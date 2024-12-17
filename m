@@ -1,246 +1,235 @@
-Return-Path: <linux-pm+bounces-19377-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19378-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7586B9F4F64
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 16:26:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF89B9F53A1
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 18:30:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DA95A16CD2C
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 15:24:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B03177A58B6
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 17:30:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC2FC1F708B;
-	Tue, 17 Dec 2024 15:24:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814641F76DF;
+	Tue, 17 Dec 2024 17:30:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kOzh3Grq"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ovpe+cV1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C6F1482E7;
-	Tue, 17 Dec 2024 15:24:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 814D11F75A6;
+	Tue, 17 Dec 2024 17:30:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734449065; cv=none; b=bhhqQg09QgcQMNB7/6mIScVrz0DrQ0+W2YTuVJQGdsw/ugS41D97rpWdxwYvlkLxcqIjIPWR/qzu1Zit+8DDSoT0fh3qLAacS1bhzzrIO7pUj5jxGOCezITSjmYUQVqW1TEpMWpsV5vJfpGkZbR0nokhjxT2WKZm8OB6aowoLwU=
+	t=1734456637; cv=none; b=pwwF23yQ7AprpKcHDbuZaNLbRZlpA98mTJi7fv0/BMuuvwDqvyJ0uu2/N3z++zdOnqzfvD2xiw/XGpjSOG0I2EcAjr/+65hUrqZ8yA87nPI6w/1k9hhyORLAtg7Tvt/F8TU2zHRVbVSH0Pjg0QfujkYQ52UhwTEWKWMM69ywoMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734449065; c=relaxed/simple;
-	bh=c3ulHEYBgsgYZ37H3Xd1i6SyEHl45vxz6yUhcVOU6vE=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=AIMh9jbq2W44raJWwGVN1nuCnZRUVKTsZJcqOIyfSvzoHucgDtDdURu6HkP9vI2z5iOOyaAy/THDuxDFoxPwieYKL/3GFNOEZaiq/H1DasdRozev5ksPoc3nDFztq+mst/VxPdpRSiVRsxElg20HwrlWZcNfuZVSqE5PxPw7TJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kOzh3Grq; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734449064; x=1765985064;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=c3ulHEYBgsgYZ37H3Xd1i6SyEHl45vxz6yUhcVOU6vE=;
-  b=kOzh3Grq234yz57Ow3NTu6OEDyrL5CwsUO0CBrsRE+GjHQrLSyXgRrv1
-   40Cf6Gsbkb+rkBijKy54iTtQC8+h3r/CDS0oVQaLsnbN4Lv3Z4doRgmGr
-   t8947jmeKEHNs6VRPk8J/tyykbwOnI5ds4R/SswLtMaZ0qlJmrtmVVDyE
-   VPhwsqk6XNYmhG4mbK6NpK5ldrKbkT5IIcYUv+2/jIqds86secZ81usGs
-   SqS+dF+ExHV3sGHhRB4M8lfHR151PD7rytQRut2fbevIwLwKTJQUhv0Bh
-   5OCR2amStcswN0wac9pheuq813eQzIpQdbLoSmjHcO/ZualN5WLsaCt4f
-   A==;
-X-CSE-ConnectionGUID: FdRMYAxERte8Z8Po8YmM/g==
-X-CSE-MsgGUID: R8xY/pooS2qH4L2ovus4Vw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11282"; a="46291666"
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="46291666"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 07:24:23 -0800
-X-CSE-ConnectionGUID: TWLTh27/S0qS4AHCuT0K3A==
-X-CSE-MsgGUID: miRv/ZIQRSSG05LykbmMxg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="128544896"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.192])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 17 Dec 2024 07:24:21 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Tue, 17 Dec 2024 17:24:18 +0200 (EET)
-To: Hans de Goede <hdegoede@redhat.com>
-cc: Andy Shevchenko <andy@kernel.org>, 
-    =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>, 
-    Sebastian Reichel <sre@kernel.org>, Jelle van der Waa <jelle@vdwaa.nl>, 
-    platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] platform/x86: dell-laptop: Use
- power_supply_charge_types_show/_parse() helpers
-In-Reply-To: <6760c9d3-ccf4-47de-bfe5-b59b8b9fca07@redhat.com>
-Message-ID: <88a8f295-855a-d191-927e-e8611bc4bea5@linux.intel.com>
-References: <20241211174451.355421-1-hdegoede@redhat.com> <20241211174451.355421-5-hdegoede@redhat.com> <0030c3dd-c70c-d21b-de2b-ace0aeb4030d@linux.intel.com> <6760c9d3-ccf4-47de-bfe5-b59b8b9fca07@redhat.com>
+	s=arc-20240116; t=1734456637; c=relaxed/simple;
+	bh=zgjQXb39cHz+vwjb7186pA2Yvsy5IoBBrsqy0T+30sY=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bjaGA1qOydR7adRPyBf0zM1ROOXyAci6kXlNzysQj4Z//DXT/XeQ9bJ7rwew0yLcyVOOLBfgIEemBHyDk1xeKaHqhQ25yqLgs1fhbRkljVZ2dqz94mBJ+CiQ9mCxq6IN8UkL2Nb8ngv7gJ/Xch12prbaL6O97lE7q+j+jNPUzy4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ovpe+cV1; arc=none smtp.client-ip=209.85.208.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5d3f57582a2so12281694a12.1;
+        Tue, 17 Dec 2024 09:30:35 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734456634; x=1735061434; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Li56ffbmLz6sJozt7Yl68NZFlCWV0JeWHRWPEui3yjM=;
+        b=Ovpe+cV1S3WkRoTISpqR18K35II+DNaEdz5o+2XaGONvzECF5Kbx4JJjcMJu3gHZ1y
+         Ftte4hzkAvV14Jff7hNkyha/TajrBLO/JWHG3qwdVY76hhN0Bgaft3WXC3Lc37wRnFof
+         yDAZUXwfEhcqAT97PI5Hu/aZKON16wrQTLtXayOx3a/WN77lvIEfYcad23BCzKOptENo
+         i53V2qT4sxu8iN2dEuVTvZttoDMPmse5V1opRy/7EMlskvh8jdyTcuUbpvZ/uv9Y1RcE
+         TMc1i6XAv4ySDf3y9hvgPOioiKgqRwIkoASFPufXplrhVAi9wYNVilb1fXBlNvUg4mYY
+         gQDw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734456634; x=1735061434;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Li56ffbmLz6sJozt7Yl68NZFlCWV0JeWHRWPEui3yjM=;
+        b=JWBppXCw0cyAL8r0MP3aYpitBmJZ34QZlwvqmHa3kdMSM5SjtyOI3chtxa2VIjAMr2
+         Vh0Vm9p5SDUNqAqjV+f1j1oH+6ZcrzupPIIWE/iy8Wc1FVlAV8eufI8yGoa7eLllK6JZ
+         RZXC8LdbIy1ISI2x8yCnWDZ5S+TeYe8qG5VjGDbFApFO9tNXMSHLD84aTYgDvR7PxzTx
+         ow/J7sagmboabCEt+D/vy4zC4qanlC95R2EKPYptWl2qm5rc+78h2kxLVveYm/SfDFIH
+         fo8XOMVDyFDznQ4W4Lw5ZcKZ8gEjS+3+JEqvDTopN5TX7KoHlEwC/3jpouxVL1Nj8q9C
+         yg6w==
+X-Forwarded-Encrypted: i=1; AJvYcCVTBNFvA+trsg7A5Cshja7QOo47HEFjp+ASIfcPIaJwQOL5yI0FQnSakEdtrR/KNCNXVwdQjVY6Fqo7fU1h@vger.kernel.org, AJvYcCVdMjyqWrlpixI1C+zlL88liUDvdXGJ/7gIMJ5UR0d7Cz/Gcj+7clAqArg6W0aLLk9GbAbpAG7CtLoI@vger.kernel.org, AJvYcCWGPyS9zalw7tZxIgDYHwlAjzO+MNMPI8Rcj43ZlN87q5YOCR/21XNfSgfhybIPIVe9Pc49wX0h0kdcfg==@vger.kernel.org, AJvYcCXvEe3MajYqMs+Em1h8O0luFP3uRtke8Jt16/VHtgVtkry5kbK2bQccItWSJXGApHMd/LibRvO4qNZHt3Q=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFbrAKX1ifrlvWKjZDt+dqxbnz8N605VOTMwf+xlaa2kJhPXvD
+	hZgxCSEgbDT61QJ64wuw8Tu1JZUYKBOxLXj4T2gKvk8IUZ4fETEg
+X-Gm-Gg: ASbGncv2tfuR12ZlKG4bOyIP38yBeheBMM2EDrJBanEO3DxISJJOZAWt48eb8FwYYPZ
+	NywGMjvIhm2nuDTffmA0UIMMlf6LJswNDIQ9ZWxZEk+RoNEStBvNv0lchK9S1cQigofmsH5BQnE
+	ti7GNm5N8mntpmdyT7JHmJGQwReV4tczJtutPedSR/6OQC8zoSECTDZcanybQuid3ZoOwXmmQGf
+	ugH2Ji/VYErLzfXMp0spQt2qsGhKsNyeoJg8n/8Tagm0fH+0KmUpoU=
+X-Google-Smtp-Source: AGHT+IGbmpjnWqINLhHyNtnj1V6xjerVH6TdYVp4iAsNlQKpZQx7fxXtFUG9DShJxtKvTG7Z+ZcwRQ==
+X-Received: by 2002:a17:907:3f94:b0:aa5:b1bb:10db with SMTP id a640c23a62f3a-aabdc833a85mr365893666b.1.1734456633481;
+        Tue, 17 Dec 2024 09:30:33 -0800 (PST)
+Received: from [127.0.1.1] ([46.53.242.72])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-aab95d813afsm470444166b.0.2024.12.17.09.30.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2024 09:30:33 -0800 (PST)
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Subject: [PATCH v12 00/11] Add support for Maxim Integrated MAX77705 PMIC
+Date: Tue, 17 Dec 2024 20:29:58 +0300
+Message-Id: <20241217-starqltechn_integration_upstream-v12-0-ed840944f948@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/mixed; boundary="8323328-1624801791-1734449058=:924"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIABa1YWcC/43TzW7bMAwA4FcJfJ4GUv/Oqe8xFAUlUYmBxGltx
+ +hQ5N3HJNhqJIf5IkA09JGixa9m5KHjsdluvpqB527sTr1sUP/YNHlP/Y5VVyTQaNAWPAY1TjR
+ 8HCbO+/6t6yfeDTTJobfz+zgNTEeVcvTRQdKVTSNMopFVGqjPe4H68+EgwfeBa/d5S/zrVfb7b
+ pxOw+9bHbO5Rv9mjP/POBsFik313mvAQPlld6Tu8DOfjs0Vn+032KJZAVoBddFci8suhvAIumW
+ FK3oyu2uFAMZUtFjwCfT/QARYA3oBoZiYHLSQ3RMYFqBec+UgYJsqkamWkOARjAvQ4AowXntYS
+ X5K1sYAP4LtNyjLCrAVUCor2SRineIjiLAU7QoRpYcqFI6ObWTn9ROJS7JdQ6KQJYNrY9SRAZf
+ k5f7yB/44y6RN9+d/HxD5fuym7aba6HMkQp8iBl29SaXkAIieIMc2UKimgm6WA7rd3CpEiCpZd
+ aRPDGC1ag34moOjSryVIXi9XP4AFnVqNfEDAAA=
+To: Sebastian Reichel <sre@kernel.org>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
+ Purism Kernel Team <kernel@puri.sm>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-leds@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734456631; l=6970;
+ i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
+ bh=zgjQXb39cHz+vwjb7186pA2Yvsy5IoBBrsqy0T+30sY=;
+ b=dHHzJl44Y4W6inDdXOjQVyw5Nt9wBo691dDpwKxwN2p2bXIvRHcI3c9zT4muKPVs+MeL4ZZvc
+ Z+0S9ugy+nXAywN9XSi3bL4VKlf66j8t6P3b3kwlxWF9eWYvOZY77Gm
+X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
+ pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-  This message is in MIME format.  The first part should be readable text,
-  while the remaining parts are likely unreadable without MIME-aware tools.
+The Maxim MAX77705 is a Companion Power Management and Type-C
+interface IC which includes charger, fuelgauge, LED, haptic motor driver and
+Type-C management IC. It's used in Samsung S series smart phones
+starting from S9 model.
 
---8323328-1624801791-1734449058=:924
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: QUOTED-PRINTABLE
+Add features:
+  - charger
+  - fuelgauge
+  - haptic
+  - led
 
-On Tue, 17 Dec 2024, Hans de Goede wrote:
-> On 17-Dec-24 1:01 PM, Ilpo J=C3=A4rvinen wrote:
-> > On Wed, 11 Dec 2024, Hans de Goede wrote:
-> >=20
-> >> Make battery_modes a map between tokens and enum power_supply_charge_t=
-ype
-> >> values instead of between tokens and strings and use the new
-> >> power_supply_charge_types_show/_parse() helpers for show()/store()
-> >> to ensure that things are handled in the same way as in other drivers.
-> >>
-> >> This also changes battery_supported_modes to be a bitmap of charge-typ=
-es
-> >> (enum power_supply_charge_type values) rather then a bitmap of indices
-> >> into battery_modes[].
-> >>
-> >> Reviewed-by: Thomas Wei=C3=9Fschuh <linux@weissschuh.net>
-> >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
-> >> ---
-> >>  drivers/platform/x86/dell/dell-laptop.c | 54 ++++++++++++------------=
--
-> >>  1 file changed, 25 insertions(+), 29 deletions(-)
-> >>
-> >> diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platfor=
-m/x86/dell/dell-laptop.c
-> >> index 5671bd0deee7..9a4cfcb8bbe0 100644
-> >> --- a/drivers/platform/x86/dell/dell-laptop.c
-> >> +++ b/drivers/platform/x86/dell/dell-laptop.c
-> >> @@ -103,15 +103,15 @@ static bool mute_led_registered;
-> >> =20
-> >>  struct battery_mode_info {
-> >>  =09int token;
-> >> -=09const char *label;
-> >> +=09enum power_supply_charge_type charge_type;
-> >>  };
-> >> =20
-> >>  static const struct battery_mode_info battery_modes[] =3D {
-> >> -=09{ BAT_PRI_AC_MODE_TOKEN,   "Trickle" },
-> >> -=09{ BAT_EXPRESS_MODE_TOKEN,  "Fast" },
-> >> -=09{ BAT_STANDARD_MODE_TOKEN, "Standard" },
-> >> -=09{ BAT_ADAPTIVE_MODE_TOKEN, "Adaptive" },
-> >> -=09{ BAT_CUSTOM_MODE_TOKEN,   "Custom" },
-> >> +=09{ BAT_PRI_AC_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_TRICKLE },
-> >> +=09{ BAT_EXPRESS_MODE_TOKEN,  POWER_SUPPLY_CHARGE_TYPE_FAST },
-> >> +=09{ BAT_STANDARD_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_STANDARD },
-> >> +=09{ BAT_ADAPTIVE_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE },
-> >> +=09{ BAT_CUSTOM_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_CUSTOM },
-> >>  };
-> >>  static u32 battery_supported_modes;
-> >> =20
-> >> @@ -2261,46 +2261,42 @@ static ssize_t charge_types_show(struct device=
- *dev,
-> >>  =09=09struct device_attribute *attr,
-> >>  =09=09char *buf)
-> >>  {
-> >> -=09ssize_t count =3D 0;
-> >> +=09enum power_supply_charge_type charge_type;
-> >>  =09int i;
-> >> =20
-> >>  =09for (i =3D 0; i < ARRAY_SIZE(battery_modes); i++) {
-> >> -=09=09bool active;
-> >> +=09=09charge_type =3D battery_modes[i].charge_type;
-> >> =20
-> >> -=09=09if (!(battery_supported_modes & BIT(i)))
-> >> +=09=09if (!(battery_supported_modes & BIT(charge_type)))
-> >>  =09=09=09continue;
-> >> =20
-> >> -=09=09active =3D dell_battery_mode_is_active(battery_modes[i].token);
-> >> -=09=09count +=3D sysfs_emit_at(buf, count, active ? "[%s] " : "%s ",
-> >> -=09=09=09=09battery_modes[i].label);
-> >> +=09=09if (!dell_battery_mode_is_active(battery_modes[i].token))
-> >> +=09=09=09continue;
-> >> +
-> >> +=09=09return power_supply_charge_types_show(dev, battery_supported_mo=
-des,
-> >> +=09=09=09=09=09=09      charge_type, buf);
-> >>  =09}
-> >> =20
-> >> -=09/* convert the last space to a newline */
-> >> -=09if (count > 0)
-> >> -=09=09count--;
-> >> -=09count +=3D sysfs_emit_at(buf, count, "\n");
-> >> -
-> >> -=09return count;
-> >> +=09/* No active mode found */
-> >> +=09return -EIO;
-> >>  }
-> >> =20
-> >>  static ssize_t charge_types_store(struct device *dev,
-> >>  =09=09struct device_attribute *attr,
-> >>  =09=09const char *buf, size_t size)
-> >>  {
-> >> -=09bool matched =3D false;
-> >> -=09int err, i;
-> >> +=09int charge_type, err, i;
-> >> +
-> >> +=09charge_type =3D power_supply_charge_types_parse(battery_supported_=
-modes, buf);
-> >> +=09if (charge_type < 0)
-> >> +=09=09return charge_type;
-> >> =20
-> >>  =09for (i =3D 0; i < ARRAY_SIZE(battery_modes); i++) {
-> >> -=09=09if (!(battery_supported_modes & BIT(i)))
-> >> -=09=09=09continue;
-> >> -
-> >> -=09=09if (sysfs_streq(battery_modes[i].label, buf)) {
-> >> -=09=09=09matched =3D true;
-> >> +=09=09if (battery_modes[i].charge_type =3D=3D charge_type)
-> >>  =09=09=09break;
-> >> -=09=09}
-> >>  =09}
-> >> -=09if (!matched)
-> >> -=09=09return -EINVAL;
-> >> +=09if (i =3D=3D ARRAY_SIZE(battery_modes))
-> >> +=09=09return -EIO;
-> >=20
-> > Hi Hans,
-> >=20
-> > Is this errno change helpful/correct?
->=20
-> power_supply_charge_types_parse() already checks that the user-input
-> is one of the values advertised in the passed in battery_supported_modes,
-> so when we loop to translate the enum power_supply_charge_type value
-> returned by power_supply_charge_types_parse() then we should find
-> a matching entry in battery_modes[] if not something is wrong at
-> the driver level. So not -EINVAL, since this is a driver issue not
-> a user input issue.
->=20
-> > There is zero I/O done before=20
-> > reaching this point, just input validation, so why does it return errno=
-=20
-> > that is "I/O error"? If you want to differentiate from -EINVAL, I sugge=
-st=20
-> > using -ENOENT (but I personally think -EINVAL would be fine as well=20
-> > because it's still an invalid argument even if it passed one stage of=
-=20
-> > the input checks).
->=20
-> -ENOENT instead of -EIO works for me.
->=20
-> Shall I send out a new version with that changed?
->
-> Note that merging this requires the earlier patches from this
-> series which have been merged into:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.gi=
-t/log/?h=3Dfor-next
->=20
-> so this either requires an immutable tag from Sebastian for you to merge,
-> or this should be merged through Sebastian's tree.
+Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+---
+Changes in v12:
+- charger: move out of mfd because separate device
+- charger: add it's own binding file
+- fuel gauge: move to simple-mfd-i2c along with additional measurement
+  capabilities, which will be implemented in max77705-hwmon driver
+- fix review comments
+- reorder commits to stick mfd together
+- Link to v11: https://lore.kernel.org/r/20241209-starqltechn_integration_upstream-v11-0-dc0598828e01@gmail.com
 
-Yes, please send a new version with -ENOENT as I was going to ask
-Sebastian to take this patch but noticed this small errno thing while=20
-reading the patch one more time before acking it.
+Changes in v11:
+- charger: code review fixes
+- max17042 binding: split in 2 files, so its binding code can be reused
+  in MFD bindings
+- Link to v10: https://lore.kernel.org/r/20241204-starqltechn_integration_upstream-v10-0-7de85e48e562@gmail.com
 
---=20
- i.
+Changes in v10:
+- drop NACKed 'dt-bindings: power: supply: max17042: remove reg from
+  required' patch
+- review fixes
+- use dev_err_probe for errors in probe functions
+- Link to v9: https://lore.kernel.org/r/20241202-starqltechn_integration_upstream-v9-0-a1adc3bae2b8@gmail.com
 
---8323328-1624801791-1734449058=:924--
+Changes in v9:
+- fuel gauge: use max17042 driver instead of separate max77705
+- fix kernel bot error
+- charger: enable interrupt after power supply registration
+- add dependency on max17042 patch series
+- Link to v8: https://lore.kernel.org/r/20241031-starqltechn_integration_upstream-v8-0-2fa666c2330e@gmail.com
+
+Changes in v8:
+- Fix comment style
+- join line where possible to fit in 100 chars
+- Link to v7: https://lore.kernel.org/r/20241023-starqltechn_integration_upstream-v7-0-9bfaa3f4a1a0@gmail.com
+
+Changes in v7:
+- Fix review comments
+- Link to v6: https://lore.kernel.org/r/20241007-starqltechn_integration_upstream-v6-0-0d38b5090c57@gmail.com
+
+Changes in v6:
+- fix binding review comments
+- update trailers
+- Link to v5: https://lore.kernel.org/r/20240617-starqltechn_integration_upstream-v5-0-e0033f141d17@gmail.com
+
+Changes in v5:
+- Split patchset per subsystem
+- Link to v4: https://lore.kernel.org/r/20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com
+
+Changes in v4:
+- Rewrite max77705, max77705_charger, max77705_fuel_gauge from scratch
+- Reorder patches:
+  - squash max77705 subdevice bindings in core file because
+    no resources there
+  - split device tree changes
+- Use _ as space for filenames in power/supply like the majority
+- Link to v3: https://lore.kernel.org/r/20240618-starqltechn_integration_upstream-v3-0-e3f6662017ac@gmail.com
+
+---
+Dzmitry Sankouski (11):
+      power: supply: add undervoltage health status property
+      dt-bindings: power: supply: max17042: split on 2 files
+      dt-bindings: power: supply: add maxim,max77705 charger
+      dt-bindings: mfd: add maxim,max77705 core
+      dt-bindings: mfd: add maxim,max77705 sensors
+      power: supply: max17042: add max77705 fuel gauge support
+      power: supply: max77705: Add charger driver for Maxim 77705
+      mfd: simple-mfd-i2c: Add MAX77705 support
+      mfd: Add new driver for MAX77705 PMIC
+      input: max77693: add max77705 haptic support
+      leds: max77705: Add LEDs support
+
+ Documentation/ABI/testing/sysfs-class-power                               |   2 +-
+ Documentation/devicetree/bindings/mfd/maxim,max77705-sensors.yaml         |  60 +++++++++++++++++++++++++++++++
+ Documentation/devicetree/bindings/mfd/maxim,max77705.yaml                 | 166 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Documentation/devicetree/bindings/power/supply/maxim,max17042-common.yaml |  54 ++++++++++++++++++++++++++++
+ Documentation/devicetree/bindings/power/supply/maxim,max17042.yaml        |  43 ++---------------------
+ Documentation/devicetree/bindings/power/supply/maxim,max77705.yaml        |  50 ++++++++++++++++++++++++++
+ MAINTAINERS                                                               |   6 +++-
+ drivers/input/misc/Kconfig                                                |   4 +--
+ drivers/input/misc/Makefile                                               |   1 +
+ drivers/input/misc/max77693-haptic.c                                      |  15 +++++++-
+ drivers/leds/Kconfig                                                      |   8 +++++
+ drivers/leds/Makefile                                                     |   1 +
+ drivers/leds/leds-max77705.c                                              | 267 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/mfd/Kconfig                                                       |  13 +++++++
+ drivers/mfd/Makefile                                                      |   2 ++
+ drivers/mfd/max77705.c                                                    | 209 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/mfd/simple-mfd-i2c.c                                              |  11 ++++++
+ drivers/power/supply/Kconfig                                              |   6 ++++
+ drivers/power/supply/Makefile                                             |   1 +
+ drivers/power/supply/max17042_battery.c                                   |   3 ++
+ drivers/power/supply/max77705_charger.c                                   | 576 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/power/supply/power_supply_sysfs.c                                 |   1 +
+ include/linux/mfd/max77693-common.h                                       |   4 ++-
+ include/linux/mfd/max77705-private.h                                      | 195 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/power/max77705_charger.h                                    | 194 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/power_supply.h                                              |   1 +
+ 26 files changed, 1847 insertions(+), 46 deletions(-)
+---
+base-commit: f486c8aa16b8172f63bddc70116a0c897a7f3f02
+change-id: 20240617-starqltechn_integration_upstream-bc86850b2fe3
+prerequisite-change-id: 20241108-b4-max17042-9306fc75afae:v4
+prerequisite-patch-id: a78c51c4a1b48756c00cbc3d56b9e019577e4a6b
+prerequisite-patch-id: 735d52c3137c5e474f3601adf010f9fe2f3f7036
+
+Best regards,
+-- 
+Dzmitry Sankouski <dsankouski@gmail.com>
+
 
