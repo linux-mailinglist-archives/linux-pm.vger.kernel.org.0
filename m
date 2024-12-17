@@ -1,121 +1,162 @@
-Return-Path: <linux-pm+bounces-19364-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 786C09F47B0
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 10:37:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 976779F47B6
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 10:38:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 381D91883C04
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 09:37:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6026F163F62
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 09:38:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B661D5AA5;
-	Tue, 17 Dec 2024 09:37:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 260FC1DE8B0;
+	Tue, 17 Dec 2024 09:38:35 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419393D69
-	for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2024 09:37:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8FF1D5AA5;
+	Tue, 17 Dec 2024 09:38:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734428245; cv=none; b=VbuvnzVYkgKlNHG2kJM5LtrW4cl3e1mgAUROMO22itcYwg1I5bb+f2j3LFRMi6Wc1fmGRyNV3iIVSSsYUFTUxjSP84fcWEM3GwB+ByF5IyfTtD6me5rDuWCFDucSzrQ8lCnsZQzA0Vv1m3uEprYbw7mb2S+3A7435Ps3wLH4Zzo=
+	t=1734428315; cv=none; b=IZAczVf55TsPJvnQTKqnAmvccwknoad8YbtbR881bK/1cdAne3VwN8cRhEKydK+qi8QkyhnKhbUP+qvUUeEn8+EoodH7INo4+ZL7E1gwjkbbgRmJLhMJBKlf84tZYJckqvANGoqWQhBTKA/0N+CWfibRm3lN10Zx5klHiVS2VCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734428245; c=relaxed/simple;
-	bh=PbdsB2BhIDuxuM2K/h5mPZ7JGcHKlNVmrrssGgyp37A=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=HCUIjLOh0iA2tfvof94ZGYoVF3rbK2SAuPkLTcRJSkTAos3njnIA6ghindL3RJ86Wo5hiajXH/euODpVBOpW/Clu0k0bf6eEtqA9HC8bz/0Swv6sEaq2ToDDH+4iWxvT8xg18aNbJulgBHfIPl9W/gG420/o1kAtqcAfh62Sdq4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <l.stach@pengutronix.de>)
-	id 1tNU0y-0006bG-N7; Tue, 17 Dec 2024 10:37:16 +0100
-Message-ID: <8956e0daffc89f8c6791f8a53b1666ca31011a45.camel@pengutronix.de>
-Subject: Re: imx8m-blk-ctrl: WARNING, no release() function
-From: Lucas Stach <l.stach@pengutronix.de>
-To: Luca Ceresoli <luca.ceresoli@bootlin.com>, Peng Fan <peng.fan@nxp.com>
-Cc: Francesco Dolcini <francesco@dolcini.it>, "linux-pm@vger.kernel.org"
- <linux-pm@vger.kernel.org>, "imx@lists.linux.dev" <imx@lists.linux.dev>,
- Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>,  Fabio Estevam <festevam@gmail.com>, Marek Vasut
- <marex@denx.de>, "linux-arm-kernel@lists.infradead.org"
- <linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, Jindong Yue <jindong.yue@nxp.com>, Benjamin
- Gaignard <benjamin.gaignard@collabora.com>, Paul Elder
- <paul.elder@ideasonboard.com>,  =?ISO-8859-1?Q?Herv=E9?= Codina
- <herve.codina@bootlin.com>
-Date: Tue, 17 Dec 2024 10:37:14 +0100
-In-Reply-To: <20241217094219.788cad88@booty>
-References: <20241212141003.GA44219@francesco-nb>
-	 <PAXPR04MB8459AB53B142CB43782757D988042@PAXPR04MB8459.eurprd04.prod.outlook.com>
-	 <20241217094219.788cad88@booty>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+	s=arc-20240116; t=1734428315; c=relaxed/simple;
+	bh=bdqTMj31J0d19foueIwWZpipzFk7mkkYFLZuSeLOUHI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=fajt7T76uxckFZ9GhrLZrMy0vMze+0Kl4Um5Yue48MoPIE/pX10wSI79ZTjifJ3GjcIZQrGR8wVgVnpOqtlYrR9RtSv1Jfyzn6UZQ28Q9Bkm/5Zj6r0taaLigZFqDRqTR5OxWHgG6sG+PUtFxs3oZp0v/X9pDm6Xgk/eZZu3jZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C37B1007;
+	Tue, 17 Dec 2024 01:38:59 -0800 (PST)
+Received: from [192.168.178.6] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BCCA3F720;
+	Tue, 17 Dec 2024 01:38:29 -0800 (PST)
+Message-ID: <31c86834-273b-458f-9914-eff76c283cfb@arm.com>
+Date: Tue, 17 Dec 2024 10:38:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: l.stach@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC][PATCH v021 5/9] PM: EM: Introduce
+ em_dev_expand_perf_domain()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>
+References: <5861970.DvuYhMxLoT@rjwysocki.net>
+ <3353401.44csPzL39Z@rjwysocki.net>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
+Content-Language: en-US
+In-Reply-To: <3353401.44csPzL39Z@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Hi Luca,
+On 29/11/2024 17:02, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> Introduce a helper function for adding a CPU to an existing EM perf
+> domain.
+> 
+> Subsequently, this will be used by the intel_pstate driver to add new
+> CPUs to existing perf domains when those CPUs go online for the first
+> time after the initialization of the driver.
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+> 
+> v0.1 -> v0.2: No changes
 
-Am Dienstag, dem 17.12.2024 um 09:42 +0100 schrieb Luca Ceresoli:
-> Hello Peng,
->=20
-> On Tue, 17 Dec 2024 01:39:09 +0000
-> Peng Fan <peng.fan@nxp.com> wrote:
->=20
-> > > Subject: imx8m-blk-ctrl: WARNING, no release() function =20
-> >=20
-> > Please try this patch.
-> > https://lore.kernel.org/all/20241206112731.98244-1-peng.fan@oss.nxp.com=
-/
->=20
-> I cherry-picked the two patches from linux-next:
->=20
->   e1a875703470 ("pmdomain: imx-gpcv2: Suppress bind attrs")
->   afb2a86f002b ("pmdomain: imx8m[p]-blk-ctrl: Suppress bind attrs")
->=20
-> but I still have the same warnings:
->=20
-> [    5.427038] Device 'mediablk-mipi-csi2-1' does not have a release() fu=
-nction, it is broken and must be fixed. See Documentation/core-api/kobject.=
-rst.
-> [    6.464219] Device 'mediablk-mipi-dsi-1' does not have a release() fun=
-ction, it is broken and must be fixed. See Documentation/core-api/kobject.r=
-st.
-> [    6.752903] Device 'mediablk-mipi-csi2-1' does not have a release() fu=
-nction, it is broken and must be fixed. See Documentation/core-api/kobject.=
-rst.
-> [    7.303529] Device 'mediablk-mipi-dsi-1' does not have a release() fun=
-ction, it is broken and must be fixed. See Documentation/core-api/kobject.r=
-st.
-> [    8.006575] Device 'mediablk-mipi-csi2-1' does not have a release() fu=
-nction, it is broken and must be fixed. See Documentation/core-api/kobject.=
-rst.
-> [    8.598453] Device 'mediablk-mipi-dsi-1' does not have a release() fun=
-ction, it is broken and must be fixed. See Documentation/core-api/kobject.r=
-st.
->=20
-> This is with 6.13-rc3 on a imx8mp.
+Could you add information why this new EM interface is needed?
 
-As far as I can see this isn't emitted due to the blk-ctrl device
-itself missing the release function, but from the pseudo devices used
-by genpd to control the power of the secondary power domains.
+IIRC, you can't use the existing way (cpufreq_driver::register_em) since
+it gets called to early (3) for the PD cpumasks to be ready. This issue
+will be there for any system in which uarch domains are not congruent
+with clock domains which we hadn't have to deal with Arm's heterogeneous
+CPUs so far.
 
-I think this needs to be fixed in genpd itself. I'll take a look.
+__init intel_pstate_init()
 
-Regards,
-Lucas
+  intel_pstate_register_driver()
+
+    cpufreq_register_driver()
+
+      subsys_interface_register()
+
+        sif->add_dev() -> cpufreq_add_dev()
+
+          cpufreq_online()
+
+            if (!new_policy && cpufreq_driver->online)
+
+            else
+
+              cpufreq_driver->init() -> intel_pstate_cpu_init()
+
+                __intel_pstate_cpu_init()
+
+                  intel_pstate_init_cpu()
+
+                    intel_pstate_get_cpu_pstates()
+
+                      hybrid_add_to_domain()
+
+                        em_dev_expand_perf_domain()              <-- (1)
+
+                  intel_pstate_init_acpi_perf_limits()
+
+                    intel_pstate_set_itmt_prio()                 <-- (2)
+
+            if (new_policy)
+
+              cpufreq_driver->register_em()                      <-- (3)
+
+    hybrid_init_cpu_capacity_scaling()
+
+      hybrid_refresh_cpu_capacity_scaling()
+
+        __hybrid_refresh_cpu_capacity_scaling()                  <-- (4)
+
+        hybrid_register_all_perf_domains()
+
+          hybrid_register_perf_domain()	
+
+            em_dev_register_perf_domain()                        <-- (5)
+
+      /* Enable EAS */
+      sched_clear_itmt_support()                                 <-- (6)
+
+Debugging this on a 'nosmt' i7-13700K (online mask =
+[0,2,4,6,8,10,12,14,16-23]
+
+(1) Add CPU to existing hybrid PD or create new hybrid PD.
+(2) Triggers sched domain rebuild (+ enabling EAS) already here during
+    startup ?
+    IMHO, reason is that max_highest_perf > min_highest_perf because of
+    different itmt prio
+    Happens for CPU8 on my machine (after CPU8 is added to hybrid PD
+    0,2,4,6,8) (itmt prio for CPU8=69 (1024) instead of 68 (1009)).
+    So it looks like EAS is enabled before (6) ?	
+(3) ARM's way to do (5)
+(4) Setting hybrid_max_perf_cpu
+(5) Register EM here
+(6) Actual call to initially triggers sched domain rebuild (+ enable
+    EAS) (done already in (2) on my machine)
+
+So (3) is not possible for Intel hybrid since the policy's cpumask(s)
+contain only one CPUs, i.e. CPUs are not sharing clock.
+And those cpumasks have to be build under (1) to be used in (5)?
+
+[...]
 
