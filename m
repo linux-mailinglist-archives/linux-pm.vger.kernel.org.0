@@ -1,112 +1,121 @@
-Return-Path: <linux-pm+bounces-19363-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19364-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63F3B9F463C
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 09:42:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 786C09F47B0
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 10:37:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 778207A13F8
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 08:42:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 381D91883C04
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 09:37:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C556D1DCB24;
-	Tue, 17 Dec 2024 08:42:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mfWapWyI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B661D5AA5;
+	Tue, 17 Dec 2024 09:37:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3531B1D88C4;
-	Tue, 17 Dec 2024 08:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 419393D69
+	for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2024 09:37:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734424946; cv=none; b=b21THbSseC6rZmWBk0v3eDYcA3hIgubE1WaLib7KKlBvOwtVklJ5cN/41U3IUmVCzOvYFoppTUOOnS/YmdPflPmFDZTYLs383dymNv8Ew4KSyA5QyibmQ5OgW9hYQN24qTmfaXu4XtZ0JoH+OKS+MHS61J52+JgUOOqzKWgtEcM=
+	t=1734428245; cv=none; b=VbuvnzVYkgKlNHG2kJM5LtrW4cl3e1mgAUROMO22itcYwg1I5bb+f2j3LFRMi6Wc1fmGRyNV3iIVSSsYUFTUxjSP84fcWEM3GwB+ByF5IyfTtD6me5rDuWCFDucSzrQ8lCnsZQzA0Vv1m3uEprYbw7mb2S+3A7435Ps3wLH4Zzo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734424946; c=relaxed/simple;
-	bh=QSpktkEFl5aljmBnez15ONkM7IEJyEoiz/F4IZQK7S8=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=j/UzQQzrG9YW5qHBas0tdZz3loem9CYbRh3rNlnoi9Q1S/KURSRpzbpEQsssgSJffvSboyZjeOw6rMyXC1nRpi1Gl140DqETVU5s8+Jj0QFFpO9MMfpgnpaDkb9SHRb/7wllrqa1uPIswnKFgRj4muV+TaPWPoz9QwFe82RyQkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mfWapWyI; arc=none smtp.client-ip=217.70.183.198
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B074C0006;
-	Tue, 17 Dec 2024 08:42:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1734424942;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=9idV19gXA8JkUDickvfvx0vTW3usv3OBF/gTIq+FKLM=;
-	b=mfWapWyIqX5dLd37tsSruDGdVACdKSyEgu+qHatAIIebotStGtezb0J0kR0njEcDdomv9N
-	6JhXtoibG8DYOCSpBLjbSI4ddc4QxbDoltB3dIGSNgl1NfNX6tcMDuD2O1I61wIt98sZM6
-	rz73PJwPg1PEW05vbAZJ/zv4K+MHw4SCZN6pb33t0WKYMMziB5TvJSmvYxlF74yXKLQk4c
-	Ky2lBg1l/T1DRk84cN9B1ayq5cRi0aZmABlagrScipjqpanqREWQG+86EajEC6B7+Voy6N
-	epO+2nfmNHT6k+hRHGGY+syC0ZhrTHuKCoEiaet/iVRFdQ2q+e8PpeOopGk0ng==
-Date: Tue, 17 Dec 2024 09:42:19 +0100
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Peng Fan <peng.fan@nxp.com>
+	s=arc-20240116; t=1734428245; c=relaxed/simple;
+	bh=PbdsB2BhIDuxuM2K/h5mPZ7JGcHKlNVmrrssGgyp37A=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=HCUIjLOh0iA2tfvof94ZGYoVF3rbK2SAuPkLTcRJSkTAos3njnIA6ghindL3RJ86Wo5hiajXH/euODpVBOpW/Clu0k0bf6eEtqA9HC8bz/0Swv6sEaq2ToDDH+4iWxvT8xg18aNbJulgBHfIPl9W/gG420/o1kAtqcAfh62Sdq4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[IPv6:::1])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <l.stach@pengutronix.de>)
+	id 1tNU0y-0006bG-N7; Tue, 17 Dec 2024 10:37:16 +0100
+Message-ID: <8956e0daffc89f8c6791f8a53b1666ca31011a45.camel@pengutronix.de>
+Subject: Re: imx8m-blk-ctrl: WARNING, no release() function
+From: Lucas Stach <l.stach@pengutronix.de>
+To: Luca Ceresoli <luca.ceresoli@bootlin.com>, Peng Fan <peng.fan@nxp.com>
 Cc: Francesco Dolcini <francesco@dolcini.it>, "linux-pm@vger.kernel.org"
  <linux-pm@vger.kernel.org>, "imx@lists.linux.dev" <imx@lists.linux.dev>,
  Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>,
  Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
- <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Marek Vasut
+ <kernel@pengutronix.de>,  Fabio Estevam <festevam@gmail.com>, Marek Vasut
  <marex@denx.de>, "linux-arm-kernel@lists.infradead.org"
  <linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
- <linux-kernel@vger.kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
- Jindong  Yue <jindong.yue@nxp.com>, Benjamin Gaignard 
- <benjamin.gaignard@collabora.com>, Paul Elder 
- <paul.elder@ideasonboard.com>, =?UTF-8?Q?Herv=C3=A9?= Codina
+ <linux-kernel@vger.kernel.org>, Jindong Yue <jindong.yue@nxp.com>, Benjamin
+ Gaignard <benjamin.gaignard@collabora.com>, Paul Elder
+ <paul.elder@ideasonboard.com>,  =?ISO-8859-1?Q?Herv=E9?= Codina
  <herve.codina@bootlin.com>
-Subject: Re: imx8m-blk-ctrl: WARNING, no release() function
-Message-ID: <20241217094219.788cad88@booty>
-In-Reply-To: <PAXPR04MB8459AB53B142CB43782757D988042@PAXPR04MB8459.eurprd04.prod.outlook.com>
+Date: Tue, 17 Dec 2024 10:37:14 +0100
+In-Reply-To: <20241217094219.788cad88@booty>
 References: <20241212141003.GA44219@francesco-nb>
-	<PAXPR04MB8459AB53B142CB43782757D988042@PAXPR04MB8459.eurprd04.prod.outlook.com>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	 <PAXPR04MB8459AB53B142CB43782757D988042@PAXPR04MB8459.eurprd04.prod.outlook.com>
+	 <20241217094219.788cad88@booty>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: l.stach@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Hello Peng,
+Hi Luca,
 
-On Tue, 17 Dec 2024 01:39:09 +0000
-Peng Fan <peng.fan@nxp.com> wrote:
+Am Dienstag, dem 17.12.2024 um 09:42 +0100 schrieb Luca Ceresoli:
+> Hello Peng,
+>=20
+> On Tue, 17 Dec 2024 01:39:09 +0000
+> Peng Fan <peng.fan@nxp.com> wrote:
+>=20
+> > > Subject: imx8m-blk-ctrl: WARNING, no release() function =20
+> >=20
+> > Please try this patch.
+> > https://lore.kernel.org/all/20241206112731.98244-1-peng.fan@oss.nxp.com=
+/
+>=20
+> I cherry-picked the two patches from linux-next:
+>=20
+>   e1a875703470 ("pmdomain: imx-gpcv2: Suppress bind attrs")
+>   afb2a86f002b ("pmdomain: imx8m[p]-blk-ctrl: Suppress bind attrs")
+>=20
+> but I still have the same warnings:
+>=20
+> [    5.427038] Device 'mediablk-mipi-csi2-1' does not have a release() fu=
+nction, it is broken and must be fixed. See Documentation/core-api/kobject.=
+rst.
+> [    6.464219] Device 'mediablk-mipi-dsi-1' does not have a release() fun=
+ction, it is broken and must be fixed. See Documentation/core-api/kobject.r=
+st.
+> [    6.752903] Device 'mediablk-mipi-csi2-1' does not have a release() fu=
+nction, it is broken and must be fixed. See Documentation/core-api/kobject.=
+rst.
+> [    7.303529] Device 'mediablk-mipi-dsi-1' does not have a release() fun=
+ction, it is broken and must be fixed. See Documentation/core-api/kobject.r=
+st.
+> [    8.006575] Device 'mediablk-mipi-csi2-1' does not have a release() fu=
+nction, it is broken and must be fixed. See Documentation/core-api/kobject.=
+rst.
+> [    8.598453] Device 'mediablk-mipi-dsi-1' does not have a release() fun=
+ction, it is broken and must be fixed. See Documentation/core-api/kobject.r=
+st.
+>=20
+> This is with 6.13-rc3 on a imx8mp.
 
-> > Subject: imx8m-blk-ctrl: WARNING, no release() function  
-> 
-> Please try this patch.
-> https://lore.kernel.org/all/20241206112731.98244-1-peng.fan@oss.nxp.com/
+As far as I can see this isn't emitted due to the blk-ctrl device
+itself missing the release function, but from the pseudo devices used
+by genpd to control the power of the secondary power domains.
 
-I cherry-picked the two patches from linux-next:
+I think this needs to be fixed in genpd itself. I'll take a look.
 
-  e1a875703470 ("pmdomain: imx-gpcv2: Suppress bind attrs")
-  afb2a86f002b ("pmdomain: imx8m[p]-blk-ctrl: Suppress bind attrs")
-
-but I still have the same warnings:
-
-[    5.427038] Device 'mediablk-mipi-csi2-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
-[    6.464219] Device 'mediablk-mipi-dsi-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
-[    6.752903] Device 'mediablk-mipi-csi2-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
-[    7.303529] Device 'mediablk-mipi-dsi-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
-[    8.006575] Device 'mediablk-mipi-csi2-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
-[    8.598453] Device 'mediablk-mipi-dsi-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
-
-This is with 6.13-rc3 on a imx8mp.
-
-Luca
-
--- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+Regards,
+Lucas
 
