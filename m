@@ -1,162 +1,107 @@
-Return-Path: <linux-pm+bounces-19365-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19366-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 976779F47B6
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 10:38:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F2D19F49BA
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 12:21:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6026F163F62
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 09:38:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2793167688
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 11:21:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 260FC1DE8B0;
-	Tue, 17 Dec 2024 09:38:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E43911E47DA;
+	Tue, 17 Dec 2024 11:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pv81gis4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C8FF1D5AA5;
-	Tue, 17 Dec 2024 09:38:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF5EE23DE;
+	Tue, 17 Dec 2024 11:21:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734428315; cv=none; b=IZAczVf55TsPJvnQTKqnAmvccwknoad8YbtbR881bK/1cdAne3VwN8cRhEKydK+qi8QkyhnKhbUP+qvUUeEn8+EoodH7INo4+ZL7E1gwjkbbgRmJLhMJBKlf84tZYJckqvANGoqWQhBTKA/0N+CWfibRm3lN10Zx5klHiVS2VCs=
+	t=1734434487; cv=none; b=cuRRDU2Gll6e3aSJs+yjTwPlLYpAWeTJeSzWNOXJYuLatVjUUqRe928NXkIvft1dQSUSOGS64c0z6sL17psPzb07a6gewdMHZeHZb0w0XjeIpwQnRFDUlgyoBeAf2X3kdU2RZ3YPGUPXs46eC3DbqWyx1hDdnSKZVUyADze653Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734428315; c=relaxed/simple;
-	bh=bdqTMj31J0d19foueIwWZpipzFk7mkkYFLZuSeLOUHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fajt7T76uxckFZ9GhrLZrMy0vMze+0Kl4Um5Yue48MoPIE/pX10wSI79ZTjifJ3GjcIZQrGR8wVgVnpOqtlYrR9RtSv1Jfyzn6UZQ28Q9Bkm/5Zj6r0taaLigZFqDRqTR5OxWHgG6sG+PUtFxs3oZp0v/X9pDm6Xgk/eZZu3jZY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6C37B1007;
-	Tue, 17 Dec 2024 01:38:59 -0800 (PST)
-Received: from [192.168.178.6] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9BCCA3F720;
-	Tue, 17 Dec 2024 01:38:29 -0800 (PST)
-Message-ID: <31c86834-273b-458f-9914-eff76c283cfb@arm.com>
-Date: Tue, 17 Dec 2024 10:38:28 +0100
+	s=arc-20240116; t=1734434487; c=relaxed/simple;
+	bh=s5vK3vqWBeHhLp5xzRCQJldT103A0i54JjSN+MTyT8k=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WHw1SWDuwiNECtTTTxrKEYwgi8UcI+1QreWbd2UnxSLOiotnFMeL6/kYduf2aCBaqW79k6gN8ufs6x7D2Nh9x4szOvkK3dHzUfcMuZT+RdZ6AJ/8kzvXj0BHiKPFsBTYFUoU3FEhEzdK15se3NRcZDdhTRXRWLYw/FPEEMFhTto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pv81gis4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 10141C4CED3;
+	Tue, 17 Dec 2024 11:21:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734434487;
+	bh=s5vK3vqWBeHhLp5xzRCQJldT103A0i54JjSN+MTyT8k=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Pv81gis4dLGqoebSqNaB4sZFJMizri+86Nhpo1NOkUH1rzZP+VH9DNfuA11C6b8iD
+	 /dEHMm76FjxT05+pB24/5rDtmrSeMHMUKczet63l3PnRqTBv+xkU2L78XzlC+8bDeF
+	 xvhqx3BXzlhTB7yNMXPsscARuB4IbdoZflcTDIu7+dUaORt8ZNcBD73GOgnUUaTqIj
+	 pci1GPVySE+mDm0JdiViVKnSOvKIg18YdJ6NTtsdL4JioODFoRNfv1Vj7ei7humRmG
+	 xD8tJAaw5mVIIarlskCmtr/HD8XTDXTzCAN/GBBPuejOh7v3Gy24gHvlqxGVW8WVtn
+	 okjOkklEn4efQ==
+Date: Tue, 17 Dec 2024 05:21:25 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Karan Sanghavi <karansanghvi98@gmail.com>
+Cc: Florian Fainelli <florian.fainelli@broadcom.com>,
+	Alexander Aring <alex.aring@gmail.com>,
+	Scott Branden <sbranden@broadcom.com>,
+	Shuah Khan <skhan@linuxfoundation.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	devicetree@vger.kernel.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>,
+	linux-rpi-kernel@lists.infradead.org,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Ray Jui <rjui@broadcom.com>, Eric Anholt <eric@anholt.net>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH v5] dt-bindings: power: Convert raspberrypi,bcm2835-power
+ to Dt schema
+Message-ID: <173443448203.859628.7169765786016335364.robh@kernel.org>
+References: <20241216-raspberrypi-bcm2835-power-v5-1-222fc244132b@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC][PATCH v021 5/9] PM: EM: Introduce
- em_dev_expand_perf_domain()
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
- Peter Zijlstra <peterz@infradead.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Morten Rasmussen <morten.rasmussen@arm.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
- Pierre Gondois <pierre.gondois@arm.com>
-References: <5861970.DvuYhMxLoT@rjwysocki.net>
- <3353401.44csPzL39Z@rjwysocki.net>
-From: Dietmar Eggemann <dietmar.eggemann@arm.com>
-Content-Language: en-US
-In-Reply-To: <3353401.44csPzL39Z@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241216-raspberrypi-bcm2835-power-v5-1-222fc244132b@gmail.com>
 
-On 29/11/2024 17:02, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+On Mon, 16 Dec 2024 17:07:00 +0000, Karan Sanghavi wrote:
+> Convert the raspberrypi,bcm2835-power binding to Dt schema
 > 
-> Introduce a helper function for adding a CPU to an existing EM perf
-> domain.
-> 
-> Subsequently, this will be used by the intel_pstate driver to add new
-> CPUs to existing perf domains when those CPUs go online for the first
-> time after the initialization of the driver.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> Signed-off-by: Karan Sanghavi <karansanghvi98@gmail.com>
 > ---
+> Changes in v5:
+> - Added maintainers for the power domain
+> - Link to v4: https://lore.kernel.org/r/20241028-raspberrypi-bcm2835-power-v4-1-acf44abd45ff@gmail.com
 > 
-> v0.1 -> v0.2: No changes
+> Changes in v4:
+> - Corrected misindentations and random differences.
+> - Link to v3: https://lore.kernel.org/r/20241026-raspberrypi-bcm2835-power-v3-1-6621e075d33f@gmail.com
+> 
+> Changes in v3:
+> - Applied changes as per the feedback received for title and description
+> - Removed power label and renamed node to power-controller
+> - Moved the file from bindings/soc/bcm to bindings/power
+> - Link to v2: https://lore.kernel.org/r/20241022-raspberrypi-bcm2835-power-v2-1-1a4a8a8a5737@gmail.com
+> 
+> Changes in v2:
+> - Added original file maintainers
+> - Removed unnecessary headers from example and formating from description
+> - Link to v1: https://lore.kernel.org/r/20241019-raspberrypi-bcm2835-power-v1-1-75e924dc3745@gmail.com
+> ---
+>  .../bindings/power/raspberrypi,bcm2835-power.yaml  | 42 +++++++++++++++++++
+>  .../bindings/soc/bcm/raspberrypi,bcm2835-power.txt | 47 ----------------------
+>  2 files changed, 42 insertions(+), 47 deletions(-)
+> 
 
-Could you add information why this new EM interface is needed?
+Applied, thanks!
 
-IIRC, you can't use the existing way (cpufreq_driver::register_em) since
-it gets called to early (3) for the PD cpumasks to be ready. This issue
-will be there for any system in which uarch domains are not congruent
-with clock domains which we hadn't have to deal with Arm's heterogeneous
-CPUs so far.
-
-__init intel_pstate_init()
-
-  intel_pstate_register_driver()
-
-    cpufreq_register_driver()
-
-      subsys_interface_register()
-
-        sif->add_dev() -> cpufreq_add_dev()
-
-          cpufreq_online()
-
-            if (!new_policy && cpufreq_driver->online)
-
-            else
-
-              cpufreq_driver->init() -> intel_pstate_cpu_init()
-
-                __intel_pstate_cpu_init()
-
-                  intel_pstate_init_cpu()
-
-                    intel_pstate_get_cpu_pstates()
-
-                      hybrid_add_to_domain()
-
-                        em_dev_expand_perf_domain()              <-- (1)
-
-                  intel_pstate_init_acpi_perf_limits()
-
-                    intel_pstate_set_itmt_prio()                 <-- (2)
-
-            if (new_policy)
-
-              cpufreq_driver->register_em()                      <-- (3)
-
-    hybrid_init_cpu_capacity_scaling()
-
-      hybrid_refresh_cpu_capacity_scaling()
-
-        __hybrid_refresh_cpu_capacity_scaling()                  <-- (4)
-
-        hybrid_register_all_perf_domains()
-
-          hybrid_register_perf_domain()	
-
-            em_dev_register_perf_domain()                        <-- (5)
-
-      /* Enable EAS */
-      sched_clear_itmt_support()                                 <-- (6)
-
-Debugging this on a 'nosmt' i7-13700K (online mask =
-[0,2,4,6,8,10,12,14,16-23]
-
-(1) Add CPU to existing hybrid PD or create new hybrid PD.
-(2) Triggers sched domain rebuild (+ enabling EAS) already here during
-    startup ?
-    IMHO, reason is that max_highest_perf > min_highest_perf because of
-    different itmt prio
-    Happens for CPU8 on my machine (after CPU8 is added to hybrid PD
-    0,2,4,6,8) (itmt prio for CPU8=69 (1024) instead of 68 (1009)).
-    So it looks like EAS is enabled before (6) ?	
-(3) ARM's way to do (5)
-(4) Setting hybrid_max_perf_cpu
-(5) Register EM here
-(6) Actual call to initially triggers sched domain rebuild (+ enable
-    EAS) (done already in (2) on my machine)
-
-So (3) is not possible for Intel hybrid since the policy's cpumask(s)
-contain only one CPUs, i.e. CPUs are not sharing clock.
-And those cpumasks have to be build under (1) to be used in (5)?
-
-[...]
 
