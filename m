@@ -1,78 +1,112 @@
-Return-Path: <linux-pm+bounces-19362-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19363-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B1B79F450A
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 08:25:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63F3B9F463C
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 09:42:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9A26188FEE1
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 07:25:25 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 778207A13F8
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 08:42:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11BCF18A6CF;
-	Tue, 17 Dec 2024 07:25:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C556D1DCB24;
+	Tue, 17 Dec 2024 08:42:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VckP0Aj+"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="mfWapWyI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from relay6-d.mail.gandi.net (relay6-d.mail.gandi.net [217.70.183.198])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE63E1E529;
-	Tue, 17 Dec 2024 07:25:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3531B1D88C4;
+	Tue, 17 Dec 2024 08:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.198
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734420316; cv=none; b=TdsNfwLwlFyFOvhFTMYCgh4CFisDWhw3bnfnoo+v7TOUaVswANIyFWT5I0HrQgeh931b9YEaR7CahRLGotSVnZuQGXp6cfehDO8/SVXveYtrgaRenJeJPielc4Mc7tqPA2+S3hNZhQVref1t648ZMQ0PEMkY9XNTKiey9AoPA6U=
+	t=1734424946; cv=none; b=b21THbSseC6rZmWBk0v3eDYcA3hIgubE1WaLib7KKlBvOwtVklJ5cN/41U3IUmVCzOvYFoppTUOOnS/YmdPflPmFDZTYLs383dymNv8Ew4KSyA5QyibmQ5OgW9hYQN24qTmfaXu4XtZ0JoH+OKS+MHS61J52+JgUOOqzKWgtEcM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734420316; c=relaxed/simple;
-	bh=SIqktI3t0AAhjSeYSQWiux57263h5Nx+YwGr7UnQ6qM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=J2NFCgpPddWFazrXU5Oz/hzdWa/u4onljctuuyDGvSEjn9XAr+OwbkeKs6IkDKmH2KU9lb8X34bt5fx9MgD6Kj+oJ4bVVpoVAsVo07D52QbntvziY7kVFamqicz+681Hi8ox+4Pmka7ePEoUfHSLy8b/VrMtqsIpdtB0y6YmklA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VckP0Aj+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 765BCC4CED3;
-	Tue, 17 Dec 2024 07:25:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734420315;
-	bh=SIqktI3t0AAhjSeYSQWiux57263h5Nx+YwGr7UnQ6qM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VckP0Aj+Dqk2g4fmpH3WQSfPdFr6hDVsvhKgGIlwewonZlOpgBsT87wvDdMNTTv6c
-	 USqLU7mwP43lb84GQpH3a1O/SnDvdAw0APRtLUthlIWPWXJAQPskMoxJsaAPGb2t6S
-	 W3reYwe4iQJy4S5TGjZtDAl7IH+vkSVFHFsHa5J+NIi+iqV6TmoA+t7wISR3WsQYBo
-	 q0iA3mJ6zbZAf7Ou/HLQPO5h95+xNv1tMKD+6F1NcHvbb5ghGp86sP8V/H9YgMv1Sn
-	 Iwy+ceb4m6WNklNv7yoIKjA33dLPLUoLhg8p/woX4QkUa61aD6eaQG+dho8K7SaXBv
-	 76m1xWDFWb76g==
-Date: Tue, 17 Dec 2024 08:25:11 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Varadarajan Narayanan <quic_varada@quicinc.com>
-Cc: andersson@kernel.org, mturquette@baylibre.com, sboyd@kernel.org, 
-	djakov@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org, 
-	linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-Subject: Re: [PATCH v1 1/2] dt-bindings: interconnect: Add Qualcomm IPQ5424
- support
-Message-ID: <yloopcxo3elwkrhq5cncy3bnbxyyi4wvgtvoslc6v6mc4ecwqs@gknbpccuwqao>
-References: <20241213105808.674620-1-quic_varada@quicinc.com>
+	s=arc-20240116; t=1734424946; c=relaxed/simple;
+	bh=QSpktkEFl5aljmBnez15ONkM7IEJyEoiz/F4IZQK7S8=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=j/UzQQzrG9YW5qHBas0tdZz3loem9CYbRh3rNlnoi9Q1S/KURSRpzbpEQsssgSJffvSboyZjeOw6rMyXC1nRpi1Gl140DqETVU5s8+Jj0QFFpO9MMfpgnpaDkb9SHRb/7wllrqa1uPIswnKFgRj4muV+TaPWPoz9QwFe82RyQkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=mfWapWyI; arc=none smtp.client-ip=217.70.183.198
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 0B074C0006;
+	Tue, 17 Dec 2024 08:42:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1734424942;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=9idV19gXA8JkUDickvfvx0vTW3usv3OBF/gTIq+FKLM=;
+	b=mfWapWyIqX5dLd37tsSruDGdVACdKSyEgu+qHatAIIebotStGtezb0J0kR0njEcDdomv9N
+	6JhXtoibG8DYOCSpBLjbSI4ddc4QxbDoltB3dIGSNgl1NfNX6tcMDuD2O1I61wIt98sZM6
+	rz73PJwPg1PEW05vbAZJ/zv4K+MHw4SCZN6pb33t0WKYMMziB5TvJSmvYxlF74yXKLQk4c
+	Ky2lBg1l/T1DRk84cN9B1ayq5cRi0aZmABlagrScipjqpanqREWQG+86EajEC6B7+Voy6N
+	epO+2nfmNHT6k+hRHGGY+syC0ZhrTHuKCoEiaet/iVRFdQ2q+e8PpeOopGk0ng==
+Date: Tue, 17 Dec 2024 09:42:19 +0100
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Peng Fan <peng.fan@nxp.com>
+Cc: Francesco Dolcini <francesco@dolcini.it>, "linux-pm@vger.kernel.org"
+ <linux-pm@vger.kernel.org>, "imx@lists.linux.dev" <imx@lists.linux.dev>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team
+ <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, Marek Vasut
+ <marex@denx.de>, "linux-arm-kernel@lists.infradead.org"
+ <linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
+ <linux-kernel@vger.kernel.org>, Lucas Stach <l.stach@pengutronix.de>,
+ Jindong  Yue <jindong.yue@nxp.com>, Benjamin Gaignard 
+ <benjamin.gaignard@collabora.com>, Paul Elder 
+ <paul.elder@ideasonboard.com>, =?UTF-8?Q?Herv=C3=A9?= Codina
+ <herve.codina@bootlin.com>
+Subject: Re: imx8m-blk-ctrl: WARNING, no release() function
+Message-ID: <20241217094219.788cad88@booty>
+In-Reply-To: <PAXPR04MB8459AB53B142CB43782757D988042@PAXPR04MB8459.eurprd04.prod.outlook.com>
+References: <20241212141003.GA44219@francesco-nb>
+	<PAXPR04MB8459AB53B142CB43782757D988042@PAXPR04MB8459.eurprd04.prod.outlook.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241213105808.674620-1-quic_varada@quicinc.com>
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On Fri, Dec 13, 2024 at 04:28:07PM +0530, Varadarajan Narayanan wrote:
-> Add master/slave ids for Qualcomm IPQ5424 Network-On-Chip
-> interfaces. This will be used by the gcc-ipq5424 driver
-> for providing interconnect services using the icc-clk framework.
+Hello Peng,
+
+On Tue, 17 Dec 2024 01:39:09 +0000
+Peng Fan <peng.fan@nxp.com> wrote:
+
+> > Subject: imx8m-blk-ctrl: WARNING, no release() function  
 > 
-> Signed-off-by: Varadarajan Narayanan <quic_varada@quicinc.com>
-> ---
+> Please try this patch.
+> https://lore.kernel.org/all/20241206112731.98244-1-peng.fan@oss.nxp.com/
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I cherry-picked the two patches from linux-next:
 
-Best regards,
-Krzysztof
+  e1a875703470 ("pmdomain: imx-gpcv2: Suppress bind attrs")
+  afb2a86f002b ("pmdomain: imx8m[p]-blk-ctrl: Suppress bind attrs")
 
+but I still have the same warnings:
+
+[    5.427038] Device 'mediablk-mipi-csi2-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
+[    6.464219] Device 'mediablk-mipi-dsi-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
+[    6.752903] Device 'mediablk-mipi-csi2-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
+[    7.303529] Device 'mediablk-mipi-dsi-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
+[    8.006575] Device 'mediablk-mipi-csi2-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
+[    8.598453] Device 'mediablk-mipi-dsi-1' does not have a release() function, it is broken and must be fixed. See Documentation/core-api/kobject.rst.
+
+This is with 6.13-rc3 on a imx8mp.
+
+Luca
+
+-- 
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
