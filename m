@@ -1,100 +1,81 @@
-Return-Path: <linux-pm+bounces-19390-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19391-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD7D79F5681
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 19:50:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EA3B19F56FD
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 20:41:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A19971892DC1
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 18:50:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AFECE16FF70
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 19:41:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F387C1F8ADA;
-	Tue, 17 Dec 2024 18:50:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DFDF1F9ABF;
+	Tue, 17 Dec 2024 19:40:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="pYIONDXe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZE/E7kri"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E68713D891;
-	Tue, 17 Dec 2024 18:50:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B6AB1F9A98;
+	Tue, 17 Dec 2024 19:40:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734461410; cv=none; b=XBPu00eQxodx1So5Bh2449awXBM5X/W5LJ/0DUosWT748oO0LGueRD54cYy/zalcjSQLuIZcuRFoet0NhufBzL2xk2dXCiTuQqsgINIXHyrdhvco9RWlBK5GYwwLAFwAQ9DFl7kp9zUTafYigIol3nq9+P6SouVMBjgTEgv0vx8=
+	t=1734464454; cv=none; b=kv6fpiM6nU7mmBNWpYEMPXQv8aArClO78alW+KAE05iD0BxZCSVz8PobA3R4WUYqLBxjWwQ7xhzeG4bQasrIX9/e1Fe18knIjHbwSL1FgG34T7cWxnOLw4pf7Ghjt6Luh2JONLNYyakNccsmRGKs3fi2qwswP/21TGBE+JA71V4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734461410; c=relaxed/simple;
-	bh=G40LjJrXzGvTeGa7ZXEnOFARV4ydsEIj57Okp9nY12Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aFM/OFuF8j93O0GooTpiZlmrF0QfCyusA5G2CyZI0s2pzsXa1f6VPNMxZb5cJG+HhOQ239DSomG0SZz6e5AjiaDMCyEgR78BmQ/F1IeAthrTDINPbAlGxS/m3fNg3Q3319wZqGFXDl4428ANXRA3Lp5CyPczKcbvlkmMjOBFRsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=pYIONDXe; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1734461398;
-	bh=G40LjJrXzGvTeGa7ZXEnOFARV4ydsEIj57Okp9nY12Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=pYIONDXeFCMQy1GxAr3Q8ayx5hBLarUNrSbajwdqe7FN7O4+cKaHVWql+7LV8VTcB
-	 xT2ha8Bx68+kVOmIOVCjRvY/Mm/XDyRqfT24KxaekGXWWVB9QXFs9zRJ6Ax9/H7qOe
-	 wit4Myy0J6GlAPpzPLkxkTTKN6Se2ha8N1sOzSbg=
-Date: Tue, 17 Dec 2024 19:49:57 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Andy Shevchenko <andy@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-	Jelle van der Waa <jelle@vdwaa.nl>, platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] platform/x86: dell-laptop: Use
- power_supply_charge_types_show/_parse() helpers
-Message-ID: <c59ed113-6a43-4807-a006-ceb5a807fb90@t-8ch.de>
-References: <20241211174451.355421-1-hdegoede@redhat.com>
- <20241211174451.355421-5-hdegoede@redhat.com>
- <0030c3dd-c70c-d21b-de2b-ace0aeb4030d@linux.intel.com>
- <6760c9d3-ccf4-47de-bfe5-b59b8b9fca07@redhat.com>
+	s=arc-20240116; t=1734464454; c=relaxed/simple;
+	bh=sMWxwMc5jv9BCRlE6TvdrDoir8ne0lP4dSkKb9txpdo=;
+	h=Message-ID:Content-Type:MIME-Version:In-Reply-To:References:
+	 Subject:From:Cc:To:Date; b=Hbeua076MB4P/2aoytSnSWy3mh7BMmtyXf3L6JjeWWa/+VsjCoTWYYYsLtD9FSBVskIcJ80wsqoKjL5uYrKyHlwy8RaagMXXk+ZRvT6UQBh1I6ye4Bf3GKGIcZBP9G23m/Dk1IxRo0Q65PE123W1IGgs2a1c30Rp7J4vl+Mpgz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZE/E7kri; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E4C60C4CEDD;
+	Tue, 17 Dec 2024 19:40:53 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1734464454;
+	bh=sMWxwMc5jv9BCRlE6TvdrDoir8ne0lP4dSkKb9txpdo=;
+	h=In-Reply-To:References:Subject:From:Cc:To:Date:From;
+	b=ZE/E7kripekEf6Lm0/9RX3ufX/1nbhN/fOJVrQoyenTTT8qEQrBYdlBIWkpVfp8Ko
+	 ITFq8vDwPfXEAo7fzrLgguh4wwWMOv02zTpjtyYVZtFsL2gmr3vSWcBDmw/Km6IM2y
+	 8MJSB1qk+Xcczy5KZcN5RoC55KpyIxr+yzFL9frXSGSNHxjdQ21FCzMbK519njemtQ
+	 d+K6zokf879oSxhreMBAXt/RlAOwii3b08YdQ2UcmXXWM8RR+oPkf3lr/ihLp7l1zN
+	 xZMWA617d8DwipEp/Olq6czk8Nh9ihQIyftPCV418doR+fcD3V4fudys3hhyaZriOG
+	 qhywlLoyQU1kw==
+Message-ID: <08d2d8977847e1bc0bfcb1b884a6fb59.sboyd@kernel.org>
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <6760c9d3-ccf4-47de-bfe5-b59b8b9fca07@redhat.com>
+Content-Transfer-Encoding: quoted-printable
+In-Reply-To: <20241129142446.407443-1-eugen.hristev@linaro.org>
+References: <20241129142446.407443-1-eugen.hristev@linaro.org>
+Subject: Re: [PATCH v4] soc: qcom: Rework BCM_TCS_CMD macro
+From: Stephen Boyd <sboyd@kernel.org>
+Cc: linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, konradybcio@kernel.org, andersson@kernel.org, evgreen@chromium.org, Eugen Hristev <eugen.hristev@linaro.org>
+To: Eugen Hristev <eugen.hristev@linaro.org>, linux-arm-msm@vger.kernel.org
+Date: Tue, 17 Dec 2024 11:40:51 -0800
+User-Agent: alot/0.12.dev1+gaa8c22fdeedb
 
-Hi Hans,
+Quoting Eugen Hristev (2024-11-29 06:24:46)
+> Reworked BCM_TCS_CMD macro in order to fix warnings from sparse:
+>=20
+> drivers/clk/qcom/clk-rpmh.c:270:28: warning: restricted __le32 degrades t=
+o integer
+> drivers/clk/qcom/clk-rpmh.c:270:28: warning: restricted __le32 degrades t=
+o integer
+>=20
+> While at it, used u32_encode_bits which made the code easier to
+> follow and removed unnecessary shift definitions.
+>=20
+> The use of cpu_to_le32 was wrong and thus removed.
+>=20
+> Signed-off-by: Eugen Hristev <eugen.hristev@linaro.org>
+> ---
 
-On 2024-12-17 16:18:47+0100, Hans de Goede wrote:
-> On 17-Dec-24 1:01 PM, Ilpo Järvinen wrote:
-> > On Wed, 11 Dec 2024, Hans de Goede wrote:
-> > 
-> >> Make battery_modes a map between tokens and enum power_supply_charge_type
-> >> values instead of between tokens and strings and use the new
-> >> power_supply_charge_types_show/_parse() helpers for show()/store()
-> >> to ensure that things are handled in the same way as in other drivers.
-> >>
-> >> This also changes battery_supported_modes to be a bitmap of charge-types
-> >> (enum power_supply_charge_type values) rather then a bitmap of indices
-> >> into battery_modes[].
-> >>
-> >> Reviewed-by: Thomas Weißschuh <linux@weissschuh.net>
-> >> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+Thanks
 
-[..]
-
-> Note that merging this requires the earlier patches from this
-> series which have been merged into:
-> 
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git/log/?h=for-next
-> 
-> so this either requires an immutable tag from Sebastian for you to merge,
-> or this should be merged through Sebastian's tree.
-
-If this goes in via the psy tree, you could already make it a power
-supply extension. The necessary code is in psy/for-next.
-
-Not necessary obviously.
-
-
-Thomas
+Reviewed-by: Stephen Boyd <sboyd@kernel.org>
 
