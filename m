@@ -1,124 +1,232 @@
-Return-Path: <linux-pm+bounces-19358-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19359-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6475C9F41BB
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 05:27:37 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0EC689F42BB
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 06:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9BD3C16D6BD
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 04:27:34 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 182CE7A3694
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 05:29:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DFB814831E;
-	Tue, 17 Dec 2024 04:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DAF314D70E;
+	Tue, 17 Dec 2024 05:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GALa36JQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nBmJULm1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 17322145346
-	for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2024 04:27:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D24D146A9B
+	for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2024 05:26:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734409651; cv=none; b=QYkllKHEu/HkMGWWLbcelhLc0hesFa/wr0R7BSV/aHF5k/iHnXOO6EAnyiS6NKnF8BgNjPt8PIFImOFK0YsxJyctGcTQa8ZdQECfEfzvuq8bPIi62XhjrxcbtpsflMkZNTmgaXTqjlT/UdbSHbSskSyOUfV0WM1KwGMXEI/JqTc=
+	t=1734413201; cv=none; b=mpFYexfWW/3+2XOSk+3LyaQxI2KqO+fkd9MhwIDa+PH+Vgy1uvEwE0EkHZsN1ix4/yM1r8Es9N0/OT9J45IrJmuYbUkYnapoDwtXps6U0jgvxXIrKc6NWpsY+3kNrhkIYstbbI5L2MNzf8WGnoJmVsBtahT2ZO6d7BqzW51C2/U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734409651; c=relaxed/simple;
-	bh=KGf3WEZUTgWBNJDe2xew7TkgY4CxKh65T66dzPPcwMk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=L5cZzWmC+HpE1dzslRyQIjlTgB1SXipX0fPILqgCvdW8/n9kNX0HVQNEHhAHkvJRUx5APR1BOZzJo/caic/YMO2NSHwEGKrDSWTkJ+ZNu2qVoRZpdaELk/I+Y5P2nNUZ5235GBCFwTRFX8HxFTokMzMCk8d6y/BQYTq8zskZOgw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GALa36JQ; arc=none smtp.client-ip=209.85.216.49
+	s=arc-20240116; t=1734413201; c=relaxed/simple;
+	bh=UDl+fCY918vruRgK91wANvLDJqtjsROJTFfCQAaLERc=;
+	h=From:Date:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=oFOzZZR+vAFVCafA0aLmdMcQzICDetnIfUBFbEcl1KtuDgEHdouNQx/fuvclVFD5DvCyBKzy1GnHYQCFU32l/MnnoasJyr/OqQaWLpOJ0M1ghXrWJg6ZIeYcO/7or6PBxzqIoRFwn3H9uH/K8xAVEwQj8auljNnvu/BmUa8R0vo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nBmJULm1; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2ee67e9287fso4376349a91.0
-        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 20:27:29 -0800 (PST)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-216728b1836so34550775ad.0
+        for <linux-pm@vger.kernel.org>; Mon, 16 Dec 2024 21:26:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734409649; x=1735014449; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Fr3GeSntlHloZ4yayQx6BsNSKnwpryezH5Wr5AEdqz8=;
-        b=GALa36JQf9P2udVWsBlKW83PFKRaM1xO+HG3eiFw7WlO1O0Wn4+oq8x6fbQKgDefNv
-         XxQQYZxiuDM0ud9PEIyOF6SBGhx5QA/9M9nliQ5krmXOJnYGwDf34OlbAE6bAjXPbkzc
-         3X9a7sbTgxbzGb40JBMlERxMGW80J9tLlm5b6M5q+cyd5favPWLXEvMwuztljLkaCn1T
-         PSq2ANdZhssa/LoB+3FYIBteMGi/lV7uCeOX/UqnGprCPa7MHnJmDMBcI6vT60Fgftr6
-         lsw6hky/0n3ikwns0s75tFAXnC+BwKbuA1AHHJ6nCWNtjIUM7rL4vGG9Odz+Yi5X/e0I
-         nzdA==
+        d=linaro.org; s=google; t=1734413199; x=1735017999; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=VXnSoYy/DcLGpfJd7nHDxONKuV/9hhaVZ6r9SGdxcq8=;
+        b=nBmJULm1tLzkG1uxbXbxutxajVbluRmU7iYIkFo/C5lg5BM+cvJR2no1IhNidiwMFy
+         XKvXzQouEhclPuncns7+fuY+0s2PhXZ1R8Km7fBEAC3rUGi45XfdfOWk3V0dQGZEu/Uc
+         9PPcBQxJqu45p6ipvFhW1TWXuXIKQOnnA6r6qTyMSuLFX1rgk5mlqlif7L/K+YcvcN7I
+         Nn79gDl6PHAvNS/PCWC1HsulVEk3C7WKvMion3SEPBpGy187rimwF1itEhw5nSvklWNC
+         X6XAhpML4AtEaQ4CTi1fTHyVZkvq1p8vN78kzDbnSqYvQJ761/DQ6LqzxXihOIsMde/k
+         QYkw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734409649; x=1735014449;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Fr3GeSntlHloZ4yayQx6BsNSKnwpryezH5Wr5AEdqz8=;
-        b=FCBz9v26EDgCZdw4erbeFtyR9C1ElDeA3nVMKyxfFErR1dIp/PHHOI32OpKnPOfbti
-         uRTY7UsWdnvNzbYDNta/fONR93lew/evUu+m9MuC+qRaWzJOAirg5BbCQtD1W37qpTcW
-         8aUYXAv2CCWHSczLiKg2MeAN4ZiOtLkfxsre4t+YtWH7xuEu0XE5a5ieBNT64MTXxpLc
-         /rGZKpm0T9o/HPUbN3cO27Hr7sphF1ye+lU302l13tbl4BPiEC4aiiEktB7Aa9PGLhy5
-         pJP9CwVmScT2KaUzLKx3Ih8spWKrkr9pWxhmBkiY46lvtkBOOH1PSl+toF/i7AOT/6NV
-         0FeA==
-X-Forwarded-Encrypted: i=1; AJvYcCXn3GDdI1jkHk4YPCVDsH7zuBpo01D+HhYvXg6xZFznpZM2lfZfaUr5ffiqaY9QCeeJ5tkt4H8ccQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwDFex13F6p/Z7RrSUB4ubKnNJamSMackSuIOKka/yyKQo4Geis
-	20kMXFtTu6k1gX8UbOubz+GX3g8NcybUSfb6R6UOaNVY+Z69yMsxnosfnJTYAUA=
-X-Gm-Gg: ASbGncskRY55kFL7W4IillDugWIeW4BIUHJ0TOpO1DEzj6ARzEHNTi6FTZ+EpSRNVFG
-	/f5zN9I2M7CIU4XHVoCfWSRoJmfQvB3Ze9GdEkNqvz2D+9/kf1oSaTnvniSpYaAE9hL5BRqyVO/
-	UWU89oV4bO8PqYqyA7AN0dCTvYU9DYc1BH5WaGGdVa9vpS+IVs9e6pOs86E33HPQBFT0m3dSOnY
-	zEYR0BTyByaWw7TSEkr54tpMBU56cpR68XyiFoWliNQnjZK1NLIvUnC/gg=
-X-Google-Smtp-Source: AGHT+IE/JeMuR4dBQFhr2ewi062MYvFxM7gFUf/kYOjekW7K8q6et1llylqaVQeIxsiURZEwVjKeIQ==
-X-Received: by 2002:a17:90b:2e48:b0:2ee:6736:8512 with SMTP id 98e67ed59e1d1-2f28fb6f983mr28756658a91.12.1734409649481;
-        Mon, 16 Dec 2024 20:27:29 -0800 (PST)
-Received: from localhost ([122.172.83.132])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142d90d45sm9072765a91.11.2024.12.16.20.27.28
+        d=1e100.net; s=20230601; t=1734413199; x=1735017999;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:date:from
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=VXnSoYy/DcLGpfJd7nHDxONKuV/9hhaVZ6r9SGdxcq8=;
+        b=FmOJ7zBK3CtQoKS9k0q7NpFs14i01NCQTAVwj+AR8ZukSUfgkiUox4IIZSU+AL29lT
+         z6/6Wl8J2xoMw8OpRdSYXFlEJeuwWSMi1GMsCHoZYkgmL4f5MUak5Wxlx3ngBwarsgRj
+         rhzqgHbS9zYsyQduBTych5KrLJuJp0XMPYZLEOQ+0H7RzeEgyFJaO7rQBSLsWtajIWMS
+         zveyKmypiJG4EzuFkpIlfHqQl0xaTlCJ/Aotm145PNzY9jtrednslRE8gsV6/O9wu6Fd
+         Ac/sT8BoQ6ZMu8Wdu4HQ1kd3Ss1XpCLEKugafH2oDK2UlM157ot88q1i8rXVMaTc0CWg
+         Yx2A==
+X-Forwarded-Encrypted: i=1; AJvYcCWGQj5MT+r7OT4rZVA/EiGmBKu8SspBSynwQI8ZBkelFIvZe5chX3zsE3HkrOKv3bceyyWJFQgTJw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxtR1r/pnCAkWakQpo7b9HyZAbwKbENIrgzjHSJaM1vY/pyANZ7
+	0OPOwb4v5rOcp1ZseBJZR/ZWxpmjQgn3faqFBtY2q48xVvho38cGrUh3v5/HDg==
+X-Gm-Gg: ASbGncuh5J/d5XVDQUxVKX+xhK0qe7W/DUAM3Jhkg2YHi6/TE2h9QJaBntd/MP3/nWT
+	UpqRaq4wJiP5TLR7vHu7Hz0B2wbL1GAEh7SaOO7+tqloVLHZRpupb42wC3+iCxVnSHGuIQZC8fq
+	yN+ywNhb57tWH7+9plRm1vGP88zw1kGXiBSjuuM7z5JkAUym4T+vGZVVeq1vmTLDIUmr7RSZm0d
+	iGwi0fLA+MqXI9ZeiCNhYY0Y8tJTTs/vZwhjEig7wDMhcld3xy4lsknv5N8LrUckgOq
+X-Google-Smtp-Source: AGHT+IFsS3IZ2kuJoYYT9J6yaDIHOOQEb5x9/0WrwBJTXWku1ZLygnZo3QdYaoEU12xrzijDxxrz1Q==
+X-Received: by 2002:a17:902:c952:b0:216:3c2b:a5d0 with SMTP id d9443c01a7336-21892a785b7mr178520425ad.51.1734413199463;
+        Mon, 16 Dec 2024 21:26:39 -0800 (PST)
+Received: from thinkpad ([120.56.200.168])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f142fc305dsm9094176a91.52.2024.12.16.21.26.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 16 Dec 2024 20:27:28 -0800 (PST)
-Date: Tue, 17 Dec 2024 09:57:26 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Beata Michalska <beata.michalska@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
-	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
-	rafael@kernel.org, sumitg@nvidia.com, yang@os.amperecomputing.com,
-	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
-	zhanjie9@hisilicon.com, Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>, Phil Auld <pauld@redhat.com>,
-	x86@kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v8 1/4] cpufreq: Introduce an optional cpuinfo_avg_freq
- sysfs entry
-Message-ID: <20241217042726.isllh5bulpnwql7i@vireshk-i7>
-References: <20241206135600.4083965-1-beata.michalska@arm.com>
- <20241206135600.4083965-2-beata.michalska@arm.com>
- <20241212065100.sjb7lrlmksbm2hdk@vireshk-i7>
- <Z2CmcelSy89NULtz@arm.com>
+        Mon, 16 Dec 2024 21:26:38 -0800 (PST)
+From: manivannan.sadhasivam@linaro.org
+X-Google-Original-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, `@thinkpad
+Date: Tue, 17 Dec 2024 10:56:32 +0530
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org,
+	axboe@kernel.dk, sagi@grimberg.me, linux-nvme@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	andersson@kernel.org, konradybcio@kernel.org,
+	Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] nvme-pci: Shutdown the device if D3Cold is allowed by
+ the user
+Message-ID: <20241217052632.lbncjto5xibdkc4c@thinkpad>
+References: <13662231.uLZWGnKmhe@rjwysocki.net>
+ <CAPDyKFrxEjHFB6B2r7JbryYY6=E4CxX_xTmLDqO6+26E+ULz6A@mail.gmail.com>
+ <20241212151354.GA7708@lst.de>
+ <CAJZ5v0gUpDw_NjTDtHGCUnKK0C+x0nrW6mP0tHQoXsgwR2RH8g@mail.gmail.com>
+ <20241214063023.4tdvjbqd2lrylb7o@thinkpad>
+ <CAJZ5v0gLMx+tBo+MA3AQZ7qP28Z91d04oVBHVeTNcd-QD=kJZg@mail.gmail.com>
+ <20241216171108.6ssulem3276rkycb@thinkpad>
+ <CAJZ5v0j+4xjSOOy8TYE0pBuqd_GdQa683Qq0GEyJ9WAFad9Z=A@mail.gmail.com>
+ <20241216175210.mnc5kp6646sq7vzm@thinkpad>
+ <CAJZ5v0grRdTYaamSnKSF-HyMmCHDEZ4haLo+ziSBxhDg1PbjRQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <Z2CmcelSy89NULtz@arm.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0grRdTYaamSnKSF-HyMmCHDEZ4haLo+ziSBxhDg1PbjRQ@mail.gmail.com>
 
-On 16-12-24, 23:15, Beata Michalska wrote:
-> My bad as I must have misinterpreted that message. Although I am not entirely
-> sure why this might be unacceptable as it is not such uncommon approach to use
-> signed int space to cover both: expected positive value as well as potential
-> error code case failure.
+On Mon, Dec 16, 2024 at 08:34:24PM +0100, Rafael J. Wysocki wrote:
 
-This part is fine. The problem is with handling frequency here. Signed int can
-capture up to 2 GHz of freq, where as unsigned int can capture up to 4 GHz and
-so we would really like to keep it at 4 GHz..
+[...]
 
-Maybe we need to move to 64 bits for frequency at some point of time, but at
-least we should try to not break it for now.
+> > There is also a case where some devices like
+> > (Laptops made out of Qcom SCX Gen3 SoCs) require all the PCIe devices to be
+> > powered down in order for the SoC to reach its low power state (CX power
+> > collapse in Qcom terms). If not, the SoC would continue to draw more power
+> > leading to battery draining quickly. This platform is supported in upstream and
+> > we keep the PCIe interconnect voted during suspend as the NVMe driver is
+> > expecting the device to retain its state during resume. Because of this
+> > requirement, this platform is not reaching SoC level low power state with
+> > upstream kernel.
+> 
+> OK, now all of this makes sense and that's why you really want NVMe
+> devices to end up in some form of PCI D3 in suspend-to-idle.
+> 
+> Would D3hot be sufficient for this platform or does it need to be
+> D3cold?  If the latter, what exactly is the method by which they are
+> put into D3cold?
+> 
 
-> Enabling the new attribute for all is an option, tough not entirely compelling
-> one as exposing a feature that is known not to be supported seems bit
-> counterintuitive. On the other hand using cpufreq driver flags won't help much
-> as the support for the new attrib is platform-specific, not driver-specific.
+D3Cold is what preferred. Earlier the controller driver used to transition the
+device into D3Cold by sending PME_Turn_Off, turning off refclk, regulators
+etc... Now we have a new framework called 'pwrctrl' that handles the
+clock/regulators supplied to the device. So both controller and pwrctrl drivers
+need to work in a tandem to put the device into D3Cold.
+
+Once the PCIe client driver (NVMe in this case) powers down the device, then
+controller/pwrctrl drivers will check the PCIe device state and transition the
+device into D3Cold. This is a TODO btw.
+
+But right now there is no generic D3Cold handling available for DT platforms. I
+am hoping to fix that too once this NVMe issue is handled.
+
+> > > > > > If the platform is using DT, then there is no entity setting
+> > > > > > pm_set_suspend_via_firmware().
+> > > > >
+> > > > > That's true and so the assumption is that in this case the handling of
+> > > > > all devices will always be the same regardless of which flavor of
+> > > > > system suspend is chosen by user space.
+> > > > >
+> > > >
+> > > > Right and that's why the above concern is raised.
+> > >
+> > > And it is still unclear to me what the problem with it is.
+> > >
+> > > What exactly can go wrong?
+> > >
+> > > > > > So NVMe will be kept in low power state all the
+> > > > > > time (still draining the battery).
+> > > > >
+> > > > > So what would be the problem with powering it down unconditionally?
+> > > > >
+> > > >
+> > > > I'm not sure how would you do that (by checking dev_of_node()?). Even so, it
+> > > > will wear out the NVMe devices if used in Android tablets etc...
+> > >
+> > > I understand the wear-out concern.
+> > >
+> > > Is there anything else?
+> > >
+> >
+> > No, that's the only concern.
+> 
+> OK
+> 
+> I think we're getting to the bottom of the issue.
+> 
+> First off, there really is no requirement to avoid putting PCI devices
+> into D3hot or D3cold during suspend-to-idle.  On all modern Intel
+> platforms, PCIe devices are put into D3(hot or cold) during
+> suspend-to-idle and I don't see why this should be any different on
+> platforms from any other vendors.
+> 
+> The NVMe driver is an exception and it avoids D3(hot or cold) during
+> suspend-to-idle because of problems with some hardware or platforms.
+> It might in principle allow devices to go into D3(hot or cold) during
+> suspend-to-idle, so long as it knows that this is going to work.
+> 
+
+Slight correction here.
+
+NVMe driver avoids PCI PM _only_ when it wants to handle the NVMe power
+state on its own, not all the time. It has some checks [1] in the suspend path
+and if the platform/device passes one of the checks, it will power down the
+device.
+
+DT platforms doesn't pass any of the checks, so the NVMe driver always manages
+the power state on its own. Unfortunately, the resultant power saving is not
+enough, so the vendors (Laptop/Automotive) using DT want NVMe to be powered down
+all the time. This is the first problem we are trying to solve.
+
+[1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/nvme/host/pci.c#n3448
+
+> However, there is an additional concern that putting an NVMe device
+> into D3cold every time during system suspend on Android might cause it
+> to wear out more quickly.
+> 
+
+Right, this is the second problem.
+
+> Is there anything else?
+
+We also need to consider the fact that the firmware in some platforms doesn't
+support S2R. So we cannot take a decision based on S2I/S2R alone.
+
+I think there are atleast a couple of ways to solve above mentioned problems:
+
+1. Go extra mile, take account of all issues/limitations mentioned above and
+come up with an API. This API will provide a sane default suspend behavior to
+drivers (fixing first problem) and will also allow changing the behavior
+dynamically (to fix the second problem where kernel cannot distinguish Android
+vs other OS).
+
+2. Allow DT platforms to call pm_set_suspend_via_firmware() and make use of the
+existing behavior in the NVMe driver. This would only solve the first problem
+though. But would be a good start.
+
+- Mani
 
 -- 
-viresh
+மணிவண்ணன் சதாசிவம்
 
