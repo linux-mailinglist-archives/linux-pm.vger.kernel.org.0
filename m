@@ -1,197 +1,143 @@
-Return-Path: <linux-pm+bounces-19372-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19373-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7EFC19F4CC9
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 14:49:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3292F9F4D09
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 15:03:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E2861887F99
-	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 13:48:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0FEB1671C4
+	for <lists+linux-pm@lfdr.de>; Tue, 17 Dec 2024 14:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 748B31F4E3A;
-	Tue, 17 Dec 2024 13:48:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F83A1F4732;
+	Tue, 17 Dec 2024 14:03:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="nFl+Srr7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC7D31EF1D;
-	Tue, 17 Dec 2024 13:48:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EC41DA612
+	for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2024 14:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734443316; cv=none; b=Mc4MaoMENSKVxWFghHRotIjQf7ih52dDlcMcA90OFjiHPyN0gkG4xGnHpMScX9TurVIXHdOoGLoWbmTNRytRM/ltWFif8uI5it0YtnYgDJ16grKpSmii9mg/CUHXjfSxTekxLyhhhQyoTyq+4lwcAddv1+3/hYm4WkjrjdK0Woc=
+	t=1734444214; cv=none; b=UUhw2v34roazFMdQ3rlKFvAPYC46uJZtoTb58PnG5+lnJr2gT5Rbc0VB+cSkAurDZDqyTeH0/0iQtg8VFrNy16zPn1LyH4z2yhIFRiPSuUds5QOXdOGCM/Yhm6bYxwwGH5c3zarrnguxAbZ8LJlWB5WutgCHDI42ojMHl8oB27o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734443316; c=relaxed/simple;
-	bh=rE9+tJdETdIr7B9CewRm5Y0xjSrk+mv2qtnTS01O4mo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=eYzHNjU392L3y0YMRFuh6nTCVlhC+OB4sRSnwE0Pv4pZyOZd6pMMXM3SVjJufDIIPbQ1CPqQxvIFKrrKEyrGwM0Aqu3maCIeyjYIcrypGcmUl0i14hcT8CznPyDF/XlOOaLOZhcKETm/UwtVR7gIx3VuD3bHwN3BmQkRUyVsKpY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 382C2113E;
-	Tue, 17 Dec 2024 05:49:02 -0800 (PST)
-Received: from [10.34.129.42] (e126645.nice.arm.com [10.34.129.42])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 1EABA3F528;
-	Tue, 17 Dec 2024 05:48:29 -0800 (PST)
-Message-ID: <e581fa05-9b4e-46e6-9172-83704bfa8ab2@arm.com>
-Date: Tue, 17 Dec 2024 14:48:29 +0100
+	s=arc-20240116; t=1734444214; c=relaxed/simple;
+	bh=wCQHu8BwkDT8ncBNm5G4lju6R+6zZnSNztOygT5JKic=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l4Ol6AbuKFNIDxatphmelMyHWWtTfFzVvrz1spQfER01Xx4lfssv0B8yhwTGeHyZcKf0iXXbso4BhPrH8ys1TkSoukoS72sgCafN5+8n98TV+wtDSxpwtdXyVwr8AuE3yI6D5f4TWDQsjCMEWHARC2j7N+feSOS7l+qStfsvo2o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=nFl+Srr7; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21634338cfdso63319075ad.2
+        for <linux-pm@vger.kernel.org>; Tue, 17 Dec 2024 06:03:31 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734444211; x=1735049011; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=HCZKJMoVvIqoAo0zanWnts+pYSmSp4PD4qrht3efijY=;
+        b=nFl+Srr7NmfGflGQDJLkba9e8zs0VPlLRoAJeYS+Jke0NOaEDDf1IHEeSti06bHcSx
+         jlt1BQNREwcFWsbkC/HwvcQ/fsOsPkHC58WPEYtyV6alX1HolTudQ4HrH0ezeb0/pn1P
+         laadDbFpEHwoRqznR7Wq6VIMPs/hSrlC1HXj7HECr9HsM4p3kiwnIVzvr3t+vTzmbUs3
+         CaNrO+eF+vdTqPaU5GwjaHnvT+9/e1odAoFc8RveOrI4P9oZodvl7Gbd+IIlVRHiBkv/
+         KdY3JUbPLLuUxZLlu8BBejPRMVbh5y+ILRlq/PH01jjAFed/JSCVFMp3mtIfrQsMwyvK
+         uWPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734444211; x=1735049011;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=HCZKJMoVvIqoAo0zanWnts+pYSmSp4PD4qrht3efijY=;
+        b=sfLVtEcDHUShm3C6uMmBdy/Q0/iFAI/B01SK3M9lywTiISx8UdGECbGvs8YkCuzOUx
+         8BAyn4NeqWHDLZ4kdQ2n8BnAaMJrV/4hLm01ChMpWq7HwhPhg6JApe/i70gIyYJF4I35
+         CQKamdMeTUiyl0zIEwOGLzVBHIvEGo3PWK4T8DtBczU7/3uKUjwoeLTPWslTTFxOGmOK
+         L9zHaQcl+a/GJYOIhGlbTBX0chKqKlueTFPb3bXWuHKwda7mEGTmrHVGUCqUSc4YTd6r
+         1UmHKt4xdJsJ58pQfQEKITQS/jI3oveQ9XVQLhh5U0vCp+a/3nc40gYNmcWfQxy2b/kz
+         avOQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWVm7JrYw/We/5BHdheYGuGfSuzZoJUp0Y2Fe5LPE/OqH/cYxytazrJ9Qt/pEA7rAQgfB5T42o++A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyRjKHPwIAlzcQHvhhEmxDW4gi+5xMmyiMXrWn4Ga4jGEczinrE
+	yH1z0XqF3OWs84k5IHm695TuJmBka+Xrgdq2CRiJBzHfKE0g7D3UUyEOuCVQQA==
+X-Gm-Gg: ASbGncv1icP7WaGpx0MIOQ98VeYgQJZBZLlNdSWeUEvFoE7XaoqJQVYeedPWac7Iw1i
+	IFq4XKI1evHIK21YwDB/TNM6QOyybS4n0Go5DbydLLWFHbkIBQR52m1lRUNvTq74FnIdl7GmzUJ
+	ctVnRwVvV5zu/ui/bJIcrUIYaKL1rEVf2mKwng0cjtHU+Az+0qYA8s69s5M4Ed12yJuV58v6xh2
+	MgXOhzuyz2lmkXlMzDZhXby8DW1cn9YS7h/aBE7wBvGbIWEbWQzE3Ygf3667tkkr26p
+X-Google-Smtp-Source: AGHT+IEiVh3IK/cHWgWHyriKw5bPElBDWb9qyZwFCCoIkHMl48UnzDp2xqVg4Uf+zOD9e/YruO5kMg==
+X-Received: by 2002:a17:903:186:b0:217:803a:e47a with SMTP id d9443c01a7336-218929f1df7mr242010715ad.4.1734444211179;
+        Tue, 17 Dec 2024 06:03:31 -0800 (PST)
+Received: from thinkpad ([117.193.214.60])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e5d897sm59814305ad.183.2024.12.17.06.03.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2024 06:03:30 -0800 (PST)
+Date: Tue, 17 Dec 2024 19:33:25 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Bartosz Golaszewski <brgl@bgdev.pl>
+Cc: Stephan Gerhold <stephan.gerhold@linaro.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Subject: Re: [PATCH] power: sequencing: qcom-wcn: explain why we need the
+ WLAN_EN GPIO hack
+Message-ID: <20241217140325.qgm6m7qf2fdj35j2@thinkpad>
+References: <20241217130714.51406-1-brgl@bgdev.pl>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 3/4] ACPI: CPPC: Add autonomous selection ABIs
-To: Lifeng Zheng <zhenglifeng1@huawei.com>, Huang Rui <ray.huang@amd.com>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>,
- Mario Limonciello <mario.limonciello@amd.com>
-Cc: acpica-devel@lists.linux.dev, lenb@kernel.org, viresh.kumar@linaro.org,
- robert.moore@intel.com, rafael@kernel.org, linux-acpi@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linuxarm@huawei.com,
- ionela.voinescu@arm.com, jonathan.cameron@huawei.com,
- zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com,
- fanghao11@huawei.com
-References: <20241216091603.1247644-1-zhenglifeng1@huawei.com>
- <20241216091603.1247644-4-zhenglifeng1@huawei.com>
-Content-Language: en-US
-From: Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <20241216091603.1247644-4-zhenglifeng1@huawei.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241217130714.51406-1-brgl@bgdev.pl>
 
-Hello Lifeng, Huang, Gautham, Mario,
-
-On 12/16/24 10:16, Lifeng Zheng wrote:
-> cppc_set_epp - write energy performance preference register
+On Tue, Dec 17, 2024 at 02:07:14PM +0100, Bartosz Golaszewski wrote:
+> From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > 
-> cppc_get_auto_act_window - read autonomous activity window register
+> With the recent rework of the PCI power control code, the workaround for
+> the wlan-enable GPIO - where we don't set a default (low) state in the
+> power sequencing driver, but instead request the pin as-is - should no
+> longer be needed but some platforms still fail to probe the WLAN
+> controller. This is caused by the Qcom PCIe controller and needs a
+> workaround in the controller driver so add a FIXME to eventually remove
+> the hack from this driver once this is done.
 > 
-> cppc_set_auto_act_window - write autonomous activity window register
-> 
-> cppc_get_auto_sel - read autonomous selection enable register
-> 
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 > ---
->   drivers/acpi/cppc_acpi.c | 44 ++++++++++++++++++++++++++++++++++++++++
->   include/acpi/cppc_acpi.h | 20 ++++++++++++++++++
->   2 files changed, 64 insertions(+)
+>  drivers/power/sequencing/pwrseq-qcom-wcn.c | 8 ++++++++
+>  1 file changed, 8 insertions(+)
 > 
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 83c7fcad74ad..645f2366c888 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1595,6 +1595,50 @@ int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
->   }
->   EXPORT_SYMBOL_GPL(cppc_set_epp_perf);
->   
-> +/**
-> + * cppc_set_epp() - Write the EPP register.
-> + * @cpu: CPU on which to write register.
-> + * @epp_val: Value to write to the EPP register.
-> + */
-> +int cppc_set_epp(int cpu, u64 epp_val)
-> +{
-> +	return cppc_set_reg_val(cpu, ENERGY_PERF, epp_val);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_set_epp);
-> +
-> +/**
-> + * cppc_get_auto_act_window() - Read autonomous activity window register.
-> + * @cpu: CPU from which to read register.
-> + * @auto_act_window: Return address.
-> + */
-> +int cppc_get_auto_act_window(int cpu, u64 *auto_act_window)
+> diff --git a/drivers/power/sequencing/pwrseq-qcom-wcn.c b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> index cc03b5aaa8f2..9d6a68ac719f 100644
+> --- a/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> +++ b/drivers/power/sequencing/pwrseq-qcom-wcn.c
+> @@ -396,6 +396,14 @@ static int pwrseq_qcom_wcn_probe(struct platform_device *pdev)
+>  		return dev_err_probe(dev, PTR_ERR(ctx->bt_gpio),
+>  				     "Failed to get the Bluetooth enable GPIO\n");
+>  
+> +	/*
+> +	 * FIXME: This should actually be GPIOD_OUT_LOW. The driver model can
+> +	 * correctly handle provider <-> consumer dependencies but there is a
+> +	 * known issue with Qcom PCIe controllers where, if the device is
+> +	 * powered off abrubtly (without controller driver noticing), the PCIe
+> +	 * link moves to link down state. Until the link-down handling is
+> +	 * addressed in the controller driver, we need to keep this workaround.
 
-As there is only one way to interpret the value of the
-'Autonomous Activity Window Register', maybe the logic to convert
-from/to the register value to a value in us should be placed here
-rather than in the cppc_cpufreq driver.
-Meaning, maybe the prototype should be:
+Maybe we should add some info on how GPIOD_OUT_LOW causes link down. Like,
 
-int cppc_get_auto_act_window(int cpu, unsigned int *auto_act_window);
+	/*
+	 * FIXME: This should actually be GPIOD_OUT_LOW. But doing so would
+	 * cause the WLAN power to be toggled, resulting in PCIe link down.
+	 * Since the PCIe controller driver is not handling link down currently,
+	 * the device becomes unusable. So we need to keep this workaround until
+	 * the link down handling is implemented in the controller driver.
+	 */
 
-Similar remark for cppc_set_epp() and other functions.
+But the comment applies to gpiod_direction_output() call as well, right?
 
-> +{
-> +	return cppc_get_reg_val(cpu, AUTO_ACT_WINDOW, auto_act_window);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_get_auto_act_window);
-> +
-> +/**
-> + * cppc_set_auto_act_window() - Write autonomous activity window register.
-> + * @cpu: CPU on which to write register.
-> + * @auto_act_window: Value to write to the autonomous activity window register.
-> + */
-> +int cppc_set_auto_act_window(int cpu, u64 auto_act_window)
-> +{
-> +	return cppc_set_reg_val(cpu, AUTO_ACT_WINDOW, auto_act_window);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_set_auto_act_window);
-> +
-> +/**
-> + * cppc_get_auto_sel() - Read autonomous selection register.
-> + * @cpu: CPU from which to read register.
-> + * @auto_sel: Return address.
-> + */
-> +int cppc_get_auto_sel(int cpu, u64 *auto_sel)
+- Mani
 
-Similarly, maybe it would be better to use:
-int cppc_get_auto_sel(int cpu, bool *auto_sel);
-
-> +{
-> +	return cppc_get_reg_val(cpu, AUTO_SEL_ENABLE, auto_sel);
-> +}
-> +EXPORT_SYMBOL_GPL(cppc_get_auto_sel);
-> +
->   /**
->    * cppc_get_auto_sel_caps - Read autonomous selection register.
->    * @cpunum : CPU from which to read register.
-> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
-> index 62d368bcd9ec..134931b081a0 100644
-> --- a/include/acpi/cppc_acpi.h
-> +++ b/include/acpi/cppc_acpi.h
-> @@ -159,6 +159,10 @@ extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
->   extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
->   extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
->   extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
-> +extern int cppc_set_epp(int cpu, u64 epp_val);
-> +extern int cppc_get_auto_act_window(int cpu, u64 *auto_act_window);
-> +extern int cppc_set_auto_act_window(int cpu, u64 auto_act_window);
-> +extern int cppc_get_auto_sel(int cpu, u64 *auto_sel);
->   extern int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps);
-
-This is a bit annoying, but maybe only one function between:
-- cppc_get_auto_sel_caps()
-- cppc_get_auto_sel()
-is necessary.
-
-I added the owners of the amd-pstate driver to ask if this would
-be ok to replace cppc_get_auto_sel_caps() by cppc_get_auto_sel().
-
->   extern int cppc_set_auto_sel(int cpu, bool enable);
->   extern int amd_get_highest_perf(unsigned int cpu, u32 *highest_perf);
-> @@ -225,6 +229,22 @@ static inline int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls,
->   {
->   	return -EOPNOTSUPP;
->   }
-> +static inline int cppc_set_epp(int cpu, u64 epp_val)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +static inline int cppc_get_auto_act_window(int cpu, u64 *auto_act_window)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +static inline int cppc_set_auto_act_window(int cpu, u64 auto_act_window)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
-> +static inline int cppc_get_auto_sel(int cpu, u64 *auto_sel)
-> +{
-> +	return -EOPNOTSUPP;
-> +}
->   static inline int cppc_get_epp_perf(int cpunum, u64 *epp_perf)
->   {
->   	return -EOPNOTSUPP;
+-- 
+மணிவண்ணன் சதாசிவம்
 
