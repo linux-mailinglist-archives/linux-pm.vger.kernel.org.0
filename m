@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-19437-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19438-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC7DF9F6D45
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 19:29:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F37EE9F6D48
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 19:29:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B6B83188ABC2
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 18:29:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 389FD16E110
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 18:29:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7718B1FBEB8;
-	Wed, 18 Dec 2024 18:29:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8DFBD1FC103;
+	Wed, 18 Dec 2024 18:29:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SxfPriN3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="bsCNbgmA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pg1-f179.google.com (mail-pg1-f179.google.com [209.85.215.179])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E90921FBE89;
-	Wed, 18 Dec 2024 18:29:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.215.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E83A11FC0EF;
+	Wed, 18 Dec 2024 18:29:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734546545; cv=none; b=GoJDArIQY2dCTif/GEq4TxmjtBZ1RBpTZE4Fs2ZZICfVtx0dsu8AX1eNKx8OIjV1mh1+ZJ13jyrCNeRIFrWhmVzGWfD4D3nMREGtxxQUWs68Wi4X1WIRVwf6zzBrPtTm4NHFNCF45Q7Jbii625J+dpnuWiiRD986QskNTCtua7s=
+	t=1734546548; cv=none; b=QFepY1xQjWY1O8SuyaWN3UUAKs3DkfgMalV8QQNLlYu7XDqv7RTI+vrtjFcD4LBMxMK+IeYbZQBop9hjYwIKAHvniPaELF4f/5I7eERn4Z8dmHkbeWdp/kvLAdicEk490I1+/pIzByOWn3z7JDd+7+iYJRBpBtyXBuJjo35CnUA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734546545; c=relaxed/simple;
-	bh=4pn0Hu3mbLIrRljons9IY9VcSA1vxsFdATH588GI0yc=;
+	s=arc-20240116; t=1734546548; c=relaxed/simple;
+	bh=BuOxgI2CbOrK9Hxnatsu8Mn/4pRiwpGqt9d6S48h8hA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=f+aUCx2sTnKujJhs0tSBEpTTmFN/mdg1c6QQNYstF03ip0QnlUWPVzbJBxY1Y1V3c5CJi7uod9R/tMLCOjDVVhemUvrtYhAi4JjGNRk2Y+oL6AKVCwNTxa4DIG1lHeRwMoyBTAMqyg+y6aaK4PVzufbZdGG9/YwBVBGvIqSVTX8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SxfPriN3; arc=none smtp.client-ip=209.85.215.179
+	 MIME-Version; b=lJWbYTHdS7GKI1LWnW1s7dbXVEJis+8E8RDQugHHEfm/faYoC9Ef5BNaSx+jU0mCQ+j8Nfm+hBr0GL9q0kHUfHgdu4bRh7U253YwUW8v2mIIYmiFjObJ3Vch8QIlr5i6WZFePhzaZwkfhXr6QmNf37mtBl4B3NeP0aHd0ZzO7Z0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=bsCNbgmA; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pg1-f179.google.com with SMTP id 41be03b00d2f7-7fc93152edcso7965a12.0;
-        Wed, 18 Dec 2024 10:29:03 -0800 (PST)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-2166360285dso13015ad.1;
+        Wed, 18 Dec 2024 10:29:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734546543; x=1735151343; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1734546546; x=1735151346; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=JhYpasr65D04oywlSIN3QZu9V00P1KHiHgVqcAI4Gc0=;
-        b=SxfPriN3HRsfHyCeWjxL9g506z/O9x0aMVNFW1rOxhuM5ADup48mdIuf9U4WZFX83R
-         HLzgK+YJYh75IpCcoVNF/oDlraDO3AdYe1PoX7qkrwAJR3lqkyAV01sVWq93qnVhxGKj
-         VzcDkVYb93r5ETV3ZpR2RDScxfYC9W+0QeX5sdf+MQGNxzzEmA3v5JMM3dQiwdpydrR5
-         zHsCUG9ml6uaVEvhj3LkIHyTfqdW2S6fIGg9xAQlgf7DpYd9dnVpwAMDb5EMutKaWLZ9
-         20xcKiMaz2Gbx6DDO6Jz1WwUIy5JLM9kE2Li6Jvjd07Ig8dlNF8AlVFG68JaNYTQ7imB
-         FKzw==
+        bh=M0xMWNhFbRFrvmQCRSO20OEZKspqHRsl+17s4y7Ifdg=;
+        b=bsCNbgmAxMxUBjigI0I5Zg+ZYjSzeTBjKyTguU2OVyR8IwrR/DriTtditX4rrxVOwp
+         3c1HjSWdJgIUX9HRIXIrlBfAwwpWz0UzMNWwKCUZnvC1QKClWYkXEsPhVBgUfAXT+S6I
+         SQazzl2ffFFtB3tF2a6x3MJm9xOSEpai3FvJVKI1jQX5f9q3fbkYqXQSyisVph7on4Wh
+         c2sV90iNkKLMX7sl/RfZriECG0AxVo1nxJUkvBB8p16hLRifqxbQmSC5tqltRr6l8hTW
+         jAR5MChBcCfiyMN07B2p65siPwL0t6V/y3+r+GXKbbrYCba3L9mxqUkKSHMmk3V4RkWG
+         BPTQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734546543; x=1735151343;
+        d=1e100.net; s=20230601; t=1734546546; x=1735151346;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=JhYpasr65D04oywlSIN3QZu9V00P1KHiHgVqcAI4Gc0=;
-        b=W28pw3dabfb4c++M8i5wuNSu06BVWasgb715MbeHNRVARLbg6H2yAmVd3FflKztupQ
-         Xu1J57rRdsKzFMZmENkx+1FfWaL4tDM6B541YMjWBNber5u+94XP5zIg3dp4zo0mXU32
-         x2AIVBFIUNlxxpdmiZiOsNGTkJC8B1GVtzxu7wtQQPtTAIjLwuHo8e+Zl/TIOfELI13m
-         v+hS8hOF/j0wjVlBE6qWhFFY5ZDKtQvUuY3H2YXwr0CbAuBk7FH36A2NqybxTRm6Ljkf
-         KjwTNyfVKoVMCR794XRhRpB3s13VWs4Srw5Vsto4q+biomQT/tvDx6bPZW+l5QMD7ABG
-         lbGA==
-X-Forwarded-Encrypted: i=1; AJvYcCUcptemfViwwOgJYdioqmdDB+hPKUVQr0ww0nFIh5NH545349u1Z+LtkFcGdWjr+VPtrqPfLZ5SY1Ad@vger.kernel.org, AJvYcCWrOtXZp8F5lUoqnm18XyPRnMTJ2R1yrNBP8O6deApon4Cskdkt+UaZ+07mPfjb+jRD7d2T6B72GOg=@vger.kernel.org, AJvYcCXbpvcKEyicYlb0LrxIR5Ijf2w+KkkJozvin20H85rlHmJCuuLC/eVvGq4HZdXPDbs++nRZgoGyI/h0eqe/@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxCIZYO7xvJDUy+VVk30j7T5YYqDspLiB7ftz7UZtGzAvcm3tw
-	eqGxWv88aepyqjbcWLEajvwCWl0KeXLeC2tw+TJeY+qanncRxVRC
-X-Gm-Gg: ASbGncsRZOXwd7BsSPkAkFRZ2MAkSjTz/kbKPfkbEylptzRlFqm6xc/ihy8690kjTgi
-	b7weX9D68C1YeESj8dUbizm60acrMxc7Wh9WrAjsxwXXNM6ZXQgIMZ2DYxJqt0ARTQCxbfLEyhY
-	gqKJc/CF007ahQnXFMS0WlsqULgSNB+PK4U0nQupvs445QxFCodkf1AVB4oel5/AhGVKGktMcnH
-	QHwDkTSdAYX5gwyiAaEYH0jOZVPWDt94WfhKhXO556dEG5MYTzCWUIS/Q==
-X-Google-Smtp-Source: AGHT+IHxbY/o3QfZaUi3hlJYtIOkRSgPETDeI9GVA24+K7rvStkNiiEjw923gS1zVQfPSU4+ivzQUA==
-X-Received: by 2002:a17:90a:f945:b0:2ef:949c:6f6b with SMTP id 98e67ed59e1d1-2f4437bf688mr461691a91.13.1734546543178;
-        Wed, 18 Dec 2024 10:29:03 -0800 (PST)
+        bh=M0xMWNhFbRFrvmQCRSO20OEZKspqHRsl+17s4y7Ifdg=;
+        b=RCobzUFHMBRT/zolvFXmd7Fhm8tJ3NXwE36KikwT8nsKqf0DDPG47MFe+jOcX0Afkg
+         dkLj64jUJp9gZkepPDW5G/qCKONFt1x0Ixa6UTl6xXpkKeMU53Y2wkReEDjHc6PhEVrp
+         DXcZzIGzamdnYeFCnllmn494k/N24Y4y8o9OR5XNYdXh0ysE21/WQuSF4llL2iqFhbzx
+         UgdrjoZ8fzvl+YIBAnccs73KkFxwG/VIsCDA11EVF1Z0I6qA3W/71G3RaBqVK+gKawI8
+         78UTDB7X6khCpqTwIoBS8kTU/+WyHJolC+IXrUbXeRlLE1bxw1AuZcPYHPmJ8x0akY3j
+         U9lw==
+X-Forwarded-Encrypted: i=1; AJvYcCUTr70cEfYrTnEI7R/octsbihWhpxRB19jAKDTx7ds2dL0nVDKljFqG9aNnEcxkPnwlOUlp0gfd+JI=@vger.kernel.org, AJvYcCVwfQv5q/ySRWAvQcssMcxhT9/UzXzNQZ2YV14cjwEZbpyHxVGR3Tm2A6HXcUIBFSA8WYZ44WnvyJVP@vger.kernel.org, AJvYcCXr/4TxQ0qOhihFRJkj++7IJkbaj4qJjGNcHSdN5jyluxmMchw8BEwnOakrKnIvXMIIm89TjJoGEbaEWjPF@vger.kernel.org
+X-Gm-Message-State: AOJu0YwklEf8Jd2WR9QonDSdVmR+rSn3w4plylok9P0G8FJkR+H8Gjyk
+	VuuNR+vXHpWYm2cyvwqZRr8NsRj+AIN7+9sMIeKkbf59yNTUO5/J
+X-Gm-Gg: ASbGnctuLit8jbO8WsSxcczYntyODTOwmd3FxGaDfRXIoZdeR5VmLM6ka1+TpbBNnSE
+	jS6Go9dyy0B/GOcy1NnIx+U4f8xsoZIEjRXeR9I+xL77RvHNQd00y+negfEst/9t4mi7CthI+Bs
+	hj+NNVILvPRrbS3f3XVw3rH4hpp9ZS8Nm3/ITfgTp6MVYq4SwY7+MyNFQcp7or/MENpEqVLxU07
+	RwFXmh4lbV8/sw3D/s2zT0h66U6UmAdDiHRQeuBVPFZxf+EyxUPwlEqMQ==
+X-Google-Smtp-Source: AGHT+IE5H942ad1OAia3lBBhcksY1y+20uAlvIpOi6ha/V3bCOYFzx6F6Fufey/f4PXmeYsSviXIPg==
+X-Received: by 2002:a17:902:da89:b0:215:e98c:c5c1 with SMTP id d9443c01a7336-218d722cf3amr59411945ad.30.1734546546134;
+        Wed, 18 Dec 2024 10:29:06 -0800 (PST)
 Received: from nick-mbp.. ([59.188.211.160])
-        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-218a1dcb3ffsm79202565ad.75.2024.12.18.10.29.00
+        by smtp.googlemail.com with ESMTPSA id d9443c01a7336-218a1dcb3ffsm79202565ad.75.2024.12.18.10.29.03
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 18 Dec 2024 10:29:02 -0800 (PST)
+        Wed, 18 Dec 2024 10:29:05 -0800 (PST)
 From: Nick Chan <towinchenmi@gmail.com>
 To: Hector Martin <marcan@marcan.st>,
 	Sven Peter <sven@svenpeter.dev>,
@@ -85,11 +85,10 @@ To: Hector Martin <marcan@marcan.st>,
 	Linux power management <linux-pm@vger.kernel.org>,
 	Devicetree <devicetree@vger.kernel.org>,
 	LKML <linux-kernel@vger.kernel.org>
-Cc: Nick Chan <towinchenmi@gmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v3 1/7] dt-bindings: cpufreq: apple,cluster-cpufreq: Add A7-A11, T2 compatibles
-Date: Thu, 19 Dec 2024 02:25:03 +0800
-Message-ID: <20241218182834.22334-2-towinchenmi@gmail.com>
+Cc: Nick Chan <towinchenmi@gmail.com>
+Subject: [PATCH v3 2/7] cpufreq: apple-soc: Drop setting the PS2 field on M2+
+Date: Thu, 19 Dec 2024 02:25:04 +0800
+Message-ID: <20241218182834.22334-3-towinchenmi@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20241218182834.22334-1-towinchenmi@gmail.com>
 References: <20241218182834.22334-1-towinchenmi@gmail.com>
@@ -101,44 +100,75 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add compatibles for Apple A7-A11, T2 SoCs.
+From: Hector Martin <marcan@marcan.st>
 
-Apple A7, A8, A8X gets the per-SoC compatible and the A7
-"apple,s5l8960x-cluster-cpufreq" compatible.
+Newer device do not use this. It is not known what this field does,
+but change the behavior to be same as macOS to be safe.
 
-Apple A9, A9X, A10, A10X, T2, A11 gets the per-SoC compatible, M1
-"apple,t8103-cluster-cpufreq" compatible, then the
-"apple,cluster-cpufreq" fallback compatible.
-
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Hector Martin <marcan@marcan.st>
 Signed-off-by: Nick Chan <towinchenmi@gmail.com>
 ---
- .../bindings/cpufreq/apple,cluster-cpufreq.yaml        | 10 +++++++++-
- 1 file changed, 9 insertions(+), 1 deletion(-)
+ drivers/cpufreq/apple-soc-cpufreq.c | 13 ++++++++++---
+ 1 file changed, 10 insertions(+), 3 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-index 76cb9726660e..896276b8c6bb 100644
---- a/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-+++ b/Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml
-@@ -24,9 +24,17 @@ properties:
-               - apple,t8112-cluster-cpufreq
-           - const: apple,cluster-cpufreq
-       - items:
--          - const: apple,t6000-cluster-cpufreq
-+          - enum:
-+              - apple,s8000-cluster-cpufreq
-+              - apple,t8010-cluster-cpufreq
-+              - apple,t8015-cluster-cpufreq
-+              - apple,t6000-cluster-cpufreq
-           - const: apple,t8103-cluster-cpufreq
-           - const: apple,cluster-cpufreq
-+      - items:
-+          - const: apple,t7000-cluster-cpufreq
-+          - const: apple,s5l8960x-cluster-cpufreq
-+      - const: apple,s5l8960x-cluster-cpufreq
+diff --git a/drivers/cpufreq/apple-soc-cpufreq.c b/drivers/cpufreq/apple-soc-cpufreq.c
+index 4dcacab9b4bf..ad6c7b8f290c 100644
+--- a/drivers/cpufreq/apple-soc-cpufreq.c
++++ b/drivers/cpufreq/apple-soc-cpufreq.c
+@@ -25,7 +25,7 @@
+ #define APPLE_DVFS_CMD			0x20
+ #define APPLE_DVFS_CMD_BUSY		BIT(31)
+ #define APPLE_DVFS_CMD_SET		BIT(25)
+-#define APPLE_DVFS_CMD_PS2		GENMASK(16, 12)
++#define APPLE_DVFS_CMD_PS2		GENMASK(15, 12)
+ #define APPLE_DVFS_CMD_PS1		GENMASK(4, 0)
  
-   reg:
-     maxItems: 1
+ /* Same timebase as CPU counter (24MHz) */
+@@ -55,6 +55,7 @@
+ #define APPLE_DVFS_TRANSITION_TIMEOUT 100
+ 
+ struct apple_soc_cpufreq_info {
++	bool has_ps2;
+ 	u64 max_pstate;
+ 	u64 cur_pstate_mask;
+ 	u64 cur_pstate_shift;
+@@ -69,18 +70,21 @@ struct apple_cpu_priv {
+ static struct cpufreq_driver apple_soc_cpufreq_driver;
+ 
+ static const struct apple_soc_cpufreq_info soc_t8103_info = {
++	.has_ps2 = true,
+ 	.max_pstate = 15,
+ 	.cur_pstate_mask = APPLE_DVFS_STATUS_CUR_PS_T8103,
+ 	.cur_pstate_shift = APPLE_DVFS_STATUS_CUR_PS_SHIFT_T8103,
+ };
+ 
+ static const struct apple_soc_cpufreq_info soc_t8112_info = {
++	.has_ps2 = false,
+ 	.max_pstate = 31,
+ 	.cur_pstate_mask = APPLE_DVFS_STATUS_CUR_PS_T8112,
+ 	.cur_pstate_shift = APPLE_DVFS_STATUS_CUR_PS_SHIFT_T8112,
+ };
+ 
+ static const struct apple_soc_cpufreq_info soc_default_info = {
++	.has_ps2 = false,
+ 	.max_pstate = 15,
+ 	.cur_pstate_mask = 0, /* fallback */
+ };
+@@ -148,9 +152,12 @@ static int apple_soc_cpufreq_set_target(struct cpufreq_policy *policy,
+ 		return -EIO;
+ 	}
+ 
+-	reg &= ~(APPLE_DVFS_CMD_PS1 | APPLE_DVFS_CMD_PS2);
++	reg &= ~APPLE_DVFS_CMD_PS1;
+ 	reg |= FIELD_PREP(APPLE_DVFS_CMD_PS1, pstate);
+-	reg |= FIELD_PREP(APPLE_DVFS_CMD_PS2, pstate);
++	if (priv->info->has_ps2) {
++		reg &= ~APPLE_DVFS_CMD_PS2;
++		reg |= FIELD_PREP(APPLE_DVFS_CMD_PS2, pstate);
++	}
+ 	reg |= APPLE_DVFS_CMD_SET;
+ 
+ 	writeq_relaxed(reg, priv->reg_base + APPLE_DVFS_CMD);
 -- 
 2.47.1
 
