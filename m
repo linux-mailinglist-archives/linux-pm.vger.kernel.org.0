@@ -1,184 +1,153 @@
-Return-Path: <linux-pm+bounces-19423-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19424-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5E2459F64BE
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 12:22:45 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FF249F64D2
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 12:25:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 94E0616C50A
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 11:22:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24D4318839A9
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 11:25:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8C7E19D891;
-	Wed, 18 Dec 2024 11:22:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D40919D891;
+	Wed, 18 Dec 2024 11:25:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iVau2Vu4"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eFOnld0f"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64A751F931;
-	Wed, 18 Dec 2024 11:22:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 022911F931;
+	Wed, 18 Dec 2024 11:25:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734520958; cv=none; b=nD8NRY9lw6t0ZC4ZnXM9G1bLTwSN2iemG2GENclkk4UWMIRwzAqHW7T2UFQ307Emx8jelAZ0m9KhrLKEaiSoJXO70lqHALSRyv50xYhd+147zleIcfB3HEskKlCAeBKPIGW2wWP2SPR646+myiwvelmLUdm4L4jOY9YsxT5fLtA=
+	t=1734521144; cv=none; b=EjyEkGrrXWJd5rVf8Uypy9UTkJ7dVE0hSDIoHOh0rZVdkEpuaFOK/9FDrcmJIKHBqYi2x7MbxfCRQMjmxCgq07he5bTppCY/wNXvrZAThFEChyHdQLHP8tf5qkiI0mSOOuOfteeLM+LEo6EtYvReK74H83xaK2f+lqA1A3wyFYA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734520958; c=relaxed/simple;
-	bh=mqnGlYDccPIss1dc76o+YdtHwPH5AUCHFb+BZz94EI8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=RBj1Hbz4LKNCdJ2/qtiBgDpwQBe00L+8EyhLiuE3x+a0LRm6zexii39A1RhmBfa70LwANAXyCJF0KlpN/t+EWjkDL0ynaypYNu8JFNgvxteLNLjrTocp5OvzMxqno1yz7DrhNLZ2yBDhFVbjdBzDSuJY84eTsEQe3KLOMlqxguo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iVau2Vu4; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BI8YbD8012839;
-	Wed, 18 Dec 2024 11:22:29 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	faR4MJOYl+co5UvqPys37TlEOCbTVnKCgt1gDHCoTpQ=; b=iVau2Vu46QFJ2Xis
-	+QbogErtWOA92Z0raFRDhiHTY6pFzk8Lj1AgFFiEvsEz24TN9Rp730mxM3Jlziwl
-	YE9n5I1/Qlydc0yQPP4qN1SvcQbIsKTpgQYXLOHB9c5SSeXTb7Jk7P/42IVy/Tg+
-	Y2v1sTj4azWTZe9XsRkFcL+SNkXENK/LGxbqtl8U0SjxsSmMXJ/6nCTssHLVG5PH
-	G0cH87NsvO0ADvA9JM4MRqud1a+2c2hy2srDyUYis9amKhLPkcTsj87nRb9Gg7z7
-	qkabTFuQad8Jq8pqTgz1GzX6vswS6YKgOlrjJ8jKNapj4ak7kclxvjRCWsHJhBqa
-	qpuX9g==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43ku0p0e36-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Dec 2024 11:22:29 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BIBMSF9028696
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Dec 2024 11:22:28 GMT
-Received: from [10.152.195.140] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 18 Dec
- 2024 03:22:22 -0800
-Message-ID: <96db4471-0dfe-4969-a916-405105a663ae@quicinc.com>
-Date: Wed, 18 Dec 2024 16:52:19 +0530
+	s=arc-20240116; t=1734521144; c=relaxed/simple;
+	bh=UslFVnAXYTNmYba4GmZIVfm/Vw3mM195bpmKAqG3o7Q=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l2dOFNppXMF7ZWdB2D6qA0vAP2gO7cngxCwDJ7/8ez5AT+uV22TYQdUhNfztu6puSZadrc4spb2AkR/hvDtIgb7CQE+M7l4BKJIuJWLrD0WOPL51sCDiT03jhbdejFP6+C2ixnB/H8rNT+jh7kNnyX8EucS8ZGeNaF7ODYnO+gU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eFOnld0f; arc=none smtp.client-ip=209.85.222.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-85ba92b3acfso2787195241.1;
+        Wed, 18 Dec 2024 03:25:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734521142; x=1735125942; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=c7u6v8jjnFSq06Hoi63m+bpSt3SS1bJxGP2Hu10qTWg=;
+        b=eFOnld0f2sAsHmgHfC26DoDTI/yOfjPDt4aK167gFF3D5DIP/6vHBdjibUqSu3PJHH
+         LdelqGH4JIUPegJiEf0lDjPuPsllrvmj3QBk0qowTH+dSRhV1TiaSY49IdNmltzoztWH
+         jwswe8rgfaV7XyyRspquNGyZI65W3K6ytAM9S8iPQAvNT90Bz9++Mirj9Hr5RY7nPWUm
+         KxsQeaNfcUnBI79bIBzvUH/EyZHIsyldLNYhlOPZ63B2SGEra2gOJTjoa0vIwl6284Ql
+         nz4OtD+L/6vaWQZcuw5r982xwE6yNiyZGWS8PQJ+1O30yXcMCokAMAQz/D1fFqa4TelB
+         Vnhg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734521142; x=1735125942;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=c7u6v8jjnFSq06Hoi63m+bpSt3SS1bJxGP2Hu10qTWg=;
+        b=Wir97j48Fr24m39rJlEMcbYDXNdHCOtwBAcmnar5xp2kQ19KG18ufW90Snbzu+M8U+
+         vG4dGqBHl4V+NXOtcIhitKE+zkVX9uK88g6/HjeLoSFwMl/pA54zwENmcaL7HBS/4MH9
+         0ld5lVIzCwWgMoX93xBxMom1KmEGquNr0tF7QRXegVffT0sYhWTncEfs2U9gGMJrkdI/
+         3rX6PYXY4jYfDdEdB95GW9rwRwnCz5OJ8kaGom2m0FtPivDrRyDG/RH57Ivoi0JUWm80
+         bsqJ3XylqBy1oVEZ9PRfHrS+CxNcggXQg0AK2R8r1ybjxf9fZRcVPIfqYdvOzDXFcvar
+         Hxrw==
+X-Forwarded-Encrypted: i=1; AJvYcCU07zvLmTCNZptoiKMeuXcPFxwjN5r3YcqxiWr8ievGlSfaeYKvbQdvTx/g3pPDDqwcRRDIMhF0lHI9NQ==@vger.kernel.org, AJvYcCU9v0R4DgdaMoa9v4lNwYdIT5aJkugXszvJvuSb2+54KCqLmlMpAqVcQ49OP6Qf9TFpRZILzOJxju6iuGyn@vger.kernel.org, AJvYcCUSZpeSCvqZeq+Cs2xKSSt1zLhlarwcqG73J9T8CCZwdz5VqyS0iFFCeATcy8NT6ZOHxpvEk/JnojvwVuk=@vger.kernel.org, AJvYcCW1xx3n/XVmRkFNMnSNepj6BrWvjviqNbqP3QrxDWmFKQyHHhr2CYMaSyDp1pBxRlwHBJYLVodRRWWp@vger.kernel.org, AJvYcCXBgA7QA6V87ml9JgXULNdsjaUKeNCW9lR6Ml+eLPA4EuxeeG3hK6BVSFnOTLzSOseQnzGPlGHcT/w=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+YJm4dcSaDHgfbBnPLFboIiJy7Bq4rsZRTKSF/FTfyVpEof18
+	DPKHVVg9LOI+vBbGsOgyUG8Xi7xUoct3tnMA9Xh9MZXxHGiDBjs5RcmzW1GW0pRrKWkRvgSv5HQ
+	h/P3nkNqlheFmwmAh88Sj3/VhVVU=
+X-Gm-Gg: ASbGnctwZZTw2Jxxsu/azOLebkm7iE0sllLrE0/PexMFKTmjORifQb8wVHQ4ykkNkfK
+	jsb11MuevrgiHyTO96NmXDSoQU0Z0Z/4+c2j+
+X-Google-Smtp-Source: AGHT+IFxPPO8fZNjKeble7gWv/BLUtUUuRcuafyOUoO4UxcYC7hAY8TAjLwTyAKAea36XjgGJ6feWcBfEUYn0S34Puw=
+X-Received: by 2002:a05:6102:c0a:b0:4b0:a67c:5817 with SMTP id
+ ada2fe7eead31-4b2ae711c43mr1539235137.5.1734521141796; Wed, 18 Dec 2024
+ 03:25:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 3/7] thermal/drivers/tsens: Add TSENS enable and
- calibration support for V2
-To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
-CC: <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>,
-        <srinivas.kandagatla@linaro.org>, <robh@kernel.org>,
-        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <amitk@kernel.org>,
-        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
-        <lukasz.luba@arm.com>, <andersson@kernel.org>,
-        <konradybcio@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>
-References: <20241125050728.3699241-1-quic_mmanikan@quicinc.com>
- <20241125050728.3699241-4-quic_mmanikan@quicinc.com>
- <f7f8f087-f3bb-4dbc-b95d-6a6edd6bf64c@wanadoo.fr>
-Content-Language: en-US
-From: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
-In-Reply-To: <f7f8f087-f3bb-4dbc-b95d-6a6edd6bf64c@wanadoo.fr>
+References: <20241217-starqltechn_integration_upstream-v12-0-ed840944f948@gmail.com>
+ <20241217-starqltechn_integration_upstream-v12-2-ed840944f948@gmail.com> <vunx3s4wqw5fqtwuuuuofjtja7buh5zpxi3iznzgfl4iz7fm4d@wlxbzrnlu7fr>
+In-Reply-To: <vunx3s4wqw5fqtwuuuuofjtja7buh5zpxi3iznzgfl4iz7fm4d@wlxbzrnlu7fr>
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Date: Wed, 18 Dec 2024 14:25:31 +0300
+Message-ID: <CABTCjFBO6RYwf5GiExPFEyBAfCF7vUnbYFRePdSVPdXNfwZwrA@mail.gmail.com>
+Subject: Re: [PATCH v12 02/11] dt-bindings: power: supply: max17042: split on
+ 2 files
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, Lee Jones <lee@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
+	Hans de Goede <hdegoede@redhat.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-leds@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 2a4ucRb0vJ6CtipC5Qo_yVMXSZwU4iWT
-X-Proofpoint-GUID: 2a4ucRb0vJ6CtipC5Qo_yVMXSZwU4iWT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 malwarescore=0
- suspectscore=0 clxscore=1011 lowpriorityscore=0 adultscore=0 mlxscore=0
- priorityscore=1501 mlxlogscore=999 spamscore=0 bulkscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412180092
+Content-Transfer-Encoding: quoted-printable
 
+=D1=81=D1=80, 18 =D0=B4=D0=B5=D0=BA. 2024=E2=80=AF=D0=B3. =D0=B2 11:28, Krz=
+ysztof Kozlowski <krzk@kernel.org>:
+>
+> On Tue, Dec 17, 2024 at 08:30:00PM +0300, Dzmitry Sankouski wrote:
+> > Move max17042 common binding part to separate file, to
+> > reuse it for MFDs with platform driver version.
+> >
+> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> >
+> > Changes on v12:
+>
+> Malformed patch.
+>
+> > - add addtionalProperties: true on common file
+> > - rename *-base file to *-common
+> > - remove compatibles from shared shema
+> > - move required properties to final schema
+> > - remove max77705 compatible from binding - it will be used in
+> >   mfd77705 binding
+>
+> Sorry, all this is somehow complicated effort of not calling the fuel
+> gauge what it really is: separate device with its own I2C address, just
+> like all previous designs in that family from Maxim.
+>
+> I keep repeating this and you keep going that way, maybe because it fits
+> your drivers, but that's not the way.
+>
+> Best regards,
+> Krzysztof
 
+Fuel gauge ICs designed to sit between battery and charger, or even in the
+battery pack itself, with a goal to track and protect the battery.
+Given powering diagram:
 
-On 12/14/2024 12:32 AM, Christophe JAILLET wrote:
-> Le 25/11/2024 à 06:07, Manikanta Mylavarapu a écrit :
->> From: Praveenkumar I <quic_ipkumar-jfJNa2p1gH1BDgjK7y7TUQ@public.gmane.org>
->>
->> SoCs without RPM need to enable sensors and calibrate them from the kernel.
->> The IPQ5332 and IPQ5424 use the tsens v2.3.3 IP and do not have RPM.
->> Therefore, add a new calibration function for V2, as the tsens.c calib
->> function only supports V1. Also add new feature_config, ops and data for
->> IPQ5332, IPQ5424.
->>
->> Although the TSENS IP supports 16 sensors, not all are used. The hw_id
->> is used to enable the relevant sensors.
-> 
-> ...
-> 
->> diff --git a/drivers/thermal/qcom/tsens-v2.c b/drivers/thermal/qcom/tsens-v2.c
->> index 0cb7301eca6e..836155fa9ab2 100644
->> --- a/drivers/thermal/qcom/tsens-v2.c
->> +++ b/drivers/thermal/qcom/tsens-v2.c
->> @@ -4,13 +4,32 @@
->>    * Copyright (c) 2018, Linaro Limited
->>    */
->>   +#include <linux/bitfield.h>
->>   #include <linux/bitops.h>
->>   #include <linux/regmap.h>
->> +#include <linux/nvmem-consumer.h>
-> 
-> If moved one line above, alphabetical order would be kept.
-> 
+----------              ---------      ------------      --------------
+|usb port|<--[input]--> |charger| <--> |fuel gauge| <--> |battery pack|
+----------              ---------      ------------      --------------
+                            |
+                            |
+                            |---> [system bus]
 
-Sure, i will update in the next version.
+There's no fuel gauge ICs with input and system bus measurements on the mar=
+ket.
 
->>   #include "tsens.h"
->>     /* ----- SROT ------ */
->>   #define SROT_HW_VER_OFF    0x0000
-> 
-> ...
-> 
->> +static const struct tsens_ops ops_ipq5332 = {
->> +    .init        = init_tsens_v2_no_rpm,
->> +    .get_temp    = get_temp_tsens_valid,
->> +    .calibrate    = tsens_v2_calibration,
->> +};
->> +
->> +struct tsens_plat_data data_ipq5332 = {
-> 
-> This could easily be made as const.
-> 
+This device indeed has its own I2C address, but that's not enough to
+say it should be
+a separate device, because we have MFD's with its goal to share
+resources like a single
+i2c address for devices with separate functions.
 
-Sure, i will update in the next version.
+To me it's more like Maxim put its fuel gauge together with some hwmon
+solution on the
+single i2c client logic.
 
->> +    .num_sensors    = 5,
->> +    .ops        = &ops_ipq5332,
->> +    .hw_ids        = (unsigned int []){11, 12, 13, 14, 15},
->> +    .feat        = &ipq5332_feat,
->> +    .fields        = tsens_v2_regfields,
->> +};
->> +
->> +struct tsens_plat_data data_ipq5424 = {
-> 
-> This could easily be made as const.
-> 
-
-Sure, i will update in the next version.
-
-Thanks & Regards,
-Manikanta.
-
->> +    .num_sensors    = 7,
->> +    .ops        = &ops_ipq5332,
->> +    .hw_ids        = (unsigned int []){9, 10, 11, 12, 13, 14, 15},
->> +    .feat        = &ipq5332_feat,
->> +    .fields        = tsens_v2_regfields,
->> +};
-> 
-> ...
-> 
-> CJ
-
+--=20
+Best regards and thanks for review,
+Dzmitry
 
