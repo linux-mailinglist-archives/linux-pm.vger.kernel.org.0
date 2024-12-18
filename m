@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-19413-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19414-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 925B79F602E
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 09:35:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 32F549F6031
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 09:35:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D337A163984
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 08:35:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2A2357A1B43
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 08:35:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC8D1714C8;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5292117A90F;
 	Wed, 18 Dec 2024 08:35:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q9frgidH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GIs9kwNs"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225C7165F18;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2261C16A92E;
 	Wed, 18 Dec 2024 08:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734510907; cv=none; b=fVcPgot4RO7y/qFotGYyGaS251+yo8g79U7WM+b9uGVgGtc1se2a4Hg6YNiLl6gQsPCXqV5ZyQu2V8wvYJawRMgFTq9wQPHjGB2gd7kDpOZRuVuc7eB6Qeym2yWMZfwFicpE0D+hvV9Pxfkhn76vgh+7zeQrNYExcbsgAYlshhE=
+	t=1734510907; cv=none; b=V/Zd1JvH85bIICIIXTzVggD8GZJVg/rq4lYsz5HnaC3Q6UXLPRdnHuzFyCcLsRryraFnseXdczeOG89LpXQnnEzsKSZ7UCi23LDBzBrwZ+1s4FCIPFAyAovkwc4wcDvL1+bVqJIJqFdfovl0E4sDLkaR4Se5+9mZukmZIj4LKko=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1734510907; c=relaxed/simple;
-	bh=+QDle9JEkjDQ/QxtUf4707ZXIzare578DXwCr4H8Ixw=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=q0fipliOcLJ1ill1NWYdNma3qv84SIQdfYspHGPUvGK92zvlgYg81zsK6cYGXuwrQrnLrQSy6xRmlK7xO2Cl0uY4Ywgyn7klCQrLJNFyfugKaKu5BGSoPnmI2jksUILnmCde6dW+mqxb3ICZPed3yGoxCgx9m4lbr9S4LqQh13w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q9frgidH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id A9929C4CECE;
+	bh=it8tnYGCa+Muv91dSWxcxqadp5VusIw+15FrGes9ePI=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=OdhVaEWLLEJNJ2I9AFfdNHKDqxMx09Gpa+0+Yzqi6youl5JwdgLVWyGadRgiq1MIqWpKBz+EYIHKA9Hgo1gBWAdGUNtYUQyW08bTZFp10TxYHbrWw+KhPcG5df0oCV4ZK3hNcO7IkyJ7L4J2IRtT0jbzi8V9hTJkwSJuzJjQgFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GIs9kwNs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id BB49CC4CED4;
 	Wed, 18 Dec 2024 08:35:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
 	s=k20201202; t=1734510906;
-	bh=+QDle9JEkjDQ/QxtUf4707ZXIzare578DXwCr4H8Ixw=;
-	h=From:Subject:Date:To:Cc:Reply-To:From;
-	b=Q9frgidHErI5z4Y11uXY2cGlaKEHQT+utRObe9PPtfIvrbZfkFNbQBhF02lVFNV86
-	 AW6Xoc6zhvgdOsEMdC+Ifz1q/ZgUbDDiPjjhvVNAy7VI/dwwcT/lcTAGXNHpX1oOnP
-	 cfVCdr7/OgEkrBHrFt9RVkXi18AvaWewZLc4SorFWi33EJjf7gyjawD7S+QcBfEj9C
-	 PtZGVlZsfIPI6eQ8u2KaF6y44GyZhip/CojVAnGYEa/kCsvsx/DchMit+gKnCAoBI4
-	 UzUCOFlEOEHJXv4B1VMw7EvVJxVd+sHXvclfuPfwTRtvFhhpopwTCry5TXmL3VfOD9
-	 JNdYA91noA5wg==
+	bh=it8tnYGCa+Muv91dSWxcxqadp5VusIw+15FrGes9ePI=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:Reply-To:From;
+	b=GIs9kwNsEMt5HGNwK31DKA4XiV2jQjOx4AmdyrTN5yCf3YVdCptONFK/IIuuTa4Ka
+	 TDd9Ja/QvX8IGWZYSxKXc+mFzPPKRjtOt2o+b6V942SWu7uCTMb6JZpE2+eEuKQnep
+	 UoGBsuCRNUL2s0zR6jDk1cjw+aA8SD+MvQYBGaznBNF7ze4N2dYr8B0t7eYooLm4hM
+	 J2+V9hxscRLRiQWEC1h3z0nBlNRghs7s7K1GZp5wKrZa5j3XC9SJPx2MI0FOZsp68k
+	 TuRIA9Mm2a1ps/eu/Fhznf9/r9uL61fBgxd3F4KJjM4KX6648i+FEF6rUu3Kwca+3t
+	 oRoUYAfolKKzA==
 Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 92E9FE77188;
+	by smtp.lore.kernel.org (Postfix) with ESMTP id A46E7E77187;
 	Wed, 18 Dec 2024 08:35:06 +0000 (UTC)
 From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
-Subject: [PATCH v3 0/2] power: supply: gpio-charger: add support for
- default charge current limit
-Date: Wed, 18 Dec 2024 09:34:59 +0100
-Message-Id: <20241218-default-charge-current-limit-v3-0-b26118cf06b5@liebherr.com>
+Date: Wed, 18 Dec 2024 09:35:00 +0100
+Subject: [PATCH v3 1/2] dt-bindings: power: supply: gpio-charger: add
+ support for default charge current limit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,11 +56,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIADOJYmcC/4XNywrCMBCF4VcpWRtJ0mtc+R7iIk2ndqAXmaRBK
- X130+JCXOjynwPfLMwBITh2ShZGENDhNMZIDwmznRlvwLGJzZRQmVRC8wZaM/eex5XiamciGD3
- vcUDPC22g1FkuCmlYJO4ELT52/nKN3aHzEz33b0Fu1zcs5W84SC54WUldG1EAKHPuEeoOiI52G
- thmB/XppX88Fb0sr6qitaBFbr+8dV1fjFA2LBsBAAA=
-X-Change-ID: 20241209-default-charge-current-limit-69ae7945061a
+Message-Id: <20241218-default-charge-current-limit-v3-1-b26118cf06b5@liebherr.com>
+References: <20241218-default-charge-current-limit-v3-0-b26118cf06b5@liebherr.com>
+In-Reply-To: <20241218-default-charge-current-limit-v3-0-b26118cf06b5@liebherr.com>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>
@@ -69,11 +67,11 @@ Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  Dimitri Fedrau <dima.fedrau@gmail.com>, 
  Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734510905; l=1729;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734510905; l=2130;
  i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
- bh=+QDle9JEkjDQ/QxtUf4707ZXIzare578DXwCr4H8Ixw=;
- b=AA7hl+bQkoeVXU0gCuOpYd+ewT4c9d+ccmAsRG23kspyCjmivC0iGHf0yAPSXO4a+n8dNivw5
- WI6XFA2jAHzDHJDSoCaAE5ULGGFE2zlujAAHNBdLZrPL1ovJW6bcqsG
+ bh=2q5GV8EMl0sfSm2ZGPWeIF1Jp2pHQa5oOgDB+AtoPSY=;
+ b=j0TSn+iRF/6M3+yrgNDKIOv6HLfnRBYJvjDbCAIyCVbDOjY9Thes2n4OEfO0eDpTHa67sgRCt
+ 0Dd42ziCRWiCOK6MupHq2dcCnhy2LjAGIcHzATwgi97HRHhBf/Dq8Rb
 X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
  pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
 X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
@@ -81,44 +79,56 @@ X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
 X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
 Reply-To: dimitri.fedrau@liebherr.com
 
+From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+
 With DT properties charge-current-limit-gpios and
 charge-current-limit-mapping one can define charge current limits in uA
-using up to 32 GPIOs. At the moment the driver defaults to smallest charge
-current limitation for safety reasons. When disabling charging is
-supported, which should be common, the driver defaults to non charging on
-probe. By having a default, charging can be enabled on probe for such
-devices.
+using up to 32 GPIOs. Add property charge-current-limit-default-microamp
+which selects a default charge current limit that must be listed in
+charge-current-limit-mapping.
+This is helpful when the smallest possible charge current limit is 0uA. The
+driver defaults to the smallest possible value at the moment, which
+disables charging on probe. With the default its possible to setup a safe
+charge current limit.
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
 ---
-Changes in v3:
-- Fix commit msg for "dt-bindings: power: supply: gpio-charger: add support for default charge current limit"
-  Add use case
-- Link to v2: https://lore.kernel.org/r/20241213-default-charge-current-limit-v2-0-45886fce905c@liebherr.com
+ Documentation/devicetree/bindings/power/supply/gpio-charger.yaml | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-Changes in v2:
-- renamed DT property charge-current-limit-default to
-  charge-current-limit-default-microamp
-- Added dependency on charge-current-limit-mapping
-- Added intention and use case to commit descriptions
-- Added charge-current-limit-default-microamp in bindings example
-- Link to v1: https://lore.kernel.org/r/20241211-default-charge-current-limit-v1-0-7819ba06ee2a@liebherr.com
+diff --git a/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+index 89f8e2bcb2d7836c6a4308aff51721bd83fa3ba1..25826bfc289c1c00c338fd0cee2ae6932529cfc3 100644
+--- a/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
++++ b/Documentation/devicetree/bindings/power/supply/gpio-charger.yaml
+@@ -58,6 +58,10 @@ properties:
+             charge-current-limit-gpios property. Bit 1 second to last
+             GPIO and so on.
+ 
++  charge-current-limit-default-microamp:
++    description: Default charge current limit. Must be listed in
++      charge-current-limit-mapping.
++
+ required:
+   - compatible
+ 
+@@ -72,6 +76,7 @@ anyOf:
+ dependencies:
+   charge-current-limit-gpios: [ charge-current-limit-mapping ]
+   charge-current-limit-mapping: [ charge-current-limit-gpios ]
++  charge-current-limit-default-microamp: [charge-current-limit-mapping]
+ 
+ additionalProperties: false
+ 
+@@ -91,4 +96,5 @@ examples:
+       charge-current-limit-mapping = <2500000 0x00>, // 2.5 A => both GPIOs low
+                                      <700000 0x01>, // 700 mA => GPIO A.12 high
+                                      <0 0x02>; // 0 mA => GPIO A.11 high
++      charge-current-limit-default-microamp = <700000>;
+     };
 
----
-Dimitri Fedrau (2):
-      dt-bindings: power: supply: gpio-charger: add support for default charge current limit
-      power: supply: gpio-charger: add support for default charge current limit
-
- .../devicetree/bindings/power/supply/gpio-charger.yaml      |  6 ++++++
- drivers/power/supply/gpio-charger.c                         | 13 +++++++++++++
- 2 files changed, 19 insertions(+)
----
-base-commit: 57cb041f61d4abcf8dfa41259df27d081ab4cb6a
-change-id: 20241209-default-charge-current-limit-69ae7945061a
-
-Best regards,
 -- 
-Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+2.39.5
 
 
 
