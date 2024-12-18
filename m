@@ -1,220 +1,123 @@
-Return-Path: <linux-pm+bounces-19460-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 576CA9F6EEB
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 21:29:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BE72F9F6FB1
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 22:45:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 051D0189111A
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 20:29:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03B85169403
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 21:45:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F34651FC10E;
-	Wed, 18 Dec 2024 20:29:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B7E1FCFD8;
+	Wed, 18 Dec 2024 21:45:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b="JsgTj/WP"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AF/wlqyq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from todd.t-8ch.de (todd.t-8ch.de [159.69.126.157])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B27CD158536;
-	Wed, 18 Dec 2024 20:29:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=159.69.126.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669E51FC11F;
+	Wed, 18 Dec 2024 21:45:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734553786; cv=none; b=KzfmSnphOA0WTIZZnO4Ti7YiHhstp67AIQ/rBsKWJCgxI+L2RLfDGsZ90nH0ZBQggPdqZOEnhH+4Fv4US6NlCvhp85NUgRY2Gzl51q6CqK3+a1r+YbNqfmo0oH8pFBBQn/R4/PecDjH6NoqdtVm9AfjDT3rTzlf+d3+HQNkuuJo=
+	t=1734558303; cv=none; b=EiWbdyv7vT2QFtMo6gVaTITVhGcU2NYAqRZA5HhEvMV88wa+yfb8XHV0h2nekBDy4DwehMWbamIkikP07GhqFa0tIZgzNvGMQLuAcewjN5cad2/UMIBsXoBD+xRn9BusHd4LY23GNPYVu4as62sxB06pFIy/hsZPFYiG/mH/+18=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734553786; c=relaxed/simple;
-	bh=diqa9nZqF9nbPA0bjVREC0L9pUZfJbkw72Y0TjZKvZk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ri9P/0V90e3KuGu7/CN8x5nlzCP4Hwhe0e/oAXhjfuNfXvujKRyaE3f58Wx0WlL7tzhqkWbURthOGGZG9NvPH2kcVIILSo2loQI4hQ99oMCwx7xJw8MCJug3JyqIvGlF5ek0iIvY11mVVHpf6vy3tGlewCvJrcW3WGbLZpJdYBs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net; spf=pass smtp.mailfrom=weissschuh.net; dkim=pass (1024-bit key) header.d=weissschuh.net header.i=@weissschuh.net header.b=JsgTj/WP; arc=none smtp.client-ip=159.69.126.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=weissschuh.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=weissschuh.net
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=weissschuh.net;
-	s=mail; t=1734553772;
-	bh=diqa9nZqF9nbPA0bjVREC0L9pUZfJbkw72Y0TjZKvZk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=JsgTj/WPPgh+Mh2dc0fyV9GruKo2ESgMd+IEjZEgoS9RViruUS0hQHPkD0YHzn4Lk
-	 qFSg1OYKtlUmgQslmVYLpwRtrNlv5Kc5GJsIH17QRfbrWsI2wLUga12TwsC22wxZTV
-	 kHax0da50KSB9CRTZUbGAXOt1prDQMTNzsxKwa64=
-Date: Wed, 18 Dec 2024 21:29:31 +0100
-From: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
-To: Nathan Chancellor <nathan@kernel.org>, 
-	Sebastian Reichel <sre@kernel.org>
-Cc: Armin Wolf <W_Armin@gmx.de>, Hans de Goede <hdegoede@redhat.com>, 
-	Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>, 
-	linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v6 4/4] power: supply: core: add UAPI to discover
- currently used extensions
-Message-ID: <eb265cb2-b079-4bca-bc35-17a9f4d0ec3e@t-8ch.de>
-References: <20241211-power-supply-extensions-v6-0-9d9dc3f3d387@weissschuh.net>
- <20241211-power-supply-extensions-v6-4-9d9dc3f3d387@weissschuh.net>
- <20241218195229.GA2796534@ax162>
+	s=arc-20240116; t=1734558303; c=relaxed/simple;
+	bh=IrrU9PHVz1azGyNM00roEocrX/REpjhTwhqU4ZOGtys=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OSz3Hld4u0LoOf2UDpSgLtqolmvDbeAXmdkusR/Wm0Yvx6jgBTDsoDEJiLBrLGA00DxC4+TWa4lkCh9HaaoZNmEFpJXfMcWyM8Y5EPALBFAV2MaOSMqr8RMyuRQYAaY6yJzoqnNPUau7KEI1PPDjwZtSxmEUzMYPWO5UQ+7zUyI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AF/wlqyq; arc=none smtp.client-ip=198.175.65.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734558301; x=1766094301;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=IrrU9PHVz1azGyNM00roEocrX/REpjhTwhqU4ZOGtys=;
+  b=AF/wlqyqRlLEwGOqfmQSa8B+FDjFUnli6gYzRdCa+RSosjLWWcA7gH6N
+   7tvrGMrfObZq4d7JvWWpUrFb21185mq4IpYi9WkAyP0rAZI/RXhLk3TAm
+   DASKBKIYDhbdkQudbnjHtsKu0UBXg6JR5SokuUmIkUnHyzkD4gTMqj9m7
+   r5mSSa8y+bB9C3I/9Gt6dDnWmZ4t2X3m6QfEEywk+/rmNzcr3yG/cbeCU
+   5sczQ2ouaEypzVm8ih/+9m+jfDXq+rrOBnPNUPhbtNc46xT6LylWzOZWa
+   GTz1IYSoJkEKPLgRE/lYX+XHgPhPrHNJHMMrAkMjPd9DoAENaiR4icpA6
+   Q==;
+X-CSE-ConnectionGUID: on5jWY1mR0eb7dvgW027dw==
+X-CSE-MsgGUID: prGeJQAvRgGhW6qIN0fJIA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="52463743"
+X-IronPort-AV: E=Sophos;i="6.12,245,1728975600"; 
+   d="scan'208";a="52463743"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 13:45:00 -0800
+X-CSE-ConnectionGUID: 6u4Y/B2QT+i777IwIaolBA==
+X-CSE-MsgGUID: cQAtWgqXRAuQ2INs5B9H0Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="121248063"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.16])
+  by fmviesa002.fm.intel.com with ESMTP; 18 Dec 2024 13:45:00 -0800
+From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+To: rafael@kernel.org,
+	rui.zhang@intel.com,
+	daniel.lezcano@linaro.org,
+	lukasz.luba@arm.com
+Cc: linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH linux-pm] thermal: intel: Fix compile issue when CONFIG_NET is not defined
+Date: Wed, 18 Dec 2024 13:44:44 -0800
+Message-ID: <20241218214444.1904650-1-srinivas.pandruvada@linux.intel.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241218195229.GA2796534@ax162>
 
-Hi Nathan,
+If CONFIG_NET is not defined then THERMAL_NETLINK can't be selected.
+Hence add dependency on CONFIG_NET. Othewise it will generate compile
+errors while compiling thermal_netlink.c.
 
-On 2024-12-18 12:52:29-0700, Nathan Chancellor wrote:
-> On Wed, Dec 11, 2024 at 08:57:58PM +0100, Thomas Weißschuh wrote:
-> > Userspace wants to now about the used power supply extensions,
-> > for example to handle a device extended by a certain extension
-> > differently or to discover information about the extending device.
-> > 
-> > Add a sysfs directory to the power supply device.
-> > This directory contains links which are named after the used extension
-> > and point to the device implementing that extension.
-> > 
-> > Signed-off-by: Thomas Weißschuh <linux@weissschuh.net>
-> > ---
-> >  Documentation/ABI/testing/sysfs-class-power |  9 +++++++++
-> >  drivers/power/supply/cros_charge-control.c  |  5 ++++-
-> >  drivers/power/supply/power_supply.h         |  2 ++
-> >  drivers/power/supply/power_supply_core.c    | 19 +++++++++++++++++--
-> >  drivers/power/supply/power_supply_sysfs.c   | 10 ++++++++++
-> >  drivers/power/supply/test_power.c           |  4 +++-
-> >  include/linux/power_supply.h                |  2 ++
-> >  7 files changed, 47 insertions(+), 4 deletions(-)
-> ...
-> > diff --git a/drivers/power/supply/power_supply.h b/drivers/power/supply/power_supply.h
-> > index 531785516d2ac31f9a7f73a58e15e64cb81820ed..9ed749cd09369f0f13017847687509736b30aae8 100644
-> > --- a/drivers/power/supply/power_supply.h
-> > +++ b/drivers/power/supply/power_supply.h
-> > @@ -39,6 +40,7 @@ struct power_supply_ext_registration {
-> >  
-> >  extern void __init power_supply_init_attrs(void);
-> >  extern int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env);
-> > +extern const struct attribute_group power_supply_extension_group;
-> >  extern const struct attribute_group *power_supply_attr_groups[];
-> >  
-> >  #else
-> > diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-> > index bc22edbd0e6a02c27500132075f5c98d814a7330..5142fbd580ee3d629a2aae7d0b9bcd5709162129 100644
-> > --- a/drivers/power/supply/power_supply_core.c
-> > +++ b/drivers/power/supply/power_supply_core.c
-> > @@ -1346,17 +1346,21 @@ static int power_supply_update_sysfs_and_hwmon(struct power_supply *psy)
-> >  }
-> >  
-> >  int power_supply_register_extension(struct power_supply *psy, const struct power_supply_ext *ext,
-> > -				    void *data)
-> > +				    struct device *dev, void *data)
-> >  {
-> >  	struct power_supply_ext_registration *reg;
-> >  	size_t i;
-> >  	int ret;
-> >  
-> > -	if (!psy || !ext || !ext->properties || !ext->num_properties)
-> > +	if (!psy || !dev || !ext || !ext->name || !ext->properties || !ext->num_properties)
-> >  		return -EINVAL;
-> >  
-> >  	guard(rwsem_write)(&psy->extensions_sem);
-> >  
-> > +	power_supply_for_each_extension(reg, psy)
-> > +		if (strcmp(ext->name, reg->ext->name) == 0)
-> > +			return -EEXIST;
-> > +
-> >  	for (i = 0; i < ext->num_properties; i++)
-> >  		if (power_supply_has_property(psy, ext->properties[i]))
-> >  			return -EEXIST;
-> > @@ -1366,9 +1370,15 @@ int power_supply_register_extension(struct power_supply *psy, const struct power
-> >  		return -ENOMEM;
-> >  
-> >  	reg->ext = ext;
-> > +	reg->dev = dev;
-> >  	reg->data = data;
-> >  	list_add(&reg->list_head, &psy->extensions);
-> >  
-> > +	ret = sysfs_add_link_to_group(&psy->dev.kobj, power_supply_extension_group.name,
-> > +				      &dev->kobj, ext->name);
-> > +	if (ret)
-> > +		goto sysfs_link_failed;
-> > +
-> >  	ret = power_supply_update_sysfs_and_hwmon(psy);
-> >  	if (ret)
-> >  		goto sysfs_hwmon_failed;
-> > @@ -1376,6 +1386,8 @@ int power_supply_register_extension(struct power_supply *psy, const struct power
-> >  	return 0;
-> >  
-> >  sysfs_hwmon_failed:
-> > +	sysfs_remove_link_from_group(&psy->dev.kobj, power_supply_extension_group.name, ext->name);
-> > +sysfs_link_failed:
-> >  	list_del(&reg->list_head);
-> >  	kfree(reg);
-> >  	return ret;
-> > @@ -1392,6 +1404,9 @@ void power_supply_unregister_extension(struct power_supply *psy, const struct po
-> >  		if (reg->ext == ext) {
-> >  			list_del(&reg->list_head);
-> >  			kfree(reg);
-> > +			sysfs_remove_link_from_group(&psy->dev.kobj,
-> > +						     power_supply_extension_group.name,
-> > +						     reg->ext->name);
-> >  			power_supply_update_sysfs_and_hwmon(psy);
-> >  			return;
-> >  		}
-> 
-> I am seeing a build failure in certain configurations because
-> power_supply_extension_group is only declared under a CONFIG_SYSFS ifdef
-> but this code can be built without CONFIG_SYSFS.
+Fixes: 4596cbea0ed2 ("thermal: intel: Remove explicit user_space governor selection")
+Reported-by: kernel test robot <lkp@intel.com>
+Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
+---
+This commit ID 4596cbea0ed2 is from linux-pm bleeding edge branch of
+linux-pm git.
 
-Thanks for the report.
+ drivers/thermal/intel/Kconfig                 | 1 +
+ drivers/thermal/intel/int340x_thermal/Kconfig | 1 +
+ 2 files changed, 2 insertions(+)
 
->   $ echo 'CONFIG_EXPERT=y
->   CONFIG_SYSFS=n' >allno.config
-> 
->   $ make -skj"$(nproc)" ARCH=arm64 CROSS_COMPILE=aarch64-linux- KCONFIG_ALLCONFIG=1 mrproper allnoconfig drivers/power/supply/power_supply_core.o
->   drivers/power/supply/power_supply_core.c: In function 'power_supply_register_extension':
->   drivers/power/supply/power_supply_core.c:1389:55: error: 'power_supply_extension_group' undeclared (first use in this function); did you mean 'power_supply_attr_groups'?
->    1389 |         ret = sysfs_add_link_to_group(&psy->dev.kobj, power_supply_extension_group.name,
->         |                                                       ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         |                                                       power_supply_attr_groups
->   drivers/power/supply/power_supply_core.c:1389:55: note: each undeclared identifier is reported only once for each function it appears in
->   drivers/power/supply/power_supply_core.c: In function 'power_supply_unregister_extension':
->   drivers/power/supply/power_supply_core.c:1419:54: error: 'power_supply_extension_group' undeclared (first use in this function); did you mean 'power_supply_attr_groups'?
->    1419 |                                                      power_supply_extension_group.name,
->         |                                                      ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
->         |                                                      power_supply_attr_groups
+diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
+index 9c0f66f9defc..e1973c0efe0c 100644
+--- a/drivers/thermal/intel/Kconfig
++++ b/drivers/thermal/intel/Kconfig
+@@ -22,6 +22,7 @@ config INTEL_TCC
+ config X86_PKG_TEMP_THERMAL
+ 	tristate "X86 package temperature thermal driver"
+ 	depends on X86_THERMAL_VECTOR
++	depends on NET
+ 	select THERMAL_NETLINK
+ 	select INTEL_TCC
+ 	default m
+diff --git a/drivers/thermal/intel/int340x_thermal/Kconfig b/drivers/thermal/intel/int340x_thermal/Kconfig
+index d9a74424c29d..6a0203eaa7f2 100644
+--- a/drivers/thermal/intel/int340x_thermal/Kconfig
++++ b/drivers/thermal/intel/int340x_thermal/Kconfig
+@@ -6,6 +6,7 @@
+ config INT340X_THERMAL
+ 	tristate "ACPI INT340X thermal drivers"
+ 	depends on X86_64 && ACPI && PCI
++	depends on NET
+ 	select THERMAL_NETLINK
+ 	select ACPI_THERMAL_REL
+ 	select ACPI_FAN
+-- 
+2.47.1
 
-The reproducer doesn't actually enable CONFIG_POWER_SUPPLY, when I use it
-I get a whole array of errors.
-
-> Should the declaration be moved out from the ifdef or is there some
-> other solution I am not seeing?
-
-This, inline constants or a #define.
-
-Sebastian, do you want me to send a patch?
-
-> Cheers,
-> Nathan
-> 
-> diff --git a/drivers/power/supply/power_supply.h b/drivers/power/supply/power_supply.h
-> index 9ed749cd0936..6fc9939145fc 100644
-> --- a/drivers/power/supply/power_supply.h
-> +++ b/drivers/power/supply/power_supply.h
-> @@ -40,7 +40,6 @@ struct power_supply_ext_registration {
->  
->  extern void __init power_supply_init_attrs(void);
->  extern int power_supply_uevent(const struct device *dev, struct kobj_uevent_env *env);
-> -extern const struct attribute_group power_supply_extension_group;
->  extern const struct attribute_group *power_supply_attr_groups[];
->  
->  #else
-> @@ -51,6 +50,8 @@ static inline void power_supply_init_attrs(void) {}
->  
->  #endif /* CONFIG_SYSFS */
->  
-> +extern const struct attribute_group power_supply_extension_group;
-> +
->  #ifdef CONFIG_LEDS_TRIGGERS
->  
->  extern void power_supply_update_leds(struct power_supply *psy);
 
