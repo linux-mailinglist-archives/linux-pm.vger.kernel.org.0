@@ -1,124 +1,180 @@
-Return-Path: <linux-pm+bounces-19433-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19434-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8A2C39F6992
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 16:10:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB5859F6CBB
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 18:57:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AFFD7A2633
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 15:10:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84D991889624
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 17:57:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C651E9B04;
-	Wed, 18 Dec 2024 15:10:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D02F1FA173;
+	Wed, 18 Dec 2024 17:56:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WHndnjE6"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="XkKXDnUk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379842AF06;
-	Wed, 18 Dec 2024 15:10:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD3421F9A81
+	for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 17:56:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734534616; cv=none; b=jLz9kCkGQdtIxnpncAh/CPrAXhvL6GTFwcURmW+jVUYc62oTNidc6R2TmhBJse0ikLKl6YL34ow8XWTyuwZ9zN+SOUqGunZvVfWBESuB+tCRJQRXXueKaOL9xRdAX0TXNnEVJAkMlBD8UPtWXkMDU+U3wTAOcaFwpmWx7F2wz/8=
+	t=1734544616; cv=none; b=TncpPF5GGEoUO2e0/0ulhD86/8/aCSceEwP25a/IBhpR1gn/PgPw2P51PRzpNCZSj5BdA0juqYp+Bm99e7JqPimBw9/fzoOciEyCKlWcTiVNZ23GWRxMNJfcnbDepxUdQMDeAd/YW/SO4gTCg9HtUOjvf/5oMxfGQnDkR+fLlyc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734534616; c=relaxed/simple;
-	bh=G4pKV3afHZO3mq0GubTyL+3VV4jjQhyB7Yayygo9oWs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=PUu3XqI5lZ3uWBnyFQkxqXHLOKcIwbAhlf33AtRJ0xaGU73wducIES5ddu8aq7T+7zuSLMr+0AE3Ag6bD5geUje+5AY0dkOrEnOcfhWLEef+SKD78jRFR2rDSSBRo2D3SgFhYv6odn/QRuTTDrwtWoRhfWHoL+8FlceP+GV7K08=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WHndnjE6; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C8AC4CED4;
-	Wed, 18 Dec 2024 15:10:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734534615;
-	bh=G4pKV3afHZO3mq0GubTyL+3VV4jjQhyB7Yayygo9oWs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WHndnjE6VfreDDNtn8bujdnVDKPTa3JGQIWrbLx5Sg5tGLGohumiTXBrJhycy4n7w
-	 Pt7QBaj9aeSlBnBh7lCNNWUbkdSopzBINLhhJCyz/dhSUVKZ99RJk4n+JxbZvALUIm
-	 mMhkrFYgNIYz9LCGL3k83kqZQfHrYpzxYREvJYapyLrOtZntIMBkUsfs5BX03dqRgs
-	 2ZWrV0S6i5mlHC1l9pWnFnLDJ96cgMBQtHpgF7FsKVXXp6Z7tZ0HuLM9qZBqlqbWQ/
-	 3C3JWcN6G0Qz1O0ywU0E56Nv4ykks8SaAnAdl74WBZOEx04mL4hI0lOwM29sgkQTw7
-	 SRZf6htPDFYgg==
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2f441791e40so124636a91.3;
-        Wed, 18 Dec 2024 07:10:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUjd5H0oOnxCamSAVSKggkxYnrcn46iLchNgq9tFP3d3OZBtBh97Mb9ddD50EkM2OzmexujOAqPfi9ZoTM=@vger.kernel.org, AJvYcCUo/N137POpjFiEQllHICZqAIp1DEPilSFDqzPo5dONH2ePxAtI+43WUI4hwB6a+kvnGKqFQyPugaI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7CZ/xp/lMJUTT9TPPkikgZ1+v4aIDn+Z1wjCHXW3lQhXHe4ms
-	xNRfCuiX90RqMvoZKuleZpfDayFS4OmoaDn0hstuUtthl9ozYMKEvrRvnpfrqP3eO7NksWpklH4
-	UtysmICyVm+oXE6e51xX0bjCgcG0=
-X-Google-Smtp-Source: AGHT+IGBCOz+Zwe8RWtIRlvZdeGdXrnOG5ETkJCBE/Qkl+AHKMTnv3fLS96Jgc1WFx6DltPLajki9fW+jnTqayENWwk=
-X-Received: by 2002:a17:90b:524d:b0:2ee:f076:20fb with SMTP id
- 98e67ed59e1d1-2f2e91fa529mr5265508a91.17.1734534615333; Wed, 18 Dec 2024
- 07:10:15 -0800 (PST)
+	s=arc-20240116; t=1734544616; c=relaxed/simple;
+	bh=5NFfw/1FBWOJQrGX3rnXWm1ujFs1pBWnrqytI+C47Bk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=YXs2bD1gNQ1JS2zp2sVqMMInAHffFAxL0md9cL4AjO/tXuQXCvWOieRkiqBlRVv3xQvmzmsPgCNBl98VLIA1nJtjIdTf7Jo6IWvwxSFUqjetbxg1MIBx73B5lUvvK3hFqzzdCeLj8epKppQiLveYaJGVMef8fKF78ub2Pc1UWSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=XkKXDnUk; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21636268e43so83042005ad.2
+        for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 09:56:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1734544614; x=1735149414; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=DypSxFOZrcltTmUlVfCu971X+fsVcLRAvGohZhiEeA8=;
+        b=XkKXDnUkcTvjWmLXPc15KvMqMaAa736zl7+y1Zfq8q0ttkPxR4i+uVn39hJZt6X5iw
+         zk2X2tZ2yCwvot5VOh90aLc6b33tZINQNrPCfY+idW9x2NFxqvZHuIml3gV4J0zdDpz5
+         UH5MwLP/u6JCKfHP9o6z/eL+PZJV6tNyxPbMQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734544614; x=1735149414;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=DypSxFOZrcltTmUlVfCu971X+fsVcLRAvGohZhiEeA8=;
+        b=v2MQiac/X++ZrcR9nlpa60P/5WEXordbEOxBa3piGetXkFUY4t/DNEcK3w40ThKBKT
+         wzkF4dPwJT/DiBeyadYikPTepwiGX1+VC0tGc74B+PV2lODz1WYN/8k+9QiUKiOmKxkN
+         7ETxFZIWhEnPOWCgPbL6lP+lo57kcT6gvQj+dSFXORfYewD0S7SV+6TIJ78rYIIb1oYK
+         Jc7rGX61Apv3chLRZFUzjY5mEgOHYBfTlJ8ROdmlrjJ5s4LxSpwEBlWiQOa99lSu5xr2
+         3lsTj2hVOqScq7PTqIE/lNu/yi+4tC/K9gMrqy5otcqU37lwgKxiD4ac3VuOz8SSQli1
+         mpDg==
+X-Forwarded-Encrypted: i=1; AJvYcCW0OMuYU6u3W2jHbZl6Mw/yzDPFTE2MCsnHG3G8w/yygOr+KTjpdMEDlLPdpEGlvO8jayK+yITX5g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTbdm2JzWrdBZJiy2/i3/FQWlFZLsVCawmbdBCa8W0i8BTwWsv
+	xSZ+I7fOEIAS2IwT2kQBn1e+s1EWtbi/f6o5p+CX39RyvRu1KWU2UWBt8CO+Yw==
+X-Gm-Gg: ASbGncu74vDgeVA7PmRzDDj7XqOkdlLWhD1QTTeSe16Oaqc6n+v1i2W2DVni3cKGFO0
+	pKTpEtPhC9FGG8R6NiYez57uv7FsAU/Y0Kd+9Mlqa/JcjN78KXfwi55pEhqF5LUCEggrNvfrzXO
+	h2zKl6ysfX85FfrYaRqxRdObwlvJ0y8lBmnytBJKCIA4qixSjNP8u+QnKTBjcm5z1cxNyKZOcLA
+	t/VPAM4gGTFADtLT1QZHtObSnf8c1pXc8fgMKeBlFzbxPyd4m9W06r8xG+sKXeZyEF9dX2PbQ==
+X-Google-Smtp-Source: AGHT+IHAAP725b6qHHfdwE5KaWK+vxPZotQq2tJUkRtgMiQ8+zRPCejimNtzczuh9Wxuyf5HynQ3MQ==
+X-Received: by 2002:a17:902:d48c:b0:216:50c6:6b47 with SMTP id d9443c01a7336-219d96ebe07mr5248975ad.46.1734544614001;
+        Wed, 18 Dec 2024 09:56:54 -0800 (PST)
+Received: from dianders.sjc.corp.google.com ([2620:15c:9d:2:f9a:1506:578:687c])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-218a1e6d0e4sm79079145ad.261.2024.12.18.09.56.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 18 Dec 2024 09:56:53 -0800 (PST)
+From: Douglas Anderson <dianders@chromium.org>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>
+Cc: Tomasz Figa <tfiga@chromium.org>,
+	Douglas Anderson <dianders@chromium.org>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] PM / core: Allow configuring the DPM watchdog to warn earlier than panic
+Date: Wed, 18 Dec 2024 09:56:14 -0800
+Message-ID: <20241218095613.1.I4554f931b8da97948f308ecc651b124338ee9603@changeid>
+X-Mailer: git-send-email 2.47.1.613.gc27f4b7a9f-goog
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241212015734.41241-1-sultan@kerneltoast.com>
- <20241212015734.41241-2-sultan@kerneltoast.com> <79448239-86df-43ef-9a4f-717802d2c70a@arm.com>
-In-Reply-To: <79448239-86df-43ef-9a4f-717802d2c70a@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 18 Dec 2024 16:10:03 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j3X8BC57bxktxSZN+0XqZSGmdtGZoL8QV-_Um9pSynaA@mail.gmail.com>
-Message-ID: <CAJZ5v0j3X8BC57bxktxSZN+0XqZSGmdtGZoL8QV-_Um9pSynaA@mail.gmail.com>
-Subject: Re: [PATCH 1/2] cpufreq: schedutil: Fix superfluous updates caused by need_freq_update
-To: Christian Loehle <christian.loehle@arm.com>, Sultan Alsawaf <sultan@kerneltoast.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
-	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
-	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Thu, Dec 12, 2024 at 2:24=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 12/12/24 01:57, Sultan Alsawaf wrote:
-> > From: "Sultan Alsawaf (unemployed)" <sultan@kerneltoast.com>
-> >
-> > A redundant frequency update is only truly needed when there is a polic=
-y
-> > limits change with a driver that specifies CPUFREQ_NEED_UPDATE_LIMITS.
-> >
-> > In spite of that, drivers specifying CPUFREQ_NEED_UPDATE_LIMITS receive=
- a
-> > frequency update _all the time_, not just for a policy limits change,
-> > because need_freq_update is never cleared.
-> >
-> > Furthermore, ignore_dl_rate_limit()'s usage of need_freq_update also le=
-ads
-> > to a redundant frequency update, regardless of whether or not the drive=
-r
-> > specifies CPUFREQ_NEED_UPDATE_LIMITS, when the next chosen frequency is=
- the
-> > same as the current one.
-> >
-> > Fix the superfluous updates by only honoring CPUFREQ_NEED_UPDATE_LIMITS
-> > when there's a policy limits change, and clearing need_freq_update when=
- a
-> > requisite redundant update occurs.
-> >
-> > This is neatly achieved by moving up the CPUFREQ_NEED_UPDATE_LIMITS tes=
-t
-> > and instead setting need_freq_update to false in sugov_update_next_freq=
-().
-> >
->
-> Good catch!
-> Fixes:
-> 600f5badb78c ("cpufreq: schedutil: Don't skip freq update when limits cha=
-nge")
->
->
-> > Signed-off-by: Sultan Alsawaf (unemployed) <sultan@kerneltoast.com>
->
-> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+Allow configuring the DPM watchdog to warn about slow suspend/resume
+functions without causing a system panic(). This allows you to set the
+DPM_WATCHDOG_WARNING_TIMEOUT to something like 5 or 10 seconds to get
+warnings about slow suspend/resume functions that eventually succeed.
 
-Applied with the above Fixes tag added as 6.14 material, thanks!
+Signed-off-by: Douglas Anderson <dianders@chromium.org>
+---
+
+ drivers/base/power/main.c | 22 ++++++++++++++++++----
+ kernel/power/Kconfig      |  8 +++++++-
+ 2 files changed, 25 insertions(+), 5 deletions(-)
+
+diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+index 4a67e83300e1..239bcf93f821 100644
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -496,6 +496,7 @@ struct dpm_watchdog {
+ 	struct device		*dev;
+ 	struct task_struct	*tsk;
+ 	struct timer_list	timer;
++	bool			fatal;
+ };
+ 
+ #define DECLARE_DPM_WATCHDOG_ON_STACK(wd) \
+@@ -512,11 +513,23 @@ struct dpm_watchdog {
+ static void dpm_watchdog_handler(struct timer_list *t)
+ {
+ 	struct dpm_watchdog *wd = from_timer(wd, t, timer);
++	struct timer_list *timer = &wd->timer;
++	unsigned int time_left;
++
++	if (wd->fatal) {
++		dev_emerg(wd->dev, "**** DPM device timeout ****\n");
++		show_stack(wd->tsk, NULL, KERN_EMERG);
++		panic("%s %s: unrecoverable failure\n",
++			dev_driver_string(wd->dev), dev_name(wd->dev));
++	}
+ 
+-	dev_emerg(wd->dev, "**** DPM device timeout ****\n");
++	time_left = CONFIG_DPM_WATCHDOG_TIMEOUT - CONFIG_DPM_WATCHDOG_WARNING_TIMEOUT;
++	dev_emerg(wd->dev, "**** DPM device timeout after %u seconds; %u seconds until panic ****\n",
++		  CONFIG_DPM_WATCHDOG_WARNING_TIMEOUT, time_left);
+ 	show_stack(wd->tsk, NULL, KERN_EMERG);
+-	panic("%s %s: unrecoverable failure\n",
+-		dev_driver_string(wd->dev), dev_name(wd->dev));
++
++	wd->fatal = true;
++	mod_timer(timer, jiffies + HZ * time_left);
+ }
+ 
+ /**
+@@ -530,10 +543,11 @@ static void dpm_watchdog_set(struct dpm_watchdog *wd, struct device *dev)
+ 
+ 	wd->dev = dev;
+ 	wd->tsk = current;
++	wd->fatal = CONFIG_DPM_WATCHDOG_TIMEOUT == CONFIG_DPM_WATCHDOG_WARNING_TIMEOUT;
+ 
+ 	timer_setup_on_stack(timer, dpm_watchdog_handler, 0);
+ 	/* use same timeout value for both suspend and resume */
+-	timer->expires = jiffies + HZ * CONFIG_DPM_WATCHDOG_TIMEOUT;
++	timer->expires = jiffies + HZ * CONFIG_DPM_WATCHDOG_WARNING_TIMEOUT;
+ 	add_timer(timer);
+ }
+ 
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index afce8130d8b9..3387b94e76c1 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -257,11 +257,17 @@ config DPM_WATCHDOG
+ 	  boot session.
+ 
+ config DPM_WATCHDOG_TIMEOUT
+-	int "Watchdog timeout in seconds"
++	int "Watchdog timeout to panic in seconds"
+ 	range 1 120
+ 	default 120
+ 	depends on DPM_WATCHDOG
+ 
++config DPM_WATCHDOG_WARNING_TIMEOUT
++	int "Watchdog timeout to warn in seconds"
++	range 1 DPM_WATCHDOG_TIMEOUT
++	default DPM_WATCHDOG_TIMEOUT
++	depends on DPM_WATCHDOG
++
+ config PM_TRACE
+ 	bool
+ 	help
+-- 
+2.47.1.613.gc27f4b7a9f-goog
+
 
