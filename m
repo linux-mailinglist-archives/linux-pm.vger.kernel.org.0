@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-19449-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19450-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E67A59F6DDB
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 20:12:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D37769F6DDC
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 20:12:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 16C2D16A0A6
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 19:12:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA0D6188874A
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 19:12:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3E901FC0EB;
-	Wed, 18 Dec 2024 19:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CAE51FC0F1;
+	Wed, 18 Dec 2024 19:12:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RXck5TcL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pAmhhtVM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBFCE1FAC40
-	for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 19:12:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DD7D41FAC40
+	for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 19:12:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734549127; cv=none; b=Ue/CKbQhhU4+eWxaP3Mj9pFPzZK7OXYx8b1HNzN+qjS0/exo14iaF+Mces2vFYfF1hlNGEaOT2tn3za0sY03gjyL680h9E/j5kcfSsnkk5gTT1FX0iOpa/Qf/IptKiIONoYJqroULACcXzf7OcuDOPu9Qu5nARqYtKY0i2/AXe8=
+	t=1734549128; cv=none; b=p31GIQ7GW5fYhLBOHw5tQgf1antCSvFcU9Wdf+mTYPJ+iQpaj6husZPXFD3sd0ZO/26BP9qk2xWqLU2R2NkfH3yUiFCaa8JwKa2c9eXoeVqX+XGajvyVTOF4yQLzSQCFnJUgJJ04m/Ed608qppP+K9kM6cBp99pQdv8X5fKVEP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734549127; c=relaxed/simple;
-	bh=CuUZg4845wczGJgTn9sPWKeN9Z7IQqRUSZ9Dsp6GVx4=;
+	s=arc-20240116; t=1734549128; c=relaxed/simple;
+	bh=4oO1EcVm33bIsq/HWyN5rzW7cr4ThZfhyYM7ahaK10M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QkhMjwMKcT8fosm5zwQSbGzvPdb2XfEPgkKIwJFL7u+wC6nwBM5gbEp5Xw/Tm9V1ap9OJVTAC0bjegIL66NnrHbNiulwskGPpjXqzOWLv2vdlqLjH7aVK7UGlejFna19GjYctOiS0l4gl21aDpLLuV2qlv0RkMB+RhvkkTLpITo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RXck5TcL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91496C4CEDC;
-	Wed, 18 Dec 2024 19:12:06 +0000 (UTC)
+	 MIME-Version; b=jb4K0PKfqnEJUwiimiI6CtSwPnI3VGZ+M7pPQUuX9G9PZP8c58EmADqN9ZZMKW3FKSEEznPM0Nst0ZcpqvSCohoWnHTpoQbPvrzka0Ix7RPWkbYUpGMMb5uKOTJNFyD3GuOiy/zogpjUSz+qrD/5q23ccG4YhdcWCzn2YXZEbSc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pAmhhtVM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7BA3FC4CED7;
+	Wed, 18 Dec 2024 19:12:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734549127;
-	bh=CuUZg4845wczGJgTn9sPWKeN9Z7IQqRUSZ9Dsp6GVx4=;
+	s=k20201202; t=1734549128;
+	bh=4oO1EcVm33bIsq/HWyN5rzW7cr4ThZfhyYM7ahaK10M=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=RXck5TcLNHy1GTjdO9CU4UNfnC+dvvII5mJRWHFysjTA+aLMLaEGDJjZgYQHRO5Ce
-	 XKsqU5xm1yrjsjbz7AwNSz+dAiPNS2Q6lko8gNffbX4iYkPjvFGQx/XRCqduUtx/gs
-	 OdEq0HdYFsDjZTnypG1RAk/QLdXNy2Pfuo+N9UH5Q5DrhOoWLZuQrdFOsKUIoIq09n
-	 Ey3T8S52gZtQ3GqfKpmD3Fj3r9XangkIqGuJ+ksFQCOruBXFvMe8kTG1BWzrIWt3gZ
-	 ucEfKs0rZIzSEvD/memQLVBCrsTQjUeItbwi3JMDFaMvk/q/8MhMSZbfNTykdM0XZN
-	 H6ZnA/jch3t6g==
+	b=pAmhhtVM+HllD+p/erPDLVUjSNIXpCN1Fhr79caMM7mZKA0CKSLyBGhjh4gW90b++
+	 wInXOZbYJbEof1+IJMTG85qMrQ6VRqwCHLKuLM28QVeheuX1601NwwDyyYl+Mm+dQd
+	 PGHqLbH/+jyaPI39T6ypRTizk2COVlEqLKqWuRWlbSwo2z/GBFTkrI5wHbYAu0cDGP
+	 MUqPapZiEvv5kD1BmrmQt9sS+Z426z1SfDCdSFWXoiIPKFYmYbb0hbLFes00ltWktm
+	 brzfDqfxzSMDPuiIN/AFFMcDtwDfGOSKYWm7jPLOxOi1aNhu2dH635fIhPfmHBBPju
+	 YUZKkIOlrlAug==
 From: Mario Limonciello <superm1@kernel.org>
 To: mario.limonciello@amd.com,
 	trenn@suse.com,
@@ -48,9 +48,9 @@ To: mario.limonciello@amd.com,
 	jwyatt@redhat.com,
 	jkacur@redhat.com
 Cc: linux-pm@vger.kernel.org
-Subject: [PATCH 3/7] cpupower: Add support for amd-pstate preferred core rankings
-Date: Wed, 18 Dec 2024 13:09:52 -0600
-Message-ID: <20241218191144.3440854-4-superm1@kernel.org>
+Subject: [PATCH 4/7] cpupower: Don't try to read frequency from hardware when kernel uses aperfmperf
+Date: Wed, 18 Dec 2024 13:09:53 -0600
+Message-ID: <20241218191144.3440854-5-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20241218191144.3440854-1-superm1@kernel.org>
 References: <20241218191144.3440854-1-superm1@kernel.org>
@@ -64,47 +64,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-The rankings are useful information to determine if the scheduler
-is placing tasks appropriately for the hardware.
+When the amd-pstate is in use frequency is set by the hardware and
+measured by the kernel through using the aperf and mperf registers.
+
+There is no direct call to the hardware to indicate current frequency.
+
+Detect that this feature is in use and skip the check.
 
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- tools/power/cpupower/utils/helpers/amd.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+ tools/power/cpupower/utils/cpufreq-info.c | 7 ++++++-
+ 1 file changed, 6 insertions(+), 1 deletion(-)
 
-diff --git a/tools/power/cpupower/utils/helpers/amd.c b/tools/power/cpupower/utils/helpers/amd.c
-index 0a56e22240fc8..090fdd6d15510 100644
---- a/tools/power/cpupower/utils/helpers/amd.c
-+++ b/tools/power/cpupower/utils/helpers/amd.c
-@@ -177,6 +177,8 @@ enum amd_pstate_value {
- 	AMD_PSTATE_HIGHEST_PERF,
- 	AMD_PSTATE_MAX_FREQ,
- 	AMD_PSTATE_LOWEST_NONLINEAR_FREQ,
-+	AMD_PSTATE_HW_PREFCORE,
-+	AMD_PSTATE_PREFCORE_RANKING,
- 	MAX_AMD_PSTATE_VALUE_READ_FILES,
- };
+diff --git a/tools/power/cpupower/utils/cpufreq-info.c b/tools/power/cpupower/utils/cpufreq-info.c
+index 5f092f3c729e7..3df28e45be421 100644
+--- a/tools/power/cpupower/utils/cpufreq-info.c
++++ b/tools/power/cpupower/utils/cpufreq-info.c
+@@ -254,7 +254,12 @@ static int get_freq_kernel(unsigned int cpu, unsigned int human)
  
-@@ -184,6 +186,8 @@ static const char *amd_pstate_value_files[MAX_AMD_PSTATE_VALUE_READ_FILES] = {
- 	[AMD_PSTATE_HIGHEST_PERF] = "amd_pstate_highest_perf",
- 	[AMD_PSTATE_MAX_FREQ] = "amd_pstate_max_freq",
- 	[AMD_PSTATE_LOWEST_NONLINEAR_FREQ] = "amd_pstate_lowest_nonlinear_freq",
-+	[AMD_PSTATE_HW_PREFCORE] = "amd_pstate_hw_prefcore",
-+	[AMD_PSTATE_PREFCORE_RANKING] = "amd_pstate_prefcore_ranking",
- };
- 
- static unsigned long amd_pstate_get_data(unsigned int cpu,
-@@ -240,6 +244,10 @@ void amd_pstate_show_perf_and_freq(unsigned int cpu, int no_rounding)
- 	       acpi_cppc_get_data(cpu, LOWEST_PERF));
- 	print_speed(acpi_cppc_get_data(cpu, LOWEST_FREQ) * 1000, no_rounding);
- 	printf(".\n");
+ static int get_freq_hardware(unsigned int cpu, unsigned int human)
+ {
+-	unsigned long freq = cpufreq_get_freq_hardware(cpu);
++	unsigned long freq;
 +
-+	printf(_("    Preferred Core Support: %lu. Preferred Core Ranking: %lu.\n"),
-+	       amd_pstate_get_data(cpu, AMD_PSTATE_HW_PREFCORE),
-+	       amd_pstate_get_data(cpu, AMD_PSTATE_PREFCORE_RANKING));
- }
- 
- /* AMD P-State Helper Functions ************************************/
++	if (cpupower_cpu_info.caps & CPUPOWER_CAP_APERF)
++		return -EINVAL;
++
++	freq = cpufreq_get_freq_hardware(cpu);
+ 	printf(_("  current CPU frequency: "));
+ 	if (!freq) {
+ 		printf("Unable to call hardware\n");
 -- 
 2.43.0
 
