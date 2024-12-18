@@ -1,108 +1,124 @@
-Return-Path: <linux-pm+bounces-19432-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19433-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8D09D9F691E
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 15:52:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A2C39F6992
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 16:10:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C906C188C024
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 14:51:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3AFFD7A2633
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 15:10:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CE4D1C5CA5;
-	Wed, 18 Dec 2024 14:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62C651E9B04;
+	Wed, 18 Dec 2024 15:10:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OlE8WdHN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WHndnjE6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D056E1C5CDD;
-	Wed, 18 Dec 2024 14:50:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 379842AF06;
+	Wed, 18 Dec 2024 15:10:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734533453; cv=none; b=gb3sJGAj8k8m+j1kWuGzyy8JJoxQThltt5FY0hivMZiubEA+4NpV7vfbYam99vnUjqjOUJNUue5fNYrbh8WnKlmkodQ0KiphZdVt41gGwsDwT+p0U0WHImDs4lHxoO7/wtB1GTmMjD9JU3Q7P8/aPxB6AFFFoPDqFmyqJNMeo4Q=
+	t=1734534616; cv=none; b=jLz9kCkGQdtIxnpncAh/CPrAXhvL6GTFwcURmW+jVUYc62oTNidc6R2TmhBJse0ikLKl6YL34ow8XWTyuwZ9zN+SOUqGunZvVfWBESuB+tCRJQRXXueKaOL9xRdAX0TXNnEVJAkMlBD8UPtWXkMDU+U3wTAOcaFwpmWx7F2wz/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734533453; c=relaxed/simple;
-	bh=/50/8IJJMmFHD8jKVgG7p2IUzFRamEPAHKtLqItSCXc=;
+	s=arc-20240116; t=1734534616; c=relaxed/simple;
+	bh=G4pKV3afHZO3mq0GubTyL+3VV4jjQhyB7Yayygo9oWs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=KsWT0oSKHoGEavu+2A2wTYXvuEXH/gNTyY0kLoHt9ipPxH1d7u9dxGnJk8Jn6Fzr3Nb4HiC9Tk+IZ1UY/PyQtFqZSCVhrnIg0ATa2kdKbZOqeQ9JrNZ1xhICzLYPgo9HJ2F365Nh7Pxbz/LnKEl+5oeOlOivlJbx5EzVQBCnB5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OlE8WdHN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4CAB9C4CED4;
-	Wed, 18 Dec 2024 14:50:53 +0000 (UTC)
+	 To:Cc:Content-Type; b=PUu3XqI5lZ3uWBnyFQkxqXHLOKcIwbAhlf33AtRJ0xaGU73wducIES5ddu8aq7T+7zuSLMr+0AE3Ag6bD5geUje+5AY0dkOrEnOcfhWLEef+SKD78jRFR2rDSSBRo2D3SgFhYv6odn/QRuTTDrwtWoRhfWHoL+8FlceP+GV7K08=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WHndnjE6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0C8AC4CED4;
+	Wed, 18 Dec 2024 15:10:15 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734533453;
-	bh=/50/8IJJMmFHD8jKVgG7p2IUzFRamEPAHKtLqItSCXc=;
+	s=k20201202; t=1734534615;
+	bh=G4pKV3afHZO3mq0GubTyL+3VV4jjQhyB7Yayygo9oWs=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=OlE8WdHN0K68rijgdk7aDjrrROyP81rnI2jEzAkWYFsi8mXn5RY+WE4wvOorMxj18
-	 at12MIxV3fSwwSGtPCdmM5793hpALulRYGzxdKuTgNHMMFVPkOEuIEPBTQznJP8+jh
-	 9h0ruEy5StOxIcKG6HcwTQyZ59tKO2iuonkCjFX1kxSzn8BQoMWLED4dSevzaA5F76
-	 3BkLBQWJ+qeVt+qns8kGfoVLejeVXsdG9tOvfOBMFPVWde4OTA5GCA279a9T65UOEO
-	 q6H42hFKg+ouVLfVw+1ZIFxHUOa/Yli3IMwGwxX2DItsNn3Q7ZvwxXyX2clfuig24d
-	 I0vI7h6sKkohQ==
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3ebb1652729so2532625b6e.3;
-        Wed, 18 Dec 2024 06:50:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV977B3BxQ3DVE0SbyfnTKzIBHmSs52X7L9N+U/3DLvo+vX6J7HNvlCoqsi0B50PzJkg359xBebiM4=@vger.kernel.org, AJvYcCXUoRTKIGkiH+jgk/NQO9gIUeDOlzZTIytEFcwMM5GPXyOJs/HXnKGmPl+FTqEOY2SCZBrDY2bYbt+ndbY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz7cqB1I3WiF4bQi9mUYwIpuza3+MYn1Z44UQBm3lysYYNVb/be
-	Cjz0CKPFwKifLiOVvUF4leIbLHYsfz1WWJdzHaGTVD9QIUCjeAzXu7cn+fAa3eL08ehPogwoS3P
-	f24sFJR4It0C23iy6/loiUnMEJ6k=
-X-Google-Smtp-Source: AGHT+IEb3v8xzJWz0cDA5UTfguQZVSfREyEsVHxI+q0zbg4uzQR0p0+grFjag3fHcdBSMhFJCisrbkFwLcEtgTaQWls=
-X-Received: by 2002:a05:6808:191a:b0:3eb:7529:ad00 with SMTP id
- 5614622812f47-3eccc055b40mr2114135b6e.31.1734533452668; Wed, 18 Dec 2024
- 06:50:52 -0800 (PST)
+	b=WHndnjE6VfreDDNtn8bujdnVDKPTa3JGQIWrbLx5Sg5tGLGohumiTXBrJhycy4n7w
+	 Pt7QBaj9aeSlBnBh7lCNNWUbkdSopzBINLhhJCyz/dhSUVKZ99RJk4n+JxbZvALUIm
+	 mMhkrFYgNIYz9LCGL3k83kqZQfHrYpzxYREvJYapyLrOtZntIMBkUsfs5BX03dqRgs
+	 2ZWrV0S6i5mlHC1l9pWnFnLDJ96cgMBQtHpgF7FsKVXXp6Z7tZ0HuLM9qZBqlqbWQ/
+	 3C3JWcN6G0Qz1O0ywU0E56Nv4ykks8SaAnAdl74WBZOEx04mL4hI0lOwM29sgkQTw7
+	 SRZf6htPDFYgg==
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2f441791e40so124636a91.3;
+        Wed, 18 Dec 2024 07:10:15 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUjd5H0oOnxCamSAVSKggkxYnrcn46iLchNgq9tFP3d3OZBtBh97Mb9ddD50EkM2OzmexujOAqPfi9ZoTM=@vger.kernel.org, AJvYcCUo/N137POpjFiEQllHICZqAIp1DEPilSFDqzPo5dONH2ePxAtI+43WUI4hwB6a+kvnGKqFQyPugaI=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz7CZ/xp/lMJUTT9TPPkikgZ1+v4aIDn+Z1wjCHXW3lQhXHe4ms
+	xNRfCuiX90RqMvoZKuleZpfDayFS4OmoaDn0hstuUtthl9ozYMKEvrRvnpfrqP3eO7NksWpklH4
+	UtysmICyVm+oXE6e51xX0bjCgcG0=
+X-Google-Smtp-Source: AGHT+IGBCOz+Zwe8RWtIRlvZdeGdXrnOG5ETkJCBE/Qkl+AHKMTnv3fLS96Jgc1WFx6DltPLajki9fW+jnTqayENWwk=
+X-Received: by 2002:a17:90b:524d:b0:2ee:f076:20fb with SMTP id
+ 98e67ed59e1d1-2f2e91fa529mr5265508a91.17.1734534615333; Wed, 18 Dec 2024
+ 07:10:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241211122605.3048503-1-christian.loehle@arm.com> <20241211122605.3048503-3-christian.loehle@arm.com>
-In-Reply-To: <20241211122605.3048503-3-christian.loehle@arm.com>
+References: <20241212015734.41241-1-sultan@kerneltoast.com>
+ <20241212015734.41241-2-sultan@kerneltoast.com> <79448239-86df-43ef-9a4f-717802d2c70a@arm.com>
+In-Reply-To: <79448239-86df-43ef-9a4f-717802d2c70a@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 18 Dec 2024 15:50:40 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hyaMVwiXMa3MvVR9auHwnLvs5BrL17eABtC9KzwZx7-A@mail.gmail.com>
-Message-ID: <CAJZ5v0hyaMVwiXMa3MvVR9auHwnLvs5BrL17eABtC9KzwZx7-A@mail.gmail.com>
-Subject: Re: [PATCH 2/2] cpufreq: intel_pstate: Use CPUFREQ_POLICY_UNKNOWN
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: rafael@kernel.org, viresh.kumar@linaro.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, Len Brown <lenb@kernel.org>
+Date: Wed, 18 Dec 2024 16:10:03 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0j3X8BC57bxktxSZN+0XqZSGmdtGZoL8QV-_Um9pSynaA@mail.gmail.com>
+Message-ID: <CAJZ5v0j3X8BC57bxktxSZN+0XqZSGmdtGZoL8QV-_Um9pSynaA@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpufreq: schedutil: Fix superfluous updates caused by need_freq_update
+To: Christian Loehle <christian.loehle@arm.com>, Sultan Alsawaf <sultan@kerneltoast.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	Ingo Molnar <mingo@redhat.com>, Peter Zijlstra <peterz@infradead.org>, 
+	Juri Lelli <juri.lelli@redhat.com>, Vincent Guittot <vincent.guittot@linaro.org>, 
+	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
+	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Dec 11, 2024 at 1:26=E2=80=AFPM Christian Loehle
+On Thu, Dec 12, 2024 at 2:24=E2=80=AFPM Christian Loehle
 <christian.loehle@arm.com> wrote:
 >
-> epp_policy uses the same values as cpufreq_policy.policy and resets
-> to CPUFREQ_POLICY_UNKNOWN during offlining. Be consistent about
-> it and initialize to CPUFREQ_POLICY_UNKNOWN instead of 0, too.
+> On 12/12/24 01:57, Sultan Alsawaf wrote:
+> > From: "Sultan Alsawaf (unemployed)" <sultan@kerneltoast.com>
+> >
+> > A redundant frequency update is only truly needed when there is a polic=
+y
+> > limits change with a driver that specifies CPUFREQ_NEED_UPDATE_LIMITS.
+> >
+> > In spite of that, drivers specifying CPUFREQ_NEED_UPDATE_LIMITS receive=
+ a
+> > frequency update _all the time_, not just for a policy limits change,
+> > because need_freq_update is never cleared.
+> >
+> > Furthermore, ignore_dl_rate_limit()'s usage of need_freq_update also le=
+ads
+> > to a redundant frequency update, regardless of whether or not the drive=
+r
+> > specifies CPUFREQ_NEED_UPDATE_LIMITS, when the next chosen frequency is=
+ the
+> > same as the current one.
+> >
+> > Fix the superfluous updates by only honoring CPUFREQ_NEED_UPDATE_LIMITS
+> > when there's a policy limits change, and clearing need_freq_update when=
+ a
+> > requisite redundant update occurs.
+> >
+> > This is neatly achieved by moving up the CPUFREQ_NEED_UPDATE_LIMITS tes=
+t
+> > and instead setting need_freq_update to false in sugov_update_next_freq=
+().
+> >
 >
-> No functional change intended.
+> Good catch!
+> Fixes:
+> 600f5badb78c ("cpufreq: schedutil: Don't skip freq update when limits cha=
+nge")
 >
-> Cc: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-> Cc: Len Brown <lenb@kernel.org>
-> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
-> ---
->  drivers/cpufreq/intel_pstate.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/cpufreq/intel_pstate.c b/drivers/cpufreq/intel_pstat=
-e.c
-> index b8e2396a708a..5dacd9d26879 100644
-> --- a/drivers/cpufreq/intel_pstate.c
-> +++ b/drivers/cpufreq/intel_pstate.c
-> @@ -2709,7 +2709,7 @@ static int intel_pstate_init_cpu(unsigned int cpunu=
-m)
->         }
+> > Signed-off-by: Sultan Alsawaf (unemployed) <sultan@kerneltoast.com>
 >
->         cpu->epp_powersave =3D -EINVAL;
-> -       cpu->epp_policy =3D 0;
-> +       cpu->epp_policy =3D CPUFREQ_POLICY_UNKNOWN;
->
->         intel_pstate_get_cpu_pstates(cpu);
->
-> --
+> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
 
-Applied as 6.14 material, thanks!
+Applied with the above Fixes tag added as 6.14 material, thanks!
 
