@@ -1,118 +1,155 @@
-Return-Path: <linux-pm+bounces-19420-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19421-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 293969F6459
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 12:10:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 594B69F648E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 12:15:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76AE216A9D1
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 11:10:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 798241892AC3
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 11:15:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2FB919CC3C;
-	Wed, 18 Dec 2024 11:10:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E32A819E97B;
+	Wed, 18 Dec 2024 11:15:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DSHeOCFr"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="iuN25KoO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC13A19939D
-	for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 11:10:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60EF919D07B;
+	Wed, 18 Dec 2024 11:15:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734520213; cv=none; b=dliOo6YuIWnNM0Zwgeji0y2KNzRa9wC5OjrgYlspX6CxNw5/71TmrlwZW0Sj7nAFfdzQGknPFgK+dAkeLvvpFEClR2oU+rJLnJxVt/Y2JTHGNAge7038zs4mLV8HU0qXZBkyBZzfk7lzGREEbPfZ0oPFPFPpdRZH1jRpNsCQ8Bc=
+	t=1734520537; cv=none; b=Yn0Gw25Mk9N73+XUGb6PF8R0GzY6FjxPu8lxVqOBBt61GP0m4MTD6iB8860cHL1mCrTy5Y707EcjtSUs8u8/URRDS7NYdcF9tmPeDKebMHz8PbFIae+Sljsrw7qujrHWZxKjMfstUvxTxMjpkLJBGW1e/EhipKlpbNTD4WxS8HY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734520213; c=relaxed/simple;
-	bh=ERypSZr/K+0TmwV+cyxpd4RZs5yy0sp/ZDHqa0hiRS0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hFBLHZPXz6q6pvmskqM6Tms65swqNLV1HEwo4aA0wVzKBxV6TftDtwt4DkBrlH76oRsUvKkz//iArktMNtW8UIFzhRn6FgqffG/1CJZGUdG3S5W2SzJmG1dEC4VDmUHzqlCCzSY7106jyI0ZmU+8KhhyenLM1HFEbBtbTgucKBg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DSHeOCFr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2D970C4CECE
-	for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 11:10:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734520213;
-	bh=ERypSZr/K+0TmwV+cyxpd4RZs5yy0sp/ZDHqa0hiRS0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DSHeOCFrXtu0w01u8hTLGxqzh94l157jlXfeYUpGD8h65BLClsZIpvQkYNNzWH2HN
-	 6Gfmj5UTkhWr0vtGk9UTYyXTyTyAjU4bxeN+nw2Uaai+i0yyt4Ry61kEYnA9MyaJKy
-	 2hi3CL1j0Rq7yDVemcWoKEc4GcFdDAGmTqNthD8GFJZX6+gqOaCZIH1EK7PHjMH/EF
-	 qr1bISP8uNtvJA0UQ5l+LZR426Z4tfxsysljtV0iQ3GC1jwSqiOn4ey6PeJpPe562H
-	 VckWSV8skCLQzlQxED6RMdpE10JnvV2t/X2OWHmoNKBNIL3iOF5uRhA8HOQMoNX6v0
-	 b7iSWpU4Rx//g==
-Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-71e36b27b53so3061381a34.1
-        for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 03:10:13 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWOGATUVR6+x2qrqQbl75/uM929dcG+cEu/7+eDShDaFYhsHX4dFJ+0BmKpe0/QwdYa5vEtiToNFA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0HfIyWH1Sl7LCs/5B/GYQIYgL3IUGlSVdI/Bi09e9Fng0ol4L
-	6f6283/ARjZWl2XBdGY7i7DoqwgDrI4dZUEx9iVhLOPO6fzipxnuiN/isQynu4eFABrmmOiav1v
-	BQy7YM5s20K7yD2MIDGEwSXOKS+M=
-X-Google-Smtp-Source: AGHT+IHM5Gpwc3BiVeMkYl4H4AJLlhyZJvRAiZJuEwpnqKNEIFznuvevEZTw0T7AYrKPmJURqv5G90oyJColaOcVtWk=
-X-Received: by 2002:a05:6808:1a02:b0:3ea:66c3:d066 with SMTP id
- 5614622812f47-3eccbf2e273mr1358547b6e.7.1734520212569; Wed, 18 Dec 2024
- 03:10:12 -0800 (PST)
+	s=arc-20240116; t=1734520537; c=relaxed/simple;
+	bh=inctAiqk9Y9aXPwPxEb2n0GmKc7SIVdc2U5HmGGED98=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=U4XT4rvtwXXsQTu6g1wQ/nnhuVaTpWfnrj/PbJD1Ub2itoxU4/1AOsWN8HSaXMzWDYmVQ5QS5vgIjFlZmXPgkIUbBKWcJVWZFfUXIWnouiE6VnZrcK5GhvabpPXoUimOHWKjimJIMNDDeJ0rKSkVh2NUGTJL8ifX8qandmTL5aM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=iuN25KoO; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BI6VXL8024603;
+	Wed, 18 Dec 2024 11:15:28 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	DtDXbLrwZmGApG6b1RUBCdgE7duW8uEJPL4iYKXLNDw=; b=iuN25KoODTIomfsb
+	KCdQxdelnecN+Wyje3tTTztKQvFg1Ps6NofDm2SGWm6HTQ297W7kE7am4eh25a27
+	/Mc9NL12f7DpMNxgXJsI7wAUDTWYCo87df2lRE8KD0qD/vuAST+yixBCA2HX1A+6
+	Fky4cO3ABP85EXPOw3zWgQsG8+EvQ+q0khcJZStxtVAfcF9ar9L0HwqRh7e6tLI1
+	lrLD3M2f1KwUChDJdmKgUJd+djalZtLnKRKW3LJV8s6Tf9gilTAQMNnkvaEucmko
+	6nI1ve/rKlrrB7QkdjGLASk33VfxpyxAyULpODji/W4DHA12gvGLmGSBpyvupB4r
+	Y8Rsjg==
+Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43ks6ygpgk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 18 Dec 2024 11:15:27 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BIBFQ4M019687
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 18 Dec 2024 11:15:26 GMT
+Received: from [10.152.195.140] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 18 Dec
+ 2024 03:15:21 -0800
+Message-ID: <f6527df3-feb9-4d3b-93d7-84f4f255d23c@quicinc.com>
+Date: Wed, 18 Dec 2024 16:45:18 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241214021652.3432500-1-joe@pf.is.s.u-tokyo.ac.jp> <20241216080159.ahpzlioy7l5etn3y@lcpd911>
-In-Reply-To: <20241216080159.ahpzlioy7l5etn3y@lcpd911>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 18 Dec 2024 12:10:01 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hKOEU7XCR1G5t2FA8X2q9Y5dWGuMZ0cwTJ6mjfJuCsBg@mail.gmail.com>
-Message-ID: <CAJZ5v0hKOEU7XCR1G5t2FA8X2q9Y5dWGuMZ0cwTJ6mjfJuCsBg@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: wakeup: implement devm_device_init_wakeup() helper
-To: Dhruva Gole <d-gole@ti.com>
-Cc: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>, rafael@kernel.org, linux-pm@vger.kernel.org, 
-	alexandre.belloni@bootlin.com
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 4/7] arm64: dts: qcom: ipq5332: Add tsens node
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        <srinivas.kandagatla@linaro.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <amitk@kernel.org>,
+        <thara.gopinath@gmail.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <rui.zhang@intel.com>,
+        <lukasz.luba@arm.com>, <andersson@kernel.org>,
+        <konradybcio@kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+CC: <quic_srichara@quicinc.com>, <quic_varada@quicinc.com>
+References: <20241125050728.3699241-1-quic_mmanikan@quicinc.com>
+ <20241125050728.3699241-5-quic_mmanikan@quicinc.com>
+ <556ff23c-8b2c-4ea3-99dc-84196e3f0651@oss.qualcomm.com>
+Content-Language: en-US
+From: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+In-Reply-To: <556ff23c-8b2c-4ea3-99dc-84196e3f0651@oss.qualcomm.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: 60ueWvLQ1Wb5YcztH2AhwK-lExXkdW36
+X-Proofpoint-GUID: 60ueWvLQ1Wb5YcztH2AhwK-lExXkdW36
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=897 mlxscore=0
+ priorityscore=1501 spamscore=0 adultscore=0 clxscore=1015
+ lowpriorityscore=0 phishscore=0 suspectscore=0 impostorscore=0
+ malwarescore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2412180090
 
-On Mon, Dec 16, 2024 at 9:02=E2=80=AFAM Dhruva Gole <d-gole@ti.com> wrote:
->
-> On Dec 14, 2024 at 11:16:52 +0900, Joe Hattori wrote:
-> > Some drivers that enable device wakeup fail to properly disable it
-> > during their cleanup, which results in a memory leak.
-> >
-> > To address this, introduce devm_device_init_wakeup(), a managed variant
-> > of device_init_wakeup(dev, true). With this managed helper, wakeup
-> > functionality will be automatically disabled when the device is
-> > released, ensuring a more reliable cleanup process.
-> >
-> > This need for this addition arose during a previous discussion [1].
-> >
-> > [1]:
-> > https://lore.kernel.org/linux-rtc/20241212100403.3799667-1-joe@pf.is.s.=
-u-tokyo.ac.jp/
-> >
-> > Suggested-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-> > ---
-> > Changes in V2:
-> > - Utilize the device_init_wakeup() function.
->
-> You took my suggestion, but forgot to put me in CC I guess :)
->
+
+
+On 12/13/2024 6:29 PM, Konrad Dybcio wrote:
+> On 25.11.2024 6:07 AM, Manikanta Mylavarapu wrote:
+>> From: Praveenkumar I <quic_ipkumar@quicinc.com>
+>>
+>> IPQ5332 has tsens v2.3.3 peripheral. This patch adds the tsens
+>> node with nvmem cells for calibration data.
+>>
+>> Signed-off-by: Praveenkumar I <quic_ipkumar@quicinc.com>
+>> Signed-off-by: Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+>> ---
+> 
 > [...]
-> > +/**
-> > + * devm_device_init_wakeup - Resource managed device wakeup initializa=
-tion.
-> > + * @dev: Device to handle.
-> > + *
-> > + * This function is the devm managed version of device_init_wakeup(dev=
-, true).
-> > + */
-> > +static inline int devm_device_init_wakeup(struct device *dev)
->
-> Rafael, Should I submit a patch series to convert the regular device_init=
-_wakeup from int to void?
-> This anyway doesn't return anything but 0 today and I can already see
-> some drivers using if(device_init_wakeup) which would essentially be
-> just dead code. I can try and patch that up as well.
-> The fact that this is a return type `int` is quite misleading to it's
-> users I guess?
+> 
+>>  
+>> +		tsens: thermal-sensor@4a9000 {
+>> +			compatible = "qcom,ipq5332-tsens";
+>> +			reg = <0x004a9000 0x1000>,
+>> +			      <0x004a8000 0x1000>;
+>> +			nvmem-cells = <&tsens_mode>,
+>> +				      <&tsens_base0>,
+>> +				      <&tsens_base1>,
+>> +				      <&tsens_sens11_off>,
+>> +				      <&tsens_sens12_off>,
+>> +				      <&tsens_sens13_off>,
+>> +				      <&tsens_sens14_off>,
+>> +				      <&tsens_sens15_off>;
+>> +			nvmem-cell-names = "mode",
+>> +					   "base0",
+>> +					   "base1",
+>> +					   "tsens_sens11_off",
+>> +					   "tsens_sens12_off",
+>> +					   "tsens_sens13_off",
+>> +					   "tsens_sens14_off",
+>> +					   "tsens_sens15_off";
+>> +			interrupts = <GIC_SPI 320 IRQ_TYPE_LEVEL_HIGH>;
+>> +			interrupt-names = "combined";
+> 
+> Please move interrupts properties above nvmem
+> 
 
-Yes, it would be better to make it void.
+Sure, i will move in next version.
+
+Thanks & Regards,
+Manikanta.
+
+> with that:
+> 
+> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+> 
+> Konrad
+
 
