@@ -1,97 +1,124 @@
-Return-Path: <linux-pm+bounces-19412-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19413-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B31589F601F
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 09:29:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 925B79F602E
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 09:35:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6F9616D783
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 08:28:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D337A163984
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 08:35:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD803176228;
-	Wed, 18 Dec 2024 08:28:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FC8D1714C8;
+	Wed, 18 Dec 2024 08:35:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kj83UXCR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Q9frgidH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A288F4317E;
-	Wed, 18 Dec 2024 08:28:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 225C7165F18;
+	Wed, 18 Dec 2024 08:35:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734510496; cv=none; b=R3YEq8lA4Ci1lWdZYyag3hSr4AYwC7Pp6xbq44my6vUggLGBV5Tp/AUxt3qUXSNdDHOkIZ+S30YpL2YbCCyEtXmZ3b1kF+n15F7MMqFhJNkn0PjVLYUyMsY8/vtMXetJTxji+mTVB8ecQAF0GmWIxZeN61MAKaAvbV28+yP2Hj4=
+	t=1734510907; cv=none; b=fVcPgot4RO7y/qFotGYyGaS251+yo8g79U7WM+b9uGVgGtc1se2a4Hg6YNiLl6gQsPCXqV5ZyQu2V8wvYJawRMgFTq9wQPHjGB2gd7kDpOZRuVuc7eB6Qeym2yWMZfwFicpE0D+hvV9Pxfkhn76vgh+7zeQrNYExcbsgAYlshhE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734510496; c=relaxed/simple;
-	bh=CsY+ALDMecc5Y7Al1rY01JAbl+nL6+nkWBZjGrMZ8iQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=j6EFRusHbw0yxZmuDdvXaYJ/9/Ull5RFqTAlN0M0sST8cWNPu7YXD/PM+U5A4n02cy3cJtO/E20lp6WuAMGzVmNNZrxrNb+YUNtNHFh5kr6xD76RmKlk1mFCYGnoZBiQfsKG3OOXI/0PjfVjKmz76Fo9bIRvLrt3IGPNEoU8N/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kj83UXCR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 55B41C4CECE;
-	Wed, 18 Dec 2024 08:28:15 +0000 (UTC)
+	s=arc-20240116; t=1734510907; c=relaxed/simple;
+	bh=+QDle9JEkjDQ/QxtUf4707ZXIzare578DXwCr4H8Ixw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=q0fipliOcLJ1ill1NWYdNma3qv84SIQdfYspHGPUvGK92zvlgYg81zsK6cYGXuwrQrnLrQSy6xRmlK7xO2Cl0uY4Ywgyn7klCQrLJNFyfugKaKu5BGSoPnmI2jksUILnmCde6dW+mqxb3ICZPed3yGoxCgx9m4lbr9S4LqQh13w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Q9frgidH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A9929C4CECE;
+	Wed, 18 Dec 2024 08:35:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734510496;
-	bh=CsY+ALDMecc5Y7Al1rY01JAbl+nL6+nkWBZjGrMZ8iQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Kj83UXCRuAYrcShm4ohxzm86FHdKSZSWAqJWrO7kE2oARUaySr9ZvZJi2xNHkAo98
-	 JygsO3OJIewM84I+jyY12JTs27Ukh5OKP+ufEnmo/28TgNS1x2Cm5GR5FZF6fHX07A
-	 qt/Htfa5x2At5zevaeVVWGpZWo5VaPgNFlJR8qgOSATLDVmUBpV8cqu0T7aRHQXX6n
-	 ViGqznR+F7l3vuvqIiuBRAxWlxYv2FA0j7cr1TH40JvFScQ1ZEIR6kn40jJsvOrE+5
-	 kmQyLJ+Ifnnuw8SsOvmhBKGYeYG1FKkeJuSOHCGaxiZdZyFjvS+RCSKuJo1LR7R0ER
-	 SbaF4VMWVbw/Q==
-Date: Wed, 18 Dec 2024 09:28:12 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Dzmitry Sankouski <dsankouski@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, 
-	Chanwoo Choi <cw00.choi@samsung.com>, Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Pavel Machek <pavel@ucw.cz>, Hans de Goede <hdegoede@redhat.com>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
-	Purism Kernel Team <kernel@puri.sm>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
-Subject: Re: [PATCH v12 02/11] dt-bindings: power: supply: max17042: split on
- 2 files
-Message-ID: <vunx3s4wqw5fqtwuuuuofjtja7buh5zpxi3iznzgfl4iz7fm4d@wlxbzrnlu7fr>
-References: <20241217-starqltechn_integration_upstream-v12-0-ed840944f948@gmail.com>
- <20241217-starqltechn_integration_upstream-v12-2-ed840944f948@gmail.com>
+	s=k20201202; t=1734510906;
+	bh=+QDle9JEkjDQ/QxtUf4707ZXIzare578DXwCr4H8Ixw=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=Q9frgidHErI5z4Y11uXY2cGlaKEHQT+utRObe9PPtfIvrbZfkFNbQBhF02lVFNV86
+	 AW6Xoc6zhvgdOsEMdC+Ifz1q/ZgUbDDiPjjhvVNAy7VI/dwwcT/lcTAGXNHpX1oOnP
+	 cfVCdr7/OgEkrBHrFt9RVkXi18AvaWewZLc4SorFWi33EJjf7gyjawD7S+QcBfEj9C
+	 PtZGVlZsfIPI6eQ8u2KaF6y44GyZhip/CojVAnGYEa/kCsvsx/DchMit+gKnCAoBI4
+	 UzUCOFlEOEHJXv4B1VMw7EvVJxVd+sHXvclfuPfwTRtvFhhpopwTCry5TXmL3VfOD9
+	 JNdYA91noA5wg==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 92E9FE77188;
+	Wed, 18 Dec 2024 08:35:06 +0000 (UTC)
+From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
+Subject: [PATCH v3 0/2] power: supply: gpio-charger: add support for
+ default charge current limit
+Date: Wed, 18 Dec 2024 09:34:59 +0100
+Message-Id: <20241218-default-charge-current-limit-v3-0-b26118cf06b5@liebherr.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20241217-starqltechn_integration_upstream-v12-2-ed840944f948@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADOJYmcC/4XNywrCMBCF4VcpWRtJ0mtc+R7iIk2ndqAXmaRBK
+ X130+JCXOjynwPfLMwBITh2ShZGENDhNMZIDwmznRlvwLGJzZRQmVRC8wZaM/eex5XiamciGD3
+ vcUDPC22g1FkuCmlYJO4ELT52/nKN3aHzEz33b0Fu1zcs5W84SC54WUldG1EAKHPuEeoOiI52G
+ thmB/XppX88Fb0sr6qitaBFbr+8dV1fjFA2LBsBAAA=
+X-Change-ID: 20241209-default-charge-current-limit-69ae7945061a
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Dimitri Fedrau <dimitri.fedrau@liebherr.com>, 
+ Dimitri Fedrau <dima.fedrau@gmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734510905; l=1729;
+ i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
+ bh=+QDle9JEkjDQ/QxtUf4707ZXIzare578DXwCr4H8Ixw=;
+ b=AA7hl+bQkoeVXU0gCuOpYd+ewT4c9d+ccmAsRG23kspyCjmivC0iGHf0yAPSXO4a+n8dNivw5
+ WI6XFA2jAHzDHJDSoCaAE5ULGGFE2zlujAAHNBdLZrPL1ovJW6bcqsG
+X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
+ pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
+X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
+ with auth_id=290
+X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Reply-To: dimitri.fedrau@liebherr.com
 
-On Tue, Dec 17, 2024 at 08:30:00PM +0300, Dzmitry Sankouski wrote:
-> Move max17042 common binding part to separate file, to
-> reuse it for MFDs with platform driver version.
-> 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> 
-> Changes on v12:
+With DT properties charge-current-limit-gpios and
+charge-current-limit-mapping one can define charge current limits in uA
+using up to 32 GPIOs. At the moment the driver defaults to smallest charge
+current limitation for safety reasons. When disabling charging is
+supported, which should be common, the driver defaults to non charging on
+probe. By having a default, charging can be enabled on probe for such
+devices.
 
-Malformed patch.
+Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+---
+Changes in v3:
+- Fix commit msg for "dt-bindings: power: supply: gpio-charger: add support for default charge current limit"
+  Add use case
+- Link to v2: https://lore.kernel.org/r/20241213-default-charge-current-limit-v2-0-45886fce905c@liebherr.com
 
-> - add addtionalProperties: true on common file
-> - rename *-base file to *-common
-> - remove compatibles from shared shema
-> - move required properties to final schema
-> - remove max77705 compatible from binding - it will be used in
->   mfd77705 binding
+Changes in v2:
+- renamed DT property charge-current-limit-default to
+  charge-current-limit-default-microamp
+- Added dependency on charge-current-limit-mapping
+- Added intention and use case to commit descriptions
+- Added charge-current-limit-default-microamp in bindings example
+- Link to v1: https://lore.kernel.org/r/20241211-default-charge-current-limit-v1-0-7819ba06ee2a@liebherr.com
 
-Sorry, all this is somehow complicated effort of not calling the fuel
-gauge what it really is: separate device with its own I2C address, just
-like all previous designs in that family from Maxim.
+---
+Dimitri Fedrau (2):
+      dt-bindings: power: supply: gpio-charger: add support for default charge current limit
+      power: supply: gpio-charger: add support for default charge current limit
 
-I keep repeating this and you keep going that way, maybe because it fits
-your drivers, but that's not the way.
+ .../devicetree/bindings/power/supply/gpio-charger.yaml      |  6 ++++++
+ drivers/power/supply/gpio-charger.c                         | 13 +++++++++++++
+ 2 files changed, 19 insertions(+)
+---
+base-commit: 57cb041f61d4abcf8dfa41259df27d081ab4cb6a
+change-id: 20241209-default-charge-current-limit-69ae7945061a
 
 Best regards,
-Krzysztof
+-- 
+Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+
 
 
