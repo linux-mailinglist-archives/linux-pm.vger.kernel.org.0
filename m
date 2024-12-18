@@ -1,123 +1,173 @@
-Return-Path: <linux-pm+bounces-19461-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19462-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE72F9F6FB1
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 22:45:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD3389F6FE5
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 23:12:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03B85169403
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 21:45:14 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D4607A3FF5
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 22:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27B7E1FCFD8;
-	Wed, 18 Dec 2024 21:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0AF01FCFE4;
+	Wed, 18 Dec 2024 22:11:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AF/wlqyq"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="YnPOmvDW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.10])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 669E51FC11F;
-	Wed, 18 Dec 2024 21:45:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.10
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734558303; cv=none; b=EiWbdyv7vT2QFtMo6gVaTITVhGcU2NYAqRZA5HhEvMV88wa+yfb8XHV0h2nekBDy4DwehMWbamIkikP07GhqFa0tIZgzNvGMQLuAcewjN5cad2/UMIBsXoBD+xRn9BusHd4LY23GNPYVu4as62sxB06pFIy/hsZPFYiG/mH/+18=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734558303; c=relaxed/simple;
-	bh=IrrU9PHVz1azGyNM00roEocrX/REpjhTwhqU4ZOGtys=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=OSz3Hld4u0LoOf2UDpSgLtqolmvDbeAXmdkusR/Wm0Yvx6jgBTDsoDEJiLBrLGA00DxC4+TWa4lkCh9HaaoZNmEFpJXfMcWyM8Y5EPALBFAV2MaOSMqr8RMyuRQYAaY6yJzoqnNPUau7KEI1PPDjwZtSxmEUzMYPWO5UQ+7zUyI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AF/wlqyq; arc=none smtp.client-ip=198.175.65.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734558301; x=1766094301;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=IrrU9PHVz1azGyNM00roEocrX/REpjhTwhqU4ZOGtys=;
-  b=AF/wlqyqRlLEwGOqfmQSa8B+FDjFUnli6gYzRdCa+RSosjLWWcA7gH6N
-   7tvrGMrfObZq4d7JvWWpUrFb21185mq4IpYi9WkAyP0rAZI/RXhLk3TAm
-   DASKBKIYDhbdkQudbnjHtsKu0UBXg6JR5SokuUmIkUnHyzkD4gTMqj9m7
-   r5mSSa8y+bB9C3I/9Gt6dDnWmZ4t2X3m6QfEEywk+/rmNzcr3yG/cbeCU
-   5sczQ2ouaEypzVm8ih/+9m+jfDXq+rrOBnPNUPhbtNc46xT6LylWzOZWa
-   GTz1IYSoJkEKPLgRE/lYX+XHgPhPrHNJHMMrAkMjPd9DoAENaiR4icpA6
-   Q==;
-X-CSE-ConnectionGUID: on5jWY1mR0eb7dvgW027dw==
-X-CSE-MsgGUID: prGeJQAvRgGhW6qIN0fJIA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11290"; a="52463743"
-X-IronPort-AV: E=Sophos;i="6.12,245,1728975600"; 
-   d="scan'208";a="52463743"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by orvoesa102.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Dec 2024 13:45:00 -0800
-X-CSE-ConnectionGUID: 6u4Y/B2QT+i777IwIaolBA==
-X-CSE-MsgGUID: cQAtWgqXRAuQ2INs5B9H0Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="121248063"
-Received: from spandruv-desk.jf.intel.com ([10.54.75.16])
-  by fmviesa002.fm.intel.com with ESMTP; 18 Dec 2024 13:45:00 -0800
-From: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
-To: rafael@kernel.org,
-	rui.zhang@intel.com,
-	daniel.lezcano@linaro.org,
-	lukasz.luba@arm.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	kernel test robot <lkp@intel.com>
-Subject: [PATCH linux-pm] thermal: intel: Fix compile issue when CONFIG_NET is not defined
-Date: Wed, 18 Dec 2024 13:44:44 -0800
-Message-ID: <20241218214444.1904650-1-srinivas.pandruvada@linux.intel.com>
-X-Mailer: git-send-email 2.47.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05AB1FCF66;
+	Wed, 18 Dec 2024 22:11:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734559919; cv=pass; b=auPP1uA6qShn6OJ1f31OHxaMbRt9wSiekv+WjZm94imILR8ARHH7lTXKuHVCL4eQloBBpySxte8ndDikBVneF1NsUIfBi0tVZhhp9JKnqapo+fdyk8WgjHFTi81Irds5RmtNWOW7nG1HN6TTfgFlZVPa4UeAnnyTD7vQopDsLN4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734559919; c=relaxed/simple;
+	bh=IIFJUgSFcllsxyTqqalwYX8lwQT014h+3ow/BGcKCeY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=uVEngWehjqjlcLl9tT8U7N7FvKGaabDFE7ONpnpOLOoacVS9xXrwkqbvDjCv/1v01gmuGYre25AObo5UytQ966w3b+Q9qCuExUvSgVbn/KuKJc9iBqkjSsCnyBoA4z34OqB+f8bABdssTZUtCk8iHucOOvFuuP/oSMB3Xw4T6Cc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=YnPOmvDW; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1734559903; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=gXuHM4YTxBw6TZ2iIXJDgG9hQEp1v3bkJOg0hxBDgT0rpNyX/ExkE1iNFBRluKJvyfQKBFX5J4j2Xu3ThT5li9aOmuRcbFSxhkrkCCwVJXPZNJvW2+NB5quYKFHw4nC6YSf+J3kP6qyqWH7vD1L2YxbzG5iOllIyFKF5lHP7blU=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1734559903; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=zIC73tJE+0Lgr/1a9NeB62/o6YEaEQYqq8EDI1i5mfo=; 
+	b=ZtaeDTFM1WM3+m3qca+EJIG94ImfvlTNAM8b/2uCmClE2n9P5apZbJDBvgIglqNB+pkNtZYYx+nfJxZN9nFrddA63Vga5Rs7ZZhGUXn25q487ymqMObtoPbp4kcIETeTxgVGG9qDcshKDNGL1Z9ZAoGRlSwNEI8k/sfS67cjeMM=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1734559903;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=zIC73tJE+0Lgr/1a9NeB62/o6YEaEQYqq8EDI1i5mfo=;
+	b=YnPOmvDWxpVOfcIWcS63XMO8waj7CXDs1rtic/I6R8X6Tm+KfaGb7E/naXHxFsNe
+	f0n/N8VympK7Z5OpLGWPBVW8WFxOiu7AuBMOJFcGWHSYwwN8+ue0LmPrQff427dN0BZ
+	UHsxegIIMBJwQmAxobvmTPssLDDxdo0opM5MPuGU=
+Received: by mx.zohomail.com with SMTPS id 1734559900336540.3066848116509;
+	Wed, 18 Dec 2024 14:11:40 -0800 (PST)
+Received: by mercury (Postfix, from userid 1000)
+	id ABC7B1060345; Wed, 18 Dec 2024 23:11:35 +0100 (CET)
+Date: Wed, 18 Dec 2024 23:11:35 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>
+Cc: Nathan Chancellor <nathan@kernel.org>, Armin Wolf <W_Armin@gmx.de>, 
+	Hans de Goede <hdegoede@redhat.com>, Benson Leung <bleung@chromium.org>, 
+	Guenter Roeck <groeck@chromium.org>, linux-kernel@vger.kernel.org, chrome-platform@lists.linux.dev, 
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 4/4] power: supply: core: add UAPI to discover
+ currently used extensions
+Message-ID: <otwk52a7nkle7yx3444swh5xasm3l6lmu2suapmvjuplezihyv@p6vrs6lo454e>
+References: <20241211-power-supply-extensions-v6-0-9d9dc3f3d387@weissschuh.net>
+ <20241211-power-supply-extensions-v6-4-9d9dc3f3d387@weissschuh.net>
+ <20241218195229.GA2796534@ax162>
+ <eb265cb2-b079-4bca-bc35-17a9f4d0ec3e@t-8ch.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="eerui4o2x4lxvoah"
+Content-Disposition: inline
+In-Reply-To: <eb265cb2-b079-4bca-bc35-17a9f4d0ec3e@t-8ch.de>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.3.1/234.486.72
+X-ZohoMailClient: External
 
-If CONFIG_NET is not defined then THERMAL_NETLINK can't be selected.
-Hence add dependency on CONFIG_NET. Othewise it will generate compile
-errors while compiling thermal_netlink.c.
 
-Fixes: 4596cbea0ed2 ("thermal: intel: Remove explicit user_space governor selection")
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>
----
-This commit ID 4596cbea0ed2 is from linux-pm bleeding edge branch of
-linux-pm git.
+--eerui4o2x4lxvoah
+Content-Type: text/plain; protected-headers=v1; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v6 4/4] power: supply: core: add UAPI to discover
+ currently used extensions
+MIME-Version: 1.0
 
- drivers/thermal/intel/Kconfig                 | 1 +
- drivers/thermal/intel/int340x_thermal/Kconfig | 1 +
- 2 files changed, 2 insertions(+)
+Hi,
 
-diff --git a/drivers/thermal/intel/Kconfig b/drivers/thermal/intel/Kconfig
-index 9c0f66f9defc..e1973c0efe0c 100644
---- a/drivers/thermal/intel/Kconfig
-+++ b/drivers/thermal/intel/Kconfig
-@@ -22,6 +22,7 @@ config INTEL_TCC
- config X86_PKG_TEMP_THERMAL
- 	tristate "X86 package temperature thermal driver"
- 	depends on X86_THERMAL_VECTOR
-+	depends on NET
- 	select THERMAL_NETLINK
- 	select INTEL_TCC
- 	default m
-diff --git a/drivers/thermal/intel/int340x_thermal/Kconfig b/drivers/thermal/intel/int340x_thermal/Kconfig
-index d9a74424c29d..6a0203eaa7f2 100644
---- a/drivers/thermal/intel/int340x_thermal/Kconfig
-+++ b/drivers/thermal/intel/int340x_thermal/Kconfig
-@@ -6,6 +6,7 @@
- config INT340X_THERMAL
- 	tristate "ACPI INT340X thermal drivers"
- 	depends on X86_64 && ACPI && PCI
-+	depends on NET
- 	select THERMAL_NETLINK
- 	select ACPI_THERMAL_REL
- 	select ACPI_FAN
--- 
-2.47.1
+On Wed, Dec 18, 2024 at 09:29:31PM +0100, Thomas Wei=DFschuh wrote:
+> On 2024-12-18 12:52:29-0700, Nathan Chancellor wrote:
+> > I am seeing a build failure in certain configurations because
+> > power_supply_extension_group is only declared under a CONFIG_SYSFS ifdef
+> > but this code can be built without CONFIG_SYSFS.
+>=20
+> Thanks for the report.
+>=20
+> >   $ echo 'CONFIG_EXPERT=3Dy
+> >   CONFIG_SYSFS=3Dn' >allno.config
+> >=20
+> >   $ make -skj"$(nproc)" ARCH=3Darm64 CROSS_COMPILE=3Daarch64-linux- KCO=
+NFIG_ALLCONFIG=3D1 mrproper allnoconfig drivers/power/supply/power_supply_c=
+ore.o
+> >   drivers/power/supply/power_supply_core.c: In function 'power_supply_r=
+egister_extension':
+> >   drivers/power/supply/power_supply_core.c:1389:55: error: 'power_suppl=
+y_extension_group' undeclared (first use in this function); did you mean 'p=
+ower_supply_attr_groups'?
+> >    1389 |         ret =3D sysfs_add_link_to_group(&psy->dev.kobj, power=
+_supply_extension_group.name,
+> >         |                                                       ^~~~~~~=
+~~~~~~~~~~~~~~~~~~~~~
+> >         |                                                       power_s=
+upply_attr_groups
+> >   drivers/power/supply/power_supply_core.c:1389:55: note: each undeclar=
+ed identifier is reported only once for each function it appears in
+> >   drivers/power/supply/power_supply_core.c: In function 'power_supply_u=
+nregister_extension':
+> >   drivers/power/supply/power_supply_core.c:1419:54: error: 'power_suppl=
+y_extension_group' undeclared (first use in this function); did you mean 'p=
+ower_supply_attr_groups'?
+> >    1419 |                                                      power_su=
+pply_extension_group.name,
+> >         |                                                      ^~~~~~~~=
+~~~~~~~~~~~~~~~~~~~~
+> >         |                                                      power_su=
+pply_attr_groups
+>=20
+> The reproducer doesn't actually enable CONFIG_POWER_SUPPLY, when I use it
+> I get a whole array of errors.
+>=20
+> > Should the declaration be moved out from the ifdef or is there some
+> > other solution I am not seeing?
+>=20
+> This, inline constants or a #define.
+>=20
+> Sebastian, do you want me to send a patch?
 
+Yes, please send a patch. I suppose a define next to the NULL define
+for power_supply_attr_groups should be good enough and consistent
+with existing handling of this problem in the subsystem.=20
+
+Greetings,
+
+-- Sebastian
+
+--eerui4o2x4lxvoah
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmdjSIsACgkQ2O7X88g7
++ppwSw/+JIBBJeZjTcNbURvfdfQrjHyPIUOmGJJTkxriENOR1kfwJIJ2JIPwLe4h
+Jsbwxx69vWEowODu2430epiPrSpD/wLSvG7Ex/ZuUMZj7YD14B902523xzZ++C8F
+JsRSrBlRnlGCFSnLMe3c+DgnsVupr03yNbBxuoMBVxXKOVw7qWnRf5W759U7zMUj
+wuhEu9AUn8Pdy/KemCRz5i+Z4Ox93w6cXRD1+s3HZ7iTq8JP6cVnFCwiAgEGMalQ
+NewD9HHmSXkCO06ZyvWrDk16cQzRwEEm1PwK6K+0SeotpBMVLHabpff942KluG1O
+hK+LcIWSS+yBbZkTJpPEd0BK4X21MKc5GaTDKCgU5mrJdzabkbSDxAuectlFpR5y
+v+S5MNlHwlM3dDpsWDLaqQs6xikIRVqovvotjOs8CIvlepKU4FvD3vTVZbAx5I8b
+x1D8NI8pWIuNqDYqHwWmJSRM4utEY/g36dyNFPrzpMCK9+Z/+G75adAiAXxGI8Yz
+ytMX5riBheJURJ5lCMLu8Mb6XfbelisDcG/t8cwdhH7VQQiMrtiqR9/rO8S7r7RW
+uOhOfNV5K1c4o8h5CbPjYa+jsLJ3/K95IEJ0+t/fGvLYcHUL2mT/SKYg1zbrPonZ
+d64NYkoakcfB604AQfysFcQZPyXCbYHogFr0Dv/O6tGVcrKMZ0c=
+=0J0E
+-----END PGP SIGNATURE-----
+
+--eerui4o2x4lxvoah--
 
