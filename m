@@ -1,166 +1,169 @@
-Return-Path: <linux-pm+bounces-19405-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19406-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50E279F5ED9
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 07:50:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CE609F5F4C
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 08:31:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8F10F16E145
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 06:50:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7A3021696D2
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 07:30:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 876C1154457;
-	Wed, 18 Dec 2024 06:50:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1270216191B;
+	Wed, 18 Dec 2024 07:30:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="wCmdlz+O"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EkkOge7L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelv0142.ext.ti.com (lelv0142.ext.ti.com [198.47.23.249])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f53.google.com (mail-ej1-f53.google.com [209.85.218.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30410153820
-	for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 06:50:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.249
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32F4B1537B9;
+	Wed, 18 Dec 2024 07:30:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734504641; cv=none; b=I/EQV3vNPVkK5XhUvdOjQFeaIrchm8qgem545KS4kQ7s1Fy2j9MGwv5ZajHiiN8i/V4r4glomS9g9WbbuHnTM11l2H+mmYW7mJa5T5MzAtsyiXXkcm2o2nvjuoEzk6bbUs+6lc/Nbk6J0jPQUSTuwpiyc8Y/WeITpNmVTo/YQGU=
+	t=1734507046; cv=none; b=DDVQs8+ZHW+ZNpa55gvWeAACNPKk89td7jyC48cvJi5bA600xJXxgGq3sbAAwK8yj6y4pmGw7x9aQw9aM7Y7es9c9VaUbGbYYAWOZpy6ZtXEvdydMs6TOFfpEIlPISBOSKACdHrzWG38FvXWkeOIN2CDIcoYeDnpFNc3aLjv3vI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734504641; c=relaxed/simple;
-	bh=OswvoKCCQGwroK3IhUr27ME1LHkJ4YqvIQtZawdfk38=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KlAcN/eLa8pTJiF412RD56B2t5ktW+wPQ8af/NdPhVg2suW8gdY9OrvmCDn9jjj4e6O/nOxGAfeA5PJ7m0YZT5ih4snXvWcnS4ErwqfTmYIeHIHnV6JbNE0Mel11q8o3louSkuDAHPrL2qWAib3cZEkZvVYSWBV6BYj2Sa2Yx4o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=wCmdlz+O; arc=none smtp.client-ip=198.47.23.249
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by lelv0142.ext.ti.com (8.15.2/8.15.2) with ESMTP id 4BI6hbD7023182;
-	Wed, 18 Dec 2024 00:43:37 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1734504217;
-	bh=cMEeMpB7nbMA2f2CS/en+ziqPkCLThoLVr9dMvEr7Po=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=wCmdlz+OpFyootgf23Ncc+ZgWOgznp5qS4YTSWqq4qxhisjqU7e+dLrCFGfYDRd/g
-	 2+LUWRqzEvI7qGGqDi9JrRB4v4l70tg4A/wphUcQa3SFUeLh1/Hi+y7+AmjmtlUCYf
-	 AVYwIsm3oEybsdJeuwE8ZlgizMeLtiOzWZtRoBpg=
-Received: from DFLE101.ent.ti.com (dfle101.ent.ti.com [10.64.6.22])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4BI6hbV7096960;
-	Wed, 18 Dec 2024 00:43:37 -0600
-Received: from DFLE107.ent.ti.com (10.64.6.28) by DFLE101.ent.ti.com
- (10.64.6.22) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Wed, 18
- Dec 2024 00:43:36 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DFLE107.ent.ti.com
- (10.64.6.28) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Wed, 18 Dec 2024 00:43:36 -0600
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 4BI6haoP126594;
-	Wed, 18 Dec 2024 00:43:36 -0600
-Date: Wed, 18 Dec 2024 12:13:35 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-CC: <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-        <alexandre.belloni@bootlin.com>
-Subject: Re: [PATCH v2] PM: wakeup: implement devm_device_init_wakeup() helper
-Message-ID: <20241218064335.c72gmw56ogtp36a2@lcpd911>
-References: <20241214021652.3432500-1-joe@pf.is.s.u-tokyo.ac.jp>
- <20241216080159.ahpzlioy7l5etn3y@lcpd911>
- <a114e49b-b7e6-462a-a91c-4e1b85db7b30@pf.is.s.u-tokyo.ac.jp>
- <20241218054150.h5aqbuaspyfivka5@lcpd911>
+	s=arc-20240116; t=1734507046; c=relaxed/simple;
+	bh=RSdMFumWyD7Mx4sKNxKfjNlsDJaTB6uemxsTmcKyHuo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Va54UlWRMPYtwqjENVB1iXP9tSmpmHr5BFBlTYwPtNREEOgmqES8wqNoxEjxRhf/QAt0AiWDyeezzBs764368opZ0HmhwZfqmnVtEQFSRuXJtiLftdA3zrRqrqIQcp1NL4EdJd2UZ0xfzkpnQWYdKWRHN8dyO9PDCt+Q+n2g0iY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EkkOge7L; arc=none smtp.client-ip=209.85.218.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-aa6a92f863cso1233665766b.1;
+        Tue, 17 Dec 2024 23:30:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1734507042; x=1735111842; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:from:to:cc:subject:date:message-id:reply-to;
+        bh=NRHQQGm7cGssgdoLEtNCNKA/IiRlPKI/cHGPt5rH+50=;
+        b=EkkOge7LWVfJvHDTSYyApTqYKt9n9DQ+73Oy+gDnkjsBwXJ0/KnompZfH8lI5rQ2gx
+         fTwUEVtu/fHSb+4lBw6bvdm0avbFO1gerIoxKJyWFyfznD6i51vLi+Earb0nL04AX7kx
+         Y0l4BzG3+euUUTPL72Bu7srOOcbogEkLkDtSwLYXpJYqWD6P45Gqq/wA0Ear/La55NqU
+         9jVILeK0omkhAEMAs3bDyj6iS9Ju9VhCmfs8JadJm29h7HGvqv7GS0dgS5Rm6bFqmbcz
+         5P3pE75AzgJzkXqLnz4cTWYyAA9XUhaEFoz2MaPwXQEtOuZf/HX9ZLBb0+wQzP0UiKde
+         PrSQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734507042; x=1735111842;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:to
+         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NRHQQGm7cGssgdoLEtNCNKA/IiRlPKI/cHGPt5rH+50=;
+        b=w3NjORxHBdArxOQBpg0ssMO2bxHqKeaAwWspO6pgdn5HNa1itl1WEu/StmGs4g1bpW
+         m9O3Fploe4PVyQbLzQpt//x8wXgSq4MSdYhG+FLheKzNOtjCAO3QvfvnWLMPgLqxnn/J
+         qtJHBLkVpv6FqmaMEGeXVzET8NGZka7vXxLB8gw00oe+dNvdJ2x4nGuF69rL/VUriRkh
+         Jq8r46YdasVS3fbLWRiQhred0TggCybnyWwmppfr2yoLcLYxbV9WRIUAvQdeRWauHKQB
+         5iqbgs/M3FoRBdL4CGHqYwZETDEmLIGHOA678Dnhp8oO/lmFCAW809s4aWN4QxoZgwrP
+         tr2Q==
+X-Forwarded-Encrypted: i=1; AJvYcCU0Dnk8IVfmZLxLC5mCLy5vWnclRkIZjzelhtnxgKekSfMtIuW25qaWPZDfegJ5yckiQFGlDKmmj71rXJk4@vger.kernel.org, AJvYcCVBtzCeXctfXQ1alm2ui8mLegUWWv3zW0tnkRj8Nbp+DbzbU+aaOImRQzcmbJnMMUfLrpY19YQja7g=@vger.kernel.org, AJvYcCXR5YsnHM13/ZXI1wtvJw0XWTP/5kXD1y4d9ciy2UXZDETut7vUvl4+3SLUj+Iv4FZ8khbBHF/pjMzK@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKBplLzEVkoOTvsdmntS+ZNaW9teNv1jru51mP9HjQG7g5VwGz
+	OODcBjRwJRyrKbJAm+EGyH89lFSCMyQq16tzVAncnnN63U15m/EE
+X-Gm-Gg: ASbGnctO6fGJHXtawdHdWSQRE69UfFxor2/AEJ4NhsU8wO9xUjzoJkyYd3Q4cex5Obw
+	RZpwcsDs08g72/48u4pGy+Jn9dJmzIdUVC+7XjIpWGhnsfqmND+YV0kqpED6phEgoReUzaj0vSy
+	iqs/8+jKQ0SzsAfKHp7NB8e6gKPwm2tONsgQK2fdDq9Dquo5TQpZw00hvRQescm02+Flm8TjTJR
+	xU8QIXO1XId8+RvUeDpT2EZD6MTfHkPudKO9FfrcfNWXUDOUKrbkaD5kyBalhGUT2JcYO5zp4Dq
+	x5a45YOSZoaBcI7vLjoVgHPZx2U/OCBqHuRzJF/1dVY=
+X-Google-Smtp-Source: AGHT+IG4ns+Eg7oKR1Pc/Cp43bbqwarsbtkMQng+j8RWLT7msrs+OqYGJoo0M5isEr+oiutqKugTLQ==
+X-Received: by 2002:a17:907:720c:b0:aa6:25c6:d94f with SMTP id a640c23a62f3a-aabf47baa99mr116051366b.31.1734507042111;
+        Tue, 17 Dec 2024 23:30:42 -0800 (PST)
+Received: from localhost.localdomain (host-80-181-61-65.pool80181.interbusiness.it. [80.181.61.65])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-aab960062d3sm525607266b.16.2024.12.17.23.30.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 17 Dec 2024 23:30:41 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	upstream@airoha.com
+Subject: [RESEND PATCH v4 1/2] dt-bindings: thermal: Add support for Airoha EN7581 thermal sensor
+Date: Wed, 18 Dec 2024 08:29:56 +0100
+Message-ID: <20241218073016.2200-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.45.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20241218054150.h5aqbuaspyfivka5@lcpd911>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Transfer-Encoding: 8bit
 
-Rafael,
+Add support for Airoha EN7581 thermal sensor and monitor. This is a
+simple sensor for the CPU or SoC Package that provide thermal sensor and
+trip point for hot low and critical condition to fire interrupt and
+react on the abnormal state.
 
-On Dec 18, 2024 at 11:11:50 +0530, Dhruva Gole wrote:
-> Joe,
-> 
-> On Dec 18, 2024 at 13:10:01 +0900, Joe Hattori wrote:
-> > Thank you for your review.
-> > 
-> > On 12/16/24 17:01, Dhruva Gole wrote:
-> > > On Dec 14, 2024 at 11:16:52 +0900, Joe Hattori wrote:
-> > > > Some drivers that enable device wakeup fail to properly disable it
-> > > > during their cleanup, which results in a memory leak.
-> > > > 
-> > > > To address this, introduce devm_device_init_wakeup(), a managed variant
-> > > > of device_init_wakeup(dev, true). With this managed helper, wakeup
-> > > > functionality will be automatically disabled when the device is
-> > > > released, ensuring a more reliable cleanup process.
-> > > > 
-> > > > This need for this addition arose during a previous discussion [1].
-> > > > 
-> > > > [1]:
-> > > > https://lore.kernel.org/linux-rtc/20241212100403.3799667-1-joe@pf.is.s.u-tokyo.ac.jp/
-> > > > 
-> > > > Suggested-by: Alexandre Belloni <alexandre.belloni@bootlin.com>
-> > > > Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-> > > > ---
-> > > > Changes in V2:
-> > > > - Utilize the device_init_wakeup() function.
-> [...]
-> > > > +/**
-> > > > + * devm_device_init_wakeup - Resource managed device wakeup initialization.
-> > > > + * @dev: Device to handle.
-> > > > + *
-> > > > + * This function is the devm managed version of device_init_wakeup(dev, true).
-> > > > + */
-> > > > +static inline int devm_device_init_wakeup(struct device *dev)
-> > > 
-> > > Rafael, Should I submit a patch series to convert the regular device_init_wakeup from int to void?
-> > > This anyway doesn't return anything but 0 today and I can already see
-> > > some drivers using if(device_init_wakeup) which would essentially be
-> > > just dead code. I can try and patch that up as well.
-> > > The fact that this is a return type `int` is quite misleading to it's
-> > > users I guess?
-> 
-> Kindly disregard this, I was looking at the #else part of PM_SLEEP config.
-> There is infact error handling being done in drivers/base/power/wakeup.c
-> 
-> > > 
-> > > > +{
-> > > > +	int err;
-> > > > +
-> > > > +	err = device_init_wakeup(dev, true);
-> > > > +	if (err) {
-> > > > +		device_set_wakeup_capable(dev, false);
-> > > 
-> > > I don't see any point to this check. I am not sure if there's any case
-> > > where device_init_wakeup returns anything but 0. Even if it did, setting
-> > > wakeup_capable false should be handled within init_wakeup and not here.
-> > 
-> > Makes sense. Addressed in the v3 patch.
-> 
-> Apologies for the confusion, I think the v2 patch itself is correct.
-> I overlooked the drivers/base/power/wakeup.c implementation.
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+---
+Changes v2:
+- Add Reviewed-by tag
 
-As I review this code further, I am forming the opinion that device_init_wakeup
-itself needs to be patched up here, because if a certain API is enabling
-something, it should take care of disabling it in error scenarios. What
-I am essentially suggesting is something like this:
+ .../thermal/airoha,en7581-thermal.yaml        | 48 +++++++++++++++++++
+ 1 file changed, 48 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
 
-8<----------------------------------------------------------------------------
-                device_set_wakeup_capable(dev, true);
--               return device_wakeup_enable(dev);
-+               err = device_wakeup_enable(dev);
-+               if (err)
-+                       device_set_wakeup_capable(dev, false);
------------------------------------------------------------------------------>8
-
-Joe, would you be able to patch up the device_init_wakeup if Rafael is
-onboard with this idea? You would need to update this patch accordingly
-as well.
-
-
+diff --git a/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml b/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+new file mode 100644
+index 000000000000..ca0242ef0378
+--- /dev/null
++++ b/Documentation/devicetree/bindings/thermal/airoha,en7581-thermal.yaml
+@@ -0,0 +1,48 @@
++# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/thermal/airoha,en7581-thermal.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Airoha EN7581 Thermal Sensor and Monitor
++
++maintainers:
++  - Christian Marangi <ansuelsmth@gmail.com>
++
++properties:
++  compatible:
++    const: airoha,en7581-thermal
++
++  reg:
++    maxItems: 1
++
++  interrupts:
++    maxItems: 1
++
++  airoha,chip-scu:
++    description: phandle to the chip SCU syscon
++    $ref: /schemas/types.yaml#/definitions/phandle
++
++  '#thermal-sensor-cells':
++    const: 0
++
++required:
++  - compatible
++  - reg
++  - interrupts
++  - airoha,chip-scu
++
++additionalProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    thermal-sensor@1efbd800 {
++        compatible = "airoha,en7581-thermal";
++        reg = <0x1efbd000 0xd5c>;
++        interrupts = <GIC_SPI 23 IRQ_TYPE_LEVEL_HIGH>;
++        airoha,chip-scu = <&chip_scu>;
++
++        #thermal-sensor-cells = <0>;
++    };
 -- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+2.45.2
+
 
