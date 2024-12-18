@@ -1,140 +1,207 @@
-Return-Path: <linux-pm+bounces-19430-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19431-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6DCA9F67EB
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 15:06:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D534A9F68F6
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 15:49:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8651416C276
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 14:05:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE7E91894684
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 14:46:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D6C1BEF60;
-	Wed, 18 Dec 2024 14:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46842199EA1;
+	Wed, 18 Dec 2024 14:46:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fSjGdV7Z"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RL9oXWp9"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4580719F41D;
-	Wed, 18 Dec 2024 14:04:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213AF156238
+	for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 14:46:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734530661; cv=none; b=gHOrAukKKXduSPGmC06KQKAInXQp55zsL031jUqi0VFPvLL6UtIuY92ckU91TprHhBQ1f8DGbRhp5fiuoIsXBIfp77Rg2LzhYCkH/xyCsAEedXRK1O58/lKa+SS/Q5I+zwtMhZai5vxsxQkK9OBTB50ASZvNewtxed2wbqWOXl4=
+	t=1734533200; cv=none; b=LtAKSzbDW6BMOyvv21fbx5DXg12B2DS77pJeHVw1W0YoxRCz6b1yNeSef2aV/oAdXaftEwhTirXtYCTWLm19NKHaRHb06mzekLpfAuP04RMbGQzZcLF//ugU3wFeNxJN71qv1UfDNugX6L4U31Lgn7qag1xRwMFMkBCSa+sENoM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734530661; c=relaxed/simple;
-	bh=Viq/UnRlTIRlYrexjgMF2brgM0EKoFrlf6kCpW3HIM4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GCVa9iBF8ZvvcOOGTa0nDoF74xTLLlfAjkv7rcZj1VlimiPyAJjwTGqs6lEFBzsoDn4CxVSi3/FxsiwFDGJ6Uq6E9l3f96NI9nrTwKR1TljmoYyKDz1qCJPLrinorVuDhTu9BoLqh6BPcYfetLRrLu8oqrK1zDEuTJZzhmJ7Vbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fSjGdV7Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49489C4CECD;
-	Wed, 18 Dec 2024 14:04:18 +0000 (UTC)
+	s=arc-20240116; t=1734533200; c=relaxed/simple;
+	bh=9TdYA+hgHTEMQMU0wxaKjX3yEuRr6+3EVyLcSqPcMgI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mSYb8cEDwjsZPBf6bge3+poHqDZC/RrzKlmn4pdy/+dLeyUMZMbgkjkJwAOTsqXSuER9hdcHnG1AfZTysI90XkNghAzdgXmACHUDPZddVzoyzxWJHS/uCbY4nZ5atz4IWv0SZ1aagb0b+bkTSfPAoyoUA70bOVb0KKdE2b9s5ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RL9oXWp9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C10FAC4CECD
+	for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 14:46:39 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734530658;
-	bh=Viq/UnRlTIRlYrexjgMF2brgM0EKoFrlf6kCpW3HIM4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=fSjGdV7ZFNt2WF98SuGC2Qmw8UBWI+vvur5bdwWG28Mkf2Yhq+ihmAHwbqJzkEbO3
-	 hnzlNykLfmUtEBTKOWNNTo2CJKvs8EIC3Uo3+xJSMtSPf6wTgzRgZGxFPrbtQxYv6X
-	 z+KZOYLRL0w8Tn1jo3KIL96kxhHRNu7Kf5Hq/73qT9SqPt4SJK9cRD/3M+OIVF9piZ
-	 Vb3Epkgsfly/5KcEqhOBwjKfsQE3OtG/cToxkzfwiOs2ueY6W8lj7q75kqEaX50PTt
-	 KPXz5i8/iGVWXQK0on7WnOO7VqWmbDVF3zCLv8KseS9Mj+adEtYWHeNP5CZnMnRTrY
-	 2mvdD9wjKK5eQ==
-Date: Wed, 18 Dec 2024 15:04:15 +0100
-From: Frederic Weisbecker <frederic@kernel.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-pm@vger.kernel.org, Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>
-Subject: Re: [PATCH 3/5] cpuidle: Handle TIF_NR_POLLING on behalf of
- CPUIDLE_FLAG_MWAIT states
-Message-ID: <Z2LWX5jOTOD89yPl@localhost.localdomain>
-References: <20241206130408.18690-1-frederic@kernel.org>
- <20241206130408.18690-4-frederic@kernel.org>
- <CAJZ5v0hJyeoeZ3L=RicDiHz9X8PqEvTgWJVT3s9rsy653w_Fug@mail.gmail.com>
+	s=k20201202; t=1734533199;
+	bh=9TdYA+hgHTEMQMU0wxaKjX3yEuRr6+3EVyLcSqPcMgI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=RL9oXWp9BCWcY9t31V5OY8SKn5x+wzu+m1hILlv6RwDo/h+sB2f1j64jaBzNRP/gs
+	 SUvfV8c6Grw6cgKstOXlLSNQ1EG72IzBMX+Bvalv1I9hY1rE/CG/bA+ybMwOYUeauS
+	 i7NPkRPSiv4BcmMn0wauB3sEANt9fJvc0kW5Zea+36r1woYb2Pc7bEeJvfE4RhYIiq
+	 iWQUeK3b9NgdIsvA1geinOh/uOzwJsrXVcTn+2NjpBRKKi7VAFPGX7PuxjOV7TX4gK
+	 KDZixhV0gICniudKtwCw5ZaK2vefn3W3/APZqDbHEkfpNQqyg+je4HrSOKUb/XZPg3
+	 MByeZt6YyQoug==
+Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3ebb2d8dac4so2611330b6e.0
+        for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 06:46:39 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWgiMJqaqTUVO9cxTudaxU1XNnkAsPMh8tlA5J6hsNDyMQlm0VhzfR1/rJDkIU7Nmc8EJM91y/EYQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzehKBNuKoahxBgup+RqsBs6kotnpGSmqviNFPIuFl39Gf+BuM5
+	RCPIFMN9CFdYmjwLpcDrq5/llNsoWGHyTmXQEtGPSPJ7yUy0BT1o/DOSvZoYP1xLsPbwGsJi2v6
+	u3ahfiAHn2FzMqnf8meAsCPSt55k=
+X-Google-Smtp-Source: AGHT+IH6z4i2ZF2jNVtZKxptuhBLiDRtPDhnOcbx0awt+Y5OSWk8gLf7ZXMDxlc3pXZeEHPtZO/BUHpxn/Fc8WUPT2M=
+X-Received: by 2002:a05:6808:2183:b0:3e7:9f1f:b84a with SMTP id
+ 5614622812f47-3eccc0d8ec5mr1776663b6e.21.1734533199009; Wed, 18 Dec 2024
+ 06:46:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hJyeoeZ3L=RicDiHz9X8PqEvTgWJVT3s9rsy653w_Fug@mail.gmail.com>
+References: <63f03935-a73c-45f2-b152-29d08cb300b5@amd.com>
+In-Reply-To: <63f03935-a73c-45f2-b152-29d08cb300b5@amd.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 18 Dec 2024 15:46:27 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0je6n4V9zyS47a-RfuFVXhEjit6XhpSTTfq8=KthLkkgA@mail.gmail.com>
+Message-ID: <CAJZ5v0je6n4V9zyS47a-RfuFVXhEjit6XhpSTTfq8=KthLkkgA@mail.gmail.com>
+Subject: Re: amd-pstate fixes for 6.13 (12/11/24)
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Le Wed, Dec 18, 2024 at 02:24:36PM +0100, Rafael J. Wysocki a écrit :
-> On Fri, Dec 6, 2024 at 2:04 PM Frederic Weisbecker <frederic@kernel.org> wrote:
-> >
-> > From: Peter Zijlstra <peterz@infradead.org>
-> >
-> > The current handling of TIF_NR_POLLING is a bit of a maze:
-> >
-> > 1) TIF_NR_POLLING is set on idle entry (one atomic set)
-> >
-> > 2) Once cpuidle has selected an appropriate state and the tick is
-> >    evaluated and then possibly stopped, TIF_NR_POLLING is cleared
-> >    (one RmW operation)
-> >
-> > 2) The cpuidle state is then called with TIF_NR_POLLING cleared but if
-> >    the state polls on (or monitors) need_resched() it sets again
-> >    TIF_NR_POLLING before sleeping and clears it on wake-up. Summary:
-> >    another pair of set/clear
-> >
-> > 3) Set back TIF_NR_POLLING (one atomic set)
-> >
-> > 4) goto 2) if need_resched() is not set
-> >
-> > All those costly atomic operations, fully ordered RmW for some of
-> > them, could be avoided if the cpuidle core knew in advance if the target
-> > state polls on (or monitors) need_resched(). If so, TIF_NR_POLLING could
-> > simply be set once upon entering the idle loop and cleared once after
-> > idle loop exit.
-> >
-> > Start dealing with that with handling TIF_NR_POLLING on behalf of
-> > mwait based states.
-> >
-> > [fweisbec: _ Handle broadcast properly
-> >            _ Ignore mwait_idle() as it can be used by default_idle_call()]
-> >
-> > Not-yet-signed-off-by: Peter Zijlstra <peterz@infradead.org>
-> > Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
-> > ---
-> >  arch/x86/include/asm/mwait.h |  3 +--
-> >  drivers/cpuidle/cpuidle.c    | 22 +++++++++++++++++++-
-> >  include/linux/sched/idle.h   |  7 ++++++-
-> >  kernel/sched/idle.c          | 40 +++++++++++++-----------------------
-> >  4 files changed, 42 insertions(+), 30 deletions(-)
-> >
-> > diff --git a/arch/x86/include/asm/mwait.h b/arch/x86/include/asm/mwait.h
-> > index 920426d691ce..3634d00e5c37 100644
-> > --- a/arch/x86/include/asm/mwait.h
-> > +++ b/arch/x86/include/asm/mwait.h
-> > @@ -116,7 +116,7 @@ static __always_inline void __sti_mwait(unsigned long eax, unsigned long ecx)
-> >   */
-> >  static __always_inline void mwait_idle_with_hints(unsigned long eax, unsigned long ecx)
-> >  {
-> > -       if (static_cpu_has_bug(X86_BUG_MONITOR) || !current_set_polling_and_test()) {
-> > +       if (static_cpu_has_bug(X86_BUG_MONITOR) || !need_resched()) {
-> 
-> I'm not sure how X86_BUG_MONITOR is going to work after the change.
-> 
-> As is, X86_BUG_MONITOR prevents current_set_polling_and_test() from
-> being called, so __current_set_polling() will not be called and
-> TIF_POLLING_NRFLAG will not be set, so an IPI is going to be used for
-> CPU wakeup, which is what X86_BUG_MONITOR wants.
-> 
-> Preventing need_resched() from being called doesn't have this effect
-> and the rest of the patch doesn't do anything about X86_BUG_MONITOR.
-> 
-> Is anything missing?
+Hi,
 
-I fear you're right, I overlooked that. Probably I should set CPUIDLE_FLAG_MWAIT
-only if !boot_cpu_has_bug(X86_BUG_MONITOR). Lemme see that.
+On Wed, Dec 11, 2024 at 6:25=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> Hi,
+>
+> The following changes since commit
+> fac04efc5c793dccbd07e2d59af9f90b7fc0dca4:
+>
+>
+>
+>
+>
+>
+>
+>    Linux 6.13-rc2 (2024-12-08 14:03:39 -0800)
+>
+>
+>
+>
+>
+>
+>
+> are available in the Git repository at:
+>
+>
+>
+>
+>
+>
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
+> tags/amd-pstate-v6.13-2024-12-11
+>
+>
+>
+>
+>
+>
+> for you to fetch changes up to 2993b29b2a98f2bc9d55dfd37ef39f56a2908748:
+>
+>
+>
+>
+>
+>
+>
+>    cpufreq/amd-pstate: Use boost numerator for upper bound of
+> frequencies (2024-12-10 10:17:43 -0600)
+>
+>
+>
+>
+>
+>
+>
+> ----------------------------------------------------------------
+>
+>
+>
+> Fix a problem where systems without preferred cores were
+>
+>
+>
+> misdetecting preferred cores.
+>
+>
+>
+>
+>
+>
+>
+> Fix issues with with boost numerator handling leading to
+>
+>
+>
+> inconsistently programmed CPPC max performance values.
+>
+>
+>
+>
+>
+>
+>
+> ----------------------------------------------------------------
+>
+>
+>
+> K Prateek Nayak (1):
+>
+>
+>
+>        cpufreq/amd-pstate: Detect preferred core support before driver
+> registration
+>
+>
+>
+>
+>
+>
+> Mario Limonciello (2):
+>
+>
+>
+>        cpufreq/amd-pstate: Store the boost numerator as highest perf
+> again
+>
+>
+>        cpufreq/amd-pstate: Use boost numerator for upper bound of
+> frequencies
+>
+>
+>
+>
+>
+>
+>   Documentation/admin-guide/pm/amd-pstate.rst |  4 +---
+>
+>
+>
+>   drivers/cpufreq/amd-pstate.c                | 50
+> ++++++++++++++++++++++++++------------------------
+>
+>
+>
+>   2 files changed, 27 insertions(+), 27 deletions(-)
 
-Thanks.
+Pulled and added to linux-pm.git/fixes, sorry for the delay.
+
+I'd suggest using the "[GIT PULL]" prefix on pull requests to reduce
+the likelihood of them getting missed.
+
+Thanks!
 
