@@ -1,205 +1,619 @@
-Return-Path: <linux-pm+bounces-19418-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19419-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C28239F6385
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 11:41:07 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A27109F6427
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 11:57:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 04C3B166880
-	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 10:41:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 022CF1895507
+	for <lists+linux-pm@lfdr.de>; Wed, 18 Dec 2024 10:57:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E70E919D091;
-	Wed, 18 Dec 2024 10:40:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53524184556;
+	Wed, 18 Dec 2024 10:55:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="o4TmasGQ"
+	dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b="rA2/B/FG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mail.ozlabs.org (gandalf.ozlabs.org [150.107.74.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6EF3919D072;
-	Wed, 18 Dec 2024 10:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18331199249
+	for <linux-pm@vger.kernel.org>; Wed, 18 Dec 2024 10:55:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=150.107.74.76
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734518432; cv=none; b=rcVMcVLDqBz7g4uUQPYKGBdbVk4hubhr+ExydeDEEoZhNa9S1tLofOBvO4YtijWuqfCuMbx63qE7V6j2u+KXwvbav8nJL9sgK4oDVr7XQ7oDYKoQo2EponEF3hSL6HB+wAsyJsk0UYk6TWA15OxQdvAdktRIr4+VmqNAhpx5hpE=
+	t=1734519347; cv=none; b=VBWX1bY0d29C9YklocF6jMpOMzh7JvuL8zMX2bSVpQ5dkHewSFlxBvPKEvt08emHH8QzfmZ0/CO45luXF4rulya4ZGV0h0u3Q/fvWGroFKqrWY1jJV8JhcHiaKCmf2OWNNgjO818mBaKuDmWDFsUEexIfwXIc6O7apJd5oLdM/E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734518432; c=relaxed/simple;
-	bh=NBrWsjdOdOtXVPT086c06ucUVWg4GkYQaJindA760Lk=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=mZK0mmAqj8gnhz22lc66BPNftCg7NYXNC4+0DbuXMU/AlnEp55KNywsMbqPEz5heFY8tfLO9dx0nNMlnEFM/hoIFa1P3JTa4rw8NoCmBmwt+oCicXr4kDUquaHMIsV09qU9iVrjtU+4J9laXhzBWKxmq11Ey1ARLvANMuSExLWI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=o4TmasGQ; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BI8mbtk027172;
-	Wed, 18 Dec 2024 10:40:27 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	C0gBA8vbAkCEhzYy5FAZGzsyYOSqA+is6Y5Y8LJS7Vc=; b=o4TmasGQzrsc0aUD
-	KAsxc9K08LRXp1A5u777ldKVzQSKmjoTPBnJw6CodX5utm+m8Xyu0gf+qXWJuFYe
-	zxoXqrVC4VIvQUQCqZtz36WVo1eqmnJYTWNzSSAxxLRKOjMppWbfroGx3H3q70CP
-	936O0RAaSnynUJLXuZzXMF8J8B51BTXOLcU1/Xmcp06OhPuRbpaqa1nEywRZRaRm
-	1S5A20r2M9m7KAlUBS27wl0uhmgnLOGvFN2edQX+Van51By+B91ppKQZJW9jCBYL
-	Q1PljyZWFfIGw4RWI1lvgeUm7inE9V5q/KT53HGzG++av3WTEE/QtmZKmwRaww2C
-	Pd1smg==
-Received: from nalasppmta01.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43ku7808wv-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Dec 2024 10:40:27 +0000 (GMT)
-Received: from nalasex01b.na.qualcomm.com (nalasex01b.na.qualcomm.com [10.47.209.197])
-	by NALASPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BIAePxK031941
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 18 Dec 2024 10:40:25 GMT
-Received: from lijuang2-gv.ap.qualcomm.com (10.80.80.8) by
- nalasex01b.na.qualcomm.com (10.47.209.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 18 Dec 2024 02:40:19 -0800
-From: Lijuan Gao <quic_lijuang@quicinc.com>
-Date: Wed, 18 Dec 2024 18:39:39 +0800
-Subject: [PATCH 2/2] arm64: dts: qcom: qcs615: Add CPU and LLCC BWMON
- support
+	s=arc-20240116; t=1734519347; c=relaxed/simple;
+	bh=gLKNfHefh0hTZhQLqGs14v0vQEJbj1OQO0gjzEirntY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=pJAftKLNbpU5YjNZzw4srKO+IR4o4a1JOJagBYoIAa+21d91jqczNY1JdEd0dlrM69hvQF94Ujljt/aD+E1g/kFbtSD1IlvStsikuTyP5m4wfxAbOPaKxfIDsuHjvQgYxao3TJYNs0a+npGyaKEZIxm7vYc3pDQYrVrYljj1Jn8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au; spf=pass smtp.mailfrom=ellerman.id.au; dkim=pass (2048-bit key) header.d=ellerman.id.au header.i=@ellerman.id.au header.b=rA2/B/FG; arc=none smtp.client-ip=150.107.74.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ellerman.id.au
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ellerman.id.au
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ellerman.id.au;
+	s=201909; t=1734519336;
+	bh=ef14g61efdpXqCaHXYgrJOc2BitN918py2qKHEyVwOQ=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=rA2/B/FGdt4yCm707q89aGyrKINsvwfLGHS2lfbNOKN2qeN60cxtITq4xJB/jMXAA
+	 jWG/JeoDacoldy6nGdi1xNT5LWEEgpqYFws/RcEhSnsvYrfkn+kYhonvpfnj8bDaRA
+	 78FlZYCQ0WNaaJlk5/oiVpXbvfgML+vNbaDMjhPKpDdSwWJoEjOqNHL/rAjKXaIkQ9
+	 pxmlIgh1sYdiFy5kYnVSnS57YEoklAO6epQma6bzQloFnggN6Foe0bY6B7YIlxb3Yd
+	 LrSIO0Mcx30wgEdVmr9cnVm5wEq7WdySKooEdIJjeRQaLcFkzQxawgi0jAFj6rX8IJ
+	 xPgddPy0jRaQg==
+Received: from authenticated.ozlabs.org (localhost [127.0.0.1])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(Client did not present a certificate)
+	by mail.ozlabs.org (Postfix) with ESMTPSA id 4YCrF463Dzz4xfc;
+	Wed, 18 Dec 2024 21:55:36 +1100 (AEDT)
+From: Michael Ellerman <mpe@ellerman.id.au>
+To: <linuxppc-dev@lists.ozlabs.org>
+Cc: <arnd@arndb.de>,
+	<jk@ozlabs.org>,
+	<segher@kernel.crashing.org>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v2 22/25] cpufreq: ppc_cbe: Remove powerpc Cell driver
+Date: Wed, 18 Dec 2024 21:55:10 +1100
+Message-ID: <20241218105523.416573-22-mpe@ellerman.id.au>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20241218105523.416573-1-mpe@ellerman.id.au>
+References: <20241218105523.416573-1-mpe@ellerman.id.au>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20241218-add_bwmon_support_for_qcs615-v1-2-680d798a19e5@quicinc.com>
-References: <20241218-add_bwmon_support_for_qcs615-v1-0-680d798a19e5@quicinc.com>
-In-Reply-To: <20241218-add_bwmon_support_for_qcs615-v1-0-680d798a19e5@quicinc.com>
-To: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
-        "Bjorn
- Andersson" <andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Krzysztof Kozlowski
-	<krzysztof.kozlowski@linaro.org>,
-        Georgi Djakov <djakov@kernel.org>
-CC: <kernel@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Lijuan Gao <quic_lijuang@quicinc.com>
-X-Mailer: b4 0.15-dev-99b12
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734518412; l=2450;
- i=quic_lijuang@quicinc.com; s=20240827; h=from:subject:message-id;
- bh=NBrWsjdOdOtXVPT086c06ucUVWg4GkYQaJindA760Lk=;
- b=Uz7o+lxSzsO+NlPznauq32WjYj1KD0oPt/PT9XYn4hiljL3cTwdCcdLw84QEGzZGlp0sBN2xs
- mDJL0w8BfVzAMicBYA1bFWbAAMc4FeGS/cctemS+dCOP8iC8WGXmbwU
-X-Developer-Key: i=quic_lijuang@quicinc.com; a=ed25519;
- pk=1zeM8FpQK/J1jSFHn8iXHeb3xt7F/3GvHv7ET2RNJxE=
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nalasex01b.na.qualcomm.com (10.47.209.197)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: rrCvNGir1n_BwvVeCHPiGn66dlT-ddSY
-X-Proofpoint-GUID: rrCvNGir1n_BwvVeCHPiGn66dlT-ddSY
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- malwarescore=0 bulkscore=0 impostorscore=0 phishscore=0 priorityscore=1501
- mlxscore=0 adultscore=0 mlxlogscore=992 lowpriorityscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412180085
+Content-Transfer-Encoding: 8bit
 
-Add CPU and LLCC BWMON nodes and their corresponding opp tables to
-support bandwidth monitoring on QCS615 SoC. This is necessary to enable
-power management and optimize system performance from the perspective of
-dynamically changing LLCC and DDR frequencies.
+This driver can no longer be built since support for IBM Cell Blades was
+removed, in particular CBE_RAS.
 
-Signed-off-by: Lijuan Gao <quic_lijuang@quicinc.com>
+Remove the driver.
+
+Signed-off-by: Michael Ellerman <mpe@ellerman.id.au>
 ---
- arch/arm64/boot/dts/qcom/qcs615.dtsi | 72 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 72 insertions(+)
+v2: Unchanged.
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs615.dtsi b/arch/arm64/boot/dts/qcom/qcs615.dtsi
-index c0e4b376a1c6..45a4d9a76163 100644
---- a/arch/arm64/boot/dts/qcom/qcs615.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs615.dtsi
-@@ -2753,6 +2753,78 @@ cti@7900000 {
- 			clock-names = "apb_pclk";
- 		};
+Cc: linux-pm@vger.kernel.org
+
+ drivers/cpufreq/Kconfig.powerpc             |  18 --
+ drivers/cpufreq/Makefile                    |   3 -
+ drivers/cpufreq/ppc_cbe_cpufreq.c           | 173 --------------------
+ drivers/cpufreq/ppc_cbe_cpufreq.h           |  33 ----
+ drivers/cpufreq/ppc_cbe_cpufreq_pervasive.c | 102 ------------
+ drivers/cpufreq/ppc_cbe_cpufreq_pmi.c       | 150 -----------------
+ 6 files changed, 479 deletions(-)
+ delete mode 100644 drivers/cpufreq/ppc_cbe_cpufreq.c
+ delete mode 100644 drivers/cpufreq/ppc_cbe_cpufreq.h
+ delete mode 100644 drivers/cpufreq/ppc_cbe_cpufreq_pervasive.c
+ delete mode 100644 drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+
+diff --git a/drivers/cpufreq/Kconfig.powerpc b/drivers/cpufreq/Kconfig.powerpc
+index eb678fa5260a..551e65d35a1d 100644
+--- a/drivers/cpufreq/Kconfig.powerpc
++++ b/drivers/cpufreq/Kconfig.powerpc
+@@ -1,22 +1,4 @@
+ # SPDX-License-Identifier: GPL-2.0-only
+-config CPU_FREQ_CBE
+-	tristate "CBE frequency scaling"
+-	depends on CBE_RAS && PPC_CELL
+-	default m
+-	help
+-	  This adds the cpufreq driver for Cell BE processors.
+-	  For details, take a look at <file:Documentation/cpu-freq/>.
+-	  If you don't have such processor, say N
+-
+-config CPU_FREQ_CBE_PMI
+-	bool "CBE frequency scaling using PMI interface"
+-	depends on CPU_FREQ_CBE
+-	default n
+-	help
+-	  Select this, if you want to use the PMI interface to switch
+-	  frequencies. Using PMI, the processor will not only be able to run at
+-	  lower speed, but also at lower core voltage.
+-
+ config CPU_FREQ_PMAC
+ 	bool "Support for Apple PowerBooks"
+ 	depends on ADB_PMU && PPC32
+diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+index d35a28dd9463..17504f43da9a 100644
+--- a/drivers/cpufreq/Makefile
++++ b/drivers/cpufreq/Makefile
+@@ -90,9 +90,6 @@ obj-$(CONFIG_ARM_VEXPRESS_SPC_CPUFREQ)	+= vexpress-spc-cpufreq.o
  
-+		pmu@90b6300 {
-+			compatible = "qcom,qcs615-cpu-bwmon", "qcom,sdm845-bwmon";
-+			reg = <0x0 0x090b6300 0x0 0x600>;
-+			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>;
-+
-+			operating-points-v2 = <&cpu_bwmon_opp_table>;
-+
-+			cpu_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <12896000>;
-+				};
-+
-+				opp-1 {
-+					opp-peak-kBps = <14928000>;
-+				};
-+			};
-+		};
-+
-+		pmu@90cd000 {
-+			compatible = "qcom,qcs615-llcc-bwmon", "qcom,sc7280-llcc-bwmon";
-+			reg = <0x0 0x090cd000 0x0 0x1000>;
-+			interrupts = <GIC_SPI 667 IRQ_TYPE_LEVEL_HIGH>;
-+			interconnects = <&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>;
-+
-+			operating-points-v2 = <&llcc_bwmon_opp_table>;
-+
-+			llcc_bwmon_opp_table: opp-table {
-+				compatible = "operating-points-v2";
-+
-+				opp-0 {
-+					opp-peak-kBps = <800000>;
-+				};
-+
-+				opp-1 {
-+					opp-peak-kBps = <1200000>;
-+				};
-+
-+				opp-2 {
-+					opp-peak-kBps = <1804800>;
-+				};
-+
-+				opp-3 {
-+					opp-peak-kBps = <2188800>;
-+				};
-+
-+				opp-4 {
-+					opp-peak-kBps = <2726400>;
-+				};
-+
-+				opp-5 {
-+					opp-peak-kBps = <3072000>;
-+				};
-+
-+				opp-6 {
-+					opp-peak-kBps = <4070400>;
-+				};
-+
-+				opp-7 {
-+					opp-peak-kBps = <5414400>;
-+				};
-+
-+				opp-8 {
-+					opp-peak-kBps = <6220800>;
-+				};
-+			};
-+		};
-+
- 		dc_noc: interconnect@9160000 {
- 			reg = <0x0 0x09160000 0x0 0x3200>;
- 			compatible = "qcom,qcs615-dc-noc";
-
+ ##################################################################################
+ # PowerPC platform drivers
+-obj-$(CONFIG_CPU_FREQ_CBE)		+= ppc-cbe-cpufreq.o
+-ppc-cbe-cpufreq-y			+= ppc_cbe_cpufreq_pervasive.o ppc_cbe_cpufreq.o
+-obj-$(CONFIG_CPU_FREQ_CBE_PMI)		+= ppc_cbe_cpufreq_pmi.o
+ obj-$(CONFIG_QORIQ_CPUFREQ)   		+= qoriq-cpufreq.o
+ obj-$(CONFIG_CPU_FREQ_PMAC)		+= pmac32-cpufreq.o
+ obj-$(CONFIG_CPU_FREQ_PMAC64)		+= pmac64-cpufreq.o
+diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.c b/drivers/cpufreq/ppc_cbe_cpufreq.c
+deleted file mode 100644
+index 98595b3ea13f..000000000000
+--- a/drivers/cpufreq/ppc_cbe_cpufreq.c
++++ /dev/null
+@@ -1,173 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * cpufreq driver for the cell processor
+- *
+- * (C) Copyright IBM Deutschland Entwicklung GmbH 2005-2007
+- *
+- * Author: Christian Krafft <krafft@de.ibm.com>
+- */
+-
+-#include <linux/cpufreq.h>
+-#include <linux/module.h>
+-#include <linux/of.h>
+-
+-#include <asm/machdep.h>
+-#include <asm/cell-regs.h>
+-
+-#include "ppc_cbe_cpufreq.h"
+-
+-/* the CBE supports an 8 step frequency scaling */
+-static struct cpufreq_frequency_table cbe_freqs[] = {
+-	{0, 1,	0},
+-	{0, 2,	0},
+-	{0, 3,	0},
+-	{0, 4,	0},
+-	{0, 5,	0},
+-	{0, 6,	0},
+-	{0, 8,	0},
+-	{0, 10,	0},
+-	{0, 0,	CPUFREQ_TABLE_END},
+-};
+-
+-/*
+- * hardware specific functions
+- */
+-
+-static int set_pmode(unsigned int cpu, unsigned int slow_mode)
+-{
+-	int rc;
+-
+-	if (cbe_cpufreq_has_pmi)
+-		rc = cbe_cpufreq_set_pmode_pmi(cpu, slow_mode);
+-	else
+-		rc = cbe_cpufreq_set_pmode(cpu, slow_mode);
+-
+-	pr_debug("register contains slow mode %d\n", cbe_cpufreq_get_pmode(cpu));
+-
+-	return rc;
+-}
+-
+-/*
+- * cpufreq functions
+- */
+-
+-static int cbe_cpufreq_cpu_init(struct cpufreq_policy *policy)
+-{
+-	struct cpufreq_frequency_table *pos;
+-	const u32 *max_freqp;
+-	u32 max_freq;
+-	int cur_pmode;
+-	struct device_node *cpu;
+-
+-	cpu = of_get_cpu_node(policy->cpu, NULL);
+-
+-	if (!cpu)
+-		return -ENODEV;
+-
+-	pr_debug("init cpufreq on CPU %d\n", policy->cpu);
+-
+-	/*
+-	 * Let's check we can actually get to the CELL regs
+-	 */
+-	if (!cbe_get_cpu_pmd_regs(policy->cpu) ||
+-	    !cbe_get_cpu_mic_tm_regs(policy->cpu)) {
+-		pr_info("invalid CBE regs pointers for cpufreq\n");
+-		of_node_put(cpu);
+-		return -EINVAL;
+-	}
+-
+-	max_freqp = of_get_property(cpu, "clock-frequency", NULL);
+-
+-	of_node_put(cpu);
+-
+-	if (!max_freqp)
+-		return -EINVAL;
+-
+-	/* we need the freq in kHz */
+-	max_freq = *max_freqp / 1000;
+-
+-	pr_debug("max clock-frequency is at %u kHz\n", max_freq);
+-	pr_debug("initializing frequency table\n");
+-
+-	/* initialize frequency table */
+-	cpufreq_for_each_entry(pos, cbe_freqs) {
+-		pos->frequency = max_freq / pos->driver_data;
+-		pr_debug("%d: %d\n", (int)(pos - cbe_freqs), pos->frequency);
+-	}
+-
+-	/* if DEBUG is enabled set_pmode() measures the latency
+-	 * of a transition */
+-	policy->cpuinfo.transition_latency = 25000;
+-
+-	cur_pmode = cbe_cpufreq_get_pmode(policy->cpu);
+-	pr_debug("current pmode is at %d\n",cur_pmode);
+-
+-	policy->cur = cbe_freqs[cur_pmode].frequency;
+-
+-#ifdef CONFIG_SMP
+-	cpumask_copy(policy->cpus, cpu_sibling_mask(policy->cpu));
+-#endif
+-
+-	policy->freq_table = cbe_freqs;
+-	cbe_cpufreq_pmi_policy_init(policy);
+-	return 0;
+-}
+-
+-static void cbe_cpufreq_cpu_exit(struct cpufreq_policy *policy)
+-{
+-	cbe_cpufreq_pmi_policy_exit(policy);
+-}
+-
+-static int cbe_cpufreq_target(struct cpufreq_policy *policy,
+-			      unsigned int cbe_pmode_new)
+-{
+-	pr_debug("setting frequency for cpu %d to %d kHz, " \
+-		 "1/%d of max frequency\n",
+-		 policy->cpu,
+-		 cbe_freqs[cbe_pmode_new].frequency,
+-		 cbe_freqs[cbe_pmode_new].driver_data);
+-
+-	return set_pmode(policy->cpu, cbe_pmode_new);
+-}
+-
+-static struct cpufreq_driver cbe_cpufreq_driver = {
+-	.verify		= cpufreq_generic_frequency_table_verify,
+-	.target_index	= cbe_cpufreq_target,
+-	.init		= cbe_cpufreq_cpu_init,
+-	.exit		= cbe_cpufreq_cpu_exit,
+-	.name		= "cbe-cpufreq",
+-	.flags		= CPUFREQ_CONST_LOOPS,
+-};
+-
+-/*
+- * module init and destoy
+- */
+-
+-static int __init cbe_cpufreq_init(void)
+-{
+-	int ret;
+-
+-	if (!machine_is(cell))
+-		return -ENODEV;
+-
+-	cbe_cpufreq_pmi_init();
+-
+-	ret = cpufreq_register_driver(&cbe_cpufreq_driver);
+-	if (ret)
+-		cbe_cpufreq_pmi_exit();
+-
+-	return ret;
+-}
+-
+-static void __exit cbe_cpufreq_exit(void)
+-{
+-	cpufreq_unregister_driver(&cbe_cpufreq_driver);
+-	cbe_cpufreq_pmi_exit();
+-}
+-
+-module_init(cbe_cpufreq_init);
+-module_exit(cbe_cpufreq_exit);
+-
+-MODULE_DESCRIPTION("cpufreq driver for Cell BE processors");
+-MODULE_LICENSE("GPL");
+-MODULE_AUTHOR("Christian Krafft <krafft@de.ibm.com>");
+diff --git a/drivers/cpufreq/ppc_cbe_cpufreq.h b/drivers/cpufreq/ppc_cbe_cpufreq.h
+deleted file mode 100644
+index 00cd8633b0d9..000000000000
+--- a/drivers/cpufreq/ppc_cbe_cpufreq.h
++++ /dev/null
+@@ -1,33 +0,0 @@
+-/* SPDX-License-Identifier: GPL-2.0 */
+-/*
+- * ppc_cbe_cpufreq.h
+- *
+- * This file contains the definitions used by the cbe_cpufreq driver.
+- *
+- * (C) Copyright IBM Deutschland Entwicklung GmbH 2005-2007
+- *
+- * Author: Christian Krafft <krafft@de.ibm.com>
+- *
+- */
+-
+-#include <linux/cpufreq.h>
+-#include <linux/types.h>
+-
+-int cbe_cpufreq_set_pmode(int cpu, unsigned int pmode);
+-int cbe_cpufreq_get_pmode(int cpu);
+-
+-int cbe_cpufreq_set_pmode_pmi(int cpu, unsigned int pmode);
+-
+-#if IS_ENABLED(CONFIG_CPU_FREQ_CBE_PMI)
+-extern bool cbe_cpufreq_has_pmi;
+-void cbe_cpufreq_pmi_policy_init(struct cpufreq_policy *policy);
+-void cbe_cpufreq_pmi_policy_exit(struct cpufreq_policy *policy);
+-void cbe_cpufreq_pmi_init(void);
+-void cbe_cpufreq_pmi_exit(void);
+-#else
+-#define cbe_cpufreq_has_pmi (0)
+-static inline void cbe_cpufreq_pmi_policy_init(struct cpufreq_policy *policy) {}
+-static inline void cbe_cpufreq_pmi_policy_exit(struct cpufreq_policy *policy) {}
+-static inline void cbe_cpufreq_pmi_init(void) {}
+-static inline void cbe_cpufreq_pmi_exit(void) {}
+-#endif
+diff --git a/drivers/cpufreq/ppc_cbe_cpufreq_pervasive.c b/drivers/cpufreq/ppc_cbe_cpufreq_pervasive.c
+deleted file mode 100644
+index 04830cd95333..000000000000
+--- a/drivers/cpufreq/ppc_cbe_cpufreq_pervasive.c
++++ /dev/null
+@@ -1,102 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * pervasive backend for the cbe_cpufreq driver
+- *
+- * This driver makes use of the pervasive unit to
+- * engage the desired frequency.
+- *
+- * (C) Copyright IBM Deutschland Entwicklung GmbH 2005-2007
+- *
+- * Author: Christian Krafft <krafft@de.ibm.com>
+- */
+-
+-#include <linux/io.h>
+-#include <linux/kernel.h>
+-#include <linux/time.h>
+-#include <asm/machdep.h>
+-#include <asm/hw_irq.h>
+-#include <asm/cell-regs.h>
+-
+-#include "ppc_cbe_cpufreq.h"
+-
+-/* to write to MIC register */
+-static u64 MIC_Slow_Fast_Timer_table[] = {
+-	[0 ... 7] = 0x007fc00000000000ull,
+-};
+-
+-/* more values for the MIC */
+-static u64 MIC_Slow_Next_Timer_table[] = {
+-	0x0000240000000000ull,
+-	0x0000268000000000ull,
+-	0x000029C000000000ull,
+-	0x00002D0000000000ull,
+-	0x0000300000000000ull,
+-	0x0000334000000000ull,
+-	0x000039C000000000ull,
+-	0x00003FC000000000ull,
+-};
+-
+-
+-int cbe_cpufreq_set_pmode(int cpu, unsigned int pmode)
+-{
+-	struct cbe_pmd_regs __iomem *pmd_regs;
+-	struct cbe_mic_tm_regs __iomem *mic_tm_regs;
+-	unsigned long flags;
+-	u64 value;
+-#ifdef DEBUG
+-	long time;
+-#endif
+-
+-	local_irq_save(flags);
+-
+-	mic_tm_regs = cbe_get_cpu_mic_tm_regs(cpu);
+-	pmd_regs = cbe_get_cpu_pmd_regs(cpu);
+-
+-#ifdef DEBUG
+-	time = jiffies;
+-#endif
+-
+-	out_be64(&mic_tm_regs->slow_fast_timer_0, MIC_Slow_Fast_Timer_table[pmode]);
+-	out_be64(&mic_tm_regs->slow_fast_timer_1, MIC_Slow_Fast_Timer_table[pmode]);
+-
+-	out_be64(&mic_tm_regs->slow_next_timer_0, MIC_Slow_Next_Timer_table[pmode]);
+-	out_be64(&mic_tm_regs->slow_next_timer_1, MIC_Slow_Next_Timer_table[pmode]);
+-
+-	value = in_be64(&pmd_regs->pmcr);
+-	/* set bits to zero */
+-	value &= 0xFFFFFFFFFFFFFFF8ull;
+-	/* set bits to next pmode */
+-	value |= pmode;
+-
+-	out_be64(&pmd_regs->pmcr, value);
+-
+-#ifdef DEBUG
+-	/* wait until new pmode appears in status register */
+-	value = in_be64(&pmd_regs->pmsr) & 0x07;
+-	while (value != pmode) {
+-		cpu_relax();
+-		value = in_be64(&pmd_regs->pmsr) & 0x07;
+-	}
+-
+-	time = jiffies  - time;
+-	time = jiffies_to_msecs(time);
+-	pr_debug("had to wait %lu ms for a transition using " \
+-		 "pervasive unit\n", time);
+-#endif
+-	local_irq_restore(flags);
+-
+-	return 0;
+-}
+-
+-
+-int cbe_cpufreq_get_pmode(int cpu)
+-{
+-	int ret;
+-	struct cbe_pmd_regs __iomem *pmd_regs;
+-
+-	pmd_regs = cbe_get_cpu_pmd_regs(cpu);
+-	ret = in_be64(&pmd_regs->pmsr) & 0x07;
+-
+-	return ret;
+-}
+-
+diff --git a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c b/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
+deleted file mode 100644
+index 6f0c32592416..000000000000
+--- a/drivers/cpufreq/ppc_cbe_cpufreq_pmi.c
++++ /dev/null
+@@ -1,150 +0,0 @@
+-// SPDX-License-Identifier: GPL-2.0-or-later
+-/*
+- * pmi backend for the cbe_cpufreq driver
+- *
+- * (C) Copyright IBM Deutschland Entwicklung GmbH 2005-2007
+- *
+- * Author: Christian Krafft <krafft@de.ibm.com>
+- */
+-
+-#include <linux/kernel.h>
+-#include <linux/types.h>
+-#include <linux/timer.h>
+-#include <linux/init.h>
+-#include <linux/pm_qos.h>
+-#include <linux/slab.h>
+-
+-#include <asm/processor.h>
+-#include <asm/pmi.h>
+-#include <asm/cell-regs.h>
+-
+-#ifdef DEBUG
+-#include <asm/time.h>
+-#endif
+-
+-#include "ppc_cbe_cpufreq.h"
+-
+-bool cbe_cpufreq_has_pmi = false;
+-EXPORT_SYMBOL_GPL(cbe_cpufreq_has_pmi);
+-
+-/*
+- * hardware specific functions
+- */
+-
+-int cbe_cpufreq_set_pmode_pmi(int cpu, unsigned int pmode)
+-{
+-	int ret;
+-	pmi_message_t pmi_msg;
+-#ifdef DEBUG
+-	long time;
+-#endif
+-	pmi_msg.type = PMI_TYPE_FREQ_CHANGE;
+-	pmi_msg.data1 =	cbe_cpu_to_node(cpu);
+-	pmi_msg.data2 = pmode;
+-
+-#ifdef DEBUG
+-	time = jiffies;
+-#endif
+-	pmi_send_message(pmi_msg);
+-
+-#ifdef DEBUG
+-	time = jiffies  - time;
+-	time = jiffies_to_msecs(time);
+-	pr_debug("had to wait %lu ms for a transition using " \
+-		 "PMI\n", time);
+-#endif
+-	ret = pmi_msg.data2;
+-	pr_debug("PMI returned slow mode %d\n", ret);
+-
+-	return ret;
+-}
+-EXPORT_SYMBOL_GPL(cbe_cpufreq_set_pmode_pmi);
+-
+-
+-static void cbe_cpufreq_handle_pmi(pmi_message_t pmi_msg)
+-{
+-	struct cpufreq_policy *policy;
+-	struct freq_qos_request *req;
+-	u8 node, slow_mode;
+-	int cpu, ret;
+-
+-	BUG_ON(pmi_msg.type != PMI_TYPE_FREQ_CHANGE);
+-
+-	node = pmi_msg.data1;
+-	slow_mode = pmi_msg.data2;
+-
+-	cpu = cbe_node_to_cpu(node);
+-
+-	pr_debug("cbe_handle_pmi: node: %d max_freq: %d\n", node, slow_mode);
+-
+-	policy = cpufreq_cpu_get(cpu);
+-	if (!policy) {
+-		pr_warn("cpufreq policy not found cpu%d\n", cpu);
+-		return;
+-	}
+-
+-	req = policy->driver_data;
+-
+-	ret = freq_qos_update_request(req,
+-			policy->freq_table[slow_mode].frequency);
+-	if (ret < 0)
+-		pr_warn("Failed to update freq constraint: %d\n", ret);
+-	else
+-		pr_debug("limiting node %d to slow mode %d\n", node, slow_mode);
+-
+-	cpufreq_cpu_put(policy);
+-}
+-
+-static struct pmi_handler cbe_pmi_handler = {
+-	.type			= PMI_TYPE_FREQ_CHANGE,
+-	.handle_pmi_message	= cbe_cpufreq_handle_pmi,
+-};
+-
+-void cbe_cpufreq_pmi_policy_init(struct cpufreq_policy *policy)
+-{
+-	struct freq_qos_request *req;
+-	int ret;
+-
+-	if (!cbe_cpufreq_has_pmi)
+-		return;
+-
+-	req = kzalloc(sizeof(*req), GFP_KERNEL);
+-	if (!req)
+-		return;
+-
+-	ret = freq_qos_add_request(&policy->constraints, req, FREQ_QOS_MAX,
+-				   policy->freq_table[0].frequency);
+-	if (ret < 0) {
+-		pr_err("Failed to add freq constraint (%d)\n", ret);
+-		kfree(req);
+-		return;
+-	}
+-
+-	policy->driver_data = req;
+-}
+-EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_policy_init);
+-
+-void cbe_cpufreq_pmi_policy_exit(struct cpufreq_policy *policy)
+-{
+-	struct freq_qos_request *req = policy->driver_data;
+-
+-	if (cbe_cpufreq_has_pmi) {
+-		freq_qos_remove_request(req);
+-		kfree(req);
+-	}
+-}
+-EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_policy_exit);
+-
+-void cbe_cpufreq_pmi_init(void)
+-{
+-	if (!pmi_register_handler(&cbe_pmi_handler))
+-		cbe_cpufreq_has_pmi = true;
+-}
+-EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_init);
+-
+-void cbe_cpufreq_pmi_exit(void)
+-{
+-	pmi_unregister_handler(&cbe_pmi_handler);
+-	cbe_cpufreq_has_pmi = false;
+-}
+-EXPORT_SYMBOL_GPL(cbe_cpufreq_pmi_exit);
 -- 
-2.46.0
+2.47.1
 
 
