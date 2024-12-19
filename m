@@ -1,199 +1,330 @@
-Return-Path: <linux-pm+bounces-19509-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19510-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0452B9F7879
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 10:28:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1E3B29F78E0
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 10:49:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1D46E188C63E
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 09:28:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 65C55169278
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 09:49:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DC83222586;
-	Thu, 19 Dec 2024 09:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b="PYmAm0/j"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D19B221DBD;
+	Thu, 19 Dec 2024 09:49:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-00082601.pphosted.com (mx0a-00082601.pphosted.com [67.231.145.42])
+Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazon11020089.outbound.protection.outlook.com [52.101.225.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 530F822256F;
-	Thu, 19 Dec 2024 09:27:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=67.231.145.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C0A8221DBB;
+	Thu, 19 Dec 2024 09:49:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.225.89
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734600445; cv=fail; b=t37LTIpLhLBQ1bFoPMMv1FeXUaK5yfuFVydNfVBLoPA6mqDjYqsuTQ6fhDUMcO47skmg70YhZc2w+AncBBZDHwC1CrisL43Qwih36auH8e46TsqcqA3+p6QdrWjEVHjkxF10l5UuOeejCDPEB98PZPN4lPhNUslRcpaSF5qSUjY=
+	t=1734601780; cv=fail; b=Bhj6MCTTyxX18mVGl9sHZX9qJV7HiB1PjNfnyF8oGqZiSHdKEXasDmQYci2K43I71NxBWHhEuK4GCgJHzp3gMnNqDxbGRmxT2sjOWwSS/oFhiV9n9rlDC2BgAq92fJSZYeSS+n7khFzDqrFAhTy5EVFlO8A2taCa81ESeyM8+7M=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734600445; c=relaxed/simple;
-	bh=437vp82fE7Az+y3sYc1zM2DrYk20eyPB4Vmm8/c2+QA=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=YGYu+UJjXyTl1FcM0NDF0xLYYFIUsHkbUC5jlclzAjBzV72XnSsn5pg5bx1t8IqlV430uEbFcdDZyXwTBUG88YKH6qU7Pi4iv/w/POECYOUn2ExkY7o+fllBjd0u1ZCoDznLlFZgngPgZjcE/2XSuKGScCtELqfyuZgmb3fsKuU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com; spf=pass smtp.mailfrom=meta.com; dkim=pass (2048-bit key) header.d=meta.com header.i=@meta.com header.b=PYmAm0/j; arc=fail smtp.client-ip=67.231.145.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=meta.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=meta.com
-Received: from pps.filterd (m0148461.ppops.net [127.0.0.1])
-	by mx0a-00082601.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BJ7NtCt023741;
-	Thu, 19 Dec 2024 01:27:22 -0800
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=meta.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=s2048-2021-q4;
-	 bh=437vp82fE7Az+y3sYc1zM2DrYk20eyPB4Vmm8/c2+QA=; b=PYmAm0/jR9Ww
-	SC/oHvl2CNcrqI+dyrO67tpciOmN2TJLrPhe9D9ZHdSmCfe4vhPiD1sVp5P7c2bI
-	uS/1yYjQijjpw7mJKpxzupEwx0TAOEiGqgSsO2Nv+cKiM5CoRTIyp3Jyil1qbERv
-	fZP43otrQB/vs9gPV029plsYRrfVQAzzqXXv30UbYKajFn/P7TFi0c4sfSyj8olM
-	j8DQQX6bWs1Pwn/jVW71ujqCR8Vo/6zcjpRSyWStQFFtoMAchA9OdsGTbGc7jhcK
-	OhnC31r/DAT0n7rpCER6gfAX6i9wtNLxrlmJ6Hy7eWuJL75XZAHH33GQZaCgoRIt
-	QDCeUo8HEw==
-Received: from nam12-dm6-obe.outbound.protection.outlook.com (mail-dm6nam12lp2173.outbound.protection.outlook.com [104.47.59.173])
-	by mx0a-00082601.pphosted.com (PPS) with ESMTPS id 43mdh1s33j-2
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 19 Dec 2024 01:27:22 -0800 (PST)
+	s=arc-20240116; t=1734601780; c=relaxed/simple;
+	bh=07d8ODAv469vLBwn6iVGvmqthpr0gapn2uvBwRhOzLg=;
+	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=IkjpNsHHG3g6VZCBVhsvba+IBoA4xiDUOhHdOvZZwOIosxwsutK6kDCWmijuMqDUweetbFSqjRl5VAPwc2jCOMQnj/t9+YaA4fmbi9wWeyE66Yw9wBkxvm2RKzJy1zZf4j2UyurmUOmWbFKESSeqJgycKxirqX6DPVeVHpeL2i8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=52.101.225.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xIAwcuFz+vV5+grf03zg+AswkHzBhAQCCER8USe8PtWiPlhuuPgrn2eJXwHwSXDrQw7Mn8h2Sav3vr1ltKLBRPhWTweOk5fcPjVk40PevHrHHacAySLKexhWiCi+LP8ZFAc1sioO2OUE2D6jqN/NkLlKltCENfoBln9NYPRABm5Vwer3xdVBvXF6gBNwx5xwtxpZWWA/e98LMhYr0nlQIKfknr+m8FNGbF/dKPMnFkdkrPZZ4ebEbp/dg4ZXzsSmmOgR6TecB47lCYpIyW0sLHWkCtSxnrUdGpNucT52JRQpshflIE4DjgK9DMnbarPc8pBfHri3X8RbVBn/jLS3eA==
+ b=cd/iLjjzqLZ5+o4jv7ZrfWuCms/iyZ0e6+zsJKLKeqoLPSyZO0yNO/8LmIx19Tsbk0KjqHTXk2X7bhfRpZI86wrjYacfMiItio6t95UoqfdPOE4A1j1Ntg6JGqvJM8ufgxM/EV534r7Yf9tAvRxaCU64cWzM9RpQuFhDDP8vBGLQNBMUjGR0y7vUhWPh5RY6n6NRkQXEr4PHCQYPAOo8amKw94xjK/b3SYMlwpWnSze5VIh6I0z2dXhwm0w6qIwYMLSPpNzvkjd6nF3yb4qFPn9Bz+hsGVvcwX713iwZh/FYuCpatRomNDnpZHR5Xkpzjtf4nlH9OIkfjE7Eai65Bg==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=437vp82fE7Az+y3sYc1zM2DrYk20eyPB4Vmm8/c2+QA=;
- b=UBsQ/wG5T5HVJY2YWoLWkA6C8dm7uvmZfSP7F8enIOIcSeumMJ6zli84CpeYhp30y/zoaFq0GKS+t8EC1mljBTjSLOV2EnlLOFhiQWXI9DVHeuaJgFXFM2RGigNUAX3gFhHzosas3khhMDlg5+D95o90a/rJwtRp69tC/yp+8bC3zFyKj2AxkHb2a5sLygzaCYHjMxpuYchuoHxsVlHGyZcKMvE3tUcgoGkTHoWhAPYqcOttr7WhwOda1NJCy38A6wYM89I6VEF4P3m3V6qGapbfaT91raNqgBMQPKWf7VXo1p2WkHdY4VTbK56IJX92A4eyd4htnx0LP1AxEeBxGA==
+ bh=Wum+5PlMIes5rmpz3ArVJZERqDE+ln0TFaFjNwJwsV0=;
+ b=G4XMHKetJiGSjWSk3Hwhy+xhWW5EQED5zmAlkkH5ZiIXoKyz9hp5DsiPlhGw+eu/p8I6WnVDfZYk5sFhSGBRUes/soJ4v6d+919f3GAYvTrHeABbfcg//DQtFAtDPOjcol4DoCbIBIFL9Fv8Eb1VyulDiXadw2n6I8KZwqQJ38lJ7JaR6ZRU+WHeKdXasb+AYU14BokQmx/XehWoAbFdacAmRmoJvSIXWBnq9YYjHzM3C/J6YQvkzEQUbANuIsOY5+s4tjcsBVIk0hNnfSvfBeMKmegNU/rRfzbSrC+2AdTXdKJHzFGeIcuLVDsbgWMiauox+QNpewbPlb/4xbHCCg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=meta.com; dmarc=pass action=none header.from=meta.com;
- dkim=pass header.d=meta.com; arc=none
-Received: from BYAPR15MB2504.namprd15.prod.outlook.com (2603:10b6:a02:8e::12)
- by PH0PR15MB5039.namprd15.prod.outlook.com (2603:10b6:510:ce::14) with
+ smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
+ header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=siliconsignals.io;
+Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM (2603:1096:c04:1::15d)
+ by PN0P287MB1187.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:18d::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.13; Thu, 19 Dec
- 2024 09:27:19 +0000
-Received: from BYAPR15MB2504.namprd15.prod.outlook.com
- ([fe80::f417:ddaf:81b6:e1cb]) by BYAPR15MB2504.namprd15.prod.outlook.com
- ([fe80::f417:ddaf:81b6:e1cb%6]) with mapi id 15.20.8251.015; Thu, 19 Dec 2024
- 09:27:19 +0000
-From: Matteo Croce <teknoraver@meta.com>
-To: Ahmad Fatoum <a.fatoum@pengutronix.de>,
-        Matteo Croce
-	<technoboy85@gmail.com>, Jens Axboe <axboe@kernel.dk>,
-        Andrew Morton
-	<akpm@linux-foundation.org>
-CC: Daniel Lezcano <daniel.lezcano@linaro.org>,
-        "linux-block@vger.kernel.org"
-	<linux-block@vger.kernel.org>,
-        "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>,
-        "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>,
-        "kernel@pengutronix.de"
-	<kernel@pengutronix.de>
-Subject: Re: [PATCH RFC] docs: ABI: replace mcroce@microsoft.com with new Meta
- address
-Thread-Topic: [PATCH RFC] docs: ABI: replace mcroce@microsoft.com with new
- Meta address
-Thread-Index: AQHbUercy64A5K6wm0ORFlDepcP2XbLtTC53
-Date: Thu, 19 Dec 2024 09:27:19 +0000
-Message-ID:
- <BYAPR15MB2504E4B02DFFB1E55871955DA1062@BYAPR15MB2504.namprd15.prod.outlook.com>
-References: <20241219-fix-mcroce-mail-bounce-v1-1-4912116b6060@pengutronix.de>
-In-Reply-To:
- <20241219-fix-mcroce-mail-bounce-v1-1-4912116b6060@pengutronix.de>
-Accept-Language: en-US, it-IT
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-msip_labels:
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: BYAPR15MB2504:EE_|PH0PR15MB5039:EE_
-x-ms-office365-filtering-correlation-id: 4138fb61-9e5e-495b-e2a4-08dd200f55cb
-x-fb-source: Internal
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam: BCL:0;ARA:13230040|1800799024|376014|366016|38070700018;
-x-microsoft-antispam-message-info:
- =?iso-8859-1?Q?+5CmvsoZLj/XPxiTCOMWYtwIZPJDb9VLVeNnXbVp7AkJzxr0FhaPC8ZlK/?=
- =?iso-8859-1?Q?vm529g8dr+65M2I+uzzFZUEkvRrS4POvjRN/G9rLkTsue/rYWkAlHLBGbo?=
- =?iso-8859-1?Q?2NGE+2arg85nyeZVyewu2NuCzhAmas44M6K2M6MyJXEQ1muLIxKssWHefA?=
- =?iso-8859-1?Q?Q7iS4cqxDzEXhjRkXAi7NiDLR8AjXd6xgY4ayvOveoLyPv4D59mnkApdCn?=
- =?iso-8859-1?Q?P+HCEY6UJLHu5kfE3V7p/0tROl9pcS/2AAxpkcmOT9yd/Tby5xWQILsVML?=
- =?iso-8859-1?Q?knPWn/rhfhWG6VDPHUED/jNHaN+EiOPn7Mp02Rx6A3GK+eCfI/sXcSKJL5?=
- =?iso-8859-1?Q?wpGgmO2fyPBrvp0b8ft4xeTqAyB0sBFxUx+soYCWE5lh/NyIfFS3L64zqB?=
- =?iso-8859-1?Q?XrUMCGNukWQZwcfS6d3AGMv5Fun6KZh/X6S3rtQ8E1M/XlObCU6HZMtDVs?=
- =?iso-8859-1?Q?XtyQuyXlif6ONamn7FAgSHQdasGgzwCuXAH3cuIUhwoBW6Pxn8bHyyvRUf?=
- =?iso-8859-1?Q?k18aJ99R3pAHEO9o3y7njIw6CFC4WXFHCjWdeAX4SpaOwTZHQa8IQciglX?=
- =?iso-8859-1?Q?aO8+oUvsYH78iUovsOcvy2+n1BI0vdHIz7GyuvhPbaoVgukZBPpGxZoxKq?=
- =?iso-8859-1?Q?C13xxrP31pyh+3HnxUnsfpI5ZS/LBZrwLJCci4ipWeZ/FXTucW6Ctb6d8W?=
- =?iso-8859-1?Q?/GqVPIP3734jK319ARiD9O/FyV7bH3lBqvYpwFVwEvQLsHs+A5Fncsd/XI?=
- =?iso-8859-1?Q?x6b1SCjQF5pxuqw9IXqwXVJ7/e5TmkLj0IETje8ih0K8Xax4Ah8KGQl76w?=
- =?iso-8859-1?Q?clyitVQAKm8ZmuskYQfD8G+SeR4Li0/o/xyKaO0Cf/gZpDdV7SBZp4yX1p?=
- =?iso-8859-1?Q?TqY7uZYWaJDZl/H/euSLl6V8SSIVdiF6MOMu+esuDvCh7M23NbirG8MNZ6?=
- =?iso-8859-1?Q?OYqvgiHT5nuIUSMwDm1GO14eYosAyt4eH5q5/Ddctmc5jztxCHSgruPTiN?=
- =?iso-8859-1?Q?LbqyMjHr5wxF7UVgMaVLKnDD54z2jVsKaRYlPX7J6Gz0Bu5PlKAU9WYtqX?=
- =?iso-8859-1?Q?oLFMuJJ1o96GydZusc+1twcBhIDPv7WEP3avg9dFxL3ExsOnVG1gSdbbha?=
- =?iso-8859-1?Q?ElrPDtI3Q52UiwZmCYFDMMFn8D4Wl4n4z89ACAvWgNQGtGlrP+r6al3r5w?=
- =?iso-8859-1?Q?Ssx4l3JZ6j4aZlCD/xsvCkntZFnvACQP3Xjp1VEE/4spJ1d5ZVU1QwoHSw?=
- =?iso-8859-1?Q?TYWIDvzIFjuDU+5nrqu9Z/apKUsFpLbXjNQ6xGz+82fQuP1lr3Na/SBjIf?=
- =?iso-8859-1?Q?Zj/7ZlJkco5WG8O7CHs020JDxcY19byYxEUQIXaTJfMYCX3c6epDACfWNt?=
- =?iso-8859-1?Q?yYwVWIbOgVc11SaPC/thgPDUQEWmkaqKWb9eyRUX59464XXbiF3RGMWxH6?=
- =?iso-8859-1?Q?VSB6b3E0lEeFm5YHA+T/xl8h3LdG/dm5yLrKuIpchTlSZDbtrXhq/wQoUq?=
- =?iso-8859-1?Q?nwh3+b8JelQheFFDUWz1y6?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:BYAPR15MB2504.namprd15.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?iso-8859-1?Q?EDzn1y3nutNoFCRsKUqHfZfhiXrVoSR+/4esLWi3f/KHasHzJimgxlp17Q?=
- =?iso-8859-1?Q?eJGPrzyFs9VWxiP3vPkj+VY/IjlRf08hrQcs+VVNow4wgSjAjwhBHlAZjl?=
- =?iso-8859-1?Q?ayMNVlaP8ZrfZWdm4XvEkMHaAInwbrYNhh9/F3qOfDgwq2yRmmtb8Oot6A?=
- =?iso-8859-1?Q?gvC/gAcYPZXII+3ko6lJaZzHKgk7/Y9Hi26wVy0MAchyEVRe065Eii/MN7?=
- =?iso-8859-1?Q?HSXROKenOz+JPin6nhsUWXDBmQ6goxr/YEP/Djvsz50Kp95YxbQYTjB07W?=
- =?iso-8859-1?Q?axD1mBAhNwSq+X39LmH5Pie7XqvK445Z+D7xcS+3aQWLcCaor+Z98H8FED?=
- =?iso-8859-1?Q?eeTxuVjyNdKN7yEAwPDAyAAqX68Ia24oiZOPyfJzm3riRL4lPl5TbreHwe?=
- =?iso-8859-1?Q?xVpcHT2jfyWoqukCa0V/Doj1+QU82i21azrTRniC4Yg+DYtP13w0uYAs2m?=
- =?iso-8859-1?Q?7lXlY46/GwwlB24zhVXLhR+D7EWRd+coImPPAj8dBR+Tf6PWouGsjQOIux?=
- =?iso-8859-1?Q?+zTyRQkdCnQ0eWeO48u1nnfu5fTOcU4n84nsh6G0D5g+eiLFN2pXARs0Fj?=
- =?iso-8859-1?Q?G5ykK083qSvuC7eIw09PrjrKP/V0WkOBg8/JpE9NJgWl/eI5FvBK6MVv8+?=
- =?iso-8859-1?Q?UGiTzaXW5myriW3+Zsd3dg0sopuB1WfGzJ+H9gaobtsBxLBlCRKhlBCI6C?=
- =?iso-8859-1?Q?kJiXykIncABA4cZJ57JOQO9G6Rrsfy10bLDnBnXx/HoG+Cj/N1rJWWAJ2l?=
- =?iso-8859-1?Q?OIBjP6/+si4zW71Tv+nEvx8ZLdIOlJSZ0UW2oqBS+au0tY7mZYjsq9jLJW?=
- =?iso-8859-1?Q?iUTC44nfY3KG2GFCKA/oXkPYMggemSA1q3jxm5EpceK7YULbiWN0lUUaJP?=
- =?iso-8859-1?Q?ZIv7eZv776Y/7RbmVApyOIaJ8p6EuliH6GHqM9QFnwGzBALLBx5zvb/kCl?=
- =?iso-8859-1?Q?Pjm+DJiwVKWxmU8U/HmZBslwMj6S+FPPvBHySLibvx95yc+KBPvOTToPQI?=
- =?iso-8859-1?Q?FcjIzcEN9UHieb6fCwNswjqhhGDHHA0jYSCL+JC544nYEh3bHcdEGZHqFN?=
- =?iso-8859-1?Q?zvT3A7OaLO/pJeNkghXcNnVAhtKSciHjlElxPwejos59jW6WzL/qkFgG8M?=
- =?iso-8859-1?Q?m8zeKbNfhKj+5j7XO5VNFTQLVylBKv7p3633xEi49SgHkC4BH/NdfvQWFZ?=
- =?iso-8859-1?Q?ASq05UnwDCXykjoDDeHTR3b+0J+jo0TBhQLwrSOKjz6aqBsJK7TWuSyNaw?=
- =?iso-8859-1?Q?bur7YMPUezKh3p1e+s6aONfG17rQFnsu2dANLPwh8XxPs+hKt3VYfjOs8R?=
- =?iso-8859-1?Q?2ovqCd2PwQ2uOixwPRewcw22uQT5FB52DxG4nIc5HwUsd++7NfhNp8+9GI?=
- =?iso-8859-1?Q?xTncUu0TJAbL1cZvOcpoRtbqR/TZtJrDTDAf2w4soFHRsrazKHa00EOME0?=
- =?iso-8859-1?Q?37Ei6l2a7P1SMh9bvUpqv9r+sHtY4GQWFhJY0ygxsR4JwOK1Qkp/PujvB9?=
- =?iso-8859-1?Q?i6q4ZeGq6fPEsQoF8yqxZ+bXOWbaYBWDpfUJKqIjquygimdv0RxXrvTfWB?=
- =?iso-8859-1?Q?KBqOfSPoxvKkMhF0VbfrGzzuxGs7paP1ZD9YvXjz6HQ7yFuh5Nae5/+8RU?=
- =?iso-8859-1?Q?BtMZ3n7hKRd8w=3D?=
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8230.11; Thu, 19 Dec
+ 2024 09:49:33 +0000
+Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
+ ([fe80::740f:ab98:2be1:538]) by PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
+ ([fe80::740f:ab98:2be1:538%4]) with mapi id 15.20.8251.015; Thu, 19 Dec 2024
+ 09:49:33 +0000
+From: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
+To: sre@kernel.org
+Cc: Bhavin Sharma <bhavin.sharma@siliconsignals.io>,
+	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v12 0/2] power: supply: Add STC3117 Fuel Gauge 
+Date: Thu, 19 Dec 2024 15:19:10 +0530
+Message-Id: <20241219094915.19059-1-bhavin.sharma@siliconsignals.io>
+X-Mailer: git-send-email 2.34.1
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: BMXP287CA0004.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:b00:2c::23) To PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:c04:1::15d)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: meta.com
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: PN2PPFF679F9759:EE_|PN0P287MB1187:EE_
+X-MS-Office365-Filtering-Correlation-Id: dc82c05b-79b6-4415-1deb-08dd2012710f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|1800799024|376014|52116014|366016|38350700014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?dU1SS2l5bExzOCt1YkZYOVl4YXA4M0QvUVlXQVNXQ09OU3h4OUdkb1gxY1kw?=
+ =?utf-8?B?WU5Dcm1IRk1ibVI3bWtPa20wV2ZjSGh4QnJsSHhocGtmaHVuWHlOdWlTN3pl?=
+ =?utf-8?B?TW96MW56cERoMzNDTFp2cVEyTUpDUEdDekRFZWRUeEhROWgyTzcwbW9aaUwy?=
+ =?utf-8?B?OWZKc2FzRHQ1LzlWSVdHdnFuT0dwRDlzcWt2RktjRmxoRTVvOG9tN2p1WTdK?=
+ =?utf-8?B?RlV5NzBTV2xmNmFNeTdSSEppYmN2d3AyRS9ia25RWEJWK1hNdDJGdzE4TUFL?=
+ =?utf-8?B?djU5YXZFbWNUNEczUXRXMSthTE0vN0l5Lys2TnluMUcwbzNIMlV6NlkxMW0y?=
+ =?utf-8?B?cDAya3RpZGFqdzdQUlh0ZE1lMHRvcjZ6SXN4eEU5VWwyVG5yT3BiSTNSWVNn?=
+ =?utf-8?B?Z2hwZStMRzd0WUxFZHZRUFc1OGFvNVZNMGVWN3YyT2UvalB5Zm82OHh5RlJ2?=
+ =?utf-8?B?ak53WEFPc1daWTU3U2kybEdnSnphYzgyNEVpYmdrcTFTeDhySHgyV29sYXQ4?=
+ =?utf-8?B?U0lZYWpGT0llYWwwWlFKTEQ5ekd1VW1NQ1ZpTTR2UkYwbHE3dWIrN25pYlRa?=
+ =?utf-8?B?RHRVbzNVTnZZLzlaRGVwODQrbG1tVm92SnhFVmV5akdWTit6Qk5ybHNpNTNP?=
+ =?utf-8?B?eFZUVW5pS2g5WURJNUxrYU5PeHAybGFkMHozWEwreXZFK1BWUmNjbUROc3Ar?=
+ =?utf-8?B?WTdDZUI1ZDJOU3dsS0RIb09UYmRkTmtMZUlpMVhSbGpkdTBvbXh5UFJCdzRj?=
+ =?utf-8?B?bTAxcVNMbUg4UGFTdXNGYzhBc2ZBN25Cb3NkNnVsSDZUemNTZFBWQUxEKysy?=
+ =?utf-8?B?cEpzd0lSTllLWTdxSFduaGZ5Vm5SMGEzMk5rNUd2LzdEVWhJWDR4Z3lXaVdP?=
+ =?utf-8?B?Qjd5OWRoNXMxbXI2R0hnR0o5WENJV2Yxa2h0aWpoeWc4NXBWdjRpT2l0SHp3?=
+ =?utf-8?B?ajBMelF0OGptZTZSalJ5VCtJVnlsK1ZFb1BQRk1xOEViaVBmMTh1YW9lUUlI?=
+ =?utf-8?B?b1dja2gyU0dYMm8xTkZ3aGkyVkRvRHZvaDcyb3E2L1ltdTBSVkVickZmM1pk?=
+ =?utf-8?B?V2hWU2dKOUdWRkFzd0o2RUdqVnlkN3NZb3dkeTdHb3kwaUdhRjJqRzQvNzZv?=
+ =?utf-8?B?QTNuUWFmVGFFbTljTHl1ZHhMWFhNa05KVG8wSmFQY2lCYjB0TnZNSlJHZHJv?=
+ =?utf-8?B?QmtmQUltZXhWNHEzbW9jWWVndENPbGo5OFk4REwveXlMbnNIY3ZmWjNVelkz?=
+ =?utf-8?B?M2JLeUxQUzFlKzE1ZlRhc1Y5MkNtMW5Ecnd1d05vUVNZb1NnUHpLeUQ2V2Nm?=
+ =?utf-8?B?dXBWUXkxV2JqR1BVRTFKQ0MraHU2dDN1VThkVHowTEhFNWN2ay9mb21Ra2x3?=
+ =?utf-8?B?VGNpK1lWWjQyaHV3SmxaTnZlaWJsTHlHUm42c2xTbVRRb3ovUEczZW9iamUy?=
+ =?utf-8?B?cmVmQjNlcXhyWGJGajQrZnhyUU1FZFU4ckdEbGZoRDkvUGhmOFR3TXRaTlRl?=
+ =?utf-8?B?QTZRYm1WU1NGSGNJQnlhcEV1aTFaUFJjV0w1aDlBM1VJVjhXdms4RVZ3S1k0?=
+ =?utf-8?B?bFNNVW5TbUNTT1I1MHZzZFVCQVRKMFZBQ3VNRGU3WS9DNDVvTzRnSktrWXlN?=
+ =?utf-8?B?aGYxWGkyQkJJZEd3NFVXaDBwc2tMTVpnSkJKU3RkV3dDaTZZTWZTQzk1U0I2?=
+ =?utf-8?B?NjZtT1NxT3VBT0tBSGdrSTZOTTYydmN3R3MxRFpLdFJSUldoZUVFUS85bHE5?=
+ =?utf-8?B?eVJOMFJtWUZSS2pESG00S0JEYWNYNHJ0by95dkMzTXBiUTM5SndXNWhtTmlt?=
+ =?utf-8?B?cXQ5VjB3bVhqQUhTZDVBbUNFTnc3ZkdBdWhZQXFWcFlxSU5IMU9zR215OUdn?=
+ =?utf-8?Q?JkxwPQ5Vageb2?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(52116014)(366016)(38350700014);DIR:OUT;SFP:1102;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?ODJDa3BKN2VGVUJNdzhuaEU3ZDRJcmsxZGNvM0I3R0VPSDZtdzBQeGk4bXVv?=
+ =?utf-8?B?bkVuZ0MvdmpOOThMbWtSZUZrZUpvUnVOaTVhdUFPYnBhNllkY1BvUDBwM09Y?=
+ =?utf-8?B?YmttRFN3aS9qcVNhVE4zbXJxdkMvdkRnNGlSR1ljMkNpbmhmVVBYQzJlbnVV?=
+ =?utf-8?B?Vzl4Mjg0SVFYTlNBaVN4blpxcE9BUWRTRkp4blZlSlVHVGpFREd1OGhDQlg5?=
+ =?utf-8?B?OXpqdnJwNVJJM0FVZ3JWb2dDVU1CbzloZkh2RFdURHBBRjRSWWcxamVwUDB1?=
+ =?utf-8?B?c3hTM25GZlFnWUx2Mi9GNzAyS0FPb1UvL0JWNXJVVklSYkNmemNmS2JLTGNB?=
+ =?utf-8?B?emlFemh2cWtWRTNoU1c0cGNGdVFkWW82WHZpclNSL2dTQS9ndkN2QTlzdHRz?=
+ =?utf-8?B?YjVYMUZBRUdzNDdDdXF2bjA5TytvOGlON0g2RXh0RmxhTmpnTzNlbVBwVi9X?=
+ =?utf-8?B?MDEvWVgvdndHUHFVYkZmb1JqNmtlT3RhL052UHprM2FUMmpiSS9Qb3E2OHg5?=
+ =?utf-8?B?RU5iQndQRUR5cXhwcks2Q3JqWTNQV09RUUFZN0FWamZxOS8vd1hyUjNRZ1Z0?=
+ =?utf-8?B?Sks1RExrRCtlZmF1VXZSRnhYQlJQU2RrTUppZkR6WlpiOEpYcExsbi9BWStP?=
+ =?utf-8?B?Vk9HekRBb3psaFRMYkQrY1ZFdFVvbk1zKzhhN0xIWUNaeTlHZTV5NU1kSDYx?=
+ =?utf-8?B?SkRHYXgwTllFRjg2WUNhbFNuaEtJZ2NsZGxuSkE0OU9RaGpVVzZRM2diZFl5?=
+ =?utf-8?B?S3ZRNUR3amNLOExSZlhKeFlMZlluMHZZM0RGTktNUFhvcGhTclkvRXk2U2xQ?=
+ =?utf-8?B?TlZPQWE5K0s4Q1Z3RGcyMjk0QXgrMnFjME5SMWYzSGVBMmYxbkxJTVo3WWM0?=
+ =?utf-8?B?NkkrNHNNc2FUalUwRmh6RFlVYXA2RDRtRERUR0tsZTJCOGhiWE8rUEoxK2N5?=
+ =?utf-8?B?cGlFQXJpdzFWa1FPYnFpRTY5MCs2WmF1VDFpRnhnV1pRSCtPSlhVWTROeDhy?=
+ =?utf-8?B?Z0gxNTZRV2l6ZTEwS0JmbEVlbFpHNHgrNk1zNTNKNEV5N2x0cUZiMC8vaXFx?=
+ =?utf-8?B?VldKdUhMeit5N3RhVEVBNDkyaHdaaGc5anpHcHZUckZXQ2F3LzkvUGhRWDFM?=
+ =?utf-8?B?TTlhMi9UaUhSZjl1bFV3MFVQd3VJbFdqanVpM211WE5qN3o3M0RiL0gxMXRr?=
+ =?utf-8?B?dno2MXBqTVVDbmdDQ3hMN2JMMWpLUG5mbjBVYlErZmtMbzRzMmh6dzllWFQ0?=
+ =?utf-8?B?TlVTVnlMVGZzQ01Pb0s4eXVDM0o0dEI4bTlWR3ZDOE9lYW5JWTk3cHZWVmJY?=
+ =?utf-8?B?ek5lVGU5N0RaOFZ3WnhBMGd3Ujd5MGtWeXpUdzZpQmZYZk9pSy9xUFhvdHNn?=
+ =?utf-8?B?VHpoVHlqVyt1YjZlRS80Mmw4Y2xVNWJNTkpIb2VRUURObG1HclBad0hrTWk3?=
+ =?utf-8?B?dlVUZFZPZ3J3aUJyMXNmY3p6QTV5bGhab2tTS1FWOW5DdkVndnJWRi91Q1Fh?=
+ =?utf-8?B?V01TRHB1Sk1FS2o3cUdEd084TU1CSHYrMDBYc2c0c2k4c2dRUStzR2N1djdj?=
+ =?utf-8?B?SVdMRVpvVVhsa0xkV2tad0dCY0U3SWVOK0FFWlBZbEdFVk9rSVpkdE93ZUht?=
+ =?utf-8?B?VGJKVC8zUjJ0ZTVxYzRVUlZ4T1I5WDVaVjZzSklzdEpSSlo4NTV4RitxL1pw?=
+ =?utf-8?B?NDhtMFcxbFIzb1VHdGFsdmQzNVNrcnNkUWl5OGtVRnVTVGQrTzN0OVFjaFky?=
+ =?utf-8?B?cDh6bitmRTlOd2xVRVJTTjVEenQ1S3pJZUpoY3dueVpLd3Jwa004eWRmK0RL?=
+ =?utf-8?B?NmNzWEg5NjVjMmJJVVZiOGZhY1pKMk0xSFhWL1hONjkzVElYSzU4M2xydmZB?=
+ =?utf-8?B?RHB4WUwzbys4dncxbGlZTEtiMVpvZ0taTXlPa25TTWhpVFhKNjFPeGdvS2Ux?=
+ =?utf-8?B?VklmWXlsbjdWUjh1MEZHaU01VmxLWGpPd3M2MlZWT0lBdFl2OVB4dDhhMXNZ?=
+ =?utf-8?B?NHRuMFJKdE9CVFJJbnZodDJ5VXppY05zbVZkYVNEbXRMVG1ub1hnVHFCRExW?=
+ =?utf-8?B?MlV6eEVVYWdON293dXB3bmdkczB6bnZVR25lVG5ocTRwNUFIVGdxUk5TRzdV?=
+ =?utf-8?B?MkNWTlpmVG13MjVMUWdhZnJlSkR5TEMvcUhyejg1aXkzRzlHSXlzakpKb3Ru?=
+ =?utf-8?Q?E95tHFTgmHOEXLNzuY3cy8Q=3D?=
+X-OriginatorOrg: siliconsignals.io
+X-MS-Exchange-CrossTenant-Network-Message-Id: dc82c05b-79b6-4415-1deb-08dd2012710f
+X-MS-Exchange-CrossTenant-AuthSource: PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: BYAPR15MB2504.namprd15.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 4138fb61-9e5e-495b-e2a4-08dd200f55cb
-X-MS-Exchange-CrossTenant-originalarrivaltime: 19 Dec 2024 09:27:19.2121
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 19 Dec 2024 09:49:33.6388
  (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 8ae927fe-1255-47a7-a2af-5f3a069daaa2
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: diRzZvjnYckmLOAdodjo0FcJdPqKyyBj/N42MNQmBwQjkVKJPjTpyXlclftGGS8oHJVe1NBH4mQFhV1xEOrDJg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR15MB5039
-X-Proofpoint-GUID: dRQ-3EkKML_FL-K9sLOuBLo1UXOdNi3K
-X-Proofpoint-ORIG-GUID: dRQ-3EkKML_FL-K9sLOuBLo1UXOdNi3K
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1051,Hydra:6.0.680,FMLib:17.12.62.30
- definitions=2024-10-05_03,2024-10-04_01,2024-09-30_01
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Kn2tROZwXGF66/mhaILSefxI8do/+9zweOZkeVl69R7tw0p4W6UH+UZCbDM49HGKXH8PHWEJpq7gZy9Eu3zYwpWdYi0D+pGu7dD8rF9mdn0=
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB1187
 
-Hi,=0A=
-=0A=
-this address works just fine, go for it!=0A=
-=0A=
-Regards,=0A=
--- =0A=
-Matteo Croce=
+Adds initial support for the STC3117 fuel gauge.
+
+Output of test_power_supply_properties.sh
+(with version 12 patch changes applied)
+ 
+TAP version 13
+1..33
+# Testing device stc3117-battery
+ok 1 stc3117-battery.exists
+ok 2 stc3117-battery.uevent.NAME
+ok 3 stc3117-battery.sysfs.type
+ok 4 stc3117-battery.uevent.TYPE
+ok 5 stc3117-battery.sysfs.usb_type # SKIP
+ok 6 stc3117-battery.sysfs.online # SKIP
+# Reported: '1' ()
+ok 7 stc3117-battery.sysfs.present
+# Reported: 'Discharging'
+ok 8 stc3117-battery.sysfs.status
+# Reported: '24' % ()
+ok 9 stc3117-battery.sysfs.capacity
+ok 10 stc3117-battery.sysfs.capacity_level # SKIP
+ok 11 stc3117-battery.sysfs.model_name # SKIP
+ok 12 stc3117-battery.sysfs.manufacturer # SKIP
+ok 13 stc3117-battery.sysfs.serial_number # SKIP
+ok 14 stc3117-battery.sysfs.technology # SKIP
+ok 15 stc3117-battery.sysfs.cycle_count # SKIP
+ok 16 stc3117-battery.sysfs.scope # SKIP
+ok 17 stc3117-battery.sysfs.input_current_limit # SKIP
+ok 18 stc3117-battery.sysfs.input_voltage_limit # SKIP
+# Reported: '3506000' uV (3.506 V)
+ok 19 stc3117-battery.sysfs.voltage_now
+ok 20 stc3117-battery.sysfs.voltage_min # SKIP
+ok 21 stc3117-battery.sysfs.voltage_max # SKIP
+# Reported: '3200000' uV (3.2 V)
+ok 22 stc3117-battery.sysfs.voltage_min_design
+# Reported: '4200000' uV (4.2 V)
+ok 23 stc3117-battery.sysfs.voltage_max_design
+# Reported: '196000' uA (196 mA)
+ok 24 stc3117-battery.sysfs.current_now
+ok 25 stc3117-battery.sysfs.current_max # SKIP
+ok 26 stc3117-battery.sysfs.charge_now # SKIP
+ok 27 stc3117-battery.sysfs.charge_full # SKIP
+# Reported: '3000000' uAh (3 Ah)
+ok 28 stc3117-battery.sysfs.charge_full_design
+ok 29 stc3117-battery.sysfs.power_now # SKIP
+ok 30 stc3117-battery.sysfs.energy_now # SKIP
+ok 31 stc3117-battery.sysfs.energy_full # SKIP
+ok 32 stc3117-battery.sysfs.energy_full_design # SKIP
+ok 33 stc3117-battery.sysfs.energy_full_design # SKIP
+# Totals: pass:12 fail:0 xfail:0 xpass:0 skip:21 error:0 
+
+v11 -> v12
+
+- Removed direct scaling (* 1000) in userspace property values.
+- Modified stc3117_convert to ensure proper unit conversions.
+- Returned -ENODATA directly without scaling.
+- Corrected Singed-of-by & Co-developed-by
+
+Link for v11: https://lore.kernel.org/linux-pm/20241216070457.8083-1-bhavin.sharma@siliconsignals.io/T/#t
+
+v10 -> v11
+
+- No changes                                                                    
+                                                                                
+v9 -> v10                                                                       
+                                                                                
+- Use error code instead of arbitrary values                                    
+- Use Co-developed-by tag                                                       
+                                                                                
+Link for V9: https://lore.kernel.org/linux-pm/20241213063813.32371-1-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v8 -> v9                                                                        
+                                                                                
+- Corrected the error message                                                   
+                                                                                
+Link for V8: https://lore.kernel.org/linux-pm/20241210080954.5067-1-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v7 -> v8                                                                        
+                                                                                
+- Add output of test_power_supply_properties.sh script.                         
+- Change 0X to 0x in macros.                                                    
+- Fix typos and Specify units in property comments.                             
+- Remove stc3117_update_battery_status function.                                
+- Convert voltage and current from mV/mA to uV/uA.                              
+- Represent temperature in tenths of a degree Celsius (1/10 °C).                
+- Export average current and open-circuit voltage (OCV).                        
+- Use devm_delayed_work_autocancel.                                             
+                                                                                
+Link for V7: https://lore.kernel.org/linux-pm/20241202094328.14395-1-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v6 -> v7                                                                        
+                                                                                
+- Removes extra spaces.                                                         
+- Fixes error handling.                                                         
+- Fixes the logic for checking battery status.                                  
+- Fixes typos.                                                                  
+- Removes unnecessary commas.                                                   
+                                                                                
+Link for v6: https://lore.kernel.org/linux-pm/20241130094531.14885-2-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v5 -> v6                                                                        
+                                                                                
+- Use shunt-resistor-micro-ohms property instead of sense-resistor.             
+- Remove the battery node from the binding examples.                            
+- Add interrupt bindings to the example.                                        
+- Correct the Signed-off-by (SoB) order in the commit.                          
+                                                                                
+Link for v5: https://lore.kernel.org/linux-pm/20241129114200.13351-1-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v4 -> v5                                                                        
+                                                                                
+- Fix variable names                                                            
+- Limit code line length to 80 columns                                          
+- Add interrupt and monitor-battery properties to bindings                      
+- Correct error handling with return dev_err_probe()                            
+                                                                                
+Link for v4: https://lore.kernel.org/linux-pm/21c08a45-34f1-443c-97d4-6baf9fa01b67@kernel.org/T/#t
+                                                                                
+v3 -> v4                                                                        
+                                                                                
+- Added support for current, soc, temp, and status properties.                  
+- Addressed comments and feedback provided by Krzysztof and Sebastian.          
+                                                                                
+Link for v3: https://lore.kernel.org/linux-pm/20240205051321.4079933-1-bhavin.sharma@siliconsignals.io/T/#t
+                                                                                
+v2 -> v3                                                                        
+                                                                                
+- Resolved DTC warnings and errors                                              
+- Formatted the changelogs                                                      
+- Added monitored battery properties                                            
+- Replaced 'additionalProperties' with 'unevaluatedProperties'                  
+- Replaced '&i2c6' with 'i2c'                                                   
+                                                                                
+Link for v2: https://lore.kernel.org/linux-pm/202401080530.0hMWnrIg-lkp@intel.com/T/#t
+                                                                                
+v1 -> v2                                                                        
+                                                                                
+- String value is redundantly quoted with any quotes (quoted-strings)           
+- Found character '\t' that cannot start any token                              
+                                                                                
+Link for v1: https://lore.kernel.org/linux-pm/46bba29c-330d-417d-ad84-ceb5207fdb55@wanadoo.fr/T/#t
+
+Bhavin Sharma (1):
+  power: supply: Add STC3117 fuel gauge unit driver
+
+Hardevsinh Palaniya (1):
+  dt-bindings: power: supply: Add STC3117 Fuel Gauge
+
+ .../bindings/power/supply/st,stc3117.yaml     |  74 +++
+ MAINTAINERS                                   |   8 +
+ drivers/power/supply/Kconfig                  |   7 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/stc3117_fuel_gauge.c     | 607 ++++++++++++++++++
+ 5 files changed, 697 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+ create mode 100644 drivers/power/supply/stc3117_fuel_gauge.c
+
+-- 
+2.34.1
+
 
