@@ -1,155 +1,214 @@
-Return-Path: <linux-pm+bounces-19537-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19538-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 481559F84C0
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 20:51:34 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EC859F84CC
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 20:52:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 494CF188A33D
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 19:51:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37916166CDC
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 19:52:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B7B8E1A9B55;
-	Thu, 19 Dec 2024 19:51:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 835CC1BC09F;
+	Thu, 19 Dec 2024 19:52:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LZJWs5sy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jtqPtCPm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90D18155342
-	for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 19:51:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 825A2155342;
+	Thu, 19 Dec 2024 19:52:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734637889; cv=none; b=OrXaemQbtGJSMXmLtoWWPWbdyArjPPgqu94TpF1af31xZEquJQqAnkWmBMVTwcJGvS46nPe+HEvplNA8VqWw0Ie0kouSaU2S5rvMyGkkc8DTK91mTFlhZEDVfgvPHFCUaBd0w2G25/IaS8SEeb9PGTdWR5/G9yrrhsHrRmlQs9o=
+	t=1734637961; cv=none; b=D1OAY8pFNHtVsjIAEsUWT+be3+JmOLJnebq1fc7vsvdOg0fKSZ2sEBUgSVf/9LEi8wBjjFuho7YS/yRMCljGL/yU1Q66cYgl7FEMCMhPOB5BHKhp7PHitpSd9yV0VcCp0JIJUz1j5Swxi/66b4/tcbAEralpCqKyDiVHHaD2yeQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734637889; c=relaxed/simple;
-	bh=y7oUz4SuExNm31vj3cCfoo9vRQaFpH/6KjDAOIQ94/Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fSlBAj8bTceEFyZxlUS6zn8sev9jbhbv4c0R0MCGQ4k2UBTuWEAAJUr3QNi69YHmF/HIvOD2i8IMI1VpPoJ6YVFzvrDXZk9a9MK1bhGcnXvixMV+LFr9KEPKgXrwc/poHoqICAs8er+1ZeBLYfWXYoKEBssDdX7YpbcBKy+mvg0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LZJWs5sy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EB4ADC4CECE
-	for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 19:51:28 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734637889;
-	bh=y7oUz4SuExNm31vj3cCfoo9vRQaFpH/6KjDAOIQ94/Y=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=LZJWs5syOho+IV0FU20jbzD/XCq6fYybLIF4eTjNXbokkbRh4Xhz1ueixcCrdSnZ4
-	 iZO8m79nYZ/hk6IEL/lQkOayWdAP6sHLMeg5lhfB02As79XbLkkssBQD+iRJy/FsZG
-	 5elDfvUIsG+IZCOqa+ANQhjl1ZOJ2HYoiUX/gtZEg3hmiT79QeO3PhrstgEZTJhvCZ
-	 oKOuVLDA9wLh8yt9IYsOSzX5wAroko9jF99fBJ083SmO1WT8DMqnPs4h342L5Ky3Qd
-	 d1w+w5RZAnEJW4OuR692Mp7S2i/xovMhPRG3CrrH36qIOHfGiqe6xdlA5eTjt/x6i+
-	 kg8jIlBqXhkqA==
-Received: by mail-ot1-f46.google.com with SMTP id 46e09a7af769-71e2bc5b90fso539023a34.0
-        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 11:51:28 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW6ahP//W7d3pHk5PT2UzQVdkn3BudyebxGCtp3bvGyABr/KlI3mEb4s+Jc4I0dy+JI/U8qhh2cQg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyCW1mrFHdstk2p/TUHHPZYFR9TUFP+XBU3y8yEFWUW9d/os0Ex
-	0tlNdftGU3S+iC5Cn59Z9VtyTcrtO8Nhz/qSyW97L30MTyMYvobhNG5EaBU0T2lBuE5TX0cYaCU
-	AmHUntNb3c1zgnAKG+ZEOYrItX8k=
-X-Google-Smtp-Source: AGHT+IHpoTLJhYkOGEbi9uTZv+d3e8a4yuH01dxKw6bsV019Mfsc4FgHzBbE0bKTNhb7L/x5P+w2OSri8ciTVQzOVz0=
-X-Received: by 2002:a05:6830:7102:b0:71d:fdf7:f8d6 with SMTP id
- 46e09a7af769-720ff955110mr139592a34.28.1734637888318; Thu, 19 Dec 2024
- 11:51:28 -0800 (PST)
+	s=arc-20240116; t=1734637961; c=relaxed/simple;
+	bh=pBH2xtozFGdOHwp8Qrf+Na3F52ENcdh/Qjxb0ZI7ezI=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=K34IdUN0XSfSjupk0hM98cbTx/1KVXagdg7XpgkPlCoaAtS6kFvwia7FZNYzQAiEkTLCwyk91dOSTxJCMgVqMSIYY0DXoD22FVaDdTDa+ztsfbqLjhufHltlAJv7q8fTN3AB4pO7SSAmyPB85Jh/kHY5oVZB2DHNBLRYvjehQqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jtqPtCPm; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734637959; x=1766173959;
+  h=message-id:subject:from:reply-to:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=pBH2xtozFGdOHwp8Qrf+Na3F52ENcdh/Qjxb0ZI7ezI=;
+  b=jtqPtCPmJIru0ZgwsH9EJWfaMr10fQrYTG/H/4/qfKOCUbB/NhESZR2c
+   VB7elpTgQ6C+cdLHAmBEFnRb5BBIku0vOi2YMI3czWTlsqvcdTGQvP1mr
+   ikLO7hsBqTTmSNkHghSqDxHS6CzpvACNmk0O5qefcV4Byy35csKF3atVQ
+   +Toi3NPHbYYTV1hxZAt+J30bU+QHRMWo+r6PLnT3+aZJqvNwZPCCkdMjN
+   8cMFut/m9cWKaLdxK2Kp+QGJtGJgHp5FNEprhjbkIFhRe0w8A2Wp3q6jc
+   EeC5fwiruY44jOZkq7nm6r3uYXwpZ7mktiSjIC1YhGckSwqLeDcTkca9g
+   w==;
+X-CSE-ConnectionGUID: E6u9XAkNTBWcO9W3ASV1oQ==
+X-CSE-MsgGUID: X+a8vlORQg2sO5WIjFX1uA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="60550964"
+X-IronPort-AV: E=Sophos;i="6.12,248,1728975600"; 
+   d="scan'208";a="60550964"
+Received: from fmviesa007.fm.intel.com ([10.60.135.147])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 11:52:39 -0800
+X-CSE-ConnectionGUID: qLBfQ+rERpm/zQ38WY7F+Q==
+X-CSE-MsgGUID: TpQ5DL2zQBm6FbzOdR5ZyA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,248,1728975600"; 
+   d="scan'208";a="98134734"
+Received: from dwoodwor-mobl2.amr.corp.intel.com ([10.125.108.55])
+  by fmviesa007-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 11:52:38 -0800
+Message-ID: <2ed90445e8e39a76e58a37712ca75ba40d121c15.camel@linux.intel.com>
+Subject: Re: My AlderLake Dell (XPS-9320) needs these patches to get full
+ standby/low-power modes
+From: "David E. Box" <david.e.box@linux.intel.com>
+Reply-To: david.e.box@linux.intel.com, rafael@kernel.org
+To: Kenneth Crudup <kenny@panix.com>, Bjorn Helgaas <helgaas@kernel.org>, 
+ Nirmal Patel <nirmal.patel@linux.ntel.com>
+Cc: Kai-Heng Feng <kai.heng.feng@canonical.com>, Vidya Sagar
+ <vidyas@nvidia.com>,  Bjorn Helgaas <bhelgaas@google.com>, Andrea Righi
+ <andrea.righi@canonical.com>, You-Sheng Yang <vicamo.yang@canonical.com>,
+ linux-pm@vger.kernel.org,  linux-pci@vger.kernel.org
+Date: Thu, 19 Dec 2024 11:52:37 -0800
+In-Reply-To: <28fd68e1-f76f-40a9-89a8-a24d693209c1@panix.com>
+References: <20241213230214.GA3434438@bhelgaas>
+	 <ffeae6a38215df37d8c109c16fd8b6713687ba77.camel@linux.intel.com>
+	 <28fd68e1-f76f-40a9-89a8-a24d693209c1@panix.com>
+Organization: David E. Box
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.3-0ubuntu1 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <ba6ab96f-89bb-4bb3-a295-a1f41042eb15@amd.com>
-In-Reply-To: <ba6ab96f-89bb-4bb3-a295-a1f41042eb15@amd.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 19 Dec 2024 20:51:17 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ihGFW3cKHo1MEhyaHGKimLMeh4Ri8O=0E3YwQGRErD3w@mail.gmail.com>
-Message-ID: <CAJZ5v0ihGFW3cKHo1MEhyaHGKimLMeh4Ri8O=0E3YwQGRErD3w@mail.gmail.com>
-Subject: Re: [GIT PULL] amd-pstate content for 6.14 (12/18/24)
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi,
++Rafael
 
-On Wed, Dec 18, 2024 at 8:43=E2=80=AFPM Mario Limonciello
-<mario.limonciello@amd.com> wrote:
->
-> Hello,
->
-> The following changes since commit fac04efc5c793dccbd07e2d59af9f90b7fc0dc=
-a4:
->
->    Linux 6.13-rc2 (2024-12-08 14:03:39 -0800)
->
-> are available in the Git repository at:
->
->
-> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
-> tags/amd-pstate-v6.14-2024-12-18
->
-> for you to fetch changes up to 95fad7fb58cfaa2a295aa54a1f001a16b9324963:
->
->    cpufreq/amd-pstate: Drop boost_state variable (2024-12-11 10:44:53 -06=
-00)
->
-> ----------------------------------------------------------------
-> amd-pstate changes for 6.14
->
-> Mostly cleanups and optimizations to increase code reuse by
-> shuffling around and using helpers.
->
-> Notable other changes:
->   * Add ftrace event for active mode to use
->   * Set default EPP policy on Ryzen
->
-> ----------------------------------------------------------------
-> Dhananjay Ugwekar (5):
->        cpufreq/amd-pstate: Convert the amd_pstate_get/set_epp() to
-> static calls
->        cpufreq/amd-pstate: Move the invocation of amd_pstate_update_perf(=
-)
->        cpufreq/amd-pstate: Refactor amd_pstate_epp_reenable() and
-> amd_pstate_epp_offline()
->        cpufreq/amd-pstate: Remove the cppc_state check in offline/online
-> functions
->        cpufreq/amd-pstate: Merge amd_pstate_epp_cpu_offline() and
-> amd_pstate_epp_offline()
->
-> K Prateek Nayak (1):
->        cpufreq/amd-pstate: Detect preferred core support before driver
-> registration
->
-> Mario Limonciello (15):
->        cpufreq/amd-pstate: Store the boost numerator as highest perf agai=
+On Thu, 2024-12-19 at 10:17 -0800, Kenneth Crudup wrote:
+> I do see that:
+>=20
+> ----
+> [E0] 781 /usr/src/ubuntu-kernel> dmesg | fgrep -i aspm
+> [=C2=A0=C2=A0=C2=A0 0.164233] ACPI FADT declares the system doesn't suppo=
+rt PCIe ASPM,=20
+> so disable it
+
+So, PCIe ASPM refers to OS control of ASPM. Disabling it means the BIOS alo=
+ne
+controls it, leaving the OS to stick with the defaults programmed into the
+controllers by the BIOS. This might happen due to critical bugs in certain =
+ASPM
+states or simply because the OEM decided to configure it that way. We don't=
+ know
+the exact reason.
+
+The issue with VMD is that its controllers are hidden from the BIOS, so ASP=
+M
+defaults are never programmed into them. When PCIe ASPM is disabled, it's
+unclear whether this should apply to controllers in VMD mode. To be cautiou=
+s, we
+avoid modifying ASPM settings in this scenario.
+
+If you want to override this behavior, you can try setting pcie_aspm=3Dforc=
+e on
+the kernel command line.
+
+David
+
+> [=C2=A0=C2=A0=C2=A0 0.579946] acpi PNP0A08:00: _OSC: OS supports [Extende=
+dConfig ASPM=20
+> ClockPM Segments MSI EDR HPX-Type3]
+> [=C2=A0=C2=A0=C2=A0 0.587377] acpi PNP0A08:00: FADT indicates ASPM is uns=
+upported,=20
+> using BIOS configuration
+> [=C2=A0=C2=A0=C2=A0 1.309826] pci 10000:e0:06.0: enable ASPM for pci brid=
+ge behind vmd
+> [=C2=A0=C2=A0=C2=A0 1.622705] pci 10000:e1:00.0: can't override BIOS ASPM=
+; OS doesn't=20
+> have ASPM control
+> [110757.878494] pcieport 0000:00:07.0: ASPM: current common clock=20
+> configuration is inconsistent, reconfiguring
+> [171953.284616] pcieport 0000:00:07.0: ASPM: current common clock=20
+> configuration is inconsistent, reconfiguring
+> ----
+>=20
+> On 12/19/24 08:25, David E. Box wrote:
+> > Hi Kenneth,
+> >=20
+> > On Fri, 2024-12-13 at 17:02 -0600, Bjorn Helgaas wrote:
+> > > [cc->to: David, Nirmal]
+> > >=20
+> > > On Fri, Dec 13, 2024 at 02:26:37PM -0800, Kenneth Crudup wrote:
+> > > > OK, it looks like the effective change (that's not already containe=
+d in
+> > > > the
+> > > > LTR SNOOP patches already in Linus' master (et al.)) comes from thi=
+s
+> > > > line
+> > > > from the Ubuntu commit 1a0102a0 ("UBUNTU: SAUCE: PCI/ASPM: Enable A=
+SPM
+> > > > for
+> > > > links under VMD domain"):
+> > > >=20
+> > > > ----
+> > > > diff --git a/drivers/pci/pcie/aspm.c b/drivers/pci/pcie/aspm.c
+> > > > index 00143f5fb83a..d2ff44e7fbb1 100644
+> > > > --- a/drivers/pci/pcie/aspm.c
+> > > > +++ b/drivers/pci/pcie/aspm.c
+> > > > @@ -688,7 +688,8 @@ static void pcie_aspm_cap_init(struct
+> > > > pcie_link_state
+> > > > *link, int blacklist)
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 aspm_l1ss_init(lin=
+k);
+> > > >=20
+> > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Save default st=
+ate */
+> > > > -=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 link->aspm_default =3D link->=
+aspm_enabled;
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 link->aspm_default =3D parent=
+->dev_flags &
+> > > > PCI_DEV_FLAGS_ENABLE_ASPM ?
+> > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0 ASPM_STATE_ALL : link->aspm_enabled;
+> > >=20
+> > > So I thought the "pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL)" i=
 n
->        cpufreq/amd-pstate: Use boost numerator for upper bound of
-> frequencies
->        cpufreq/amd-pstate: Add trace event for EPP perf updates
->        cpufreq/amd-pstate: convert mutex use to guard()
->        cpufreq/amd-pstate: Drop cached epp_policy variable
->        cpufreq/amd-pstate: Use FIELD_PREP and FIELD_GET macros
->        cpufreq/amd-pstate: Only update the cached value in msr_set_epp()
-> on success
->        cpufreq/amd-pstate: store all values in cpudata struct in khz
->        cpufreq/amd-pstate: Change amd_pstate_update_perf() to return an i=
-nt
->        cpufreq/amd-pstate: Move limit updating code
->        cpufreq/amd-pstate: Cache EPP value and use that everywhere
->        cpufreq/amd-pstate: Always write EPP value when updating perf
->        cpufreq/amd-pstate: Drop ret variable from
-> amd_pstate_set_energy_pref_index()
->        cpufreq/amd-pstate: Set different default EPP policy for Epyc and
-> Ryzen
->        cpufreq/amd-pstate: Drop boost_state variable
->
->   Documentation/admin-guide/pm/amd-pstate.rst |   4 +-
->   drivers/cpufreq/amd-pstate-trace.h          |  52 ++++++++++++--
->   drivers/cpufreq/amd-pstate-ut.c             |  12 ++--
->   drivers/cpufreq/amd-pstate.c                | 520
-> ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++-------=
-----------------------------------------------------------------
->   drivers/cpufreq/amd-pstate.h                |   3 -
->   5 files changed, 301 insertions(+), 290 deletions(-)
+> > > f492edb40b54 would effectively do the same thing:
+> > >=20
+> > > > > > > > https://git.launchpad.net/~ubuntu-kernel/ubuntu/+source/lin=
+ux/+git/
+> > > > > > > > lunar/commit/?id=3D1a0102a08f206149d9abd56c2b28877c878b5526
+> > > > > > >=20
+> > > > > > > This is "UBUNTU: SAUCE: PCI/ASPM: Enable ASPM for links under=
+ VMD
+> > > > > > > domain", which adds "link->aspm_default =3D ASPM_STATE_ALL" f=
+or
+> > > > > > > device
+> > > > > > > IDs 0x9a09 and 0xa0b0.
+> > > > > > >=20
+> > > > > > > This looks like it should also be handled by upstream f492edb=
+40b54
+> > > > > > > ("PCI: vmd: Add quirk to configure PCIe ASPM and LTR") [1], w=
+hich
+> > > > > > > adds
+> > > > > > > "pci_enable_link_state(pdev, PCIE_LINK_STATE_ALL)".
+> > >=20
+> > > But I guess it doesn't actually work.=C2=A0 I'm hoping David or Nirma=
+l can
+> > > figure out why it doesn't because it seems obvious that it's the
+> > > intent.
+> >=20
+> > Is PCIe ASPM disabled? In the kernel log do you see:
+> >=20
+> > =C2=A0=C2=A0=C2=A0=C2=A0 "can't override BIOS ASPM; OS doesn't have ASP=
+M control"
+> >=20
+> > David
+> >=20
+>=20
 
-Pulled, thanks!
 
