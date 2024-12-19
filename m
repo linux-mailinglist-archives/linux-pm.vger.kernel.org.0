@@ -1,93 +1,70 @@
-Return-Path: <linux-pm+bounces-19506-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19507-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A45AF9F7829
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 10:17:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B29B99F7835
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 10:20:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 607B316440C
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 09:17:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 144E7164ED9
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 09:20:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88AF8221459;
-	Thu, 19 Dec 2024 09:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA57B221DA8;
+	Thu, 19 Dec 2024 09:19:50 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72F901F63EC;
-	Thu, 19 Dec 2024 09:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4B05155756;
+	Thu, 19 Dec 2024 09:19:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734599845; cv=none; b=ttsHlg+fdTD22t42ZpbD0J32vP1gixSSQAwkWYKZ3YJzbF+kOV7zkWbhK4S7Of/NfN8pE04stJsET1JzP7X0kTwzQyN4QYchZGQ3ljWFUJfp9FrbX2xmu2BWH7ajSPMoiuULRv/BehHeyW3wDyHZ64Hn4m0eyelLHl1PIt9c6Lo=
+	t=1734599990; cv=none; b=Qko7mg7t9ZCvo3dJUBaY6uZFrnusSC9AUWG1P5aBUAEPsJJd+DeiYGgFUojOTDHnI4RY7bdSJ2+jJN2rl5MZX+tkkJy0FbcUdKw5fEwu/nKETPQO8GsO7HuTH28namtx438H+g2djXybSdxqylF+hcGPDXo1ZocFj7U/cCrQMnQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734599845; c=relaxed/simple;
-	bh=PpQ/4zZIqhV5Bmbzo/POv9RQxWL6uY4EORdaMnDPB/A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tZ8w8oKT7pck3UybDhesKp0ecT54aPeOuzW8b/hb1lrt/BS//Fl8z68K0pDrbHWWRtM6pHoX+enMR3rP7wxm+UEZ0Zvl5F70gnBYbmRkOxV4nSiBimcBqFeV9Q8YJ5SKFs0Hra8b2NuV+OuEmn2+JloT8qory4UTURgMKYQh8OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A3C3B1477;
-	Thu, 19 Dec 2024 01:17:50 -0800 (PST)
-Received: from [10.57.68.234] (unknown [10.57.68.234])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B598F3F528;
-	Thu, 19 Dec 2024 01:17:20 -0800 (PST)
-Message-ID: <a43ebb14-be7f-4f8a-8892-cdb63eec4043@arm.com>
-Date: Thu, 19 Dec 2024 09:18:50 +0000
+	s=arc-20240116; t=1734599990; c=relaxed/simple;
+	bh=TzpEg3e7g2Gwn7WITPJIV8P9M39xjKN5UygubSc/4Lo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IDAeccmsBsq4+q3XNegYX7F666b+O/OjBdeL3YizuX0SMaQPFR/niyhCPcceGFq5dXUU/9/AOTdNaMsnH1PXZN8tMphkMYLULCf8GxZQLCZSa+3mtXIY37us/lXjB3XvC8BbAZnxr2YWOaIrZ79mpTMPygBi0RaTN4wzWQ+loPc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A10BC4CECE;
+	Thu, 19 Dec 2024 09:19:49 +0000 (UTC)
+Date: Thu, 19 Dec 2024 10:19:47 +0100
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: Lijuan Gao <quic_lijuang@quicinc.com>
+Cc: Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Georgi Djakov <djakov@kernel.org>, kernel@quicinc.com, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: qcom-bwmon: Document
+ QCS615 bwmon compatibles
+Message-ID: <35doix7q2x7uel4t5vgjbkfjtaugrqbhdbuq5nxarhqndvnmjt@pncqandctdlh>
+References: <20241218-add_bwmon_support_for_qcs615-v1-0-680d798a19e5@quicinc.com>
+ <20241218-add_bwmon_support_for_qcs615-v1-1-680d798a19e5@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] power: energy_model: Rework the depends on for
- CONFIG_ENERGY_MODEL
-To: Xuewen Yan <xuewen.yan@unisoc.com>
-Cc: linux-pm@vger.kernel.org, rafael@kernel.org, len.brown@intel.com,
- linux-kernel@vger.kernel.org, ke.wang@unisoc.com, xuewen.yan94@gmail.com,
- jeson.gao@unisoc.com, di.shen@unisoc.com, pavel@ucw.cz
-References: <20241219091109.10050-1-xuewen.yan@unisoc.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20241219091109.10050-1-xuewen.yan@unisoc.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20241218-add_bwmon_support_for_qcs615-v1-1-680d798a19e5@quicinc.com>
 
-
-
-On 12/19/24 09:11, Xuewen Yan wrote:
-> From: Jeson Gao <jeson.gao@unisoc.com>
+On Wed, Dec 18, 2024 at 06:39:38PM +0800, Lijuan Gao wrote:
+> Document QCS615 BWMONs, which includes one BWMONv4 instance for CPU to
+> LLCC path bandwidth monitoring and one BWMONv5 instance for LLCC to DDR
+> path bandwidth monitoring.
 > 
-> Now not only CPUs can use energy efficiency models, but GPUs
-> can also use. On the other hand, even with only one CPU, we can also
-> use energy_model to align control in thermal.
-> So remove the dependence of SMP, and add the DEVFREQ.
-
-That's true, there are 1-CPU platforms supported. Also, GPU can have
-the EM alone.
-
-> 
-> Signed-off-by: Jeson Gao <jeson.gao@unisoc.com>
+> Signed-off-by: Lijuan Gao <quic_lijuang@quicinc.com>
 > ---
->   kernel/power/Kconfig | 3 +--
->   1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> index afce8130d8b9..c532aee09e12 100644
-> --- a/kernel/power/Kconfig
-> +++ b/kernel/power/Kconfig
-> @@ -361,8 +361,7 @@ config CPU_PM
->   
->   config ENERGY_MODEL
->   	bool "Energy Model for devices with DVFS (CPUs, GPUs, etc)"
-> -	depends on SMP
-> -	depends on CPU_FREQ
-> +	depends on CPU_FREQ || PM_DEVFREQ
->   	help
->   	  Several subsystems (thermal and/or the task scheduler for example)
->   	  can leverage information about the energy consumed by devices to
+>  Documentation/devicetree/bindings/interconnect/qcom,msm8998-bwmon.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
+
 
