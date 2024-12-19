@@ -1,161 +1,324 @@
-Return-Path: <linux-pm+bounces-19500-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19501-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DC2DF9F7663
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 08:56:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DABCE9F7696
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 09:02:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 24FA61897EA9
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 07:55:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48442161374
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 08:02:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0440D2185AE;
-	Thu, 19 Dec 2024 07:51:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8397216E3E;
+	Thu, 19 Dec 2024 08:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uxrvqhlG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7963C2185A6
-	for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 07:51:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA3629A5
+	for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 08:02:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734594709; cv=none; b=j3r1pbidz51h3wXS9GFL5KSG8IGrZ0rS76pWrQ0z7ajXWh4C3cbcVnp3fZwT0HkEbFiEKTALuJCwEFn+ChOHu1HZ3qyGgbrmQbSDDo2IZjEot2O/yPA/G0Jhzhtdn9iyh2hvwOzHIvgtchZvlmJobR94I9EF2qyXM3tzJj5dmOg=
+	t=1734595348; cv=none; b=lypoanEbXIRvVVXGpqYt/N39j/GDpctUkfvg0ObGC3gZlbDco4UAtX+4EJTXIJLaCMNGdgQmcvHxpK79xl8zd7u+42z4MXc5r7auGaCcBvmXfEmfc0Ef8V/f6wzL1V53fsv+OEGRLnVqhcP7smkUa66n0/XGdQXJXCsWtzSQJyo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734594709; c=relaxed/simple;
-	bh=cxF36KdhaoPLy1OtO7ZkW/HO4NVt5BPOjnHrtwP0dpM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=RJJz93i/pUNGQzh+3B4WFcBBpmaGqXJb8IT8ak4D93RHGmmSeqGHgy6i8qvchj2o1iqtzKBV7qgU3VYlTx9tXJg7Nk4/4Pqht/PaYac3tWDCoR2OvdqXq5y4kfYp+Ritx+fOhTrz+Zs4+sv+N0gpiPpHlA5dQNNH3c4vjzN5GrE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tOBJu-0004D5-4s; Thu, 19 Dec 2024 08:51:42 +0100
-Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tOBJs-004AWx-1E;
-	Thu, 19 Dec 2024 08:51:41 +0100
-Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
-	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tOBJt-00GmXj-0I;
-	Thu, 19 Dec 2024 08:51:41 +0100
-From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Date: Thu, 19 Dec 2024 08:51:30 +0100
-Subject: [PATCH RFC] docs: ABI: replace mcroce@microsoft.com with new Meta
- address
+	s=arc-20240116; t=1734595348; c=relaxed/simple;
+	bh=PIQaEH7XnDeoE5i9LsmS5jNHg0gLKNYNvQ6Q+DwhM2I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kWbFUVTcsrM83StnzeVkGfAorD8g3gnlg9jnV0Bc0eqWvaJhvLejgsC2uFME5TPzWI9ExiqsTnZnIXZFFZscn2rRLIO/uBr5KzPyjNmtvUxCJH1t0U1vLSN8Ct4n9KR19mI/znS/gFOyyDTyhZ8sDKlK6+h5r6RB7aJ/7jpqe3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uxrvqhlG; arc=none smtp.client-ip=209.85.210.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-725ea1e19f0so418210b3a.3
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 00:02:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734595345; x=1735200145; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=FiIXhUgGXRHUKYompmzT3WtYs6AwRDjwCP4avnbaXXs=;
+        b=uxrvqhlG0IG7sDcA8tyqkf5W26tRgyJaGwe5n/H9HgtbAv8U3xQXlH6vyJhVuopf7z
+         i/vMMYizhIDY4kKMpIBEVxqFd0tfOiijnWYMoH+pXc7OuaHb0nAlWruHBbMhljsfesrC
+         3lrmfxJfI6SUt4uhNAlrR32MO8UEMp9QuGj9jBqxG4XXZnSOD3onEAvCkpIQyMaXj8mH
+         TBQh/1ph6BaHGOn0jh4l2tAjHFrVl0VXVZW+FMVENIL4h9S508n1j9chYGZBa6k/uFB2
+         dGtc/Fj+I53cPfyFkF0q43yMrB21K36OaAaHJ85zoN/Nt1BxXap1H6CQ+GdO2gI4G3V7
+         AwlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734595345; x=1735200145;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=FiIXhUgGXRHUKYompmzT3WtYs6AwRDjwCP4avnbaXXs=;
+        b=TrALIufAX+62FDXuAmRRkO3tLqLX4RuRhBLphzdGv/DDc1Fu4gWS0RhsZbQkx7ygxO
+         g0HUNC4w++o+69kYpkTi7DYlUR7bri06yh5qvRQkV8nL+kG8PWt0uGxWTWSPrf4Y1/Q5
+         C1FAaN3/XiXnejEmFXHDEo0Gvx3WU3YTgtxOd35uNl3Hg6JbNOMcRfUOXlEr3QZwvKBD
+         JI7vZ3+Lpg4ABT6ESV7MkHOMYQ1jw/BVM5WfGy4pNlx78TmyzAfHKoAQjlGIcSlupWfp
+         SdAaaHDdpl1qSxuPPIh22ZF6jIkWY0urdn4k+D+5nVgdiuhkS0Un0RpfY5RqUCiQFWeC
+         xzBA==
+X-Forwarded-Encrypted: i=1; AJvYcCUL20zjb4+6qjtktWQ3xoj52QpMlKCUg0m7L7qhMRakh31MOb2ns9LLijjvPtbMAiBu/p2jbNGB5Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwkrtEyS9Lk381KuGQnYbrefECGgcUzfIoZHvaEnwsSVGngLCeu
+	vEuAC3NMs1OilMlKY/xYV07lOCt6BK6gjzJDZ6xwlf9K+9vQzqgkbbDC649R/w==
+X-Gm-Gg: ASbGnctPeE7ekNCqzhXhD1L4reYHUFaUS6cII1s8dVtT6JVH9x6x4nzEahYXeWDvn1S
+	CaOoHot72BNfF2HpE28IjeHvPxn2byO8sGs+MRZlryWljQ2ouF8D+7zmFIb0eEMxdq9cWdALqWc
+	/Fell5sQJsdkYl8Dc+W3rX+Wz8A07uAhX+JUlPLUuZEnYWfY61/sEIz5KYLrBWMrEBh+F7b5oiW
+	nOaBX2GFUyVkf635J3szR+V7tuFgYa3/CCgKX9mjHd0hTBDUpkROMxrO+XP59z9jZMs
+X-Google-Smtp-Source: AGHT+IFll0irdbwM+RUdhMNn+L6WxoWJUa0AF8tiMBuXb8vjLzgtKTa5XtyI18qRm8PKkIbtuUs9zg==
+X-Received: by 2002:a05:6a20:6a25:b0:1e1:afa9:d38a with SMTP id adf61e73a8af0-1e5c74f2fafmr4032467637.1.1734595345080;
+        Thu, 19 Dec 2024 00:02:25 -0800 (PST)
+Received: from thinkpad ([117.213.97.217])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842b1ce01d3sm627161a12.23.2024.12.19.00.02.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2024 00:02:24 -0800 (PST)
+Date: Thu, 19 Dec 2024 13:32:17 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Christoph Hellwig <hch@lst.de>, Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org,
+	axboe@kernel.dk, sagi@grimberg.me, linux-nvme@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	andersson@kernel.org, konradybcio@kernel.org,
+	Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] nvme-pci: Shutdown the device if D3Cold is allowed by
+ the user
+Message-ID: <20241219080217.fr2ukr7sk4a7hfmo@thinkpad>
+References: <20241212151354.GA7708@lst.de>
+ <CAJZ5v0gUpDw_NjTDtHGCUnKK0C+x0nrW6mP0tHQoXsgwR2RH8g@mail.gmail.com>
+ <20241214063023.4tdvjbqd2lrylb7o@thinkpad>
+ <CAJZ5v0gLMx+tBo+MA3AQZ7qP28Z91d04oVBHVeTNcd-QD=kJZg@mail.gmail.com>
+ <20241216171108.6ssulem3276rkycb@thinkpad>
+ <CAJZ5v0j+4xjSOOy8TYE0pBuqd_GdQa683Qq0GEyJ9WAFad9Z=A@mail.gmail.com>
+ <20241216175210.mnc5kp6646sq7vzm@thinkpad>
+ <CAJZ5v0grRdTYaamSnKSF-HyMmCHDEZ4haLo+ziSBxhDg1PbjRQ@mail.gmail.com>
+ <20241217052632.lbncjto5xibdkc4c@thinkpad>
+ <CAJZ5v0gjrBUgejwBz1vv6P83oZiYu8AuDMs47ZAFJoNhMaMdpQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20241219-fix-mcroce-mail-bounce-v1-1-4912116b6060@pengutronix.de>
-X-B4-Tracking: v=1; b=H4sIAIHQY2cC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDIxNDI0NL3bTMCt3c5KL85FTd3MTMHN2k/NI8INvYyMLSwMDQzNLEwFQJqLm
- gKBWoEmxwtFKQm7NSbG0tABtKRYptAAAA
-X-Change-ID: 20241219-fix-mcroce-mail-bounce-328900169405
-To: Matteo Croce <teknoraver@meta.com>, 
- Matteo Croce <technoboy85@gmail.com>, Jens Axboe <axboe@kernel.dk>, 
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-block@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>
-X-Mailer: b4 0.14.2
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gjrBUgejwBz1vv6P83oZiYu8AuDMs47ZAFJoNhMaMdpQ@mail.gmail.com>
 
-The Microsoft email address is bouncing:
+On Tue, Dec 17, 2024 at 08:45:55PM +0100, Rafael J. Wysocki wrote:
+> On Tue, Dec 17, 2024 at 6:26 AM <manivannan.sadhasivam@linaro.org> wrote:
+> >
+> > On Mon, Dec 16, 2024 at 08:34:24PM +0100, Rafael J. Wysocki wrote:
+> >
+> > [...]
+> >
+> > > > There is also a case where some devices like
+> > > > (Laptops made out of Qcom SCX Gen3 SoCs) require all the PCIe devices to be
+> > > > powered down in order for the SoC to reach its low power state (CX power
+> > > > collapse in Qcom terms). If not, the SoC would continue to draw more power
+> > > > leading to battery draining quickly. This platform is supported in upstream and
+> > > > we keep the PCIe interconnect voted during suspend as the NVMe driver is
+> > > > expecting the device to retain its state during resume. Because of this
+> > > > requirement, this platform is not reaching SoC level low power state with
+> > > > upstream kernel.
+> > >
+> > > OK, now all of this makes sense and that's why you really want NVMe
+> > > devices to end up in some form of PCI D3 in suspend-to-idle.
+> > >
+> > > Would D3hot be sufficient for this platform or does it need to be
+> > > D3cold?  If the latter, what exactly is the method by which they are
+> > > put into D3cold?
+> > >
+> >
+> > D3Cold is what preferred. Earlier the controller driver used to transition the
+> > device into D3Cold by sending PME_Turn_Off, turning off refclk, regulators
+> > etc... Now we have a new framework called 'pwrctrl' that handles the
+> > clock/regulators supplied to the device. So both controller and pwrctrl drivers
+> > need to work in a tandem to put the device into D3Cold.
+> >
+> > Once the PCIe client driver (NVMe in this case) powers down the device, then
+> > controller/pwrctrl drivers will check the PCIe device state and transition the
+> > device into D3Cold. This is a TODO btw.
+> >
+> > But right now there is no generic D3Cold handling available for DT platforms. I
+> > am hoping to fix that too once this NVMe issue is handled.
+> 
+> There's no generic D3cold handling for PCIe devices at all AFAICS.  At
+> least, I'm not aware of any standard way to do it.  Yes, there are
+> vendor-specific conventions that may even be followed by multiple
+> vendors, but not much beyond that.
+> 
 
-    550 5.4.1 Recipient address rejected: Access denied.
+Yeah, right. Atleast ACPI has its own way of handling D3Cold and that's what I
+meant. There is no such option available for DT right now. I was shoping that
+once this NVMe issue is resolved, then I could look into D3Cold for DT
+platforms.
 
-So let's replace it with the address Matteo last used to sign off
-patches two months ago.
+> > > > > > > > If the platform is using DT, then there is no entity setting
+> > > > > > > > pm_set_suspend_via_firmware().
+> > > > > > >
+> > > > > > > That's true and so the assumption is that in this case the handling of
+> > > > > > > all devices will always be the same regardless of which flavor of
+> > > > > > > system suspend is chosen by user space.
+> > > > > > >
+> > > > > >
+> > > > > > Right and that's why the above concern is raised.
+> > > > >
+> > > > > And it is still unclear to me what the problem with it is.
+> > > > >
+> > > > > What exactly can go wrong?
+> > > > >
+> > > > > > > > So NVMe will be kept in low power state all the
+> > > > > > > > time (still draining the battery).
+> > > > > > >
+> > > > > > > So what would be the problem with powering it down unconditionally?
+> > > > > > >
+> > > > > >
+> > > > > > I'm not sure how would you do that (by checking dev_of_node()?). Even so, it
+> > > > > > will wear out the NVMe devices if used in Android tablets etc...
+> > > > >
+> > > > > I understand the wear-out concern.
+> > > > >
+> > > > > Is there anything else?
+> > > > >
+> > > >
+> > > > No, that's the only concern.
+> > >
+> > > OK
+> > >
+> > > I think we're getting to the bottom of the issue.
+> > >
+> > > First off, there really is no requirement to avoid putting PCI devices
+> > > into D3hot or D3cold during suspend-to-idle.  On all modern Intel
+> > > platforms, PCIe devices are put into D3(hot or cold) during
+> > > suspend-to-idle and I don't see why this should be any different on
+> > > platforms from any other vendors.
+> > >
+> > > The NVMe driver is an exception and it avoids D3(hot or cold) during
+> > > suspend-to-idle because of problems with some hardware or platforms.
+> > > It might in principle allow devices to go into D3(hot or cold) during
+> > > suspend-to-idle, so long as it knows that this is going to work.
+> > >
+> >
+> > Slight correction here.
+> >
+> > NVMe driver avoids PCI PM _only_ when it wants to handle the NVMe power
+> > state on its own, not all the time. It has some checks [1] in the suspend path
+> > and if the platform/device passes one of the checks, it will power down the
+> > device.
+> 
+> Yes, there is a comment in that code explaining what's going on and
+> that is basically "if key ingredients are missing or the firmware is
+> going to do its thing anyway, don't bother".
+> 
+> > DT platforms doesn't pass any of the checks, so the NVMe driver always manages
+> > the power state on its own. Unfortunately, the resultant power saving is not
+> > enough, so the vendors (Laptop/Automotive) using DT want NVMe to be powered down
+> > all the time. This is the first problem we are trying to solve.
+> >
+> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/nvme/host/pci.c#n3448
+> 
+> I see.
+> 
+> This cannot be done by the driver itself, though, at least not in
+> general.  The PCI layer needs to be involved and, if we are talking
+> about D3cold, the platform firmware needs to be involved either.
+> 
 
-Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
----
-@Matteo, is this ok for you or would you prefer another address (whether
-your own or someone else's?)
+Right, but the device driver needs to have some idea about what state PCI core
+is going to choose for the device. I believe that's the purpose of
+pci_choose_state() API. More below...
 
-I ran into this while submitting a series[1] touching sysfs-kernel-reboot
-and b4/get_maintainers.pl picked off the stale address from the file.
+> As a rule, the PCI layer reaches out to the platform firmware for help
+> as needed and drivers don't take part in this directly.
+> 
+> The NVMe driver would need to let the PCI layer take over and set the
+> PCI power state of the device if it wanted to get any deeper than NVMe
+> protocol specific power states.
+> 
+> In principle, this can be addressed with some kind of a driver opt-in.
+> That is, the NVMe driver would continue to work the way it does, but
+> instead of completely preventing the PCI layer from taking over, it
+> would opt in (the exact opt-in mechanism is TBD) for D3cold if (a) the
+> platform firmware provides a mechanism to do so and (b) the DT
+> indicates that this mechanism should be used for the given device.
+> 
 
-[1]: https://lore.kernel.org/all/20241219-hw_protection-reboot-v1-6-263a0c1df802@pengutronix.de/
----
- Documentation/ABI/stable/sysfs-block          |  2 +-
- Documentation/ABI/testing/sysfs-kernel-reboot | 10 +++++-----
- 2 files changed, 6 insertions(+), 6 deletions(-)
+Ok, IIUC you are talking about something like this?
 
-diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/stable/sysfs-block
-index 0cceb2badc836b8cbdade543deff71edef0e3da1..ee1bbb4dfd4ea65fc0aa13c03a5205b8d5816ecf 100644
---- a/Documentation/ABI/stable/sysfs-block
-+++ b/Documentation/ABI/stable/sysfs-block
-@@ -77,7 +77,7 @@ Description:
- 
- What:		/sys/block/<disk>/diskseq
- Date:		February 2021
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:
- 		The /sys/block/<disk>/diskseq files reports the disk
- 		sequence number, which is a monotonically increasing
-diff --git a/Documentation/ABI/testing/sysfs-kernel-reboot b/Documentation/ABI/testing/sysfs-kernel-reboot
-index 837330fb251134ffdf29cd68f0b2a845b088e5a0..fb2d21acc6627ee340a3c8327261d5727ad63e15 100644
---- a/Documentation/ABI/testing/sysfs-kernel-reboot
-+++ b/Documentation/ABI/testing/sysfs-kernel-reboot
-@@ -1,7 +1,7 @@
- What:		/sys/kernel/reboot
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	Interface to set the kernel reboot behavior, similarly to
- 		what can be done via the reboot= cmdline option.
- 		(see Documentation/admin-guide/kernel-parameters.txt)
-@@ -9,24 +9,24 @@ Description:	Interface to set the kernel reboot behavior, similarly to
- What:		/sys/kernel/reboot/mode
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	Reboot mode. Valid values are: cold warm hard soft gpio
- 
- What:		/sys/kernel/reboot/type
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	Reboot type. Valid values are: bios acpi kbd triple efi pci
- 
- What:		/sys/kernel/reboot/cpu
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	CPU number to use to reboot.
- 
- What:		/sys/kernel/reboot/force
- Date:		November 2020
- KernelVersion:	5.11
--Contact:	Matteo Croce <mcroce@microsoft.com>
-+Contact:	Matteo Croce <teknoraver@meta.com>
- Description:	Don't wait for any other CPUs on reboot and
- 		avoid anything that could hang.
+	static int nvme_suspend(struct device *dev)
+	{
+		...
 
----
-base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
-change-id: 20241219-fix-mcroce-mail-bounce-328900169405
+		if (pm_suspend_via_firmware() || !ctrl->npss || ... ||
+		    pci_choose_state(pdev, PMSG_SUSPEND) == PCI_D3cold)
+			return nvme_disable_prepare_reset(ndev, true);
 
-Best regards,
+		/* continue using protocol specific low power state */
+
+		...
+	}
+
+Here, pci_choose_state() should tell the driver if the device should enter
+D3Cold. ACPI already supports this API, now I need to add DT support (which is
+not straightforward, but doable). Since this API is already exported, I think it
+makes perfect sense to use it here (and other drivers for similar usecase).
+
+> > > However, there is an additional concern that putting an NVMe device
+> > > into D3cold every time during system suspend on Android might cause it
+> > > to wear out more quickly.
+> > >
+> >
+> > Right, this is the second problem.
+> 
+> Let's set this one somewhat aside for now.  We'll get back to it when
+> we have clarity in the above.
+> 
+
+Ok. I believe this could be addressed in pci_choose_state() itself if required.
+
+> > > Is there anything else?
+> >
+> > We also need to consider the fact that the firmware in some platforms doesn't
+> > support S2R. So we cannot take a decision based on S2I/S2R alone.
+> 
+> Right, the S2I/S2R thing is ACPI-specific.
+> 
+> On platforms using ACPI, pm_suspend_via_firmware() means that the
+> firmware is at least likely to power down the whole platform, so the
+> PCI layer may as well be allowed to do what it wants with the device.
+> 
+> > I think there are atleast a couple of ways to solve above mentioned problems:
+> >
+> > 1. Go extra mile, take account of all issues/limitations mentioned above and
+> > come up with an API. This API will provide a sane default suspend behavior to
+> > drivers (fixing first problem) and will also allow changing the behavior
+> > dynamically (to fix the second problem where kernel cannot distinguish Android
+> > vs other OS).
+> 
+> I don't quite follow TBH.
+> 
+> A "default suspend behavior" is there already and it is to allow the
+> PCI layer to set the device's power state (in collaboration with the
+> platform firmware).  Thing is, the NVMe driver doesn't always want to
+> rely on it.
+> 
+> > 2. Allow DT platforms to call pm_set_suspend_via_firmware() and make use of the
+> > existing behavior in the NVMe driver. This would only solve the first problem
+> > though. But would be a good start.
+> 
+> That would mean just letting the PCI layer always take over on the
+> platforms that would call pm_set_suspend_via_firmware().
+> 
+> There is a potential issue with doing it, which is that everybody
+> calling pm_suspend_via_firmware() would then assume that the platform
+> would be powered down by the firmware.  I'm not sure how much of an
+> issue that would be in practice, though.
+
+Yeah, that would be a concern.
+
+- Mani
+
 -- 
-Ahmad Fatoum <a.fatoum@pengutronix.de>
-
+மணிவண்ணன் சதாசிவம்
 
