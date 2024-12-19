@@ -1,98 +1,96 @@
-Return-Path: <linux-pm+bounces-19504-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19505-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD9F49F773A
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 09:26:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4296B9F781E
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 10:14:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AFCA17A2698
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 08:26:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 438D3188DBEA
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 09:13:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C951221CA01;
-	Thu, 19 Dec 2024 08:26:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="kzMFVmRV"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B1E99217701;
+	Thu, 19 Dec 2024 09:13:32 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from relay3-d.mail.gandi.net (relay3-d.mail.gandi.net [217.70.183.195])
+Received: from SHSQR01.spreadtrum.com (unknown [222.66.158.135])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACC0A218ADB
-	for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 08:26:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5683C149DF4;
+	Thu, 19 Dec 2024 09:13:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=222.66.158.135
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734596786; cv=none; b=RRRjdx1N3U+uh/Q3ZDkDPEeOqv6gXe5raCrGJKaQtH4plooPnmtesULi2D8DmMnS037/g5MNyLZpjrAcxY8BZeCz9jpsusY2s2OIZD4psbD+4DLdOZn1voUYDm2kNc7de7PNaS47kDm6bpwJ44AfxNtPd1IYxSDc4Oatns9ootg=
+	t=1734599612; cv=none; b=eslypUGeO5SZjc3al70CQqAfaE/OM1dF3J/zapilNMyjG672e6UNjkAS2eO64nsHGMZR3qxuw3/5MerGBW3C5/1ZX0XR1BibDiHQVnV4IECc3nKVIFUSE3M+laPxyQflVJA7JupGfdpvQho4WaVUyYx1NAfTx5nvHXmtDrXb2yY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734596786; c=relaxed/simple;
-	bh=Cl01RPJOttck3gvyGkE5Tpf1jMwwXKE85I7QwAN8JX4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Tp94LUx1xhRb0twaXFkro/QFvwUtbVT1fDvh3Pd/2Qcs0DGQycm3ClLSqU5KT/Mai2KCCuDqzRGtyJT3DvzRidQy4igUnJ7s0PK/9d8YDlbIZJHXkcG9nmh6wq3wAqpeevtdsC9iVWl5nTbKrl+lfa0M8GGAe/+gRyYoqRZVNP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=kzMFVmRV; arc=none smtp.client-ip=217.70.183.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
-Received: by mail.gandi.net (Postfix) with ESMTPSA id F40B460002;
-	Thu, 19 Dec 2024 08:26:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
-	t=1734596781;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=JftywA7reBjvEdVfRGDtGssvyudTSPbbDpwATH5r7RI=;
-	b=kzMFVmRVkM6XnKX9NgE+qrhzFhaktOTxKHRWUVvzXkdcEc8PRvFRL4zYwKjiNzZAF9hXWs
-	XbS8Bsh6HTmRdPMoCutJwaKCJS+GL49MSeqqerKC67lHdLndwizuV+H4I3tXENq3t5rbCo
-	vs/Yb0FuyYQCBZzzQM/lQZxVUd3xX6U3zttGwkokFsxW6wmd0F1A26h/agQaINpDZhcqJE
-	G4mYTZk2alYrShXKDFycl2t7Dr9yDcMRRK+YwwFVlgC6H8G0aJDTrHxtlyH8jjmW39a5P5
-	d4zo0DhUpW2pNSXVo7lWbCiZAUJUzqwcH5tvPWNfNFcxmHGCyW7kblyytAqOnQ==
-Date: Thu, 19 Dec 2024 09:26:19 +0100
-From: Luca Ceresoli <luca.ceresoli@bootlin.com>
-To: Lucas Stach <l.stach@pengutronix.de>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, linux-pm@vger.kernel.org,
- kernel@pengutronix.de, patchwork-lst@pengutronix.de, Peng Fan
- <peng.fan@nxp.com>, =?UTF-8?Q?Herv=C3=A9?= Codina
- <herve.codina@bootlin.com>
-Subject: Re: [PATCH] pmdomain: core: add dummy release function to genpd
- device
-Message-ID: <20241219092619.18f3fa1c@booty>
-In-Reply-To: <20241218184433.1930532-1-l.stach@pengutronix.de>
-References: <20241218184433.1930532-1-l.stach@pengutronix.de>
-Organization: Bootlin
-X-Mailer: Claws Mail 4.0.0 (GTK+ 3.24.33; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1734599612; c=relaxed/simple;
+	bh=FLyhzf61d1e5xczKgiwad5y57JUj3aNOvMvwhXidjkA=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ubWaN9WmGNtbcGI22IxehU2Wl1TCAECdOvy/HmaTzR8qL6Bj6ugDWw0p7QvcPQd1RmyiUoFzH/VxMh3Pk7KWdHw3Gi8IDgyIyeYtHW1Xd+iKPO1qTlxvI0mQ2hGI5UNlWEe1z6HLsPIRiRY3QizlHQZe6umlgEBTxGf4Qpz3Z0w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com; spf=pass smtp.mailfrom=unisoc.com; arc=none smtp.client-ip=222.66.158.135
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=unisoc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=unisoc.com
+Received: from SHSQR01.spreadtrum.com (localhost [127.0.0.2] (may be forged))
+	by SHSQR01.spreadtrum.com with ESMTP id 4BJ9DNrQ094464;
+	Thu, 19 Dec 2024 17:13:23 +0800 (+08)
+	(envelope-from Xuewen.Yan@unisoc.com)
+Received: from dlp.unisoc.com ([10.29.3.86])
+	by SHSQR01.spreadtrum.com with ESMTP id 4BJ9BKPu084324;
+	Thu, 19 Dec 2024 17:11:20 +0800 (+08)
+	(envelope-from Xuewen.Yan@unisoc.com)
+Received: from SHDLP.spreadtrum.com (bjmbx01.spreadtrum.com [10.0.64.7])
+	by dlp.unisoc.com (SkyGuard) with ESMTPS id 4YDPqf6zzBz2Mjnt5;
+	Thu, 19 Dec 2024 17:09:02 +0800 (CST)
+Received: from BJ10918NBW01.spreadtrum.com (10.0.73.73) by
+ BJMBX01.spreadtrum.com (10.0.64.7) with Microsoft SMTP Server (TLS) id
+ 15.0.1497.23; Thu, 19 Dec 2024 17:11:18 +0800
+From: Xuewen Yan <xuewen.yan@unisoc.com>
+To: <rafael@kernel.org>, <lukasz.luba@arm.com>, <len.brown@intel.com>,
+        <pavel@ucw.cz>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <ke.wang@unisoc.com>, <xuewen.yan94@gmail.com>, <jeson.gao@unisoc.com>,
+        <di.shen@unisoc.com>
+Subject: [PATCH] power: energy_model: Rework the depends on for CONFIG_ENERGY_MODEL
+Date: Thu, 19 Dec 2024 17:11:09 +0800
+Message-ID: <20241219091109.10050-1-xuewen.yan@unisoc.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
-Content-Transfer-Encoding: 7bit
-X-GND-Sasl: luca.ceresoli@bootlin.com
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SHCAS03.spreadtrum.com (10.0.1.207) To
+ BJMBX01.spreadtrum.com (10.0.64.7)
+X-MAIL:SHSQR01.spreadtrum.com 4BJ9BKPu084324
 
-Hello Lucas,
+From: Jeson Gao <jeson.gao@unisoc.com>
 
-On Wed, 18 Dec 2024 19:44:33 +0100
-Lucas Stach <l.stach@pengutronix.de> wrote:
+Now not only CPUs can use energy efficiency models, but GPUs
+can also use. On the other hand, even with only one CPU, we can also
+use energy_model to align control in thermal.
+So remove the dependence of SMP, and add the DEVFREQ.
 
-> The genpd device, which is really only used as a handle to lookup
-> OPP, but not even registered to the device core otherwise and thus
-> lifetime linked to the genpd struct it is contained in, is missing
-> a release function. After b8f7bbd1f4ec ("pmdomain: core: Add
-> missing put_device()") the device will be cleaned up going through
-> the driver core device_release() function, which will warn when no
-> release callback is present for the device. Add a dummy release
-> function to shut up the warning.
-> 
-> Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
+Signed-off-by: Jeson Gao <jeson.gao@unisoc.com>
+---
+ kernel/power/Kconfig | 3 +--
+ 1 file changed, 1 insertion(+), 2 deletions(-)
 
-Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
-
-Thanks for the very quick response!
-
-Luca
-
+diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+index afce8130d8b9..c532aee09e12 100644
+--- a/kernel/power/Kconfig
++++ b/kernel/power/Kconfig
+@@ -361,8 +361,7 @@ config CPU_PM
+ 
+ config ENERGY_MODEL
+ 	bool "Energy Model for devices with DVFS (CPUs, GPUs, etc)"
+-	depends on SMP
+-	depends on CPU_FREQ
++	depends on CPU_FREQ || PM_DEVFREQ
+ 	help
+ 	  Several subsystems (thermal and/or the task scheduler for example)
+ 	  can leverage information about the energy consumed by devices to
 -- 
-Luca Ceresoli, Bootlin
-Embedded Linux and Kernel engineering
-https://bootlin.com
+2.25.1
+
 
