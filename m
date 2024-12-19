@@ -1,80 +1,81 @@
-Return-Path: <linux-pm+bounces-19501-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19502-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DABCE9F7696
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 09:02:45 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC0749F76AC
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 09:05:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48442161374
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 08:02:37 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B53147A77A2
+	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 08:03:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8397216E3E;
-	Thu, 19 Dec 2024 08:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10DB9217F33;
+	Thu, 19 Dec 2024 08:03:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uxrvqhlG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lE542baa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pf1-f178.google.com (mail-pf1-f178.google.com [209.85.210.178])
+Received: from mail-pj1-f43.google.com (mail-pj1-f43.google.com [209.85.216.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DFA3629A5
-	for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 08:02:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AE7121772B
+	for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 08:03:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734595348; cv=none; b=lypoanEbXIRvVVXGpqYt/N39j/GDpctUkfvg0ObGC3gZlbDco4UAtX+4EJTXIJLaCMNGdgQmcvHxpK79xl8zd7u+42z4MXc5r7auGaCcBvmXfEmfc0Ef8V/f6wzL1V53fsv+OEGRLnVqhcP7smkUa66n0/XGdQXJXCsWtzSQJyo=
+	t=1734595413; cv=none; b=hlX13DWIWJVAC6f4cuNRE/N1am/fYDdOk3oQioCXsmjf5BH6+n+eKhtLJZ2LAiSSb4+9iGUUJmt8tZuANRYeDX4p68O7R75J2OwHSfHtWIwCRVqYdvRJVEROqzr8xWpD3ggDKxpKDoGAuxECbxyjCCbnF0IBRTe2+PBm/bHdk5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734595348; c=relaxed/simple;
-	bh=PIQaEH7XnDeoE5i9LsmS5jNHg0gLKNYNvQ6Q+DwhM2I=;
+	s=arc-20240116; t=1734595413; c=relaxed/simple;
+	bh=UJiJoUrfLpwq/NbQZ03B10FmxybeXKUL6QwP8MevoLk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kWbFUVTcsrM83StnzeVkGfAorD8g3gnlg9jnV0Bc0eqWvaJhvLejgsC2uFME5TPzWI9ExiqsTnZnIXZFFZscn2rRLIO/uBr5KzPyjNmtvUxCJH1t0U1vLSN8Ct4n9KR19mI/znS/gFOyyDTyhZ8sDKlK6+h5r6RB7aJ/7jpqe3U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uxrvqhlG; arc=none smtp.client-ip=209.85.210.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=X4EbUiwfpsv+wjLgErhZ3Gi17V+18vq+ab0XhquDnwSogxcs9jfs5Fr9HyktxDe0It7Oqrzg1ZgvE+9Hk/DhSPPCw0NcNS60xtRTwBeW5Jpt1Z0y1x0FHzv0qQr1c4p9AB0wmwNFl1vHwzedt5TLvEtQBPGcQJei9nCrhcp5LSs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lE542baa; arc=none smtp.client-ip=209.85.216.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pf1-f178.google.com with SMTP id d2e1a72fcca58-725ea1e19f0so418210b3a.3
-        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 00:02:25 -0800 (PST)
+Received: by mail-pj1-f43.google.com with SMTP id 98e67ed59e1d1-2eec9b3a1bbso343843a91.3
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 00:03:31 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734595345; x=1735200145; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1734595411; x=1735200211; darn=vger.kernel.org;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date:from:to
          :cc:subject:date:message-id:reply-to;
-        bh=FiIXhUgGXRHUKYompmzT3WtYs6AwRDjwCP4avnbaXXs=;
-        b=uxrvqhlG0IG7sDcA8tyqkf5W26tRgyJaGwe5n/H9HgtbAv8U3xQXlH6vyJhVuopf7z
-         i/vMMYizhIDY4kKMpIBEVxqFd0tfOiijnWYMoH+pXc7OuaHb0nAlWruHBbMhljsfesrC
-         3lrmfxJfI6SUt4uhNAlrR32MO8UEMp9QuGj9jBqxG4XXZnSOD3onEAvCkpIQyMaXj8mH
-         TBQh/1ph6BaHGOn0jh4l2tAjHFrVl0VXVZW+FMVENIL4h9S508n1j9chYGZBa6k/uFB2
-         dGtc/Fj+I53cPfyFkF0q43yMrB21K36OaAaHJ85zoN/Nt1BxXap1H6CQ+GdO2gI4G3V7
-         AwlQ==
+        bh=veA0Huobzzxbz9/R8JSsJ4HAsAbD6I8RRhj1NsnH8C0=;
+        b=lE542baa12T/S2XXDakLJuCqo1OIkyH/aW+Elko4R3fIQTQL1mRm8+5vydfUisdgAq
+         Tjun5K3B0iUpN/N7GmoUUtqy7c3hwI8bmxmjfpfV4QW1TLiQ43pJE4vrlI7HL2GUj6NP
+         fD+h2+o+bgLymYSLpenSc+esAHqtT6laY82+uzUFa9iER2THZS/Ks3I+cpnetKTmezkO
+         WsWvI/h44ynCGyoXqJAnFZ+Lf1s5Vzl8AIrGqbuprpFv9JSO/R7YAMyc7mx6MYlPXz33
+         bribGg1ANW2d8n3jtJ4tUQyAIl/UCwWyvYv2dEru6UiWboHyso+A7ZqNh9jxaJBaUYtk
+         jgbQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734595345; x=1735200145;
+        d=1e100.net; s=20230601; t=1734595411; x=1735200211;
         h=in-reply-to:content-transfer-encoding:content-disposition
          :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=FiIXhUgGXRHUKYompmzT3WtYs6AwRDjwCP4avnbaXXs=;
-        b=TrALIufAX+62FDXuAmRRkO3tLqLX4RuRhBLphzdGv/DDc1Fu4gWS0RhsZbQkx7ygxO
-         g0HUNC4w++o+69kYpkTi7DYlUR7bri06yh5qvRQkV8nL+kG8PWt0uGxWTWSPrf4Y1/Q5
-         C1FAaN3/XiXnejEmFXHDEo0Gvx3WU3YTgtxOd35uNl3Hg6JbNOMcRfUOXlEr3QZwvKBD
-         JI7vZ3+Lpg4ABT6ESV7MkHOMYQ1jw/BVM5WfGy4pNlx78TmyzAfHKoAQjlGIcSlupWfp
-         SdAaaHDdpl1qSxuPPIh22ZF6jIkWY0urdn4k+D+5nVgdiuhkS0Un0RpfY5RqUCiQFWeC
-         xzBA==
-X-Forwarded-Encrypted: i=1; AJvYcCUL20zjb4+6qjtktWQ3xoj52QpMlKCUg0m7L7qhMRakh31MOb2ns9LLijjvPtbMAiBu/p2jbNGB5Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwkrtEyS9Lk381KuGQnYbrefECGgcUzfIoZHvaEnwsSVGngLCeu
-	vEuAC3NMs1OilMlKY/xYV07lOCt6BK6gjzJDZ6xwlf9K+9vQzqgkbbDC649R/w==
-X-Gm-Gg: ASbGnctPeE7ekNCqzhXhD1L4reYHUFaUS6cII1s8dVtT6JVH9x6x4nzEahYXeWDvn1S
-	CaOoHot72BNfF2HpE28IjeHvPxn2byO8sGs+MRZlryWljQ2ouF8D+7zmFIb0eEMxdq9cWdALqWc
-	/Fell5sQJsdkYl8Dc+W3rX+Wz8A07uAhX+JUlPLUuZEnYWfY61/sEIz5KYLrBWMrEBh+F7b5oiW
-	nOaBX2GFUyVkf635J3szR+V7tuFgYa3/CCgKX9mjHd0hTBDUpkROMxrO+XP59z9jZMs
-X-Google-Smtp-Source: AGHT+IFll0irdbwM+RUdhMNn+L6WxoWJUa0AF8tiMBuXb8vjLzgtKTa5XtyI18qRm8PKkIbtuUs9zg==
-X-Received: by 2002:a05:6a20:6a25:b0:1e1:afa9:d38a with SMTP id adf61e73a8af0-1e5c74f2fafmr4032467637.1.1734595345080;
-        Thu, 19 Dec 2024 00:02:25 -0800 (PST)
+        bh=veA0Huobzzxbz9/R8JSsJ4HAsAbD6I8RRhj1NsnH8C0=;
+        b=dqUfLeAXrUzVi7x0Zs4OQnmbf8uvp35ZXPviSxpHJhngOqp+yOXO2iuCNJBFbwOTos
+         tXgGR5WtWtJ1vlTlFM1aof+k6IQ3D/c/gFoUXPYUEUuYuwmXMegLXvKax8d+2pT+IamX
+         c978o6YZdWw1+TUr3zPAmEw+1fivQXtRu+BXi+wxY3AcG5Lv1uCS3aNn/Fpn7gjj0K1t
+         x6mspsPBIzI400V8FSaJChzFyiQwPU3fWMn7m7slpFI4qddPLWb4QHuPjEabi8l/v7cU
+         Jlr8IIo/IhKptbOIpteGAWhbKfTMs8O/gmwFUOy9ch2gEuRfKEurA5t6rDJEy6Qdc5oR
+         0TSg==
+X-Forwarded-Encrypted: i=1; AJvYcCXuG0u82yJcmIAz8RTm95DJ0L0xctE9Yc1fxBA4NIyRIHeQwhRqZfRX/srIgKRJPZDfCwVPf6HHbA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzSrxlqBoRX7vELG/CTgo0J1f8VRwOJf8rOyaB3XW4pksD7AvUT
+	bnnLCk/5qoRn3497KKveis+Nt12a+DfN3QGrAQ08jUeO0BfBSAWOK9YT8qxHRQ==
+X-Gm-Gg: ASbGncu6JvubyDYvpfWSCIIO45uiIPQ/+grxyjMnjzMZX+SvVjgP3+5hXXcgTfM8qON
+	juJHk0rjU9aMTSOc46srf8K9TMTAcpASUM1wEIHgfsE9gMluZ6GUuMpDdJqMsL8YRhfSQz9IU/3
+	/lhBv6QnHDs7ZfbnwspUnUVFkurN1HZgnogJjeohZxVEq5UNmVp+S1rBNqaJyV6Q+uiAhiJignb
+	UbpSMqINNVgiWRNCFZWc0c+ouf7l9mbMxqXbcZJUmxOHzPTgIZ9P2JuTXgAsGr5r7Y6
+X-Google-Smtp-Source: AGHT+IGkAKRKIGy2PWGUpJtb9ofOGf4tb9aPaoih3oeJ6FkCxuJrXISiTP6H5Og+dCW667T6Nacl4g==
+X-Received: by 2002:a17:90b:524a:b0:2ee:d35c:39ab with SMTP id 98e67ed59e1d1-2f443d0189emr2977479a91.22.1734595410812;
+        Thu, 19 Dec 2024 00:03:30 -0800 (PST)
 Received: from thinkpad ([117.213.97.217])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842b1ce01d3sm627161a12.23.2024.12.19.00.02.20
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f2ed62cde6sm2963410a91.13.2024.12.19.00.03.26
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 19 Dec 2024 00:02:24 -0800 (PST)
-Date: Thu, 19 Dec 2024 13:32:17 +0530
+        Thu, 19 Dec 2024 00:03:30 -0800 (PST)
+Date: Thu, 19 Dec 2024 13:33:22 +0530
 From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Christoph Hellwig <hch@lst.de>, Ulf Hansson <ulf.hansson@linaro.org>,
+To: Christoph Hellwig <hch@lst.de>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
 	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
 	Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org,
 	axboe@kernel.dk, sagi@grimberg.me, linux-nvme@lists.infradead.org,
@@ -83,17 +84,17 @@ Cc: Christoph Hellwig <hch@lst.de>, Ulf Hansson <ulf.hansson@linaro.org>,
 	Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
 Subject: Re: [PATCH] nvme-pci: Shutdown the device if D3Cold is allowed by
  the user
-Message-ID: <20241219080217.fr2ukr7sk4a7hfmo@thinkpad>
-References: <20241212151354.GA7708@lst.de>
+Message-ID: <20241219080322.gskydm7mg6srhv3p@thinkpad>
+References: <13662231.uLZWGnKmhe@rjwysocki.net>
+ <CAPDyKFrxEjHFB6B2r7JbryYY6=E4CxX_xTmLDqO6+26E+ULz6A@mail.gmail.com>
+ <20241212151354.GA7708@lst.de>
  <CAJZ5v0gUpDw_NjTDtHGCUnKK0C+x0nrW6mP0tHQoXsgwR2RH8g@mail.gmail.com>
  <20241214063023.4tdvjbqd2lrylb7o@thinkpad>
  <CAJZ5v0gLMx+tBo+MA3AQZ7qP28Z91d04oVBHVeTNcd-QD=kJZg@mail.gmail.com>
  <20241216171108.6ssulem3276rkycb@thinkpad>
  <CAJZ5v0j+4xjSOOy8TYE0pBuqd_GdQa683Qq0GEyJ9WAFad9Z=A@mail.gmail.com>
  <20241216175210.mnc5kp6646sq7vzm@thinkpad>
- <CAJZ5v0grRdTYaamSnKSF-HyMmCHDEZ4haLo+ziSBxhDg1PbjRQ@mail.gmail.com>
- <20241217052632.lbncjto5xibdkc4c@thinkpad>
- <CAJZ5v0gjrBUgejwBz1vv6P83oZiYu8AuDMs47ZAFJoNhMaMdpQ@mail.gmail.com>
+ <20241219063052.GA20003@lst.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -103,219 +104,21 @@ MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0gjrBUgejwBz1vv6P83oZiYu8AuDMs47ZAFJoNhMaMdpQ@mail.gmail.com>
+In-Reply-To: <20241219063052.GA20003@lst.de>
 
-On Tue, Dec 17, 2024 at 08:45:55PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Dec 17, 2024 at 6:26 AM <manivannan.sadhasivam@linaro.org> wrote:
-> >
-> > On Mon, Dec 16, 2024 at 08:34:24PM +0100, Rafael J. Wysocki wrote:
-> >
-> > [...]
-> >
-> > > > There is also a case where some devices like
-> > > > (Laptops made out of Qcom SCX Gen3 SoCs) require all the PCIe devices to be
-> > > > powered down in order for the SoC to reach its low power state (CX power
-> > > > collapse in Qcom terms). If not, the SoC would continue to draw more power
-> > > > leading to battery draining quickly. This platform is supported in upstream and
-> > > > we keep the PCIe interconnect voted during suspend as the NVMe driver is
-> > > > expecting the device to retain its state during resume. Because of this
-> > > > requirement, this platform is not reaching SoC level low power state with
-> > > > upstream kernel.
-> > >
-> > > OK, now all of this makes sense and that's why you really want NVMe
-> > > devices to end up in some form of PCI D3 in suspend-to-idle.
-> > >
-> > > Would D3hot be sufficient for this platform or does it need to be
-> > > D3cold?  If the latter, what exactly is the method by which they are
-> > > put into D3cold?
-> > >
-> >
-> > D3Cold is what preferred. Earlier the controller driver used to transition the
-> > device into D3Cold by sending PME_Turn_Off, turning off refclk, regulators
-> > etc... Now we have a new framework called 'pwrctrl' that handles the
-> > clock/regulators supplied to the device. So both controller and pwrctrl drivers
-> > need to work in a tandem to put the device into D3Cold.
-> >
-> > Once the PCIe client driver (NVMe in this case) powers down the device, then
-> > controller/pwrctrl drivers will check the PCIe device state and transition the
-> > device into D3Cold. This is a TODO btw.
-> >
-> > But right now there is no generic D3Cold handling available for DT platforms. I
-> > am hoping to fix that too once this NVMe issue is handled.
+On Thu, Dec 19, 2024 at 07:30:52AM +0100, Christoph Hellwig wrote:
+> On Mon, Dec 16, 2024 at 11:22:10PM +0530, Manivannan Sadhasivam wrote:
+> > > So what technically is the problem?
+> > > 
+> > 
+> > NVMe wear out is the problem.
 > 
-> There's no generic D3cold handling for PCIe devices at all AFAICS.  At
-> least, I'm not aware of any standard way to do it.  Yes, there are
-> vendor-specific conventions that may even be followed by multiple
-> vendors, but not much beyond that.
+> Btw, it's not just the PE cycles, it's also the sheer time a clean
+> shutdown can take (or the time for an unclean enable if we don't wait
+> long enough).
 > 
 
-Yeah, right. Atleast ACPI has its own way of handling D3Cold and that's what I
-meant. There is no such option available for DT right now. I was shoping that
-once this NVMe issue is resolved, then I could look into D3Cold for DT
-platforms.
-
-> > > > > > > > If the platform is using DT, then there is no entity setting
-> > > > > > > > pm_set_suspend_via_firmware().
-> > > > > > >
-> > > > > > > That's true and so the assumption is that in this case the handling of
-> > > > > > > all devices will always be the same regardless of which flavor of
-> > > > > > > system suspend is chosen by user space.
-> > > > > > >
-> > > > > >
-> > > > > > Right and that's why the above concern is raised.
-> > > > >
-> > > > > And it is still unclear to me what the problem with it is.
-> > > > >
-> > > > > What exactly can go wrong?
-> > > > >
-> > > > > > > > So NVMe will be kept in low power state all the
-> > > > > > > > time (still draining the battery).
-> > > > > > >
-> > > > > > > So what would be the problem with powering it down unconditionally?
-> > > > > > >
-> > > > > >
-> > > > > > I'm not sure how would you do that (by checking dev_of_node()?). Even so, it
-> > > > > > will wear out the NVMe devices if used in Android tablets etc...
-> > > > >
-> > > > > I understand the wear-out concern.
-> > > > >
-> > > > > Is there anything else?
-> > > > >
-> > > >
-> > > > No, that's the only concern.
-> > >
-> > > OK
-> > >
-> > > I think we're getting to the bottom of the issue.
-> > >
-> > > First off, there really is no requirement to avoid putting PCI devices
-> > > into D3hot or D3cold during suspend-to-idle.  On all modern Intel
-> > > platforms, PCIe devices are put into D3(hot or cold) during
-> > > suspend-to-idle and I don't see why this should be any different on
-> > > platforms from any other vendors.
-> > >
-> > > The NVMe driver is an exception and it avoids D3(hot or cold) during
-> > > suspend-to-idle because of problems with some hardware or platforms.
-> > > It might in principle allow devices to go into D3(hot or cold) during
-> > > suspend-to-idle, so long as it knows that this is going to work.
-> > >
-> >
-> > Slight correction here.
-> >
-> > NVMe driver avoids PCI PM _only_ when it wants to handle the NVMe power
-> > state on its own, not all the time. It has some checks [1] in the suspend path
-> > and if the platform/device passes one of the checks, it will power down the
-> > device.
-> 
-> Yes, there is a comment in that code explaining what's going on and
-> that is basically "if key ingredients are missing or the firmware is
-> going to do its thing anyway, don't bother".
-> 
-> > DT platforms doesn't pass any of the checks, so the NVMe driver always manages
-> > the power state on its own. Unfortunately, the resultant power saving is not
-> > enough, so the vendors (Laptop/Automotive) using DT want NVMe to be powered down
-> > all the time. This is the first problem we are trying to solve.
-> >
-> > [1] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/drivers/nvme/host/pci.c#n3448
-> 
-> I see.
-> 
-> This cannot be done by the driver itself, though, at least not in
-> general.  The PCI layer needs to be involved and, if we are talking
-> about D3cold, the platform firmware needs to be involved either.
-> 
-
-Right, but the device driver needs to have some idea about what state PCI core
-is going to choose for the device. I believe that's the purpose of
-pci_choose_state() API. More below...
-
-> As a rule, the PCI layer reaches out to the platform firmware for help
-> as needed and drivers don't take part in this directly.
-> 
-> The NVMe driver would need to let the PCI layer take over and set the
-> PCI power state of the device if it wanted to get any deeper than NVMe
-> protocol specific power states.
-> 
-> In principle, this can be addressed with some kind of a driver opt-in.
-> That is, the NVMe driver would continue to work the way it does, but
-> instead of completely preventing the PCI layer from taking over, it
-> would opt in (the exact opt-in mechanism is TBD) for D3cold if (a) the
-> platform firmware provides a mechanism to do so and (b) the DT
-> indicates that this mechanism should be used for the given device.
-> 
-
-Ok, IIUC you are talking about something like this?
-
-	static int nvme_suspend(struct device *dev)
-	{
-		...
-
-		if (pm_suspend_via_firmware() || !ctrl->npss || ... ||
-		    pci_choose_state(pdev, PMSG_SUSPEND) == PCI_D3cold)
-			return nvme_disable_prepare_reset(ndev, true);
-
-		/* continue using protocol specific low power state */
-
-		...
-	}
-
-Here, pci_choose_state() should tell the driver if the device should enter
-D3Cold. ACPI already supports this API, now I need to add DT support (which is
-not straightforward, but doable). Since this API is already exported, I think it
-makes perfect sense to use it here (and other drivers for similar usecase).
-
-> > > However, there is an additional concern that putting an NVMe device
-> > > into D3cold every time during system suspend on Android might cause it
-> > > to wear out more quickly.
-> > >
-> >
-> > Right, this is the second problem.
-> 
-> Let's set this one somewhat aside for now.  We'll get back to it when
-> we have clarity in the above.
-> 
-
-Ok. I believe this could be addressed in pci_choose_state() itself if required.
-
-> > > Is there anything else?
-> >
-> > We also need to consider the fact that the firmware in some platforms doesn't
-> > support S2R. So we cannot take a decision based on S2I/S2R alone.
-> 
-> Right, the S2I/S2R thing is ACPI-specific.
-> 
-> On platforms using ACPI, pm_suspend_via_firmware() means that the
-> firmware is at least likely to power down the whole platform, so the
-> PCI layer may as well be allowed to do what it wants with the device.
-> 
-> > I think there are atleast a couple of ways to solve above mentioned problems:
-> >
-> > 1. Go extra mile, take account of all issues/limitations mentioned above and
-> > come up with an API. This API will provide a sane default suspend behavior to
-> > drivers (fixing first problem) and will also allow changing the behavior
-> > dynamically (to fix the second problem where kernel cannot distinguish Android
-> > vs other OS).
-> 
-> I don't quite follow TBH.
-> 
-> A "default suspend behavior" is there already and it is to allow the
-> PCI layer to set the device's power state (in collaboration with the
-> platform firmware).  Thing is, the NVMe driver doesn't always want to
-> rely on it.
-> 
-> > 2. Allow DT platforms to call pm_set_suspend_via_firmware() and make use of the
-> > existing behavior in the NVMe driver. This would only solve the first problem
-> > though. But would be a good start.
-> 
-> That would mean just letting the PCI layer always take over on the
-> platforms that would call pm_set_suspend_via_firmware().
-> 
-> There is a potential issue with doing it, which is that everybody
-> calling pm_suspend_via_firmware() would then assume that the platform
-> would be powered down by the firmware.  I'm not sure how much of an
-> issue that would be in practice, though.
-
-Yeah, that would be a concern.
+I do agree with you!
 
 - Mani
 
