@@ -1,53 +1,54 @@
-Return-Path: <linux-pm+bounces-19613-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19614-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 054A29F9D20
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2024 00:41:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F8F19F9D24
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2024 00:41:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 14CC518927A0
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 23:41:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B98516B7BE
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 23:41:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DFF88227B8E;
-	Fri, 20 Dec 2024 23:41:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 105BA2288DA;
+	Fri, 20 Dec 2024 23:41:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="h6A/XROA"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="g3N7hoIn"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0256F2253EE;
-	Fri, 20 Dec 2024 23:41:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78D2F2236FF;
+	Fri, 20 Dec 2024 23:41:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734738071; cv=none; b=scidBKcAYhaQQT7gOQG1oZMwiAIsnkG8HwFv+CvmnC64k9LMDx0NLZerhtdhTJoksZKSLdvxBa8mxUraOWAzam+qozJ7AF2IIhenuUDJjDLLTSbjz/HDmIUUSg4ZITh0PBII0ZWfsuo0VZTFP+R26JSxkaM25z34D91gE0Gh3UA=
+	t=1734738072; cv=none; b=M3alveZ6obhMOqyCC9hiHm7Uu/0i0D/PUz92fSrJ3zxXCg5dCVNUOn7YWRkktU2+az0ui7qs/dz91V/0jhVWjfl6S3/psMh664xWQPRfTiY8c19p1sXOcOgL7Nq0VQ+Dycz53fEUhez0XUBl/Pn7XmD1Cv2hASCEzCOlEcT0BB4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734738071; c=relaxed/simple;
-	bh=sCXu2gmOdDmbBFG2lCJY1mdmHIob9H6tgLAI1ct5784=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=OjyP11OMfIytwW0z3lvFpmNiF1fnwjYx8qXheWN+6dbXaQyzMOObu7Ck1l39KtZUchPNkwOSZtcicPw72LwJtxK3gh/82oHaK633zoXvvC59y/Dz9MOGOIJezbwz6jgTnITNQnv9ibWD3rvB9LbtTukFBwaG7KA8q/JHPI5QBxw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=h6A/XROA; arc=none smtp.client-ip=5.75.144.95
+	s=arc-20240116; t=1734738072; c=relaxed/simple;
+	bh=Gkb8/KuT2/ey2XlnmvLYtTnKiL7D7tYacDyqH0ik4tk=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=LIY39YSV2HH16EjKOVmrgfbmCJ6YNVs8doj4sS6fXv+wlPzsTwX4kB4VniTmTz11COVKn+4Iq5G/KagO5/yXF/ysmVnD7L78f0YsMAJ3he72JADyupz9XRw+UereGYd4HFYLc47REw755gat2VD5Hf9tOhQ4L1Fwesi1Wfm4nSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=g3N7hoIn; arc=none smtp.client-ip=5.75.144.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Received: from [192.168.30.162] (254C14D2.nat.pool.telekom.hu [37.76.20.210])
-	by mail.mainlining.org (Postfix) with ESMTPSA id ECF22E450C;
-	Fri, 20 Dec 2024 23:41:04 +0000 (UTC)
+	by mail.mainlining.org (Postfix) with ESMTPSA id 23A4CE4838;
+	Fri, 20 Dec 2024 23:41:07 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1734738066;
+	s=psm; t=1734738068;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=ppnPh7QXZxj5t1x0IJTETaaoJaoVwNkQB1J6Xh3LMLA=;
-	b=h6A/XROApXQH93eEbOYiw3GxRCkH9rNMLv8bK4++Z5kuMsKX6UPoq99CWH3X+dyveaTL41
-	K2v7fVf+o8pcLqRQ9xR+I94YtAZ+hTSU3k6VPxCQosFRS8ZVyAw1i27tG3onRwdK8PTrcU
-	H+F7rcn9u+T51h1S1vBcgEaXo3reWiCSWYGHNQJVnjxq9Upo2HI/TVSzvGCoPe4qgemyTr
-	VZsX2GDG4Vised+UdNCuIm04bMeMvJKSA8QQg19MKA4+TzZZ672Z8y4TvThnqHuNmXk/vA
-	ptpgYE2u2raHA1196VftZBbrfUlB8EaVchZYJER3oOMjkKjK9RgO9pa/PM5mPQ==
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=XTEzrWIojNicg5b3ndDyKHaaVkaDSYELJmjR/meFdL4=;
+	b=g3N7hoInsPxrt75qTxjWwv7VNcvg1/T2ORlXdARhX/ul1O62cIQgzlv9bkHreoBIq8xC4j
+	pGg4U3h0eB+O3TdDn1p5XT3Ukk3GJ6yVG+opXn7QzxUdFK//KFMoH5kodXJp+MFeyoztR1
+	6OiSReBfVgHEvmluSrWDVB3Qhpp9KaRTPZn81q1nqgb3F/v/V94ZxHmokEkaRlntDFg2Dc
+	pyET/0mTdzzyRPsrhl6PEOj8gXKm6n1r4W3d5NVoNaWsamlO1SfkY5+bU+HG4oFw9t7vwG
+	X7u4m0Zo5te3ciIxykk6G/IzdNzMkGKHjw21162kvdSnJ5aRrGAj6q4NrlLjNA==
 From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
-Subject: [PATCH v11 0/4] Add MSM8917/PM8937/Redmi 5A
-Date: Sat, 21 Dec 2024 00:40:47 +0100
-Message-Id: <20241221-msm8917-v11-0-901a74db4805@mainlining.org>
+Date: Sat, 21 Dec 2024 00:40:48 +0100
+Subject: [PATCH v11 1/4] arm64: dts: qcom: Add PM8937 PMIC
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,13 +57,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAH8AZmcC/3XSzW7DIAwA4FepOC8TtiHATnuPaQeHnxZpTatki
- jZVffeRXkAqO9ri85+4iTUuOa7i7XATS9zymi9zCQBeDsKfeD7GIYeSEChRgQQ3nNezdWAGMJ6
- CTEmxRlFeX5eY8s+j1MdniU95/b4sv4/KG+zZ5xobDHJIkMgzBGujfj9znr/ynOfj62U5ir3Qh
- g0mqBgLtiyNTszWTdDFVDFIUzEVPIbgNfvgjJ26WLW4GVvtnafonFTGIfexbjBgxbrgsjCpQAQ
- O+nhsMVU8FuxJ2TRp51JMXWwajKpis+8MaNBZUqMeu9hWjNBc2xYMzrD3UqGkPnYt1hW7gif2z
- Dgmiv+MDbLRKJtfIveTBW1IReuJn3vf7/c/QL8kSssCAAA=
-X-Change-ID: 20241019-msm8917-17c3d0ff4a52
+Message-Id: <20241221-msm8917-v11-1-901a74db4805@mainlining.org>
+References: <20241221-msm8917-v11-0-901a74db4805@mainlining.org>
+In-Reply-To: <20241221-msm8917-v11-0-901a74db4805@mainlining.org>
 To: Bjorn Andersson <andersson@kernel.org>, 
  Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
  Krzysztof Kozlowski <krzk+dt@kernel.org>, 
@@ -79,117 +76,188 @@ Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
  =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
  Dang Huynh <danct12@riseup.net>, 
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
- Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
- Stephan Gerhold <stephan.gerhold@linaro.org>, 
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734738064; l=3702;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734738064; l=4019;
  i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
- bh=sCXu2gmOdDmbBFG2lCJY1mdmHIob9H6tgLAI1ct5784=;
- b=QCWVBYLdt3QvrsE5+KfOkicwOiW0qnMskDZ0SiAZ2/8EcVKyDkMh4BnJydOaWPqobK7F/tbeH
- 3G9875JKZfZCSgJAgq41T3ZucCKBt8rM9uqjfiJrJQ8kw8yb7klMZ5S
+ bh=9NnPuFhsH6Kz3BJW3UjnLFlUU4jRHYGk2eJlaqLX+Y0=;
+ b=BcV56QqR7/iVYK7w/aMLoIPUZKPEXwNJqaOuSLfc2swvix7mF/q2zoXRrZYOLV97AohAMP0Ff
+ I++gZd1VPY6Dpb+BlJZSVV8AtuTOGRxXdGS/vG7/c+d864X1K7AlczO
 X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
  pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
-This patch series add support for MSM8917 soc with PM8937 and
-Xiaomi Redmi 5A (riva).
+From: Dang Huynh <danct12@riseup.net>
 
+The PM8937 features integrated peripherals like ADC, GPIO controller,
+MPPs, PON keys and others.
+
+Add the device tree so that any boards with this PMIC can use it.
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Signed-off-by: Dang Huynh <danct12@riseup.net>
 Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
 ---
-Changes in v11:
-- msm8917:
-  - pll_opp_table: fix indentation
-  - gpu_opp_table: change to ascending order
-- Remove applied patches.
-- Link to v10: https://lore.kernel.org/r/20241220-msm8917-v10-0-3d5734e8c3a6@mainlining.org
+ arch/arm64/boot/dts/qcom/pm8937.dtsi | 150 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 150 insertions(+)
 
-Changes in v10:
-- msm8917: sdc1 cmd_on, cmd_off change bias-disable to bias-pull-up
-- Remove applied patches.
-- Link to v9: https://lore.kernel.org/r/20241215-msm8917-v9-0-bacaa26f3eef@mainlining.org
+diff --git a/arch/arm64/boot/dts/qcom/pm8937.dtsi b/arch/arm64/boot/dts/qcom/pm8937.dtsi
+new file mode 100644
+index 0000000000000000000000000000000000000000..42b3575b36ff4d37df11ccb5ed68e965e3716300
+--- /dev/null
++++ b/arch/arm64/boot/dts/qcom/pm8937.dtsi
+@@ -0,0 +1,150 @@
++// SPDX-License-Identifier: BSD-3-Clause
++/*
++ * Copyright (c) 2023, Dang Huynh <danct12@riseup.net>
++ */
++
++#include <dt-bindings/iio/qcom,spmi-vadc.h>
++#include <dt-bindings/input/linux-event-codes.h>
++#include <dt-bindings/spmi/spmi.h>
++
++/ {
++	thermal-zones {
++		pm8937-thermal {
++			polling-delay-passive = <0>;
++			polling-delay = <0>;
++			thermal-sensors = <&pm8937_temp>;
++
++			trips {
++				trip0 {
++					temperature = <105000>;
++					hysteresis = <0>;
++					type = "passive";
++				};
++
++				trip1 {
++					temperature = <125000>;
++					hysteresis = <0>;
++					type = "hot";
++				};
++
++				trip2 {
++					temperature = <145000>;
++					hysteresis = <0>;
++					type = "critical";
++				};
++			};
++		};
++	};
++};
++
++&spmi_bus {
++	pmic@0 {
++		compatible = "qcom,pm8937", "qcom,spmi-pmic";
++		reg = <0x0 SPMI_USID>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		pon@800 {
++			compatible = "qcom,pm8916-pon";
++			reg = <0x800>;
++			mode-bootloader = <0x2>;
++			mode-recovery = <0x1>;
++
++			pm8937_pwrkey: pwrkey {
++				compatible = "qcom,pm8941-pwrkey";
++				interrupts = <0 0x8 0 IRQ_TYPE_EDGE_BOTH>;
++				debounce = <15625>;
++				bias-pull-up;
++				linux,code = <KEY_POWER>;
++			};
++
++			pm8937_resin: resin {
++				compatible = "qcom,pm8941-resin";
++				interrupts = <0 0x8 1 IRQ_TYPE_EDGE_BOTH>;
++				debounce = <15625>;
++				bias-pull-up;
++				status = "disabled";
++			};
++		};
++
++		pm8937_gpios: gpio@c000 {
++			compatible = "qcom,pm8937-gpio", "qcom,spmi-gpio";
++			reg = <0xc000>;
++			gpio-controller;
++			gpio-ranges = <&pm8937_gpios 0 0 8>;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		pm8937_mpps: mpps@a000 {
++			compatible = "qcom,pm8937-mpp", "qcom,spmi-mpp";
++			reg = <0xa000>;
++			gpio-controller;
++			gpio-ranges = <&pm8937_mpps 0 0 4>;
++			#gpio-cells = <2>;
++			interrupt-controller;
++			#interrupt-cells = <2>;
++		};
++
++		pm8937_temp: temp-alarm@2400 {
++			compatible = "qcom,spmi-temp-alarm";
++			reg = <0x2400>;
++			interrupts = <0 0x24 0 IRQ_TYPE_EDGE_RISING>;
++			io-channels = <&pm8937_vadc VADC_DIE_TEMP>;
++			io-channel-names = "thermal";
++			#thermal-sensor-cells = <0>;
++		};
++
++		pm8937_vadc: adc@3100 {
++			compatible = "qcom,spmi-vadc";
++			reg = <0x3100>;
++			interrupts = <0 0x31 0 IRQ_TYPE_EDGE_RISING>;
++			#address-cells = <1>;
++			#size-cells = <0>;
++			#io-channel-cells = <1>;
++
++			channel@8 {
++				reg = <VADC_DIE_TEMP>;
++			};
++
++			channel@9 {
++				reg = <VADC_REF_625MV>;
++			};
++
++			channel@a {
++				reg = <VADC_REF_1250MV>;
++			};
++
++			channel@c {
++				reg = <VADC_SPARE1>;
++			};
++
++			channel@e {
++				reg = <VADC_GND_REF>;
++			};
++
++			channel@f {
++				reg = <VADC_VDD_VADC>;
++			};
++		};
++
++		rtc@6000 {
++			compatible = "qcom,pm8941-rtc";
++			reg = <0x6000>, <0x6100>;
++			reg-names = "rtc", "alarm";
++			interrupts = <0x0 0x61 0x1 IRQ_TYPE_EDGE_RISING>;
++		};
++	};
++
++	pmic@1 {
++		compatible = "qcom,pm8937", "qcom,spmi-pmic";
++		reg = <0x1 SPMI_USID>;
++		#address-cells = <1>;
++		#size-cells = <0>;
++
++		pm8937_spmi_regulators: regulators {
++			compatible = "qcom,pm8937-regulators";
++		};
++	};
++};
 
-Changes in v9:
-- msm8917:
- - add some empty lines for separating pins more
- - order compatible, reg, ranges properties
-- Link to v8: https://lore.kernel.org/r/20241211-msm8917-v8-0-197acc042036@mainlining.org
-
-Changes in v8:
-- pm8937, msm8917, msm8917-xiaomi-riva: remove unused includes
-- Link to v7: https://lore.kernel.org/r/20241124-msm8917-v7-0-612729834656@mainlining.org
-
-Changes in v7:
-- msm8917-xiaomi-riva:
-  - Add pinctrls for used GPIO pins.
-  - Use interrupts-extend for charger.
-  - Order properies.
-- Link to v6: https://lore.kernel.org/r/20241113-msm8917-v6-0-c348fb599fef@mainlining.org
-
-Changes in v6:
-- msm8917:
-  - Consolidate SDC pins, remove sdc2-cd-on/off pins.
-  - Remove cluster-sleep-0 and cluster-sleep-1
-  and rename cluster-sleep-2 to cluster-sleep-0.
-  - Fix spi, i2c and related pinctrl namings.
-- msm8917-xiaomi-riva: follow i2c name changes.
-- Link to v5: https://lore.kernel.org/r/20241112-msm8917-v5-0-3ca34d33191b@mainlining.org
-
-Changes in v5:
-- msm8917:
-  - Remove aliases.
-  - Rename spi, i2c labels and pins.
-  - Remove clock-frequency from timers
-  - Remove unused mpss_mem region.
-  - Use mboxes where it can be used, only smd-edge uses qcom,ipc.
-- msm8917-xiaomi-riva: Follow i2c label changes.
-- Link to v4: https://lore.kernel.org/r/20241109-msm8917-v4-0-8be9904792ab@mainlining.org
-
-Changes in v4:
-- msm8917 pinctrl: Fix gpio regexp in the schema.
-- msm8937 tsens: Rename ops_msm8976 to ops_common and use it for msm8937.
-- msm8917: fix address padding, naming and ordering, remove polling-delays.
-- Remove applied patches from the series.
-- Link to v3: https://lore.kernel.org/r/20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org
-
-Changes in v3:
-- msm8917-xiaomi-riva: Fix issues addressed by Konrad.
-- msm8917: Fix node addresses, orders of some properties.
-- pm8937: simplify vadc channels.
-- msm8917 pinctrl: Fix schema issues addressed by Krzysztof. 
-- Remove applied tcsr patch from this series.
-- Reword some commit title.
-- Link to v2: https://lore.kernel.org/r/20241031-msm8917-v2-0-8a075faa89b1@mainlining.org
-
-Changes in v2:
-- Add msm8937 tsens support.
-- Fix issues addressed by reviews.
-- Link to v1: https://lore.kernel.org/r/20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org
-
----
-Barnabás Czémán (2):
-      dt-bindings: arm: qcom: Add Xiaomi Redmi 5A
-      arm64: dts: qcom: Add Xiaomi Redmi 5A
-
-Dang Huynh (1):
-      arm64: dts: qcom: Add PM8937 PMIC
-
-Otto Pflüger (1):
-      arm64: dts: qcom: Add initial support for MSM8917
-
- Documentation/devicetree/bindings/arm/qcom.yaml  |    7 +
- arch/arm64/boot/dts/qcom/Makefile                |    1 +
- arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts |  333 ++++
- arch/arm64/boot/dts/qcom/msm8917.dtsi            | 1954 ++++++++++++++++++++++
- arch/arm64/boot/dts/qcom/pm8937.dtsi             |  150 ++
- 5 files changed, 2445 insertions(+)
----
-base-commit: 8503810115fbff903f626adc0788daa048302bc0
-change-id: 20241019-msm8917-17c3d0ff4a52
-
-Best regards,
 -- 
-Barnabás Czémán <barnabas.czeman@mainlining.org>
+2.47.1
 
 
