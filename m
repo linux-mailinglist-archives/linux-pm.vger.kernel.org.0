@@ -1,89 +1,90 @@
-Return-Path: <linux-pm+bounces-19584-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19586-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B1259F96DB
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 17:49:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EA0C9F975B
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 18:06:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FE271883833
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 16:48:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15AE416BC29
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 17:05:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 57283219A63;
-	Fri, 20 Dec 2024 16:48:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C18921C9E8;
+	Fri, 20 Dec 2024 17:00:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sFYDjqS5"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Mwwe/O2z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0C21C4A1C
-	for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 16:48:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C19212206B9
+	for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 17:00:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734713312; cv=none; b=Ua5TfPq7kOqPnZ1UQarFC5hu3cnpluj9HL86eFfnIF5UILVS1jHiSc7tu3jmWi8g96mFbqfgufUEy/g1aUz0vNQKM10J+ceenQINgIuHZy0E30sVy+TDFe0IC1TudSOw7UomxhySaQxu02FBeYa/lLpI61+2LJHCEf46ZDcwRzk=
+	t=1734714039; cv=none; b=aEwHw5GaRDFRmo3NdRMFbyE2L/nyHAWr/E5nQNnxECfWt7py9AGm32+CyBbte6Gf3hlIzfH1S1Zfn172NTtqo2oBd/QqR4JnMaw9SWyLJ6Mvo/VvrtaGh4rdNM8pA2aj/iQhCgKuIRxtMHVnWPVIV5naRENHSzOq6/gDQvq+zL0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734713312; c=relaxed/simple;
-	bh=+uqR5hchscqr6YR4+njrT8B11FtlYQSdI9WQuKB/H08=;
+	s=arc-20240116; t=1734714039; c=relaxed/simple;
+	bh=IDIsEwpQxky8+42CT/WRnqpHWTdUYjOv/TDVr+kY0fw=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=renfBiKEWnrnrkyJqOpErCO1D3x9O+WwA4ayMsLcYrr1asEE8RHuH4vuKrd00v4KazScuoVUQ9/PiPCTAxOX9j00SOTvkyelPsksS8YY4P/td/nD5Sw7D3ZhXmbnzRHsilTGRtT1gDg7QuKdXZl6LIjR4XeMwYs1q4T5wZyI8Bk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sFYDjqS5; arc=none smtp.client-ip=209.85.128.46
+	 MIME-Version:Content-Type; b=Twb3MdFoG0V3vbuzJci3bMBjAj8dRvMLhbAP5pirhFz4P/SSLwsTl560C8a44g9qpYM8dz8Xpp1bq4S3pHH9ajh5LIg7SkPHTZbcJFmELNbazuYdrg+4QpbMs+GmTIVXblCKjWvp/tnnje9abzPg3v9K/Zprs+3N1zDwqXzx/MQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Mwwe/O2z; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4361f796586so22987295e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 08:48:30 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-4361f796586so23096345e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 09:00:37 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734713309; x=1735318109; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1734714036; x=1735318836; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=cZByLX3qMcgSrvToNlDtUFTZ3GOi+oQgA3+Ql28cvCo=;
-        b=sFYDjqS5yjwuXZC0K6LnAquKTx4mlHki3gdpxtIfznhV4iiAGjeN/aoGQn99pmUjkX
-         s12MaNL8w/beLCKuqEVxo0tVivGK/xxrR/rLimzWH/wC+l4HZoNpuS54vhcAYOiZQU6d
-         v4aT3wesdUBAxsi4dsR5qyyBowYP96NNNNU1coxkfZs3Ta9ynTT4J/omK6VeOJX5pkYE
-         EftuzngZ4pcUsrlyGXK1Yr+HoVni2teec8zI/C1VqzANTIIkI7FxE/DmQhH6YurZw2xs
-         pv/4Ef4mgzQjD47WjyAmUDfZqQ22C6Rvu6qENbAm2XkznkM0IgUitQLxQcRgu0g3AgxB
-         xaEw==
+        bh=sK6y7RfwZKL78wz9SHO2m2rgbMAGzctH+wuLbcNhNAI=;
+        b=Mwwe/O2zHcUi2MCxGNaNQL44tPelC80YalggECH6zpUd2ePUZAPZtih3juiZNXI8Hu
+         DgjsJJ1T15nIXihEWCB2al+v1RNqY4slti+N7nQA6JYMnlZPZ1WAQzV9WrC4I7aJ6ubj
+         YYW4LVyVNs3WZmJZuvLMbRnyHZsI5B5DxBUOx+zn49KlX6PJKInu9+LBYFBIVb9dDSCX
+         5cg2zs0uLe17IS/dQzEeeSwj2sdvVyixsQ6WX9h5s4Cryh/4uoxqw4r6jeZ+B4H+r1Fm
+         vCYdIZ+y6ETE8W0s/kqTY9G0xzCTELLU+GSRpMh4hFlUP9RD5uDUTY9A94jvy7dSpJlr
+         fBfw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734713309; x=1735318109;
+        d=1e100.net; s=20230601; t=1734714036; x=1735318836;
         h=content-transfer-encoding:mime-version:date:message-id:subject
          :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=cZByLX3qMcgSrvToNlDtUFTZ3GOi+oQgA3+Ql28cvCo=;
-        b=JJL2gtEItBbPMt/b5lt9h/TR5av2v06mc3go3Uz7DJbswBkz60qvjH+BSLsBRod0qw
-         xZHfHkV8eZ0NLEXyvqo9goN69o+BIt7uBBLRplKgBiMyNYGnujwDqbytC17yNX0SL4Zg
-         2gl+iKlbpH/nGRcTJ01o4ZisMPLzzPDuPk7wPvrGiskuDhGNAWPqGuljSztBa4fOudPf
-         kd3ak2i5IUoBdiocdW6fvwwHGd0qlpCpiS6KkdeCC603RkYdKeGYuFo2Ucv2Ec16lHby
-         S5qwI9iQi+/gDIcNbWTYQKFw/kF1mcW1yW5PGPKo/EKPdKRV1esPSLdrJFoiZoix7BAq
-         UjJA==
-X-Forwarded-Encrypted: i=1; AJvYcCUeT2nMTfgoGSiS+rqXQk8MhPLBGZKHg/H13RSbWaGyyqaUmCdT0sJ5vDSeTiQ51/E6B7bA+9dLVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz8V5Na9GPaGj+WLn8ORw9tV2bOJkITWhnHU5bBlMCsAY2fyery
-	xMq6aMMg/JjLmq7PnkLN3oFsjJN5S8oj7tqSevikoNSwpStAtHtYdOYJu7ApkJ/wTII+ipzM+3V
-	f
-X-Gm-Gg: ASbGncuFU9foaoyroYy027YhpCVa1yhSEYTl7nX/SfyrfGmWkUzOD9DPmfs/Pu3zaIN
-	GXrQSlwQ/CL+9UsZpw+MWLdovpTmEgRKmS+4ZyUegSxNZ0q8EPEmZ911ptmNQscRr+S+E9nTDX+
-	Rin/47CZoG98NVyVqR1OXvYLXi4PcexmWF0MUX4IhYDZ0FIbx5VHV/3KXmC9fX2aJTJd0hkCGzw
-	brQ5BICWCnMfYijN7ighIwD6jm7LMnn5SC1KCqzmzAfaDvy0v8NNoIUBzMo4YFaYsSaSAuixNE=
-X-Google-Smtp-Source: AGHT+IGOyrG86B94jpBWzvLbfbP0jGB+WqeEWTMrf9WizZonuQRh7h7657Bkk0qrhilsJg0W5yZdeQ==
-X-Received: by 2002:a05:600c:3b86:b0:434:f0df:9fd with SMTP id 5b1f17b1804b1-4366835c187mr33419095e9.2.1734713308965;
-        Fri, 20 Dec 2024 08:48:28 -0800 (PST)
+        bh=sK6y7RfwZKL78wz9SHO2m2rgbMAGzctH+wuLbcNhNAI=;
+        b=eQNMryB33tb4XL8v3uZVXQ4QTPNzXl5rOccMnwmHF8oPts4ISnYoi5p/f3DmxHRQgV
+         7WT9Wl1V6ViNV2bH1S4BqaypZGVNGwew+ZTtOPeWdT31onknORnBzsuF4OJEOu6SbnlY
+         uuXCYGeQn8sEhFRTzkShDIw27wAv5yVCUcEui0f2y20IWXXJVsIGjtLNh+yEYIBPrH1F
+         J9DDpkgmfYAU80JOoPS8ZeUKWqgWVBrpXnWFol42ooxJvTz5BUcIB/F1Dkbo9fY6nN5w
+         5KvvimGzgsw1BrwhPZHddNqq3C7ZmrMHSZf5fW7FL27y/pnnidGdR0SK7RJBATSFdJR1
+         9Ypw==
+X-Forwarded-Encrypted: i=1; AJvYcCXrb0WQUqJiRigKPjZPyR31b1lMHxMKrbU8QeHpX0fX9owsx9jqzBZ0X2p2Asnrt31D8McbB8Q9bw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzpSaIYqzbIUL3HzB9RIryYHQjqAH89W2A63uzCDTObuDmu9Sv/
+	oXmJJ+VkC3zb/j0rVzjHJKrSLdpJCQPNQ/NM8hmsIiQteIwlq/VH9FBQiBqcGGA=
+X-Gm-Gg: ASbGncsik6oBwed3LW044eT+Y7SfTVbCzGGmUauY3Ni2EpZHhALkrqhtbp2lARPfPpz
+	eSjEBBonoBEMleLtDuFOM2yrSTZwkrZLGy71k97E2Uc0kZy+QfcQ6AltqBO5j4syAeq04aSX40P
+	qc8EHGiThQHTNrBLlbPXJVJZP4nhe8xbJywp2wb1HLjjtlH4mMLye5tPUc6NOeYXOnMMuRpWBtP
+	LpKgikFA6fjdBV8zO8ltMI3N1926yuryFx9IZZZn8Ile0gskF0slf8UMGtPZS4qfrJQaSqaeL4=
+X-Google-Smtp-Source: AGHT+IEIow7W7jlzekjBM8yMzgTeUbMzT6YnQhflYonoeJCqHySWJS3rP+z9Y68z1AcuWg4pRLt9xA==
+X-Received: by 2002:a05:600c:1d10:b0:434:ff45:cbbe with SMTP id 5b1f17b1804b1-4366864414amr38292285e9.18.1734714036167;
+        Fri, 20 Dec 2024 09:00:36 -0800 (PST)
 Received: from [192.168.68.114] ([5.133.47.210])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4364a379d69sm102650455e9.0.2024.12.20.08.48.27
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c832e31sm4437915f8f.33.2024.12.20.09.00.34
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 08:48:28 -0800 (PST)
+        Fri, 20 Dec 2024 09:00:35 -0800 (PST)
 From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-To: Sebastian Reichel <sre@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Maxime Ripard <mripard@kernel.org>, 
- Jennifer Berringer <jberring@redhat.com>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-In-Reply-To: <20241104152312.3813601-1-jberring@redhat.com>
-References: <20241104152312.3813601-1-jberring@redhat.com>
-Subject: Re: (subset) [PATCH v3 0/3] nvmem: fix out-of-bounds reboot-mode
- write
-Message-Id: <173471330771.223296.13009549390429951707.b4-ty@linaro.org>
-Date: Fri, 20 Dec 2024 16:48:27 +0000
+To: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+ amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org, 
+ daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
+ andersson@kernel.org, konradybcio@kernel.org, linux-arm-msm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pm@vger.kernel.org, Manikanta Mylavarapu <quic_mmanikan@quicinc.com>
+Cc: quic_srichara@quicinc.com, quic_varada@quicinc.com
+In-Reply-To: <20241219062839.747986-1-quic_mmanikan@quicinc.com>
+References: <20241219062839.747986-1-quic_mmanikan@quicinc.com>
+Subject: Re: (subset) [PATCH v10 0/7] Add TSENS support for IPQ5332,
+ IPQ5424
+Message-Id: <173471403487.224698.3739532865770865065.b4-ty@linaro.org>
+Date: Fri, 20 Dec 2024 17:00:34 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -95,27 +96,20 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.12.2
 
 
-On Mon, 04 Nov 2024 10:23:09 -0500, Jennifer Berringer wrote:
-> These patches fix a small out-of-bounds write when using the
-> nvmem-reboot-mode driver on Qualcomm SA8775P, such as by executing
-> "reboot bootloader" in a shell. Relevant error log:
+On Thu, 19 Dec 2024 11:58:32 +0530, Manikanta Mylavarapu wrote:
+> IPQ5332 uses tsens v2.3.3 IP with combined interrupt for
+> upper/lower and critical. IPQ5332 does not have RPM and
+> kernel has to take care of TSENS enablement and calibration.
 > 
->   BUG: KASAN: slab-out-of-bounds in nvmem_cell_prepare_write_buffer+0x144/0x47c
->   Write of size 4 at addr ffff19dd8e1a37a0 by task systemd-shutdow/1
->   Hardware name: Qualcomm SA8775P Ride (DT)
->   Call trace:
->   nvmem_cell_prepare_write_buffer
->   nvmem_cell_write
->   nvmem_reboot_mode_write
->   The buggy address is located 0 bytes inside of
->    allocated 1-byte region
+> IPQ5424 also uses same tsens v2.3.3 IP and it's similar to IPQ5332
+> (no RPM) hence add IPQ5424 support in this series itself.
 > 
 > [...]
 
 Applied, thanks!
 
-[1/3] nvmem: core: improve range check for nvmem_cell_write()
-      commit: 27a3485271ed3e81dec1e51460dc671dae387a2a
+[2/7] dt-bindings: nvmem: Add compatible for IPQ5424
+      commit: e976eb4479e967cb6dc86b6e46554648a3b8f37b
 
 Best regards,
 -- 
