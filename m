@@ -1,212 +1,135 @@
-Return-Path: <linux-pm+bounces-19552-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19553-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 102E99F88BE
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 00:56:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B130C9F88D0
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 01:08:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 60182189645F
-	for <lists+linux-pm@lfdr.de>; Thu, 19 Dec 2024 23:56:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABE271897D7E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 00:08:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0E9D1F755E;
-	Thu, 19 Dec 2024 23:55:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A345FEC4;
+	Fri, 20 Dec 2024 00:08:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FoLD6E41"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="aOIGtHwo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE97A1EE7CF;
-	Thu, 19 Dec 2024 23:55:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734652550; cv=none; b=oKyCdYmNcPKg7Ct4GBNApucijjM7cL2hDEaTPun+UWREcWKuB5eaGMdRqFT8wmICIMVzIjL7pdIDdGMOi4NDZxs9uu61pNi9cqA/QOB1YJwrNcyGLfF7uOd3nnhzDRIm7ZWnuCTPeKiNvYXktQuqFHN7zQYGx+RCruv9oy0C3H4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734652550; c=relaxed/simple;
-	bh=XOS/Lo8PRO5FYOmv2qknmwmm/BzyirfDvLWN/RNtc3g=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=QpfGmML43icfIAXrS/6ykrntCwsFCMo1RqeKGbPKcWhCrc2GK9IagK3/Au8zLDaGVE5dwODUHafJoWQtznXLJV5rcXFs5gC0bpm1guIn4EAs2rqOEsHj+pEFn8DtKW1Ni8f2J98milmdCn1irKWLiWOkeRW3FGTkAiI4PSDuqKM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FoLD6E41; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734652549; x=1766188549;
-  h=from:to:subject:date:message-id:in-reply-to:references:
-   mime-version:content-transfer-encoding;
-  bh=XOS/Lo8PRO5FYOmv2qknmwmm/BzyirfDvLWN/RNtc3g=;
-  b=FoLD6E41Wum8geCgwaRRSi3evZYxi/hQBWELEWLn0N54sp0AwC7PPuZZ
-   sOaQLHEosfZ/YtTBQoLADKcuLJnI1QbfbAEu9q/yN65RJdaiUgbCWeXPo
-   hQO6AYjjda4E2Q62hhua7uoAbMdw4kOOwKgAoLVg1FGGOFHryENzbskzB
-   n3+UcPLTOTzEbqayTZ3jtrmqzv1qfwW7iT03RKqwdrKykEkV24Q5Hg9E0
-   /wvpASj1ctR/cQTXNJvX7hOtdJY4XB9JX1P60cIRkPdYbLorGrobwO2lj
-   +CJNVPXRMl8ZLGBjSd0n4DuyFc/A4WZ53QYwnGZdVVljI7g8pzzxeBRNI
-   Q==;
-X-CSE-ConnectionGUID: sOHFhpGcTGurSnxSQth/qQ==
-X-CSE-MsgGUID: 89N+wi1hTxi6brzkEYurHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11291"; a="38975822"
-X-IronPort-AV: E=Sophos;i="6.12,249,1728975600"; 
-   d="scan'208";a="38975822"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 15:55:48 -0800
-X-CSE-ConnectionGUID: wEpQQx7eQIqIk60sVuaJUg==
-X-CSE-MsgGUID: xp/n6BBvS+iu34CBUx6OiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,249,1728975600"; 
-   d="scan'208";a="98745834"
-Received: from jairdeje-mobl1.amr.corp.intel.com (HELO xpardee-desk.lan) ([10.124.221.167])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Dec 2024 15:55:47 -0800
-From: Xi Pardee <xi.pardee@linux.intel.com>
-To: xi.pardee@linux.intel.com,
-	rajvi0912@gmail.com,
-	irenic.rajneesh@gmail.com,
-	david.e.box@linux.intel.com,
-	hdegoede@redhat.com,
-	ilpo.jarvinen@linux.intel.com,
-	platform-driver-x86@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v3 3/3] platform/x86/intel/pmc: Add Arrow Lake U/H support to intel_pmc_core driver
-Date: Thu, 19 Dec 2024 15:55:40 -0800
-Message-ID: <20241219235543.236592-4-xi.pardee@linux.intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20241219235543.236592-1-xi.pardee@linux.intel.com>
-References: <20241219235543.236592-1-xi.pardee@linux.intel.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6041800;
+	Fri, 20 Dec 2024 00:07:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734653280; cv=pass; b=pyRTEVza14W9SK3mwp6YR4nDj9pGOTJovY9f8I4ZqUb0EJC9+OCdQoNvW3U/7/PeL4PSFUXA0AgkLV+3dniL+7AVb9zWF+7kjnAbJUmWoS0C+cg/GHBEON/kXwWNA6J0+7C8fU9nm2wGmUSmeCUh27lWfFzI4gZ7Ty4p7hLo6oE=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734653280; c=relaxed/simple;
+	bh=9dhIIHfHcYh5bMd4tpuDoOfufCYlDhgPCe3PPEm1iWg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Uvl64re1iE6u+ZSxspW+z7T/5J/tzH8/hVwp8RCXDHZj2FbCTAS4DFIxXbQd2u4vkJH33jDplxZBdoMJNHEHUqB2KMu+yhhugy4UVC6nYbFQSt935mOIAiT6u2kf+1ZirYs2HlKAMimxumfBGuiFYrhajQe7U4WDytQPfWbCO1A=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=aOIGtHwo; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1734653264; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=eBXA4uIIkksfy/NdKNMhYjHqWnhKKb0abGD3Q3EZ065tcIR+d0n28rXI1GVSR2vbpzibXApAVioVfCLlhfMBoz1lZ4gIGwJ7ak/xjFRAbocC+HrsYqLyKmgVMXUgidsw1HvP7cmo8I4fCLCO4/ffWjkufnyoJYVlNex1LIL9L+M=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1734653264; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=9dhIIHfHcYh5bMd4tpuDoOfufCYlDhgPCe3PPEm1iWg=; 
+	b=cJ83atTrycUICt3fp64DqmgsG42uNtUz0VQ1iMNmwZ+00wSEMmpaDSayKa9icpaC3uGgvsPhc0zlFhj5EnysKfa/SZq/vyfIRyxd/jMovt+ukhGt8LaCCgC6hfxQk/YjyLh5omGoPXT6y7DsPFP1f2qL/0WSUqCDRcn8wNhelvc=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1734653264;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=9dhIIHfHcYh5bMd4tpuDoOfufCYlDhgPCe3PPEm1iWg=;
+	b=aOIGtHwo4dXowun3pJOWBIYnHcLpaBo+IibVt0g5TOvERoysuYJ1fcMYUBvqcXg+
+	JjjZHUMLlAIgyOhSBz3bwcZmeDCoQiSejzHpSv6oo8X/d2DtLsdzOj4v+I1sqDRs4jk
+	T38B5zaSmD0G9gjcdl++1jdVF9ma7jZISpf3ESn8=
+Received: by mx.zohomail.com with SMTPS id 1734653261276915.0288078430918;
+	Thu, 19 Dec 2024 16:07:41 -0800 (PST)
+Received: by mercury (Postfix, from userid 1000)
+	id D37711060348; Fri, 20 Dec 2024 01:07:37 +0100 (CET)
+Date: Fri, 20 Dec 2024 01:07:37 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Hans de Goede <hdegoede@redhat.com>
+Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
+	Andy Shevchenko <andy@kernel.org>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+	Jelle van der Waa <jelle@vdwaa.nl>, platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 4/4] platform/x86: dell-laptop: Use
+ power_supply_charge_types_show/_parse() helpers
+Message-ID: <g4qclyb47aylmjavfd2boidyp77khdc3k5i5ftzhaohawdsdnw@pwmune4y3kn3>
+References: <20241211174451.355421-1-hdegoede@redhat.com>
+ <20241211174451.355421-5-hdegoede@redhat.com>
+ <0030c3dd-c70c-d21b-de2b-ace0aeb4030d@linux.intel.com>
+ <6760c9d3-ccf4-47de-bfe5-b59b8b9fca07@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="g2ob2suj76dp2zbl"
+Content-Disposition: inline
+In-Reply-To: <6760c9d3-ccf4-47de-bfe5-b59b8b9fca07@redhat.com>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.3.1/234.551.59
+X-ZohoMailClient: External
 
-Add Arrow Lake U and Arrow Lake H support in intel_pmc_core driver.
 
-Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
----
- drivers/platform/x86/intel/pmc/arl.c  | 36 +++++++++++++++++++++++++++
- drivers/platform/x86/intel/pmc/core.c |  2 ++
- drivers/platform/x86/intel/pmc/core.h |  1 +
- 3 files changed, 39 insertions(+)
+--g2ob2suj76dp2zbl
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH v4 4/4] platform/x86: dell-laptop: Use
+ power_supply_charge_types_show/_parse() helpers
+MIME-Version: 1.0
 
-diff --git a/drivers/platform/x86/intel/pmc/arl.c b/drivers/platform/x86/intel/pmc/arl.c
-index 137a1fdfee715..05c45e37f2449 100644
---- a/drivers/platform/x86/intel/pmc/arl.c
-+++ b/drivers/platform/x86/intel/pmc/arl.c
-@@ -16,6 +16,7 @@
- #define IOEP_LPM_REQ_GUID	0x5077612
- #define SOCS_LPM_REQ_GUID	0x8478657
- #define PCHS_LPM_REQ_GUID	0x9684572
-+#define SOCM_LPM_REQ_GUID	0x2625030
- 
- static const u8 ARL_LPM_REG_INDEX[] = {0, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20};
- 
-@@ -650,6 +651,7 @@ const struct pmc_reg_map arl_pchs_reg_map = {
- 	.etr3_offset = ETR3_OFFSET,
- };
- 
-+#define PMC_DEVID_SOCM 0x777f
- #define PMC_DEVID_SOCS 0xae7f
- #define PMC_DEVID_IOEP 0x7ecf
- #define PMC_DEVID_PCHS 0x7f27
-@@ -669,11 +671,17 @@ static struct pmc_info arl_pmc_info_list[] = {
- 		.devid	= PMC_DEVID_PCHS,
- 		.map	= &arl_pchs_reg_map,
- 	},
-+	{
-+		.guid	= SOCM_LPM_REQ_GUID,
-+		.devid	= PMC_DEVID_SOCM,
-+		.map	= &mtl_socm_reg_map,
-+	},
- 	{}
- };
- 
- #define ARL_NPU_PCI_DEV			0xad1d
- #define ARL_GNA_PCI_DEV			0xae4c
-+#define ARL_H_GNA_PCI_DEV		0x774c
- /*
-  * Set power state of select devices that do not have drivers to D3
-  * so that they do not block Package C entry.
-@@ -684,6 +692,12 @@ static void arl_d3_fixup(void)
- 	pmc_core_set_device_d3(ARL_GNA_PCI_DEV);
- }
- 
-+static void arl_h_d3_fixup(void)
-+{
-+	pmc_core_set_device_d3(ARL_NPU_PCI_DEV);
-+	pmc_core_set_device_d3(ARL_H_GNA_PCI_DEV);
-+}
-+
- static int arl_resume(struct pmc_dev *pmcdev)
- {
- 	arl_d3_fixup();
-@@ -691,6 +705,13 @@ static int arl_resume(struct pmc_dev *pmcdev)
- 	return cnl_resume(pmcdev);
- }
- 
-+static int arl_h_resume(struct pmc_dev *pmcdev)
-+{
-+	arl_h_d3_fixup();
-+
-+	return cnl_resume(pmcdev);
-+}
-+
- static struct pmc_dev_info arl_pmc_dev = {
- 	.func = 0,
- 	.ssram = true,
-@@ -702,8 +723,23 @@ static struct pmc_dev_info arl_pmc_dev = {
- 	.resume = arl_resume,
- };
- 
-+static struct pmc_dev_info arl_h_pmc_dev = {
-+	.func = 2,
-+	.ssram = true,
-+	.dmu_guid = ARL_PMT_DMU_GUID,
-+	.regmap_list = arl_pmc_info_list,
-+	.map = &mtl_socm_reg_map,
-+	.fixup = arl_h_d3_fixup,
-+	.suspend = cnl_suspend,
-+	.resume = arl_h_resume,
-+};
-+
- int arl_core_init(struct pmc_dev *pmcdev)
- {
- 	return generic_core_init(pmcdev, &arl_pmc_dev);
- }
- 
-+int arl_h_core_init(struct pmc_dev *pmcdev)
-+{
-+	return generic_core_init(pmcdev, &arl_h_pmc_dev);
-+}
-diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-index 8b73101dcfe95..8890dda174b6e 100644
---- a/drivers/platform/x86/intel/pmc/core.c
-+++ b/drivers/platform/x86/intel/pmc/core.c
-@@ -1412,6 +1412,8 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
- 	X86_MATCH_VFM(INTEL_RAPTORLAKE_S,	adl_core_init),
- 	X86_MATCH_VFM(INTEL_METEORLAKE_L,	mtl_core_init),
- 	X86_MATCH_VFM(INTEL_ARROWLAKE,		arl_core_init),
-+	X86_MATCH_VFM(INTEL_ARROWLAKE_H,	arl_h_core_init),
-+	X86_MATCH_VFM(INTEL_ARROWLAKE_U,	arl_h_core_init),
- 	X86_MATCH_VFM(INTEL_LUNARLAKE_M,	lnl_core_init),
- 	{}
- };
-diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-index 82be953db9463..e4c0b9477262f 100644
---- a/drivers/platform/x86/intel/pmc/core.h
-+++ b/drivers/platform/x86/intel/pmc/core.h
-@@ -625,6 +625,7 @@ int tgl_l_core_init(struct pmc_dev *pmcdev);
- int adl_core_init(struct pmc_dev *pmcdev);
- int mtl_core_init(struct pmc_dev *pmcdev);
- int arl_core_init(struct pmc_dev *pmcdev);
-+int arl_h_core_init(struct pmc_dev *pmcdev);
- int lnl_core_init(struct pmc_dev *pmcdev);
- 
- void cnl_suspend(struct pmc_dev *pmcdev);
--- 
-2.43.0
+Hi,
 
+On Tue, Dec 17, 2024 at 04:18:47PM +0100, Hans de Goede wrote:
+> Note that merging this requires the earlier patches from this
+> series which have been merged into:
+>=20
+> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.gi=
+t/log/?h=3Dfor-next
+>=20
+> so this either requires an immutable tag from Sebastian for you to merge,
+> or this should be merged through Sebastian's tree.
+
+Unfortunately I cannot easily create an immutable tag, which does
+not pull in quite a bit of other clutter from my for-next branch
+(or require a big rebase of everything in my for-next branch, which
+I usually try to avoid). I noticed too late that it would have been
+a good idea to merge all of this through a topic branch.
+
+Greetings,
+
+-- Sebastian
+
+--g2ob2suj76dp2zbl
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmdktT4ACgkQ2O7X88g7
++pqazA/8DouyIvR78L9UouabSfwPvJsvfA1iHLpbu57sMylUrYXiPenhW+IX1wmw
+lwfg8XOGvSqU1lBQMSCfKtY1VrKqnZWIQAHOuXyuDKhv4DvNdKYmfPC4dl8oDE/L
+esQTK3RP7F1sJEsVUfrC3WvVLP5WW+Q+vavAVzMtYcjbXSMnKNODTojykwPcOBRA
+gar163TMfBs0aoCDzBGofku/L7Xik7dYAzOS4ztp3OjHCwqKZI4US+zthfmKVw2p
+8pfxNquZg2GA/aZj3dkHSm31L93MopRHgDpdp7LK7+Q3E0WRJM5YtEeFLoAukGI/
+ZwLKngY0TQTwGA3ye6HAB4K62Bo3274OhNFF/lSemhSfEPJkop140fPvNCWue/VL
+5XCFVCq7MGjTVG62m1I83ktcnNbE1HeYo/p1R96YtLYdsDDjXOqYqCIN1SyTc9m2
+CTpIuuilgLkzaSscJoDInR1KSnojGva0iROpo23vx46V2RnQLA7blCVcJnOZLWar
+pkyFfpddUh0ERqHSJ0odfkho67WCTpx5XwpgQtfEB1jZvRpB3GzneZ/lAKFmvS85
+GhPNIJJQet36qSPLleUquvKRE0SpjM0gx9CYA/QYd+nSeNPohn/oM/qcf4VwU5EZ
+4aL8SGmCWsdqoKgSLZgdls7BTvfoI440uREwB689hfYrbXtGsCA=
+=pkQX
+-----END PGP SIGNATURE-----
+
+--g2ob2suj76dp2zbl--
 
