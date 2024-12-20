@@ -1,41 +1,41 @@
-Return-Path: <linux-pm+bounces-19564-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19565-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89A9F9F8E41
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 09:52:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 991839F8E46
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 09:52:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E42EF16C62A
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 08:51:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D574D160C22
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 08:52:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD271A83FE;
-	Fri, 20 Dec 2024 08:51:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DD5E1A9B55;
+	Fri, 20 Dec 2024 08:51:47 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazon11020094.outbound.protection.outlook.com [52.101.225.94])
+Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazon11020091.outbound.protection.outlook.com [52.101.225.91])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888171A00DF;
-	Fri, 20 Dec 2024 08:51:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.225.94
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E4E71A83FC;
+	Fri, 20 Dec 2024 08:51:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.225.91
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734684699; cv=fail; b=rR+v/MVkz2YtxpHsRUHEpE6tq6ZaDFeFCnpt4rUVJbrs8d7q4/dcqlYw03ERjuN1n/VtgpczoTlhP0lkLMc5KZkgRMqhjUFdHACvRx3CZEIR0CS9HiK5yjexvICKG4fSA7pBIWEOkDp9J1X28X/3lGBm4teVKcnC9o0b/hAIuV4=
+	t=1734684706; cv=fail; b=mvUQYL+2yyDS2A2QjO9vatVbXo5k6xO4iv75Ht1Qlh51lthoVY7E8wbP7voUc3J1e5nS5Byw9MELPEMhlYFA3xH5F9Oem80L+0cb7lW+6tBLsQZHVlf7HKDx1/RhOxo5/ZqjnxYRYcHzxuyHKJav8a8QonwLF/yaz3eq6BYusfk=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734684699; c=relaxed/simple;
-	bh=xxO4C7UJMAvPfzsTKdMS/AVZDN2aX32WHNE17XpIfV8=;
+	s=arc-20240116; t=1734684706; c=relaxed/simple;
+	bh=TdiFWDUAiCeNTUQVh3+ZDyl/vz2T6MkhiZomXQ9D59E=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=VavjCV7lg67UHfHVPpXmrm7iFkJGcAr51Zs7mtZdsZymm9siSESm8gXDmkymfI4Qbuu9eEdkmcLKEGa+f+2IPTG54bq7xTsGIXXWDww2mA4SXFo8i2hderiJfjfDomVBM/6HM1WPz/GEAKv4W+3+Ee/ms/nq0Vdg12MNx3aeRpc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=52.101.225.94
+	 Content-Type:MIME-Version; b=Uxpi96+8KMN6eyCcIhOwOG5LQD2LN6kW2fd5ThRRcBmk7nZP1V63J6Oqpb5XLpsrgTTcS274ZHsRh/V/Bt6P+0IECgqcaxXSQPDhY7KOMXjgVAIgTnXlGv6RcBZv7/2jSMT470yYUeSbhGmLpKgB8OLu3JnF4BGGLEJNJ2MqLi8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=52.101.225.91
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=habeGnF9skarZJ+SUfiRY48vU55kinc17Mha5dRA/4pqpgr7uoVhGLRwDdkJwxfHEenpza4MTujP5pKr8PASzspl1PT7awV1KfqoORb0vtL2L4VUDrerRC4gigO8SBWbCci8LIuHf1zIvkSHnwcU0XpeFdu2lnTlPBoLImJ72zwMMMZ98hmqSEoWpi7Sr7YVNfa+KtQYUfMCTUmWzCmLrSWbID7IjlD8UINlgfJ9q88ygq38PHDTTTGL1o/Oxv7iu0d6/AHhixDJ4NUodgGEEpexL8+FHeahnHv4+VtrKPei9EigY09jylDU2EtNHd9T9dmZhsR3TTTpBzMjEFFP5g==
+ b=bUFOZzT5HH5rFrm89T0ucTPdadI7xyuIO9wKFnVS+D/1LGtoBzIiAyypB662DAAdr+GWNQi78QlIohbAVN1NfTLaWfNFrxd5CSSvHn5QNjSt0RI1Aod0qvSrRi+b98nhtvMoHhq4rjHazYCCAkkIoPQ+wdNVBDkfMdvy6g2mLPBS5H97rYDvh5Rbbz7JOrTIGU1RsaXolcP9CfiCyZ36d5tO4pFwN9pPBrGVyzr4j/W0LMBQ395u18N/BfSB6sgYLIsGEROdAeLcuYVDQ/hU9jQ9KzWViP3vTNzDN7mL8LdFSwzih3JylJZupsoSLhX06PhvG39qla+VgAoY4kXfZw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=GOdcyKu+fYOMaibbUC1Q9/NKitxcTCDC/b42yokj+NQ=;
- b=eRWbBe4aCidMUmqIB/gieotQ68pf1QLghX/aRYaOSpx0pkAwvp+fJDegkpS2cOnE3Hdq2SNHchnSbXOQzVJtMtv9eWKYnIrv7+B2GQbTb12wEkuvcGPidGUlpP1N5xqeqLXfoCA9y76TimNSFbX/ywUYBOYRW5ec5684aXRYbm0ix4U2YKaJye4ozTt75MUTDOMxYUFnxKT3QlountaKsaM/JVRnwo1WM3l3irFbMRU8xwwwUFzfY1brEa9rwt2qDCv+y1wgDIxuBBswXGWC3/0En646xUIed5XHhM+OzDcDAuNvDkdCIS5deQe6qMdtCPr/2OkkCI32c2e5HzG+8Q==
+ bh=6yEqLuwLmA3MzpECiHISwby+VQ9zwkc7mGFNGPfy0YY=;
+ b=MNcWEW1aPFHoLzJe/LHPTVkap0T4XqnlzawKFJzYjtwD6rdmS4928VwgLrT6x9tLEadPYGJ6bRaAdbGW9pSjr7XSGKzAHZdHqzSHHs/FSspw929zxJU93mJS7ZUZjFrPbKQCnMBV2Rys0YfGoACmfAy3nmtj1s7zLZkY5mUtt/oMIv4XU5yUecdLyqDPTzFPDeK0SdgXDXv5nYZaEvwtdxqJsCSHOmHkyT1GdihLdQxQd49CGIaPKTmpLd0U8NRXhHcF8aGKwGdyCSiIAnn0uWsFsEnb6LuoH6my8z/SGpKSkiMcgJTvbd44v005BwoLgcA68830rguP5NkWRzysOg==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
  header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
@@ -45,31 +45,30 @@ Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM (2603:1096:c04:1::15d)
  by PN0P287MB1045.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:139::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.16; Fri, 20 Dec
- 2024 08:51:34 +0000
+ 2024 08:51:41 +0000
 Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
  ([fe80::740f:ab98:2be1:538]) by PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
  ([fe80::740f:ab98:2be1:538%4]) with mapi id 15.20.8251.015; Fri, 20 Dec 2024
- 08:51:34 +0000
+ 08:51:41 +0000
 From: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
 To: sre@kernel.org
 Cc: tarang.raval@siliconsignals.io,
-	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
 	Bhavin Sharma <bhavin.sharma@siliconsignals.io>,
+	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v13 1/2] dt-bindings: power: supply: Add STC3117 Fuel Gauge
-Date: Fri, 20 Dec 2024 14:19:54 +0530
-Message-Id: <20241220084958.32367-2-bhavin.sharma@siliconsignals.io>
+Subject: [PATCH v13 2/2] power: supply: Add STC3117 fuel gauge unit driver
+Date: Fri, 20 Dec 2024 14:19:55 +0530
+Message-Id: <20241220084958.32367-3-bhavin.sharma@siliconsignals.io>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20241220084958.32367-1-bhavin.sharma@siliconsignals.io>
 References: <20241220084958.32367-1-bhavin.sharma@siliconsignals.io>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
 X-ClientProxiedBy: PN2PR01CA0254.INDPRD01.PROD.OUTLOOK.COM
  (2603:1096:c01:21a::20) To PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
  (2603:1096:c04:1::15d)
@@ -81,173 +80,786 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PN2PPFF679F9759:EE_|PN0P287MB1045:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1c633bb3-6c28-45b9-5b87-08dd20d381bb
+X-MS-Office365-Filtering-Correlation-Id: c9985256-91e2-4df0-3316-08dd20d38601
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|376014|1800799024|52116014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?ApRnwKDjEIbMU8tt2Sugrz3GvaIOY0ev4xx6zsPshSX9o8yJGP8rbkxKoatE?=
- =?us-ascii?Q?/YNt+H0XuNgaLqqaQwUb/4MQb1V+Ydza4jU5J3QYEe5BThMl6xXmkp/eRejQ?=
- =?us-ascii?Q?fjAlsF/eRJQNgD3+FnkXDwFKD5A9p6kurkNjw6fYJ5NMhWk0R8c0pydU6bx7?=
- =?us-ascii?Q?myu0C2IR6xlNucXtphGhUAPf0uf01iAasaXPOfo77LUEkTsFyyTi6b6juA/f?=
- =?us-ascii?Q?URWKlYlsLRHT4ixQE1UY+Qin+w5lWAUZfjpnFkjKvxUHAkMVlUzOplgm8Uv7?=
- =?us-ascii?Q?eN/Mi/upFEqyMjPx4EeLuewsXXSuExMJvTUk2dXcbvA6S6dS03sWFOB/QneI?=
- =?us-ascii?Q?JUi8+frxkczf8QBxxP4aW6YtjgmRn515cfc7k1gXiqgo7ypErTlT/T00z0oS?=
- =?us-ascii?Q?gFfPug+Hx3xRJuaG0/8AA7geR10HVAEkNeChNKZThwKJ3447cNTIIvkIHJRY?=
- =?us-ascii?Q?gcT5JEqQ8Q7wwNW7LgmfiQ5QdSJcDyop3tcdSE+5XZopUvkD8ugG5TqJfyjb?=
- =?us-ascii?Q?xXzeZMzNj/P6DAg8LLcnhaH+MgyKpFuSQVcYF599MQN+EuM46PxnOFFPMIVx?=
- =?us-ascii?Q?SitD5jvFHc/eQ5Xickhszw1g21VDd42aTe2Zx2gA75ho7FTIUjTH2hJVNVg5?=
- =?us-ascii?Q?9kRsTJiqX/s2gziku87vYhzYUev9UqYlbLlmmrXE7RVABvc44hw+QWYWfHqZ?=
- =?us-ascii?Q?Tnl/R3rZz1vqtNTPyQ1QtLxdof1oz0LMjBkqXeoW5mNQLcTdczpmB+DCwZ90?=
- =?us-ascii?Q?M8eG5IzWIoxEk9+cvlupv+ExjdvKn+caBQCDfDnUmAqavwAm68vvTZPPNHVc?=
- =?us-ascii?Q?+nUPJXTwXVidyGCrB5x9ujLYQUhQQnr5eEHnc8q6S/JX9ewK8kb1mVTK0JAu?=
- =?us-ascii?Q?YfzjGB9ewBTg5BZeKpW2wljxtxR1RNt2j3t7BSlpurWES/kOWtYda4cbfSy0?=
- =?us-ascii?Q?tbbCsDnj8z0Kss8CyzOSVzu4Ax+CzrxpBlb2/+Y5c3Mh3I++i9gk7Tie1Qud?=
- =?us-ascii?Q?NKBDAFmep2NYrohnKwawT56MAeJEO5wbclu6N6nJLIcJ6V/fxA+ADh70cZV0?=
- =?us-ascii?Q?MR9m/ioCQOAY96+d9TjqIKj5G1Fn3x7yX6iyYHf0IAAzi2YWMyanH3e2xyFW?=
- =?us-ascii?Q?Joeh7DLTJ1S/Sshrn5ncuYADRMROu4DuYLoAnGmLrHlSxF+ETWzaj2WoSRNd?=
- =?us-ascii?Q?cnpG4ACiaSB9l5P+WL6rShAzpBKXnptoyERkEATVYDWvRGj0sPxd5ZtS8Dqt?=
- =?us-ascii?Q?DC6pfolA9Yn8P/Gbrvceim+wUzXKCjnQvYVxWbC+ZgLh+2N/Wgo+D2goxdGz?=
- =?us-ascii?Q?Ca48AHvMpntD9bFtwyoM4kFluTGpZ5dqu1S1gr1Mx4p1g0PAooqimS7uGLTt?=
- =?us-ascii?Q?fnV4TWEHS5X4aMt9/EpUIubye0zLbl7R6MayikXV/v9yyT5WMw=3D=3D?=
+	=?utf-8?B?Zld2QVBSbzFQUy9jRTNDWVlQWEMyRktLcnlQakwvTERyb29BaWV0ek02VDFx?=
+ =?utf-8?B?cGUvQU9vVVRZUFRoS2FUR05VMUg3REJNK2Q2ZDFRdjVCR094TUZKb04vbDNI?=
+ =?utf-8?B?RHUxSnFXemNyUU9NNFZxM0xwcFgrYlJBcW4zelNaMXlSMEh1RHlzcmlGVkx6?=
+ =?utf-8?B?bnJuRkcrMjZmaWJ0aGhZVkVyMkwyK0pSR1NERnFSU083NjRiMU5yd3pYeVh4?=
+ =?utf-8?B?bDlWQi9HUllxR2xoTEIvU1ZhdXYzRjArbEcrWC9jaXUzMGxFdVBEMG5YekQ1?=
+ =?utf-8?B?S0IwZ0JIZFdCMlltRnlSWTMyWTl0dG9jN3dyRlpTU3dMRzgvU0VLb0NERVI2?=
+ =?utf-8?B?ZGF3SnJSTVJmMlVMY3M1STFwQ1NPallVOG16alZkdU5maVJmUXAwR1g2TTVn?=
+ =?utf-8?B?V3lKdG5oY1c3T3oydm05SDM1MVZFTTBST2JLbmJCY1MvbmdpNDZFbkZWOCtS?=
+ =?utf-8?B?MHUvUDlKRUNqS1F0QzhyU01pQzgwRmJxMExha2d3ODV6bTEvREtVeGl0ZXBR?=
+ =?utf-8?B?NHpUL0RIem5hYWZ4eStHVkhFanQ2STFkSXZBS0VybktsanQrQmloR0tyNUNH?=
+ =?utf-8?B?N0RpbmFwM2dSTXROMnl5ZG9pcWs1TUhSRkJnMjliY1ZMUC80RHdIaGR1SndG?=
+ =?utf-8?B?bEdMTG51VXZWdllsZVhGL3NXSzBYRmhuZmgyODhNcVJvYmhDR1JYajhSUkpp?=
+ =?utf-8?B?L2tZazZGQmY2c3dHM1Axb09mMG13L0JoQzdJa3Vzd0xNNVRwUXZkUFI2RkVq?=
+ =?utf-8?B?S05ZYkZkRnRUR0xtTFIwaTBjRDFkKzVwMmlLNEFFL2VOMmxjWlMwUEVyRlpl?=
+ =?utf-8?B?RDJhVjFmUitxdTFnZnNsVFFtSDJUUEtuRVF1VXYvN3J5TEU0SU9PN2NOOXJT?=
+ =?utf-8?B?YWoyWTVnR2lJcDdRTTlYWGU4M21jbzUyM1FzZVc4dXdNK3BnRTJQQy9UOHlz?=
+ =?utf-8?B?STdIZE5oQWpPYkljekRBenZyUW16UXIwc3hRdmZwbmh5ZzVRRS9wa3htbnFM?=
+ =?utf-8?B?K2ZXRDRHL2NhNUFMcmRZRmtqREg3OEtZS1NFem9seVhCdFpWb0pTTjFCWTg0?=
+ =?utf-8?B?Y2FEdmRJL1c4L0JQYVZobUwrcmNmbDhpZW50TW1pOHpNUWRITVZwM2VicVNT?=
+ =?utf-8?B?Tm9jVkxucFVldUYzYngvN050Sm5FWWNteUtTa1habDFhc3lteTRBQzhNdXo3?=
+ =?utf-8?B?OXgxMDY3MUNTeHhoTVVZd2NFUlNCVWVvamVpZkU1TGh5MmdUTFpINkUxak8z?=
+ =?utf-8?B?STdaNXdzOEhXeDdWRXJyTXBlc2VDOUhtZnUycTdLZzVYWndtV2Q5ZWNLWW5N?=
+ =?utf-8?B?cWtlT3cycGtxc1I5a20rUlB0cWNpdVF2ZHFFVlRMeHYwVUJ1VUpiaDIxUVkw?=
+ =?utf-8?B?VWdrOW1mT1hoTlpXT2NjZ0JIS1hVaUZ2UXpkNndPN2xjYmNSM1RSemZONW94?=
+ =?utf-8?B?TDdVN2phUkxZUjlUTGdFKzdjeXF5VXVpSkV4M3JwY2hMbkpYVHpPZmlPcXor?=
+ =?utf-8?B?b1NVNXdwTnZ4K0Z4RDRpWUUrN3Z6VW1rTnVUaHlTZ1Ivb3lwODR3QUVRK1I1?=
+ =?utf-8?B?b05BOUNzUllYUjB1ckxqT3NzeWhHVTNuREVFWUtTYXB0Y2VBNlBMYi9ybXpp?=
+ =?utf-8?B?TkVJclRiR25NMm5BZEJCYXRIb0VTZWlobWVtV1NRU25RUFg5aWM5RXhBOU5R?=
+ =?utf-8?B?dUJrOHZwOEtNV2ZyOVpQcDZiVW1TYW5UWGVFMlR3YlNqWXNtQitSTDRPL0oy?=
+ =?utf-8?B?OWxKMXR2VmozZXRmN3kxY2hyK01aTU45N1JyekgveDg0VjcxVlQrOXFEejhM?=
+ =?utf-8?B?eWJvUkhUS2VjRlM3TiswYUtaTlJzb0VDSzNLdlpHUEpQZjFwejlwRHI3d3JP?=
+ =?utf-8?B?aHF2dmtHZ3dKcmNCUzdRczEwWGtyazVtTWxSa2Q4RmxraFZpdW9SZ3NaTFRi?=
+ =?utf-8?Q?T7QdT1yX4bhi1sTEyYP9zFHopwpkYFSo?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(52116014)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?DFn2jU8P4F2crxb2m4xGraXi7Pi/pLPZrTRCPPql3SM6wsL6+2fxuAnf+w9y?=
- =?us-ascii?Q?q/Y3hZBwEGOBnSvcJrlDXWEvCzu9TzZE661XAzTdauMqSc9/u4UEbvGCy8PJ?=
- =?us-ascii?Q?7eHZqXICfsWoxwahY9v/HQNs8JbiTntocQlkWohgkT1GxFhkpJblTneVo7Vz?=
- =?us-ascii?Q?Nde+Ebh/baLJKGbV2XJ58EJjj8f7dYc4nsyC9DHMz4tuUSVIMto0LFR6wkG8?=
- =?us-ascii?Q?Rkzby+jCaXwPOlX4buyA3SOpiADd4vuPgu+J9pdZWOm2i3qEJU3sTVjMpnH6?=
- =?us-ascii?Q?jDhq8TmInHLzPN+9nulYWtWR+fWc6TGg8hnL2eJbif3CwTLIidhrRex5l5iH?=
- =?us-ascii?Q?sBEHgaBpXMUWIf+flXnEvtAIRR1Uj/F/MsVfFOH1mi/E5HXJ0J+GfMuH3AOa?=
- =?us-ascii?Q?SeD2p4RK7iSfFDg1TxCIl3HAQxBLOpNzwkNfx+3HXg69g0mw/0CEF49/w6Te?=
- =?us-ascii?Q?WerBMVs4yhPUK+DVsVnZxLgSsHkO9XBmS0zEe5oyVKUCEyiFAoRPZSPjq9Ij?=
- =?us-ascii?Q?864Z8E8zfMH8L2WDtiP7j5vV/qkDEC+Vg8L+u7tKC+iP40PFv6KSP3n7tQDO?=
- =?us-ascii?Q?5aMiLmPQQVQv7hcXWqP1RzQPOuehelah/7CLT/BJhDSa+eaUCfPFHAA3z5+Y?=
- =?us-ascii?Q?K9rP7GgdHzPw5B1sdaljUlKLColRSwBLXEuXYDX4yYJUb79d9zTbS5s55ps6?=
- =?us-ascii?Q?IkySGVo2yp6PuOOPCHkkFMz1OM0Dw1qGYDL7O5sZVIA6MTqkc26IVTns0IGJ?=
- =?us-ascii?Q?hWNIP/SKw4SkzPcc0GK8hbJfjRYAtUN6f2GIDk/xjHRbFdu+KPQDCkt40j2u?=
- =?us-ascii?Q?bigeTUEsBLLIJbT/4D66hyH8OkhS96/UVFOdyEtWBdQDzp/WJgJ9kLXXjWIK?=
- =?us-ascii?Q?ebfRL+7OCxmHAp2lIb7pkHsz1ZS161P+uoQPOW80lhSlNZHyP4oMUXU6P2kE?=
- =?us-ascii?Q?I5fgSDg8gHFwEm0T7cimnOx0y9LhRKIa6mp31UUZpZNPp26N8JIujCe10HY2?=
- =?us-ascii?Q?K0FHnP91gl9tLNZz88y8cmMNOmbkBdrkyACd4N5ukFGibT/oWRB+nK76XTLI?=
- =?us-ascii?Q?z8djASbAmUhmK6t02NS29M2FjKZ13EcSOREHJ2+RV7tTBpgYXgapdfIQYkqU?=
- =?us-ascii?Q?1qoXPPTce3oZCMTL9l3/tGn+BXL5Mvkmm8M4O8p1mn/krLzd5lONN4r0MMEY?=
- =?us-ascii?Q?o9yoS1Uli4Z5mVLhTRHG3iD6LwfIrFm07LXS/M6h7t1r4Axvu0pXWpiJLV/6?=
- =?us-ascii?Q?Yy79g603YJfVUNyOGEYOxUbQogfZTzNH1XA68HtJMyyaHdbgXREEHnGCF51G?=
- =?us-ascii?Q?kY1q41vDpAS8uKp7sRPswVoK3sHTZuwUeGYNkayM3mcyZpnyK46hWKGLlGK3?=
- =?us-ascii?Q?B3iXC9bPyEZTqXiwJa8T7xh0ylZIMzNC+1bLdkSw329fonU9J2RSVOz/f33m?=
- =?us-ascii?Q?opu6a4+HNWzgkZLWYWvkImwCHx2LCOp2ZZCcYOPKnmsrNjKYzV7LYCDFJvYu?=
- =?us-ascii?Q?i/oOE9wbe6SmTBikIOqTnmNzmNCs3d/hLi4Ul5uTEoRTlNbWFrQqgU/zZuj0?=
- =?us-ascii?Q?NU/ffWGowcuVu/obBI3c0G9bCDR5AYuyUSvhG/cDksZOTWosDNs59VDI/Prt?=
- =?us-ascii?Q?AMrwJyD7/i17pjwh91IG95g=3D?=
+	=?utf-8?B?K1NXNjl5NEZ5blR2YnRlaUdYK1VBNnlaYittVUQrTjMwdytFNTJ0UW5WaWgv?=
+ =?utf-8?B?REI5TFdVZHhlWWxFWlZDMWxZQmJaTGg4UCtYamJsRmkzekJDNnQrOHRXU0Fm?=
+ =?utf-8?B?WWNQTDVmRWN4K1RVNFpqUmVGTWhFeW5DYTcySWN3RzcyeThpM2J2ajE4NkEy?=
+ =?utf-8?B?SXN2VFg1Nmlza1p0VjhCUGxuaHVvSE9GcitsK29rMmdvT2RtUWUwWk53czhw?=
+ =?utf-8?B?Rnd6d3kxWVJJWDBvSExmWnBQcjNmOU04cWpocG5NZnZPMFVPbjFxRUM3RHRM?=
+ =?utf-8?B?RTZBRmpYRW9aeU1CZExUZG9POGFTZFZZSERuUDlhaUxpMzJHQWV0NUFxcjlq?=
+ =?utf-8?B?Sml1YlBPd2x4TUxuakJCamtXUFZ4cFRCSFFiOXRMcEp0c2ZEdFIxNVJOMXpq?=
+ =?utf-8?B?a0ttTWEvejdVWkZ5Vzk4Z3JPV2dXTlV2Vzd1STJqeVl0bE5yZW04Ui9JUnJB?=
+ =?utf-8?B?VTVJanNRU3JsZVJvaWFkVldLMHRScFFNRUNzQ2o0QUxuZ2xxbkJrUlFMQS91?=
+ =?utf-8?B?WmhhVkJrSFlKc3NTMnlPV3gwelhocW45ZjlKK1pNWlVHRVdrS2xXSmhTSnZm?=
+ =?utf-8?B?VXhSWXoxRUo5VVdxendkREJVTHUzSS9CaE1VVC8yamE0S1hMODIvMVVyMWRP?=
+ =?utf-8?B?ZUZabDFvcVJoOXdxRGw0K2o5WXNuaWFVWUJ0cFlmNjhjVDBiZllZb1VUQWZK?=
+ =?utf-8?B?RzZDV0p3NE9xdVJDYjA1Wnh3cVJETHFGS0FoTDlRUGh6L2dqeGxNcldVd2Fi?=
+ =?utf-8?B?TElmR1lZK3pPaDRoUENkOWN6bnUyRGpGa3FyT2VEYXFDUm9yS2lTdEhPbVZ1?=
+ =?utf-8?B?Umw1WnlKRDlHd3pVMlk0RzI5T1d2bDlJcENBd1RZVUgwTmI5Skw0OGVUNmNC?=
+ =?utf-8?B?NEJlTnptZlU5NGI3NHdxb0pybzI1TmUwOXBuN2pkelVqMm44SW1OMm9xVmRs?=
+ =?utf-8?B?UzNKQlo1VDltaFozYTVGLzlDZXZZT21ycDdQczE5S2lSVW1COGNoNjV4Y2tP?=
+ =?utf-8?B?aG14WTlVMHNCY0hpblhKVGZFamlZYUJWMVd1ZzM0cWN2NWtyZXJFUzJvdGJ3?=
+ =?utf-8?B?Y0NDME9NM2FXSFNnQXZvelFmSnFOZ2E4MFUyRHRUaUxKWndncTlpbU1xamE2?=
+ =?utf-8?B?TFFDUWN2TEY2bXB1R3EvbTgzdllhaUR2NzBqaFltUWN5eWRPZ2JzZHdlVXVY?=
+ =?utf-8?B?MzVpS1hyYmdvRXF2QnUrSlU2dytIa0l0UG1rdVZaMHNIWG5zM0FzYTI2aUlm?=
+ =?utf-8?B?OFZQeVR4ZitFc2RidlVvSzNmNkUvWWNRb1RFenlsc24rRmdiS2RIWWRwTEh0?=
+ =?utf-8?B?QmdiRERIaGJ3dnF5M0pCdjlGVUpBcml3NUNXdy9IK1E3VTI3ajdwM0lwN2s1?=
+ =?utf-8?B?T25uRnUwYytVUGdxVHBPY2RxZEpoZlpXQ2xGWVVId3lHeVBmRHlyTDNFSkl6?=
+ =?utf-8?B?SE1Gb1ltbHlob2lJazJ0dGV2dVZ3S2hQbTJNOGNqTlFaSzNMaWR4emRwME5X?=
+ =?utf-8?B?RmEvd1prT0tjcVRtZE90SG1BMjIzdS9iSGxKRGxsalRSSGFkTUhrL1F5RkQ0?=
+ =?utf-8?B?OGxuWjkxaVBjZWZtTE9DRnJFalRmSjBEdk9CdGQvMTNCTngyMzlRZWxVcUxm?=
+ =?utf-8?B?QXMzanB0Vkt1aEl5akg3NTYzb2ZXNk1pNHFmQ1FabUlDYzdaMEREcENsRlVH?=
+ =?utf-8?B?Zmo0QXFvQVFadUVoaUdLZ2NwSFlZb0gzbkNuZDU2RFIzY216K3lNZUR0R2N5?=
+ =?utf-8?B?Y1BZVmFKM0RUK1FDNmE1R2MydCtob3ZydVplQUt4Lzh2SUtEYy81ZG1xK2c1?=
+ =?utf-8?B?VmlGNDU4Z3JGY2gyRkMrVFovTVZOZC8vRkNEcnQ3VUhpbGZIQ09SRGNreVNM?=
+ =?utf-8?B?cm9yZWZvMHB1d25aL0UrUElCMm1yQ2o2aUw3VEc5OE9OcDFXeUo5aVRhWVRZ?=
+ =?utf-8?B?MmV1amFIUVR2Y3dQMnhkYnl1eXp6TWJSS01LSFpLUlo1dGNycWkxampzTFFm?=
+ =?utf-8?B?YnNjaDVzcFVTY3BWWHl6NE1XWFU3SGRsNGNpekVCVDVzRk5yTWRsRzhhTTBH?=
+ =?utf-8?B?NEdHNStqZFUzdytSUkJ3OU1NN1gvSUJpSzVFMTVKZVo1dTV2aE9mVEo5ZkJD?=
+ =?utf-8?B?MFhvWjVQcHZVQTRucHdkYStmamdUOFBsTnVWNTN6Nldad1RwRkRFVHRlZXc1?=
+ =?utf-8?Q?KWXI14bS2IdqI8VvYUEaO14=3D?=
 X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1c633bb3-6c28-45b9-5b87-08dd20d381bb
+X-MS-Exchange-CrossTenant-Network-Message-Id: c9985256-91e2-4df0-3316-08dd20d38601
 X-MS-Exchange-CrossTenant-AuthSource: PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2024 08:51:34.4373
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2024 08:51:41.6302
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Qn0a22Y0G3YN/DtR84JRf55+IzX6WQjVhviBO08dJQp88MrLaGJSDyJiD1KgB4MfyYwUD8Jup/FHHpw/Pp81sp8Aluk039fT1GnVLarnEqc=
+X-MS-Exchange-CrossTenant-UserPrincipalName: Lcv51qrWqpiyRTOkNa20ZVTar9qNVimnCXmcuK/TYOCB2Gc1jb17G7xRNUjZvFDNCTbGuhzqd/tMkAOxOM3BbaabGcCqa7PzrKiMF/RC64g=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB1045
 
-From: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+Adds initial support for the STC3117 fuel gauge.
 
-The STC3117 provides a simple fuel gauge via I2C.
-Add a DT schema to describe how to set it up in the device tree.
+The driver provides functionality to monitor key parameters including:
+- Voltage
+- Current
+- State of Charge (SOC)
+- Temperature
+- Status
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Co-developed-by: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
 Signed-off-by: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
 Signed-off-by: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
 ---
- .../bindings/power/supply/st,stc3117.yaml     | 74 +++++++++++++++++++
- 1 file changed, 74 insertions(+)
- create mode 100644 Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+ MAINTAINERS                               |   8 +
+ drivers/power/supply/Kconfig              |   7 +
+ drivers/power/supply/Makefile             |   1 +
+ drivers/power/supply/stc3117_fuel_gauge.c | 613 ++++++++++++++++++++++
+ 4 files changed, 629 insertions(+)
+ create mode 100644 drivers/power/supply/stc3117_fuel_gauge.c
 
-diff --git a/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml b/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+diff --git a/MAINTAINERS b/MAINTAINERS
+index 7e29c4e86db1..847690a8d9a7 100644
+--- a/MAINTAINERS
++++ b/MAINTAINERS
+@@ -22170,6 +22170,14 @@ T:	git git://linuxtv.org/media.git
+ F:	Documentation/devicetree/bindings/media/i2c/st,st-mipid02.yaml
+ F:	drivers/media/i2c/st-mipid02.c
+ 
++ST STC3117 FUEL GAUGE DRIVER
++M:	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
++M:	Bhavin Sharma <bhavin.sharma@siliconsignals.io>
++L:	linux-pm@vger.kernel.org
++S:	Maintained
++F:	Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
++F:	drivers/power/supply/stc3117_fuel_gauge.c
++
+ ST STM32 FIREWALL
+ M:	Gatien Chevallier <gatien.chevallier@foss.st.com>
+ S:	Maintained
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index 9f2eef6787f7..5c13fbc9751e 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -918,6 +918,13 @@ config FUEL_GAUGE_SC27XX
+ 	  Say Y here to enable support for fuel gauge with SC27XX
+ 	  PMIC chips.
+ 
++config FUEL_GAUGE_STC3117
++       tristate "STMicroelectronics STC3117 fuel gauge driver"
++       depends on I2C
++       help
++         Say Y here to enable support for fuel gauge with STC3117
++         chip.
++
+ config CHARGER_UCS1002
+ 	tristate "Microchip UCS1002 USB Port Power Controller"
+ 	depends on I2C
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index 59c4a9f40d28..b55cc48a4c86 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -108,6 +108,7 @@ obj-$(CONFIG_CHARGER_CROS_USBPD)	+= cros_usbpd-charger.o
+ obj-$(CONFIG_CHARGER_CROS_PCHG)	+= cros_peripheral_charger.o
+ obj-$(CONFIG_CHARGER_SC2731)	+= sc2731_charger.o
+ obj-$(CONFIG_FUEL_GAUGE_SC27XX)	+= sc27xx_fuel_gauge.o
++obj-$(CONFIG_FUEL_GAUGE_STC3117)       += stc3117_fuel_gauge.o
+ obj-$(CONFIG_CHARGER_UCS1002)	+= ucs1002_power.o
+ obj-$(CONFIG_CHARGER_BD99954)	+= bd99954-charger.o
+ obj-$(CONFIG_CHARGER_WILCO)	+= wilco-charger.o
+diff --git a/drivers/power/supply/stc3117_fuel_gauge.c b/drivers/power/supply/stc3117_fuel_gauge.c
 new file mode 100644
-index 000000000000..e486131a27a9
+index 000000000000..b4aeee8a7232
 --- /dev/null
-+++ b/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
-@@ -0,0 +1,74 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/power/supply/st,stc3117.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
++++ b/drivers/power/supply/stc3117_fuel_gauge.c
+@@ -0,0 +1,613 @@
++// SPDX-License-Identifier: GPL-2.0
++/*
++ * stc3117_fuel_gauge.c - STMicroelectronics STC3117 Fuel Gauge Driver
++ *
++ * Copyright (c) 2024 Silicon Signals Pvt Ltd.
++ * Author:      Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
++ *              Bhavin Sharma <bhavin.sharma@siliconsignals.io>
++ */
 +
-+title: STMicroelectronics STC3117 Fuel Gauge Unit Power Supply
++#include <linux/crc8.h>
++#include <linux/devm-helpers.h>
++#include <linux/i2c.h>
++#include <linux/power_supply.h>
++#include <linux/regmap.h>
++#include <linux/workqueue.h>
 +
-+maintainers:
-+  - Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
-+  - Bhavin Sharma <bhavin.sharma@siliconsignals.io>
++#define STC3117_ADDR_MODE                      0x00
++#define STC3117_ADDR_CTRL                      0x01
++#define STC3117_ADDR_SOC_L                     0x02
++#define STC3117_ADDR_SOC_H                     0x03
++#define STC3117_ADDR_COUNTER_L                 0x04
++#define STC3117_ADDR_COUNTER_H                 0x05
++#define STC3117_ADDR_CURRENT_L                 0x06
++#define STC3117_ADDR_CURRENT_H                 0x07
++#define STC3117_ADDR_VOLTAGE_L                 0x08
++#define STC3117_ADDR_VOLTAGE_H                 0x09
++#define STC3117_ADDR_TEMPERATURE               0x0A
++#define STC3117_ADDR_AVG_CURRENT_L             0x0B
++#define STC3117_ADDR_AVG_CURRENT_H             0x0C
++#define STC3117_ADDR_OCV_L                     0x0D
++#define STC3117_ADDR_OCV_H                     0x0E
++#define STC3117_ADDR_CC_CNF_L                  0x0F
++#define STC3117_ADDR_CC_CNF_H                  0x10
++#define STC3117_ADDR_VM_CNF_L                  0x11
++#define STC3117_ADDR_VM_CNF_H                  0x12
++#define STC3117_ADDR_ALARM_soc                 0x13
++#define STC3117_ADDR_ALARM_VOLTAGE             0x14
++#define STC3117_ADDR_ID                        0x18
++#define STC3117_ADDR_CC_ADJ_L			0x1B
++#define STC3117_ADDR_CC_ADJ_H			0x1C
++#define STC3117_ADDR_VM_ADJ_L			0x1D
++#define STC3117_ADDR_VM_ADJ_H			0x1E
++#define STC3117_ADDR_RAM			0x20
++#define STC3117_ADDR_OCV_TABLE			0x30
++#define STC3117_ADDR_SOC_TABLE			0x30
 +
-+description: |
-+  The STC3117 includes the STMicroelectronics OptimGauge algorithm.
-+  It provides accurate battery state-of-charge (SOC) monitoring, tracks
-+  battery parameter changes with operation conditions, temperature,
-+  and aging, and allows the application to get a battery state-of-health
-+  (SOH) indication.
++/* Bit mask definition */
++#define STC3117_ID			        0x16
++#define STC3117_MIXED_MODE			0x00
++#define STC3117_VMODE				BIT(0)
++#define STC3117_GG_RUN				BIT(4)
++#define STC3117_CC_MODE			BIT(5)
++#define STC3117_BATFAIL			BIT(3)
++#define STC3117_PORDET				BIT(4)
++#define STC3117_RAM_SIZE			16
++#define STC3117_OCV_TABLE_SIZE			16
++#define STC3117_RAM_TESTWORD			0x53A9
++#define STC3117_SOFT_RESET                     0x11
++#define STC3117_NOMINAL_CAPACITY		2600
 +
-+  An alarm output signals low SOC or low voltage conditions and also
-+  indicates fault conditions like a missing or swapped battery.
++#define VOLTAGE_LSB_VALUE			9011
++#define CURRENT_LSB_VALUE			24084
++#define APP_CUTOFF_VOLTAGE			2500
++#define MAX_HRSOC				51200
++#define MAX_SOC				1000
++#define CHG_MIN_CURRENT			200
++#define CHG_END_CURRENT			20
++#define APP_MIN_CURRENT			(-5)
++#define BATTERY_FULL				95
++#define CRC8_POLYNOMIAL			0x07
++#define CRC8_INIT				0x00
 +
-+  Datasheet is available at
-+  https://www.st.com/resource/en/datasheet/stc3117.pdf
++DECLARE_CRC8_TABLE(stc3117_crc_table);
 +
-+allOf:
-+  - $ref: power-supply.yaml#
++enum stc3117_state {
++	STC3117_INIT,
++	STC3117_RUNNING,
++	STC3117_POWERDN,
++};
 +
-+properties:
-+  compatible:
-+    enum:
-+      - st,stc3117
++/* Default ocv curve Li-ion battery */
++static const int ocv_value[16] = {
++	3400, 3582, 3669, 3676, 3699, 3737, 3757, 3774,
++	3804, 3844, 3936, 3984, 4028, 4131, 4246, 4320
++};
 +
-+  reg:
-+    maxItems: 1
++union stc3117_internal_ram {
++	u8 ram_bytes[STC3117_RAM_SIZE];
++	struct {
++	u16 testword;   /* 0-1    Bytes */
++	u16 hrsoc;      /* 2-3    Bytes */
++	u16 cc_cnf;     /* 4-5    Bytes */
++	u16 vm_cnf;     /* 6-7    Bytes */
++	u8 soc;         /* 8      Byte  */
++	u8 state;       /* 9      Byte  */
++	u8 unused[5];   /* 10-14  Bytes */
++	u8 crc;         /* 15     Byte  */
++	} reg;
++};
 +
-+  monitored-battery:
-+    description: |
-+      The fuel gauge uses the following battery properties:
-+      - charge-full-design-microamp-hours
-+      - voltage-min-design-microvolt
-+      - voltage-max-design-microvolt
++struct stc3117_battery_info {
++	int voltage_min_mv;
++	int voltage_max_mv;
++	int battery_capacity_mah;
++	int sense_resistor;
++};
 +
-+  shunt-resistor-micro-ohms:
-+    description: Current sense resistor
++struct stc3117_data {
++	struct i2c_client *client;
++	struct regmap *regmap;
++	struct delayed_work update_work;
++	struct power_supply *battery;
++	union stc3117_internal_ram ram_data;
++	struct stc3117_battery_info battery_info;
 +
-+  interrupts:
-+    maxItems: 1
++	u8 soc_tab[16];
++	int cc_cnf;
++	int vm_cnf;
++	int cc_adj;
++	int vm_adj;
++	int avg_current;
++	int avg_voltage;
++	int batt_current;
++	int voltage;
++	int temp;
++	int soc;
++	int ocv;
++	int hrsoc;
++	int presence;
++};
 +
-+required:
-+  - compatible
-+  - reg
-+  - monitored-battery
-+  - shunt-resistor-micro-ohms
++static int stc3117_convert(int value, int factor)
++{
++	value = (value * factor) / 4096;
++	return value * 1000;
++}
 +
-+unevaluatedProperties: false
++static int stc3117_get_battery_data(struct stc3117_data *data)
++{
++	u8 reg_list[16];
++	u8 data_adjust[4];
++	int value, mode;
 +
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
++	regmap_bulk_read(data->regmap, STC3117_ADDR_MODE,
++			 reg_list, sizeof(reg_list));
 +
-+    i2c {
-+      #address-cells = <1>;
-+      #size-cells = <0>;
++	/* soc */
++	value = (reg_list[3] << 8) + reg_list[2];
++	data->hrsoc = value;
++	data->soc = (value * 10 + 256) / 512;
 +
-+      battery@70 {
-+        compatible = "st,stc3117";
-+        reg = <0x70>;
-+        interrupt-parent = <&gpio0>;
-+        interrupts = <31 IRQ_TYPE_LEVEL_LOW>;
-+        monitored-battery = <&bat>;
-+        shunt-resistor-micro-ohms = <10000>;
-+      };
-+    };
++	/* current in uA*/
++	value = (reg_list[7] << 8) + reg_list[6];
++	data->batt_current = stc3117_convert(value,
++			CURRENT_LSB_VALUE / data->battery_info.sense_resistor);
++
++	/* voltage in uV */
++	value = (reg_list[9] << 8) + reg_list[8];
++	data->voltage = stc3117_convert(value, VOLTAGE_LSB_VALUE);
++
++	/* temp in 1/10 °C */
++	data->temp = reg_list[10] * 10;
++
++	/* Avg current in uA */
++	value = (reg_list[12] << 8) + reg_list[11];
++	regmap_read(data->regmap, STC3117_ADDR_MODE, &mode);
++	if (!(mode & STC3117_VMODE)) {
++		value = stc3117_convert(value,
++			CURRENT_LSB_VALUE / data->battery_info.sense_resistor);
++		value = value / 4;
++	} else {
++		value = stc3117_convert(value, 36 * STC3117_NOMINAL_CAPACITY);
++	}
++	data->avg_current = value;
++
++	/* ocv in uV */
++	value = (reg_list[14] << 8) + reg_list[13];
++	value = stc3117_convert(value, VOLTAGE_LSB_VALUE);
++	value = (value + 2) / 4;
++	data->ocv = value;
++
++	/* CC & VM adjustment counters */
++	regmap_bulk_read(data->regmap, STC3117_ADDR_CC_ADJ_L,
++			 data_adjust, sizeof(data_adjust));
++	value = (data_adjust[1] << 8) + data_adjust[0];
++	data->cc_adj = value;
++
++	value = (data_adjust[3] << 8) + data_adjust[2];
++	data->vm_adj = value;
++
++	return 0;
++}
++
++static int ram_write(struct stc3117_data *data)
++{
++	int ret;
++
++	ret = regmap_bulk_write(data->regmap, STC3117_ADDR_RAM,
++				data->ram_data.ram_bytes, STC3117_RAM_SIZE);
++	if (ret)
++		return ret;
++
++	return 0;
++};
++
++static int ram_read(struct stc3117_data *data)
++{
++	int ret;
++
++	ret = regmap_bulk_read(data->regmap, STC3117_ADDR_RAM,
++			       data->ram_data.ram_bytes, STC3117_RAM_SIZE);
++	if (ret)
++		return ret;
++
++	return 0;
++};
++
++static int stc3117_set_para(struct stc3117_data *data)
++{
++	int ret;
++
++	ret = regmap_write(data->regmap, STC3117_ADDR_MODE, STC3117_VMODE);
++
++	for (int i = 0; i < STC3117_OCV_TABLE_SIZE; i++)
++		ret |= regmap_write(data->regmap, STC3117_ADDR_OCV_TABLE + i,
++			     ocv_value[i] * 100 / 55);
++	if (data->soc_tab[1] != 0)
++		ret |= regmap_bulk_write(data->regmap, STC3117_ADDR_SOC_TABLE,
++				  data->soc_tab, STC3117_OCV_TABLE_SIZE);
++
++	ret |= regmap_write(data->regmap, STC3117_ADDR_CC_CNF_H,
++				(data->ram_data.reg.cc_cnf >> 8) & 0xFF);
++
++	ret |= regmap_write(data->regmap, STC3117_ADDR_CC_CNF_L,
++					data->ram_data.reg.cc_cnf & 0xFF);
++
++	ret |= regmap_write(data->regmap, STC3117_ADDR_VM_CNF_H,
++				(data->ram_data.reg.vm_cnf >> 8) & 0xFF);
++
++	ret |= regmap_write(data->regmap, STC3117_ADDR_VM_CNF_L,
++					data->ram_data.reg.vm_cnf & 0xFF);
++
++	ret |= regmap_write(data->regmap, STC3117_ADDR_CTRL, 0x03);
++
++	ret |= regmap_write(data->regmap, STC3117_ADDR_MODE,
++					STC3117_MIXED_MODE | STC3117_GG_RUN);
++
++	return ret;
++};
++
++static int stc3117_init(struct stc3117_data *data)
++{
++	int id, ret;
++	int ctrl;
++	int ocv_m, ocv_l;
++
++	regmap_read(data->regmap, STC3117_ADDR_ID, &id);
++	if (id != STC3117_ID)
++		return -EINVAL;
++
++	data->cc_cnf = (data->battery_info.battery_capacity_mah *
++			data->battery_info.sense_resistor * 250 + 6194) / 12389;
++	data->vm_cnf = (data->battery_info.battery_capacity_mah
++						* 200 * 50 + 24444) / 48889;
++
++	/* Battery has not been removed */
++	data->presence = 1;
++
++	/* Read RAM data */
++	ret = ram_read(data);
++	if (ret)
++		return ret;
++
++	if (data->ram_data.reg.testword != STC3117_RAM_TESTWORD ||
++	    (crc8(stc3117_crc_table, data->ram_data.ram_bytes,
++					STC3117_RAM_SIZE, CRC8_INIT)) != 0) {
++		data->ram_data.reg.testword = STC3117_RAM_TESTWORD;
++		data->ram_data.reg.cc_cnf = data->cc_cnf;
++		data->ram_data.reg.vm_cnf = data->vm_cnf;
++		data->ram_data.reg.crc = crc8(stc3117_crc_table,
++						data->ram_data.ram_bytes,
++						STC3117_RAM_SIZE - 1, CRC8_INIT);
++
++		ret = regmap_read(data->regmap, STC3117_ADDR_OCV_H, &ocv_m);
++
++		ret |= regmap_read(data->regmap, STC3117_ADDR_OCV_L, &ocv_l);
++
++		ret |= stc3117_set_para(data);
++
++		ret |= regmap_write(data->regmap, STC3117_ADDR_OCV_H, ocv_m);
++
++		ret |= regmap_write(data->regmap, STC3117_ADDR_OCV_L, ocv_l);
++		if (ret)
++			return ret;
++	} else {
++		ret = regmap_read(data->regmap, STC3117_ADDR_CTRL, &ctrl);
++		if (ret)
++			return ret;
++
++		if ((ctrl & STC3117_BATFAIL) != 0  ||
++		    (ctrl & STC3117_PORDET) != 0) {
++			ret = regmap_read(data->regmap,
++					  STC3117_ADDR_OCV_H, &ocv_m);
++
++			ret |= regmap_read(data->regmap,
++						STC3117_ADDR_OCV_L, &ocv_l);
++
++			ret |= stc3117_set_para(data);
++
++			ret |= regmap_write(data->regmap,
++						STC3117_ADDR_OCV_H, ocv_m);
++
++			ret |= regmap_write(data->regmap,
++						STC3117_ADDR_OCV_L, ocv_l);
++			if (ret)
++				return ret;
++		} else {
++			ret = stc3117_set_para(data);
++			ret |= regmap_write(data->regmap, STC3117_ADDR_SOC_H,
++				     (data->ram_data.reg.hrsoc >> 8 & 0xFF));
++			ret |= regmap_write(data->regmap, STC3117_ADDR_SOC_L,
++				     (data->ram_data.reg.hrsoc & 0xFF));
++			if (ret)
++				return ret;
++		}
++	}
++
++	data->ram_data.reg.state = STC3117_INIT;
++	data->ram_data.reg.crc = crc8(stc3117_crc_table,
++					data->ram_data.ram_bytes,
++					STC3117_RAM_SIZE - 1, CRC8_INIT);
++	ret = ram_write(data);
++	if (ret)
++		return ret;
++
++	return 0;
++};
++
++static int stc3117_task(struct stc3117_data *data)
++{
++	int id, mode, ret;
++	int count_l, count_m;
++	int ocv_l, ocv_m;
++
++	regmap_read(data->regmap, STC3117_ADDR_ID, &id);
++	if (id != STC3117_ID) {
++		data->presence = 0;
++		return -EINVAL;
++	}
++
++	stc3117_get_battery_data(data);
++
++	/* Read RAM data */
++	ret = ram_read(data);
++	if (ret)
++		return ret;
++
++	if (data->ram_data.reg.testword != STC3117_RAM_TESTWORD ||
++	    (crc8(stc3117_crc_table, data->ram_data.ram_bytes,
++					STC3117_RAM_SIZE, CRC8_INIT) != 0)) {
++		data->ram_data.reg.testword = STC3117_RAM_TESTWORD;
++		data->ram_data.reg.cc_cnf = data->cc_cnf;
++		data->ram_data.reg.vm_cnf = data->vm_cnf;
++		data->ram_data.reg.crc = crc8(stc3117_crc_table,
++						data->ram_data.ram_bytes,
++						STC3117_RAM_SIZE - 1, CRC8_INIT);
++		data->ram_data.reg.state = STC3117_INIT;
++	}
++
++	/* check battery presence status */
++	ret = regmap_read(data->regmap, STC3117_ADDR_CTRL, &mode);
++	if ((mode & STC3117_BATFAIL) != 0) {
++		data->presence = 0;
++		data->ram_data.reg.testword = 0;
++		data->ram_data.reg.state = STC3117_INIT;
++		ret = ram_write(data);
++		ret |= regmap_write(data->regmap, STC3117_ADDR_CTRL, STC3117_PORDET);
++		if (ret)
++			return ret;
++	}
++
++	data->presence = 1;
++
++	ret = regmap_read(data->regmap, STC3117_ADDR_MODE, &mode);
++	if (ret)
++		return ret;
++	if ((mode & STC3117_GG_RUN) == 0) {
++		if (data->ram_data.reg.state > STC3117_INIT) {
++			ret = stc3117_set_para(data);
++
++			ret |= regmap_write(data->regmap, STC3117_ADDR_SOC_H,
++					(data->ram_data.reg.hrsoc >> 8 & 0xFF));
++			ret |= regmap_write(data->regmap, STC3117_ADDR_SOC_L,
++					(data->ram_data.reg.hrsoc & 0xFF));
++			if (ret)
++				return ret;
++		} else {
++			ret = regmap_read(data->regmap, STC3117_ADDR_OCV_H, &ocv_m);
++
++			ret |= regmap_read(data->regmap, STC3117_ADDR_OCV_L, &ocv_l);
++
++			ret |= stc3117_set_para(data);
++
++			ret |= regmap_write(data->regmap, STC3117_ADDR_OCV_H, ocv_m);
++
++			ret |= regmap_write(data->regmap, STC3117_ADDR_OCV_L, ocv_l);
++			if (ret)
++				return ret;
++		}
++		data->ram_data.reg.state = STC3117_INIT;
++	}
++
++	regmap_read(data->regmap, STC3117_ADDR_COUNTER_L, &count_l);
++	regmap_read(data->regmap, STC3117_ADDR_COUNTER_H, &count_m);
++
++	count_m = (count_m << 8) + count_l;
++
++	/* INIT state, wait for batt_current & temperature value available: */
++	if (data->ram_data.reg.state == STC3117_INIT && count_m > 4) {
++		data->avg_voltage = data->voltage;
++		data->avg_current = data->batt_current;
++		data->ram_data.reg.state = STC3117_RUNNING;
++	}
++
++	if (data->ram_data.reg.state != STC3117_RUNNING) {
++		data->batt_current = -ENODATA;
++		data->temp = -ENODATA;
++	} else {
++		if (data->voltage < APP_CUTOFF_VOLTAGE)
++			data->soc = -ENODATA;
++
++		if (mode & STC3117_VMODE) {
++			data->avg_current = -ENODATA;
++			data->batt_current = -ENODATA;
++		}
++	}
++
++	data->ram_data.reg.hrsoc = data->hrsoc;
++	data->ram_data.reg.soc = (data->soc + 5) / 10;
++	data->ram_data.reg.crc = crc8(stc3117_crc_table,
++					data->ram_data.ram_bytes,
++					STC3117_RAM_SIZE - 1, CRC8_INIT);
++
++	ret = ram_write(data);
++	if (ret)
++		return ret;
++	return 0;
++};
++
++static void fuel_gauge_update_work(struct work_struct *work)
++{
++	struct stc3117_data *data =
++		container_of(work, struct stc3117_data, update_work.work);
++
++	stc3117_task(data);
++
++	/* Schedule the work to run again in 2 seconds */
++	schedule_delayed_work(&data->update_work, msecs_to_jiffies(2000));
++}
++
++static int stc3117_get_property(struct power_supply *psy,
++	enum power_supply_property psp, union power_supply_propval *val)
++{
++	struct stc3117_data *data = power_supply_get_drvdata(psy);
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
++		if (data->soc > BATTERY_FULL)
++			val->intval = POWER_SUPPLY_STATUS_FULL;
++		else if (data->batt_current < 0)
++			val->intval = POWER_SUPPLY_STATUS_CHARGING;
++		else if (data->batt_current > 0)
++			val->intval = POWER_SUPPLY_STATUS_DISCHARGING;
++		else
++			val->intval = POWER_SUPPLY_STATUS_NOT_CHARGING;
++		break;
++	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
++		val->intval = data->voltage;
++		break;
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++		val->intval = data->batt_current;
++		break;
++	case POWER_SUPPLY_PROP_VOLTAGE_OCV:
++		val->intval = data->ocv;
++		break;
++	case POWER_SUPPLY_PROP_CURRENT_AVG:
++		val->intval = data->avg_current;
++		break;
++	case POWER_SUPPLY_PROP_CAPACITY:
++		val->intval = data->soc;
++		break;
++	case POWER_SUPPLY_PROP_TEMP:
++		val->intval = data->temp;
++		break;
++	case POWER_SUPPLY_PROP_PRESENT:
++		val->intval = data->presence;
++		break;
++	default:
++		return -EINVAL;
++	}
++	return 0;
++}
++
++static enum power_supply_property stc3117_battery_props[] = {
++	POWER_SUPPLY_PROP_STATUS,
++	POWER_SUPPLY_PROP_VOLTAGE_NOW,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
++	POWER_SUPPLY_PROP_VOLTAGE_OCV,
++	POWER_SUPPLY_PROP_CURRENT_AVG,
++	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_TEMP,
++	POWER_SUPPLY_PROP_PRESENT,
++};
++
++static const struct power_supply_desc stc3117_battery_desc = {
++	.name = "stc3117-battery",
++	.type = POWER_SUPPLY_TYPE_BATTERY,
++	.get_property = stc3117_get_property,
++	.properties = stc3117_battery_props,
++	.num_properties = ARRAY_SIZE(stc3117_battery_props),
++};
++
++static const struct regmap_config stc3117_regmap_config = {
++	.reg_bits       = 8,
++	.val_bits       = 8,
++};
++
++static int stc3117_probe(struct i2c_client *client)
++{
++	struct stc3117_data *data;
++	struct power_supply_config psy_cfg = {};
++	struct power_supply_battery_info *info;
++	int ret;
++
++	data = devm_kzalloc(&client->dev, sizeof(*data), GFP_KERNEL);
++	if (!data)
++		return -ENOMEM;
++
++	data->client = client;
++	data->regmap = devm_regmap_init_i2c(client, &stc3117_regmap_config);
++	if (IS_ERR(data->regmap))
++		return PTR_ERR(data->regmap);
++
++	psy_cfg.drv_data = data;
++
++	psy_cfg.fwnode = dev_fwnode(&client->dev);
++
++	crc8_populate_msb(stc3117_crc_table, CRC8_POLYNOMIAL);
++
++	data->battery = devm_power_supply_register(&client->dev,
++					&stc3117_battery_desc, &psy_cfg);
++	if (IS_ERR(data->battery))
++		return dev_err_probe(&client->dev, PTR_ERR(data->battery),
++					"failed to register battery\n");
++
++	ret = device_property_read_u32(&client->dev, "shunt-resistor-micro-ohms",
++					&data->battery_info.sense_resistor);
++	if (ret)
++		return dev_err_probe(&client->dev, ret,
++				"failed to get shunt-resistor-micro-ohms\n");
++	data->battery_info.sense_resistor = data->battery_info.sense_resistor / 1000;
++
++	ret = power_supply_get_battery_info(data->battery, &info);
++	if (ret)
++		return dev_err_probe(&client->dev, ret,
++					"failed to get battery information\n");
++
++	data->battery_info.battery_capacity_mah = info->charge_full_design_uah / 1000;
++	data->battery_info.voltage_min_mv = info->voltage_min_design_uv / 1000;
++	data->battery_info.voltage_max_mv = info->voltage_max_design_uv / 1000;
++
++	ret = stc3117_init(data);
++	if (ret)
++		return dev_err_probe(&client->dev, ret,
++				"failed to initialize of stc3117\n");
++
++	ret = devm_delayed_work_autocancel(&client->dev, &data->update_work,
++					   fuel_gauge_update_work);
++	if (ret)
++		return ret;
++
++	schedule_delayed_work(&data->update_work, 0);
++
++	return 0;
++}
++
++static const struct i2c_device_id stc3117_id[] = {
++	{ "stc3117", 0 },
++	{ }
++};
++MODULE_DEVICE_TABLE(i2c, stc3117_id);
++
++static const struct of_device_id stc3117_of_match[] = {
++	{ .compatible = "st,stc3117" },
++	{ }
++};
++MODULE_DEVICE_TABLE(of, stc3117_of_match);
++
++static struct i2c_driver stc3117_i2c_driver = {
++	.driver = {
++		.name = "stc3117_i2c_driver",
++		.of_match_table = stc3117_of_match,
++	},
++	.probe = stc3117_probe,
++	.id_table = stc3117_id,
++};
++
++module_i2c_driver(stc3117_i2c_driver);
++
++MODULE_LICENSE("GPL");
++MODULE_AUTHOR("Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>");
++MODULE_AUTHOR("Bhavin Sharma <bhavin.sharma@siliconsignals.io>");
++MODULE_DESCRIPTION("STC3117 Fuel Gauge Driver");
 -- 
 2.34.1
 
