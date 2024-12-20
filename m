@@ -1,40 +1,41 @@
-Return-Path: <linux-pm+bounces-19563-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19564-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 742BC9F8E3F
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 09:51:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 89A9F9F8E41
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 09:52:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C468C16C578
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 08:51:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E42EF16C62A
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 08:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 406E21A8404;
-	Fri, 20 Dec 2024 08:51:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AD271A83FE;
+	Fri, 20 Dec 2024 08:51:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazon11020102.outbound.protection.outlook.com [52.101.225.102])
+Received: from PNYPR01CU001.outbound.protection.outlook.com (mail-centralindiaazon11020094.outbound.protection.outlook.com [52.101.225.94])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8AB21A3AB8;
-	Fri, 20 Dec 2024 08:51:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.225.102
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 888171A00DF;
+	Fri, 20 Dec 2024 08:51:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.225.94
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734684685; cv=fail; b=tQ1jyU5OvRvB+sOa3LCZPjOCP58qLbRBqLRTYRrBviT0K+kHsBUXTJQLvNyLyuKThFaSdMsd/05XKA1o3yRLBz8xKIxkyTfgR76OFXZKNO/nQmbKzD9GgTWC3grtOux/oH478/n/4kxE9z1oF9zNE+SQlnrEuQbMv2+AhcUDkhQ=
+	t=1734684699; cv=fail; b=rR+v/MVkz2YtxpHsRUHEpE6tq6ZaDFeFCnpt4rUVJbrs8d7q4/dcqlYw03ERjuN1n/VtgpczoTlhP0lkLMc5KZkgRMqhjUFdHACvRx3CZEIR0CS9HiK5yjexvICKG4fSA7pBIWEOkDp9J1X28X/3lGBm4teVKcnC9o0b/hAIuV4=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734684685; c=relaxed/simple;
-	bh=9sGyP4U+ig+XyUedWAeqlgUQVPu3O3VwW2pjOfe+hRE=;
-	h=From:To:Cc:Subject:Date:Message-Id:Content-Type:MIME-Version; b=sJYFqexdx8MimPPqeyoX7C0q3vkcAThZ5kuK/iUDuzMa5bgpT5wNG1AN0O9IAoOMe00jR/ALQE5pVA5MLpf5DzG3E5cd5f15eqIHIC/UVatSnd/xrEuBQG7/TNbZHqZImZ2jvF2yPrVbKIHu790WMV9iaTa1WyS2fiqa7dHBnnc=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=52.101.225.102
+	s=arc-20240116; t=1734684699; c=relaxed/simple;
+	bh=xxO4C7UJMAvPfzsTKdMS/AVZDN2aX32WHNE17XpIfV8=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=VavjCV7lg67UHfHVPpXmrm7iFkJGcAr51Zs7mtZdsZymm9siSESm8gXDmkymfI4Qbuu9eEdkmcLKEGa+f+2IPTG54bq7xTsGIXXWDww2mA4SXFo8i2hderiJfjfDomVBM/6HM1WPz/GEAKv4W+3+Ee/ms/nq0Vdg12MNx3aeRpc=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io; spf=pass smtp.mailfrom=siliconsignals.io; arc=fail smtp.client-ip=52.101.225.94
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=siliconsignals.io
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=siliconsignals.io
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=xa4AfZcVNFfhacx7O7jK76JFlAkgFHmForM7cvhHkEoT2tf4G+7VXMdOzYuiU7gaG+vFZPwPrcDPqY+sbmOQtNrj86rc9eqfOr9e7EhvSGX92SHvOzTvaPg2IWxjKslqb4+E76IIz8apdqk7dg8vWWW1Rb1odYAyol1IIRssND387dpNuHpJSx2u7p1Fho3U0C6s/OyingSYQgKh31dHI9NTv4K8HhcoFFAJGmS894h7cCwdnOXdp3OOrPsx//LizwpBVe9OG94Tt+lJN6l6pP0OIpDYs3DfoB9M9kk4al6+h76PBcrgitZqYUt8XYfitHIzdkvcf/GjaMDM7w2A3A==
+ b=habeGnF9skarZJ+SUfiRY48vU55kinc17Mha5dRA/4pqpgr7uoVhGLRwDdkJwxfHEenpza4MTujP5pKr8PASzspl1PT7awV1KfqoORb0vtL2L4VUDrerRC4gigO8SBWbCci8LIuHf1zIvkSHnwcU0XpeFdu2lnTlPBoLImJ72zwMMMZ98hmqSEoWpi7Sr7YVNfa+KtQYUfMCTUmWzCmLrSWbID7IjlD8UINlgfJ9q88ygq38PHDTTTGL1o/Oxv7iu0d6/AHhixDJ4NUodgGEEpexL8+FHeahnHv4+VtrKPei9EigY09jylDU2EtNHd9T9dmZhsR3TTTpBzMjEFFP5g==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=pFX78gU7jDK6zjtSB4OQUyezIjG6wWJxf1yn9Bl8+w8=;
- b=a0BMienUvKPhNctui6PzZmNl2i1DTOwQXoRzPyg5U+eYOV8jqGFOObYWGmbAwR3rLOEwBa2toXKQpu4gZwxRqkrib+CumQAR+uqRBXjnRa6KmWexetV5TdfbUDMm7kwquLKNE9aCSx7fpyo4ejWUCRpYDl+xCwwUBIvacNFBnIbylAcIVfOQTD90WCCsQA5UgorQyvWicqBj7h1JTcSR2ML2iGsElEk6BRu9h0ZuNAi6KWO97SdceyvO5qhl3Y4gXkRg+lCo7X1/e10l1+B7IGU0TvMrZ5cWf96OS8Szvr2DXGpCUX8/27IwAK7Lv26/r36QwvUVzus3ntHVkxpVJA==
+ bh=GOdcyKu+fYOMaibbUC1Q9/NKitxcTCDC/b42yokj+NQ=;
+ b=eRWbBe4aCidMUmqIB/gieotQ68pf1QLghX/aRYaOSpx0pkAwvp+fJDegkpS2cOnE3Hdq2SNHchnSbXOQzVJtMtv9eWKYnIrv7+B2GQbTb12wEkuvcGPidGUlpP1N5xqeqLXfoCA9y76TimNSFbX/ywUYBOYRW5ec5684aXRYbm0ix4U2YKaJye4ozTt75MUTDOMxYUFnxKT3QlountaKsaM/JVRnwo1WM3l3irFbMRU8xwwwUFzfY1brEa9rwt2qDCv+y1wgDIxuBBswXGWC3/0En646xUIed5XHhM+OzDcDAuNvDkdCIS5deQe6qMdtCPr/2OkkCI32c2e5HzG+8Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=siliconsignals.io; dmarc=pass action=none
  header.from=siliconsignals.io; dkim=pass header.d=siliconsignals.io; arc=none
@@ -44,28 +45,31 @@ Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM (2603:1096:c04:1::15d)
  by PN0P287MB1045.INDP287.PROD.OUTLOOK.COM (2603:1096:c01:139::14) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8272.16; Fri, 20 Dec
- 2024 08:51:19 +0000
+ 2024 08:51:34 +0000
 Received: from PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
  ([fe80::740f:ab98:2be1:538]) by PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
  ([fe80::740f:ab98:2be1:538%4]) with mapi id 15.20.8251.015; Fri, 20 Dec 2024
- 08:51:19 +0000
+ 08:51:34 +0000
 From: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
 To: sre@kernel.org
 Cc: tarang.raval@siliconsignals.io,
-	Bhavin Sharma <bhavin.sharma@siliconsignals.io>,
 	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Bhavin Sharma <bhavin.sharma@siliconsignals.io>,
 	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
 	Conor Dooley <conor+dt@kernel.org>,
 	linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v13 0/2] power: supply: Add STC3117 Fuel Gauge
-Date: Fri, 20 Dec 2024 14:19:53 +0530
-Message-Id: <20241220084958.32367-1-bhavin.sharma@siliconsignals.io>
+Subject: [PATCH v13 1/2] dt-bindings: power: supply: Add STC3117 Fuel Gauge
+Date: Fri, 20 Dec 2024 14:19:54 +0530
+Message-Id: <20241220084958.32367-2-bhavin.sharma@siliconsignals.io>
 X-Mailer: git-send-email 2.34.1
-Content-Type: text/plain; charset=UTF-8
+In-Reply-To: <20241220084958.32367-1-bhavin.sharma@siliconsignals.io>
+References: <20241220084958.32367-1-bhavin.sharma@siliconsignals.io>
 Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 X-ClientProxiedBy: PN2PR01CA0254.INDPRD01.PROD.OUTLOOK.COM
  (2603:1096:c01:21a::20) To PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
  (2603:1096:c04:1::15d)
@@ -77,259 +81,173 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: PN2PPFF679F9759:EE_|PN0P287MB1045:EE_
-X-MS-Office365-Filtering-Correlation-Id: 776dd8e8-2cd1-4c60-07ff-08dd20d3786c
+X-MS-Office365-Filtering-Correlation-Id: 1c633bb3-6c28-45b9-5b87-08dd20d381bb
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam:
 	BCL:0;ARA:13230040|366016|376014|1800799024|52116014|38350700014;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?MndSbDM1cHVqNzkwSUpudys3NTNmM2JNODQzTHNUKzFhQk5Ud0Ezd2JLSmZB?=
- =?utf-8?B?VEZ3RExPUGJiMnUrbmgxRlZoZEk0bkJDUjgrcXQ2ZTh1OWpzME9teWdWZVZW?=
- =?utf-8?B?NTk3ZUNDMkxjWUJ4ZWdDSUs5b1h4cDE3S3J0YXl1Qng3WUhIL1JROFVKRWtM?=
- =?utf-8?B?a0svVEMwbE9DQ1NZU0M5dTZBbVJyMW9INmNORlhLQmprenlJV1lUSGdXeUlz?=
- =?utf-8?B?N3VWMzNHTWQxRFQ4ZE9iNmlYUlVqdWpxTzczWWdncTJFNHU2ak5BK1U5NDRy?=
- =?utf-8?B?QWlGRldLU0svaGpNZDcxY3Rnb3oyWmo1OU04dVl2OHo0MVBJbEFOYlBNQ1J6?=
- =?utf-8?B?REZLYkxycHhkeEw1OXZ6Wm1MbzU2ZnNsYTU0SVpCZUtKUGRFd1FKdGdMQ3hQ?=
- =?utf-8?B?RVhEa0tmVmpOQzhGTUpUZUthVkh0TUxyc1FrZ2h5UHdkaEZIOVJSN21nWXFi?=
- =?utf-8?B?amU2aTZGSVFpZlhkd2w2MnBUa1FDbXFGT2hkQ2tIWlprRE9UNGxaUTJqNU43?=
- =?utf-8?B?MHh2M3BWb0lUcVBBY1JnK0tGVDIya244SHNTS0lYY2hoNUhwNkN4QmJ2QWd0?=
- =?utf-8?B?NUR2RGtPeVVNODJ4eTBEdXNPckttaXhjS1hScnNZamVpNGJObkZwZHlWUGtD?=
- =?utf-8?B?NWJ4M1FiTk9zbExIWEZXR0JOSkxCdWw3OUZLMGZYS2FEcVlNcDNaSTVvSWd3?=
- =?utf-8?B?NCtiVnJWeCt2TW1WMWVMUHdrbmhXVC9MVFhIOXVsaVoxdHpLbUxSeUNwbGph?=
- =?utf-8?B?d3RuVXdHNkFQM0x4Y2ExelltNXM0K3BGL2Z5R1NpYTdzVWpZdEs1TEp4Z1Fi?=
- =?utf-8?B?TWNUdWVwWUY4Um1HWkg3ZnR0MGt0a1NJYVk4TDYxT1FhTGlQRWFPQzYxejMv?=
- =?utf-8?B?OUxxZ0Z3dXdUMnh2TktUQ0NrUGFIRm5NT0ZqZ0RhbWVaQUtJRGdDbWx6UUlJ?=
- =?utf-8?B?ZEhUNmVJK0N4akt1VFZDemlMT1ByTTlNU1VsMUpFbHNZbkJ1aWZzdmY2MW84?=
- =?utf-8?B?MkhtNHUwQ3lqL0RSc1M3RDI1L0pRWGVxVDhWbWNET2VSa3F1UlZ1ZE9VUU50?=
- =?utf-8?B?L3pmQmtiSHBtWXM2Sk5kSVBaMlZSUDhzRDErWlRuOGQySzlEeHlIdG0xVFhj?=
- =?utf-8?B?M1RrTHJNN0V4Zk8razAxeDFsVUV3MzZid0lpTk8wci8yTkNZUjJpVDJlN2lG?=
- =?utf-8?B?ejJVazBIOEtsUVdML0FBSjRyZU9HbSswN3FpaXJwU3NLUS9acmlCSU1IQWVO?=
- =?utf-8?B?Yit2QUtrNkNNTDdtcGpobU5IOVVUQ3Y2THFyV0F3RDQxNVQ4L3A0N1BQNFFz?=
- =?utf-8?B?eWwydTcra3VOUm5LNDd1alVNMEpwYzZBa21zSm9ndzhMZ1U2MGhCUlRaNVg5?=
- =?utf-8?B?RGVYUFN1SkxlZ2Y1WVFaN1FZeXdLcG04dS83RWV5aGFSZlpCTGtRRDVXWXBM?=
- =?utf-8?B?MWIrOHVsSXF2Mjl5K2lrcnprMGFsbFRGbmpEMG9UMjh1ZnN6bXh1TXJ4dnU2?=
- =?utf-8?B?U1lqK29pZ0ZpUjNXcUdNcXRoMjhQZmRnSjY4UWQyMjU0QkNHdHhoUCtwb25w?=
- =?utf-8?B?ZVA1dGtoWEtaWVU2RitsZTJkRmczUktzWjYwSXBCM3dpVFBLRXhmekt3cDBT?=
- =?utf-8?B?b3FxUzdhN1F6dUdNOVJnSkcyeXRicStRbW1yYWpCbHVuQzRaMXBNRXQxQXVF?=
- =?utf-8?B?ZGV0RGtsNi9renRCY2I5eVlHOHQwTEU0SEd3WmloUnMwWC9jdXZkUHNBTnRr?=
- =?utf-8?B?eUJBUEFGWlh4YjE3Zjh0TkljajkzTnlmTi91YjBSUWlKUnh5a1d1NnRDRExi?=
- =?utf-8?B?RU52ZmVMdlJsWndadlVTM253VXRCS1BtcDhzMWM0bjBDNFFaakpOcDB3OEFm?=
- =?utf-8?Q?LFRkVcllUQ1kb?=
+	=?us-ascii?Q?ApRnwKDjEIbMU8tt2Sugrz3GvaIOY0ev4xx6zsPshSX9o8yJGP8rbkxKoatE?=
+ =?us-ascii?Q?/YNt+H0XuNgaLqqaQwUb/4MQb1V+Ydza4jU5J3QYEe5BThMl6xXmkp/eRejQ?=
+ =?us-ascii?Q?fjAlsF/eRJQNgD3+FnkXDwFKD5A9p6kurkNjw6fYJ5NMhWk0R8c0pydU6bx7?=
+ =?us-ascii?Q?myu0C2IR6xlNucXtphGhUAPf0uf01iAasaXPOfo77LUEkTsFyyTi6b6juA/f?=
+ =?us-ascii?Q?URWKlYlsLRHT4ixQE1UY+Qin+w5lWAUZfjpnFkjKvxUHAkMVlUzOplgm8Uv7?=
+ =?us-ascii?Q?eN/Mi/upFEqyMjPx4EeLuewsXXSuExMJvTUk2dXcbvA6S6dS03sWFOB/QneI?=
+ =?us-ascii?Q?JUi8+frxkczf8QBxxP4aW6YtjgmRn515cfc7k1gXiqgo7ypErTlT/T00z0oS?=
+ =?us-ascii?Q?gFfPug+Hx3xRJuaG0/8AA7geR10HVAEkNeChNKZThwKJ3447cNTIIvkIHJRY?=
+ =?us-ascii?Q?gcT5JEqQ8Q7wwNW7LgmfiQ5QdSJcDyop3tcdSE+5XZopUvkD8ugG5TqJfyjb?=
+ =?us-ascii?Q?xXzeZMzNj/P6DAg8LLcnhaH+MgyKpFuSQVcYF599MQN+EuM46PxnOFFPMIVx?=
+ =?us-ascii?Q?SitD5jvFHc/eQ5Xickhszw1g21VDd42aTe2Zx2gA75ho7FTIUjTH2hJVNVg5?=
+ =?us-ascii?Q?9kRsTJiqX/s2gziku87vYhzYUev9UqYlbLlmmrXE7RVABvc44hw+QWYWfHqZ?=
+ =?us-ascii?Q?Tnl/R3rZz1vqtNTPyQ1QtLxdof1oz0LMjBkqXeoW5mNQLcTdczpmB+DCwZ90?=
+ =?us-ascii?Q?M8eG5IzWIoxEk9+cvlupv+ExjdvKn+caBQCDfDnUmAqavwAm68vvTZPPNHVc?=
+ =?us-ascii?Q?+nUPJXTwXVidyGCrB5x9ujLYQUhQQnr5eEHnc8q6S/JX9ewK8kb1mVTK0JAu?=
+ =?us-ascii?Q?YfzjGB9ewBTg5BZeKpW2wljxtxR1RNt2j3t7BSlpurWES/kOWtYda4cbfSy0?=
+ =?us-ascii?Q?tbbCsDnj8z0Kss8CyzOSVzu4Ax+CzrxpBlb2/+Y5c3Mh3I++i9gk7Tie1Qud?=
+ =?us-ascii?Q?NKBDAFmep2NYrohnKwawT56MAeJEO5wbclu6N6nJLIcJ6V/fxA+ADh70cZV0?=
+ =?us-ascii?Q?MR9m/ioCQOAY96+d9TjqIKj5G1Fn3x7yX6iyYHf0IAAzi2YWMyanH3e2xyFW?=
+ =?us-ascii?Q?Joeh7DLTJ1S/Sshrn5ncuYADRMROu4DuYLoAnGmLrHlSxF+ETWzaj2WoSRNd?=
+ =?us-ascii?Q?cnpG4ACiaSB9l5P+WL6rShAzpBKXnptoyERkEATVYDWvRGj0sPxd5ZtS8Dqt?=
+ =?us-ascii?Q?DC6pfolA9Yn8P/Gbrvceim+wUzXKCjnQvYVxWbC+ZgLh+2N/Wgo+D2goxdGz?=
+ =?us-ascii?Q?Ca48AHvMpntD9bFtwyoM4kFluTGpZ5dqu1S1gr1Mx4p1g0PAooqimS7uGLTt?=
+ =?us-ascii?Q?fnV4TWEHS5X4aMt9/EpUIubye0zLbl7R6MayikXV/v9yyT5WMw=3D=3D?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(52116014)(38350700014);DIR:OUT;SFP:1102;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?ZmtEWlBJTW9YNWpVQXVFWXZyOHVkaHpiMmNoMWFtTHdROExQUjduc2hFMEdD?=
- =?utf-8?B?ZlpNS1VkdkVCY3JFbkFVOEp5MmhsZ3VDcG5NdG1xTVJUU1VwSUgxT2JPcVRD?=
- =?utf-8?B?T1pSMFFUM2pSNm4zc0NXR2ZFMmFtNFJETmFzei9vZEl0Z1VzZVUvYlU0WTdm?=
- =?utf-8?B?aXdUaUVjY1Q2UVM4RTV0NnhNZFo2V0cxMjFvTDZ1TmZkL1NtUVVCZkRPaEo1?=
- =?utf-8?B?UWVRcENRTW9iVlZ0a21jdkcxdXlaSVpFb1VpbTJybFFlU2gwbmFSaHAwUTZI?=
- =?utf-8?B?cFNzMFBoRzl6TEZraFFYSm83RDk1bDZ4b2JKK253aUtXZ2xBejgrSEkxYnV2?=
- =?utf-8?B?ZisxK1ZDVU02RWRONWZYY2RlM01TdEo1emQ0MW9tT2lSVWYvWkVGL09qTG1z?=
- =?utf-8?B?elh1eWljYlpTeVUya25BMmM1ZFN5cndZRnFtQUZVeitxNFFoa2FWbnVXNFpq?=
- =?utf-8?B?K2YrUGhpWVpUQWNiTDdzWGJsNTYyeXlKNFNEeUhVNEtacG4zaGlMMnFlQTBH?=
- =?utf-8?B?SjhmNHhUTE9HNUYzOGFMU2pzRDM5THNqTWN0V3dzQ3h3cUFuakFxcjZ4L21U?=
- =?utf-8?B?aUtxUE1NN2E3UWdwZ0ZEeUNaWFgvbDBEVjJOck1Mc1dTaWR5ZUJRUUs2S1VR?=
- =?utf-8?B?UUxIY0ZDY1BOYlZBL1RCUnhnUVlJQVpBVEY3UzBTN1NjYlM2b3pPYnd2WlI2?=
- =?utf-8?B?d3owUDZYZHhYeHhncGVUdUNETHdhdncybjRGZCszcU5iRFlWN2R5bmhzd0hM?=
- =?utf-8?B?TGdhdWJ3TEtFd05HREZ6Q1krSnFhM1ljN0NCZTFWQkxCR2psb2hvWWV5TGZu?=
- =?utf-8?B?c1prdmpRVnpxaHNDdkdvaEtFQzdZUG1ZTS9hd0QwZC9nY2U1aElxRWdEWWp4?=
- =?utf-8?B?b1pUdjdsN2x0ZG1FaFNTSGV5cDF1a05kTDZtZmRpVnI4QVlYNXlaU0VaUG83?=
- =?utf-8?B?Q0kyRE5jc3JwcGVjWFNaMElmUFFGQlFESy9PUk1vQmVOTDRCSG5RZ3BWams1?=
- =?utf-8?B?NytLMXFsYmJmR1JZSEx5NUhrRklhVkdmbjZDZUZmUjFuWjhUNXp0RHZISlNP?=
- =?utf-8?B?WTRXSitMSzU3YjVpQjMrVVBldjdzakdXS25UVFczWVBBZVZwRGt2LzBJWUdp?=
- =?utf-8?B?c0NsekcyWGJIRWVFdHAzSU1MdUY3ZDhjWjRWY1BjdlVoN216eEIrYTdhSFhD?=
- =?utf-8?B?MEJnRkdUemd0RFF3clIrREgrbDNEYnMzMDVFam5hTTFjenRoZXlxWCt3Kzkw?=
- =?utf-8?B?WkJGSFJmYTh6a0J6OXYzRlBDaHV1YjRneDcxVG9OQ21tQmpuUU9WMVpYeVF3?=
- =?utf-8?B?NHdsL3pKcU16SnJBOHNMN0E5UUQ5RFVpYXlrY0xDVUpmdkgrTzh6V3N3NHBh?=
- =?utf-8?B?RXpzQ0dKVnRDb3FoZ0FpWFZDMUVaS1Mvc2RTazNrdmRPdHFDc3NMQUhISUNY?=
- =?utf-8?B?SEtuUkV1Ly81Y2w4TzEzYmZTZ2FqaUpQU3lBY2NHdllIWldkdytpY0cyNGtH?=
- =?utf-8?B?aGJnVG4zTTBOaXVqY2ZXRjhJYy9KSGlwT0NNUUxrK2FDWmxkUGZDU1JIeWZP?=
- =?utf-8?B?N3lnOXVHVzg2WUxHYTArUXNPR2o0K1Z3bG9DYVByZUF6czd5ckNOMnV3T0s0?=
- =?utf-8?B?cGYyMnE1ek00U09IcjJxRXN0Y3QvRm9OZkdFc3lVa2hBSk83ZTVyUmhOMVR6?=
- =?utf-8?B?R0ZTNmJKMExNeFd0bFJCeHM0L3FaMHlmQU9ZSjNHVllBZTgzanY3RXdxeGho?=
- =?utf-8?B?NVBBWHdLNTFOL2g1cC8xMGN6TlZvc1N6Rm85TlBnVkRkeklBcnhiV0hub0hh?=
- =?utf-8?B?ZDVYU2RnaExkc2ZiZ2NTRCtPKzR0aXlJRGNYME5wN1ViUGlqTWFDL0JGbWI4?=
- =?utf-8?B?WnM2amxpRjZuWW5DVGpod2ZnNSt4T3dvUUpja0orKzE5TDZuYVhGY3VNemp5?=
- =?utf-8?B?TDUreXNyemVnUHVtRnBlQjRZd081K3VLdThmZkd6N3NoQXYyTDZ5VDhlUGVR?=
- =?utf-8?B?M2hIUG5qT1VhUDg5Qjd0UG0vRDVLdk9vMUpGemdsaVhlNnNzc21RUTlsOWdx?=
- =?utf-8?B?d01QV2NLY0FjZUIzdDhWL2JYcFVhMTh6a3BybEtXNS9GbHYwZmNGMEJWaFZ6?=
- =?utf-8?B?UnBDdXhZczNraUpkbnBFK1B0TWlGU0RjVWw5eWxqY0ZCU0ppUDhUbGFtMFlk?=
- =?utf-8?Q?iQNsCZi9ROmm/t706Nk1tOM=3D?=
+	=?us-ascii?Q?DFn2jU8P4F2crxb2m4xGraXi7Pi/pLPZrTRCPPql3SM6wsL6+2fxuAnf+w9y?=
+ =?us-ascii?Q?q/Y3hZBwEGOBnSvcJrlDXWEvCzu9TzZE661XAzTdauMqSc9/u4UEbvGCy8PJ?=
+ =?us-ascii?Q?7eHZqXICfsWoxwahY9v/HQNs8JbiTntocQlkWohgkT1GxFhkpJblTneVo7Vz?=
+ =?us-ascii?Q?Nde+Ebh/baLJKGbV2XJ58EJjj8f7dYc4nsyC9DHMz4tuUSVIMto0LFR6wkG8?=
+ =?us-ascii?Q?Rkzby+jCaXwPOlX4buyA3SOpiADd4vuPgu+J9pdZWOm2i3qEJU3sTVjMpnH6?=
+ =?us-ascii?Q?jDhq8TmInHLzPN+9nulYWtWR+fWc6TGg8hnL2eJbif3CwTLIidhrRex5l5iH?=
+ =?us-ascii?Q?sBEHgaBpXMUWIf+flXnEvtAIRR1Uj/F/MsVfFOH1mi/E5HXJ0J+GfMuH3AOa?=
+ =?us-ascii?Q?SeD2p4RK7iSfFDg1TxCIl3HAQxBLOpNzwkNfx+3HXg69g0mw/0CEF49/w6Te?=
+ =?us-ascii?Q?WerBMVs4yhPUK+DVsVnZxLgSsHkO9XBmS0zEe5oyVKUCEyiFAoRPZSPjq9Ij?=
+ =?us-ascii?Q?864Z8E8zfMH8L2WDtiP7j5vV/qkDEC+Vg8L+u7tKC+iP40PFv6KSP3n7tQDO?=
+ =?us-ascii?Q?5aMiLmPQQVQv7hcXWqP1RzQPOuehelah/7CLT/BJhDSa+eaUCfPFHAA3z5+Y?=
+ =?us-ascii?Q?K9rP7GgdHzPw5B1sdaljUlKLColRSwBLXEuXYDX4yYJUb79d9zTbS5s55ps6?=
+ =?us-ascii?Q?IkySGVo2yp6PuOOPCHkkFMz1OM0Dw1qGYDL7O5sZVIA6MTqkc26IVTns0IGJ?=
+ =?us-ascii?Q?hWNIP/SKw4SkzPcc0GK8hbJfjRYAtUN6f2GIDk/xjHRbFdu+KPQDCkt40j2u?=
+ =?us-ascii?Q?bigeTUEsBLLIJbT/4D66hyH8OkhS96/UVFOdyEtWBdQDzp/WJgJ9kLXXjWIK?=
+ =?us-ascii?Q?ebfRL+7OCxmHAp2lIb7pkHsz1ZS161P+uoQPOW80lhSlNZHyP4oMUXU6P2kE?=
+ =?us-ascii?Q?I5fgSDg8gHFwEm0T7cimnOx0y9LhRKIa6mp31UUZpZNPp26N8JIujCe10HY2?=
+ =?us-ascii?Q?K0FHnP91gl9tLNZz88y8cmMNOmbkBdrkyACd4N5ukFGibT/oWRB+nK76XTLI?=
+ =?us-ascii?Q?z8djASbAmUhmK6t02NS29M2FjKZ13EcSOREHJ2+RV7tTBpgYXgapdfIQYkqU?=
+ =?us-ascii?Q?1qoXPPTce3oZCMTL9l3/tGn+BXL5Mvkmm8M4O8p1mn/krLzd5lONN4r0MMEY?=
+ =?us-ascii?Q?o9yoS1Uli4Z5mVLhTRHG3iD6LwfIrFm07LXS/M6h7t1r4Axvu0pXWpiJLV/6?=
+ =?us-ascii?Q?Yy79g603YJfVUNyOGEYOxUbQogfZTzNH1XA68HtJMyyaHdbgXREEHnGCF51G?=
+ =?us-ascii?Q?kY1q41vDpAS8uKp7sRPswVoK3sHTZuwUeGYNkayM3mcyZpnyK46hWKGLlGK3?=
+ =?us-ascii?Q?B3iXC9bPyEZTqXiwJa8T7xh0ylZIMzNC+1bLdkSw329fonU9J2RSVOz/f33m?=
+ =?us-ascii?Q?opu6a4+HNWzgkZLWYWvkImwCHx2LCOp2ZZCcYOPKnmsrNjKYzV7LYCDFJvYu?=
+ =?us-ascii?Q?i/oOE9wbe6SmTBikIOqTnmNzmNCs3d/hLi4Ul5uTEoRTlNbWFrQqgU/zZuj0?=
+ =?us-ascii?Q?NU/ffWGowcuVu/obBI3c0G9bCDR5AYuyUSvhG/cDksZOTWosDNs59VDI/Prt?=
+ =?us-ascii?Q?AMrwJyD7/i17pjwh91IG95g=3D?=
 X-OriginatorOrg: siliconsignals.io
-X-MS-Exchange-CrossTenant-Network-Message-Id: 776dd8e8-2cd1-4c60-07ff-08dd20d3786c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1c633bb3-6c28-45b9-5b87-08dd20d381bb
 X-MS-Exchange-CrossTenant-AuthSource: PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2024 08:51:18.8499
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 20 Dec 2024 08:51:34.4373
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 7ec5089e-a433-4bd1-a638-82ee62e21d37
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: AnB9N6OOmXd9+R/az0czC50TcG0gRInVw/aYGvWPtYInZuOiDNzIDoXF4iTZBGWOs3AkCpltPT6ci1IcZm3ibJlcT72Ca0Q/KO6HWnymAVo=
+X-MS-Exchange-CrossTenant-UserPrincipalName: Qn0a22Y0G3YN/DtR84JRf55+IzX6WQjVhviBO08dJQp88MrLaGJSDyJiD1KgB4MfyYwUD8Jup/FHHpw/Pp81sp8Aluk039fT1GnVLarnEqc=
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: PN0P287MB1045
 
-Adds initial support for the STC3117 fuel gauge.
+From: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
 
-Output of test_power_supply_properties.sh
+The STC3117 provides a simple fuel gauge via I2C.
+Add a DT schema to describe how to set it up in the device tree.
 
-TAP version 13
-1..33
-# Testing device stc3117-battery
-ok 1 stc3117-battery.exists
-ok 2 stc3117-battery.uevent.NAME
-ok 3 stc3117-battery.sysfs.type
-ok 4 stc3117-battery.uevent.TYPE
-ok 5 stc3117-battery.sysfs.usb_type # SKIP
-ok 6 stc3117-battery.sysfs.online # SKIP
-# Reported: '1' ()
-ok 7 stc3117-battery.sysfs.present
-# Reported: 'Discharging'
-ok 8 stc3117-battery.sysfs.status
-# Reported: '30' % ()
-ok 9 stc3117-battery.sysfs.capacity
-ok 10 stc3117-battery.sysfs.capacity_level # SKIP
-ok 11 stc3117-battery.sysfs.model_name # SKIP
-ok 12 stc3117-battery.sysfs.manufacturer # SKIP
-ok 13 stc3117-battery.sysfs.serial_number # SKIP
-ok 14 stc3117-battery.sysfs.technology # SKIP
-ok 15 stc3117-battery.sysfs.cycle_count # SKIP
-ok 16 stc3117-battery.sysfs.scope # SKIP
-ok 17 stc3117-battery.sysfs.input_current_limit # SKIP
-ok 18 stc3117-battery.sysfs.input_voltage_limit # SKIP
-# Reported: '3577000' uV (3.577 V)
-ok 19 stc3117-battery.sysfs.voltage_now
-ok 20 stc3117-battery.sysfs.voltage_min # SKIP
-ok 21 stc3117-battery.sysfs.voltage_max # SKIP
-# Reported: '3200000' uV (3.2 V)
-ok 22 stc3117-battery.sysfs.voltage_min_design
-# Reported: '4200000' uV (4.2 V)
-ok 23 stc3117-battery.sysfs.voltage_max_design
-# Reported: '206000' uA (206 mA)
-ok 24 stc3117-battery.sysfs.current_now
-ok 25 stc3117-battery.sysfs.current_max # SKIP
-ok 26 stc3117-battery.sysfs.charge_now # SKIP
-ok 27 stc3117-battery.sysfs.charge_full # SKIP
-# Reported: '3000000' uAh (3 Ah)
-ok 28 stc3117-battery.sysfs.charge_full_design
-ok 29 stc3117-battery.sysfs.power_now # SKIP
-ok 30 stc3117-battery.sysfs.energy_now # SKIP
-ok 31 stc3117-battery.sysfs.energy_full # SKIP
-ok 32 stc3117-battery.sysfs.energy_full_design # SKIP
-ok 33 stc3117-battery.sysfs.energy_full_design # SKIP
-# Totals: pass:12 fail:0 xfail:0 xpass:0 skip:21 error:0
-
-v12 -> v13
-
-- Battery information and RAM data add into struct stc3117_data
-
-Link for v12: https://lore.kernel.org/linux-pm/20241219094915.19059-1-bhavin.sharma@siliconsignals.io/T/#t
-
-v11 -> v12
-
-- Removed direct scaling (* 1000) in userspace property values.
-- Modified stc3117_convert to ensure proper unit conversions.
-- Returned -ENODATA directly without scaling.
-- Corrected Singed-of-by & Co-developed-by
-
-Link for v11: https://lore.kernel.org/linux-pm/20241216070457.8083-1-bhavin.sharma@siliconsignals.io/T/#t
-
-v10 -> v11
-
-- No changes                                                                    
-                                                                                
-v9 -> v10                                                                       
-                                                                                
-- Use error code instead of arbitrary values                                    
-- Use Co-developed-by tag                                                       
-                                                                                
-Link for V9: https://lore.kernel.org/linux-pm/20241213063813.32371-1-bhavin.sharma@siliconsignals.io/T/#t
-                                                                                
-v8 -> v9                                                                        
-                                                                                
-- Corrected the error message                                                   
-                                                                                
-Link for V8: https://lore.kernel.org/linux-pm/20241210080954.5067-1-bhavin.sharma@siliconsignals.io/T/#t
-                                                                                
-v7 -> v8                                                                        
-                                                                                
-- Add output of test_power_supply_properties.sh script.                         
-- Change 0X to 0x in macros.                                                    
-- Fix typos and Specify units in property comments.                             
-- Remove stc3117_update_battery_status function.                                
-- Convert voltage and current from mV/mA to uV/uA.                              
-- Represent temperature in tenths of a degree Celsius (1/10 °C).                
-- Export average current and open-circuit voltage (OCV).                        
-- Use devm_delayed_work_autocancel.                                             
-                                                                                
-Link for V7: https://lore.kernel.org/linux-pm/20241202094328.14395-1-bhavin.sharma@siliconsignals.io/T/#t
-                                                                                
-v6 -> v7                                                                        
-                                                                                
-- Removes extra spaces.                                                         
-- Fixes error handling.                                                         
-- Fixes the logic for checking battery status.                                  
-- Fixes typos.                                                                  
-- Removes unnecessary commas.                                                   
-                                                                                
-Link for v6: https://lore.kernel.org/linux-pm/20241130094531.14885-2-bhavin.sharma@siliconsignals.io/T/#t
-                                                                                
-v5 -> v6                                                                        
-                                                                                
-- Use shunt-resistor-micro-ohms property instead of sense-resistor.             
-- Remove the battery node from the binding examples.                            
-- Add interrupt bindings to the example.                                        
-- Correct the Signed-off-by (SoB) order in the commit.                          
-                                                                                
-Link for v5: https://lore.kernel.org/linux-pm/20241129114200.13351-1-bhavin.sharma@siliconsignals.io/T/#t
-                                                                                
-v4 -> v5                                                                        
-                                                                                
-- Fix variable names                                                            
-- Limit code line length to 80 columns                                          
-- Add interrupt and monitor-battery properties to bindings                      
-- Correct error handling with return dev_err_probe()                            
-                                                                                
-Link for v4: https://lore.kernel.org/linux-pm/21c08a45-34f1-443c-97d4-6baf9fa01b67@kernel.org/T/#t
-                                                                                
-v3 -> v4                                                                        
-                                                                                
-- Added support for current, soc, temp, and status properties.                  
-- Addressed comments and feedback provided by Krzysztof and Sebastian.          
-                                                                                
-Link for v3: https://lore.kernel.org/linux-pm/20240205051321.4079933-1-bhavin.sharma@siliconsignals.io/T/#t
-                                                                                
-v2 -> v3                                                                        
-                                                                                
-- Resolved DTC warnings and errors                                              
-- Formatted the changelogs                                                      
-- Added monitored battery properties                                            
-- Replaced 'additionalProperties' with 'unevaluatedProperties'                  
-- Replaced '&i2c6' with 'i2c'                                                   
-                                                                                
-Link for v2: https://lore.kernel.org/linux-pm/202401080530.0hMWnrIg-lkp@intel.com/T/#t
-                                                                                
-v1 -> v2                                                                        
-                                                                                
-- String value is redundantly quoted with any quotes (quoted-strings)           
-- Found character '\t' that cannot start any token                              
-                                                                                
-Link for v1: https://lore.kernel.org/linux-pm/46bba29c-330d-417d-ad84-ceb5207fdb55@wanadoo.fr/T/#t
-
-Bhavin Sharma (1):
-  power: supply: Add STC3117 fuel gauge unit driver
-
-Hardevsinh Palaniya (1):
-  dt-bindings: power: supply: Add STC3117 Fuel Gauge
-
- .../bindings/power/supply/st,stc3117.yaml     |  74 +++
- MAINTAINERS                                   |   8 +
- drivers/power/supply/Kconfig                  |   7 +
- drivers/power/supply/Makefile                 |   1 +
- drivers/power/supply/stc3117_fuel_gauge.c     | 613 ++++++++++++++++++
- 5 files changed, 703 insertions(+)
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
+Signed-off-by: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
+---
+ .../bindings/power/supply/st,stc3117.yaml     | 74 +++++++++++++++++++
+ 1 file changed, 74 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
- create mode 100644 drivers/power/supply/stc3117_fuel_gauge.c
 
+diff --git a/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml b/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+new file mode 100644
+index 000000000000..e486131a27a9
+--- /dev/null
++++ b/Documentation/devicetree/bindings/power/supply/st,stc3117.yaml
+@@ -0,0 +1,74 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/power/supply/st,stc3117.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: STMicroelectronics STC3117 Fuel Gauge Unit Power Supply
++
++maintainers:
++  - Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>
++  - Bhavin Sharma <bhavin.sharma@siliconsignals.io>
++
++description: |
++  The STC3117 includes the STMicroelectronics OptimGauge algorithm.
++  It provides accurate battery state-of-charge (SOC) monitoring, tracks
++  battery parameter changes with operation conditions, temperature,
++  and aging, and allows the application to get a battery state-of-health
++  (SOH) indication.
++
++  An alarm output signals low SOC or low voltage conditions and also
++  indicates fault conditions like a missing or swapped battery.
++
++  Datasheet is available at
++  https://www.st.com/resource/en/datasheet/stc3117.pdf
++
++allOf:
++  - $ref: power-supply.yaml#
++
++properties:
++  compatible:
++    enum:
++      - st,stc3117
++
++  reg:
++    maxItems: 1
++
++  monitored-battery:
++    description: |
++      The fuel gauge uses the following battery properties:
++      - charge-full-design-microamp-hours
++      - voltage-min-design-microvolt
++      - voltage-max-design-microvolt
++
++  shunt-resistor-micro-ohms:
++    description: Current sense resistor
++
++  interrupts:
++    maxItems: 1
++
++required:
++  - compatible
++  - reg
++  - monitored-battery
++  - shunt-resistor-micro-ohms
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/interrupt-controller/irq.h>
++
++    i2c {
++      #address-cells = <1>;
++      #size-cells = <0>;
++
++      battery@70 {
++        compatible = "st,stc3117";
++        reg = <0x70>;
++        interrupt-parent = <&gpio0>;
++        interrupts = <31 IRQ_TYPE_LEVEL_LOW>;
++        monitored-battery = <&bat>;
++        shunt-resistor-micro-ohms = <10000>;
++      };
++    };
 -- 
 2.34.1
 
