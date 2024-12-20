@@ -1,135 +1,123 @@
-Return-Path: <linux-pm+bounces-19553-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19554-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B130C9F88D0
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 01:08:06 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 717529F8BD7
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 06:19:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABE271897D7E
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 00:08:07 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 50E457A3305
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 05:19:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A345FEC4;
-	Fri, 20 Dec 2024 00:08:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60BEB770FE;
+	Fri, 20 Dec 2024 05:19:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="aOIGtHwo"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gQ6isGpR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pf1-f181.google.com (mail-pf1-f181.google.com [209.85.210.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6041800;
-	Fri, 20 Dec 2024 00:07:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734653280; cv=pass; b=pyRTEVza14W9SK3mwp6YR4nDj9pGOTJovY9f8I4ZqUb0EJC9+OCdQoNvW3U/7/PeL4PSFUXA0AgkLV+3dniL+7AVb9zWF+7kjnAbJUmWoS0C+cg/GHBEON/kXwWNA6J0+7C8fU9nm2wGmUSmeCUh27lWfFzI4gZ7Ty4p7hLo6oE=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734653280; c=relaxed/simple;
-	bh=9dhIIHfHcYh5bMd4tpuDoOfufCYlDhgPCe3PPEm1iWg=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C93222594B2
+	for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 05:19:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.181
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734671982; cv=none; b=ThZ3WaX+FMS8zc0qOsA4CulZZm3CBNhSYn0NOsuFoLVBsFv21Nv9AE5aagBfMnuNbOHMonZNxdsBaPsW1tCilJVfSfajv+tPzZzq/+M3C/4UTS4qX2qYbTm+dCUznVO6ZWUPWBHZiAAkl1SnFeKuPbRHMC/AqK0kZi8s5GDt1Jw=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734671982; c=relaxed/simple;
+	bh=e54aETtzKU0bJh4FKXcbmgqTYchVu+DCLAOii7IkhIg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Uvl64re1iE6u+ZSxspW+z7T/5J/tzH8/hVwp8RCXDHZj2FbCTAS4DFIxXbQd2u4vkJH33jDplxZBdoMJNHEHUqB2KMu+yhhugy4UVC6nYbFQSt935mOIAiT6u2kf+1ZirYs2HlKAMimxumfBGuiFYrhajQe7U4WDytQPfWbCO1A=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=aOIGtHwo; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1734653264; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=eBXA4uIIkksfy/NdKNMhYjHqWnhKKb0abGD3Q3EZ065tcIR+d0n28rXI1GVSR2vbpzibXApAVioVfCLlhfMBoz1lZ4gIGwJ7ak/xjFRAbocC+HrsYqLyKmgVMXUgidsw1HvP7cmo8I4fCLCO4/ffWjkufnyoJYVlNex1LIL9L+M=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1734653264; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=9dhIIHfHcYh5bMd4tpuDoOfufCYlDhgPCe3PPEm1iWg=; 
-	b=cJ83atTrycUICt3fp64DqmgsG42uNtUz0VQ1iMNmwZ+00wSEMmpaDSayKa9icpaC3uGgvsPhc0zlFhj5EnysKfa/SZq/vyfIRyxd/jMovt+ukhGt8LaCCgC6hfxQk/YjyLh5omGoPXT6y7DsPFP1f2qL/0WSUqCDRcn8wNhelvc=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1734653264;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=9dhIIHfHcYh5bMd4tpuDoOfufCYlDhgPCe3PPEm1iWg=;
-	b=aOIGtHwo4dXowun3pJOWBIYnHcLpaBo+IibVt0g5TOvERoysuYJ1fcMYUBvqcXg+
-	JjjZHUMLlAIgyOhSBz3bwcZmeDCoQiSejzHpSv6oo8X/d2DtLsdzOj4v+I1sqDRs4jk
-	T38B5zaSmD0G9gjcdl++1jdVF9ma7jZISpf3ESn8=
-Received: by mx.zohomail.com with SMTPS id 1734653261276915.0288078430918;
-	Thu, 19 Dec 2024 16:07:41 -0800 (PST)
-Received: by mercury (Postfix, from userid 1000)
-	id D37711060348; Fri, 20 Dec 2024 01:07:37 +0100 (CET)
-Date: Fri, 20 Dec 2024 01:07:37 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>, 
-	Andy Shevchenko <andy@kernel.org>, Thomas =?utf-8?Q?Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
-	Jelle van der Waa <jelle@vdwaa.nl>, platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v4 4/4] platform/x86: dell-laptop: Use
- power_supply_charge_types_show/_parse() helpers
-Message-ID: <g4qclyb47aylmjavfd2boidyp77khdc3k5i5ftzhaohawdsdnw@pwmune4y3kn3>
-References: <20241211174451.355421-1-hdegoede@redhat.com>
- <20241211174451.355421-5-hdegoede@redhat.com>
- <0030c3dd-c70c-d21b-de2b-ace0aeb4030d@linux.intel.com>
- <6760c9d3-ccf4-47de-bfe5-b59b8b9fca07@redhat.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TMJ2ynLbbfbk0PQWzkAx848OPpP+y4sLpUko/bs+AOSWC2+DjM/t8f8nCm5XXJHD0874PpdvcxP/iTToVo3WUjjJkXIABq5dhlXm8egimq9qEw8+qIEAxyumIwQjkDBObOSkUrHak4t2ym30oRDRrpaAwZNX8+SsnViLUdf+1go=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gQ6isGpR; arc=none smtp.client-ip=209.85.210.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pf1-f181.google.com with SMTP id d2e1a72fcca58-725ea1e19f0so1360299b3a.3
+        for <linux-pm@vger.kernel.org>; Thu, 19 Dec 2024 21:19:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1734671980; x=1735276780; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=3ldz2OYNNzJdiTSApNt6V8tKr1UZg1Bi0CEsnq5FrJM=;
+        b=gQ6isGpRmwIlZvX9t7QC+jW+A5RdljsY9VCu4BxI6MRsqpOEvIjdoX0/YMudqgPr3S
+         m4TfirlUtRmGW/0Fd8Iqnfzs+Kb4l98bOmQJz4mkjL7o7NDBKaAYnF4lk46BO+LgAywV
+         aPEikqhX+EDfANRKF+YpWuV50V4vmuju+nN4pqEIj5ibgTmiEEc2RSwxwUTRfDmGo3LU
+         qaS6ks9JzFwP6gS9jHVY2MAOvAbOaw3U6+0TKANIQW931XpyN//euUIofN9UvzU9N9Ny
+         JfVqSdDzjKXygQO1470o9TzYP36OFpe2L5RFc6rif8ELV6fJadx7B0wOmbf1ujufv9tA
+         h7bQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734671980; x=1735276780;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=3ldz2OYNNzJdiTSApNt6V8tKr1UZg1Bi0CEsnq5FrJM=;
+        b=P24+jy+O1S2g3Ta7+O0r1ZUICHUf84Ts1gKCSZT/2VDj4OmnOQUG0D7zQkaHZuEj3X
+         QjhdN00ri/j7Na9FX+z8FtOqUjKn3krYp9zuqiIGLfgse87vujwdipVNT0y/8SoWu/We
+         qCXlANDEmb9lbEmbAm9ZrnLHbK78IDk6ZcSGXHwoihIKwKB/FtOvPDKMTNhePkQf1ao1
+         5uyrVL0ftShyItoe7SIHrVcNiOyR50wQPueukx3RRUzg4ShPG4gxFP+OFQmLULGoX8Ng
+         3vGgGh3aYm209jJ6n1dW8PUXI6rHHm6Zap2Y9x+h5MjMDKXHY0WrLV3RrS9nir1+gm+9
+         0/lw==
+X-Forwarded-Encrypted: i=1; AJvYcCXrBTbOcg8CcMkcdu1xwwOSCY3cBjhLXNJj6kwccx4/ZbWVVRYRIl9ymSSInRRJfE7l51kFL7sjsw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YytOy+oZIZ6YjDnFtoNN4HabQdqSmJSv40/PAKkJGKF6vYDXyA0
+	8Tq3QUubzB268y0lMNk8bT8wccOOsn0HimL3LWmqPgc4OXFvzDaTWWB3EOblpWc=
+X-Gm-Gg: ASbGncsDuL1ELxb+W0PTQ2jkdfk/S7Udv5NnA+mXCLT6qoLKCs1BoRt85Ku9sYZJEGw
+	x3Bjhg1XY99mJemja0i3FB+ZURVe1QG8q1zno7TtQQjvHSy0vQ31BRFClMVcedpkSKO4AKYG7Xe
+	8EbvOpAXrpgZyokYgweEDEAmwbiyCR3ghmmdZGe0tw3VVt+7qooIynTIXvcHPVPfoUW9IMzTHAU
+	bWPhOuKSXRkHPKcwtaaR0jD0fn+IHiqvxCqYwPdjf/s1v2WFjtyzq7rSyw=
+X-Google-Smtp-Source: AGHT+IFMsOL2P9eXpfo9vzACUXZ9LwC+O82OrlKh1udvUcRtJDTnWmllWwbry/KmoxqbdXKEqnl/4g==
+X-Received: by 2002:a05:6a20:258c:b0:1e1:a693:d623 with SMTP id adf61e73a8af0-1e5e04994fcmr3156113637.25.1734671980199;
+        Thu, 19 Dec 2024 21:19:40 -0800 (PST)
+Received: from localhost ([122.172.83.132])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842aba73267sm2074168a12.13.2024.12.19.21.19.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 19 Dec 2024 21:19:39 -0800 (PST)
+Date: Fri, 20 Dec 2024 10:49:37 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Christian Marangi <ansuelsmth@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	upstream@airoha.com
+Subject: Re: [PATCH v7 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
+Message-ID: <20241220051937.fbfbbvtd3yzu54kv@vireshk-i7>
+References: <20241206211145.2823-1-ansuelsmth@gmail.com>
+ <20241206211145.2823-2-ansuelsmth@gmail.com>
+ <CAPDyKFovtfR7BiXBfH-79Cyf1=rd-kmOoEnEdMArjGUxSks-Aw@mail.gmail.com>
+ <20241213040001.jaqeuxyuhcc73ihg@vireshk-i7>
+ <675cb6b2.050a0220.149877.5bab@mx.google.com>
+ <CAPDyKFq7c607_NtiEF=4HinL5HABv7+fW9EGi1xfwpOpUPO6Bg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="g2ob2suj76dp2zbl"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <6760c9d3-ccf4-47de-bfe5-b59b8b9fca07@redhat.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.3.1/234.551.59
-X-ZohoMailClient: External
+In-Reply-To: <CAPDyKFq7c607_NtiEF=4HinL5HABv7+fW9EGi1xfwpOpUPO6Bg@mail.gmail.com>
 
+On 19-12-24, 16:23, Ulf Hansson wrote:
+> The power-domain provider driver should use the compatible
+> "airoha,en7581-cpufreq". This driver should be responsible for
+> registering the genpd and the clock.
+> 
+> Potentially, the power-domain provider driver could also register the
+> "cpufreq-dt" platform-device. To make this work, we also need to
+> extend the cpufreq-dt driver (maybe extend its platform-data too?) to
+> be capable of attaching the corresponding cpu-devices to their
+> power(perf)-domains. For the moment, this isn't supported, but I think
+> it would be nice if it could. Another option, would be to use an
+> additional separate name-based cpufreq-driver, as in the
+> qcom-cpufreq-nvmem.c, that then becomes responsible for registering
+> the cpufreq-dt device.
+> 
+> Viresh, do you have a better approach in mind?
 
---g2ob2suj76dp2zbl
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH v4 4/4] platform/x86: dell-laptop: Use
- power_supply_charge_types_show/_parse() helpers
-MIME-Version: 1.0
+I am fine with any part of the kernel creating the cpufreq-dt device.. That
+doesn't need to be in the cpufreq directory.
 
-Hi,
-
-On Tue, Dec 17, 2024 at 04:18:47PM +0100, Hans de Goede wrote:
-> Note that merging this requires the earlier patches from this
-> series which have been merged into:
->=20
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.gi=
-t/log/?h=3Dfor-next
->=20
-> so this either requires an immutable tag from Sebastian for you to merge,
-> or this should be merged through Sebastian's tree.
-
-Unfortunately I cannot easily create an immutable tag, which does
-not pull in quite a bit of other clutter from my for-next branch
-(or require a big rebase of everything in my for-next branch, which
-I usually try to avoid). I noticed too late that it would have been
-a good idea to merge all of this through a topic branch.
-
-Greetings,
-
--- Sebastian
-
---g2ob2suj76dp2zbl
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmdktT4ACgkQ2O7X88g7
-+pqazA/8DouyIvR78L9UouabSfwPvJsvfA1iHLpbu57sMylUrYXiPenhW+IX1wmw
-lwfg8XOGvSqU1lBQMSCfKtY1VrKqnZWIQAHOuXyuDKhv4DvNdKYmfPC4dl8oDE/L
-esQTK3RP7F1sJEsVUfrC3WvVLP5WW+Q+vavAVzMtYcjbXSMnKNODTojykwPcOBRA
-gar163TMfBs0aoCDzBGofku/L7Xik7dYAzOS4ztp3OjHCwqKZI4US+zthfmKVw2p
-8pfxNquZg2GA/aZj3dkHSm31L93MopRHgDpdp7LK7+Q3E0WRJM5YtEeFLoAukGI/
-ZwLKngY0TQTwGA3ye6HAB4K62Bo3274OhNFF/lSemhSfEPJkop140fPvNCWue/VL
-5XCFVCq7MGjTVG62m1I83ktcnNbE1HeYo/p1R96YtLYdsDDjXOqYqCIN1SyTc9m2
-CTpIuuilgLkzaSscJoDInR1KSnojGva0iROpo23vx46V2RnQLA7blCVcJnOZLWar
-pkyFfpddUh0ERqHSJ0odfkho67WCTpx5XwpgQtfEB1jZvRpB3GzneZ/lAKFmvS85
-GhPNIJJQet36qSPLleUquvKRE0SpjM0gx9CYA/QYd+nSeNPohn/oM/qcf4VwU5EZ
-4aL8SGmCWsdqoKgSLZgdls7BTvfoI440uREwB689hfYrbXtGsCA=
-=pkQX
------END PGP SIGNATURE-----
-
---g2ob2suj76dp2zbl--
+-- 
+viresh
 
