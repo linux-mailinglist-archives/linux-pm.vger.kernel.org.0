@@ -1,121 +1,308 @@
-Return-Path: <linux-pm+bounces-19560-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19561-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 952FD9F8D24
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 08:22:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2A42A9F8DFE
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 09:30:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4B7687A296D
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 07:22:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 04B0E189681E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 08:30:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 268741946C8;
-	Fri, 20 Dec 2024 07:22:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="bRcQGZ3v"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 524B11A8404;
+	Fri, 20 Dec 2024 08:30:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 266581304B0
-	for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 07:22:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80C291A8405;
+	Fri, 20 Dec 2024 08:30:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734679354; cv=none; b=XkUHDa5sFMZuF1vHqV/qaO0+15xQt1mIRMXzTeeZ6V5Jd9uMG6PCPBUN/uPfEFsiPUKkpw7sR3jN1NebLU/ErKsea2FvGh90UPG+WuM5SZPesPjprsztFijmhc0tm5P8f1IvDZ9xSg2QRPXLHrIlC0SFrvMiFfI9F1E6WjcTzLw=
+	t=1734683409; cv=none; b=UmHIJdJ1zlf3fES9IoPClLA3jK+2TjnxRbxny81wGbCkLSauid9NVZ90IoVp+XOdyk99umnfm9Z0BrNL2R/bfz5EecblW6JljGqnHpp5URkbztjyHlkz+E4II0ZDwM8aF4rNrE88Sg6zEBnsdCZog8kbnXxZxmDzNHcOJdz85Vo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734679354; c=relaxed/simple;
-	bh=mD0SSobIGbBT5eejdQTqxB+QHJJCwWIlX7PTGwwLltQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cLF3VhaABJrPlf2KX5PHpdIPeQ2bzFZwXsmtvNdyIb/VyRxCw5wI+ewx6bm6Hl8B/IiIa7pdU/7Nji8bhbzFHzA17OcX/Qofo6j1br+gYGxszh+CM6phJrCFFMP1k4tDkVRhJ/Z05gDCP9c11hKJXU9YmwBF10rhSWhQ1uiwnjk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=bRcQGZ3v; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1734679350;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=VV1GAbU6vs/Ml1xhCadOL44dM9zTf3oC8kpgBVJ9ouw=;
-	b=bRcQGZ3vEO8upouDA2q+oT8Ehz2tdfdn1fM4brJ9BSdeVi2TfuuQgPDEbLmr7Gao2e0cuN
-	6makcYIfy5xglsaDxF2lXVUzhzA3DmFoo8fefCqEXZJFyXNGKU6m+oGs2yD8bNC6QI3Qh8
-	TpMPYFQX35EliK/39p4KZxtTGfl7NZQ=
-Received: from mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-589-r-LCiKK2MmeyGdwoo16F7g-1; Fri,
- 20 Dec 2024 02:22:25 -0500
-X-MC-Unique: r-LCiKK2MmeyGdwoo16F7g-1
-X-Mimecast-MFC-AGG-ID: r-LCiKK2MmeyGdwoo16F7g
-Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 0BD7B195608C;
-	Fri, 20 Dec 2024 07:22:24 +0000 (UTC)
-Received: from localhost (unknown [10.66.37.175])
-	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5A1B719560A2;
-	Fri, 20 Dec 2024 07:22:21 +0000 (UTC)
-Date: Fri, 20 Dec 2024 15:22:17 +0800
-From: Baoquan He <bhe@redhat.com>
-To: "Eric W. Biederman" <ebiederm@xmission.com>
-Cc: David Woodhouse <dwmw2@infradead.org>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ming Lei <ming.lei@redhat.com>, LKML <linux-kernel@vger.kernel.org>,
-	Linux PM <linux-pm@vger.kernel.org>,
-	Kexec Mailing List <kexec@lists.infradead.org>
-Subject: Re: Does anyone actually use KEXEC_JUMP?
-Message-ID: <Z2UbKdmmgd/IzMoz@MiWiFi-R3L-srv>
-References: <4968818.GXAFRqVoOG@rjwysocki.net>
- <d29738023f117bbd4031579443e0c2f8f1f78592.camel@infradead.org>
- <87h673zkhr.fsf_-_@email.froward.int.ebiederm.org>
- <E64227FF-E6A2-4E2C-85F3-EF1D9EFEC91F@infradead.org>
- <87bjxbzdyq.fsf@email.froward.int.ebiederm.org>
+	s=arc-20240116; t=1734683409; c=relaxed/simple;
+	bh=pBZBvKJSkf7ZlT+2Lyv7NJuhuYwU31Yd9wum+IcHf8k=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=pHe0e5fE5z+HHYkhIyIjPwUKHZBNl5fDz822fY8o6AphPGFxGTT0WvQWTXsCW7Gi0z6T3SmGO2pDbDXC2ky8F/mzTGqcFcisO/dGX+grNdGQl+02VFX1751YiVMTbhbTvlsO8Z/BLFmWkvib3N4PaQHnFO/QTRrWGbM7K6Ic1n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.194])
+	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4YF0rP287gz1V5Jv;
+	Fri, 20 Dec 2024 16:26:45 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id 5D4E21402E1;
+	Fri, 20 Dec 2024 16:30:02 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 20 Dec
+ 2024 16:30:01 +0800
+Message-ID: <74be38cf-8e18-44fc-995c-a5b734d9df29@huawei.com>
+Date: Fri, 20 Dec 2024 16:30:00 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <87bjxbzdyq.fsf@email.froward.int.ebiederm.org>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 1/4] ACPI: CPPC: Add cppc_get_reg_val and
+ cppc_set_reg_val function
+To: Pierre Gondois <pierre.gondois@arm.com>, <rafael@kernel.org>,
+	<lenb@kernel.org>, <robert.moore@intel.com>, <viresh.kumar@linaro.org>
+CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linuxarm@huawei.com>, <ionela.voinescu@arm.com>,
+	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<lihuisong@huawei.com>, <hepeng68@huawei.com>, <fanghao11@huawei.com>
+References: <20241216091603.1247644-1-zhenglifeng1@huawei.com>
+ <20241216091603.1247644-2-zhenglifeng1@huawei.com>
+ <8e9c1ede-3277-458b-bd44-ca0c7615a4ab@arm.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <8e9c1ede-3277-458b-bd44-ca0c7615a4ab@arm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-On 12/16/24 at 12:21pm, Eric W. Biederman wrote:
-> David Woodhouse <dwmw2@infradead.org> writes:
+On 2024/12/17 21:48, Pierre Gondois wrote:
+> Hello Lifeng,
 > 
-> > It isn't broken. I know of it being used a few million times a week.
-> >
-> > There are corner cases which have never worked right, like the callee
-> > putting a different return address for its next invocation, on the
-> > stack *above* the address it 'ret's to. Which since the first kjump
-> > patch has been the first word of the page *after* the swap page (and
-> > is now fixed in my tree). But fundamentally it *does* work.
-> >
-> > I only started messing with it because I was working on
-> > relocate_kernel() and needed to write a test case for it; the fact
-> > that I know of it being used in production is actually just a
-> > coincidence.
+> On 12/16/24 10:16, Lifeng Zheng wrote:
+>> Rename cppc_get_perf() to cppc_get_reg_val() as a generic function to read
+>> cppc registers, with four changes:
+>>
+>> 1. Change the error kind to "no such device" when pcc_ss_id < 0, which
+>> means that this cpu cannot get a valid pcc_ss_id.
+>>
+>> 2. Add a check to verify if the register is a cpc supported one before
+>> using it.
+>>
+>> 3. Extract the operations if register is in pcc out as
+>> cppc_get_reg_val_in_pcc().
+>>
+>> 4. Return the result of cpc_read() instead of 0.
+>>
+>> Add cppc_set_reg_val_in_pcc() and cppc_set_reg_val() as generic functions
+>> for setting cppc registers value. Unlike other set reg ABIs,
+>> cppc_set_reg_val() checks CPC_SUPPORTED right after getting the register,
+>> because the rest of the operations are meaningless if this register is not
+>> a cpc supported one.
+>>
+>> These functions can be used to reduce some existing code duplication.
+>>
+>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>> ---
+>>   drivers/acpi/cppc_acpi.c | 111 +++++++++++++++++++++++++++++----------
+>>   1 file changed, 84 insertions(+), 27 deletions(-)
+>>
+>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>> index c1f3568d0c50..bb5333a503a2 100644
+>> --- a/drivers/acpi/cppc_acpi.c
+>> +++ b/drivers/acpi/cppc_acpi.c
+>> @@ -1179,43 +1179,100 @@ static int cpc_write(int cpu, struct cpc_register_resource *reg_res, u64 val)
+>>       return ret_val;
+>>   }
+>>   -static int cppc_get_perf(int cpunum, enum cppc_regs reg_idx, u64 *perf)
+>> +static int cppc_get_reg_val_in_pcc(int cpu, struct cpc_register_resource *reg, u64 *val)
+>>   {
+>> -    struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
+>> +    int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+>> +    struct cppc_pcc_data *pcc_ss_data = NULL;
+>> +    int ret;
+>> +
+>> +    if (pcc_ss_id < 0) {
+>> +        pr_debug("Invalid pcc_ss_id\n");
+>> +        return -ENODEV;
+>> +    }
+>> +
+>> +    pcc_ss_data = pcc_data[pcc_ss_id];
+>> +
+>> +    down_write(&pcc_ss_data->pcc_lock);
+>> +
+>> +    if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0)
+>> +        ret = cpc_read(cpu, reg, val);
+>> +    else
+>> +        ret = -EIO;
+>> +
+>> +    up_write(&pcc_ss_data->pcc_lock);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +static int cppc_get_reg_val(int cpu, enum cppc_regs reg_idx, u64 *val)
+>> +{
+>> +    struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+>>       struct cpc_register_resource *reg;
+>>         if (!cpc_desc) {
+>> -        pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
+>> +        pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+>>           return -ENODEV;
+>>       }
+>>         reg = &cpc_desc->cpc_regs[reg_idx];
+>>   -    if (CPC_IN_PCC(reg)) {
+>> -        int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
+>> -        struct cppc_pcc_data *pcc_ss_data = NULL;
+>> -        int ret = 0;
+>> -
+>> -        if (pcc_ss_id < 0)
+>> -            return -EIO;
+>> +    if (!CPC_SUPPORTED(reg)) {
+>> +        pr_debug("CPC register (reg_idx=%d) is not supported\n", reg_idx);
+>> +        return -EOPNOTSUPP;
+>> +    }
 > 
-> Cool.  I had the sense that the original developer never got around
-> to using it, so I figured I should check.
+> I think this is only valid for optional fields. Meaning that:
+> - if the function is used one day for the mandatory 'Lowest Performance'
+> field, an integer value of 0 would be valid.
+> - if the function is used for a mandatory field containing a NULL Buffer,
+> it seems we would return -EFAULT currently, through cpc_read(). -EOPNOTSUPP
+> doesn't seem appropriate as the field would be mandatory.
 > 
-> Mind if I ask what you know of it being used for?
+> Maybe the function needs an additional 'bool optional' input parameter
+> to do these check conditionally.
 
-I am also very curious about the use case and asked David in other
-thread, while David didn't tell. Not sure if it's one company's
-confidential information. We may want to know what it's used for to
-evaluate if it's a generally useful use case, or an unintentional
-testing.
+Indeed, I should have judged the type before doing this check. But adding a
+input parameter is not a really nice way to me. How about adding a bool
+list of length MAX_CPC_REG_ENT in cppc_acpi.h to indicate wheter it is
+optional?
 
 > 
-> I had imagined it might be a way to call firmware code preventing the
-> need to code of a specific interface for each type of firmware.
+>>   -        pcc_ss_data = pcc_data[pcc_ss_id];
+>> +    if (CPC_IN_PCC(reg))
+>> +        return cppc_get_reg_val_in_pcc(cpu, reg, val);
+>>   -        down_write(&pcc_ss_data->pcc_lock);
+>> +    return cpc_read(cpu, reg, val);
+>> +}
+>>   -        if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0)
+>> -            cpc_read(cpunum, reg, perf);
+>> -        else
+>> -            ret = -EIO;
+>> +static int cppc_set_reg_val_in_pcc(int cpu, struct cpc_register_resource *reg, u64 val)
+>> +{
+>> +    int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+>> +    struct cppc_pcc_data *pcc_ss_data = NULL;
+>> +    int ret;
+>>   -        up_write(&pcc_ss_data->pcc_lock);
+>> +    if (pcc_ss_id < 0) {
+>> +        pr_debug("Invalid pcc_ss_id\n");
+>> +        return -ENODEV;
+>> +    }
+>>   +    ret = cpc_write(cpu, reg, val);
+>> +    if (ret)
+>>           return ret;
+>> +
+>> +    pcc_ss_data = pcc_data[pcc_ss_id];
+>> +
+>> +    down_write(&pcc_ss_data->pcc_lock);
+>> +    /* after writing CPC, transfer the ownership of PCC to platform */
+>> +    ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
+>> +    up_write(&pcc_ss_data->pcc_lock);
+>> +
+>> +    return ret;
+>> +}
+>> +
+>> +static int cppc_set_reg_val(int cpu, enum cppc_regs reg_idx, u64 val)
+>> +{
+>> +    struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+>> +    struct cpc_register_resource *reg;
+>> +
+>> +    if (!cpc_desc) {
+>> +        pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+>> +        return -ENODEV;
+>>       }
+>>   -    cpc_read(cpunum, reg, perf);
+>> +    reg = &cpc_desc->cpc_regs[reg_idx];
+>>   -    return 0;
+>> +    if (!CPC_SUPPORTED(reg)) {
+>> +        pr_debug("CPC register (reg_idx=%d) is not supported\n", reg_idx);
+>> +        return -EOPNOTSUPP;
+>> +    }
 > 
-> Eric
+> Similarly to cppc_get_reg_val(), if a field is:
+> - mandatory + integer: currently doesn't exist. Not sure we should
+> try to detect that, but might be safer.
+> - mandatory + buffer: should not return -EOPNOTSUPP I think
+> - optional + integer: e.g.: 'Autonomous Selection Enable Register',
+> we should return -EOPNOTSUPP. It seems that currently, if the integer
+> value is 1, I get a 'write error: Bad address'
+> - optional + buffer:
+> should effectively return -EOPNOTSUPP if the buffer is NULL.
+
+Actually, cpc_write() doesn't check field type and treats the field as a
+buffer. That's why you get 'Bad address' error when the integer value is 1.
+I think the existing code needs to be improved, otherwise there may be
+unexpected problems.
+
+Do you mean we should return -EOPNOTSUPP no matter what to be written if
+this field is a optional + integer one? And what about a mandatory +
+integer one. Should we directly write the int_value?
+
+Looking forward to your opinion.
+
 > 
+>> +
+>> +    if (CPC_IN_PCC(reg))
+>> +        return cppc_set_reg_val_in_pcc(cpu, reg, val);
+>> +
+>> +    return cpc_write(cpu, reg, val);
+>>   }
+>>     /**
+>> @@ -1223,11 +1280,11 @@ static int cppc_get_perf(int cpunum, enum cppc_regs reg_idx, u64 *perf)
+>>    * @cpunum: CPU from which to get desired performance.
+>>    * @desired_perf: Return address.
+>>    *
+>> - * Return: 0 for success, -EIO otherwise.
+>> + * Return: 0 for success, -ERRNO otherwise.
+>>    */
+>>   int cppc_get_desired_perf(int cpunum, u64 *desired_perf)
+>>   {
+>> -    return cppc_get_perf(cpunum, DESIRED_PERF, desired_perf);
+>> +    return cppc_get_reg_val(cpunum, DESIRED_PERF, desired_perf);
+>>   }
+>>   EXPORT_SYMBOL_GPL(cppc_get_desired_perf);
+>>   @@ -1236,11 +1293,11 @@ EXPORT_SYMBOL_GPL(cppc_get_desired_perf);
+>>    * @cpunum: CPU from which to get nominal performance.
+>>    * @nominal_perf: Return address.
+>>    *
+>> - * Return: 0 for success, -EIO otherwise.
+>> + * Return: 0 for success, -ERRNO otherwise.
+>>    */
+>>   int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+>>   {
+>> -    return cppc_get_perf(cpunum, NOMINAL_PERF, nominal_perf);
+>> +    return cppc_get_reg_val(cpunum, NOMINAL_PERF, nominal_perf);
+>>   }
+>>     /**
+>> @@ -1248,11 +1305,11 @@ int cppc_get_nominal_perf(int cpunum, u64 *nominal_perf)
+>>    * @cpunum: CPU from which to get highest performance.
+>>    * @highest_perf: Return address.
+>>    *
+>> - * Return: 0 for success, -EIO otherwise.
+>> + * Return: 0 for success, -ERRNO otherwise.
+>>    */
+>>   int cppc_get_highest_perf(int cpunum, u64 *highest_perf)
+>>   {
+>> -    return cppc_get_perf(cpunum, HIGHEST_PERF, highest_perf);
+>> +    return cppc_get_reg_val(cpunum, HIGHEST_PERF, highest_perf);
+>>   }
+>>   EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
+>>   @@ -1261,11 +1318,11 @@ EXPORT_SYMBOL_GPL(cppc_get_highest_perf);
+>>    * @cpunum: CPU from which to get epp preference value.
+>>    * @epp_perf: Return address.
+>>    *
+>> - * Return: 0 for success, -EIO otherwise.
+>> + * Return: 0 for success, -ERRNO otherwise.
+>>    */
+>>   int cppc_get_epp_perf(int cpunum, u64 *epp_perf)
+>>   {
+>> -    return cppc_get_perf(cpunum, ENERGY_PERF, epp_perf);
+>> +    return cppc_get_reg_val(cpunum, ENERGY_PERF, epp_perf);
+>>   }
+>>   EXPORT_SYMBOL_GPL(cppc_get_epp_perf);
+>>   
 > 
 
 
