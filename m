@@ -1,111 +1,52 @@
-Return-Path: <linux-pm+bounces-19579-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19580-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 480009F920C
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 13:22:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 526D99F941D
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 15:19:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 78EBF16780B
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 12:22:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC570162FB1
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 14:19:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13408204693;
-	Fri, 20 Dec 2024 12:21:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Yq+tb1ps"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC998210189;
+	Fri, 20 Dec 2024 14:19:40 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AFA31A7AE3;
-	Fri, 20 Dec 2024 12:21:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C668CA4E;
+	Fri, 20 Dec 2024 14:19:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734697316; cv=none; b=TDIiwUUrEtm6twyomjSCct5MRfRt/tgfmLYP7tyGJs4zp4xeEktFTHJOdvfE01lI03uCkzQFBbROcerheaD7e1Pu7nDazQAmuoNnEMzaWZzeP63emPIcJxjJSyZmaBXCOh+SizanyH5ZATwo+XqSJFMZREv9avFiCAWnI/EZYp8=
+	t=1734704380; cv=none; b=HGsoti9qyLHb0tD/iV3li3TaSHbIVxfGRJ0DDhOi69LqhNH22T7M22uIiHkSZ8bPFlPH6CkJXiPLvV95xIEVmZQrBly+InXsOOHrqMWjcQe5Uo0Pw0EV1OYEwsEGZLhO2foWdF5gmicVPe75KnSxAVJ5nU6NGnfMVbLSe0OMtV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734697316; c=relaxed/simple;
-	bh=JduFaswRmxN5tGLStvzwUiaywMEIItZVTSmKsVx9nOI=;
+	s=arc-20240116; t=1734704380; c=relaxed/simple;
+	bh=ASLUFO5R2CgGQPwQ8a6jkmVEdXgBx+P8ojf6e49k7bw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rm4jRIh61FDTqFa4Wqoho1YpUA8bygGHav7a9cstSMKlhSuVDC+bbPGXdAGx77au9BuXy6CUCYnYD8s6iLuqXiGA0AboG0Jzab3zzVyaGpoHQxF9Cz88n2PtJg4pJpREJiF49Btjh0DQYiAwCcpna2SOfS5Lr4jX7ZEmu8z7lBA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Yq+tb1ps; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 02B3BC4CECD;
-	Fri, 20 Dec 2024 12:21:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1734697316;
-	bh=JduFaswRmxN5tGLStvzwUiaywMEIItZVTSmKsVx9nOI=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Yq+tb1psbAD0EEaGVo62BeRkwh9Xj1zwGjU1RnX9bPc3zuKVZ+vFaKjzZirLF0O5Q
-	 cWqZTrj/8oUOashMDH0in9idt9Jf9pCN3xfKSbuna7zWsHJDYmyLi1Jgqy+04F5+b+
-	 WkFCtRLWZn13uCsuIFDP/5NAmVeHVQ3OLBfdEu0A=
-Date: Fri, 20 Dec 2024 13:21:51 +0100
-From: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-To: Kever Yang <kever.yang@rock-chips.com>
-Cc: heiko@sntech.de, linux-rockchip@lists.infradead.org,
-	Simon Xue <xxm@rock-chips.com>, Lee Jones <lee@kernel.org>,
-	dri-devel@lists.freedesktop.org, Zhang Rui <rui.zhang@intel.com>,
-	Elaine Zhang <zhangqing@rock-chips.com>, linux-clk@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>, FUKAUMI Naoki <naoki@radxa.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>, Andy Yan <andyshrk@163.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-pm@vger.kernel.org, Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-usb@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org, Jakub Kicinski <kuba@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jose Abreu <joabreu@synopsys.com>, Jamie Iles <jamie@jamieiles.com>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Frank Wang <frank.wang@rock-chips.com>, linux-mmc@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>, linux-i2c@vger.kernel.org,
-	Simona Vetter <simona@ffwll.ch>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-watchdog@vger.kernel.org, David Wu <david.wu@rock-chips.com>,
-	Shresth Prasad <shresthprasad7@gmail.com>,
-	linux-gpio@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>, linux-iio@vger.kernel.org,
-	linux-pci@vger.kernel.org, David Airlie <airlied@gmail.com>,
-	linux-phy@lists.infradead.org, Jonas Karlman <jonas@kwiboo.se>,
-	Maxime Ripard <mripard@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Vinod Koul <vkoul@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>, linux-pwm@vger.kernel.org,
+	 Content-Type:Content-Disposition:In-Reply-To; b=JtpXpuSpl/gpxOqpkpAe3HK+lOdI20OGuj/7hrsxkU0732dwab9GPkzrtrvs7CHhgpfOZDkUOihVEyZ5pMoNYb0pQPYSjEDqBk4fie39GMaAfpduyYW0pZAioWpsXxWjpp8jnaNsV3I3WBlr6MCBkG1VewNkffyog3inx+rxb7U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 033D51480;
+	Fri, 20 Dec 2024 06:20:06 -0800 (PST)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9FB343F720;
+	Fri, 20 Dec 2024 06:19:36 -0800 (PST)
+Date: Fri, 20 Dec 2024 14:19:34 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
 	Rob Herring <robh@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>, Mark Brown <broonie@kernel.org>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>, Johan Jonker <jbx6244@gmail.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-serial@vger.kernel.org,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	devicetree@vger.kernel.org,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Tim Lunn <tim@feathertop.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-	netdev@vger.kernel.org, Paolo Abeni <pabeni@redhat.com>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <ukleinek@kernel.org>
-Subject: Re: [PATCH 00/38] rockchip: Add rk3562 support
-Message-ID: <2024122018-groove-glitzy-f3bc@gregkh>
-References: <20241220103825.3509421-1-kever.yang@rock-chips.com>
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	upstream@airoha.com
+Subject: Re: [PATCH v7 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
+Message-ID: <Z2V89nHKetwwRGS0@bogus>
+References: <20241206211145.2823-1-ansuelsmth@gmail.com>
+ <20241206211145.2823-2-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -114,21 +55,114 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20241220103825.3509421-1-kever.yang@rock-chips.com>
+In-Reply-To: <20241206211145.2823-2-ansuelsmth@gmail.com>
 
-On Fri, Dec 20, 2024 at 06:37:46PM +0800, Kever Yang wrote:
+On Fri, Dec 06, 2024 at 10:11:25PM +0100, Christian Marangi wrote:
+> Add simple CPU Freq driver for Airoha EN7581 SoC that control CPU
+> frequency scaling with SMC APIs and register a generic "cpufreq-dt"
+> device.
 > 
-> This patch set adds rk3562 SoC and its evb support.
+> CPUFreq driver registers a get-only clock to get the current global CPU
+> frequency from SMC and a Power Domain to configure the performance state
+> for each OPP to apply the requested frequency from cpufreq-dt. This is
+> needed as SMC use index instead of raw frequency.
 > 
-> The patch number is a little bit too big, some of them may need to split
-> out for different maintainers, please let me know which patch need to
-> split out.
+> All CPU share the same frequency and can't be controlled independently.
+> Current shared CPU frequency is returned by the related SMC command.
+> 
+> Add SoC compatible to cpufreq-dt-plat block list as a dedicated cpufreq
+> driver is needed with OPP v2 nodes declared in DTS.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-I recommend you doing the split-apart as you know the dependencies here
-the best, right?  Otherwise we all will just probably ignore them
-assuming someone else is going to review/accept them...
+[...]
 
-thanks,
+> diff --git a/drivers/cpufreq/airoha-cpufreq.c b/drivers/cpufreq/airoha-cpufreq.c
+> new file mode 100644
+> index 000000000000..29738f61f401
+> --- /dev/null
+> +++ b/drivers/cpufreq/airoha-cpufreq.c
+> @@ -0,0 +1,222 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +
+> +#include <linux/arm-smccc.h>
+> +#include <linux/bitfield.h>
+> +#include <linux/cpufreq.h>
+> +#include <linux/clk-provider.h>
+> +#include <linux/module.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_domain.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/slab.h>
+> +
+> +#include "cpufreq-dt.h"
+> +
 
-greg k-h
+[...]
+
+
+> +
+> +static unsigned long airoha_cpufreq_clk_get(struct clk_hw *hw,
+> +					    unsigned long parent_rate)
+> +{
+> +	const struct arm_smccc_1_2_regs args = {
+> +		.a0 = AIROHA_SIP_AVS_HANDLE,
+> +		.a1 = AIROHA_AVS_OP_GET_FREQ,
+> +	};
+> +	struct arm_smccc_1_2_regs res;
+> +
+> +	arm_smccc_1_2_smc(&args, &res);
+
+See below comment. Same applies here.
+
+> +
+> +	/* SMCCC returns freq in MHz */
+> +	return res.a0 * 1000 * 1000;
+> +}
+> +
+> +/* Airoha CPU clk SMCC is always enabled */
+> +static int airoha_cpufreq_clk_is_enabled(struct clk_hw *hw)
+> +{
+> +	return true;
+> +}
+> +
+> +static const struct clk_ops airoha_cpufreq_clk_ops = {
+> +	.recalc_rate = airoha_cpufreq_clk_get,
+> +	.is_enabled = airoha_cpufreq_clk_is_enabled,
+> +	.round_rate = airoha_cpufreq_clk_round,
+> +};
+> +
+> +static const char * const airoha_cpufreq_clk_names[] = { "cpu", NULL };
+> +
+> +/* NOP function to disable OPP from setting clock */
+> +static int airoha_cpufreq_config_clks_nop(struct device *dev,
+> +					  struct opp_table *opp_table,
+> +					  struct dev_pm_opp *opp,
+> +					  void *data, bool scaling_down)
+> +{
+> +	return 0;
+> +}
+> +
+> +static const char * const airoha_cpufreq_pd_names[] = { "perf" };
+> +
+> +static int airoha_cpufreq_set_performance_state(struct generic_pm_domain *domain,
+> +						unsigned int state)
+> +{
+> +	const struct arm_smccc_1_2_regs args = {
+> +		.a0 = AIROHA_SIP_AVS_HANDLE,
+> +		.a1 = AIROHA_AVS_OP_FREQ_DYN_ADJ,
+> +		.a3 = state,
+> +	};
+> +	struct arm_smccc_1_2_regs res;
+> +
+> +	arm_smccc_1_2_smc(&args, &res);
+> +
+
+I assume the compatible suggests SMCCCv1.2+ is implemented, but it is good
+to check  arm_smccc_get_version() and add build config dependency on
+HAVE_ARM_SMCCC_DISCOVERY. Also use the SMCCC conduit and don't assume SMC.
+
+-- 
+Regards,
+Sudeep
 
