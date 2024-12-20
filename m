@@ -1,166 +1,143 @@
-Return-Path: <linux-pm+bounces-19587-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19588-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78A259F98C3
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 18:55:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 684429F9A9D
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 20:39:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9F6127A7122
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 17:50:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B8CF8167D21
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 19:39:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C26022CBEB;
-	Fri, 20 Dec 2024 17:30:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B85632206BB;
+	Fri, 20 Dec 2024 19:39:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qOYpPnYM"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="ItoCk1AG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 491A086326
-	for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 17:30:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 009AA220694
+	for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 19:39:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734715830; cv=none; b=BBs8xo8n4WqpWDElbP2AsiTyaJjCkBFbvCMxI2xqhSK+JrKneCexnPiiO59PK1sZaetrUoK3Ix4dqQE62YvtZOfz3uTGiKfAKTXIwn92YcgkyYrm4LV13BeS63Q9OdUQrseMlotiaiw0AFRPh71fX3ngDRwtZx4zZAXk0D9T4ug=
+	t=1734723564; cv=none; b=GraIlMsaXq8VliTmTb01Dnp8xXN9vOiRk6SFeTa6MGbqOo/NTcbxd+YTvSYOowbEv9ZDHEJnp5JmUAM1wUF4UF+2EvVgXH/1b4WktfUIrmym3gJ1Ra0NiIVMOCji8o1nGirNkxS7m/bvOudRbCUjA7DXvfy/05YPX+Ppp9np5Bs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734715830; c=relaxed/simple;
-	bh=bAysmXT1ApL4MZsbGXlIGLiZFW3xoeOXskBVjon1K5o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uhsCQLi2tG5EerA5isEVNA6M5VCdwy805M8amxf2va4esMCPCJaRXyhXFt1OJjzd0HjBz2rIR4Cvx8Hzr/DfXS8/Lg0KF7rveaJRnLdoRhjbv2OjcnqJp+tSsIGYaqzZeGDSWqEtqDre1iQPGZPOdD2XSC38hXvhrc+7VM++JyA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qOYpPnYM; arc=none smtp.client-ip=209.85.208.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5d3bdccba49so3619149a12.1
-        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 09:30:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1734715825; x=1735320625; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TJaoXje8uHao+uzoShrvm+9AXWvGP52yQ1oIubMZeDc=;
-        b=qOYpPnYMBIYcyxPd/dIxvrxDZ2a+MjN5XDo9ufa+Nkc7m6jHNBWj4VZR2dzLQWal/p
-         9/EH6SfJvK95in9YX8Z+C38MANHZh2l411ELOKdsHiv/qpFdkmB+/PnClqJALDJ6cokM
-         fZ6eFVkQ8j6IgJawG7xaAvIgDhqzDXOX4reOGQYxR1v9xyyigS+cz9Owc9tq7pY8LvHJ
-         Qhz05uFjy1ocgkMCpV5jqwH8ONYgaUwNmzbdEMX9tijYrq/WmToyfJOvYhyr3aj+1wa9
-         7zkFgM2Ditewl7XtZchWqzJjJoYxtcxhR97PHaX/UX3IIkDdrqxHc959dPq0ekQV2STJ
-         Pa5Q==
+	s=arc-20240116; t=1734723564; c=relaxed/simple;
+	bh=WaTkqQd0gCJx5+ld/Hgl+wnVFSH38qph2AHIt3Pou80=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=C+ZyLx2j8S3n7Mfa8I5J+yfQ0zGz+JfDIzVv6vA+wswH5aIT4YlAHuRIkJ3ZdCQ/2Xwfk9C/ScSg2pQyTJGSCBM9kqok7uzBkIoqL0QUXLpSgDsea8TLHZRarHWIJTzsJ5pesIafJYj9Ld1/IC/vdgcrQf7lS0Bb/JuXmDYldAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=ItoCk1AG; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1734723562;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=UvMoGPZXA/JCbWJzTQp5VTX9HgW6KoGFQy+Y1R5Z8oU=;
+	b=ItoCk1AGLe/lcF8XgTUCKhJRa9gdw6BkfA3a7A2D5SBc94KiOv0zlFCYJIUxxv/RWXPBHl
+	cRWODgEJuLsMiGYXKyHz7dju1VwwrYvfc3jEYoyT5UREAM5D7ZYlTeVrf9DsBOyndZ4xhv
+	yLDo/xnF4oa3r19QbyTdDI+8Uo4+HkQ=
+Received: from mail-yb1-f198.google.com (mail-yb1-f198.google.com
+ [209.85.219.198]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-638-bFXcnrVsO7-1aah3u7sAZA-1; Fri, 20 Dec 2024 14:39:20 -0500
+X-MC-Unique: bFXcnrVsO7-1aah3u7sAZA-1
+X-Mimecast-MFC-AGG-ID: bFXcnrVsO7-1aah3u7sAZA
+Received: by mail-yb1-f198.google.com with SMTP id 3f1490d57ef6-e3a0d165daeso2914484276.1
+        for <linux-pm@vger.kernel.org>; Fri, 20 Dec 2024 11:39:20 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734715825; x=1735320625;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1734723560; x=1735328360;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TJaoXje8uHao+uzoShrvm+9AXWvGP52yQ1oIubMZeDc=;
-        b=TCk1083NJrbz3xHi1xce/YZmfCiYLBXDsaazILrAfG7+WWV/bIHLQkSJ0mXTeh2QCN
-         mNT3hWUwFBmNn6+SsDcgBAmXntZ3D7wXWqXyvNyUdYkyEnThYDPJpFbRHH5jhAxj+mXG
-         q8iX0KylDwTCi9lI2zWcNWiOloxZUApBgcHDwtG1wDQ/BN7kO5tubXmH6DWjE+anzinO
-         omJ5ZA/FfXt7/7ry0iMzhK+vDij5TX6OpYRiTv8chucEfOyc76I7+SeZvPeSAfIGf0bS
-         uk+PYqO5ZDu7CvzhUyT8LUeqO27x4RvM11kzSz2g6bkYXNiB1TIiXl3vhIjYTVrjh1Wk
-         vLaA==
-X-Forwarded-Encrypted: i=1; AJvYcCWPv5KGvKWngLKhi8FDK3Q5AVHWW3bPo2C/F6jbUjJ0bxkzo8ZGUlbmk/DE30WFg4CL1qE7wcL6Ag==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEVNB4UHPpkYv2GuiW/7mE0KB8CBBWChiIhEcI5l03K1crGfPE
-	BzTKbbW7jgxV/UDaIbV8F/c8eabCTKDHMx7+oxbtrsHMXIW6uXJg9qf5bNe2GC4=
-X-Gm-Gg: ASbGnctF9m8s6jeUUW1tJn09a7FojZFy7loWA1IAng5cKLdSPxT3OwU/qXahNM8jSvo
-	t/Sg29rNp7sV5Y7q4eVACyWDEbik+gL4DOdMIDhlUsCnbP6f305Eg5MkSolqdUEHDezkvBvlnFZ
-	otGlRvWzMAmSuopoqnKwDDIjXjFfLyVHjp2ifNoXrCcv7R6rLdLDMWcAOCh4P+OayH+WK0CGeam
-	SVBBJG6QRXjqhLYv7PJ8l6H1UryPmO60K/IeK2ATelap7HZhtJdgeAcX5+0r66fG/cx
-X-Google-Smtp-Source: AGHT+IH7+XcVUt5iV5cF3xg1wrooGDBJq1k5sc95u227IWRCzMGea6RcPb0ttVzenGGImX0jMdU8ww==
-X-Received: by 2002:a05:6402:35c7:b0:5d4:34a5:e317 with SMTP id 4fb4d7f45d1cf-5d81de1611dmr3897302a12.22.1734715825516;
-        Fri, 20 Dec 2024 09:30:25 -0800 (PST)
-Received: from linaro.org ([2a02:2454:ff21:ef80:6d2c:6f87:64ef:2237])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d80675a3d2sm1928475a12.16.2024.12.20.09.30.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 09:30:25 -0800 (PST)
-Date: Fri, 20 Dec 2024 18:30:22 +0100
-From: Stephan Gerhold <stephan.gerhold@linaro.org>
-To: =?iso-8859-1?B?QmFybmFi4XMgQ3rpbeFu?= <barnabas.czeman@mainlining.org>
-Cc: Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Joerg Roedel <joro@8bytes.org>, Will Deacon <will@kernel.org>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org,
-	linux-pm@vger.kernel.org, iommu@lists.linux.dev,
-	Otto =?iso-8859-1?Q?Pfl=FCger?= <otto.pflueger@abscue.de>,
-	Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Subject: Re: [PATCH v10 3/5] arm64: dts: qcom: Add initial support for MSM8917
-Message-ID: <Z2WprlxV4wop0jxB@linaro.org>
-References: <20241220-msm8917-v10-0-3d5734e8c3a6@mainlining.org>
- <20241220-msm8917-v10-3-3d5734e8c3a6@mainlining.org>
+        bh=UvMoGPZXA/JCbWJzTQp5VTX9HgW6KoGFQy+Y1R5Z8oU=;
+        b=lcO0a0PbEcT3CqW7/xJOKBldGr9uMXaap3BT9PDFw9JBq1mSKQA+YyBMvm9pS+h4cJ
+         p3s+UNPRSvPBOc+s/PsNfY8ZSz0d5Ul1Ub8EewNoPCntAlvQ2RgPBZfMFAchTvmkxR9g
+         rJ8Jr0wf+APYG1gh7t2MOYKmUH2erPq2X8RzQ3FMXOI4c9kB6niRqd61QTXs3EfG7g6m
+         6W4uWzbNGmFILzE/eULdsvguRO3/HQOgz8B5QGtyX1pnoXQoAtyv1laLySZoHy7uompk
+         1amqpaRFNchH1ouHWEMpb7knBUmoQDrxHpezTzGCFiu+CZGuTvNqWV+YQUttvEeqXQsv
+         A/Vw==
+X-Forwarded-Encrypted: i=1; AJvYcCUfrQXZqvxoTP5fPijz1FiGOC9w5oILnISwSrULUfIuyX9GCYXGoUhK0FsZQfijW1lyqNM3NFGCRg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx88XaLIsfjs4OGMi2uyStXGSqWlBtR6gZuNDuBN2YQ+2z3xw9a
+	dCDtL4nguVeSfJEElg5xTKVKxbnN4hEMpY8pZ5jZQhJnI5djrSWbyBWVIKIOkBj/rbomMDJu6zu
+	82oSVrKDfLTu22rQq+IswFXfTmsoYI1mCyYLWKw8wzES6naV5H1Yz9uiT
+X-Gm-Gg: ASbGnctyr0xzYySPFA4VKZZgB9BQvSoUBiLCPAGnZdq17A9MwCZlZ8x7ksapJNa6yxU
+	YcYsF79za4iC9Df+UAq9Ngcr40VZ29Vb6ZnFO536+kZ8BMdpXxnNZ0u/Rngw7pKBqEr5Me5kKwu
+	f7nCVZQCVMcKIaQzNJ4Z1IhPlSyusu/OMVMLtmsxBOlsyrrD1LJSObmEr6RGodp8+M1bc8CA7Px
+	+95dyVfCoOs7vGrm9Cx3emPKvJgelzFaXw4OhhF0P8p3hHH4QvwKXZrjFKhCBJPYPkUxjIajrz7
+	T8JXNa+JqUAmg2T0PDtk+jp/jy5i5hlRqaBZX5LK1JGuxxP1SeN6DpwVvlOVLw==
+X-Received: by 2002:a25:1e85:0:b0:e39:7347:6d76 with SMTP id 3f1490d57ef6-e538c256b59mr2918256276.19.1734723560233;
+        Fri, 20 Dec 2024 11:39:20 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHL5XtiuXrohZaf8df4Lv1IXHirXfqxMzPVe9I/pESLg1R0ZgUBtt3WSyl6Q3KDh7GtORHhcw==
+X-Received: by 2002:a25:1e85:0:b0:e39:7347:6d76 with SMTP id 3f1490d57ef6-e538c256b59mr2918243276.19.1734723559943;
+        Fri, 20 Dec 2024 11:39:19 -0800 (PST)
+Received: from ?IPV6:2603:9001:3d00:5353::14c1? (2603-9001-3d00-5353-0000-0000-0000-14c1.inf6.spectrum.com. [2603:9001:3d00:5353::14c1])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e537cf46c9fsm959308276.40.2024.12.20.11.39.18
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 20 Dec 2024 11:39:19 -0800 (PST)
+Message-ID: <1ace6102-2e88-499a-a5fd-71951863b987@redhat.com>
+Date: Fri, 20 Dec 2024 14:39:18 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20241220-msm8917-v10-3-3d5734e8c3a6@mainlining.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 2/3] nvmem: core: add nvmem_cell_write_variable_u32()
+To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+ Sebastian Reichel <sre@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Maxime Ripard <mripard@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20241104152312.3813601-1-jberring@redhat.com>
+ <20241104152312.3813601-3-jberring@redhat.com>
+ <488ea6c2-0832-4409-902b-2b6b193daf8c@linaro.org>
+Content-Language: en-US
+From: Jennifer Berringer <jberring@redhat.com>
+In-Reply-To: <488ea6c2-0832-4409-902b-2b6b193daf8c@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Fri, Dec 20, 2024 at 12:26:55PM +0100, Barnabás Czémán wrote:
-> From: Otto Pflüger <otto.pflueger@abscue.de>
+Thanks for the feedback and for accepting my first patch.
+
+On 12/14/24 10:07, Srinivas Kandagatla wrote:
+>> + * nvmem_cell_write_variable_u32() - Write up to 32-bits of data as a host-endian number
 > 
-> Add initial support for MSM8917 SoC.
+>> + *
+>> + * @cell: nvmem cell to be written.
+>> + * @val: Value to be written which may be truncated.
+>> + *
+>> + * Return: length of bytes written or negative on failure.
+>> + */
+>> +int nvmem_cell_write_variable_u32(struct nvmem_cell *cell, u32 val)
 > 
-> Signed-off-by: Otto Pflüger <otto.pflueger@abscue.de>
-> [reword commit, rebase, fix schema errors]
-> Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-> Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
-> ---
->  arch/arm64/boot/dts/qcom/msm8917.dtsi | 1954 +++++++++++++++++++++++++++++++++
->  1 file changed, 1954 insertions(+)
+> This new API is confusing, as writing to cell should in the same order of the data. Doing any data manipulation within the api is confusing to users.
 > 
-> diff --git a/arch/arm64/boot/dts/qcom/msm8917.dtsi b/arch/arm64/boot/dts/qcom/msm8917.dtsi
-> new file mode 100644
-> index 0000000000000000000000000000000000000000..7bd6925029eeb9d6d49a99f8686181e926258cab
-> --- /dev/null
-> +++ b/arch/arm64/boot/dts/qcom/msm8917.dtsi
-> @@ -0,0 +1,1954 @@
-> [...]
-> +		a53pll: clock@b016000 {
-> +			compatible = "qcom,msm8939-a53pll";
-> +			reg = <0x0b016000 0x40>;
-> +			clocks = <&xo_board>;
-> +			clock-names = "xo";
-> +			#clock-cells = <0>;
-> +			operating-points-v2 = <&pll_opp_table>;
-> +
-> +			pll_opp_table: opp-table {
-> +				compatible = "operating-points-v2";
-> +
-> +				opp-960000000 {
-> +					opp-hz = /bits/ 64 <960000000>;
-> +				};
-> +
-> +				opp-1094400000 {
-> +					opp-hz = /bits/ 64 <1094400000>;
-> +				};
-> +
-> +				opp-1248000000 {
-> +					opp-hz = /bits/ 64 <1248000000>;
-> +				};
-> +
-> +				opp-1401600000 {
-> +				      opp-hz = /bits/ 64 <1401600000>;
+> If the intention is to know the size of cell before writing, then best way to address this is to provide the cell size visibility to the consumer.
+> 
+> --srini
 
-Nitpick: indentation is off here.
+My intention was to mirror the existing functions in this file, hoping that would make it less confusing rather than more. nvmem_cell_read_variable_le_u32() already similarly has consumers accessing the contents of a cell without knowing its size, silently filling any bytes not read with zero. The function I add doesn't change the order of the bytes. The existing read_variable_le functions (in contrast) byte swap from little-endian to the CPU's endianness and indicate this in the function name. Otherwise, I believe the function I add here is what would be expected from a write equivalent. Its return value also gives the caller the actual cell size upon success.
 
-Anyway, this looks really nice overall now. Thanks for doing all the
-cleanup! FWIW:
+The only manipulation done to the data here is truncating to ignore the highest-order bytes. This behavior should match the below example unless the size is 3 bytes, which my patch should handle but the below example can't.
 
-Reviewed-by: Stephan Gerhold <stephan.gerhold@linaro.org>
+if (entry->bytes == sizeof(u32)) {
+    return __nvmem_cell_entry_write(entry, &val, sizeof(u32));
+} else if (entry->bytes == sizeof(u16)) {
+    u16 val_16 = (u16) val;
+    return __nvmem_cell_entry_write(entry, &val_16, sizeof(u16));
+} else if (entry->bytes == sizeof(u8)) {
+    u8 val_8 = (u8) val;
+    return __nvmem_cell_entry_write(entry, &val_8, sizeof(u8));
+} else {
+    return -EINVAL;
+}
 
-Thanks,
-Stephan
+Still, if you prefer, I can send new patches that add a function to get the cell size and put any truncation behavior needed by nvmem-reboot-mode into that source file instead.
+
 
