@@ -1,269 +1,189 @@
-Return-Path: <linux-pm+bounces-19570-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19571-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 630319F907E
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 11:44:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F6059F911F
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 12:26:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63BF3189729B
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 10:44:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD8537A028D
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 11:26:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93ECC1C3F3B;
-	Fri, 20 Dec 2024 10:43:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E181C1F1D;
+	Fri, 20 Dec 2024 11:26:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="LXQtSCOj"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="KIDjXJZ7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m127157.xmail.ntesmail.com (mail-m127157.xmail.ntesmail.com [115.236.127.157])
+Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB0919C56D;
-	Fri, 20 Dec 2024 10:43:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.157
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D522AE96;
+	Fri, 20 Dec 2024 11:26:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734691437; cv=none; b=PZRUu5qXmLzX5l79DboK37HahVqH1k8xAABbgeA81aJqpeAXMRmh22JFuWdGhfYX+2lg7nGYRt3uoLuCBFFxFX/q2q0DL8n3xYsMXr9BKq5koCQQDEROKZPsiK6cLcaH3gl/Qg3vYSRBd6rx0eQrytIqlQ+OTn4TBj9/qzSRX0Q=
+	t=1734693988; cv=none; b=r2StMcqHYdTZ6QdQFsIg0xtwzgRTpx6Gr2vSeoy0IsWaQByNG8gn1RiOR9IfYqvoe2/iPdVILyfAwc5DWySAAUAfSmAxwZpgRaHFE38nZISVo1T1Wpnmz8P5c6U/5j0bm5EkDBPhuPsURoiSO3RzCqNi6pmRSENMMg0UFENDCb4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734691437; c=relaxed/simple;
-	bh=FLotb8PO7pUbOoGoa3ZcA+IJLn2SEtUGvEV7uvVVTkk=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kbln7y/CCeYJY3S9PlwwCdobmOpsBOraPpxJpouwpuGplkxgSESnNkpTn090B/kdHBqxXc2u8p+GLR8k9jPCPAcgbcXdmVGHGw60XNJkwku5wI6zdCunKuGeLKIwIWibwqrXS2c6O1FkrGFO6PM8eUS9WzTk5N0PGR9e7uX1zj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=LXQtSCOj; arc=none smtp.client-ip=115.236.127.157
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id 656820ed;
-	Fri, 20 Dec 2024 18:38:26 +0800 (GMT+08:00)
-From: Kever Yang <kever.yang@rock-chips.com>
-To: heiko@sntech.de
-Cc: linux-rockchip@lists.infradead.org,
-	Kever Yang <kever.yang@rock-chips.com>,
-	Simon Xue <xxm@rock-chips.com>,
-	Lee Jones <lee@kernel.org>,
-	dri-devel@lists.freedesktop.org,
-	Zhang Rui <rui.zhang@intel.com>,
-	Elaine Zhang <zhangqing@rock-chips.com>,
-	linux-clk@vger.kernel.org,
-	Conor Dooley <conor+dt@kernel.org>,
-	FUKAUMI Naoki <naoki@radxa.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Andrew Lunn <andrew+netdev@lunn.ch>,
-	Andy Yan <andyshrk@163.com>,
-	Michael Riesch <michael.riesch@wolfvision.net>,
-	Andi Shyti <andi.shyti@kernel.org>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
-	linux-pm@vger.kernel.org,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-usb@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-spi@vger.kernel.org,
-	Jakub Kicinski <kuba@kernel.org>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Jose Abreu <joabreu@synopsys.com>,
-	Jamie Iles <jamie@jamieiles.com>,
-	Detlev Casanova <detlev.casanova@collabora.com>,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Frank Wang <frank.wang@rock-chips.com>,
-	linux-mmc@vger.kernel.org,
-	Linus Walleij <linus.walleij@linaro.org>,
-	linux-i2c@vger.kernel.org,
-	Simona Vetter <simona@ffwll.ch>,
-	Finley Xiao <finley.xiao@rock-chips.com>,
-	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
-	linux-stm32@st-md-mailman.stormreply.com,
-	linux-watchdog@vger.kernel.org,
-	David Wu <david.wu@rock-chips.com>,
-	Shresth Prasad <shresthprasad7@gmail.com>,
-	linux-gpio@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Jisheng Zhang <jszhang@kernel.org>,
-	Guenter Roeck <linux@roeck-us.net>,
-	linux-iio@vger.kernel.org,
-	linux-pci@vger.kernel.org,
-	David Airlie <airlied@gmail.com>,
-	linux-phy@lists.infradead.org,
-	Jonas Karlman <jonas@kwiboo.se>,
-	Maxime Ripard <mripard@kernel.org>,
-	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Vinod Koul <vkoul@kernel.org>,
-	Bjorn Helgaas <bhelgaas@google.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Alexandre Torgue <alexandre.torgue@foss.st.com>,
-	Jonathan Cameron <jic23@kernel.org>,
-	Jiri Slaby <jirislaby@kernel.org>,
-	linux-pwm@vger.kernel.org,
-	Rob Herring <robh@kernel.org>,
-	Wim Van Sebroeck <wim@linux-watchdog.org>,
-	"David S. Miller" <davem@davemloft.net>,
-	Eric Dumazet <edumazet@google.com>,
-	Mark Brown <broonie@kernel.org>,
-	Dragan Simic <dsimic@manjaro.org>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	Lars-Peter Clausen <lars@metafoo.de>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Johan Jonker <jbx6244@gmail.com>,
-	Shawn Lin <shawn.lin@rock-chips.com>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	linux-serial@vger.kernel.org,
-	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	devicetree@vger.kernel.org,
-	Diederik de Haas <didi.debian@cknow.org>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Tim Lunn <tim@feathertop.org>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
-	netdev@vger.kernel.org,
-	Paolo Abeni <pabeni@redhat.com>,
-	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
-Subject: [PATCH 00/38] rockchip: Add rk3562 support
-Date: Fri, 20 Dec 2024 18:37:46 +0800
-Message-Id: <20241220103825.3509421-1-kever.yang@rock-chips.com>
-X-Mailer: git-send-email 2.25.1
+	s=arc-20240116; t=1734693988; c=relaxed/simple;
+	bh=0WzX3MQkYGmE1/tKbh9NNev17T02tgmw6EH2Zim0PVE=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SU4aU1ujKsP7LS9DIXeqge/RermE8Ndjj+Fj5qn8HP9MUsxzaKGYj3OaYuMijQwuCyMf0dmjEU1JfcMfYXM2F+Q7k4w1Y6IAtYJw1tQou6gLogDF0ROKNI8jNQWHiXBK+aRB0ODodgRsmxBWRrXYuO9ZYBzx8PoqqD+zQCpckoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=KIDjXJZ7; arc=none smtp.client-ip=5.75.144.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
+Received: from [192.168.30.162] (254C1A66.nat.pool.telekom.hu [37.76.26.102])
+	by mail.mainlining.org (Postfix) with ESMTPSA id 029FCE450C;
+	Fri, 20 Dec 2024 11:26:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
+	s=psm; t=1734693978;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=/r5C8XysB4BMKE04Wyv9EWVB5LkFZ4rFY+Jd94igHFA=;
+	b=KIDjXJZ7qYGF3oH78mvcs1+7O5rTUrBRrQzbUdBgQo6nx63+Aay0ZF+xrJIme6IyGltptg
+	4aIDirzE1gJsGdZEsClwXrRANkSks5qsQCkgM/93uce+7/Bq2cjUWCLXla5TC6fwzNszj6
+	4C4I6htWOABBv07DkUK6NzBFcUHSd/c0NRF51J5Tzrv7pKyCntbIpTSDgJPGU3/m7ylHh2
+	6bf2JDWr9KynezYuYabx1ohKLQ9GRtzhkaz4QmDxENJOabWGiw9buOcfYx2ZeLuLrbkrc3
+	2WqAkqh+o07onIKaZkYqTMm7lTX/tRVJcbOjz2VCP0TB+eeBiLTAqRI7go4d2A==
+From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
+Subject: [PATCH v10 0/5] Add MSM8917/PM8937/Redmi 5A
+Date: Fri, 20 Dec 2024 12:26:13 +0100
+Message-Id: <20241220-msm8917-v10-0-35c27f704d34@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQh9LT1ZJGktPSElKGk8fQxhWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEtNQk
-	tVSktLVUpCWQY+
-X-HM-Tid: 0a93e3a5af4003afkunm656820ed
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nwg6Kxw6GTIRKggeThEUMR4h
-	P0gaCyxVSlVKTEhPTUJKSkpKTElJVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
-	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFOTUpJNwY+
-DKIM-Signature:a=rsa-sha256;
-	b=LXQtSCOj5PQ5rmMQS8JUHg+aVmzux+tnR5NnlpILS50US/QWv5VBCTHDsqEiVs5WhSa9UqWxWgKBEnSg0vucKhE8FyZdsUwbc5ZsdiUz76LZqHiim02ORqBuKb413jRYfReSUFy7jfbzAaPEA5wGkuukfoQqA957T+ZIIQC0lqE=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=RUJ3VBWN4hJZF+kjNTXL1lSb1odrwauQvfHGVuJDe90=;
-	h=date:mime-version:subject:message-id:from;
+X-B4-Tracking: v=1; b=H4sIAFVUZWcC/23QzW7DIAwH8FepOC8TNhDwTnuPaQeHjxZpTapki
+ jZVffeRXkAaR1v8/ti+iy2uOW7i7XQXa9zzlpe5FCBfTsJfeD7HIYfSEChRgwQartvVEdgBrFd
+ BpqTZoCivb2tM+ecZ9fFZ6kvevpf195m8w9H9n7HDIIcESXmG4Fw071fO81ee83x+XdazOIJ2b
+ LCCirFgx9KaxOxogi5WFYO0FauCxxC8YR/IuqmLdYubsfXx8xSJpLaE3MemwYAVm4LLwkoHpYC
+ gj8cWq4rHgr3SLk2GKMXUxbbBqCu2x86AFskpPZqxi13FCM21XcFAlr2XGqXqY2qxqZgKntgz4
+ 5hU7Iz9eDz+AAVesqOMAgAA
+X-Change-ID: 20241019-msm8917-17c3d0ff4a52
+To: Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Linus Walleij <linus.walleij@linaro.org>, Amit Kucheria <amitk@kernel.org>, 
+ Thara Gopinath <thara.gopinath@gmail.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Joerg Roedel <joro@8bytes.org>, 
+ Will Deacon <will@kernel.org>, Robin Murphy <robin.murphy@arm.com>, 
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-gpio@vger.kernel.org, 
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev, 
+ =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>, 
+ Dang Huynh <danct12@riseup.net>, 
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>, 
+ =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
+ Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734693976; l=3592;
+ i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
+ bh=0WzX3MQkYGmE1/tKbh9NNev17T02tgmw6EH2Zim0PVE=;
+ b=HRn/BNUbX58DOIR3ALPGnWQWGQVEtKGEfuNBKVuYehrNUiu6DLuD0dBYB50LDPLB77L+saqBX
+ u9HH2eyYt90C2cDAugk0xryIuiMFXMwnZ1m+gYih7BDYixB5uozOIQa
+X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
+ pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
+This patch series add support for MSM8917 soc with PM8937 and
+Xiaomi Redmi 5A (riva).
 
-This patch set adds rk3562 SoC and its evb support.
+Signed-off-by: Barnabás Czémán <barnabas.czeman@mainlining.org>
+---
+Changes in v10:
+- msm8917: sdc1 cmd_on, cmd_off change bias-disable to bias-pull-up
+- Remove applied patches.
+- Link to v9: https://lore.kernel.org/r/20241215-msm8917-v9-0-bacaa26f3eef@mainlining.org
 
-The patch number is a little bit too big, some of them may need to split
-out for different maintainers, please let me know which patch need to
-split out.
+Changes in v9:
+- msm8917:
+ - add some empty lines for separating pins more
+ - order compatible, reg, ranges properties
+- Link to v8: https://lore.kernel.org/r/20241211-msm8917-v8-0-197acc042036@mainlining.org
 
-Test with GMAC, USB, PCIe, EMMC, SD Card.
+Changes in v8:
+- pm8937, msm8917, msm8917-xiaomi-riva: remove unused includes
+- Link to v7: https://lore.kernel.org/r/20241124-msm8917-v7-0-612729834656@mainlining.org
 
-This patch set is base on the patche set for rk3576 evb1 support.
+Changes in v7:
+- msm8917-xiaomi-riva:
+  - Add pinctrls for used GPIO pins.
+  - Use interrupts-extend for charger.
+  - Order properies.
+- Link to v6: https://lore.kernel.org/r/20241113-msm8917-v6-0-c348fb599fef@mainlining.org
 
+Changes in v6:
+- msm8917:
+  - Consolidate SDC pins, remove sdc2-cd-on/off pins.
+  - Remove cluster-sleep-0 and cluster-sleep-1
+  and rename cluster-sleep-2 to cluster-sleep-0.
+  - Fix spi, i2c and related pinctrl namings.
+- msm8917-xiaomi-riva: follow i2c name changes.
+- Link to v5: https://lore.kernel.org/r/20241112-msm8917-v5-0-3ca34d33191b@mainlining.org
 
-David Wu (2):
-  ethernet: stmmac: dwmac-rk: Add gmac support for rk3562
-  ethernet: stmmac: dwmac-rk: Make the phy clock could be used for
-    external phy
+Changes in v5:
+- msm8917:
+  - Remove aliases.
+  - Rename spi, i2c labels and pins.
+  - Remove clock-frequency from timers
+  - Remove unused mpss_mem region.
+  - Use mboxes where it can be used, only smd-edge uses qcom,ipc.
+- msm8917-xiaomi-riva: Follow i2c label changes.
+- Link to v4: https://lore.kernel.org/r/20241109-msm8917-v4-0-8be9904792ab@mainlining.org
 
-Finley Xiao (7):
-  clk: rockchip: add dt-binding header for rk3562
-  clk: rockchip: Add clock controller for the RK3562
-  dt-bindings: add power-domain header for RK3562 SoC
-  nvmem: rockchip-otp: Add support for rk3568-otp
-  nvmem: rockchip-otp: Add support for rk3562
-  arm64: dts: rockchip: add core dtsi for RK3562 Soc
-  arm64: dts: rockchip: Add RK3562 evb2 devicetree
+Changes in v4:
+- msm8917 pinctrl: Fix gpio regexp in the schema.
+- msm8937 tsens: Rename ops_msm8976 to ops_common and use it for msm8937.
+- msm8917: fix address padding, naming and ordering, remove polling-delays.
+- Remove applied patches from the series.
+- Link to v3: https://lore.kernel.org/r/20241107-msm8917-v3-0-6ddc5acd978b@mainlining.org
 
-Frank Wang (1):
-  phy: rockchip: inno-usb2: add usb2 phy support for rk3562
+Changes in v3:
+- msm8917-xiaomi-riva: Fix issues addressed by Konrad.
+- msm8917: Fix node addresses, orders of some properties.
+- pm8937: simplify vadc channels.
+- msm8917 pinctrl: Fix schema issues addressed by Krzysztof. 
+- Remove applied tcsr patch from this series.
+- Reword some commit title.
+- Link to v2: https://lore.kernel.org/r/20241031-msm8917-v2-0-8a075faa89b1@mainlining.org
 
-Jon Lin (1):
-  phy: rockchip-naneng-combo: Support rk3562
+Changes in v2:
+- Add msm8937 tsens support.
+- Fix issues addressed by reviews.
+- Link to v1: https://lore.kernel.org/r/20241019-msm8917-v1-0-f1f3ca1d88e5@mainlining.org
 
-Kever Yang (24):
-  dt-bindings: clock: add rk3562 cru bindings
-  dt-bindings: pinctrl: Add rk3562 pinctrl support
-  soc: rockchip: power-domain: add power domain support for rk3562
-  dt-bindings: rockchip-thermal: Support the RK3562 SoC compatible
-  dt-bindings: iio: adc: Add rockchip,rk3562-saradc string
-  dt-bindings: net: Add support for rk3562 dwmac
-  dt-bindings: nvmem: rockchip,otp: Add support for rk3562 and rk3568
-  dt-bindings: phy: rockchip: Add rk3562 naneng-combophy compatible
-  dt-bindings: phy: rockchip,inno-usb2phy: add rk3562
-  dt-bindings: PCI: dwc: rockchip: Add rk3562 support
-  dt-bindings: mmc: Add support for rk3562 eMMC
-  dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
-  dt-bindings: power: rockchip: Add bindings for rk3562
-  dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
-  dt-bindings: gpu: Add rockchip,rk3562-mali compatible
-  dt-bindings: watchdog: Add rk3562 compatible
-  dt-bindings: spi: Add rockchip,rk3562-spi compatible
-  dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
-  dt-bindings: usb: dwc3: add compatible for rk3562
-  dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
-  dt-bindings: rockchip: pmu: Add rk3562 compatible
-  dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
-  dt-bindings: arm: rockchip: Add rk3562 evb2 board
-  dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
+---
+Barnabás Czémán (3):
+      dt-bindings: nvmem: Add compatible for MS8917
+      dt-bindings: arm: qcom: Add Xiaomi Redmi 5A
+      arm64: dts: qcom: Add Xiaomi Redmi 5A
 
-Shaohan Yao (1):
-  thermal: rockchip: Support the rk3562 SoC in thermal driver
+Dang Huynh (1):
+      arm64: dts: qcom: Add PM8937 PMIC
 
-Simon Xue (1):
-  iio: adc: rockchip_saradc: add rk3562
+Otto Pflüger (1):
+      arm64: dts: qcom: Add initial support for MSM8917
 
-Steven Liu (1):
-  pinctrl: rockchip: add rk3562 support
+ Documentation/devicetree/bindings/arm/qcom.yaml    |    7 +
+ .../devicetree/bindings/nvmem/qcom,qfprom.yaml     |    1 +
+ arch/arm64/boot/dts/qcom/Makefile                  |    1 +
+ arch/arm64/boot/dts/qcom/msm8917-xiaomi-riva.dts   |  333 ++++
+ arch/arm64/boot/dts/qcom/msm8917.dtsi              | 1954 ++++++++++++++++++++
+ arch/arm64/boot/dts/qcom/pm8937.dtsi               |  150 ++
+ 6 files changed, 2446 insertions(+)
+---
+base-commit: 8503810115fbff903f626adc0788daa048302bc0
+change-id: 20241019-msm8917-17c3d0ff4a52
 
- .../devicetree/bindings/arm/rockchip.yaml     |    5 +
- .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
- .../bindings/clock/rockchip,rk3562-cru.yaml   |   62 +
- .../bindings/gpu/arm,mali-bifrost.yaml        |    3 +-
- .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
- .../bindings/iio/adc/rockchip-saradc.yaml     |    2 +
- .../devicetree/bindings/mfd/syscon.yaml       |    2 +
- .../bindings/mmc/rockchip-dw-mshc.yaml        |    1 +
- .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |    9 +-
- .../bindings/net/rockchip-dwmac.yaml          |    5 +-
- .../bindings/nvmem/rockchip,otp.yaml          |   49 +-
- .../bindings/pci/rockchip-dw-pcie.yaml        |    1 +
- .../phy/phy-rockchip-naneng-combphy.yaml      |    1 +
- .../bindings/phy/rockchip,inno-usb2phy.yaml   |    3 +-
- .../bindings/pinctrl/rockchip,pinctrl.yaml    |    1 +
- .../power/rockchip,power-controller.yaml      |    1 +
- .../devicetree/bindings/pwm/pwm-rockchip.yaml |    1 +
- .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
- .../devicetree/bindings/soc/rockchip/grf.yaml |    7 +
- .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
- .../bindings/thermal/rockchip-thermal.yaml    |    1 +
- .../bindings/usb/rockchip,dwc3.yaml           |    3 +
- .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
- arch/arm64/boot/dts/rockchip/Makefile         |    1 +
- .../boot/dts/rockchip/rk3562-evb2-v10.dts     |  520 ++++
- .../boot/dts/rockchip/rk3562-pinctrl.dtsi     | 2352 +++++++++++++++++
- arch/arm64/boot/dts/rockchip/rk3562.dtsi      | 1432 ++++++++++
- drivers/clk/rockchip/Kconfig                  |    7 +
- drivers/clk/rockchip/Makefile                 |    1 +
- drivers/clk/rockchip/clk-rk3562.c             | 1111 ++++++++
- drivers/clk/rockchip/clk.h                    |   39 +
- drivers/iio/adc/rockchip_saradc.c             |   24 +-
- .../net/ethernet/stmicro/stmmac/dwmac-rk.c    |  213 +-
- drivers/nvmem/rockchip-otp.c                  |   97 +
- drivers/phy/rockchip/phy-rockchip-inno-usb2.c |   49 +
- .../rockchip/phy-rockchip-naneng-combphy.c    |  152 ++
- drivers/pinctrl/pinctrl-rockchip.c            |  199 +-
- drivers/pinctrl/pinctrl-rockchip.h            |    3 +-
- drivers/pmdomain/rockchip/pm-domains.c        |   48 +-
- drivers/thermal/rockchip_thermal.c            |  112 +-
- include/dt-bindings/clock/rk3562-cru.h        |  733 +++++
- include/dt-bindings/power/rk3562-power.h      |   35 +
- 42 files changed, 7269 insertions(+), 22 deletions(-)
- create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3562-cru.yaml
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-pinctrl.dtsi
- create mode 100644 arch/arm64/boot/dts/rockchip/rk3562.dtsi
- create mode 100644 drivers/clk/rockchip/clk-rk3562.c
- create mode 100644 include/dt-bindings/clock/rk3562-cru.h
- create mode 100644 include/dt-bindings/power/rk3562-power.h
-
+Best regards,
 -- 
-2.25.1
+Barnabás Czémán <barnabas.czeman@mainlining.org>
 
 
