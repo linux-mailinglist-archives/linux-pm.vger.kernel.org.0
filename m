@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-19571-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19572-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F6059F911F
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 12:26:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CF9F29F9123
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 12:27:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BD8537A028D
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 11:26:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 57F6B7A3922
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 11:27:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 00E181C1F1D;
-	Fri, 20 Dec 2024 11:26:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C52391C3316;
+	Fri, 20 Dec 2024 11:27:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="KIDjXJZ7"
+	dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b="EmfEM4rR"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail.mainlining.org (mail.mainlining.org [5.75.144.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7D522AE96;
-	Fri, 20 Dec 2024 11:26:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A08851C07DA;
+	Fri, 20 Dec 2024 11:27:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=5.75.144.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734693988; cv=none; b=r2StMcqHYdTZ6QdQFsIg0xtwzgRTpx6Gr2vSeoy0IsWaQByNG8gn1RiOR9IfYqvoe2/iPdVILyfAwc5DWySAAUAfSmAxwZpgRaHFE38nZISVo1T1Wpnmz8P5c6U/5j0bm5EkDBPhuPsURoiSO3RzCqNi6pmRSENMMg0UFENDCb4=
+	t=1734694029; cv=none; b=KPTuVBV2nLCb8k7sCZgxYDTSbq60rVMWrkb7qAhq5UJlxiJQko5+RXW0zpPFM81/NuKV5M+MFgs/2iOVTiSY7D+/HYNg81FD4Aqh6u7if8jnrFwIALgezYOzovba/Z7y6RApakCGDPVMptbxxBr7E9cOOiku4tQd1jK2DGDr4JU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734693988; c=relaxed/simple;
+	s=arc-20240116; t=1734694029; c=relaxed/simple;
 	bh=0WzX3MQkYGmE1/tKbh9NNev17T02tgmw6EH2Zim0PVE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=SU4aU1ujKsP7LS9DIXeqge/RermE8Ndjj+Fj5qn8HP9MUsxzaKGYj3OaYuMijQwuCyMf0dmjEU1JfcMfYXM2F+Q7k4w1Y6IAtYJw1tQou6gLogDF0ROKNI8jNQWHiXBK+aRB0ODodgRsmxBWRrXYuO9ZYBzx8PoqqD+zQCpckoo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=KIDjXJZ7; arc=none smtp.client-ip=5.75.144.95
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=bAARiufTcex0BNTZpiXLLJKGlTwO6SHZF655AmNjmOmtSQ0/MQ56K7Prx3nGrXr3LgM1H1M1SJAR8HBnLfvt1M4U3SiwdP4CKRaJmixbn9p6tOWtc78OItKqmAANSsCfzcVTpGd6MWw1MTUgVwI2Uv5/+03X6MJ7m9NiHu/9gO0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org; spf=pass smtp.mailfrom=mainlining.org; dkim=pass (2048-bit key) header.d=mainlining.org header.i=@mainlining.org header.b=EmfEM4rR; arc=none smtp.client-ip=5.75.144.95
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mainlining.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mainlining.org
 Received: from [192.168.30.162] (254C1A66.nat.pool.telekom.hu [37.76.26.102])
-	by mail.mainlining.org (Postfix) with ESMTPSA id 029FCE450C;
-	Fri, 20 Dec 2024 11:26:16 +0000 (UTC)
+	by mail.mainlining.org (Postfix) with ESMTPSA id A259AE450C;
+	Fri, 20 Dec 2024 11:27:03 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mainlining.org;
-	s=psm; t=1734693978;
+	s=psm; t=1734694025;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
 	 content-transfer-encoding:content-transfer-encoding;
 	bh=/r5C8XysB4BMKE04Wyv9EWVB5LkFZ4rFY+Jd94igHFA=;
-	b=KIDjXJZ7qYGF3oH78mvcs1+7O5rTUrBRrQzbUdBgQo6nx63+Aay0ZF+xrJIme6IyGltptg
-	4aIDirzE1gJsGdZEsClwXrRANkSks5qsQCkgM/93uce+7/Bq2cjUWCLXla5TC6fwzNszj6
-	4C4I6htWOABBv07DkUK6NzBFcUHSd/c0NRF51J5Tzrv7pKyCntbIpTSDgJPGU3/m7ylHh2
-	6bf2JDWr9KynezYuYabx1ohKLQ9GRtzhkaz4QmDxENJOabWGiw9buOcfYx2ZeLuLrbkrc3
-	2WqAkqh+o07onIKaZkYqTMm7lTX/tRVJcbOjz2VCP0TB+eeBiLTAqRI7go4d2A==
+	b=EmfEM4rRqllgZ2d1ZPVeYKsCYz9L4yOW1UmcRROAy0goabcHFMOxj3HT3nhs0g6ZZUCSQG
+	Uk/3qSpRjpCp65VhySWbXq5HI469elCUeR5weys76KqT+H1dR+sG5cTmzhW+dONLA+iHdR
+	rfRONhN0GkCIIHV+z16LRqOti2rh22U2GcK9AfJbgWrKA3O+8NMuXCYpAznuYocngQQBaD
+	R7c/XntE6x47pr+rxDAx2RO1fHR6aVFgff69AA0GDNgzPrm4IGudIHaZr6ALP5Gj48yau6
+	b8659gvjl658l+p9naNAJwamwjBSnCdfOA1uuu8z3cJCCyy0YBqPVYV00ByPaA==
 From: =?utf-8?q?Barnab=C3=A1s_Cz=C3=A9m=C3=A1n?= <barnabas.czeman@mainlining.org>
 Subject: [PATCH v10 0/5] Add MSM8917/PM8937/Redmi 5A
-Date: Fri, 20 Dec 2024 12:26:13 +0100
-Message-Id: <20241220-msm8917-v10-0-35c27f704d34@mainlining.org>
+Date: Fri, 20 Dec 2024 12:26:52 +0100
+Message-Id: <20241220-msm8917-v10-0-3d5734e8c3a6@mainlining.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,7 +56,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAFVUZWcC/23QzW7DIAwH8FepOC8TNhDwTnuPaQeHjxZpTapki
+X-B4-Tracking: v=1; b=H4sIAHxUZWcC/23QzW7DIAwH8FepOC8TNhDwTnuPaQeHjxZpTapki
  jZVffeRXkAaR1v8/ti+iy2uOW7i7XQXa9zzlpe5FCBfTsJfeD7HIYfSEChRgwQartvVEdgBrFd
  BpqTZoCivb2tM+ecZ9fFZ6kvevpf195m8w9H9n7HDIIcESXmG4Fw071fO81ee83x+XdazOIJ2b
  LCCirFgx9KaxOxogi5WFYO0FauCxxC8YR/IuqmLdYubsfXx8xSJpLaE3MemwYAVm4LLwkoHpYC
@@ -84,11 +84,11 @@ Cc: linux-arm-msm@vger.kernel.org, devicetree@vger.kernel.org,
  =?utf-8?q?Otto_Pfl=C3=BCger?= <otto.pflueger@abscue.de>, 
  Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734693976; l=3592;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734694023; l=3592;
  i=barnabas.czeman@mainlining.org; s=20240730; h=from:subject:message-id;
  bh=0WzX3MQkYGmE1/tKbh9NNev17T02tgmw6EH2Zim0PVE=;
- b=HRn/BNUbX58DOIR3ALPGnWQWGQVEtKGEfuNBKVuYehrNUiu6DLuD0dBYB50LDPLB77L+saqBX
- u9HH2eyYt90C2cDAugk0xryIuiMFXMwnZ1m+gYih7BDYixB5uozOIQa
+ b=qYyvw6XmsU6+yw5CO65990bVKxLbs0+mC2nmAFPEE6xKzeGgnIpFTRyx5SdmpgewnZPQdbnY4
+ KswvGAwEadBCOUEAbPV039I+4IXF7T/Z+dI6nLmw+AG+jq0q1ONVH/3
 X-Developer-Key: i=barnabas.czeman@mainlining.org; a=ed25519;
  pk=TWUSIGgwW/Sn4xnX25nw+lszj1AT/A3bzkahn7EhOFc=
 
