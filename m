@@ -1,167 +1,269 @@
-Return-Path: <linux-pm+bounces-19569-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19570-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0632F9F9057
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 11:36:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 630319F907E
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 11:44:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D70C71896D84
-	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 10:36:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63BF3189729B
+	for <lists+linux-pm@lfdr.de>; Fri, 20 Dec 2024 10:44:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07F8B1BFE10;
-	Fri, 20 Dec 2024 10:36:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93ECC1C3F3B;
+	Fri, 20 Dec 2024 10:43:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NWOU2qXt"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="LXQtSCOj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m127157.xmail.ntesmail.com (mail-m127157.xmail.ntesmail.com [115.236.127.157])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DE52C859;
-	Fri, 20 Dec 2024 10:36:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DEB0919C56D;
+	Fri, 20 Dec 2024 10:43:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734690983; cv=none; b=dmIR7SZjzN3Ma3m06SvG6qhM/C5vVD7Gko2p3p7Zi+Yavk+xwLOZ3yMiZEY4uXEHbqOjUJpNwx09uDcJ+zDgtui1LYBBZDnIgXzj9ZBRU/5Xb7jhasiAVMaHA+0xrg2D6+xL9FOxZkJXqw5RtxANuQMaCAxfVN4DwlY3cg4GyaU=
+	t=1734691437; cv=none; b=PZRUu5qXmLzX5l79DboK37HahVqH1k8xAABbgeA81aJqpeAXMRmh22JFuWdGhfYX+2lg7nGYRt3uoLuCBFFxFX/q2q0DL8n3xYsMXr9BKq5koCQQDEROKZPsiK6cLcaH3gl/Qg3vYSRBd6rx0eQrytIqlQ+OTn4TBj9/qzSRX0Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734690983; c=relaxed/simple;
-	bh=5ZEY+r5qQ+AMYuZ7XFhExXY/85ImD6gfTOM4YM4hv3w=;
-	h=Message-ID:Date:From:To:Cc:Subject:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fjdQ98zaW6FuDa0Yo2ibogH5MipUZKTa26R9gRl/p8tudlbGOhySyzo27qDC66x5+p1yD27NbsmVG1XMnFupB4NRT1YvkzImujbka2li6/pkR76c/C7KxCYzsfylc386J86CWbaolJJT/Dxo9o9p9Y8M8xezimx3GpZnV4GF/Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NWOU2qXt; arc=none smtp.client-ip=209.85.128.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43622354a3eso11991605e9.1;
-        Fri, 20 Dec 2024 02:36:22 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734690980; x=1735295780; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=4AxlDXOdbX1NGFPQpTvVqnJBNKIwf38rf+x+0J3lvQ4=;
-        b=NWOU2qXt5X8N138gUGwU0qpi4u3B3X4U7hl2jjHrEdL2TEN3UTZpOUoRehbVHNSHfL
-         4RTlXHtD2y0IUWtcaDP4W7zB8FexP6JIjfR+7ZFpfr7H0xtbH+T8272JRQiLgJpb5UR3
-         HHyzVQ/xeVuY8fSR0Q3RoqgQgby8L1MNu3nWJyS4N+hbEYMK3QMDw9yTXn4XxR+yRtEU
-         TM+s2bYm3ZhiGeTE0k1Y29Gculvs2XvrbqZX5Ah1FCzdtQ8mzoLweX1jdnyMg+pW3d/S
-         cStXlhO/NCKN64qx/UwjwEnVplUx2ocISioE6I6YrUPjZqIXRgo6IT0mul/hTTK+A+Xy
-         hseg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734690980; x=1735295780;
-        h=in-reply-to:content-disposition:mime-version:references:subject:cc
-         :to:from:date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=4AxlDXOdbX1NGFPQpTvVqnJBNKIwf38rf+x+0J3lvQ4=;
-        b=uVqyWC7RHqNZONWM39olwk4J8p7/RVUTC+Mzzpg4A/mZvdOeAvi95Vb7zSLcavKoEm
-         DynI3VTeqjST7oZzG1EoaZ8SouxvdGU9OtTG7WD0uQYC/hLdzZPfY1QI2z4+1NhSTSOi
-         QVYBPmi8gStMSM6HBk1DGIMINlDmTKGJZU1y4gvlqGD3uPkjMrp/uFPXai9KiWW10iZa
-         mIBGvUgWs/G4Xy7FkYzjV4AAhukF+ubCvv/Is+Nmdo/y7K5gv7NxwWYiHXT3ekRXtxjg
-         sfzxfkujYkUwlvg8kN34Nny18kZ3yppR8vslMHjh2XRMwz7c0c9Gk7ptS3+I96q/v6vQ
-         wwFg==
-X-Forwarded-Encrypted: i=1; AJvYcCVOWLawhuB2wNIEHeKTaRBakGh1fIvJCyjn3or+JOYMZbmSnwWnSQh+GVxIg2OTCPfk/2fD7GTPqfo=@vger.kernel.org, AJvYcCVm3z3pmlIh3CJLYDrWTqAk0UJ9w9ysRIitpICl2eaUQvjD1wkPAE2yjoS1FERibyedR7G7glQhkTi+GDQB@vger.kernel.org, AJvYcCW2qdQTUgIiOzVXO3QYoDfA3b/5xRwtAmqpveIkelGAPEws3KEPch1+0RJ8Hi8cZEKgtTtoMmjuz223@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8bG6mIw5PklpdxEou6+JIPRTIidVxPA/GmUiE7nxDRGofaoS7
-	48QH5tGhm8OLnx0ocbJhYumBATTWwltIyrdn3KIySG4wGLbYd0AO
-X-Gm-Gg: ASbGncsEhmU3MQ0WFdz09VCWKbb3s9rBA7Ylm9jZ4PXNVelt3YMRJewLP5sxDexZ9L7
-	sb2y0W9EYV70kww1AfuibGk6vEfX25W7lUw/cuvOAaSp9Xj4nHmiPvUsfH/ZvpdIEEHev+V+Z5Z
-	riF9jR/bb5cnU/Yakehdl/WonR8kuruFipHrP4Ws/KJ3osjOMt9REc+GJxd647ohl62Sx84e2BO
-	gDTiq1m3fMeUX4Ef6fAHXxgqAcY/+sgEgMvxK8SYi6+rY/g7WpDagUEwyYmFKwZ4f5FRY7gjIWc
-	mR/ImyoAe/GFWU2W0pz1bCcv8A==
-X-Google-Smtp-Source: AGHT+IF2Qdcxxt1R0R++BV7eITFAXb/Wj5U7hOYNI4VeDmzZWOtyS4Gwa0cTfnRVbIHoCAL304lHlQ==
-X-Received: by 2002:a5d:59ac:0:b0:386:2fc8:ef86 with SMTP id ffacd0b85a97d-38a221fac08mr2245628f8f.14.1734690980197;
-        Fri, 20 Dec 2024 02:36:20 -0800 (PST)
-Received: from Ansuel-XPS. (host-80-181-61-65.retail.telecomitalia.it. [80.181.61.65])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a2432e587sm823346f8f.95.2024.12.20.02.36.18
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 20 Dec 2024 02:36:19 -0800 (PST)
-Message-ID: <676548a3.df0a0220.16c730.268c@mx.google.com>
-X-Google-Original-Message-ID: <Z2VIo8I6O301MnGy@Ansuel-XPS.>
-Date: Fri, 20 Dec 2024 11:36:19 +0100
-From: Christian Marangi <ansuelsmth@gmail.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Rob Herring <robh@kernel.org>,
+	s=arc-20240116; t=1734691437; c=relaxed/simple;
+	bh=FLotb8PO7pUbOoGoa3ZcA+IJLn2SEtUGvEV7uvVVTkk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kbln7y/CCeYJY3S9PlwwCdobmOpsBOraPpxJpouwpuGplkxgSESnNkpTn090B/kdHBqxXc2u8p+GLR8k9jPCPAcgbcXdmVGHGw60XNJkwku5wI6zdCunKuGeLKIwIWibwqrXS2c6O1FkrGFO6PM8eUS9WzTk5N0PGR9e7uX1zj4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=LXQtSCOj; arc=none smtp.client-ip=115.236.127.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 656820ed;
+	Fri, 20 Dec 2024 18:38:26 +0800 (GMT+08:00)
+From: Kever Yang <kever.yang@rock-chips.com>
+To: heiko@sntech.de
+Cc: linux-rockchip@lists.infradead.org,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Simon Xue <xxm@rock-chips.com>,
+	Lee Jones <lee@kernel.org>,
+	dri-devel@lists.freedesktop.org,
+	Zhang Rui <rui.zhang@intel.com>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	linux-clk@vger.kernel.org,
+	Conor Dooley <conor+dt@kernel.org>,
+	FUKAUMI Naoki <naoki@radxa.com>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	upstream@airoha.com
-Subject: Re: [PATCH v7 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
-References: <20241206211145.2823-1-ansuelsmth@gmail.com>
- <20241206211145.2823-2-ansuelsmth@gmail.com>
- <CAPDyKFovtfR7BiXBfH-79Cyf1=rd-kmOoEnEdMArjGUxSks-Aw@mail.gmail.com>
- <20241213040001.jaqeuxyuhcc73ihg@vireshk-i7>
- <675cb6b2.050a0220.149877.5bab@mx.google.com>
- <CAPDyKFq7c607_NtiEF=4HinL5HABv7+fW9EGi1xfwpOpUPO6Bg@mail.gmail.com>
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	Andy Yan <andyshrk@163.com>,
+	Michael Riesch <michael.riesch@wolfvision.net>,
+	Andi Shyti <andi.shyti@kernel.org>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-pm@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-usb@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-spi@vger.kernel.org,
+	Jakub Kicinski <kuba@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Jose Abreu <joabreu@synopsys.com>,
+	Jamie Iles <jamie@jamieiles.com>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Chris Morgan <macromorgan@hotmail.com>,
+	Frank Wang <frank.wang@rock-chips.com>,
+	linux-mmc@vger.kernel.org,
+	Linus Walleij <linus.walleij@linaro.org>,
+	linux-i2c@vger.kernel.org,
+	Simona Vetter <simona@ffwll.ch>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	=?UTF-8?q?Krzysztof=20Wilczy=C5=84ski?= <kw@linux.com>,
+	linux-stm32@st-md-mailman.stormreply.com,
+	linux-watchdog@vger.kernel.org,
+	David Wu <david.wu@rock-chips.com>,
+	Shresth Prasad <shresthprasad7@gmail.com>,
+	linux-gpio@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Guenter Roeck <linux@roeck-us.net>,
+	linux-iio@vger.kernel.org,
+	linux-pci@vger.kernel.org,
+	David Airlie <airlied@gmail.com>,
+	linux-phy@lists.infradead.org,
+	Jonas Karlman <jonas@kwiboo.se>,
+	Maxime Ripard <mripard@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	Vinod Koul <vkoul@kernel.org>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Alexandre Torgue <alexandre.torgue@foss.st.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Jiri Slaby <jirislaby@kernel.org>,
+	linux-pwm@vger.kernel.org,
+	Rob Herring <robh@kernel.org>,
+	Wim Van Sebroeck <wim@linux-watchdog.org>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Mark Brown <broonie@kernel.org>,
+	Dragan Simic <dsimic@manjaro.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Lars-Peter Clausen <lars@metafoo.de>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Johan Jonker <jbx6244@gmail.com>,
+	Shawn Lin <shawn.lin@rock-chips.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	linux-serial@vger.kernel.org,
+	Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	devicetree@vger.kernel.org,
+	Diederik de Haas <didi.debian@cknow.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Tim Lunn <tim@feathertop.org>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Cristian Ciocaltea <cristian.ciocaltea@collabora.com>,
+	netdev@vger.kernel.org,
+	Paolo Abeni <pabeni@redhat.com>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <ukleinek@kernel.org>
+Subject: [PATCH 00/38] rockchip: Add rk3562 support
+Date: Fri, 20 Dec 2024 18:37:46 +0800
+Message-Id: <20241220103825.3509421-1-kever.yang@rock-chips.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAPDyKFq7c607_NtiEF=4HinL5HABv7+fW9EGi1xfwpOpUPO6Bg@mail.gmail.com>
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQh9LT1ZJGktPSElKGk8fQxhWFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSEtNQk
+	tVSktLVUpCWQY+
+X-HM-Tid: 0a93e3a5af4003afkunm656820ed
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nwg6Kxw6GTIRKggeThEUMR4h
+	P0gaCyxVSlVKTEhPTUJKSkpKTElJVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFOTUpJNwY+
+DKIM-Signature:a=rsa-sha256;
+	b=LXQtSCOj5PQ5rmMQS8JUHg+aVmzux+tnR5NnlpILS50US/QWv5VBCTHDsqEiVs5WhSa9UqWxWgKBEnSg0vucKhE8FyZdsUwbc5ZsdiUz76LZqHiim02ORqBuKb413jRYfReSUFy7jfbzAaPEA5wGkuukfoQqA957T+ZIIQC0lqE=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=RUJ3VBWN4hJZF+kjNTXL1lSb1odrwauQvfHGVuJDe90=;
+	h=date:mime-version:subject:message-id:from;
 
-On Thu, Dec 19, 2024 at 04:23:52PM +0100, Ulf Hansson wrote:
-> On Fri, 13 Dec 2024 at 23:35, Christian Marangi <ansuelsmth@gmail.com> wrote:
-> >
-> > On Fri, Dec 13, 2024 at 09:30:01AM +0530, Viresh Kumar wrote:
-> > > On 12-12-24, 13:01, Ulf Hansson wrote:
-> > > > On Fri, 6 Dec 2024 at 22:16, Christian Marangi <ansuelsmth@gmail.com> wrote:
-> > > > Hmm, it looks like this needs to be moved and possibly split up.
-> > > >
-> > > > The provider part (for the clock and power-domain) belongs in
-> > > > /drivers/pmdomain/*, along with the other power-domain providers.
-> > > >
-> > > > Other than that, I was really expecting the cpufreq-dt to take care of the rest.
-> > > >
-> > > > To me, the above code belongs in a power-domain provider driver. While
-> > > > the below should be taken care of in cpufreq-dt, except for the device
-> > > > registration of the cpufreq-dt device, I guess.
-> > > >
-> > > > Viresh, what's your view on this?
-> > >
-> > > Sure, no issues.. These are all cpufreq related, but don't necessarily belong in
-> > > the cpufreq directory.
-> > >
-> >
-> > Problem is really DT schema... I wonder if it's acceptable to push a
-> > name-only driver in pmdomain just do detach from cpufreq. The cpufreq
-> > driver would manually probe the pmdomain. Is it acceptable?
-> >
-> > Or do you have alternative solution for this?
-> 
-> The power-domain provider driver should use the compatible
-> "airoha,en7581-cpufreq". This driver should be responsible for
-> registering the genpd and the clock.
 
-Is it ok to have clk provider in power-domain driver?
+This patch set adds rk3562 SoC and its evb support.
 
-> 
-> Potentially, the power-domain provider driver could also register the
-> "cpufreq-dt" platform-device. To make this work, we also need to
-> extend the cpufreq-dt driver (maybe extend its platform-data too?) to
-> be capable of attaching the corresponding cpu-devices to their
-> power(perf)-domains. For the moment, this isn't supported, but I think
-> it would be nice if it could. Another option, would be to use an
-> additional separate name-based cpufreq-driver, as in the
-> qcom-cpufreq-nvmem.c, that then becomes responsible for registering
-> the cpufreq-dt device.
+The patch number is a little bit too big, some of them may need to split
+out for different maintainers, please let me know which patch need to
+split out.
 
-Well a simple init/exit driver should be ok, we still need to have the
-custom function for opp so a specific driver in cpufreq is needed
-anyway.
+Test with GMAC, USB, PCIe, EMMC, SD Card.
 
-> 
-> Viresh, do you have a better approach in mind?
->
+This patch set is base on the patche set for rk3576 evb1 support.
 
-If both are ok with this approach I will:
-- move pm domain and clock to pmdomain driver directory
-- rework the cpufreq driver to an init/exit implementation (no
-  compatible) and just register cpufreq-dt with the custom opp
-  OPs.
 
-This should work and make everything well organized.
+David Wu (2):
+  ethernet: stmmac: dwmac-rk: Add gmac support for rk3562
+  ethernet: stmmac: dwmac-rk: Make the phy clock could be used for
+    external phy
+
+Finley Xiao (7):
+  clk: rockchip: add dt-binding header for rk3562
+  clk: rockchip: Add clock controller for the RK3562
+  dt-bindings: add power-domain header for RK3562 SoC
+  nvmem: rockchip-otp: Add support for rk3568-otp
+  nvmem: rockchip-otp: Add support for rk3562
+  arm64: dts: rockchip: add core dtsi for RK3562 Soc
+  arm64: dts: rockchip: Add RK3562 evb2 devicetree
+
+Frank Wang (1):
+  phy: rockchip: inno-usb2: add usb2 phy support for rk3562
+
+Jon Lin (1):
+  phy: rockchip-naneng-combo: Support rk3562
+
+Kever Yang (24):
+  dt-bindings: clock: add rk3562 cru bindings
+  dt-bindings: pinctrl: Add rk3562 pinctrl support
+  soc: rockchip: power-domain: add power domain support for rk3562
+  dt-bindings: rockchip-thermal: Support the RK3562 SoC compatible
+  dt-bindings: iio: adc: Add rockchip,rk3562-saradc string
+  dt-bindings: net: Add support for rk3562 dwmac
+  dt-bindings: nvmem: rockchip,otp: Add support for rk3562 and rk3568
+  dt-bindings: phy: rockchip: Add rk3562 naneng-combophy compatible
+  dt-bindings: phy: rockchip,inno-usb2phy: add rk3562
+  dt-bindings: PCI: dwc: rockchip: Add rk3562 support
+  dt-bindings: mmc: Add support for rk3562 eMMC
+  dt-bindings: mmc: rockchip-dw-mshc: Add rk3562 compatible string
+  dt-bindings: power: rockchip: Add bindings for rk3562
+  dt-bindings: i2c: i2c-rk3x: Add rk3562 compatible
+  dt-bindings: gpu: Add rockchip,rk3562-mali compatible
+  dt-bindings: watchdog: Add rk3562 compatible
+  dt-bindings: spi: Add rockchip,rk3562-spi compatible
+  dt-bindings: serial: snps-dw-apb-uart: Add support for rk3562
+  dt-bindings: usb: dwc3: add compatible for rk3562
+  dt-bindings: pwm: rockchip: Add rockchip,rk3562-pwm
+  dt-bindings: rockchip: pmu: Add rk3562 compatible
+  dt-bindings: soc: rockchip: Add rk3562 syscon compatibles
+  dt-bindings: arm: rockchip: Add rk3562 evb2 board
+  dt-bindings: mfd: syscon: Add rk3562 QoS register compatible
+
+Shaohan Yao (1):
+  thermal: rockchip: Support the rk3562 SoC in thermal driver
+
+Simon Xue (1):
+  iio: adc: rockchip_saradc: add rk3562
+
+Steven Liu (1):
+  pinctrl: rockchip: add rk3562 support
+
+ .../devicetree/bindings/arm/rockchip.yaml     |    5 +
+ .../devicetree/bindings/arm/rockchip/pmu.yaml |    2 +
+ .../bindings/clock/rockchip,rk3562-cru.yaml   |   62 +
+ .../bindings/gpu/arm,mali-bifrost.yaml        |    3 +-
+ .../devicetree/bindings/i2c/i2c-rk3x.yaml     |    1 +
+ .../bindings/iio/adc/rockchip-saradc.yaml     |    2 +
+ .../devicetree/bindings/mfd/syscon.yaml       |    2 +
+ .../bindings/mmc/rockchip-dw-mshc.yaml        |    1 +
+ .../bindings/mmc/snps,dwcmshc-sdhci.yaml      |    9 +-
+ .../bindings/net/rockchip-dwmac.yaml          |    5 +-
+ .../bindings/nvmem/rockchip,otp.yaml          |   49 +-
+ .../bindings/pci/rockchip-dw-pcie.yaml        |    1 +
+ .../phy/phy-rockchip-naneng-combphy.yaml      |    1 +
+ .../bindings/phy/rockchip,inno-usb2phy.yaml   |    3 +-
+ .../bindings/pinctrl/rockchip,pinctrl.yaml    |    1 +
+ .../power/rockchip,power-controller.yaml      |    1 +
+ .../devicetree/bindings/pwm/pwm-rockchip.yaml |    1 +
+ .../bindings/serial/snps-dw-apb-uart.yaml     |    1 +
+ .../devicetree/bindings/soc/rockchip/grf.yaml |    7 +
+ .../devicetree/bindings/spi/spi-rockchip.yaml |    1 +
+ .../bindings/thermal/rockchip-thermal.yaml    |    1 +
+ .../bindings/usb/rockchip,dwc3.yaml           |    3 +
+ .../bindings/watchdog/snps,dw-wdt.yaml        |    1 +
+ arch/arm64/boot/dts/rockchip/Makefile         |    1 +
+ .../boot/dts/rockchip/rk3562-evb2-v10.dts     |  520 ++++
+ .../boot/dts/rockchip/rk3562-pinctrl.dtsi     | 2352 +++++++++++++++++
+ arch/arm64/boot/dts/rockchip/rk3562.dtsi      | 1432 ++++++++++
+ drivers/clk/rockchip/Kconfig                  |    7 +
+ drivers/clk/rockchip/Makefile                 |    1 +
+ drivers/clk/rockchip/clk-rk3562.c             | 1111 ++++++++
+ drivers/clk/rockchip/clk.h                    |   39 +
+ drivers/iio/adc/rockchip_saradc.c             |   24 +-
+ .../net/ethernet/stmicro/stmmac/dwmac-rk.c    |  213 +-
+ drivers/nvmem/rockchip-otp.c                  |   97 +
+ drivers/phy/rockchip/phy-rockchip-inno-usb2.c |   49 +
+ .../rockchip/phy-rockchip-naneng-combphy.c    |  152 ++
+ drivers/pinctrl/pinctrl-rockchip.c            |  199 +-
+ drivers/pinctrl/pinctrl-rockchip.h            |    3 +-
+ drivers/pmdomain/rockchip/pm-domains.c        |   48 +-
+ drivers/thermal/rockchip_thermal.c            |  112 +-
+ include/dt-bindings/clock/rk3562-cru.h        |  733 +++++
+ include/dt-bindings/power/rk3562-power.h      |   35 +
+ 42 files changed, 7269 insertions(+), 22 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/clock/rockchip,rk3562-cru.yaml
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-evb2-v10.dts
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562-pinctrl.dtsi
+ create mode 100644 arch/arm64/boot/dts/rockchip/rk3562.dtsi
+ create mode 100644 drivers/clk/rockchip/clk-rk3562.c
+ create mode 100644 include/dt-bindings/clock/rk3562-cru.h
+ create mode 100644 include/dt-bindings/power/rk3562-power.h
 
 -- 
-	Ansuel
+2.25.1
+
 
