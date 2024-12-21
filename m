@@ -1,232 +1,112 @@
-Return-Path: <linux-pm+bounces-19625-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19626-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81B4A9FA067
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2024 12:17:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96D009FA0B5
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2024 13:52:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA9821686C3
-	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2024 11:17:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F7B97A1FC9
+	for <lists+linux-pm@lfdr.de>; Sat, 21 Dec 2024 12:51:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B43E1F0E4A;
-	Sat, 21 Dec 2024 11:17:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5245F1F2C45;
+	Sat, 21 Dec 2024 12:51:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="l3yAc36c"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IY7P+5v0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E12281F0E3E
-	for <linux-pm@vger.kernel.org>; Sat, 21 Dec 2024 11:17:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 809161A8406
+	for <linux-pm@vger.kernel.org>; Sat, 21 Dec 2024 12:51:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734779829; cv=none; b=f5x91jCh4iLCWbBOU6TQz7Y/dL0v1IEguvd2EO/hKSePP1LYjGnfcg1W5EXQh3qoHaS3QgidYSZZjqgTEqoPk4h0uxUOmiKtLcqhdz5UrjtVMRT2CWpW71Jmr1J7MKgOflk8UrKsbzdeXH6Bht9DfBg1dQiLtBRlw/daobI8cO0=
+	t=1734785514; cv=none; b=jFTJeV5qeyCfauAMo75OI4gDDMKiL5MxXIqANCARK1j5Y9WxOppl2gh/MLCgP7kUYVRSV9pB/5upHjH3ly9pYSp+1qDGZ7qn2qiil41lG7FimB6nhHgFKGpqe7CumhkTkgAHDNeOz/y6KaZvmkmbynwjTsDBdPCr92f3T5ljGjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734779829; c=relaxed/simple;
-	bh=PV5QIsYMzzv2hGUCwcAheUz749Zs6BIC9WmP/2dEY9M=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Pisia/Q19eEVV7SOK+Nw5CSSRF1VUuuDUCmDPuRiiGlG42NrOkPy+5DKtRcZJuQRD9Rt5qmmjVLzH7nNWq4jFcM/t8hPFHZVgCh3fgTecjpf15kN7REtIMyYx/q1bEzdpANNM8rsTVfT+7qlfufqw+VE+5au94dOiFp7WcBOWhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=l3yAc36c; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BL6WTBw011078
-	for <linux-pm@vger.kernel.org>; Sat, 21 Dec 2024 11:17:07 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	PviBgmbTXKBNX4qAGuEbhZpgWfmtVEh2UszefQDNd8Y=; b=l3yAc36c14puS7M5
-	4qvDsMiIdErI1uYhsAldWTRoupTTOSGQ5OSjnEmaXTwdh+JXtOb86dna4VgNdjAa
-	yCta6SqYUx594SxOwCdv5hoLAOqyqoN4dMV1eKE7+1jT+2PIcPzJFgA2/7/+y3m4
-	Ghctg5QCT90XONkG0YWEfPa4bQuFSKHPdnOvS/JHFaCwC0/RjC16mtY2JDKeLuFv
-	jDp0iB9ukEPE2JzlwolEr3brl6E7HyCE1lQt+imZIQyVtDQB3D/4LmeC0oihGEdi
-	oiX/ugL5kyHeD5gLA9JfYoqodFut3Fx12670b2d/2Ci5e6qdjj+1lM4VfmxM8D57
-	UYDTvA==
-Received: from mail-qv1-f71.google.com (mail-qv1-f71.google.com [209.85.219.71])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43nrgegku5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Sat, 21 Dec 2024 11:17:07 +0000 (GMT)
-Received: by mail-qv1-f71.google.com with SMTP id 6a1803df08f44-6d881a3e466so5923916d6.3
-        for <linux-pm@vger.kernel.org>; Sat, 21 Dec 2024 03:17:06 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734779826; x=1735384626;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=PviBgmbTXKBNX4qAGuEbhZpgWfmtVEh2UszefQDNd8Y=;
-        b=M2zdtDC+FgTsTy/4kPTRZ7ziJJsOEPK1UK4SSgh81cHkQouddUb9K7bQFjQRAm5vXP
-         81nlNe1CBuxoYawfn04nLgIuOGnBI4e5i9Bk4goAUYyJ2/MuBRaKsPuqKilqUFmhg8kJ
-         b7YjbbthmSwgV7KRodfwKyL2fHxUk52nTpTr5Vn3iZanbkfsCgSEhW1PK4/nb7S8akSQ
-         /Kf7yWHARvMoiDW+DPNbRK3Ctr53OmuRkXBPjYKGRRZ/s/LXS6OH24lsL0TAvcMK+wPy
-         lTy8qVQRZGMBTxyf62nCvJTosaFFQ0nkQFo83tayZPxwCobd/hngY7phX/mDprh3xVG4
-         tQDw==
-X-Forwarded-Encrypted: i=1; AJvYcCXom6eMl7danQ22Kf/dlaDGV5lAeml0fDEHbJb82EXG1MpNFivv1bFVctoX2kLv2NKkPyiKdCiz+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjahGeFZTsJ0DIp3nZPC0tCdxsX+/JJQ9PJ5+mC3D9rZSZIlGq
-	ihjmks2BDYlBmQkNKzJO0QGiXJK0k96vrPZGKaJfdDKdIjeM9kb4XWccFecYYBK+8dtiWPpOPUA
-	/PC0qTdV2GW8tY7ZhXF+7SN1vgX3bi3S/UFxk269s02oRXk8PE9qTPYMiOg==
-X-Gm-Gg: ASbGncvGanoV24ZM1UquaR8WeztjdIlVz6/ff02Rdab3tzIWKik0F2IBU08e/etWXbw
-	mcogK+GYU9vttWn0s8IUKmw5RtbXaXrTdzLLQjh95bNQnPeugdd/oE3B3yQALe3ZBet2Bdx/zgW
-	o/MtFUk+rOm8o8FloC6lyWy58VinpZWavVxaMNSJ7cTF2orB6b8+hqgYSudR3Vp4FrDfBUi+RJb
-	bjpAza3u2Y70hWjmOvgQryg+XC3ZgKHkYwVsiuhWkpgAXpMTNa0UXPgFrMqfLqAW4JbEPAkIMXn
-	pm0SgmZETMTTeYz9pU3fYFKSHGGT5U0Vqy0=
-X-Received: by 2002:a05:620a:4116:b0:7b6:cb9a:e0d4 with SMTP id af79cd13be357-7b9ba7d89b7mr317910085a.15.1734779825333;
-        Sat, 21 Dec 2024 03:17:05 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEr1Wi8ZZI27rCO1os4kGR09bu4rvLnhtSDLOTZS9z4c7OepAJHRXZEQU8Hm0VJwaoP7XsYUw==
-X-Received: by 2002:a05:620a:4116:b0:7b6:cb9a:e0d4 with SMTP id af79cd13be357-7b9ba7d89b7mr317907985a.15.1734779824888;
-        Sat, 21 Dec 2024 03:17:04 -0800 (PST)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aac0efe48aasm269194566b.112.2024.12.21.03.17.02
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 21 Dec 2024 03:17:04 -0800 (PST)
-Message-ID: <a514f047-d56e-40a1-ad36-b655cc8cddb7@oss.qualcomm.com>
-Date: Sat, 21 Dec 2024 12:17:02 +0100
+	s=arc-20240116; t=1734785514; c=relaxed/simple;
+	bh=ftFqeXJlr7ozSsJiJmwDqttcOnaO3TPQ4NZq5jR1kpU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=rbal+8kEjzEHreOOdCOMs8Jv02mdwWspib/pHXPhZjzO2Qgnno+5lJM0OZ8SZkf0pG95m7rS+XXDRQCdUb+XT5iGMyUSyWfN6wguwANfCv20FnacLqCt55++gUMDyHwZr+h8JAdiMAk1PSICDi2o5bfX2GzffPRn5g74iGU1utM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IY7P+5v0; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1734785510;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=DMdR9EaqQqpEHfKqP+5Z9GMZ9uoTPMuFThXtBArLjI8=;
+	b=IY7P+5v0y0MAdsPtZRVtFxJpCEZQ/6lPZFAeoXHeCa8xu+UM0DMZwnYPDB4ZAKL6cCFoNs
+	nKYai6SRhB33zYM7puXcVExWbMI0LiwFResvCDbjJxObxiAXIZwSuqELU25BI7K29ujD9H
+	JR6f9UXtccfmJwinLJ6JqRgZ932VJ6I=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-274-PjvPJLMuNqiJwJftw3LRbA-1; Sat,
+ 21 Dec 2024 07:51:45 -0500
+X-MC-Unique: PjvPJLMuNqiJwJftw3LRbA-1
+X-Mimecast-MFC-AGG-ID: PjvPJLMuNqiJwJftw3LRbA
+Received: from mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.12])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 33C0F19560B1;
+	Sat, 21 Dec 2024 12:51:44 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.192.23])
+	by mx-prod-int-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id B9A4519560A2;
+	Sat, 21 Dec 2024 12:51:41 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	Andy Shevchenko <andy@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	platform-driver-x86@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v5 0/1] power: supply: Add new "charge_types" property
+Date: Sat, 21 Dec 2024 13:51:39 +0100
+Message-ID: <20241221125140.345776-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] nvme-pci: Shutdown the device if D3Cold is allowed by the
- user
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-        Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christoph Hellwig <hch@lst.de>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        "Rafael J. Wysocki"
- <rjw@rjwysocki.net>,
-        Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org, axboe@kernel.dk,
-        sagi@grimberg.me, linux-nvme@lists.infradead.org,
-        linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
-        andersson@kernel.org, konradybcio@kernel.org,
-        Len Brown
- <len.brown@intel.com>, linux-pm@vger.kernel.org
-References: <20241209143821.m4dahsaqeydluyf3@thinkpad>
- <20241212055920.GB4825@lst.de> <13662231.uLZWGnKmhe@rjwysocki.net>
- <CAPDyKFrxEjHFB6B2r7JbryYY6=E4CxX_xTmLDqO6+26E+ULz6A@mail.gmail.com>
- <20241212151354.GA7708@lst.de>
- <CAJZ5v0gUpDw_NjTDtHGCUnKK0C+x0nrW6mP0tHQoXsgwR2RH8g@mail.gmail.com>
- <20241214063023.4tdvjbqd2lrylb7o@thinkpad> <20241216162303.GA26434@lst.de>
- <CAJZ5v0g8CdGgWA7e6TXpUjYNkU1zX46Rz3ELiun42MayoN0osA@mail.gmail.com>
- <dd557897-f2e0-4347-ae67-27cd45920159@oss.qualcomm.com>
- <20241221033842.6nvmd4clkb3r4roh@thinkpad>
-Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241221033842.6nvmd4clkb3r4roh@thinkpad>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: kcC_lSrkIqOrqIXDZtQWhU1JVjh6VbMJ
-X-Proofpoint-GUID: kcC_lSrkIqOrqIXDZtQWhU1JVjh6VbMJ
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 priorityscore=1501 bulkscore=0 mlxscore=0
- malwarescore=0 spamscore=0 phishscore=0 adultscore=0 mlxlogscore=999
- suspectscore=0 impostorscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2411120000 definitions=main-2412210099
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.12
 
-On 21.12.2024 4:38 AM, Manivannan Sadhasivam wrote:
-> On Fri, Dec 20, 2024 at 04:15:21PM +0100, Konrad Dybcio wrote:
->> On 16.12.2024 5:42 PM, Rafael J. Wysocki wrote:
->>> On Mon, Dec 16, 2024 at 5:23 PM Christoph Hellwig <hch@lst.de> wrote:
->>>>
->>>> On Sat, Dec 14, 2024 at 12:00:23PM +0530, Manivannan Sadhasivam wrote:
->>>>> We need a PM core API that tells the device drivers when it is safe to powerdown
->>>>> the devices. The usecase here is with PCIe based NVMe devices but the problem is
->>>>> applicable to other devices as well.
->>>>
->>>> Maybe I'm misunderstanding things, but I think the important part is
->>>> to indicate when a suspend actually MUST put the device into D3.  Because
->>>> doing that should always be safe, but not always optimal.
->>>
->>> I'm not aware of any cases when a device must be put into D3cold
->>> (which I think is what you mean) during system-wide suspend.
->>>
->>> Suspend-to-idle on x86 doesn't require this, at least not for
->>> correctness.  I don't think any platforms using DT require it either.
->>
->> That would be correct.
->>
->> The Qualcomm platform (or class of platforms) we're looking at with this
->> specific issue requires PCIe (implying NVMe) shutdown for S2RAM.
->>
->> The S2RAM entry mechanism is unfortunately misrepresented as an S2Idle
->> state by Linux as of today, and I'm trying really hard to convince some
->> folks to let me describe it correctly, with little success so far..
->>
-> 
-> Perhaps you should say 'S2RAM is misrepresented as S2Idle by the firmware as of
-> today'...
-> 
-> But I'll leave it up to the PSCI folks to decide whether it makes sense to
-> expose PSCI SYSTEM_SUSPEND through CPU_SUSPEND or not.
+Here is v5 of my "charge_types" property series, most of this series
+has already been merged, leaving only the dell-laptop patch.
 
-The firmware happily performs the actions required to put the platform
-in S2RAM, but the interface used to request entry (CPU_SUSPEND) is
-mostly used for entering CPU/cluster idle states on arm64.
+Changes in v5:
+- Drop patches 1-3 (already merged)
+- dell-laptop: Return ENOENT instead of EIO in charge_types_store() when
+  the requested mode was accepted by power_supply_charge_types_parse() but
+  for some reason is not found in the battery_modes[] array
 
-(although the PSCI spec also clearly states that using CPU_SUSPEND for
-system-level low power states is allowed *plus* the reference
-implementation literally just calls CPU_SUSPEND internally whenever
-the """proper""" SYSTEM_SUSPEND call is used, anyway)
+As already discussed since the dependencies are merged into
+linux-power-supply/for-next this patch should also be merged through
+linux-power-supply/for-next.
 
-> 
-> For the people in this thread, I'm leaving the link to the PSCI discussion here:
-> https://lore.kernel.org/all/20241028-topic-cpu_suspend_s2ram-v1-0-9fdd9a04b75c@oss.qualcomm.com/
-> 
->> That is the real underlying issue and once/if it's solved, this patch
->> will not be necessary.
->>
->>> In theory, ACPI S3 or hibernation may request that, but I've never
->>> seen it happen in practice.
->>>
->>> Suspend-to-idle on x86 may want devices to end up in specific power
->>> states in order to be able to switch the entire platform into a deep
->>> energy-saving mode, but that's never been D3cold so far.
->>
->> In our case the plug is only pulled in S2RAM, otherwise the best we can
->> do is just turn off the devices individually to decrease the overall
->> power draw
->>
-> 
-> I don't think this is accurate. Qcom FW (the one we are discussing in this
-> thread) doesn't pull the plug (except on platforms like x13s due to hw
-> limitation). On ACPI though, the FW *might* pull the plug, so that's why drivers
-> prepare the devices by powering down them (largely) if pm_suspend_via_firmware()
-> succeeds. On Qcom platforms, we are trying to allow the SoC to transition to low
-> power state and that requires relinquishing the resource votes by the drivers.
+Ilpo, this new version addresses your review comment, can you please
+provide your Acked-by for merging this through linux-power-supply/for-next?
 
-Look, I have a power measurement device before my eyes and I clearly see
-the main power rail being cut on successful S2RAM entry.
+Sebastian, can you merge this once acked by Ilpo?
 
-In s2idle/runtime cpuidle, no power is removed to anything except CPUs
-(as decided by the adjacent uncore MCU) and Linux-PM-managed devices.
-This is what the "pure software, light-weight variant of system suspend"
-wording refers to in the doc - we shut off some peripheral devices and
-put the CPUs in some sort of a wait-for-event state, opportunistically
-cutting power from them.
+Regards,
+
+Hans
 
 
-For S2RAM, in the special snowflake sc8280xp/x13s case, we need to
-shut down all PCIe RCs manually from Linux, so that another power
-management MCU can then cut the system power rail.
+Hans de Goede (1):
+  platform/x86: dell-laptop: Use power_supply_charge_types_show/_parse()
+    helpers
 
-But on other platforms it'd be enough to put the RCs in a lower power
-state and have something that's not controlled by the OS decide
-whether power should flow to them (more like the ACPI scenario).
+ drivers/platform/x86/dell/dell-laptop.c | 54 ++++++++++++-------------
+ 1 file changed, 25 insertions(+), 29 deletions(-)
 
-The latter we don't/can't support as of now, so at least getting the
-first case squared out would be good, as tearing down RCs always
-works, even if it's not preferred for $REASONS.
-
-Konrad
-
-> 
-> I still have doubt that pm_set_suspend_via_firmware() applies to Qcom FW or not.
-> Also the API description doesn't exactly match its usecase.
-
+-- 
+2.47.1
 
 
