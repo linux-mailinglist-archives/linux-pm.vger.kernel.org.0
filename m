@@ -1,246 +1,223 @@
-Return-Path: <linux-pm+bounces-19717-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19718-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CF7B9FB3DA
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 19:14:04 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96D799FB4A3
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 20:19:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C148188426B
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 18:14:05 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0474A7A2300
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 19:19:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0023E1BBBFD;
-	Mon, 23 Dec 2024 18:13:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35E311C5F25;
+	Mon, 23 Dec 2024 19:19:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R0Js+qCr"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Hh4lObX0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB8F61B0F1B;
-	Mon, 23 Dec 2024 18:13:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=198.175.65.14
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734977636; cv=fail; b=eAyjoHIhGAFb1MaQJ7CRdABESCwuqWFZuHBTCD5NSmEH+2FsoI8Xd5ZWL7FPD47dPcakpLRuYk/bg7adUJk9DpaUqu+/Y6j3me2PZDgRLbcazjquZYASaayXVSHtOUQ7y9B9Y6GOrN7Cwc6S2abdS5rkxfwtpJNqF+TyOFmKQa0=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734977636; c=relaxed/simple;
-	bh=oQZW4wKdybArjz3rE5vTmDXlLWz9KvveNeqfkg0977Y=;
-	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=hii7QkzhfZY6sviDqOiAy5hR0Py1aeQ2FAjynQFMfYLYMBF/YRud9dymqPiDCdzJFapsY0a8eEbN4AdbzCa5smwAiOmqZx/H2g9DLP3JPOvmM792yhnRNdgZtvDjH4K/dNhiKJjn6n1Lc78XaKAR9QHEX77mn80RFf3D/S9Fq5U=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R0Js+qCr; arc=fail smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36EF1161328;
+	Mon, 23 Dec 2024 19:19:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734981555; cv=none; b=HG/8qefRi2F/JHVD6RrvEFW02HNG4VwTrSF1nJSL1VZZE8ad4fFZQt636ZczFLGf/yCl1IKLxhDLzVXBZI+CcGDazqEW7piSOmeOgVKfneJJY7zmtYaQge2Jo4/XFFODj8vj2oY/+z44CwP9m+OHBB/e7vf37zNic8X4Wk2nJyE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734981555; c=relaxed/simple;
+	bh=3RpuQldBS7hpE/P6A1CmeISsbkkKHapgpOTrXxhCmQs=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=gNEK+GNG//9ijCDxSJxvz5fViMCeSDaVbicADJvzgukVPPOXXt4VFw/vUwNABUE9d4rwa+OhfNCkoR1a35odIQ6/juZ7G5re4aWuMWVqOcW68UizuvJ+6KLe6c4h6KKnnTyuVyc6zIxBPiwNjH/vWiO+z3MXgeo4/m9+UU7apNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Hh4lObX0; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1734977635; x=1766513635;
-  h=message-id:date:subject:to:cc:references:from:
-   in-reply-to:content-transfer-encoding:mime-version;
-  bh=oQZW4wKdybArjz3rE5vTmDXlLWz9KvveNeqfkg0977Y=;
-  b=R0Js+qCrQMXjnqXa6lRFkPvQNtnf1qWbWshGy/vUOZitGQRceuI+RTRJ
-   /hKYPW9xaHwSQYjv49lCMFCjfv85n9AOCEgkdf6gScbT5BjNKT/cX9Gtr
-   gRFqTmjY2Z3sRAfI9S0tIjHFcTY/+QvE6hg5Om50mhDgz+bw+HvYeqQKw
-   fOSXKHYil+HfI5JngWoG0zlZ8dnRwYdnOyCJhQowHiLp709NZGhNzfR+C
-   kIPqgjCUHm6AhDVsyBy8UB9c54Jjj/yiSPY+27E1olfChn6l5FMZjS/Ll
-   ttFej7df9aUcmFVyLYQHcR1Y+2aRPq6lP1tZd7T7gIwAeZ6NZqzir/t5j
+  t=1734981553; x=1766517553;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version:content-id;
+  bh=3RpuQldBS7hpE/P6A1CmeISsbkkKHapgpOTrXxhCmQs=;
+  b=Hh4lObX08cBR3oPKD7tDrgm1GcSatRpplfJ7tTHD+vhzhTuXD80zQA3y
+   pBMFx6+Zgm5P0srqgX79Ey1oECesve7kB+oqA9GDiQbGAcyFHABmcITZU
+   y4uPBmig/fO3NjV0DrcGNLooyEarzqKafmDaYi3hSFdZ91LB85h3H+YkE
+   hHa9B6OSirQlZX59EydAxrfgwLCfrzcJ9824QnGzQak6JAmtQtB5qs2mN
+   hGQ/qj5I5HURI+6vPXpIhanMPYkIBnVU3lkMLIugUg/yOIZijVpBSkMiz
+   PlZ0gzeA1H99LOOm8UzcngtelnJ61bZVYzOyk1O3K4ENyfRJWsvwltJN7
    g==;
-X-CSE-ConnectionGUID: ms+7QL4QQpq3nJiwCkk5Nw==
-X-CSE-MsgGUID: hGfgzq+lRuy+tnM5XuaE/w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11295"; a="39225580"
+X-CSE-ConnectionGUID: QUFDT+EVTjSBVFo/2+o+Rg==
+X-CSE-MsgGUID: Pv85NPrpRRKCad6hODsDmw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11295"; a="39395086"
 X-IronPort-AV: E=Sophos;i="6.12,257,1728975600"; 
-   d="scan'208";a="39225580"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 10:13:53 -0800
-X-CSE-ConnectionGUID: tayWr4TPSDOkDzerQeJVEA==
-X-CSE-MsgGUID: RGzeHUaISSmUJV8w985q+w==
+   d="scan'208";a="39395086"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 11:19:12 -0800
+X-CSE-ConnectionGUID: u/SXRiJiSimgaaAyMPqToA==
+X-CSE-MsgGUID: X9/0CC+kSG6dBMhGMDVaiw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,257,1728975600"; 
-   d="scan'208";a="99033619"
-Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
-  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 23 Dec 2024 10:13:53 -0800
-Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
- ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44; Mon, 23 Dec 2024 10:13:52 -0800
-Received: from ORSEDG602.ED.cps.intel.com (10.7.248.7) by
- orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.44 via Frontend Transport; Mon, 23 Dec 2024 10:13:52 -0800
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (104.47.56.174)
- by edgegateway.intel.com (134.134.137.103) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.1.2507.44; Mon, 23 Dec 2024 10:13:52 -0800
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=H766VVISCBYMA9LVkWMLYfaazQASX+zCs2YWDv2VjdoxqHrCiMOXyzsLMjauX1PRbkQ7Qh5edqiBZeWUfyEneK0EOWe9KJHixiHjKT9GjDaWLtl6jIOCOv/t1GSg07Fmo5uVRSlCC+LPSobO31Ke2kq4c1iYKTZG7sdQXnxlAhAH6nN8W+4EfxSfeKAV4pRkzp/aSuRraW99BNkloy8fLCnfk9dJAHVzPVatUBvgxElAsJ4VngqY7WlznFbSrP4DB3oQeGt4GARCh2hxkMCk7QexijMDfRCCIZ7Zqe4awtrPg2dvCQ6j1rktcvyV71E4od15Zy1PYaTl9YfTkNbiGA==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=QQ+FsPxdNrx5QTUgunpSMaDlF21sLo51LqAgGGPwbcM=;
- b=rYpR5eBtnVz4PVKLYerDTR/rROeRGS+OwKc92U7XSkFZlKFpXht0tooGaOY1S0zGXLQPbhUOZKENWDY7su4vp5vuQtw0OqMjs2PW8fYo+EsY2QDG2fV/IoqPIPBIhTYBD8aiXlZW1TC6WPPhtQ5+TXLhtffMDeO81H/0Na0oM3i5O9n2VAhS3kclIFMpkGEt0k1L1jLR65ystoyfHoYN/hbhOPvmwIp4svVgRSZMxYsf5lySMKHL8eXc/4vj40WFncoz3JMjukowhRwo7lKQua09SFXEphTzmWpV7OM44xsB2KwbuLtCEciJ6T5ljcPzme7VwUv0pDKFrSnDtjUATw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
- dkim=pass header.d=intel.com; arc=none
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=intel.com;
-Received: from DM6PR11MB3322.namprd11.prod.outlook.com (2603:10b6:5:55::19) by
- CO1PR11MB4851.namprd11.prod.outlook.com (2603:10b6:303:9b::13) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8251.19; Mon, 23 Dec 2024 18:13:50 +0000
-Received: from DM6PR11MB3322.namprd11.prod.outlook.com
- ([fe80::fca4:6188:1cda:9c1e]) by DM6PR11MB3322.namprd11.prod.outlook.com
- ([fe80::fca4:6188:1cda:9c1e%5]) with mapi id 15.20.8272.013; Mon, 23 Dec 2024
- 18:13:50 +0000
-Message-ID: <89acce43-b4f6-434a-96c3-1a2874116b5f@intel.com>
-Date: Mon, 23 Dec 2024 10:13:45 -0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH 05/15] hwmon: Fix Intel family checks to include
- extended family numbers
-To: Guenter Roeck <linux@roeck-us.net>, <x86@kernel.org>, Dave Hansen
-	<dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>
-CC: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
-	<namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Alexander
- Shishkin" <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
-	"Kan Liang" <kan.liang@linux.intel.com>, Thomas Gleixner
-	<tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, "H . Peter Anvin"
-	<hpa@zytor.com>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
-	<lenb@kernel.org>, Andy Lutomirski <luto@kernel.org>, Viresh Kumar
-	<viresh.kumar@linaro.org>, Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare
-	<jdelvare@suse.com>, Zhang Rui <rui.zhang@intel.com>,
-	<linux-perf-users@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-hwmon@vger.kernel.org>
-References: <20241220213711.1892696-1-sohil.mehta@intel.com>
- <20241220213711.1892696-6-sohil.mehta@intel.com>
- <cdece644-385d-408c-bb8c-c8fbb17c1372@roeck-us.net>
-Content-Language: en-US
-From: Sohil Mehta <sohil.mehta@intel.com>
-In-Reply-To: <cdece644-385d-408c-bb8c-c8fbb17c1372@roeck-us.net>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: MW4PR04CA0092.namprd04.prod.outlook.com
- (2603:10b6:303:83::7) To DM6PR11MB3322.namprd11.prod.outlook.com
- (2603:10b6:5:55::19)
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="136596946"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.68])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 11:19:10 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 23 Dec 2024 21:19:07 +0200 (EET)
+To: Hans de Goede <hdegoede@redhat.com>, Sebastian Reichel <sre@kernel.org>
+cc: Andy Shevchenko <andy@kernel.org>, 
+    =?ISO-8859-15?Q?Thomas_Wei=DFschuh?= <linux@weissschuh.net>, 
+    platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 1/1] platform/x86: dell-laptop: Use
+ power_supply_charge_types_show/_parse() helpers
+In-Reply-To: <20241221125140.345776-2-hdegoede@redhat.com>
+Message-ID: <c30837b6-496c-e3c5-81a6-61e6e8db7875@linux.intel.com>
+References: <20241221125140.345776-1-hdegoede@redhat.com> <20241221125140.345776-2-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DM6PR11MB3322:EE_|CO1PR11MB4851:EE_
-X-MS-Office365-Filtering-Correlation-Id: 506bacff-9097-481e-740e-08dd237d8d04
-X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|7416014|376014|1800799024|366016|7053199007;
-X-Microsoft-Antispam-Message-Info: =?utf-8?B?R2FjSDk5alNvUklkWUFUWU9VOVNUWG05Y1NEVFlVM2pWZk9nUmh3QTEwV0NE?=
- =?utf-8?B?U0J1Sy9hbHZzMFZscHQycy9UZCt6ODZXenN4NCtBZERldXcwZDc3UTJIZGM4?=
- =?utf-8?B?UG5KNjVMMnJnczFRSmoxVnNTR2dPcnBSd3JtdDRRYS92YXNCUGdUOEN2K1hC?=
- =?utf-8?B?VnJzMVFPU1d6Qit0eDlnVlptMWZHNEtadWZWQTdQMnFTanRHcGN5ZDZiVnJy?=
- =?utf-8?B?NDhrZ2pVMGRmMW1YaXFYVkpmS2wvcmlqcXptMUpvekRqd2R6am02allHVGZk?=
- =?utf-8?B?S3dBMnFrRmtuTVZKY1p5aFV1N0FzOEFGZTR1Y1pkTGw0eGlld3piQlhYNk40?=
- =?utf-8?B?Vm51b0lxTk1YdCsvN0NkWVpkUEY1UUtDQ3VqclNVTTlBNTlwZllrb21tSmRz?=
- =?utf-8?B?ckxzeWtVM2djbHlWb3FZZG1zbHdqNUFBdWo0dFNmaHdaa3V1c3hxREsxVTFz?=
- =?utf-8?B?bDd1YjJGcGswZS9IRC9HSnR6Um50RWJRWVBwT0NIVVh3ZSttSlM2NXBRQTdR?=
- =?utf-8?B?bWpUbTN0VkFCT2swTGRwQnkza29CTmJKM2wyRUVTdllidks1M0pITW1NU2hW?=
- =?utf-8?B?emRVM2E2THJtbGlCamVSQjBHQUEvOExDMDdtZjhKTGpGWTJWRWFPaEN6Y0lt?=
- =?utf-8?B?dDJVNFdJNHhiZWdmY0Y3TENPdDB2bW9DdFNNaHRiYWRvNHZIZFJ0UXNIN1ZZ?=
- =?utf-8?B?WUR5WHQ1NXRSbTBhZTk4c2I5T3A3RDJUaFh1RVRhbkxNS0JlNmpHNmJMYjBI?=
- =?utf-8?B?Y2lYRjJ2aHJ1bjdMSWUwb3NmTU9DRWRuUWpjT0ZIQi9JT2NuTDNROVlnalZs?=
- =?utf-8?B?RUVkSjF4UEJ0Z0JaWHUvRnNZdEZtRWpVNE9QMkRMcjMvRVBrSXpzR01US1J4?=
- =?utf-8?B?dnQrUW00OVd1N3VVSHhqNVRJMU82RVNJVWYxVlZqSXNsMmEwWEpwcUZBS1pF?=
- =?utf-8?B?VmNyWDg0TEtzZ2FnaEgzWEc0d2dGbjA5UXY0UVBJejhHNXBjcGwwWWk2MEw1?=
- =?utf-8?B?S0dFUVJTdk9CelZLblFXNXRJU0xwdjBVSDJzbjMzcjdhTE85TTd4SFhWRmRW?=
- =?utf-8?B?cGhURkZWbmwwQzJmSU9UMG5FZ3p4TG9DWGdKUVRYVmg3OEVaUnlqcndOSWYv?=
- =?utf-8?B?U09OYmR6SHI5UEtKYjNZbVpMNk1leWNjdlRsQXJZYjZlTm10TDNXR0puMXB4?=
- =?utf-8?B?bkFyRS9DVW5BTkRPV1NiUm9LVVR0YWtsOFlsVndSQ0VrSVMvZ0JFN2V4VGZC?=
- =?utf-8?B?RjViWTIrTlArWElRVjhicGxEYm5QdFJvV01RbmxIZ2kwQ0ExQS93UWhZWnl5?=
- =?utf-8?B?eUZJdTNQNGpOdExNaTJGenp5Rld0bmlaOUJoTGpXVG9zMjJKSS9iL3FRQ1lX?=
- =?utf-8?B?SjBlMTVJemlVbWt5VFZrM0FjMXp0Ry8yQUpvOTFlVEx3SURVdkdFcm53SUpQ?=
- =?utf-8?B?ZGRDRzQ5Nkx0a3NuSjk2ODVFdXlxdldOd1dlZFpPM3dXTHdwbDRaY3lEKzNB?=
- =?utf-8?B?ajBpM3FEcVlNdFMyN2NtTVh0YzFJRjZzWTJqMWpqSXpINE9tL1RxeDJMNVJZ?=
- =?utf-8?B?L0ROaU9oOFRRWHFjVjFrZ2RwelJOTEM2d1UwUDBld3Jhd2RlZE1jM05Eb0lR?=
- =?utf-8?B?L1RrYllNbWRjTFdJMjJQNWtoblJ1Z2ZJWlp4U1krZEhLV3ZiNHBETTVaWTV2?=
- =?utf-8?B?UzFMd091MElra3ZhQ1QxNGplM1VTVDN4czl1eUc3ZDZ1ei9OQnR5QUxQM3Zu?=
- =?utf-8?B?NzltalBsaTBKa0Zlbi91Y3pkekdkUnpaTEoyenl4R3dYUFVtSWpjaHJJVUJ3?=
- =?utf-8?B?MHI0MFpXODlGbzJWNzRYbmRnYW1OSWhnRGhIazJ4NUYvMStjM3dnRXIxTU1x?=
- =?utf-8?Q?hR1SiLf3Iz6vU?=
-X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3322.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?Y2VPVXJ3aktDVDJnYmF4THc3VmxCWndqRkpTQ09LRUpDSzVtR1FVZlU1dlNm?=
- =?utf-8?B?U3FLSWppTzRoUzZ5WXh0bmNvM2hzaFc2R0wvQXBaWXZneUVNMG5RNVI1U2tl?=
- =?utf-8?B?NUdhNk1pZ3Bqdi8raUkyZjQvUWhIKzEyVm52QUk0SDJpZHRmSGR3K25rQnBE?=
- =?utf-8?B?QlovNDhhYnA4ai9PcERhaGhiOGVEU3pQS1cyK0NlZGt0QVBWdVRCM1hoQ3E1?=
- =?utf-8?B?RkFURnlpYU9PNVRJQmIvcEE1TFVCTXBwS04rcmRycVFPODFqeU5mUGt2NmpX?=
- =?utf-8?B?OVk1WlovcHdCVUg4M3ZPcVR6a0toWEU1VkJ5UVk3MWF1akFRUlZleWNUTGxu?=
- =?utf-8?B?TzI3dmdNWjRRZjdZTG5LOWx2WmxJdkFOb0VDRzhseHlxWVhPRXhIOGlkOWx5?=
- =?utf-8?B?YWlHOEd5RmdSeW81ZnEvZS9uL2Jta3A4MU9GVHd5NlU1SXU4VzF5S1NmL09Q?=
- =?utf-8?B?N1dNeDc2OVhHTGd1MFI0eWZ3R3BLUmRtVnpzbldDSVhjeml6OVV3ZTBOUnpp?=
- =?utf-8?B?aVNtdVZsSWFrVENZc3Axck44ak5tdHBZM2VwQndaTFdnVkd1ZGtnUHU3RFJJ?=
- =?utf-8?B?WWkrRWU0Qis3dVZTcnpraU5xdno2ZWhBY2gvY1EzYWxnMUR2RGhWNFB3djlO?=
- =?utf-8?B?bElZRHRCL3ZqT1VydW9rSnNQYnI3YU51VWh4YjJkK2hYUExNUkh1S2Yrbzlx?=
- =?utf-8?B?MFk2SXR6VE0yTVpSNnp1dG5IaG1BR2RUWkhzVjRlRVdJcHNRWUlYK3J4WTRH?=
- =?utf-8?B?Umt3OGlCSDNUbm95NEh2WmdWRFd6SHhjMmFIa3NVYjdnUWVSMlhFVDM0OFZ6?=
- =?utf-8?B?aS9RdEZtWDBWK3hiMzNCMlVkMnJtKzg4YnBJbEIvRk9MeFlCM0txczJTZXUz?=
- =?utf-8?B?djVrNlVFNTVuampOU1N6cjg0eDFjK1ZNSFJ5Q0orWDZtSVZDQWJCcUc5Q3Bi?=
- =?utf-8?B?U3lWbTRHK2ZVUHRVdllBY3FGamNncHdWRFhJQlZrTEt5VTJna0d4TnVjWEpt?=
- =?utf-8?B?RlpPbFN4amlMOUtCaklhQVRPU1k2QXkyTVlSQUIyQ2YySUZteUpQbmo2QWhH?=
- =?utf-8?B?aEpDSDJMNG9SaEhXSXVCbjZoeGFneC80R3BzNVhQMmdNenpSaTlGM0c1V3Na?=
- =?utf-8?B?WCtjOXAwcHZFU2MwcyttVmQ1RG5NWk1aSTk4Y2t6QVNoZTZ1RGlTalJWaSt2?=
- =?utf-8?B?d1I0SkdmRXprcjRYdHBxMTcybjdOcHZRT0hFMG9IazdmcGUxMS9rTEFFcWJj?=
- =?utf-8?B?K24vT1RxUWJjalF3Y0Fuc3dyd2dnZkxrc1liQkpVMUFLcHFoeFpaMS9RTmo2?=
- =?utf-8?B?aTVYQUhtbFo1Z0N6eTFMUnZCaS9tMDRjVmFHdDRFanY2WTRHY2NFZCt1MjZ2?=
- =?utf-8?B?N2Y5QTJ4L01Ob093cmgvekNIOXhWOGZJcm9Pc1dnUnEra0VKdFZ5MWt3UUY5?=
- =?utf-8?B?SEdvN0Z1Z2hLTUJFY0VRc0JGb2ZKWUNnMTkwMUF4aTc3YUtRRklMMTB3UEtt?=
- =?utf-8?B?Q1lkTHFCTEZETHhiUS9ZeTVDY1FsbkV4WXY4UEwxblRwSlVOTVdGZldiT2RI?=
- =?utf-8?B?TFhQZEFwc1JNdzFuclBIcDVXNXZhNXEwU2lPa1JyYTNQeS8wVTJRSkdJR0Rt?=
- =?utf-8?B?MlNQTWg4OWppWnEyWmZldWNnM1MwN0JiZ3I0N1FDTTlKelJiZUtTSm5qVVhl?=
- =?utf-8?B?TStkN1hmMThIK2tXdGgzV0JkVm9uTFdCdVRNbUNwQ2UrNjM5SDBaaXpqQXNT?=
- =?utf-8?B?TjI5T3paajREd0VmTGxpZHp0L2tGRW1YNk56NjNKdkFsaDkrWGsvbnQyNFdF?=
- =?utf-8?B?MFRSWEZaMk80OUVTWGNmeWgvS0VaQnF5QmN4ODE5TmpMZE4rQXFsQ2QyNW92?=
- =?utf-8?B?TVlVZUgzT2pjazgrVERyaVlWOXZpdUczRXV4Zk5uc01ieHdVUmkwTEk4RHRr?=
- =?utf-8?B?ODBLaFljdHpWaGhlc05EUlNTOVlTRHZ4VDB4REFkb0lDMDlQTHpYa3ZYaUdx?=
- =?utf-8?B?ckV6Q0lyUnh1TVdoUU94ZmRQOVRFUUxEZHJNNGxzazhDVzB6R3JXaWVaUG9p?=
- =?utf-8?B?MWlnS0V4S284WVoyUndZcWo0KzNjNzJoWGx1N29JZHdaSHJMWHl0VCtPS1pw?=
- =?utf-8?Q?AFYAkHNRFpqImJe3PEkt2dHhy?=
-X-MS-Exchange-CrossTenant-Network-Message-Id: 506bacff-9097-481e-740e-08dd237d8d04
-X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3322.namprd11.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2024 18:13:50.4298
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: xeO13LitoJNLG6fCG4uF2PszmOUA7m1so/OX4PUMDyXrbp16ERneJ4hAA5ScVS/QqE/0MNhqEJHN9fZGDMpzbQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: CO1PR11MB4851
-X-OriginatorOrg: intel.com
+Content-Type: multipart/mixed; BOUNDARY="8323328-976463236-1734981524=:937"
+Content-ID: <0dca0e8c-5d0d-4f65-4405-aeb0e874328e@linux.intel.com>
 
-On 12/21/2024 9:27 AM, Guenter Roeck wrote:
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
+--8323328-976463236-1734981524=:937
+Content-Type: text/plain; CHARSET=ISO-8859-15
+Content-Transfer-Encoding: QUOTED-PRINTABLE
+Content-ID: <d51877b1-90ec-378c-7003-2559a49b5eb1@linux.intel.com>
 
->> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
-> 
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
-> 
+On Sat, 21 Dec 2024, Hans de Goede wrote:
 
-Thank you for the Ack.
+> Make battery_modes a map between tokens and enum power_supply_charge_type
+> values instead of between tokens and strings and use the new
+> power_supply_charge_types_show/_parse() helpers for show()/store()
+> to ensure that things are handled in the same way as in other drivers.
+>=20
+> This also changes battery_supported_modes to be a bitmap of charge-types
+> (enum power_supply_charge_type values) rather then a bitmap of indices
+> into battery_modes[].
+>=20
+> Reviewed-by: Thomas Wei=DFschuh <linux@weissschuh.net>
+> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-> The patch is independent, but since it is submitted as part of a series
-> and there is no comment suggesting otherwise, I assume that it is expected
-> to be pushed together with that series, and I won't take it into the hwmon
-> branch.
-> 
+Acked-by: Ilpo J=E4rvinen <ilpo.jarvinen@linux.intel.com>
 
-This first RFC version was mainly intended to be a conversation starter.
-I am not very familiar with hwmon and my testing has been fairly
-limited. I was hoping we can get at least one tested-by on this patch
-before merging it.
+--=20
+ i.
 
-I have tried to keep all the patches independent to make it easier to
-merge whenever they seem ready. Please feel free to merge the patch if
-it seems so.
-
-Sohil
+> ---
+> Changes in v5:
+> - Return ENOENT instead of EIO in charge_types_store() when the requested
+>   mode was accepted by power_supply_charge_types_parse() but for some
+>   reason is not found in the battery_modes[] array
+> ---
+>  drivers/platform/x86/dell/dell-laptop.c | 54 ++++++++++++-------------
+>  1 file changed, 25 insertions(+), 29 deletions(-)
+>=20
+> diff --git a/drivers/platform/x86/dell/dell-laptop.c b/drivers/platform/x=
+86/dell/dell-laptop.c
+> index 5671bd0deee7..e6da468daf83 100644
+> --- a/drivers/platform/x86/dell/dell-laptop.c
+> +++ b/drivers/platform/x86/dell/dell-laptop.c
+> @@ -103,15 +103,15 @@ static bool mute_led_registered;
+> =20
+>  struct battery_mode_info {
+>  =09int token;
+> -=09const char *label;
+> +=09enum power_supply_charge_type charge_type;
+>  };
+> =20
+>  static const struct battery_mode_info battery_modes[] =3D {
+> -=09{ BAT_PRI_AC_MODE_TOKEN,   "Trickle" },
+> -=09{ BAT_EXPRESS_MODE_TOKEN,  "Fast" },
+> -=09{ BAT_STANDARD_MODE_TOKEN, "Standard" },
+> -=09{ BAT_ADAPTIVE_MODE_TOKEN, "Adaptive" },
+> -=09{ BAT_CUSTOM_MODE_TOKEN,   "Custom" },
+> +=09{ BAT_PRI_AC_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_TRICKLE },
+> +=09{ BAT_EXPRESS_MODE_TOKEN,  POWER_SUPPLY_CHARGE_TYPE_FAST },
+> +=09{ BAT_STANDARD_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_STANDARD },
+> +=09{ BAT_ADAPTIVE_MODE_TOKEN, POWER_SUPPLY_CHARGE_TYPE_ADAPTIVE },
+> +=09{ BAT_CUSTOM_MODE_TOKEN,   POWER_SUPPLY_CHARGE_TYPE_CUSTOM },
+>  };
+>  static u32 battery_supported_modes;
+> =20
+> @@ -2261,46 +2261,42 @@ static ssize_t charge_types_show(struct device *d=
+ev,
+>  =09=09struct device_attribute *attr,
+>  =09=09char *buf)
+>  {
+> -=09ssize_t count =3D 0;
+> +=09enum power_supply_charge_type charge_type;
+>  =09int i;
+> =20
+>  =09for (i =3D 0; i < ARRAY_SIZE(battery_modes); i++) {
+> -=09=09bool active;
+> +=09=09charge_type =3D battery_modes[i].charge_type;
+> =20
+> -=09=09if (!(battery_supported_modes & BIT(i)))
+> +=09=09if (!(battery_supported_modes & BIT(charge_type)))
+>  =09=09=09continue;
+> =20
+> -=09=09active =3D dell_battery_mode_is_active(battery_modes[i].token);
+> -=09=09count +=3D sysfs_emit_at(buf, count, active ? "[%s] " : "%s ",
+> -=09=09=09=09battery_modes[i].label);
+> +=09=09if (!dell_battery_mode_is_active(battery_modes[i].token))
+> +=09=09=09continue;
+> +
+> +=09=09return power_supply_charge_types_show(dev, battery_supported_modes=
+,
+> +=09=09=09=09=09=09      charge_type, buf);
+>  =09}
+> =20
+> -=09/* convert the last space to a newline */
+> -=09if (count > 0)
+> -=09=09count--;
+> -=09count +=3D sysfs_emit_at(buf, count, "\n");
+> -
+> -=09return count;
+> +=09/* No active mode found */
+> +=09return -EIO;
+>  }
+> =20
+>  static ssize_t charge_types_store(struct device *dev,
+>  =09=09struct device_attribute *attr,
+>  =09=09const char *buf, size_t size)
+>  {
+> -=09bool matched =3D false;
+> -=09int err, i;
+> +=09int charge_type, err, i;
+> +
+> +=09charge_type =3D power_supply_charge_types_parse(battery_supported_mod=
+es, buf);
+> +=09if (charge_type < 0)
+> +=09=09return charge_type;
+> =20
+>  =09for (i =3D 0; i < ARRAY_SIZE(battery_modes); i++) {
+> -=09=09if (!(battery_supported_modes & BIT(i)))
+> -=09=09=09continue;
+> -
+> -=09=09if (sysfs_streq(battery_modes[i].label, buf)) {
+> -=09=09=09matched =3D true;
+> +=09=09if (battery_modes[i].charge_type =3D=3D charge_type)
+>  =09=09=09break;
+> -=09=09}
+>  =09}
+> -=09if (!matched)
+> -=09=09return -EINVAL;
+> +=09if (i =3D=3D ARRAY_SIZE(battery_modes))
+> +=09=09return -ENOENT;
+> =20
+>  =09err =3D dell_battery_set_mode(battery_modes[i].token);
+>  =09if (err)
+> @@ -2430,7 +2426,7 @@ static u32 __init battery_get_supported_modes(void)
+> =20
+>  =09for (i =3D 0; i < ARRAY_SIZE(battery_modes); i++) {
+>  =09=09if (dell_smbios_find_token(battery_modes[i].token))
+> -=09=09=09modes |=3D BIT(i);
+> +=09=09=09modes |=3D BIT(battery_modes[i].charge_type);
+>  =09}
+> =20
+>  =09return modes;
+>=20
+--8323328-976463236-1734981524=:937--
 
