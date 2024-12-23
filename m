@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19705-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19706-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id F17ED9FB18A
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:07:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 297179FB1C3
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:09:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44B6718833D9
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:07:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7D85B1884D44
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:09:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6DCF1B0F30;
-	Mon, 23 Dec 2024 16:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2D4D1B2EEB;
+	Mon, 23 Dec 2024 16:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t9udbE05"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nQrpWpDQ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A38A188006;
-	Mon, 23 Dec 2024 16:07:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8413E188006;
+	Mon, 23 Dec 2024 16:09:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734970027; cv=none; b=Wqu4nfqBbdB3nsS3v0D9tLs8p2bRwhmgsU2Z8t4y8Z7DCMdc+5/OfM4e6d1Ztn/oIHDRhy0KXg+ntWAO8eqXHqw1E8GCWqkTc3cUDy5oCRXUsX6W/jVheTeJj8P8cexbL1zHkFSPUmkXClAIJyF5iETN1kdtyo32p362u0rUiLU=
+	t=1734970188; cv=none; b=Khh1rifytOazJSg/PiG7uhnUTyTuNcBVLFB8jJSsH0jzLEQYOsIrtlp3VrMJ2eb+A2ulN+3rpCq1NcYu8VapVf/DOZAjnonc076aV1U9yZotEU9swLyRgnUMpm5qwJxjJCPfjiS2ZQvClaebIP8qpl8VvdGDfXmshfBc4gfBjvU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734970027; c=relaxed/simple;
-	bh=1IbgtySXC4KI6sZYcpnCUCWLQZXNGqd5oTs96XrG+lk=;
+	s=arc-20240116; t=1734970188; c=relaxed/simple;
+	bh=8yY7PAo6J90CfiAubwEdngmP+WIXNeXeySn+ACc7MJc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hGVfIW7MMAiG+BO/spiGnAhKZ74juYj42fi+KyaepN3PO/bszNVHS4M2Ur7J2wE9Kdxinm+t8zbjoVbKjo3ciYeF/WhYR0XzltvcX7LnkKGY+rjt9YmIngTnGEDTT88tiazvSnN/Mt/gfCv1Kpbk/Pl+htG/+ROJ3lElSo1MZYQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t9udbE05; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2EFC4CED3;
-	Mon, 23 Dec 2024 16:07:00 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=DfcHM0iuN5E/5EAHDuJBynCYpwA4iph0OMP/NLq6FXo3VUA0pjPSialU3Hv7qrt0pzMHQnHQSnKmB7rY9YEoU+EdRerh1wKhIqhrGqW4BhLUbOY/6s9YC8WYO5KO88PqFpkg7HDP4cY43mTuKuigvhxb4knDcgaJLiBuQY4tNA0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nQrpWpDQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 453E3C4CED3;
+	Mon, 23 Dec 2024 16:09:41 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734970027;
-	bh=1IbgtySXC4KI6sZYcpnCUCWLQZXNGqd5oTs96XrG+lk=;
+	s=k20201202; t=1734970188;
+	bh=8yY7PAo6J90CfiAubwEdngmP+WIXNeXeySn+ACc7MJc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=t9udbE05fb/2gYsfBsie7tiGtZPZzA1P58w0CvJDSPoF7s7KKw6J2rnxFSY63SZcB
-	 ewH0s2pOlp4175MjCgv8xs4dCGzjgFd4rgaNKXKsSjQwAdvrAeT+pkoM9DzuMGXSvo
-	 e1sOEP6bdJQPSBScS7XKSoTXTUNNPfyJhIC+IbxHFHzG94NHa2AZFwGGYvZhoIPhP8
-	 Xk7BQFLh2Nm14DJAR+Gjtx4B8Fi370wOh+0I984xEzZHWi/7B+pw4hbsNgYq87yhbF
-	 iJqtZIvl5R+BXwD3isAMJ8/rhZz4YAByiQa57qGLeTbzJw2ebxODlJwrRy0lV3ichn
-	 MzzWGR+WujGcQ==
-Message-ID: <d242dafd-f51b-4a81-bcd7-fed9e00506b3@kernel.org>
-Date: Mon, 23 Dec 2024 17:06:58 +0100
+	b=nQrpWpDQWwFTMIgJaG3inMCzsfYw0WpKnXY8RrKP3FlDNc/N5suKg0f+QnPje6hnc
+	 UDpkF6SHv5oMWiqwxL1GUBLzj1cKJDft0H+b0r4DAMAM63wukxwi+Q90UsO/r3OVUD
+	 qRpxQUhpp2vrZrZKJ6ienQYTm9//7obuPu566fpQ5HIPqLrp/V/mpDR9qqZUZWi3iX
+	 mRjr4oxqrzJCyycGi8uJP7ZYZYIeItZvZ40PsGLyHV5nY6xccnbY4GKTKsWmqHceWM
+	 Rw7/Ee9u7sY2OXwcVJyJx/WjdywwOZ830KQk9azrmUW/uLP5vKArZbxrXy/TMgQ1C7
+	 69mS9T7I5dspQ==
+Message-ID: <db2987c2-53fc-4d3a-b85c-f5683f74e7a0@kernel.org>
+Date: Mon, 23 Dec 2024 17:09:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -52,25 +52,22 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [RFC PATCH v2 03/19] dt-bindings: power: thead,th1520: Add
  support for power domains
-To: Michal Wilczynski <m.wilczynski@samsung.com>,
- "Rob Herring (Arm)" <robh@kernel.org>
-Cc: guoren@kernel.org, linux-riscv@lists.infradead.org, conor+dt@kernel.org,
- krzk+dt@kernel.org, sboyd@kernel.org, mripard@kernel.org,
- jassisinghbrar@gmail.com, dri-devel@lists.freedesktop.org,
- m.szyprowski@samsung.com, palmer@dabbelt.com, jszhang@kernel.org,
- aou@eecs.berkeley.edu, airlied@gmail.com, ulf.hansson@linaro.org,
- frank.binns@imgtec.com, linux-pm@vger.kernel.org, paul.walmsley@sifive.com,
- devicetree@vger.kernel.org, p.zabel@pengutronix.de,
- linux-clk@vger.kernel.org, matt.coster@imgtec.com, mturquette@baylibre.com,
- linux-kernel@vger.kernel.org, drew@pdp7.com, tzimmermann@suse.de,
- simona@ffwll.ch, maarten.lankhorst@linux.intel.com, wefu@redhat.com
+To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com,
+ sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ frank.binns@imgtec.com, matt.coster@imgtec.com,
+ maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
+ airlied@gmail.com, simona@ffwll.ch, ulf.hansson@linaro.org,
+ jszhang@kernel.org, p.zabel@pengutronix.de, m.szyprowski@samsung.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
 References: <20241223125553.3527812-1-m.wilczynski@samsung.com>
  <CGME20241223125604eucas1p26b870756eeaf2a5666b70de3f7554c13@eucas1p2.samsung.com>
  <20241223125553.3527812-4-m.wilczynski@samsung.com>
- <173496697225.830201.2249501258776075204.robh@kernel.org>
- <3b2fd94a-2b4d-4bdb-9266-203a09369982@samsung.com>
-Content-Language: en-US
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -114,29 +111,46 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <3b2fd94a-2b4d-4bdb-9266-203a09369982@samsung.com>
+In-Reply-To: <20241223125553.3527812-4-m.wilczynski@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 23/12/2024 17:02, Michal Wilczynski wrote:
->>>  .../bindings/power/thead,th1520-power.yaml    | 42 +++++++++++++++++++
->>>  MAINTAINERS                                   |  1 +
->>>  .../dt-bindings/power/thead,th1520-power.h    | 18 ++++++++
->>>  3 files changed, 61 insertions(+)
->>>  create mode 100644 Documentation/devicetree/bindings/power/thead,th1520-power.yaml
->>>  create mode 100644 include/dt-bindings/power/thead,th1520-power.h
->>>
->>
->> My bot found errors running 'make dt_binding_check' on your patch:
->>
->> yamllint warnings/errors:
->>
->> dtschema/dtc warnings/errors:
->> Documentation/devicetree/bindings/power/thead,th1520-power.example.dtb: /example-0/firmware/aon: failed to match any schema with compatible: ['thead,th1520-aon']
-> 
-> It is introduced in the next commit in this patch series.
+On 23/12/2024 13:55, Michal Wilczynski wrote:
+> +  compatible:
+> +    const: thead,th1520-pd
+> +
+> +  "#power-domain-cells":
+> +    const: 1
+> +
+> +additionalProperties: false
+> +
+> +required:
+> +  - compatible
+> +  - "#power-domain-cells"
+> +
+> +examples:
+> +  - |
+> +    firmware {
 
-Then your patchset is not bisectable. Reorder patches.
+Drop
+
+> +        aon: aon {
+> +            compatible = "thead,th1520-aon";
+> +            mboxes = <&mbox_910t 1>;
+> +            mbox-names = "aon";
+
+Drop aon node... but the main problem is you do not have any resources
+in your power-domain device node, assuming your binding is complete.
+This suggests that this is part of aon, not separate device. Fold the
+device node into its parent (so everything goes to AON).
+
+> +
+> +            pd: power-domain {
+> +                compatible = "thead,th1520-pd";
+> +                #power-domain-cells = <1>;
+> +            };
+> +        };
+> +    };
 
 Best regards,
 Krzysztof
