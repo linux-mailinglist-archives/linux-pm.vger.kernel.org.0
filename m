@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19712-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19713-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9F1DC9FB2CC
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:25:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FDC09FB2D7
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:29:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1782A162DDA
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:25:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC7647A05A9
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B6F41B3928;
-	Mon, 23 Dec 2024 16:25:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5F891B4120;
+	Mon, 23 Dec 2024 16:26:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="LhB0N/st"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l09IWAFi"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F080F15C14B;
-	Mon, 23 Dec 2024 16:25:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6ED82187848;
+	Mon, 23 Dec 2024 16:26:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734971151; cv=none; b=msQw5dADkRpdLQsC6wu3DCidWbL59L0UFvPR9W5wX1nHFGWCcoXQm3R/AxFLJRQkpxKARXBej84odPc0OrojgftLfLeniu7GF0qSruMMat6t9d1RcKRBxg3qi0DnOqcDQ8cfsmLF4elSGhir4t780wCt0qnnw8etnu0dWR7VorA=
+	t=1734971203; cv=none; b=Ynchl0MOjFwPKeX6xt5RMPz8gcTYwewrRSxNt2+RBQ0nO4OjDHbIdJhmw3gfrnAdy0Kt2TCwk6Wt8i+20sk6JLxdDcUx/LxR4KpMH5DLQwhqJKBeppInyZzZxtQt2L1tiwHlVzjSz5AKcasiC5PeZ9kxPx/c3qfOgvEjGHzfLuo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734971151; c=relaxed/simple;
-	bh=Vs/h4RxE9dOESkNRA82uuKV5gXmOQqgO1ktW1hz8B7g=;
+	s=arc-20240116; t=1734971203; c=relaxed/simple;
+	bh=SpibcqlZmzhHP5M7rb1BfLKQeqe2s1fFqr8oFCIWDCw=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RjaypjZk8Zd5i8yQ2+om0z6PCgW9b2PatxqpFs8ojTJ8HUfoJRfhsXXcc7FCUJH6f/4Nvk1wlaPg9JPc0FxOVjXrHgVRm07TGz61/4W22BAJ39kXaP5nJGnsoJBFmJTJBWgg2QapbPSbnla23MPlznS08DqxANYAeM66Doiivgk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=LhB0N/st; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 22C3DC4CED3;
-	Mon, 23 Dec 2024 16:25:42 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=rqBeaLaGSo//xR+54lcScMEmELmrGZY7V1DkUijoov80QxV3ZDyICLUO/PliugLXMlFF9XK24iXHKtowLYc9iMEwbSAHTilaRVFLpzaxWnSBzpdgrwHm2+SA98u5ytjsJnCX6aNkC/PCk2DeodKAfX/nhP8iQv473o8JEu/DSBI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l09IWAFi; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFAFAC4CED3;
+	Mon, 23 Dec 2024 16:26:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734971150;
-	bh=Vs/h4RxE9dOESkNRA82uuKV5gXmOQqgO1ktW1hz8B7g=;
+	s=k20201202; t=1734971201;
+	bh=SpibcqlZmzhHP5M7rb1BfLKQeqe2s1fFqr8oFCIWDCw=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=LhB0N/st+R0Kikm7sUW1cSS6+spRJeFAh5hPNkjrYUwQAHFtwoz4IModLtTD9k/o2
-	 nCcxqrXn1hdB67/V/DOnsYxXBh6Hy6v0HPqwlPvLe5E06Y6VW78NW1Go/GPOJveKuL
-	 l+gdTiaRugnPE/Wjr+Uxwh5SJR6nqSrp+bdzunblrn9SkdhW/QfmV8rkmqPGt4GosG
-	 ZOOt5IhESPaU9+yFZURuPhs/Ob7/LxTNk/FLgZoK7OUJw+Eb4k5iQZjwfTqMAg6r0R
-	 ktADTREn3EL9u6Y3PCPgcHMA5XFl4nC8tF9TffH4QZ03fCPTxKmzbXbU/J9PxG8vLk
-	 mvbA4RxtGOUCA==
-Message-ID: <5b4368c4-b4bb-453d-9daa-e108f944556b@kernel.org>
-Date: Mon, 23 Dec 2024 17:25:41 +0100
+	b=l09IWAFiS5Vij+ODX6yzNZGu6ZgPfIuNCkUbYhyWPW971pbObxvHPgTAHG+q1m3L7
+	 0pen81f01rvpqivtIfH541oEOGTJSSjqXSOGrEUliFiK1V3xd94La7mZdZoNjcPu6R
+	 VJ2B2CFO6pot8gfUll3NrzFk/Abm7lIe5CNWO6VsfwvttQP9g8Ki2W47VF3nYUsEVo
+	 F9ephFRC6/wnmMU+WitqsjE17BK32IzC19Q/lJzmojXxH67N+gHwg/ukjc7LUKqQCz
+	 xk8DYE81TRfHREEEYOvFjlCWq/4WRwxGW4Fum2Bu5+P7SPDp94zWSy3xX+XKR1KFpw
+	 jewAa1+9+0sXg==
+Message-ID: <567e2ea6-ad6b-44bb-a5ec-fdb95da5b166@kernel.org>
+Date: Mon, 23 Dec 2024 17:26:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 09/19] reset: thead: Add TH1520 reset controller
- driver
+Subject: Re: [RFC PATCH v2 06/19] soc: thead: power-domain: Add power-domain
+ driver for TH1520
 To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com,
  sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
@@ -64,8 +64,8 @@ Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
 References: <20241223125553.3527812-1-m.wilczynski@samsung.com>
- <CGME20241223125612eucas1p1d27f793116fa405911f07cfc926c0129@eucas1p1.samsung.com>
- <20241223125553.3527812-10-m.wilczynski@samsung.com>
+ <CGME20241223125608eucas1p25f0be9eb6fb7ab906f942201560dd881@eucas1p2.samsung.com>
+ <20241223125553.3527812-7-m.wilczynski@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,193 +111,30 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241223125553.3527812-10-m.wilczynski@samsung.com>
+In-Reply-To: <20241223125553.3527812-7-m.wilczynski@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/12/2024 13:55, Michal Wilczynski wrote:
-> This patch introduces the reset controller driver for the T-HEAD
-
-Please do not use "This commit/patch/change", but imperative mood. See
-longer explanation here:
-https://elixir.bootlin.com/linux/v5.17.1/source/Documentation/process/submitting-patches.rst#L95
-
-> TH1520 SoC. The controller manages hardware reset lines for various SoC
-> subsystems, such as the GPU. By exposing these resets via the Linux
-> reset subsystem, drivers can request and control hardware resets to
-> reliably initialize or recover key components.
-> 
-
-
-
->  config RESET_TI_SCI
->  	tristate "TI System Control Interface (TI-SCI) reset driver"
->  	depends on TI_SCI_PROTOCOL || (COMPILE_TEST && TI_SCI_PROTOCOL=n)
-> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-> index 677c4d1e2632..d6c2774407ae 100644
-> --- a/drivers/reset/Makefile
-> +++ b/drivers/reset/Makefile
-> @@ -35,6 +35,7 @@ obj-$(CONFIG_RESET_SIMPLE) += reset-simple.o
->  obj-$(CONFIG_RESET_SOCFPGA) += reset-socfpga.o
->  obj-$(CONFIG_RESET_SUNPLUS) += reset-sunplus.o
->  obj-$(CONFIG_RESET_SUNXI) += reset-sunxi.o
-> +obj-$(CONFIG_RESET_TH1520) += reset-th1520.o
->  obj-$(CONFIG_RESET_TI_SCI) += reset-ti-sci.o
->  obj-$(CONFIG_RESET_TI_SYSCON) += reset-ti-syscon.o
->  obj-$(CONFIG_RESET_TI_TPS380X) += reset-tps380x.o
-> diff --git a/drivers/reset/reset-th1520.c b/drivers/reset/reset-th1520.c
-> new file mode 100644
-> index 000000000000..10ca200690d5
-> --- /dev/null
-> +++ b/drivers/reset/reset-th1520.c
-> @@ -0,0 +1,151 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2024 Samsung Electronics Co., Ltd.
-> + * Author: Michal Wilczynski <m.wilczynski@samsung.com>
-> + */
-> +
-> +#include <linux/of.h>
-
-This looks unused. What you need is mod_devicetable.h and
-MODULE_DEVICE_TABLE(th1520_reset_match) after th1520_reset_match.
-
-> +#include <linux/platform_device.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/regmap.h>
-> +
-> +#include <dt-bindings/reset/thead,th1520-reset.h>
-> +
-> + /* register offset in VOSYS_REGMAP */
-> +#define TH1520_GPU_RST_CFG		0x0
-> +#define TH1520_GPU_RST_CFG_MASK		GENMASK(2, 0)
-> +
-> +/* register values */
-> +#define TH1520_GPU_SW_GPU_RST		BIT(0)
-> +#define TH1520_GPU_SW_CLKGEN_RST	BIT(1)
-> +
-> +struct th1520_reset_priv {
-> +	struct reset_controller_dev rcdev;
-> +	struct regmap *map;
-> +};
-> +
-> +static inline struct th1520_reset_priv *
-> +to_th1520_reset(struct reset_controller_dev *rcdev)
-> +{
-> +	return container_of(rcdev, struct th1520_reset_priv, rcdev);
-> +}
-> +
-> +static void th1520_rst_gpu_enable(struct regmap *reg)
-> +{
-> +	int val;
-> +
-> +	/* if the GPU is not in a reset state it, put it into one */
-> +	regmap_read(reg, TH1520_GPU_RST_CFG, &val);
-> +	if (val) {
-
-Drop {}
-
-> +		regmap_update_bits(reg, TH1520_GPU_RST_CFG,
-> +				   TH1520_GPU_RST_CFG_MASK, 0x0);
-> +	}
-> +
-> +	/* rst gpu clkgen */
-> +	regmap_set_bits(reg, TH1520_GPU_RST_CFG, TH1520_GPU_SW_CLKGEN_RST);
+> +	pd_data->domains = domains;
+> +	pd_data->num_domains = ARRAY_SIZE(th1520_pd_ranges);
+> +	pd_data->xlate = th1520_pd_xlate;
 > +
 > +	/*
-> +	 * According to the hardware manual, a delay of at least 32 clock
-> +	 * cycles is required between de-asserting the clkgen reset and
-> +	 * de-asserting the GPU reset. Assuming a worst-case scenario with
-> +	 * a very high GPU clock frequency, a delay of 1 microsecond is
-> +	 * sufficient to ensure this requirement is met across all
-> +	 * feasible GPU clock speeds.
+> +	 * Initialize all power domains to off to ensure they start in a
+> +	 * low-power state. This allows device drivers to manage power
+> +	 * domains by turning them on or off as needed.
 > +	 */
-> +	udelay(1);
+> +	th1520_pd_init_all_off(domains, dev);
 > +
-> +	/* rst gpu */
-> +	regmap_set_bits(reg, TH1520_GPU_RST_CFG, TH1520_GPU_SW_GPU_RST);
+> +	return of_genpd_add_provider_onecell(dev->of_node, pd_data);
 > +}
 > +
-> +static void th1520_rst_gpu_disable(struct regmap *reg)
-> +{
-> +	regmap_update_bits(reg, TH1520_GPU_RST_CFG, TH1520_GPU_RST_CFG_MASK, 0x0);
-> +}
-> +
-> +static int th1520_reset_assert(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct th1520_reset_priv *priv = to_th1520_reset(rcdev);
-> +
-> +	switch (id) {
-> +	case TH1520_RESET_ID_GPU:
-> +		th1520_rst_gpu_disable(priv->map);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static int th1520_reset_deassert(struct reset_controller_dev *rcdev, unsigned long id)
-> +{
-> +	struct th1520_reset_priv *priv = to_th1520_reset(rcdev);
-> +
-> +	switch (id) {
-> +	case TH1520_RESET_ID_GPU:
-> +		th1520_rst_gpu_enable(priv->map);
-> +		break;
-> +	default:
-> +		return -EINVAL;
-> +	}
-> +
-> +	return 0;
-> +}
-> +
-> +static const struct reset_control_ops th1520_reset_ops = {
-> +	.assert	= th1520_reset_assert,
-> +	.deassert = th1520_reset_deassert,
+> +static const struct of_device_id th1520_pd_match[] = {
+> +	{ .compatible = "thead,th1520-pd" },
+> +	{ /* sentinel */ }
 > +};
-> +
-> +const struct regmap_config th1520_reset_regmap_config = {
-
-Should be static
-
-> +	.reg_bits = 32,
-> +	.val_bits = 32,
-> +	.reg_stride = 4,
-> +	.fast_io = true,
-> +};
-> +
-> +static int th1520_reset_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct th1520_reset_priv *priv;
-> +	void __iomem *base;
-> +
-> +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-> +	if (!priv)
-> +		return -ENOMEM;
-> +
-> +	base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(base))
-> +		return PTR_ERR(base);
-> +
-> +	priv->map =
-> +		devm_regmap_init_mmio(dev, base, &th1520_reset_regmap_config);
-
-Join lines. I feel you used some incorrect clang or other editor
-settings leading to such code format. Code can exceed 80 if improves
-readability, but if you wanted to wrap, then the wrapping should be
-after 'base' and next line aligned with opening (.
-
-> +	if (IS_ERR(priv->map))
-> +		return PTR_ERR(priv->map);
-> +
-> +	priv->rcdev.owner = THIS_MODULE;
-> +	priv->rcdev.nr_resets = TH1520_RESET_NUM_IDS;
-> +	priv->rcdev.ops = &th1520_reset_ops;
-
-
+MODULE_DEVICE_TABLE, this applies to all your patches.
 
 Best regards,
 Krzysztof
