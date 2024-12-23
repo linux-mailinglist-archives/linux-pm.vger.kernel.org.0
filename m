@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19715-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19716-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AE4F9FB2E6
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:33:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8EF69FB2EF
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:34:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24B09162613
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:32:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 505EA1623F4
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:34:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7CDC01BD000;
-	Mon, 23 Dec 2024 16:29:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF83A1B6CEF;
+	Mon, 23 Dec 2024 16:31:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YBOVXoAT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KxCuIiLM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F25A1B6CFE;
-	Mon, 23 Dec 2024 16:29:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AEEA454F81;
+	Mon, 23 Dec 2024 16:31:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734971356; cv=none; b=sOr9qgAi6Yn3MLzyziRU4/JO5g5QEBx/PFqruWvsZcWqq6jJZmi9dDl7ht+Shi6EUXddgUvYQHshCT5oEpIUuoE6ZXt3kNqNMNtRAeJpn6BHG2rcDZNlvUYsYYmK80VF+UsLaFql7+6CBeWMi7qysdMEUOn/YZuBUvKy+mVjEeE=
+	t=1734971512; cv=none; b=CszCQCETovmK7g3PXBtKW/aULS8feY4ZjW1RRUkvnoIYnJvSSBj3R7JNaTOsiN5G9Ejqxx6dvDGl5ICNt81AXKxLlcql7utIMR3LHx79bdTEoDfIlJVEfrYYrvgrZBe8vQpjRMDel1RyobpSVo8FjIj6GACMeMzUaM7NQQAt7EI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734971356; c=relaxed/simple;
-	bh=XygZQRpJWNRjIbchkiN9zAFoutbPnIdXdggo9ovNnuQ=;
+	s=arc-20240116; t=1734971512; c=relaxed/simple;
+	bh=w+QV/mB1TkcNRz22qPGBMzO1669gtw0sjjDXxZLS0ps=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VtDAFlH4AEQwQEXbb8IUNwmsTadPl+ufW5Q4x3Bcn2MP6Jn6hfmxgs7/dWTHmyHXmPziS8+KkjF2/mGDCYn4DVlIitVQMfcYzm/q9QYOJU9Ot0RLNA4TK5P3fwpxxOUDnAHj0nU99uVDqnCU722INH796FNqLrvxhZZjA/HD6D8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YBOVXoAT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB9A4C4CED3;
-	Mon, 23 Dec 2024 16:29:07 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=SGthb1v5o72JSYfrlkIxQGIOh/Fycj1Ig/exfv3wpMKVEOJRwJybOGlA9beKSdPrDsEMDYfrcNUa5fDLtzX+KqzEwbSCS6WS9am2Kron1qscN9L8GSQNphQINUrchW0+9Z4UignkS4//XMRMJGiQqvq1GskTmWjVIAgF/iWDRcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KxCuIiLM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C734BC4CED3;
+	Mon, 23 Dec 2024 16:31:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734971355;
-	bh=XygZQRpJWNRjIbchkiN9zAFoutbPnIdXdggo9ovNnuQ=;
+	s=k20201202; t=1734971512;
+	bh=w+QV/mB1TkcNRz22qPGBMzO1669gtw0sjjDXxZLS0ps=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YBOVXoAT/0v5TyJWpBPDWBHr/0LTx0YYWnAgGCL+a0XYlXbFOmVqGBirPoX0i4c1s
-	 SdGCzOkzWCFh0LQCbEI6xoXl5C2Iux48lbpfOk+4FFKmqRhrdbhBpVd5Ay7e46AsQ8
-	 FIaceDzbPZsLqqeHWnSGEArd9hDuGxA6YEzWiAWxd2btT2XmGD4HzaPT+UdnZ4Ngjr
-	 hiEixwbhFZltUcvzyHAhoZCdwoA4InJJfuTbvaG+lsTtVqJLjVULq/Y33335HO9mj+
-	 02C95ioDoarhsjRxjrnMzA7P9XMfjqXECocQqr6soelqqgIlTssVW/J00zI9EBQcmf
-	 v5Th2T+JxcVuA==
-Message-ID: <06c381c3-f181-4422-8aec-d4efcc6d3f07@kernel.org>
-Date: Mon, 23 Dec 2024 17:29:06 +0100
+	b=KxCuIiLMWCOoFhkGB/Efi6bq45psfCemWTVlJ6X+jGmT0kiquKLM8AYW3CtfcH7Kx
+	 SOOeOaacl9o24FO0KtbJeP/oPO3rq8pomEiWI1BqWicuYz9PjS+m7UQ3UdK3QulANU
+	 cHgeAhjoZCl6YEtXSvbF/WbxKBrb4fB1Y79yaHcuYLWYsnPri8ukMTUjsSF0nilkjo
+	 3fZyKDeNBjlsfiiq/Xmx5k/PFOAUBRx/56xuqcxdRJBOqAx2KLlsPVCWXycMfF1q+k
+	 4jV0Ht9BbZXIAtkuRKuQMLv5ossb5j0qDmFSa4xNU+mMyESxczRN6dttK5SctnZJu9
+	 37MC5TVjDvfGQ==
+Message-ID: <6d488724-c315-4ba8-954f-1eaee3eb701d@kernel.org>
+Date: Mon, 23 Dec 2024 17:31:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 11/19] dt-bindings: gpu: Add 'resets' property for
- GPU initialization
+Subject: Re: [RFC PATCH v2 12/19] dt-bindings: gpu: Add compatibles for T-HEAD
+ TH1520 GPU
 To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com,
  sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
@@ -64,8 +64,8 @@ Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
 References: <20241223125553.3527812-1-m.wilczynski@samsung.com>
- <CGME20241223125615eucas1p10cd69b9a6f03f33ce9b9346558de6ce6@eucas1p1.samsung.com>
- <20241223125553.3527812-12-m.wilczynski@samsung.com>
+ <CGME20241223125617eucas1p25256081c64ae4e64a12c6ec427f75e8e@eucas1p2.samsung.com>
+ <20241223125553.3527812-13-m.wilczynski@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,27 +111,64 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241223125553.3527812-12-m.wilczynski@samsung.com>
+In-Reply-To: <20241223125553.3527812-13-m.wilczynski@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/12/2024 13:55, Michal Wilczynski wrote:
+> Add a new SoC-specific compatible ("thead,th1520-gpu") for the T-HEAD
+> TH1520 GPU, alongside the Imagination BXM family compatible
+> ("img,img-bxm").  This documents the GPU integration on the T-HEAD
+> platform.
+> 
+> Also adjust clock name constraints to accommodate a second clock named
+> "sys" instead of "mem" for T-HEAD. This is achieved by changing the
+> order, and making the 'sys' appear before 'mem'.
+> 
+> Provide example of the new GPU node.
+> 
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> ---
+>  .../bindings/gpu/img,powervr-rogue.yaml       | 32 +++++++++++++++++--
+>  1 file changed, 30 insertions(+), 2 deletions(-)
+> 
 > diff --git a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
-> index 256e252f8087..4078cc816ea1 100644
+> index 4078cc816ea1..1eb1c15baec4 100644
 > --- a/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
 > +++ b/Documentation/devicetree/bindings/gpu/img,powervr-rogue.yaml
-> @@ -37,6 +37,12 @@ properties:
->    power-domains:
->      maxItems: 1
->  
-> +  resets:
-> +    maxItems: 1
-> +
-> +  reset-names:
-> +    const: gpu
-Name being equal to the name of the block is not useful. Drop
-reset-names. Reset framework allows to get the reset instance without name.
+> @@ -15,7 +15,10 @@ properties:
+>      items:
+>        - enum:
+>            - ti,am62-gpu
+> -      - const: img,img-axe # IMG AXE GPU model/revision is fully discoverable
+> +          - thead,th1520-gpu
+> +      - enum:
+> +          - img,img-axe # IMG AXE GPU model/revision is fully discoverable
+> +          - img,img-bxm
 
+This cannot be flexible. You now changed am62-gpu. Look how other
+bindings do it: oneOf with two lists.
+>  
+>    reg:
+>      maxItems: 1
+> @@ -27,8 +30,8 @@ properties:
+>    clock-names:
+>      items:
+>        - const: core
+> -      - const: mem
+>        - const: sys
+> +      - const: mem
+
+That's ABI break, so no.
+
+Widest constraints - min/maxItems - stay here. In allOf:if:then you
+specify the list of items. See:
+https://elixir.bootlin.com/linux/v6.11-rc6/source/Documentation/devicetree/bindings/ufs/qcom,ufs.yaml#L127
+
+You will need to adjust existing variants - list the items there.
+
+>      minItems: 1
+>  
 Best regards,
 Krzysztof
 
