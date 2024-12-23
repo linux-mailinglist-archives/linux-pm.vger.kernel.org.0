@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19704-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19705-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FE079FB174
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:06:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F17ED9FB18A
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:07:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C89E5166AEC
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:05:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 44B6718833D9
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:07:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 701581AF0CE;
-	Mon, 23 Dec 2024 16:05:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6DCF1B0F30;
+	Mon, 23 Dec 2024 16:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oSJGTj81"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t9udbE05"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CA7D19E971;
-	Mon, 23 Dec 2024 16:05:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A38A188006;
+	Mon, 23 Dec 2024 16:07:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734969948; cv=none; b=IozPtrAICNGkM+2PQcVR6A9DeDlIacWQsHfixhtSgtBfeM19CVxZsas8GdsdOY/e6cyxVlCbk6fenYDm/OoBpuq6FfhwqUnasoUjLhOcNuD4G4EBDg8L9LtVQOLPQ7RuApX1Xg0BPMqNGSUmVfdajDBgWNXEg0qYVuLG/UpuStw=
+	t=1734970027; cv=none; b=Wqu4nfqBbdB3nsS3v0D9tLs8p2bRwhmgsU2Z8t4y8Z7DCMdc+5/OfM4e6d1Ztn/oIHDRhy0KXg+ntWAO8eqXHqw1E8GCWqkTc3cUDy5oCRXUsX6W/jVheTeJj8P8cexbL1zHkFSPUmkXClAIJyF5iETN1kdtyo32p362u0rUiLU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734969948; c=relaxed/simple;
-	bh=FyhbUDFYzmUUwzgCV2llSYJzVDKPCcqce7NR3DfFN3k=;
+	s=arc-20240116; t=1734970027; c=relaxed/simple;
+	bh=1IbgtySXC4KI6sZYcpnCUCWLQZXNGqd5oTs96XrG+lk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ps+ewsC0vFOcj+nBg03+IMjiS9/OkUfPoGsRdJclgSnuwPgohAAnuKdZskop1vd9OeQn8HjttfaMUcgVWbMvlFwnHABXKWXWnP3pOMtRU0MJRj9ToUIXQVH7DrhZ6VlobjhosESBAIfHifS/YMOar9yOVZs2Q9i4r2zsUeP1w2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oSJGTj81; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B4C9C4CED6;
-	Mon, 23 Dec 2024 16:05:40 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=hGVfIW7MMAiG+BO/spiGnAhKZ74juYj42fi+KyaepN3PO/bszNVHS4M2Ur7J2wE9Kdxinm+t8zbjoVbKjo3ciYeF/WhYR0XzltvcX7LnkKGY+rjt9YmIngTnGEDTT88tiazvSnN/Mt/gfCv1Kpbk/Pl+htG/+ROJ3lElSo1MZYQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t9udbE05; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B2EFC4CED3;
+	Mon, 23 Dec 2024 16:07:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734969948;
-	bh=FyhbUDFYzmUUwzgCV2llSYJzVDKPCcqce7NR3DfFN3k=;
+	s=k20201202; t=1734970027;
+	bh=1IbgtySXC4KI6sZYcpnCUCWLQZXNGqd5oTs96XrG+lk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=oSJGTj81G054ABDVOfZMBhMmxten0SpJmyqwyqA0Lr08ruEs0JY2zYulIW+u7kJmJ
-	 w6CkJnP8nhGtOvx8TKGRaaT09pGFG7gYCOn+r8p8Mq4NdYm6+NHhvRGBY9jra5yYTJ
-	 IWDTZZ8eQYv8Tfkuo1H4kmzQYvA+9ThHEucw3L1ipROiX7/L9bkwqIjwcxXH5P+Z2G
-	 VxA1ZID1zvLo0aJg+P90Yj3ig+v24xZdIDMYUyIsfHrLVjrR4RxkZfvugFtlk2DMB3
-	 q0xh1Thg/eGshXx7XnnLicpevG+7cbCSOwGijqZpblgwC5XlZ2cEfsMAhfa36NBihF
-	 8YC6aPnz1HAbw==
-Message-ID: <48716029-9338-4d66-b846-b5c4a74431cf@kernel.org>
-Date: Mon, 23 Dec 2024 17:05:38 +0100
+	b=t9udbE05fb/2gYsfBsie7tiGtZPZzA1P58w0CvJDSPoF7s7KKw6J2rnxFSY63SZcB
+	 ewH0s2pOlp4175MjCgv8xs4dCGzjgFd4rgaNKXKsSjQwAdvrAeT+pkoM9DzuMGXSvo
+	 e1sOEP6bdJQPSBScS7XKSoTXTUNNPfyJhIC+IbxHFHzG94NHa2AZFwGGYvZhoIPhP8
+	 Xk7BQFLh2Nm14DJAR+Gjtx4B8Fi370wOh+0I984xEzZHWi/7B+pw4hbsNgYq87yhbF
+	 iJqtZIvl5R+BXwD3isAMJ8/rhZz4YAByiQa57qGLeTbzJw2ebxODlJwrRy0lV3ichn
+	 MzzWGR+WujGcQ==
+Message-ID: <d242dafd-f51b-4a81-bcd7-fed9e00506b3@kernel.org>
+Date: Mon, 23 Dec 2024 17:06:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,24 +50,27 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 01/19] dt-bindings: clock: Add VO subsystem clocks
- and update address requirements
-To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com,
- sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
- drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
- paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
- frank.binns@imgtec.com, matt.coster@imgtec.com,
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
- airlied@gmail.com, simona@ffwll.ch, ulf.hansson@linaro.org,
- jszhang@kernel.org, p.zabel@pengutronix.de, m.szyprowski@samsung.com
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
- dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
+Subject: Re: [RFC PATCH v2 03/19] dt-bindings: power: thead,th1520: Add
+ support for power domains
+To: Michal Wilczynski <m.wilczynski@samsung.com>,
+ "Rob Herring (Arm)" <robh@kernel.org>
+Cc: guoren@kernel.org, linux-riscv@lists.infradead.org, conor+dt@kernel.org,
+ krzk+dt@kernel.org, sboyd@kernel.org, mripard@kernel.org,
+ jassisinghbrar@gmail.com, dri-devel@lists.freedesktop.org,
+ m.szyprowski@samsung.com, palmer@dabbelt.com, jszhang@kernel.org,
+ aou@eecs.berkeley.edu, airlied@gmail.com, ulf.hansson@linaro.org,
+ frank.binns@imgtec.com, linux-pm@vger.kernel.org, paul.walmsley@sifive.com,
+ devicetree@vger.kernel.org, p.zabel@pengutronix.de,
+ linux-clk@vger.kernel.org, matt.coster@imgtec.com, mturquette@baylibre.com,
+ linux-kernel@vger.kernel.org, drew@pdp7.com, tzimmermann@suse.de,
+ simona@ffwll.ch, maarten.lankhorst@linux.intel.com, wefu@redhat.com
 References: <20241223125553.3527812-1-m.wilczynski@samsung.com>
- <CGME20241223125601eucas1p1d274193122638075dc65310a22616bae@eucas1p1.samsung.com>
- <20241223125553.3527812-2-m.wilczynski@samsung.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+ <CGME20241223125604eucas1p26b870756eeaf2a5666b70de3f7554c13@eucas1p2.samsung.com>
+ <20241223125553.3527812-4-m.wilczynski@samsung.com>
+ <173496697225.830201.2249501258776075204.robh@kernel.org>
+ <3b2fd94a-2b4d-4bdb-9266-203a09369982@samsung.com>
 Content-Language: en-US
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -111,39 +114,29 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241223125553.3527812-2-m.wilczynski@samsung.com>
+In-Reply-To: <3b2fd94a-2b4d-4bdb-9266-203a09369982@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 23/12/2024 13:55, Michal Wilczynski wrote:
+On 23/12/2024 17:02, Michal Wilczynski wrote:
+>>>  .../bindings/power/thead,th1520-power.yaml    | 42 +++++++++++++++++++
+>>>  MAINTAINERS                                   |  1 +
+>>>  .../dt-bindings/power/thead,th1520-power.h    | 18 ++++++++
+>>>  3 files changed, 61 insertions(+)
+>>>  create mode 100644 Documentation/devicetree/bindings/power/thead,th1520-power.yaml
+>>>  create mode 100644 include/dt-bindings/power/thead,th1520-power.h
+>>>
+>>
+>> My bot found errors running 'make dt_binding_check' on your patch:
+>>
+>> yamllint warnings/errors:
+>>
+>> dtschema/dtc warnings/errors:
+>> Documentation/devicetree/bindings/power/thead,th1520-power.example.dtb: /example-0/firmware/aon: failed to match any schema with compatible: ['thead,th1520-aon']
+> 
+> It is introduced in the next commit in this patch series.
 
->  description: |
->    The T-HEAD TH1520 AP sub-system clock controller configures the
-> -  CPU, DPU, GMAC and TEE PLLs.
-> +  CPU, DPU, GMAC and TEE PLLs. Additionally the VO subsystem configures
-> +  the clock gates for the HDMI, MIPI and the GPU.
->  
->    SoC reference manual
->    https://openbeagle.org/beaglev-ahead/beaglev-ahead/-/blob/main/docs/TH1520%20System%20User%20Manual.pdf
-> @@ -23,7 +24,13 @@ properties:
->      const: thead,th1520-clk-ap
->  
->    reg:
-> -    maxItems: 1
-> +    minItems: 2
-
-You can drop minItems in this case.
-
-> +    maxItems: 2
-> +
-> +  reg-names:
-> +    items:
-> +      - const: ap-clks
-> +      - const: vo-clks
-
-
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-
+Then your patchset is not bisectable. Reorder patches.
 
 Best regards,
 Krzysztof
