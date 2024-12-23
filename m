@@ -1,279 +1,299 @@
-Return-Path: <linux-pm+bounces-19724-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19725-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F5399FB616
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 22:32:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 944249FB68F
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 22:56:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEE38163ECA
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 21:32:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0FB45165C54
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 21:56:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89B581B0F1B;
-	Mon, 23 Dec 2024 21:32:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE15D1D6DAD;
+	Mon, 23 Dec 2024 21:56:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="dVZRRLCJ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l8t1uh/2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A360138F82;
-	Mon, 23 Dec 2024 21:32:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734989537; cv=none; b=DfMNe6Kf0LXTD7W+nX4/Q2AfZ+cUsIMVQRtZMfJE2amIb63ArvhptCgfADIitQcYNRGmgsIMxUcotTLRasBf3kC/o1i4zaAr49GGbSu6vdHxIeVWD+uT+d3Zef8lQr6iqqvEm/XeEsEb/wsID1JycLivYzHdk0krq/W3YOz82SQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734989537; c=relaxed/simple;
-	bh=5dM4cwKmyqkQKIYfrOAF6YX4sJ7zg2b8M/uaLOHp9IY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=ZPTPNne6zDv9vCiHoPV/k2hTz1NYnUf9OX0MK9hWiC4vImND3f5STQR+opC99ZmECCKcMrD+qYC/AFVnyDqIQPbCqFJdu8Ywg8D4szEVElR7bLeaZkqhvSP0gNPzThhB4797HEyGfr2NyeprlO9quWVH8oR/S0sbRe3IDl8b8+k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=dVZRRLCJ; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BNGstx6021638;
-	Mon, 23 Dec 2024 21:32:04 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	WyLitNd8/tcTwCmNNpcKxCV5OtiO8konOiyjEuvvhf4=; b=dVZRRLCJVdO5FSrN
-	g4B0/9z2Okuu9FiuN4WHlfpANGlftfzsfbd8UjRmT5bVCat3oFvoxs+vRlQ8lQaN
-	jPhgIc3cbWUW6job2wA7vtTn+BoH/B6kRpBR2SL9KiPuF9Kj/CV6bL8x+krmfTYI
-	aRgPL6xa+7289FOb/tLYyya7V9vv9eRUK+q7VzcIE1zE+yjI/UzB9ude3UUwj3dJ
-	C0+gdbJW7olsAzIYMZIaR9JMmLxM7plLHWw9WHB2pigo/eLHH2Pe3vEXK7I+BnAd
-	/fY5cOTmHQ0oqcfjDoURHseFyIw2K0OXD7jitgKCrFI9KwK/XQ07VaVxdXHwMIsl
-	wJlwCQ==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43qbskgqh7-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Dec 2024 21:32:03 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BNLW2uk007421
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 23 Dec 2024 21:32:02 GMT
-Received: from [10.216.35.172] (10.80.80.8) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 23 Dec
- 2024 13:31:54 -0800
-Message-ID: <f1cf95be-af6c-45d9-8e26-2b978327260f@quicinc.com>
-Date: Tue, 24 Dec 2024 03:01:51 +0530
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CE521422AB;
+	Mon, 23 Dec 2024 21:55:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.8
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1734990961; cv=fail; b=JVasysNic+CGx/HSZuQpJ4mYeaxvNzRAFDUh4ylZ+PbphOtIEN/ruGf4KqstW8J+CX/XFKcvEwGjNGwKHCbR9mhZVdrFRCd2mBeaa6doq9Cl2WflRrgfUTPkFRJY68SlOVQLPOQG9uZ7I5J5K8E3v1qwyncewxqr+Cnvz5v2MYY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1734990961; c=relaxed/simple;
+	bh=MQ67PYv8lvq/UQQPyKSNLkERn1rbLC+M8s0DKPu0xIw=;
+	h=Message-ID:Date:Subject:To:CC:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=PJnnmXCvomB15o6o5pbZLixr8VkMf/z55wEuoucZ8r4gqpT8fGRcLyukzpx4ymV66zGKPbc3muyTD3sAJnEIc7zJ553sB1AH8VeqarCX8oDUzn4Hc4yjNWtueYXtAxAjlKWfZIHwpk+HOecFN++eJAZDUViEj3TaA+gqRc4bLa8=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l8t1uh/2; arc=fail smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1734990959; x=1766526959;
+  h=message-id:date:subject:to:cc:references:from:
+   in-reply-to:content-transfer-encoding:mime-version;
+  bh=MQ67PYv8lvq/UQQPyKSNLkERn1rbLC+M8s0DKPu0xIw=;
+  b=l8t1uh/2R+eOirMqKxkPCVQT8wATSndEqjGEI4dhKb9k1Tw3pceCE6o4
+   wXN/CHoFjSAN+toqW4xNdyvqyGl5DXHy4PtW0S7oPqpbu2s60NwEE+lxg
+   SWz5dOivBelhnJGZleQtWOHVsRUIF8dlpjbz8XYOgIDCDSaOs/+IZs/mX
+   vPwe+SdGxmtOxdcxQnO6nCQMOdyJmXlC9urXobwykvHAVQkUUYBap2jj+
+   bWLeb7N3IOjoSNNw92dhS+P1b3y5Vu9bsrLqADgCUifKypOnvjqu/9OaF
+   s+k3cYj20i0Ih3a7V2tI7244jYc9PIMngwhLBNahL1tmINAW3bn33jZV7
+   A==;
+X-CSE-ConnectionGUID: OXn3MeY8RoqpCixuV26PRA==
+X-CSE-MsgGUID: DMjgxF8ESxacWFVldcgpBw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11295"; a="52993611"
+X-IronPort-AV: E=Sophos;i="6.12,258,1728975600"; 
+   d="scan'208";a="52993611"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Dec 2024 13:55:58 -0800
+X-CSE-ConnectionGUID: 88EWWelIQSy0guwuucR0bg==
+X-CSE-MsgGUID: uLVlwrhcQVuwZrxfuu5C5Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,258,1728975600"; 
+   d="scan'208";a="99069011"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by fmviesa006.fm.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 23 Dec 2024 13:55:58 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Mon, 23 Dec 2024 13:55:57 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Mon, 23 Dec 2024 13:55:57 -0800
+Received: from NAM12-DM6-obe.outbound.protection.outlook.com (104.47.59.177)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Mon, 23 Dec 2024 13:55:57 -0800
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=rWU3Sh+aNRiaOiNpBqdbe8j4KUInKJRa/1jrfKU9M/Chmb8r091yPn13xXDhwS2l5Pu7vtS+/F7D58flsnTmRx4VhvOnpF3XxdXYFodQOMnPmdYIIxlgjk9ebvFc9pmzvicx3qbMcsQhcQeMdNFmSQtE6+uoOK9l80PGoGHkSYk0XzGNYNICfp10X1RjELXUoCYwBXzo53BFX02wus7LS+mBPxPma+hpRleARpTWHPSjxkji+Yw4BO9mcnOs88YOhUr4wloC+Kriou5HeUyH5LUc5BZnZTcBLKj+zSe6XTpG/zEAuZ7xM9AzF3jvwECTDZXbmlLmrU9F9/2B9LrMFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=4OngykJymkd2KWGAQlCcdKYaALTMj23aG6yeI9OgDK8=;
+ b=drtcs7wbqjx9Zsu3U6KXxhb/JN0hvYRt4LcCy/1xlm3IhixS0HfLk7Cvqmr80cGyOtn50RLp2H4/qj3AWc80c9MEeJKDCH0kV/8/rszn6/usQ08uVtjCUlEfvPmJ+1UvEec8MwTyCDyk7KOn0xE3aKY4MlWBhI7O3U/9SvKDlRdhT8ZbXHdu8rfjKOOVNlhIO/wkWte9bzJiUTwr/pbGfEeoyrz//41M/Bib9KpZi/Ls5y5UEWTPgZ71IrJ4fyMGmC3rKkyPqAeQEfx7QhMezTpNTXAtUnQ/lSh3urCJpm6zpp7kkXj/U76pZbClmUpm1L8cSk22XRXs8/aUIHtABQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from DM6PR11MB3322.namprd11.prod.outlook.com (2603:10b6:5:55::19) by
+ PH7PR11MB6794.namprd11.prod.outlook.com (2603:10b6:510:1b8::6) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8272.20; Mon, 23 Dec 2024 21:55:11 +0000
+Received: from DM6PR11MB3322.namprd11.prod.outlook.com
+ ([fe80::fca4:6188:1cda:9c1e]) by DM6PR11MB3322.namprd11.prod.outlook.com
+ ([fe80::fca4:6188:1cda:9c1e%5]) with mapi id 15.20.8272.013; Mon, 23 Dec 2024
+ 21:55:11 +0000
+Message-ID: <74e6ec51-4475-40ec-9803-633378a5dcf2@intel.com>
+Date: Mon, 23 Dec 2024 13:55:07 -0800
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFC PATCH 02/15] x86/apic: Fix smp init delay for extended Intel
+ families
+To: Dave Hansen <dave.hansen@intel.com>, <x86@kernel.org>, Dave Hansen
+	<dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>
+CC: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Namhyung Kim
+	<namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, "Alexander
+ Shishkin" <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>,
+	Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>,
+	"Kan Liang" <kan.liang@linux.intel.com>, Thomas Gleixner
+	<tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>, "H . Peter Anvin"
+	<hpa@zytor.com>, "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown
+	<lenb@kernel.org>, Andy Lutomirski <luto@kernel.org>, Viresh Kumar
+	<viresh.kumar@linaro.org>, Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare
+	<jdelvare@suse.com>, Guenter Roeck <linux@roeck-us.net>, Zhang Rui
+	<rui.zhang@intel.com>, <linux-perf-users@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-hwmon@vger.kernel.org>
+References: <20241220213711.1892696-1-sohil.mehta@intel.com>
+ <20241220213711.1892696-3-sohil.mehta@intel.com>
+ <0875ab7b-0595-4195-924c-66da28074ef6@intel.com>
+Content-Language: en-US
+From: Sohil Mehta <sohil.mehta@intel.com>
+In-Reply-To: <0875ab7b-0595-4195-924c-66da28074ef6@intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: MW4PR04CA0279.namprd04.prod.outlook.com
+ (2603:10b6:303:89::14) To DM6PR11MB3322.namprd11.prod.outlook.com
+ (2603:10b6:5:55::19)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 2/3] dt-bindings: opp: Add v2-qcom-adreno vendor
- bindings
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio
-	<konrad.dybcio@oss.qualcomm.com>,
-        Krzysztof Kozlowski <krzk@kernel.org>,
-        "Rob
- Herring" <robh@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-CC: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
-        "Konrad
- Dybcio" <konradybcio@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie
-	<airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Viresh Kumar
-	<vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd
-	<sboyd@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <dri-devel@lists.freedesktop.org>, <freedreno@lists.freedesktop.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>
-References: <mz4zpcr4tqh2w7vt75f4ofxjzfve54ozzgpdbi2jjzk5pdxbk7@t36tlt3mmprt>
- <d858dadb-4098-4c9f-b4f0-393dc988db5f@quicinc.com>
- <4426b4kybtac6rc4twa5pgm3hvlegofemvqjcrvh6ni7f5z2h6@5dnlv3hgywh5>
- <c5e868e1-2dae-466c-a6fc-ef0f247fa0ce@quicinc.com>
- <278e62e1-02a4-4e33-8592-fb4fafcedf7e@quicinc.com>
- <CAA8EJprgshjbNqNErOb06jqV__LmbWvocsK5eD8PQqL+FaLb1g@mail.gmail.com>
- <f67c72c3-7393-47b0-9b9c-1bfadce13110@quicinc.com>
- <CAA8EJppy+V9m-t_qPEJh2iTkC7tyDcf2y8wD9vYoHtFSp=HrkQ@mail.gmail.com>
- <982686bb-0ddd-45a2-b620-564af4f01800@quicinc.com>
- <16e1145c-6ef4-4274-a8f9-966f0edef9fe@oss.qualcomm.com>
- <rzhm6lkryxfqepgejpgmu4mr2z5qlzcvuptmmxhhndafc4kwlo@uw6eiw4cqlmd>
-Content-Language: en-US
-From: Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <rzhm6lkryxfqepgejpgmu4mr2z5qlzcvuptmmxhhndafc4kwlo@uw6eiw4cqlmd>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: xTIjoKbMsnWqweVOPrd6WnsZlvaUv1A-
-X-Proofpoint-ORIG-GUID: xTIjoKbMsnWqweVOPrd6WnsZlvaUv1A-
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- priorityscore=1501 spamscore=0 adultscore=0 clxscore=1015 suspectscore=0
- impostorscore=0 malwarescore=0 mlxscore=0 phishscore=0 bulkscore=0
- mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412230190
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DM6PR11MB3322:EE_|PH7PR11MB6794:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1ef23da4-4ed1-40e3-c761-08dd239c7903
+X-LD-Processed: 46c98d88-e344-4ed4-8496-4ed7712e255d,ExtAddr
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info: =?utf-8?B?T0NhSmFVNWc2R2tuTTQwSnVNbHlKV01BbWRyYWJuWkx2VzkyRVJHZnJKbzk2?=
+ =?utf-8?B?RDBxclRJcW0vZVRLS3ZBNjJ0Vkg4N2Q0bWtSbVJjb0JzWFlqdDhvQU1TS0dL?=
+ =?utf-8?B?VGk2M3lueDlrSWorOWhzRDM3Q0JBbUVidnFBQUxnVjNxMnRlcnNyQUtQMVZ1?=
+ =?utf-8?B?aEMycWM1ejRHZExXM1BMcndMeU56U1BxYjhSbWxoNVVMZzloczJsUUxpTVFs?=
+ =?utf-8?B?dWdoSEZ3aUxxa0ZhanRkck1paFREWjFEUThYUkNESlJJbHRGeWh4Uk5IQmhP?=
+ =?utf-8?B?eGFDeE0wcWJlemhNWkRuVmx4ZDBNcTRoQUpwSjVUVXJPdGJCS1hCa1lWMVpz?=
+ =?utf-8?B?RWFGSHQ2SkxnMHI5TXBZUHB3L3JMRDBtL1FUZjhZaVRLWnJ3SUxVRVZhM2Vx?=
+ =?utf-8?B?RURFZC9CZmhrWG1qK2d3aDBTbGNoQlhuMHh1ZERIWktLOHdYTUtOdUhLQk9C?=
+ =?utf-8?B?TnRYZnB2My9NbkQ2cWdIeCszWktRcjBTTmlpMyttbFRhZmR0T0xYM3lpUE10?=
+ =?utf-8?B?b1hTU1p0NHp5Z1RpRmFmeEhPU2VKNGVNVGIrMS9jeFhkY2FRTXV4NXJOMmdV?=
+ =?utf-8?B?aExvV0V5ZTNMLzEwcnFDd1VrZDFVSnBIWWd6eDVxRnpwTHNWMzhBWEpqUy9q?=
+ =?utf-8?B?eWkrMWhocjFHY2ZTM09lYldYYVdsNjBoLzFrU3hjRG9ZZ3RlSFhlMmZQZWM0?=
+ =?utf-8?B?YWNKSWI0RkRFYzVvWTJQZnJVeHFTOWZJQUR5WHQ3bTJyVGpNVUp6aThyeVZO?=
+ =?utf-8?B?dnBGcS9mS1RLM2FaTEtjZDdkWVYwckdsNUZsNW9UeDkrN1lVMG00a2YyNWpS?=
+ =?utf-8?B?bXg3Y1MvNFRHMi9PbFhaQnI3ZHI1YkVrd25hS0JLVnF6NmxKa3RVS2lOYTZJ?=
+ =?utf-8?B?bitsaXRxU1hYQWdBekVEZ0FKVTY4OUNzVVNqSE03RENPRHJsSE9zV2NUK0R3?=
+ =?utf-8?B?MmFlTXBhSWRVMDVadG5kS2VCU2dsWHpjMms3RG9wQis2QSszZ1RUTThxMVVG?=
+ =?utf-8?B?c2JFZ09PQmZoS1lldlRYUnM0dFdwYW9OdkE1d3BTWmRWak5QZ2RHanVJYXEv?=
+ =?utf-8?B?N290anVZUW5RWGpabFV3RURJdkRRRUYyRktDYWlxK2VtVUFPdWVFN2FPTlRY?=
+ =?utf-8?B?bHlrRzU5OUx4RWhYK0hZN1dJZm5YMlZ6Z1NoSXBKanN1YTZXcldIb2NOblVT?=
+ =?utf-8?B?UFRyWXhZZkZOOEVwVTBwZy9Id1Nac2NkWjVLMjhZcjZyVTVRVXBZM3F2ZHJM?=
+ =?utf-8?B?L0ZyTmI4dkp4UDFTN2RhNzZWS21od0hFNUNPdVhoakdOWVkyZHdrWUF1aXpm?=
+ =?utf-8?B?Z3BWTkU5dFFmYVg3bElaSEs4THpZWlNMTGd5M2s2RU5oUEVKMkJLQVlqKzJU?=
+ =?utf-8?B?aVdha1FvK0FVVStUK0krc1pPVG1HLzErRW9JUk9lUHkrMy9yTk82NW1RMG5J?=
+ =?utf-8?B?T0UzSEVsVS84RmNWVE5KUzlUWHdFNnlhanl1alZ2eHAycG0vWVRnR1Y2cW1O?=
+ =?utf-8?B?TmJPb0U3UTBpMUN1cDhVa3M4VGdMb0VudEYrL1lxU0ViOGN2MGJIUjdiOFNW?=
+ =?utf-8?B?UXk0YmE3REdxQXZkUFZRMjlsMk9ZQjB4WlExeFYrK0FrQWlkTHBRVWRHeThv?=
+ =?utf-8?B?bktZMXMzandtTW9ZMnhDZFJEb2dZR0J2MlFTeXZhbCtieVN1OVg2V2MzUjla?=
+ =?utf-8?B?SEhIRTdlSDl5cVRmeVJhcmZ0d1l4TkRsMVVsd2QvV29pa00ybUhRKzdhT2FK?=
+ =?utf-8?B?b0l1NXlSY2FSMzRwelUrd2hGL1R3YXlSU05rNEdOYWJrSnJ3T0NqWFppS2t4?=
+ =?utf-8?B?eFI0cm9RTVdHT0lOeCtOSWhBWm41alQrQTAxTCtNTjNROStHRFFESWRmQTN5?=
+ =?utf-8?Q?N3a6kWoIQCdBf?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DM6PR11MB3322.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0: =?utf-8?B?NnpPYmlBckNjS1dwZndBK2MzVTBrcFNROGdFUUZ6VFNlY0VsdkFVUklKdlNG?=
+ =?utf-8?B?d3ZCcTZYMlQ0SGFiNzUyMkt6S0xaZDVZT1B5bjhoeWhxTEhqbUg3TFFJaHJr?=
+ =?utf-8?B?d0hJTTRvUVF1b2xUWGFEWlBubWdUQUFrdDFlZ3VxN1hQY05TeEV6eXR4bi9X?=
+ =?utf-8?B?eVc0aWpSU2dVUGFUOUluWFZLOE8zWWdWVWJTb1ZQclNXd3pXUnZJbmN2TWcz?=
+ =?utf-8?B?NzFpL2l5Y2ZSbHlWZ21kOU8zMU9mMGVJQ3R1VDA3bDM5Q2QyUDBBWkpjdlBp?=
+ =?utf-8?B?RUJkc2pWTDQwMEZoM1hqdHJTVTUzV2FodmZRckE2dCtKclcyQjExRXdRcTNK?=
+ =?utf-8?B?K0VxQVQwSjFscEwyYlZCMXI1NmJQMnpSVno0YmJoRWxrbXllUGdSWWEzQzFC?=
+ =?utf-8?B?WTFwSFdyeEhiVzB5Zk56YWF5ZWsxa1dIam1EZDBQZkhRNFZjaHV6RWxKRTE2?=
+ =?utf-8?B?cy8yL1F0T0FwUWVlZUp0SFNvYlZtWjd1YmRndnIzeklUZDlhZHkycnAybU1Y?=
+ =?utf-8?B?dENaUWdYY0I3dHcxTzVnWTdEKytVLzZJM0pWbmNpODZEVktaaUFTZ1JYWHM3?=
+ =?utf-8?B?djZRRTZOUnZJejJyUmhiSTZkU2xmYWVwSmxZRXgxTVpVZ2ZSQmIvTndjclVI?=
+ =?utf-8?B?NDdEa3ZjdHh6UUV1dUx2OXUzcElMZThuSmJMT2tGZDJKU21uZi9sZENwS0RN?=
+ =?utf-8?B?K3BCeC96enlteGEvUkIrUXlkZE84VW1QY2hSUCtoYlpMQ0dxSVdVdCtTQkdk?=
+ =?utf-8?B?cHdiNEc3MDdYZVdrTDNXZ3NHaUsyUTZvRTd5bnAyblpYVGpFYjE4QzJpRlpS?=
+ =?utf-8?B?ZWRLY2gvVVl6YWp5ZWY0TERTdXhXd2FDUWUrSXZBWk9BTTFBUCtvMzFVcUhI?=
+ =?utf-8?B?Y1dpc3h2SVB5OTE0ZDhLaUhoS0g5UWpNVkhzMUpvTUN1NUR2TDNqdlh3VHBC?=
+ =?utf-8?B?Nk1wTkhyeUhKVXk0VU1JU0hRdk5rVmNqNE1LRWRRajAvNkxwTlBYM2crMFBr?=
+ =?utf-8?B?emN6L3lwSXhxYVU4d3AwVnlORXp2N1J3aGd4N0FWeHYyUk5sU3U2UEdZZmdl?=
+ =?utf-8?B?YmVUeGs5Rng1WWd6Z2lBVCtNc2hUSVR5SGl3bE1GSFlZaDBKZU5XbnhNM2NV?=
+ =?utf-8?B?UE54OUpsbzlTZHppQUUzRW5XZDV5YXQzQTFEN3Zwci9GNVRVS20weUZSQXJi?=
+ =?utf-8?B?Ni9lTCtjaW9DbDRCbWtDZzEyQ09yZHdIU3RGeGRvaC9zZmYvNW9aUUNZUFBx?=
+ =?utf-8?B?ZHEyUWlydytZdkZmaThSTjNCUm14dWUwSm9laDRqN25ncWtuSkRaT2ZWd3Bh?=
+ =?utf-8?B?Y0ZQbEprRHdMRURtQWNTSTRXdDZWbnZmSm5PcmVnT0l2RTRzdVpINXBTNTJZ?=
+ =?utf-8?B?Ym54YkZ6MjlwSTV0QmY3MTB5SHVDRDg0RFBUVXBzdlFrMW1naXc4dCtFMnhR?=
+ =?utf-8?B?UWFpRGtWV3pybUJNV1BJRC9ia29hR3cxVXFSbklxMU1mNHRvcmptdDJnVERx?=
+ =?utf-8?B?b1Q2MkRjclJNZ3RZbGMvMldXSVVkSU1hemhMOHBtdXIraXFPTlVPT1d1elN5?=
+ =?utf-8?B?Y241TVdXakg0S3JpOENjbHZhNjhDSFV6TUltUUd3alg5MmRweUtEM0d4Z2Rs?=
+ =?utf-8?B?VUp0OXU5L29DbDZydmw2d1FwY01ubHZlZEFsOGNBT2UrWnpCTVZ0VjRab0lI?=
+ =?utf-8?B?SnFvZEViZGZ1ekh3UFk0R05ORE8wVkRPYVlsakJ2bmtIOXQvaUZnZHA3NU5Z?=
+ =?utf-8?B?WjVFRE5ML1FUcE52UEJpa2Y5bkRaOWczZXdjNWU2VG04L0g2MlpaUE9qZGIz?=
+ =?utf-8?B?ckJNaTEzdHNCcXBiODUwTVhtLzdKdlcxWXJBT2ZYdVFJdG82cXlnOVNxelRW?=
+ =?utf-8?B?TDBVdDd1aDBMeVFvQm1mcm5RM0prUHVsS3lzU2FoY05ONENqd0huRjhUT3VN?=
+ =?utf-8?B?YmN4bENHbDAwUnRHdlc3S3l3WS8yVU4wSUVnVjEzMjFPZVRQWnI5TnJWTXlq?=
+ =?utf-8?B?R20va1BEV29HcFdxdUZ1alBvb2tKUS9iVWY3UjZSbWQvRWpOQ0xFMmppbnM4?=
+ =?utf-8?B?MDZ3ams2V1BieUVSbE81L2U0TGMwTnlTOTZMeHFQQTlrZTEvU1lNenMrRWhT?=
+ =?utf-8?Q?XNbG5XIA90hbTaIAQUD3WgNu3?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1ef23da4-4ed1-40e3-c761-08dd239c7903
+X-MS-Exchange-CrossTenant-AuthSource: DM6PR11MB3322.namprd11.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 23 Dec 2024 21:55:11.0660
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: A2TVYiXJ4pTh/fn1UEq64ku3BQLRBBWVZ3qsou9kj9792PqM1fXPYlakYK5PIUSZp7LOB7PzWR98MYsBe8Z/Ug==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH7PR11MB6794
+X-OriginatorOrg: intel.com
 
-On 12/23/2024 5:24 PM, Dmitry Baryshkov wrote:
-> On Mon, Dec 23, 2024 at 12:31:27PM +0100, Konrad Dybcio wrote:
->> On 4.12.2024 7:18 PM, Akhil P Oommen wrote:
->>> On 11/16/2024 1:17 AM, Dmitry Baryshkov wrote:
->>>> On Fri, 15 Nov 2024 at 19:54, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->>>>>
->>>>> On 11/15/2024 3:54 AM, Dmitry Baryshkov wrote:
->>>>>> Hello Akhil,
->>>>>>
->>>>>> On Thu, 14 Nov 2024 at 20:50, Akhil P Oommen <quic_akhilpo@quicinc.com> wrote:
->>>>>>>
->>>>>>> On 11/1/2024 9:54 PM, Akhil P Oommen wrote:
->>>>>>>> On 10/25/2024 11:58 AM, Dmitry Baryshkov wrote:
->>>>>>>>> On Thu, Oct 24, 2024 at 12:56:58AM +0530, Akhil P Oommen wrote:
->>>>>>>>>> On 10/22/2024 11:19 AM, Krzysztof Kozlowski wrote:
->>>>>>>>>>> On Mon, Oct 21, 2024 at 05:23:43PM +0530, Akhil P Oommen wrote:
->>>>>>>>>>>> Add a new schema which extends opp-v2 to support a new vendor specific
->>>>>>>>>>>> property required for Adreno GPUs found in Qualcomm's SoCs. The new
->>>>>>>>>>>> property called "qcom,opp-acd-level" carries a u32 value recommended
->>>>>>>>>>>> for each opp needs to be shared to GMU during runtime.
->>>>>>>>>>>>
->>>>>>>>>>>> Cc: Rob Clark <robdclark@gmail.com>
->>>>>>>>>>>> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
->>>>>>>>>>>> ---
->>>>>>>>>>>>  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 96 ++++++++++++++++++++++
->>>>>>>>>>>>  1 file changed, 96 insertions(+)
->>>>>>>>>>>>
->>>>>>>>>>>> diff --git a/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
->>>>>>>>>>>> new file mode 100644
->>>>>>>>>>>> index 000000000000..6d50c0405ef8
->>>>>>>>>>>> --- /dev/null
->>>>>>>>>>>> +++ b/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml
->>>>>>>>>>>> @@ -0,0 +1,96 @@
->>>>>>>>>>>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
->>>>>>>>>>>> +%YAML 1.2
->>>>>>>>>>>> +---
->>>>>>>>>>>> +$id: http://devicetree.org/schemas/opp/opp-v2-qcom-adreno.yaml#
->>>>>>>>>>>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
->>>>>>>>>>>> +
->>>>>>>>>>>> +title: Qualcomm Adreno compatible OPP supply
->>>>>>>>>>>> +
->>>>>>>>>>>> +description:
->>>>>>>>>>>> +  Adreno GPUs present in Qualcomm's Snapdragon chipsets uses an OPP specific
->>>>>>>>>>>> +  ACD related information tailored for the specific chipset. This binding
->>>>>>>>>>>> +  provides the information needed to describe such a hardware value.
->>>>>>>>>>>> +
->>>>>>>>>>>> +maintainers:
->>>>>>>>>>>> +  - Rob Clark <robdclark@gmail.com>
->>>>>>>>>>>> +
->>>>>>>>>>>> +allOf:
->>>>>>>>>>>> +  - $ref: opp-v2-base.yaml#
->>>>>>>>>>>> +
->>>>>>>>>>>> +properties:
->>>>>>>>>>>> +  compatible:
->>>>>>>>>>>> +    items:
->>>>>>>>>>>> +      - const: operating-points-v2-adreno
->>>>>>>>>>>> +      - const: operating-points-v2
->>>>>>>>>>>> +
->>>>>>>>>>>> +patternProperties:
->>>>>>>>>>>> +  '^opp-?[0-9]+$':
->>>>>>>>>>>
->>>>>>>>>>> '-' should not be optional. opp1 is not expected name.
->>>>>>>>>>
->>>>>>>>>> Agree. Will change this to '^opp-[0-9]+$'
->>>>>>>>>>
->>>>>>>>>>>
->>>>>>>>>>>> +    type: object
->>>>>>>>>>>> +    additionalProperties: false
->>>>>>>>>>>> +
->>>>>>>>>>>> +    properties:
->>>>>>>>>>>> +      opp-hz: true
->>>>>>>>>>>> +
->>>>>>>>>>>> +      opp-level: true
->>>>>>>>>>>> +
->>>>>>>>>>>> +      opp-peak-kBps: true
->>>>>>>>>>>> +
->>>>>>>>>>>> +      opp-supported-hw: true
->>>>>>>>>>>> +
->>>>>>>>>>>> +      qcom,opp-acd-level:
->>>>>>>>>>>> +        description: |
->>>>>>>>>>>> +          A positive value representing the ACD (Adaptive Clock Distribution,
->>>>>>>>>>>> +          a fancy name for clk throttling during voltage droop) level associated
->>>>>>>>>>>> +          with this OPP node. This value is shared to a co-processor inside GPU
->>>>>>>>>>>> +          (called Graphics Management Unit a.k.a GMU) during wake up. It may not
->>>>>>>>>>>> +          be present for some OPPs and GMU will disable ACD while transitioning
->>>>>>>>>>>> +          to that OPP. This value encodes a voltage threshold and few other knobs
->>>>>>>>>>>> +          which are identified by characterization of the SoC. So, it doesn't have
->>>>>>>>>>>> +          any unit.
->>>>>>>>>>>
->>>>>>>>>>> Thanks for explanation and other updates. I am still not happy with this
->>>>>>>>>>> property. I do not see reason why DT should encode magic values in a
->>>>>>>>>>> quite generic piece of code. This creates poor ABI, difficult to
->>>>>>>>>>> maintain or understand.
->>>>>>>>>>>
->>>>>>>>>>
->>>>>>>>>> Configuring GPU ACD block with its respective value is a requirement for each OPP.
->>>>>>>>>> So OPP node seems like the natural place for this data.
->>>>>>>>>>
->>>>>>>>>> If it helps to resolve your concerns, I can elaborate the documentation with
->>>>>>>>>> details on the GMU HFI interface where this value should be passed on to the
->>>>>>>>>> hardware. Also replace "few other knobs" with "Delay cycles & Calibration margin"
->>>>>>>>>> in the above doc.
->>>>>>>>>
->>>>>>>>> Usually the preference for DT is to specify data in a sensible way
->>>>>>>>> rather than just the values being programmed to the register. Is it
->>>>>>>>> possible to implement this approach for ACD values?
->>>>>>>
->>>>>>> Krzysztof/Dmitry,
->>>>>>>
->>>>>>> BIT(0)-BIT(15) are static configurations which doesn't change between
->>>>>>> OPPs. We can move it to driver.
->>>>>>>
->>>>>>> BIT(16)-BIT(31) indicates a threshold margin which triggers ACD. We can
->>>>>>> keep this in the devicetree. And the driver can construct the final
->>>>>>> value from both data and send it to GMU.
->>>>>>>
->>>>>>> If this is acceptable, I will send the v3 revision.
->>>>>>
->>>>>> Can the upper bitfield have a sensible representation in DT (like uV
->>>>>> or something similar)?
->>>>>
->>>>> Closest approximation is quantized voltage steps. So, unit-less.
->>>>> Converting it to the exact voltage requires identifying the pmic voltage
->>>>> steps and other stuffs which are outside of my expertise.
->>>>>
->>>>> It is convenient if we can abstract it as an integer which correlates
->>>>> with the voltage margin that should be maintained for each regulator corner.
->>>
->>> Krzysztof,
->>>
->>> Could you please confirm if this approach would be acceptable?
->>>
->>> To reiterate, move the lower 16 bits which is same across OPPs to the
->>> driver. Abstract the higher 16 bits as number of quantized voltage
->>> margin when ACD mitigation gets triggered.
+On 12/20/2024 3:20 PM, Dave Hansen wrote:
+> On 12/20/24 13:36, Sohil Mehta wrote:
+>> The MP specification version 1.4 references the i486 and early Pentium
+>> processors in family 5. 
+> 
+> Can you please elaborate on how this reference is relevant to the patch
+> at hand?
+> 
+
+The comment above UDELAY_10MS_DEFAULT which references the MP
+specification seems to be the basis of all the cpu_init_delay quirks.
+
+I wanted to use that reference to justify that family 15 doesn't need
+the 10 msec delay since it is not explicitly mentioned there. I realize
+now that it's moot since the Pentium 4 wasn't released until 3 years
+after it's publication.
+
+I referred the latest MP initialization specification but that doesn't
+say explicitly when the delay is needed vs not needed. However it does
+say that later Family 6 models and Family 15 models have similar
+initialization protocols.
+
+"The selection of the BSP and APs is handled through a special system
+bus cycle, without using BIPI and FIPI message arbitration (see Section
+9.4.3, “MP Initialization Protocol Algorithm for MP Systems”). These
+processor generations have CPUID signatures of family=0FH with
+(model=0H, stepping>=0AH) or (model >0, all steppings); or family=06H,
+extended_model=0, model>=0EH."
+
+>> However, all processors starting with family 6 likely do not need the
+>> 10 msec INIT delay. The omission of the Pentium 4s (family 15) seems
+>> like an oversight in the original check.
 >>
->> I know I'm not Krzysztof, but given this is ultimately a magic value
->> passed to the firmware, I'm a bit lukewarm on decomposing it and would
->> rather see the entire 32b passed in a property, so that if a future
->> target needs a different constant in the lower word, we don't have to
->> pull our hair out again, trying to add more spaghetti logic to account
->> for that.
+>> With some risk, choose a simpler check and extend the quirk to all
+>> recent and upcoming Intel processors.
 > 
-> Also obviously being non-Krzysztof, if we don't have a semantic value
-> for the upper half I'm fine with having the magic value as a single
-> instance instead of spreading it between two places.
-
-If there is a general consensus, I will send out another revision with
-some minor updates.
-
--Akhil.
-
+> I'm struggling to follow this a bit.
 > 
+
+Because my interpretation of the code and the related comments is
+opposite to yours. The usage of "quirk" in this context seems to be
+inverted due to how this check has evolved over time.
+
+> I think these are the facts that matter:
+> 
+
+The code says this:
+
+/* if modern processor, use no delay */
+	init_udelay = 0;
+/* else, use legacy delay */
+	init_udelay = UDELAY_10MS_DEFAULT;
+
+
+The legacy/default delay is 10 msec and then the quirk applies to the
+modern processors to remove the delay. This is the comment above
+UDELAY_10MS_DEFAULT:
+
+ * Modern processor families are quirked to remove the delay entirely.
+
+>  * init_udelay=0 means "no quirk"
+>  * Modern CPUs don't have the quirk
+>  * The current check says "only family 6 is modern"
+>  * Family 15 is _probably_ modern and just forgotten about
+> 
+> And this is what you're doing in the end:
+> 
+> Consider everything PPro and later to be modern, including all of
+> families 6, 15 and the new 18/19 CPUs.
+> 
+
+That's right. We consider these CPUs to be modern and do not apply the
+10 msec delay but the usage of "quirk" is confusing here.
+
+I'll clarify the changelog without using "quirk" to avoid confusion.
+
+Am I interpreting this wrong?
+
 
 
