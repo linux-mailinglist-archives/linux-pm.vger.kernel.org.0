@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19707-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19708-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 961A29FB1E9
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:11:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E6809FB26C
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 17:18:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4DD8D7A0820
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:11:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 255F1166D44
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 16:17:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499951B3953;
-	Mon, 23 Dec 2024 16:11:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE2941B3925;
+	Mon, 23 Dec 2024 16:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lFxnkZlp"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLyCRIZR"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 16E611B3942;
-	Mon, 23 Dec 2024 16:11:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A90568827;
+	Mon, 23 Dec 2024 16:17:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734970291; cv=none; b=jIL4/fBxSPlEFZBa/wiNLuI6ZtjyZnPbuL8MOUVV3NH1MRIqgKRRmU/HgNb2aKeQ4tV42qm93XDqp0iVPg12bnrCrmCeZrmNKTA8CVRBnrYq49dL+cda5vJGEavsAjWBSMUhBXfok+rOrrJK+5JV6mMBwxjlVc8D8GrKzPHqSXA=
+	t=1734970632; cv=none; b=Bqy3MFukVd8/mXmm63PhPkO9QJba/dZ9sj9iuPjUUGiUCmW8VepHtuDxf2nsNcwJj/kF9ZO1YFH2ESCFWnI8/H3mS4w+2BmJzTbbDK0+D7NDiKJq8KBvVf1rOL8Uf5Mk97pIrVCKciqEOf3Qr5t+HZQNO3ndWROfinv8hEcf4j0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734970291; c=relaxed/simple;
-	bh=osfhE2TyNQW1+b8jfL6a/Qu2j1NG7qQBvc9ikP7KIpQ=;
+	s=arc-20240116; t=1734970632; c=relaxed/simple;
+	bh=U+r0l82EYvI04zf6st2atiHtEKZrPRSvnnX9tISQoao=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=PCleBZIbMGMArT7+9cI3VKnbSRiVjhQ3/x2utSpdbc1iSabj2V6xYoyLOALnhH3wT99O5Xz9a/jkhsShtJvd2df4QTvVaySGSX6+sNKIu9mjXZiB/yjW2Hwr1cbgIdmA9iGZSv1hPjWzMUch7L/o9qktXfQsXUHsVl/6TpgCGYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lFxnkZlp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2C02C4CED6;
-	Mon, 23 Dec 2024 16:11:22 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=em6AiChu9YA35h23LX/qA9pE6dLGwwqvExvI2m79H9VKSsofE0eCUwvlFuje52xECOIW/epG+JsfSWnDOeNPSLaRyDXhgKhLRRRma2a7ocOAFuTnurdCXgsepW2VjCKzThOQZv16gwn57ajG1mc56+e5PEuL575CNadwlRRo2mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLyCRIZR; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87A86C4CED3;
+	Mon, 23 Dec 2024 16:17:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1734970290;
-	bh=osfhE2TyNQW1+b8jfL6a/Qu2j1NG7qQBvc9ikP7KIpQ=;
+	s=k20201202; t=1734970632;
+	bh=U+r0l82EYvI04zf6st2atiHtEKZrPRSvnnX9tISQoao=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lFxnkZlpDn18NzO7Mx2sEHY9verHL6/fPu8Py9tvo9jJUzN4iZba7L2R1W3DQ4yoO
-	 TdPwEJyaHZDtJTlpBlKFhZvifCQAoYQ6QortFO79D0UyZKk/RSg3Rhv3qfm+MY3m11
-	 lRBMPvC+yKH7OUrBGqfiRcf9zrQ64ThZHaBKaUDif1GfT+qKVLKn/nczfFmGHTDTqm
-	 wgJIhPJ0HFNY5ZTO97sV3eJ1vEdj4z8Hasrik54IGYUgJ6AA9+w1sx0cqy7CDBvDFr
-	 KyFqSp0hkq+B2wjJh2ePtn5dmwcoy9Ab6KpxIv1+NFL7H+TmAvfwYlDWnpylmrbo4G
-	 Wtn8zqFuyE3Hw==
-Message-ID: <19270618-be7e-46c0-a937-706b0c0b4118@kernel.org>
-Date: Mon, 23 Dec 2024 17:11:21 +0100
+	b=HLyCRIZRn2YdQ1X9NnEVSIx7ti5xIOEfdjXFOzbWEF91fdAO6iqOH8Uy2HGdAB1bq
+	 vfec9xmHItDBgVzrIRBSK9KhIJLdi+Ab5LFuTRpwLO0Iy7+NLp+9YxR5QmflTVByiC
+	 Rk9+UtqkmZg6cYr1xD5FSiXxaeTrWAQk45M2k8iZ0/nIyXqWSupzWHk5EHMYM7FKxM
+	 +KHnY+F63sI1myS2vaK54LWldBECTaZNBNqtsLEZjsnHf1o7DI5XOEk/ytaO6isAA4
+	 bSbbrF/JvPnpxs0NTAa/j/hskINol3WcISIFgWG/Ooqx/fijc++6TONatwpovUXycX
+	 K7pAFb5NssRCg==
+Message-ID: <ef07641d-ced2-4a45-89cd-d119e503dd14@kernel.org>
+Date: Mon, 23 Dec 2024 17:17:03 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 04/19] dt-bindings: firmware: thead,th1520: Add
- support for firmware node
+Subject: Re: [RFC PATCH v2 05/19] firmware: thead: Add AON firmware protocol
+ driver
 To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com,
  sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
  drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
@@ -64,8 +64,8 @@ Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
  dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
 References: <20241223125553.3527812-1-m.wilczynski@samsung.com>
- <CGME20241223125606eucas1p10ca3adc99322ff33d617a227733e5e67@eucas1p1.samsung.com>
- <20241223125553.3527812-5-m.wilczynski@samsung.com>
+ <CGME20241223125607eucas1p1eac1c05d699337f9af118c1885b14b1d@eucas1p1.samsung.com>
+ <20241223125553.3527812-6-m.wilczynski@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -111,84 +111,203 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241223125553.3527812-5-m.wilczynski@samsung.com>
+In-Reply-To: <20241223125553.3527812-6-m.wilczynski@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/12/2024 13:55, Michal Wilczynski wrote:
-> The kernel communicates with the E902 core through the mailbox
-> transport using AON firmware protocol. Add dt-bindings to document it
-> the dt node.
+> The T-Head TH1520 SoC uses an E902 co-processor running Always-On (AON)
+> firmware to manage power, clock, and other system resources [1]. This
+> patch introduces a driver implementing the AON firmware protocol,
+> allowing the Linux kernel to communicate with the firmware via mailbox
+> channels.  Through an RPC-based interface, the kernel can initiate power
+> state transitions, update resource configurations, and perform other
+> AON-related tasks.
+> 
+> Link: https://openbeagle.org/beaglev-ahead/beaglev-ahead/-/blob/main/docs/TH1520%20System%20User%20Manual.pdf [1]
 > 
 > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
 > ---
->  .../bindings/firmware/thead,th1520-aon.yaml   | 59 +++++++++++++++++++
->  MAINTAINERS                                   |  1 +
->  2 files changed, 60 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+>  MAINTAINERS                                   |   2 +
+>  drivers/firmware/Kconfig                      |   9 +
+>  drivers/firmware/Makefile                     |   1 +
+>  drivers/firmware/thead,th1520-aon.c           | 203 ++++++++++++++++++
+>  .../linux/firmware/thead/thead,th1520-aon.h   | 186 ++++++++++++++++
+>  5 files changed, 401 insertions(+)
+>  create mode 100644 drivers/firmware/thead,th1520-aon.c
+>  create mode 100644 include/linux/firmware/thead/thead,th1520-aon.h
 > 
-> diff --git a/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml b/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
-> new file mode 100644
-> index 000000000000..ca4c276766a3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
-> @@ -0,0 +1,59 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/firmware/thead,th1520-aon.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: T-HEAD TH1520 AON (Always-On) Firmware Node
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 7705d1b6dd7a..42aef66bd257 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -20196,10 +20196,12 @@ F:	Documentation/devicetree/bindings/pinctrl/thead,th1520-pinctrl.yaml
+>  F:	Documentation/devicetree/bindings/power/thead,th1520-power.yaml
+>  F:	arch/riscv/boot/dts/thead/
+>  F:	drivers/clk/thead/clk-th1520-ap.c
+> +F:	drivers/firmware/thead,th1520-aon.c
+>  F:	drivers/mailbox/mailbox-th1520.c
+>  F:	drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c
+>  F:	drivers/pinctrl/pinctrl-th1520.c
+>  F:	include/dt-bindings/clock/thead,th1520-clk-ap.h
+> +F:	include/linux/firmware/thead/thead,th1520-aon.h
+>  
+>  RNBD BLOCK DRIVERS
+>  M:	Md. Haris Iqbal <haris.iqbal@ionos.com>
+> diff --git a/drivers/firmware/Kconfig b/drivers/firmware/Kconfig
+> index 71d8b26c4103..e08e01de3ee3 100644
+> --- a/drivers/firmware/Kconfig
+> +++ b/drivers/firmware/Kconfig
+> @@ -212,6 +212,15 @@ config SYSFB_SIMPLEFB
+>  
+>  	  If unsure, say Y.
+>  
+> +config TH1520_AON_PROTOCOL
+> +	tristate "Always-On firmware protocol"
+> +	depends on THEAD_TH1520_MBOX
 
-Drop "Node", unless this is somehow name of device (not a DT node).
+Would:
+	|| COMPILE_TEST
+work?
 
-> +
-> +description: |
-> +  The Always-On (AON) subsystem in the TH1520 SoC is responsible for managing
-> +  low-power states, system wakeup events, and power management tasks. It is
-> +  designed to operate independently in a dedicated power domain, allowing it to
-> +  remain functional even during the SoC's deep sleep states.
-> +
-> +  At the heart of the AON subsystem is the E902, a low-power core that executes
-> +  firmware responsible for coordinating tasks such as power domain control,
-> +  clock management, and system wakeup signaling. Communication between the main
-> +  SoC and the AON subsystem is handled through a mailbox interface, which
-> +  enables message-based interactions with the AON firmware.
-> +
-> +maintainers:
-> +  - Michal Wilczynski <m.wilczynski@samsung.com>
-> +
-> +properties:
-> +  compatible:
-> +    const: thead,th1520-aon
-> +
-> +  mboxes:
-> +    maxItems: 1
-> +
-> +  mbox-names:
-> +    items:
-> +      - const: aon
-> +
-> +  power-domain:
-> +    $ref: /schemas/power/thead,th1520-power.yaml#
-> +    description: Subnode representing the hardware power domain of the AON subsystem.
-> +
-> +additionalProperties: false
-> +
-> +required:
-> +  - compatible
-> +  - mboxes
-> +  - mbox-names
+What sort of dependency is this? Build time? Runtime? If runtime, this
+should be just dependency on ARCH_THEAD (or whatever is there)
 
-In all your bindings patches: "required" block goes before
-additional/unevaluatedProperties. See also example-schema.
-
+> +	help
+> +	  Power, clock, and resource management capabilities on the TH1520 SoC are
+> +	  managed by the E902 core. Firmware running on this core communicates with
+> +	  the kernel through the Always-On protocol, using hardware mailbox as a medium.
+> +	  Say yes if you need such capabilities.
 > +
-> +examples:
-> +  - |
-> +    firmware {
-> +        aon: aon {
+
+
+...
+
+> +static void th1520_aon_rx_callback(struct mbox_client *c, void *rx_msg)
+> +{
+> +	struct th1520_aon_chan *aon_chan =
+> +		container_of(c, struct th1520_aon_chan, cl);
+> +	struct th1520_aon_rpc_msg_hdr *hdr =
+> +		(struct th1520_aon_rpc_msg_hdr *)rx_msg;
+> +	u8 recv_size = sizeof(struct th1520_aon_rpc_msg_hdr) + hdr->size;
+> +
+> +	if (recv_size != sizeof(struct th1520_aon_rpc_ack_common)) {
+> +		dev_err(c->dev, "Invalid ack size, not completing\n");
+> +		return;
+> +	}
+> +
+> +	memcpy(&aon_chan->ack_msg, rx_msg, recv_size);
+> +	complete(&aon_chan->done);
+> +}
+> +
+
+You need proper (and useful) kerneldoc for all exported functions.
+
+> +int th1520_aon_call_rpc(struct th1520_aon_chan *aon_chan, void *msg)
+> +{
+> +	struct th1520_aon_rpc_msg_hdr *hdr = msg;
+> +	int ret;
+> +
+> +	mutex_lock(&aon_chan->transaction_lock);
+> +	reinit_completion(&aon_chan->done);
+> +
+> +	RPC_SET_VER(hdr, TH1520_AON_RPC_VERSION);
+> +	RPC_SET_SVC_ID(hdr, hdr->svc);
+> +	RPC_SET_SVC_FLAG_MSG_TYPE(hdr, RPC_SVC_MSG_TYPE_DATA);
+> +	RPC_SET_SVC_FLAG_ACK_TYPE(hdr, RPC_SVC_MSG_NEED_ACK);
+> +
+> +	ret = mbox_send_message(aon_chan->ch, msg);
+> +	if (ret < 0) {
+> +		dev_err(aon_chan->cl.dev, "RPC send msg failed: %d\n", ret);
+> +		goto out;
+> +	}
+> +
+> +	if (!wait_for_completion_timeout(&aon_chan->done, MAX_RX_TIMEOUT)) {
+> +		dev_err(aon_chan->cl.dev, "RPC send msg timeout\n");
+> +		mutex_unlock(&aon_chan->transaction_lock);
+> +		return -ETIMEDOUT;
+> +	}
+> +
+> +	ret = aon_chan->ack_msg.err_code;
+> +
+> +out:
+> +	mutex_unlock(&aon_chan->transaction_lock);
+> +
+> +	return th1520_aon_to_linux_errno(ret);
+> +}
+> +EXPORT_SYMBOL_GPL(th1520_aon_call_rpc);
+> +
+
+Here as well.
+
+> +int th1520_aon_power_update(struct th1520_aon_chan *aon_chan, u16 rsrc,
+> +			    bool power_on)
+> +{
+> +	struct th1520_aon_msg_req_set_resource_power_mode msg = {};
+> +	struct th1520_aon_rpc_msg_hdr *hdr = &msg.hdr;
+> +	int ret;
+> +
+> +	hdr->svc = TH1520_AON_RPC_SVC_PM;
+> +	hdr->func = TH1520_AON_PM_FUNC_SET_RESOURCE_POWER_MODE;
+> +	hdr->size = TH1520_AON_RPC_MSG_NUM;
+> +
+> +	RPC_SET_BE16(&msg.resource, 0, rsrc);
+> +	RPC_SET_BE16(&msg.resource, 2,
+> +		     (power_on ? TH1520_AON_PM_PW_MODE_ON :
+> +				 TH1520_AON_PM_PW_MODE_OFF));
+> +
+> +	ret = th1520_aon_call_rpc(aon_chan, &msg);
+> +	if (ret)
+> +		dev_err(aon_chan->cl.dev, "failed to power %s resource %d ret %d\n",
+> +			power_on ? "up" : "off", rsrc, ret);
+> +
+> +	return ret;
+> +}
+> +EXPORT_SYMBOL_GPL(th1520_aon_power_update);
+> +
+> +static int th1520_aon_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct th1520_aon_chan *aon_chan;
+> +	struct mbox_client *cl;
+> +	int ret;
+> +
+> +	aon_chan = devm_kzalloc(dev, sizeof(*aon_chan), GFP_KERNEL);
+> +	if (!aon_chan)
+> +		return -ENOMEM;
+> +
+> +	cl = &aon_chan->cl;
+> +	cl->dev = dev;
+> +	cl->tx_block = true;
+> +	cl->tx_tout = MAX_TX_TIMEOUT;
+> +	cl->rx_callback = th1520_aon_rx_callback;
+> +
+> +	aon_chan->ch = mbox_request_channel_byname(cl, "aon");
+> +	if (IS_ERR(aon_chan->ch)) {
+> +		ret = PTR_ERR(aon_chan->ch);
+> +		if (ret != -EPROBE_DEFER)
+> +			dev_err(dev, "Failed to request aon mbox chan ret %d\n",
+> +				ret);
+
+You just open-coded dev_err_probe. Syntax is:
+
+return dev_err_probe()
+
+> +		return ret;
+> +	}
+> +
+> +	mutex_init(&aon_chan->transaction_lock);
+> +	init_completion(&aon_chan->done);
+> +
+> +	platform_set_drvdata(pdev, aon_chan);
+> +
+> +	return devm_of_platform_populate(dev);
+> +}
+> +
+
+No remove() callback to free mbox channel? Looks like a leak.
+
+
 
 Best regards,
 Krzysztof
