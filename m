@@ -1,79 +1,80 @@
-Return-Path: <linux-pm+bounces-19683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19684-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0B2D99FAEDD
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 14:31:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B771E9FAEE4
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 14:31:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36FA31882BBB
-	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 13:31:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5592F7A1C94
+	for <lists+linux-pm@lfdr.de>; Mon, 23 Dec 2024 13:31:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 411A0190664;
-	Mon, 23 Dec 2024 13:31:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 972BF1AF0B0;
+	Mon, 23 Dec 2024 13:31:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Mv820YsL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kHadZMEE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F6A41C36;
-	Mon, 23 Dec 2024 13:31:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DCE7E8BEA;
+	Mon, 23 Dec 2024 13:31:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1734960674; cv=none; b=hf6Ubs2NtWsqlkzxWZJntugXDoflqQ1HDizJtW73w0EtRoBWBpcFZ5kWPN2XXFOJmGcQREJiBrGnwWbry7Run5oF42D1/C+wQkV3bnc0Wgg3RwTPL68s1NLMtzV/R0MODBw5TkxKuOXxvcvzEjnAbXcu2PofgluoZzDzXOv1pJA=
+	t=1734960675; cv=none; b=j2Uw3z/Ooi268RoJpC/KHEtm+mf31nabm5o26xlEW3+uoWdTmAOd2T3kM4dQ45jrkX2OFJCa7wRAVEsB2MbmZ9Yehp8EZAiIdl0JXBh2YCh9KTfbd2WZTHZjfv40p9NBwViuahxcfZeqHCH/iiYYgf+FDO7qdVEU++DWgPc3KqI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1734960674; c=relaxed/simple;
-	bh=o4Fom0Rpm9fWzhbvqugXg9BmbPqo3cs/0znTlLu54ck=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=lJodlWKMB5Mepyk4XiGo7MbR3E0uSPRQWliBL87+BBNjK5RIyVT5yYnxiKJH57LZiF6GpU9AndYJvmT57sEAmOOk0/7CW54oEkiKv3TQw7iVGHMk+tUnk9XdOjHUqhl14EPdabHVWDptGf/TGhU3IxEp9WTeACMTmrMBUM2T19c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Mv820YsL; arc=none smtp.client-ip=209.85.208.50
+	s=arc-20240116; t=1734960675; c=relaxed/simple;
+	bh=/EeD7LqHcTZ3/1Ng4iRA0q/Q9oTbn7vVY0BQy1PKauQ=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=GnNTkk8kmxAeTaZL6qzHARBsZc1MqH+K/REuyoqjViTMHEtUqBbyNoqk2Ln5x9p1ELFC4XEcXMmYMoiGHgu0jrreqvS6lciSGWzeyIGfRMiN1BsRqQ6nWLFFSV3stZg2zDtgro37Y39skeuZulk/KjdYosGkaiNbOE8Z12T4Ydo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kHadZMEE; arc=none smtp.client-ip=209.85.218.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5d7e3f1fdafso8138733a12.0;
-        Mon, 23 Dec 2024 05:31:12 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aa679ad4265so936859466b.0;
+        Mon, 23 Dec 2024 05:31:13 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1734960671; x=1735565471; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=0E20nH4nI7hZl+zQi4Z91y7ffU07fB4nfSqv0rzeH8M=;
-        b=Mv820YsLFb0n7fwGqx0v5xeyxAVxuUzVTlNaA2791cjZwwAe0hCkLTEQDAGYygVVKo
-         UHqx4EJSEX7c0xP1AWgEWF+fkJbH7ByDVsz4BMaXhoIuaXqvyigE4ps62M8dwM2E34RH
-         mnX+vHmc47KHMaz/DirvN6MXEPaAGsov2Db+fwGYWF/LxSSwr5FPXblwuYuN91nvRfuf
-         MPsAiId9FGoiz6e9gnMy7NJNqgDqJRu0eAlXTXIXmJzJV3976LllAkWj7GzdMLUpnS/D
-         cdTInTHXHW15Eg1itNXEcPWy13WQ63Gf5ax8o2LeYsTVe4NbaitKLNk8pHIZuQML145Q
-         nshA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1734960671; x=1735565471;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1734960672; x=1735565472; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=0E20nH4nI7hZl+zQi4Z91y7ffU07fB4nfSqv0rzeH8M=;
-        b=ql+vuFknkqf797iCvqunC5jObZosJs3Mx3bwxvYN4FaXBPRVp5DATm/vsPr7btqD/9
-         yjCc3nXkMfIu2K1YuBRHg9H+F5jT1Me7girutJCuiE6YMGwZlonytXzasa8OpoTmDpP2
-         gBPi0xxy+n+Rdy+5k4tcsJ0+7KTARz5zQCQtR3+LOA+VustzdUeGt46gD9/1P0MYLG96
-         maCVYPsp5TlCCFrSYdxVWgUayuD20ScZBeo+uYdHMBmN4jDSc6ZWwkj+cst7yNk0ta8I
-         N3Oeo2jdY3Hne0RA58p49Y6vlLKMRtQp0pxPApl5K5iOwKTugnnKcu0ttLCIJ/7JTCvD
-         z8Tg==
-X-Forwarded-Encrypted: i=1; AJvYcCVNK+5w+FscIUgu/sJNKSHTXEJlnzLQL/04vGrqFgghI8xHBY/pWEvb4ej/4ecbUwmMJ1FlwYCuiIWDQ0kXAQ==@vger.kernel.org, AJvYcCVXbB9QDvULiwGDMKfHzEfLFdRZRPIyt1n+n0tapABVLKLf8UBNE8kXQCmTHkDiZsEPK4m/PQ9wt/3CgFtg@vger.kernel.org, AJvYcCX7kfCSzPwglVxSGMYeYbvTZu2zejhHcVcoFyBvk8AXVD3IuseFxKAg2jX4qWeCsqdYS/KVS21ZLWe+@vger.kernel.org, AJvYcCXer+nfC234+5+7TP0aVOIepbru+T0KpItVF8BSin0j1rh7N2ZtNtvc3zpIKiw2hGjTbALr9zFZHfwH143GU7tfEwI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwueigKNnTJs1l2keB04Z/PL9JUl4/gxUTkOIopY7BMsTYkDnRC
-	K8xlrAsa08H8/FW+a8JxX06BZJlq9dB0QVc7zcZ8FKQFcpT8w8yw
-X-Gm-Gg: ASbGncv6cbRIKDOApkIuIK6fhosffokuAVdW6yjubT01ef7yl+u2eOSLfQnZ7rWA15D
-	rvXiBuJwcOB5VxRCiEYMtwdJ4pDIlg39APeXwQ/PVWFC0B0zBJQNv1XAZFJKXg3PxTA+i97pD1i
-	ITX1cXQNqIYM+AJxo+iVuCU5K0XT7uTCbnoiZDQSjM6p9xAYSu7mpSim+0OwACXRTUfK6/qaCl1
-	6pCmwjHU2S87WXKitkjkhiWn8BSnyz2eXfvMmlnIlaZKVw9I5tRa43wlX55h9JrqMB3LeJR7wTV
-	PDkWrbxaVvc386WVdlU+x8vQRQ==
-X-Google-Smtp-Source: AGHT+IFtl3Jc4R8ZM18OiD8T35sINFW2yCCL1hkjUfHrIzuM/MvcGihGAKcF6iZA6+Q/hgFepUAa8g==
-X-Received: by 2002:a17:907:96a4:b0:aab:7507:7a94 with SMTP id a640c23a62f3a-aac2ad84badmr1228517466b.16.1734960670508;
-        Mon, 23 Dec 2024 05:31:10 -0800 (PST)
+        bh=RwPuXDf5OOwhnI0ZOOII5GNLjUS47fPFuHS4/Stj1TM=;
+        b=kHadZMEEVZsqnDWfP/qdMXLWyLDD3JtOoSmSA0n7y3m5bOFtwA0dc+LZTNfCORIl21
+         gQZtn49vDW679r4dsWVuU+tg6SZ+/qPFal2SidmWhyK8X3FA6A4v7mAq/TGtzDkTMSy2
+         Wqxl//fweDk+PFrk4F2Qv9xFm7leTS9xaVUlE0alykLoav3wEYnlYmZoqSLMTacZAj+N
+         XYb/bvvEf4i192ehfFDNO1OUKrMIVk0eyJTsjQNSLZuTRXc5D1vkyyY/frffoU0UQPCk
+         x/mKSn6r3AeWC47ZM5xHbeMTMftB7e8Q6aHXHo7P4W4mjxtUpP9i6Xff7Y3YnItQTffM
+         ScZg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1734960672; x=1735565472;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=RwPuXDf5OOwhnI0ZOOII5GNLjUS47fPFuHS4/Stj1TM=;
+        b=gxrG/FWf+a6hSy3ryEr4W+5tGyqkEJ6vjEOXxNuojQBHGE162G9KDGdzgeq7SIG/B3
+         RdqyzwMHpdxi0QlXN7Khl0gazeNu4UDJ3YuA5V1yeQg46aPeGqE9Yx1GJJJibYDDrgrK
+         YtSK8Ycz2v+ZpUGOTcX9OOAnVvhQFEIJO41tnE1MjZYfRVS8UtAhZhsVJuxdYIz3mdWj
+         3HdjWNT0wmeq6pkWNLapi2/tV8z6ENYU6/J35Pa3XNizxkyzG4Qy3QZ7O3WLuCw9/O3r
+         FQYNbYsXhSDy+mzsB9ynVUPyZvNCqtGScLUSzeacUD2B3LeaQS5Eh0PL4R9Y8a7F9WkD
+         2ynA==
+X-Forwarded-Encrypted: i=1; AJvYcCUMZbJcCqZFvuPa4UZhAsM8ndjxmbdOZgad+agP1rcs78rvR7JGPvWGzdEhmvGiF+gnu8Rx9J7AgGq1TDkU@vger.kernel.org, AJvYcCUtg03EwRZ3SJmrm2uXr3wHv0lJBQCftBmKtbxdA9I8TIK9QrFlLb0LFDJunrxx8OprS5bYpk7CGqz3@vger.kernel.org, AJvYcCXOPnMFSw4fEHF+5knowEZ2+GysQqSc0ofUC0QzHUVR+hJnCpFJK7m06t6WW/38PCiUkvlro2X8G5zHTx9RCf30eyA=@vger.kernel.org, AJvYcCXtQ2Xic2imys8yErwxiX8piUOetMDpRb5jD+YCr2UC8GqOaRwh3ijJJ3YR4HRZM2KvaI4PEAu4wGWrQipD6A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyv9DPCZjzwodfuowGrSWaH6rUP/vtTzXQ5bBli5wWTxjApJzX4
+	A+F81PnBGIgZgXnekPp5T6TKJ/lB2tX/zHvKm1k4xiY8xB5VNZ+5
+X-Gm-Gg: ASbGncveYtIPjNw7OjbFTJuo+IRYbf4IaY3t5ZM5uXjupwCS7fMQayvBvRU0ANPIf11
+	atTFo91ZnPGGHYHliQLYiB/XSE2TwSNxpprqBTvL3vKl+HOSQkNQ9t8xNO0BhAUpLvu/IsnjO4w
+	i8x9y6EKzJ0ZQx70WzZlm4WRVmcozU3m2It0jvDs3u270MyHEXrUJ4VLcXHlImfi06CXaKT+Vko
+	oBRGjAx/ih0gRKbLol/mj4WEziUlZy2RbnCxtiqIEHU7+lLTjd/qb08n3q4yG6NyhA+s2wT+KKQ
+	ZeHKBLeR1FYeaFuFal1R1rVb1A==
+X-Google-Smtp-Source: AGHT+IEAjOSElAIIGrGWGIQMWdMK2o7RI6v/y07lVKjYb6AqUZp1yJSKckWfo1Bm53K/zjmZVsKLjg==
+X-Received: by 2002:a17:907:3faa:b0:aa6:9540:570f with SMTP id a640c23a62f3a-aac081579eemr1553450066b.18.1734960671961;
+        Mon, 23 Dec 2024 05:31:11 -0800 (PST)
 Received: from [127.0.1.1] (nat6-minsk-pool-46-53-210-232.telecom.by. [46.53.210.232])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-aac0e895502sm523749966b.63.2024.12.23.05.31.09
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-aac0e895502sm523749966b.63.2024.12.23.05.31.10
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 23 Dec 2024 05:31:10 -0800 (PST)
+        Mon, 23 Dec 2024 05:31:11 -0800 (PST)
 From: Dzmitry Sankouski <dsankouski@gmail.com>
-Subject: [PATCH v5 0/2] power: supply: max17042: cleanup and more features
-Date: Mon, 23 Dec 2024 16:30:38 +0300
-Message-Id: <20241223-b4-max17042-v5-0-e4e409723bce@gmail.com>
+Date: Mon, 23 Dec 2024 16:30:39 +0300
+Subject: [PATCH v5 1/2] power: supply: max17042: make interrupt shared
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,10 +83,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAP5laWcC/32OzQrCMBAGX6XkbCR/bRpPvod42CSbNmBbaSVUp
- O9uKghVweO3MDP7IBOOESdyKB5kxBSnOPR5lLuCuBb6Bmn0eRPBhOKc1dQq2sHMNVOCGsmq4HQ
- JAZBk4jpiiPPLdjrn3cbpNoz3lzzx9fr2mA9P4pRRg8IyjaVCXR2bDuJl74aOrJ4ktuznD0lkN
- rCyDhp4ZcF+s3LD8i9Wrl3rAD0oAeynq/50VWZr7SpvjJVe+i27LMsT2LeUIloBAAA=
+Message-Id: <20241223-b4-max17042-v5-1-e4e409723bce@gmail.com>
+References: <20241223-b4-max17042-v5-0-e4e409723bce@gmail.com>
+In-Reply-To: <20241223-b4-max17042-v5-0-e4e409723bce@gmail.com>
 To: Hans de Goede <hdegoede@redhat.com>, 
  Krzysztof Kozlowski <krzk@kernel.org>, 
  Marek Szyprowski <m.szyprowski@samsung.com>, 
@@ -102,71 +102,45 @@ Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev, 
  linux-arm-msm@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1734960669; l=2342;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1734960669; l=1055;
  i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=o4Fom0Rpm9fWzhbvqugXg9BmbPqo3cs/0znTlLu54ck=;
- b=f8X4xAir/UsYai9B01gBdXs+JRfS4B/GpHsSQ6bQ+wpNPfRjetFZ6uLzwavBXVG0SW/VerEor
- 87W4HwyJbVHB0I2ApwmvSY313JIzXsnoxdlHPVOGMYxp9vDxQqJ8SlI
+ bh=/EeD7LqHcTZ3/1Ng4iRA0q/Q9oTbn7vVY0BQy1PKauQ=;
+ b=ltc3kA6HcpduIZKYmVftqNij2lf7rbl9PER+OdeUoULkpB6JPpKkulYdc4j7/w7rYHRt1LhYp
+ zt4lvjE87Z+B8qqX5eyIYMrKZZuAMRSM/NZnPIuV9vCF2JBkS3lLuE7
 X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
  pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
 Fuelgauge blocks often are incorporated in bigger chip,
-which may use only 1 line for interrupts. Shared-irq
-handles that case by requesting irq as shared.
-
-Maxim PMICs may include fuel gauge with additional features, which is
-out of single Linux power supply driver scope.
-
-For example, in max77705 PMIC fuelgauge has additional registers,
-like IIN_REG, VSYS_REG, ISYS_REG. Those needed to measure PMIC input
-current, system voltage and current respectively. Those measurements
-cannot be bound to any of fuelgauge properties.
-
-The solution here add and option to use max17042 driver as a MFD
-sub device, thus allowing any additional functionality be implemented as
-another sub device. This will help to reduce code duplication in MFD
-fuel gauge drivers.
-
-Make max17042 interrupt shared, and add platform driver
-version.
+which may use only 1 line for interrupts. Make interrupt
+shared.
 
 Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 ---
-Changes in v5:
-- platform version: use parent device of_node as current device.
-  This is because mfd driver matches fuel gauge node, and max17042
-  platform variant is intended to match a mfd subdevice.
-- fix platform version issues.
-- Link to v4: https://lore.kernel.org/r/20241108-b4-max17042-v4-0-87c6d99b3d3d@gmail.com
+ drivers/power/supply/max17042_battery.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
-Changes in v4:
-- review fixes.
-- Link to v3: https://lore.kernel.org/r/20241118-b4-max17042-v3-0-9bcaeda42a06@gmail.com
+diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+index 496c3e1f2ee6..99bf6915aa23 100644
+--- a/drivers/power/supply/max17042_battery.c
++++ b/drivers/power/supply/max17042_battery.c
+@@ -1103,14 +1103,7 @@ static int max17042_probe(struct i2c_client *client)
+ 	}
+ 
+ 	if (client->irq) {
+-		unsigned int flags = IRQF_ONESHOT;
+-
+-		/*
+-		 * On ACPI systems the IRQ may be handled by ACPI-event code,
+-		 * so we need to share (if the ACPI code is willing to share).
+-		 */
+-		if (acpi_id)
+-			flags |= IRQF_SHARED | IRQF_PROBE_SHARED;
++		unsigned int flags = IRQF_ONESHOT | IRQF_SHARED | IRQF_PROBE_SHARED;
+ 
+ 		ret = devm_request_threaded_irq(&client->dev, client->irq,
+ 						NULL,
 
-Changes in v3:
-- pass dev pointer to probe
-- Link to v2: https://lore.kernel.org/r/20241108-b4-max17042-v2-0-f058f7a16bab@gmail.com
-
-Changes in v2:
-- drop NACKed commits
-- make shared interrupts unconditionally
-- rework descriptions
-- add platform driver version
-- Link to v1: https://lore.kernel.org/r/20241109-b4-max17042-v1-0-9e2b07e54e76@gmail.com
-
----
-Dzmitry Sankouski (2):
-      power: supply: max17042: make interrupt shared
-      power: supply: max17042: add platform driver variant
-
- drivers/power/supply/max17042_battery.c | 200 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------------------------------------------------------
- 1 file changed, 142 insertions(+), 58 deletions(-)
----
-base-commit: 8155b4ef3466f0e289e8fcc9e6e62f3f4dceeac2
-change-id: 20241108-b4-max17042-9306fc75afae
-
-Best regards,
 -- 
-Dzmitry Sankouski <dsankouski@gmail.com>
+2.39.5
 
 
