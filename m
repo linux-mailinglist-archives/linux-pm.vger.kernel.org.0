@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19740-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19741-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36ED49FBF13
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2024 15:16:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1D55A9FBF18
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2024 15:17:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA910162D27
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2024 14:16:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8205D163529
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2024 14:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4859B1BC9FF;
-	Tue, 24 Dec 2024 14:15:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377E41C3C15;
+	Tue, 24 Dec 2024 14:16:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="B5e+lP2M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PRG9s4N7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 096E34689;
-	Tue, 24 Dec 2024 14:15:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFEEE4689;
+	Tue, 24 Dec 2024 14:16:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735049759; cv=none; b=dF/ZgJFF9Q1z14yCUEcnbgOQb6CocAkKfITXrqmh41ETxoDZQ35pL8tUfJeziCdrZAucbYtxdVmjG+BOnq4Qm3zE3DeeTugFD6OE7RgBRwLkLYzyS33/c2t5R7CTCVgHPW2JRomsvCMw/9StyxO5deN1VQyNDlk85VoC27Dd3UY=
+	t=1735049813; cv=none; b=s1MUaqTrDqhHtOdoueXzs60bT8rppHkJ2w3yFuwf1YzjkI/Db/lOu3f+bhlmq9B9DkauPBLhf+/wsaDKOXo/QRPP26NnC4oeINxPhYK5COPebSRPWacJwIqnhWST8cAj3ZwcGWY1y7Ubn9wxIUS/ZrGOVpDKsI5/AfIh7+z9G0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735049759; c=relaxed/simple;
-	bh=/ysaRB4Vs2PBs5uEOotndvm/ii6ZE5lzSJc7Rc6NbV4=;
+	s=arc-20240116; t=1735049813; c=relaxed/simple;
+	bh=nTU/BdSBgAVCv4Dh2x2LodKDjoS/hWzg4rkX6ehbQQc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=EKwDJ5q/58XYoEjgsl53d9bDw3aIayrHDktQDQV28Pn8m9x4Gy4OaFtFHpPwL+brEXeM/X5dkrtiekBV3IPhXjogAawJRPn4U0kfOewnPhX6ZnnzRodfX9EuIpY2oMDnCgad3h87IzQq/Z6Bi6BdLrT7Ppa8kYBbFEK6KCFQRDY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=B5e+lP2M; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B84FC4CED0;
-	Tue, 24 Dec 2024 14:15:51 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=uiOLmlhhuKnNRn2ex/eGKdpt8ddqSmeCORrzKZ3lAo8fx6+2vt3nV6WIc4Twj2S89Dkhxz+6mr7w7CMwuE1ExS1O2hvJcrU9/KYnpXowhFtJCupQBkMIdPvXtL2aFtyiK5cCTd1f9M9oNeJHOZctAMD+5fBoi2xQTlHR9U8Wqaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PRG9s4N7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EADF0C4CED0;
+	Tue, 24 Dec 2024 14:16:46 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735049758;
-	bh=/ysaRB4Vs2PBs5uEOotndvm/ii6ZE5lzSJc7Rc6NbV4=;
+	s=k20201202; t=1735049812;
+	bh=nTU/BdSBgAVCv4Dh2x2LodKDjoS/hWzg4rkX6ehbQQc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=B5e+lP2MbcdhxoHhtS2ZL9w29KyjK+U3+EsUOV7MRNK7n3jrgAi1ymuRn8GwCQRxz
-	 hG6ZA5RJH9zhIjqoy/mdFNla/f8+Mos543U/DVenfesHSd4vfYp6mYrhzqk/nmG6Vm
-	 EU8q3ZOrq1CwggdtvqLgiZ3rPQOsv9G0eRwaSkONzyRS1xbFPo+XZC/N9po96Ky9NJ
-	 MwwUYHkFJO+oUHBYpE7PAgiXV4UrMzWCoQ8IDLRYorwzWSSTlH5zOLrjDPxQudNI5y
-	 zP5o0/rMubtnCYjrAAPpqHs3ALhRu65j9AiRznH3GzcawJVFi5NZ0CXZUVV2wPbb2K
-	 li6qMzerPNqLQ==
-Message-ID: <421edb68-fd7f-4136-8c98-88f745dde5aa@kernel.org>
-Date: Tue, 24 Dec 2024 15:15:50 +0100
+	b=PRG9s4N7SiHVRD+Ff8nhfSm4jwjXgqQxP0UD4QbDKHnoCT/KgqW+5iAFm5SLo+OvX
+	 qMcc7w+D6bF0nq2l+Aknm9yYa7fd7wg4B2KPAwd4YRiPteyS+39EZinIaGj+mzj3Bl
+	 XEovDUXzB1y0iKfbo6VPl60A+9/iiAG5AGPHioMV650lStWt70yBrKcrHPL2UIKIs9
+	 dQDphDxQ2TGLiltKVr8703Etp+G3Vmo4gbvCX74F7yRsIZyPhDHRkKKeBdQqgDwTPy
+	 L6T82n+PDFMpHOAIL6xmGlppzoOo1zTPzQze2QjFe3V6jghldusNMBTnhHB7K9XwFk
+	 sbVBuH6ereZHQ==
+Message-ID: <fa68df6a-f8dc-4701-8e02-fc90e3561544@kernel.org>
+Date: Tue, 24 Dec 2024 15:16:44 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 1/2] power: supply: max17042: make interrupt shared
+Subject: Re: [PATCH v5 2/2] power: supply: max17042: add platform driver
+ variant
 To: Dzmitry Sankouski <dsankouski@gmail.com>,
  Hans de Goede <hdegoede@redhat.com>,
  Marek Szyprowski <m.szyprowski@samsung.com>,
@@ -67,7 +68,7 @@ Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev,
  linux-arm-msm@vger.kernel.org
 References: <20241223-b4-max17042-v5-0-e4e409723bce@gmail.com>
- <20241223-b4-max17042-v5-1-e4e409723bce@gmail.com>
+ <20241223-b4-max17042-v5-2-e4e409723bce@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -113,28 +114,31 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241223-b4-max17042-v5-1-e4e409723bce@gmail.com>
+In-Reply-To: <20241223-b4-max17042-v5-2-e4e409723bce@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 23/12/2024 14:30, Dzmitry Sankouski wrote:
-> Fuelgauge blocks often are incorporated in bigger chip,
-> which may use only 1 line for interrupts. Make interrupt
-> shared.
-
-If there is going to be a resend:
-
-Please wrap commit message according to Linux coding style / submission
-process (neither too early nor over the limit):
-https://elixir.bootlin.com/linux/v6.4-rc1/source/Documentation/process/submitting-patches.rst#L597
-
+> Maxim PMICs may include fuel gauge with additional features, which is
+> out of single Linux power supply driver scope.
 > 
-> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
->  drivers/power/supply/max17042_battery.c | 9 +--------
+> For example, in max77705 PMIC fuelgauge has additional registers,
+> like IIN_REG, VSYS_REG, ISYS_REG. Those needed to measure PMIC input
+> current, system voltage and current respectively. Those measurements
+> cannot be bound to any of fuelgauge properties.
+> 
+> The solution here add and option to use max17042 driver as a MFD
+> sub device, thus allowing any additional functionality be implemented as
+> another sub device. This will help to reduce code duplication in MFD
+> fuel gauge drivers.
+> 
 
 
-Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
+I did not perform a thorough review, but skimmed through the code. Looks
+fine.
+
+
+Acked-by: Krzysztof Kozlowski <krzk@kernel.org>
 
 Best regards,
 Krzysztof
