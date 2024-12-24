@@ -1,221 +1,194 @@
-Return-Path: <linux-pm+bounces-19734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19735-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 591169FBB34
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2024 10:32:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE52F9FBB68
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2024 10:42:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EEBC61633D0
-	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2024 09:31:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 382DC7A34AA
+	for <lists+linux-pm@lfdr.de>; Tue, 24 Dec 2024 09:39:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4ADE199252;
-	Tue, 24 Dec 2024 09:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13D7C1B0F2D;
+	Tue, 24 Dec 2024 09:39:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="I6vW8WMF"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="AcT/noO3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
+Received: from mail-m12748.qiye.163.com (mail-m12748.qiye.163.com [115.236.127.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F32858C1F
-	for <linux-pm@vger.kernel.org>; Tue, 24 Dec 2024 09:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 109961A8F98;
+	Tue, 24 Dec 2024 09:39:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=115.236.127.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735032710; cv=none; b=JaXLpY75uNYqwtzsRKRYFO7bldMaN//a0K+qdIbplxX9JFt1+ofUB7VcruNdCLm83Izgakx/BKThyWi7OMCS/spBOUvxczKQi8teY0PweSysxtMIafp9aKo3JXFmW8wI1apx8vNONzo83zbkUHtw7oRTTl8ki20MeuBVLkZyhiM=
+	t=1735033175; cv=none; b=V2XoNOjutGNL06bctaDLvWV9uePqOz0orlsM/IDK0JLKDuAOTVzO0/1ISGtFPph8TgCZsNEcjKHsyLhMqfdVcTFJ/UyHBRTXhcBt73B/ZguE0V96US5vZSPJkAUZsCAVkyAC1I8NQ67W+7ixInqQ78HSe2WmTOO9Po+8fJP2wPY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735032710; c=relaxed/simple;
-	bh=+Pkza9XyR1Ndbye03dFVchl7bfZ2Ly0KhJCbQRUruCw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=T6RTWk6E1VMMiA1N2vJSgbLXLL0OfnaAh6SbHBPWCkPKoaXRTOpw3i93BTEtzf3r/qKTCQ4DNg0ECU+0V69niOxOUzUK0e2yuabX06rG7GuMxmlXRN++I2ZlrGkmJV9MwU1Q62MRYQGahw7LviZxk56RWxQUJOVM70P267jH0aE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=I6vW8WMF; arc=none smtp.client-ip=210.118.77.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20241224093147euoutp0102f2a05219403203dd0e6c9824af0fd7~UEw4BZtKq1634216342euoutp013
-	for <linux-pm@vger.kernel.org>; Tue, 24 Dec 2024 09:31:47 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20241224093147euoutp0102f2a05219403203dd0e6c9824af0fd7~UEw4BZtKq1634216342euoutp013
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1735032707;
-	bh=3Nu/ij16UUT42lqe5Bh1GBTS2K9+BxVpiEpokJla4rg=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=I6vW8WMFg4yzE6lIMlgvWHRT5BSP6wyYlygHxO2AKSlWgBTAlguorfQixWWJpbHqY
-	 69UwsxSqyUxDgS6wRwPeA4z2semx9C+SEm6FNubMTrnGBFyJKUyWMkoUYHedIcnu5z
-	 bSvWRxFSrC/X2ENjxMlbNxZ2h8ze0wpMmmDpVBb4=
-Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20241224093146eucas1p2a8502d1d2cfe9bc9a124c7922a07875e~UEw3SoWR71295412954eucas1p27;
-	Tue, 24 Dec 2024 09:31:46 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges1new.samsung.com (EUCPMTA) with SMTP id AC.69.20821.28F7A676; Tue, 24
-	Dec 2024 09:31:46 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20241224093145eucas1p29ab5546f55e59b9b54873f4eb28b7004~UEw2g_yGH2149421494eucas1p2V;
-	Tue, 24 Dec 2024 09:31:45 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20241224093145eusmtrp136f912a8d7b273585e3990bf96361e2b~UEw2gEDwc1635616356eusmtrp1J;
-	Tue, 24 Dec 2024 09:31:45 +0000 (GMT)
-X-AuditID: cbfec7f2-b11c470000005155-1e-676a7f825839
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 31.AB.19920.18F7A676; Tue, 24
-	Dec 2024 09:31:45 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20241224093144eusmtip27edc20307c19f74a5a9e4811f470707d~UEw1PhWww1893718937eusmtip2C;
-	Tue, 24 Dec 2024 09:31:44 +0000 (GMT)
-Message-ID: <756031bf-4f81-424d-8cbc-db27ac27f6dd@samsung.com>
-Date: Tue, 24 Dec 2024 10:31:44 +0100
+	s=arc-20240116; t=1735033175; c=relaxed/simple;
+	bh=MBINi5IJRThDVfFVd2ZoJWxRN15U708RoKbJSr8140Y=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=f++m55iHwcp93nE1j4O/1tPshrZizpZSOw5uvHMGTeA/rsDE64ehQ7TrUuvf4sW26bEiajcW638zN/Wsv+GVdMBLiRvpCcrdYPuinPN5KohP/f+DFkU6vC5AJg2RBF/X+IwOUco2DfkI48QhJQ+tbxxbXXd9zTdq0+QS/5MNT6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=AcT/noO3; arc=none smtp.client-ip=115.236.127.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id 6aa9032d;
+	Tue, 24 Dec 2024 17:39:22 +0800 (GMT+08:00)
+From: Kever Yang <kever.yang@rock-chips.com>
+To: heiko@sntech.de
+Cc: linux-rockchip@lists.infradead.org,
+	Kever Yang <kever.yang@rock-chips.com>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	linux-pm@vger.kernel.org,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Subject: [PATCH v2 2/2] soc: rockchip: power-domain: add power domain support for rk3562
+Date: Tue, 24 Dec 2024 17:39:20 +0800
+Message-Id: <20241224093920.3816071-2-kever.yang@rock-chips.com>
+X-Mailer: git-send-email 2.25.1
+In-Reply-To: <20241224093920.3816071-1-kever.yang@rock-chips.com>
+References: <20241224093920.3816071-1-kever.yang@rock-chips.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC PATCH v2 03/19] dt-bindings: power: thead,th1520: Add
- support for power domains
-To: Krzysztof Kozlowski <krzk@kernel.org>, mturquette@baylibre.com,
-	sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
-	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
-	frank.binns@imgtec.com, matt.coster@imgtec.com,
-	maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
-	airlied@gmail.com, simona@ffwll.ch, ulf.hansson@linaro.org,
-	jszhang@kernel.org, p.zabel@pengutronix.de, m.szyprowski@samsung.com
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <db2987c2-53fc-4d3a-b85c-f5683f74e7a0@kernel.org>
 Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTVxzHc25v7y24smuBcQQDWtQE5qCaLZ4xonPZ424JUbI5t7noGrhW
-	tBTWgo9lC7J2WFgRUBGtqyCywZBSQVoK4TEeoQVs63jJnFSz6FgrjPCocRBg0Isb/31+39/3
-	nO/vd3J4HEEHEcxLkqUxcplYKiR8cVPXP45Xvs04KhHdLFqHrHdLMWSc05KoqtmOoeJOOxc5
-	++owNOCZIFD14zsk+qs5E0dDFToSKbsMBHJpnQRyOG6SaFLj5KL+xh8INJ3bCZBpWkUgfecI
-	ia5NGnFUZm4EKCv7Jy76tecdNOK04sjVr+GgLO2LaLHJTKKFoRocXfm7lUR1YwVcZNHvR6rW
-	C/ibofTE8HckPeZy4XSHeoakm5+W4HSDdoSkNQ23AV1bmU3Q94eaCPpqdzz94HsLRt8qy6BV
-	+i6MzpsX0RMtgwR9tq4S0H3Ku+RewWe+sYmMNOk4I4/e+YXvkcs9Djy1ijrpcf+GnwbnXsgB
-	PjxIvQqnMvPwHODLE1AVABqe6jG2mAGwbVC3UkwDWGK7w31+5Bf9DQ7bKAewZ0BJsMU4gFWl
-	FeSyi0/thM2LHi/j1GbYVtiLs/pa2H35kZcDqTD44N4lr8efSoCGCyqwfFEAVYVD92i5N45D
-	1QNovc1nOQjee1SMLTNBbYcPy4u9Hp+lMI/tyYo/DCqNV7zjQWrQFzovOXB27rfhxEIxybI/
-	dFvqVng97D2vWfGkwIfGKQ7LX8MGjWWF34D37bNLa/KWAiKgoTGalXfDOtcUd1mGlB8cHl/L
-	juAHz5mKOKzMh+osAeveAgs1uf+F2itMWD4Qale9inbVktpVy2j/zy0BeCUIYtIVyRJGsU3G
-	nIhSiJMV6TJJVEJKci1Y+ue9C5YpM9C5J6PaAcYD7QDyOMIAfrsgSSLgJ4pPfcXIUw7J06WM
-	oh2E8HBhEH9zYhgjoCTiNOYYw6Qy8uddjOcTfBoLTy4jZJqIgCewpn7c7fjgkLo25eTPswPv
-	H9TEqDnHEuOSWo3K2Iw4Zn9Bx7XGaZMh0lgzL95nK61urd2z4cvcgmFjaHiCPfxi/2tZMdXm
-	lut+W7v9v/n4IJkTOJJ54Drn02j61Oh7M3tvGT8/YFUe3ze6K7+Fd/Qt7rO0wvlN2/02SPK3
-	WNUqaWpoiOhMdo858HWRcmvR2egTzPo/F8esCzHrdJHWGCYi8Pfw3PjDsrm+D6mx6cd/0Klt
-	6k8MF7UZwRVxe8yTO4iIJtuNNRtjz88erncWeXYEaD/a9S5s320Sr6n8MUFYb9cZ8mwvWTeO
-	hszpx0SF0njly1JQKTvzLFaIK46It0Vy5Arxv1AwNKtWBAAA
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKKsWRmVeSWpSXmKPExsVy+t/xe7qN9VnpBjsvqFicuL6IyWLr71ns
-	Fmv2nmOymH/kHKvFvUtbmCyufH3PZrHu6QV2ixd7G1ksrq2Yy27RfGw9m8XLWffYLM6f38Bu
-	8bHnHqvF5V1z2Cw+9x5htNj2uYXNYu2Ru+wWCz9uZbFYsmMXo0Vb5zJWi4unXC3u3jvBYvHy
-	cg+zRdssfov/e3awW/y7tpHFYva7/ewWW95MZLU4vjbcomX/FBYHOY/3N1rZPd68fMnicbjj
-	C7vH3m8LWDx2zrrL7tGz8wyjx6ZVnWwed67tYfOYdzLQ4373cSaPzUvqPVrWHmPy6P9r4PF+
-	31U2j74tqxg9LjVfZw8QitKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0No+1MjJV0rez
-	SUnNySxLLdK3S9DLmHnqPEvBGoGKr69usjQwTuLpYuTkkBAwkTiwdjUziC0ksJRR4s/kDIi4
-	jMS17pcsELawxJ9rXWxdjFxANa8ZJda/fwGW4BWwk9j7/ys7iM0ioCpxcOppqLigxMmZT8Bs
-	UQF5ifu3ZoDVCAskS6yf0sIIMkhEYA2LxNV3U1lBHGaB7YwSG2ZOZYRY8ZdRYvasB2wgLcwC
-	4hK3nsxnArHZBIwkHiyfzwpicwKt/nr2NZDNAVSjLrF+nhBEubxE89bZzBMYhWYhOWQWkkmz
-	EDpmIelYwMiyilEktbQ4Nz232FCvODG3uDQvXS85P3cTIzB9bTv2c/MOxnmvPuodYmTiYDzE
-	KMHBrCTCe0goM12INyWxsiq1KD++qDQntfgQoykwMCYyS4km5wMTaF5JvKGZgamhiZmlgaml
-	mbGSOK/b5fNpQgLpiSWp2ampBalFMH1MHJxSDUyyD578OngpN8Ep9mTI6yWnJVyu7LjjdIxr
-	fXGHXfl6JTajex57jqW8OfXpyyku+X7J1PxPYSvEVzytu3T06NysfeYam36c1fpSf6i4NKSI
-	8/H1Z0YHfJf2dLJq1Of3TXu8xi3j1SNz8akOd2XKTxl2745dv2q3RVid29QJotETtxmU87wv
-	PLgtKzczJnbaY7NNRn8sKl590T+n1yjaWvj09tsnT4R9szMKUw/LMgvu3twY2iXm8YSDf0GE
-	ob/y0kL+Tf+uWa0IzF/CrnFx2i4/2+UOOi/2Lgnhj1u9o9uDZ///veKKUeVhuhl/9NbMFU9X
-	Oe4hFjOz4PWHTnXlogXfJJ9tfaGUGLO2+/quC7FKLMUZiYZazEXFiQALa9nU6AMAAA==
-X-CMS-MailID: 20241224093145eucas1p29ab5546f55e59b9b54873f4eb28b7004
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20241223125604eucas1p26b870756eeaf2a5666b70de3f7554c13
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20241223125604eucas1p26b870756eeaf2a5666b70de3f7554c13
-References: <20241223125553.3527812-1-m.wilczynski@samsung.com>
-	<CGME20241223125604eucas1p26b870756eeaf2a5666b70de3f7554c13@eucas1p2.samsung.com>
-	<20241223125553.3527812-4-m.wilczynski@samsung.com>
-	<db2987c2-53fc-4d3a-b85c-f5683f74e7a0@kernel.org>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUkZHlZDGRlJHRhMHx0dH09WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSUhCSE
+	NVSktLVUpCS0tZBg++
+X-HM-Tid: 0a93f8090cd403afkunm6aa9032d
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6My46Tgw6MzIOSUooF0hJECMf
+	DkJPCRBVSlVKTEhOS0hISk1PS0JIVTMWGhIXVRAeDR4JVQIaFRw7CRQYEFYYExILCFUYFBZFWVdZ
+	EgtZQVlOQ1VJSVVMVUpKT1lXWQgBWUFPT0pPNwY+
+DKIM-Signature:a=rsa-sha256;
+	b=AcT/noO30omhJSUYcdP+9+GskAYRxWwkTLmAJrQMt44QQUL/QrtHSIi0fupc03iQhfKLxi0oxg9u9NG0loj4/FFAmdlUJjc6iveCFxE3SEPrgH788VyTtG9Hvk3+I4OOxiX22XBhJzdXuAsvhuzZf/VeILYYPOFXmFlkf2qce2c=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=XleyPgZ/9CM1PcFef+OPgtrYNksdCSgQk5pDrBsSbTY=;
+	h=date:mime-version:subject:message-id:from;
 
+This driver is modified to support RK3562 SoC.
+Add support to ungate clk.
+Add support to shut down memory for rk3562.
 
+Signed-off-by: Finley Xiao <finley.xiao@rock-chips.com>
+Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+---
 
-On 12/23/24 17:09, Krzysztof Kozlowski wrote:
-> On 23/12/2024 13:55, Michal Wilczynski wrote:
->> +  compatible:
->> +    const: thead,th1520-pd
->> +
->> +  "#power-domain-cells":
->> +    const: 1
->> +
->> +additionalProperties: false
->> +
->> +required:
->> +  - compatible
->> +  - "#power-domain-cells"
->> +
->> +examples:
->> +  - |
->> +    firmware {
-> 
-> Drop
-> 
->> +        aon: aon {
->> +            compatible = "thead,th1520-aon";
->> +            mboxes = <&mbox_910t 1>;
->> +            mbox-names = "aon";
-> 
-> Drop aon node... but the main problem is you do not have any resources
-> in your power-domain device node, assuming your binding is complete.
-> This suggests that this is part of aon, not separate device. Fold the
-> device node into its parent (so everything goes to AON).
+Changes in v2:
+- update the header after rename
 
-Merging everything to AON node would definitely work. I was looking at
-the other implementations of firmware protocols for example, and that's
-how I figured the current implementation:
+ drivers/pmdomain/rockchip/pm-domains.c | 48 +++++++++++++++++++++++++-
+ 1 file changed, 47 insertions(+), 1 deletion(-)
 
-arch/arm/boot/dts/broadcom/bcm2835-rpi.dtsi
-soc {
-	firmware: firmware {
-		compatible = "raspberrypi,bcm2835-firmware", "simple-mfd";
-		mboxes = <&mailbox>;
+diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
+index cb0f93800138..d05ec0a009a0 100644
+--- a/drivers/pmdomain/rockchip/pm-domains.c
++++ b/drivers/pmdomain/rockchip/pm-domains.c
+@@ -2,7 +2,7 @@
+ /*
+  * Rockchip Generic power domain support.
+  *
+- * Copyright (c) 2015 ROCKCHIP, Co. Ltd.
++ * Copyright (c) 2015 Rockchip Electronics Co., Ltd.
+  */
+ 
+ #include <linux/io.h>
+@@ -32,6 +32,7 @@
+ #include <dt-bindings/power/rk3366-power.h>
+ #include <dt-bindings/power/rk3368-power.h>
+ #include <dt-bindings/power/rk3399-power.h>
++#include <dt-bindings/power/rockchip,rk3562-power.h>
+ #include <dt-bindings/power/rk3568-power.h>
+ #include <dt-bindings/power/rockchip,rk3576-power.h>
+ #include <dt-bindings/power/rk3588-power.h>
+@@ -129,6 +130,20 @@ struct rockchip_pmu {
+ 	.active_wakeup = wakeup,			\
+ }
+ 
++#define DOMAIN_M_G_SD(_name, pwr, status, req, idle, ack, g_mask, mem, wakeup, keepon)	\
++{							\
++	.name = _name,					\
++	.pwr_w_mask = (pwr) << 16,			\
++	.pwr_mask = (pwr),				\
++	.status_mask = (status),			\
++	.req_w_mask = (req) << 16,			\
++	.req_mask = (req),				\
++	.idle_mask = (idle),				\
++	.ack_mask = (ack),				\
++	.clk_ungate_mask = (g_mask),			\
++	.active_wakeup = wakeup,			\
++}
++
+ #define DOMAIN_M_O_R(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, wakeup)	\
+ {							\
+ 	.name = _name,					\
+@@ -194,6 +209,9 @@ struct rockchip_pmu {
+ #define DOMAIN_RK3399(name, pwr, status, req, wakeup)		\
+ 	DOMAIN(name, pwr, status, req, req, req, wakeup)
+ 
++#define DOMAIN_RK3562(name, pwr, req, g_mask, mem, wakeup)		\
++	DOMAIN_M_G_SD(name, pwr, pwr, req, req, req, g_mask, mem, wakeup, false)
++
+ #define DOMAIN_RK3568(name, pwr, req, wakeup)		\
+ 	DOMAIN_M(name, pwr, pwr, req, req, req, wakeup)
+ 
+@@ -1130,6 +1148,18 @@ static const struct rockchip_domain_info rk3399_pm_domains[] = {
+ 	[RK3399_PD_SDIOAUDIO]	= DOMAIN_RK3399("sdioaudio", BIT(31), BIT(31), BIT(29), true),
+ };
+ 
++static const struct rockchip_domain_info rk3562_pm_domains[] = {
++					     /* name           pwr     req     g_mask  mem wakeup */
++	[RK3562_PD_GPU]		= DOMAIN_RK3562("gpu",         BIT(0), BIT(1), BIT(1), 0, false),
++	[RK3562_PD_NPU]		= DOMAIN_RK3562("npu",         BIT(1), BIT(2), BIT(2), 0, false),
++	[RK3562_PD_VDPU]	= DOMAIN_RK3562("vdpu",        BIT(2), BIT(6), BIT(6), 0, false),
++	[RK3562_PD_VEPU]	= DOMAIN_RK3562("vepu",        BIT(3), BIT(7), BIT(7) | BIT(3), 0, false),
++	[RK3562_PD_RGA]		= DOMAIN_RK3562("rga",         BIT(4), BIT(5), BIT(5) | BIT(4), 0, false),
++	[RK3562_PD_VI]		= DOMAIN_RK3562("vi",          BIT(5), BIT(3), BIT(3), 0, false),
++	[RK3562_PD_VO]		= DOMAIN_RK3562("vo",  BIT(6), BIT(4), BIT(4), 16, false),
++	[RK3562_PD_PHP]		= DOMAIN_RK3562("php",         BIT(7), BIT(8), BIT(8), 0, false),
++};
++
+ static const struct rockchip_domain_info rk3568_pm_domains[] = {
+ 	[RK3568_PD_NPU]		= DOMAIN_RK3568("npu",  BIT(1), BIT(2),  false),
+ 	[RK3568_PD_GPU]		= DOMAIN_RK3568("gpu",  BIT(0), BIT(1),  false),
+@@ -1331,6 +1361,18 @@ static const struct rockchip_pmu_info rk3399_pmu = {
+ 	.domain_info = rk3399_pm_domains,
+ };
+ 
++static const struct rockchip_pmu_info rk3562_pmu = {
++	.pwr_offset = 0x210,
++	.status_offset = 0x230,
++	.req_offset = 0x110,
++	.idle_offset = 0x128,
++	.ack_offset = 0x120,
++	.clk_ungate_offset = 0x140,
++
++	.num_domains = ARRAY_SIZE(rk3562_pm_domains),
++	.domain_info = rk3562_pm_domains,
++};
++
+ static const struct rockchip_pmu_info rk3568_pmu = {
+ 	.pwr_offset = 0xa0,
+ 	.status_offset = 0x98,
+@@ -1429,6 +1471,10 @@ static const struct of_device_id rockchip_pm_domain_dt_match[] = {
+ 		.compatible = "rockchip,rk3399-power-controller",
+ 		.data = (void *)&rk3399_pmu,
+ 	},
++	{
++		.compatible = "rockchip,rk3562-power-controller",
++		.data = (void *)&rk3562_pmu,
++	},
+ 	{
+ 		.compatible = "rockchip,rk3568-power-controller",
+ 		.data = (void *)&rk3568_pmu,
+-- 
+2.25.1
 
-		firmware_clocks: clocks {
-			compatible = "raspberrypi,firmware-clocks";
-			#clock-cells = <1>;
-		};
-	};
-
-	power: power {
-		compatible = "raspberrypi,bcm2835-power";
-		firmware = <&firmware>;
-		#power-domain-cells = <1>;
-	};
-};
-
-This is fairly similar, as the firmware is passed as property, instead
-as in a parent-child relationship. Would you consider it more canonical
-?
-
-I would be happy to merge everything to AON node, and merge the
-power-domain driver and AON driver together, but it seemed to me like
-those could use some separation, and since power-domain and the AON
-represent actual HW it's fine to represent them in the device tree.
-
-Thanks,
-Michał
-> 
->> +
->> +            pd: power-domain {
->> +                compatible = "thead,th1520-pd";
->> +                #power-domain-cells = <1>;
->> +            };
->> +        };
->> +    };
-> 
-> Best regards,
-> Krzysztof
-> 
 
