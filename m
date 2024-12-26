@@ -1,199 +1,199 @@
-Return-Path: <linux-pm+bounces-19765-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19766-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 164069FCBC2
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2024 17:13:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6E119FCBD2
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2024 17:22:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0FE91621E0
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2024 16:13:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6CC601624A4
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2024 16:22:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C9EB473176;
-	Thu, 26 Dec 2024 16:13:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99CDC84D3E;
+	Thu, 26 Dec 2024 16:22:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="JKVG1B0U"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Yb2va+Lm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D57647;
-	Thu, 26 Dec 2024 16:13:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA6CB23DE
+	for <linux-pm@vger.kernel.org>; Thu, 26 Dec 2024 16:22:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735229621; cv=none; b=ckV1pFDCZ/+ZeJJLen7bdgPdXqO1VDJkHKeJgO+N2dltsVvDm/6CtMGzKXYLJ6cebpOQt0uW0Cq+XFthuuIApXYuvINDXdIkk8KazZG33BDnFVTYMf4fddTryhpk6Wb9UuOKkPyZrj+WnJgfJnrvD49V1AE51tjzf78EmqrMxEM=
+	t=1735230145; cv=none; b=DHxCiKYTWE4pHeHjKLOo2py1BqlzsLGzVddeDfLkTKgwz9KHgD9qqh8oSD0/iDH9FRUxvjQ6WlDPLMec7qWdhDUC53+G3MdiXFqhdyXbvyrUKH8Y4DjEWqyRaGkxp577ggGyMeCwiNQJQgRWbD5Gp1OrNCBTRRq8YZ4woZ8UAWc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735229621; c=relaxed/simple;
-	bh=R8gTBKypijmWyZend+EQ7DZwu+TKMr8gYHaZkpEQjTQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=l7WhqjzOfHqi3g8ckqJoFWc9IbAbBSqkRoG/fCeYx39Y27TjwVM2YnWZy+vTf+T1G5kQId9c3qiEUx8Fzj4uPfuvCoCUN2vpEts7IfLORK+KHmBQdiYfzNyfAwPlluCuy58iS9opSoBHOXs9gUznBQS9wyQli19yLuJalZlH0EU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=JKVG1B0U; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BQ6ttAo005102;
-	Thu, 26 Dec 2024 16:13:30 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	ivBD8d5gBzuOH2t6w4NLCLVafrwFu+cn5L/5FCyuZ84=; b=JKVG1B0U8c6rZN0y
-	rynL9pI56S+U50H+6aDqIcOzPqeV8oikR+uVRruQ+tPK99bEU/xURm+oxGG5WsVC
-	veVNU4HpnKjOHOPM/kPg60ORMBQA2QlgGS63j8LsHI9SvsT3fmaReo0EN8HZ0eUK
-	a/P2rHFfeSgaINcbWhA1NaTZ7Tj559flB7wWpYwPgpS350AkwuNatkJozQt9nSEp
-	rC3uArT9Jq7NIo5aFTC07YWUlqJHogohqLgML2pxzPzuNylGAO2NKpMSSFeVzg48
-	4lOlgzLbhNw2wk/xFDxTX7qgXWoK3O4GGceos+ER5amIpeJBhUVJYj1RnXmoOZp4
-	dIUn9A==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43s2a8uf1h-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Dec 2024 16:13:30 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BQGDT2G026513
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 26 Dec 2024 16:13:29 GMT
-Received: from [10.216.0.11] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 26 Dec
- 2024 08:13:23 -0800
-Message-ID: <dafa6ce0-47f6-4e6a-882b-278c3b51e768@quicinc.com>
-Date: Thu, 26 Dec 2024 21:43:20 +0530
+	s=arc-20240116; t=1735230145; c=relaxed/simple;
+	bh=DEucWZKqke6YmICCHoXk1QBMjOFMLzmD29afDJ18eoc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iBtiI9d6Rk4ygoXfOOdK0NLkc9S8zldb+G8wvs/Hb8StXnv6nRysM6TClMfE6e7HpIqVjSMTClIHye/k847JZ53uWE5NA5DqKKteLx9s4fQKCFQYHx4a24kmBY8ucdaRqafLvp814QDs2SVfqL5vti0AI0lXINuhhfzLm2I0Anw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Yb2va+Lm; arc=none smtp.client-ip=209.85.214.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-2167141dfa1so74298145ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 26 Dec 2024 08:22:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1735230143; x=1735834943; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=qm1OGexTUahbG35IAioexR2EqAbbh3BE3Y6REOnezMM=;
+        b=Yb2va+LmZObLBeP+T82RzjBQHw1xdMD9Ju4ALSof+UMVJbUHjHskBq8inhMpezdMst
+         zy/L+YoT/ZCRH5oh//wsXArqlayoeGo5Dykcd8VY9EsZjAvSDJuc8qbQTEQP2Jp6xvdQ
+         8sdxLgc5laUlfvCvTLGJZczwGruldb1SVwfyWR9Kv8guISo26kLSJmsUrQHhUFrK20eI
+         LSIaaeMwWJ21hXhNTM3xP4OopZfBJbRwGaG6+lqGUg/Z5/p1EGF34l3JLBEjloxnUg81
+         5JYu74TBVx7fa6yBk9u72llllUGofIJlAYuDea5IG29tfBC6T4WdG6SVbXuw27cldDce
+         2Cew==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735230143; x=1735834943;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qm1OGexTUahbG35IAioexR2EqAbbh3BE3Y6REOnezMM=;
+        b=p0PWjPKM9uZWh+MiKqBhVHk408dqGDiGUPe28Q6uvOWvpal/NWhi0IzpV47cwjaGD6
+         x1aSe8mf1eylajBiIfGcfDrWfKEFmVLPeIEYDDHCqxs+z9AdPoQCjXbII2IVrlp35gpX
+         PP1wrFNOQPJGTqj1EYm3sO9DirCL2YamtgJNiYRE/gtMqQQQHb5PRaxNMnCbn7yr1k/7
+         IubBG3M03X8SmaeX/uF5LbJcUijwAfHmY7OHXjFEIN5lO/VTD17fDe7m6VEhghIEznPt
+         5v4dqgEBEgFPBwR3X7YOZr+h3n+d0FRbKlwKr+Euwh9BMQyWmN2YivvpV6C+hfNgHHOu
+         tW8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUQIJkIHJLczSP7agJiUkrRFHFn3J8nSzP/+whQ1ZJxBSiKIK/3rdh6HxjQv7v0syK2unZBqBhBOQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxTMLslhAuawozm1Z4o7s0tnIO7rqxAG7cZeDiz2C7ZJol6XhhK
+	OKOSYxCwfSWQsuRLa/OzOtJT5aiuan53DA+DcDkBZSQLd4yajJl9V+Tmvi51ig==
+X-Gm-Gg: ASbGnctLuqJlejRFgJeEaPWPKhU/cY7z+UTFQxIOTZ7e0dtYAnKQqWGE/qiCQHMpS+Z
+	Id5dHF3wKLjZGSAJjxlfy0dwTyk+Hzb3K56VL6JmcELLA/aFUQGxG+zFs07cgDtOV8ONiacIS9N
+	ZfMS2aTqK4vQquNUhnCaaUn1U1V5tBSjyubZk860LNJNYVahn18jo/uoHHr3Fmgh/rP+JC2NSXc
+	3KNO0d02Cnj0WIM+oO+YUUylbBIPIc5Ws9QFasayEMDXPfBdWILE/fAsuCeH3sm9H8=
+X-Google-Smtp-Source: AGHT+IHvoBuGe08qo2yEvL2GcLwase7T5VuaXPLzhbgmwOzxg/Nr7C9/tE4B78BHn6KoWJtSaarh9Q==
+X-Received: by 2002:a17:902:f648:b0:216:84f0:e33c with SMTP id d9443c01a7336-219da7ef985mr427820475ad.20.1735230143189;
+        Thu, 26 Dec 2024 08:22:23 -0800 (PST)
+Received: from thinkpad ([120.56.206.83])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9d4c89sm118912905ad.124.2024.12.26.08.22.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 26 Dec 2024 08:22:22 -0800 (PST)
+Date: Thu, 26 Dec 2024 21:52:15 +0530
+From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Christoph Hellwig <hch@lst.de>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Bjorn Helgaas <helgaas@kernel.org>, kbusch@kernel.org,
+	axboe@kernel.dk, sagi@grimberg.me, linux-nvme@lists.infradead.org,
+	linux-kernel@vger.kernel.org, linux-pci@vger.kernel.org,
+	andersson@kernel.org, konradybcio@kernel.org,
+	Len Brown <len.brown@intel.com>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH] nvme-pci: Shutdown the device if D3Cold is allowed by
+ the user
+Message-ID: <20241226162215.vnhidukzkzfhuwt2@thinkpad>
+References: <13662231.uLZWGnKmhe@rjwysocki.net>
+ <CAPDyKFrxEjHFB6B2r7JbryYY6=E4CxX_xTmLDqO6+26E+ULz6A@mail.gmail.com>
+ <20241212151354.GA7708@lst.de>
+ <CAJZ5v0gUpDw_NjTDtHGCUnKK0C+x0nrW6mP0tHQoXsgwR2RH8g@mail.gmail.com>
+ <20241214063023.4tdvjbqd2lrylb7o@thinkpad>
+ <20241216162303.GA26434@lst.de>
+ <CAJZ5v0g8CdGgWA7e6TXpUjYNkU1zX46Rz3ELiun42MayoN0osA@mail.gmail.com>
+ <dd557897-f2e0-4347-ae67-27cd45920159@oss.qualcomm.com>
+ <20241221033842.6nvmd4clkb3r4roh@thinkpad>
+ <a514f047-d56e-40a1-ad36-b655cc8cddb7@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V6 1/4] interconnect: qcom: Add multidev EPSS L3 support
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Konrad Dybcio
-	<konrad.dybcio@oss.qualcomm.com>
-CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        "Mike
- Tipton" <quic_mdtipton@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20241125174511.45-1-quic_rlaggysh@quicinc.com>
- <20241125174511.45-2-quic_rlaggysh@quicinc.com>
- <2b95cc25-a842-4edd-a5f3-2351038d264e@oss.qualcomm.com>
- <5egskepgsr52ulnbw7jhvazfjayg5ge5vhg6pi7mllyxx2vwqw@a2ojvabzd36o>
- <0881289f-db05-4e33-91a7-ffd415c2f37e@oss.qualcomm.com>
- <b2zicviv7nyl3izj2fzwzm2cp5phlxufaaoyi7e3g3iyxcyw56@iufgz33tsk33>
-Content-Language: en-US
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <b2zicviv7nyl3izj2fzwzm2cp5phlxufaaoyi7e3g3iyxcyw56@iufgz33tsk33>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: A9yg5quDy3VUFdUWd3ivV4YfB9OYoBb6
-X-Proofpoint-ORIG-GUID: A9yg5quDy3VUFdUWd3ivV4YfB9OYoBb6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 adultscore=0
- priorityscore=1501 malwarescore=0 phishscore=0 lowpriorityscore=0
- bulkscore=0 mlxlogscore=999 clxscore=1015 spamscore=0 impostorscore=0
- suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412260143
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <a514f047-d56e-40a1-ad36-b655cc8cddb7@oss.qualcomm.com>
 
-
-
-On 11/30/2024 9:02 PM, Dmitry Baryshkov wrote:
-> On Sat, Nov 30, 2024 at 04:12:49PM +0100, Konrad Dybcio wrote:
->> On 30.11.2024 4:09 PM, Dmitry Baryshkov wrote:
->>> On Sat, Nov 30, 2024 at 01:49:56PM +0100, Konrad Dybcio wrote:
->>>> On 25.11.2024 6:45 PM, Raviteja Laggyshetty wrote:
->>>>> EPSS on SA8775P has two instances which requires creation of two device
->>>>> nodes with different compatible and device data because of unique
->>>>> icc node id and name limitation in interconnect framework.
->>>>> Add multidevice support to osm-l3 code to get unique node id from IDA
->>>>> and node name is made unique by appending node address.
->>>>>
->>>>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->>>>> ---
->>>>
->>>> [...]
->>>>
->>>>> +	ret = of_property_read_reg(pdev->dev.of_node, 0, &addr, NULL);
->>>>> +	if (ret)
->>>>> +		return ret;
->>>>> +
->>>>>  	qp->base = devm_platform_ioremap_resource(pdev, 0);
->>>>>  	if (IS_ERR(qp->base))
->>>>>  		return PTR_ERR(qp->base);
->>>>> @@ -242,8 +262,13 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->>>>>  
->>>>>  	icc_provider_init(provider);
->>>>>  
->>>>> +	/* Allocate unique id for qnodes */
->>>>> +	for (i = 0; i < num_nodes; i++)
->>>>> +		qnodes[i]->id = ida_alloc_min(&osm_l3_id, OSM_L3_NODE_ID_START, GFP_KERNEL);
->>>>
->>>> As I've said in my previous emails, this is a framework-level problem.
->>>>
->>>> Up until now we've simply silently ignored the possibility of an
->>>> interconnect provider having more than one instance, as conveniently
->>>> most previous SoCs had a bunch of distinct bus masters.
->>>>
->>>> Currently, debugfs-client.c relies on the node names being unique.
->>>> Keeping them as such is also useful for having a sane sysfs/debugfs
->>>> interface. But it's not always feasible, and a hierarchical approach
->>>> (like in pmdomain) may be a better fit.
->>>>
->>>> Then, node->id is used for creating links, and we unfortunately cannot
->>>> assume that both src and dst are within the same provider.
->>>> I'm not a fan of these IDs being hardcoded, but there are some drivers
->>>> that rely on that, which itself is also a bit unfortunate..
->>>>
->>>>
->>>> If Mike (who introduced debugfs-client and is probably the main user)
->>>> doesn't object to a small ABI break (which is "fine" with a debugfs
->>>> driver that requires editing the source code to be compiled), we could
->>>> add a property within icc_provider like `bool dynamic_ids` and have an
->>>> ICC-global IDA that would take care of any conflicts.
->>>
->>> Frankly speaking, I think this just delays the inevitable. We have been
->>> there with GPIOs and with some other suppliers. In my opinion the ICC
->>> subsystem needs to be refactored in order to support linking based on
->>> the supplier (fwnode?) + offset_id, but that's a huuuge rework.
->>
->> I thought about this too, but ended up not including it in the email..
->>
->> I think this will be more difficult with ICC, as tons of circular
->> dependencies are inevitable by design and we'd essentially have to
->> either provide placeholder nodes (like it's the case today) or probe
->> only parts of a device, recursively, to make sure all links can be
->> created
+On Sat, Dec 21, 2024 at 12:17:02PM +0100, Konrad Dybcio wrote:
+> On 21.12.2024 4:38 AM, Manivannan Sadhasivam wrote:
+> > On Fri, Dec 20, 2024 at 04:15:21PM +0100, Konrad Dybcio wrote:
+> >> On 16.12.2024 5:42 PM, Rafael J. Wysocki wrote:
+> >>> On Mon, Dec 16, 2024 at 5:23 PM Christoph Hellwig <hch@lst.de> wrote:
+> >>>>
+> >>>> On Sat, Dec 14, 2024 at 12:00:23PM +0530, Manivannan Sadhasivam wrote:
+> >>>>> We need a PM core API that tells the device drivers when it is safe to powerdown
+> >>>>> the devices. The usecase here is with PCIe based NVMe devices but the problem is
+> >>>>> applicable to other devices as well.
+> >>>>
+> >>>> Maybe I'm misunderstanding things, but I think the important part is
+> >>>> to indicate when a suspend actually MUST put the device into D3.  Because
+> >>>> doing that should always be safe, but not always optimal.
+> >>>
+> >>> I'm not aware of any cases when a device must be put into D3cold
+> >>> (which I think is what you mean) during system-wide suspend.
+> >>>
+> >>> Suspend-to-idle on x86 doesn't require this, at least not for
+> >>> correctness.  I don't think any platforms using DT require it either.
+> >>
+> >> That would be correct.
+> >>
+> >> The Qualcomm platform (or class of platforms) we're looking at with this
+> >> specific issue requires PCIe (implying NVMe) shutdown for S2RAM.
+> >>
+> >> The S2RAM entry mechanism is unfortunately misrepresented as an S2Idle
+> >> state by Linux as of today, and I'm trying really hard to convince some
+> >> folks to let me describe it correctly, with little success so far..
+> >>
+> > 
+> > Perhaps you should say 'S2RAM is misrepresented as S2Idle by the firmware as of
+> > today'...
+> > 
+> > But I'll leave it up to the PSCI folks to decide whether it makes sense to
+> > expose PSCI SYSTEM_SUSPEND through CPU_SUSPEND or not.
 > 
-> Or just allow probing, but then fail path creation. It will be a
-> redesign, but I think it is inevitable in the end.
+> The firmware happily performs the actions required to put the platform
+> in S2RAM, but the interface used to request entry (CPU_SUSPEND) is
+> mostly used for entering CPU/cluster idle states on arm64.
+> 
+> (although the PSCI spec also clearly states that using CPU_SUSPEND for
+> system-level low power states is allowed *plus* the reference
+> implementation literally just calls CPU_SUSPEND internally whenever
+> the """proper""" SYSTEM_SUSPEND call is used, anyway)
 > 
 
-There are no two instances of l3 or NoC on any SoC except qcs9100 and
-qcs8300. I dont expect any new SoC as well.
-As second instance is needed only on qcs9100 and qcs8300, I am keeping
-the patch (patchset v6) as is and limit the dynamic id addition to l3
-provider only.
+Ok, sounds fair.
 
->>
->> Konrad
->>
->>>> Provider drivers whose consumers don't already rely on programmatical
->>>> use of hardcoded IDs *and* don't have cross-provider links could then
->>>> enable that flag and have the node IDs and names set like you did in
->>>> this patch. This also sounds very useful for icc-clk.
->>>
+> > 
+> > For the people in this thread, I'm leaving the link to the PSCI discussion here:
+> > https://lore.kernel.org/all/20241028-topic-cpu_suspend_s2ram-v1-0-9fdd9a04b75c@oss.qualcomm.com/
+> > 
+> >> That is the real underlying issue and once/if it's solved, this patch
+> >> will not be necessary.
+> >>
+> >>> In theory, ACPI S3 or hibernation may request that, but I've never
+> >>> seen it happen in practice.
+> >>>
+> >>> Suspend-to-idle on x86 may want devices to end up in specific power
+> >>> states in order to be able to switch the entire platform into a deep
+> >>> energy-saving mode, but that's never been D3cold so far.
+> >>
+> >> In our case the plug is only pulled in S2RAM, otherwise the best we can
+> >> do is just turn off the devices individually to decrease the overall
+> >> power draw
+> >>
+> > 
+> > I don't think this is accurate. Qcom FW (the one we are discussing in this
+> > thread) doesn't pull the plug (except on platforms like x13s due to hw
+> > limitation). On ACPI though, the FW *might* pull the plug, so that's why drivers
+> > prepare the devices by powering down them (largely) if pm_suspend_via_firmware()
+> > succeeds. On Qcom platforms, we are trying to allow the SoC to transition to low
+> > power state and that requires relinquishing the resource votes by the drivers.
+> 
+> Look, I have a power measurement device before my eyes and I clearly see
+> the main power rail being cut on successful S2RAM entry.
 > 
 
+You seem to have misunderstood what I said. I do *know* the power state of the
+SoC when it enters the CX power collapse state. What I said was in the case of
+ACPI, it powers down the peripherals in S3 without any SW dependency (except for
+wakeup capable devices). But in Qcom case, each driver has to relinquish the
+vote for the SoC to enter CX collapse state. But anyhow, the difference doesn't
+matter much here as all drivers need to drop the vote except in wakeup path.
+
+- Mani
+
+-- 
+மணிவண்ணன் சதாசிவம்
 
