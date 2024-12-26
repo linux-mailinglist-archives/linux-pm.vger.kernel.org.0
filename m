@@ -1,115 +1,88 @@
-Return-Path: <linux-pm+bounces-19767-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19768-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8DE69FCC8B
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2024 18:56:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 60BD19FCCA8
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2024 19:28:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 76DA11602A1
-	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2024 17:56:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 08D60162B0F
+	for <lists+linux-pm@lfdr.de>; Thu, 26 Dec 2024 18:28:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74696142E77;
-	Thu, 26 Dec 2024 17:56:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BAAF1D61AA;
+	Thu, 26 Dec 2024 18:27:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Au/+jhPe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nVsLKle9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f174.google.com (mail-il1-f174.google.com [209.85.166.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C39B813B780
-	for <linux-pm@vger.kernel.org>; Thu, 26 Dec 2024 17:56:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EF041D5CFA;
+	Thu, 26 Dec 2024 18:27:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735235793; cv=none; b=YfW2oDTGN1Tm+Adav9K9fpIma4Agxj0zVRRuaWLPyHO4DXpur8CdT1op0ZAeE51xfUkAsf6e0RooM3vdiBqVcyJJQBEuUk6VJEBtRaw0waq5OVsv+VH+OFBb6hyxkHIqTdbAV5X2yC6Luuvu/znVYC7G07hJtS9E8GjSfjRZbSo=
+	t=1735237640; cv=none; b=QsmR7Rb5iR9UR67SWFm+kQfVD//pNqO/FY2MlpAgNAvZ9wMKWY2FY3d/jZGDxatXypTA4tbXRCiBSWFnw0iic22ZdeIaNJ4VBrHpLPnpLVonInHk7zyUs5+VrWeWuyQvm/53WMMLF6V5nVLPA3wm/3d4OKwXS+2r+hblEeNMoU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735235793; c=relaxed/simple;
-	bh=M2PH08CsesUP6tXYAmNF9noNelaV+3uiedlZxgtQpYg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=JgaB9E/MHUKsRXgaLNMGd/kaksfynmPqsipYl60HzHx/oBMdjGw6x17mA0u8Rt+AScZKQmMQpcs2N8ni896xfDZugVWgdPT9DAA8CqRsLFbzR7EvEajGwj4StZOIpFx7+9qygixzs3PZHQVSLVCnQ7sR3MwAyMCseAGkdjg96hM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Au/+jhPe; arc=none smtp.client-ip=209.85.166.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f174.google.com with SMTP id e9e14a558f8ab-3a9caa3726fso22964425ab.1
-        for <linux-pm@vger.kernel.org>; Thu, 26 Dec 2024 09:56:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1735235791; x=1735840591; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=DEAYaQoQFtrQwUZktkiFbLCglG9SJB+JzX3zNkxnsWQ=;
-        b=Au/+jhPeaI0iuFDuuVmc64h+VcT/tOHpPThxHHFTCo8pL6f3p6h0Q2syW+S8woDlHY
-         p54NRC/QpU7cPUrn0k58UgEJ+pB4cbBXRqJbSs2obcM13HjxyZj65hoLvHfHL5KwOxrx
-         uvIK/IEshoEfmVG/Wb7m+jWoAIo6wSAJhysbM=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735235791; x=1735840591;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=DEAYaQoQFtrQwUZktkiFbLCglG9SJB+JzX3zNkxnsWQ=;
-        b=hOW/YRbpRHP1NuP8AtPZqISJOaOWZXj8zxtPmf6Y2FPr0bTmunLTdf6FjaHl8UZoAF
-         T6RoF1z3A99nlhjmubZ3YjYmlIx7NstQyb05LY6FZ/zMrXawMd/UDMsMPa4gTgl5vUpy
-         tzr1LKNiR+7mo31yKzNZcpELC0g+/pWsA/XMO84RQ8WKgU77KlA6cX1bAz3UJFgsLe/x
-         yM3wxQ9owPIvePOe2cDq9Y+iqZ2z0MJYyPcDC6NbZAjHSOn8lteV2eSlTtho2A50hK9v
-         TdZ6Wo8AvijdRhlDgo7m5WgHjR6ZDlnNPFLFLDNn82PFJs1z1GyvXlFFgBD871z8x09f
-         B2/w==
-X-Gm-Message-State: AOJu0YyuVuODWh2cdko6yyPrZ3m8evPXk0Pc8np/tzQNpZlsDK/NyJmx
-	NvBDe8tlKrJRNpoCCQ8j9BHoHFJ3EwxVtzvaXfIUzkYvGzZBOXM0dW6+K/7XOPM=
-X-Gm-Gg: ASbGnctUfIvn1C1cfnGRbSdqOsYKE5F8ZIoiQZGXuKGrDliK7ghXoMYD2H6SFYN880u
-	JFf5yCg004ip4G3teREwQCcoSapzVBUbbwMpFoNCgf+JUztpac8vmy0IdPz4GFQEqEOHAy8Gfq/
-	YKGseqMSr76hI4D/t5fRgzztf10aH+kWIXGmHoWaecr+bXObo4OTj1enKRURLLBHGhzLO8XP5JK
-	NNh0ZZfmSa4gu2ylD46ZxOj7qm+AaFJIh/2gjMhySaag1Adxy+dV3yjc6EVWeOEMNOB
-X-Google-Smtp-Source: AGHT+IGQcyerPq2LPJWEn0ElherSriFY4zOl7KaXNRRiSCMlcKWgWPm1id5YQJfoljn9U38+5DtC1A==
-X-Received: by 2002:a05:6e02:3c86:b0:3a9:d32c:d312 with SMTP id e9e14a558f8ab-3c02f9e9555mr252943675ab.9.1735235790765;
-        Thu, 26 Dec 2024 09:56:30 -0800 (PST)
-Received: from [192.168.1.128] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4e68bf508acsm3597029173.30.2024.12.26.09.56.30
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 26 Dec 2024 09:56:30 -0800 (PST)
-Message-ID: <4fe9560f-2e0c-42eb-a67e-4d1c5382bae1@linuxfoundation.org>
-Date: Thu, 26 Dec 2024 10:56:29 -0700
+	s=arc-20240116; t=1735237640; c=relaxed/simple;
+	bh=xJC9Nm0YHwJstoJ4lo3nMMA7t8v/iMOSBA6NUo2yGWg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=c6Gh2NsgGFrZVOTIYBghmXHKeM4QxfOSYSm5Xngjh+SbtNVu5jDWIgQDkmTKoHfx6Ad4oJtnnbSOBvWKFTVoSZPtQb3gcsEzuHM7kCEdnNjat2Fe3Ea0VIHMXxtRCARAd1Ze2f3Ooov01gP53ZT40FgyYsNKjdN+5OqKoajwt7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVsLKle9; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0BDD5C4CED6;
+	Thu, 26 Dec 2024 18:27:17 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735237638;
+	bh=xJC9Nm0YHwJstoJ4lo3nMMA7t8v/iMOSBA6NUo2yGWg=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=nVsLKle9jLY2CAfCHHV4TBcaXid+hYjqIuejZsZDa/5fN8WV8Bc9W1oB56YsT88lY
+	 GHZE37ASl5L2FOgcaD0kHJ57bIGeg/0Aj+DfP/Q60hR7iQ256XpJeyTGy/4oz92hf5
+	 xUcHK83PM9zn06Zf3Z8uf3ZPWOIQacJzYIctJSLJekcoPz2Wspo8Rcj9NeEui+NHGJ
+	 aKsFI8KuyikCVcG2DWYfcd6GrCUf9gjDiKzAZqp+0eCfKToU/T4ZK3l8y3oAD8W5Am
+	 MgRej6EWD254NoXEm4/0ZQXy4GbGS5Vu8uGeYgrqaS9VcftMoCJYlDW8ZFzx8eoq/h
+	 bVYoymCbq0lYQ==
+From: Bjorn Andersson <andersson@kernel.org>
+To: linux-arm-msm@vger.kernel.org,
+	sboyd@kernel.org,
+	Eugen Hristev <eugen.hristev@linaro.org>
+Cc: linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	konradybcio@kernel.org,
+	evgreen@chromium.org
+Subject: Re: [PATCH v4] soc: qcom: Rework BCM_TCS_CMD macro
+Date: Thu, 26 Dec 2024 12:26:37 -0600
+Message-ID: <173523761394.1412574.5233882312649238359.b4-ty@kernel.org>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <20241129142446.407443-1-eugen.hristev@linaro.org>
+References: <20241129142446.407443-1-eugen.hristev@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] pm: cpupower: Add header changes for cpufreq.h to SWIG
- bindings
-To: "John B. Wyatt IV" <jwyatt@redhat.com>, Thomas Renninger <trenn@suse.com>
-Cc: linux-pm@vger.kernel.org, Mario Limonciello <mario.limonciello@amd.com>,
- Shuah Khan <shuah@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
- "John B. Wyatt IV" <sageofredondo@gmail.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20241224062329.39606-1-jwyatt@redhat.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20241224062329.39606-1-jwyatt@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-On 12/23/24 23:23, John B. Wyatt IV wrote:
-> "cpupower: Add support for showing energy performance preference" added
-> two new functions to cpufreq.h. This patch adds them to the bindings.
+
+On Fri, 29 Nov 2024 16:24:46 +0200, Eugen Hristev wrote:
+> Reworked BCM_TCS_CMD macro in order to fix warnings from sparse:
 > 
-> Link: https://lore.kernel.org/linux-pm/8dc731c3-6586-4265-ae6a-d93ed219a963@linuxfoundation.org/T/#t
+> drivers/clk/qcom/clk-rpmh.c:270:28: warning: restricted __le32 degrades to integer
+> drivers/clk/qcom/clk-rpmh.c:270:28: warning: restricted __le32 degrades to integer
 > 
-> Tested by compiling both libcpupower and the headers; running the test
-> script that does not use the functions as a basic sanity test.
+> While at it, used u32_encode_bits which made the code easier to
+> follow and removed unnecessary shift definitions.
 > 
-> Signed-off-by: "John B. Wyatt IV" <jwyatt@redhat.com>
-> Signed-off-by: "John B. Wyatt IV" <sageofredondo@gmail.com>
-> ---
+> [...]
 
-Thank for the patch. Applied to
+Applied, thanks!
 
-https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/?h=cpupower
+[1/1] soc: qcom: Rework BCM_TCS_CMD macro
+      commit: 2705bce5b4c45e2a0a354ec4df937d2803241cd8
 
-This patch will be included in the 6.14-rc1 pull request to Rafael.
-
-thanks,
--- Shuah
+Best regards,
+-- 
+Bjorn Andersson <andersson@kernel.org>
 
