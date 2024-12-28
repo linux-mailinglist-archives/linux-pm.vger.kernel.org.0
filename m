@@ -1,84 +1,84 @@
-Return-Path: <linux-pm+bounces-19811-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19812-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97FAC9FDC70
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2024 23:55:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73E079FDC76
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2024 23:56:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 499861613F6
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2024 22:55:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C91D53A1556
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2024 22:56:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D654919885F;
-	Sat, 28 Dec 2024 22:55:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 01AB9194A73;
+	Sat, 28 Dec 2024 22:56:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jmdnptxK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rQJx0q36"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DBE7770E2
-	for <linux-pm@vger.kernel.org>; Sat, 28 Dec 2024 22:55:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51FCA1531C0
+	for <linux-pm@vger.kernel.org>; Sat, 28 Dec 2024 22:55:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735426525; cv=none; b=TTNUTapNj4DSnKdPG/jae9BvBput6jpaa76RQhc0/NzT7TBPqCPFCtYZPexpjv+Z9k2wbPwdG3mXuNCh5/6tJZ9l62Bli224Zr795dWBUmxmQ8eZaNbopJXE5eayVQK8OxCaPOZK3lIJlJOlCPMInTZCikaFiMsMZc4gflsBoWA=
+	t=1735426559; cv=none; b=J9UtBfYbRYVAo1JTN6hkZoBnCbwKcmHgHjggQqsa/4nwx033YsJDKIQigBuhYcjVDwiAdtMa9FUQO4LqcuiEWfoi19SVxeEWRaD53gyXkI3oxk1xt4A22ZZHzrpYZuLH/y09+MhWSALh6KvrPg/fGTlkkyzd/nvLI0oER2afMd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735426525; c=relaxed/simple;
-	bh=ma5+6x4L6RmgRS3yZ8s305V7iJUxY/Vzh6XEkM9c4sU=;
+	s=arc-20240116; t=1735426559; c=relaxed/simple;
+	bh=Og/Ya+X+3++Et3/7WcbZEScyD/vU8dvbGouUjKmS+Yg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=YPxy2fjMmjFsNs4Pbmn9/W/f1O6xQVJQ51ABvLTnhO9YC5MQVcNwokPkmso/+VX9HWBn66PIDptMOFtbyivtkcpwLKlMGSaXFRhalp6BqgWyd6lJRc1DGEy6Pvr8o0LEoSHj+VVdxRz0zLgVNjqYypGq9NB6V9sxLosuqRp8948=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jmdnptxK; arc=none smtp.client-ip=209.85.167.50
+	 To:Cc:Content-Type; b=ZNWqLUMoxypHaZosyGq2w/+14Tp/axke7PoILs7zasDnXGVqMfrgT+GVfeKpAw3qkICqUrvOqjOIYsXDwYOe5WH1bXOQQymK6uGBFmxI1VYnObSwPy/0hgvyF+mu3c9YeQnFKFVLisifd9aTryAdMX8vyICRLxtYEYyQz2ZR2pw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rQJx0q36; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-53e3a227b82so7822626e87.0
-        for <linux-pm@vger.kernel.org>; Sat, 28 Dec 2024 14:55:22 -0800 (PST)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5401bd6cdb7so9064597e87.2
+        for <linux-pm@vger.kernel.org>; Sat, 28 Dec 2024 14:55:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1735426521; x=1736031321; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1735426556; x=1736031356; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ma5+6x4L6RmgRS3yZ8s305V7iJUxY/Vzh6XEkM9c4sU=;
-        b=jmdnptxKkl79Plu61bNDKEEMlk/nTlELUMqzvaFPUB8R/4+9oxKPERsZQmGTYsGuT8
-         1vUu739fLVz7Mr/w8UkBvMy0f6o/X08kUqwMTJ2t2AyZslb5tcNIPUwkLFx7uKw24CA+
-         WfXOzAVZlxupAqc8I+rKVfrWg7/3IxDXfWVOHmHf/X+2vKcghnbVKheTWRVcfPn2RwgQ
-         UV8E97tFta2OMrFHtfJbfGjHCLVD4nTyEpAX9yI267YsgOZedWcXAofISxUU8WTmujpX
-         E4c2RARwbv2YrTIAdz2UnOdo4lRe0b3PLXtj0lOpqlN965JrDzs40otT42Za+OR6nx/a
-         tQOQ==
+        bh=Og/Ya+X+3++Et3/7WcbZEScyD/vU8dvbGouUjKmS+Yg=;
+        b=rQJx0q368x3w9zAL1TOJsbAVl/tJqWQthYrQHZ3dPmiw1tNxMbEAkaaw9Q2nOwcLFl
+         +rNajV3RXS7Zw6K74cyOCL4XymdNlYbhBNIBjwFSxO2JmEcR6bfPwOB+Wkmy3bVgpmIf
+         l+f7I0t0rIWU0irJFAMJWdGAYhbNvhIaKK0a8TAIYAcgPPW7uLwUFNavtto4r8H/Ykjs
+         5YjKfAIPIwe3ZT+4CmWJlGttLYGDdT3jY8QNZNfDoI+xobA7wathITRBzbwl4YUt+Lpp
+         0jI+mIPy4kPNIL7GKFItZyHm/8z/1KCxbWFMk73T/7KiwSRXsx+mEmbTL8Qw0DhuqbuX
+         5Fbw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735426521; x=1736031321;
+        d=1e100.net; s=20230601; t=1735426556; x=1736031356;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ma5+6x4L6RmgRS3yZ8s305V7iJUxY/Vzh6XEkM9c4sU=;
-        b=Kx5a3NDBloGil2MfN2yHUaB9nniVDH7sf7o+svZzOoWkD1SIyg/haFRWdBB3I41VFF
-         Y5rnjvVqdCWHCK4uF5JfiyeCAmLWo38Vv3HROaqL8pYH0Srd694o5IXxaR/B9UCzbKLf
-         CKLu9B3iSBXiP2cb4hVpbmtZlO5flH1lqfi/BkuFiVv9Q6LiW5YwikKnFYx3s+NiTKFt
-         cNiL38UkkgW7bi5t+oqVunB81R6q8Uah+PCvqQwt5QML++8KuVNcgmdAuDYirw4a8m/5
-         NXbgrYq+mL8m6UfFewFaDwHV2uLsW2J5wLj74/ZZm7GCeu1ZCiyOiF0q2KYXqh3t/O05
-         BP1A==
-X-Forwarded-Encrypted: i=1; AJvYcCU9z8Des+u4XcNYIu7g7uwXX/gGWLMC2ohW4Fn5ZGaU5ZJa5YZvRTCFUmHWUmKPrb12wEkneiPhkA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBPxg6ucyX9k2Mjg9wNcxxVHGxVnwJwWpqbklvmM+T8nTwEbux
-	D5ogWMzKYXOisCEYCQEC7l6qs4kvqs8fQuaroibT46XJRfzyXOxfIWE8SxEgJsHzHB6+1kVBcq4
-	Ccc1SNj+hDCe7MKSZo8nr8gKhvfeVBUoM6ixT/A==
-X-Gm-Gg: ASbGncvQhIahtJnq7taXjGpGRYpLdyBpSen4Q693JEzeis2jYK4LdWuQtgnF9JvHEEU
-	nlgGeZzyu//FaCSdUn3g+Ra/zlr+MAHPXqeKE
-X-Google-Smtp-Source: AGHT+IEeHS7qBCOkGJkLci2K1l4MO3cQjjPsp4mJA4mp2Fct0kochwX6HgM8ASkaZLPLeUe5QHN30KZL6jeoExuit3I=
-X-Received: by 2002:a05:6512:ba6:b0:540:2160:ade3 with SMTP id
- 2adb3069b0e04-5422953c19cmr7875781e87.25.1735426521162; Sat, 28 Dec 2024
- 14:55:21 -0800 (PST)
+        bh=Og/Ya+X+3++Et3/7WcbZEScyD/vU8dvbGouUjKmS+Yg=;
+        b=ZjyGmii6RovMi70vG2UtV0a3/xnbRwIKAb7hgQsqk/m61wi8hKpYwsqlQ13HEWMuRc
+         dkQXaBwqMBKn2nWCm1LYbOxR96uz6eC585EjPB2cMYXx6z4lyDM/jmEuYCOI7z9iXDmn
+         GyymEon15ByiNOhcg7LzsJeXU1Sv8qzL1h9Tbh8LJqytjV6jYwY3ZTTsKdQraDCImgV2
+         YB16o1Vnusst9GagZJeFyd4Zn3kSQ0AV1i3THxMekh0Ic/LqxezYSYhwfYuPsq1SVnyu
+         f2BYKe/V4ZSrhHPG0Y0Khn21gByQHZgIojYJDsNLDJW6EwZFLNOw2xYunWDWUG5cQHoU
+         E9yw==
+X-Forwarded-Encrypted: i=1; AJvYcCUoLzFg/K8Ef2M4JEp3uc1Ci13WoJ9skhpzpctTxJ7XXL/IQgFOKDDW+4ImDkNTYIAa8P0h0ssFtg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7aWoR3wI10Ybz21gGffxvV9kAZ1J6r6ofYVWHG/1N4+NgI0Hz
+	/cxzOvhQYLP9g25REOwdwCvio7OZizo7xvCtk366vfxPW66DSdVqcWnw5FWvCDM1D+rpyr8I50r
+	niGVlyFalUX/oTZQ/U8hDP19+JoqUN1wmMfrHpA==
+X-Gm-Gg: ASbGncsm4eVQTfjIk4X3JG5R3k9OHfPxAogon/9zyn9mP0fWu3wDVirlSuVbnrs5nWm
+	kqOUa+w80lmYFIfTApOXslOJRb+u2kWqm3scu
+X-Google-Smtp-Source: AGHT+IEOcI/QKkD3AUBydUx80A/BH8Zb+xNHEVzuo3JP6PjvydFsYRRsKbYFCgVkNWvtDpuRPklRSeHgUyviYhKsrpU=
+X-Received: by 2002:a05:6512:2246:b0:542:2e04:edd1 with SMTP id
+ 2adb3069b0e04-5422e04f073mr6848917e87.42.1735426556517; Sat, 28 Dec 2024
+ 14:55:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241228-wake_irq-v1-0-09cfca77cd47@nxp.com> <20241228-wake_irq-v1-10-09cfca77cd47@nxp.com>
-In-Reply-To: <20241228-wake_irq-v1-10-09cfca77cd47@nxp.com>
+References: <20241228-wake_irq-v1-0-09cfca77cd47@nxp.com> <20241228-wake_irq-v1-12-09cfca77cd47@nxp.com>
+In-Reply-To: <20241228-wake_irq-v1-12-09cfca77cd47@nxp.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Sat, 28 Dec 2024 23:55:10 +0100
-Message-ID: <CACRpkdYaWTdOoLXcpWG92+OyRwsPMxMbhQ6djdzO07x0sPz4oQ@mail.gmail.com>
-Subject: Re: [PATCH 10/12] rtc: ab8500: Use resource managed API to simplify code
+Date: Sat, 28 Dec 2024 23:55:45 +0100
+Message-ID: <CACRpkdaTBSpk7wToj2TLS1Tgj2cshuSrYgEm4bj-WmFSVohYoQ@mail.gmail.com>
+Subject: Re: [PATCH 12/12] rtc: pl031: Use resource managed API to simplify code
 To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
@@ -102,7 +102,6 @@ m> wrote:
 >
 > Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
-This looks very nice provided the core code is merged.
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
 Yours,
