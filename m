@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19802-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19803-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CD1D9FD9AD
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2024 10:54:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD6F99FD9B2
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2024 10:58:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0DE727A1D40
-	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2024 09:54:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C14E1883665
+	for <lists+linux-pm@lfdr.de>; Sat, 28 Dec 2024 09:58:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D2AC12B169;
-	Sat, 28 Dec 2024 09:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4991C136672;
+	Sat, 28 Dec 2024 09:58:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Yf5mehRO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Xun8O2wc"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D159A3D76;
-	Sat, 28 Dec 2024 09:54:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 088E612BF02;
+	Sat, 28 Dec 2024 09:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735379662; cv=none; b=AGOSV7eX7OlIne3zTF4A9ZSETK20v06Hj9UTqAKU/y5TGSDEAU6tv9cu5BI17spzU1jJt0IgLPLMkHe2UKehZXUfCIOL8Z6FCL8etHwXLikk+OvDfJGTDm3Ss2MHmNkSsOGs1xxXmQopmINiyPoe2pFREXQarbML+cH1UcqBAqI=
+	t=1735379919; cv=none; b=kwOxFEkDjMHv9naPqX0Gk4WtvBOwoHHtDggndG8LU+20nOa9tyE+kTecnta8NwP+HDCTL8477PhuC8d3fSEB9SFoCJ/F+pEvqJWmEV+ttttl6o6Xm3DmB2ov0923qvOZFiOjuz9qH9tH95FBZorMpkaqvwxJkmpj48CaHWuvs0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735379662; c=relaxed/simple;
-	bh=FcnIkqxzD71OecOca/4hQUSkp6GWUTNw42/pT5ECcR8=;
+	s=arc-20240116; t=1735379919; c=relaxed/simple;
+	bh=+P+kLl/ocrOolz4XU71E8/be56fO/YCwnH1ig+LcgzU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ZC1IVaNUuE5/Q3a2qoSgt88gEJI/LJb8x1cE1V2sPUf7OdxWvItA4GxcKgVtqqaUSLp4Y43Fy9IP7XXh+91Qo0z543zqj1x8AYkuWZ4EnpWZPuOa1BjwVVKQAIsK4vi2HqyEIBuLSmR8jfSckjoR8ttZzPPsWtRaoodQ+Xau0dU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Yf5mehRO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 29950C4CECD;
-	Sat, 28 Dec 2024 09:54:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=AfFI+9upAoxqwDclnROA4XZp/y84hi9Nwcwgqf4zq30luWntyTkSp09L5C35ZYoqRJiSvptGbSbo7T4gxWQXc0EV/TOcqoN6n2fL05w1pXKk577VK80kInQeOGtmxVZR3dhYsN9pNenhW5yVgJOpDf8dZIVBNlDc+U0ID3WPQzY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Xun8O2wc; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E4AC4CECD;
+	Sat, 28 Dec 2024 09:58:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735379661;
-	bh=FcnIkqxzD71OecOca/4hQUSkp6GWUTNw42/pT5ECcR8=;
+	s=k20201202; t=1735379918;
+	bh=+P+kLl/ocrOolz4XU71E8/be56fO/YCwnH1ig+LcgzU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Yf5mehROfnmdFJwje+p2W54VMnQBBOuAy/qy3e950uz8gncXFqPFtmuvxjooVGfYL
-	 3bL47EUFcJvCi1gShRdjQdLURj49eF+f4SHVF9Ow6FtjqxSLkI1CIsgtlroQ5hNNyP
-	 MzAprc2uvSHB38boDntx0I+xGuqzZn7muHFXIPcJ5a4uvSFwPh/4mMY7Fp4OKaJCyq
-	 3EuUpAG5DedhiOUbjtnGQg7tNfdtfWTpkW5DjwsIz/hrxYPZ0bbbNM9BHvfcmIeDBK
-	 a03Tgy/oPBxir6aW/7KHI0NgQFhDUVc6LrxrxO1CmsiUzx9CpYeiKIaIMO2U+RF96M
-	 xlhUK3xwa0mEQ==
-Message-ID: <705f52a9-562b-4b17-8b28-ee837b41ea7d@kernel.org>
-Date: Sat, 28 Dec 2024 10:54:12 +0100
+	b=Xun8O2wcRIQGZYxruskToO114BgAscem/sl8u+EGgBY8W1fdhmXsylOzjT8xVoMM5
+	 y1b5L/r7aud116hSpHPmKzlIXZSnN89XGiyO9YncCKSbPH2dnM7H2opRDOmVkpYajJ
+	 UO2au1o3UgVurfcfChd5VO7di1fCWYXZrS1BRoY1ugj79LyjC1kJTcRlvi4cOvWeme
+	 lW+wMw6uOQGE5Cv1hH+c7gD1ddblYpOHQEOVLg/qQTPwwQEWjmyBqFw8Z55KSZweqz
+	 /rXtgJ9Px1HfcIBX8Jphgcplji85a7+oOSlTKiaX3z+VeEnPjXLPNrReDKCEdu+hl3
+	 CASgENHI1JHDw==
+Message-ID: <53da6468-501c-4c0f-a73b-4eac99c72b8c@kernel.org>
+Date: Sat, 28 Dec 2024 10:58:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
+Subject: Re: [PATCH 2/5] platform: arm64: add Huawei Matebook E Go (sc8280xp)
+ EC driver
 To: Pengyu Luo <mitltlatltl@gmail.com>, Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
@@ -66,7 +67,7 @@ Cc: devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
  Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
  Nikita Travkin <nikita@trvn.ru>
 References: <20241227171353.404432-1-mitltlatltl@gmail.com>
- <20241227171353.404432-2-mitltlatltl@gmail.com>
+ <20241227171353.404432-3-mitltlatltl@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -112,79 +113,133 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241227171353.404432-2-mitltlatltl@gmail.com>
+In-Reply-To: <20241227171353.404432-3-mitltlatltl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 27/12/2024 18:13, Pengyu Luo wrote:
 > +
-> +description:
-> +  Different from other Qualcomm Snapdragon sc8180x sc8280xp based machines,
-> +  the Huawei Matebook E Go tablets use embedded controllers while others
-> +  use something called pmic glink which handles battery, UCSI, USB Type-C DP
-> +  alt mode. Huawei one handles even more, like charging thresholds, FN lock,
-> +  lid status, HPD events for the USB Type-C DP alt mode, etc.
+> +#include <linux/platform_data/huawei-gaokun-ec.h>
 > +
-> +properties:
-> +  compatible:
-> +    items:
-> +      - enum:
-> +          - huawei,sc8180x-gaokun-ec
-> +          - huawei,sc8280xp-gaokun-ec
+> +#define EC_EVENT		0x06
+> +
+> +/* Also can be found in ACPI specification 12.3 */
+> +#define EC_READ			0x80
+> +#define EC_WRITE		0x81
+> +#define EC_BURST		0x82
+> +#define EC_QUERY		0x84
+> +
+> +
+> +#define EC_EVENT_LID		0x81
+> +
+> +#define EC_LID_STATE		0x80
+> +#define EC_LID_OPEN		BIT(1)
+> +
+> +#define UCSI_REG_SIZE		7
+> +
+> +/* for tx, command sequences are arranged as
 
-sc8180x and sc8280xp are not products of Huawei, so you cannot combine
-them. Use compatibles matching exactly your device, because I doubt any
-of us has actual schematics or datasheet of that device.
+Use Linux style comments, see coding style.
 
-> +      - const: huawei,gaokun-ec
+> + * {master_cmd, slave_cmd, data_len, data_seq}
+> + */
+> +#define REQ_HDR_SIZE		3
+> +#define INPUT_SIZE_OFFSET	2
+> +#define INPUT_DATA_OFFSET	3
+> +
+> +/* for rx, data sequences are arranged as
+> + * {status, data_len(unreliable), data_seq}
+> + */
+> +#define RESP_HDR_SIZE		2
+> +#define DATA_OFFSET		2
+> +
+> +
+> +struct gaokun_ec {
+> +	struct i2c_client *client;
+> +	struct mutex lock;
 
-How did you get the name?
+Missing doc. Run Checkpatch --strict, so you will know what is missing here.
 
+> +	struct blocking_notifier_head notifier_list;
+> +	struct input_dev *idev;
+> +	bool suspended;
+> +};
 > +
-> +  reg:
-> +    const: 0x38
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  connector:
-> +    $ref: /schemas/connector/usb-connector.yaml#
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +    i2c15 {
 
-i2c
 
-> +        clock-frequency = <400000>;
-> +
-> +        pinctrl-names = "default";
-> +        pinctrl-0 = <&i2c15_default>;
 
-Drop all three above and test your bindings. This cannot work and test
-will tell you what is missing.
+...
 
 > +
-> +        embedded-controller@38 {
-> +            compatible = "huawei,sc8280xp-gaokun-ec", ""huawei,gaokun-ec";
-> +            reg = <0x38>;
+> +static DEVICE_ATTR_RO(temperature);
 > +
-> +            interrupts-extended = <&tlmm 107 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +            #address-cells = <1>;
-> +            #size-cells = <0>;
-> +
-> +            connector@0 {
+> +static struct attribute *gaokun_wmi_features_attrs[] = {
+> +	&dev_attr_charge_control_thresholds.attr,
+> +	&dev_attr_smart_charge_param.attr,
+> +	&dev_attr_smart_charge.attr,
+> +	&dev_attr_fn_lock_state.attr,
+> +	&dev_attr_temperature.attr,
+> +	NULL,
+> +};
 
-Test your bindings - you do not have node connector@0.
+
+No, don't expose your own interface. Charging is already exposed by
+power supply framework. Temperature by hwmon sensors. Drop all these and
+never re-implement existing kernel user-space interfaces.
+
+
+> diff --git a/include/linux/platform_data/huawei-gaokun-ec.h b/include/linux/platform_data/huawei-gaokun-ec.h
+> new file mode 100644
+> index 000000000..a649e9ecf
+> --- /dev/null
+> +++ b/include/linux/platform_data/huawei-gaokun-ec.h
+> @@ -0,0 +1,90 @@
+> +// SPDX-License-Identifier: GPL-2.0-only
+> +/* Huawei Matebook E Go (sc8280xp) Embedded Controller
+> + *
+> + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
+> + *
+> + */
+> +
+> +#ifndef __HUAWEI_GAOKUN_EC_H__
+> +#define __HUAWEI_GAOKUN_EC_H__
+> +
+> +#define GAOKUN_UCSI_CCI_SIZE	4
+> +#define GAOKUN_UCSI_DATA_SIZE	16
+> +#define GAOKUN_UCSI_READ_SIZE	(GAOKUN_UCSI_CCI_SIZE + GAOKUN_UCSI_DATA_SIZE)
+> +#define GAOKUN_UCSI_WRITE_SIZE	0x18
+> +
+> +#define GAOKUN_TZ_REG_NUM	20
+> +#define GAOKUN_SMART_CHARGE_DATA_SIZE	4 /* mode, delay, start, end */
+> +
+> +/* -------------------------------------------------------------------------- */
+> +
+> +struct gaokun_ec;
+> +struct notifier_block;
+
+Drop, include proper header instead.
+
+> +
+> +#define GAOKUN_MOD_NAME			"huawei_gaokun_ec"
+> +#define GAOKUN_DEV_PSY			"psy"
+> +#define GAOKUN_DEV_WMI			"wmi"
+> +#define GAOKUN_DEV_UCSI			"ucsi"
+> +
+> +/* -------------------------------------------------------------------------- */
+> +/* Common API */
+> +
+> +int gaokun_ec_register_notify(struct gaokun_ec *ec,
+> +			      struct notifier_block *nb);
+> +void gaokun_ec_unregister_notify(struct gaokun_ec *ec,
+> +				 struct notifier_block *nb);
+> +
+> +int gaokun_ec_read(struct gaokun_ec *ec, const u8 *req,
+> +		   size_t resp_len, u8 *resp);
+> +int gaokun_ec_write(struct gaokun_ec *ec, u8 *req);
+> +int gaokun_ec_read_byte(struct gaokun_ec *ec, u8 *req, u8 *byte);
+
+
+You need kerneldoc, in the C file, for all exported functions.
 
 
 
