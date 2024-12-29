@@ -1,179 +1,137 @@
-Return-Path: <linux-pm+bounces-19828-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19829-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12ECF9FDFCD
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 16:57:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 455D99FDFD4
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 17:15:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CAB407A1916
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 15:57:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 974433A1B2E
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 16:15:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36DA8189BB3;
-	Sun, 29 Dec 2024 15:57:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB2C318B464;
+	Sun, 29 Dec 2024 16:15:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Letu+Jnb"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="WkZvn5WE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.web.de (mout.web.de [212.227.17.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A65DC158558;
-	Sun, 29 Dec 2024 15:57:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C70472594B9;
+	Sun, 29 Dec 2024 16:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735487830; cv=none; b=Od09pZQdtr/2or/XolQNfFnUSKifS8DH9NJBVyZ4duXb1oM2ZFAuf72uTpzpC85XDU6pPsfFRPRU4qA+PJmKkBccs3VsIIhpJe0g1qznHEI9gPEqYokQcYo/ppERWYu1o1k9B82U4PBcMwMx3U6egSmieOIyNJs+Ekx8gBHiSXg=
+	t=1735488944; cv=none; b=W1B6e66yHIRrJ6sqq9FeTUQgJtcWBrDEYMD2VywGHcDsYu3QlmDVxjZVXiEOUO9ImQ994jfqxUP2A7KSskE1iZXwyzpc+XtvMSwfCEpysveVirukIP6CNuxlJ2C8rqf3ZBl+StmaFGVDN71KiZYMTK4lAF8UqXvJ114XMwK/cjc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735487830; c=relaxed/simple;
-	bh=G16g7KhEhjfIaudKqWTvS9Wi3zg//U58BvnfaCgV9EQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=d84nDTE+lrT0bD2mjRxHsLlynkygFkL8EsZFNnl6Nr505wVKS9l846GfHWUI3Z0PX6usNu2cVuHluMocbEs6LW4zHpVPCWdXv9t9li1a8vGyw71I/z3fQDTKhN5/LOn+LyL0TyTqtScnFdOL2hc2lXunbi62zek5WD14ZMgyg3I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Letu+Jnb; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21654fdd5daso101914245ad.1;
-        Sun, 29 Dec 2024 07:57:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735487828; x=1736092628; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=9Ro8nEOno/QbT8NzwPYno2ZIV4TEwLo2uUCFVPIvSrs=;
-        b=Letu+JnbDoFrdinF9HWadB1OuvyCiISJtjM8jApV4QusmfCth0+gXLhFUJaSWNCiX7
-         oqc3JkhLmT08y+v1+RPuaf+wTxUl2YmU8BDxFDnyPEoYXdaxWH2pbz1HGSkZoi7q3kH4
-         +/FRogLn7vBbiaGU8xJOL21b8wQ1KTKvYhH9D0kAHICC//x6sbFL/A9Vfn/3oH64Gz+T
-         9zYt2hcJJEjo/iDy0JKASSriBkxM/T1JAGoo0XejwrZ4W9GYAUcFmKOvkI5mCOZ0H5J8
-         BhNR8KdDzRbluxE/+MUr+1uv/caVTyt805pqUZGU2yr8yM293Kq29i+fdiopPYOR57mL
-         oiqQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735487828; x=1736092628;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=9Ro8nEOno/QbT8NzwPYno2ZIV4TEwLo2uUCFVPIvSrs=;
-        b=fI6jdIb3UlixoFH56CvnaMrY7dzL1/pdY5lC6Iisf3js7iWIfdrxqd++mGeQuaf+Pz
-         AEnadvG3kAu9BYpOEHE5l6+PdrrHsHKpmHQ7iWUJBuB9dVqwHzVRYw3kZEcgfU43cdK4
-         t1VxV0StfR2UBzz/wUxpXhTDzwTyBGJ9/u7Wx0cf1UShvRl/2xngfHE0iSQYqBpz6nHP
-         UulqGRDljm6ykCBduBFEtcFGWUI9K1ESQ/5YRvR0B3MCaUAdoaxQ/6D0zncRQKCh4G/7
-         IHThAS0oyrALf4yU116flNfKSjnI8LCZzcm5JQVkdOmrbCAOj18r2wJb3TkuIjVP16lK
-         rWYA==
-X-Forwarded-Encrypted: i=1; AJvYcCU/1o+fBWAAICEjEpjefpQstq3XkZFKDiKii5KHVT4lXgAQI4EL2bZ5i2mFBAt3Kb5PL1fuCtIwukN+/Viplg==@vger.kernel.org, AJvYcCUvMITJshBvDAOj6PRud7fPxBjBbXlD1DuRzGcQfrz11ywtt+dgH6UBlPQwAl+Z8dM4RAY3umNJDqvz@vger.kernel.org, AJvYcCVsK7E+ZTDDakAPA0cS+aM3ox/yiuRhYzIc7rvzGJAviySOP4hANFfwPSBtEarQSYQGmMAOYeGF7JM=@vger.kernel.org, AJvYcCVtEb0pN58t73Nh1guP4NxhjxAykWVnFgKkEHdAVvnDHk00dVLLZTh6Xtm35b1k+CujD6Sg6T+kWO/U@vger.kernel.org, AJvYcCVzRceAdhodz6whP1pKNdHFyYHz6Ae/CUhRc3g/EW6mHYTVQW2XKCCsDAc+UOng3JltGrNASvwmUa68JjuY@vger.kernel.org, AJvYcCX2+/sqjKF7y+UZPiSwC7Z0YcKf/NveGilAvnWJD2RCR4Q1uQZUMUBFdKnhjeoGR4AkRU7c+q9hJJCibv13maUU0yrCIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy7tGL6aJ9IFBT1occF4SuGZt0m6YndmemFCEzLDgu/nTvVidpI
-	AKwDxNb0U+1FLD+5SB9JeSXn204ZIu4CMPA+BmayACt3A5rC5wA/
-X-Gm-Gg: ASbGncsFMQBXOZhxBPe1jOyD9Be/gWZh52mTS6sqGi+P4ubLgyM3pzCUV49t6Kg2O31
-	M+2qd4K+MtI8nWxcf7Fka0OrYqw2jacC1p8qink5B9KJb9g/ykHUgjYjmjq8yh6uuHJdUmWWnFC
-	A/43VICZOJgKUlZ4N/Im6iCM+x+5paJfkA/oZNWcrKcjoaaKv9vChFCsjPqb0Rpgww1PxhnEPSR
-	15t0HQWH4w17dAKy7hyJPfiHFeDgYfr1HUejnhe5Ik=
-X-Google-Smtp-Source: AGHT+IF6r2x7M7+0yQmWqW6UcsDaYxKqFljH8VIFuOI28HDoZuK/ySWlmbqUnoC1M5YPTSTGqZ/pww==
-X-Received: by 2002:a17:902:ec8e:b0:216:7926:8d69 with SMTP id d9443c01a7336-219e6f42b41mr410920845ad.47.1735487827828;
-        Sun, 29 Dec 2024 07:57:07 -0800 (PST)
-Received: from nuvole.. ([2a09:bac1:76a0:dd10::2e9:e5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a267dc09bsm35062135ad.169.2024.12.29.07.57.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 29 Dec 2024 07:57:07 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: ilpo.jarvinen@linux.intel.com
-Cc: andersson@kernel.org,
-	bryan.odonoghue@linaro.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	dmitry.baryshkov@linaro.org,
-	gregkh@linuxfoundation.org,
-	hdegoede@redhat.com,
-	heikki.krogerus@linux.intel.com,
-	konradybcio@kernel.org,
-	krzk+dt@kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	mitltlatltl@gmail.com,
-	nikita@trvn.ru,
-	platform-driver-x86@vger.kernel.org,
-	robh@kernel.org,
-	sre@kernel.org
-Subject: Re: [PATCH 2/5] platform: arm64: add Huawei Matebook E Go (sc8280xp) EC driver
-Date: Sun, 29 Dec 2024 23:55:51 +0800
-Message-ID: <20241229155551.92070-1-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <41e8cc85-6978-49b0-7216-3ce715d48101@linux.intel.com>
-References: <41e8cc85-6978-49b0-7216-3ce715d48101@linux.intel.com>
+	s=arc-20240116; t=1735488944; c=relaxed/simple;
+	bh=apwEeeswKrp3FZ59Cs1Zz/EpIAJd+0SigGt3BHZfR5I=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=mBHZ44rp1CMcyS3XB73ggDEocZkgTa4otsIdlxUePqM2R5fnMSYCVrxBo5BiltqjA2L8534RkOzxpX5Lnqt4PEiGjIcxWZ53/lziWvJxPc+Gn3Y4aM11MP9a/LwMrnNMCKZfWzVIlbTLe+o9NrufYVE1re/V3NT8PpFdPemk230=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=WkZvn5WE; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1735488933; x=1736093733; i=markus.elfring@web.de;
+	bh=QSoFJnymi4D41ZRTLo69HsCAimuwsTVQKSmnk45fsGQ=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=WkZvn5WEJhEKukh+ReBwYGfpMnXV2b63AC+D2WGWx9M1c62i09yhvTtt5EaAKQFH
+	 V5rSkvJ7Z508teds8ZVJUsWntkdm52921Iw4MwsK36SDL7fD0gCl5Az1sSNkgGKVM
+	 TyoLdn/VO1Ye2fz41couCpbnNLk8ALXgN8L+sx3UdELgHLk/DqMGcfwD6Wmiimr63
+	 /Qi+PTsAcmO1ndeAllYJlPRvz2AaiyaBaUC5VR/JCrMIJy/smuU+OytO9WbbabOSc
+	 qdZjOGO6SQELwLtlnacqrTCw0GDLQAMRN2a6LEgnY5/1TBZfriTq2bQlUjwUjnkY8
+	 B2TBfIdlU8J+Q3IrIQ==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.21] ([94.31.70.72]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1N9LEU-1tXRhp2lDY-015KvO; Sun, 29
+ Dec 2024 17:15:33 +0100
+Message-ID: <231206da-e992-46d9-9998-5b2f1d3e8bb2@web.de>
+Date: Sun, 29 Dec 2024 17:15:31 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+To: Pengyu Luo <mitltlatltl@gmail.com>, platform-driver-x86@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
+ Bjorn Andersson <andersson@kernel.org>,
+ Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Heikki Krogerus <heikki.krogerus@linux.intel.com>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
+ Sebastian Reichel <sre@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Nikita Travkin <nikita@trvn.ru>
+References: <20241227171353.404432-4-mitltlatltl@gmail.com>
+Subject: Re: [PATCH 3/5] usb: typec: ucsi: add Huawei Matebook E Go (sc8280xp)
+ ucsi driver
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20241227171353.404432-4-mitltlatltl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:l6zmfyqEhSmiTu1FX/SaCtxQLAYyEO0OZchwogQX3ZhS8Z5HNi+
+ Ij/Ti6CruIRcHef0IlgDewWJxQRgkDXzjVo9NaNDX7y4wx/O+BA7hB1fkzsA5QYru4GdTgK
+ oHovdZy3UekwYAvyjxi03FJhAZ3UnC0g0/HYcqDxOAZG0zsHl9D3cXuCWBn+MhSPl64mMr4
+ Narh2VtXzCa+bwDbHc4+A==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:tRV+lQwU6w0=;6bUMAl4mOrcaVBR1H8V9433q369
+ fJoqHZw2m2AwuhmE+IbClWkVk0anPc+xUT1oOQiCBGdqg1bnosA2qY+aKm1OKYe56V35hpytu
+ qF0wyxwuYWGt8GHSmBFV406EuUwyhUbUk3vTTxLY5ITp/CC0xpWB1wGA7Uw4bd8rrSZRhnsVx
+ Tu9ZQjr7jx+PN1boEJYIsapStUof38TH0NBPRKibL8hUsT/jeQT3sQfctK1G5kuxyvcU21Zqc
+ Bm23OcOG3zdq5xpdJb5hqMbfBHfgCZvQhc5ES7HhAnKS2u+F2dNQPL+FilzFEh49ItA3oXb94
+ axDTdHj3k/FTJjhPLyrdYKuBAN3gUnh4xnXXRW4vDZSqxfAOmUwUsoUtnkqw3DCI8MORocr7R
+ vaZ0js04OuKOFTNYW8+XdS2MH42dQpvkL8f9cejw+q36W9Ke/eaRXCqJIn6mYPICmbakMLJjX
+ R5lfRM9hBlzZe7QNZdTgxI7X0b0D22axxA/gV3TO22ltRa8saCFiJb4QYpkaDGguZyav9xaf1
+ JygyI+svxjp+gOuorjfi9uJO8szMcL9DfDbimPXlp+8wp7JpQuEG4QsF4H+vIZHMeX1LUhnsr
+ 4W1tzN2jqLagwXsadMM9J+bYe7rZMpSpOrbp8rqCvUj3cj1tdVv4YNeGf76nukGocDrda7kb6
+ ysra05FYyCHA1yASQxmflgbABPyym5FACo1VCiJrqTXogMypPowbbTh/knMc57xFU+zklTUh5
+ YSn9eB3eZDoEsw2ph5597eT1/q3uzGSVAQ+J1ChEO5B/fl9aLGzf9TV2GP2siUBAEywxoykw8
+ MJ21JUSkigORJC9gTyCgO1QgZ2PH9a4o8U++w10FkvwxoM7QL5GwniIKYvEM0NhD8I2y7gS1d
+ NABQ2cJOhMFyfAxtlYCtBWjNM7DENuNPzWkbYU9HH3DgcYssllZs5euVLV1D5kHdP5B910HvR
+ UH1uDGssXQY6lBBIwld4btoNhInG+RyQPummn8qTZL2QqpyCIwHIEvJnGgncF5nyQIhH5Snm1
+ 56b4++nC51yzfKind/zJ23kg4qQLHfmaxrrzvIdgpvxqRNfbkgZywvor+femEFr7TuPsNJfD1
+ qPJLwkczg=
 
-On Sun, Dec 29, 2024 at 11:33 PM Ilpo Järvinen <ilpo.jarvinen@linux.intel.com> wrote:
-> On Sat, 28 Dec 2024, Pengyu Luo wrote:
-> > On Sat, Dec 28, 2024 at 8:33 PM Bryan O'Donoghue <bryan.odonoghue@linaro.org> wrote:
-> > > On 27/12/2024 17:13, Pengyu Luo wrote:
-> > > > There are 3 variants, Huawei released first 2 at the same time.
-> > >
-> > > There are three variants of which Huawei released the first two
-> > > simultaneously.
+> The Huawei Matebook E Go (sc8280xp) tablet provides implements UCSI
 
-[skipped]
+                                                      Omit this verb here?
 
-> > > > +/* Thermal Zone */
-> > > > +/* Range from 0 to 0x2C, partial valid */
-> > > > +static const u8 temp_reg[] = {0x05, 0x07, 0x08, 0x0E, 0x0F, 0x12, 0x15, 0x1E,
-> > > > +                           0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26,
-> > > > +                           0x27, 0x28, 0x29, 0x2A};
-> > > > +
-> > > > +int gaokun_ec_wmi_get_temp(struct gaokun_ec *ec, s16 temp[GAOKUN_TZ_REG_NUM])
-> > >
-> > > int gaokun_ec_wmi_get_temp(struct gaokun_ec *ec, s16 *temp, size_t
-> > > temp_reg_num)
-> > >
-> > >
-> > > > +{
-> > > > +     /* GTMP */
-> > > > +     u8 req[REQ_HDR_SIZE] = {0x02, 0x61, 1,};
-> > > > +     u8 resp[RESP_HDR_SIZE + sizeof(s16)];
-> > > > +     int ret, i = 0;
-> > > > +
-> > > > +     while (i < GAOKUN_TZ_REG_NUM) {
-> > > while (i < temp_reg_num)
-> > >
-> >
-> > It is a constant. But later, as Krzysztof suggested, I will use interfaces
-> > from hwmon, then reading one at a time.
-> >
-> > > > +             req[INPUT_DATA_OFFSET] = temp_reg[i];
-> > > > +             ret = gaokun_ec_read(ec, req, sizeof(resp), resp);
-> > > > +             if (ret)
-> > > > +                     return -EIO;
-> > > > +             temp[i++] = *(s16 *)(resp + DATA_OFFSET);
-> > >
-> > > What's the point of the casting here ?
-> > >
-> > > memcpy(temp, resp, sizeof(s16));
-> > > temp++;
-> >
-> > A 2Bytes symbol number in little endian, ec return it like this, so
-> > casting.
->
-> You should use __le16 and proper endianess conversion function then.
->
 
-Agree
+> interface in the onboard EC. =E2=80=A6
 
-> It's bit confusing that in the declaration you used RESP_HDR_SIZE and here
-> you do it with DATA_OFFSET instead. It feels DATA_OFFSET is unnecessary
-> duplicate of RESP_HDR_SIZE and will easily lead confusing variation such
-> as above.
->
 
-I totally agree with you, it is duplicated.
-In declaration, u8 resp[RESP_HDR_SIZE]; RESP_HDR_SIZE indicates the size.
-When assigning, val = resp[DATA_OFFSET]; let us know we are extracting a
-data from a response without thinking, so I added an alias. Removing it
-is also fine for me.
+> +++ b/drivers/platform/arm64/huawei-gaokun-ec.c
+> @@ -0,0 +1,598 @@
+=E2=80=A6
+> +static void gaokun_set_orientation(struct ucsi_connector *con,
+> +				   struct gaokun_ucsi_port *port)
+> +{
+=E2=80=A6
+> +	spin_lock_irqsave(&port->lock, flags);
+> +	ccx =3D port->ccx;
+> +	spin_unlock_irqrestore(&port->lock, flags);
+> +
+> +	typec_set_orientation(con->port, CCX_TO_ORI(ccx));
+> +}
+=E2=80=A6
 
-Best wishes,
-Pengyu
+Under which circumstances would you become interested to apply a statement
+like =E2=80=9Cguard(spinlock_irqsave)(&port->lock);=E2=80=9D?
+https://elixir.bootlin.com/linux/v6.13-rc3/source/include/linux/spinlock.h=
+#L572
+
+Regards,
+Markus
 
