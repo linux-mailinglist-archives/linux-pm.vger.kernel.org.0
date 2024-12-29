@@ -1,345 +1,220 @@
-Return-Path: <linux-pm+bounces-19825-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19826-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 17C409FDF89
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 15:54:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4968C9FDF9E
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 16:23:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B89BE18811CD
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 14:54:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C13E916114A
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 15:23:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96C06198A37;
-	Sun, 29 Dec 2024 14:52:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E8EA17B401;
+	Sun, 29 Dec 2024 15:23:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e6ckRCNd"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JrmCUG61"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877012594A6
-	for <linux-pm@vger.kernel.org>; Sun, 29 Dec 2024 14:52:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B5A3AD23;
+	Sun, 29 Dec 2024 15:23:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735483924; cv=none; b=F0pdF6zcCx9ZlzJb4S/JAHrGHXxUpxHpfwTkVV3WfUrFVCQUEJAYPYmDGeY3zte5wKhMao4tWtM5ofHnS0K8qiDdJprpskHmnw++CEMKqH2zPKjtP0+RsoVUmpaAsWIfaezK1tUTIDFrA4vMgRrAG6H8YzeKqddpdFZm4rPLg8c=
+	t=1735485829; cv=none; b=pjvC4xOpGBqWX2X9ZKZJ7kXZmCz3AWyILrSq3bAT5WZUYt1DWC5afSgZRyE15x7gpQneO060jKBa1hESpu+FT4kjfubOgMchExrt/yhVIXdfr8w3pyopS/qivpo1BUhNJNZIJrOtjeMUqcfy/+WREJE0LNtWKaH8d3Lvszoy05w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735483924; c=relaxed/simple;
-	bh=NH+R1Gq5a4ptQDjw4VRo6cce3Q3VMA+UUnZJpCGlVLg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=kCJ330a2FEQk1ES/Vi4o8rJ0NFsi53dZSlSh7Neez6l0tBYoQykl368OpaIqdvmkvbg5TutDXYfyp0o5kbJ86yymctmdjs8hv6ACExGQoNKXivZitS9+Wut0jRk0PdN0IgCDArW54WDXIZl+fRcojDURfAEfIiDDIlt0xZ20qAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e6ckRCNd; arc=none smtp.client-ip=209.85.221.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3863703258fso5564253f8f.1
-        for <linux-pm@vger.kernel.org>; Sun, 29 Dec 2024 06:52:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1735483920; x=1736088720; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=2RkB7UfRiNg6MyNlWMJbO93WwIH7bFs9T4rAheWdhbk=;
-        b=e6ckRCNdSqMFd3uZRSm5JGkr0zPLgH0I5ANLlyX33gNReQr8+2aO58MsnQqN3ioguy
-         5Jio11Ml17/FE2tLS2mODCvwHHgTEM1sNxSVm8WXircvWOo1SPqBjdZJJzSAgndsnQ5+
-         obAI/A1lDWs1HQjtQSW4O3hfXd237r6CfawSO0Yh1kaoYoX29sZPzMR2Y6jjquoRhu+t
-         hxw0k07S3Yx3+hBf/Sll/eybPnwpWF4prOQndr95tw8Aes8KkOfXUoJZjXX3xIHvq+8D
-         18Lv8ii5fbbsL4w7l6UA3tRLb+IcvQglxqzhUmOUdMVIpQ7t5Ib2CbsWaBrSjxZ2mN4T
-         s2LQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735483920; x=1736088720;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=2RkB7UfRiNg6MyNlWMJbO93WwIH7bFs9T4rAheWdhbk=;
-        b=d0nqBBoPkxS/gfepmrP063AjWMgCqpexzXrd7zhOE7IvxuOWglBe8xlpM69z0Sj2NH
-         Ha19jtjPCnDIR8x2bu5B2RurPPCnvu91K+Tsixzg2vRTx4Isj9Qio2fp2gnLKS6IU2nO
-         j/6Cq+XjH7+ryTsfHxaznPzj1uvEw0/suTrjDx/G58YGh0ohjC8Iv2ciUoRCJhKp+NWM
-         Sb/C5p0yIgx7RQ3yG7+1jb4rEz+Db2NC/XiwxnZnPctpnhc1LdYe26rwRQ3oPNDUwqpo
-         ESCmxBbkoVR2pLSFjEjfMNMXT5WBNe3GxKIFPqSgWej8QjiRarPuhfubbszIPXUjqggz
-         yQQQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV1eGBRQB3J3iseHBB11En1l8cqClQY9RFIV+SYplbHnHNHevAdRJPHp02l34waDgB3Piy8WkCW9Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZ7uBXNaJacwTOE74Tx5hbnuCJhfUDA9Ie1It2iDVqlDvwOUXd
-	ygONCz7NsGEk7JUDKYEN7/3fb19dcQkJ03hoA4qtTjpWemiglXF74gvI45lZp/c=
-X-Gm-Gg: ASbGncs8GIv74ZnA1Pw096WRMCHS3BQBNXsdefyJbpqzey9N3/Xh29FdqMFuFRjquZW
-	jMIHuENeaSb3KA5T5mDfQrFOJq1IIPC3VsAJW/AFRX8TmNp9VhYIhV0k78cR1to90ArH+z4+H/C
-	MX+XQWDtpnR7moHCm1X1iN5xJ5vOdnq5W1epe+R377CfOrbP9vzLsytRQqeGDXqD6tlSVqkb+yI
-	4RepBukA//wFQFfhXmgbQpY0i9llmMI/dMqhk9S7kpNAZZmrbpMVa2wYqeL+JeNCHkt5w==
-X-Google-Smtp-Source: AGHT+IFGQdUBCOz+F0Jdt8T/X7wzDgUoFUYLmOZIeAMTzUhMqCz8ekRTaHkUH6qYyBefzRQQ0RDeZQ==
-X-Received: by 2002:a05:6000:704:b0:385:ea40:b46b with SMTP id ffacd0b85a97d-38a229ed094mr26533826f8f.4.1735483919862;
-        Sun, 29 Dec 2024 06:51:59 -0800 (PST)
-Received: from [192.168.0.43] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c8332absm27199663f8f.38.2024.12.29.06.51.58
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 29 Dec 2024 06:51:59 -0800 (PST)
-Message-ID: <5310962f-c0d8-4ada-bb95-b727a3c88b00@linaro.org>
-Date: Sun, 29 Dec 2024 14:51:57 +0000
+	s=arc-20240116; t=1735485829; c=relaxed/simple;
+	bh=PuJekdX68TX7mA2SJ6up2wHPfgvi8OZ4Elzfk1Ke76o=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=Q6Sw1scx4haYmPZE4uzycrmqz3hY1EBIDJ7H+HhF/476JfmBG4Yoor9QtvuiGE+vCMsmMQTHDDEzcrIYvhT2y0jhIXO4Vk3f2BCU8z+YikUE8sB/eBgxm9KcaWlTICvmdGk04xnQzm07zhbkG3TEUMmJPA+ldb5CfqLrcuoMrK8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JrmCUG61; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735485828; x=1767021828;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=PuJekdX68TX7mA2SJ6up2wHPfgvi8OZ4Elzfk1Ke76o=;
+  b=JrmCUG61bxNVzEWg78Typ/izVktt4+OtyH75QMeZ6H7m2zPai67nIC/T
+   9Qxj/0gNiTO9VQOB8e5G3SZ6SBoNwB22mmDCYgnC+OcqWOeZACJ7G1cQu
+   T6SqRiVFBtb0Adr8uIRiREzVz9ahRAULb2K0hEtC2BN7lf0VqRpr4Pr4g
+   DCxmxaWnmWsL1Dr0NWF9NJZn25X1lwn+GeoXbB2jk80pQZW8ANTyk1cC+
+   uWGibmyKx5o4K+txkJXZxZeHcVyiSyH9W7JOMBa7oCLhjd7AlrVLtSiyl
+   z5ifInEvQMPDx9bjK87bBSpuJgk4CAkHrOGRu7wHjqJuyT/qNQEXd2qPT
+   g==;
+X-CSE-ConnectionGUID: cpZp+h3bRbugqdsksr57ow==
+X-CSE-MsgGUID: L90Hs7AJQfq6Ys4QBwhwuA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11299"; a="35508527"
+X-IronPort-AV: E=Sophos;i="6.12,274,1728975600"; 
+   d="scan'208";a="35508527"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2024 07:23:47 -0800
+X-CSE-ConnectionGUID: CcuwxvBFQSO8n7iy6tTh1w==
+X-CSE-MsgGUID: 8j4FFGCtQ0eM22xN2664/w==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="137926102"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.202])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Dec 2024 07:23:43 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Sun, 29 Dec 2024 17:23:40 +0200 (EET)
+To: Xi Pardee <xi.pardee@linux.intel.com>
+cc: rajvi0912@gmail.com, irenic.rajneesh@gmail.com, 
+    david.e.box@linux.intel.com, Hans de Goede <hdegoede@redhat.com>, 
+    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-pm@vger.kernel.org
+Subject: Re: [PATCH v3 2/3] platform/x86:intel/pmc: Create generic_core_init()
+ for all platforms
+In-Reply-To: <0810bc98-ea48-4d30-bfb1-bd009ee485de@linux.intel.com>
+Message-ID: <e3628ae8-317b-82e7-7545-38ba51dd4481@linux.intel.com>
+References: <20241219235543.236592-1-xi.pardee@linux.intel.com> <20241219235543.236592-3-xi.pardee@linux.intel.com> <5f694390-079a-13e6-5c93-38b938125044@linux.intel.com> <0810bc98-ea48-4d30-bfb1-bd009ee485de@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/5] usb: typec: ucsi: add Huawei Matebook E Go (sc8280xp)
- ucsi driver
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: andersson@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
- dmitry.baryshkov@linaro.org, gregkh@linuxfoundation.org,
- hdegoede@redhat.com, heikki.krogerus@linux.intel.com,
- ilpo.jarvinen@linux.intel.com, konradybcio@kernel.org, krzk+dt@kernel.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, nikita@trvn.ru,
- platform-driver-x86@vger.kernel.org, robh@kernel.org, sre@kernel.org
-References: <c17372ed-baf0-40a7-b267-25f1ff849cf7@linaro.org>
- <20241228143830.613658-1-mitltlatltl@gmail.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20241228143830.613658-1-mitltlatltl@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/mixed; boundary="8323328-1986260294-1735485820=:922"
 
-On 28/12/2024 14:38, Pengyu Luo wrote:
-> On Sat, Dec 28, 2024 at 9:06 PM Bryan O'Donoghue <bryan.odonoghue@linaro.org> wrote:
->> On 27/12/2024 17:13, Pengyu Luo wrote:
->>> The Huawei Matebook E Go (sc8280xp) tablet provides implements UCSI
->>> interface in the onboard EC. Add the glue driver to interface the
->>> platform's UCSI implementation.
->>>
->>> Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
->>> ---
->>>    drivers/usb/typec/ucsi/Kconfig              |   9 +
->>>    drivers/usb/typec/ucsi/Makefile             |   1 +
->>>    drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 481 ++++++++++++++++++++
->>>    3 files changed, 491 insertions(+)
->>>    create mode 100644 drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
->>>
->>> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
->>> index 680e1b87b..0d0f07488 100644
->>> --- a/drivers/usb/typec/ucsi/Kconfig
->>> +++ b/drivers/usb/typec/ucsi/Kconfig
->>> @@ -78,4 +78,13 @@ config UCSI_LENOVO_YOGA_C630
->>>          To compile the driver as a module, choose M here: the module will be
->>>          called ucsi_yoga_c630.
->>>
->>> +config UCSI_HUAWEI_GAOKUN
->>> +     tristate "UCSI Interface Driver for Huawei Matebook E Go (sc8280xp)"
->>> +     depends on EC_HUAWEI_GAOKUN
->>> +     help
->>> +       This driver enables UCSI support on the Huawei Matebook E Go tablet.
->>> +
->>> +       To compile the driver as a module, choose M here: the module will be
->>> +       called ucsi_huawei_gaokun.
->>> +
->>>    endif
->>> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
->>> index aed41d238..0b400122b 100644
->>> --- a/drivers/usb/typec/ucsi/Makefile
->>> +++ b/drivers/usb/typec/ucsi/Makefile
->>> @@ -22,3 +22,4 @@ obj-$(CONFIG_UCSI_CCG)                      += ucsi_ccg.o
->>>    obj-$(CONFIG_UCSI_STM32G0)          += ucsi_stm32g0.o
->>>    obj-$(CONFIG_UCSI_PMIC_GLINK)               += ucsi_glink.o
->>>    obj-$(CONFIG_UCSI_LENOVO_YOGA_C630) += ucsi_yoga_c630.o
->>> +obj-$(CONFIG_UCSI_HUAWEI_GAOKUN)     += ucsi_huawei_gaokun.o
->>> diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
->>> new file mode 100644
->>> index 000000000..84ed0407d
->>> --- /dev/null
->>> +++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
->>> @@ -0,0 +1,481 @@
->>> +// SPDX-License-Identifier: GPL-2.0-only
->>> +/*
->>> + * ucsi-huawei-gaokun - A UCSI driver for HUAWEI Matebook E Go (sc8280xp)
->>> + *
->>> + * reference: drivers/usb/typec/ucsi/ucsi_yoga_c630.c
->>> + *            drivers/usb/typec/ucsi/ucsi_glink.c
->>> + *            drivers/soc/qcom/pmic_glink_altmode.c
->>> + *
->>> + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
->>> + */
->>> +
->>> +#include <linux/auxiliary_bus.h>
->>> +#include <linux/bitops.h>
->>> +#include <linux/completion.h>
->>> +#include <linux/container_of.h>
->>> +#include <linux/delay.h>
->>> +#include <linux/module.h>
->>> +#include <linux/notifier.h>
->>> +#include <linux/of.h>
->>> +#include <linux/string.h>
->>> +#include <linux/workqueue_types.h>
->>> +
->>> +#include <linux/usb/pd_vdo.h>
->>> +#include <drm/bridge/aux-bridge.h
->>
->> Is there a reason you don't have strict include alphanumeric ordering here ?
->>
-> 
-> These two is dp/alt mode related, so listing them out. Above of them are
-> general things.
+  This message is in MIME format.  The first part should be readable text,
+  while the remaining parts are likely unreadable without MIME-aware tools.
 
-OK. Unless there's an include dependency reason you need to, please just 
-sort the headers alphanumerically in order
+--8323328-1986260294-1735485820=:922
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: QUOTED-PRINTABLE
 
-#include <globals_first>
-#include <globals_first_alpha>
-
-#include "locals_next"
-#include "locals_next_alpha_also"
-
->>>
->>> +
->>> +#include "ucsi.h"
->>> +#include <linux/platform_data/huawei-gaokun-ec.h>
->>> +
->>> +
->>> +#define EC_EVENT_UCSI        0x21
->>> +#define EC_EVENT_USB 0x22
->>> +
->>> +#define GAOKUN_CCX_MASK              GENMASK(1, 0)
->>> +#define GAOKUN_MUX_MASK              GENMASK(3, 2)
->>> +
->>> +#define GAOKUN_DPAM_MASK     GENMASK(3, 0)
->>> +#define GAOKUN_HPD_STATE_MASK        BIT(4)
->>> +#define GAOKUN_HPD_IRQ_MASK  BIT(5)
->>> +
->>> +#define CCX_TO_ORI(ccx) (++ccx % 3)
->>
->> Why do you increment the value of the enum ?
->> Seems strange.
->>
-> 
-> EC's logic, it is just a trick. Qualcomm maps
-> 0 1 2 to normal, reverse, none(no device insert)
-> typec lib maps 1 2 0 to that.
-
-I'd suggest making the trick much more obvious.
-
-Either with a comment or just mapping 1:1 between EC and Linux' view of 
-this data.
-
-The main reason for that is to make it easier to 
-read/understand/maintain/debug.
-
-
-
->>> +             port->svid = USB_SID_DISPLAYPORT;
->>> +             if (port->ccx == USBC_CCX_REVERSE)
->>> +                     port->mode -= 6;
->>
->> why minus six ?
->> needs a comment.
->>
-> 
-> EC's logic. I don't know why, it is a quirk from Qualcomm or Huawei.
-> I will mention this.
-
-Instead of hard-coding a mapping between the EC's mode and Linux' UCSI 
-enum - just make a define or an inline, ideally something with
-
-switch(port->mode)
-case GOAKUN_MODE_0:
-	val = LINUX_UCSI_MODE_X;
-case GOAKUN_MODE_1:
-	val = LINUX_UCSI_MODE_Y;
-}
-
-That will make the mapping obvious and also ensure both to yourself and 
-to your reviewers that you have accounted for _all_ of the potential 
-mappings and if those mappings don't exist then the default: of your 
-switch statement should make some noise about it
-
-dev_err(dev, "GOKUN UCSI mode %d unmapped\n"); or something like that.
-
-
-> 
->>> +             break;
->>> +     default:
->>> +             break;
->>> +     }
->>> +
->>> +     spin_unlock_irqrestore(&port->lock, flags);
->>> +}
->>> +
->>> +static int gaokun_ucsi_refresh(struct gaokun_ucsi *uec)
->>> +{
->>> +     struct gaokun_ucsi_reg ureg;
->>> +     int ret, idx;
->>> +
->>> +     ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
->>> +     if (ret)
->>> +             return -EIO;
->>> +
->>> +     uec->port_num = ureg.port_num;
->>> +     idx = GET_IDX(ureg.port_updt);
->>> +
->>> +     if (idx >= 0 && idx < ureg.port_num)
->>> +             gaokun_ucsi_port_update(&uec->ports[idx], ureg.port_data);
->>
->> Since you are checking the validity of the index, you should -EINVAL if
->> the index is out of range.
->>
-> 
-> EC / pmic glink encode every port in a bit
-> 0/1/2/4/... => ???/left/right/some port
-> 
-> I remap it to -1/0/1/2, to access specific port exceptions(-1) are not
-> harmful, later in gaokun_ucsi_altmode_notify_ind
-> 
-> 	if (idx < 0)
-> 		gaokun_ec_ucsi_pan_ack(uec->ec, idx);
-> 	else
-> 		gaokun_ucsi_handle_altmode(&uec->ports[idx]);
-> 
-> gaokun_ec_ucsi_pan_ack can handle exceptions.
-> 
-
-gaokun_ucsi_refresh() can return
-
--EIO
--1
- >=0
-
-Where -EIO and -1 both trigger gaokun_ec_ucsi_pan_ack() in 
-gaokun_ucsi_altmode_notify_ind()
-
-So if the index doesn't matter and < 0 => pan_ack() is OK or -EIO is not 
-returning meaningful error.
-
-Either way strongly advise against mixing a negative index as having a 
-valid meaning with actual -E error codes...
-
-As a reviewer doing a fist-pass this looks suspicous and implies more 
-thought/refinement should be done to the flow.
-
-
->>> +
->>> +     ucsi->quirks = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_PDOS;
->>> +
->>> +     ssleep(3); /* EC can't handle UCSI properly in the early stage */
->>
->> Could you not schedule work for + 3 seconds instead of sleeping here -
->> representing the required stall time in some sort of state machine ?
->>
-> 
-> I see, I will check work schedule interface.
-> 
->> 3 seconds is an incredibly long time for a computer to sleep.
->>
-> 
-> This module will be loaded at about 5th second after power up, if not
-> sleep, we will receive something disharmonious, sleeping for 3 seconds is
-> a hack.
-
-Yes it is. You could schedule some work to complete three seconds from 
-here instead of doing this long sleep here.
-
-In fact you are registering a worker here right ?
-
-In which case its pretty trivial to schedule some work on that worker 
-for three seconds hence ..
-
-Please investigate.
-
+On Fri, 20 Dec 2024, Xi Pardee wrote:
+> On 12/20/2024 3:52 AM, Ilpo J=C3=A4rvinen wrote:
+> > On Thu, 19 Dec 2024, Xi Pardee wrote:
+> >=20
+> > > Create a generic_core_init() function for all architecture to reduce
+> > > duplicate code in each architecture file. Create an info structure
+> > > to catch the variations between each architecture and pass it to the
+> > > generic init function.
+> > >=20
+> > > Convert all architectures to call the generic core init function.
+> > >=20
+> > > Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+> > This looks much better!
+> >=20
+> > > ---
+> > >   drivers/platform/x86/intel/pmc/adl.c  | 21 ++++--------
+> > >   drivers/platform/x86/intel/pmc/arl.c  | 47 ++++++++----------------=
 ---
-bod
+> > >   drivers/platform/x86/intel/pmc/cnp.c  | 21 ++++--------
+> > >   drivers/platform/x86/intel/pmc/core.c | 45 ++++++++++++++++++++++++=
++
+> > >   drivers/platform/x86/intel/pmc/core.h | 25 ++++++++++++++
+> > >   drivers/platform/x86/intel/pmc/icl.c  | 18 ++++------
+> > >   drivers/platform/x86/intel/pmc/lnl.c  | 24 +++++---------
+> > >   drivers/platform/x86/intel/pmc/mtl.c  | 45 +++++++-----------------=
+-
+> > >   drivers/platform/x86/intel/pmc/spt.c  | 18 ++++------
+> > >   drivers/platform/x86/intel/pmc/tgl.c  | 31 +++++++++---------
+> > >   10 files changed, 145 insertions(+), 150 deletions(-)
+> > >=20
+> > > diff --git a/drivers/platform/x86/intel/pmc/adl.c
+> > > b/drivers/platform/x86/intel/pmc/adl.c
+> > > index e7878558fd909..ac37f4ece9c70 100644
+> > > --- a/drivers/platform/x86/intel/pmc/adl.c
+> > > +++ b/drivers/platform/x86/intel/pmc/adl.c
+
+> > > diff --git a/drivers/platform/x86/intel/pmc/arl.c
+> > > b/drivers/platform/x86/intel/pmc/arl.c
+> > > index 05dec4f5019f3..137a1fdfee715 100644
+> > > --- a/drivers/platform/x86/intel/pmc/arl.c
+> > > +++ b/drivers/platform/x86/intel/pmc/arl.c
+> > > @@ -691,40 +691,19 @@ static int arl_resume(struct pmc_dev *pmcdev)
+> > >   =09return cnl_resume(pmcdev);
+> > >   }
+> > >   +static struct pmc_dev_info arl_pmc_dev =3D {
+> > > +=09.func =3D 0,
+> > > +=09.ssram =3D true,
+> > > +=09.dmu_guid =3D ARL_PMT_DMU_GUID,
+> > > +=09.regmap_list =3D arl_pmc_info_list,
+> > > +=09.map =3D &arl_socs_reg_map,
+> > > +=09.fixup =3D arl_d3_fixup,
+> > I think the fixups should be left to be called from the per architectur=
+e
+> > init funcs.
+>=20
+> Will rename the fixup field to platform_specifc (more explanation at the =
+end).
+
+> > > diff --git a/drivers/platform/x86/intel/pmc/core.h
+> > > b/drivers/platform/x86/intel/pmc/core.h
+> > > index a1886d8e1ef3e..82be953db9463 100644
+> > > --- a/drivers/platform/x86/intel/pmc/core.h
+> > > +++ b/drivers/platform/x86/intel/pmc/core.h
+> > > @@ -436,6 +436,30 @@ enum pmc_index {
+> > >   =09PMC_IDX_MAX
+> > >   };
+> > >   +/**
+> > > + * struct pmc_dev_info - Structure to keep pmc device info
+> > > + * @func:=09=09Function number of the primary pmc
+> > Capitalize "PMC" in the comments.
+> Will change it.
+> >=20
+> > > + * @ssram:=09=09Bool shows if platform has ssram support
+> > > + * @dmu_guid:=09=09DMU GUID
+> > > + * @regmap_list:=09Pointer to a list of pmc_info structure that coul=
+d be
+> > > + *=09=09=09available for the platform
+> > > + * @map:=09=09Pointer to a pmc_reg_map struct that contains platform
+> > > + *=09=09=09specific attributes of the primary pmc
+> > > + * @fixup:=09=09Function to perform platform specific fixup
+> > > + * @suspend:=09=09Function to perform platform specific suspend
+> > > + * @resume:=09=09Function to perform platform specific resume
+> > > + */
+> > > +struct pmc_dev_info {
+> > > +=09u8 func;
+> > > +=09bool ssram;
+> > > +=09u32 dmu_guid;
+> > > +=09struct pmc_info *regmap_list;
+> > > +=09const struct pmc_reg_map *map;
+> > > +=09void (*fixup)(void);
+> > > +=09void (*suspend)(struct pmc_dev *pmcdev);
+> > > +=09int (*resume)(struct pmc_dev *pmcdev);
+> > > +};
+
+> > > -=09return tgl_core_generic_init(pmcdev, PCH_H);
+> > > +=09return tgl_core_generic_init(pmcdev, &tgl_pmc_dev);
+> > >   }
+> > >=20
+> > It might be also worth to consider what is stored into those
+> > X86_MATCH_VFM()s so that the simple init functions could be removed
+> > entirely but it could be done in another patch on top of this one.
+>
+> Right now we store the init function pointer for each architecture in
+> X86_MATCH_VFM()
+> structure. We could change it to be a pointer to the pmc_dev_info structu=
+re
+> instead. Most
+> of the per architecture init function call the generic_init function dire=
+ctly
+> except for TGL
+> init function. The TGL case can be handled by adding a new callback funct=
+ion
+> pointer field named
+> platform_specific and this field can also be used to replace the fixup fi=
+eld.
+
+To preserve generality, the function pointer should be a real replacement=
+=20
+of the generic init function (if non-NULL), not some platform specific=20
+hook is called from one point of the generic init function.
+
+If the init function is NULL, just call the generic init function=20
+directly.
+
+If not NULL, that per platform replacement function in can then do the=20
+fixup like it currently does (and whatever extra is needed) and call the=20
+generic init function.
+
+--=20
+ i.
+
+--8323328-1986260294-1735485820=:922--
 
