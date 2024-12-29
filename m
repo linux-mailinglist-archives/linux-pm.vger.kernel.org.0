@@ -1,203 +1,232 @@
-Return-Path: <linux-pm+bounces-19813-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19814-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE0F39FDD08
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 02:23:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D60A9FDD32
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 05:08:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 24A0A3A15F1
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 01:23:39 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8DB21882668
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 04:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5EB32594B6;
-	Sun, 29 Dec 2024 01:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9195171C9;
+	Sun, 29 Dec 2024 04:08:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="K4li8RVP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gUp4gJTr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A258D259C
-	for <linux-pm@vger.kernel.org>; Sun, 29 Dec 2024 01:23:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B189EC147
+	for <linux-pm@vger.kernel.org>; Sun, 29 Dec 2024 04:08:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735435418; cv=none; b=NMEo7fN8MI9rpDcTtUYShtu2b50T7+yUeFjjGfEd1gfiqcxKFdRQKPLKXFWhzSdgvm48RCNQrEYJRgrq4u5uKLftdLfzLtIdJ1JnZD7/ulD4maEqIkALBFKIdxYZ970jUoBbByf8eBIstLVOrRF0W3O5dpNefs6vVyCqxTIeYVQ=
+	t=1735445288; cv=none; b=CQPl7uoxYQdvOXGpDg9sm9b2vnfnQagyUvaFtyhJTiCEdQ+TQkuDS1pIp3eP7+cFsbNUq98ARIrVGUvKKAhQ98f7gHqJJFQcJxVjRa8DuBxd5w9NNi1Wd7/yMEhQoG8bGE8qDRJPq/8ZjhrA0xqoWhFVJWWJyo+k8ElmUj7upGM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735435418; c=relaxed/simple;
-	bh=MH2kKGrSKK2CgBl4KM0ZOEJRCnzuI/Kcseozcr4PHN0=;
+	s=arc-20240116; t=1735445288; c=relaxed/simple;
+	bh=/quudPiktVZqE9WjTumurLTNm6H8nKE+1TLqFdezSjk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XjsNsvJgbS+AQk6M7qimK681rr+JVgYw3GYyqtZ/qmWb1GSEbBRGuU9aLCTyzKBih7h2KGimdqIE0U/Q18Gf8Bn7wkiwQZ6A5iv+E8FFPUAFdnMUpDPrz6+341OzYlHlREfKS+1Yepfi+rTBkfpIscW/4SBtksLV4TaVWBy+/Ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=K4li8RVP; arc=none smtp.client-ip=209.85.167.41
+	 Content-Type:Content-Disposition:In-Reply-To; b=e/YuW0o8LKIkT3WmWfjDbsYv1Q2NNkm5Q1xUG+fgnigxYyLgWpxF28q1NEIhb15T2uYK2g5vjIeeRPAQnmhxrsRYyuNLbr5Ijk6s40Hpg5CfsyrlT760BCGFIFx5OdPHVFDmj23+VEPNvX/VXdjcG4XBSiwycBNAGy/BEMkCrAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gUp4gJTr; arc=none smtp.client-ip=209.85.167.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53e3a227b82so7885053e87.0
-        for <linux-pm@vger.kernel.org>; Sat, 28 Dec 2024 17:23:36 -0800 (PST)
+Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-54020b0dcd2so10038099e87.1
+        for <linux-pm@vger.kernel.org>; Sat, 28 Dec 2024 20:08:06 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1735435415; x=1736040215; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=SFsbQPjlzXbFI6XJVd0xng35m0N0gmlheNYTk38UQVw=;
-        b=K4li8RVPn1eW/VssVk/MJwXAIZO3AuStJJasNxw2y5bTGWnFVjMF2MA7XncsBgHiJz
-         y0qMxdlmiWRuTfSmc2qUW1KKUPMNtMI5vdkoDOERihIcowczMibaEoRnVau+XioD2TMB
-         FCe3UtgAuLXxeKGl/dbzcgr8hWx6Tn4/B8683DBmMkb5X4C+H1X6Oai91fFYuJYKaBZY
-         e7sXOWxGqhgm6T0pFLac2CCJR0RyAmQ+QDeUMYngC/jPT0xjBrtSWFbaunp7xYZulLSb
-         kt+nTy+WFvU0oyMMVrBCEQuPkPVYuDbU0ONNoQMGxaBDR+ziCMhaj7Ut0qxZrXoBanlu
-         0FqQ==
+        d=linaro.org; s=google; t=1735445285; x=1736050085; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=dBYyXD4A7od+Hr4TN2s40+nz0C8Q9NU/oHkDiqfb3QY=;
+        b=gUp4gJTrqt7tweU/u38PQzO+s2KE8d2UGokiI3sWerMyVWDyXw+hcpT2dUX5Zz2F68
+         nm2Kz0Yq6WMUi5Ki/PPh9/gtPWV3IWoEwJc5Nc5gED2K7wACic4xRiB/5tb6LLqygasR
+         adfpyJCZlSSJ+DUYLTJLsRGtvVMlZz5YaJhmw7unDMIAVlqVc7bcJZR1lgrPvyIxZ/7J
+         Qdw7oipnUyoWKQbW+upJCF3b2UaIISg+i/PJfVaHV1hJ2DWaou9BX6KVc/i6iTZ0hpkA
+         Z4kT+48q6Il/hlV+dP9IKh1BNOoBqhpAQfpXpjenr+dQjcDbOurBLExBur5iF5QvVpPX
+         caeA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735435415; x=1736040215;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=SFsbQPjlzXbFI6XJVd0xng35m0N0gmlheNYTk38UQVw=;
-        b=NlFHV0gu0N01yBkGKi+5BnJ69QPXdy6hGmz+Ny7bJ7Q82cS0KlX/RBUrJ1SZDKLwgJ
-         1P9m/nHp9GMvbjtyJ8pnv2ZzZ/IF2yacHhdLu9EPOCTR7uINW9rbIO2lGjjQCJCcQ1g5
-         NQyY5xuJgrihQiK+4fwkOSiLX8POrArQA+FjZeXJy91qUHK4tX+aHM1wGlouDt8bkWXK
-         UYQwrMcZVd/efyVbAi1Vb0Ngb4j98weBCKfR10v4wdxi1dGM9qWB1bT++MaHY5SMUNDF
-         X6d+iWCjIdwVs1G38sBkt4+jK6aciOSNHV3elrb8hpG6jZpFvUndOpxcHdDo4HqaSSKJ
-         eYzw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXcnk1KH/p5Txy0xKWuxlN/3psePEPutVWBBWFuaw/OzaNIKkw1W7DsbaqqrqSar/CkpcT7N2rQw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjMM8GufO1ArV7PK6UPWAGWP8QIlCU00c7VoDQEhAhvTBhWTHZ
-	g6BlPy0yCWJk8Hhk7L+LOce+RZOD+vvrfLZQ9fIXEK2ayZpAnpKf2y1h1HV7kkG+AmiX26oJNpU
-	d
-X-Gm-Gg: ASbGnctDnhrt67DzHte9TisSK0/HhQ7bKdWERG2+yny8kSeESTMD3jLMEia+cfH/i2N
-	xd4W00JrZIKJbnDsyQEptnSlBuO0elxcdH6l8xrrQR5jb2yY2f5+yIObfw2PE4nKsE3LLJ00ALC
-	nMv+/aQ3RQTMz+moh7A+xI/VF1+s0czxfe74L8DRSbdEO+DAI8/MNT9/mtu/lAFyrb/2xmRQBY8
-	GPfs+83VVtgXcdody05uKjFpZeodqWs4T7huFqu5PaGePzwXkBjQYaLI0SY12rA8NmPLuYFX1tH
-	1O15bN7V2FdK6HunSuPts6cu69aoU4Xwzu5i
-X-Google-Smtp-Source: AGHT+IE6ygaFpJhqi1sQtOzzMfQwC5MPGSQWsNozAVNIAiDUNkupqX2bYVPn8WGzoUFvYpPfErgXzA==
-X-Received: by 2002:a05:6512:12c2:b0:542:1b6a:b476 with SMTP id 2adb3069b0e04-5422952291bmr9340193e87.7.1735435414599;
-        Sat, 28 Dec 2024 17:23:34 -0800 (PST)
+        d=1e100.net; s=20230601; t=1735445285; x=1736050085;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dBYyXD4A7od+Hr4TN2s40+nz0C8Q9NU/oHkDiqfb3QY=;
+        b=C6fTNLBxSmUJ3Rzwdm0hb/Nbrxw0dPeP+J63RxbtHYPOsEiJdeCdDUC8Cl1Pht7TDd
+         FxSKVU1mC/HjkH/Pc6c0Jr3yzawvwrD5otrhfXX/5IhuWukSRlu5turczVev0gkZ8oGh
+         Drj57f43ZF/8PI8Pl/Rm4zSY3/Go8nKR4Ljmir053XxQ/FCF/8Q1HNGHi2PkisZKpDtm
+         Xuv4MdJBYfBX4A9VcwkPzlu2Vs6l+gU2LWon9mQhFcUuvmNkhHZfmx5SUFaEkxav4QY1
+         ODNI4mfaGub5KUfDgOinQbQoRgB08SteOjIswbpwcjP4BWe8cbAWzjYC98/C7UuHqW1E
+         OE+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWmM7dxU8az8cCX7U5PmbPmhd/RxS/+p7K2ChXUlQ3TWDfEDmukkUPZqeyxCGlg7RoKbN7FM+LEmg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzAsaGlCTOR5FSySlT0YH9ubn/6RCSzfspJKipDFRjgqGtFXtVI
+	KSlKfxEXnUTN64Hz0QT+xxNI0Xqz3bb+oQH4xBix2RKlgzcMjU89KK6TvDge8BQ=
+X-Gm-Gg: ASbGncvvJv8+zB4qNRgDajlsNh+729SKCkVLIfHGyaXEK8ZmzyKuYXr+xL970CpMu6I
+	QnvqJ641C8c+iFgUtTESHHbSzqWkF0P2YDtySYU9OWuj0HJKJwHcWYfxueZAHHhTqgKLNBqlLmH
+	Q0CrojAchUbfQmXYHvKv7BM3r1dFGQgDbnTeHdX873pH/sebkV/3Omr1Rggt2X22/765RRzbR6u
+	6DddjSVWkYVDf/qjjHT1gw89WS49DGt8YoweJB8kSeGwjHTplopvmviZAMYC/ZaYb9SQBMAFQtN
+	7hTVH3+NLbjkN+w+exrJAGvZAS/WqaoJfere
+X-Google-Smtp-Source: AGHT+IEmnQonNnCtCNCxnF10T/nU4V0yXQZtHkXo8ONEqj/q42yAyh+ZqfgVXb/gaGmlvzPHgq3v7w==
+X-Received: by 2002:a05:6512:318e:b0:540:1db4:3c72 with SMTP id 2adb3069b0e04-542294434abmr9788309e87.10.1735445284611;
+        Sat, 28 Dec 2024 20:08:04 -0800 (PST)
 Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--b8c.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::b8c])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5422382154csm2741299e87.181.2024.12.28.17.23.32
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-542235f6790sm2760827e87.2.2024.12.28.20.08.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 28 Dec 2024 17:23:33 -0800 (PST)
-Date: Sun, 29 Dec 2024 03:23:30 +0200
+        Sat, 28 Dec 2024 20:08:03 -0800 (PST)
+Date: Sun, 29 Dec 2024 06:08:00 +0200
 From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-Cc: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>, 
-	Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Odelu Kukatla <quic_okukatla@quicinc.com>, Mike Tipton <quic_mdtipton@quicinc.com>, 
-	Sibi Sankar <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V6 1/4] interconnect: qcom: Add multidev EPSS L3 support
-Message-ID: <bbn3cbrxcagifpcjrzh5k7o5xvf6ajnf5y6zqnghex6sqwdt4t@mb3v6yfgehtv>
-References: <20241125174511.45-1-quic_rlaggysh@quicinc.com>
- <20241125174511.45-2-quic_rlaggysh@quicinc.com>
- <2b95cc25-a842-4edd-a5f3-2351038d264e@oss.qualcomm.com>
- <5egskepgsr52ulnbw7jhvazfjayg5ge5vhg6pi7mllyxx2vwqw@a2ojvabzd36o>
- <0881289f-db05-4e33-91a7-ffd415c2f37e@oss.qualcomm.com>
- <b2zicviv7nyl3izj2fzwzm2cp5phlxufaaoyi7e3g3iyxcyw56@iufgz33tsk33>
- <dafa6ce0-47f6-4e6a-882b-278c3b51e768@quicinc.com>
+To: Pengyu Luo <mitltlatltl@gmail.com>
+Cc: krzk@kernel.org, andersson@kernel.org, bryan.odonoghue@linaro.org, 
+	conor+dt@kernel.org, devicetree@vger.kernel.org, gregkh@linuxfoundation.org, 
+	hdegoede@redhat.com, heikki.krogerus@linux.intel.com, ilpo.jarvinen@linux.intel.com, 
+	konradybcio@kernel.org, krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, 
+	nikita@trvn.ru, platform-driver-x86@vger.kernel.org, robh@kernel.org, 
+	sre@kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
+Message-ID: <xiwaq7fapkkmohg743v36uzpxv4ib4o6upibh7fgvmfjiupy2k@zqxw53prsith>
+References: <53da6468-501c-4c0f-a73b-4eac99c72b8c@kernel.org>
+ <20241228113438.591254-1-mitltlatltl@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <dafa6ce0-47f6-4e6a-882b-278c3b51e768@quicinc.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20241228113438.591254-1-mitltlatltl@gmail.com>
 
-On Thu, Dec 26, 2024 at 09:43:20PM +0530, Raviteja Laggyshetty wrote:
+On Sat, Dec 28, 2024 at 07:34:37PM +0800, Pengyu Luo wrote:
+> > On Sat, Dec 28, 2024 at 5:58 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+> > On 27/12/2024 18:13, Pengyu Luo wrote:
+> > > +
+> > > +#include <linux/platform_data/huawei-gaokun-ec.h>
+> > > +
+> > > +#define EC_EVENT             0x06
+> > > +
+> > > +/* Also can be found in ACPI specification 12.3 */
+> > > +#define EC_READ                      0x80
+> > > +#define EC_WRITE             0x81
+> > > +#define EC_BURST             0x82
+> > > +#define EC_QUERY             0x84
+> > > +
+> > > +
+> > > +#define EC_EVENT_LID         0x81
+> > > +
+> > > +#define EC_LID_STATE         0x80
+> > > +#define EC_LID_OPEN          BIT(1)
+> > > +
+> > > +#define UCSI_REG_SIZE                7
+> > > +
+> > > +/* for tx, command sequences are arranged as
+> >
+> > Use Linux style comments, see coding style.
+> >
 > 
+> Agree
 > 
-> On 11/30/2024 9:02 PM, Dmitry Baryshkov wrote:
-> > On Sat, Nov 30, 2024 at 04:12:49PM +0100, Konrad Dybcio wrote:
-> >> On 30.11.2024 4:09 PM, Dmitry Baryshkov wrote:
-> >>> On Sat, Nov 30, 2024 at 01:49:56PM +0100, Konrad Dybcio wrote:
-> >>>> On 25.11.2024 6:45 PM, Raviteja Laggyshetty wrote:
-> >>>>> EPSS on SA8775P has two instances which requires creation of two device
-> >>>>> nodes with different compatible and device data because of unique
-> >>>>> icc node id and name limitation in interconnect framework.
-> >>>>> Add multidevice support to osm-l3 code to get unique node id from IDA
-> >>>>> and node name is made unique by appending node address.
-> >>>>>
-> >>>>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-> >>>>> ---
-> >>>>
-> >>>> [...]
-> >>>>
-> >>>>> +	ret = of_property_read_reg(pdev->dev.of_node, 0, &addr, NULL);
-> >>>>> +	if (ret)
-> >>>>> +		return ret;
-> >>>>> +
-> >>>>>  	qp->base = devm_platform_ioremap_resource(pdev, 0);
-> >>>>>  	if (IS_ERR(qp->base))
-> >>>>>  		return PTR_ERR(qp->base);
-> >>>>> @@ -242,8 +262,13 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
-> >>>>>  
-> >>>>>  	icc_provider_init(provider);
-> >>>>>  
-> >>>>> +	/* Allocate unique id for qnodes */
-> >>>>> +	for (i = 0; i < num_nodes; i++)
-> >>>>> +		qnodes[i]->id = ida_alloc_min(&osm_l3_id, OSM_L3_NODE_ID_START, GFP_KERNEL);
-> >>>>
-> >>>> As I've said in my previous emails, this is a framework-level problem.
-> >>>>
-> >>>> Up until now we've simply silently ignored the possibility of an
-> >>>> interconnect provider having more than one instance, as conveniently
-> >>>> most previous SoCs had a bunch of distinct bus masters.
-> >>>>
-> >>>> Currently, debugfs-client.c relies on the node names being unique.
-> >>>> Keeping them as such is also useful for having a sane sysfs/debugfs
-> >>>> interface. But it's not always feasible, and a hierarchical approach
-> >>>> (like in pmdomain) may be a better fit.
-> >>>>
-> >>>> Then, node->id is used for creating links, and we unfortunately cannot
-> >>>> assume that both src and dst are within the same provider.
-> >>>> I'm not a fan of these IDs being hardcoded, but there are some drivers
-> >>>> that rely on that, which itself is also a bit unfortunate..
-> >>>>
-> >>>>
-> >>>> If Mike (who introduced debugfs-client and is probably the main user)
-> >>>> doesn't object to a small ABI break (which is "fine" with a debugfs
-> >>>> driver that requires editing the source code to be compiled), we could
-> >>>> add a property within icc_provider like `bool dynamic_ids` and have an
-> >>>> ICC-global IDA that would take care of any conflicts.
-> >>>
-> >>> Frankly speaking, I think this just delays the inevitable. We have been
-> >>> there with GPIOs and with some other suppliers. In my opinion the ICC
-> >>> subsystem needs to be refactored in order to support linking based on
-> >>> the supplier (fwnode?) + offset_id, but that's a huuuge rework.
-> >>
-> >> I thought about this too, but ended up not including it in the email..
-> >>
-> >> I think this will be more difficult with ICC, as tons of circular
-> >> dependencies are inevitable by design and we'd essentially have to
-> >> either provide placeholder nodes (like it's the case today) or probe
-> >> only parts of a device, recursively, to make sure all links can be
-> >> created
-> > 
-> > Or just allow probing, but then fail path creation. It will be a
-> > redesign, but I think it is inevitable in the end.
-> > 
+> > > + * {master_cmd, slave_cmd, data_len, data_seq}
+> > > + */
+> > > +#define REQ_HDR_SIZE         3
+> > > +#define INPUT_SIZE_OFFSET    2
+> > > +#define INPUT_DATA_OFFSET    3
+> > > +
+> > > +/* for rx, data sequences are arranged as
+> > > + * {status, data_len(unreliable), data_seq}
+> > > + */
+> > > +#define RESP_HDR_SIZE                2
+> > > +#define DATA_OFFSET          2
+> > > +
+> > > +
+> > > +struct gaokun_ec {
+> > > +     struct i2c_client *client;
+> > > +     struct mutex lock;
+> >
+> > Missing doc. Run Checkpatch --strict, so you will know what is missing here.
+> >
 > 
-> There are no two instances of l3 or NoC on any SoC except qcs9100 and
-> qcs8300. I dont expect any new SoC as well.
-> As second instance is needed only on qcs9100 and qcs8300, I am keeping
-> the patch (patchset v6) as is and limit the dynamic id addition to l3
-> provider only.
+> I see. A comment for mutex lock.
+> 
+> > > +     struct blocking_notifier_head notifier_list;
+> > > +     struct input_dev *idev;
+> > > +     bool suspended;
+> > > +};
+> > > +
+> >
+> >
+> >
+> > ...
+> >
+> > > +
+> > > +static DEVICE_ATTR_RO(temperature);
+> > > +
+> > > +static struct attribute *gaokun_wmi_features_attrs[] = {
+> > > +     &dev_attr_charge_control_thresholds.attr,
+> > > +     &dev_attr_smart_charge_param.attr,
+> > > +     &dev_attr_smart_charge.attr,
+> > > +     &dev_attr_fn_lock_state.attr,
+> > > +     &dev_attr_temperature.attr,
+> > > +     NULL,
+> > > +};
+> >
+> >
+> > No, don't expose your own interface. Charging is already exposed by
+> > power supply framework. Temperature by hwmon sensors. Drop all these and
+> > never re-implement existing kernel user-space interfaces.
+> >
+> 
+> I don't quite understand what you mean. You mean I should use hwmon
+> interface like hwmon_device_register_with_groups to register it, right?
+> As for battery, get/set_propery allow us to handle charging thresholds
+> things, but there are smart_charge_param, smart_charge and fn_lock to handle.
 
-As you could have noticed, it was suggested to change ICC subsystem API
-to allow the dynamic IDs. This isssue is not limited to just EPSS L3
-driver. So we were discussing if you or your colleagues could sign up
-for updating the interconnect subsystem to use node+arguments approach
-instead of using a global static ID list.
+Please push the smart_* to the PSY driver. At least it makes sense to
+move those. I'm not sure about the fn_lock one. If you have a separate
+EC-based input device, it should go to it. If not, let's keep it in the
+base device.
 
 > 
-> >>
-> >> Konrad
-> >>
-> >>>> Provider drivers whose consumers don't already rely on programmatical
-> >>>> use of hardcoded IDs *and* don't have cross-provider links could then
-> >>>> enable that flag and have the node IDs and names set like you did in
-> >>>> this patch. This also sounds very useful for icc-clk.
-> >>>
-> > 
+> >
+> > > diff --git a/include/linux/platform_data/huawei-gaokun-ec.h b/include/linux/platform_data/huawei-gaokun-ec.h
+> > > new file mode 100644
+> > > index 000000000..a649e9ecf
+> > > --- /dev/null
+> > > +++ b/include/linux/platform_data/huawei-gaokun-ec.h
+> > > @@ -0,0 +1,90 @@
+> > > +// SPDX-License-Identifier: GPL-2.0-only
+> > > +/* Huawei Matebook E Go (sc8280xp) Embedded Controller
+> > > + *
+> > > + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
+> > > + *
+> > > + */
+> > > +
+> > > +#ifndef __HUAWEI_GAOKUN_EC_H__
+> > > +#define __HUAWEI_GAOKUN_EC_H__
+> > > +
+> > > +#define GAOKUN_UCSI_CCI_SIZE 4
+> > > +#define GAOKUN_UCSI_DATA_SIZE        16
+> > > +#define GAOKUN_UCSI_READ_SIZE        (GAOKUN_UCSI_CCI_SIZE + GAOKUN_UCSI_DATA_SIZE)
+> > > +#define GAOKUN_UCSI_WRITE_SIZE       0x18
+> > > +
+> > > +#define GAOKUN_TZ_REG_NUM    20
+> > > +#define GAOKUN_SMART_CHARGE_DATA_SIZE        4 /* mode, delay, start, end */
+> > > +
+> > > +/* -------------------------------------------------------------------------- */
+> > > +
+> > > +struct gaokun_ec;
+> > > +struct notifier_block;
+> >
+> > Drop, include proper header instead.
+> >
 > 
+> I agree, I copy 'struct notifier_block;' from
+> include/linux/platform_data/lenovo-yoga-c630.h
+
+Please don't pollute header files with extra dependencies. It's usually
+better to just forware-declare the struct instead of adding unnecessary
+include.
+
 
 -- 
 With best wishes
