@@ -1,55 +1,78 @@
-Return-Path: <linux-pm+bounces-19824-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19825-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D269D9FDF53
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 15:49:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17C409FDF89
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 15:54:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84170161972
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 14:49:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B89BE18811CD
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 14:54:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D4C916F0CF;
-	Sun, 29 Dec 2024 14:49:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96C06198A37;
+	Sun, 29 Dec 2024 14:52:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="FFoiTSNd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e6ckRCNd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.web.de (mout.web.de [212.227.17.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4532594A6;
-	Sun, 29 Dec 2024 14:49:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 877012594A6
+	for <linux-pm@vger.kernel.org>; Sun, 29 Dec 2024 14:52:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735483774; cv=none; b=hWIYIE48qrKKwSwlG1bbsUh3vrvDYEQXVn7PgbdauIiFIiMsOpxxX1qG9rgd0FStAzxqjuLT0pSJesjgZQUbEcO2wKrt8QS8TqAX6k+dM8F+8hye+9FHIomQfPG/Fd9RpAxGofTdOxj3uhSfHc5NihsqSfoA6pNPp1R56KrxS+c=
+	t=1735483924; cv=none; b=F0pdF6zcCx9ZlzJb4S/JAHrGHXxUpxHpfwTkVV3WfUrFVCQUEJAYPYmDGeY3zte5wKhMao4tWtM5ofHnS0K8qiDdJprpskHmnw++CEMKqH2zPKjtP0+RsoVUmpaAsWIfaezK1tUTIDFrA4vMgRrAG6H8YzeKqddpdFZm4rPLg8c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735483774; c=relaxed/simple;
-	bh=k0ZngxZKM6fOJCwatdrmbqUfNxevJYyyucnNVKDe7Pw=;
-	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
-	 In-Reply-To:Content-Type; b=rRrFWsrM5AyuzcNOKg9jQqYiITo0HgV1v24ZMLbFeVj63vNH34SO62TfttVCNwZv9qMiC93S5W+53pYOs+dSGz8v+C4Mw+heZi+JO+7JB5QmwECJiefUeISLQOC4kf9+6LlbjoQco0g7qMIj2CfJyh6e/o8UpdRn8Zn21If1GEM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=FFoiTSNd; arc=none smtp.client-ip=212.227.17.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
-	s=s29768273; t=1735483745; x=1736088545; i=markus.elfring@web.de;
-	bh=HqBR+j1S1SOZ52pSXNFEjgGp09gt0sT/jE/UV/DQVko=;
-	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
-	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
-	 cc:content-transfer-encoding:content-type:date:from:message-id:
-	 mime-version:reply-to:subject:to;
-	b=FFoiTSNdWpGKXjZUZlvbbDc5VCHZJzyjXaLhnd5DZue6Xqq+s5c1JueQc+/qClD5
-	 CAZV83FvB28dN9ZkE2eLIZKZ/j2XAvPIepLGuuafep9Ot8iCiDvkamuuBS6cPednW
-	 RcosBKI+mpml7t5AyzvrEZhVcp/CSe+sEgvmcNqN0WlpaSHpa/S23mQa3Oukw2ZXg
-	 r36Q/09riex6RgAYbCsJl8BletqqmJfcxdS0ISZMndrqfff8XoEJS7UGBglHSJTLg
-	 m32qk1psWRsisZcnDG25YRB+GdrVwFwswAHm16NhTW/LUu90rRPxpdK3rxo+J5GGi
-	 d+gRg8X15z7ZE3Sy0A==
-X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
-Received: from [192.168.178.21] ([94.31.70.72]) by smtp.web.de (mrweb105
- [213.165.67.124]) with ESMTPSA (Nemesis) id 1MxpiO-1tj3ux2yb8-00zGNQ; Sun, 29
- Dec 2024 15:49:05 +0100
-Message-ID: <b55886e2-9a21-4903-b344-2dccb359bcbc@web.de>
-Date: Sun, 29 Dec 2024 15:49:01 +0100
+	s=arc-20240116; t=1735483924; c=relaxed/simple;
+	bh=NH+R1Gq5a4ptQDjw4VRo6cce3Q3VMA+UUnZJpCGlVLg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=kCJ330a2FEQk1ES/Vi4o8rJ0NFsi53dZSlSh7Neez6l0tBYoQykl368OpaIqdvmkvbg5TutDXYfyp0o5kbJ86yymctmdjs8hv6ACExGQoNKXivZitS9+Wut0jRk0PdN0IgCDArW54WDXIZl+fRcojDURfAEfIiDDIlt0xZ20qAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e6ckRCNd; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-3863703258fso5564253f8f.1
+        for <linux-pm@vger.kernel.org>; Sun, 29 Dec 2024 06:52:01 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1735483920; x=1736088720; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2RkB7UfRiNg6MyNlWMJbO93WwIH7bFs9T4rAheWdhbk=;
+        b=e6ckRCNdSqMFd3uZRSm5JGkr0zPLgH0I5ANLlyX33gNReQr8+2aO58MsnQqN3ioguy
+         5Jio11Ml17/FE2tLS2mODCvwHHgTEM1sNxSVm8WXircvWOo1SPqBjdZJJzSAgndsnQ5+
+         obAI/A1lDWs1HQjtQSW4O3hfXd237r6CfawSO0Yh1kaoYoX29sZPzMR2Y6jjquoRhu+t
+         hxw0k07S3Yx3+hBf/Sll/eybPnwpWF4prOQndr95tw8Aes8KkOfXUoJZjXX3xIHvq+8D
+         18Lv8ii5fbbsL4w7l6UA3tRLb+IcvQglxqzhUmOUdMVIpQ7t5Ib2CbsWaBrSjxZ2mN4T
+         s2LQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735483920; x=1736088720;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=2RkB7UfRiNg6MyNlWMJbO93WwIH7bFs9T4rAheWdhbk=;
+        b=d0nqBBoPkxS/gfepmrP063AjWMgCqpexzXrd7zhOE7IvxuOWglBe8xlpM69z0Sj2NH
+         Ha19jtjPCnDIR8x2bu5B2RurPPCnvu91K+Tsixzg2vRTx4Isj9Qio2fp2gnLKS6IU2nO
+         j/6Cq+XjH7+ryTsfHxaznPzj1uvEw0/suTrjDx/G58YGh0ohjC8Iv2ciUoRCJhKp+NWM
+         Sb/C5p0yIgx7RQ3yG7+1jb4rEz+Db2NC/XiwxnZnPctpnhc1LdYe26rwRQ3oPNDUwqpo
+         ESCmxBbkoVR2pLSFjEjfMNMXT5WBNe3GxKIFPqSgWej8QjiRarPuhfubbszIPXUjqggz
+         yQQQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1eGBRQB3J3iseHBB11En1l8cqClQY9RFIV+SYplbHnHNHevAdRJPHp02l34waDgB3Piy8WkCW9Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZ7uBXNaJacwTOE74Tx5hbnuCJhfUDA9Ie1It2iDVqlDvwOUXd
+	ygONCz7NsGEk7JUDKYEN7/3fb19dcQkJ03hoA4qtTjpWemiglXF74gvI45lZp/c=
+X-Gm-Gg: ASbGncs8GIv74ZnA1Pw096WRMCHS3BQBNXsdefyJbpqzey9N3/Xh29FdqMFuFRjquZW
+	jMIHuENeaSb3KA5T5mDfQrFOJq1IIPC3VsAJW/AFRX8TmNp9VhYIhV0k78cR1to90ArH+z4+H/C
+	MX+XQWDtpnR7moHCm1X1iN5xJ5vOdnq5W1epe+R377CfOrbP9vzLsytRQqeGDXqD6tlSVqkb+yI
+	4RepBukA//wFQFfhXmgbQpY0i9llmMI/dMqhk9S7kpNAZZmrbpMVa2wYqeL+JeNCHkt5w==
+X-Google-Smtp-Source: AGHT+IFGQdUBCOz+F0Jdt8T/X7wzDgUoFUYLmOZIeAMTzUhMqCz8ekRTaHkUH6qYyBefzRQQ0RDeZQ==
+X-Received: by 2002:a05:6000:704:b0:385:ea40:b46b with SMTP id ffacd0b85a97d-38a229ed094mr26533826f8f.4.1735483919862;
+        Sun, 29 Dec 2024 06:51:59 -0800 (PST)
+Received: from [192.168.0.43] ([176.61.106.227])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c8332absm27199663f8f.38.2024.12.29.06.51.58
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sun, 29 Dec 2024 06:51:59 -0800 (PST)
+Message-ID: <5310962f-c0d8-4ada-bb95-b727a3c88b00@linaro.org>
+Date: Sun, 29 Dec 2024 14:51:57 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,77 +80,266 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-To: Pengyu Luo <mitltlatltl@gmail.com>, platform-driver-x86@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
- linux-usb@vger.kernel.org, linux-pm@vger.kernel.org,
- Bjorn Andersson <andersson@kernel.org>,
- Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Hans de Goede <hdegoede@redhat.com>,
- Heikki Krogerus <heikki.krogerus@linux.intel.com>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
- Sebastian Reichel <sre@kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
- Nikita Travkin <nikita@trvn.ru>
-References: <20241227171353.404432-3-mitltlatltl@gmail.com>
-Subject: Re: [PATCH 2/5] platform: arm64: add Huawei Matebook E Go (sc8280xp)
- EC driver
-Content-Language: en-GB
-From: Markus Elfring <Markus.Elfring@web.de>
-In-Reply-To: <20241227171353.404432-3-mitltlatltl@gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:u/t21Gl+b0kv/L7T/6C0mdnE5HLDCB9ud5PsPoMIUZ0+nydSYBG
- JcV6qZcMFuRRCxXWuL2HU8ddK8udFsp+Ogn/QkHNdDUowH9DrwNV8OvBnTE1aXg3gSw7oI8
- IPKug7WB9ZjKA0ZfGo4KT4+SdylJ3YzAQlzwngFGSQPPkfI1Ix46BF/pl33eE6ttFiH41cJ
- O6LgUlo3552a90hJ1wC7g==
-X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:ShYNGWyMq0o=;bntqRl1t/Vl3qe/+W68wkBbphT9
- AvhOZqMYRAzx34o7xq7HFv2EO5ceHj0wWTcQrNFCphG0LA7XfbF0Bmn6aSroyh+gYPXKfbh41
- XTWwIo1Tpybc5rqV70WOZ+mpQ5ZRiO4cdQXd5vzOXem+H9gxRH8r+4udJtjD7qDjFcOkie3CS
- HdZaBnWnqwt9NlhzPDlet+ht+1TfzvZcAiuR60n61y53JyfiiloQCmlhs+e2+Lb4MPK0XInzV
- pyOByK3GL/KDjWHzRF3hMWuX/T905gnywOwZTjZi7Sj098uv1vGuaRmN+2Mf4OIZqsLDgGHBK
- avj82mWPJPOBA/KNgxd0A663Gd6b/c5t9HqHELQB/YrR5npkB9hC+EueQNpmouzgY+INieQE7
- GgqV4YQLcMpW0P+ZkuxtBWX2LwRPQvRJrXucz/NBfnCAURSKglR4UMZkd4SAFy5tVD4nxhFfJ
- 4lCJUwhyK2IB1GvccXXxdXalmr3Ko6dfhGtgexvG85XRFABL7kmpTEFgEU+LcpWJQNN4+8eGA
- 4CZNXitO3HhwEyhReh/WPJeJKd/aVjhdapPCHaxGozigZBOlM6tcU2PoeNbTFNypiFNgn02W5
- c4UWTI2RKRqAQpF6Re0lY0lAKyRGatR8wGdOK7BcVDH6aaecj3xrgDyFZ1FrKd28DvHVEAwng
- aGsDoGd8ngemjCFIDnHIKfSowhAWlQObfDWGXEQxaai2G+ahlWu+AarRU4RcPA+OzxM9hxWxm
- GHWHPZGF9dU7HgkfF6SOPuFxhWC+Ld7/qD548vC65EuygUwHQuqs5jMLJZ9G7WDgmOQ2fj2VI
- tpnCEJOIJgh9iGJwRTl0h/gI4Zht2LUqRyKVRVZm2HaNnIB41w8paS8PouSJzLAbDKs1oSxaR
- Xv9JTtO5luW/yI2EKGQz4kkgFGDIqmcyvf4TASjMcCX/xuM0lhrRLDrnwb5IrxlGm64aOTTo7
- gyh4mDydkJLVVGEgt1SWEVJioOpPgY6M4c5cyqiFor2A/tuZwV8S1HCpVMfi/5yWjYUdKvdHS
- 36sLP8+uJbAGkkHr9ZRHH9RTvWjFkfN0oEIYNdZEMicggeBkIXmz7BLRK0nFxjxlF0YVzbT11
- a9nJ2KCEQ=
+Subject: Re: [PATCH 3/5] usb: typec: ucsi: add Huawei Matebook E Go (sc8280xp)
+ ucsi driver
+To: Pengyu Luo <mitltlatltl@gmail.com>
+Cc: andersson@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
+ dmitry.baryshkov@linaro.org, gregkh@linuxfoundation.org,
+ hdegoede@redhat.com, heikki.krogerus@linux.intel.com,
+ ilpo.jarvinen@linux.intel.com, konradybcio@kernel.org, krzk+dt@kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, nikita@trvn.ru,
+ platform-driver-x86@vger.kernel.org, robh@kernel.org, sre@kernel.org
+References: <c17372ed-baf0-40a7-b267-25f1ff849cf7@linaro.org>
+ <20241228143830.613658-1-mitltlatltl@gmail.com>
+Content-Language: en-US
+From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
+In-Reply-To: <20241228143830.613658-1-mitltlatltl@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-=E2=80=A6
-> +++ b/drivers/platform/arm64/huawei-gaokun-ec.c
-> @@ -0,0 +1,598 @@
-=E2=80=A6
-> +static int gaokun_ec_request(struct gaokun_ec *ec, const u8 *req,
-> +			     size_t resp_len, u8 *resp)
-> +{
-=E2=80=A6
-> +	mutex_lock(&ec->lock);
-> +
-> +	i2c_transfer(client->adapter, msgs, 2);
-> +	usleep_range(2000, 2500);
-> +
-> +	mutex_unlock(&ec->lock);
-> +
-> +	return *resp;
-> +}
-=E2=80=A6
+On 28/12/2024 14:38, Pengyu Luo wrote:
+> On Sat, Dec 28, 2024 at 9:06 PM Bryan O'Donoghue <bryan.odonoghue@linaro.org> wrote:
+>> On 27/12/2024 17:13, Pengyu Luo wrote:
+>>> The Huawei Matebook E Go (sc8280xp) tablet provides implements UCSI
+>>> interface in the onboard EC. Add the glue driver to interface the
+>>> platform's UCSI implementation.
+>>>
+>>> Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
+>>> ---
+>>>    drivers/usb/typec/ucsi/Kconfig              |   9 +
+>>>    drivers/usb/typec/ucsi/Makefile             |   1 +
+>>>    drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 481 ++++++++++++++++++++
+>>>    3 files changed, 491 insertions(+)
+>>>    create mode 100644 drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+>>>
+>>> diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+>>> index 680e1b87b..0d0f07488 100644
+>>> --- a/drivers/usb/typec/ucsi/Kconfig
+>>> +++ b/drivers/usb/typec/ucsi/Kconfig
+>>> @@ -78,4 +78,13 @@ config UCSI_LENOVO_YOGA_C630
+>>>          To compile the driver as a module, choose M here: the module will be
+>>>          called ucsi_yoga_c630.
+>>>
+>>> +config UCSI_HUAWEI_GAOKUN
+>>> +     tristate "UCSI Interface Driver for Huawei Matebook E Go (sc8280xp)"
+>>> +     depends on EC_HUAWEI_GAOKUN
+>>> +     help
+>>> +       This driver enables UCSI support on the Huawei Matebook E Go tablet.
+>>> +
+>>> +       To compile the driver as a module, choose M here: the module will be
+>>> +       called ucsi_huawei_gaokun.
+>>> +
+>>>    endif
+>>> diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
+>>> index aed41d238..0b400122b 100644
+>>> --- a/drivers/usb/typec/ucsi/Makefile
+>>> +++ b/drivers/usb/typec/ucsi/Makefile
+>>> @@ -22,3 +22,4 @@ obj-$(CONFIG_UCSI_CCG)                      += ucsi_ccg.o
+>>>    obj-$(CONFIG_UCSI_STM32G0)          += ucsi_stm32g0.o
+>>>    obj-$(CONFIG_UCSI_PMIC_GLINK)               += ucsi_glink.o
+>>>    obj-$(CONFIG_UCSI_LENOVO_YOGA_C630) += ucsi_yoga_c630.o
+>>> +obj-$(CONFIG_UCSI_HUAWEI_GAOKUN)     += ucsi_huawei_gaokun.o
+>>> diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+>>> new file mode 100644
+>>> index 000000000..84ed0407d
+>>> --- /dev/null
+>>> +++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+>>> @@ -0,0 +1,481 @@
+>>> +// SPDX-License-Identifier: GPL-2.0-only
+>>> +/*
+>>> + * ucsi-huawei-gaokun - A UCSI driver for HUAWEI Matebook E Go (sc8280xp)
+>>> + *
+>>> + * reference: drivers/usb/typec/ucsi/ucsi_yoga_c630.c
+>>> + *            drivers/usb/typec/ucsi/ucsi_glink.c
+>>> + *            drivers/soc/qcom/pmic_glink_altmode.c
+>>> + *
+>>> + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
+>>> + */
+>>> +
+>>> +#include <linux/auxiliary_bus.h>
+>>> +#include <linux/bitops.h>
+>>> +#include <linux/completion.h>
+>>> +#include <linux/container_of.h>
+>>> +#include <linux/delay.h>
+>>> +#include <linux/module.h>
+>>> +#include <linux/notifier.h>
+>>> +#include <linux/of.h>
+>>> +#include <linux/string.h>
+>>> +#include <linux/workqueue_types.h>
+>>> +
+>>> +#include <linux/usb/pd_vdo.h>
+>>> +#include <drm/bridge/aux-bridge.h
+>>
+>> Is there a reason you don't have strict include alphanumeric ordering here ?
+>>
+> 
+> These two is dp/alt mode related, so listing them out. Above of them are
+> general things.
 
-Under which circumstances would you become interested to apply a statement
-like =E2=80=9Cguard(mutex)(&ec->lock);=E2=80=9D?
-https://elixir.bootlin.com/linux/v6.13-rc3/source/include/linux/mutex.h#L2=
-01
+OK. Unless there's an include dependency reason you need to, please just 
+sort the headers alphanumerically in order
 
-Regards,
-Markus
+#include <globals_first>
+#include <globals_first_alpha>
+
+#include "locals_next"
+#include "locals_next_alpha_also"
+
+>>>
+>>> +
+>>> +#include "ucsi.h"
+>>> +#include <linux/platform_data/huawei-gaokun-ec.h>
+>>> +
+>>> +
+>>> +#define EC_EVENT_UCSI        0x21
+>>> +#define EC_EVENT_USB 0x22
+>>> +
+>>> +#define GAOKUN_CCX_MASK              GENMASK(1, 0)
+>>> +#define GAOKUN_MUX_MASK              GENMASK(3, 2)
+>>> +
+>>> +#define GAOKUN_DPAM_MASK     GENMASK(3, 0)
+>>> +#define GAOKUN_HPD_STATE_MASK        BIT(4)
+>>> +#define GAOKUN_HPD_IRQ_MASK  BIT(5)
+>>> +
+>>> +#define CCX_TO_ORI(ccx) (++ccx % 3)
+>>
+>> Why do you increment the value of the enum ?
+>> Seems strange.
+>>
+> 
+> EC's logic, it is just a trick. Qualcomm maps
+> 0 1 2 to normal, reverse, none(no device insert)
+> typec lib maps 1 2 0 to that.
+
+I'd suggest making the trick much more obvious.
+
+Either with a comment or just mapping 1:1 between EC and Linux' view of 
+this data.
+
+The main reason for that is to make it easier to 
+read/understand/maintain/debug.
+
+
+
+>>> +             port->svid = USB_SID_DISPLAYPORT;
+>>> +             if (port->ccx == USBC_CCX_REVERSE)
+>>> +                     port->mode -= 6;
+>>
+>> why minus six ?
+>> needs a comment.
+>>
+> 
+> EC's logic. I don't know why, it is a quirk from Qualcomm or Huawei.
+> I will mention this.
+
+Instead of hard-coding a mapping between the EC's mode and Linux' UCSI 
+enum - just make a define or an inline, ideally something with
+
+switch(port->mode)
+case GOAKUN_MODE_0:
+	val = LINUX_UCSI_MODE_X;
+case GOAKUN_MODE_1:
+	val = LINUX_UCSI_MODE_Y;
+}
+
+That will make the mapping obvious and also ensure both to yourself and 
+to your reviewers that you have accounted for _all_ of the potential 
+mappings and if those mappings don't exist then the default: of your 
+switch statement should make some noise about it
+
+dev_err(dev, "GOKUN UCSI mode %d unmapped\n"); or something like that.
+
+
+> 
+>>> +             break;
+>>> +     default:
+>>> +             break;
+>>> +     }
+>>> +
+>>> +     spin_unlock_irqrestore(&port->lock, flags);
+>>> +}
+>>> +
+>>> +static int gaokun_ucsi_refresh(struct gaokun_ucsi *uec)
+>>> +{
+>>> +     struct gaokun_ucsi_reg ureg;
+>>> +     int ret, idx;
+>>> +
+>>> +     ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
+>>> +     if (ret)
+>>> +             return -EIO;
+>>> +
+>>> +     uec->port_num = ureg.port_num;
+>>> +     idx = GET_IDX(ureg.port_updt);
+>>> +
+>>> +     if (idx >= 0 && idx < ureg.port_num)
+>>> +             gaokun_ucsi_port_update(&uec->ports[idx], ureg.port_data);
+>>
+>> Since you are checking the validity of the index, you should -EINVAL if
+>> the index is out of range.
+>>
+> 
+> EC / pmic glink encode every port in a bit
+> 0/1/2/4/... => ???/left/right/some port
+> 
+> I remap it to -1/0/1/2, to access specific port exceptions(-1) are not
+> harmful, later in gaokun_ucsi_altmode_notify_ind
+> 
+> 	if (idx < 0)
+> 		gaokun_ec_ucsi_pan_ack(uec->ec, idx);
+> 	else
+> 		gaokun_ucsi_handle_altmode(&uec->ports[idx]);
+> 
+> gaokun_ec_ucsi_pan_ack can handle exceptions.
+> 
+
+gaokun_ucsi_refresh() can return
+
+-EIO
+-1
+ >=0
+
+Where -EIO and -1 both trigger gaokun_ec_ucsi_pan_ack() in 
+gaokun_ucsi_altmode_notify_ind()
+
+So if the index doesn't matter and < 0 => pan_ack() is OK or -EIO is not 
+returning meaningful error.
+
+Either way strongly advise against mixing a negative index as having a 
+valid meaning with actual -E error codes...
+
+As a reviewer doing a fist-pass this looks suspicous and implies more 
+thought/refinement should be done to the flow.
+
+
+>>> +
+>>> +     ucsi->quirks = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_PDOS;
+>>> +
+>>> +     ssleep(3); /* EC can't handle UCSI properly in the early stage */
+>>
+>> Could you not schedule work for + 3 seconds instead of sleeping here -
+>> representing the required stall time in some sort of state machine ?
+>>
+> 
+> I see, I will check work schedule interface.
+> 
+>> 3 seconds is an incredibly long time for a computer to sleep.
+>>
+> 
+> This module will be loaded at about 5th second after power up, if not
+> sleep, we will receive something disharmonious, sleeping for 3 seconds is
+> a hack.
+
+Yes it is. You could schedule some work to complete three seconds from 
+here instead of doing this long sleep here.
+
+In fact you are registering a worker here right ?
+
+In which case its pretty trivial to schedule some work on that worker 
+for three seconds hence ..
+
+Please investigate.
+
+---
+bod
 
