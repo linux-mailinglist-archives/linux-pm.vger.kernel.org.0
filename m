@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19819-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19820-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 475889FDE46
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 10:43:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D7BD9FDE4E
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 10:45:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F0B547A124C
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 09:43:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3252F1619E7
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 09:45:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A5F27DA6C;
-	Sun, 29 Dec 2024 09:43:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 350EA86334;
+	Sun, 29 Dec 2024 09:45:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HkTumfq+"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KbXWZCKG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E7592AE86;
-	Sun, 29 Dec 2024 09:43:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4112AE86;
+	Sun, 29 Dec 2024 09:45:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735465421; cv=none; b=rPqhrjmnmBgd9cmrBh2V2cA81+v5bZgh4LgdpBnk34NCu86kzz4XENgApbwzh/nO/czovu7zmkPKURQP0De2651w/uCLd9z8V1HvG1xHbDI4wOTTrGKE2d/hh0lvYfY7yBRtmuWeBM5/JJFtoI1gggjBfSpNoZKhiYY1jB6SqO8=
+	t=1735465501; cv=none; b=fSC79c+EbBIN/Nid5FK1swoLegrm3ZZ25+zSfBL+yZeScDupIN0xTlOOVS9tEQ98YI2P9j3zkiZzDDXKGtvj57OmNTTIZe5wqEtjbgBAjwbVEoGcq0DGiJUfct4BYjQT/mFH8VdI5TT4gsQmeCRWb4i6r2Rjqseq38KO302yl74=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735465421; c=relaxed/simple;
-	bh=99AOtJIrXiKzw5zkMdJrr1l3jmHrlm4DQapWU0eZAag=;
+	s=arc-20240116; t=1735465501; c=relaxed/simple;
+	bh=S2GhzAqFS2xfs9Cpu/ShhqODEb8JsrDRFcwSyQAsnws=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VZzfFtqjWJ84uFjanJFlffDPAwVDzd0y93a4iS0wETVXjluzJ+ZGfUJyA+6rj7zhmKyRQHUvLYDQt5LOMcg+1tSKsh2B6Qi23uKfXV/jk0sMHfiE4jZfP3x1wsI56QIFsuDtYWQaeGn3Mo/Nbj0T+vlDwC/r5HesVF0irYrn14I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HkTumfq+; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A92CC4CED1;
-	Sun, 29 Dec 2024 09:43:34 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=buCLHcZs3mnhHN/DcFByX3spUNfuakxATO0aO2m4WjfbSPSXx+1SAN45GfQeXr0/sXnUtQtTcRlCnbY7/XN/Rca3Fy5W4IKC63tKYclkRnLUc4i6h3jPvWLLF0dSg9KNQuDiTY9tMXZqIbfGm/dAHa5UIdv5oewXCPgmEHRV0n0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KbXWZCKG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9BC9C4CED1;
+	Sun, 29 Dec 2024 09:44:54 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735465420;
-	bh=99AOtJIrXiKzw5zkMdJrr1l3jmHrlm4DQapWU0eZAag=;
+	s=k20201202; t=1735465500;
+	bh=S2GhzAqFS2xfs9Cpu/ShhqODEb8JsrDRFcwSyQAsnws=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=HkTumfq+QuEjd2uDQkt053QkfzNnc/W3NwIh16bkbnerpRyNn9SwLOtclcXWZYDne
-	 8ss2Vjq5Uzxff3q4DgXTkjOlxo+pAWbdhHDA2nKax94nTappE7gC09g+8gULAd7W0a
-	 pnMAANmwGpw/OARfY8rqRoNgbfL2v4aFB1judeSllG/WTneIUIf5Cc1mH3qkJdybjt
-	 ieRn9KdqEZSIEKfCJEPStuPVIOW4YT0SHELcP5iph4uPpD2vIht97HKAaSe46JhhJt
-	 il8f14mB5SI4TDODfRBECV1GNNjuZMihWNkgI7VdsmLUWUnqByqtPkF5sEMEchO7hJ
-	 HWAkADW8OpsFA==
-Message-ID: <0fc279b2-fa58-404a-af8e-ed18d4e2f514@kernel.org>
-Date: Sun, 29 Dec 2024 10:43:32 +0100
+	b=KbXWZCKGarXp//G2Du4QP7FaDhZ5ciJLe+Xk5mZG8bQ7W9DP6WYxGzxEQax/bvkMZ
+	 nkcN2ODF+g/3s59azWFPudXuH1n9ZEFkmUuqqMmq6dSlICvzACSCeaiWhBuezxnp6b
+	 pmu6giwOKKFFpIZfnvBJAgOX9I0u8PeBnAXx6NzfS8ULXls77cm9V4+ZYZtszIIXnk
+	 dFH8HPOGbTjwgIXA/s3oe7TeyLbMtvYjqGibmA4v3iRQ5LmCnNrQtSBjhRPG0bJy3R
+	 YZURTCUsAHASK05MNGFBxnJsYl4od4UOxP5gEJ+IbNOKfYDmFmVW8IlfeCwEdrnYLc
+	 t5+U3oJzIRVkg==
+Message-ID: <48c2ea99-ef86-48a9-8b16-38fe47ed7f75@kernel.org>
+Date: Sun, 29 Dec 2024 10:44:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,18 +50,18 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
-To: Pengyu Luo <mitltlatltl@gmail.com>
+Subject: Re: [PATCH 2/5] platform: arm64: add Huawei Matebook E Go (sc8280xp)
+ EC driver
+To: Pengyu Luo <mitltlatltl@gmail.com>, dmitry.baryshkov@linaro.org
 Cc: andersson@kernel.org, bryan.odonoghue@linaro.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org, dmitry.baryshkov@linaro.org,
- gregkh@linuxfoundation.org, hdegoede@redhat.com,
+ devicetree@vger.kernel.org, gregkh@linuxfoundation.org, hdegoede@redhat.com,
  heikki.krogerus@linux.intel.com, ilpo.jarvinen@linux.intel.com,
  konradybcio@kernel.org, krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-usb@vger.kernel.org, nikita@trvn.ru,
  platform-driver-x86@vger.kernel.org, robh@kernel.org, sre@kernel.org
-References: <53da6468-501c-4c0f-a73b-4eac99c72b8c@kernel.org>
- <20241228113438.591254-1-mitltlatltl@gmail.com>
+References: <xiwaq7fapkkmohg743v36uzpxv4ib4o6upibh7fgvmfjiupy2k@zqxw53prsith>
+ <20241229090455.51838-1-mitltlatltl@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,103 +107,40 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241228113438.591254-1-mitltlatltl@gmail.com>
+In-Reply-To: <20241229090455.51838-1-mitltlatltl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 28/12/2024 12:34, Pengyu Luo wrote:
->> On Sat, Dec 28, 2024 at 5:58 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
->> On 27/12/2024 18:13, Pengyu Luo wrote:
->>> +
->>> +#include <linux/platform_data/huawei-gaokun-ec.h>
->>> +
->>> +#define EC_EVENT             0x06
->>> +
->>> +/* Also can be found in ACPI specification 12.3 */
->>> +#define EC_READ                      0x80
->>> +#define EC_WRITE             0x81
->>> +#define EC_BURST             0x82
->>> +#define EC_QUERY             0x84
->>> +
->>> +
->>> +#define EC_EVENT_LID         0x81
->>> +
->>> +#define EC_LID_STATE         0x80
->>> +#define EC_LID_OPEN          BIT(1)
->>> +
->>> +#define UCSI_REG_SIZE                7
->>> +
->>> +/* for tx, command sequences are arranged as
+On 29/12/2024 10:04, Pengyu Luo wrote:
+>>>>> +
+>>>>> +struct gaokun_ec;
+>>>>> +struct notifier_block;
+>>>>
+>>>> Drop, include proper header instead.
+>>>>
+>>>
+>>> I agree, I copy 'struct notifier_block;' from
+>>> include/linux/platform_data/lenovo-yoga-c630.h
 >>
->> Use Linux style comments, see coding style.
+>> Please don't pollute header files with extra dependencies. It's usually
+>> better to just forware-declare the struct instead of adding unnecessary
+>> include.
 >>
 > 
-> Agree
+> Both of you are resonable. So how?
 > 
->>> + * {master_cmd, slave_cmd, data_len, data_seq}
->>> + */
->>> +#define REQ_HDR_SIZE         3
->>> +#define INPUT_SIZE_OFFSET    2
->>> +#define INPUT_DATA_OFFSET    3
->>> +
->>> +/* for rx, data sequences are arranged as
->>> + * {status, data_len(unreliable), data_seq}
->>> + */
->>> +#define RESP_HDR_SIZE                2
->>> +#define DATA_OFFSET          2
->>> +
->>> +
->>> +struct gaokun_ec {
->>> +     struct i2c_client *client;
->>> +     struct mutex lock;
->>
->> Missing doc. Run Checkpatch --strict, so you will know what is missing here.
->>
+> BTW, Krzysztof said
+
+I would recommend differently, but I am fine with other approach if
+other reviewers have their preference.
+
 > 
-> I see. A comment for mutex lock.
+>>> You need kerneldoc, in the C file, for all exported functions.
 > 
->>> +     struct blocking_notifier_head notifier_list;
->>> +     struct input_dev *idev;
->>> +     bool suspended;
->>> +};
->>> +
->>
->>
->>
->> ...
->>
->>> +
->>> +static DEVICE_ATTR_RO(temperature);
->>> +
->>> +static struct attribute *gaokun_wmi_features_attrs[] = {
->>> +     &dev_attr_charge_control_thresholds.attr,
->>> +     &dev_attr_smart_charge_param.attr,
->>> +     &dev_attr_smart_charge.attr,
->>> +     &dev_attr_fn_lock_state.attr,
->>> +     &dev_attr_temperature.attr,
->>> +     NULL,
->>> +};
->>
->>
->> No, don't expose your own interface. Charging is already exposed by
->> power supply framework. Temperature by hwmon sensors. Drop all these and
->> never re-implement existing kernel user-space interfaces.
->>
-> 
-> I don't quite understand what you mean. You mean I should use hwmon
-> interface like hwmon_device_register_with_groups to register it, right?
-
-You added sysfs interface, I think. My comment is: do not. We have
-existing interfaces.
-
-> As for battery, get/set_propery allow us to handle charging thresholds
-> things, but there are smart_charge_param, smart_charge and fn_lock to handle.
-
-So where is the ABI documentation? Where is any explanation why existing
-interfaces are not enough?
-
-
-
+> So Dmitry is here, I want to check again, should I add kerneldoc for all
+> exported functions? C630 one never added all kerneldocs. In my driver,
+> some function names have already indicated many things, some complex
+> functions have been doced.
 Best regards,
 Krzysztof
 
