@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19820-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19821-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D7BD9FDE4E
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 10:45:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B5839FDE59
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 10:50:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3252F1619E7
-	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 09:45:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 914723A1C29
+	for <lists+linux-pm@lfdr.de>; Sun, 29 Dec 2024 09:50:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 350EA86334;
-	Sun, 29 Dec 2024 09:45:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 612DF70838;
+	Sun, 29 Dec 2024 09:50:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KbXWZCKG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uc5JJpLE"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB4112AE86;
-	Sun, 29 Dec 2024 09:45:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1320CC148;
+	Sun, 29 Dec 2024 09:50:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735465501; cv=none; b=fSC79c+EbBIN/Nid5FK1swoLegrm3ZZ25+zSfBL+yZeScDupIN0xTlOOVS9tEQ98YI2P9j3zkiZzDDXKGtvj57OmNTTIZe5wqEtjbgBAjwbVEoGcq0DGiJUfct4BYjQT/mFH8VdI5TT4gsQmeCRWb4i6r2Rjqseq38KO302yl74=
+	t=1735465818; cv=none; b=WswFaL3bzIjE7dGKdbSnWYWBAgemoe6DFZMWprG94bG1+Q11+RWTEVPXCpbr4W80g9yA/dpASSfapYR/V9atdMgYcolhs8X0bMLBUKZdAVUDhtXrd9wPcHdq2PujQ963kY69eea6Qm839k9q0aqtdWGiNOuDLwC0F/t/2dB/XEg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735465501; c=relaxed/simple;
-	bh=S2GhzAqFS2xfs9Cpu/ShhqODEb8JsrDRFcwSyQAsnws=;
+	s=arc-20240116; t=1735465818; c=relaxed/simple;
+	bh=AvY5jNWA3138rOdPbrpyng+2vYJ1IMDw6Ay/kLMl2Ao=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=buCLHcZs3mnhHN/DcFByX3spUNfuakxATO0aO2m4WjfbSPSXx+1SAN45GfQeXr0/sXnUtQtTcRlCnbY7/XN/Rca3Fy5W4IKC63tKYclkRnLUc4i6h3jPvWLLF0dSg9KNQuDiTY9tMXZqIbfGm/dAHa5UIdv5oewXCPgmEHRV0n0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KbXWZCKG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A9BC9C4CED1;
-	Sun, 29 Dec 2024 09:44:54 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=P1emTNx8OAXdLqYtMwyyx6d2ulrvhaTBLSCW6ZzdqzS1AWdT7+RvGcMAy0YGzrVm0NkN9SSjzL8YCKuZIq06s+IvST8/XQKxdwRtOhp9Xk6y2IzrXRUxm/RRAv4egHvAwRkbi4ddYgNXvdp0grC6n36SCqH8QlmSGxA87OESQ6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uc5JJpLE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6ABF3C4CED1;
+	Sun, 29 Dec 2024 09:50:11 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735465500;
-	bh=S2GhzAqFS2xfs9Cpu/ShhqODEb8JsrDRFcwSyQAsnws=;
+	s=k20201202; t=1735465817;
+	bh=AvY5jNWA3138rOdPbrpyng+2vYJ1IMDw6Ay/kLMl2Ao=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=KbXWZCKGarXp//G2Du4QP7FaDhZ5ciJLe+Xk5mZG8bQ7W9DP6WYxGzxEQax/bvkMZ
-	 nkcN2ODF+g/3s59azWFPudXuH1n9ZEFkmUuqqMmq6dSlICvzACSCeaiWhBuezxnp6b
-	 pmu6giwOKKFFpIZfnvBJAgOX9I0u8PeBnAXx6NzfS8ULXls77cm9V4+ZYZtszIIXnk
-	 dFH8HPOGbTjwgIXA/s3oe7TeyLbMtvYjqGibmA4v3iRQ5LmCnNrQtSBjhRPG0bJy3R
-	 YZURTCUsAHASK05MNGFBxnJsYl4od4UOxP5gEJ+IbNOKfYDmFmVW8IlfeCwEdrnYLc
-	 t5+U3oJzIRVkg==
-Message-ID: <48c2ea99-ef86-48a9-8b16-38fe47ed7f75@kernel.org>
-Date: Sun, 29 Dec 2024 10:44:52 +0100
+	b=uc5JJpLEKq0HP2KTfF7qDC0iYgqYe4aGoppCroCU6YB1hGQEp62T3EQAW7qqMgJN2
+	 iNOoFBGBc5iYd5TlMsW4AO76mufvCw6ZgYbDu2ipGLT80ZxQV+TzQ55zu7oQcFInAx
+	 rfeVmzIdLHetEur9JTFZ9Lfk+/jO9BJ96+waA2kHIpnTsYgUHvb0CjVR0xiN/iSeMW
+	 jyEQ73EjcTn4eOH2XPuSVUH5aIK6wf08XuJaGSDMLskhc+C9LJnUDrEXYVUd7SbpY1
+	 qQ1GWKPQVceLwTCmNrebVievVfYtjCM2GGKqfWBt09if5FjoQaRcWXtaBQHumNPiqQ
+	 C8Ko+mfT05Hzg==
+Message-ID: <ff53d7f7-0103-4e52-ac0a-c05bf4521cd1@kernel.org>
+Date: Sun, 29 Dec 2024 10:50:08 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,18 +50,18 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] platform: arm64: add Huawei Matebook E Go (sc8280xp)
- EC driver
-To: Pengyu Luo <mitltlatltl@gmail.com>, dmitry.baryshkov@linaro.org
+Subject: Re: [PATCH 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
+To: Pengyu Luo <mitltlatltl@gmail.com>
 Cc: andersson@kernel.org, bryan.odonoghue@linaro.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org, gregkh@linuxfoundation.org, hdegoede@redhat.com,
+ devicetree@vger.kernel.org, dmitry.baryshkov@linaro.org,
+ gregkh@linuxfoundation.org, hdegoede@redhat.com,
  heikki.krogerus@linux.intel.com, ilpo.jarvinen@linux.intel.com,
  konradybcio@kernel.org, krzk+dt@kernel.org, linux-arm-msm@vger.kernel.org,
  linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
  linux-usb@vger.kernel.org, nikita@trvn.ru,
  platform-driver-x86@vger.kernel.org, robh@kernel.org, sre@kernel.org
-References: <xiwaq7fapkkmohg743v36uzpxv4ib4o6upibh7fgvmfjiupy2k@zqxw53prsith>
- <20241229090455.51838-1-mitltlatltl@gmail.com>
+References: <705f52a9-562b-4b17-8b28-ee837b41ea7d@kernel.org>
+ <20241228105017.585067-1-mitltlatltl@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -107,40 +107,71 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241229090455.51838-1-mitltlatltl@gmail.com>
+In-Reply-To: <20241228105017.585067-1-mitltlatltl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 29/12/2024 10:04, Pengyu Luo wrote:
->>>>> +
->>>>> +struct gaokun_ec;
->>>>> +struct notifier_block;
->>>>
->>>> Drop, include proper header instead.
->>>>
->>>
->>> I agree, I copy 'struct notifier_block;' from
->>> include/linux/platform_data/lenovo-yoga-c630.h
+On 28/12/2024 11:50, Pengyu Luo wrote:
+> On Sat, Dec 28, 2024 at 5:54 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
+>> On 27/12/2024 18:13, Pengyu Luo wrote:
+>>> +
+>>> +description:
+>>> +  Different from other Qualcomm Snapdragon sc8180x sc8280xp based machines,
+>>> +  the Huawei Matebook E Go tablets use embedded controllers while others
+>>> +  use something called pmic glink which handles battery, UCSI, USB Type-C DP
+>>> +  alt mode. Huawei one handles even more, like charging thresholds, FN lock,
+>>> +  lid status, HPD events for the USB Type-C DP alt mode, etc.
+>>> +
+>>> +properties:
+>>> +  compatible:
+>>> +    items:
+>>> +      - enum:
+>>> +          - huawei,sc8180x-gaokun-ec
+>>> +          - huawei,sc8280xp-gaokun-ec
 >>
->> Please don't pollute header files with extra dependencies. It's usually
->> better to just forware-declare the struct instead of adding unnecessary
->> include.
+>> sc8180x and sc8280xp are not products of Huawei, so you cannot combine
+>> them. Use compatibles matching exactly your device, because I doubt any
+>> of us has actual schematics or datasheet of that device.
+>>
+>>> +      - const: huawei,gaokun-ec
+>>
+>> How did you get the name?
 >>
 > 
-> Both of you are resonable. So how?
-> 
-> BTW, Krzysztof said
+> From website of Huawei([1]), please search for 'gaokun' here, we can know
 
-I would recommend differently, but I am fine with other approach if
-other reviewers have their preference.
+Then please explain this in commit msg or bindings description (what is
+gaokun).
+
+> this series is called gaokun. Many files from windows indicate more,
+> someone fetch drivers from microsoft server([2]), in one of driver archive
+> 'OemXAudioExt_HWVE.cab', there are two files, "algorithm_GaoKunGen2.xml"
+> "algorithm_GaoKunGen3.xml". And `Gaokun Gen3` print can be found on
+> motherboard(someone have the motherboard, I can ask for it later).
+> 
+> So can I use?
+> - enum:
+> 	- huawei,gaokun-gen2
+> 	- huawei,gaokun-gen3
+
+The internal name?
 
 > 
->>> You need kerneldoc, in the C file, for all exported functions.
-> 
-> So Dmitry is here, I want to check again, should I add kerneldoc for all
-> exported functions? C630 one never added all kerneldocs. In my driver,
-> some function names have already indicated many things, some complex
-> functions have been doced.
+> Some backgroud:
+> There are 3 variants, Huawei released first 2 at the same time.
+> Huawei Matebook E Go LTE(sc8180x), codename should be gaokun2.
+> Huawei Matebook E Go(sc8280xp@3.0GHz), codename is gaokun3.
+> Huawei Matebook E Go 2023(sc8280xp@2.69GHz).
+
+Well, I believe it is still not good choice because we have absolutely
+zero insights what is actually there, what else is called gaokun etc.
+Especially "gen2" and "gen3" - how can anyone, outside of Huawei, figure
+out which is gen3?
+
+Why do people try to decode some vendor naming scheme instead of using
+well recognized, public and available naming: the device name?
+
+
 Best regards,
 Krzysztof
 
