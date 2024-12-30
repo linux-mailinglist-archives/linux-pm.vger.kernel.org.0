@@ -1,334 +1,324 @@
-Return-Path: <linux-pm+bounces-19845-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19846-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4040C9FE500
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 10:46:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BBE09FE558
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 11:45:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B78A3A1E87
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 09:46:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B14023A197B
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 10:45:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3A5D1A2545;
-	Mon, 30 Dec 2024 09:46:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B73A1A0BF8;
+	Mon, 30 Dec 2024 10:45:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="UBmWNUWa"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QC+ZGdHB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 087241D540;
-	Mon, 30 Dec 2024 09:46:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC14013633F;
+	Mon, 30 Dec 2024 10:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735551968; cv=none; b=e6Kjib+t3kobLmQsYcZF+s66/s8rM3b9Ux1lTRCtlOXAFfZsUPuggP0kYyLwoXSKj1GIMahoH4pYcVuX4kdj106qxB+xJu2O4qxt4emJy+o/rNoBn7Ny+f9OhVMw4Ta25tY9VprsRFlqmAvW6xcuTs2OTEvMWvu5N3o44TtaL08=
+	t=1735555530; cv=none; b=rzbRPwkduz6Be57BrO/iTIuSFw0GKatoXCA11XQchsa37SFz8nESVi1bnuvBQv1flv2J4h/H/dpFuNijAWO5/OdRbJjNFCFmzmjwVxQa8Q5AGGrlLlrp3TWz2yU8TYsUhIrGdXHM28+bcoel95fY+tulzjR18O5f8+kmPgHDBvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735551968; c=relaxed/simple;
-	bh=9vD9MtuX5fTs/84zjWforym1XDL1NOxumqnACS8YaNM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=f4LXeQY2iAOfalFAqY94YJSNkpnuEjkjASlt6CUon4KOLR6aitlqJNxiW09W/EoITpa3IQcSpMQHLpLCJ8usZqIYvywKRv+pEgmMXNolCYD4tBHCU+LQqwtvxBKpLppTvmIEqDcce6u2Mupr/a9pUI3wNaV96grSInpMiJYLU7s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=UBmWNUWa; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BU7Fwnu027219;
-	Mon, 30 Dec 2024 09:45:45 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	nE7Pl8ty/cDHDnKCID6Uh3U9BiIrHhReoZ30nnIVRcs=; b=UBmWNUWa3KL4xlMO
-	JkIDRaLVtu5PUdX+Ae3+cJSZvZ7wSvHWOVmaW8nNOKYoAUXAdDn/vG5wwC20+ES4
-	jzUhANdfxUBhGHoojQCBTEXFWTMtlzt94KoeMYkY2I7ZU+IZmSPOtX/7cdoVUaVV
-	ud8Gsotp8rQpv/hASM3Cq8xGymYKbGTIuAzn6/2LfzKkONTPWO6P3q7G1fUoLTeR
-	FC6wZx/qVtLUhWcS+MCjC4aJ9y54GjobvwDQHPQhhFsF2bPeK3jU/f0CJMJ6QY3/
-	WMyLQWfB5gQcZ+fsIoM9fu3LRic2EBdchVfCaYcgtDBkEeelN4nRCEv7sIF1dOpN
-	VTHXEg==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43upyr89a0-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Dec 2024 09:45:45 +0000 (GMT)
-Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BU9ji0T013191
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Dec 2024 09:45:44 GMT
-Received: from [10.218.23.250] (10.80.80.8) by nalasex01c.na.qualcomm.com
- (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 30 Dec
- 2024 01:45:35 -0800
-Message-ID: <c5079172-e127-4dfc-826a-b32489d852f8@quicinc.com>
-Date: Mon, 30 Dec 2024 15:15:32 +0530
+	s=arc-20240116; t=1735555530; c=relaxed/simple;
+	bh=L0/ZkxSibT+4mHc0CmZI6VPxe/6USTCaDZxPkpbmd7c=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Dm4qB3l14MHCQZYphYEgKd9opW3Ef94pSKuxE5lppJ8VNchG6ZgmYgWHXD7r+12+2jrcUHXOBB8SA4V/iiHzwXWJueBG6hl7XggM6HluzTl/xuGX8f2Zqff8LDC65C/nFUBHI2i42fWGUPSL1DGXbmgDAJQlgnOtJQLXhaTnrAE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QC+ZGdHB; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-216634dd574so77800905ad.2;
+        Mon, 30 Dec 2024 02:45:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1735555526; x=1736160326; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=APaYFD30RudnEgnmZHaXtaG597yFzOWoROkKl7BwD44=;
+        b=QC+ZGdHB7suEOXaO4bVPKr0C7Zr1jru0HybSqTsyHJl+s0kSpLsN7lAUkp1cTzfXgH
+         5nnaXNORDfn99AtaTVDb4gcTwuHpfDxBgqC5riMf6R/A4RGk4EAc9odLamshnYUgrHU4
+         EbcFz6px7mk97d0EXXL+x8APLQf76jYm3CCl+KaSvs+14kO36PXWPrRc0WX8IOeGQvXh
+         3cIv1kckp3PDED2VJtS3b+K+Kt2bwX+JREBnuS26Zq8kH8poiMzSukQfFyuhrKVOhd7h
+         SgOKrCsVKU6eiz+HxWuVfh3eQod4kNorPhCNyOrl0spTOlhvqaylg7iwma0E0phWN9nT
+         YiDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1735555526; x=1736160326;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=APaYFD30RudnEgnmZHaXtaG597yFzOWoROkKl7BwD44=;
+        b=WKHdGOr6RgZwE88wVU52LaBQt0HWPWNkT3pkmOUJB+CBF6KgjvtFyMYGF7DW/venc2
+         JzRW494O2U7dnFBhU/7u+pp1xsrVzeTxP7zGnxqLFOGF/mdsUjAM3lZKM8Ff9wczUxZl
+         Q47z2nW3hpb40f38DayJBz/Hgm5/3j1/ejhkOdXQBTR0Wm+zm7QNIaoNPTJHF2Fxeeus
+         nT0wd7L/WUXwLnv7eOa/Z9/G222slCldQY543TWfQeT+59YYvipg2FgV8+CrFiCqY4m6
+         tFEDlFnPZz8dj4K1HVp7+itTwsbl/Gxp74lONyCFGnS2J0Br25dPd0JRg8oRTjJD3qYZ
+         Q9Ag==
+X-Forwarded-Encrypted: i=1; AJvYcCVapQn7yj83b3Mzset5OWSsytVGHd3376Oc54ZXDt431Rc80ebSh56Xo4XM5NUbx14SwKSfQJBlzck=@vger.kernel.org, AJvYcCVtzlhaZjm53K3dG6Bh5QRisG6VSK/aIVKORRYyF/pjhSsQ9yZC7OaEWIcxilxWdUdnt6rgixdWriB/ZWdd@vger.kernel.org, AJvYcCW9s02EVAeYFdQ/LwXFjxl0LKggf0XDkutVztu8MRDbz7bAU8dS8Qa+QCTYH3rJj3+Yrw979MkHAEfrKh5vIBUyte0nIA==@vger.kernel.org, AJvYcCWLJDw8mcbc0xotcPOc4F42dVvms7em1OQ53eG36vcu64tK3Hwd6jsM2C6IGl/0eKP+BDZOA4zTP7nH@vger.kernel.org, AJvYcCWOPwWiJw4rk+PHYiwy7rZbdwEyy7jvSpSAb4D40R6hia9oQadsC7C9mPhQBy/jzBUkZ3ysDF4ODCYFhiXraQ==@vger.kernel.org, AJvYcCXK+WI2X06YrPfMpRNR0jokeBWSVlLjJQBNygsVcZYMj7VG3TY2yIRURTQg3Hm1n+/Sp0lA4DUwVpWX@vger.kernel.org
+X-Gm-Message-State: AOJu0YxEGUm3/QbPPq5GObTkBk4rJEP2glC6r3vyKrViOkxf26sLcn+G
+	jBrVVyB546os0NKmPPIvaYgSkx781DsPsQK6jdULOYipNys7KwSw
+X-Gm-Gg: ASbGnctwlYjdVgxvLeAf9HV7MF5uN17f0Vzd88mC5nUIkSGLpBqfga0KP8V+c/rzrns
+	tDJQnTzQtcIAb0PZvjwiBLJ8aQ98kz60d2wax9dj0FemzDViJeLeZdv0pkZ6ecJQg3F+mbhcSPA
+	MXoOPq/xLph50lRA5fHCaL1MCsgmKrWRFc9LYgC9o+7diylm1jmAe2Dg6w1l6WFME2b39m3KaW9
+	peGRTZCuKOJ1c2HU70TXV/Pm5rEtns4Ju9jpJB54a0=
+X-Google-Smtp-Source: AGHT+IH6yrNe9TzPma0TrHyfew/WREVGdiQnOdhU8EJOBjK4tTim7ABUoAf5J9acdKapFrt6vZdqSA==
+X-Received: by 2002:a17:903:2306:b0:205:4721:19c with SMTP id d9443c01a7336-219e6f1448cmr438389625ad.37.1735555525838;
+        Mon, 30 Dec 2024 02:45:25 -0800 (PST)
+Received: from nuvole.. ([2a09:bac1:76a0:dd10::2e9:e5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9cde7esm175594515ad.152.2024.12.30.02.45.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 30 Dec 2024 02:45:25 -0800 (PST)
+From: Pengyu Luo <mitltlatltl@gmail.com>
+To: quic_aiquny@quicinc.com
+Cc: andersson@kernel.org,
+	bryan.odonoghue@linaro.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	dmitry.baryshkov@linaro.org,
+	gregkh@linuxfoundation.org,
+	hdegoede@redhat.com,
+	heikki.krogerus@linux.intel.com,
+	ilpo.jarvinen@linux.intel.com,
+	konradybcio@kernel.org,
+	krzk+dt@kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	mitltlatltl@gmail.com,
+	nikita@trvn.ru,
+	platform-driver-x86@vger.kernel.org,
+	robh@kernel.org,
+	sre@kernel.org
+Subject: Re: [PATCH 2/5] platform: arm64: add Huawei Matebook E Go (sc8280xp) EC driver
+Date: Mon, 30 Dec 2024 18:44:03 +0800
+Message-ID: <20241230104404.184616-1-mitltlatltl@gmail.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <564fcad7-59d5-44da-8ed7-78fade8e40a8@quicinc.com>
+References: <564fcad7-59d5-44da-8ed7-78fade8e40a8@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 3/5] thermal: qcom: Add support for MBG thermal
- monitoring
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
-        "Rafael J. Wysocki"
-	<rafael@kernel.org>,
-        Daniel Lezcano <daniel.lezcano@linaro.org>,
-        Zhang Rui
-	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-        Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>,
-        Jonathan Cameron <jic23@kernel.org>,
-        "Lars-Peter
- Clausen" <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
-        Stephen Boyd
-	<sboyd@kernel.org>, Amit Kucheria <amitk@kernel.org>,
-        Thara Gopinath
-	<thara.gopinath@gmail.com>,
-        Bjorn Andersson <andersson@kernel.org>,
-        "Konrad
- Dybcio" <konradybcio@kernel.org>
-CC: Ajit Pandey <quic_ajipan@quicinc.com>,
-        Imran Shaik
-	<quic_imrashai@quicinc.com>,
-        Taniya Das <quic_tdas@quicinc.com>,
-        "Jagadeesh
- Kona" <quic_jkona@quicinc.com>, <quic_kamalw@quicinc.com>,
-        <quic_jprakash@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>
-References: <20241212-mbg-v2-support-v2-0-3249a4339b6e@quicinc.com>
- <20241212-mbg-v2-support-v2-3-3249a4339b6e@quicinc.com>
- <cf2f2510-9d27-4473-bf50-45b14725f4c5@oss.qualcomm.com>
-Content-Language: en-US
-From: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
-In-Reply-To: <cf2f2510-9d27-4473-bf50-45b14725f4c5@oss.qualcomm.com>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nalasex01c.na.qualcomm.com (10.47.97.35)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: oUaXNI0tYN-jc47S-txQVBDRdvOyUM29
-X-Proofpoint-ORIG-GUID: oUaXNI0tYN-jc47S-txQVBDRdvOyUM29
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 malwarescore=0
- bulkscore=0 lowpriorityscore=0 mlxlogscore=999 adultscore=0 clxscore=1015
- impostorscore=0 priorityscore=1501 suspectscore=0 phishscore=0 spamscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2412300083
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
+On Mon, Dec 30, 2024 at 5:04 PM Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+> On 12/28/2024 1:13 AM, Pengyu Luo wrote:
+> > There are 3 variants, Huawei released first 2 at the same time.
+> > Huawei Matebook E Go LTE(sc8180x), codename should be gaokun2.
+> > Huawei Matebook E Go(sc8280xp@3.0GHz), codename is gaokun3.
+> > Huawei Matebook E Go 2023(sc8280xp@2.69GHz).
 
-On 12/13/2024 9:18 PM, Konrad Dybcio wrote:
-> On 12.12.2024 5:11 PM, Satya Priya Kakitapalli wrote:
->> Add driver for the MBG thermal monitoring device. It monitors
->> the die temperature, and when there is a level 1 upper threshold
->> violation, it receives an interrupt over spmi. The driver reads
->> the fault status register and notifies thermal accordingly.
->>
->> Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
->> ---
-> [...]
+[...]
+
+> > +#include <linux/mutex.h>
+> > +#include <linux/version.h>
+> > +
+> > +#include <linux/platform_data/huawei-gaokun-ec.h>
+> > +
+> > +#define EC_EVENT             0x06
+> > +
+> > +/* Also can be found in ACPI specification 12.3 */
 >
->> +static const struct mbg_map_table map_table[] = {
-> Is this peripheral/pmic-specific?
-
-
-Yes, peripheral specific.
-
-
->> +	/* minT	vtemp0	tc */
->> +	{ -60000, 4337, 1967 },
->> +	{ -40000, 4731, 1964 },
->> +	{ -20000, 5124, 1957  },
->> +	{ 0,      5515, 1949 },
->> +	{ 20000,  5905, 1940 },
->> +	{ 40000,  6293, 1930 },
->> +	{ 60000,  6679, 1921 },
->> +	{ 80000,  7064, 1910 },
->> +	{ 100000, 7446, 1896 },
->> +	{ 120000, 7825, 1878 },
->> +	{ 140000, 8201, 1859 },
->> +};
->> +
->> +static int mbg_tm_get_temp(struct thermal_zone_device *tz, int *temp)
->> +{
->> +	struct mbg_tm_chip *chip = thermal_zone_device_priv(tz);
->> +	int ret, milli_celsius;
->> +
->> +	if (!temp)
->> +		return -EINVAL;
->> +
->> +	if (chip->last_thres_crossed) {
->> +		pr_debug("last_temp: %d\n", chip->last_temp);
-> Use dev_dbg for consistency with the other debug prints
-
-
-Okay.
-
-
->> +		chip->last_thres_crossed = false;
->> +		*temp = chip->last_temp;
->> +		return 0;
->> +	}
->> +
->> +	ret = iio_read_channel_processed(chip->adc, &milli_celsius);
->> +	if (ret < 0) {
->> +		dev_err(chip->dev, "failed to read iio channel %d\n", ret);
->> +		return ret;
->> +	}
->> +
->> +	*temp = milli_celsius;
->> +
->> +	return 0;
->> +}
->> +
->> +static int temp_to_vtemp(int temp)
->> +{
->> +
->> +	int idx, vtemp, tc = 0, t0 = 0, vtemp0 = 0;
->> +
->> +	for (idx = 0; idx < ARRAY_SIZE(map_table); idx++)
->> +		if (temp >= map_table[idx].min_temp &&
->> +				temp < (map_table[idx].min_temp + 20000)) {
-> Please align the two lines, tab width is 8 for kernel code
-
-
-Okay.
-
-
->> +			tc = map_table[idx].tc;
->> +			t0 = map_table[idx].min_temp;
->> +			vtemp0 = map_table[idx].vtemp0;
->> +			break;
->> +		}
->> +
->> +	/*
->> +	 * Formula to calculate vtemp(mV) from a given temp
->> +	 * vtemp = (temp - minT) * tc + vtemp0
->> +	 * tc, t0 and vtemp0 values are mentioned in the map_table array.
->> +	 */
->> +	vtemp = ((temp - t0) * tc + vtemp0 * 100000) / 1000000;
-> So you say vtemp = ... and the func is called temp_to_vtemp
+> It appears that the following EC commands are common to all ACPI-applied
+> embedded controllers. Is it possible to standardize these commands and API?
 >
->> +	return abs(vtemp - MBG_TEMP_DEFAULT_TEMP_MV) / MBG_TEMP_STEP_MV;
-> But you end up returning a scaled version of it..
-> Please clarify that in the code
 
+No, I mentioned a little in kerneldoc, EC_READ only works for psy
+related things.
 
-Sure, I'll update the function name to temp_to_vtemp_mv and probably add 
-a comment in the code.
-
-
+> > +#define EC_READ                      0x80
+> > +#define EC_WRITE             0x81
+> > +#define EC_BURST             0x82
+> > +#define EC_QUERY             0x84
+> > +
+> > +
+> > +#define EC_EVENT_LID         0x81
+> > +
+> > +#define EC_LID_STATE         0x80
+> > +#define EC_LID_OPEN          BIT(1)
+> > +
+> > +#define UCSI_REG_SIZE                7
+> > +
+> > +/* for tx, command sequences are arranged as
+> > + * {master_cmd, slave_cmd, data_len, data_seq}
+> > + */
+> > +#define REQ_HDR_SIZE         3
+> > +#define INPUT_SIZE_OFFSET    2
+> > +#define INPUT_DATA_OFFSET    3
+> > +
+> > +/* for rx, data sequences are arranged as
+> > + * {status, data_len(unreliable), data_seq}
+> > + */
+> > +#define RESP_HDR_SIZE                2
+> > +#define DATA_OFFSET          2
+> > +
+> > +
+> > +struct gaokun_ec {
+> > +     struct i2c_client *client;
+> > +     struct mutex lock;
+> > +     struct blocking_notifier_head notifier_list;
+> > +     struct input_dev *idev;
+> > +     bool suspended;
+> > +};
+> > +
+> > +static int gaokun_ec_request(struct gaokun_ec *ec, const u8 *req,
+> > +                          size_t resp_len, u8 *resp)
+> > +{
+> > +     struct i2c_client *client = ec->client;
+> > +     struct i2c_msg msgs[2] = {
+> > +             {
+> > +                     .addr = client->addr,
+> > +                     .flags = client->flags,
+> > +                     .len = req[INPUT_SIZE_OFFSET] + REQ_HDR_SIZE,
+> > +                     .buf = req,
+> > +             }, {
+> > +                     .addr = client->addr,
+> > +                     .flags = client->flags | I2C_M_RD,
+> > +                     .len = resp_len,
+> > +                     .buf = resp,
+> > +             },
+> > +     };
+> > +
+> > +     mutex_lock(&ec->lock);
+> > +
+> > +     i2c_transfer(client->adapter, msgs, 2);
 >
->> +}
->> +
->> +static int mbg_tm_set_trip_temp(struct thermal_zone_device *tz, int low_temp,
->> +						int temp)
->> +{
->> +	struct mbg_tm_chip *chip = thermal_zone_device_priv(tz);
->> +	int ret = 0;
->> +
->> +	guard(mutex)(&chip->lock);
->> +
->> +	/* The HW has a limitation that the trip set must be above 25C */
->> +	if (temp > MBG_MIN_TRIP_TEMP && temp < MBG_MAX_SUPPORTED_TEMP) {
->> +		regmap_set_bits(chip->map,
->> +			chip->base + MBG_TEMP_MON2_MISC_CFG, MON2_UP_THRESH_EN);
->> +		ret = regmap_write(chip->map, chip->base + MON2_LVL1_UP_THRESH,
->> +						temp_to_vtemp(temp));
->> +		if (ret < 0)
->> +			return ret;
->> +	} else {
->> +		dev_dbg(chip->dev, "Set trip b/w 25C and 160C\n");
->> +		regmap_clear_bits(chip->map,
->> +			chip->base + MBG_TEMP_MON2_MISC_CFG, MON2_UP_THRESH_EN);
->> +	}
->> +
->> +	/*
->> +	 * Configure the last_temp one degree higher, to ensure the
->> +	 * violated temp is returned to thermal framework when it reads
->> +	 * temperature for the first time after the violation happens.
->> +	 * This is needed to account for the inaccuracy in the conversion
->> +	 * formula used which leads to the thermal framework setting back
->> +	 * the same thresholds in case the temperature it reads does not
->> +	 * show violation.
->> +	 */
->> +	chip->last_temp = temp + MBG_TEMP_CONSTANT;
->> +
->> +	return ret;
->> +}
->> +
->> +static const struct thermal_zone_device_ops mbg_tm_ops = {
->> +	.get_temp = mbg_tm_get_temp,
->> +	.set_trips = mbg_tm_set_trip_temp,
->> +};
->> +
->> +static irqreturn_t mbg_tm_isr(int irq, void *data)
->> +{
->> +	struct mbg_tm_chip *chip = data;
->> +	int ret, val;
->> +
->> +	scoped_guard(mutex, &chip->lock) {
->> +		ret = regmap_read(chip->map,
->> +			chip->base + MBG_TEMP_MON2_FAULT_STATUS, &val);
->> +		if (ret < 0)
->> +			return IRQ_HANDLED;
->> +	}
->> +
->> +	if ((val & MON_FAULT_STATUS_MASK) & MON_FAULT_STATUS_LVL1) {
->> +		if ((val & MON_POLARITY_STATUS_MASK) & MON_POLARITY_STATUS_UPR) {
-> Just checking the last argument to AND in both lines is enough, as
-> they're both parts of the bitfield
-
-
-Both the bits of each mask need to be checked in order to proceed 
-accordingly, I will update with proper logic in next version.
-
-
+> ARRAY_SIZE(msgs) is suggested instead of pure 2.
 >
-> [...]
->
->> +	ret = device_property_read_u32(chip->dev, "reg", &res);
->> +	if (ret < 0)
->> +		return ret;
-> return dev_err_probe(dev, ret, "Couldn't read reg property"\n);
->
->> +
->> +	chip->base = res;
->> +
->> +	chip->irq = platform_get_irq(pdev, 0);
->> +	if (chip->irq < 0)
->> +		return chip->irq;
-> Similarly here
->
->> +
->> +	chip->adc = devm_iio_channel_get(&pdev->dev, "thermal");
->> +	if (IS_ERR(chip->adc))
->> +		return dev_err_probe(&pdev->dev, PTR_ERR(chip->adc),
->> +			       "failed to get adc channel\n");
->> +
->> +	chip->tz_dev = devm_thermal_of_zone_register(&pdev->dev, 0,
->> +						chip, &mbg_tm_ops);
->> +	if (IS_ERR(chip->tz_dev))
->> +		return dev_err_probe(&pdev->dev, PTR_ERR(chip->tz_dev),
->> +			       "failed to register sensor\n");
-> Please also make the error messages start with an uppercase letter
->
->> +
->> +	return devm_request_threaded_irq(&pdev->dev, chip->irq, NULL,
->> +			mbg_tm_isr, IRQF_ONESHOT, node->name, chip);
->> +}
->> +
->> +static const struct of_device_id mbg_tm_match_table[] = {
->> +	{ .compatible = "qcom,spmi-pm8775-mbg-tm" },
-> I don't think the 'spmi' bit belongs here
 
+Agree
 
-Okay, will update it.
+> > +     usleep_range(2000, 2500);
+>
+> Why is a sleep needed here? Is this information specified in any datasheet?
+>
 
+Have a break between 2 transaction. This sleep happens in acpi code, also
+inside a critical region. I rearranged it.
 
-> Konrad
+Local7 = Acquire (\_SB.IC16.MUEC, 0x03E8)
+...
+write ops
+...
+Sleep (0x02)
+...
+read ops
+...
+Release (\_SB.IC16.MUEC)
+
+> > +
+> > +     mutex_unlock(&ec->lock);
+> > +
+> > +     return *resp;
+> > +}
+> > +
+> > +/* -------------------------------------------------------------------------- */
+> > +/* Common API */
+> > +
+> > +/**
+> > + * gaokun_ec_read - read from EC
+> > + * @ec: The gaokun_ec
+> > + * @req: The sequence to request
+> > + * @resp_len: The size to read
+> > + * @resp: Where the data are read to
+> > + *
+> > + * This function is used to read data after writing a magic sequence to EC.
+> > + * All EC operations dependent on this functions.
+> > + *
+> > + * Huawei uses magic sequences everywhere to complete various functions, all
+> > + * these sequences are passed to ECCD(a ACPI method which is quiet similar
+> > + * to gaokun_ec_request), there is no good abstraction to generalize these
+> > + * sequences, so just wrap it for now. Almost all magic sequences are kept
+> > + * in this file.
+> > + */
+> > +int gaokun_ec_read(struct gaokun_ec *ec, const u8 *req,
+> > +                size_t resp_len, u8 *resp)
+> > +{
+> > +     return gaokun_ec_request(ec, req, resp_len, resp);
+> > +}
+> > +EXPORT_SYMBOL_GPL(gaokun_ec_read);
+> > +
+> > +/**
+> > + * gaokun_ec_write - write to EC
+> > + * @ec: The gaokun_ec
+> > + * @req: The sequence to request
+> > + *
+> > + * This function has no big difference from gaokun_ec_read. When caller care
+> > + * only write status and no actual data are returnd, then use it.
+> > + */
+> > +int gaokun_ec_write(struct gaokun_ec *ec, u8 *req)
+> > +{
+> > +     u8 resp[RESP_HDR_SIZE];
+> > +
+> > +     return gaokun_ec_request(ec, req, sizeof(resp), resp);
+> > +}
+> > +EXPORT_SYMBOL_GPL(gaokun_ec_write);
+> > +
+> > +int gaokun_ec_read_byte(struct gaokun_ec *ec, u8 *req, u8 *byte)
+> > +{
+> > +     int ret;
+> > +     u8 resp[RESP_HDR_SIZE + sizeof(*byte)];
+> > +
+> > +     ret = gaokun_ec_read(ec, req, sizeof(resp), resp);
+> > +     *byte = resp[DATA_OFFSET];
+> > +
+> > +     return ret;
+> > +}
+> > +EXPORT_SYMBOL_GPL(gaokun_ec_read_byte);
+> > +
+> > +int gaokun_ec_register_notify(struct gaokun_ec *ec, struct notifier_block *nb)
+> > +{
+> > +     return blocking_notifier_chain_register(&ec->notifier_list, nb);
+> > +}
+> > +EXPORT_SYMBOL_GPL(gaokun_ec_register_notify);
+> > +
+> > +void gaokun_ec_unregister_notify(struct gaokun_ec *ec, struct notifier_block *nb)
+> > +{
+> > +     blocking_notifier_chain_unregister(&ec->notifier_list, nb);
+> > +}
+> > +EXPORT_SYMBOL_GPL(gaokun_ec_unregister_notify);
+> > +
+> > +/* -------------------------------------------------------------------------- */
+> > +/* API For PSY */
+> > +
+> > +int gaokun_ec_psy_multi_read(struct gaokun_ec *ec, u8 reg,
+> > +                          size_t resp_len, u8 *resp)
+> > +{
+> > +     int i, ret;
+> > +     u8 _resp[RESP_HDR_SIZE + 1];
+> > +     u8 req[REQ_HDR_SIZE + 1] = {0x02, EC_READ, 1, };
+>
+> Could it be made more readable by specifying the macro names for 0x02
+> and 1? This would help in understanding the meaning of these numbers.
+>
+
+I really don't know the meaning of master command 0x02, 1 is the size for
+the data_seq behind of it. There are many possible sizes. It is not a good
+idea to define a macro name for everyone.
+
+> Also, please ensure the actual size of the request buffer is handled
+> properly. In gaokun_ec_request(), the req is passed down directly, and
+> the i2c_msg.len is used dynamically with req[INPUT_SIZE_OFFSET] +
+> REQ_HDR_SIZE. This requires the caller to carefully manage the contents
+> to avoid memory over-read, making the code difficult to read.
+>
+> Creating a defined macro can help you avoid manually defining the size.
+> For example:
+> #define REQ(size, data_0, data_1, args...) \
+> u8 req[REQ_HDR_SIZE + size] = {data_0, data_1, size, args};
+>
+
+I think wrapping like this is not recommended, see '5)' in [1]
+
+Best wishes,
+Pengyu
+
+[1] https://www.kernel.org/doc/html/v4.10/process/coding-style.html#macros-enums-and-rtl
 
