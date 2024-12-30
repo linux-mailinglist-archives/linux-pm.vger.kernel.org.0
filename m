@@ -1,209 +1,184 @@
-Return-Path: <linux-pm+bounces-19853-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19854-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C93699FE907
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 17:24:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE5509FEADD
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 22:11:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CF081623FA
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 16:24:18 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D3EB33A21E3
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 21:11:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 778E11ACEAC;
-	Mon, 30 Dec 2024 16:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29A3319C575;
+	Mon, 30 Dec 2024 21:11:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="CR2PIpgg"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Q4idXrPb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E428A19ABA3;
-	Mon, 30 Dec 2024 16:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B29215E8B;
+	Mon, 30 Dec 2024 21:11:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735575856; cv=none; b=WvyhKdaKH4knSRcY253AfambDBST7P4uepRSii3IoOQ41UHLC4Sy3RiM8qVzQWblgMbxfhWF8ZSGJcImIava4MWbwdYi5t5p4t0jvpr3mnHsRFHVYcvfONVSZGdikHAkRUWLquMAMf0E4pZkdfkDFxRdmN0227rQDD7paDrEVm8=
+	t=1735593100; cv=none; b=SgWx4n/uM7SIm2sEOo9Os9itLiqebd7wEU6PhFEMHAiKwasUcHydxDrS/AirAbgWA0mlRd3oDg7uAvwCq5385WAgqzBCOQJoAAJLs4WIKLy7OAZ7tCbZvNQRlD7htfBezu8ofJyJPTXMpkX86snH5q/oPyZ3c27EehIoAabzGOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735575856; c=relaxed/simple;
-	bh=WCDd1WFvb0By3z4kEVfAfGMFgCJKdxQTdHM6nF0i27U=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=ShrlSpVWbNYq9ngxBYMqn3qbYgi428r+NNex6Scox6pi8REJ//PaBVkOSRqdrXncVqz78rhXjFPHV0vjsJKA8qA4m1bfa66Y3ivhxq273lZgoy7iJDWJo/W78KPAyOnOBBJteOO9sae0dTzFMLKc5vWmzHGYdrr12HOZn1Zw+Uk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=CR2PIpgg; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21680814d42so105578535ad.2;
-        Mon, 30 Dec 2024 08:24:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735575854; x=1736180654; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=IQYiqjijoXv8UNTxSWkMBDgGIXf88c4tiPOnipcOFPA=;
-        b=CR2PIpggSqFMz0DMB8DtMP+dNWF50zc4pK1llZ7yaxyqXAFM2bA1xhp3LsQUebp3FE
-         tGt50NY2FtCljOr5nseyLl71vO1QsS70okY1JSAfEddy3L3Z+kQ/YJzwLxQho0XeOM0K
-         InX8eXT3veGItGLYie5cf+pCBl8S9a3jnuNZLCckwHK/eQtrqz0a5JVXOlEDf7nJWlQv
-         lObsKGY9vDSAfPNJAXpODEDlxXDfoUm1UKLgO0rTnIx2OLxBvhkWISVEC9Ex56ZVWcnC
-         A18CqcakU+P5r0VIp2XZ7bkMqD2qwsdeltNaczuiYdyPsyPZP7vYauyf2FZNQt/eLdBl
-         ogmw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735575854; x=1736180654;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IQYiqjijoXv8UNTxSWkMBDgGIXf88c4tiPOnipcOFPA=;
-        b=JOQKrhPLaoijSn5016J9He0F2ivOxgwIVHfQFtUNR36ceRic8MPYMvviHwMf18v6Uj
-         ILdF1ABwyobEthQj3ZHiOV/HUz058hxBsnX2UrHxJNywE9xQnpAY+yfv9mJv5zNXBJo9
-         r1lDCSQwzTwb4T98/DztDZl+ffhyL+nans2DXUvwS3TlkW2XSzT/4/IiXDha2RHNOing
-         dZUL1YiZUk+GJyA41aOmX6t4tmQUBrzdzK9RC432PlnOJCU14OgxBpupbIIRriSNTkmx
-         tscucRIaKECmiIIM6mjZrEhlFxT/Ofw4TM0s0laczZzwkZABGDj+3zvXSubWp6ZsxaPd
-         N53g==
-X-Forwarded-Encrypted: i=1; AJvYcCUoJ1AWFcZvvnhO34up5l5/+jHZzzXMvbeJWRdXngzYg4VaLqXvlrxFznaOwM5tD+HllKX2hJpza1mw@vger.kernel.org, AJvYcCWg+MDCwQM3VgfcOKUBnkdehD8AM4hfLl6nv72eqS+PpYm+pHwjp5r+2nlACOg3CMHUKk5KSjxyhPfrxtiFlA16kIE9SQ==@vger.kernel.org, AJvYcCWnGFXW9IwY50d32KObJr2yVJqPfLl/biSZIPfMMawx+VydQLgZsigej4wbgKCpy5x24sfynF96UDCbAKBszA==@vger.kernel.org, AJvYcCXMGZzdTxjCxs3nzawktkP3MVc0NOeRFthfPH6wPCdhQvQYRtL6tly1dZgdO5XJO/SIRA2RCKYEY81phuSw@vger.kernel.org, AJvYcCXRsFk6ZHKnxTyzyawN8Q2kJSwWeEU/T8cS+Qk2S2ToHr20hBvTad5pi0HUqlBlKbJqY5Zuz7Xo7P0=@vger.kernel.org, AJvYcCXT+M/i44tzCjca6rA/GIxVF7TxoCr48+2vXcAim/5YMXyrPCFlTpKoDTU0rYFxS2hwyUgIF38vSYrM@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsfEOfq1tKQRffiAJzFD1MFmgUwwMIo63dY7JpkP5t5+i+8Igl
-	DyJdt13+cMzjydpicOJiKJIRncDThYAVLDLKiCPBoONCVnaf1SXa
-X-Gm-Gg: ASbGncsBZpwx12QoLR28307Xs3sDApuZuHYHx6ZJZ3aqP+Vm3Lto0OZTl1WTQL92476
-	SuxEYFGCgCRWfOyc0qjBTdBRZVtIch0SPpkL3GSelBPobbY+jKYX9MmjRAyEOs3rCDqQVqh3UlY
-	L/52ejocNHChZMhqV7Yjxm8PRsPEmgqhRWAM6IX/HZ3i+pVRqZGUnRUMzfhnchXsb9NP9YlpO/A
-	NcJzn8Xshn78yb9AEloBnfOt+FHZPKWwspngbSZA+0=
-X-Google-Smtp-Source: AGHT+IFeDxGKcHWEYos+i3sMDCqEYmYUL6mMPgS2lHM+khPzP9xeYbBgtPQKszdQYLCZwH2Za6hUEg==
-X-Received: by 2002:a05:6a00:ac2:b0:72a:ae66:3050 with SMTP id d2e1a72fcca58-72abde40466mr48099099b3a.1.1735575854114;
-        Mon, 30 Dec 2024 08:24:14 -0800 (PST)
-Received: from nuvole.. ([2a09:bac1:76a0:dd10::2e9:e5])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72aad90c182sm20055113b3a.189.2024.12.30.08.24.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 30 Dec 2024 08:24:13 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: konrad.dybcio@oss.qualcomm.com
-Cc: andersson@kernel.org,
-	bryan.odonoghue@linaro.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	dmitry.baryshkov@linaro.org,
-	gregkh@linuxfoundation.org,
-	hdegoede@redhat.com,
-	heikki.krogerus@linux.intel.com,
-	ilpo.jarvinen@linux.intel.com,
-	konradybcio@kernel.org,
-	krzk+dt@kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	mitltlatltl@gmail.com,
-	nikita@trvn.ru,
-	platform-driver-x86@vger.kernel.org,
-	robh@kernel.org,
-	sre@kernel.org
-Subject: Re: [PATCH 5/5] arm64: dts: qcom: gaokun3: Add Embedded Controller node
-Date: Tue, 31 Dec 2024 00:22:56 +0800
-Message-ID: <20241230162257.215401-1-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <233e7a35-0ec5-4746-b758-684a0befd005@oss.qualcomm.com>
-References: <233e7a35-0ec5-4746-b758-684a0befd005@oss.qualcomm.com>
+	s=arc-20240116; t=1735593100; c=relaxed/simple;
+	bh=Q741uALNTB5CNtq/lM82le4OnSfw8mlTzBRmSR8fCd0=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=fF373ZftH88plajw2IgFI/+mjkdsjazcbA0ea8KnxGCLiaA3Q5FkUBFDbLEjt32G9mbGgwWbPXqfGY+3iyGCMLi+Iqlas7XTy3sjtVdw4qkcLITPOgllZdIcPhSnv/OGEjk23Cb+rThWhxbn/3NKmfwd1G6Dh9/O806jHVRGiLg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Q4idXrPb; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BUBxqFi024418;
+	Mon, 30 Dec 2024 21:11:24 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=wv9LFGqrlufuILlnYrRqDx
+	yHgwXOsry9EMa3kBYHC9s=; b=Q4idXrPbBBMNePk9yiC/bE/hEKPwLpCW6p/awG
+	Ku2J4RozqfvZFDCvnfKBwMbsccbae/87l6cWgl82CYJSrdXyyM0Lgg8pu2TDt8CC
+	r6D8Zi0YAd8kE3xiqlhqZ+96I1asbSusqowC12fenBF2riMY+CQKitpTxsz3SNgr
+	10K6evttWgHyUMOFO/tz5kl3U+AS5PMyuudzNe4nXD8ABNXCzG/WWWFkO+DEQjhd
+	QZqGgj5WdYz7/KLoY548rGlQcLz7VSusi+4gvJ8Q2kDzz12TLNxf3XnXMZEtg20Y
+	gcMdLezWGdiMfLAqEJaASKLd3qwz4WdVydpRvjieyt+NYiZw==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43uu4ss2xk-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Dec 2024 21:11:23 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BULBMhI000535
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 30 Dec 2024 21:11:22 GMT
+Received: from [10.213.111.143] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 30 Dec
+ 2024 13:11:16 -0800
+From: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Subject: [PATCH v3 0/6] Support for GPU ACD feature on Adreno X1-85
+Date: Tue, 31 Dec 2024 02:41:01 +0530
+Message-ID: <20241231-gpu-acd-v3-0-3ba73660e9ca@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAGUMc2cC/1WPS27DMAwFr2JoXQUi9XGcVe9RdCHTdMJF7FRyh
+ BZB7l45QVN4+cg3Q/CmMifhrA7NTSUukmWearBvjaJTnI6sZahZoUFnWnT6eLnqSIMOBAP5gUY
+ PQdX2JfEo3w/Tx2fNJ8nLnH4e4gLr9M8RXo4C2ujWRRvb0Tkb9u9fVyGZaEfzeZWuBBjALQHsu
+ YMYO9+HDbHeLfi6BQbhn8RKdoQ+Btwb29OWvD9fSFynWZbnH6qPmXXdn2U5NCXswOpErrbvv8L
+ ju9E5AQAA
+To: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        "Konrad
+ Dybcio" <konradybcio@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten
+	<marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
+	<nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Bjorn Andersson
+	<andersson@kernel.org>
+CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1735593076; l=3014;
+ i=quic_akhilpo@quicinc.com; s=20240726; h=from:subject:message-id;
+ bh=Q741uALNTB5CNtq/lM82le4OnSfw8mlTzBRmSR8fCd0=;
+ b=ssQq6YvpNmZ0CM+SXHYb5Zg7rAMYz6z3FO8Y4+sbbtTLR21OJc3zD4T5eHgf3oi6BWpWwDXq6
+ 9b/a9LGbUIJCNHAUgp1IjIuEAXPnj8ORP4sj5QeJ1ujsnO5zEtL/Ffh
+X-Developer-Key: i=quic_akhilpo@quicinc.com; a=ed25519;
+ pk=lmVtttSHmAUYFnJsQHX80IIRmYmXA4+CzpGcWOOsfKA=
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: TjhbSJ7Ytiqmqbt8s_WlH6wBjRgX2EpV
+X-Proofpoint-GUID: TjhbSJ7Ytiqmqbt8s_WlH6wBjRgX2EpV
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 adultscore=0 phishscore=0 malwarescore=0 mlxscore=0
+ spamscore=0 lowpriorityscore=0 mlxlogscore=999 impostorscore=0
+ suspectscore=0 clxscore=1015 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2411120000 definitions=main-2412300182
 
-On Mon, Dec 30, 2024 at 10:53 PM Konrad Dybcio <konrad.dybcio@oss.qualcomm.com> wrote:
-> On 27.12.2024 6:13 PM, Pengyu Luo wrote:
-> > The Embedded Controller in the Huawei Matebook E Go (s8280xp)
-> > is accessible on &i2c15 and provides battery and adapter status,
-> > port orientation status, as well as HPD event notifications for
-> > two USB Type-C port, etc.
-> >
-> > Add the EC to the device tree and describe the relationship among
-> > the type-c ports, orientation switches and the QMP combo PHY.
-> >
-> > Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-> > ---
-> >  .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts | 139 ++++++++++++++++++
-> >  1 file changed, 139 insertions(+)
-> >
-> > diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-> > index 09b95f89e..09ca9a560 100644
-> > --- a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-> > +++ b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-> > @@ -28,6 +28,7 @@ / {
-> >
-> >       aliases {
-> >               i2c4 = &i2c4;
-> > +             i2c15 = &i2c15;
-> >               serial1 = &uart2;
-> >       };
-> >
-> > @@ -216,6 +217,40 @@ map1 {
-> >               };
-> >       };
-> >
-> > +     usb0-sbu-mux {
-> > +                     compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-> > +
-> > +                     select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
-> > +
-> > +                     pinctrl-names = "default";
-> > +                     pinctrl-0 = <&usb0_sbu_default>;
->
-> Please preserve this order:
->
-> property-n
-> property-names
->
-> > +
-> > +                     orientation-switch;
->
-> This
->
-> > +
-> > +                     port {
-> > +                             usb0_sbu_mux: endpoint {
-> > +                                             remote-endpoint = <&ucsi0_sbu>;
->
-> And this section have incorrect whitespacing (one tab too many, make
-> sure you set your tab width to 8 spaces)
->
-> Same for usb1-sbu-mux
->
-> [...]
->
-> > +     i2c15_default: i2c15-default-state {
-> > +             pins = "gpio36", "gpio37";
-> > +             function = "qup15";
-> > +             drive-strength = <2>;
-> > +             bias-pull-up;
-> > +     };
-> > +
-> >       mode_pin_active: mode-pin-state {
-> >               pins = "gpio26";
-> >               function = "gpio";
-> > @@ -1301,6 +1426,20 @@ tx-pins {
-> >               };
-> >       };
-> >
-> > +     usb0_sbu_default: usb0-sbu-state {
-> > +             pins = "gpio164";
-> > +             function = "gpio";
-> > +             bias-disable;
-> > +             drive-strength = <16>;
-> > +     };
-> > +
-> > +     usb1_sbu_default: usb1-sbu-state {
-> > +             pins = "gpio47";
-> > +             function = "gpio";
-> > +             bias-disable;
-> > +             drive-strength = <16>;
-> > +     };
->
-> Similarly, please keep drive-strength above bias for consistency
->
-> lgtm otherwise
->
+This series adds support for ACD feature for Adreno GPU which helps to
+lower the power consumption on GX rail and also sometimes is a requirement
+to enable higher GPU frequencies. At high level, following are the
+sequences required for ACD feature:
+	1. Identify the ACD level data for each regulator corner
+	2. Send a message to AOSS to switch voltage plan
+	3. Send a table with ACD level information to GMU during every
+	gpu wake up
 
-Totaly agree, I was in a hurry, I will fix it in v2.
+For (1), it is better to keep ACD level data in devicetree because this
+value depends on the process node, voltage margins etc which are
+chipset specific. For instance, same GPU HW IP on a different chipset
+would have a different set of values. So, a new schema which extends
+opp-v2 is created to add a new property called "qcom,opp-acd-level".
 
-Best wishes,
-Pengyu
+ACD support is dynamically detected based on the presence of
+"qcom,opp-acd-level" property in GPU's opp table. Also, qmp node should be
+present under GMU node in devicetree for communication with AOSS.
+
+The devicetree patch in this series adds the acd-level data for X1-85
+GPU present in Snapdragon X1 Elite chipset.
+
+The last two devicetree patches are for Bjorn and all the rest for
+Rob Clark.
+
+---
+Changes in v3:
+- Rebased on top of v6.13-rc4 since X1E doesn't boot properly with msm-next
+- Update patternProperties regex (Krzysztof)
+- Update MAINTAINERS file include the new opp-v2-qcom-adreno.yaml
+- Update the new dt properties' description
+- Do not move qmp_get() to acd probe (Konrad)
+- New patches: patch#2, #3 and #6
+- Link to v2: https://lore.kernel.org/r/20241021-gpu-acd-v2-0-9c25a62803bc@quicinc.com
+
+Changes in v2:
+- Removed RFC tag for the series
+- Improve documentation for the new dt bindings (Krzysztof)
+- Add fallback compatible string for opp-table (Krzysztof)
+- Link to v1: https://lore.kernel.org/r/20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com
+
+---
+Akhil P Oommen (6):
+      drm/msm/adreno: Add support for ACD
+      drm/msm: a6x: Rework qmp_get() error handling
+      drm/msm/adreno: Add module param to disable ACD
+      dt-bindings: opp: Add v2-qcom-adreno vendor bindings
+      arm64: dts: qcom: x1e80100: Add ACD levels for GPU
+      arm64: dts: qcom: x1e80100: Add OPPs up to Turbo L3 for GPU
+
+ .../bindings/opp/opp-v2-qcom-adreno.yaml           | 97 ++++++++++++++++++++++
+ MAINTAINERS                                        |  1 +
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi             | 25 +++++-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c              | 96 ++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h              |  1 +
+ drivers/gpu/drm/msm/adreno/a6xx_hfi.c              | 36 ++++++++
+ drivers/gpu/drm/msm/adreno/a6xx_hfi.h              | 21 +++++
+ drivers/gpu/drm/msm/adreno/adreno_device.c         |  4 +
+ 8 files changed, 268 insertions(+), 13 deletions(-)
+---
+base-commit: dbfac60febfa806abb2d384cb6441e77335d2799
+change-id: 20240724-gpu-acd-6c1dc5dcf516
+
+Best regards,
+-- 
+Akhil P Oommen <quic_akhilpo@quicinc.com>
+
 
