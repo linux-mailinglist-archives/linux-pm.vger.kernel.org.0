@@ -1,100 +1,102 @@
-Return-Path: <linux-pm+bounces-19842-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19843-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E03909FE4C4
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 10:20:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E42F39FE4D4
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 10:31:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 37B4C3A1A30
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 09:20:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF01618828C5
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 09:31:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 070351A23AC;
-	Mon, 30 Dec 2024 09:20:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A34C1A08A4;
+	Mon, 30 Dec 2024 09:30:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NqouMV3R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qckX+al/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4F4419F489
-	for <linux-pm@vger.kernel.org>; Mon, 30 Dec 2024 09:20:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA902F50;
+	Mon, 30 Dec 2024 09:30:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735550435; cv=none; b=hhFwsJe8okHrtdEP3q0Fz3oLOVBA73+VKYn3Yh+w0k5aCwHo9m8IuJmGbfQCVppHIUOtUq6+i3mDearwj9klKzaNSvcm3o/MCDKpCMXt3taEvAcuuWChna/Q0UVRqff16a/FkH3L8tf2jMrFpdqvHx8V2I47sgm/vVIMW2GosoY=
+	t=1735551057; cv=none; b=M+iOn2AF6gD0DMPNhFp+5dAUDLLlZG7NaJPRTl6iB9WNsf5QYjNbRi7jSBj/CI1FzaeNBGTyUeQ3qL1Wr6ivdMJujuoAYbJ1u1PI9yr9pQHxhRdfBAnv8dcUv/ARuOE/lkwloK5y+pwQjV4fMnvMvNznX736uGf4z3Bqo412q44=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735550435; c=relaxed/simple;
-	bh=M3Y6cNPkMpkYeiEu0IRKgzqXsCExyd+eexG/yAk7qsk=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=CvwvRDkw2QAmsDGQc4Ej4ONHf7wNiRM49geTE2SiulhoxkgocJ+POkRqu1H9JQBTipdPKOyPv8t3AY1rKnlejQMyX9z0mPLXVb+PkfmakFOWukIYKAbInikOcwTD5kmxWcstWDplgZHp8Ccr+EChSaRUI6rcM67F7DNN3lwiQdQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NqouMV3R; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 575D0C4CED4
-	for <linux-pm@vger.kernel.org>; Mon, 30 Dec 2024 09:20:35 +0000 (UTC)
+	s=arc-20240116; t=1735551057; c=relaxed/simple;
+	bh=OIUGQo/iIZMOB5N1vqzsOTaqkLjkGwgB8YS8iwbc2v0=;
+	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=u1mJwAChxAdEsZaxhNreSPH9J/mHhPlWNOh04sWt3gsG+hdDZOhkn4YOtmiEkezDBBZKRLkaUjZOj31xMGcYP09TMpRKeU7i4wCA/2TGY0eg7xH9FSIvSaCPlpyh2REybSAM5QE5olOLhlxt+iJb2Dzvlp+vrteI6sIxlDtvr7E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qckX+al/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E15BC4CED4;
+	Mon, 30 Dec 2024 09:30:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735550435;
-	bh=M3Y6cNPkMpkYeiEu0IRKgzqXsCExyd+eexG/yAk7qsk=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=NqouMV3RvicqAMq8GAIkvDhsp0kYl5zZxt7JJOQsGHtz1mSAubOQ3DWOHgGWM2Z5F
-	 DJ9m3eB37g0PSun52/pYe/yFa3/+Yh8smw5gNf49Kpdail155C5/AdTdFMYd0ZITGu
-	 DGclfDp8qG20bIGG7gOa7vIEhxF+d0wblTQ+6WXS25Ne3IJrsDrZKwbF6ux7cahbA8
-	 a8n48nRSJDOx5jHGirBIe300CEnDvlrWS1VgOq3GhP39x7uXbU70qUIfOIXY4UqGIc
-	 sSKug9yZ8cD2WqWZUeYtDfmY/oFZjwNKE9ezUFzBAfZR4zQSOCHR0Xm9ELd2pS+x6L
-	 cDNFj4dYbnNsA==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 42C94C41606; Mon, 30 Dec 2024 09:20:35 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 219640] Preferred cores working incorrectly for Zen3 CPU
- (regression)
-Date: Mon, 30 Dec 2024 09:20:35 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: sobrus@gmail.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: cf_bisect_commit bug_file_loc cf_kernel_version
- cf_regression
-Message-ID: <bug-219640-137361-aRHlO5jLj5@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219640-137361@https.bugzilla.kernel.org/>
-References: <bug-219640-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1735551056;
+	bh=OIUGQo/iIZMOB5N1vqzsOTaqkLjkGwgB8YS8iwbc2v0=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qckX+al/1vXglOD9P9vSAmfYmA19uYRolQf0JXidvL5u+I4or77p1FuPQjE74xMpH
+	 dCW3SbBOqjDb5Bn0Cfjn03NI4bLOC3UjHplyHO20287zKjnZQNXcVK7lVDOFUJt2lZ
+	 k4qI9aYak73bUKa+UUfznGAPCuDghFIw56b+NZOtNONsoeoQgFias5F8YWdqta4uza
+	 nywB1elkCyw52nK8pchAETGcVsVbsu1g+UVeeLtsw3lz8RiirlEiuruYqXVpC+EYZC
+	 5Lu9tq62ZJugQNxFw3scsFyqC6tu6s6dmLs2DcKtWSt8yufDWe7PVvk3M5hJtp9GJA
+	 za7ko0aObsx6A==
+Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
+	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.95)
+	(envelope-from <maz@kernel.org>)
+	id 1tSC6w-007mVR-0P;
+	Mon, 30 Dec 2024 09:30:54 +0000
+Date: Mon, 30 Dec 2024 09:30:53 +0000
+Message-ID: <86ikr1plf6.wl-maz@kernel.org>
+From: Marc Zyngier <maz@kernel.org>
+To: Charles Han <hanchunchao@inspur.com>
+Cc: <marcan@marcan.st>,
+	<sven@svenpeter.dev>,
+	<alyssa@rosenzweig.io>,
+	<rafael@kernel.org>,
+	<viresh.kumar@linaro.org>,
+	<asahi@lists.linux.dev>,
+	<linux-arm-kernel@lists.infradead.org>,
+	<linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: apple-soc: Fix possible null-ptr-deref for cpufreq_cpu_get_raw()
+In-Reply-To: <20241230035714.72780-1-hanchunchao@inspur.com>
+References: <20241230035714.72780-1-hanchunchao@inspur.com>
+User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
+ FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
+ (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
+MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
+Content-Type: text/plain; charset=US-ASCII
+X-SA-Exim-Connect-IP: 185.219.108.64
+X-SA-Exim-Rcpt-To: hanchunchao@inspur.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, rafael@kernel.org, viresh.kumar@linaro.org, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+X-SA-Exim-Mail-From: maz@kernel.org
+X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219640
+On Mon, 30 Dec 2024 03:57:14 +0000,
+Charles Han <hanchunchao@inspur.com> wrote:
+> 
+> cpufreq_cpu_get_raw() may return NULL if the cpu is not in
+> policy->cpus cpu mask and it will cause null pointer dereference.
+> But this returned value in apple_soc_cpufreq_get_rate() is not
+> checked. Add NULL check in apple_soc_cpufreq_get_rate(), to handle
+> kernel NULL pointer dereference error.
 
-Sebastian (sobrus@gmail.com) changed:
+The only way I can see a CPU not having an assigned policy is when the
+DT is incomplete. And even then, reaching this code path doesn't look
+obvious to me.
 
-           What    |Removed                     |Added
-----------------------------------------------------------------------------
- Bisected commit-id|                            |39311a230e04eab2fe7e257ad79
-                   |                            |922040bfdaf1c
-                URL|                            |https://discuss.cachyos.org
-                   |                            |/t/preferred-cores-stopped-
-                   |                            |working-for-zen3-cpu/5108/6
-     Kernel Version|                            |6.13rc4
-         Regression|No                          |Yes
+Can you describe how you get into this situation?
 
---=20
-You may reply to this email to add a comment.
+Thanks,
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+	M.
+
+-- 
+Without deviation from the norm, progress is not possible.
 
