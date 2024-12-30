@@ -1,122 +1,96 @@
-Return-Path: <linux-pm+bounces-19839-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19840-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BBEA9FE472
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 10:11:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C33D09FE49F
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 10:12:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 248E13A2411
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 09:10:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 53B0A3A2623
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 09:12:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D3F1A3AB8;
-	Mon, 30 Dec 2024 09:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="b5UQ252R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 000581A76AE;
+	Mon, 30 Dec 2024 09:11:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from ssh247.corpemail.net (ssh247.corpemail.net [210.51.61.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A0BD1A23A9;
-	Mon, 30 Dec 2024 09:10:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 09BCA1A8407;
+	Mon, 30 Dec 2024 09:11:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.61.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735549833; cv=none; b=ODMhz8Oj/SS3LOwDoNxwcz1aWlvHbrojmCVquoHWo97LgjFYO2BQdboFcz4wEhLuoAcYjZfdiXVI9kiuEdzcpiRBox3lUZxWx++c9KMEq/RJZ51/XwvAMpPFGTSGpH55PLmgmiO24a9IKQ0jZ6uh0ZNV6R95FqRT2lJ6mdXziH8=
+	t=1735549878; cv=none; b=RHrnevrX9Xl/sWkobbtTZbpmvgP9Ypkx+KtNQZCCjZgGS779hqugniShIhiJUaUGe+EuWvpjxfv0KagHFQGvVqWm4MbFOfk6xOnhZNsS8tzIgjLzHrldhxkQjzor36Q4eA+KqB+ZIi5Nv8hJQkSL3HoSOXmvP9k+HZv9BIpY93s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735549833; c=relaxed/simple;
-	bh=LvuelUv/PKJnM81qkpumebOSSAWMNddGqZWVrM6Nvbs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=X5pIu7I7UTRapfCoRrQXonjcYbxjhZwqvPjUEeBS8v6JOFAxuBMqgS/+ZQxRv7u24xjD6pfElav9B1HYtMK3WPST3zktFdIGOj81N5/CjTHutDSoYOkpE2avF8pn6WpuKdP9RbiVqhmD0bMpzB0g3o1Td63I8XPDn1+GyRNFRx8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=b5UQ252R; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 4BU2kV89027261;
-	Mon, 30 Dec 2024 09:10:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	pOJNikt3Gho9pfSzSncZfTq62v3DSgp6Hu1UcM+O+1g=; b=b5UQ252RtH6jnP/S
-	c2Li3XgYOaDt4WS6OJy6EA7UpoOC9EWWIQmwr2sfwkar0k6cddfEyhjK98c/B8W4
-	khgH0MOOPlkjQwwwxMT2kkSUT/OFEANK3fbdz8RIRyh7XYpoO0MKUSZtZItTQjhH
-	D+A5/gpykUxgUkGt5bSlIWa713yUTXSudAHgDbqTT52o/R8WVbUfQvnr++3VphA2
-	mHjF0feL1+IeCYRlzsrbJUztjmBwKbdZ8Siw4x5AEbl1uyqAmOcPKNXB7jdjb3Um
-	CXZRLjdWsVeFEA4hRgwIMM1I+KlxLGmCf0wTd5aTSWyCdyqwpG40q3RQzLzsCd4D
-	nQNAYw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43uk120ng6-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Dec 2024 09:10:21 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 4BU9AKKl000353
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Mon, 30 Dec 2024 09:10:20 GMT
-Received: from [10.239.132.150] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 30 Dec
- 2024 01:10:16 -0800
-Message-ID: <8568e9d3-7209-42b8-91a2-cda8b98a5790@quicinc.com>
-Date: Mon, 30 Dec 2024 17:10:14 +0800
+	s=arc-20240116; t=1735549878; c=relaxed/simple;
+	bh=y4L8hO4mSubGVwG8jhpI9T9WWPRMAmZNvO/5c32N2FM=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BGcdj7zA4uEdKRMkjxJLuAxeBOBFbpJgSLaFm5fCd4RDTpbGy/6dCrTm8qEAiAFV4skbvpbYPrZjcqvtwe5muHcbKSsjSs/49fvqe5dxvr8cgKyZw+z0Hsf5omkvSkFil2jNUdwaqrehvSHFW3m5/goTXi4g2xmnkDXpwLGwMSw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.61.247
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
+Received: from ssh247.corpemail.net
+        by ssh247.corpemail.net ((D)) with ASMTP (SSL) id BNQ00011;
+        Mon, 30 Dec 2024 17:11:11 +0800
+Received: from jtjnmail201607.home.langchao.com (10.100.2.7) by
+ jtjnmail201619.home.langchao.com (10.100.2.19) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 30 Dec 2024 17:11:10 +0800
+Received: from localhost.localdomain (10.94.16.130) by
+ jtjnmail201607.home.langchao.com (10.100.2.7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 30 Dec 2024 17:11:08 +0800
+From: Charles Han <hanchunchao@inspur.com>
+To: <marcan@marcan.st>, <sven@svenpeter.dev>, <alyssa@rosenzweig.io>,
+	<rafael@kernel.org>, <viresh.kumar@linaro.org>, <maz@kernel.org>,
+	<Markus.Elfring@web.de>
+CC: <linux-arm-kernel@lists.infradead.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, Charles Han <hanchunchao@inspur.com>
+Subject: [PATCH  v2] cpufreq: apple-soc: Prevent null pointer dereference in apple_soc_cpufreq_get_rate()
+Date: Mon, 30 Dec 2024 17:10:53 +0800
+Message-ID: <20241230091053.247719-1-hanchunchao@inspur.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
-To: Krzysztof Kozlowski <krzk@kernel.org>, Pengyu Luo <mitltlatltl@gmail.com>
-CC: <andersson@kernel.org>, <bryan.odonoghue@linaro.org>,
-        <conor+dt@kernel.org>, <devicetree@vger.kernel.org>,
-        <dmitry.baryshkov@linaro.org>, <gregkh@linuxfoundation.org>,
-        <hdegoede@redhat.com>, <heikki.krogerus@linux.intel.com>,
-        <ilpo.jarvinen@linux.intel.com>, <konradybcio@kernel.org>,
-        <krzk+dt@kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-usb@vger.kernel.org>, <nikita@trvn.ru>,
-        <platform-driver-x86@vger.kernel.org>, <robh@kernel.org>,
-        <sre@kernel.org>
-References: <ff53d7f7-0103-4e52-ac0a-c05bf4521cd1@kernel.org>
- <20241229101244.59779-1-mitltlatltl@gmail.com>
- <7fc6c727-d3c1-4c6d-a990-8caeb95c43c5@quicinc.com>
- <5ce5c90b-3fb1-41eb-b5aa-e4e06c8cf7e8@kernel.org>
-From: "Aiqun(Maria) Yu" <quic_aiquny@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <5ce5c90b-3fb1-41eb-b5aa-e4e06c8cf7e8@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6cHNrEQ3sbqy59kutadFkvt4lCjBHAUa
-X-Proofpoint-GUID: 6cHNrEQ3sbqy59kutadFkvt4lCjBHAUa
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
- definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 adultscore=0 spamscore=0
- priorityscore=1501 phishscore=0 mlxscore=0 lowpriorityscore=0
- clxscore=1015 bulkscore=0 impostorscore=0 suspectscore=0 mlxlogscore=651
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2412300078
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: Jtjnmail201615.home.langchao.com (10.100.2.15) To
+ jtjnmail201607.home.langchao.com (10.100.2.7)
+tUid: 202412301711117422a1f991e589291e20510d2f3b4f04
+X-CorpSPAM-Fhash: Yes
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
 
-On 12/30/2024 3:35 PM, Krzysztof Kozlowski wrote:
-> On 30/12/2024 08:28, Aiqun(Maria) Yu wrote:
->>>>
->> [...]
->>>>
->>>
->>> Check the motherboard, https://postimg.cc/V5r4KCgx (Credit to Tianyu Gao <gty0622@gmail.com>)
->>
->> The link is not accessible from my end. Could you please help follow the
-> 
-> Link is accessible. Maybe you are using corporate network with some
-> firewalls/content filtering?
+cpufreq_cpu_get_raw() may return NULL if the cpu is not in
+policy->cpus cpu mask and it will cause null pointer dereference.
+Prevent null pointer dereference in apple_soc_cpufreq_get_rate().
 
-It's highly likely that my corporate network has blocked this.
+Fixes: 6286bbb40576 ("cpufreq: apple-soc: Add new driver to control Apple SoC CPU P-states")
+Signed-off-by: Charles Han <hanchunchao@inspur.com>
+---
+ drivers/cpufreq/apple-soc-cpufreq.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
+diff --git a/drivers/cpufreq/apple-soc-cpufreq.c b/drivers/cpufreq/apple-soc-cpufreq.c
+index 4dcacab9b4bf..1c6d81355b41 100644
+--- a/drivers/cpufreq/apple-soc-cpufreq.c
++++ b/drivers/cpufreq/apple-soc-cpufreq.c
+@@ -104,6 +104,9 @@ static const struct of_device_id apple_soc_cpufreq_of_match[] __maybe_unused = {
+ static unsigned int apple_soc_cpufreq_get_rate(unsigned int cpu)
+ {
+ 	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
++	if (unlikely(!policy))
++		return 0;
++
+ 	struct apple_cpu_priv *priv = policy->driver_data;
+ 	struct cpufreq_frequency_table *p;
+ 	unsigned int pstate;
 -- 
-Thx and BRs,
-Aiqun(Maria) Yu
+2.31.1
+
 
