@@ -1,102 +1,95 @@
-Return-Path: <linux-pm+bounces-19843-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19844-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E42F39FE4D4
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 10:31:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B3A49FE4DB
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 10:32:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CF01618828C5
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 09:31:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBF7D3A1D53
+	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 09:32:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A34C1A08A4;
-	Mon, 30 Dec 2024 09:30:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qckX+al/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C4C1A3BC0;
+	Mon, 30 Dec 2024 09:32:12 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from ssh247.corpemail.net (ssh247.corpemail.net [210.51.61.247])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2AA902F50;
-	Mon, 30 Dec 2024 09:30:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F421A23A9;
+	Mon, 30 Dec 2024 09:32:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.51.61.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735551057; cv=none; b=M+iOn2AF6gD0DMPNhFp+5dAUDLLlZG7NaJPRTl6iB9WNsf5QYjNbRi7jSBj/CI1FzaeNBGTyUeQ3qL1Wr6ivdMJujuoAYbJ1u1PI9yr9pQHxhRdfBAnv8dcUv/ARuOE/lkwloK5y+pwQjV4fMnvMvNznX736uGf4z3Bqo412q44=
+	t=1735551131; cv=none; b=d/DJwy+2El2Cwj6yCzD/J1F85ZMyVPTAW/d+ziPpWbZjroWlZJVzmwsfTRmPThBunEmn8jzmTZrNq4SyBNVwgwUesmO3S/GyhVF1iCpJy2D/RHGdADAJxWrdPpTlkCeX79EmzPG4EBZzX50yaj+lPZ0tz6jADzgYL+AAK/CAo4I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735551057; c=relaxed/simple;
-	bh=OIUGQo/iIZMOB5N1vqzsOTaqkLjkGwgB8YS8iwbc2v0=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u1mJwAChxAdEsZaxhNreSPH9J/mHhPlWNOh04sWt3gsG+hdDZOhkn4YOtmiEkezDBBZKRLkaUjZOj31xMGcYP09TMpRKeU7i4wCA/2TGY0eg7xH9FSIvSaCPlpyh2REybSAM5QE5olOLhlxt+iJb2Dzvlp+vrteI6sIxlDtvr7E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qckX+al/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8E15BC4CED4;
-	Mon, 30 Dec 2024 09:30:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735551056;
-	bh=OIUGQo/iIZMOB5N1vqzsOTaqkLjkGwgB8YS8iwbc2v0=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=qckX+al/1vXglOD9P9vSAmfYmA19uYRolQf0JXidvL5u+I4or77p1FuPQjE74xMpH
-	 dCW3SbBOqjDb5Bn0Cfjn03NI4bLOC3UjHplyHO20287zKjnZQNXcVK7lVDOFUJt2lZ
-	 k4qI9aYak73bUKa+UUfznGAPCuDghFIw56b+NZOtNONsoeoQgFias5F8YWdqta4uza
-	 nywB1elkCyw52nK8pchAETGcVsVbsu1g+UVeeLtsw3lz8RiirlEiuruYqXVpC+EYZC
-	 5Lu9tq62ZJugQNxFw3scsFyqC6tu6s6dmLs2DcKtWSt8yufDWe7PVvk3M5hJtp9GJA
-	 za7ko0aObsx6A==
-Received: from sofa.misterjones.org ([185.219.108.64] helo=goblin-girl.misterjones.org)
-	by disco-boy.misterjones.org with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.95)
-	(envelope-from <maz@kernel.org>)
-	id 1tSC6w-007mVR-0P;
-	Mon, 30 Dec 2024 09:30:54 +0000
-Date: Mon, 30 Dec 2024 09:30:53 +0000
-Message-ID: <86ikr1plf6.wl-maz@kernel.org>
-From: Marc Zyngier <maz@kernel.org>
-To: Charles Han <hanchunchao@inspur.com>
-Cc: <marcan@marcan.st>,
-	<sven@svenpeter.dev>,
-	<alyssa@rosenzweig.io>,
-	<rafael@kernel.org>,
-	<viresh.kumar@linaro.org>,
-	<asahi@lists.linux.dev>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: apple-soc: Fix possible null-ptr-deref for cpufreq_cpu_get_raw()
-In-Reply-To: <20241230035714.72780-1-hanchunchao@inspur.com>
-References: <20241230035714.72780-1-hanchunchao@inspur.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) SEMI-EPG/1.14.7 (Harue)
- FLIM-LB/1.14.9 (=?UTF-8?B?R29qxY0=?=) APEL-LB/10.8 EasyPG/1.0.0 Emacs/29.4
- (aarch64-unknown-linux-gnu) MULE/6.0 (HANACHIRUSATO)
+	s=arc-20240116; t=1735551131; c=relaxed/simple;
+	bh=6z0eFfOZs7BdJIGqDGcwfBjGyNn+VEE09uPh+kDNBHY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=RA7ApbVIzkNWPrtJLrf23RWDz2IJrHenjrEufNhVnZmN7bDhmGxdZrOOhhyahoP34N3sUsi/kTCL1r0uxKfxt1MIRjtOs0NieMgm3BPeG69L+ID7zYqQf/k+Iskx24LoU6IfPQN7EjzBH/lZBsA4hPevtyfpdpxLRIGrowFWf2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com; spf=pass smtp.mailfrom=inspur.com; arc=none smtp.client-ip=210.51.61.247
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=inspur.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=inspur.com
+Received: from ssh247.corpemail.net
+        by ssh247.corpemail.net ((D)) with ASMTP (SSL) id BNL00002;
+        Mon, 30 Dec 2024 17:32:02 +0800
+Received: from jtjnmail201607.home.langchao.com (10.100.2.7) by
+ jtjnmail201602.home.langchao.com (10.100.2.2) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 30 Dec 2024 17:32:02 +0800
+Received: from localhost.localdomain (10.94.16.130) by
+ jtjnmail201607.home.langchao.com (10.100.2.7) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 30 Dec 2024 17:32:01 +0800
+From: Charles Han <hanchunchao@inspur.com>
+To: <sudeep.holla@arm.com>, <cristian.marussi@arm.com>, <rafael@kernel.org>,
+	<viresh.kumar@linaro.org>
+CC: <arm-scmi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, Charles Han
+	<hanchunchao@inspur.com>
+Subject: [PATCH] cpufreq: scpi: Prevent null pointer dereference in scpi_cpufreq_get_rate()
+Date: Mon, 30 Dec 2024 17:31:59 +0800
+Message-ID: <20241230093159.258813-1-hanchunchao@inspur.com>
+X-Mailer: git-send-email 2.31.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-SA-Exim-Connect-IP: 185.219.108.64
-X-SA-Exim-Rcpt-To: hanchunchao@inspur.com, marcan@marcan.st, sven@svenpeter.dev, alyssa@rosenzweig.io, rafael@kernel.org, viresh.kumar@linaro.org, asahi@lists.linux.dev, linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-X-SA-Exim-Mail-From: maz@kernel.org
-X-SA-Exim-Scanned: No (on disco-boy.misterjones.org); SAEximRunCond expanded to false
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: Jtjnmail201615.home.langchao.com (10.100.2.15) To
+ jtjnmail201607.home.langchao.com (10.100.2.7)
+tUid: 20241230173202c6988a2345bca3e4352598e577134bd2
+X-Abuse-Reports-To: service@corp-email.com
+Abuse-Reports-To: service@corp-email.com
+X-Complaints-To: service@corp-email.com
+X-Report-Abuse-To: service@corp-email.com
 
-On Mon, 30 Dec 2024 03:57:14 +0000,
-Charles Han <hanchunchao@inspur.com> wrote:
-> 
-> cpufreq_cpu_get_raw() may return NULL if the cpu is not in
-> policy->cpus cpu mask and it will cause null pointer dereference.
-> But this returned value in apple_soc_cpufreq_get_rate() is not
-> checked. Add NULL check in apple_soc_cpufreq_get_rate(), to handle
-> kernel NULL pointer dereference error.
+cpufreq_cpu_get_raw() may return NULL if the cpu is not in
+policy->cpus cpu mask and it will cause null pointer dereference.
+Prevent null pointer dereference in scpi_cpufreq_get_rate().
 
-The only way I can see a CPU not having an assigned policy is when the
-DT is incomplete. And even then, reaching this code path doesn't look
-obvious to me.
+Fixes: 343a8d17fa8d ("cpufreq: scpi: remove arm_big_little dependency")
+Signed-off-by: Charles Han <hanchunchao@inspur.com>
+---
+ drivers/cpufreq/scpi-cpufreq.c | 3 +++
+ 1 file changed, 3 insertions(+)
 
-Can you describe how you get into this situation?
-
-Thanks,
-
-	M.
-
+diff --git a/drivers/cpufreq/scpi-cpufreq.c b/drivers/cpufreq/scpi-cpufreq.c
+index cd89c1b9832c..c888ed3a0de9 100644
+--- a/drivers/cpufreq/scpi-cpufreq.c
++++ b/drivers/cpufreq/scpi-cpufreq.c
+@@ -30,6 +30,9 @@ static struct scpi_ops *scpi_ops;
+ static unsigned int scpi_cpufreq_get_rate(unsigned int cpu)
+ {
+ 	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
++	if (unlikely(!policy))
++		return 0;
++
+ 	struct scpi_data *priv = policy->driver_data;
+ 	unsigned long rate = clk_get_rate(priv->clk);
+ 
 -- 
-Without deviation from the norm, progress is not possible.
+2.31.1
+
 
