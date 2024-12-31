@@ -1,140 +1,235 @@
-Return-Path: <linux-pm+bounces-19861-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19862-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB4B29FEB4B
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 23:25:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C36069FEC64
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2024 03:23:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EC2C161B8A
-	for <lists+linux-pm@lfdr.de>; Mon, 30 Dec 2024 22:25:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F05AC3A29C9
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2024 02:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E56B19D08F;
-	Mon, 30 Dec 2024 22:25:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F00B1304BA;
+	Tue, 31 Dec 2024 02:23:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ANOEQYIC"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NWXrgjuR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0985033C9;
-	Mon, 30 Dec 2024 22:25:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58EE8347C7;
+	Tue, 31 Dec 2024 02:23:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735597549; cv=none; b=jgP4lU0k2B4yrgo5vBktNgsR7TNWWGU3NgsXv13lKz7vNG+2HfmG/6o9TJcXX4cPwCqnF195z89tBd168sJYascVGjRlQidCJPIL0tHEy+EcM5LYLNBZn8grKjTJSjkgYQ/CzTCQh0AwrX/ex1yzgBjswWdFR7KhrdGv9XdW20Y=
+	t=1735611806; cv=none; b=LWUk725mroD5h35UfinAFevcRI8HHy8nf6rQSsT8UsbbKRXzWh1vbNhIuDH5AQHTZgfloAwwFZRID/ZY2NpPWjBpY9Dv0gbv0m9/BsKqcePg8QBW4KcnXzHCgyGc2TpP6ccmE8z+uabV8djnOtAPpcjvpj5OiIFQ2FdlcKa1YPk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735597549; c=relaxed/simple;
-	bh=seSfdDx4urL0UaGKOK2Me2hdCtSftuthkBmEb9T7lZQ=;
-	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
-	 Message-Id:Subject; b=qWU2K+a5uPps/8jZEyiWsqEHjYzbQIRyqgD4K2hiK4YIqfkQ9jmgpFzblruSN50NCznXihlFt64q5yQSiwT4LpBuXqf/mxH/zciDF6pkZcvmGGKke2U/gbpkC3AC3Dz6g90QBPN4IntGPU/HphPIbr8dIMZ94/FuUnsgTDGAJ2U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ANOEQYIC; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 74186C4CED0;
-	Mon, 30 Dec 2024 22:25:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735597548;
-	bh=seSfdDx4urL0UaGKOK2Me2hdCtSftuthkBmEb9T7lZQ=;
-	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
-	b=ANOEQYICVHhXohQQekYt8/6lY9XvBPzzYfiSUkCf0hmSmqq9CoKFIpNGQPlsHXYGE
-	 dS+38Y8sTewF26Z+ysMuYKDkNN9haQ9NdGhrLzp4+2CaF9xLTgMIvNAvnwZyPvUDBu
-	 OD9IKo2CRbmoSkA8NzERg/naoSNh9MSrCldmtyHlrjY/xuLEVk+pAHSjc8ECeclHJm
-	 D1+/2vNat6s+9s0CLaZy+guUl0x8CMGeJq5nkT+U8stCB9tEXNllCIngFNNiKX2mQh
-	 +UUTmEvHARYVCLHJTF4ke8CQabO8AKbWV0oasIpGBIkosJ6l6JqlsZpubp4sFbchsl
-	 DZYalSK3Vb3cA==
-Date: Mon, 30 Dec 2024 16:25:47 -0600
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+	s=arc-20240116; t=1735611806; c=relaxed/simple;
+	bh=vpz+YHgZ+2JtPrtNzuQCTzbagEMX7mXuy9rE7ZySV18=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=ObSHmp8DP+GW5ROrr5s4hP6GHnWKBaH4iRWF9/C0uFgXplKQ7nEdujxYcuWh+9mNZIiw8PsB3pndSq9v54XwvWT9tGM7JvQXvi9YI8CpZrPek0DcOVQO4YinT66o2LshZ4dMJtQWxUnVbCGE/6fU22CGsmw3Rr2KbJuzgsCd7Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NWXrgjuR; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735611804; x=1767147804;
+  h=date:from:to:cc:subject:message-id;
+  bh=vpz+YHgZ+2JtPrtNzuQCTzbagEMX7mXuy9rE7ZySV18=;
+  b=NWXrgjuRVuMjfwFiPZSKweVd2hWYpGl7Y2/h2pZqaWvUsNQTMFyMV0jL
+   VWXM3MAfzW0ljtvcJnwng5HDsePlWUyn0a52893fqWsufZInUrUcXXKm+
+   kYGU1GMUf2KZk9T0UPZk4ZOZ5YH7jpxs/yDH+1zbZD2QxWqgoR7iC2FxM
+   W1SQRjhSbX+9HX2QzzI5RZBbI4BccAUdjMRp8SaWArB7YMqIwBOI9q5H8
+   cFGY+dsBszn/Kn2u+Zii3r6dDGRn5a5geUDJvUefI9B2KSfmX74f5dxKE
+   DZHoXF4o6en7Gmu5pmElD0ngXMtkAUB3OgQwSU8DBXfJa1jBcWShhYcFi
+   w==;
+X-CSE-ConnectionGUID: u4neQhA3SrWJ0sYVt085wQ==
+X-CSE-MsgGUID: ZJ2TCohYRIyawuO9yDNddw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11301"; a="47316179"
+X-IronPort-AV: E=Sophos;i="6.12,278,1728975600"; 
+   d="scan'208";a="47316179"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 30 Dec 2024 18:23:23 -0800
+X-CSE-ConnectionGUID: y2voj7t6TG6lvgHsOxW52Q==
+X-CSE-MsgGUID: 9smSQtsiS5+h6JaUeLD4Hg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,278,1728975600"; 
+   d="scan'208";a="100700707"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa006.fm.intel.com with ESMTP; 30 Dec 2024 18:23:22 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tSRui-0006bD-17;
+	Tue, 31 Dec 2024 02:23:20 +0000
+Date: Tue, 31 Dec 2024 10:22:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ bddf783635b462521b33a3f3d58946be3f9a45a8
+Message-ID: <202412311052.vxvNfAL3-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-From: "Rob Herring (Arm)" <robh@kernel.org>
-Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, Nishanth Menon <nm@ti.com>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Abhinav Kumar <quic_abhinavk@quicinc.com>, devicetree@vger.kernel.org, 
- Marijn Suijten <marijn.suijten@somainline.org>, 
- Simona Vetter <simona@ffwll.ch>, Sean Paul <sean@poorly.run>, 
- freedreno@lists.freedesktop.org, Bjorn Andersson <andersson@kernel.org>, 
- linux-pm@vger.kernel.org, Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
- Viresh Kumar <vireshk@kernel.org>, dri-devel@lists.freedesktop.org, 
- linux-arm-msm@vger.kernel.org, Stephen Boyd <sboyd@kernel.org>, 
- Rob Clark <robdclark@gmail.com>, linux-kernel@vger.kernel.org, 
- Konrad Dybcio <konradybcio@kernel.org>, David Airlie <airlied@gmail.com>
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>
-In-Reply-To: <20241231-gpu-acd-v3-4-3ba73660e9ca@quicinc.com>
-References: <20241231-gpu-acd-v3-0-3ba73660e9ca@quicinc.com>
- <20241231-gpu-acd-v3-4-3ba73660e9ca@quicinc.com>
-Message-Id: <173559754709.2660868.7488137827927170444.robh@kernel.org>
-Subject: Re: [PATCH v3 4/6] dt-bindings: opp: Add v2-qcom-adreno vendor
- bindings
 
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: bddf783635b462521b33a3f3d58946be3f9a45a8  Merge branch 'experimental/intel_pstate-testing' into bleeding-edge
 
-On Tue, 31 Dec 2024 02:41:05 +0530, Akhil P Oommen wrote:
-> Add a new schema which extends opp-v2 to support a new vendor specific
-> property required for Adreno GPUs found in Qualcomm's SoCs. The new
-> property called "qcom,opp-acd-level" carries a u32 value recommended
-> for each opp needs to be shared to GMU during runtime.
-> 
-> Also, update MAINTAINERS file include the new opp-v2-qcom-adreno.yaml.
-> 
-> Cc: Rob Clark <robdclark@gmail.com>
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> ---
->  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 97 ++++++++++++++++++++++
->  MAINTAINERS                                        |  1 +
->  2 files changed, 98 insertions(+)
-> 
+elapsed time: 720m
 
-My bot found errors running 'make dt_binding_check' on your patch:
+configs tested: 141
+configs skipped: 3
 
-yamllint warnings/errors:
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-dtschema/dtc warnings/errors:
-/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml: ignoring, error parsing file
-Traceback (most recent call last):
-  File "/usr/bin/yamllint", line 33, in <module>
-    sys.exit(load_entry_point('yamllint==1.29.0', 'console_scripts', 'yamllint')())
-             ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3/dist-packages/yamllint/cli.py", line 228, in run
-    prob_level = show_problems(problems, file, args_format=args.format,
-                 ^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^
-  File "/usr/lib/python3/dist-packages/yamllint/cli.py", line 113, in show_problems
-    for problem in problems:
-  File "/usr/lib/python3/dist-packages/yamllint/linter.py", line 200, in _run
-    for problem in get_cosmetic_problems(buffer, conf, filepath):
-  File "/usr/lib/python3/dist-packages/yamllint/linter.py", line 137, in get_cosmetic_problems
-    for problem in rule.check(rule_conf,
-  File "/usr/lib/python3/dist-packages/yamllint/rules/indentation.py", line 583, in check
-    yield from _check(conf, token, prev, next, nextnext, context)
-  File "/usr/lib/python3/dist-packages/yamllint/rules/indentation.py", line 344, in _check
-    if expected < 0:
-       ^^^^^^^^^^^^
-TypeError: '<' not supported between instances of 'NoneType' and 'int'
-./Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml:97:1: did not find expected key
-make[2]: *** Deleting file 'Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.example.dts'
-Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.yaml:97:1: did not find expected key
-make[2]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/opp/opp-v2-qcom-adreno.example.dts] Error 1
-make[2]: *** Waiting for unfinished jobs....
-make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1506: dt_binding_check] Error 2
-make: *** [Makefile:251: __sub-make] Error 2
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+alpha                               defconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                                 defconfig    gcc-13.2.0
+arc                   randconfig-001-20241231    gcc-13.2.0
+arc                   randconfig-002-20241231    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                              allyesconfig    gcc-14.2.0
+arm                                 defconfig    clang-20
+arm                       multi_v4t_defconfig    clang-20
+arm                        mvebu_v5_defconfig    gcc-14.2.0
+arm                   randconfig-001-20241231    clang-19
+arm                   randconfig-002-20241231    clang-17
+arm                   randconfig-003-20241231    gcc-14.2.0
+arm                   randconfig-004-20241231    gcc-14.2.0
+arm                           stm32_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                               defconfig    gcc-14.2.0
+arm64                 randconfig-001-20241231    clang-20
+arm64                 randconfig-002-20241231    clang-20
+arm64                 randconfig-003-20241231    gcc-14.2.0
+arm64                 randconfig-004-20241231    clang-19
+csky                              allnoconfig    gcc-14.2.0
+csky                                defconfig    gcc-14.2.0
+csky                  randconfig-001-20241230    gcc-14.2.0
+csky                  randconfig-002-20241230    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                          allyesconfig    clang-18
+hexagon                             defconfig    clang-20
+hexagon               randconfig-001-20241230    clang-17
+hexagon               randconfig-002-20241230    clang-15
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20241230    gcc-12
+i386        buildonly-randconfig-002-20241230    gcc-12
+i386        buildonly-randconfig-003-20241230    clang-19
+i386        buildonly-randconfig-004-20241230    clang-19
+i386        buildonly-randconfig-005-20241230    clang-19
+i386        buildonly-randconfig-006-20241230    clang-19
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch                           defconfig    gcc-14.2.0
+loongarch             randconfig-001-20241230    gcc-14.2.0
+loongarch             randconfig-002-20241230    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                          atari_defconfig    gcc-14.2.0
+m68k                                defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+microblaze                          defconfig    gcc-14.2.0
+microblaze                      mmu_defconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                           ip32_defconfig    clang-20
+mips                           jazz_defconfig    clang-20
+mips                   sb1250_swarm_defconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20241230    gcc-14.2.0
+nios2                 randconfig-002-20241230    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20241230    gcc-14.2.0
+parisc                randconfig-002-20241230    gcc-14.2.0
+parisc64                            defconfig    gcc-14.1.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                  mpc885_ads_defconfig    clang-18
+powerpc               randconfig-001-20241230    gcc-14.2.0
+powerpc               randconfig-002-20241230    gcc-14.2.0
+powerpc               randconfig-003-20241230    gcc-14.2.0
+powerpc                      tqm8xx_defconfig    clang-20
+powerpc64             randconfig-001-20241230    clang-18
+powerpc64             randconfig-002-20241230    gcc-14.2.0
+powerpc64             randconfig-003-20241230    gcc-14.2.0
+riscv                            allmodconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-20
+riscv                               defconfig    clang-19
+riscv                 randconfig-001-20241230    clang-20
+riscv                 randconfig-002-20241230    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                  randconfig-001-20241230    clang-20
+s390                  randconfig-002-20241230    clang-15
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                            hp6xx_defconfig    gcc-14.2.0
+sh                    randconfig-001-20241230    gcc-14.2.0
+sh                    randconfig-002-20241230    gcc-14.2.0
+sh                          sdk7780_defconfig    gcc-14.2.0
+sh                           se7722_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20241230    gcc-14.2.0
+sparc                 randconfig-002-20241230    gcc-14.2.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20241230    gcc-14.2.0
+sparc64               randconfig-002-20241230    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-20
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20241230    gcc-12
+um                    randconfig-002-20241230    gcc-12
+um                           x86_64_defconfig    clang-15
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20241230    clang-19
+x86_64      buildonly-randconfig-002-20241230    clang-19
+x86_64      buildonly-randconfig-003-20241230    gcc-12
+x86_64      buildonly-randconfig-004-20241230    clang-19
+x86_64      buildonly-randconfig-005-20241230    gcc-12
+x86_64      buildonly-randconfig-006-20241230    gcc-12
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                          iss_defconfig    gcc-14.2.0
+xtensa                  nommu_kc705_defconfig    gcc-14.2.0
+xtensa                randconfig-001-20241230    gcc-14.2.0
+xtensa                randconfig-002-20241230    gcc-14.2.0
 
-doc reference errors (make refcheckdocs):
-
-See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20241231-gpu-acd-v3-4-3ba73660e9ca@quicinc.com
-
-The base for the series is generally the latest rc1. A different dependency
-should be noted in *this* patch.
-
-If you already ran 'make dt_binding_check' and didn't see the above
-error(s), then make sure 'yamllint' is installed and dt-schema is up to
-date:
-
-pip3 install dtschema --upgrade
-
-Please check and re-submit after running the above command yourself. Note
-that DT_SCHEMA_FILES can be set to your schema file to speed up checking
-your schema. However, it must be unset to test all examples with your schema.
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
