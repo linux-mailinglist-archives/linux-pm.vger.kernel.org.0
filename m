@@ -1,120 +1,95 @@
-Return-Path: <linux-pm+bounces-19870-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19871-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F1B59FEF04
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2024 12:09:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D36049FF0C2
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2024 17:51:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A2743A28BD
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2024 11:09:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 815567A1421
+	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2024 16:51:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2C431993BD;
-	Tue, 31 Dec 2024 11:09:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s5tqCrWt"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F102C199234;
+	Tue, 31 Dec 2024 16:51:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9069A190678
-	for <linux-pm@vger.kernel.org>; Tue, 31 Dec 2024 11:09:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BFCD013CFA6;
+	Tue, 31 Dec 2024 16:51:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735643386; cv=none; b=gMzPzLABJZq18bE2CxoQXhAxNED0vq0Bdbz19TaNXptmzEYsgjrjfspvLw+SeF4vp345kcidv93Y9H77nzdAWcmBCz9C5hgUAJPjbLxJQZK0U/RWqxai14f8+MHOCwYynm8pKpiMuriNeMhWV0NkG+Eke1vt4lzm5L7ZZHyGKZw=
+	t=1735663879; cv=none; b=R6Uk3MBRyq3yQYiGhCLj7fJLO3Fy+tPKPGY+Ax2NHXVlEudhSo3e8B4L4Qa2a8ALc4jkxZOLxgseLioDzoX/gOai/59HLqxZabdgk55tFfXetv0PCDE0A4bbvqgYML3L4flxszOqI/dkK7It3A0/CbJ76/ZPsJqDtMKZqOtff08=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735643386; c=relaxed/simple;
-	bh=CZQrp3ljcPGAGgTKtH6TnT0akhIhaKad5XpyBTsLY9A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=tOCGaSl7mzwpaUFkhwg55xEGGe7wMWh9GA2EqV/t+oZFMt5FRZd1cYWprgm0RLTww/fWKAUBbFU/MBhPJdrT8PdREy4GySUWXdohoKSxnC+QzXXqHyMSgDusZ/5RkeSXZqqBJmVaI1P4ynUL/9IMTQwKcGLon1jOVVf1l41Mcu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s5tqCrWt; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3862ca8e0bbso7715617f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 31 Dec 2024 03:09:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1735643383; x=1736248183; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Mh8UYWaZc8WrVxKRwykbsoh7O86a7wx9Ng47k23FtHw=;
-        b=s5tqCrWtKraouzU9+pCS0X4ejOyWYzCvtoiYHShK8elgI41wEu895sywAI5xnJS1Ma
-         +osiZ16wodiyTf8eR67X2dAJjFWQNWtK9v7EaqeARwjBqXP4sBixd09XlF9UCTY+jKyq
-         obL/z3PCD7/3dbjzsDHQx2Pj+KGYgISlZ/5XgSb1cdzNIccDyud4zVyIyJ6/q/9Zfrpu
-         y8rtuNoTRYGbZdJWmtf6Bj/WVeJe6yJr5JamZGwW25t/qQNSM76BjobqMkG5rj6P3vf/
-         xUt7pIgHwoc0hZTrCYM2eDVq/XTWZTv3NGhG7AiNjsw8Sl3aTl2GhK6q4R0AKAfmexfp
-         yD3g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735643383; x=1736248183;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mh8UYWaZc8WrVxKRwykbsoh7O86a7wx9Ng47k23FtHw=;
-        b=KOHQ8ApD3Zn9XiQHTYYH+Z/NFRyjD8UKNcD78vfvYg/YW7qvE8LnLVK64bb4R5hCMn
-         da73X2Z9EBW/iLUmUbqKWGJ/IWFKTTO7GIUmfxvECyKCP6QICrSOtmoO+E1+k8HIMjm7
-         WNec2/7G63J0lQIfdghkIFmHuvTdhfaTzXZbi4omQUpkyx2zfOrpM2ViN+k7/kG0pZTJ
-         eIHINuSSTixwObmVryyhebQTxwz1xHTvMI5fs/IW1uEB2K/x+90E5nDOyB3noS6XBZhC
-         99b0emCtp0vecoLZBPBeQB2Am61AjfgbcwEd47yxLwLAjJ4a4omUswzwE40vdubaUpW5
-         sIXg==
-X-Forwarded-Encrypted: i=1; AJvYcCXyMwh8HBxu7zTJz+y5gqYe19J7Bn8nOzKsgDJ2OG1RveQe5DP1pX7dXvCwyrdLi8YWqM+HEKcuEw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzR3Ui5QTfdKHSYZR7sg6SLQGUCtT1Y/KOBqYKYhIsGE5Jp3gpg
-	ZaF29WL2T+AVBhiYIGYZxMVelmfDL9p04ZYyqjfdXGwR7+IB3BDxe6p1O+1x/dI=
-X-Gm-Gg: ASbGncuUkprYswqqVeiXxccVu7dqvMjzVCMLZfn2Ft6G46uMONUA39eyhN68aCblzMC
-	4VnTuaGi2ZNAWOxnxXG66FyoPYhihylHQOVgDEk9CkTt5tD43gHA2HP47MZQ9i/fEugCmbNK4Au
-	qiNkgbJzYx1NBajFSnQTXOHNEWgKcpRzaLHC/w468SdFXeHcgyrosbVx9OxAuD0/0UiS2ixKM7S
-	iBiRs+gDoY+DEIuBcp8UKYzDlKc+Q1onGw2reaMQ1rCxIKlPuMi+W5Wiw/kErzrXPxKBg==
-X-Google-Smtp-Source: AGHT+IFaNhrfsnfvBxSp1tViYSz7o2qMK2dzhldDNDYiuudm1kNGgf7qZsGXiU9LTOK5Js6Pse/c7w==
-X-Received: by 2002:a05:6000:1568:b0:385:dc45:ea22 with SMTP id ffacd0b85a97d-38a223f835dmr31212643f8f.39.1735643382887;
-        Tue, 31 Dec 2024 03:09:42 -0800 (PST)
-Received: from [192.168.0.40] ([176.61.106.227])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c829120sm33379893f8f.6.2024.12.31.03.09.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 31 Dec 2024 03:09:42 -0800 (PST)
-Message-ID: <583ec206-e670-4aa0-9490-4ee6397800e5@linaro.org>
-Date: Tue, 31 Dec 2024 11:09:40 +0000
+	s=arc-20240116; t=1735663879; c=relaxed/simple;
+	bh=gQILtRV6Cv06NRYCVuOvVD++zVJo+wWhuhD9jGcUXhw=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=FJTWgrT+a21DxMBtHZc6KA2xqvm070JggBOD90JEGS3Zf9vgYKJuKGVjfCW/c3/e7HM6JbgCLo5Gr6GYFnmThwgb/X2Xh3KOQ2yV9njZrL98Ki4fY16Bak8qX1Yf5+zwWjP3TMX88m3/ooDcmDKPnRYYcdKndEQ3k7hRYxeKfqk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 93FB11476;
+	Tue, 31 Dec 2024 08:51:39 -0800 (PST)
+Received: from donnerap.arm.com (donnerap.manchester.arm.com [10.32.100.21])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id EE4233F6A8;
+	Tue, 31 Dec 2024 08:51:09 -0800 (PST)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Lee Jones <lee@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>
+Cc: linux-sunxi@lists.linux.dev,
+	Chris Morgan <macroalpha82@gmail.com>,
+	Vasily Khoruzhick <anarsoul@gmail.com>,
+	Jonathan Cameron <jic23@kernel.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH] Revert "mfd: axp20x: Allow multiple regulators"
+Date: Tue, 31 Dec 2024 16:51:03 +0000
+Message-Id: <20241231165103.800752-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/5] platform: arm64: add Huawei Matebook E Go (sc8280xp)
- EC driver
-To: Pengyu Luo <mitltlatltl@gmail.com>, quic_aiquny@quicinc.com
-Cc: andersson@kernel.org, conor+dt@kernel.org, devicetree@vger.kernel.org,
- dmitry.baryshkov@linaro.org, gregkh@linuxfoundation.org,
- hdegoede@redhat.com, heikki.krogerus@linux.intel.com,
- ilpo.jarvinen@linux.intel.com, konradybcio@kernel.org, krzk+dt@kernel.org,
- linux-arm-msm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-usb@vger.kernel.org, nikita@trvn.ru,
- platform-driver-x86@vger.kernel.org, robh@kernel.org, sre@kernel.org
-References: <1dff7a78-1693-45d7-8ee3-357b33848595@quicinc.com>
- <20241231074437.239979-1-mitltlatltl@gmail.com>
-Content-Language: en-US
-From: Bryan O'Donoghue <bryan.odonoghue@linaro.org>
-In-Reply-To: <20241231074437.239979-1-mitltlatltl@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 31/12/2024 07:44, Pengyu Luo wrote:
-> Please search
-> 'device name + acpi table' on the internet, someone dumped it and uploaded
-> it, in SSDT, check ECCD. I am not sure if huawei allows users to dump it.
-> So I don't provide it here.
+As Chris and Vasily reported, the attempt to support multiple AXP PMICs
+in one system [1] breaks some of the battery and charging functionality
+on devices with AXP PMICs. The reason is that the drivers now fail to get
+the correct IIO channel for the ADC component, as the current code seems
+to rely on the zero-based enumeration of the regulator devices.
+A fix is possible, but not trivial, as it requires some rework in the AXP
+MFD driver, which cannot be fully reviewed or tested in time for the
+6.13 release.
 
-There's a repository of ACPI dumps here:
+So revert this patch for now, to avoid regressions on battery powered
+devices. This patch was really only necessary for devices with two
+PMICs, support for which is not mainline yet anyway, so we don't lose
+any functionality.
 
-https://github.com/aarch64-laptops/build/tree/master/misc
+This reverts commit e37ec32188701efa01455b9be42a392adab06ce4.
 
-including the Huawei Matebook E - not sure if that should include the 
-"Matebook E Go"
+[1] https://lore.kernel.org/linux-sunxi/20241007001408.27249-4-andre.przywara@arm.com/
 
-https://github.com/aarch64-laptops/build/tree/master/misc/huawei-matebooke-2019
-
-You could provide it there.
-
+Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 ---
-bod
+ drivers/mfd/axp20x.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+index 251465a656d09..5b8e88341a305 100644
+--- a/drivers/mfd/axp20x.c
++++ b/drivers/mfd/axp20x.c
+@@ -1445,7 +1445,7 @@ int axp20x_device_probe(struct axp20x_dev *axp20x)
+ 		}
+ 	}
+ 
+-	ret = mfd_add_devices(axp20x->dev, PLATFORM_DEVID_AUTO, axp20x->cells,
++	ret = mfd_add_devices(axp20x->dev, -1, axp20x->cells,
+ 			      axp20x->nr_cells, NULL, 0, NULL);
+ 
+ 	if (ret) {
+-- 
+2.25.1
+
 
