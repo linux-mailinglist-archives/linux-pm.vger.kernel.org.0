@@ -1,137 +1,159 @@
-Return-Path: <linux-pm+bounces-19873-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19874-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2D6089FF18E
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2024 20:31:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B66719FF318
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jan 2025 06:59:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 605AC3A3112
-	for <lists+linux-pm@lfdr.de>; Tue, 31 Dec 2024 19:31:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 86C74188252B
+	for <lists+linux-pm@lfdr.de>; Wed,  1 Jan 2025 05:59:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75BCA19D89B;
-	Tue, 31 Dec 2024 19:31:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8EFFE14286;
+	Wed,  1 Jan 2025 05:59:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T6/vaJVK"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gK30eRv9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oo1-f50.google.com (mail-oo1-f50.google.com [209.85.161.50])
+Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDC05188591;
-	Tue, 31 Dec 2024 19:31:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.161.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DAB678F58;
+	Wed,  1 Jan 2025 05:59:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735673510; cv=none; b=ngbstWpicbmEPlsUEmEHCnHurxVt3AGc++1jwetQGGedlMAvsx1NeLT2Gm9iBjwUUQc2w69s0tiw27o+j9Z4AU1t9LbUVvmUX7sSJ4KB00FVKH3pPEyN4eQJiCuzQa5j1lGdu6qzqKqs40MPDDBVQ/UcL4APjEpAVE8T1PhA71c=
+	t=1735711149; cv=none; b=kkeVgI+fJhM+rtDIMCWN7zPg48s3+HGUC/F5eVlaDhKfr+YnkZJfd6YDn57vNyRvaplCf2ABwASXIAMERObNse5M8j+o7IHPjgumnHJE89JLD/gaOLVlHAJ61VVBE/K+fA8M//BCq9L+E4A4kembQX/btvg1+iO/ohGG8NPqlJ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735673510; c=relaxed/simple;
-	bh=1IBP/CbWOe8XNYy1yhGQC0nEhfBHuxql2uqOe/kJnSw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uzuTGJf0TxPkmz5P/zdRPoEHmfUU3ZcsyvNOzF/KVoVNV/N11Rv0kpxtLon4lMqexJlyI6OXgbqrNkkjDzadjBxyfRtsZ0P0ipYj6lPHOj0alE5gCan7OYGE9kqPFf5F1jNyNFNmvp+S9cBLVkCk4+6SqRVmPa3Uxm2j2DKgtTM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T6/vaJVK; arc=none smtp.client-ip=209.85.161.50
+	s=arc-20240116; t=1735711149; c=relaxed/simple;
+	bh=1ERfz6MYRyQC9T7JOUIcmI7il21I2EZ+euGNycX8pHI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Kh90sV54pNcf6lD2PPzn/idiWGDGRJLzRBJwUnHx3Gn5+vh7oCPz+iVNe0nauh9uuZxrfopdyo2wxJ6kFadX2XtFQBoQksg7avtY2M5/xGl3+uwcAge57hSfp6G8n7N018ChHgiFElyBcoGChMchgU7HKFhDWL1suDiNSDSPkeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gK30eRv9; arc=none smtp.client-ip=209.85.214.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5f2e13cb356so4380390eaf.2;
-        Tue, 31 Dec 2024 11:31:48 -0800 (PST)
+Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-2165448243fso169167925ad.1;
+        Tue, 31 Dec 2024 21:59:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735673508; x=1736278308; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1735711147; x=1736315947; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ivUPqyCU6yjFi/yyaL60jmScG9p289+S/O0luR0dfiU=;
-        b=T6/vaJVKwHqusU7dp7MN/srZvp510kxl2C78pDzHAqlMARlOQIf/gtSe6vDyXKmaUV
-         Z8ZuWEbajNWZi1j3tq5VT3n7miBVASaz12DkooIl87DG6SBoasZ/FJ7L4Fqv45dkAO0U
-         amP6Ot8xeWa5mzKPsNKcgI/01uEvRjZH0QTrfRqY6ZISoN1U0sY90BzTiOpFF9OA2ATH
-         OTWWzpx9gNygqOd5Rli9IP5jfKs0I9XpNWfTbM5inn/QRr17CE19NS558d7FW5K63h2g
-         IZKYbAgFYoyONGhd9UyKUahQIDRs78/rCYsx0uNuPMG+HwQgSFODKu0nfW7X/ka8UU95
-         JfDQ==
+        bh=JxlkzERHMH6O41FvyQTnmiC7rDKDMif6g1pkU6AYpeQ=;
+        b=gK30eRv9ifZlF5yeO0FpNmwLBxq/4PUPRXKRB2Harezf1/5G6Sxaz08A+y5ha0Ril3
+         tPjD5kYn7pVH2qEuxYjylsGdM/ScrE1GPWw4GLgfNCcnUWCL2Rm9M5w8QyroiUvfprMs
+         VmNt+Vs1EfqNUVPeeK7MrsyM5laq1iLVNz0GBG4ykSM07ZjxS5btH0SjxqB/huioJqJg
+         Sy+VlqPMyIgoTke32G6+aXH80y4q7In2NqWs4nVFWe4Y/FM+uE35J0vajQjQNYURyrZl
+         8ghitX/mDPpCAjSvE4U8fIoM81PZi48ZmkDr0YtzQ6wOjj7fdicbE1npG1fVM3Yd/5Ay
+         9TEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735673508; x=1736278308;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1735711147; x=1736315947;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ivUPqyCU6yjFi/yyaL60jmScG9p289+S/O0luR0dfiU=;
-        b=crszh6+/xHu5R//ao2k2xX1ypQ2fIfLxf7MyulZcucMCYGxd2vuk13TrKZAIWq4kFE
-         eIYT19mpKYz9lbCxbRm/hJJtw4l7HdLUZCZPHR1VjScLDOVsWpcHfgKwQeZcjBcZcthh
-         VEb4yEnJgnOFSKiHe9rwIgzBg2vy/NTTFjcA2xjXMAOonyF2ie4ngNSg55ua++jkwMAl
-         9mTuNNBhGLEVGwHOMz4BHz+uKG/JxLoHSPFtX8elKoKQhz/Ilz6f7zlPtTHMuY091tvr
-         m0OpOJkWMCwa1GczFwpQ9E70GBPamiCiBhE0fiWINRtctzqbK2KBQYoihxcaJbUry+/b
-         DDMw==
-X-Forwarded-Encrypted: i=1; AJvYcCUxxCFNuBta4fZ37yE1zO0c6iX9YfjgEAPi2AcxgUev9eKx5SnMUJGTT+BL+mHzUhO8DU9jPMfqmRA=@vger.kernel.org, AJvYcCWJX1y8BqyA/+jaT4yleuqTxAzG3/WuZvkmPjyF1YGk6TR88malYoCfuJWiHV5ZDwn+FlwsztFJLIRHzjM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOQno1fRCZuJNbBG708pGod7qiqUKl0beDsEdczzs0vr3gzGfY
-	UH1HlUhFp9o3exkFym3N2LeFylWiM9NDS4WYSOZkcwS9YjJKWp7zBSO1N76L1PlFQL0h6ZDuzhw
-	ZvdWTqI5qdvfVbaEdjle25mY52SM=
-X-Gm-Gg: ASbGncvcQMCKwiWHCfloQiwUiXBzzWwx/yE8XWw/WxZy+AshwyZBUmMyCsXVf9EMW+r
-	Ntil6a6qUNiiAT/u7dNvLH+bUakRHnjI1gsneUYkgyZDq4w8pjz9D
-X-Google-Smtp-Source: AGHT+IFiaHDkPu6NWg+9kL19uqrO69oJjfD/9cD76ZjPsLNZz5UXh21bTOnwF6Jt2Y9g2MV/ab8KjAxo8UaDb2It1xM=
-X-Received: by 2002:a05:6871:7c03:b0:296:b638:1b1a with SMTP id
- 586e51a60fabf-2a7fb3fed8bmr20848926fac.42.1735673507851; Tue, 31 Dec 2024
- 11:31:47 -0800 (PST)
+        bh=JxlkzERHMH6O41FvyQTnmiC7rDKDMif6g1pkU6AYpeQ=;
+        b=AyfvSN5X0d8uCckPxltne0RNhvXkNJ9+H98GZMB8RnAJUJZ/1L6ol/M1bkq9OQQuTf
+         pt1cFUlG2Vffj8OTZi5wLUiM3dDlnW0KNeI0tQmufccAHUZxfq/XBXu5uMN1crZpvjG/
+         aiV9z4xXpph3ljePQc72WwfZ2uk615BqGnOc0yF0FW7pQETAhzUeaCLR2bcfH4wCpmau
+         hRJu+ahzVMAQKPtlxuT7O0OCtfvR3HGgjuLUfhDgYKd0/680R42PNpYcDBpC8+v/0irf
+         CR9Ye330KEzWBndoh4hGAHSZs7XOV6/xv1WOw9BF80mPOqe+233Jdd1L8YyWgdVLPwhJ
+         RMvw==
+X-Forwarded-Encrypted: i=1; AJvYcCU/A8H5T5+CMLGWVfVI1RHt3fbdR4kdnfz/NeZYilNwNMat0Kyp+UvFl47Whz4mVRLlcAzrB44NV9fBuwBgGg==@vger.kernel.org, AJvYcCUICweDMYsoOOBc2R6eu9PFChU0jtlg/mWV3LAXtaUJaAHYMA78nJhRRkpxKa1qpAyqaSn28mtUPLs=@vger.kernel.org, AJvYcCVqdoh4cIvkwaF00iRrpZYRknTwVkhqZLSrtOrT/E4OZJ8WXN1gp4WqDwYeiVOb3oCfb4U5JGxf47z44seK@vger.kernel.org, AJvYcCWStJ/ZO55vZUlM0zNQz5OKpU71nB2ICEX+SAiRe047/ButUnizVn6s0deVnb3Dmq+th0xNxSACf1XQt4iiZVLMksPa9A==@vger.kernel.org, AJvYcCWtmVpPkJyiE2zFBPD0GonnTFHOaF1t1Qi5/Nabe1PTx98/xUW4zX0HkhherGs+RKzGei/M6pu1DFvB@vger.kernel.org, AJvYcCXD4puMYIlbsIkOyYR8ws/hsJfGYOBQel0A5/V9bG3qDwyH2/FoU1Vk/U1iFxijvATi74M9Uu9EpVCw@vger.kernel.org
+X-Gm-Message-State: AOJu0YxXbbC54heIWkIafXNI/PeEfRPCD+IrVKieEmcDqClTLhZdTsyV
+	7wZ2Czi9Z091zG+8kVYjH3RswjkMKkSxjIUQuupBI/XILrVT+nAL
+X-Gm-Gg: ASbGncurOTylwPd15my9zwWth5GJ2ZnJ+hjTjd8xOnpajzB2nperXcEOdG+g/HOppHJ
+	k5BTbd/thuzeM+wOZDjZkZJH0hmRBMmLzHgnvq6yyRA7YLeNRdFO/W/OlRQh6a4jepphsQ1IL0u
+	pD7hENDIFozjH2WNLLWsxfOsjytET7dHAsiJIezcGKmMYrbA+NG2Pd51BS65gvNiqB2sypXNuod
+	vI/sADJAOWEwTxwPHu9nKwNmlydl2PGEF6pBTYAXis=
+X-Google-Smtp-Source: AGHT+IFaaIyUWgZ24rB3hmAOUX8zPA+G1PMHHz/e1QmhclfDDXABnWyBle8Zo2odWFY/pwPLmQdrVQ==
+X-Received: by 2002:a17:903:24e:b0:215:5625:885b with SMTP id d9443c01a7336-219e6f28552mr636262665ad.52.1735711147068;
+        Tue, 31 Dec 2024 21:59:07 -0800 (PST)
+Received: from nuvole.. ([2a09:bac1:76a0:dd10::2e9:e5])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc9716b3sm204396595ad.90.2024.12.31.21.59.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 31 Dec 2024 21:59:06 -0800 (PST)
+From: Pengyu Luo <mitltlatltl@gmail.com>
+To: quic_aiquny@quicinc.com
+Cc: andersson@kernel.org,
+	bryan.odonoghue@linaro.org,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	dmitry.baryshkov@linaro.org,
+	gregkh@linuxfoundation.org,
+	hdegoede@redhat.com,
+	heikki.krogerus@linux.intel.com,
+	ilpo.jarvinen@linux.intel.com,
+	konradybcio@kernel.org,
+	krzk+dt@kernel.org,
+	krzk@kernel.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-usb@vger.kernel.org,
+	mitltlatltl@gmail.com,
+	nikita@trvn.ru,
+	platform-driver-x86@vger.kernel.org,
+	robh@kernel.org,
+	sre@kernel.org
+Subject: Re: [PATCH 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
+Date: Wed,  1 Jan 2025 13:57:44 +0800
+Message-ID: <20250101055745.357081-1-mitltlatltl@gmail.com>
+X-Mailer: git-send-email 2.47.1
+In-Reply-To: <7fc6c727-d3c1-4c6d-a990-8caeb95c43c5@quicinc.com>
+References: <7fc6c727-d3c1-4c6d-a990-8caeb95c43c5@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241231165103.800752-1-andre.przywara@arm.com>
-In-Reply-To: <20241231165103.800752-1-andre.przywara@arm.com>
-From: Vasily Khoruzhick <anarsoul@gmail.com>
-Date: Tue, 31 Dec 2024 11:31:21 -0800
-Message-ID: <CA+E=qVc+v_io04u2zvF7cjqkYhZKt=KB4+VRtQqOK4BJ2PJx_w@mail.gmail.com>
-Subject: Re: [PATCH] Revert "mfd: axp20x: Allow multiple regulators"
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Lee Jones <lee@kernel.org>, Chen-Yu Tsai <wens@csie.org>, linux-sunxi@lists.linux.dev, 
-	Chris Morgan <macroalpha82@gmail.com>, Jonathan Cameron <jic23@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Tue, Dec 31, 2024 at 8:51=E2=80=AFAM Andre Przywara <andre.przywara@arm.=
-com> wrote:
+On Mon, Dec 30, 2024 at 3:28 PM Aiqun(Maria) Yu <quic_aiquny@quicinc.com> wrote:
+> On 12/29/2024 6:12 PM, Pengyu Luo wrote:
 >
-> As Chris and Vasily reported, the attempt to support multiple AXP PMICs
-> in one system [1] breaks some of the battery and charging functionality
-> on devices with AXP PMICs. The reason is that the drivers now fail to get
-> the correct IIO channel for the ADC component, as the current code seems
-> to rely on the zero-based enumeration of the regulator devices.
-> A fix is possible, but not trivial, as it requires some rework in the AXP
-> MFD driver, which cannot be fully reviewed or tested in time for the
-> 6.13 release.
->
-> So revert this patch for now, to avoid regressions on battery powered
-> devices. This patch was really only necessary for devices with two
-> PMICs, support for which is not mainline yet anyway, so we don't lose
-> any functionality.
->
-> This reverts commit e37ec32188701efa01455b9be42a392adab06ce4.
->
-> [1] https://lore.kernel.org/linux-sunxi/20241007001408.27249-4-andre.przy=
-wara@arm.com/
 
-Doesn't it need a Fixes tag?
+[...]
 
-Tested-by: Vasily Khoruzhick <anarsoul@gmail.com>
+> >>
+> >
+> > Check the motherboard, https://postimg.cc/V5r4KCgx (Credit to Tianyu Gao <gty0622@gmail.com>)
+>
+> The link is not accessible from my end. Could you please help follow the
+> document tips referenced by [1] if this content is important for the
+> overall naming design?
+>
+> Here are some snippets for reference:
+> "for 'volatile' documents, please create an entry in the kernel
+> bugzilla https://bugzilla.kernel.org and attach a copy of these documents
+> to the bugzilla entry. Finally, provide the URL of the bugzilla entry in
+> the changelog."
+>
+> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/process/maintainer-tip.rst
+> [1]
 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  drivers/mfd/axp20x.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+I created one entry, then I got myself and the entry banned, :(
+I had written to them to explain this yesterday. No response.
+
+Title 'Huawei Matebook E Go, whose codename is Gaokun',
+In this entry, I explained why is it called gaokun, and why gen3.
+
+> https://bugzilla.kernel.org/show_bug.cgi?id=219645
 >
-> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
-> index 251465a656d09..5b8e88341a305 100644
-> --- a/drivers/mfd/axp20x.c
-> +++ b/drivers/mfd/axp20x.c
-> @@ -1445,7 +1445,7 @@ int axp20x_device_probe(struct axp20x_dev *axp20x)
->                 }
->         }
+> Artem S. Tashkinov (aros@gmx.com) changed:
 >
-> -       ret =3D mfd_add_devices(axp20x->dev, PLATFORM_DEVID_AUTO, axp20x-=
->cells,
-> +       ret =3D mfd_add_devices(axp20x->dev, -1, axp20x->cells,
->                               axp20x->nr_cells, NULL, 0, NULL);
->
->         if (ret) {
-> --
-> 2.25.1
->
+>            What    |Removed                     |Added
+> ----------------------------------------------------------------------------
+>              Status|NEW                         |RESOLVED
+>               Group|                            |Junk
+>           Component|man-pages                   |Spam
+>             Version|unspecified                 |2.5
+>          Resolution|---                         |INVALID
+>            Assignee|documentation_man-pages@ker |other_spam@kernel-bugs.kern
+>                    |nel-bugs.osdl.org           |el.org
+>             Product|Documentation               |Other
+
+
+Best wishes,
+Pengyu
 
