@@ -1,90 +1,105 @@
-Return-Path: <linux-pm+bounces-19881-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19882-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61BFE9FF7A8
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 10:48:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 608049FF7AF
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 10:50:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EB0F3A182C
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 09:48:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 338E016222E
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 09:50:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04381A8419;
-	Thu,  2 Jan 2025 09:48:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50E691A8F84;
+	Thu,  2 Jan 2025 09:50:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Zt/TsWdZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9AD1A8416;
-	Thu,  2 Jan 2025 09:48:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93F281A4F2F;
+	Thu,  2 Jan 2025 09:50:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735811317; cv=none; b=Aoexv6Di3KgwvwtgJSOvDeAfmA98Ft4zPejsFknckLQH356I6PvsQzj8TqDX/a+Ad+JOKeKNoECKCHOIGJRqumJ2JXHcwSISKVIbIjKSPPyK2W+fY7FpGCDML7VOcoXcRMA1VQ8OAz6cCGKiliLvko46P8yzbiw/XTxAO79IVLg=
+	t=1735811441; cv=none; b=L9FiEPFKhBJqGAxdePX3McvFW17dRhNvXKyTlUtpi7R3PHiMa+mtQgaTCdBJT6R7DZKco9npL9xLHZXcBbbT7D4QWX1cnC6hLe68wCicaxZLD/fwnF8rf2e4djNNTVrmJNlgk1Akeen8Wkya6vUVlx8iiKQWIuekaLFXK5K7oPc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735811317; c=relaxed/simple;
-	bh=fAymzws3Ml3bKlqGpAPIeAh6rOvf51h36pdJ5y1pYlk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CJ4z4/K0dZXWc4TdB+mtcvurPFJD+kH1WFZ9+WISnNXM3msyBCFUFK0gG3uJXunP2ECXH8iewhLqQckJ6YJJ+iOcwV1CmWV/fXo0x1/5nxVdriNF2J8YwEi1TsIWw10lMUu4lS5iPfs3gdiOERn4+HgwIjVfluyeikXPaO1fUkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7AB5811FB;
-	Thu,  2 Jan 2025 01:49:01 -0800 (PST)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B008E3F59E;
-	Thu,  2 Jan 2025 01:48:31 -0800 (PST)
-Date: Thu, 2 Jan 2025 09:48:28 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Charles Han <hanchunchao@inspur.com>
-Cc: <cristian.marussi@arm.com>, <rafael@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>, <viresh.kumar@linaro.org>,
-	<arm-scmi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: scpi: Prevent null pointer dereference in
- scpi_cpufreq_get_rate()
-Message-ID: <Z3Zg7PHdGAzXsyMg@bogus>
-References: <20241230093159.258813-1-hanchunchao@inspur.com>
+	s=arc-20240116; t=1735811441; c=relaxed/simple;
+	bh=1a+Uph2h+v+Y+ToVfeb1NyuIX2gYgygd6YVvm6ksRIo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=gufYHXHNhvH5wL/WcItEtD0ibcn1PpgUnOBavGb0meLIBWzyNJGGTIbuJFnR5cC9PxuYKesD15/t3vmGEIGQA2QwmZ1uynhsvyFp12y8+zG+svvgkfSIaxU9DBlL3Y4KpxKaLuh1/O0zDUuY/451xjN/epXwV2kq0bfLpAzcdRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Zt/TsWdZ; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1735811438; x=1767347438;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=1a+Uph2h+v+Y+ToVfeb1NyuIX2gYgygd6YVvm6ksRIo=;
+  b=Zt/TsWdZISk5p5k6gHbZ9XVRAs63Cl/Cx0SQR3ScAStgC2swyFvJRUQ5
+   4KQ8JQCU4V1sERg/t3bBc8Fa/+LfmhWGIXg7iOvGsMhgcHPKtGrOHD6VX
+   o4Dcnv0SmqH+tMuPsIQVmRsngBYqAMk0lRCBJV111EtKkEHHA9RH/K+s8
+   63v1axHp5K2gdmNGbiKYBgHTHGp5PZDsPU8c+MeJ5/515r89u6mt/gRMC
+   zzuUDTaXmLx5PwKUDTL/36nUinLAMq7CIhPZauAHakmTaWOc7AMeZukie
+   nSPvrnPOKOI9iEg/wXbkI0Su9IEfcs+zg7rOCu9iLSFI1C0bXQPL/vTpI
+   g==;
+X-CSE-ConnectionGUID: DT1aPfOsTn+nP+axnQSo8g==
+X-CSE-MsgGUID: Mg+pdgwZSs6TAmPx98V9+A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11302"; a="53593252"
+X-IronPort-AV: E=Sophos;i="6.12,285,1728975600"; 
+   d="scan'208";a="53593252"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 01:50:37 -0800
+X-CSE-ConnectionGUID: NyygQtYoRc6j4Q9BCECZHQ==
+X-CSE-MsgGUID: nbe0k4ZjSfGWlRrqgRUKkg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="105511164"
+Received: from ettammin-mobl2.ger.corp.intel.com (HELO [10.245.245.102]) ([10.245.245.102])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Jan 2025 01:50:35 -0800
+Message-ID: <f597da81-abdc-4133-b5ad-432792b6aa6e@linux.intel.com>
+Date: Thu, 2 Jan 2025 10:50:26 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20241230093159.258813-1-hanchunchao@inspur.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v7 1/4] x86/smp: Allow calling mwait_play_dead with an
+ arbitrary hint
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ rafael.j.wysocki@intel.com, peterz@infradead.org,
+ dave.hansen@linux.intel.com, gautham.shenoy@amd.com, tglx@linutronix.de,
+ len.brown@intel.com, artem.bityutskiy@linux.intel.com
+References: <20241129182232.14987-1-patryk.wlazlyn@linux.intel.com>
+ <20241129182232.14987-2-patryk.wlazlyn@linux.intel.com>
+ <CAJZ5v0jhK51+pkf=Amr=qXWzK3e1xC_tdt0iqQXxVfeE4pcFJQ@mail.gmail.com>
+ <2320a952-334d-4d52-a15a-669a5670df7d@linux.intel.com>
+ <CAJZ5v0i=_wNubB8_yQtBZYLYJ+f==c9OVMpxbtYHfFCJR+nsng@mail.gmail.com>
+Content-Language: en-US
+From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+In-Reply-To: <CAJZ5v0i=_wNubB8_yQtBZYLYJ+f==c9OVMpxbtYHfFCJR+nsng@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, Dec 30, 2024 at 05:31:59PM +0800, Charles Han wrote:
-> cpufreq_cpu_get_raw() may return NULL if the cpu is not in
-> policy->cpus cpu mask and it will cause null pointer dereference.
-> Prevent null pointer dereference in scpi_cpufreq_get_rate().
->
+>>> And honestly I'm wondering why adding a parameter to mwait_play_dead()
+>>> is better than introducing mwait_play_dead_with_hint(), in analogy
+>>> with the existing mwait_idle_with_hints()?
 
-Can you please fix such occurrences in other places too ?
-I see it in apple-soc-cpufreq.c and scmi-cpufreq.c as well.
+Well.. Maybe that wasn't that good of an idea. I've given the rationale
+in the 0/4:
 
-> Fixes: 343a8d17fa8d ("cpufreq: scpi: remove arm_big_little dependency")
-> Signed-off-by: Charles Han <hanchunchao@inspur.com>
-> ---
->  drivers/cpufreq/scpi-cpufreq.c | 3 +++
->  1 file changed, 3 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/scpi-cpufreq.c b/drivers/cpufreq/scpi-cpufreq.c
-> index cd89c1b9832c..c888ed3a0de9 100644
-> --- a/drivers/cpufreq/scpi-cpufreq.c
-> +++ b/drivers/cpufreq/scpi-cpufreq.c
-> @@ -30,6 +30,9 @@ static struct scpi_ops *scpi_ops;
->  static unsigned int scpi_cpufreq_get_rate(unsigned int cpu)
->  {
->  	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
-> +	if (unlikely(!policy))
-> +		return 0;
-> +
->  	struct scpi_data *priv = policy->driver_data;
->  	unsigned long rate = clk_get_rate(priv->clk);
->  
+> Changes since v6:
+>  * Renamed mwait_play_dead to mwait_play_dead_cpuid_hint in 1/1, so that
+>    mwait_play_dead name can be reused for the function that takes the
+>    MWAIT hint as an argument. This leaves the comments around the
+>    smpboot.c file that reference the old mwait_play_dead() unchanged.
 
--- 
-Regards,
-Sudeep
+It makes the patches simpler, in a sense that I don't have to update the
+comments each patch when moving things around and renaming.
+
+
 
