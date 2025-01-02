@@ -1,126 +1,126 @@
-Return-Path: <linux-pm+bounces-19877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19878-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 33A1F9FF488
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jan 2025 17:20:02 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84F6C9FF589
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 03:11:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22AA2161CA7
-	for <lists+linux-pm@lfdr.de>; Wed,  1 Jan 2025 16:19:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DDAB160FAE
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 02:11:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0A911E22E9;
-	Wed,  1 Jan 2025 16:19:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BEF64A00;
+	Thu,  2 Jan 2025 02:11:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="eBA94zS0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="KZiQpYzs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C24731854;
-	Wed,  1 Jan 2025 16:19:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735748390; cv=pass; b=VPaDienBHGTiuiCiO5HREegEabFkPl6oJN9K6UoOXLVb2GJJBqXAGLUq6yWjb2bvKiSgQuQDpgX0rfedFfRTZcUTOUnFlJNQfkYLCZYWjKqs8/4K2G4AiGMVTpOYs4noisbnx6W/8QoadpzJhOOKz73WdXL9FYPabMo7f6bNkW8=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735748390; c=relaxed/simple;
-	bh=ric4iNSuqLxj4fjkqYY2hfWQ0QejJbop6rkw+2de9Ak=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H1gW/DhPxCsP91GfMU5whbemHnWxJ22umQmFHUnvBwYfDXLSNnFpIfk95xB7EcqEvupiVDky93/FJwNbp0BSJTkT7xuZwIR8G+5oFKnrkQV0t3Q6L51cVFeOwbW1EkJK7sWGUwkj1QDaZBxUDgb7beK8r4PxfucPQ13Gdoy/Tjk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=eBA94zS0; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1735748379; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=FQs1evtVE2sgkPSEfsulAqeIdssyVbyYayntPb80XfeoSaHEcHPnJRj7jDGx+EC5mmZhjbWz+t3atz4javZSal9Dl3MhHYzUtW/1wSlNwem4htrw/4OJrc6qhuMtjf3Z1lmlgKLK3jTE8Y5jHzIAqX7ZHGWW1smU6YqO/NOGSKI=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1735748379; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=ric4iNSuqLxj4fjkqYY2hfWQ0QejJbop6rkw+2de9Ak=; 
-	b=ZXQ+vPIusGUgKbBc6v55GrvU2wLrVkn99/VSDu2aWKFZupvcnajszicnp1xcEkGEcspgceCh6gm+GaGxffvA92f+fiVbhRjaKyRyvhEaa/IVl+0Tm2vRC1qG7FFBblbjxyZ9HxNdVzVXrfPHSkpgZMimc+Blcjc7BJ8WI1xpMo8=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1735748379;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=ric4iNSuqLxj4fjkqYY2hfWQ0QejJbop6rkw+2de9Ak=;
-	b=eBA94zS0C62BzhJ4Il+QGtm49Ex4K2U/sSjBi8/9jeZvXiIVlQUhexLs4ywlaYqe
-	Zf5xD9OtAw4U0KN50tvxvPkUTvFWwHdGc9VoxYRiQJiGnwIZ5930KMnwhfeQSoLPRCT
-	GuvQTTmB8Ioj6Ns4R3FpLHVX0ASYVb2JDiQVEUZY=
-Received: by mx.zohomail.com with SMTPS id 1735748375571289.9748444958916;
-	Wed, 1 Jan 2025 08:19:35 -0800 (PST)
-Received: by mercury (Postfix, from userid 1000)
-	id 95126106034B; Wed, 01 Jan 2025 17:19:31 +0100 (CET)
-Date: Wed, 1 Jan 2025 17:19:31 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Bhavin Sharma <bhavin.sharma@siliconsignals.io>
-Cc: Tarang Raval <tarang.raval@siliconsignals.io>, 
-	Hardevsinh Palaniya <hardevsinh.palaniya@siliconsignals.io>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH v13 0/2] power: supply: Add STC3117 Fuel Gauge
-Message-ID: <vnv44opjdghvz7sa2tso3yk5vbbaepredfyf64ds5jkaeujmcp@eolkitmwg3jn>
-References: <20241220084958.32367-1-bhavin.sharma@siliconsignals.io>
- <173479644260.3359498.3393893755513748803.b4-ty@collabora.com>
- <PN2PPFF679F9759585FA8AC4AE446848843F20B2@PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E66AA184E
+	for <linux-pm@vger.kernel.org>; Thu,  2 Jan 2025 02:11:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1735783890; cv=none; b=H6fBY4YWQDjs0YEbgJi91+1A6sUVkQBWV4GL3UZc/faGEnJ6w90XqgsOPx2TkPFvAQLDOTfEK0bTO4BE0x9Q2zpJUX5rN/kEyOZSKivVvXHe4K1VKe1ExPJ2IIqv2qChVM5pAXUEfClL/mlZ6yCq6mXb/ADF5kic72YhBcnRrr4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1735783890; c=relaxed/simple;
+	bh=tF7J7F0cAYFW/IX2u1lgxozmkIT2Jg7qNwAN+Hj8v6I=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pBNPrsr0EKSWjb9PKjS/j44tAsCK7A7PwkYf4GGgCdQ1vmASKrfdD1SQZfs7TmC53FgO2261znc/5/VIAT1hDYLt3pfx8CnsVQstBcaTUGpvKq2JmsM153a2hrhM4L765KB6XX+mP2zpdaf8hvOnBEOh3O+Gz3w2rdgc7bY9FPg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=KZiQpYzs; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 7E922C4CEDD
+	for <linux-pm@vger.kernel.org>; Thu,  2 Jan 2025 02:11:29 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735783889;
+	bh=tF7J7F0cAYFW/IX2u1lgxozmkIT2Jg7qNwAN+Hj8v6I=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=KZiQpYzsUxZ7/kCO7hUrdb7NtRAcL+8eE/Iv9F6vH59gj1cy7b6Q210Nca1hm7MK0
+	 5Ew7o+OiMTeZoVo8tpV7ZYAoX1rF8TS+fDV3i1HukCuP5Hlrmw98FXe7H9OO92XK0p
+	 fPOdHC7fUWjVxJEOX+WNTzRxoDeGgtZrDwa/EEEVzBA+FMHBEwckaSWFWzms2tNKx1
+	 PO2Q90pkiUg1M0/EyldyyyeGVAcn61vlKyahNXfsWZrFK9IHx+91t5UjUJyHWI0kCl
+	 FTu0SLqbS0LIZVsjMp+UcM5pZ2Ef4CRzgDjKI750WCJSpHIWMSKRRuzk2zoxe+6oc/
+	 tv4yNic42ZtoQ==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 70B4AC4160E; Thu,  2 Jan 2025 02:11:29 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 219640] [REGRESSION, BISECTED] Preferred cores working
+ incorrectly for Zen3 CPU (regression)
+Date: Thu, 02 Jan 2025 02:11:29 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: normal
+X-Bugzilla-Who: mario.limonciello@amd.com
+X-Bugzilla-Status: ASSIGNED
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: mario.limonciello@amd.com
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_status assigned_to attachments.created
+Message-ID: <bug-219640-137361-YaGFOtJo92@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-219640-137361@https.bugzilla.kernel.org/>
+References: <bug-219640-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hpzfsp4lsryjwr5q"
-Content-Disposition: inline
-In-Reply-To: <PN2PPFF679F9759585FA8AC4AE446848843F20B2@PN2PPFF679F9759.INDP287.PROD.OUTLOOK.COM>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.3.1/235.736.4
-X-ZohoMailClient: External
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219640
 
---hpzfsp4lsryjwr5q
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Subject: Re: [PATCH v13 0/2] power: supply: Add STC3117 Fuel Gauge
-MIME-Version: 1.0
+Mario Limonciello (AMD) (mario.limonciello@amd.com) changed:
 
-Hi,
+           What    |Removed                     |Added
+----------------------------------------------------------------------------
+             Status|NEW                         |ASSIGNED
+           Assignee|linux-pm@vger.kernel.org    |mario.limonciello@amd.com
 
-On Wed, Jan 01, 2025 at 10:40:57AM +0000, Bhavin Sharma wrote:
-> The patch has not yet appeared in linux-next tree. Do I have to
-> provide something further?
+--- Comment #1 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+Created attachment 307438
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307438&action=3Dedit
+potential patch (v1)
 
-No new patches have appeared in linux-next since 2024-12-20, since
-Stephen Rothwell is on vacation until 2025-01-06:
+FWIW that commit ID is a little bit different than what landed in mainline.=
+=20
+This is the mainline commit ID:
 
-https://lore.kernel.org/linux-next/20241220162051.50a762e4@canb.auug.org.au/
+https://git.kernel.org/torvalds/c/50a062a762005
 
-Greetings,
+Looking at the changes in what you identified, I have a patch that might he=
+lp.=20
+Can you please have a try with it?
 
--- Sebastian
+If that doesn't work to help isolate; can you please tell me if you can also
+reproduce this issue using the 'linux-next' branch here:
 
---hpzfsp4lsryjwr5q
-Content-Type: application/pgp-signature; name="signature.asc"
+https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/log/?h=3D=
+linux-next
 
------BEGIN PGP SIGNATURE-----
+While also adding this patch series on top of it?
 
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmd1awcACgkQ2O7X88g7
-+prieA//SNjtqqq5T7TXBZKcx13x4EAPixEgMnd7sD0CD+LvwOk5UkeCJ4qGr+3s
-Fzck5ieI/N+ILkJ/YCPxPI9biAaK4tSUoak7CYDvp2wK0wPklYrySM45op6jB4rr
-PbnBdv59dVGi1MnfB/iN+McZLA4ZRJdt8KuEpei+6Glx9NiMmoL9f6ZFagQs5sX0
-o17NpmXxFdwCDfDBEkP8ebhQ1Ja9fwbzkz8mYi5Blhv7LiOZWA1kYwfqkqjX8ccb
-QT2cyifdI7BDyqCkE+6oxZ2RICuQzldeeXgtP6REt+z+tk+jANtPQHCf9YG78/j1
-IVLL6qO+yin0F33KNik1azM8HKUdfN1tzxqoWP8I2XRDLTME5EdQ1qDPM34M1S/g
-FlSWwDvcESdDL6EywySfi/Enrg8/0zN1CflGI/q3Cgdg/kzPtsBPypOLihoEowoP
-C0BZRh9zWYdtH3pMAbmz/nGefs8ymKrzmPjykegqaouGBaTneA6NrreQ5xQPl7vl
-ClKikzrgDu4Rs52+zs1jtj2jDidUVtXoNTJ9x2Ld3m/i0Vi0Q26/yxwL42dUpEgJ
-OBD0b9OXwGxrCixRstkYTST6p+Uk2yvty6irVU9dS9WOxaxOct1vTTUGc0HaORa4
-r92SSMPtFbink6JapLV05SYcKpyQpjROlyRE75xYIq4DZa2AVIc=
-=3Qo6
------END PGP SIGNATURE-----
+https://lore.kernel.org/lkml/20241223043407.1611-1-kprateek.nayak@amd.com/#t
 
---hpzfsp4lsryjwr5q--
+If not aware you can use the tool 'b4' to download and apply that series:
+
+```
+b4 shazam
+https://lore.kernel.org/lkml/20241223043407.1611-1-kprateek.nayak@amd.com/#t
+```
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
