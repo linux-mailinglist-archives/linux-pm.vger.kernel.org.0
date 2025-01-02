@@ -1,57 +1,60 @@
-Return-Path: <linux-pm+bounces-19903-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19904-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id EED7A9FFA3F
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 15:12:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 487C79FFAAF
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 16:02:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2BCC618836CA
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 14:12:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 36AA63A15FC
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 15:02:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC5E91AAA1C;
-	Thu,  2 Jan 2025 14:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604B71B2522;
+	Thu,  2 Jan 2025 15:02:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JuryGGV/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="M/axxqCk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91EFD19E819;
-	Thu,  2 Jan 2025 14:12:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37BB018B492;
+	Thu,  2 Jan 2025 15:02:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735827128; cv=none; b=nM2brr/zwCfzi+GJf0MkdE1nbBjBYqIa1rd6nJJeQRlTOVw4yagbdlkhozW8gFHQXGWKdYVbja1WA9XyFZ15FTLBI3wvpmQv3US/ojqG/Za6yOtcEtRkBOptBT1vI5bfG55YX+BZQs7EVNEz2PUtuYTcTZWJmikEQXQ78126w9E=
+	t=1735830128; cv=none; b=m6cRcdpbBwXr6HjqFaB/LIXBOQxuufodTWvNpIOLFYWKocafoQsHjq7fEiG8CtDbeaViJt3AMqHg1RnpaB88sygOMR7FkJ7zf4IlIe8nmyCkV29xCFIYvFwGLkSx9zrc5FHriyQifMbnwgZT6jjDs+CviIZdARDV6JEElTmDfW0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735827128; c=relaxed/simple;
-	bh=L6foyfhqB298HrTp42cOyzVK0PjE+59nsjCwQRd+jjU=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P/ZIx7HS/W+RufL9RTAD6AiwnjtKSQkzhwnOtCXpHwU1rOIGJyTq3ENj1VSYl8wrKCRwCS3aY3lEf7we6ZOy8XSSzz2pMP4OWACM30/pUBN1shsn7rd7+fHFh6QK/wL6HW6TPCaB19N7OOb4Sf4JJ6Q1k74+FRoCRB4pcdvKuLE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JuryGGV/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63307C4CEDD;
-	Thu,  2 Jan 2025 14:12:07 +0000 (UTC)
+	s=arc-20240116; t=1735830128; c=relaxed/simple;
+	bh=xt43zsb1kTVdravRw2KfgwLpvDUZRbJHOcpla+U0hMk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=PhGLqyoQdPRA13ik3dLmsRtZc9mvmkynjVbQQvhwT6S2I3WXs2/9Yz385M5HLmG/XkeSFsbQE29rh/gx72yzqkbH0mx7DSHYybT00dVKq5h8fxCvdkNj562v5RjX+0bdaPJ9NnV/1iQ+f/SKuQqSj2mPcrJg5Mpo+qKg/I2fJSg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=M/axxqCk; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 71D06C4CED0;
+	Thu,  2 Jan 2025 15:02:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735827128;
-	bh=L6foyfhqB298HrTp42cOyzVK0PjE+59nsjCwQRd+jjU=;
+	s=k20201202; t=1735830127;
+	bh=xt43zsb1kTVdravRw2KfgwLpvDUZRbJHOcpla+U0hMk=;
 	h=From:To:Cc:Subject:Date:From;
-	b=JuryGGV/MWf7qGU7bEM2/HWR7PisOcyYJFoeiQFGTS070PUxPJZ2Xx1f7aaExCqTH
-	 cwwjQjpJtH9cj73cCpLpDaOrAdDn2XmqgPiKN5z1QaPJdUY4Km1tvgh77BeUD8fWh7
-	 dRifB9JkzL8ARRnT2gQBWXmWMB2UV3g25KlkhqkT7jNmmeAxWXguDkoFFgW4dHvqVK
-	 f+woxzlVNpz4+zSL/HwhmLuZPWxlsLxjgdf9nhCV+jQ29LYx/V6MefJgXuke1i2Mbv
-	 D53COa9xxrlFZcm+ambGcKb4GNZzeV5aQ+pU7kJxDcs1K6/gRzMbOxkFuBE7dnPQ3T
-	 2TLyd5GazMZIQ==
-From: Mario Limonciello <superm1@kernel.org>
-To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>
-Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
-	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK),
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Sebastian <sobrus@gmail.com>
-Subject: [PATCH] cpufreq/amd-pstate: Fix prefcore rankings
-Date: Thu,  2 Jan 2025 08:12:04 -0600
-Message-ID: <20250102141204.3413202-1-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
+	b=M/axxqCkw65Se1gZliet/2m2SLhyFFGbL9e6lEBzKa+O/IO0YwnY6U5ouPukwTwV6
+	 gwkvVVCFD++cm/CCD3W7hi8EuLrX2X3sdxKDwhfzZijhp9iR/ps1r8VtygjwTT/MEN
+	 71wXhmCA2SkWDg1ZkFeW/iCIt7tF6dwa9nYn0KtynIRzskjGuP1xzRt7IPHGy8ZwdB
+	 7mWsHswDmU+khLNY+coE4Cxc4uH0c3NLa5Er+C9fGo5nEdQ5+fuIvWVPnPL1O8sqeA
+	 ujZ0z8K1iJNcHlgYac3Snyecfd/n6VLPyi9sQW7mejb5ouOqf2tco9P5XmJylz6xdN
+	 Z88qMYgaSXrmg==
+From: Frederic Weisbecker <frederic@kernel.org>
+To: LKML <linux-kernel@vger.kernel.org>
+Cc: Frederic Weisbecker <frederic@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-pm@vger.kernel.org,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	Peter Zijlstra <peterz@infradead.org>
+Subject: [PATCH 0/6 v3] cpuidle: Handle TIF_NR_POLLING on behalf of polling idle states
+Date: Thu,  2 Jan 2025 16:01:54 +0100
+Message-ID: <20250102150201.21639-1-frederic@kernel.org>
+X-Mailer: git-send-email 2.46.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,38 +63,51 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+The TIF_NR_POLLING handling against TIF_NEED_RESCHED polling/monitoring
+idle states (mwait and also software polling) is a bit messy, with quite
+some wasted cycles spent on useless atomic operations. This tries to
+consolidate this state handling from the cpuidle core.
 
-commit 50a062a76200 ("cpufreq/amd-pstate: Store the boost numerator as
-highest perf again") updated the value stored for highest perf to no longer
-store the highest perf value but instead the boost numerator.
+Changes since v2:
 
-This is a fixed value for systems with preferred cores and not appropriate
-for use ITMT rankings. Update the value used for ITMT rankings to be the
-preferred core ranking.
+_ Handle buggy mwait implementations (thanks Rafael)
 
-Reported-and-tested-by: Sebastian <sobrus@gmail.com>
-Closes: https://bugzilla.kernel.org/show_bug.cgi?id=219640
-Fixes: 50a062a76200 ("cpufreq/amd-pstate: Store the boost numerator as highest perf again")
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/cpufreq/amd-pstate.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Frederic Weisbecker (4):
+  cpuidle: Remove unnecessary current_clr_polling_and_test() from
+    haltpoll
+  x86/cpuidle: Move buggy mwait implementations away from
+    CPUIDLE_FLAG_MWAIT
+  cpuidle: Remove call_cpuidle_s2idle()
+  cpuidle: Handle TIF_NR_POLLING on behalf of software polling idle
+    states
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 66e5dfc711c0c..f6d04eb40af94 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -802,7 +802,7 @@ static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata)
- 	 * sched_set_itmt_support(true) has been called and it is valid to
- 	 * update them at any time after it has been called.
- 	 */
--	sched_set_itmt_core_prio((int)READ_ONCE(cpudata->highest_perf), cpudata->cpu);
-+	sched_set_itmt_core_prio((int)READ_ONCE(cpudata->prefcore_ranking), cpudata->cpu);
- 
- 	schedule_work(&sched_prefcore_work);
- }
+Peter Zijlstra (2):
+  cpuidle: Introduce CPUIDLE_FLAG_MWAIT
+  cpuidle: Handle TIF_NR_POLLING on behalf of CPUIDLE_FLAG_MWAIT states
+
+ arch/arm/include/asm/cpuidle.h     |  2 ++
+ arch/arm64/include/asm/cpuidle.h   |  3 ++
+ arch/powerpc/include/asm/cpuidle.h |  4 +++
+ arch/riscv/include/asm/cpuidle.h   |  2 ++
+ arch/x86/include/asm/cpuidle.h     | 12 +++++++
+ arch/x86/include/asm/mwait.h       | 27 +++++++--------
+ drivers/acpi/processor_idle.c      |  5 +++
+ drivers/cpuidle/cpuidle-haltpoll.c |  3 --
+ drivers/cpuidle/cpuidle-powernv.c  | 10 ------
+ drivers/cpuidle/cpuidle-pseries.c  | 11 -------
+ drivers/cpuidle/cpuidle.c          | 22 ++++++++++++-
+ drivers/cpuidle/poll_state.c       | 30 +++++++----------
+ drivers/idle/intel_idle.c          |  8 +++++
+ include/asm-generic/Kbuild         |  1 +
+ include/asm-generic/cpuidle.h      | 10 ++++++
+ include/linux/cpuidle.h            |  1 +
+ include/linux/sched/idle.h         |  7 +++-
+ kernel/sched/idle.c                | 53 +++++++++---------------------
+ 18 files changed, 114 insertions(+), 97 deletions(-)
+ create mode 100644 arch/x86/include/asm/cpuidle.h
+ create mode 100644 include/asm-generic/cpuidle.h
+
 -- 
-2.43.0
+2.46.0
 
 
