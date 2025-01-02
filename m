@@ -1,132 +1,116 @@
-Return-Path: <linux-pm+bounces-19915-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19916-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 928D39FFFD1
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 21:08:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53454A000D3
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 22:39:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6956E1628D7
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 20:08:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 41B113A36C4
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 21:39:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9B2E1B4F04;
-	Thu,  2 Jan 2025 20:08:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="E+2YCuB2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27E91B6CEA;
+	Thu,  2 Jan 2025 21:39:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bmailout1.hostsharing.net (bmailout1.hostsharing.net [83.223.95.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5ED513D508
-	for <linux-pm@vger.kernel.org>; Thu,  2 Jan 2025 20:08:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B46413BC0C;
+	Thu,  2 Jan 2025 21:39:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=83.223.95.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735848491; cv=none; b=kcsWYqhmekXAIGuHM71j/Z5AoLu5PhzZklx0Fb+0oZUs8izLSW+M3W5NcuN7aT8JPSCGQSFFwsW7OZlmEXpuHIir2vKoC1PmQXPaD9bBuhkdSi+4k0vCmV7bjBeIkuIcNx+T8NZmpj1YDRv9ah/FZiSTGf1FvX7XDqQCpvs9OMA=
+	t=1735853995; cv=none; b=g+DK/6ApI1l9tMdeiiD6IPz4GJs5fZ0zpxHDFpcqXkpu2Tj4GWDsS6htqYXGX8XavKxRwqKe6UEwcTdx0H2QZrEnbTo0Cf7GWa+jEAlV9ihaghRjTa4e+2lliemwq6rtBzc8FSbhBZnfoKTUG2TRrgCwYmL6P8HLpjBEFZ5kqFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735848491; c=relaxed/simple;
-	bh=jvX67mFsfLe4VWpjGP9IYHEM0KqK/Nai/jzo3FhJ+6E=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BubtBXSHlscf26deJqSyuLey0dwokj7/ntyXpOKp5C3XMEQrXRXGglFCuQqY5VZp4k5TrOPlJmfI0Rqy4zrqYs+FunxGdV2NarG4uiDgIjLDE9vRZ2yK+uU71rQ/BpSdy+qN9g3/tvZgQ0kKZx9dXStB+FFlDRhUjpysNqYdy+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=E+2YCuB2; arc=none smtp.client-ip=209.85.219.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e4a6b978283so15692680276.0
-        for <linux-pm@vger.kernel.org>; Thu, 02 Jan 2025 12:08:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1735848487; x=1736453287; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=LfITormVFn4jObWXUL+Z9GCJHTq0moTZycjXJjd+H4I=;
-        b=E+2YCuB2sV7ifeL046zbPvrBMgt2htFoJAJ19kS2uvEm59xdMtpXP0toElZvQe1TjG
-         D8I/ZgahG1CP79aJPrj69p7wirzN/Oz9mJzn7SdvSe1TtA+GJi7YyXdZAbw40SAlrU6L
-         7nB5idrXoJzSYLGS4g9Pp2UK8f4MzR5cQ7zpRkQ2uWIwm5cNRSqMKEWNdPBfThBmYEwf
-         rz69I2YF0XwBI0wPL4XaH6M/wD3hCqoxv+Uev51oJiDXnz47O1YO+nExvJWUjOoZ8dGe
-         Jw3lGtYiAQY6XV4m5+AEs1Lk/c0w5/1Tnb+peH0uhdaDBxKWhVhlP7ayyvMsVjuElGYu
-         ObRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735848487; x=1736453287;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=LfITormVFn4jObWXUL+Z9GCJHTq0moTZycjXJjd+H4I=;
-        b=iLpbLCKfO+qnwBFdshMzFc/H9eOSXSmEdLHQnifipqTfeYuINt+rBdecG5qqljeYJa
-         DQStHUrezZZMoIUbTTZXNDdQB8twLFdxZgNFXDxCl3pg/NkQqwXz7dtlYRtZyGXm/fnh
-         ZZOj8/SG6PVx6G5oAjl4skBYSFSvYebXw3FDP7QklCH0cFBq7a+xYyVYwe6+aIJO5Izo
-         bTJ1lPOwJzgRta/EJfuiGH3B85Ifs9u0kiocUaELwjOBtn3FphkTCdprVB7784XUh7aj
-         MHJP7hSB2Ygn21P33JsWuRh5T/+iDM69Lar0Kfh6sWOWm2tWS3NvABwUg6IVnIY90nEk
-         1v7w==
-X-Forwarded-Encrypted: i=1; AJvYcCV1KP1VQB+JojbYLBnND2ObeLdK9pRMQa07DpN2RQb8a9oUJd1GaDIaanWQfLy42CUrkX1LNcwQIA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxjoPBku13JqyIvUiiq6ZzW2tbkVDdbda5lovlHlvAGyihdTIFv
-	4ezZjO38r5jRVplIpJtsEIa3+UIxL7g9wC6kVouTn6vdMBIVBbp/HLH9I6mqNDVgMZLvI5JAmyG
-	bH4937f8Q0CBGqMURu381gC6R3ihWMcKGougX/g==
-X-Gm-Gg: ASbGncvAgOyfNSaAp4ToOBGOsSg5vEjb9TjYLEVpi5Gd6Bli6SgfAiMHKCZy14SdvHB
-	CDYlMm55AFkFxA6oLpK3uoVD+tPB4hUEhRMBwRjY=
-X-Google-Smtp-Source: AGHT+IHTMntr/wIaqTba+whMGR9EjXQOW5JmOmFz3zgpeRIDl3WKXyCdvz2mWr5GNUq+dMW//xlN4NVag3thQW3KuxM=
-X-Received: by 2002:a05:690c:74c3:b0:6f0:23c9:2989 with SMTP id
- 00721157ae682-6f3f7e3d205mr266592177b3.11.1735848487650; Thu, 02 Jan 2025
- 12:08:07 -0800 (PST)
+	s=arc-20240116; t=1735853995; c=relaxed/simple;
+	bh=x8r8W9nOjGPFmJACK43eIlITuOvo5ra9svdTzJuNoMM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WLDVwNiSLAg2dCjV/AHKr5wdcK0XDEh7t6zrvl6Jvl9+Gz/FPZ06Ly2KYAD54VUu3+G4ncPIeUqqA+EI+gIdlwb/Qf/FHoniAWNRgC3vn4JF9tI13XL1gn9rHmK1bEbF0l1yHDtWklFKjfw5o1vGwToJjIku1fPcZTslIIxK4RU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de; spf=none smtp.mailfrom=h08.hostsharing.net; arc=none smtp.client-ip=83.223.95.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=wunner.de
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=h08.hostsharing.net
+Received: from h08.hostsharing.net (h08.hostsharing.net [IPv6:2a01:37:1000::53df:5f1c:0])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256
+	 client-signature RSA-PSS (4096 bits) client-digest SHA256)
+	(Client CN "*.hostsharing.net", Issuer "RapidSSL TLS RSA CA G1" (verified OK))
+	by bmailout1.hostsharing.net (Postfix) with ESMTPS id 181A23000A3A4;
+	Thu,  2 Jan 2025 22:30:38 +0100 (CET)
+Received: by h08.hostsharing.net (Postfix, from userid 100393)
+	id 107DD59DC31; Thu,  2 Jan 2025 22:30:38 +0100 (CET)
+Date: Thu, 2 Jan 2025 22:30:38 +0100
+From: Lukas Wunner <lukas@wunner.de>
+To: Niklas Schnelle <niks@kernel.org>
+Cc: Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+	linux-pci@vger.kernel.org, Bjorn Helgaas <bhelgaas@google.com>,
+	Lorenzo Pieralisi <lorenzo.pieralisi@arm.com>,
+	Rob Herring <robh@kernel.org>, Krzysztof Wilczy??ski <kw@linux.com>,
+	"Maciej W . Rozycki" <macro@orcam.me.uk>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
+	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+	linux-kernel@vger.kernel.org,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	Evert Vorster <evorster@gmail.com>
+Subject: Re: [PATCH v9 6/9] PCI/bwctrl: Re-add BW notification portdrv as
+ PCIe BW controller
+Message-ID: <Z3cFfhHirAgxjmDQ@wunner.de>
+References: <20241018144755.7875-1-ilpo.jarvinen@linux.intel.com>
+ <20241018144755.7875-7-ilpo.jarvinen@linux.intel.com>
+ <db8e457fcd155436449b035e8791a8241b0df400.camel@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241218184433.1930532-1-l.stach@pengutronix.de>
- <CAPDyKFoeebzUkmeya4WEcdc+px-=8rwSGdmF_-1giiwkHvWo5Q@mail.gmail.com>
- <CAPDyKFp8jvEDGfkuMzzSVSo2gDtf+naC3QwXrCJD7t1e8wPJFQ@mail.gmail.com> <CAMuHMdU=Kyu7n-Wn85mPpJFKKxRDqNAVv+RBJsN7Xauma-jpHQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdU=Kyu7n-Wn85mPpJFKKxRDqNAVv+RBJsN7Xauma-jpHQ@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 2 Jan 2025 21:07:31 +0100
-Message-ID: <CAPDyKFo7rqJ4dw_0cBK+fF0BSwZcM1Z_MMH6o=p8H22E5UVCmw@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: core: add dummy release function to genpd device
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Lucas Stach <l.stach@pengutronix.de>, linux-pm@vger.kernel.org, kernel@pengutronix.de, 
-	patchwork-lst@pengutronix.de, Luca Ceresoli <luca.ceresoli@bootlin.com>, 
-	Peng Fan <peng.fan@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <db8e457fcd155436449b035e8791a8241b0df400.camel@kernel.org>
 
-On Tue, 31 Dec 2024 at 11:45, Geert Uytterhoeven <geert@linux-m68k.org> wro=
-te:
->
-> Hi Ulf,
->
-> On Thu, Dec 19, 2024 at 3:49=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
-> > Applied for fixes and by adding a stable tag.
->
-> commit f64f610ec6ab59dd0391b03842cea3a4cd8ee34f
-> Author: Lucas Stach <l.stach@pengutronix.de>
-> Date:   Wed Dec 18 19:44:33 2024 +0100
->
->     pmdomain: core: add dummy release function to genpd device
->
->     The genpd device, which is really only used as a handle to lookup
->     OPP, but not even registered to the device core otherwise and thus
->     lifetime linked to the genpd struct it is contained in, is missing
->     a release function. After b8f7bbd1f4ec ("pmdomain: core: Add
->     missing put_device()") the device will be cleaned up going through
->     the driver core device_release() function, which will warn when no
->     release callback is present for the device. Add a dummy release
->     function to shut up the warning.
->
->     Signed-off-by: Lucas Stach <l.stach@pengutronix.de>
->     Tested-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
->     Fixes: b8f7bbd1f4ec ("pmdomain: core: Add missing put_device()")
->     Cc: stable@vger.kernel.org
->     Message-ID: <20241218184433.1930532-1-l.stach@pengutronix.de>
->     Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
->
-> Can you please use Link:-tags pointing to lore instead of non-standard
-> Message-ID:-tags, so we can easily go to preceding discussions?
+[cc += Evert]
 
-Certainly! Thanks for pointing this out!
+On Fri, Dec 06, 2024 at 07:12:37PM +0100, Niklas Schnelle wrote:
+> On Fri, 2024-10-18 at 17:47 +0300, Ilpo Järvinen wrote:
+> > This mostly reverts the commit b4c7d2076b4e ("PCI/LINK: Remove
+> > bandwidth notification"). An upcoming commit extends this driver
+> > building PCIe bandwidth controller on top of it.
+> > 
+> > The PCIe bandwidth notification were first added in the commit
+> > e8303bb7a75c ("PCI/LINK: Report degraded links via link bandwidth
+> > notification") but later had to be removed. The significant changes
+> > compared with the old bandwidth notification driver include:
+[...]
+> I bisected a v6.13-rc1 boot hang on my personal workstation to this
+> patch. Sadly I don't have much details like a panic or so because the
+> boot hangs before any kernel messages, or at least they're not visible
+> long enough to see. I haven't yet looked into the code as I wanted to
+> raise awareness first. Since the commit doesn't revert cleanly on
+> v6.13-rc1 I also haven't tried that yet.
 
-It seems like my git-hook with a perl-script stopped working, as in
-the past I have added those Link-tags when applying a patch.
+Hi Niklas,
 
-Kind regards
-Uffe
+another regression caused by bandwidth control was reported,
+this time it's a hang on shutdown (instead of on boot) and
+this time we root-caused it instead of just working around it.
+
+Here's the proposed fix:
+https://lore.kernel.org/r/0ee5faf5395cad8d29fb66e1ec444c8d882a4201.1735852688.git.lukas@wunner.de/
+
+Could you test this on top of v6.13-rc1 (or any other rc which
+does not include 774c71c52aa4 ("PCI/bwctrl: Enable only if more
+than one speed is supported")?
+
+I suspect that it may fix the issue you were seeing as well and
+I'm curious whether that suspicion is correct.
+
+Thanks!
+
+Lukas
 
