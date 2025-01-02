@@ -1,105 +1,90 @@
-Return-Path: <linux-pm+bounces-19880-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19881-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1607F9FF776
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 10:34:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61BFE9FF7A8
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 10:48:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 210991881BBE
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 09:34:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5EB0F3A182C
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 09:48:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B8C571917EB;
-	Thu,  2 Jan 2025 09:34:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tZWBiia4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A04381A8419;
+	Thu,  2 Jan 2025 09:48:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56427188938;
-	Thu,  2 Jan 2025 09:34:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A9AD1A8416;
+	Thu,  2 Jan 2025 09:48:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735810471; cv=none; b=LMoVlARYAb0abRRArYvaJBGbwbJBd2Gdp6Gohmu+gkUlTZlEhnWd5bwl8r4EZWHrICLaXl80uffJdr93Kk/bLg95+mRJiPci5yPAucGk1sU23fVw9Hj79KtFK+Ex+R0f9BQjqRWvs7/XgfcXpx1AoXOBBSDkFq8RMWUzbfD3Aro=
+	t=1735811317; cv=none; b=Aoexv6Di3KgwvwtgJSOvDeAfmA98Ft4zPejsFknckLQH356I6PvsQzj8TqDX/a+Ad+JOKeKNoECKCHOIGJRqumJ2JXHcwSISKVIbIjKSPPyK2W+fY7FpGCDML7VOcoXcRMA1VQ8OAz6cCGKiliLvko46P8yzbiw/XTxAO79IVLg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735810471; c=relaxed/simple;
-	bh=oTeU9mTGKrBcXiHvg+Jl3slVbuBrAfkxWQcJ4qdEqJ4=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=kggPXr6j0bMnG/IlI7D/1uLz1JAWTfIVqirh1V0dRl4Wcp5Ln7myYyf1efrOuSWbbFYY46ROolcHt6AkaBC8oKRTm5cI7f8Oi21quXOyhx55rA3GrbWw7ghKBI9rF+BU/tB4z4RHuzRVk/aq7DIVPCpi85oxeUu1mTN3V2RK3dU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tZWBiia4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8164C4CED0;
-	Thu,  2 Jan 2025 09:34:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1735810470;
-	bh=oTeU9mTGKrBcXiHvg+Jl3slVbuBrAfkxWQcJ4qdEqJ4=;
-	h=From:To:Cc:Subject:Date:From;
-	b=tZWBiia4cLy6okdpTT3BGYjab/WoaCKnMB5Vz6Y86mrSXUgm5nS1XFPMYlwQhX8U9
-	 cI89Baw8pxyN2XiXAh+/BlN70R3QevZzlCiMIPhcy450iHgX9S8DBPL3QuX2KCOsY+
-	 rv3SpWnDsylvEIHAYEOSaQi+XgrHZsOG9E5wcn0dp0Vqaw5pce7TzogICHH4EzY2WF
-	 VF3yaU0+1AgDM3YR/6ElDMkZScA9Ay2vVq5e/rxI0Hyo1uEAuDCulPJz/lj+EwV3v/
-	 MOMQbD/nW2mZNpPBomPBxkfoM8Qq4wD9hc79fGMSHw9gMVW45ZWtucDqoEY5ergbDK
-	 YiweCFQdv+erg==
-From: Georgi Djakov <djakov@kernel.org>
-To: gregkh@linuxfoundation.org
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	djakov@kernel.org
-Subject: [GIT PULL] interconnect fixes for 6.13-rc
-Date: Thu,  2 Jan 2025 11:34:04 +0200
-Message-Id: <20250102093404.947684-1-djakov@kernel.org>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1735811317; c=relaxed/simple;
+	bh=fAymzws3Ml3bKlqGpAPIeAh6rOvf51h36pdJ5y1pYlk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CJ4z4/K0dZXWc4TdB+mtcvurPFJD+kH1WFZ9+WISnNXM3msyBCFUFK0gG3uJXunP2ECXH8iewhLqQckJ6YJJ+iOcwV1CmWV/fXo0x1/5nxVdriNF2J8YwEi1TsIWw10lMUu4lS5iPfs3gdiOERn4+HgwIjVfluyeikXPaO1fUkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 7AB5811FB;
+	Thu,  2 Jan 2025 01:49:01 -0800 (PST)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id B008E3F59E;
+	Thu,  2 Jan 2025 01:48:31 -0800 (PST)
+Date: Thu, 2 Jan 2025 09:48:28 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Charles Han <hanchunchao@inspur.com>
+Cc: <cristian.marussi@arm.com>, <rafael@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>, <viresh.kumar@linaro.org>,
+	<arm-scmi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+Subject: Re: [PATCH] cpufreq: scpi: Prevent null pointer dereference in
+ scpi_cpufreq_get_rate()
+Message-ID: <Z3Zg7PHdGAzXsyMg@bogus>
+References: <20241230093159.258813-1-hanchunchao@inspur.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241230093159.258813-1-hanchunchao@inspur.com>
 
-Hello Greg,
+On Mon, Dec 30, 2024 at 05:31:59PM +0800, Charles Han wrote:
+> cpufreq_cpu_get_raw() may return NULL if the cpu is not in
+> policy->cpus cpu mask and it will cause null pointer dereference.
+> Prevent null pointer dereference in scpi_cpufreq_get_rate().
+>
 
-This pull request contains two fixes for the current cycle. The details
-are in the signed tag as usual. The patches have been in linux-next for
-a few days right before the holidays. Please pull into char-misc-linus
-when possible.
+Can you please fix such occurrences in other places too ?
+I see it in apple-soc-cpufreq.c and scmi-cpufreq.c as well.
 
-Thanks,
-Georgi
+> Fixes: 343a8d17fa8d ("cpufreq: scpi: remove arm_big_little dependency")
+> Signed-off-by: Charles Han <hanchunchao@inspur.com>
+> ---
+>  drivers/cpufreq/scpi-cpufreq.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/scpi-cpufreq.c b/drivers/cpufreq/scpi-cpufreq.c
+> index cd89c1b9832c..c888ed3a0de9 100644
+> --- a/drivers/cpufreq/scpi-cpufreq.c
+> +++ b/drivers/cpufreq/scpi-cpufreq.c
+> @@ -30,6 +30,9 @@ static struct scpi_ops *scpi_ops;
+>  static unsigned int scpi_cpufreq_get_rate(unsigned int cpu)
+>  {
+>  	struct cpufreq_policy *policy = cpufreq_cpu_get_raw(cpu);
+> +	if (unlikely(!policy))
+> +		return 0;
+> +
+>  	struct scpi_data *priv = policy->driver_data;
+>  	unsigned long rate = clk_get_rate(priv->clk);
+>  
 
-
-The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
-
-  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
-
-are available in the Git repository at:
-
-  git://git.kernel.org/pub/scm/linux/kernel/git/djakov/icc.git tags/icc-6.13-rc6
-
-for you to fetch changes up to 44c5aa73ccd1e8a738fd011354ee8fb9fcda201a:
-
-  interconnect: icc-clk: check return values of devm_kasprintf() (2024-12-17 14:03:34 +0200)
-
-----------------------------------------------------------------
-interconnect fixes for v6.13-rc
-
-This contains two fixes. One fixing a boot error on db410c board when UBSAN
-is enabled with clang-19 builds. The other one adds a missing return value
-check after devm_kasprintf.
-
-- interconnect: qcom: icc-rpm: Set the count member before accessing the flex array
-- interconnect: icc-clk: check return values of devm_kasprintf()
-
-Signed-off-by: Georgi Djakov <djakov@kernel.org>
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      interconnect: icc-clk: check return values of devm_kasprintf()
-
-Georgi Djakov (1):
-      interconnect: qcom: icc-rpm: Set the count member before accessing the flex array
-
- drivers/interconnect/icc-clk.c      | 10 ++++++++
- drivers/interconnect/qcom/icc-rpm.c |  2 +-
- 2 files changed, 11 insertions(+), 1 deletion(-)
+-- 
+Regards,
+Sudeep
 
