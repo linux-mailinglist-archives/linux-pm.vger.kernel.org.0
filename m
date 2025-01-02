@@ -1,83 +1,85 @@
-Return-Path: <linux-pm+bounces-19901-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19902-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA0449FF948
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 13:15:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 908819FF97B
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 13:48:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9E87B16101D
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 12:15:39 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8A80A3A30EA
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 12:47:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A2BC1B0F0A;
-	Thu,  2 Jan 2025 12:15:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B1BF195B33;
+	Thu,  2 Jan 2025 12:47:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="DOjzHNj3"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="tLCmqL3p"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E12A1A8419
-	for <linux-pm@vger.kernel.org>; Thu,  2 Jan 2025 12:15:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 507654431
+	for <linux-pm@vger.kernel.org>; Thu,  2 Jan 2025 12:47:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735820138; cv=none; b=c29U/g8qX64YOWiOXsCFeJ/oZHFsWLHN5+9z0g/knn78MEXZ1TODdbnCRcAYwjdBkvPswuW8fxsc2WyVFEwD1vu8/JkS0O8qCYSaWQz2xbBFwYJ/L9jsPrAaetRAnCiVgMXF1ySVicW8q/xY1/7jeN4eY+RwYPt9B+tmAXajFLU=
+	t=1735822079; cv=none; b=rKVBoGuTHUZth9rEkFJMAl9LeXwi/zmdBvklxGPpN6Vrwb9UA2TaM8kAvwfkqNvJyx1ASAMXWVIpSLN7eo0yTKOCtWwxc4fACBHEltnJTdOXl34+NWogoeH6Rmc4o7X2UAQ0CddCZBL4+ZcDINzk4VBdydhgWHZysD+A8KFfqAQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735820138; c=relaxed/simple;
-	bh=DXQ2A41Ak0f8c/Srx/US/xMIqRF+hrTTRWNqwbb/UY0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=TDxBkuRPtZe4Z9WLpDQUWRz+ZGbx8t9yrcmlSonZDq2S4crX3Izm/0s6TwelJBmHr7LygFMua6d4UIkbdAuXUCac9gjAYZwBr8PE38wCXKFm2KLsX/Yc3FaBK+VkCpw42nuqyhwQAcGrbNCkmDQ+nt3iRey9wfoJnbUS8mhgIsQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=DOjzHNj3; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-385f06d0c8eso5848636f8f.0
-        for <linux-pm@vger.kernel.org>; Thu, 02 Jan 2025 04:15:34 -0800 (PST)
+	s=arc-20240116; t=1735822079; c=relaxed/simple;
+	bh=GrAq73/L407yMj1vo2ni3/vYnlr8zbcdLF5JsHwBMbY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rVU5KP8T6xB5lO7j9yruazvyZjj7dwYc6iUEMGJAugEEkxO6gMgdiZAZidr721EXJ8Hui4Ie2pygg8lrjl7d0u0JBbwJdGmo0Hy3lJdo2Zz3jJwjnvpEi6Bk1Hx5lADI3BOu+oi8kT5d6bUp3SbMI8dmXOBVjOPTfS8ZgoLnSi4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=tLCmqL3p; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53f757134cdso12456013e87.2
+        for <linux-pm@vger.kernel.org>; Thu, 02 Jan 2025 04:47:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1735820133; x=1736424933; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1735822075; x=1736426875; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=49Zbfez2Uv+GwEi9/KdRDU2/n1SiCvCfPSvq3xfobnQ=;
-        b=DOjzHNj3pXuc5qguM8G1DfSHc1qrwHMe8r2yB3hPjLv3MS3UW+Z9CiERhCTHWxOkCs
-         1djDjLtnEA9G0IpBsnF/ltuPT+bRIXaU/0jUH58ys6AWbbbEFhbxoKnSd7WeoKzQVZM+
-         jSAl7fMH5+ysJyMoSO1R9um+NdvSq91J7oXOWVvzSueYV4GLSenri959pZnRnrKnAgD4
-         8dVGdKhDMQEvWys8gpRGgb7XBGn5rzfJtUEK4ae6Th/r5ApZAtmV0VpD/o7+ua8ej3Z7
-         5bEOKCi/ajdVQHx4th2G863Cx2cCGKoWv+bDLT6Mh4CTBbRAF1GiW3nf9BydIFSURAyW
-         JIlA==
+        bh=87IKF3c9HbECtsPTMeRuQc+tjYDzspetfXzHHwU8By8=;
+        b=tLCmqL3pNY+erBVzj6IAlrznR2wLYfXiyLaqhAv2eoiYjMhFqAOofhirSdUq6BSMgr
+         z0NPqgg20A6qmIAgyy/Q8HK7YXD9jvLXQl1a3cIjksXAU4eVnY0Rnb+mDRJj6q/vDtxu
+         KsiymcInGl+IZzcKnZP1VCanHlSJertM3Z3/LtDnwWhpBgiX4t1fngOJZidyN/OR2S+7
+         4yFN7VhAHs5iY97Pz5FG4CtXrE1DXi7TzqUG2n2DdUAidGVSyrRPY+0spKdE05Bkq97S
+         r9wtvWHt9BcEgJFYtGzR4T+5lewQQthsoxNBGmbaTWMyf+asDWDWt/3qBi3+l29cFrVs
+         jsWw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735820133; x=1736424933;
+        d=1e100.net; s=20230601; t=1735822075; x=1736426875;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=49Zbfez2Uv+GwEi9/KdRDU2/n1SiCvCfPSvq3xfobnQ=;
-        b=pTY+QngpMQTjetbwU2tviGWmfq/T2B/1smEXrroyQpEcj4YknIj84u5qB6PnFmB2om
-         a2dftVe0MUhDjP25rWbsAekLqua2hDon1n3LxKOBcKC86plV2JKrnFivqdvkGbnOue2+
-         eY+sCWPJqMqF5IUkurHW4YIvVMV2A2dRzDN7V/HHtPYk802B7hg9IHGdKKP57GFSPBbF
-         J3nffkgaVsm8tRtHGRsVh+X0Bkfm+yRAWtAmxRVuNxrqu/JScj17sMdCgqDTEFNxi7rp
-         l0qeStXUxjisV5Q9czb+VB2/2e+Eh96dLh+zuAX093gMIjXdiHJS99DFftryIlTPg15J
-         9VgQ==
-X-Gm-Message-State: AOJu0YwbsEsimfmH7PW0H5eSjfbKBnVaRQNxhyXQ88+4Wx4mJarL5d7D
-	PfCnMgMrUAUJ1917e6Gzr8mnl9/O6Cf49SzQo8thNhPnuOFIIi7/zrLPbR1bl9E=
-X-Gm-Gg: ASbGncuXl5bTbYrR0njRbzpzD2Ncxg93kDq3Ng54LPa9Y/SoESmy8DOBYkehO12NbF7
-	LXtbphUKDYdMgB6UUWlMAEWTp+WMFfa1Z6cvD8nlx0ItmgfU79HqGFk4WVp7XNAoD1Tn7KF0ifS
-	1Sw/r2Fi+KAflQZBk9gQwfXJRaSgxXol8F8jrZ1l3wy7jSKyBrQtQ9REu6UIM2IooH32748bPkr
-	K6siirUEchf8I2CHHCn90QDjzSK7PvfUJTEmRI+tnsDodA790dCf/Nj
-X-Google-Smtp-Source: AGHT+IEQcymUaT5z7OHfgOJIsMrGBipMq4M5GLXMYW2IFgD9r2VMIYMv0E5DtI+X27G8zzsAsvqv/w==
-X-Received: by 2002:a05:6000:1fac:b0:385:eecb:6f02 with SMTP id ffacd0b85a97d-38a2220045bmr34868448f8f.28.1735820133226;
-        Thu, 02 Jan 2025 04:15:33 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:427d:f084:4f4e:ff78])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c832e74sm37475445f8f.30.2025.01.02.04.15.32
+        bh=87IKF3c9HbECtsPTMeRuQc+tjYDzspetfXzHHwU8By8=;
+        b=lGYdOEvLidFe4ZraeyH0S0ghY6d5y93zBZSIpGpRFQLKh/UkZAFt1k0ILbs4Ub0Fec
+         xuNZFYyDxBVf1DKYRDuPS5AhQWvJC7+rZyKe76YgArni+z9gKYpubE5ngv7myVhjPWWm
+         1c+3IS37B3LRwcq6S/CrxdyzVILUU4AAlzbihIRT4OYgrmtT1vg3/5Xb4b5VOpfk/yuN
+         if374R4/3Zm23fvv6m4MuXLorwdpUxt0p5a9arOuSrmYsJSJM0wRqnY9dToHK1phWg74
+         dx24X0hwp1ziqt0zy49mqt8tHFrlkZhhiCs6m74PlMkiDkAz9DSzLcW8rslKezpPHmk2
+         SaPw==
+X-Forwarded-Encrypted: i=1; AJvYcCX88rZe2J/Rl+m2JNEB7IKrnLs19LR9cO37tBdYi1OX3/0TdcuIp7JX+2hdX2Ph3MIeHSK8gqgZsg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwLpQPCzxvyUFEdA0Safm6JyEqjvMv6L01/FORWD7ZQPy+gdypn
+	oxRhtSbwak0vUTw55jEEKjqoDYl9XsPtpySVZx5nHup1I4TXhJZ7eC8ftM+ivpE=
+X-Gm-Gg: ASbGncu7uuIFdITaiUEn8eMVwUsMWfnb1r8kVzViQxAgcNqUOjBuC5aQ0CUkSBo/ZyT
+	BMiaSfEC1rsG4ThHmqbic5mAL69LnAadjBKH7z6lsfPt5v0TXvycO+I/Hf7OTtb/Sqs4Fa5UNW5
+	p11OZVG6HHmq+1PUgheOTYt9WnNhAiwTr8V1h8H8v5L4DSKvyj+5uI+kdg8PWRx5Cmm6sKsUqZC
+	ZAA/N/a0C+uWx7I3y2PKLHbVziJKeqm0NrtsdnExjL3YOU5pRI03dyuAhNx7KJDNMYllRE40aqC
+	rP44/v5JpZR8lT4vOEb8aWc8IJ5+LVk=
+X-Google-Smtp-Source: AGHT+IHSR/Xqw+zKVilPbS18SxVhML7NXuysuSNJyvDEen1lNQEfTHRrM46D8RL3KMyIttSdLTLqLA==
+X-Received: by 2002:a05:6512:e8c:b0:53a:1a81:f006 with SMTP id 2adb3069b0e04-5422953fedcmr15859594e87.31.1735822075431;
+        Thu, 02 Jan 2025 04:47:55 -0800 (PST)
+Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-542238217f9sm3817314e87.211.2025.01.02.04.47.53
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2025 04:15:32 -0800 (PST)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Stephan Gerhold <stephan.gerhold@linaro.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [PATCH v2] power: sequencing: qcom-wcn: explain why we need the WLAN_EN GPIO hack
-Date: Thu,  2 Jan 2025 13:15:30 +0100
-Message-ID: <20250102121530.26993-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.45.2
+        Thu, 02 Jan 2025 04:47:54 -0800 (PST)
+From: Ulf Hansson <ulf.hansson@linaro.org>
+To: Linus <torvalds@linux-foundation.org>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: [GIT PULL] pmdomain fixes for v6.13-rc6
+Date: Thu,  2 Jan 2025 13:47:53 +0100
+Message-ID: <20250102124753.50440-1-ulf.hansson@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,43 +88,44 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
+Hi Linus,
 
-With the recent rework of the PCI power control code, the workaround for
-the wlan-enable GPIO - where we don't set a default (low) state in the
-power sequencing driver, but instead request the pin as-is - should no
-longer be needed but some platforms still fail to probe the WLAN
-controller. This is caused by the Qcom PCIe controller and needs a
-workaround in the controller driver so add a FIXME to eventually remove
-the hack from this driver once this is done.
+Here's a PR with a couple of pmdomain fixes intended for v6.13-rc6. Details
+about the highlights are as usual found in the signed tag.
 
-Signed-off-by: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
----
-Changes in v2:
-- reword the FIXME comment as advised by Manivannan
+Please pull this in!
 
- drivers/power/sequencing/pwrseq-qcom-wcn.c | 7 +++++++
- 1 file changed, 7 insertions(+)
+Kind regards
+Ulf Hansson
 
-diff --git a/drivers/power/sequencing/pwrseq-qcom-wcn.c b/drivers/power/sequencing/pwrseq-qcom-wcn.c
-index cc03b5aaa8f2..e8f5030f2639 100644
---- a/drivers/power/sequencing/pwrseq-qcom-wcn.c
-+++ b/drivers/power/sequencing/pwrseq-qcom-wcn.c
-@@ -396,6 +396,13 @@ static int pwrseq_qcom_wcn_probe(struct platform_device *pdev)
- 		return dev_err_probe(dev, PTR_ERR(ctx->bt_gpio),
- 				     "Failed to get the Bluetooth enable GPIO\n");
- 
-+	/*
-+	 * FIXME: This should actually be GPIOD_OUT_LOW, but doing so would
-+	 * cause the WLAN power to be toggled, resulting in PCIe link down.
-+	 * Since the PCIe controller driver is not handling link down currently,
-+	 * the device becomes unusable. So we need to keep this workaround until
-+	 * the link down handling is implemented in the controller driver.
-+	 */
- 	ctx->wlan_gpio = devm_gpiod_get_optional(dev, "wlan-enable",
- 						 GPIOD_ASIS);
- 	if (IS_ERR(ctx->wlan_gpio))
--- 
-2.45.2
 
+The following changes since commit fac04efc5c793dccbd07e2d59af9f90b7fc0dca4:
+
+  Linux 6.13-rc2 (2024-12-08 14:03:39 -0800)
+
+are available in the Git repository at:
+
+  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.13-rc2
+
+for you to fetch changes up to f64f610ec6ab59dd0391b03842cea3a4cd8ee34f:
+
+  pmdomain: core: add dummy release function to genpd device (2024-12-19 15:47:02 +0100)
+
+----------------------------------------------------------------
+pmdomain core:
+ - Silence warning by adding a dummy release function
+
+pmdomain providers:
+ - imx: Fix an OF node reference leak in imx_gpcv2_probe()
+
+----------------------------------------------------------------
+Joe Hattori (1):
+      pmdomain: imx: gpcv2: fix an OF node reference leak in imx_gpcv2_probe()
+
+Lucas Stach (1):
+      pmdomain: core: add dummy release function to genpd device
+
+ drivers/pmdomain/core.c      | 6 ++++++
+ drivers/pmdomain/imx/gpcv2.c | 4 ++--
+ 2 files changed, 8 insertions(+), 2 deletions(-)
 
