@@ -1,178 +1,128 @@
-Return-Path: <linux-pm+bounces-19900-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19895-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D20C79FF8D2
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 12:32:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 724459FF88C
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 12:16:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BDBD03A2E07
-	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 11:32:36 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6A1323A2D51
+	for <lists+linux-pm@lfdr.de>; Thu,  2 Jan 2025 11:16:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72EBE1B0F01;
-	Thu,  2 Jan 2025 11:31:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 82D651AF0C7;
+	Thu,  2 Jan 2025 11:16:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GRNZOcdt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddPNGJMb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 286F41B0429;
-	Thu,  2 Jan 2025 11:31:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F1D31ADFE0;
+	Thu,  2 Jan 2025 11:16:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735817516; cv=none; b=qKs/QfNPQd1gjXsS01rM9SQnqG+ChVim7GdOhnDZrdpkraTxDpOPLek3pdJR7RwLP4r3FjnExxfak2Jkb0p6xoXpuTIgUHAM1eb1sqGH9JwjYaEfYDFaTbKJd1jR4vxO099VxGxHVrciwtFGspIcjujt6BdTU8uAlzqaS9cfQeY=
+	t=1735816564; cv=none; b=ZV+Bq3aR21W/nHatfjtyG/UGTW86avrEywKGF1Vd+7ne9XnKJWq/OtCyHPvWTHt733JUXj9ZMNYlqu8gy8EOA87el9MGbP0e7NmHIC25aPOLB3/QgiC2B4z9ErE2LGbeQKFZIhbbi7nxiXIPsSw9eTDVeO7hXy48LuZm9NwHHwI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735817516; c=relaxed/simple;
-	bh=Sy9qvv8oQoq/9h9qcBbWefVUptXmIhFXkPfMNNuFGtY=;
-	h=References:From:To:Cc:Subject:Date:In-reply-to:Message-ID:
-	 MIME-Version:Content-Type; b=UIlNykMIoVFEn4hiJVYPBJAz25aCIGv4d/LQUm80E7p3o9hvx50d11Ru11lbuBmP8AnlxrJ8MAo6KDwfBp0+XSZZvPjUJ/TLhHjigmBtFFsg4igkzUAWY9PDjouKRLYjJTTaIxGH06Ihh0yi/vf+0aEBfCP+AK01zRcBO3KdheQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GRNZOcdt; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43622267b2eso119171235e9.0;
-        Thu, 02 Jan 2025 03:31:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1735817512; x=1736422312; darn=vger.kernel.org;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:from:to:cc:subject:date:message-id:reply-to;
-        bh=6wcHiBkRkYS13bhGe02lr8rGk3XbGLMMM9eQ3HQy9pc=;
-        b=GRNZOcdthYgmDweW3FCjOcs1LRG4MQwbyo7astFLtv9qLjsAioHNYsPEekFFRRTcT+
-         NYFmcnJx+vBFCxhnYNwWyFhBaNF/6OjdCrue5K3wzmY3UtNofyKcugWO6rN0SsGkgc4y
-         5O8oIckw+JVrD3fxlCSkEz6gorKcyUR0NPseP4NDIQ8Mj8UVsySBBqJw0Q5h9Jvq+fwZ
-         SVODZLh2K1BTmwVBI1NW6heyMpYyhRcW30Snp77F99wzVbVDyNPBC5a6sM7EctU//Kb/
-         1vQfqqbK3xTQW5En7hAnu+7RaDusCh97Y8kZd+/jn68rO2f6sV/E0ktc3qX1PuylcQqg
-         pGKA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735817512; x=1736422312;
-        h=mime-version:message-id:in-reply-to:date:subject:cc:to:from
-         :references:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=6wcHiBkRkYS13bhGe02lr8rGk3XbGLMMM9eQ3HQy9pc=;
-        b=vsPvA5INGzafz/dzcA4o4u6Rgl2clb2fHQgdq+LKXuc0+pBW7rte2D0YPAGvncqyoe
-         F3Flrx2nLUutsxOHabgIg3yL/NGHX69HZ+X45Co5YGSGlSR2s5e8XQybvWbRMmXH6vQP
-         CsJdgKT/2KOt4cBwl8jtFVyCjMlGW0nP11QehN4UcwGH9qDoGg5rKxSYLH2ae9+03IrZ
-         w4ek/85scBXs5OPh/eRWi75ImNpzKjCy6/F6wCm5kslXAWaU/Fe0pGBnp+P5lwwD8Ae0
-         q7xIzNDJaLXtk24nrfsgpQpm0KpdY7hAK7+UUmesD0kKyYn1N3AzuSuFIOeozh4pObNl
-         Gymw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXkEnWbq3nynlWsQG2lU6ddZSvpiDNfXaXStxX3yWXA24NVjL/icvfwY69Tb++s6HTP/WLTSRtiEM=@vger.kernel.org, AJvYcCW6Yu5VJtVA8G34aWE31NAXa0YzS/4rFdR7nVVFm+WEZgs5Q2rqMvap/45HE0VKGg5fCk3BDc3GnDMr@vger.kernel.org, AJvYcCWaCumiu4eb82vqAiQeyyrLSY/gU0U0TRCqLZ/vnPIqPreqsAU3fbJif5yvRYF8bXnasPPNy662HsfyucrD@vger.kernel.org, AJvYcCXSwQgl3D0Z9chRmLGoH82K1ffUu3X1dk8oTbr6h7oe6AabLvbjhJYv8bSIRdBm5t7BkXKmHWmHGxjV@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx8uPrlvwnItlf6qW6nBL0EX7lhBMoN7j4jsIQMSRwNJzl5qUuO
-	dBqdfSkXKQS+e7EpjnEkAxT8S3fRbR7h2P5zgrKFNuR4x98rgFdh
-X-Gm-Gg: ASbGnctmfBL84h78mCLJdNraEWAIXYDYndLNNsYp1mu2tWrS+Og7Ty0LZU7gqXuvyL0
-	g3RHSzQgt+dJfcoe6rTOCNkyXxAgZ0mfoY02ec1zFWxNG0AyTinzVAD+UUD1V55LGRy1CXXHKOV
-	0zSKY86YDLMbAcRjtxJWG8a2GmWQ7IXKYUvPIdq7N4Idw9cJXzHJRnWzVTiBTzOiDLREzVui6A8
-	yMUnoLqtvfxBUZSTr5qLNc2QMk5oOVanAhk+T6LtmsbSGJ5e8r5MMQa6hdqu9ZR
-X-Google-Smtp-Source: AGHT+IHV4jPTiUqrXA+3RgaNsECQZU0VOfvJYgGlt1bAEMcUljMwbh7ep6IPt0Qu2f8zTyeQYe/uOQ==
-X-Received: by 2002:a05:6000:470a:b0:385:f092:df2 with SMTP id ffacd0b85a97d-38a221faae4mr33240914f8f.34.1735817512042;
-        Thu, 02 Jan 2025 03:31:52 -0800 (PST)
-Received: from localhost ([167.98.27.226])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c832e74sm37384777f8f.30.2025.01.02.03.31.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 02 Jan 2025 03:31:51 -0800 (PST)
-References: <20221016234335.904212-1-aidanmacdonald.0x0@gmail.com>
- <1535049f-1e4c-446b-8070-6f51877b2649@gmail.com>
- <20240608141832.7fdc9eb8@jic23-huawei>
-From: Aidan MacDonald <aidanmacdonald.0x0@gmail.com>
-To: Alex Bee <knaerzche@gmail.com>
-Cc: Jonathan Cameron <jic23@kernel.org>, robh+dt@kernel.org,
- krzysztof.kozlowski+dt@linaro.org, wens@csie.org, ee.jones@linaro.org,
- sre@kernel.org, lgirdwood@gmail.com, broonie@kernel.org, lars@metafoo.de,
- andy.shevchenko@gmail.com, linus.walleij@linaro.org, brgl@bgdev.pl,
- michael@walle.cc, samuel@sholland.org, linux-iio@vger.kernel.org,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v6 0/13] Add support for AXP192 PMIC
-Date: Thu, 02 Jan 2025 10:44:16 +0000
-In-reply-to: <20240608141832.7fdc9eb8@jic23-huawei>
-Message-ID: <cItZox1cacPR8zQiMUpDztLjYyVXenxO@localhost>
+	s=arc-20240116; t=1735816564; c=relaxed/simple;
+	bh=BCKCRIacyWKgqo6gAegHeTB5UJABaGjYit2k0RzaGXo=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=sFafalgP9mQ0mh6ve3PfPnDWN7nuYMXuU6aCegSeQwL40sWhzspmJa96J5TvaI7vazxfmI5x0R37WxRRKovYjQr0XBfkNXiAZkpmZ3X/JTQeMmP5oaLYl5DT2/zfjxaghHok4tsnIgGtef8c0p/zc5Npgn+vs4fBC6sDlRLKres=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ddPNGJMb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id A0C60C4CED0;
+	Thu,  2 Jan 2025 11:16:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1735816563;
+	bh=BCKCRIacyWKgqo6gAegHeTB5UJABaGjYit2k0RzaGXo=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=ddPNGJMbDtFFvIaY6NZJ3R0J/5lMcrqSA61LFimqiZoeZvHLjEuNRz+b3xYIEcsn0
+	 vagd3nvdPwSfrrtS3C7O9a9CDsISXUZrmF7Ntc2BtCCP7zPHIe9NXwCiLJRztYCqZi
+	 9X5DyTLuvq/1M2uxn+mmY5kixeKu5SF6NRs5Q3YSIol4MtAPRwNAwsuN4QVhfEm9QX
+	 GnZ3AOeJPsZK/qULq5M0knOIkcLZ5Qftg6dm35I3wLV/28lByXodTLl7NPc7R7M0JP
+	 qN+r9B+Jh6rYQDwvGSmHzWhK61IUvlHTblHO5XF4oFPoCRmJuzqa/8VTecMYTtjl1o
+	 /A/K3eeDjQrEA==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 965F5E77188;
+	Thu,  2 Jan 2025 11:16:03 +0000 (UTC)
+From: Thomas Antoine via B4 Relay <devnull+t.antoine.uclouvain.be@kernel.org>
+Subject: [PATCH v2 0/4] Google Pixel 6 (oriole): max77759 fuel gauge
+ enablement and driver support
+Date: Thu, 02 Jan 2025 12:15:02 +0100
+Message-Id: <20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIADZ1dmcC/4WNWwqDMBREtyL3uyl5ldR+dR9FJNEbvdAaSWqwi
+ Htv6gb6M3AG5swGCSNhglu1QcRMicJUQJ4q6EY7DcioLwySSy1KMKfZkAQX7cuuxphL3fqBaS5
+ RKmG1UwrKdI7oaT20j6bwSOkd4ud4yeLX/hFmwTirr7301jiPit+X7hmWbGk6O4Rm3/cvUWaGq
+ bsAAAA=
+X-Change-ID: 20241202-b4-gs101_max77759_fg-402e231a4b33
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, 
+ Peter Griffin <peter.griffin@linaro.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, 
+ =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-samsung-soc@vger.kernel.org, Thomas Antoine <t.antoine@uclouvain.be>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1735816515; l=1708;
+ i=t.antoine@uclouvain.be; s=20241202; h=from:subject:message-id;
+ bh=BCKCRIacyWKgqo6gAegHeTB5UJABaGjYit2k0RzaGXo=;
+ b=nNwiaZEpXaE/xmq13KUaZhCVGXxQKaEr/PxDVQPiVg9kT2kvTD0OYSbdMx2Gh/O1M5enu4LZj
+ vL6grHmE2QpAp6Z94gjM2/KM23we6cqO7iHL2goR6lHLpCb0jy0IE1L
+X-Developer-Key: i=t.antoine@uclouvain.be; a=ed25519;
+ pk=sw7UYl31W1LTpgWRiX4xIF5x6ok7YWZ6XZnHqy/d3dY=
+X-Endpoint-Received: by B4 Relay for t.antoine@uclouvain.be/20241202 with
+ auth_id=289
+X-Original-From: Thomas Antoine <t.antoine@uclouvain.be>
+Reply-To: t.antoine@uclouvain.be
+
+The Google Pixel 6 has a Maxim max77759 which provides a fuel gauge with
+an interface with a lot in common with the Maxim max1720x.
+
+Modify the Maxim max1720x driver to be compatible with the Maxim max77759 and
+enable it for the gs101-oriole board.
+
+Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
+---
+Changes in v2:
+- Add fallback for voltage measurement (André Draszik)
+- Add regmap for the max77759 (André Draszik)
+- Add chip identification for the max77759 (André Draszik, Peter Griffin)
+- Move RSense value to a devicetree property shunt-resistor-micro-ohms
+  (Dimitri Fedrau, André Draszik)
+- Use allOf:if to narrow binding per variant (Krzysztof Kozlowski)
+- Remove binding example (Krzysztof Kozlowski)
+- Change defconfig order to follow savedefconfig (Krzysztof Kozlowski)
+- Fix style errors
+- Link to v1: https://lore.kernel.org/r/20241202-b4-gs101_max77759_fg-v1-0-98d2fa7bfe30@uclouvain.be
+
+---
+Thomas Antoine (4):
+      power: supply: add support for max77759 fuel gauge
+      dt-bindings: power: supply: add max77759-fg flavor
+      arm64: defconfig: enable Maxim max1720x driver
+      arm64: dts: exynos: gs101-oriole: enable Maxim max77759 fuel gauge
+
+ .../bindings/power/supply/maxim,max17201.yaml      |  56 ++++--
+ arch/arm64/boot/dts/exynos/google/gs101-oriole.dts |  10 ++
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/power/supply/max1720x_battery.c            | 189 ++++++++++++++++++---
+ 4 files changed, 218 insertions(+), 38 deletions(-)
+---
+base-commit: 12e0a4072e8edc49c99418a4303bd7b96916de95
+change-id: 20241202-b4-gs101_max77759_fg-402e231a4b33
+
+Best regards,
+-- 
+Thomas Antoine <t.antoine@uclouvain.be>
 
 
-Hi Alex,
-
-Jonathan Cameron <jic23@kernel.org> writes:
-
-> On Fri, 7 Jun 2024 17:12:51 +0200
-> Alex Bee <knaerzche@gmail.com> wrote:
->
->> Hi Aidan,
->>
->> Am 17.10.22 um 01:43 schrieb Aidan MacDonald:
->> > This series adds support for the AXP192 PMIC to the AXP20x MFD driver
->> > framework, including support for regulators, ADCs, and AC/USB/battery
->> > power supplies.
->> >
->> > v6 is a resend of v5 from July -- the patches haven't changed at all
->> > but I've rebased them on the latest git master branch.
->> I'm not entirely sure if I've found the latest version of the patches - at
->> least b4 didn't find a newer. It looks a lot like only mfd and usb-power
->> patches have been applied for some reason. Are you planing to resend the
->> other ones?
-
-These patches were part of porting Linux to a music player I had, but I
-lost interest in the project and I'm not really paying attention to the
-mailing list anymore. As Jonathan already indicated, there were some
-cross-tree dependencies on mfd, and I think on regmap-irq as well.
-I didn't realize at first how much of a headache it was to deal with
-these things. :)
-
-Eventually I resubmitted the mfd patch separately and did the same for
-the USB power patch (after removing the mfd dependency) so both of those
-got merged. Didn't get around to doing the other patches unfortunately.
-
-Regards,
-Aidan
-
->
-> This was delayed originally by a dependency on a header in mfd and that is
-> obviously resolved now.  I think everyone was expecting a resend
-> of the series or for Lee to pick up the dependent ones and so we all
-> stopped tracking it.
->
-> Anyhow, I had the two IIO cleanups already, but I've now picked up
-> the 3rd patch (where the dependency was) as well.
->
-> Thanks,
->
-> Jonathan
->
->>
->> Regards,
->> Alex
->>
->> > Aidan MacDonald (13):
->> >    dt-bindings: mfd: add bindings for AXP192 MFD device
->> >    dt-bindings: iio: adc: axp209: Add AXP192 compatible
->> >    dt-bindings: power: supply: axp20x: Add AXP192 compatible
->> >    dt-bindings: power: axp20x-battery: Add AXP192 compatible
->> >    mfd: axp20x: Add support for AXP192
->> >    regulator: axp20x: Add support for AXP192
->> >    iio: adc: axp20x_adc: Minor code cleanups
->> >    iio: adc: axp20x_adc: Replace adc_en2 flag with adc_en2_mask field
->> >    iio: adc: axp20x_adc: Add support for AXP192
->> >    power: supply: axp20x_usb_power: Add support for AXP192
->> >    power: axp20x_battery: Add constant charge current table
->> >    power: axp20x_battery: Support battery status without fuel gauge
->> >    power: axp20x_battery: Add support for AXP192
->> >
->> >   .../bindings/iio/adc/x-powers,axp209-adc.yaml |  18 +
->> >   .../bindings/mfd/x-powers,axp152.yaml         |   1 +
->> >   .../x-powers,axp20x-battery-power-supply.yaml |   1 +
->> >   .../x-powers,axp20x-usb-power-supply.yaml     |   1 +
->> >   drivers/iio/adc/axp20x_adc.c                  | 356 ++++++++++++++++--
->> >   drivers/mfd/axp20x-i2c.c                      |   2 +
->> >   drivers/mfd/axp20x.c                          | 141 +++++++
->> >   drivers/power/supply/axp20x_battery.c         | 142 ++++++-
->> >   drivers/power/supply/axp20x_usb_power.c       |  84 ++++-
->> >   drivers/regulator/axp20x-regulator.c          | 100 ++++-
->> >   include/linux/mfd/axp20x.h                    |  84 +++++
->> >   11 files changed, 856 insertions(+), 74 deletions(-)
->> >
 
