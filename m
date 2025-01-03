@@ -1,87 +1,63 @@
-Return-Path: <linux-pm+bounces-19941-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19942-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 712EEA0096B
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2025 13:42:48 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1CFA1A00A45
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2025 15:07:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C4943A3E6F
-	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2025 12:42:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EB0C33A0F82
+	for <lists+linux-pm@lfdr.de>; Fri,  3 Jan 2025 14:07:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 425A81FA15C;
-	Fri,  3 Jan 2025 12:42:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69BC41F9F75;
+	Fri,  3 Jan 2025 14:07:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nnRMaVB8"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="KlaLbkR3"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7C621CA8D
-	for <linux-pm@vger.kernel.org>; Fri,  3 Jan 2025 12:42:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 715581F9428;
+	Fri,  3 Jan 2025 14:07:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1735908163; cv=none; b=AcNWIpJB1+DEM/rp6A3brtD5Z14eeBs4xXb/NtUcHtJ5Y236XYiSovgo96T2A71G6NCxD4pZvgpkiymADFGhmOG0dmFGgrdE99iuZ3xbg27M9slWaMpAmOmrtisN2d7WE8cX8HqFl8wza+lM6eiesldLIEBn2U9iQ+hqic5cGro=
+	t=1735913264; cv=none; b=pLKUgwwcN7mzKbhickmvPKIaZeu8So4sIaApmiZNGZ3vEsn+MUM3UiAp68Rp8GyitaZF+/QHc+hT8aBTw0oRsrIgek8qls6IevSEFUW4gyhdXOunbqpJlr++XEnM2v3Q6LAzwYqZ6A+4xn/c8/OnhIdQUPESYkEBctDZjY9r3Bo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1735908163; c=relaxed/simple;
-	bh=6z2Cj9z11DNrLUU7p25gMTU2IDw5wEC3O9INArUUsuU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=RdKuK0t0hYP8Lr+h0ZCfyWIIOjpj4YkeBOeVQ+MPbLVsGQaNjJRyCeVGuNFftlE33kV7vsd9YJJ7yP0ynB71YqjcgbBEph1WenINq5guXiX+6FTyG2w0Zs5EMOTFTLLnq0G4INy9ukT+NysnmaIiPGS+ilKeSt34Y4t/hpr0z30=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nnRMaVB8; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 503CAWs3010377
-	for <linux-pm@vger.kernel.org>; Fri, 3 Jan 2025 12:42:40 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	s=arc-20240116; t=1735913264; c=relaxed/simple;
+	bh=TtSY5XtET3VlePieWkjgXvHJDZQtKE6czFZuQo1BULA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Lcl6OwTEsn0d9zuX+NrUmYUoUGSmJqcDMcU1trfFVoKi7VnSbsPznT9mXpzG5rxMCZmI0XcXdnIr3aNrGpgcYZwcxyTKtyninHCrcSVWnWuZ5i5UiqRzsEc6zWn6PWJYFDW+/QtcXUwRnJDLz7IqsJ8aHmTyz1BSv7BFWyg002k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=KlaLbkR3; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5038Kirw010162;
+	Fri, 3 Jan 2025 14:07:37 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	TZARMRNqfJJBSi0ZuqSgSannpryoCZUFZtAwwKozzXI=; b=nnRMaVB8anTGzIqz
-	Z/SV7YYBtvPCSwx+azpasLMav06W23ogMLE8zV0C4njs/pYmJ48Ker3/HAmLb/JG
-	q5u5uOfXelWitjaizImhNyKYHrSGBkP2yf/5M/B4VCAGsv80cJTZXeqdyULd2wZK
-	vzfR4OHtp6JkfgRU03rsKxHwZQEINku3b/ZTo2PFxOg2a3SbrZlIdT/3g+k8s81u
-	owpnsWZDssYTJkB0Jm8oRLvxa7pofQHY9p4DcdWNhEud219evO6s67WppPX5D8kC
-	X5+uox+vguhsiTdYQeT/f8MCMnIQSR3rTfMYLua1ovIaWQeLf0veDi5OXhieXpQv
-	YGrRqA==
-Received: from mail-qt1-f198.google.com (mail-qt1-f198.google.com [209.85.160.198])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43xfnfr1u5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Fri, 03 Jan 2025 12:42:40 +0000 (GMT)
-Received: by mail-qt1-f198.google.com with SMTP id d75a77b69052e-46a32c5cdbdso8046861cf.1
-        for <linux-pm@vger.kernel.org>; Fri, 03 Jan 2025 04:42:40 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1735908160; x=1736512960;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TZARMRNqfJJBSi0ZuqSgSannpryoCZUFZtAwwKozzXI=;
-        b=gq3MxbnysDMkKKDHTLqt1Lrbfh7fT/2uMp31Mwz5kxnsxK3J3+ZH1/aix+gqged56y
-         CSh6JZnaP/VxqZyGakybPuRsUcKC/xxxbROkNv5/2KYu8/sIQ/nIxX6rSn4vmEONLsI4
-         avWcQzwUCOBJ+uJqZ7qfTQgNrRVBTl5hntTtcInODvFg+KVGBmnkV2i77WHOx9PM5Syv
-         vLU6KyvaRNVFf+o235V03PZi05jKBJk/yLJtwp7Ve+U0rRl8EaGntQD7lvTDdDu/PSbV
-         myUOBxxVAwGHNvwlG9EXxMNQrraSiUIY4HD05Pg+xmWM3dtw3CYVeymr7ALF9KHlbtRq
-         u19g==
-X-Forwarded-Encrypted: i=1; AJvYcCXgqsB4YWCMoOzhdYR9rmxomODGFaX5aGKlL8reFIteZUmn1IDj9xvv5k1jJkXj3d8rmNPwgm6WeA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwiDt0kURlENvl7RfUObVhHqDwUtT66+Buq7NPvUSVzYvQ/Mkt2
-	ELK5TaZhz1EouhzdatGD5qe2MItOxP1c2S8BuLP0H46MB6mAo5Pc+A2xnuQjJDGJTWG8xwowrlk
-	8cjSsMIy610ZXbEtclztu3+EuG3jQx7/6f3XNBEr/Fs0qURmodDINUSbZRQ==
-X-Gm-Gg: ASbGnct/BtK4pQFSkVz2hI+I5EFbtYOFtnF203D2yqnMgQ0+KoaqlD8qWuzTo8zYUaA
-	qoXvV4nz9YwfukbsAoqrKPn5lmcOkCze2ZtcXqAbNvCNxLxTVcSJo9D86FU7I+8grBhFAoD3/PX
-	JIqNxhbhzX6g5P3sAK5/WYvw5ENQILu1dBvTmovIIkMWXYZuELeh1B4NcrxHtuQzJziemkCgODv
-	F42GZC39wZyNDroWNEYZpmk/il3/a2DjPOBm6L0INkMtr8Z1TpBdyJeqgwjUocsQqr/PReUnt0d
-	yn+X60yco9rkFCp9D1PGQMWc7YcuMs2XC0w=
-X-Received: by 2002:a05:622a:1183:b0:460:900d:6052 with SMTP id d75a77b69052e-46a4a9a34c7mr310086151cf.14.1735908159808;
-        Fri, 03 Jan 2025 04:42:39 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEcALt0LJyqknH0pa/OzeBKOkJJU1g2a9f/TCjCM+WwWX2eXlLse+id4suQvcMJE43uhj1+Eg==
-X-Received: by 2002:a05:622a:1183:b0:460:900d:6052 with SMTP id d75a77b69052e-46a4a9a34c7mr310085941cf.14.1735908159459;
-        Fri, 03 Jan 2025 04:42:39 -0800 (PST)
-Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d806fedaf9sm20087153a12.56.2025.01.03.04.42.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 03 Jan 2025 04:42:38 -0800 (PST)
-Message-ID: <78979ab6-0ce6-47c4-abe2-d4d2d9d50480@oss.qualcomm.com>
-Date: Fri, 3 Jan 2025 13:42:34 +0100
+	R6NTduAePc8ZwaKvcu36TnjGrnGXU936fDZ6o+O8DIo=; b=KlaLbkR3d7V4Ef1H
+	oRic7Nf8Scdxt1Oji8wLk3rGs7k+ogGq/IQfA3nMjfyD6bqgFIKFf4zQ77N3/hig
+	BV/L3LppT6D6v+X9U/YBEU6SThuD3KfGG6Nsu2OOSLvIDVgoDYdC6PXlpIr/H3Md
+	hMeuCcc2BH/RrlZpxzQtCaQkQs/pCWQa0QpjrTHL+enOPPHzLgvMemYLvz8T76U9
+	L+nIrWvx4at2faBz1L28rSPg3fnDFKfRRqh1/1wZ6ypuAoKoZ+JP0SYmCNketwAA
+	kcsOx5JlCL1r4tqiPHRLHelIfWb0Pfc0JL2quWHaKtc+u5f3Y5gYig5zGEEX1gxl
+	PXIBOw==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 43xca50pum-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 03 Jan 2025 14:07:36 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 503E7Zh3021814
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 3 Jan 2025 14:07:35 GMT
+Received: from [10.216.36.23] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 3 Jan 2025
+ 06:07:30 -0800
+Message-ID: <193702a3-cdad-42d9-8434-b29c2cca0896@quicinc.com>
+Date: Fri, 3 Jan 2025 19:37:07 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -89,51 +65,161 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 6/6] arm64: dts: qcom: x1e80100: Add OPPs up to Turbo
- L3 for GPU
-To: Akhil P Oommen <quic_akhilpo@quicinc.com>,
-        Rob Clark
- <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+Subject: Re: [PATCH V6 1/4] interconnect: qcom: Add multidev EPSS L3 support
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Georgi Djakov
+	<djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski
+	<krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
         Konrad Dybcio <konradybcio@kernel.org>,
-        Abhinav Kumar <quic_abhinavk@quicinc.com>,
-        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-        Marijn Suijten <marijn.suijten@somainline.org>,
-        David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
-        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
- <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
-        freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
-        linux-pm@vger.kernel.org, devicetree@vger.kernel.org
-References: <20241231-gpu-acd-v3-0-3ba73660e9ca@quicinc.com>
- <20241231-gpu-acd-v3-6-3ba73660e9ca@quicinc.com>
+        Odelu Kukatla
+	<quic_okukatla@quicinc.com>,
+        Mike Tipton <quic_mdtipton@quicinc.com>,
+        "Sibi
+ Sankar" <quic_sibis@quicinc.com>,
+        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+References: <20241125174511.45-1-quic_rlaggysh@quicinc.com>
+ <20241125174511.45-2-quic_rlaggysh@quicinc.com>
+ <2b95cc25-a842-4edd-a5f3-2351038d264e@oss.qualcomm.com>
+ <5egskepgsr52ulnbw7jhvazfjayg5ge5vhg6pi7mllyxx2vwqw@a2ojvabzd36o>
+ <0881289f-db05-4e33-91a7-ffd415c2f37e@oss.qualcomm.com>
+ <b2zicviv7nyl3izj2fzwzm2cp5phlxufaaoyi7e3g3iyxcyw56@iufgz33tsk33>
+ <dafa6ce0-47f6-4e6a-882b-278c3b51e768@quicinc.com>
+ <bbn3cbrxcagifpcjrzh5k7o5xvf6ajnf5y6zqnghex6sqwdt4t@mb3v6yfgehtv>
 Content-Language: en-US
-From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-In-Reply-To: <20241231-gpu-acd-v3-6-3ba73660e9ca@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
+From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+In-Reply-To: <bbn3cbrxcagifpcjrzh5k7o5xvf6ajnf5y6zqnghex6sqwdt4t@mb3v6yfgehtv>
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: xmVZB2q428JRfMg0WtEa4D30AjkScKiR
-X-Proofpoint-ORIG-GUID: xmVZB2q428JRfMg0WtEa4D30AjkScKiR
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: oPqdJ8YugvhkcPMEFE0654fOCtnwnZIt
+X-Proofpoint-GUID: oPqdJ8YugvhkcPMEFE0654fOCtnwnZIt
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
  definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=809 spamscore=0
- impostorscore=0 priorityscore=1501 bulkscore=0 phishscore=0 mlxscore=0
- clxscore=1015 malwarescore=0 suspectscore=0 adultscore=0
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501030112
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0
+ priorityscore=1501 mlxscore=0 malwarescore=0 suspectscore=0
+ mlxlogscore=999 spamscore=0 impostorscore=0 lowpriorityscore=0
+ clxscore=1015 adultscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2411120000 definitions=main-2501030125
 
-On 30.12.2024 10:11 PM, Akhil P Oommen wrote:
-> Now that we have ACD support for GPU, add additional OPPs up to
-> Turbo L3 which are supported across all existing SKUs.
+
+
+On 12/29/2024 6:53 AM, Dmitry Baryshkov wrote:
+> On Thu, Dec 26, 2024 at 09:43:20PM +0530, Raviteja Laggyshetty wrote:
+>>
+>>
+>> On 11/30/2024 9:02 PM, Dmitry Baryshkov wrote:
+>>> On Sat, Nov 30, 2024 at 04:12:49PM +0100, Konrad Dybcio wrote:
+>>>> On 30.11.2024 4:09 PM, Dmitry Baryshkov wrote:
+>>>>> On Sat, Nov 30, 2024 at 01:49:56PM +0100, Konrad Dybcio wrote:
+>>>>>> On 25.11.2024 6:45 PM, Raviteja Laggyshetty wrote:
+>>>>>>> EPSS on SA8775P has two instances which requires creation of two device
+>>>>>>> nodes with different compatible and device data because of unique
+>>>>>>> icc node id and name limitation in interconnect framework.
+>>>>>>> Add multidevice support to osm-l3 code to get unique node id from IDA
+>>>>>>> and node name is made unique by appending node address.
+>>>>>>>
+>>>>>>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+>>>>>>> ---
+>>>>>>
+>>>>>> [...]
+>>>>>>
+>>>>>>> +	ret = of_property_read_reg(pdev->dev.of_node, 0, &addr, NULL);
+>>>>>>> +	if (ret)
+>>>>>>> +		return ret;
+>>>>>>> +
+>>>>>>>  	qp->base = devm_platform_ioremap_resource(pdev, 0);
+>>>>>>>  	if (IS_ERR(qp->base))
+>>>>>>>  		return PTR_ERR(qp->base);
+>>>>>>> @@ -242,8 +262,13 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>>>>>>>  
+>>>>>>>  	icc_provider_init(provider);
+>>>>>>>  
+>>>>>>> +	/* Allocate unique id for qnodes */
+>>>>>>> +	for (i = 0; i < num_nodes; i++)
+>>>>>>> +		qnodes[i]->id = ida_alloc_min(&osm_l3_id, OSM_L3_NODE_ID_START, GFP_KERNEL);
+>>>>>>
+>>>>>> As I've said in my previous emails, this is a framework-level problem.
+>>>>>>
+>>>>>> Up until now we've simply silently ignored the possibility of an
+>>>>>> interconnect provider having more than one instance, as conveniently
+>>>>>> most previous SoCs had a bunch of distinct bus masters.
+>>>>>>
+>>>>>> Currently, debugfs-client.c relies on the node names being unique.
+>>>>>> Keeping them as such is also useful for having a sane sysfs/debugfs
+>>>>>> interface. But it's not always feasible, and a hierarchical approach
+>>>>>> (like in pmdomain) may be a better fit.
+>>>>>>
+>>>>>> Then, node->id is used for creating links, and we unfortunately cannot
+>>>>>> assume that both src and dst are within the same provider.
+>>>>>> I'm not a fan of these IDs being hardcoded, but there are some drivers
+>>>>>> that rely on that, which itself is also a bit unfortunate..
+>>>>>>
+>>>>>>
+>>>>>> If Mike (who introduced debugfs-client and is probably the main user)
+>>>>>> doesn't object to a small ABI break (which is "fine" with a debugfs
+>>>>>> driver that requires editing the source code to be compiled), we could
+>>>>>> add a property within icc_provider like `bool dynamic_ids` and have an
+>>>>>> ICC-global IDA that would take care of any conflicts.
+>>>>>
+>>>>> Frankly speaking, I think this just delays the inevitable. We have been
+>>>>> there with GPIOs and with some other suppliers. In my opinion the ICC
+>>>>> subsystem needs to be refactored in order to support linking based on
+>>>>> the supplier (fwnode?) + offset_id, but that's a huuuge rework.
+>>>>
+>>>> I thought about this too, but ended up not including it in the email..
+>>>>
+>>>> I think this will be more difficult with ICC, as tons of circular
+>>>> dependencies are inevitable by design and we'd essentially have to
+>>>> either provide placeholder nodes (like it's the case today) or probe
+>>>> only parts of a device, recursively, to make sure all links can be
+>>>> created
+>>>
+>>> Or just allow probing, but then fail path creation. It will be a
+>>> redesign, but I think it is inevitable in the end.
+>>>
+>>
+>> There are no two instances of l3 or NoC on any SoC except qcs9100 and
+>> qcs8300. I dont expect any new SoC as well.
+>> As second instance is needed only on qcs9100 and qcs8300, I am keeping
+>> the patch (patchset v6) as is and limit the dynamic id addition to l3
+>> provider only.
 > 
-> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
-> ---
+> As you could have noticed, it was suggested to change ICC subsystem API
+> to allow the dynamic IDs. This isssue is not limited to just EPSS L3
+> driver. So we were discussing if you or your colleagues could sign up
+> for updating the interconnect subsystem to use node+arguments approach
+> instead of using a global static ID list.
+> 
+This problem is limited to EPSS L3 only, NoCs are not having
+multi instances and don't expect this problem to arise in new
+chipsets. we have multi instances of L3 only on qcs9100 and
+qcs8300. we can limit the dynamic ID creation for L3 provider.
+If we update the interconnect framework also, we will have to
+limit it to provider only.
 
-Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+Thanks,
+Raviteja
+>>
+>>>>
+>>>> Konrad
+>>>>
+>>>>>> Provider drivers whose consumers don't already rely on programmatical
+>>>>>> use of hardcoded IDs *and* don't have cross-provider links could then
+>>>>>> enable that flag and have the node IDs and names set like you did in
+>>>>>> this patch. This also sounds very useful for icc-clk.
+>>>>>
+>>>
+>>
+> 
 
-Konrad
 
