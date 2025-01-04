@@ -1,74 +1,77 @@
-Return-Path: <linux-pm+bounces-19957-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19958-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 453EEA01637
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Jan 2025 19:13:43 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3A1BEA01639
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Jan 2025 19:13:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F22D53A3DBE
-	for <lists+linux-pm@lfdr.de>; Sat,  4 Jan 2025 18:13:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 64CAC18814BB
+	for <lists+linux-pm@lfdr.de>; Sat,  4 Jan 2025 18:13:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B0B01D47AE;
-	Sat,  4 Jan 2025 18:13:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA3441D5146;
+	Sat,  4 Jan 2025 18:13:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eHuCsZLp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NezRFzr5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
+Received: from mail-wr1-f45.google.com (mail-wr1-f45.google.com [209.85.221.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 485FE1CEEBB;
-	Sat,  4 Jan 2025 18:13:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A1C45016;
+	Sat,  4 Jan 2025 18:13:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736014419; cv=none; b=c75niljRq2iMbK2IoNWLaznHkXpjuL3vc7qTUq771p1fIjb+U2MkChi9SUz+x729hE7uYPaGi/jysXyWskyy0ewNgRp0rGhwJUKw0LfRz0cZyu2p+Nx6TyFZ4z3qe2FllOW8t+lzeXLL3TYWv1wlBfGA2gO4rxikQF/KwH9BeUw=
+	t=1736014420; cv=none; b=li53R6oHc6lNPxK5kOEOhS/9T2yxco0pPN9XkxwxIIvNmdn4Sz6GKM8RjxBexcPakuWunO+5pqbQ1pqzVat9Sxd8yUMGfJtpmMfKYxJaEZAxbg7kS/YvvFRs+PIpaM+I0DKv88TGYk+A+bCkoENf9kxbxFXEG1TyktBkxO8ANPs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736014419; c=relaxed/simple;
-	bh=86STLew9OYjgvQAEMohndkUfIZugWpR00NROPl9Bg1U=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version; b=Q28zi3KIhoJG+6YLfH+bUd85/mJAIzUPFJsU7+OEpseRko8zYNOHsB5XhsQk6HegJeLwj0QLDMouqBFvP441kjEGiWFMLprWWmhBugpZSCERkO0v0E+2nOqnbbc9mUY4Qvf6kepIWZipj6vDpIQtActSJHQ2P6AkgynPrDIFmlQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eHuCsZLp; arc=none smtp.client-ip=209.85.128.50
+	s=arc-20240116; t=1736014420; c=relaxed/simple;
+	bh=oMYbdEiZMWkxRbV6nTzaK70f1aiutmitMOAjfsUBO0s=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=mT5F96qlOcCuw6k7M1FXJIxD6+Wf2NuGmbaMEr6EsAfYJVSwAZUrQwUmoYSxjy1CkUyrniqJzwINIMIhqymPYJe+/HQBHQ7/N0PCqpLJogVXLMa4YCMPKbLANrIVZGiWruT/ZXRdQpQRMapQk/K/YjDgXvi4nH+qHqMVt9lUKlM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NezRFzr5; arc=none smtp.client-ip=209.85.221.45
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-4361815b96cso87139545e9.1;
-        Sat, 04 Jan 2025 10:13:37 -0800 (PST)
+Received: by mail-wr1-f45.google.com with SMTP id ffacd0b85a97d-3862ca8e0bbso10064231f8f.0;
+        Sat, 04 Jan 2025 10:13:38 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736014415; x=1736619215; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=IC3C3Jj0ECPtMGXUDy4JdjvWVRz6QWTlZAY+EqQiUks=;
-        b=eHuCsZLpe0HjM3OGMjeYXLR8tpU77nBZ7efo9ZHFX9jSlWP+bZBwmirH/qvNJDqb3Z
-         u3X47JZPclhn7fS5lpSgspNOuM6PiLZpa8z5bUwwky84Jbevx6svk8wNnCLTLOEfFgRJ
-         VByIrnBgDUEmTxQz6Ib9He4zhaIUS5CmYW5P+PcrFfxRgaiyMk2tgLqBPd0GNSkGkTGu
-         KWikc9jjP4uKTfxzDiSuGWdwnCJgkpuOtHd+bNAyoGbzIAF8Y3jVFMfnmU4El/YYnuDp
-         +FyMUBCKH4vV9pTc9Hjy3udwaLmdsscxr5uH7Ap64seTFZw7W0l4BXe74HH3eEDFH7lv
-         cCQw==
+        d=gmail.com; s=20230601; t=1736014417; x=1736619217; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xV+8RO/Ef30DT4vDUqGvKPdTER63OAV9teSiIpFh5bo=;
+        b=NezRFzr5ht2GKHUWk+oFh21+ZsZuzDPTcWx9+seg7Qc/HcGVybtZcZNuzQf0qxyC4X
+         odbIEGOE+hsqtrUYfiK8nTCL5hTcf71KpE0K0onN7syvyyeYi5yi/NCph9cncr5pUzOM
+         3Op6J78hsOgKAQZtiP6q74Q+e5FTtmmAJQL/97J8YhQqsk2v8f342YPTRtDdZVMlr+Lc
+         71sHPNcgqfHu0KZs2H1HLdVdtH86WCKu7Pxdw8OM/wYMSsNE1Tt5gdjJmEa/Puoho+Un
+         2zRzhKKT9dMuc+zqPO7y2d/Ny5Fy6SGgBinrfTvYTnJqud/hGpwUQ8dYBqsKe3nLMGhp
+         Mgmw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736014415; x=1736619215;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IC3C3Jj0ECPtMGXUDy4JdjvWVRz6QWTlZAY+EqQiUks=;
-        b=LhnUgAU49ulsotO/ZpIeg21JsL1sh4anOTj7vr/+iS7dCvFUMfXJvEgCbt/HHy3p2D
-         hD4GKC3j9eDsjum1cS004bT4ORJyXUimpzS4z7BA/PyjFBPQu4LoSzU4d4hzrjbVKPod
-         kjEhyk8UGcuBrju5OI9PSdfcD/bjFamqLkK86zkKT/xEDDugVM9/Mtc31/xKqmSUythg
-         1DdPodlVbphrfjJg4S8d6RGs7RccRVdKOePy8wOwCafJs+S1e0DzV7xrYV5tOwXOMv0J
-         MEDBB92+pWCJ/3G66+Z2nbq36/z5AnV7T/b9367NF3svePXJ1NytKYhidAtqDe2b2sMC
-         QEWQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVVRRlRyh6/injmqJhYIXo1mx2NqnkkKTkygfbSbvCviZhkd6QrfNyk9iTJOyapg3ZLRkBgKF6lF4A=@vger.kernel.org, AJvYcCX8ftYvVuuRAcIjKTRpbNN1v49Jp4I71ovLhmPBjWUqCUqkS8APlXcU163sE/iQ/ihk5js7tBjfdj9OjF0=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzpbglmwZKW0euvFtr8TAXVlSvrw0DQjDrKdcloOPSvy/Kj7J9g
-	lZbDsAbqLHiHrei1hFxWLEtdUyWSEJReYjvlayq779WXCSeX+0Iv
-X-Gm-Gg: ASbGncsNY8GWLeGbjlYFUT/dRr+iVIu2lquunFe/T/NVoleQT3i9HDA3aBJ2BqHyBLN
-	9mmoV8L1hBsXyQu9xSYQP+6S1snfOUksMECLm87enmesCJ4mUWe+3sPKbODiYdTvar+4RfSJu5c
-	vwoRCPhsQY6WLyK/Nan2m2aSsfzw2vddancUa/lyONChFNbm1mNZB3loUDCPLCMRdLPmfJBmFIs
-	H5I/Ko6bRmo1cdSnFAwTy/4QzQCKzEMl9HIkDAmh0V2+2fD8eYXxC0hg1I2MuLrh5zmVyMudwr3
-	SdkT4XDPKwqAcFqggXu8AiEn+Gc+juZzZ5JfUukEXg==
-X-Google-Smtp-Source: AGHT+IEVj8J7H0x2CN9xCT2uuvbsbjXurGVCUw1JaW7uQYexZR/wM6uGfcvvWBNsskg0jDWDee4VCQ==
-X-Received: by 2002:a05:6000:1785:b0:386:930:fad4 with SMTP id ffacd0b85a97d-38a221fab43mr45454220f8f.19.1736014415317;
-        Sat, 04 Jan 2025 10:13:35 -0800 (PST)
+        d=1e100.net; s=20230601; t=1736014417; x=1736619217;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=xV+8RO/Ef30DT4vDUqGvKPdTER63OAV9teSiIpFh5bo=;
+        b=KdGAxY88WN0UZLkMw6KptgErFwp3wONGZpEc4DYqoaukD3b+I3IXfyG1JhZhysrK1Z
+         FU9VzwBEEfYuwkvl6KsgPEEHdTiPMV4dmhZTQGIhqog2z6RWxOYI9bGt2Xn6xm9AvvJT
+         IHExRfB0EdhwbGT2PPAZY9wB/nxI7ddTGAC+VIPJBI/56p7bhh6PwTgHUIu7X5cuJWFj
+         a44ikOpGgu831H6PoLuBUfAarshVspheW1cvBcw0F3/4Sagtbfv2k/xo1EiilF0Nrnmm
+         bZvfF3g6iXHjfTXyp/AsnFo5U8C0ny8DJS1BwE9vChpQ3Xo1Gz7LrvudFOL+Bm6EdjhF
+         xEBw==
+X-Forwarded-Encrypted: i=1; AJvYcCV8eUMZ1rxmv24eszmpZeMHdlW4xxVRVkRw6rbqmE/IZ6j45UAejuy6BEhd8qCRlZ/7umIvB1FMa1w=@vger.kernel.org, AJvYcCXC9+dGevdZLAXLuE1n48yujCL6VJ3LZHxIaLNL90cENRNMqVucCKMt2bQmWqOWSaNxeW/eBfhkHrQCo7g=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHm0inbddnO7OMZ92maG0tChFUnPV7vz2mMnTsLK1icv4pvGp/
+	6QxoQIixF9umpdAXLtLMtQfa3VhdBTuCJage78oY+wlsIeS9P6jo
+X-Gm-Gg: ASbGncu0EeATJTdjjmfs0PJ3LZArQDoPAznxV0NYL2mI7uZsVEbB3nLI8RGbKPkitJN
+	2IWqd1W8br9OAiyDnjf+7QJwjrSC8IQ52HmaMJqH5wiglKSfM4ZMosoHL4KWQ+CRTHu4z/ZrLw0
+	PdoUw3cdLjD0aTouAKE/P7mCfdqjdi1usGzl10KQQSgUCM7sdjE0ej8hug3ackydDrW4C2oELie
+	B5e/7H/K/nhoQdVAP83UgTkyjSxT5Z4HjIOc+0NnaEaqXYP36DTOmTI7e4mF/ZT1+oYM+VjfbRi
+	EZ6vUM/m1pCiX/snJ7TYA3KFpXjqQ2C3sG5/nSRw7g==
+X-Google-Smtp-Source: AGHT+IHZ9RHFwy4NU/YhiX1jRd9CAQ4xsTogB3A40Eq9ggchtQQG0Ko4CuvvRbK9Fw1CF7r+Ai9xqA==
+X-Received: by 2002:a05:6000:70a:b0:382:4ab4:b3e5 with SMTP id ffacd0b85a97d-38a2213e228mr47250390f8f.0.1736014416944;
+        Sat, 04 Jan 2025 10:13:36 -0800 (PST)
 Received: from localhost.localdomain (host-95-246-253-26.retail.telecomitalia.it. [95.246.253.26])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4366128a3c9sm520167595e9.40.2025.01.04.10.13.33
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4366128a3c9sm520167595e9.40.2025.01.04.10.13.35
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 04 Jan 2025 10:13:34 -0800 (PST)
+        Sat, 04 Jan 2025 10:13:36 -0800 (PST)
 From: Christian Marangi <ansuelsmth@gmail.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
@@ -81,10 +84,12 @@ To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org,
 	upstream@airoha.com
-Subject: [PATCH v8 1/2] pmdomain: airoha: Add Airoha CPU PM Domain support
-Date: Sat,  4 Jan 2025 19:12:37 +0100
-Message-ID: <20250104181305.28185-1-ansuelsmth@gmail.com>
+Subject: [PATCH v8 2/2] cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
+Date: Sat,  4 Jan 2025 19:12:38 +0100
+Message-ID: <20250104181305.28185-2-ansuelsmth@gmail.com>
 X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20250104181305.28185-1-ansuelsmth@gmail.com>
+References: <20250104181305.28185-1-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -93,205 +98,263 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add Airoha CPU PM Domain support to control frequency and power of CPU
-present on Airoha EN7581 SoC.
+Add simple CPU Freq driver for Airoha EN7581 SoC that control CPU
+frequency scaling with SMC APIs and register a generic "cpufreq-dt"
+device.
 
-Frequency and power can be controlled with the use of the SMC command by
-passing the performance state. The driver also expose a read-only clock
-that expose the current CPU frequency with SMC command.
+All CPU share the same frequency and can't be controlled independently.
+CPU frequency is controlled by the attached PM domain.
+
+Add SoC compatible to cpufreq-dt-plat block list as a dedicated cpufreq
+driver is needed with OPP v2 nodes declared in DTS.
 
 Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 ---
 Changes v8:
-- Add this patch
-- Use SMC invoke instead of 1.2
+- Split in dedicated PM domain driver
+Changes v7:
+- No changes
+Changes v6:
+- Improve Kconfig depends logic
+- Select PM (PM_GENERIC_DOMAINS depends on it)
+- Drop (int) cast for 
+Changes v5:
+- Rename cpu_pd to perf for power domain name
+- Use remove instead of remove_new
+Changes v4:
+- Rework to clk-only + PM set_performance_state implementation
+Changes v3:
+- Adapt to new cpufreq-dt APIs
+- Register cpufreq-dt instead of custom freq driver
+Changes v2:
+- Fix kernel bot error with missing slab.h and bitfield.h header
+- Limit COMPILE_TEST to ARM64 due to smcc 1.2
 
- drivers/pmdomain/mediatek/Kconfig             |  11 ++
- drivers/pmdomain/mediatek/Makefile            |   1 +
- .../pmdomain/mediatek/airoha-cpu-pmdomain.c   | 145 ++++++++++++++++++
- 3 files changed, 157 insertions(+)
- create mode 100644 drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c
+ drivers/cpufreq/Kconfig.arm          |  10 ++
+ drivers/cpufreq/Makefile             |   1 +
+ drivers/cpufreq/airoha-cpufreq.c     | 166 +++++++++++++++++++++++++++
+ drivers/cpufreq/cpufreq-dt-platdev.c |   2 +
+ 4 files changed, 179 insertions(+)
+ create mode 100644 drivers/cpufreq/airoha-cpufreq.c
 
-diff --git a/drivers/pmdomain/mediatek/Kconfig b/drivers/pmdomain/mediatek/Kconfig
-index 21305c4f17fe..049e599a5b57 100644
---- a/drivers/pmdomain/mediatek/Kconfig
-+++ b/drivers/pmdomain/mediatek/Kconfig
-@@ -26,4 +26,15 @@ config MTK_SCPSYS_PM_DOMAINS
- 	  Control Processor System (SCPSYS) has several power management related
- 	  tasks in the system.
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 5f7e13e60c80..8494faac58ae 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -15,6 +15,16 @@ config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
+ 	  To compile this driver as a module, choose M here: the
+ 	  module will be called sun50i-cpufreq-nvmem.
  
-+config AIROHA_CPU_PM_DOMAIN
-+	tristate "Airoha CPU power domain"
-+	default ARCH_AIROHA
-+	depends on PM
++config ARM_AIROHA_SOC_CPUFREQ
++	tristate "Airoha EN7581 SoC CPUFreq support"
++	depends on ARM64 && (ARCH_AIROHA || COMPILE_TEST)
++	select PM
++	select PM_OPP
 +	select PM_GENERIC_DOMAINS
++	default ARCH_AIROHA
 +	help
-+	  Say y here to enable CPU power domain support for Airoha SoC.
++	  This adds the CPUFreq driver for Airoha EN7581 SoCs.
 +
-+	  CPU frequency and power is controlled by ATF with SMC command to
-+	  set performance states.
-+
- endmenu
-diff --git a/drivers/pmdomain/mediatek/Makefile b/drivers/pmdomain/mediatek/Makefile
-index 8cde09e654b3..0f6edce9239b 100644
---- a/drivers/pmdomain/mediatek/Makefile
-+++ b/drivers/pmdomain/mediatek/Makefile
-@@ -1,3 +1,4 @@
- # SPDX-License-Identifier: GPL-2.0-only
- obj-$(CONFIG_MTK_SCPSYS)		+= mtk-scpsys.o
- obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) 	+= mtk-pm-domains.o
-+obj-$(CONFIG_AIROHA_CPU_PM_DOMAIN) 	+= airoha-cpu-pmdomain.o
-diff --git a/drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c b/drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c
+ config ARM_APPLE_SOC_CPUFREQ
+ 	tristate "Apple Silicon SoC CPUFreq support"
+ 	depends on ARCH_APPLE || (COMPILE_TEST && 64BIT)
+diff --git a/drivers/cpufreq/Makefile b/drivers/cpufreq/Makefile
+index d35a28dd9463..890fff99f37d 100644
+--- a/drivers/cpufreq/Makefile
++++ b/drivers/cpufreq/Makefile
+@@ -53,6 +53,7 @@ obj-$(CONFIG_X86_AMD_FREQ_SENSITIVITY)	+= amd_freq_sensitivity.o
+ 
+ ##################################################################################
+ # ARM SoC drivers
++obj-$(CONFIG_ARM_AIROHA_SOC_CPUFREQ)	+= airoha-cpufreq.o
+ obj-$(CONFIG_ARM_APPLE_SOC_CPUFREQ)	+= apple-soc-cpufreq.o
+ obj-$(CONFIG_ARM_ARMADA_37XX_CPUFREQ)	+= armada-37xx-cpufreq.o
+ obj-$(CONFIG_ARM_ARMADA_8K_CPUFREQ)	+= armada-8k-cpufreq.o
+diff --git a/drivers/cpufreq/airoha-cpufreq.c b/drivers/cpufreq/airoha-cpufreq.c
 new file mode 100644
-index 000000000000..a57855459b64
+index 000000000000..cca5183495cc
 --- /dev/null
-+++ b/drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c
-@@ -0,0 +1,145 @@
++++ b/drivers/cpufreq/airoha-cpufreq.c
+@@ -0,0 +1,166 @@
 +// SPDX-License-Identifier: GPL-2.0
 +
-+#include <linux/arm-smccc.h>
 +#include <linux/bitfield.h>
-+#include <linux/clk-provider.h>
++#include <linux/cpufreq.h>
 +#include <linux/module.h>
 +#include <linux/platform_device.h>
-+#include <linux/pm_domain.h>
++#include <linux/pm_runtime.h>
 +#include <linux/slab.h>
 +
-+#define AIROHA_SIP_AVS_HANDLE			0x82000301
-+#define AIROHA_AVS_OP_BASE			0xddddddd0
-+#define AIROHA_AVS_OP_MASK			GENMASK(1, 0)
-+#define AIROHA_AVS_OP_FREQ_DYN_ADJ		(AIROHA_AVS_OP_BASE | \
-+						 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x1))
-+#define AIROHA_AVS_OP_GET_FREQ			(AIROHA_AVS_OP_BASE | \
-+						 FIELD_PREP(AIROHA_AVS_OP_MASK, 0x2))
++#include "cpufreq-dt.h"
 +
-+struct airoha_cpu_pmdomain_priv {
-+	struct clk_hw hw;
-+	struct generic_pm_domain pd;
++struct airoha_cpufreq_priv {
++	int opp_token;
++	struct device **virt_devs;
++	struct platform_device *cpufreq_dt;
 +};
 +
-+static long airoha_cpu_pmdomain_clk_round(struct clk_hw *hw, unsigned long rate,
-+					  unsigned long *parent_rate)
++static struct platform_device *cpufreq_pdev;
++
++/* NOP function to disable OPP from setting clock */
++static int airoha_cpufreq_config_clks_nop(struct device *dev,
++					  struct opp_table *opp_table,
++					  struct dev_pm_opp *old_opp,
++					  struct dev_pm_opp *opp,
++					  void *data, bool scaling_down)
 +{
-+	return rate;
++	return 0;
 +}
 +
-+static unsigned long airoha_cpu_pmdomain_clk_get(struct clk_hw *hw,
-+						 unsigned long parent_rate)
++static const char * const airoha_cpufreq_clk_names[] = { "cpu", NULL };
++static const char * const airoha_cpufreq_genpd_names[] = { "cpu_pd", NULL };
++
++static int airoha_cpufreq_probe(struct platform_device *pdev)
 +{
-+	struct arm_smccc_res res;
-+
-+	arm_smccc_1_1_invoke(AIROHA_SIP_AVS_HANDLE, AIROHA_AVS_OP_GET_FREQ,
-+			     0, 0, 0, 0, 0, 0, &res);
-+
-+	/* SMCCC returns freq in MHz */
-+	return (int)(res.a0 * 1000 * 1000);
-+}
-+
-+/* Airoha CPU clk SMCC is always enabled */
-+static int airoha_cpu_pmdomain_clk_is_enabled(struct clk_hw *hw)
-+{
-+	return true;
-+}
-+
-+static const struct clk_ops airoha_cpu_pmdomain_clk_ops = {
-+	.recalc_rate = airoha_cpu_pmdomain_clk_get,
-+	.is_enabled = airoha_cpu_pmdomain_clk_is_enabled,
-+	.round_rate = airoha_cpu_pmdomain_clk_round,
-+};
-+
-+static int airoha_cpu_pmdomain_set_performance_state(struct generic_pm_domain *domain,
-+						     unsigned int state)
-+{
-+	struct arm_smccc_res res;
-+
-+	arm_smccc_1_1_invoke(AIROHA_SIP_AVS_HANDLE, AIROHA_AVS_OP_FREQ_DYN_ADJ,
-+			     0, state, 0, 0, 0, 0, &res);
-+
-+	/* SMC signal correct apply by unsetting BIT 0 */
-+	return res.a0 & BIT(0) ? -EINVAL : 0;
-+}
-+
-+static int airoha_cpu_pmdomain_probe(struct platform_device *pdev)
-+{
-+	struct airoha_cpu_pmdomain_priv *priv;
++	struct dev_pm_opp_config config = { };
++	struct platform_device *cpufreq_dt;
++	struct airoha_cpufreq_priv *priv;
 +	struct device *dev = &pdev->dev;
-+	struct clk_init_data init = { };
-+	struct generic_pm_domain *pd;
-+	struct clk_hw *hw;
++	struct device **virt_devs = NULL;
++	struct device *cpu_dev;
 +	int ret;
++
++	/* CPUs refer to the same OPP table */
++	cpu_dev = get_cpu_device(0);
++	if (!cpu_dev)
++		return -ENODEV;
 +
 +	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
 +	if (!priv)
 +		return -ENOMEM;
 +
-+	/* Init and register a get-only clk for Cpufreq */
-+	init.name = "cpu";
-+	init.ops = &airoha_cpu_pmdomain_clk_ops;
-+	/* Clock with no set_rate, can't cache */
-+	init.flags = CLK_GET_RATE_NOCACHE;
++	config.clk_names = airoha_cpufreq_clk_names;
++	config.config_clks = airoha_cpufreq_config_clks_nop;
++	config.genpd_names = airoha_cpufreq_genpd_names;
++	config.virt_devs = &virt_devs;
 +
-+	hw = &priv->hw;
-+	hw->init = &init;
-+	ret = devm_clk_hw_register(dev, hw);
-+	if (ret)
-+		return ret;
++	priv->opp_token = dev_pm_opp_set_config(cpu_dev, &config);
++	if (priv->opp_token < 0)
++		return dev_err_probe(dev, priv->opp_token, "Failed to set OPP config\n");
 +
-+	ret = devm_of_clk_add_hw_provider(dev, of_clk_hw_simple_get, hw);
-+	if (ret)
-+		return ret;
++	/* Set Attached PM for OPP ACTIVE */
++	if (virt_devs) {
++		const char * const *name = airoha_cpufreq_genpd_names;
++		int i, j;
 +
-+	/* Init and register a PD for CPU */
-+	pd = &priv->pd;
-+	pd->name = "cpu_pd";
-+	pd->flags = GENPD_FLAG_ALWAYS_ON;
-+	pd->set_performance_state = airoha_cpu_pmdomain_set_performance_state;
++		for (i = 0; *name; i++, name++) {
++			ret = pm_runtime_resume_and_get(virt_devs[i]);
++			if (ret) {
++				dev_err(cpu_dev, "failed to resume %s: %d\n",
++					*name, ret);
 +
-+	ret = pm_genpd_init(pd, NULL, false);
-+	if (ret)
-+		return ret;
++				/* Rollback previous PM runtime calls */
++				name = config.genpd_names;
++				for (j = 0; *name && j < i; j++, name++)
++					pm_runtime_put(virt_devs[j]);
 +
-+	ret = of_genpd_add_provider_simple(dev->of_node, pd);
-+	if (ret)
-+		goto err_add_provider;
++				goto err_register_cpufreq;
++			}
++		}
++		priv->virt_devs = virt_devs;
++	}
 +
++	cpufreq_dt = platform_device_register_simple("cpufreq-dt", -1, NULL, 0);
++	ret = PTR_ERR_OR_ZERO(cpufreq_dt);
++	if (ret) {
++		dev_err(dev, "failed to create cpufreq-dt device: %d\n", ret);
++		goto err_register_cpufreq;
++	}
++
++	priv->cpufreq_dt = cpufreq_dt;
 +	platform_set_drvdata(pdev, priv);
 +
 +	return 0;
 +
-+err_add_provider:
-+	pm_genpd_remove(pd);
++err_register_cpufreq:
++	dev_pm_opp_clear_config(priv->opp_token);
 +
 +	return ret;
 +}
 +
-+static void airoha_cpu_pmdomain_remove(struct platform_device *pdev)
++static void airoha_cpufreq_remove(struct platform_device *pdev)
 +{
-+	struct airoha_cpu_pmdomain_priv *priv = platform_get_drvdata(pdev);
++	struct airoha_cpufreq_priv *priv = platform_get_drvdata(pdev);
++	const char * const *name = airoha_cpufreq_genpd_names;
++	int i;
 +
-+	of_genpd_del_provider(pdev->dev.of_node);
-+	pm_genpd_remove(&priv->pd);
++	platform_device_unregister(priv->cpufreq_dt);
++
++	dev_pm_opp_clear_config(priv->opp_token);
++
++	for (i = 0; *name; i++, name++)
++		pm_runtime_put(priv->virt_devs[i]);
 +}
 +
-+static const struct of_device_id airoha_cpu_pmdomain_of_match[] = {
-+	{ .compatible = "airoha,en7581-cpufreq" },
-+	{ },
-+};
-+MODULE_DEVICE_TABLE(of, airoha_cpu_pmdomain_of_match);
-+
-+static struct platform_driver airoha_cpu_pmdomain_driver = {
-+	.probe = airoha_cpu_pmdomain_probe,
-+	.remove_new = airoha_cpu_pmdomain_remove,
++static struct platform_driver airoha_cpufreq_driver = {
++	.probe = airoha_cpufreq_probe,
++	.remove_new = airoha_cpufreq_remove,
 +	.driver = {
-+		.name = "airoha-cpu-pmdomain",
-+		.of_match_table = airoha_cpu_pmdomain_of_match,
++		.name = "airoha-cpufreq",
 +	},
 +};
-+module_platform_driver(airoha_cpu_pmdomain_driver);
++
++static const struct of_device_id airoha_cpufreq_match_list[] __initconst = {
++	{ .compatible = "airoha,en7581" },
++	{},
++};
++MODULE_DEVICE_TABLE(of, airoha_cpufreq_match_list);
++
++static int __init airoha_cpufreq_init(void)
++{
++	struct device_node *np = of_find_node_by_path("/");
++	const struct of_device_id *match;
++	int ret;
++
++	if (!np)
++		return -ENODEV;
++
++	match = of_match_node(airoha_cpufreq_match_list, np);
++	of_node_put(np);
++	if (!match)
++		return -ENODEV;
++
++	ret = platform_driver_register(&airoha_cpufreq_driver);
++	if (unlikely(ret < 0))
++		return ret;
++
++	cpufreq_pdev = platform_device_register_data(NULL, "airoha-cpufreq",
++						     -1, match, sizeof(*match));
++	ret = PTR_ERR_OR_ZERO(cpufreq_pdev);
++	if (ret)
++		platform_driver_unregister(&airoha_cpufreq_driver);
++
++	return ret;
++}
++module_init(airoha_cpufreq_init);
++
++static void __exit airoha_cpufreq_exit(void)
++{
++	platform_device_unregister(cpufreq_pdev);
++	platform_driver_unregister(&airoha_cpufreq_driver);
++}
++module_exit(airoha_cpufreq_exit);
 +
 +MODULE_AUTHOR("Christian Marangi <ansuelsmth@gmail.com>");
-+MODULE_DESCRIPTION("CPU PM domain driver for Airoha SoCs");
++MODULE_DESCRIPTION("CPUfreq driver for Airoha SoCs");
 +MODULE_LICENSE("GPL");
+diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+index 9c198bd4f7e9..2aa00769cf09 100644
+--- a/drivers/cpufreq/cpufreq-dt-platdev.c
++++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+@@ -103,6 +103,8 @@ static const struct of_device_id allowlist[] __initconst = {
+  * platforms using "operating-points-v2" property.
+  */
+ static const struct of_device_id blocklist[] __initconst = {
++	{ .compatible = "airoha,en7581", },
++
+ 	{ .compatible = "allwinner,sun50i-a100" },
+ 	{ .compatible = "allwinner,sun50i-h6", },
+ 	{ .compatible = "allwinner,sun50i-h616", },
 -- 
 2.45.2
 
