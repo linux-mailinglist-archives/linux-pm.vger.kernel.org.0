@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-19969-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19970-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF318A01B15
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 18:44:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC306A01B1C
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 18:45:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 625C33A360A
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 17:44:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB3F41883C73
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 17:45:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2506A1B5ECB;
-	Sun,  5 Jan 2025 17:44:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ADC81CDFD5;
+	Sun,  5 Jan 2025 17:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="i4IzW+Lx"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FiIaQTq0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8739F150980;
-	Sun,  5 Jan 2025 17:44:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDEF1C0DED;
+	Sun,  5 Jan 2025 17:44:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736099068; cv=none; b=tnofb+zUi/664ckCB6PO7dWxwS2Wx6PZxMe0ZIfGd2jUSAlA7PNXjagfDFQ3QyqasUe5t2f/uI5dC2fvmN7TeSQGZkDX/m9LW8R9yeN+l1Qld2fNy7jHCC8yJs6+hFDpAM6BgJdma5i4d1F7jJLwcxO6ldM7tOI4CQf4WwLwkjU=
+	t=1736099082; cv=none; b=UlqsM/eErlOMkQ25tMN58Uzc8n0F5Fg+2N9gfTr7/TuuAi1y6uueUzTHqwJksdUQhx2vBVn/aupABcF+MqtQzo+d0h8bZxedq9P5g20MmR3oKF4oewjZoZPcDzvLQgY/PmRWeGREq8wM1K+5eRAaXPebg1d6NNdQ8cVK/oLicT0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736099068; c=relaxed/simple;
-	bh=6iXLXb0ujAC0qOdyCZUbxGezjvKV0XO8+N+w0IaaoZk=;
+	s=arc-20240116; t=1736099082; c=relaxed/simple;
+	bh=D5IlMtAl+uTkkx/UIKc3WY2G0+8X7xX8G8TaPY6+f6w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GDV2w+hhrFexH0r4On/9L9yzG+vg0DmCc7ohqbCEEKeipYfadnQ03kUZsiojmk40PTdiLKDRS+3/Qcn7+EEmUUYacXR8aYQjPibx+78L7aZCINQajB+nYoyPHBs/QKhkVOhlg4AYIL5UDEtVMc1bLGlI4aIFU6sAV+JjE3ClT2g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=i4IzW+Lx; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=q6oUG4AD7mpEiWhN3PUvYFvRbNz6LT/HOI+qKqm5au39jr+IfJ7IuS8jJFa6RxJySGEFTTKjJJWkqHxb2g8v0p2Lq1RbTltak7GqbIUDEPKwMQxpIQRPEJn30ZQtgZuAy4M0iblQ+gIRPBFApePFkG3qEsHHR+BLFbpSygYwufA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FiIaQTq0; arc=none smtp.client-ip=209.85.214.169
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21619108a6bso179780315ad.3;
-        Sun, 05 Jan 2025 09:44:25 -0800 (PST)
+Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-216728b1836so174373945ad.0;
+        Sun, 05 Jan 2025 09:44:39 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736099065; x=1736703865; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736099079; x=1736703879; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ymaCNlL/RNvm0IWW6gKnUAy90BSclawi0O5FUcbHu/o=;
-        b=i4IzW+LxbLlAxgazjLJsMNSU6uimRJdVdB7TS9g9Vk4NAArSKsY2AmwRILApVr0QgC
-         t0GsvyE0QEK6+zO1IOCsh6EN9EhU4pDRVp/oyAbHAbId4MYuKZ5eVuLtkzqJGAv38Pzb
-         KIERXXoP60M/6svwpeeZ/x2uFTqBlUjBWuGVPiv7zyaOXX1NBvJUljqCJCUAZZWEuvdx
-         IRRdqLtbfHEIQgw/H3towDEB5HS8WRcpVYRqCaSPyezswNvCTFkUc+tvwpAjdHNFw7pT
-         4aZEn9/UEsrNTfXuoVRIOxHS0G09fppcRt8ShAkxIl/xFk/LAao5wc5T3NeoLUMj6Dzy
-         xG8Q==
+        bh=3d0jF7kNZrSFFba9MWDdQNjjLx4MP93BazBprG+7xJg=;
+        b=FiIaQTq0TVv5UUZ/HGNVg0nVnJQXaKW2B5xGa6TPLTZBcXzQA8DVESw6ZFscSAR2kj
+         Fva3QPkWMfpFbACsdpq5FEWC2qduEOCi8kA6gUbhfvrBKOKcavXrnNFBJbUZ2wTPDwlT
+         9wGb1zDimgFNLeCJO8c66nqFqVI4YOwZJgUlDlbhVu3cdcCFGiKooY3KUYXXpv6N/50t
+         V+UZg/qhivz2Dhf1qf237KUJx2EA+L3oJzPwepk1SVh1ARc2UpPXbVEJwytskmYrTeW4
+         2ggbMFxv/a/8GVOjaRV1zYZyqGot9mVQs2lMPffltZI1+WUh9cxdUuVk6NoIElizQy3v
+         2x1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736099065; x=1736703865;
+        d=1e100.net; s=20230601; t=1736099079; x=1736703879;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ymaCNlL/RNvm0IWW6gKnUAy90BSclawi0O5FUcbHu/o=;
-        b=L24CTk338aMNifG3wpHTwi126/KTUeE4pTy3pQXttsuC5WmgQ+o/i6si1yl1CtTF/J
-         HsmTErAdpybAjvkWLOrd3vHXZPtuvHYMyY5LFInqiSBfe6HRlVwuExyw/mhyJcqrZaME
-         YEmA0pbHIANz+5Jp6m9Hcqpx/44RueRbmaFzwaGQ4cK3HFeGhQ4D+gWG++sGiF00tZZ4
-         yoGx5J/zso02+dqdUHEkwI4hMdrGa9yWhY4kiZealVUfPqsbaeGPJ30wPCTjMdtOlLXR
-         uprHoGHvQreAEaniKVeuqKXxLe7bzBfzqZzb45dmvK64vIFfEUmRLjz4ZeOuBK5u9zHj
-         8Vxg==
-X-Forwarded-Encrypted: i=1; AJvYcCU1ibkAwnTSCOzZd3Lm2X0siivHBOOHuNT/rZ/J/vAQDfTR8Ye1f2owjm7TpD1Of9IQ3ypTnK+sym4j9FM=@vger.kernel.org, AJvYcCVlPf9f/bMYtFlYKiobi9/jfwW0BApsXO0ILrK/2eORmvjTx0mevLIb1g8H6dvIVTptF9+nZ0XeuLfSIYNm@vger.kernel.org, AJvYcCW7C2XtaYpDJjs8LybFsHlb+BB/jr9wW49zPuUdD1mOcbDB3+irsE3Ua+1Rq7jhEgvVH6ZS2rtM2x70@vger.kernel.org, AJvYcCX5HtfWLfHpPuX9bnwhQJpphx8YTi1NVZcj40DlLqnQ5Q0vl8IqoCDNRjOw02TbDi/bm3cQNYRnodE=@vger.kernel.org, AJvYcCXAxP5KdbGZvKt3dtpuT4KZprVQUOF0KdS3+8AHN1AeaBRb7yKO/D/5W5R/Tug26e8gRx8tK6LXt2tJgVyhvDpCkP0xoQ==@vger.kernel.org, AJvYcCXCf+T8kekp90puq0u39EfPla8g1fUQBshlYH1jIamvSfVix6NELro6KEPLPOjGgfgrhvTg31qBuRadFPqj@vger.kernel.org
-X-Gm-Message-State: AOJu0YyrZAdCkNM88KjUt64GyNaavOY4xeyxoTUWC4NPHbJ85ksXSWE9
-	532EfHF95kJlJ2CcyZmdP3Hnva/csFvKKT71PdfPqQ9MIPNkwh4q
-X-Gm-Gg: ASbGnctSP5Puh52JQbG+4pKfrD89WWvKx3iZ7hwEC015rmstW5wEl+hnQ3pVJ2GDYM6
-	D8K/SHavIdH7xg60pZO/vHblQB2uYce/k6A5kSvFunwdIf5E4StxS4veSpDLGBS8r8edaRkNbEo
-	U4pBTOJdtjbCFeR2LAbdbah0fxtjkaHKugVDU/1x/qIjwjHStXeuP+KD3HiGsY+4RpWDoCD0kX6
-	/SbkD86YoRIaZUPCgPAccHzleJPZUkatZxO6qw96lTmQ6cuQ88HNR0=
-X-Google-Smtp-Source: AGHT+IG+2JCAWr723k4FWWJwukXrscmm5CXTiWpQmkUAWoh7WbKyrg+YkyiUDbqlQBFOKg/oZIh00Q==
-X-Received: by 2002:a05:6a21:6da4:b0:1e0:d4f4:5b2f with SMTP id adf61e73a8af0-1e5e07ffb0dmr94930455637.32.1736099064655;
-        Sun, 05 Jan 2025 09:44:24 -0800 (PST)
+        bh=3d0jF7kNZrSFFba9MWDdQNjjLx4MP93BazBprG+7xJg=;
+        b=h3gErzaj6RFftskuj1s1jLqcUlJ7h8lleg1MCxt8IUenxAyNOWlWkebr0XPXW5YWQt
+         LfGcG2KZISzPfXFdGHWvmQLMA5h7w80PS8iNcLnvQ5pQvI3HM2eMAhZt6CQ0CgC0oESq
+         PAOAP3ls1bcnHV/85y/KIeRauB+NeDmd0uKQSmk8uZZYxf5Hf8xNa5b1RS9d0SiljgZr
+         a8Z1KeSYy5nz1UD98TaocVOamYmUl1gM75ArcP2CY7MCezH9nvYV6Wmp1fLfARSJHN6D
+         1Zx6u4p0zZXPgwCIbL72C1hbZmp7OLz/U8VciCb2cmx5QA0gCoYeKh6sifvNDZj0C/q9
+         +SvQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUfMylNldcUJCVaZYvjVxjD/f3U15gdG0X5aESNr2dhqi03aPM3WmYrOSZYE6YffefQInxd/KPpSEibXIZ4@vger.kernel.org, AJvYcCUrRMLcmLviwOKkJDzJexnRMLdtJFHIcgLEgIZrQ+gDsNNhBBEMxAFiiYpU9RfEAvx0ax3Tcl3SlobB@vger.kernel.org, AJvYcCVgLdWKTI+DKIVd2bYMSiV/kAelnxjFzcc8qS5qTFOAbushf/tVAeE3LK0n9VNYh6YbAwucVpw12lQ=@vger.kernel.org, AJvYcCX3iAy0VjjmcZrz++HfQJ3ihZLl6+fiJapX7Z/UCKfe3nTjCev+R+r6MwPkvRDTGNGe/HqFVdynSoDw39sHuqd1870dog==@vger.kernel.org, AJvYcCXdO1mSOw89qWLu0F/6ZMDVDhERGkZZJJLR0k/JWXZJ3cyNb0d3PBOUAPob7kRS7e+Hprdkc/kcOnlw5og=@vger.kernel.org, AJvYcCXgs2NwxX7oalWB0g3VBYj/AzyDx+DYrgV2zf9GdxB7Y74AC+vV6GtzFB+Xj5MBToeOtOc3uSP72gzb4ylf@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx7EYRw+FWG7WW56I65qMMcdREHV0AYtLsURWOw9Yq+/5ZtRzNM
+	GBGf/EwRMm63nZ8Cv40QXvws+rA44LvdgZOLvsiZqbydaP0W88Y9
+X-Gm-Gg: ASbGncvu/bGZb+KICS2+VyTC+tUMWs9r24c/EcMGr2X2b06wlzw/6qEGt5gIziGOHvW
+	Crnh7SMyEyOWnzUdCZNMTJeXZB1xIV8fIV+YddbGvJ8YsVT9eUqa4cEo08bmul/vSvIxfN70ZrZ
+	PpNH/laWhi/Y5Mw56Rr0DS8DH3/fMKxP64dg1ImT7QD0o1rY8/tbcMP7iOkzSzTO6EiwlFaX/Hm
+	eDn20TPACrL9UPmC7FHPGvfPUHq/jChLUy7q+sqo23XnVcVeF7+L9M=
+X-Google-Smtp-Source: AGHT+IFhM4H+33xSsvYkhW92V2AuBbuHnXONZyxIVy6w65xEXqkkQV+s2rc8boow5qq5ZPwfsij3gQ==
+X-Received: by 2002:a05:6a00:acc:b0:72a:bb83:7804 with SMTP id d2e1a72fcca58-72abde81bf6mr81637286b3a.17.1736099079345;
+        Sun, 05 Jan 2025 09:44:39 -0800 (PST)
 Received: from nuvole.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842abd5927fsm27375046a12.10.2025.01.05.09.44.10
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842abd5927fsm27375046a12.10.2025.01.05.09.44.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2025 09:44:23 -0800 (PST)
+        Sun, 05 Jan 2025 09:44:38 -0800 (PST)
 From: Pengyu Luo <mitltlatltl@gmail.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -94,9 +94,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	Pengyu Luo <mitltlatltl@gmail.com>
-Subject: [PATCH v2 2/5] platform: arm64: add Huawei Matebook E Go EC driver
-Date: Mon,  6 Jan 2025 01:41:56 +0800
-Message-ID: <20250105174159.227831-3-mitltlatltl@gmail.com>
+Subject: [PATCH v2 3/5] usb: typec: ucsi: add Huawei Matebook E Go ucsi driver
+Date: Mon,  6 Jan 2025 01:41:57 +0800
+Message-ID: <20250105174159.227831-4-mitltlatltl@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250105174159.227831-1-mitltlatltl@gmail.com>
 References: <20250105174159.227831-1-mitltlatltl@gmail.com>
@@ -108,966 +108,576 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-There are three variants of which Huawei released the first two
-simultaneously.
-
-Huawei Matebook E Go LTE(sc8180x), codename seems to be gaokun2.
-Huawei Matebook E Go(sc8280xp@3.0GHz), codename must be gaokun3. (see [1])
-Huawei Matebook E Go 2023(sc8280xp@2.69GHz), codename should be also gaokun3.
-
-Adding support for the latter two variants for now, this driver should
-also work for the sc8180x variant according to acpi table files, but I
-don't have the device to test yet.
-
-Different from other Qualcomm Snapdragon sc8280xp based machines, the
-Huawei Matebook E Go uses an embedded controller while others use
-a system called PMIC GLink. This embedded controller can be used to
-perform a set of various functions, including, but not limited to:
-
-- Battery and charger monitoring;
-- Charge control and smart charge;
-- Fn_lock settings;
-- Tablet lid status;
-- Temperature sensors;
-- USB Type-C notifications (ports orientation,  DP alt mode HPD);
-- USB Type-C PD (according to observation, up to 48w).
-
-Add a driver for the EC which creates devices for UCSI and power supply
-devices.
-
-[1] https://bugzilla.kernel.org/show_bug.cgi?id=219645
+The Huawei Matebook E Go tablet implements the UCSI interface in the
+onboard EC. Add the glue driver to interface with the platform's UCSI
+implementation.
 
 Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
 ---
- MAINTAINERS                                   |   9 +
- drivers/platform/arm64/Kconfig                |  21 +
- drivers/platform/arm64/Makefile               |   1 +
- drivers/platform/arm64/huawei-gaokun-ec.c     | 767 ++++++++++++++++++
- .../linux/platform_data/huawei-gaokun-ec.h    |  79 ++
- 5 files changed, 877 insertions(+)
- create mode 100644 drivers/platform/arm64/huawei-gaokun-ec.c
- create mode 100644 include/linux/platform_data/huawei-gaokun-ec.h
+ drivers/usb/typec/ucsi/Kconfig              |  10 +
+ drivers/usb/typec/ucsi/Makefile             |   1 +
+ drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 524 ++++++++++++++++++++
+ 3 files changed, 535 insertions(+)
+ create mode 100644 drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
 
-diff --git a/MAINTAINERS b/MAINTAINERS
-index 85c8a68d1..04263ba32 100644
---- a/MAINTAINERS
-+++ b/MAINTAINERS
-@@ -10595,6 +10595,15 @@ S:	Maintained
- F:	Documentation/networking/device_drivers/ethernet/huawei/hinic.rst
- F:	drivers/net/ethernet/huawei/hinic/
+diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
+index 680e1b87b..8a73df84a 100644
+--- a/drivers/usb/typec/ucsi/Kconfig
++++ b/drivers/usb/typec/ucsi/Kconfig
+@@ -78,4 +78,14 @@ config UCSI_LENOVO_YOGA_C630
+ 	  To compile the driver as a module, choose M here: the module will be
+ 	  called ucsi_yoga_c630.
  
-+HUAWEI MATEBOOK E GO EMBEDDED CONTROLLER DRIVER
-+M:	Pengyu Luo <mitltlatltl@gmail.com>
-+S:	Maintained
-+F:	Documentation/devicetree/bindings/platform/huawei,gaokun-ec.yaml
-+F:	drivers/platform/arm64/huawei-gaokun-ec.c
-+F:	drivers/power/supply/huawei-gaokun-battery.c
-+F:	drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-+F:	include/linux/platform_data/huawei-gaokun-ec.h
-+
- HUGETLB SUBSYSTEM
- M:	Muchun Song <muchun.song@linux.dev>
- L:	linux-mm@kvack.org
-diff --git a/drivers/platform/arm64/Kconfig b/drivers/platform/arm64/Kconfig
-index f88395ea3..67dc7aa95 100644
---- a/drivers/platform/arm64/Kconfig
-+++ b/drivers/platform/arm64/Kconfig
-@@ -33,6 +33,27 @@ config EC_ACER_ASPIRE1
- 	  laptop where this information is not properly exposed via the
- 	  standard ACPI devices.
- 
-+config EC_HUAWEI_GAOKUN
-+	tristate "Huawei Matebook E Go Embedded Controller driver"
-+	depends on ARCH_QCOM || COMPILE_TEST
-+	depends on I2C
-+	depends on DRM
-+	depends on POWER_SUPPLY
-+	depends on INPUT
++config UCSI_HUAWEI_GAOKUN
++	tristate "UCSI Interface Driver for Huawei Matebook E Go"
++	depends on EC_HUAWEI_GAOKUN
 +	help
-+	  Say Y here to enable the EC driver for the Huawei Matebook E Go
-+	  which is a sc8280xp-based 2-in-1 tablet. The driver handles battery
-+	  (information, charge control) and USB Type-C DP HPD events as well
-+	  as some misc functions like the lid sensor and temperature sensors,
-+	  etc.
++	  This driver enables UCSI support on the Huawei Matebook E Go tablet,
++	  which is a sc8280xp-based 2-in-1 tablet.
 +
-+	  This driver provides battery and AC status support for the mentioned
-+	  laptop where this information is not properly exposed via the
-+	  standard ACPI devices.
++	  To compile the driver as a module, choose M here: the module will be
++	  called ucsi_huawei_gaokun.
 +
-+	  Say M or Y here to include this support.
-+
-+
- config EC_LENOVO_YOGA_C630
- 	tristate "Lenovo Yoga C630 Embedded Controller driver"
- 	depends on ARCH_QCOM || COMPILE_TEST
-diff --git a/drivers/platform/arm64/Makefile b/drivers/platform/arm64/Makefile
-index b2ae9114f..46a99eba3 100644
---- a/drivers/platform/arm64/Makefile
-+++ b/drivers/platform/arm64/Makefile
-@@ -6,4 +6,5 @@
- #
- 
- obj-$(CONFIG_EC_ACER_ASPIRE1)	+= acer-aspire1-ec.o
-+obj-$(CONFIG_EC_HUAWEI_GAOKUN)	+= huawei-gaokun-ec.o
- obj-$(CONFIG_EC_LENOVO_YOGA_C630) += lenovo-yoga-c630.o
-diff --git a/drivers/platform/arm64/huawei-gaokun-ec.c b/drivers/platform/arm64/huawei-gaokun-ec.c
+ endif
+diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
+index aed41d238..0b400122b 100644
+--- a/drivers/usb/typec/ucsi/Makefile
++++ b/drivers/usb/typec/ucsi/Makefile
+@@ -22,3 +22,4 @@ obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
+ obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
+ obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
+ obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)	+= ucsi_yoga_c630.o
++obj-$(CONFIG_UCSI_HUAWEI_GAOKUN)	+= ucsi_huawei_gaokun.o
+diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
 new file mode 100644
-index 000000000..743885a3b
+index 000000000..044545b44
 --- /dev/null
-+++ b/drivers/platform/arm64/huawei-gaokun-ec.c
-@@ -0,0 +1,767 @@
++++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+@@ -0,0 +1,524 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * huawei-gaokun-ec - An EC driver for HUAWEI Matebook E Go
++ * ucsi-huawei-gaokun - A UCSI driver for HUAWEI Matebook E Go
 + *
-+ * reference: drivers/platform/arm64/acer-aspire1-ec.c
-+ *            drivers/platform/arm64/lenovo-yoga-c630.c
-+ *            drivers/platform/x86/huawei-wmi.c
++ * reference: drivers/usb/typec/ucsi/ucsi_yoga_c630.c
++ *            drivers/usb/typec/ucsi/ucsi_glink.c
++ *            drivers/soc/qcom/pmic_glink_altmode.c
 + *
 + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
 + */
 +
++#include <drm/bridge/aux-bridge.h>
 +#include <linux/auxiliary_bus.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/hwmon.h>
-+#include <linux/hwmon-sysfs.h>
-+#include <linux/i2c.h>
-+#include <linux/input.h>
-+#include <linux/notifier.h>
++#include <linux/bitops.h>
++#include <linux/completion.h>
++#include <linux/container_of.h>
 +#include <linux/module.h>
-+#include <linux/mutex.h>
++#include <linux/notifier.h>
++#include <linux/of.h>
 +#include <linux/platform_data/huawei-gaokun-ec.h>
-+#include <linux/version.h>
++#include <linux/string.h>
++#include <linux/usb/pd_vdo.h>
++#include <linux/usb/typec_altmode.h>
++#include <linux/usb/typec_dp.h>
++#include <linux/workqueue_types.h>
 +
-+#define EC_EVENT		0x06
++#include "ucsi.h"
 +
-+/* Also can be found in ACPI specification 12.3 */
-+#define EC_READ			0x80
-+#define EC_WRITE		0x81
-+#define EC_BURST		0x82
-+#define EC_QUERY		0x84
++#define EC_EVENT_UCSI	0x21
++#define EC_EVENT_USB	0x22
 +
-+#define EC_FN_LOCK_ON		0x5A
-+#define EC_FN_LOCK_OFF		0x55
++#define GAOKUN_CCX_MASK		GENMASK(1, 0)
++#define GAOKUN_MUX_MASK		GENMASK(3, 2)
 +
-+#define EC_EVENT_LID		0x81
++#define GAOKUN_DPAM_MASK	GENMASK(3, 0)
++#define GAOKUN_HPD_STATE_MASK	BIT(4)
++#define GAOKUN_HPD_IRQ_MASK	BIT(5)
 +
-+#define EC_LID_STATE		0x80
-+#define EC_LID_OPEN		BIT(1)
++#define GET_IDX(updt) (ffs(updt) - 1)
 +
-+#define UCSI_REG_SIZE		7
++#define CCX_TO_ORI(ccx) (++ccx % 3) /* convert ccx to enum typec_orientation */
++
++/* Configuration Channel Extension */
++enum gaokun_ucsi_ccx {
++	USBC_CCX_NORMAL,
++	USBC_CCX_REVERSE,
++	USBC_CCX_NONE,
++};
++
++enum gaokun_ucsi_mux {
++	USBC_MUX_NONE,
++	USBC_MUX_USB_2L,
++	USBC_MUX_DP_4L,
++	USBC_MUX_USB_DP,
++};
++/* based on pmic_glink_altmode_pin_assignment */
++enum gaokun_ucsi_dpam_pan {	/* DP Alt Mode Pin Assignments */
++	USBC_DPAM_PAN_NONE,
++	USBC_DPAM_PAN_A,	/* Not supported after USB Type-C Standard v1.0b */
++	USBC_DPAM_PAN_B,	/* Not supported after USB Type-C Standard v1.0b */
++	USBC_DPAM_PAN_C,	/* USBC_DPAM_PAN_C_REVERSE - 6 */
++	USBC_DPAM_PAN_D,
++	USBC_DPAM_PAN_E,
++	USBC_DPAM_PAN_F,	/* Not supported after USB Type-C Standard v1.0b */
++	USBC_DPAM_PAN_A_REVERSE,/* Not supported after USB Type-C Standard v1.0b */
++	USBC_DPAM_PAN_B_REVERSE,/* Not supported after USB Type-C Standard v1.0b */
++	USBC_DPAM_PAN_C_REVERSE,
++	USBC_DPAM_PAN_D_REVERSE,
++	USBC_DPAM_PAN_E_REVERSE,
++	USBC_DPAM_PAN_F_REVERSE,/* Not supported after USB Type-C Standard v1.0b */
++};
++
++struct gaokun_ucsi_reg {
++	u8 port_num;
++	u8 port_updt;
++	u8 port_data[4];
++	u8 checksum;
++	u8 reserved;
++} __packed;
++
++struct gaokun_ucsi_port {
++	struct completion usb_ack;
++	spinlock_t lock;
++
++	struct gaokun_ucsi *ucsi;
++	struct auxiliary_device *bridge;
++
++	int idx;
++	enum gaokun_ucsi_ccx ccx;
++	enum gaokun_ucsi_mux mux;
++	u8 mode;
++	u16 svid;
++	u8 hpd_state;
++	u8 hpd_irq;
++};
++
++struct gaokun_ucsi {
++	struct gaokun_ec *ec;
++	struct ucsi *ucsi;
++	struct gaokun_ucsi_port *ports;
++	struct device *dev;
++	struct delayed_work work;
++	struct notifier_block nb;
++	u16 version;
++	u8 port_num;
++};
++
++/* -------------------------------------------------------------------------- */
++/* For UCSI */
++
++static int gaokun_ucsi_read_version(struct ucsi *ucsi, u16 *version)
++{
++	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
++
++	*version = uec->version;
++
++	return 0;
++}
++
++static int gaokun_ucsi_read_cci(struct ucsi *ucsi, u32 *cci)
++{
++	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
++	u8 buf[GAOKUN_UCSI_READ_SIZE];
++	int ret;
++
++	ret = gaokun_ec_ucsi_read(uec->ec, buf);
++	if (ret)
++		return ret;
++
++	memcpy(cci, buf, sizeof(*cci));
++
++	return 0;
++}
++
++static int gaokun_ucsi_read_message_in(struct ucsi *ucsi,
++				       void *val, size_t val_len)
++{
++	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
++	u8 buf[GAOKUN_UCSI_READ_SIZE];
++	int ret;
++
++	ret = gaokun_ec_ucsi_read(uec->ec, buf);
++	if (ret)
++		return ret;
++
++	memcpy(val, buf + GAOKUN_UCSI_CCI_SIZE,
++	       min(val_len, GAOKUN_UCSI_DATA_SIZE));
++
++	return 0;
++}
++
++static int gaokun_ucsi_async_control(struct ucsi *ucsi, u64 command)
++{
++	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
++	u8 buf[GAOKUN_UCSI_WRITE_SIZE] = {};
++
++	memcpy(buf, &command, sizeof(command));
++
++	return gaokun_ec_ucsi_write(uec->ec, buf);
++}
++
++static void gaokun_ucsi_update_connector(struct ucsi_connector *con)
++{
++	struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
++
++	if (con->num > uec->port_num)
++		return;
++
++	con->typec_cap.orientation_aware = true;
++}
++
++static void gaokun_set_orientation(struct ucsi_connector *con,
++				   struct gaokun_ucsi_port *port)
++{
++	enum gaokun_ucsi_ccx ccx;
++	unsigned long flags;
++
++	spin_lock_irqsave(&port->lock, flags);
++	ccx = port->ccx;
++	spin_unlock_irqrestore(&port->lock, flags);
++
++	typec_set_orientation(con->port, CCX_TO_ORI(ccx));
++}
++
++static void gaokun_ucsi_connector_status(struct ucsi_connector *con)
++{
++	struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
++	int idx;
++
++	idx = con->num - 1;
++	if (con->num > uec->port_num) {
++		dev_warn(uec->dev, "set orientation out of range: con%d\n", idx);
++		return;
++	}
++
++	gaokun_set_orientation(con, &uec->ports[idx]);
++}
++
++const struct ucsi_operations gaokun_ucsi_ops = {
++	.read_version = gaokun_ucsi_read_version,
++	.read_cci = gaokun_ucsi_read_cci,
++	.read_message_in = gaokun_ucsi_read_message_in,
++	.sync_control = ucsi_sync_control_common,
++	.async_control = gaokun_ucsi_async_control,
++	.update_connector = gaokun_ucsi_update_connector,
++	.connector_status = gaokun_ucsi_connector_status,
++};
++
++/* -------------------------------------------------------------------------- */
++/* For Altmode */
++
++static void gaokun_ucsi_port_update(struct gaokun_ucsi_port *port,
++				    const u8 *port_data)
++{
++	struct gaokun_ucsi *uec = port->ucsi;
++	int offset = port->idx * 2; /* every port has 2 Bytes data */
++	unsigned long flags;
++	u8 dcc, ddi;
++
++	dcc = port_data[offset];
++	ddi = port_data[offset + 1];
++
++	spin_lock_irqsave(&port->lock, flags);
++
++	port->ccx = FIELD_GET(GAOKUN_CCX_MASK, dcc);
++	port->mux = FIELD_GET(GAOKUN_MUX_MASK, dcc);
++	port->mode = FIELD_GET(GAOKUN_DPAM_MASK, ddi);
++	port->hpd_state = FIELD_GET(GAOKUN_HPD_STATE_MASK, ddi);
++	port->hpd_irq = FIELD_GET(GAOKUN_HPD_IRQ_MASK, ddi);
++
++	/* Mode and SVID are unused; keeping them to make things clearer */
++	switch (port->mode) {
++	case USBC_DPAM_PAN_C:
++	case USBC_DPAM_PAN_C_REVERSE:
++		port->mode = DP_PIN_ASSIGN_C; /* correct it for usb later */
++		break;
++	case USBC_DPAM_PAN_D:
++	case USBC_DPAM_PAN_D_REVERSE:
++		port->mode = DP_PIN_ASSIGN_D;
++		break;
++	case USBC_DPAM_PAN_E:
++	case USBC_DPAM_PAN_E_REVERSE:
++		port->mode = DP_PIN_ASSIGN_E;
++		break;
++	case USBC_DPAM_PAN_NONE:
++		port->mode = TYPEC_STATE_SAFE;
++		break;
++	default:
++		dev_warn(uec->dev, "unknow mode %d\n", port->mode);
++		break;
++	}
++
++	switch (port->mux) {
++	case USBC_MUX_NONE:
++		port->svid = 0;
++		break;
++	case USBC_MUX_USB_2L:
++		port->svid = USB_SID_PD;
++		port->mode = TYPEC_STATE_USB; /* same as PAN_C, correct it */
++		break;
++	case USBC_MUX_DP_4L:
++	case USBC_MUX_USB_DP:
++		port->svid = USB_SID_DISPLAYPORT;
++		break;
++	default:
++		dev_warn(uec->dev, "unknow mux state %d\n", port->mux);
++		break;
++	}
++
++	spin_unlock_irqrestore(&port->lock, flags);
++}
++
++static int gaokun_ucsi_refresh(struct gaokun_ucsi *uec)
++{
++	struct gaokun_ucsi_reg ureg;
++	int ret, idx;
++
++	ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
++	if (ret)
++		return GAOKUN_UCSI_NO_PORT_UPDATE;
++
++	uec->port_num = ureg.port_num;
++	idx = GET_IDX(ureg.port_updt);
++
++	if (idx < 0 || idx >= ureg.port_num)
++		return GAOKUN_UCSI_NO_PORT_UPDATE;
++
++	gaokun_ucsi_port_update(&uec->ports[idx], ureg.port_data);
++	return idx;
++}
++
++static void gaokun_ucsi_handle_altmode(struct gaokun_ucsi_port *port)
++{
++	struct gaokun_ucsi *uec = port->ucsi;
++	int idx = port->idx;
++
++	if (idx >= uec->ucsi->cap.num_connectors) {
++		dev_warn(uec->dev, "altmode port out of range: %d\n", idx);
++		return;
++	}
++
++	/* UCSI callback .connector_status() have set orientation */
++	if (port->bridge)
++		drm_aux_hpd_bridge_notify(&port->bridge->dev,
++					  port->hpd_state ?
++					  connector_status_connected :
++					  connector_status_disconnected);
++
++	gaokun_ec_ucsi_pan_ack(uec->ec, port->idx);
++}
++
++static void gaokun_ucsi_altmode_notify_ind(struct gaokun_ucsi *uec)
++{
++	int idx;
++
++	 if (!uec->ucsi->connector) { /* slow to register */
++		 dev_err(uec->dev, "ucsi connector is not initialized yet\n");
++		 return;
++	 }
++
++	idx = gaokun_ucsi_refresh(uec);
++	if (idx == GAOKUN_UCSI_NO_PORT_UPDATE)
++		gaokun_ec_ucsi_pan_ack(uec->ec, idx); /* ack directly if no update */
++	else
++		gaokun_ucsi_handle_altmode(&uec->ports[idx]);
++}
 +
 +/*
-+ * for tx, command sequences are arranged as
-+ * {master_cmd, slave_cmd, data_len, data_seq}
++ * USB event is necessary for enabling altmode, the event should follow
++ * UCSI event, if not after timeout(this notify may be disabled somehow),
++ * then force to enable altmode.
 + */
-+#define REQ_HDR_SIZE		3
-+#define INPUT_SIZE_OFFSET	2
-+#define REQ_LEN(req) (REQ_HDR_SIZE + req[INPUT_SIZE_OFFSET])
-+
-+/*
-+ * for rx, data sequences are arranged as
-+ * {status, data_len(unreliable), data_seq}
-+ */
-+#define RESP_HDR_SIZE		2
-+
-+#define MKREQ(REG0, REG1, SIZE, ...)			\
-+{							\
-+	REG0, REG1, SIZE,				\
-+	/* ## will remove comma when SIZE is 0 */	\
-+	## __VA_ARGS__,					\
-+	/* make sure len(pkt[3:]) >= SIZE */		\
-+	[3 + SIZE] = 0,					\
-+}
-+
-+#define MKRESP(SIZE)				\
-+{						\
-+	[RESP_HDR_SIZE + SIZE - 1] = 0,		\
-+}
-+
-+static inline void refill_req(u8 *dest, const u8 *src, size_t size)
++static void gaokun_ucsi_handle_no_usb_event(struct gaokun_ucsi *uec, int idx)
 +{
-+	memcpy(dest + REQ_HDR_SIZE, src, size);
-+}
++	struct gaokun_ucsi_port *port;
 +
-+static inline void extr_resp(u8 *dest, const u8 *src, size_t size)
-+{
-+	memcpy(dest, src + RESP_HDR_SIZE, size);
-+}
-+
-+struct gaokun_ec {
-+	struct i2c_client *client;
-+	struct mutex lock; /* EC transaction lock */
-+	struct blocking_notifier_head notifier_list;
-+	struct device *hwmon_dev;
-+	struct input_dev *idev;
-+	bool suspended;
-+};
-+
-+static int gaokun_ec_request(struct gaokun_ec *ec, const u8 *req,
-+			     size_t resp_len, u8 *resp)
-+{
-+	struct i2c_client *client = ec->client;
-+	struct i2c_msg msgs[2] = {
-+		{
-+			.addr = client->addr,
-+			.flags = client->flags,
-+			.len = REQ_LEN(req),
-+			.buf = req,
-+		}, {
-+			.addr = client->addr,
-+			.flags = client->flags | I2C_M_RD,
-+			.len = resp_len,
-+			.buf = resp,
-+		},
-+	};
-+
-+	mutex_lock(&ec->lock);
-+
-+	i2c_transfer(client->adapter, msgs, ARRAY_SIZE(msgs));
-+	usleep_range(2000, 2500); /* have a break, acpi did this */
-+
-+	mutex_unlock(&ec->lock);
-+
-+	return *resp;
-+}
-+
-+/* -------------------------------------------------------------------------- */
-+/* Common API */
-+
-+/**
-+ * gaokun_ec_read - read from EC
-+ * @ec: The gaokun_ec
-+ * @req: The sequence to request
-+ * @resp_len: The size to read
-+ * @resp: Where the data are read to
-+ *
-+ * Return: 0 on success or negative error code.
-+ *
-+ * This function is used to read data after writing a magic sequence to EC.
-+ * All EC operations depend on this function.
-+ *
-+ * Huawei uses magic sequences everywhere to complete various functions, all
-+ * these sequences are passed to ECCD(a ACPI method which is quiet similar
-+ * to gaokun_ec_request), there is no good abstraction to generalize these
-+ * sequences, so just wrap it for now. Almost all magic sequences are kept
-+ * in this file.
-+ */
-+int gaokun_ec_read(struct gaokun_ec *ec, const u8 *req,
-+		   size_t resp_len, u8 *resp)
-+{
-+	return gaokun_ec_request(ec, req, resp_len, resp);
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_read);
-+
-+/**
-+ * gaokun_ec_write - write to EC
-+ * @ec: The gaokun_ec
-+ * @req: The sequence to request
-+ *
-+ * Return: 0 on success or negative error code.
-+ *
-+ * This function has no big difference from gaokun_ec_read. When caller care
-+ * only write status and no actual data are returned, then use it.
-+ */
-+int gaokun_ec_write(struct gaokun_ec *ec, u8 *req)
-+{
-+	u8 resp[] = MKRESP(0);
-+
-+	return gaokun_ec_request(ec, req, sizeof(resp), resp);
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_write);
-+
-+int gaokun_ec_read_byte(struct gaokun_ec *ec, u8 *req, u8 *byte)
-+{
-+	int ret;
-+	u8 resp[] = MKRESP(sizeof(*byte));
-+
-+	ret = gaokun_ec_read(ec, req, sizeof(resp), resp);
-+	extr_resp(byte, resp, sizeof(*byte));
-+
-+	return ret;
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_read_byte);
-+
-+/**
-+ * gaokun_ec_register_notify - Register a notifier callback for EC events.
-+ * @ec: The gaokun_ec
-+ * @nb: Notifier block pointer to register
-+ *
-+ * Return: 0 on success or negative error code.
-+ */
-+int gaokun_ec_register_notify(struct gaokun_ec *ec, struct notifier_block *nb)
-+{
-+	return blocking_notifier_chain_register(&ec->notifier_list, nb);
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_register_notify);
-+
-+/**
-+ * gaokun_ec_unregister_notify - Unregister notifier callback for EC events.
-+ * @ec: The gaokun_ec
-+ * @nb: Notifier block pointer to unregister
-+ *
-+ * Unregister a notifier callback that was previously registered with
-+ * gaokun_ec_register_notify().
-+ */
-+void gaokun_ec_unregister_notify(struct gaokun_ec *ec, struct notifier_block *nb)
-+{
-+	blocking_notifier_chain_unregister(&ec->notifier_list, nb);
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_unregister_notify);
-+
-+/* -------------------------------------------------------------------------- */
-+/* API For PSY */
-+
-+int gaokun_ec_psy_multi_read(struct gaokun_ec *ec, u8 reg,
-+			     size_t resp_len, u8 *resp)
-+{
-+	int i, ret;
-+	u8 _resp[] = MKRESP(1);
-+	u8 req[] = MKREQ(0x02, EC_READ, 1, 0);
-+
-+	for (i = 0; i < resp_len; ++i, reg++) {
-+		refill_req(req, &reg, 1);
-+		ret = gaokun_ec_read(ec, req, sizeof(_resp), _resp);
-+		if (ret)
-+			return ret;
-+		extr_resp(&resp[i], _resp, 1);
++	port = &uec->ports[idx];
++	if (!wait_for_completion_timeout(&port->usb_ack, 2 * HZ)) {
++		dev_warn(uec->dev, "No USB EVENT, triggered by UCSI EVENT");
++		gaokun_ucsi_altmode_notify_ind(uec);
 +	}
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_psy_multi_read);
-+
-+/* Smart charge */
-+#define are_thresholds_valid(start, end) ((end != 0) && (start <= end) && (end <= 100))
-+int gaokun_ec_psy_get_smart_charge(struct gaokun_ec *ec,
-+				   u8 data[GAOKUN_SMART_CHARGE_DATA_SIZE])
-+{
-+	/* GBCM */
-+	u8 req[] = MKREQ(0x02, 0xE4, 0);
-+	u8 resp[] = MKRESP(GAOKUN_SMART_CHARGE_DATA_SIZE);
-+	int ret;
-+
-+	ret = gaokun_ec_read(ec, req, sizeof(resp), resp);
-+	if (ret)
-+		return -EIO;
-+
-+	extr_resp(data, resp, GAOKUN_SMART_CHARGE_DATA_SIZE);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_psy_get_smart_charge);
-+
-+int gaokun_ec_psy_set_smart_charge(struct gaokun_ec *ec,
-+				   u8 data[GAOKUN_SMART_CHARGE_DATA_SIZE])
-+{
-+	/* SBCM */
-+	u8 req[] = MKREQ(0x02, 0XE3, GAOKUN_SMART_CHARGE_DATA_SIZE);
-+
-+	if (!are_thresholds_valid(data[2], data[3]))
-+		return -EINVAL;
-+
-+	refill_req(req, data, GAOKUN_SMART_CHARGE_DATA_SIZE);
-+
-+	return gaokun_ec_write(ec, req);
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_psy_set_smart_charge);
-+
-+/* Smart charge enable */
-+int gaokun_ec_psy_get_smart_charge_enable(struct gaokun_ec *ec, bool *on)
-+{
-+	/* GBAC */
-+	*on = 0; /* clear other 3 Bytes */
-+	return gaokun_ec_read_byte(ec, (u8 [])MKREQ(0x02, 0xE6, 0), (u8 *)on);
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_psy_get_smart_charge_enable);
-+
-+int gaokun_ec_psy_set_smart_charge_enable(struct gaokun_ec *ec, bool on)
-+{
-+	/* SBAC */
-+	return gaokun_ec_write(ec, (u8 [])MKREQ(0x02, 0xE5, 1, on));
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_psy_set_smart_charge_enable);
-+
-+/* -------------------------------------------------------------------------- */
-+/* API For UCSI */
-+
-+int gaokun_ec_ucsi_read(struct gaokun_ec *ec,
-+			u8 resp[GAOKUN_UCSI_READ_SIZE])
-+{
-+	u8 req[] = MKREQ(0x03, 0xD5, 0);
-+	u8 _resp[] = MKRESP(GAOKUN_UCSI_READ_SIZE);
-+	int ret;
-+
-+	ret = gaokun_ec_read(ec, req, sizeof(_resp), _resp);
-+	if (ret)
-+		return ret;
-+
-+	extr_resp(resp, _resp, GAOKUN_UCSI_READ_SIZE);
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_read);
-+
-+int gaokun_ec_ucsi_write(struct gaokun_ec *ec,
-+			 const u8 req[GAOKUN_UCSI_WRITE_SIZE])
-+{
-+	u8 _req[] = MKREQ(0x03, 0xD4, GAOKUN_UCSI_WRITE_SIZE);
-+
-+
-+	refill_req(_req, req, GAOKUN_UCSI_WRITE_SIZE);
-+
-+	return gaokun_ec_write(ec, _req);
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_write);
-+
-+int gaokun_ec_ucsi_get_reg(struct gaokun_ec *ec, u8 *ureg)
-+{
-+	u8 req[] = MKREQ(0x03, 0xD3, 0);
-+	u8 _resp[] = MKRESP(UCSI_REG_SIZE);
-+	int ret;
-+
-+	ret = gaokun_ec_read(ec, req, sizeof(_resp), _resp);
-+	if (ret)
-+		return ret;
-+
-+	extr_resp(ureg, _resp, UCSI_REG_SIZE);
-+
-+	return 0;
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_get_reg);
-+
-+int gaokun_ec_ucsi_pan_ack(struct gaokun_ec *ec, int port_id)
-+{
-+	u8 req[] = MKREQ(0x03, 0xD2, 1);
-+	u8 data = 1 << port_id;
-+
-+	if (port_id == GAOKUN_UCSI_NO_PORT_UPDATE)
-+		data = 0;
-+
-+	refill_req(req, &data, 1);
-+
-+	return gaokun_ec_write(ec, req);
-+}
-+EXPORT_SYMBOL_GPL(gaokun_ec_ucsi_pan_ack);
-+
-+/* -------------------------------------------------------------------------- */
-+/* EC Sysfs */
-+
-+/* Fn lock */
-+static int gaokun_ec_get_fn_lock(struct gaokun_ec *ec, bool *on)
-+{
-+	/* GFRS */
-+	u8 req[] = MKREQ(0x02, 0x6B, 0);
-+	int ret;
-+	u8 val;
-+
-+	ret = gaokun_ec_read_byte(ec, req, &val);
-+	if (ret)
-+		return ret;
-+
-+	if (val == EC_FN_LOCK_ON)
-+		*on = true;
-+	else if (val == EC_FN_LOCK_OFF)
-+		*on = false;
-+	else
-+		return -EIO;
-+
-+	return 0;
 +}
 +
-+static int gaokun_ec_set_fn_lock(struct gaokun_ec *ec, bool on)
++static int gaokun_ucsi_notify(struct notifier_block *nb,
++			      unsigned long action, void *data)
 +{
-+	/* SFRS */
-+	u8 req[] = MKREQ(0x02, 0x6C, 1);
-+	u8 data;
++	u32 cci;
++	struct gaokun_ucsi *uec = container_of(nb, struct gaokun_ucsi, nb);
 +
-+	if (on)
-+		data = EC_FN_LOCK_ON;
-+	else
-+		data = EC_FN_LOCK_OFF;
++	switch (action) {
++	case EC_EVENT_USB:
++		gaokun_ucsi_altmode_notify_ind(uec);
++		return NOTIFY_OK;
 +
-+	refill_req(req, &data, 1);
++	case EC_EVENT_UCSI:
++		uec->ucsi->ops->read_cci(uec->ucsi, &cci);
++		ucsi_notify_common(uec->ucsi, cci);
++		if (UCSI_CCI_CONNECTOR(cci))
++			gaokun_ucsi_handle_no_usb_event(uec, UCSI_CCI_CONNECTOR(cci) - 1);
 +
-+	return gaokun_ec_write(ec, req);
-+}
-+
-+static ssize_t fn_lock_show(struct device *dev,
-+			    struct device_attribute *attr,
-+			    char *buf)
-+{
-+	struct gaokun_ec *ec = dev_get_drvdata(dev);
-+	bool on;
-+	int ret;
-+
-+	ret = gaokun_ec_get_fn_lock(ec, &on);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%d\n", on);
-+}
-+
-+static ssize_t fn_lock_store(struct device *dev,
-+			     struct device_attribute *attr,
-+			     const char *buf, size_t size)
-+{
-+	struct gaokun_ec *ec = dev_get_drvdata(dev);
-+	bool on;
-+	int ret;
-+
-+	if (kstrtobool(buf, &on))
-+		return -EINVAL;
-+
-+	ret = gaokun_ec_set_fn_lock(ec, on);
-+	if (ret)
-+		return ret;
-+
-+	return size;
-+}
-+
-+static DEVICE_ATTR_RW(fn_lock);
-+
-+static struct attribute *gaokun_ec_attrs[] = {
-+	&dev_attr_fn_lock.attr,
-+	NULL,
-+};
-+ATTRIBUTE_GROUPS(gaokun_ec);
-+
-+/* Thermal Zone HwMon */
-+/* Range from 0 to 0x2C, partial valid */
-+static const u8 temp_reg[20] = {0x05, 0x07, 0x08, 0x0E, 0x0F, 0x12, 0x15, 0x1E,
-+				0x1F, 0x20, 0x21, 0x22, 0x23, 0x24, 0x25, 0x26,
-+				0x27, 0x28, 0x29, 0x2A};
-+
-+static int gaokun_ec_get_temp(struct gaokun_ec *ec, u8 idx, int *temp)
-+{
-+	/* GTMP */
-+	u8 req[] = MKREQ(0x02, 0x61, 1, temp_reg[idx]);
-+	u8 resp[] = MKRESP(sizeof(__le16));
-+	__le16 tmp;
-+	int ret;
-+
-+	ret = gaokun_ec_read(ec, req, sizeof(resp), resp);
-+	if (ret)
-+		return ret;
-+
-+	extr_resp((u8 *)&tmp, resp, sizeof(tmp));
-+	*temp = le16_to_cpu(tmp) * 100; /* convert to HwMon's unit */
-+
-+	return 0;
-+}
-+
-+static ssize_t get_ec_tz_temp(struct device *dev,
-+			      struct device_attribute *attr,
-+			      char *buf)
-+{
-+	struct gaokun_ec *ec = dev_get_drvdata(dev);
-+	int idx, ret, temp;
-+
-+	idx = (to_sensor_dev_attr(attr))->index - 1;
-+	ret = gaokun_ec_get_temp(ec, idx, &temp);
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%d\n", temp);
-+}
-+
-+static ssize_t ec_tz_temp_label(struct device *dev,
-+				struct device_attribute *attr,
-+				char *buf)
-+{
-+	int idx = (to_sensor_dev_attr(attr))->index - 1;
-+
-+	return sysfs_emit(buf, "EC Thermal Zone %2d Temperature\n", idx);
-+}
-+
-+static SENSOR_DEVICE_ATTR(temp1_input, 0444, get_ec_tz_temp, NULL, 1);
-+static SENSOR_DEVICE_ATTR(temp1_label, 0444, ec_tz_temp_label, NULL, 1);
-+static SENSOR_DEVICE_ATTR(temp2_input, 0444, get_ec_tz_temp, NULL, 2);
-+static SENSOR_DEVICE_ATTR(temp2_label, 0444, ec_tz_temp_label, NULL, 2);
-+static SENSOR_DEVICE_ATTR(temp3_input, 0444, get_ec_tz_temp, NULL, 3);
-+static SENSOR_DEVICE_ATTR(temp3_label, 0444, ec_tz_temp_label, NULL, 3);
-+static SENSOR_DEVICE_ATTR(temp4_input, 0444, get_ec_tz_temp, NULL, 4);
-+static SENSOR_DEVICE_ATTR(temp4_label, 0444, ec_tz_temp_label, NULL, 4);
-+static SENSOR_DEVICE_ATTR(temp5_input, 0444, get_ec_tz_temp, NULL, 5);
-+static SENSOR_DEVICE_ATTR(temp5_label, 0444, ec_tz_temp_label, NULL, 5);
-+static SENSOR_DEVICE_ATTR(temp6_input, 0444, get_ec_tz_temp, NULL, 6);
-+static SENSOR_DEVICE_ATTR(temp6_label, 0444, ec_tz_temp_label, NULL, 6);
-+static SENSOR_DEVICE_ATTR(temp7_input, 0444, get_ec_tz_temp, NULL, 7);
-+static SENSOR_DEVICE_ATTR(temp7_label, 0444, ec_tz_temp_label, NULL, 7);
-+static SENSOR_DEVICE_ATTR(temp8_input, 0444, get_ec_tz_temp, NULL, 8);
-+static SENSOR_DEVICE_ATTR(temp8_label, 0444, ec_tz_temp_label, NULL, 8);
-+static SENSOR_DEVICE_ATTR(temp9_input, 0444, get_ec_tz_temp, NULL, 9);
-+static SENSOR_DEVICE_ATTR(temp9_label, 0444, ec_tz_temp_label, NULL, 9);
-+static SENSOR_DEVICE_ATTR(temp10_input, 0444, get_ec_tz_temp, NULL, 10);
-+static SENSOR_DEVICE_ATTR(temp10_label, 0444, ec_tz_temp_label, NULL, 10);
-+static SENSOR_DEVICE_ATTR(temp11_input, 0444, get_ec_tz_temp, NULL, 11);
-+static SENSOR_DEVICE_ATTR(temp11_label, 0444, ec_tz_temp_label, NULL, 11);
-+static SENSOR_DEVICE_ATTR(temp12_input, 0444, get_ec_tz_temp, NULL, 12);
-+static SENSOR_DEVICE_ATTR(temp12_label, 0444, ec_tz_temp_label, NULL, 12);
-+static SENSOR_DEVICE_ATTR(temp13_input, 0444, get_ec_tz_temp, NULL, 13);
-+static SENSOR_DEVICE_ATTR(temp13_label, 0444, ec_tz_temp_label, NULL, 13);
-+static SENSOR_DEVICE_ATTR(temp14_input, 0444, get_ec_tz_temp, NULL, 14);
-+static SENSOR_DEVICE_ATTR(temp14_label, 0444, ec_tz_temp_label, NULL, 14);
-+static SENSOR_DEVICE_ATTR(temp15_input, 0444, get_ec_tz_temp, NULL, 15);
-+static SENSOR_DEVICE_ATTR(temp15_label, 0444, ec_tz_temp_label, NULL, 15);
-+static SENSOR_DEVICE_ATTR(temp16_input, 0444, get_ec_tz_temp, NULL, 16);
-+static SENSOR_DEVICE_ATTR(temp16_label, 0444, ec_tz_temp_label, NULL, 16);
-+static SENSOR_DEVICE_ATTR(temp17_input, 0444, get_ec_tz_temp, NULL, 17);
-+static SENSOR_DEVICE_ATTR(temp17_label, 0444, ec_tz_temp_label, NULL, 17);
-+static SENSOR_DEVICE_ATTR(temp18_input, 0444, get_ec_tz_temp, NULL, 18);
-+static SENSOR_DEVICE_ATTR(temp18_label, 0444, ec_tz_temp_label, NULL, 18);
-+static SENSOR_DEVICE_ATTR(temp19_input, 0444, get_ec_tz_temp, NULL, 19);
-+static SENSOR_DEVICE_ATTR(temp19_label, 0444, ec_tz_temp_label, NULL, 19);
-+static SENSOR_DEVICE_ATTR(temp20_input, 0444, get_ec_tz_temp, NULL, 20);
-+static SENSOR_DEVICE_ATTR(temp20_label, 0444, ec_tz_temp_label, NULL, 20);
-+
-+static struct attribute *gaokun_ec_hwmon_attrs[] = {
-+	&sensor_dev_attr_temp1_input.dev_attr.attr,
-+	&sensor_dev_attr_temp1_label.dev_attr.attr,
-+	&sensor_dev_attr_temp2_input.dev_attr.attr,
-+	&sensor_dev_attr_temp2_label.dev_attr.attr,
-+	&sensor_dev_attr_temp3_input.dev_attr.attr,
-+	&sensor_dev_attr_temp3_label.dev_attr.attr,
-+	&sensor_dev_attr_temp4_input.dev_attr.attr,
-+	&sensor_dev_attr_temp4_label.dev_attr.attr,
-+	&sensor_dev_attr_temp5_input.dev_attr.attr,
-+	&sensor_dev_attr_temp5_label.dev_attr.attr,
-+	&sensor_dev_attr_temp6_input.dev_attr.attr,
-+	&sensor_dev_attr_temp6_label.dev_attr.attr,
-+	&sensor_dev_attr_temp7_input.dev_attr.attr,
-+	&sensor_dev_attr_temp7_label.dev_attr.attr,
-+	&sensor_dev_attr_temp8_input.dev_attr.attr,
-+	&sensor_dev_attr_temp8_label.dev_attr.attr,
-+	&sensor_dev_attr_temp9_input.dev_attr.attr,
-+	&sensor_dev_attr_temp9_label.dev_attr.attr,
-+	&sensor_dev_attr_temp10_input.dev_attr.attr,
-+	&sensor_dev_attr_temp10_label.dev_attr.attr,
-+	&sensor_dev_attr_temp11_input.dev_attr.attr,
-+	&sensor_dev_attr_temp11_label.dev_attr.attr,
-+	&sensor_dev_attr_temp12_input.dev_attr.attr,
-+	&sensor_dev_attr_temp12_label.dev_attr.attr,
-+	&sensor_dev_attr_temp13_input.dev_attr.attr,
-+	&sensor_dev_attr_temp13_label.dev_attr.attr,
-+	&sensor_dev_attr_temp14_input.dev_attr.attr,
-+	&sensor_dev_attr_temp14_label.dev_attr.attr,
-+	&sensor_dev_attr_temp15_input.dev_attr.attr,
-+	&sensor_dev_attr_temp15_label.dev_attr.attr,
-+	&sensor_dev_attr_temp16_input.dev_attr.attr,
-+	&sensor_dev_attr_temp16_label.dev_attr.attr,
-+	&sensor_dev_attr_temp17_input.dev_attr.attr,
-+	&sensor_dev_attr_temp17_label.dev_attr.attr,
-+	&sensor_dev_attr_temp18_input.dev_attr.attr,
-+	&sensor_dev_attr_temp18_label.dev_attr.attr,
-+	&sensor_dev_attr_temp19_input.dev_attr.attr,
-+	&sensor_dev_attr_temp19_label.dev_attr.attr,
-+	&sensor_dev_attr_temp20_input.dev_attr.attr,
-+	&sensor_dev_attr_temp20_label.dev_attr.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(gaokun_ec_hwmon);
-+
-+/* -------------------------------------------------------------------------- */
-+/* Modern Standby */
-+
-+static int gaokun_ec_suspend(struct device *dev)
-+{
-+	struct gaokun_ec *ec = dev_get_drvdata(dev);
-+	u8 req[] = MKREQ(0x02, 0xB2, 1, 0xDB);
-+	int ret;
-+
-+	if (ec->suspended)
-+		return 0;
-+
-+	ret = gaokun_ec_write(ec, req);
-+
-+	if (ret)
-+		return ret;
-+
-+	ec->suspended = true;
-+
-+	return 0;
-+}
-+
-+static int gaokun_ec_resume(struct device *dev)
-+{
-+	struct gaokun_ec *ec = dev_get_drvdata(dev);
-+	u8 req[] = MKREQ(0x02, 0xB2, 1, 0xEB);
-+	int ret;
-+	int i;
-+
-+	if (!ec->suspended)
-+		return 0;
-+
-+	for (i = 0; i < 3; ++i) {
-+		ret = gaokun_ec_write(ec, req);
-+		if (ret == 0)
-+			break;
-+
-+		msleep(100); /* EC need time to resume */
-+	};
-+
-+	ec->suspended = false;
-+
-+	return 0;
-+}
-+
-+static void gaokun_aux_release(struct device *dev)
-+{
-+	struct auxiliary_device *adev = to_auxiliary_dev(dev);
-+
-+	kfree(adev);
-+}
-+
-+static void gaokun_aux_remove(void *data)
-+{
-+	struct auxiliary_device *adev = data;
-+
-+	auxiliary_device_delete(adev);
-+	auxiliary_device_uninit(adev);
-+}
-+
-+static int gaokun_aux_init(struct device *parent, const char *name,
-+			   struct gaokun_ec *ec)
-+{
-+	struct auxiliary_device *adev;
-+	int ret;
-+
-+	adev = kzalloc(sizeof(*adev), GFP_KERNEL);
-+	if (!adev)
-+		return -ENOMEM;
-+
-+	adev->name = name;
-+	adev->id = 0;
-+	adev->dev.parent = parent;
-+	adev->dev.release = gaokun_aux_release;
-+	adev->dev.platform_data = ec;
-+	/* Allow aux devices to access parent's DT nodes directly */
-+	device_set_of_node_from_dev(&adev->dev, parent);
-+
-+	ret = auxiliary_device_init(adev);
-+	if (ret) {
-+		kfree(adev);
-+		return ret;
-+	}
-+
-+	ret = auxiliary_device_add(adev);
-+	if (ret) {
-+		auxiliary_device_uninit(adev);
-+		return ret;
-+	}
-+
-+	return devm_add_action_or_reset(parent, gaokun_aux_remove, adev);
-+}
-+
-+/* -------------------------------------------------------------------------- */
-+/* EC */
-+
-+static irqreturn_t gaokun_ec_irq_handler(int irq, void *data)
-+{
-+	struct gaokun_ec *ec = data;
-+	u8 req[] = MKREQ(EC_EVENT, EC_QUERY, 0);
-+	u8 status, id;
-+	int ret;
-+
-+	ret = gaokun_ec_read_byte(ec, req, &id);
-+	if (ret)
-+		return IRQ_HANDLED;
-+
-+	switch (id) {
-+	case 0x0: /* No event */
-+		break;
-+
-+	case EC_EVENT_LID:
-+		gaokun_ec_psy_read_byte(ec, EC_LID_STATE, &status);
-+		status = EC_LID_OPEN & status;
-+		input_report_switch(ec->idev, SW_LID, !status);
-+		input_sync(ec->idev);
-+		break;
++		return NOTIFY_OK;
 +
 +	default:
-+		blocking_notifier_call_chain(&ec->notifier_list, id, ec);
++		return NOTIFY_DONE;
 +	}
-+
-+	return IRQ_HANDLED;
 +}
 +
-+static int gaokun_ec_probe(struct i2c_client *client)
++static inline int gaokun_ucsi_get_port_num(struct gaokun_ucsi *uec)
 +{
-+	struct device *dev = &client->dev;
-+	struct gaokun_ec *ec;
++	struct gaokun_ucsi_reg ureg;
 +	int ret;
 +
-+	ec = devm_kzalloc(dev, sizeof(*ec), GFP_KERNEL);
-+	if (!ec)
++	ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
++
++	return ret ? 0 : ureg.port_num;
++}
++
++static int gaokun_ucsi_ports_init(struct gaokun_ucsi *uec)
++{
++	u32 port;
++	int i, ret, port_num;
++	struct device *dev = uec->dev;
++	struct gaokun_ucsi_port *ucsi_port;
++	struct fwnode_handle *fwnode;
++
++	port_num = gaokun_ucsi_get_port_num(uec);
++	uec->port_num = port_num;
++
++	uec->ports = devm_kcalloc(dev, port_num, sizeof(*(uec->ports)),
++				  GFP_KERNEL);
++	if (!uec->ports)
 +		return -ENOMEM;
 +
-+	mutex_init(&ec->lock);
-+	ec->client = client;
-+	i2c_set_clientdata(client, ec);
-+	BLOCKING_INIT_NOTIFIER_HEAD(&ec->notifier_list);
++	for (i = 0; i < port_num; ++i) {
++		ucsi_port = &uec->ports[i];
++		ucsi_port->ccx = USBC_CCX_NONE;
++		ucsi_port->idx = i;
++		ucsi_port->ucsi = uec;
++		init_completion(&ucsi_port->usb_ack);
++		spin_lock_init(&ucsi_port->lock);
++	}
 +
-+	/* Lid switch */
-+	ec->idev = devm_input_allocate_device(dev);
-+	if (!ec->idev)
-+		return -ENOMEM;
++	device_for_each_child_node(dev, fwnode) {
++		ret = fwnode_property_read_u32(fwnode, "reg", &port);
++		if (ret < 0) {
++			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
++			fwnode_handle_put(fwnode);
++			return ret;
++		}
 +
-+	ec->idev->name = "LID";
-+	ec->idev->phys = "gaokun-ec/input0";
-+	input_set_capability(ec->idev, EV_SW, SW_LID);
++		if (port >= port_num) {
++			dev_warn(dev, "invalid connector number %d, ignoring\n", port);
++			continue;
++		}
 +
-+	ret = input_register_device(ec->idev);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to register input device\n");
++		ucsi_port = &uec->ports[port];
++		ucsi_port->bridge = devm_drm_dp_hpd_bridge_alloc(dev, to_of_node(fwnode));
++		if (IS_ERR(ucsi_port->bridge)) {
++			fwnode_handle_put(fwnode);
++			return PTR_ERR(ucsi_port->bridge);
++		}
++	}
 +
-+	ret = gaokun_aux_init(dev, "psy", ec);
-+	if (ret)
-+		return ret;
++	for (i = 0; i < port_num; i++) {
++		if (!uec->ports[i].bridge)
++			continue;
 +
-+	ret = gaokun_aux_init(dev, "ucsi", ec);
-+	if (ret)
-+		return ret;
-+
-+	ret = devm_request_threaded_irq(dev, client->irq, NULL,
-+					gaokun_ec_irq_handler, IRQF_ONESHOT,
-+					dev_name(dev), ec);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "Failed to request irq\n");
-+
-+	ec->hwmon_dev = hwmon_device_register_with_groups(dev, "gaokun_ec_hwmon",
-+							  ec, gaokun_ec_hwmon_groups);
-+	if (IS_ERR(ec->hwmon_dev)) {
-+		dev_err(dev, "Failed to register hwmon device\n");
-+		return PTR_ERR(ec->hwmon_dev);
++		ret = devm_drm_dp_hpd_bridge_add(dev, uec->ports[i].bridge);
++		if (ret)
++			return ret;
 +	}
 +
 +	return 0;
 +}
 +
-+static void gaokun_ec_remove(struct i2c_client *client)
++static void gaokun_ucsi_register_worker(struct work_struct *work)
 +{
-+	struct gaokun_ec *ec = i2c_get_clientdata(client);
-+	hwmon_device_unregister(ec->hwmon_dev);
++	struct gaokun_ucsi *uec;
++	struct ucsi *ucsi;
++	int ret;
++
++	uec = container_of(work, struct gaokun_ucsi, work.work);
++	ucsi = uec->ucsi;
++	/* This may be a problem specific to sc8280xp-based machines */
++	ucsi->quirks = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_PDOS;
++
++	ret = gaokun_ec_register_notify(uec->ec, &uec->nb);
++	if (ret) {
++		dev_err_probe(ucsi->dev, ret, "notifier register failed\n");
++		return;
++	}
++
++	ret = ucsi_register(ucsi);
++	if (ret)
++		dev_err_probe(ucsi->dev, ret, "ucsi register failed\n");
 +}
 +
-+static const struct i2c_device_id gaokun_ec_id[] = {
-+	{ "gaokun-ec", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, gaokun_ec_id);
++static inline int gaokun_ucsi_register(struct gaokun_ucsi *uec)
++{
++	/* EC can't handle UCSI properly in the early stage */
++	schedule_delayed_work(&uec->work, 3 * HZ);
 +
-+static const struct of_device_id gaokun_ec_of_match[] = {
-+	{ .compatible = "huawei,gaokun-ec", },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(of, gaokun_ec_of_match);
++	return 0;
++}
 +
-+static const struct dev_pm_ops gaokun_ec_pm_ops = {
-+	NOIRQ_SYSTEM_SLEEP_PM_OPS(gaokun_ec_suspend, gaokun_ec_resume)
++static int gaokun_ucsi_probe(struct auxiliary_device *adev,
++			     const struct auxiliary_device_id *id)
++{
++	struct gaokun_ec *ec = adev->dev.platform_data;
++	struct device *dev = &adev->dev;
++	struct gaokun_ucsi *uec;
++	int ret;
++
++	uec = devm_kzalloc(dev, sizeof(*uec), GFP_KERNEL);
++	if (!uec)
++		return -ENOMEM;
++
++	uec->ec = ec;
++	uec->dev = dev;
++	uec->version = 0x0100;
++	uec->nb.notifier_call = gaokun_ucsi_notify;
++
++	INIT_DELAYED_WORK(&uec->work, gaokun_ucsi_register_worker);
++
++	ret = gaokun_ucsi_ports_init(uec);
++	if (ret)
++		return ret;
++
++	uec->ucsi = ucsi_create(dev, &gaokun_ucsi_ops);
++	if (IS_ERR(uec->ucsi))
++		return PTR_ERR(uec->ucsi);
++
++	ucsi_set_drvdata(uec->ucsi, uec);
++	auxiliary_set_drvdata(adev, uec);
++
++	return gaokun_ucsi_register(uec);
++}
++
++static void gaokun_ucsi_remove(struct auxiliary_device *adev)
++{
++	struct gaokun_ucsi *uec = auxiliary_get_drvdata(adev);
++
++	gaokun_ec_unregister_notify(uec->ec, &uec->nb);
++	ucsi_unregister(uec->ucsi);
++	ucsi_destroy(uec->ucsi);
++}
++
++static const struct auxiliary_device_id gaokun_ucsi_id_table[] = {
++	{ .name = GAOKUN_MOD_NAME "." GAOKUN_DEV_UCSI, },
++	{}
++};
++MODULE_DEVICE_TABLE(auxiliary, gaokun_ucsi_id_table);
++
++static struct auxiliary_driver gaokun_ucsi_driver = {
++	.name = GAOKUN_DEV_UCSI,
++	.id_table = gaokun_ucsi_id_table,
++	.probe = gaokun_ucsi_probe,
++	.remove = gaokun_ucsi_remove,
 +};
 +
-+static struct i2c_driver gaokun_ec_driver = {
-+	.driver = {
-+		.name = "gaokun-ec",
-+		.of_match_table = gaokun_ec_of_match,
-+		.pm = &gaokun_ec_pm_ops,
-+		.dev_groups = gaokun_ec_groups,
-+	},
-+	.probe = gaokun_ec_probe,
-+	.remove = gaokun_ec_remove,
-+	.id_table = gaokun_ec_id,
-+};
-+module_i2c_driver(gaokun_ec_driver);
++module_auxiliary_driver(gaokun_ucsi_driver);
 +
-+MODULE_DESCRIPTION("HUAWEI Matebook E Go EC driver");
-+MODULE_AUTHOR("Pengyu Luo <mitltlatltl@gmail.com>");
++MODULE_DESCRIPTION("HUAWEI Matebook E Go UCSI driver");
 +MODULE_LICENSE("GPL");
-diff --git a/include/linux/platform_data/huawei-gaokun-ec.h b/include/linux/platform_data/huawei-gaokun-ec.h
-new file mode 100644
-index 000000000..7a8d17391
---- /dev/null
-+++ b/include/linux/platform_data/huawei-gaokun-ec.h
-@@ -0,0 +1,79 @@
-+// SPDX-License-Identifier: GPL-2.0-only
-+/*
-+ * Huawei Matebook E Go Embedded Controller
-+ *
-+ * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
-+ */
-+
-+#ifndef __HUAWEI_GAOKUN_EC_H__
-+#define __HUAWEI_GAOKUN_EC_H__
-+
-+#define GAOKUN_UCSI_CCI_SIZE	4
-+#define GAOKUN_UCSI_DATA_SIZE	16
-+#define GAOKUN_UCSI_READ_SIZE	(GAOKUN_UCSI_CCI_SIZE + GAOKUN_UCSI_DATA_SIZE)
-+#define GAOKUN_UCSI_WRITE_SIZE	0x18
-+
-+#define GAOKUN_UCSI_NO_PORT_UPDATE	(-1)
-+
-+#define GAOKUN_SMART_CHARGE_DATA_SIZE	4 /* mode, delay, start, end */
-+
-+/* -------------------------------------------------------------------------- */
-+
-+struct gaokun_ec;
-+struct notifier_block;
-+
-+#define GAOKUN_MOD_NAME			"huawei_gaokun_ec"
-+#define GAOKUN_DEV_PSY			"psy"
-+#define GAOKUN_DEV_UCSI			"ucsi"
-+
-+/* -------------------------------------------------------------------------- */
-+/* Common API */
-+
-+int gaokun_ec_register_notify(struct gaokun_ec *ec,
-+			      struct notifier_block *nb);
-+void gaokun_ec_unregister_notify(struct gaokun_ec *ec,
-+				 struct notifier_block *nb);
-+
-+int gaokun_ec_read(struct gaokun_ec *ec, const u8 *req,
-+		   size_t resp_len, u8 *resp);
-+int gaokun_ec_write(struct gaokun_ec *ec, u8 *req);
-+int gaokun_ec_read_byte(struct gaokun_ec *ec, u8 *req, u8 *byte);
-+
-+/* -------------------------------------------------------------------------- */
-+/* API For PSY */
-+
-+int gaokun_ec_psy_multi_read(struct gaokun_ec *ec, u8 reg,
-+			     size_t resp_len, u8 *resp);
-+
-+static inline int gaokun_ec_psy_read_byte(struct gaokun_ec *ec,
-+					  u8 reg, u8 *byte)
-+{
-+	return gaokun_ec_psy_multi_read(ec, reg, sizeof(*byte), byte);
-+}
-+
-+static inline int gaokun_ec_psy_read_word(struct gaokun_ec *ec,
-+					  u8 reg, u16 *word)
-+{
-+	return gaokun_ec_psy_multi_read(ec, reg, sizeof(*word), (u8 *)word);
-+}
-+
-+int gaokun_ec_psy_get_smart_charge(struct gaokun_ec *ec,
-+				   u8 data[GAOKUN_SMART_CHARGE_DATA_SIZE]);
-+int gaokun_ec_psy_set_smart_charge(struct gaokun_ec *ec,
-+				   u8 data[GAOKUN_SMART_CHARGE_DATA_SIZE]);
-+
-+int gaokun_ec_psy_get_smart_charge_enable(struct gaokun_ec *ec, bool *on);
-+int gaokun_ec_psy_set_smart_charge_enable(struct gaokun_ec *ec, bool on);
-+
-+/* -------------------------------------------------------------------------- */
-+/* API For UCSI */
-+
-+int gaokun_ec_ucsi_read(struct gaokun_ec *ec, u8 resp[GAOKUN_UCSI_READ_SIZE]);
-+int gaokun_ec_ucsi_write(struct gaokun_ec *ec,
-+			 const u8 req[GAOKUN_UCSI_WRITE_SIZE]);
-+
-+int gaokun_ec_ucsi_get_reg(struct gaokun_ec *ec, u8 *ureg);
-+int gaokun_ec_ucsi_pan_ack(struct gaokun_ec *ec, int port_id);
-+
-+
-+#endif /* __HUAWEI_GAOKUN_EC_H__ */
 -- 
 2.47.1
 
