@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-19970-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19971-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC306A01B1C
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 18:45:04 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86A91A01B22
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 18:45:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EB3F41883C73
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 17:45:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F055162E69
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 17:45:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ADC81CDFD5;
-	Sun,  5 Jan 2025 17:44:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B741C1C68A3;
+	Sun,  5 Jan 2025 17:44:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="FiIaQTq0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="moz5IHtl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CDEF1C0DED;
-	Sun,  5 Jan 2025 17:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84184194A74;
+	Sun,  5 Jan 2025 17:44:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736099082; cv=none; b=UlqsM/eErlOMkQ25tMN58Uzc8n0F5Fg+2N9gfTr7/TuuAi1y6uueUzTHqwJksdUQhx2vBVn/aupABcF+MqtQzo+d0h8bZxedq9P5g20MmR3oKF4oewjZoZPcDzvLQgY/PmRWeGREq8wM1K+5eRAaXPebg1d6NNdQ8cVK/oLicT0=
+	t=1736099096; cv=none; b=XeHzI+tH90epCxr/gQ77MRqCqjjSnNYh8Mn0dLp1uHoLDQmbP4WUdSXpG9BCsXEzxQqefJriEiZHJpQobHKfKlHfms0K0PbBxIael+QHtg2xT9eYJgmZ690p604YRljhy1fs8DiPdXiotmOKpkVdL7h7MGWVYgaRFe6hldE2+vc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736099082; c=relaxed/simple;
-	bh=D5IlMtAl+uTkkx/UIKc3WY2G0+8X7xX8G8TaPY6+f6w=;
+	s=arc-20240116; t=1736099096; c=relaxed/simple;
+	bh=xVHeUc/C4u1daGbrWuogd81/0rcQNKbsMESLSlYwRl0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=q6oUG4AD7mpEiWhN3PUvYFvRbNz6LT/HOI+qKqm5au39jr+IfJ7IuS8jJFa6RxJySGEFTTKjJJWkqHxb2g8v0p2Lq1RbTltak7GqbIUDEPKwMQxpIQRPEJn30ZQtgZuAy4M0iblQ+gIRPBFApePFkG3qEsHHR+BLFbpSygYwufA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=FiIaQTq0; arc=none smtp.client-ip=209.85.214.169
+	 MIME-Version; b=NrBOfIGZ3mtJ7H6HyY5uazaxi/7w17RQPy9vL/eyvCR2G3Hjb16p6Dt39MUH0/F7jPQkESx+AIPTA82x1xcavt3vp0u+S5UXTNijgSxclrpOpZMq68EppCO6seyD4JlTKYGV7KtF5Tg8x0+4oTpoGDgbbMrkTHNZax/wz3F50lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=moz5IHtl; arc=none smtp.client-ip=209.85.214.177
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-216728b1836so174373945ad.0;
-        Sun, 05 Jan 2025 09:44:39 -0800 (PST)
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21649a7bcdcso187913385ad.1;
+        Sun, 05 Jan 2025 09:44:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736099079; x=1736703879; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1736099094; x=1736703894; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=3d0jF7kNZrSFFba9MWDdQNjjLx4MP93BazBprG+7xJg=;
-        b=FiIaQTq0TVv5UUZ/HGNVg0nVnJQXaKW2B5xGa6TPLTZBcXzQA8DVESw6ZFscSAR2kj
-         Fva3QPkWMfpFbACsdpq5FEWC2qduEOCi8kA6gUbhfvrBKOKcavXrnNFBJbUZ2wTPDwlT
-         9wGb1zDimgFNLeCJO8c66nqFqVI4YOwZJgUlDlbhVu3cdcCFGiKooY3KUYXXpv6N/50t
-         V+UZg/qhivz2Dhf1qf237KUJx2EA+L3oJzPwepk1SVh1ARc2UpPXbVEJwytskmYrTeW4
-         2ggbMFxv/a/8GVOjaRV1zYZyqGot9mVQs2lMPffltZI1+WUh9cxdUuVk6NoIElizQy3v
-         2x1A==
+        bh=gZLsaP+3GWbBerxQUrnDJSoxZwCUOex2k8o1U+GPlvY=;
+        b=moz5IHtlkDYRhfwS6lUc9LzmsXgDHPR1gOxvBr3YB5row0Md0rsoOoPZvyiiVP36Xo
+         6ohMi7/Duljy4iAF8RwTVgMdEXh+hJ+/gh3t8MrYWR1MsGnI3tx0Fp84v4p+rXUr/frZ
+         mREvPa15j024IsM42C6QUzRZlZLnrQbf+fEGpPLLlMnkssHbRjCW9OLxBPvSvCxsm6/u
+         /Dnx5Rez85/SxZHuOljK8QA7QptvDO7mEs9fRg5tzF5d5+X03HoQGfTgHo8TOedUtyud
+         VlgRMgHjFOmTJ9ihpDuKbGkcd2YSac/YuEHlyFKAH34X+AlW/i2SQH2Nv5GsDX3Pe4CY
+         HGUQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736099079; x=1736703879;
+        d=1e100.net; s=20230601; t=1736099094; x=1736703894;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=3d0jF7kNZrSFFba9MWDdQNjjLx4MP93BazBprG+7xJg=;
-        b=h3gErzaj6RFftskuj1s1jLqcUlJ7h8lleg1MCxt8IUenxAyNOWlWkebr0XPXW5YWQt
-         LfGcG2KZISzPfXFdGHWvmQLMA5h7w80PS8iNcLnvQ5pQvI3HM2eMAhZt6CQ0CgC0oESq
-         PAOAP3ls1bcnHV/85y/KIeRauB+NeDmd0uKQSmk8uZZYxf5Hf8xNa5b1RS9d0SiljgZr
-         a8Z1KeSYy5nz1UD98TaocVOamYmUl1gM75ArcP2CY7MCezH9nvYV6Wmp1fLfARSJHN6D
-         1Zx6u4p0zZXPgwCIbL72C1hbZmp7OLz/U8VciCb2cmx5QA0gCoYeKh6sifvNDZj0C/q9
-         +SvQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUfMylNldcUJCVaZYvjVxjD/f3U15gdG0X5aESNr2dhqi03aPM3WmYrOSZYE6YffefQInxd/KPpSEibXIZ4@vger.kernel.org, AJvYcCUrRMLcmLviwOKkJDzJexnRMLdtJFHIcgLEgIZrQ+gDsNNhBBEMxAFiiYpU9RfEAvx0ax3Tcl3SlobB@vger.kernel.org, AJvYcCVgLdWKTI+DKIVd2bYMSiV/kAelnxjFzcc8qS5qTFOAbushf/tVAeE3LK0n9VNYh6YbAwucVpw12lQ=@vger.kernel.org, AJvYcCX3iAy0VjjmcZrz++HfQJ3ihZLl6+fiJapX7Z/UCKfe3nTjCev+R+r6MwPkvRDTGNGe/HqFVdynSoDw39sHuqd1870dog==@vger.kernel.org, AJvYcCXdO1mSOw89qWLu0F/6ZMDVDhERGkZZJJLR0k/JWXZJ3cyNb0d3PBOUAPob7kRS7e+Hprdkc/kcOnlw5og=@vger.kernel.org, AJvYcCXgs2NwxX7oalWB0g3VBYj/AzyDx+DYrgV2zf9GdxB7Y74AC+vV6GtzFB+Xj5MBToeOtOc3uSP72gzb4ylf@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx7EYRw+FWG7WW56I65qMMcdREHV0AYtLsURWOw9Yq+/5ZtRzNM
-	GBGf/EwRMm63nZ8Cv40QXvws+rA44LvdgZOLvsiZqbydaP0W88Y9
-X-Gm-Gg: ASbGncvu/bGZb+KICS2+VyTC+tUMWs9r24c/EcMGr2X2b06wlzw/6qEGt5gIziGOHvW
-	Crnh7SMyEyOWnzUdCZNMTJeXZB1xIV8fIV+YddbGvJ8YsVT9eUqa4cEo08bmul/vSvIxfN70ZrZ
-	PpNH/laWhi/Y5Mw56Rr0DS8DH3/fMKxP64dg1ImT7QD0o1rY8/tbcMP7iOkzSzTO6EiwlFaX/Hm
-	eDn20TPACrL9UPmC7FHPGvfPUHq/jChLUy7q+sqo23XnVcVeF7+L9M=
-X-Google-Smtp-Source: AGHT+IFhM4H+33xSsvYkhW92V2AuBbuHnXONZyxIVy6w65xEXqkkQV+s2rc8boow5qq5ZPwfsij3gQ==
-X-Received: by 2002:a05:6a00:acc:b0:72a:bb83:7804 with SMTP id d2e1a72fcca58-72abde81bf6mr81637286b3a.17.1736099079345;
-        Sun, 05 Jan 2025 09:44:39 -0800 (PST)
+        bh=gZLsaP+3GWbBerxQUrnDJSoxZwCUOex2k8o1U+GPlvY=;
+        b=k5T8xvaN0GvPeZKEnmGBB+PrsXPAMQf3dHBHnEcwDVSneskV4YnIvnlSny8DrYtDZY
+         TrzJ+GnajZBdCp0WE6T2vZRQed0Dm8MdiYg4PUOQzRkSeI/dGdj2A2a94rjB0XFqJ4JW
+         Pge52BB4wNR9RIt9H3XsQWhAszZbVrhlLvxpxRjjJhTWBivYusiRCo2GD08haOfSzpRh
+         1BqsESBIgu5hWwlg1kK9anfwX+irb79VZmQX+DSAZFDkeJ0bUD1K1+RvOBdfFwhrWy41
+         wWKFUuy2Bc2OpLSPYpuQdb1636/aQDF/yuf8XT+oW4JZfqfjgud/KyPpU9fTG6U7DCdu
+         7YBg==
+X-Forwarded-Encrypted: i=1; AJvYcCV2/FJwuQEqR90HwAeMEG3FcXqgaxxdSEmKkeDRSwf9g7NTrPe6QWvZBNhikdJSS4/a+uLm+wRoq5smzSU=@vger.kernel.org, AJvYcCVWf/bJ5wECdYcncX+c3iRrry/LU3amYDAEuj9m+3x2Y7D6scUzzrNVRXszEpkaEuS+ncKp9ZLYsXGq@vger.kernel.org, AJvYcCWTKT9BppjgEl9A0hcG0uElEJm73w91piXs8xJVxZ5xarAQK7DysvLbm66B1SobyzIDlON1370DRhw=@vger.kernel.org, AJvYcCWXhqsAJgvpsZOiYks9DMXWTB1OzEsUShY/+Y3UNEnHKb97B197Azs/Qz7j3SaF8EuSU8+wJmz3shVM0a2wVIXWobvibA==@vger.kernel.org, AJvYcCWhDPFILInRcYXtjFNq3bHIZMLQrueGtglQNEDhbMOkaSeUwyEqF60DDjkSGC0LkubVfWBLJF2d2giW0oua@vger.kernel.org, AJvYcCXG7WMQHz4/BHIGOu1vYxNG5NJcONEKcs76bPlgVaYIlyzdX5ArB4pan9XBKNYos+wuvUmSYBECLy6mEXlq@vger.kernel.org
+X-Gm-Message-State: AOJu0YybTc/vq7SeANI77MSUqzO8owyLIXFBofDb1T7C/kpy3LTzsRqi
+	w2ciVNvZ2N9Fe5aSlyaWjFee9aAcf6lmlZHSohKVuU++i1x8DPLI
+X-Gm-Gg: ASbGncs0H5Y8PxH+okYOwRikCzk3huzyAVVRn8n2CI9SxcnYZXlfp4rW8ge2vnNwCD1
+	o0qbQ6+muYCjKlCr6z73euzobf3J70sZqUFppWpQKFLjQmzBXqXrfBiC9+kNBPtOzYPyYvEsKVx
+	uzCpOGkcH2dqWIRQo96VR+cMqBUYvewhqtLjem4d4rh+pmPdTFIqwqv3IBPGR7fS1sNf9M2Ba96
+	RuIYGusz47uJduUftSH3h8pdVsrld3cdZMrwn8lhd40H4ebJ+V0fdI=
+X-Google-Smtp-Source: AGHT+IEIGhhwGKeXdLbTeAZmLA4GuhP9OQ+KHuIuhth4AjtsuC0yDQQ/THKrMFqO/AogEJjkKic9Fw==
+X-Received: by 2002:a05:6a20:7f99:b0:1e0:cfc0:df34 with SMTP id adf61e73a8af0-1e5e0470226mr81719777637.16.1736099093722;
+        Sun, 05 Jan 2025 09:44:53 -0800 (PST)
 Received: from nuvole.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842abd5927fsm27375046a12.10.2025.01.05.09.44.25
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842abd5927fsm27375046a12.10.2025.01.05.09.44.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2025 09:44:38 -0800 (PST)
+        Sun, 05 Jan 2025 09:44:52 -0800 (PST)
 From: Pengyu Luo <mitltlatltl@gmail.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -94,9 +94,9 @@ Cc: devicetree@vger.kernel.org,
 	linux-hwmon@vger.kernel.org,
 	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
 	Pengyu Luo <mitltlatltl@gmail.com>
-Subject: [PATCH v2 3/5] usb: typec: ucsi: add Huawei Matebook E Go ucsi driver
-Date: Mon,  6 Jan 2025 01:41:57 +0800
-Message-ID: <20250105174159.227831-4-mitltlatltl@gmail.com>
+Subject: [PATCH v2 4/5] power: supply: add Huawei Matebook E Go psy driver
+Date: Mon,  6 Jan 2025 01:41:58 +0800
+Message-ID: <20250105174159.227831-5-mitltlatltl@gmail.com>
 X-Mailer: git-send-email 2.47.1
 In-Reply-To: <20250105174159.227831-1-mitltlatltl@gmail.com>
 References: <20250105174159.227831-1-mitltlatltl@gmail.com>
@@ -108,412 +108,590 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The Huawei Matebook E Go tablet implements the UCSI interface in the
-onboard EC. Add the glue driver to interface with the platform's UCSI
-implementation.
+On the Huawei Matebook E Go tablet the EC provides access to the adapter
+and battery status. Add the driver to read power supply status on the
+tablet.
 
 Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
 ---
- drivers/usb/typec/ucsi/Kconfig              |  10 +
- drivers/usb/typec/ucsi/Makefile             |   1 +
- drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 524 ++++++++++++++++++++
- 3 files changed, 535 insertions(+)
- create mode 100644 drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+ .../ABI/testing/sysfs-class-power-gaokun      |  47 ++
+ drivers/power/supply/Kconfig                  |  10 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/huawei-gaokun-battery.c  | 548 ++++++++++++++++++
+ 4 files changed, 606 insertions(+)
+ create mode 100644 Documentation/ABI/testing/sysfs-class-power-gaokun
+ create mode 100644 drivers/power/supply/huawei-gaokun-battery.c
 
-diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-index 680e1b87b..8a73df84a 100644
---- a/drivers/usb/typec/ucsi/Kconfig
-+++ b/drivers/usb/typec/ucsi/Kconfig
-@@ -78,4 +78,14 @@ config UCSI_LENOVO_YOGA_C630
- 	  To compile the driver as a module, choose M here: the module will be
- 	  called ucsi_yoga_c630.
+diff --git a/Documentation/ABI/testing/sysfs-class-power-gaokun b/Documentation/ABI/testing/sysfs-class-power-gaokun
+new file mode 100644
+index 000000000..b1eb9e8d7
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-class-power-gaokun
+@@ -0,0 +1,47 @@
++What:		/sys/class/power_supply/gaokun-ec-battery/smart_charge
++Date:		January 2025
++KernelVersion:	6.12
++Contact:	Pengyu Luo <mitltlatltl@gmail.com>
++Description:
++		This entry allows configuration of smart charging behavior with
++		four parameters. The format is: <mode> <delay> <start> <stop>.
++
++		- mode: Defines the charging mode (1 or 4). Mode 4 enables delay,
++			while mode 1 does not.
++		- delay: Specifies the delay in hours (non-negative). This is
++			only used when 'mode' is set to 4.
++		- start: The battery percentage at which charging starts (0-100).
++		- stop: The battery percentage at which charging stops (1-100).
++
++		 When the laptop is connected to a power adapter, it starts
++		 charging if the battery level is below the 'start' value. It
++		 continues charging until the battery reaches the 'stop' level.
++		 If the battery is already above the 'stop' level, charging is
++		 paused.
++
++		 When the power adapter is always connected, charging will
++		 begin if the battery level falls below 'start', and charging
++		 will stop once the battery reaches 'stop'.
++
++		 If mode is set to 4, the above charging mode will only occur
++		 after the specified delay in hours. If mode is 1, there is
++		 no delay.
++
++		Access: Read, Write
++
++		Valid values:
++			- mode: integer value (1 or 4)
++			- delay: integer value, delay in hours (non-negative)
++			- start: integer value, battery percentage (0-100)
++			- stop: integer value, battery percentage (1-100)
++
++What:		/sys/class/power_supply/gaokun-ec-battery/smart_charge_enable
++Date:		January 2025
++KernelVersion:	6.12
++Contact:	Pengyu Luo <mitltlatltl@gmail.com>
++Description:
++		This entry allows enabling smart charging.
++
++		Access: Read, Write
++
++		Valid values: 0 (disabled) or 1 (enabled)
+diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
+index 9f2eef678..f00983186 100644
+--- a/drivers/power/supply/Kconfig
++++ b/drivers/power/supply/Kconfig
+@@ -161,6 +161,16 @@ config BATTERY_DS2782
+ 	  Say Y here to enable support for the DS2782/DS2786 standalone battery
+ 	  gas-gauge.
  
-+config UCSI_HUAWEI_GAOKUN
-+	tristate "UCSI Interface Driver for Huawei Matebook E Go"
++config BATTERY_HUAWEI_GAOKUN
++	tristate "Huawei Matebook E Go power supply"
 +	depends on EC_HUAWEI_GAOKUN
 +	help
-+	  This driver enables UCSI support on the Huawei Matebook E Go tablet,
-+	  which is a sc8280xp-based 2-in-1 tablet.
++	  This driver enables battery and adapter support on the Huawei Matebook
++	  E Go, which is a sc8280xp-based 2-in-1 tablet.
 +
 +	  To compile the driver as a module, choose M here: the module will be
-+	  called ucsi_huawei_gaokun.
++	  called huawei-gaokun-battery.
 +
- endif
-diff --git a/drivers/usb/typec/ucsi/Makefile b/drivers/usb/typec/ucsi/Makefile
-index aed41d238..0b400122b 100644
---- a/drivers/usb/typec/ucsi/Makefile
-+++ b/drivers/usb/typec/ucsi/Makefile
-@@ -22,3 +22,4 @@ obj-$(CONFIG_UCSI_CCG)			+= ucsi_ccg.o
- obj-$(CONFIG_UCSI_STM32G0)		+= ucsi_stm32g0.o
- obj-$(CONFIG_UCSI_PMIC_GLINK)		+= ucsi_glink.o
- obj-$(CONFIG_UCSI_LENOVO_YOGA_C630)	+= ucsi_yoga_c630.o
-+obj-$(CONFIG_UCSI_HUAWEI_GAOKUN)	+= ucsi_huawei_gaokun.o
-diff --git a/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
+ config BATTERY_LEGO_EV3
+ 	tristate "LEGO MINDSTORMS EV3 battery"
+ 	depends on OF && IIO && GPIOLIB && (ARCH_DAVINCI_DA850 || COMPILE_TEST)
+diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
+index 59c4a9f40..c0941a832 100644
+--- a/drivers/power/supply/Makefile
++++ b/drivers/power/supply/Makefile
+@@ -31,6 +31,7 @@ obj-$(CONFIG_BATTERY_DS2781)	+= ds2781_battery.o
+ obj-$(CONFIG_BATTERY_DS2782)	+= ds2782_battery.o
+ obj-$(CONFIG_BATTERY_GAUGE_LTC2941)	+= ltc2941-battery-gauge.o
+ obj-$(CONFIG_BATTERY_GOLDFISH)	+= goldfish_battery.o
++obj-$(CONFIG_BATTERY_HUAWEI_GAOKUN)	+= huawei-gaokun-battery.o
+ obj-$(CONFIG_BATTERY_LEGO_EV3)	+= lego_ev3_battery.o
+ obj-$(CONFIG_BATTERY_LENOVO_YOGA_C630) += lenovo_yoga_c630_battery.o
+ obj-$(CONFIG_BATTERY_PMU)	+= pmu_battery.o
+diff --git a/drivers/power/supply/huawei-gaokun-battery.c b/drivers/power/supply/huawei-gaokun-battery.c
 new file mode 100644
-index 000000000..044545b44
+index 000000000..65b617aea
 --- /dev/null
-+++ b/drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-@@ -0,0 +1,524 @@
++++ b/drivers/power/supply/huawei-gaokun-battery.c
+@@ -0,0 +1,548 @@
 +// SPDX-License-Identifier: GPL-2.0-only
 +/*
-+ * ucsi-huawei-gaokun - A UCSI driver for HUAWEI Matebook E Go
++ * huawei-gaokun-battery - A power supply driver for HUAWEI Matebook E Go
 + *
-+ * reference: drivers/usb/typec/ucsi/ucsi_yoga_c630.c
-+ *            drivers/usb/typec/ucsi/ucsi_glink.c
-+ *            drivers/soc/qcom/pmic_glink_altmode.c
++ * reference: drivers/power/supply/lenovo_yoga_c630_battery.c
++ *            drivers/platform/arm64/acer-aspire1-ec.c
++ *            drivers/acpi/battery.c
++ *            drivers/acpi/ac.c
 + *
 + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
 + */
 +
-+#include <drm/bridge/aux-bridge.h>
 +#include <linux/auxiliary_bus.h>
-+#include <linux/bitops.h>
-+#include <linux/completion.h>
-+#include <linux/container_of.h>
++#include <linux/bits.h>
++#include <linux/delay.h>
++#include <linux/jiffies.h>
 +#include <linux/module.h>
 +#include <linux/notifier.h>
-+#include <linux/of.h>
 +#include <linux/platform_data/huawei-gaokun-ec.h>
-+#include <linux/string.h>
-+#include <linux/usb/pd_vdo.h>
-+#include <linux/usb/typec_altmode.h>
-+#include <linux/usb/typec_dp.h>
-+#include <linux/workqueue_types.h>
++#include <linux/power_supply.h>
++#include <linux/sprintf.h>
 +
-+#include "ucsi.h"
++/* -------------------------------------------------------------------------- */
++/* String Data Reg */
 +
-+#define EC_EVENT_UCSI	0x21
-+#define EC_EVENT_USB	0x22
++#define EC_BAT_VENDOR		0x01 /* from 0x01 to 0x0F, SUNWODA */
++#define EC_BAT_MODEL		0x11 /* from 0x11 to 0x1F, HB30A8P9ECW-22T */
 +
-+#define GAOKUN_CCX_MASK		GENMASK(1, 0)
-+#define GAOKUN_MUX_MASK		GENMASK(3, 2)
++#define EC_ADP_STATUS		0x81
++#define EC_AC_STATUS		BIT(0)
++#define EC_BAT_PRESENT		BIT(1) /* BATC._STA */
 +
-+#define GAOKUN_DPAM_MASK	GENMASK(3, 0)
-+#define GAOKUN_HPD_STATE_MASK	BIT(4)
-+#define GAOKUN_HPD_IRQ_MASK	BIT(5)
++#define EC_BAT_STATUS		0x82 /* _BST */
++#define EC_BAT_DISCHARGING	BIT(0)
++#define EC_BAT_CHARGING		BIT(1)
++#define EC_BAT_CRITICAL		BIT(2) /* Low Battery Level */
++#define EC_BAT_FULL		BIT(3)
 +
-+#define GET_IDX(updt) (ffs(updt) - 1)
++/* -------------------------------------------------------------------------- */
++/* Word Data Reg */
 +
-+#define CCX_TO_ORI(ccx) (++ccx % 3) /* convert ccx to enum typec_orientation */
++/* 0x5A: ?
++ * 0x5C: ?
++ * 0x5E: ?
++ * 0X60: ?
++ * 0x84: ?
++ */
 +
-+/* Configuration Channel Extension */
-+enum gaokun_ucsi_ccx {
-+	USBC_CCX_NORMAL,
-+	USBC_CCX_REVERSE,
-+	USBC_CCX_NONE,
-+};
++#define EC_BAT_STATUS_START	0x90
++#define EC_BAT_PERCENTAGE	0x90
++#define EC_BAT_VOLTAGE		0x92
++#define EC_BAT_CAPACITY		0x94
++#define EC_BAT_FULL_CAPACITY	0x96
++/* 0x98: ? */
++#define EC_BAT_CURRENT		0x9A
++/* 0x9C: ? */
 +
-+enum gaokun_ucsi_mux {
-+	USBC_MUX_NONE,
-+	USBC_MUX_USB_2L,
-+	USBC_MUX_DP_4L,
-+	USBC_MUX_USB_DP,
-+};
-+/* based on pmic_glink_altmode_pin_assignment */
-+enum gaokun_ucsi_dpam_pan {	/* DP Alt Mode Pin Assignments */
-+	USBC_DPAM_PAN_NONE,
-+	USBC_DPAM_PAN_A,	/* Not supported after USB Type-C Standard v1.0b */
-+	USBC_DPAM_PAN_B,	/* Not supported after USB Type-C Standard v1.0b */
-+	USBC_DPAM_PAN_C,	/* USBC_DPAM_PAN_C_REVERSE - 6 */
-+	USBC_DPAM_PAN_D,
-+	USBC_DPAM_PAN_E,
-+	USBC_DPAM_PAN_F,	/* Not supported after USB Type-C Standard v1.0b */
-+	USBC_DPAM_PAN_A_REVERSE,/* Not supported after USB Type-C Standard v1.0b */
-+	USBC_DPAM_PAN_B_REVERSE,/* Not supported after USB Type-C Standard v1.0b */
-+	USBC_DPAM_PAN_C_REVERSE,
-+	USBC_DPAM_PAN_D_REVERSE,
-+	USBC_DPAM_PAN_E_REVERSE,
-+	USBC_DPAM_PAN_F_REVERSE,/* Not supported after USB Type-C Standard v1.0b */
-+};
++#define EC_BAT_INFO_START	0xA0
++/* 0xA0: POWER_SUPPLY_PROP_INPUT_VOLTAGE_LIMIT? */
++#define EC_BAT_DESIGN_CAPACITY	0xA2
++#define EC_BAT_DESIGN_VOLTAGE	0xA4
++#define EC_BAT_SERIAL_NUMBER	0xA6
++#define EC_BAT_CYCLE_COUNT	0xAA
 +
-+struct gaokun_ucsi_reg {
-+	u8 port_num;
-+	u8 port_updt;
-+	u8 port_data[4];
-+	u8 checksum;
-+	u8 reserved;
++/* -------------------------------------------------------------------------- */
++/* Battery Event ID */
++
++#define EC_EVENT_BAT_A0		0xA0
++#define EC_EVENT_BAT_A1		0xA1
++#define EC_EVENT_BAT_A2		0xA2
++#define EC_EVENT_BAT_A3		0xA3
++#define EC_EVENT_BAT_B1		0xB1
++/* EVENT B1 A0 A1 repeat about every 1s 2s 3s respectively */
++
++/* ACPI _BIX field, Min sampling time, the duration between two _BST */
++#define CACHE_TIME		3000 /* cache time in milliseconds */
++
++#define MILLI_TO_MICRO		1000
++
++struct gaokun_psy_bat_status {
++	__le16 percentage_now;	/* 0x90 */
++	__le16 voltage_now;
++	__le16 capacity_now;
++	__le16 full_capacity;
++	__le16 unknown1;
++	__le16 rate_now;
++	__le16 unknown2;	/* 0x9C */
 +} __packed;
 +
-+struct gaokun_ucsi_port {
-+	struct completion usb_ack;
-+	spinlock_t lock;
++struct gaokun_psy_bat_info {
++	__le16 unknown3;	/* 0xA0 */
++	__le16 design_capacity;
++	__le16 design_voltage;
++	__le16 serial_number;
++	__le16 padding2;
++	__le16 cycle_count;	/* 0xAA */
++} __packed;
 +
-+	struct gaokun_ucsi *ucsi;
-+	struct auxiliary_device *bridge;
-+
-+	int idx;
-+	enum gaokun_ucsi_ccx ccx;
-+	enum gaokun_ucsi_mux mux;
-+	u8 mode;
-+	u16 svid;
-+	u8 hpd_state;
-+	u8 hpd_irq;
-+};
-+
-+struct gaokun_ucsi {
++struct gaokun_psy {
 +	struct gaokun_ec *ec;
-+	struct ucsi *ucsi;
-+	struct gaokun_ucsi_port *ports;
 +	struct device *dev;
-+	struct delayed_work work;
 +	struct notifier_block nb;
-+	u16 version;
-+	u8 port_num;
++
++	struct power_supply *bat_psy;
++	struct power_supply *adp_psy;
++
++	unsigned long update_time;
++	struct gaokun_psy_bat_status status;
++	struct gaokun_psy_bat_info info;
++
++	char battery_model[0x10]; /* HB30A8P9ECW-22T, the real one is XXX-22A */
++	char battery_serial[0x10];
++	char battery_vendor[0x10];
++
++	int charge_now;
++	int online;
++	int bat_present;
 +};
 +
 +/* -------------------------------------------------------------------------- */
-+/* For UCSI */
++/* Adapter */
 +
-+static int gaokun_ucsi_read_version(struct ucsi *ucsi, u16 *version)
++static int gaokun_psy_get_adp_status(struct gaokun_psy *ecbat)
 +{
-+	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-+
-+	*version = uec->version;
-+
-+	return 0;
-+}
-+
-+static int gaokun_ucsi_read_cci(struct ucsi *ucsi, u32 *cci)
-+{
-+	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-+	u8 buf[GAOKUN_UCSI_READ_SIZE];
++	/* _PSR */
 +	int ret;
++	u8 online;
 +
-+	ret = gaokun_ec_ucsi_read(uec->ec, buf);
++	ret = gaokun_ec_psy_read_byte(ecbat->ec, EC_ADP_STATUS, &online);
 +	if (ret)
 +		return ret;
 +
-+	memcpy(cci, buf, sizeof(*cci));
++	ecbat->online = !!(online & EC_AC_STATUS);
 +
 +	return 0;
 +}
 +
-+static int gaokun_ucsi_read_message_in(struct ucsi *ucsi,
-+				       void *val, size_t val_len)
++static int gaokun_psy_get_adp_property(struct power_supply *psy,
++				       enum power_supply_property psp,
++				       union power_supply_propval *val)
 +{
-+	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-+	u8 buf[GAOKUN_UCSI_READ_SIZE];
++	struct gaokun_psy *ecbat = power_supply_get_drvdata(psy);
 +	int ret;
 +
-+	ret = gaokun_ec_ucsi_read(uec->ec, buf);
++	ret = gaokun_psy_get_adp_status(ecbat);
 +	if (ret)
 +		return ret;
 +
-+	memcpy(val, buf + GAOKUN_UCSI_CCI_SIZE,
-+	       min(val_len, GAOKUN_UCSI_DATA_SIZE));
++	switch (psp) {
++	case POWER_SUPPLY_PROP_ONLINE:
++		val->intval = ecbat->online;
++		break;
 +
-+	return 0;
-+}
-+
-+static int gaokun_ucsi_async_control(struct ucsi *ucsi, u64 command)
-+{
-+	struct gaokun_ucsi *uec = ucsi_get_drvdata(ucsi);
-+	u8 buf[GAOKUN_UCSI_WRITE_SIZE] = {};
-+
-+	memcpy(buf, &command, sizeof(command));
-+
-+	return gaokun_ec_ucsi_write(uec->ec, buf);
-+}
-+
-+static void gaokun_ucsi_update_connector(struct ucsi_connector *con)
-+{
-+	struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
-+
-+	if (con->num > uec->port_num)
-+		return;
-+
-+	con->typec_cap.orientation_aware = true;
-+}
-+
-+static void gaokun_set_orientation(struct ucsi_connector *con,
-+				   struct gaokun_ucsi_port *port)
-+{
-+	enum gaokun_ucsi_ccx ccx;
-+	unsigned long flags;
-+
-+	spin_lock_irqsave(&port->lock, flags);
-+	ccx = port->ccx;
-+	spin_unlock_irqrestore(&port->lock, flags);
-+
-+	typec_set_orientation(con->port, CCX_TO_ORI(ccx));
-+}
-+
-+static void gaokun_ucsi_connector_status(struct ucsi_connector *con)
-+{
-+	struct gaokun_ucsi *uec = ucsi_get_drvdata(con->ucsi);
-+	int idx;
-+
-+	idx = con->num - 1;
-+	if (con->num > uec->port_num) {
-+		dev_warn(uec->dev, "set orientation out of range: con%d\n", idx);
-+		return;
++	default:
++		return -EINVAL;
 +	}
 +
-+	gaokun_set_orientation(con, &uec->ports[idx]);
++	return 0;
 +}
 +
-+const struct ucsi_operations gaokun_ucsi_ops = {
-+	.read_version = gaokun_ucsi_read_version,
-+	.read_cci = gaokun_ucsi_read_cci,
-+	.read_message_in = gaokun_ucsi_read_message_in,
-+	.sync_control = ucsi_sync_control_common,
-+	.async_control = gaokun_ucsi_async_control,
-+	.update_connector = gaokun_ucsi_update_connector,
-+	.connector_status = gaokun_ucsi_connector_status,
++static enum power_supply_property gaokun_psy_adp_props[] = {
++	POWER_SUPPLY_PROP_ONLINE,
++};
++
++static const struct power_supply_desc gaokun_psy_adp_desc = {
++	.name		= "gaokun-ec-adapter",
++	.type		= POWER_SUPPLY_TYPE_USB_TYPE_C,
++	.get_property	= gaokun_psy_get_adp_property,
++	.properties	= gaokun_psy_adp_props,
++	.num_properties	= ARRAY_SIZE(gaokun_psy_adp_props),
 +};
 +
 +/* -------------------------------------------------------------------------- */
-+/* For Altmode */
++/* Battery */
 +
-+static void gaokun_ucsi_port_update(struct gaokun_ucsi_port *port,
-+				    const u8 *port_data)
++static inline void gaokun_psy_get_bat_present(struct gaokun_psy *ecbat)
 +{
-+	struct gaokun_ucsi *uec = port->ucsi;
-+	int offset = port->idx * 2; /* every port has 2 Bytes data */
-+	unsigned long flags;
-+	u8 dcc, ddi;
++	int ret;
++	u8 present;
 +
-+	dcc = port_data[offset];
-+	ddi = port_data[offset + 1];
++	/* Some kind of initialization */
++	gaokun_ec_write(ecbat->ec, (u8 []){0x02, 0xB2, 1, 0x90});
 +
-+	spin_lock_irqsave(&port->lock, flags);
++	ret = gaokun_ec_psy_read_byte(ecbat->ec, EC_ADP_STATUS, &present);
 +
-+	port->ccx = FIELD_GET(GAOKUN_CCX_MASK, dcc);
-+	port->mux = FIELD_GET(GAOKUN_MUX_MASK, dcc);
-+	port->mode = FIELD_GET(GAOKUN_DPAM_MASK, ddi);
-+	port->hpd_state = FIELD_GET(GAOKUN_HPD_STATE_MASK, ddi);
-+	port->hpd_irq = FIELD_GET(GAOKUN_HPD_IRQ_MASK, ddi);
-+
-+	/* Mode and SVID are unused; keeping them to make things clearer */
-+	switch (port->mode) {
-+	case USBC_DPAM_PAN_C:
-+	case USBC_DPAM_PAN_C_REVERSE:
-+		port->mode = DP_PIN_ASSIGN_C; /* correct it for usb later */
-+		break;
-+	case USBC_DPAM_PAN_D:
-+	case USBC_DPAM_PAN_D_REVERSE:
-+		port->mode = DP_PIN_ASSIGN_D;
-+		break;
-+	case USBC_DPAM_PAN_E:
-+	case USBC_DPAM_PAN_E_REVERSE:
-+		port->mode = DP_PIN_ASSIGN_E;
-+		break;
-+	case USBC_DPAM_PAN_NONE:
-+		port->mode = TYPEC_STATE_SAFE;
-+		break;
-+	default:
-+		dev_warn(uec->dev, "unknow mode %d\n", port->mode);
-+		break;
-+	}
-+
-+	switch (port->mux) {
-+	case USBC_MUX_NONE:
-+		port->svid = 0;
-+		break;
-+	case USBC_MUX_USB_2L:
-+		port->svid = USB_SID_PD;
-+		port->mode = TYPEC_STATE_USB; /* same as PAN_C, correct it */
-+		break;
-+	case USBC_MUX_DP_4L:
-+	case USBC_MUX_USB_DP:
-+		port->svid = USB_SID_DISPLAYPORT;
-+		break;
-+	default:
-+		dev_warn(uec->dev, "unknow mux state %d\n", port->mux);
-+		break;
-+	}
-+
-+	spin_unlock_irqrestore(&port->lock, flags);
++	ecbat->bat_present = ret ? false : !!(present & EC_BAT_PRESENT);
 +}
 +
-+static int gaokun_ucsi_refresh(struct gaokun_ucsi *uec)
++static inline int gaokun_psy_bat_present(struct gaokun_psy *ecbat)
 +{
-+	struct gaokun_ucsi_reg ureg;
-+	int ret, idx;
-+
-+	ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
-+	if (ret)
-+		return GAOKUN_UCSI_NO_PORT_UPDATE;
-+
-+	uec->port_num = ureg.port_num;
-+	idx = GET_IDX(ureg.port_updt);
-+
-+	if (idx < 0 || idx >= ureg.port_num)
-+		return GAOKUN_UCSI_NO_PORT_UPDATE;
-+
-+	gaokun_ucsi_port_update(&uec->ports[idx], ureg.port_data);
-+	return idx;
++	return ecbat->bat_present;
 +}
 +
-+static void gaokun_ucsi_handle_altmode(struct gaokun_ucsi_port *port)
++static int gaokun_psy_get_bat_info(struct gaokun_psy *ecbat)
 +{
-+	struct gaokun_ucsi *uec = port->ucsi;
-+	int idx = port->idx;
++	/* _BIX */
++	if (!gaokun_psy_bat_present(ecbat))
++		return 0;
 +
-+	if (idx >= uec->ucsi->cap.num_connectors) {
-+		dev_warn(uec->dev, "altmode port out of range: %d\n", idx);
++	return gaokun_ec_psy_multi_read(ecbat->ec, EC_BAT_INFO_START,
++					sizeof(ecbat->info), (u8 *)&ecbat->info);
++}
++
++static void gaokun_psy_update_bat_charge(struct gaokun_psy *ecbat)
++{
++	u8 charge;
++
++	gaokun_ec_psy_read_byte(ecbat->ec, EC_BAT_STATUS, &charge);
++
++	switch (charge) {
++	case EC_BAT_CHARGING:
++		ecbat->charge_now = POWER_SUPPLY_STATUS_CHARGING;
++		break;
++	case EC_BAT_DISCHARGING:
++		ecbat->charge_now = POWER_SUPPLY_STATUS_DISCHARGING;
++		break;
++	case EC_BAT_FULL:
++		ecbat->charge_now = POWER_SUPPLY_STATUS_FULL;
++		break;
++	default:
++		dev_warn(ecbat->dev, "unknown charge state %d\n", charge);
++	}
++}
++
++static int gaokun_psy_get_bat_status(struct gaokun_psy *ecbat)
++{
++	/* _BST */
++	int ret;
++
++	if (time_before(jiffies, ecbat->update_time +
++			msecs_to_jiffies(CACHE_TIME)))
++		return 0;
++
++	gaokun_psy_update_bat_charge(ecbat);
++	ret = gaokun_ec_psy_multi_read(ecbat->ec, EC_BAT_STATUS_START,
++				       sizeof(ecbat->status), (u8 *)&ecbat->status);
++
++	ecbat->update_time = jiffies;
++
++	return ret;
++}
++
++static void gaokun_psy_init(struct gaokun_psy *ecbat)
++{
++	gaokun_psy_get_bat_present(ecbat);
++	if (!gaokun_psy_bat_present(ecbat))
 +		return;
++
++	gaokun_psy_get_bat_info(ecbat);
++
++	snprintf(ecbat->battery_serial, sizeof(ecbat->battery_serial),
++		 "%d", le16_to_cpu(ecbat->info.serial_number));
++
++	gaokun_ec_psy_multi_read(ecbat->ec, EC_BAT_VENDOR,
++				 sizeof(ecbat->battery_vendor) - 1,
++				 ecbat->battery_vendor);
++
++	gaokun_ec_psy_multi_read(ecbat->ec, EC_BAT_MODEL,
++				 sizeof(ecbat->battery_model) - 1,
++				 ecbat->battery_model);
++
++	ecbat->battery_model[14] = 'A'; /* FIX UP */
++}
++
++static int gaokun_psy_get_bat_property(struct power_supply *psy,
++				       enum power_supply_property psp,
++				       union power_supply_propval *val)
++{
++	struct gaokun_psy *ecbat = power_supply_get_drvdata(psy);
++
++	if (gaokun_psy_bat_present(ecbat))
++		gaokun_psy_get_bat_status(ecbat);
++	else if (psp != POWER_SUPPLY_PROP_PRESENT)
++		return -ENODEV;
++
++	switch (psp) {
++	case POWER_SUPPLY_PROP_STATUS:
++		val->intval = ecbat->charge_now;
++		break;
++
++	case POWER_SUPPLY_PROP_PRESENT:
++		val->intval = ecbat->bat_present;
++		break;
++
++	case POWER_SUPPLY_PROP_TECHNOLOGY:
++		val->intval = POWER_SUPPLY_TECHNOLOGY_LION;
++		break;
++
++	case POWER_SUPPLY_PROP_CYCLE_COUNT:
++		val->intval = le16_to_cpu(ecbat->info.cycle_count);
++		break;
++
++	case POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN:
++		val->intval = le16_to_cpu(ecbat->info.design_voltage) * MILLI_TO_MICRO;
++		break;
++
++	case POWER_SUPPLY_PROP_VOLTAGE_NOW:
++		val->intval = le16_to_cpu(ecbat->status.voltage_now) * MILLI_TO_MICRO;
++		break;
++
++	case POWER_SUPPLY_PROP_CURRENT_NOW:
++		val->intval = (s16)le16_to_cpu(ecbat->status.rate_now) * MILLI_TO_MICRO;
++		break;
++
++	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
++		val->intval = le16_to_cpu(ecbat->info.design_capacity) * MILLI_TO_MICRO;
++		break;
++
++	case POWER_SUPPLY_PROP_CHARGE_FULL:
++		val->intval = le16_to_cpu(ecbat->status.full_capacity) * MILLI_TO_MICRO;
++		break;
++
++	case POWER_SUPPLY_PROP_CHARGE_NOW:
++		val->intval = le16_to_cpu(ecbat->status.capacity_now) * MILLI_TO_MICRO;
++		break;
++
++	case POWER_SUPPLY_PROP_CAPACITY:
++		val->intval = le16_to_cpu(ecbat->status.percentage_now);
++		break;
++
++	case POWER_SUPPLY_PROP_MODEL_NAME:
++		val->strval = ecbat->battery_model;
++		break;
++
++	case POWER_SUPPLY_PROP_MANUFACTURER:
++		val->strval = ecbat->battery_vendor;
++		break;
++
++	case POWER_SUPPLY_PROP_SERIAL_NUMBER:
++		val->strval = ecbat->battery_serial;
++		break;
++
++	default:
++		return -EINVAL;
 +	}
-+
-+	/* UCSI callback .connector_status() have set orientation */
-+	if (port->bridge)
-+		drm_aux_hpd_bridge_notify(&port->bridge->dev,
-+					  port->hpd_state ?
-+					  connector_status_connected :
-+					  connector_status_disconnected);
-+
-+	gaokun_ec_ucsi_pan_ack(uec->ec, port->idx);
++	return 0;
 +}
 +
-+static void gaokun_ucsi_altmode_notify_ind(struct gaokun_ucsi *uec)
++static enum power_supply_property gaokun_psy_bat_props[] = {
++	POWER_SUPPLY_PROP_STATUS,
++	POWER_SUPPLY_PROP_PRESENT,
++	POWER_SUPPLY_PROP_TECHNOLOGY,
++	POWER_SUPPLY_PROP_CYCLE_COUNT,
++	POWER_SUPPLY_PROP_VOLTAGE_MIN_DESIGN,
++	POWER_SUPPLY_PROP_VOLTAGE_NOW,
++	POWER_SUPPLY_PROP_CURRENT_NOW,
++	POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN,
++	POWER_SUPPLY_PROP_CHARGE_FULL,
++	POWER_SUPPLY_PROP_CHARGE_NOW,
++	POWER_SUPPLY_PROP_CAPACITY,
++	POWER_SUPPLY_PROP_MODEL_NAME,
++	POWER_SUPPLY_PROP_MANUFACTURER,
++	POWER_SUPPLY_PROP_SERIAL_NUMBER,
++};
++
++static const struct power_supply_desc gaokun_psy_bat_desc = {
++	.name		= "gaokun-ec-battery",
++	.type		= POWER_SUPPLY_TYPE_BATTERY,
++	.get_property	= gaokun_psy_get_bat_property,
++	.properties	= gaokun_psy_bat_props,
++	.num_properties	= ARRAY_SIZE(gaokun_psy_bat_props),
++};
++
++/* -------------------------------------------------------------------------- */
++/* Sysfs */
++
++/* Smart charge enable */
++static ssize_t smart_charge_enable_show(struct device *dev,
++					struct device_attribute *attr,
++					char *buf)
 +{
-+	int idx;
++	struct power_supply *psy = to_power_supply(dev);
++	struct gaokun_psy *ecbat = power_supply_get_drvdata(psy);
++	int ret;
++	bool on;
 +
-+	 if (!uec->ucsi->connector) { /* slow to register */
-+		 dev_err(uec->dev, "ucsi connector is not initialized yet\n");
-+		 return;
-+	 }
++	ret = gaokun_ec_psy_get_smart_charge_enable(ecbat->ec, &on);
++	if (ret)
++		return ret;
 +
-+	idx = gaokun_ucsi_refresh(uec);
-+	if (idx == GAOKUN_UCSI_NO_PORT_UPDATE)
-+		gaokun_ec_ucsi_pan_ack(uec->ec, idx); /* ack directly if no update */
-+	else
-+		gaokun_ucsi_handle_altmode(&uec->ports[idx]);
++	return sysfs_emit(buf, "%d\n", on);
 +}
 +
-+/*
-+ * USB event is necessary for enabling altmode, the event should follow
-+ * UCSI event, if not after timeout(this notify may be disabled somehow),
-+ * then force to enable altmode.
-+ */
-+static void gaokun_ucsi_handle_no_usb_event(struct gaokun_ucsi *uec, int idx)
++static ssize_t smart_charge_enable_store(struct device *dev,
++					 struct device_attribute *attr,
++					 const char *buf, size_t size)
 +{
-+	struct gaokun_ucsi_port *port;
++	struct power_supply *psy = to_power_supply(dev);
++	struct gaokun_psy *ecbat = power_supply_get_drvdata(psy);
++	int ret;
++	bool on;
 +
-+	port = &uec->ports[idx];
-+	if (!wait_for_completion_timeout(&port->usb_ack, 2 * HZ)) {
-+		dev_warn(uec->dev, "No USB EVENT, triggered by UCSI EVENT");
-+		gaokun_ucsi_altmode_notify_ind(uec);
-+	}
++	if (kstrtobool(buf, &on))
++		return -EINVAL;
++
++	ret = gaokun_ec_psy_set_smart_charge_enable(ecbat->ec, on);
++	if (ret)
++		return ret;
++
++	return size;
 +}
 +
-+static int gaokun_ucsi_notify(struct notifier_block *nb,
-+			      unsigned long action, void *data)
++static DEVICE_ATTR_RW(smart_charge_enable);
++
++/* Smart charge */
++static ssize_t smart_charge_show(struct device *dev,
++				 struct device_attribute *attr,
++				 char *buf)
 +{
-+	u32 cci;
-+	struct gaokun_ucsi *uec = container_of(nb, struct gaokun_ucsi, nb);
++	struct power_supply *psy = to_power_supply(dev);
++	struct gaokun_psy *ecbat = power_supply_get_drvdata(psy);
++	u8 bf[GAOKUN_SMART_CHARGE_DATA_SIZE];
++	int ret;
++
++	ret = gaokun_ec_psy_get_smart_charge(ecbat->ec, bf);
++	if (ret)
++		return ret;
++
++	return sysfs_emit(buf, "%d %d %d %d\n",
++			  bf[0], bf[1], bf[2], bf[3]);
++}
++
++static ssize_t smart_charge_store(struct device *dev,
++				  struct device_attribute *attr,
++				  const char *buf, size_t size)
++{
++	struct power_supply *psy = to_power_supply(dev);
++	struct gaokun_psy *ecbat = power_supply_get_drvdata(psy);
++	u8 bf[GAOKUN_SMART_CHARGE_DATA_SIZE];
++	int ret;
++
++	if (sscanf(buf, "%hhd %hhd %hhd %hhd", bf, bf + 1, bf + 2, bf + 3) != 4)
++		return -EINVAL;
++
++	if (bf[0] != 1 && bf[0] != 4)
++		return -EINVAL;
++
++	ret = gaokun_ec_psy_set_smart_charge(ecbat->ec, bf);
++	if (ret)
++		return ret;
++
++	return size;
++}
++
++static DEVICE_ATTR_RW(smart_charge);
++
++static struct attribute *gaokun_psy_features_attrs[] = {
++	&dev_attr_smart_charge_enable.attr,
++	&dev_attr_smart_charge.attr,
++	NULL,
++};
++ATTRIBUTE_GROUPS(gaokun_psy_features);
++
++static int gaokun_psy_notify(struct notifier_block *nb,
++			     unsigned long action, void *data)
++{
++	struct gaokun_psy *ecbat = container_of(nb, struct gaokun_psy, nb);
 +
 +	switch (action) {
-+	case EC_EVENT_USB:
-+		gaokun_ucsi_altmode_notify_ind(uec);
++	case EC_EVENT_BAT_A2:
++	case EC_EVENT_BAT_B1:
++		gaokun_psy_get_bat_info(ecbat);
 +		return NOTIFY_OK;
 +
-+	case EC_EVENT_UCSI:
-+		uec->ucsi->ops->read_cci(uec->ucsi, &cci);
-+		ucsi_notify_common(uec->ucsi, cci);
-+		if (UCSI_CCI_CONNECTOR(cci))
-+			gaokun_ucsi_handle_no_usb_event(uec, UCSI_CCI_CONNECTOR(cci) - 1);
++	case EC_EVENT_BAT_A0:
++		gaokun_psy_get_adp_status(ecbat);
++		power_supply_changed(ecbat->adp_psy);
++		msleep(10);
++		fallthrough;
 +
++	case EC_EVENT_BAT_A1:
++	case EC_EVENT_BAT_A3:
++		if (action == EC_EVENT_BAT_A3) {
++			gaokun_psy_get_bat_info(ecbat);
++			msleep(100);
++		}
++		gaokun_psy_get_bat_status(ecbat);
++		power_supply_changed(ecbat->bat_psy);
 +		return NOTIFY_OK;
 +
 +	default:
@@ -521,162 +699,68 @@ index 000000000..044545b44
 +	}
 +}
 +
-+static inline int gaokun_ucsi_get_port_num(struct gaokun_ucsi *uec)
-+{
-+	struct gaokun_ucsi_reg ureg;
-+	int ret;
-+
-+	ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
-+
-+	return ret ? 0 : ureg.port_num;
-+}
-+
-+static int gaokun_ucsi_ports_init(struct gaokun_ucsi *uec)
-+{
-+	u32 port;
-+	int i, ret, port_num;
-+	struct device *dev = uec->dev;
-+	struct gaokun_ucsi_port *ucsi_port;
-+	struct fwnode_handle *fwnode;
-+
-+	port_num = gaokun_ucsi_get_port_num(uec);
-+	uec->port_num = port_num;
-+
-+	uec->ports = devm_kcalloc(dev, port_num, sizeof(*(uec->ports)),
-+				  GFP_KERNEL);
-+	if (!uec->ports)
-+		return -ENOMEM;
-+
-+	for (i = 0; i < port_num; ++i) {
-+		ucsi_port = &uec->ports[i];
-+		ucsi_port->ccx = USBC_CCX_NONE;
-+		ucsi_port->idx = i;
-+		ucsi_port->ucsi = uec;
-+		init_completion(&ucsi_port->usb_ack);
-+		spin_lock_init(&ucsi_port->lock);
-+	}
-+
-+	device_for_each_child_node(dev, fwnode) {
-+		ret = fwnode_property_read_u32(fwnode, "reg", &port);
-+		if (ret < 0) {
-+			dev_err(dev, "missing reg property of %pOFn\n", fwnode);
-+			fwnode_handle_put(fwnode);
-+			return ret;
-+		}
-+
-+		if (port >= port_num) {
-+			dev_warn(dev, "invalid connector number %d, ignoring\n", port);
-+			continue;
-+		}
-+
-+		ucsi_port = &uec->ports[port];
-+		ucsi_port->bridge = devm_drm_dp_hpd_bridge_alloc(dev, to_of_node(fwnode));
-+		if (IS_ERR(ucsi_port->bridge)) {
-+			fwnode_handle_put(fwnode);
-+			return PTR_ERR(ucsi_port->bridge);
-+		}
-+	}
-+
-+	for (i = 0; i < port_num; i++) {
-+		if (!uec->ports[i].bridge)
-+			continue;
-+
-+		ret = devm_drm_dp_hpd_bridge_add(dev, uec->ports[i].bridge);
-+		if (ret)
-+			return ret;
-+	}
-+
-+	return 0;
-+}
-+
-+static void gaokun_ucsi_register_worker(struct work_struct *work)
-+{
-+	struct gaokun_ucsi *uec;
-+	struct ucsi *ucsi;
-+	int ret;
-+
-+	uec = container_of(work, struct gaokun_ucsi, work.work);
-+	ucsi = uec->ucsi;
-+	/* This may be a problem specific to sc8280xp-based machines */
-+	ucsi->quirks = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_PDOS;
-+
-+	ret = gaokun_ec_register_notify(uec->ec, &uec->nb);
-+	if (ret) {
-+		dev_err_probe(ucsi->dev, ret, "notifier register failed\n");
-+		return;
-+	}
-+
-+	ret = ucsi_register(ucsi);
-+	if (ret)
-+		dev_err_probe(ucsi->dev, ret, "ucsi register failed\n");
-+}
-+
-+static inline int gaokun_ucsi_register(struct gaokun_ucsi *uec)
-+{
-+	/* EC can't handle UCSI properly in the early stage */
-+	schedule_delayed_work(&uec->work, 3 * HZ);
-+
-+	return 0;
-+}
-+
-+static int gaokun_ucsi_probe(struct auxiliary_device *adev,
-+			     const struct auxiliary_device_id *id)
++static int gaokun_psy_probe(struct auxiliary_device *adev,
++			    const struct auxiliary_device_id *id)
 +{
 +	struct gaokun_ec *ec = adev->dev.platform_data;
++	struct power_supply_config psy_cfg = {};
 +	struct device *dev = &adev->dev;
-+	struct gaokun_ucsi *uec;
-+	int ret;
++	struct gaokun_psy *ecbat;
 +
-+	uec = devm_kzalloc(dev, sizeof(*uec), GFP_KERNEL);
-+	if (!uec)
++	ecbat = devm_kzalloc(&adev->dev, sizeof(*ecbat), GFP_KERNEL);
++	if (!ecbat)
 +		return -ENOMEM;
 +
-+	uec->ec = ec;
-+	uec->dev = dev;
-+	uec->version = 0x0100;
-+	uec->nb.notifier_call = gaokun_ucsi_notify;
++	ecbat->ec = ec;
++	ecbat->dev = dev;
++	ecbat->nb.notifier_call = gaokun_psy_notify;
 +
-+	INIT_DELAYED_WORK(&uec->work, gaokun_ucsi_register_worker);
++	auxiliary_set_drvdata(adev, ecbat);
 +
-+	ret = gaokun_ucsi_ports_init(uec);
-+	if (ret)
-+		return ret;
++	psy_cfg.drv_data = ecbat;
++	ecbat->adp_psy = devm_power_supply_register(dev, &gaokun_psy_adp_desc,
++						    &psy_cfg);
++	if (IS_ERR(ecbat->adp_psy))
++		return dev_err_probe(dev, PTR_ERR(ecbat->adp_psy),
++				     "Failed to register AC power supply\n");
 +
-+	uec->ucsi = ucsi_create(dev, &gaokun_ucsi_ops);
-+	if (IS_ERR(uec->ucsi))
-+		return PTR_ERR(uec->ucsi);
++	psy_cfg.supplied_to = (char **)&gaokun_psy_bat_desc.name;
++	psy_cfg.num_supplicants = 1;
++	psy_cfg.no_wakeup_source = true;
++	psy_cfg.attr_grp = gaokun_psy_features_groups;
++	ecbat->bat_psy = devm_power_supply_register(dev, &gaokun_psy_bat_desc,
++						    &psy_cfg);
++	if (IS_ERR(ecbat->bat_psy))
++		return dev_err_probe(dev, PTR_ERR(ecbat->bat_psy),
++				     "Failed to register battery power supply\n");
++	gaokun_psy_init(ecbat);
 +
-+	ucsi_set_drvdata(uec->ucsi, uec);
-+	auxiliary_set_drvdata(adev, uec);
-+
-+	return gaokun_ucsi_register(uec);
++	return gaokun_ec_register_notify(ec, &ecbat->nb);
 +}
 +
-+static void gaokun_ucsi_remove(struct auxiliary_device *adev)
++static void gaokun_psy_remove(struct auxiliary_device *adev)
 +{
-+	struct gaokun_ucsi *uec = auxiliary_get_drvdata(adev);
++	struct gaokun_psy *ecbat = auxiliary_get_drvdata(adev);
 +
-+	gaokun_ec_unregister_notify(uec->ec, &uec->nb);
-+	ucsi_unregister(uec->ucsi);
-+	ucsi_destroy(uec->ucsi);
++	gaokun_ec_unregister_notify(ecbat->ec, &ecbat->nb);
 +}
 +
-+static const struct auxiliary_device_id gaokun_ucsi_id_table[] = {
-+	{ .name = GAOKUN_MOD_NAME "." GAOKUN_DEV_UCSI, },
++static const struct auxiliary_device_id gaokun_psy_id_table[] = {
++	{ .name = GAOKUN_MOD_NAME "." GAOKUN_DEV_PSY, },
 +	{}
 +};
-+MODULE_DEVICE_TABLE(auxiliary, gaokun_ucsi_id_table);
++MODULE_DEVICE_TABLE(auxiliary, gaokun_psy_id_table);
 +
-+static struct auxiliary_driver gaokun_ucsi_driver = {
-+	.name = GAOKUN_DEV_UCSI,
-+	.id_table = gaokun_ucsi_id_table,
-+	.probe = gaokun_ucsi_probe,
-+	.remove = gaokun_ucsi_remove,
++static struct auxiliary_driver gaokun_psy_driver = {
++	.name = GAOKUN_DEV_PSY,
++	.id_table = gaokun_psy_id_table,
++	.probe = gaokun_psy_probe,
++	.remove = gaokun_psy_remove,
 +};
 +
-+module_auxiliary_driver(gaokun_ucsi_driver);
++module_auxiliary_driver(gaokun_psy_driver);
 +
-+MODULE_DESCRIPTION("HUAWEI Matebook E Go UCSI driver");
++MODULE_DESCRIPTION("HUAWEI Matebook E Go psy driver");
 +MODULE_LICENSE("GPL");
 -- 
 2.47.1
