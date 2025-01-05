@@ -1,318 +1,185 @@
-Return-Path: <linux-pm+bounces-19972-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19973-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE50EA01B29
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 18:45:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FABBA01B39
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 18:56:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 16E89188390A
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 17:45:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 25587162EF4
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 17:56:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD7381CEEB0;
-	Sun,  5 Jan 2025 17:45:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F6AC153BEE;
+	Sun,  5 Jan 2025 17:56:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b6JXcFxz"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="WL5pwI2Q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 722351CDA2E;
-	Sun,  5 Jan 2025 17:45:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D781BB658;
+	Sun,  5 Jan 2025 17:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736099111; cv=none; b=QphMVmw2QbYbQZkImrb1FD6S3+2EYBd1HvPXwuas3LeS3BW1Sr3aLl5CwxaEuurJWOU1oLUmrfwMNE5V5VRqH/m9zStIPF0wKTtmSwqWv1gewC3KTJTKEjpvAXQLlVRBQKpmEN0VhF6esEJOuIlfG8fiHgsxdoEJVcquljlVf0M=
+	t=1736099784; cv=none; b=HCaPGHY8nT7nyy02L+XBCAFHmEVvp7w1hJhm0Q/Cli2jai1ostr2vXjhl8gA6GeAgB9js3LcOcQLtwI1gyCf24yEXkeTV2uYl2AnFOljG6ILV6bCqbNRmLSwpzvHOuWpSdrsNa5k9w56OdDT5unO0MpMlRaD08P+BG2bsRd4drE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736099111; c=relaxed/simple;
-	bh=aHxh6mXQm2Pomntp5Apy+gfeS3bWH/sypTFPY9It4WU=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=IwofaReCjTYRWf2Oed6v/z0+ZTT0HbN3kdXWdcaKZeeQm4s9D+KDA+x0d4w10D9bnc2jCaZH+9fdSl0IWQTKyB1/lP/sQqOBWU3fheMu1mub/imRHj3leVeQW7TRrBBb3XEAEQypUutdytGfiEHHyJZ1SUvK4h9aGQOc5N3icUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b6JXcFxz; arc=none smtp.client-ip=209.85.214.177
+	s=arc-20240116; t=1736099784; c=relaxed/simple;
+	bh=59WbRrfzuqi4LwQlgVcvF7pyzGs+uagP//FmY9IXOxs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=i8Yrb5wIAUrFUrkCi1bYFxeGpKKecDAgmOi6SwH/hIaeCV6c99Nj6TIVWQhXpv+Jw2H00I8E3RWsOq7wrIuHzgfE5L0x5AqyTo3CmgNix3rI4EA4i5Z3XQeBQON+HCBwSrIHFgSlkruy1y23hG6BUevAZ0rlI19Rn1cuX2lx33I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=WL5pwI2Q; arc=none smtp.client-ip=209.85.160.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21661be2c2dso175958745ad.1;
-        Sun, 05 Jan 2025 09:45:09 -0800 (PST)
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-29ff8053384so6200983fac.3;
+        Sun, 05 Jan 2025 09:56:22 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736099108; x=1736703908; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1736099782; x=1736704582; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=keJpUCOZO1G6z7AqbQ0oWlgGpxQddW7HrAwABR04sv0=;
-        b=b6JXcFxz3duKIR1E6JNFKhQtSQwjdx3pvo5WZvfbqHTjEjXEOmMESvHoHrNLjY7sov
-         COiqODh6CGxd7sR/urQM7wvxfk0DrXlRpmFlCfchA/jO3iBHN1EeWntRSqpmG5ZzffwE
-         JqecJYPqkLKY32UMeJmpAzKUjwvYt4CDMgBEePcdIVWj+BEOnUKrse5FGMhVJ2+KqpBG
-         9IRTaHk1cucO9JC4tGlzNVtftQKGSPbg4wFDFhxPDVnNG8bLZ547TZV4+iMQ4o1fbo9p
-         Qjda1rcDw/9zpEss723fUQyTfzm42+ppKchz6uiRWvAGnAZhD8uNF2+eBOUehv+EJgXn
-         AMbg==
+        bh=5XxNEftZua09LK0hM2esB8aQB+qauXYBXnPyeQF/u7M=;
+        b=WL5pwI2QlJMzGkrJBU6MRmjV618VMc5IrkXrI701r6fRLODbRr96ZbPISH2tT10iFD
+         FUC4TG+VeKD48cXMvZxz+3qulkkykNN3p/TWD8QAI2uGtQ36g2gEnP+W2rDnW1KR+H9F
+         E/TttzEIg37JqnwLA2iHYoqq2r7aqHa3rQznQwtCTxFixbyLRpt542XglhlP4QE1XSzB
+         Z6HbEqBBs+Kj0xN1+C/I5rdEe6O4L7KV0u7aA2sMVNZ1RMeklU/aQNAApGoC+8aWP3hq
+         QCpgBSpA1M6PgEiXanwI24z0jclN5WsxKnxxbuniGoc8eSQh3//2ZojBlkQ6u/v/8GiX
+         AaRg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736099108; x=1736703908;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+        d=1e100.net; s=20230601; t=1736099782; x=1736704582;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=keJpUCOZO1G6z7AqbQ0oWlgGpxQddW7HrAwABR04sv0=;
-        b=s3486e++39sjzGcZrOa/eqXFftdoumkRA9SRErACZfcboVS/HpS1jpgYFbLTtGUlJa
-         JrGlDklvvKW2oflAi8hXP5CWiZEuea8xNnV0mUewcZldvRhLdTY5vZQXsUKhx2z4QtWJ
-         VRsjvFfmWo9G2n1zgyqTUENXBWt1feySJZqi5SJLhDM8p9nFoX94jkSEjCyZWtsqu17Q
-         yjjDz1WRryrsbTRI0WrhG9ClOAyvS276KH14A9CZwxPoM4S/2xmpah1eCJqTtwa3wOhY
-         bkbSHVbS8TNH1h0NuiQnNYgYZZP6JHXbBCbEpXMVKNJ+gD7StZbxQj5UNtzPeHEQH7ab
-         906g==
-X-Forwarded-Encrypted: i=1; AJvYcCUBs9RJU8AqnaJRJZ2ZIsbic0GeuY3H+AW26hQZJA7uMn2VNS5JCYNjl4hQ8wykrVq8lIR+L1Jgy3+yN9ls@vger.kernel.org, AJvYcCUP3SlOD63ftes+YDNB8QYBazhXkE+aDZQzL/5fxBlzUHREFnB5xYjb5i2gvdvL+tl7iVau+zfWa4bhHkKv@vger.kernel.org, AJvYcCVBCVjUhanCMUi2FVChZqOknrHzuMRNkqmrt0imdYDZKzAAuVA47OvlPmXTVxwRldD9Q2q5HTd6PVc=@vger.kernel.org, AJvYcCVf3cPSDZWegnGHRnXfl7bLA3Q5yBSNW7rAqYJyp7lqTZQPQiaQx0mE7q1GFHHYVdUoUuWmo//9AVV2Si725rKcXMydOQ==@vger.kernel.org, AJvYcCVmoQcRr6MrInIgWLapt8MDYiOcThi5zbQUfieajtBOpMbdUy9H7GRM0L0Jbqnt5c7VNTM/gkUbYcmGlX4=@vger.kernel.org, AJvYcCWnlDscV4feUVuGlO1OIaWdvZjVK6znaMAR/MHrL/3D+AGMbHrQDCZeB2wMSytBUllx/aa3nbPtOe+T@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz2acbmFhQfQMDV9+7XDncJ2KQxtRh9tpQd8ZwaLLM5k+0r8s2D
-	gzSXzqJamdk7pAuy5GS8C4r7ZOwv/YziC5n4NiAYOYS3H0qVopj8
-X-Gm-Gg: ASbGncsu4+RrqHRhH5Z3630l6aBTI/mTOa6O6RdCee8Wv56dlsusqUaXlBOVDcX/jkn
-	I96BFSj600NS9rKbcYJPhbIdvtY8/0bKgWqYEJ48AyUdBmBvqJxTEVj4sqYa8/iObVzffGhC8KW
-	O0eCYm7gufKYp4WFerw/xfw5N4LtdwagarVsF5cZJK4P7FvvYuIT/rugVIVdq2QA7VM7uOHX3B5
-	hWEm3DAeacaAE39xDCpiokS2/+2R5aBa6ZNkzKqlJaYOjYyOxR0L24=
-X-Google-Smtp-Source: AGHT+IF8HVsTW5i+utryOgn5ztd9UTIpIO2jnXnIbnTi49ubQnVwoyiKkRH9bWUyzLDJ6jx/N2MgsQ==
-X-Received: by 2002:a05:6a21:158d:b0:1e0:d89e:f5bc with SMTP id adf61e73a8af0-1e5e046155fmr91302343637.11.1736099108489;
-        Sun, 05 Jan 2025 09:45:08 -0800 (PST)
-Received: from nuvole.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-842abd5927fsm27375046a12.10.2025.01.05.09.44.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 05 Jan 2025 09:45:07 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Heikki Krogerus <heikki.krogerus@linux.intel.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>
-Cc: devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
-	Pengyu Luo <mitltlatltl@gmail.com>
-Subject: [PATCH v2 5/5] arm64: dts: qcom: gaokun3: Add Embedded Controller node
-Date: Mon,  6 Jan 2025 01:41:59 +0800
-Message-ID: <20250105174159.227831-6-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250105174159.227831-1-mitltlatltl@gmail.com>
-References: <20250105174159.227831-1-mitltlatltl@gmail.com>
+        bh=5XxNEftZua09LK0hM2esB8aQB+qauXYBXnPyeQF/u7M=;
+        b=T4mvvos55BmR+uW+6zZ5xInRllakEbwAFMpRWcGqm6wARtCPy5qH4qVKmP4T/a2ttA
+         ULm4fomG6VGv6EYNOfxVVH5j2WqG6n2cYlpf3aohJIJerpifjqysA0aKdG2QWVcKwXd7
+         DmNXNhUCaee1iTmJCObkhMPz2rt11FN414zl7TDMVkOA8io92iLtgjceXzxm4weBXnrM
+         9CMP6OWtyg7hDi513nAetmAPNTcnwD1whC7zz3es6UymbLGtdxYry3ML4Vjt0b2UsTGC
+         +FRepCDUNKr8uVz8oJCJ/YkVbfNMjvH4kn0JudHZLQY7r4bJtrZFP6732+i6yl0VCoDD
+         yB7A==
+X-Forwarded-Encrypted: i=1; AJvYcCV084mmgYw3a6Xar9IZlYPi2ZIoYlacsvhz0PSmM8XCWCMLwuDgHPo5kytaouGj24pV2TzlCsBNvNbg@vger.kernel.org, AJvYcCV9m/8WIi1jZrV2TiVHY1vfK4Hmu1tA2Tlj1Jg4dlDdo1pn8p3XuMHdJovRMKsltDzfhGPdnxMFR1T2bF8Muw==@vger.kernel.org, AJvYcCW3ukd2EJuWf67qIat2Zt3SfJQoa3n4ELkjal9cNDEOirHuGuwku3NqfFDEoIqOlCA9g8q9zdkYFZrKiJab@vger.kernel.org, AJvYcCX2ZOXAzjj1LAl+bm0+mKp3dZH+sTkKupCxpVWArbhrvqRMH5WzicdSaF0Gx4kglwB31SHom1d9Ut0=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz1HHfTgd6qr30w5Jxhnxvu34oM5iEJ0HEtyQJWDnTwsUnozorH
+	5nLQ/o5zQ3P01q+lUGtek+83b1DnYPV2ZGw7yMTqDf36+i9yUkq9/lretrYaZSXkU94xJ6gHKNq
+	RgZ9HDBwYJYd5EugKN3nJ/n5rE5Q=
+X-Gm-Gg: ASbGncuOqD/SVikkXjTl0RxCQC+Hreivkzw1sjfVvR0xutGBge/TfU6OKSUPQQPPenQ
+	HZM+yanNU5t9NfZLoS2AsTeSc8B2ARSBPEQPSvchFI53qX8479bvkCSz1WvOTNmnyB7/dABaB
+X-Google-Smtp-Source: AGHT+IHvCPNMz64lZgikf9PqNcOhvTMRwGCdjgxlvaOeMmuPREPE2VatSotMqePlInthqSEKKYUwoJA15I6O4EM0eaU=
+X-Received: by 2002:a05:6870:20d:b0:29e:32e7:5f17 with SMTP id
+ 586e51a60fabf-2a7fb4b7bb3mr25812289fac.28.1736099781938; Sun, 05 Jan 2025
+ 09:56:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20241231-gpu-acd-v3-0-3ba73660e9ca@quicinc.com>
+In-Reply-To: <20241231-gpu-acd-v3-0-3ba73660e9ca@quicinc.com>
+From: Maya Matuszczyk <maccraft123mc@gmail.com>
+Date: Sun, 5 Jan 2025 18:55:46 +0100
+Message-ID: <CAO_MupJ21kOQPZG_=87mC-fQKmL=-K9AgOjriWR=wXCKU0897w@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Support for GPU ACD feature on Adreno X1-85
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-The Embedded Controller in the Huawei Matebook E Go is accessible on &i2c15
-and provides battery and adapter status, port orientation status, as well
-as HPD event notifications for two USB Type-C port, etc.
+Hi,
+I've applied this series for testing, and I've no performance
+increase, and some screen corruption, there's some lines(mostly white)
+on my yoga slim 7x that appear on the bottom of the screen. When I
+move my cursor in swaywm over it, the lines get occluded by the cursor
+and screenshots don't show these lines.
 
-Add the EC to the device tree and describe the relationship among
-the type-c ports, orientation switches and the QMP combo PHY.
+Best Regards,
+Maya Matuszczyk
 
-Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
----
- .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts | 139 ++++++++++++++++++
- 1 file changed, 139 insertions(+)
-
-diff --git a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-index 09b95f89e..ff5db8f63 100644
---- a/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-+++ b/arch/arm64/boot/dts/qcom/sc8280xp-huawei-gaokun3.dts
-@@ -28,6 +28,7 @@ / {
- 
- 	aliases {
- 		i2c4 = &i2c4;
-+		i2c15 = &i2c15;
- 		serial1 = &uart2;
- 	};
- 
-@@ -216,6 +217,40 @@ map1 {
- 		};
- 	};
- 
-+	usb0-sbu-mux {
-+			compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+			select-gpios = <&tlmm 164 GPIO_ACTIVE_HIGH>;
-+
-+			pinctrl-0 = <&usb0_sbu_default>;
-+			pinctrl-names = "default";
-+
-+			orientation-switch;
-+
-+			port {
-+				usb0_sbu_mux: endpoint {
-+					remote-endpoint = <&ucsi0_sbu>;
-+				};
-+			};
-+	};
-+
-+	usb1-sbu-mux {
-+			compatible = "pericom,pi3usb102", "gpio-sbu-mux";
-+
-+			select-gpios = <&tlmm 47 GPIO_ACTIVE_HIGH>;
-+
-+			pinctrl-0 = <&usb1_sbu_default>;
-+			pinctrl-names = "default";
-+
-+			orientation-switch;
-+
-+			port {
-+				usb1_sbu_mux: endpoint {
-+					remote-endpoint = <&ucsi1_sbu>;
-+				};
-+			};
-+	};
-+
- 	wcn6855-pmu {
- 		compatible = "qcom,wcn6855-pmu";
- 
-@@ -584,6 +619,81 @@ touchscreen@4f {
- 
- };
- 
-+&i2c15 {
-+	clock-frequency = <400000>;
-+
-+	pinctrl-0 = <&i2c15_default>;
-+	pinctrl-names = "default";
-+
-+	status = "okay";
-+
-+	embedded-controller@38 {
-+		compatible = "huawei,gaokun3", "huawei,gaokun-ec";
-+		reg = <0x38>;
-+
-+		interrupts-extended = <&tlmm 107 IRQ_TYPE_LEVEL_LOW>;
-+
-+		#address-cells = <1>;
-+		#size-cells = <0>;
-+
-+		connector@0 {
-+			compatible = "usb-c-connector";
-+			reg = <0>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					ucsi0_ss_in: endpoint {
-+						remote-endpoint = <&usb_0_qmpphy_out>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					ucsi0_sbu: endpoint {
-+						remote-endpoint = <&usb0_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+
-+		connector@1 {
-+			compatible = "usb-c-connector";
-+			reg = <1>;
-+			power-role = "dual";
-+			data-role = "dual";
-+
-+			ports {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				port@0 {
-+					reg = <0>;
-+
-+					ucsi1_ss_in: endpoint {
-+						remote-endpoint = <&usb_1_qmpphy_out>;
-+					};
-+				};
-+
-+				port@1 {
-+					reg = <1>;
-+
-+					ucsi1_sbu: endpoint {
-+						remote-endpoint = <&usb1_sbu_mux>;
-+					};
-+				};
-+			};
-+		};
-+	};
-+};
-+
- &mdss0 {
- 	status = "okay";
- };
-@@ -1025,6 +1135,10 @@ &usb_0_qmpphy_dp_in {
- 	remote-endpoint = <&mdss0_dp0_out>;
- };
- 
-+&usb_0_qmpphy_out {
-+	remote-endpoint = <&ucsi0_ss_in>;
-+};
-+
- &usb_1 {
- 	status = "okay";
- };
-@@ -1054,6 +1168,10 @@ &usb_1_qmpphy_dp_in {
- 	remote-endpoint = <&mdss0_dp1_out>;
- };
- 
-+&usb_1_qmpphy_out {
-+	remote-endpoint = <&ucsi1_ss_in>;
-+};
-+
- &usb_2 {
- 	status = "okay";
- };
-@@ -1177,6 +1295,13 @@ i2c4_default: i2c4-default-state {
- 		bias-disable;
- 	};
- 
-+	i2c15_default: i2c15-default-state {
-+		pins = "gpio36", "gpio37";
-+		function = "qup15";
-+		drive-strength = <2>;
-+		bias-pull-up;
-+	};
-+
- 	mode_pin_active: mode-pin-state {
- 		pins = "gpio26";
- 		function = "gpio";
-@@ -1301,6 +1426,20 @@ tx-pins {
- 		};
- 	};
- 
-+	usb0_sbu_default: usb0-sbu-state {
-+		pins = "gpio164";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-disable;
-+	};
-+
-+	usb1_sbu_default: usb1-sbu-state {
-+		pins = "gpio47";
-+		function = "gpio";
-+		drive-strength = <16>;
-+		bias-disable;
-+	};
-+
- 	wcd_default: wcd-default-state {
- 		reset-pins {
- 			pins = "gpio106";
--- 
-2.47.1
-
+pon., 30 gru 2024 o 22:11 Akhil P Oommen <quic_akhilpo@quicinc.com> napisa=
+=C5=82(a):
+>
+> This series adds support for ACD feature for Adreno GPU which helps to
+> lower the power consumption on GX rail and also sometimes is a requiremen=
+t
+> to enable higher GPU frequencies. At high level, following are the
+> sequences required for ACD feature:
+>         1. Identify the ACD level data for each regulator corner
+>         2. Send a message to AOSS to switch voltage plan
+>         3. Send a table with ACD level information to GMU during every
+>         gpu wake up
+>
+> For (1), it is better to keep ACD level data in devicetree because this
+> value depends on the process node, voltage margins etc which are
+> chipset specific. For instance, same GPU HW IP on a different chipset
+> would have a different set of values. So, a new schema which extends
+> opp-v2 is created to add a new property called "qcom,opp-acd-level".
+>
+> ACD support is dynamically detected based on the presence of
+> "qcom,opp-acd-level" property in GPU's opp table. Also, qmp node should b=
+e
+> present under GMU node in devicetree for communication with AOSS.
+>
+> The devicetree patch in this series adds the acd-level data for X1-85
+> GPU present in Snapdragon X1 Elite chipset.
+>
+> The last two devicetree patches are for Bjorn and all the rest for
+> Rob Clark.
+>
+> ---
+> Changes in v3:
+> - Rebased on top of v6.13-rc4 since X1E doesn't boot properly with msm-ne=
+xt
+> - Update patternProperties regex (Krzysztof)
+> - Update MAINTAINERS file include the new opp-v2-qcom-adreno.yaml
+> - Update the new dt properties' description
+> - Do not move qmp_get() to acd probe (Konrad)
+> - New patches: patch#2, #3 and #6
+> - Link to v2: https://lore.kernel.org/r/20241021-gpu-acd-v2-0-9c25a62803b=
+c@quicinc.com
+>
+> Changes in v2:
+> - Removed RFC tag for the series
+> - Improve documentation for the new dt bindings (Krzysztof)
+> - Add fallback compatible string for opp-table (Krzysztof)
+> - Link to v1: https://lore.kernel.org/r/20241012-gpu-acd-v1-0-1e5e91aa95b=
+6@quicinc.com
+>
+> ---
+> Akhil P Oommen (6):
+>       drm/msm/adreno: Add support for ACD
+>       drm/msm: a6x: Rework qmp_get() error handling
+>       drm/msm/adreno: Add module param to disable ACD
+>       dt-bindings: opp: Add v2-qcom-adreno vendor bindings
+>       arm64: dts: qcom: x1e80100: Add ACD levels for GPU
+>       arm64: dts: qcom: x1e80100: Add OPPs up to Turbo L3 for GPU
+>
+>  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 97 ++++++++++++++++=
+++++++
+>  MAINTAINERS                                        |  1 +
+>  arch/arm64/boot/dts/qcom/x1e80100.dtsi             | 25 +++++-
+>  drivers/gpu/drm/msm/adreno/a6xx_gmu.c              | 96 ++++++++++++++++=
+++---
+>  drivers/gpu/drm/msm/adreno/a6xx_gmu.h              |  1 +
+>  drivers/gpu/drm/msm/adreno/a6xx_hfi.c              | 36 ++++++++
+>  drivers/gpu/drm/msm/adreno/a6xx_hfi.h              | 21 +++++
+>  drivers/gpu/drm/msm/adreno/adreno_device.c         |  4 +
+>  8 files changed, 268 insertions(+), 13 deletions(-)
+> ---
+> base-commit: dbfac60febfa806abb2d384cb6441e77335d2799
+> change-id: 20240724-gpu-acd-6c1dc5dcf516
+>
+> Best regards,
+> --
+> Akhil P Oommen <quic_akhilpo@quicinc.com>
+>
+>
 
