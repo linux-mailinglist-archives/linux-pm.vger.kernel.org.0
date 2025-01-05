@@ -1,148 +1,138 @@
-Return-Path: <linux-pm+bounces-19961-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19962-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F38DA017EF
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 04:37:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1AED4A017FF
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 05:07:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 619FF7A18E6
-	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 03:37:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F03FE161CC1
+	for <lists+linux-pm@lfdr.de>; Sun,  5 Jan 2025 04:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE291BDC3;
-	Sun,  5 Jan 2025 03:37:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049521DFEF;
+	Sun,  5 Jan 2025 04:07:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="daall1yw"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="RfFGQjK6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f171.google.com (mail-yb1-f171.google.com [209.85.219.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 111CA63A9;
-	Sun,  5 Jan 2025 03:37:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D181F442F;
+	Sun,  5 Jan 2025 04:07:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736048234; cv=none; b=Xa//ut9YOgGr8egAUYPcZm9uDyq8lgncv4dEAOsSxyLvG70afwrCWlP9zcmC8lcPnrcP5htvh/iagA5Mk23PIAiXbU4EuInZKBMiWUSqboKCsz7XGUR0Z+lKYYgEYBjUH1PNTAQ3lDMhRvGKJ3tz2XNuEZVjrWPfN+kZFFPa6Kw=
+	t=1736050023; cv=none; b=RDcc3B0FiXZIZSljSCPokA0jB9IPrXu98I9yZgEUZxLORHlNBG1hvRi3Rj5e7R7rm5CEy3lAFya0YeFurDYc/FbTLcaBfIgdSQjpsBnZAWeCtvIjeWcvvRZG/TcWMWtqGbopUjfrfCIaWqQTkBHAUVoXxKDLZCLyCQbAEBjNaYQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736048234; c=relaxed/simple;
-	bh=mLmGz/XxMDGsY0VpbcIUgsvv1SKTMC8Kz6zHyosMipY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Mh4B7CfUuBXcJpsHxxCA/jwmbUM7QODDx9yu9MXl/edF8eq9ewQGe6ZALSqfR+bFBxSxUQxmpVkELSXqe3d4+TpzIFcyft72oCIo0Tg1gz7Dnyf+tA9bq3qOi6FubNdZIfrOxY2LXATBoV+a7th38NlHyJFyT9raxmiiTe2wg8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=daall1yw; arc=none smtp.client-ip=209.85.219.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f171.google.com with SMTP id 3f1490d57ef6-e3a0acba5feso14935951276.2;
-        Sat, 04 Jan 2025 19:37:12 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736048232; x=1736653032; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Zhs1GeekqR+yhW2r7LReyZh0loVS1uNNv7SzsVVmAS8=;
-        b=daall1ywcwqD4dFm9/eVr64HB3RsD6V3Oq+kDAxzMoS/8SdCoMWx2pFA4JG/ayWoVB
-         qfGQXA+9uu22eWDRQDj+e0SbUDMKb11QmEaN8yjf5dBm2oEs00dFX3H9MM6su0Q7odZZ
-         VR7jyC365z5xDB97tfOIha6f2w8CrMG03luDXtTT0A02h5bfzn5qVbykt3LJL9yI9Mj2
-         qYWYFPDQyzuT3QUADh+D7idqouo72Rr4usZZDgQPkmUG8CXhgdxSIpp7ERsJ7Epj71jI
-         CUGY8wxoCTJ9pbcv2nOmDz2mIIjyZpXJQ4If86H+k1Hn9v2aJrw1zmre74u1KdA57n4F
-         ThIg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736048232; x=1736653032;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zhs1GeekqR+yhW2r7LReyZh0loVS1uNNv7SzsVVmAS8=;
-        b=DJINCQRGj5G5Ud2vdDUlxS8HxiV5xs5Nz573Hyyf9BXw6JUswg8GFNUzwcqE8Aj0h9
-         qSUJihKnicudrEScBfuQtpmB8zGdSkJmZrMwl7EvdgBErWuvmxPG7TJyj3+WHR4Rcfx4
-         KanDpxyh9nPhz1YgakdqcgJYbuiyXmGPQ6sKnGqzyUqTaoGvKMRIRWcKm/+F0Adjp9F/
-         7pcssUjV56kr4gxkodLbOp+2gi3xLb2r8pm8eSGL9tj6vGypl+BbVMsyDSRL/78owHzc
-         0y1EuM79S03MTB5t8N2GK3GBTEsCASXEZlbzFdECQssfnKWoNcCrVIxpM0LHCI19lQNd
-         YmQg==
-X-Forwarded-Encrypted: i=1; AJvYcCXYwWPKcBuztYmBG5dgiaZaIiVjyXonPfFi4rHZZ4Y6ZtbrlZUi/EmhpnheijqAUzMB+0sQm3gvj1BbFy0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx1561tYjU2wvwnKhUWR2HwhVUB6VM6OlX0GSe806JqCZ34pPCH
-	2dDF1BL63sa1HuwwR/FaIkmaMppVlAysFKJIFcMM7u2qw9VntI+z
-X-Gm-Gg: ASbGncvynCfZ/33T6uhbRlf4696NCWynbGIFa2SUrwiuKqp0zkJ033ybqb++c34BHUP
-	mWZk9NKwvknUyarEZxrLU4kiOWdAdr0r5rUpCYnNlLcunN01nU7FkUz25nGS416a7PbwLvZUkUw
-	5sCq14Q/fz6wn/E5Keevh81kRH9oPm+eIWauOPTgiqJJf7u5u3uTYyruwU/8Mt0E5XynHKCoK7k
-	Esg2TAhsyh9J31LlHEJnaTvJJZxPXLlw2pwlANEuReDmtr5gh9YXMXVHlFPX6XUVq6g/8I2
-X-Google-Smtp-Source: AGHT+IH7rdz1OK60/3Jzqbq03lujYPTS14/OILrw7BMffcBY1KqFDaedkV2LvozM+Z4yaavW92Xerw==
-X-Received: by 2002:a05:6902:2681:b0:e30:cd98:56dd with SMTP id 3f1490d57ef6-e538c223eefmr36360976276.19.1736048231747;
-        Sat, 04 Jan 2025 19:37:11 -0800 (PST)
-Received: from ?IPV6:2600:6c56:7d00:582f::64e? ([2600:6c56:7d00:582f::64e])
-        by smtp.googlemail.com with ESMTPSA id 00721157ae682-6f3e73e785dsm81302447b3.1.2025.01.04.19.37.11
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 04 Jan 2025 19:37:11 -0800 (PST)
-Message-ID: <1bb556a4-6b9b-42ae-98d2-15c8986cb88d@gmail.com>
-Date: Sat, 4 Jan 2025 21:37:10 -0600
+	s=arc-20240116; t=1736050023; c=relaxed/simple;
+	bh=uTTXcYE2JlL0MwZNF4xf3gPhakQayiJl1mKH6vTKQMI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jIOfsR1yArBMcsu6iFggXErm2kih3EWzROpcCeaVoEqy3VFpxxIhST8Wu7p1C1zXnkYaeVeLfbxN4Y2D4LpmeK8Pe5Umtyki6yWqOcezU/pCgUxMrhyYpU5UStXkGzK0BNr9h3fZo2VHlap/MGRl8YLV3LFGeW1dhEZL/3SJ5Sg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=RfFGQjK6; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736050022; x=1767586022;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=uTTXcYE2JlL0MwZNF4xf3gPhakQayiJl1mKH6vTKQMI=;
+  b=RfFGQjK6PekFSvPeMj+D+sau8EUDjhqUHBGoNgYE16Bw6tkBSOaXWLmY
+   KKps1AbsnmykHuxGvbPEo9mz8t07TKLRxVdMUPmhQjkdBCAWktd8gP5w6
+   h6sL/HfTJkzZxw2dU7CFrrEgXucyhrrfFxBoCQrj5t30iMhAh3nr0eDI1
+   Wglv/gCbb6MS0KiZOVthXfn7TQmx8/bU+qj/f/JDYM2CECFOnKBFrdbSl
+   Y9EszjC/H6DdbP4EOsS/J40Wvom49KChbGU4lSMwHjZYjWavK4JAas0fS
+   UTCOR3NZ/OQF3ZAKsQmXUVep8ew2NyvFV4sgLUb813nZnuQE4DeWwNXDo
+   w==;
+X-CSE-ConnectionGUID: 1SsTWpg7SqG3Pd0TxPgwRg==
+X-CSE-MsgGUID: WIZbAWXfSOm8UB+yzkzcCg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11305"; a="46906606"
+X-IronPort-AV: E=Sophos;i="6.12,289,1728975600"; 
+   d="scan'208";a="46906606"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 04 Jan 2025 20:07:01 -0800
+X-CSE-ConnectionGUID: s5QBkrq/RlC6x0S1Bzo8Zg==
+X-CSE-MsgGUID: T/KGlmm5Qo60f34HgbLZqg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,289,1728975600"; 
+   d="scan'208";a="106980210"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 04 Jan 2025 20:06:58 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tUHui-000BRL-14;
+	Sun, 05 Jan 2025 04:06:56 +0000
+Date: Sun, 5 Jan 2025 12:06:24 +0800
+From: kernel test robot <lkp@intel.com>
+To: Christian Marangi <ansuelsmth@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, upstream@airoha.com
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev
+Subject: Re: [PATCH v8 1/2] pmdomain: airoha: Add Airoha CPU PM Domain support
+Message-ID: <202501051127.3AKt5ZE9-lkp@intel.com>
+References: <20250104181305.28185-1-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 0/2] cpufreq/amd-pstate: Set initial min_freq to
- lowest_nonlinear_freq
-To: Mario Limonciello <mario.limonciello@amd.com>,
- Hanabishi <i.r.e.c.c.a.k.u.n+kernel.org@gmail.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20241017053927.25285-1-Dhananjay.Ugwekar@amd.com>
- <d89bfc1b-37cb-4d8b-b944-8dc385915bcf@gmail.com>
- <62f0402c-89a4-4ca8-b443-fbc9cc3b2055@amd.com>
-Content-Language: en-US
-From: Russell Haley <yumpusamongus@gmail.com>
-In-Reply-To: <62f0402c-89a4-4ca8-b443-fbc9cc3b2055@amd.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250104181305.28185-1-ansuelsmth@gmail.com>
+
+Hi Christian,
+
+kernel test robot noticed the following build errors:
+
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.13-rc5 next-20241220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Christian-Marangi/cpufreq-airoha-Add-EN7581-CPUFreq-SMCCC-driver/20250105-022153
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20250104181305.28185-1-ansuelsmth%40gmail.com
+patch subject: [PATCH v8 1/2] pmdomain: airoha: Add Airoha CPU PM Domain support
+config: arm64-randconfig-001-20250105 (https://download.01.org/0day-ci/archive/20250105/202501051127.3AKt5ZE9-lkp@intel.com/config)
+compiler: clang version 20.0.0git (https://github.com/llvm/llvm-project 096551537b2a747a3387726ca618ceeb3950e9bc)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250105/202501051127.3AKt5ZE9-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501051127.3AKt5ZE9-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c:135:3: error: field designator 'remove_new' does not refer to any field in type 'struct platform_driver'
+     135 |         .remove_new = airoha_cpu_pmdomain_remove,
+         |         ~^~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   1 error generated.
 
 
+vim +135 drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c
 
-On 12/8/24 10:35 AM, Mario Limonciello wrote:
-> On 12/8/2024 01:54, Hanabishi wrote:
->> Hello. Maybe I'm too late on this, but I have some concerns.
->>
->> On 10/17/24 05:39, Dhananjay Ugwekar wrote:
->>> In other systems, power consumption has increased but so has the
->>> throughput/watt.
->>
->> I just want to bring up the fact that this change affects all
->> governors. It sounds good for the performance governor, but not so
->> much for the powersave governor.
->>
->> So the question is: don't we want the lowest power consumption
->> possible in the powersave mode? Even if it means decreased efficiency.
->> Powersave by definition supposed to make battery last as long as
->> possible no matter what, isn't it?
->>
-> 
-> No, the powersave governor isn't a one stop shop to bring everything to
-> longest battery.
-> 
-> By your argument we should set the EPP to "power" by default and "boost"
-> to off by default when the powersave governor is enacted?
-> 
-> All of those are far too aggressive for a default behavior.  Setting the
-> lowest nonlinear frequency as the default lowest scaling frequency is
-> about having a good default that balances responsiveness, battery life
-> and performance.
-> 
-> Like all knobs anyone that doesn't agree with it can of course modify it
-> from sysfs.
-> 
+   132	
+   133	static struct platform_driver airoha_cpu_pmdomain_driver = {
+   134		.probe = airoha_cpu_pmdomain_probe,
+ > 135		.remove_new = airoha_cpu_pmdomain_remove,
+   136		.driver = {
+   137			.name = "airoha-cpu-pmdomain",
+   138			.of_match_table = airoha_cpu_pmdomain_of_match,
+   139		},
+   140	};
+   141	module_platform_driver(airoha_cpu_pmdomain_driver);
+   142	
 
-If the documentation is correct, the lowest_nonlinear_frequency *does*
-result in the lowest battery consumption unless you are running one or
-more threads at 100% utilization until the battery dies. In that case,
-lowest nonlinear frequency should result in greatest number of
-instructions retired when the battery dies. I say instructions retired
-rather than work completed, because "100% until the battery dies" is
-only stress tests, malware, and damn-the-torpedos concurrency frameworks
-that use spinwaits.
-
-If that is not true, then either the documentation is wrong, or the
-CPU's reporting of its lowest nonlinear frequency is wrong.
-
-I am puzzled why the CPU even exposes frequencies below
-lowest-nonlinear. They should always be worse than PWM-ing between C0 at
-lowest nonlinear freq and some deeper C-state. Testing software that has
-to run on much slower CPUs, I guess?
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
