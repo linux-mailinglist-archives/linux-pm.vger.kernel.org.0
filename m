@@ -1,40 +1,40 @@
-Return-Path: <linux-pm+bounces-19988-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19989-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71F54A02697
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 14:32:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3EBA3A027FD
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 15:29:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 022691885552
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 13:32:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8AE4F7A029C
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 14:29:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F5541DA631;
-	Mon,  6 Jan 2025 13:32:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A76781DE3A7;
+	Mon,  6 Jan 2025 14:29:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2C6232B9CD
-	for <linux-pm@vger.kernel.org>; Mon,  6 Jan 2025 13:32:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68C801DCB2B
+	for <linux-pm@vger.kernel.org>; Mon,  6 Jan 2025 14:29:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736170359; cv=none; b=gOozGY5UOFV4NwwjPh4DtPeaC9k5AckM7f3/3N/SPP0rNNirLukedoeDFggNMXEcekv4M/DbgYytIYnFZQZQv6/cZER4+BpuriMf64Lf7Ms8F/jYKFcZstzw92UOK2rcbRdK6RH3zGVfAoUo17KdIY3ch33o625Nb7koiSKBsh0=
+	t=1736173749; cv=none; b=VJcOWfoH24yEjEhWnhvxaL+unTt5xy2nEMlfTYMoPcosmi0uw+udvugsfyjQW97Yk1PIbpP/29VNIGDXD+3kLKUVW5XsYFPZKk95QWOfUIVvtTp7/GjoL8EM3nLatW7mqjMvbDG5bPRhZbFcgthOapa6nLYV6DiiAOtqQm3v1SU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736170359; c=relaxed/simple;
-	bh=uJXhTysw7aPAFizE9GDolxWlKW3OFYpdebjwy/OOKcw=;
+	s=arc-20240116; t=1736173749; c=relaxed/simple;
+	bh=tDpzm4Bj9QcJNosTjFSSPqoZ3zZOgYkdsQMreDEVpwY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q42mU4FENAafvqzAyFKmYX1ZQuwd3bW2Pfl50Jovg/QfU9365V2cWU2AhIXHr54tQHk8R3CzX5hdVwxYTmpU9YmDywT/ILohI4cjfrjDTDQ57uuFPUVtSJqlPEiwV6pClqO9oFLB/16YPp60I5AOosza9lThrLi2zBG8tJpaoNI=
+	 In-Reply-To:Content-Type; b=qDqG6ovqg6c3/xxoq3zvBZ2Ip1okxhVy8xszBTwTUSi8zKhMNJ/D3N10ua4EjGfMsMcfGkAUmWBL2xMl2QFNQXsmp0AC0LVe1pB4q5Mf6vsOLnqEe41LfyQDzV+C9HIxIERClgBuD4YGYkobdOh2ZBA1RPC5HE48Td4aoEYTTKU=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
 Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
 	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tUnDa-00032F-D6; Mon, 06 Jan 2025 14:32:30 +0100
-Message-ID: <86f3159b-2ef0-4c1c-97f5-a03b552b6738@pengutronix.de>
-Date: Mon, 6 Jan 2025 14:32:28 +0100
+	id 1tUo5x-0005hl-W8; Mon, 06 Jan 2025 15:28:42 +0100
+Message-ID: <1c0957b2-48cf-49a1-aa5e-666defd7f0fd@pengutronix.de>
+Date: Mon, 6 Jan 2025 15:28:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,16 +42,28 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC] docs: ABI: replace mcroce@microsoft.com with new Meta
- address
-To: Matteo Croce <teknoraver@meta.com>, Matteo Croce <technoboy85@gmail.com>,
- Jens Axboe <axboe@kernel.dk>, Andrew Morton <akpm@linux-foundation.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-block@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@pengutronix.de
-References: <20241219-fix-mcroce-mail-bounce-v1-1-4912116b6060@pengutronix.de>
+Subject: Re: [PATCH 02/11] reboot: reboot, not shutdown, on
+ hw_protection_reboot timeout
+To: kernel test robot <lkp@intel.com>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Fabio Estevam
+ <festevam@denx.de>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Jonathan Corbet <corbet@lwn.net>, Serge Hallyn <serge@hallyn.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Matti Vaittinen <matti.vaittinen@fi.rohmeurope.com>,
+ Matti Vaittinen <mazziesaccount@gmail.com>,
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Guenter Roeck <groeck@chromium.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
+ linux-security-module@vger.kernel.org, chrome-platform@lists.linux.dev,
+ devicetree@vger.kernel.org, kernel@pengutronix.de
+References: <20241219-hw_protection-reboot-v1-2-263a0c1df802@pengutronix.de>
+ <202412201310.JWkUQ9qf-lkp@intel.com>
 Content-Language: en-US
 From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20241219-fix-mcroce-mail-bounce-v1-1-4912116b6060@pengutronix.de>
+In-Reply-To: <202412201310.JWkUQ9qf-lkp@intel.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
@@ -59,97 +71,61 @@ X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Hi,
+On 20.12.24 07:12, kernel test robot wrote:
+> Hi Ahmad,
+> 
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Ahmad-Fatoum/reboot-replace-__hw_protection_shutdown-bool-action-parameter-with-an-enum/20241219-155416
+> base:   78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
+> patch link:    https://lore.kernel.org/r/20241219-hw_protection-reboot-v1-2-263a0c1df802%40pengutronix.de
+> patch subject: [PATCH 02/11] reboot: reboot, not shutdown, on hw_protection_reboot timeout
+> config: i386-buildonly-randconfig-003-20241220 (https://download.01.org/0day-ci/archive/20241220/202412201310.JWkUQ9qf-lkp@intel.com/config)
+> compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20241220/202412201310.JWkUQ9qf-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202412201310.JWkUQ9qf-lkp@intel.com/
+> 
+> All warnings (new ones prefixed by >>):
+> 
+>    kernel/reboot.c:241: warning: Function parameter or struct member 'cmd' not described in 'do_kernel_restart'
+>>> kernel/reboot.c:995: warning: Function parameter or struct member 'action' not described in 'hw_failure_emergency_schedule'
+>>> kernel/reboot.c:995: warning: Function parameter or struct member 'poweroff_delay_ms' not described in 'hw_failure_emergency_schedule'
 
-On 19.12.24 08:51, Ahmad Fatoum wrote:
-> The Microsoft email address is bouncing:
-> 
->     550 5.4.1 Recipient address rejected: Access denied.
-> 
-> So let's replace it with the address Matteo last used to sign off
-> patches two months ago.
-> 
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> ---
-> @Matteo, is this ok for you or would you prefer another address (whether
-> your own or someone else's?)
-> 
-> I ran into this while submitting a series[1] touching sysfs-kernel-reboot
-> and b4/get_maintainers.pl picked off the stale address from the file.
+Will fix the kernel doc issues for v2.
 
-Given that Matteo is fine with the change, can this be applied?
-
-Thanks,
-Ahmad
-
+>    kernel/reboot.c:1023: warning: Function parameter or struct member 'action' not described in '__hw_protection_shutdown'
+>    kernel/reboot.c:1023: warning: Excess function parameter 'shutdown' description in '__hw_protection_shutdown'
 > 
-> [1]: https://lore.kernel.org/all/20241219-hw_protection-reboot-v1-6-263a0c1df802@pengutronix.de/
-> ---
->  Documentation/ABI/stable/sysfs-block          |  2 +-
->  Documentation/ABI/testing/sysfs-kernel-reboot | 10 +++++-----
->  2 files changed, 6 insertions(+), 6 deletions(-)
 > 
-> diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/stable/sysfs-block
-> index 0cceb2badc836b8cbdade543deff71edef0e3da1..ee1bbb4dfd4ea65fc0aa13c03a5205b8d5816ecf 100644
-> --- a/Documentation/ABI/stable/sysfs-block
-> +++ b/Documentation/ABI/stable/sysfs-block
-> @@ -77,7 +77,7 @@ Description:
->  
->  What:		/sys/block/<disk>/diskseq
->  Date:		February 2021
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:
->  		The /sys/block/<disk>/diskseq files reports the disk
->  		sequence number, which is a monotonically increasing
-> diff --git a/Documentation/ABI/testing/sysfs-kernel-reboot b/Documentation/ABI/testing/sysfs-kernel-reboot
-> index 837330fb251134ffdf29cd68f0b2a845b088e5a0..fb2d21acc6627ee340a3c8327261d5727ad63e15 100644
-> --- a/Documentation/ABI/testing/sysfs-kernel-reboot
-> +++ b/Documentation/ABI/testing/sysfs-kernel-reboot
-> @@ -1,7 +1,7 @@
->  What:		/sys/kernel/reboot
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	Interface to set the kernel reboot behavior, similarly to
->  		what can be done via the reboot= cmdline option.
->  		(see Documentation/admin-guide/kernel-parameters.txt)
-> @@ -9,24 +9,24 @@ Description:	Interface to set the kernel reboot behavior, similarly to
->  What:		/sys/kernel/reboot/mode
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	Reboot mode. Valid values are: cold warm hard soft gpio
->  
->  What:		/sys/kernel/reboot/type
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	Reboot type. Valid values are: bios acpi kbd triple efi pci
->  
->  What:		/sys/kernel/reboot/cpu
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	CPU number to use to reboot.
->  
->  What:		/sys/kernel/reboot/force
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	Don't wait for any other CPUs on reboot and
->  		avoid anything that could hang.
+> vim +995 kernel/reboot.c
 > 
-> ---
-> base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
-> change-id: 20241219-fix-mcroce-mail-bounce-328900169405
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   983  
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   984  static DECLARE_DELAYED_WORK(hw_failure_emergency_poweroff_work,
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   985  			    hw_failure_emergency_poweroff_func);
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   986  
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   987  /**
+> 595ab92650cc28 Ahmad Fatoum    2024-12-19   988   * hw_failure_emergency_schedule - Schedule an emergency system shutdown or reboot
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   989   *
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   990   * This may be called from any critical situation to trigger a system shutdown
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   991   * after a given period of time. If time is negative this is not scheduled.
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   992   */
+> 595ab92650cc28 Ahmad Fatoum    2024-12-19   993  static void hw_failure_emergency_schedule(enum hw_protection_action action,
+> 595ab92650cc28 Ahmad Fatoum    2024-12-19   994  					  int poweroff_delay_ms)
+> dfa19b11385d4c Matti Vaittinen 2021-06-03  @995  {
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   996  	if (poweroff_delay_ms <= 0)
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   997  		return;
+> 595ab92650cc28 Ahmad Fatoum    2024-12-19   998  	hw_failure_emergency_action = action;
+> dfa19b11385d4c Matti Vaittinen 2021-06-03   999  	schedule_delayed_work(&hw_failure_emergency_poweroff_work,
+> dfa19b11385d4c Matti Vaittinen 2021-06-03  1000  			      msecs_to_jiffies(poweroff_delay_ms));
+> dfa19b11385d4c Matti Vaittinen 2021-06-03  1001  }
+> dfa19b11385d4c Matti Vaittinen 2021-06-03  1002  
 > 
-> Best regards,
 
 
 -- 
