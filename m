@@ -1,207 +1,357 @@
-Return-Path: <linux-pm+bounces-19979-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9FF2A02062
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 09:10:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D69EDA02198
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 10:18:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D21C3A52E5
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 08:09:32 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D606F7A17C5
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 09:18:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D00C81D7E45;
-	Mon,  6 Jan 2025 08:08:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 903B61D63F7;
+	Mon,  6 Jan 2025 09:18:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ViMH81LL"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="CJU69mBi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+Received: from mail-wm1-f52.google.com (mail-wm1-f52.google.com [209.85.128.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E72F81D6DB1;
-	Mon,  6 Jan 2025 08:08:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CA347EEB2
+	for <linux-pm@vger.kernel.org>; Mon,  6 Jan 2025 09:18:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736150915; cv=none; b=bTvvppr6Qxs/N/avigLqyBG+01UYIfX6PH8d/CgGzBhiBtnuTVK8xtUYbWhrufX/pE7ckiiJWbuOpnhPVdEy4pvsf0LNyHdYprvbuXGSIxpAH6azqehnnsHA8oRIhVUIAeW2WewXM6y5jcvyF0USG1EjY1JtR1NM3mWbQrousOg=
+	t=1736155128; cv=none; b=Wkc27ANtI0r0qWz3xUQI6wMT78K9H+2zXCzVNvP8CW9CnI8dCderIwlk8ULXRTHW7gnpaXyTex3qdKXGR4hcUxrSukvjZwZmd/o6D1HS6LoejhDm71l5x9wZcwsimLKGS+fUb8F08NTtYRMP88n9yRoyoybTzMMl8SUqD99umwU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736150915; c=relaxed/simple;
-	bh=wHGu/oSSwQUbQ328emg5bZckBobIHSpMg0a2PmUbvwY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LkXZzDIoTpRANBffRoRox4EXRBygbkKX6judNWOafbLw6JKyf59twMCl4PjsbgiME7ZOaQ9laXCa/H6Zk9dmwkqOmjaw1b6nFTuuMWgJpsqPIeqQvWMGcSqcJ6xu+ap6Fhx81mF1bRLtLd9WNiUywZrV6hmDPW/5FC3ONBqRuI0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ViMH81LL; arc=none smtp.client-ip=209.85.216.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2ee86a1a92dso16165867a91.1;
-        Mon, 06 Jan 2025 00:08:30 -0800 (PST)
+	s=arc-20240116; t=1736155128; c=relaxed/simple;
+	bh=RnTORvbm0gnQw+JAYaXlL1z80u4lpfomXvVmpfqsKWQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ZWppqxRh0wcXWv0Ao9M17v9+pn26bWXQF7FSoETzoC1XwylnaMEf2d28mw2YI4KY2FzWgSnQUKMDiz6fApu7oLJvwtDW6e4dBNY0pO6xUs3nvQz/L12DCGj+bo/eNVLD6cv38ePxaQ/NW3cf9j1h4eAgTeS/bxOG9CqhcT278Wc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=CJU69mBi; arc=none smtp.client-ip=209.85.128.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wm1-f52.google.com with SMTP id 5b1f17b1804b1-436202dd7f6so161280315e9.0
+        for <linux-pm@vger.kernel.org>; Mon, 06 Jan 2025 01:18:44 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736150909; x=1736755709; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=miofxZI6eA3394zdcfXv5+YqJvoJUfGSz5V6LgQvf58=;
-        b=ViMH81LLGD3HHJYUMeVONlG1cf/a0FxNl9KiT+WkyBNtScMj1vUwRwhaRPTxNh/c1A
-         IMQ3LwKaVW25ZozeGa0sENsn+Nitl4fqGJe51oQHd3FIf57zS41KGEG7HdtEkpu2cu+m
-         2mkPSprjaU8QbcGBWpyQgcUD7yoyV1QobA8ypXSKEC71dUREuIndo1lBcbSDoYzc8ZWk
-         57wUkiaQ462k5VPT9rpWjLwGS6uTMlgItyTqADSIEptG/VM0FmPqSvQspDNzeTxyQiBK
-         NlV90tcb1I7BDTpaA0Yd1tGsy+wT8BzFGXEb9ujcd7RAQRUdLw381man/FOGvGfF7YWH
-         Efxg==
+        d=tuxon.dev; s=google; t=1736155123; x=1736759923; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=RytLxRZxC8L+SoHq2QUPWp7tJd9AZXXGwn4jAy0YyYg=;
+        b=CJU69mBiG7V8NwDeYmoX0qJIauhfFeTyzPkSn4nS/B9u4QbZ+MqSn/caf4crkhxifD
+         x8Yt6oSCf/lzY10JKzE0tQ8xRoMgTJKdRNS1QQ46Tv3HzoWEBANvhryjtnaz1A7T5AwC
+         HpX1h9OkkXDFlpAEiA6JMr+mnKyHgr39N/BxjnO8tJo/SUkfCkt020wLxeBzxkS8O0Mb
+         2k+9HuY58F/qVOpbeouCC2f6vkjwcUSccXMmM6ekqXF42S6M1pYGc40UsBr0nGAwN+nN
+         zx9LRTVM5vi0kOOzYMUbjGOyzmb3PQ/xiIovxnAIlKGYOdiLYgnYCde2pIkjhjmXiphy
+         742Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736150909; x=1736755709;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=miofxZI6eA3394zdcfXv5+YqJvoJUfGSz5V6LgQvf58=;
-        b=M9JRmBV0axYBDBentYAZM/8bhDkvFw4Xv8dvJnDm+iWuSvI0A5BbAB4KXqMjkoa0Jd
-         23DBenR+XZu69G5SH6DttTFOZOhDM/mvMkB/xO8+UV3JDet+YWIGFU5w1gw0VFhy/m8N
-         kAwirGZutUxhdSRCWHD83wnBgsqM4ya8DUZMhTWiiQCFUX/OLMssDgijN0doZmZXAc7C
-         jG4OcxmQLc3MD27hnEctzPoohSogvFXJdN6Io1IE7sSkEvvmW5+5sj2reEoN69oWTqVy
-         2Uz9vsiOfJyEcCOYDoZLDW2gIAELQ3Vfrz7iZcna/qviDfwVp9O70pGT2iEpR2+5RZU7
-         HJ4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVBArqLorEi5SKER+3e4BeUAZqzj0AjrlrqTHwFvP8xYhBvKWL8az/uec6w8oImw28Yp0fUjCIldFw=@vger.kernel.org, AJvYcCVb+pASWhmj+ExFvzEo52OgbIcVXrdtWdKe0V7K71igOvPdDwpe673KandRh9T131x4mFksRIyf0lR6@vger.kernel.org, AJvYcCW6sgn/c0paROiQbxxSBYpo4aelnPPB+sohbMh7EOh0BxIRYXESsaMYiRFX2QwRBx5/nGRaF6w4vDwX++s=@vger.kernel.org, AJvYcCWDctfJlbZTZ8Zmi3A/xNuxqT9sjkQVsrCZsNubakA+LVcnbkZOk3NYT46wX6dlOxxVPldjv2ZM7EHRxFdYwg==@vger.kernel.org, AJvYcCWMbWrnGHrrMtgVJG/33QA0mnGXemeC/ywOqtMMEI4nRiy0bODm6STqwoxa2o0habjDEkQjr5ZK9wKYj6XvDM5LNpOafg==@vger.kernel.org, AJvYcCXYXcdyBDmFEKD5HSbfeTr6SOPH5Ufxmf3EID6oYtxOKW0yrD+cuiB1f0OQr3pnrvpRs+504/g2b3Yf@vger.kernel.org, AJvYcCXzLk7yjHUkJcB4fjp+ECmqhuQIg4ZsEMYAeBKamNSFfdVgOT1GXqPS1aAd0L4QdrPs4x1hgJ7vCS2gGXzk@vger.kernel.org
-X-Gm-Message-State: AOJu0YwwbPDH2sZtTSph9a7GdiF3aQgZXdov4KXiXTmA+ocG42ZXtXHs
-	HcHOP1FOs6wlk5j4xxSyK6+/V4djrKVX3cCsXVoYBJ01Csj0G4xt
-X-Gm-Gg: ASbGncuxreFZPvoUozfhyASodh9aXYi8EnnwwiE+p64BMv32kvVYa43tGUG6V+OCuJR
-	r3GHbgg9ldVQABg+tla9UvhZPDT2ekpqNdAb2MfWIr0ZqDEkxzYKe1Pk+4Qlwidt5jOb3621IVh
-	pyFZZvDkW7zhCEmIkGrNw+ySZ7AOIcBFQxRdUeFPYvt+uXO/Jphb7Jx/At+GxsGZswrYE4BADKw
-	O/7zgWU11OTw+BbR92+BM6r4wqrwx6ImRWMPMjrgWmh5I8AbxN7P9g=
-X-Google-Smtp-Source: AGHT+IGAiCuLKBYIm5kxkrIB5POZheZeFzEP+YXQx/K+Y9+0ooTv3Jv3BCORj3F89XQMRfCWUOpLwg==
-X-Received: by 2002:a17:90b:134b:b0:2ef:316b:53fe with SMTP id 98e67ed59e1d1-2f452e4d0e5mr73686828a91.22.1736150908695;
-        Mon, 06 Jan 2025 00:08:28 -0800 (PST)
-Received: from nuvole.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f4477ec330sm36530772a91.24.2025.01.06.00.08.14
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2025 00:08:27 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: krzk@kernel.org
-Cc: andersson@kernel.org,
-	bryan.odonoghue@linaro.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	dmitry.baryshkov@linaro.org,
-	gregkh@linuxfoundation.org,
-	hdegoede@redhat.com,
-	heikki.krogerus@linux.intel.com,
-	ilpo.jarvinen@linux.intel.com,
-	jdelvare@suse.com,
-	konradybcio@kernel.org,
-	krzk+dt@kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-hwmon@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	linux@roeck-us.net,
-	mitltlatltl@gmail.com,
-	platform-driver-x86@vger.kernel.org,
-	robh@kernel.org,
-	sre@kernel.org
-Subject: Re: [PATCH v2 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
-Date: Mon,  6 Jan 2025 16:06:56 +0800
-Message-ID: <20250106080657.240974-1-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <md45rp2dmv7aibez2sxwzyjayfi4wbujshlc46hxi6v4jzlhfr@tpbtqv46hrlh>
-References: <md45rp2dmv7aibez2sxwzyjayfi4wbujshlc46hxi6v4jzlhfr@tpbtqv46hrlh>
+        d=1e100.net; s=20230601; t=1736155123; x=1736759923;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=RytLxRZxC8L+SoHq2QUPWp7tJd9AZXXGwn4jAy0YyYg=;
+        b=EmDUeWCJhOoLSdwwRLuRd+8z7TPWy2jP+okP8l75bagRbT4PmolpXrN+edId1oNx/H
+         SDQ3tecVKkjSU/69RsoKUVEMn9lWN4n0Uwf4mh4jELeS86dN0dU0bnCUkpuTrp+jt5hA
+         mp3Gu+HysWWwbMKjXiliFUjSoxtm+nBcuY6PFJyOKcRBA+WFZZmy+rhSmrYCIx9FjeXU
+         qr2LoLZCZUN+DCcJVTnqvrhyWYZImvhX7iJshbTVc+hWpD4uy1g10JqtE7/7gqD4U8/S
+         M4ioRL4jopYri7XKWpNMBsnWk0ELdYBZqsCr9cuOQemnFEy8BrURF217d0pIEPRse4/K
+         WNlw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/hEGtE1E7Y0vkl8gzQ6mjcjvIYWSADiSkKQdVCCXkMVIgqWVtOBS4mS63UdGiHyf5xdPX8u8Ryw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzX6gkdsIhgYntBnkoHvE4SQe72rD6YlqC5WV7588kU/pw/V0Uz
+	a+H960Kb91PFOC2F6zvzLbgYlv7DOnzrEIlHpFRAo2pIzhn7rHMDeyCFMgKaJek=
+X-Gm-Gg: ASbGnctsoUakwPh49yXuGdaMVt+eJrdkku0V2UgWjn+eQ1VRZ7l5RbvUag6F/ai2T+n
+	6AEXQ9mkItK4xVOkZN1issjuMfOg/zXiMRkzboscbd8x3ZekuHe0iwW5nSAuNqIRTB7dDCeVBH3
+	OdUQXplC/U+TPXOYLbx09vjhoa7S1Kho57DSGJaavaeShti3Ni7OSJQNz1qdTOzGPGAxPuJDkuZ
+	jUh0licEOYrc/pZ7N7+U2Jv1hfLYt9z/DMRxV3BWe9Si9f7QaFQPiPqQb296X4feg==
+X-Google-Smtp-Source: AGHT+IE2i/BEt1LhXm6aBI8xTYmzok77BKFnrRyh1Do/v27tAGefsSGEkvLFuko9CQOF3izyTVZFGw==
+X-Received: by 2002:a05:600c:154a:b0:434:fd15:3adc with SMTP id 5b1f17b1804b1-43668b786bamr431393875e9.25.1736155122879;
+        Mon, 06 Jan 2025 01:18:42 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.102])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a1c8472b3sm47328729f8f.58.2025.01.06.01.18.41
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 06 Jan 2025 01:18:42 -0800 (PST)
+Message-ID: <44e4a6b4-39a4-49d0-b3a5-fc5545c39a56@tuxon.dev>
+Date: Mon, 6 Jan 2025 11:18:41 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] iio: adc: rzg2l_adc: Drop devm_pm_runtime_enable()
+To: Jonathan Cameron <jic23@kernel.org>
+Cc: prabhakar.mahadev-lad.rj@bp.renesas.com, lars@metafoo.de,
+ ulf.hansson@linaro.org, linux-iio@vger.kernel.org,
+ linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org
+References: <20250103140042.1619703-1-claudiu.beznea.uj@bp.renesas.com>
+ <20250103140042.1619703-2-claudiu.beznea.uj@bp.renesas.com>
+ <20250104135225.2573285b@jic23-huawei>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <20250104135225.2573285b@jic23-huawei>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On Mon, Jan 6, 2025 at 3:11 PM Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> On Mon, Jan 06, 2025 at 01:41:55AM +0800, Pengyu Luo wrote:
-> > +maintainers:
-> > +  - Pengyu Luo <mitltlatltl@gmail.com>
-> > +
-> > +description:
-> > +  Different from other Qualcomm Snapdragon sc8180x and sc8280xp-based
-> > +  machines, the Huawei Matebook E Go tablets use embedded controllers
-> > +  while others use a system called PMIC GLink which handles battery,
-> > +  UCSI, USB Type-C DP Alt Mode. In addition, Huawei's implementation
-> > +  also handles additional features, such as charging thresholds, FN
-> > +  lock, smart charging, tablet lid status, thermal sensors, and more.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    items:
-> > +      - enum:
-> > +          - huawei,gaokun2
-> > +          - huawei,gaokun3
->
-> Missing "-ec", because gaokun2/3 is the name of the board, apparently. You cannot
-> duplicate compatibles with different meanings and if you tested this you
-> would see errors.
->
-> I think I might mislead you during last talk, where I questioned what is
-> "gen2" etc.
->
-
-Agree
-
-> > +      - const: huawei,gaokun-ec
->
-> There is no support for gaokun2 here, so I assume you checked and you
-> know these are compatible. What's more, you claim there is a generic
-> piece of hardware called gaokun-ec and everything in this family will be
-> compatible with it. Well, that's my standard disclaimer and disapproval
-> of using generic compatibles.
->
-> So in general what you want here is *only one* compatible called
-> huawei,gaokun3-ec
->
-
-I agree with you. If there is a generic rule to follow, I am not familiar
-with this. I have seen some bindings, using like this, so I followed it
-recently.
-
-properties:
-  compatible:
-    items:
-      - enum:
-          - vendor0,device0
-          - vendor1,device1
-      - const: generic-device
+Hi, Jonathan,
 
 
-> > +
-> > +  reg:
-> > +    const: 0x38
-> > +
-> > +  '#address-cells':
-> > +    const: 1
-> > +
-> > +  '#size-cells':
-> > +    const: 0
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +patternProperties:
-> > +  '^connector@[01]$':
-> > +    $ref: /schemas/connector/usb-connector.yaml#
-> > +
-> > +    properties:
-> > +      reg:
-> > +        maxItems: 1
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +
-> > +additionalProperties: false
-> > +
-> > +examples:
-> > +  - |+
->
-> Drop +
->
+On 04.01.2025 15:52, Jonathan Cameron wrote:
+> On Fri,  3 Jan 2025 16:00:41 +0200
+> Claudiu <claudiu.beznea@tuxon.dev> wrote:
+> 
+>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> +CC Rafael and linux-pm
+> 
+>>
+>> On all systems where the rzg2l_adc driver is used, the ADC clocks are part
+>> of a PM domain. The code that implements the PM domains support is in
+>> drivers/clk/renesas/rzg2l-cpg.c, the functions of interest for this commit
+>> being rzg2l_cpg_attach_dev() and rzg2l_cpg_deattach_dev(). The PM
+>> domains support is registered with GENPD_FLAG_PM_CLK which, according to
+>> the documentation, instructs genpd to use the PM clk framework while
+>> powering on/off attached devices.
+>>
+>> During probe, the ADC device is attached to the PM domain
+>> controlling the ADC clocks. Similarly, during removal, the ADC device is
+>> detached from the PM domain.
+>>
+>> The detachment call stack is as follows:
+>>
+>> device_driver_detach() ->
+>>   device_release_driver_internal() ->
+>>     __device_release_driver() ->
+>>       device_remove() ->
+>>         platform_remove() ->
+>>           dev_pm_domain_detach()
+>>
+>> During driver unbind, after the ADC device is detached from its PM domain,
+>> the device_unbind_cleanup() function is called, which subsequently invokes
+>> devres_release_all(). This function handles devres resource cleanup.
+>>
+>> If runtime PM is enabled via devm_pm_runtime_enable(), the cleanup process
+>> triggers the action or reset function for disabling runtime PM. This
+>> function is pm_runtime_disable_action(), which leads to the following call
+>> stack of interest when called:
+>>
+>> pm_runtime_disable_action() ->
+>>   pm_runtime_dont_use_autosuspend() ->
+> 
+> So is the only real difference that in the code below you disable runtime pm
+> before autosuspend?
 
-Agree
+No, the difference is that now, the driver specific runtime PM APIs are not
+called anymore (through the pointed call stack) after the ADC was removed
+from it's PM domain.
 
 
-Best Wishes,
-Pengyu
+>  Can you still do that with a devm callback just not
+> the standard one?
+
+No. It doesn't matter if we call the standard devm callback or driver
+specific one. As long as it is devm it will impact us as long as the driver
+specific runtime PM APIs are called through devres_release_all() after
+dev_pm_domain_detach(). And at that time the PM domain may be off along
+with its clocks disabled.
+
+> 
+> 
+>>     __pm_runtime_use_autosuspend() ->
+>>       update_autosuspend() ->
+>>         rpm_idle()
+>>
+>> The rpm_idle() function attempts to runtime resume the ADC device.
+> 
+> Can you give a little more on that path. I'm not immediately spotting
+> how rpm_idle() is causing a resume
+
+It is not in particular about the resume. Runtime suspend/resume after
+devres_release_all() will be affected.
+
+In particular, the rpm_idle() can call rpm_suspend() (called on the out
+label of rpm_idle()) and rpm_suspend() may call the driver specific
+runtime_suspend API through the following code (from the rpm_suspend()
+function):
+
+        callback = RPM_GET_CALLBACK(dev, runtime_suspend);
+
+
+
+        dev_pm_enable_wake_irq_check(dev, true);
+
+        retval = rpm_callback(callback, dev);
+
+        if (retval)
+
+                goto fail;
+
+
+
+The full stack generated when running:
+# cd /sys/bus/platform/drivers/rzg2l-adc
+# while :; do echo 10058000.adc > unbind ; echo 10058000.adc > bind; done
+
+is as follows:
+
+[   24.801195] Call trace:
+[   24.803633]  rzg2l_adc_pm_runtime_suspend+0x18/0x54 (P)
+[   24.808847]  pm_generic_runtime_suspend+0x2c/0x44 (L)
+[   24.813887]  pm_generic_runtime_suspend+0x2c/0x44
+[   24.818580]  __rpm_callback+0x48/0x198
+[   24.822319]  rpm_callback+0x68/0x74
+[   24.825798]  rpm_suspend+0x100/0x578
+[   24.829362]  rpm_idle+0xd0/0x17c
+[   24.832582]  update_autosuspend+0x30/0xc4
+[   24.836580]  pm_runtime_disable_action+0x40/0x64
+[   24.841184]  devm_action_release+0x14/0x20
+[   24.845274]  devres_release_all+0xa0/0x100
+[   24.849361]  device_unbind_cleanup+0x18/0x60
+[   24.853618]  device_release_driver_internal+0x1ec/0x228
+[   24.858828]  device_driver_detach+0x18/0x24
+[   24.862998]  unbind_store+0xb4/0xb8
+[   24.866478]  drv_attr_store+0x24/0x38
+[   24.870135]  sysfs_kf_write+0x44/0x54
+[   24.873795]  kernfs_fop_write_iter+0x118/0x1a8
+[   24.878229]  vfs_write+0x2ac/0x358
+[   24.881627]  ksys_write+0x68/0xfc
+[   24.884934]  __arm64_sys_write+0x1c/0x28
+[   24.888846]  invoke_syscall+0x48/0x110
+[   24.892592]  el0_svc_common.constprop.0+0xc0/0xe0
+[   24.897285]  do_el0_svc+0x1c/0x28
+[   24.900593]  el0_svc+0x30/0xd0
+[   24.903647]  el0t_64_sync_handler+0xc8/0xcc
+[   24.907821]  el0t_64_sync+0x198/0x19c
+[   24.911481] Code: 910003fd f9403c00 f941bc01 f9400020 (b9400000)
+
+
+Digging it further today: on the Renesas RZ/G3S we implement the power
+domain on/off and we register the PM domain with GENPD_FLAG_PM_CLK. The
+on/off PM domain functionality is implemented though the clock controller
+MSTOP functionality which blocks the bus access to the specific IP (in this
+particular case to the ADC).
+
+The issue is reproducible when doing:
+# cd /sys/bus/platform/drivers/rzg2l-adc
+# while :; do echo 10058000.adc > unbind ; echo 10058000.adc > bind; done
+
+I noticed today that doing single manual unbind+bind doesn't always leads
+to aborts. It may be related to the fact that, as I noticed, the genpd
+power off is called asynchronously as a work (through
+genpd_power_off_work_fn()).
+
+I also noticed today what when there is no on/off functionality implemented
+on the PM domain we have no failures (as the MSTOP is not implemented and
+the bus access to the specific IP is not blocked as there is no PM domain
+on/off available).
+
+
+
+> 
+>> However,
+>> at the point it is called, the ADC device is no longer part of the PM
+>> domain (which manages the ADC clocks). Since the rzg2l_adc runtime PM
+>> APIs directly modifies hardware registers, the
+>> rzg2l_adc_pm_runtime_resume() function is invoked without the ADC clocks
+>> being enabled. This is because the PM domain no longer resumes along with
+>> the ADC device. As a result, this leads to system aborts.
+>>
+>> Drop the devres API for runtime PM enable.
+>>
+>> Fixes: 89ee8174e8c8 ("iio: adc: rzg2l_adc: Simplify the runtime PM code")
+>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> 
+> See below. I'm doubtful in general about the sequence changes and
+> specifically you can't just remove one devm callback from a driver without
+> modifying a lot of other code / leaving really fragile ordering.
+> 
+> Jonathan
+> 
+>> ---
+>>  drivers/iio/adc/rzg2l_adc.c | 33 ++++++++++++++++++++++++---------
+>>  1 file changed, 24 insertions(+), 9 deletions(-)
+>>
+>> diff --git a/drivers/iio/adc/rzg2l_adc.c b/drivers/iio/adc/rzg2l_adc.c
+>> index 883c167c0670..f12f3daf08cc 100644
+>> --- a/drivers/iio/adc/rzg2l_adc.c
+>> +++ b/drivers/iio/adc/rzg2l_adc.c
+>> @@ -464,25 +464,26 @@ static int rzg2l_adc_probe(struct platform_device *pdev)
+>>  
+>>  	pm_runtime_set_autosuspend_delay(dev, 300);
+>>  	pm_runtime_use_autosuspend(dev);
+>> -	ret = devm_pm_runtime_enable(dev);
+>> -	if (ret)
+>> -		return ret;
+>> +	pm_runtime_enable(dev);
+>>  
+>>  	platform_set_drvdata(pdev, indio_dev);
+>>  
+>>  	ret = rzg2l_adc_hw_init(dev, adc);
+>> -	if (ret)
+>> -		return dev_err_probe(&pdev->dev, ret,
+>> -				     "failed to initialize ADC HW\n");
+>> +	if (ret) {
+>> +		dev_err_probe(&pdev->dev, ret, "failed to initialize ADC HW\n");
+>> +		goto rpm_disable;
+>> +	}
+>>  
+>>  	irq = platform_get_irq(pdev, 0);
+>> -	if (irq < 0)
+>> -		return irq;
+>> +	if (irq < 0) {
+>> +		ret = irq;
+>> +		goto rpm_disable;
+>> +	}
+>>  
+>>  	ret = devm_request_irq(dev, irq, rzg2l_adc_isr,
+>>  			       0, dev_name(dev), adc);
+>>  	if (ret < 0)
+>> -		return ret;
+>> +		goto rpm_disable;
+>>  
+>>  	init_completion(&adc->completion);
+>>  
+>> @@ -493,6 +494,19 @@ static int rzg2l_adc_probe(struct platform_device *pdev)
+>>  	indio_dev->num_channels = adc->data->num_channels;
+>>  
+>>  	return devm_iio_device_register(dev, indio_dev);
+>> +
+>> +rpm_disable:
+>> +	pm_runtime_disable(dev);
+>> +	pm_runtime_dont_use_autosuspend(dev);
+>> +	return ret;
+> If you have to move away from devm you must do it for all calls after
+> the first thing that is manually cleaned up.
+> As you have it here the userspace interfaces are left available at a point
+> well after power down.
+
+I see, thank you for pointing it.
+
+And thank you for checking this,
+Claudiu
+
+> 
+>> +}
+>> +
+>> +static void rzg2l_adc_remove(struct platform_device *pdev)
+>> +{
+>> +	struct device *dev = &pdev->dev;
+>> +
+>> +	pm_runtime_disable(dev);
+>> +	pm_runtime_dont_use_autosuspend(dev);
+>>  }
+>>  
+>>  static const struct rzg2l_adc_hw_params rzg2l_hw_params = {
+>> @@ -614,6 +628,7 @@ static const struct dev_pm_ops rzg2l_adc_pm_ops = {
+>>  
+>>  static struct platform_driver rzg2l_adc_driver = {
+>>  	.probe		= rzg2l_adc_probe,
+>> +	.remove		= rzg2l_adc_remove,
+>>  	.driver		= {
+>>  		.name		= DRIVER_NAME,
+>>  		.of_match_table = rzg2l_adc_match,
+> 
+
 
