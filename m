@@ -1,48 +1,40 @@
-Return-Path: <linux-pm+bounces-19986-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19987-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEA40A02589
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 13:31:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3013A02612
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 14:00:08 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5479163C62
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 12:31:16 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7CC6D3A2100
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 13:00:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B0E71DDC16;
-	Mon,  6 Jan 2025 12:30:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a9LQR9JG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D13B7433CB;
+	Mon,  6 Jan 2025 13:00:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239EF1DDA36;
-	Mon,  6 Jan 2025 12:30:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BCC6433CE;
+	Mon,  6 Jan 2025 13:00:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736166607; cv=none; b=aDCuLy+STRxXz8cmHlZDlWYRR8CGMaymqO3h+4KygWeiURIeD35WRfDXIDFbbUzIGkanWCq9YNGuvcBhDZ5UgOz0+yAHRYs990U7mh4efYA1pypCqiLgk3Ky8r0OBOruhoGpCJI0bv9Q5pBcOmpxo/nkl45HpnMMZ5YjdTVXUfY=
+	t=1736168405; cv=none; b=cWj5A7Hxdp88l8jrO4J+XZWscbSslLu5MLJhXsF64Qd/yybflWyerVPFNyXb3/AeyHPvs4dPGPP1u76vnddVy4iT8swryLaYvolzxrYnvOVm/U5Y4ufGCM5RGyDkkLEjYlXTHNTRB3dCUX8jUS0+TMxn+MMWUkojevejouB3W3s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736166607; c=relaxed/simple;
-	bh=dt9uunZPfoDIamCzQdNIaGK4eUqsz1QnKbTU0kwbDmY=;
+	s=arc-20240116; t=1736168405; c=relaxed/simple;
+	bh=wWWYHuaeWue2phOpJDTdfIEQY2PQpM/yv1lFi7COY4w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=GHhfp3/eKZkqDm3sfcSQalyzO5pAY4Lxi3PkTjD0ODpXC6ROGT6HjHezBou6ZaQhkarze+bTDWLdNR6T8EUNE85jr1H86h0CKFbkVks3SI2RkwsX9CBi+AgruzaaYDDh0gadajjMKOVytH34a4IhtVh8idMIkC30N/R117WuXEY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a9LQR9JG; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF4FC4CED2;
-	Mon,  6 Jan 2025 12:29:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736166606;
-	bh=dt9uunZPfoDIamCzQdNIaGK4eUqsz1QnKbTU0kwbDmY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=a9LQR9JGvR0xDzmmLzR5+XiZyNQkMMSzf8c1Gv73vWyzd8Q4iG15fZOWnWayXC50c
-	 0tJTFwh9hsvkZb+pipXUybbF6cvhVm9uycseeNmVAXjwQAUDWVeW1Osqr9dKcc7tOX
-	 TowLQZAdYm5ZjJLM7mOUJ7AVqQiTYWZ2AX6qzD//Q31W4vNBWwOqfiw7pQ/43Trfi1
-	 SavnRtZPCt+sRJZJ4+7V8ksKnIbRq2cVBTPNwYzKsD2rbq7ysZHuglAmFxg21mX60A
-	 lOv6rQXmXY+XPhQ/hc/XX2ipjv9lVQjaegFcLmoRP72x7KXjgoH5y/tcOUaYb4OsSF
-	 FO5tT8UKd6Fag==
-Message-ID: <12636552-b644-429b-8be0-44334fae6130@kernel.org>
-Date: Mon, 6 Jan 2025 13:29:57 +0100
+	 In-Reply-To:Content-Type; b=WklZlLEuq0zuSPblkAcdpnwWmDQBJ2uiWUIJM5XfzUQ1D+iSBFRT+atsnhXMTRhdhy1df/vn5qwDqjkbFrSx8fFQruiGL+Xn2S9etfDtV1oHUMnS0xPb1etjGeyKO8VfyB6cIRqtvXGHzNDN+A+BSXNdMsK8rdXa+YgRC8yQi9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A1B7E143D;
+	Mon,  6 Jan 2025 05:00:30 -0800 (PST)
+Received: from [192.168.178.6] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C969C3F673;
+	Mon,  6 Jan 2025 05:00:00 -0800 (PST)
+Message-ID: <8f26fac2-787d-44a9-a0cd-c3035a91149c@arm.com>
+Date: Mon, 6 Jan 2025 13:59:59 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,91 +42,233 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: andersson@kernel.org, bryan.odonoghue@linaro.org, conor+dt@kernel.org,
- devicetree@vger.kernel.org, dmitry.baryshkov@linaro.org,
- gregkh@linuxfoundation.org, hdegoede@redhat.com,
- heikki.krogerus@linux.intel.com, ilpo.jarvinen@linux.intel.com,
- jdelvare@suse.com, konradybcio@kernel.org, krzk+dt@kernel.org,
- linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-usb@vger.kernel.org, linux@roeck-us.net,
- platform-driver-x86@vger.kernel.org, robh@kernel.org, sre@kernel.org
-References: <md45rp2dmv7aibez2sxwzyjayfi4wbujshlc46hxi6v4jzlhfr@tpbtqv46hrlh>
- <20250106080657.240974-1-mitltlatltl@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [RFC][PATCH v021 5/9] PM: EM: Introduce
+ em_dev_expand_perf_domain()
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>
+References: <5861970.DvuYhMxLoT@rjwysocki.net>
+ <3353401.44csPzL39Z@rjwysocki.net>
+ <31c86834-273b-458f-9914-eff76c283cfb@arm.com>
+ <CAJZ5v0jus4bzeZhUK4WC7uypQkh-_MMuU1M54figsGV3+5OhUg@mail.gmail.com>
+From: Dietmar Eggemann <dietmar.eggemann@arm.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250106080657.240974-1-mitltlatltl@gmail.com>
+In-Reply-To: <CAJZ5v0jus4bzeZhUK4WC7uypQkh-_MMuU1M54figsGV3+5OhUg@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 06/01/2025 09:06, Pengyu Luo wrote:
->>> +      - const: huawei,gaokun-ec
+On 17/12/2024 21:40, Rafael J. Wysocki wrote:
+> On Tue, Dec 17, 2024 at 10:38 AM Dietmar Eggemann
+> <dietmar.eggemann@arm.com> wrote:
 >>
->> There is no support for gaokun2 here, so I assume you checked and you
->> know these are compatible. What's more, you claim there is a generic
->> piece of hardware called gaokun-ec and everything in this family will be
->> compatible with it. Well, that's my standard disclaimer and disapproval
->> of using generic compatibles.
+>> On 29/11/2024 17:02, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> Introduce a helper function for adding a CPU to an existing EM perf
+>>> domain.
+>>>
+>>> Subsequently, this will be used by the intel_pstate driver to add new
+>>> CPUs to existing perf domains when those CPUs go online for the first
+>>> time after the initialization of the driver.
+>>>
+>>> No intentional functional impact.
+>>>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>
+>>> v0.1 -> v0.2: No changes
 >>
->> So in general what you want here is *only one* compatible called
->> huawei,gaokun3-ec
->>
+>> Could you add information why this new EM interface is needed?
 > 
-> I agree with you. If there is a generic rule to follow, I am not familiar
-> with this. I have seen some bindings, using like this, so I followed it
-> recently.
+> There is some of it in the changelog already.
+> 
+> In fact, it is only needed in a corner case when the system starts
+> with some CPUs offline and they only go online later (as a result of
+> an explicit request from user space).  That is the only case when a
+> new CPU may need to be added to an existing perf domain.
 
-Generic rule is: wildcards and family names are not allowed. Now what
-"generic" means, is different for different devices. If unsure, always
-use only device-specific compatibles.
+OK, I see. Arm doesn't need this since we derive the masks from the
+CPUfreq policies so far.
+
+I just verified, we both keep hotplugged-out CPU within the PD. That's
+why we mask the PD cpus with cpu_online_mask in:
+
+find_energy_efficient_cpu()
+
+  ...
+
+  for (; pd; pd = pd->next)
+
+    cpumask_and(cpus, perf_domain_span(pd), cpu_online_mask);
+
+>> IIRC, you can't use the existing way (cpufreq_driver::register_em) since
+>> it gets called to early (3) for the PD cpumasks to be ready. This issue
+>> will be there for any system in which uarch domains are not congruent
+>> with clock domains which we hadn't have to deal with Arm's heterogeneous
+>> CPUs so far.
+> 
+> Basically, yes.
+> 
+>> __init intel_pstate_init()
+>>
+>>   intel_pstate_register_driver()
+>>
+>>     cpufreq_register_driver()
+>>
+>>       subsys_interface_register()
+>>
+>>         sif->add_dev() -> cpufreq_add_dev()
+>>
+>>           cpufreq_online()
+>>
+>>             if (!new_policy && cpufreq_driver->online)
+>>
+>>             else
+>>
+>>               cpufreq_driver->init() -> intel_pstate_cpu_init()
+>>
+>>                 __intel_pstate_cpu_init()
+>>
+>>                   intel_pstate_init_cpu()
+>>
+>>                     intel_pstate_get_cpu_pstates()
+>>
+>>                       hybrid_add_to_domain()
+>>
+>>                         em_dev_expand_perf_domain()              <-- (1)
+>>
+>>                   intel_pstate_init_acpi_perf_limits()
+>>
+>>                     intel_pstate_set_itmt_prio()                 <-- (2)
+>>
+>>             if (new_policy)
+>>
+>>               cpufreq_driver->register_em()                      <-- (3)
+>>
+>>     hybrid_init_cpu_capacity_scaling()
+>>
+>>       hybrid_refresh_cpu_capacity_scaling()
+>>
+>>         __hybrid_refresh_cpu_capacity_scaling()                  <-- (4)
+>>
+>>         hybrid_register_all_perf_domains()
+>>
+>>           hybrid_register_perf_domain()
+>>
+>>             em_dev_register_perf_domain()                        <-- (5)
+>>
+>>       /* Enable EAS */
+>>       sched_clear_itmt_support()                                 <-- (6)
+>>
+>> Debugging this on a 'nosmt' i7-13700K (online mask =
+>> [0,2,4,6,8,10,12,14,16-23]
+>>
+>> (1) Add CPU to existing hybrid PD or create new hybrid PD.
+> 
+> Not exactly.
+> 
+> (1) is just to expand an existing perf domain if the CPU is new (was
+> offline all the time previously).
+
+OK.
+
+> 
+> Likewise, the direct hybrid_register_perf_domain() call in
+> hybrid_add_to_domain() is to add a new perf domain if the given CPU is
+> new (was offline all the time previously) and is the first one of the
+> given type (say, the system is starting with all E-cores offline).
+> It won't succeed before (4).
+> 
+> For CPUs that are online to start with, hybrid_add_to_domain() assigns
+> them to hybrid domains and PDs are created for them in
+> hybrid_register_all_perf_domains().
+
+Understood.
+
+> 
+>> (2) Triggers sched domain rebuild (+ enabling EAS) already here during
+>>     startup ?
+> 
+> This is just to enable ITMT which is the default mechanism for Intel
+> hybrid platforms.  It also requires a rebuild of sched domains to be
+> enabled.
+> 
+>>     IMHO, reason is that max_highest_perf > min_highest_perf because of
+>>     different itmt prio
+> 
+> Yes (which means that the platform is at least not homogenous).
+> 
+> This really has been introduced for the handling of favored cores on
+> otherwise non-hybrid platforms (say Tiger Lake).
+> 
+>>     Happens for CPU8 on my machine (after CPU8 is added to hybrid PD
+>>     0,2,4,6,8) (itmt prio for CPU8=69 (1024) instead of 68 (1009)).
+>>     So it looks like EAS is enabled before (6) ?
+> 
+> No, it is ITMT because CPU8 is a favored core.
+> 
+>> (3) ARM's way to do (5)
+>> (4) Setting hybrid_max_perf_cpu
+>> (5) Register EM here
+>> (6) Actual call to initially triggers sched domain rebuild (+ enable
+>>     EAS) (done already in (2) on my machine)
+> 
+> This is the second rebuild of sched domains to turn off ITMT and
+> enable EAS.  The previous one is to enable ITMT.
+> 
+> The earlier enabling of ITMT could be avoided I think, but that would
+> be a complication on platforms that contain favored cores but
+> otherwise are not hybrid.
+
+OK, the fact that EAS will already be enabled in (2) is not an issue IMHO.
+
+> 
+>> So (3) is not possible for Intel hybrid since the policy's cpumask(s)
+> 
+> It is possible in principle, but not particularly convenient because
+> at that point it is not clear whether or not the platform is really
+> hybrid and SMT is off and so whether or not EAS is to be used.
+> 
+>> contain only one CPUs, i.e. CPUs are not sharing clock.
+>> And those cpumasks have to be build under (1) to be used in (5)?
+> 
+> They are built by the caller of (1) to be precise, but yes.
+
+OK.
+
+I still see an issue in putting all performance CPUs in one PD.
+
+find_energy_efficient_cpu() assumes that all PD CPUs has the same CPU
+capacity value.
+
+  find_energy_efficient_cpu()
+
+    ...
+
+    for (; pd; pd = pd->next) {
+
+      ...
+      /* Account external pressure for the energy estimation */
+      cpu = cpumask_first(cpus);
+      cpu_actual_cap = get_actual_cpu_capacity(cpu); --> (1)
 
 
+Even though X86 does not implement hw_load_avg() or
+cpufreq_get_pressure() we would still assume that all PD CPUs have the
+same cpu_capacity:
 
-Best regards,
-Krzysztof
+
+  get_actual_cpu_capacity() <-- (1)
+
+    capacity = arch_scale_cpu_capacity(cpu)
+
+
+Now the error introduced is small (1024 versus 1009) on my i7-13700K but
+it's there. How big can those diffs based om itmt prio be?
 
