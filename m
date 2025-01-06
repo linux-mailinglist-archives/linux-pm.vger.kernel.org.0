@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-19985-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19986-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 053B2A02530
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 13:21:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id EEA40A02589
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 13:31:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7DF921885DFA
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 12:21:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D5479163C62
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 12:31:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE1951DD885;
-	Mon,  6 Jan 2025 12:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B0E71DDC16;
+	Mon,  6 Jan 2025 12:30:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZwMNEPa0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a9LQR9JG"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 881D81DB362;
-	Mon,  6 Jan 2025 12:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 239EF1DDA36;
+	Mon,  6 Jan 2025 12:30:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736166091; cv=none; b=ogW5MlwzZxipaTHSyaPJ2dHSnS0/K7xq6y0jkgjKKG6yikAJOdllBAKUgOClJqlwSAP/A+f5aQj6hMHEB6A7h+XwWWvI1ixOLdzkW95IlKo5VV8DCr0f+U+p50wjcR6LxU6sOznIT0DKBHwUTuvzsuiMCzQ5jPUJjXI+mMQKkoY=
+	t=1736166607; cv=none; b=aDCuLy+STRxXz8cmHlZDlWYRR8CGMaymqO3h+4KygWeiURIeD35WRfDXIDFbbUzIGkanWCq9YNGuvcBhDZ5UgOz0+yAHRYs990U7mh4efYA1pypCqiLgk3Ky8r0OBOruhoGpCJI0bv9Q5pBcOmpxo/nkl45HpnMMZ5YjdTVXUfY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736166091; c=relaxed/simple;
-	bh=4E7mcN3x1OnhH9luhDmZGNISKS/71TLxvluP4MAlcQ0=;
+	s=arc-20240116; t=1736166607; c=relaxed/simple;
+	bh=dt9uunZPfoDIamCzQdNIaGK4eUqsz1QnKbTU0kwbDmY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=IAsRdE7oRslHVm73p7mvmcF5gxVyfLYJdGhWNG9Q1JVGaP8bEpUFflOs0Rj09b7wX9w+9pAwwKq5/h537156F7gyee+cxLKMBdPbJZRgXOg3vETnsIf4T4MW+2v7nUhg/Q04L9Q16mhk8ViDf+kWyAsuwLqDSG2hyCK/8BgPhww=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZwMNEPa0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6D7EDC4CED2;
-	Mon,  6 Jan 2025 12:21:22 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=GHhfp3/eKZkqDm3sfcSQalyzO5pAY4Lxi3PkTjD0ODpXC6ROGT6HjHezBou6ZaQhkarze+bTDWLdNR6T8EUNE85jr1H86h0CKFbkVks3SI2RkwsX9CBi+AgruzaaYDDh0gadajjMKOVytH34a4IhtVh8idMIkC30N/R117WuXEY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a9LQR9JG; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8AF4FC4CED2;
+	Mon,  6 Jan 2025 12:29:59 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736166091;
-	bh=4E7mcN3x1OnhH9luhDmZGNISKS/71TLxvluP4MAlcQ0=;
+	s=k20201202; t=1736166606;
+	bh=dt9uunZPfoDIamCzQdNIaGK4eUqsz1QnKbTU0kwbDmY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ZwMNEPa0WxzIpMUyRCA1Nx0TRbiI3JlRuNAge/vnFqf50YQK0C5DHPNz1kh1iDdhb
-	 PI6Ku0gYKOXOhrPn23eBYBLPWYIrat+3TJCLyiRNX0cbnRal/lyQYDJAdmjtbhH0Id
-	 sVw7DXUrfwtxnwxJQ5B8K+JAh2NyImEll6f+I3SPgHQefNo1xQdwD9LxijcjrTNLIu
-	 Mz8eUvF2JRRJcBu4EDf6umEspeuwvMMmWwtQ88R7RuF9kPwZYh6y0m0rYuQKQSZ4u7
-	 qRrIJom16M4NRM+TQIJOLaP2v5ExrUDjeYK5kw9JD5OwxX0u+liVh+YMhPxJJw4K1F
-	 m9d5xZj3NewwA==
-Message-ID: <4e5bcdfa-069c-460d-8e43-8661883f5065@kernel.org>
-Date: Mon, 6 Jan 2025 13:21:19 +0100
+	b=a9LQR9JGvR0xDzmmLzR5+XiZyNQkMMSzf8c1Gv73vWyzd8Q4iG15fZOWnWayXC50c
+	 0tJTFwh9hsvkZb+pipXUybbF6cvhVm9uycseeNmVAXjwQAUDWVeW1Osqr9dKcc7tOX
+	 TowLQZAdYm5ZjJLM7mOUJ7AVqQiTYWZ2AX6qzD//Q31W4vNBWwOqfiw7pQ/43Trfi1
+	 SavnRtZPCt+sRJZJ4+7V8ksKnIbRq2cVBTPNwYzKsD2rbq7ysZHuglAmFxg21mX60A
+	 lOv6rQXmXY+XPhQ/hc/XX2ipjv9lVQjaegFcLmoRP72x7KXjgoH5y/tcOUaYb4OsSF
+	 FO5tT8UKd6Fag==
+Message-ID: <12636552-b644-429b-8be0-44334fae6130@kernel.org>
+Date: Mon, 6 Jan 2025 13:29:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,27 +50,19 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 3/9] dt-bindings: input: mtk-pmic-keys: add MT6392 binding
- definition
-To: Val Packett <val@packett.cool>
-Cc: Fabien Parent <parent.f@gmail.com>, Rob Herring <robh@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>,
- Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
- Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Eddie Huang <eddie.huang@mediatek.com>,
- Alexandre Belloni <alexandre.belloni@bootlin.com>,
- Javier Carrasco <javier.carrasco.cruz@gmail.com>,
- Yassine Oudjana <y.oudjana@protonmail.com>,
- Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org
-References: <20241226050205.30241-1-val@packett.cool>
- <20241226050205.30241-4-val@packett.cool>
+Subject: Re: [PATCH v2 1/5] dt-bindings: platform: Add Huawei Matebook E Go EC
+To: Pengyu Luo <mitltlatltl@gmail.com>
+Cc: andersson@kernel.org, bryan.odonoghue@linaro.org, conor+dt@kernel.org,
+ devicetree@vger.kernel.org, dmitry.baryshkov@linaro.org,
+ gregkh@linuxfoundation.org, hdegoede@redhat.com,
+ heikki.krogerus@linux.intel.com, ilpo.jarvinen@linux.intel.com,
+ jdelvare@suse.com, konradybcio@kernel.org, krzk+dt@kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-hwmon@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-usb@vger.kernel.org, linux@roeck-us.net,
+ platform-driver-x86@vger.kernel.org, robh@kernel.org, sre@kernel.org
+References: <md45rp2dmv7aibez2sxwzyjayfi4wbujshlc46hxi6v4jzlhfr@tpbtqv46hrlh>
+ <20250106080657.240974-1-mitltlatltl@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -116,21 +108,32 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20241226050205.30241-4-val@packett.cool>
+In-Reply-To: <20250106080657.240974-1-mitltlatltl@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 26/12/2024 05:58, Val Packett wrote:
-> From: Fabien Parent <parent.f@gmail.com>
+On 06/01/2025 09:06, Pengyu Luo wrote:
+>>> +      - const: huawei,gaokun-ec
+>>
+>> There is no support for gaokun2 here, so I assume you checked and you
+>> know these are compatible. What's more, you claim there is a generic
+>> piece of hardware called gaokun-ec and everything in this family will be
+>> compatible with it. Well, that's my standard disclaimer and disapproval
+>> of using generic compatibles.
+>>
+>> So in general what you want here is *only one* compatible called
+>> huawei,gaokun3-ec
+>>
 > 
-> Add the binding documentation of the mtk-pmic-keys for the MT6392 PMICs.
-> 
-> Signed-off-by: Fabien Parent <parent.f@gmail.com>
-> Reviewed-by: Rob Herring <robh@kernel.org>
-I don't think this happened. The tag added here at v6 was never received.
+> I agree with you. If there is a generic rule to follow, I am not familiar
+> with this. I have seen some bindings, using like this, so I followed it
+> recently.
 
-What's more, that's v6 or v7 or vN, so keep proper versioning and
-changelog, including lore links to the old patchset.
+Generic rule is: wildcards and family names are not allowed. Now what
+"generic" means, is different for different devices. If unsure, always
+use only device-specific compatibles.
+
+
 
 Best regards,
 Krzysztof
