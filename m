@@ -1,375 +1,180 @@
-Return-Path: <linux-pm+bounces-19982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 34C4DA021B1
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 10:24:03 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C2E78A02242
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 10:56:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 157881638B0
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 09:24:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9978D1609B8
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 09:56:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 53EBA1D8DEE;
-	Mon,  6 Jan 2025 09:23:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B461D79B3;
+	Mon,  6 Jan 2025 09:56:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="T3HrRguh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JYt+RUeL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79C7DEEB2;
-	Mon,  6 Jan 2025 09:23:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB95DB676
+	for <linux-pm@vger.kernel.org>; Mon,  6 Jan 2025 09:56:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736155436; cv=none; b=eGnVEdQtzDM/Y8dtqROpVVXJbYFzL00eHgSbJzmyLnWsH2nCFPdS6uYdpXp2awUup8+pnnUeBf+cP6QYtgByZRvPzHKNkFxUIy0Hmeu0NU+dcMx+45Iolf3aNXnzLNiGp/nGHPWeqaoOWPywrOExT/e/vnu59zBOTmNDdl/ON9k=
+	t=1736157369; cv=none; b=emQsxHwH7c63YKJeHVJSnXsGN0KtVggD+5NjlYEI7wlDfjveqBdgUY56biBsQyOZNENMfH7GSsGDYJuEvwbIdd/rnlQCpMcbDHa3GdQA+Gs7RxluE4oSW8L5bJc3g3dW/g8FWz2kfl4afER3qLqF7u1GLY0QId0CSfYMxI6cfbc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736155436; c=relaxed/simple;
-	bh=y9leoPXPqutzk6SaXbsCxPmtWiljSdQJ8JUFmkkxQpI=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qFc+KcKafNecqVIWssB2hWovd9m7wpU42P2SDz/ChjzhV9l1siwhMbfoQNcRhj2+I0xNfNd6awEAqFxrezpKCT0y1ZKgsA4kkNAAA4BOXOJMMOXiSR0fUpuWe2FOJz4rvYTcpy3maVRwViloBkdEJUP6qaO0+26pyQ1rbTP1o2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=T3HrRguh; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-216401de828so189265655ad.3;
-        Mon, 06 Jan 2025 01:23:54 -0800 (PST)
+	s=arc-20240116; t=1736157369; c=relaxed/simple;
+	bh=g/OoJEckbiVwHqoVZ/DJIoLLvVB6DKWKjEkArqzX77U=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=SU4vYzSmpUh+AaCO8LwhxGekLdL4wN2Fp3jSaaN1IMeSSoIGD1wADOYOnJttLRXvE5gXpdAmbkFERAGGAxyqrbYTNyLwZinTcxlyhxclztMBc3Ufk2dK77UbzoYGDGUeiaYW6Df6uYjJ5O17fBl8FqxfdtcWEu1mTaxKmCe6nUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JYt+RUeL; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-385dece873cso5198971f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 06 Jan 2025 01:56:07 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736155434; x=1736760234; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=3mFlOOesLzWV9jHl0CvWryDo9a7928bRA/ndvzi3U34=;
-        b=T3HrRguhtRfsbE8+bEp0ESDkbXV2tZfizy8ubI5ux9gIlHQDkTqUmYbbI58T6z/Rx8
-         m5P5+104iXjSzvX6DATp73keda6jEfsiH10zrYFS+culVAeBHlbkLvzfUG1JoOAoERmZ
-         y+ZtWGROaUcmqkLBb6k1+euFs4htlv3qWwRRtz2HFItjxPOcYqufJOwhu+vZkI2fBtut
-         pKS9vfWcto6CTRNCuqcjv+p/tvpNrKaFXH37EkcGCSyjIFDtqmFV1TR9zNrbvyJZB2pt
-         Hq+N6SVvcwfVYMEh4ehB3pceTuh6ZBbL9ouSmd+4Omq6H1Re7xtdZZS6mF0cHtwstSfh
-         Yl+Q==
+        d=linaro.org; s=google; t=1736157366; x=1736762166; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=XPxusyoqlnRrNJq7+ups8OMfqGNcbuHMUJVymBouBjo=;
+        b=JYt+RUeLSYwLCOVuk296pJMr3wiBC5C+seAPSM68KkOYJ/yjsB2Ya9omlItZaTfmN+
+         U3dwDTr3lcWaX3eYyjth51gFBEnOqwBiY1YoSeh6xtDIazhk0ye5uFaRkN+eYIY5Gf9X
+         unFBTFgRGlqUI17IZy8RhkMj76AgJv2xqORmtFiOF/WTbd2NVRkgr/M0qBtHdjVTb7Vj
+         BaQzDuBSnQL5z0YvX8EOQ7oqmBy6inus9B9rFTcd2xo3fCSLZCRdYIa+hcqiVjkk7LpO
+         NlCM1EwhfNkXqiT6K+AkblSFvcw6hp3D8YpmTSx5heUSSXopSzEYvDsuiaYaFlBfjorC
+         lykg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736155434; x=1736760234;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=3mFlOOesLzWV9jHl0CvWryDo9a7928bRA/ndvzi3U34=;
-        b=XBuV5mrsDIF/QcHpLmROI3Fi48BekUUMojHi2qF+/ll+b3x7NRKZrm8etfhNySi4+5
-         PHWipgCagnrQnV9p2Mj9Bc8KXUYQ7/wWZKdi6sMsDDOEsZzAOIYnPRoVq5fSym3TGcTy
-         LEopVHoKTdI5///zb/j6uxQjIyMnsWbxM3sJa5IlG1C6qzPL0dYwFvf5Hx2iJtsz0FwI
-         B3qZmvnn4PABIy+bkiKEvZHn3DAW8vZ2NRJahgY7rGN41nJtBIn4lrA1zkjOu0yZX2oy
-         pdqeKWj4dKsXGX/dV5jUO+seVP7+4pGZZyubEeHkYpEtf7cYvLQ5iOAuFwvuAtMB626/
-         F7sQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUBLqVwMjoKaPAlavx9t+H0kxk1bzh6hijTo1kTDQYas1YOLao+hWbod0b0Kk4g3rM0jYW1aukHB7Ut@vger.kernel.org, AJvYcCVBlhw9jpbz3KLviHuzgJ4F+ZEpkCn6yIbGGjmSNMIcgxTrC3IXVn/M4dZd8ucRymoqsAAUsGby0fud@vger.kernel.org, AJvYcCVboQnyMoewVtJqLnvWdCSUP+gkyTSChUHc12o4wqRBBUNo7U/GPRLzLD8obZruTT3abp9QWno65MReyO37mg==@vger.kernel.org, AJvYcCWdXCibUrXdqMDLEx9pvNiIzLCOumfX5G0c3ZCaigGqPYEONUkLARv6UCX4Zm+IDLc05MXrmdXqCwSlouQr0SSi4oL4+Q==@vger.kernel.org, AJvYcCX/bTp4EN24fR/ZfhhljjYoTj+5WJNJbZ+eNcJzpslFcXJrOYbCqw/9cUg380uriuf06kMUANgh69AnvZQp@vger.kernel.org, AJvYcCXw3zbhA/je6EQvJQMavkhJ5bBQVnNvphL2KHisqpWqS4OMq+P4ea1IJDVYZoAE3RzA7SShNE6aRHc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx27sp6nj2vfMp69FfpCgxcXGV0PDD0eEb9hkcqFXOJOedgKrp+
-	RZ7s4JgZ14BmtEFMYfrl8CxAEpi8filodRgs5+iK6s+sjUMpUqF3
-X-Gm-Gg: ASbGncv7ygCH0B2bITkVvb6mYuERCMuyDdzxPqWlnhoI9L9gtFnoaW/JurOFAlLQoIv
-	Rfu+YxfF5Y4KKfro2r5Ig5TOSLJkMC8mZQEd2mzNlyOdlkDPDkCt2brcUwi9YQ7jAscTcXrK24C
-	G8TTQvRqP9eYIbfd2oKLzza0mfK3AjLv19CzerBhom4o0ab4sRwVtjxYq/x7f5gYF4hDcW23/ow
-	CWS9TlZDYdlvGI8Ccuv1CLOLGpdLy6N+mpew2jDCC9RkXQdF/Wkq4g=
-X-Google-Smtp-Source: AGHT+IFNWgvknEaxxE/ZqSDN24QXJsDgOgSDSuKyBvBC/wiI20eX0ttoGoBq9myC9hh4RE2mGnAZNg==
-X-Received: by 2002:a17:902:ce86:b0:216:2f7f:ff69 with SMTP id d9443c01a7336-219e6e894c8mr693163105ad.5.1736155433560;
-        Mon, 06 Jan 2025 01:23:53 -0800 (PST)
-Received: from nuvole.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dc964a67sm287766465ad.27.2025.01.06.01.23.41
+        d=1e100.net; s=20230601; t=1736157366; x=1736762166;
+        h=in-reply-to:content-disposition:mime-version:message-id:subject:cc
+         :to:from:date:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=XPxusyoqlnRrNJq7+ups8OMfqGNcbuHMUJVymBouBjo=;
+        b=astM5/OD9VamGWdVw9eghmHUTvApvpn+dpjGP0HgslEdWlHLeBzUuuhAU/3pjsAkxv
+         Tp3n40pnwMlnxgoYGOa0keXQUGEGsk0mQscw8DVji+u0EjrGLRE6R7DvxrYmJf0AQfXI
+         k+Z5QHIvwC5tbx6xIwBeM4rhdWO26ow9bW5oNlguzDKddaUSUNo5MnuzTir6KhnaR4Py
+         k9ylAnvdPMjWABZ3tYu35unrtnvzVfWwfagpQJ2FcyW0J0CAbQRBler0x3R8AwV+ZLir
+         4h4g+FGSV57aXCFQgMOYF2lLNaYJom2Ll1q1iwkFDLcuuZd6EizuR/WbN0jLBQ63uxX+
+         zJKg==
+X-Forwarded-Encrypted: i=1; AJvYcCX3z14L8m4uxIosGniflGj3SAmGgBO9kqBem1SjkDzawRYIqi6z81prgFYVDK3CSv5FtZ9MfClLPA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx+SHi6nbPHZMFFZyXGs1gj6ckn6VjZDeLZcG5+fWjovMeT4KMh
+	+DUa9Gel2UqZtS5CstZM2gJnYH12D7AE1mGxrgdqau2JQ0p0Rl3MHGBGd70YFFg=
+X-Gm-Gg: ASbGncspTPYEN5NclCsNNu3tRFnUmOwk9072DHwikVsYhHa5hBKxpBulkf8AyORhsJi
+	yG3jsUVrVw0w6IYXgOYY0L8taSx11ZSWuBZDX6fO8iavH5uvknR5A8IjS9InpyNGXXbcAQ9uqqc
+	A3HTun8RhKfQ5vrQeg2X/PiSKIdKb+SR4SW3bQ9HrdaDgU8nW867GpRQelSKm6mlWxLIc0x03Wr
+	68hzr4jvUFjEl5fHDzQqNOIYcuHafNnyn8bn0KFFGzXWh89kjfNsXlq/+oYEg==
+X-Google-Smtp-Source: AGHT+IGhWRISLmROsfexY/7S1VN3olm0rXAnp4XlnaP5acP2aBFiZteVn7JIK9wCL3+4yp5Vobvaww==
+X-Received: by 2002:a5d:6484:0:b0:388:da10:ea7e with SMTP id ffacd0b85a97d-38a221faea2mr45331915f8f.24.1736157366234;
+        Mon, 06 Jan 2025 01:56:06 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43661219a08sm568953115e9.25.2025.01.06.01.56.05
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 06 Jan 2025 01:23:53 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: dmitry.baryshkov@linaro.org
-Cc: andersson@kernel.org,
-	bryan.odonoghue@linaro.org,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	gregkh@linuxfoundation.org,
-	hdegoede@redhat.com,
-	heikki.krogerus@linux.intel.com,
-	ilpo.jarvinen@linux.intel.com,
-	konradybcio@kernel.org,
-	krzk+dt@kernel.org,
-	linux-arm-msm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org,
-	mitltlatltl@gmail.com,
-	nikita@trvn.ru,
-	platform-driver-x86@vger.kernel.org,
-	robh@kernel.org,
-	sre@kernel.org
-Subject: Re: [PATCH 3/5] usb: typec: ucsi: add Huawei Matebook E Go (sc8280xp) ucsi driver
-Date: Mon,  6 Jan 2025 17:22:17 +0800
-Message-ID: <20250106092224.251115-1-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <h4icxzxk5fzgkdhhk6disrervqmb4dqe3xlc432k7pgyzsk77u@pyfrrtyjslpo>
-References: <h4icxzxk5fzgkdhhk6disrervqmb4dqe3xlc432k7pgyzsk77u@pyfrrtyjslpo>
+        Mon, 06 Jan 2025 01:56:05 -0800 (PST)
+Date: Mon, 6 Jan 2025 12:56:02 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: oe-kbuild@lists.linux.dev, Peter Geis <pgwipeout@gmail.com>,
+	Heiko Stuebner <heiko@sntech.de>
+Cc: lkp@intel.com, oe-kbuild-all@lists.linux.dev,
+	Peter Geis <pgwipeout@gmail.com>, Caesar Wang <wxt@rock-chips.com>,
+	Detlev Casanova <detlev.casanova@collabora.com>,
+	Finley Xiao <finley.xiao@rock-chips.com>,
+	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
+	Kevin Hilman <khilman@linaro.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-rockchip@lists.infradead.org
+Subject: Re: [PATCH 1/6] pmdomain: rockchip: fix rockchip_pd_power error
+ handling
+Message-ID: <e3a5c27e-cab1-409d-b118-7dc96962db36@stanley.mountain>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241210013010.81257-2-pgwipeout@gmail.com>
 
-Please ignore the last email, I sent the wrong archive.
+Hi Peter,
 
-On Mon, Jan 6, 2025 at 11:33 AM Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
-> On Sun, Dec 29, 2024 at 05:05:47PM +0800, Pengyu Luo wrote:
-> > On Sun, Dec 29, 2024 at 12:40 PM Dmitry Baryshkov <dmitry.baryshkov@linaro.org> wrote:
-> > > On Sat, Dec 28, 2024 at 01:13:51AM +0800, Pengyu Luo wrote:
-> > > > The Huawei Matebook E Go (sc8280xp) tablet provides implements UCSI
-> > > > interface in the onboard EC. Add the glue driver to interface the
-> > > > platform's UCSI implementation.
-> > > >
-> > > > Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-> > > > ---
-> > > >  drivers/usb/typec/ucsi/Kconfig              |   9 +
-> > > >  drivers/usb/typec/ucsi/Makefile             |   1 +
-> > > >  drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c | 481 ++++++++++++++++++++
-> > > >  3 files changed, 491 insertions(+)
-> > > >  create mode 100644 drivers/usb/typec/ucsi/ucsi_huawei_gaokun.c
-> > > >
-> > > > diff --git a/drivers/usb/typec/ucsi/Kconfig b/drivers/usb/typec/ucsi/Kconfig
-> > > > index 680e1b87b..0d0f07488 100644
-> > > > --- a/drivers/usb/typec/ucsi/Kconfig
-> > > > +++ b/drivers/usb/typec/ucsi/Kconfig
-> > > > @@ -78,4 +78,13 @@ config UCSI_LENOVO_YOGA_C630
-> > > >         To compile the driver as a module, choose M here: the module will be
-> > > >         called ucsi_yoga_c630.
+kernel test robot noticed the following build warnings:
 
-[...]
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > > > +
-> > > > +     spin_lock_irqsave(&port->lock, flags);
-> > > > +
-> > > > +     port->ccx = FIELD_GET(GAOKUN_CCX_MASK, dcc);
-> > > > +     port->mux = FIELD_GET(GAOKUN_MUX_MASK, dcc);
-> > > > +     port->mode = FIELD_GET(GAOKUN_DPAM_MASK, ddi);
-> > > > +     port->hpd_state = FIELD_GET(GAOKUN_HPD_STATE_MASK, ddi);
-> > > > +     port->hpd_irq = FIELD_GET(GAOKUN_HPD_IRQ_MASK, ddi);
-> > > > +
-> > > > +     switch (port->mux) {
-> > > > +     case USBC_MUX_NONE:
-> > > > +             port->svid = 0;
-> > > > +             break;
-> > > > +     case USBC_MUX_USB_2L:
-> > > > +             port->svid = USB_SID_PD;
-> > > > +             break;
-> > > > +     case USBC_MUX_DP_4L:
-> > > > +     case USBC_MUX_USB_DP:
-> > > > +             port->svid = USB_SID_DISPLAYPORT;
-> > > > +             if (port->ccx == USBC_CCX_REVERSE)
-> > > > +                     port->mode -= 6;
-> > >
-> > > I'd prefer it this were more explicit about what is happening.
-> > >
-> >
-> > If orientation is reverse, then we should minus 6, EC's logic.
-> > I will add a comment for it. Actually, this field is unused, I don't
-> > find the mux yet, so I cannot set it with this field. But I don't want
-> > to make things imcomplete, so keep it.
->
-> Which values are you expecting / getting there? The -6 is a pure magic.
-> Please replace this with a switch-case or something more obvious.
->
+url:    https://github.com/intel-lab-lkp/linux/commits/Peter-Geis/pmdomain-rockchip-fix-rockchip_pd_power-error-handling/20241210-093424
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/mmind/linux-rockchip.git for-next
+patch link:    https://lore.kernel.org/r/20241210013010.81257-2-pgwipeout%40gmail.com
+patch subject: [PATCH 1/6] pmdomain: rockchip: fix rockchip_pd_power error handling
+config: powerpc-randconfig-r072-20241223 (https://download.01.org/0day-ci/archive/20241224/202412240015.MfjYhpNz-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 14.2.0
 
-In v2, I have deduced their meaning, with a switch to map them.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Reported-by: Dan Carpenter <dan.carpenter@linaro.org>
+| Closes: https://lore.kernel.org/r/202412240015.MfjYhpNz-lkp@intel.com/
 
-> > Let me go off the topic, on my device, I can just use drm_aux_hpd_bridge_notify
-> > to enable altmode, usb functions well after I pluged out, I don't need set mode
-> > switch(orientation switch is required if orientation is reverse), which is quiet
-> > similar to Acer aspire 1. Is mux controlled also by QMP combo phy(see [1])?
-> >
-> > > > +             break;
-> > > > +     default:
-> > > > +             break;
-> > > > +     }
-> > > > +
-> > > > +     spin_unlock_irqrestore(&port->lock, flags);
-> > > > +}
-> > > > +
-> > > > +static int gaokun_ucsi_refresh(struct gaokun_ucsi *uec)
-> > > > +{
-> > > > +     struct gaokun_ucsi_reg ureg;
-> > > > +     int ret, idx;
-> > > > +
-> > > > +     ret = gaokun_ec_ucsi_get_reg(uec->ec, (u8 *)&ureg);
-> > > > +     if (ret)
-> > > > +             return -EIO;
-> > > > +
-> > > > +     uec->port_num = ureg.port_num;
-> > > > +     idx = GET_IDX(ureg.port_updt);
-> > > > +
-> > > > +     if (idx >= 0 && idx < ureg.port_num)
-> > > > +             gaokun_ucsi_port_update(&uec->ports[idx], ureg.port_data);
-> > > > +
-> > > > +     return idx;
-> > > > +}
-> > > > +
-> > > > +static void gaokun_ucsi_handle_altmode(struct gaokun_ucsi_port *port)
-> > > > +{
-> > > > +     struct gaokun_ucsi *uec = port->ucsi;
-> > > > +     int idx = port->idx;
-> > > > +
-> > > > +     if (idx >= uec->ucsi->cap.num_connectors || !uec->ucsi->connector) {
-> > > > +             dev_warn(uec->ucsi->dev, "altmode port out of range: %d\n", idx);
-> > > > +             return;
-> > > > +     }
-> > > > +
-> > > > +     /* UCSI callback .connector_status() have set orientation */
-> > > > +     if (port->bridge)
-> > > > +             drm_aux_hpd_bridge_notify(&port->bridge->dev,
-> > > > +                                       port->hpd_state ?
-> > > > +                                       connector_status_connected :
-> > > > +                                       connector_status_disconnected);
-> > >
-> > > Does your platform report any altmodes? What do you see in
-> > > /sys/class/typec/port0/port0.*/ ?
-> > >
-> >
-> > /sys/class/typec/port0/port0.0:
-> > active  mode  mode1  power  svid  uevent  vdo
-> >
-> > /sys/class/typec/port0/port0.1:
-> > active  mode  mode1  power  svid  uevent  vdo
-> >
-> > /sys/class/typec/port0/port0.2:
-> > active  mode  mode1  power  svid  uevent  vdo
-> >
-> > /sys/class/typec/port0/port0.3:
-> > active  mode  mode2  power  svid  uevent  vdo
-> >
-> > /sys/class/typec/port0/port0.4:
-> > active  mode  mode3  power  svid  uevent  vdo
->
-> please:
->
-> cat /sys/class/typec/port0/port0*/svid
-> cat /sys/class/typec/port0/port0*/vdo
->
+smatch warnings:
+drivers/pmdomain/rockchip/pm-domains.c:614 rockchip_pd_power() warn: inconsistent returns '&pmu->mutex'.
 
-svid:
-8087
-ff01
-12d1
-12d1
-12d1
+vim +614 drivers/pmdomain/rockchip/pm-domains.c
 
-vdo:
-0xff000001
-0xff1c1c46
-0xff000001
-0xff000002
-0xff000003
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  572  static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  573  {
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  574  	struct rockchip_pmu *pmu = pd->pmu;
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  575  	int ret;
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  576  
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  577  	mutex_lock(&pmu->mutex);
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  578  
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  579  	if (rockchip_pmu_domain_is_on(pd) != power_on) {
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  580  		ret = clk_bulk_enable(pd->num_clks, pd->clks);
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  581  		if (ret < 0) {
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  582  			dev_err(pmu->dev, "failed to enable clocks\n");
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  583  			mutex_unlock(&pmu->mutex);
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  584  			return ret;
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  585  		}
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  586  
+8b579881de295d drivers/pmdomain/rockchip/pm-domains.c Detlev Casanova 2024-08-29  587  		rockchip_pmu_ungate_clk(pd, true);
+8b579881de295d drivers/pmdomain/rockchip/pm-domains.c Detlev Casanova 2024-08-29  588  
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  589  		if (!power_on) {
+074c6a422d86ff drivers/soc/rockchip/pm_domains.c      Elaine Zhang    2016-04-14  590  			rockchip_pmu_save_qos(pd);
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  591  
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  592  			/* if powering down, idle request to NIU first */
+a15817772c0ae6 drivers/pmdomain/rockchip/pm-domains.c Peter Geis      2024-12-10  593  			ret = rockchip_pmu_set_idle_request(pd, true);
+a15817772c0ae6 drivers/pmdomain/rockchip/pm-domains.c Peter Geis      2024-12-10  594  			if (ret < 0)
+a15817772c0ae6 drivers/pmdomain/rockchip/pm-domains.c Peter Geis      2024-12-10  595  				return ret;
 
-> If DP is reported as one the altmodes, then it should be using the
-> DisplayPort AltMode driver, as suggested by Heikki.
->
+mutex_unlock(&pmu->mutex);
 
-But this paltform cannot access to the partner device, related API
-requires a partner.
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  596  		}
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  597  
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  598  		rockchip_do_pmu_set_power_domain(pd, power_on);
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  599  
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  600  		if (power_on) {
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  601  			/* if powering up, leave idle mode */
+a15817772c0ae6 drivers/pmdomain/rockchip/pm-domains.c Peter Geis      2024-12-10  602  			ret = rockchip_pmu_set_idle_request(pd, false);
+a15817772c0ae6 drivers/pmdomain/rockchip/pm-domains.c Peter Geis      2024-12-10  603  			if (ret < 0)
+a15817772c0ae6 drivers/pmdomain/rockchip/pm-domains.c Peter Geis      2024-12-10  604  				return ret;
 
-BTW, it is unnecessary that implementing/call a DP Altmode driver for
-this platform. Currently, we can enter altmode with a HPD event notify.
-This point is quiet similar to Acer aspire 1. I mentioned this when we
-last talked about minus 6.
+mutex_unlock(&pmu->mutex);
 
-> > > > +
-> > > > +     gaokun_ec_ucsi_pan_ack(uec->ec, port->idx);
-> > > > +}
-> > > > +
-> > > > +static void gaokun_ucsi_altmode_notify_ind(struct gaokun_ucsi *uec)
-> > > > +{
-> > > > +     int idx;
-> > > > +
-> > > > +     idx = gaokun_ucsi_refresh(uec);
-> > > > +     if (idx < 0)
-> > > > +             gaokun_ec_ucsi_pan_ack(uec->ec, idx);
-> > > > +     else
-> > > > +             gaokun_ucsi_handle_altmode(&uec->ports[idx]);
-> > > > +}
-> > > > +
-> > > > +/*
-> > > > + * USB event is necessary for enabling altmode, the event should follow
-> > > > + * UCSI event, if not after timeout(this notify may be disabled somehow),
-> > > > + * then force to enable altmode.
-> > > > + */
-> > > > +static void gaokun_ucsi_handle_no_usb_event(struct gaokun_ucsi *uec, int idx)
-> > > > +{
-> > > > +     struct gaokun_ucsi_port *port;
-> > > > +
-> > > > +     port = &uec->ports[idx];
-> > > > +     if (!wait_for_completion_timeout(&port->usb_ack, 2 * HZ)) {
-> > > > +             dev_warn(uec->dev, "No USB EVENT, triggered by UCSI EVENT");
-> > > > +             gaokun_ucsi_altmode_notify_ind(uec);
-> > > > +     }
-> > > > +}
-> > > > +
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  605  
+074c6a422d86ff drivers/soc/rockchip/pm_domains.c      Elaine Zhang    2016-04-14  606  			rockchip_pmu_restore_qos(pd);
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  607  		}
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  608  
+8b579881de295d drivers/pmdomain/rockchip/pm-domains.c Detlev Casanova 2024-08-29  609  		rockchip_pmu_ungate_clk(pd, false);
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  610  		clk_bulk_disable(pd->num_clks, pd->clks);
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  611  	}
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  612  
+d909072d0521a8 drivers/soc/rockchip/pm_domains.c      Jeffy Chen      2018-02-28  613  	mutex_unlock(&pmu->mutex);
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08 @614  	return 0;
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  615  }
+7c696693a4f54d drivers/soc/rockchip/pm_domains.c      Caesar Wang     2015-09-08  616  
 
-[...]
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
-> > > > +
-> > > > +static void gaokun_ucsi_register_worker(struct work_struct *work)
-> > > > +{
-> > > > +     struct gaokun_ucsi *uec;
-> > > > +     struct ucsi *ucsi;
-> > > > +     int ret;
-> > > > +
-> > > > +     uec = container_of(work, struct gaokun_ucsi, work);
-> > > > +     ucsi = uec->ucsi;
-> > > > +
-> > > > +     ucsi->quirks = UCSI_NO_PARTNER_PDOS | UCSI_DELAY_DEVICE_PDOS;
-> > >
-> > > Does it crash in the same way as GLINK crashes (as you've set
-> > > UCSI_NO_PARTNER_PDOS)?
-> > >
-> >
-> > Yes, no partner can be detected, I checked. I think it is also handled by
-> > the firmware As you said in [2]
-> > > In some obscure cases (Qualcomm PMIC Glink) altmode is completely
-> > > handled by the firmware. Linux does not get proper partner altmode info.
->
-> This is a separate topic. Those two flags were added for a very
-> particular reason:
->
-> - To workaround firmware crash on requesting PDOs for a partner
-> - To delay requeting PDOs for the device because in the unconnected
->   state the GET_PDOS returns incorrect information
->
-> Are you sure that those two flags are necessary for your platform?
->
-
-Alright, I think I got things mixed up. Actually PDO requires UCSI only,
-not a partner device.
-
-I think I will remove it in v3 if it works well during the time. Rencetly,
-this platform works well without it. Thanks for pointing out.
-
-> >
-> > > > +
-> > > > +     ssleep(3); /* EC can't handle UCSI properly in the early stage */
-> > > > +
-> > > > +     ret = gaokun_ec_register_notify(uec->ec, &uec->nb);
-> > > > +     if (ret) {
-> > > > +             dev_err_probe(ucsi->dev, ret, "notifier register failed\n");
-> > > > +             return;
-> > > > +     }
-> > > > +
-> > > > +     ret = ucsi_register(ucsi);
-> > > > +     if (ret)
-> > > > +             dev_err_probe(ucsi->dev, ret, "ucsi register failed\n");
-> > > > +}
-> > > > +
-> > > > +static int gaokun_ucsi_register(struct gaokun_ucsi *uec)
-> > >
-> > > Please inline
-> > >
-> >
-> > I see.
-> >
-> > Best wishes
-> > Pengyu
-> >
-> > [1] https://elixir.bootlin.com/linux/v6.12.5/source/drivers/phy/qualcomm/phy-qcom-qmp-combo.c#L2679
-> > [2] https://lore.kernel.org/lkml/20240416-ucsi-glink-altmode-v1-0-890db00877ac@linaro.org
-
-
-Best Wishes,
-Pengyu
 
