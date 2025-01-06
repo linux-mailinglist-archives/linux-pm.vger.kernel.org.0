@@ -1,83 +1,116 @@
-Return-Path: <linux-pm+bounces-19995-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-19996-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id F299BA0319B
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 21:52:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92DDDA0334E
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 00:27:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 89B2C1886F5A
-	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 20:52:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 165653A1835
+	for <lists+linux-pm@lfdr.de>; Mon,  6 Jan 2025 23:26:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 579D91AAA09;
-	Mon,  6 Jan 2025 20:52:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46F991E1C11;
+	Mon,  6 Jan 2025 23:26:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OyJJEgkH"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="O/V1AtkE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 028C41372;
-	Mon,  6 Jan 2025 20:52:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C57771E1A33
+	for <linux-pm@vger.kernel.org>; Mon,  6 Jan 2025 23:26:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736196725; cv=none; b=lkyuqWq1PFmhH59A4JZSBW9yxxXg56/bIF1bCQCQLi8LAFcWobGAASMo0Q3K5AhX6F6jUHUkj6S4WJHkfystkxqkUwhssEdjVd/wHxsl+Fc0aBrYyw4pAcmn86BtbHQL7J+3m2/Scua0zmo0DdGKbbOx6BoLVZccO0D5FvWdr6g=
+	t=1736206016; cv=none; b=U/dlMevNueIMYFk74+o/7WFxXeBMNJlMk7rwSNQ/dSVuSyz78GIu9p1//aB7191ouFsraCNb97v/Zs5zyI/jKqJ5V7LekcQWvec2wB/nHw9N5HrPcXg4WweOwYhaxMHkr5QJtStsA8FhaN0yzywawrLN+vBVWlFQZHKzpIp5ihs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736196725; c=relaxed/simple;
-	bh=pkoTA3m4K1X1dlDuPOYVmh5S9A/up69OsUuJcxsBqHE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DnenumcDX9+qJjNFT7yUIBTQoL8Rprs3pra9I2D/gC5kEpyqlUVWkaa03DfH6FX73gdrGcjQ7YCA6XJrWNzuySxt0uiXSiBjiU/nHy7UNdVkumg7TsmaQEMODo2SPKxUSKAJLiQ8zpU6I0lU89SoBJJ//2zsUFHso8qABEB46Vk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OyJJEgkH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 565A3C4CED2;
-	Mon,  6 Jan 2025 20:52:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736196724;
-	bh=pkoTA3m4K1X1dlDuPOYVmh5S9A/up69OsUuJcxsBqHE=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=OyJJEgkH69zsFc0M3nZjbn4atDhSp6dbxWwLCHRzPcOXT5Z0FZN1NqS+YolQU0Y10
-	 JQeCJM/2NAnBvcTYICSgCld1bBlgoxWrrrJs6KK6cxRgebvm5GZPr9Y0ykXRS5C3Xp
-	 KHxw+JeReuqBkg1NreDwGzYLVLe58ylX1Hu5cAA33tDmLxaKLz1/Mcx+R/I+UIKIW7
-	 NyIwxOIANbaRUkZnJ4fjivlv3OLQqX+eS215tMZ3QWD7sadaprTX5w9LDgXFFK94hQ
-	 R0/4i3/h9kHCbFvRASHmbUK2zL029o9pWgrH2IDNMrTfOrhw5puQSzkdmk/B9ixUQw
-	 hfBKBUSGNalow==
-Date: Mon, 6 Jan 2025 14:52:03 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Rayyan Ansari <rayyan.ansari@linaro.org>
-Cc: Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	devicetree@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Thara Gopinath <thara.gopinath@gmail.com>,
-	linux-arm-msm@vger.kernel.org, Amit Kucheria <amitk@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH] dt-bindings: thermal: qcom-tsens: Document ipq6018
- temperature sensor
-Message-ID: <173619670386.940648.7452245327494202129.robh@kernel.org>
-References: <20240716133803.82907-1-rayyan.ansari@linaro.org>
+	s=arc-20240116; t=1736206016; c=relaxed/simple;
+	bh=CScU65F031qQqaiweB+T7sXCuQF+ER/uPWY9SACzlHY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=CahLc+3cQ9t+usCXPy5gX7u7Av2ClfkoKVYH0YMO+9ZUhmuJr6uCSFaXbpRNjfChdt7i7xVmEHckaZl8Z+83ZABDQmbowtTsuLhHsIwE1D7zYpK3l9qzlpogPmWBajDpAL7KsSCT/WsWx67M+vojQk6wjNk8s9OF9+562aWL+AE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=O/V1AtkE; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 506I3egb022614;
+	Mon, 6 Jan 2025 23:26:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	CScU65F031qQqaiweB+T7sXCuQF+ER/uPWY9SACzlHY=; b=O/V1AtkEcvy0lrzT
+	b8pQw51YDo1l5Zw0dnjQ88dythJqp7uV0WLB+76cOyn4KvQf48vGjbCSW2Yn809w
+	4JPs0QlniMjfzZ9qlg0k2IrWgFa/VfZPaKg+K+e/nrwLeL3RAe7NpAOH/OKYpB0i
+	iBGMISK8Jm/00rTimRU87BdVLMtz0mL0Y9cNSYe7kBrsZ1FjN1SIqQ02PLQ8obXw
+	19LTqNEUqXyI9MYrtLXtIyb5CHyYVo4Z3k6nqX2c5BftLj0qnMr8t9obsfCCMLuk
+	9f5sZ5MAIGCFhdC5AOlcpqKrA2RpPY0dySki9txFehi5SdforBMoS0t8lh0cUCNM
+	1Q8lDQ==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 440m4a0k8f-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 06 Jan 2025 23:26:50 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 506NQngk005752
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 6 Jan 2025 23:26:49 GMT
+Received: from [10.81.24.74] (10.49.16.6) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Mon, 6 Jan 2025
+ 15:26:49 -0800
+Message-ID: <c6af6fb4-50a1-43c0-88e5-f541fa5dd4c7@quicinc.com>
+Date: Mon, 6 Jan 2025 15:26:48 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20240716133803.82907-1-rayyan.ansari@linaro.org>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/8] power: supply: Add adc-battery-helper
+To: Hans de Goede <hdegoede@redhat.com>, Sebastian Reichel <sre@kernel.org>
+CC: <linux-pm@vger.kernel.org>
+References: <20241215172133.178460-1-hdegoede@redhat.com>
+ <20241215172133.178460-3-hdegoede@redhat.com>
+From: Jeff Johnson <quic_jjohnson@quicinc.com>
+Content-Language: en-US
+In-Reply-To: <20241215172133.178460-3-hdegoede@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: djX4PWWzz25DlSAi_RVrfnDsdW9QWvqA
+X-Proofpoint-ORIG-GUID: djX4PWWzz25DlSAi_RVrfnDsdW9QWvqA
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxscore=0
+ lowpriorityscore=0 mlxlogscore=892 adultscore=0 suspectscore=0 spamscore=0
+ phishscore=0 priorityscore=1501 malwarescore=0 impostorscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
+ definitions=main-2501060204
 
+On 12/15/24 09:21, Hans de Goede wrote:
+...
+> diff --git a/drivers/power/supply/adc-battery-helper.c b/drivers/power/supply/adc-battery-helper.c
+> new file mode 100644
+> index 000000000000..1917e92ab1eb
+> --- /dev/null
+> +++ b/drivers/power/supply/adc-battery-helper.c
+> @@ -0,0 +1,359 @@
+> +// SPDX-License-Identifier: GPL-2.0+
 
-On Tue, 16 Jul 2024 14:38:02 +0100, Rayyan Ansari wrote:
-> Document the ipq6018 temperature sensor, which is used in ipq6018.dtsi
-> and is compatible with the ipq8074 temperature sensor.
-> 
-> Signed-off-by: Rayyan Ansari <rayyan.ansari@linaro.org>
-> ---
->  Documentation/devicetree/bindings/thermal/qcom-tsens.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+...
 
-Looks like this slipped thru the cracks. Applied, thanks!
+> +MODULE_AUTHOR("Hans de Goede <hansg@kernel.org>");
+> +MODULE_LICENSE("GPL");
 
+Sorry for not noticing this until now -- holidays...
+
+Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
+description is missing"), a module without a MODULE_DESCRIPTION() will
+result in a warning with make W=1. Please add a MODULE_DESCRIPTION()
+to avoid this warning.
+
+/jeff
 
