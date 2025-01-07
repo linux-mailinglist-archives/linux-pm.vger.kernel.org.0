@@ -1,157 +1,178 @@
-Return-Path: <linux-pm+bounces-20001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3B903A03AD1
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 10:10:37 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D16FDA03B23
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 10:31:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 48AC71615F0
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 09:10:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E8B718852D6
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 09:31:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C056A1E3DE8;
-	Tue,  7 Jan 2025 09:06:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A9DD1E2844;
+	Tue,  7 Jan 2025 09:31:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SfAdx9pD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hdlfV79Q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30551E3DF2
-	for <linux-pm@vger.kernel.org>; Tue,  7 Jan 2025 09:06:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A8D1E0B7D;
+	Tue,  7 Jan 2025 09:31:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736240816; cv=none; b=VtBLM5Z4VzdFsL3jfE/8HmvyLxdliLtLS9ia115AUmfTiXHYHHU9FfEVBDVKNa3LaWbU2M8qUuS3VhYa+rwjUDUoC2d+W4GSuU0vllaWeNeU3IKYTvCVd0ZSFxjb7yfXzJlMogSzXQYsGBiJNaULeqBeSq8KeWwVZE+yAoqWYMc=
+	t=1736242308; cv=none; b=UWqgZlZG1QVJa7OJhqEpX4tvMMYPBzQkUm3XqXn+JiBfAW7/4TZNmAGpELLcHLaR7hVz4TszdH4jPkrUW4n+kQ2nllfIgwhuR57HoSzKVdZ5eEZPjKNcL76O86/pjPiUZxnT9ji8EHqQy+nRhNF1ePa1E89u2J7q2cai/gW4OlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736240816; c=relaxed/simple;
-	bh=LvDd8U5d1JAExU6nJWpv5tD30jOU1E0HMWgRrqOF98o=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RLPDvsF8CmhET++TJUkzMudY9q0qEORLfOvruHLlPChBikaCuruKt2XhNqiyJd3cgHlGEl7NVAUOgBZG7t40iK5jI3CGff1iAa52Wx9IEh6n3GUkJBfc8iiHgVvw/bM7p9HxACI2uIaYT7ChtaDfMU1VAsPyqubQg7YxvBT0LHs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SfAdx9pD; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-385eed29d17so7239448f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jan 2025 01:06:51 -0800 (PST)
+	s=arc-20240116; t=1736242308; c=relaxed/simple;
+	bh=wNxScV3swdqLS2kSQnTrWGwVBmGv+k7mN3nS5bD4pig=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ci6Yg4OHQC4+3hMlRMAw515g1L5V6TV58uK3HrjGgSSnGhbkVO/xVpQwV/TL16+xEBsm464zIDoYiTX0NRzSuURExnp5DRlVTygGOVVigP9oy8IClkfQQKPUYCwkFqCryFUtOIOPbJ2TbmuQZ7RmyZQSp+jInt2iRsMLWfbsvX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hdlfV79Q; arc=none smtp.client-ip=209.85.218.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-aab925654d9so2698904866b.2;
+        Tue, 07 Jan 2025 01:31:43 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736240810; x=1736845610; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=A4jDBOd4uA6iWq10QaHFHWmxRK0/Onl9k6WANOitcUI=;
-        b=SfAdx9pD8u00Jk9Zxg0HjjKtk1PVJmVuNIy9xCxr+lvGr1MG556UlGirUbNwzin2fM
-         B5W9X7aSnTOHrW8TNLLqMjEAGtpkxIMPrFtw8ZPHmGK0UONtJ5a2vIMgtg0+EaGp5kav
-         Ig0vwgueYHJeWZsDXVngEJXFKhSiAnZ+t+NwYmhTq1J/Sl01WQDkO67RunPulI8W7AH9
-         pE5K+IxSLUFtn2kaKDhnggjHeSqmgKATS8F7RAV42vQvgXmlvLUqV43qGko9Bfo8ltdO
-         5kx/qTdsKN6PzJhJfnKV8FaQC4bopzDcLPpLLhkATo5R72zc0t2bY5otgiMnJqVJPnGi
-         Svgw==
+        d=gmail.com; s=20230601; t=1736242302; x=1736847102; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=zEVZrcp6sH8kKT4/yJXuIbm9BkC4O+Tbaah14OHvXYw=;
+        b=hdlfV79QxjYZWg01dGHcHO4tYjs/+n00y5vOa/f15WHHIPcTzgi0cPG5yWIJzxfW+d
+         elP3Ww6NbrqbsedX9xzKRloLpZwZXoTU6jeuZn/2R55jhucBt9HiEcvvBTc03myF71Ab
+         dPBofsp0E6AgNJjoXXSgINWx4dpzaPloDMYLZv3L4WmjZA6ufTGCEuH3Wt3ExWOYDrgF
+         zCRR82UxonfZZUFSo9tOqMD4C8BnYyGSZ72JV0iY0yhahKyRe0Gg0iw9pmatypuWn3M2
+         gTw8ZMu2Ht30k8qms/9zAtVIYcehEKCWkdyDvM+1iTSpW/H8I41XTmU245/pneSjaUrm
+         hOCA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736240810; x=1736845610;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=A4jDBOd4uA6iWq10QaHFHWmxRK0/Onl9k6WANOitcUI=;
-        b=aFJLHGpiBTeuDiG1ftRVSkc3ZG3hsTuGOFG3Jjc7irfon0oEPzYhN+xXymvIV1qOzT
-         qPAJe77Ng0TWpUczptTaNYX+qmvxRZqCttDOS6aK1t9ejUd/FqRBAhCQ8MQU/8FOIQil
-         qfjjMa9xF+5zw/mSEot7lzr8VRtRYFaNKnIgCYQPjM4GPnIMqMayGLsN1PSlp9F2TUsg
-         j/8moK7D4yyTjVp6R3cgXqB6hbMB0pxeazfAQz94e3HiesE6tn4T21+xu6crM6SymHLN
-         2WPMspjavC26ZByPJd6LzBe7Loxo2sl641w4qiS2pcRIdZG6iv+g7P8yLeKVmMTyVMUg
-         sWbw==
-X-Gm-Message-State: AOJu0YzhRISGsnJKnOCayw2JisRzcOdCmZRZvmclJd3SEF/xjCWkw428
-	/1ShzBb6jyTwA+FkPFtI6TizbT0ujU2hXfKyd2JYwS+k/3Rj6Aqs+haQB70B+24=
-X-Gm-Gg: ASbGnctb/I+VBQwtKy7n/yVrBuQ5+3z0AZA95ky+ZXsPB5TEl3mo1EtIAonozmcWgGG
-	DyqCGn0vTTo0EQGqVJqxPoODQ3JUWmjquWO8jJAYVtbK7/4bxoYpTutq5Hc+Xf1mWLIAQIg/SO6
-	LPDsfHhJbpv2NT1USugECUZZrZyyAgp0uILK1DxI5S6u1q9k2YvapWQKE9Tm2XEtZXGGLR/xXmG
-	+BdaUumtUmY2dKqSiJ1CePbHzbxSXvx0NByXd5CpoKjW5oeyrpx2Q8pYJ9Z+g==
-X-Google-Smtp-Source: AGHT+IHZAZxqzkt43hjIPdmiX16LWtAmIlQjSGTOiM5YyAVZqEoQExXofh761RH379rxPGTtkqw/RA==
-X-Received: by 2002:a05:6000:480a:b0:386:1cd3:89fa with SMTP id ffacd0b85a97d-38a221fa8c6mr57479039f8f.33.1736240809665;
-        Tue, 07 Jan 2025 01:06:49 -0800 (PST)
-Received: from [10.1.1.109] ([80.111.64.44])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43656b013e1sm619089305e9.12.2025.01.07.01.06.48
+        d=1e100.net; s=20230601; t=1736242302; x=1736847102;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=zEVZrcp6sH8kKT4/yJXuIbm9BkC4O+Tbaah14OHvXYw=;
+        b=lXZFXj084n9CLIY02ElHEZOoCVstaZibs7nyEpuzwXESoNWuU6CXrdxkJ1VVJis/1f
+         419WHtqktb++9vy4t00e8zcy9qxDdny67I7mezDsCF/cjCSvpNQvUnIU1kjb5Gs7mQXS
+         Cs/4GqNDurQ3+pmAfdGUppqrnjISMGRc9zqwfoA8aSWgwFgaNAOTQzwND4C62tEjNb6r
+         wYv0njSce4OkXrdkEQ9XzZlXw+mHu2n0RNgCDzss7YFZc01mI2EnvIN+C4oAxAFs4YK4
+         RMybqMUV8MM68N5kZFDXqOTwOugqgXl0pWscTyzz5mpjL3nfG+/uFog/Lx1tazHZyoa9
+         tnjA==
+X-Forwarded-Encrypted: i=1; AJvYcCUrLtHR9W/yU2rhHgQkHfIyfluaN4aygzbU3bInMt2Les7nDIBC4sQ0towBsUNIpWlxgAWUcZkNaljGY8qF@vger.kernel.org, AJvYcCWjFVkiP3ABQS9Vgk1YO8p9fXHcTZ2tCwmmTunIH4w99dhuLT+cMxMK7yoRLdMCIDbt/1J5fQlRV0Ic@vger.kernel.org, AJvYcCX/9hAtY1zZYRyrW5L7rGQoDA58mlcuBRAl7dR94URO+u3KQ9VVXMoTclN+9QESlrBsgOWVGtmpYTD+MWCo6w==@vger.kernel.org, AJvYcCXDtiPhe2F7K5yFM5VCKeJEkSsmVWv1KlZjR4jXwJnnlFDO23z1AkIwdSXOrKrw5HqP1yV3mi3peoQZFku5IcT6nKo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyktNMlMk6RCaCHEf3KcQT/qTxG+evwbi80BNH0E+UBwiQLVbcu
+	hjGkP1qouysu0gS2U9lkJMhBPe2Rb2u+L8T8G583GgJcSNWZGbxh
+X-Gm-Gg: ASbGnctlfQd676nbag+0qJ+mEy9htwTL919jnrZt6iIwCjNRaE6acYJkVyh7JmPHqC1
+	1x9mSj+/PHiTGwqGm4nKeUTHQB/uaeSqN8nx5USanPM7ERI6iOy4LiqL7O7b/tQ0QwdWJs/hg3p
+	6iwNTo84U2lgnBOUMN4ig2i38jyC5SYifmJahaW84D+R1WRgmD/12hrAoVt6cu/sPpe4Ed38Fyo
+	FHhwAyxbmITPqVwDbV7fJqzOBNYAqqS8G9Omo7WR81UbgMpieBUlhEtA3ajqXeocSRTYHo0bSvt
+	e+Au/Ex461gCTReudzWp7+XDFw==
+X-Google-Smtp-Source: AGHT+IEVG3G336WmBhvtPtrjSoYbrfPG9f0yBDcuNNv8Va58Y4lKbJL/RINEhKFkS8DMU1all+HtKA==
+X-Received: by 2002:a17:907:7f0b:b0:aab:dc3e:1c84 with SMTP id a640c23a62f3a-aac2b0a56b6mr5288197066b.17.1736242301740;
+        Tue, 07 Jan 2025 01:31:41 -0800 (PST)
+Received: from [127.0.1.1] (nat6-minsk-pool-46-53-210-232.telecom.by. [46.53.210.232])
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5d806feddfasm24976300a12.58.2025.01.07.01.31.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 01:06:49 -0800 (PST)
-Message-ID: <74430be84cb49dc0a7413656a2923facc021cd15.camel@linaro.org>
-Subject: Re: [PATCH v2 4/4] arm64: dts: exynos: gs101-oriole: enable Maxim
- max77759 fuel gauge
-From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
-To: t.antoine@uclouvain.be, Sebastian Reichel <sre@kernel.org>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Dimitri Fedrau <dima.fedrau@gmail.com>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Peter
- Griffin <peter.griffin@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-samsung-soc@vger.kernel.org
-Date: Tue, 07 Jan 2025 09:06:48 +0000
-In-Reply-To: <20250102-b4-gs101_max77759_fg-v2-4-87959abeb7ff@uclouvain.be>
-References: <20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be>
-	 <20250102-b4-gs101_max77759_fg-v2-4-87959abeb7ff@uclouvain.be>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.1-4 
+        Tue, 07 Jan 2025 01:31:40 -0800 (PST)
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Subject: [PATCH v6 0/2] power: supply: max17042: cleanup and more features
+Date: Tue, 07 Jan 2025 12:31:29 +0300
+Message-Id: <20250107-b4-max17042-v6-0-3d0104ad5bc7@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAHH0fGcC/33OTWrDMBAF4KsErasijf6srnqPksVIGiWCOg52E
+ QnBd68cKLVd6PINfO/Ng000FprY2+HBRqplKsOlBftyYPGMlxPxklpmIEBLKToeNO/xJp3QwL0
+ SNkdnMCOxJq4j5XJ7tn0cWz6X6WsY78/yKpfrT4/f9FTJBfcEQTgympx9P/VYPl/j0LOlp8Lab
+ n+o0GwWpssOpQ0Y9latrNxZteyGiJRQA4o/u/qfXd1s56JN3geVVNpb82sB1NaaZkmTFt6BCpH
+ Wdp7nb8tDV4yWAQAA
+To: Hans de Goede <hdegoede@redhat.com>, 
+ Krzysztof Kozlowski <krzk@kernel.org>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
+ Purism Kernel Team <kernel@puri.sm>, Sebastian Reichel <sre@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+ Alim Akhtar <alim.akhtar@samsung.com>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-msm@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736242298; l=2494;
+ i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
+ bh=wNxScV3swdqLS2kSQnTrWGwVBmGv+k7mN3nS5bD4pig=;
+ b=1JtrugEyOnG9rTV9ipPmn7Dqi8oclWFU4f35ch2Nd9PNVtszt3ORa39p1Fv75jGVZL6bvFqTI
+ CLw2ZitS2mYCt3iVQgrh6G9xfg2If1x/LAD7//OYAlHcpoBi2E9VM/P
+X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
+ pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-Hi Thomas,
+Fuelgauge blocks often are incorporated in bigger chip,
+which may use only 1 line for interrupts. Shared-irq
+handles that case by requesting irq as shared.
 
-Thanks for your patch!
+Maxim PMICs may include fuel gauge with additional features, which is
+out of single Linux power supply driver scope.
 
-On Thu, 2025-01-02 at 12:15 +0100, Thomas Antoine via B4 Relay wrote:
-> From: Thomas Antoine <t.antoine@uclouvain.be>
->=20
-> Add the node for the max77759 fuel gauge as a slave of the i2c.
->=20
-> The todo is still applicable given there are other slaves on the
-> bus (pca9468, other max77759 functions and the max20339 OVP).
->=20
-> The fuel gauge has been tested and seems to give coherent results.
-> Manual activation of the charger via i2cset shows that the sign of
-> the current does indicate charging/discharging status.
->=20
-> Signed-off-by: Thomas Antoine <t.antoine@uclouvain.be>
-> ---
-> =C2=A0arch/arm64/boot/dts/exynos/google/gs101-oriole.dts | 10 ++++++++++
-> =C2=A01 file changed, 10 insertions(+)
->=20
-> diff --git a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts b/arch/ar=
-m64/boot/dts/exynos/google/gs101-oriole.dts
-> index 387fb779bd29ea3812331a7951f03b181c5fe659..6c83ee6f8a6b0327c576573d0=
-3a8d2bcc93f9e16 100644
-> --- a/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
-> +++ b/arch/arm64/boot/dts/exynos/google/gs101-oriole.dts
-> @@ -10,6 +10,7 @@
-> =C2=A0
-> =C2=A0#include <dt-bindings/gpio/gpio.h>
-> =C2=A0#include <dt-bindings/input/input.h>
-> +#include <dt-bindings/interrupt-controller/irq.h>
-> =C2=A0#include "gs101-pinctrl.h"
-> =C2=A0#include "gs101.dtsi"
-> =C2=A0
-> @@ -90,6 +91,15 @@ eeprom: eeprom@50 {
-> =C2=A0&hsi2c_12 {
-> =C2=A0	status =3D "okay";
-> =C2=A0	/* TODO: add the devices once drivers exist */
-> +
-> +	fuel-gauge@36 {
-> +		compatible =3D "maxim,max77759-fg";
-> +		reg =3D <0x36>;
-> +		reg-names =3D "m5";
-> +		shunt-resistor-micro-ohms =3D <5000>;
-> +		interrupt-parent =3D <&gpa9>;
-> +		interrupts =3D <3 IRQ_TYPE_LEVEL_LOW>;
-> +	};
+For example, in max77705 PMIC fuelgauge has additional registers,
+like IIN_REG, VSYS_REG, ISYS_REG. Those needed to measure PMIC input
+current, system voltage and current respectively. Those measurements
+cannot be bound to any of fuelgauge properties.
 
-The order of properties within a node should follow
-Documentation/devicetree/bindings/dts-coding-style.rst
+The solution here add and option to use max17042 driver as a MFD
+sub device, thus allowing any additional functionality be implemented as
+another sub device. This will help to reduce code duplication in MFD
+fuel gauge drivers.
 
-In particular shunt-resistor-micro-ohms should come last in
-this case.
+Make max17042 interrupt shared, and add platform driver
+version.
 
-Cheers,
-Andre'
+Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+---
+Changes in v6:
+- reformat commit messages
+- add trailers
+- Link to v5: https://lore.kernel.org/r/20241223-b4-max17042-v5-0-e4e409723bce@gmail.com
+
+Changes in v5:
+- platform version: use parent device of_node as current device.
+  This is because mfd driver matches fuel gauge node, and max17042
+  platform variant is intended to match a mfd subdevice.
+- fix platform version issues.
+- Link to v4: https://lore.kernel.org/r/20241108-b4-max17042-v4-0-87c6d99b3d3d@gmail.com
+
+Changes in v4:
+- review fixes.
+- Link to v3: https://lore.kernel.org/r/20241118-b4-max17042-v3-0-9bcaeda42a06@gmail.com
+
+Changes in v3:
+- pass dev pointer to probe
+- Link to v2: https://lore.kernel.org/r/20241108-b4-max17042-v2-0-f058f7a16bab@gmail.com
+
+Changes in v2:
+- drop NACKed commits
+- make shared interrupts unconditionally
+- rework descriptions
+- add platform driver version
+- Link to v1: https://lore.kernel.org/r/20241109-b4-max17042-v1-0-9e2b07e54e76@gmail.com
+
+---
+Dzmitry Sankouski (2):
+      power: supply: max17042: make interrupt shared
+      power: supply: max17042: add platform driver variant
+
+ drivers/power/supply/max17042_battery.c | 200 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------------------------------------------------------
+ 1 file changed, 142 insertions(+), 58 deletions(-)
+---
+base-commit: 7b4b9bf203da94fbeac75ed3116c84aa03e74578
+change-id: 20241108-b4-max17042-9306fc75afae
+
+Best regards,
+-- 
+Dzmitry Sankouski <dsankouski@gmail.com>
 
 
