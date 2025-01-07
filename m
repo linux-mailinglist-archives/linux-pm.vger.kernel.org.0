@@ -1,79 +1,80 @@
-Return-Path: <linux-pm+bounces-20002-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20003-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id D16FDA03B23
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 10:31:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B001A03B28
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 10:32:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3E8B718852D6
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 492043A4909
 	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 09:31:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A9DD1E2844;
-	Tue,  7 Jan 2025 09:31:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF481E3DF9;
+	Tue,  7 Jan 2025 09:31:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hdlfV79Q"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q7L16J9T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f49.google.com (mail-ej1-f49.google.com [209.85.218.49])
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1A8D1E0B7D;
-	Tue,  7 Jan 2025 09:31:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D29C21E0DEE;
+	Tue,  7 Jan 2025 09:31:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736242308; cv=none; b=UWqgZlZG1QVJa7OJhqEpX4tvMMYPBzQkUm3XqXn+JiBfAW7/4TZNmAGpELLcHLaR7hVz4TszdH4jPkrUW4n+kQ2nllfIgwhuR57HoSzKVdZ5eEZPjKNcL76O86/pjPiUZxnT9ji8EHqQy+nRhNF1ePa1E89u2J7q2cai/gW4OlI=
+	t=1736242311; cv=none; b=XDlzcjd0UTZ6CdY3Vx35FgcPkffqQUeXUmJwZiZOSjdcXJhWNk/1v23r1OUfm5PrDlVgxl3qbiR1EfEAQfothXEd0btDGJ2REfcDvUuO9PMx57kjeaf1abBhSm0j76qQAkOFbs3vGZZFZyo1zeOkn1HIvouKN5CLutyzMFpCOtU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736242308; c=relaxed/simple;
-	bh=wNxScV3swdqLS2kSQnTrWGwVBmGv+k7mN3nS5bD4pig=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ci6Yg4OHQC4+3hMlRMAw515g1L5V6TV58uK3HrjGgSSnGhbkVO/xVpQwV/TL16+xEBsm464zIDoYiTX0NRzSuURExnp5DRlVTygGOVVigP9oy8IClkfQQKPUYCwkFqCryFUtOIOPbJ2TbmuQZ7RmyZQSp+jInt2iRsMLWfbsvX4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hdlfV79Q; arc=none smtp.client-ip=209.85.218.49
+	s=arc-20240116; t=1736242311; c=relaxed/simple;
+	bh=OsA1dEJLjjYZ2BIUPRu/DSyAQjTWyqdaRkl5xknsg7U=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=a8gcmju21WH3iSx05T7cNYBkbdTGTmmQbaWUeG3ZQpwtXPwxg9D9zQfzh2toEfLphY6E5tKl1OGV1l+wAADLibVRgvcSH8faYA3JMW2XVGShYGuAGfnnhVo3Jyh++GPrjxwGPflc2acIQ+Gqxa1nKqd4gfGVScxUEsqWaTBIcXk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q7L16J9T; arc=none smtp.client-ip=209.85.208.42
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f49.google.com with SMTP id a640c23a62f3a-aab925654d9so2698904866b.2;
-        Tue, 07 Jan 2025 01:31:43 -0800 (PST)
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5d27243ba8bso28856521a12.2;
+        Tue, 07 Jan 2025 01:31:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736242302; x=1736847102; darn=vger.kernel.org;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=zEVZrcp6sH8kKT4/yJXuIbm9BkC4O+Tbaah14OHvXYw=;
-        b=hdlfV79QxjYZWg01dGHcHO4tYjs/+n00y5vOa/f15WHHIPcTzgi0cPG5yWIJzxfW+d
-         elP3Ww6NbrqbsedX9xzKRloLpZwZXoTU6jeuZn/2R55jhucBt9HiEcvvBTc03myF71Ab
-         dPBofsp0E6AgNJjoXXSgINWx4dpzaPloDMYLZv3L4WmjZA6ufTGCEuH3Wt3ExWOYDrgF
-         zCRR82UxonfZZUFSo9tOqMD4C8BnYyGSZ72JV0iY0yhahKyRe0Gg0iw9pmatypuWn3M2
-         gTw8ZMu2Ht30k8qms/9zAtVIYcehEKCWkdyDvM+1iTSpW/H8I41XTmU245/pneSjaUrm
-         hOCA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736242302; x=1736847102;
-        h=cc:to:content-transfer-encoding:mime-version:message-id:date
-         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=gmail.com; s=20230601; t=1736242305; x=1736847105; darn=vger.kernel.org;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=zEVZrcp6sH8kKT4/yJXuIbm9BkC4O+Tbaah14OHvXYw=;
-        b=lXZFXj084n9CLIY02ElHEZOoCVstaZibs7nyEpuzwXESoNWuU6CXrdxkJ1VVJis/1f
-         419WHtqktb++9vy4t00e8zcy9qxDdny67I7mezDsCF/cjCSvpNQvUnIU1kjb5Gs7mQXS
-         Cs/4GqNDurQ3+pmAfdGUppqrnjISMGRc9zqwfoA8aSWgwFgaNAOTQzwND4C62tEjNb6r
-         wYv0njSce4OkXrdkEQ9XzZlXw+mHu2n0RNgCDzss7YFZc01mI2EnvIN+C4oAxAFs4YK4
-         RMybqMUV8MM68N5kZFDXqOTwOugqgXl0pWscTyzz5mpjL3nfG+/uFog/Lx1tazHZyoa9
-         tnjA==
-X-Forwarded-Encrypted: i=1; AJvYcCUrLtHR9W/yU2rhHgQkHfIyfluaN4aygzbU3bInMt2Les7nDIBC4sQ0towBsUNIpWlxgAWUcZkNaljGY8qF@vger.kernel.org, AJvYcCWjFVkiP3ABQS9Vgk1YO8p9fXHcTZ2tCwmmTunIH4w99dhuLT+cMxMK7yoRLdMCIDbt/1J5fQlRV0Ic@vger.kernel.org, AJvYcCX/9hAtY1zZYRyrW5L7rGQoDA58mlcuBRAl7dR94URO+u3KQ9VVXMoTclN+9QESlrBsgOWVGtmpYTD+MWCo6w==@vger.kernel.org, AJvYcCXDtiPhe2F7K5yFM5VCKeJEkSsmVWv1KlZjR4jXwJnnlFDO23z1AkIwdSXOrKrw5HqP1yV3mi3peoQZFku5IcT6nKo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyktNMlMk6RCaCHEf3KcQT/qTxG+evwbi80BNH0E+UBwiQLVbcu
-	hjGkP1qouysu0gS2U9lkJMhBPe2Rb2u+L8T8G583GgJcSNWZGbxh
-X-Gm-Gg: ASbGnctlfQd676nbag+0qJ+mEy9htwTL919jnrZt6iIwCjNRaE6acYJkVyh7JmPHqC1
-	1x9mSj+/PHiTGwqGm4nKeUTHQB/uaeSqN8nx5USanPM7ERI6iOy4LiqL7O7b/tQ0QwdWJs/hg3p
-	6iwNTo84U2lgnBOUMN4ig2i38jyC5SYifmJahaW84D+R1WRgmD/12hrAoVt6cu/sPpe4Ed38Fyo
-	FHhwAyxbmITPqVwDbV7fJqzOBNYAqqS8G9Omo7WR81UbgMpieBUlhEtA3ajqXeocSRTYHo0bSvt
-	e+Au/Ex461gCTReudzWp7+XDFw==
-X-Google-Smtp-Source: AGHT+IEVG3G336WmBhvtPtrjSoYbrfPG9f0yBDcuNNv8Va58Y4lKbJL/RINEhKFkS8DMU1all+HtKA==
-X-Received: by 2002:a17:907:7f0b:b0:aab:dc3e:1c84 with SMTP id a640c23a62f3a-aac2b0a56b6mr5288197066b.17.1736242301740;
-        Tue, 07 Jan 2025 01:31:41 -0800 (PST)
+        bh=uVVIvwMJ1kFj7ARNI9PQB5xeCct+X8ALPUkf7yd8p6g=;
+        b=Q7L16J9Tucu1i7DQb7DLh8yT0wPY/X2IA2ZnUH5JuvgdlGBypTEeQLgl+60AH9ObrN
+         4p8DUTE05l8+2NNgKOheAqrsuUs4nziayrEIPF8X6pdpVSNRm0cDaboHTxdfL23sgTr9
+         FL2ORhHGM2DSghsS9wS57lg37LoK+6tNyY/671LBpFkSbEVgsid3IsSIj2+cYYAZoXQY
+         KBs2RgbzHyvUPXjhEgdejjdwnQvIND7osKXkAEXrUkc4amCGZeJRvdk7gUlbl0jWFqp+
+         ywnl+ZyDn2nGay3p8PEAjEZuKPvzvlf6bMCzRwBWQ7YfqvbEOlP8IOxQaH7h6xTuauon
+         xpgw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736242305; x=1736847105;
+        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
+         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uVVIvwMJ1kFj7ARNI9PQB5xeCct+X8ALPUkf7yd8p6g=;
+        b=pllXhJ1Sx1nF+Bp4I8it9ht9p+8QDQ6cKo37Fyt4YlMd089Fhlq3MNHwJ2YHf/X1tn
+         qOOvFRaJp4e4y8Q4E0jsr9w7VjSYYchCJH7q0/crZy+U2rBjmIR1W3kDolwoFGG0xPPd
+         9c1G5yd7qVGFHDZsGLTmeIOQXKNoQy9whX8F/O5rZJVzyocTEZPX+IiCVl+X0bPXutS3
+         9mfEMdvbXKbBnoPZ6DG/Uz2GsLZpkw1gmVODHrvcvSZn28kSzrVeiL9ehoYwc6O9OGev
+         BIxpfbMS3EA0NFk+vyfjBI/sqRD5MdTqNXi9Ha2jE40WA9okwy3PI6xC7ZUoaTvGwGK4
+         75XA==
+X-Forwarded-Encrypted: i=1; AJvYcCUglZu331my0Gf9B2bwbZayTP5RpWO7yqKVxSlWAz0LNGqD0Z/FPD4nLl1MJ/w/TtorzOyC5F3o0aLg@vger.kernel.org, AJvYcCV5KEg/mwO2yzD6jvRLLkJeEoN5R3CuNGKL5O3UeY4dAffefms4UgXaxareo6XgewEqeeGo3QF2cc0P4GSxkKII6nY=@vger.kernel.org, AJvYcCVn5biw57SIq917eAHMpUJtGRm4JFwIzp/VYRtMzwwF/njxIihcujhcG/BFLgwo+CQtjGTLQjYJ19f6JWleeQ==@vger.kernel.org, AJvYcCVqBLzyP03js2BEMpKlsbGOVWnml7nFHcPqAYsMd2Uwey42siuOLfYz1Aqv5z4s/FHXiCFD5egbIslibcYg@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQWQG09E/F7wEY31izqTsD0GOhqHPEeq5knUQE9TmO+SIYivTa
+	Eg2om4WwdG3OyS3fEtzT6ZoOIQleCHrL42H3lVDNSMO0myZLsDAd
+X-Gm-Gg: ASbGnctAY2vhu4UqiYS1sRdqvZ4Uvz2bM0/3edHna/DxuCPA9L+jC+1b63YAhV66xfZ
+	8IZfJKt+IuOsfNvb+qDHue7izQMP6E9h3MrxhWw4ZagZCgdVtaJZw4O/oQBIZDb7St3uh9aL6ZM
+	6rhfC1MCDe6IbWlbhNaS3lClepEwa0jaDVmtOyXq3+DmE63EfVIQxVXDQFtMHBIWSE9PaRK0ta3
+	EVC3vgQEpNdTD0023b48+ZBQYlnGjTUuB3KVYFb8HKxTn/xV6yd4YOgp1L9nF57tNxc+sJq1ACI
+	JOIiHGXb07BeHslsAzwL+KjTcw==
+X-Google-Smtp-Source: AGHT+IFxd3YBOxk4ntPc+MGfHTxmMyeBqIw3Ey/TIoViFJfaz0wCgI08UnQ4BfUpSjzeL2SymnOtSw==
+X-Received: by 2002:a50:cb83:0:b0:5d9:a55:810c with SMTP id 4fb4d7f45d1cf-5d90a55817emr12774693a12.5.1736242304417;
+        Tue, 07 Jan 2025 01:31:44 -0800 (PST)
 Received: from [127.0.1.1] (nat6-minsk-pool-46-53-210-232.telecom.by. [46.53.210.232])
-        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5d806feddfasm24976300a12.58.2025.01.07.01.31.38
+        by smtp.googlemail.com with ESMTPSA id 4fb4d7f45d1cf-5d806feddfasm24976300a12.58.2025.01.07.01.31.41
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 07 Jan 2025 01:31:40 -0800 (PST)
+        Tue, 07 Jan 2025 01:31:43 -0800 (PST)
 From: Dzmitry Sankouski <dsankouski@gmail.com>
-Subject: [PATCH v6 0/2] power: supply: max17042: cleanup and more features
-Date: Tue, 07 Jan 2025 12:31:29 +0300
-Message-Id: <20250107-b4-max17042-v6-0-3d0104ad5bc7@gmail.com>
+Date: Tue, 07 Jan 2025 12:31:30 +0300
+Subject: [PATCH v6 1/2] power: supply: max17042: make interrupt shared
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,11 +83,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-B4-Tracking: v=1; b=H4sIAHH0fGcC/33OTWrDMBAF4KsErasijf6srnqPksVIGiWCOg52E
- QnBd68cKLVd6PINfO/Ng000FprY2+HBRqplKsOlBftyYPGMlxPxklpmIEBLKToeNO/xJp3QwL0
- SNkdnMCOxJq4j5XJ7tn0cWz6X6WsY78/yKpfrT4/f9FTJBfcEQTgympx9P/VYPl/j0LOlp8Lab
- n+o0GwWpssOpQ0Y9latrNxZteyGiJRQA4o/u/qfXd1s56JN3geVVNpb82sB1NaaZkmTFt6BCpH
- Wdp7nb8tDV4yWAQAA
+Message-Id: <20250107-b4-max17042-v6-1-3d0104ad5bc7@gmail.com>
+References: <20250107-b4-max17042-v6-0-3d0104ad5bc7@gmail.com>
+In-Reply-To: <20250107-b4-max17042-v6-0-3d0104ad5bc7@gmail.com>
 To: Hans de Goede <hdegoede@redhat.com>, 
  Krzysztof Kozlowski <krzk@kernel.org>, 
  Marek Szyprowski <m.szyprowski@samsung.com>, 
@@ -103,76 +102,49 @@ Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
  linux-samsung-soc@vger.kernel.org, imx@lists.linux.dev, 
  linux-arm-msm@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>
 X-Mailer: b4 0.14.0
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1736242298; l=2494;
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736242298; l=1245;
  i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
- bh=wNxScV3swdqLS2kSQnTrWGwVBmGv+k7mN3nS5bD4pig=;
- b=1JtrugEyOnG9rTV9ipPmn7Dqi8oclWFU4f35ch2Nd9PNVtszt3ORa39p1Fv75jGVZL6bvFqTI
- CLw2ZitS2mYCt3iVQgrh6G9xfg2If1x/LAD7//OYAlHcpoBi2E9VM/P
+ bh=OsA1dEJLjjYZ2BIUPRu/DSyAQjTWyqdaRkl5xknsg7U=;
+ b=J0dWnGbnmiouoiodH/YY3fMMFLG4B8Gx/vWl0yc/WZJl8KQeP94ZetXT2O/N9KE1/fYvk0BB4
+ x1EvIJYj6moAFniEnk39u1QMcPvRqdk7vkeILsipJQhrNpB8Lnhv7v2
 X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
  pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-Fuelgauge blocks often are incorporated in bigger chip,
-which may use only 1 line for interrupts. Shared-irq
-handles that case by requesting irq as shared.
+Fuelgauge blocks often are incorporated in bigger chip, which may use
+only 1 line for interrupts. Make interrupt shared.
 
-Maxim PMICs may include fuel gauge with additional features, which is
-out of single Linux power supply driver scope.
-
-For example, in max77705 PMIC fuelgauge has additional registers,
-like IIN_REG, VSYS_REG, ISYS_REG. Those needed to measure PMIC input
-current, system voltage and current respectively. Those measurements
-cannot be bound to any of fuelgauge properties.
-
-The solution here add and option to use max17042 driver as a MFD
-sub device, thus allowing any additional functionality be implemented as
-another sub device. This will help to reduce code duplication in MFD
-fuel gauge drivers.
-
-Make max17042 interrupt shared, and add platform driver
-version.
-
+Reviewed-by: Hans de Goede <hdegoede@redhat.com>
+Reviewed-by: Krzysztof Kozlowski <krzk@kernel.org>
 Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 ---
 Changes in v6:
-- reformat commit messages
-- add trailers
-- Link to v5: https://lore.kernel.org/r/20241223-b4-max17042-v5-0-e4e409723bce@gmail.com
-
-Changes in v5:
-- platform version: use parent device of_node as current device.
-  This is because mfd driver matches fuel gauge node, and max17042
-  platform variant is intended to match a mfd subdevice.
-- fix platform version issues.
-- Link to v4: https://lore.kernel.org/r/20241108-b4-max17042-v4-0-87c6d99b3d3d@gmail.com
-
-Changes in v4:
-- review fixes.
-- Link to v3: https://lore.kernel.org/r/20241118-b4-max17042-v3-0-9bcaeda42a06@gmail.com
-
-Changes in v3:
-- pass dev pointer to probe
-- Link to v2: https://lore.kernel.org/r/20241108-b4-max17042-v2-0-f058f7a16bab@gmail.com
-
-Changes in v2:
-- drop NACKed commits
-- make shared interrupts unconditionally
-- rework descriptions
-- add platform driver version
-- Link to v1: https://lore.kernel.org/r/20241109-b4-max17042-v1-0-9e2b07e54e76@gmail.com
-
+- reformat commit message with vim 'gq' to wrap closer to 75 chars
 ---
-Dzmitry Sankouski (2):
-      power: supply: max17042: make interrupt shared
-      power: supply: max17042: add platform driver variant
+ drivers/power/supply/max17042_battery.c | 9 +--------
+ 1 file changed, 1 insertion(+), 8 deletions(-)
 
- drivers/power/supply/max17042_battery.c | 200 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++----------------------------------------------------------
- 1 file changed, 142 insertions(+), 58 deletions(-)
----
-base-commit: 7b4b9bf203da94fbeac75ed3116c84aa03e74578
-change-id: 20241108-b4-max17042-9306fc75afae
+diff --git a/drivers/power/supply/max17042_battery.c b/drivers/power/supply/max17042_battery.c
+index 496c3e1f2ee6..99bf6915aa23 100644
+--- a/drivers/power/supply/max17042_battery.c
++++ b/drivers/power/supply/max17042_battery.c
+@@ -1103,14 +1103,7 @@ static int max17042_probe(struct i2c_client *client)
+ 	}
+ 
+ 	if (client->irq) {
+-		unsigned int flags = IRQF_ONESHOT;
+-
+-		/*
+-		 * On ACPI systems the IRQ may be handled by ACPI-event code,
+-		 * so we need to share (if the ACPI code is willing to share).
+-		 */
+-		if (acpi_id)
+-			flags |= IRQF_SHARED | IRQF_PROBE_SHARED;
++		unsigned int flags = IRQF_ONESHOT | IRQF_SHARED | IRQF_PROBE_SHARED;
+ 
+ 		ret = devm_request_threaded_irq(&client->dev, client->irq,
+ 						NULL,
 
-Best regards,
 -- 
-Dzmitry Sankouski <dsankouski@gmail.com>
+2.39.5
 
 
