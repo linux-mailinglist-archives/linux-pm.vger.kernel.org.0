@@ -1,107 +1,140 @@
-Return-Path: <linux-pm+bounces-20060-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20061-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0177CA049F5
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 20:10:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8760A04B22
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 21:38:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73A4518881BA
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 19:10:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 97FDD16524E
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 20:38:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2658C1F4E38;
-	Tue,  7 Jan 2025 19:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28D54194A75;
+	Tue,  7 Jan 2025 20:38:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WQ6wiGvy"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="JDO6CzxH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f50.google.com (mail-io1-f50.google.com [209.85.166.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018631F470C
-	for <linux-pm@vger.kernel.org>; Tue,  7 Jan 2025 19:09:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41DF51F63F1
+	for <linux-pm@vger.kernel.org>; Tue,  7 Jan 2025 20:38:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736277000; cv=none; b=d+YXECTpIxC3gwAh+1Om7Mds6tEVLm9l7lt+GLdVcpjoKYgQScJi9Ey8afop3Z8Hk1v4IdpnyK2IlkH7K+PRYxoTf+59Z4hq6U49rjir7SF7wVUcNpWNFAyy0cFs5nCWICB0k2uZFjLJa6FquDQjJss8QoD5Je0uxgDQ3QLpkXk=
+	t=1736282327; cv=none; b=X5ith+bOKo4iRPIi65DvcwLYlPWJQiWypOHN5ynn62OiPU3oQqaqCtSCiWFBrTOUF/cf+jw8Zt8ZEtH4tJLscVcBT0NR0PmyOmjqyzaN+V1pwfhmPZb3DiERshtHoG5897lO9pyc4nQA87y/cw6WgbyOyWqj9ew8qT+q85FlWiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736277000; c=relaxed/simple;
-	bh=Yf2haJUFwDZ+lCJcbwEoQW+Q+h/XwQqCO+wx6ZW2EVs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uLCjR/w5Boy26ERxiSWaeBEmEyWG40xFXDPHMOOivbti+h3LrOojcq007pYelzmIeZPCUMVlnODGfT8GfT2WH+eYSRFiXppcj19mGvBUh0XVZeBHkPzC/baaYzynuB4cul60tjHTJ18Mv5OTnWxugeMM0ID5anahJTsL+hETqjY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WQ6wiGvy; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9B4B7C4CEE3
-	for <linux-pm@vger.kernel.org>; Tue,  7 Jan 2025 19:09:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736276999;
-	bh=Yf2haJUFwDZ+lCJcbwEoQW+Q+h/XwQqCO+wx6ZW2EVs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=WQ6wiGvykoc/d80XBgW3nCHFzw4WbwwxiJ8++8eZxcxSR/vbCBqNI4UwzhzdXQLdo
-	 rLuFfZcEarkACUViyx095qXDNkh/gSV5TLYGPo3ZV/vZR9d2f9LgMtfa3PdJEtsPtb
-	 Bl4cHD46UK8A2Ibzu0iI5qBES0F1dtnEn71zwXyFhrFRx8G5J/IfNeuymdrV6g0Lzm
-	 1+lFWieiEaKxjoQ1F+RggdFPLCFMJbeix/6q2y23yy+A+REIB2nwNhyCqss+azU1/y
-	 595SfwSodSqe5Ge4fOBDMTbSk9uecrf2gPYqj2oMnIH8iZEMtveJCBi8Ff8irEpRe0
-	 WmYtmNQq4Ht+w==
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3ebb4aae80dso6619702b6e.2
-        for <linux-pm@vger.kernel.org>; Tue, 07 Jan 2025 11:09:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW4jZF3djNptd6JhMZP5vi6IjlJXQSwkiLULM1gDa2GBku1E5h950yuawWjUZaTST4TSOE8VRLchQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya+IeUOOSLM9jOeoqhoFLobr2cM1+dEHx4BswkgSdoO7fHxgje
-	nF82BOWJdrVW88UlkG6anlrPGKZEU182fcFqVUuzH2HENYeUA9aSycuuFeeiO7dYZvGnpBAFN05
-	ScqZYpMsSB8fzRovoYVvqscMoLX0=
-X-Google-Smtp-Source: AGHT+IEsC19wjkk31RAubZkIUWoKB6vPyUvfqImleeICi44wb6SvGPdulY77av0XGMh0g2SNmpJt7NPQYu6C8ev4WBc=
-X-Received: by 2002:a05:6808:180d:b0:3eb:777c:184e with SMTP id
- 5614622812f47-3ef2ec252f7mr148056b6e.13.1736276998899; Tue, 07 Jan 2025
- 11:09:58 -0800 (PST)
+	s=arc-20240116; t=1736282327; c=relaxed/simple;
+	bh=e8WQ39Su6ky7skUv3PyuvKeIr5tlC26nKHLRUgnNraA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=LKcGT7QJw6/AGW/buwcWDbn5DtRAx4Ir5vK0oxfdhtqElnA/YJaz0XnSkMmdPIQ7Su12aSfV+LFUj/A5aukppm+cWc7KjlXXFoqBwzQYnlTVBnoQO59ebpp831MCpQgbaK2a05ScZQY7V2K7MIOV9YjQ/Xs/ZJdiQdq1r/rcqmk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=JDO6CzxH; arc=none smtp.client-ip=209.85.166.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f50.google.com with SMTP id ca18e2360f4ac-844e9b8b0b9so1250715839f.0
+        for <linux-pm@vger.kernel.org>; Tue, 07 Jan 2025 12:38:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1736282324; x=1736887124; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=Uzbso2+ca1pLZqt/93l4QqoXiGatRJPC5SsTzTNGAHI=;
+        b=JDO6CzxHd7Uu40+EFRtDfynvvtoiGClZr4WFDnmq5kRF8ThTTpxttSq23n4PgdrCWf
+         wYBp+S3Wsl0ozYoPt5SoUyfVzGidCnMqrLJaaUQaxK4IBLSPi3hGj1pYQ832pvTPhQ7Q
+         LYqFJq8o+1fapLbyD/K5Oc11N3tusOB3S3lOI=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736282324; x=1736887124;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Uzbso2+ca1pLZqt/93l4QqoXiGatRJPC5SsTzTNGAHI=;
+        b=GL2wgS+yDrI2OnfcV03WH/iMl1Tw/lAg9+Wo4mJKaDLi2b7/c7dDdu+1Z9E5CDX7Bb
+         IuW52QIoeOyNDB8p4h1J+TMwXG8lrqCepaDH2WbMRRoeasExP+tJtb9N9d4YIUi+wYlZ
+         aJ89P8xLfaklYftZlWwMuAasLZ7h5D4m0fg/y7D61eWB2Zb6d0ps0Te9SPiLkIkaJtm1
+         VLKSFJaFdL5m/sUDBDWTJSwjiTsIXaFWbUoKAvC8Q5C5O8GHUHkuizjJi8Q5YC6ijQpz
+         JhKvC9sUAIYdF9QkZPwvFd/6UyOcyz7eAdhj4ynZH7y8pWpPnZloWL9HTAf9uS582MfV
+         XqtA==
+X-Forwarded-Encrypted: i=1; AJvYcCWnLwZIrBngs+KF05xun/JZ+MXw92RbZi7Xsh8QU/plco7585tvpE/NhMBXDuD6D5e3zaqXyCveLQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwEEVmW5EMvisQxHYXKRB/3sAKDgOvYfEiqb17itTHAN6C3E85d
+	b6N5HQezHXl7R0whGnDNHpoX5DnnYD7cf8XJtJ07F8ukWpy4Cih0mr/4HcMQhqg=
+X-Gm-Gg: ASbGncty2LYWQY/DGDZp7RFHywHx0ApTmm+N000jT4NyoLu5l7NyudCw2IpiC3l02zZ
+	GbrEAty1wUqc7q1qOmy5YmX47fgK4yp5OAFUXA/YSAYdhS5dtxAYVpyZEncpVzXKkVFQjbK1DHQ
+	mSstCX/u+IsrIAw0ZhJK/Nil894MKksHtFZIdjoO4cJQFskOvkMJZsRRBZyx9X1SylTVocavIuF
+	CE9QoQQJiPLMzJTrMVSBaZmnr5izl5AH0TwGCy7nNzKBoMMC7bWlVngQipL5YHdCcse
+X-Google-Smtp-Source: AGHT+IHjFkhumWPxo4w0OFqZx0FKT5AXj10ENPl5LhQhojTdBUyruRJpYRD7p7bnN0WrZq9CT3z5fw==
+X-Received: by 2002:a05:6e02:1488:b0:3a7:a2c6:e6d1 with SMTP id e9e14a558f8ab-3ce3a93a83emr4414725ab.16.1736282324344;
+        Tue, 07 Jan 2025 12:38:44 -0800 (PST)
+Received: from [192.168.1.128] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3c0deccf34fsm103978225ab.30.2025.01.07.12.38.43
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 07 Jan 2025 12:38:43 -0800 (PST)
+Message-ID: <f727eb90-4ed9-4d8d-856c-2de526d97795@linuxfoundation.org>
+Date: Tue, 7 Jan 2025 13:38:42 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241224031809.950461-1-joe@pf.is.s.u-tokyo.ac.jp>
-In-Reply-To: <20241224031809.950461-1-joe@pf.is.s.u-tokyo.ac.jp>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 7 Jan 2025 20:09:48 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jsyGLh0Vn4soGZtptNfv+QS2FT2GZskNyTN_t7paUR_A@mail.gmail.com>
-X-Gm-Features: AbW1kvaNcdPMdqUgMmb8_UXdklRLGo8XdO_9vOPHI18Z5uvyESfOB5Sc4FLpXes
-Message-ID: <CAJZ5v0jsyGLh0Vn4soGZtptNfv+QS2FT2GZskNyTN_t7paUR_A@mail.gmail.com>
-Subject: Re: [PATCH] thermal: of: fix OF node leak in of_thermal_zone_find()
-To: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-Cc: rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
-	lukasz.luba@arm.com, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] pm: cpupower: Makefile: Fix cross compilation
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+ "Peng Fan (OSS)" <peng.fan@oss.nxp.com>, Thomas Renninger <trenn@suse.com>,
+ Shuah Khan <shuah@kernel.org>, "John B. Wyatt IV" <jwyatt@redhat.com>,
+ John Kacur <jkacur@redhat.com>, Peng Fan <peng.fan@nxp.com>,
+ "open list:CPU POWER MONITORING SUBSYSTEM" <linux-pm@vger.kernel.org>,
+ open list <linux-kernel@vger.kernel.org>,
+ Shuah Khan <skhan@linuxfoundation.org>
+References: <20241129012006.3068626-1-peng.fan@oss.nxp.com>
+ <ae5eba41-e2ae-48c4-b25d-daece4d329ca@broadcom.com>
+ <16615e97-268e-4daf-a991-6cad7803ac16@linuxfoundation.org>
+ <3b55d23b-aa37-4187-9649-aef663ee1de8@broadcom.com>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <3b55d23b-aa37-4187-9649-aef663ee1de8@broadcom.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Tue, Dec 24, 2024 at 4:18=E2=80=AFAM Joe Hattori <joe@pf.is.s.u-tokyo.ac=
-.jp> wrote:
->
-> of_thermal_zone_find() calls of_parse_phandle_with_args(), but does not
-> release the OF node reference obtained by it. Therefore, add a
-> of_node_put() call when the call is successful.
->
-> Fixes: 3fd6d6e2b4e8 ("thermal/of: Rework the thermal device tree initiali=
-zation")
-> Signed-off-by: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-> ---
->  drivers/thermal/thermal_of.c | 1 +
->  1 file changed, 1 insertion(+)
->
-> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
-> index fab11b98ca49..5ab4ce4daaeb 100644
-> --- a/drivers/thermal/thermal_of.c
-> +++ b/drivers/thermal/thermal_of.c
-> @@ -160,6 +160,7 @@ static struct device_node *of_thermal_zone_find(struc=
-t device_node *sensor, int
->                                 return ERR_PTR(ret);
->                         }
->
-> +                       of_node_put(sensor_specs.np);
->                         if ((sensor =3D=3D sensor_specs.np) && id =3D=3D =
-(sensor_specs.args_count ?
->                                                                   sensor_=
-specs.args[0] : 0)) {
->                                 pr_debug("sensor %pOFn id=3D%d belongs to=
- %pOFn\n", sensor, id, child);
-> --
+On 1/7/25 11:56, Florian Fainelli wrote:
+> On 12/9/24 16:58, Shuah Khan wrote:
+>> On 12/2/24 10:12, Florian Fainelli wrote:
+>>> On 11/28/24 17:20, Peng Fan (OSS) wrote:
+>>>> From: Peng Fan <peng.fan@nxp.com>
+>>>>
+>>>> After commit f79473ed9220 ("pm: cpupower: Makefile: Allow overriding
+>>>> cross-compiling env params") we would fail to cross compile cpupower in
+>>>> buildroot which uses the recipe at [1] where only the CROSS variable is
+>>>> being set.
+>>>>
+>>>> The issue here is the use of the lazy evaluation for all variables: CC,
+>>>> LD, AR, STRIP, RANLIB, rather than just CROSS.
+>>>>
+>>>> [1]:
+>>>> https://git.buildroot.net/buildroot/tree/package/linux-tools/linux- tool-cpupower.mk.in
+>>>>
+>>>> Fixes: f79473ed9220 ("pm: cpupower: Makefile: Allow overriding cross- compiling env params")
+>>>> Reported-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>>>> Closes: https://lore.kernel.org/all/2bbabd2c-24ef-493c- a199-594e5dada3da@broadcom.com/
+>>>> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+>>>
+>>> Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+>>>
+>>> Thanks!
+>>
+>> Thank you. Applied to linux-cpupower for my next full request to
+>> Rafael.
+> 
+> Since this is a bug fix, any chance you can fast track that change so we can keep on building that tool in various environments?
+> 
 
-Applied as 6.13-rc material, thanks!
+I am planning to send pull request to Rafael later on today.
+It will be available in linux-next once Rafael pulls it in.
+
+I don't think if it can be fast tracked with the vacations
+and holidays for the past 3 weeks or so. The best I can do
+is getting this into linux-next
+
+thanks,
+-- Shuah
+
 
