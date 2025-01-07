@@ -1,324 +1,199 @@
-Return-Path: <linux-pm+bounces-20064-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20065-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6B33A04BD0
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 22:34:17 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 359B3A04BD6
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 22:37:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4567C3A5AE7
-	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 21:34:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D01C31880931
+	for <lists+linux-pm@lfdr.de>; Tue,  7 Jan 2025 21:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FD031F708D;
-	Tue,  7 Jan 2025 21:33:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83F691F3D23;
+	Tue,  7 Jan 2025 21:37:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b="eqsRnceJ"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="LQtIRmKv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bedivere.hansenpartnership.com (bedivere.hansenpartnership.com [104.223.66.194])
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11on2055.outbound.protection.outlook.com [40.107.236.55])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4061F76C4;
-	Tue,  7 Jan 2025 21:33:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=104.223.66.194
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736285605; cv=none; b=ddO7ULcnq+iOam8YR1bcuxSBCxeodymnxDgXdWfap3+jhXIVctbLrnmFI4FzBATQ/sRTal39efLBOzmg160WqCPOmDCutpJ3GgAONlyGKBBuL05qSKjhGR4aYdXPsVGKSjvWhpb0BlUAyPah3omVarKKHgyEZPLmC/A5iztjOOE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736285605; c=relaxed/simple;
-	bh=a8Mrn17PRNJn6hSgrx3WnNcaM6pjfNfZ9l7IUOAETb0=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=nXLNeWFE7XH9+xRaDs9vnkSIGmDxWZlFmG9+l96Bz9/2Zwvy6KPwJPLOt1xt2NVOdyhBGWYtod3nUOiFF2oQFkfrSaxmX55D4MPMX2cNmveLeV34QDryluNSvC+qT+1igXKIkbBcytOCScnZYihNAb4vYFFpIJvkbUS9aTefqCg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com; spf=pass smtp.mailfrom=HansenPartnership.com; dkim=pass (1024-bit key) header.d=hansenpartnership.com header.i=@hansenpartnership.com header.b=eqsRnceJ; arc=none smtp.client-ip=104.223.66.194
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=HansenPartnership.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=HansenPartnership.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-	d=hansenpartnership.com; s=20151216; t=1736285602;
-	bh=a8Mrn17PRNJn6hSgrx3WnNcaM6pjfNfZ9l7IUOAETb0=;
-	h=From:To:Subject:Date:Message-Id:In-Reply-To:References:From;
-	b=eqsRnceJwmY4fNSgS0X6URVGL/90QYqUd9iGGKMyUguPCKz//A2QHH/1EPXQPt2G+
-	 +ATM2M5SKn+Mqrz2B8yCaIV3Yr8NKV37Uebs1c49vX9F+OlCt6tc1/ndt8g/bGHA8M
-	 Qj+6Tsr36xX4FHle0lhvzkWZ+T8je2GLsPMzgQ4U=
-Received: from localhost (localhost [127.0.0.1])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 14EC11286BD6;
-	Tue, 07 Jan 2025 16:33:22 -0500 (EST)
-Received: from bedivere.hansenpartnership.com ([127.0.0.1])
- by localhost (bedivere.hansenpartnership.com [127.0.0.1]) (amavis, port 10024)
- with ESMTP id eSW1rxi7RHWk; Tue,  7 Jan 2025 16:33:21 -0500 (EST)
-Received: from lingrow.int.hansenpartnership.com (unknown [153.66.160.227])
-	by bedivere.hansenpartnership.com (Postfix) with ESMTP id 396DB1286B13;
-	Tue, 07 Jan 2025 16:33:21 -0500 (EST)
-From: James Bottomley <James.Bottomley@HansenPartnership.com>
-To: linux-fsdevel@vger.kernel.org,
-	linux-efi@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: Ard Biesheuvel <ardb@kernel.org>,
-	Jeremy Kerr <jk@ozlabs.org>,
-	Christian Brauner <brauner@kernel.org>,
-	Al Viro <viro@zeniv.linux.org.uk>,
-	Lennart Poettering <mzxreary@0pointer.de>
-Subject: [PATCH 2/2] efivarfs: add variable resync after hibernation
-Date: Tue,  7 Jan 2025 13:31:29 -0800
-Message-Id: <20250107213129.28454-3-James.Bottomley@HansenPartnership.com>
-X-Mailer: git-send-email 2.35.3
-In-Reply-To: <20250107213129.28454-1-James.Bottomley@HansenPartnership.com>
-References: <20250107213129.28454-1-James.Bottomley@HansenPartnership.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3DD51E0084
+	for <linux-pm@vger.kernel.org>; Tue,  7 Jan 2025 21:37:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.236.55
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1736285862; cv=fail; b=BwrtMeKrAUswatrEytK4Y+RaWgSptbzFS6+cbvyByfeZaPVrLkR0ZDKcfGlrTFYtM6/So09v8STtwy2Y5zpF/97N1ML2i3hldncg1FSpXYf62shyIjroPuwUxNKGpp8It1DeMWichJ19HIXYhFQMA3VpHr3xCGtXvvaZplnZgCA=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1736285862; c=relaxed/simple;
+	bh=IeLpO4zsu+QaNFco/uVjFgmnf3E2ERDp/+uzCipew7s=;
+	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=PbRqUXWbcPABASowon+0RqUhifugq51hUTMv+QZZAElZX7lRDuOJEIBr2FabWkiwkIUk6kxLWZmhx3c7vyFvnZ5fXxoteG0sxxdSSZXA+0mf9apYn+n+HqO2PLj7kl533UnegNLx8oloYDOerSyoJt5nd9vvjwG/P5Y5VTDYyWU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=LQtIRmKv; arc=fail smtp.client-ip=40.107.236.55
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=t1eV9Mf5Di7NvHEeFPqw5q8nWuXZ6SguGmEqJXgSLBRxL60gs7iqMeWG2pSa0AcgTjKXdCvz6ArB7U9uiIQXk0/H6u7Yq7xoH9nYs2O+IJGdCczRXXIqZTx08K/YEa9p235U1s9YRLMjV/c0sETrOFcmXtILVSoXRRaVwhIZhc4Bqc5Eumovm5TCpG0hbiF9kH/zvqONUdPI5oPX/MjhlIicR+NqzAz63I4TVPwFMlgZo6pJz550Hm5UZGrWpO8zAp+73JD37ix6i5Uy6LtcngXAKoj7FjRySe3Yq9yKIZVBptM8DrBDP7h8AtaHuq1sKnn4pKupB6KhXixNfqrm/w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=ZQJxAclhJjJNeVg28wHaq9uicLDzplAgqHYpoVJ0WZY=;
+ b=I19n3vFQMuG6vbTBkklf2zW1VUk8J6lCY5JhMC3GsGg+rveEZuqn0I+5vqxX/9mwuHcEoZfVeY0Z4Hs9gKZnOzWVL5pca9y4Dm5ceF3xr82wwvufVqv0mpllYC1f8VV1pxjr8NcJkyKYCVhVY1JX1YCvoho/W0SISQot12kpvH0c+JtJM4cKpX3ePyIji4PU2cBEBv+ZQwOb1RktKtGWVRQ2HDJhjX4ExKNHLsPt8QGvVM5X2RRY1QJUMm+3py5vzVtr7ynQKAURCgSwk2ZANYhRAAMgZ8mNom0vqvV0vILvNxZ4dTUPzSI1Cyznwr6M3M9vejZqTsW6oKMNjK4JCQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=ZQJxAclhJjJNeVg28wHaq9uicLDzplAgqHYpoVJ0WZY=;
+ b=LQtIRmKvvU7G0yDiCZCNFPhFWXojqay+WejQWcu+Buxq6oKhnpYn6oTLM4AXaR62fl1YOQsvCa+DHPzXJr2c6u6dBzWcq+JAK5x/xsFcjkyHShRyj4W5RLEXyajWuFNRyVmcJPyY23OrEUjAtAsKlm8Kp+8gzwG8IN/aUHJJtEU=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from CY5PR12MB6108.namprd12.prod.outlook.com (2603:10b6:930:27::15)
+ by SN7PR12MB7201.namprd12.prod.outlook.com (2603:10b6:806:2a8::22) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8335.10; Tue, 7 Jan
+ 2025 21:37:38 +0000
+Received: from CY5PR12MB6108.namprd12.prod.outlook.com
+ ([fe80::46e5:5b51:72c3:3754]) by CY5PR12MB6108.namprd12.prod.outlook.com
+ ([fe80::46e5:5b51:72c3:3754%6]) with mapi id 15.20.8293.000; Tue, 7 Jan 2025
+ 21:37:38 +0000
+Message-ID: <913e9c94-4e3b-4c1e-b626-4f2c64068bd0@amd.com>
+Date: Tue, 7 Jan 2025 15:37:37 -0600
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+From: Mario Limonciello <mario.limonciello@amd.com>
+Subject: [GIT PULL] amd-pstate-6.14 content 1/7/25
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SA0PR11CA0160.namprd11.prod.outlook.com
+ (2603:10b6:806:1bb::15) To CY5PR12MB6108.namprd12.prod.outlook.com
+ (2603:10b6:930:27::15)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY5PR12MB6108:EE_|SN7PR12MB7201:EE_
+X-MS-Office365-Filtering-Correlation-Id: d4b86858-34b9-486f-c9ec-08dd2f6381d9
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|1800799024|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?YlBpamVpUDB2ckdWbEFRd1ZkbjFabUtmUTNDeFZzYWRxTGtENGhnejlDTVQy?=
+ =?utf-8?B?em5kc3ZCT2ZTaTFhMnh2eGpFRmE5LzNJbm8zZFMrSXhOemNmbjF5bVczalpV?=
+ =?utf-8?B?bzVPQUdjdy9Eby93WWl2d0FKNzJySDMwaSt1eEl6OFNOa09WMkE5Ti9aWDB3?=
+ =?utf-8?B?SDU0cUxSc0FERUtIY2RWZUtSK05DajFSMnkySkNLL2ZaVS9FbExTMVVvQlFp?=
+ =?utf-8?B?d3U4Q3NaZ0NSQVY1RUtPY1IyNUptd2s1R1NWN0Y4R2xiT2k2ckVlS2ZmdG9Y?=
+ =?utf-8?B?NVA5YXFNREpwTURpeXd3eG5EMEhEM1JNZkRUR1VJbW9MV3ViWnovRVpoeFN0?=
+ =?utf-8?B?amt2dW1BakpNOERMTVJ4M0lhWEVZd2FKL29hbnpYdy9wc1Z5aFhrdFNkWklp?=
+ =?utf-8?B?bXg3VkZQRENsaTVIT2dmRjRoSFFndVhDMGVNNjg3bi8renVORElhYnI0RU5l?=
+ =?utf-8?B?N0FBSXVuTUs0WXVYZkVrYitWMURHUUQ5anNSNENkMGg5T2dDZ29YaE5DWG1J?=
+ =?utf-8?B?eXgrSlprSlJFVVVTZkpqWW1CZHRRb1V5ellGcFVVeE9VRWFpR09hUGpNdFJk?=
+ =?utf-8?B?SCt6WXhvaFZuNHhSckVmMmltbHY3clJEdEVLdGo3OVRlQlFOZW9yZzl6WFJ4?=
+ =?utf-8?B?WWVLR3c5OEdUanBWYVVWN3J0Mm85UmJobGx0SEkxVHo2elNuTHRDTGZ1N2pO?=
+ =?utf-8?B?clo3alEvdUZHK2NkWFJLOTcvYnlkbXEzZk9lWjlEdXVjSTVhcEljdU0za3RL?=
+ =?utf-8?B?RmlIa2lCem1YVXZ3KzUrak9ac00wb05QVW9yOWZjeFNWTlFXQ29uL3JOQlRw?=
+ =?utf-8?B?b0lpdnJUTDh4ck9qSThRZEl2QXl5dkcvWXIxWkJOQ0k5a25VS3F5bTRoenV1?=
+ =?utf-8?B?V1B5YTlyZi9XeTdpRzRzSkM4NUpoQWxtSE9zcDMzWEIyQjJQTFBLS1JJcW1y?=
+ =?utf-8?B?emppM2xxcWhVZ094dXhwMFQ4S29ReFdLanFqVGhLbnRRdTFOUXo1Und0OHMw?=
+ =?utf-8?B?STN3Y055S1dyU01CNmhSS0FwVTU4Q3Qzdk5MWCttMGUzTkMvR0pFSjU4VGRs?=
+ =?utf-8?B?dUJ2OEREN25JcFhCRE96cHJLUjlHcjJHUlMxUlFTUThXcjJEMVJuVWhXQTMw?=
+ =?utf-8?B?Y2xUZU85eE5wTnFwUWxIbENmRUxtaytKYkpXcTdySklSaDNKOVoxSFJBTUw0?=
+ =?utf-8?B?NitweEdKSGVacG1xdTlHejhnY29QaTBJMjU5THlrVDZQNmtBRXZKY3BxU0ZV?=
+ =?utf-8?B?Y21Uc3VuUFhjbDNlTzY1emM4aitVVkF0d25hVnJDZTV2WXFPVExuVmtVUm8v?=
+ =?utf-8?B?bHgyUVhVK05VSTVKYTQ2UVFyWHpYbmFFQUZKREhtdXZCUkI3Wmg5UEhycE11?=
+ =?utf-8?B?ZTdSL0J5Tk1VeWFhenh2SmpPRmhpcVVDV3RVek80bmVtU1dDb1hZUEN3UjB0?=
+ =?utf-8?B?MllsTjNFclRMNTN5aldxNTJ2LzNNNW1Jd2dpWDEyYUhqSVl0MTg1bFhoZGFZ?=
+ =?utf-8?B?T2JXZ1UrWXAybFdlcHBBNVU2bGNRR3ZyUnlkb3hpanJDd1hSQnUyemYxemRr?=
+ =?utf-8?B?cTd0OHRwTDB4d3hIYkI2ME1aR0l4YlcvV1NaZEhKNzdPWVRQVk1jV1MzMXJV?=
+ =?utf-8?B?aFM0REZGQ2NIVHJFdlNsZE8vSlMyOUpERUxkZE9JQkgxNEdiU0xOcU5zTlZ1?=
+ =?utf-8?B?eWc2ejNTamhaaEtHYXlIWGN6cjBoL1phUi9LZ2t0c1NEQndGTG50bDZiOGVF?=
+ =?utf-8?B?UWtCMUlaOUJEUk90MnMxRFltcEt1RlVtM0xWUktMK2NZQnJIYUw2aXFTOHBF?=
+ =?utf-8?B?NDJPcWl4M2VoL2doWVJzQT09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CY5PR12MB6108.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?Z1lsYVRXTjd0eHNCUXE4bkQ5a3ZDcUttWkVSeWdSS0RHeml0b1ZIREoyUE13?=
+ =?utf-8?B?WHdsY1REVnJwTGIvMVBhUnQ4U2h4QmMzTFFuTWxHaXU4S1pUcDhjM29lNnhs?=
+ =?utf-8?B?czRRcTNVb1JsV3EyM1BHcUIwTkcyL29POUVKTVY4QU1tL3AyZ0RXaDVUcnBz?=
+ =?utf-8?B?TFB5czZZS3JjMDFoSkJVVjhZNTdoRTk0WWJ3TkhLWU1ISGpPWTFDV253YzNI?=
+ =?utf-8?B?NERhNzZjSnkrbWZrSkJxVU5WVnlZMDB6SVBJWEJjeU1vNTlibUZncE8vU2hp?=
+ =?utf-8?B?cWhuai96WUNoL2c2b3o0YlZYK2IrWnhwY2lURGNhYUFndWljWDlFbGFOSXRE?=
+ =?utf-8?B?T0hFQjRBSDZYVjhmZjFhTGZNSUVYbFBVQXlNK25FcVVMa0FUWUt3amVCc0JL?=
+ =?utf-8?B?dElPRDhQMHZNYlJ1dEIwbHJMdTBmKzhJMFhPOHV1Mk12bTdWL1lWT3MyRito?=
+ =?utf-8?B?K0JsbkgrZzZPWmtUMkNqckFoTHAwZ043WUxhbkRLa0JXSWFGZTV2TCtnYU0v?=
+ =?utf-8?B?dmxDWENZTGRHQ3ZGWUVkaFpPWWhUVkwvREZMNmNFblR3ZFY3R3JnNFVwNzl3?=
+ =?utf-8?B?aWt2cE1maXpMclN1TVlzK1V3cEJOSG1LMG1OdHZ6T0tBOE5HU2FwaXdTQUZ6?=
+ =?utf-8?B?RkdQMlMvTEhTeVhac1dsVG1YTjBFQnpnQnFNQm5seG1hcHVody9ta1N2eGhy?=
+ =?utf-8?B?T1pMNUtSTlovUkxaMmY5ZkJzUFVJTjRGZjl0UVNETWw1MUxnK0dqaWpqeUcx?=
+ =?utf-8?B?Y25tYVhCdmV3dlF2eCtqS1VvSGhGNlcvYVZQdXJueER4UUlNMTB0bm84K0Q2?=
+ =?utf-8?B?ZkIycHF1b3B2Y3BDVFJaaDRNbXFzM2g0QW9pUmhmemNtWVpFMThOOTBGZDdF?=
+ =?utf-8?B?WUFaR3BxMFJmcmpqenB4d3FQTERLQlkvdERPSnowd3NOT3ppL21VdlBhME5m?=
+ =?utf-8?B?anRmcXpXbEhUT0pDeWs5MER0QmRlQk9temcrTGNaN0RuQUQzYjBwTDBGQ3dh?=
+ =?utf-8?B?U3N6MWcydG5jT2s2bW9ybHZ3LzI0MjFpZm16Q005V0drOTJvSitUZGRNV2pE?=
+ =?utf-8?B?MFg2cGVDT0U2Wnk2aHdpTnVBMzVLMFArNjlZbzJDajdWQjJ0RTZ1OVFYZzU2?=
+ =?utf-8?B?MEZCbjFGMjVxTnhWaDk1d3pUMU5aNkpJTWhXemIxQlp4TmZvZjcvOGlKcWtZ?=
+ =?utf-8?B?NHVZK3h5LzE4TEJKM0kzVWdyK05TSXFOTDFvZEYyWVE1USs0RktLUmtaMHg4?=
+ =?utf-8?B?eC9EMVdiRmJRQVVNdklXbFU4dWhBU3ArZnNCOUZlemZqWUJPbkcwSnprODJn?=
+ =?utf-8?B?VkdOL1R6VGZHMjFJM1h6TlB5Q0NhOG9IT0Jzbmd1akhGZFZaaVZPS2FhUlhW?=
+ =?utf-8?B?OHM4bVgyTGswYW41UWZkRytZRy9Rc09qY3J3elNrald6UlpCWVkyZXpuQVZK?=
+ =?utf-8?B?OG9zUjV6YzdMR25WU3NjUGo5VThUMWZveWJMTHd1OFQzWXl5QysrWWRWRkI3?=
+ =?utf-8?B?ZjVPeTYwZlNqcmdsNVBsQWhBS09DOUplYWJ0eHV4OVN3N1lOaFFPMFZERmtX?=
+ =?utf-8?B?TEY1U0pSY0tZaktJSENKV0MzczV1MlhtVVJoZEY1Ky9pWXlEeXpIaXVCMVFY?=
+ =?utf-8?B?b3VZQUxsemh3SjMrek1Pci81cnl1MUsvSGF1bExuQ1BCUzZmS0lhajFRZGR3?=
+ =?utf-8?B?clhuSmZreVVDajI5U2ZjOEFGUm9jajNxRnZpQzJqMmdGSC91THkyZ0VtbVlE?=
+ =?utf-8?B?bHhtaktrRVlaZTI4YldMc1dueFJiVXkzeXZnbU1XbmZma0xIMTBEOHM0RGx2?=
+ =?utf-8?B?bVlvd201dUk4TFk1aGhBM0RSbFBRZVJNK2xvRWtJelE1SDI5TklZdFVONnVJ?=
+ =?utf-8?B?cG5uS0FNVVlEN29SL0xhRCt3UGZ1QzU1ME5jdmdRNExETmR1c3pwL21YdWIr?=
+ =?utf-8?B?dExFNWZ5bjdNWTkyZ1RSaUtXMjRXakRidWpiUDlVYW8yWmxCTXdGSWpKS2k5?=
+ =?utf-8?B?Z2J3RVlVTE5SZ3d4Mktpa3FjYlBxNktJUHJRN1pIeUlsa2Q2dHBhTnVTYmtx?=
+ =?utf-8?B?ZjB0ZnhNMitmZHEvd0FSRitQb3BkN3hSMHNFUENIL3Z3d2lrMk5MT1QrSHNn?=
+ =?utf-8?Q?12LoiPGX0/nJORhJl2U1uYRIg?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: d4b86858-34b9-486f-c9ec-08dd2f6381d9
+X-MS-Exchange-CrossTenant-AuthSource: CY5PR12MB6108.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 07 Jan 2025 21:37:38.4331
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: dyib3N3vqV9/06my6Yxtfqbn11DpsBJzvradm6aYY0xDXMACO/QvtAlwqjZIk2GO+pNXmkVNZd1K5wndNWXf0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB7201
 
-Hibernation allows other OSs to boot and thus the variable state might
-be altered by the time the hibernation image is resumed.  Resync the
-variable state by looping over all the dentries and update the size
-(in case of alteration) delete any which no-longer exist.  Finally,
-loop over all efi variables creating any which don't have
-corresponding dentries.
+Hello,
 
-Signed-off-by: James Bottomley <James.Bottomley@HansenPartnership.com>
----
- fs/efivarfs/internal.h |   3 +-
- fs/efivarfs/super.c    | 151 ++++++++++++++++++++++++++++++++++++++++-
- fs/efivarfs/vars.c     |   5 +-
- 3 files changed, 155 insertions(+), 4 deletions(-)
+The following changes since commit 95fad7fb58cfaa2a295aa54a1f001a16b9324963:
 
-diff --git a/fs/efivarfs/internal.h b/fs/efivarfs/internal.h
-index 32b83f644798..48ab75d69b26 100644
---- a/fs/efivarfs/internal.h
-+++ b/fs/efivarfs/internal.h
-@@ -17,6 +17,7 @@ struct efivarfs_fs_info {
- 	struct efivarfs_mount_opts mount_opts;
- 	struct super_block *sb;
- 	struct notifier_block nb;
-+	struct notifier_block pm_nb;
- };
- 
- struct efi_variable {
-@@ -30,7 +31,7 @@ struct efivar_entry {
- };
- 
- int efivar_init(int (*func)(efi_char16_t *, efi_guid_t, unsigned long, void *),
--		void *data);
-+		void *data, bool duplicate_check);
- 
- int efivar_entry_delete(struct efivar_entry *entry);
- 
-diff --git a/fs/efivarfs/super.c b/fs/efivarfs/super.c
-index 2523030caeda..961264f628dc 100644
---- a/fs/efivarfs/super.c
-+++ b/fs/efivarfs/super.c
-@@ -13,6 +13,7 @@
- #include <linux/pagemap.h>
- #include <linux/ucs2_string.h>
- #include <linux/slab.h>
-+#include <linux/suspend.h>
- #include <linux/magic.h>
- #include <linux/statfs.h>
- #include <linux/notifier.h>
-@@ -356,7 +357,7 @@ static int efivarfs_fill_super(struct super_block *sb, struct fs_context *fc)
- 	if (err)
- 		return err;
- 
--	return efivar_init(efivarfs_callback, sb);
-+	return efivar_init(efivarfs_callback, sb, true);
- }
- 
- static int efivarfs_get_tree(struct fs_context *fc)
-@@ -380,6 +381,148 @@ static const struct fs_context_operations efivarfs_context_ops = {
- 	.reconfigure	= efivarfs_reconfigure,
- };
- 
-+struct efivarfs_ctx {
-+	struct dir_context ctx;
-+	struct super_block *sb;
-+	struct dentry *dentry;
-+};
-+
-+static bool efivarfs_actor(struct dir_context *ctx, const char *name, int len,
-+			   loff_t offset, u64 ino, unsigned mode)
-+{
-+	unsigned long size;
-+	struct efivarfs_ctx *ectx = container_of(ctx, struct efivarfs_ctx, ctx);
-+	struct qstr qstr = { .name = name, .len = len };
-+	struct dentry *dentry = d_hash_and_lookup(ectx->sb->s_root, &qstr);
-+	struct inode *inode;
-+	struct efivar_entry *entry;
-+	int err;
-+
-+	if (IS_ERR_OR_NULL(dentry))
-+		return true;
-+
-+	inode = d_inode(dentry);
-+	entry = inode->i_private;
-+
-+	err = efivar_entry_size(entry, &size);
-+	size += sizeof(__u32);	/* attributes */
-+	if (err)
-+		size = 0;
-+
-+	inode_lock(inode);
-+	i_size_write(inode, size);
-+	inode_unlock(inode);
-+
-+	if (!size) {
-+		ectx->dentry = dentry;
-+		return false;
-+	}
-+
-+	dput(dentry);
-+
-+	return true;
-+}
-+
-+static int efivarfs_check_missing(efi_char16_t *name16, efi_guid_t vendor,
-+				  unsigned long name_size, void *data)
-+{
-+	char *name;
-+	struct super_block *sb = data;
-+	struct dentry *dentry;
-+	struct qstr qstr;
-+	int err;
-+
-+	if (guid_equal(&vendor, &LINUX_EFI_RANDOM_SEED_TABLE_GUID))
-+		return 0;
-+
-+	name = efivar_get_utf8name(name16, &vendor);
-+	if (!name)
-+		return -ENOMEM;
-+
-+	qstr.name = name;
-+	qstr.len = strlen(name);
-+	dentry = d_hash_and_lookup(sb->s_root, &qstr);
-+	if (IS_ERR(dentry)) {
-+		err = PTR_ERR(dentry);
-+		goto out;
-+	}
-+
-+	if (!dentry) {
-+		/* found missing entry */
-+		pr_info("efivarfs: creating variable %s\n", name);
-+		return efivarfs_create_dentry(sb, name16, name_size, &vendor, name);
-+	}
-+
-+	dput(dentry);
-+	err = 0;
-+
-+ out:
-+	kfree(name);
-+
-+	return err;
-+}
-+
-+static int efivarfs_pm_notify(struct notifier_block *nb, unsigned long action,
-+			      void *ptr)
-+{
-+	struct efivarfs_fs_info *sfi = container_of(nb, struct efivarfs_fs_info,
-+						    pm_nb);
-+	struct path path = { .mnt = NULL, .dentry = sfi->sb->s_root, };
-+	struct efivarfs_ctx ectx = {
-+		.ctx = {
-+			.actor	= efivarfs_actor,
-+		},
-+		.sb = sfi->sb,
-+	};
-+	struct file *file;
-+	static bool rescan_done = true;
-+
-+	if (action == PM_HIBERNATION_PREPARE) {
-+		rescan_done = false;
-+		return NOTIFY_OK;
-+	} else if (action != PM_POST_HIBERNATION) {
-+		return NOTIFY_DONE;
-+	}
-+
-+	if (rescan_done)
-+		return NOTIFY_DONE;
-+
-+	pr_info("efivarfs: resyncing variable state\n");
-+
-+	/* O_NOATIME is required to prevent oops on NULL mnt */
-+	file = kernel_file_open(&path, O_RDONLY | O_DIRECTORY | O_NOATIME,
-+				current_cred());
-+	if (!file)
-+		return NOTIFY_DONE;
-+
-+	rescan_done = true;
-+
-+	/*
-+	 * First loop over the directory and verify each entry exists,
-+	 * removing it if it doesn't
-+	 */
-+	file->f_pos = 2;	/* skip . and .. */
-+	do {
-+		ectx.dentry = NULL;
-+		iterate_dir(file, &ectx.ctx);
-+		if (ectx.dentry) {
-+			pr_info("efivarfs: removing variable %pd\n",
-+				ectx.dentry);
-+			simple_recursive_removal(ectx.dentry, NULL);
-+			dput(ectx.dentry);
-+		}
-+	} while (ectx.dentry);
-+	fput(file);
-+
-+	/*
-+	 * then loop over variables, creating them if there's no matching
-+	 * dentry
-+	 */
-+	efivar_init(efivarfs_check_missing, sfi->sb, false);
-+
-+	return NOTIFY_OK;
-+}
-+
- static int efivarfs_init_fs_context(struct fs_context *fc)
- {
- 	struct efivarfs_fs_info *sfi;
-@@ -396,6 +539,11 @@ static int efivarfs_init_fs_context(struct fs_context *fc)
- 
- 	fc->s_fs_info = sfi;
- 	fc->ops = &efivarfs_context_ops;
-+
-+	sfi->pm_nb.notifier_call = efivarfs_pm_notify;
-+	sfi->pm_nb.priority = 0;
-+	register_pm_notifier(&sfi->pm_nb);
-+
- 	return 0;
- }
- 
-@@ -405,6 +553,7 @@ static void efivarfs_kill_sb(struct super_block *sb)
- 
- 	blocking_notifier_chain_unregister(&efivar_ops_nh, &sfi->nb);
- 	kill_litter_super(sb);
-+	unregister_pm_notifier(&sfi->pm_nb);
- 
- 	kfree(sfi);
- }
-diff --git a/fs/efivarfs/vars.c b/fs/efivarfs/vars.c
-index d0beecbf9441..d720d780648b 100644
---- a/fs/efivarfs/vars.c
-+++ b/fs/efivarfs/vars.c
-@@ -371,7 +371,7 @@ static void dup_variable_bug(efi_char16_t *str16, efi_guid_t *vendor_guid,
-  * Returns 0 on success, or a kernel error code on failure.
-  */
- int efivar_init(int (*func)(efi_char16_t *, efi_guid_t, unsigned long, void *),
--		void *data)
-+		void *data, bool duplicate_check)
- {
- 	unsigned long variable_name_size = 512;
- 	efi_char16_t *variable_name;
-@@ -415,7 +415,8 @@ int efivar_init(int (*func)(efi_char16_t *, efi_guid_t, unsigned long, void *),
- 			 * we'll ever see a different variable name,
- 			 * and may end up looping here forever.
- 			 */
--			if (efivarfs_variable_is_present(variable_name,
-+			if (duplicate_check &&
-+			    efivarfs_variable_is_present(variable_name,
- 							 &vendor_guid, data)) {
- 				dup_variable_bug(variable_name, &vendor_guid,
- 						 variable_name_size);
--- 
-2.35.3
+   cpufreq/amd-pstate: Drop boost_state variable (2024-12-11 10:44:53 -0600)
 
+are available in the Git repository at:
+
+  
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git 
+tags/amd-pstate-v6.14-2025-01-07
+
+for you to fetch changes up to 857a61c2ce74e30fc3b10bc89d68ddd8d05b188c:
+
+   cpufreq/amd-pstate: Refactor max frequency calculation (2025-01-03 
+23:44:07 -0600)
+
+----------------------------------------------------------------
+amd-pstate-6.14 content 1/7/25
+
+Fix a regression with preferred core rankings not being used.
+Fix a precision issue with frequency calculation.
+
+----------------------------------------------------------------
+Mario Limonciello (1):
+       cpufreq/amd-pstate: Fix prefcore rankings
+
+Naresh Solanki (1):
+       cpufreq/amd-pstate: Refactor max frequency calculation
+
+  drivers/cpufreq/amd-pstate.c | 15 +++++----------
+  1 file changed, 5 insertions(+), 10 deletions(-)
 
