@@ -1,160 +1,123 @@
-Return-Path: <linux-pm+bounces-20086-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20087-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 51326A05ACB
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 12:58:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52D39A05AC4
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 12:58:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F69A7A3B95
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 11:55:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 501901612CD
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 11:57:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C93A51FDE08;
-	Wed,  8 Jan 2025 11:53:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B8BD1FC10C;
+	Wed,  8 Jan 2025 11:55:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b="KI2aVTuw";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="Xpm5xDDw"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="F3i5FQ5P"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f41.google.com (mail-wr1-f41.google.com [209.85.221.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A30CF1FCF62;
-	Wed,  8 Jan 2025 11:53:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 950931FC0E7
+	for <linux-pm@vger.kernel.org>; Wed,  8 Jan 2025 11:55:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736337221; cv=none; b=t1shWcRzLQfkoa8rLpBrPjE3I+nbaBZSxU0YwOjbGzAVd5MA2u3u/Oi9kDw4RX2rjVZj7qsaLTBvy5lMq1n1tnO4qKOh18do4Eo4xCc0++aqEawT6MTdayvUd8Mbirgv093Cx2CSB5jJxiGAZ2DZq/IApZbZsaFvCziOCne8KoU=
+	t=1736337353; cv=none; b=ficntXwUE9QYSo9pKbkGMEdLYmMBbHxs20nuihwi0G3qmaSUYHDeZ62rsKD6rgfKmI2rUUNvNHk2BSQLgoun+kWDTfJtedddqD7K09UT6JiK9rA3dHnoqosfTtBYafw7lwEH7WRD59P5YU3a4UYS5KJzoYNQh8AecW9GIZQ0RDI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736337221; c=relaxed/simple;
-	bh=x00YMsxhjzJGlP9Sq4r8hP0TerHaPpRXSdNMhuXXc8c=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Hilo/Akf29vbvRqx0/p0LQRADtlN3p0syKWf4kl7CzGCBsLOpoJ3YWJTcJY2oB64DVUKoOWBMRXt8d1H3NWx0bacyH1kenITLkEF+zU3X2EX5vKfTcRKAvPIUWypS4nU9XD16ehprbIwNZiY95a08hrBs56QMn4Y1QnmqHbqLls=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com; spf=pass smtp.mailfrom=kroah.com; dkim=pass (2048-bit key) header.d=kroah.com header.i=@kroah.com header.b=KI2aVTuw; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=Xpm5xDDw; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=kroah.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kroah.com
-Received: from phl-compute-03.internal (phl-compute-03.phl.internal [10.202.2.43])
-	by mailflow.phl.internal (Postfix) with ESMTP id A3353200FDD;
-	Wed,  8 Jan 2025 06:53:38 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-03.internal (MEProxy); Wed, 08 Jan 2025 06:53:38 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=kroah.com; h=cc
-	:cc:content-type:content-type:date:date:from:from:in-reply-to
-	:in-reply-to:message-id:mime-version:references:reply-to:subject
-	:subject:to:to; s=fm2; t=1736337218; x=1736344418; bh=btUwRHuX5g
-	BsWJIQdk3kdeg3r4y3ZqBBNLuLHNcycxE=; b=KI2aVTuwWZNuVLooRSyIfoWGJ/
-	rA/g2dgsUbVQBcEUHHmLdQ9FvfckVQsYAaznAARdwsqXNz9g68lmHLkFUXznWuy7
-	DzHSGxlLzatZO72zLZVSWCbbAUsbFvG176LvjNccfv1t0LCOyydhY1toyaFle6nD
-	rGZ3w9Ri17ExRLEAb9iOJw9RoMcZgiviSR9//Khj+0NjLIiWBp7LG0fEOs+4DpqN
-	rr0A3665/R0Ujv9bd27tOYyXn36T+LE0GbiVLAu25mFbgwx+ejc7qS2ZRS4erC4o
-	NFW+Y60qOiqR+aSPCr3PPiem9U7O8143rCTbU/s2lrcyoM7uBFpcUymlrOFw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-type:content-type:date:date
-	:feedback-id:feedback-id:from:from:in-reply-to:in-reply-to
-	:message-id:mime-version:references:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1736337218; x=1736344418; bh=btUwRHuX5gBsWJIQdk3kdeg3r4y3ZqBBNLu
-	LHNcycxE=; b=Xpm5xDDw7t/ZkbaFr5Ju90h+q1pWUXJSlRS2dNC6yYs1ugfX0wX
-	ZM0qbR8cVtHeXbuNzt2F3Dx7XUFQtYGjGVlud056t9vMIeWcyy6wgqTbwQv8EBrA
-	C3rpzFNeRW46j9Wdz0Tf4JrH7+pyG3+0zQazMVD0oopY9jFqPr3ewJJCzsBhxDP2
-	+SyOOmEqmq0rkBeu4E+LzmoaPXI2R8wxEfKG2VX7cwmIiMhKqWOGf2C2KMtCqrMH
-	kIuv8P3QbMrhBrMjUHO1O1VoIp3jCvniivZdWfbyWPYIUw3dWdBzfkTwjmna+CYw
-	2La+EeGI7A0mWkGr6YKzjtsbc+5DlzKwWvQ==
-X-ME-Sender: <xms:Qmd-Z6O8McItGLEhEIHpEy6sQHq7WvupuvmsGOBoMjAG5YFJFubBQQ>
-    <xme:Qmd-Z4_f4ebqSfWcvhZup3bDZTlM5lRhySBjH2tsCwTqzqKkDMZGhvd6oMvIGKIy_
-    FWDR7kMky2CMg>
-X-ME-Received: <xmr:Qmd-ZxQCO05PKbzROFOXLzKsIenTb-_4k7gnI-Xh7Io9IyggvVKYOwSVDOfo7P3CxsByhly_M8EuA9LsX2KlIhXPEooH7n8OzJxCQw>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudeggedgfeefucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhepfffhvfevuffkfhggtggujgesthdtredttddtvden
-    ucfhrhhomhepifhrvghgucfmjfcuoehgrhgvgheskhhrohgrhhdrtghomheqnecuggftrf
-    grthhtvghrnhepheegvdevvdeljeeugfdtudduhfekledtiefhveejkeejuefhtdeufefh
-    gfehkeetnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomh
-    epghhrvghgsehkrhhorghhrdgtohhmpdhnsggprhgtphhtthhopeehtddpmhhouggvpehs
-    mhhtphhouhhtpdhrtghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdroh
-    hrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohep
-    mhhighhuvghlrdhojhgvuggrrdhsrghnughonhhishesghhmrghilhdrtghomhdprhgtph
-    htthhopegurghkrhesrhgvughhrghtrdgtohhmpdhrtghpthhtohepvhhirhgvshhhkhes
-    khgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhhmsehtihdrtghomhdprhgtphhtthhope
-    hssghohigusehkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehkvghrnhgv
-    lhdrohhrghdprhgtphhtthhopegrlhgvgidrghgrhihnohhrsehgmhgrihhlrdgtohhm
-X-ME-Proxy: <xmx:Qmd-Z6tGUdqS1rzS-kJWCEGP3iyy47ghPI7sVR4NOn5cjtTzhsUM1w>
-    <xmx:Qmd-Zyd9AKadU4Bx9MecknKqAZZJn3gGJIO5WRY9xiciyvXVxwVhuw>
-    <xmx:Qmd-Z-3vgNEmJ9ccSeq1L5_IUXBaRm1KIIgGR4IkAhzdpUJdUec30Q>
-    <xmx:Qmd-Z2-njjL9U9ktxDoIfnoCHKMP4gU4MyOXsGy_tuVAjNCAgPoZmQ>
-    <xmx:Qmd-Z_XkyAsF06Clr7ZDEJKhU494NaD6URSWp6x0aSgWqn9LqNcQa_bS>
-Feedback-ID: i787e41f1:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
- 8 Jan 2025 06:53:37 -0500 (EST)
-Date: Wed, 8 Jan 2025 12:53:35 +0100
-From: Greg KH <greg@kroah.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>,
-	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Stephen Boyd <sboyd@kernel.org>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V6 01/15] PM / OPP: Expose refcounting helpers for the
- Rust implementation
-Message-ID: <2025010821-yam-distaste-130f@gregkh>
-References: <cover.1736248242.git.viresh.kumar@linaro.org>
- <fa014791cad083ad77125cebad11a6d5ec9592df.1736248242.git.viresh.kumar@linaro.org>
- <2025010759-errant-lather-a64a@gregkh>
- <20250108091124.3cqgjk4k45uuvppk@vireshk-i7>
+	s=arc-20240116; t=1736337353; c=relaxed/simple;
+	bh=LU5+JZ8c0aMuXsiq2DbH/nw5wwIFJpTg6gDHtEUTtdM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O92QIo+7AjktTswH9FNxuPe3ZbEZx+GTPl+qbjrP0x0EyZPZjiz65U0QMZUVHdKzwKxQlZe1gvh813ZxysFlVP0v0QqOyBhCn+YgN0Z/tDquTjMfBcZ+FWEi2uapzgXR7CZ2wTARasxMTnvFnp97fVpQ7o2H98O9LEpX1aXu7dQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=F3i5FQ5P; arc=none smtp.client-ip=209.85.221.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-wr1-f41.google.com with SMTP id ffacd0b85a97d-3862d161947so7904061f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jan 2025 03:55:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1736337350; x=1736942150; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ysWqhzjGdaCIDt4W9FTlg6YymFeYs9kmMV3kG8nOLxk=;
+        b=F3i5FQ5PGFihP3ipI1qJSgnS5iBnbe3DFU+7dKDwhKgI/93ceAYP92cYlDo3Oz6iVH
+         2n8lfmdkmxHqPLMUp1FxoOFFlUEl5T8o5B3lCG/bcuklpo5t7M5ZmeJaYbjzsv6nrNjF
+         8VM6qsutzmZzlZigwf9ghnRT9zLIzZ7U7d6Az5LAkeCSyHXHEGCjH54u+jSWQrqDrn00
+         o9C4cqhAkMKlp+iqnCLgLg8J0buFk01ft9hIE0N9763lYnHVQuKD1bRBzDJhyfUQWcbJ
+         zJcQJ9nIMVRwVZuw1pKY/t6+ZhckqwIAYCLsFQ/4NVeQj6uz3yXzVRjZKgYXPN59nEZ8
+         qZrg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736337350; x=1736942150;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ysWqhzjGdaCIDt4W9FTlg6YymFeYs9kmMV3kG8nOLxk=;
+        b=Vxpgw6XR3QLkrMFsVNCoVDZlF3J/ON/iEM0wNN53kEipMRAMhKQh5jn7qGeGDGfZ81
+         +Mu+zRII5AocLsry0uj7AqjPST54+BudYns04+QlSZyRNSJIe8cQFbbBPcEUCnHWa67X
+         NPirTWMNRkfLx2IjzVICegrmE5nOwxXutJ3vn5KL51/P4opODGRu7wNuq7qMLmmMTADi
+         X9Js+Ici/78HFOQqpILvazi1RAXPlJc6YRaSD5in5U3BRjxoAxiSwNiJ2+ln1OBH9aUk
+         v4UlOhH4Y8tY7VRUqpxO63atCgQyx3lGImJi179E+BdE5PpoObhBrnxweD6LBX4RMLGK
+         Xq+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUh1xacF3do5d0V4XilGE7ROnv+Vci3fIyhaEB9JDdz6v4fb1dDlMgXLpXJgxtt1tYKJhO5eZw6Ow==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz83QMdChnx+FW8l5VFNskkAK9hLo24c56tokfkL7ryhC0qQqZo
+	RV3hxV/mSmHgbKRKIg1UJ4QCGLLAlXxvZueqcL+OaiRBFkmuHlT9sWKYQRHsfJNVlKaQI6iYjTR
+	vgNJUAechXbgTLs4n1ZzQJ3BYABMMAjhzRViZ
+X-Gm-Gg: ASbGncujOrvhc57rQfTaXUMLIgUQWgqbehiqhLdefsu9+3byr792dz9R2BJjkXvIDjg
+	4rTUJFa/jWqqnTEXQpoEqrPuIrg1JDp8pTTs58Wu6awHbmRzW8ZljIKW9l1RQaN3Nf0/3
+X-Google-Smtp-Source: AGHT+IF2oFQwQLC2aHSgatD9Fzt59TAsCxdAF56BZp7hAJhm68tYyV8qzc8wgcoL1gJB/1oyGVfApI3k9DfpsBRwboI=
+X-Received: by 2002:a05:6000:1f85:b0:385:e411:c894 with SMTP id
+ ffacd0b85a97d-38a873377b2mr1823281f8f.43.1736337349818; Wed, 08 Jan 2025
+ 03:55:49 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250108091124.3cqgjk4k45uuvppk@vireshk-i7>
+References: <cover.1736248242.git.viresh.kumar@linaro.org> <429b7539f787ad360cd28fd1db6dc3d6c1fe289d.1736248242.git.viresh.kumar@linaro.org>
+ <2025010734-march-cultivate-bd96@gregkh> <20250108110242.dwhdlwnyjloz6dwb@vireshk-i7>
+ <2025010835-uncover-pamphlet-de5b@gregkh>
+In-Reply-To: <2025010835-uncover-pamphlet-de5b@gregkh>
+From: Alice Ryhl <aliceryhl@google.com>
+Date: Wed, 8 Jan 2025 12:55:38 +0100
+X-Gm-Features: AbW1kvbRBBGWZiziirBt6pPx-Q4lHLyYgwH2cnuwi8CwUQDQVuYJRGMbyw8G8wo
+Message-ID: <CAH5fLgg+XQ2ALpW2x2Mwc4h-ZMo8ZpynH3VA9kxFWyg5SgvmXw@mail.gmail.com>
+Subject: Re: [PATCH V6 04/15] rust: device: Add few helpers
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>, Danilo Krummrich <dakr@redhat.com>, 
+	Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Trevor Gross <tmgross@umich.edu>, Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, 
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, 
+	=?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>, 
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 08, 2025 at 02:41:24PM +0530, Viresh Kumar wrote:
-> On 07-01-25, 12:58, Greg KH wrote:
-> > On Tue, Jan 07, 2025 at 04:51:34PM +0530, Viresh Kumar wrote:
-> > > The Rust implementation needs these APIs for its working. Expose them.
-> > 
-> > Why is the rust code unique here?  Why does C code not need these
-> > exported?
-> > 
-> > And that first sentance isn't really good grammer :)
-> > 
-> > Also, you created a new function here and didn't document it anywhere,
-> > nor do you mention it here in the changelog text, making this a
-> > non-starter right off :(
-> 
-> How about this ?
-> 
->     PM / OPP: Add reference counting helpers for Rust implementation
-> 
->     To ensure that resources such as OPP tables or OPP nodes are not freed
->     while in use by the Rust implementation, it is necessary to increment
->     their reference count from Rust code.
-> 
->     This commit introduces a new helper function,
->     `dev_pm_opp_get_opp_table_ref()`, to increment the reference count of an
->     OPP table and declares the existing helper `dev_pm_opp_get()` in
->     `pm_opp.h`.
+On Wed, Jan 8, 2025 at 12:52=E2=80=AFPM Greg Kroah-Hartman
+<gregkh@linuxfoundation.org> wrote:
+> > +    /// Checks if property is present or not.
+> > +    pub fn property_present(&self, name: &CString) -> bool {
+> > +        // SAFETY: By the invariant of `CString`, `name` is null-termi=
+nated.
+> > +        unsafe { bindings::device_property_present(self.as_raw() as *c=
+onst _, name.as_ptr() as *const _) }
+>
+> I hate to ask, but how was this compiling if the const wasn't there
+> before?  There's no type-checking happening here?  If not, how are we
+> ever going to notice when function parameters change?  If there is type
+> checking, how did this ever build without the const?
+>
+> confused,
 
-That works, if you drop the `` stuff, not needed :)
+Rust auto-converts `*mut` pointers to `*const` when necessary.
 
-thanks,
+Note that this should really be `self.as_raw().cast_const()` if you're
+just casting mut to const without changing the pointee type.
 
-greg k-h
+Alice
 
