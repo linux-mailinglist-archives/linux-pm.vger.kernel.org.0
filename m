@@ -1,144 +1,144 @@
-Return-Path: <linux-pm+bounces-20079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2CA9AA05748
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 10:47:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D46BA05750
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 10:49:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 822173A4F4C
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 09:47:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F085A3A5044
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 09:49:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DAC1EF0A5;
-	Wed,  8 Jan 2025 09:47:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A228D1F5432;
+	Wed,  8 Jan 2025 09:49:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JaMuWFnh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f169.google.com (mail-oi1-f169.google.com [209.85.167.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2801A8413;
-	Wed,  8 Jan 2025 09:47:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C29B1F2C5E
+	for <linux-pm@vger.kernel.org>; Wed,  8 Jan 2025 09:49:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736329668; cv=none; b=ZLX3lnX+UySNNuKSP4s6JR6fOVnrFMyysrCkNYSiZlnmHSl6jcAUQISm1ZL3x5p32bVNj0807I8Hcq1/bhRVg5WzWK6SaimY8isGuaT1SFmTByx2fGxvBNeLXr4dcT5vptfac6qVb+Bgn3E27b0tlvGjfyKHnYMK+wHbX2/tE5w=
+	t=1736329767; cv=none; b=TbMUN+AO+jlSFa9Sy9ZGebmUdRLwOCRkxnTsvmlBgrzpGwEhHogPUg0GNVs2P43bVbsYiZvC0eZJ5/xIzkU9qT54plMN1fLnHopMtBeZaen/NC47SxVAgm47y+vqkrZKeg4Ox7E69L5CSDO9hpnuf9NqCGuvAog+c+jCUf0uoaE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736329668; c=relaxed/simple;
-	bh=+BJgSHh+2S3fLPTVT2MQmgY8JUrXp25EkhvHQ5F8bwo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=M3F/mTNO115tRhKHK2te2+17ZYK2aYD4c1M6SDI5TjEepRf9UMEeIVmlSDxUHZgtTN64ziHxqwxwbd3bdmaemuo3flNzkk3mbNOnhftlqYRElALH9dSRIZCOSJpoGvRnzVoO9t4Uy+jI23IYa4sk0cK80rI1jzy76OsvcJlzp8I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4YSjgY2QLjz2DkF6;
-	Wed,  8 Jan 2025 17:44:41 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id AAF0F1401E0;
-	Wed,  8 Jan 2025 17:47:42 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 8 Jan
- 2025 17:47:42 +0800
-Message-ID: <b6cf42a9-72f8-473f-8e93-e0ad9ac1d49e@huawei.com>
-Date: Wed, 8 Jan 2025 17:47:41 +0800
+	s=arc-20240116; t=1736329767; c=relaxed/simple;
+	bh=9deTj6/vvguCX59Rp5CA9tK97aPiY1BmdFL+MDFSKko=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=qvveCJaqZDGg1j2ULYhjycXn9GgihO1sEw3tzZKKti4lvkWiJLekrgg8+VCflRDBsLFe8/u3cNiKsMw0RnIZtyhW8VUiGi0/ub8bLEIR2fowDoYHAv3gKPvQCsvVnsbSDPWv4toTPmjJaT/BwnZioI126k4iW9u4nugeGGgYu3k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JaMuWFnh; arc=none smtp.client-ip=209.85.167.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3ebb2d8dac4so9035618b6e.0
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jan 2025 01:49:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736329765; x=1736934565; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=9deTj6/vvguCX59Rp5CA9tK97aPiY1BmdFL+MDFSKko=;
+        b=JaMuWFnhvRe9Dx/dKXneuV/27sMd4smP6tmfeoUV6ZCWMcajTfwvYp2ryHwrEFtF4h
+         AoS70UmNEQ/fdAnnufMfxcm0SLInHurSTaSlGgJWAqxej50QBcadH5rj6QhALfDQin0t
+         SFklNc0Qgmo3XoqDnn2A3lRJ7ecyVFX1P8HnPJ5b5OhG1FcH5+lGVryHUVLb1D0v3d7R
+         7PFnvZoqwSHNX212tUjoNCyckLMv7rCvoodaq8Wy/+5sWN/QlozpEdVbC38iMP8wFT6h
+         i3RwL7LUbYIcgBrvpgYojlU4sLyAwcbocPOY26tcqyE5IlsReXAb3kgMZg4EUNuGXa68
+         MQrA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736329765; x=1736934565;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=9deTj6/vvguCX59Rp5CA9tK97aPiY1BmdFL+MDFSKko=;
+        b=a6hapv0BgfNXHH+GzWpRyq+xf7fGxmQgp3NCtr9MjU8q6QHigqVIyB9TvdgD+bZaAJ
+         7SLCaXpxyrkunXi44UJr8APWf1c10AQJ7Jz7N1TFK0nWJVM6BQj0y88fXaPZzKgGDIn/
+         /EuDbOFWGyiH/CyW134W7W1QXAXoUPgorJswPHnLr9SDOnBvOF9Z1TO3RNZrhlJA1PS1
+         Gy21SCiQqjzdZirx5KTZxNpFgCTJogP86P26rMsil15+1gGYFZE5ZeO5f2IWan/2xbmV
+         mipvHIpUBkkwENs+Ek7hj+viuKvrAv2FIc5yQQPcgGFuGIqouX3wjts6arbu+bi77nuq
+         Mudg==
+X-Forwarded-Encrypted: i=1; AJvYcCXEuwZVY5unoBq2e67IPJM/wHzcFbwr1l71cTwRkYGrBf8YniJB9/5XkggEQPhsp0id9MJwBAkvOA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUca95LOlXSBaRCbq8HZgeGQy0/aEz/r7gQRAQoh+QyOUyVzEH
+	eGfyRRTF/7PSy7CmyVUCAwYnRGAH7fq8UdvRT0At3s96XpzIeZC8n5/+9FxmX9ZrQ0DaV86NoKW
+	54X4hof+HpcSSuAL3vZkicGPXnO7Rf/RoD0C/YQ==
+X-Gm-Gg: ASbGncs84L9odReUkNG+tO2Rnjoz2qDhecDO1NIpNBm9x3zWUzXNkCtFwv0+D2+hkne
+	Eb/BylMXZHMopyAWsXKYRszu53zTJKVLVFXoWj1s=
+X-Google-Smtp-Source: AGHT+IHZ2qa5v003ct1VSkNjp4+W849xZ86hZNQfh08NEbSUCMyVnvNz0IJm/V2fxZ6p4xrdj0xHIGvA99BCjD8jKng=
+X-Received: by 2002:a05:6808:10ce:b0:3eb:6044:5a8c with SMTP id
+ 5614622812f47-3ef2ec96526mr1173978b6e.20.1736329764752; Wed, 08 Jan 2025
+ 01:49:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq/amd-pstate: Fix per-policy boost flag incorrect
- when fail
-To: Mario Limonciello <mario.limonciello@amd.com>
-CC: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <perry.yuan@amd.com>,
-	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <fanghao11@huawei.com>
-References: <20250103074139.1080092-1-zhenglifeng1@huawei.com>
- <7e777177-417e-41eb-81d0-3635769d3a83@amd.com>
- <8fcec19d-9f3c-4ec9-99e9-d3003a94efcd@huawei.com>
- <4d4ba2f4-a294-44cf-b79e-c93c4e23cb2e@amd.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <4d4ba2f4-a294-44cf-b79e-c93c4e23cb2e@amd.com>
+References: <20250102-b4-gs101_max77759_fg-v2-0-87959abeb7ff@uclouvain.be> <20250102-b4-gs101_max77759_fg-v2-1-87959abeb7ff@uclouvain.be>
+In-Reply-To: <20250102-b4-gs101_max77759_fg-v2-1-87959abeb7ff@uclouvain.be>
+From: Peter Griffin <peter.griffin@linaro.org>
+Date: Wed, 8 Jan 2025 09:49:13 +0000
+X-Gm-Features: AbW1kvYKpkuMkeIC0jLCwnzruoE9AbHyOFZse_X-2P5ly2F0MUO4jvDNj5kUorY
+Message-ID: <CADrjBPpkiNvxGjw_iLG3tw2MNy62trao+igaMMX_zjL44+w1EQ@mail.gmail.com>
+Subject: Re: [PATCH v2 1/4] power: supply: add support for max77759 fuel gauge
+To: t.antoine@uclouvain.be
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Dimitri Fedrau <dima.fedrau@gmail.com>, Catalin Marinas <catalin.marinas@arm.com>, 
+	Will Deacon <will@kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	=?UTF-8?Q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>, 
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-samsung-soc@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Transfer-Encoding: quoted-printable
 
-On 2025/1/8 10:26, Mario Limonciello wrote:
+Hi Thomas,
 
-> On 1/7/2025 19:31, zhenglifeng (A) wrote:
->> On 2025/1/4 0:56, Mario Limonciello wrote:
->>
->>> On 1/3/2025 01:41, Lifeng Zheng wrote:
->>>> Commit c8c68c38b56f ("cpufreq: amd-pstate: initialize core precision
->>>> boost state") sets per-policy boost flag to false when boost fail.
->>>> However, this boost flag will be set to reverse value in
->>>> store_local_boost() and cpufreq_boost_trigger_state() in cpufreq.c. This
->>>> will cause the per-policy boost flag set to true when fail to set boost.
->>>> Remove the extra assignment in amd_pstate_set_boost() and keep all
->>>> operations on per-policy boost flag outside of set_boost() to fix this
->>>> problem.
->>>>
->>>> Fixes: c8c68c38b56f ("cpufreq: amd-pstate: initialize core precision boost state")
->>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
->>>> ---
->>>
->>> Hi There,
->>>
->>> Thanks for the patch.  Unfortunately, it doesn't apply to the current linux-next branch at https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
->>
->> Hello Mario,
->>
->> When I try to build on this branch, I got an error:
->>
->> arch/x86/kernel/relocate_kernel_64.o: In function `virtual_mapped':
->> .../linux/arch/x86/kernel/relocate_kernel_64.S:249: undefined reference to `saved_context_gdt_desc'
->> scripts/Makefile.vmlinux:77: recipe for target 'vmlinux' failed
->>
->> This error occurs when CONFIG_KEXEC_JUMP=y, and doesn't occur when build on
->> torvalds master branch with same config. Please check if there is any
->> problem whith this branch.
->>
-> Hi,
-> 
-> It's because the branch is based on an earlier 6.13-rc.
-> 
-> Two ideas that can help you:
-> 
-> 1) You can pull this patch manually on top of it to avoid that issue.
-> https://git.kernel.org/torvalds/c/aeb68937614f4
-> 
-> 2) You can manually rebase the branch on newer 6.13-rc locally to make your commit.  That commit that fixed it landed in 6.13-rc3, so rc3 or later would be fine.
+On Thu, 2 Jan 2025 at 11:16, Thomas Antoine via B4 Relay
+<devnull+t.antoine.uclouvain.be@kernel.org> wrote:
+>
+> From: Thomas Antoine <t.antoine@uclouvain.be>
+>
+> The interface of the Maxim max77759 fuel gauge has a lot of common with t=
+he
+> Maxim max1720x. The major difference is the lack of non-volatile memory
+> slave address. No slave is available at address 0xb of the i2c bus, which
+> is coherent with the following driver from google: line 5836 disables
+> non-volatile memory for m5 gauge.
+>
+> Link: https://android.googlesource.com/kernel/google-modules/bms/+/1a68c3=
+6bef474573cc8629cc1d121eb6a81ab68c/max1720x_battery.c
+>
+> Other differences include the lack of V_BATT register to read the battery
+> level and a difference in the way to identify the chip (the same register
+> is used but not the same mask).
+>
+> Add support for the max77759 by allowing to use the non-volatile
+> memory or not based on the chip. Also add the V_CELL regsister as a
+> fallback to read voltage value in the case where read of V_BATT fails.
+>
+> The cast is necessary to avoid an overflow when the value of the register
+> is above 54975 (equivalent to a voltage around 4.29 V).
+>
+> The regmap of the max77759 will lead the read to fail for V_BATT and to
+> correctly use V_CELL instead. This regmap was proposed by Andr=C3=A9 Dras=
+zik in
+>
+> Link: https://lore.kernel.org/all/d1bade77b5281c1de6b2ddcb4dbbd033e455a11=
+6.camel@linaro.org/
 
-This solves the problem, thanks!
+Firstly thanks for working on this :) Fuel gauge is a great addition
+to the Pixel 6 upstream support.
 
-> 
->>>
->>> Although the issue you identified is still valid, there have been other contextual changes in the function [1].  Can you rebase on that branch, test it again and send a v2?
->>>
->>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/tree/drivers/cpufreq/amd-pstate.c?h=linux-next#n750
->>>
->>> Thanks!
->>>
->>>>    drivers/cpufreq/amd-pstate.c | 1 -
->>>>    1 file changed, 1 deletion(-)
->>>>
->>>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->>>> index 66e5dfc711c0..4ce923788f3a 100644
->>>> --- a/drivers/cpufreq/amd-pstate.c
->>>> +++ b/drivers/cpufreq/amd-pstate.c
->>>> @@ -730,7 +730,6 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
->>>>        mutex_lock(&amd_pstate_driver_lock);
->>>>        ret = amd_pstate_cpu_boost_update(policy, state);
->>>>        WRITE_ONCE(cpudata->boost_state, !ret ? state : false);
->>>> -    policy->boost_enabled = !ret ? state : false;
->>>>        refresh_frequency_limits(policy);
->>>>        mutex_unlock(&amd_pstate_driver_lock);
->>>>    
->>>
->>
-> 
+It would be good if you can document what you consider "working" with
+this series applied. I think it's fine for support to come
+incrementally (say feature additions to the driver to support x,y,z).
+But anything that is now reported in sysfs with this series applied
+should be accurate (or alternatively not exposed for MAX77759 variant
+if it's not accurate and it's unclear from checking the downstream
+driver how to fix it).
 
+Thanks,
+
+Peter
 
