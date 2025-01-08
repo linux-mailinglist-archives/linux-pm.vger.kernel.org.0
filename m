@@ -1,158 +1,200 @@
-Return-Path: <linux-pm+bounces-20105-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20106-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5A1DDA062AA
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 17:53:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64FE3A0630C
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 18:11:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5015C16529A
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 16:53:09 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E155D188A0A1
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 17:11:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4AAA01FF608;
-	Wed,  8 Jan 2025 16:53:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B05051FF7D9;
+	Wed,  8 Jan 2025 17:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R7tK4w5D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f172.google.com (mail-lj1-f172.google.com [209.85.208.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CCAF219AD90;
-	Wed,  8 Jan 2025 16:53:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7472680604;
+	Wed,  8 Jan 2025 17:10:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736355188; cv=none; b=Aqt8RFWvULXaR5AwsDbX8FeJ7wHJJP+uePhCucnCA172UgF46AUGP+TGJkhMYizPYFaRPJnn2k4p6tkPcrb1GgF5a7bhBCB3sxo+Vn1446Ljl6xUFb4D4Gi6AKv4trHPM6QYxLnnHLpDN3QqDUnj7SrTu9IoINS8EBI+/zWa5RE=
+	t=1736356255; cv=none; b=TjqM3mEi61TfeqbFnYIS3EZs1llPUJTuOkHXv5IC83IZ4fkufGQ7hIENFjnDYypniCzhZdFgH/LiGi1bIiYaPScv08+HdTl1F/+qfZY/BYkz9G+qcgJl6ex5Igy+lc6Mgzx0jihEd/oOSiEt1fIjYXnXRvv+Pg5VUr91lP0zkbA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736355188; c=relaxed/simple;
-	bh=xrHb5M/ZA4Z98nlMieaSv4x7qELzO4tPhnQnYmeSNVk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aV74cirA3X9mAJElhVY1MPMigMTcLljuTmV4/S6/gYi4LIS4iUdBkewHfAS+yVhob7//tkPx4n8pqSUkWjhK8GvsWAxMsjR+INTFr/c4XaFhFvKbs2DXku83mcykZ7g1XH+UjdRnVTAqdzOg14wTOun2ZepLijBsqS3u33L3600=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.208.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f172.google.com with SMTP id 38308e7fff4ca-2ffd6b7d77aso223009251fa.0;
-        Wed, 08 Jan 2025 08:53:05 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736355182; x=1736959982;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jx0eMDBUFN8OZ3Iife5XjSsJKU6lJXng+Kzs65bz5do=;
-        b=o/OGLUcZw5/9noznhA2Ic9OUC3GTEaJa6+lDwMayyTOeSCWSDjbuA2tkVaKsshfNH6
-         keRRYKQk87dhxs692jc+DD7VMvuINyraZZJ2q2aaejs5k6U4tBv2O6U7LJiVB3cPtA+G
-         iFqRf6dpYJIDfbRcGbtCe1S3xImkYilaOsX2ntj+KjzTAkgqPXer5XPiobDE4+5LBPam
-         7QgwU9DdD13v97ibe3dXo6lOIGgzzqXN1dU4QxzOo/lgrtsHHoJqeW/QP9tQW42ODt1T
-         GNtR0o8sNRT53tiEGVIdDk9bfN1jrUZyZQzKVXjXq2xkb/UlGrZP6WVIfWEplDhe6efl
-         c/QA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9rmqyriOHeHdijDppfCzJ9hJBBWcSKjbkk8sJ7oCqFBOuO3o/JuyKCbZUBpdJSyBn95HmYWcbsTPaqQ8=@vger.kernel.org, AJvYcCXG2kNPlJPeZAH5TZTBSYBtOH92BnIsqVkRe2x5nmXtOgCu/Nv6OBQ5kzxOnjI4lYPEBjwjqejf+iA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywsarr80Lm2DVNWLvrtJLZgK80xeUAGH+TAjaVy/S7h113Zhyrj
-	NT/O2hKjgb8iEI+pBIhSYbQo65M3HyAdrc2TTTbgJFWCo5pb72vTLM0bOVNw
-X-Gm-Gg: ASbGncuGO03FwyiEnXSeB4d8rBkaaKaREq8EG7/CSN7Kb6JZXQVU/yk68bpUpL1MHeJ
-	S4y9Rvyks7HxX1/edVkCdvK8xKEKZse4u/nt3kszh+c3bW4u25K7TuW1dWNWY4n8jPc4ny74aYF
-	tGfrK6UhvWsZ3rb+uP6hJ9EKe8b7bL6pUDEXI7m75ugb8xOCq0TUXbNESj+jB2YiZu4YXFgvIau
-	KUJUFLNNYRpqhCIrKXHj6UqoFhKT0fLMD+0p38mg6+UX3/WTMYVOGqz4UWHDRocM48OOUC8mY/F
-	vs58z7aw6uSQaA==
-X-Google-Smtp-Source: AGHT+IFLFwabH84cvJGTa2NVfaLgERbLr714wpTb9qW7QgJQvvjgWliEKR0yp8r25IM53e9XONsVyA==
-X-Received: by 2002:a2e:a692:0:b0:300:17a3:7ae7 with SMTP id 38308e7fff4ca-305f45f005emr6774341fa.36.1736355181465;
-        Wed, 08 Jan 2025 08:53:01 -0800 (PST)
-Received: from mail-lj1-f170.google.com (mail-lj1-f170.google.com. [209.85.208.170])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3045b082e31sm60727181fa.110.2025.01.08.08.53.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 08 Jan 2025 08:53:01 -0800 (PST)
-Received: by mail-lj1-f170.google.com with SMTP id 38308e7fff4ca-305d843d925so33631161fa.2;
-        Wed, 08 Jan 2025 08:53:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUQQUDBd3ESHZypdbKRw+aIhSUVXxgtc+8QeJLq6f/bzqAuwptGVn1NpCNmk9IfAblfd9wDwuclRM0=@vger.kernel.org, AJvYcCXbdPYU5xd0MWNql9LGbyqndAGyWNnt9Hwhx8Z15yj1K3w1dgitCsCph88G6c70IxbzCQBtl02D0sqe+aI=@vger.kernel.org
-X-Received: by 2002:a05:651c:602:b0:300:3307:389d with SMTP id
- 38308e7fff4ca-305f458e846mr7855991fa.19.1736355180052; Wed, 08 Jan 2025
- 08:53:00 -0800 (PST)
+	s=arc-20240116; t=1736356255; c=relaxed/simple;
+	bh=syHNq8FrS1memVYT2XOnQef+TX1aQH42HmaCCT2gH7U=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Qv/S1RMxwJWOGjBfA5kasVYP+E8trtVKfrhirZ8yTKPKHstq2rxG/qpF1pef5AqTP4WiokyBdxrgaG4xK/pdNtYJ3eJg6xoG9TDkSJxRoiIgfLx1sLilrgRcUZWdxTDKNqY2QW4zj5FIy4vaRElrU1CFeBlIVQVbKX4oeAWBPkA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R7tK4w5D; arc=none smtp.client-ip=192.198.163.8
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736356253; x=1767892253;
+  h=date:from:to:cc:subject:message-id;
+  bh=syHNq8FrS1memVYT2XOnQef+TX1aQH42HmaCCT2gH7U=;
+  b=R7tK4w5D2kHoqWQJlAVsCKNcG6e2O9T3f8rCDLWffSel1gm6jrzdFHSN
+   Ciy+I41QYHUn6uWEJ82qVaz6tBNOwORlDTB1VzpAq9oxawN17JpZbxg/e
+   q6BywRLF6efZ2Seb9RGtvY7FNryfqt3L9mPCP4PHcQRULuyi1ArDDli4P
+   xlv6p+m0N06hSqMbMgFi6CBWvnYEQ7ANIOkvka73ru8cjxVCK3nylhSaM
+   R9EDEgAZHJIAtQOjDsSUfSlSj/3w7bUJywXvC4ijAsz2nnpFfVlSmMkRD
+   jjFet8Ui3aD3fSXlt88RB3HlRPgWsIaCC8Sa/IwoBJsxK2Euikhr0m7EC
+   A==;
+X-CSE-ConnectionGUID: zUH2eEZSRGGAH/O47OWRkg==
+X-CSE-MsgGUID: l/CtitNYT6+4Ud2ogQb1mg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="54140234"
+X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
+   d="scan'208";a="54140234"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 09:10:52 -0800
+X-CSE-ConnectionGUID: dweD3lcwQwemQ/SVA8echg==
+X-CSE-MsgGUID: am1tRrh2SOyJ8rHG2SuYKQ==
+X-Ironport-Invalid-End-Of-Message: True
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="104019684"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa008.jf.intel.com with ESMTP; 08 Jan 2025 09:10:50 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tVZZv-000GQe-2V;
+	Wed, 08 Jan 2025 17:10:47 +0000
+Date: Thu, 09 Jan 2025 01:10:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:fixes] BUILD SUCCESS
+ b6079e1e691c68b53792972fd97653b702e45668
+Message-ID: <202501090121.75OoS9Yw-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250108164359.2609078-1-andre.przywara@arm.com>
-In-Reply-To: <20250108164359.2609078-1-andre.przywara@arm.com>
-Reply-To: wens@csie.org
-From: Chen-Yu Tsai <wens@csie.org>
-Date: Thu, 9 Jan 2025 00:52:47 +0800
-X-Gmail-Original-Message-ID: <CAGb2v66jTH+aiCHQyic0hYUWQ3wiZFa3a6f9U1NickAfZPizYA@mail.gmail.com>
-X-Gm-Features: AbW1kvYf6FaWmHcSx5PlJ4_54WBtFGt_VFk4l8WJnSU8vd7BgjPLUbQr4KhZAEw
-Message-ID: <CAGb2v66jTH+aiCHQyic0hYUWQ3wiZFa3a6f9U1NickAfZPizYA@mail.gmail.com>
-Subject: Re: [PATCH v2] Revert "mfd: axp20x: Allow multiple regulators"
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Lee Jones <lee@kernel.org>, linux-sunxi@lists.linux.dev, 
-	Chris Morgan <macroalpha82@gmail.com>, Vasily Khoruzhick <anarsoul@gmail.com>, 
-	Jonathan Cameron <jic23@kernel.org>, Andrey Skvortsov <andrej.skvortzov@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Jan 9, 2025 at 12:44=E2=80=AFAM Andre Przywara <andre.przywara@arm.=
-com> wrote:
->
-> As Chris and Vasily reported, the attempt to support multiple AXP PMICs
-> in one system [1] breaks some of the battery and charging functionality
-> on devices with AXP PMICs. The reason is that the drivers now fail to get
-> the correct IIO channel for the ADC component, as the current code seems
-> to rely on the zero-based enumeration of the regulator devices.
-> A fix is possible, but not trivial, as it requires some rework in the AXP
-> MFD driver, which cannot be fully reviewed or tested in time for the
-> 6.13 release.
->
-> So revert this patch for now, to avoid regressions on battery powered
-> devices. This patch was really only necessary for devices with two
-> PMICs, support for which is not mainline yet anyway, so we don't lose
-> any functionality.
->
-> This reverts commit e37ec32188701efa01455b9be42a392adab06ce4.
->
-> [1] https://lore.kernel.org/linux-sunxi/20241007001408.27249-4-andre.przy=
-wara@arm.com/
->
-> Reported-by: Chris Morgan <macroalpha82@gmail.com>
-> Closes: https://lore.kernel.org/linux-sunxi/675489c1.050a0220.8d73f.6e90@=
-mx.google.com/
-> Reported-by: Vasily Khoruzhick <anarsoul@gmail.com>
-> Closes: https://lore.kernel.org/linux-sunxi/CA+E=3DqVf8_9gn0y=3DmcdKXvj2P=
-FoHT2eF+JN=3DCmtTNdRGaSnpgKg@mail.gmail.com/
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
+branch HEAD: b6079e1e691c68b53792972fd97653b702e45668  Merge branch 'thermal-core' into fixes
 
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+elapsed time: 1317m
 
-> ---
-> Hi,
->
-> just replacing the old -1 with the respective macro name, as Lee asked
-> for. Also adding tags to acknowledge the reporters.
-> Lee, feel free to change the subject line if you think the "Revert" in
-> there is not justified anymore.
->
-> Cheers,
-> Andre
->
-> Changes v1 .. v2:
-> - use proper name for the formely used -1 value
-> - add Reported-by: tags
->
->  drivers/mfd/axp20x.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
-> index 251465a656d09..bce85a58944ac 100644
-> --- a/drivers/mfd/axp20x.c
-> +++ b/drivers/mfd/axp20x.c
-> @@ -1445,7 +1445,7 @@ int axp20x_device_probe(struct axp20x_dev *axp20x)
->                 }
->         }
->
-> -       ret =3D mfd_add_devices(axp20x->dev, PLATFORM_DEVID_AUTO, axp20x-=
->cells,
-> +       ret =3D mfd_add_devices(axp20x->dev, PLATFORM_DEVID_NONE, axp20x-=
->cells,
->                               axp20x->nr_cells, NULL, 0, NULL);
->
->         if (ret) {
-> --
-> 2.25.1
->
+configs tested: 105
+configs skipped: 2
+
+The following configs have been built successfully.
+More configs may be tested in the coming days.
+
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20250108    gcc-13.2.0
+arc                   randconfig-002-20250108    gcc-13.2.0
+arm                               allnoconfig    clang-17
+arm                              allyesconfig    gcc-14.2.0
+arm                   randconfig-001-20250108    gcc-14.2.0
+arm                   randconfig-002-20250108    gcc-14.2.0
+arm                   randconfig-003-20250108    clang-20
+arm                   randconfig-004-20250108    clang-18
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250108    gcc-14.2.0
+arm64                 randconfig-002-20250108    clang-20
+arm64                 randconfig-003-20250108    gcc-14.2.0
+arm64                 randconfig-004-20250108    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250108    gcc-14.2.0
+csky                  randconfig-002-20250108    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                          allyesconfig    clang-18
+hexagon               randconfig-001-20250108    clang-20
+hexagon               randconfig-002-20250108    clang-20
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250108    clang-19
+i386        buildonly-randconfig-002-20250108    gcc-12
+i386        buildonly-randconfig-003-20250108    gcc-12
+i386        buildonly-randconfig-004-20250108    gcc-12
+i386        buildonly-randconfig-005-20250108    gcc-12
+i386        buildonly-randconfig-006-20250108    clang-19
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250108    gcc-14.2.0
+loongarch             randconfig-002-20250108    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250108    gcc-14.2.0
+nios2                 randconfig-002-20250108    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                randconfig-001-20250108    gcc-14.2.0
+parisc                randconfig-002-20250108    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc               randconfig-001-20250108    clang-16
+powerpc               randconfig-002-20250108    gcc-14.2.0
+powerpc               randconfig-003-20250108    gcc-14.2.0
+powerpc64             randconfig-001-20250108    clang-18
+powerpc64             randconfig-002-20250108    clang-16
+powerpc64             randconfig-003-20250108    clang-20
+riscv                            allmodconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-20
+riscv                 randconfig-001-20250108    gcc-14.2.0
+riscv                 randconfig-002-20250108    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20250108    gcc-14.2.0
+s390                  randconfig-002-20250108    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250108    gcc-14.2.0
+sh                    randconfig-002-20250108    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250108    gcc-14.2.0
+sparc                 randconfig-002-20250108    gcc-14.2.0
+sparc64               randconfig-001-20250108    gcc-14.2.0
+sparc64               randconfig-002-20250108    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250108    gcc-12
+um                    randconfig-002-20250108    clang-16
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250108    clang-19
+x86_64      buildonly-randconfig-002-20250108    gcc-11
+x86_64      buildonly-randconfig-003-20250108    clang-19
+x86_64      buildonly-randconfig-004-20250108    gcc-12
+x86_64      buildonly-randconfig-005-20250108    gcc-12
+x86_64      buildonly-randconfig-006-20250108    clang-19
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250108    gcc-14.2.0
+xtensa                randconfig-002-20250108    gcc-14.2.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
