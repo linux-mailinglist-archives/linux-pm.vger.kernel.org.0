@@ -1,196 +1,164 @@
-Return-Path: <linux-pm+bounces-20108-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20109-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB1D1A0653E
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 20:20:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9995BA06594
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 20:51:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DBF063A205F
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 19:20:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 12F29188959E
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 19:51:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 913281F03C3;
-	Wed,  8 Jan 2025 19:20:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B6BC1B040D;
+	Wed,  8 Jan 2025 19:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="NbP/SXCo"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eSy2zfQT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 789E91AA795;
-	Wed,  8 Jan 2025 19:20:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5425922611;
+	Wed,  8 Jan 2025 19:51:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736364026; cv=none; b=W/dXx7atNxxOXigmWEm462p7NqBGiKtcqmzm2IpoAYvdhC+KkErJ3kN9jOlpoffj1DUNKJUS63IuuUdeBYkGPD1K+68oj5JIEx30nIUogZn8GN+rwk8AJNrX72zY0GaXOU7doIIvWEgkMULi5erMx5Y4kgUXm+XsXSYvmnTW0oM=
+	t=1736365872; cv=none; b=GffSGi3v90g5+qUeW3SbsjS41iN5oTaXzJJlnuWgSLS9mJ32Z1BpG0Ae2sMC7fdISUmU4dFTwe9mcUPRr2j8M2555RTHUZHxjddeAP+h7c21T2mW94OKb3p3zYFMPS1KC13HN6LYxJnYm5LJn3u7tYaDvAggKD26in5faq4fPsM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736364026; c=relaxed/simple;
-	bh=ZJyU/H/9tf9IFwYcVjncxPF/xuX+iYQU/nGGz1Af3So=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Nd8WGzFHS+UxBjmlDqK7f56cK2SSBwCGO1EBu0v3j/Ld3RILsoItOfHQ7/fC+gDEPTcAjyn2oDD2GsqfTuxLEw9+JEEGqBbeSdk4x6fFsbErdUlIzjiPevcqZxi+ak8yv74rO4HB0DeORgtIhwbAE8VW4CIWIZl/06WRMH0EgiY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=NbP/SXCo; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736364024; x=1767900024;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZJyU/H/9tf9IFwYcVjncxPF/xuX+iYQU/nGGz1Af3So=;
-  b=NbP/SXCoycAaWnc8zam1pMc8ks65CJdXFyT05sTEZtwreAcY8jliBO9C
-   kJa9R1F9RFS0rASrLk//lfknTHujOSfxH0n40dYW7AfsIjeJbBk4JqtpG
-   L7zzIGQb72vzhmN/PaRyytCjeA4sO3EKZG+ae99rFlFH0vTFFuIcTWJNt
-   vrS7S9kWd0o4sX1fO+T2IE3ahfgN8aC9ILYKhkGNyQw8AFt8vnXhwph+9
-   HDFTU9ANaS1ObX9O1SsSNz9iV5xrV5yjgoou7AjYVO0QWGnPv9wZshzqa
-   QS83svgs+W8be1ooqAYY4Qodfhy080OTFM3/8Xur3PHXvngCXEpbiMofv
-   g==;
-X-CSE-ConnectionGUID: ZJVcj19VQkulyKx3Ay2l5A==
-X-CSE-MsgGUID: 6JEthGD8RDSwU6IraxKqIQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="40372825"
-X-IronPort-AV: E=Sophos;i="6.12,299,1728975600"; 
-   d="scan'208";a="40372825"
-Received: from orviesa009.jf.intel.com ([10.64.159.149])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 11:20:24 -0800
-X-CSE-ConnectionGUID: L0PACDFbRRavI0e7dgbaNg==
-X-CSE-MsgGUID: BumIr7j7TwiovBz177aeNg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,299,1728975600"; 
-   d="scan'208";a="102990838"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa009.jf.intel.com with ESMTP; 08 Jan 2025 11:20:23 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVbbH-000GXj-32;
-	Wed, 08 Jan 2025 19:20:19 +0000
-Date: Thu, 09 Jan 2025 03:20:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- c01d4e6d68e3023227cc7ad19e1a01a92cf2818d
-Message-ID: <202501090356.SfseXz5B-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1736365872; c=relaxed/simple;
+	bh=3XOtlTs/hzd4lsseZnXoaXETrVytDww/rNaH/CWFCHg=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition:In-Reply-To; b=tYxTpnhCh3Kbuz1zM5TeE9/Vy+kPCW7kYLfLtjoocLmue2UloFi7LzJ0Nyxt7uSP9xUPtBO/Z4m/oqiKQIc0XkeVTDqtb/684yV/3NXyq7EsZbxkzqKH/V+1Bri/PPopG6SRkKPU2wQ4GkuIU3yf7rVYUYWZ7zPci3H1hg36qOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eSy2zfQT; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD64CC4CED3;
+	Wed,  8 Jan 2025 19:51:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736365871;
+	bh=3XOtlTs/hzd4lsseZnXoaXETrVytDww/rNaH/CWFCHg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:From;
+	b=eSy2zfQTnz2eDskYMtxlTfY3C4bnkL9u7/WUKe/6zfE+dgMFAojOF9IfkFG63R25Z
+	 dgz871Tre+p2ebJXxcCZt7OZxuVnDh6doOjeDeSYJcf+s2Xlr6K1aC5vW1//RaqELF
+	 32n3NV1UJ5FK/Ag/0fIq1Ax8eULCg6RKCNMY4EB1Tqo+sBojINI5fR/TyClQck+RHR
+	 Foq9UE/uwonxzjyM99M2iKW9QtxLpcTAr3KqnOGFkffNGkJzyWwf94zMEmdLHrbmUr
+	 S0/pAHCJlRL1nAUEDOg7j9MtbSCLnYwFSWxL53ev1YY0YAGlYNtPYjaP/72FmUrqio
+	 lVfA80Ebgj/8w==
+Date: Wed, 8 Jan 2025 13:51:09 -0600
+From: Bjorn Helgaas <helgaas@kernel.org>
+To: Sergey Ryazanov <ryazanov.s.a@gmail.com>
+Cc: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>,
+	M Chetan Kumar <m.chetan.kumar@intel.com>,
+	Loic Poulain <loic.poulain@linaro.org>,
+	Johannes Berg <johannes@sipsolutions.net>,
+	Bjorn Helgaas <bhelgaas@google.com>,
+	Andrew Lunn <andrew+netdev@lunn.ch>,
+	"David S. Miller" <davem@davemloft.net>,
+	Eric Dumazet <edumazet@google.com>,
+	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+	netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2] net: wwan: iosm: Fix hibernation by re-binding the
+ driver around it
+Message-ID: <20250108195109.GA224965@bhelgaas>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <c634d5bc-7a60-436a-94d8-c8a4fb0e0c26@gmail.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: c01d4e6d68e3023227cc7ad19e1a01a92cf2818d  Merge branch 'linux-next' into bleeding-edge
+[+cc Rafael, linux-pm because they *are* PM experts :)]
 
-elapsed time: 1447m
+On Wed, Jan 08, 2025 at 02:15:28AM +0200, Sergey Ryazanov wrote:
+> On 08.01.2025 01:45, Bjorn Helgaas wrote:
+> > On Wed, Jan 08, 2025 at 01:13:41AM +0200, Sergey Ryazanov wrote:
+> > > On 05.01.2025 19:39, Maciej S. Szmigiero wrote:
+> > > > Currently, the driver is seriously broken with respect to the
+> > > > hibernation (S4): after image restore the device is back into
+> > > > IPC_MEM_EXEC_STAGE_BOOT (which AFAIK means bootloader stage) and needs
+> > > > full re-launch of the rest of its firmware, but the driver restore
+> > > > handler treats the device as merely sleeping and just sends it a
+> > > > wake-up command.
+> > > > 
+> > > > This wake-up command times out but device nodes (/dev/wwan*) remain
+> > > > accessible.
+> > > > However attempting to use them causes the bootloader to crash and
+> > > > enter IPC_MEM_EXEC_STAGE_CD_READY stage (which apparently means "a crash
+> > > > dump is ready").
+> > > > 
+> > > > It seems that the device cannot be re-initialized from this crashed
+> > > > stage without toggling some reset pin (on my test platform that's
+> > > > apparently what the device _RST ACPI method does).
+> > > > 
+> > > > While it would theoretically be possible to rewrite the driver to tear
+> > > > down the whole MUX / IPC layers on hibernation (so the bootloader does
+> > > > not crash from improper access) and then re-launch the device on
+> > > > restore this would require significant refactoring of the driver
+> > > > (believe me, I've tried), since there are quite a few assumptions
+> > > > hard-coded in the driver about the device never being partially
+> > > > de-initialized (like channels other than devlink cannot be closed,
+> > > > for example).
+> > > > Probably this would also need some programming guide for this hardware.
+> > > > 
+> > > > Considering that the driver seems orphaned [1] and other people are
+> > > > hitting this issue too [2] fix it by simply unbinding the PCI driver
+> > > > before hibernation and re-binding it after restore, much like
+> > > > USB_QUIRK_RESET_RESUME does for USB devices that exhibit a similar
+> > > > problem.
+> > > > 
+> > > > Tested on XMM7360 in HP EliteBook 855 G7 both with s2idle (which uses
+> > > > the existing suspend / resume handlers) and S4 (which uses the new code).
+> > > > 
+> > > > [1]: https://lore.kernel.org/all/c248f0b4-2114-4c61-905f-466a786bdebb@leemhuis.info/
+> > > > [2]:
+> > > > https://github.com/xmm7360/xmm7360-pci/issues/211#issuecomment-1804139413
+> > > > 
+> > > > Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
+> > > 
+> > > Generally looks good to me. Lets wait for approval from PCI
+> > > maintainers to be sure that there no unexpected side effects.
+> > 
+> > I have nothing useful to contribute here.  Seems like kind of a
+> > mess.  But Intel claims to maintain this, so it would be nice if
+> > they would step up and make this work nicely.
+> 
+> Suddenly, Intel lost their interest in the modems market and, as
+> Maciej mentioned, the driver was abandon for a quite time now. The
+> author no more works for Intel. You will see the bounce.
 
-configs tested: 102
-configs skipped: 2
+Well, that's unfortunate :)  Maybe step 0 is to remove the Intel
+entry from MAINTAINERS for this driver.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+> Bjorn, could you suggest how to deal easily with the device that is
+> incapable to seamlessly recover from hibernation? I am totally
+> hopeless regarding the PM topic. Or is the deep driver rework the
+> only option?
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250108    gcc-13.2.0
-arc                   randconfig-002-20250108    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250108    gcc-14.2.0
-arm                   randconfig-002-20250108    gcc-14.2.0
-arm                   randconfig-003-20250108    clang-20
-arm                   randconfig-004-20250108    clang-18
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250108    gcc-14.2.0
-arm64                 randconfig-002-20250108    clang-20
-arm64                 randconfig-003-20250108    gcc-14.2.0
-arm64                 randconfig-004-20250108    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250108    gcc-14.2.0
-csky                  randconfig-002-20250108    gcc-14.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    clang-20
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250108    clang-20
-hexagon               randconfig-002-20250108    clang-20
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250108    clang-19
-i386        buildonly-randconfig-002-20250108    gcc-12
-i386        buildonly-randconfig-003-20250108    gcc-12
-i386        buildonly-randconfig-004-20250108    gcc-12
-i386        buildonly-randconfig-005-20250108    gcc-12
-i386        buildonly-randconfig-006-20250108    clang-19
-i386                                defconfig    clang-19
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250108    gcc-14.2.0
-loongarch             randconfig-002-20250108    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250108    gcc-14.2.0
-nios2                 randconfig-002-20250108    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250108    gcc-14.2.0
-parisc                randconfig-002-20250108    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc               randconfig-001-20250108    clang-16
-powerpc               randconfig-002-20250108    gcc-14.2.0
-powerpc               randconfig-003-20250108    gcc-14.2.0
-powerpc64             randconfig-002-20250108    clang-16
-powerpc64             randconfig-003-20250108    clang-20
-riscv                            allmodconfig    clang-20
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-20
-riscv                 randconfig-001-20250108    gcc-14.2.0
-riscv                 randconfig-002-20250108    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250108    gcc-14.2.0
-s390                  randconfig-002-20250108    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250108    gcc-14.2.0
-sh                    randconfig-002-20250108    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250108    gcc-14.2.0
-sparc                 randconfig-002-20250108    gcc-14.2.0
-sparc64               randconfig-001-20250108    gcc-14.2.0
-sparc64               randconfig-002-20250108    gcc-14.2.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250108    gcc-12
-um                    randconfig-002-20250108    clang-16
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250108    clang-19
-x86_64      buildonly-randconfig-002-20250108    gcc-11
-x86_64      buildonly-randconfig-003-20250108    clang-19
-x86_64      buildonly-randconfig-004-20250108    gcc-12
-x86_64      buildonly-randconfig-005-20250108    gcc-12
-x86_64      buildonly-randconfig-006-20250108    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250108    gcc-14.2.0
-xtensa                randconfig-002-20250108    gcc-14.2.0
+I'm pretty PM-illiterate myself.  Based on
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/pm/sleep-states.rst?id=v6.12#n109,
+I assume that when we resume after hibernate, devices are in the same
+state as after a fresh boot, i.e., the state driver .probe() methods
+see.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+So I assume that some combination of dev_pm_ops methods must be able
+to do basically the same as .probe() to get the device usable again
+after it was completely powered off and back on.
+
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/driver-api/pm/devices.rst?id=v6.12#n506
+mentions .freeze(), .thaw(), .restore(), etc, but the fact that few
+drivers set those pointers and all the nice macros for setting pm ops
+(SYSTEM_SLEEP_PM_OPS, NOIRQ_SYSTEM_SLEEP_PM_OPS, etc) only take
+suspend and resume functions makes me think most drivers must handle
+hibernation in the same .suspend() and .resume() functions they use
+for non-hibernate transitions.
+
+Since all drivers have to cope with devices needing to be
+reinitialized after hibernate, I would look around to see how other
+drivers do it and see if you can do it similarly.
+
+Sorry this is still really a non-answer.
+
+Bjorn
 
