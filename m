@@ -1,200 +1,264 @@
-Return-Path: <linux-pm+bounces-20106-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20107-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64FE3A0630C
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 18:11:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4173A0631F
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 18:15:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E155D188A0A1
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 17:11:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CEFD7188A51F
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 17:15:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B05051FF7D9;
-	Wed,  8 Jan 2025 17:10:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5A30D20011E;
+	Wed,  8 Jan 2025 17:15:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="R7tK4w5D"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HG8hJgG1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f52.google.com (mail-oa1-f52.google.com [209.85.160.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7472680604;
-	Wed,  8 Jan 2025 17:10:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68E521FFC7F;
+	Wed,  8 Jan 2025 17:15:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736356255; cv=none; b=TjqM3mEi61TfeqbFnYIS3EZs1llPUJTuOkHXv5IC83IZ4fkufGQ7hIENFjnDYypniCzhZdFgH/LiGi1bIiYaPScv08+HdTl1F/+qfZY/BYkz9G+qcgJl6ex5Igy+lc6Mgzx0jihEd/oOSiEt1fIjYXnXRvv+Pg5VUr91lP0zkbA=
+	t=1736356530; cv=none; b=IbOEo4G4UL/gjn4wydlqhZXO+NNQn1lh1XbtHK3zbaSHyKfahfWVajMtzoj7WuP4O5SYOsrbbJHgWUNFJAp8GEFeMoa/7V3xk5xoihxnN/c7rY4FNtX8etK7sw3990gw+Rvad91v24r43slXytKuJTunppaBO3mX+CjW1OdyAxM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736356255; c=relaxed/simple;
-	bh=syHNq8FrS1memVYT2XOnQef+TX1aQH42HmaCCT2gH7U=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=Qv/S1RMxwJWOGjBfA5kasVYP+E8trtVKfrhirZ8yTKPKHstq2rxG/qpF1pef5AqTP4WiokyBdxrgaG4xK/pdNtYJ3eJg6xoG9TDkSJxRoiIgfLx1sLilrgRcUZWdxTDKNqY2QW4zj5FIy4vaRElrU1CFeBlIVQVbKX4oeAWBPkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=R7tK4w5D; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736356253; x=1767892253;
-  h=date:from:to:cc:subject:message-id;
-  bh=syHNq8FrS1memVYT2XOnQef+TX1aQH42HmaCCT2gH7U=;
-  b=R7tK4w5D2kHoqWQJlAVsCKNcG6e2O9T3f8rCDLWffSel1gm6jrzdFHSN
-   Ciy+I41QYHUn6uWEJ82qVaz6tBNOwORlDTB1VzpAq9oxawN17JpZbxg/e
-   q6BywRLF6efZ2Seb9RGtvY7FNryfqt3L9mPCP4PHcQRULuyi1ArDDli4P
-   xlv6p+m0N06hSqMbMgFi6CBWvnYEQ7ANIOkvka73ru8cjxVCK3nylhSaM
-   R9EDEgAZHJIAtQOjDsSUfSlSj/3w7bUJywXvC4ijAsz2nnpFfVlSmMkRD
-   jjFet8Ui3aD3fSXlt88RB3HlRPgWsIaCC8Sa/IwoBJsxK2Euikhr0m7EC
-   A==;
-X-CSE-ConnectionGUID: zUH2eEZSRGGAH/O47OWRkg==
-X-CSE-MsgGUID: l/CtitNYT6+4Ud2ogQb1mg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11309"; a="54140234"
-X-IronPort-AV: E=Sophos;i="6.12,298,1728975600"; 
-   d="scan'208";a="54140234"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Jan 2025 09:10:52 -0800
-X-CSE-ConnectionGUID: dweD3lcwQwemQ/SVA8echg==
-X-CSE-MsgGUID: am1tRrh2SOyJ8rHG2SuYKQ==
-X-Ironport-Invalid-End-Of-Message: True
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="104019684"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa008.jf.intel.com with ESMTP; 08 Jan 2025 09:10:50 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tVZZv-000GQe-2V;
-	Wed, 08 Jan 2025 17:10:47 +0000
-Date: Thu, 09 Jan 2025 01:10:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- b6079e1e691c68b53792972fd97653b702e45668
-Message-ID: <202501090121.75OoS9Yw-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1736356530; c=relaxed/simple;
+	bh=qYtetr5HMEGJr1ZUeZNui68qc0xfaK2HdPqXLaZLml4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=liKwsd/zvCpHG0gaNIK3Kl6pSiqDdY3NuiZNaVj/EvYTz3f4MJ6kF7NYZPlFTGYg8vUlEnKbmTSjxcJGTyhY+3ZtQoBKWlPDjLCkQWyK3SdTE4ugYbdpYxhOEaKNQB3SDoMUuliJ8rIScTp/NKIMJ46aSUbRPsgtBicWT/X/faY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HG8hJgG1; arc=none smtp.client-ip=209.85.160.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-29f88004a92so11129175fac.1;
+        Wed, 08 Jan 2025 09:15:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736356525; x=1736961325; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=CQjSIB+SpA8Xj2XbGtqFG9O6snqi8JpWaZDvK39g3CU=;
+        b=HG8hJgG15ETw5WXFi6RCiARDe/dj/3aA4bpHrpFHZAPkwi/1HLPJHuPpALRmVCw9QF
+         SI637v/GBf4w5O7VfUc2NuLvRXgzh1X3f213hCZOVbrf4uMTAiqSop6dFzUDZCHz9Wgv
+         u9VZSyD7KOx0LcGIMa8Bc+YX95FEy4mYSn7H8caBKtECU59NvailEmVvI9e6fDZVzjtR
+         5ybmPRksnHqmKsYEV30EPatuph6qHI/1PxfrUcXDiqZKf3TUCjJ0X2ISWb18jyGA/2wL
+         qzTZjlsIGfZPvWJr9BLI0ri/gUwGhJFW+Z5CcshlUbzqUeOwniCxqG2U92z7I/WIzHxR
+         rfFg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736356525; x=1736961325;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=CQjSIB+SpA8Xj2XbGtqFG9O6snqi8JpWaZDvK39g3CU=;
+        b=FMV9Q17tPENXSy9o/E6JQk0cn4xXeyNJTRNBu2Pzw7E0UQNXgSVg/zw5fMrVmyr2nY
+         AoE7pvh6pW++8NlKRdbfhDZZPpBZCAl/e+uQO1nlF41sWxbEvrgzWCnYcRtoFdii39kk
+         aefmfmqxrowE5Rf8k7ZX/PW5vyhpvSJwaxFgGbAtd6TeO2bgRUIyq4kXrxit3OFzPAy1
+         6qxn6GulUFYmWtbzX5AATIhO0JIXvrtZPKvEc8LbWlVsZbgzwT/6fQEJsvLpeuvc7iXN
+         cJ64jodDxjpcvOZ5ITurfebmcitkzVisMEBRGSwImg8klY2M6C/8m4c4WPhTxp6op1/l
+         LVrg==
+X-Forwarded-Encrypted: i=1; AJvYcCU1Ux6oCdXUNXmpeqz3BLf+PZoJ2lLn/DY1lxdDWgrlrs7rwz+dgacov1eo6vXbGVDUVPuUtqVMzH1tjtmCJw==@vger.kernel.org, AJvYcCUdxs9XEkA/jjUxMysyrfwbp0tzjd5xVO9XjvjpWmQzLJgmUlvc9EU3g5+HtYXSlSWsIeDFtEQCYTjV@vger.kernel.org, AJvYcCUmJcMVtO4lZ2EtZ6srTer210zES1/O4J8n44YAmlAymQGiN1DfZMgh6wduhqeNRIJrNcp16jUO8Uo9rXcz@vger.kernel.org, AJvYcCVr+W9QTM00Z+UGUVJQQ8Q1kj05r2Rv7jVbxjvxORvOl1Rz6gNgIhXzMUjLmrfLkXHETeGrfmcWJME=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhqNrN6HWHMqHPm+SP+GYquCS1sS9oxFm2B7c04tMCRoCepGi5
+	OID6AOhTX9ftgN9WTpfmI3Dtdfy8TPZZ1A4jCTRT0O9Dwc1VAvjVtwBoyEHQT0dJKVb0/+sYT8Z
+	xk7E6PXf8uFfCep2FnLU4QdfOufw=
+X-Gm-Gg: ASbGncvpAZi3wgSsMar0APQrWzWDS5ySE93sOadfLSSwxFTzJLPPbLj6uXI9BctSwmO
+	S2rKroiWr3kmFKBYcb5akEmGpLoUFC2o2jVX562dBgeKrazJ8BxbvTvhTs4U2FxyASl75LXU=
+X-Google-Smtp-Source: AGHT+IFOYu2zI0eI/ZEBSXvRujyJw5sTg9SU8LM20UymNfmWYiLeo3rutyCnE9H4ti6sd4aPiSqdNSeAmK4V7RQnZSM=
+X-Received: by 2002:a05:6871:d106:b0:296:e6d9:a2e1 with SMTP id
+ 586e51a60fabf-2aa066af572mr1855075fac.11.1736356525229; Wed, 08 Jan 2025
+ 09:15:25 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20241231-gpu-acd-v3-0-3ba73660e9ca@quicinc.com>
+ <CAO_MupJ21kOQPZG_=87mC-fQKmL=-K9AgOjriWR=wXCKU0897w@mail.gmail.com>
+ <CAF6AEGvYFL9Q88c727eFrTgDb+FvnPm2d=6niLu80DM1DJdm5g@mail.gmail.com> <20250106195539.tcta6yoyijfrgzhh@hu-akhilpo-hyd.qualcomm.com>
+In-Reply-To: <20250106195539.tcta6yoyijfrgzhh@hu-akhilpo-hyd.qualcomm.com>
+From: Maya Matuszczyk <maccraft123mc@gmail.com>
+Date: Wed, 8 Jan 2025 18:14:46 +0100
+X-Gm-Features: AbW1kvZoIa1SIG2WBthB7htvGPGQe3KsLSA-x7LZ0U_Ys8L5v4xzXxkp0ix07rU
+Message-ID: <CAO_MupJZ+eGUNGXSd7jwEaC6DeZt60LNW_V_38-Jcpmbiy_9Bg@mail.gmail.com>
+Subject: Re: [PATCH v3 0/6] Support for GPU ACD feature on Adreno X1-85
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Cc: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Abhinav Kumar <quic_abhinavk@quicinc.com>, 
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	Marijn Suijten <marijn.suijten@somainline.org>, David Airlie <airlied@gmail.com>, 
+	Simona Vetter <simona@ffwll.ch>, Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>, 
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, linux-arm-msm@vger.kernel.org, 
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: b6079e1e691c68b53792972fd97653b702e45668  Merge branch 'thermal-core' into fixes
+pon., 6 sty 2025 o 20:55 Akhil P Oommen <quic_akhilpo@quicinc.com> napisa=
+=C5=82(a):
+>
+> On Sun, Jan 05, 2025 at 04:55:42PM -0800, Rob Clark wrote:
+> > fwiw, I did see some perf boost (was mainly looking at gfxbench aztec
+> > ruins vk high/normal, and also a separate mesa MR that fixes some LRZ
+> > issues with turnip, so I don't remember how much boost was related to
+> > which offhand)..  I've not seen corruption yet (gnome-shell / f41),
+> > although what you describe sounds cache-line(ish) and could be just
+> > timing related.  You could limit max freq via
+> > /sys/devices/platform/soc@0/3d00000.gpu/devfreq/3d00000.gpu/max_freq
+> > and see if that "fixes" things.  I don't really expect this patchset
+> > to introduce these sorts of issues, but maybe the increased freq
+> > exposes some preexisting conditions?
+>
+> Actually, ACD related issues may show up as weird glitches in HW because
+> of HW spec violation. These issues are very very rare in production
+> devices though. And the behavior may vary between devices due to silicon
+> variations.
+>
+> @Maya, thanks for testing this series. Sorry, one of my patch is buggy.
+> Could you please apply the below diff and check once?
+>
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> @@ -725,7 +725,7 @@ static int a6xx_hfi_enable_acd(struct a6xx_gmu *gmu)
+>         }
+>
+>         /* Send ACD table to GMU */
+> -       ret =3D a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_ACD, &msg, sizeof(msg)=
+, NULL, 0);
+> +       ret =3D a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_ACD, acd_table, sizeof=
+(*acd_table), NULL, 0);
+>         if (ret) {
+>                 DRM_DEV_ERROR(gmu->dev, "Unable to ACD table (%d)\n", ret=
+);
+>                 return ret;
+>
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> @@ -109,7 +109,7 @@ static int a6xx_hfi_wait_for_ack(struct a6xx_gmu *gmu=
+, u32 id, u32 seqnum,
+>
+>         /* Wait for a response */
+>         ret =3D gmu_poll_timeout(gmu, REG_A6XX_GMU_GMU2HOST_INTR_INFO, va=
+l,
+> -               val & A6XX_GMU_GMU2HOST_INTR_INFO_MSGQ, 100, 5000);
+> +               val & A6XX_GMU_GMU2HOST_INTR_INFO_MSGQ, 100, 1000000);
+>
+>         if (ret) {
+>                 DRM_DEV_ERROR(gmu->dev,
+>
 
-elapsed time: 1317m
+With this change on top of this patch series I'm seeing an increase in
+vkmark scores roughly in line with increased frequency.
 
-configs tested: 105
-configs skipped: 2
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250108    gcc-13.2.0
-arc                   randconfig-002-20250108    gcc-13.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250108    gcc-14.2.0
-arm                   randconfig-002-20250108    gcc-14.2.0
-arm                   randconfig-003-20250108    clang-20
-arm                   randconfig-004-20250108    clang-18
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250108    gcc-14.2.0
-arm64                 randconfig-002-20250108    clang-20
-arm64                 randconfig-003-20250108    gcc-14.2.0
-arm64                 randconfig-004-20250108    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250108    gcc-14.2.0
-csky                  randconfig-002-20250108    gcc-14.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    clang-20
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250108    clang-20
-hexagon               randconfig-002-20250108    clang-20
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250108    clang-19
-i386        buildonly-randconfig-002-20250108    gcc-12
-i386        buildonly-randconfig-003-20250108    gcc-12
-i386        buildonly-randconfig-004-20250108    gcc-12
-i386        buildonly-randconfig-005-20250108    gcc-12
-i386        buildonly-randconfig-006-20250108    clang-19
-i386                                defconfig    clang-19
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250108    gcc-14.2.0
-loongarch             randconfig-002-20250108    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250108    gcc-14.2.0
-nios2                 randconfig-002-20250108    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250108    gcc-14.2.0
-parisc                randconfig-002-20250108    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc               randconfig-001-20250108    clang-16
-powerpc               randconfig-002-20250108    gcc-14.2.0
-powerpc               randconfig-003-20250108    gcc-14.2.0
-powerpc64             randconfig-001-20250108    clang-18
-powerpc64             randconfig-002-20250108    clang-16
-powerpc64             randconfig-003-20250108    clang-20
-riscv                            allmodconfig    clang-20
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-20
-riscv                 randconfig-001-20250108    gcc-14.2.0
-riscv                 randconfig-002-20250108    gcc-14.2.0
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250108    gcc-14.2.0
-s390                  randconfig-002-20250108    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250108    gcc-14.2.0
-sh                    randconfig-002-20250108    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250108    gcc-14.2.0
-sparc                 randconfig-002-20250108    gcc-14.2.0
-sparc64               randconfig-001-20250108    gcc-14.2.0
-sparc64               randconfig-002-20250108    gcc-14.2.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250108    gcc-12
-um                    randconfig-002-20250108    clang-16
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250108    clang-19
-x86_64      buildonly-randconfig-002-20250108    gcc-11
-x86_64      buildonly-randconfig-003-20250108    clang-19
-x86_64      buildonly-randconfig-004-20250108    gcc-12
-x86_64      buildonly-randconfig-005-20250108    gcc-12
-x86_64      buildonly-randconfig-006-20250108    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250108    gcc-14.2.0
-xtensa                randconfig-002-20250108    gcc-14.2.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>
+> -Akhil
+> >
+> > BR,
+> > -R
+> >
+> > On Sun, Jan 5, 2025 at 9:56=E2=80=AFAM Maya Matuszczyk <maccraft123mc@g=
+mail.com> wrote:
+> > >
+> > > Hi,
+> > > I've applied this series for testing, and I've no performance
+> > > increase, and some screen corruption, there's some lines(mostly white=
+)
+> > > on my yoga slim 7x that appear on the bottom of the screen. When I
+> > > move my cursor in swaywm over it, the lines get occluded by the curso=
+r
+> > > and screenshots don't show these lines.
+> > >
+> > > Best Regards,
+> > > Maya Matuszczyk
+> > >
+> > > pon., 30 gru 2024 o 22:11 Akhil P Oommen <quic_akhilpo@quicinc.com> n=
+apisa=C5=82(a):
+> > > >
+> > > > This series adds support for ACD feature for Adreno GPU which helps=
+ to
+> > > > lower the power consumption on GX rail and also sometimes is a requ=
+irement
+> > > > to enable higher GPU frequencies. At high level, following are the
+> > > > sequences required for ACD feature:
+> > > >         1. Identify the ACD level data for each regulator corner
+> > > >         2. Send a message to AOSS to switch voltage plan
+> > > >         3. Send a table with ACD level information to GMU during ev=
+ery
+> > > >         gpu wake up
+> > > >
+> > > > For (1), it is better to keep ACD level data in devicetree because =
+this
+> > > > value depends on the process node, voltage margins etc which are
+> > > > chipset specific. For instance, same GPU HW IP on a different chips=
+et
+> > > > would have a different set of values. So, a new schema which extend=
+s
+> > > > opp-v2 is created to add a new property called "qcom,opp-acd-level"=
+.
+> > > >
+> > > > ACD support is dynamically detected based on the presence of
+> > > > "qcom,opp-acd-level" property in GPU's opp table. Also, qmp node sh=
+ould be
+> > > > present under GMU node in devicetree for communication with AOSS.
+> > > >
+> > > > The devicetree patch in this series adds the acd-level data for X1-=
+85
+> > > > GPU present in Snapdragon X1 Elite chipset.
+> > > >
+> > > > The last two devicetree patches are for Bjorn and all the rest for
+> > > > Rob Clark.
+> > > >
+> > > > ---
+> > > > Changes in v3:
+> > > > - Rebased on top of v6.13-rc4 since X1E doesn't boot properly with =
+msm-next
+> > > > - Update patternProperties regex (Krzysztof)
+> > > > - Update MAINTAINERS file include the new opp-v2-qcom-adreno.yaml
+> > > > - Update the new dt properties' description
+> > > > - Do not move qmp_get() to acd probe (Konrad)
+> > > > - New patches: patch#2, #3 and #6
+> > > > - Link to v2: https://lore.kernel.org/r/20241021-gpu-acd-v2-0-9c25a=
+62803bc@quicinc.com
+> > > >
+> > > > Changes in v2:
+> > > > - Removed RFC tag for the series
+> > > > - Improve documentation for the new dt bindings (Krzysztof)
+> > > > - Add fallback compatible string for opp-table (Krzysztof)
+> > > > - Link to v1: https://lore.kernel.org/r/20241012-gpu-acd-v1-0-1e5e9=
+1aa95b6@quicinc.com
+> > > >
+> > > > ---
+> > > > Akhil P Oommen (6):
+> > > >       drm/msm/adreno: Add support for ACD
+> > > >       drm/msm: a6x: Rework qmp_get() error handling
+> > > >       drm/msm/adreno: Add module param to disable ACD
+> > > >       dt-bindings: opp: Add v2-qcom-adreno vendor bindings
+> > > >       arm64: dts: qcom: x1e80100: Add ACD levels for GPU
+> > > >       arm64: dts: qcom: x1e80100: Add OPPs up to Turbo L3 for GPU
+> > > >
+> > > >  .../bindings/opp/opp-v2-qcom-adreno.yaml           | 97 ++++++++++=
+++++++++++++
+> > > >  MAINTAINERS                                        |  1 +
+> > > >  arch/arm64/boot/dts/qcom/x1e80100.dtsi             | 25 +++++-
+> > > >  drivers/gpu/drm/msm/adreno/a6xx_gmu.c              | 96 ++++++++++=
+++++++++---
+> > > >  drivers/gpu/drm/msm/adreno/a6xx_gmu.h              |  1 +
+> > > >  drivers/gpu/drm/msm/adreno/a6xx_hfi.c              | 36 ++++++++
+> > > >  drivers/gpu/drm/msm/adreno/a6xx_hfi.h              | 21 +++++
+> > > >  drivers/gpu/drm/msm/adreno/adreno_device.c         |  4 +
+> > > >  8 files changed, 268 insertions(+), 13 deletions(-)
+> > > > ---
+> > > > base-commit: dbfac60febfa806abb2d384cb6441e77335d2799
+> > > > change-id: 20240724-gpu-acd-6c1dc5dcf516
+> > > >
+> > > > Best regards,
+> > > > --
+> > > > Akhil P Oommen <quic_akhilpo@quicinc.com>
+> > > >
+> > > >
 
