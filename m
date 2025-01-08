@@ -1,259 +1,144 @@
-Return-Path: <linux-pm+bounces-20078-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20079-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C82E6A056CE
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 10:27:46 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CA9AA05748
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 10:47:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6A76161CFB
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 09:27:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 822173A4F4C
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 09:47:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA2A11F1305;
-	Wed,  8 Jan 2025 09:27:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="duR1Rk2w"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31DAC1EF0A5;
+	Wed,  8 Jan 2025 09:47:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FBD1D932F
-	for <linux-pm@vger.kernel.org>; Wed,  8 Jan 2025 09:27:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E2801A8413;
+	Wed,  8 Jan 2025 09:47:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736328461; cv=none; b=N/XEzwmoMjjfrIxqBCJLDhyZ8+z8mpLKT4npRzK1jwZFiIoJqvSki4HDpwGIKZK0Ecu2Z3QY8LrBXNzuNHnn4X9N6RHZcvzzjz53q7hWDvLaXmCvsPVjIHMK37P03nMwquOitKaiYEMonIQu/1HT3HkE6//lmpfw0/l0LCpg6/0=
+	t=1736329668; cv=none; b=ZLX3lnX+UySNNuKSP4s6JR6fOVnrFMyysrCkNYSiZlnmHSl6jcAUQISm1ZL3x5p32bVNj0807I8Hcq1/bhRVg5WzWK6SaimY8isGuaT1SFmTByx2fGxvBNeLXr4dcT5vptfac6qVb+Bgn3E27b0tlvGjfyKHnYMK+wHbX2/tE5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736328461; c=relaxed/simple;
-	bh=jVus9tORm8KvuSjonr0l2HkAMicjd4Eb1rJcv3Wo/Zg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=qjKQUdc60CF29yGAMFL1B2vLABr5u1fAfR3eX1rd8Ho0RZndy+dJ+koKNpACrntB6F66ckhkx46ltmYLM9p4pYtJYTkGqn8/nSs/4SLFQOgOOGvsox852uX2/z+kBhpvvt4QSu9sUEdTEhIKa2DPAxXfw4hlAg50qrNtc9E2f+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=duR1Rk2w; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21628b3fe7dso237244965ad.3
-        for <linux-pm@vger.kernel.org>; Wed, 08 Jan 2025 01:27:39 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736328459; x=1736933259; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=AHm0RBzE9nusKxqQPIPJdzyLuqQMGI1MwErDSccgEsw=;
-        b=duR1Rk2wo/FB0Z85EPrtFMFfXD6fLyQvKY5KBfeVAeLL8Z6IcIJ3xmOTTO0zSODL2u
-         ar1JYvCSvcf4Ut2Id9KYC0JeuVqW+scZu6SBbUXvO9FxrESeq6htZlNd+yrERT7eDax+
-         2HlIeePwL2HThjDMTBzuwWuIHZ3lvjth4uQb+3hr5/mKK+3VuAGW5wepKhY8DTOIAzHK
-         dDcaIqbXHTCZUm6Y5jlemr6rze1IVJmKLJg/pJHI4nKKJ+1vnzm03ynT4d7Bh+94GcZE
-         XOFJx4L8meOohzOpC9sqMvyzm8qYuWJ0fxbOILw3gXsr/by3pzBSYhshecAGxyom6OtC
-         Wm4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736328459; x=1736933259;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AHm0RBzE9nusKxqQPIPJdzyLuqQMGI1MwErDSccgEsw=;
-        b=kVmmlaDNRlD/YozRWfygUT6I8wXDb+Bu4doPp78BTp138YR044uIxh1M3JawutxZuU
-         Z3Cbgke9w2HQFP3lQe+jhayKozxiGZuUtdZK3ieweefqOCtd4QHr+WbWKMzs7W96Cqet
-         IOgGV754PjegLQymaPaPztaxsZ/B3uKPH17ycWoSueZxFub479vHiqsa7nVIhEedmilF
-         uJTmL7mBjH/bcweqLh0tbFa3A9/TyeKOTzcXbzQypSzXXsWnW1AJt56NUeKwfVzPPtNI
-         ma3u+iLrlnAtCi5TdifEayWyfBm4SV6D+W3Ao2/434fYN62MFV9JUp7LYlISbV1xcj7K
-         iTzg==
-X-Forwarded-Encrypted: i=1; AJvYcCUxZBHSfy/gzUC5mibSJnAdTWzbV3BUI2VaZJX0gMG0AVsUeGKYNBmyL4Bs3XhYEIDWAt2yAMX+uQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxX1WkcgL3NWCyg6NQnnr/flICjGKTMKHYI2erPy22lLrLPcFwj
-	cnYflTBCkVQjxHSqPBu1WDUhG/c55Q2sbtCsEGdLZy5Xsf7ThHRZC5iA5lIqVko=
-X-Gm-Gg: ASbGncsLiBkLC+sgi0ooqv7PjV5cBysdmz7yqCR99f0nJFOYfGLwUDyHyJYLC8NaxVe
-	G2rWgkncwW2hLgCUmawtKTcSEsGeNLQu50BVyzpfBjwkUDRjU8ClIvWM2VFzKZAOZJk0PHyhJbN
-	e/T1UVUdQ7mkSlHpM+1fA7WwGTEzFhhABAmvNJfFW9gyzdUWJQ2fY5i5lA1y5Ci6iLt7XS0gteo
-	K1pdtbbpi6E9pUSCXb6Y52ob+AlwoGzNkah7xnJPyn6za3cD9kwde3DrQ8=
-X-Google-Smtp-Source: AGHT+IFl11h7DflWwx9bWWFuvL2hSbCFHV7kkV1X4l1W+rvTucd+iYu6wUGpzuX+/UKI3PkQh9IjgA==
-X-Received: by 2002:a17:902:ce8c:b0:215:711d:d59 with SMTP id d9443c01a7336-21a83f33783mr28520045ad.2.1736328459158;
-        Wed, 08 Jan 2025 01:27:39 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-219dca01965sm324039425ad.240.2025.01.08.01.27.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 08 Jan 2025 01:27:38 -0800 (PST)
-Date: Wed, 8 Jan 2025 14:57:36 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Alice Ryhl <aliceryhl@google.com>
-Cc: Daniel Almeida <daniel.almeida@collabora.com>,
-	Greg KH <gregkh@linuxfoundation.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Trevor Gross <tmgross@umich.edu>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V6 03/15] cpufreq: Rust implementation doesn't parse
- BIT() macro
-Message-ID: <20250108092736.ehimseqpbwraro5g@vireshk-i7>
-References: <cover.1736248242.git.viresh.kumar@linaro.org>
- <9719ba8b3a921bd9f2cb7ebf902c54c708b5409d.1736248242.git.viresh.kumar@linaro.org>
- <2025010752-vagrantly-juiciness-cd81@gregkh>
- <37DAF91C-2A1B-4848-A66F-3B50285AFEBA@collabora.com>
- <20250108065347.k67aqosuefcjdiqi@vireshk-i7>
- <CAH5fLghLxZU5e+7DOXPKordBL_TMXW-_4Bc2E8fkdt_5LSykAQ@mail.gmail.com>
+	s=arc-20240116; t=1736329668; c=relaxed/simple;
+	bh=+BJgSHh+2S3fLPTVT2MQmgY8JUrXp25EkhvHQ5F8bwo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=M3F/mTNO115tRhKHK2te2+17ZYK2aYD4c1M6SDI5TjEepRf9UMEeIVmlSDxUHZgtTN64ziHxqwxwbd3bdmaemuo3flNzkk3mbNOnhftlqYRElALH9dSRIZCOSJpoGvRnzVoO9t4Uy+jI23IYa4sk0cK80rI1jzy76OsvcJlzp8I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4YSjgY2QLjz2DkF6;
+	Wed,  8 Jan 2025 17:44:41 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id AAF0F1401E0;
+	Wed,  8 Jan 2025 17:47:42 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 8 Jan
+ 2025 17:47:42 +0800
+Message-ID: <b6cf42a9-72f8-473f-8e93-e0ad9ac1d49e@huawei.com>
+Date: Wed, 8 Jan 2025 17:47:41 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <CAH5fLghLxZU5e+7DOXPKordBL_TMXW-_4Bc2E8fkdt_5LSykAQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpufreq/amd-pstate: Fix per-policy boost flag incorrect
+ when fail
+To: Mario Limonciello <mario.limonciello@amd.com>
+CC: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <perry.yuan@amd.com>,
+	<linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
+	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <fanghao11@huawei.com>
+References: <20250103074139.1080092-1-zhenglifeng1@huawei.com>
+ <7e777177-417e-41eb-81d0-3635769d3a83@amd.com>
+ <8fcec19d-9f3c-4ec9-99e9-d3003a94efcd@huawei.com>
+ <4d4ba2f4-a294-44cf-b79e-c93c4e23cb2e@amd.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <4d4ba2f4-a294-44cf-b79e-c93c4e23cb2e@amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-On 08-01-25, 10:01, Alice Ryhl wrote:
-> Change the #define to an enum instead. See commit 3634783be125
-> ("binder: use enum for binder ioctls") for an example of this
-> strategy.
+On 2025/1/8 10:26, Mario Limonciello wrote:
 
-Thanks Alice. Works with this now:
+> On 1/7/2025 19:31, zhenglifeng (A) wrote:
+>> On 2025/1/4 0:56, Mario Limonciello wrote:
+>>
+>>> On 1/3/2025 01:41, Lifeng Zheng wrote:
+>>>> Commit c8c68c38b56f ("cpufreq: amd-pstate: initialize core precision
+>>>> boost state") sets per-policy boost flag to false when boost fail.
+>>>> However, this boost flag will be set to reverse value in
+>>>> store_local_boost() and cpufreq_boost_trigger_state() in cpufreq.c. This
+>>>> will cause the per-policy boost flag set to true when fail to set boost.
+>>>> Remove the extra assignment in amd_pstate_set_boost() and keep all
+>>>> operations on per-policy boost flag outside of set_boost() to fix this
+>>>> problem.
+>>>>
+>>>> Fixes: c8c68c38b56f ("cpufreq: amd-pstate: initialize core precision boost state")
+>>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>>>> ---
+>>>
+>>> Hi There,
+>>>
+>>> Thanks for the patch.  Unfortunately, it doesn't apply to the current linux-next branch at https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
+>>
+>> Hello Mario,
+>>
+>> When I try to build on this branch, I got an error:
+>>
+>> arch/x86/kernel/relocate_kernel_64.o: In function `virtual_mapped':
+>> .../linux/arch/x86/kernel/relocate_kernel_64.S:249: undefined reference to `saved_context_gdt_desc'
+>> scripts/Makefile.vmlinux:77: recipe for target 'vmlinux' failed
+>>
+>> This error occurs when CONFIG_KEXEC_JUMP=y, and doesn't occur when build on
+>> torvalds master branch with same config. Please check if there is any
+>> problem whith this branch.
+>>
+> Hi,
+> 
+> It's because the branch is based on an earlier 6.13-rc.
+> 
+> Two ideas that can help you:
+> 
+> 1) You can pull this patch manually on top of it to avoid that issue.
+> https://git.kernel.org/torvalds/c/aeb68937614f4
+> 
+> 2) You can manually rebase the branch on newer 6.13-rc locally to make your commit.  That commit that fixed it landed in 6.13-rc3, so rc3 or later would be fine.
 
-Subject: [PATCH] cpufreq: Use enum for cpufreq flags that use BIT()
+This solves the problem, thanks!
 
-The BIT() macro is too complex for Rust's bindgen to interpret as
-integer constants. This can cause issues when generating bindings for
-use in Rust. By replacing the `#define` macros with an `enum`, we ensure
-that bindgen can properly evaluate these values, enabling their seamless
-use in Rust code.
+> 
+>>>
+>>> Although the issue you identified is still valid, there have been other contextual changes in the function [1].  Can you rebase on that branch, test it again and send a v2?
+>>>
+>>> [1] https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/tree/drivers/cpufreq/amd-pstate.c?h=linux-next#n750
+>>>
+>>> Thanks!
+>>>
+>>>>    drivers/cpufreq/amd-pstate.c | 1 -
+>>>>    1 file changed, 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+>>>> index 66e5dfc711c0..4ce923788f3a 100644
+>>>> --- a/drivers/cpufreq/amd-pstate.c
+>>>> +++ b/drivers/cpufreq/amd-pstate.c
+>>>> @@ -730,7 +730,6 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
+>>>>        mutex_lock(&amd_pstate_driver_lock);
+>>>>        ret = amd_pstate_cpu_boost_update(policy, state);
+>>>>        WRITE_ONCE(cpudata->boost_state, !ret ? state : false);
+>>>> -    policy->boost_enabled = !ret ? state : false;
+>>>>        refresh_frequency_limits(policy);
+>>>>        mutex_unlock(&amd_pstate_driver_lock);
+>>>>    
+>>>
+>>
+> 
 
-No intentional functional impact.
-
-Suggested-by: Alice Ryhl <aliceryhl@google.com>
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
- include/linux/cpufreq.h | 96 ++++++++++++++++++++++-------------------
- 1 file changed, 51 insertions(+), 45 deletions(-)
-
-diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-index 6b882ff4dc24..6f4283007b8c 100644
---- a/include/linux/cpufreq.h
-+++ b/include/linux/cpufreq.h
-@@ -292,11 +292,12 @@ static inline void cpufreq_stats_record_transition(struct cpufreq_policy *policy
-  *                      CPUFREQ DRIVER INTERFACE                     *
-  *********************************************************************/
- 
--#define CPUFREQ_RELATION_L 0  /* lowest frequency at or above target */
--#define CPUFREQ_RELATION_H 1  /* highest frequency below or at target */
--#define CPUFREQ_RELATION_C 2  /* closest frequency to target */
--/* relation flags */
--#define CPUFREQ_RELATION_E BIT(2) /* Get if possible an efficient frequency */
-+enum {
-+	CPUFREQ_RELATION_L = 0, /* lowest frequency at or above target */
-+	CPUFREQ_RELATION_H = BIT(0), /* highest frequency below or at target */
-+	CPUFREQ_RELATION_C = BIT(1), /* closest frequency to target */
-+	CPUFREQ_RELATION_E = BIT(2), /* Get if possible an efficient frequency */
-+};
- 
- #define CPUFREQ_RELATION_LE (CPUFREQ_RELATION_L | CPUFREQ_RELATION_E)
- #define CPUFREQ_RELATION_HE (CPUFREQ_RELATION_H | CPUFREQ_RELATION_E)
-@@ -418,52 +419,57 @@ struct cpufreq_driver {
- 
- /* flags */
- 
--/*
-- * Set by drivers that need to update internal upper and lower boundaries along
-- * with the target frequency and so the core and governors should also invoke
-- * the diver if the target frequency does not change, but the policy min or max
-- * may have changed.
-- */
--#define CPUFREQ_NEED_UPDATE_LIMITS		BIT(0)
-+enum {
-+	/*
-+	 * Set by drivers that need to update internal upper and lower
-+	 * boundaries along with the target frequency and so the core and
-+	 * governors should also invoke the diver if the target frequency does
-+	 * not change, but the policy min or max may have changed.
-+	 */
-+	CPUFREQ_NEED_UPDATE_LIMITS		= BIT(0),
- 
--/* loops_per_jiffy or other kernel "constants" aren't affected by frequency transitions */
--#define CPUFREQ_CONST_LOOPS			BIT(1)
-+	/*
-+	 * loops_per_jiffy or other kernel "constants" aren't affected by
-+	 * frequency transitions.
-+	 */
-+	CPUFREQ_CONST_LOOPS			= BIT(1),
- 
--/*
-- * Set by drivers that want the core to automatically register the cpufreq
-- * driver as a thermal cooling device.
-- */
--#define CPUFREQ_IS_COOLING_DEV			BIT(2)
-+	/*
-+	 * Set by drivers that want the core to automatically register the
-+	 * cpufreq driver as a thermal cooling device.
-+	 */
-+	CPUFREQ_IS_COOLING_DEV			= BIT(2),
- 
--/*
-- * This should be set by platforms having multiple clock-domains, i.e.
-- * supporting multiple policies. With this sysfs directories of governor would
-- * be created in cpu/cpu<num>/cpufreq/ directory and so they can use the same
-- * governor with different tunables for different clusters.
-- */
--#define CPUFREQ_HAVE_GOVERNOR_PER_POLICY	BIT(3)
-+	/*
-+	 * This should be set by platforms having multiple clock-domains, i.e.
-+	 * supporting multiple policies. With this sysfs directories of governor
-+	 * would be created in cpu/cpu<num>/cpufreq/ directory and so they can
-+	 * use the same governor with different tunables for different clusters.
-+	 */
-+	CPUFREQ_HAVE_GOVERNOR_PER_POLICY	= BIT(3),
- 
--/*
-- * Driver will do POSTCHANGE notifications from outside of their ->target()
-- * routine and so must set cpufreq_driver->flags with this flag, so that core
-- * can handle them specially.
-- */
--#define CPUFREQ_ASYNC_NOTIFICATION		BIT(4)
-+	/*
-+	 * Driver will do POSTCHANGE notifications from outside of their
-+	 * ->target() routine and so must set cpufreq_driver->flags with this
-+	 *  flag, so that core can handle them specially.
-+	 */
-+	CPUFREQ_ASYNC_NOTIFICATION		= BIT(4),
- 
--/*
-- * Set by drivers which want cpufreq core to check if CPU is running at a
-- * frequency present in freq-table exposed by the driver. For these drivers if
-- * CPU is found running at an out of table freq, we will try to set it to a freq
-- * from the table. And if that fails, we will stop further boot process by
-- * issuing a BUG_ON().
-- */
--#define CPUFREQ_NEED_INITIAL_FREQ_CHECK	BIT(5)
-+	/*
-+	 * Set by drivers which want cpufreq core to check if CPU is running at
-+	 * a frequency present in freq-table exposed by the driver. For these
-+	 * drivers if CPU is found running at an out of table freq, we will try
-+	 * to set it to a freq from the table. And if that fails, we will stop
-+	 * further boot process by issuing a BUG_ON().
-+	 */
-+	CPUFREQ_NEED_INITIAL_FREQ_CHECK		= BIT(5),
- 
--/*
-- * Set by drivers to disallow use of governors with "dynamic_switching" flag
-- * set.
-- */
--#define CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING	BIT(6)
-+	/*
-+	 * Set by drivers to disallow use of governors with "dynamic_switching"
-+	 * flag set.
-+	 */
-+	CPUFREQ_NO_AUTO_DYNAMIC_SWITCHING	= BIT(6),
-+};
- 
- int cpufreq_register_driver(struct cpufreq_driver *driver_data);
- void cpufreq_unregister_driver(struct cpufreq_driver *driver_data);
--- 
-viresh
 
