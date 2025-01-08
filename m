@@ -1,216 +1,195 @@
-Return-Path: <linux-pm+bounces-20113-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20114-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EA435A065ED
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 21:18:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A60C5A06650
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 21:40:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3AD683A12F6
-	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 20:18:26 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 007D43A7219
+	for <lists+linux-pm@lfdr.de>; Wed,  8 Jan 2025 20:40:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F14420127E;
-	Wed,  8 Jan 2025 20:18:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A45E0202C5D;
+	Wed,  8 Jan 2025 20:40:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ketGsGW/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from vps-ovh.mhejs.net (vps-ovh.mhejs.net [145.239.82.108])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0DA91ABED9;
-	Wed,  8 Jan 2025 20:18:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=145.239.82.108
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5C9E1F9F4B;
+	Wed,  8 Jan 2025 20:40:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736367507; cv=none; b=ZbwLbf1sXGHw3avxltW2crD5p9n3jas1xgFBLcnQh6LIrA2f+rAhwv08ocpIXVHtVl/Gs3mncjWBtG/nZEKAzjNb+NUVDVnFQzJ9w5yq+ucRz6Ei/0hMI2D7nDgsxRPRCDepXHZnpoDp1dMQrHjy6kuUJBn5wCoCtrkM6WeOWC8=
+	t=1736368844; cv=none; b=SkzyuOJruvkIfjJ18ZGMfgUgBVEZlRt8MtH0FwdtmXib77ortwr9qH2IuOMKCnZO4FwLdPhvX+Q0dGkvkOuHT0vIKkUbXGqKECwq91fDfTIa7vLr64FMphwW5/uepB+oBrpZglE72RSvfTyPJfrJX/pwDGq9L99rlP3wsAx7NxA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736367507; c=relaxed/simple;
-	bh=eQvOD5oObR9xJhsrh/E1FQya3AOWCKVE8dKE+vvzmTw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=k4Vt1RlfAa6K5RLUAabIqJUKfyvT7C2TFe2odAa+DckagYFgQt2MjI1+Au+e5rTkzSvsRk0JSHH6t6FT5H8cQzED7dR5OZ4Md4JEKfM7nllnfKKPGbLBrvG0+bUcOZbiWb0eZAFw5grMWiiLdt+Jt93tde+O02H+FVl57Nv1XKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name; spf=pass smtp.mailfrom=vps-ovh.mhejs.net; arc=none smtp.client-ip=145.239.82.108
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vps-ovh.mhejs.net
-Received: from MUA
-	by vps-ovh.mhejs.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
-	(Exim 4.98)
-	(envelope-from <mhej@vps-ovh.mhejs.net>)
-	id 1tVcVM-00000005Q2v-1LVe;
-	Wed, 08 Jan 2025 21:18:16 +0100
-Message-ID: <db2575ca-e287-4911-97f9-50570aeece41@maciej.szmigiero.name>
-Date: Wed, 8 Jan 2025 21:18:11 +0100
+	s=arc-20240116; t=1736368844; c=relaxed/simple;
+	bh=mP3e4YZddAGvahjk2HZAAOT5Oq0VSXTNEvcaAQbl2gU=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=Z8bvqg0NvG8X4621YfKvJ5AkHL6USNPKmMD7pkJ0WpHDYJ1y0sYyxTptUrQDmBS6zL1hp5ntVlEZFDiNhsaQ3gMCygNc3fDiLlX9WsV+CBDwPDeMHGrJMhaJMIUUgrceidsLRnxymjyGvVnZ/o3E2p6A2XXY2WL2IqU2vHzR6ro=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ketGsGW/; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 508GceHs002463;
+	Wed, 8 Jan 2025 20:40:29 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=MmmVej/51Kjt6A9bkZeUhE
+	Uoj/xUWewiMnEyfTP8uHU=; b=ketGsGW/7g7BNx+C9fQF9thQ6l8uQn0HeyLyhH
+	DaJDWazvpsnYJ/B5Vh7GcXMc+BJDy9XnB46iko7KDlM7cH9xlaPOWG0nmxG9p6Ry
+	pH6iISd7minOH560ohjDS+arH8nFsIGsca9wUh3qJH5+7QLUMGStZAjNowi1WkF8
+	WOrN9EZLszbb28WGGrPTUZ6dWJ+aUfCiuYFXGSzJLlNNnR5PfaE9vQ3acRkHD962
+	09S6IV08ClSBn1VheJF1GF+t4Qhd4FRzOM9mEB+XEHmLxSXcZwrg/OULMM1le0jm
+	XKG+X5qkEXMeg/A2ap6QSsS1j8O4jzBfT568Lq+G0V/RXw5A==
+Received: from nalasppmta02.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 441w2j8jde-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 08 Jan 2025 20:40:28 +0000 (GMT)
+Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
+	by NALASPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 508KeRPd020787
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 8 Jan 2025 20:40:27 GMT
+Received: from [10.213.111.143] (10.80.80.8) by nalasex01a.na.qualcomm.com
+ (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 8 Jan 2025
+ 12:40:21 -0800
+From: Akhil P Oommen <quic_akhilpo@quicinc.com>
+Subject: [PATCH v4 0/7] Support for GPU ACD feature on Adreno X1-85
+Date: Thu, 9 Jan 2025 02:09:56 +0530
+Message-ID: <20250109-gpu-acd-v4-0-08a5efaf4a23@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] net: wwan: iosm: Fix hibernation by re-binding the
- driver around it
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>,
- M Chetan Kumar <m.chetan.kumar@intel.com>,
- Sergey Ryazanov <ryazanov.s.a@gmail.com>,
- Loic Poulain <loic.poulain@linaro.org>,
- Johannes Berg <johannes@sipsolutions.net>,
- Bjorn Helgaas <bhelgaas@google.com>, Andrew Lunn <andrew+netdev@lunn.ch>,
- "David S. Miller" <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
- Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
- netdev@vger.kernel.org, linux-pci@vger.kernel.org,
- linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- linux-pm@vger.kernel.org
-References: <20250108195109.GA224965@bhelgaas>
- <5df4a525-dc5d-405a-be07-5b33e94f5a4f@maciej.szmigiero.name>
- <CAJZ5v0hU8=h2QLQ+JDoTb28uWFH=r=PsCSGjgs+Mv4_ax-rrAg@mail.gmail.com>
-Content-Language: en-US, pl-PL
-From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
-Autocrypt: addr=mail@maciej.szmigiero.name; keydata=
- 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
-Disposition-Notification-To: "Maciej S. Szmigiero"
- <mail@maciej.szmigiero.name>
-In-Reply-To: <CAJZ5v0hU8=h2QLQ+JDoTb28uWFH=r=PsCSGjgs+Mv4_ax-rrAg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-Sender: mhej@vps-ovh.mhejs.net
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJzifmcC/2WQwW7CMAyGX6XKeUGxk6aU095j2sF1XciBFpISb
+ UK8+1LQYNWOv+3vs+yrShKDJLWrripKDilMYwnurVJ8oHEvOvQlKzToTINO708XTdxrz9Bz3fN
+ Qg1dl+hRlCF9308dnyYeQ5il+38UZluqvwz8dGbTRjSNLzeCc9dv38yVwGHnD03GRLgQYwDUBU
+ ksLRG3d+RWx7M343AUG4UViIVvGmjxuje34P2lfJNo/pC2k7aix3htpmdbk7XF8lFJNYX58QHW
+ URJf+Mcy7KvsNWB3ZlenbDxphfpxzAQAA
+To: Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+        "Konrad
+ Dybcio" <konradybcio@kernel.org>,
+        Abhinav Kumar <quic_abhinavk@quicinc.com>,
+        Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+        Marijn Suijten
+	<marijn.suijten@somainline.org>,
+        David Airlie <airlied@gmail.com>, "Simona
+ Vetter" <simona@ffwll.ch>,
+        Viresh Kumar <vireshk@kernel.org>, Nishanth Menon
+	<nm@ti.com>,
+        Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Akhil P Oommen <quic_akhilpo@quicinc.com>,
+        Bjorn Andersson
+	<andersson@kernel.org>,
+        Maya Matuszczyk <maccraft123mc@gmail.com>
+CC: <linux-arm-msm@vger.kernel.org>, <dri-devel@lists.freedesktop.org>,
+        <freedreno@lists.freedesktop.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        Konrad Dybcio
+	<konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1736368821; l=3340;
+ i=quic_akhilpo@quicinc.com; s=20240726; h=from:subject:message-id;
+ bh=mP3e4YZddAGvahjk2HZAAOT5Oq0VSXTNEvcaAQbl2gU=;
+ b=z2iX7nYDuxdiuqdLRXdB70QhHyJvtPGOgchmS96OVXtTZRSrOVQ45cUgZU78qZUu/ir+jh67w
+ HjPx8ibGw7qCs/l0tEWDXDdIsiVILnxDc1Ls43h09+maI+Nw+kHJfKX
+X-Developer-Key: i=quic_akhilpo@quicinc.com; a=ed25519;
+ pk=lmVtttSHmAUYFnJsQHX80IIRmYmXA4+CzpGcWOOsfKA=
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nalasex01a.na.qualcomm.com (10.47.209.196)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: Qm6GXnLTgCEs5lfsie021mzlXrIK4uBf
+X-Proofpoint-ORIG-GUID: Qm6GXnLTgCEs5lfsie021mzlXrIK4uBf
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1039,Hydra:6.0.680,FMLib:17.12.60.29
+ definitions=2024-09-06_09,2024-09-06_01,2024-09-02_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 mlxlogscore=999
+ clxscore=1015 impostorscore=0 phishscore=0 spamscore=0 suspectscore=0
+ lowpriorityscore=0 adultscore=0 priorityscore=1501 malwarescore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501080168
 
-On 8.01.2025 21:17, Rafael J. Wysocki wrote:
-> On Wed, Jan 8, 2025 at 9:04 PM Maciej S. Szmigiero
-> <mail@maciej.szmigiero.name> wrote:
->>
->> On 8.01.2025 20:51, Bjorn Helgaas wrote:
->>> [+cc Rafael, linux-pm because they *are* PM experts :)]
->>>
->>> On Wed, Jan 08, 2025 at 02:15:28AM +0200, Sergey Ryazanov wrote:
->>>> On 08.01.2025 01:45, Bjorn Helgaas wrote:
->>>>> On Wed, Jan 08, 2025 at 01:13:41AM +0200, Sergey Ryazanov wrote:
->>>>>> On 05.01.2025 19:39, Maciej S. Szmigiero wrote:
->>>>>>> Currently, the driver is seriously broken with respect to the
->>>>>>> hibernation (S4): after image restore the device is back into
->>>>>>> IPC_MEM_EXEC_STAGE_BOOT (which AFAIK means bootloader stage) and needs
->>>>>>> full re-launch of the rest of its firmware, but the driver restore
->>>>>>> handler treats the device as merely sleeping and just sends it a
->>>>>>> wake-up command.
->>>>>>>
->>>>>>> This wake-up command times out but device nodes (/dev/wwan*) remain
->>>>>>> accessible.
->>>>>>> However attempting to use them causes the bootloader to crash and
->>>>>>> enter IPC_MEM_EXEC_STAGE_CD_READY stage (which apparently means "a crash
->>>>>>> dump is ready").
->>>>>>>
->>>>>>> It seems that the device cannot be re-initialized from this crashed
->>>>>>> stage without toggling some reset pin (on my test platform that's
->>>>>>> apparently what the device _RST ACPI method does).
->>>>>>>
->>>>>>> While it would theoretically be possible to rewrite the driver to tear
->>>>>>> down the whole MUX / IPC layers on hibernation (so the bootloader does
->>>>>>> not crash from improper access) and then re-launch the device on
->>>>>>> restore this would require significant refactoring of the driver
->>>>>>> (believe me, I've tried), since there are quite a few assumptions
->>>>>>> hard-coded in the driver about the device never being partially
->>>>>>> de-initialized (like channels other than devlink cannot be closed,
->>>>>>> for example).
->>>>>>> Probably this would also need some programming guide for this hardware.
->>>>>>>
->>>>>>> Considering that the driver seems orphaned [1] and other people are
->>>>>>> hitting this issue too [2] fix it by simply unbinding the PCI driver
->>>>>>> before hibernation and re-binding it after restore, much like
->>>>>>> USB_QUIRK_RESET_RESUME does for USB devices that exhibit a similar
->>>>>>> problem.
->>>>>>>
->>>>>>> Tested on XMM7360 in HP EliteBook 855 G7 both with s2idle (which uses
->>>>>>> the existing suspend / resume handlers) and S4 (which uses the new code).
->>>>>>>
->>>>>>> [1]: https://lore.kernel.org/all/c248f0b4-2114-4c61-905f-466a786bdebb@leemhuis.info/
->>>>>>> [2]:
->>>>>>> https://github.com/xmm7360/xmm7360-pci/issues/211#issuecomment-1804139413
->>>>>>>
->>>>>>> Signed-off-by: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
->>>>>>
->>>>>> Generally looks good to me. Lets wait for approval from PCI
->>>>>> maintainers to be sure that there no unexpected side effects.
->>>>>
->>>>> I have nothing useful to contribute here.  Seems like kind of a
->>>>> mess.  But Intel claims to maintain this, so it would be nice if
->>>>> they would step up and make this work nicely.
->>>>
->>>> Suddenly, Intel lost their interest in the modems market and, as
->>>> Maciej mentioned, the driver was abandon for a quite time now. The
->>>> author no more works for Intel. You will see the bounce.
->>>
->>> Well, that's unfortunate :)  Maybe step 0 is to remove the Intel
->>> entry from MAINTAINERS for this driver.
->>>
->>>> Bjorn, could you suggest how to deal easily with the device that is
->>>> incapable to seamlessly recover from hibernation? I am totally
->>>> hopeless regarding the PM topic. Or is the deep driver rework the
->>>> only option?
->>>
->>> I'm pretty PM-illiterate myself.  Based on
->>> https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/admin-guide/pm/sleep-states.rst?id=v6.12#n109,
->>> I assume that when we resume after hibernate, devices are in the same
->>> state as after a fresh boot, i.e., the state driver .probe() methods
->>> see.
->>>
->>> So I assume that some combination of dev_pm_ops methods must be able
->>> to do basically the same as .probe() to get the device usable again
->>> after it was completely powered off and back on.
->>
->> You are right that it should be theoretically possible to fix this issue
->> by re-initializing the driver in the hibernation restore/thaw callbacks
->> and I even have tried to do so in the beginning.
->>
->> But as I wrote in this patch description, doing so would need significant
->> refactoring of the driver as it is not currently capable of being
->> de-initialized and re-initialized partially.
->>
->> Hence this patch approach of simply re-binding the driver which also
->> seemed safer in the absence of any real programming docs for this hardware.
-> 
-> While this may not be elegant, it may actually get the job done.
-> 
-> Can you please resend the patch with a CC to linux-pm@vger.kernel.org?
+This series adds support for ACD feature for Adreno GPU which helps to
+lower the power consumption on GX rail and also sometimes is a requirement
+to enable higher GPU frequencies. At high level, following are the
+sequences required for ACD feature:
+	1. Identify the ACD level data for each regulator corner
+	2. Send a message to AOSS to switch voltage plan
+	3. Send a table with ACD level information to GMU during every
+	gpu wake up
 
-Will do.
+For (1), it is better to keep ACD level data in devicetree because this
+value depends on the process node, voltage margins etc which are
+chipset specific. For instance, same GPU HW IP on a different chipset
+would have a different set of values. So, a new schema which extends
+opp-v2 is created to add a new property called "qcom,opp-acd-level".
 
-Thanks,
-Maciej
+ACD support is dynamically detected based on the presence of
+"qcom,opp-acd-level" property in GPU's opp table. Also, qmp node should be
+present under GMU node in devicetree for communication with AOSS.
+
+The devicetree patch in this series adds the acd-level data for X1-85
+GPU present in Snapdragon X1 Elite chipset.
+
+The last two devicetree patches are for Bjorn and all the rest for
+Rob Clark.
+
+---
+Changes in v4:
+- Send correct acd data via hfi (Neil)
+- Fix dt-bindings error
+- Fix IB vote for the 1.1Ghz OPP
+- New patch#2 to fix the HFI timeout error seen when ACD is enabled
+- Link to v3: https://lore.kernel.org/r/20241231-gpu-acd-v3-0-3ba73660e9ca@quicinc.com
+
+Changes in v3:
+- Rebased on top of v6.13-rc4 since X1E doesn't boot properly with msm-next
+- Update patternProperties regex (Krzysztof)
+- Update MAINTAINERS file include the new opp-v2-qcom-adreno.yaml
+- Update the new dt properties' description
+- Do not move qmp_get() to acd probe (Konrad)
+- New patches: patch#2, #3 and #6
+- Link to v2: https://lore.kernel.org/r/20241021-gpu-acd-v2-0-9c25a62803bc@quicinc.com
+
+Changes in v2:
+- Removed RFC tag for the series
+- Improve documentation for the new dt bindings (Krzysztof)
+- Add fallback compatible string for opp-table (Krzysztof)
+- Link to v1: https://lore.kernel.org/r/20241012-gpu-acd-v1-0-1e5e91aa95b6@quicinc.com
+
+---
+Akhil P Oommen (7):
+      drm/msm/adreno: Add support for ACD
+      drm/msm/a6xx: Increase HFI response timeout
+      drm/msm: a6x: Rework qmp_get() error handling
+      drm/msm/adreno: Add module param to disable ACD
+      dt-bindings: opp: Add v2-qcom-adreno vendor bindings
+      arm64: dts: qcom: x1e80100: Add ACD levels for GPU
+      arm64: dts: qcom: x1e80100: Add OPPs up to Turbo L3 for GPU
+
+ .../bindings/opp/opp-v2-qcom-adreno.yaml           | 97 ++++++++++++++++++++++
+ MAINTAINERS                                        |  1 +
+ arch/arm64/boot/dts/qcom/x1e80100.dtsi             | 27 +++++-
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.c              | 96 ++++++++++++++++++---
+ drivers/gpu/drm/msm/adreno/a6xx_gmu.h              |  1 +
+ drivers/gpu/drm/msm/adreno/a6xx_hfi.c              | 38 ++++++++-
+ drivers/gpu/drm/msm/adreno/a6xx_hfi.h              | 21 +++++
+ drivers/gpu/drm/msm/adreno/adreno_device.c         |  4 +
+ 8 files changed, 270 insertions(+), 15 deletions(-)
+---
+base-commit: dbfac60febfa806abb2d384cb6441e77335d2799
+change-id: 20240724-gpu-acd-6c1dc5dcf516
+
+Best regards,
+-- 
+Akhil P Oommen <quic_akhilpo@quicinc.com>
 
 
