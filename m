@@ -1,87 +1,127 @@
-Return-Path: <linux-pm+bounces-20140-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20141-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7FBF0A074DC
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 12:39:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F179A074E2
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 12:39:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8438D168531
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 11:39:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7402B16858D
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 11:39:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9463E216E37;
-	Thu,  9 Jan 2025 11:38:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6470A216E10;
+	Thu,  9 Jan 2025 11:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vDLPsUqv"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DHKnm668"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6516A12EBEA;
-	Thu,  9 Jan 2025 11:38:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFF4216E01
+	for <linux-pm@vger.kernel.org>; Thu,  9 Jan 2025 11:39:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736422731; cv=none; b=d99sEI3Ge69kT516T3Rn++nDbF9t6r/wGa/rjirdeCTZPQJVAzyyVJdbRG9IqdqQb46Q+gTbOiLGOLclX3koOnT5wES6QcRAeWAoBVkC0zLNAV5IKdMApMXWBmMnQadmB+M+1ZP3xBuqLNu7cvSt1PjEwJd3I28awMENAVpB3X8=
+	t=1736422755; cv=none; b=TyGcWDNQuxyZNxEOCzfylLkTcKNihE1jodEf4cTMNc2RXbfJgQwEO9VRQwKkoJ4zE2tKGYlkFMTfmiyYLZq9r/nUhYjNJcou0t8UeZSi0b51e/yycERvSohEU0FDHvRkRFqt6KLNigD8kJ7uuNvoUl7QbrTlgFRVH+ymexmcyTE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736422731; c=relaxed/simple;
-	bh=zgMHsOc6QOK1ad1fReClnAUKTbMQiY82oCo9qlKQvcY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=GkShBIPeHSABnkQfD871qNw+msV6myo+jKQrRUSEKKRzrPf72e282IRfp6L0jqANcXnQ0KOBE9/h81XfBDIJBJhI9nXU/sUp4kwfM7jZ9CDKGvPnOz28mTm4FkQ0zO6o6dfP9w96U3krWmxzXyPQFvt7Mbro1kdhhPiimtT6Hw0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vDLPsUqv; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 222D5C4CEE2;
-	Thu,  9 Jan 2025 11:38:48 +0000 (UTC)
+	s=arc-20240116; t=1736422755; c=relaxed/simple;
+	bh=DXE2So2Py5XRjf84OhnQg7rvzaZdP9MRRVPhI7d2j1A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=W8JrIusFPXrrWBMwcb77hPs7H5lTt7Sx4ycUU+FeUpydau42ueZ+CiOg23urECPP5fo8cpxcMSwi1UtKNZxnOf7r4PpBryZA5z8D9ts7brVmd8lTvfo7qzWQzPM+lqoiNWwnwsnemOmt0eatahWepQkuTLkeOd9PY472bFUre/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHKnm668; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1EF3C4CED2
+	for <linux-pm@vger.kernel.org>; Thu,  9 Jan 2025 11:39:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736422731;
-	bh=zgMHsOc6QOK1ad1fReClnAUKTbMQiY82oCo9qlKQvcY=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=vDLPsUqvdItIFevZ6ywY6qN1aTgNp61+EE5SyRAssptWz3/DM6/MItnpCrN9VPQwd
-	 NoVPkRfGWobB3MlKtrme0mhKm5KzhL/E+psNe6rCbb6POAxpK2LN1XP7zuh6a8JXTe
-	 ce2Pt463WiTBddkLN5F1liBVDwNANcpWkDrXSfRgA8VMW/C9I59Cy5wiLkGRoa2fPX
-	 BLvtiW7s72ebafPI0rUNcYPo7OMVv3boXQSPs+mWIOIrb7dcayHGAkx5o1yzBy0ZiE
-	 Uq+cmgFQEYMkpDLIx9XZ+xn9Dot05j83nc03nrFncvX8+/DvzZ3uGgL3i1LfyUdDIQ
-	 NEqCH0bzeGAEQ==
-From: Lee Jones <lee@kernel.org>
-To: Lee Jones <lee@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
- Andre Przywara <andre.przywara@arm.com>
-Cc: linux-sunxi@lists.linux.dev, Chris Morgan <macroalpha82@gmail.com>, 
- Vasily Khoruzhick <anarsoul@gmail.com>, Jonathan Cameron <jic23@kernel.org>, 
- Andrey Skvortsov <andrej.skvortzov@gmail.com>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20250108164359.2609078-1-andre.przywara@arm.com>
-References: <20250108164359.2609078-1-andre.przywara@arm.com>
-Subject: Re: (subset) [PATCH v2] Revert "mfd: axp20x: Allow multiple
- regulators"
-Message-Id: <173642272888.2620575.17634288216154119464.b4-ty@kernel.org>
-Date: Thu, 09 Jan 2025 11:38:48 +0000
+	s=k20201202; t=1736422754;
+	bh=DXE2So2Py5XRjf84OhnQg7rvzaZdP9MRRVPhI7d2j1A=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DHKnm668LZloOjr8HB9l3i3Ph2SMcYlqctSL9SdPzBdCU9G/22CyW6CkuhFpS3Zlf
+	 k4NCRmuNXW7BUkq7bSET9aN4SBmMNbkikjc+MXH47tVnzau06w1JjtAR1l0ggoOAyg
+	 T9FolIIeEsk399LUOBWFouYuwIzUAG226Om305ELudWbDR/Xwd1NeS7yLE6O1CjgUm
+	 jYSmZTGTC0QIAJ9Uxk+NM/KfemE9k2VeONXy3ueE0OOP3rpVBWHE8yoUmENw+P8qeu
+	 n+sssuRTaqsBDDCHrWCG5UOUowob6oesqdM8ht/xc+B8ZnCbRnbiBBQeM86+II8VfQ
+	 BIjlatDyIj3tA==
+Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3eb7edfa42dso375810b6e.2
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2025 03:39:14 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWVYYt8CkoRjgx/8q5kq6qQvTGAEigGQuKRNQVSy6bUfvhAV7iUuAA19MXhye4tgLuDJG+ElJ6yjw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzmrmgzxcUcbAdrHI9NygvsI5iCA9mabUdQ2ab7rprALcTbyliF
+	+NRmoV6JiIyhxmxswZVsMtzI6pPDeP9Zz7meDKQRgNbO/qJZ/g8z2GJyrvvl4wr/wMtnCftcoPc
+	eseUvLJt7B0a+0YOAbr3tzDl9Bgg=
+X-Google-Smtp-Source: AGHT+IGMqUrt2FKou5An29S/lwto4lru3NIbCF5jBqSGOlkndBoIjeSLEXcUR95IHzzENRb3gc+NTbmPsc2MCz+VH5s=
+X-Received: by 2002:a05:6808:1446:b0:3e6:63b5:f248 with SMTP id
+ 5614622812f47-3ef2ebcb8e4mr3897067b6e.7.1736422753938; Thu, 09 Jan 2025
+ 03:39:13 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13.0
+References: <97c5c93d-e31e-483b-83c3-28b797b69e9a@stanley.mountain> <68cdb73b-59cd-47be-9bc1-9affa606ba8f@pf.is.s.u-tokyo.ac.jp>
+In-Reply-To: <68cdb73b-59cd-47be-9bc1-9affa606ba8f@pf.is.s.u-tokyo.ac.jp>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 9 Jan 2025 12:39:01 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h4TUvGKKD51U+RUWv0sCbRjon6PF3ycVaTHMoA=1VEVQ@mail.gmail.com>
+X-Gm-Features: AbW1kvbbH0I-CJj2f6-yB5QpUedzTyqnz7rgG_4MRC9lfYMeaRVEBir3AFTkCyA
+Message-ID: <CAJZ5v0h4TUvGKKD51U+RUWv0sCbRjon6PF3ycVaTHMoA=1VEVQ@mail.gmail.com>
+Subject: Re: [bug report] powercap: balance device refcount in powercap_register_control_type()
+To: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 08 Jan 2025 16:43:59 +0000, Andre Przywara wrote:
-> As Chris and Vasily reported, the attempt to support multiple AXP PMICs
-> in one system [1] breaks some of the battery and charging functionality
-> on devices with AXP PMICs. The reason is that the drivers now fail to get
-> the correct IIO channel for the ADC component, as the current code seems
-> to rely on the zero-based enumeration of the regulator devices.
-> A fix is possible, but not trivial, as it requires some rework in the AXP
-> MFD driver, which cannot be fully reviewed or tested in time for the
-> 6.13 release.
-> 
-> [...]
+On Thu, Jan 9, 2025 at 1:36=E2=80=AFAM Joe Hattori <joe@pf.is.s.u-tokyo.ac.=
+jp> wrote:
+>
+> Hi Dan,
+>
+> Thank you for the report.
+>
+> On 1/8/25 19:11, Dan Carpenter wrote:
+> > Hello Joe Hattori,
+> >
+> > Commit cae442480e40 ("powercap: balance device refcount in
+> > powercap_register_control_type()") from Dec 15, 2024 (linux-next),
+> > leads to the following Smatch static checker warning:
+> >
+> >       drivers/powercap/powercap_sys.c:632 powercap_register_control_typ=
+e()
+> >       warn: freeing device managed memory (UAF): 'control_type'
+> >
+> > drivers/powercap/powercap_sys.c
+> >      622         }
+> >      623         mutex_init(&control_type->lock);
+> >      624         control_type->ops =3D ops;
+> >      625         INIT_LIST_HEAD(&control_type->node);
+> >      626         control_type->dev.class =3D &powercap_class;
+> >      627         dev_set_name(&control_type->dev, "%s", name);
+> >      628         result =3D device_register(&control_type->dev);
+> >      629         if (result) {
+> >      630                 put_device(&control_type->dev);
+> >
+> > The patch adds this call to put_device() based on static analysis but
+> > I'm pretty sure that will lead to a double free so the patch should be
+> > reverted.
+> >
+> > We can see on line 626 that the class is powercap_class, so
+> > put_device() will call powercap_release().  The means that control_type
+> > will be freed.
+>
+> Indeed, I missed that.
+>
+> >
+> >      631                 if (control_type->allocated)
+> > --> 632                         kfree(control_type);
+> >
+> > Use after free and double free.
+>
+> Instead of reverting the patch, How about removing these two lines to
+> avoid the double free (so that mutex_destroy() is called in the cleanup
+> function as well. Not that it makes that big of a difference though). If
+> that is ok with you, I will work on a patch to fix it.
 
-Applied, thanks!
+I'd rather drop the commit in question and feel free to submit a
+correct patch for the device refcount balancing.
 
-[1/1] Revert "mfd: axp20x: Allow multiple regulators"
-      commit: b246bd32a34c1b0d80670e60e4e4102be6366191
-
---
-Lee Jones [李琼斯]
-
+Thanks!
 
