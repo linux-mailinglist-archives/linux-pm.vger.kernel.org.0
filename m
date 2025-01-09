@@ -1,198 +1,117 @@
-Return-Path: <linux-pm+bounces-20162-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20163-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1A49A081E5
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 22:01:22 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D905BA082F8
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 23:53:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6720C188CA17
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 21:01:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 94B45188BB40
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 22:53:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7472A1FCF68;
-	Thu,  9 Jan 2025 21:01:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9DE5205E07;
+	Thu,  9 Jan 2025 22:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Pw6iE+zE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CsYDOCEr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C619E1FCFF5
-	for <linux-pm@vger.kernel.org>; Thu,  9 Jan 2025 21:01:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 735A02054E3;
+	Thu,  9 Jan 2025 22:53:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736456477; cv=none; b=iGNMGfnDlHUNZffYk/SX4UK0ErmOelulxfAtR4hCeFrLoEXPPBHi/MvmT7wrUzL2sYLIbVz++vOyDlzKT67wA6hKwg+tCt+1T6lkgRb7BBs5w1PuJJctV1koMl4vD9kXtJw3NL+xcZRm4ToPCYrn3C90k82iXmMAwbsrY+8gzcs=
+	t=1736463194; cv=none; b=Q3nbHMhRILwFt8qTV1n7FuTpfFCPG8KvODyCeTgPwhqk68JRx0g0NBRnn4fvOfXDTdWXULfcM6B2wCPGfmY0URbr8ONlc/dCPt8K/JZ6lhwg0FmWzzHRhhmt1RA+zt20r+5IEgcX+nrUax+36ei5A3Heayzt8YsgxjEajjAzMKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736456477; c=relaxed/simple;
-	bh=Jhy8nReLTFgKywbASQ+2hQf0BlhFkyZ2YcvMV/yNA1U=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=bKLJiLtvPE0hW2U32ajugJ3f7nfhtVhrvnx5LBnpanjbgxVpkEts92W10qRc8BD3Vm8A/d5Imm0ik7IuegAJhUJWLmvX4qJba6ymyP7orG/pqeahNHgYyRumXRZT3ZxLZKNJ9YfmaZY+I2LRj3VofTlBh7r9ZCkNJdGIM87X/lc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Pw6iE+zE; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21649a7bcdcso21778815ad.1
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2025 13:01:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1736456475; x=1737061275; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=fSzfS1hDLLpKmdo2uvTyrYDLllGYGguN1Mm+AUu6f2U=;
-        b=Pw6iE+zEkIm/W5Un7maTNkokucrBFvlVSsXfaWs41R+NIgau1lVX0x74ZyHOuTGMAE
-         LgI01J4tZy2DrArRkxzVyq4ZUNmza5vqxlSKdVeRzi+uJd5xvWXZ9TC6SMFkD+9wcdel
-         NsQoVHtaHOaZb0T8m1tju5vFTvcjmSUMTkiUE=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736456475; x=1737061275;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=fSzfS1hDLLpKmdo2uvTyrYDLllGYGguN1Mm+AUu6f2U=;
-        b=cor75/k9NRR/1WkAiEYKQJekN6q3co+VhwMnJIp31L0vyRiAx4jhGlcVfkP4kkLqyc
-         8H7iEtDxwfE6+RfwK2liaBIpioQWODpgCSTdGyW8mu3ErOSLIomG8SbOwMdXxIHbYUzs
-         glKObkpncJ8DDCWtiWdtE5Di4qxCMlI2OVbrQDIqQVdFB1hexS9FlJZbTOKHdT9ni0B7
-         pITvNdFgMDLpnZVY6rCJHrHJJoRi0nOO1HmeNPMPFx7Jyh79f26fgrg6WJ9E0bqlNVrE
-         l+tegWp7Lu7oOz8Mengx751tZaN+spkNupVAc3mtfnp1ubOygaE0V/qpz3VhMy5F3jwa
-         wStw==
-X-Forwarded-Encrypted: i=1; AJvYcCXAEXLR8dtVlB2ldsX/gPwkynxoQ58U0pBX88b18iwotKJgjnMamUDe3ZsGzGbaLAI9A8SNVbXTGw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw9kiRaV+l9++CXiShupOEE86fk0AHLpIAT8WcWzxU6JlKHQY5T
-	OaZVsgclf7wxUtY2PZKBulRV6yC3pZr50gNEfylSaHONN08ADEDwHZzktNbstQ==
-X-Gm-Gg: ASbGncus2QR8oZd3coemVtAjQiCdXSvWfA6cMpiyXiWKtUcPVOaI6ymLMmt2To1tPBG
-	dLHJxuNrEEmmEuUUjVIoHo338i8F8ggfxbb6EKUH4Y+IommraF34a+4gM/+CSPfoOOk8DvQUCgm
-	V0d3i4mpJHdyUiqHsyFqU8djOafBwaeyMbCxCPZa12hxkd8mSA0bXINyv3kShyk+wqrxt7DBZKq
-	h7855Onw+A/V0AjwRL0lxoxgKqR89D0QG2BR7nqy3bJlAdQtzIlMBYDO5WpIR5z/duz0Ylbn4rb
-X-Google-Smtp-Source: AGHT+IHtlbXKB8nQGV8Na+mbl+3fLCXplg925dK4lhdkih8JRZ1GimXiwwWjEtm2kYaEdd76Ln3JJQ==
-X-Received: by 2002:a05:6a00:190c:b0:725:cfa3:bc6b with SMTP id d2e1a72fcca58-72d21f304d1mr12928976b3a.3.1736456475072;
-        Thu, 09 Jan 2025 13:01:15 -0800 (PST)
-Received: from dianders.sjc.corp.google.com ([2620:15c:9d:2:52e9:9ded:c8d2:20ba])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d405493d4sm237565b3a.1.2025.01.09.13.01.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 09 Jan 2025 13:01:14 -0800 (PST)
-From: Douglas Anderson <dianders@chromium.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>
-Cc: Tomasz Figa <tfiga@chromium.org>,
-	Douglas Anderson <dianders@chromium.org>,
+	s=arc-20240116; t=1736463194; c=relaxed/simple;
+	bh=ygPBiRPZBdHE0lhMQk0UMilxxye1rAgfC0lt552dW+A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=I2nDoL58GOJ2kgPohFW/aPdtZL0EOmgfTQe+LzW0cOZv+Dnlg+GYVVtbPXwu3vYL4wanOBVIFV79FzcEOab3RPes8Xi6wIf2Ag2H1KLMKhLwKAIR7bsczVKYcTnTxBbobKbjW3C7NcsqYAN7OIoEkogx3/sgMcMA/weLOYmq/A4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CsYDOCEr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C4C15C4CED2;
+	Thu,  9 Jan 2025 22:53:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736463194;
+	bh=ygPBiRPZBdHE0lhMQk0UMilxxye1rAgfC0lt552dW+A=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CsYDOCEru3+AEdwiKyVkWO1mOJHA55tzrKUnUNyTndawph6pOFrhOW2l5pojnvJNg
+	 XORMOFZhafzHRheJC4Iv5aiLfQ1VqP7MH4Pqu9XdMOpqsE4WY98zwSIMgV4mneTs4v
+	 MSH1YspqDd9RCndarix0IjsiR7dityj4eKCyBBD+T6WcvBFrqeyyEK21WNNwg+2OY3
+	 /uZxAB7095zODtu0FbcRODsUwetcSBxBU5PkfCNtgydf+hjYcotb4iZsTCuTmqvl91
+	 mF8CF65TskxLdd9bruSw13e/03ANgi57eGbjP06pOzhD91/3VFwUjLrJXUYA5XPxxE
+	 GHhEzoYh6bnYQ==
+Date: Thu, 9 Jan 2025 16:53:12 -0600
+From: Rob Herring <robh@kernel.org>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Chen-Yu Tsai <wens@csie.org>, Cody Eksal <masterr3c0rd@epochal.quest>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Yangtao Li <tiny.windzz@gmail.com>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Conor Dooley <conor+dt@kernel.org>,
 	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v2] PM / core: Allow configuring the DPM watchdog to warn earlier than panic
-Date: Thu,  9 Jan 2025 12:59:58 -0800
-Message-ID: <20250109125957.v2.1.I4554f931b8da97948f308ecc651b124338ee9603@changeid>
-X-Mailer: git-send-email 2.47.1.688.g23fc6f90ad-goog
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Maxime Ripard <mripard@kernel.org>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Nishanth Menon <nm@ti.com>, Stephen Boyd <sboyd@kernel.org>,
+	Vinod Koul <vkoul@kernel.org>, Viresh Kumar <vireshk@kernel.org>,
+	Parthiban <parthiban@linumiz.com>,
+	Andre Przywara <andre.przywara@arm.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev
+Subject: Re: [PATCH v2 12/13] cpufreq: sun50i: add a100 cpufreq support
+Message-ID: <20250109225312.GA434678-robh@kernel.org>
+References: <20241031070232.1793078-1-masterr3c0rd@epochal.quest>
+ <20241031070232.1793078-13-masterr3c0rd@epochal.quest>
+ <20241111041311.hleaz5fgipsyxigm@vireshk-i7>
+ <CAGb2v646NHFAni=P+iC8OZsWMpg0PJc=kYbuWaY=C0-W-q6qAw@mail.gmail.com>
+ <20241111055504.2f3szrd5ahudvtqm@vireshk-i7>
+ <CAL_JsqJJ5A+nYKg1aU5zqGZsmtNJxpS3Gw04pSH-3xOkQ9Vzew@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAL_JsqJJ5A+nYKg1aU5zqGZsmtNJxpS3Gw04pSH-3xOkQ9Vzew@mail.gmail.com>
 
-Allow configuring the DPM watchdog to warn about slow suspend/resume
-functions without causing a system panic(). This allows you to set the
-DPM_WATCHDOG_WARNING_TIMEOUT to something like 5 or 10 seconds to get
-warnings about slow suspend/resume functions that eventually succeed.
+On Mon, Nov 18, 2024 at 09:36:37AM -0600, Rob Herring wrote:
+> On Sun, Nov 10, 2024 at 11:55 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > On 11-11-24, 13:30, Chen-Yu Tsai wrote:
+> > > On Mon, Nov 11, 2024 at 12:13 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> > > >
+> > > > On 31-10-24, 04:02, Cody Eksal wrote:
+> > > > > From: Shuosheng Huang <huangshuosheng@allwinnertech.com>
+> > > > >
+> > > > > Let's add cpufreq nvmem based for allwinner a100 soc. It's similar to h6,
+> > > > > let us use efuse_xlate to extract the differentiated part.
+> > > > >
+> > > > > Signed-off-by: Shuosheng Huang <huangshuosheng@allwinnertech.com>
+> > > > > [masterr3c0rd@epochal.quest: add A100 to opp_match_list]
+> > > > > Signed-off-by: Cody Eksal <masterr3c0rd@epochal.quest>
+> > > > > ---
+> > > > > Changes in V2:
+> > > > >  - Add the A100 to the cpufreq-dt-platdev blacklist.
+> > > >
+> > > > Can this be applied to the cpufreq tree separately ?
+> > >
+> > > Yes.
+> > >
+> > > Acked-by: Chen-Yu Tsai <wens@csie.org>
+> >
+> > Applied. Thanks.
+> 
+> You missed the binding patch, so
+> "allwinner,sun50i-a100-operating-points" is undocumented. Can you pick
+> that up please.
 
-Signed-off-by: Douglas Anderson <dianders@chromium.org>
----
+Still not applied, so I applied it.
 
-Changes in v2:
-- Print the warning at warn level, not emergency level.
-- Add help text to DPM_WATCHDOG_WARNING_TIMEOUT.
-
- drivers/base/power/main.c | 24 +++++++++++++++++++-----
- kernel/power/Kconfig      | 21 ++++++++++++++++++++-
- 2 files changed, 39 insertions(+), 6 deletions(-)
-
-diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
-index 4a67e83300e1..7d60610437a4 100644
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -496,6 +496,7 @@ struct dpm_watchdog {
- 	struct device		*dev;
- 	struct task_struct	*tsk;
- 	struct timer_list	timer;
-+	bool			fatal;
- };
- 
- #define DECLARE_DPM_WATCHDOG_ON_STACK(wd) \
-@@ -512,11 +513,23 @@ struct dpm_watchdog {
- static void dpm_watchdog_handler(struct timer_list *t)
- {
- 	struct dpm_watchdog *wd = from_timer(wd, t, timer);
-+	struct timer_list *timer = &wd->timer;
-+	unsigned int time_left;
-+
-+	if (wd->fatal) {
-+		dev_emerg(wd->dev, "**** DPM device timeout ****\n");
-+		show_stack(wd->tsk, NULL, KERN_EMERG);
-+		panic("%s %s: unrecoverable failure\n",
-+			dev_driver_string(wd->dev), dev_name(wd->dev));
-+	}
-+
-+	time_left = CONFIG_DPM_WATCHDOG_TIMEOUT - CONFIG_DPM_WATCHDOG_WARNING_TIMEOUT;
-+	dev_warn(wd->dev, "**** DPM device timeout after %u seconds; %u seconds until panic ****\n",
-+		 CONFIG_DPM_WATCHDOG_WARNING_TIMEOUT, time_left);
-+	show_stack(wd->tsk, NULL, KERN_WARNING);
- 
--	dev_emerg(wd->dev, "**** DPM device timeout ****\n");
--	show_stack(wd->tsk, NULL, KERN_EMERG);
--	panic("%s %s: unrecoverable failure\n",
--		dev_driver_string(wd->dev), dev_name(wd->dev));
-+	wd->fatal = true;
-+	mod_timer(timer, jiffies + HZ * time_left);
- }
- 
- /**
-@@ -530,10 +543,11 @@ static void dpm_watchdog_set(struct dpm_watchdog *wd, struct device *dev)
- 
- 	wd->dev = dev;
- 	wd->tsk = current;
-+	wd->fatal = CONFIG_DPM_WATCHDOG_TIMEOUT == CONFIG_DPM_WATCHDOG_WARNING_TIMEOUT;
- 
- 	timer_setup_on_stack(timer, dpm_watchdog_handler, 0);
- 	/* use same timeout value for both suspend and resume */
--	timer->expires = jiffies + HZ * CONFIG_DPM_WATCHDOG_TIMEOUT;
-+	timer->expires = jiffies + HZ * CONFIG_DPM_WATCHDOG_WARNING_TIMEOUT;
- 	add_timer(timer);
- }
- 
-diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-index afce8130d8b9..ca947ed32e3d 100644
---- a/kernel/power/Kconfig
-+++ b/kernel/power/Kconfig
-@@ -257,11 +257,30 @@ config DPM_WATCHDOG
- 	  boot session.
- 
- config DPM_WATCHDOG_TIMEOUT
--	int "Watchdog timeout in seconds"
-+	int "Watchdog timeout to panic in seconds"
- 	range 1 120
- 	default 120
- 	depends on DPM_WATCHDOG
- 
-+config DPM_WATCHDOG_WARNING_TIMEOUT
-+	int "Watchdog timeout to warn in seconds"
-+	range 1 DPM_WATCHDOG_TIMEOUT
-+	default DPM_WATCHDOG_TIMEOUT
-+	depends on DPM_WATCHDOG
-+	help
-+	  If the DPM watchdog warning timeout and main timeout are
-+	  different then a non-fatal warning (with a stack trace of
-+	  the stuck suspend routine) will be printed when the warning
-+	  timeout expires. If the suspend routine gets un-stuck
-+	  before the main timeout expires then no other action is
-+	  taken. If the routine continues to be stuck and the main
-+	  timeout expires then an emergency-level message and stack
-+	  trace will be printed and the system will panic.
-+
-+	  If the warning timeout is equal to the main timeout (the
-+	  default) then the warning will never happen and the system
-+	  will jump straight to panic when the main timeout expires.
-+
- config PM_TRACE
- 	bool
- 	help
--- 
-2.47.1.688.g23fc6f90ad-goog
-
+Rob
 
