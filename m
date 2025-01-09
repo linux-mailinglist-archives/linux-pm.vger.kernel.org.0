@@ -1,102 +1,385 @@
-Return-Path: <linux-pm+bounces-20134-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20135-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C33E5A06F26
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 08:36:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79013A06F75
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 08:54:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7188161F21
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 07:36:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B271A3A24DA
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 07:54:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D52DB214811;
-	Thu,  9 Jan 2025 07:35:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19242215173;
+	Thu,  9 Jan 2025 07:53:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="FIOW4Twz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ErY6VSWT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B4548F5E;
-	Thu,  9 Jan 2025 07:35:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAE4C204688
+	for <linux-pm@vger.kernel.org>; Thu,  9 Jan 2025 07:53:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736408155; cv=none; b=MFRRg5TzMcTeEruf1kU2xmRjgJxMsko36WJyVw0ryaqxN6Pcwf/fdzlxF+8psZXnZGl1f49Qv7T7fUOselXAwkLs18o+qQMQ50YRa85svK2ozsD/M4Xmk4vE7m6dIAvzCzNdINEpFk2qaYh68LycCrZ/BeH7n+Io8b6ERSWkdv4=
+	t=1736409235; cv=none; b=nzL6jaxcy4iP9TLeXU10xWuZk3aoHWkPzVynSpOxWaXQaEkyoAoNY8NM2Z2lwhwexj/ZsseHL0FAciQNiq86zj/L57UUUWhOZsCDmkFHvXjuyirJAEJutSrAEC6z4Y+0eHoqBvRkKe+WgrF/GYYRtDwAtamEuJECZj03BlV1yTw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736408155; c=relaxed/simple;
-	bh=DBpGn6Ju2m3/CEGQizrf3gS7wG0QSA07waaOHI1kwsw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=LPfNMMRUr6nYu2zwQ2+UgCAZbxuQvF9/mUQDiMEeEtBEe4h8kkb+DcAUSxc2cYNVOZZxsCnBhdzfppeNHjNIpgB9uc4jLz2EhrHfmogARDOWTxRz6W6q808GDRP7vn+dsfuyJ+2+tk40JBT1d0zwQOdkSIOKx+sLWkqiQxTcQfQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=FIOW4Twz; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A78BC4CEE2;
-	Thu,  9 Jan 2025 07:35:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1736408155;
-	bh=DBpGn6Ju2m3/CEGQizrf3gS7wG0QSA07waaOHI1kwsw=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=FIOW4Twz000n2skjGqi3Zmq3poycLHYovB9005x6OG/Je1vldjdfyNkrbJnt7+pG1
-	 BSiQ0sl6DrJhToQ3EibJZAH7z7WZq/uTxqBbG+ZuELDu5Ci65gZv6Pqv1sEm/tr2iU
-	 ctMkFw8Pa6U1QEAl4g9CRVUf+cVWVGvfQu+/mOgA=
-Date: Thu, 9 Jan 2025 08:35:04 +0100
-From: Greg KH <gregkh@linuxfoundation.org>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V6 02/15] cpufreq: Add cpufreq_table_len()
-Message-ID: <2025010944-detective-borough-b158@gregkh>
-References: <cover.1736248242.git.viresh.kumar@linaro.org>
- <867ba9728179ba21ff8f8aca97d416b72ccd63d9.1736248242.git.viresh.kumar@linaro.org>
- <2025010727-banner-monday-1941@gregkh>
- <20250108111253.tg6ixurijf2dvptx@vireshk-i7>
- <2025010855-cargo-quickness-a08f@gregkh>
- <20250109044117.s5s4dlmssamwicew@vireshk-i7>
+	s=arc-20240116; t=1736409235; c=relaxed/simple;
+	bh=SUL1rwQxCeGoGIudfKxY19YuACvW07OmdyUWkGTWgfk=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=GxrdbYDolsLjDQUrPSNsZkorZHGD8W5KIPy1iFne+kAKx0kSXKH0jxpzAH6UfvaaMADa4eqqhgmLXnQLtnPjYKnHj7K9dyUEvurSAIyXmcYfX+9BTXWbmxBSyztgK2IoGs7+w3jELkwujak1lN2YKEZkjQ0AubmpUY+jrqHi5qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ErY6VSWT; arc=none smtp.client-ip=209.85.221.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-3862d6d5765so302637f8f.3
+        for <linux-pm@vger.kernel.org>; Wed, 08 Jan 2025 23:53:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736409232; x=1737014032; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=pYwrTFYhQZWChYoXnnLgK+gBgeb8rrd8GmS0pqeHRkQ=;
+        b=ErY6VSWTO6vwZhC1OJ01OCF2P8YSh8XVwZf0/l9ts0WJXF3kq5/1ViVajin3HOrKem
+         nfAScQe5v3FUZ+LpRvBgYJ+nD79h72ca6rJ43ShKIc7HYkWWfmrV06rGdsHhtR5//vOW
+         A6xgdF1AaqPGi2yr3p+3QnlHZn4eDqy4t1btwpe/zlx6AJqQHXYkppJo2xeqbm/bfJhZ
+         X+5LHB7eD3nUIxKGlip2TnqbqDV+Ut+avcIUILSMkN1TQ7yd+CEl5/cNKqjFXwWJokfc
+         9GB3XIJK7nsJ30B/iysYtI2Ruy98HEKF4+NA9Mxqlj3QqXh7zKhR6BJSmg+jYXjKeegI
+         ZSug==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736409232; x=1737014032;
+        h=content-transfer-encoding:in-reply-to:organization:autocrypt
+         :content-language:references:cc:to:subject:reply-to:from:user-agent
+         :mime-version:date:message-id:x-gm-message-state:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=pYwrTFYhQZWChYoXnnLgK+gBgeb8rrd8GmS0pqeHRkQ=;
+        b=bsu2YQkeWG4rLLLCd007eCnkTkvSY64NKs5V9V7CdZFKveDdxIon90oVElAdm5VeSv
+         j8/yoNX1Je+QKj2L7LhqzWaf0cj7aO4PBRgwBs/WdQNM36dojZZprcCwUj6bq3IslNTq
+         5enRmQU/dNVv63cdWzBRKjYr8xRUiwnGc189FYarIZzuBvpDmrEN0HEKcVl00g2Gc4vi
+         9CkkQdr5nBZa6UFcCu20EzHgOvs3fkOpZEGpxzVK0feB+etU7kLEjdziHQAstf1DUzeQ
+         FBiCdUTeCdNvivK0HIXPk1a5lqOrQuKuIsUqorRuGMpgU9hkozOIHOh00DgXOG+9Yt6S
+         DH9Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWc/2MYIx++ukU3eYia1CreyziFHIN/Gii3qVJpTDSR+6618QCD1QR0eclh0ruHfVPEYZK7WcCnUw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YynpciyY4bjKOtwjk5ngJ8rK6O9QWNoF7wesLE+ggmsDWD+wYKi
+	uudcnonrk2o/DfpLjHuVwCCUsj9gUUQ22EEpqQJKJcLVoih8a5UJoSlOyy4XwK0=
+X-Gm-Gg: ASbGnctrB1d07xLFLqIZO/odTob2xIgO6IdVJ73h4MtN4RC+08RypILLCvFiZ9VdHHo
+	y5s5C+FB47KeRuGJeQsULbLZZ1eQlLQ9Iq2+fxdhiCuNhdlzDaEF8l4WqVfV+ME8r9GyKsrXwdl
+	ug59tEWD0xuGQzpavhuVyap/ynfp5J8G2pJ2Mef7VZeOEjQWn83D+DSSBa2dwoqJha6tiLWPyc8
+	tB/1kini9/YOVDUOUBc9fi2fo5lnrkCDvLEW3wrw5SS35JvZDn/YKP4CVOiHXMZ6MrktrAtde/H
+	NgFx4nJtFBuKBfyFydJLbprP1NAv9txrzQ==
+X-Google-Smtp-Source: AGHT+IFlMDqZ1mwhTw65CziPYf+WzQqjwBtxBF1bx8FyjDt1mZKxdZTeMQjICpEpyRf86THO25H/Bg==
+X-Received: by 2002:a5d:5f85:0:b0:387:86cf:4e87 with SMTP id ffacd0b85a97d-38a872deb33mr5392030f8f.15.1736409232106;
+        Wed, 08 Jan 2025 23:53:52 -0800 (PST)
+Received: from ?IPV6:2a01:e0a:982:cbb0:688f:e09e:ce30:f1b2? ([2a01:e0a:982:cbb0:688f:e09e:ce30:f1b2])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2e89df1sm45491345e9.27.2025.01.08.23.53.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 08 Jan 2025 23:53:51 -0800 (PST)
+Message-ID: <5ace1905-cce0-4d32-9e38-5451e9466c88@linaro.org>
+Date: Thu, 9 Jan 2025 08:53:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250109044117.s5s4dlmssamwicew@vireshk-i7>
+User-Agent: Mozilla Thunderbird
+From: neil.armstrong@linaro.org
+Reply-To: neil.armstrong@linaro.org
+Subject: Re: [PATCH v4 1/7] drm/msm/adreno: Add support for ACD
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>, Rob Clark
+ <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Abhinav Kumar <quic_abhinavk@quicinc.com>,
+ Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+ Marijn Suijten <marijn.suijten@somainline.org>,
+ David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+ Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+ Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Maya Matuszczyk <maccraft123mc@gmail.com>
+Cc: linux-arm-msm@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ freedreno@lists.freedesktop.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org
+References: <20250109-gpu-acd-v4-0-08a5efaf4a23@quicinc.com>
+ <20250109-gpu-acd-v4-1-08a5efaf4a23@quicinc.com>
+Content-Language: en-US, fr
+Autocrypt: addr=neil.armstrong@linaro.org; keydata=
+ xsBNBE1ZBs8BCAD78xVLsXPwV/2qQx2FaO/7mhWL0Qodw8UcQJnkrWmgTFRobtTWxuRx8WWP
+ GTjuhvbleoQ5Cxjr+v+1ARGCH46MxFP5DwauzPekwJUD5QKZlaw/bURTLmS2id5wWi3lqVH4
+ BVF2WzvGyyeV1o4RTCYDnZ9VLLylJ9bneEaIs/7cjCEbipGGFlfIML3sfqnIvMAxIMZrvcl9
+ qPV2k+KQ7q+aXavU5W+yLNn7QtXUB530Zlk/d2ETgzQ5FLYYnUDAaRl+8JUTjc0CNOTpCeik
+ 80TZcE6f8M76Xa6yU8VcNko94Ck7iB4vj70q76P/J7kt98hklrr85/3NU3oti3nrIHmHABEB
+ AAHNKk5laWwgQXJtc3Ryb25nIDxuZWlsLmFybXN0cm9uZ0BsaW5hcm8ub3JnPsLAkQQTAQoA
+ OwIbIwULCQgHAwUVCgkICwUWAgMBAAIeAQIXgBYhBInsPQWERiF0UPIoSBaat7Gkz/iuBQJk
+ Q5wSAhkBAAoJEBaat7Gkz/iuyhMIANiD94qDtUTJRfEW6GwXmtKWwl/mvqQtaTtZID2dos04
+ YqBbshiJbejgVJjy+HODcNUIKBB3PSLaln4ltdsV73SBcwUNdzebfKspAQunCM22Mn6FBIxQ
+ GizsMLcP/0FX4en9NaKGfK6ZdKK6kN1GR9YffMJd2P08EO8mHowmSRe/ExAODhAs9W7XXExw
+ UNCY4pVJyRPpEhv373vvff60bHxc1k/FF9WaPscMt7hlkbFLUs85kHtQAmr8pV5Hy9ezsSRa
+ GzJmiVclkPc2BY592IGBXRDQ38urXeM4nfhhvqA50b/nAEXc6FzqgXqDkEIwR66/Gbp0t3+r
+ yQzpKRyQif3OwE0ETVkGzwEIALyKDN/OGURaHBVzwjgYq+ZtifvekdrSNl8TIDH8g1xicBYp
+ QTbPn6bbSZbdvfeQPNCcD4/EhXZuhQXMcoJsQQQnO4vwVULmPGgtGf8PVc7dxKOeta+qUh6+
+ SRh3vIcAUFHDT3f/Zdspz+e2E0hPV2hiSvICLk11qO6cyJE13zeNFoeY3ggrKY+IzbFomIZY
+ 4yG6xI99NIPEVE9lNBXBKIlewIyVlkOaYvJWSV+p5gdJXOvScNN1epm5YHmf9aE2ZjnqZGoM
+ Mtsyw18YoX9BqMFInxqYQQ3j/HpVgTSvmo5ea5qQDDUaCsaTf8UeDcwYOtgI8iL4oHcsGtUX
+ oUk33HEAEQEAAcLAXwQYAQIACQUCTVkGzwIbDAAKCRAWmrexpM/4rrXiB/sGbkQ6itMrAIfn
+ M7IbRuiSZS1unlySUVYu3SD6YBYnNi3G5EpbwfBNuT3H8//rVvtOFK4OD8cRYkxXRQmTvqa3
+ 3eDIHu/zr1HMKErm+2SD6PO9umRef8V82o2oaCLvf4WeIssFjwB0b6a12opuRP7yo3E3gTCS
+ KmbUuLv1CtxKQF+fUV1cVaTPMyT25Od+RC1K+iOR0F54oUJvJeq7fUzbn/KdlhA8XPGzwGRy
+ 4zcsPWvwnXgfe5tk680fEKZVwOZKIEuJC3v+/yZpQzDvGYJvbyix0lHnrCzq43WefRHI5XTT
+ QbM0WUIBIcGmq38+OgUsMYu4NzLu7uZFAcmp6h8g
+Organization: Linaro
+In-Reply-To: <20250109-gpu-acd-v4-1-08a5efaf4a23@quicinc.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Thu, Jan 09, 2025 at 10:11:17AM +0530, Viresh Kumar wrote:
-> On 08-01-25, 12:50, Greg KH wrote:
-> > Odd, why can't Rust also know where CPUFREQ_TABLE_END is?  Why do you
-> > have to do extra work here?  That feels wrong.
+On 08/01/2025 21:39, Akhil P Oommen wrote:
+> ACD a.k.a Adaptive Clock Distribution is a feature which helps to reduce
+> the power consumption. In some chipsets, it is also a requirement to
+> support higher GPU frequencies. This patch adds support for GPU ACD by
+> sending necessary data to GMU and AOSS. The feature support for the
+> chipset is detected based on devicetree data.
 > 
-> Well, it can, sure.
+> Signed-off-by: Akhil P Oommen <quic_akhilpo@quicinc.com>
+> ---
+>   drivers/gpu/drm/msm/adreno/a6xx_gmu.c | 84 ++++++++++++++++++++++++++++++-----
+>   drivers/gpu/drm/msm/adreno/a6xx_gmu.h |  1 +
+>   drivers/gpu/drm/msm/adreno/a6xx_hfi.c | 36 +++++++++++++++
+>   drivers/gpu/drm/msm/adreno/a6xx_hfi.h | 21 +++++++++
+>   4 files changed, 132 insertions(+), 10 deletions(-)
 > 
-> The freq table the Rust code receives is part of the C code:
-> bindings::cpufreq_frequency_table. Since it is a C managed pointer, I thought it
-> is better to do the parsing in C code itself. In case the implementation of the
-> struct changes in future (unlikely though), we would only need to fix the C code
-> and not Rust, which looks to be the right expectation.
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> index 14db7376c712..2689e79aefa5 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.c
+> @@ -1021,14 +1021,6 @@ int a6xx_gmu_resume(struct a6xx_gpu *a6xx_gpu)
+>   
+>   	gmu->hung = false;
+>   
+> -	/* Notify AOSS about the ACD state (unimplemented for now => disable it) */
+> -	if (!IS_ERR(gmu->qmp)) {
+> -		ret = qmp_send(gmu->qmp, "{class: gpu, res: acd, val: %d}",
+> -			       0 /* Hardcode ACD to be disabled for now */);
+> -		if (ret)
+> -			dev_err(gmu->dev, "failed to send GPU ACD state\n");
+> -	}
+> -
+>   	/* Turn on the resources */
+>   	pm_runtime_get_sync(gmu->dev);
+>   
+> @@ -1476,6 +1468,68 @@ static int a6xx_gmu_pwrlevels_probe(struct a6xx_gmu *gmu)
+>   	return a6xx_gmu_rpmh_votes_init(gmu);
+>   }
+>   
+> +static int a6xx_gmu_acd_probe(struct a6xx_gmu *gmu)
+> +{
+> +	struct a6xx_gpu *a6xx_gpu = container_of(gmu, struct a6xx_gpu, gmu);
+> +	struct a6xx_hfi_acd_table *cmd = &gmu->acd_table;
+> +	struct adreno_gpu *adreno_gpu = &a6xx_gpu->base;
+> +	struct msm_gpu *gpu = &adreno_gpu->base;
+> +	int ret, i, cmd_idx = 0;
+> +
+> +	cmd->version = 1;
+> +	cmd->stride = 1;
+> +	cmd->enable_by_level = 0;
+> +
+> +	/* Skip freq = 0 and parse acd-level for rest of the OPPs */
+> +	for (i = 1; i < gmu->nr_gpu_freqs; i++) {
+> +		struct dev_pm_opp *opp;
+> +		struct device_node *np;
+> +		unsigned long freq;
+> +		u32 val;
+> +
+> +		freq = gmu->gpu_freqs[i];
+> +		opp = dev_pm_opp_find_freq_exact(&gpu->pdev->dev, freq, true);
+> +		np = dev_pm_opp_get_of_node(opp);
+> +
+> +		ret = of_property_read_u32(np, "qcom,opp-acd-level", &val);
+> +		of_node_put(np);
+> +		dev_pm_opp_put(opp);
+> +		if (ret == -EINVAL)
+> +			continue;
+> +		else if (ret) {
+> +			DRM_DEV_ERROR(gmu->dev, "Unable to read acd level for freq %lu\n", freq);
+> +			return ret;
+> +		}
+> +
+> +		cmd->enable_by_level |= BIT(i);
+> +		cmd->data[cmd_idx++] = val;
+> +	}
+> +
+> +	cmd->num_levels = cmd_idx;
+> +
+> +	/* It is a problem if qmp node is unavailable when ACD is required */
+> +	if (cmd->enable_by_level && IS_ERR_OR_NULL(gmu->qmp)) {
+> +		DRM_DEV_ERROR(gmu->dev, "Unable to send ACD state to AOSS\n");
+> +		return -EINVAL;
+> +	}
+> +
+> +	/* Otherwise, nothing to do if qmp is unavailable */
+> +	if (IS_ERR_OR_NULL(gmu->qmp))
+> +		return 0;
+> +
+> +	/*
+> +	 * Notify AOSS about the ACD state. AOSS is supposed to assume that ACD is disabled on
+> +	 * system reset. So it is harmless if we couldn't notify 'OFF' state
+> +	 */
+> +	ret = qmp_send(gmu->qmp, "{class: gpu, res: acd, val: %d}", !!cmd->enable_by_level);
+> +	if (ret && cmd->enable_by_level) {
+> +		DRM_DEV_ERROR(gmu->dev, "Failed to send ACD state to AOSS\n");
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int a6xx_gmu_clocks_probe(struct a6xx_gmu *gmu)
+>   {
+>   	int ret = devm_clk_bulk_get_all(gmu->dev, &gmu->clocks);
+> @@ -1793,7 +1847,7 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
+>   	gmu->qmp = qmp_get(gmu->dev);
+>   	if (IS_ERR(gmu->qmp) && adreno_is_a7xx(adreno_gpu)) {
+>   		ret = PTR_ERR(gmu->qmp);
+> -		goto remove_device_link;
+> +		goto detach_gxpd;
+>   	}
+>   
+>   	init_completion(&gmu->pd_gate);
+> @@ -1809,6 +1863,10 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
+>   	/* Get the power levels for the GMU and GPU */
+>   	a6xx_gmu_pwrlevels_probe(gmu);
+>   
+> +	ret = a6xx_gmu_acd_probe(gmu);
+> +	if (ret)
+> +		goto detach_gxpd;
+> +
+>   	/* Set up the HFI queues */
+>   	a6xx_hfi_init(gmu);
+>   
+> @@ -1819,7 +1877,13 @@ int a6xx_gmu_init(struct a6xx_gpu *a6xx_gpu, struct device_node *node)
+>   
+>   	return 0;
+>   
+> -remove_device_link:
+> +detach_gxpd:
+> +	if (!IS_ERR_OR_NULL(gmu->gxpd))
+> +		dev_pm_domain_detach(gmu->gxpd, false);
+> +
+> +	if (!IS_ERR_OR_NULL(gmu->qmp))
+> +		qmp_put(gmu->qmp);
+> +
+>   	device_link_del(link);
+>   
+>   detach_cxpd:
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+> index b4a79f88ccf4..87d225b08e9b 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_gmu.h
+> @@ -81,6 +81,7 @@ struct a6xx_gmu {
+>   	int nr_gpu_freqs;
+>   	unsigned long gpu_freqs[16];
+>   	u32 gx_arc_votes[16];
+> +	struct a6xx_hfi_acd_table acd_table;
+>   
+>   	int nr_gmu_freqs;
+>   	unsigned long gmu_freqs[4];
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> index cb8844ed46b2..3c183c1c6266 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.c
+> @@ -702,6 +702,38 @@ static int a6xx_hfi_send_bw_table(struct a6xx_gmu *gmu)
+>   		NULL, 0);
+>   }
+>   
+> +#define HFI_FEATURE_ACD 12
+> +
+> +static int a6xx_hfi_enable_acd(struct a6xx_gmu *gmu)
+> +{
+> +	struct a6xx_hfi_acd_table *acd_table = &gmu->acd_table;
+> +	struct a6xx_hfi_msg_feature_ctrl msg = {
+> +		.feature = HFI_FEATURE_ACD,
+> +		.enable = 1,
+> +		.data = 0,
+> +	};
+> +	int ret;
+> +
+> +	if (!acd_table->enable_by_level)
+> +		return 0;
+> +
+> +	/* Enable ACD feature at GMU */
+> +	ret = a6xx_hfi_send_msg(gmu, HFI_H2F_FEATURE_CTRL, &msg, sizeof(msg), NULL, 0);
+> +	if (ret) {
+> +		DRM_DEV_ERROR(gmu->dev, "Unable to enable ACD (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	/* Send ACD table to GMU */
+> +	ret = a6xx_hfi_send_msg(gmu, HFI_H2F_MSG_ACD, &msg, sizeof(msg), NULL, 0);
 
-Then why not make the C code use this function as well, to keep all
-cpufreq drivers from having to manually walk the list and that way both
-C and Rust drivers all do the same thing?  That makes more sense to me,
-there's no reason you can't change C code today first to make things
-more unified, in fact, that's usually a better idea overall anyway.
+It seems you still don't send the acd_table!
 
-thanks,
+Neil
 
-greg k-h
+> +	if (ret) {
+> +		DRM_DEV_ERROR(gmu->dev, "Unable to ACD table (%d)\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	return 0;
+> +}
+> +
+>   static int a6xx_hfi_send_test(struct a6xx_gmu *gmu)
+>   {
+>   	struct a6xx_hfi_msg_test msg = { 0 };
+> @@ -799,6 +831,10 @@ int a6xx_hfi_start(struct a6xx_gmu *gmu, int boot_state)
+>   	if (ret)
+>   		return ret;
+>   
+> +	ret = a6xx_hfi_enable_acd(gmu);
+> +	if (ret)
+> +		return ret;
+> +
+>   	ret = a6xx_hfi_send_core_fw_start(gmu);
+>   	if (ret)
+>   		return ret;
+> diff --git a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h b/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
+> index 528110169398..51864c8ad0e6 100644
+> --- a/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
+> +++ b/drivers/gpu/drm/msm/adreno/a6xx_hfi.h
+> @@ -151,12 +151,33 @@ struct a6xx_hfi_msg_test {
+>   	u32 header;
+>   };
+>   
+> +#define HFI_H2F_MSG_ACD 7
+> +#define MAX_ACD_STRIDE 2
+> +
+> +struct a6xx_hfi_acd_table {
+> +	u32 header;
+> +	u32 version;
+> +	u32 enable_by_level;
+> +	u32 stride;
+> +	u32 num_levels;
+> +	u32 data[16 * MAX_ACD_STRIDE];
+> +};
+> +
+>   #define HFI_H2F_MSG_START 10
+>   
+>   struct a6xx_hfi_msg_start {
+>   	u32 header;
+>   };
+>   
+> +#define HFI_H2F_FEATURE_CTRL 11
+> +
+> +struct a6xx_hfi_msg_feature_ctrl {
+> +	u32 header;
+> +	u32 feature;
+> +	u32 enable;
+> +	u32 data;
+> +};
+> +
+>   #define HFI_H2F_MSG_CORE_FW_START 14
+>   
+>   struct a6xx_hfi_msg_core_fw_start {
+> 
+
 
