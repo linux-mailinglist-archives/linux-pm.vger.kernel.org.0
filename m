@@ -1,139 +1,128 @@
-Return-Path: <linux-pm+bounces-20145-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20146-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15CF4A07622
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 13:54:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DAC8A076CC
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 14:12:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 11B0A167FE0
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 12:54:04 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 825421673C0
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 13:12:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB7A6218585;
-	Thu,  9 Jan 2025 12:54:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDB33217F4A;
+	Thu,  9 Jan 2025 13:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VJwj5/fj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GB+LNnJy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f53.google.com (mail-ua1-f53.google.com [209.85.222.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30497215074;
-	Thu,  9 Jan 2025 12:53:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D92CD217F28;
+	Thu,  9 Jan 2025 13:12:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736427240; cv=none; b=GkQOMrwpPu4lRNgMsilwNeqSa40xSV8f/7IvHItuHQML91OBjKOmBycZq9XTL/V7paipvsokDKmfUnlRwMGxKVpMuRIW9W6J36eCTi9s6XkImtwmiadBTWWQEB6DerLCE8mCc9IjpFvQD5kbz1RL20DPs7pwAwAqJEYwXvA5cBU=
+	t=1736428337; cv=none; b=ixJ/0ipKcH3BfotN0SztuXuoWGUsLdhGbfrk0votT9AUa2XIcU0JtmIAD3x5IIQlQvALyEUhRBTbcp/cDBRTz6qvPyyxL6GcMX3EFGlIntonoQGgJf44kEKuagboXATVZg+XKlWPnXwpe2+iv/32XJ2g3T4bWg2UT48d4aTNTGU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736427240; c=relaxed/simple;
-	bh=XngCrPFnKYJnX4wmtZJNVByjfsD6XAwJEe6yUvrW7Ok=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ucWbLF87LTs9ROz5CrdRg4KxYcDf/IBUjo4ngz4WskGf9t+hJrs8ZKq+UPGY8u8Op8JLVUVvKJ9dQUsKmszY7wfTLEbpLgU8iITEyRKaQZmBwxNYT+Uyma8BsJZ28uHzybd/3xl3nS6751zljUhzw4M7JWnrsmBcekGMQWJTlik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VJwj5/fj; arc=none smtp.client-ip=209.85.222.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f53.google.com with SMTP id a1e0cc1a2514c-85bad7be09dso524851241.0;
-        Thu, 09 Jan 2025 04:53:59 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736427238; x=1737032038; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=bOwGmglZgSOm6Gk1CXqHJczAaEbPrQw+u7E9D/ELwX8=;
-        b=VJwj5/fj+JeUMhJvH+jUgP/k+YZKZ+62aBqpgRaCKX6GDNUHxlAZ+GwlSZsQDmPTZB
-         TN5ZbyxgGVOQcRYrLO+5zduzohsMqEKPT/G+dYbppsV8DOLgaO8mpj67yJLF3Jv0fLhJ
-         UHbzvOkvCimvjMUJg3szwebzPLOBPD7G6WJsbRdRbscJ8VQ4+7LxPboRU/1QJqjilyRL
-         Djh042nA5Ogpkj+E17q25Qn3KeZ4X9+sVYniu5+VWjI2mX+n8QKU53fD99yuANrS6Lqr
-         WsFZoSu8FyFH8mf1/eT6HsvcnpL9DkxR1f5d5KdtHu7LPQVi6y9lCOiuVPUKDnOMSOCw
-         JjTw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736427238; x=1737032038;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=bOwGmglZgSOm6Gk1CXqHJczAaEbPrQw+u7E9D/ELwX8=;
-        b=pQi8owKthUGWHzvYKYHvPwNBs/+7g1WipoZpmiJ2dJURHPRVyz5sIgYNH9uCpnsuvO
-         2/oYN0ycAYkEyLT2hTOjDmSD3z0tU7brDK4vt5BEBIqO4FaVGd7A3OJRm7bxaXPxcn/t
-         jJERQPiFAXvxXUM9XIta1MSAjrnz+A109sa46pajEPlGQrHK7mwcAsTLx0pQlXX7xaN5
-         Gp1ryl3pcxICLu0RsaX4tu43scM+rkZBk685r8n8uk2kIq+M1i0AAioaqlCOheirJOty
-         EnvFo5rdPK9X97374fb38O8JaFLKkeDVU7WYbM+sGQJC+kdfddkeK+Y61LxaLCFXUMrY
-         EEmA==
-X-Forwarded-Encrypted: i=1; AJvYcCU/XyD0HbWhGnxFTvl7Jun1/weLMcVzoSfTzt1WV3CzfyJTvzezLN6s5sw0yNZaFivlOjreisZr2OKKXQ==@vger.kernel.org, AJvYcCVYxn/Mo0q/Gry25nD/81OENKqhrjg8ZCDuFiNAxPHnHlLtgx4/Q4oDSOUSxHu1qQGj35LWzQBEGFPYogQ=@vger.kernel.org, AJvYcCViGuItW0SwnG7JoJ7fpKQMGDI75U7VGxd+4H+XIqZBXR+T9DccAu0SQJ5gPeSRhvZKCNfqUgP3MsY=@vger.kernel.org, AJvYcCWyj5GyXXDJi1KikdHHNFhOlzdPJRRv25K+WGy4n6ScCzwimEjllgWgwOo/YJZA39I3ys0VutrGxYcf@vger.kernel.org, AJvYcCXDVT6jiKRj0lhfhZhc2O1bgEYT3MUijXzSYwmO7lvx637gMvJO8YuBfxDo2vifHb5UDd76b3YrnNYzrTNU@vger.kernel.org
-X-Gm-Message-State: AOJu0YzYFvOl+rE/g6bToGcTskE/Fmv4RxkZgmVjpzo9gIW0pg7NjCmR
-	arXYyAwembbRB0eOLAsFCqPUbCjG6B2f1dmV0ed1+WXkDg/XDwQRV//521sI2VJqp8qE3rqZPKq
-	fd3w0sPETJY7OHc3zgpqUt5W+hjc=
-X-Gm-Gg: ASbGncvfPXRHzAMKWmhm/ZiWxVW3i/ePQTEC5EfxxpBMXmc7ULZDUHkNNfPUwEqu79W
-	3P46ibr5vfWcCWezbLynVLSMznzU3Qq1/I1HF/w==
-X-Google-Smtp-Source: AGHT+IH1XwcQ9+xLozO4Q3bu65QRU8W1LZuyVdusoys5faul4KaN3rPauBxadAiPSUOGB0xJz1gY3MkUHKo9TFNuZko=
-X-Received: by 2002:a05:6102:d87:b0:4af:c5c8:bb4c with SMTP id
- ada2fe7eead31-4b3d0e0f3eemr5260422137.16.1736427237410; Thu, 09 Jan 2025
- 04:53:57 -0800 (PST)
+	s=arc-20240116; t=1736428337; c=relaxed/simple;
+	bh=ag+CVL8GO1ZYXa8AfDCwJl1QeL0yUyMSeLoUvIHHepE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TGlcUGo2NUGtZmZ33Qxv7v3bNUP6L1ST2HDFCM6Xxity9MQj4fNIAACF2MnMkF2hVJ4N0qGj904PHkPEw0NyZF3HiB0SumGapBFPLr545mCXEpin1hbhaZ+bu34nR66YIVAlfpTeszrFMPxysvUDHehVRPCc0G28XwMluIzgk/o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GB+LNnJy; arc=none smtp.client-ip=198.175.65.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736428337; x=1767964337;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=ag+CVL8GO1ZYXa8AfDCwJl1QeL0yUyMSeLoUvIHHepE=;
+  b=GB+LNnJykrosOwogLmVgsLQHpcolJXe13fHrKC94VzS2biEMzeVsFvZr
+   xQEeMbq4WHi3BsHlBjoQ85Xg64tPgaqS4VrcpBRSDVAS9cGRZ9FgYaoBG
+   2CkD4FTspVO+n7uETmYVsv6SB9ogTSXcqzWyHTkkh6toi8t+poKBT61Js
+   8qBUBx9dXi0MLZlMb3m42AFuSiRayhDieHvBqDghu7+gXUf0K6iLFu3J0
+   gECIYU8c2Hj/j4j7A8eXUVxqxpg/MSonmeHEO5BS2wlP0poYDM1aOJi0/
+   mZbuM9B5tvPub6o2VOQMWUnyfjD/du2hr8H52Q/ZHh5cvk1Lq9F3XyeQz
+   w==;
+X-CSE-ConnectionGUID: +ZEc85x3SEqpqFji1zP7jw==
+X-CSE-MsgGUID: Rkv2lW+pTYqW231t9/uu6w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="36802438"
+X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
+   d="scan'208";a="36802438"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 05:12:16 -0800
+X-CSE-ConnectionGUID: fJrEWseXQLiO5pdH9F86mA==
+X-CSE-MsgGUID: fAZbMe0HR5ieD1l6xsc5Dg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,301,1728975600"; 
+   d="scan'208";a="134235630"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 09 Jan 2025 05:12:11 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tVsKV-000HZX-2u;
+	Thu, 09 Jan 2025 13:12:07 +0000
+Date: Thu, 9 Jan 2025 21:11:53 +0800
+From: kernel test robot <lkp@intel.com>
+To: Akhil P Oommen <quic_akhilpo@quicinc.com>,
+	Rob Clark <robdclark@gmail.com>, Sean Paul <sean@poorly.run>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Abhinav Kumar <quic_abhinavk@quicinc.com>,
+	Dmitry Baryshkov <dmitry.baryshkov@linaro.org>,
+	Marijn Suijten <marijn.suijten@somainline.org>,
+	David Airlie <airlied@gmail.com>, Simona Vetter <simona@ffwll.ch>,
+	Viresh Kumar <vireshk@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Bjorn Andersson <andersson@kernel.org>,
+	Maya Matuszczyk <maccraft123mc@gmail.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-arm-msm@vger.kernel.org,
+	dri-devel@lists.freedesktop.org, freedreno@lists.freedesktop.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org
+Subject: Re: [PATCH v4 5/7] dt-bindings: opp: Add v2-qcom-adreno vendor
+ bindings
+Message-ID: <202501092058.5rRJ1ocm-lkp@intel.com>
+References: <20250109-gpu-acd-v4-5-08a5efaf4a23@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250108-starqltechn_integration_upstream-v14-0-f6e84ec20d96@gmail.com>
- <20250108-starqltechn_integration_upstream-v14-7-f6e84ec20d96@gmail.com>
- <20250109120158.GH6763@google.com> <20250109120308.GI6763@google.com>
-In-Reply-To: <20250109120308.GI6763@google.com>
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Thu, 9 Jan 2025 15:53:44 +0300
-X-Gm-Features: AbW1kvbYBA43BadlmghIi3O6FKD8wTkjV5Cw7rRDl9rkqTnWC7Han4ju5QPlKqg
-Message-ID: <CABTCjFCMky1kRZ0a8q999_WNdeOhqsDwtqxMCcWsmUoWv_rhDw@mail.gmail.com>
-Subject: Re: [PATCH v14 07/10] mfd: simple-mfd-i2c: Add MAX77705 support
-To: Lee Jones <lee@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
-	Hans de Goede <hdegoede@redhat.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250109-gpu-acd-v4-5-08a5efaf4a23@quicinc.com>
 
-=D1=87=D1=82, 9 =D1=8F=D0=BD=D0=B2. 2025=E2=80=AF=D0=B3. =D0=B2 15:03, Lee =
-Jones <lee@kernel.org>:
->
-> On Thu, 09 Jan 2025, Lee Jones wrote:
->
-> > On Wed, 08 Jan 2025, Dzmitry Sankouski wrote:
-> >
-> > > Add MAX77705 support - fuel gauge and hwmon devices.
-> > > Hwmon provides charger input and system bus measurements.
-> > >
-> > > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> > > ---
-> > > Changes in v13:
-> > > - remove compatible from cells
-> > > - change mfd compatible to match max77705 fuel gauge node
-> > > ---
-> > >  drivers/mfd/simple-mfd-i2c.c | 11 +++++++++++
-> > >  1 file changed, 11 insertions(+)
-> > >
-> > > diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2=
-c.c
-> > > index 6eda79533208..22159913bea0 100644
-> > > --- a/drivers/mfd/simple-mfd-i2c.c
-> > > +++ b/drivers/mfd/simple-mfd-i2c.c
-> > > @@ -83,11 +83,22 @@ static const struct simple_mfd_data maxim_max5970=
- =3D {
-> > >     .mfd_cell_size =3D ARRAY_SIZE(max5970_cells),
-> > >  };
-> > >
-> > > +static const struct mfd_cell max77705_sensor_cells[] =3D {
-> > > +   { .name =3D "max77705-battery" },
-> > > +   { .name =3D "max77705-hwmon", },
-> > > +};
->
-> Why not register these from the proper MFD driver?
->
+Hi Akhil,
 
-Because the fuel gauge address is different from the max77705 mfd device.
+kernel test robot noticed the following build warnings:
 
---=20
-Best regards and thanks for review,
-Dzmitry
+[auto build test WARNING on dbfac60febfa806abb2d384cb6441e77335d2799]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Akhil-P-Oommen/drm-msm-adreno-Add-support-for-ACD/20250109-044339
+base:   dbfac60febfa806abb2d384cb6441e77335d2799
+patch link:    https://lore.kernel.org/r/20250109-gpu-acd-v4-5-08a5efaf4a23%40quicinc.com
+patch subject: [PATCH v4 5/7] dt-bindings: opp: Add v2-qcom-adreno vendor bindings
+config: csky-randconfig-051-20250109 (https://download.01.org/0day-ci/archive/20250109/202501092058.5rRJ1ocm-lkp@intel.com/config)
+compiler: csky-linux-gcc (GCC) 14.2.0
+dtschema version: 2024.12.dev6+gc4da38d
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250109/202501092058.5rRJ1ocm-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202501092058.5rRJ1ocm-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   Documentation/devicetree/bindings/net/snps,dwmac.yaml: mac-mode: missing type definition
+>> Warning: Duplicate compatible "operating-points-v2" found in schemas matching "$id":
+   	http://devicetree.org/schemas/opp/opp-v2.yaml#
+   	http://devicetree.org/schemas/opp/opp-v2-qcom-adreno.yaml#
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
