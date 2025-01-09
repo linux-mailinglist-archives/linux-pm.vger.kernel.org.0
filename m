@@ -1,104 +1,125 @@
-Return-Path: <linux-pm+bounces-20160-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20161-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA152A0803E
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 19:54:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DBF9EA08075
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 20:10:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AEC861680C0
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 18:54:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D65477A28E3
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 19:10:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9CD019995B;
-	Thu,  9 Jan 2025 18:54:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 211F419FA8D;
+	Thu,  9 Jan 2025 19:10:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JHhAq58a"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QP4vU+zO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f47.google.com (mail-lf1-f47.google.com [209.85.167.47])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC19719DFA4
-	for <linux-pm@vger.kernel.org>; Thu,  9 Jan 2025 18:54:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2E04C2AF07
+	for <linux-pm@vger.kernel.org>; Thu,  9 Jan 2025 19:10:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736448848; cv=none; b=KNlHU6ba041EDHu6A4Zx38EBD/TuCXhJmwLS6wsyQY5NrTSIGcw1kjDG3gJv1AATJ2Raj4icbTgOLew/wmDItauvIX9nkc8IPGz/WnvzdosS8XUvscJcA4tnvlqDdPhdlHDOkkknAfRnyS3E8ZpfnXidS0shLCHPN0ILorzlx+U=
+	t=1736449807; cv=none; b=tEvxc/nZbe8PbIDenyUr4QG/lLar3eT2SVPdXwBpQISBtrje+fLoDOBYuTqiEleHNAJVwUCzjsCSe0KxUUvNmOhvi7Ux/yoPLwKADuUAciDgdW85vFfopORoNsMsJBuX6od/sC1FYTrU/No49vtGL2WnPxK6y/bGZdKvJ38p8ys=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736448848; c=relaxed/simple;
-	bh=6rD5kJ6oNKZqfp61+BrJaBStpKZz+WxfOE5XGLVTdiw=;
+	s=arc-20240116; t=1736449807; c=relaxed/simple;
+	bh=ztB8QMxXG57fyiJiPyOTkzqaNbYZnkur2dYi4+l9Wyg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mmUbtB5KNIiDSKWTpRmBNf6fu9xo3Zqjl4rEG5Wl72cOwET71CIMwtD7lBytJLMpIW3KqtJ+cMj4NU+hGQEfSVUhBQXqxxXdlSFpraz2ANCVVKYkG9Tf2q7q0IlUFrLizAc0M1DfErP6y+gbHjybpAZbkhtARgV6hD1vNTiJo2I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JHhAq58a; arc=none smtp.client-ip=209.85.167.47
+	 To:Cc:Content-Type; b=DVJlQeceQ1TT/FStiw3xjAdXrih24rL3GWFaMrYKaTHODGXehoc2EpsQpcv0a/V0GpCWmj1enSV4ralMCGCiKyr9t4Su0jzv/EeEovLoS2qnsC8x41wZMXS1A8BrivsJk+l4FmaoeDMEGGBooWgzXBAnouBtrv0wu+amau9iwRo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QP4vU+zO; arc=none smtp.client-ip=209.85.167.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f47.google.com with SMTP id 2adb3069b0e04-53e389d8dc7so1277122e87.0
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2025 10:54:06 -0800 (PST)
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-54252789365so1512509e87.0
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2025 11:10:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736448845; x=1737053645; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1736449803; x=1737054603; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6rD5kJ6oNKZqfp61+BrJaBStpKZz+WxfOE5XGLVTdiw=;
-        b=JHhAq58ac5uWUAXYacSldDpG49e2dYFEPzWMiwa7j5EWuu62XtMQ7kEkgXOE+z256g
-         a7Z3YVgJyKF+N3WRQZWMVRslbQ6uoGTCwUAhEehXVXX1CRnsgju21PgBi3KOCiyXe6sl
-         9cG7Whrbf5DUassmk5JALXkbYlnF8S6zeWskzFzgIgRcwZzl4K/4orTKB96L5TUw5psf
-         ltm7RdDFiScrODbc916He2szMv2sRg59YBNVYEe4Wz8YfuUpcoL0qs1rac9A6DeDR9ex
-         pNNdLGm0sMAYdpXJwJcUGrTnHekRHL8Z33P0MQ69oSyz44v/GjXkG+sVqT8Ktpaazti/
-         fPlg==
+        bh=033JmqE4kVUrBXvHgjgoIo0v08Uj8oWqcjO2I4rH828=;
+        b=QP4vU+zO746F49YXD1iPoSvLmAX0BXVRcNBiaHvfKdyfcMAmhoOuLk1+MauCCA0YEf
+         ZouPQYhlsDRPMBOGheSqD6q8t5ZM/jGP00gvZnItXeqbDCrfxxUwtZE/C+Y+b4NGAp8l
+         Gbap/f+fpAO9nlh3o1Zrz7rpDbkOTJ449R/tmk6H4ungSuLWq3P7RPDdqWZJwRI64/4o
+         pp+EpDKa6mBc6Ea1Sx5QOA+/YhYGIcv99c16DhBsEZtP+tbLSTDtQW4A8Xd/e38OP13A
+         24uy9j7E9yL6UI8jGlBgWfCVml5ZLvpgKvl8+h4fpZppdc0NNZskU+Plc824Q3JYqJUa
+         fh9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736448845; x=1737053645;
+        d=1e100.net; s=20230601; t=1736449803; x=1737054603;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6rD5kJ6oNKZqfp61+BrJaBStpKZz+WxfOE5XGLVTdiw=;
-        b=XOHdl6GPJyfE+greaFuvaJrdsRfA1jpwfNiMkW+vak1ZMDsEL2cIkeN9RTBBM+GC4u
-         mQyV7E4KVt2YWW3KPFmHlyX53N4mSvW146G92LPLoviFlw64195wI9QB/ta/v1yP2vYa
-         I12ekHrTiBmu1zOcId8JjK5+bYD+REyhcGCsi4Bp21s/hbzQfc4ofEmF4y8WJ9S2rPH6
-         Txdm1o6OX5M4y2fX7FvtsZv7f5PW1egX8K2LbHwgQ7UmIupQ3ZKsnQ54+c1/8QWKWYdG
-         5zvMN/co9PqrYvmoezED6tZxGTIucKb8DBLX8vuSNgtA7iSLSaWLr4rkVXc3c1EeuH04
-         +dSg==
-X-Forwarded-Encrypted: i=1; AJvYcCWnhM95slx0p4186XrHnipa0JRz5Xloa73a6jYAVLBhn32Cn+QOE4AJGzS4TLV0xgB/4PClBf1FfA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyR1BYAyCCyLOYiV50M6F1hPR9Uv2SXuVJoeOxrTuW3R4iFvgWe
-	N3K4zZCVPV6j/9TdDYYwG5V592vXRLxsD1/cRrTfCdpBF9dgRIdZitunFk61k/BMhPqDyUNuq2P
-	XHUTAJ9aabpHJh7CjuUahZRVkChQG+OkolhuXWA==
-X-Gm-Gg: ASbGncvQcEvoe4p7fneS1EcYXjZgHt9aw9F3lH9TY7YD8uiLYT4uz1khSYsUXEIUAs1
-	TC7BNbBMEBFPwglQ4RWXpkZBe6S9WvEpjvj03
-X-Google-Smtp-Source: AGHT+IFUKN3gCG+reUubOj1ToiPOoBLA0OkmJSvGwhuKi7K8xqy12CnnwimI96TU3tjzN92TC8wBnTQv0QFNMwvUx8A=
-X-Received: by 2002:a05:6512:1053:b0:540:358d:d9b7 with SMTP id
- 2adb3069b0e04-54284810eb2mr2197592e87.52.1736448844953; Thu, 09 Jan 2025
- 10:54:04 -0800 (PST)
+        bh=033JmqE4kVUrBXvHgjgoIo0v08Uj8oWqcjO2I4rH828=;
+        b=U2a8nZ/cyiGSBxC6IycWeka7wrhgP4mFg2KYo63Z/OTTyV11VyS1WGq5eBgJ4VZUMx
+         +ZZLV4cxwZm8OwtanX8jVF6SBhMcsfzQQYv6k1IPkfObXR8U0kiaa8gvFQVqFxi7ooGq
+         XThGvKpyPdcLNMbbnylRtmle4HGld/YVMihNLu7yj3YLrf/JrDMwKgndWOTDhcsKoDN1
+         k7y114nKP2VRx3UgKpmY/X0HI11ojtbDycBlbB74BNTHm/B2hkDkSVEaY6eQ0bfLzotE
+         nJNFu2FWSylGqrVGsq1aDbw9V/RXkQ1EUa/0I/9t6GA3aJuBqb2t1Btc8WW206A8DqY1
+         6yYQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUI6VizLcWBlsSkNxAX8qJtIQxbc2ogvq29xdL60KuTqwXLhOb4mow0i3E8ZCeloh4jthFnK7Bazw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHELfRCESPj22l00zX2cpJcMD098PZm0AFicLeVmlUTh3FjvaF
+	pHxJlGn7OGw9AQuOjIcuIjeW7s+9INYVKw1TUCPWfaeTtFYoVtoyBCFt0D/bxs7kXXhZ5Nqc5Vq
+	jh26edDY2mMJcyccdLEzlkUC4OO9Ev5FzKby61eYKHFmtqFOP4TGA8w==
+X-Gm-Gg: ASbGncvb/HhNY6pBjh9LElcdIWncwJ52xt7OQtfrCd27DB+z6Mt9BhWzCByZVPk3Ij9
+	449NItV8rqBdM54m2mMecKxBUGLSzlKyuv7Ug
+X-Google-Smtp-Source: AGHT+IEFDXEsZPp57ElAkHFJsGAlwp0fqUVCLKoqAIDa5G+0kJdNGr7OynTSJFBCj/Xys060QDD3Toklafw1jfetu94=
+X-Received: by 2002:a05:6512:3c9c:b0:540:2d64:4ef4 with SMTP id
+ 2adb3069b0e04-542844b04a3mr2685807e87.0.1736449803247; Thu, 09 Jan 2025
+ 11:10:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250107113346.170612-1-hdegoede@redhat.com> <20250107113346.170612-6-hdegoede@redhat.com>
-In-Reply-To: <20250107113346.170612-6-hdegoede@redhat.com>
+References: <20250107113346.170612-1-hdegoede@redhat.com> <20250107113346.170612-7-hdegoede@redhat.com>
+In-Reply-To: <20250107113346.170612-7-hdegoede@redhat.com>
 From: Linus Walleij <linus.walleij@linaro.org>
-Date: Thu, 9 Jan 2025 19:53:54 +0100
-X-Gm-Features: AbW1kvZEZOMH81MIXR0A1BfM7tPY1FakDVA-YcXlDJpCzeZlDhK5jLGeGBKEJlQ
-Message-ID: <CACRpkdYfeHKdop7eMod_qaOiZLzM15mPcdfJtWghBA7zvyd_GA@mail.gmail.com>
-Subject: Re: [PATCH v2 5/6] power: supply: adc-battery-helper: Add support for
- optional charge_finished GPIO
+Date: Thu, 9 Jan 2025 20:09:51 +0100
+X-Gm-Features: AbW1kvZfXESF5ov-jAJd_iT6ZXD-KPIGqtsD3CP-ZItklrq2KDPUdrvRBzUDWs8
+Message-ID: <CACRpkdb-YQZeJ4igWaJAr-FwokW721tdM28TtgrZYtar1j=Ydg@mail.gmail.com>
+Subject: Re: [PATCH v2 6/6] power: supply: Add new Intel Dollar Cove TI
+ battery driver
 To: Hans de Goede <hdegoede@redhat.com>
 Cc: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
+Hi Hans!
+
+This patch set continues to be intriguing, I like it!
+
+I try to help out as best I can, more comments below.
+
 On Tue, Jan 7, 2025 at 12:34=E2=80=AFPM Hans de Goede <hdegoede@redhat.com>=
  wrote:
 
-> Charger ICs often have a status pin which indicates when the charger has
-> finished charging the battery. Sometimes the status of this pin can be
-> read over a GPIO.
->
-> Add support for optionally reading a charge-finished GPIO and when
-> available use this to determine when to return POWER_SUPPLY_STATUS_FULL.
->
-> Signed-off-by: Hans de Goede <hdegoede@redhat.com>
 
-Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
+> +       /* Read Vbat */
+> +       ret =3D iio_read_channel_raw(chip->vbat_channel, &volt_raw);
+> +       if (ret < 0)
+> +               goto out_err;
+> +
+> +       /* Apply calibration */
+> +       volt_raw -=3D chip->vbat_zse;
+> +       volt_raw =3D volt_raw * (VBAT_GE_DIV - chip->vbat_ge * VBAT_GE_ST=
+EP) / VBAT_GE_DIV;
+> +       *volt =3D VBAT_RAW_TO_UVOLT(volt_raw);
+
+This thing looks like a property of the ADC rather than this charger.
+
+Can you not simply implement this as a processed channel in the
+ADC driver and use iio_read_channel_processed[_scale]()
+with IIO_CHAN_INFO_PROCESSED?
+
+(The _scale version is used when you wanna just say *1000, which
+you often want to do because these tend to be microvolts or
+microamperes).
+
+See drivers/iio/adc/ab8500-gpadc.c ab8500_gpadc_read_raw()
+ab8500_gpadc_ad_to_voltage()
+for a (complex...) example.
 
 Yours,
 Linus Walleij
