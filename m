@@ -1,112 +1,111 @@
-Return-Path: <linux-pm+bounces-20164-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20165-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B794EA0833B
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 00:03:16 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BFEF5A08350
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 00:15:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E59643A364B
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 23:03:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A93257A2C70
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 23:15:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9011C205E1A;
-	Thu,  9 Jan 2025 23:03:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB1AB2063C9;
+	Thu,  9 Jan 2025 23:15:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="oBB+UDtl"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="VLMDRBo0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF469204F98;
-	Thu,  9 Jan 2025 23:03:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60230205E37;
+	Thu,  9 Jan 2025 23:15:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736463792; cv=none; b=afJ1G0uUa2nmcs0bc/ZidQN9js1f66DkXLzZ0C5qzQPjzHH32UuKEKyZozLeETF5FtkmfWte2ainr0Hh/jGaRY1349pWIme/C1U+2N5ojzDQ5KEq7CqD70RHUsdZbZzCUxie+3YhnH/hVeAWHIqOIpCe7kvZqwQvJPAIE/4s91o=
+	t=1736464517; cv=none; b=f7GzGceH8/+fqggKUsVuF+2SHk3M9xh7dTJ0N+XnutUS/8KaGqhhEO4wYM+TTV8RVxn9jyiHtyWedDK1ebFruTXY6g04KKXTgpSS0bzrDPwqrZ4RynUW3fjjOaAgVn1NoLZq/PVVaBgNqCiTsYmv5KW1Enp7YSh81XSiBmIHP+w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736463792; c=relaxed/simple;
-	bh=J5pbfu2P0SRouzuCOwQ6Fg1ZXF6bjH6Vvi/1m3tza4Y=;
+	s=arc-20240116; t=1736464517; c=relaxed/simple;
+	bh=HznCb0V66Eh/wgloVhCI/l+lkOgEx8kQIjfNELNCpkQ=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jJ5eNXRMGAw+G1nrvag1Cqt8TDfGq23Ak7L/O7v31qClRs8jAeWvLGLGre9fuYfbv1FdAqY9U2C1XqV3jbDXn/mU4/NaP/4ahXZSdWHQhxv56lJgYQF3uS6/KYFdNXjT85OPzbO+B2OX3E+SrRqkIfcAJIMPodwmYf7Mm0oDpxk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=oBB+UDtl; arc=none smtp.client-ip=185.11.138.130
+	 MIME-Version:Content-Type; b=FxNM5snw3i17WZrWENdMa1Gsr8RqYrmuoulXYg4yvC6hOK6wGc6b0EFuWQo/gIeWqVK89JiqbJteyWvYsnz5VQboFkUCaB5OzId4b8NQmmiHKABPnYzzrSUBxF60HSHEoM4W7qZBnJ0MUB8sXb7ru4XfqrR41/0sZmzDGopxASM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=VLMDRBo0; arc=none smtp.client-ip=185.11.138.130
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
 DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
 	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
 	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
 	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
 	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=2Hc9m1dPBDPuWb47dArImrMSzilYfkcFH6qpnwe202U=; b=oBB+UDtlo9fsDTebtDxQhn7Nwm
-	VKSxQCiJa5SPi0oW7hlItnioj/0wI8JwrcvxDaLtvGdFsFHWCb5KOmX7ClMseKRNv7Wz63nrRA0aH
-	v9GacM01qGUr/QxcjQwfkp7Y7XLFORZnvt2BMrkKHhn5lE/NjizZY/zciikJcplKNCH4Gqb2jW4Js
-	9g+Wf9Q5SPYl6g4p07DZfTvBgM7q6lxACDf5rVl4z3IB41nRugDEzZGKSptD3xK+Y0sPEXwJFlmHs
-	MAoEso/qR+dr0XXBcvPh3vi+gcLHCzPFip6DsShz/68IY+aH7PGIcl28OYAG94aKMU+1YdvSfcUr1
-	UagzyiLQ==;
-Received: from i5e860d05.versanet.de ([94.134.13.5] helo=diego.localnet)
+	bh=DMXLTKZv7aPQSaOukCeYXiGlmyqmXrYyjrj2l+DZP5Q=; b=VLMDRBo0Fhxksbi/ChrY9gaNRh
+	o12d4T6RURl9lbQ51vCzjGjUq9nTsq4uAnKCKqM86LZS0Du0OHDSwH/h9jND8AwaCIEWJZcIIfTI6
+	6Jauton0lBxcEHROkEGLVW1/Fm0RsdkiReO3f73GQzzaWeoM4FZQqHYDmrDy1rsE+siE+UjyOYxhS
+	rBka+Yl1YXrd+yqdkOhTn+48LdB+ZrKhCw8RI/bmk7YK/4f5/IeRG686DrjaQO37o++1bXbxnyas9
+	wq3nuWEQPyTRuUSb2jkGY3y+f0SkkLy9zyGRWW089m9VEywmqRPGrv9oP+zLHlraiwZNSL0+CTDrm
+	+DOU59Kw==;
+Received: from i5e860d05.versanet.de ([94.134.13.5] helo=localhost.localdomain)
 	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.94.2)
 	(envelope-from <heiko@sntech.de>)
-	id 1tW1YT-0005pB-Aj; Fri, 10 Jan 2025 00:03:09 +0100
-From: Heiko =?ISO-8859-1?Q?St=FCbner?= <heiko@sntech.de>
-To: linux-kernel@vger.kernel.org, Shimrra Shai <shimrrashai@gmail.com>
-Cc: conor+dt@kernel.org, devicetree@vger.kernel.org, krzk+dt@kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- linux-rockchip@lists.infradead.org, robh@kernel.org,
- Shimrra Shai <shimrrashai@gmail.com>
-Subject:
- Re: [PATCH v4 1/2] dt-bindings: arm: rockchip: Add Firefly ITX-3588J board
-Date: Fri, 10 Jan 2025 00:03:08 +0100
-Message-ID: <2999810.o0KrE1Onz3@diego>
-In-Reply-To: <20241216214152.58387-2-shimrrashai@gmail.com>
-References:
- <20241216214152.58387-1-shimrrashai@gmail.com>
- <20241216214152.58387-2-shimrrashai@gmail.com>
+	id 1tW1k9-0005wG-FP; Fri, 10 Jan 2025 00:15:13 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: linux-kernel@vger.kernel.org,
+	Shimrra Shai <shimrrashai@gmail.com>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	conor+dt@kernel.org,
+	devicetree@vger.kernel.org,
+	krzk+dt@kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	robh@kernel.org
+Subject: Re: [PATCH v4 0/2] arm64: dts: rockchip: Add Firefly ITX-3588J Board
+Date: Fri, 10 Jan 2025 00:15:03 +0100
+Message-ID: <173646444755.2945728.11659314833812280538.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.45.2
+In-Reply-To: <20241216214152.58387-1-shimrrashai@gmail.com>
+References: <20241216214152.58387-1-shimrrashai@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="us-ascii"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-Am Montag, 16. Dezember 2024, 22:41:51 CET schrieb Shimrra Shai:
-> Document board compatible bindings.
+
+On Mon, 16 Dec 2024 15:41:50 -0600, Shimrra Shai wrote:
+> Draft 4 for the device trees for this board. I hope this one finally
+> addresses all outstanding style and organization issues. Note that the
+> technical functionality limitations from the preceding versions remain.
 > 
-> Signed-off-by: Shimrra Shai <shimrrashai@gmail.com>
-> ---
->  Documentation/devicetree/bindings/arm/rockchip.yaml | 7 +++++++
->  1 file changed, 7 insertions(+)
+> Changes since draft 3:
+>  * Removed the rockchip-pca9555.h header and used the pin numbers directly
+>    in the .dts.
+>  * Removed the display-subsystem node in the .dts. No other board seems to
+>    have one like the one that was there and it was causing warnings.
+>  * Removed extraneous property "rk806_dvs1_pwrdn" on the PMIC subnode on
+>    SPI2.
+>  * Removed an extraneous property "rockchip,skip-scan-in-resume" on the
+>    PCIe node pcie2x1l0.
 > 
-> diff --git a/Documentation/devicetree/bindings/arm/rockchip.yaml b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> index 753199a12..fc7ee86e2 100644
-> --- a/Documentation/devicetree/bindings/arm/rockchip.yaml
-> +++ b/Documentation/devicetree/bindings/arm/rockchip.yaml
-> @@ -167,6 +167,13 @@ properties:
->            - const: engicam,px30-core
->            - const: rockchip,px30
->  
-> +      - description: Firefly Core-3588J-based boards
-> +        items:
-> +          - enum:
-> +              - firefly,itx-3588j
-> +          - const: firefly,core-3588j
-> +          - const: rockchip,rk3588
-> +
->        - description: Firefly Core-PX30-JD4 on MB-JD4-PX30 baseboard
->          items:
->            - const: firefly,px30-jd4-core-mb
-> 
+> [...]
 
-In v3 [0] the board dt-binding got an
+Applied, thanks!
 
-Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+[1/2] dt-bindings: arm: rockchip: Add Firefly ITX-3588J board
+      commit: 8886252102bd774656d19423b7d85e1ddd78f9c0
+[2/2] arm64: dts: rockchip: add DTs for Firefly ITX-3588J and its Core-3588J SoM
+      commit: ebe82df46fba0f0fe45d7e03ddf5ca0f6e758a06
 
-so Krzysztof already noted, please carry those forward into new versions.
+I've sorted some properties and dropped the status="okay" from the
+fixed regulators added in the board dts.
+status=okay is the default, so there is no need to add this to new
+nodes.
 
 
-[0] https://lore.kernel.org/linux-arm-kernel/x7y24y3bkbj5fzx5pdprjr5umg6egxsy2xscfbj3xgzgzubvdk@ppncjiqoekk7/
-
-
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
 
