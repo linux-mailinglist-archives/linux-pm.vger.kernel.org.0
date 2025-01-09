@@ -1,127 +1,125 @@
-Return-Path: <linux-pm+bounces-20141-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20142-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6F179A074E2
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 12:39:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id CFCEEA07536
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 13:02:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7402B16858D
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 11:39:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B70D188B0E5
+	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 12:02:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6470A216E10;
-	Thu,  9 Jan 2025 11:39:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4032C2165F3;
+	Thu,  9 Jan 2025 12:02:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DHKnm668"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Lw/9ZmFe"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FFF4216E01
-	for <linux-pm@vger.kernel.org>; Thu,  9 Jan 2025 11:39:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07E3A195;
+	Thu,  9 Jan 2025 12:02:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736422755; cv=none; b=TyGcWDNQuxyZNxEOCzfylLkTcKNihE1jodEf4cTMNc2RXbfJgQwEO9VRQwKkoJ4zE2tKGYlkFMTfmiyYLZq9r/nUhYjNJcou0t8UeZSi0b51e/yycERvSohEU0FDHvRkRFqt6KLNigD8kJ7uuNvoUl7QbrTlgFRVH+ymexmcyTE=
+	t=1736424125; cv=none; b=OG3XSyndA6y+CIy4ola7QYKk0QBoKSztcpmii1gi1yw9CoKEMUeUs06bhPh+OQIpS3GoM2iDiER1Uys1MXlp9QSgSbOoflrsqUjBWetTRyTV36MvEzmpeGLO8WttPCNQd4oEkOzGWeEgp59GS2YSWxStBYibG7oNNX0dQkmVBMc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736422755; c=relaxed/simple;
-	bh=DXE2So2Py5XRjf84OhnQg7rvzaZdP9MRRVPhI7d2j1A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=W8JrIusFPXrrWBMwcb77hPs7H5lTt7Sx4ycUU+FeUpydau42ueZ+CiOg23urECPP5fo8cpxcMSwi1UtKNZxnOf7r4PpBryZA5z8D9ts7brVmd8lTvfo7qzWQzPM+lqoiNWwnwsnemOmt0eatahWepQkuTLkeOd9PY472bFUre/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DHKnm668; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1EF3C4CED2
-	for <linux-pm@vger.kernel.org>; Thu,  9 Jan 2025 11:39:14 +0000 (UTC)
+	s=arc-20240116; t=1736424125; c=relaxed/simple;
+	bh=44XC/PoinYXBD7pTczVCDvbpws2IBUMxEXAauXTCGG8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=o3IH6SGzqUVmLkZnAlL8e6pf7n5EAArlBPu3i/7PNkYiCYylRJ8JDcUpwfTDCd4mkx/W/i0WAOA3wDHTlq6u/OBHj6/MrzIeE4qUvWNRC1xp5zO3F9VMpHVeaD2NZDu0ZcRAAWM27Ef1yRaQOGUlrIhB2405dITK23Pg4u6w8mE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Lw/9ZmFe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 41250C4CEE7;
+	Thu,  9 Jan 2025 12:02:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736422754;
-	bh=DXE2So2Py5XRjf84OhnQg7rvzaZdP9MRRVPhI7d2j1A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=DHKnm668LZloOjr8HB9l3i3Ph2SMcYlqctSL9SdPzBdCU9G/22CyW6CkuhFpS3Zlf
-	 k4NCRmuNXW7BUkq7bSET9aN4SBmMNbkikjc+MXH47tVnzau06w1JjtAR1l0ggoOAyg
-	 T9FolIIeEsk399LUOBWFouYuwIzUAG226Om305ELudWbDR/Xwd1NeS7yLE6O1CjgUm
-	 jYSmZTGTC0QIAJ9Uxk+NM/KfemE9k2VeONXy3ueE0OOP3rpVBWHE8yoUmENw+P8qeu
-	 n+sssuRTaqsBDDCHrWCG5UOUowob6oesqdM8ht/xc+B8ZnCbRnbiBBQeM86+II8VfQ
-	 BIjlatDyIj3tA==
-Received: by mail-oi1-f182.google.com with SMTP id 5614622812f47-3eb7edfa42dso375810b6e.2
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2025 03:39:14 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWVYYt8CkoRjgx/8q5kq6qQvTGAEigGQuKRNQVSy6bUfvhAV7iUuAA19MXhye4tgLuDJG+ElJ6yjw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmrmgzxcUcbAdrHI9NygvsI5iCA9mabUdQ2ab7rprALcTbyliF
-	+NRmoV6JiIyhxmxswZVsMtzI6pPDeP9Zz7meDKQRgNbO/qJZ/g8z2GJyrvvl4wr/wMtnCftcoPc
-	eseUvLJt7B0a+0YOAbr3tzDl9Bgg=
-X-Google-Smtp-Source: AGHT+IGMqUrt2FKou5An29S/lwto4lru3NIbCF5jBqSGOlkndBoIjeSLEXcUR95IHzzENRb3gc+NTbmPsc2MCz+VH5s=
-X-Received: by 2002:a05:6808:1446:b0:3e6:63b5:f248 with SMTP id
- 5614622812f47-3ef2ebcb8e4mr3897067b6e.7.1736422753938; Thu, 09 Jan 2025
- 03:39:13 -0800 (PST)
+	s=k20201202; t=1736424124;
+	bh=44XC/PoinYXBD7pTczVCDvbpws2IBUMxEXAauXTCGG8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Lw/9ZmFeEQJ+wTxulF0TE5jHA5xXgi+sWJirHx/0MOKs9NDGFlAXJ8X1Szz3vS+a2
+	 PNxJ8qwlx1Y0yq7jtDSZM8/ramIS8h9Wf1dGfKjXUv3FMOQiYc2r7L90bfmMgAvYbu
+	 oUyFeL68Bm/fpa0UNr4kvdC3vgvBsWqeIp/uozshaPdQJd5rMKEwBYK1/anhwDgEXq
+	 nsS2T+JmozfTh0NoRFXBP/jnV/+J2Q9Wy4zGpxnnEVXOxKm33n3osizYBGHCHqtgkG
+	 2CrtQR62mIJNOjAdkJjx7dRn4F01WOLBRyu628vTY+Da8c+/nqEC5x0gkDCUmQJWL4
+	 xbs4JkTNu6S9g==
+Date: Thu, 9 Jan 2025 12:01:58 +0000
+From: Lee Jones <lee@kernel.org>
+To: Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, Hans de Goede <hdegoede@redhat.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+	Purism Kernel Team <kernel@puri.sm>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: [PATCH v14 07/10] mfd: simple-mfd-i2c: Add MAX77705 support
+Message-ID: <20250109120158.GH6763@google.com>
+References: <20250108-starqltechn_integration_upstream-v14-0-f6e84ec20d96@gmail.com>
+ <20250108-starqltechn_integration_upstream-v14-7-f6e84ec20d96@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <97c5c93d-e31e-483b-83c3-28b797b69e9a@stanley.mountain> <68cdb73b-59cd-47be-9bc1-9affa606ba8f@pf.is.s.u-tokyo.ac.jp>
-In-Reply-To: <68cdb73b-59cd-47be-9bc1-9affa606ba8f@pf.is.s.u-tokyo.ac.jp>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 9 Jan 2025 12:39:01 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h4TUvGKKD51U+RUWv0sCbRjon6PF3ycVaTHMoA=1VEVQ@mail.gmail.com>
-X-Gm-Features: AbW1kvbbH0I-CJj2f6-yB5QpUedzTyqnz7rgG_4MRC9lfYMeaRVEBir3AFTkCyA
-Message-ID: <CAJZ5v0h4TUvGKKD51U+RUWv0sCbRjon6PF3ycVaTHMoA=1VEVQ@mail.gmail.com>
-Subject: Re: [bug report] powercap: balance device refcount in powercap_register_control_type()
-To: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-Cc: Dan Carpenter <dan.carpenter@linaro.org>, linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250108-starqltechn_integration_upstream-v14-7-f6e84ec20d96@gmail.com>
 
-On Thu, Jan 9, 2025 at 1:36=E2=80=AFAM Joe Hattori <joe@pf.is.s.u-tokyo.ac.=
-jp> wrote:
->
-> Hi Dan,
->
-> Thank you for the report.
->
-> On 1/8/25 19:11, Dan Carpenter wrote:
-> > Hello Joe Hattori,
-> >
-> > Commit cae442480e40 ("powercap: balance device refcount in
-> > powercap_register_control_type()") from Dec 15, 2024 (linux-next),
-> > leads to the following Smatch static checker warning:
-> >
-> >       drivers/powercap/powercap_sys.c:632 powercap_register_control_typ=
-e()
-> >       warn: freeing device managed memory (UAF): 'control_type'
-> >
-> > drivers/powercap/powercap_sys.c
-> >      622         }
-> >      623         mutex_init(&control_type->lock);
-> >      624         control_type->ops =3D ops;
-> >      625         INIT_LIST_HEAD(&control_type->node);
-> >      626         control_type->dev.class =3D &powercap_class;
-> >      627         dev_set_name(&control_type->dev, "%s", name);
-> >      628         result =3D device_register(&control_type->dev);
-> >      629         if (result) {
-> >      630                 put_device(&control_type->dev);
-> >
-> > The patch adds this call to put_device() based on static analysis but
-> > I'm pretty sure that will lead to a double free so the patch should be
-> > reverted.
-> >
-> > We can see on line 626 that the class is powercap_class, so
-> > put_device() will call powercap_release().  The means that control_type
-> > will be freed.
->
-> Indeed, I missed that.
->
-> >
-> >      631                 if (control_type->allocated)
-> > --> 632                         kfree(control_type);
-> >
-> > Use after free and double free.
->
-> Instead of reverting the patch, How about removing these two lines to
-> avoid the double free (so that mutex_destroy() is called in the cleanup
-> function as well. Not that it makes that big of a difference though). If
-> that is ok with you, I will work on a patch to fix it.
+On Wed, 08 Jan 2025, Dzmitry Sankouski wrote:
 
-I'd rather drop the commit in question and feel free to submit a
-correct patch for the device refcount balancing.
+> Add MAX77705 support - fuel gauge and hwmon devices.
+> Hwmon provides charger input and system bus measurements.
+> 
+> Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> ---
+> Changes in v13:
+> - remove compatible from cells
+> - change mfd compatible to match max77705 fuel gauge node
+> ---
+>  drivers/mfd/simple-mfd-i2c.c | 11 +++++++++++
+>  1 file changed, 11 insertions(+)
+> 
+> diff --git a/drivers/mfd/simple-mfd-i2c.c b/drivers/mfd/simple-mfd-i2c.c
+> index 6eda79533208..22159913bea0 100644
+> --- a/drivers/mfd/simple-mfd-i2c.c
+> +++ b/drivers/mfd/simple-mfd-i2c.c
+> @@ -83,11 +83,22 @@ static const struct simple_mfd_data maxim_max5970 = {
+>  	.mfd_cell_size = ARRAY_SIZE(max5970_cells),
+>  };
+>  
+> +static const struct mfd_cell max77705_sensor_cells[] = {
+> +	{ .name = "max77705-battery" },
+> +	{ .name = "max77705-hwmon", },
+> +};
+> +
+> +static const struct simple_mfd_data maxim_mon_max77705 = {
+> +	.mfd_cell = max77705_sensor_cells,
+> +	.mfd_cell_size = ARRAY_SIZE(max77705_sensor_cells),
+> +};
+> +
+>  static const struct of_device_id simple_mfd_i2c_of_match[] = {
+>  	{ .compatible = "kontron,sl28cpld" },
+>  	{ .compatible = "silergy,sy7636a", .data = &silergy_sy7636a},
+>  	{ .compatible = "maxim,max5970", .data = &maxim_max5970},
+>  	{ .compatible = "maxim,max5978", .data = &maxim_max5970},
+> +	{ .compatible = "maxim,max77705-battery", .data = &maxim_mon_max77705},
 
-Thanks!
+Drop the battery part from the MFD (group) name please.
+
+>  	{}
+>  };
+>  MODULE_DEVICE_TABLE(of, simple_mfd_i2c_of_match);
+> 
+> -- 
+> 2.39.5
+> 
+
+-- 
+Lee Jones [李琼斯]
 
