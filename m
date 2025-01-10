@@ -1,184 +1,120 @@
-Return-Path: <linux-pm+bounces-20227-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20223-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEE70A0926B
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:47:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA7F7A091A8
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:17:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1AED2164373
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:47:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73AB6188F22A
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:17:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E11D920E015;
-	Fri, 10 Jan 2025 13:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="IIxwpPwG"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E068320E021;
+	Fri, 10 Jan 2025 13:16:55 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8232220E703;
-	Fri, 10 Jan 2025 13:46:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BDCA20C468;
+	Fri, 10 Jan 2025 13:16:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736516808; cv=none; b=i/IUOZePEjWw9ZGoVUoIVxFTNo/x3+bBKKSyoEydWJY+3nAIVAlmhIgrxNVSfyAxTd7fS1WVdICqyPV82M9oiN97rnTmXAlVDDYjya1cKFX3PgD7sSH54oJ7SMUO3oztLr6qZli72mqrDyGlydyaOM1Q8ThGuEC+FGTBR87PcQo=
+	t=1736515015; cv=none; b=OKlp9gWnTD343IX5LJrbkb6+5/gxYyl9Zm1liLTP6PX/VZrgjA1/ymqQjKiwSjK11Rcaw78Dg/Y/zvGOmbvrubSuJbi8eDdhmNRfemraYYAYtd9bULr39XHIBxtkXty5Xh5Gs9b8OqPJ/Zgr0UWbnWna1Xa7cDIoUCwv5D6ERp0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736516808; c=relaxed/simple;
-	bh=uW/ugZM0hITtzeLLS0Jw26EUUNfhmarB6omouNNWEds=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=VLtlzMNx/vVpVuHvb58aw1FSyRLwDM3Na/NSiti/Md4y6ZzO4kg8B/yTm2Hp8gZ7z6rpp/+Q5LuyXyMvK7jtVYTZ3cwI5iCU8BMxCCu21e9fkTfcY9KukC66nRBhyDRQCvgCuCa2GP/bf1Dt3LClbBWnkPA7+aO1Hsi8xVGBpzU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=IIxwpPwG; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 4b01693e2680a597; Fri, 10 Jan 2025 13:46:44 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 9E7F58E05BB;
-	Fri, 10 Jan 2025 13:46:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1736513204;
-	bh=uW/ugZM0hITtzeLLS0Jw26EUUNfhmarB6omouNNWEds=;
-	h=From:Subject:Date;
-	b=IIxwpPwGqZ1zW7iYYsnjWVxTR6ly/a6o9xinz712/IR4xMhrH6oJpxDuWZv8XUhC/
-	 zswM73rQKHejdd6wxPOYL32cHSq6li6aoG+6EvJK+q4K09TM/Se6FLTPqFdUJKxIZf
-	 UnIIVzQ4KQ/UI4esSX2LlaBB6CPiYMLRI4r3r+iwpke8/hnZraKG0Z/3VHFV9WB2F3
-	 FIiBlp6OcnOEOGAFFYR+ju/nsPVUdKOZyWUqY660qWeI7WBAOINV6hWhqyTY2tHP7k
-	 a0tI1gK7rxCMyqxANx0R6GoO9axwDqGGwc0wiYF83dD/PTcVkC8PlFO17jPt3ix/Sx
-	 Dbhq1eflKB28g==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
- Christian Loehle <christian.loehle@arm.com>
-Subject: [PATCH v1] cpuidle: menu: Update documentation after previous changes
-Date: Fri, 10 Jan 2025 13:46:43 +0100
-Message-ID: <12589281.O9o76ZdvQC@rjwysocki.net>
+	s=arc-20240116; t=1736515015; c=relaxed/simple;
+	bh=QR6cDHWgQdjiZwn5qfBNMTvfecgvNmP5xOctGM7XS6g=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=lzlMCf15cmXzRIrkAaVM563pnSN10j59OJUvrqTs5+pkymGgrR6u6W6jw/BbfiJJZhz4hpXgXPpUb6IX+Q9VXWNaaAgE+pd6fMxbILNSbgbqT1/90OLyGrcXE4X/D1+3nf5iblpSlOET47p00HECgsYQlJ4JaK6GEoumKcxh/ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B847A1477;
+	Fri, 10 Jan 2025 05:17:20 -0800 (PST)
+Received: from [10.57.6.52] (unknown [10.57.6.52])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F6BA3F66E;
+	Fri, 10 Jan 2025 05:16:51 -0800 (PST)
+Message-ID: <842b1500-9f4f-47e5-9777-ee89351f956e@arm.com>
+Date: Fri, 10 Jan 2025 13:16:49 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrudegkedggeegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepffffffekgfehheffleetieevfeefvefhleetjedvvdeijeejledvieehueevueffnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprghrthgvmhdrsghithihuhhtshhkihihsehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheptghhrhhishhtihgrnhdrlhhovgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 1/4] cpuidle: teo: Add polling flag check to early
+ return path
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>,
+ Aboorva Devarajan <aboorvad@linux.ibm.com>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+References: <4953183.GXAFRqVoOG@rjwysocki.net>
+ <13679187.uLZWGnKmhe@rjwysocki.net>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <13679187.uLZWGnKmhe@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 1/10/25 12:53, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> 
+> After commit 6da8f9ba5a87 ("cpuidle: teo: Skip tick_nohz_get_sleep_length()
+> call in some cases") the teo governor behaves a bit differently on
+> systems where idle state 0 is a "polling" state (that is, it is not
+> really an idle state, but a loop continuously executed by the CPU).
+> Namely, on such systems it skips the tick_nohz_get_sleep_length() call
+> if the target residency of the current candidate idle state is small
+> enough.
+> 
+> However, if state 0 itself was to be returned, it would be returned
+> right away without calling tick_nohz_get_sleep_length() even on systems
+> where it was not a "polling" state until commit 4b20b07ce72f ("cpuidle:
+> teo: Don't count non-existent intercepts") that attempted to fix this
+> problem.
+> 
+> Unfortunately, commit 4b20b07ce72f has made the governor always call
+> tick_nohz_get_sleep_length() when about to return state 0 early, even
+> if that state is a "polling" one, which is inconsistent and defeats
+> the purpose of commit 6da8f9ba5a87 in that case.
+> 
+> Address this by adding a CPUIDLE_FLAG_POLLING check to the path where
+> state 0 is returned early to prevent tick_nohz_get_sleep_length() from
+> being called if it is a "polling" state.
+> 
+> Fixes: 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpuidle/governors/teo.c |    3 ++-
+>  1 file changed, 2 insertions(+), 1 deletion(-)
+> 
+> --- a/drivers/cpuidle/governors/teo.c
+> +++ b/drivers/cpuidle/governors/teo.c
+> @@ -422,7 +422,8 @@
+>  			first_suitable_idx = i;
+>  		}
+>  	}
+> -	if (!idx && prev_intercept_idx) {
+> +	if (!idx && prev_intercept_idx &&
+> +	    !(drv->states[0].flags & CPUIDLE_FLAG_POLLING)) {
+>  		/*
+>  		 * We have to query the sleep length here otherwise we don't
+>  		 * know after wakeup if our guess was correct.
+> 
+> 
+> 
 
-After commit 38f83090f515 ("cpuidle: menu: Remove iowait influence") and
-other previous changes, the description of the menu governor in the
-documentation does not match the code any more, so update it as
-appropriate.
+But then you do run into the issue of intercepts not being detected if
+state0 is the right choice, don't you?
+This would then enable intercept-detection only for <50% of the time,
+another option is to not allow intercepts selecting a polling state, but
+there were recent complaints about this exact behavior from Aboorva (+TO).
+They don't have a low-latency non-polling state.
 
-Fixes: 38f83090f515 ("cpuidle: menu: Remove iowait influence")
-Fixes: 5484e31bbbff ("cpuidle: menu: Skip tick_nohz_get_sleep_length() call in some cases")
-Reported-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- Documentation/admin-guide/pm/cpuidle.rst |   72 +++++++++++++------------------
- 1 file changed, 31 insertions(+), 41 deletions(-)
+https://lore.kernel.org/lkml/20240809073120.250974-1-aboorvad@linux.ibm.com/
 
---- a/Documentation/admin-guide/pm/cpuidle.rst
-+++ b/Documentation/admin-guide/pm/cpuidle.rst
-@@ -269,27 +269,7 @@
- the CPU will ask the processor hardware to enter), it attempts to predict the
- idle duration and uses the predicted value for idle state selection.
- 
--It first obtains the time until the closest timer event with the assumption
--that the scheduler tick will be stopped.  That time, referred to as the *sleep
--length* in what follows, is the upper bound on the time before the next CPU
--wakeup.  It is used to determine the sleep length range, which in turn is needed
--to get the sleep length correction factor.
--
--The ``menu`` governor maintains two arrays of sleep length correction factors.
--One of them is used when tasks previously running on the given CPU are waiting
--for some I/O operations to complete and the other one is used when that is not
--the case.  Each array contains several correction factor values that correspond
--to different sleep length ranges organized so that each range represented in the
--array is approximately 10 times wider than the previous one.
--
--The correction factor for the given sleep length range (determined before
--selecting the idle state for the CPU) is updated after the CPU has been woken
--up and the closer the sleep length is to the observed idle duration, the closer
--to 1 the correction factor becomes (it must fall between 0 and 1 inclusive).
--The sleep length is multiplied by the correction factor for the range that it
--falls into to obtain the first approximation of the predicted idle duration.
--
--Next, the governor uses a simple pattern recognition algorithm to refine its
-+It first uses a simple pattern recognition algorithm to obtain a preliminary
- idle duration prediction.  Namely, it saves the last 8 observed idle duration
- values and, when predicting the idle duration next time, it computes the average
- and variance of them.  If the variance is small (smaller than 400 square
-@@ -301,29 +281,39 @@
- taken as the "typical interval" value and so on, until either the "typical
- interval" is determined or too many data points are disregarded, in which case
- the "typical interval" is assumed to equal "infinity" (the maximum unsigned
--integer value).  The "typical interval" computed this way is compared with the
--sleep length multiplied by the correction factor and the minimum of the two is
--taken as the predicted idle duration.
--
--Then, the governor computes an extra latency limit to help "interactive"
--workloads.  It uses the observation that if the exit latency of the selected
--idle state is comparable with the predicted idle duration, the total time spent
--in that state probably will be very short and the amount of energy to save by
--entering it will be relatively small, so likely it is better to avoid the
--overhead related to entering that state and exiting it.  Thus selecting a
--shallower state is likely to be a better option then.   The first approximation
--of the extra latency limit is the predicted idle duration itself which
--additionally is divided by a value depending on the number of tasks that
--previously ran on the given CPU and now they are waiting for I/O operations to
--complete.  The result of that division is compared with the latency limit coming
--from the power management quality of service, or `PM QoS <cpu-pm-qos_>`_,
--framework and the minimum of the two is taken as the limit for the idle states'
--exit latency.
-+integer value).
-+
-+If the "typical interval" computed this way is long enough, the governor obtains
-+the time until the closest timer event with the assumption that the scheduler
-+tick will be stopped.  That time, referred to as the *sleep length* in what follows,
-+is the upper bound on the time before the next CPU wakeup.  It is used to determine
-+the sleep length range, which in turn is needed to get the sleep length correction
-+factor.
-+
-+The ``menu`` governor maintains an array containing several correction factor
-+values that correspond to different sleep length ranges organized so that each
-+range represented in the array is approximately 10 times wider than the previous
-+one.
-+
-+The correction factor for the given sleep length range (determined before
-+selecting the idle state for the CPU) is updated after the CPU has been woken
-+up and the closer the sleep length is to the observed idle duration, the closer
-+to 1 the correction factor becomes (it must fall between 0 and 1 inclusive).
-+The sleep length is multiplied by the correction factor for the range that it
-+falls into to obtain an approximation of the predicted idle duration that is
-+compared to the "typical interval" determined previously and the minimum of
-+the two is taken as the idle duration prediction.
-+
-+If the "typical interval" value is small, which means that the CPU is likely
-+to be woken up soon enough, the sleep length computation is skipped as it may
-+be costly and the idle duration is simply predicted to equal the "typical
-+interval" value.
- 
- Now, the governor is ready to walk the list of idle states and choose one of
- them.  For this purpose, it compares the target residency of each state with
--the predicted idle duration and the exit latency of it with the computed latency
--limit.  It selects the state with the target residency closest to the predicted
-+the predicted idle duration and the exit latency of it with the with the latency
-+limit coming from the power management quality of service, or `PM QoS <cpu-pm-qos_>`_,
-+framework.  It selects the state with the target residency closest to the predicted
- idle duration, but still below it, and exit latency that does not exceed the
- limit.
- 
-
-
-
+Regards,
+Christian
 
