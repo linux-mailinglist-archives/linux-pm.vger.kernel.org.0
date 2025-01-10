@@ -1,48 +1,40 @@
-Return-Path: <linux-pm+bounces-20192-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20193-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 49A90A08BEF
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 10:29:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ADE7A08DAF
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 11:17:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4466F7A11C5
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 09:28:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF3D918836C5
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 10:17:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2193B20C00C;
-	Fri, 10 Jan 2025 09:26:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Spr2N1qD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 448012080CB;
+	Fri, 10 Jan 2025 10:16:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7BBB20A5F9;
-	Fri, 10 Jan 2025 09:26:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05CFA1C3C04;
+	Fri, 10 Jan 2025 10:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736501175; cv=none; b=BHutXBgLVjfZ91bpHmMxIsEXsGQs7qntvWaXWll72SoNUylNf7E0ucYuZGmu1WbNTH2iONREkhv1F1He9oDWYSINeagK8oWpFPtbjJ7+p75bfXH7JhazVfnIxiuZoQRtRsKB/PWFQP8WPepetUVtRwG1mBn5dzaVthQciNHQXgk=
+	t=1736504219; cv=none; b=aBjP0aD38W4Orr1QU9Xfty3aEef6esWwEcnsbdiRu/sNVu6TBlsHknGCZcfUpqrHzU+ELzvWe8wcdrglQn/I8EIUykdEX4jBTTqATfdhnpZbaM2SX+3lL05w/+WJx3cvZJm5whoTdQJEP/kDkSu7saJsRVYUQP1F/REwfldpY6k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736501175; c=relaxed/simple;
-	bh=uei27sesWLm2oEWslSDGNYqx7mW2qXBtjIVpNbawP3Q=;
+	s=arc-20240116; t=1736504219; c=relaxed/simple;
+	bh=wfjuoK3H2wh3wA5p9SNSv6wi46YJVUcRyKLEDE9hqOQ=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=sVsP6KyujJJbYegAgLWMV73QJ9ze6StEOZGvE5GYTLlJYS+1QuhVXrD/+4F0XLCzU0rshASPpvs9ybyp81P0Ag75uTYtqkrQ18MWqGbH0MdESzJFmZ3IeaammWjppcsJxt8HG2s3NYL+YuAjfCM9t0qXaS0kh4E9aMxkq9IqmSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Spr2N1qD; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1DB30C4CEDF;
-	Fri, 10 Jan 2025 09:26:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736501173;
-	bh=uei27sesWLm2oEWslSDGNYqx7mW2qXBtjIVpNbawP3Q=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Spr2N1qD8C9EJMXNsnGrCqc0IbkXhgAYYChV/ONgJEbh50jiKmep2IC+4ClLZpcWX
-	 jx/8r3204kh1bKdXqsDM2MPLKh7c+UvQaHB+yNUzGkaHhoOqtfljzu+b9Zm+XArrlV
-	 VG+oUNqUs1WQ1LOeQKryGOjJ/dkVMjt1cOUL1ZNop7Ro/556rLpmZDX+McobLLnsow
-	 q4xbqaXfnBBlKvw8wwiz7LnEVB82LcKy6QrLOoZzcbXmMLePfoChJgL0i/kUNc4ltb
-	 hJbwQIeeZPJ7RaTkGIyho4QGyTtACs7Q0odLSXS5uoC1H9Wv9LtYhcgn3MsQw/ce6U
-	 TDksT+7zEhhNA==
-Message-ID: <235467e3-75fe-46d4-b809-434261cc0798@kernel.org>
-Date: Fri, 10 Jan 2025 10:26:08 +0100
+	 In-Reply-To:Content-Type; b=GjmnSz4GoHRGFPp0IWLnVI5+c9fRCp8TBShyCIKRCblGimZw7RLwP+Mp2sV7kS2VgyPsO+DlG+S0sDsPcltVidYbYR0Ah5W5eOZHb4jybmUlHKp1B1QTfCJzCGMTqfi0RgFZcupVtr0VBq/KxwgRRwnKzdJYaOtCK5nfNaPP46w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E62B13D5;
+	Fri, 10 Jan 2025 02:17:24 -0800 (PST)
+Received: from [10.34.125.29] (e126645.nice.arm.com [10.34.125.29])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 004DD3F673;
+	Fri, 10 Jan 2025 02:16:52 -0800 (PST)
+Message-ID: <365e18b5-e01b-4444-aa7a-b36779ce8932@arm.com>
+Date: Fri, 10 Jan 2025 11:16:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,84 +42,195 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/2] dt-bindings: power: supply: add adi,lt8491.yaml
-To: John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>,
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
-References: <20250110080235.54808-1-johnerasmusmari.geronimo@analog.com>
- <20250110080235.54808-2-johnerasmusmari.geronimo@analog.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v3 1/4] ACPI: CPPC: Add cppc_get_reg_val and
+ cppc_set_reg_val function
+To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>, rafael@kernel.org,
+ lenb@kernel.org, robert.moore@intel.com, viresh.kumar@linaro.org
+Cc: acpica-devel@lists.linux.dev, linux-acpi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linuxarm@huawei.com,
+ ionela.voinescu@arm.com, jonathan.cameron@huawei.com,
+ zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com,
+ fanghao11@huawei.com
+References: <20241216091603.1247644-1-zhenglifeng1@huawei.com>
+ <20241216091603.1247644-2-zhenglifeng1@huawei.com>
+ <8e9c1ede-3277-458b-bd44-ca0c7615a4ab@arm.com>
+ <74be38cf-8e18-44fc-995c-a5b734d9df29@huawei.com>
+ <a9574bab-3b85-4a33-b465-204687dabc98@arm.com>
+ <49bd9db5-b05d-4bed-8f9d-10ec087323b5@huawei.com>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250110080235.54808-2-johnerasmusmari.geronimo@analog.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+From: Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <49bd9db5-b05d-4bed-8f9d-10ec087323b5@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 10/01/2025 09:02, John Erasmus Mari Geronimo wrote:
-> +$id: http://devicetree.org/schemas/power/supply/adi,lt8491.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Linear Technology (Analog Devices) LT8491 Battery Charger
-> +
-> +maintainers:
-> +  - John Erasmus Mari Geronimo <johnerasmusmari.geronimo@analog.com>
-> +
-> +description: |
-> +  The LT8491 is a buck-boost switching regulator battery charger that implements
-> +  a constant-current constant-voltage (CCCV) charging profile used for most
-> +  battery types, including sealed lead-acid (SLA), flooded, gel and lithium-ion.
-> +
-> +  Specifications about the charger can be found at:
-> +    https://www.analog.com/en/products/lt8491.html
-> +
+Hello Lifeng,
 
-Mostly looks good, but I don't see $ref to power-supply, which brings
-you the battery property.
+On 1/10/25 03:23, zhenglifeng (A) wrote:
+> Hello Pierre,
+> 
+> On 2025/1/8 0:54, Pierre Gondois wrote:
+>> Hello Lifeng,
+>>
+>> On 12/20/24 09:30, zhenglifeng (A) wrote:
+>>> On 2024/12/17 21:48, Pierre Gondois wrote:
+>>>> Hello Lifeng,
+>>>>
+>>>> On 12/16/24 10:16, Lifeng Zheng wrote:
+>>>>> Rename cppc_get_perf() to cppc_get_reg_val() as a generic function to read
+>>>>> cppc registers, with four changes:
+>>>>>
+>>>>> 1. Change the error kind to "no such device" when pcc_ss_id < 0, which
+>>>>> means that this cpu cannot get a valid pcc_ss_id.
+>>>>>
+>>>>> 2. Add a check to verify if the register is a cpc supported one before
+>>>>> using it.
+>>>>>
+>>>>> 3. Extract the operations if register is in pcc out as
+>>>>> cppc_get_reg_val_in_pcc().
+>>>>>
+>>>>> 4. Return the result of cpc_read() instead of 0.
+>>>>>
+>>>>> Add cppc_set_reg_val_in_pcc() and cppc_set_reg_val() as generic functions
+>>>>> for setting cppc registers value. Unlike other set reg ABIs,
+>>>>> cppc_set_reg_val() checks CPC_SUPPORTED right after getting the register,
+>>>>> because the rest of the operations are meaningless if this register is not
+>>>>> a cpc supported one.
+>>>>>
+>>>>> These functions can be used to reduce some existing code duplication.
+>>>>>
+>>>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>>>>> ---
+>>>>>     drivers/acpi/cppc_acpi.c | 111 +++++++++++++++++++++++++++++----------
+>>>>>     1 file changed, 84 insertions(+), 27 deletions(-)
+>>>>>
+>>>>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>>>>> index c1f3568d0c50..bb5333a503a2 100644
+>>>>> --- a/drivers/acpi/cppc_acpi.c
+>>>>> +++ b/drivers/acpi/cppc_acpi.c
+>>>>> @@ -1179,43 +1179,100 @@ static int cpc_write(int cpu, struct cpc_register_resource *reg_res, u64 val)
+>>>>>         return ret_val;
+>>>>>     }
+>>>>>     -static int cppc_get_perf(int cpunum, enum cppc_regs reg_idx, u64 *perf)
+>>>>> +static int cppc_get_reg_val_in_pcc(int cpu, struct cpc_register_resource *reg, u64 *val)
+>>>>>     {
+>>>>> -    struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
+>>>>> +    int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
+>>>>> +    struct cppc_pcc_data *pcc_ss_data = NULL;
+>>>>> +    int ret;
+>>>>> +
+>>>>> +    if (pcc_ss_id < 0) {
+>>>>> +        pr_debug("Invalid pcc_ss_id\n");
+>>>>> +        return -ENODEV;
+>>>>> +    }
+>>>>> +
+>>>>> +    pcc_ss_data = pcc_data[pcc_ss_id];
+>>>>> +
+>>>>> +    down_write(&pcc_ss_data->pcc_lock);
+>>>>> +
+>>>>> +    if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0)
+>>>>> +        ret = cpc_read(cpu, reg, val);
+>>>>> +    else
+>>>>> +        ret = -EIO;
+>>>>> +
+>>>>> +    up_write(&pcc_ss_data->pcc_lock);
+>>>>> +
+>>>>> +    return ret;
+>>>>> +}
+>>>>> +
+>>>>> +static int cppc_get_reg_val(int cpu, enum cppc_regs reg_idx, u64 *val)
+>>>>> +{
+>>>>> +    struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
+>>>>>         struct cpc_register_resource *reg;
+>>>>>           if (!cpc_desc) {
+>>>>> -        pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
+>>>>> +        pr_debug("No CPC descriptor for CPU:%d\n", cpu);
+>>>>>             return -ENODEV;
+>>>>>         }
+>>>>>           reg = &cpc_desc->cpc_regs[reg_idx];
+>>>>>     -    if (CPC_IN_PCC(reg)) {
+>>>>> -        int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
+>>>>> -        struct cppc_pcc_data *pcc_ss_data = NULL;
+>>>>> -        int ret = 0;
+>>>>> -
+>>>>> -        if (pcc_ss_id < 0)
+>>>>> -            return -EIO;
+>>>>> +    if (!CPC_SUPPORTED(reg)) {
+>>>>> +        pr_debug("CPC register (reg_idx=%d) is not supported\n", reg_idx);
+>>>>> +        return -EOPNOTSUPP;
+>>>>> +    }
+>>>>
+>>>> I think this is only valid for optional fields. Meaning that:
+>>>> - if the function is used one day for the mandatory 'Lowest Performance'
+>>>> field, an integer value of 0 would be valid.
+>>>> - if the function is used for a mandatory field containing a NULL Buffer,
+>>>> it seems we would return -EFAULT currently, through cpc_read(). -EOPNOTSUPP
+>>>> doesn't seem appropriate as the field would be mandatory.
+>>>>
+>>>> Maybe the function needs an additional 'bool optional' input parameter
+>>>> to do these check conditionally.
+>>>
+>>> Indeed, I should have judged the type before doing this check. But adding a
+>>> input parameter is not a really nice way to me. How about adding a bool
+>>> list of length MAX_CPC_REG_ENT in cppc_acpi.h to indicate wheter it is
+>>> optional?
+>>
+>> Actually all these functions:
+>> - cppc_get_desired_perf
+>> - cppc_get_highest_perf
+>> - cppc_get_epp_perf
+>> - cppc_set_epp
+>> - cppc_get_auto_act_window
+>> - cppc_set_auto_act_window
+> 
+> As you suggest in another patch, the logic should be placed in
+> cppc_get_auto_act_window() and some other functions. I'm afraid these
+> functions couldn't be implemented with the macros you suggest.
 
-Best regards,
-Krzysztof
+If you're referring to the [get|set]_auto_act_window() functions, I guess
+it should be ok to have the getter/setter functions implemented as a macros,
+and then have a wrapper to do the conversion of the value.
+
+> 
+>> - cppc_get_auto_sel
+>> - cppc_get_nominal_perf
+>>
+>> and in general all the functions getting / setting one value at a time could
+>> be implemented by macros similars to show_cppc_data(). From what I see the
+>> input parameters required are:
+>> - name of the field
+>> - if the field is mandatory to have or not
+> 
+> If with this parameter, we should put all the cppc_get_reg_val() and
+> cppc_set_reg_val() in the macro. This wouldn't look really nice. I
+> prefer to use a macro to judge mandatory / optional. I'll show you in
+> v4.
+> 
+
+If you prefer to have specific macro names to distinguish optional/mandatory
+fields, it also seems a good solution.
+
+>> - if the field is writeable
+> 
+> I think we can define a READ macro, a WRITE macro and a RW macro. For
+> the registers which are not writeable, only use the READ macro to
+> implement getting function.
+
+Yes right, same comment as above.
+
+> 
+>> - if the field is implemented as an integer, register, or can be both
+> 
+> I don't think this parameter is necessary. The field type can be got
+> from cpc_desc->cpc_regs[reg_idx].type.
+
+Yes indeed.
+
+> 
+>>
+>> This would avoid having numerous function definitions doing approximately the
+>> same thing.
+> 
+> So from what I see the input parameters required are name of the field
+> and reg_idx. Thanks for your advice!
+> 
 
