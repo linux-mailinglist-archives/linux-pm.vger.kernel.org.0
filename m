@@ -1,94 +1,93 @@
-Return-Path: <linux-pm+bounces-20187-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20188-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5BF66A08AC9
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 09:57:43 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7BC7FA08AFA
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 10:12:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3F4D07A34EA
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 08:57:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6B9D47A4043
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 09:12:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE182208978;
-	Fri, 10 Jan 2025 08:57:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E2E982080EA;
+	Fri, 10 Jan 2025 09:12:26 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1E59716DEA9;
-	Fri, 10 Jan 2025 08:57:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 049391ADFE4;
+	Fri, 10 Jan 2025 09:12:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736499454; cv=none; b=s2IhtbqmKXBKtr1SDMxxOid5h6SuoznpLqLWZ9NjDO69bkfWr49aEGJfnUtKVNZ2ep7gx1AHDcwLMe4SiGxdKb3CorkKg876pyWd0NmXtsleBdb/LQYI5DtE6C1FVR/WN5GysI9mXfyiHNCK3U7zZ71l7n1lHR8uQ4R/T/72qpA=
+	t=1736500346; cv=none; b=XM30o3kbAY8J1OTt5WSdEXh4hfWbY3U/eiRBInBUa7rRFU7YzeD06g/isabMykuZCYYBcYi3gQm+Wy3UyW+PkU1Q+gw1a04XqdE21+lU+MqcdjbBcIjLD3zqXKSYyBfkBp56knQeqACxNZ+rRvRVC8TjF1QqrD4LC9Q2yOpdrMo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736499454; c=relaxed/simple;
-	bh=Tjw14NYUqYjRYbR6eRVWRYuV9iZjChtKW+k/ayQR6N8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=pXzbHdQIZEDHzf7rBahotwhNGqY+5SNlnUQcIMAqIBcT67eSRNJX81ZbIMJb7lW0eYFUG72bT8D/3/Pk6hQwVOhzuA9MBfwikNAO3Dz9wEUzH84hykzBl0Do0ij2JCrselxUFEUo+EVyXBsMjfCV2PfulsrvfH/ulaQ+5uZ45qs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 6EC2B12FC;
-	Fri, 10 Jan 2025 00:57:59 -0800 (PST)
-Received: from [10.34.125.29] (e126645.nice.arm.com [10.34.125.29])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4B2D13F673;
-	Fri, 10 Jan 2025 00:57:29 -0800 (PST)
-Message-ID: <2751313c-4862-4dfd-9017-68ca02671fdd@arm.com>
-Date: Fri, 10 Jan 2025 09:57:22 +0100
+	s=arc-20240116; t=1736500346; c=relaxed/simple;
+	bh=hySPAPRttZETuxsSfTLhfgDfk61WVzLU8mLozuVJgYU=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=mdAmSRsRNcOwYLbDAJSmrvLkVqL+bO7hi+GktH5WfNeIg3BuZEPFhOxJ2DV3jbwBsKrrGbPc8JuyrJe2HahyCzKV3BXO2hgL+7IH7ST/tQkZkPKbnZUAEBNGZPaeZ0y4lBYnGTjBZfeAnoiLBgNeRj8cdMMMfgZamBHXKmENDVQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.174])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YTwmz35lNz11Nqj;
+	Fri, 10 Jan 2025 17:08:35 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id 050C51402CF;
+	Fri, 10 Jan 2025 17:12:20 +0800 (CST)
+Received: from localhost.huawei.com (10.50.165.33) by
+ kwepemh100008.china.huawei.com (7.202.181.93) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Fri, 10 Jan 2025 17:12:19 +0800
+From: Lifeng Zheng <zhenglifeng1@huawei.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>,
+	<mario.limonciello@amd.com>, <perry.yuan@amd.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
+	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <zhenglifeng1@huawei.com>,
+	<fanghao11@huawei.com>
+Subject: [PATCH] [PATCH] cpufreq/amd-pstate: Fix per-policy boost flag incorrect when fail
+Date: Fri, 10 Jan 2025 17:12:18 +0800
+Message-ID: <20250110091218.3530092-1-zhenglifeng1@huawei.com>
+X-Mailer: git-send-email 2.33.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq: Move endif to the end of Kconfig file
-To: Viresh Kumar <viresh.kumar@linaro.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Sunil V L
- <sunilvl@ventanamicro.com>, Sudeep Holla <sudeep.holla@arm.com>,
- Palmer Dabbelt <palmer@rivosinc.com>
-Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
- linux-kernel@vger.kernel.org
-References: <84ac7a8fa72a8fe20487bb0a350a758bce060965.1736488384.git.viresh.kumar@linaro.org>
-Content-Language: en-US
-From: Pierre Gondois <pierre.gondois@arm.com>
-In-Reply-To: <84ac7a8fa72a8fe20487bb0a350a758bce060965.1736488384.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-Hello Viresh,
+Commit c8c68c38b56f ("cpufreq: amd-pstate: initialize core precision
+boost state") sets per-policy boost flag to false when boost fail.
+However, this boost flag will be set to reverse value in
+store_local_boost() and cpufreq_boost_trigger_state() in cpufreq.c. This
+will cause the per-policy boost flag set to true when fail to set boost.
+Remove the extra assignment in amd_pstate_set_boost() and keep all
+operations on per-policy boost flag outside of set_boost() to fix this
+problem.
 
-Reviewed-by: Pierre Gondois <pierre.gondois@arm.com>
+Fixes: c8c68c38b56f ("cpufreq: amd-pstate: initialize core precision boost state")
+Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+---
+ drivers/cpufreq/amd-pstate.c | 1 -
+ 1 file changed, 1 deletion(-)
 
-On 1/10/25 06:53, Viresh Kumar wrote:
-> It is possible to enable few cpufreq drivers, without the framework
-> being enabled. This happened due to a bug while moving the entries
-> earlier. Fix it.
-> 
-> Fixes: 7ee1378736f0 ("cpufreq: Move CPPC configs to common Kconfig and add RISC-V")
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->   drivers/cpufreq/Kconfig | 4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
-> index ea9afdc119fb..d64b07ec48e5 100644
-> --- a/drivers/cpufreq/Kconfig
-> +++ b/drivers/cpufreq/Kconfig
-> @@ -325,8 +325,6 @@ config QORIQ_CPUFREQ
->   	  This adds the CPUFreq driver support for Freescale QorIQ SoCs
->   	  which are capable of changing the CPU's frequency dynamically.
->   
-> -endif
-> -
->   config ACPI_CPPC_CPUFREQ
->   	tristate "CPUFreq driver based on the ACPI CPPC spec"
->   	depends on ACPI_PROCESSOR
-> @@ -355,4 +353,6 @@ config ACPI_CPPC_CPUFREQ_FIE
->   
->   	  If in doubt, say N.
->   
-> +endif
-> +
->   endmenu
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index d7b1de97727a..a2573393ce30 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -747,7 +747,6 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
+ 	guard(mutex)(&amd_pstate_driver_lock);
+ 
+ 	ret = amd_pstate_cpu_boost_update(policy, state);
+-	policy->boost_enabled = !ret ? state : false;
+ 	refresh_frequency_limits(policy);
+ 
+ 	return ret;
+-- 
+2.17.1
+
 
