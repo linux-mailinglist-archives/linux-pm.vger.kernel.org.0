@@ -1,48 +1,40 @@
-Return-Path: <linux-pm+bounces-20233-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20234-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBD20A092B8
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:59:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C77FA092FD
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 15:09:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DF31B165DC5
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:59:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3055B3AAB23
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:09:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87B0020FAA8;
-	Fri, 10 Jan 2025 13:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qtSc7DoK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46DE5210184;
+	Fri, 10 Jan 2025 14:09:11 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4216E20FA9E;
-	Fri, 10 Jan 2025 13:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A912420FAB2;
+	Fri, 10 Jan 2025 14:09:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736517544; cv=none; b=n/kZPan/KR9DqqfpRDUILgSVYP/MEMel/dgT0exgbZE028XYITSjUCf2UpcNiDhbbhQCzYeaGo5cfhxbPBbhKmsPpNDAiAsRP62/MrPlOgO5Id1oaTbcdSX+zYiqK/IrUr+3ymxSTT7b2rAPATDNKVQOm3/mJgDZ0fCszMnZ2ao=
+	t=1736518150; cv=none; b=ocs0r4W8eY0uF0WCg8q3thi0CKK/E5J3BH2dsR3IPIMQUxtpFlv2X+VAe3U8XGd482h2l2opVkEFVqMH0TX+IY5f4jARqCe8acY14zDbK/lw/ajJp4EmYFiXnZd72MMETOk8tVMGNYGo5gWOGP5lZ4s1N/fRY5+3hcbkYv9cJqY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736517544; c=relaxed/simple;
-	bh=g7wxpqcSQJrcO2+CyoWI6wsntd8vQcmKdFcJ3jJ7Gto=;
+	s=arc-20240116; t=1736518150; c=relaxed/simple;
+	bh=OBQU0X6jtRDwZquvKnyq/lAIBBJf4gZh+VpCf3e9j0w=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FETT9k3IsXUHt67RsqzYmLvg7giidLaUyjFRnWtPGimJIZ9DFhhiSWKFYaHkrtKwdg/HyCbd1539s8OinWSQ0AWdkvbd6sOq+cR2CYbHFpz1k06HNlyfMMOZHu9qO/y2yPssyROGeKF2vRJV60NHFU/ZqzndaT2ar2ppr52Kao8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qtSc7DoK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BEE7DC4CED6;
-	Fri, 10 Jan 2025 13:58:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736517543;
-	bh=g7wxpqcSQJrcO2+CyoWI6wsntd8vQcmKdFcJ3jJ7Gto=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=qtSc7DoKJaJxVmUrLBQwq48v+ML5dD9Ga2+pU723ktjwlMZcKLgkHhlcyOXDZUuEe
-	 qK8ewFruiXPXBpCoEmKdqMgA2DXJ94pw8IEY8nGAznJ3xE0lQMsw/R7ANS4L2atzdU
-	 QQse0NzArfLlWtSoMphmG3sWlXakNCM31W84vEItXJA6h3rtEeQurmXhtzbEUvQk7v
-	 GZHD9+zNNPISrFQhdCNOMDaieDZnj+IIUv24yxWd/oY4hgBgoEXuIdrXyFCGKGpK2U
-	 LxadZwWtcr2cXnOIcHNp3dX4MBQhK9a72dgHjr2+kGwXScL6DLfF7Rl7pM1kPWEEjA
-	 my9wCAUEhljwA==
-Message-ID: <ff57cf8d-626e-4d35-a18f-1a89b4d9fa3e@kernel.org>
-Date: Fri, 10 Jan 2025 14:58:52 +0100
+	 In-Reply-To:Content-Type; b=XZJV72DzzjY8wwlykCs4ShzQ+7mQ0jaCxTxlKL0eTaflfVN51efxrF12BY9DkuOSIN3RafqiSj5a1Gqmk3jVRZJR5kwOPayYJIJMc+GlE8Uki/WMUPc3qrAwlDd8SNxxIVt8DOVVPEvL5sWcos5ydslgeeU+i+e6uF3KOJR898g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 55C931477;
+	Fri, 10 Jan 2025 06:09:33 -0800 (PST)
+Received: from [10.57.6.52] (unknown [10.57.6.52])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id F23953F59E;
+	Fri, 10 Jan 2025 06:09:03 -0800 (PST)
+Message-ID: <658fc3b6-2e8f-47b4-a5c2-bd1b72b54a15@arm.com>
+Date: Fri, 10 Jan 2025 14:09:01 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,120 +42,181 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/12] ARM: dts: sun8i: add DTSI file for V853
-To: Andras Szemzo <szemzo.andras@gmail.com>,
- Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
- <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
- Jernej Skrabec <jernej.skrabec@gmail.com>,
- Samuel Holland <samuel@sholland.org>,
- Linus Walleij <linus.walleij@linaro.org>,
- Philipp Zabel <p.zabel@pengutronix.de>, Maxime Ripard <mripard@kernel.org>
-Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I
- <kishon@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt
- <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>,
- =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
- Florian Fainelli <florian.fainelli@broadcom.com>, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
-References: <20250110123923.270626-1-szemzo.andras@gmail.com>
- <20250110123923.270626-13-szemzo.andras@gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v1] cpuidle: teo: Update documentation after previous
+ changes
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+References: <6120335.lOV4Wx5bFT@rjwysocki.net>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <20250110123923.270626-13-szemzo.andras@gmail.com>
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <6120335.lOV4Wx5bFT@rjwysocki.net>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 10/01/2025 13:39, Andras Szemzo wrote:
-> V853/V851 is a new SoC by Allwinner. Add a basic dtsi file for it.
+On 1/10/25 12:48, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> Signed-off-by: Andras Szemzo <szemzo.andras@gmail.com>
+> After previous changes, the description of the teo governor in the
+> documentation comment does not match the code any more, so update it
+> as appropriate.
+> 
+> Fixes: 449914398083 ("cpuidle: teo: Remove recent intercepts metric")
+> Fixes: 2662342079f5 ("cpuidle: teo: Gather statistics regarding whether or not to stop the tick")
+> Fixes: 6da8f9ba5a87 ("cpuidle: teo: Skip tick_nohz_get_sleep_length() call in some cases")
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > ---
->  arch/arm/boot/dts/allwinner/sun8i-v853.dtsi | 673 ++++++++++++++++++++
->  1 file changed, 673 insertions(+)
->  create mode 100644 arch/arm/boot/dts/allwinner/sun8i-v853.dtsi
+>  drivers/cpuidle/governors/teo.c |   99 +++++++++++++++++++++-------------------
+>  1 file changed, 52 insertions(+), 47 deletions(-)
 > 
-> diff --git a/arch/arm/boot/dts/allwinner/sun8i-v853.dtsi b/arch/arm/boot/dts/allwinner/sun8i-v853.dtsi
-> new file mode 100644
-> index 000000000000..4ecc97c7e7c0
-> --- /dev/null
-> +++ b/arch/arm/boot/dts/allwinner/sun8i-v853.dtsi
+> --- a/drivers/cpuidle/governors/teo.c
+> +++ b/drivers/cpuidle/governors/teo.c
+> @@ -10,25 +10,27 @@
+>   * DOC: teo-description
+>   *
+>   * The idea of this governor is based on the observation that on many systems
+> - * timer events are two or more orders of magnitude more frequent than any
+> - * other interrupts, so they are likely to be the most significant cause of CPU
+> - * wakeups from idle states.  Moreover, information about what happened in the
+> - * (relatively recent) past can be used to estimate whether or not the deepest
+> - * idle state with target residency within the (known) time till the closest
+> - * timer event, referred to as the sleep length, is likely to be suitable for
+> - * the upcoming CPU idle period and, if not, then which of the shallower idle
+> - * states to choose instead of it.
+> - *
+> - * Of course, non-timer wakeup sources are more important in some use cases
+> - * which can be covered by taking a few most recent idle time intervals of the
+> - * CPU into account.  However, even in that context it is not necessary to
+> - * consider idle duration values greater than the sleep length, because the
+> - * closest timer will ultimately wake up the CPU anyway unless it is woken up
+> - * earlier.
+> - *
+> - * Thus this governor estimates whether or not the prospective idle duration of
+> - * a CPU is likely to be significantly shorter than the sleep length and selects
+> - * an idle state for it accordingly.
+> + * timer interrupts are two or more orders of magnitude more frequent than any
+> + * other interrupt types, so they are likely to dominate CPU wakeup patterns.
+> + * Moreover, in principle, the time when the next timer event is going to occur
+> + * can be determined at the idle state selection time, although doing that may
+> + * be costly, so it can be regarded as the most reliable source of information
+> + * for idle state selection.
+> + *
+> + * Of course, non-timer wakeup sources are more important in some use cases,
+> + * but even then it is generally unnecessary to consider idle duration values
+> + * greater than the time time till the next timer event, referred as the sleep
+> + * length in what follows, because the closest timer will ultimately wake up the
+> + * CPU anyway unless it is woken up earlier.
+> + *
+> + * However, since obtaining the sleep length may be costly, the governor first
+> + * checks if it can select a shallow idle state using wakeup pattern information
+> + * from recent times, in which case it can do without knowing the sleep length
+> + * at all.  For this purpose, it counts CPU wakeup events and looks for an idle
+> + * state whose terget residency has not exceeded the idle duration (measured
 
-Impossible to build and test.
+s/terget/target
 
-Please submit complete work, so one which can be actually built (DTSI,
-DTS and bindings).
+> + * after wakeup) in the majority of relevant recent cases.  If the target
+> + * residency of that state is small enough, it may be used right away and the
+> + * sleep length need not be determined.
+>   *
+>   * The computations carried out by this governor are based on using bins whose
+>   * boundaries are aligned with the target residency parameter values of the CPU
+> @@ -39,7 +41,11 @@
+>   * idle state 2, the third bin spans from the target residency of idle state 2
+>   * up to, but not including, the target residency of idle state 3 and so on.
+>   * The last bin spans from the target residency of the deepest idle state
+> - * supplied by the driver to infinity.
+> + * supplied by the driver to the scheduler tick period length or to infinity if
+> + * the tick period length is less than the targer residency of that state.  In
 
-> @@ -0,0 +1,673 @@
-> +// SPDX-License-Identifier: (GPL-2.0+ or MIT)
+s/targer/target
 
-Odd license, why would we ever want GPLv3 or even GPLv4?
+> + * the latter case, the governor also counts events with the measured idle
+> + * duration between the tick period length and the target residency of the
+> + * deepest idle state.
+>   *
+>   * Two metrics called "hits" and "intercepts" are associated with each bin.
+>   * They are updated every time before selecting an idle state for the given CPU
+> @@ -49,47 +55,46 @@
+>   * sleep length and the idle duration measured after CPU wakeup fall into the
+>   * same bin (that is, the CPU appears to wake up "on time" relative to the sleep
+>   * length).  In turn, the "intercepts" metric reflects the relative frequency of
+> - * situations in which the measured idle duration is so much shorter than the
+> - * sleep length that the bin it falls into corresponds to an idle state
+> - * shallower than the one whose bin is fallen into by the sleep length (these
+> - * situations are referred to as "intercepts" below).
+> + * non-timer wakeup events for which the measured idle duration falls into a bin
+> + * that corresponds to an idle state shallower than the one whose bin is fallen
+> + * into by the sleep length (these events are also referred to as "intercepts"
+> + * below).
+>   *
+>   * In order to select an idle state for a CPU, the governor takes the following
+>   * steps (modulo the possible latency constraint that must be taken into account
+>   * too):
+>   *
+> - * 1. Find the deepest CPU idle state whose target residency does not exceed
+> - *    the current sleep length (the candidate idle state) and compute 2 sums as
+> - *    follows:
+> - *
+> - *    - The sum of the "hits" and "intercepts" metrics for the candidate state
+> - *      and all of the deeper idle states (it represents the cases in which the
+> - *      CPU was idle long enough to avoid being intercepted if the sleep length
+> - *      had been equal to the current one).
+> - *
+> - *    - The sum of the "intercepts" metrics for all of the idle states shallower
+> - *      than the candidate one (it represents the cases in which the CPU was not
+> - *      idle long enough to avoid being intercepted if the sleep length had been
+> - *      equal to the current one).
+> + * 1. Find the deepest enabled CPU idle state (the candidate idle state) and
+> + *    compute 2 sums as follows:
+>   *
+> - * 2. If the second sum is greater than the first one the CPU is likely to wake
+> - *    up early, so look for an alternative idle state to select.
+> + *    - The sum of the "hits" metric for all of the idle states shallower than
+> + *      the candidate one (it represents the cases in which the CPU was likely
+> + *      woken up by a timer).
+> + *
+> + *    - The sum of the "intercepts" metric for all of the idle states shallower
+> + *      than the candidate one (it represents the cases in which the CPU was
+> + *      likely woken up by a non-timer wakeup source).
+> + *
+> + * 2. If the second sum computed in step 1 is greater than a half of the sum of
+> + *    both mertics for the candidate state bin and all subsequent bins(if any),
 
-> +// Copyright (C) 2024 Andras Szemzo <szemzo.andras@gmail.com>
-> +
-> +#include <dt-bindings/clock/sun6i-rtc.h>
-> +#include <dt-bindings/clock/sun8i-v853-r-ccu.h>
-> +#include <dt-bindings/reset/sun8i-v853-r-ccu.h>
-> +#include <dt-bindings/clock/sun8i-v853-ccu.h>
-> +#include <dt-bindings/reset/sun8i-v853-ccu.h>
-> +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> +#include <dt-bindings/power/allwinner,sun8i-v853-ppu.h>
-> +
-> +/ {
-> +	#address-cells = <1>;
-> +	#size-cells = <1>;
-> +
-> +	osc24M: osc24M-clk {
+s/mertics/metrics
 
-Only lowercase node names.
+> + *    a shallower idle state is likely to be more suitable, so look for it.
+>   *
+> - *    - Traverse the idle states shallower than the candidate one in the
+> + *    - Traverse the enabled idle states shallower than the candidate one in the
+>   *      descending order.
+>   *
+>   *    - For each of them compute the sum of the "intercepts" metrics over all
+>   *      of the idle states between it and the candidate one (including the
+>   *      former and excluding the latter).
+>   *
+> - *    - If each of these sums that needs to be taken into account (because the
+> - *      check related to it has indicated that the CPU is likely to wake up
+> - *      early) is greater than a half of the corresponding sum computed in step
+> - *      1 (which means that the target residency of the state in question had
+> - *      not exceeded the idle duration in over a half of the relevant cases),
+> - *      select the given idle state instead of the candidate one.
+> + *    - If this sum is greater than a half of the second sum computed in step 1,
+> + *      use the given idle state as the new candidate one.
+>   *
+> - * 3. By default, select the candidate state.
+> + * 3. If the current candidate state is state 0 or its target residency is short
+> + *    enough, return it and prevent the scheduler tick from being stopped.
+> + *
+> + * 4. Obtain the sleep length value and check if it is below the target
+> + *    residency of the current candidate state, in which case a new shallower
+> + *    candidate state needs to be found, so look for it.
+>   */
 
-Best regards,
-Krzysztof
+Description seems to parse in my brain FWIW.
+Thanks for cleaning that up, clearly I've overlooked that doc.
+
+Reviewed-by: Christian Loehle <christian.loehle@arm.com>
 
