@@ -1,111 +1,134 @@
-Return-Path: <linux-pm+bounces-20165-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20166-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BFEF5A08350
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 00:15:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 78881A083E4
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 01:26:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A93257A2C70
-	for <lists+linux-pm@lfdr.de>; Thu,  9 Jan 2025 23:15:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8993F16869B
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 00:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB1AB2063C9;
-	Thu,  9 Jan 2025 23:15:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 507F21F941;
+	Fri, 10 Jan 2025 00:26:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="VLMDRBo0"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ysx/PQOa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60230205E37;
-	Thu,  9 Jan 2025 23:15:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 501E811187;
+	Fri, 10 Jan 2025 00:26:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736464517; cv=none; b=f7GzGceH8/+fqggKUsVuF+2SHk3M9xh7dTJ0N+XnutUS/8KaGqhhEO4wYM+TTV8RVxn9jyiHtyWedDK1ebFruTXY6g04KKXTgpSS0bzrDPwqrZ4RynUW3fjjOaAgVn1NoLZq/PVVaBgNqCiTsYmv5KW1Enp7YSh81XSiBmIHP+w=
+	t=1736468779; cv=none; b=IA5+O7axk+2HmZj+zQi/UdJAVYw5+4rj8Q/2XgQvtPRyyXjJCjsXmTcoiWFWC1/8UexXsG6tGlbG5P0CVUg9AjHQRUH8AbTXLLVrSMRHH2wGGVPLBhmKu/J/UerqXsSY+9X7HJ57J+rLO+lTbccdCkQeZQZAlFPcn9t83Ucb3+U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736464517; c=relaxed/simple;
-	bh=HznCb0V66Eh/wgloVhCI/l+lkOgEx8kQIjfNELNCpkQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FxNM5snw3i17WZrWENdMa1Gsr8RqYrmuoulXYg4yvC6hOK6wGc6b0EFuWQo/gIeWqVK89JiqbJteyWvYsnz5VQboFkUCaB5OzId4b8NQmmiHKABPnYzzrSUBxF60HSHEoM4W7qZBnJ0MUB8sXb7ru4XfqrR41/0sZmzDGopxASM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=VLMDRBo0; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=DMXLTKZv7aPQSaOukCeYXiGlmyqmXrYyjrj2l+DZP5Q=; b=VLMDRBo0Fhxksbi/ChrY9gaNRh
-	o12d4T6RURl9lbQ51vCzjGjUq9nTsq4uAnKCKqM86LZS0Du0OHDSwH/h9jND8AwaCIEWJZcIIfTI6
-	6Jauton0lBxcEHROkEGLVW1/Fm0RsdkiReO3f73GQzzaWeoM4FZQqHYDmrDy1rsE+siE+UjyOYxhS
-	rBka+Yl1YXrd+yqdkOhTn+48LdB+ZrKhCw8RI/bmk7YK/4f5/IeRG686DrjaQO37o++1bXbxnyas9
-	wq3nuWEQPyTRuUSb2jkGY3y+f0SkkLy9zyGRWW089m9VEywmqRPGrv9oP+zLHlraiwZNSL0+CTDrm
-	+DOU59Kw==;
-Received: from i5e860d05.versanet.de ([94.134.13.5] helo=localhost.localdomain)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1tW1k9-0005wG-FP; Fri, 10 Jan 2025 00:15:13 +0100
-From: Heiko Stuebner <heiko@sntech.de>
-To: linux-kernel@vger.kernel.org,
-	Shimrra Shai <shimrrashai@gmail.com>
-Cc: Heiko Stuebner <heiko@sntech.de>,
-	conor+dt@kernel.org,
-	devicetree@vger.kernel.org,
-	krzk+dt@kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	robh@kernel.org
-Subject: Re: [PATCH v4 0/2] arm64: dts: rockchip: Add Firefly ITX-3588J Board
-Date: Fri, 10 Jan 2025 00:15:03 +0100
-Message-ID: <173646444755.2945728.11659314833812280538.b4-ty@sntech.de>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20241216214152.58387-1-shimrrashai@gmail.com>
-References: <20241216214152.58387-1-shimrrashai@gmail.com>
+	s=arc-20240116; t=1736468779; c=relaxed/simple;
+	bh=dICDqNh7Rij1Bee1+gwWVYFY2gN9otXv0IKNIymDSBE=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Nwn0ynZw4QhFb1s6Imx4drJ5vlzOPaiFy9GevfdfwEcka/c1Quh6uw5hDdbMCUBZVeK+uxR6b5e4+5LpLd/nzQwtw9UH2MWa4N5YoKFnSoRTn6NDSnxrNECB4waDeuQBfZucSak0ldl8ENx71NdxKI69ZdywIA/9cHXataMiJqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ysx/PQOa; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736468778; x=1768004778;
+  h=from:to:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=dICDqNh7Rij1Bee1+gwWVYFY2gN9otXv0IKNIymDSBE=;
+  b=Ysx/PQOaRZpwW6M9Twh27I6dhh+paQoC5eRikhDUmhXMshA+pZis87bq
+   BH/+4+YS5z7ZGf9woSL3BbFALnmKSJqx89YhmupJCXijX9mgo0QlUX+gU
+   lKpY9y28taAoDXMgqbniSJD/YbDbbtQULlGpxnGaifp/+m0CdjBsEDZr7
+   /f6A15F1VzmBCJ9VkHpujq8vDV1y3z06e7FekYCjlAXYnKEL3H+XwqAIo
+   /TaRIDehbRt6K18YSCax+R+lwGo7RHiwKSyTXAc8nP/ReIHzxhkm7qvzy
+   8mJ3APoxOXowOSOn1HuGd1t07t19Yt3VH2dM0ENXCh/+1CnjEi5RGWy/p
+   w==;
+X-CSE-ConnectionGUID: mPq+OIgKSaSE45qpmJbaug==
+X-CSE-MsgGUID: T7R98Cz4RHu6NeoeUbtogw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11310"; a="36653476"
+X-IronPort-AV: E=Sophos;i="6.12,302,1728975600"; 
+   d="scan'208";a="36653476"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 16:26:17 -0800
+X-CSE-ConnectionGUID: lIHa0yZDS4GcFnZm4tWOdA==
+X-CSE-MsgGUID: t8v9MmNPQAeLbjrPogBwEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="104097022"
+Received: from sramkris-mobl1.amr.corp.intel.com (HELO xpardee-desk.lan) ([10.124.222.100])
+  by orviesa007-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Jan 2025 16:26:16 -0800
+From: Xi Pardee <xi.pardee@linux.intel.com>
+To: xi.pardee@linux.intel.com,
+	rajvi0912@gmail.com,
+	irenic.rajneesh@gmail.com,
+	david.e.box@linux.intel.com,
+	hdegoede@redhat.com,
+	ilpo.jarvinen@linux.intel.com,
+	platform-driver-x86@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v4 0/6] Add Arrow Lake U/H support
+Date: Thu,  9 Jan 2025 16:26:02 -0800
+Message-ID: <20250110002612.244782-1-xi.pardee@linux.intel.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+This patch series contains six patches to add Arrow Lake
+U/H support in intel_pmc_core driver. 
 
-On Mon, 16 Dec 2024 15:41:50 -0600, Shimrra Shai wrote:
-> Draft 4 for the device trees for this board. I hope this one finally
-> addresses all outstanding style and organization issues. Note that the
-> technical functionality limitations from the preceding versions remain.
-> 
-> Changes since draft 3:
->  * Removed the rockchip-pca9555.h header and used the pin numbers directly
->    in the .dts.
->  * Removed the display-subsystem node in the .dts. No other board seems to
->    have one like the one that was there and it was causing warnings.
->  * Removed extraneous property "rk806_dvs1_pwrdn" on the PMIC subnode on
->    SPI2.
->  * Removed an extraneous property "rockchip,skip-scan-in-resume" on the
->    PCIe node pcie2x1l0.
-> 
-> [...]
+The first five patches are preparation patches. The second
+patch creates a generic init function for all platforms. The
+fourth patch create a callback field that allows platform
+specific action to be done in generic init function. The
+fifth patch removes all per architecture init functions.
 
-Applied, thanks!
+v4->v3:
+- Remove all per architecture init functions and replace with
+  pmc_dev_info structures in x86_cpu_id structure in core.c.
+- Remove fixup field and add arch_specific field in 
+  pmc_dev_info structure.
+- Move ssram init comment to be function comment.
+- Remove ssram field in pmc_dev_info structure.
+- Captilize PMC
+- Remove PMC_IDX_SOC
 
-[1/2] dt-bindings: arm: rockchip: Add Firefly ITX-3588J board
-      commit: 8886252102bd774656d19423b7d85e1ddd78f9c0
-[2/2] arm64: dts: rockchip: add DTs for Firefly ITX-3588J and its Core-3588J SoM
-      commit: ebe82df46fba0f0fe45d7e03ddf5ca0f6e758a06
+v3->v2:
+- Create a generic init function for all platforms
 
-I've sorted some properties and dropped the status="okay" from the
-fixed regulators added in the board dts.
-status=okay is the default, so there is no need to add this to new
-nodes.
+v2->v1:
+- Create an info structure for platform variation information
+- Make generic init function to static in tgl.c
+- Fix typo
 
+Xi Pardee (6):
+  platform/x86:intel/pmc: Make tgl_core_generic_init() static
+  platform/x86/intel/pmc: Remove duplicate enum
+  platform/x86:intel/pmc: Create generic_core_init() for all platforms
+  platform/x86/intel/pmc: Create architecture specific callback
+  platform/x86/intel/pmc: Remove init functions per architecture
+  platform/x86/intel/pmc: Add Arrow Lake U/H support to intel_pmc_core
+    driver
 
-Best regards,
+ drivers/platform/x86/intel/pmc/adl.c  |  22 ++----
+ drivers/platform/x86/intel/pmc/arl.c  |  78 +++++++++++--------
+ drivers/platform/x86/intel/pmc/cnp.c  |  21 ++----
+ drivers/platform/x86/intel/pmc/core.c | 103 +++++++++++++++++++-------
+ drivers/platform/x86/intel/pmc/core.h |  52 ++++++++++---
+ drivers/platform/x86/intel/pmc/icl.c  |  18 +----
+ drivers/platform/x86/intel/pmc/lnl.c  |  24 ++----
+ drivers/platform/x86/intel/pmc/mtl.c  |  44 +++--------
+ drivers/platform/x86/intel/pmc/spt.c  |  18 +----
+ drivers/platform/x86/intel/pmc/tgl.c  |  40 ++++------
+ 10 files changed, 210 insertions(+), 210 deletions(-)
+
 -- 
-Heiko Stuebner <heiko@sntech.de>
+2.43.0
+
 
