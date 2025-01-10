@@ -1,78 +1,79 @@
-Return-Path: <linux-pm+bounces-20174-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20175-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B3E3A0847E
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 02:09:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A55FFA08488
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 02:13:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15C4A18825B9
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 01:09:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 95B7A167C08
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 01:13:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D42DA1F941;
-	Fri, 10 Jan 2025 01:08:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E8F62BAE3;
+	Fri, 10 Jan 2025 01:13:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="pJxT60Gd"
+	dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b="MLKULT0W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6A8228DA1
-	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 01:08:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 725D7539A
+	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 01:13:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736471289; cv=none; b=HRkkVN9qhP9Kbh0LB69LjLqcUKXWwMov1t9y7m9lGjT7n7hFkY6Ngp9PoJfsYBUoHp7JqAfS2dfIdfvz/Tr43Lh8pMkmFdvcxEh9JRBMtgS2wdJcNhOj/r0hJFKZ6y73U8LVjif5HNNvX1VgGEadHhOyOHz077z3cO3PPht8fE0=
+	t=1736471623; cv=none; b=hcnNK4uUETr73oxQnVW7rAbvKm8Mn+OOsA0WrM9F6LgB7S2ITTJZvqOVunXERdeSU2mDmL1SKn1o+LnkAl+emQxztdvQunQsFPbnmGHCE8f1c9z1aojYc4BaMHoeI9grgVp8Ak3HtCCrM5qTO1SzM6sqnJEF3YZ0ktnahuY3/gY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736471289; c=relaxed/simple;
-	bh=WCbVpxIvWy0ytQsV3aeOeTRdlRFDjjx0oUo+17KOs9U=;
+	s=arc-20240116; t=1736471623; c=relaxed/simple;
+	bh=+CgXAtMojwIIhf+jTTcBilvCFgsiI16P6JjkqSzmkic=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=euVJzfkFqbssvV5JqFwWOjJzrKer5X6s0NIKWK5Rr4jsbuZyvllU0uUCimZSbV5w6ZF0f/X33ZhwBzZH+yEDjY+nzEsHDKHpaBVEjCjEGkkVi2LCD8/iZAW16AO2gKMz30HBrV4kjTTecghXU3u04qqYXd0tVBhX3SEK0LzrIXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=pJxT60Gd; arc=none smtp.client-ip=209.85.216.49
+	 In-Reply-To:Content-Type; b=EUFx6vdp8ZEy2tfTqRI5cUtVXuPUchkO10QAD5TbCv4V7HBSbd4U8mk8Jq+JT10deMA5dBkQTe2F5nYf3SypQ+8cTnfAxZQ3XWWhpP+NmL8VG6CdkYQiAF5iNgVSh57BHkq1VkC8jglt5FsTaBnicrMsHZh7+ePgxM8WoDnDhzE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp; dkim=pass (2048-bit key) header.d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.i=@pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com header.b=MLKULT0W; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=pf.is.s.u-tokyo.ac.jp
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=pf.is.s.u-tokyo.ac.jp
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2eed82ca5b4so2481422a91.2
-        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2025 17:08:07 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21634338cfdso34549765ad.2
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2025 17:13:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1736471287; x=1737076087; darn=vger.kernel.org;
+        d=pf-is-s-u-tokyo-ac-jp.20230601.gappssmtp.com; s=20230601; t=1736471621; x=1737076421; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=6yDXqAoI77pH4XvnKApFcsfqn8Hj/0/jrKt7jZzCD64=;
-        b=pJxT60GddpX+qQ5Nx5dAPOFPIDU3/k0MWizox/diw/VrN6kjIlMEz6j741XNgHoocC
-         U1SB2bjK2QkPERp67pFyrorGyQs8OQzV0Wj+A+LOyJ+GIymtaTVBeHqkpXlpsQo4BnBq
-         Juz0mmhUBT+B3mS8pYM7NWl3gah/9ryKXlDtqbK0njo/S2Gbu5RdyEAlUGcuAztBk6UG
-         00SThgnzHUwn4VVSKIKrA7SWLhOu2UdjnSnWEm7U0aycpNHfyJOhx9t56SWxcsrXl7nx
-         7Lz/4Pq3lBLCs77r3CSQGnssKDtxcERDOAOx3IqGSbsvYQRHr4opwmphP8D1HZOQNMPK
-         fMKg==
+        bh=DjPmDXgMDBTgnIwJ02Grcz60cHw9V7uf7ucFpJhnJQw=;
+        b=MLKULT0WvWEOyOrQ/7xf1nlbXLE/oH821sDgPa4bbIxSh0IHUyk/SSsmQWXYch9zYl
+         lY4YOc4zKgGdviuXhdPVBG3pJSVoVNCOHP4OA/ZtTLkUbveSy8fZmkQXAQYFDDKdPgMk
+         J2sx76dQ4Qrg9xhDcrST11CfS759zmXeGtAG6JzUPFqtJYuEWswA7ZDhYI0OcnjTDXRb
+         D+9RYPeFh/X3/jVhVnmPuD7VKXz1hnQPuGlVGd5lS6SWfkhim+1ELpyxYFTWC0vKAprn
+         1gBxRktNkHXOFOayxUn3JDmlL6k4rAeqyamWA/XhnznalbjAfD3dfQojKgJdpYNHL/+N
+         iH+w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736471287; x=1737076087;
+        d=1e100.net; s=20230601; t=1736471621; x=1737076421;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6yDXqAoI77pH4XvnKApFcsfqn8Hj/0/jrKt7jZzCD64=;
-        b=FXNItYvi6e0tAo8Xjw/D3LhrNE8vvQBhPlnww07JB/kNM6WBs8CiCw2MEQfLkEA4SW
-         LKRNYwwoanVwaD5pn5aFurJ1CEA0d/89J41TKnxghqWHgOiZr/hM8Pka38+c4kbe25ly
-         Oag+MuMqM9IyRFNLMEVdJ4cN7fbNCYGO0eKV5GLh0T/CmzC8l3SIQAuTWu/m/hlLAqjp
-         5jgM9Vn1AGrluQQX04/96X6e3v8k+STOBYEmqnsPMrljQiD+ZVs6/MDSwDsIgkXwerMs
-         gLkAiyunTK3HnE3fPw+xnYaSF7ZPlJAqjrOMXSU+13QDXED1ee+03mrfhTPTlVKuw5Rp
-         uRAQ==
-X-Gm-Message-State: AOJu0YwvUK+uchZLyozF95+wTtkbonzP2sUfIz2jd6iWeF5qrM1QwJuh
-	AtTyS2ZeI3j6uSaXMBnQVq12tkFek7m6rLcZfZZlAVPc0mhdo2Rcn0X0tO5hYJ4=
-X-Gm-Gg: ASbGncv0ZjddaR1awXfzB9SsOPzmJAb9ieIdUfrs7Yzr1QPux5M2M5m++e6wrvm/AjX
-	Ex+TiVLRKuxa25l4wS8UfvKIsXOn0Veq5KlEc5Hsn3/lTdUtrLx8kd9kcF7pwC25SEUVpS2z1gt
-	E02HfMSB2n+xods3dXRXkKLvNtB+2ZiqhLs5cdzp265FIgjNXs0RZ19nZMa1/uprDVr4+6qmEOK
-	y9xL9FVUIHfay33A7HBmke/B+iFGFUF0hyslincbQEkTlT+NGBO889/yXSpHpet8Lywx5N4hFRr
-	gDwTru2kCxLGv60BlUpOrCexpSjOVfMb1g==
-X-Google-Smtp-Source: AGHT+IEuV69Ovlf0E0rSyLpApdpn5ESd9H9IbaYLocHeQMbz/SMxDCpoAVQooFRhKYT3BLOVQFWunw==
-X-Received: by 2002:a17:90b:538e:b0:2ee:c4f2:a76d with SMTP id 98e67ed59e1d1-2f548f59a46mr11807308a91.21.1736471286944;
-        Thu, 09 Jan 2025 17:08:06 -0800 (PST)
-Received: from [192.168.0.78] (133-32-227-190.east.xps.vectant.ne.jp. [133.32.227.190])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f54a36a06fsm4315906a91.46.2025.01.09.17.08.05
+        bh=DjPmDXgMDBTgnIwJ02Grcz60cHw9V7uf7ucFpJhnJQw=;
+        b=ChWrLs69e0cJcCHlZNpSKjJP9PUQJ649OZdsabyG+zcpCUddATYwaVKVOx0MqoG1A8
+         Y9g4dBnccxyrEhHZCJBwrPHW8zRtEr6nuOyhRFdRmKHBVPVnJ+cU5v70lKSZ3bdKr07p
+         6zg9wXb4AdxcHjtmi0uuKVs+5LE1zQ035jRB2Hj3kohBid8L2Y4YuPsBsPDLpRqKvaRf
+         2l9ixzA2Zhgaz51MSgH6fUdNV1h7N1gwcn4+Jp31FbTlweqvIQX+aS794+k+IG2cyAg6
+         wuk67tO+knbvxtF7pIOQmFIs2DJshnrCIEYL/1PqoQatJbRNQ86zsYgQ/fpqrujNln/o
+         9duw==
+X-Forwarded-Encrypted: i=1; AJvYcCWY/c/QcKiKKOB7WhFJgZpWIrH1pIIBimJmR7XWaxtmvoxFL7PEtkA7EHuDC0uM9QC4D/TOBB27Aw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyqRXKWzYKrd0387yR86sA5lQ8KNWfOundON1ufNzSTSUuIEfet
+	AjF0/tErM4KnGu8KZS63DC3sbvszh6l43ewqw4PjzJ9wQbluRso0Ry7Ckf3tJtM=
+X-Gm-Gg: ASbGncvB5ewb2vYJFUMEybCzyQVKsDjRk+AbRABgxSoKpU0loEvn96KX8FyMkKHYBJx
+	ypyk2k+OeWYIDM/U5FkZ4ygqtbwXXDJXxk8NdR0L96wztAXEN89jDRvwE4QvOoq63mOy/kiOFa5
+	KxAzqX+8E5FuYRg7/7CM+rdbStkUb8+9cgPXmVt9OjYByRWFob6G3fxzDLnyG1uxBteao9WaSs+
+	Us6Rk4fa/sHnlXRbsNMMDP9GxloZgolbxs/x4rIQq72semGcD+EidHQAuZ9l3wVkNUPh9z2httw
+	UYcUFZz0ZDgspRe7ZdJmtZr849SAhWra53Qz
+X-Google-Smtp-Source: AGHT+IHaLUiTwIrvlEsIvh+hJM+h6Cc3uuniHsw5qZQd71heT2rgBMRg3lFOR2OEtF2PeDPqV2AUmA==
+X-Received: by 2002:a17:902:cf09:b0:216:401f:acd with SMTP id d9443c01a7336-21a83f527e4mr141734785ad.21.1736471620728;
+        Thu, 09 Jan 2025 17:13:40 -0800 (PST)
+Received: from ?IPV6:2001:f70:39c0:3a00:cec8:c8cd:7a1f:b1b8? ([2001:f70:39c0:3a00:cec8:c8cd:7a1f:b1b8])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f22d22bsm3900535ad.189.2025.01.09.17.13.39
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 09 Jan 2025 17:08:06 -0800 (PST)
-Message-ID: <022a2fcc-ac64-433c-9ff5-46e3c0072227@pf.is.s.u-tokyo.ac.jp>
-Date: Fri, 10 Jan 2025 10:08:04 +0900
+        Thu, 09 Jan 2025 17:13:40 -0800 (PST)
+Message-ID: <87e46b70-d100-4ced-9b77-0d30eaecbf2d@pf.is.s.u-tokyo.ac.jp>
+Date: Fri, 10 Jan 2025 10:13:38 +0900
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,130 +83,78 @@ MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
 Subject: Re: [bug report] powercap: balance device refcount in
  powercap_register_control_type()
-To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>,
- Dan Carpenter <dan.carpenter@linaro.org>
-Cc: linux-pm@vger.kernel.org
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Dan Carpenter <dan.carpenter@linaro.org>, linux-pm@vger.kernel.org
 References: <97c5c93d-e31e-483b-83c3-28b797b69e9a@stanley.mountain>
  <68cdb73b-59cd-47be-9bc1-9affa606ba8f@pf.is.s.u-tokyo.ac.jp>
- <9d85c85f-c520-4e69-a412-22aaae7ba414@stanley.mountain>
- <c33fda7bde0b7fed4d47a3d1fc46e448bf8f99ff.camel@linux.intel.com>
+ <CAJZ5v0h4TUvGKKD51U+RUWv0sCbRjon6PF3ycVaTHMoA=1VEVQ@mail.gmail.com>
 Content-Language: en-US
 From: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-In-Reply-To: <c33fda7bde0b7fed4d47a3d1fc46e448bf8f99ff.camel@linux.intel.com>
+In-Reply-To: <CAJZ5v0h4TUvGKKD51U+RUWv0sCbRjon6PF3ycVaTHMoA=1VEVQ@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 1/10/25 03:42, srinivas pandruvada wrote:
-> Hi All,
-> 
-> On Thu, 2025-01-09 at 11:31 +0300, Dan Carpenter wrote:
->> On Thu, Jan 09, 2025 at 09:36:43AM +0900, Joe Hattori wrote:
->>> Hi Dan,
->>>
->>> Thank you for the report.
->>>
->>> On 1/8/25 19:11, Dan Carpenter wrote:
->>>> Hello Joe Hattori,
->>>>
->>>> Commit cae442480e40 ("powercap: balance device refcount in
->>>> powercap_register_control_type()") from Dec 15, 2024 (linux-
->>>> next),
->>>> leads to the following Smatch static checker warning:
->>>>
->>>> 	drivers/powercap/powercap_sys.c:632
->>>> powercap_register_control_type()
->>>> 	warn: freeing device managed memory (UAF):
->>>> 'control_type'
->>>>
->>>> drivers/powercap/powercap_sys.c
->>>>       622         }
->>>>       623         mutex_init(&control_type->lock);
->>>>       624         control_type->ops = ops;
->>>>       625         INIT_LIST_HEAD(&control_type->node);
->>>>       626         control_type->dev.class = &powercap_class;
->>>>       627         dev_set_name(&control_type->dev, "%s", name);
->>>>       628         result = device_register(&control_type->dev);
->>>>       629         if (result) {dev_release
->>>>       630                 put_device(&control_type->dev);
->>>>
->>>> The patch adds this call to put_device() based on static analysis
->>>> but
->>>> I'm pretty sure that will lead to a double free so the patch
->>>> should be
->>>> reverted.
->>>>
->>>> We can see on line 626 that the class is powercap_class, so
->>>> put_device() will call powercap_release().  The means that
->>>> control_type
->>>> will be freed.
->>>
->>> Indeed, I missed that.
->>>
->>>>
->>>>       631                 if (control_type->allocated)
->>>> --> 632                         kfree(control_type);
->>>>
->>>> Use after free and double free.
->>>
->>> Instead of reverting the patch, How about removing these two lines
->>> to avoid
->>> the double free (so that mutex_destroy() is called in the cleanup
->>> function
->>> as well. Not that it makes that big of a difference though). If
->>> that is ok
->>> with you, I will work on a patch to fix it.
->>>
->>
->> What you are suggesting *sounds* like the correct thing to do, but
->> surely the original author thought of that too?  Except the original
->> code was written 15 years ago and that was a completely different era
->> so maybe that explains it?  We could CC Srinivas and see if he
->> remembers this code that he wrote back when he was still a child.
->>
-> Indeed, long time back during 3.14.
-> Looking at 3.14, callers of device_register(), on failure there was no
-> call to put_device().
-> So if device_register fails then this memory needs to be freed.
-> If I look at code now, put_device() is called.
-> 
-> Looking at the code of device_register(), the need of this free will be
-> only required if the call to get_device() fails. But get_device() can't
-> fail here.
-> After call to get_device() the put_device() should call dev_release(),
-> so we can remove code at line 631-632.
+Thank you for your response.
 
-Thank you for the confirmation. Reflected in the new patch that I just sent.
+On 1/9/25 20:39, Rafael J. Wysocki wrote:
+> On Thu, Jan 9, 2025 at 1:36 AM Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp> wrote:
+>>
+>> Hi Dan,
+>>
+>> Thank you for the report.
+>>
+>> On 1/8/25 19:11, Dan Carpenter wrote:
+>>> Hello Joe Hattori,
+>>>
+>>> Commit cae442480e40 ("powercap: balance device refcount in
+>>> powercap_register_control_type()") from Dec 15, 2024 (linux-next),
+>>> leads to the following Smatch static checker warning:
+>>>
+>>>        drivers/powercap/powercap_sys.c:632 powercap_register_control_type()
+>>>        warn: freeing device managed memory (UAF): 'control_type'
+>>>
+>>> drivers/powercap/powercap_sys.c
+>>>       622         }
+>>>       623         mutex_init(&control_type->lock);
+>>>       624         control_type->ops = ops;
+>>>       625         INIT_LIST_HEAD(&control_type->node);
+>>>       626         control_type->dev.class = &powercap_class;
+>>>       627         dev_set_name(&control_type->dev, "%s", name);
+>>>       628         result = device_register(&control_type->dev);
+>>>       629         if (result) {
+>>>       630                 put_device(&control_type->dev);
+>>>
+>>> The patch adds this call to put_device() based on static analysis but
+>>> I'm pretty sure that will lead to a double free so the patch should be
+>>> reverted.
+>>>
+>>> We can see on line 626 that the class is powercap_class, so
+>>> put_device() will call powercap_release().  The means that control_type
+>>> will be freed.
+>>
+>> Indeed, I missed that.
+>>
+>>>
+>>>       631                 if (control_type->allocated)
+>>> --> 632                         kfree(control_type);
+>>>
+>>> Use after free and double free.
+>>
+>> Instead of reverting the patch, How about removing these two lines to
+>> avoid the double free (so that mutex_destroy() is called in the cleanup
+>> function as well. Not that it makes that big of a difference though). If
+>> that is ok with you, I will work on a patch to fix it.
+> 
+> I'd rather drop the commit in question and feel free to submit a
+> correct patch for the device refcount balancing.
+
+I have just submitted a new patch addressing this issue. Please review 
+it and apply it if it seems valid after reverting the original patch. If 
+you prefer that I send a separate patch to revert the original one, 
+please let me know.
 
 > 
-> 
-> Thanks,
-> Srinivas
-> 
->> I don't know this code well enough to be confident.
->>
->> regards,
->> dan carpenter
->>
->>>>
->>>>       633                 return ERR_PTR(result);
->>>>       634         }
->>>>       635         idr_init(&control_type->idr);
->>>>       636
->>>>       637         mutex_lock(&powercap_cntrl_list_lock);
->>>>       638         list_add_tail(&control_type->node,
->>>> &powercap_cntrl_list);
->>>>       639         mutex_unlock(&powercap_cntrl_list_lock);
->>>>       640
->>>>       641         return control_type;
->>>>       642 }
->>>>
->>>> regards,
->>>> dan carpenter
->>>
->>> Best,
->>> Joe
->>
-> 
+> Thanks!
 
 Best,
 Joe
