@@ -1,134 +1,109 @@
-Return-Path: <linux-pm+bounces-20195-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20194-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22795A08F5D
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 12:29:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B6EBDA08EF7
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 12:16:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1846F3AA3CB
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 11:29:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C0348166307
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 11:16:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 439FE20C02F;
-	Fri, 10 Jan 2025 11:27:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C8D8205515;
+	Fri, 10 Jan 2025 11:16:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vDZutFjb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mta21.hihonor.com (mta21.hihonor.com [81.70.160.142])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BFE720C49F
-	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 11:27:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.70.160.142
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 573E018787A
+	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 11:16:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736508451; cv=none; b=LmPF6MsAccuIyTGN5loMYHI1BFwMgJl36sslEuLiHAM8UqWTY+AXcMTLOsr18stE8GtDyo3UGAF1Wx+jCln7O0qT8rBuXp+39giZdqth2ixvTpQ8aK+7EzdvZksjqdWahpMO9dWn5Z8CuRNYeO06ucSPH34huDe2armDtGIG0fI=
+	t=1736507802; cv=none; b=IH8/BcyEm+VQujr5Ayzssdz/Kg9heEPk4WDnEfp2MuzRIgyScW5EVjPbGGK6g3PZfw5/r6eHBkjsVcq5xJLnZZsn81Qij4jRXjuVHjPNv5VvfomQkG2eOwRyRAHpAKUTUDEF7AhxWNLoeoP9Dw3LfRQrLsZUIlOc9A4CJZ+tMtY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736508451; c=relaxed/simple;
-	bh=AuTHtZpdzWZFaWJ8xRjgtg2IfDRiTvj6Ov4rDR9gdow=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=JLagVP6ZLcdmLXtYUOHcExOn9IasMcJIeMsQp4pvUkjY0QBOigqsWynYBa+zJiQyKz4THg1AHtPg2V5whtpzcMQ5o1wJOlKbVOm8hl64yc2QSyIQTsnwQXy5ecgEi2XR8QwwikuoTIdREvtqlHpIREx0eLHSdNTt1RLk2w8vzs4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com; spf=pass smtp.mailfrom=honor.com; arc=none smtp.client-ip=81.70.160.142
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=honor.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=honor.com
-Received: from w001.hihonor.com (unknown [10.68.25.235])
-	by mta21.hihonor.com (SkyGuard) with ESMTPS id 4YTzW14hHTzYlDhm;
-	Fri, 10 Jan 2025 19:11:41 +0800 (CST)
-Received: from a006.hihonor.com (10.68.23.242) by w001.hihonor.com
- (10.68.25.235) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 10 Jan
- 2025 19:12:09 +0800
-Received: from a004.hihonor.com (10.68.27.131) by a006.hihonor.com
- (10.68.23.242) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 10 Jan
- 2025 19:12:09 +0800
-Received: from a004.hihonor.com ([fe80::d0f4:9864:20bc:c407]) by
- a004.hihonor.com ([fe80::d0f4:9864:20bc:c407%4]) with mapi id 15.02.1544.011;
- Fri, 10 Jan 2025 19:12:09 +0800
-From: shichunyong <shichunyong@honor.com>
-To: "sre@kernel.org" <sre@kernel.org>
-CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, yuanzhen 00013066
-	<richard.yuan@honor.com>, yangyunmeng 00013317 <yangyunmeng@honor.com>,
-	gongxi 00013624 <gongxi4@honor.com>, yuxuesong 00013800
-	<xuesong.yu@honor.com>, shichunyong <shichunyong@honor.com>
-Subject: RE: [PATCH] power: supply: sysfs: Add
- manufacturing_date,first_usage_date
-Thread-Topic: [PATCH] power: supply: sysfs: Add
- manufacturing_date,first_usage_date
-Thread-Index: AdtjT/+X2mHP1I+8TI2PYcb16gLeKA==
-Date: Fri, 10 Jan 2025 11:12:09 +0000
-Message-ID: <ed82ec55afed40448c70831f1991f6c1@honor.com>
-Accept-Language: zh-CN, en-US
-Content-Language: zh-CN
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	s=arc-20240116; t=1736507802; c=relaxed/simple;
+	bh=EOeNxVnfbeZZXARhuAVlq1oZTxyMAQHwp1iLPrWqqCg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Jx9SAOxvBB6OajNsFDId2DxQDcNm715AnscY1yfkoR4NUxVLiInUDyyPyv/vVgJWr0cfYKzB/4lubkXoxAPGBvwfl+PoXM2/mMXlhJe7oFBoGqrXvtsbzkIWGF9J9ITtMMz4kPi8S73HwehlYjRTy6PYhPVswqobvOEqkggduZY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vDZutFjb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D1469C4CED6
+	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 11:16:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736507799;
+	bh=EOeNxVnfbeZZXARhuAVlq1oZTxyMAQHwp1iLPrWqqCg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=vDZutFjbeKTkt4Bpwxf7z6/kaf2C0xK5pg2BlC9/OEkA+5VOWnm0CMSnvS8HQlsSQ
+	 p/usUZXaZgp9xNMa4ngmLM3giU+cUJgvmoUmr24i9hk9Tkn/VVMfs9GYocY0Wmxt3Z
+	 14DyXj7+ElCxk+I9SeyTakecPbH1wV2PdFSVZcB9mPm2pXhF1jH4Ud40o8W3sUhClv
+	 fRu1Vj9CvIAhZg9AvstLCRTxtxVWh2YKO7zKBWdSf/NVxyPB7ulZ7uSs4Hsg27Aabp
+	 vypF6YXmNG8KHeZOXRJupfqksbXb98Re+2mPMzZoKbARk//jmwWDQUYQh+RdGqO1l1
+	 3qeX80zXo3/oA==
+Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5f31841c6f6so1009456eaf.0
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 03:16:39 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUWPJD9C8bh9QbeBd1+J9zXMSUksZLWyDWG0+/d+oAPi9FGDwqxqpbZI9D6vXoCyEzY/a20ZGzP5g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjFQdM520OyVeenDv641MreOvx0EKX9iMmWQdsqp4EMJEJkiOb
+	c1pT8YlZ/qHYfrC685xl6R8JUZ6vD/dIdq1qGjEQW8kxSlnddgYh60LzGvhKfstG009HcnPnc6E
+	6saJeVtO6m9dNBlEJuD+tci3ZPxU=
+X-Google-Smtp-Source: AGHT+IESefqsu2fKRINlLKliX1X39xuguU4JR5rltWjv9dzjUWEUxKU8+SE7LTlOVor9BGE9LHAFodes0ZLYwRJGcso=
+X-Received: by 2002:a05:6870:6b0b:b0:29d:c709:a76c with SMTP id
+ 586e51a60fabf-2aa0654da09mr5165173fac.4.1736507799168; Fri, 10 Jan 2025
+ 03:16:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <97c5c93d-e31e-483b-83c3-28b797b69e9a@stanley.mountain>
+ <68cdb73b-59cd-47be-9bc1-9affa606ba8f@pf.is.s.u-tokyo.ac.jp>
+ <CAJZ5v0h4TUvGKKD51U+RUWv0sCbRjon6PF3ycVaTHMoA=1VEVQ@mail.gmail.com>
+ <87e46b70-d100-4ced-9b77-0d30eaecbf2d@pf.is.s.u-tokyo.ac.jp> <a25400a9-ed04-4355-a9c5-e3439ac26d78@stanley.mountain>
+In-Reply-To: <a25400a9-ed04-4355-a9c5-e3439ac26d78@stanley.mountain>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 10 Jan 2025 12:16:26 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hMyJgsMQojbzCg7wdqX9Rt866gXzNSEwjZ1pge0x4i_Q@mail.gmail.com>
+X-Gm-Features: AbW1kvbsMoNCkvqaJg7bJRnLb4SxrenVr-DiyS8am-DXIi6EPpa3t1br-PEd4w4
+Message-ID: <CAJZ5v0hMyJgsMQojbzCg7wdqX9Rt866gXzNSEwjZ1pge0x4i_Q@mail.gmail.com>
+Subject: Re: [bug report] powercap: balance device refcount in powercap_register_control_type()
+To: Dan Carpenter <dan.carpenter@linaro.org>
+Cc: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Please help to review, thanks.
+On Fri, Jan 10, 2025 at 6:41=E2=80=AFAM Dan Carpenter <dan.carpenter@linaro=
+.org> wrote:
+>
+> On Fri, Jan 10, 2025 at 10:13:38AM +0900, Joe Hattori wrote:
+> > > > >
+> > > > >       631                 if (control_type->allocated)
+> > > > > --> 632                         kfree(control_type);
+> > > > >
+> > > > > Use after free and double free.
+> > > >
+> > > > Instead of reverting the patch, How about removing these two lines =
+to
+> > > > avoid the double free (so that mutex_destroy() is called in the cle=
+anup
+> > > > function as well. Not that it makes that big of a difference though=
+). If
+> > > > that is ok with you, I will work on a patch to fix it.
+> > >
+> > > I'd rather drop the commit in question and feel free to submit a
+> > > correct patch for the device refcount balancing.
+> >
+> > I have just submitted a new patch addressing this issue. Please review =
+it
+> > and apply it if it seems valid after reverting the original patch. If y=
+ou
+> > prefer that I send a separate patch to revert the original one, please =
+let
+> > me know.
+>
+> No one sent a revert patch.  We were hoping that you would handle that.
 
------Original Message-----
-From: shichunyong 00013399=20
-Sent: 2024-12-19 17:52
-To: 'sre@kernel.org' <sre@kernel.org>
-Cc: 'linux-pm@vger.kernel.org' <linux-pm@vger.kernel.org>; yuanzhen 0001306=
-6 <richard.yuan@honor.com>; yangyunmeng 00013317 <yangyunmeng@honor.com>; g=
-ongxi 00013624 <gongxi4@honor.com>; yuxuesong 00013800 <xuesong.yu@honor.co=
-m>
-Subject: [PATCH] power: supply: sysfs: Add manufacturing_date,first_usage_d=
-ate
-
-manufacturing_date/first_usage_date/state_of_health are the battery data
-required by EU regulations that are accessible for end-users.
-
-manufacturing_date is the date of manufacturing of the battery.
-first_usage_date is the date of first use of the battery
-after the set-up of the device by the first user.
-Both dates are the seconds since the epoch (1970-01-01 UTC).
-state_of_health(SoH) is a figure of merit of the condition of a battery,
-compared to its ideal conditions. The unit of SoH is percent
-(100% =3D the battery's conditions match the battery's specifications).
-
-Signed-off-by: ShiChunyong <shichunyong@honor.com>
----
- drivers/power/supply/power_supply_sysfs.c | 3 +++
- include/linux/power_supply.h              | 3 +++
- 2 files changed, 6 insertions(+)
-
-diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supp=
-ly/power_supply_sysfs.c
-index 571de43fcca9..0550073224f2 100644
---- a/drivers/power/supply/power_supply_sysfs.c
-+++ b/drivers/power/supply/power_supply_sysfs.c
-@@ -217,6 +217,9 @@ static struct power_supply_attr power_supply_attrs[] __=
-ro_after_init =3D {
- 	POWER_SUPPLY_ATTR(MANUFACTURE_YEAR),
- 	POWER_SUPPLY_ATTR(MANUFACTURE_MONTH),
- 	POWER_SUPPLY_ATTR(MANUFACTURE_DAY),
-+	POWER_SUPPLY_ATTR(MANUFACTURING_DATE),
-+	POWER_SUPPLY_ATTR(FIRST_USAGE_DATE),
-+	POWER_SUPPLY_ATTR(STATE_OF_HEALTH),
- 	/* Properties of type `const char *' */
- 	POWER_SUPPLY_ATTR(MODEL_NAME),
- 	POWER_SUPPLY_ATTR(MANUFACTURER),
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index b98106e1a90f..c8d8a8bfbf9f 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -170,6 +170,9 @@ enum power_supply_property {
- 	POWER_SUPPLY_PROP_MANUFACTURE_YEAR,
- 	POWER_SUPPLY_PROP_MANUFACTURE_MONTH,
- 	POWER_SUPPLY_PROP_MANUFACTURE_DAY,
-+	POWER_SUPPLY_PROP_MANUFACTURING_DATE,
-+	POWER_SUPPLY_PROP_FIRST_USAGE_DATE,
-+	POWER_SUPPLY_PROP_STATE_OF_HEALTH,
- 	/* Properties of type `const char *' */
- 	POWER_SUPPLY_PROP_MODEL_NAME,
- 	POWER_SUPPLY_PROP_MANUFACTURER,
---=20
-2.17.1
-
+I'll just drop the old one, no worries.
 
