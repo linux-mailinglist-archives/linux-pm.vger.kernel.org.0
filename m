@@ -1,226 +1,140 @@
-Return-Path: <linux-pm+bounces-20241-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20242-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D456A094DB
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 16:18:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCF63A094F1
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 16:21:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 23A4616A36B
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 15:18:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 766E6188ADE7
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 15:21:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C554211468;
-	Fri, 10 Jan 2025 15:17:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F599211497;
+	Fri, 10 Jan 2025 15:21:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="U7D0DrE/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XRRFA/0L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6C6D210F7A;
-	Fri, 10 Jan 2025 15:17:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 965AD20B80D
+	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 15:21:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736522276; cv=none; b=kQeOeIm0cPBdlGN+xZjv6ic9OLGCgEEU2K3lxDciWPP03aetYDq2a9oKirHGiQ7D+8RrbQbCLYuYaZ1VkpiGD8s3PMKfLOmX4YhZPavZ2GnRKRHfXzzz7p+Kdk0jJD4F1H5vX6sJjlWnyTwOAvYvDR1JnbettJToxnMlz1Xu+Jg=
+	t=1736522487; cv=none; b=ftOvlK8S8HA+gLFbHK1NsDG2mdr6igJFf3xhZb8yxkd3p2LUU7l0FrPT6JBm+t41S3Zr0B3Yc3r18vppN+brYAtd7a2whTQXSR6b53KhFMJb6t3/BSmXel2D5i7v+FpPhb+m9JvcSO4GIx4nHjJmUQmxMefH0/1dr1uzAnXH3DA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736522276; c=relaxed/simple;
-	bh=5umKel3ID8KbXJWCbxZbcN+ZW/fw7Lo1yK7DspHD1uk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aqBfLBv2pfOSq3I1gna0kBENdKcgGwC/gcMmkePrVqAV4/9h2wAGRgzWBWindJBKEBbicWG9NXRB8NQltP93fIE350KKyPsytGncsJ0clUJs+3temtBuoRETqgSYkLj8TOsc/msjz5jNyDwvjO6ATh8WYploFY1tZXRBkWIUr3o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=U7D0DrE/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A92D4C4CEE6;
-	Fri, 10 Jan 2025 15:17:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736522275;
-	bh=5umKel3ID8KbXJWCbxZbcN+ZW/fw7Lo1yK7DspHD1uk=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=U7D0DrE/AOV+YexVglpLxTDiLXPjONO9O8N/xzkPv0QC4Giw4usXymWaknKHY89JG
-	 bXZAuOPyGkDyS25DMtqupJkKqGD1zAASQAtIK8NKydDgbqewiXXDkknPXSLli+SCGS
-	 A5Gbv4de83wAmKstJbHEju5UfqJh35nFmjQIc2bomc6DqncxiMgFLrUEDrh4ab0JDa
-	 XbUxcZWIK1DAjV1mOMeo/NHmLZ8AvA5DymftwY8bz78cgEoS5woYZhTNlvOEHqcwf4
-	 wYN8PPZEd7PqQyW/5nrQ481ADjbeO3aDXjIjxTsPt4F1fkX1kGD4MTzY8DH3OmiaUg
-	 W4wF0N8JfKsVg==
-Received: by mail-ot1-f49.google.com with SMTP id 46e09a7af769-71e3eb8d224so553162a34.2;
-        Fri, 10 Jan 2025 07:17:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV8/Fxc+j6tFI1eH5TpWulXUROwiPA6A8ONbqBVURARLJRUHZf+LCJAKpNAol1tbbWFMd5Gw5q7mbjFHks=@vger.kernel.org, AJvYcCWC1m3n7yeP0vob1R75NuXtxSGehaCnFXGK+PndIG/l81WFuuzD3GJnE0DGD6Gw8GveaFEwJCv+cRg=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxxQuasQM5EUZTmdBjaEsFhwmC9vC2YrilaAwYBl54DgaOIVHhD
-	9Pzd3sISlbCUbBYCBPV487FfJ1SNZ7P1/YprcDC+aG+BdZa6hPtrBcd9Zp04hFELoHziAvkRxMK
-	GwXDSb+sTQK+j08dqw2YZLHcm1C8=
-X-Google-Smtp-Source: AGHT+IFWSzuyE7cQE5Uy7qEs6wsV9CLXmZ6cNhpnDheTglx1GrYjJ1/i5UqI0REYv8rf4MAaYG/UMwfrnyxFGoQ5fnM=
-X-Received: by 2002:a05:6870:ef82:b0:29e:51ca:68b4 with SMTP id
- 586e51a60fabf-2aa0674f4f8mr5668297fac.19.1736522274873; Fri, 10 Jan 2025
- 07:17:54 -0800 (PST)
+	s=arc-20240116; t=1736522487; c=relaxed/simple;
+	bh=JnqFWSB3iJHN2sZQAq8AP/OtACXVIFWvAsbe/hFx6B8=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=tAbsadyq2IN0Sm2bJ5WSD5/jt/GeWQmwV+5U+ZhWAhCsY65PxxgW9XQOkUxZdKLKeNP7RoKJysTtPiwxBCu3NMomk15BdOqTNjX2wCbU9hllM+1HkX/mwiL52WDqu1++ATvLDfi5BaVty86w0VDDuJEyQDkk9y7210YaCdht9z4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XRRFA/0L; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-43623f0c574so16533495e9.2
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 07:21:25 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736522484; x=1737127284; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/mYQvssNBwc29hpj1QqQP20JVpNfZ61yAfUKzfc2V4o=;
+        b=XRRFA/0LWs/CtReS7Ed5BHM7z8sYLVaMYgRsQGz2cDeiJaJPL8hN94Pc4iWM/mirWv
+         /mpSvf5o67MwhCOj/B8CbtLXlox7mTgxPx7Fo1/tQuNEFaXkChpKWH0jR+evCUwdCt/k
+         mgjfZPPKMBghNsZJCVF/Nz0Ab9wzvZUHeSZ3JvdLh0MzHXE7nVuQGXyKngeW/lIl8J94
+         ksXIqGCKXSPb/wzXHUQnmmr3jYJa1mtp9hIihipfU4560aRjWpAgEaRFyTIg2Xf2hOtz
+         OU893NtR3lwR+zd8kaZBUR4lYttFZHI6rsW0GB4D0Wj3IwLK6Zvm6sr2TzYKmfmDfVKA
+         8wRw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736522484; x=1737127284;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/mYQvssNBwc29hpj1QqQP20JVpNfZ61yAfUKzfc2V4o=;
+        b=BeajYwTW8GfFvGfrmIuMWFQGs7jNGpS8SWSSLED3Fp7dBsP3MTk8HiVEhcnKc63eLZ
+         X5RyjstASJlHZhLdteJrDat5VdrJVarWnU5j0bMEkGVjSaOV5IJZcvKi9fCxQt5nIIEO
+         uinKe6UJdbJaKM2Sh17NnrhPzuC5JUe4Go2o2AZ2EXrv+ILFS1nT961jIZKjvYxu9jWP
+         UX4VhT3Y22MJinI9jd4MJMNIAf9batnVHKxTmIwgV7z9UGRS6KEtEu87IG28XfZ1xhwz
+         WP9s13Ql0WHBVU7kUGtvoysc1v//AJ3oSmZlQzpGnlHucfC2boLNhjlZkTmRhnwp7qGn
+         nkCw==
+X-Forwarded-Encrypted: i=1; AJvYcCWxRY3BoHZ2JItg0ZsyMYK9ea/BLg6qR3MYuMQ9Zev1orjw5Oq80q2hC900+SgqQ/1B9YLTkf1LGw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWkUZuXw37GM0vSN5ixPeEgBT7c7UPSZFX42L8HMR7Vh/da0uu
+	gEJoY54enm1Ot6+0uKGGnGj94ldGDcAnoea5Ihrhl5655c3iFqbv+wFu5SBxRpo=
+X-Gm-Gg: ASbGncs2RcRIBqX93LnMr9XheIKF/xZ4tv/kzduptiV4J+nzQ6Dkca7uAUms3MzPXYa
+	v8oFuZOnLJ1gJ5N/YwZ5IA3xuve2IK+8l6EtNkbQYNiO6cXLBU6pAmS+ulThR1FG37u4pGmcbMK
+	0CCAmiUcjQmtCZA7OlH9VIeYifSLg0R2kdnjNKm1lOs/NHaA2xPpumxEoGbcFy3DlwMUE81nMcH
+	xjH118fL/eQT1TqxA+r6D6mSIEKxH1J2yGHI6nh8ZDnM8tmlOeZRa+Ym02D+YGeO3WyCl/jN0I4
+	CA==
+X-Google-Smtp-Source: AGHT+IENrY8NBnNToJJmSGO34BCcM4kSpUFWWK4T1gTw9QcuOAyOmPgeSHcQAZlYTWlrWi2W3O57tQ==
+X-Received: by 2002:a05:600c:3c82:b0:434:a10f:c3 with SMTP id 5b1f17b1804b1-436e2696082mr101321745e9.9.1736522484024;
+        Fri, 10 Jan 2025 07:21:24 -0800 (PST)
+Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:52eb:f6ff:feb3:451a])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2e92794sm88714725e9.37.2025.01.10.07.21.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2025 07:21:23 -0800 (PST)
+From: Neil Armstrong <neil.armstrong@linaro.org>
+Subject: [PATCH 0/4] arm64: qcom: sm8650: add DDR, LLCC & L3 CPU bandwidth
+ scaling
+Date: Fri, 10 Jan 2025 16:21:17 +0100
+Message-Id: <20250110-topic-sm8650-ddr-bw-scaling-v1-0-041d836b084c@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4953183.GXAFRqVoOG@rjwysocki.net> <13679187.uLZWGnKmhe@rjwysocki.net>
- <842b1500-9f4f-47e5-9777-ee89351f956e@arm.com> <CAJZ5v0hKZP7b8G+FJrb2kTSo90YK75XUsukExPMGVqhoZsSU7A@mail.gmail.com>
- <c976eae7-56f8-4b7b-821a-1ec4291b21dd@arm.com>
-In-Reply-To: <c976eae7-56f8-4b7b-821a-1ec4291b21dd@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 10 Jan 2025 16:17:43 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iRoKvTLXrxJWNk8ooARQQ-ctPR8CjsOuQSEt7e5Ws33Q@mail.gmail.com>
-X-Gm-Features: AbW1kvbpj5TWOzXVafD4AQ8CR5VRTQFjk-k4bf-88P0-MkiFRbmUnMojaqiCChk
-Message-ID: <CAJZ5v0iRoKvTLXrxJWNk8ooARQQ-ctPR8CjsOuQSEt7e5Ws33Q@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] cpuidle: teo: Add polling flag check to early
- return path
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, Aboorva Devarajan <aboorvad@linux.ibm.com>, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAO06gWcC/x3MwQqDMAwA0F+RnBdo6izqrwwP2qYa2Ko0sgniv
+ 694fJd3gnIWVuirEzJ/RWVNBfSowC9jmhklFIM1tjFEBvd1E4/6aV1jMISM0w/Vj29JM0ZqXR2
+ njuzTQRm2zFGOe38N1/UHbTvQLW0AAAA=
+X-Change-ID: 20250110-topic-sm8650-ddr-bw-scaling-f1863fb91246
+To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Sibi Sankar <quic_sibis@quicinc.com>, 
+ Bjorn Andersson <andersson@kernel.org>, 
+ Konrad Dybcio <konradybcio@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Neil Armstrong <neil.armstrong@linaro.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=939;
+ i=neil.armstrong@linaro.org; h=from:subject:message-id;
+ bh=JnqFWSB3iJHN2sZQAq8AP/OtACXVIFWvAsbe/hFx6B8=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBngTrwbhAkA4yrWtOiKbdeTc4YW6EHqsy3ZrZaur7C
+ Az+xEoSJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZ4E68AAKCRB33NvayMhJ0VkoEA
+ C3v9ea9whcNFKPh8APJpLKz1PP4DiRYa9Ds6q36PsRQVY1raZr3k7F8vFrwSI+LvcATsVWD5jFMqMH
+ pF8DhjsBZ2bfYMo1QOd2rhGHLWJK5Gpd6jS4L2NyLxMgN62+83oEuozkBa9RUtfFx7/EaLOIPVAtlE
+ SfvoEoRMSwso4zEZMYNUvIGL+jMHaElk131LFdtw5DFpkHjZ2eYjzuEniPLsVNQr63fcrCN1GCWkDG
+ n87lGQuEwdnYoA7FpUKFMRbL7VOngpmW5ShadVu5bbOsUcPi2OdujS95AFltAazTGcdwu5HNF9AJDV
+ GcgsuC4dsQvB1KD2lN4YF1D+63GwdTde+k4VK+OrzXKbSsrPX1aeTWF9sCQyba7BpndYERUryqOi9I
+ Nnf/l9sIUI00zqbDwhJVS1k3ofev9XrxOrBrrcFMJ8yRmlX1PQE8NKUT74XcVrC7Qd86XmWxpJ92iv
+ +DYuWNUaK3BQnJ27nn2PJ5v07ETMrMiILwP1AzdJb2+j5KfoDqzBllQql8s6+uFfioCdr7m6l8Xcr5
+ o8grkpX5Obnu+WWkFDTlETyxOKmD7x1bL6rgkYMErpKyQ+jnBWGCaTLd/hE26evIZKcXgz6YYAIEGE
+ 51EGWtPGlZz2fE80qooreWotG9DNxFowVetkLZ1uVf0cF0c+IR3VlP/dctRQ==
+X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
+ fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-On Fri, Jan 10, 2025 at 3:52=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 1/10/25 13:34, Rafael J. Wysocki wrote:
-> > On Fri, Jan 10, 2025 at 2:16=E2=80=AFPM Christian Loehle
-> > <christian.loehle@arm.com> wrote:
-> >>
-> >> On 1/10/25 12:53, Rafael J. Wysocki wrote:
-> >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>>
-> >>> After commit 6da8f9ba5a87 ("cpuidle: teo: Skip tick_nohz_get_sleep_le=
-ngth()
-> >>> call in some cases") the teo governor behaves a bit differently on
-> >>> systems where idle state 0 is a "polling" state (that is, it is not
-> >>> really an idle state, but a loop continuously executed by the CPU).
-> >>> Namely, on such systems it skips the tick_nohz_get_sleep_length() cal=
-l
-> >>> if the target residency of the current candidate idle state is small
-> >>> enough.
-> >>>
-> >>> However, if state 0 itself was to be returned, it would be returned
-> >>> right away without calling tick_nohz_get_sleep_length() even on syste=
-ms
-> >>> where it was not a "polling" state until commit 4b20b07ce72f ("cpuidl=
-e:
-> >>> teo: Don't count non-existent intercepts") that attempted to fix this
-> >>> problem.
-> >>>
-> >>> Unfortunately, commit 4b20b07ce72f has made the governor always call
-> >>> tick_nohz_get_sleep_length() when about to return state 0 early, even
-> >>> if that state is a "polling" one, which is inconsistent and defeats
-> >>> the purpose of commit 6da8f9ba5a87 in that case.
-> >>>
-> >>> Address this by adding a CPUIDLE_FLAG_POLLING check to the path where
-> >>> state 0 is returned early to prevent tick_nohz_get_sleep_length() fro=
-m
-> >>> being called if it is a "polling" state.
-> >>>
-> >>> Fixes: 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercep=
-ts")
-> >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >>> ---
-> >>>  drivers/cpuidle/governors/teo.c |    3 ++-
-> >>>  1 file changed, 2 insertions(+), 1 deletion(-)
-> >>>
-> >>> --- a/drivers/cpuidle/governors/teo.c
-> >>> +++ b/drivers/cpuidle/governors/teo.c
-> >>> @@ -422,7 +422,8 @@
-> >>>                       first_suitable_idx =3D i;
-> >>>               }
-> >>>       }
-> >>> -     if (!idx && prev_intercept_idx) {
-> >>> +     if (!idx && prev_intercept_idx &&
-> >>> +         !(drv->states[0].flags & CPUIDLE_FLAG_POLLING)) {
-> >>>               /*
-> >>>                * We have to query the sleep length here otherwise we =
-don't
-> >>>                * know after wakeup if our guess was correct.
-> >>>
-> >>>
-> >>>
-> >>
-> >> But then you do run into the issue of intercepts not being detected if
-> >> state0 is the right choice, don't you?
-> >
-> > That's true, but then on systems with a "polling" state 0 you still
-> > have this problem if the state returned early is not state 0.  Say C1
-> > on x86.>
-> > The point here is that the behavior needs to be consistent, one way or =
-another.
->
-> Yes, gotcha. Why not be consistent 'in the other way' then?
->
-> >
-> > The exact point of commit 6da8f9ba5a87 was to avoid calling
-> > tick_nohz_get_sleep_length() in some cases when the state to be
-> > returned is shallow enough and obviously that includes a "polling"
-> > state 0, possibly at the cost of being somewhat inaccurate in
-> > prediction.
->
-> Somewhat inaccurate meaning not making any prediction?
-> cpu_data->sleep_length_ns =3D KTIME_MAX;
+Add the OSM L3 controller node then add the necessary interconnect
+properties with the appropriate OPP table for each CPU cluster to
+allow the DDR, LLCC & L3 CPU bandwidth to scale along the CPU
+cluster operating point.
 
-Yes, and the wakeup is going to be counted as an intercept which of
-course may be inaccurate, but how inaccurate it really is depends on
-the workload.  If the workload doesn't contain short timers, it
-actually is as good as it gets.
+Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
+---
+Neil Armstrong (4):
+      dt-bindings: interconnect: OSM L3: Document sm8650 OSM L3 compatible
+      arm64: dts: qcom: sm8650: add OSM L3 node
+      arm64: dts: qcom: sm8650: add cpu interconnect nodes
+      arm64: dts: qcom: add cpu OPP table with DDR, LLCC & L3 bandwidths
 
-> How much is the harm for calling tick_nohz_get_sleep_length() when
-> polling anyway?
+ .../bindings/interconnect/qcom,osm-l3.yaml         |   1 +
+ arch/arm64/boot/dts/qcom/sm8650.dtsi               | 938 +++++++++++++++++++++
+ 2 files changed, 939 insertions(+)
+---
+base-commit: 6ecd20965bdc21b265a0671ccf36d9ad8043f5ab
+change-id: 20250110-topic-sm8650-ddr-bw-scaling-f1863fb91246
 
-On x86, a lot, especially on systems with many cores.
+Best regards,
+-- 
+Neil Armstrong <neil.armstrong@linaro.org>
 
-This was the whole reason for doing commit 6da8f9ba5a87 in the first place.
-
-> I know tick_nohz_get_sleep_length() is the majority of the usual
-> cpuidle entry path, but for many scenarios where state0 is appropriate
-> that should be pretty fast, no?
-
-Not necessarily.
-
-For single-digit exit latency idle states the
-tick_nohz_get_sleep_length() evaluation time may exceed the state exit
-latency and is comparable to the target residency, so calling it
-pretty much doesn't make sense.
-
-> >
-> > Then you're seeing this intercept accumulation for state 0 when there
-> > are only 2 states in the table (or all of the other states are much
-> > higher target residency than state 0).
-> >
-> > Commit 4b20b07ce72f effectively caused tick_nohz_get_sleep_length() to
-> > be called every time on systems without a "polling" state 0, which was
-> > fair enough, but it also affected the other systems, which wasn't.
-> >
-> >> This would then enable intercept-detection only for <50% of the time,
-> >> another option is to not allow intercepts selecting a polling state, b=
-ut
-> >> there were recent complaints about this exact behavior from Aboorva (+=
-TO).
-> >> They don't have a low-latency non-polling state.
-> >>
-> >> https://lore.kernel.org/lkml/20240809073120.250974-1-aboorvad@linux.ib=
-m.com/
-> >
-> > If they don't have a "polling" state 0, they won't be affected by this
-> > patch and after commit 4b20b07ce72f, they'll always call
-> > tick_nohz_get_sleep_length(), so the current governor behavior is
-> > generally unsuitable for them.
->
-> They do though.
-> commit 5ddcc03a07ae ("powerpc/cpuidle: Set CPUIDLE_FLAG_POLLING for snooz=
-e state")
-> So they have a polling 'snooze' and a relatively high latency (hundreds u=
-secs)
-> non-polling state and no deeper state.
->
-> So if they don't query sleep length on snooze on a (1us)-interrupt-wakeup=
- heavy
-> workload they will get 50% state0 and 50% state1 (because intercepts reco=
-vered
-> due to not querying sleep length).
-
-Obviously.
-
-OK, I guess I'll just do the other cleanups without this change to start wi=
-th.
 
