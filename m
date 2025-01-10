@@ -1,172 +1,121 @@
-Return-Path: <linux-pm+bounces-20225-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20226-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF892A09225
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:34:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 34101A0923D
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:39:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BCD6D188298F
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:35:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5C1C9188E3F7
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:39:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 937E920B80D;
-	Fri, 10 Jan 2025 13:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C69420E317;
+	Fri, 10 Jan 2025 13:39:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="onJH6tIZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HDJxtVPU"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E2B78C91;
-	Fri, 10 Jan 2025 13:34:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BFCD420D4ED;
+	Fri, 10 Jan 2025 13:39:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736516093; cv=none; b=mDaC1G3Sv1Dy0SARYdEmpmEp5EOhA7gv6BZpCq81eNLdLvppv8wyekzrs/Ks2oeEOsc/OhGdtCfgjbMwHBpJ51Px0+wPgNzeEnEs2q0L9X18d8zB5FTYWYPPk7L6BkRTnS07dWDcooGDMRhsvKdZMH4CvuDvbzJQRN957sAqByw=
+	t=1736516342; cv=none; b=U1YrHcQrxkh1vOiY5sVwQBm7PVdxn6MNSWzAaqcuWMH28PCphqzz7XbRMfjOsGopljvqqFfRPqIb7cJ+oQfuh7qVWUUvtFj/hgj/ofpG+5RfZP6NFv479VjhtWuArBEOeATFj8jnkV2bFFbf/4Q2aJGMDGe07MVoXVgxaEukWUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736516093; c=relaxed/simple;
-	bh=UVYtGWlHf2XPJdl7LbzGBo+7rdm/RbujJMBqXcO5uuY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mhkUb5j26j4K6zewXKqbxY6D99VT0u+os+8rfeC8PngQK1UPp2wWYsBY+dQPg3qQu1iDGVxEdc880lmOXwe+IgRpc46i87r5XohbRYlfCdxXyBr3hWixfrPABDewIK7H9FsE3YuZ8wDvJZe7aB0+JVHTHYaoFZmXW2Ldh/7T5EM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=onJH6tIZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 49BD8C4CEE2;
-	Fri, 10 Jan 2025 13:34:53 +0000 (UTC)
+	s=arc-20240116; t=1736516342; c=relaxed/simple;
+	bh=6706hwt5VHDv/HYNCdAtvE3p3uI0dV7mNWaIgSNjhww=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=FPOJ0QUqKS2sdD3Jxg6V4VDFu6erFCFvhv2oMEpII3MwGoGe6w8bqhO7MZL0u47Q7WbkrQmNissOXuENFTnIDbkwC+EhvYJyxgEDyG2BPa7cxTR8L3YoZungZJQww0MkY4jweyn451Rl7M/OrD5LAYISKxflQLGol1QCx4j5it0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HDJxtVPU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E5A41C4CED6;
+	Fri, 10 Jan 2025 13:39:01 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736516093;
-	bh=UVYtGWlHf2XPJdl7LbzGBo+7rdm/RbujJMBqXcO5uuY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=onJH6tIZ0xgNn/542cvEqBP4iw+aZB0JI1hEJkc+Hwo8jLPFZisdsT5aAGr+0nDkB
-	 5EYdDIkiNEcQNOfKfga5vGFSqEKWcUljQgMypFDeCFiIVWbDILD1QRCIkaSH8rC3aM
-	 9OKYe1QKJmR93ohdbTsAPTXxKH3CyyQOeaJXpiDHvYqqkIgUxOUCBRrKGVEcGqstSo
-	 0aR8pt5HUYEvLqgavVVsxVxJItnKqUGxLysLx/Jm1g0dGfffBG/1hunaJi6fG2Ccfm
-	 7lv164kuNTw6ebIgqIcPg6E6Zbdvu+IN7WdfVdfOae12buSM5hybKMc4FwGjsy8gKq
-	 9YxHnCX++hhRw==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-29e5aedbebdso982139fac.0;
-        Fri, 10 Jan 2025 05:34:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVwoIetVvNy2NOJ9W6tRSqEyrjWTClLLJmsX4yDdoM42nejLVSo/8OTcjxZJT/NKWjJP70S7UCMWsc=@vger.kernel.org, AJvYcCXCjZhM5zlaG6XKu/MEjB/uT/B8dFLcxL8v3TXlLQTL00bhD+yEMfy9uJK8QUwZncOw3Hj7WvcFqblOU9A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzUfjdG3IbxkuYYKte7RBTaIKalVBXu3ZcU4IDbZhYbhP+VM//J
-	2PiohwNLIMdmsJUaOMOHpDzytviU8VNFBh8YZjqvIMlf8KJaU4Gq8orWcmQtY5CkZBdriWcxyvx
-	EAaoXHtQp0HAWZv3UbpX69bhTE3c=
-X-Google-Smtp-Source: AGHT+IEI9IczEXSwTUFK/n8L7ouDRXi2e2SPA47I/92Ohk0226VABcXkdADRlyPxzizGlwXoPYX310waazhd6b2CY7c=
-X-Received: by 2002:a05:6871:800a:b0:29e:3bea:7e60 with SMTP id
- 586e51a60fabf-2aa0698375emr5339496fac.38.1736516092550; Fri, 10 Jan 2025
- 05:34:52 -0800 (PST)
+	s=k20201202; t=1736516342;
+	bh=6706hwt5VHDv/HYNCdAtvE3p3uI0dV7mNWaIgSNjhww=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=HDJxtVPUD3p1SPdmApTnfH1ZoE4n7ZFxynwqFV038FIhmH+KTYwzMG0DrffGF/nes
+	 kHPqBwAElyCI5eK2Ezs/K/2wx9Fm/iwgfWvrIY1/oBQutRKEN6/5whRMsBp3y+gCvj
+	 zsk+fd0zgLouIxMHWUtxp7Fvrsu5xZEEqA02aR3WXlWLsxqWJGuyQC/zI5p7cqJ3Yr
+	 IdvP7rbi4pJzlYTPlII5k1cSTkk6THrWwSveggw5lwWG65vHhOGbTYdOpY4mPzjIzZ
+	 S/HtoWdh6WDCC2mmpvDMmDXH7DENiQdWf8f0jNCEyIKckZyeYqAHdxqPq6FsuvWZ93
+	 CdTSfMYioM6Gw==
+Date: Fri, 10 Jan 2025 07:39:00 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <4953183.GXAFRqVoOG@rjwysocki.net> <13679187.uLZWGnKmhe@rjwysocki.net>
- <842b1500-9f4f-47e5-9777-ee89351f956e@arm.com>
-In-Reply-To: <842b1500-9f4f-47e5-9777-ee89351f956e@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 10 Jan 2025 14:34:41 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hKZP7b8G+FJrb2kTSo90YK75XUsukExPMGVqhoZsSU7A@mail.gmail.com>
-X-Gm-Features: AbW1kvZXg5zq4NzD1-GKtJII0BbF4s2IKA6AwzAV-wNyz8-Lz_fHYVRxnhV6GzE
-Message-ID: <CAJZ5v0hKZP7b8G+FJrb2kTSo90YK75XUsukExPMGVqhoZsSU7A@mail.gmail.com>
-Subject: Re: [PATCH v1 1/4] cpuidle: teo: Add polling flag check to early
- return path
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	Aboorva Devarajan <aboorvad@linux.ibm.com>, LKML <linux-kernel@vger.kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: devicetree@vger.kernel.org, linux-phy@lists.infradead.org, 
+ Vinod Koul <vkoul@kernel.org>, linux-sunxi@lists.linux.dev, 
+ Philipp Zabel <p.zabel@pengutronix.de>, linux-riscv@lists.infradead.org, 
+ Albert Ou <aou@eecs.berkeley.edu>, linux-gpio@vger.kernel.org, 
+ Linus Walleij <linus.walleij@linaro.org>, 
+ Ulf Hansson <ulf.hansson@linaro.org>, Stephen Boyd <sboyd@kernel.org>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ Paul Walmsley <paul.walmsley@sifive.com>, Chen-Yu Tsai <wens@csie.org>, 
+ linux-pm@vger.kernel.org, Samuel Holland <samuel@sholland.org>, 
+ Maxime Ripard <mripard@kernel.org>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, linux-clk@vger.kernel.org, 
+ Michael Turquette <mturquette@baylibre.com>, linux-kernel@vger.kernel.org, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ linux-arm-kernel@lists.infradead.org, Palmer Dabbelt <palmer@dabbelt.com>
+To: Andras Szemzo <szemzo.andras@gmail.com>
+In-Reply-To: <20250110123923.270626-11-szemzo.andras@gmail.com>
+References: <20250110123923.270626-1-szemzo.andras@gmail.com>
+ <20250110123923.270626-11-szemzo.andras@gmail.com>
+Message-Id: <173651634086.2650897.13417575426746113059.robh@kernel.org>
+Subject: Re: [PATCH 10/12] dt-bindings: phy: allwinner: add v853 usb phy
 
-On Fri, Jan 10, 2025 at 2:16=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 1/10/25 12:53, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > After commit 6da8f9ba5a87 ("cpuidle: teo: Skip tick_nohz_get_sleep_leng=
-th()
-> > call in some cases") the teo governor behaves a bit differently on
-> > systems where idle state 0 is a "polling" state (that is, it is not
-> > really an idle state, but a loop continuously executed by the CPU).
-> > Namely, on such systems it skips the tick_nohz_get_sleep_length() call
-> > if the target residency of the current candidate idle state is small
-> > enough.
-> >
-> > However, if state 0 itself was to be returned, it would be returned
-> > right away without calling tick_nohz_get_sleep_length() even on systems
-> > where it was not a "polling" state until commit 4b20b07ce72f ("cpuidle:
-> > teo: Don't count non-existent intercepts") that attempted to fix this
-> > problem.
-> >
-> > Unfortunately, commit 4b20b07ce72f has made the governor always call
-> > tick_nohz_get_sleep_length() when about to return state 0 early, even
-> > if that state is a "polling" one, which is inconsistent and defeats
-> > the purpose of commit 6da8f9ba5a87 in that case.
-> >
-> > Address this by adding a CPUIDLE_FLAG_POLLING check to the path where
-> > state 0 is returned early to prevent tick_nohz_get_sleep_length() from
-> > being called if it is a "polling" state.
-> >
-> > Fixes: 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts=
-")
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/cpuidle/governors/teo.c |    3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > --- a/drivers/cpuidle/governors/teo.c
-> > +++ b/drivers/cpuidle/governors/teo.c
-> > @@ -422,7 +422,8 @@
-> >                       first_suitable_idx =3D i;
-> >               }
-> >       }
-> > -     if (!idx && prev_intercept_idx) {
-> > +     if (!idx && prev_intercept_idx &&
-> > +         !(drv->states[0].flags & CPUIDLE_FLAG_POLLING)) {
-> >               /*
-> >                * We have to query the sleep length here otherwise we do=
-n't
-> >                * know after wakeup if our guess was correct.
-> >
-> >
-> >
->
-> But then you do run into the issue of intercepts not being detected if
-> state0 is the right choice, don't you?
 
-That's true, but then on systems with a "polling" state 0 you still
-have this problem if the state returned early is not state 0.  Say C1
-on x86.
+On Fri, 10 Jan 2025 13:39:21 +0100, Andras Szemzo wrote:
+> Document Allwinner v853 USB phy.
+> 
+> Signed-off-by: Andras Szemzo <szemzo.andras@gmail.com>
+> ---
+>  .../phy/allwinner,sun8i-v853-usb-phy.yaml     | 89 +++++++++++++++++++
+>  1 file changed, 89 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.yaml
+> 
 
-The point here is that the behavior needs to be consistent, one way or anot=
-her.
+My bot found errors running 'make dt_binding_check' on your patch:
 
-The exact point of commit 6da8f9ba5a87 was to avoid calling
-tick_nohz_get_sleep_length() in some cases when the state to be
-returned is shallow enough and obviously that includes a "polling"
-state 0, possibly at the cost of being somewhat inaccurate in
-prediction.
+yamllint warnings/errors:
+./Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.yaml:19:1: [error] syntax error: found character '\t' that cannot start any token (syntax)
 
-Then you're seeing this intercept accumulation for state 0 when there
-are only 2 states in the table (or all of the other states are much
-higher target residency than state 0).
+dtschema/dtc warnings/errors:
+/builds/robherring/dt-review-ci/linux/Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.yaml: ignoring, error parsing file
+make[2]: *** Deleting file 'Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.example.dts'
+Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.yaml:19:1: found character '\t' that cannot start any token
+make[2]: *** [Documentation/devicetree/bindings/Makefile:26: Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.example.dts] Error 1
+make[2]: *** Waiting for unfinished jobs....
+./Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.yaml:19:1: found character '\t' that cannot start any token
+make[1]: *** [/builds/robherring/dt-review-ci/linux/Makefile:1506: dt_binding_check] Error 2
+make: *** [Makefile:251: __sub-make] Error 2
 
-Commit 4b20b07ce72f effectively caused tick_nohz_get_sleep_length() to
-be called every time on systems without a "polling" state 0, which was
-fair enough, but it also affected the other systems, which wasn't.
+doc reference errors (make refcheckdocs):
 
-> This would then enable intercept-detection only for <50% of the time,
-> another option is to not allow intercepts selecting a polling state, but
-> there were recent complaints about this exact behavior from Aboorva (+TO)=
-.
-> They don't have a low-latency non-polling state.
->
-> https://lore.kernel.org/lkml/20240809073120.250974-1-aboorvad@linux.ibm.c=
-om/
+See https://patchwork.ozlabs.org/project/devicetree-bindings/patch/20250110123923.270626-11-szemzo.andras@gmail.com
 
-If they don't have a "polling" state 0, they won't be affected by this
-patch and after commit 4b20b07ce72f, they'll always call
-tick_nohz_get_sleep_length(), so the current governor behavior is
-generally unsuitable for them.
+The base for the series is generally the latest rc1. A different dependency
+should be noted in *this* patch.
 
-I have an idea how to change it to be more accurate in prediction, but
-we'll see how it goes.  Stay tuned.
+If you already ran 'make dt_binding_check' and didn't see the above
+error(s), then make sure 'yamllint' is installed and dt-schema is up to
+date:
+
+pip3 install dtschema --upgrade
+
+Please check and re-submit after running the above command yourself. Note
+that DT_SCHEMA_FILES can be set to your schema file to speed up checking
+your schema. However, it must be unset to test all examples with your schema.
+
 
