@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-20231-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20232-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3F76A092A3
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:55:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C255AA092AF
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:56:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C288C3AAD16
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:55:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BEFF5169F78
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:56:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68CC20E6E9;
-	Fri, 10 Jan 2025 13:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AB5C20FA88;
+	Fri, 10 Jan 2025 13:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="n1qrLbpm"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hEPjokNK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B14284400;
-	Fri, 10 Jan 2025 13:55:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0310D4400;
+	Fri, 10 Jan 2025 13:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736517333; cv=none; b=XgAaOPKRL3jlC7bj8WD2SOQ4R25RcG2tmBA4NZyliKGuJ2s5/GkJc2irArlPMf/8oOEU4QU2d1in+4scLDBi4rjj7DDLy62fuDqTPLir8vFAAUi3LP5WF0j/NejWxsZIRnRjjwlIjICo0LqbUrWUurcfVqoyXmkdHVLful3kelA=
+	t=1736517409; cv=none; b=Y5PFWu9jPTRXAiBdzqX6CjtTRGL4wJ84ADIChXrJShvEgqPtq1s9L7QaE7SBOQy3TwxPnjNX1b0HO58sJGj9oHpCpvX7mI2utAmzulFItRO5/VFj1rgG/+cz5bEc4+YLtOo6lFCQilCcrSZhe8ncxNSqddsrsADst1IdEuNYDXo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736517333; c=relaxed/simple;
-	bh=7FhdF0E/wzZ/LjN0yMmNkDWkh1Ljtoxfv/kPShF+jeQ=;
+	s=arc-20240116; t=1736517409; c=relaxed/simple;
+	bh=AouVWEys/NtgqaGbXkcBOKCybsdMDm2Sr9XXLLSNYMc=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iN6WKGWoImPdRJ1Ywza4zSO6k3RJuErmGg23VgL6A7GTJakpf9seMzglqwO3OKIQNmnVXEsVXSaSzvrh2o115w0mSAAfTXXp1RjHHVQ4yuJMMiqjk/XzhtXSoxGunIxgy/HKPN9vCIRGZmgWwSUS74v/7D/M+xRbcHmjYwn5KPQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=n1qrLbpm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0B5E3C4CED6;
-	Fri, 10 Jan 2025 13:55:24 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=bzUC47NyAdVh7rkvkgEjiYly5Gb4vOsNq0f365RNIQt+kjEy/P0+vmEhK4w2PKevZZCRt7pYpHy65W2EP0cH6bqheYUalgWuSMss2v97HdzVpwoSuoH3uDmM8Zzcwa4fGsQNIxPaOdRwfHpe9rSwI3xHd3evQADNSyk9qNBvZJo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hEPjokNK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B165CC4CED6;
+	Fri, 10 Jan 2025 13:56:40 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736517333;
-	bh=7FhdF0E/wzZ/LjN0yMmNkDWkh1Ljtoxfv/kPShF+jeQ=;
+	s=k20201202; t=1736517408;
+	bh=AouVWEys/NtgqaGbXkcBOKCybsdMDm2Sr9XXLLSNYMc=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=n1qrLbpmYHNuXmpmmfgcZqeE9SKNpSLD+QRrpHqDL1r5p0y/s5K6pfI8xfrCqkmsf
-	 s73mWDEghOV7mk3dxbzcne12ZseS0n4PuWOGwG+ytrRKnVHq9vq6PzbrsH4J9q8PoJ
-	 iHxwjJ65zbKbLFje7JOnUkBJuHawvetMmK5OJg5UiF/LqYJb5za6xjpEAXUL1iV1tM
-	 rt+0AF6adCg3UcUh6zFcV656ck1kZP01SYIquNQA+zb9Se2guaP6DroZfSHqGKsiKK
-	 XmUxFGUDGxUWbxj5n+spiWELjrrBc6Qb1y+BWEKouX0FYGmLqqzAOXfPmyVzPyafoO
-	 2GIrGHad83vRA==
-Message-ID: <106ad964-3734-43ec-8563-50cb18c5189d@kernel.org>
-Date: Fri, 10 Jan 2025 14:55:22 +0100
+	b=hEPjokNK/n8xwEc3DQJQvgieQyY0GTZOA6Bio0y1e6GVGnmuCaek49sVLVjUlj7P2
+	 1IHRmkMzLocl5POXPHb+0V29Md+2J9fo7ulrSsiP4zqaNTmsC7FoCKWH43NKMyqPrR
+	 b6y3uTd1MIJKjGK7V1oBJpoh+0pvIjzzTcR3TLzbm/8JbSdcyb/cJeXTLf+4pwmKX+
+	 18dsUQfblv/ooXW7qG42cVFr+Kp+RHcBuSFqgaqseq4rJl5wBN4GfC3kqik52K6qmE
+	 bKmoxWJyUr7cGdpGETQO8VqBLulpyOCX/q1CPUa4a8qYvWANlQ6hWJHSQV+6sa/Imt
+	 QkV1g7JKUmY7Q==
+Message-ID: <de280eed-bcc8-4802-9734-5e95ad1f6611@kernel.org>
+Date: Fri, 10 Jan 2025 14:56:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/12] dt-bindings: clock: sunxi-ng: add compatibles for
- V853
+Subject: Re: [PATCH 06/12] dt-bindings: clk: sunxi-ng: add V853 CCU
+ clock/reset
 To: Andras Szemzo <szemzo.andras@gmail.com>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
  <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -72,7 +72,7 @@ Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I
  linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
 References: <20250110123923.270626-1-szemzo.andras@gmail.com>
- <20250110123923.270626-5-szemzo.andras@gmail.com>
+ <20250110123923.270626-7-szemzo.andras@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -118,30 +118,53 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250110123923.270626-5-szemzo.andras@gmail.com>
+In-Reply-To: <20250110123923.270626-7-szemzo.andras@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/01/2025 13:39, Andras Szemzo wrote:
-> V853 has 2 CCUs, add compatible strings for it.
+> As the device tree needs the clock/reset indices, add them to DT binding
+> headers.
 > 
 > Signed-off-by: Andras Szemzo <szemzo.andras@gmail.com>
-> ---
->  .../devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml      | 2 ++
->  1 file changed, 2 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml b/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml
-> index 1690b9d99c3d..bb1fa032e789 100644
-> --- a/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml
-> +++ b/Documentation/devicetree/bindings/clock/allwinner,sun4i-a10-ccu.yaml
-> @@ -36,6 +36,8 @@ properties:
->        - allwinner,sun9i-a80-ccu
->        - allwinner,sun20i-d1-ccu
->        - allwinner,sun20i-d1-r-ccu
-> +      - allwinner,sun8i-v853-ccu
-> +      - allwinner,sun8i-v853-r-ccu
 
-Where are the clock headers?
+That's never a separate commit from the binding.
+
+
+...
+
+> --- /dev/null
+> +++ b/include/dt-bindings/clock/sun8i-v853-r-ccu.h
+> @@ -0,0 +1,16 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+> +/* Copyright(c) 2020 - 2023 Allwinner Technology Co.,Ltd. All rights reserved.
+> + *
+> + * Copyright (C) 2023 rengaomin@allwinnertech.com
+> + */
+> +#ifndef _DT_BINDINGS_CLK_SUN8I_V85X_R_CCU_H_
+> +#define _DT_BINDINGS_CLK_SUN8I_V85X_R_CCU_H_
+> +
+> +#define CLK_R_TWD		0
+> +#define CLK_R_PPU		1
+> +#define CLK_R_RTC		2
+> +#define CLK_R_CPUCFG		3
+> +
+> +#define CLK_R_MAX_NO		(CLK_R_CPUCFG + 1)
+
+Nope, drop. Not a binding.
+
+> +
+> +#endif
+> diff --git a/include/dt-bindings/reset/sun8i-v853-ccu.h b/include/dt-bindings/reset/sun8i-v853-ccu.h
+> new file mode 100644
+> index 000000000000..89d94fcbdb55
+> --- /dev/null
+> +++ b/include/dt-bindings/reset/sun8i-v853-ccu.h
+> @@ -0,0 +1,62 @@
+> +/* SPDX-License-Identifier: (GPL-2.0+ OR MIT) */
+
+Odd license. Did you copy the file with such license from the downstream?
+
 
 Best regards,
 Krzysztof
