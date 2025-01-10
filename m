@@ -1,120 +1,114 @@
-Return-Path: <linux-pm+bounces-20223-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20224-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AA7F7A091A8
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:17:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A8157A091BB
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:21:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73AB6188F22A
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:17:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B2697160EDE
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:21:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E068320E021;
-	Fri, 10 Jan 2025 13:16:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DCDB920D4FB;
+	Fri, 10 Jan 2025 13:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QF8j2/B4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BDCA20C468;
-	Fri, 10 Jan 2025 13:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7CE4206F14
+	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 13:21:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736515015; cv=none; b=OKlp9gWnTD343IX5LJrbkb6+5/gxYyl9Zm1liLTP6PX/VZrgjA1/ymqQjKiwSjK11Rcaw78Dg/Y/zvGOmbvrubSuJbi8eDdhmNRfemraYYAYtd9bULr39XHIBxtkXty5Xh5Gs9b8OqPJ/Zgr0UWbnWna1Xa7cDIoUCwv5D6ERp0=
+	t=1736515298; cv=none; b=obT7dqjMPDf4jsXV7/Yaz9ILOI1tONPE5KplrqcDu09na8sZVMyemkC3XOqSZl2PfBNfLm4/lkE6i/XLHBk4MlC28VTcQnBxHluStL6gw6Nh3rbBhIsZKKRS11qzZmAc3u21GCiBU8C8aodaFgIWeG9QhyKVvqbgydbhnsYk0gw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736515015; c=relaxed/simple;
-	bh=QR6cDHWgQdjiZwn5qfBNMTvfecgvNmP5xOctGM7XS6g=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lzlMCf15cmXzRIrkAaVM563pnSN10j59OJUvrqTs5+pkymGgrR6u6W6jw/BbfiJJZhz4hpXgXPpUb6IX+Q9VXWNaaAgE+pd6fMxbILNSbgbqT1/90OLyGrcXE4X/D1+3nf5iblpSlOET47p00HECgsYQlJ4JaK6GEoumKcxh/ik=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B847A1477;
-	Fri, 10 Jan 2025 05:17:20 -0800 (PST)
-Received: from [10.57.6.52] (unknown [10.57.6.52])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 6F6BA3F66E;
-	Fri, 10 Jan 2025 05:16:51 -0800 (PST)
-Message-ID: <842b1500-9f4f-47e5-9777-ee89351f956e@arm.com>
-Date: Fri, 10 Jan 2025 13:16:49 +0000
+	s=arc-20240116; t=1736515298; c=relaxed/simple;
+	bh=9RmVsSLSb1+ZA860nuB6hWS3y1joE6pVuKx7tXB+pkg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gY3qsyQENSpz+bbJ5019EgsaTRXA+ITOJT91YP/Qm5fUzBa59IJthc1HMiE16QK6IccO+lGn3AEcoPKEJgAg4f+cSqW06HqKvb0DYf86Sf+BrxfpDYt7KHxBgblb5C9KuW6dxGcRbac+gpFEI8tAX4OwbhQ2EFCwP0D8cd+JtzI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QF8j2/B4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3F8EDC4CEE0
+	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 13:21:38 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736515298;
+	bh=9RmVsSLSb1+ZA860nuB6hWS3y1joE6pVuKx7tXB+pkg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QF8j2/B48v2BWTU54b6fK0olWwZsR3gHAOa3oNEM5NBXI8jmhwWExHArXzresfhmo
+	 lrBrLnj8/0cE4B8V7k7/GTt34EOpvBDsQa7GBU9qgT0cn7l9lwtSb/32ui6/b4TMaI
+	 U7KMGc9G6yJJNsXrZHz6+zPT5SPVhO0TYILq1kC7UYzCCmwRAhHdax4ZGotliwQpRo
+	 9k2okcgjsrqQWQ3bmlhg79NoPlGcOUzeRUXdso6+AEUVcQfBTLjVMRTKDI5gd8raYW
+	 eIsWxanmitcVSIrferqQDbBQuix8TEAuGPgVei4/SkfNFV37QTKJWeDma3Frl08Dd2
+	 FY086IiCl0Uew==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-2a383315d96so992198fac.3
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 05:21:38 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVJz+Mhw9VaIpr8IffMRHBKAJ8IIBb86lNW+C3b7HgL7jfQrzQcLw6pTFF5SJ0jM7gXvB34cSn4nA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLGvE5zutvOXftoHe8vozMVeFxxHclcaLRTM1oEfCG9PmumffH
+	u5eK7ewXqmtaLIYl9OeWXo6GN8W95ZqlHLI0Vlh3U0m/p6lkAgOgQPb/mDHu8a7La7T/cg4dhk7
+	rTcbJfL1OgDsSf1qwmqXZlHMGTaQ=
+X-Google-Smtp-Source: AGHT+IH77mu0HXZRtPSf/w/zox+efdXTKMYgx6WKokQuBxyciQiS2LoK2YTKpi8jhGCkEaBR+ELfysfsxsXcCMjTeLA=
+X-Received: by 2002:a05:6870:ae85:b0:2a3:8280:c23e with SMTP id
+ 586e51a60fabf-2aa06970212mr5305839fac.39.1736515297558; Fri, 10 Jan 2025
+ 05:21:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/4] cpuidle: teo: Add polling flag check to early
- return path
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>,
- Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-References: <4953183.GXAFRqVoOG@rjwysocki.net>
- <13679187.uLZWGnKmhe@rjwysocki.net>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <13679187.uLZWGnKmhe@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <913e9c94-4e3b-4c1e-b626-4f2c64068bd0@amd.com>
+In-Reply-To: <913e9c94-4e3b-4c1e-b626-4f2c64068bd0@amd.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 10 Jan 2025 14:21:26 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g-mVW2PMpcZ4WqrzqUh04WEMfK3A76smGMS9S2XkYoUQ@mail.gmail.com>
+X-Gm-Features: AbW1kvZfcHRfZsx7eQ9DSMZjh5Pkdv-uqsGOUA3ZLXzjjI0fTvOlu4xUygj9QIk
+Message-ID: <CAJZ5v0g-mVW2PMpcZ4WqrzqUh04WEMfK3A76smGMS9S2XkYoUQ@mail.gmail.com>
+Subject: Re: [GIT PULL] amd-pstate-6.14 content 1/7/25
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/10/25 12:53, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> After commit 6da8f9ba5a87 ("cpuidle: teo: Skip tick_nohz_get_sleep_length()
-> call in some cases") the teo governor behaves a bit differently on
-> systems where idle state 0 is a "polling" state (that is, it is not
-> really an idle state, but a loop continuously executed by the CPU).
-> Namely, on such systems it skips the tick_nohz_get_sleep_length() call
-> if the target residency of the current candidate idle state is small
-> enough.
-> 
-> However, if state 0 itself was to be returned, it would be returned
-> right away without calling tick_nohz_get_sleep_length() even on systems
-> where it was not a "polling" state until commit 4b20b07ce72f ("cpuidle:
-> teo: Don't count non-existent intercepts") that attempted to fix this
-> problem.
-> 
-> Unfortunately, commit 4b20b07ce72f has made the governor always call
-> tick_nohz_get_sleep_length() when about to return state 0 early, even
-> if that state is a "polling" one, which is inconsistent and defeats
-> the purpose of commit 6da8f9ba5a87 in that case.
-> 
-> Address this by adding a CPUIDLE_FLAG_POLLING check to the path where
-> state 0 is returned early to prevent tick_nohz_get_sleep_length() from
-> being called if it is a "polling" state.
-> 
-> Fixes: 4b20b07ce72f ("cpuidle: teo: Don't count non-existent intercepts")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/cpuidle/governors/teo.c |    3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -422,7 +422,8 @@
->  			first_suitable_idx = i;
->  		}
->  	}
-> -	if (!idx && prev_intercept_idx) {
-> +	if (!idx && prev_intercept_idx &&
-> +	    !(drv->states[0].flags & CPUIDLE_FLAG_POLLING)) {
->  		/*
->  		 * We have to query the sleep length here otherwise we don't
->  		 * know after wakeup if our guess was correct.
-> 
-> 
-> 
+Hi,
 
-But then you do run into the issue of intercepts not being detected if
-state0 is the right choice, don't you?
-This would then enable intercept-detection only for <50% of the time,
-another option is to not allow intercepts selecting a polling state, but
-there were recent complaints about this exact behavior from Aboorva (+TO).
-They don't have a low-latency non-polling state.
+On Tue, Jan 7, 2025 at 10:37=E2=80=AFPM Mario Limonciello
+<mario.limonciello@amd.com> wrote:
+>
+> Hello,
+>
+> The following changes since commit 95fad7fb58cfaa2a295aa54a1f001a16b93249=
+63:
+>
+>    cpufreq/amd-pstate: Drop boost_state variable (2024-12-11 10:44:53 -06=
+00)
+>
+> are available in the Git repository at:
+>
+>
+> ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git
+> tags/amd-pstate-v6.14-2025-01-07
+>
+> for you to fetch changes up to 857a61c2ce74e30fc3b10bc89d68ddd8d05b188c:
+>
+>    cpufreq/amd-pstate: Refactor max frequency calculation (2025-01-03
+> 23:44:07 -0600)
+>
+> ----------------------------------------------------------------
+> amd-pstate-6.14 content 1/7/25
+>
+> Fix a regression with preferred core rankings not being used.
+> Fix a precision issue with frequency calculation.
+>
+> ----------------------------------------------------------------
+> Mario Limonciello (1):
+>        cpufreq/amd-pstate: Fix prefcore rankings
+>
+> Naresh Solanki (1):
+>        cpufreq/amd-pstate: Refactor max frequency calculation
+>
+>   drivers/cpufreq/amd-pstate.c | 15 +++++----------
+>   1 file changed, 5 insertions(+), 10 deletions(-)
 
-https://lore.kernel.org/lkml/20240809073120.250974-1-aboorvad@linux.ibm.com/
-
-Regards,
-Christian
+Pulled and added to linux-pm.git/linux-next, thanks!
 
