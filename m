@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-20229-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20230-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CB61EA0928E
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:54:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5345BA0929D
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 14:55:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A029D1882875
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:54:18 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54BD0169EA2
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 13:55:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDAD920E70E;
-	Fri, 10 Jan 2025 13:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1872920E71D;
+	Fri, 10 Jan 2025 13:55:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOvaP1he"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HLmE9fAe"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80FC120E719;
-	Fri, 10 Jan 2025 13:54:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D138C20E700;
+	Fri, 10 Jan 2025 13:55:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736517251; cv=none; b=b7f1OO+CP5NJ6ALpgv5dq3/YFz3UuGXq9bbPJAzvBmn7xrXLVT/XWjWqgWI+jUOjoooubEH31gxolO3BORK4WrsoVBUJ9hRacF0gX2eFoNQK1gSBSve2OEIcZa5OsYyaFuqE/WEHZvZRxknPBuUuV1zSMbrwG5ZzHnqiCkks/mk=
+	t=1736517301; cv=none; b=MBabpTKtZjtCj6+fZIrpl4iRqA9BcMAEXmWvwp/K2pErXwQoee6h8TqP+aBB3VjxZehgLo4F2hy7pp4kmhCeNLYbRmDztCTV4xFGsNW0TTckLn4tlXKeTrHBvP0IKLuKEtGhF4EcLoDtfXzYEoPCQGDHvedK4H6BAVdzyNlK71c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736517251; c=relaxed/simple;
-	bh=jEVCuEZV5Gr8pXT1qYg9b6tzkbYnHjzSBCglmFu48nc=;
+	s=arc-20240116; t=1736517301; c=relaxed/simple;
+	bh=GwQHk8tU2zwJEWdTaDa4kpSdyMXUvLt1FJwllRojAgM=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cGkKdBRr6Akp5Z8msDKyPZepnJCE1ZKmczw1g9aQvR3Y0YNvg7tbfdnJhDEQ5ChYg/aqwAs/onFDN+aEGRQImgJ64/ZJ5SavaAyPmayX9yAYHJZXvrlntJ+dbvsZtwBFkvAZtT+AeEOGfCNC8RxcsN4+wzJk3O4cBoKmz0q67eQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOvaP1he; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 921FDC4CED6;
-	Fri, 10 Jan 2025 13:54:01 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=tu9KCsOBIEqv6eUciLh3Cb44uTjWJ0U7pExWLsmgzu/TKQ7h8F1bE64z44dtaZ/EgLRULDTuL3I53gVUIXx2Sj01E35kpvk0jGDqAYX1iIs4LXvVxI7E0nd6tOX66mVvvo6o2kpzhCm8+H/EbLIQuXEYeZ0kGEwGcKgOdYnvVZo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HLmE9fAe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BC042C4CED6;
+	Fri, 10 Jan 2025 13:54:51 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736517251;
-	bh=jEVCuEZV5Gr8pXT1qYg9b6tzkbYnHjzSBCglmFu48nc=;
+	s=k20201202; t=1736517300;
+	bh=GwQHk8tU2zwJEWdTaDa4kpSdyMXUvLt1FJwllRojAgM=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TOvaP1heR4Ub7inpuLtgEwGwSQ9y1fkA0FVa+8VWiaH7mpstEm+NodxZX4p2rqV+8
-	 hVGLu+HrHOPv3Dw6I5QoH7fxzVP96CFx0ysGgCWCCz2VZ7iuQL6FNoIKeHDu+oWrN/
-	 vg4Fa8TFAEy0Yr1lWYQQLjxM7I8iiDwRUkABALDu6gUjmDLY89ORHTE1ouHE41wTrH
-	 RGABTcBwqjrxKihT1ugdZTHSO8iq9RlKCAxSnD/kxXTh4WogbecrMkdJ2H5070TN42
-	 GktNsn1wPo6V7DwW8Ek2n/CN5QraK8D7Z9da0orkvRJ9WKGuGp588JtQf+2Gy8Jive
-	 FOe3yARaYywmw==
-Message-ID: <f3712c29-47b0-42bc-9135-c35a24fafb35@kernel.org>
-Date: Fri, 10 Jan 2025 14:53:59 +0100
+	b=HLmE9fAe9Av6txZNzmMcvTKs1v24fyzSDnMKGs6c0+nfkvNmg6/rl7nNqh9vpwdpp
+	 nMu2r3Q3FY2/0IMNNs36T/stybZg0YIRiZtaW9vnpzT8qqL7splqH5PlQUEFaWfXC5
+	 09WznGMPKnxn5Rt/MZlBklmL8hTxQUlWAXNCIWuMc4HGDDVYg3EDtatOv5MI7Xh2si
+	 6Z5XtlgezD/S5VdsSVoHOBsloygvxakBZJWB7kmM//MPsdZgFnYB3YErtOy4RG1g5q
+	 +csWu9kgJPW+NZOLDZ66lLdtfB2QLDwU+tzaXz4sxq+frZJU6qbtTLcQKEhNqETink
+	 dBNX0y1KorfHA==
+Message-ID: <27fe2d33-dc79-435f-ab1c-467bd121c049@kernel.org>
+Date: Fri, 10 Jan 2025 14:54:49 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 09/12] dt-bindings: power: add V853 ppu bindings
+Subject: Re: [PATCH 07/12] devicetree: bindings: power: add v853 ppu
 To: Andras Szemzo <szemzo.andras@gmail.com>,
  Michael Turquette <mturquette@baylibre.com>, Stephen Boyd
  <sboyd@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -71,7 +71,7 @@ Cc: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I
  linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
  linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
 References: <20250110123923.270626-1-szemzo.andras@gmail.com>
- <20250110123923.270626-10-szemzo.andras@gmail.com>
+ <20250110123923.270626-8-szemzo.andras@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -117,16 +117,21 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250110123923.270626-10-szemzo.andras@gmail.com>
+In-Reply-To: <20250110123923.270626-8-szemzo.andras@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 10/01/2025 13:39, Andras Szemzo wrote:
-> The device-tree needs ppu indexes, add it.
+> Document V853 PPU compatible.
+> 
+> Signed-off-by: Andras Szemzo <szemzo.andras@gmail.com>
+Why different subject prefix?
 
-
-This belongs to the commit introducing binding. Squash it.
-
+Please use subject prefixes matching the subsystem. You can get them for
+example with `git log --oneline -- DIRECTORY_OR_FILE` on the directory
+your patch is touching. For bindings, the preferred subjects are
+explained here:
+https://www.kernel.org/doc/html/latest/devicetree/bindings/submitting-patches.html#i-for-patch-submitters
 
 Best regards,
 Krzysztof
