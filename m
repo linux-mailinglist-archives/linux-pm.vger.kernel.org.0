@@ -1,316 +1,128 @@
-Return-Path: <linux-pm+bounces-20176-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20177-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5F429A08547
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 03:23:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE79BA085B0
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 03:50:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EE7A3188A071
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 02:23:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 926FD188D7BA
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 02:50:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DE6221AA1F6;
-	Fri, 10 Jan 2025 02:23:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1F859157A5C;
+	Fri, 10 Jan 2025 02:50:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Me+ln9vE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D34543FB31;
-	Fri, 10 Jan 2025 02:23:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5785C2C9D
+	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 02:50:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736475788; cv=none; b=Mb8ApWg/zW9lcl3iTwKuo+flF37W+tsLswBVJ37fRcHW/Cj3544p1e2Z5uGCp/aOUOjzpQZA5uKHUDf/D33uFg0KZw0AuHnLpDk3SRjsyBmEU2WUMkZgBds5f+RvKtfca1GWyjrzXTeX2SZtyMtPMdAYPzD8eCLnBVvBe2ftftY=
+	t=1736477430; cv=none; b=G9JtzVbJh0i6Pu3YmqsPjr9JvPTd3ZWcd+AAfxeQ0vObkTQThetJEhVlNlmOEB7H2s8/Amrl5Aas1QT6FViwHYgDbypF7mo+mwFSPZg34boX7lt5oLljGHzu/sOk7WZrs5ZCl6sUvvIsN2+pxgi6MCeU3IZ68d3SEdsuJl0aOCk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736475788; c=relaxed/simple;
-	bh=aiLymV2UWSp3zEcSt82qm9KqxXmYjgxcUtLPnMJOwI8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=rYN8VpESN4coU8Ux5zntPlbHtryhse8fhrVQZQotsNL/+Uh/IEC3WK1jBV7aAIR7sX8zQzDHP8krKrEh+JYcwy3tZvr70eii6VyqxyoYirExz8qJ3M+jHLjYwN/6kefJ/iP9tDBuI6HWD8GNscRYY3TdFNw0ldhNBVq1j4wQWDc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4YTlhk1d8Rz1W3hc;
-	Fri, 10 Jan 2025 10:19:18 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 25DCA18007C;
-	Fri, 10 Jan 2025 10:23:02 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 10 Jan
- 2025 10:23:01 +0800
-Message-ID: <49bd9db5-b05d-4bed-8f9d-10ec087323b5@huawei.com>
-Date: Fri, 10 Jan 2025 10:23:00 +0800
+	s=arc-20240116; t=1736477430; c=relaxed/simple;
+	bh=o66zoOku2bbm9Y4n8pbmOlH8MafPuyTQNf2nN5CW8Ow=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=R5aECCj5aF8QUDquQR9qhguzdyqHzUaKAwtpRoss7Ca1UaRL5hG24IrX3k1WJRlFPHZdjCjVqoQB3HZy0KqiqY/lfxHP9w0Svh1RO5SaEFtEUL9sqATH7n0ppwcRI3/4Nh8CDZwMiNKBE9afcpjk4ejNzlHCHykVL7dDVShVBT8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Me+ln9vE; arc=none smtp.client-ip=209.85.208.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5d0d32cd31aso2083775a12.0
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2025 18:50:28 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1736477426; x=1737082226; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=uVNqVV/ljRSaQFyYY3YrukOxYF3RDkgqKP6rXa2V7Vo=;
+        b=Me+ln9vEzLhmmyaOm7f5UgOfj2xLANAvVWOckJb0GpXwuKHml3DdEeoNBq87A2uyDg
+         8pEO5+ssK0QzOqfRqQYmqgko6v6FoRQDXSF9Kp6gcVBrU+WM9U8O8jcwyfzWFsWTM06f
+         nwlQ6vSsiUI/2GXVG9Wvkt+gRXgVExBXT/O7k=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736477426; x=1737082226;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=uVNqVV/ljRSaQFyYY3YrukOxYF3RDkgqKP6rXa2V7Vo=;
+        b=lTmSfBw96L25WITqNcoftw/vD1prrpPomOshoY73XTzgNNBvNJKJ2DbFUUV2lQ/B9G
+         2x09zU64oJlvh3KoAEHijd/nXzulKPUlxGDco1LcXRSDb0ffOfj6Y/n9gbhVbu9RFt8G
+         nOHRG+oILRlWfeax5S7k9Ky6DUWdfvL0xUENfyVZeuGtAAMxtyWuxxjhbU1WNcfAdevK
+         JFi60KIKDO16pNjU6D6kQt+ipTdJw4JMlM4MShL7DWHSVOSjznBQlBxK/br31k8PJe+x
+         2ZdEXD30V43ylm8S1ga4C0qrxiyMRwT8xwEAVtJ3JNrGZ7i5PKBfZDc9PDw07MXw1Z9K
+         c8jg==
+X-Forwarded-Encrypted: i=1; AJvYcCU0f1ZVo08JjpQyTP9NU0cnJ6jo57O7azQH9fjLoH9pmNCLpZhnM1RmpzyQuT5kMM1XbfA09iqeag==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz3dDP4mMt6jYRGxGmEVH5P5HGxJWuSKKlMHzWXkVm2kIYgRH3R
+	ff8x1fiOUBSSe6OSnBEH/V0v6RisvfFfw7G0QYcLYcgOwTq7C7SMM7aMKgV+cU+ysuaX6C1SGkc
+	mHg==
+X-Gm-Gg: ASbGncu4JoNNZbRwmwGvGkjEthc6DjQoBNlCevCvMWnU0/KNHyAx+K5tHvfAxix8w5A
+	HwjS9ywj54GYZ4Xj4nuslRRDpzXCF8LPpt9DELFCoT94ndyKvoxK25SiHPOJtD3wTqZ9c+6X+JA
+	+VjaVWhwW20TNyZ4DbiKFBDRCzBVkEdWoEJ27yvxvHtpikX+9L9/PprtzfACFxpM8M7ILUGwpBT
+	7HsMGmGpyEYYZXQto5uwzzLdyrbQ6JgE2B2pwq6Yao3XeBrb8I5o9iOTMlJ1Or2xi/wwWmlIPGe
+	9k5DqMoZTQFYg2Lx
+X-Google-Smtp-Source: AGHT+IHiMgGnWFoas8IAJJ/Qlu+elkcqu0v621htkcm1Ie9BanzMPpGAcETMmTl13Jp06TQ/y+B7vg==
+X-Received: by 2002:a05:6402:35ca:b0:5d0:d818:559d with SMTP id 4fb4d7f45d1cf-5d972e0b954mr21895301a12.11.1736477426349;
+        Thu, 09 Jan 2025 18:50:26 -0800 (PST)
+Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com. [209.85.208.43])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c9647711sm125312066b.173.2025.01.09.18.50.24
+        for <linux-pm@vger.kernel.org>
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 09 Jan 2025 18:50:25 -0800 (PST)
+Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5d442f9d285so2244a12.1
+        for <linux-pm@vger.kernel.org>; Thu, 09 Jan 2025 18:50:24 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVRG5GVJ6kB+CibCozf9R7nypcKDOA7AZ3f+ckR4gyCuEroOaDWs7IXiP0cBciDTeziUIjBE9spog==@vger.kernel.org
+X-Received: by 2002:aa7:c850:0:b0:5d0:dfe4:488a with SMTP id
+ 4fb4d7f45d1cf-5d99fb471c5mr38484a12.2.1736477423640; Thu, 09 Jan 2025
+ 18:50:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 1/4] ACPI: CPPC: Add cppc_get_reg_val and
- cppc_set_reg_val function
-To: Pierre Gondois <pierre.gondois@arm.com>, <rafael@kernel.org>,
-	<lenb@kernel.org>, <robert.moore@intel.com>, <viresh.kumar@linaro.org>
-CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>, <ionela.voinescu@arm.com>,
-	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <hepeng68@huawei.com>, <fanghao11@huawei.com>
-References: <20241216091603.1247644-1-zhenglifeng1@huawei.com>
- <20241216091603.1247644-2-zhenglifeng1@huawei.com>
- <8e9c1ede-3277-458b-bd44-ca0c7615a4ab@arm.com>
- <74be38cf-8e18-44fc-995c-a5b734d9df29@huawei.com>
- <a9574bab-3b85-4a33-b465-204687dabc98@arm.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <a9574bab-3b85-4a33-b465-204687dabc98@arm.com>
+References: <20250109125957.v2.1.I4554f931b8da97948f308ecc651b124338ee9603@changeid>
+In-Reply-To: <20250109125957.v2.1.I4554f931b8da97948f308ecc651b124338ee9603@changeid>
+From: Tomasz Figa <tfiga@chromium.org>
+Date: Fri, 10 Jan 2025 11:50:07 +0900
+X-Gmail-Original-Message-ID: <CAAFQd5B30=9TT+ipyWaHdB1XMVagvEAJAw8grdU0Vva8+6JqLA@mail.gmail.com>
+X-Gm-Features: AbW1kvZSRWAITYp68oDvUpBffdUWkQ7pr2zrejir-K6Mze20hNL9eqj-z_7AwHY
+Message-ID: <CAAFQd5B30=9TT+ipyWaHdB1XMVagvEAJAw8grdU0Vva8+6JqLA@mail.gmail.com>
+Subject: Re: [PATCH v2] PM / core: Allow configuring the DPM watchdog to warn
+ earlier than panic
+To: Douglas Anderson <dianders@chromium.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Transfer-Encoding: quoted-printable
 
-Hello Pierre,
+On Fri, Jan 10, 2025 at 6:01=E2=80=AFAM Douglas Anderson <dianders@chromium=
+.org> wrote:
+>
+> Allow configuring the DPM watchdog to warn about slow suspend/resume
+> functions without causing a system panic(). This allows you to set the
+> DPM_WATCHDOG_WARNING_TIMEOUT to something like 5 or 10 seconds to get
+> warnings about slow suspend/resume functions that eventually succeed.
+>
+> Signed-off-by: Douglas Anderson <dianders@chromium.org>
+> ---
+>
+> Changes in v2:
+> - Print the warning at warn level, not emergency level.
+> - Add help text to DPM_WATCHDOG_WARNING_TIMEOUT.
+>
+>  drivers/base/power/main.c | 24 +++++++++++++++++++-----
+>  kernel/power/Kconfig      | 21 ++++++++++++++++++++-
+>  2 files changed, 39 insertions(+), 6 deletions(-)
+>
 
-On 2025/1/8 0:54, Pierre Gondois wrote:
-> Hello Lifeng,
-> 
-> On 12/20/24 09:30, zhenglifeng (A) wrote:
->> On 2024/12/17 21:48, Pierre Gondois wrote:
->>> Hello Lifeng,
->>>
->>> On 12/16/24 10:16, Lifeng Zheng wrote:
->>>> Rename cppc_get_perf() to cppc_get_reg_val() as a generic function to read
->>>> cppc registers, with four changes:
->>>>
->>>> 1. Change the error kind to "no such device" when pcc_ss_id < 0, which
->>>> means that this cpu cannot get a valid pcc_ss_id.
->>>>
->>>> 2. Add a check to verify if the register is a cpc supported one before
->>>> using it.
->>>>
->>>> 3. Extract the operations if register is in pcc out as
->>>> cppc_get_reg_val_in_pcc().
->>>>
->>>> 4. Return the result of cpc_read() instead of 0.
->>>>
->>>> Add cppc_set_reg_val_in_pcc() and cppc_set_reg_val() as generic functions
->>>> for setting cppc registers value. Unlike other set reg ABIs,
->>>> cppc_set_reg_val() checks CPC_SUPPORTED right after getting the register,
->>>> because the rest of the operations are meaningless if this register is not
->>>> a cpc supported one.
->>>>
->>>> These functions can be used to reduce some existing code duplication.
->>>>
->>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
->>>> ---
->>>>    drivers/acpi/cppc_acpi.c | 111 +++++++++++++++++++++++++++++----------
->>>>    1 file changed, 84 insertions(+), 27 deletions(-)
->>>>
->>>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->>>> index c1f3568d0c50..bb5333a503a2 100644
->>>> --- a/drivers/acpi/cppc_acpi.c
->>>> +++ b/drivers/acpi/cppc_acpi.c
->>>> @@ -1179,43 +1179,100 @@ static int cpc_write(int cpu, struct cpc_register_resource *reg_res, u64 val)
->>>>        return ret_val;
->>>>    }
->>>>    -static int cppc_get_perf(int cpunum, enum cppc_regs reg_idx, u64 *perf)
->>>> +static int cppc_get_reg_val_in_pcc(int cpu, struct cpc_register_resource *reg, u64 *val)
->>>>    {
->>>> -    struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
->>>> +    int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
->>>> +    struct cppc_pcc_data *pcc_ss_data = NULL;
->>>> +    int ret;
->>>> +
->>>> +    if (pcc_ss_id < 0) {
->>>> +        pr_debug("Invalid pcc_ss_id\n");
->>>> +        return -ENODEV;
->>>> +    }
->>>> +
->>>> +    pcc_ss_data = pcc_data[pcc_ss_id];
->>>> +
->>>> +    down_write(&pcc_ss_data->pcc_lock);
->>>> +
->>>> +    if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0)
->>>> +        ret = cpc_read(cpu, reg, val);
->>>> +    else
->>>> +        ret = -EIO;
->>>> +
->>>> +    up_write(&pcc_ss_data->pcc_lock);
->>>> +
->>>> +    return ret;
->>>> +}
->>>> +
->>>> +static int cppc_get_reg_val(int cpu, enum cppc_regs reg_idx, u64 *val)
->>>> +{
->>>> +    struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
->>>>        struct cpc_register_resource *reg;
->>>>          if (!cpc_desc) {
->>>> -        pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
->>>> +        pr_debug("No CPC descriptor for CPU:%d\n", cpu);
->>>>            return -ENODEV;
->>>>        }
->>>>          reg = &cpc_desc->cpc_regs[reg_idx];
->>>>    -    if (CPC_IN_PCC(reg)) {
->>>> -        int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpunum);
->>>> -        struct cppc_pcc_data *pcc_ss_data = NULL;
->>>> -        int ret = 0;
->>>> -
->>>> -        if (pcc_ss_id < 0)
->>>> -            return -EIO;
->>>> +    if (!CPC_SUPPORTED(reg)) {
->>>> +        pr_debug("CPC register (reg_idx=%d) is not supported\n", reg_idx);
->>>> +        return -EOPNOTSUPP;
->>>> +    }
->>>
->>> I think this is only valid for optional fields. Meaning that:
->>> - if the function is used one day for the mandatory 'Lowest Performance'
->>> field, an integer value of 0 would be valid.
->>> - if the function is used for a mandatory field containing a NULL Buffer,
->>> it seems we would return -EFAULT currently, through cpc_read(). -EOPNOTSUPP
->>> doesn't seem appropriate as the field would be mandatory.
->>>
->>> Maybe the function needs an additional 'bool optional' input parameter
->>> to do these check conditionally.
->>
->> Indeed, I should have judged the type before doing this check. But adding a
->> input parameter is not a really nice way to me. How about adding a bool
->> list of length MAX_CPC_REG_ENT in cppc_acpi.h to indicate wheter it is
->> optional?
-> 
-> Actually all these functions:
-> - cppc_get_desired_perf
-> - cppc_get_highest_perf
-> - cppc_get_epp_perf
-> - cppc_set_epp
-> - cppc_get_auto_act_window
-> - cppc_set_auto_act_window
+Thanks for addressing my comments.
 
-As you suggest in another patch, the logic should be placed in
-cppc_get_auto_act_window() and some other functions. I'm afraid these
-functions couldn't be implemented with the macros you suggest.
+Reviewed-by: Tomasz Figa <tfiga@chromium.org>
 
-> - cppc_get_auto_sel
-> - cppc_get_nominal_perf
-> 
-> and in general all the functions getting / setting one value at a time could
-> be implemented by macros similars to show_cppc_data(). From what I see the
-> input parameters required are:
-> - name of the field
-> - if the field is mandatory to have or not
-
-If with this parameter, we should put all the cppc_get_reg_val() and
-cppc_set_reg_val() in the macro. This wouldn't look really nice. I
-prefer to use a macro to judge mandatory / optional. I'll show you in
-v4.
-
-> - if the field is writeable
-
-I think we can define a READ macro, a WRITE macro and a RW macro. For
-the registers which are not writeable, only use the READ macro to
-implement getting function.
-
-> - if the field is implemented as an integer, register, or can be both
-
-I don't think this parameter is necessary. The field type can be got
-from cpc_desc->cpc_regs[reg_idx].type.
-
-> 
-> This would avoid having numerous function definitions doing approximately the
-> same thing.
-
-So from what I see the input parameters required are name of the field
-and reg_idx. Thanks for your advice!
-
-> 
->>
->>>
->>>>    -        pcc_ss_data = pcc_data[pcc_ss_id];
->>>> +    if (CPC_IN_PCC(reg))
->>>> +        return cppc_get_reg_val_in_pcc(cpu, reg, val);
->>>>    -        down_write(&pcc_ss_data->pcc_lock);
->>>> +    return cpc_read(cpu, reg, val);
->>>> +}
->>>>    -        if (send_pcc_cmd(pcc_ss_id, CMD_READ) >= 0)
->>>> -            cpc_read(cpunum, reg, perf);
->>>> -        else
->>>> -            ret = -EIO;
->>>> +static int cppc_set_reg_val_in_pcc(int cpu, struct cpc_register_resource *reg, u64 val)
->>>> +{
->>>> +    int pcc_ss_id = per_cpu(cpu_pcc_subspace_idx, cpu);
->>>> +    struct cppc_pcc_data *pcc_ss_data = NULL;
->>>> +    int ret;
->>>>    -        up_write(&pcc_ss_data->pcc_lock);
->>>> +    if (pcc_ss_id < 0) {
->>>> +        pr_debug("Invalid pcc_ss_id\n");
->>>> +        return -ENODEV;
->>>> +    }
->>>>    +    ret = cpc_write(cpu, reg, val);
->>>> +    if (ret)
->>>>            return ret;
->>>> +
->>>> +    pcc_ss_data = pcc_data[pcc_ss_id];
->>>> +
->>>> +    down_write(&pcc_ss_data->pcc_lock);
->>>> +    /* after writing CPC, transfer the ownership of PCC to platform */
->>>> +    ret = send_pcc_cmd(pcc_ss_id, CMD_WRITE);
->>>> +    up_write(&pcc_ss_data->pcc_lock);
->>>> +
->>>> +    return ret;
->>>> +}
->>>> +
->>>> +static int cppc_set_reg_val(int cpu, enum cppc_regs reg_idx, u64 val)
->>>> +{
->>>> +    struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpu);
->>>> +    struct cpc_register_resource *reg;
->>>> +
->>>> +    if (!cpc_desc) {
->>>> +        pr_debug("No CPC descriptor for CPU:%d\n", cpu);
->>>> +        return -ENODEV;
->>>>        }
->>>>    -    cpc_read(cpunum, reg, perf);
->>>> +    reg = &cpc_desc->cpc_regs[reg_idx];
->>>>    -    return 0;
->>>> +    if (!CPC_SUPPORTED(reg)) {
->>>> +        pr_debug("CPC register (reg_idx=%d) is not supported\n", reg_idx);
->>>> +        return -EOPNOTSUPP;
->>>> +    }
->>>
->>> Similarly to cppc_get_reg_val(), if a field is:
->>> - mandatory + integer: currently doesn't exist. Not sure we should
->>> try to detect that, but might be safer.
->>> - mandatory + buffer: should not return -EOPNOTSUPP I think
->>> - optional + integer: e.g.: 'Autonomous Selection Enable Register',
->>> we should return -EOPNOTSUPP. It seems that currently, if the integer
->>> value is 1, I get a 'write error: Bad address'
->>> - optional + buffer:
->>> should effectively return -EOPNOTSUPP if the buffer is NULL.
->>
->> Actually, cpc_write() doesn't check field type and treats the field as a
->> buffer. That's why you get 'Bad address' error when the integer value is 1.
->> I think the existing code needs to be improved, otherwise there may be
->> unexpected problems.
->>
->> Do you mean we should return -EOPNOTSUPP no matter what to be written if
->> this field is a optional + integer one?
-> 
-> Yes exact
-> 
->> And what about a mandatory +
->> integer one. Should we directly write the int_value?
-> 
-> I don't think it is possible to have this. Indeed, if a value is writeable,
-> it must be a register, so mandatory + integer should not exist. I suggested
-> a check in case someone made a mistake, but it is not sure the check is actually
-> necessary.
-
-Yeah, I think it's better to have this check, too.
-
-Regards,
-Lifeng
-
-> 
-> Regards,
-> Pierre
-> 
-
+Best regards,
+Tomasz
 
