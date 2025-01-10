@@ -1,96 +1,130 @@
-Return-Path: <linux-pm+bounces-20189-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20190-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 209B4A08B53
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 10:20:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E867A08B5E
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 10:21:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EFE2F1883F5D
-	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 09:20:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2293161810
+	for <lists+linux-pm@lfdr.de>; Fri, 10 Jan 2025 09:21:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6865B20A5E8;
-	Fri, 10 Jan 2025 09:18:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CDB0F20B1E8;
+	Fri, 10 Jan 2025 09:18:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b="j4V8SYHd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f47.google.com (mail-pj1-f47.google.com [209.85.216.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A99020A5E2;
-	Fri, 10 Jan 2025 09:18:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 330E420B1E4
+	for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 09:18:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736500685; cv=none; b=Z6Roqu/WCbBynDja6qXCRdlcM8tYxX3JdrP3hnFzKCYS+pt6QlRaozNYdTBBaOAnAXyK+VjfD2l1EFUN07G/DAbdMaeRB89nsX6x1pBEF2o6Ml/w5u0qgcM6MaBfDmrRi6oV0MOLjjNC2sODrjTQX1LNCeR8+9nGEijmDxharrM=
+	t=1736500693; cv=none; b=imy3B5OBifhgI1TUHPcVS12yQ2V0sv/wBdEMZbv/oNd+4W3yQebGM50d+9LD4Uzj6eSeyqSF33AvpLCLoSCAn+7SNmptjR5pZ2ArRhSSZqnU7PSQ5UmJHHGzYe/6WlvxeOtv42RgD92eYgWXzYS2V01NQ3GKV0TYQ7dPrWJ3O98=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736500685; c=relaxed/simple;
-	bh=VpNo6XlsDOzef8ZX9W7kPIruU0R3nXNQaQFzRgI+Rzc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=gDjDBqu4rS6navXYRhTRjVPO1EFhXJEGaC2U1J2jgmP4L5n5KpdOaPZLfwwu2s1RFVZ1+AlsZbgVOiWjH6k1Dkpb91mH4zGIE9nC1/g2uOYNr78kFCuu8R8mq+l2iJYvuggncfLZQtuRUb18qerB4dXnzgIekf5wxQb4MrSpD98=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4YTwwB0bZBz1V4Nr;
-	Fri, 10 Jan 2025 17:14:50 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 865EA1401F4;
-	Fri, 10 Jan 2025 17:17:54 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Fri, 10 Jan
- 2025 17:17:53 +0800
-Message-ID: <ac5af09b-c5a2-47e7-a1a3-9e2d67468906@huawei.com>
-Date: Fri, 10 Jan 2025 17:17:53 +0800
+	s=arc-20240116; t=1736500693; c=relaxed/simple;
+	bh=hNBZxj+ad9sHLm9gjWHtUvBF9UX/L8mW6UuvNNyLd5I=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sMpmGI1Cynzy3Kn6Ybz5Z3gtMb58kxqdIOneQONbPwu6WbxgvBif44n3Ia3afzDAS44aMD1ueNaBGQNljP7vKbCltglKunfZUGcGa7ZvcxC6O7PHDjtTwnqYX6Ui8+FVrq7WbrFTnTCYXLH+jPxANTeFnyYhEKw2euq0FHlf7hc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com; spf=pass smtp.mailfrom=ventanamicro.com; dkim=pass (2048-bit key) header.d=ventanamicro.com header.i=@ventanamicro.com header.b=j4V8SYHd; arc=none smtp.client-ip=209.85.216.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ventanamicro.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ventanamicro.com
+Received: by mail-pj1-f47.google.com with SMTP id 98e67ed59e1d1-2f43d17b0e3so3238365a91.0
+        for <linux-pm@vger.kernel.org>; Fri, 10 Jan 2025 01:18:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=ventanamicro.com; s=google; t=1736500691; x=1737105491; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=py3EM8lNbnLNrhq2yNBY3NFtPh/A/mkth7ZekvKlJJw=;
+        b=j4V8SYHdPp97upXRy/Pn2zf/zlRKwCJX5OPB4WBS8NyOad4Uv0bWzmDDlhYT5uPzys
+         WOeviq09UugEtifkCs0tJ+SsAGf4n0BCH4hUp8NWpz11jHcyETSpDWBvjd150tyBd5+q
+         xiWyP7ejO1A1ZMSfPyhGbsMLBC+tH770t/5Xu4a5FJ5dr39eEcvS91XO/KqS4OfN1sBk
+         jtbOHW4uyxL7N0V3iA0/x2jldtchLQewSpcrsatlvjFwvAOe20HyY54ypiceRBgC1C87
+         BLTPmduQIzQnH7dxFzpzUIUavXmF9b7WK2kFrBzA7i+O2YGWP/dRG21skPe/RJWF7gSC
+         xJbQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736500691; x=1737105491;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=py3EM8lNbnLNrhq2yNBY3NFtPh/A/mkth7ZekvKlJJw=;
+        b=S9xpm6cpctWGL0tkj3170FlDvay5gVxAEdXtRy/5yDJoiRMxIcgPLjZoMGfwP4m/L7
+         1uIUYFhENiluNZo1KUETy/Yz7LOhHFQsFOf8JBZ0dfQPXWgALNfnE9l0tORJF33o29l9
+         nkpYnbTpwTPTW3DKcDgqDrtuo46vVD8ZeFbO33B9BBW4uOnwOc+VJ1xfeTQBe4U+HVx5
+         ftaY7WLrYGCbeEdaRunrLbze4yqUDqnPu2hkKFSkGrE7tyjIHkpvtDgGBfGwtXUBB0rM
+         EkPiMYXu+/m74Jrf06yqmbDJ3qcrMsbbAnqfg7a/T0hdcHUDvZtoMJhWfMD30SWz917G
+         lMOA==
+X-Forwarded-Encrypted: i=1; AJvYcCW9T8gECMdW6U1hjrLU5c1PjfvgMxph7XInheSksdHv3wc348lXDkxSGr+N6PRrDCa4M2/2204NvQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKZv4fdTJhmQe9nQ1ZlVAVCTq9YBNh0BYXzDklXvMRL01nJ2MQ
+	J8C83WWetj+fh81qaJ4s2lPaHjkhMPhdCY72cp06Poz9DhKgXjdl6ztfvGDNcWQ=
+X-Gm-Gg: ASbGnctC61hCSW/ZGfFhCCunXNzr0b5Mo30SPxQYqIb1ouvqRXiEO/7kgxkfLMjjE82
+	wgaJeW/cuMChod2nQXjSooEQxkcH8i95fal8BumuvPYb0kgmJhO7I5xRc58EQotD69p+Y5VDmk9
+	ll6+ZVftUnuRZUt+n/J4CecalssY5F3AoQEQjlvMytzukP6cem14mySmvAWF8qd0Bht9Jtjg5Ml
+	oxIC4v1/XBkhAGHXiT2FlNgDYhwrNMh7hpSCvcg5UI9bPlfnk49mkVVV3Oz/ykj
+X-Google-Smtp-Source: AGHT+IHtZxzlARbcjSnKtAptD/fYrETaeyk6lZ4ak/9c+R0h45SFgp58K8OMrXoW049gIOQyZ3PYQg==
+X-Received: by 2002:a17:90b:274b:b0:2ee:b4d4:69 with SMTP id 98e67ed59e1d1-2f5490eed37mr14549632a91.35.1736500691463;
+        Fri, 10 Jan 2025 01:18:11 -0800 (PST)
+Received: from sunil-laptop ([103.97.166.196])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f259fb5sm10154435ad.239.2025.01.10.01.18.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 10 Jan 2025 01:18:10 -0800 (PST)
+Date: Fri, 10 Jan 2025 14:48:03 +0530
+From: Sunil V L <sunilvl@ventanamicro.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Palmer Dabbelt <palmer@rivosinc.com>,
+	Pierre Gondois <pierre.gondois@arm.com>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: Move endif to the end of Kconfig file
+Message-ID: <Z4Dly1L9UXzpeMrc@sunil-laptop>
+References: <84ac7a8fa72a8fe20487bb0a350a758bce060965.1736488384.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] [PATCH] cpufreq/amd-pstate: Fix per-policy boost flag
- incorrect when fail
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>,
-	<mario.limonciello@amd.com>, <perry.yuan@amd.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <fanghao11@huawei.com>
-References: <20250110091218.3530092-1-zhenglifeng1@huawei.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <20250110091218.3530092-1-zhenglifeng1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <84ac7a8fa72a8fe20487bb0a350a758bce060965.1736488384.git.viresh.kumar@linaro.org>
 
-On 2025/1/10 17:12, Lifeng Zheng wrote:
-> Commit c8c68c38b56f ("cpufreq: amd-pstate: initialize core precision
-> boost state") sets per-policy boost flag to false when boost fail.
-> However, this boost flag will be set to reverse value in
-> store_local_boost() and cpufreq_boost_trigger_state() in cpufreq.c. This
-> will cause the per-policy boost flag set to true when fail to set boost.
-> Remove the extra assignment in amd_pstate_set_boost() and keep all
-> operations on per-policy boost flag outside of set_boost() to fix this
-> problem.
+On Fri, Jan 10, 2025 at 11:23:10AM +0530, Viresh Kumar wrote:
+> It is possible to enable few cpufreq drivers, without the framework
+> being enabled. This happened due to a bug while moving the entries
+> earlier. Fix it.
 > 
-> Fixes: c8c68c38b56f ("cpufreq: amd-pstate: initialize core precision boost state")
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> Fixes: 7ee1378736f0 ("cpufreq: Move CPPC configs to common Kconfig and add RISC-V")
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  drivers/cpufreq/amd-pstate.c | 1 -
->  1 file changed, 1 deletion(-)
+>  drivers/cpufreq/Kconfig | 4 ++--
+>  1 file changed, 2 insertions(+), 2 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index d7b1de97727a..a2573393ce30 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -747,7 +747,6 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
->  	guard(mutex)(&amd_pstate_driver_lock);
+> diff --git a/drivers/cpufreq/Kconfig b/drivers/cpufreq/Kconfig
+> index ea9afdc119fb..d64b07ec48e5 100644
+> --- a/drivers/cpufreq/Kconfig
+> +++ b/drivers/cpufreq/Kconfig
+> @@ -325,8 +325,6 @@ config QORIQ_CPUFREQ
+>  	  This adds the CPUFreq driver support for Freescale QorIQ SoCs
+>  	  which are capable of changing the CPU's frequency dynamically.
 >  
->  	ret = amd_pstate_cpu_boost_update(policy, state);
-> -	policy->boost_enabled = !ret ? state : false;
->  	refresh_frequency_limits(policy);
+> -endif
+> -
+>  config ACPI_CPPC_CPUFREQ
+>  	tristate "CPUFreq driver based on the ACPI CPPC spec"
+>  	depends on ACPI_PROCESSOR
+> @@ -355,4 +353,6 @@ config ACPI_CPPC_CPUFREQ_FIE
 >  
->  	return ret;
+>  	  If in doubt, say N.
+>  
+> +endif
+> +
+>  endmenu
+Thanks! Viresh for fixing this.
 
-Got some mistakes, I'll resent another one. Sorry.😭
+Reviewed-by: Sunil V L <sunilvl@ventanamicro.com>
+
 
