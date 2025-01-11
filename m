@@ -1,144 +1,162 @@
-Return-Path: <linux-pm+bounces-20278-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20279-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DEEB1A0A564
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Jan 2025 19:54:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10A75A0A604
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Jan 2025 21:58:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C91A61886B59
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Jan 2025 18:54:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 02AB13A9255
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Jan 2025 20:58:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A470C1B5823;
-	Sat, 11 Jan 2025 18:54:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 814211B87E7;
+	Sat, 11 Jan 2025 20:58:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sFq2xh4N"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gX3bwQVN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD1441B4237
-	for <linux-pm@vger.kernel.org>; Sat, 11 Jan 2025 18:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4419E1B86D5;
+	Sat, 11 Jan 2025 20:58:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736621643; cv=none; b=Kz3eF+axwjykId0QFCLhZSbINFDnfvOg1PX0jiX5zVRqel9I6gitbcHyTkfi+6tuBEUBhY5YoalCoWv0IGhQT1rsNjU6xVAD0ZT1Ojo/K0qLK9FsHxrHSOOaYX+TKvAmLih5CrYjgAbVSFqiindfHqJgeh3qHcPog00uEPENSo0=
+	t=1736629081; cv=none; b=d6CllpdiMj4JgH/7Ka5IF3V+u9taJKpG9ELERF6Nbo6JqwmRaNgfrW8mTD7OiA42mdmL79JhX66kK4levuqszQiuXjxOR6ccl+Tef4P3EH0At1UEskVScZT/+tfU68hryVE66VY8Z/I9hGrb9htA3Z+SNXN38MvFcPP7GtgOm4w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736621643; c=relaxed/simple;
-	bh=VMkFXdlKupe/Vo0hC58uh8Q1V7VfPokQohZNH9TpUMY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eUz9Fu9U7zJ4DKV7pOGDThE+XsMzRF/y1wsHy6/BBgimfBgkqsQopezxEHdOEltOFKKZXlDVlQDIms17HdlMZcY8lcnVh6QN/qiyObPT5d5ncfLR6Jjcrk2L/w7m3drk7fRRtidfNsUdhZD50RGg/NSz1MDLyxGKI12cRNPGEL8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sFq2xh4N; arc=none smtp.client-ip=209.85.128.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-436284cdbe0so4361205e9.3
-        for <linux-pm@vger.kernel.org>; Sat, 11 Jan 2025 10:54:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736621640; x=1737226440; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=uUbuynTw3nLmo+iUBj5GAwH3abxm4CzEksjMH3G3tPI=;
-        b=sFq2xh4NfPBzySI6UmVvCT/N/FfNlP69CWqaUcRRIjGYq3BpMKL1DUNHk2rOmmbfVS
-         iPqTbOQR32ltgCwXx6kW2yNtVCVw1Og0NXHGFF7lzd/N/7yYKx4yAfcikXD5F7dh62es
-         LvJA3BIh8FHkpqvn0Eo7cyvsUD5UxpuKrbmo73HexGqjN7etJsuKWoU0v4IgeeFkQ0aG
-         k5rNXfD0zCQABSXBqvqFlPErQkYj69LppN8c6YVXii0sH3CTtYb8lXlvplhls0xeq6Z2
-         u3paQN3I/Jr5LlQfvprZv/bwVficRsSMIcIm5ku79c6vJ8H+cLLO3RzasmwNALRctYaw
-         6E7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736621640; x=1737226440;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=uUbuynTw3nLmo+iUBj5GAwH3abxm4CzEksjMH3G3tPI=;
-        b=AnRM6h63W1f2Uw2GzZPLQRjV1cUdQ2Gn59XXgvWwT/QmIJ4vxWaCh++Ih02ryc83XI
-         +OmUo04mRD0tdI++2Y+M3h9pYS0BG5wcxjvem4vwYqz5A2g/rTWUCItaRvcT+Jdwl9Zl
-         DC6k43taPlwjSMmJLsgWx8Qcyf1004m/JBDEQ9Ucv9XlUeeaIhrnBZotHqiavVrXzA3V
-         xIcKZX4tmKqHj7ZL+qFnaz8YJqlOJrnw7kA9MGceA58zMxrQpNTMbP5abDdbbeVTwSTd
-         5byBWSgII6DMaWtQcM+phJGV9pyrHaXaM497aqPExtukZZn//Q9JVh4LV/bTX19RHeut
-         /J8A==
-X-Forwarded-Encrypted: i=1; AJvYcCX87SC9+Ejk2iZEDDn+vj7isaWxDMmBh/gKy9pHXL/d1U9/0E/erBATmfZ2YQKKWf9ECrX5IefPyA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWRKwOJz0BLlFixluBunWUInnD4pBXW525xBgd6AEdoICCVQRt
-	A5XxTMOdCKESj2Z/BqtCI3qMnSfB3UeojAgu2SkLK/GmJM7m293YHX1FTokQYoc0KLmkfhaib57
-	X
-X-Gm-Gg: ASbGncvqD1zzkEwA+ZLe1L26hEbhuSKFgOHYX/D1A1KyBHc4qNLV9J7kNYtnGOnn/IC
-	dZjTHZFEL2p6X2AZjqw/YHE/1SPCLHaJVFHka5CB9tHNBsGvIF6BvoxXmUVEdGv9Epj4MWfiAh/
-	8zvtkd3fHxjpLXJCiQF+UeaNuDnUXxUNmEVuRL4wEwCvQuFWY0/E33m4QA2p4O0t0rBOXXtGW9W
-	B5lqUj3pZ5VfHx+a0Q4R5RXLp4GcFhlpV13uLhSInrnAWqByuz+qIQ/oGtuaTZbWGMAbas=
-X-Google-Smtp-Source: AGHT+IGSOdbn08to4HCodxQ0MZs8k5PRpq0ooeuMQ+MMYxq7yNQNNfpQaPmt1mVKzJPEYYulnOOrnw==
-X-Received: by 2002:a5d:64e9:0:b0:385:f79d:21a2 with SMTP id ffacd0b85a97d-38a87308a22mr5127018f8f.11.1736621640071;
-        Sat, 11 Jan 2025 10:54:00 -0800 (PST)
-Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4b7f79sm7972351f8f.69.2025.01.11.10.53.59
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 11 Jan 2025 10:53:59 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Santosh Shilimkar <ssantosh@kernel.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] reset: keystone: Use syscon_regmap_lookup_by_phandle_args
-Date: Sat, 11 Jan 2025 19:53:58 +0100
-Message-ID: <20250111185358.183725-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1736629081; c=relaxed/simple;
+	bh=rZlrw1MdH6lT8XSO9uN3ijndrX0n6Szo2E+ewjmusds=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=PaZcRqN3dLniZNJvZXxL4bLsSoJkSVhudbHR+AFx9IvmJNvd3iSBL1/ZHicwbjnqqBy8EcHqYvCFMt21tHtFDvStgjxyMye90RJoGtGQ0GYy3svpPiU49H+XRs7gI4aGw7HGbSUFcf7DAktcABACAryBMIhlyRyGMPuNRz3Lhr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gX3bwQVN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7D9DFC4CEDF;
+	Sat, 11 Jan 2025 20:57:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736629080;
+	bh=rZlrw1MdH6lT8XSO9uN3ijndrX0n6Szo2E+ewjmusds=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=gX3bwQVNl3E/1qKRxzxPkJlmeYY1s+/Jb0+cxDa+EXiuK2dFpWgv/DsnRkxh3kLge
+	 ZuU/BnQgf7fUAZIYQeMNMTrhbb1gO5ioqTyE9SUMiUIJUnD5wp/mY+p1whA73mQHaK
+	 jNtVwpwsSd/09U3ZN+WNQ5daMz0DRO9rMi1rOfnOG7Z4ru44/RXQ+jvnKR6q+FgoZk
+	 wPQ4yQkfyeerWgFOmryCeV+xhgwh525IgAA7RycHyItPHtswJzBLpputMZsKRrOW8R
+	 QSOmBYnF4no5EsF/GHI8BiV1XboXJ2+kLtknFwlE+XgLmT/a6Cby/4bdl8kSmn5ojD
+	 O/8H2mPGeXIvA==
+Date: Sat, 11 Jan 2025 14:57:57 -0600
+From: Bjorn Andersson <andersson@kernel.org>
+To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Odelu Kukatla <quic_okukatla@quicinc.com>, 
+	Mike Tipton <mdptipton@quicinc.com>, Vivek Aknurwar <viveka@quicinc.com>, 
+	Sibi Sankar <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V7 1/5] interconnect: core: Add dynamic id allocation
+ support
+Message-ID: <pu3s3fjkt2663wce2632s25oys56wkhsc22lcc5ydepfc4pbll@n73ouprb25zj>
+References: <20250111161429.51-1-quic_rlaggysh@quicinc.com>
+ <20250111161429.51-2-quic_rlaggysh@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250111161429.51-2-quic_rlaggysh@quicinc.com>
 
-Use syscon_regmap_lookup_by_phandle_args() which is a wrapper over
-syscon_regmap_lookup_by_phandle() combined with getting the syscon
-argument.  Except simpler code this annotates within one line that given
-phandle has arguments, so grepping for code would be easier.
+On Sat, Jan 11, 2025 at 04:14:25PM +0000, Raviteja Laggyshetty wrote:
+> Current interconnect framework is based on static IDs for creating node
+> and registering with framework. This becomes a limitation for topologies
+> where there are multiple instances of same interconnect provider. Add
+> icc_node_create_alloc_id() API to create icc node with dynamic id, this
+> will help to overcome the dependency on static IDs.
+> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> ---
+>  drivers/interconnect/core.c           | 32 +++++++++++++++++++++++++++
+>  include/linux/interconnect-provider.h |  6 +++++
+>  2 files changed, 38 insertions(+)
+> 
+> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+> index 9d5404a07e8a..0b7093eb51af 100644
+> --- a/drivers/interconnect/core.c
+> +++ b/drivers/interconnect/core.c
+> @@ -858,6 +858,38 @@ struct icc_node *icc_node_create(int id)
+>  }
+>  EXPORT_SYMBOL_GPL(icc_node_create);
+>  
+> +/**
+> + * icc_node_create_alloc_id() - create node and dynamically allocate id
+> + * @start_id: min id to be allocated
+> + *
+> + * Return: icc_node pointer on success, or ERR_PTR() on error
+> + */
+> +struct icc_node *icc_node_create_alloc_id(int start_id)
 
-There is also no real benefit in printing errors on missing syscon
-argument, because this is done just too late: runtime check on
-static/build-time data.  Dtschema and Devicetree bindings offer the
-static/build-time check for this already.
+By having clients pass in start_id, you distribute the decision of what
+a "good number" is across multiple parts of the system (or you have
+clients relying on getting [start_id, start_id + N) back).
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/power/reset/keystone-reset.c | 18 ++++--------------
- 1 file changed, 4 insertions(+), 14 deletions(-)
+Wouldn't it be better to hide that choice in one place (inside the icc
+framework)?
 
-diff --git a/drivers/power/reset/keystone-reset.c b/drivers/power/reset/keystone-reset.c
-index cfaa54ced0d0..d9268d150e1f 100644
---- a/drivers/power/reset/keystone-reset.c
-+++ b/drivers/power/reset/keystone-reset.c
-@@ -87,26 +87,16 @@ static int rsctrl_probe(struct platform_device *pdev)
- 		return -ENODEV;
- 
- 	/* get regmaps */
--	pllctrl_regs = syscon_regmap_lookup_by_phandle(np, "ti,syscon-pll");
-+	pllctrl_regs = syscon_regmap_lookup_by_phandle_args(np, "ti,syscon-pll",
-+							    1, &rspll_offset);
- 	if (IS_ERR(pllctrl_regs))
- 		return PTR_ERR(pllctrl_regs);
- 
--	devctrl_regs = syscon_regmap_lookup_by_phandle(np, "ti,syscon-dev");
-+	devctrl_regs = syscon_regmap_lookup_by_phandle_args(np, "ti,syscon-dev",
-+							    1, &rsmux_offset);
- 	if (IS_ERR(devctrl_regs))
- 		return PTR_ERR(devctrl_regs);
- 
--	ret = of_property_read_u32_index(np, "ti,syscon-pll", 1, &rspll_offset);
--	if (ret) {
--		dev_err(dev, "couldn't read the reset pll offset!\n");
--		return -EINVAL;
--	}
--
--	ret = of_property_read_u32_index(np, "ti,syscon-dev", 1, &rsmux_offset);
--	if (ret) {
--		dev_err(dev, "couldn't read the rsmux offset!\n");
--		return -EINVAL;
--	}
--
- 	/* set soft/hard reset */
- 	val = of_property_read_bool(np, "ti,soft-reset");
- 	val = val ? RSCFG_RSTYPE_SOFT : RSCFG_RSTYPE_HARD;
--- 
-2.43.0
+Regards,
+Bjorn
 
+> +{
+> +	struct icc_node *node;
+> +	int id;
+> +
+> +	mutex_lock(&icc_lock);
+> +
+> +	node = kzalloc(sizeof(*node), GFP_KERNEL);
+> +	if (!node)
+> +		return ERR_PTR(-ENOMEM);
+> +
+> +	id = idr_alloc(&icc_idr, node, start_id, 0, GFP_KERNEL);
+> +	if (id < 0) {
+> +		WARN(1, "%s: couldn't get idr\n", __func__);
+> +		kfree(node);
+> +		node = ERR_PTR(id);
+> +		goto out;
+> +	}
+> +	node->id = id;
+> +out:
+> +	mutex_unlock(&icc_lock);
+> +
+> +	return node;
+> +}
+> +EXPORT_SYMBOL_GPL(icc_node_create_alloc_id);
+> +
+>  /**
+>   * icc_node_destroy() - destroy a node
+>   * @id: node id
+> diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
+> index f5aef8784692..4fc7a5884374 100644
+> --- a/include/linux/interconnect-provider.h
+> +++ b/include/linux/interconnect-provider.h
+> @@ -117,6 +117,7 @@ struct icc_node {
+>  int icc_std_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
+>  		      u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
+>  struct icc_node *icc_node_create(int id);
+> +struct icc_node *icc_node_create_alloc_id(int start_id);
+>  void icc_node_destroy(int id);
+>  int icc_link_create(struct icc_node *node, const int dst_id);
+>  void icc_node_add(struct icc_node *node, struct icc_provider *provider);
+> @@ -141,6 +142,11 @@ static inline struct icc_node *icc_node_create(int id)
+>  	return ERR_PTR(-ENOTSUPP);
+>  }
+>  
+> +static inline struct icc_node *icc_node_create_alloc_id(int start_id)
+> +{
+> +	return ERR_PTR(-EOPNOTSUPP);
+> +}
+> +
+>  static inline void icc_node_destroy(int id)
+>  {
+>  }
+> -- 
+> 2.39.2
+> 
 
