@@ -1,79 +1,94 @@
-Return-Path: <linux-pm+bounces-20262-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20263-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 419F3A0A022
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Jan 2025 02:36:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CD881A0A146
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Jan 2025 07:31:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 34E167A343B
-	for <lists+linux-pm@lfdr.de>; Sat, 11 Jan 2025 01:36:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9465316B52E
+	for <lists+linux-pm@lfdr.de>; Sat, 11 Jan 2025 06:31:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C047713D503;
-	Sat, 11 Jan 2025 01:25:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 800081547E7;
+	Sat, 11 Jan 2025 06:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aFhPYxU3"
+	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="0OkLkrcw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bombadil.infradead.org (bombadil.infradead.org [198.137.202.133])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9158B13C8FF;
-	Sat, 11 Jan 2025 01:25:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECDB014F9E2;
+	Sat, 11 Jan 2025 06:31:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.137.202.133
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736558756; cv=none; b=k9NIuI9Xy4UWbzr/hgptyvBVLtvxWtYB0MXVS5VanhjV+dF4n3DhabV/W/m0WHVNgMNDjkz+WkTWQIk+xw9HZ2KR+81Qfk0V0OiyQTMQx9D5vTMloXIA9VEv9lg4yWyiVg6H1MXM+Jy2+e5KfSdsq6Yor2XxlXUJj3SpcBBVDu4=
+	t=1736577071; cv=none; b=qzs6PtauR+J8sNdSIV6jiK7OjUo/7kPHjLzBy2O6SIJFz8jh/LJqp0LfHt5XMk0DjSoJcjwOJOAsVxvmz6KRMYyiWP/u80wkEtTUjPwd3UIIt8zPrGxhbP2wYdafHEA3nc04uUydPfs4qYl6bAIe4jDFqCHlFU0qTioXj4AONlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736558756; c=relaxed/simple;
-	bh=H2BeacE5Yy7sRrfRoMKztkgS05r85ZiWdQQDuQFYhRU=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=PURmQDUOJTInM4D6sfu16/J5C5J67fDAzknmJftqMLKehJ/A7hKJmiRVYjZYaa4rEtF4qlX8xkq2zrDA0VvbX/54acX0u4N78IofVq2e9rMlmU1Lm7I1ibAIZI7K7gQJrGjsMLi/7QnD80/Ze98gVcNJOPPz/4fQZDV5NSX5gEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aFhPYxU3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 730E0C4CED6;
-	Sat, 11 Jan 2025 01:25:56 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736558756;
-	bh=H2BeacE5Yy7sRrfRoMKztkgS05r85ZiWdQQDuQFYhRU=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=aFhPYxU3zO8sqPh6arIRTXg3itaySkGXyGLV7UsxZbq6/BuA1US2haPxK+J/YplHD
-	 e/amo0kOjl4MYZb88X+uHTXSHgWJd//E5a2VokTS+ssf25W4WX7q51BLJtggTiawFj
-	 gJm1g5IAcosNjzv6D2vTpx2rTXDgVrDWKMR2ArsFfolCeiOW/CSPaeI0PNCOUdwr4o
-	 9QMHupbaDvNuPQiI9JFj92xJl/WEaph+3MKM0H4RRLKR/pnpvYlmV5FZQhxRf/RFjv
-	 yZsX6XQ3xGMDGAoO/1xYS/pcFYOXl0csfgiBGIHyU8jUwtlURPd6kdOK+OJ8ZffeBJ
-	 ZvzyNoD9g4siA==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id ADEF0380AA57;
-	Sat, 11 Jan 2025 01:26:19 +0000 (UTC)
-Subject: Re: [GIT PULL] Thermal control fix for v6.13-rc7
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAJZ5v0jyAYdA9mJTftkVcDH1OKNEky82s4UAA4A7ODWHHQ3K9Q@mail.gmail.com>
-References: <CAJZ5v0jyAYdA9mJTftkVcDH1OKNEky82s4UAA4A7ODWHHQ3K9Q@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJZ5v0jyAYdA9mJTftkVcDH1OKNEky82s4UAA4A7ODWHHQ3K9Q@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.13-rc7
-X-PR-Tracked-Commit-Id: 9164e0912af206a72ddac4915f7784e470a04ace
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: da13af839228cc3ec51d9caabea9c0b411dc464a
-Message-Id: <173655877819.2259020.13894736945385047311.pr-tracker-bot@kernel.org>
-Date: Sat, 11 Jan 2025 01:26:18 +0000
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+	s=arc-20240116; t=1736577071; c=relaxed/simple;
+	bh=VCZQ5q/WHmwfCQG3NNy+362FBTnxtBZA/OMCUYCyo4g=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UVXY0h3dZzijN/dhC3W0NaYv9sLWim4b1d+l82Ns4d0Fxue1ZnoAC+URoY/lOU/uHdy3dAhaHEYE4O6Yi8Wh+MLq0RLpdOt1YsRx78+dKLAKm/Ahy6cbqKCaUuN/a5O3rEUX3oWxpxwxrLncVf53iXEWOcrvHS4Hc4ICH7nyFHQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=0OkLkrcw; arc=none smtp.client-ip=198.137.202.133
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=infradead.org; s=bombadil.20210309; h=Content-Transfer-Encoding:
+	MIME-Version:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:Content-Type:
+	Content-ID:Content-Description:In-Reply-To:References;
+	bh=0KMsKZoEMMrWxESyMUyDMhcH3AMxH+i7GiFFV+pC27U=; b=0OkLkrcwvxmhm7RDM5FXtXf7/j
+	uYK1UqxP6xWRBURx8XANZqSSiuNlX2haqUp9206GGSGQdJmHjzNyJHmwzWd5r1Y4d6H1Gjq7WvVmq
+	Jb4K0FTuL7WApf1SHT6I5+Zp/wMWtClUrRBdaJwtuLgrGtOyE/y24IkARK24qCFynhlosLsruoqb5
+	PRzsqMjGDXR4KVJySL+5hrsXnXdve00cm1PwL1+onscCRaPi/1mFl6H8Kxf5R4JZqmI8Fesnw4stt
+	Y5iX7SeanHbALNreA8LuZDvcvgWiAg0L8UIg8b/+ap9Okz4ojWryo7uUQ3yTDELB4A2cbo1hersx3
+	hJVzsNhw==;
+Received: from [50.53.2.24] (helo=bombadil.infradead.org)
+	by bombadil.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
+	id 1tWV1Y-00000000Hbi-0tuy;
+	Sat, 11 Jan 2025 06:31:08 +0000
+From: Randy Dunlap <rdunlap@infradead.org>
+To: linux-kernel@vger.kernel.org
+Cc: Randy Dunlap <rdunlap@infradead.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@ucw.cz>,
+	Len Brown <len.brown@intel.com>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] kernel/power: convert comment from kernel-doc to plain comment
+Date: Fri, 10 Jan 2025 22:31:07 -0800
+Message-ID: <20250111063107.910825-1-rdunlap@infradead.org>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-The pull request you sent on Fri, 10 Jan 2025 22:15:24 +0100:
+Modify a non-kernel-doc comment to begin with /* instead of /**
+so that it does not cause a kernel-doc warning.
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal-6.13-rc7
+power.h:114: warning: This comment starts with '/**', but isn't a kernel-doc comment. Refer Documentation/doc-guide/kernel-doc.rst
+ *      Auxiliary structure used for reading the snapshot image data and
+power.h:114: warning: missing initial short description on line:
+ *      Auxiliary structure used for reading the snapshot image data and
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/da13af839228cc3ec51d9caabea9c0b411dc464a
+Signed-off-by: Randy Dunlap <rdunlap@infradead.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Pavel Machek <pavel@ucw.cz>
+Cc: Len Brown <len.brown@intel.com>
+Cc: linux-pm@vger.kernel.org
+---
+ kernel/power/power.h |    2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
-Thank you!
-
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+--- linux-next-20250108.orig/kernel/power/power.h
++++ linux-next-20250108/kernel/power/power.h
+@@ -110,7 +110,7 @@ extern int hibernate_preallocate_memory(
+ 
+ extern void clear_or_poison_free_pages(void);
+ 
+-/**
++/*
+  *	Auxiliary structure used for reading the snapshot image data and
+  *	metadata from and writing them to the list of page backup entries
+  *	(PBEs) which is the main data structure of swsusp.
 
