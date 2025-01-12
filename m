@@ -1,79 +1,91 @@
-Return-Path: <linux-pm+bounces-20284-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20285-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D91F7A0A950
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2025 13:44:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69297A0A9CA
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2025 14:44:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E416918821D0
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2025 12:44:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 54198166F3E
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2025 13:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAE721B393D;
-	Sun, 12 Jan 2025 12:44:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F18B1B6CF9;
+	Sun, 12 Jan 2025 13:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ZGp9Av4b"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ER51TUJp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 975491B3921;
-	Sun, 12 Jan 2025 12:44:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2613191F6C;
+	Sun, 12 Jan 2025 13:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736685845; cv=none; b=G77N74isWEwfBjTV04Xp5Wix+lNkrhPd7HrA3EqdgQgarevhj10mZP8zMopDPsTRKSQrn5nRoqv+9R4iL7tIdhojV70QbxzKN7WCVq4+NDLeRNjUag8ESoC4VzgkPIdYeeLjm7kDYRSeDoxszH7cJ6hu7IAWTTDVaT7KZHnwSZQ=
+	t=1736689454; cv=none; b=pTSUZvWXKlIrd4Swk+fnWE5da7K6mNfCYFmHeDEfSJ5tkBGBA/pJ4ReKL0wuYyQu88/BI9JdGHnd5KdOQhnw1yAB8qWGscmQxfMrijw4pG994tREdxw+tiWDuCyniw7qxwYfvWLUVeMAhmpQFmd8vN3TyVwONqnYJBxI5/fyYus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736685845; c=relaxed/simple;
-	bh=fmc3FWSJV9HURTfZRkV0j5Nkeo8ZUM5IM3jPQxX+8XA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X/R0XWVmTbbPc6EjsPCi39SCvBrYZvxrDWzxbH3z0iC+ComzQci6l2AhH122fsM407MDj+9J5toMA4iAquHX7hihUo3PUNuwVsPQNGL7eeo5PW7Nt8Re1wzpteoZFIYZ3XSQJ9GmRtNwnqkrj01p/AFxsTBAIzxvX2/hfJesYjg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ZGp9Av4b; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1736685844; x=1768221844;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=fmc3FWSJV9HURTfZRkV0j5Nkeo8ZUM5IM3jPQxX+8XA=;
-  b=ZGp9Av4bAIn5DeQWiv9jJ4RAJy3+L8ebRfk8ivO6QIgCTBsM83fvNMTW
-   pqJTG9sohTwZ+nC9HJ6EfM3rSNp/4XOU0RINHMQyvLl5aXU5FpY0zZnAS
-   sE8YVKU0T4yyFbN/Lk24BmtppeWHUCUyPgSroTM8UnVUhYw45uw8vAUei
-   0UyJabMNbCkKYmz8HVs3WYQQ/tLNbrrGcrC8ipSPxgr+sX2Z0Xhlk0EzD
-   Ml7VVATRyIkfLbNCJOfVYawOhnJxHO5onCJ438Sg7rM5w4CRPIdqi8B8S
-   fgsL//vCX04HZwh+EsmBfg7b3kmUbWYjGMC5BVmZDG9+N5h5cRZj33dfU
-   g==;
-X-CSE-ConnectionGUID: QspeWaRbRsaOOy0XeqEgJQ==
-X-CSE-MsgGUID: EDOjC5c6RvCsOLNDRxNJFQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11313"; a="54469082"
-X-IronPort-AV: E=Sophos;i="6.12,309,1728975600"; 
-   d="scan'208";a="54469082"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Jan 2025 04:44:03 -0800
-X-CSE-ConnectionGUID: 0bwufGByQBWXluj5i8aNfg==
-X-CSE-MsgGUID: r57qug4hRK2G3QM5AYMeCA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="135060251"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by fmviesa001.fm.intel.com with ESMTP; 12 Jan 2025 04:44:01 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tWxJu-000Lx5-2t;
-	Sun, 12 Jan 2025 12:43:58 +0000
-Date: Sun, 12 Jan 2025 20:43:24 +0800
-From: kernel test robot <lkp@intel.com>
-To: David Reaver <me@davidreaver.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>
-Cc: oe-kbuild-all@lists.linux.dev, David Reaver <me@davidreaver.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Ira Weiny <ira.weiny@intel.com>
-Subject: Re: [PATCH] pm: Replace deprecated kmap_atomic() with
- kmap_local_page()
-Message-ID: <202501122002.vD4o8M9T-lkp@intel.com>
-References: <20250112015535.191527-1-me@davidreaver.com>
+	s=arc-20240116; t=1736689454; c=relaxed/simple;
+	bh=/rMLW05jq4cUDUm1thCPJqxqvpmxmRyRSu/ZYqYrerU=;
+	h=Message-ID:Date:From:To:Subject:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hl+fjfroAq0pnHr+tIBypUywSpVICwHvIIv8GUr6JRX+p++GQFAsZ9yXmoSRETKN9UJCPnsOn3TklwV/VYB3OLxqxLm75vCWl4gaYSFGKwgnM4SH16QcMPqEZqzsqEL8JX1bdet9mSja59c54uy/6Rzmk5MnHQV1PltwXMZdAd4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ER51TUJp; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5d9837f201aso6310652a12.0;
+        Sun, 12 Jan 2025 05:44:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736689451; x=1737294251; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:subject:to
+         :from:date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=EPgX5NsNbtvZ/N2NUTg4lI1LcSTBn2a3Mrtrofd3QVY=;
+        b=ER51TUJpCqsv/I/6Tl9WrUMV7TdFS8PEyEvz8c5Qolkb6EcoZGfQm2+pVbMajBL+gB
+         h5zgF/zijw9WmS6K/Cia4IOW8pYZxgoYlPJ6dGV1zeAeunE+0vxig0I9p90kfbJw/Cuj
+         nTgQlCDIS5FrcO8Dv/TwpOfh3HERYd3lYGy/vmSNM2GhigPOFejlM8QQtYggpsiZM/Z2
+         2ZVW8m2iFssaDTQ7gI0lEacNpoap8MaX7qEpnHC13m1NSWUD2owWvAJEvPVh+x5DtEVI
+         jA3CEvAJ6ZKXNX5WM0Yy0+hvsWmgZlnesvVhrYXNoDaa67mSx/ztfgWQnRTbm3+n16JJ
+         Y1Cw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736689451; x=1737294251;
+        h=in-reply-to:content-disposition:mime-version:references:subject:to
+         :from:date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=EPgX5NsNbtvZ/N2NUTg4lI1LcSTBn2a3Mrtrofd3QVY=;
+        b=RUFCxD7VwawNZ2aTGmSXM6iuP45d8sWJJ51jkvtLN425J9jLdkQ/9eNyuiOeY1gMB/
+         W7fP5QpdMCnLvg2zrmaCvwFdT0xc2uQId4SCQs07MzasIHujLYUn/m7sZmdiOAN9llHU
+         Ig1CJPUQe43Q5zVHekKpwkCtknDdsv1XFzfHp9Kytslop2dOsBw2+prOeBT4+IiSdnSX
+         PQP0FxGg8uq0DZRKpjl7CTfMXrI7DKR2salaUfRS0x2g4W4nMZVh52PjrUo6xzT3NscN
+         BYDqpRto5m1BpfRZbIOIJBzkB9PYaBss/fy41uNtur7mzczyHgwu97pqDc5OMfk4REmg
+         AAfw==
+X-Forwarded-Encrypted: i=1; AJvYcCU0x+EIpe53dn+v7rXgaeycwo61hTURc+UwagBWwmgZjfyLt7x/Z8z1N7OhgMModjvHRJyX5Nfwl2wZxwl3@vger.kernel.org, AJvYcCXlv7c3ydwgpiAjm0qeh02wxOqM2TrHk4XHlYPZEOde2nmzBy4HwDnb9eS5NoPW6RWcSAjcJ10NHirn@vger.kernel.org, AJvYcCXuXa9/3INpEDQ60kbsdtTGnuFLtHqw/EfdXNy48+3JJYGHlc4VrinlePdC4D5lP+LIxUQpz/ergvY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyeXCsDjNYH22vBAlogjT356jkyOE4GCnoZJbVFE7mGOS5Nvc6r
+	UoJI0xmq3xnrLZFXMLeJeZ68uJc9RvxGrNimLR5E4NE6KAGgg18F
+X-Gm-Gg: ASbGncuFdEBvD3up438olt2ZSUIoAF8SWcVu02ZZQMlUbYRRiqYXqqqZWycbNMws4Gt
+	n21yC+rsuHQirvbG9uRO9J12UMVLdaQmD0g2MfXJJQU+81JvroxiUHaDw/L8gOA9VLOLEqSR9t0
+	R9d9FfXNd6WgkHWVtwYrArCqyeBtFjlAKtiUvXyQcROdgpA/UGkRhhSa2dF0RHsKfd4NbBp99XF
+	M9YJjFiAy2BaTikuiECK4zd0RL5RT4WKnXmnM0kVtKqMqs5t81Rg0N3tA==
+X-Google-Smtp-Source: AGHT+IHcM7d6rqd8ThEuy8RduLXWP8Hm1lawoW8DILwbk0y864WVSg6CxWXiD3njvv5YX+O+CXe9vQ==
+X-Received: by 2002:a05:6402:2345:b0:5d0:7a0b:b45f with SMTP id 4fb4d7f45d1cf-5d98620928emr12656825a12.10.1736689450829;
+        Sun, 12 Jan 2025 05:44:10 -0800 (PST)
+Received: from Ansuel-XPS. ([109.52.222.172])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5d9903c4400sm3741062a12.52.2025.01.12.05.44.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 12 Jan 2025 05:44:09 -0800 (PST)
+Message-ID: <6783c729.500a0220.2cbf1.ef5e@mx.google.com>
+X-Google-Original-Message-ID: <Z4PHJUenJpr5e2Y4@Ansuel-XPS.>
+Date: Sun, 12 Jan 2025 14:44:05 +0100
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	upstream@airoha.com
+Subject: Re: [RESEND PATCH v4 2/2] thermal: Add support for Airoha EN7581
+ thermal sensor
+References: <20241218073016.2200-1-ansuelsmth@gmail.com>
+ <20241218073016.2200-2-ansuelsmth@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,67 +94,20 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250112015535.191527-1-me@davidreaver.com>
+In-Reply-To: <20241218073016.2200-2-ansuelsmth@gmail.com>
 
-Hi David,
+On Wed, Dec 18, 2024 at 08:29:57AM +0100, Christian Marangi wrote:
+> Add support for Airoha EN7581 thermal sensor. This provide support for
+> reading the CPU or SoC Package sensor and to setup trip points for hot
+> and critical condition. An interrupt is fired to react on this and
+> doesn't require passive poll to read the temperature.
+> 
+> The thermal regs provide a way to read the ADC value from an external
+> register placed in the Chip SCU regs. Monitor will read this value and
+> fire an interrupt if the trip condition configured is reached.
+> 
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-kernel test robot noticed the following build warnings:
+Any news for this?
 
-[auto build test WARNING on amd-pstate/linux-next]
-[also build test WARNING on amd-pstate/bleeding-edge linus/master v6.13-rc6 next-20250110]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/David-Reaver/pm-Replace-deprecated-kmap_atomic-with-kmap_local_page/20250112-100253
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git linux-next
-patch link:    https://lore.kernel.org/r/20250112015535.191527-1-me%40davidreaver.com
-patch subject: [PATCH] pm: Replace deprecated kmap_atomic() with kmap_local_page()
-config: i386-buildonly-randconfig-005-20250112 (https://download.01.org/0day-ci/archive/20250112/202501122002.vD4o8M9T-lkp@intel.com/config)
-compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250112/202501122002.vD4o8M9T-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202501122002.vD4o8M9T-lkp@intel.com/
-
-All warnings (new ones prefixed by >>):
-
-   kernel/power/snapshot.c: In function 'copy_last_highmem_page':
-   kernel/power/snapshot.c:2567:23: error: implicit declaration of function 'kmap_page_local' [-Werror=implicit-function-declaration]
-    2567 |                 dst = kmap_page_local(last_highmem_page);
-         |                       ^~~~~~~~~~~~~~~
->> kernel/power/snapshot.c:2567:21: warning: assignment to 'void *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-    2567 |                 dst = kmap_page_local(last_highmem_page);
-         |                     ^
-   cc1: some warnings being treated as errors
-
-
-vim +2567 kernel/power/snapshot.c
-
-  2554	
-  2555	/**
-  2556	 * copy_last_highmem_page - Copy most the most recent highmem image page.
-  2557	 *
-  2558	 * Copy the contents of a highmem image from @buffer, where the caller of
-  2559	 * snapshot_write_next() has stored them, to the right location represented by
-  2560	 * @last_highmem_page .
-  2561	 */
-  2562	static void copy_last_highmem_page(void)
-  2563	{
-  2564		if (last_highmem_page) {
-  2565			void *dst;
-  2566	
-> 2567			dst = kmap_page_local(last_highmem_page);
-  2568			copy_page(dst, buffer);
-  2569			kunmap_local(dst);
-  2570			last_highmem_page = NULL;
-  2571		}
-  2572	}
-  2573	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
 
