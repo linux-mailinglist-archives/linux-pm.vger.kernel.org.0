@@ -1,172 +1,105 @@
-Return-Path: <linux-pm+bounces-20282-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20283-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E28BDA0A6E3
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2025 03:01:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEEF5A0A7FF
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2025 10:32:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F03CB167A91
-	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2025 02:01:48 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5C2A1887F66
+	for <lists+linux-pm@lfdr.de>; Sun, 12 Jan 2025 09:32:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F8C8611E;
-	Sun, 12 Jan 2025 02:01:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96EA118A950;
+	Sun, 12 Jan 2025 09:31:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=davidreaver.com header.i=@davidreaver.com header.b="Zz1j/V6e";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="L+BLe5zA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kz6NQmgC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh-b5-smtp.messagingengine.com (fhigh-b5-smtp.messagingengine.com [202.12.124.156])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC88010F4;
-	Sun, 12 Jan 2025 02:01:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.156
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 626161CA81;
+	Sun, 12 Jan 2025 09:31:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736647306; cv=none; b=j6f2q8rr/etzNn9TBjhLQZkM32rGAHlzb4AEOlOr1skRHKdxumSG7XhSV3HlBD8qmESrpnmhZYCdciPsD+G73HAryosMGwFU/0snMVd6LbM/MP9wwaZ3Ck96mMwn3bruPAAks/wxa/cxi8RZxu8o1BN4Yi3fB+WSfxJhOBsklAY=
+	t=1736674318; cv=none; b=s+oqFcOGvacSbwmuFxwEJY6NaEgBekfq3nsOJG2G1xdl0qBoOAproHwobliAl84AkX3LUZvXop//V6NfyPVnCXL0cMIu9KX2xaosiM46Tpq/eZemxeLMdTAUZ5sIi/vmi7qlt7MIlURwWiBHIp5N6m4NVLmLcSdb2UFQKndvFSg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736647306; c=relaxed/simple;
-	bh=Dlwaj7rPawpw8zYfPKC+xeBhCtnl+DmBD6nK1hGaxfs=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=QFtsgpad2gAqCPOC4LKCQawDwEyIf+mQLMw8VHRB6WS4BCuCsdek8pAUxmSRXQk0p4HJAIh7xOUSvQuJ7mS5Uh0hRKHUtk1ehbAZzgvOqTaH+5TLCVZ8TEO5798n3QHNkzPEc+6UaOGHRqzi6OuPrc2DFEf8vjfqi0QRiB03eX0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidreaver.com; spf=pass smtp.mailfrom=davidreaver.com; dkim=pass (2048-bit key) header.d=davidreaver.com header.i=@davidreaver.com header.b=Zz1j/V6e; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=L+BLe5zA; arc=none smtp.client-ip=202.12.124.156
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=davidreaver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=davidreaver.com
-Received: from phl-compute-04.internal (phl-compute-04.phl.internal [10.202.2.44])
-	by mailfhigh.stl.internal (Postfix) with ESMTP id BA29A2540103;
-	Sat, 11 Jan 2025 21:01:42 -0500 (EST)
-Received: from phl-mailfrontend-02 ([10.202.2.163])
-  by phl-compute-04.internal (MEProxy); Sat, 11 Jan 2025 21:01:42 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=davidreaver.com;
-	 h=cc:cc:content-transfer-encoding:content-type:date:date:from
-	:from:in-reply-to:message-id:mime-version:reply-to:subject
-	:subject:to:to; s=fm2; t=1736647302; x=1736733702; bh=TpeIoDATxs
-	isnMNoEwo4GRZnOSdlm0MBzd0wFXTRka4=; b=Zz1j/V6ed+DSlhDw9QdlBq8Li1
-	GnZetf+AD3iqrKviNJFWnYaqV3CnZbqnZ3i4AnmYwu7RoW6Q3ECD8v7lxeEjb0Ai
-	1wAE2kt7o7Q6DwtA1KkhJv8AFK0O+pGmRvPiTzImfuAZW3yy31urJfvbAgtW1eqs
-	vYMirF/KsrykbUY2MM0z7X3NXpAcofjhfcUFFhAV1SOT7xdwmTEWx+4cn7byq/fz
-	vaOnKdURPwXevoq6ijRiTQzBJ4aSXW7Upi/6lhl1BJGNr4XYGJE5wE9idKqIKlN4
-	UpXiq4NLm8vu0zXKvk4trUiImXslJ9z7eYOgbPWR/k3yF1AP0yg136pAtdNw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:date:date:feedback-id:feedback-id:from:from
-	:in-reply-to:message-id:mime-version:reply-to:subject:subject:to
-	:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=fm2; t=
-	1736647302; x=1736733702; bh=TpeIoDATxsisnMNoEwo4GRZnOSdlm0MBzd0
-	wFXTRka4=; b=L+BLe5zAnpAvjc1OotgRC507gHhqBuUE8OieHW2KKK2xvDFxSFW
-	p/I0YuoQBozBgEodeB/sF2cdgjzOiCnrzQw+xU1PxlXUbuOLrgP9N1hlcJi86CkK
-	6dYCzA/m6ZRpRxOtLDJIergeNV+SjpLb+NXxUVtW8ppDMfSIpq7CU1/8Jk53n6st
-	2WR8eB7BOyIi3Js87UBjgUibZbIF/rcNJsQl4JMYFEwuUyrD3+fRVoiDk6l0AKAx
-	U/jHnC1IQB3t9Un+yCljCqQqmwGkOSY1cNUok7RWFucAlTuILtFsAtz7mHJ2E1yG
-	JsuSk+kE2ePS5kLQG3w3Wm7Z1rwyZtY12bA==
-X-ME-Sender: <xms:hiKDZ9ZbGWNybcdh3O-F_TrJNFCUhV6PPEmzXc-ZTfCbs97eX6_4LA>
-    <xme:hiKDZ0Z6jH9gg0Nos2rqQhSJ3rWL5zxfd1k0AjmkJ4WG59TCL3fYje2GsdxNQnaaO
-    U2YDBgT-pZw-ymRo94>
-X-ME-Received: <xmr:hiKDZ_9Lk-je2a0Hlwmn9lm38hFfmEdq1ZmRWBXbRztDOqWUW0HehXsCgAnTLYVK8ONInWPJL6PXtWKfRM82hfFrxwtOUwyToBzvP4Gz6U0BwrA>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefuddrudehuddggeduucetufdoteggodetrfdotf
-    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
-    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
-    htshculddquddttddmnecujfgurhephffvvefufffkofgggfestdekredtredttdenucfh
-    rhhomhepffgrvhhiugcutfgvrghvvghruceomhgvsegurghvihgurhgvrghvvghrrdgtoh
-    hmqeenucggtffrrghtthgvrhhnpeevjefgueffgfelvdeigfefgfdvtefhuddvheeffeeg
-    gfejteelhfegvedvhfefleenucffohhmrghinheplhifnhdrnhgvthdpkhgvrhhnvghlrd
-    horhhgnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehmrghilhhfrhhomhep
-    mhgvsegurghvihgurhgvrghvvghrrdgtohhmpdhnsggprhgtphhtthhopeejpdhmohguvg
-    epshhmthhpohhuthdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhr
-    tghpthhtohepphgrvhgvlhesuhgtfidrtgiipdhrtghpthhtoheplhgvnhdrsghrohifnh
-    esihhnthgvlhdrtghomhdprhgtphhtthhopehmvgesuggrvhhiughrvggrvhgvrhdrtgho
-    mhdprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprh
-    gtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdp
-    rhgtphhtthhopehirhgrrdifvghinhihsehinhhtvghlrdgtohhm
-X-ME-Proxy: <xmx:hiKDZ7rh9dJ6tbn3dYlvy0zNH2tuw7JYAEEaXel5NjVWldVWP6bV9w>
-    <xmx:hiKDZ4r8OVtni0r7GZzxDj_mGWNd-n8SPFIvPj3i-4S17kh8ZHBtfA>
-    <xmx:hiKDZxQfs-yquHGPgKjGSI2ngJoSAmBgUFePSjheXsm9tOE4ZszTaQ>
-    <xmx:hiKDZwrFPSdw1pV1ItNiYQaQlxxcfKFIXnHndLtZ22z60vbWX3sy1A>
-    <xmx:hiKDZwIiwRVYUjieRbEHY8JgHR7l1xPc8gCqMdaJukBTIGHC2E6qnK52>
-Feedback-ID: i67e946c9:Fastmail
-Received: by mail.messagingengine.com (Postfix) with ESMTPA; Sat,
- 11 Jan 2025 21:01:41 -0500 (EST)
-From: David Reaver <me@davidreaver.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Len Brown <len.brown@intel.com>
-Cc: David Reaver <me@davidreaver.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Ira Weiny <ira.weiny@intel.com>
-Subject: [PATCH] pm: Replace deprecated kmap_atomic() with kmap_local_page()
-Date: Sat, 11 Jan 2025 17:55:32 -0800
-Message-ID: <20250112015535.191527-1-me@davidreaver.com>
-X-Mailer: git-send-email 2.47.0
+	s=arc-20240116; t=1736674318; c=relaxed/simple;
+	bh=AjigO0agJ3UHJw0Zlp986qjRtlPhraW94JcbdG07BBk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FuUHrILtOQCISjtV6AHmbq58Cyp3iHgVBOGsMsNK7FWo3TdfxILlFiX4+f/N2H9ciY9ZsthJ7l0df5Q5TzzbY1rdZ3Zv10Y2ct4mss7nbCRnCANlrm4YZvAR1x/no736SXH2tImyizk2lC9OdxPymjViSZ7i94EFhcrl//VRkaw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kz6NQmgC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 114E8C4CEDF;
+	Sun, 12 Jan 2025 09:31:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736674317;
+	bh=AjigO0agJ3UHJw0Zlp986qjRtlPhraW94JcbdG07BBk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=kz6NQmgCGeP60DLjdCrCrQxYOc83Ko6OTMuVbV1whuxJB/yOPS9HY3R4peT2uNnl+
+	 TFeA6weJYEhqdgL0C/26cfI8OuNv98pnJefwDBGoC7QeackmKzCIfQMrfBq5MRbf/l
+	 v8eJ1/s3yVOwqv6pIG/uDrILYHkyfbejp/MCYOYFcPn6nBOk8YT4y7250iR6Ftm+If
+	 POMoc+FfB8S/RCXsO02i7EI648OP+ebnZuVcQqwJmgzLHyJ8ngjtvQ0y8GKYSEhhGk
+	 QMQxKozaWBIaDs0Iwxa1i9SROIIBq041O7N4rEWRUC7cp4TOCRWa1QVSe8crufPZL2
+	 VShZIogfBhiiQ==
+Date: Sun, 12 Jan 2025 10:31:54 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
+	Odelu Kukatla <quic_okukatla@quicinc.com>, Mike Tipton <mdptipton@quicinc.com>, 
+	Vivek Aknurwar <viveka@quicinc.com>, Sibi Sankar <quic_sibis@quicinc.com>, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V7 3/5] dt-bindings: interconnect: Add EPSS L3 compatible
+ for SA8775P
+Message-ID: <273w3qr5wix4srdum5qmrqdzzaw3uprqhhfmmgrwycrb6wlyqf@txuxzzyjyhfk>
+References: <20250111161429.51-1-quic_rlaggysh@quicinc.com>
+ <20250111161429.51-4-quic_rlaggysh@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250111161429.51-4-quic_rlaggysh@quicinc.com>
 
-kmap_atomic() is deprecated and should be replaced with kmap_local_page()
-[1][2]. kmap_local_page() is faster in kernels with HIGHMEM enabled, can
-take page faults, and allows preemption.
+On Sat, Jan 11, 2025 at 04:14:27PM +0000, Raviteja Laggyshetty wrote:
+> Add Epoch Subsystem (EPSS) L3 interconnect provider binding on
+> SA8775P SoCs.
 
-According to [2], this replacement is safe as long as the code between
-kmap_atomic() and kunmap_atomic() does not implicitly depend on disabling
-page faults or preemption. In all of the call sites in this patch, the only
-thing happening between mapping and unmapping pages is copy_page() calls,
-and I don't suspect they depend on disabling page faults or preemption.
+1. And why is this not compatible with sm8250? There was lengthy
+discussion and no outcome of it managed to get to commit msg. Really, so
+we are going to repeat everything again and you will not get any acks.
 
-[1] https://lwn.net/Articles/836144/
-[2] https://docs.kernel.org/mm/highmem.html#temporary-virtual-mappings
+You have entire commit msg to explain things but instead you repeat what
+the patch does. We can read the diff for that.
 
-Signed-off-by: David Reaver <me@davidreaver.com>
----
- kernel/power/snapshot.c | 16 ++++++++--------
- 1 file changed, 8 insertions(+), 8 deletions(-)
+2. Binding *ALWAYS* comes before the user.
 
-diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-index c9fb559a6399..87f4dde4a49d 100644
---- a/kernel/power/snapshot.c
-+++ b/kernel/power/snapshot.c
-@@ -2270,9 +2270,9 @@ int snapshot_read_next(struct snapshot_handle *handle)
- 			 */
- 			void *kaddr;
- 
--			kaddr = kmap_atomic(page);
-+			kaddr = kmap_local_page(page);
- 			copy_page(buffer, kaddr);
--			kunmap_atomic(kaddr);
-+			kunmap_local(kaddr);
- 			handle->buffer = buffer;
- 		} else {
- 			handle->buffer = page_address(page);
-@@ -2561,9 +2561,9 @@ static void copy_last_highmem_page(void)
- 	if (last_highmem_page) {
- 		void *dst;
- 
--		dst = kmap_atomic(last_highmem_page);
-+		dst = kmap_page_local(last_highmem_page);
- 		copy_page(dst, buffer);
--		kunmap_atomic(dst);
-+		kunmap_local(dst);
- 		last_highmem_page = NULL;
- 	}
- }
-@@ -2881,13 +2881,13 @@ static inline void swap_two_pages_data(struct page *p1, struct page *p2,
- {
- 	void *kaddr1, *kaddr2;
- 
--	kaddr1 = kmap_atomic(p1);
--	kaddr2 = kmap_atomic(p2);
-+	kaddr1 = kmap_local_page(p1);
-+	kaddr2 = kmap_local_page(p2);
- 	copy_page(buf, kaddr1);
- 	copy_page(kaddr1, kaddr2);
- 	copy_page(kaddr2, buf);
--	kunmap_atomic(kaddr2);
--	kunmap_atomic(kaddr1);
-+	kunmap_local(kaddr2);
-+	kunmap_local(kaddr1);
- }
- 
- /**
+> 
+> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> index 21dae0b92819..94f7f283787a 100644
+> --- a/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> +++ b/Documentation/devicetree/bindings/interconnect/qcom,osm-l3.yaml
+> @@ -33,6 +33,7 @@ properties:
+>                - qcom,sm6375-cpucp-l3
+>                - qcom,sm8250-epss-l3
+>                - qcom,sm8350-epss-l3
+> +              - qcom,sa8775p-epss-l3
+>            - const: qcom,epss-l3
+
+Your driver suggests this is not really true - it is not compatible with
+qcom,epss-l3. Maybe it is, maybe not, no clue, commit explains nothing.
+
+Best regards,
+Krzysztof
+
 
