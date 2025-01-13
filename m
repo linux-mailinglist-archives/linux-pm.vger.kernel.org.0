@@ -1,119 +1,135 @@
-Return-Path: <linux-pm+bounces-20353-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20357-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10F15A0BDAC
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 17:36:43 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D8ECA0BEC1
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 18:20:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2649E18819B0
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 16:36:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BF5E167D5E
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 17:20:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD86E1C5D52;
-	Mon, 13 Jan 2025 16:36:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="DCmcKgVB"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16575192B66;
+	Mon, 13 Jan 2025 17:20:46 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f170.google.com (mail-il1-f170.google.com [209.85.166.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C30033A8D0
-	for <linux-pm@vger.kernel.org>; Mon, 13 Jan 2025 16:36:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.170
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7D14D8CE;
+	Mon, 13 Jan 2025 17:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736786197; cv=none; b=mPmy/RP5zvgSSk2oOkiwT4SMBT1MnhI3ubqlMq2sS4yDVgTgfSOTTgwA5qL0qAFc5uUu5l4PH62hsrKMNvH8YKFUNEM01YFjj4ZN+J5bcWZMadT4C8arBM1aTTAjkSCdHAtHwfVnG3aWc8S+C57iFAogblHAcrHM/oi+TWf2r+A=
+	t=1736788846; cv=none; b=F8LNEGAZiZoh9r+ztQOJAjJjegIs+8UziUTHzyWJ4fEZJEkucz3VFl08gBk2ZpQJ667MEen1lXHGRiQo9xroZ6Sxt4QkrryvtpAPiVQ/91nP4FGieWOVmj4Eypq9KpPk6bycP0nXSegLZqCG4yi7TGSRdQ8ATYapgC/N6PFpmzE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736786197; c=relaxed/simple;
-	bh=q9UKaurFTuhBnPZFCnQBR+mLk9QnRFoXkoVcvbEpr8o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=LUzT7WUT4ioXvWJGcpVJYNPkqfqWIWAyAuPq6pQ/LYhorhAyECoj7EzLHAMiciqB2Bc7U9BpjldqnRbSXz406MsnPAIh5PJigQcmsEUo7xKE7sHtoXR215xw/Pzo1JMzsbMHanqEUd8MKjd49rbu6VCRp5V5muRI10zj77rKOFw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=DCmcKgVB; arc=none smtp.client-ip=209.85.166.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-il1-f170.google.com with SMTP id e9e14a558f8ab-3cdd57060acso14492595ab.0
-        for <linux-pm@vger.kernel.org>; Mon, 13 Jan 2025 08:36:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1736786195; x=1737390995; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=9fDlN2wR9lbXaBkAAjT1/4Mke1eVB5abZ4PdWHu4Z+8=;
-        b=DCmcKgVB/M6c8ipWhR0rlS5bkgoXmmp8JwIVE/mviVr0CFMYy83kLI8eHHe/u1dC1Y
-         W1+uygWnhgUVWVfZARWRnwUnZ5hgmfnSVzszAY0sUoyter8O5VUM0xVl+r4H5tS2/8UB
-         dHSII6zDcnhXBDBes6sTtgKz2YHHoRyoAYj5I=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736786195; x=1737390995;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=9fDlN2wR9lbXaBkAAjT1/4Mke1eVB5abZ4PdWHu4Z+8=;
-        b=sUT3kUw6uygkCuvxyCHHXeHOgSKoc8/aneQhS8ntxXwbmRT7YNTxynTYiTW2uyasDE
-         +F5Kou1vxCAVZc4jlov7wgbQr5CYDN5qz8NKK4elfSYANbruIf7YF18hWuqmo1oA6EBF
-         qOHYfuYCohB8Aun/JILc/3DeQU+8rEaCCpZNlMI2tqZaOU27THEIySuSWOXvijCbNe2b
-         t5jfPism/2fVCQrzBEfpXR4zyhb1lTACVrDYKG7HaXPJxuj0ikt2LicaKH4zkjYVAsHS
-         evkdahDr3IJb7CcAT6KiuQzVJZrOtEpMJRG9SngR/xptTnjPmeQFyfy4fhQ5+GmrqKnm
-         TPRA==
-X-Gm-Message-State: AOJu0Ywx/LNElrWyLcTHwlbzmPOtty9PFh8sF5G0fpHpdjeYm0zeb89p
-	Zx+dzMYN+nhS3tq/HU7RpnLB555U9d4n/uqWsljwoMgbMAXGeCXncH/LJqTwaUY=
-X-Gm-Gg: ASbGncs+dmooi7Ia/O9iQYNnsP+67vgRfFdGCL2smayjRpYO2gJLAnTy+2hyH/wAtvk
-	/xRG/5iknbpf28onvFVSMM0l+6FNKL+kGNvQjMdXMgFsMeK2DXMVCG+sBzmEmdcwaIpYgCZfcJS
-	+WZWmdd8Oo9ALkjq2GY6icDB45S6gIYbRzQ5v1KYjsD6xOmvO4THTtA9WsZr6Yzw4JnJBCDAT0s
-	h6w10+F6eH+d+dREW+kvAeom5upKba69doVv6wgnDi0N0SzUmvIpf3qjWDQsE2aGII=
-X-Google-Smtp-Source: AGHT+IFsrZ22e17zJUtqpJryrtg55/98d5DNr3yDC4VfBtu8H6dbeQCPQ1bPQxqND1qK7H844dmM0g==
-X-Received: by 2002:a05:6e02:3dc1:b0:3ce:7852:129b with SMTP id e9e14a558f8ab-3ce785213f1mr12313055ab.20.1736786194798;
-        Mon, 13 Jan 2025 08:36:34 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3ce4ad93a6bsm27396715ab.16.2025.01.13.08.36.33
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 13 Jan 2025 08:36:34 -0800 (PST)
-Message-ID: <4f4ad06c-b2e4-4e3b-8ec9-85cb81e61ae0@linuxfoundation.org>
-Date: Mon, 13 Jan 2025 09:36:33 -0700
+	s=arc-20240116; t=1736788846; c=relaxed/simple;
+	bh=sI6JaOjakoEdGvRIdJ2kFY3O/ANYwTb0/8GsKasdb+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IALeS88gmjmkSGHB0m/CwhsJ2urbSj75kPw12ueQLmphBlmjl2yVxoYRYW/l9kyqHTDLBeR9Uv7ytPNzBN26KTw0xyeLqp684uwpM4QhW8wfddrx7/4n814N9VScVAhfmT/OMaNmkqTaldOSB0jEDmEfDe9eHdYb831YSU9hgoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 635391424;
+	Mon, 13 Jan 2025 09:21:11 -0800 (PST)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 891B33F673;
+	Mon, 13 Jan 2025 09:20:41 -0800 (PST)
+Date: Mon, 13 Jan 2025 17:20:38 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+	"ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+	"arm-scmi@vger.kernel.org" <arm-scmi@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize
+ state as off
+Message-ID: <Z4VLZgAWR7ugDl7W@bogus>
+References: <20250110061346.2440772-1-peng.fan@oss.nxp.com>
+ <Z4TreQ5bA9qiMTgC@bogus>
+ <PAXPR04MB8459F33BCC84CCA8F49F3B60881F2@PAXPR04MB8459.eurprd04.prod.outlook.com>
+ <Z4UZ2Au7KSFMibDW@bogus>
+ <PA4PR04MB94855052830C8F4874237BA6921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] pm: cpupower: Add missing residency header changes in
- cpuidle.h to SWIG
-To: "John B. Wyatt IV" <jwyatt@redhat.com>, Thomas Renninger <trenn@suse.com>
-Cc: linux-pm@vger.kernel.org, Aboorva Devarajan <aboorvad@linux.ibm.com>,
- Shuah Khan <shuah@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>,
- linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
- "John B. Wyatt IV" <sageofredondo@gmail.com>,
- Shuah Khan <skhan@linuxfoundation.org>
-References: <20250108221852.30771-1-jwyatt@redhat.com>
- <Z4UdWpRie1ZsJ4tk@thinkpad2024>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <Z4UdWpRie1ZsJ4tk@thinkpad2024>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PA4PR04MB94855052830C8F4874237BA6921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
 
-On 1/13/25 07:04, John B. Wyatt IV wrote:
-> Hello Shuah,
-> 
-> Did you have a chance to look at this? This is the second header change
-> that was missing from the bindings.
-> 
-> On Wed, Jan 08, 2025 at 05:18:44PM -0500, John B. Wyatt IV wrote:
->> "tools/cpupower: display residency value in idle-info" added a new
->> function to cpuidle.h. This patch adds them to the bindings.
->>
->> Link: https://lore.kernel.org/linux-pm/20240809083728.266697-1-aboorvad@linux.ibm.com/
->>
->> Tested by compiling both libcpupower and the headers; running the test
->> script that does not use the functions as a basic sanity test.
->>
->> Signed-off-by: "John B. Wyatt IV" <jwyatt@redhat.com>
->> Signed-off-by: "John B. Wyatt IV" <sageofredondo@gmail.com>
->> ---
+On Mon, Jan 13, 2025 at 03:30:58PM +0000, Ranjani Vaidyanathan wrote:
+> -----Original Message-----
+> From: Sudeep Holla [mailto:sudeep.holla@arm.com]
+> Sent: Monday, January 13, 2025 7:49 AM
+> To: Peng Fan <peng.fan@nxp.com>
+> Cc: Peng Fan (OSS) <peng.fan@oss.nxp.com>; cristian.marussi@arm.com; Sudeep Holla <sudeep.holla@arm.com>; ulf.hansson@linaro.org; arm-scmi@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+> Subject: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize state as off
+>
+> On Mon, Jan 13, 2025 at 11:37:23AM +0000, Peng Fan wrote:
+> > > Subject: Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize state
+> > > as off
+> > >
+> > > On Fri, Jan 10, 2025 at 02:13:46PM +0800, Peng Fan (OSS) wrote:
+> > > > From: Peng Fan <peng.fan@nxp.com>
+> > > >
+> > > > Per ARM SCMI Spec DEN0056E, page 16, "The platform may disable a
+> > > > resource if no agent has requested to use that resource."
+> > > >
+> > >
+> > > True, but ...
+> > >
+> > > > Linux Kernel should not rely on a state that it has not requested,
+> > > > so make state as off during initialization.
+> > > >
+> > >
+> > > IIUC, this was done to avoid any transitions if the bootloader like
+> > > U- Boot has turned on the resource and OS can just rely on that stay.
+> >
+> > But if it is not U-Boot turned it on?
+>
+> Not sure if I understand what exactly you mean by that.
+> [RV] Its possible that some other agent (M33/M7 running OS) in the system
+> turned on the power domain. Resources in the same power domain can shared
+> across agents.  That being said, uboot provides mechanism to clean up any
+> power domains/clocks that it enabled. And our implementation of uboot does
+> disable any power domain it powered up for downloading of images or anything
+> else (display is a unique case if splash screen is enabled).
+>
 
-Yes I did. Looks good to me. I am waiting for Rafael to pull my PR
-to apply the patch.
+Right I was referring to the display as one of the example when I referred
+to the case where bootloader turns on the resource.
 
-thanks,
--- Shuah
+> >
+> > Because the power domain is ON, kernel will not issue SCMI to platform
+> > to request it ON when kernel needs this power domain on.
+> >
+>
+> Yes, but the agent(via bootloader) has already requested the SCMI platform,
+> so it should be fine. No ?
+> [RV] As mentioned above, it need not be the bootloader. And secondly how to
+> handle this power domain during suspend/resume? It's possible that the agent
+> that turned on the power domain initially will have different wakeup
+> requirements. IMO Linux should completely be responsible for the power
+> domains that the drivers need.
+>
+
+May be I am still missing something. The genpd framework does issue power
+down of all the PD that are not used once we boot. Is that not sufficient.
+We are just not changing the pd state when initialising the genpds.
+Is that causing the issue ? I was under the impression that it shouldn't
+matter if the driver manages the genpds they consume and all unused ones
+get turned off eventually.
+
+What exactly is the issue for which this patch is the solution ? I think
+I might have not understood the issue properly here. Sorry if that is the
+case.
+
+--
+Regards,
+Sudeep
 
