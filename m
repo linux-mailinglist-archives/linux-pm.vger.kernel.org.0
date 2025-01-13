@@ -1,31 +1,31 @@
-Return-Path: <linux-pm+bounces-20346-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20354-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3322EA0BD4B
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 17:27:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64C35A0BDC2
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 17:40:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 995FE164511
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 16:27:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9CB847A16CD
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 16:40:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 429F722C9EB;
-	Mon, 13 Jan 2025 16:26:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3C7C220F073;
+	Mon, 13 Jan 2025 16:39:49 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E8822BAAA
-	for <linux-pm@vger.kernel.org>; Mon, 13 Jan 2025 16:26:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B088B20AF8A
+	for <linux-pm@vger.kernel.org>; Mon, 13 Jan 2025 16:39:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736785563; cv=none; b=Wjk5i7nsI8uEIXj/JYdtJmBcNImVgxh44qFp3uza2EnvYIAjhl3v4NLZGxvwnnUbZ0G0CgIsDpjhN+GV25Gexd3RA6Aitg95BPDRNJbOBJKZPMePJBHT/nAwjW01F7fjbcx5xcwMOiK1gP5ca9E6vRoaz3deOMF2HlmzJBaBfHg=
+	t=1736786389; cv=none; b=HymB8psG2TRKazU+DL+yY0GX6vvLwh2BZyb0jKeBXBhtWm4Y7SX94HRFqO0CuLrHDsSX/yRO3vhn3uGlsO6jTXHHSDNKyOB7Y68W6LdO7hbQPSkP72Npb53h0bTtoNxeq3G6jcG1rDl99FX9BQH5rKI39vmT+lxS90r6U3j40s4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736785563; c=relaxed/simple;
-	bh=kv7H/2Fmdq5NzjHdH9WlL1ylasJJ18efPHXVIQWM2Hk=;
+	s=arc-20240116; t=1736786389; c=relaxed/simple;
+	bh=bIet0sSt0htpcx1JHEcCUyCD45/LA4jWGaGLBnQOx88=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=lROuss53O0XU5/51NFPXFQhBuWNozUibyHyIP5JshYWxQNIhjwgYAT5QEx4RHhT0n+sy0QGpWD1rbQXeqkFPvvO4VZFcCtNQJtyZfKZBUU5BeMmbHXXMJtSm5i/UM9eBJaIDDzRMoQUCX+GCQKQ5NjUvDfG3Y1un3OuLK+11jIQ=
+	 In-Reply-To:To:Cc; b=aYc/gfybi2jenIxukukzKHk3VZNqLUitVSyJ72iRTKZBnUoeq2uM6zPcJOvFREqoz89ZOK3MPbBc4M8jZGipoP1VjLoLnKrNQLUAGy8N3/DKQR+8TSrgZOIjOMWmr5BPUJHcVh07Gp05gIFKr3oLwj3AC+a8i0FXYWVk6UDNb7Q=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
@@ -33,22 +33,22 @@ Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
 	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
 	(Exim 4.92)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tXNFs-0000JM-8B; Mon, 13 Jan 2025 17:25:32 +0100
+	id 1tXNTL-0001hJ-Ks; Mon, 13 Jan 2025 17:39:27 +0100
 Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
 	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
 	(Exim 4.96)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tXNFp-000HzN-2s;
-	Mon, 13 Jan 2025 17:25:30 +0100
+	id 1tXNTJ-000I5l-29;
+	Mon, 13 Jan 2025 17:39:26 +0100
 Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
 	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
 	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tXNFq-007FQL-32;
+	id 1tXNFq-007FQL-33;
 	Mon, 13 Jan 2025 17:25:30 +0100
 From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Date: Mon, 13 Jan 2025 17:25:34 +0100
-Subject: [PATCH v2 09/12] platform/chrome: cros_ec_lpc: prepare for
- hw_protection_shutdown removal
+Date: Mon, 13 Jan 2025 17:25:35 +0100
+Subject: [PATCH v2 10/12] dt-bindings: thermal: give OS some leeway in
+ absence of critical-action
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,7 +57,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250113-hw_protection-reboot-v2-9-161d3fc734f0@pengutronix.de>
+Message-Id: <20250113-hw_protection-reboot-v2-10-161d3fc734f0@pengutronix.de>
 References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
 In-Reply-To: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
 To: Andrew Morton <akpm@linux-foundation.org>, 
@@ -81,38 +81,38 @@ X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
 X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
 X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-In the general case, a driver doesn't know which of system shutdown or
-reboot is the better action to take to protect hardware in an emergency
-situation. For this reason, hw_protection_shutdown is going to be
-removed in favor of hw_protection_trigger, which defaults to shutdown,
-but may be configured at kernel runtime to be a reboot instead.
+An operating system may allow its user to configure the action to be
+undertaken on critical overtemperature events.
 
-The ChromeOS EC situation is different as we do know that shutdown is
-the correct action as the EC is programmed to force reset after the
-short period, thus replace hw_protection_shutdown with
-__hw_protection_trigger with HWPROT_ACT_SHUTDOWN as argument to
-maintain the same behavior.
+However, the bindings currently mandate an absence of the critical-action
+property to be equal to critical-action = "shutdown", which would mean
+any differing user configuration would violate the bindings.
 
-No functional change.
+Resolve this by documenting the absence of the property to mean that the
+OS gets to decide.
 
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 ---
- drivers/platform/chrome/cros_ec_lpc.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+ Documentation/devicetree/bindings/thermal/thermal-zones.yaml | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-diff --git a/drivers/platform/chrome/cros_ec_lpc.c b/drivers/platform/chrome/cros_ec_lpc.c
-index 924bf4d3cc77b9f27d415a10c61ae06886fa7f80..068781b75529d80b51b3773845bcf457fa958710 100644
---- a/drivers/platform/chrome/cros_ec_lpc.c
-+++ b/drivers/platform/chrome/cros_ec_lpc.c
-@@ -414,7 +414,7 @@ static void cros_ec_lpc_acpi_notify(acpi_handle device, u32 value, void *data)
- 		blocking_notifier_call_chain(&ec_dev->panic_notifier, 0, ec_dev);
- 		kobject_uevent_env(&ec_dev->dev->kobj, KOBJ_CHANGE, (char **)env);
- 		/* Begin orderly shutdown. EC will force reset after a short period. */
--		hw_protection_shutdown("CrOS EC Panic", -1);
-+		__hw_protection_trigger("CrOS EC Panic", -1, HWPROT_ACT_SHUTDOWN);
- 		/* Do not query for other events after a panic is reported */
- 		return;
- 	}
+diff --git a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+index 0f435be1dbd8cfb4502be9d198ed6d51058f453b..0de0a9757ccc201ebbb0c8c8efb9f8da662f8e9c 100644
+--- a/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
++++ b/Documentation/devicetree/bindings/thermal/thermal-zones.yaml
+@@ -82,9 +82,8 @@ patternProperties:
+         $ref: /schemas/types.yaml#/definitions/string
+         description: |
+           The action the OS should perform after the critical temperature is reached.
+-          By default the system will shutdown as a safe action to prevent damage
+-          to the hardware, if the property is not set.
+-          The shutdown action should be always the default and preferred one.
++          If the property is not set, it is up to the system to select the correct
++          action. The recommended and preferred default is shutdown.
+           Choose 'reboot' with care, as the hardware may be in thermal stress,
+           thus leading to infinite reboots that may cause damage to the hardware.
+           Make sure the firmware/bootloader will act as the last resort and take
 
 -- 
 2.39.5
