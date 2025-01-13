@@ -1,269 +1,134 @@
-Return-Path: <linux-pm+bounces-20327-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20329-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF885A0B6BD
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 13:22:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86AD5A0B815
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 14:28:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C951B1888268
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 12:22:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8DF4A16586C
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 13:28:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 862642397B5;
-	Mon, 13 Jan 2025 12:21:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 34D2120B22;
+	Mon, 13 Jan 2025 13:27:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="cQaPL3eg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 66132237A38;
-	Mon, 13 Jan 2025 12:21:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F0ADBA4B;
+	Mon, 13 Jan 2025 13:27:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736770880; cv=none; b=uWabq+Wi9lezTw3FCkKg4PZLN8zMK2oUM5L8wfUJIlHVaS2IDJmL8mjekqyZSDCMO6tikTkylJGHhV5TI49tn3W0vvfBIRsSuH2ZAKyavj9tI3xIeZxuC4SoAnFht7qxtPctBo8Oxz2URmFNmVimEHgTi8Id68MPho9Cf82qfmE=
+	t=1736774879; cv=none; b=oxupEOddVSzwjHl4XWpM6Rbgj5jMvpLaD2CX95MUacnPOBOwh1YLqE0qrewizUwyweMVnJdN2WK741poNxMulNGT93E5Igg1yF1Xb5b6Tuz0HTbut/XqFDiIdlbz7XpCnJgRV8QwZ51wVIr+RzIwtvV5XzQnTULyJ7RZSr1psXk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736770880; c=relaxed/simple;
-	bh=i/VXOKlHN24K3aT7JmFKe3KAjVKXXypwpIPRo0RnR1Q=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=V6zj4DgcU+zUvGNYwv9PF1HASZ7FoTChLoCDfjvueZWeS8bQHNjvgX/XKZH5lzK+PoSJsySi2kRDDrlLw0GiWI+AgLJgrfQiDoD1aiJb2PWS+LdCaUxWPAHKR0d0KHaTzyKRNOTMHw74/zSL+nbvs3NCKrV3tzHfTMsunYtOkdc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.44])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4YWrrB6LZBz2DjgD;
-	Mon, 13 Jan 2025 20:18:02 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id B573F1400CB;
-	Mon, 13 Jan 2025 20:21:10 +0800 (CST)
-Received: from localhost.huawei.com (10.50.165.33) by
- kwepemh100008.china.huawei.com (7.202.181.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Mon, 13 Jan 2025 20:21:09 +0800
-From: Lifeng Zheng <zhenglifeng1@huawei.com>
-To: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
-	<viresh.kumar@linaro.org>, <mario.limonciello@amd.com>,
-	<gautham.shenoy@amd.com>, <ray.huang@amd.com>, <pierre.gondois@arm.com>
-CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <zhenglifeng1@huawei.com>,
-	<hepeng68@huawei.com>, <fanghao11@huawei.com>
-Subject: [PATCH v4 6/6] cpufreq: CPPC: Support for autonomous selection in cppc_cpufreq
-Date: Mon, 13 Jan 2025 20:21:04 +0800
-Message-ID: <20250113122104.3870673-7-zhenglifeng1@huawei.com>
-X-Mailer: git-send-email 2.33.0
-In-Reply-To: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
-References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1736774879; c=relaxed/simple;
+	bh=ysn17uQxkXzPtLZxnOMKYQsJkVa5vH4rdmQv56kQ19U=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=U0uVssLnWZOHguy5JWexKg+6s2eWHcFZnuZcEYH8LGd9K0DWbRMd4WD/1ZuDGW99TiPXvcdvQgxomPpHy0CKcO3bA3AiMPD0KAjIljXmnOwIZfZEZA92kpMZH/BipF+4WzN+SSb9JxX/7IYJ5yqGX2mCiCbT+kX8yx5WJVz30h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=cQaPL3eg; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1736774875;
+	bh=ysn17uQxkXzPtLZxnOMKYQsJkVa5vH4rdmQv56kQ19U=;
+	h=From:Subject:Date:To:Cc:From;
+	b=cQaPL3eg4q1NUlufcAKQoR5YN+GJdtn/17lbSWYbgPS62pYxsKam4SPZ548d2AyK4
+	 B7Gwf9LXiQSZFWXafmSR+l9+v9jZg7ANIXuR+KYY7HeZoJqvoSXLaRZafvPE/13rpv
+	 RZEqnGdGh9aJKmMut9Nzm1onHdZ8Bl9bg6PwyIg1VeBdCcVroCb9ipVtoQpz+/YhP7
+	 iyj4UBNRh8XNkj5RtVi34nxGOPhbl4+sYBuKMYzMqpjIo9aBycm3QQGwSMBNak0aQD
+	 6hsDK5vatfHXymp8xVUCFgAJpwcRiCVMxDbmCSdLvmt2hOhD+oPFIBqY/qlaFOexDH
+	 kObWOr2klR1vg==
+Received: from [192.168.0.47] (unknown [IPv6:2804:14c:1a9:53ee::1000])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1941F17E0DB7;
+	Mon, 13 Jan 2025 14:27:50 +0100 (CET)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Subject: [PATCH RESEND v2 0/5] thermal/drivers/mediatek/lvts: Fixes for
+ suspend and IRQ storm, and cleanups
+Date: Mon, 13 Jan 2025 10:27:11 -0300
+Message-Id: <20250113-mt8192-lvts-filtered-suspend-fix-v2-0-07a25200c7c6@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems702-chm.china.huawei.com (10.3.19.179) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Alexandre Mergnat <amergnat@baylibre.com>, 
+ Balsam CHIHI <bchihi@baylibre.com>
+Cc: kernel@collabora.com, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+ linux-mediatek@lists.infradead.org, Hsin-Te Yuan <yuanhsinte@chromium.org>, 
+ Chen-Yu Tsai <wenst@chromium.org>, 
+ =?utf-8?q?Bernhard_Rosenkr=C3=A4nzer?= <bero@baylibre.com>, 
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>, 
+ stable@vger.kernel.org
+X-Mailer: b4 0.14.2
 
-Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
-driver.
+Patches 1 and 2 of this series fix the issue reported by Hsin-Te Yuan
+[1] where MT8192-based Chromebooks are not able to suspend/resume 10
+times in a row. Either one of those patches on its own is enough to fix
+the issue, but I believe both are desirable, so I've included them both
+here.
 
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+Patches 3-5 fix unrelated issues that I've noticed while debugging.
+Patch 3 fixes IRQ storms when the temperature sensors drop to 20
+Celsius. Patches 4 and 5 are cleanups to prevent future issues.
+
+To test this series, I've run 'rtcwake -m mem -d 60' 10 times in a row
+on a MT8192-Asurada-Spherion-rev3 Chromebook and checked that the wakeup
+happened 60 seconds later (+-5 seconds). I've repeated that test on 10
+separate runs. Not once did the chromebook wake up early with the series
+applied.
+
+I've also checked that during those runs, the LVTS interrupt didn't
+trigger even once, while before the series it would trigger a few times
+per run, generally during boot or resume.
+
+Finally, as a sanity check I've verified that the interrupts still work
+by lowering the thermal trip point to 45 Celsius and running 'stress -c
+8'. Indeed they still do, and the temperature showed by the
+thermal_temperature ftrace event matched the expected value.
+
+[1] https://lore.kernel.org/all/20241108-lvts-v1-1-eee339c6ca20@chromium.org/
+
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++++
- drivers/cpufreq/cppc_cpufreq.c                | 109 ++++++++++++++++++
- 2 files changed, 163 insertions(+)
+Changes in v2:
+- Renamed bitmasks for interrupt enable (added "INTEN" to the name)
+- Made read-only arrays static const
+- Changed sensor_filt_bitmap array from u32 to u8 to save memory
+- Rebased on next-20241209
+- Link to v1: https://lore.kernel.org/r/20241125-mt8192-lvts-filtered-suspend-fix-v1-0-42e3c0528c6c@collabora.com
 
-diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
-index 206079d3bd5b..3d87c3bb3fe2 100644
---- a/Documentation/ABI/testing/sysfs-devices-system-cpu
-+++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
-@@ -268,6 +268,60 @@ Description:	Discover CPUs in the same CPU frequency coordination domain
- 		This file is only present if the acpi-cpufreq or the cppc-cpufreq
- 		drivers are in use.
- 
-+What:		/sys/devices/system/cpu/cpuX/cpufreq/auto_select
-+Date:		October 2024
-+Contact:	linux-pm@vger.kernel.org
-+Description:	Autonomous selection enable
-+
-+		Read/write interface to control autonomous selection enable
-+			Read returns autonomous selection status:
-+				0: autonomous selection is disabled
-+				1: autonomous selection is enabled
-+
-+			Write 'y' or '1' or 'on' to enable autonomous selection.
-+			Write 'n' or '0' or 'off' to disable autonomous selection.
-+
-+		This file only presents if the cppc-cpufreq driver is in use.
-+
-+What:		/sys/devices/system/cpu/cpuX/cpufreq/auto_act_window
-+Date:		October 2024
-+Contact:	linux-pm@vger.kernel.org
-+Description:	Autonomous activity window
-+
-+		This file indicates a moving utilization sensitivity window to
-+		the platform's autonomous selection policy.
-+
-+		Read/write an integer represents autonomous activity window (in
-+		microseconds) from/to this file. The max value to write is
-+		1270000000 but the max significand is 127. This means that if 128
-+		is written to this file, 127 will be stored. If the value is
-+		greater than 130, only the first two digits will be saved as
-+		significand.
-+
-+		Writing a zero value to this file enable the platform to
-+		determine an appropriate Activity Window depending on the workload.
-+
-+		Writing to this file only has meaning when Autonomous Selection is
-+		enabled.
-+
-+		This file only presents if the cppc-cpufreq driver is in use.
-+
-+What:		/sys/devices/system/cpu/cpuX/cpufreq/energy_perf
-+Date:		October 2024
-+Contact:	linux-pm@vger.kernel.org
-+Description:	Energy performance preference
-+
-+		Read/write an 8-bit integer from/to this file. This file
-+		represents a range of values from 0 (performance preference) to
-+		0xFF (energy efficiency preference) that influences the rate of
-+		performance increase/decrease and the result of the hardware's
-+		energy efficiency and performance optimization policies.
-+
-+		Writing to this file only has meaning when Autonomous Selection is
-+		enabled.
-+
-+		This file only presents if the cppc-cpufreq driver is in use.
-+
- 
- What:		/sys/devices/system/cpu/cpu*/cache/index3/cache_disable_{0,1}
- Date:		August 2008
-diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-index bd8f75accfa0..ea6c6a5bbd8c 100644
---- a/drivers/cpufreq/cppc_cpufreq.c
-+++ b/drivers/cpufreq/cppc_cpufreq.c
-@@ -814,10 +814,119 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
- 
- 	return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
- }
-+
-+static ssize_t show_auto_select(struct cpufreq_policy *policy, char *buf)
-+{
-+	bool val;
-+	int ret;
-+
-+	ret = cppc_get_auto_sel(policy->cpu, &val);
-+
-+	/* show "<unsupported>" when this register is not supported by cpc */
-+	if (ret == -EOPNOTSUPP)
-+		return sysfs_emit(buf, "%s\n", "<unsupported>");
-+
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%d\n", val);
-+}
-+
-+static ssize_t store_auto_select(struct cpufreq_policy *policy,
-+				 const char *buf, size_t count)
-+{
-+	bool val;
-+	int ret;
-+
-+	ret = kstrtobool(buf, &val);
-+	if (ret)
-+		return ret;
-+
-+	ret = cppc_set_auto_sel(policy->cpu, val);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
-+static ssize_t show_auto_act_window(struct cpufreq_policy *policy, char *buf)
-+{
-+	u64 val;
-+	int ret;
-+
-+	ret = cppc_get_auto_act_window(policy->cpu, &val);
-+
-+	/* show "<unsupported>" when this register is not supported by cpc */
-+	if (ret == -EOPNOTSUPP)
-+		return sysfs_emit(buf, "%s\n", "<unsupported>");
-+
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%llu\n", val);
-+}
-+
-+static ssize_t store_auto_act_window(struct cpufreq_policy *policy,
-+				     const char *buf, size_t count)
-+{
-+	u64 usec;
-+	int ret;
-+
-+	ret = kstrtou64(buf, 0, &usec);
-+	if (ret)
-+		return ret;
-+
-+	ret = cppc_set_auto_act_window(policy->cpu, usec);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
-+static ssize_t show_energy_perf(struct cpufreq_policy *policy, char *buf)
-+{
-+	u64 val;
-+	int ret;
-+
-+	ret = cppc_get_epp_perf(policy->cpu, &val);
-+
-+	/* show "<unsupported>" when this register is not supported by cpc */
-+	if (ret == -EOPNOTSUPP)
-+		return sysfs_emit(buf, "%s\n", "<unsupported>");
-+
-+	if (ret)
-+		return ret;
-+
-+	return sysfs_emit(buf, "%llu\n", val);
-+}
-+
-+static ssize_t store_energy_perf(struct cpufreq_policy *policy,
-+				 const char *buf, size_t count)
-+{
-+	u64 val;
-+	int ret;
-+
-+	ret = kstrtou64(buf, 0, &val);
-+	if (ret)
-+		return ret;
-+
-+	ret = cppc_set_epp(policy->cpu, val);
-+	if (ret)
-+		return ret;
-+
-+	return count;
-+}
-+
- cpufreq_freq_attr_ro(freqdomain_cpus);
-+cpufreq_freq_attr_rw(auto_select);
-+cpufreq_freq_attr_rw(auto_act_window);
-+cpufreq_freq_attr_rw(energy_perf);
- 
- static struct freq_attr *cppc_cpufreq_attr[] = {
- 	&freqdomain_cpus,
-+	&auto_select,
-+	&auto_act_window,
-+	&energy_perf,
- 	NULL,
- };
- 
+---
+Nícolas F. R. A. Prado (5):
+      thermal/drivers/mediatek/lvts: Disable monitor mode during suspend
+      thermal/drivers/mediatek/lvts: Disable Stage 3 thermal threshold
+      thermal/drivers/mediatek/lvts: Disable low offset IRQ for minimum threshold
+      thermal/drivers/mediatek/lvts: Start sensor interrupts disabled
+      thermal/drivers/mediatek/lvts: Only update IRQ enable for valid sensors
+
+ drivers/thermal/mediatek/lvts_thermal.c | 103 ++++++++++++++++++++++----------
+ 1 file changed, 72 insertions(+), 31 deletions(-)
+---
+base-commit: d1486dca38afd08ca279ae94eb3a397f10737824
+change-id: 20241121-mt8192-lvts-filtered-suspend-fix-a5032ca8eceb
+
+Best regards,
 -- 
-2.33.0
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
 
