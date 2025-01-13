@@ -1,135 +1,127 @@
-Return-Path: <linux-pm+bounces-20357-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20358-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D8ECA0BEC1
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 18:20:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AE408A0BF0F
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 18:42:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6BF5E167D5E
-	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 17:20:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81DBD3A9D55
+	for <lists+linux-pm@lfdr.de>; Mon, 13 Jan 2025 17:42:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16575192B66;
-	Mon, 13 Jan 2025 17:20:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C39F1BD004;
+	Mon, 13 Jan 2025 17:42:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Q0K6jGjc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB7D14D8CE;
-	Mon, 13 Jan 2025 17:20:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-oa1-f49.google.com (mail-oa1-f49.google.com [209.85.160.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8B9F1B0F35;
+	Mon, 13 Jan 2025 17:42:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736788846; cv=none; b=F8LNEGAZiZoh9r+ztQOJAjJjegIs+8UziUTHzyWJ4fEZJEkucz3VFl08gBk2ZpQJ667MEen1lXHGRiQo9xroZ6Sxt4QkrryvtpAPiVQ/91nP4FGieWOVmj4Eypq9KpPk6bycP0nXSegLZqCG4yi7TGSRdQ8ATYapgC/N6PFpmzE=
+	t=1736790161; cv=none; b=tKwyJeWaS/IDlsAHKuHZsJvj+KzN88BcTEGYB8mJGgz/7EeveNthzoSftTqsPddKJH+LLI7+SEiYsAIFnvfVl4vy4SD9JEMbjZ+W2bN9WuCnYs9HVdn8YXQQKBJFUt4BFEIi5coZW57Y5qlGsKVfIun2ro1gIZDAnY2WFkoqV1c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736788846; c=relaxed/simple;
-	bh=sI6JaOjakoEdGvRIdJ2kFY3O/ANYwTb0/8GsKasdb+w=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=IALeS88gmjmkSGHB0m/CwhsJ2urbSj75kPw12ueQLmphBlmjl2yVxoYRYW/l9kyqHTDLBeR9Uv7ytPNzBN26KTw0xyeLqp684uwpM4QhW8wfddrx7/4n814N9VScVAhfmT/OMaNmkqTaldOSB0jEDmEfDe9eHdYb831YSU9hgoQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 635391424;
-	Mon, 13 Jan 2025 09:21:11 -0800 (PST)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 891B33F673;
-	Mon, 13 Jan 2025 09:20:41 -0800 (PST)
-Date: Mon, 13 Jan 2025 17:20:38 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
-Cc: Peng Fan <peng.fan@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	"cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-	"ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-	"arm-scmi@vger.kernel.org" <arm-scmi@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize
- state as off
-Message-ID: <Z4VLZgAWR7ugDl7W@bogus>
-References: <20250110061346.2440772-1-peng.fan@oss.nxp.com>
- <Z4TreQ5bA9qiMTgC@bogus>
- <PAXPR04MB8459F33BCC84CCA8F49F3B60881F2@PAXPR04MB8459.eurprd04.prod.outlook.com>
- <Z4UZ2Au7KSFMibDW@bogus>
- <PA4PR04MB94855052830C8F4874237BA6921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
+	s=arc-20240116; t=1736790161; c=relaxed/simple;
+	bh=9By/cg3WRaJU39H2+KcBel81dQIv17faS7AvhuuC9hM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Wk/SSGFlUPMm+LjVHhZMoAqAv/js+CjtVNTaO3bCwAE2w5HnLdypu/mUb4iwW+5ZOctAitcAZkKSNd8jIRBq0dyAmYWNd/F/oGVhvvwS8OrVh0WbpzwXvmn6/FdswkYITLuMPukpKMnmKWVAoa2zVh6cA5OVGNYNAwcaGV1iLcM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Q0K6jGjc; arc=none smtp.client-ip=209.85.160.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-oa1-f49.google.com with SMTP id 586e51a60fabf-2aa179a8791so2879090fac.1;
+        Mon, 13 Jan 2025 09:42:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736790159; x=1737394959; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LQZPia2sZAAmybfMLEyqNp4QuNfkcuPO8IQNsllu2Bk=;
+        b=Q0K6jGjcTQoWGmIJfM6TM1YKspMMDp0mSZ7sV8/I1oCjLilta5KBFFhQD9hZ8f0pqo
+         cGiBzG9HzDMveQxhuZ/Al2td91ZuUysNZY2f5qje8j2UG88FDBqaxHnWuiDSyj/cUiy8
+         yTyDs0uFc0cnsgJrmP4dgZDhVnzsmC2EPKHLo0jsNmSyC2KbnzfJjDp3oeuTZU8a37Yu
+         wMAH0Q0O1x632YWIHtUOIR6w13eC2kgMUtCNxEVYfgVTf1huMmcszW/JJG2OU3vBKzer
+         tRQp56nxrIrtT1bi/cUr38sU7Tr7UWV9EUKOEVV1Vd2hQVVw3O+jPhk7faKHxhvVRZG4
+         uFhQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736790159; x=1737394959;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=LQZPia2sZAAmybfMLEyqNp4QuNfkcuPO8IQNsllu2Bk=;
+        b=piU0sDvATKBV2VAyvB9wWWwKYGapItX+n+00R+qJuua0Xit2iguUjHLYv0SWWrgSz9
+         97rR4uZcj3tnNdS9IgHns4CtOebcqoxRNNQO6vhAmkPpdaE3q8LdRLQD+SHbV8LNqGDK
+         97UwzMOZGJBAUQLRVv1UHxoSrtYubqyL5WIUAKk7xE1U7kVExSMrTh4PAVFMvlEkJ/Xb
+         pQQS3k+XiA5lpSjFaUge68BlsjrcL7U/l3slu/4ib5BylG2y+zkILr5TOlcOQghATPFa
+         SkOZRdXv8uLgeI56IHYl9M1xU0NEqX1S5WE0JIN0fpnW3qSXe1EMz1K0Ne7hTcSYKupP
+         ht3A==
+X-Forwarded-Encrypted: i=1; AJvYcCV+g4ypgHvmY+DzJGwrs0KbVGGai1QckjrJVCbvIqsbn7y+dvfh6IuB6xnK+zm1W5VEjYfcLKJaD5z09w==@vger.kernel.org, AJvYcCV0W08Hm9hcU6TJCmU511EGrsIiCzlMpt5PVpangPUlyCaSWJPnRcj8ad9iqK1SHeqU94nGB9dI0jM=@vger.kernel.org, AJvYcCVpPZzUdiM9YUp0lrhbPtEJDEkyjZPjrB+uYz5OMGqjbdRuSbj3VLEXSErPReQXxsr05iM35iiIU0Ch@vger.kernel.org, AJvYcCWdxNku1JGMhrc9pQmR05frYkC/EuiaOGKe0jvD/3bSv0osWaIKR2HjdWPt0yYD9g0doWd5jYiR+oOff2Q=@vger.kernel.org, AJvYcCWnnj/ogJq1p0y/RbSEkIR9u+VIaT9eU+jypj8/BfO9Hjgr4di61by5x6P2epmumyASreK5udga+uw3KpM5@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy9OtovXg1dtFzssCgPe73nbMW0s1eby3MxIcMUjmLeWFqcR+Bl
+	Rah+hys6pFnw/L8zlw4+ccvbZ9tA7a/VtsfiBXSQxIElOV2PbCP3XZVfCraFsmTva3IRp79IKHI
+	Q8Q9/axibscCgAImnScDr4rqnck0=
+X-Gm-Gg: ASbGncvsZJsYIqzTHlxhhWbfEE6xrcQzlhohNzlCVT7N8bdDtKxl9mElurlaXUDRjuO
+	D/zRjBGtvdrlaL/Fb3sITa5sbEQFwUxWH2nrXJw==
+X-Google-Smtp-Source: AGHT+IHMB+GGiNJhNGefJ2LWoJuZLtThtPOh9fydXyn/5Rwt5TmKrvnF9R7u9+jTH81xBy2WWWy1ILuMVCmAVSS1zkY=
+X-Received: by 2002:a05:6870:1710:b0:29e:1325:760a with SMTP id
+ 586e51a60fabf-2aa06668e92mr11830484fac.8.1736790158782; Mon, 13 Jan 2025
+ 09:42:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PA4PR04MB94855052830C8F4874237BA6921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
+References: <20250108-starqltechn_integration_upstream-v14-0-f6e84ec20d96@gmail.com>
+ <20250108-starqltechn_integration_upstream-v14-8-f6e84ec20d96@gmail.com> <20250109122148.GJ6763@google.com>
+In-Reply-To: <20250109122148.GJ6763@google.com>
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Date: Mon, 13 Jan 2025 20:42:27 +0300
+X-Gm-Features: AbW1kvb-liGKuGLtkmrjc1H7lITbUJMSGPuUb2fk2sIiLd6fXWjbBtERZBX-Eys
+Message-ID: <CABTCjFCaTOLQQ_cU10HNiVUoWT=FreoKYj3yAGQYccDkagcn0g@mail.gmail.com>
+Subject: Re: [PATCH v14 08/10] mfd: Add new driver for MAX77705 PMIC
+To: Lee Jones <lee@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
+	Hans de Goede <hdegoede@redhat.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
+	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-leds@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 13, 2025 at 03:30:58PM +0000, Ranjani Vaidyanathan wrote:
-> -----Original Message-----
-> From: Sudeep Holla [mailto:sudeep.holla@arm.com]
-> Sent: Monday, January 13, 2025 7:49 AM
-> To: Peng Fan <peng.fan@nxp.com>
-> Cc: Peng Fan (OSS) <peng.fan@oss.nxp.com>; cristian.marussi@arm.com; Sudeep Holla <sudeep.holla@arm.com>; ulf.hansson@linaro.org; arm-scmi@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org; Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
-> Subject: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize state as off
+=D1=87=D1=82, 9 =D1=8F=D0=BD=D0=B2. 2025=E2=80=AF=D0=B3. =D0=B2 15:21, Lee =
+Jones <lee@kernel.org>:
 >
-> On Mon, Jan 13, 2025 at 11:37:23AM +0000, Peng Fan wrote:
-> > > Subject: Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize state
-> > > as off
-> > >
-> > > On Fri, Jan 10, 2025 at 02:13:46PM +0800, Peng Fan (OSS) wrote:
-> > > > From: Peng Fan <peng.fan@nxp.com>
-> > > >
-> > > > Per ARM SCMI Spec DEN0056E, page 16, "The platform may disable a
-> > > > resource if no agent has requested to use that resource."
-> > > >
-> > >
-> > > True, but ...
-> > >
-> > > > Linux Kernel should not rely on a state that it has not requested,
-> > > > so make state as off during initialization.
-> > > >
-> > >
-> > > IIUC, this was done to avoid any transitions if the bootloader like
-> > > U- Boot has turned on the resource and OS can just rely on that stay.
+> On Wed, 08 Jan 2025, Dzmitry Sankouski wrote:
+>
+> > Add the core MFD driver for max77705 PMIC. Drivers for sub-devices
+> > will be added in subsequent patches.
 > >
-> > But if it is not U-Boot turned it on?
->
-> Not sure if I understand what exactly you mean by that.
-> [RV] Its possible that some other agent (M33/M7 running OS) in the system
-> turned on the power domain. Resources in the same power domain can shared
-> across agents.  That being said, uboot provides mechanism to clean up any
-> power domains/clocks that it enabled. And our implementation of uboot does
-> disable any power domain it powered up for downloading of images or anything
-> else (display is a unique case if splash screen is enabled).
->
-
-Right I was referring to the display as one of the example when I referred
-to the case where bootloader turns on the resource.
-
+> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
 > >
-> > Because the power domain is ON, kernel will not issue SCMI to platform
-> > to request it ON when kernel needs this power domain on.
-> >
+(...)
+> > +
+> > +     /* Unmask interrupts from all blocks in interrupt source register=
+ */
+> > +     ret =3D regmap_update_bits(max77705->regmap,
+> > +                              MAX77705_PMIC_REG_INTSRC_MASK,
+> > +                              MAX77705_SRC_IRQ_ALL, (unsigned int)~MAX=
+77705_SRC_IRQ_ALL);
 >
-> Yes, but the agent(via bootloader) has already requested the SCMI platform,
-> so it should be fine. No ?
-> [RV] As mentioned above, it need not be the bootloader. And secondly how to
-> handle this power domain during suspend/resume? It's possible that the agent
-> that turned on the power domain initially will have different wakeup
-> requirements. IMO Linux should completely be responsible for the power
-> domains that the drivers need.
+> I don't see this much.  Are you sure the cast is required?
 >
 
-May be I am still missing something. The genpd framework does issue power
-down of all the PD that are not used once we boot. Is that not sufficient.
-We are just not changing the pd state when initialising the genpds.
-Is that causing the issue ? I was under the impression that it shouldn't
-matter if the driver manages the genpds they consume and all unused ones
-get turned off eventually.
+BIT macro creates a 64 bit constant value. When inverted,
+it overruns 32 bit value, causing compiler to warn on conversion like
+`warning: conversion from =E2=80=98long unsigned int=E2=80=99 to =E2=80=98u=
+nsigned int=E2=80=99`.
 
-What exactly is the issue for which this patch is the solution ? I think
-I might have not understood the issue properly here. Sorry if that is the
-case.
 
---
-Regards,
-Sudeep
+--=20
+Best regards and thanks for review,
+Dzmitry
 
