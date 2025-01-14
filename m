@@ -1,220 +1,125 @@
-Return-Path: <linux-pm+bounces-20445-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20446-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 11BD9A11220
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 21:36:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ADF25A11234
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 21:39:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AF97188AFA6
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 20:36:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BF82A3A4515
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 20:39:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B1420B80A;
-	Tue, 14 Jan 2025 20:36:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 100FC20B80A;
+	Tue, 14 Jan 2025 20:39:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Tgf9Vwaw"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="MNStDm26"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4472208974
-	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 20:36:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 76296146590
+	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 20:39:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736886980; cv=none; b=YnrDX7vb1IqjRO6lNV0E36xmObTjkvOhxFPlEiuDzhyY+onD/G8egPEmSqo7pECUx1seUm5SCdozIevgQ16/DH+8byx0Le8hVNiat23l2KK8Z5pVxTz2G/GoiqsuZA0GbuGgQJCyeqgMfHMnfDxzGcZKCA30ALfo8LjiMzVrcX8=
+	t=1736887172; cv=none; b=Zc8qVGitP4XVINcT30cmrIYMWzgccmGocwzwytUAygOEz++faiyRxXZ2LI7r97OxR5UZyXgj2pj6hNxqxcIdCZkPVayBelwEGOeZUYCphlWgYoynwHaPe9WfG09V8OyjM8VDALIfwnkWqYPWY+CaB1mpjKgJIwSE2rIdrdZaI5Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736886980; c=relaxed/simple;
-	bh=gS2tWpA0GbEwM/UrYpG6nfxlsBb4yRzG9ZzVj5HoQ/s=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KfEprWavhM9Dsej4tzVZfBcllOAknO4zh7i5s2cSqfnQYUQtpMb96SF/H1gmHWeHYpPUNmydxlxKULAYjoE1lr+v0xWKz9g51YcJXrozC9Auk5Qii0ZSKWk0TU2Jl8Uexo3bGZpHorzqmYWfyEoviIIL6cIQSPMAtoZ9rsCbFlY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Tgf9Vwaw; arc=none smtp.client-ip=209.85.128.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43616bf3358so7514315e9.3
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 12:36:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736886977; x=1737491777; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=tqhlC6RQ0+FQLPBPdYr6MxzFHvj3QH9yoD42eRdXTpE=;
-        b=Tgf9VwawuMcILGWUsD8A4Tb52+9ntk7X4Hz8AqWWYBDRFBIyp+YeJeE7IE2E2sNGm3
-         OeN1YA9ilvf2kC3doWCcUQFfhqmxsv7F2FGJM8SFv/xap8N5MQ0KeHQ+7yeMcWDTTtIa
-         cZiCEA7wy/vgFzrp40Zi1R7vtAfZNoq+rVtDnQ2iSFO4RHMXkkIwytICVMmQ/bh1rLKx
-         EsL3MRA79T3OyIvuuWfctFOlQv5CLH/HVpX07vJ27zUUnjYfD8ThOF5Go2mHiESTgKNV
-         lGCjGPHLfkH/eIyn3EgPTPA5HKwOuSPg50s3VAVENTKUdaxbcgEpyjxNatKqP+ootTTN
-         FoFQ==
+	s=arc-20240116; t=1736887172; c=relaxed/simple;
+	bh=7S87F8bLh/++B5Ek/t9oF21Sl0yDEu2m3Cn3XzZoFNQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MyHLlBiLHcYDljCWaG4N/eFhJkqnYm6UzE5NRpn+T0aPG8cfFqrCNfmXIUMwR23iN03s1OMBxX4Zk1VFNlMnG4K+460QLhnS4hLSJm4+NBGWdN7aCSMM5PeQ84E4Cy3caksYqtIQP+mVaW3AbUuUu6LqRJA2HVOdE/IlLVIuct8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=MNStDm26; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736887169;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=SWJSCrgaLK67vBW7t7G3KMTfbi2TnhrA3mKegVxocUM=;
+	b=MNStDm26Cg8R1Wxo7ZNzP7ccHYmLjdScLa7uuRQD7+ERrA/bbAQPCUNIVbl3oMMFErepcI
+	ygdx356Y3+YJdhLMp1XkgZTxtqmDjuNoD5jtHlRaKRz3lvw6mK7V3UnwvtMoKAk2LRKWRc
+	HGBVA7dF707J1pfl8pU91Av5kuxUVDk=
+Received: from mail-qt1-f200.google.com (mail-qt1-f200.google.com
+ [209.85.160.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-2-RyDIInIkP8Sr6hOVOC2n3Q-1; Tue, 14 Jan 2025 15:39:26 -0500
+X-MC-Unique: RyDIInIkP8Sr6hOVOC2n3Q-1
+X-Mimecast-MFC-AGG-ID: RyDIInIkP8Sr6hOVOC2n3Q
+Received: by mail-qt1-f200.google.com with SMTP id d75a77b69052e-467ae19e34bso182466171cf.2
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 12:39:26 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736886977; x=1737491777;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=tqhlC6RQ0+FQLPBPdYr6MxzFHvj3QH9yoD42eRdXTpE=;
-        b=KwnC8dzT24N8X6ZDZGOLKqqHBx46uFY99tpQQrnsvpmXwn8AXDarAeGcyNEAv35uvJ
-         tpkzy0ygzrh9ZEwm9OaXfjGjDpQAj4tNnPLUYpfduAOg2CVJQblJVe2QZlAJ1HoQFgVO
-         O7DHWjXm6xKI1zV0sLHcfUf+Wlx4TOJZ2f2cslwozzO31PSkXumI+jHzqkZH59nUshgW
-         DFqzmZAN6fTUYkX1lNfrloDMgcU/3kwuFuyY+XLp0oDMt5apa82/55KF7s9rQ/sZsjfB
-         y2ClthDG5VW+6PxqbAJ5jaQtpQEEw6vqEZA7FH/wxe7d4Gv0zs4TOqx8iGcUUaXJuakx
-         fP/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXCvSD3H2pi6xXQJUkWgBBgaSuZWmCazlsItRM5Qc+RYgvV2sL3BwK4MHCOViLzEeci3pohMhk/iw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzZtfH3gRdGT1ACKRE/QCY8S//BRVmaP+vYuYuL08SR3J5ylqGT
-	s7QHL1SwPZhLagiH4/ETtgg7M3wroqLABPKq8b7irFyWXod0RuuWzQSlE/MxNSVKjgOuTvuVyEF
-	3
-X-Gm-Gg: ASbGncs7HVULePOs3fTJTAzk5aGc1iMajgk8VlnsiNumNSWDDZ7QL3I9gcCZSpl7NzE
-	RX6IDOgFEQsliFHS0W12VOPIFVdoUFeIy1QP1OtNsNqRwG+6+XvXfOFQhxFwEuHXqOLri15d0aT
-	McnNbdyj4rI7sKgW6Af9zxZCQBGhao3ox7fEthersFVerpzzvqe2mJ9YPFj3xdl5GsfwcMwQrGN
-	I3gmemqVTgpQKePrIq9z7bumhS1JTPmd1bwkgw6VxOQMWSZh6EgA1CdqrHvmAJc+CVoCo8=
-X-Google-Smtp-Source: AGHT+IFMhRoEAtSbN0L+Bt9NTb3syOW3OEuQGe010Dhx0qHFCjXkdD60E5s2ytRq5B5M4Gl29FBoCQ==
-X-Received: by 2002:a05:6000:402c:b0:386:3afb:19a with SMTP id ffacd0b85a97d-38a872ea989mr9171714f8f.4.1736886976759;
-        Tue, 14 Jan 2025 12:36:16 -0800 (PST)
-Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4b7ff0sm15874440f8f.77.2025.01.14.12.36.14
+        d=1e100.net; s=20230601; t=1736887166; x=1737491966;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=SWJSCrgaLK67vBW7t7G3KMTfbi2TnhrA3mKegVxocUM=;
+        b=BfiNuBHR/w68S9UuYcezBmA8+g8/aZD8PLnqubbhAx+8NKMQHD9J5xJPWImLPPcJB6
+         UetclrqiWK4JmKg6Bx4lZXw/1hYBOSNFPQMUlYjfkxyraidUzJ4D1SdL/iV1K/OAPnle
+         oSTQY0ib8LKgqTB8M4lUS1s3mlYcJZmG6Q78kMNFEDjqZQF/evgJ7ziH29GnNZRkn2+t
+         TL2IUv8gylQPsEIpVh7xJQt0JXczgrimwOAS49DOjrE8MyMuuR8UurT1PVuYmIm9l5DO
+         H7b7/f81zsvMm7GoaGs3N61Hc8DdDnrrwg5pftN0K0pYArS/7KaEUkZKmOSHJ9IjOS22
+         d0Ew==
+X-Forwarded-Encrypted: i=1; AJvYcCVjVy6KjGCtIDvF1DwrJxDK9byq/f/rTMkDJCIvw7Lf3SuXzMlSGYbyn3vXZVFyPIkbYK6geeXljQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwX3xvVeVz2yeUv7IA67NaYxKdNkLa1aRooStKVb1OOGoehgiHJ
+	ZhvSaIj3ni7PEXUmGnN7cgpA8lTrnizIDhxvDP2DKlcCOLG3LGcrk79YRpK9W3e0VLOXS6nrHi2
+	gYdfoS2MD/Y3UEiQ4eIBgLCsNvcdo9PWgcSeGv/EPPH3sm1m+d3zX7Iwm
+X-Gm-Gg: ASbGncsisnwT1t0+ORx9tvVBPQHFbRfr92dN/jgF/Obe3y6dEu4nuvfWK9GL25qSIoA
+	MlLCkPecWHxKZu+/b3g2vtKM/dUL/lgkHswssTjNgNJxaOvvQ+XKaW6qKnax8JwKdSZ+xpjfa0Z
+	4J1JVFBk9+nZroAeizOqvBw5QsdzkyyZfpxTfMnZVZs9BFrtc+K1IAaA635Nt3HEtotQXbY8oee
+	SpCg5ew1HXROA+RDgjNXdkh00Xo7/8xXwJRTfIWhQ/QKGq4B6Prtg==
+X-Received: by 2002:a05:622a:1a8d:b0:467:8765:51bb with SMTP id d75a77b69052e-46c7107e0a9mr478654831cf.37.1736887166133;
+        Tue, 14 Jan 2025 12:39:26 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF1VQXMj393+NSNp6pT98xnavABEJu58M+PjEbdaB3kFAkam0UN/cLp0TSCDGkqct29umQ+iw==
+X-Received: by 2002:a05:622a:1a8d:b0:467:8765:51bb with SMTP id d75a77b69052e-46c7107e0a9mr478654491cf.37.1736887165855;
+        Tue, 14 Jan 2025 12:39:25 -0800 (PST)
+Received: from thinkpad2024 ([71.217.66.209])
+        by smtp.gmail.com with ESMTPSA id d75a77b69052e-46c873304cdsm57177741cf.29.2025.01.14.12.39.25
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2025 12:36:15 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Sebastian Reichel <sre@kernel.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] power: supply: Use str_enable_disable-like helpers
-Date: Tue, 14 Jan 2025 21:36:11 +0100
-Message-ID: <20250114203611.1013324-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+        Tue, 14 Jan 2025 12:39:25 -0800 (PST)
+Date: Tue, 14 Jan 2025 15:39:23 -0500
+From: "John B. Wyatt IV" <jwyatt@redhat.com>
+To: Shuah Khan <skhan@linuxfoundation.org>
+Cc: Thomas Renninger <trenn@suse.com>, linux-pm@vger.kernel.org,
+	Aboorva Devarajan <aboorvad@linux.ibm.com>,
+	Shuah Khan <shuah@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	linux-kernel@vger.kernel.org, John Kacur <jkacur@redhat.com>,
+	"John B. Wyatt IV" <sageofredondo@gmail.com>
+Subject: Re: [PATCH] pm: cpupower: Add missing residency header changes in
+ cpuidle.h to SWIG
+Message-ID: <Z4bLe1TZ6G_5yePa@thinkpad2024>
+References: <20250108221852.30771-1-jwyatt@redhat.com>
+ <Z4UdWpRie1ZsJ4tk@thinkpad2024>
+ <4f4ad06c-b2e4-4e3b-8ec9-85cb81e61ae0@linuxfoundation.org>
+ <03f5eb31-32b3-4dee-934e-05bc0bb0eb06@linuxfoundation.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <03f5eb31-32b3-4dee-934e-05bc0bb0eb06@linuxfoundation.org>
 
-Replace ternary (condition ? "enable" : "disable") syntax with helpers
-from string_choices.h because:
-1. Simple function call with one argument is easier to read.  Ternary
-   operator has three arguments and with wrapping might lead to quite
-   long code.
-2. Is slightly shorter thus also easier to read.
-3. It brings uniformity in the text - same string.
-4. Allows deduping by the linker, which results in a smaller binary
-   file.
+On Mon, Jan 13, 2025 at 04:17:32PM -0700, Shuah Khan wrote:
+> On 1/13/25 09:36, Shuah Khan wrote:
+> 
+> Applied to https://git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?h=cpupower
+> 
+> Will send another pr to Rafael later this week.
+> 
+> thanks,
+> -- Shuah
+> 
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/power/supply/88pm860x_battery.c | 4 ++--
- drivers/power/supply/charger-manager.c  | 3 ++-
- drivers/power/supply/cpcap-charger.c    | 3 ++-
- drivers/power/supply/da9030_battery.c   | 3 ++-
- drivers/power/supply/sbs-battery.c      | 5 +++--
- 5 files changed, 11 insertions(+), 7 deletions(-)
+Thank you; I appreciate it.
 
-diff --git a/drivers/power/supply/88pm860x_battery.c b/drivers/power/supply/88pm860x_battery.c
-index b7938fbb24a5..edae1e843c51 100644
---- a/drivers/power/supply/88pm860x_battery.c
-+++ b/drivers/power/supply/88pm860x_battery.c
-@@ -14,6 +14,7 @@
- #include <linux/mutex.h>
- #include <linux/string.h>
- #include <linux/power_supply.h>
-+#include <linux/string_choices.h>
- #include <linux/mfd/88pm860x.h>
- #include <linux/delay.h>
- 
-@@ -503,8 +504,7 @@ static void pm860x_init_battery(struct pm860x_battery_info *info)
- 	data = pm860x_reg_read(info->i2c, PM8607_POWER_UP_LOG);
- 	bat_remove = data & BAT_WU_LOG;
- 
--	dev_dbg(info->dev, "battery wake up? %s\n",
--		bat_remove != 0 ? "yes" : "no");
-+	dev_dbg(info->dev, "battery wake up? %s\n", str_yes_no(bat_remove));
- 
- 	/* restore SOC from RTC domain register */
- 	if (bat_remove == 0) {
-diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
-index a69faef444c0..c49e0e4d02f7 100644
---- a/drivers/power/supply/charger-manager.c
-+++ b/drivers/power/supply/charger-manager.c
-@@ -22,6 +22,7 @@
- #include <linux/platform_device.h>
- #include <linux/power/charger-manager.h>
- #include <linux/regulator/consumer.h>
-+#include <linux/string_choices.h>
- #include <linux/sysfs.h>
- #include <linux/of.h>
- #include <linux/thermal.h>
-@@ -1088,7 +1089,7 @@ static ssize_t charger_state_show(struct device *dev,
- 	if (!charger->externally_control)
- 		state = regulator_is_enabled(charger->consumer);
- 
--	return sysfs_emit(buf, "%s\n", state ? "enabled" : "disabled");
-+	return sysfs_emit(buf, "%s\n", str_enabled_disabled(state));
- }
- 
- static ssize_t charger_externally_control_show(struct device *dev,
-diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
-index 7781b45a67a7..6625d539d9ae 100644
---- a/drivers/power/supply/cpcap-charger.c
-+++ b/drivers/power/supply/cpcap-charger.c
-@@ -14,6 +14,7 @@
- #include <linux/init.h>
- #include <linux/module.h>
- #include <linux/slab.h>
-+#include <linux/string_choices.h>
- #include <linux/err.h>
- #include <linux/interrupt.h>
- #include <linux/notifier.h>
-@@ -515,7 +516,7 @@ static void cpcap_charger_vbus_work(struct work_struct *work)
- out_err:
- 	cpcap_charger_update_state(ddata, POWER_SUPPLY_STATUS_UNKNOWN);
- 	dev_err(ddata->dev, "%s could not %s vbus: %i\n", __func__,
--		ddata->vbus_enabled ? "enable" : "disable", error);
-+		str_enable_disable(ddata->vbus_enabled), error);
- }
- 
- static int cpcap_charger_set_vbus(struct phy_companion *comparator,
-diff --git a/drivers/power/supply/da9030_battery.c b/drivers/power/supply/da9030_battery.c
-index 34328f5d556e..ac2e319e9517 100644
---- a/drivers/power/supply/da9030_battery.c
-+++ b/drivers/power/supply/da9030_battery.c
-@@ -15,6 +15,7 @@
- #include <linux/module.h>
- #include <linux/platform_device.h>
- #include <linux/power_supply.h>
-+#include <linux/string_choices.h>
- #include <linux/mfd/da903x.h>
- 
- #include <linux/debugfs.h>
-@@ -138,7 +139,7 @@ static int bat_debug_show(struct seq_file *s, void *data)
- {
- 	struct da9030_charger *charger = s->private;
- 
--	seq_printf(s, "charger is %s\n", charger->is_on ? "on" : "off");
-+	seq_printf(s, "charger is %s\n", str_on_off(charger->is_on));
- 	if (charger->chdet) {
- 		seq_printf(s, "iset = %dmA, vset = %dmV\n",
- 			   charger->mA, charger->mV);
-diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
-index a6c204c08232..6f3d0413b1c1 100644
---- a/drivers/power/supply/sbs-battery.c
-+++ b/drivers/power/supply/sbs-battery.c
-@@ -21,6 +21,7 @@
- #include <linux/power_supply.h>
- #include <linux/slab.h>
- #include <linux/stat.h>
-+#include <linux/string_choices.h>
- 
- enum {
- 	REG_MANUFACTURER_DATA,
-@@ -320,8 +321,8 @@ static int sbs_update_presence(struct sbs_info *chip, bool is_present)
- 		client->flags &= ~I2C_CLIENT_PEC;
- 	}
- 
--	dev_dbg(&client->dev, "PEC: %s\n", (client->flags & I2C_CLIENT_PEC) ?
--		"enabled" : "disabled");
-+	dev_dbg(&client->dev, "PEC: %s\n",
-+		str_enabled_disabled(client->flags & I2C_CLIENT_PEC));
- 
- 	if (!chip->is_present && is_present && !chip->charger_broadcasts)
- 		sbs_disable_charger_broadcasts(chip);
 -- 
-2.43.0
+Sincerely,
+John Wyatt
+Software Engineer, Core Kernel
+Red Hat
 
 
