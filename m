@@ -1,78 +1,121 @@
-Return-Path: <linux-pm+bounces-20409-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20410-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 90A9FA10794
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 14:19:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F40DBA107C4
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 14:27:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A77B3A5D75
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 13:19:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D84D1604B1
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 13:27:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D2C62361F2;
-	Tue, 14 Jan 2025 13:19:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D30623242E;
+	Tue, 14 Jan 2025 13:27:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=r-ricci.it header.i=@r-ricci.it header.b="GG4uwl0r"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Th2+swrA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-175.mta1.migadu.com (out-175.mta1.migadu.com [95.215.58.175])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C5FA224B1A
-	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 13:19:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=95.215.58.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D28232424;
+	Tue, 14 Jan 2025 13:27:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736860776; cv=none; b=aBHl8lGlAgw7YIQ+47z7V0oRvCs/GrfJNgPY9n4kbzYyfnCqZ9ARkkWVa9ANHzNxeTtwiJd18BquenmPJwWpZQHQ9zjfXIhr/qvNBBM8hDeOBSSz2bCEsN8uOYui0BQKSS9e4jwtdRz9hTl0kHoLARNb1Nwnd3OmCknh6JegFAo=
+	t=1736861244; cv=none; b=odYu5WysNHkiuKiF3G4z1YkYgarcQmUmx9rsVT5GadORwxzagUv54dz7tozRuz8NJ6kR1yjrA0fxnLE3KMaO+YnLQfp3AuicfEPPwX1pPjc4WnxmaXdPLEWLZV73moampkX8HxGQ6baF8uOKvvEZASpSVK4/Rjo8hQ6P0TAiDTk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736860776; c=relaxed/simple;
-	bh=332KVkL1C0x+3D8CEeDizwoiBpCDUCrbktmpvFuRRXU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=uS6f6hwL0oIs899W7WVXHtaItwhM7dCXEs0eKjt0NwB4VvlpmgROc2bmT2BUsNwiAoz6CdF1yQfcRqnkQ4JqBrRDbpgjM4Q+1pVw4Unl2O9nrWhwGRC1j7a0FnIpLu5Q6fUQuIgAwduwW0aglpG4se1X5rzGnQS8ZrG2LMnhWgs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=r-ricci.it; spf=pass smtp.mailfrom=r-ricci.it; dkim=pass (2048-bit key) header.d=r-ricci.it header.i=@r-ricci.it header.b=GG4uwl0r; arc=none smtp.client-ip=95.215.58.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=r-ricci.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=r-ricci.it
-Date: Tue, 14 Jan 2025 14:19:15 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=r-ricci.it; s=key1;
-	t=1736860762;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=flEd8z2hdXUk/KymUNdSJ4lzjp1l0nO7/efuuvNahLE=;
-	b=GG4uwl0rwAgNdmsDR1mVIO6bFTRdvrm0k6C/ix7j7Nms85OlahEJ0SMakXx2tAAIEVaOic
-	vE/yuZlFDDqBxq/zVnfmI1aUqcOdTmT65xGHe/T5B//evRkKZ6q9dccdqsMWTFolOIq8uA
-	9m8clwtdLeoQrmio1kHWbC5hZTTf5SvLyH3u9eMv4xLon0WZKoPlbcqqsr7FWn5yNXlfNu
-	s+PYP+w4KadFrVTQqlI1D4f572mGYD6rXt0baFZz+TnzwKDvHou9KLD//rYTmgkp4I2Y1h
-	JBP8U7UwJfGLsW/KPckHN/kUf+KRbjPgeDmBL0PnfT6i/mZY3t0o7WLB/FFUTQ==
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Roberto Ricci <io@r-ricci.it>
-To: Andrew Morton <akpm@linux-foundation.org>
-Cc: ebiederm@xmission.com, rafael@kernel.org, pavel@ucw.cz,
-	ytcoode@gmail.com, kexec@lists.infradead.org,
-	linux-pm@vger.kernel.org, regressions@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from
- hibernation
-Message-ID: <Z4ZkU81xJwEUiCbV@desktop0a>
-References: <Z4WFjBVHpndct7br@desktop0a>
- <20250113151749.b687c35e9f4c6d596449f433@linux-foundation.org>
+	s=arc-20240116; t=1736861244; c=relaxed/simple;
+	bh=eLc+q9S1jrqfKEh0Shy5K5yfQiiy8VjwTpD0Ol7oxo4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Fbv4/FRl8ullsw05p1CzmH+cfi28pwWt+6MdkDJNZSkr4nkQ7jP9fnwWLI43Lt7oMQI/YSLDDL4m9ZaZJW5HOyRCbIoIdC0LcePOBA6WKBNReRIGqLodz7/e26CaesVVmoMGznBERvuWEOjbB5zdftgbmoXqnf4+ysK+6STCTbE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Th2+swrA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF97BC4CEE4;
+	Tue, 14 Jan 2025 13:27:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736861243;
+	bh=eLc+q9S1jrqfKEh0Shy5K5yfQiiy8VjwTpD0Ol7oxo4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Th2+swrA+f4hqIJCt6+/umIAMrtHCVhi9cd3Chl2vVpJt8RYmsKKyYxEW+17USVPz
+	 Lsl1k4znjaUEGAA0hHOSFmuEv918VP5plSCeC3npxvIuUyjZC0zgxgAQYJmIJ/uik5
+	 rYPkIl4w7wbJ5QG7hdB02tjA79n3Wm4c1P+rdpOdILEhB233wlqTm/NKWFCrbU59T0
+	 gmx3djDhpMH0pssNjXAdMvERa5QZHNRJwz4N8AtHAMsgV+SxY4hOfWAfXIr+tfxHkd
+	 YGUTGbAau7nVH2grbRyqVyNuG0M5eRZWs/vx2q5esJ4mhM9gRiKIVgIqD/inOPqGkz
+	 ni85WRL8TuuEQ==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-29fe83208a4so2696875fac.0;
+        Tue, 14 Jan 2025 05:27:23 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUtLy7eR9d5HOsOM+nrBigMqrFF8DVSxVA7/5bwQFLrHQvUgeovYHkvElM5h7FbPcLfcJxMHcWskgdvFCJT@vger.kernel.org, AJvYcCV1LiERKTtUtfwYFzA4sushC9Df0IiBLs53BmAvd9FlOMyyi/zhOdITyNmX7Qaj2/QftlEFEHu2YorV@vger.kernel.org, AJvYcCXxWByjIDkxy1EEJayZeWxlcnYwQQCjtFdFNX3KgFsA2OCEnsoyV3aB7rE2JPI5Ud3nXb6xng2AGqQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyKG8/7uDD6DJ3uRhrvuS9aZuyowZOr9AcPeOhTaDkvzg85QiaQ
+	FbdZc75wVvPU3ME9cZSc/pI8Ap8iuOUe4R2VYv34yPQg3IyblKqwYat/cEVfl5kM6ybVa4a6p64
+	/3cJ33t8OJBHyRu4coQxz31FvpcE=
+X-Google-Smtp-Source: AGHT+IFqQ76W/O+kYshOg6zjtig0JEaVkHWcK8wO+TUwklW859PHlWhrWxjbqDONCXGyMjbNuAP8/Ne+16wXvsa6rkQ=
+X-Received: by 2002:a05:6870:b9c4:b0:29f:b645:ce86 with SMTP id
+ 586e51a60fabf-2aae5aa8daemr12907467fac.12.1736861243031; Tue, 14 Jan 2025
+ 05:27:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250113151749.b687c35e9f4c6d596449f433@linux-foundation.org>
-X-Migadu-Flow: FLOW_OUT
+References: <20250113122104.3870673-1-zhenglifeng1@huawei.com> <20250113122104.3870673-2-zhenglifeng1@huawei.com>
+In-Reply-To: <20250113122104.3870673-2-zhenglifeng1@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 14 Jan 2025 14:27:12 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0ja7AaJza0PeNgutebXRV3tsgxZRwZUBcFksD9thyKg1Q@mail.gmail.com>
+X-Gm-Features: AbW1kvYxFpUsEc9PFeMehAkFEsQFM5KZKo-OlX1ezuwCujGsEj_an0AKwqHVAyg
+Message-ID: <CAJZ5v0ja7AaJza0PeNgutebXRV3tsgxZRwZUBcFksD9thyKg1Q@mail.gmail.com>
+Subject: Re: [PATCH v4 1/6] ACPI: CPPC: Add IS_OPTIONAL_CPC_REG macro
+To: Lifeng Zheng <zhenglifeng1@huawei.com>
+Cc: rafael@kernel.org, lenb@kernel.org, robert.moore@intel.com, 
+	viresh.kumar@linaro.org, mario.limonciello@amd.com, gautham.shenoy@amd.com, 
+	ray.huang@amd.com, pierre.gondois@arm.com, acpica-devel@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com, 
+	fanghao11@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-01-13 Mon 15:17:49 -0800, Andrew Morton wrote:
-> Thanks.  Are you able to confirm that reverting 18d565ea95fe fixes things?
+On Mon, Jan 13, 2025 at 1:21=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huawei.c=
+om> wrote:
+>
+> Add IS_OPTIONAL_CPC_REG macro to judge if a cpc_reg is an optional one.
 
-Actually no, reverting 18d565ea95fe553f442c5bbc5050415bab3c3fa4
-("kexec_file: fix incorrect temp_start value in locate_mem_hole_top_down()")
-on top of v6.13-rc7 does not fix the issue.
-So this might not be the real culprit.
-But I verified that 18d565ea95fe553f442c5bbc5050415bab3c3fa4 is affected
-while 18d565ea95fe553f442c5bbc5050415bab3c3fa4~1 is not.
+This requires a bit more explanation, especially what's the purpose of
+it (ie. the "why").
+
+> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> ---
+>  drivers/acpi/cppc_acpi.c | 6 ++++++
+>  1 file changed, 6 insertions(+)
+>
+> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> index f193e713825a..6454b469338f 100644
+> --- a/drivers/acpi/cppc_acpi.c
+> +++ b/drivers/acpi/cppc_acpi.c
+> @@ -129,6 +129,12 @@ static DEFINE_PER_CPU(struct cpc_desc *, cpc_desc_pt=
+r);
+>  #define CPC_SUPPORTED(cpc) ((cpc)->type =3D=3D ACPI_TYPE_INTEGER ?      =
+   \
+>                                 !!(cpc)->cpc_entry.int_value :          \
+>                                 !IS_NULL_REG(&(cpc)->cpc_entry.reg))
+> +
+> +/* These indicate optional of the per-cpu cpc_regs[]. */
+
+Again, you need to say more here, like how this is supposed to work.
+
+> +#define REG_OPTIONAL (0b111111100011111010000)
+
+A hex literal would work too AFAICS.
+
+> +
+> +#define IS_OPTIONAL_CPC_REG(reg_idx) (REG_OPTIONAL & (1U << (reg_idx)))
+
+You need to explain what reg_idx is.
+
+> +
+>  /*
+>   * Arbitrary Retries in case the remote processor is slow to respond
+>   * to PCC commands. Keeping it high enough to cover emulators where
+> --
 
