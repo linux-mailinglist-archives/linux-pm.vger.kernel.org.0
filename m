@@ -1,134 +1,109 @@
-Return-Path: <linux-pm+bounces-20406-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20407-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45151A105F9
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 12:54:55 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CF6AA10674
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 13:17:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A4B377A3009
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 11:54:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5AF5A1884C22
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 12:17:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20160229611;
-	Tue, 14 Jan 2025 11:54:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9237D234D00;
+	Tue, 14 Jan 2025 12:17:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="r0BU05vq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qdHQrtqe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 405AC234D03
-	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 11:54:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8C97020F998
+	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 12:17:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736855688; cv=none; b=NNuuSc9mZ2acN5EjNY9Pf3TBxK5H2Xb48S/1VNxVuRT8Wit72FMXaB1sOUSAiBvwdeQ/jirnyAaeeDF1tXY0duPR5E1t2KLCHAEgHSdkBLJgqjiS8tvqZmEP2kIZYKhBlvT2rHO0JpMLEdWOpNyFgaDAYFFVJ1ccmtTKYOQUZz0=
+	t=1736857038; cv=none; b=tSlwMHOZJBYeuTUATgo7Nzh1yTh9SZg0ktIy31YUOLTqCrJjdfcfNooeXOoaZk5HJLQSDzfGxXvvMDrj2SJUx3Qc24OnWQbwom5iFBUoW35n9IdycA6HMj/aGozfu+xoc8LRDNk7XFW8e8UP0D2WCuhR0ElsHYUnW8gf2TfMcWQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736855688; c=relaxed/simple;
-	bh=fEDej9nAUZIT3iZUHPHO5YoBQzGTiWDJOevOdtjt7NU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fC3Z6+uJmhr2EtFTzOJka/H7uN0k1w+CfeeI9GJ2D3I10Wv0H3KcGyVfSpZKxApa7kbhfR4VzIWefHegUYW3FqmHlmExbblQeVYCVzLcDOvgMm+oduqTfAoJZf8VUv+bjMbyWyOQEaK46a18djXm9tt70rCGT3SSsbMhwqw8UT0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=r0BU05vq; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1736857038; c=relaxed/simple;
+	bh=8Ie4b99Xwh0aEWRWBEX58b0bMixe8tSP3T+iPjUb6uc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IvxwxnaLgmspj63rob7e4/1orxV2eNOMA7nS1JR3hMfe9ivNkWMzY2RXwa+ps7ZSDUMFLNpubm1Ce1UolUgSjpq5vq98dYitWGi26HAQDPRUDe4CFNFBcnMUznKcfWmGHoaetzkWB+Ybg5nBqDiOJRlJT2V3qlSJvy5+4PGkMXQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qdHQrtqe; arc=none smtp.client-ip=209.85.167.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-436345cc17bso38574295e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 03:54:45 -0800 (PST)
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-5401fb9fa03so4231355e87.1
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 04:17:16 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736855684; x=1737460484; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=qbJZNH3I2kHSJ3p3lZHpAuzG4uICLJvj/AiJ0Ww5yMA=;
-        b=r0BU05vq0UG9S/cKonr0ojd4GQYt9tp1ihp6z/PQXI15eL2WJ15jbGzuQ1IzmpWmf9
-         Nj2geYIoKgLpJKO2BLpYep4OU6uP80jMEiioLLRkJWuKiGPO9M1E/nVsj4d3RVn0CRR4
-         XcHs9qS5kZFdaAzzN/hmeAfpiue/wW6caDKJC9xKjmox4zCZoahuF0ld7lgtkMnq2d0m
-         M3mloHq3rTF0BY4lg1yWBzfgGr14xfsSAjrU5OQ7cv+70tc+9DN3EZqBr+wb1L3NfqGC
-         D94cbvjdskoOcv/sfANOshoSLyatqVMqNE7lOdDWIGAbQx2FvCqSLCxWymul67ukwWrE
-         o6vw==
+        d=linaro.org; s=google; t=1736857035; x=1737461835; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=8Ie4b99Xwh0aEWRWBEX58b0bMixe8tSP3T+iPjUb6uc=;
+        b=qdHQrtqeqnAhe09KLETFGSkDMQv5jTwlECLYrdCpML+BDUAu4hv3V+dz2s/C/dTQm/
+         qRrExopeKyFBXre2BxAocM+XqmLaXrOr07YAyA3ZfuqJAwaO66u8evVZHlTCb8xKNToO
+         oX0yPj/t7D1IPRTc9zj2ymBwzwpDYx5f/C2OAGQRtVrmmgG5Oy/lkvFnQHDIMrSiEeOp
+         G7rqcuTLmWDEI/aD2ABQdlC11DiJfjWMgZtZmhJny/LWeP+ODbTdNm5O7a9xc5KyyN+L
+         c2Xo5Z6b07WciVrpxCXaR0eQwW5HymUGzIoLN1iG4E5NSaZ1uaoChd8j4w7xhx2MMmRY
+         gcVw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736855684; x=1737460484;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=qbJZNH3I2kHSJ3p3lZHpAuzG4uICLJvj/AiJ0Ww5yMA=;
-        b=u8ffQZJ3eQDNBcIlBidAOydJEZY+D4WsfdyHGOtLhBPH6EGaamhI/qftO68v46sJ98
-         7M6pOHMs4VXY+McU8iaG3Q83SNn2vU2cx0nj2DFDvvrwzG8lw5rm2mAF7fkXj1eRTB6p
-         sfrBGlmppakwPRYlH29le0cjssoZBa/Jl5R4uh8V6Uepiby+k1Nzx5zpELPymu2XNSIt
-         6EZw77DnJsTT+oRWjctcVbX96GDkI5R9t/uqusA7Uksvh2SBV9F4uzTDRkbdb1AkrkDX
-         jtgjiEgRcbtWfemOamTqNWTIuAWL4rMa2txWTS+Wn8RZWrMSVrao/p2UNAnNNJbLeCuB
-         hWgA==
-X-Forwarded-Encrypted: i=1; AJvYcCVy4xhujbtG/TUOVBporbD73/slbK5Tjm/DrVnTMMCSbJ0jSD9FpZ6k9VgCMLCdcLxUoMNXuaWbVw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YycM8w7yUpHLCIBhJidyTYcHzZmhXLe4kPJcZNgZWQW/rfUAkd7
-	qNdTUhi0ayuXF5+E+cwCJFO4OxYUfpZ8gwXxfKkxA0p3/5/mkeIM5lKq4EqHUCo=
-X-Gm-Gg: ASbGnctZtLwBZIHNW96BpdWEwga/n9g2bABwWFRyu26Tvo7cS810zp/ScVu7FIRQ+YA
-	LdNRi21qf9TqLdZiOgKfqCrgUf6WOkA1gcWgRrLcG2yXJcBSjGhFo9dIPmN7GM6SGntA1WhMDAJ
-	XX6WGDC+pQVVAnTBJC4um6ihirxJmE9s5sQMQFYYn51k2L3doN0qlQ74Ola+9PRrYLxgPQq1Fgv
-	yobxUOhXgAY/Pzn1NyMKPkGXiYqn3dTQ1jHRCKawBBKnROS/qukrr2ye1pAdLvpTnSOcs8vbboe
-	SSsKkt8E3wxE0a9SDiZ0
-X-Google-Smtp-Source: AGHT+IFlWMbt6nrzrirx/rDmydW/pVj5xprtbzyuAVBQY0lAHuDRdBjo+/B7yttkEhzKPsZ0JknC1w==
-X-Received: by 2002:a05:600c:283:b0:434:f1e9:afae with SMTP id 5b1f17b1804b1-436ee0f8783mr124040565e9.1.1736855684496;
-        Tue, 14 Jan 2025 03:54:44 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-437c0f03984sm13710775e9.0.2025.01.14.03.54.43
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2025 03:54:44 -0800 (PST)
-Message-ID: <53f3803f-c6ef-40db-9794-6c90b37659c1@linaro.org>
-Date: Tue, 14 Jan 2025 12:54:43 +0100
+        d=1e100.net; s=20230601; t=1736857035; x=1737461835;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=8Ie4b99Xwh0aEWRWBEX58b0bMixe8tSP3T+iPjUb6uc=;
+        b=eTJNUHNwBntk/RRDvy8jcPlBfH6tjjdxbc3L8X8w4EDwitscUp+brK4Hyt/bvx9B7g
+         C/PdHcIRc4eFse4q8GCpV7kduIVGjEpolpi+h3UTy1TE41Pr/kgJdqFUDkZC/zH8cdM+
+         y1PaLXAzsfs/JMa8vCAABz+F5MQGbHyPubMk0ei9ewE4NqFPiUFFUbb5LCb0q3HBhD/Q
+         3Fdw/X5b0cNlyr6KAG2pFv6fKj/JmerCkVwO8Bs05hQFM5Occ4IHys/BHM+RvoNTYY/E
+         1DBChOcYg6gWyR+BQf79MofynSub8r6BI5RUbVBvpPDxv4FPYZKuwpNLpORtzPfFgwbK
+         XlYA==
+X-Forwarded-Encrypted: i=1; AJvYcCWOZAMhn5JIoMA8G6bd9XaBpwxjSMTnzqQt+PDXW756mLpRpyJu6pJSDf52m3T+pwFiuxbRAqE4Zg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxSGF8sw+F7iJxwL6m+WHzHAyBb+WvmQZSeq/YUErC4qgvDLodr
+	dEEDj/0ViiBH2giiVoM9hu83i0XPw11cAXhULERFB+O3rRTRTCZOPZZ3raTb/jHpj0+XBCFR6Zq
+	j+D/33OqGhiKoLC8sXjaATx12fXOe81XPTK92mg==
+X-Gm-Gg: ASbGnctv69ny0DbT+9p2hia5+ILkYAMEoN23NuZgVoDiEhvyrwOtpga0hzJ0esZouCX
+	kCyiukZXlhGmGLdwrCYFlcEmln5YE5ajsu3tZ
+X-Google-Smtp-Source: AGHT+IG/nVzJ4usllSB7WeL3esJ0/+hz1rQx2YNWDFn17mueoKalfz6Uj0tzGOzfhZRqk49pDpDqslNG3Jdx7c4EaqI=
+X-Received: by 2002:a05:6512:b97:b0:542:986b:de08 with SMTP id
+ 2adb3069b0e04-542986be0a1mr3961478e87.26.1736857034594; Tue, 14 Jan 2025
+ 04:17:14 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v2 2/5] thermal/drivers/mediatek/lvts: Disable
- Stage 3 thermal threshold
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Matthias Brugger
- <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Alexandre Mergnat <amergnat@baylibre.com>, Balsam CHIHI <bchihi@baylibre.com>
-Cc: kernel@collabora.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, Hsin-Te Yuan <yuanhsinte@chromium.org>,
- Chen-Yu Tsai <wenst@chromium.org>, =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?=
- <bero@baylibre.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- stable@vger.kernel.org
-References: <20250113-mt8192-lvts-filtered-suspend-fix-v2-0-07a25200c7c6@collabora.com>
- <20250113-mt8192-lvts-filtered-suspend-fix-v2-2-07a25200c7c6@collabora.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250113-mt8192-lvts-filtered-suspend-fix-v2-2-07a25200c7c6@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250103-wake_irq-v2-0-e3aeff5e9966@nxp.com> <20250103-wake_irq-v2-9-e3aeff5e9966@nxp.com>
+In-Reply-To: <20250103-wake_irq-v2-9-e3aeff5e9966@nxp.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Tue, 14 Jan 2025 13:17:03 +0100
+X-Gm-Features: AbW1kvYSSgagqOIiggVP1rEX84eySXcyOvS8Yel1NcZ50o6oIQlw1NaD7KnQIZM
+Message-ID: <CACRpkdbFtLhGXwSbCF+v54eEdm0w=sDsseUPiRfc=xmak-DbhQ@mail.gmail.com>
+Subject: Re: [PATCH v2 09/12] rtc: pm8xxx: Use devm_pm_set_wake_irq
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
+	Alexandre Belloni <alexandre.belloni@bootlin.com>, Maxime Coquelin <mcoquelin.stm32@gmail.com>, 
+	Alexandre Torgue <alexandre.torgue@foss.st.com>, Conor Dooley <conor.dooley@microchip.com>, 
+	Daire McNamara <daire.mcnamara@microchip.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org, 
+	linux-rtc@vger.kernel.org, linux-stm32@st-md-mailman.stormreply.com, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, Peng Fan <peng.fan@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 13/01/2025 14:27, Nícolas F. R. A. Prado wrote:
-> The Stage 3 thermal threshold is currently configured during
-> the controller initialization to 105 Celsius. From the kernel
-> perspective, this configuration is harmful because:
-> * The stage 3 interrupt that gets triggered when the threshold is
->    crossed is not handled in any way by the IRQ handler, it just gets
->    cleared. Besides, the temperature used for stage 3 comes from the
->    sensors, and the critical thermal trip points described in the
->    Devicetree will already cause a shutdown when crossed (at a lower
->    temperature, of 100 Celsius, for all SoCs currently using this
->    driver).
-> * The only effect of crossing the stage 3 threshold that has been
->    observed is that it causes the machine to no longer be able to enter
->    suspend. Even if that was a result of a momentary glitch in the
->    temperature reading of a sensor (as has been observed on the
->    MT8192-based Chromebooks).
-> 
-> For those reasons, disable the Stage 3 thermal threshold configuration.
+On Fri, Jan 3, 2025 at 9:42=E2=80=AFAM Peng Fan (OSS) <peng.fan@oss.nxp.com=
+> wrote:
 
-Does this stage 3 not designed to reset the system ? So the interrupt 
-line should be attached to the reset line ? (just asking)
+> From: Peng Fan <peng.fan@nxp.com>
+>
+> Use devm_pm_set_wake_irq, then the 'driver.remove()' could be cleaned up.
+>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
 
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Yours,
+Linus Walleij
 
