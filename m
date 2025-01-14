@@ -1,172 +1,144 @@
-Return-Path: <linux-pm+bounces-20404-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20405-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E2881A104BF
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 11:56:41 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D896FA10578
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 12:31:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B0181691FD
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 10:56:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 928323A05C9
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 11:31:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A4124334A;
-	Tue, 14 Jan 2025 10:56:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OU/O7M33"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB599234CF4;
+	Tue, 14 Jan 2025 11:31:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from vps-ovh.mhejs.net (vps-ovh.mhejs.net [145.239.82.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197863DABE4
-	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 10:56:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F5D9234CE8;
+	Tue, 14 Jan 2025 11:31:38 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=145.239.82.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736852177; cv=none; b=WO4gOfbV2Hgkv9GF2B+oaBYF7hxXG/iyWsETUIR6NdoUzlDtayuMw4UlztfZ8yD9novZRRHqXewwFjUYs/db5V6rxRJuYwlrMeduhVQRHIIoJQhSi1GICdx/whOvpGjt8b3RSjrW63sNYBuZjzmdIdWe1IQNlr4/W/BvDM/hTrU=
+	t=1736854302; cv=none; b=uGcQ46Mw7aFL0TNtKJt64p98k3TjlVn3EVOyiq72gO3uNSMW6Y9J6OZ/uBUtkYbcU8Kt+iP1Ed+YgR/alfcjBig0fb29878SkGR9A6X6UT8uOcFJG5C0CdFubx9j2kMUJqPafUhxLaMZn3HyemJWWLaErPP4SPvphDPliLauLaI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736852177; c=relaxed/simple;
-	bh=apw9YRbIZ1vmrPQOI1/lMVImDpyDtn8TVgIS0tClx/8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZDoVr4ShaXa1G5eivpPbJLoT6o3U6mpLgUBP1fflO6q4mIubDcQAwaKPEszjdhaSkFlcoWBvctXSY15EGZ4cz2T9sOqNs5ndw37rsOCrH2t1IahkbYL61YicLFfP5YUiUylTwDm7bQc3Pff8g6RdrH73/7If+KWmr1FIJcB0N2c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OU/O7M33; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ab30614c1d6so53646266b.1
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 02:56:15 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736852174; x=1737456974; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=/9oSrldtgC1P5MkOGOlIxpHFkeRWTLigJBFqOxmE9I8=;
-        b=OU/O7M33UZQhjE1xPYGHXdbPcTDJ8kJzCbhIiSjWBYDtR6eVl7HAX3M16Jpz8BNjaz
-         joJT+F9VlIf+NDzT9V1F8X0QaUwDeb+lBD6yXhp527Ln+tv+EbLXdQhbcbSjk0/RHiK7
-         gCrMM/LMTS0ojNtiz1oNjYQH0AXqA0IvTZ7PwkU9bsXddkIiP91hA682PHZfRoFWLOun
-         QiMA7c0KVv5SMduYg90el6oDFzbNgxa50cExSHYrPiSnDYgA1WzbfIDF7tRHFkpo6f8i
-         WkA9tAygAp0wIWAVOGSu0xHem/PgRMBSeHYiCVQePoSLWzaFZQRXbkXUffeF2OeHvA2+
-         ucBw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736852174; x=1737456974;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=/9oSrldtgC1P5MkOGOlIxpHFkeRWTLigJBFqOxmE9I8=;
-        b=RjC0GBgGYW5nUzy2XEsnurk4NVPQuuK8tDjlN6apyKUZIxz3tozOEn3LD+CNylwioi
-         yX5RXj7vey6uC9qnaSZ7kAYqRZXQNsfEuIL2tZRyJx2u6P6zYWwvzCy5c377A7sc24Pp
-         tDU3P/ov1t5cJ/yL9N16Qa4G1u6BdMow0Jg47FSoBFJRVmbHG7Rna9NgSQdHNKlz5EP2
-         shryU9yY2ISE8uoOxOlh8fOGFuXh5n2Z0C3IdZBHd/wKev+b5bKvqsVmo9te0WM11RTs
-         kU3ZWh7wkx1jRp7ODlLP4NlZ0RD8iEwvRWzjR04tDtNE7mpdxj78zvolbPN29mlh/1/d
-         +cRw==
-X-Forwarded-Encrypted: i=1; AJvYcCXGTQv+pTBhOrESuceqFbrEolqU1OgpG92uy3njiFn6r5KhhrOaEe/mojUHZs+l+y6kpNZ6OYvVmw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzn0AcDlJi7xyNQNju94ObGpOaCaeW4b/Qiee0LmnbSYhZSVT/y
-	3I9gEVCJPyN5QsLqznewsRm7sfvSCWgTQrbg9jPQQM1LgyQRQs3R/F/QlVubixc=
-X-Gm-Gg: ASbGncuyFvRb2Mq2rFWXb0XlpvQuW3h0LVFZGEzOtpJQ0QqVS4w04Lb+tD+8ydxK8NV
-	CnwG+YKxNdXXNruUtIAkQmmF64lfpwNPfeaKr16xMkOlS+TKzp70HesVtlCLA+EJcrfoVuAbLtY
-	J/+eDub1DkkJISw0aLQ5ULutOic5JTRHRR2scqkkD19eSzfsZ1Dc5c+EwfhLOgTPYjOn2+T7iVe
-	BGl6kREum+9iVReFum+37snuI/BhDfq/oRF31gKo5qLHKJ6GmAFm7XscB7a8dHFZHEQpsY=
-X-Google-Smtp-Source: AGHT+IELLCYYvHKb5lpw7z0EW5WhiA9Rzrdg/loEMvWoWRnv3YcLbL4xd0LbtlI+AziAeBNghsD6uQ==
-X-Received: by 2002:a17:907:2d92:b0:aa6:9631:923f with SMTP id a640c23a62f3a-ab2abc9519fmr845034066b.12.1736852174367;
-        Tue, 14 Jan 2025 02:56:14 -0800 (PST)
-Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c95b215esm611700266b.161.2025.01.14.02.56.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2025 02:56:13 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] cpufreq: Use str_enable_disable-like helpers
-Date: Tue, 14 Jan 2025 11:56:11 +0100
-Message-ID: <20250114105611.273202-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1736854302; c=relaxed/simple;
+	bh=eW6U59BPg0IUfxzmR11pJfNIdnQfbsiAzNpoLYz5DZo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PXF65Kcz6kMZgvN9EonNlLCuSlUuJYX68ySaKsrgUwlLu+u+Fede5iL/rFPmMO7TOl8wCfI25nH8VIOhn5fZqMjN6dTQG/UhddO1qRjwc9Fh1RHhF3wlQ4m7ct7pXvMF+/DS52gMnhVJ+drCrbFEt2bev5UT4FgOuDhnLLb1amA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name; spf=pass smtp.mailfrom=vps-ovh.mhejs.net; arc=none smtp.client-ip=145.239.82.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=maciej.szmigiero.name
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=vps-ovh.mhejs.net
+Received: from MUA
+	by vps-ovh.mhejs.net with esmtpsa  (TLS1.3) tls TLS_AES_128_GCM_SHA256
+	(Exim 4.98)
+	(envelope-from <mhej@vps-ovh.mhejs.net>)
+	id 1tXf8r-00000005dxg-1mCl;
+	Tue, 14 Jan 2025 12:31:29 +0100
+Message-ID: <5459665f-a0ac-4b17-8830-17fa26f78dcb@maciej.szmigiero.name>
+Date: Tue, 14 Jan 2025 12:31:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3] net: wwan: iosm: Fix hibernation by re-binding the
+ driver around it
+To: Paolo Abeni <pabeni@redhat.com>
+Cc: Andrew Lunn <andrew+netdev@lunn.ch>,
+ M Chetan Kumar <m.chetan.kumar@intel.com>,
+ Loic Poulain <loic.poulain@linaro.org>,
+ Sergey Ryazanov <ryazanov.s.a@gmail.com>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ Bjorn Helgaas <bhelgaas@google.com>, "David S. Miller"
+ <davem@davemloft.net>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ netdev@vger.kernel.org, linux-pci@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <e60287ebdb0ab54c4075071b72568a40a75d0205.1736372610.git.mail@maciej.szmigiero.name>
+ <44a21765-1283-4e79-b24a-fb672399250d@redhat.com>
+Content-Language: en-US, pl-PL
+From: "Maciej S. Szmigiero" <mail@maciej.szmigiero.name>
+Autocrypt: addr=mail@maciej.szmigiero.name; keydata=
+ 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
+Disposition-Notification-To: "Maciej S. Szmigiero"
+ <mail@maciej.szmigiero.name>
+In-Reply-To: <44a21765-1283-4e79-b24a-fb672399250d@redhat.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+Sender: mhej@vps-ovh.mhejs.net
 
-Replace ternary (condition ? "enable" : "disable") syntax with helpers
-from string_choices.h because:
-1. Simple function call with one argument is easier to read.  Ternary
-   operator has three arguments and with wrapping might lead to quite
-   long code.
-2. Is slightly shorter thus also easier to read.
-3. It brings uniformity in the text - same string.
-4. Allows deduping by the linker, which results in a smaller binary
-   file.
+On 14.01.2025 09:49, Paolo Abeni wrote:
+> On 1/9/25 12:33 AM, Maciej S. Szmigiero wrote:
+>   @@ -530,3 +531,56 @@ void ipc_pcie_kfree_skb(struct iosm_pcie
+> *ipc_pcie, struct sk_buff *skb)
+>>   	IPC_CB(skb)->mapping = 0;
+>>   	dev_kfree_skb(skb);
+>>   }
+>> +
+>> +static int pm_notify(struct notifier_block *nb, unsigned long mode, void *_unused)
+>> +{
+>> +	if (mode == PM_HIBERNATION_PREPARE || mode == PM_RESTORE_PREPARE) {
+>> +		if (pci_registered) {
+> 
+> Out of sheer ignorance on my side, why 'mode == PM_RESTORE_PREPARE' is
+> required above? Isn't the driver already unregistered by the previous
+> PM_HIBERNATION_PREPARE call?
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
----
- drivers/cpufreq/cpufreq.c         | 7 ++++---
- drivers/cpufreq/powernv-cpufreq.c | 3 ++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+If the restore kernel had this driver loaded then it needs to be unregistered
+before restoring the hibernation image so it has chance to shut the modem
+firmware down rather than keep it running during the restore process.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 418236fef172..fba62124b56a 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -25,6 +25,7 @@
- #include <linux/mutex.h>
- #include <linux/pm_qos.h>
- #include <linux/slab.h>
-+#include <linux/string_choices.h>
- #include <linux/suspend.h>
- #include <linux/syscore_ops.h>
- #include <linux/tick.h>
-@@ -602,12 +603,12 @@ static ssize_t store_boost(struct kobject *kobj, struct kobj_attribute *attr,
- 
- 	if (cpufreq_boost_trigger_state(enable)) {
- 		pr_err("%s: Cannot %s BOOST!\n",
--		       __func__, enable ? "enable" : "disable");
-+		       __func__, str_enable_disable(enable));
- 		return -EINVAL;
- 	}
- 
- 	pr_debug("%s: cpufreq BOOST %s\n",
--		 __func__, enable ? "enabled" : "disabled");
-+		 __func__, str_enable_disable(enable));
- 
- 	return count;
- }
-@@ -2812,7 +2813,7 @@ int cpufreq_boost_trigger_state(int state)
- 	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
- 
- 	pr_err("%s: Cannot %s BOOST\n",
--	       __func__, state ? "enable" : "disable");
-+	       __func__, str_enable_disable(state));
- 
- 	return ret;
- }
-diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-index 8de759247771..ae79d909943b 100644
---- a/drivers/cpufreq/powernv-cpufreq.c
-+++ b/drivers/cpufreq/powernv-cpufreq.c
-@@ -18,6 +18,7 @@
- #include <linux/of.h>
- #include <linux/reboot.h>
- #include <linux/slab.h>
-+#include <linux/string_choices.h>
- #include <linux/cpu.h>
- #include <linux/hashtable.h>
- #include <trace/events/power.h>
-@@ -281,7 +282,7 @@ static int init_powernv_pstates(void)
- 	pr_info("cpufreq pstate min 0x%x nominal 0x%x max 0x%x\n", pstate_min,
- 		pstate_nominal, pstate_max);
- 	pr_info("Workload Optimized Frequency is %s in the platform\n",
--		(powernv_pstate_info.wof_enabled) ? "enabled" : "disabled");
-+		str_enabled_disabled(powernv_pstate_info.wof_enabled));
- 
- 	pstate_ids = of_get_property(power_mgt, "ibm,pstate-ids", &len_ids);
- 	if (!pstate_ids) {
--- 
-2.43.0
+This way when the driver from the restored image re-binds the device it finds
+it in the proper non-running state.
+
+> Thanks,
+> 
+> Paolo
+> 
+
+Thanks,
+Maciej
 
 
