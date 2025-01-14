@@ -1,177 +1,213 @@
-Return-Path: <linux-pm+bounces-20436-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20437-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5649A110D2
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 20:06:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD919A11141
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 20:39:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AC1211886035
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 19:06:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AC1D3A1A89
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 19:38:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DE272040BD;
-	Tue, 14 Jan 2025 19:06:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CE65202C41;
+	Tue, 14 Jan 2025 19:38:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Bxq3MzXx"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CyKfe5lj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f46.google.com (mail-wr1-f46.google.com [209.85.221.46])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57D4D1FC10E
-	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 19:06:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5C601CEE92;
+	Tue, 14 Jan 2025 19:38:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736881568; cv=none; b=cRaT/Q+ljx6Y/CuXXrsKTB1Qk0uouwIZMvKR1+odooxjbigFBwSzBNBpxH4XETNYAuI1d1mb3pwqtkmTJB7r1RaCuFv5XXg59rlu/4QJ7k42hWcsmkfzD3q2jcvAsBKjHZe7Qy7UuXieXB+hUzlvtOU2TmzMMZw2V0JDbt+JKFA=
+	t=1736883537; cv=none; b=S1KKdePRMsEhYLrBCV9mU6+wvPADA9jJSCQX45AqzjssByFHtTgz9jDs4KG4V2kwDkId4oPLCsUy0dX86pFptAW7gNaRB9NlkutoAQ+UryYI4p2Rs8pUzDP2IAyuQ50wc1dbkG1sd5w5VM0dk1xPO+cRTLvcZyAOaBibDaKaRdU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736881568; c=relaxed/simple;
-	bh=LXLQiJqWt+6VSxSgWHu0HnY8Id/SQVdnYvhKrOX0X7o=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=LsKvMuUCO2i+FN0T7qcHCH/myC7diJCgpGFNMVAICMADNfR0GzOs8RAuVQ0AH/cORgFdViMBm29QxTh9b63aZe2+qQ2vMKBAt3XOZdbpmORUHUtyTd7pR0ociQD5YYWWlevezgNFBEbpRAWJk0B7uztQSaIZLUg7Nw0oTVSNQzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Bxq3MzXx; arc=none smtp.client-ip=209.85.221.46
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f46.google.com with SMTP id ffacd0b85a97d-3862de51d38so270373f8f.1
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 11:06:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736881565; x=1737486365; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=lN5rUEMysp3+AroTy4SlvvD7Pduqgen38rd5O/+MvPY=;
-        b=Bxq3MzXxtNeyVBTpsf3utpz6NkwjrQz6mV1qh68FgOIgezYUFS8qIAF+XT5jsAvT7c
-         h66i7mApvhJtNIHdJHBrRIlRu3Pyge9jgIl6xACMxTmN3+plyc39SkY91AuChSZ+n8Mc
-         quGEVWWJ1cmJ0HbgYMgmWFusfVCVK7IeM3/fMX6IXGIzGSRuyG1fYFqpd1WBKDwbZQUy
-         4zBsGgvVJPi5+5IcuzYgTajTm/Ipm1Vnh2PKvd2rotEHPMdyCRsLO+THADdQ7g1URFQi
-         FKpGT/+m3YfLDN8Gb+SnuvH0n5dEOnfNmyHDyAeQazPnTf/Rk5RPhaTnWYbO4rv47Swe
-         TgWg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736881565; x=1737486365;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=lN5rUEMysp3+AroTy4SlvvD7Pduqgen38rd5O/+MvPY=;
-        b=Ac6zFSWgHXGrSSLlTwUR6Mr9cKuxHlBek6D0AbhkexGeISCasi+TVgQF/Jhb0bqRwN
-         4bimRlYiwmByRUjR0tjt5c/+nDSTlXB/6jm6sb/5B0dL99JXhfXrvoUTJBbR5rZoNrxr
-         bAkjKz/StZ9LlNEQOOt6EhnmVeKBtsrolAp6Khw7IaPyp86Egw3lLJ0wHvJOGkXfYez3
-         VXZSO35jmmaXbCVdNm2ZSWKXJWuHdUftGcVeYTDfA6SMjbU6nSJPDE4/rgD4doRcJK5n
-         z/cfbbE1GFLHnHkrgG2Mo3dNgzEWKlqH4clBlr/O0bZYn+zTzCxMIcy80YwVi4JUpuo3
-         q98Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVQQfhNkF2hUPd3BaLSukCesjKFm+L0Txytq375Mw2+1n5gwyhjsUNmi/xH8sXM8MA91jHsT3vowQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBU8gPAQbH5vBwLfo/U6VP1x+/rLsRe+sMqb1gaP92VowmsJd5
-	6lmPtAs6Q2/OlG74fBtEmyl4UmObGICYNHzae4F2MZRJiB03h3+Bt0v15JGqnLE=
-X-Gm-Gg: ASbGncsUM1tnjsRi0yJUIkF24BfT0jZCcAAFEvJOk9VmvsDPaR6QSjn5OeI+wYbbD1e
-	P4Vwbf1ruuoyyuPCrTkX2wyKy64544uWDAGPq+WSLAxcfQsTR1Py3/ydsoqAvT4G7JC2a+la4kY
-	SztJkaFHpCeQrCBUeOu1k+FDQ9+Wv+lkJuPnLq4QZL2Va52WUdxl7sD9+yqZn5+lka19TWgBktt
-	fwxwjBpHDUJtGOSf+PFHOEPC8TXwAZ4S4wDEuoNnCMjFduAoIoKYA40534HtjpyFw7rRFw=
-X-Google-Smtp-Source: AGHT+IE6pa0lthPJtWzhB15VzlOKuOcoh6DUo2csVHRrLlrQDBEdBv9yOOVd7c4Cp/ivr1V81kDl7A==
-X-Received: by 2002:a05:6000:705:b0:37d:4aa2:5cfe with SMTP id ffacd0b85a97d-38a872d9f96mr8638256f8f.6.1736881564689;
-        Tue, 14 Jan 2025 11:06:04 -0800 (PST)
-Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4b81a4sm15958883f8f.68.2025.01.14.11.06.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2025 11:06:04 -0800 (PST)
-From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Michael Ellerman <mpe@ellerman.id.au>,
-	Nicholas Piggin <npiggin@gmail.com>,
-	Christophe Leroy <christophe.leroy@csgroup.eu>,
-	Naveen N Rao <naveen@kernel.org>,
-	Madhavan Srinivasan <maddy@linux.ibm.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linuxppc-dev@lists.ozlabs.org
-Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH v2] cpufreq: Use str_enable_disable-like helpers
-Date: Tue, 14 Jan 2025 20:06:00 +0100
-Message-ID: <20250114190600.846651-1-krzysztof.kozlowski@linaro.org>
-X-Mailer: git-send-email 2.43.0
+	s=arc-20240116; t=1736883537; c=relaxed/simple;
+	bh=OincceTvqAqEpfIje4dELWgrlyHWDOIWYkXRrsBVy5o=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=vEcGrPybh89FmDv5b0aPHFHo8KW5I2CKXuKPNq6nlfjy22bYxT34PgwDOBsBlrBbmvUYojzmY3dPjLnaaEPC/W1ux8qgfsndouM4sSSOUxOyzQs2pvML8Wdy2kdF6BgDNzOVuHi7J1xavPDIdzosunjXOGstJKBHrnKhvxGSvEw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CyKfe5lj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C0CD5C4CEDD;
+	Tue, 14 Jan 2025 19:38:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736883536;
+	bh=OincceTvqAqEpfIje4dELWgrlyHWDOIWYkXRrsBVy5o=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=CyKfe5ljU9ll4V4DBYvKLID0oqsycgmmiXy9Ghw/HatzxXC6i0V4xCpYw4Ru5Vbgu
+	 XXcZs7D3coWrRm5R1wuc6HpWShac3E9l01XiejObkTBb/+9ErGKiaf4X04MQzf65QA
+	 OuziKXgf5Dfjdg6r90wxJsuk+msyBDJ9U9QxfZhFq8Yo5mrgmud482s8e3zFXk7ORN
+	 GzkOGMQUrBsIyNWWGxvfvEBqhuDTuuzN+pF8Em89CgMj2d1nNY3oYAslRwlJAQBzLm
+	 Z+kmJGg6AGj38+Ep1hPJulF0T5UITLgwysoApnLTRKNEgjmSb5XtAR4Kt2eyAE8Q8P
+	 tFTw8TB2jq+Bw==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5f6b65c89c4so1153155eaf.2;
+        Tue, 14 Jan 2025 11:38:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVnj+gmQrMvbiA70lAaH3U5aSQBeTSeTDob2Ty6zg/GfAhGBVNhtIWOAQvT38YTC3K9ZIFs2+w53yA=@vger.kernel.org, AJvYcCWhTqvp0Pm8uIujDtmW2gxw2WA16Og7RYgDbw/s161BIjroxxDRyH96rEiz/B6q7lekk+DCgqjR2WnOJ9U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YynlLYERAFIJA959HIhP7T3rEJyUOJUp+d0eC4YEjblvGBmFpjn
+	q3oqclqL45zllHmrIKqxstUqAMV5mVnv3HBVzf6t3NIsDr6oCAQoTcKYx+11JFc8BJ3IAMuPH5h
+	OrQZJZRscC3nDpjXJyjmnsq6Gi5w=
+X-Google-Smtp-Source: AGHT+IH2at2WiK9Qz938X6eVc5gH+upks6UVSnjd9BbiVdH2NZZq0Qyq7zmmLPZXgaD6psvziPrHvtJMF84VY9ZLvEA=
+X-Received: by 2002:a05:6871:6317:b0:29e:3132:5897 with SMTP id
+ 586e51a60fabf-2aa0666a876mr15423039fac.5.1736883536148; Tue, 14 Jan 2025
+ 11:38:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250108061942.3264396-1-rui.zhang@intel.com>
+In-Reply-To: <20250108061942.3264396-1-rui.zhang@intel.com>
+From: Len Brown <lenb@kernel.org>
+Date: Tue, 14 Jan 2025 13:38:48 -0600
+X-Gmail-Original-Message-ID: <CAJvTdKmVcS5X0Q5omBsEPEzwBiNgkx0RzRmHzpWJvswsqQSCmQ@mail.gmail.com>
+X-Gm-Features: AbW1kvakpseX_sbCc2Al2je5Ull6GHqSHrezL4e8WtuqMMumrig1a66bguqlg6U
+Message-ID: <CAJvTdKmVcS5X0Q5omBsEPEzwBiNgkx0RzRmHzpWJvswsqQSCmQ@mail.gmail.com>
+Subject: Re: [PATCH] tools/power turbostat: Time procfs/sysfs snapshot cost
+To: Zhang Rui <rui.zhang@intel.com>
+Cc: rafael.j.wysocki@intel.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Replace ternary (condition ? "enable" : "disable") syntax with helpers
-from string_choices.h because:
-1. Simple function call with one argument is easier to read.  Ternary
-   operator has three arguments and with wrapping might lead to quite
-   long code.
-2. Is slightly shorter thus also easier to read.
-3. It brings uniformity in the text - same string.
-4. Allows deduping by the linker, which results in a smaller binary
-   file.
+Applied, thanks!
 
-Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+BTW. when you start a line with "---" in the e-mail, git-am excludes
+text from there on out from the commit patch header.
+This is sometimes used to add some context in the e-mail that isn't
+intended to go into the log.
 
----
+In this case, I think your extra comments deserve to live in the log,
+so I've tweaked the syntax to include them.
 
-Changes in v2:
-1. Fix enable->enabled
----
- drivers/cpufreq/cpufreq.c         | 7 ++++---
- drivers/cpufreq/powernv-cpufreq.c | 3 ++-
- 2 files changed, 6 insertions(+), 4 deletions(-)
+thanks,
+-Len
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 418236fef172..1076e37a18ad 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -25,6 +25,7 @@
- #include <linux/mutex.h>
- #include <linux/pm_qos.h>
- #include <linux/slab.h>
-+#include <linux/string_choices.h>
- #include <linux/suspend.h>
- #include <linux/syscore_ops.h>
- #include <linux/tick.h>
-@@ -602,12 +603,12 @@ static ssize_t store_boost(struct kobject *kobj, struct kobj_attribute *attr,
- 
- 	if (cpufreq_boost_trigger_state(enable)) {
- 		pr_err("%s: Cannot %s BOOST!\n",
--		       __func__, enable ? "enable" : "disable");
-+		       __func__, str_enable_disable(enable));
- 		return -EINVAL;
- 	}
- 
- 	pr_debug("%s: cpufreq BOOST %s\n",
--		 __func__, enable ? "enabled" : "disabled");
-+		 __func__, str_enabled_disabled(enable));
- 
- 	return count;
- }
-@@ -2812,7 +2813,7 @@ int cpufreq_boost_trigger_state(int state)
- 	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
- 
- 	pr_err("%s: Cannot %s BOOST\n",
--	       __func__, state ? "enable" : "disable");
-+	       __func__, str_enable_disable(state));
- 
- 	return ret;
- }
-diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-index 8de759247771..ae79d909943b 100644
---- a/drivers/cpufreq/powernv-cpufreq.c
-+++ b/drivers/cpufreq/powernv-cpufreq.c
-@@ -18,6 +18,7 @@
- #include <linux/of.h>
- #include <linux/reboot.h>
- #include <linux/slab.h>
-+#include <linux/string_choices.h>
- #include <linux/cpu.h>
- #include <linux/hashtable.h>
- #include <trace/events/power.h>
-@@ -281,7 +282,7 @@ static int init_powernv_pstates(void)
- 	pr_info("cpufreq pstate min 0x%x nominal 0x%x max 0x%x\n", pstate_min,
- 		pstate_nominal, pstate_max);
- 	pr_info("Workload Optimized Frequency is %s in the platform\n",
--		(powernv_pstate_info.wof_enabled) ? "enabled" : "disabled");
-+		str_enabled_disabled(powernv_pstate_info.wof_enabled));
- 
- 	pstate_ids = of_get_property(power_mgt, "ibm,pstate-ids", &len_ids);
- 	if (!pstate_ids) {
--- 
-2.43.0
+On Wed, Jan 8, 2025 at 12:19=E2=80=AFAM Zhang Rui <rui.zhang@intel.com> wro=
+te:
+>
+> Column "usec" is used to measure time cost, but right now it does not
+> include the procfs and sysfs snapshot time, which lowers its value.
+>
+> --- Background ---
+> Column "usec" shows
+> 1. the number of microseconds elapsed during counter collection,
+>    including thread migration -- if any, for each CPU row.
+> 2. total elapsed time to collect the counters on all cpus, for the
+>    summary row.
+> This can be used to check the time cost of a give column. For example,
+> run below commands separately
+>    turbostat --show usec sleep 1
+>    turbostat --show usec,CoreTmp sleep 1
+> and the delta in the usec column will tell the time cost for CoreTmp
+> (Thermal MSR read)
+>
+> --- Problem ---
+> Some of the kernel procfs/sysfs accesses are expensive, especially on
+> high core count systems. "usec" column cannot tell this because it only
+> includes the time cost of the counters.
+>
+> --- Solution ---
+> Leave the per CPU "usec" as it is and modify the summary "usec" to
+> include the time cost of the procfs/sysfs snapshot.
+>
+> With it, the "usec" column can be used to get
+> 1. the baseline, e.g.
+>         turbostat --show usec sleep 1
+> 2. the baseline + some per CPU counter cost, e.g.
+>         turbostat --show usec,CoreTmp sleep 1
+> 3. the baseline + some per CPU sysfs cost, e.g.
+>         turbostat --show usec,C1 sleep 1
+> 4. the baseline + /proc/interrupts cost, e.g
+>         turbostat --show usec,IRQ sleep 1
+>
+> Document update is also included.
+>
+> Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+> ---
+>  tools/power/x86/turbostat/turbostat.8 | 2 +-
+>  tools/power/x86/turbostat/turbostat.c | 7 ++++++-
+>  2 files changed, 7 insertions(+), 2 deletions(-)
+>
+> diff --git a/tools/power/x86/turbostat/turbostat.8 b/tools/power/x86/turb=
+ostat/turbostat.8
+> index a7f7ed01421c..6fad772dacde 100644
+> --- a/tools/power/x86/turbostat/turbostat.8
+> +++ b/tools/power/x86/turbostat/turbostat.8
+> @@ -136,7 +136,7 @@ displays the statistics gathered since it was forked.
+>  The system configuration dump (if --quiet is not used) is followed by st=
+atistics.  The first row of the statistics labels the content of each colum=
+n (below).  The second row of statistics is the system summary line.  The s=
+ystem summary line has a '-' in the columns for the Package, Core, and CPU.=
+  The contents of the system summary line depends on the type of column.  C=
+olumns that count items (eg. IRQ) show the sum across all CPUs in the syste=
+m.  Columns that show a percentage show the average across all CPUs in the =
+system.  Columns that dump raw MSR values simply show 0 in the summary.  Af=
+ter the system summary row, each row describes a specific Package/Core/CPU.=
+  Note that if the --cpu parameter is used to limit which specific CPUs are=
+ displayed, turbostat will still collect statistics for all CPUs in the sys=
+tem and will still show the system summary for all CPUs in the system.
+>  .SH COLUMN DESCRIPTIONS
+>  .PP
+> -\fBusec\fP For each CPU, the number of microseconds elapsed during count=
+er collection, including thread migration -- if any.  This counter is disab=
+led by default, and is enabled with "--enable usec", or --debug.  On the su=
+mmary row, usec refers to the total elapsed time to collect the counters on=
+ all cpus.
+> +\fBusec\fP For each CPU, the number of microseconds elapsed during count=
+er collection, including thread migration -- if any.  This counter is disab=
+led by default, and is enabled with "--enable usec", or --debug.  On the su=
+mmary row, usec refers to the total elapsed time to snapshot the procfs/sys=
+fs and collect the counters on all cpus.
+>  .PP
+>  \fBTime_Of_Day_Seconds\fP For each CPU, the gettimeofday(2) value (secon=
+ds.subsec since Epoch) when the counters ending the measurement interval we=
+re collected.  This column is disabled by default, and can be enabled with =
+"--enable Time_Of_Day_Seconds" or "--debug".  On the summary row, Time_Of_D=
+ay_Seconds refers to the timestamp following collection of counters on the =
+last CPU.
+>  .PP
+> diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turb=
+ostat/turbostat.c
+> index 58a487c225a7..ff6c5fa95aac 100644
+> --- a/tools/power/x86/turbostat/turbostat.c
+> +++ b/tools/power/x86/turbostat/turbostat.c
+> @@ -365,6 +365,9 @@ unsigned int has_hwp_activity_window;       /* IA32_H=
+WP_REQUEST[bits 41:32] */
+>  unsigned int has_hwp_epp;      /* IA32_HWP_REQUEST[bits 31:24] */
+>  unsigned int has_hwp_pkg;      /* IA32_HWP_REQUEST_PKG */
+>  unsigned int first_counter_read =3D 1;
+> +
+> +static struct timeval procsysfs_tv_begin;
+> +
+>  int ignore_stdin;
+>  bool no_msr;
+>  bool no_perf;
+> @@ -3580,7 +3583,7 @@ int sum_counters(struct thread_data *t, struct core=
+_data *c, struct pkg_data *p)
+>
+>         /* remember first tv_begin */
+>         if (average.threads.tv_begin.tv_sec =3D=3D 0)
+> -               average.threads.tv_begin =3D t->tv_begin;
+> +               average.threads.tv_begin =3D procsysfs_tv_begin;
+>
+>         /* remember last tv_end */
+>         average.threads.tv_end =3D t->tv_end;
+> @@ -5912,6 +5915,8 @@ int snapshot_sys_lpi_us(void)
+>   */
+>  int snapshot_proc_sysfs_files(void)
+>  {
+> +       gettimeofday(&procsysfs_tv_begin, (struct timezone *)NULL);
+> +
+>         if (DO_BIC(BIC_IRQ))
+>                 if (snapshot_proc_interrupts())
+>                         return 1;
+> --
+> 2.43.0
+>
 
+
+--=20
+Len Brown, Intel Open Source Technology Center
 
