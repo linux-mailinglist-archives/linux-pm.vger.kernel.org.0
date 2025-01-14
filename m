@@ -1,91 +1,83 @@
-Return-Path: <linux-pm+bounces-20444-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20445-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E0DBA1121C
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 21:36:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 11BD9A11220
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 21:36:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EE7DD16A42B
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 20:36:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0AF97188AFA6
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 20:36:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB59020AF8F;
-	Tue, 14 Jan 2025 20:35:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C0B1420B80A;
+	Tue, 14 Jan 2025 20:36:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GK3PAgRa"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Tgf9Vwaw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
+Received: from mail-wm1-f51.google.com (mail-wm1-f51.google.com [209.85.128.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 40F971FCD05
-	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 20:35:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4472208974
+	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 20:36:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736886958; cv=none; b=bYyXbK31uK0jydfZcb0Gkj6UOagXbPvtemzR1KC7LIUM2n0n8E444Kb45spjk580KuBBape+KI3LNFLLYOrfa7KEyU2iOHo8DqlA75VrOmc0m4nZNsUrwTeTToOc1y5HTtQ0eyHGD1CQUKMVc067AtCaw/4w+7FmnxUlXI9BHU8=
+	t=1736886980; cv=none; b=YnrDX7vb1IqjRO6lNV0E36xmObTjkvOhxFPlEiuDzhyY+onD/G8egPEmSqo7pECUx1seUm5SCdozIevgQ16/DH+8byx0Le8hVNiat23l2KK8Z5pVxTz2G/GoiqsuZA0GbuGgQJCyeqgMfHMnfDxzGcZKCA30ALfo8LjiMzVrcX8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736886958; c=relaxed/simple;
-	bh=5EHDsAh1gvS0BQE9Spp73R1FEpmpoEEz/oly6xIBojg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Kqsz2hFxAQtCNK1A7/oq9LJE7a+H+ltgN9I0c3A5jEF5gJ4HjdMEzqNW3wF6fErj4+PKOl2qeTVQ9dgkpGMFVLAzQFoCtmBL4VSfuYT4KMXnqmQjIpVexrfuB+N7CGFfmFbTzBRmNIWZAS6xgjPyCL1VV6lP2DHjPluKHlUZZ4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GK3PAgRa; arc=none smtp.client-ip=209.85.128.47
+	s=arc-20240116; t=1736886980; c=relaxed/simple;
+	bh=gS2tWpA0GbEwM/UrYpG6nfxlsBb4yRzG9ZzVj5HoQ/s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KfEprWavhM9Dsej4tzVZfBcllOAknO4zh7i5s2cSqfnQYUQtpMb96SF/H1gmHWeHYpPUNmydxlxKULAYjoE1lr+v0xWKz9g51YcJXrozC9Auk5Qii0ZSKWk0TU2Jl8Uexo3bGZpHorzqmYWfyEoviIIL6cIQSPMAtoZ9rsCbFlY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Tgf9Vwaw; arc=none smtp.client-ip=209.85.128.51
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-4361f09be37so7523425e9.1
-        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 12:35:56 -0800 (PST)
+Received: by mail-wm1-f51.google.com with SMTP id 5b1f17b1804b1-43616bf3358so7514315e9.3
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 12:36:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736886954; x=1737491754; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1736886977; x=1737491777; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=3YEUyfDTrDdv/X9cKczpOY/bvfGujRsuEaW/USYXyac=;
-        b=GK3PAgRas5Aa2HRds65LI6Tos9tAE8+j6/bcMaY0bMNXD4ObirARXRZ1rhqBMC8YoF
-         NCnfU94Ty3DxDSazKhQCeTI/CKJd9ngjywPsJP70InO+aeZK0G11p8zapyG8t9htLF0z
-         rWx4i7kdJVAIN3mOjnCxM5Cp5X9q23zaUEXtsT/AQnb9uJL3KiY1SKjDz8r8ehR0N9al
-         yzgTF/N7eYY8KNH+laTZOHD3EQfvU1suh9LGUKKFsbpeIaE0KA8P3yEpgj3bxVGqjDv6
-         dFIhKRUYBom+Bdh2U3XSEmFTXuh0nEcIIW4Hwq8JNezibEtbsJ91CUSP6gr20btAdG+s
-         z9Xg==
+        bh=tqhlC6RQ0+FQLPBPdYr6MxzFHvj3QH9yoD42eRdXTpE=;
+        b=Tgf9VwawuMcILGWUsD8A4Tb52+9ntk7X4Hz8AqWWYBDRFBIyp+YeJeE7IE2E2sNGm3
+         OeN1YA9ilvf2kC3doWCcUQFfhqmxsv7F2FGJM8SFv/xap8N5MQ0KeHQ+7yeMcWDTTtIa
+         cZiCEA7wy/vgFzrp40Zi1R7vtAfZNoq+rVtDnQ2iSFO4RHMXkkIwytICVMmQ/bh1rLKx
+         EsL3MRA79T3OyIvuuWfctFOlQv5CLH/HVpX07vJ27zUUnjYfD8ThOF5Go2mHiESTgKNV
+         lGCjGPHLfkH/eIyn3EgPTPA5HKwOuSPg50s3VAVENTKUdaxbcgEpyjxNatKqP+ootTTN
+         FoFQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736886954; x=1737491754;
+        d=1e100.net; s=20230601; t=1736886977; x=1737491777;
         h=content-transfer-encoding:mime-version:message-id:date:subject:cc
          :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=3YEUyfDTrDdv/X9cKczpOY/bvfGujRsuEaW/USYXyac=;
-        b=X1CWi8V6fqT/wEXZmSJ9cnzRAnFbIxVqKWe0fsd71JP9Pc7oP7crA4ZBOuKmGssEje
-         qX/e4vvn4Vdg1FgArCHNl6N13s3gczKyYSKo9CpPR4WkrA4RyNoArB/Xc19FJqM0ICjA
-         w3/QgUECL9ikPKKei9SZYvioPMHNgukDEOkCl76IwhYDA8P5lxo5sXzFihYr/fjoZlXf
-         FVhdroRa3P3qb3rR0L8mFB3nDJbyRdBx9GFiqa7BR3zB7slVi316RP9NJgxMIjvDIpLO
-         2hYArhfkiKLT517oyRlf1rGODLKZ57DhfehDDQkH3eHKiloO1vZeNSmwSvT7K8/BgnSl
-         glfg==
-X-Forwarded-Encrypted: i=1; AJvYcCVKzPr2BhQXNoXIziouR3Pgn5rZ0E+7YunYWCtIqNArCuQly5d2dyVFANAnAWNUI/fQkatLHjslLg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/Ll+/POo01+yrsee6AcXcl0CLermftdkdjgGZNi7RFSk5/TOP
-	12VFCJyag7yEc+VyhI6sUdocD5VmcGvqSPxwXN5IWLe6yuLcp9jXsFsVdmDKYOk=
-X-Gm-Gg: ASbGncuQeloR8I8zGj+Qb1xj/H4rT/assyf+WzD/k8iX3LqH46EX/+7FigcdTq97YH8
-	311nXMt3gHFwoJ2s2uByZj2uSdgclvxO1WShBiGcdMQFDM6ET5tavPM07folyTWa992dpWfUQjp
-	j1krAPRF5iv0Q5nLY/9fZUbbNnIIJApb3fHmbpcKUXBo2d97IODng14RkcQfaTFEljX2+hsaG4M
-	LPBpWGfNr/FC+uLYVA84p5UrwlHDVpH/QIV+j+73BbIZM9W65nrKL17WTc4Ysy+GkH8bY4=
-X-Google-Smtp-Source: AGHT+IEGIFldZ+L4k4Dl+6+c14xQU/JWpFaLddSCbKXPeGIlOQ60LNvgiaZaK9zGFGqW8cmq+2DOXg==
-X-Received: by 2002:adf:9ccd:0:b0:386:3c21:b1f7 with SMTP id ffacd0b85a97d-38a872f40f3mr8004257f8f.7.1736886954611;
-        Tue, 14 Jan 2025 12:35:54 -0800 (PST)
+        bh=tqhlC6RQ0+FQLPBPdYr6MxzFHvj3QH9yoD42eRdXTpE=;
+        b=KwnC8dzT24N8X6ZDZGOLKqqHBx46uFY99tpQQrnsvpmXwn8AXDarAeGcyNEAv35uvJ
+         tpkzy0ygzrh9ZEwm9OaXfjGjDpQAj4tNnPLUYpfduAOg2CVJQblJVe2QZlAJ1HoQFgVO
+         O7DHWjXm6xKI1zV0sLHcfUf+Wlx4TOJZ2f2cslwozzO31PSkXumI+jHzqkZH59nUshgW
+         DFqzmZAN6fTUYkX1lNfrloDMgcU/3kwuFuyY+XLp0oDMt5apa82/55KF7s9rQ/sZsjfB
+         y2ClthDG5VW+6PxqbAJ5jaQtpQEEw6vqEZA7FH/wxe7d4Gv0zs4TOqx8iGcUUaXJuakx
+         fP/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXCvSD3H2pi6xXQJUkWgBBgaSuZWmCazlsItRM5Qc+RYgvV2sL3BwK4MHCOViLzEeci3pohMhk/iw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZtfH3gRdGT1ACKRE/QCY8S//BRVmaP+vYuYuL08SR3J5ylqGT
+	s7QHL1SwPZhLagiH4/ETtgg7M3wroqLABPKq8b7irFyWXod0RuuWzQSlE/MxNSVKjgOuTvuVyEF
+	3
+X-Gm-Gg: ASbGncs7HVULePOs3fTJTAzk5aGc1iMajgk8VlnsiNumNSWDDZ7QL3I9gcCZSpl7NzE
+	RX6IDOgFEQsliFHS0W12VOPIFVdoUFeIy1QP1OtNsNqRwG+6+XvXfOFQhxFwEuHXqOLri15d0aT
+	McnNbdyj4rI7sKgW6Af9zxZCQBGhao3ox7fEthersFVerpzzvqe2mJ9YPFj3xdl5GsfwcMwQrGN
+	I3gmemqVTgpQKePrIq9z7bumhS1JTPmd1bwkgw6VxOQMWSZh6EgA1CdqrHvmAJc+CVoCo8=
+X-Google-Smtp-Source: AGHT+IFMhRoEAtSbN0L+Bt9NTb3syOW3OEuQGe010Dhx0qHFCjXkdD60E5s2ytRq5B5M4Gl29FBoCQ==
+X-Received: by 2002:a05:6000:402c:b0:386:3afb:19a with SMTP id ffacd0b85a97d-38a872ea989mr9171714f8f.4.1736886976759;
+        Tue, 14 Jan 2025 12:36:16 -0800 (PST)
 Received: from krzk-bin.. ([178.197.223.165])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4c1c01sm16042789f8f.97.2025.01.14.12.35.53
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e4b7ff0sm15874440f8f.77.2025.01.14.12.36.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2025 12:35:54 -0800 (PST)
+        Tue, 14 Jan 2025 12:36:15 -0800 (PST)
 From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-To: Geert Uytterhoeven <geert+renesas@glider.be>,
-	Magnus Damm <magnus.damm@gmail.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Walker Chen <walker.chen@starfivetech.com>,
-	Changhuang Liang <changhuang.liang@starfivetech.com>,
-	linux-renesas-soc@vger.kernel.org,
+To: Sebastian Reichel <sre@kernel.org>,
 	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org
+	linux-kernel@vger.kernel.org
 Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH] pmdomain: Use str_enable_disable-like helpers
-Date: Tue, 14 Jan 2025 21:35:47 +0100
-Message-ID: <20250114203547.1013010-1-krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] power: supply: Use str_enable_disable-like helpers
+Date: Tue, 14 Jan 2025 21:36:11 +0100
+Message-ID: <20250114203611.1013324-1-krzysztof.kozlowski@linaro.org>
 X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -107,106 +99,121 @@ from string_choices.h because:
 
 Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- drivers/pmdomain/renesas/rcar-gen4-sysc.c    | 3 ++-
- drivers/pmdomain/renesas/rcar-sysc.c         | 3 ++-
- drivers/pmdomain/samsung/exynos-pm-domains.c | 6 +++---
- drivers/pmdomain/starfive/jh71xx-pmu.c       | 3 ++-
- 4 files changed, 9 insertions(+), 6 deletions(-)
+ drivers/power/supply/88pm860x_battery.c | 4 ++--
+ drivers/power/supply/charger-manager.c  | 3 ++-
+ drivers/power/supply/cpcap-charger.c    | 3 ++-
+ drivers/power/supply/da9030_battery.c   | 3 ++-
+ drivers/power/supply/sbs-battery.c      | 5 +++--
+ 5 files changed, 11 insertions(+), 7 deletions(-)
 
-diff --git a/drivers/pmdomain/renesas/rcar-gen4-sysc.c b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-index 66409cff2083..fe9a0c1deaa3 100644
---- a/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-gen4-sysc.c
-@@ -17,6 +17,7 @@
- #include <linux/pm_domain.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
-+#include <linux/string_choices.h>
- #include <linux/types.h>
- 
- #include "rcar-gen4-sysc.h"
-@@ -171,7 +172,7 @@ static int rcar_gen4_sysc_power(u8 pdr, bool on)
-  out:
- 	spin_unlock_irqrestore(&rcar_gen4_sysc_lock, flags);
- 
--	pr_debug("sysc power %s domain %d: %08x -> %d\n", on ? "on" : "off",
-+	pr_debug("sysc power %s domain %d: %08x -> %d\n", str_on_off(on),
- 		 pdr, ioread32(rcar_gen4_sysc_base + SYSCISCR(reg_idx)), ret);
- 	return ret;
- }
-diff --git a/drivers/pmdomain/renesas/rcar-sysc.c b/drivers/pmdomain/renesas/rcar-sysc.c
-index b99326917330..e3f2c7edf22a 100644
---- a/drivers/pmdomain/renesas/rcar-sysc.c
-+++ b/drivers/pmdomain/renesas/rcar-sysc.c
+diff --git a/drivers/power/supply/88pm860x_battery.c b/drivers/power/supply/88pm860x_battery.c
+index b7938fbb24a5..edae1e843c51 100644
+--- a/drivers/power/supply/88pm860x_battery.c
++++ b/drivers/power/supply/88pm860x_battery.c
 @@ -14,6 +14,7 @@
- #include <linux/pm_domain.h>
- #include <linux/slab.h>
- #include <linux/spinlock.h>
+ #include <linux/mutex.h>
+ #include <linux/string.h>
+ #include <linux/power_supply.h>
 +#include <linux/string_choices.h>
- #include <linux/io.h>
- #include <linux/iopoll.h>
- #include <linux/soc/renesas/rcar-sysc.h>
-@@ -162,7 +163,7 @@ static int rcar_sysc_power(const struct rcar_sysc_pd *pd, bool on)
- 
- 	spin_unlock_irqrestore(&rcar_sysc_lock, flags);
- 
--	pr_debug("sysc power %s domain %d: %08x -> %d\n", on ? "on" : "off",
-+	pr_debug("sysc power %s domain %d: %08x -> %d\n", str_on_off(on),
- 		 pd->isr_bit, ioread32(rcar_sysc_base + SYSCISR), ret);
- 	return ret;
- }
-diff --git a/drivers/pmdomain/samsung/exynos-pm-domains.c b/drivers/pmdomain/samsung/exynos-pm-domains.c
-index 9b502e8751d1..1a892c611dad 100644
---- a/drivers/pmdomain/samsung/exynos-pm-domains.c
-+++ b/drivers/pmdomain/samsung/exynos-pm-domains.c
-@@ -13,6 +13,7 @@
- #include <linux/err.h>
- #include <linux/platform_device.h>
- #include <linux/slab.h>
-+#include <linux/string_choices.h>
- #include <linux/pm_domain.h>
+ #include <linux/mfd/88pm860x.h>
  #include <linux/delay.h>
- #include <linux/of.h>
-@@ -38,7 +39,6 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
- 	struct exynos_pm_domain *pd;
- 	void __iomem *base;
- 	u32 timeout, pwr;
--	char *op;
  
- 	pd = container_of(domain, struct exynos_pm_domain, pd);
- 	base = pd->base;
-@@ -51,8 +51,8 @@ static int exynos_pd_power(struct generic_pm_domain *domain, bool power_on)
+@@ -503,8 +504,7 @@ static void pm860x_init_battery(struct pm860x_battery_info *info)
+ 	data = pm860x_reg_read(info->i2c, PM8607_POWER_UP_LOG);
+ 	bat_remove = data & BAT_WU_LOG;
  
- 	while ((readl_relaxed(base + 0x4) & pd->local_pwr_cfg) != pwr) {
- 		if (!timeout) {
--			op = (power_on) ? "enable" : "disable";
--			pr_err("Power domain %s %s failed\n", domain->name, op);
-+			pr_err("Power domain %s %s failed\n", domain->name,
-+			       str_enable_disable(power_on));
- 			return -ETIMEDOUT;
- 		}
- 		timeout--;
-diff --git a/drivers/pmdomain/starfive/jh71xx-pmu.c b/drivers/pmdomain/starfive/jh71xx-pmu.c
-index 74720c09a6e3..30c29ac9391f 100644
---- a/drivers/pmdomain/starfive/jh71xx-pmu.c
-+++ b/drivers/pmdomain/starfive/jh71xx-pmu.c
-@@ -12,6 +12,7 @@
- #include <linux/of.h>
+-	dev_dbg(info->dev, "battery wake up? %s\n",
+-		bat_remove != 0 ? "yes" : "no");
++	dev_dbg(info->dev, "battery wake up? %s\n", str_yes_no(bat_remove));
+ 
+ 	/* restore SOC from RTC domain register */
+ 	if (bat_remove == 0) {
+diff --git a/drivers/power/supply/charger-manager.c b/drivers/power/supply/charger-manager.c
+index a69faef444c0..c49e0e4d02f7 100644
+--- a/drivers/power/supply/charger-manager.c
++++ b/drivers/power/supply/charger-manager.c
+@@ -22,6 +22,7 @@
  #include <linux/platform_device.h>
- #include <linux/pm_domain.h>
+ #include <linux/power/charger-manager.h>
+ #include <linux/regulator/consumer.h>
 +#include <linux/string_choices.h>
- #include <dt-bindings/power/starfive,jh7110-pmu.h>
+ #include <linux/sysfs.h>
+ #include <linux/of.h>
+ #include <linux/thermal.h>
+@@ -1088,7 +1089,7 @@ static ssize_t charger_state_show(struct device *dev,
+ 	if (!charger->externally_control)
+ 		state = regulator_is_enabled(charger->consumer);
  
- /* register offset */
-@@ -155,7 +156,7 @@ static int jh7110_pmu_set_state(struct jh71xx_pmu_dev *pmd, u32 mask, bool on)
+-	return sysfs_emit(buf, "%s\n", state ? "enabled" : "disabled");
++	return sysfs_emit(buf, "%s\n", str_enabled_disabled(state));
+ }
  
- 	if (ret) {
- 		dev_err(pmu->dev, "%s: failed to power %s\n",
--			pmd->genpd.name, on ? "on" : "off");
-+			pmd->genpd.name, str_on_off(on));
- 		return -ETIMEDOUT;
+ static ssize_t charger_externally_control_show(struct device *dev,
+diff --git a/drivers/power/supply/cpcap-charger.c b/drivers/power/supply/cpcap-charger.c
+index 7781b45a67a7..6625d539d9ae 100644
+--- a/drivers/power/supply/cpcap-charger.c
++++ b/drivers/power/supply/cpcap-charger.c
+@@ -14,6 +14,7 @@
+ #include <linux/init.h>
+ #include <linux/module.h>
+ #include <linux/slab.h>
++#include <linux/string_choices.h>
+ #include <linux/err.h>
+ #include <linux/interrupt.h>
+ #include <linux/notifier.h>
+@@ -515,7 +516,7 @@ static void cpcap_charger_vbus_work(struct work_struct *work)
+ out_err:
+ 	cpcap_charger_update_state(ddata, POWER_SUPPLY_STATUS_UNKNOWN);
+ 	dev_err(ddata->dev, "%s could not %s vbus: %i\n", __func__,
+-		ddata->vbus_enabled ? "enable" : "disable", error);
++		str_enable_disable(ddata->vbus_enabled), error);
+ }
+ 
+ static int cpcap_charger_set_vbus(struct phy_companion *comparator,
+diff --git a/drivers/power/supply/da9030_battery.c b/drivers/power/supply/da9030_battery.c
+index 34328f5d556e..ac2e319e9517 100644
+--- a/drivers/power/supply/da9030_battery.c
++++ b/drivers/power/supply/da9030_battery.c
+@@ -15,6 +15,7 @@
+ #include <linux/module.h>
+ #include <linux/platform_device.h>
+ #include <linux/power_supply.h>
++#include <linux/string_choices.h>
+ #include <linux/mfd/da903x.h>
+ 
+ #include <linux/debugfs.h>
+@@ -138,7 +139,7 @@ static int bat_debug_show(struct seq_file *s, void *data)
+ {
+ 	struct da9030_charger *charger = s->private;
+ 
+-	seq_printf(s, "charger is %s\n", charger->is_on ? "on" : "off");
++	seq_printf(s, "charger is %s\n", str_on_off(charger->is_on));
+ 	if (charger->chdet) {
+ 		seq_printf(s, "iset = %dmA, vset = %dmV\n",
+ 			   charger->mA, charger->mV);
+diff --git a/drivers/power/supply/sbs-battery.c b/drivers/power/supply/sbs-battery.c
+index a6c204c08232..6f3d0413b1c1 100644
+--- a/drivers/power/supply/sbs-battery.c
++++ b/drivers/power/supply/sbs-battery.c
+@@ -21,6 +21,7 @@
+ #include <linux/power_supply.h>
+ #include <linux/slab.h>
+ #include <linux/stat.h>
++#include <linux/string_choices.h>
+ 
+ enum {
+ 	REG_MANUFACTURER_DATA,
+@@ -320,8 +321,8 @@ static int sbs_update_presence(struct sbs_info *chip, bool is_present)
+ 		client->flags &= ~I2C_CLIENT_PEC;
  	}
  
+-	dev_dbg(&client->dev, "PEC: %s\n", (client->flags & I2C_CLIENT_PEC) ?
+-		"enabled" : "disabled");
++	dev_dbg(&client->dev, "PEC: %s\n",
++		str_enabled_disabled(client->flags & I2C_CLIENT_PEC));
+ 
+ 	if (!chip->is_present && is_present && !chip->charger_broadcasts)
+ 		sbs_disable_charger_broadcasts(chip);
 -- 
 2.43.0
 
