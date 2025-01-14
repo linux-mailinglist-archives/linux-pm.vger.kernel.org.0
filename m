@@ -1,124 +1,172 @@
-Return-Path: <linux-pm+bounces-20403-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20404-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96FC9A10359
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 10:53:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E2881A104BF
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 11:56:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A0CA71886523
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 09:54:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0B0181691FD
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 10:56:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C07F624022A;
-	Tue, 14 Jan 2025 09:53:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5A4124334A;
+	Tue, 14 Jan 2025 10:56:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OU/O7M33"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0B3C22DC43;
-	Tue, 14 Jan 2025 09:53:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 197863DABE4
+	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 10:56:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736848432; cv=none; b=ZNJBFrztzboVDXqNEEi4gvOXReeJWyIZW/ECkbUOdLSXOCZ0arpKsYdn57gcSfAIaYtpH5Qpgn976jKkV8B8/yIW3V8jZ/IEvbLbJlWFtBP8JSIoBni35t3yHwMH01Y38WkaBQVpJnJFwz1V0Y72Ayb5QQWCFpxTfYUGp2jtWpo=
+	t=1736852177; cv=none; b=WO4gOfbV2Hgkv9GF2B+oaBYF7hxXG/iyWsETUIR6NdoUzlDtayuMw4UlztfZ8yD9novZRRHqXewwFjUYs/db5V6rxRJuYwlrMeduhVQRHIIoJQhSi1GICdx/whOvpGjt8b3RSjrW63sNYBuZjzmdIdWe1IQNlr4/W/BvDM/hTrU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736848432; c=relaxed/simple;
-	bh=QernjPqux5TLywytSMeNCq/y0tyjCAqIRMJpaKFr7ZQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HUO9Nont2fFRSM2kiBuutlAPytfUvsdddZeesUpyFeNSvAYpcE4hTpcVqI/sCaQRE/ac6MkO0CJ2BMy4qomRBU3AEwwNia/iPgWzkINaAdV+Vv6jfwcLMQjeSlrfUHAcDFSzFn/ml+X1tzQkLhfXhCF4bZpstt7ofWNWhrs8z20=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=linux.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-21669fd5c7cso94481615ad.3;
-        Tue, 14 Jan 2025 01:53:50 -0800 (PST)
+	s=arc-20240116; t=1736852177; c=relaxed/simple;
+	bh=apw9YRbIZ1vmrPQOI1/lMVImDpyDtn8TVgIS0tClx/8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ZDoVr4ShaXa1G5eivpPbJLoT6o3U6mpLgUBP1fflO6q4mIubDcQAwaKPEszjdhaSkFlcoWBvctXSY15EGZ4cz2T9sOqNs5ndw37rsOCrH2t1IahkbYL61YicLFfP5YUiUylTwDm7bQc3Pff8g6RdrH73/7If+KWmr1FIJcB0N2c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OU/O7M33; arc=none smtp.client-ip=209.85.218.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ab30614c1d6so53646266b.1
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 02:56:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736852174; x=1737456974; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=/9oSrldtgC1P5MkOGOlIxpHFkeRWTLigJBFqOxmE9I8=;
+        b=OU/O7M33UZQhjE1xPYGHXdbPcTDJ8kJzCbhIiSjWBYDtR6eVl7HAX3M16Jpz8BNjaz
+         joJT+F9VlIf+NDzT9V1F8X0QaUwDeb+lBD6yXhp527Ln+tv+EbLXdQhbcbSjk0/RHiK7
+         gCrMM/LMTS0ojNtiz1oNjYQH0AXqA0IvTZ7PwkU9bsXddkIiP91hA682PHZfRoFWLOun
+         QiMA7c0KVv5SMduYg90el6oDFzbNgxa50cExSHYrPiSnDYgA1WzbfIDF7tRHFkpo6f8i
+         WkA9tAygAp0wIWAVOGSu0xHem/PgRMBSeHYiCVQePoSLWzaFZQRXbkXUffeF2OeHvA2+
+         ucBw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736848430; x=1737453230;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=nSeUkptft34AkNx4jU0RBWebPqQDxIe1uPszewCoC+U=;
-        b=vUlXjZYtEv6gXEiFWS6OgZOXx1qYXiwxyAoRuEPbZOjyUteHfs15nkS2m9tL5YyKPB
-         zEu39MBkr2Dfw+ZrQ+B0GgCOxHruwghyR3+z+AgfmZz1nmZJTwKS9+oLggj8pY6LksG+
-         9DPWdLpOu0nUtdj8xFU2B9vK+2Z+adThBkNJ9SPTXq8owFuMucBMa6WZ8rqNRdBfpS9Z
-         nBmXF7IF0CZNjfBbAbgLsAiqvwjSpl3AUOIQgwh9MN72Gs6bz2c/2/pDmMqDytV/9CX1
-         N3NbnJbcWE/tyCOih8LbPY0iXJyFcldraX89N4k2PrEsIVThTt5CuAPCOM5m4L4KxywR
-         GFRQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVwCB4LfcoQLAsD5bNX1H4g+xOMAkIYLxufgsQy62hwBImu5AGcOF/QLFPTD4ll7cnhbLxVd3BV5vo=@vger.kernel.org, AJvYcCWEatJea49OV6aHBOmBHFn2POYDkJz5a1bXBvz/A+KzCi9XltmFeXRvCfvn+KFy2Ow7PU8jV5Kz0+Ppswk=@vger.kernel.org, AJvYcCXmMCY1M9aQnOBuJyR1oHHw8+lT3jsC36Hn/cyfEABRkAdPGRJZ/DmXinfB6x9tj661cTVm1BRa/CKe@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxzAilkk1HM0Ca5LiakFzOkH8x3IRR3Wdjlh/jh8K7Q6+EZYOH
-	R1yU/2IDa9YOKvdP+06AdpN5YagRYYQNEpArZb6Mq4Ee1lTTOlLm
-X-Gm-Gg: ASbGncu+84a3oB3HQCtsBUxcWW7dFNZHWyjOlQEyK6M7mZrVxNBfgdyp2HsXcOVdxOg
-	SFUY+hdCA6ZJZCsRcgFThv666gOr3GS9L5XBFtSE2a2e+oKr1GWThpa4ZeZM+hQVgRPaViMenaj
-	6L8RekQCcg2r3J5zZBt5Ehrhaqn/B9nKNNIJIxsiyTGUuWCC0AZbWxGiV/VgL6qzcc2VWf/eISz
-	fmQ/g6X3K6sD8Pa3Caqkmw8S9+4EYo69KeBIWo962IB8Dh1zBo6UQbESIIXFUs4GT6aM8yeJ89O
-	iFu0gd5QshXSVNg=
-X-Google-Smtp-Source: AGHT+IEcTQwpsnVXURxRYFuDX1xTBQOSvGJ+8G1/e7z3DcKHqB/DRr0X3DJGiJVousekFSPpJVY1Ww==
-X-Received: by 2002:a05:6a00:9294:b0:72a:a7a4:9b21 with SMTP id d2e1a72fcca58-72d21f16046mr30678516b3a.5.1736848430124;
-        Tue, 14 Jan 2025 01:53:50 -0800 (PST)
-Received: from localhost (fpd11144dd.ap.nuro.jp. [209.17.68.221])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40658d2bsm7274298b3a.107.2025.01.14.01.53.49
+        d=1e100.net; s=20230601; t=1736852174; x=1737456974;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/9oSrldtgC1P5MkOGOlIxpHFkeRWTLigJBFqOxmE9I8=;
+        b=RjC0GBgGYW5nUzy2XEsnurk4NVPQuuK8tDjlN6apyKUZIxz3tozOEn3LD+CNylwioi
+         yX5RXj7vey6uC9qnaSZ7kAYqRZXQNsfEuIL2tZRyJx2u6P6zYWwvzCy5c377A7sc24Pp
+         tDU3P/ov1t5cJ/yL9N16Qa4G1u6BdMow0Jg47FSoBFJRVmbHG7Rna9NgSQdHNKlz5EP2
+         shryU9yY2ISE8uoOxOlh8fOGFuXh5n2Z0C3IdZBHd/wKev+b5bKvqsVmo9te0WM11RTs
+         kU3ZWh7wkx1jRp7ODlLP4NlZ0RD8iEwvRWzjR04tDtNE7mpdxj78zvolbPN29mlh/1/d
+         +cRw==
+X-Forwarded-Encrypted: i=1; AJvYcCXGTQv+pTBhOrESuceqFbrEolqU1OgpG92uy3njiFn6r5KhhrOaEe/mojUHZs+l+y6kpNZ6OYvVmw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn0AcDlJi7xyNQNju94ObGpOaCaeW4b/Qiee0LmnbSYhZSVT/y
+	3I9gEVCJPyN5QsLqznewsRm7sfvSCWgTQrbg9jPQQM1LgyQRQs3R/F/QlVubixc=
+X-Gm-Gg: ASbGncuyFvRb2Mq2rFWXb0XlpvQuW3h0LVFZGEzOtpJQ0QqVS4w04Lb+tD+8ydxK8NV
+	CnwG+YKxNdXXNruUtIAkQmmF64lfpwNPfeaKr16xMkOlS+TKzp70HesVtlCLA+EJcrfoVuAbLtY
+	J/+eDub1DkkJISw0aLQ5ULutOic5JTRHRR2scqkkD19eSzfsZ1Dc5c+EwfhLOgTPYjOn2+T7iVe
+	BGl6kREum+9iVReFum+37snuI/BhDfq/oRF31gKo5qLHKJ6GmAFm7XscB7a8dHFZHEQpsY=
+X-Google-Smtp-Source: AGHT+IELLCYYvHKb5lpw7z0EW5WhiA9Rzrdg/loEMvWoWRnv3YcLbL4xd0LbtlI+AziAeBNghsD6uQ==
+X-Received: by 2002:a17:907:2d92:b0:aa6:9631:923f with SMTP id a640c23a62f3a-ab2abc9519fmr845034066b.12.1736852174367;
+        Tue, 14 Jan 2025 02:56:14 -0800 (PST)
+Received: from krzk-bin.. ([178.197.223.165])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab2c95b215esm611700266b.161.2025.01.14.02.56.13
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 14 Jan 2025 01:53:49 -0800 (PST)
-Date: Tue, 14 Jan 2025 18:53:47 +0900
-From: Krzysztof Wilczy??ski <kw@linux.com>
-To: Niklas Schnelle <schnelle@linux.ibm.com>
-Cc: Geert Uytterhoeven <geert@linux-m68k.org>,
-	Niklas Schnelle <niks@kernel.org>,
-	Ilpo =?utf-8?B?SsOkcnZpbmVu?= <ilpo.jarvinen@linux.intel.com>,
-	Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>,
-	linux-pci@vger.kernel.org, Rob Herring <robh@kernel.org>,
-	"Maciej W . Rozycki" <macro@orcam.me.uk>,
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>,
-	Alexandru Gagniuc <mr.nuke.me@gmail.com>,
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>,
+        Tue, 14 Jan 2025 02:56:13 -0800 (PST)
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Amit Kucheria <amitk@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
-	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
-	Mika Westerberg <mika.westerberg@linux.intel.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Subject: Re: [PATCH v2] PCI/portdrv: Disable bwctrl service if port is fixed
- at 2.5 GT/s
-Message-ID: <20250114095347.GA953333@rocinante>
-References: <20241213-fix_bwctrl_thunderbolt-v2-1-b52fef641dfc@kernel.org>
- <CAMuHMdVtpVTtUEX=hF+r+rt_awk=w8iYWHd5yzZYGUpKoyYcgA@mail.gmail.com>
- <0a053cef86001953b34fd199b551b96100fcca70.camel@linux.ibm.com>
+	linuxppc-dev@lists.ozlabs.org
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: [PATCH] cpufreq: Use str_enable_disable-like helpers
+Date: Tue, 14 Jan 2025 11:56:11 +0100
+Message-ID: <20250114105611.273202-1-krzysztof.kozlowski@linaro.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <0a053cef86001953b34fd199b551b96100fcca70.camel@linux.ibm.com>
+Content-Transfer-Encoding: 8bit
 
-Hello,
+Replace ternary (condition ? "enable" : "disable") syntax with helpers
+from string_choices.h because:
+1. Simple function call with one argument is easier to read.  Ternary
+   operator has three arguments and with wrapping might lead to quite
+   long code.
+2. Is slightly shorter thus also easier to read.
+3. It brings uniformity in the text - same string.
+4. Allows deduping by the linker, which results in a smaller binary
+   file.
 
-[...]
-> > This is now commit e50e27a613db6f18 ("PCI/portdrv: Disable bwctrl
-> > service if port is fixed at 2.5 GT/s") in pci/next, which conflicts
-> > with  commit 774c71c52aa48700 ("PCI/bwctrl: Enable only if more than
-> > one speed is supported") in v6.13-rc4.
-> > 
-> > Gr{oetje,eeting}s,
-> > 
-> >                         Geert
-> 
-> Oh, that's not right, good catch. This patch is superseded by
-> "PCI/bwctrl: Enable only if more than one speed is supported" and
-> should be dropped.
+Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+---
+ drivers/cpufreq/cpufreq.c         | 7 ++++---
+ drivers/cpufreq/powernv-cpufreq.c | 3 ++-
+ 2 files changed, 6 insertions(+), 4 deletions(-)
 
-Done.
+diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+index 418236fef172..fba62124b56a 100644
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -25,6 +25,7 @@
+ #include <linux/mutex.h>
+ #include <linux/pm_qos.h>
+ #include <linux/slab.h>
++#include <linux/string_choices.h>
+ #include <linux/suspend.h>
+ #include <linux/syscore_ops.h>
+ #include <linux/tick.h>
+@@ -602,12 +603,12 @@ static ssize_t store_boost(struct kobject *kobj, struct kobj_attribute *attr,
+ 
+ 	if (cpufreq_boost_trigger_state(enable)) {
+ 		pr_err("%s: Cannot %s BOOST!\n",
+-		       __func__, enable ? "enable" : "disable");
++		       __func__, str_enable_disable(enable));
+ 		return -EINVAL;
+ 	}
+ 
+ 	pr_debug("%s: cpufreq BOOST %s\n",
+-		 __func__, enable ? "enabled" : "disabled");
++		 __func__, str_enable_disable(enable));
+ 
+ 	return count;
+ }
+@@ -2812,7 +2813,7 @@ int cpufreq_boost_trigger_state(int state)
+ 	write_unlock_irqrestore(&cpufreq_driver_lock, flags);
+ 
+ 	pr_err("%s: Cannot %s BOOST\n",
+-	       __func__, state ? "enable" : "disable");
++	       __func__, str_enable_disable(state));
+ 
+ 	return ret;
+ }
+diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
+index 8de759247771..ae79d909943b 100644
+--- a/drivers/cpufreq/powernv-cpufreq.c
++++ b/drivers/cpufreq/powernv-cpufreq.c
+@@ -18,6 +18,7 @@
+ #include <linux/of.h>
+ #include <linux/reboot.h>
+ #include <linux/slab.h>
++#include <linux/string_choices.h>
+ #include <linux/cpu.h>
+ #include <linux/hashtable.h>
+ #include <trace/events/power.h>
+@@ -281,7 +282,7 @@ static int init_powernv_pstates(void)
+ 	pr_info("cpufreq pstate min 0x%x nominal 0x%x max 0x%x\n", pstate_min,
+ 		pstate_nominal, pstate_max);
+ 	pr_info("Workload Optimized Frequency is %s in the platform\n",
+-		(powernv_pstate_info.wof_enabled) ? "enabled" : "disabled");
++		str_enabled_disabled(powernv_pstate_info.wof_enabled));
+ 
+ 	pstate_ids = of_get_property(power_mgt, "ibm,pstate-ids", &len_ids);
+ 	if (!pstate_ids) {
+-- 
+2.43.0
 
-> Sorry if that wasn't clear from the the limited context of this patch
-> discussion. @Bjorn I think this needs to be taken care of by you?
-
-No worries.  I removed it from our next branch and marked accordingly in
-Patchwork.
-
-	Krzysztof
 
