@@ -1,121 +1,179 @@
-Return-Path: <linux-pm+bounces-20410-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20411-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F40DBA107C4
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 14:27:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6FB55A1084A
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 15:01:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D84D1604B1
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 13:27:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 70E931881C47
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 14:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1D30623242E;
-	Tue, 14 Jan 2025 13:27:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50D513594A;
+	Tue, 14 Jan 2025 14:01:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Th2+swrA"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AuBD6f3T"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E2D28232424;
-	Tue, 14 Jan 2025 13:27:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26635382;
+	Tue, 14 Jan 2025 14:01:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736861244; cv=none; b=odYu5WysNHkiuKiF3G4z1YkYgarcQmUmx9rsVT5GadORwxzagUv54dz7tozRuz8NJ6kR1yjrA0fxnLE3KMaO+YnLQfp3AuicfEPPwX1pPjc4WnxmaXdPLEWLZV73moampkX8HxGQ6baF8uOKvvEZASpSVK4/Rjo8hQ6P0TAiDTk=
+	t=1736863298; cv=none; b=Olbf41JsOC2sNEkjZGrqLTkkfALpEWGHV477OLHsvBTfUrue5O/ipPcXctTqCpzwAhqVOkydUU8pZjbIEsd2kcBRYmQlDzIBnKbIoqstaYMjqA2dtZHj35iiYakKpr2arncXz4WR3PYzwir4XPYdxlELZA9NCGdrGQN2Oind6gE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736861244; c=relaxed/simple;
-	bh=eLc+q9S1jrqfKEh0Shy5K5yfQiiy8VjwTpD0Ol7oxo4=;
+	s=arc-20240116; t=1736863298; c=relaxed/simple;
+	bh=BvCVREdTDGCMsp3aRYxOfsRjh3UiHKyeoK5cGdoulAU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Fbv4/FRl8ullsw05p1CzmH+cfi28pwWt+6MdkDJNZSkr4nkQ7jP9fnwWLI43Lt7oMQI/YSLDDL4m9ZaZJW5HOyRCbIoIdC0LcePOBA6WKBNReRIGqLodz7/e26CaesVVmoMGznBERvuWEOjbB5zdftgbmoXqnf4+ysK+6STCTbE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Th2+swrA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BF97BC4CEE4;
-	Tue, 14 Jan 2025 13:27:23 +0000 (UTC)
+	 To:Cc:Content-Type; b=pvvk6Wpp47tucZSzlOLO0xqOydvUVQqxWJvS1DK5czNlNIAGE6NsK5zxKps1Yg7plK8HWzWpqW+l0G/OTkPxcLG0BSvrfqPyGlFN/u61gTcjweJ8P/NWiH7Gn2HEZA9WfKP28v53IyP/sUdKU9BxrNi8YPKqjOIn1yKJE+P7Cr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AuBD6f3T; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B00C2C4CEE1;
+	Tue, 14 Jan 2025 14:01:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736861243;
-	bh=eLc+q9S1jrqfKEh0Shy5K5yfQiiy8VjwTpD0Ol7oxo4=;
+	s=k20201202; t=1736863297;
+	bh=BvCVREdTDGCMsp3aRYxOfsRjh3UiHKyeoK5cGdoulAU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Th2+swrA+f4hqIJCt6+/umIAMrtHCVhi9cd3Chl2vVpJt8RYmsKKyYxEW+17USVPz
-	 Lsl1k4znjaUEGAA0hHOSFmuEv918VP5plSCeC3npxvIuUyjZC0zgxgAQYJmIJ/uik5
-	 rYPkIl4w7wbJ5QG7hdB02tjA79n3Wm4c1P+rdpOdILEhB233wlqTm/NKWFCrbU59T0
-	 gmx3djDhpMH0pssNjXAdMvERa5QZHNRJwz4N8AtHAMsgV+SxY4hOfWAfXIr+tfxHkd
-	 YGUTGbAau7nVH2grbRyqVyNuG0M5eRZWs/vx2q5esJ4mhM9gRiKIVgIqD/inOPqGkz
-	 ni85WRL8TuuEQ==
-Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-29fe83208a4so2696875fac.0;
-        Tue, 14 Jan 2025 05:27:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUtLy7eR9d5HOsOM+nrBigMqrFF8DVSxVA7/5bwQFLrHQvUgeovYHkvElM5h7FbPcLfcJxMHcWskgdvFCJT@vger.kernel.org, AJvYcCV1LiERKTtUtfwYFzA4sushC9Df0IiBLs53BmAvd9FlOMyyi/zhOdITyNmX7Qaj2/QftlEFEHu2YorV@vger.kernel.org, AJvYcCXxWByjIDkxy1EEJayZeWxlcnYwQQCjtFdFNX3KgFsA2OCEnsoyV3aB7rE2JPI5Ud3nXb6xng2AGqQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKG8/7uDD6DJ3uRhrvuS9aZuyowZOr9AcPeOhTaDkvzg85QiaQ
-	FbdZc75wVvPU3ME9cZSc/pI8Ap8iuOUe4R2VYv34yPQg3IyblKqwYat/cEVfl5kM6ybVa4a6p64
-	/3cJ33t8OJBHyRu4coQxz31FvpcE=
-X-Google-Smtp-Source: AGHT+IFqQ76W/O+kYshOg6zjtig0JEaVkHWcK8wO+TUwklW859PHlWhrWxjbqDONCXGyMjbNuAP8/Ne+16wXvsa6rkQ=
-X-Received: by 2002:a05:6870:b9c4:b0:29f:b645:ce86 with SMTP id
- 586e51a60fabf-2aae5aa8daemr12907467fac.12.1736861243031; Tue, 14 Jan 2025
- 05:27:23 -0800 (PST)
+	b=AuBD6f3TFFoG6gOlDPnGVyOWR+ANVddWjvpF03QpdEe0+B47TYChEPMfVE3yZ1gKS
+	 YZCWA8MmRMinLjLgpXvXUe8hgji+SObWuKmXpb8ndgYKlmAfMP8B96WSUvouK/cRWm
+	 0pnFBRWQlCjaMRCwxMYzWLSRVMref+/iio2AP6XSXhrARP0i/9sd5+m1FV+iQGCNls
+	 WhP6rRHg86xf7Igt7EKI4lYw7ovgorW6VYlx9Fv/2z5elIl53udg7myIg4CYMjEFW5
+	 i1nXgNmYwbaN1TRTI9Mp3nPOvYlwUAWmIfiwpsv3lEQ6lzycRgncZnkoositaPfC8U
+	 IBk7cZjHFlLVw==
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3eba5848ee4so1419345b6e.3;
+        Tue, 14 Jan 2025 06:01:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVsxHeKwnkx/0bEH96Wn/LZnfIalxQbSldjQWI4oqS9/ae8SDezlvcBYmE33eW18B2qRmEqPeJuIg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwINf0i9Q8L/gBaR73FpdfVSqqxNvciYuVBtgO1qzymho1TWVzO
+	XrHfc9iu0DAqxCBoprdVxog9VQsZL0Lllb4gnTaNbETh7Juq0R9jnxauQ541L67r1hTKskrSRZw
+	hoLSSZ95WZiT7qRKxH5woBgeG0C0=
+X-Google-Smtp-Source: AGHT+IFenHe2Dyii6b5QgJJVIcyLVp/WviFK0I9RmrYosavNpGkAp+CTDmEZSuplekrO/hZWPqbadAE6Uybx1421hHQ=
+X-Received: by 2002:a05:6808:14c3:b0:3eb:4137:53bb with SMTP id
+ 5614622812f47-3ef2ed64538mr17419951b6e.31.1736863297039; Tue, 14 Jan 2025
+ 06:01:37 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250113122104.3870673-1-zhenglifeng1@huawei.com> <20250113122104.3870673-2-zhenglifeng1@huawei.com>
-In-Reply-To: <20250113122104.3870673-2-zhenglifeng1@huawei.com>
+References: <20250102150201.21639-1-frederic@kernel.org> <20250102150201.21639-3-frederic@kernel.org>
+In-Reply-To: <20250102150201.21639-3-frederic@kernel.org>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 14 Jan 2025 14:27:12 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ja7AaJza0PeNgutebXRV3tsgxZRwZUBcFksD9thyKg1Q@mail.gmail.com>
-X-Gm-Features: AbW1kvYxFpUsEc9PFeMehAkFEsQFM5KZKo-OlX1ezuwCujGsEj_an0AKwqHVAyg
-Message-ID: <CAJZ5v0ja7AaJza0PeNgutebXRV3tsgxZRwZUBcFksD9thyKg1Q@mail.gmail.com>
-Subject: Re: [PATCH v4 1/6] ACPI: CPPC: Add IS_OPTIONAL_CPC_REG macro
-To: Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: rafael@kernel.org, lenb@kernel.org, robert.moore@intel.com, 
-	viresh.kumar@linaro.org, mario.limonciello@amd.com, gautham.shenoy@amd.com, 
-	ray.huang@amd.com, pierre.gondois@arm.com, acpica-devel@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com, 
-	fanghao11@huawei.com
+Date: Tue, 14 Jan 2025 15:01:26 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gEhGJCkfMn6jhF2D_4BYKJZev_Eyq5AhkTeT02_cHcXQ@mail.gmail.com>
+X-Gm-Features: AbW1kvaevySiHr2zFkI5jc3HBojCRP1XnEfzDTvYSRT0ahuYQ_ZSu6VIovWEIQ8
+Message-ID: <CAJZ5v0gEhGJCkfMn6jhF2D_4BYKJZev_Eyq5AhkTeT02_cHcXQ@mail.gmail.com>
+Subject: Re: [PATCH 2/6] cpuidle: Introduce CPUIDLE_FLAG_MWAIT
+To: Frederic Weisbecker <frederic@kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
+	"Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, linux-pm@vger.kernel.org, 
+	Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>, 
+	Dave Hansen <dave.hansen@linux.intel.com>, Jacob Pan <jacob.jun.pan@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 13, 2025 at 1:21=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huawei.c=
-om> wrote:
+On Thu, Jan 2, 2025 at 4:02=E2=80=AFPM Frederic Weisbecker <frederic@kernel=
+.org> wrote:
 >
-> Add IS_OPTIONAL_CPC_REG macro to judge if a cpc_reg is an optional one.
-
-This requires a bit more explanation, especially what's the purpose of
-it (ie. the "why").
-
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> From: Peter Zijlstra <peterz@infradead.org>
+>
+> Provide a way to tell the cpuidle core about states monitoring
+> TIF_NEED_RESCHED on the hardware level, monitor/mwait users being the
+> only examples in use.
+>
+> This will allow cpuidle core to manage TIF_NR_POLLING on behalf of all
+> kinds of TIF_NEED_RESCHED watching states while keeping a necessary
+> distinction for the governors between software loops polling on
+> TIF_NEED_RESCHED and hardware monitored writes to thread flags.
+>
+> [fweisbec: _ Initialize flag from acpi_processor_setup_cstates() instead
+>              of acpi_processor_setup_lpi_states(), as the latter seem to
+>              be about arm64...
+>            _ Rename CPUIDLE_FLAG_NO_IPI to CPUIDLE_FLAG_MWAIT]
+>
+> Signed-off-by: Peter Zijlstra <peterz@infradead.org>
+> Signed-off-by: Frederic Weisbecker <frederic@kernel.org>
 > ---
->  drivers/acpi/cppc_acpi.c | 6 ++++++
->  1 file changed, 6 insertions(+)
+>  drivers/acpi/processor_idle.c | 3 +++
+>  drivers/idle/intel_idle.c     | 5 ++++-
+>  include/linux/cpuidle.h       | 1 +
+>  3 files changed, 8 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index f193e713825a..6454b469338f 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -129,6 +129,12 @@ static DEFINE_PER_CPU(struct cpc_desc *, cpc_desc_pt=
-r);
->  #define CPC_SUPPORTED(cpc) ((cpc)->type =3D=3D ACPI_TYPE_INTEGER ?      =
-   \
->                                 !!(cpc)->cpc_entry.int_value :          \
->                                 !IS_NULL_REG(&(cpc)->cpc_entry.reg))
+> diff --git a/drivers/acpi/processor_idle.c b/drivers/acpi/processor_idle.=
+c
+> index 698897b29de2..66cb5536d91e 100644
+> --- a/drivers/acpi/processor_idle.c
+> +++ b/drivers/acpi/processor_idle.c
+> @@ -806,6 +806,9 @@ static int acpi_processor_setup_cstates(struct acpi_p=
+rocessor *pr)
+>                 if (cx->type =3D=3D ACPI_STATE_C1 || cx->type =3D=3D ACPI=
+_STATE_C2)
+>                         drv->safe_state_index =3D count;
+>
+> +               if (cx->entry_method =3D=3D ACPI_CSTATE_FFH)
+> +                       state->flags |=3D CPUIDLE_FLAG_MWAIT;
+
+FFH need not mean MWAIT in principle.
+
+FFH in _CST means MWAIT in practice because _CST is used on x86 which
+implements FFH through MWAIT, but it would be good at least to put a
+comment here to explain that this code is only expected to run on x86.
+
+Or better still, add something like acpi_arch_idle_state_flags(u8
+entry_method) that will return CPUIDLE_FLAG_MWAIT for ACPI_CSTATE_FFH
+and 0 otherwise and then do
+
+    state->flags |=3D acpi_arch_idle_state_flags(cx->entry_method);
+
 > +
-> +/* These indicate optional of the per-cpu cpc_regs[]. */
-
-Again, you need to say more here, like how this is supposed to work.
-
-> +#define REG_OPTIONAL (0b111111100011111010000)
-
-A hex literal would work too AFAICS.
-
+>                 /*
+>                  * Halt-induced C1 is not good for ->enter_s2idle, becaus=
+e it
+>                  * re-enables interrupts on exit.  Moreover, C1 is genera=
+lly not
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index ac4d8faa3886..d52723fbeb04 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -1787,7 +1787,8 @@ static void __init intel_idle_init_cstates_acpi(str=
+uct cpuidle_driver *drv)
+>                 if (cx->type > ACPI_STATE_C1)
+>                         state->target_residency *=3D 3;
+>
+> -               state->flags =3D MWAIT2flg(cx->address);
+> +               state->flags =3D MWAIT2flg(cx->address) | CPUIDLE_FLAG_MW=
+AIT;
 > +
-> +#define IS_OPTIONAL_CPC_REG(reg_idx) (REG_OPTIONAL & (1U << (reg_idx)))
-
-You need to explain what reg_idx is.
-
+>                 if (cx->type > ACPI_STATE_C2)
+>                         state->flags |=3D CPUIDLE_FLAG_TLB_FLUSHED;
+>
+> @@ -2072,6 +2073,8 @@ static bool __init intel_idle_verify_cstate(unsigne=
+d int mwait_hint)
+>
+>  static void state_update_enter_method(struct cpuidle_state *state, int c=
+state)
+>  {
+> +       state->flags |=3D CPUIDLE_FLAG_MWAIT;
 > +
->  /*
->   * Arbitrary Retries in case the remote processor is slow to respond
->   * to PCC commands. Keeping it high enough to cover emulators where
+>         if (state->flags & CPUIDLE_FLAG_INIT_XSTATE) {
+>                 /*
+>                  * Combining with XSTATE with IBRS or IRQ_ENABLE flags
+> diff --git a/include/linux/cpuidle.h b/include/linux/cpuidle.h
+> index a9ee4fe55dcf..b8084617aa27 100644
+> --- a/include/linux/cpuidle.h
+> +++ b/include/linux/cpuidle.h
+> @@ -85,6 +85,7 @@ struct cpuidle_state {
+>  #define CPUIDLE_FLAG_OFF               BIT(4) /* disable this state by d=
+efault */
+>  #define CPUIDLE_FLAG_TLB_FLUSHED       BIT(5) /* idle-state flushes TLBs=
+ */
+>  #define CPUIDLE_FLAG_RCU_IDLE          BIT(6) /* idle-state takes care o=
+f RCU */
+> +#define CPUIDLE_FLAG_MWAIT             BIT(7) /* hardware need_resched()=
+ monitoring */
+>
+>  struct cpuidle_device_kobj;
+>  struct cpuidle_state_kobj;
 > --
 
