@@ -1,127 +1,143 @@
-Return-Path: <linux-pm+bounces-20428-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20429-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0A03A10ED9
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 19:02:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 80363A10FC7
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 19:20:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AE9A8188AFBB
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 18:02:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92C763AD994
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 18:18:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3EA1B20AF91;
-	Tue, 14 Jan 2025 17:58:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="On0icLC/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37B2D1FCD00;
+	Tue, 14 Jan 2025 18:16:59 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 104751FCD1A;
-	Tue, 14 Jan 2025 17:58:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AB82204590;
+	Tue, 14 Jan 2025 18:16:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736877531; cv=none; b=aaLN470424nxKjpPVIsSnLi38FZsDkncs/M9PY9ZA1tPkVvvpyIkIVqDPJ7bm5FxGy2xlVJziuPOfwO4Wl2dJTYASGwkVr2vYxYVlUVOUC0bqIsW86dj/rSjQ0pzNS1cMqTgitpoh1zAME4QEmBVqjvojMFHszqPk/PM+qxcFCU=
+	t=1736878619; cv=none; b=bsojDcWkWCjKpl9o5CmkjeS5cBhHdzNRaZCnn1JnK5SAt3AHSnPPPyroC8ngR/+obme8wVSpVdvTNKsRLhhgU2yx0bMzm6RKm2MNHwg+cgdKYzlS2mmC3UtalOe80vEmrV/scTeicsb5Z43dj9guCpLEOuQjIcYN+egsFkXgbnE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736877531; c=relaxed/simple;
-	bh=QMVdysp1bNs9gS/O+OM9aj9n+vRbf8P9M4FQlGF2t8A=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VfOLCDkiOJ/grCbb76YEbVnBWVbmytNQxwUpumKMEtdUp6T0yIkGSe099rmJo21Dgkw+xDvV7bzKjnoWE6qnwOPY2K64jgp5mv3Va6X6lu7tYE+9cmov0rHH3PIqCghXvfiYBrYJtfAs5x0LlB5dTRmjPkTff8HbnnM4Bdk6qr4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=On0icLC/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AF29FC4CEE4;
-	Tue, 14 Jan 2025 17:58:50 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736877530;
-	bh=QMVdysp1bNs9gS/O+OM9aj9n+vRbf8P9M4FQlGF2t8A=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=On0icLC/K314f32KVZZHPFUJmcAVo2/8VsQF5Ju1aIbC6m9fUfHp2mi+HcZ+sYGyq
-	 FJfnXWycuziAIXJEu70eRZZO9cAm4Osg6DtiroMzF2UrFN4Yf1M0kJidnjHWB4Xu7S
-	 4k++KUKztZcgBvRZvxaxjahhvK5ECKX8lJD5c9WfnGull/LSKgtXJzEodYOT8bH76Z
-	 swzvLSAFM+oawQg1BtJDcC6xxhdAH6atdRrQ8RkssKp1Ufd1wyI5TI6XmyxIAFgFtL
-	 6p/rzUaJmOq9iuMIDZTigkuJcJD4hUm97TUQU0l8dZRyKAEvRtmS2vZ3juKFx2rZK5
-	 ceBZeon2qA/wg==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3eb8559b6b0so3348132b6e.1;
-        Tue, 14 Jan 2025 09:58:50 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUozn2Vcbban7nGb+LxirJss7UMJlbnRFmYeqOfPLiRF7YcnrB0bGhZHgGW2idcBu1nE6vhpcTgTWSQ@vger.kernel.org, AJvYcCWjtEnF8ITzlRvUXSVqNZDGJVwsOvrvpX0InD0ilpTp+xfrJzuozU+Fc14KN7emioNIf/LCCu5EHi/pJGNt@vger.kernel.org, AJvYcCXQPZoTA2tl//qQgyzFHZ5DtzxZexS8/2J9rx+ZV1FrhSSf9Tlce2GsR2Nbtlc8kOIaop/9P/ECY4I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YywBN4iXNuyvfYrRSxvvswCdbPk7gKRe3wRzhQkXZt23wxje3GO
-	DqL5a1+waNH0HEgEvWVmVZKRme1o7t2mPTCnol5/HxBpEX627BS61rhVzBo3KjWvV12yXTfrTeP
-	43s8eVSZZt9Sb5pBfA4njEjddz6s=
-X-Google-Smtp-Source: AGHT+IFVH7/p7XT/F+M/730zJz1baSx0oUsDTd7oshF25Ya68iWu81vlpGzooaTacLKZJbSJtPbOVmxHPLBGn6N0arc=
-X-Received: by 2002:a05:6808:3387:b0:3eb:5bf7:65d2 with SMTP id
- 5614622812f47-3ef2ec9b534mr16576932b6e.25.1736877530029; Tue, 14 Jan 2025
- 09:58:50 -0800 (PST)
+	s=arc-20240116; t=1736878619; c=relaxed/simple;
+	bh=IIYLZ3cFHqV82/6582I80ZBHQku8iozDmea5FW8JPJg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=gaTRTrQeADVMn0Pqnm7E58y9bFQ9ZOP+zs+kXaA9uBo2QZdYg1ZpQFgm4NKVE75o2Xh/xn/3UTRfW2js3QL9NwIVbEQa7Xbis1azPQfWXvtY707DUtTUzUpoGHlJdRGFVMcwPJvhkaGk/w++mYFCQa/Tczi/34JGJl3VYtrdA/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E376E19F0;
+	Tue, 14 Jan 2025 10:17:23 -0800 (PST)
+Received: from bogus (unknown [10.57.34.70])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2ED193F51B;
+	Tue, 14 Jan 2025 10:16:54 -0800 (PST)
+Date: Tue, 14 Jan 2025 18:16:29 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+Cc: Peng Fan <peng.fan@nxp.com>, "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+	"ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+	"arm-scmi@vger.kernel.org" <arm-scmi@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize
+ state as off
+Message-ID: <20250114180649.alehyqs657p2vyzl@bogus>
+References: <20250110061346.2440772-1-peng.fan@oss.nxp.com>
+ <Z4TreQ5bA9qiMTgC@bogus>
+ <PAXPR04MB8459F33BCC84CCA8F49F3B60881F2@PAXPR04MB8459.eurprd04.prod.outlook.com>
+ <Z4UZ2Au7KSFMibDW@bogus>
+ <PA4PR04MB94855052830C8F4874237BA6921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
+ <Z4VLZgAWR7ugDl7W@bogus>
+ <PA4PR04MB9485E9C126E48A088D7E399B921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
+ <Z4aBkezSWOPCXcUh@bogus>
+ <PA4PR04MB9485507CCC21354B5ED55C3792182@PA4PR04MB9485.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250113122104.3870673-1-zhenglifeng1@huawei.com> <20250113122104.3870673-4-zhenglifeng1@huawei.com>
-In-Reply-To: <20250113122104.3870673-4-zhenglifeng1@huawei.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 14 Jan 2025 18:58:39 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jwqZ4A=eeHSXGHKpj-g+KFNWvgLB_yjM55Yk37LryrwQ@mail.gmail.com>
-X-Gm-Features: AbW1kvblVD7sqUVmGZEwKFjQRVpCMUpuQrDYT3u49qGLCKszlrjGSJJ1fOt6yoI
-Message-ID: <CAJZ5v0jwqZ4A=eeHSXGHKpj-g+KFNWvgLB_yjM55Yk37LryrwQ@mail.gmail.com>
-Subject: Re: [PATCH v4 3/6] ACPI: CPPC: Add macros to generally implement
- registers getting and setting functions
-To: Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: rafael@kernel.org, lenb@kernel.org, robert.moore@intel.com, 
-	viresh.kumar@linaro.org, mario.limonciello@amd.com, gautham.shenoy@amd.com, 
-	ray.huang@amd.com, pierre.gondois@arm.com, acpica-devel@lists.linux.dev, 
-	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com, 
-	fanghao11@huawei.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PA4PR04MB9485507CCC21354B5ED55C3792182@PA4PR04MB9485.eurprd04.prod.outlook.com>
 
-On Mon, Jan 13, 2025 at 1:21=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huawei.c=
-om> wrote:
+On Tue, Jan 14, 2025 at 04:09:13PM +0000, Ranjani Vaidyanathan wrote:
+> Hello Sudeep,
 >
-> Add CPPC_REG_VAL_READ() to implement registers getting functions.
+> Comments below.
 >
-> Add CPPC_REG_VAL_WRITE() to implement registers setting functions.
+> Regards,
+> Ranjani Vaidyanathan
 >
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-
-I don't particularly like these macros as they will generally make it
-harder to follow the code.
-
-> ---
->  drivers/acpi/cppc_acpi.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
+> -----Original Message-----
+> From: Sudeep Holla [mailto:sudeep.holla@arm.com]
+> Sent: Tuesday, January 14, 2025 9:24 AM
+> To: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+> Cc: Peng Fan <peng.fan@nxp.com>; Peng Fan (OSS) <peng.fan@oss.nxp.com>; cristian.marussi@arm.com; Sudeep Holla <sudeep.holla@arm.com>; ulf.hansson@linaro.org; arm-scmi@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize state as off
 >
-> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
-> index 571f94855dce..6326a1536cda 100644
-> --- a/drivers/acpi/cppc_acpi.c
-> +++ b/drivers/acpi/cppc_acpi.c
-> @@ -1279,6 +1279,20 @@ static int cppc_set_reg_val(int cpu, enum cppc_reg=
-s reg_idx, u64 val)
->         return cpc_write(cpu, reg, val);
->  }
+> Caution: This is an external email. Please take care when clicking links or opening attachments. When in doubt, report the message using the 'Report this email' button
 >
-> +#define CPPC_REG_VAL_READ(reg_name, reg_idx)           \
-> +int cppc_get_##reg_name(int cpu, u64 *val)             \
-> +{                                                      \
-> +       return cppc_get_reg_val(cpu, reg_idx, val);     \
-> +}                                                      \
-> +EXPORT_SYMBOL_GPL(cppc_get_##reg_name)
+>
+> Hi Ranjani,
+>
+> On Mon, Jan 13, 2025 at 07:54:06PM +0000, Ranjani Vaidyanathan wrote:
+> > Hello Sudeep,
+> >
+> > Will try to explain the situation we are facing.
+> > 1. We have multiple agents running, Agent-A is booted up first before
+> > Linux is booted and powers up a shared power domain PD-X.
+> > 2. Linux boots and gets the power state of PD-X. And its already ON.
+> > And then PD -X is initialized with a default ON state.
+> > 3. When the driver that needs PD-X  is probed, Linux sees that the
+> > power domain status is ON and never makes an SCMI call to power up the
+> > PD-X for Linux Agent.
+> > 4. Agent-A now is shutdown/suspends. Linux will crash because the
+> > platform disables PD-X because it has no other requests for PD-X.
+> >
+>
+> Thanks for the detailed explanation. I understand the issue now.
+>
+> I would like to discuss if the below alternative approach works for you.
+> We can debate the pros and cons. I see with the approach in this patch
+> proposed by Peng we would avoid querying and setting genpd all together
+> during the genpd initialisation which is good. But if there are any genpd
+> left on by the platform or bootloader(same agent), it will not get turned
+> off when Linux tries to turn off the unused genpds(IIRC this could be the
+> reason for the current state of code). While your platform may find sending
+> those commands unnecessary, there was some usecase where SCMI platform kept
+> all resources ON by default for faster boot and expects OSPM to turn off
+> unused resources. So we need to support both the cases. I hope my below
+> patch should suffice.
+>
+> [RV] Linux can still make the call to disable unused power domains, even if
+> it never explicitly made a request to power it on. The platform will
+> aggregate the request from all agents and will power off the resource if no
+> other agent has enabled it. From Linux point of view it has disabled all
+> unused power domains.
 
-What about if defining something like
+I need to dig into genpd to see if that is possible. IIUC, genpd tracks the
+state and will call off only if it is turned on and is unused. If we
+initialise to default off state, it may not issue the OFF call to the
+firmware irrespective of the actual state(i.e. even if it left ON).
 
-#define CPPC_READ_REG_VAL(cpu, reg_name, val)
-cppc_get_reg_val((cpu), CPPC_REG_IDX(reg_name), (val))
+> Your patch below may also work, but feels like a workaround to artificially
+> (for lack of a better word) enable a resource.
 
-(and analogously for the WRITE_ part), where CPPC_REG_IDX(reg_name) is
+I tend to agree this might feel like workaround but I need to look and
+refresh my genpd knowledge. Or we can check with Ulf.
 
-#define CPPC_REG_IDX(reg_name)    CPPC_REG_##reg_name_IDX
+> And also makes unnecessary SCMI calls (expensive) for every resource
+> immaterial of it power state (maybe can be improved by a conditional check).
 
-and there are CPPC_REG_##reg_name_IDX macros defined for all register
-names in use?
+Yes we can make explicit call only for ON state.
 
-For example
-
-#define CPPC_REG_desired_perf_IDX   DESIRED_PERF
+--
+Regards,
+Sudeep
 
