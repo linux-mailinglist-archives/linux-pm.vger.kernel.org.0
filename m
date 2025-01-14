@@ -1,167 +1,208 @@
-Return-Path: <linux-pm+bounces-20400-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20401-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2416A1025E
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 09:51:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3B61DA102F3
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 10:23:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BAF921887CC5
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 08:51:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9E983A4688
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 09:23:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E660234964;
-	Tue, 14 Jan 2025 08:51:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 229D824024E;
+	Tue, 14 Jan 2025 09:23:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="t9/CvVal"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f48.google.com (mail-vs1-f48.google.com [209.85.217.48])
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9686538FA3;
-	Tue, 14 Jan 2025 08:51:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6BC2A22DC20
+	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 09:23:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736844664; cv=none; b=on9wHFL5GjNG/ObWjajxxfHq2mCcQ9CKli5nCqML+xZwxWGxgkCZLa4fAxVpi2B/lo8QvnXGUFjSy2w7m3llkiGdJc47ZDuo2aT788RFjEaPMtqZjy9+8NKDwyriEOqNtmyDudjNb5KVUOR3Fs4rhifaIIeNYZg0Zn6ogkLyBXo=
+	t=1736846628; cv=none; b=FlZ+375zbFVhdPf7jY0Rr3EMaHEOfYep5zvCLUHt7z7TmUlTzcetSGsgY/s58/cMMNjSYQF9Pd9J7aatpIIIN1D1T26Pg9DPHYqifBcXXcFCPCWwFjFTukCUMjX0xgnTPQmxTYu69pvXja/qEn+tzYZ3tmx2Ipe2G0vDnSMKaAA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736844664; c=relaxed/simple;
-	bh=JRqmTAOBvR+mzBViA4yWgkoc22NIDipxEJJMBadYQnw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XAmkjklg8kP4Sw3knReER6R5/AVfJEyAfxJKkrCi6AfOgpnnaFbaZ9SLQqFHVQ+AjDx6ZCcCCaIziRItJQ1YnSnCCx+QtQGzANQlOiia6VNIUK0tPS6AJ/Wnn/lknlcLjG1wwsXIefTdPRLO3YuUIdd++c+F4+RdUDk2YGWb6EI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f48.google.com with SMTP id ada2fe7eead31-4aff31b77e8so2094885137.1;
-        Tue, 14 Jan 2025 00:51:02 -0800 (PST)
+	s=arc-20240116; t=1736846628; c=relaxed/simple;
+	bh=oYpAQBhA6oPHH4Ricya3Bzgts/o51VFx30fQ7a+NYj4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=U/YrYqggqf+fdAU2yZ05zarv7JP+LW/DO/lyM2K4/HrnCNJwNO1R2GiRGZ9oyb3b+RHbJvn8ZeowyoU6pyb5k1kYZx5zalJR0whJpR/kKWZ0VFnvFDYLY5R12REWbYbwbKFxei8AFprOOS04NUooHRW6fZY0NePn5yWwMAZwpAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=t9/CvVal; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-385ef8b64b3so4543751f8f.0
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 01:23:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736846624; x=1737451424; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Ujceh96Zfu+ZZBCUYvGUXM3Y+jEAHufrqSQjtD+xc6o=;
+        b=t9/CvValVtjyN/seQoO26P1c1AAKpOehFqzGbtV04iZlvjkFg6QpOm9uxjYJRf1wEk
+         oYMzf1pWBtqNFdO32OnQNEggoa0rLm+Ig1b/fZA1PG05UlZ0/E4CsWhV7V5nxsUgAqA0
+         +sNLX5Ib87QdJtAm/FZ2VScJ+ZAfRdhA7pYJ2ycTHNb+GBBQLIexm2OsoFCHLxZxl4my
+         iO/P/ruFQznpxMnEajfAoDpid701tw85DdZSRW4Nh1JdWscE/8vrHlzOBNjZpy64YY6j
+         cMIYGc4CAVY+AMqRV12o8jG5qtRsJ2q2mLDkHX2drKFCIAcAMEhKKjEzb2f+bXELZplK
+         xvnw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736844659; x=1737449459;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=vZapeDv4kpaC5Gk5VUgNaknGqRDxt+j+i6l9YWXwmgk=;
-        b=k2zj02I1OAA4PHBU3MHTRJEp5IuYtgTLx8EToNNW+yb5gbkN7ZeRUFvrHn8P9kxEe1
-         cWSWtpdlF7yTek203O5V659d2ED0bOussNESAguK+Ro10vWbs/fEKyIHLl2FXvZyL68s
-         yUA2ZQYrVAhdWJh2UNXPFtRUnUNquPvIk9F5DpoCsYvb5qBg6x/UVplEOQXkrJas70Vp
-         UhXJfcLeKzu3YPgZIROcRZl0zhh74Yosiq7bq4x5oArEw4BHG3DkKY0L1tqqo6p6PPPD
-         JtXpPjHAfy76nUQMi2ausiU/xuuO6SoFPs0s1o4lUS6OK4lqCAtOAtV/5nxXkXMz7Cbi
-         ++oQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUYyiThbhv17DyvAG7OIKbo81nfULo+AhbBrRBUNRu2kD27HXAZVA/4zhgTbSpIfZetCIfFi+BZLhU=@vger.kernel.org, AJvYcCVXwU/lSYgVA2AAZD0akfo+/9km/kzqDco3ZpGfXpipaHCG9AZgofc8eeMdCRO9nPkHk2kNjJmNNXUEeIw=@vger.kernel.org, AJvYcCVzgbQzeyYV4HVGGZBX1ZwQMl0wZkkZKVoH/AR7+CjL4prDD7TQsXjdm28AGXHyz8MZ7XXccMKZxZWN@vger.kernel.org
-X-Gm-Message-State: AOJu0YwRkOnBIG17dS5vqosVobj+gYEFnPUYIEdGyUuSe8NJUm6Mt2SN
-	42rgzEw6a/zi7UXpasdGGi+70IBITEs86W7YIGUbl3jpgW7OiCks+pxBe+tLvY0=
-X-Gm-Gg: ASbGncutPaDvrowb6JXMLIQkbrY4lMrytW1r5YCUm46yW5AarRQu6rKWzvtJA3eq8yR
-	qYivLxnCam4mwNuObuIXrd3jFnbXU42m2Acc6ArNRnL5Ygi+EG0ek5cc+0yl+acGeyRQepJRWe0
-	V6rn8VFaQhrqR8Du04TnN1k6YDuSWI472h8Tb/AB9+/l8GkxChG+b7+6by/xQNvTnCewf2BkEiB
-	KQalbpCE/DneNc00os7+0ye+Kgf5Zv68FWLh5WlUGkZLmyGPmCN36QoxakxU8B6DjWEBNLbH1hE
-	A/0gfr8yQKdXVCW+0i0=
-X-Google-Smtp-Source: AGHT+IGjSx6opmTV7Rzh2KU7lkKAF8ale9xwGMxzHelt1NcMKyjyd2vsTqYMastoRgH+6uCtZ1qGdw==
-X-Received: by 2002:a05:6102:3750:b0:4b2:5d67:94c3 with SMTP id ada2fe7eead31-4b3d0fc4134mr18849582137.18.1736844659237;
-        Tue, 14 Jan 2025 00:50:59 -0800 (PST)
-Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com. [209.85.222.52])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-8623134c6b9sm5220941241.1.2025.01.14.00.50.58
+        d=1e100.net; s=20230601; t=1736846624; x=1737451424;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Ujceh96Zfu+ZZBCUYvGUXM3Y+jEAHufrqSQjtD+xc6o=;
+        b=kugs1z89n/pO3KScvmDxdV+RbiHs7p4gyMF3wwaoydk+oW2Tf+GSb7TkKM/dN1RjcR
+         z5QeXCReaE9sCmnMb0smX3/14r2Zrj/vxeC7z3SAqksuT3pO2ri68f1hblOUyZwa97ur
+         3TC+9vqql0QGF/TFyD77p4D0PPNOH7i/hauvZf1yZ04ybK/wBLFwrffQgjClxCMw9p0e
+         z3D4+xT6ZupCLu+VV4kwSc+/7nG4u/UGhaca7MymYzqMpCtkURJC9SrmUedZ/QO4fhrL
+         JyERJRJ3CoO6SthIgfnHGfLmqQsEXrcvHcHV2d3A4NanR/dacrshvoKQObjAtVm+tHaK
+         Lb9A==
+X-Forwarded-Encrypted: i=1; AJvYcCUECkcqJKxVulSZawaw0vHMYI7RF2nf6Ry3BtqBZMcXl/VZiakOkZp08AWp64rPt1xBeE0N/KhQug==@vger.kernel.org
+X-Gm-Message-State: AOJu0YypmmxaF9CElqrgrwDR+zluUMdUu8oNMZ9T4JXG230vfoPZtIXS
+	wh63BqmsUV6pweRRFa1k6t4G4UIHtXfwuOk7koApLqT7xoXrXdqKbtXaHurpCx0=
+X-Gm-Gg: ASbGncvimN7VCWQcsxSa7iXOHMUyYn02LuwgHY+EFFIdThGs8ShnxMckv83LU4ziqkX
+	7P8wZK/in6WsVEuP5rsFCVteN88mblHv9Yc2z1aT2N5jFgo/E5ILJyUG7fO5oOMYtVyeWP/YDzf
+	TsM/gHYhI6lt0zSVqTTnzGmAOKj6XZB7V8ROUUjcJUBsjd6lBPwPv7gYsgwdlwA04+rBcY8c9hB
+	2GtsANWUR0SZwzjtenIBuoD9UFiCn1gnEY7uR1pMp3MWSd6xMoFecUymzleY2njEomX4JJCPU1L
+	n/Xob7UtYrwH9UWxNvM0
+X-Google-Smtp-Source: AGHT+IGUa5x9kNh4WH7UnCyzX3Q2GslgbUWvRhsg8TCGNensTbTol30VhBNVgwctwPWzJvCkmK/QEA==
+X-Received: by 2002:a5d:5e8a:0:b0:386:3918:16b1 with SMTP id ffacd0b85a97d-38a8730fc4bmr23941231f8f.39.1736846623863;
+        Tue, 14 Jan 2025 01:23:43 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38a8e4b7ff0sm14396260f8f.77.2025.01.14.01.23.42
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 14 Jan 2025 00:50:58 -0800 (PST)
-Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-85c5adbca8eso1333673241.0;
-        Tue, 14 Jan 2025 00:50:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWH/Vsytaw/0kPzr2z5UV4M1IV/7AIsjDW1QNZ5KG2vDjF2nwXnchkXbuKaeeLalKAcpJVAGX4bYH4=@vger.kernel.org, AJvYcCWuR8iwoDoInmIMsScjwdSCoGwBWuw/QcMEubVAo7SQDgrTzxeoaL4IVYrdvBCTgBKUqtudQvDEd5D2@vger.kernel.org, AJvYcCX2l2oj8gbxcVdS1c5q0kAmOlhMFJFmr0D3vQNuNjn0/HYRs+pNEEDClW201Q6dHQDVDR6uu84ZWrIlfJ8=@vger.kernel.org
-X-Received: by 2002:a05:6102:d89:b0:4af:bf45:39a8 with SMTP id
- ada2fe7eead31-4b3d0f41da6mr18880384137.16.1736844658081; Tue, 14 Jan 2025
- 00:50:58 -0800 (PST)
+        Tue, 14 Jan 2025 01:23:43 -0800 (PST)
+Message-ID: <20828ba5-ecb5-46a4-8be3-9119d93c383a@linaro.org>
+Date: Tue, 14 Jan 2025 10:23:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241213-fix_bwctrl_thunderbolt-v2-1-b52fef641dfc@kernel.org>
-In-Reply-To: <20241213-fix_bwctrl_thunderbolt-v2-1-b52fef641dfc@kernel.org>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 14 Jan 2025 09:50:45 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVtpVTtUEX=hF+r+rt_awk=w8iYWHd5yzZYGUpKoyYcgA@mail.gmail.com>
-X-Gm-Features: AbW1kvYO1dSgvIgmXpf3X7_IJcFWeR2PErQvf8ZhVlDPZnKWck-RCDeidez29AE
-Message-ID: <CAMuHMdVtpVTtUEX=hF+r+rt_awk=w8iYWHd5yzZYGUpKoyYcgA@mail.gmail.com>
-Subject: Re: [PATCH v2] PCI/portdrv: Disable bwctrl service if port is fixed
- at 2.5 GT/s
-To: Niklas Schnelle <niks@kernel.org>
-Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	Bjorn Helgaas <bhelgaas@google.com>, Lukas Wunner <lukas@wunner.de>, linux-pci@vger.kernel.org, 
-	Rob Herring <robh@kernel.org>, "Krzysztof Wilczy??ski" <kw@linux.com>, "Maciej W . Rozycki" <macro@orcam.me.uk>, 
-	Jonathan Cameron <Jonathan.Cameron@huawei.com>, Alexandru Gagniuc <mr.nuke.me@gmail.com>, 
-	Krishna chaitanya chundru <quic_krichai@quicinc.com>, 
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	Smita Koralahalli <Smita.KoralahalliChannabasappa@amd.com>, linux-kernel@vger.kernel.org, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Amit Kucheria <amitk@kernel.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Christophe JAILLET <christophe.jaillet@wanadoo.fr>, 
-	Mika Westerberg <mika.westerberg@linux.intel.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
-	Stephen Rothwell <sfr@canb.auug.org.au>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RESEND v2 1/5] thermal/drivers/mediatek/lvts: Disable
+ monitor mode during suspend
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Matthias Brugger
+ <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Alexandre Mergnat <amergnat@baylibre.com>, Balsam CHIHI <bchihi@baylibre.com>
+Cc: kernel@collabora.com, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+ linux-mediatek@lists.infradead.org, Hsin-Te Yuan <yuanhsinte@chromium.org>,
+ Chen-Yu Tsai <wenst@chromium.org>, =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?=
+ <bero@baylibre.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+ stable@vger.kernel.org
+References: <20250113-mt8192-lvts-filtered-suspend-fix-v2-0-07a25200c7c6@collabora.com>
+ <20250113-mt8192-lvts-filtered-suspend-fix-v2-1-07a25200c7c6@collabora.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250113-mt8192-lvts-filtered-suspend-fix-v2-1-07a25200c7c6@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Fri, Dec 13, 2024 at 9:56=E2=80=AFPM Niklas Schnelle <niks@kernel.org> w=
-rote:
-> Trying to enable bwctrl on an Intel JHL7540 (Titan Ridge) based
-> Thunderbolt port causes a boot hang on at least some systems though the
-> exact reason is not yet understood. As per the spec Thunderbolt PCIe
-> Downstream Ports have a fake Max Link Speed of 2.5 GT/s (USB4 v2 sec
-> 11.2.1):
->
->    "Max Link Speed field in the Link Capabilities Register set to 0001b
->     (data rate of 2.5 GT/s only).
->     Note: These settings do not represent actual throughput.
->     Throughput is implementation specific and based on the USB4 Fabric
->     performance."
->
-> More generally if 2.5 GT/s is the only supported link speed there is no
-> point in throtteling as this is already the lowest possible PCIe speed
-> so don't advertise the capability stopping bwctrl from being probed on
-> these ports.
->
-> The PCIe r6.2 specification section 7.5.3.18 recommends to primarily
-> utilize the Supported Link Speeds Vector instead of the Max Link Speeds
-> field to prevent confusion if future specifications allow devices not
-> to support lower speeds. This concern does not apply however when
-> specifically targeting devices claiming support only for 2.5 GT/s.
->
-> Link: https://lore.kernel.org/linux-pci/Z1R4VNwCOlh9Sg9n@wunner.de/
-> Fixes: 665745f27487 ("PCI/bwctrl: Re-add BW notification portdrv as PCIe =
-BW controller")
-> Tested-by: Niklas Schnelle <niks@kernel.org>
-> Reviewed-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
-> Reviewed-by: Mika Westerberg <mika.westerberg@linux.intel.com>
-> Signed-off-by: Niklas Schnelle <niks@kernel.org>
+
+Hi Nicolas,
+
+On 13/01/2025 14:27, Nícolas F. R. A. Prado wrote:
+> When configured in filtered mode, the LVTS thermal controller will
+> monitor the temperature from the sensors and trigger an interrupt once a
+> thermal threshold is crossed.
+> 
+> Currently this is true even during suspend and resume. The problem with
+> that is that when enabling the internal clock of the LVTS controller in
+> lvts_ctrl_set_enable() during resume, the temperature reading can glitch
+> and appear much higher than the real one, resulting in a spurious
+> interrupt getting generated.
+> 
+> Disable the temperature monitoring and give some time for the signals to
+> stabilize during suspend in order to prevent such spurious interrupts.
+> 
+> Cc: stable@vger.kernel.org
+> Reported-by: Hsin-Te Yuan <yuanhsinte@chromium.org>
+> Closes: https://lore.kernel.org/all/20241108-lvts-v1-1-eee339c6ca20@chromium.org/
+> Fixes: 8137bb90600d ("thermal/drivers/mediatek/lvts_thermal: Add suspend and resume")
+> Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 > ---
-> Note: This issue causes a boot hang on my personal workstation.
->
-> While there is an ongoing discussion about generalizing this to all
-> devices with a single supported speed. It turns out however that in my
-> case dev->supported_speeds incorrectly claims 2.5-8 GT/s requiring
-> a seperate second fix. So in the interest of simplicity and because I'll
-> be out from the 19th until January, I'd like to propose to do this simple
-> fix to the boot hang now and take the time to figure out a more general
-> approach afterwards.
-> ---
-> Changes in v2:
-> - Improve commit message to mention the specific controller and
->   why using the Max Link Speeds field should be fine here.
-> - Add a comment (Lukas)
-> - Add R-b's (no change to logic).
-> - Link to v1: https://lore.kernel.org/r/20241207-fix_bwctrl_thunderbolt-v=
-1-1-b711f572a705@kernel.org
+>   drivers/thermal/mediatek/lvts_thermal.c | 36 +++++++++++++++++++++++++++++++--
+>   1 file changed, 34 insertions(+), 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/mediatek/lvts_thermal.c b/drivers/thermal/mediatek/lvts_thermal.c
+> index 07f7f3b7a2fb569cfc300dc2126ea426e161adff..a1a438ebad33c1fff8ca9781e12ef9e278eef785 100644
+> --- a/drivers/thermal/mediatek/lvts_thermal.c
+> +++ b/drivers/thermal/mediatek/lvts_thermal.c
+> @@ -860,6 +860,32 @@ static int lvts_ctrl_init(struct device *dev, struct lvts_domain *lvts_td,
+>   	return 0;
+>   }
+>   
+> +static void lvts_ctrl_monitor_enable(struct device *dev, struct lvts_ctrl *lvts_ctrl, bool enable)
+> +{
+> +	/*
+> +	 * Bitmaps to enable each sensor on filtered mode in the MONCTL0
+> +	 * register.
+> +	 */
+> +	static const u8 sensor_filt_bitmap[] = { BIT(0), BIT(1), BIT(2), BIT(3) };
+> +	u32 sensor_map = 0;
+> +	int i;
+> +
+> +	if (lvts_ctrl->mode != LVTS_MSR_FILTERED_MODE)
+> +		return;
+> +
+> +	if (enable) {
+> +		lvts_for_each_valid_sensor(i, lvts_ctrl)
+> +			sensor_map |= sensor_filt_bitmap[i];
+> +	}
+> +
+> +	/*
+> +	 * Bits:
+> +	 *      9: Single point access flow
+> +	 *    0-3: Enable sensing point 0-3
+> +	 */
+> +	writel(sensor_map | BIT(9), LVTS_MONCTL0(lvts_ctrl->base));
+> +}
+> +
+>   /*
+>    * At this point the configuration register is the only place in the
+>    * driver where we write multiple values. Per hardware constraint,
+> @@ -1381,8 +1407,11 @@ static int lvts_suspend(struct device *dev)
+>   
+>   	lvts_td = dev_get_drvdata(dev);
+>   
+> -	for (i = 0; i < lvts_td->num_lvts_ctrl; i++)
+> +	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
+> +		lvts_ctrl_monitor_enable(dev, &lvts_td->lvts_ctrl[i], false);
+> +		usleep_range(100, 200);
 
-This is now commit e50e27a613db6f18 ("PCI/portdrv: Disable bwctrl
-service if port is fixed at 2.5 GT/s") in pci/next, which conflicts
-with  commit 774c71c52aa48700 ("PCI/bwctrl: Enable only if more than
-one speed is supported") in v6.13-rc4.
+ From where this delay is coming from ?
 
-Gr{oetje,eeting}s,
+>   		lvts_ctrl_set_enable(&lvts_td->lvts_ctrl[i], false);
+> +	}
+>   
+>   	clk_disable_unprepare(lvts_td->clk);
+>   
+> @@ -1400,8 +1429,11 @@ static int lvts_resume(struct device *dev)
+>   	if (ret)
+>   		return ret;
+>   
+> -	for (i = 0; i < lvts_td->num_lvts_ctrl; i++)
+> +	for (i = 0; i < lvts_td->num_lvts_ctrl; i++) {
+>   		lvts_ctrl_set_enable(&lvts_td->lvts_ctrl[i], true);
+> +		usleep_range(100, 200);
+> +		lvts_ctrl_monitor_enable(dev, &lvts_td->lvts_ctrl[i], true);
+> +	}
+>   
+>   	return 0;
+>   }
+> 
 
-                        Geert
 
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
 
-In personal conversations with technical people, I call myself a hacker. Bu=
-t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
