@@ -1,135 +1,132 @@
-Return-Path: <linux-pm+bounces-20395-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20396-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCD6EA0FE20
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 02:31:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 352C7A0FFA7
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 04:43:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DA45F1888E45
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 01:31:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D34207A14CC
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 03:43:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C14B42288C7;
-	Tue, 14 Jan 2025 01:31:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66494231C9F;
+	Tue, 14 Jan 2025 03:43:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iSHX1Lb/"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TWixnnKK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF0B1228375;
-	Tue, 14 Jan 2025 01:31:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE838230984
+	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 03:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736818279; cv=none; b=nwXYH3ubTAfyt10Kp3nP5qzeDOR07lPBpYJ4i1052+xPD+6vV1wPXVCTAU8YvjAfxeyf0qvrz07DSxldPkD9OmjuqyCVnYckf1yv5CPji/sCH0GqLsGkp50YtZ7g+/T1g4IhiSDKSKam3p801PkjgKCOzvyzt92cd2iMS0ZrHTk=
+	t=1736826181; cv=none; b=b5sfZ41I91g2gkKrFCw0beR5krSjZghKqlFe4WmSinhHcR24ABaWkDM2OgfXEBrdcYdgmldy5sgGkRlVYwYV3FijmCX++maX0ifUQznjtbEoiI7vGtZAXPkgmNLxkHA4Ew5SaYJMUOJdIuoE0HAAWtVKN9NP3cd4Ah74OzWGwjU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736818279; c=relaxed/simple;
-	bh=RAc8JMWGHAEq/1zAnmcjYAkTf3sEC2U7lszSqnBPbgA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=uDZrkWN4NuK2BiL0roz+B4bItDS3VUY3nabFIhWfBOivopqvk/c6G0bhjFjwkmzaqAOWMeA/vNh2Jxmvqa9k0rlBqtPpc5g1+1JExqgHaH/HV8F7EjPZJ9hsz/YKv5zhQ1M8JZyZsQqEPFuFaTGFWWcSALefyq/w7uGQ+LGBGUI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iSHX1Lb/; arc=none smtp.client-ip=209.85.208.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-303548a933aso39671811fa.3;
-        Mon, 13 Jan 2025 17:31:16 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736818275; x=1737423075; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=/aU6EnYM1FFu/Ni2NC3JHueKkzhR3f1t7juJ8cBXKNg=;
-        b=iSHX1Lb/SpRcZa+M00t8k9oFku+PU0EmuC5PPQIXMgMn8rKaT44UXFucMgwgVpFgFy
-         Yy7QX6HiQ7yfmW8xANW6uo07xIsZJhM+FCB2R4vt4FIPMBARyCTQUrohvCox/hTMDTJU
-         RbFBc+4hPVYbGpZbqu4akW0f1/FF1nEMo1Pf2nkeibvWV6zXIHb6rY0QMbO+R1zOIhRk
-         nOjFG0GRwEdCMZgExdiJ4EZg/evBQSrDb8tAdS+DYJpep24MW5oqeIzd9rVCaJ/au66X
-         dy/pLXsVWA6ill7zwWi7syQtazRNAKG0i1dxxp6qQieWlry2bvGgvivUbbNQ20iGKtIx
-         TQUg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736818275; x=1737423075;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=/aU6EnYM1FFu/Ni2NC3JHueKkzhR3f1t7juJ8cBXKNg=;
-        b=QFzEb5MkibkaX3aAWNd6whshGqagpKs4t36c37S1uz7nD0K0Oy13xQiUzUvuHcWNAq
-         msCqrNnrvNSuKs5SkzVUsNrQKCt0VI8PHArotgGDgHYFV8ryQylqEXc+TBIVizU5R3WI
-         NSyWhA+CDM28Ot6Qm7RUG3bkqseYurwgvFSWSIkFkPjcbPD6Kpo+smpyT4JeL2UxBPak
-         A4GE1FZd2bmpN4ANZF2BU5uVGiHesTaxz7T4vPFqMsOIBA6RYv1KzvhoQ0FZbrNox/St
-         QJmNHKHpCtb+JtioAwA+kcKQXQ0o97Zb/Q5oIcLxgFiu90kaL52sA9715za0CMSD8pkw
-         Dnpg==
-X-Forwarded-Encrypted: i=1; AJvYcCXJJv4LbnTZHX7puqlbZgmOUi1F4E1CTr4j5ivK5lFf6HWqb9XBnjR+Md2yq1EVYE8GunQy8AfEokc4eTI=@vger.kernel.org, AJvYcCXysCgSbjrJkMoC6Ls/maU296mNYwS2Ro1rMssnnN4cz2/AChDAWnPNITrbZcWhDMaLYDUfcRf2MPo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwFI9Fd+mM1l4zf32YmbEv+Zg1Mo0skdp4wKbpEUZHUBhJjjcWL
-	+hRnBHR6AW3qpU7950QbA3Cw3/bdT97odkx5iBwypwjIFkxH0akQvYFtA8Ih+JWPKTM4uXqOxJG
-	79MsXkoBwou7qpKECZyEHTXvf37U=
-X-Gm-Gg: ASbGncv3QAel1yzvGFTVcPgftsXTrYkT6bTBkolt1YL5gKPPXR3Ki2kWt0Q3/fQGsAe
-	HwN8lE7Iq9P5B7E02NbUdtnjoOgZ7MpWawY5/+Y56++yEOqDFhuXFvtH1Q93Smnlb2rPsng==
-X-Google-Smtp-Source: AGHT+IEUJmr5CzHShAQpgO68JDpagn9ocRTq7BeVsW6j7XDBWpIfZvawE2F15mzspC+LVxD1aFCcu76BGOg5HtppGiQ=
-X-Received: by 2002:a2e:be10:0:b0:302:52a8:243 with SMTP id
- 38308e7fff4ca-305f45db514mr82377271fa.30.1736818274651; Mon, 13 Jan 2025
- 17:31:14 -0800 (PST)
+	s=arc-20240116; t=1736826181; c=relaxed/simple;
+	bh=n/NVH8+N6yzwcIDq9FPXWJ28s+DN3p2T232gdhB9LEM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Ei2SVX6E9pwXtePXTvo2byNUw38FBmnEggZLHQtHqzRfgB29+KE3rhSYWNyY+z4SIuVIIcobophEpRQBR2cwczDgXq9qgmZjgxoxu/r3DC3d/r6PfM8EeZUrimb8dIQutbAsv7Nfq5Sblpq2AZroWqPCXZTck3b37uYWOAJG3h0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TWixnnKK; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1736826178;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=GSW4oy9jnxLr2pA/3ti78V9yiawCQ3o1yEEVBM2/WTQ=;
+	b=TWixnnKK2n2nGjHBZ9/8vqGqOCel8tBt1Mzm3bu2Ec8RplzgBsM8qelfU9dgnoqcsWy6aW
+	ZgZefTQrpRGX9r6pdDIDj/w5u9M0uWhxkWZN0nAfkiWZGfQjwo7kafIFVGIQm8lyhEuO7Y
+	qrIACDdhSn0wCdxyYtsex396ImPbxNs=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-564-1t_4m890NjelwhNyI0K33w-1; Mon,
+ 13 Jan 2025 22:42:55 -0500
+X-MC-Unique: 1t_4m890NjelwhNyI0K33w-1
+X-Mimecast-MFC-AGG-ID: 1t_4m890NjelwhNyI0K33w
+Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5789519560AA;
+	Tue, 14 Jan 2025 03:42:52 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.156])
+	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C10A19560AD;
+	Tue, 14 Jan 2025 03:42:49 +0000 (UTC)
+Date: Tue, 14 Jan 2025 11:42:45 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Roberto Ricci <io@r-ricci.it>
+Cc: ebiederm@xmission.com, rafael@kernel.org, pavel@ucw.cz,
+	ytcoode@gmail.com, kexec@lists.infradead.org,
+	linux-pm@vger.kernel.org, akpm@linux-foundation.org,
+	regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from
+ hibernation
+Message-ID: <Z4XdNTRTyKB+J175@MiWiFi-R3L-srv>
+References: <Z4WFjBVHpndct7br@desktop0a>
+ <Z4WGSMdF6seQm9GV@desktop0a>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250114011818.2401479-1-xiaolei.wang@windriver.com>
-In-Reply-To: <20250114011818.2401479-1-xiaolei.wang@windriver.com>
-From: Fabio Estevam <festevam@gmail.com>
-Date: Mon, 13 Jan 2025 22:31:03 -0300
-X-Gm-Features: AbW1kvYlHMYh_9BWfuP0hql59S9fdsu1xJunec-2pANaEdOBUzmqZvZq2hVMDbI
-Message-ID: <CAOMZO5BpBjPhr3Y_+28ob48N-6GMaA640=d=VTVxfz=vq5PV7A@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain: imx8mp-blk-ctrl: add missing loop break condition
-To: Xiaolei Wang <xiaolei.wang@windriver.com>
-Cc: ulf.hansson@linaro.org, shawnguo@kernel.org, s.hauer@pengutronix.de, 
-	kernel@pengutronix.de, ping.bai@nxp.com, l.stach@pengutronix.de, 
-	marex@denx.de, aford173@gmail.com, linux-pm@vger.kernel.org, 
-	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z4WGSMdF6seQm9GV@desktop0a>
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
 
-On Mon, Jan 13, 2025 at 10:18=E2=80=AFPM Xiaolei Wang
-<xiaolei.wang@windriver.com> wrote:
->
-> Currently imx8mp_blk_ctrl_remove() will continue the for loop
-> until an out-of-bounds exception occurs.
->
-> pstate: 60000005 (nZCv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=3D--)
-> pc : dev_pm_domain_detach+0x8/0x48
-> lr : imx8mp_blk_ctrl_shutdown+0x58/0x90
-> sp : ffffffc084f8bbf0
-> x29: ffffffc084f8bbf0 x28: ffffff80daf32ac0 x27: 0000000000000000
-> x26: ffffffc081658d78 x25: 0000000000000001 x24: ffffffc08201b028
-> x23: ffffff80d0db9490 x22: ffffffc082340a78 x21: 00000000000005b0
-> x20: ffffff80d19bc180 x19: 000000000000000a x18: ffffffffffffffff
-> x17: ffffffc080a39e08 x16: ffffffc080a39c98 x15: 4f435f464f006c72
-> x14: 0000000000000004 x13: ffffff80d0172110 x12: 0000000000000000
-> x11: ffffff80d0537740 x10: ffffff80d05376c0 x9 : ffffffc0808ed2d8
-> x8 : ffffffc084f8bab0 x7 : 0000000000000000 x6 : 0000000000000000
-> x5 : ffffff80d19b9420 x4 : fffffffe03466e60 x3 : 0000000080800077
-> x2 : 0000000000000000 x1 : 0000000000000001 x0 : 0000000000000000
-> Call trace:
->  dev_pm_domain_detach+0x8/0x48
->  platform_shutdown+0x2c/0x48
->  device_shutdown+0x158/0x268
->  kernel_restart_prepare+0x40/0x58
->  kernel_kexec+0x58/0xe8
->  __do_sys_reboot+0x198/0x258
->  __arm64_sys_reboot+0x2c/0x40
->  invoke_syscall+0x5c/0x138
->  el0_svc_common.constprop.0+0x48/0xf0
->  do_el0_svc+0x24/0x38
->  el0_svc+0x38/0xc8
->  el0t_64_sync_handler+0x120/0x130
->  el0t_64_sync+0x190/0x198
-> Code: 8128c2d0 ffffffc0 aa1e03e9 d503201f
->
-> Fixes: 556f5cf9568a ("soc: imx: add i.MX8MP HSIO blk-ctrl")
-> Signed-off-by: Xiaolei Wang <xiaolei.wang@windriver.com>
-> Reviewed-by: Lucas Stach <l.stach@pengutronix.de>
+On 01/13/25 at 10:31pm, Roberto Ricci wrote:
+...... 
+> Code starting with the faulting instruction
+> ===========================================
+>    0:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax
+>    4:	84 c0                	test   %al,%al
+>    6:	74 08                	je     0x10
+>    8:	3c 03                	cmp    $0x3,%al
+>    a:	0f 8e 9d 00 00 00    	jle    0xad
+>   10:	8b 8b 00 4a 00 00    	mov    0x4a00(%rbx),%ecx
+> [   88.485275] RSP: 0018:ffffffffa4807ce8 EFLAGS: 00010002
+> [   88.485279] RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 1ffff11027fff565
+> [   88.485281] RDX: 0000000000000940 RSI: ffffffffa3a89b80 RDI: 0000000000004a00
+> [   88.485283] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffed10234c82c8
+> [   88.485285] R10: ffff88811a641647 R11: ffff88811a635e30 R12: 0000000000000000
+> [   88.485287] R13: 1ffffffff4839048 R14: 0000000000000000 R15: 000000000000003d
+> [   88.485290] FS:  0000000000000000(0000) GS:ffff88811a600000(0000) knlGS:0000000000000000
+> [   88.485292] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> [   88.485294] CR2: 000055e8c586c300 CR3: 0000000106eb0000 CR4: 00000000000006f0
+> [   88.485299] Call Trace:
+> [   88.485301]  <TASK>
+> [   88.485306] ? die_addr (arch/x86/kernel/dumpstack.c:421 arch/x86/kernel/dumpstack.c:460)
+> [   88.485313] ? exc_general_protection (arch/x86/kernel/traps.c:751 arch/x86/kernel/traps.c:693)
+> [   88.485319] ? asm_exc_general_protection (./arch/x86/include/asm/idtentry.h:617)
+> [   88.485324] ? next_zone (mm/mmzone.c:20 mm/mmzone.c:37)
+> [   88.485336] ? calc_load_nohz_start (kernel/sched/loadavg.c:251 (discriminator 2))
+> [   88.485341] need_update (mm/vmstat.c:2032 (discriminator 2))
+> [   88.485366] quiet_vmstat (mm/vmstat.c:2065 (discriminator 2))
+> [   88.485369] tick_nohz_stop_tick (./include/linux/hrtimer.h:135 kernel/time/tick-sched.c:1044)
+> [   88.485373] ? __pfx_tick_nohz_stop_tick (kernel/time/tick-sched.c:970)
+> [   88.485376] ? tick_nohz_next_event (kernel/time/tick-sched.c:952 (discriminator 2))
+> [   88.485379] ? __pfx_tsc_verify_tsc_adjust (arch/x86/kernel/tsc_sync.c:51)
+> [   88.485396] tick_nohz_idle_stop_tick (kernel/time/tick-sched.c:1229)
 
-Thanks for the fix:
+It's weird, how come the change in kexec will impact this tick-sched
+code. I will try to reproduce and investigate today.
 
-Reviewed-by: Fabio Estevam <festevam@gmail.com>
+> [   88.485399] do_idle (kernel/sched/idle.c:185 kernel/sched/idle.c:325)
+> [   88.485403] ? __pfx_do_idle (kernel/sched/idle.c:253)
+> [   88.485406] cpu_startup_entry (kernel/sched/idle.c:422)
+> [   88.485409] rest_init (init/main.c:720)
+> [   88.485413] ? acpi_subsystem_init (drivers/acpi/bus.c:1314)
+> [   88.485417] start_kernel (init/main.c:1000)
+> [   88.485422] x86_64_start_reservations (arch/x86/kernel/head64.c:495)
+> [   88.485426] x86_64_start_kernel (??:?)
+> [   88.485432] common_startup_64 (arch/x86/kernel/head_64.S:415)
+> [   88.485437]  </TASK>
+> [   88.485439] Modules linked in: cfg80211 8021q garp stp mrp llc ppdev evdev input_leds intel_agp e1000 mac_hid intel_gtt pcspkr i2c_piix4 agpgart i2c_smbus parport_pc parport tiny_power_button button rfkill vhost_vsock vmw_vsock_virtio_transport_common vsock vhost_net vhost vhost_iotlb tap vfio_iommu_type1 vfio iommufd uhid hid dm_mod uinput userio ppp_generic slhc tun loop cuse fuse ext4 crc32c_generic crc16 mbcache jbd2 bochs drm_client_lib drm_shmem_helper sd_mod drm_kms_helper ata_generic pata_acpi ata_piix libata drm scsi_mod serio_raw scsi_common qemu_fw_cfg
+> 
+
 
