@@ -1,132 +1,162 @@
-Return-Path: <linux-pm+bounces-20396-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20397-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 352C7A0FFA7
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 04:43:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F48EA10137
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 08:16:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D34207A14CC
-	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 03:43:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 332C7167FFF
+	for <lists+linux-pm@lfdr.de>; Tue, 14 Jan 2025 07:16:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66494231C9F;
-	Tue, 14 Jan 2025 03:43:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8A0819B5B8;
+	Tue, 14 Jan 2025 07:16:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="TWixnnKK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SDu0kUVC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE838230984
-	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 03:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE01E1BD9E5
+	for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 07:16:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736826181; cv=none; b=b5sfZ41I91g2gkKrFCw0beR5krSjZghKqlFe4WmSinhHcR24ABaWkDM2OgfXEBrdcYdgmldy5sgGkRlVYwYV3FijmCX++maX0ifUQznjtbEoiI7vGtZAXPkgmNLxkHA4Ew5SaYJMUOJdIuoE0HAAWtVKN9NP3cd4Ah74OzWGwjU=
+	t=1736838968; cv=none; b=FdwtgYTkVpAEo92iP9kq3VYV0DCcIw1uF2AkYaK41b7g4uKH60n5O5dFELlJtEI3gybU6gKLYS19BeSwvqlc8mk6B+GPAGOm0h8FcHXJ4sDWhLYfwnKxN20yiKVlFm6yqbRfbAYhxyxqs/GDTTzJuf1sSpcDzWcsUX5AXVZCAo0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736826181; c=relaxed/simple;
-	bh=n/NVH8+N6yzwcIDq9FPXWJ28s+DN3p2T232gdhB9LEM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ei2SVX6E9pwXtePXTvo2byNUw38FBmnEggZLHQtHqzRfgB29+KE3rhSYWNyY+z4SIuVIIcobophEpRQBR2cwczDgXq9qgmZjgxoxu/r3DC3d/r6PfM8EeZUrimb8dIQutbAsv7Nfq5Sblpq2AZroWqPCXZTck3b37uYWOAJG3h0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=TWixnnKK; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736826178;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=GSW4oy9jnxLr2pA/3ti78V9yiawCQ3o1yEEVBM2/WTQ=;
-	b=TWixnnKK2n2nGjHBZ9/8vqGqOCel8tBt1Mzm3bu2Ec8RplzgBsM8qelfU9dgnoqcsWy6aW
-	ZgZefTQrpRGX9r6pdDIDj/w5u9M0uWhxkWZN0nAfkiWZGfQjwo7kafIFVGIQm8lyhEuO7Y
-	qrIACDdhSn0wCdxyYtsex396ImPbxNs=
-Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-564-1t_4m890NjelwhNyI0K33w-1; Mon,
- 13 Jan 2025 22:42:55 -0500
-X-MC-Unique: 1t_4m890NjelwhNyI0K33w-1
-X-Mimecast-MFC-AGG-ID: 1t_4m890NjelwhNyI0K33w
-Received: from mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.40])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5789519560AA;
-	Tue, 14 Jan 2025 03:42:52 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.156])
-	by mx-prod-int-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5C10A19560AD;
-	Tue, 14 Jan 2025 03:42:49 +0000 (UTC)
-Date: Tue, 14 Jan 2025 11:42:45 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Roberto Ricci <io@r-ricci.it>
-Cc: ebiederm@xmission.com, rafael@kernel.org, pavel@ucw.cz,
-	ytcoode@gmail.com, kexec@lists.infradead.org,
-	linux-pm@vger.kernel.org, akpm@linux-foundation.org,
-	regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from
- hibernation
-Message-ID: <Z4XdNTRTyKB+J175@MiWiFi-R3L-srv>
-References: <Z4WFjBVHpndct7br@desktop0a>
- <Z4WGSMdF6seQm9GV@desktop0a>
+	s=arc-20240116; t=1736838968; c=relaxed/simple;
+	bh=LlEk7MHA8ECmJroMPN2kM5U4L2sRjOLKssx47kcRcUM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=UjkdDtsxzJYmijjpSXe31MMQZdzWo2ZNGEZlpXT18w94ehn4oG7EUM0Q6Nxnb5V0A1gJxvcYsTLtd5rdvFJU9jDUy7rBeeo5EcYtnicaBKgIM2VK1QmqACEnAOJwxpioNiM1DWOiTbjfn7iyXJeRIeLdLnt+RY1FWDgUIGf+sHE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SDu0kUVC; arc=none smtp.client-ip=209.85.128.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-4361f09be37so6444845e9.1
+        for <linux-pm@vger.kernel.org>; Mon, 13 Jan 2025 23:16:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736838965; x=1737443765; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=ra3en1TTsF+QBOdXbaKhwvJyQmAHitbLe2Sa90BXlrw=;
+        b=SDu0kUVChdTk+fMZ+ezk7/zjwO23N6fhwTum7QgkVb3KQZ8y/ozjDjkPm49gqPiXup
+         JAaEr+KN2SiZ2CZzbqx/YCpgp7SmPxq989DlsOscDat+uJj0vwaA66Jil2q8bZs6sDok
+         c26Yw6xxqYbA7ug8qvX7/Zeq/ePrcNmW0LneLmgL0cn18zABSHx3R4m0P7b0zWiCqHOO
+         hXNghnmbkWewaJa2EibLQxRAyGxfksXiCVul9stS+UiA9H5swadERKU5N4DIpY6gGxAy
+         w7WgBrEck2Y//RJIU49SDnSkflNblODzAhrgR54WYsdSli52P1FgcujYI8y80g4vYZku
+         YJUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736838965; x=1737443765;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ra3en1TTsF+QBOdXbaKhwvJyQmAHitbLe2Sa90BXlrw=;
+        b=ds9CbNaldk+y7sp6mOka4IrE3oY24K3AU3VZeaUIk23LI+UsE2oMAePOdNZDO1Rdv8
+         FFKhyUL2sGSh4QffAA5Xm2ja/dt9GSgWQAulWb1Dq2RXNQzFaJrB0y1ocGZcLY5xAcn1
+         dczFgqdvui6kSIHT0UsUliqXen/1D/YT+3ppbzgKFF+eP6TRB76Hf9NkenCbUcVg85M8
+         wX9H18eOiXZa/fdV8QUGKq1xXr4JUABYgz48HfusAddjLKQUy3xTa82DnjjQA7wBNr5X
+         jNx+4lYzPt67twAbz2odxlXcZRTbFEerHHxPisX3b1XXMy1WfeWGQDcX6wyT/PTfIzU7
+         b33g==
+X-Forwarded-Encrypted: i=1; AJvYcCVFShBnaoRJd6budry+Z9YPIeNTuWtRSyEjhCAfih8UFAcQ5qvW5DxZZthCMnkp6LGR85N+7Cd+og==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvyhtCqzaskRvLOcdue4ke532zUz463jP7CS/i+BY5ql1mPoo4
+	45EwPxk0K4ttDKnOeTR4g55g1fFCwOw8gTE/2bbsUSGxDLjF8YkGVDklqPmIOn8=
+X-Gm-Gg: ASbGncsI4Um8BcHrrGj9+iEty2sz1iV1D/XjT4Cgv3u6tP2XGytGse0QVWWQnuVUo6P
+	XKbaqf9seAUcwUrc5LY/eDAqbpBJ7LX/X15LbJZIz/YK1T/MIwD1JZdJiOwIix+cZTDgnoPYMDW
+	m2PiXTeyLggljkdoTr1Hltq8yXLUDwvpWI1Vq9c5VTDqJSs++/w09eak3zI1quZQVyWMaZMC5dn
+	lYikL1tyLWXQwJKuaORr8/aYoj5GeWvNzPWqYiflTWiDyERh88BbMGAPSb2F9mFvM907y6fl11J
+X-Google-Smtp-Source: AGHT+IHPC+EWWU32ZLRxvrxIC+NfkNhqUNrDmgJNu1KTT5jKynsKitzE7Lrjf+3PJQcSUazdsKXX4A==
+X-Received: by 2002:a5d:5f4f:0:b0:38a:a037:a5fa with SMTP id ffacd0b85a97d-38aa037a79cmr4102420f8f.5.1736838965091;
+        Mon, 13 Jan 2025 23:16:05 -0800 (PST)
+Received: from [192.168.1.20] ([178.197.223.165])
+        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-436e2da66e6sm202435025e9.4.2025.01.13.23.16.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 13 Jan 2025 23:16:04 -0800 (PST)
+Message-ID: <fe853235-a588-49f5-8b49-d73682a682d0@linaro.org>
+Date: Tue, 14 Jan 2025 08:16:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z4WGSMdF6seQm9GV@desktop0a>
-X-Scanned-By: MIMEDefang 3.0 on 10.30.177.40
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/2] dt-bindings: interconnect: qcom,msm8998-bwmon: Add
+ SM8750 CPU BWMONs
+To: Melody Olvera <quic_molvera@quicinc.com>,
+ Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Bjorn Andersson <andersson@kernel.org>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+ Trilok Soni <quic_tsoni@quicinc.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ Shivnandan Kumar <quic_kshivnan@quicinc.com>
+References: <20250113-sm8750_bwmon_master-v1-0-f082da3a3308@quicinc.com>
+ <20250113-sm8750_bwmon_master-v1-1-f082da3a3308@quicinc.com>
+Content-Language: en-US
+From: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Autocrypt: addr=krzysztof.kozlowski@linaro.org; keydata=
+ xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
+ cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
+ JMp7PSyMPzpUXfU12yfcRYVEMQrmplNZssmYhiTeVicuOOypWugZKVLGNm0IweVCaZ/DJDIH
+ gNbpvVwjcKYrx85m9cBVEBUGaQP6AT7qlVCkrf50v8bofSIyVa2xmubbAwwFA1oxoOusjPIE
+ J3iadrwpFvsZjF5uHAKS+7wHLoW9hVzOnLbX6ajk5Hf8Pb1m+VH/E8bPBNNYKkfTtypTDUCj
+ NYcd27tjnXfG+SDs/EXNUAIRefCyvaRG7oRYF3Ec+2RgQDRnmmjCjoQNbFrJvJkFHlPeHaeS
+ BosGY+XWKydnmsfY7SSnjAzLUGAFhLd/XDVpb1Een2XucPpKvt9ORF+48gy12FA5GduRLhQU
+ vK4tU7ojoem/G23PcowM1CwPurC8sAVsQb9KmwTGh7rVz3ks3w/zfGBy3+WmLg++C2Wct6nM
+ Pd8/6CBVjEWqD06/RjI2AnjIq5fSEH/BIfXXfC68nMp9BZoy3So4ZsbOlBmtAPvMYX6U8VwD
+ TNeBxJu5Ex0Izf1NV9CzC3nNaFUYOY8KfN01X5SExAoVTr09ewARAQABzTRLcnp5c3p0b2Yg
+ S296bG93c2tpIDxrcnp5c3p0b2Yua296bG93c2tpQGxpbmFyby5vcmc+wsGUBBMBCgA+FiEE
+ m9B+DgxR+NWWd7dUG5NDfTtBYpsFAmI+BxMCGwMFCRRfreEFCwkIBwIGFQoJCAsCBBYCAwEC
+ HgECF4AACgkQG5NDfTtBYptgbhAAjAGunRoOTduBeC7V6GGOQMYIT5n3OuDSzG1oZyM4kyvO
+ XeodvvYv49/ng473E8ZFhXfrre+c1olbr1A8pnz9vKVQs9JGVa6wwr/6ddH7/yvcaCQnHRPK
+ mnXyP2BViBlyDWQ71UC3N12YCoHE2cVmfrn4JeyK/gHCvcW3hUW4i5rMd5M5WZAeiJj3rvYh
+ v8WMKDJOtZFXxwaYGbvFJNDdvdTHc2x2fGaWwmXMJn2xs1ZyFAeHQvrp49mS6PBQZzcx0XL5
+ cU9ZjhzOZDn6Apv45/C/lUJvPc3lo/pr5cmlOvPq1AsP6/xRXsEFX/SdvdxJ8w9KtGaxdJuf
+ rpzLQ8Ht+H0lY2On1duYhmro8WglOypHy+TusYrDEry2qDNlc/bApQKtd9uqyDZ+rx8bGxyY
+ qBP6bvsQx5YACI4p8R0J43tSqWwJTP/R5oPRQW2O1Ye1DEcdeyzZfifrQz58aoZrVQq+innR
+ aDwu8qDB5UgmMQ7cjDSeAQABdghq7pqrA4P8lkA7qTG+aw8Z21OoAyZdUNm8NWJoQy8m4nUP
+ gmeeQPRc0vjp5JkYPgTqwf08cluqO6vQuYL2YmwVBIbO7cE7LNGkPDA3RYMu+zPY9UUi/ln5
+ dcKuEStFZ5eqVyqVoZ9eu3RTCGIXAHe1NcfcMT9HT0DPp3+ieTxFx6RjY3kYTGLOwU0EVUNc
+ NAEQAM2StBhJERQvgPcbCzjokShn0cRA4q2SvCOvOXD+0KapXMRFE+/PZeDyfv4dEKuCqeh0
+ hihSHlaxTzg3TcqUu54w2xYskG8Fq5tg3gm4kh1Gvh1LijIXX99ABA8eHxOGmLPRIBkXHqJY
+ oHtCvPc6sYKNM9xbp6I4yF56xVLmHGJ61KaWKf5KKWYgA9kfHufbja7qR0c6H79LIsiYqf92
+ H1HNq1WlQpu/fh4/XAAaV1axHFt/dY/2kU05tLMj8GjeQDz1fHas7augL4argt4e+jum3Nwt
+ yupodQBxncKAUbzwKcDrPqUFmfRbJ7ARw8491xQHZDsP82JRj4cOJX32sBg8nO2N5OsFJOcd
+ 5IE9v6qfllkZDAh1Rb1h6DFYq9dcdPAHl4zOj9EHq99/CpyccOh7SrtWDNFFknCmLpowhct9
+ 5ZnlavBrDbOV0W47gO33WkXMFI4il4y1+Bv89979rVYn8aBohEgET41SpyQz7fMkcaZU+ok/
+ +HYjC/qfDxT7tjKXqBQEscVODaFicsUkjheOD4BfWEcVUqa+XdUEciwG/SgNyxBZepj41oVq
+ FPSVE+Ni2tNrW/e16b8mgXNngHSnbsr6pAIXZH3qFW+4TKPMGZ2rZ6zITrMip+12jgw4mGjy
+ 5y06JZvA02rZT2k9aa7i9dUUFggaanI09jNGbRA/ABEBAAHCwXwEGAEKACYCGwwWIQSb0H4O
+ DFH41ZZ3t1Qbk0N9O0FimwUCYDzvagUJFF+UtgAKCRAbk0N9O0Fim9JzD/0auoGtUu4mgnna
+ oEEpQEOjgT7l9TVuO3Qa/SeH+E0m55y5Fjpp6ZToc481za3xAcxK/BtIX5Wn1mQ6+szfrJQ6
+ 59y2io437BeuWIRjQniSxHz1kgtFECiV30yHRgOoQlzUea7FgsnuWdstgfWi6LxstswEzxLZ
+ Sj1EqpXYZE4uLjh6dW292sO+j4LEqPYr53hyV4I2LPmptPE9Rb9yCTAbSUlzgjiyyjuXhcwM
+ qf3lzsm02y7Ooq+ERVKiJzlvLd9tSe4jRx6Z6LMXhB21fa5DGs/tHAcUF35hSJrvMJzPT/+u
+ /oVmYDFZkbLlqs2XpWaVCo2jv8+iHxZZ9FL7F6AHFzqEFdqGnJQqmEApiRqH6b4jRBOgJ+cY
+ qc+rJggwMQcJL9F+oDm3wX47nr6jIsEB5ZftdybIzpMZ5V9v45lUwmdnMrSzZVgC4jRGXzsU
+ EViBQt2CopXtHtYfPAO5nAkIvKSNp3jmGxZw4aTc5xoAZBLo0OV+Ezo71pg3AYvq0a3/oGRG
+ KQ06ztUMRrj8eVtpImjsWCd0bDWRaaR4vqhCHvAG9iWXZu4qh3ipie2Y0oSJygcZT7H3UZxq
+ fyYKiqEmRuqsvv6dcbblD8ZLkz1EVZL6djImH5zc5x8qpVxlA0A0i23v5QvN00m6G9NFF0Le
+ D2GYIS41Kv4Isx2dEFh+/Q==
+In-Reply-To: <20250113-sm8750_bwmon_master-v1-1-f082da3a3308@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On 01/13/25 at 10:31pm, Roberto Ricci wrote:
-...... 
-> Code starting with the faulting instruction
-> ===========================================
->    0:	0f b6 04 02          	movzbl (%rdx,%rax,1),%eax
->    4:	84 c0                	test   %al,%al
->    6:	74 08                	je     0x10
->    8:	3c 03                	cmp    $0x3,%al
->    a:	0f 8e 9d 00 00 00    	jle    0xad
->   10:	8b 8b 00 4a 00 00    	mov    0x4a00(%rbx),%ecx
-> [   88.485275] RSP: 0018:ffffffffa4807ce8 EFLAGS: 00010002
-> [   88.485279] RAX: dffffc0000000000 RBX: 0000000000000000 RCX: 1ffff11027fff565
-> [   88.485281] RDX: 0000000000000940 RSI: ffffffffa3a89b80 RDI: 0000000000004a00
-> [   88.485283] RBP: 0000000000000000 R08: 0000000000000000 R09: ffffed10234c82c8
-> [   88.485285] R10: ffff88811a641647 R11: ffff88811a635e30 R12: 0000000000000000
-> [   88.485287] R13: 1ffffffff4839048 R14: 0000000000000000 R15: 000000000000003d
-> [   88.485290] FS:  0000000000000000(0000) GS:ffff88811a600000(0000) knlGS:0000000000000000
-> [   88.485292] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> [   88.485294] CR2: 000055e8c586c300 CR3: 0000000106eb0000 CR4: 00000000000006f0
-> [   88.485299] Call Trace:
-> [   88.485301]  <TASK>
-> [   88.485306] ? die_addr (arch/x86/kernel/dumpstack.c:421 arch/x86/kernel/dumpstack.c:460)
-> [   88.485313] ? exc_general_protection (arch/x86/kernel/traps.c:751 arch/x86/kernel/traps.c:693)
-> [   88.485319] ? asm_exc_general_protection (./arch/x86/include/asm/idtentry.h:617)
-> [   88.485324] ? next_zone (mm/mmzone.c:20 mm/mmzone.c:37)
-> [   88.485336] ? calc_load_nohz_start (kernel/sched/loadavg.c:251 (discriminator 2))
-> [   88.485341] need_update (mm/vmstat.c:2032 (discriminator 2))
-> [   88.485366] quiet_vmstat (mm/vmstat.c:2065 (discriminator 2))
-> [   88.485369] tick_nohz_stop_tick (./include/linux/hrtimer.h:135 kernel/time/tick-sched.c:1044)
-> [   88.485373] ? __pfx_tick_nohz_stop_tick (kernel/time/tick-sched.c:970)
-> [   88.485376] ? tick_nohz_next_event (kernel/time/tick-sched.c:952 (discriminator 2))
-> [   88.485379] ? __pfx_tsc_verify_tsc_adjust (arch/x86/kernel/tsc_sync.c:51)
-> [   88.485396] tick_nohz_idle_stop_tick (kernel/time/tick-sched.c:1229)
-
-It's weird, how come the change in kexec will impact this tick-sched
-code. I will try to reproduce and investigate today.
-
-> [   88.485399] do_idle (kernel/sched/idle.c:185 kernel/sched/idle.c:325)
-> [   88.485403] ? __pfx_do_idle (kernel/sched/idle.c:253)
-> [   88.485406] cpu_startup_entry (kernel/sched/idle.c:422)
-> [   88.485409] rest_init (init/main.c:720)
-> [   88.485413] ? acpi_subsystem_init (drivers/acpi/bus.c:1314)
-> [   88.485417] start_kernel (init/main.c:1000)
-> [   88.485422] x86_64_start_reservations (arch/x86/kernel/head64.c:495)
-> [   88.485426] x86_64_start_kernel (??:?)
-> [   88.485432] common_startup_64 (arch/x86/kernel/head_64.S:415)
-> [   88.485437]  </TASK>
-> [   88.485439] Modules linked in: cfg80211 8021q garp stp mrp llc ppdev evdev input_leds intel_agp e1000 mac_hid intel_gtt pcspkr i2c_piix4 agpgart i2c_smbus parport_pc parport tiny_power_button button rfkill vhost_vsock vmw_vsock_virtio_transport_common vsock vhost_net vhost vhost_iotlb tap vfio_iommu_type1 vfio iommufd uhid hid dm_mod uinput userio ppp_generic slhc tun loop cuse fuse ext4 crc32c_generic crc16 mbcache jbd2 bochs drm_client_lib drm_shmem_helper sd_mod drm_kms_helper ata_generic pata_acpi ata_piix libata drm scsi_mod serio_raw scsi_common qemu_fw_cfg
+On 13/01/2025 22:08, Melody Olvera wrote:
+> From: Shivnandan Kumar <quic_kshivnan@quicinc.com>
 > 
+> Document the SM8750 BWMONs, which has one instance per cluster of
+> BWMONv4.
+> 
+> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
 
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
