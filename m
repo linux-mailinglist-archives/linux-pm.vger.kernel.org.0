@@ -1,217 +1,315 @@
-Return-Path: <linux-pm+bounces-20492-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20493-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20300A12763
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 16:27:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0005BA1276F
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 16:29:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8E522162954
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 15:27:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22C5E161DB2
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 15:29:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F0AA15535B;
-	Wed, 15 Jan 2025 15:26:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C666614B959;
+	Wed, 15 Jan 2025 15:29:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zbdcXD+W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DC9B145B2E;
-	Wed, 15 Jan 2025 15:26:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB9A370801
+	for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 15:29:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736954812; cv=none; b=pGNLCXTN7TOpICSKl4Wpjtfa/kAzYPVg/3q4LgQAG3/t8Z3IInSKFt/AFEFB1FbGxX0t7+pXWFkGTdYh82AjQWxQDJc7OZRyLBZTH0qPia6gXYnM9fz6yg6Oc109Hi1E2HF63CuGIXqIG9HmT09a+HfgDsTAEUYZl/iFgtpcc/g=
+	t=1736954994; cv=none; b=iAgxioFDhj5nMaG7/gaIXzVOMCwwjEz3HH7CsafxltlEHztPd5R9Sp6yJakUUMsX811uP+jKDqJm7tbm8coox9eeL0a5WIiuG77j2ZxONwa7+WDIxK3jr+sDCwtlLTHR4yEI/LCp4bqIq5UkskPC/1klRmzZK6A8udIg3LKgpQo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736954812; c=relaxed/simple;
-	bh=JBcCp53Gsobb/CU+JgBt3NsWKZtsmKsbDhO8bGTGg5A=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=fpetO5zbJqroMhWZa8321nN6dui2SY81VEnYb+y2qrp/Yj4aLvFSYequOi4wA/Zkj7Pm8frkgbjqzfsnC1XleioOdzGuCS4kL7BtYunPoqD3dAbebjh7UmxLUIj/rWoH6geELyuuqA8sNTVUJj6Kswu7gDYzRZU9mSXPZ445O8Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AE6FF11FB;
-	Wed, 15 Jan 2025 07:27:11 -0800 (PST)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 2FF323F73F;
-	Wed, 15 Jan 2025 07:26:39 -0800 (PST)
-Date: Wed, 15 Jan 2025 15:26:35 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Linus Walleij <linus.walleij@linaro.org>
-Cc: Andras Szemzo <szemzo.andras@gmail.com>, Michael Turquette
- <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Rob Herring
- <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec
- <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, Philipp
- Zabel <p.zabel@pengutronix.de>, Maxime Ripard <mripard@kernel.org>, Vinod
- Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, Ulf
- Hansson <ulf.hansson@linaro.org>, Paul Walmsley <paul.walmsley@sifive.com>,
- Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Uwe
- =?UTF-8?B?S2xlaW5lLUvDtm5pZw==?= <u.kleine-koenig@baylibre.com>, Florian
- Fainelli <florian.fainelli@broadcom.com>, linux-clk@vger.kernel.org,
- devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org,
- linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
-Subject: Re: [PATCH 03/12] pinctrl: sunxi: add driver for Allwinner V853.
-Message-ID: <20250115152635.1b89e7f4@donnerap.manchester.arm.com>
-In-Reply-To: <CACRpkda0nx3SQtdjmXdCEbVJSWM10TM=p-6JbDjbiYcOSF5PxQ@mail.gmail.com>
-References: <20250110123923.270626-1-szemzo.andras@gmail.com>
-	<20250110123923.270626-4-szemzo.andras@gmail.com>
-	<20250114141954.2785879a@donnerap.manchester.arm.com>
-	<CACRpkda0nx3SQtdjmXdCEbVJSWM10TM=p-6JbDjbiYcOSF5PxQ@mail.gmail.com>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1736954994; c=relaxed/simple;
+	bh=wNgR2c+BMJSH6gD92uDGWGbidsrzCrnHdgFwMIt966Y=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ffkftVenDLmSyeik181NezImtPEoKYufwYK3O/Pqjv+IwUFZDwaUsniJMPPDpKxv72Ps+z86dRI3317n3oj64HOWCkn2ulpcK0e+u/9nkaNDsVxv1nhbmSxhykC0HS9ZkW381W4Xtm6Y4M7qUWlxMlMvG+1QvB81UZB2i77cIUg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zbdcXD+W; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e53aa843a24so1849269276.0
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 07:29:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736954992; x=1737559792; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=1u8p13E1hpeUcZKc1WkjX/TcEv4l8+zAQcGUoovR/qA=;
+        b=zbdcXD+Wo5NGWep3/tkNSjWWDz/E5NnJAxSaoLvLusVgkIMJGD/ZY0sz4W4IxhMuVH
+         IrYbOv0p3bz+ozvGw2q50fqVaDXUqSUomC0R3x0EhLT725MID1k91VPX/TQV5fVCu5UG
+         nfoV2YhvRgQx63QdK1QUpxFkxhDA5aFMXCVM2DI5yQtPg7yueUpPkNevVtM3ple2MiHi
+         hVINcyXWhV9E3IDWS5ZVDUiWcHSHCInjsuqg5DRTAUj+0LI/oF6BZAVCN9dJ4c0OSHoa
+         1b8tpATKkAOT1y8bLxCl29+/POAxjwcmPkxjjvu2krbcVuLrThJUCGaGIt1eHj31WL9I
+         BnvA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736954992; x=1737559792;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=1u8p13E1hpeUcZKc1WkjX/TcEv4l8+zAQcGUoovR/qA=;
+        b=ibVl3N7dtsQPuaNsRRcY6vcs0poSIYg+hJkI2zVUMPPHITKEoA/zRTxx085k2sJAYp
+         +Ne328M8JbQgk/WRE+8nlVFTH0wY3a1mbQAGSWb1as98V/npkNofsdbBjjWMdSESIRcT
+         zEU+Dpwj94xUh5ppoAZk4Wf9+RqAyKwoJm8OJy00kfkZyvWfEGjvkAA3Iz+Ce2wBpzjM
+         VTq5+YNtiXWu0ZYICqZNvGF6DUoe6CHj5ciT4ambbfqFDV9kt1XAKiSXciUNfGBTARi0
+         Xslw106SDSnPRcAtdWTIxvcl291HvtxAFnzKkxtX/vUYSmd5FQ1it4ISraioCCLPmCW+
+         2cLw==
+X-Forwarded-Encrypted: i=1; AJvYcCXSdMQjuJKIledek1la9r7+wRwGPLE2QqFCPxnPvb2Un9CIbJWLJaKODQ1ZMTrv0Wnnt9H4QFeC+w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg6hZRHba4oqWnawxanqhIqek72nH4dvUEZ0uqcNbmAH787fin
+	RlgIybzIKvAb7DOLvwN0rte/qMX3PnEafcpl7hfDitmSmuUrQXVTEU4NkMv3DhUFl+TdnNTTG1M
+	N8WNSmAgkH3a8O3Ha5MisS9FEdRmkhgqld1L/3nTGPEwFV5KNii8=
+X-Gm-Gg: ASbGnctaiJK9e2BUZuljaPhtJAHPLW1JU6THd/Bb0nX8am3ewGmSVqpZXp5+adANZp6
+	Qrz2QpwgX2k05qTl1215MeK2tvpBeXwSI6hnroS8=
+X-Google-Smtp-Source: AGHT+IHX3o/r7pPk/ALB3zlIkVKRklximm6dC3IFogIKFZ6HZ8nqjHmDqLWLcjsgKuZ/AHTfV6VeD0WdHuMvYzEyX0c=
+X-Received: by 2002:a25:ad4f:0:b0:e49:8248:37fa with SMTP id
+ 3f1490d57ef6-e578a18abe3mr2770970276.14.1736954991801; Wed, 15 Jan 2025
+ 07:29:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+References: <20250103140042.1619703-1-claudiu.beznea.uj@bp.renesas.com>
+ <20250103140042.1619703-2-claudiu.beznea.uj@bp.renesas.com>
+ <20250104135225.2573285b@jic23-huawei> <44e4a6b4-39a4-49d0-b3a5-fc5545c39a56@tuxon.dev>
+ <20250111131409.36bebfd3@jic23-huawei> <bb987a1b-a999-478c-8e35-124fcf41561d@tuxon.dev>
+In-Reply-To: <bb987a1b-a999-478c-8e35-124fcf41561d@tuxon.dev>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 15 Jan 2025 16:29:15 +0100
+X-Gm-Features: AbW1kvYE0y86zbx_LiClzS_rMOAiiaJzbKN_OS8wmkEc_NPPPg8xEw-oyYTjcjk
+Message-ID: <CAPDyKFoJ3pLU-5_b5MSxMZd7B1cfOvmcdqR4FGkU2Wb7No0mcw@mail.gmail.com>
+Subject: Re: [PATCH 1/2] iio: adc: rzg2l_adc: Drop devm_pm_runtime_enable()
+To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Cc: Jonathan Cameron <jic23@kernel.org>, prabhakar.mahadev-lad.rj@bp.renesas.com, 
+	lars@metafoo.de, linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, 
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 15 Jan 2025 11:23:50 +0100
-Linus Walleij <linus.walleij@linaro.org> wrote:
-
-Hi Linus,
-
-thanks for the reply, I was hoping to get some insight and discuss this!
-
-> On Tue, Jan 14, 2025 at 3:20=E2=80=AFPM Andre Przywara <andre.przywara@ar=
-m.com> wrote:
-> > Andras Szemzo <szemzo.andras@gmail.com> wrote: =20
->=20
-> > > The V853 family has multiple package variants, from BGA to QFN88.
-> > > The latter has co-packaged DRAM and fewer pins, and less features (pi=
-n muxes).
-> > > All family members can be supported by a single driver, as the availa=
-ble pins
-> > > with allowed muxes is the same across the devices. =20
+On Wed, 15 Jan 2025 at 14:37, Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+>
+> Hi, Jonathan,
+>
+> Thank you for your input!
+>
+> On 11.01.2025 15:14, Jonathan Cameron wrote:
+> > On Mon, 6 Jan 2025 11:18:41 +0200
+> > Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
 > >
-> > It depends a bit on the outcome of the discussion on the A523 pinctrl
-> > driver [1], but I think we should use the same approach here (and for
-> > every "new" Allwinner SoC coming up, really): put the pinmux value in t=
-he
-> > DT, and get rid of this entire table altogether:
-> > [1]
+> >> Hi, Jonathan,
+> >>
+> >>
+> >> On 04.01.2025 15:52, Jonathan Cameron wrote:
+> >>> On Fri,  3 Jan 2025 16:00:41 +0200
+> >>> Claudiu <claudiu.beznea@tuxon.dev> wrote:
+> >>>
+> >>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >>> +CC Rafael and linux-pm
+> >>>
+> >>>>
+> >>>> On all systems where the rzg2l_adc driver is used, the ADC clocks are part
+> >>>> of a PM domain. The code that implements the PM domains support is in
+> >>>> drivers/clk/renesas/rzg2l-cpg.c, the functions of interest for this commit
+> >>>> being rzg2l_cpg_attach_dev() and rzg2l_cpg_deattach_dev(). The PM
+> >>>> domains support is registered with GENPD_FLAG_PM_CLK which, according to
+> >>>> the documentation, instructs genpd to use the PM clk framework while
+> >>>> powering on/off attached devices.
+> >>>>
+> >>>> During probe, the ADC device is attached to the PM domain
+> >>>> controlling the ADC clocks. Similarly, during removal, the ADC device is
+> >>>> detached from the PM domain.
+> >>>>
+> >>>> The detachment call stack is as follows:
+> >>>>
+> >>>> device_driver_detach() ->
+> >>>>   device_release_driver_internal() ->
+> >>>>     __device_release_driver() ->
+> >>>>       device_remove() ->
+> >>>>         platform_remove() ->
+> >>>>           dev_pm_domain_detach()
+> >>>>
+> >>>> During driver unbind, after the ADC device is detached from its PM domain,
+> >>>> the device_unbind_cleanup() function is called, which subsequently invokes
+> >>>> devres_release_all(). This function handles devres resource cleanup.
+> >>>>
+> >>>> If runtime PM is enabled via devm_pm_runtime_enable(), the cleanup process
+> >>>> triggers the action or reset function for disabling runtime PM. This
+> >>>> function is pm_runtime_disable_action(), which leads to the following call
+> >>>> stack of interest when called:
+> >>>>
+> >>>> pm_runtime_disable_action() ->
+> >>>>   pm_runtime_dont_use_autosuspend() ->
+> >>>
+> >>> So is the only real difference that in the code below you disable runtime pm
+> >>> before autosuspend?
+> >>
+> >> No, the difference is that now, the driver specific runtime PM APIs are not
+> >> called anymore (through the pointed call stack) after the ADC was removed
+> >> from it's PM domain.
 > >
-> > The SoC specific pinctrl driver would then be very small ([2]), so this
-> > pinctrl support patch here would actually become much smaller.
+> > By my reading they are only not called now because you turn autosuspend off
+> > after disabling runtime PM.
+>
+> Sorry, I wanted to say that the runtime PM APIs are not called anymore from
+> devm_action_release(), though this call stack:
+>
+> [   24.801195] Call trace:
+> [   24.803633]  rzg2l_adc_pm_runtime_suspend+0x18/0x54 (P)
+> [   24.808847]  pm_generic_runtime_suspend+0x2c/0x44 (L)
+> [   24.813887]  pm_generic_runtime_suspend+0x2c/0x44
+> [   24.818580]  __rpm_callback+0x48/0x198
+> [   24.822319]  rpm_callback+0x68/0x74
+> [   24.825798]  rpm_suspend+0x100/0x578
+> [   24.829362]  rpm_idle+0xd0/0x17c
+> [   24.832582]  update_autosuspend+0x30/0xc4
+> [   24.836580]  pm_runtime_disable_action+0x40/0x64
+> [   24.841184]  devm_action_release+0x14/0x20
+> [   24.845274]  devres_release_all+0xa0/0x100
+> [   24.849361]  device_unbind_cleanup+0x18/0x60
+>
+> This is because I dropped the devm_pm_runtime_enable() which registers the
+> pm_runtime_disable_action(), which is called at the time the
+> device_unbind_cleanup() is called, which is called when the ADC is not
+> anymore part of its PM domain.
+>
+> If I change the order in remove function proposed in this patch, thus do:
+>
+> +static void rzg2l_adc_remove(struct platform_device *pdev)
+> +{
+> +       struct device *dev = &pdev->dev;
+> +
+> +       pm_runtime_dont_use_autosuspend(dev);
+> +       pm_runtime_disable(dev);
+>  }
+>
+> nothing changes with the behavior of this patch. There will be no issue if
+> the device is runtime suspended/resumed through the
+> pm_runtime_dont_use_autosuspend() because at the time the
+> rzg2l_adc_remove() is called the ADC is still part of the PM domain.
+>
+>
+>
 > >
-> > Just feel a bit sorry for you having created this table, in a tedious a=
-nd
-> > eye-straining exercise - been there, done that ;-) =20
->=20
-> It's pretty stressful for the pin control maintainer as well.
->=20
-> From the subsystems point of view, groups matches to functions by
-> strings is the best. ("fun1") + ("group1", "group2"):
->=20
-> pio: pinctrl@1c20800 {
->                         compatible =3D "allwinner,sun8i-r40-pinctrl";
-> (...)
->                         i2c0_pins: i2c0-pins {
->                                 pins =3D "PB0", "PB1";
->                                 function =3D "i2c0";
->                         };
->=20
-> abstract, strings, nice. The driver handles the particulars.
+> >>
+> >>
+> >>>  Can you still do that with a devm callback just not
+> >>> the standard one?
+> >>
+> >> No. It doesn't matter if we call the standard devm callback or driver
+> >> specific one. As long as it is devm it will impact us as long as the driver
+> >> specific runtime PM APIs are called through devres_release_all() after
+> >> dev_pm_domain_detach(). And at that time the PM domain may be off along
+> >> with its clocks disabled.
+> >
+> > As above, I think that this is only the case because of the reordering
+> > of those two calls, not something more fundamental.
+>
+> I tried having a local devm function (the following diff applied with this
+> patch reverted) identical with pm_runtime_disable_action():
+>
+> diff --git a/drivers/iio/adc/rzg2l_adc.c b/drivers/iio/adc/rzg2l_adc.c
+> index 22a581c894f8..459cc9c67eec 100644
+> --- a/drivers/iio/adc/rzg2l_adc.c
+> +++ b/drivers/iio/adc/rzg2l_adc.c
+> @@ -423,6 +423,12 @@ static int rzg2l_adc_hw_init(struct device *dev,
+> struct rzg2l_adc *adc)
+>         return ret;
+>  }
+>
+> +static void rzg2l_pm_runtime_disable(void *data)
+> +{
+> +       pm_runtime_dont_use_autosuspend(data);
+> +       pm_runtime_disable(data);
+> +}
+> +
+>  static int rzg2l_adc_probe(struct platform_device *pdev)
+>  {
+>         struct device *dev = &pdev->dev;
+> @@ -463,7 +469,9 @@ static int rzg2l_adc_probe(struct platform_device *pdev)
+>
+>         pm_runtime_set_autosuspend_delay(dev, 300);
+>         pm_runtime_use_autosuspend(dev);
+> -       ret = devm_pm_runtime_enable(dev);
+> +       pm_runtime_enable(dev);
+> +
+> +       ret = devm_add_action_or_reset(dev, rzg2l_pm_runtime_disable, dev);
+>         if (ret)
+>                 return ret;
+>
+> With this the issue is still reproducible.
+>
+> However, changing the order of functions in rzg2l_pm_runtime_disable() and
+> having it like:
+>
+> +static void rzg2l_pm_runtime_disable(void *data)
+> +{
+> +       pm_runtime_disable(data);
+> +       pm_runtime_dont_use_autosuspend(data);
+> +}
+>
+>
+> leads to no failure when doing unbind/bind.
+>
+> However, I see the pm_runtime_disable() can still call rpm_resume() under
+> certain conditions. It can still lead to failures if it is called after the
+> device was remove from its PM domain.
+>
+> >
+> > In driver remove flow, device_unbind_cleanup9() is called
+> > just after device_remove() which is calling the dev->driver_remove()
+> > callback. There are no runtime pm related calls in between that I can see.
+>
+> On my side the device_remove() is calling dev->bus->remove() which is
+> platform_remove(), which calls the dev_pm_domain_detach(). The
+> dev_pm_domain_detach() detaches the ADC from it's PM domain. Because of
+> this, accessing now the ADC registers after a runtime resume leads to
+> failures pointed in this patch (as of my investigation) (as the ADC is not
+> anymore part of its PM domain and its PM domain is not started anymore
+> though runtime PM APIs).
+>
+> A similar issue was found while I was adding thermal support for RZ/G3S,
+> explained in
+> https://lore.kernel.org/all/20250103163805.1775705-3-claudiu.beznea.uj@bp.renesas.com
+>
+>
+> Jonathan, Rafael, Ulf, all,
+>
+> Do consider OK to change the order in pm_runtime_disable_action() to get
+> rid of these issues, e.g.:
+>
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 2ee45841486b..f27d311d2619 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1547,8 +1547,8 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
+>
+>  static void pm_runtime_disable_action(void *data)
+>  {
+> -       pm_runtime_dont_use_autosuspend(data);
+>         pm_runtime_disable(data);
+> +       pm_runtime_dont_use_autosuspend(data);
+>  }
+>
+> though I see a rpm_resume() call is still possible though pm_runtime_disable().
 
-What bugs me about this it that this has quite some seemingly redundant
-information (Who would have thought that the i2c0 pins use function
-"i2c0"?), but misses out on the actual 4 bits(!) of information.
-So the A523 version [1] just *adds* this one property:
-		allwinner,pinmux =3D <2>;
+I am still worried about keeping the device runtime enabled during a
+window when we have turned off all resources for the device. Typically
+we want to leave the device in a low power state after unbind.
 
-[1]https://lore.kernel.org/linux-sunxi/20241111005750.13071-5-andre.przywar=
-a@arm.com/
+That said, I would rather just drop the devm_pm_runtime_enable() API
+altogether and convert all users of it into
+pm_runtime_enable|disable(), similar to what your patch does.
 
-And we keep all your beloved strings ;-)
+>
+> Thank you,
+> Claudiu
 
-> That is like so because we are designing for users which are
-> let's say customization engineers. If these engineers jump from
-> project to project matching function strings to group strings will
-> be a common way to set up pins, and easy to understand and
-> grasp, and it makes the DTS very readable.
+[...]
 
-That's an interesting view, and I see the point of it being easy to read,
-but this is partly because it doesn't convey too much actual information,
-does it, as it requires another lookup or two.
-And the pinctrl group nodes are actually in the .dtsi file, which are
-typically written once during the initial SoC enablement, and new board
-.dts files normally just reference the existing pingroup nodes. So anyone
-dealing with just a new board is not bothered by this.
-Also in my experience most people have no problems in understanding the
-concept of pinmuxing and that there is a selector number, also where to
-find this.
-
-> Then there are the engineers creating the pin control drivers,
-> and they want everything to be convinient for *them*, and they
-> think an opaque hex digit in the DTS is perfect at times, thus
-> pinmux =3D <0xdeadbeef>;
->=20
-> Mediatek and STM32 made a compromise by using pinmux
-> and adding some macros to define them so it looks more
-> pleasant:
->=20
->       i2c0_pins_a: i2c0-default {
->                 pins-i2c0 {
->                         pinmux =3D <MT7623_PIN_75_SDA0_FUNC_SDA0>,
->                                  <MT7623_PIN_76_SCL0_FUNC_SCL0>;
-
-Well, I don't really get why they don't use the (MTK_PIN_NO(75) | 1)
-definition directly, seems to be more telling to me?
-So the plan for sunxi would be: <SUNXI_PINMUX(PORTC, 23, MUX_1)>, ...
-And this would not be really "opaque", since it has a fixed known mapping:
-	(port << 16) | (pin << 8) | (mux << 0))
-I find this both technically elegant, because it combines all the
-information into just one compact cell, but also readable by outsiders,
-thanks to the macro.
-
-But please note that using the generic pinmux is just an idea at this
-point, last time I checked this would require significant rework in the
-sunxi pinctrl driver.
-Just adding the "allwinner,pinmux" property on the other hand is a
-comparably easy addition, hence my patch, as a compromise.
-
->                         bias-disable;
->                 };
->         };
->=20
-> At least the bias control is using strings, this is nice.
->=20
-> So I'm mostly fine with that as well, but it can be pretty
-> heavy on people coming from the outside, asking us questions
-> like "on MT7689 how do you mux pin nnnn to function yyy"???
-> Well I don't know? Some MT7689_PIN* macro I guess?
-
-MTK_PIN_NO(nnn, yyy)?
-
-> If it was just strings I would know what the
-> expected behaviour and looks would be at least, then the driver
-> could be buggy or missing things but that's clearly cut. That's
-> why I prefer the strings.
-
-My main arguments against the current (string-based) approach:
-- They require the mapping table to be in every DT user, so not only the
-  Linux kernel, but also U-Boot, FreeBSD, you name it...
-https://source.denx.de/u-boot/u-boot/-/blob/master/drivers/pinctrl/sunxi/pi=
-nctrl-sunxi.c?ref_type=3Dheads#L236-768
-https://cgit.freebsd.org/src/tree/sys/arm/allwinner/h6/h6_padconf.c
-- The tables are getting quite large, and they pollute the single image
-  Linux kernel, with tons of very specific information for a number of very
-  pitiful Allwinner SoCs. At the moment the tally is at 145KB of code+data
-  for the existing arm64 SoCs, with the newer SoCs ever growing (H616 alone
-  is 27KB, A523 would be quite larger even, I guess 40K). The new A523
-  specific pinctrl support adds 872 Bytes.
-- Most of the mappings are untested at pinctrl driver commit time, since we
-  don't have the device drivers ready yet - by a margin. The new approach
-  would add the pinmux values when we need them and can test them.
-- The comments in the table give away that something is not quite right:
-                  SUNXI_FUNCTION(0x2, "i2c0")),         /* SDA */
-  This is just a comment, so has no relevance for the code, but it's not
-  meant for humans either. Yet we try to make this correct and maintain
-  it. Odd.
-
-Cheers,
-Andre
+Kind regards
+Uffe
 
