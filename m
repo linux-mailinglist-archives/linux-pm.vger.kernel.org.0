@@ -1,73 +1,88 @@
-Return-Path: <linux-pm+bounces-20454-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20455-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id F417CA11838
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 05:04:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63177A11AA9
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 08:14:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A05653A7A9C
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 04:04:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 759881883E02
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 07:14:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DD7419CC21;
-	Wed, 15 Jan 2025 04:04:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 08D5328EC60;
+	Wed, 15 Jan 2025 07:12:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OWn03VrA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="m3xpbbHL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B73AF156676
-	for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 04:04:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68B5B284A59
+	for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 07:12:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736913867; cv=none; b=LrzdjMlNexLEaXUbBcbt7JuC3JxiOYoa542UrcnglkgAAFV6z3Z2EQxlwVEM2ZUC8XdhuLDs+9E5RqiIQ4xUrDBOrFWDJ4zntxkf/bEdoSRhAVROdoU6H8OefHFZWrZ9FqeH0wH+DDJ/8nZGE0z0qGjV1Wb8e6152ihRa4Mq8AE=
+	t=1736925175; cv=none; b=imPFx29jjpblZ7WmrKBDmTG6E65tWo1gdI7J8lMAxKR/8oyJenE8NGjym4lDyW+GP87GMFU0oTRsO4WEclm34RPLDa5t7BLAzNMbWVVN1EbQP0swagnpuqoRojxkW/A8jTEubGeW8c8E3nFOT4j1L0LwVpUFoIxd8JfAzf3KW8w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736913867; c=relaxed/simple;
-	bh=OutPCBssKJH51fBJ7ANy7MsTaNa+Uu9yOZ3Iho1madA=;
+	s=arc-20240116; t=1736925175; c=relaxed/simple;
+	bh=RIZq14xveaKtJ0Sj1xMhK6C7Hi/gylDBoJENBfOSwls=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MVLy+qmkD7nOWxqSD2q4+bjxruXTc7G6NZWddfezpaD/YHIJvAfpUZYfNYcrvdf7m5qvT63y6dTwHrE2v7zjBRd8u2p23cmlkfmVfEX4XPNUbxNs6aGAHN+Pzb6M6gcKy9BqlGVcgNXKvvGYPEJVrvETpRQRgWuaJQCj7YirbVU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OWn03VrA; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1736913864;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+unhOYBjiPAqZTRFood5aIiHdu2obot7zgKwQr1T8N4=;
-	b=OWn03VrAPkWTz+qBIltYz+MCHrxN6uGSy+QQnTfYWTfsT5rbsvpZG/op6IqjHqI5rRzgrQ
-	9GcBzLvMrdVp6OiWpGFPWVTiEsPtxxwWMu5qQnyE4RkoVusrg4e2i3nJ9K9/qw105ZIpSH
-	8WzOVHNlV66UUzqStTvyd8JWJ6NmqqE=
-Received: from mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-662-D0RozbHVNbOEewaG-IRirA-1; Tue,
- 14 Jan 2025 23:04:21 -0500
-X-MC-Unique: D0RozbHVNbOEewaG-IRirA-1
-X-Mimecast-MFC-AGG-ID: D0RozbHVNbOEewaG-IRirA
-Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mx-prod-mc-04.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 80ED71955DDF;
-	Wed, 15 Jan 2025 04:04:18 +0000 (UTC)
-Received: from localhost (unknown [10.72.112.24])
-	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 5CE473003FD9;
-	Wed, 15 Jan 2025 04:04:15 +0000 (UTC)
-Date: Wed, 15 Jan 2025 12:04:10 +0800
-From: Baoquan He <bhe@redhat.com>
-To: Roberto Ricci <io@r-ricci.it>
-Cc: ebiederm@xmission.com, rafael@kernel.org, pavel@ucw.cz,
-	ytcoode@gmail.com, kexec@lists.infradead.org,
-	linux-pm@vger.kernel.org, akpm@linux-foundation.org,
-	regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from
- hibernation
-Message-ID: <Z4czuvi2BiNlDWPP@MiWiFi-R3L-srv>
-References: <Z4WFjBVHpndct7br@desktop0a>
- <Z4Zjmva-pLbLjtQv@desktop0a>
+	 Content-Type:Content-Disposition:In-Reply-To; b=Qn+6hZPVtK1NrlRjAP8Mjh1N3cyRzn27iLNj7lDuURfS3F9QuD/3qp2ZyjHtgKYgZ0c4CxwO8+28EMtKTZf7kXJUkVtn5hctPVD6ls/FJgjIcfU2tLbqqswSr+jTKOmCkAvgGXRinqihWxNbP6Fh2uIfDXd6up4UqpAZmA4Yn7Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=m3xpbbHL; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2161eb95317so113743465ad.1
+        for <linux-pm@vger.kernel.org>; Tue, 14 Jan 2025 23:12:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736925173; x=1737529973; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=O8HHF6MYQA6CAOWThaq0m4Xv0t8b1zLcaJQ7xxZQmfU=;
+        b=m3xpbbHLlnRzDWvZSZ/h33GDT0hARS94ny86kNwKZjxpA0UMwpdcWYMCZG7JkfjLAE
+         nisQefZbzhiYDk5MqZ7hf2HwSQTdGdHNIx2oS6gRHpXoZ7bYlncpazymM+xJcLZUVVDw
+         XkH7/2hHu8O8Xytm6nsu+ZcSsuN6xZ89lmlgLEq9764cD1/b+ky/VtFA1qixi2X+bF2N
+         uI84+MiCa+hyq+VY+DcExLzToPqNadWMn4Mmby4dnl5mBzaOJreBBrfTq7XQq2Q+vADj
+         8yqbnKcCsWX6WAjzxVecRn7bBQSplSoGaSBBXiZdk5IesOfSZq5FpK0l2UPjLKoZQ5td
+         Exaw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736925174; x=1737529974;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=O8HHF6MYQA6CAOWThaq0m4Xv0t8b1zLcaJQ7xxZQmfU=;
+        b=eBNK8R3gj8b8kR8HsBw6AU8k9j+IX+2xWIwhf3bJpGu99zg0JpOttiyrhbR0viMydL
+         TW/PdnYRDct/dxfVzRjBoS217p3oM5HR6rBl+LwuYFE9UYKdaZcRkAsPvaCpTcVJscR8
+         kThRq4tOm7ZigjoMDJZjfVpOQRi9Hc1WP1tYXwv4RjMFL6ZNAq4QQDgquolEEummWGcM
+         yYvLEKuIj6a6W/vZzTdz3XbY45+LIfTlWkL4gXSmKyBpWDW0AkOBYa9ASRE81JmD7Ar4
+         FxqMFLQ1duOwV8g78yyyG6gz7l7hqGj17eZrlMRfNrTyOprTsbE+FyewRtTMKNeSnT5x
+         C04Q==
+X-Forwarded-Encrypted: i=1; AJvYcCWYy9NJCaMqJf8t/cXA7u1eCZcHUmK8np2erln1MUrBpkOLyoRlKvewNPBz2be5m7TNalRNAx18Jg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyVOQBsr/i5zIObi2kxipRjK4GBW4x0R87/Ggo2z3dWERcP4BgJ
+	aardWW0n82iww/as70A0JdpZfljt0IoaxJAoAQ7IztBK90w2ms5s76D7D2PYGUs=
+X-Gm-Gg: ASbGncugmdEA8FyHL9XOxylGb1hHBHHFBkx6c2AxoWTEnlyLbglr/8CI3JzRSnYr6u9
+	xgJMHhMAlD0QSPlMT/g4Vo1Feqj6TQiVIXjeVUkUKVWScxWbz1gWEhmiu8NDpZtsfih2zdJMKzy
+	LH1puh3X6gOIB0BoMIUTj2PX/b2bDbOoDB12zwMA3i/2TYKOAe7jfWJQEQ8ioZCejSR9FMDedgt
+	OoedSH8G+8fwyOhfXNtmgIJVkk1rABQHpAoe007RxhTPqxfFHmtyP+hBX8=
+X-Google-Smtp-Source: AGHT+IE2T/YITMwdTXu7fGoI/VNncgoEDza43yvfpT31YZbr+6WFdwjMNUDo/e4NJFzh+zf2/sHP0Q==
+X-Received: by 2002:a17:903:41c3:b0:216:18f9:528b with SMTP id d9443c01a7336-21a83f6299emr406121655ad.26.1736925173712;
+        Tue, 14 Jan 2025 23:12:53 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f22dd30sm76804695ad.171.2025.01.14.23.12.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 14 Jan 2025 23:12:53 -0800 (PST)
+Date: Wed, 15 Jan 2025 12:42:51 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Naveen N Rao <naveen@kernel.org>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org
+Subject: Re: [PATCH v2] cpufreq: Use str_enable_disable-like helpers
+Message-ID: <20250115071251.ww6z2h2oj2v56sbw@vireshk-i7>
+References: <20250114190600.846651-1-krzysztof.kozlowski@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -76,40 +91,23 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z4Zjmva-pLbLjtQv@desktop0a>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
+In-Reply-To: <20250114190600.846651-1-krzysztof.kozlowski@linaro.org>
 
-On 01/14/25 at 02:16pm, Roberto Ricci wrote:
-> On 2025-01-13 Mon 22:28:48 +0100, Roberto Ricci wrote:
-> > I can reproduce this with kernel 6.13-rc7 in a qemu x86_64 virtual machine
-> > running Void Linux, with the following commands:
-> > 
-> > ```
-> > # kexec -l /boot/vmlinuz-6.13.0-rc7 --initrd=/boot/initramfs-6.13.0-rc7 --reuse-cmdline
-> > # reboot
-> > # printf reboot >/sys/power/disk
-> > # printf disk >/sys/power/state
-> > ```
+On 14-01-25, 20:06, Krzysztof Kozlowski wrote:
+> Replace ternary (condition ? "enable" : "disable") syntax with helpers
+> from string_choices.h because:
+> 1. Simple function call with one argument is easier to read.  Ternary
+>    operator has three arguments and with wrapping might lead to quite
+>    long code.
+> 2. Is slightly shorter thus also easier to read.
+> 3. It brings uniformity in the text - same string.
+> 4. Allows deduping by the linker, which results in a smaller binary
+>    file.
 > 
-> Looks like it's the kernel performing the kexec which causes the issue,
-> not the target one. E.g.: kexec-ing 6.7 from 6.13-rc7 makes resume from
-> hibernation fail; but if I kexec 6.13-rc7 from 6.7, then it works fine.
+> Signed-off-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-I tried the latest mainline kernel with your above command execution
-series, I didn't see the problem you reported. Can you try kexec from
-6.7 to 6.7 or something like that and try to bisect a specific criminal
-commit?
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-As for below commit, it seems not a suspect.
-18d565ea95fe ("kexec_file: fix incorrect temp_start value in locate_mem_hole_top_down()")
-
-If possible, can you revert below two commits altogether to have a try?
-I am not sure if they caused the problem.
-
-18d565ea95fe kexec_file: fix incorrect temp_start value in locate_mem_hole_top_down()
-816d334afa85 kexec: modify the meaning of the end parameter in kimage_is_destination_range()
-
-Thanks
-Baoquan
-
+-- 
+viresh
 
