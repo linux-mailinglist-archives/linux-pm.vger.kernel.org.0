@@ -1,98 +1,146 @@
-Return-Path: <linux-pm+bounces-20481-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20482-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4397A12248
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 12:15:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C4B54A12257
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 12:19:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 55CAA3AD911
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 11:15:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE1BD1694B8
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 11:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28FF8236A7B;
-	Wed, 15 Jan 2025 11:14:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C822F1E9909;
+	Wed, 15 Jan 2025 11:18:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="svCAF1/b"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1B4D2309A1;
-	Wed, 15 Jan 2025 11:14:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C611E98F7
+	for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 11:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736939688; cv=none; b=WaWdY6j+6s1PKDiMjRp8BhjZPYKTT73knFWUr9oTGwSb8cyb9AN9/12HFFNU6Zmuzq0Vb6Cczfzj+5GQ/61eTMczDfrx/RkTQf59SvxIKI6BjbeTsQdNXOTtVA3tXPXVObJk0GoIaiMjb3oO7Xr6Ec5P0buzesWEItAVFdcSD7M=
+	t=1736939937; cv=none; b=fI4D4aYlt1ud45h3nmbIh0th+kJOp+UbSylnGSm03teevGVU0q7REPP7sWjE4JxoHQkiJuhiF0Qh9VcSG9XU/RKFUjnuwrbPqUEUHGQIE7C2YsMZeTuJTbApLtephtH2GjqGt+SELapzOqfsgGCUMJPOZvFN6SGH/3mOH9s6FiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736939688; c=relaxed/simple;
-	bh=+3aBOFlgVygmAQiQ1HC7xJeQG6jYBCJ6dab2btOotA4=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=SHLcU/LzqRhD13Qtrzhu4SIeKwK2msla5RMtfXrD7Wt/y/U8T16lGQ6EXo7bsqcSGXlWnJJ3lCJ/bdpyzq1EBruy6coCdvfvbLwp6fACOt182orBh92u51lNXaHKzlUltIt3ZnL4udS8rKywm6j0almVZ0wrc2yON45UZQugeNA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5E38412FC;
-	Wed, 15 Jan 2025 03:15:13 -0800 (PST)
-Received: from donnerap.manchester.arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 53F6F3F51B;
-	Wed, 15 Jan 2025 03:14:43 -0800 (PST)
-Date: Wed, 15 Jan 2025 11:14:38 +0000
-From: Andre Przywara <andre.przywara@arm.com>
-To: Lee Jones <lee@kernel.org>
-Cc: Chen-Yu Tsai <wens@csie.org>, linux-sunxi@lists.linux.dev, Chris Morgan
- <macroalpha82@gmail.com>, Vasily Khoruzhick <anarsoul@gmail.com>, Jonathan
- Cameron <jic23@kernel.org>, Andrey Skvortsov <andrej.skvortzov@gmail.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH v2] Revert "mfd: axp20x: Allow multiple
- regulators"
-Message-ID: <20250115111438.5d0d47f3@donnerap.manchester.arm.com>
-In-Reply-To: <173642272888.2620575.17634288216154119464.b4-ty@kernel.org>
-References: <20250108164359.2609078-1-andre.przywara@arm.com>
-	<173642272888.2620575.17634288216154119464.b4-ty@kernel.org>
-Organization: ARM
-X-Mailer: Claws Mail 3.18.0 (GTK+ 2.24.32; aarch64-unknown-linux-gnu)
+	s=arc-20240116; t=1736939937; c=relaxed/simple;
+	bh=LMAx3aQ3tr/+4xQlrM1fIVpNQ7/15mRu9KbyMLrR0SM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=T9rfqULMJWDTn9Ql5+l4tx0PwP65cBbSHUvlbkCD8vIZ7imEgEl8uJR91LtUNAQ/z59hXci8OBRZ1amTu8ECxfbQpdXCsIR6Y1alW+euVGg2d4H8/uXWPEVWoIXdR3HiZXhCf3QRQ9cTZZlA7JwevdZCEoc812IMH6JlafJAYac=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=svCAF1/b; arc=none smtp.client-ip=209.85.214.179
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2167141dfa1so13082565ad.1
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 03:18:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736939935; x=1737544735; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=DqfkXRbUJMCh8cBTiV2yE9LjBiqhO1LbtQ4RE9MmtaM=;
+        b=svCAF1/bgWKNUO922YSm6kai1y3hdG4WLuqrMXr6WVutPlqbjgjoeSnPAcvaZxhY7q
+         x4XZCsvsoL9huuG5vg8rRmSq0pzSa9kPs2umbHOwMEbjZYGfyIjGNY6QKucttL62cRUv
+         joQCbMpmxruFcQiA723GilaciZFLDQrCQz2Nao4EGNLwxXImHMMLXFlB6aRG4luJdvOh
+         nEC60wioMCh8GC456BmGIgIw++xX9p1U8N4cXKGZucRV0bmMWqvB7Hqw2KytwU3C/gCn
+         FrYBxYbxSLnqYi4Tlhzwh6eo/3WfZX7r2KK2tMJgX7ViE+dKHhYZ5NJXV/LRClTB3PAn
+         gd7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736939935; x=1737544735;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=DqfkXRbUJMCh8cBTiV2yE9LjBiqhO1LbtQ4RE9MmtaM=;
+        b=ZxKS6Ui8qC37yXItocIZnEzXnCt9WlLJ43k1EDCjRpt+nytn+zfpv/YZuj8VGzJGgG
+         E4/y4O6rauxHfpWfl4L8/yg5qHDCobc2i2QLH7iI+O9lUWE70KB0YKl65oLjuaZGM3n0
+         muYbC3ZFY1rrzwcaKVGQIzdRR115tmsXP68z1N9kIdmwJ9QPmaoGHcZvMCuoiQBzMSoH
+         /MfZh93O5sOx+fFLaW5oE6HLXb3PxjmEonGhNGJFI1UzeIL8EPb7H3v24TepLzhd2Cn+
+         vMhOybxLqr2U7yr7vJZmp3fjMA16Pdg9zwMpmWmlapCTuVdYk8j4pRdYvpHMPHywQ6K1
+         jA4Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVmdHSHbDxFgb1aXG6vGvhQUFEuW9wgoW06ToMX+SVyEnzqGcoL5oHJjV8MZFXQT2yNZZvuiKu+dA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwI1lSZ2TwPtbou/pVuAGbaCOrKcvkyPK/U2ononwsKypcMd76S
+	nLtm9FcSGF/A2/vRvxSrq0mhQDf1XZ3UIzlAEXN5FblO6+6wnq7JBiHQFwhlIEI=
+X-Gm-Gg: ASbGnct4eO7fWCLbDRq8fl7U0t+xaMWelwVI8Q82hwsei67tU0KUfC7OyvlyruT8sG4
+	iMvJIdt8drtVGwe/oIURolIez75AN1DbO6Sh1GzrZBdIst8ayQZbFgFSZe3E7fBO3LMuuoh53/M
+	yNRGYKPWX6gls2DKTjz74hcsC2bPy+6RYq+9wqC+CjWyS2I2iqr+M4Da1qNNmWdGYCU9MbBDkUt
+	JlgEGBhpg/8tYEjGHWrQnUU+LRQNiabbZCIyPLRf2rz0M+k2ieOMD4AKek=
+X-Google-Smtp-Source: AGHT+IHP48mslcDUkaDMbpAtO1zSP55tzjmEN2NpfWla74Q81rt1Y5Vixf+U0wGkqJoOTchJlUVCqw==
+X-Received: by 2002:a17:902:d343:b0:215:8847:4377 with SMTP id d9443c01a7336-21bf0cd9719mr29629395ad.15.1736939935487;
+        Wed, 15 Jan 2025 03:18:55 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f219b7fsm80849095ad.116.2025.01.15.03.18.54
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2025 03:18:54 -0800 (PST)
+Date: Wed, 15 Jan 2025 16:48:52 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Lifeng Zheng <zhenglifeng1@huawei.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com,
+	lihuisong@huawei.com, fanghao11@huawei.com
+Subject: Re: [PATCH 1/2] cpufreq: Fix re-boost issue after hotplugging a cpu
+Message-ID: <20250115111852.hluxcprc7cbrxqtc@vireshk-i7>
+References: <20250115100123.241110-1-zhenglifeng1@huawei.com>
+ <20250115100123.241110-2-zhenglifeng1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250115100123.241110-2-zhenglifeng1@huawei.com>
 
-On Thu, 09 Jan 2025 11:38:48 +0000
-Lee Jones <lee@kernel.org> wrote:
+On 15-01-25, 18:01, Lifeng Zheng wrote:
+> It turns out that cpuX will stay on the base frequency after performing
+> these operations:
+> 
+> 1. boost all cpus: echo 1 > /sys/devices/system/cpu/cpufreq/boost
+> 
+> 2. offline the cpu: echo 0 > /sys/devices/system/cpu/cpuX/online
+> 
+> 3. deboost all cpus: echo 0 > /sys/devices/system/cpu/cpufreq/boost
+> 
+> 4. online the cpu: echo 1 > /sys/devices/system/cpu/cpuX/online
+> 
+> 5. boost all cpus again: echo 1 > /sys/devices/system/cpu/cpufreq/boost
+> 
+> This is because max_freq_req of the policy is not updated during the
+> online process, and the value of max_freq_req before the last offline is
+> retained. When the CPU is boosted again, freq_qos_update_request() will
+> do nothing because the old value is the same as the new one. This causes
+> the CPU stay on the base frequency. Update max_freq_req (and
+> min_freq_req of course) in cpufreq_online() will solve this problem.
+> 
+> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 1a4cae54a01b..03ae879d50b9 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1475,6 +1475,13 @@ static int cpufreq_online(unsigned int cpu)
+>  
+>  		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
+>  				CPUFREQ_CREATE_POLICY, policy);
+> +	} else {
+> +		ret = freq_qos_update_request(policy->min_freq_req, policy->min);
 
-Hi Lee,
+This may not be required, as min-freq-req is never updated.
 
-> On Wed, 08 Jan 2025 16:43:59 +0000, Andre Przywara wrote:
-> > As Chris and Vasily reported, the attempt to support multiple AXP PMICs
-> > in one system [1] breaks some of the battery and charging functionality
-> > on devices with AXP PMICs. The reason is that the drivers now fail to g=
-et
-> > the correct IIO channel for the ADC component, as the current code seems
-> > to rely on the zero-based enumeration of the regulator devices.
-> > A fix is possible, but not trivial, as it requires some rework in the A=
-XP
-> > MFD driver, which cannot be fully reviewed or tested in time for the
-> > 6.13 release.
-> >=20
-> > [...] =20
->=20
-> Applied, thanks!
+> +		if (ret < 0)
+> +			goto out_destroy_policy;
+> +		ret = freq_qos_update_request(policy->max_freq_req, policy->max);
+> +		if (ret < 0)
+> +			goto out_destroy_policy;
+>  	}
+>  
+>  	if (cpufreq_driver->get && has_target()) {
+> -- 
+> 2.33.0
 
-Just checking, is this on route to reach Linus' tree this week still? I
-don't see it in any of your kernel.org trees.
-Since it's a regression introduced with 6.13-rc1, so I would very much
-like to see this fixed before the release.
-If I can help with anything, please let me know.
-
-Cheers,
-Andre
-
->=20
-> [1/1] Revert "mfd: axp20x: Allow multiple regulators"
->       commit: b246bd32a34c1b0d80670e60e4e4102be6366191
->=20
-> --
-> Lee Jones [=E6=9D=8E=E7=90=BC=E6=96=AF]
->=20
-
+-- 
+viresh
 
