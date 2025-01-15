@@ -1,124 +1,102 @@
-Return-Path: <linux-pm+bounces-20461-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20462-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 56A7FA11B51
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 08:52:24 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 038D4A11B56
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 08:54:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id ED01F161B19
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 07:52:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 641977A34CE
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 07:54:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 587A422F388;
-	Wed, 15 Jan 2025 07:52:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EA15F22E419;
+	Wed, 15 Jan 2025 07:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XGWcrPpJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga07-in.huawei.com (szxga07-in.huawei.com [45.249.212.35])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 69E332080E3;
-	Wed, 15 Jan 2025 07:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.35
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD6AD2080E3;
+	Wed, 15 Jan 2025 07:54:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736927534; cv=none; b=lOXVUXlHtcug88HGIKu7D9LTHxJZbcsogyceQFvF7zcpS7k+0ws900FF7iVzKiYxBkvW+10rU3eKXZ/K4W5Trcs1c0xjw+bSDiFziCnP3mENDdS32n6/+vb74dKMX5kb7HSW6ULTi480y0XYTD4n96vWY72gg4lfrWEEEutC3Fs=
+	t=1736927653; cv=none; b=Y8Frgld25/bTKfa9wOaEaTQUnLDJ8dDgA4JLY1ucozMsMYdFacN0rfgF1pQzCqp92KoaURTEmgy/LmlyOKInQUo+4ekXqtesV9OekIv1o/V9fU9y3xoSRbmDy8HpxPgfkWkpWyctXTNOkPCcWG+XtnmRF6S4hunOY5BEKbk8uo4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736927534; c=relaxed/simple;
-	bh=7gkfamUWxmOO3n7dI9pQM1/SuXoCMLQQCsK1t8MFF6o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Z2B0QaZ/anZ8aptmKCCZPiR6tVMIH6JGhXnPArPjl6cQD9d6ibBxCaXLvpRGRibcLoXEYnTkYzgOoClEvzROnPVd4PvaqDiWwHeAkkLImUmiDo9QFHjCidqu0yPhj9uo33dEBJjfHgJMW2UL4rCHlw7QAFZed0q1NaMPeFXaQfI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.35
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.234])
-	by szxga07-in.huawei.com (SkyGuard) with ESMTP id 4YXymm5GxQz1wn5t;
-	Wed, 15 Jan 2025 15:48:56 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 743AB140119;
-	Wed, 15 Jan 2025 15:52:07 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 15 Jan
- 2025 15:52:06 +0800
-Message-ID: <c021a12a-ce3c-4266-8bc1-dc8b20525b9a@huawei.com>
-Date: Wed, 15 Jan 2025 15:52:05 +0800
+	s=arc-20240116; t=1736927653; c=relaxed/simple;
+	bh=X/l7FawYSYHZ8Mlk4c11D/X+JSdiQqQGx6oXqhwxltI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s67vwdS8NVXaFxtMvwapbOOw91HeyPJRcNXLhkF1WHcsi0PqraNRK17sHAswKNmblRN+uJxeRQt+I6mhgrtxu5xHnXOn5tIljQNYb5gRlLMsiM+5C1qlADRdJD5NU3pvA/+9TUOX1oRLPHkTCf8TIvLpd2gbyyJDmfbZZdF1kVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XGWcrPpJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 63CADC4CEDF;
+	Wed, 15 Jan 2025 07:54:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
+	s=korg; t=1736927653;
+	bh=X/l7FawYSYHZ8Mlk4c11D/X+JSdiQqQGx6oXqhwxltI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=XGWcrPpJ6nABvT/fCNgWSbZjkfZfOOsoyS/ePHXistwysWxqrIGeLqOvMLN11755z
+	 oR19wctirpYRMWsMH2eGSNtFh1aBQtXFTI+sYfzbgQGEilnbTyqfni+TKbIPRPGUz6
+	 8rRozkj3dM+e2jkt/m2Bo7116CgNe0+1yfRUQk0U=
+Date: Wed, 15 Jan 2025 08:54:09 +0100
+From: Greg KH <gregkh@linuxfoundation.org>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
+Subject: Re: [PATCH V7 03/16] rust: cpu: Add from_cpu()
+Message-ID: <2025011537-shuffling-unpaved-121a@gregkh>
+References: <cover.1736766672.git.viresh.kumar@linaro.org>
+ <854f7b8c9cbcc7f38fe5ed548290f41224478b40.1736766672.git.viresh.kumar@linaro.org>
+ <2025011430-humiliate-expansive-2ea4@gregkh>
+ <20250115072050.72oeibi735k3pjdq@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/6] ACPI: CPPC: Add IS_OPTIONAL_CPC_REG macro
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <lenb@kernel.org>, <robert.moore@intel.com>, <viresh.kumar@linaro.org>,
-	<mario.limonciello@amd.com>, <gautham.shenoy@amd.com>, <ray.huang@amd.com>,
-	<pierre.gondois@arm.com>, <acpica-devel@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <hepeng68@huawei.com>, <fanghao11@huawei.com>
-References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
- <20250113122104.3870673-2-zhenglifeng1@huawei.com>
- <CAJZ5v0ja7AaJza0PeNgutebXRV3tsgxZRwZUBcFksD9thyKg1Q@mail.gmail.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <CAJZ5v0ja7AaJza0PeNgutebXRV3tsgxZRwZUBcFksD9thyKg1Q@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250115072050.72oeibi735k3pjdq@vireshk-i7>
 
-On 2025/1/14 21:27, Rafael J. Wysocki wrote:
-
-> On Mon, Jan 13, 2025 at 1:21 PM Lifeng Zheng <zhenglifeng1@huawei.com> wrote:
->>
->> Add IS_OPTIONAL_CPC_REG macro to judge if a cpc_reg is an optional one.
+On Wed, Jan 15, 2025 at 12:50:50PM +0530, Viresh Kumar wrote:
+> On 14-01-25, 19:44, Greg KH wrote:
+> > > +pub fn from_cpu(cpu: u32) -> Result<&'static Device> {
+> > > +    // SAFETY: The pointer returned by `get_cpu_device()`, if not `NULL`, is a valid pointer to
+> > > +    // a `struct device` and is never freed by the C code.
+> > 
+> > I thought it was pointed out that it could be freed when a cpu was
+> > hot-unplugged?  Or is that a different device in the cpu code?  We seem
+> > to have 2 of them and it's not obvious which is which :(
 > 
-> This requires a bit more explanation, especially what's the purpose of
-> it (ie. the "why").
+> I did reply [1] to that earlier. The CPU can get unregistered but the
+> memory for the device is never freed (it is part of struct cpu). Some
+> calls on the CPU device may fail later on (if called for an unregisted
+> dev), but should never crash the kernel.
 
-Will add more explanation. Thanks.
+Ah, but that's not really something that SAFETY should override, right?
 
-> 
->> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
->> ---
->>  drivers/acpi/cppc_acpi.c | 6 ++++++
->>  1 file changed, 6 insertions(+)
->>
->> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
->> index f193e713825a..6454b469338f 100644
->> --- a/drivers/acpi/cppc_acpi.c
->> +++ b/drivers/acpi/cppc_acpi.c
->> @@ -129,6 +129,12 @@ static DEFINE_PER_CPU(struct cpc_desc *, cpc_desc_ptr);
->>  #define CPC_SUPPORTED(cpc) ((cpc)->type == ACPI_TYPE_INTEGER ?         \
->>                                 !!(cpc)->cpc_entry.int_value :          \
->>                                 !IS_NULL_REG(&(cpc)->cpc_entry.reg))
->> +
->> +/* These indicate optional of the per-cpu cpc_regs[]. */
-> 
-> Again, you need to say more here, like how this is supposed to work.
+Yes, you know your implementation of this will stop using the pointer in
+the hotplug callback before it goes away but that's not documented here.
+And having the device "fail" afterward isn't really ok either as you are
+relying on the driver core to always check for this and I'm not so sure
+that it always does on all codepaths.
 
-Will add it. Thanks.
+But, I'm ok with this for now, as you are just copying the bad C model
+at the moment, but it really feels like a huge foot-gun waiting to go
+off.  Any way to put some more documentation here as in "use this at
+your own risk!"?
 
-> 
->> +#define REG_OPTIONAL (0b111111100011111010000)
-> 
-> A hex literal would work too AFAICS.
+thanks,
 
-Will change it. Thanks.
-
-> 
->> +
->> +#define IS_OPTIONAL_CPC_REG(reg_idx) (REG_OPTIONAL & (1U << (reg_idx)))
-> 
-> You need to explain what reg_idx is.
-
-Will add more annotations. Thanks.
-
-> 
->> +
->>  /*
->>   * Arbitrary Retries in case the remote processor is slow to respond
->>   * to PCC commands. Keeping it high enough to cover emulators where
->> --
-
+greg k-h
 
