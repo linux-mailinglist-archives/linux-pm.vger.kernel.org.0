@@ -1,122 +1,135 @@
-Return-Path: <linux-pm+bounces-20500-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20501-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1CECA12B43
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 19:57:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D85ACA12BAD
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 20:20:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3E0623A5286
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 18:57:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 289801887EA4
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 19:20:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93A411D6199;
-	Wed, 15 Jan 2025 18:57:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nFcyAqJ2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E20B01D54E3;
+	Wed, 15 Jan 2025 19:20:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 033FA24A7D5;
-	Wed, 15 Jan 2025 18:57:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42DBB86350;
+	Wed, 15 Jan 2025 19:20:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736967443; cv=none; b=rlNR5h5D9URdHy4zdYJfZ3dgOmPbzNv+XZ/XmAZeuSEogDJwF0gyPR2Dx3KXE972QpJTh50CQMcHvnxq+BKdaVldwxiRM2EPlIhlk90yPmttsbehHpfT2WP0s8xdQWeF3kTSn6WGbdTlgdwxgTIlKv2Do+dJza+n7In1+8cgnCI=
+	t=1736968836; cv=none; b=AjrKqOVC8FyVWoJ8aAD3+6sLeKd1QilIVpfTg4il+h19tuOmMXbKQJHSdms9r6q1ZFUkGfAL97mv6sU9xBOgMXm5+sbSxOWvQEE93Zf76aZATlvdlkasoIqwehexeKsZndoPUbuIzuXRu50L6+RfYNtKC0JKhk78L/a0urYbDEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736967443; c=relaxed/simple;
-	bh=IR2xwznE+4WYl7pQ3lGz85p+APkypmY6M5Cpe+lrRM8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=J880f+hqF7/ZWchjuZDJ0ZPsfe2rzyfxgETS2huZO7st7ALXJogO1BfsqGMYaBovt0ZXPEAEPSL7jxa0I5lS81Kp4Emw2azFENT25bqNgPDXVDhJYXcKLtgnEowSkOxAn39p6FhfmS8hDlGXhjlsJnmpFIESrNTvhA8oAbBdk3A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nFcyAqJ2; arc=none smtp.client-ip=209.85.222.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-85b8c94a6b4so16752241.0;
-        Wed, 15 Jan 2025 10:57:21 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736967441; x=1737572241; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=c3rBHRWcLK//xf8QI8u0SxcahJkLNHxSKfdrX2ub8N8=;
-        b=nFcyAqJ2T+uRK+Wfhw6eUFcmKuxtWpFgduNN0Jp+nfsVDSaW/cPjuAgpEJfSEV+78t
-         /or42rqj2Z7lGPLvdIId5Mh90NabTkzzvFftAvax+teBDS6m4Yy7RS2QeiQbEbG2/Q6n
-         nY7YFOsqIyn79Nqf1rXZ8Bd4Pbei7BL/QTZ5z9mL8Zshk1tXtCnz2+YWAMpp0qH7lVyg
-         yuiRs19y2JLYe/E1mPZQXrRwLlh68tu0Q+YoPleOPsRbjpgIuHXOcwqvwhl0P5/bNdvA
-         C8syvWGDDUAcRFCw1IalJfskV3FsiiCTERDAzyQzBqrs2qMxmtJ7O4Th9CD+zvMjbCFa
-         NWYw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736967441; x=1737572241;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=c3rBHRWcLK//xf8QI8u0SxcahJkLNHxSKfdrX2ub8N8=;
-        b=jJn/iT7Yqp8QM2FmcFFqyxxxN76LmRDX/l1tHRzBFg33+rCOpj2E48+R/rVqkyQLsT
-         bIJOSsewPadn955HIk43JuKN8fbwPsCcU2em9cgduiBU/oqaZwT76jAxQzfPgo+oQOpa
-         DGbvYiRHGpqPw+W2UyPDWCRfMevZkB/rYH/jAMBwWp02e3VT+UpcKWALx4w5kmLin6Wq
-         S5ZJd6JAKCXoDp2LtPIdqM74vH4Hj3ndavh1O2Hbr+1SBw9XGYNJs83wMlWdww678Nxs
-         vfkhhze4uYsmJJJvL9X1bHXtbsJ/HSqaTV29P3qIInP599/GYIB+LDcRdbEr6JOyY/Pe
-         ASOw==
-X-Forwarded-Encrypted: i=1; AJvYcCUFmOJA6viX/pl4m7vXcj+jy2+Op9/lgy60PnQnE0k5GYX3sTg1b9FX24k/UcNcg/q3vOLOoANW/iQ=@vger.kernel.org, AJvYcCVEecKq03wMR6R7DGSEpaP+k56ny+wWef/U3SQR1RLmEWR+AGVx17EcvVadP/kvuKAlcerRzPyI0R5P@vger.kernel.org, AJvYcCWQzWhiOj7rbV9MTAjLaE86Vo54BeHNIM9qN0n0bolwNQmF/7t68oOGlJpYIfRsaEQsf5aSPvmJCmp47w==@vger.kernel.org, AJvYcCXRAqbwTceK9ZFGT2fq+qr0IeDS/LQLi/NEv3iVKALMerBR0yDnuNOnJ6WhN8lgonFO7hNF5XRy/OsaWpxu@vger.kernel.org, AJvYcCXw/rvpTTZusjWdw4xOybP3GbJvbqD2Cr+qKAjKNOdKZHTpR5R2phaskVOCUNiz2Cj00jVIsxZaUy/sE18=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxwq8ZLGhe3322nZ83hDKOA6WhEjR5Xu7LmZKYAh/p++Jjz7MN2
-	bv8pdVK8C0jM0PDRGgA8olnjnYehJwTpE0dh735Em2nINggu7fgrKR0YwGXFfpKMOGjj1cGDSy8
-	Yueu4mMeaY6PgubvfrybNxbbE4AI=
-X-Gm-Gg: ASbGncttERD0ECZnSQIYKqAUwd1JoFXAHwRDNG+FbexVu65CbUZkcmP+j08Jq/C+hWQ
-	ydpQ862+udrfZUqMhqT6DR0TT0J9S6bTaDE1DEQ==
-X-Google-Smtp-Source: AGHT+IE55Rdnoo5jX5nfajWgoNNwUTnz6FOgcf+XznEOImYy05XNUfoQS5g6zQ6+0C00XjS1svK50Bh5JpBiykBUoAs=
-X-Received: by 2002:a05:6102:578e:b0:4af:eccf:e3ca with SMTP id
- ada2fe7eead31-4b3d0da8a8cmr27249008137.10.1736967440942; Wed, 15 Jan 2025
- 10:57:20 -0800 (PST)
+	s=arc-20240116; t=1736968836; c=relaxed/simple;
+	bh=I1O/C1Or8EGJzFxToggNg+3O2u+busIM/+ma0hWmsTE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=LjzLCrRosdfpem3m+5noPyu43AcefKeBcXjNJ4qJML3z1X/tU39x3tATBxt8+X2Fj5VsD3sLdg2YlAEre89JVSHIPlVekAPjcP8XCBthNqmZ50ZeuYmRrjPDbKivOdjM5uCVsylHLTyCPgFlGJ8ICTUvlyYLK7WAaG+vSoPmsWY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id DD46912FC;
+	Wed, 15 Jan 2025 11:21:02 -0800 (PST)
+Received: from [192.168.0.16] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3548C3F73F;
+	Wed, 15 Jan 2025 11:20:33 -0800 (PST)
+Message-ID: <a44d8a62-8753-4efb-8c3a-f9c3cdc1dabc@arm.com>
+Date: Wed, 15 Jan 2025 19:20:30 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250108-starqltechn_integration_upstream-v14-0-f6e84ec20d96@gmail.com>
- <20250108-starqltechn_integration_upstream-v14-7-f6e84ec20d96@gmail.com> <20250109120158.GH6763@google.com>
-In-Reply-To: <20250109120158.GH6763@google.com>
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Wed, 15 Jan 2025 21:57:09 +0300
-X-Gm-Features: AbW1kvaKlV8za9mZKmha3NIhIgfbbIci3s1GldX6Gil1h0TJ6PBMmhbBMhVV-SQ
-Message-ID: <CABTCjFAky55btJz3B=K2kL5gSJD9BYi5t15jaA2ga5asVT=3NQ@mail.gmail.com>
-Subject: Re: [PATCH v14 07/10] mfd: simple-mfd-i2c: Add MAX77705 support
-To: Lee Jones <lee@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
-	Hans de Goede <hdegoede@redhat.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 2/9] cpuidle: teo: Reorder candidate state index checks
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+References: <6116275.lOV4Wx5bFT@rjwysocki.net>
+ <1907276.tdWV9SEqCh@rjwysocki.net>
+ <8959e72a-600d-427a-9ab2-54f14b056766@arm.com>
+ <CAJZ5v0iVOg5CnYo8OQ5E8VGLdn4cvVdFFQqpOgpWvij4a4cdxQ@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAJZ5v0iVOg5CnYo8OQ5E8VGLdn4cvVdFFQqpOgpWvij4a4cdxQ@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-=D1=87=D1=82, 9 =D1=8F=D0=BD=D0=B2. 2025=E2=80=AF=D0=B3. =D0=B2 15:02, Lee =
-Jones <lee@kernel.org>:
->
-> On Wed, 08 Jan 2025, Dzmitry Sankouski wrote:
->
-> > Add MAX77705 support - fuel gauge and hwmon devices.
-> > Hwmon provides charger input and system bus measurements.
-> >
-> > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-(...)
-> >  static const struct of_device_id simple_mfd_i2c_of_match[] =3D {
-> >       { .compatible =3D "kontron,sl28cpld" },
-> >       { .compatible =3D "silergy,sy7636a", .data =3D &silergy_sy7636a},
-> >       { .compatible =3D "maxim,max5970", .data =3D &maxim_max5970},
-> >       { .compatible =3D "maxim,max5978", .data =3D &maxim_max5970},
-> > +     { .compatible =3D "maxim,max77705-battery", .data =3D &maxim_mon_=
-max77705},
->
-> Drop the battery part from the MFD (group) name please.
->
+On 1/15/25 15:54, Rafael J. Wysocki wrote:
+> On Wed, Jan 15, 2025 at 3:46 PM Christian Loehle
+> <christian.loehle@arm.com> wrote:
+>>
+>> On 1/13/25 18:36, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> Since constraint_idx may be 0, the candidate state index may change to 0
+>>> after assigning constraint_idx to it, so first check if it is greater
+>>> than constraint_idx (and update it if so) and then check it against 0.
+>>
+>> So the reason I've left this where it was is because the prev_intercept_idx
+>> was supposed to query the sleep length if we're in an majority-intercept
+>> period and then it makes sense to query the sleep length (to detect such
+>> a period being over).
+>> A constraint_idx == 0 scenario doesn't need the intercept-machinery to
+>> work at all, why are we querying the sleep length then?
+> 
+> In case the constraint is different next time and it's better to know
+> the sleep length to properly classify the wakeup.
 
-It will then conflict with MAX77705 mfd driver compatible.
+I would hope constraints change nowhere near as frequently as
+idle entry / exit happen, is your experience different?
 
---=20
-Best regards and thanks for review,
-Dzmitry
+> 
+>>>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>
+>>> This is a rebased variant of
+>>>
+>>> https://lore.kernel.org/linux-pm/8476650.T7Z3S40VBb@rjwysocki.net/
+>>>
+>>> ---
+>>>  drivers/cpuidle/governors/teo.c |   15 ++++++++-------
+>>>  1 file changed, 8 insertions(+), 7 deletions(-)
+>>>
+>>> --- a/drivers/cpuidle/governors/teo.c
+>>> +++ b/drivers/cpuidle/governors/teo.c
+>>> @@ -428,6 +428,14 @@
+>>>                               break;
+>>>               }
+>>>       }
+>>> +
+>>> +     /*
+>>> +      * If there is a latency constraint, it may be necessary to select an
+>>> +      * idle state shallower than the current candidate one.
+>>> +      */
+>>> +     if (idx > constraint_idx)
+>>> +             idx = constraint_idx;
+>>> +
+>>>       if (!idx && prev_intercept_idx) {
+>>>               /*
+>>>                * We have to query the sleep length here otherwise we don't
+>>> @@ -439,13 +447,6 @@
+>>>       }
+>>>
+>>>       /*
+>>> -      * If there is a latency constraint, it may be necessary to select an
+>>> -      * idle state shallower than the current candidate one.
+>>> -      */
+>>> -     if (idx > constraint_idx)
+>>> -             idx = constraint_idx;
+>>> -
+>>> -     /*
+>>
+>> We could leave this here and just do goto end;?
+> 
+> Why would this be better?
+
+Saves querying the sleep length in case of constraint_idx == 0, i.e.
+qos request to be very latency-sensitive and us actually adding latency
+here.
+
 
