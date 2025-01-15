@@ -1,146 +1,126 @@
-Return-Path: <linux-pm+bounces-20482-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20483-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C4B54A12257
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 12:19:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8066FA122CE
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 12:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DE1BD1694B8
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 11:19:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BE5091881914
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 11:39:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C822F1E9909;
-	Wed, 15 Jan 2025 11:18:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="svCAF1/b"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9028E213E6F;
+	Wed, 15 Jan 2025 11:39:37 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31C611E98F7
-	for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 11:18:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 986FF20F968;
+	Wed, 15 Jan 2025 11:39:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736939937; cv=none; b=fI4D4aYlt1ud45h3nmbIh0th+kJOp+UbSylnGSm03teevGVU0q7REPP7sWjE4JxoHQkiJuhiF0Qh9VcSG9XU/RKFUjnuwrbPqUEUHGQIE7C2YsMZeTuJTbApLtephtH2GjqGt+SELapzOqfsgGCUMJPOZvFN6SGH/3mOH9s6FiQ=
+	t=1736941177; cv=none; b=n+Ue3pd+dxWUcjeRYktkgELGXSsW3xELEZBCXiNVeT/UdPc+T0j4RgKrWpP5yh8N5JXw1PgDCwv8Csu9zQphxmH0BjLhZDGoVanldJu6IwzEQ6mv50h7u4PqwANeWeTEN+0ZOuYgjWjopjKBrlu/A18QpGW5WX60+6ME7wpAqHQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736939937; c=relaxed/simple;
-	bh=LMAx3aQ3tr/+4xQlrM1fIVpNQ7/15mRu9KbyMLrR0SM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=T9rfqULMJWDTn9Ql5+l4tx0PwP65cBbSHUvlbkCD8vIZ7imEgEl8uJR91LtUNAQ/z59hXci8OBRZ1amTu8ECxfbQpdXCsIR6Y1alW+euVGg2d4H8/uXWPEVWoIXdR3HiZXhCf3QRQ9cTZZlA7JwevdZCEoc812IMH6JlafJAYac=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=svCAF1/b; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-2167141dfa1so13082565ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 03:18:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736939935; x=1737544735; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=DqfkXRbUJMCh8cBTiV2yE9LjBiqhO1LbtQ4RE9MmtaM=;
-        b=svCAF1/bgWKNUO922YSm6kai1y3hdG4WLuqrMXr6WVutPlqbjgjoeSnPAcvaZxhY7q
-         x4XZCsvsoL9huuG5vg8rRmSq0pzSa9kPs2umbHOwMEbjZYGfyIjGNY6QKucttL62cRUv
-         joQCbMpmxruFcQiA723GilaciZFLDQrCQz2Nao4EGNLwxXImHMMLXFlB6aRG4luJdvOh
-         nEC60wioMCh8GC456BmGIgIw++xX9p1U8N4cXKGZucRV0bmMWqvB7Hqw2KytwU3C/gCn
-         FrYBxYbxSLnqYi4Tlhzwh6eo/3WfZX7r2KK2tMJgX7ViE+dKHhYZ5NJXV/LRClTB3PAn
-         gd7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736939935; x=1737544735;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=DqfkXRbUJMCh8cBTiV2yE9LjBiqhO1LbtQ4RE9MmtaM=;
-        b=ZxKS6Ui8qC37yXItocIZnEzXnCt9WlLJ43k1EDCjRpt+nytn+zfpv/YZuj8VGzJGgG
-         E4/y4O6rauxHfpWfl4L8/yg5qHDCobc2i2QLH7iI+O9lUWE70KB0YKl65oLjuaZGM3n0
-         muYbC3ZFY1rrzwcaKVGQIzdRR115tmsXP68z1N9kIdmwJ9QPmaoGHcZvMCuoiQBzMSoH
-         /MfZh93O5sOx+fFLaW5oE6HLXb3PxjmEonGhNGJFI1UzeIL8EPb7H3v24TepLzhd2Cn+
-         vMhOybxLqr2U7yr7vJZmp3fjMA16Pdg9zwMpmWmlapCTuVdYk8j4pRdYvpHMPHywQ6K1
-         jA4Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVmdHSHbDxFgb1aXG6vGvhQUFEuW9wgoW06ToMX+SVyEnzqGcoL5oHJjV8MZFXQT2yNZZvuiKu+dA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwI1lSZ2TwPtbou/pVuAGbaCOrKcvkyPK/U2ononwsKypcMd76S
-	nLtm9FcSGF/A2/vRvxSrq0mhQDf1XZ3UIzlAEXN5FblO6+6wnq7JBiHQFwhlIEI=
-X-Gm-Gg: ASbGnct4eO7fWCLbDRq8fl7U0t+xaMWelwVI8Q82hwsei67tU0KUfC7OyvlyruT8sG4
-	iMvJIdt8drtVGwe/oIURolIez75AN1DbO6Sh1GzrZBdIst8ayQZbFgFSZe3E7fBO3LMuuoh53/M
-	yNRGYKPWX6gls2DKTjz74hcsC2bPy+6RYq+9wqC+CjWyS2I2iqr+M4Da1qNNmWdGYCU9MbBDkUt
-	JlgEGBhpg/8tYEjGHWrQnUU+LRQNiabbZCIyPLRf2rz0M+k2ieOMD4AKek=
-X-Google-Smtp-Source: AGHT+IHP48mslcDUkaDMbpAtO1zSP55tzjmEN2NpfWla74Q81rt1Y5Vixf+U0wGkqJoOTchJlUVCqw==
-X-Received: by 2002:a17:902:d343:b0:215:8847:4377 with SMTP id d9443c01a7336-21bf0cd9719mr29629395ad.15.1736939935487;
-        Wed, 15 Jan 2025 03:18:55 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21a9f219b7fsm80849095ad.116.2025.01.15.03.18.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 03:18:54 -0800 (PST)
-Date: Wed, 15 Jan 2025 16:48:52 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com,
-	lihuisong@huawei.com, fanghao11@huawei.com
-Subject: Re: [PATCH 1/2] cpufreq: Fix re-boost issue after hotplugging a cpu
-Message-ID: <20250115111852.hluxcprc7cbrxqtc@vireshk-i7>
-References: <20250115100123.241110-1-zhenglifeng1@huawei.com>
- <20250115100123.241110-2-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1736941177; c=relaxed/simple;
+	bh=fU9LjpnWlPykGUfJlYWRMdEruVigf7TQ5gejulzm53g=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=dT78UGC6kHeOFGdY3eCuSB4Jck1923GpG71F9iPXdtGrnDvDSKz+QZ9+QKXEvk88/SMDGafjW3EnX8qWt0Di/P42j5r1OWN3m28tbvEohNuR+/nzZaOPO4rr/ZpzHdhxld1rKkiulKPmmMHKhsbmvWWHbou/8ueBmslsgpW7LlQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4AC6512FC;
+	Wed, 15 Jan 2025 03:40:03 -0800 (PST)
+Received: from usa.arm.com (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id C75EF3F63F;
+	Wed, 15 Jan 2025 03:39:33 -0800 (PST)
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: arm-scmi@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
+	Peng Fan <peng.fan@nxp.com>
+Subject: [PATCH] pmdomain: arm: scmi_pm_domain: Send an explicit request to set the current state
+Date: Wed, 15 Jan 2025 11:39:31 +0000
+Message-Id: <20250115113931.1181309-1-sudeep.holla@arm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250115100123.241110-2-zhenglifeng1@huawei.com>
+Content-Transfer-Encoding: 8bit
 
-On 15-01-25, 18:01, Lifeng Zheng wrote:
-> It turns out that cpuX will stay on the base frequency after performing
-> these operations:
-> 
-> 1. boost all cpus: echo 1 > /sys/devices/system/cpu/cpufreq/boost
-> 
-> 2. offline the cpu: echo 0 > /sys/devices/system/cpu/cpuX/online
-> 
-> 3. deboost all cpus: echo 0 > /sys/devices/system/cpu/cpufreq/boost
-> 
-> 4. online the cpu: echo 1 > /sys/devices/system/cpu/cpuX/online
-> 
-> 5. boost all cpus again: echo 1 > /sys/devices/system/cpu/cpufreq/boost
-> 
-> This is because max_freq_req of the policy is not updated during the
-> online process, and the value of max_freq_req before the last offline is
-> retained. When the CPU is boosted again, freq_qos_update_request() will
-> do nothing because the old value is the same as the new one. This causes
-> the CPU stay on the base frequency. Update max_freq_req (and
-> min_freq_req of course) in cpufreq_online() will solve this problem.
-> 
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 7 +++++++
->  1 file changed, 7 insertions(+)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 1a4cae54a01b..03ae879d50b9 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1475,6 +1475,13 @@ static int cpufreq_online(unsigned int cpu)
->  
->  		blocking_notifier_call_chain(&cpufreq_policy_notifier_list,
->  				CPUFREQ_CREATE_POLICY, policy);
-> +	} else {
-> +		ret = freq_qos_update_request(policy->min_freq_req, policy->min);
+On a system with multiple active SCMI agents, one agent(other than OSPM/
+Linux or bootloader) would request to turn on a shared power domain
+before the Linux boots/initialise the genpds. So when the Linux boots
+and gets the power state as already ON, it just registers the genpd with
+a default ON state.
 
-This may not be required, as min-freq-req is never updated.
+However, when the driver that needs this shared power domain is probed
+genpd sees that the power domain status is ON and never makes any SCMI
+call to power it up which is correct. But, since Linux didn't make an
+explicit request to turn on the shared power domain, the SCMI platform
+firmware will not know if the OSPM agent is actively using it.
 
-> +		if (ret < 0)
-> +			goto out_destroy_policy;
-> +		ret = freq_qos_update_request(policy->max_freq_req, policy->max);
-> +		if (ret < 0)
-> +			goto out_destroy_policy;
->  	}
->  
->  	if (cpufreq_driver->get && has_target()) {
-> -- 
-> 2.33.0
+Suppose the other agent that requested the shared power domain to be
+powered ON requests to power it OFF as it no longer needs it, the SCMI
+platform firmware needs to turn it off if there are no active users of
+it which in the above scenaro is the case.
 
+As a result of SCMI platform firmware turning off the resource, OSPM/
+Linux will crash the moment as it expects the shared power domain to be
+powered ON.
+
+Send an explicit request to set the current state when setting up the
+genpd power domains so that OSPM registers its vote in the power domain
+state with the SCMI platform firmware.
+
+The other option is to not read the state and set the genpds as default
+OFF, but it can't handle the scenario on certain platforms where SCMI
+platform keeps all the power domains turned ON by default for faster boot
+(or any other such variations) and expect the OSPM to turn off the unused
+domains if power saving is required.
+
+Cc: Ulf Hansson <ulf.hansson@linaro.org>
+Link: https://lore.kernel.org/all/Z4aBkezSWOPCXcUh@bogus
+Reported-by: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+Reported-by: Peng Fan <peng.fan@nxp.com>
+Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+---
+ drivers/pmdomain/arm/scmi_pm_domain.c | 8 ++++++++
+ 1 file changed, 8 insertions(+)
+
+Hi Ulf,
+
+We need your feedback or suggestions for better solution on this matter.
+Let us know if we can do something better with the genpd's help to resolve
+this issue.
+
+Regards,
+Sudeep
+
+diff --git a/drivers/pmdomain/arm/scmi_pm_domain.c b/drivers/pmdomain/arm/scmi_pm_domain.c
+index a7784a8bb5db..86b531e15b85 100644
+--- a/drivers/pmdomain/arm/scmi_pm_domain.c
++++ b/drivers/pmdomain/arm/scmi_pm_domain.c
+@@ -96,6 +96,14 @@ static int scmi_pm_domain_probe(struct scmi_device *sdev)
+ 			continue;
+ 		}
+ 
++		/*
++		 * Register the explicit power on request to the firmware so
++		 * that it is tracked as used by OSPM agent and not
++		 * accidentally turned off with OSPM's knowledge
++		 */
++		if (state == SCMI_POWER_STATE_GENERIC_ON)
++			power_ops->state_set(ph, i, state);
++
+ 		scmi_pd->domain = i;
+ 		scmi_pd->ph = ph;
+ 		scmi_pd->name = power_ops->name_get(ph, i);
 -- 
-viresh
+2.34.1
+
 
