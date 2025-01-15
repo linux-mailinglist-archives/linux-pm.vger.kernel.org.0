@@ -1,195 +1,156 @@
-Return-Path: <linux-pm+bounces-20511-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20512-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AEEEA12D6A
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 22:12:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D957EA12DA3
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 22:23:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 64B22165B89
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 21:12:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2C6001887975
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 21:23:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6F431DAC97;
-	Wed, 15 Jan 2025 21:10:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF6F71DA112;
+	Wed, 15 Jan 2025 21:23:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PR7lN8KT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mC1O4zFy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0D61D63E8;
-	Wed, 15 Jan 2025 21:10:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 006894D599;
+	Wed, 15 Jan 2025 21:23:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736975423; cv=none; b=QDtR5t5EX1w1fr8ZxVPxFx+9Cs2WZgzc+FwGtx/ZOwXvEkN75c8ozagmkNcwoDkG6gRT48xtXBiLEt5cSk3Xq+Y09jsJhWHAgKBAelYXBJ4WTVmgYOFguV9znLnIGD1EjDQRYV45gfhLiJiY89Ba3cWvbkBsKjIzeXmFAT9GcXs=
+	t=1736976199; cv=none; b=PaiqhchN9LyBAMt/xudD12G+J9ElByN7sbTtJuwTvro7JLxyLBlD4YwO6shGesz+Go6qV/589VXsoquc5URdXKOgb7Tf7BupbWAXN1NjQw7u8FuyAJg5w05EUFhGvWlN9kFu+R0HfQwtXHFIzL3bwIjWbuvelgbNigHN1qf9pM0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736975423; c=relaxed/simple;
-	bh=zP8ZYkjMOLm0Pwvv+BfFGRWiYBtSUPW/EsvdFBprqgQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Xrm91fpThV1BGwbeKpRfLrSnPOXG9JePtVfpU+/ReBfOFqG1k/CV+LsEzgxTp92W21Z8Xki6Z7WZTzNjmUh13GVRYLlw+Vuvq0Yxd9S6tM8l2N5/Oue7jsYY6sLTpyvHyf8sw/nEHpspnAnnq58wUbRp8ObRzqQdcegwe8UMZoY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PR7lN8KT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3A3FCC4CEE3;
-	Wed, 15 Jan 2025 21:10:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736975423;
-	bh=zP8ZYkjMOLm0Pwvv+BfFGRWiYBtSUPW/EsvdFBprqgQ=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=PR7lN8KTp5uu3l0VctcX88rwTN9CgTi5/BSP0dXBle3xYHmMAj91T10FjZWcFeN5H
-	 eYIHBzNsKz6/KW+DoCREGz/s3aB1cJNchiEWrH2EYJsrc9xAELjeXZ+sy5PtLJXHM+
-	 efM3MaWtrXJzryLYW0i4sLEpl5/Ig4mF6JDGPalx+lby1xpaGTWvBWlKa0MneS5ZBt
-	 HF6cOZeG/gdGrUMWy+RllBQPPfqJ3I2lYLcdqsPeqsViT8R7I4HEHBgRHeJu1PP5uZ
-	 /wn/aR6D5ndsQB8CPezwIir13ejNK7YR9s2vMEAVdv25ivGJZ+clBEhcBUWuRjjjtd
-	 ud4gTEUG1yWBw==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-29fb532b668so97706fac.0;
-        Wed, 15 Jan 2025 13:10:23 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVmgqHKUtdMqgcgWiyevQGZua0Ebjqrb4ObtK4n6xGtDRn7C+3JoCRe14Y5+lhUCmWjoBg0t70z0/f7F54=@vger.kernel.org, AJvYcCXpb0kTsgWUsiLpGtJ6CkDGJc+2UWm/Z4iLYDwM49X9MDUxYsKlhPrC4gENmvR8enJPDAeYF2a5SkM=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxey7R4UHf90LPalG0G83y85fUBc+LxPrPLHpF798TaTmsChnZE
-	YRi6idv/Qm3yIm6DfDLpNINnk1x5KwaZiv256XV+XzOyw6RTLjaNmd5KPDey4QZ6dUk2LwtWUex
-	UvSXaXrbvSdfEcn7BS1rljQK7GSU=
-X-Google-Smtp-Source: AGHT+IHsgpyuC09pA3K+hw6CRAmmmI8I3xMjjerA/+uNeMkinmC8Qd7B5n5FCsApeDn8XfhSun+7ITECLqwQjTI7Hk4=
-X-Received: by 2002:a05:6871:aa12:b0:288:563b:e48d with SMTP id
- 586e51a60fabf-2aa066b475amr17013060fac.10.1736975422502; Wed, 15 Jan 2025
- 13:10:22 -0800 (PST)
+	s=arc-20240116; t=1736976199; c=relaxed/simple;
+	bh=buQ6yhU4umw32VgNSvpomDQoppikaE+rCZLX3s5iooY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=B+yZMbXzwW+lM84bSq4S4tLXf546xfKLIPFXEb6W4lOqWn006nRGIvTOK1kJSAscoWCjoQNmpL6yumKYrpmuqW3z0bIM5/nDYMLvtf2hDbE6HlhC2N/K2rxw8vyFIuqbIjKml4pYmxG+qxhJvyLc70AsGVmuqA0ahXzpNClLy7k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mC1O4zFy; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1736976198; x=1768512198;
+  h=date:from:to:cc:subject:message-id;
+  bh=buQ6yhU4umw32VgNSvpomDQoppikaE+rCZLX3s5iooY=;
+  b=mC1O4zFysenZ2pNs76buN0TcMvV2Zt7l1yiGepobRYe1FKCB3fquRJwe
+   Ggp4R+zntCadwnfkhEXPuVBoAwrxrAIPfuXHdIb49cQIpmDjYAm6g1Vfq
+   rOofBrdFKevSOliEv9YhgsCnBH4izMw5B//tLoKfBVvJwIP+W1xuiTduL
+   QLMP03z56lBM73Ak9X4PUsyun/kj0BsOAihf5gzPFzXPuhEo3lZsjppsU
+   rnYsOY5LpqlZbObfj+zpETTI2O1D0k/huYcAcw2Rabpt39jsrv63CLYmS
+   QODtpTlmimirfpG+s62Gl6K27EuUCK7ugu+dp7inbI+dccVyhj4zOUZh4
+   Q==;
+X-CSE-ConnectionGUID: 8FMbcslQQWewf0Ys6DPFuw==
+X-CSE-MsgGUID: 6g++hlNkTQWKM/4Omm4ynw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="48726125"
+X-IronPort-AV: E=Sophos;i="6.13,207,1732608000"; 
+   d="scan'208";a="48726125"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 15 Jan 2025 13:23:18 -0800
+X-CSE-ConnectionGUID: CqXOZdNYSYy38gi6Q7ZeIg==
+X-CSE-MsgGUID: mhTRMZ6aTne6NuQprt4tTg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,207,1732608000"; 
+   d="scan'208";a="136110455"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 15 Jan 2025 13:23:16 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tYAr4-000QuV-0j;
+	Wed, 15 Jan 2025 21:23:14 +0000
+Date: Thu, 16 Jan 2025 05:22:51 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ bba4f2ac76f605f6f8b62c5dae11103ceb20ad60
+Message-ID: <202501160545.aaMR9yed-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <6116275.lOV4Wx5bFT@rjwysocki.net> <1907276.tdWV9SEqCh@rjwysocki.net>
- <8959e72a-600d-427a-9ab2-54f14b056766@arm.com> <CAJZ5v0iVOg5CnYo8OQ5E8VGLdn4cvVdFFQqpOgpWvij4a4cdxQ@mail.gmail.com>
- <a44d8a62-8753-4efb-8c3a-f9c3cdc1dabc@arm.com> <CAJZ5v0g2CxmFB3Js09jKk=ym26oEGVUsr5tM2p2vpPU_bczjmA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0g2CxmFB3Js09jKk=ym26oEGVUsr5tM2p2vpPU_bczjmA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 15 Jan 2025 22:10:11 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gr5CTM+p4dvAywuNyxLfE6MW7WWFu7wajCazMPodEvvg@mail.gmail.com>
-X-Gm-Features: AbW1kvbmGzI-FpdE_OUGcPN_dQPpvncF6uKjAtj9WrtARqPG9rZvY2Nb3EVdy_U
-Message-ID: <CAJZ5v0gr5CTM+p4dvAywuNyxLfE6MW7WWFu7wajCazMPodEvvg@mail.gmail.com>
-Subject: Re: [PATCH v1 2/9] cpuidle: teo: Reorder candidate state index checks
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 15, 2025 at 9:48=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
->
-> On Wed, Jan 15, 2025 at 8:20=E2=80=AFPM Christian Loehle
-> <christian.loehle@arm.com> wrote:
-> >
-> > On 1/15/25 15:54, Rafael J. Wysocki wrote:
-> > > On Wed, Jan 15, 2025 at 3:46=E2=80=AFPM Christian Loehle
-> > > <christian.loehle@arm.com> wrote:
-> > >>
-> > >> On 1/13/25 18:36, Rafael J. Wysocki wrote:
-> > >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >>>
-> > >>> Since constraint_idx may be 0, the candidate state index may change=
- to 0
-> > >>> after assigning constraint_idx to it, so first check if it is great=
-er
-> > >>> than constraint_idx (and update it if so) and then check it against=
- 0.
-> > >>
-> > >> So the reason I've left this where it was is because the prev_interc=
-ept_idx
-> > >> was supposed to query the sleep length if we're in an majority-inter=
-cept
-> > >> period and then it makes sense to query the sleep length (to detect =
-such
-> > >> a period being over).
-> > >> A constraint_idx =3D=3D 0 scenario doesn't need the intercept-machin=
-ery to
-> > >> work at all, why are we querying the sleep length then?
-> > >
-> > > In case the constraint is different next time and it's better to know
-> > > the sleep length to properly classify the wakeup.
-> >
-> > I would hope constraints change nowhere near as frequently as
-> > idle entry / exit happen, is your experience different?
->
-> They don't, but they may change at any time and it is kind of good to
-> have history in case this happens.
->
-> > >
-> > >>>
-> > >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > >>> ---
-> > >>>
-> > >>> This is a rebased variant of
-> > >>>
-> > >>> https://lore.kernel.org/linux-pm/8476650.T7Z3S40VBb@rjwysocki.net/
-> > >>>
-> > >>> ---
-> > >>>  drivers/cpuidle/governors/teo.c |   15 ++++++++-------
-> > >>>  1 file changed, 8 insertions(+), 7 deletions(-)
-> > >>>
-> > >>> --- a/drivers/cpuidle/governors/teo.c
-> > >>> +++ b/drivers/cpuidle/governors/teo.c
-> > >>> @@ -428,6 +428,14 @@
-> > >>>                               break;
-> > >>>               }
-> > >>>       }
-> > >>> +
-> > >>> +     /*
-> > >>> +      * If there is a latency constraint, it may be necessary to s=
-elect an
-> > >>> +      * idle state shallower than the current candidate one.
-> > >>> +      */
-> > >>> +     if (idx > constraint_idx)
-> > >>> +             idx =3D constraint_idx;
-> > >>> +
-> > >>>       if (!idx && prev_intercept_idx) {
-> > >>>               /*
-> > >>>                * We have to query the sleep length here otherwise w=
-e don't
-> > >>> @@ -439,13 +447,6 @@
-> > >>>       }
-> > >>>
-> > >>>       /*
-> > >>> -      * If there is a latency constraint, it may be necessary to s=
-elect an
-> > >>> -      * idle state shallower than the current candidate one.
-> > >>> -      */
-> > >>> -     if (idx > constraint_idx)
-> > >>> -             idx =3D constraint_idx;
-> > >>> -
-> > >>> -     /*
-> > >>
-> > >> We could leave this here and just do goto end;?
-> > >
-> > > Why would this be better?
-> >
-> > Saves querying the sleep length in case of constraint_idx =3D=3D 0, i.e=
-.
-> > qos request to be very latency-sensitive and us actually adding latency
-> > here.
->
-> Fair enough, but before patch [7/9] leaving it where it is doesn't
-> really cause it to skip the sleep length check unless state 0 is
-> "polling".
->
-> After patch [7/9] it is possible to add a constraint_idx check against
-> 0 to the "goto out_tick" condition before the
-> tick_nohz_get_sleep_length() call, that is
->
-> if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_N=
-S) &&
->     (2 * cpu_data->short_idle >=3D cpu_data->total || !constraint_idx))
->         goto out_tick;
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: bba4f2ac76f605f6f8b62c5dae11103ceb20ad60  Merge branch 'pm-sleep' into bleeding-edge
 
-Or even
+elapsed time: 1454m
 
-if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS)=
- &&
-    (2 * cpu_data->short_idle >=3D cpu_data->total || latency_req <
-A_SMALL_VALUE))
-        goto out_tick;
+configs tested: 62
+configs skipped: 0
 
-for that matter.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-> but that would be a separate patch if you will.
+tested configs:
+arc                  randconfig-001-20250115    gcc-13.2.0
+arc                  randconfig-002-20250115    gcc-13.2.0
+arm                  randconfig-001-20250115    clang-16
+arm                  randconfig-002-20250115    clang-20
+arm                  randconfig-003-20250115    clang-20
+arm                  randconfig-004-20250115    clang-20
+arm64                randconfig-001-20250115    clang-20
+arm64                randconfig-002-20250115    gcc-14.2.0
+arm64                randconfig-003-20250115    clang-18
+arm64                randconfig-004-20250115    gcc-14.2.0
+csky                 randconfig-001-20250115    gcc-14.2.0
+csky                 randconfig-002-20250115    gcc-14.2.0
+hexagon              randconfig-001-20250115    clang-20
+hexagon              randconfig-002-20250115    clang-19
+i386       buildonly-randconfig-001-20250115    clang-19
+i386       buildonly-randconfig-002-20250115    gcc-12
+i386       buildonly-randconfig-003-20250115    gcc-12
+i386       buildonly-randconfig-004-20250115    gcc-12
+i386       buildonly-randconfig-005-20250115    gcc-12
+i386       buildonly-randconfig-006-20250115    gcc-12
+loongarch            randconfig-001-20250115    gcc-14.2.0
+loongarch            randconfig-002-20250115    gcc-14.2.0
+nios2                randconfig-001-20250115    gcc-14.2.0
+nios2                randconfig-002-20250115    gcc-14.2.0
+openrisc                         allnoconfig    gcc-14.2.0
+parisc                           allnoconfig    gcc-14.2.0
+parisc               randconfig-001-20250115    gcc-14.2.0
+parisc               randconfig-002-20250115    gcc-14.2.0
+powerpc                          allnoconfig    gcc-14.2.0
+powerpc              randconfig-001-20250115    gcc-14.2.0
+powerpc              randconfig-002-20250115    gcc-14.2.0
+powerpc              randconfig-003-20250115    gcc-14.2.0
+powerpc64            randconfig-001-20250115    gcc-14.2.0
+powerpc64            randconfig-002-20250115    gcc-14.2.0
+powerpc64            randconfig-003-20250115    clang-18
+riscv                            allnoconfig    gcc-14.2.0
+riscv                randconfig-001-20250115    gcc-14.2.0
+riscv                randconfig-002-20250115    clang-16
+s390                            allmodconfig    clang-19
+s390                            allyesconfig    gcc-14.2.0
+s390                 randconfig-001-20250115    clang-20
+s390                 randconfig-002-20250115    clang-15
+sh                              allmodconfig    gcc-14.2.0
+sh                              allyesconfig    gcc-14.2.0
+sh                   randconfig-001-20250115    gcc-14.2.0
+sh                   randconfig-002-20250115    gcc-14.2.0
+sparc                           allmodconfig    gcc-14.2.0
+sparc                randconfig-001-20250115    gcc-14.2.0
+sparc                randconfig-002-20250115    gcc-14.2.0
+sparc64              randconfig-001-20250115    gcc-14.2.0
+sparc64              randconfig-002-20250115    gcc-14.2.0
+um                   randconfig-001-20250115    clang-18
+um                   randconfig-002-20250115    gcc-12
+x86_64                           allnoconfig    clang-19
+x86_64     buildonly-randconfig-001-20250115    gcc-12
+x86_64     buildonly-randconfig-002-20250115    gcc-12
+x86_64     buildonly-randconfig-003-20250115    clang-19
+x86_64     buildonly-randconfig-004-20250115    clang-19
+x86_64     buildonly-randconfig-005-20250115    gcc-12
+x86_64     buildonly-randconfig-006-20250115    clang-19
+xtensa               randconfig-001-20250115    gcc-14.2.0
+xtensa               randconfig-002-20250115    gcc-14.2.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
