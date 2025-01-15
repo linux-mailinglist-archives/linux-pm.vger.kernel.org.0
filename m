@@ -1,540 +1,294 @@
-Return-Path: <linux-pm+bounces-20494-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20495-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CF5CFA127BD
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 16:42:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7ADEDA127C5
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 16:43:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9067188AF5F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 15:42:44 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 903EB166B18
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 15:43:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4EB9150980;
-	Wed, 15 Jan 2025 15:42:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68856155391;
+	Wed, 15 Jan 2025 15:43:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ltKJl4E8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f51.google.com (mail-ej1-f51.google.com [209.85.218.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0EA0686336;
-	Wed, 15 Jan 2025 15:42:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CE3414A630
+	for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 15:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736955755; cv=none; b=MBjw/YmB70EEgx0SDrg1kFIOCNUUvu4lOFGyRRNfhlxzZQdh/5phrC4A3iO2DR1Exg3zmG51kTV4SkfPEU+A2yUTfkNqEBhDugt+i2EUd3DiF4r85H+5fHj46pUUZSL2yBBIUB+wIhymXKewI1EbHSerF4dxUnAS7MGIsZ8a2mo=
+	t=1736955799; cv=none; b=YBJPH0s08zl3tFPYe7WtOzpnpPufHY+FvkfS4/aTj94Y3KmAiVUJAf/vBkm/QfjsS026BLYQoIm7MlmpC/uTYlhrw30aBCk1rU6O35GvAadbM3E206U6ba74Vk7WSbImyf41bSZbhvUY3O8DTFSw+epnDsjE7yw0pEMOiBjhEUs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736955755; c=relaxed/simple;
-	bh=BlVdU7WbYhvFxgN82gszB+ccPfkJ489wTLwOA0UK4QQ=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=u5z1PD8CDZegnY1gtHoukyz8VDmtt0YqdqGNlkwyJMhqPylhNMirSPooz7ZYqJURFiPkHHf41zhMShBDyz8nradnUUsctU1F7R12ExVSb2gFN8/BCejxK/eCRTkIJxWL/rHGxMrBHnCssOQSYIjlubkjbyqyJWSDQYAwWXX3VjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.216])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YY99T6H3Hz6K5q1;
-	Wed, 15 Jan 2025 23:37:33 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 60330140A35;
-	Wed, 15 Jan 2025 23:42:29 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Wed, 15 Jan
- 2025 16:42:28 +0100
-Date: Wed, 15 Jan 2025 15:42:27 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-CC: Jonathan Cameron <jic23@kernel.org>,
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, <lars@metafoo.de>,
-	<ulf.hansson@linaro.org>, <linux-iio@vger.kernel.org>,
-	<linux-renesas-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Claudiu
- Beznea" <claudiu.beznea.uj@bp.renesas.com>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, <linux-pm@vger.kernel.org>
-Subject: Re: [PATCH 1/2] iio: adc: rzg2l_adc: Drop devm_pm_runtime_enable()
-Message-ID: <20250115154227.00000760@huawei.com>
-In-Reply-To: <bb987a1b-a999-478c-8e35-124fcf41561d@tuxon.dev>
-References: <20250103140042.1619703-1-claudiu.beznea.uj@bp.renesas.com>
-	<20250103140042.1619703-2-claudiu.beznea.uj@bp.renesas.com>
-	<20250104135225.2573285b@jic23-huawei>
-	<44e4a6b4-39a4-49d0-b3a5-fc5545c39a56@tuxon.dev>
-	<20250111131409.36bebfd3@jic23-huawei>
-	<bb987a1b-a999-478c-8e35-124fcf41561d@tuxon.dev>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1736955799; c=relaxed/simple;
+	bh=dmMnEGcq21MgikMSqYyZzPg3t/SJw9VOAtnLYskAp30=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uP+ME6vDAIqqO2JsmjOFvI43jZ4PHaBw6wPnc4UUT8EGt5JW1uJ20DhCiBJuGnz8FB1EypEBdWNH2tkFTSXP2MFvEDKAJFUNB8aDr1JMmUE7/DotaJ3ODujohNMhc00XYyxkIrRdZqlfk2ZZs/4XgX6Rl7RrKBjxony7pl/kKhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ltKJl4E8; arc=none smtp.client-ip=209.85.218.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-aaf0f1adef8so1471843666b.3
+        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 07:43:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1736955795; x=1737560595; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=J3f/BtUt4rfes1Yuu9lxrllgo0vGvTSgAee2lMYuIXM=;
+        b=ltKJl4E8e3dqQxZPpfGXPuESDtva26dY8Nfn6juD0Mj1XBARlBVNWg2lDnUhOiZDsu
+         dFDdVTgKJqHxBOHbSJHxzL0oFqv9fgRwJLRVGYsss0QsqBWrOTvoVKhbMN2zfEp6fpq9
+         ZF1p6+PePqGsVwAkddSgPNFWbtgJFsXX2tU60kF9ZN8QKfz7YNjUZAE7gHpdKc2vZ25O
+         sx9ylI4ZmuNFAJRYeVdjm2ulGMkcW6iJ7tz9b/EIXpIsJqQIMGmtVvjsoby1ER0wQ+e4
+         Lrfu0cFM2C0Wk8sWY14EznFolWOhBXs4p6RJ18us+gAkUBx7FMIhSDC5ZClXOBN9a/fV
+         uQEw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736955795; x=1737560595;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=J3f/BtUt4rfes1Yuu9lxrllgo0vGvTSgAee2lMYuIXM=;
+        b=w7r3p4BTjHKr3iloD7wM0KR6wHALjlEausY10vH2txdqWRcD4NS8Yz2VbiVvjpwN/A
+         og13FaCcdlifXoMfRR14Rdf/ioVcurbNM3qUzYtvHiysj4cG0rCHh1RusKF+rCP4/AFz
+         1f8JrnQH76txQlqUSsYrJQBH/1hxno7CP7gWHID1txWBT7v/Fk4bixoV5zq6Hl0Gbol/
+         gF6VEqVtFAJ1TSDDBNJsB50imthsU48PdeF8KC+eUUtBxCn2wjKUqtqK1ylJLWYYgUtk
+         JwW/7ZYxcnNfNci8Mb+sxZzVtA28PZ2Zg4akv3aGaUrLvQnAYyvBs+aePhQNiqPYgHeo
+         XAaA==
+X-Forwarded-Encrypted: i=1; AJvYcCUaQV2s+rbbNBXArupglnTsjZ4qgShWWbaLACr/cvA53GPZaXcbBsrL3dwAnNPNkn0hXlH4CkFb3g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyJmIlJjq5swvZzFg6gMhk7bHKE3H6LdH7wXSQ9fgGOw9iqJT9O
+	CyH6Rm2PoiscVvVdFXJFtWQTLl7P85iV5y6EJpS/ptsypk7j8uo8pG/lvpvcKbesi+3MsHbD037
+	QRiYNGSSQG7UMkh3HoQFz3pGa7uEFr0oNlfzXhw==
+X-Gm-Gg: ASbGncuznxM53/xgemnVKCaUmRqQSmLBdhy0V6arOVWDy/7FPwwyWT6gMxGYWK7js+Y
+	JRkb/qJarNNgX9t0I1hhkCXIVM/Fursc6rurPcTk=
+X-Google-Smtp-Source: AGHT+IHDoi+mGYLGebHeWkmmNu9kuOD8jns2z/VYjko7Tnbt+R1MkhbZJ+/4XcPAdBtCZQ/TdWXJyEXsB5J2CJpGKLI=
+X-Received: by 2002:a17:907:2cc5:b0:aaf:c326:f2d8 with SMTP id
+ a640c23a62f3a-ab2abdc0257mr3047455066b.57.1736955795506; Wed, 15 Jan 2025
+ 07:43:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
- frapeml500008.china.huawei.com (7.182.85.71)
+References: <20250103163805.1775705-1-claudiu.beznea.uj@bp.renesas.com>
+ <20250103163805.1775705-3-claudiu.beznea.uj@bp.renesas.com> <46c8e8ff-ea39-4dbd-a26c-67fcabf4b589@linaro.org>
+In-Reply-To: <46c8e8ff-ea39-4dbd-a26c-67fcabf4b589@linaro.org>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 15 Jan 2025 16:42:37 +0100
+X-Gm-Features: AbW1kvbeNqMmLKjkvJqDQCdSbnPp1um89aAtf_bRTZINBqlSnyOdq4a4Fmix_nI
+Message-ID: <CAPDyKFq40KB6jKapnm0mOkFGB9-7VEGiBhNrVn_2fzrcziq0=Q@mail.gmail.com>
+Subject: Re: [PATCH 2/6] thermal: of: Export non-devres helper to
+ register/unregister thermal zone
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Claudiu <claudiu.beznea@tuxon.dev>, rafael@kernel.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	geert+renesas@glider.be, magnus.damm@gmail.com, mturquette@baylibre.com, 
+	sboyd@kernel.org, p.zabel@pengutronix.de, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-renesas-soc@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-clk@vger.kernel.org, Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 15 Jan 2025 15:37:57 +0200
-Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
+On Thu, 9 Jan 2025 at 18:34, Daniel Lezcano <daniel.lezcano@linaro.org> wro=
+te:
+>
+>
+> Ulf,
+>
+> can you have a look at this particular patch please ?
+>
+> Perhaps this scenario already happened in the past and there is an
+> alternative to fix it instead of this proposed change
 
-> Hi, Jonathan,
-> 
-> Thank you for your input!
-> 
-> On 11.01.2025 15:14, Jonathan Cameron wrote:
-> > On Mon, 6 Jan 2025 11:18:41 +0200
-> > Claudiu Beznea <claudiu.beznea@tuxon.dev> wrote:
-> >   
-> >> Hi, Jonathan,
-> >>
-> >>
-> >> On 04.01.2025 15:52, Jonathan Cameron wrote:  
-> >>> On Fri,  3 Jan 2025 16:00:41 +0200
-> >>> Claudiu <claudiu.beznea@tuxon.dev> wrote:
-> >>>     
-> >>>> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>    
-> >>> +CC Rafael and linux-pm
-> >>>     
-> >>>>
-> >>>> On all systems where the rzg2l_adc driver is used, the ADC clocks are part
-> >>>> of a PM domain. The code that implements the PM domains support is in
-> >>>> drivers/clk/renesas/rzg2l-cpg.c, the functions of interest for this commit
-> >>>> being rzg2l_cpg_attach_dev() and rzg2l_cpg_deattach_dev(). The PM
-> >>>> domains support is registered with GENPD_FLAG_PM_CLK which, according to
-> >>>> the documentation, instructs genpd to use the PM clk framework while
-> >>>> powering on/off attached devices.
-> >>>>
-> >>>> During probe, the ADC device is attached to the PM domain
-> >>>> controlling the ADC clocks. Similarly, during removal, the ADC device is
-> >>>> detached from the PM domain.
-> >>>>
-> >>>> The detachment call stack is as follows:
-> >>>>
-> >>>> device_driver_detach() ->
-> >>>>   device_release_driver_internal() ->
-> >>>>     __device_release_driver() ->
-> >>>>       device_remove() ->
-> >>>>         platform_remove() ->
-> >>>>           dev_pm_domain_detach()
-> >>>>
-> >>>> During driver unbind, after the ADC device is detached from its PM domain,
-> >>>> the device_unbind_cleanup() function is called, which subsequently invokes
-> >>>> devres_release_all(). This function handles devres resource cleanup.
-> >>>>
-> >>>> If runtime PM is enabled via devm_pm_runtime_enable(), the cleanup process
-> >>>> triggers the action or reset function for disabling runtime PM. This
-> >>>> function is pm_runtime_disable_action(), which leads to the following call
-> >>>> stack of interest when called:
-> >>>>
-> >>>> pm_runtime_disable_action() ->
-> >>>>   pm_runtime_dont_use_autosuspend() ->    
-> >>>
-> >>> So is the only real difference that in the code below you disable runtime pm
-> >>> before autosuspend?    
-> >>
-> >> No, the difference is that now, the driver specific runtime PM APIs are not
-> >> called anymore (through the pointed call stack) after the ADC was removed
-> >> from it's PM domain.  
-> > 
-> > By my reading they are only not called now because you turn autosuspend off
-> > after disabling runtime PM.  
-> 
-> Sorry, I wanted to say that the runtime PM APIs are not called anymore from
-> devm_action_release(), though this call stack:
-> 
-> [   24.801195] Call trace:
-> [   24.803633]  rzg2l_adc_pm_runtime_suspend+0x18/0x54 (P)
-> [   24.808847]  pm_generic_runtime_suspend+0x2c/0x44 (L)
-> [   24.813887]  pm_generic_runtime_suspend+0x2c/0x44
-> [   24.818580]  __rpm_callback+0x48/0x198
-> [   24.822319]  rpm_callback+0x68/0x74
-> [   24.825798]  rpm_suspend+0x100/0x578
-> [   24.829362]  rpm_idle+0xd0/0x17c
-> [   24.832582]  update_autosuspend+0x30/0xc4
-> [   24.836580]  pm_runtime_disable_action+0x40/0x64
-> [   24.841184]  devm_action_release+0x14/0x20
-> [   24.845274]  devres_release_all+0xa0/0x100
-> [   24.849361]  device_unbind_cleanup+0x18/0x60
-> 
-> This is because I dropped the devm_pm_runtime_enable() which registers the
-> pm_runtime_disable_action(), which is called at the time the
-> device_unbind_cleanup() is called, which is called when the ADC is not
-> anymore part of its PM domain.
-> 
-> If I change the order in remove function proposed in this patch, thus do:
-> 
-> +static void rzg2l_adc_remove(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +
-> +	pm_runtime_dont_use_autosuspend(dev);
-> +	pm_runtime_disable(dev);
->  }
-> 
-> nothing changes with the behavior of this patch. There will be no issue if
-> the device is runtime suspended/resumed through the
-> pm_runtime_dont_use_autosuspend() because at the time the
-> rzg2l_adc_remove() is called the ADC is still part of the PM domain.
-> 
-> 
-> 
-> >   
-> >>
-> >>  
-> >>>  Can you still do that with a devm callback just not
-> >>> the standard one?    
-> >>
-> >> No. It doesn't matter if we call the standard devm callback or driver
-> >> specific one. As long as it is devm it will impact us as long as the driver
-> >> specific runtime PM APIs are called through devres_release_all() after
-> >> dev_pm_domain_detach(). And at that time the PM domain may be off along
-> >> with its clocks disabled.  
-> > 
-> > As above, I think that this is only the case because of the reordering
-> > of those two calls, not something more fundamental.  
-> 
-> I tried having a local devm function (the following diff applied with this
-> patch reverted) identical with pm_runtime_disable_action():
-> 
-> diff --git a/drivers/iio/adc/rzg2l_adc.c b/drivers/iio/adc/rzg2l_adc.c
-> index 22a581c894f8..459cc9c67eec 100644
-> --- a/drivers/iio/adc/rzg2l_adc.c
-> +++ b/drivers/iio/adc/rzg2l_adc.c
-> @@ -423,6 +423,12 @@ static int rzg2l_adc_hw_init(struct device *dev,
-> struct rzg2l_adc *adc)
->         return ret;
->  }
-> 
-> +static void rzg2l_pm_runtime_disable(void *data)
-> +{
-> +       pm_runtime_dont_use_autosuspend(data);
-> +       pm_runtime_disable(data);
-> +}
-> +
->  static int rzg2l_adc_probe(struct platform_device *pdev)
->  {
->         struct device *dev = &pdev->dev;
-> @@ -463,7 +469,9 @@ static int rzg2l_adc_probe(struct platform_device *pdev)
-> 
->         pm_runtime_set_autosuspend_delay(dev, 300);
->         pm_runtime_use_autosuspend(dev);
-> -       ret = devm_pm_runtime_enable(dev);
-> +       pm_runtime_enable(dev);
-> +
-> +       ret = devm_add_action_or_reset(dev, rzg2l_pm_runtime_disable, dev);
->         if (ret)
->                 return ret;
-> 
-> With this the issue is still reproducible.
-> 
-> However, changing the order of functions in rzg2l_pm_runtime_disable() and
-> having it like:
-> 
-> +static void rzg2l_pm_runtime_disable(void *data)
-> +{
-> +       pm_runtime_disable(data);
-> +       pm_runtime_dont_use_autosuspend(data);
-> +}
-> 
-> 
-> leads to no failure when doing unbind/bind.
-> 
-> However, I see the pm_runtime_disable() can still call rpm_resume() under
-> certain conditions. It can still lead to failures if it is called after the
-> device was remove from its PM domain.
-> 
-> > 
-> > In driver remove flow, device_unbind_cleanup9() is called
-> > just after device_remove() which is calling the dev->driver_remove()
-> > callback. There are no runtime pm related calls in between that I can see.  
-> 
-> On my side the device_remove() is calling dev->bus->remove() which is
-> platform_remove(), which calls the dev_pm_domain_detach(). The
-> dev_pm_domain_detach() detaches the ADC from it's PM domain. Because of
-> this, accessing now the ADC registers after a runtime resume leads to
-> failures pointed in this patch (as of my investigation) (as the ADC is not
-> anymore part of its PM domain and its PM domain is not started anymore
-> though runtime PM APIs).
-> 
-> A similar issue was found while I was adding thermal support for RZ/G3S,
-> explained in
-> https://lore.kernel.org/all/20250103163805.1775705-3-claudiu.beznea.uj@bp.renesas.com
-> 
-> 
-> Jonathan, Rafael, Ulf, all,
-> 
-> Do consider OK to change the order in pm_runtime_disable_action() to get
-> rid of these issues, e.g.:
-> 
-> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> index 2ee45841486b..f27d311d2619 100644
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1547,8 +1547,8 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
-> 
->  static void pm_runtime_disable_action(void *data)
->  {
-> -       pm_runtime_dont_use_autosuspend(data);
->         pm_runtime_disable(data);
-> +       pm_runtime_dont_use_autosuspend(data);
->  }
-> 
-> though I see a rpm_resume() call is still possible though pm_runtime_disable().
+I think the patch makes sense.
 
-This isn't the right fix.  I was just trying to get to the bottom of why
-your fix worked and reordering was a false path. If we go ahead with this
-patch, then put them in the same order as in pm_runtime_disable_action()
-and add a nice big comment on why we have to do them manually.
+If there is a PM domain that is attached to the device that is
+managing the clocks for the thermal zone, the detach procedure
+certainly needs to be well controlled/synchronized.
 
-Now you've talked me through the call of platform_remove() I can see the
-dev_pm_domain_detach(). It seems odd that is called before 
-the devres manged part of device tear down.
+>
+>
+> On 03/01/2025 17:38, Claudiu wrote:
+> > From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+> >
+> > On the Renesas RZ/G3S (and other Renesas SoCs, e.g., RZ/G2{L, LC, UL}),
+> > clocks are managed through PM domains. These PM domains, registered on
+> > behalf of the clock controller driver, are configured with
+> > GENPD_FLAG_PM_CLK. In most of the Renesas drivers used by RZ SoCs, the
+> > clocks are enabled/disabled using runtime PM APIs.
+> >
+> > During probe, devices are attached to the PM domain controlling their
+> > clocks. Similarly, during removal, devices are detached from the PM dom=
+ain.
+> >
+> > The detachment call stack is as follows:
+> >
+> > device_driver_detach() ->
+> >    device_release_driver_internal() ->
+> >      __device_release_driver() ->
+> >        device_remove() ->
+> >          platform_remove() ->
+> >         dev_pm_domain_detach()
+> >
+> > In the upcoming Renesas RZ/G3S thermal driver, the
+> > struct thermal_zone_device_ops::change_mode API is implemented to
+> > start/stop the thermal sensor unit. Register settings are updated withi=
+n
+> > the change_mode API.
+> >
+> > In case devres helpers are used for thermal zone register/unregister th=
+e
+> > struct thermal_zone_device_ops::change_mode API is invoked when the
+> > driver is unbound. The identified call stack is as follows:
+> >
+> > device_driver_detach() ->
+> >    device_release_driver_internal() ->
+> >      device_unbind_cleanup() ->
+> >        devres_release_all() ->
+> >          devm_thermal_of_zone_release() ->
+> >         thermal_zone_device_disable() ->
+> >           thermal_zone_device_set_mode() ->
+> >             rzg3s_thermal_change_mode()
+> >
+> > The device_unbind_cleanup() function is called after the thermal device=
+ is
+> > detached from the PM domain (via dev_pm_domain_detach()).
+> >
+> > The rzg3s_thermal_change_mode() implementation calls
+> > pm_runtime_resume_and_get()/pm_runtime_put_autosuspend() before/after
+> > accessing the registers. However, during the unbind scenario, the
+> > devm_thermal_of_zone_release() is invoked after dev_pm_domain_detach().
+> > Consequently, the clocks are not enabled, as the device is removed from
+> > the PM domain at this time, leading to an Asynchronous SError Interrupt=
+.
+> > The system cannot be used after this.
+> >
+> > Add thermal_of_zone_register()/thermal_of_zone_unregister(). These will
+> > be used in the upcomming RZ/G3S thermal driver.
+> >
+> > Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-The change here to me smells like a hack to get around that and looks
-like a bad idea from a maintenance point of view.
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-Rafael/all, right approach or should we do something else?
+Kind regards
+Uffe
 
-Jonathan
-
-
-> 
-> Thank you,
-> Claudiu
-> 
-> > 
-> > So you are moving these calls a little earlier but not in a fashion that
-> > seems to have any involvement with anything else.
-> > 
-> > 
-> > Call stack being
-> > device_release_driver_internal()  
-> > -> __device_release_driver()
-> >   -> device_remove() where you are now calling the disables  
-> >    .. some dma stuff  
-> >   -> device_unbind_cleanup() where the calling of disables previously was.  
-> > 
-> > other than that unrelated DMA stuff there is nothing between the
-> > two calls. 
-> > 
-> > There is runtime PM stuff before any of this, but not in the crucial
-> > portion this code affects.
-> > 
-> > So I am thinking the only change that actually matters is the trivial
-> > reorder mentioned above.
-> > 
-> > 
-> > 
-> > 
-> >   
-> >>  
-> >>>
-> >>>     
-> >>>>     __pm_runtime_use_autosuspend() ->
-> >>>>       update_autosuspend() ->
-> >>>>         rpm_idle()
-> >>>>
-> >>>> The rpm_idle() function attempts to runtime resume the ADC device.    
-> >>>
-> >>> Can you give a little more on that path. I'm not immediately spotting
-> >>> how rpm_idle() is causing a resume    
-> >>
-> >> It is not in particular about the resume. Runtime suspend/resume after
-> >> devres_release_all() will be affected.
-> >>
-> >> In particular, the rpm_idle() can call rpm_suspend() (called on the out
-> >> label of rpm_idle()) and rpm_suspend() may call the driver specific
-> >> runtime_suspend API through the following code (from the rpm_suspend()
-> >> function):
-> >>
-> >>         callback = RPM_GET_CALLBACK(dev, runtime_suspend);
-> >>
-> >>
-> >>
-> >>         dev_pm_enable_wake_irq_check(dev, true);
-> >>
-> >>         retval = rpm_callback(callback, dev);
-> >>
-> >>         if (retval)
-> >>
-> >>                 goto fail;
-> >>
-> >>
-> >>
-> >> The full stack generated when running:
-> >> # cd /sys/bus/platform/drivers/rzg2l-adc
-> >> # while :; do echo 10058000.adc > unbind ; echo 10058000.adc > bind; done
-> >>
-> >> is as follows:
-> >>
-> >> [   24.801195] Call trace:
-> >> [   24.803633]  rzg2l_adc_pm_runtime_suspend+0x18/0x54 (P)
-> >> [   24.808847]  pm_generic_runtime_suspend+0x2c/0x44 (L)
-> >> [   24.813887]  pm_generic_runtime_suspend+0x2c/0x44
-> >> [   24.818580]  __rpm_callback+0x48/0x198
-> >> [   24.822319]  rpm_callback+0x68/0x74
-> >> [   24.825798]  rpm_suspend+0x100/0x578
-> >> [   24.829362]  rpm_idle+0xd0/0x17c
-> >> [   24.832582]  update_autosuspend+0x30/0xc4
-> >> [   24.836580]  pm_runtime_disable_action+0x40/0x64
-> >> [   24.841184]  devm_action_release+0x14/0x20
-> >> [   24.845274]  devres_release_all+0xa0/0x100
-> >> [   24.849361]  device_unbind_cleanup+0x18/0x60
-> >> [   24.853618]  device_release_driver_internal+0x1ec/0x228
-> >> [   24.858828]  device_driver_detach+0x18/0x24
-> >> [   24.862998]  unbind_store+0xb4/0xb8
-> >> [   24.866478]  drv_attr_store+0x24/0x38
-> >> [   24.870135]  sysfs_kf_write+0x44/0x54
-> >> [   24.873795]  kernfs_fop_write_iter+0x118/0x1a8
-> >> [   24.878229]  vfs_write+0x2ac/0x358
-> >> [   24.881627]  ksys_write+0x68/0xfc
-> >> [   24.884934]  __arm64_sys_write+0x1c/0x28
-> >> [   24.888846]  invoke_syscall+0x48/0x110
-> >> [   24.892592]  el0_svc_common.constprop.0+0xc0/0xe0
-> >> [   24.897285]  do_el0_svc+0x1c/0x28
-> >> [   24.900593]  el0_svc+0x30/0xd0
-> >> [   24.903647]  el0t_64_sync_handler+0xc8/0xcc
-> >> [   24.907821]  el0t_64_sync+0x198/0x19c
-> >> [   24.911481] Code: 910003fd f9403c00 f941bc01 f9400020 (b9400000)  
-> > 
-> > Thanks, that was helpful.
-> >   
-> >>
-> >>
-> >> Digging it further today: on the Renesas RZ/G3S we implement the power
-> >> domain on/off and we register the PM domain with GENPD_FLAG_PM_CLK. The
-> >> on/off PM domain functionality is implemented though the clock controller
-> >> MSTOP functionality which blocks the bus access to the specific IP (in this
-> >> particular case to the ADC).
-> >>
-> >> The issue is reproducible when doing:
-> >> # cd /sys/bus/platform/drivers/rzg2l-adc
-> >> # while :; do echo 10058000.adc > unbind ; echo 10058000.adc > bind; done
-> >>
-> >> I noticed today that doing single manual unbind+bind doesn't always leads
-> >> to aborts. It may be related to the fact that, as I noticed, the genpd
-> >> power off is called asynchronously as a work (through
-> >> genpd_power_off_work_fn()).
-> >>
-> >> I also noticed today what when there is no on/off functionality implemented
-> >> on the PM domain we have no failures (as the MSTOP is not implemented and
-> >> the bus access to the specific IP is not blocked as there is no PM domain
-> >> on/off available).  
-> > 
-> > The PM domain stuff is only called later in device_unbind_cleanup()
-> > so I don't see the relevance. All the code you are modifying is
-> > done before that happens.
-> > 
-> > Jonathan
-> > 
-> >   
-> >>
-> >>
-> >>  
-> >>>     
-> >>>> However,
-> >>>> at the point it is called, the ADC device is no longer part of the PM
-> >>>> domain (which manages the ADC clocks). Since the rzg2l_adc runtime PM
-> >>>> APIs directly modifies hardware registers, the
-> >>>> rzg2l_adc_pm_runtime_resume() function is invoked without the ADC clocks
-> >>>> being enabled. This is because the PM domain no longer resumes along with
-> >>>> the ADC device. As a result, this leads to system aborts.
-> >>>>
-> >>>> Drop the devres API for runtime PM enable.
-> >>>>
-> >>>> Fixes: 89ee8174e8c8 ("iio: adc: rzg2l_adc: Simplify the runtime PM code")
-> >>>> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>    
-> >>>
-> >>> See below. I'm doubtful in general about the sequence changes and
-> >>> specifically you can't just remove one devm callback from a driver without
-> >>> modifying a lot of other code / leaving really fragile ordering.
-> >>>
-> >>> Jonathan
-> >>>     
-> >>>> ---
-> >>>>  drivers/iio/adc/rzg2l_adc.c | 33 ++++++++++++++++++++++++---------
-> >>>>  1 file changed, 24 insertions(+), 9 deletions(-)
-> >>>>
-> >>>> diff --git a/drivers/iio/adc/rzg2l_adc.c b/drivers/iio/adc/rzg2l_adc.c
-> >>>> index 883c167c0670..f12f3daf08cc 100644
-> >>>> --- a/drivers/iio/adc/rzg2l_adc.c
-> >>>> +++ b/drivers/iio/adc/rzg2l_adc.c
-> >>>> @@ -464,25 +464,26 @@ static int rzg2l_adc_probe(struct platform_device *pdev)
-> >>>>  
-> >>>>  	pm_runtime_set_autosuspend_delay(dev, 300);
-> >>>>  	pm_runtime_use_autosuspend(dev);
-> >>>> -	ret = devm_pm_runtime_enable(dev);
-> >>>> -	if (ret)
-> >>>> -		return ret;
-> >>>> +	pm_runtime_enable(dev);
-> >>>>  
-> >>>>  	platform_set_drvdata(pdev, indio_dev);
-> >>>>  
-> >>>>  	ret = rzg2l_adc_hw_init(dev, adc);
-> >>>> -	if (ret)
-> >>>> -		return dev_err_probe(&pdev->dev, ret,
-> >>>> -				     "failed to initialize ADC HW\n");
-> >>>> +	if (ret) {
-> >>>> +		dev_err_probe(&pdev->dev, ret, "failed to initialize ADC HW\n");
-> >>>> +		goto rpm_disable;
-> >>>> +	}
-> >>>>  
-> >>>>  	irq = platform_get_irq(pdev, 0);
-> >>>> -	if (irq < 0)
-> >>>> -		return irq;
-> >>>> +	if (irq < 0) {
-> >>>> +		ret = irq;
-> >>>> +		goto rpm_disable;
-> >>>> +	}
-> >>>>  
-> >>>>  	ret = devm_request_irq(dev, irq, rzg2l_adc_isr,
-> >>>>  			       0, dev_name(dev), adc);
-> >>>>  	if (ret < 0)
-> >>>> -		return ret;
-> >>>> +		goto rpm_disable;
-> >>>>  
-> >>>>  	init_completion(&adc->completion);
-> >>>>  
-> >>>> @@ -493,6 +494,19 @@ static int rzg2l_adc_probe(struct platform_device *pdev)
-> >>>>  	indio_dev->num_channels = adc->data->num_channels;
-> >>>>  
-> >>>>  	return devm_iio_device_register(dev, indio_dev);
-> >>>> +
-> >>>> +rpm_disable:
-> >>>> +	pm_runtime_disable(dev);
-> >>>> +	pm_runtime_dont_use_autosuspend(dev);
-> >>>> +	return ret;    
-> >>> If you have to move away from devm you must do it for all calls after
-> >>> the first thing that is manually cleaned up.
-> >>> As you have it here the userspace interfaces are left available at a point
-> >>> well after power down.    
-> >>
-> >> I see, thank you for pointing it.
-> >>
-> >> And thank you for checking this,
-> >> Claudiu
-> >>  
-> >>>     
-> >>>> +}
-> >>>> +
-> >>>> +static void rzg2l_adc_remove(struct platform_device *pdev)
-> >>>> +{
-> >>>> +	struct device *dev = &pdev->dev;
-> >>>> +
-> >>>> +	pm_runtime_disable(dev);
-> >>>> +	pm_runtime_dont_use_autosuspend(dev);
-> >>>>  }
-> >>>>  
-> >>>>  static const struct rzg2l_adc_hw_params rzg2l_hw_params = {
-> >>>> @@ -614,6 +628,7 @@ static const struct dev_pm_ops rzg2l_adc_pm_ops = {
-> >>>>  
-> >>>>  static struct platform_driver rzg2l_adc_driver = {
-> >>>>  	.probe		= rzg2l_adc_probe,
-> >>>> +	.remove		= rzg2l_adc_remove,
-> >>>>  	.driver		= {
-> >>>>  		.name		= DRIVER_NAME,
-> >>>>  		.of_match_table = rzg2l_adc_match,    
-> >>>     
-> >>
-> >>  
-> >   
-> 
-> 
-> 
-
+> > ---
+> >   drivers/thermal/thermal_of.c |  8 +++++---
+> >   include/linux/thermal.h      | 14 ++++++++++++++
+> >   2 files changed, 19 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.=
+c
+> > index fab11b98ca49..8fc35d20db60 100644
+> > --- a/drivers/thermal/thermal_of.c
+> > +++ b/drivers/thermal/thermal_of.c
+> > @@ -329,11 +329,12 @@ static bool thermal_of_should_bind(struct thermal=
+_zone_device *tz,
+> >    *
+> >    * @tz: a pointer to the thermal zone structure
+> >    */
+> > -static void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+> > +void thermal_of_zone_unregister(struct thermal_zone_device *tz)
+> >   {
+> >       thermal_zone_device_disable(tz);
+> >       thermal_zone_device_unregister(tz);
+> >   }
+> > +EXPORT_SYMBOL_GPL(thermal_of_zone_unregister);
+> >
+> >   /**
+> >    * thermal_of_zone_register - Register a thermal zone with device nod=
+e
+> > @@ -355,8 +356,8 @@ static void thermal_of_zone_unregister(struct therm=
+al_zone_device *tz)
+> >    *  - ENOMEM: if one structure can not be allocated
+> >    *  - Other negative errors are returned by the underlying called fun=
+ctions
+> >    */
+> > -static struct thermal_zone_device *thermal_of_zone_register(struct dev=
+ice_node *sensor, int id, void *data,
+> > -                                                         const struct =
+thermal_zone_device_ops *ops)
+> > +struct thermal_zone_device *thermal_of_zone_register(struct device_nod=
+e *sensor, int id, void *data,
+> > +                                                  const struct thermal=
+_zone_device_ops *ops)
+> >   {
+> >       struct thermal_zone_device_ops of_ops =3D *ops;
+> >       struct thermal_zone_device *tz;
+> > @@ -429,6 +430,7 @@ static struct thermal_zone_device *thermal_of_zone_=
+register(struct device_node *
+> >
+> >       return ERR_PTR(ret);
+> >   }
+> > +EXPORT_SYMBOL_GPL(thermal_of_zone_register);
+> >
+> >   static void devm_thermal_of_zone_release(struct device *dev, void *re=
+s)
+> >   {
+> > diff --git a/include/linux/thermal.h b/include/linux/thermal.h
+> > index 69f9bedd0ee8..adbb4092a064 100644
+> > --- a/include/linux/thermal.h
+> > +++ b/include/linux/thermal.h
+> > @@ -195,13 +195,23 @@ struct thermal_zone_params {
+> >
+> >   /* Function declarations */
+> >   #ifdef CONFIG_THERMAL_OF
+> > +struct thermal_zone_device *thermal_of_zone_register(struct device_nod=
+e *sensor, int id, void *data,
+> > +                                                  const struct thermal=
+_zone_device_ops *ops);
+> >   struct thermal_zone_device *devm_thermal_of_zone_register(struct devi=
+ce *dev, int id, void *data,
+> >                                                         const struct th=
+ermal_zone_device_ops *ops);
+> >
+> > +void thermal_of_zone_unregister(struct thermal_zone_device *tz);
+> >   void devm_thermal_of_zone_unregister(struct device *dev, struct therm=
+al_zone_device *tz);
+> >
+> >   #else
+> >
+> > +static inline
+> > +struct thermal_zone_device *thermal_of_zone_register(struct device_nod=
+e *sensor, int id, void *data,
+> > +                                                  const struct thermal=
+_zone_device_ops *ops)
+> > +{
+> > +     return ERR_PTR(-ENOTSUPP);
+> > +}
+> > +
+> >   static inline
+> >   struct thermal_zone_device *devm_thermal_of_zone_register(struct devi=
+ce *dev, int id, void *data,
+> >                                                         const struct th=
+ermal_zone_device_ops *ops)
+> > @@ -209,6 +219,10 @@ struct thermal_zone_device *devm_thermal_of_zone_r=
+egister(struct device *dev, in
+> >       return ERR_PTR(-ENOTSUPP);
+> >   }
+> >
+> > +static inline void thermal_of_zone_unregister(struct thermal_zone_devi=
+ce *tz)
+> > +{
+> > +}
+> > +
+> >   static inline void devm_thermal_of_zone_unregister(struct device *dev=
+,
+> >                                                  struct thermal_zone_de=
+vice *tz)
+> >   {
+>
+>
+> --
+> <http://www.linaro.org/> Linaro.org =E2=94=82 Open source software for AR=
+M SoCs
+>
+> Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+> <http://twitter.com/#!/linaroorg> Twitter |
+> <http://www.linaro.org/linaro-blog/> Blog
 
