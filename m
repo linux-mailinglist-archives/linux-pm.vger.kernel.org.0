@@ -1,146 +1,169 @@
-Return-Path: <linux-pm+bounces-20496-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20497-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0102EA127EC
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 16:55:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 37088A1280D
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 17:03:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24703166085
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 15:55:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 90EE7188BE1A
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 16:03:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7694915383A;
-	Wed, 15 Jan 2025 15:55:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5ABC16DECB;
+	Wed, 15 Jan 2025 16:02:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EiYt2/pH"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="PI74K4vy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4DDE924A7C3;
-	Wed, 15 Jan 2025 15:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEE6114F12D;
+	Wed, 15 Jan 2025 16:02:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736956505; cv=none; b=lz8mh8/ZqvWXI6l8mN9uNgB6mtBTgsoxZcaFRtRhMPI2bztcjxHTbevEDbUcUkhlqPZWWv3Sv+Rg5mc/C9fiH6s2uSwZ6evU5l8Lf2zQH9ZbUvaKgmr44IPTAyl3tsvohmVg4+xWUxvpTKEWYv4625eXWXc4v/WUo8qZGlKf1+o=
+	t=1736956979; cv=none; b=rlsNxW0QAkoCzUgJsu5iA7rPFTd/ZSFtRXDbj3Y1vwQ3ycbkX5ubs2xnxCZdqX/f1HwgKJjd+RhItcnHFGGbkhSvTbIYhO8CW/euPH0XI2lNuHiF2qfgtP0IrbaT0jT1c7dcEeZRAHzvVxK2mhi4yVMK0KL3LaQlwaJw0EeA9g0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736956505; c=relaxed/simple;
-	bh=+QPiUTiSAK22ayBo/E8hcV3AUVObrjc8o5z9lxWA71s=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o8dYMZ7AR7vvEJ2Z9BiKlh1pWBSdrW52dqvSp3fP3YUTZ3HFjnxClr1S3IQ8V61INQ3dtC/yNv4lwrXKAufMfemoM2xM803vYrW3+9auxz5AHNlh+PuClElU6fHG52gYScMJ5R0uosjKozEWn/xrb1HWB09/dMq8WqPRSyBL4ag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EiYt2/pH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E23CAC4CEDF;
-	Wed, 15 Jan 2025 15:55:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1736956504;
-	bh=+QPiUTiSAK22ayBo/E8hcV3AUVObrjc8o5z9lxWA71s=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=EiYt2/pHsTuW0AsmNH6wvfOc86c7IDCzBzbgwZeqRmOl7LLajF8o7swErKxRlQDbR
-	 b6xN1Mb9O4/STBdh9nZ6SWqURj8jAGNYahxv0I8KcRg4gYQXOV6/hdSyqWjtuIukr0
-	 w2hkpuAHkSmzPtLL0pVCYpyno+OiMAB81Y8SGJ7ECeWdVjpn430QN4czQBgBsRncVT
-	 ZLeCKksgeS32KzEnCPXFKPCpQ2M86UFBDh7RHL3VPSSY2ebtYARHthoWnRrWliA/88
-	 84libB6dqZaz+r7LU2Z2t7G2ZXDpyVDHcpmwTdl4FezTViqfeKidxLvkMGcGipekPZ
-	 sDkguvZ3jbvQg==
-Received: by mail-oa1-f52.google.com with SMTP id 586e51a60fabf-2a3939a758dso2339578fac.1;
-        Wed, 15 Jan 2025 07:55:04 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVD4SvFeiHuGp0bnY+RJ/S/M64mCJkBM5VZj4RQt39dU99BiQsA84ck4/sZ5PMnK1xB31pV0/Q0Ku0=@vger.kernel.org, AJvYcCVeZBRFxbWoVr/gy/l/nz2oZVUO9XCgn9/5nCOtajm93zS0nv2QCbt/wrMiA4dAd13/U4jcfp8/hpT9aso=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKMBeDDtIm3jVvlNjTiWNtbljOdvvgv071dvvkriz5TaHG22IR
-	fBo+P1b/oleWTKZ68nS6MZ27ulfqwAIrujxJTA9mnsXBgJwRhWHfzaTnRd9yDEjNVoPHV5ZsmHr
-	7YoEodyrpLzeHONGax/DejS+1oCU=
-X-Google-Smtp-Source: AGHT+IEvEE1AQjnGEBb9oOAF6OO9hzl851xb1B7iB3glRUngOnIZK5tFlSysC2vVROe7kf2PIpVFRP+oM4MOm9r2HeY=
-X-Received: by 2002:a05:6871:80c5:b0:29d:c832:840d with SMTP id
- 586e51a60fabf-2aa0699a7dbmr19065306fac.35.1736956504202; Wed, 15 Jan 2025
- 07:55:04 -0800 (PST)
+	s=arc-20240116; t=1736956979; c=relaxed/simple;
+	bh=lkic8j+SMxOU3XLWEexi01K46tUhYr1mvLUvm+kAN8o=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O5jh8sbpSPLLuQ+D4YmIdxoStJegvSTD3do+/m3fD1jGzs9BTUvsGhwhnPaSLuuE2VeQJfPH8r7mHFuwHFWIMqO2JH/OUESgHlTyNvPcXUuaQxf8QWhc4zVeSHqPKYKLdNwT1fMy/kn9BhsOXgmSv+Jzy6bydljgl0KMeti/yds=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=PI74K4vy; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 36F09A087A;
+	Wed, 15 Jan 2025 17:02:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=OdOKTTKoBkRw2qI2a3fK
+	Jbn7RnYioij+mv7jrByPp7M=; b=PI74K4vytHlWnFtcfaRP8LDT89PaLFOQ0t/2
+	4UFTSVvh/PyO7Ouly96fH3bMQCK8e1CPH7UZo0/AdDCO064mrMLEdhc8XMWY+ePk
+	185NySwiZLF698xVRw11sSmP86TjFA2xT/jZPKQ603AG8Nt0uQhU1t9rtYSTPszb
+	qceslXwkT6Nsk4hRy5ZsQfKc0z9LgK4ZUIbcuMD/B7DUTyxJihZEu7LsBrVuUCY0
+	S4dsw4sZ3KyULIBtOr96dQrn5xkbAyw//nuk6s7UBlzn2GSUDdTTAi8mvVe5V2jr
+	CVP1Qb7ThBrz2mxUZDTRPOHaxRkW4T2wRegTCFZvdp0GY/tC6Goshypw+gyw0+EZ
+	eZte40TaomgpMRygs6HmHGtAUj+PIywCl2g0XXIoPbmdVplgREV9m6uL84XQ6dqN
+	rvCtf78SCT+ue6EkFnsbO9+nnAEUvxExuhadQTf26lpEiqmrGpj+ZgJLlMTFB7gs
+	XTjpRTJPYabU/uZLZJY+6gbgf6cusv0sWlCE21PYcTRosxooA5Msf7rAUbfVJQA4
+	xlb4biIcBbvS8mFz7fX85KqEnr4V7yTYcq9Fi8+kXw6bMufLf+Ijxe2INMPHugGw
+	v4vWigHu4DG1wCInp52Kx1BcQAOdUyj3PRORJMtQR+wbjMik167IVqyc64To6lzG
+	M+EUI9w=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
+	<pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: [PATCH 2/4] pm: runtime: Add new devm functions
+Date: Wed, 15 Jan 2025 17:02:39 +0100
+Message-ID: <20250115160244.1102881-2-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.48.0
+In-Reply-To: <20250115160244.1102881-1-csokas.bence@prolan.hu>
+References: <20250115160244.1102881-1-csokas.bence@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6116275.lOV4Wx5bFT@rjwysocki.net> <1907276.tdWV9SEqCh@rjwysocki.net>
- <8959e72a-600d-427a-9ab2-54f14b056766@arm.com>
-In-Reply-To: <8959e72a-600d-427a-9ab2-54f14b056766@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 15 Jan 2025 16:54:53 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iVOg5CnYo8OQ5E8VGLdn4cvVdFFQqpOgpWvij4a4cdxQ@mail.gmail.com>
-X-Gm-Features: AbW1kvYml30kwv_BE_IxV34fnXWUxoZyiG2hMtyEQrLXK3Qdi33cB3NsiTwvTFE
-Message-ID: <CAJZ5v0iVOg5CnYo8OQ5E8VGLdn4cvVdFFQqpOgpWvij4a4cdxQ@mail.gmail.com>
-Subject: Re: [PATCH v1 2/9] cpuidle: teo: Reorder candidate state index checks
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1736956967;VERSION=7983;MC=3933488075;ID=287148;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29ACD94852647067
 
-On Wed, Jan 15, 2025 at 3:46=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
->
-> On 1/13/25 18:36, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Since constraint_idx may be 0, the candidate state index may change to =
-0
-> > after assigning constraint_idx to it, so first check if it is greater
-> > than constraint_idx (and update it if so) and then check it against 0.
->
-> So the reason I've left this where it was is because the prev_intercept_i=
-dx
-> was supposed to query the sleep length if we're in an majority-intercept
-> period and then it makes sense to query the sleep length (to detect such
-> a period being over).
-> A constraint_idx =3D=3D 0 scenario doesn't need the intercept-machinery t=
-o
-> work at all, why are we querying the sleep length then?
+Add `devm_pm_runtime_set_active()` and
+`devm_pm_runtime_get_noresume()` for
+simplifying common use cases in drivers.
 
-In case the constraint is different next time and it's better to know
-the sleep length to properly classify the wakeup.
+Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+---
+ drivers/base/power/runtime.c | 36 ++++++++++++++++++++++++++++++++++++
+ include/linux/pm_runtime.h   |  4 ++++
+ 2 files changed, 40 insertions(+)
 
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > This is a rebased variant of
-> >
-> > https://lore.kernel.org/linux-pm/8476650.T7Z3S40VBb@rjwysocki.net/
-> >
-> > ---
-> >  drivers/cpuidle/governors/teo.c |   15 ++++++++-------
-> >  1 file changed, 8 insertions(+), 7 deletions(-)
-> >
-> > --- a/drivers/cpuidle/governors/teo.c
-> > +++ b/drivers/cpuidle/governors/teo.c
-> > @@ -428,6 +428,14 @@
-> >                               break;
-> >               }
-> >       }
-> > +
-> > +     /*
-> > +      * If there is a latency constraint, it may be necessary to selec=
-t an
-> > +      * idle state shallower than the current candidate one.
-> > +      */
-> > +     if (idx > constraint_idx)
-> > +             idx =3D constraint_idx;
-> > +
-> >       if (!idx && prev_intercept_idx) {
-> >               /*
-> >                * We have to query the sleep length here otherwise we do=
-n't
-> > @@ -439,13 +447,6 @@
-> >       }
-> >
-> >       /*
-> > -      * If there is a latency constraint, it may be necessary to selec=
-t an
-> > -      * idle state shallower than the current candidate one.
-> > -      */
-> > -     if (idx > constraint_idx)
-> > -             idx =3D constraint_idx;
-> > -
-> > -     /*
->
-> We could leave this here and just do goto end;?
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 2ee45841486b..f0a6c64bec19 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1545,6 +1545,24 @@ void pm_runtime_enable(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(pm_runtime_enable);
+ 
++static void pm_runtime_set_suspended_action(void *data)
++{
++	pm_runtime_set_suspended(data);
++}
++
++/**
++ * devm_pm_runtime_set_active - devres-enabled version of pm_runtime_set_active.
++ *
++ * @dev: Device to handle.
++ */
++int devm_pm_runtime_set_active(struct device *dev)
++{
++	pm_runtime_set_active(dev);
++
++	return devm_add_action_or_reset(dev, pm_runtime_set_suspended_action, dev);
++}
++EXPORT_SYMBOL_GPL(devm_pm_runtime_set_active);
++
+ static void pm_runtime_disable_action(void *data)
+ {
+ 	pm_runtime_dont_use_autosuspend(data);
+@@ -1567,6 +1585,24 @@ int devm_pm_runtime_enable(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
+ 
++static void pm_runtime_put_noidle_action(void *data)
++{
++	pm_runtime_put_noidle(data);
++}
++
++/**
++ * devm_pm_runtime_get_noresume - devres-enabled version of pm_runtime_get_noresume.
++ *
++ * @dev: Device to handle.
++ */
++int devm_pm_runtime_get_noresume(struct device *dev)
++{
++	pm_runtime_get_noresume(dev);
++
++	return devm_add_action_or_reset(dev, pm_runtime_put_noidle_action, dev);
++}
++EXPORT_SYMBOL_GPL(devm_pm_runtime_get_noresume);
++
+ /**
+  * pm_runtime_forbid - Block runtime PM of a device.
+  * @dev: Device to handle.
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index d39dc863f612..d7eca86150b8 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -93,7 +93,9 @@ extern void pm_runtime_new_link(struct device *dev);
+ extern void pm_runtime_drop_link(struct device_link *link);
+ extern void pm_runtime_release_supplier(struct device_link *link);
+ 
++int devm_pm_runtime_set_active(struct device *dev);
+ extern int devm_pm_runtime_enable(struct device *dev);
++int devm_pm_runtime_get_noresume(struct device *dev);
+ 
+ /**
+  * pm_suspend_ignore_children - Set runtime PM behavior regarding children.
+@@ -276,7 +278,9 @@ static inline void __pm_runtime_disable(struct device *dev, bool c) {}
+ static inline void pm_runtime_allow(struct device *dev) {}
+ static inline void pm_runtime_forbid(struct device *dev) {}
+ 
++static inline int devm_pm_runtime_set_active(struct device *dev) { return 0; }
+ static inline int devm_pm_runtime_enable(struct device *dev) { return 0; }
++static inline int devm_pm_runtime_get_noresume(struct device *dev) { return 0; }
+ 
+ static inline void pm_suspend_ignore_children(struct device *dev, bool enable) {}
+ static inline void pm_runtime_get_noresume(struct device *dev) {}
+-- 
+2.48.0
 
-Why would this be better?
+
 
