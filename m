@@ -1,156 +1,303 @@
-Return-Path: <linux-pm+bounces-20473-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20474-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1FE9A11D16
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 10:15:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD2B9A11D2E
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 10:18:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBADB168972
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 09:15:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EE6EB3A9EE4
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 09:17:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4554E1EEA38;
-	Wed, 15 Jan 2025 09:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85B7C1EEA41;
+	Wed, 15 Jan 2025 09:16:51 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AAFC1EBFE8;
-	Wed, 15 Jan 2025 09:15:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F403F246A0A;
+	Wed, 15 Jan 2025 09:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736932523; cv=none; b=Ud/XPp8G7dBZwjolckWzK3zZIQ+rdoVUeqGJMaB4WkrlbVE0p43NljIJchQhXB57oXf42QXNSGfHSt3q1+5l3Yf2g4ZgNYRiWXRAfsgV1lvqCSI2J5kkaeNxKm4oXBSLsP5HFCZIZpDMP75QDoP0vTzXKMviG2rJSXHXN/bcesQ=
+	t=1736932611; cv=none; b=nByN4yhm6ejVbI8AtsL1P1ya5yb3Ngow3+LIDVEtEdqEPPVFRFdqrnlpWDmOkVEmOUyvgJIWZem4iHm+EM8sXcrKF02Me+Rmkop3/nEo7wnkElsqk/faMsxlE4PpJQfhxf9lHsUxTfnVbuDelN3DjbN74KJSvHEIDCY25McR7Fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736932523; c=relaxed/simple;
-	bh=L3mwxvUzQv16jk5DRpOsgk8RDtoolyGpzWWfW5zeRcI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NO8eGF25NjaWhbOcp5cVf9VFRxQNsjafgADcXMOg0UVojV0t/vaJ7FSWgOa1zQlu0B+aBNlNfPhZ4tAvLr4btP92qWPxqF+IqBjj8JqMAGfnWeHhYZet1ULORXj9dP2jt8vcxn9XkaAKiLTFdEECdWZE6aLDrwTRz3ZuXvzZ6S8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A92EC12FC;
-	Wed, 15 Jan 2025 01:15:47 -0800 (PST)
-Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E06743F77D;
-	Wed, 15 Jan 2025 01:15:17 -0800 (PST)
-Date: Wed, 15 Jan 2025 09:15:10 +0000
-From: Cristian Marussi <cristian.marussi@arm.com>
-To: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>, Peng Fan <peng.fan@nxp.com>,
-	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
-	"cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-	"ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
-	"arm-scmi@vger.kernel.org" <arm-scmi@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize
- state as off
-Message-ID: <Z4d8nrJy-h9EwzsJ@pluto>
-References: <20250110061346.2440772-1-peng.fan@oss.nxp.com>
- <Z4TreQ5bA9qiMTgC@bogus>
- <PAXPR04MB8459F33BCC84CCA8F49F3B60881F2@PAXPR04MB8459.eurprd04.prod.outlook.com>
- <Z4UZ2Au7KSFMibDW@bogus>
- <PA4PR04MB94855052830C8F4874237BA6921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
- <Z4VLZgAWR7ugDl7W@bogus>
- <PA4PR04MB9485E9C126E48A088D7E399B921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
- <Z4aBkezSWOPCXcUh@bogus>
- <PA4PR04MB9485507CCC21354B5ED55C3792182@PA4PR04MB9485.eurprd04.prod.outlook.com>
+	s=arc-20240116; t=1736932611; c=relaxed/simple;
+	bh=mn330r5buxbnIyzzcqAXkfMOP76wg1Y403B1yovkHfo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=YtyGgN3lJEN7JDQOovWjxVLD+DVZwpQl9BzgLWY/xla2/xBW4izjuD9r9yFMOQCl0GiJmzsXSosxaHAPi05sXE3G8qsg0BTYqpJkXsJktq02+B4bTJhxv1s72qlN5qGckFI2Cn6chMHCTx0vQWh4JWNONiNvSVZNCLLG/DB4KT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.88.214])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4YY0fP3ZJMz2Djg7;
+	Wed, 15 Jan 2025 17:13:33 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id B45CE1A016C;
+	Wed, 15 Jan 2025 17:16:43 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 15 Jan
+ 2025 17:16:42 +0800
+Message-ID: <e29f1d7e-943d-4286-a92c-3db04f9e60ae@huawei.com>
+Date: Wed, 15 Jan 2025 17:16:42 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <PA4PR04MB9485507CCC21354B5ED55C3792182@PA4PR04MB9485.eurprd04.prod.outlook.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 5/6] ACPI: CPPC: Add autonomous selection ABIs
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+CC: <lenb@kernel.org>, <robert.moore@intel.com>, <viresh.kumar@linaro.org>,
+	<mario.limonciello@amd.com>, <gautham.shenoy@amd.com>, <ray.huang@amd.com>,
+	<pierre.gondois@arm.com>, <acpica-devel@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<lihuisong@huawei.com>, <hepeng68@huawei.com>, <fanghao11@huawei.com>
+References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
+ <20250113122104.3870673-6-zhenglifeng1@huawei.com>
+ <CAJZ5v0go8y7E2kCDbPYKcwppp0iGzZb3WiKAMhcMRMf_wrUVGA@mail.gmail.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <CAJZ5v0go8y7E2kCDbPYKcwppp0iGzZb3WiKAMhcMRMf_wrUVGA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-On Tue, Jan 14, 2025 at 04:09:13PM +0000, Ranjani Vaidyanathan wrote:
-> Hello Sudeep,
-> 
-> Comments below.
-> 
-> Regards,
-> Ranjani Vaidyanathan
-> 
-> -----Original Message-----
-> From: Sudeep Holla [mailto:sudeep.holla@arm.com] 
-> Sent: Tuesday, January 14, 2025 9:24 AM
-> To: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
-> Cc: Peng Fan <peng.fan@nxp.com>; Peng Fan (OSS) <peng.fan@oss.nxp.com>; cristian.marussi@arm.com; Sudeep Holla <sudeep.holla@arm.com>; ulf.hansson@linaro.org; arm-scmi@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
-> Subject: Re: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize state as off
-> 
-> Caution: This is an external email. Please take care when clicking links or opening attachments. When in doubt, report the message using the 'Report this email' button
-> 
-> 
-> Hi Ranjani,
-> 
-> On Mon, Jan 13, 2025 at 07:54:06PM +0000, Ranjani Vaidyanathan wrote:
-> > Hello Sudeep,
-> >
-> > Will try to explain the situation we are facing.
-> > 1. We have multiple agents running, Agent-A is booted up first before 
-> > Linux is booted and powers up a shared power domain PD-X.
-> > 2. Linux boots and gets the power state of PD-X. And its already ON. 
-> > And then PD -X is initialized with a default ON state.
-> > 3. When the driver that needs PD-X  is probed, Linux sees that the 
-> > power domain status is ON and never makes an SCMI call to power up the 
-> > PD-X for Linux Agent.
-> > 4. Agent-A now is shutdown/suspends. Linux will crash because the 
-> > platform disables PD-X because it has no other requests for PD-X.
-> >
-> 
-> Thanks for the detailed explanation. I understand the issue now.
-> 
-> I would like to discuss if the below alternative approach works for you.
-> We can debate the pros and cons. I see with the approach in this patch proposed by Peng we would avoid querying and setting genpd all together during the genpd initialisation which is good. But if there are any genpd left on by the platform or bootloader(same agent), it will not get turned off when Linux tries to turn off the unused genpds(IIRC this could be the reason for the current state of code). While your platform may find sending those commands unnecessary, there was some usecase where SCMI platform kept all resources ON by default for faster boot and expects OSPM to turn off unused resources. So we need to support both the cases. I hope my below patch should suffice.
-> 
-> [RV] Linux can still make the call to disable unused power domains, even if it never explicitly made a request to power it on. The platform will aggregate the request from all agents and will power off the resource if no other agent has enabled it. From Linux point of view it has disabled all unused power domains. 
-> Your patch below may also work, but feels like a workaround to artificially (for lack of a better word) enable a resource. And also makes unnecessary SCMI calls (expensive) for every resource immaterial of it power state (maybe can be improved by a conditional check). 
-> 
+On 2025/1/15 2:24, Rafael J. Wysocki wrote:
 
-...sincerely, both of these solutions seem to me hacks/workarounds to
-counteract the fundamental issue that derives from having allowed (IMPDEF)
-to implement the get operations to return the real physical state of a
-resource instead of its virtual per-agent state as maintained by the platform,
-while, at the same time, having allowed to implement the set-operations to
-operate in a 'virtual-fashion'...
+> On Mon, Jan 13, 2025 at 1:21 PM Lifeng Zheng <zhenglifeng1@huawei.com> wrote:
+> 
+> This should mention the specification revision and section number(s)
+> for the specification material the code is based on.
 
-...so, when Peng's patch forcibly set the state to OFF on genpd init, you
-are indeed artificially forcing the kernel internal state to align with
-what would have been the virtual-per-agent state of the resource in your
-specific particular configuration....
+Will mention it. Thanks.
 
-...on the other side Sudeep's proposed patch tries really to play the same
-trick, just on the other way around, by instead forcibly/artificially aligning
-the state on the platform side by issuing a redundant ON request to bump the
-refcount and take hold of that resource from the Kernel agent point of view...
+> 
+>> cppc_set_epp - write energy performance preference register value
+>>
+>> cppc_get_auto_act_window - read autonomous activity window register value
+>>
+>> cppc_set_auto_act_window - write autonomous activity window register value
+>>
+>> cppc_get_auto_sel - read autonomous selection enable register value,
+>> modified from cppc_get_auto_sel_caps()
+> 
+> It would be better to move the modification part into a separate patch.
 
-... but Peng's proposed patch will broke immediately the moment you have
-instead a system with an SCMI-capable bootloader that instead left the
-resource ON for the Kernel to inherit, since the kernel will now forcibly
-see this anyway as OFF, and so you wont be ever be able to switch that resource
-REALLY OFF in the future, if ever needed, because the bootloader/Kernel agent
-will never see it as ON in genPD, since, at least in the genPD case, AFAICS
-correct me if wrong, there is no callback to peek at the real state later on:
-so, after the initialization value has been chosen at genpd_init time, genPd
-subsystem maintains the PD state on its own based on the issued ON/OFF genPD
-requests, so your forced-initial-OFF-state will be, in this specific alternative
-scenario, wrong and forever.
+Yes, good point. Thanks.
 
-...I think at least Sudeep's solution could survive this scenario
-because it is more general and can cope with both scenarios
+> 
+>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>> ---
+>>  drivers/acpi/cppc_acpi.c     | 82 ++++++++++++++++++++++++++++++++----
+>>  drivers/cpufreq/amd-pstate.c |  3 +-
+>>  include/acpi/cppc_acpi.h     | 30 +++++++++++--
+>>  3 files changed, 103 insertions(+), 12 deletions(-)
+>>
+>> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+>> index 03134613311d..7bfe30f7b40f 100644
+>> --- a/drivers/acpi/cppc_acpi.c
+>> +++ b/drivers/acpi/cppc_acpi.c
+>> @@ -1568,23 +1568,89 @@ int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable)
+>>  EXPORT_SYMBOL_GPL(cppc_set_epp_perf);
+>>
+>>  /**
+>> - * cppc_get_auto_sel_caps - Read autonomous selection register.
+>> - * @cpunum : CPU from which to read register.
+>> - * @perf_caps : struct where autonomous selection register value is updated.
+>> + * cppc_set_epp() - Write the EPP register.
+>> + * @cpu: CPU on which to write register.
+>> + * @epp_val: Value to write to the EPP register.
+>>   */
+>> -int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+>> +int cppc_set_epp(int cpu, u64 epp_val)
+>>  {
+>> -       u64 auto_sel;
+>> +       if (epp_val > CPPC_ENERGY_PERF_MAX)
+>> +               return -EINVAL;
+>> +
+>> +       return cppc_set_reg_val(cpu, ENERGY_PERF, epp_val);
+>> +}
+>> +EXPORT_SYMBOL_GPL(cppc_set_epp);
+>> +
+>> +/**
+>> + * cppc_get_auto_act_window() - Read autonomous activity window register.
+>> + * @cpu: CPU from which to read register.
+>> + * @auto_act_window: Return address.
+> 
+> It would be good to describe the autonomous activity window encoding.
 
-I know this phys-vs-virtual state is a lost battle at this point, but the
-IMPDEF possible scenarios that derive from this choice now have to be supported
-kernel-side as best as we can both ways...with the additional headache that,
-from the Kernel agent perspective, we cannot infer what kind of IMPDEF get_state
-is implemented by the platform we are talking to AND various different
-subsystem in the Linux kernel handle this "initial-state-matter" in
-different ways (e.g. see  clocks subsystem)
+Will add. Thanks.
 
-Thanks
-Cristian
+> 
+>> + */
+>> +int cppc_get_auto_act_window(int cpu, u64 *auto_act_window)
+>> +{
+>> +       unsigned int exp;
+>> +       u64 val, sig;
+>> +       int ret;
+>> +
+>> +       ret = cppc_get_reg_val(cpu, AUTO_ACT_WINDOW, &val);
+>> +       if (ret)
+>> +               return ret;
+>> +
+>> +       sig = val & CPPC_AUTO_ACT_WINDOW_MAX_SIG;
+>> +       exp = (val >> CPPC_AUTO_ACT_WINDOW_SIG_BIT_SIZE) & CPPC_AUTO_ACT_WINDOW_MAX_EXP;
+>> +       *auto_act_window = sig * int_pow(10, exp);
+>> +
+>> +       return 0;
+>> +}
+>> +EXPORT_SYMBOL_GPL(cppc_get_auto_act_window);
+>> +
+>> +/**
+>> + * cppc_set_auto_act_window() - Write autonomous activity window register.
+>> + * @cpu: CPU on which to write register.
+>> + * @auto_act_window: usec value to write to the autonomous activity window register.
+>> + */
+>> +int cppc_set_auto_act_window(int cpu, u64 auto_act_window)
+>> +{
+>> +       u64 max_val = CPPC_AUTO_ACT_WINDOW_MAX_SIG * int_pow(10, CPPC_AUTO_ACT_WINDOW_MAX_EXP);
+>> +       int digits = 0;
+>> +       u64 val;
+>> +
+>> +       if (auto_act_window > max_val)
+>> +               return -EINVAL;
+>> +
+>> +       while (auto_act_window > CPPC_AUTO_ACT_WINDOW_SIG_CARRY_THRESH) {
+>> +               auto_act_window /= 10;
+>> +               digits += 1;
+>> +       }
+>> +
+>> +       if (auto_act_window > CPPC_AUTO_ACT_WINDOW_MAX_SIG)
+>> +               auto_act_window = CPPC_AUTO_ACT_WINDOW_MAX_SIG;
+> 
+> It looks like this may clobber the most significant bit, or am I mistaken?
+
+Actually, after the while loop above, auto_act_window is not larger than
+CPPC_AUTO_ACT_WINDOW_SIG_CARRY_THRESH, which is 129. So this if condition
+is valid only when auto_act_window is 128 or 129. Since we only have 7 bits
+to store this value, 128 and 129 can only be cut to 127.
+
+> 
+>> +
+>> +       val = (digits << CPPC_AUTO_ACT_WINDOW_SIG_BIT_SIZE) + auto_act_window;
+>> +
+>> +       return cppc_set_reg_val(cpu, AUTO_ACT_WINDOW, val);
+>> +}
+>> +EXPORT_SYMBOL_GPL(cppc_set_auto_act_window);
+>> +
+>> +/**
+>> + * cppc_get_auto_sel() - Read autonomous selection register.
+>> + * @cpu: CPU from which to read register.
+>> + * @enable: Return address.
+>> + */
+>> +int cppc_get_auto_sel(int cpu, bool *enable)
+>> +{
+>> +       u64 val;
+>>         int ret;
+>>
+>> -       ret = cppc_get_reg_val(cpunum, AUTO_SEL_ENABLE, &auto_sel);
+>> +       ret = cppc_get_reg_val(cpu, AUTO_SEL_ENABLE, &val);
+>>         if (ret)
+>>                 return ret;
+>>
+>> -       perf_caps->auto_sel = (bool)auto_sel;
+>> +       *enable = (bool)val;
+>> +
+>>         return 0;
+>>  }
+>> -EXPORT_SYMBOL_GPL(cppc_get_auto_sel_caps);
+>> +EXPORT_SYMBOL_GPL(cppc_get_auto_sel);
+>>
+>>  /**
+>>   * cppc_set_auto_sel - Write autonomous selection register.
+>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+>> index 66e5dfc711c0..8bc11d0618f8 100644
+>> --- a/drivers/cpufreq/amd-pstate.c
+>> +++ b/drivers/cpufreq/amd-pstate.c
+>> @@ -399,6 +399,7 @@ static int shmem_init_perf(struct amd_cpudata *cpudata)
+>>  {
+>>         struct cppc_perf_caps cppc_perf;
+>>         u64 numerator;
+>> +       bool auto_sel;
+>>
+>>         int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+>>         if (ret)
+>> @@ -420,7 +421,7 @@ static int shmem_init_perf(struct amd_cpudata *cpudata)
+>>         if (cppc_state == AMD_PSTATE_ACTIVE)
+>>                 return 0;
+>>
+>> -       ret = cppc_get_auto_sel_caps(cpudata->cpu, &cppc_perf);
+>> +       ret = cppc_get_auto_sel(cpudata->cpu, &auto_sel);
+>>         if (ret) {
+>>                 pr_warn("failed to get auto_sel, ret: %d\n", ret);
+>>                 return 0;
+>> diff --git a/include/acpi/cppc_acpi.h b/include/acpi/cppc_acpi.h
+>> index 62d368bcd9ec..325e9543e08f 100644
+>> --- a/include/acpi/cppc_acpi.h
+>> +++ b/include/acpi/cppc_acpi.h
+>> @@ -32,6 +32,15 @@
+>>  #define        CMD_READ 0
+>>  #define        CMD_WRITE 1
+>>
+>> +#define CPPC_AUTO_ACT_WINDOW_SIG_BIT_SIZE      (7)
+>> +#define CPPC_AUTO_ACT_WINDOW_EXP_BIT_SIZE      (3)
+>> +#define CPPC_AUTO_ACT_WINDOW_MAX_SIG   ((1 << CPPC_AUTO_ACT_WINDOW_SIG_BIT_SIZE) - 1)
+>> +#define CPPC_AUTO_ACT_WINDOW_MAX_EXP   ((1 << CPPC_AUTO_ACT_WINDOW_EXP_BIT_SIZE) - 1)
+>> +/* CPPC_AUTO_ACT_WINDOW_MAX_SIG is 127, so 128 and 129 will decay to 127 when writing */
+>> +#define CPPC_AUTO_ACT_WINDOW_SIG_CARRY_THRESH 129
+>> +
+>> +#define CPPC_ENERGY_PERF_MAX   (0xFF)
+>> +
+>>  /* Each register has the folowing format. */
+>>  struct cpc_reg {
+>>         u8 descriptor;
+>> @@ -159,7 +168,10 @@ extern int cpc_read_ffh(int cpunum, struct cpc_reg *reg, u64 *val);
+>>  extern int cpc_write_ffh(int cpunum, struct cpc_reg *reg, u64 val);
+>>  extern int cppc_get_epp_perf(int cpunum, u64 *epp_perf);
+>>  extern int cppc_set_epp_perf(int cpu, struct cppc_perf_ctrls *perf_ctrls, bool enable);
+>> -extern int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps);
+>> +extern int cppc_set_epp(int cpu, u64 epp_val);
+>> +extern int cppc_get_auto_act_window(int cpu, u64 *auto_act_window);
+>> +extern int cppc_set_auto_act_window(int cpu, u64 auto_act_window);
+>> +extern int cppc_get_auto_sel(int cpu, bool *enable);
+>>  extern int cppc_set_auto_sel(int cpu, bool enable);
+>>  extern int amd_get_highest_perf(unsigned int cpu, u32 *highest_perf);
+>>  extern int amd_get_boost_ratio_numerator(unsigned int cpu, u64 *numerator);
+>> @@ -229,11 +241,23 @@ static inline int cppc_get_epp_perf(int cpunum, u64 *epp_perf)
+>>  {
+>>         return -EOPNOTSUPP;
+>>  }
+>> -static inline int cppc_set_auto_sel(int cpu, bool enable)
+>> +static inline int cppc_set_epp(int cpu, u64 epp_val)
+>>  {
+>>         return -EOPNOTSUPP;
+>>  }
+>> -static inline int cppc_get_auto_sel_caps(int cpunum, struct cppc_perf_caps *perf_caps)
+>> +static inline int cppc_get_auto_act_window(int cpu, u64 *auto_act_window)
+>> +{
+>> +       return -EOPNOTSUPP;
+>> +}
+>> +static inline int cppc_set_auto_act_window(int cpu, u64 auto_act_window)
+>> +{
+>> +       return -EOPNOTSUPP;
+>> +}
+>> +static inline int cppc_get_auto_sel(int cpu, bool *enable)
+>> +{
+>> +       return -EOPNOTSUPP;
+>> +}
+>> +static inline int cppc_set_auto_sel(int cpu, bool enable)
+>>  {
+>>         return -EOPNOTSUPP;
+>>  }
+>> --
+>> 2.33.0
+>>
+>>
+> 
 
 
