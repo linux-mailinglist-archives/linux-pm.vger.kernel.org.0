@@ -1,110 +1,135 @@
-Return-Path: <linux-pm+bounces-20484-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20485-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 403BBA1235F
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 13:01:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24D61A12428
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 13:54:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 633F8162D71
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 12:01:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 513833A9336
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 12:53:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 604C82475DB;
-	Wed, 15 Jan 2025 12:00:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89F811E98FD;
+	Wed, 15 Jan 2025 12:50:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=r-ricci.it header.i=@r-ricci.it header.b="cL2KtTEG"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kgdX4O6y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from out-173.mta0.migadu.com (out-173.mta0.migadu.com [91.218.175.173])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DF312475D0
-	for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 12:00:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.218.175.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5E4EC3DABFE;
+	Wed, 15 Jan 2025 12:50:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736942459; cv=none; b=HnXauBc0PVegndE1q/wzU877GAI/v3gUXTQHiqmV7Xxim3X8NLuOEePJ0aSNMIsgvq/7La+GsRZlRRuFs3hC/5TqHs1dVQxTyNiWG+TedSdzhnEDKOl/BTZ7Fbe2Ap0P73jZTrh48ZnrySHey1L4YLP3eyjq2Sc/wMYQJiQRDhc=
+	t=1736945457; cv=none; b=GHRe7ZeI+6l/NBlYSPmIKyjcUYBLAo3fdrKPjRecbAfa72iv7oSRUqTEneOUBJl3sVQacKA39ppGZxCz9eqcdimR1uOaUQh0PzJ90Fqaw930NFA43jZaOMt7/o8kxdRRBfnTes2R5LlE+TDJYgBb6tMiZb4OqmaDcUQ7LjD+4ow=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736942459; c=relaxed/simple;
-	bh=60r/GbavV6jjAAcCPMGG8G1xsMsyNtrDaJlgTkzL+v8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dpwBlNaGnwhH7o9p5q/S3gNhaSgv6vCX1ZRfNX03ev61OnQlxuYJh8N65NBAQCnwqFxGr0kzsGQqEguaq/elfk17jXSfHscB9A874XHUsLHL5GGw6GU/TIKd5ii2asQpGEEOhQTBcIlIJBO+WdzzGQIzlgUZfF1OMQKoKftWUZI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=r-ricci.it; spf=pass smtp.mailfrom=r-ricci.it; dkim=pass (2048-bit key) header.d=r-ricci.it header.i=@r-ricci.it header.b=cL2KtTEG; arc=none smtp.client-ip=91.218.175.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=r-ricci.it
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=r-ricci.it
-Date: Wed, 15 Jan 2025 13:00:45 +0100
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=r-ricci.it; s=key1;
-	t=1736942450;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=XSA5fxZb1Zqp8xGb+AoSG7h9EPnLoDgiYKVD066+ghk=;
-	b=cL2KtTEGF8cCgbVf9/IXVqeIDUuKYS3WSL6t4mtky6ztvJolDkxN0g4J4CN+uM+x03p08Q
-	8G0y9sKcOf7/Wn74d0tFANZOtIjMq3zbEi6Ihp4E90+KjyxnzF2IY0d2775pAAf0lpqYeG
-	X34r6ag2vqM9egoICBJ+WtqhEX6IclrWlRCb7ZrpCdudK60iKsMm4g2kBVl1WC1hD6qL/j
-	ioWq7/QDR0hShTchppAb+yWf8iMa4E6ESubD5Iq6m67C/eaZrtbC2HLFN/UXwjoThhtaKp
-	SHRCpAAB0tB80B+uPcmyZ1oPQkXPl6oAzc2SSW6ZOH/O+YDfNu/2/VeT2nNurQ==
-X-Report-Abuse: Please report any abuse attempt to abuse@migadu.com and include these headers.
-From: Roberto Ricci <io@r-ricci.it>
-To: Baoquan He <bhe@redhat.com>
-Cc: ebiederm@xmission.com, rafael@kernel.org, pavel@ucw.cz,
-	ytcoode@gmail.com, kexec@lists.infradead.org,
-	linux-pm@vger.kernel.org, akpm@linux-foundation.org,
-	regressions@lists.linux.dev, linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from
- hibernation
-Message-ID: <Z4ejbdJr87V3IwV8@desktop0a>
-References: <Z4WFjBVHpndct7br@desktop0a>
- <Z4Zjmva-pLbLjtQv@desktop0a>
- <Z4czuvi2BiNlDWPP@MiWiFi-R3L-srv>
+	s=arc-20240116; t=1736945457; c=relaxed/simple;
+	bh=hsM+3mjbJ/FLZ39Ng0XglGjOeLpsDOSBHFTEnGQ/cdo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=EzuyTGYGPb1CIT2MfcfPKHt3lZGVgKnC1K4JTg4guTbp5+TvrpWvH64CAezFHLLsGhwa4VmE2YH256/Uvc1whXaMg/mO05dul762DorQrUFoHal9XW2Yrr4wy4SpGnBitAOB222d0oSGo+1+2nraUZBxZzo0si/Xxnpd4Hs7tr8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kgdX4O6y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DF86AC4CEDF;
+	Wed, 15 Jan 2025 12:50:56 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736945456;
+	bh=hsM+3mjbJ/FLZ39Ng0XglGjOeLpsDOSBHFTEnGQ/cdo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=kgdX4O6ypP2la5IE/6NaUCYX2pcC2IxyxycRS5xg6feSTsqDrUHpTcz2jRAgh25Fw
+	 90W6AaWTzMVJcpcctQN2Xb6fhcPhcjDQZl/dvvDqn86gUYuFip2XFfF/sA/Z7bj2HL
+	 F3Pg9cACpUK7WXJcOZeSXlBqOEquIHz7irTfzWUg5BfOxYksfoiIIoI6NXJpzWJ6tN
+	 aeYT2GFlOhYSCbylc3osww8Bw0bqSUwg9Cg3HPDP7bHWXLWD9h3CojLRRA4tJsC2KY
+	 KGg5EtcoMdgoLdl98abeExy9Yxcyt58wo9J2Zvz8oZEpwzZESRceZPeYkf25FVG7PS
+	 /9Xy4qt1soS9g==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-71e3cbd0583so1696230a34.1;
+        Wed, 15 Jan 2025 04:50:56 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU93xRojdeDDDh74zGIQtJMM14Mbd6PeHIzFI+NAvOqkJup+dm/LBFnOPazihEiEyJu4MHOitteVRDJqA4=@vger.kernel.org, AJvYcCVK64k37MC2hrDw7f02eTThPMRKvlZKEf0/edOM/lLYx75oUh7KOiRUsclFGh2skCiNmiIYFx9NyCg=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyq5K+UrfqV77yiHo+BOPvf2HSJzF6Q/wY3znMS3seivYT36caI
+	GeN+Cw47C5gm6iRXt8V68BzvQHFdjoLPlqWhlD0cO1K1hyiq+X1nQMwxO0UMfUtlMKkYkvBXlkg
+	v8eabfwHP3mtTnEQukXaxlJ/4L64=
+X-Google-Smtp-Source: AGHT+IG+5mvxjOX5qljn2W+sfXqZQmihbNHVGBEDQchGVBqQhPCB8fr4EE4nWoDWtEhQNbR6gsD25FXfVDBe6LOtYAc=
+X-Received: by 2002:a05:6808:14c3:b0:3eb:4137:53bb with SMTP id
+ 5614622812f47-3ef2ed64538mr20022830b6e.31.1736945456235; Wed, 15 Jan 2025
+ 04:50:56 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z4czuvi2BiNlDWPP@MiWiFi-R3L-srv>
-X-Migadu-Flow: FLOW_OUT
+References: <20250115100123.241110-1-zhenglifeng1@huawei.com>
+ <20250115100123.241110-2-zhenglifeng1@huawei.com> <20250115111852.hluxcprc7cbrxqtc@vireshk-i7>
+In-Reply-To: <20250115111852.hluxcprc7cbrxqtc@vireshk-i7>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 15 Jan 2025 13:50:45 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h9zb=_HTR-nraCZj18YcOSfkMm7WVZ4ePsziOzpV0ndg@mail.gmail.com>
+X-Gm-Features: AbW1kvYyvrv9jML_MXu1Jp0AMMj2_gneJcvacYPRTSlP53Pqe1TqfD6x13CdYJE
+Message-ID: <CAJZ5v0h9zb=_HTR-nraCZj18YcOSfkMm7WVZ4ePsziOzpV0ndg@mail.gmail.com>
+Subject: Re: [PATCH 1/2] cpufreq: Fix re-boost issue after hotplugging a cpu
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Lifeng Zheng <zhenglifeng1@huawei.com>, rafael@kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linuxarm@huawei.com, 
+	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, lihuisong@huawei.com, 
+	fanghao11@huawei.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2025-01-15 Wed 12:04:10 +0800, Baoquan He wrote:
-> On 01/14/25 at 02:16pm, Roberto Ricci wrote:
-> > On 2025-01-13 Mon 22:28:48 +0100, Roberto Ricci wrote:
-> > > I can reproduce this with kernel 6.13-rc7 in a qemu x86_64 virtual machine
-> > > running Void Linux, with the following commands:
-> > > 
-> > > ```
-> > > # kexec -l /boot/vmlinuz-6.13.0-rc7 --initrd=/boot/initramfs-6.13.0-rc7 --reuse-cmdline
-> > > # reboot
-> > > # printf reboot >/sys/power/disk
-> > > # printf disk >/sys/power/state
-> > > ```
-> > 
-> > Looks like it's the kernel performing the kexec which causes the issue,
-> > not the target one. E.g.: kexec-ing 6.7 from 6.13-rc7 makes resume from
-> > hibernation fail; but if I kexec 6.13-rc7 from 6.7, then it works fine.
-> 
-> I tried the latest mainline kernel with your above command execution
-> series, I didn't see the problem you reported. Can you try kexec from
-> 6.7 to 6.7 or something like that and try to bisect a specific criminal
-> commit?
+On Wed, Jan 15, 2025 at 12:18=E2=80=AFPM Viresh Kumar <viresh.kumar@linaro.=
+org> wrote:
+>
+> On 15-01-25, 18:01, Lifeng Zheng wrote:
+> > It turns out that cpuX will stay on the base frequency after performing
+> > these operations:
+> >
+> > 1. boost all cpus: echo 1 > /sys/devices/system/cpu/cpufreq/boost
+> >
+> > 2. offline the cpu: echo 0 > /sys/devices/system/cpu/cpuX/online
+> >
+> > 3. deboost all cpus: echo 0 > /sys/devices/system/cpu/cpufreq/boost
+> >
+> > 4. online the cpu: echo 1 > /sys/devices/system/cpu/cpuX/online
+> >
+> > 5. boost all cpus again: echo 1 > /sys/devices/system/cpu/cpufreq/boost
+> >
+> > This is because max_freq_req of the policy is not updated during the
+> > online process, and the value of max_freq_req before the last offline i=
+s
+> > retained. When the CPU is boosted again, freq_qos_update_request() will
+> > do nothing because the old value is the same as the new one. This cause=
+s
+> > the CPU stay on the base frequency. Update max_freq_req (and
+> > min_freq_req of course) in cpufreq_online() will solve this problem.
+> >
+> > Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> > ---
+> >  drivers/cpufreq/cpufreq.c | 7 +++++++
+> >  1 file changed, 7 insertions(+)
+> >
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 1a4cae54a01b..03ae879d50b9 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -1475,6 +1475,13 @@ static int cpufreq_online(unsigned int cpu)
+> >
+> >               blocking_notifier_call_chain(&cpufreq_policy_notifier_lis=
+t,
+> >                               CPUFREQ_CREATE_POLICY, policy);
+> > +     } else {
+> > +             ret =3D freq_qos_update_request(policy->min_freq_req, pol=
+icy->min);
+>
+> This may not be required, as min-freq-req is never updated.
 
-As I mentioned in my initial report, only versions >= 6.8 are affected.
-Anyway, I actually was kexec-ing the same kernel which was already booted
-when I did the bisection which pointed to 18d565ea95fe.
+It gets updated via scaling_min_freq AFAICS.  Doesn't this matter?
 
-> As for below commit, it seems not a suspect.
-> 18d565ea95fe ("kexec_file: fix incorrect temp_start value in locate_mem_hole_top_down()")
-> 
-> If possible, can you revert below two commits altogether to have a try?
-> I am not sure if they caused the problem.
-> 
-> 18d565ea95fe kexec_file: fix incorrect temp_start value in locate_mem_hole_top_down()
-> 816d334afa85 kexec: modify the meaning of the end parameter in kimage_is_destination_range()
-
-Reverting these two commits does not fix things on v6.13-rc7.
-
-But I have found that reverting 18d565ea95fe fixes the issue for kernels
-up to 6.11. Since 6.12 this is not enough. So I'm doing another bisection.
-I will report results maybe later today.
+> > +             if (ret < 0)
+> > +                     goto out_destroy_policy;
+> > +             ret =3D freq_qos_update_request(policy->max_freq_req, pol=
+icy->max);
+> > +             if (ret < 0)
+> > +                     goto out_destroy_policy;
+> >       }
+> >
+> >       if (cpufreq_driver->get && has_target()) {
+> > --
 
