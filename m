@@ -1,177 +1,143 @@
-Return-Path: <linux-pm+bounces-20479-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20480-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 582AFA11F33
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 11:24:17 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C24A0A12233
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 12:13:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51E181647AC
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 10:24:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 663C33A8666
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 11:13:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4718523F26F;
-	Wed, 15 Jan 2025 10:24:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9FE01E9918;
+	Wed, 15 Jan 2025 11:13:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kIda5TE8"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djdd+Tiv"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05C61234981
-	for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 10:24:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7ADEF248BB9;
+	Wed, 15 Jan 2025 11:13:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736936646; cv=none; b=Apj0epsEUwiWBm/K072JZzGtXTu6WxGluFBkS5R1jZ/A+rGApeFq3ODl/jmHoDpIrvdq8cAgMZhyfpoKQQtInIUQpXWOCRAncIYmXhWbdNT5QK3fCQEkL/NUkZ7aFb7bmZIgc8sJxK0UY4Krzy+z2sIwZOXKXlVRuKcYxKuk6Cw=
+	t=1736939589; cv=none; b=n42nloRqURDwrJiK9rs8Zvnai3jMb1s8P3wQGnOs3EbJ5C7haMSwvSLXpDpjru34kJhn6v4+VhZMcVdho90eq8/xizBP6wSPZfgRvYaGu+rNYgNy/3MB58hf3rMXa3LCy+346iIBoku8IBRVd6bkvgM2Vzl3QC1HHjRqaZelWqg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736936646; c=relaxed/simple;
-	bh=Vts8aji0Ex50TPGXhf8sIPh7B0rC3S22agQ3oVPxtuE=;
+	s=arc-20240116; t=1736939589; c=relaxed/simple;
+	bh=6jO4WiPBhFzgyb9GhdkgahEyUDYbh3P2ioXyxGAwVdw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=o+Gv4iu1OyF+TDxWIGasrJPGzlIBlAWS1bwPZsLChEjnS9kAtHRmz9aemq6X0rq/G0cntKW6oh9N9g2P6TxG0uIYXLdxSZup4ZLaAaP4bN5KZB5xhv88p6SmHz9Au2dKy5GsuRPXJgkkw5EWHUtvP0nQ2NBNp33IF2g9LHT+yeI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kIda5TE8; arc=none smtp.client-ip=209.85.208.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-30613802a04so41144481fa.2
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 02:24:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1736936642; x=1737541442; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=AjuDDA/yi8Mfj7zbd5ybLmAd4yGE7SYSfzfs6+hwDoA=;
-        b=kIda5TE8wGtKn9sgO95fnAKGDuB7oSsKGCClGjpJHnUjlzKw6Q3iIkmJJlh2Mbb4HC
-         jfQcadZP0DYXnJg/WB2/FVDEumIeUFKUhVf7x81q4kUr/I3SMVcp5se0OpUUlpkQMLO7
-         P8sgNjgDuq9NHzX71EUZq6vMcNdwIdSAeQ4MBCoqSfIAqDfhFIl3DXhxC/OEki2LKx5y
-         BtBgNVr6EIIQs88h8iXmjzsArDmgw30He18Yr4w9UTfG6luyEA5woO7ZhgAt55fMXB4G
-         85k3auIfKdQmGMgfdpEy9OfylmnK2/cl0vNYKN+d03IHdqy8yPBhCSHWEIPolQypsJeD
-         7I3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736936642; x=1737541442;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=AjuDDA/yi8Mfj7zbd5ybLmAd4yGE7SYSfzfs6+hwDoA=;
-        b=uPobdx3LrZTatg7GDt/t9rGtjCbjfGK98NxXd9FGosN0EeYTs+L0R5o8iqTPMabLQf
-         Bpod/QiAEOGshpNN676Vr+FFTXbQzxGYjkA+9JAg5YoVcHgfrOlzDhc7QNiC7y6/2Isg
-         raljbuPHIVRlqys6wlsxTyZ+xG0eDuNsnwks3erbtUwWohQ5OprAYgBKSrTuZdlFVWdX
-         8o/r1dMe89FNXZ+mFSYW99lI2UoRUY97E7csMPnClhLkfmsQTLM5JlKdddpWW6PYraqt
-         QftTRZNmf+2q2ZZ7Y4X5ae5HrgTuqAeoYPap7iRB49Pkvt0Ta7IP6EvVdHtXQPVaT7v+
-         UIjA==
-X-Forwarded-Encrypted: i=1; AJvYcCVAYHXADc7SeiybpEttWpHqP0bE9UCLvDRhxRcea9eYx1B5P6CDgxwWkex918X8Z/YAfKNVLEKGNA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy0aoMaPuJ2P+bbvLVRoSZhgv4gqyEpI4z+bPuzFPmXkmwQEpr1
-	zFHWiqPGqAc6PZtllUfvZfjI3NNaNefIdXQrBuhqo7SH8pFxiK3m90XUUv/ME/eK4NmjTiwc5k2
-	kUxS3ed3u1O/09fdTQqAcYp94a6zoH711gTlXqw==
-X-Gm-Gg: ASbGncvefw2NzdLr1RBlLyBdsIgYQWiCox/qDSesFYkjKmN2adxJVy6ZtCyEnodbdf8
-	MweEwhQPoe/+CU+GqP7JIsLv2lrr1Y24pq++LaQ==
-X-Google-Smtp-Source: AGHT+IFa4MDYjg2TaeSyPhVd+uFI72e9/zbKAp/MLgh6iKYqJ4fsconYWJROEaljs/Hlt1y7e8hWcLbxXAs4QRl/Z8o=
-X-Received: by 2002:a05:651c:546:b0:300:3a15:8f22 with SMTP id
- 38308e7fff4ca-305f45a1d53mr103210261fa.21.1736936641947; Wed, 15 Jan 2025
- 02:24:01 -0800 (PST)
+	 To:Cc:Content-Type; b=m8jBLfaqSfdNUADT4tesgL6ciMN/aHAzBrelzxxoClh3WzCivG3F/FWFavs+Xk1pqlNEPzFHdhTJGD7+gfXxvDyofPLByATYwyGNPoTesj9JC/pSC1/pdds4Cpjc/pytIAlagYV521sX2O8ga0XTGHrfjzTZQGEqCJ2dhuigrTg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=djdd+Tiv; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23620C4CEE2;
+	Wed, 15 Jan 2025 11:13:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736939589;
+	bh=6jO4WiPBhFzgyb9GhdkgahEyUDYbh3P2ioXyxGAwVdw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=djdd+TivZehmhPLpPa4kJZz1+1z7/jt7y/q8s7pcUVQ0XE7AgDNQ/c3m+ICnbvMuD
+	 lRMAXCi4jKbjH8de34O9BIT+bRBJQOnltJD655VBtdT3Qfpp1+EZROiWBA38Ybsm5s
+	 gSrjMZRaz1X9yEsSyrZbf4Cc5j5xsUPq5EnxgpDn/pIHhUySnXPj/MBeon4a4BLEp3
+	 JpDZpuNsiz3YRiu3fDY4IcRO1q0/nZVaEuWzxjM4xTMEo9aeG4/mzPN9AO518PCLoz
+	 NFfYVo/qtARRITXmuRpsHpE300Ql2UVV018us7d6KeA6xTL//cWAg8jx7WU1+urNEN
+	 vql5fiqTXQm9w==
+Received: by mail-oi1-f169.google.com with SMTP id 5614622812f47-3eb8559b6b0so3761316b6e.1;
+        Wed, 15 Jan 2025 03:13:09 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWcfkI+Ykwt/k5EpyLZj6LsbNTKyaTVj9W1fyPO0TEC+gBW+Jjy4yK8v2NSBWkLYzGHrClGsd1H+oFoH1bZ@vger.kernel.org, AJvYcCWwF+/y3LK44aOCrhBS1kOZ9CD5f5qWK9ktlwNLlZK27aBhwGiEyl/JdWcGlQzMbDVtloL3DKcqTuc=@vger.kernel.org, AJvYcCXjG3BP+qn6txmyVPUbEwCNNYL3SiFaUQF07u4Q6rmeQoOvwL8A9F33GrugLGneHLq5XQfrcHTp3q/D@vger.kernel.org
+X-Gm-Message-State: AOJu0YxW6A90PdioAUQkRwXUbGGpCpwbz/nt4t91csrvutZ07yI21u+r
+	pQ9ZBeTDwuztGKH01BbieCU7wAfFKnddhJiX5qKe0t97kzKMJ+uOHvJswnHg14sgl7qYNivzpsR
+	NAEPT4cCHpi4CKaMxwc3Oo3LHPjs=
+X-Google-Smtp-Source: AGHT+IHnnDdSk0+UGjbtKgUlEIzX22igfm/NGfH82JBFguw7/RwNA1HP/MBV1bCC8lSJ8ui81Ri8tBig7u5Nt4aXNpU=
+X-Received: by 2002:a05:6808:3095:b0:3eb:a602:62b1 with SMTP id
+ 5614622812f47-3ef2ec43a84mr18858448b6e.17.1736939588258; Wed, 15 Jan 2025
+ 03:13:08 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250110123923.270626-1-szemzo.andras@gmail.com>
- <20250110123923.270626-4-szemzo.andras@gmail.com> <20250114141954.2785879a@donnerap.manchester.arm.com>
-In-Reply-To: <20250114141954.2785879a@donnerap.manchester.arm.com>
-From: Linus Walleij <linus.walleij@linaro.org>
-Date: Wed, 15 Jan 2025 11:23:50 +0100
-X-Gm-Features: AbW1kvY9UIu_hIL2n2uWJ6IEfQySNpBxaxTILzVXzQ1Bv8Ht8eyLtJ6PcP46pwQ
-Message-ID: <CACRpkda0nx3SQtdjmXdCEbVJSWM10TM=p-6JbDjbiYcOSF5PxQ@mail.gmail.com>
-Subject: Re: [PATCH 03/12] pinctrl: sunxi: add driver for Allwinner V853.
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Andras Szemzo <szemzo.andras@gmail.com>, Michael Turquette <mturquette@baylibre.com>, 
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>, 
-	Jernej Skrabec <jernej.skrabec@gmail.com>, Samuel Holland <samuel@sholland.org>, 
-	Philipp Zabel <p.zabel@pengutronix.de>, Maxime Ripard <mripard@kernel.org>, 
-	Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, Paul Walmsley <paul.walmsley@sifive.com>, 
-	Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, 
-	=?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
-	Florian Fainelli <florian.fainelli@broadcom.com>, linux-clk@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
-	linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
+References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
+ <20250113122104.3870673-4-zhenglifeng1@huawei.com> <CAJZ5v0jwqZ4A=eeHSXGHKpj-g+KFNWvgLB_yjM55Yk37LryrwQ@mail.gmail.com>
+ <10a624c3-66c1-420c-860d-2ef9104b59d8@huawei.com>
+In-Reply-To: <10a624c3-66c1-420c-860d-2ef9104b59d8@huawei.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 15 Jan 2025 12:12:57 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jmZy0tNO7Btc9-A0rfzL5jPp2ZEH99bEX00cEi3z+XcQ@mail.gmail.com>
+X-Gm-Features: AbW1kvbIZPwFXAmyiLrc7Lroo3xglhf9zN2VVd-BjjjHc-QrsQ-2BYDR3RYvtEs
+Message-ID: <CAJZ5v0jmZy0tNO7Btc9-A0rfzL5jPp2ZEH99bEX00cEi3z+XcQ@mail.gmail.com>
+Subject: Re: [PATCH v4 3/6] ACPI: CPPC: Add macros to generally implement
+ registers getting and setting functions
+To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, lenb@kernel.org, robert.moore@intel.com, 
+	viresh.kumar@linaro.org, mario.limonciello@amd.com, gautham.shenoy@amd.com, 
+	ray.huang@amd.com, pierre.gondois@arm.com, acpica-devel@lists.linux.dev, 
+	linux-acpi@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linuxarm@huawei.com, jonathan.cameron@huawei.com, 
+	zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com, 
+	fanghao11@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Tue, Jan 14, 2025 at 3:20=E2=80=AFPM Andre Przywara <andre.przywara@arm.=
-com> wrote:
-> Andras Szemzo <szemzo.andras@gmail.com> wrote:
-
-> > The V853 family has multiple package variants, from BGA to QFN88.
-> > The latter has co-packaged DRAM and fewer pins, and less features (pin =
-muxes).
-> > All family members can be supported by a single driver, as the availabl=
-e pins
-> > with allowed muxes is the same across the devices.
+On Wed, Jan 15, 2025 at 9:59=E2=80=AFAM zhenglifeng (A) <zhenglifeng1@huawe=
+i.com> wrote:
 >
-> It depends a bit on the outcome of the discussion on the A523 pinctrl
-> driver [1], but I think we should use the same approach here (and for
-> every "new" Allwinner SoC coming up, really): put the pinmux value in the
-> DT, and get rid of this entire table altogether:
-> [1]
+> On 2025/1/15 1:58, Rafael J. Wysocki wrote:
 >
-> The SoC specific pinctrl driver would then be very small ([2]), so this
-> pinctrl support patch here would actually become much smaller.
+> > On Mon, Jan 13, 2025 at 1:21=E2=80=AFPM Lifeng Zheng <zhenglifeng1@huaw=
+ei.com> wrote:
+> >>
+> >> Add CPPC_REG_VAL_READ() to implement registers getting functions.
+> >>
+> >> Add CPPC_REG_VAL_WRITE() to implement registers setting functions.
+> >>
+> >> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> >
+> > I don't particularly like these macros as they will generally make it
+> > harder to follow the code.
+> >
+> >> ---
+> >>  drivers/acpi/cppc_acpi.c | 14 ++++++++++++++
+> >>  1 file changed, 14 insertions(+)
+> >>
+> >> diff --git a/drivers/acpi/cppc_acpi.c b/drivers/acpi/cppc_acpi.c
+> >> index 571f94855dce..6326a1536cda 100644
+> >> --- a/drivers/acpi/cppc_acpi.c
+> >> +++ b/drivers/acpi/cppc_acpi.c
+> >> @@ -1279,6 +1279,20 @@ static int cppc_set_reg_val(int cpu, enum cppc_=
+regs reg_idx, u64 val)
+> >>         return cpc_write(cpu, reg, val);
+> >>  }
+> >>
+> >> +#define CPPC_REG_VAL_READ(reg_name, reg_idx)           \
+> >> +int cppc_get_##reg_name(int cpu, u64 *val)             \
+> >> +{                                                      \
+> >> +       return cppc_get_reg_val(cpu, reg_idx, val);     \
+> >> +}                                                      \
+> >> +EXPORT_SYMBOL_GPL(cppc_get_##reg_name)
+> >
+> > What about if defining something like
+> >
+> > #define CPPC_READ_REG_VAL(cpu, reg_name, val)
+> > cppc_get_reg_val((cpu), CPPC_REG_IDX(reg_name), (val))
+> >
+> > (and analogously for the WRITE_ part), where CPPC_REG_IDX(reg_name) is
+> >
+> > #define CPPC_REG_IDX(reg_name)    CPPC_REG_##reg_name_IDX
+> >
+> > and there are CPPC_REG_##reg_name_IDX macros defined for all register
+> > names in use?
+> >
+> > For example
+> >
+> > #define CPPC_REG_desired_perf_IDX   DESIRED_PERF
 >
-> Just feel a bit sorry for you having created this table, in a tedious and
-> eye-straining exercise - been there, done that ;-)
+> What about keeping these two macros but replace reg_idx with
+> CPPC_REG_IDX(reg_name)? With this, the only needed parameter for these tw=
+o
+> macros is reg_name.
 
-It's pretty stressful for the pin control maintainer as well.
-
-From the subsystems point of view, groups matches to functions by
-strings is the best. ("fun1") + ("group1", "group2"):
-
-pio: pinctrl@1c20800 {
-                        compatible =3D "allwinner,sun8i-r40-pinctrl";
-(...)
-                        i2c0_pins: i2c0-pins {
-                                pins =3D "PB0", "PB1";
-                                function =3D "i2c0";
-                        };
-
-abstract, strings, nice. The driver handles the particulars.
-
-That is like so because we are designing for users which are
-let's say customization engineers. If these engineers jump from
-project to project matching function strings to group strings will
-be a common way to set up pins, and easy to understand and
-grasp, and it makes the DTS very readable.
-
-Then there are the engineers creating the pin control drivers,
-and they want everything to be convinient for *them*, and they
-think an opaque hex digit in the DTS is perfect at times, thus
-pinmux =3D <0xdeadbeef>;
-
-Mediatek and STM32 made a compromise by using pinmux
-and adding some macros to define them so it looks more
-pleasant:
-
-      i2c0_pins_a: i2c0-default {
-                pins-i2c0 {
-                        pinmux =3D <MT7623_PIN_75_SDA0_FUNC_SDA0>,
-                                 <MT7623_PIN_76_SCL0_FUNC_SCL0>;
-                        bias-disable;
-                };
-        };
-
-At least the bias control is using strings, this is nice.
-
-So I'm mostly fine with that as well, but it can be pretty
-heavy on people coming from the outside, asking us questions
-like "on MT7689 how do you mux pin nnnn to function yyy"???
-Well I don't know? Some MT7689_PIN* macro I guess?
-
-If it was just strings I would know what the
-expected behaviour and looks would be at least, then the driver
-could be buggy or missing things but that's clearly cut. That's
-why I prefer the strings.
-
-Yours,
-Linus Walleij
+The problem is that looking up functions defined through macros is
+hard when somebody wants to know what they do, so I'd prefer to avoid
+doing that.
 
