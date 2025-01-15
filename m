@@ -1,157 +1,156 @@
-Return-Path: <linux-pm+bounces-20472-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20473-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B009AA11D14
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 10:15:14 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B1FE9A11D16
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 10:15:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA10916547D
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 09:15:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BBADB168972
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 09:15:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 908AD1EBFE8;
-	Wed, 15 Jan 2025 09:15:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aTDQWKsI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4554E1EEA38;
+	Wed, 15 Jan 2025 09:15:23 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D711C1EEA3C;
-	Wed, 15 Jan 2025 09:15:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3AAFC1EBFE8;
+	Wed, 15 Jan 2025 09:15:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736932511; cv=none; b=FZ7DA7wzfXJb0ksyVozSjUXCsABCI8pJljrTYzBB/r3IivaNF44w5OrzZT2wZg8DrfmXErU9b1sXmZaIPSyMdz9iAEg3NJwm3CO7YAD1XcJjJ9YxmU7GYuFOTUaL0AXgbaQN1xWvW4yWIf5u2Yja4abWc8XdrYe+AcK3+2Wcg2I=
+	t=1736932523; cv=none; b=Ud/XPp8G7dBZwjolckWzK3zZIQ+rdoVUeqGJMaB4WkrlbVE0p43NljIJchQhXB57oXf42QXNSGfHSt3q1+5l3Yf2g4ZgNYRiWXRAfsgV1lvqCSI2J5kkaeNxKm4oXBSLsP5HFCZIZpDMP75QDoP0vTzXKMviG2rJSXHXN/bcesQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736932511; c=relaxed/simple;
-	bh=jeR7/gWf6Skl/qjAR+jZQXkKFEOuRqSrEZuOJL3HMyE=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=oJckeDyJvZcBK2rJOcDBwEGbuxQsvEJ02tfcUexRGIMvBVHO50d5Kz3ij7bcaQKn6KtMKa4JeZlK+wUSEQvMemPJ8t1dI6ZnMVp9clOb99gT3tFAQq/AC/b3PcXWMJ43Wd+ON3b9ubt4lRmA6YkCBrAvKkiqyVc/4/sSUVP50Bs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aTDQWKsI; arc=none smtp.client-ip=209.85.221.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-385f06d0c8eso3333501f8f.0;
-        Wed, 15 Jan 2025 01:15:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1736932507; x=1737537307; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=J/Rn9ie+6t4Dw0dOkRjEwpRIvwGjZP3l0XjeBhuGtKk=;
-        b=aTDQWKsIpKlhjjVPUlA8O/93NLgEuP2EmN6hvOc8+yIPVy/SIwBCIxpAv/0hBJe/bV
-         YVmep9leXMqxW/nKuxUuHTDR5sP0DoqRL79508cW1scaE8uWCA16vxgEk+dONbd/qMX0
-         s57KtcifeqZh0jtmk2AC/EkwFC5zoxOhGiWEmMN+TWehRuNSBPGB9Aalg0+1judBHcbr
-         fheX/ct2elu6Zha3Hi5Ez1bDVJf8exCp8m6uJ+Y6lfDZbNFoQ/G2G1uCzm5Qa7JEaU2m
-         mkaf4aJsdjMEyX+/qgRku4dt0iH/WSNrzJeT7D+bfgEufK2ay6BFtoikpbqLxO3udNJd
-         Dn7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1736932507; x=1737537307;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=J/Rn9ie+6t4Dw0dOkRjEwpRIvwGjZP3l0XjeBhuGtKk=;
-        b=sh4/2auXyj7NRDONJDVXn6ID2p4/lA/Q0hrJLEl6ZIhZsEmeUHxDjqHCFPmZZ+9ZLt
-         r3UlDPS2W1uxKkSHcLgM6H9benrKCS4Mi0TpwQVtp8xH1taBHWHCEt25dH3ODrn+f+3S
-         xBc0JUM750lUFmHqmBvAX/iT0OE1Y5LZOQe+jVOtTPAAmGHEmx+dXc41AUb6Mjl7oNoA
-         p2tzm+EaSR09w0fPRQTQ7r+Px0y87Gmubo+y/zAIm9Bz5zH48enxS3MOO+pbM5F0z6mN
-         HFSl04H49Z030VWEXGdAfFv8hS6fdkvIER2uu6MNAZ1E6kX5EFunXchu1+tLShrxlQM2
-         K86g==
-X-Forwarded-Encrypted: i=1; AJvYcCUqIsfaBPRL4Z5+L8kz4jEaM709QbBvS/zzauuy9AgzKp/8a4k7J7X2iUZPoyYJt3ywHWHLt94LK9jObrQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxv4ysDP9R//tr3rW4h7Wv4AU1SAVAXRAY6s3C0/dm26xHcL4E/
-	58OGAl3ZF6W+DQy3mP21hqizy7KkWIbK2gNDUlB3Rxap3SEgjK5pf8UKh/m5j50=
-X-Gm-Gg: ASbGncuBvDXOXIITe6/roH/uxipCWQgpuVapIfHkB25Brj8U2Q54CuFwDMEunfaQv3n
-	5oU8VYLyo/ex550/lt1ya8kP6AS/M4p/x4oUef/EpkB3r6zhDw7J3WpU9K5bxJ9rlSwqGn3Sexx
-	iar09Jd5XH66WTTGsOFZk/rvJp4lJyxiP4GncGituzPLBw/MW0buWk2ZpXBAwrUMHOVReosLHhL
-	hbGJF7JnyOM80Iqu0/xYal1bZswrgJniCyuOz3unsfR3jQSHdnIGXm04kljMLaYRhRwUSYTXoC2
-	FGZOOp7Ap4Shw6RHYFW5xOFt2Q7A
-X-Google-Smtp-Source: AGHT+IE0c1f7spcMvHNvh+ACVR4C0TvhK0aSqqVXi6IH+rZFY8EMdS08HctrMeI17jzG17HFgSMowQ==
-X-Received: by 2002:a05:6000:1f89:b0:38a:9ffb:fe2f with SMTP id ffacd0b85a97d-38a9ffc0071mr13394732f8f.0.1736932506842;
-        Wed, 15 Jan 2025 01:15:06 -0800 (PST)
-Received: from ?IPv6:2001:818:ea8e:7f00:2575:914:eedd:620e? ([2001:818:ea8e:7f00:2575:914:eedd:620e])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e38428bsm17079228f8f.37.2025.01.15.01.15.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 01:15:06 -0800 (PST)
-Message-ID: <4393f4a97a5acbf1ba17bbe0cf5dc3993149acff.camel@gmail.com>
-Subject: Re: [PATCH] power: supply: ltc4162l: Use GENMASK macro in bitmask
- operation
-From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
-To: Kim Seer Paller <kimseer.paller@analog.com>, Sebastian Reichel
-	 <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Date: Wed, 15 Jan 2025 09:15:06 +0000
-In-Reply-To: <20250114011318.5784-1-kimseer.paller@analog.com>
-References: <20250114011318.5784-1-kimseer.paller@analog.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1736932523; c=relaxed/simple;
+	bh=L3mwxvUzQv16jk5DRpOsgk8RDtoolyGpzWWfW5zeRcI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=NO8eGF25NjaWhbOcp5cVf9VFRxQNsjafgADcXMOg0UVojV0t/vaJ7FSWgOa1zQlu0B+aBNlNfPhZ4tAvLr4btP92qWPxqF+IqBjj8JqMAGfnWeHhYZet1ULORXj9dP2jt8vcxn9XkaAKiLTFdEECdWZE6aLDrwTRz3ZuXvzZ6S8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id A92EC12FC;
+	Wed, 15 Jan 2025 01:15:47 -0800 (PST)
+Received: from pluto (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E06743F77D;
+	Wed, 15 Jan 2025 01:15:17 -0800 (PST)
+Date: Wed, 15 Jan 2025 09:15:10 +0000
+From: Cristian Marussi <cristian.marussi@arm.com>
+To: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+Cc: Sudeep Holla <sudeep.holla@arm.com>, Peng Fan <peng.fan@nxp.com>,
+	"Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+	"cristian.marussi@arm.com" <cristian.marussi@arm.com>,
+	"ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+	"arm-scmi@vger.kernel.org" <arm-scmi@vger.kernel.org>,
+	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
+Subject: Re: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize
+ state as off
+Message-ID: <Z4d8nrJy-h9EwzsJ@pluto>
+References: <20250110061346.2440772-1-peng.fan@oss.nxp.com>
+ <Z4TreQ5bA9qiMTgC@bogus>
+ <PAXPR04MB8459F33BCC84CCA8F49F3B60881F2@PAXPR04MB8459.eurprd04.prod.outlook.com>
+ <Z4UZ2Au7KSFMibDW@bogus>
+ <PA4PR04MB94855052830C8F4874237BA6921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
+ <Z4VLZgAWR7ugDl7W@bogus>
+ <PA4PR04MB9485E9C126E48A088D7E399B921F2@PA4PR04MB9485.eurprd04.prod.outlook.com>
+ <Z4aBkezSWOPCXcUh@bogus>
+ <PA4PR04MB9485507CCC21354B5ED55C3792182@PA4PR04MB9485.eurprd04.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <PA4PR04MB9485507CCC21354B5ED55C3792182@PA4PR04MB9485.eurprd04.prod.outlook.com>
 
-On Tue, 2025-01-14 at 09:13 +0800, Kim Seer Paller wrote:
-> Replace the bitmask operation BIT(6) - 1 with GENMASK(5, 0) to make the
-> code clearer and readable.
->=20
-> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
-> ---
+On Tue, Jan 14, 2025 at 04:09:13PM +0000, Ranjani Vaidyanathan wrote:
+> Hello Sudeep,
+> 
+> Comments below.
+> 
+> Regards,
+> Ranjani Vaidyanathan
+> 
+> -----Original Message-----
+> From: Sudeep Holla [mailto:sudeep.holla@arm.com] 
+> Sent: Tuesday, January 14, 2025 9:24 AM
+> To: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+> Cc: Peng Fan <peng.fan@nxp.com>; Peng Fan (OSS) <peng.fan@oss.nxp.com>; cristian.marussi@arm.com; Sudeep Holla <sudeep.holla@arm.com>; ulf.hansson@linaro.org; arm-scmi@vger.kernel.org; linux-arm-kernel@lists.infradead.org; linux-pm@vger.kernel.org; linux-kernel@vger.kernel.org
+> Subject: Re: [EXT] Re: [PATCH] pmdomain: arm: scmi_pm_domain: Initialize state as off
+> 
+> Caution: This is an external email. Please take care when clicking links or opening attachments. When in doubt, report the message using the 'Report this email' button
+> 
+> 
+> Hi Ranjani,
+> 
+> On Mon, Jan 13, 2025 at 07:54:06PM +0000, Ranjani Vaidyanathan wrote:
+> > Hello Sudeep,
+> >
+> > Will try to explain the situation we are facing.
+> > 1. We have multiple agents running, Agent-A is booted up first before 
+> > Linux is booted and powers up a shared power domain PD-X.
+> > 2. Linux boots and gets the power state of PD-X. And its already ON. 
+> > And then PD -X is initialized with a default ON state.
+> > 3. When the driver that needs PD-X  is probed, Linux sees that the 
+> > power domain status is ON and never makes an SCMI call to power up the 
+> > PD-X for Linux Agent.
+> > 4. Agent-A now is shutdown/suspends. Linux will crash because the 
+> > platform disables PD-X because it has no other requests for PD-X.
+> >
+> 
+> Thanks for the detailed explanation. I understand the issue now.
+> 
+> I would like to discuss if the below alternative approach works for you.
+> We can debate the pros and cons. I see with the approach in this patch proposed by Peng we would avoid querying and setting genpd all together during the genpd initialisation which is good. But if there are any genpd left on by the platform or bootloader(same agent), it will not get turned off when Linux tries to turn off the unused genpds(IIRC this could be the reason for the current state of code). While your platform may find sending those commands unnecessary, there was some usecase where SCMI platform kept all resources ON by default for faster boot and expects OSPM to turn off unused resources. So we need to support both the cases. I hope my below patch should suffice.
+> 
+> [RV] Linux can still make the call to disable unused power domains, even if it never explicitly made a request to power it on. The platform will aggregate the request from all agents and will power off the resource if no other agent has enabled it. From Linux point of view it has disabled all unused power domains. 
+> Your patch below may also work, but feels like a workaround to artificially (for lack of a better word) enable a resource. And also makes unnecessary SCMI calls (expensive) for every resource immaterial of it power state (maybe can be improved by a conditional check). 
+> 
 
-Reviewed-by: Nuno Sa <nuno.sa@analog.com>
+...sincerely, both of these solutions seem to me hacks/workarounds to
+counteract the fundamental issue that derives from having allowed (IMPDEF)
+to implement the get operations to return the real physical state of a
+resource instead of its virtual per-agent state as maintained by the platform,
+while, at the same time, having allowed to implement the set-operations to
+operate in a 'virtual-fashion'...
 
-> =C2=A0drivers/power/supply/ltc4162-l-charger.c | 8 ++++----
-> =C2=A01 file changed, 4 insertions(+), 4 deletions(-)
->=20
-> diff --git a/drivers/power/supply/ltc4162-l-charger.c
-> b/drivers/power/supply/ltc4162-l-charger.c
-> index 24b62f000..db1a75c9b 100644
-> --- a/drivers/power/supply/ltc4162-l-charger.c
-> +++ b/drivers/power/supply/ltc4162-l-charger.c
-> @@ -410,7 +410,7 @@ static int ltc4162l_get_icharge(struct ltc4162l_info
-> *info,
-> =C2=A0	if (ret)
-> =C2=A0		return ret;
-> =C2=A0
-> -	regval &=3D BIT(6) - 1; /* Only the lower 5 bits */
-> +	regval &=3D GENMASK(5, 0); /* Only the lower 5 bits */
-> =C2=A0
-> =C2=A0	/* The charge current servo level: (icharge_dac + 1) =C3=97 1mV/RS=
-NSB */
-> =C2=A0	++regval;
-> @@ -449,7 +449,7 @@ static int ltc4162l_get_vcharge(struct ltc4162l_info
-> *info,
-> =C2=A0	if (ret)
-> =C2=A0		return ret;
-> =C2=A0
-> -	regval &=3D BIT(6) - 1; /* Only the lower 5 bits */
-> +	regval &=3D GENMASK(5, 0); /* Only the lower 5 bits */
-> =C2=A0
-> =C2=A0	/*
-> =C2=A0	 * charge voltage setting can be computed from
-> @@ -500,7 +500,7 @@ static int ltc4015_get_vcharge(struct ltc4162l_info *=
-info,
-> =C2=A0	if (ret)
-> =C2=A0		return ret;
-> =C2=A0
-> -	regval &=3D BIT(6) - 1; /* Only the lower 5 bits */
-> +	regval &=3D GENMASK(5, 0); /* Only the lower 5 bits */
-> =C2=A0
-> =C2=A0	/*
-> =C2=A0	 * charge voltage setting can be computed from:
-> @@ -636,7 +636,7 @@ static int ltc4162l_get_iin_limit_dac(struct ltc4162l=
-_info
-> *info,
-> =C2=A0	if (ret)
-> =C2=A0		return ret;
-> =C2=A0
-> -	regval &=3D BIT(6) - 1; /* Only 6 bits */
-> +	regval &=3D GENMASK(5, 0); /* Only 6 bits */
-> =C2=A0
-> =C2=A0	/* (iin_limit_dac + 1) =C3=97 500=CE=BCV / RSNSI */
-> =C2=A0	++regval;
->=20
-> base-commit: a3a8799165ff83bb764fd800c6559c3cba0ddac3
+...so, when Peng's patch forcibly set the state to OFF on genpd init, you
+are indeed artificially forcing the kernel internal state to align with
+what would have been the virtual-per-agent state of the resource in your
+specific particular configuration....
+
+...on the other side Sudeep's proposed patch tries really to play the same
+trick, just on the other way around, by instead forcibly/artificially aligning
+the state on the platform side by issuing a redundant ON request to bump the
+refcount and take hold of that resource from the Kernel agent point of view...
+
+... but Peng's proposed patch will broke immediately the moment you have
+instead a system with an SCMI-capable bootloader that instead left the
+resource ON for the Kernel to inherit, since the kernel will now forcibly
+see this anyway as OFF, and so you wont be ever be able to switch that resource
+REALLY OFF in the future, if ever needed, because the bootloader/Kernel agent
+will never see it as ON in genPD, since, at least in the genPD case, AFAICS
+correct me if wrong, there is no callback to peek at the real state later on:
+so, after the initialization value has been chosen at genpd_init time, genPd
+subsystem maintains the PD state on its own based on the issued ON/OFF genPD
+requests, so your forced-initial-OFF-state will be, in this specific alternative
+scenario, wrong and forever.
+
+...I think at least Sudeep's solution could survive this scenario
+because it is more general and can cope with both scenarios
+
+I know this phys-vs-virtual state is a lost battle at this point, but the
+IMPDEF possible scenarios that derive from this choice now have to be supported
+kernel-side as best as we can both ways...with the additional headache that,
+from the Kernel agent perspective, we cannot infer what kind of IMPDEF get_state
+is implemented by the platform we are talking to AND various different
+subsystem in the Linux kernel handle this "initial-state-matter" in
+different ways (e.g. see  clocks subsystem)
+
+Thanks
+Cristian
 
 
