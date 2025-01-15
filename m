@@ -1,122 +1,157 @@
-Return-Path: <linux-pm+bounces-20471-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20472-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 12784A11CF8
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 10:09:31 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B009AA11D14
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 10:15:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F13E6168EBF
-	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 09:09:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA10916547D
+	for <lists+linux-pm@lfdr.de>; Wed, 15 Jan 2025 09:15:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA7711EEA3B;
-	Wed, 15 Jan 2025 09:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 908AD1EBFE8;
+	Wed, 15 Jan 2025 09:15:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="YwUsiqL+"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="aTDQWKsI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f43.google.com (mail-wr1-f43.google.com [209.85.221.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D478D246A10;
-	Wed, 15 Jan 2025 09:09:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D711C1EEA3C;
+	Wed, 15 Jan 2025 09:15:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736932157; cv=none; b=SDciiV0AaMUkHFlI4zHdGLnCyjCuYsTpUBG9A3gcnyjOE/e5NA/FP2h1mS8zFLNoEn2guPyQ6CccSGPNzIbt+jC2HcqaL3Pjn1deTFCRpi2f2gyIhXnOS46468h8dxgQpf504W6jz2CYuAZOmKTTB+rBDBBXSRoIc92lvOs4+UE=
+	t=1736932511; cv=none; b=FZ7DA7wzfXJb0ksyVozSjUXCsABCI8pJljrTYzBB/r3IivaNF44w5OrzZT2wZg8DrfmXErU9b1sXmZaIPSyMdz9iAEg3NJwm3CO7YAD1XcJjJ9YxmU7GYuFOTUaL0AXgbaQN1xWvW4yWIf5u2Yja4abWc8XdrYe+AcK3+2Wcg2I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736932157; c=relaxed/simple;
-	bh=jzVF8QKbSKlwNeLM5JaEErE+5Hfuig0I3TmeMB+qegc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=cZ4mnvrKBjHrjKpzwJfN7Q4jAuzZHHgZ2LfpmfJokjsL3EAbFrm9/ZQ64+h9E1oHzdaSqfa6yyVrJhF+4waSbuBjP1NNfAw8vooNvxnw12Dhc6ZVSpXJq3RBWVX/OFSNuvnIdTl7AsC7ENOqYSHFXLMtCCKLNgwYjz01nJiGNKA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=YwUsiqL+; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 4F1A8A0A27;
-	Wed, 15 Jan 2025 10:09:12 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=ssZI86T0A6XNN8hCXgMu
-	MZMsnzteKeFLGvw1TpMOAQU=; b=YwUsiqL+mnfGUW9j8eGYD/GWnYrYU4Lh23/R
-	Gk2lpKqoAoqRGyrHg00ogMYZOT6rBU2nNA0yllC476j3q3fUoYLJVNemN00UpP4s
-	RNSd3MN5utnVTVpVHhRiW7g18Rxvg6cg5Mbi0igsJ8aqMJi2LKMdPOWddsY+ja2X
-	HdVuwqmRkFUNTRYG+1vhShK2qKRzlVSPpPbLn1PZT3aeK6GviuuaHTod48xGpBct
-	xITp7DWK5gH6WgPA0466Hq4INt9RjJ3g9jWgF2DO4HcsvCXLUtYqm6VEJSF6skO4
-	QKwbsuC4d9czkpAnsIVGSJP89jgtxCsPE33/NZJaQbojtYFP5lBO/LYuskWxvMgF
-	L+IEVCzwQZ8fR5S7OdoyPZNYIudOpxHv82EgdF5wm/maN/qVoKiD6Jtr/4cSHgyp
-	A0d/IluO1KZddaESPZPCepvmVGSG8fa7b68lneLzG4o93UIraCbzM6rDLsfYHMtg
-	lpWj8ZVDnG6zZDLoLifMkms32GIpx/DhARP/Z8rZ3YYdqa0ClqgGgmZVhYHHRiLK
-	Xglikd9s9lg4opobT3B+ruWbtNC7nBY7dr1DfKu4PDOZqXWX80G3xcgPLCmXTtq1
-	pl4P9NrgOy1MtsywyJ4vVaQqbvy1t76OTxyKF32tbGpRU0vliKNBQ5DbgD/jZTwO
-	3/JuGtg=
-Message-ID: <81cbb273-a4b4-424c-9d25-f53ebc8ea82a@prolan.hu>
-Date: Wed, 15 Jan 2025 10:09:09 +0100
+	s=arc-20240116; t=1736932511; c=relaxed/simple;
+	bh=jeR7/gWf6Skl/qjAR+jZQXkKFEOuRqSrEZuOJL3HMyE=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=oJckeDyJvZcBK2rJOcDBwEGbuxQsvEJ02tfcUexRGIMvBVHO50d5Kz3ij7bcaQKn6KtMKa4JeZlK+wUSEQvMemPJ8t1dI6ZnMVp9clOb99gT3tFAQq/AC/b3PcXWMJ43Wd+ON3b9ubt4lRmA6YkCBrAvKkiqyVc/4/sSUVP50Bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=aTDQWKsI; arc=none smtp.client-ip=209.85.221.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f43.google.com with SMTP id ffacd0b85a97d-385f06d0c8eso3333501f8f.0;
+        Wed, 15 Jan 2025 01:15:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1736932507; x=1737537307; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=J/Rn9ie+6t4Dw0dOkRjEwpRIvwGjZP3l0XjeBhuGtKk=;
+        b=aTDQWKsIpKlhjjVPUlA8O/93NLgEuP2EmN6hvOc8+yIPVy/SIwBCIxpAv/0hBJe/bV
+         YVmep9leXMqxW/nKuxUuHTDR5sP0DoqRL79508cW1scaE8uWCA16vxgEk+dONbd/qMX0
+         s57KtcifeqZh0jtmk2AC/EkwFC5zoxOhGiWEmMN+TWehRuNSBPGB9Aalg0+1judBHcbr
+         fheX/ct2elu6Zha3Hi5Ez1bDVJf8exCp8m6uJ+Y6lfDZbNFoQ/G2G1uCzm5Qa7JEaU2m
+         mkaf4aJsdjMEyX+/qgRku4dt0iH/WSNrzJeT7D+bfgEufK2ay6BFtoikpbqLxO3udNJd
+         Dn7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1736932507; x=1737537307;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=J/Rn9ie+6t4Dw0dOkRjEwpRIvwGjZP3l0XjeBhuGtKk=;
+        b=sh4/2auXyj7NRDONJDVXn6ID2p4/lA/Q0hrJLEl6ZIhZsEmeUHxDjqHCFPmZZ+9ZLt
+         r3UlDPS2W1uxKkSHcLgM6H9benrKCS4Mi0TpwQVtp8xH1taBHWHCEt25dH3ODrn+f+3S
+         xBc0JUM750lUFmHqmBvAX/iT0OE1Y5LZOQe+jVOtTPAAmGHEmx+dXc41AUb6Mjl7oNoA
+         p2tzm+EaSR09w0fPRQTQ7r+Px0y87Gmubo+y/zAIm9Bz5zH48enxS3MOO+pbM5F0z6mN
+         HFSl04H49Z030VWEXGdAfFv8hS6fdkvIER2uu6MNAZ1E6kX5EFunXchu1+tLShrxlQM2
+         K86g==
+X-Forwarded-Encrypted: i=1; AJvYcCUqIsfaBPRL4Z5+L8kz4jEaM709QbBvS/zzauuy9AgzKp/8a4k7J7X2iUZPoyYJt3ywHWHLt94LK9jObrQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxv4ysDP9R//tr3rW4h7Wv4AU1SAVAXRAY6s3C0/dm26xHcL4E/
+	58OGAl3ZF6W+DQy3mP21hqizy7KkWIbK2gNDUlB3Rxap3SEgjK5pf8UKh/m5j50=
+X-Gm-Gg: ASbGncuBvDXOXIITe6/roH/uxipCWQgpuVapIfHkB25Brj8U2Q54CuFwDMEunfaQv3n
+	5oU8VYLyo/ex550/lt1ya8kP6AS/M4p/x4oUef/EpkB3r6zhDw7J3WpU9K5bxJ9rlSwqGn3Sexx
+	iar09Jd5XH66WTTGsOFZk/rvJp4lJyxiP4GncGituzPLBw/MW0buWk2ZpXBAwrUMHOVReosLHhL
+	hbGJF7JnyOM80Iqu0/xYal1bZswrgJniCyuOz3unsfR3jQSHdnIGXm04kljMLaYRhRwUSYTXoC2
+	FGZOOp7Ap4Shw6RHYFW5xOFt2Q7A
+X-Google-Smtp-Source: AGHT+IE0c1f7spcMvHNvh+ACVR4C0TvhK0aSqqVXi6IH+rZFY8EMdS08HctrMeI17jzG17HFgSMowQ==
+X-Received: by 2002:a05:6000:1f89:b0:38a:9ffb:fe2f with SMTP id ffacd0b85a97d-38a9ffc0071mr13394732f8f.0.1736932506842;
+        Wed, 15 Jan 2025 01:15:06 -0800 (PST)
+Received: from ?IPv6:2001:818:ea8e:7f00:2575:914:eedd:620e? ([2001:818:ea8e:7f00:2575:914:eedd:620e])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38a8e38428bsm17079228f8f.37.2025.01.15.01.15.05
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 15 Jan 2025 01:15:06 -0800 (PST)
+Message-ID: <4393f4a97a5acbf1ba17bbe0cf5dc3993149acff.camel@gmail.com>
+Subject: Re: [PATCH] power: supply: ltc4162l: Use GENMASK macro in bitmask
+ operation
+From: Nuno =?ISO-8859-1?Q?S=E1?= <noname.nuno@gmail.com>
+To: Kim Seer Paller <kimseer.paller@analog.com>, Sebastian Reichel
+	 <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Date: Wed, 15 Jan 2025 09:15:06 +0000
+In-Reply-To: <20250114011318.5784-1-kimseer.paller@analog.com>
+References: <20250114011318.5784-1-kimseer.paller@analog.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/12] ARM: dts: sun8i: add DTSI file for V853
-To: Krzysztof Kozlowski <krzk@kernel.org>, Andras Szemzo
-	<szemzo.andras@gmail.com>, Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>, Rob Herring <robh@kernel.org>, "Krzysztof
- Kozlowski" <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, "Chen-Yu
- Tsai" <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, "Samuel
- Holland" <samuel@sholland.org>, Linus Walleij <linus.walleij@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>, Maxime Ripard <mripard@kernel.org>
-CC: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>, Paul Walmsley
-	<paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, Albert Ou
-	<aou@eecs.berkeley.edu>, =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
-	<u.kleine-koenig@baylibre.com>, Florian Fainelli
-	<florian.fainelli@broadcom.com>, <linux-clk@vger.kernel.org>,
-	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-sunxi@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-	<linux-phy@lists.infradead.org>, <linux-gpio@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linux-riscv@lists.infradead.org>
-References: <20250110123923.270626-1-szemzo.andras@gmail.com>
- <20250110123923.270626-13-szemzo.andras@gmail.com>
- <ff57cf8d-626e-4d35-a18f-1a89b4d9fa3e@kernel.org>
-Content-Language: en-US
-From: =?UTF-8?B?Q3PDs2vDoXMgQmVuY2U=?= <csokas.bence@prolan.hu>
-In-Reply-To: <ff57cf8d-626e-4d35-a18f-1a89b4d9fa3e@kernel.org>
-Content-Type: text/plain; charset="UTF-8"; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: ATLAS.intranet.prolan.hu (10.254.0.229) To
- ATLAS.intranet.prolan.hu (10.254.0.229)
-X-EsetResult: clean, is OK
-X-EsetId: 37303A2980D94852647063
 
-Hi,
+On Tue, 2025-01-14 at 09:13 +0800, Kim Seer Paller wrote:
+> Replace the bitmask operation BIT(6) - 1 with GENMASK(5, 0) to make the
+> code clearer and readable.
+>=20
+> Signed-off-by: Kim Seer Paller <kimseer.paller@analog.com>
+> ---
 
-On 2025. 01. 10. 14:58, Krzysztof Kozlowski wrote:
-> On 10/01/2025 13:39, Andras Szemzo wrote:
->> +// Copyright (C) 2024 Andras Szemzo <szemzo.andras@gmail.com>
->> +
->> +#include <dt-bindings/clock/sun6i-rtc.h>
->> +#include <dt-bindings/clock/sun8i-v853-r-ccu.h>
->> +#include <dt-bindings/reset/sun8i-v853-r-ccu.h>
->> +#include <dt-bindings/clock/sun8i-v853-ccu.h>
->> +#include <dt-bindings/reset/sun8i-v853-ccu.h>
->> +#include <dt-bindings/interrupt-controller/arm-gic.h>
->> +#include <dt-bindings/power/allwinner,sun8i-v853-ppu.h>
->> +
->> +/ {
->> +	#address-cells = <1>;
->> +	#size-cells = <1>;
->> +
->> +	osc24M: osc24M-clk {
-> 
-> Only lowercase node names.
+Reviewed-by: Nuno Sa <nuno.sa@analog.com>
 
-I don't agree. It is customary to write oscillator names with casing in 
-line with the SI prefixes of their frequency, i.e. lowercase k, 
-uppercase M/G/etc. (even though a millihertz oscillator rarely makes 
-sense, it is best to stay consistent).
-
-Bence
+> =C2=A0drivers/power/supply/ltc4162-l-charger.c | 8 ++++----
+> =C2=A01 file changed, 4 insertions(+), 4 deletions(-)
+>=20
+> diff --git a/drivers/power/supply/ltc4162-l-charger.c
+> b/drivers/power/supply/ltc4162-l-charger.c
+> index 24b62f000..db1a75c9b 100644
+> --- a/drivers/power/supply/ltc4162-l-charger.c
+> +++ b/drivers/power/supply/ltc4162-l-charger.c
+> @@ -410,7 +410,7 @@ static int ltc4162l_get_icharge(struct ltc4162l_info
+> *info,
+> =C2=A0	if (ret)
+> =C2=A0		return ret;
+> =C2=A0
+> -	regval &=3D BIT(6) - 1; /* Only the lower 5 bits */
+> +	regval &=3D GENMASK(5, 0); /* Only the lower 5 bits */
+> =C2=A0
+> =C2=A0	/* The charge current servo level: (icharge_dac + 1) =C3=97 1mV/RS=
+NSB */
+> =C2=A0	++regval;
+> @@ -449,7 +449,7 @@ static int ltc4162l_get_vcharge(struct ltc4162l_info
+> *info,
+> =C2=A0	if (ret)
+> =C2=A0		return ret;
+> =C2=A0
+> -	regval &=3D BIT(6) - 1; /* Only the lower 5 bits */
+> +	regval &=3D GENMASK(5, 0); /* Only the lower 5 bits */
+> =C2=A0
+> =C2=A0	/*
+> =C2=A0	 * charge voltage setting can be computed from
+> @@ -500,7 +500,7 @@ static int ltc4015_get_vcharge(struct ltc4162l_info *=
+info,
+> =C2=A0	if (ret)
+> =C2=A0		return ret;
+> =C2=A0
+> -	regval &=3D BIT(6) - 1; /* Only the lower 5 bits */
+> +	regval &=3D GENMASK(5, 0); /* Only the lower 5 bits */
+> =C2=A0
+> =C2=A0	/*
+> =C2=A0	 * charge voltage setting can be computed from:
+> @@ -636,7 +636,7 @@ static int ltc4162l_get_iin_limit_dac(struct ltc4162l=
+_info
+> *info,
+> =C2=A0	if (ret)
+> =C2=A0		return ret;
+> =C2=A0
+> -	regval &=3D BIT(6) - 1; /* Only 6 bits */
+> +	regval &=3D GENMASK(5, 0); /* Only 6 bits */
+> =C2=A0
+> =C2=A0	/* (iin_limit_dac + 1) =C3=97 500=CE=BCV / RSNSI */
+> =C2=A0	++regval;
+>=20
+> base-commit: a3a8799165ff83bb764fd800c6559c3cba0ddac3
 
 
