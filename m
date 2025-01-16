@@ -1,122 +1,177 @@
-Return-Path: <linux-pm+bounces-20526-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20527-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2363A13387
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 08:02:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 116F9A13491
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 09:01:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0D8E71881B7B
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 07:02:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93E823A4080
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 08:01:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3463319644B;
-	Thu, 16 Jan 2025 07:02:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="koimY0D/"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B7E18C03B;
+	Thu, 16 Jan 2025 08:01:16 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E0DC18C01E
-	for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2025 07:02:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63AF73451;
+	Thu, 16 Jan 2025 08:01:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737010941; cv=none; b=HFaRcYP1+VYD/sV2om94wuCfxQUDT2eg0vhyy0vfhfmXiTumP8IEbgcBNk3CiHA1AJG4DwPKx4WPzsC273MDN+/v+WfMEf6+tBWgElo5RYYlnADs/eNWuLzIzHNHGFSXGv3NzpZaaoDWvVyru9oHNWg5Y6tm+LPOFwtwl4wXr7U=
+	t=1737014476; cv=none; b=qDBd9louhlxtFUTav2QNSduFIKIhjFGeDKXUwDA//20eK/UMJoMeHS/ch6kY1BYKjfU9va5hVHbnrolpBIyGTQQoGoW0D5Iov8Uvy/LaiPH7ExT3DePvEHQo4FnBly4KNtHXqiDLnwy3OlFIDCRehK2IwtKG9NF4dnTjPaQUIs4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737010941; c=relaxed/simple;
-	bh=LYf4Heml1LtDO/L+mq0vB1SnlOrRybgUhc3drbjDADs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rQB2QgB+6fbICCmC1vKrFcyNfTjM53+R5ygKaDub/ccxTp9JSEBDMNbe44ZJJFx8UVE5Kgh0grXUWS/uKqv3JsgPsM/Da0hJ+H8hRm6sw0HATOBp8X5srpUlXdseQtx9x5wpsSQoCl2nDECwMqyZHfMCOoNTJDYxvaxFCK4f9/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=koimY0D/; arc=none smtp.client-ip=209.85.214.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-21a7ed0155cso7791505ad.3
-        for <linux-pm@vger.kernel.org>; Wed, 15 Jan 2025 23:02:17 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737010937; x=1737615737; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ZS/zLNoMtbOmAlXztUQxM70zl6Vh6C5NkcTxONG7DqM=;
-        b=koimY0D/sMYJqVcg273fLE7vmvAsVprtsWH9WseflLG0KfM/OmloBI5GW3mLGDvjkE
-         yagNImuMBh0tCl0Qqa0fuaorJzscE13od77OiEtGT5DMPd5xfn6ibYI+AaSZhcVoYnlp
-         h/Pz2kPlFbuAirsNxP+US0rI2YRK5u4TBdKUX83xGCS40MkwNi9+MWcfAyKOjWBeEA50
-         lf98BsZmqBjhsmoAmab/SG7om8J5JtKsCV1BXzHet5ts2+QZjIbKjDEZlVaFBlzOphGH
-         Pi4/cLDJ+Ypuu5wAgry//KTr9247jhrsyDosIWH5twM5W4lrDbODRlMtl/snqrhf56Jt
-         4FRQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737010937; x=1737615737;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZS/zLNoMtbOmAlXztUQxM70zl6Vh6C5NkcTxONG7DqM=;
-        b=fYvLpOlH7Xbp7bE+BkaeA/B3RF+M3YX8xMlslgj83WiQT1Ga3c8PeoYWpjJta2vETY
-         5aYBvLVvUOVTQiBMfY7zzQ+Ib9dlFnCHtZWW7S4MvWPLm1IK8S1HpQFcOg8AbqyAQAqD
-         DjIt9j7nzzBLhP2MElnmf2k0PQf2ztJFLIVW+pYlg3/Yv1H0BTUBWdw1fxQqLWJZi5cx
-         KKwrO0VANC94T1y1nC7RYhN1sGVjvGi+58Ze2pg8FWa0hq8deJpTTubdWFdbbUu1DM6h
-         3iue+ooQfjI9yZ21oGZv5OPzc9D+MQVtqYNEd3zJpECBYnzo6C4jxyuYOoQRQIgSIZWM
-         bSlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWbpGn86X5Kn8ZTM8br0HonevpOJLs4kfgyciT67qwb8Qko4ljyRJUs1rO/JbjxWfsc4VBmAAdxxg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxLlwkfBe1GaEh+hkHdeXMKsDjSB8wU07fU11m8aDkC2uH2rXCM
-	Yyj4nXMqCtcB0KRvcwmAcWD3wade7WgCNAhMb6eI990pRZo1E31k9ndld+/E77vJf92nstxPHbp
-	/
-X-Gm-Gg: ASbGnctetdSQ5YjNfkRT6nSIUXczvTG2Y9CpsPBEvA+umBYfWnvh9ur8hRmYFMxWUKK
-	zlXnBo6Dnavn6/ykl3d0i4ajlWRCP5XnDQs5mmz3QdxaNOwMbN+u20UioDrV5puMeYlgAkdTpL3
-	DnkyAau/6+wj+SerCzT5ZC9tYGkLkVU56eJvC9NRY4PqI0sg5vQdnUQqWq20eRYk7G9Fi9qGzBq
-	bVPCwjkhvy4Q9UHUJoNlt2A7N1p2a4feMkrUsBIW3NInHxHLCm+cAQFrAE=
-X-Google-Smtp-Source: AGHT+IFlzrBcdUY0bs4/8Sj7xVrCBP3SbPdaZMKXeURQBEhXHLuZJom44Aw7mHBQtMkoxQPSA6dA9w==
-X-Received: by 2002:aa7:88cc:0:b0:71e:4930:162c with SMTP id d2e1a72fcca58-72d21f4ac63mr45499683b3a.6.1737010936743;
-        Wed, 15 Jan 2025 23:02:16 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72d40549322sm10135399b3a.8.2025.01.15.23.02.15
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 15 Jan 2025 23:02:16 -0800 (PST)
-Date: Thu, 16 Jan 2025 12:32:14 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, upstream@airoha.com
-Subject: Re: [PATCH v10 1/2] pmdomain: airoha: Add Airoha CPU PM Domain
- support
-Message-ID: <20250116070214.vdnbyyqnciifngha@vireshk-i7>
-References: <20250109131313.32317-1-ansuelsmth@gmail.com>
+	s=arc-20240116; t=1737014476; c=relaxed/simple;
+	bh=CYMTRBhW2WXOjQ1h0QxJE0G54rvHoKIHqFKORo/wqEs=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=TdwVGvu9Jy/9x0g7Ktpn6xhenW3Hu1b3R/S9n1WOWoO3SHPuJs6kiacg/snQIH0WQvC5StsfwMUpogqbSjEX1k4nGctr0lcPNJFZ+z9V1kOGEmDJBZxGjKlquIcexiEAN73rcNXTzY7dYPjfLOC/B8/uhsr0yAWJD5AKwJowDH8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.162.254])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YYZvx3VB2zjYBT;
+	Thu, 16 Jan 2025 15:57:17 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id B76B7180105;
+	Thu, 16 Jan 2025 16:01:09 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 16 Jan
+ 2025 16:01:08 +0800
+Message-ID: <ad254dd8-24f7-4aee-9f68-5d1890e87c81@huawei.com>
+Date: Thu, 16 Jan 2025 16:01:08 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250109131313.32317-1-ansuelsmth@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 6/6] cpufreq: CPPC: Support for autonomous selection in
+ cppc_cpufreq
+To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+CC: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<viresh.kumar@linaro.org>, <mario.limonciello@amd.com>, <ray.huang@amd.com>,
+	<pierre.gondois@arm.com>, <acpica-devel@lists.linux.dev>,
+	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<lihuisong@huawei.com>, <hepeng68@huawei.com>, <fanghao11@huawei.com>
+References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
+ <20250113122104.3870673-7-zhenglifeng1@huawei.com>
+ <Z4fLXPgMvwGur+pz@BLRRASHENOY1.amd.com>
+ <f89fc07a-1c65-4d1e-9ad8-76c6c9a15b25@huawei.com>
+ <Z4ijkAFOMtVAOY6u@BLRRASHENOY1.amd.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <Z4ijkAFOMtVAOY6u@BLRRASHENOY1.amd.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-Ulf,
+On 2025/1/16 14:13, Gautham R. Shenoy wrote:
 
-On 09-01-25, 14:12, Christian Marangi wrote:
-> Add Airoha CPU PM Domain support to control frequency and power of CPU
-> present on Airoha EN7581 SoC.
+> On Thu, Jan 16, 2025 at 09:26:37AM +0800, zhenglifeng (A) wrote:
+>> On 2025/1/15 22:51, Gautham R. Shenoy wrote:
+>>
+>>> Hello Lifeng,
+>>>
+>>>
+>>> On Mon, Jan 13, 2025 at 08:21:04PM +0800, Lifeng Zheng wrote:
+>>>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
+>>>> driver.
+>>>>
+>>>
+>>> [..snip..]
+>>>
+>>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
+>>>> index bd8f75accfa0..ea6c6a5bbd8c 100644
+>>>> --- a/drivers/cpufreq/cppc_cpufreq.c
+>>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
+>>>> @@ -814,10 +814,119 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
+>>>>  
+>>>>  	return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
+>>>>  }
+>>>> +
+>>>> +static ssize_t show_auto_select(struct cpufreq_policy *policy, char *buf)
+>>>> +{
+>>>> +	bool val;
+>>>> +	int ret;
+>>>> +
+>>>> +	ret = cppc_get_auto_sel(policy->cpu, &val);
+>>>> +
+>>>> +	/* show "<unsupported>" when this register is not supported by cpc */
+>>>> +	if (ret == -EOPNOTSUPP)
+>>>> +		return sysfs_emit(buf, "%s\n", "<unsupported>");
+>>>> +
+>>>> +	if (ret)
+>>>> +		return ret;
+>>>> +
+>>>> +	return sysfs_emit(buf, "%d\n", val);
+>>>> +}
+>>>> +
+>>>> +static ssize_t store_auto_select(struct cpufreq_policy *policy,
+>>>> +				 const char *buf, size_t count)
+>>>> +{
+>>>> +	bool val;
+>>>> +	int ret;
+>>>> +
+>>>> +	ret = kstrtobool(buf, &val);
+>>>> +	if (ret)
+>>>> +		return ret;
+>>>> +
+>>>> +	ret = cppc_set_auto_sel(policy->cpu, val);
+>>>
+>>> When the auto_select register is not supported, since
+>>> cppc_set_reg_val() doesn't have the !CPC_SUPPORTED(reg) check, that
+>>> function won't return an error, and thus this store function won't
+>>> return an error either. Should there be a !CPC_SUPPORTED(reg) check in
+>>> cppc_set_reg_val() as well? Or should the store function call
+>>> cppc_get_auto_sel() to figure out if the register is supported or not?
+>>
+>> In patch 2, I have this check in cppc_set_reg_val():
+>>
+>> +	/* if a register is writeable, it must be a buffer */
+>> +	if ((reg->type != ACPI_TYPE_BUFFER) ||
+>> +	    (IS_OPTIONAL_CPC_REG(reg_idx) && IS_NULL_REG(&reg->cpc_entry.reg))) {
+>> +		pr_debug("CPC register (reg_idx=%d) is not supported\n", reg_idx);
+>> +		return -EOPNOTSUPP;
+>> +	}
+>>
+>> If a register is not a cpc supported one, it must be either an integer type
+>> or a null one. So it won't pass this check I think.
 > 
-> Frequency and power can be controlled with the use of the SMC command by
-> passing the performance state. The driver also expose a read-only clock
-> that expose the current CPU frequency with SMC command.
+> Ah, I see. In that case, you can remove the cppc_get_auto_sel() in
+> shmem_init_perf() function in amd_pstate.c (in Patch 5/6) from the
+> following snippet. The auto_sel value is nowhere used in the rest of
+> the code.
 > 
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> ---
-> Changes v10:
-> - Depends on HAVE_ARM_SMCCC
-> Changes v9:
-> - Fix compile error targetting wrong branch (remove_new change)
-> Changes v8:
-> - Add this patch
-> - Use SMC invoke instead of 1.2
+> @@ -399,6 +399,7 @@ static int shmem_init_perf(struct amd_cpudata *cpudata)
+>  {
+>  	struct cppc_perf_caps cppc_perf;
+>  	u64 numerator;
+> +	bool auto_sel; <--- Not needed.
+>  
+>  	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+>  	if (ret)
+> @@ -420,7 +421,7 @@ static int shmem_init_perf(struct amd_cpudata *cpudata)
+>  	if (cppc_state == AMD_PSTATE_ACTIVE)
+>  		return 0;
+>  
+> -	ret = cppc_get_auto_sel_caps(cpudata->cpu, &cppc_perf);   <--- Not needed.
+> +	ret = cppc_get_auto_sel(cpudata->cpu, &auto_sel);         <--- Not needed.
+>  	if (ret) {                                                <--- Not needed.
+>  		pr_warn("failed to get auto_sel, ret: %d\n", ret); <--- Not needed.
+> 
 
-Any inputs on this ?
+If auto_sel is not supported, this function will return 0 after getting
+fail. But after removing cppc_get_auto_sel(), this function will return
+-EOPNOTSUPP by setting. Is this alright?
 
--- 
-viresh
+> 
+> --
+> Thanks and Regards
+> gautham.
+
 
