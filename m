@@ -1,102 +1,163 @@
-Return-Path: <linux-pm+bounces-20573-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20574-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CE32A13F7A
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 17:28:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42CA1A13F7E
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 17:29:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AFB021888DD7
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 16:28:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BC2303A181F
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 16:29:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0260F22CF35;
-	Thu, 16 Jan 2025 16:28:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Y3ueES+G"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A33171DE88D;
+	Thu, 16 Jan 2025 16:29:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBB7E1E766F;
-	Thu, 16 Jan 2025 16:28:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B558635B;
+	Thu, 16 Jan 2025 16:29:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737044891; cv=none; b=n+sLtSW8bXNcM/akbBZDUNxEhsE7CANUfw4UHbuzryybIt1k6qFDIudtCHHIh8IYTpx7cb2Bu5f2+kMMrkhxhRYPDqFnRTbjVlYbJ333oO88m8SFCYpiUZxGKrlUJLR64rfBSBJlfA9+X+4HmLByMbJ0oqsma0+HltiN6NoFJJ0=
+	t=1737044970; cv=none; b=lVbFMZjTsS6q8g7uhcZoXT/3RkVakQnweTJX+R56sMDl7HUMpL8jq6+KyF89MNHD3TCYoB96572BUCp4u/+1fJLYC2VkeUfcQhm8G4U6oebtS1gXO8KePdqF4SQoCTNQj4qOxGNlR+VQqYyyuD7CpSK4OP9wdBa7KVZGckuvCiY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737044891; c=relaxed/simple;
-	bh=W3LD/mc8OgjXFPgxHAgdDbVEbuCUXcztBYZfDxNaNpI=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BPNpQIrGOWYnuA/SXrDH7OvrTJpXBWyiIsNKe4VhEwxsy5vCo1QEBR8hq644JkpNAfCbRShp+HHGxFOAnAO9Q56MFxvfI8FJDstu9gIGbpDSUrjnjEwLXnW2Bu2hHbV0Y1+rOKgj/eCuZWKR6aC1bE2pCxhdH0xEJZv894R/e9Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Y3ueES+G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6CBCCC4CEE5;
-	Thu, 16 Jan 2025 16:28:11 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737044891;
-	bh=W3LD/mc8OgjXFPgxHAgdDbVEbuCUXcztBYZfDxNaNpI=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Y3ueES+GgmUQ9LT3FnPufEvSoPQaLHdgDCrDG8l/2hU6b5Nb2whXBHGmju7Wyq0nL
-	 FhwmuOk04AUhckzSW5FU/AK8mRTJ/5Nz2+T7ZYgq1aA0L6vR16gYyvFLFE/W+anj1b
-	 kZUiLabsqycOkEUfEJNQ/N5Lp7SuQ7WRznXL9535hzuxJLyC9ZAvitId6WJ4IT5LkN
-	 IUtwbWsTsT5S+d/gukzPYXSl9jihD3Yq/0GLx4r57gJSUw9D4by6utoHI1HhYZg0uf
-	 K3i/yYxd3/SIeZVsXFJ2EJqCZKIPm8R1GgOxOdvW+mvxnvUEJY1eY2TuWKGBDY2jP2
-	 A6uCQggkOFHeg==
-Received: by mail-oi1-f179.google.com with SMTP id 5614622812f47-3eb87127854so369454b6e.2;
-        Thu, 16 Jan 2025 08:28:11 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUxVI4/DNjDYFBR5ByvMG8iaPdr5Qagk6FGNj8JvB0RXd2xFcTgl8/KPpcxKFvg3sBRWRcYU2wCTyc=@vger.kernel.org, AJvYcCXC6M6DDp2/fBQgE1h3yBniNzcFkwE63WHx5569S7/yaZTppd87+qeiI36iDrxGtrLZTufRjAhPhi09PtQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyncMJtFEB0Fx4Qk+r727bvMeHU1PBiShS6P4LoKV1EmrgDL4JR
-	gbpVemx/83MmNQZZ1u0929WKOOcQq/SnYet8GY7ULQJPHkoh/wjAabTIW9wJJig3NTSwS4LbdpT
-	0wUcZ0UZoYPnzLLRblhwEw62dT8g=
-X-Google-Smtp-Source: AGHT+IHHxANpiaIDQ9iNwT6ona780AQYihnMyGKLJ98qqK+EhP0tPssncTog1nZS9rfKYdqj9HYfGkC1IJMOnG4mlQQ=
-X-Received: by 2002:a05:6808:2103:b0:3eb:3b6e:a73c with SMTP id
- 5614622812f47-3ef2ec6c4c8mr23509859b6e.1.1737044890651; Thu, 16 Jan 2025
- 08:28:10 -0800 (PST)
+	s=arc-20240116; t=1737044970; c=relaxed/simple;
+	bh=CGIav0E83RUbfKK7U/4dppNEaAQ9rTIVebK8bo2gu/s=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=lDIAMSv+oW14qG5PDuorYJD2Ktz1NhY9YGoPjIDJBnk3FnROG61t/qaecc32qVX62Dbj47gDjrOQm0JlBVb5c+TcI88CCUg9qOer8NxP5Az/kdqg0RlegIhJWfVcC69Ddf26BX3eNCH7sQdP73n+fWsuiJ8dtY1/F/r7UgGSt3o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 951BD1007;
+	Thu, 16 Jan 2025 08:29:56 -0800 (PST)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 39DB03F673;
+	Thu, 16 Jan 2025 08:29:27 -0800 (PST)
+Date: Thu, 16 Jan 2025 16:29:24 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: arm-scmi@vger.kernel.org, linux-pm@vger.kernel.org,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>,
+	Peng Fan <peng.fan@nxp.com>
+Subject: Re: [PATCH] pmdomain: arm: scmi_pm_domain: Send an explicit request
+ to set the current state
+Message-ID: <Z4kz5MvjSCK6KTT0@bogus>
+References: <20250115113931.1181309-1-sudeep.holla@arm.com>
+ <CAPDyKFrrdkBAPBw5JOv5HLnOj2L=6ZjE+O7h8N3MFC64ebcNEg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250116154354.149297-1-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0izBnSGjmjO7T+_gEhrSib0==_bRXnsLEdzEjbH0cZDqg@mail.gmail.com> <Z4kwK6JCm5RDI4nG@smile.fi.intel.com>
-In-Reply-To: <Z4kwK6JCm5RDI4nG@smile.fi.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 16 Jan 2025 17:27:59 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jdqtyF_Prf6TETwaLJ3Cr3sK4rFnU68C5ioqKq8OF02A@mail.gmail.com>
-X-Gm-Features: AbW1kvbiR7X26FCPNfAVlMeoK4-_AjX_GmZ-xvNeT1WV_qp4jDF2NpP9AtmLTpk
-Message-ID: <CAJZ5v0jdqtyF_Prf6TETwaLJ3Cr3sK4rFnU68C5ioqKq8OF02A@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] PM: Revert "Add EXPORT macros for exporting PM functions"
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>, 
-	Pavel Machek <pavel@ucw.cz>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFrrdkBAPBw5JOv5HLnOj2L=6ZjE+O7h8N3MFC64ebcNEg@mail.gmail.com>
 
-On Thu, Jan 16, 2025 at 5:13=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Jan 16, 2025 at 05:09:29PM +0100, Rafael J. Wysocki wrote:
-> > On Thu, Jan 16, 2025 at 4:44=E2=80=AFPM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > >
-> > > The introduced macros are not doing what they intend for, namely
-> > > they won't eliminate the code when CONFIG_PM=3Dn.
+On Thu, Jan 16, 2025 at 04:54:44PM +0100, Ulf Hansson wrote:
+> On Wed, 15 Jan 2025 at 12:39, Sudeep Holla <sudeep.holla@arm.com> wrote:
 > >
-> > I don't think they have ever been expected to eliminate the code then.
-> > They just don't export the symbols in that case.
+> > On a system with multiple active SCMI agents, one agent(other than OSPM/
+> > Linux or bootloader) would request to turn on a shared power domain
+> > before the Linux boots/initialise the genpds. So when the Linux boots
+> > and gets the power state as already ON, it just registers the genpd with
+> > a default ON state.
+> >
+> > However, when the driver that needs this shared power domain is probed
+> > genpd sees that the power domain status is ON and never makes any SCMI
+> > call to power it up which is correct. But, since Linux didn't make an
+> > explicit request to turn on the shared power domain, the SCMI platform
+> > firmware will not know if the OSPM agent is actively using it.
+> >
+> > Suppose the other agent that requested the shared power domain to be
+> > powered ON requests to power it OFF as it no longer needs it, the SCMI
+> > platform firmware needs to turn it off if there are no active users of
+> > it which in the above scenaro is the case.
+> >
+> > As a result of SCMI platform firmware turning off the resource, OSPM/
+> > Linux will crash the moment as it expects the shared power domain to be
+> > powered ON.
+> >
+> > Send an explicit request to set the current state when setting up the
+> > genpd power domains so that OSPM registers its vote in the power domain
+> > state with the SCMI platform firmware.
+> >
+> > The other option is to not read the state and set the genpds as default
+> > OFF, but it can't handle the scenario on certain platforms where SCMI
+> > platform keeps all the power domains turned ON by default for faster boot
+> > (or any other such variations) and expect the OSPM to turn off the unused
+> > domains if power saving is required.
+> >
+> > Cc: Ulf Hansson <ulf.hansson@linaro.org>
+> > Link: https://lore.kernel.org/all/Z4aBkezSWOPCXcUh@bogus
+> > Reported-by: Ranjani Vaidyanathan <ranjani.vaidyanathan@nxp.com>
+> > Reported-by: Peng Fan <peng.fan@nxp.com>
+> > Signed-off-by: Sudeep Holla <sudeep.holla@arm.com>
+> 
+> I read up on the discussion and it looks like there is not really a
+> simple solution here.
+> 
+> In principle if a boot-loader wants to do a handover and leave the
+> power-domain powered-on for the kernel, the additional call to
+> ->state_set() *could* bump the usagecount in the SCMI FW, forever
+> leaving the power-domain on.
 >
-> Then I'm really puzzled with (potential) usefulness of them to begin with=
-.
-> Having a dead code that is not exported is doubtful benefit.
 
-Arguably, exported dead code is even worse.
+IIUC, the refcount in firmware differs from the one in the kernel. It is
+refcount per agent i.e. it is really just a kind of boolean to indicate if
+the agent is active user of the resource. So if the bootloader and the Linux
+being the same agent request to be turned on without a request to turn off
+doesn't mean the refcount is set to 2 and Linux needs to turn off twice.
+This is just my opinion and understanding.
 
-Anyway, it is hard to say what they are good for if there are no users.
+> I guess this problem only exists for power-domains being shared across
+> scmi agents. Perhaps some kind of configuration flag can help us to
+> determine what to do?
+>
 
-My point really is that you don't need to add anything beyond "this
-stuff has no users" to get it removed and arguing about what the
-unused stuff was intended for is not very useful so to speak.
+While I can't disagree, there is also a thought that OS shouldn't be aware
+of that detail for equally valid reasons. I am not sure if we can get that
+added in the spec.
+
+> > ---
+> >  drivers/pmdomain/arm/scmi_pm_domain.c | 8 ++++++++
+> >  1 file changed, 8 insertions(+)
+> >
+> > Hi Ulf,
+> >
+> > We need your feedback or suggestions for better solution on this matter.
+> > Let us know if we can do something better with the genpd's help to resolve
+> > this issue.
+> 
+> At initialization, genpd tries to get the correct state of the HW. If
+> the power-domain is on, genpd believes that it will stay on until it
+> requests it to be powered-off.
+>
+
+Agreed and it is right. I don't think that should change.
+
+> That said, I know we have FW's that aren't capable of informing us
+> about the power-domain's current state. For this, I (and Abel Vesa)
+> have been exploring how to introduce an "unknown-default" power-state,
+> which would mean that genpd would request on or off the first time
+> there is a transition of the genpd's power-state. This is on my TODO
+> list, perhaps that is something that can help here too?
+>
+
+Ah interesting. But I still can't get my head around how this fits with
+in with the existing 2 extreme use cases. One where f/w leaves everything
+on to speed up boot(which is fair requirement) and one where OS is expected
+to turn on when it needs a resource(which is ideal but may impact boot time
+loads of power domains needs to be turned on.
+
+IIUC if we initialise it to unknown state, we will issue ON request when
+we use the resource in the kernel and OFF when we are trying to power off
+unused on. It may defer the request to the firmware and is move this hack
+away from the genpd provider driver into core to deal with this "unknown"
+state. Sounds not bad to me if it is feasible to implement.
+
+--
+Regards,
+Sudeep
 
