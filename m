@@ -1,228 +1,118 @@
-Return-Path: <linux-pm+bounces-20543-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20544-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07B6FA13ADB
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 14:27:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38F54A13ADD
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 14:27:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3CF097A3454
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 13:27:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57D6B160EBD
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 13:27:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1EB7422A804;
-	Thu, 16 Jan 2025 13:27:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E29822A7EB;
+	Thu, 16 Jan 2025 13:27:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="doa6shUH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9F3422A7F4;
-	Thu, 16 Jan 2025 13:27:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FEC822A7E5;
+	Thu, 16 Jan 2025 13:27:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737034024; cv=none; b=hy4oBujDNIplbCI/RTbaRmlk7QqPrIUUQxtV4LUxtansb8jx1np08mHqiAPdv2seeUhMPP/1452QqC2UZSmP1bmJ7eKbo/E28H3ZcSGzoNY5RkWTMITzX4Q980LDNUwXVDjHz7Cjimk3vKSIxhhsYS683GRF2H4uIoDNV1EA67k=
+	t=1737034033; cv=none; b=c1jVuBBMvFniOLTcHsc4BmLTSXOCaE3PtpI+TEiUrCo/9OpzXtI5e+cX+GaeDnGc0tL1zPrScL/fu3KsCSiXTayY6LCXyu+6mWvb65e0gyBff1DGtXpK+g+64pRCafFRFt0i5jsUASghRfKShpXALd1k1rtk0h6ollkajD2F+z0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737034024; c=relaxed/simple;
-	bh=1zJPC/pU/QWkHE+WlObZSvhgbhMNp/BwGqDC1oA2TMQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Q7ZC7O1USEu/QO2lK2mRq08loJs4P1ER1nCVGkMmCTv2QLcv1/Ee1cpDUH6Lu3jPwhyNLFRlty7WwXivVOtiqe3H0dCRmCVh/aAlnpZ3zY+vD9FrosL7gMZqdUz1SE1Zf7lCskhK6c7AL3j/t1yTQa6S1d2Nf70Wzmg1iJoQ2go=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 41473106F;
-	Thu, 16 Jan 2025 05:27:28 -0800 (PST)
-Received: from [192.168.0.16] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7BDA33F673;
-	Thu, 16 Jan 2025 05:26:58 -0800 (PST)
-Message-ID: <9fb87b98-778c-4ab8-9444-55b76096c28f@arm.com>
-Date: Thu, 16 Jan 2025 13:26:55 +0000
+	s=arc-20240116; t=1737034033; c=relaxed/simple;
+	bh=CO6WZPYdeZC8+Bx0ho5URccoE4ccASaq/bcedaSPINk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XeEQqM1YAqVAiIV1TfW8aMBdTzOMvi19sKJvtc/e4ncd1jJGEgKTdRdfJCltvepRnx2jXJMxYFQZVXFO2OJxBgOhXRzZQAD3oDdOGnV4rfHBv5DUz471A3YsHDSEnhJHwnrcusAPO2oYCMTzLoe8pDU1Zm0MmFLmKCI2LKBKaC4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=doa6shUH; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1737034029;
+	bh=CO6WZPYdeZC8+Bx0ho5URccoE4ccASaq/bcedaSPINk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=doa6shUHNfIEHjEAqGxGeNydvwDIsM1DBvzqdtwPGDCSR34OXuitDO+D0BSeQ2Rqt
+	 W9MVXML8f3pjH7YJCaXHs65OgRAOlA3Xwu+tEKOGWrZIMb/qLbCbN0PfaNsCSIhTKS
+	 OfyB55kluekPg1CI9bdfN6AB9eqsWfqdgMHRecFtShYQDb5W+mH7D3b8d1zoHBg/Vy
+	 eN/OWG7kPrF+ditoeDRg4zC5K+JaiSZljxdOotELYC/wvbAoG1DQci3XSrOxopF67G
+	 e0UT5+nAUv00teiH5IQJS4oUGyZWqkqCtPpgYWzqTAGQScsfZfv5RqbHEt8+JQAVFX
+	 +3/Xu0o3qQ7sA==
+Received: from notapiano (unknown [IPv6:2804:14c:1a9:53ee::1001])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2CAE817E0E9E;
+	Thu, 16 Jan 2025 14:27:02 +0100 (CET)
+Date: Thu, 16 Jan 2025 10:27:00 -0300
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Alexandre Mergnat <amergnat@baylibre.com>,
+	Balsam CHIHI <bchihi@baylibre.com>, kernel@collabora.com,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	Hsin-Te Yuan <yuanhsinte@chromium.org>,
+	Chen-Yu Tsai <wenst@chromium.org>,
+	Bernhard =?utf-8?Q?Rosenkr=C3=A4nzer?= <bero@baylibre.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	stable@vger.kernel.org
+Subject: Re: [PATCH RESEND v2 2/5] thermal/drivers/mediatek/lvts: Disable
+ Stage 3 thermal threshold
+Message-ID: <a61835ca-a13d-4547-b3a2-3563688bff25@notapiano>
+References: <20250113-mt8192-lvts-filtered-suspend-fix-v2-0-07a25200c7c6@collabora.com>
+ <20250113-mt8192-lvts-filtered-suspend-fix-v2-2-07a25200c7c6@collabora.com>
+ <53f3803f-c6ef-40db-9794-6c90b37659c1@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/9] cpuidle: teo: Reorder candidate state index checks
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-References: <6116275.lOV4Wx5bFT@rjwysocki.net>
- <CAJZ5v0g2CxmFB3Js09jKk=ym26oEGVUsr5tM2p2vpPU_bczjmA@mail.gmail.com>
- <CAJZ5v0gr5CTM+p4dvAywuNyxLfE6MW7WWFu7wajCazMPodEvvg@mail.gmail.com>
- <6122398.lOV4Wx5bFT@rjwysocki.net>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <6122398.lOV4Wx5bFT@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <53f3803f-c6ef-40db-9794-6c90b37659c1@linaro.org>
 
-On 1/16/25 12:22, Rafael J. Wysocki wrote:
-> On Wednesday, January 15, 2025 10:10:11 PM CET Rafael J. Wysocki wrote:
->> On Wed, Jan 15, 2025 at 9:48â€¯PM Rafael J. Wysocki <rafael@kernel.org> wrote:
->>>
->>> On Wed, Jan 15, 2025 at 8:20â€¯PM Christian Loehle
->>> <christian.loehle@arm.com> wrote:
->>>>
->>>> On 1/15/25 15:54, Rafael J. Wysocki wrote:
->>>>> On Wed, Jan 15, 2025 at 3:46â€¯PM Christian Loehle
->>>>> <christian.loehle@arm.com> wrote:
->>>>>>
->>>>>> On 1/13/25 18:36, Rafael J. Wysocki wrote:
->>>>>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>>>>
->>>>>>> Since constraint_idx may be 0, the candidate state index may change to 0
->>>>>>> after assigning constraint_idx to it, so first check if it is greater
->>>>>>> than constraint_idx (and update it if so) and then check it against 0.
->>>>>>
->>>>>> So the reason I've left this where it was is because the prev_intercept_idx
->>>>>> was supposed to query the sleep length if we're in an majority-intercept
->>>>>> period and then it makes sense to query the sleep length (to detect such
->>>>>> a period being over).
->>>>>> A constraint_idx == 0 scenario doesn't need the intercept-machinery to
->>>>>> work at all, why are we querying the sleep length then?
->>>>>
->>>>> In case the constraint is different next time and it's better to know
->>>>> the sleep length to properly classify the wakeup.
->>>>
->>>> I would hope constraints change nowhere near as frequently as
->>>> idle entry / exit happen, is your experience different?
->>>
->>> They don't, but they may change at any time and it is kind of good to
->>> have history in case this happens.
->>>
->>>>>
->>>>>>>
->>>>>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>>>>> ---
->>>>>>>
->>>>>>> This is a rebased variant of
->>>>>>>
->>>>>>> https://lore.kernel.org/linux-pm/8476650.T7Z3S40VBb@rjwysocki.net/
->>>>>>>
->>>>>>> ---
->>>>>>>  drivers/cpuidle/governors/teo.c |   15 ++++++++-------
->>>>>>>  1 file changed, 8 insertions(+), 7 deletions(-)
->>>>>>>
->>>>>>> --- a/drivers/cpuidle/governors/teo.c
->>>>>>> +++ b/drivers/cpuidle/governors/teo.c
->>>>>>> @@ -428,6 +428,14 @@
->>>>>>>                               break;
->>>>>>>               }
->>>>>>>       }
->>>>>>> +
->>>>>>> +     /*
->>>>>>> +      * If there is a latency constraint, it may be necessary to select an
->>>>>>> +      * idle state shallower than the current candidate one.
->>>>>>> +      */
->>>>>>> +     if (idx > constraint_idx)
->>>>>>> +             idx = constraint_idx;
->>>>>>> +
->>>>>>>       if (!idx && prev_intercept_idx) {
->>>>>>>               /*
->>>>>>>                * We have to query the sleep length here otherwise we don't
->>>>>>> @@ -439,13 +447,6 @@
->>>>>>>       }
->>>>>>>
->>>>>>>       /*
->>>>>>> -      * If there is a latency constraint, it may be necessary to select an
->>>>>>> -      * idle state shallower than the current candidate one.
->>>>>>> -      */
->>>>>>> -     if (idx > constraint_idx)
->>>>>>> -             idx = constraint_idx;
->>>>>>> -
->>>>>>> -     /*
->>>>>>
->>>>>> We could leave this here and just do goto end;?
->>>>>
->>>>> Why would this be better?
->>>>
->>>> Saves querying the sleep length in case of constraint_idx == 0, i.e.
->>>> qos request to be very latency-sensitive and us actually adding latency
->>>> here.
->>>
->>> Fair enough, but before patch [7/9] leaving it where it is doesn't
->>> really cause it to skip the sleep length check unless state 0 is
->>> "polling".
->>>
->>> After patch [7/9] it is possible to add a constraint_idx check against
->>> 0 to the "goto out_tick" condition before the
->>> tick_nohz_get_sleep_length() call, that is
->>>
->>> if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS) &&
->>>     (2 * cpu_data->short_idle >= cpu_data->total || !constraint_idx))
->>>         goto out_tick;
->>
->> Or even
->>
->> if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS) &&
->>     (2 * cpu_data->short_idle >= cpu_data->total || latency_req <
->> A_SMALL_VALUE))
->>         goto out_tick;
->>
->> for that matter.
->>
->>> but that would be a separate patch if you will.
+On Tue, Jan 14, 2025 at 12:54:43PM +0100, Daniel Lezcano wrote:
+> On 13/01/2025 14:27, Nícolas F. R. A. Prado wrote:
+> > The Stage 3 thermal threshold is currently configured during
+> > the controller initialization to 105 Celsius. From the kernel
+> > perspective, this configuration is harmful because:
+> > * The stage 3 interrupt that gets triggered when the threshold is
+> >    crossed is not handled in any way by the IRQ handler, it just gets
+> >    cleared. Besides, the temperature used for stage 3 comes from the
+> >    sensors, and the critical thermal trip points described in the
+> >    Devicetree will already cause a shutdown when crossed (at a lower
+> >    temperature, of 100 Celsius, for all SoCs currently using this
+> >    driver).
+> > * The only effect of crossing the stage 3 threshold that has been
+> >    observed is that it causes the machine to no longer be able to enter
+> >    suspend. Even if that was a result of a momentary glitch in the
+> >    temperature reading of a sensor (as has been observed on the
+> >    MT8192-based Chromebooks).
+> > 
+> > For those reasons, disable the Stage 3 thermal threshold configuration.
 > 
-> So for completeness, it would be a patch like the one below, on top of the [7/9].
-> 
-> ---
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> Subject: [PATCH v1] cpuidle: teo: Skip sleep length computation for low latency constraints
-> 
-> If the idle state exit latency constraint is sufficiently low, it
-> is better to avoid the additional latency related to calling
-> tick_nohz_get_sleep_length().  It is also not necessary to compute
-> the sleep length in that case because shallow idle state selection
-> will be forced then regardless of the recent wakeup history.
-> 
-> Accordingly, skip the sleep length computation and subsequent
-> checks of the exit latency constraint is low enough.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> Does this stage 3 not designed to reset the system ? So the interrupt line
+> should be attached to the reset line ? (just asking)
 
-Thank you, that makes sense.
-Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+Yes, my guess is that the intention of stage 3 is to cause a system reset,
+however it clearly does not cause a system reset, so it is not directly
+connected to the reset line in any way. Instead it is up to the kernel to
+receive the interrupt and deal with it. But then, since there are lower thermal
+thresholds that already cause a system shutdown, it's useless to keep this
+around - it only causes suspend/resume misbehaviors in case there are spurious
+readings.
 
-> ---
->  drivers/cpuidle/governors/teo.c |   13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> --- a/drivers/cpuidle/governors/teo.c
-> +++ b/drivers/cpuidle/governors/teo.c
-> @@ -106,6 +106,12 @@
->  #include "gov.h"
->  
->  /*
-> + * Idle state exit latency threshold used for deciding whether or not to check
-> + * the time till the closest expected timer event.
-> + */
-> +#define LATENCY_THRESHOLD_NS	(RESIDENCY_THRESHOLD_NS / 2)
-> +
-> +/*
->   * The PULSE value is added to metrics when they grow and the DECAY_SHIFT value
->   * is used for decreasing metrics on a regular basis.
->   */
-> @@ -432,9 +438,14 @@
->  	 * duration falls into that range in the majority of cases, assume
->  	 * non-timer wakeups to be dominant and skip updating the sleep length
->  	 * to reduce latency.
-> +	 *
-> +	 * Also, if the latency constraint is sufficiently low, it will force
-> +	 * shallow idle states regardless of the wakeup type, so the sleep
-> +	 * length need not be known in that case.
->  	 */
->  	if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_NS) &&
-> -	    2 * cpu_data->short_idle >= cpu_data->total)
-> +	    (2 * cpu_data->short_idle >= cpu_data->total ||
-> +	     latency_req < LATENCY_THRESHOLD_NS))
->  		goto out_tick;
->  
->  	duration_ns = tick_nohz_get_sleep_length(&delta_tick);
-> 
-> 
-> 
-> 
-
+Thanks,
+Nícolas
 
