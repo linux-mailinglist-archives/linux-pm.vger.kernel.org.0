@@ -1,92 +1,115 @@
-Return-Path: <linux-pm+bounces-20561-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20562-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC215A13EF1
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 17:11:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0D3B4A13F00
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 17:13:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 43FEB3A6BAF
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 16:11:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 637FC188A5E4
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 16:13:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C948422B8A0;
-	Thu, 16 Jan 2025 16:11:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3CB8222BAD9;
+	Thu, 16 Jan 2025 16:13:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="bjP2KtRN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="KEtb+6TK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9C9A922C9F1;
-	Thu, 16 Jan 2025 16:11:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C131022A7FA;
+	Thu, 16 Jan 2025 16:13:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737043867; cv=none; b=hAdzUKGvdyr4VsHsIWCDLah0gOrXPFo5lutLrQuyqtYkMqwogkMYAAXOhFN4S2zn+Q+Qfa2GHmiXz6NukJkXRdtKt6/mapGhhOxiD1IPxpZwINhxEkbY24iv/cb5v9sjZV8Vf1OWNcv4QbMUtAGMU3+aC4uZdd11fzb49cyPXXk=
+	t=1737044018; cv=none; b=EnuIZcgtdQvpsAwNt4DkGB7P0bQvDpiFDbMtW0TAW1TPrF/HiXgnRd1esdIA8g9cBOvmN7a7i+9eIwjqctaJB/1ymFCC/a5L688C3+LVRwNDyaauHa8RybAxbd2lPFwDLteszyGkft9abK5pHVm7hq0kFC1Rpah274JEilm7lKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737043867; c=relaxed/simple;
-	bh=vQPjsuN6FQji3BEBE8K8dx+hbZAUbUP9ZCtbbWZvkwA=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=pAVhONVQVUyVRHiEsEGlaxSUZfnbKe2/KzoAwcKq5pga9o/FOiFSoDn6+jI33LNWMnib4aexK97bXfnINN5GnVWNdhrXgWTO1KgBHmWjZNy32GGYKaGdekfFbzKSlWT90IJGjh19tDe2uiVVgyi7FILT/hntskrYLdt7+M/pBPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=bjP2KtRN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2855AC4CEE2;
-	Thu, 16 Jan 2025 16:11:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737043867;
-	bh=vQPjsuN6FQji3BEBE8K8dx+hbZAUbUP9ZCtbbWZvkwA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=bjP2KtRN3WJXsvNBprn4d5TZ/sw9MyNZDZVt08Jbt9/wW5pwKFlbA9vfHpLhN9zJm
-	 q0bzTwYOhbpQ80Z4LeshMQatt4HjhTYDWHOcPD8jOfTKQlyg+oPW7lBawqlihPDUyU
-	 puhw2EfPKFNLYmXB4FJrY3x6KbcjXYZumnvrIG5FAEb2/OIn5/y7G+yDfP3+zlis7X
-	 SxDNfg3oMsdam8yED9nfwapSII6QgHNL/a/ewzmWuQpAnm01LjYQPyFw3W4XwfAWOb
-	 rt+vPwoDtVA7LfR8UmPRpcaEq+UbycIGH7nX4XDLIg+QAEEBE9fxDHQsoCWq21/mB4
-	 H7qJM9MrcyBng==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3eb9a0a2089so585587b6e.1;
-        Thu, 16 Jan 2025 08:11:07 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW4YGw0sfBKWzTBquuqxUzjYe4qweW/kX6lL64OcX5o50M4dDzU1keFNi+6IYOtpLuad8oNa68UGwAr1cY=@vger.kernel.org, AJvYcCXKcNbE2cpPytPD81fQXR1OTApLxsluyqDBg1qC6XhDFhN+xoErZHsDntrski8mdT4CNl09W7sQQnk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw/qpbgDPXaqezRKgmQ+Sn3+GA5pZ74SDZXQMQGDZHKWq+mo7Pc
-	IV1Bcwg+BLEdxYISLQllEeXZb9X6v3mes07QVIx5RQlwiLDaDGFkG8Nq5nesvo/lnI3fW7GlREB
-	dvq0w8XKfJGh0Fitz6uHfN8MmvWY=
-X-Google-Smtp-Source: AGHT+IG+PH3z0Y7Hf/brP+skAArWJjojmnf4tgK7ah04xOzOTncqp+79yN6VTBPwS/HALKHThyR/ESaOi5vufeUrgoQ=
-X-Received: by 2002:a05:6808:3c8d:b0:3eb:7492:63be with SMTP id
- 5614622812f47-3ef2ec267dcmr22025668b6e.24.1737043866525; Thu, 16 Jan 2025
- 08:11:06 -0800 (PST)
+	s=arc-20240116; t=1737044018; c=relaxed/simple;
+	bh=YTfVF+G9qXcD88zA4v+05XFx3vzf2b4f8ztuVqDlTB8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CjQNp/WCVtZ/9RWpEpdy4eR/w3rKHB9SHskuI1m9w/wU9DYnthU6Y8OzHGuhVQjsYKT6UWODDaokkcvS8rPW/zpp8hvDgTNqE6M10/6h8jtb/7ezqQHwwkv/mxBxvd/PlbNojGgdXMwaPNd6vo9AP81XvmP5Xh67sBmvLCYq0h8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=KEtb+6TK; arc=none smtp.client-ip=198.175.65.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737044017; x=1768580017;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=YTfVF+G9qXcD88zA4v+05XFx3vzf2b4f8ztuVqDlTB8=;
+  b=KEtb+6TKDorroOXRdBDc/iTSurhlHzcpSBLaXowgLXY7Y94n+cDrOMas
+   WqdolY/lhx+kWhg4TahLtzTSo5CO296tmzo92sXM9g9TvpxUcpNHr3iVt
+   eEcbJCJV47nChwckYLrqPN9FRB4d19x/mTXh8S1LEmMm8QPkX50s5yX0E
+   2lD8tUucocEVvR1rmvJqLare7MG1oMfqsl+cdBtmIBh27cvgDep0FRREr
+   dyBP6N7rc1h+Wrdjywqjpu93J56976m2ss8BQ7gCJohWa3oNJel3X2ris
+   ObmkpMpy7YMofjJuDSgXM9c3fCMPKW8tCTVBYLvICEzi/odzFog9fyD/M
+   A==;
+X-CSE-ConnectionGUID: oZH5EnyDRvaSs7Lv/AhNEg==
+X-CSE-MsgGUID: 6Au54n3NRgG/I9FyAMspSw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="48443108"
+X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
+   d="scan'208";a="48443108"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 08:13:36 -0800
+X-CSE-ConnectionGUID: JAtNw0QsRYGwnkRSaJIEDA==
+X-CSE-MsgGUID: fziWSYPCRwWClbNcbHKxkA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
+   d="scan'208";a="106075339"
+Received: from unknown (HELO smile.fi.intel.com) ([10.237.72.154])
+  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 08:13:33 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tYSUt-00000001jLm-1BRB;
+	Thu, 16 Jan 2025 18:13:31 +0200
+Date: Thu, 16 Jan 2025 18:13:31 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+	Richard Fitzgerald <rf@opensource.cirrus.com>,
+	Adrian Hunter <adrian.hunter@intel.com>
+Subject: Re: [PATCH v2 1/1] PM: Revert "Add EXPORT macros for exporting PM
+ functions"
+Message-ID: <Z4kwK6JCm5RDI4nG@smile.fi.intel.com>
+References: <20250116154354.149297-1-andriy.shevchenko@linux.intel.com>
+ <CAJZ5v0izBnSGjmjO7T+_gEhrSib0==_bRXnsLEdzEjbH0cZDqg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250110115953.6058-1-patryk.wlazlyn@linux.intel.com>
- <e6c49f30-b32a-4ad0-98e2-634113011f90@intel.com> <5f24fe01b6dd0ae0e6d91209e143f2faff6ae017.camel@linux.intel.com>
- <860da841-fa82-4984-9e34-fba02e7aa556@intel.com> <fbdaf69ec121836db4d4611842bd0c1b93224bf6.camel@linux.intel.com>
- <ac0babd8-2c05-4fe9-a2d0-9972172e1e92@linux.intel.com>
-In-Reply-To: <ac0babd8-2c05-4fe9-a2d0-9972172e1e92@linux.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 16 Jan 2025 17:10:55 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j9mx694gN-jk90hHPNDjHHFs-rpwQm2zkeKT_QpAeH9Q@mail.gmail.com>
-X-Gm-Features: AbW1kvaijP8Q1y8Z6w1skOVMRgf-JaMhfm8nOyZYuZpoO5lcSf52YCpkSjulY38
-Message-ID: <CAJZ5v0j9mx694gN-jk90hHPNDjHHFs-rpwQm2zkeKT_QpAeH9Q@mail.gmail.com>
-Subject: Re: [PATCH v9 0/4] SRF: Fix offline CPU preventing pc6 entry
-To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-Cc: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Dave Hansen <dave.hansen@intel.com>, 
-	x86@kernel.org, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	rafael.j.wysocki@intel.com, len.brown@intel.com, dave.hansen@linux.intel.com
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0izBnSGjmjO7T+_gEhrSib0==_bRXnsLEdzEjbH0cZDqg@mail.gmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Thu, Jan 16, 2025 at 5:02=E2=80=AFPM Patryk Wlazlyn
-<patryk.wlazlyn@linux.intel.com> wrote:
->
-> > * Because version 6.12 is LTS, there is a good chance that users of nea=
-r-future
-> > new platforms will run 6.12 on them.
-> > * If a near-future platform happens to miss the firmware workaround for=
- this
-> > issue, having these patches in 6.12 will likely mean that most users ar=
-e OK.
->
-> Make sense to me. Any objections to adding "Cc stable v6.12"?
+On Thu, Jan 16, 2025 at 05:09:29PM +0100, Rafael J. Wysocki wrote:
+> On Thu, Jan 16, 2025 at 4:44 PM Andy Shevchenko
+> <andriy.shevchenko@linux.intel.com> wrote:
+> >
+> > The introduced macros are not doing what they intend for, namely
+> > they won't eliminate the code when CONFIG_PM=n.
+> 
+> I don't think they have ever been expected to eliminate the code then.
+> They just don't export the symbols in that case.
 
-Well, that's not what you add anyway.  "Cc stable" is a maintainer thing.
+Then I'm really puzzled with (potential) usefulness of them to begin with.
+Having a dead code that is not exported is doubtful benefit.
+
+> > Also there were no users of them for all this time.
+> 
+> This actually is a good argument for dropping stuff.
+> 
+> > Drop them for good and to avoid possible misleading.
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
