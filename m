@@ -1,230 +1,264 @@
-Return-Path: <linux-pm+bounces-20537-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20538-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05A13A139AB
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 13:02:56 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FA70A139DB
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 13:22:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FF59168370
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 12:02:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 573A7163F45
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 12:22:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7708B1DE3DC;
-	Thu, 16 Jan 2025 12:02:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52AD81DE4DD;
+	Thu, 16 Jan 2025 12:22:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Kvb2l+YM"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="FOC+t+Wt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DA8D1D90DB;
-	Thu, 16 Jan 2025 12:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7259C24A7E7;
+	Thu, 16 Jan 2025 12:22:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737028969; cv=none; b=uGfocAeq8OtJBo/iVoaKUyh8sAzu+As8UZblXHCgmjtdiDlUJNPH239LIONfY8UfmRTDgLzkDSCiJ34FRiFaKi+jAAuBmvnaNcXun3w/YQgftQJGTCPW8RrTuyx6qlyeCAGIMwGmXneKUHhhLKHFPfR+M1HNqWZgc7dpMQId+dc=
+	t=1737030171; cv=none; b=WMKwhSt1LlflzOBJy8sWtvjIL1KfRm4AtwggmFrqFT0oGaW+ng01pj2i6aXkkIlYGCtV5jTvKUvtxufTPPL+ku43D1ebCmgIBED0HYAkEh+zVT5ziodiiReG7SMcKcLo1h9sdkBoZnuNMy0Bs3ro1liPfb9DNfgy0umSqK8wkt8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737028969; c=relaxed/simple;
-	bh=NgMks3iOQKzMIwQHOtA+dP88k7Mk7eu8pT4IExXYSo4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=THJwlkuX+7d5s/IST1uBkAnctFpR2cj0PuaVt3iGd7cRdbbDmq05kuYh8SOui8L++yrXjItchj8PeyuyHgd3PQQNoHje9bQP4CvS9GdJp4x4YmFDUTlyI/TPKHV18SUQ6OufkgT7YfhThFDJn5MUHBEEfVvsLOCWZB3m41RkPjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Kvb2l+YM; arc=none smtp.client-ip=198.175.65.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1737028968; x=1768564968;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=NgMks3iOQKzMIwQHOtA+dP88k7Mk7eu8pT4IExXYSo4=;
-  b=Kvb2l+YM6Bugdk95Dpd4an3MvnFbfS6A+4wNGv6W/NZhE+ycVTdJKQqE
-   6FeKKy1UAi7mishAGwjZkmbYcNPOI/kG8pUjA50XNCO2Xb7mUncLxs63Z
-   siwrYsbJX34eJgcylU8a995MMw3AxnfRTksiiOHULi1cIBUWR8QRBFVi7
-   iRvB/2ZzZcoqZOqyu5qpbKpNKHN7nQh6rDbM7FDCZZZjidbKmRrSXQc/0
-   RbER4Ni3SrgV8EgoC3HQu/NFUNLA4U22RWjSnMV4ThAhSzlCnUqFBKWWw
-   Ryaojg8b0DHAfkKAmqaEHXFozPdxFORy27XD+8hJk3wqV/NTwgVlYfED/
-   Q==;
-X-CSE-ConnectionGUID: D4jw5TItQkKQGr19JfWq6A==
-X-CSE-MsgGUID: QPrnRmHISyqn/OlijW6mIA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11316"; a="48806107"
-X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
-   d="scan'208";a="48806107"
-Received: from fmviesa006.fm.intel.com ([10.60.135.146])
-  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 04:02:47 -0800
-X-CSE-ConnectionGUID: 7XN/y71JSHqEoD3bBWgY0g==
-X-CSE-MsgGUID: vz555kR/Q5mWewTlcUEJsg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
-   d="scan'208";a="105293015"
-Received: from kuha.fi.intel.com ([10.237.72.152])
-  by fmviesa006.fm.intel.com with SMTP; 16 Jan 2025 04:02:19 -0800
-Received: by kuha.fi.intel.com (sSMTP sendmail emulation); Thu, 16 Jan 2025 14:02:18 +0200
-Date: Thu, 16 Jan 2025 14:02:18 +0200
-From: Heikki Krogerus <heikki.krogerus@linux.intel.com>
-To: Pengyu Luo <mitltlatltl@gmail.com>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Bjorn Andersson <andersson@kernel.org>,
-	Konrad Dybcio <konradybcio@kernel.org>,
-	Hans de Goede <hdegoede@redhat.com>,
-	Ilpo =?iso-8859-1?Q?J=E4rvinen?= <ilpo.jarvinen@linux.intel.com>,
-	Bryan O'Donoghue <bryan.odonoghue@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-usb@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v3 2/6] platform: arm64: add Huawei Matebook E Go EC
- driver
-Message-ID: <Z4j1SicBtMZq4P9B@kuha.fi.intel.com>
-References: <20250113174945.590344-1-mitltlatltl@gmail.com>
- <20250113175049.590511-1-mitltlatltl@gmail.com>
+	s=arc-20240116; t=1737030171; c=relaxed/simple;
+	bh=/YbBRTytvR1JREEqgrc+7rPx2GBZhsQVFOi+CTtEGyg=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uqipwWa7ADNKc4Pt1w3uY7hYbC71G7a6/AqwaY0r6zQtrNi+Q8gcT0iADUS3q+2T/euZVbtvgBKXGPO0IvbadI8TJE0ZvJqUctIxhXYqH58+PYK6gxqfV+Uk2+B/irZ2QKdo44kJ6CzXtPCeMrl1qyZIi6GeJFZKfAck83NJS8Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=FOC+t+Wt; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id 29e3a80c989a39bd; Thu, 16 Jan 2025 13:22:40 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A7F398E0B66;
+	Thu, 16 Jan 2025 13:22:39 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1737030160;
+	bh=/YbBRTytvR1JREEqgrc+7rPx2GBZhsQVFOi+CTtEGyg=;
+	h=From:Subject:Date;
+	b=FOC+t+WtO/TBu97dNhQjyV7bDW3ncgNEmddequLo4XBVabS/vfO8dIbjceklFpOex
+	 1gR+JTJp8QSdam/s3lfew1oKnzOkFyl941BD4Tp0YGSZJwrwoz7iF1hbRImx4UZDhK
+	 pKtRLpGVmMCS+A+/2TyrzWt3HUR3z5Bk//pUAkpGv2EDG0qGLX4OuLpIdFW03ifHKK
+	 VBtmoQvmprSytXaEk48iscxTJn1noo/vnSobW9CvH4akJmPizOOVpAPmzq8Eag4sWg
+	 QDIUvfPkZySaDp/Hq0KO9M+Iz2XbfW4KKgDuGjoinwA9n3aZBHiBdLhBEpAezYRNb6
+	 1V3vk3v5VvFsA==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Christian Loehle <christian.loehle@arm.com>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Subject: Re: [PATCH v1 2/9] cpuidle: teo: Reorder candidate state index checks
+Date: Thu, 16 Jan 2025 13:22:39 +0100
+Message-ID: <6122398.lOV4Wx5bFT@rjwysocki.net>
+In-Reply-To:
+ <CAJZ5v0gr5CTM+p4dvAywuNyxLfE6MW7WWFu7wajCazMPodEvvg@mail.gmail.com>
+References:
+ <6116275.lOV4Wx5bFT@rjwysocki.net>
+ <CAJZ5v0g2CxmFB3Js09jKk=ym26oEGVUsr5tM2p2vpPU_bczjmA@mail.gmail.com>
+ <CAJZ5v0gr5CTM+p4dvAywuNyxLfE6MW7WWFu7wajCazMPodEvvg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250113175049.590511-1-mitltlatltl@gmail.com>
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefuddrudeiuddgfeejucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtqhertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepkeeileehffelfefggfdtjedvkeettdejfeevueegfedvhffgudeuteeigfeileetnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheptghhrhhishhtihgrnhdrlhhovghhlhgvsegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrghrohdrohhrghdprhgtphhtthhopeg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-Hi,
+On Wednesday, January 15, 2025 10:10:11 PM CET Rafael J. Wysocki wrote:
+> On Wed, Jan 15, 2025 at 9:48=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+> >
+> > On Wed, Jan 15, 2025 at 8:20=E2=80=AFPM Christian Loehle
+> > <christian.loehle@arm.com> wrote:
+> > >
+> > > On 1/15/25 15:54, Rafael J. Wysocki wrote:
+> > > > On Wed, Jan 15, 2025 at 3:46=E2=80=AFPM Christian Loehle
+> > > > <christian.loehle@arm.com> wrote:
+> > > >>
+> > > >> On 1/13/25 18:36, Rafael J. Wysocki wrote:
+> > > >>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >>>
+> > > >>> Since constraint_idx may be 0, the candidate state index may chan=
+ge to 0
+> > > >>> after assigning constraint_idx to it, so first check if it is gre=
+ater
+> > > >>> than constraint_idx (and update it if so) and then check it again=
+st 0.
+> > > >>
+> > > >> So the reason I've left this where it was is because the prev_inte=
+rcept_idx
+> > > >> was supposed to query the sleep length if we're in an majority-int=
+ercept
+> > > >> period and then it makes sense to query the sleep length (to detec=
+t such
+> > > >> a period being over).
+> > > >> A constraint_idx =3D=3D 0 scenario doesn't need the intercept-mach=
+inery to
+> > > >> work at all, why are we querying the sleep length then?
+> > > >
+> > > > In case the constraint is different next time and it's better to kn=
+ow
+> > > > the sleep length to properly classify the wakeup.
+> > >
+> > > I would hope constraints change nowhere near as frequently as
+> > > idle entry / exit happen, is your experience different?
+> >
+> > They don't, but they may change at any time and it is kind of good to
+> > have history in case this happens.
+> >
+> > > >
+> > > >>>
+> > > >>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > >>> ---
+> > > >>>
+> > > >>> This is a rebased variant of
+> > > >>>
+> > > >>> https://lore.kernel.org/linux-pm/8476650.T7Z3S40VBb@rjwysocki.net/
+> > > >>>
+> > > >>> ---
+> > > >>>  drivers/cpuidle/governors/teo.c |   15 ++++++++-------
+> > > >>>  1 file changed, 8 insertions(+), 7 deletions(-)
+> > > >>>
+> > > >>> --- a/drivers/cpuidle/governors/teo.c
+> > > >>> +++ b/drivers/cpuidle/governors/teo.c
+> > > >>> @@ -428,6 +428,14 @@
+> > > >>>                               break;
+> > > >>>               }
+> > > >>>       }
+> > > >>> +
+> > > >>> +     /*
+> > > >>> +      * If there is a latency constraint, it may be necessary to=
+ select an
+> > > >>> +      * idle state shallower than the current candidate one.
+> > > >>> +      */
+> > > >>> +     if (idx > constraint_idx)
+> > > >>> +             idx =3D constraint_idx;
+> > > >>> +
+> > > >>>       if (!idx && prev_intercept_idx) {
+> > > >>>               /*
+> > > >>>                * We have to query the sleep length here otherwise=
+ we don't
+> > > >>> @@ -439,13 +447,6 @@
+> > > >>>       }
+> > > >>>
+> > > >>>       /*
+> > > >>> -      * If there is a latency constraint, it may be necessary to=
+ select an
+> > > >>> -      * idle state shallower than the current candidate one.
+> > > >>> -      */
+> > > >>> -     if (idx > constraint_idx)
+> > > >>> -             idx =3D constraint_idx;
+> > > >>> -
+> > > >>> -     /*
+> > > >>
+> > > >> We could leave this here and just do goto end;?
+> > > >
+> > > > Why would this be better?
+> > >
+> > > Saves querying the sleep length in case of constraint_idx =3D=3D 0, i=
+=2Ee.
+> > > qos request to be very latency-sensitive and us actually adding laten=
+cy
+> > > here.
+> >
+> > Fair enough, but before patch [7/9] leaving it where it is doesn't
+> > really cause it to skip the sleep length check unless state 0 is
+> > "polling".
+> >
+> > After patch [7/9] it is possible to add a constraint_idx check against
+> > 0 to the "goto out_tick" condition before the
+> > tick_nohz_get_sleep_length() call, that is
+> >
+> > if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD=
+_NS) &&
+> >     (2 * cpu_data->short_idle >=3D cpu_data->total || !constraint_idx))
+> >         goto out_tick;
+>=20
+> Or even
+>=20
+> if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_N=
+S) &&
+>     (2 * cpu_data->short_idle >=3D cpu_data->total || latency_req <
+> A_SMALL_VALUE))
+>         goto out_tick;
+>=20
+> for that matter.
+>=20
+> > but that would be a separate patch if you will.
 
-> +static void gaokun_ec_remove(struct i2c_client *client)
-> +{
-> +	struct gaokun_ec *ec = i2c_get_clientdata(client);
-> +	hwmon_device_unregister(ec->hwmon_dev);
-> +}
+So for completeness, it would be a patch like the one below, on top of the =
+[7/9].
 
-You are missing black line after the declaration.
+=2D--
+=46rom: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Subject: [PATCH v1] cpuidle: teo: Skip sleep length computation for low lat=
+ency constraints
 
-> +static const struct i2c_device_id gaokun_ec_id[] = {
-> +	{ "gaokun-ec", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(i2c, gaokun_ec_id);
-> +
-> +static const struct of_device_id gaokun_ec_of_match[] = {
-> +	{ .compatible = "huawei,gaokun3-ec", },
-> +	{ }
-> +};
-> +MODULE_DEVICE_TABLE(of, gaokun_ec_of_match);
-> +
-> +static const struct dev_pm_ops gaokun_ec_pm_ops = {
-> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(gaokun_ec_suspend, gaokun_ec_resume)
-> +};
-> +
-> +static struct i2c_driver gaokun_ec_driver = {
-> +	.driver = {
-> +		.name = "gaokun-ec",
-> +		.of_match_table = gaokun_ec_of_match,
-> +		.pm = &gaokun_ec_pm_ops,
-> +		.dev_groups = gaokun_ec_groups,
-> +	},
-> +	.probe = gaokun_ec_probe,
-> +	.remove = gaokun_ec_remove,
-> +	.id_table = gaokun_ec_id,
-> +};
-> +module_i2c_driver(gaokun_ec_driver);
-> +
-> +MODULE_DESCRIPTION("HUAWEI Matebook E Go EC driver");
-> +MODULE_AUTHOR("Pengyu Luo <mitltlatltl@gmail.com>");
-> +MODULE_LICENSE("GPL");
-> diff --git a/include/linux/platform_data/huawei-gaokun-ec.h b/include/linux/platform_data/huawei-gaokun-ec.h
-> new file mode 100644
-> index 000000000..dfd177bd9
-> --- /dev/null
-> +++ b/include/linux/platform_data/huawei-gaokun-ec.h
-> @@ -0,0 +1,80 @@
-> +// SPDX-License-Identifier: GPL-2.0-only
-> +/*
-> + * Huawei Matebook E Go Embedded Controller
-> + *
-> + * Copyright (C) 2024 Pengyu Luo <mitltlatltl@gmail.com>
-> + */
-> +
-> +#ifndef __HUAWEI_GAOKUN_EC_H__
-> +#define __HUAWEI_GAOKUN_EC_H__
-> +
-> +#define GAOKUN_UCSI_CCI_SIZE	4
-> +#define GAOKUN_UCSI_DATA_SIZE	16
-> +#define GAOKUN_UCSI_READ_SIZE	(GAOKUN_UCSI_CCI_SIZE + GAOKUN_UCSI_DATA_SIZE)
-> +#define GAOKUN_UCSI_WRITE_SIZE	0x18
-> +
-> +#define GAOKUN_UCSI_NO_PORT_UPDATE	(-1)
-> +
-> +#define GAOKUN_SMART_CHARGE_DATA_SIZE	4 /* mode, delay, start, end */
-> +
-> +/* -------------------------------------------------------------------------- */
-> +
-> +struct gaokun_ec;
-> +struct gaokun_ucsi_reg;
-> +struct notifier_block;
-> +
-> +#define GAOKUN_MOD_NAME			"huawei_gaokun_ec"
-> +#define GAOKUN_DEV_PSY			"psy"
-> +#define GAOKUN_DEV_UCSI			"ucsi"
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* Common API */
-> +
-> +int gaokun_ec_register_notify(struct gaokun_ec *ec,
-> +			      struct notifier_block *nb);
-> +void gaokun_ec_unregister_notify(struct gaokun_ec *ec,
-> +				 struct notifier_block *nb);
-> +
-> +int gaokun_ec_read(struct gaokun_ec *ec, const u8 *req,
-> +		   size_t resp_len, u8 *resp);
-> +int gaokun_ec_write(struct gaokun_ec *ec, u8 *req);
-> +int gaokun_ec_read_byte(struct gaokun_ec *ec, u8 *req, u8 *byte);
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* API For PSY */
-> +
-> +int gaokun_ec_psy_multi_read(struct gaokun_ec *ec, u8 reg,
-> +			     size_t resp_len, u8 *resp);
-> +
-> +static inline int gaokun_ec_psy_read_byte(struct gaokun_ec *ec,
-> +					  u8 reg, u8 *byte)
-> +{
-> +	return gaokun_ec_psy_multi_read(ec, reg, sizeof(*byte), byte);
-> +}
-> +
-> +static inline int gaokun_ec_psy_read_word(struct gaokun_ec *ec,
-> +					  u8 reg, u16 *word)
-> +{
-> +	return gaokun_ec_psy_multi_read(ec, reg, sizeof(*word), (u8 *)word);
-> +}
-> +
-> +int gaokun_ec_psy_get_smart_charge(struct gaokun_ec *ec,
-> +				   u8 data[GAOKUN_SMART_CHARGE_DATA_SIZE]);
-> +int gaokun_ec_psy_set_smart_charge(struct gaokun_ec *ec,
-> +				   u8 data[GAOKUN_SMART_CHARGE_DATA_SIZE]);
-> +
-> +int gaokun_ec_psy_get_smart_charge_enable(struct gaokun_ec *ec, bool *on);
-> +int gaokun_ec_psy_set_smart_charge_enable(struct gaokun_ec *ec, bool on);
-> +
-> +/* -------------------------------------------------------------------------- */
-> +/* API For UCSI */
-> +
-> +int gaokun_ec_ucsi_read(struct gaokun_ec *ec, u8 resp[GAOKUN_UCSI_READ_SIZE]);
-> +int gaokun_ec_ucsi_write(struct gaokun_ec *ec,
-> +			 const u8 req[GAOKUN_UCSI_WRITE_SIZE]);
-> +
-> +int gaokun_ec_ucsi_get_reg(struct gaokun_ec *ec, struct gaokun_ucsi_reg *ureg);
-> +int gaokun_ec_ucsi_pan_ack(struct gaokun_ec *ec, int port_id);
-> +
-> +
+If the idle state exit latency constraint is sufficiently low, it
+is better to avoid the additional latency related to calling
+tick_nohz_get_sleep_length().  It is also not necessary to compute
+the sleep length in that case because shallow idle state selection
+will be forced then regardless of the recent wakeup history.
 
-Here you have extra line.
+Accordingly, skip the sleep length computation and subsequent
+checks of the exit latency constraint is low enough.
 
-scripts/checkpatch.pl should find this kind issues for you.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+=2D--
+ drivers/cpuidle/governors/teo.c |   13 ++++++++++++-
+ 1 file changed, 12 insertions(+), 1 deletion(-)
 
-Br,
+=2D-- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -106,6 +106,12 @@
+ #include "gov.h"
+=20
+ /*
++ * Idle state exit latency threshold used for deciding whether or not to c=
+heck
++ * the time till the closest expected timer event.
++ */
++#define LATENCY_THRESHOLD_NS	(RESIDENCY_THRESHOLD_NS / 2)
++
++/*
+  * The PULSE value is added to metrics when they grow and the DECAY_SHIFT =
+value
+  * is used for decreasing metrics on a regular basis.
+  */
+@@ -432,9 +438,14 @@
+ 	 * duration falls into that range in the majority of cases, assume
+ 	 * non-timer wakeups to be dominant and skip updating the sleep length
+ 	 * to reduce latency.
++	 *
++	 * Also, if the latency constraint is sufficiently low, it will force
++	 * shallow idle states regardless of the wakeup type, so the sleep
++	 * length need not be known in that case.
+ 	 */
+ 	if ((!idx || drv->states[idx].target_residency_ns < RESIDENCY_THRESHOLD_N=
+S) &&
+=2D	    2 * cpu_data->short_idle >=3D cpu_data->total)
++	    (2 * cpu_data->short_idle >=3D cpu_data->total ||
++	     latency_req < LATENCY_THRESHOLD_NS))
+ 		goto out_tick;
+=20
+ 	duration_ns =3D tick_nohz_get_sleep_length(&delta_tick);
 
--- 
-heikki
+
+
+
 
