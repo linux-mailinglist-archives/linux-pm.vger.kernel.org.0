@@ -1,246 +1,167 @@
-Return-Path: <linux-pm+bounces-20528-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20529-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id A00F0A1349F
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 09:04:52 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 607E2A134A6
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 09:06:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3C86166CF9
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 08:04:50 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A74AE7A0467
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 08:05:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2E7198850;
-	Thu, 16 Jan 2025 08:04:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F15401990AF;
+	Thu, 16 Jan 2025 08:05:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SbpmaubP"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="NT3wG8zu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A468019343E;
-	Thu, 16 Jan 2025 08:04:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 49C7B381AA;
+	Thu, 16 Jan 2025 08:05:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737014688; cv=none; b=V6w2Gxu/hrxhGIpkM9EJGbaDFpZ7bPT1F5OR1LdEqfE2cQ9NszEM0ErzNO/M71H8dmhduZPMcM1BLFYJ55qsg9FPG8PotCYSEkE9wB5kO+NpyZfo9A4qDjoJabHsnJc1sPLczJz4PK95my9HRtHftwjcZeGuj4M+Ts2F6iGz1NU=
+	t=1737014756; cv=none; b=EJ44wfY6Qg2DHExQjJCJgDSoL6G9X5uRiiu3ZmbCio8KfQWqCW6LnpBFpYooASxd2ToO8LKPLzJydQRgcSLBahVRoH/9NJZ8N9m/ePfFbWGGkuxlokS27DAxmswF/AAUFv/aYAwMW0JazezJDsB2Nd7bAX5xUAy5Gr/phSn3F/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737014688; c=relaxed/simple;
-	bh=uvB1h+87siG9diTP5RB8Hj+24Ej2g94Oj7tqxT4bTjY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qIK9KiTuChNck0Nad0tCnzGYuKghp0hxJVHo9HyMf7Z9Fvs8Tx5tFoewZ8Amc+8AVYo0mwpyu6yyk93Vq+Wk0K3cGEc4Ajax8I+T6l/I0+MIMwG4H56wDXhni7VKL8s/jfK9gtNfUsDC2a1jAiWFQpAOY7o4alheYeASzPgeDXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SbpmaubP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 18713C4CED6;
-	Thu, 16 Jan 2025 08:04:48 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737014688;
-	bh=uvB1h+87siG9diTP5RB8Hj+24Ej2g94Oj7tqxT4bTjY=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=SbpmaubPgJkIACL3DRWqXWdfc1xPo5ZkXxBUElln9GlXw8mS10jZZc9oR4zNjloUl
-	 /0MfopnEtu9hgU0kP/qNCkH9vxoROLyI/NPFNfUS6hBIeQ1p+l6V5e5tUiaP1WTKm8
-	 RJWenFUEN/skGQ1qNnJyYOP4eGymRQ8ojxvQO/Se8lmoU5sQbIQzx82vOJH6XXcUvd
-	 DY1JfJAxaTC4p8pY2gW/fOpPyvOKZU3J1jBphS1oDMBpFivNDzIWjxeJy5Nvav1pSw
-	 g3MZG7vQbinhqVrqHyQxjuqEBUSrFXl6BmUdXDm/IwZ5iMpWid4u/7dO0cUaT/nIeO
-	 6VNRsL0Hj57zw==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 07870C02180;
-	Thu, 16 Jan 2025 08:04:48 +0000 (UTC)
-From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
-Date: Thu, 16 Jan 2025 09:04:29 +0100
-Subject: [PATCH v2] power: supply: max1720x: add support for reading
- internal and thermistor temperatures
+	s=arc-20240116; t=1737014756; c=relaxed/simple;
+	bh=5rd12jR+ruZpQr+zcf+f2VHKx265Ozuy8y6gxIm+YW4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=no96MNgo1Qg6O8FmiuJNNsAoyiI5FD2x2U7h5N3mMYVACPwlISzZVvpwj8T7wl/SCFH9ASCATDgKzHgQQ7dc/4FT0RznzKeW97JYQYVKLr+aMMLJk73L7t1/JbxUCoLIqvmImaN/C3/X/ZWligyPnq4/osn4OzFk92sl4q3RGUc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=NT3wG8zu; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50G4nmO1030734;
+	Thu, 16 Jan 2025 08:05:34 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	5rd12jR+ruZpQr+zcf+f2VHKx265Ozuy8y6gxIm+YW4=; b=NT3wG8zulBWYxQcZ
+	pYTsUIpwcj2Nyb6HsToUyg555KlgNrIs72EIr+UBkmgWUVRvoThly8YU6jGMLGJi
+	3Xzi37Lgr4DzE8xF4cVa81Hd+BwSOkGEE8SHsFL87F2Vb+6wyoosUTcbVW+glPTg
+	9fnbxPJlLf9WXfj8ipXTWUuhtmOqZ1S0qC0+Y8J9JPQNhv/Lbr8oX6ZJQEJTWD5d
+	gHqp0RyYiOuybarTuAeZNLkKN6XfuvDa7Q/l+CVb+WZBXOZhmLQyNOpmHbmf9ryl
+	Z79ocHAJm3DhdCoE+akKXSrTHgYVrF/Sqv4W3tq12eqH7j4GdhVPD1c5QmzN8sEw
+	ADwL+Q==
+Received: from nalasppmta05.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 446ue8gdsn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 Jan 2025 08:05:33 +0000 (GMT)
+Received: from nalasex01c.na.qualcomm.com (nalasex01c.na.qualcomm.com [10.47.97.35])
+	by NALASPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50G85Wgj004387
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Thu, 16 Jan 2025 08:05:32 GMT
+Received: from [10.110.84.216] (10.80.80.8) by nalasex01c.na.qualcomm.com
+ (10.47.97.35) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 16 Jan
+ 2025 00:05:24 -0800
+Message-ID: <eef55e66-629a-46c4-822b-bce41cff51a2@quicinc.com>
+Date: Thu, 16 Jan 2025 13:35:20 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250116-max1720x-temperature-v2-1-9638969d091a@liebherr.com>
-X-B4-Tracking: v=1; b=H4sIAIy9iGcC/4WNTQ6CMBBGr0JmbU2nqA2uuIdhAe0gk8hPpthgS
- O9u5QIu30u+9+0QSJgC3IsdhCIHnqcM5lSAG9rpSYp9ZjDaXDViqcZ2Q2v0plYaF5J2fQspR+5
- m++6isbKQp4tQz9uRfTSZBw7rLJ/jJeLP/glGVKicr7wvu8obtPWLqRtI5OzmEZqU0heKtsJSu
- wAAAA==
-X-Change-ID: 20250113-max1720x-temperature-cec67fb40197
-To: Sebastian Reichel <sre@kernel.org>
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Dimitri Fedrau <dima.fedrau@gmail.com>, 
- Thomas Antoine <t.antoine@uclouvain.be>, 
- Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1737014687; l=5333;
- i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
- bh=fn4u6JBkLe9ziUbn1gD/a8EhRkjnGm3GtfEWO+TsGa8=;
- b=dAkFeQoN0VmR3Y+MbdFqyhxNmqSOMwbGpepG68DabcRXlIGiMeTUQZQAuwTaWt8V8q9Yl68f7
- 60z7AXnRf3/AG60eHn5owQcyl0nhQPaN+tDcXKjfg3FSqc4UKOliR9R
-X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
- pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
-X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
- with auth_id=290
-X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-Reply-To: dimitri.fedrau@liebherr.com
-
-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-
-If enabled in the nPackCfg register, the Temp1, Temp2 and IntTemp registers
-contain the temperature readings from the AIN1 thermistor, AIN2 thermistor
-and internal die temperature respectively. Registers are shared between SBS
-and normal IC functions and are always readable regardless of IC settings.
-
-Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
----
-Changes in v2:
-- Rename device attribute temp1 to temp_ain1
-- Rename device attribute temp2 to temp_ain2
-- Rename device attribute int_temp to temp_int
-- Add documentation to max1720x to Documentation/ABI/testing/
-- Link to v1: https://lore.kernel.org/r/20250113-max1720x-temperature-v1-1-cd9dd3b9d217@liebherr.com
----
- .../ABI/testing/sysfs-class-power-max1720x         | 32 ++++++++++++
- drivers/power/supply/max1720x_battery.c            | 60 +++++++++++++++++++++-
- 2 files changed, 91 insertions(+), 1 deletion(-)
-
-diff --git a/Documentation/ABI/testing/sysfs-class-power-max1720x b/Documentation/ABI/testing/sysfs-class-power-max1720x
-new file mode 100644
-index 0000000000000000000000000000000000000000..7d895bfda9ced2ba089723065b3ec27d1d3204ee
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-class-power-max1720x
-@@ -0,0 +1,32 @@
-+What:		/sys/class/power_supply/max1720x/temp_ain1
-+Date:		January 2025
-+KernelVersion:	6.14
-+Contact:	Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-+Description:
-+		Reports the current temperature reading from AIN1 thermistor.
-+
-+		Access: Read
-+
-+		Valid values: Represented in 1/10 Degrees Celsius
-+
-+What:		/sys/class/power_supply/max1720x/temp_ain2
-+Date:		January 2025
-+KernelVersion:	6.14
-+Contact:	Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-+Description:
-+		Reports the current temperature reading from AIN2 thermistor.
-+
-+		Access: Read
-+
-+		Valid values: Represented in 1/10 Degrees Celsius
-+
-+What:		/sys/class/power_supply/max1720x/temp_int
-+Date:		January 2025
-+KernelVersion:	6.14
-+Contact:	Dimitri Fedrau <dimitri.fedrau@liebherr.com>
-+Description:
-+		Reports the current temperature reading from internal die.
-+
-+		Access: Read
-+
-+		Valid values: Represented in 1/10 Degrees Celsius
-diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supply/max1720x_battery.c
-index 9c7e14d2c7b87b8194511f36ade16e774281333e..11580e414713b7f42354a8bf4e4ef7bee6e33f36 100644
---- a/drivers/power/supply/max1720x_battery.c
-+++ b/drivers/power/supply/max1720x_battery.c
-@@ -16,6 +16,11 @@
- 
- #include <linux/unaligned.h>
- 
-+/* SBS compliant registers */
-+#define MAX172XX_TEMP1			0x34
-+#define MAX172XX_INT_TEMP		0x35
-+#define MAX172XX_TEMP2			0x3B
-+
- /* Nonvolatile registers */
- #define MAX1720X_NXTABLE0		0x80
- #define MAX1720X_NRSENSE		0xCF	/* RSense in 10^-5 Ohm */
-@@ -113,11 +118,15 @@ static const struct regmap_config max1720x_regmap_cfg = {
- };
- 
- static const struct regmap_range max1720x_nvmem_allow[] = {
-+	regmap_reg_range(MAX172XX_TEMP1, MAX172XX_INT_TEMP),
-+	regmap_reg_range(MAX172XX_TEMP2, MAX172XX_TEMP2),
- 	regmap_reg_range(MAX1720X_NXTABLE0, MAX1720X_NDEVICE_NAME4),
- };
- 
- static const struct regmap_range max1720x_nvmem_deny[] = {
--	regmap_reg_range(0x00, 0x7F),
-+	regmap_reg_range(0x00, 0x33),
-+	regmap_reg_range(0x36, 0x3A),
-+	regmap_reg_range(0x3C, 0x7F),
- 	regmap_reg_range(0xE0, 0xFF),
- };
- 
-@@ -388,6 +397,54 @@ static int max1720x_battery_get_property(struct power_supply *psy,
- 	return ret;
- }
- 
-+static int max1720x_read_temp(struct device *dev, u8 reg, char *buf)
-+{
-+	struct power_supply *psy = dev_get_drvdata(dev);
-+	struct max1720x_device_info *info = power_supply_get_drvdata(psy);
-+	unsigned int val;
-+	int ret;
-+
-+	ret = regmap_read(info->regmap_nv, reg, &val);
-+	if (ret < 0)
-+		return ret;
-+
-+	/*
-+	 * Temperature in degrees Celsius starting at absolute zero, -273C or
-+	 * 0K with an LSb of 0.1C
-+	 */
-+	return sysfs_emit(buf, "%d\n", val - 2730);
-+}
-+
-+static ssize_t temp_ain1_show(struct device *dev, struct device_attribute *attr,
-+			      char *buf)
-+{
-+	return max1720x_read_temp(dev, MAX172XX_TEMP1, buf);
-+}
-+
-+static ssize_t temp_ain2_show(struct device *dev, struct device_attribute *attr,
-+			      char *buf)
-+{
-+	return max1720x_read_temp(dev, MAX172XX_TEMP2, buf);
-+}
-+
-+static ssize_t temp_int_show(struct device *dev, struct device_attribute *attr,
-+			     char *buf)
-+{
-+	return max1720x_read_temp(dev, MAX172XX_INT_TEMP, buf);
-+}
-+
-+static DEVICE_ATTR_RO(temp_ain1);
-+static DEVICE_ATTR_RO(temp_ain2);
-+static DEVICE_ATTR_RO(temp_int);
-+
-+static struct attribute *max1720x_attrs[] = {
-+	&dev_attr_temp_ain1.attr,
-+	&dev_attr_temp_ain2.attr,
-+	&dev_attr_temp_int.attr,
-+	NULL
-+};
-+ATTRIBUTE_GROUPS(max1720x);
-+
- static
- int max1720x_nvmem_reg_read(void *priv, unsigned int off, void *val, size_t len)
- {
-@@ -488,6 +545,7 @@ static int max1720x_probe(struct i2c_client *client)
- 
- 	psy_cfg.drv_data = info;
- 	psy_cfg.fwnode = dev_fwnode(dev);
-+	psy_cfg.attr_grp = max1720x_groups;
- 	i2c_set_clientdata(client, info);
- 	info->regmap = devm_regmap_init_i2c(client, &max1720x_regmap_cfg);
- 	if (IS_ERR(info->regmap))
-
----
-base-commit: 260d7c5e5392ac41c94152005d416172ba0a906d
-change-id: 20250113-max1720x-temperature-cec67fb40197
-
-Best regards,
--- 
-Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v2 3/5] thermal: qcom: Add support for MBG thermal
+ monitoring
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui
+	<rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Rob Herring
+	<robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        "Lars-Peter
+ Clausen" <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+        Stephen Boyd
+	<sboyd@kernel.org>, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath
+	<thara.gopinath@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        "Konrad
+ Dybcio" <konradybcio@kernel.org>
+CC: Ajit Pandey <quic_ajipan@quicinc.com>,
+        Imran Shaik
+	<quic_imrashai@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        "Jagadeesh
+ Kona" <quic_jkona@quicinc.com>, <quic_kamalw@quicinc.com>,
+        <quic_jprakash@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-iio@vger.kernel.org>
+References: <20241212-mbg-v2-support-v2-0-3249a4339b6e@quicinc.com>
+ <20241212-mbg-v2-support-v2-3-3249a4339b6e@quicinc.com>
+ <cf2f2510-9d27-4473-bf50-45b14725f4c5@oss.qualcomm.com>
+ <c5079172-e127-4dfc-826a-b32489d852f8@quicinc.com>
+ <ba764e00-2968-447f-99d1-5925e7782491@oss.qualcomm.com>
+Content-Language: en-US
+From: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
+In-Reply-To: <ba764e00-2968-447f-99d1-5925e7782491@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nalasex01c.na.qualcomm.com (10.47.97.35)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: BbVQTR9sHQ_quzWQ50wcNfxnBKqnP-cS
+X-Proofpoint-ORIG-GUID: BbVQTR9sHQ_quzWQ50wcNfxnBKqnP-cS
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-16_03,2025-01-16_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
+ bulkscore=0 malwarescore=0 clxscore=1015 spamscore=0 adultscore=0
+ priorityscore=1501 suspectscore=0 impostorscore=0 phishscore=0 mlxscore=0
+ mlxlogscore=999 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501160058
 
 
+On 12/30/2024 7:36 PM, Konrad Dybcio wrote:
+> On 30.12.2024 10:45 AM, Satya Priya Kakitapalli wrote:
+>> On 12/13/2024 9:18 PM, Konrad Dybcio wrote:
+>>> On 12.12.2024 5:11 PM, Satya Priya Kakitapalli wrote:
+>>>> Add driver for the MBG thermal monitoring device. It monitors
+>>>> the die temperature, and when there is a level 1 upper threshold
+>>>> violation, it receives an interrupt over spmi. The driver reads
+>>>> the fault status register and notifies thermal accordingly.
+>>>>
+>>>> Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
+>>>> ---
+>>> [...]
+>>>
+>>>> +static const struct mbg_map_table map_table[] = {
+>>> Is this peripheral/pmic-specific?
+>>
+>> Yes, peripheral specific.
+> Okay, I asked a question that I don't recall what I meant by.
+>
+> To be clear, is this table specific to all instances of MBG on
+> different kinds of PMIC7, or does it only apply to PM8775
+> specifically?
+
+
+No it is not specific to PM8775 pmic, it is specific to MBG peripheral.
+
+
+>>>> +    /* minT    vtemp0    tc */
+>>>> +    { -60000, 4337, 1967 },
+>>>> +    { -40000, 4731, 1964 },
+>>>> +    { -20000, 5124, 1957  },
+>>>> +    { 0,      5515, 1949 },
+>>>> +    { 20000,  5905, 1940 },
+>>>> +    { 40000,  6293, 1930 },
+>>>> +    { 60000,  6679, 1921 },
+>>>> +    { 80000,  7064, 1910 },
+>>>> +    { 100000, 7446, 1896 },
+>>>> +    { 120000, 7825, 1878 },
+>>>> +    { 140000, 8201, 1859 },
+>>>> +};
+> Konrad
 
