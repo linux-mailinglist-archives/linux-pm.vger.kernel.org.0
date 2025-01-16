@@ -1,121 +1,93 @@
-Return-Path: <linux-pm+bounces-20558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B52E0A13E95
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 16:59:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63326A13EAD
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 17:03:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CA1207A53D2
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 15:59:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B7765188278D
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 16:03:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0578C22DFA1;
-	Thu, 16 Jan 2025 15:58:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13F7D22BAC1;
+	Thu, 16 Jan 2025 16:02:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="s+EhvJgK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="g6MBb8vi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AE7522DC41
-	for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2025 15:58:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9301C1DDA17;
+	Thu, 16 Jan 2025 16:02:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737043129; cv=none; b=rPdkyKs5huV225Tv5Dqa04mWaYnh5GotSZdgwcMx+K3MnCM30NbVnxUw+Ji/08/eeM2TN3IWhkJ9TkivpKiuuU4o41kgZHv7p468pJLBUJOVqTY+ZkYdOUFTF6oms1CfWKVyBjkPP85XbYfO2GLIRFoRiC3bjz0Y2bxoKEr9fYI=
+	t=1737043376; cv=none; b=SLo56fqteDkx7K6vSylMcIc89oMgnskPUnIGSHddfAeK3bXbfLA1DxVCza5Z2KWNQJsVyjrTUoUFLrvhrCXrSSoRrwzhfgM2xFYv+SznWDjuXq6xHi7fch11OzqJcbe65PTeBZuIL2GxibMO5eoEFjvyhv+t3c4ld1/7YhWcMVE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737043129; c=relaxed/simple;
-	bh=QGPiUeQaDByXyGYfaiyGjoevsH3zwreWTmPpwDEUSo8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=K0IVd2lUFfb2Xn+sxVNhQFfeI2m5p5nY0M2xtIgsHmXWaRMb8M/inxrC700+Hf9e5L/yBRRosU5FltYwC6Gu1V8oHS1idDds9WOuSTh7v1wXrra2zb6JVvIOifl70C7g6MPa+mvN+6IsEj90UPhLvm8YJVn7Oidmc2kUF8ZmsKU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=s+EhvJgK; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e5447fae695so1949794276.2
-        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2025 07:58:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737043127; x=1737647927; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=QGPiUeQaDByXyGYfaiyGjoevsH3zwreWTmPpwDEUSo8=;
-        b=s+EhvJgK6tpTSiC+IF5lidiwlqftFr8ktRSeenwtj2WoglWlo7clXdpvf2YoJUevAg
-         awdgeKABjxbPWxG6oZxPzjYZ8GoPfr4IVuPdrNLx3rUSXaAwUCPo+7ys+yLs4GkNmafZ
-         6rQF9lbuq1LuhGiWplfTxlFXr8f3QzRaJ1sJSNfGZ6E180VEoKfKIavjOZ8j/bVQUTQV
-         wD9aFZoTZJ8/bQNSkOhEULTYzGAm6BfTAmKBmodd096y/AK7x6qFpxpO16A+1uMM2d8m
-         6vNq7XnOZozmk1qAVhB9+roqq2D7UKfCP8iSLkY0AME08s8DqBjfkcOWW3p9PI/+yGkx
-         KPrg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737043127; x=1737647927;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=QGPiUeQaDByXyGYfaiyGjoevsH3zwreWTmPpwDEUSo8=;
-        b=RG4w8zT7zji0mehgy+fiDjzx8qNeeaw2gNKAK/8R4vAsrJ/EFOdSfqUq4eh0m0dO3j
-         cw87zwCshwLDiu/cJqTtJKiCvmq/fMFyS5cXcSnDPr9GFtFyNObxWe265p1igAYUq0Bl
-         fNmf8wBBNX1SODgTmNc2QC6+PGOGq9IYOZ6SSL3fSmvqe4q8Wi2UxyRnEEm3W7PPyM9j
-         zeLCHYqytQbmecops+9vJAfiilWDDKh3rGvyL/aAG1cjKGcVSyyekSiw80gi6aJ2W0bQ
-         +tJlj7pVWb2mrljTLZxNEZjnvqGogxoKunFyhBjaeh68lIbjC5z6YLZEU7oPtDgDGsVG
-         bXEA==
-X-Forwarded-Encrypted: i=1; AJvYcCV36kLoiRyjsxCAUhNHIMg6SS3juaVjAQFLg/f9LDf0hRlwo25W3StzoZ3WjuDIMTdeESHO5pxUUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YynTsysZN2DVjkwuxsm26KHQgrYiNzsd7tF++AIai5Xc+/bMccG
-	kszfcVZDNQhmmrlvGjhv7H6E/Fhaqbe7XuDukdsT+CweykNWehZMem7a3rhIHDxfzb0IHY/ORt3
-	gn00z1KGq4RMqERPjHteQ3YzVze7PkmlR4Do2QQ==
-X-Gm-Gg: ASbGncteLQXrir1iDS8J6IF54u9ajweQQPrH4gCxoyVihG0rSKMy96naCY1Vv46WlfD
-	NArKwqyHGJpDLF457HgS2HKxPtiJ9HGfWct1yHf8=
-X-Google-Smtp-Source: AGHT+IHzQbQYAi6FZO8GNmu8t3VQrhl2ccDWHjHOxE3SLBVC4VwnOsYtSa0UftO9WxJZ8AnPeBd+o1qUAP/ZQG8iuDk=
-X-Received: by 2002:a05:6902:18c3:b0:e57:8814:13a6 with SMTP id
- 3f1490d57ef6-e5788141804mr6901177276.17.1737043127387; Thu, 16 Jan 2025
- 07:58:47 -0800 (PST)
+	s=arc-20240116; t=1737043376; c=relaxed/simple;
+	bh=97p9b3mdL471MSKShwjo981bCu/leHm7j8x2aNa/8bE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=f6W+E1+IONFoTYmi/1p944tAKin8k+4D5IHm80PmA/yTf+Edg3PRgRjFY+DE/MfDK+BQGYVG6faU9u/hFU035ux+tu2XUKoe/lHY6843ngQqBdAkXu7AN1ByDnJ6bBpblOMd6X+AYO8zii/tGSlV6LBVIzhx7POMRl0Tucly83Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=g6MBb8vi; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737043375; x=1768579375;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=97p9b3mdL471MSKShwjo981bCu/leHm7j8x2aNa/8bE=;
+  b=g6MBb8viVIetYi9naWHu9aI7Z1jevWlZS7QBdkT021kfV+BFLqKHYsFi
+   ihi+qtogqAUsg5AjZl7zY5F7iigB3xkDFGTggryTh8SAd+bIezFAEtfgC
+   rjiFCEu8SE7n3ma1efaqBp78sOm/xBnCgMoeAv/7wo7toQbrkaXitsp/0
+   mMyezg3xGo0MPzvTQeXqqa2f5zWyLjYmBGweGAIg/qqdKv2zX0929YD+3
+   TvbJ3tOh9WZKzRd4k005NM65hIQjDpA0q5UM0ChWHAcQa7Yk5c4Y9rJ8c
+   X8+RSgTC97RdyqWXax5OgX2GtytT9e/0eFFFM6i1c9HMXxx4vx2i5/sFE
+   A==;
+X-CSE-ConnectionGUID: gz3kPbxTTomD2GCw9C2PDA==
+X-CSE-MsgGUID: bzDgz2ibRvKjqiIsUkBMsg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11317"; a="37322375"
+X-IronPort-AV: E=Sophos;i="6.13,209,1732608000"; 
+   d="scan'208";a="37322375"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 08:02:54 -0800
+X-CSE-ConnectionGUID: KN2BIi2GR5WoiJSewcaJXw==
+X-CSE-MsgGUID: 22NScDJrTj2Bm1TWvLAm1g==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="105388009"
+Received: from bergbenj-mobl1.ger.corp.intel.com (HELO [10.245.245.105]) ([10.245.245.105])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 16 Jan 2025 08:02:51 -0800
+Message-ID: <ac0babd8-2c05-4fe9-a2d0-9972172e1e92@linux.intel.com>
+Date: Thu, 16 Jan 2025 17:02:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250109131313.32317-1-ansuelsmth@gmail.com> <20250116070214.vdnbyyqnciifngha@vireshk-i7>
-In-Reply-To: <20250116070214.vdnbyyqnciifngha@vireshk-i7>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 16 Jan 2025 16:58:11 +0100
-X-Gm-Features: AbW1kvYjzgMKu3xCJVK7F5l29WK5ilTbahAEoFI6YcNzZrqQ5wXTPLxX0mm-M2A
-Message-ID: <CAPDyKFr_z3WUyO2bTV7fPt8=ECdoHCERd=f5UN8MmNpyN=Rm_A@mail.gmail.com>
-Subject: Re: [PATCH v10 1/2] pmdomain: airoha: Add Airoha CPU PM Domain support
-To: Christian Marangi <ansuelsmth@gmail.com>, Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, upstream@airoha.com
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 0/4] SRF: Fix offline CPU preventing pc6 entry
+To: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Dave Hansen <dave.hansen@intel.com>, x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ rafael.j.wysocki@intel.com, len.brown@intel.com, dave.hansen@linux.intel.com
+References: <20250110115953.6058-1-patryk.wlazlyn@linux.intel.com>
+ <e6c49f30-b32a-4ad0-98e2-634113011f90@intel.com>
+ <5f24fe01b6dd0ae0e6d91209e143f2faff6ae017.camel@linux.intel.com>
+ <860da841-fa82-4984-9e34-fba02e7aa556@intel.com>
+ <fbdaf69ec121836db4d4611842bd0c1b93224bf6.camel@linux.intel.com>
+Content-Language: en-US
+From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+In-Reply-To: <fbdaf69ec121836db4d4611842bd0c1b93224bf6.camel@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Thu, 16 Jan 2025 at 08:02, Viresh Kumar <viresh.kumar@linaro.org> wrote:
->
-> Ulf,
->
-> On 09-01-25, 14:12, Christian Marangi wrote:
-> > Add Airoha CPU PM Domain support to control frequency and power of CPU
-> > present on Airoha EN7581 SoC.
-> >
-> > Frequency and power can be controlled with the use of the SMC command by
-> > passing the performance state. The driver also expose a read-only clock
-> > that expose the current CPU frequency with SMC command.
-> >
-> > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > ---
-> > Changes v10:
-> > - Depends on HAVE_ARM_SMCCC
-> > Changes v9:
-> > - Fix compile error targetting wrong branch (remove_new change)
-> > Changes v8:
-> > - Add this patch
-> > - Use SMC invoke instead of 1.2
->
-> Any inputs on this ?
+> * Because version 6.12 is LTS, there is a good chance that users of near-future
+> new platforms will run 6.12 on them.
+> * If a near-future platform happens to miss the firmware workaround for this
+> issue, having these patches in 6.12 will likely mean that most users are OK.
 
-Apologize for the delay! This looks good to me! So, applied for next
-to my pmdomain tree, thanks!
+Make sense to me. Any objections to adding "Cc stable v6.12"?
 
-I assume Viresh will take the cpufreq patch via his tree? Please let
-me know if you prefer another route.
-
-Kind regards
-Uffe
 
