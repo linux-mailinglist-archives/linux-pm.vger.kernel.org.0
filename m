@@ -1,150 +1,111 @@
-Return-Path: <linux-pm+bounces-20530-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20531-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D661A13551
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 09:30:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B573AA13634
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 10:09:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 816891887EB4
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 08:30:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DC80616782E
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 09:09:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6701119F40A;
-	Thu, 16 Jan 2025 08:30:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DDED1D90B9;
+	Thu, 16 Jan 2025 09:09:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IQ4xu/k2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 20930157E88;
-	Thu, 16 Jan 2025 08:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1436C1D86C7
+	for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2025 09:09:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737016244; cv=none; b=VbjUlg5n+iWvZi25Lm6KhK+W+VNpcl5U28QRYbvU1EUDCGy2RottAtORYqJ5yr//dPmIrXfjsMwws9b8GahEU27wcYcuB70X8V+jTpjP/jcRenIHlEQD1dKQGgiSNUryxNtspll8oEVVyobGQjMjkof2KNAI1bYOJ5Q+YpyRd58=
+	t=1737018548; cv=none; b=IDEjLBT2eblaF09L4rU9RGSN+BngE2EVQtLZaVa0tg77YM1EWe+8022WRjEs/GsVIbn0Kyrkh2zJk2BSAuA5Itw9jMwmOMRK99dpe3qT8WoeODjQRYvluXrPolICjMbIcCDIA0f2MIbSsZ3MNF/RA6Nv8belzfJV8A63aluyLcw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737016244; c=relaxed/simple;
-	bh=ThHTbKqhHspxKB8L7fR5uEbmaTonukIR1yzoqR0WKkU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=HgpZNl8i61VRc5y8c2mLDQ6skpXgXuj+oKuyGf0eDIUDqQF59ShemV0R0xb4b2niKRgVLHS1WYr7faqA/e/uYQs12A0WpV9zgvyPUWSBJPp7fWDTfNd1tdG3dUvVTrzL/53mc3GlMezyRzhTZ51FMTK9yBIE6czrmO92vSh32RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YYbZt0cHTz11SV7;
-	Thu, 16 Jan 2025 16:27:34 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 69E0E140159;
-	Thu, 16 Jan 2025 16:30:37 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 16 Jan
- 2025 16:30:36 +0800
-Message-ID: <17c7ed77-21f1-4093-91fc-f3eaa863d312@huawei.com>
-Date: Thu, 16 Jan 2025 16:30:36 +0800
+	s=arc-20240116; t=1737018548; c=relaxed/simple;
+	bh=6oElNuHGnh2SndiJKSmzP3b2+Y0n7fF/o6Bw/SCWA8s=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CwDvD77ZoJSR5/fTwTC6ZebiwXZarUSMuTm2k8bLwzNRm/cUV7jGxn1szLWsyes23Q1yB6vU6rNyAk8voKX4X5BOqyz+blMPW3CWOfGhyQ19K+0OsHuDzZKi0SiZt2haF7rZiebqT0M96OL+OkLsgl2U+YVZQF2Z+M+5T1a7GVY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IQ4xu/k2; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-3061513d353so7278521fa.2
+        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2025 01:09:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737018543; x=1737623343; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6oElNuHGnh2SndiJKSmzP3b2+Y0n7fF/o6Bw/SCWA8s=;
+        b=IQ4xu/k27KRRWT8+BR952Rp6sKVE/VBK5DV2ZXczu1NXcUukvmSRhxYLL+0UXBIJ4c
+         3XLFDkgeNmHYnmaZ1Y+a9giINHrU31aBwZYdr2dnFxiFW1/qGxFPCUuOm9gPYsHh4oHG
+         0vzH+G0XYL84pZEwCnLOqSj66IjfcnuQlbsgN/qIvOrhWppNR7wGIUs1hexzLPxTpmyt
+         3hbCRYP/n4ekMfXpEKGouRTTopOyA6dAL2JuiYN7x087ZTdBG7STUK9luWQEInOjkGUe
+         hBgxFng++giL4qYxSLhDii9GH5/I3L8nHqsV4VGu8zTpo4mXnEuh6k3KbDxJ3Mg/WwBz
+         L5lA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737018543; x=1737623343;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6oElNuHGnh2SndiJKSmzP3b2+Y0n7fF/o6Bw/SCWA8s=;
+        b=mpD6X9sVgSvGk8dC1ibtSxTXjgv9wesd8we8XF9cdu8nbHlNNLzZZ4tSVbS7Snylyr
+         ROthxah+VIyJSAh/iJq/UXkSTineA1FpYiV46ONJkHAPw5+7jK+9eVPnIg+qQjyx9f3e
+         SFuuXL22YvKff9Xcdn01lpffx1WllHJwTCkQfVSY7Vwu3yDkR3+gLlYRb8VMqR5Z6fXC
+         SqIpqZSklY5LMnehl+xe3trrahoeLM6oM4zmrlZF1w3300qiAQ/AbjCWDeK4oe6bfgf1
+         tN69k4vGMO1/xlzAsHPx8r8fFft8UGJfEl/LXKG2Gz+V6ONw1Jf9ImbiyxnEmRxBVMzx
+         IGNg==
+X-Forwarded-Encrypted: i=1; AJvYcCUlacnJaxeDwZ+RExmZ7vglXpomyxdzdrwfP5D5aTwDKyCg6crXwuyY+vj9fqUB1CJEAwBk+6Myvw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxo3ZtWjGOQYn14kmJaYKHBVGWHknJV6VQ4DzW70uSDaI5Inxa4
+	T0lagfKldOvMmMGVpjXQz9DA1oPwrVahmS20pH3caichiO0g2zzSZtIJHsZsm2k3GbnXRy+wVJ0
+	EEs34HqT82gk/tCKqu2kQV43XYIV3JmYhlrScpg==
+X-Gm-Gg: ASbGncslo9HhmIcjCZCTClfoYTtQNB1cuBUKAprwxUfZbb32I1f5CUHGVBMsOplIUk3
+	47idOzsmqHIQudj3ys6Al6nSuKNBHCGG8Xo4h
+X-Google-Smtp-Source: AGHT+IGshDnah7yTVkge7frSzXP6u6YQ9EMlI5n0k71zbBXiVfkDniOTr0RXn5mT0CNZhOwwkIPYxH+G4Ml04S4rkI8=
+X-Received: by 2002:a05:651c:221a:b0:302:1e65:f2ab with SMTP id
+ 38308e7fff4ca-305f45dcb78mr119399301fa.20.1737018543217; Thu, 16 Jan 2025
+ 01:09:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] cpufreq: Introduce a more generic way to set default
- per-policy boost flag
-To: Viresh Kumar <viresh.kumar@linaro.org>
-CC: <rafael@kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <fanghao11@huawei.com>
-References: <20250115100123.241110-1-zhenglifeng1@huawei.com>
- <20250115100123.241110-3-zhenglifeng1@huawei.com>
- <20250116065408.kjifylpgse5f3k3h@vireshk-i7>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <20250116065408.kjifylpgse5f3k3h@vireshk-i7>
+References: <20250110123923.270626-1-szemzo.andras@gmail.com> <20250110123923.270626-3-szemzo.andras@gmail.com>
+In-Reply-To: <20250110123923.270626-3-szemzo.andras@gmail.com>
+From: Linus Walleij <linus.walleij@linaro.org>
+Date: Thu, 16 Jan 2025 10:08:52 +0100
+X-Gm-Features: AbW1kvZEtDtDDV1b-JCy06VodlCu92OcKCF4KhRqyAArlBqTeeutEPgAkUkNoec
+Message-ID: <CACRpkdZ6yNvtqjYHaWC6ynP4CdkGSdt5AH9ZrZDqYq=wTehu-g@mail.gmail.com>
+Subject: Re: [PATCH 02/12] dt-bindings: pinctrl: sunxi: add compatible for V853
+To: Andras Szemzo <szemzo.andras@gmail.com>
+Cc: Michael Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>, 
+	Samuel Holland <samuel@sholland.org>, Philipp Zabel <p.zabel@pengutronix.de>, 
+	Maxime Ripard <mripard@kernel.org>, Vinod Koul <vkoul@kernel.org>, 
+	Kishon Vijay Abraham I <kishon@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Paul Walmsley <paul.walmsley@sifive.com>, Palmer Dabbelt <palmer@dabbelt.com>, 
+	Albert Ou <aou@eecs.berkeley.edu>, =?UTF-8?Q?Uwe_Kleine=2DK=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+	Florian Fainelli <florian.fainelli@broadcom.com>, linux-clk@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-sunxi@lists.linux.dev, linux-kernel@vger.kernel.org, 
+	linux-phy@lists.infradead.org, linux-gpio@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-riscv@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Transfer-Encoding: quoted-printable
 
-On 2025/1/16 14:54, Viresh Kumar wrote:
+On Fri, Jan 10, 2025 at 1:39=E2=80=AFPM Andras Szemzo <szemzo.andras@gmail.=
+com> wrote:
 
-> On 15-01-25, 18:01, Lifeng Zheng wrote:
->> In cpufreq_online() of cpufreq.c, the per-policy boost flag is already set
->> to mirror the cpufreq_driver boost during init but using freq_table to
->> judge if the policy has boost frequency. There are two drawbacks to this
->> approach:
->>
->> 1. It doesn't work for the cpufreq drivers that do not use a frequency
->> table. For now, acpi-cpufreq and amd-pstate have to enable boost in policy
->> initialization. And cppc_cpufreq never set policy to boost when going
->> online no matter what the cpufreq_driver boost flag is.
->>
->> 2. If the cpu goes offline when cpufreq_driver boost enabled and then goes
->> online when cpufreq_driver boost disabled, the per-policy boost flag will
->> unreasonably remain true.
-> 
-> Yeah, this is a problem. I agree. If the global boost is disabled,
-> then boost shouldn't be allowed for any of the policies.
-> 
->> Running set_boost at the end of the online process is a more generic way
->> for all cpufreq drivers.
->>
->> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
->> ---
->>  drivers/cpufreq/cpufreq.c | 16 ++++++++++++----
->>  1 file changed, 12 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
->> index 03ae879d50b9..867bda3decfd 100644
->> --- a/drivers/cpufreq/cpufreq.c
->> +++ b/drivers/cpufreq/cpufreq.c
->> @@ -1409,10 +1409,6 @@ static int cpufreq_online(unsigned int cpu)
->>  			goto out_free_policy;
->>  		}
->>  
->> -		/* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
->> -		if (cpufreq_boost_enabled() && policy_has_boost_freq(policy))
->> -			policy->boost_enabled = true;
->> -
->>  		/*
->>  		 * The initialization has succeeded and the policy is online.
->>  		 * If there is a problem with its frequency table, take it
->> @@ -1576,6 +1572,18 @@ static int cpufreq_online(unsigned int cpu)
->>  	if (new_policy && cpufreq_thermal_control_enabled(cpufreq_driver))
->>  		policy->cdev = of_cpufreq_cooling_register(policy);
->>  
->> +	/* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
->> +	if (cpufreq_boost_supported()) {
->> +		policy->boost_enabled = cpufreq_boost_enabled();
->> +		ret = cpufreq_driver->set_boost(policy, policy->boost_enabled);
-> 
-> Maybe we can optimize here and not call set_boost() if policy's
-> boost_enabled is not changing at all.
->         if (policy->boost_enabled != cpufreq_boost_enabled()) {
->                 policy->boost_enabled = cpufreq_boost_enabled();
->                 ret = cpufreq_driver->set_boost(policy, policy->boost_enabled);
->                 ...
->         }
+> Add compatible strings for V853 family pinctrl.
+>
+> Signed-off-by: Andras Szemzo <szemzo.andras@gmail.com>
 
-Makes sense. Thanks.
+Patch applied because stand-alone, clear cut and reviewed.
 
-> 
-> After this patch, maybe you should simplify the drivers as well, which
-> take care of enabling/boost at boot time or setting this flag ?
-
-OK. I'll try to.
-
-> 
->> +		if (ret) {
->> +			/* If the set_boost fails, the online operation is not affected */
->> +			pr_info("%s: CPU%d: Cannot %s BOOST\n", __func__, policy->cpu,
->> +				policy->boost_enabled ? "enable" : "disable");
->> +			policy->boost_enabled = !policy->boost_enabled;
->> +		}
->> +	}
->> +
->>  	pr_debug("initialization complete\n");
->>  
->>  	return 0;
-> 
-
+Yours,
+Linus Walleij
 
