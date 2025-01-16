@@ -1,86 +1,95 @@
-Return-Path: <linux-pm+bounces-20522-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20523-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B71FDA13116
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 03:08:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 379E2A1318D
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 03:51:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 754BD1889509
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 02:08:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D394164076
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 02:51:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3B3150285;
-	Thu, 16 Jan 2025 02:08:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0822C78F3A;
+	Thu, 16 Jan 2025 02:51:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VcGWGV/n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22B11E480;
-	Thu, 16 Jan 2025 02:08:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C79ABE555;
+	Thu, 16 Jan 2025 02:50:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1736993306; cv=none; b=N9218L8RKvFFj+mdle743COydkPU3sLwb2pGIhymBD6eCjGniY246lF5NhQE+OEL/+SBXynQ3SeY/elXlYsn0cU65gculHfIllGC7ZhVQgQEWl6HfZQIXfVtaqlqguZq8IrIiEgt4yF/SkRPD43dfqOZ5w22kC3mRdhWyYRLb/o=
+	t=1736995859; cv=none; b=oFt579jMBy3/xLcPsvqaIimeUKoEmv3XZP6VgYFC6GJuT51Xuc62VVjUc+45VNGLZgXYGAJ8BznnM1sqpht0x+FwCjPOIIaVw60Fr1uvJJ5ouUHcR5ccHA6dLliqxM0HKFfpD54bhfvjE2yW0aPuieATYEQ1eEV9hzn8oDIHm0Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1736993306; c=relaxed/simple;
-	bh=ISZ/r+9sXHU4PlqiSCDo21HNThB3R2YXCh4o+Ce98DQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=O+QGz32yB8tkwBTo+4AUuKO8KEFrwqwepo2xxBnjk8tgzxOPTQmJp32pipN92ajAXaern5KqtzlUWKqVM1SkwHMpLSuXhKHAz4z1l0s9bmMa2UxwX5E71lWSxrXjVU8VXX42vJsokifn+MgjH52m1sfhXcPvbcIHi2a+Ucjc4ck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4YYR7P2LGpzrSV4;
-	Thu, 16 Jan 2025 10:06:41 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 6556318032E;
-	Thu, 16 Jan 2025 10:08:21 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 16 Jan
- 2025 10:08:20 +0800
-Message-ID: <9423f959-6d93-4908-ac2a-a9e23c69f2db@huawei.com>
-Date: Thu, 16 Jan 2025 10:08:20 +0800
+	s=arc-20240116; t=1736995859; c=relaxed/simple;
+	bh=+ZYNwZATOq0t2LdGXDouWYN7G+SKSyQoiBOOSmTuqyA=;
+	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
+	 In-Reply-To:To:Cc; b=DCvA3da8HQCVMv7ptXMzVcoU3BnfkerDp15Mje5RNW/1HxhHWxsXZ/0sgw/nN1uUkEDPZ1tx0EbmuAFhiEY09zzEpX7U4fJZ47BwqL7IIgrf0uqoMWURWP8teHgeyLtDOrhumuVW88CZeIdLsOSgVjN7FCsc2MgpLPQUL4lHEIA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VcGWGV/n; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 36EFFC4CED1;
+	Thu, 16 Jan 2025 02:50:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1736995859;
+	bh=+ZYNwZATOq0t2LdGXDouWYN7G+SKSyQoiBOOSmTuqyA=;
+	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
+	b=VcGWGV/nnfVGLM4fXGW5RSC/Xei+1ResxNcw3ICxmalD15Skcrz6hFpF4iJ97/asV
+	 fD3GEBmm5G6tw0DStQQEtaUi1hprYUF8WjLzzQtN+Hs4tVlq4cbvKPlEwYNP/PW9sO
+	 3ZlAMcNZrpX2p47LRcsqAGG+vHFfgHloDgjsSNH+17/Bx69su/JE59/U+OUsan7Jun
+	 EmXc9ekXUp6xxsR2sIY6fQtoOGLwNz/2ewU+LIowhYuBLzDQCFY241LrwcPmEKE9Nl
+	 3OEPo0h6xeqtMSnEnOA9/GEPsP6eK+npDHooDglX0bO4oVxployOg1NYctRcmL4nhJ
+	 amInC/r1aaanA==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 712EE380AA5F;
+	Thu, 16 Jan 2025 02:51:23 +0000 (UTC)
+Content-Type: text/plain; charset="utf-8"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 0/2] cpufreq: Introduce a more generic way to boost when
- cpu is going online
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <viresh.kumar@linaro.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <fanghao11@huawei.com>
-References: <20250115100123.241110-1-zhenglifeng1@huawei.com>
- <CAJZ5v0gPMGg2ZvjOmvmfj9W6L9wKT2+ToFgDpi-1pcg_zc+Z2g@mail.gmail.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <CAJZ5v0gPMGg2ZvjOmvmfj9W6L9wKT2+ToFgDpi-1pcg_zc+Z2g@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Subject: Re: [PATCH v3] net: wwan: iosm: Fix hibernation by re-binding the driver
+ around it
+From: patchwork-bot+netdevbpf@kernel.org
+Message-Id: 
+ <173699588213.987898.18343161167546299162.git-patchwork-notify@kernel.org>
+Date: Thu, 16 Jan 2025 02:51:22 +0000
+References: <e60287ebdb0ab54c4075071b72568a40a75d0205.1736372610.git.mail@maciej.szmigiero.name>
+In-Reply-To: <e60287ebdb0ab54c4075071b72568a40a75d0205.1736372610.git.mail@maciej.szmigiero.name>
+To: Maciej S. Szmigiero <mail@maciej.szmigiero.name>
+Cc: m.chetan.kumar@intel.com, loic.poulain@linaro.org, ryazanov.s.a@gmail.com,
+ johannes@sipsolutions.net, bhelgaas@google.com, andrew+netdev@lunn.ch,
+ davem@davemloft.net, edumazet@google.com, kuba@kernel.org, pabeni@redhat.com,
+ rafael@kernel.org, netdev@vger.kernel.org, linux-pci@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 
-On 2025/1/15 20:53, Rafael J. Wysocki wrote:
+Hello:
 
-> On Wed, Jan 15, 2025 at 11:01 AM Lifeng Zheng <zhenglifeng1@huawei.com> wrote:
->>
->> Since commit f37a4d6b4a2c ("cpufreq: Fix per-policy boost behavior on
->> SoCs using cpufreq_boost_set_sw()") and commit 102fa9c4b439 ("cpufreq:
->> Allow drivers to advertise boost enabled"), per-policy boost flag has
->> already been set to mirror the cpufreq_driver boost during
->> initialization. However, the current implementation doesn't work for all
->> cpufreq drivers and may fail in certain situation. A more generic
->> implementation is needed.
+This patch was applied to netdev/net-next.git (main)
+by Jakub Kicinski <kuba@kernel.org>:
+
+On Thu,  9 Jan 2025 00:33:50 +0100 you wrote:
+> Currently, the driver is seriously broken with respect to the
+> hibernation (S4): after image restore the device is back into
+> IPC_MEM_EXEC_STAGE_BOOT (which AFAIK means bootloader stage) and needs
+> full re-launch of the rest of its firmware, but the driver restore
+> handler treats the device as merely sleeping and just sends it a
+> wake-up command.
 > 
-> Can you please be more specific here?
-> 
-> What happens, why it happens and why do you think the way to go is to
-> reimplement this?
+> [...]
 
-I've explained this in commit log of patch 2. But if you think it is better
-to palce here too, I'll do that in v2.
+Here is the summary with links:
+  - [v3] net: wwan: iosm: Fix hibernation by re-binding the driver around it
+    https://git.kernel.org/netdev/net-next/c/0b6f6593aa8c
+
+You are awesome, thank you!
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/patchwork/pwbot.html
+
+
 
