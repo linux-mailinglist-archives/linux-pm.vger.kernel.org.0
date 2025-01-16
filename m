@@ -1,177 +1,246 @@
-Return-Path: <linux-pm+bounces-20527-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20528-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 116F9A13491
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 09:01:21 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A00F0A1349F
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 09:04:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93E823A4080
-	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 08:01:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B3C86166CF9
+	for <lists+linux-pm@lfdr.de>; Thu, 16 Jan 2025 08:04:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5B7E18C03B;
-	Thu, 16 Jan 2025 08:01:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD2E7198850;
+	Thu, 16 Jan 2025 08:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="SbpmaubP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A63AF73451;
-	Thu, 16 Jan 2025 08:01:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A468019343E;
+	Thu, 16 Jan 2025 08:04:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737014476; cv=none; b=qDBd9louhlxtFUTav2QNSduFIKIhjFGeDKXUwDA//20eK/UMJoMeHS/ch6kY1BYKjfU9va5hVHbnrolpBIyGTQQoGoW0D5Iov8Uvy/LaiPH7ExT3DePvEHQo4FnBly4KNtHXqiDLnwy3OlFIDCRehK2IwtKG9NF4dnTjPaQUIs4=
+	t=1737014688; cv=none; b=V6w2Gxu/hrxhGIpkM9EJGbaDFpZ7bPT1F5OR1LdEqfE2cQ9NszEM0ErzNO/M71H8dmhduZPMcM1BLFYJ55qsg9FPG8PotCYSEkE9wB5kO+NpyZfo9A4qDjoJabHsnJc1sPLczJz4PK95my9HRtHftwjcZeGuj4M+Ts2F6iGz1NU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737014476; c=relaxed/simple;
-	bh=CYMTRBhW2WXOjQ1h0QxJE0G54rvHoKIHqFKORo/wqEs=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TdwVGvu9Jy/9x0g7Ktpn6xhenW3Hu1b3R/S9n1WOWoO3SHPuJs6kiacg/snQIH0WQvC5StsfwMUpogqbSjEX1k4nGctr0lcPNJFZ+z9V1kOGEmDJBZxGjKlquIcexiEAN73rcNXTzY7dYPjfLOC/B8/uhsr0yAWJD5AKwJowDH8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YYZvx3VB2zjYBT;
-	Thu, 16 Jan 2025 15:57:17 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id B76B7180105;
-	Thu, 16 Jan 2025 16:01:09 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 16 Jan
- 2025 16:01:08 +0800
-Message-ID: <ad254dd8-24f7-4aee-9f68-5d1890e87c81@huawei.com>
-Date: Thu, 16 Jan 2025 16:01:08 +0800
+	s=arc-20240116; t=1737014688; c=relaxed/simple;
+	bh=uvB1h+87siG9diTP5RB8Hj+24Ej2g94Oj7tqxT4bTjY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=qIK9KiTuChNck0Nad0tCnzGYuKghp0hxJVHo9HyMf7Z9Fvs8Tx5tFoewZ8Amc+8AVYo0mwpyu6yyk93Vq+Wk0K3cGEc4Ajax8I+T6l/I0+MIMwG4H56wDXhni7VKL8s/jfK9gtNfUsDC2a1jAiWFQpAOY7o4alheYeASzPgeDXA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=SbpmaubP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 18713C4CED6;
+	Thu, 16 Jan 2025 08:04:48 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737014688;
+	bh=uvB1h+87siG9diTP5RB8Hj+24Ej2g94Oj7tqxT4bTjY=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=SbpmaubPgJkIACL3DRWqXWdfc1xPo5ZkXxBUElln9GlXw8mS10jZZc9oR4zNjloUl
+	 /0MfopnEtu9hgU0kP/qNCkH9vxoROLyI/NPFNfUS6hBIeQ1p+l6V5e5tUiaP1WTKm8
+	 RJWenFUEN/skGQ1qNnJyYOP4eGymRQ8ojxvQO/Se8lmoU5sQbIQzx82vOJH6XXcUvd
+	 DY1JfJAxaTC4p8pY2gW/fOpPyvOKZU3J1jBphS1oDMBpFivNDzIWjxeJy5Nvav1pSw
+	 g3MZG7vQbinhqVrqHyQxjuqEBUSrFXl6BmUdXDm/IwZ5iMpWid4u/7dO0cUaT/nIeO
+	 6VNRsL0Hj57zw==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 07870C02180;
+	Thu, 16 Jan 2025 08:04:48 +0000 (UTC)
+From: Dimitri Fedrau via B4 Relay <devnull+dimitri.fedrau.liebherr.com@kernel.org>
+Date: Thu, 16 Jan 2025 09:04:29 +0100
+Subject: [PATCH v2] power: supply: max1720x: add support for reading
+ internal and thermistor temperatures
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 6/6] cpufreq: CPPC: Support for autonomous selection in
- cppc_cpufreq
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-CC: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
-	<viresh.kumar@linaro.org>, <mario.limonciello@amd.com>, <ray.huang@amd.com>,
-	<pierre.gondois@arm.com>, <acpica-devel@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <hepeng68@huawei.com>, <fanghao11@huawei.com>
-References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
- <20250113122104.3870673-7-zhenglifeng1@huawei.com>
- <Z4fLXPgMvwGur+pz@BLRRASHENOY1.amd.com>
- <f89fc07a-1c65-4d1e-9ad8-76c6c9a15b25@huawei.com>
- <Z4ijkAFOMtVAOY6u@BLRRASHENOY1.amd.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <Z4ijkAFOMtVAOY6u@BLRRASHENOY1.amd.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Message-Id: <20250116-max1720x-temperature-v2-1-9638969d091a@liebherr.com>
+X-B4-Tracking: v=1; b=H4sIAIy9iGcC/4WNTQ6CMBBGr0JmbU2nqA2uuIdhAe0gk8hPpthgS
+ O9u5QIu30u+9+0QSJgC3IsdhCIHnqcM5lSAG9rpSYp9ZjDaXDViqcZ2Q2v0plYaF5J2fQspR+5
+ m++6isbKQp4tQz9uRfTSZBw7rLJ/jJeLP/glGVKicr7wvu8obtPWLqRtI5OzmEZqU0heKtsJSu
+ wAAAA==
+X-Change-ID: 20250113-max1720x-temperature-cec67fb40197
+To: Sebastian Reichel <sre@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Dimitri Fedrau <dima.fedrau@gmail.com>, 
+ Thomas Antoine <t.antoine@uclouvain.be>, 
+ Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737014687; l=5333;
+ i=dimitri.fedrau@liebherr.com; s=20241202; h=from:subject:message-id;
+ bh=fn4u6JBkLe9ziUbn1gD/a8EhRkjnGm3GtfEWO+TsGa8=;
+ b=dAkFeQoN0VmR3Y+MbdFqyhxNmqSOMwbGpepG68DabcRXlIGiMeTUQZQAuwTaWt8V8q9Yl68f7
+ 60z7AXnRf3/AG60eHn5owQcyl0nhQPaN+tDcXKjfg3FSqc4UKOliR9R
+X-Developer-Key: i=dimitri.fedrau@liebherr.com; a=ed25519;
+ pk=rT653x09JSQvotxIqQl4/XiI4AOiBZrdOGvxDUbb5m8=
+X-Endpoint-Received: by B4 Relay for dimitri.fedrau@liebherr.com/20241202
+ with auth_id=290
+X-Original-From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+Reply-To: dimitri.fedrau@liebherr.com
 
-On 2025/1/16 14:13, Gautham R. Shenoy wrote:
+From: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
 
-> On Thu, Jan 16, 2025 at 09:26:37AM +0800, zhenglifeng (A) wrote:
->> On 2025/1/15 22:51, Gautham R. Shenoy wrote:
->>
->>> Hello Lifeng,
->>>
->>>
->>> On Mon, Jan 13, 2025 at 08:21:04PM +0800, Lifeng Zheng wrote:
->>>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
->>>> driver.
->>>>
->>>
->>> [..snip..]
->>>
->>>> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
->>>> index bd8f75accfa0..ea6c6a5bbd8c 100644
->>>> --- a/drivers/cpufreq/cppc_cpufreq.c
->>>> +++ b/drivers/cpufreq/cppc_cpufreq.c
->>>> @@ -814,10 +814,119 @@ static ssize_t show_freqdomain_cpus(struct cpufreq_policy *policy, char *buf)
->>>>  
->>>>  	return cpufreq_show_cpus(cpu_data->shared_cpu_map, buf);
->>>>  }
->>>> +
->>>> +static ssize_t show_auto_select(struct cpufreq_policy *policy, char *buf)
->>>> +{
->>>> +	bool val;
->>>> +	int ret;
->>>> +
->>>> +	ret = cppc_get_auto_sel(policy->cpu, &val);
->>>> +
->>>> +	/* show "<unsupported>" when this register is not supported by cpc */
->>>> +	if (ret == -EOPNOTSUPP)
->>>> +		return sysfs_emit(buf, "%s\n", "<unsupported>");
->>>> +
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	return sysfs_emit(buf, "%d\n", val);
->>>> +}
->>>> +
->>>> +static ssize_t store_auto_select(struct cpufreq_policy *policy,
->>>> +				 const char *buf, size_t count)
->>>> +{
->>>> +	bool val;
->>>> +	int ret;
->>>> +
->>>> +	ret = kstrtobool(buf, &val);
->>>> +	if (ret)
->>>> +		return ret;
->>>> +
->>>> +	ret = cppc_set_auto_sel(policy->cpu, val);
->>>
->>> When the auto_select register is not supported, since
->>> cppc_set_reg_val() doesn't have the !CPC_SUPPORTED(reg) check, that
->>> function won't return an error, and thus this store function won't
->>> return an error either. Should there be a !CPC_SUPPORTED(reg) check in
->>> cppc_set_reg_val() as well? Or should the store function call
->>> cppc_get_auto_sel() to figure out if the register is supported or not?
->>
->> In patch 2, I have this check in cppc_set_reg_val():
->>
->> +	/* if a register is writeable, it must be a buffer */
->> +	if ((reg->type != ACPI_TYPE_BUFFER) ||
->> +	    (IS_OPTIONAL_CPC_REG(reg_idx) && IS_NULL_REG(&reg->cpc_entry.reg))) {
->> +		pr_debug("CPC register (reg_idx=%d) is not supported\n", reg_idx);
->> +		return -EOPNOTSUPP;
->> +	}
->>
->> If a register is not a cpc supported one, it must be either an integer type
->> or a null one. So it won't pass this check I think.
-> 
-> Ah, I see. In that case, you can remove the cppc_get_auto_sel() in
-> shmem_init_perf() function in amd_pstate.c (in Patch 5/6) from the
-> following snippet. The auto_sel value is nowhere used in the rest of
-> the code.
-> 
-> @@ -399,6 +399,7 @@ static int shmem_init_perf(struct amd_cpudata *cpudata)
->  {
->  	struct cppc_perf_caps cppc_perf;
->  	u64 numerator;
-> +	bool auto_sel; <--- Not needed.
->  
->  	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
->  	if (ret)
-> @@ -420,7 +421,7 @@ static int shmem_init_perf(struct amd_cpudata *cpudata)
->  	if (cppc_state == AMD_PSTATE_ACTIVE)
->  		return 0;
->  
-> -	ret = cppc_get_auto_sel_caps(cpudata->cpu, &cppc_perf);   <--- Not needed.
-> +	ret = cppc_get_auto_sel(cpudata->cpu, &auto_sel);         <--- Not needed.
->  	if (ret) {                                                <--- Not needed.
->  		pr_warn("failed to get auto_sel, ret: %d\n", ret); <--- Not needed.
-> 
+If enabled in the nPackCfg register, the Temp1, Temp2 and IntTemp registers
+contain the temperature readings from the AIN1 thermistor, AIN2 thermistor
+and internal die temperature respectively. Registers are shared between SBS
+and normal IC functions and are always readable regardless of IC settings.
 
-If auto_sel is not supported, this function will return 0 after getting
-fail. But after removing cppc_get_auto_sel(), this function will return
--EOPNOTSUPP by setting. Is this alright?
+Signed-off-by: Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+---
+Changes in v2:
+- Rename device attribute temp1 to temp_ain1
+- Rename device attribute temp2 to temp_ain2
+- Rename device attribute int_temp to temp_int
+- Add documentation to max1720x to Documentation/ABI/testing/
+- Link to v1: https://lore.kernel.org/r/20250113-max1720x-temperature-v1-1-cd9dd3b9d217@liebherr.com
+---
+ .../ABI/testing/sysfs-class-power-max1720x         | 32 ++++++++++++
+ drivers/power/supply/max1720x_battery.c            | 60 +++++++++++++++++++++-
+ 2 files changed, 91 insertions(+), 1 deletion(-)
 
-> 
-> --
-> Thanks and Regards
-> gautham.
+diff --git a/Documentation/ABI/testing/sysfs-class-power-max1720x b/Documentation/ABI/testing/sysfs-class-power-max1720x
+new file mode 100644
+index 0000000000000000000000000000000000000000..7d895bfda9ced2ba089723065b3ec27d1d3204ee
+--- /dev/null
++++ b/Documentation/ABI/testing/sysfs-class-power-max1720x
+@@ -0,0 +1,32 @@
++What:		/sys/class/power_supply/max1720x/temp_ain1
++Date:		January 2025
++KernelVersion:	6.14
++Contact:	Dimitri Fedrau <dimitri.fedrau@liebherr.com>
++Description:
++		Reports the current temperature reading from AIN1 thermistor.
++
++		Access: Read
++
++		Valid values: Represented in 1/10 Degrees Celsius
++
++What:		/sys/class/power_supply/max1720x/temp_ain2
++Date:		January 2025
++KernelVersion:	6.14
++Contact:	Dimitri Fedrau <dimitri.fedrau@liebherr.com>
++Description:
++		Reports the current temperature reading from AIN2 thermistor.
++
++		Access: Read
++
++		Valid values: Represented in 1/10 Degrees Celsius
++
++What:		/sys/class/power_supply/max1720x/temp_int
++Date:		January 2025
++KernelVersion:	6.14
++Contact:	Dimitri Fedrau <dimitri.fedrau@liebherr.com>
++Description:
++		Reports the current temperature reading from internal die.
++
++		Access: Read
++
++		Valid values: Represented in 1/10 Degrees Celsius
+diff --git a/drivers/power/supply/max1720x_battery.c b/drivers/power/supply/max1720x_battery.c
+index 9c7e14d2c7b87b8194511f36ade16e774281333e..11580e414713b7f42354a8bf4e4ef7bee6e33f36 100644
+--- a/drivers/power/supply/max1720x_battery.c
++++ b/drivers/power/supply/max1720x_battery.c
+@@ -16,6 +16,11 @@
+ 
+ #include <linux/unaligned.h>
+ 
++/* SBS compliant registers */
++#define MAX172XX_TEMP1			0x34
++#define MAX172XX_INT_TEMP		0x35
++#define MAX172XX_TEMP2			0x3B
++
+ /* Nonvolatile registers */
+ #define MAX1720X_NXTABLE0		0x80
+ #define MAX1720X_NRSENSE		0xCF	/* RSense in 10^-5 Ohm */
+@@ -113,11 +118,15 @@ static const struct regmap_config max1720x_regmap_cfg = {
+ };
+ 
+ static const struct regmap_range max1720x_nvmem_allow[] = {
++	regmap_reg_range(MAX172XX_TEMP1, MAX172XX_INT_TEMP),
++	regmap_reg_range(MAX172XX_TEMP2, MAX172XX_TEMP2),
+ 	regmap_reg_range(MAX1720X_NXTABLE0, MAX1720X_NDEVICE_NAME4),
+ };
+ 
+ static const struct regmap_range max1720x_nvmem_deny[] = {
+-	regmap_reg_range(0x00, 0x7F),
++	regmap_reg_range(0x00, 0x33),
++	regmap_reg_range(0x36, 0x3A),
++	regmap_reg_range(0x3C, 0x7F),
+ 	regmap_reg_range(0xE0, 0xFF),
+ };
+ 
+@@ -388,6 +397,54 @@ static int max1720x_battery_get_property(struct power_supply *psy,
+ 	return ret;
+ }
+ 
++static int max1720x_read_temp(struct device *dev, u8 reg, char *buf)
++{
++	struct power_supply *psy = dev_get_drvdata(dev);
++	struct max1720x_device_info *info = power_supply_get_drvdata(psy);
++	unsigned int val;
++	int ret;
++
++	ret = regmap_read(info->regmap_nv, reg, &val);
++	if (ret < 0)
++		return ret;
++
++	/*
++	 * Temperature in degrees Celsius starting at absolute zero, -273C or
++	 * 0K with an LSb of 0.1C
++	 */
++	return sysfs_emit(buf, "%d\n", val - 2730);
++}
++
++static ssize_t temp_ain1_show(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	return max1720x_read_temp(dev, MAX172XX_TEMP1, buf);
++}
++
++static ssize_t temp_ain2_show(struct device *dev, struct device_attribute *attr,
++			      char *buf)
++{
++	return max1720x_read_temp(dev, MAX172XX_TEMP2, buf);
++}
++
++static ssize_t temp_int_show(struct device *dev, struct device_attribute *attr,
++			     char *buf)
++{
++	return max1720x_read_temp(dev, MAX172XX_INT_TEMP, buf);
++}
++
++static DEVICE_ATTR_RO(temp_ain1);
++static DEVICE_ATTR_RO(temp_ain2);
++static DEVICE_ATTR_RO(temp_int);
++
++static struct attribute *max1720x_attrs[] = {
++	&dev_attr_temp_ain1.attr,
++	&dev_attr_temp_ain2.attr,
++	&dev_attr_temp_int.attr,
++	NULL
++};
++ATTRIBUTE_GROUPS(max1720x);
++
+ static
+ int max1720x_nvmem_reg_read(void *priv, unsigned int off, void *val, size_t len)
+ {
+@@ -488,6 +545,7 @@ static int max1720x_probe(struct i2c_client *client)
+ 
+ 	psy_cfg.drv_data = info;
+ 	psy_cfg.fwnode = dev_fwnode(dev);
++	psy_cfg.attr_grp = max1720x_groups;
+ 	i2c_set_clientdata(client, info);
+ 	info->regmap = devm_regmap_init_i2c(client, &max1720x_regmap_cfg);
+ 	if (IS_ERR(info->regmap))
+
+---
+base-commit: 260d7c5e5392ac41c94152005d416172ba0a906d
+change-id: 20250113-max1720x-temperature-cec67fb40197
+
+Best regards,
+-- 
+Dimitri Fedrau <dimitri.fedrau@liebherr.com>
+
 
 
