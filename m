@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-20597-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20598-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAB15A14A12
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 08:25:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7D1ABA14A1B
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 08:27:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 069493AA8A9
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 07:25:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 30C4916632E
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 07:27:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 477BC1F78F9;
-	Fri, 17 Jan 2025 07:25:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E09611F7908;
+	Fri, 17 Jan 2025 07:27:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="RAokXgxQ"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hp6RfAG0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A13D1F78F3;
-	Fri, 17 Jan 2025 07:25:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E1C1F78FD;
+	Fri, 17 Jan 2025 07:27:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737098721; cv=none; b=miS7oR6CbxOuvZM81h9Oe08oG4e1eVBycQj4ysHsYWrY4Sj/yowISlQJKcS1tIWEwuw8hSJaaUbAlIZh4ErMLXKBdy/S0YfW8kyeUcrmsYbVSCpaiDUhZBTxlA58BQiZBCdXWK7fRI9RTLUyAa3Y/kKwD60d3cVYZzQOn/J3z5s=
+	t=1737098824; cv=none; b=D+RIIi/n84aFsPWEiLzCCQBWFu7Yr5XMiOI66wBNUAkEFg56BsudwkIsbLJhjP+MB6xA9Xjmw8J3sFUwRLcAmsS4SXChrWBs+ej8cqPoCCEOJ4GUR4f88Xyu7onxjKskhOcH8yf7aH1baCKjf4KH7fp3Lwb1+WTK6FuDisDfJFU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737098721; c=relaxed/simple;
-	bh=cGTuzvyXhhbVdzsVpQHI3NbFsG2cU0VrK5fyS3VgK5Q=;
+	s=arc-20240116; t=1737098824; c=relaxed/simple;
+	bh=8ZoHB3c7Wja3OoOz4RgpQxXimVh8mCkNOGXye7svh3s=;
 	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=gTGNMJKDBRvG9x/3HZMPw+dmRNiUc4D575XqctZaBrWB1qDc4vRuOiUYfhtr36sg9kLEBk2ico1ketdKKzm8MT4I9ilXxTIDTyBy7AAh0KLvXM+27fCdiOQU6QS5hhKmwoN091C2O/FqBAfQ5Q7dllDL7/PmoihbRqIoAC4KVCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=RAokXgxQ; arc=none smtp.client-ip=209.85.218.46
+	 Message-Id:References:To; b=kNjo0rSgJEKFr5EuUR4dgPPxq8RbYjZDvkKrGbBhytuVxHUyxqtx9mFybuQrFVlxCuTpnDvBCsaembIIE9DJMXlxH1USCoJ0EH1EYCOr415JgkLY3+3YO+j9G1+ucjcY2/SWzSLzRWu62G9YipDAQDEGUdURMGK6SJktGKobRso=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hp6RfAG0; arc=none smtp.client-ip=209.85.208.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-aaedd529ba1so245997866b.1;
-        Thu, 16 Jan 2025 23:25:19 -0800 (PST)
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5d3d143376dso2669994a12.3;
+        Thu, 16 Jan 2025 23:27:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737098717; x=1737703517; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1737098820; x=1737703620; darn=vger.kernel.org;
         h=to:references:message-id:content-transfer-encoding:cc:date
          :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=acBUeSMeLcUwdvAPh7XnIMxupIQjS7s3gcf5z1wzyRw=;
-        b=RAokXgxQWI8H4i8pqD939KXCLwyZgQ21n/rEWGvfexCOLdOLwUeX26gvnBLFnOavKV
-         dQaAg8AO9Br9t2WkyZxJzi27JUL4QtYJz4qt56ykcUqxMOEokNBHZS2o/LcMOzRzlubP
-         Q6AOLjSOj4A9a2eixrKSjeVAioHtVYBKnMpbMdxa7NhGBRRvTXXmsPl+hV+zk8mGJu8+
-         5sNkRsjnsudQAJLpgdWI+ph9t6ag/IjJlyS4NYBwXBXhnZj/rQU6/EvasnU4ozJ4H8W+
-         dHhY3MuT6xR2nnJPg4fA5wQ8yqK2X3Q0vxy+www1v2+mWHN0Aa7CWOCxn/DoW9zYfM/j
-         Itsg==
+        bh=F24Ywam/p+ofkibybtKEAiJQBVKXbmYXTkvfrfJmGwk=;
+        b=hp6RfAG0/y9XnzfTkyQtULRRVpkaXRCARYDnOM7u8M5ObDVEz9KWUTSw0ssvcBwZ3q
+         aqQjzKfalnJde5VSaA3md5J5Lzods8XdvUcH31GPygt8KRMXTYs8cc7iH3oLrvHnWpDa
+         0vt2Nwp8xx6c2jtm7tgm/hRkguzDzNWA42g53LNEwdvgF+cCNNs3RiOpKYn+cgLxHNCz
+         jVkX2MZiPmuQX32N8PZQ3X+y21UpSgdTcvRxchMZZSd9VaX2uiAl4okp0m6EVMWRwHc+
+         8Upj8SyyVRjfJhsvjhktty/400Z9GJNwDW04H9Zo0Oo+nJyBhdV07fne3nLeYf8cZoGM
+         q4ZA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737098717; x=1737703517;
+        d=1e100.net; s=20230601; t=1737098820; x=1737703620;
         h=to:references:message-id:content-transfer-encoding:cc:date
          :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=acBUeSMeLcUwdvAPh7XnIMxupIQjS7s3gcf5z1wzyRw=;
-        b=q+Li1ukWc3HEOTYY11r/jgydcXwVcuxbTTFMmcW8/mRUJBV7d5hTtChu7ZzGKRwQNy
-         UPa0Lf54XnUtrI3bdXM/soBkLnYZxvn4sFC1NP0a22jxt13B0y/t7+tGWtW+IKDqJ8lp
-         rViLLJ7dvzTShC4s4zxfIJZAzihu91NAP+9SxfiknIIlpLvoN8vs8WkD/WNSTjV9TleT
-         sOjc5bjO0vbilqlnp+9ABiTtaMCbxw5bZnDVBuvtWNDBKr49GS/C46vks4s8oeVegzDi
-         pmtwsdIj7e9AKEk3hVOhz2Z1TcmJ0q0R8k/WXSrNAYj8OdycxEjw2GXEWJ0ZwBHL6g3Z
-         Sn4w==
-X-Forwarded-Encrypted: i=1; AJvYcCVKZetnTmanXhYR6p9+oSlWS2iyINsSMcPDdXxcdOorWHkHdWIgguc7pulmdxrbNP6EQt232sX7th3JhQ==@vger.kernel.org, AJvYcCVf1HBKeFE0Tn5Dc8Pw14SAwXBtiWWzQOXCwQNWB3G6iz5bMapCt+RuOF98mBeWry25dIhl83pdWy+F@vger.kernel.org, AJvYcCWYApwnWfriZQ3ivrzzjRnQq9U9g58/rMMD2gjHTAI5jClt1QkfzqLAN0nSycEdE2rZPVSrxg9kRb3ou48A@vger.kernel.org, AJvYcCXniZY09U1Zkix8ownnz8o1OwcplhxJulAUQgQP0Z7a0vAu+2CUQ029P4RIyG3gK0bJRAvxOm6yzLY=@vger.kernel.org, AJvYcCXoSQPtWcRyLFzhRqQFbcHjsVIAYqsScGSWfHkRHdDCM7SZFeJdhVLAobGYFPoADvAFCxWsgrcOYF+7@vger.kernel.org
-X-Gm-Message-State: AOJu0YzvaULFaq+JjgFt+04XxUPQ1NBRywOfDf8zYWl3xYbi8bccZRLJ
-	+O47hwd7cXJ/AXZXwTofhVPh1V4Tw0BZ0Mpzujf1xfLMu+FFzjsE
-X-Gm-Gg: ASbGncuOdz5P5kpBGXmJHfxG3XrPm0fBOhDe3cjesDmXEY52W6kLwRH1l829S9USSRw
-	JMCFs+VICDXkjIGBhclvjOHS1YH6haDF8bEaqpJ7LWW0DDWiaSth5ATggWQu+oFMN1vufuX0mMC
-	ljY2FEUjdfouMGBo4bpszrZIpjG1gejBsHBbh+saCmy4uXK4EUYSb7aVDgQvLDfiPGsQV4juJ29
-	K71hxkZtLvN/Tp4sEK2xNSLR+cROM5bQNPCmj+N8s5+tzXbo1E+7K5R1aWyafZsvo00ctuggd7n
-	dxkwDFVw4DRtX6jDclc=
-X-Google-Smtp-Source: AGHT+IGePGJHVWxw4XwLV4zxZAGfulFMMCFa6UxYk4nNAptBEBklprrxVwXwqCG4Gi/JEQo6iRnv6g==
-X-Received: by 2002:a05:6402:2745:b0:5d0:bf5e:eb8 with SMTP id 4fb4d7f45d1cf-5db7db07846mr3557485a12.23.1737098717190;
-        Thu, 16 Jan 2025 23:25:17 -0800 (PST)
+        bh=F24Ywam/p+ofkibybtKEAiJQBVKXbmYXTkvfrfJmGwk=;
+        b=oheogE3wI9m/3ZJpQ9OlhD8Bdq2KwSP77tizIxKsckxSF3ICZfSNmjT2wAgFvcGSk1
+         lo30wzeEaJqcfFPyuBW4dvVtb9wm0kW9a3LNyYjGCN/RzEOLCCYXnbHyr6PxaReuaZoJ
+         nomJvT3D77ijzL1ObMFdKhD53Z0QbURa6PVxekvOwogp07Nr8+XZczZyAFUVe1m2quhu
+         GkdfC4RzncloN2xZYEgbsO80qhdgERmIFHtQqHdNwegIKw+1ECief83Nvzp7sGC7jqCN
+         sdBNIiGrDg2H7NXjiyTMbP9Q+19dhOaYqW5rUjDceTnol4PEmIwH5bXTfwB4WtC0QO3g
+         6y3g==
+X-Forwarded-Encrypted: i=1; AJvYcCUReP1EKKOpXB+BXv8TWxnURibxeSdJ/odSSVBy/DdmyUPXcSgslYxXhvMLHL3jGYy91JyL0GuHNVbSDbpZ@vger.kernel.org, AJvYcCUWUaNoxL08Kp+PjK7uZQxkjgUaeNF72YbL3dF+ekT4bfhjNVFWgEnEresAtlVCOdhhMLhNQjFx+p3EaQ==@vger.kernel.org, AJvYcCUaCZ2pMf/NHKVFnx+9TiLCghwy1Ty/Nza64S9Z3mABLK8OYuzUmEYVZDU35wVA1qlZrjDs5V6wIxlL@vger.kernel.org, AJvYcCUlKPDTt5Xsm8mNM0Sr5jMhDpHVWaXiwXiwdF+2drw5aEMBENR5+qbtn0MZtPaFaffZZ0SBi31YIxI7@vger.kernel.org, AJvYcCXOvU8MbflDTks5r6mRA0yRbH/+7+MNWabGGEeRJGUwxhaVaDWVpA597SLw6JFnn5qEejLW3QZeEEA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz81y5PX99gbzs1WZdAntbqwXb3I+ZrtAvtEhhXt5+zFPxCj0yQ
+	v6yYNK2l4gdsF5zdC0X4Da+N2uBqHVdTkK7A9UATiXh7kcI31tgW
+X-Gm-Gg: ASbGnctPHAqtR3fWaC+FKYWyIfXKtTqXaBTzwZ9sWaHZChWr9klZw4c9gz9NtWaQr4A
+	IFmvKVN+XvMrl0Bq0QFy8kwCGc06kayg8w4DEXlbBEetnFaAxzzLn6CbvqgVuho+rKWZ8C1z3JX
+	8cx7JXKgUM2quF8fzU1nU3HuvC8Zcgtao2SIriGNVpYs5pLsIOwW4QnwZ0QkdLn0gHCLBbZGP6I
+	xm8reJNs2NaLqUicqT0vrY2HMDjIOtQheTyHKdHVQfXaz99IXEbW+JwS8TpgV/8urIuYPv0buPZ
+	9rl8vAf//ykFlffQZGM=
+X-Google-Smtp-Source: AGHT+IEJ47ULSJP3koS5kB9oV3dzXmmnz2xu5B2PxtVsCDw5X7zWmfzS9Fwll8RLJEa/W2eN3Ozjlw==
+X-Received: by 2002:a05:6402:26c2:b0:5d2:7199:ae5 with SMTP id 4fb4d7f45d1cf-5db7d2e3014mr1246401a12.5.1737098819744;
+        Thu, 16 Jan 2025 23:26:59 -0800 (PST)
 Received: from smtpclient.apple (185.174.17.62.zt.hu. [185.174.17.62])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab384ce1a49sm124381366b.46.2025.01.16.23.25.15
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5db73edccd4sm1072439a12.77.2025.01.16.23.26.57
         (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
-        Thu, 16 Jan 2025 23:25:16 -0800 (PST)
+        Thu, 16 Jan 2025 23:26:59 -0800 (PST)
 Content-Type: text/plain;
 	charset=utf-8
 Precedence: bulk
@@ -80,12 +80,11 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51\))
-Subject: Re: [PATCH 03/12] pinctrl: sunxi: add driver for Allwinner V853.
+Subject: Re: [PATCH 10/12] dt-bindings: phy: allwinner: add v853 usb phy
 From: =?utf-8?B?QW5kcsOhcyBTemVtesWR?= <szemzo.andras@gmail.com>
-In-Reply-To: <CACRpkdYVTedEon0X-izvaDTGF6yRhD2s=Z6NEM=zBf4vD-T0Pg@mail.gmail.com>
-Date: Fri, 17 Jan 2025 08:25:04 +0100
-Cc: Andre Przywara <andre.przywara@arm.com>,
- Michael Turquette <mturquette@baylibre.com>,
+In-Reply-To: <Z4dpFqffMJ31ml2y@vaman>
+Date: Fri, 17 Jan 2025 08:26:46 +0100
+Cc: Michael Turquette <mturquette@baylibre.com>,
  Stephen Boyd <sboyd@kernel.org>,
  Rob Herring <robh@kernel.org>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -93,9 +92,9 @@ Cc: Andre Przywara <andre.przywara@arm.com>,
  Chen-Yu Tsai <wens@csie.org>,
  Jernej Skrabec <jernej.skrabec@gmail.com>,
  Samuel Holland <samuel@sholland.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
  Philipp Zabel <p.zabel@pengutronix.de>,
  Maxime Ripard <mripard@kernel.org>,
- Vinod Koul <vkoul@kernel.org>,
  Kishon Vijay Abraham I <kishon@kernel.org>,
  Ulf Hansson <ulf.hansson@linaro.org>,
  Paul Walmsley <paul.walmsley@sifive.com>,
@@ -113,185 +112,67 @@ Cc: Andre Przywara <andre.przywara@arm.com>,
  linux-pm@vger.kernel.org,
  linux-riscv@lists.infradead.org
 Content-Transfer-Encoding: quoted-printable
-Message-Id: <686A634E-147F-4D73-A909-29FC0C20472C@gmail.com>
+Message-Id: <2D99DF28-4CC0-443D-8E5F-A2AC12EE47B7@gmail.com>
 References: <20250110123923.270626-1-szemzo.andras@gmail.com>
- <20250110123923.270626-4-szemzo.andras@gmail.com>
- <20250114141954.2785879a@donnerap.manchester.arm.com>
- <CACRpkda0nx3SQtdjmXdCEbVJSWM10TM=p-6JbDjbiYcOSF5PxQ@mail.gmail.com>
- <20250115152635.1b89e7f4@donnerap.manchester.arm.com>
- <CACRpkdYVTedEon0X-izvaDTGF6yRhD2s=Z6NEM=zBf4vD-T0Pg@mail.gmail.com>
-To: Linus Walleij <linus.walleij@linaro.org>
+ <20250110123923.270626-11-szemzo.andras@gmail.com> <Z4dpFqffMJ31ml2y@vaman>
+To: Vinod Koul <vkoul@kernel.org>
 X-Mailer: Apple Mail (2.3776.700.51)
 
-I=E2=80=99ve actually already converted the pinctrl driver to the new dt =
-based pinmux, as Andre
-suggested. It=E2=80=99s simple, get rid of those huge pinmux tables, and =
-easy to understand to
-add the mux settings to the dtsi.
 
 
-> On 16 Jan 2025, at 10:34, Linus Walleij <linus.walleij@linaro.org> =
-wrote:
+> On 15 Jan 2025, at 08:51, Vinod Koul <vkoul@kernel.org> wrote:
 >=20
-> Hi Andre,
->=20
-> some nice talk here, actually the following is just opinions, I will
-> be likely happy with whatever approach is taken eventually.
->=20
-> On Wed, Jan 15, 2025 at 4:26=E2=80=AFPM Andre Przywara =
-<andre.przywara@arm.com> wrote:
->=20
->>> pio: pinctrl@1c20800 {
->>>                        compatible =3D "allwinner,sun8i-r40-pinctrl";
->>> (...)
->>>                        i2c0_pins: i2c0-pins {
->>>                                pins =3D "PB0", "PB1";
->>>                                function =3D "i2c0";
->>>                        };
->>>=20
->>> abstract, strings, nice. The driver handles the particulars.
+> On 10-01-25, 13:39, Andras Szemzo wrote:
+>> Document Allwinner v853 USB phy.
 >>=20
->> What bugs me about this it that this has quite some seemingly =
-redundant
->> information (Who would have thought that the i2c0 pins use function
->> "i2c0"?), but misses out on the actual 4 bits(!) of information.
->=20
-> the pins in this example are called PB0 and PB1 though. The =
-designation
-> on the package. And often pins actually named "i2c0_1" "i2c0_2" are
-> for that primary function, but muxable to a few other functions,
-> at least GPIO in most cases. So it's just some name for the pin
-> really.
->=20
->>> That is like so because we are designing for users which are
->>> let's say customization engineers. If these engineers jump from
->>> project to project matching function strings to group strings will
->>> be a common way to set up pins, and easy to understand and
->>> grasp, and it makes the DTS very readable.
+>> Signed-off-by: Andras Szemzo <szemzo.andras@gmail.com>
+>> ---
+>> .../phy/allwinner,sun8i-v853-usb-phy.yaml     | 89 =
++++++++++++++++++++
+>> 1 file changed, 89 insertions(+)
+>> create mode 100644 =
+Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.yaml
 >>=20
->> That's an interesting view, and I see the point of it being easy to =
-read,
->> but this is partly because it doesn't convey too much actual =
-information,
->> does it, as it requires another lookup or two.
->> And the pinctrl group nodes are actually in the .dtsi file, which are
->> typically written once during the initial SoC enablement, and new =
-board
->> .dts files normally just reference the existing pingroup nodes. So =
-anyone
->> dealing with just a new board is not bothered by this.
+>> diff --git =
+a/Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.yaml =
+b/Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.yaml
+>> new file mode 100644
+>> index 000000000000..773c3f476db8
+>> --- /dev/null
+>> +++ =
+b/Documentation/devicetree/bindings/phy/allwinner,sun8i-v853-usb-phy.yaml
+>> @@ -0,0 +1,89 @@
+>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>> +%YAML 1.2
+>> +---
+>> +$id: =
+http://devicetree.org/schemas/phy/allwinner,sun8i-v853-usb-phy.yaml#
+>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+>> +
+>> +title: Allwinner V853 USB PHY
+>> +
+>> +maintainers:
+>> +  - Chen-Yu Tsai <wens@csie.org>
+>> +  - Maxime Ripard <mripard@kernel.org>
+>> +
+>> +properties:
+>> +  "#phy-cells":
+>> +    const: 1
+>> +
+>> +  compatible:
+>> +    const:
+>> +	- allwinner,sun8i-v853-usb-phy
 >=20
-> You have a point, and when working with a system the application
-> engineer often finds bugs in the pin control driver, and has to go
-> and fix the actual driver and then all the information hiding and
-> simplification is moot.
+> Does this really need a new binding document, if so why... Cant this =
+be
+> added to one of the existing docs which driver uses?
 >=20
-> This can become an expensive lesson for the current attempts
-> to push pin control into firmware where the configuration is
-> mostly "dead simple" (and just using strings) - the bugs will be
-> in the firmware instead, and impossible or really hard to fix.
->=20
->> Also in my experience most people have no problems in understanding =
-the
->> concept of pinmuxing and that there is a selector number, also where =
-to
->> find this.
->=20
-> Yeah the ambition with the strings was to avoid forcing application
-> engineers to know all about that. If they do, they are then
-> developing the driver, not just using it.
->=20
->>> Mediatek and STM32 made a compromise by using pinmux
->>> and adding some macros to define them so it looks more
->>> pleasant:
->>>=20
->>>      i2c0_pins_a: i2c0-default {
->>>                pins-i2c0 {
->>>                        pinmux =3D <MT7623_PIN_75_SDA0_FUNC_SDA0>,
->>>                                 <MT7623_PIN_76_SCL0_FUNC_SCL0>;
->>=20
->> Well, I don't really get why they don't use the (MTK_PIN_NO(75) | 1)
->> definition directly, seems to be more telling to me?
->=20
-> That's what STM32 does as well and it's usable.
->=20
-> But of course it drives a truck through the initial ambition that pins
-> on all systems be configured the same way, with strings. So now
-> there are some families of drivers all "necessarily different" which
-> is not so nice for people jumping between different SoCs, but
-> very compelling for people focusing on just one SoC.
->=20
-> Well, unless this way of doing things becomes so prevalent that
-> it's the new black.
->=20
->> So the plan for sunxi would be: <SUNXI_PINMUX(PORTC, 23, MUX_1)>, ...
->> And this would not be really "opaque", since it has a fixed known =
-mapping:
->>        (port << 16) | (pin << 8) | (mux << 0))
->> I find this both technically elegant, because it combines all the
->> information into just one compact cell, but also readable by =
-outsiders,
->> thanks to the macro.
->=20
-> And a new standard, to add to the other standards, so that
-> is my problem as maintainer. It makes sense on its own, and it
-> complicates the bigger picture.
->=20
->> My main arguments against the current (string-based) approach:
->> - They require the mapping table to be in every DT user, so not only =
-the
->>  Linux kernel, but also U-Boot, FreeBSD, you name it...
->=20
-> That's true.
->=20
-> This comes from the DT ambition to describe hardware and config,
-> but not *define* hardware, i.e. to stop device tree to turn into
-> Verilog or SystemC, which is what will happen if we take the
-> 1:1 reflection of hardware to device tree too far.
->=20
-> I don't think anyone really knows where to cut the line.
->=20
->> - The tables are getting quite large, and they pollute the single =
-image
->>  Linux kernel, with tons of very specific information for a number of =
-very
->>  pitiful Allwinner SoCs. At the moment the tally is at 145KB of =
-code+data
->>  for the existing arm64 SoCs, with the newer SoCs ever growing (H616 =
-alone
->>  is 27KB, A523 would be quite larger even, I guess 40K). The new A523
->>  specific pinctrl support adds 872 Bytes.
->=20
-> This is a generic problem though, look at GPU drivers.
->=20
-> The community (especially Android) seem set on fixing this by using
-> modules.
->=20
->> - Most of the mappings are untested at pinctrl driver commit time, =
-since we
->>  don't have the device drivers ready yet - by a margin. The new =
-approach
->>  would add the pinmux values when we need them and can test them.
->=20
-> I like this argument the best.
->=20
-> However this also reads "upfront firmware to handle pin control is a
-> dead end" yet there are people dedicatedly working on exactly that.
-> (Not that its' the Allwinner developers' problem...)
->=20
->> - The comments in the table give away that something is not quite =
-right:
->>                  SUNXI_FUNCTION(0x2, "i2c0")),         /* SDA */
->>  This is just a comment, so has no relevance for the code, but it's =
-not
->>  meant for humans either. Yet we try to make this correct and =
-maintain
->>  it. Odd.
->=20
-> So i2c0 is SDA and i2c1 is SCL or something?
-> It seems common, but yeah it can be confusing.
->=20
-> Yours,
-> Linus Walleij
+
+Yes, that was my first intention too, but didn=E2=80=99t know how to do =
+it propery, but I=E2=80=99ll remove it
+and add to one of the existing doc.
+
+> --=20
+> ~Vinod
 
 
