@@ -1,91 +1,77 @@
-Return-Path: <linux-pm+bounces-20593-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20594-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43429A14881
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 04:35:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3598EA1488F
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 04:41:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A2E221889363
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 03:35:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A4DC43A437B
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 03:41:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272941F5610;
-	Fri, 17 Jan 2025 03:35:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7232E46434;
+	Fri, 17 Jan 2025 03:41:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="XBq8n7Zt"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="E3qtqeEn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D5A225A643
-	for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2025 03:35:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A74AA25A620
+	for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2025 03:41:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737084947; cv=none; b=j82MEWSTaHYMagLolMex1evu7d8GILltzjswyzjMS4hOPOPnkQxPy+peDmNmzM6UlNOb0kkXCAHZXvUToXZakKIHDe3IcpdPpVNly1KO77s+uyHXaIT9uQvxty2BrkRn1hRwHjuVM9SA+6XPp6wWI1hHgduKfnKqfbxLj7iPwxc=
+	t=1737085288; cv=none; b=WXpAQ7fBoDg5lyLwNb6mJH9Wklq6N1T7JeCy+/u/y3TgnIPUxpvZASJUDMUD7aPScyY1k6AlliPe5r5HjKVLVlHTBTzY1Rg8m2n0jY9x64gA5BJocnwgyMabGe1ihXdlCdzu/RK9Gc/diBGWRTfmDu+Eyc9/kY8jgmZ/3RomE3g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737084947; c=relaxed/simple;
-	bh=NbSxWnZyu8RyFNkzI/hOemUAH4hDNgeb1XTakz637p4=;
+	s=arc-20240116; t=1737085288; c=relaxed/simple;
+	bh=YMWd9WTCfl+pmp9VBwB8sa2KM+zbCZYG2YGhqW8vPvg=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XtF7L7b64ZvhvHUEI+0ldkfh50Hwv2NFwbxo71LavplvHArKrQLWLnatW/PwZu/Ibaz8ROMPfQBzc+w9hY56czIGWKQWSNcX7QQT4juoEfzkRoDm0mUMxZ5L3/XdVCUxFE9lTUZvnbLOKVpgemliWE1G/2kwHohoCOob0EN8a4I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=XBq8n7Zt; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-2166f1e589cso40309275ad.3
-        for <linux-pm@vger.kernel.org>; Thu, 16 Jan 2025 19:35:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737084944; x=1737689744; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=wCiz+sabDeeau8SEKk5GsN1jfadMcq+hi9aKPPfDvcI=;
-        b=XBq8n7Zt7yKfKtP/dp6cKhwKuy8BWdbwJr65EwzKYQGMafQ9Or39yvqXCVCXiwuM3P
-         amS6ntHmw/zDSzQtFJ5meV14hex2jHIFIuTaiO1hIwWRtn1QXAOOpQ3Cx6WoaBonKEF+
-         sw5aNNaEUs96kvNEt5TW/SvptLGhHQYbyEbiv5Zf6xQvRW23TdGT7gAWqBuNq7ALDddu
-         UcVkNfB+UY2DpmR6VHbE7cdLcuwqjWjtoIMU+tfyMz6O3qFOfOG8/EnGgJIDoiDFBoQI
-         s5gLleMwErnFVskfOBj9yB4wXrUQki6mpS300J4i0MTffKp+45+C/xtfXV3dmG/LwgtE
-         lrwQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737084944; x=1737689744;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wCiz+sabDeeau8SEKk5GsN1jfadMcq+hi9aKPPfDvcI=;
-        b=ZRkheWmIBOWxVHQ9OHpYZoG1YvvSW9yqPoe6CGiAvISgzursDyJTu4KTrPlipdOYGL
-         LS8v105PivPGguUik98/gY/wQ0kdfF0Ad1vDNQNPj+wPw/8Kae7C9N4q1xzpBsgM70JG
-         AvwjwBePOQOiP72vgGlJ2Gcotgev5NOV9xAbJEy6BRYMHwB4HuT5tLh3/o1WaAqAqE3x
-         JuAhef+qe4Yz9dxaTNXidZT6hCO/vZE0L3tbGSDtxhriGUuIzaHEmgnIfFT8DKxSw9IG
-         EAbqwGlbWkP6ukAwUzoikU+Z/+Te4D+GXJfOVTtxUqsAtbzltUThtnxcvzKH2ldsrl/b
-         simw==
-X-Forwarded-Encrypted: i=1; AJvYcCXfozu5VHJNR589CDdkyLJQL/Mg/zaHnhQWkfltHtlf++0MduMNrG/ysW0jxPmkRt/JllZUgGHnkw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzT13W82iUSLJo6QJM+P9ivuHmQ8wRFNGHPy8bpFw6X1pSaM1Q1
-	Eoe5nVL+o6oAz14JE5mDIdU4h0r6LrOjTivikxZJ/rc/jX0OUiCvedfdh01a7+8=
-X-Gm-Gg: ASbGncspO2WPBLZ+RV0VJ5dwoaFpHk2BTilaLYgVG2econ9C49Xh3zFoA6/0nIZ7YkA
-	WGvjZWxcq5qsbSYUM/JWKrFBCnRI+yNSqXqAt2qJC4E9/1a6n9GtF9+TEaNVV9j4T1uef3q6u+F
-	4vTPCuNwJq3mP1k2dJxepskyM0EcDpVatHEuGSQ8VgsOPWZbk0WJ5EGlQZw8ZqFi5d9PXOHgmsR
-	HZWZQVepY0N973tHPDIKfoO1z1LT64kDxKGGnGqrEbNCxIYb9+JmcjQtFw=
-X-Google-Smtp-Source: AGHT+IF5Ygdj23ZD7GuKZPa9QsTHhprHgm42ulCzwj5UoaKE1u+8zqF+SlF34qHYFtOsB+w9cQjK2Q==
-X-Received: by 2002:a17:902:ea05:b0:216:3d72:1712 with SMTP id d9443c01a7336-21c3579359cmr18630745ad.48.1737084943861;
-        Thu, 16 Jan 2025 19:35:43 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2cea1fe9sm7100525ad.2.2025.01.16.19.35.42
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 16 Jan 2025 19:35:43 -0800 (PST)
-Date: Fri, 17 Jan 2025 09:05:38 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: Christian Marangi <ansuelsmth@gmail.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Matthias Brugger <matthias.bgg@gmail.com>,
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-mediatek@lists.infradead.org, upstream@airoha.com
-Subject: Re: [PATCH v10 1/2] pmdomain: airoha: Add Airoha CPU PM Domain
- support
-Message-ID: <20250117033538.pnh52c7qd2bb7h2z@vireshk-i7>
-References: <20250109131313.32317-1-ansuelsmth@gmail.com>
- <20250116070214.vdnbyyqnciifngha@vireshk-i7>
- <CAPDyKFr_z3WUyO2bTV7fPt8=ECdoHCERd=f5UN8MmNpyN=Rm_A@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=IcKFo/ZiIeTxDs4IX4sffwKB80BV6yQpTi1yEi80BO4MLKNKqdwAjWVSWXi7qVq2fqMH5Liyp+mqO8IMyaPT1O5wSFGxxHfA9jL0iC76kk7K64VitxSBpQ5EwFr35KlvYcX3d2xoD7yGm83ukLO/VxCbRA3bmoQbbBXcusE8uDo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=E3qtqeEn; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1737085285;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=JicVrS6630U6GLKgttTEGLfxPYMVZnTHvkxIjdKwIR8=;
+	b=E3qtqeEnogJSN4+upjpCq1rMIqc+C690YIkTCRUHbPcBA/Ec/KpzzPuuV1m/zvfZcA9USa
+	j/JdQA5vc8qaR58eijeZPQTZFu2H94axMi8uFiuxy7el1+IDQAc2NepkiWCn/X5UgupaCp
+	oeMePePw/B3F3kMaB0xMXdzdVOqx8ec=
+Received: from mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-178-9Nugs1zqOY6ARK2pr1smzg-1; Thu,
+ 16 Jan 2025 22:41:23 -0500
+X-MC-Unique: 9Nugs1zqOY6ARK2pr1smzg-1
+X-Mimecast-MFC-AGG-ID: 9Nugs1zqOY6ARK2pr1smzg
+Received: from mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.4])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-03.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 6A4D619560B7;
+	Fri, 17 Jan 2025 03:41:21 +0000 (UTC)
+Received: from localhost (unknown [10.72.112.4])
+	by mx-prod-int-01.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id B113E30001BE;
+	Fri, 17 Jan 2025 03:41:19 +0000 (UTC)
+Date: Fri, 17 Jan 2025 11:41:14 +0800
+From: Baoquan He <bhe@redhat.com>
+To: Roberto Ricci <io@r-ricci.it>
+Cc: Andrew Morton <akpm@linux-foundation.org>, ebiederm@xmission.com,
+	rafael@kernel.org, pavel@ucw.cz, ytcoode@gmail.com,
+	kexec@lists.infradead.org, linux-pm@vger.kernel.org,
+	regressions@lists.linux.dev, linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from
+ hibernation
+Message-ID: <Z4nRWnysvuxLWU32@MiWiFi-R3L-srv>
+References: <Z4WFjBVHpndct7br@desktop0a>
+ <Z4Zjmva-pLbLjtQv@desktop0a>
+ <Z4czuvi2BiNlDWPP@MiWiFi-R3L-srv>
+ <Z4ejbdJr87V3IwV8@desktop0a>
+ <Z4jy-NoLxpwaLfyD@desktop0a>
+ <Z4m4q8yfIjfMRgZ+@MiWiFi-R3L-srv>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -94,41 +80,25 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAPDyKFr_z3WUyO2bTV7fPt8=ECdoHCERd=f5UN8MmNpyN=Rm_A@mail.gmail.com>
+In-Reply-To: <Z4m4q8yfIjfMRgZ+@MiWiFi-R3L-srv>
+X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.4
 
-On 16-01-25, 16:58, Ulf Hansson wrote:
-> On Thu, 16 Jan 2025 at 08:02, Viresh Kumar <viresh.kumar@linaro.org> wrote:
-> >
-> > Ulf,
-> >
-> > On 09-01-25, 14:12, Christian Marangi wrote:
-> > > Add Airoha CPU PM Domain support to control frequency and power of CPU
-> > > present on Airoha EN7581 SoC.
-> > >
-> > > Frequency and power can be controlled with the use of the SMC command by
-> > > passing the performance state. The driver also expose a read-only clock
-> > > that expose the current CPU frequency with SMC command.
-> > >
-> > > Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
-> > > ---
-> > > Changes v10:
-> > > - Depends on HAVE_ARM_SMCCC
-> > > Changes v9:
-> > > - Fix compile error targetting wrong branch (remove_new change)
-> > > Changes v8:
-> > > - Add this patch
-> > > - Use SMC invoke instead of 1.2
-> >
-> > Any inputs on this ?
+On 01/17/25 at 09:55am, Baoquan He wrote:
+> On 01/16/25 at 12:52pm, Roberto Ricci wrote:
+> > On 2025-01-15 Wed 13:00:52 +0100, Roberto Ricci wrote:
+> > > On 2025-01-15 Wed 12:04:10 +0800, Baoquan He wrote:
+> > > > On 01/14/25 at 02:16pm, Roberto Ricci wrote:
+> > > > > On 2025-01-13 Mon 22:28:48 +0100, Roberto Ricci wrote:
+> ...snip...
+> > Also, I can't reproduce with the default config (make defconfig),
+> > therefore something in my config (I already sent it) may play a role.
 > 
-> Apologize for the delay! This looks good to me! So, applied for next
-> to my pmdomain tree, thanks!
-> 
-> I assume Viresh will take the cpufreq patch via his tree? Please let
-> me know if you prefer another route.
+> What I tried is defconfig on 6.13-rc7, let me try your config again.
 
-Applied 2/2. Thanks.
+I tried your config on the latest kernel, reboot will fail during the
+new kernel bootup after newly built kernel was installed.
 
--- 
-viresh
+I haven't compared your config with the defconfig to see their
+difference. Wondering where your config comes from.
+
 
