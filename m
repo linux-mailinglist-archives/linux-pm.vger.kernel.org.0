@@ -1,142 +1,101 @@
-Return-Path: <linux-pm+bounces-20617-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20618-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7AFB6A14F2F
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 13:32:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E0A20A14F35
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 13:34:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8380166A97
-	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 12:32:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 19C92165878
+	for <lists+linux-pm@lfdr.de>; Fri, 17 Jan 2025 12:34:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D51F1FECBC;
-	Fri, 17 Jan 2025 12:32:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Y0E4lNp3"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB6341FECD9;
+	Fri, 17 Jan 2025 12:34:05 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qt1-f182.google.com (mail-qt1-f182.google.com [209.85.160.182])
+Received: from mail-il1-f199.google.com (mail-il1-f199.google.com [209.85.166.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 057341FCFD9;
-	Fri, 17 Jan 2025 12:32:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 47CE01FCFC2
+	for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2025 12:34:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.199
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737117156; cv=none; b=VRvqgN+QNo2N/CzWSDj/er5l/FvAcmIbRO2nhF2QR7Zg++ZCfiVy/183LLnSdnfdJrN72W8hzuLIBr11Fr+QZ8kJb62lqNkSWPhXFzMXPomi1t3N96s9umjpUwVXnitVqvYWWdQuqg7XSIF7eeRKkj7yPpjHpboRC6cksOZGQJc=
+	t=1737117245; cv=none; b=XeLI3BeDzRIzYS6oi2nKZ/O7dHhv0b6bsTrXytTZ/Q6ZRY8ukWKtiWAqEACuTtNZkZW0QW30SJU36lWegF7QfPH0VwQgSQ8pzjJlkGHmaerkUdDR1/pGMi3BK4MF/PuYaDL6gY7Ng18x5YLaWAagDnZA+qT4v6eO4L/AMZOueuE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737117156; c=relaxed/simple;
-	bh=mqz26Fh/x9DyhlccpdqVgdCq6zWu6Wh2lg8PYOD69HU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F083vP7bCgRAeFCzaottxYa12AjNCnIg5kX/syYCpDYalhg/A1iSykxGNohUjKCVp5OOSlx2TGQKxgS3NFeCkecskq6v4DPYqdLdWbt/cIKj8Y/VgEbByZbAoyqR++riVa3R7EctxbpiuO0HqQ+odM7+zHJ2wBHlW4It2kBpRhw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Y0E4lNp3; arc=none smtp.client-ip=209.85.160.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qt1-f182.google.com with SMTP id d75a77b69052e-46c7855df10so35187471cf.3;
-        Fri, 17 Jan 2025 04:32:34 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737117154; x=1737721954; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=wLrKx2+xTF2aOZo6+sc9CokcMkc+Xyh2+/CzbTrJtIM=;
-        b=Y0E4lNp3lofRzKOnvczpXMfXL46BOb9M+uPvfhBsc/7caf6uv/ukyd6T1Min3W5I0/
-         saXxLD2HDHFBpu7X/saxwfiu0kDntcdpCzxqSWF9XRKaUFMjsX5PVGD+63EzVV23bUyr
-         XwyyzeWtLJ/WE9D9aknesmAchlGhtHoYchGKLgxj3uKuXuMUOWBgJQEDpIbUstgK0X9U
-         34IqIc5Fh5qWlXn/Os9DGTiorYtxhR8GVGPvy6/He28J6BI1SxOHs6Io1NlMQZ9Z0reX
-         9CmXUVy3pbltCjWNQ13EQmrfHLLn1F1w5fc6l8R7Y0ldMzUqjYIuR3slQaFyIufKL6bz
-         l/9g==
+	s=arc-20240116; t=1737117245; c=relaxed/simple;
+	bh=f6UH6L4B+hKtCwzKAlYd+xmm5Ot1kU+xbkfzuFhko94=;
+	h=MIME-Version:Date:In-Reply-To:Message-ID:Subject:From:To:
+	 Content-Type; b=Hr993dGSlWMjI3j6R+SZAS8jRMBYVjq8qsy3wQcUCG+gVZICEimFTX5r0Vo9nwHLKrRyrtIp7QNX64GTk8gnzuM3f54q24keNJNdXdCqpKpnO4oQ5zv1jrnP/+lz9j7QybRJrAAdWEAGbic7aQRN3YUEL0aUISaKQabQnhH4vBw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f199.google.com with SMTP id e9e14a558f8ab-3a814bfb77bso25847015ab.0
+        for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2025 04:34:04 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737117154; x=1737721954;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=wLrKx2+xTF2aOZo6+sc9CokcMkc+Xyh2+/CzbTrJtIM=;
-        b=WwYkOy06lay+qwrUXX0lL+OO99eos7/CrqEhLYIuzQDdPI09mADBKTNg2ya4DooUUR
-         NiHxTM/KplaJI59SqMi3NC01Tvcx52aaZUScYM2cT22dIfQNPO0pzxx33I5hgqVezswp
-         doZIh/IRMUPcVSHswOF7OYZtzey2BZXyhsrum5yuCyctuJvdRRnSo0s1jrIwGdnAUPiJ
-         tEcOIe2TT+zm0dcaxTCcnbvIUAMNqNM6F9Q6GD43T9j5idzvjRgCakw2zvmmsA5U+cC+
-         snXx7iU5I6CO0P+AGDdif4ka/30s4GVLeR5dDsiLMmvDEhrRBS/tuSiNAyNDwJn7TERg
-         gvww==
-X-Forwarded-Encrypted: i=1; AJvYcCVgMhQ5ohETzvBviGkoyNTRzMcCN2j76TPJR9gnw1cpT3gDqh7YIMj6AVVI6WOY5QqK5eHnzh7l3KhBEA==@vger.kernel.org, AJvYcCVraLKF9UWO5q9z13xGiJZGgs1Zs40C/YLVjDu7r3Ifa2M4cd1vxq8LzU6xFxYzhE5g6WYyxXtqG0Lp2NI=@vger.kernel.org, AJvYcCWD6O50Xv6Dx5SrL6DagLHLjiHMqmMVs+SLTdn3Hbx/FE2FYNjosNjqfPvIE2AxwLNmaLgSK/IgiNs=@vger.kernel.org, AJvYcCXDyUFTlbXENLcljS/yWwUOCsiYaVBJD8bzb7w4sePVefadxN6DEamCj62oO2QqX8kA2OKoeAQAc/v20u8t@vger.kernel.org, AJvYcCXFWg9PfKiKLQLxxRhN/W9BGSfWlFsLMTskNGC7ORAp6/E+kHvC5KYDfKjZMpuJ/kIEWeA2WygkcuqA@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywr6HK/OegoHCQ84z4UWY1hI0o6HZRK6MnxqbwHOIJljifZRcQs
-	nUn6Gc/1v6pK98nCI8UtJci/caXYijAa35ytg79zUGF9S5NNXbbBVQNqqmtwLzZs/5kSLo2AOlk
-	msffrW8ckYh0a+HW+jjhM5jEsLjI=
-X-Gm-Gg: ASbGncttV7a5jIIxR7IPf9Rgxju1IP5AgvafVW5oRAkFPiLD/92cLeJ6E6edM5hwi0o
-	N2686Ya6im074HJ046/q644y8mJuM1g624R197g==
-X-Google-Smtp-Source: AGHT+IEasG4GEAwxuDzLs69Bpj/5s6Rpow8aj8W5GZK+iDdDIGfm4eTX2/kOrzCYS7fp5P4fm6nb0+tyWOBNZ6jup48=
-X-Received: by 2002:a05:622a:34c:b0:466:86aa:efd9 with SMTP id
- d75a77b69052e-46e12bddab4mr36304111cf.51.1737117153821; Fri, 17 Jan 2025
- 04:32:33 -0800 (PST)
+        d=1e100.net; s=20230601; t=1737117243; x=1737722043;
+        h=to:from:subject:message-id:in-reply-to:date:mime-version
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=QvZtm/UtggZQ4vZzY3P7eWyMLxgL/oSk0kGt7oXniJs=;
+        b=kzxiNL29ppJb2ACKecFooBXCOttgmIPJk1zU4aFIFhbnVo1jK72VnU9jqJ6T8+u++X
+         HCvm3vKHR8fyVFWb+Vg0uHpGugJPFh/AZfwWMN1fSlW9wUKCQ1tpSkbiXaGHmelSnP0B
+         C/TfIrzKHL+njbeG7Hjskp4QuizZmulZ8afpfhG9DmmFS8pK/J5Ts2Tpwj1lC20Ikyf9
+         BzJQ5TOYysI4zrYWm7cOrO2UpXd9EE24v+N6LxPY6M3EkYf5Ls1WHm7Vnt2iQNF188z1
+         QXBUxgIkSH+vZUh+n6KiQxfOI1HXa6lT0uzD9GS+LTeTT3diy5dQ8kwoeW3BWHa/Wsjd
+         9cLQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXJsNL2coSwGSb19jPBqRU890MrSO/0NTTzzXbK0TC+zVDFneaPyO1gqdsOohfpALsOxjo8ZoxSBQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw9rja7QEcvuK8FIe2IKDAJviVt2xZdoip72PZSr4JaSjOsCJGO
+	Ba6xZ/OigDiTUmiN3G5uf0OTu+g7eH2D6ruusFuzll4gsKzAyAYGrajdlAPSMV4uRM7R4UE1KUd
+	PQZLqK7IsIhGY7Mv+6eA4GMVZeEzl8555TbdFCps2t6XPg5ACov7PfcE=
+X-Google-Smtp-Source: AGHT+IGSN+89+ev6I1KKIKrYVVMo2ys84hMSR+T3BfDaLgnUIIaFdFWMTnr/kHWhlVvZWahKwsOImXHsCYbnOPCcr/MWQDnXuHB1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250116-starqltechn_integration_upstream-v15-0-cf229de9f758@gmail.com>
- <20250116-starqltechn_integration_upstream-v15-6-cf229de9f758@gmail.com> <20250117-chubby-convivial-axolotl-29e2df@krzk-bin>
-In-Reply-To: <20250117-chubby-convivial-axolotl-29e2df@krzk-bin>
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Fri, 17 Jan 2025 15:32:23 +0300
-X-Gm-Features: AbW1kvbLbvefMNqJ340BulwA83dgy5C9sl4tO4GomasdcM4Jj0ng0uJJF-Nt04g
-Message-ID: <CABTCjFBF7C=MOcLgyyQg3FeRF3gVVPASDGBT+ogCTSLs-yQo6w@mail.gmail.com>
-Subject: Re: [PATCH v15 6/7] input: max77693: add max77705 haptic support
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, Lee Jones <lee@kernel.org>, 
-	Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
-	Hans de Goede <hdegoede@redhat.com>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org
+X-Received: by 2002:a05:6e02:148e:b0:3ce:7cc9:9f46 with SMTP id
+ e9e14a558f8ab-3cf748b4d2dmr14934665ab.9.1737117243572; Fri, 17 Jan 2025
+ 04:34:03 -0800 (PST)
+Date: Fri, 17 Jan 2025 04:34:03 -0800
+In-Reply-To: <0000000000001e66f5061fe3b883@google.com>
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <678a4e3b.050a0220.303755.0005.GAE@google.com>
+Subject: Re: [syzbot] [cgroups?] possible deadlock in console_lock_spinning_enable
+ (5)
+From: syzbot <syzbot+622acb507894a48b2ce9@syzkaller.appspotmail.com>
+To: andrii@kernel.org, ast@kernel.org, bpf@vger.kernel.org, 
+	cgroups@vger.kernel.org, daniel@iogearbox.net, davem@davemloft.net, 
+	elic@nvidia.com, gregkh@linuxfoundation.org, hannes@cmpxchg.org, 
+	hawk@kernel.org, jasowang@redhat.com, jirislaby@kernel.org, 
+	john.fastabend@gmail.com, kafai@fb.com, kpsingh@kernel.org, kuba@kernel.org, 
+	len.brown@intel.com, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-serial@vger.kernel.org, mingo@redhat.com, mkoutny@suse.com, 
+	mst@redhat.com, netdev@vger.kernel.org, parav@nvidia.com, pavel@ucw.cz, 
+	rafael@kernel.org, rostedt@goodmis.org, songliubraving@fb.com, 
+	syzkaller-bugs@googlegroups.com, tj@kernel.org, yhs@fb.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-=D0=BF=D1=82, 17 =D1=8F=D0=BD=D0=B2. 2025=E2=80=AF=D0=B3. =D0=B2 11:01, Krz=
-ysztof Kozlowski <krzk@kernel.org>:
->
-> On Thu, Jan 16, 2025 at 07:26:08PM +0300, Dzmitry Sankouski wrote:
-> >  #define MAX_MAGNITUDE_SHIFT  16
-> > @@ -115,6 +116,13 @@ static int max77693_haptic_configure(struct max776=
-93_haptic *haptic,
-> >                       MAX77693_HAPTIC_PWM_DIVISOR_128);
-> >               config_reg =3D MAX77693_HAPTIC_REG_CONFIG2;
-> >               break;
-> > +     case TYPE_MAX77705:
-> > +             value =3D ((haptic->type << MAX77693_CONFIG2_MODE) |
-> > +                     (enable << MAX77693_CONFIG2_MEN) |
-> > +                     (haptic->mode << MAX77693_CONFIG2_HTYP) |
-> > +                     MAX77693_HAPTIC_PWM_DIVISOR_128);
->
-> That's the same as previous one, why duplicating?
->
+syzbot has bisected this issue to:
 
-config_reg is different. I don't see any good way to get rid of that duplic=
-ation
+commit bc0d90ee021f1baecd6aaa010d787eb373aa74dd
+Author: Parav Pandit <parav@nvidia.com>
+Date:   Tue Jan 5 10:32:02 2021 +0000
 
-> > +             config_reg =3D MAX77705_PMIC_REG_MCONFIG;
-> > +             break;
-> >       case TYPE_MAX77843:
-> >               value =3D (haptic->type << MCONFIG_MODE_SHIFT) |
-> >                       (enable << MCONFIG_MEN_SHIFT) |
-(...)
-> >
-> >  static const struct platform_device_id max77693_haptic_id[] =3D {
-> >       { "max77693-haptic", },
-> > +     { "max77705-haptic", },
-> >       { "max77843-haptic", },
-> >       {},
-> >  };
-> > @@ -414,6 +426,7 @@ MODULE_DEVICE_TABLE(platform, max77693_haptic_id);
-> >
-> >  static const struct of_device_id of_max77693_haptic_dt_match[] =3D {
-> >       { .compatible =3D "maxim,max77693-haptic", },
-> > +     { .compatible =3D "maxim,max77705-haptic", },
->
-> So the device looks fully compatible with max77693. Drop this change and
-> express compatibility with fallback.
->
+    vdpa: Enable user to query vdpa device info
 
-The only difference is config_reg.
+bisection log:  https://syzkaller.appspot.com/x/bisect.txt?x=1440c2b0580000
+start commit:   619f0b6fad52 Merge tag 'seccomp-v6.13-rc8' of git://git.ke..
+git tree:       upstream
+final oops:     https://syzkaller.appspot.com/x/report.txt?x=1640c2b0580000
+console output: https://syzkaller.appspot.com/x/log.txt?x=1240c2b0580000
+kernel config:  https://syzkaller.appspot.com/x/.config?x=d1cb4a1f148c0861
+dashboard link: https://syzkaller.appspot.com/bug?extid=622acb507894a48b2ce9
+syz repro:      https://syzkaller.appspot.com/x/repro.syz?x=175029df980000
+C reproducer:   https://syzkaller.appspot.com/x/repro.c?x=16f29a18580000
+
+Reported-by: syzbot+622acb507894a48b2ce9@syzkaller.appspotmail.com
+Fixes: bc0d90ee021f ("vdpa: Enable user to query vdpa device info")
+
+For information about bisection process see: https://goo.gl/tpsmEJ#bisection
 
