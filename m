@@ -1,139 +1,84 @@
-Return-Path: <linux-pm+bounces-20647-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20648-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 723A0A15BBD
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Jan 2025 08:24:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6CCBDA15DF3
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Jan 2025 17:12:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C54803A9226
-	for <lists+linux-pm@lfdr.de>; Sat, 18 Jan 2025 07:24:42 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9496E7A3990
+	for <lists+linux-pm@lfdr.de>; Sat, 18 Jan 2025 16:12:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF7BC14A09A;
-	Sat, 18 Jan 2025 07:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56BFD19D88B;
+	Sat, 18 Jan 2025 16:12:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="E1DgqX9V"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Cywys806"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 343A2A32
-	for <linux-pm@vger.kernel.org>; Sat, 18 Jan 2025 07:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29F9E199E9A;
+	Sat, 18 Jan 2025 16:12:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737185084; cv=none; b=FAgZzPz+nrvMtHycC3mU4juF+UsyYkPhDWNQnue9e9lOaZZL4ZXm6k2wJHh2g/UZv/H8L0zW6p1/+XWhoidQFPSLugQJLEmSu2pdlLo54mp/hgNcDGZLaCfD66pljYOTCmCv3aHmPak/JrAoFaRKNXIZfYHwfH9c5AJ3F1Jw5E0=
+	t=1737216737; cv=none; b=e1KlbBS03E1RC6YXMe7tKRJGfVIueUfiAwuwTLhfW4JF1RTxNUfs0K0TICQ46xprrwbYoh5z1humtMFnarr1H4LKtCjtXj61nLtaSx0wLB2nBCjnVqZls/9gbmXO/IYguJvN9kgGjQe9gWiO9HJjt4bFUxE7epBu3NvCF+1rZlI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737185084; c=relaxed/simple;
-	bh=KhUjOsUtKjZxVWEAfpaUIwtDFofgniDpgtWv9gaFW9k=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=PyQvjhYsd4yTbmy6iG0SBW+q8gXc3629EG2qcQbMDBqwddd/Q/sxnvXG1VpLhjUAZ93t3P+N3nVv57HYUgJ/KKNU/sh0LRId9LkXwKnkYbndOrwkPPtvcFOAHcNrYGHciMMg5nnxXwOYBO5jzDmDn6q0g/yXzTMPUFAV9yQ5fUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=E1DgqX9V; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-21655569152so55806815ad.2
-        for <linux-pm@vger.kernel.org>; Fri, 17 Jan 2025 23:24:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737185082; x=1737789882; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=940iCcxpvzyGM4mZVRnuDDdVwqFoEWjVZnkzqluQF6M=;
-        b=E1DgqX9VJM+cBK61JImc+P+ytlAmeu6p1geXMRMle6+IXrt7rjhnf6XPoKkHKw5sSc
-         OGQlvBsxa0w9cC7jdSPKM0m1xc6UzzDLmiwo294/zkQzC5prsYxQQ8UD/Nu5+VuXXUoz
-         2FwcGnmDQbx3vuvQz3oIO3srbl2PU1dm3U/dDayNudZJV4tq7ur5fkilttYHdy6IPm53
-         /LvNcmgItHrr78d6sgfHyGx7oTobTvifdiuc5LqSaFpMOqaQfYKFfu8eYn7UB2aeAMCJ
-         J2rEx6/RE2ZZ+A+AU1eWSJEdzf+U0OVhzchpbUMDoug0+Uxj0qv5ovO0wteyIYkkvzEk
-         9zCg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737185082; x=1737789882;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=940iCcxpvzyGM4mZVRnuDDdVwqFoEWjVZnkzqluQF6M=;
-        b=uFrqw2ywCsIZd+YHe6bZZ5f3zOR89+xuhYuhAQP9rAvSopNjMmtp9cBJihKyipVGFC
-         Wko3q4dYGcgo5Bv0sSPyzxaZIqYlALfRmtmxCAl9e/U84hAjxYE4vmaZFq9hoCUtXKQz
-         9eHUFgYmEFtyjaV0ER8a/ZiuT/Dmn2X+34cZtv+tLTdl4dhe+a2YSBNEi7g9bL0B9U0O
-         HpOyN6AOmt2fcUZs360lYlmuK2SNZAGWKRk/5t+j9XEUyxZmJoBrzFNZLDFwTJlKlQOE
-         yjw5t9fYMP8yi8nLgfW18+TnOrYLHBtAKSka/NL1WIPQY1VqpYj6ticDaQv5inXj3AXE
-         DE5w==
-X-Forwarded-Encrypted: i=1; AJvYcCWsM568gdNsjTgZ7doJ5ABU4cR0HTvpQ8tsoIjta9cwUJl8M/BZjGI79JvOpMfEA1dO7p1qnesDUg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzxKfjIr6UitcqyjtWXhH4E+IcKN8kl6OJV1SuvYdZS0T3giuzK
-	GrtyybYl5Qwl1oC31UstIiexWSz3eEdrBM0akFsTShHoxE1z7q3jp7tqrDORG1ae+EZKZg==
-X-Google-Smtp-Source: AGHT+IEIBAeQmO6MGQcNwnYFn8SkrDPGzn+XCE5f7u+ZLY2Fni10ILvoUB2qzb6E+YF/skiDhuyrjNMG
-X-Received: from pgbcs4.prod.google.com ([2002:a05:6a02:4184:b0:801:cdbd:2727])
- (user=keyz job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:f29:b0:1e3:e77d:1431
- with SMTP id adf61e73a8af0-1eb214da830mr6276082637.23.1737185082483; Fri, 17
- Jan 2025 23:24:42 -0800 (PST)
-Date: Sat, 18 Jan 2025 15:24:38 +0800
-In-Reply-To: <20250117105132.4122940b@gandalf.local.home>
+	s=arc-20240116; t=1737216737; c=relaxed/simple;
+	bh=wz6R80GCtHE8Pub+JlZqdRoqRWL7RgSMjrqENer31tI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=t+KGGRC7cLYHWZLTbOSC7JvBiD8MPfb6TJ38sJfA5HcXyyuHPtpSLg4BKhpd4MaYZOuPEHKLa4ufGq51Wxb31rx54fj8ND8BHgZkK1Td+wjTZJk2cweqYenv6jMpavkp0I986pvMVMGdNs5aXt4843o0dRFn+U/wFQQWaB17Bw4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Cywys806; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F195C4CED1;
+	Sat, 18 Jan 2025 16:12:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737216737;
+	bh=wz6R80GCtHE8Pub+JlZqdRoqRWL7RgSMjrqENer31tI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Cywys806iFznKs1sz/lxDrbd2Vh8/1EkGHH9NWDEC4vVJv2QxztmgBwrSX14wB4+L
+	 HzmiX0+pTh2OteReMNdIhfMx5lkoBxxzPhtqDHRd9VtSm3ZDvOjkQbaG4WfaigBd/T
+	 TUqhXbHH2s3wIoorT4NsyW7dtjtJTiDvSdYZEj8/hCqIOw/yfROcmBdZXi3PDTg1Sp
+	 OcQcQiMgL6yPXY98a7FNm9RCEQaznSoL3l/imyef4vGggy6SL5FcAx6iyTr91ud2iN
+	 5to1fwqAVCZSiOHK7WrGjcXHUayGMWZKEK7M7GTyB9csuWeNZtiYRzZJ7vMCZOJ4cM
+	 FL1j8mIbugZag==
+Date: Sat, 18 Jan 2025 17:12:13 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Florian Fainelli <florian.fainelli@broadcom.com>
+Cc: linux-kernel@vger.kernel.org, Markus Mayer <mmayer@broadcom.com>, 
+	Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	"open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>, 
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, 
+	"moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE" <linux-arm-kernel@lists.infradead.org>
+Subject: Re: [PATCH 1/2] dt-bindings: thermal: Update for BCM74110
+Message-ID: <20250118-mauve-panther-of-upgrade-1ee500@krzk-bin>
+References: <20250116193842.758788-1-florian.fainelli@broadcom.com>
+ <20250116193842.758788-2-florian.fainelli@broadcom.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250117105132.4122940b@gandalf.local.home>
-X-Mailer: git-send-email 2.48.0.rc2.279.g1de40edade-goog
-Message-ID: <20250118072438.3647805-1-keyz@google.com>
-Subject: Re: [PATCH] cpuidle: psci: Add trace for PSCI domain idle
-From: Keita Morisaki <keyz@google.com>
-To: rostedt@goodmis.org
-Cc: aarontian@google.com, daniel.lezcano@linaro.org, keyz@google.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, lpieralisi@kernel.org, 
-	mathieu.desnoyers@efficios.com, mhiramat@kernel.org, rafael@kernel.org, 
-	sudeep.holla@arm.com, yimingtseng@google.com
-Content-Type: text/plain; charset="UTF-8"
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250116193842.758788-2-florian.fainelli@broadcom.com>
 
-Thank you for the review!
+On Thu, Jan 16, 2025 at 11:38:41AM -0800, Florian Fainelli wrote:
+> Update the binding with the BCM74110 compatible string which denotes the
+> first device we need to support in a different process node requiring an
+> updated thermal equation.
+> 
+> Signed-off-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> ---
+>  Documentation/devicetree/bindings/thermal/brcm,avs-tmon.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 
-> Why not make that into two different events:
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-> +	trace_psci_domain_idle_enter(dev->cpu, state, s2idle);
-> 	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
-> +	trace_psci_domain_idle_exit(dev->cpu, state, s2idle);
+Best regards,
+Krzysztof
 
-> Then make the above into a DECLARE_EVENT_CLASS:
-
-> DECLARE_EVENT_CLASS(psci_domain_idle_template,
-
-> 	TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-
-> 	TP_ARGS(cpu_id, state, s2idle),
-
-> 	TP_STRUCT__entry(
-> 		__field(u32,		cpu_id)
-> 		__field(u32,		state)
-> 		__field(bool,		s2idle)
-> 	),
-
-> 	TP_fast_assign(
-> 		__entry->cpu_id = cpu_id;
-> 		__entry->state = state;
-> 		__entry->s2idle = s2idle;
-> 	),
-
-> 	TP_printk("cpu_id=%lu state=0x%lx type=%s, is_s2idle=%s",
-> 		  (unsigned long)__entry->cpu_id, (unsigned long)__entry->state,
-> 		  (__entry->s2idle)?"yes":"no")
-> );
-
-
-> DEFINE_EVENT(psci_domain_idle_template, psci_domain_idle_enter,
-
-> 	TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-
-> 	TP_ARGS(cpu_id, state, s2idle),
-> );
-
-> DEFINE_EVENT(psci_domain_idle_template, psci_domain_idle_exit,
-
-> 	TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-
-> 	TP_ARGS(cpu_id, state, s2idle),
-> );
-
-Looks good. Let me apply this change in v2.
-
-Thanks,
-Keita
 
