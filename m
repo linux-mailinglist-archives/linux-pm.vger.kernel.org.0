@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-20650-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20651-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9ADB8A161B0
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2025 13:45:25 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 84221A161B8
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2025 13:46:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36BA318860A8
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2025 12:45:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 29DFC18860A8
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2025 12:46:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCB4F1CF5CE;
-	Sun, 19 Jan 2025 12:45:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 791EA1DED4C;
+	Sun, 19 Jan 2025 12:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JI8nLzIh"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WkZCtYnV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 82FAD19B59C;
-	Sun, 19 Jan 2025 12:45:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43A4A1DBB3A;
+	Sun, 19 Jan 2025 12:45:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737290720; cv=none; b=Y8/Jo41k1cNxkhI+zoBpAG5Dp1/wX8jqkBljzSZO5H7qQ4Y+qKh4B2ah14ketpoFB/0I9V8Ov0tnoAZCCXLi1km798Xdp4v0u3/jkkUMHivnfwHUZ2KC84w6lAHzvvhyik0/VmKQxfGGpGrXv6NuaZnB2uDJbNa+sOvr++baa7s=
+	t=1737290758; cv=none; b=QqrCx2+epayZvLW3+sMiCcvnx2pHWtBETEKJP2+MHJ5Xm/hfRmSUxR3c6wMbgJpDGRgUb17ALAATDno66e/wisFmx7HZ9yhEGvoMv/888cKkSfKkA7lSW6oHyNNEzv0B5d6TUqUV7zMSNVZo5C6U/cTZvGbF7DorDMw3UApR3yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737290720; c=relaxed/simple;
-	bh=Tmc8lsl8sz5I2t4ujzk9kU4BDvASsv68J/O5ZBaXE2A=;
+	s=arc-20240116; t=1737290758; c=relaxed/simple;
+	bh=zKtLx5kqxmmBCjHhkW6466g6d9qRNvpFfodnGn+ix9o=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ezq6/1XhdfkR8OzBqpQgMIPBEDq7cvcXfKasmN56eO6N5jrI7cNkZkH81ARXnMdRIFMgq7T8jZLansDI77kgXGQ21BeVlR8xErigAgoTyKnoHMUjZVv0DESe2oy/s0y3FnLcGnNgTbeTPGlf3z2xlIHaWc3rmMvfGg3BCmD/pZM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JI8nLzIh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 81160C4CED6;
-	Sun, 19 Jan 2025 12:45:14 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=jauxOM1rMlBQyB+pQks9AXO2i8unXx2KCqNA+KHTLwe+SOHnXAaMDXVDN5aKfkl6bscAhVhUcY6mV7tYON/2uDu2fDXKdBZSq4lS9oAL4t5EkzFT4aIG44Aqm5nc5USJVzvwB26mNltaWeCRQdDUbOptBFrsWvyLOugn7hyxK/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WkZCtYnV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AA601C4CED6;
+	Sun, 19 Jan 2025 12:45:52 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737290719;
-	bh=Tmc8lsl8sz5I2t4ujzk9kU4BDvASsv68J/O5ZBaXE2A=;
+	s=k20201202; t=1737290757;
+	bh=zKtLx5kqxmmBCjHhkW6466g6d9qRNvpFfodnGn+ix9o=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=JI8nLzIhOxKKdbt7JKe0Fz4ZmD5khwuzgF9BjOlzhKCftMvq6UdgehNLm1eYSxbqv
-	 ouSeYexY1aMRsgINVZ1RIUdxPJtJ5zukduj9NedJLeikM3n6gn83uY8h2TU0DPuKsV
-	 SGMrkkcBfb6Um222NFLIiNjYpcEiaAU6RISSrJkWUnlAbmMtVuDvkjHQtGtl88j6Pc
-	 rk3cobE4LsLk+VJ11YYrNtwQx4tn/gQSlcnfsLYW3PL3wjLEZRyGh0zWPosCGbxzf/
-	 oQqDapIVRNLylZyTj+oJqIISLyO65QMgKg4MW0u2DgEX3fYDjshdWNApjDddIZ0CGm
-	 Pnkm+NuE3VuEw==
-Message-ID: <0b3ac708-64c4-44a5-a3f7-1bcb22f59db6@kernel.org>
-Date: Sun, 19 Jan 2025 13:45:11 +0100
+	b=WkZCtYnVdu8q1T6vTeBqYU4AR6aJa9X8bExYuFyJuaqOuZYQUO19MNKaVTXf2Kfu8
+	 Pdd7Yp9nc/RLuz7urJ3WPkk+nIP/b0aCtcAEwZ16D3Qywm6tkWS+18PnZdmGI6V3uk
+	 ijP6Z8C9RKnffJY1RwW7gVNLqcSUzHIY7Ec5k+md7M3af61ircVD7391DLXz7qyrNu
+	 YUv19RKu/1oFrpab9PuOJyNMRaGK3q3spbVj7eZ4UyZQ//f3ep9DMffWImS/qsLX0g
+	 B8Vb4EPwnNHYLfoqNLnkCx/neZHq+skvlWayZ36xtw1/apMLQlfTjJQviDejtRIpxi
+	 DWk+fPNFGsmpw==
+Message-ID: <3041c4c4-43a1-464d-be2c-e7f1f47480b1@kernel.org>
+Date: Sun, 19 Jan 2025 13:45:50 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 6/7] input: max77693: add max77705 haptic support
+Subject: Re: [PATCH v16 7/7] leds: max77705: Add LEDs support
 To: Dzmitry Sankouski <dsankouski@gmail.com>,
  Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,7 +64,7 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-input@vger.kernel.org,
  linux-leds@vger.kernel.org
 References: <20250117-starqltechn_integration_upstream-v16-0-11afa877276c@gmail.com>
- <20250117-starqltechn_integration_upstream-v16-6-11afa877276c@gmail.com>
+ <20250117-starqltechn_integration_upstream-v16-7-11afa877276c@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,22 +110,19 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250117-starqltechn_integration_upstream-v16-6-11afa877276c@gmail.com>
+In-Reply-To: <20250117-starqltechn_integration_upstream-v16-7-11afa877276c@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/01/2025 14:01, Dzmitry Sankouski wrote:
-> Add support for haptic controller on MAX77705 Multifunction
-> device.
+> This adds basic support for LEDs for the max77705 PMIC.
 > 
-> This driver supports external pwm and LRA (Linear Resonant Actuator) motor.
-> User can control the haptic device via force feedback framework.
-> 
-> Acked-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
 > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
-> ---
+> 
 
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+I did not do thorough review here, but overall seems fine.
+
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
