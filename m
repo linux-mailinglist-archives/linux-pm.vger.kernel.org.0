@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-20653-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20654-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3EFCA161C6
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2025 13:46:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E06E6A161CE
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2025 13:47:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5FA8216521C
-	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2025 12:46:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 946C2165593
+	for <lists+linux-pm@lfdr.de>; Sun, 19 Jan 2025 12:47:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4FBFE1DED6E;
-	Sun, 19 Jan 2025 12:46:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CCA981DEFE9;
+	Sun, 19 Jan 2025 12:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ftxYw4dZ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TOg2aocx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1840C1DE8B5;
-	Sun, 19 Jan 2025 12:46:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BBE71DED45;
+	Sun, 19 Jan 2025 12:47:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737290793; cv=none; b=LdUgBraFGY/n6UM4i2d5q7uG5Gvet1vaG0YComcJvB2xXG5+/nKIQGvdsBLdCtABSDrKq4LEzgo5VyFzMaRRY/ueUk3D2xYMcl2QFjlIjsFq2KM/wgcZ0z0hPi/h4a/Qw7gKbQ++cIEycY1dpfdw2/BR8sS8s0Z34WIfs+fO2v0=
+	t=1737290829; cv=none; b=Au/ompdQkRLD8/s49AE35nGUeEmYTAol93kbcQLkvJKf8Ix2ZmRivOtwYz/wNiNb/sKKMzH6m/ozo24tDNdpl73Hk5kMW/qm2/fOHAd2zfdCSubXhxVolSW4tqbSYMHZUHUhJjMj+bTMugizxHDMMylAyt6rjli1UQfT3XgzDjk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737290793; c=relaxed/simple;
-	bh=mHdZI6W0c9scihpG28rNFpn35qc4BNbgjZbNLULCSWs=;
+	s=arc-20240116; t=1737290829; c=relaxed/simple;
+	bh=XeRq2xYZ0duKoNl8q4Un3UsRp2DhqUL2CtzTYdBLRF0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Wi+tcw3KEPg8jkQeusg6H+LAJJ/64jalGI9WhGsmhxJqVUuLL6ANYD7XnBeuNRQXErZeftJmETNQEmeObH4vCEWbHwbQO/7r66iv6n6MgDUh65oLRRcIDJQ+MRePOUhr/tRHh0gWT5+1Zkw0hNKChfWzvBm3dRio9qDtcbo+s5c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ftxYw4dZ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A087BC4CED6;
-	Sun, 19 Jan 2025 12:46:26 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=E7zIhe3PMnzupe5JW/+gOgWLPxHPcHZpVNEs4BN8YzaWWUtWVlPUxuUS7cpqJToY+XN0LOoUSMBLfirX2H9hcpM3lsiRJIyxMsbMN7DSngu9aqwD9GOs3TwChs9oCUklykm4HfQFLafDO1PTsdyNZ7lpDQmCmz112FwDdVonIic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TOg2aocx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 87D27C4CEE2;
+	Sun, 19 Jan 2025 12:47:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737290792;
-	bh=mHdZI6W0c9scihpG28rNFpn35qc4BNbgjZbNLULCSWs=;
+	s=k20201202; t=1737290829;
+	bh=XeRq2xYZ0duKoNl8q4Un3UsRp2DhqUL2CtzTYdBLRF0=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ftxYw4dZmu9ZAUZw32rNg84N3kQW+6ABZ4/vWaOp64+gA0Z8slcPzpPWoBFkZwqe5
-	 LOWdN8NV44covJQcTDW/0HbLC1o5+VWgEsDPllYke7gMSv4p9q0rtQi7bUD2Welk3G
-	 fpA1Vh7YXEGk24sq+Afzk2FHeEYV2ixY707NdFJ0ex+Js0FRn8EbsmWBI7mxPyVI+F
-	 7hOn+Dlz/iPZEzHOPgpOlhKwTtUWZ76qg8nr68qCAEoUlCjnwaHpHC0q3LChB4a3dU
-	 qREtGNPq/R38AOvSBCIzgThYwp0NGVg88pXXmSWmF8AEs3zNQEB+dusHP2nHNGyECW
-	 ivuuE2N+QPEww==
-Message-ID: <51c76510-14d3-48dc-95a1-17f2010d3953@kernel.org>
-Date: Sun, 19 Jan 2025 13:46:24 +0100
+	b=TOg2aocxUFVnJmYDuTCqsqvBl62tPRC3RG9nv2GZy04PX80gIrO2M0nuc+d2Zlps3
+	 +Gq3M0XSkT1qJI59/VKnDqWJTRRcJi2W0fLdipvr3+VW5ewRTBq4EvmSNA3FKGWuZU
+	 TwuU5cLh0XG6P85nah6WdworHlIC4M+eMCzYuhJJ6T515RtvLOtzFhmaDQXLnCo9t3
+	 R9GOheWb1NgJlfSEXmHJdXsVvQ9+PJ4eXb5GJrNBKCi1NeRdfdPUEyuq0gl2B8MUfM
+	 scvtAYuiPrxyt1uczRjhqpGsykmKTatIODhWbp2oQCv90fc5YqZdMugRxy/yGNGW4n
+	 K35vEGqcn8DkA==
+Message-ID: <038b226c-8392-406f-83b6-9cde8c1b1b34@kernel.org>
+Date: Sun, 19 Jan 2025 13:47:02 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,7 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v16 4/7] mfd: simple-mfd-i2c: Add MAX77705 support
+Subject: Re: [PATCH v16 3/7] power: supply: max77705: Add charger driver for
+ Maxim 77705
 To: Dzmitry Sankouski <dsankouski@gmail.com>,
  Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>,
  Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
@@ -64,7 +65,7 @@ Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
  devicetree@vger.kernel.org, linux-input@vger.kernel.org,
  linux-leds@vger.kernel.org
 References: <20250117-starqltechn_integration_upstream-v16-0-11afa877276c@gmail.com>
- <20250117-starqltechn_integration_upstream-v16-4-11afa877276c@gmail.com>
+ <20250117-starqltechn_integration_upstream-v16-3-11afa877276c@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -110,22 +111,20 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250117-starqltechn_integration_upstream-v16-4-11afa877276c@gmail.com>
+In-Reply-To: <20250117-starqltechn_integration_upstream-v16-3-11afa877276c@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 17/01/2025 14:01, Dzmitry Sankouski wrote:
-> Add MAX77705 support - fuel gauge and hwmon devices.
-> Hwmon provides charger input and system bus measurements.
+> Add driver for Maxim 77705 switch-mode charger.
+> It providing power supply class information to userspace.
+> 
+> The driver is configured through DTS (battery and system related
+> settings).
 > 
 > Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+> 
 > ---
-> Changes in v13:
-> - remove compatible from cells
-> - change mfd compatible to match max77705 fuel gauge node
-> ---
->  drivers/mfd/simple-mfd-i2c.c | 11 +++++++++++
->  1 file changed, 11 insertions(+)
 
 
 Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
