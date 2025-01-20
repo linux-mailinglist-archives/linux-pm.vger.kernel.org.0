@@ -1,116 +1,73 @@
-Return-Path: <linux-pm+bounces-20685-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20686-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09138A16AC1
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 11:29:52 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2FF91A16B86
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 12:27:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59103166668
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 10:29:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A5653188595D
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 11:27:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF6C1B414F;
-	Mon, 20 Jan 2025 10:29:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hro/JAcX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A711B1DF24A;
+	Mon, 20 Jan 2025 11:27:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CEB418FDC8;
-	Mon, 20 Jan 2025 10:29:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A47EC1DEFD4;
+	Mon, 20 Jan 2025 11:27:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737368980; cv=none; b=jsFCy/BaT52dhiKk5LNG4S2kIPpouk40GZpB+gtYqmpWk2epbbw91JiLRyEfERmMxMdVYc8F3bG/WzEF9u8At+mCieUYgPweSFf2RytssYTgpELEAgkO/L+8EjV/8HPGIhpsZNoLd8D54Hl0g2RX/Rq7+hs3ANcO2QU/r/99exc=
+	t=1737372439; cv=none; b=brjHOhTfdat0u9zSAxhq+Y1YQJbhE4HIv41Dd+myAFU7pYW3xA6LWVEJ3Whu4kBUKWGC6CZr9nj8w1RbLec/cTd1WsXExb9Ru0U1exdNoZuYDkLeVU7wpp3530Sn9FyCihHncaVvY+pCPy9lFvM8ELQid8wmbxE2p+5RJER5G+c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737368980; c=relaxed/simple;
-	bh=5+KuJyvD0Cc+bCHcr9Ef9KT8l8mKwIGskoiH678TfHk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fHyXlH/KSuOcECN/M+mqC/38DpzmwhOd+jIDNv8R/HFu4XYDaNlm48Z8p5kOkREwkDqFlGiKsFUo2UMGCgnTmlXePBawdwscdX3SAZOq3MrfzUY3QNY4EwuS3gNau4XlCHofv5QdgWTT3fys22NLa8yGZERJVoblFCBhgvy6lTc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hro/JAcX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9DEC4CEDD;
-	Mon, 20 Jan 2025 10:29:39 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737368979;
-	bh=5+KuJyvD0Cc+bCHcr9Ef9KT8l8mKwIGskoiH678TfHk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Hro/JAcXZ0b8TgiIvv+8tEIDQEE9Kqgy3/W9FyrH5TnLwxwaJMuWLvi9hOmvTZ4qQ
-	 /qaBoN75okTuDGxiGXKZx71yuoiAWJIjU/7Y8t/ttucGzfRgwIXJ2oLSpqP0d1b5ey
-	 QmME3Bz1fnM2HoufpTuX9CWGyGJfPyWas+ocqRDhhGmEfvBDbWbgjXaMplEwPrOOl0
-	 s0NbNrF9cCyLCZJ0pR/Ee8RqwEiB1W7Phh+1AAAfu9WXM6Nwwkdui78X5yhOkxHJX/
-	 RBvjIIQM4qPcl6baRqV01CfqTzv0ZF06q2N+0jSoMN5GhxdZMBuWQrtu/7sHOd2Cjx
-	 uhP1tE4xnMvJg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tZp2L-000000007D4-39CR;
-	Mon, 20 Jan 2025 11:29:42 +0100
-Date: Mon, 20 Jan 2025 11:29:41 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Bjorn Helgaas <helgaas@kernel.org>
-Cc: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>, rafael@kernel.org,
-	ulf.hansson@linaro.org, Kevin Xie <kevin.xie@starfivetech.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Markus.Elfring@web.de, quic_mrana@quicinc.com,
-	m.szyprowski@samsung.com, linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	regressions@lists.linux.dev
-Subject: Re: [PATCH v7 2/2] PCI: Enable runtime pm of the host bridge
-Message-ID: <Z44llTKsKfbEcnnI@hovoldconsulting.com>
-References: <20250113162549.a2y7dlwnsfetryyw@thinkpad>
- <20250114211653.GA487608@bhelgaas>
- <20250119152940.6yum3xnrvqx2xjme@thinkpad>
+	s=arc-20240116; t=1737372439; c=relaxed/simple;
+	bh=IqkvgTzrFXT6ISpRZMlA38AcY0OHfWde00hyQuW7caA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=R7ndPLWK0lL+t/KzrvmtDFjLnCzNRWRJRDjX6aZRaApgertiicVPi7JUMLaDhM/Oo0kPv0022e5QSBcHkafTRQTEqnIDGVCGbqxFrTf+ODyZ0ZJ1xDwWYuDDDSx0aqCz0xpOidnxjkFfqaYEzS7CQtUjxvPFCiebpb1Jq3NzoIk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 314B11063;
+	Mon, 20 Jan 2025 03:27:44 -0800 (PST)
+Received: from [192.168.3.143] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id CF3643F740;
+	Mon, 20 Jan 2025 03:27:14 -0800 (PST)
+Message-ID: <cdc955dd-04cb-483a-b074-739532a675b0@arm.com>
+Date: Mon, 20 Jan 2025 11:27:13 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250119152940.6yum3xnrvqx2xjme@thinkpad>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v1 6/9] cpuidle: teo: Simplify counting events used for
+ tick management
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+References: <6116275.lOV4Wx5bFT@rjwysocki.net>
+ <1987985.PYKUYFuaPT@rjwysocki.net>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <1987985.PYKUYFuaPT@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sun, Jan 19, 2025 at 08:59:40PM +0530, Manivannan Sadhasivam wrote:
-> On Tue, Jan 14, 2025 at 03:16:53PM -0600, Bjorn Helgaas wrote:
-> > On Mon, Jan 13, 2025 at 09:55:49PM +0530, Manivannan Sadhasivam wrote:
-> > > On Tue, Jan 07, 2025 at 03:27:59PM +0100, Johan Hovold wrote:
-
-> > > > > > I just noticed that this change in 6.13-rc1 is causing the
-> > > > > > following warning on resume from suspend on machines like the
-> > > > > > Lenovo ThinkPad X13s:
-
-> > > > > > 	pci0004:00: pcie4: Enabling runtime PM for inactive device with active children
-
-> > > > > > which may have unpopulated ports (this laptop SKU does not
-> > > > > > have a modem).
-
-> > What's the plan for this?  Does anybody have a proposal?
-> > 
+On 1/13/25 18:45, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> TBH, I don't know how to fix this issue in a proper way. I need inputs from
-> Rafael/Ulf.
+> Replace the tick_hits metric with a new tick_intercepts one that can be
+> used directly when deciding whether or not to stop the scheduler tick
+> and update the governor functional description accordingly.
 > 
-> > IIUC there is no functional issue, but the new warning must be fixed,
-> > and it would sure be nice to do it before v6.13.  If there *is* a
-> > functional problem, we need to consider a revert ASAP.
-> > 
+> No intentional functional impact.
 > 
-> There is no functional problem that I'm aware of, so revert is not warranted.
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-I'd argue for reverting the offending commit as that is the only way to
-make sure that the new warning is ever addressed.
+Reviewed-by: Christian Loehle <christian.loehle@arm.com>
 
-Vendors unfortunately do not a have a good track record of following up
-and fixing issues like this.
-
-Judging from a quick look at the code (and the commit message of the
-patch in question), no host controller driver depends on the commit in
-question as the ones that do enable runtime PM just resume
-unconditionally at probe() currently (i.e. effectively ignores the state
-of their children).
-
-Johan
 
