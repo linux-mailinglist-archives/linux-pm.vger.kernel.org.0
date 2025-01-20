@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-20667-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20668-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C18AA16704
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:11:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D93BCA16708
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:12:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F3DE7A42AF
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 07:11:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 18E6E3AB1A9
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 07:11:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7622118C92F;
-	Mon, 20 Jan 2025 07:11:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A400618E03A;
+	Mon, 20 Jan 2025 07:11:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcHCvlJn"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jmiS39Vn"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3CB32145A18;
-	Mon, 20 Jan 2025 07:11:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D56E145A18;
+	Mon, 20 Jan 2025 07:11:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737357102; cv=none; b=gFuuBkg/RHoZ/YAn5wcXgBqASlnrpep0sUNpXj2K5edT7wtI1eHu28XELzXg1r/1caDEN7YlMRQFfTLhib5wWUKE5trsszteE0niYn8IS7gjuu8xH0sc6LayFX8dQXQ5diamNTOFmEGMyMUySXhIkT2DzUkD7b5TFBL/szc8K4s=
+	t=1737357115; cv=none; b=VWF3V3AzKLEHXS1fQL8VBj8J7/VvmefNtQb+ZMcBa3QXBYC0VF5tBlYzm/yu24ivL+8ooZ2m/scPo3KR0DBS7ZYcseF7UjvuUjc5JBfAxkq4qR6U02LEXgn6CGkv1SELK9qWe2DCXIWDeszqBkskJLxbtwogtdzfh7Lt3GgjRnc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737357102; c=relaxed/simple;
-	bh=UsYUJ1dfu3HtvbDCIPPjsGBIQ9q1bsv5BjYbYRwgLhY=;
+	s=arc-20240116; t=1737357115; c=relaxed/simple;
+	bh=CYmVzP7C4vZmFNlB+K3Hmwu9dTRXeieNJKzxPQYjHIs=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ITxJ/73O1n5sPuPMlyKUxDyh3ImRB+G0mF7s3kxlW7QPv+ac8pE6Z5i1M27tTG/0dtiOyAwq42v1kQDBrul1psensETsKmP1bLyU/x+UDsRqxCdGxqvCLuRkL1B9s1eRTiSQMEl3JRcMM6aBJ9nwdXqbq0IxRxoXoPmeWUJinuQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcHCvlJn; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5FCBDC4CEDD;
-	Mon, 20 Jan 2025 07:11:37 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=r1UaM06Uv6JBKirzq7wxdVS/490rPPqzq3lAxbYMRm3pw5e0f1s4jhhHLiqlj7Uj5E5GPf4ORSeWk3ZUJAKQVudu/kluT2gIRuBLarLvrDLf1kZB88tkfPXJIVdcVRHyP6PxUb29LT7fyATzCLOzVi1m7StLz/bdY7eL4O3UVGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jmiS39Vn; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9E95CC4CEDD;
+	Mon, 20 Jan 2025 07:11:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737357101;
-	bh=UsYUJ1dfu3HtvbDCIPPjsGBIQ9q1bsv5BjYbYRwgLhY=;
+	s=k20201202; t=1737357114;
+	bh=CYmVzP7C4vZmFNlB+K3Hmwu9dTRXeieNJKzxPQYjHIs=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kcHCvlJnmp98NjrBfT917l6/uHCgT+k9MAAKjubdYZ0IvLCvez8gh5Aa/vAthn04s
-	 rhnn/GN+1OZaDDeGcUQbQp5KPkZBEeURwciye3uHChkURT2Kk0wnRLzfhJ6xG5eBBk
-	 Eq9/i1KimsJKvDJbVA8qb+533tJV716ZeTsNqua7k+Qy6WogVsInTcy18j/ufut4qO
-	 jT3eOAJEnFcqCQt/Wn1LK0E+jn/BnJMPgee3YetSeaymOIlOiUTl9fNBF6Js2x68Fx
-	 EJhDSTBUVYvZdapQBDjgeTXgy3+lvFpVzO0qpplWNfclEywuKmpGaqccHcF0yGoAxD
-	 TmgkhhVhgE5lw==
-Date: Mon, 20 Jan 2025 07:11:35 +0000
+	b=jmiS39VnUEpA/ga4aMdlihd6sWavlVlL4ikVuRg6p5YfWO8HEHZintB7r+3APZVDd
+	 vz2yXN3GfufEZFlFJGqxuzBqRRW+3VFAbRryEeZRookiDNfdL9VMLFDR4UVWPzzxqp
+	 3n0vPmepYOwp7ndd9vrUXjjmd+0A7A8uurlMKUPd4sIGqbU0j/pAxPoxBBWvD9h32f
+	 oYArr9EZEtVPqYiRIbf9Ehs2YNxeef87qPfc+GncnLgk7CymRewnUPmbLU/vSfLxO5
+	 WBMnxGx/AikKp2A4eAuzvo9kno36jHsUBk4dTFI3sOM7+pRlf9jk7jpXm5D4Pm00VP
+	 8hbyUWN0kuIww==
+Date: Mon, 20 Jan 2025 07:11:48 +0000
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Ahmad Fatoum <a.fatoum@pengutronix.de>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -61,11 +61,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-security-module@vger.kernel.org,
 	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: Re: [PATCH v2 05/12] reboot: rename now misleading
- __hw_protection_shutdown symbols
-Message-ID: <Z433JzVyGWK2Lq2C@google.com>
+Subject: Re: [PATCH v2 06/12] reboot: indicate whether it is a HARDWARE
+ PROTECTION reboot or shutdown
+Message-ID: <Z433ND-LvkGo2se2@google.com>
 References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
- <20250113-hw_protection-reboot-v2-5-161d3fc734f0@pengutronix.de>
+ <20250113-hw_protection-reboot-v2-6-161d3fc734f0@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,15 +74,14 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250113-hw_protection-reboot-v2-5-161d3fc734f0@pengutronix.de>
+In-Reply-To: <20250113-hw_protection-reboot-v2-6-161d3fc734f0@pengutronix.de>
 
-On Mon, Jan 13, 2025 at 05:25:30PM +0100, Ahmad Fatoum wrote:
-> The __hw_protection_shutdown function name has become misleading
-> since it can cause either a shutdown (poweroff) or a reboot
-> depending on its argument.
-> 
-> To avoid further confusion, let's rename it, so it doesn't suggest
-> that a poweroff is all it can do.
+On Mon, Jan 13, 2025 at 05:25:31PM +0100, Ahmad Fatoum wrote:
+> It currently depends on the caller, whether we attempt a hardware
+> protection shutdown (poweroff) or a reboot. A follow-up commit will make
+> this partially user-configurable, so it's a good idea to have the
+> emergency message clearly state whether the kernel is going for a reboot
+> or a shutdown.
 > 
 > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
