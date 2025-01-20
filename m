@@ -1,627 +1,356 @@
-Return-Path: <linux-pm+bounces-20700-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20701-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58996A17024
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 17:26:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B1C5A1713E
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 18:21:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B952F3A52E7
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 16:26:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4CC963A2FF0
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 17:21:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47A9F1E9B19;
-	Mon, 20 Jan 2025 16:26:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A70A1E32DA;
+	Mon, 20 Jan 2025 17:21:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GWPFKJD/"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="MwynDMFu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5C91E98E6;
-	Mon, 20 Jan 2025 16:26:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B675F15B102
+	for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 17:21:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737390394; cv=none; b=gp1yXX1jhbPnFVrX4IbpjhTShGEUS+mLXp3txuQNWj3zbkpQC0ozik1VUR0e8RaQ3uuqvHuFQvVeAr+6PuWUC8slDkCB0kxL9N4dDT7x2NwArbRnus6blszNxtFz0qUJw5oi6PsN0MjVVaJsxmKOX3H/yzUmXq08zrKTgKuyHsc=
+	t=1737393687; cv=none; b=VqypNa1gbwxJauHzaEOlGjS27vHKTN9JoB7IMy1jhvwl+gCQl8qOLEk0yj5CCcOAgPr9IeySZQ2JrIEo4/WIZvx/QrvJf9crSpTd1NIJeo9jGuwyrrFGKE6pFRq2Y+wjx4VDGsdIw48zrvH/p5SwmpZiR+6Hcqa/oupfb8IYKY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737390394; c=relaxed/simple;
-	bh=ETbJq8dU4q87jQt1++VBArfsan8YoscgZTS2ZEDmBf4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GQjSMcRyC7jJ4q4kuQPH6W3pC/Gev7NtWD7LucYDkB+7jtDcF4C+CeTg+ZB1c+LfN2AdrJ8biWED7Z1AZY+WCc+hFzUFDo7FZTl6LKsc5O1X81vuYzR89yb1kgqcCyK8/B6gwr2GaQpSn++m4eKvFMb2sf7CsOKh9LnIr7HutJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GWPFKJD/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A0FFC4CEDD;
-	Mon, 20 Jan 2025 16:26:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737390393;
-	bh=ETbJq8dU4q87jQt1++VBArfsan8YoscgZTS2ZEDmBf4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GWPFKJD/WFHwtxb5GL0IbqWmKqdsocC0jAZz+AK0UTL1Jej0wKxapkgLKWHWV4W9F
-	 HYa6tuEZmwlOExPf0IZLcSaYM4GVs5vfK0s2n2IHoxDHHf0b7sI6KfzlFaLrTil4jM
-	 EbMLgDwevBK89NlRBwDhBPq5LO+V7xf0j53+MbRUeXRsxiMA2jL4PKqxfQUXiEgajw
-	 zkPROsW7q+toXOgOoAEJaV0i+Rf1DiEeEzopN5KIOq6HR1PARZ80mKeg9yw9GaB9MY
-	 V14vHVF4d3pYJUqILYoBewIgkXflGDkLCmANdcBOdULRNOy7xtxwLnn9z45M9mNOMw
-	 4k+WAxIvrzI/g==
-Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-723442fd88aso1377579a34.3;
-        Mon, 20 Jan 2025 08:26:33 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW40nBzHE5TD76FKqXEu2N6u6q4MIsPtnPDpnpzTJqu2qo0NXXFlE2XRwz8Wvwd9hEwhiScQz2aQVz0+Q0=@vger.kernel.org, AJvYcCXnqB74fH0eAx4Z3ow6PApjEGSG4P2BHEm7QPokvKkeO0CBpznOIRBTlmv9ggtP6nMsQTnMQI+n1qM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxBTFuRLZXTR/9OImvrz/jFMV7gj1pygzcwu9VWEhzGODwca6qN
-	XkXTs3PtWJ01CDKTaCropoe+7pfaFKSnH3MygFQWNKMA4B1j0bMfydX5VNcDORL06UycMsWMPZE
-	b1YHxsynS/dzMCOuHQpZYnsTF4bc=
-X-Google-Smtp-Source: AGHT+IHNGfeESwwph0ktCv0j06GjXDqKrzDtbQzM4AYs1qoRfxXEUFwcmg76bhI+YrJ6/zov548nr9DeKmrOH9GT4OU=
-X-Received: by 2002:a05:6830:610e:b0:718:615:462d with SMTP id
- 46e09a7af769-7249da8fb2cmr8783593a34.13.1737390392741; Mon, 20 Jan 2025
- 08:26:32 -0800 (PST)
+	s=arc-20240116; t=1737393687; c=relaxed/simple;
+	bh=Ud20VHkJpi3l5/XEfD6nO/DAcTQKwiRDoVrbjyo9UTE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=aZkE1jL6W/n/Y4DLaP+MdW/x0WRnwEMAl+H32JbUBjvAmptbfRgO71WRpgygvI3K4Hnp61mFnBQ/SKU8RvP1dAmfdKqcJ38SWF/DJ9tQgD8KcKuzUAGVLm4voNeWMxOOBAIz/IEf0ck49Ko5DRK6OG3Eg3aorafhHlCP6rWEUGA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=MwynDMFu; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250120172121euoutp02bfe0ed823b73c8c05d30a00474c8ddee~cdllBMRqL1665616656euoutp02i
+	for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 17:21:21 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250120172121euoutp02bfe0ed823b73c8c05d30a00474c8ddee~cdllBMRqL1665616656euoutp02i
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1737393682;
+	bh=Gu0ryus9vacA2pmkAa3obmDZ851U5NSNS0NtIwrsbLc=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=MwynDMFuCWvrTwXKEt4u51usLDCXcg2LYxsdQHZyCyok0EjiRvBvoiWTvmjcZjd0g
+	 pPBxWppEViohHe74NZuTj6PR9nDVMUHEPUz5XT5YGQSl1re6sTAupZlfuHkpJfyV8t
+	 pk9toPREPNX0lFb58lQv+mAeu6U4Gri7RLmvjG5c=
+Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20250120172120eucas1p1d54044b1448bb62b0c471ec5105c2061~cdljpKmHh0933109331eucas1p1T;
+	Mon, 20 Jan 2025 17:21:20 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges2new.samsung.com (EUCPMTA) with SMTP id 8B.66.20409.0168E876; Mon, 20
+	Jan 2025 17:21:20 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250120172119eucas1p135434171194546bc2df259bfd21458e1~cdliiL3Yz0726407264eucas1p14;
+	Mon, 20 Jan 2025 17:21:19 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20250120172119eusmtrp2f503c9eb5ec1b72007f092dece1c70b1~cdlifRrjW0490804908eusmtrp2W;
+	Mon, 20 Jan 2025 17:21:19 +0000 (GMT)
+X-AuditID: cbfec7f4-c0df970000004fb9-b7-678e8610a188
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id C1.95.19654.F068E876; Mon, 20
+	Jan 2025 17:21:19 +0000 (GMT)
+Received: from AMDC4942.home (unknown [106.210.136.40]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250120172117eusmtip10b15c9741da2f0da703f2030601a9b3d~cdlhFFrLC1308113081eusmtip1X;
+	Mon, 20 Jan 2025 17:21:17 +0000 (GMT)
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+To: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
+	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
+	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
+	m.szyprowski@samsung.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org, Michal Wilczynski
+	<m.wilczynski@samsung.com>
+Subject: [RFC v3 00/18] Enable drm/imagination BXM-4-64 Support for LicheePi
+ 4A
+Date: Mon, 20 Jan 2025 18:20:53 +0100
+Message-Id: <20250120172111.3492708-1-m.wilczynski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6116275.lOV4Wx5bFT@rjwysocki.net> <d095149c-fb76-40e8-a459-05e4d2e50cf5@arm.com>
- <2007eace0fa9f591917cdd228c2cb66f045480d0.camel@linux.ibm.com>
-In-Reply-To: <2007eace0fa9f591917cdd228c2cb66f045480d0.camel@linux.ibm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 20 Jan 2025 17:26:17 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0g54OGuUJYazM4yhn=Y0WM0TegYJnxZwoTcVgGD7mpXug@mail.gmail.com>
-X-Gm-Features: AbW1kvaDT7V1QSwrV_Hf7js2LBofrRasHm1_t2IjPms30dzzF1asnKEy4Ab6LsU
-Message-ID: <CAJZ5v0g54OGuUJYazM4yhn=Y0WM0TegYJnxZwoTcVgGD7mpXug@mail.gmail.com>
-Subject: Re: [PATCH v1 0/9] cpuidle: teo: Cleanups and very frequent wakeups
- handling update
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Linux PM <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sf1CTZRzved937/u6E3odcDyYREeSp3cgkkdPYUJnde8f3Rn/WFeXMvR1
+	Wmzo5si47kC3gcyBBJY0iAFHMElAJhuDmBABAy1UZoO7ZIBRyI/40QYFnCPYi+V/3+/n+/l8
+	P5/vcw+NixrIrfRJ2RlOLhOnhJNCwtK9dCeSycqTRF/MDkY9AxUYMq/oKXTN1ochQ2efALn6
+	GzF0f2GWRHW/36XQI9s5AjmN31BI1V1Pogm9i0TzOpcAOVpKSOTO7QTI4laTqLZziEL1CwYM
+	lc+bCVRpbQEoK6dKgO7degsNuXoINOHQ4ShL/yxabbVSyOtsIFDxTBuFGqe/ECB77XtI3XaZ
+	SHienR3UUOz0xATB/njBQ7G2xTKCbdYPUayu+SfAmmpySPaBs5VkS3sT2eGLdoy9UZnBqmu7
+	MfbS42h29uYvJJvXWAPYftUA9a7oA+G+Y1zKyTROvnt/kvDE44LkU97EszPzxzPB+QNasImG
+	zF6oVRcItEBIixgjgN9lN200HgCXa/uJdZaIcQM4VJH+ROFZXSJ5UjWAmSsGkidNA9iZ6xOQ
+	TAwcqTb4NgUyGgJqus6B9QZnxgG0jJWsKWg6gEmES9XSdQHBRMA/6oZ9Yj8mHk7NOAW8Wxhs
+	++FnnMe3wN6vx3wcfA1XmYtxnlMuhN/qBOsrIfMmbKkP5eEAOGlvpPh6G1xtNmB8nQpHzH9t
+	SD+HzTr7Rh0HH/Qt+5LhzE5Y37Kbh9+Ao9fyAb/dHw7+uYUP4A8LLFdwHvaDF7JEPPsl+KUu
+	9z/TPqNlw5SFiwOTAv6hPoJdiw48H7ygf+os/VNn6f/PUAbwGhDMKRVSCaeIkXGfRinEUoVS
+	Jok6mio1gbVffdtr91hB9eR8VAfAaNABII2HB/oFzekkIr9j4s/SOXnqEbkyhVN0gOdoIjzY
+	r6JNIxExEvEZ7hOOO8XJn0wxetPWTCw0ed+uzdseJhRlVrSnt0/nub2EIyQ11njElO+1BWzP
+	OGBS3ShnCU34/sLkud6/P3xV9tuYtqkzOunFmQVNWpo25uyl9tOKe8nNX4UtvBbR1F1YGDne
+	FZcmKb7zUBFXGXpdhQ6tOMtG5iI9d3uydYEZlPpW0FVp5dtZr1gbokvNtvNB77ur0n4VlRQ+
+	8zq2WbZjuW5v3zuyuhDPcES+1kNMXb/aj39883BBIZeTF6s+yOwMPK5UmoxgdBS21ugHI5K8
+	3y876aSV+8P/aA6HpZRc0cf7W0JS5NrL5aMuR+mOl3NtRaFs7B6l0FpUdfDoo6l8lnDHuhIz
+	E5Txp293jYcTihPiPbtwuUL8LwHHMmhEBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRmVeSWpSXmKPExsVy+t/xu7r8bX3pBt+/slicuL6IyWLr71ns
+	Fmv2nmOymH/kHKvFvUtbmCyufH3PZrHu6QV2ixd7G1ksrq2Yy27RfGw9m8XLWffYLD723GO1
+	uLxrDpvF594jjBbbPrewWaw9cpfdYv3X+UwWCz9uZbFYsmMXo0Vb5zJWi4unXC3u3jvBYvHy
+	cg+zRdssfov/e3awW/y7tpHFYva7/ewWW95MZLU4vjbcomX/FBYHOY/3N1rZPd68fMnicbjj
+	C7vH3m8LWDx2zrrL7tGz8wyjx6ZVnWwed67tYfOYdzLQ4373cSaPzUvqPVrWHmPy6P9r4PF+
+	31U2j74tqxg9LjVfZw8QitKzKcovLUlVyMgvLrFVija0MNIztLTQMzKx1DM0No+1MjJV0rez
+	SUnNySxLLdK3S9DL+DspqeBfYMW7j2kNjE3OXYycHBICJhJf/v9k62Lk4hASWMoosfzzJ1aI
+	hIzEte6XLBC2sMSfa11QRa8YJbbu2AFWxCZgJPFg+XwwW0RgMYvE3n2VIEXMAm8ZJa7P3AjW
+	LSzgL9GxrZcRxGYRUJV4tu4+WJxXwF7i9btrUNvkJfYfPMsMEReUODnzCVANB9AgdYn184RA
+	wsxAJc1bZzNPYOSfhaRqFkLVLCRVCxiZVzGKpJYW56bnFhvpFSfmFpfmpesl5+duYgQmlm3H
+	fm7Zwbjy1Ue9Q4xMHIyHGCU4mJVEeEU/9KQL8aYkVlalFuXHF5XmpBYfYjQFunois5Rocj4w
+	teWVxBuaGZgamphZGphamhkrifOyXTmfJiSQnliSmp2aWpBaBNPHxMEp1cAUEps3z/rrnKkP
+	D89uO3vt/6+NNfxMOu/FJOue8TG3rN3oqrCD+S4Xo/sy3Rd1x3exMWu/nVAvbtIt6yLhendH
+	d9OBEwei5mk7CpdXJV+ILw1ffUyi/eGW6/2iIlPa2yeuur9macr2nv1nNQTEj56KsvtZMVW/
+	7t4LO/bM2etbGRbIr12l9r7wx5/7Z0UFVnNZHmSY4nruxcWI15ceuH3o/cxsf7irokTVe18W
+	f9e3m5Us/isUTJft/39EcKHCjw2ZE/6WrzutVbjG//3RX0Vx3zJSQ8ofvFqd3WFVd+Ly3jUf
+	BCpX5suaKyb26hhfDGBcsSPvjnhkrZpBtm2ut7Fz+ekYheD+h7dmaEd1zv6rxFKckWioxVxU
+	nAgAC5gIxbUDAAA=
+X-CMS-MailID: 20250120172119eucas1p135434171194546bc2df259bfd21458e1
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250120172119eucas1p135434171194546bc2df259bfd21458e1
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20250120172119eucas1p135434171194546bc2df259bfd21458e1
+References: <CGME20250120172119eucas1p135434171194546bc2df259bfd21458e1@eucas1p1.samsung.com>
 
-On Mon, Jan 20, 2025 at 9:17=E2=80=AFAM Aboorva Devarajan
-<aboorvad@linux.ibm.com> wrote:
->
-> On Wed, 2025-01-15 at 14:52 +0000, Christian Loehle wrote:
-> > On 1/13/25 18:32, Rafael J. Wysocki wrote:
-> > > Hi Everyone,
-> > >
-> > > This supersedes
-> > >
-> > > https://lore.kernel.org/linux-pm/4953183.GXAFRqVoOG@rjwysocki.net/
-> > >
-> > > but because the majority of patches in it are new, I've decided to co=
-unt
-> > > version numbers back from 1.
-> > >
-> > > This addresses a relatively recently added inconsistency in behavior =
-of the teo
-> > > governor regarding the handling of very frequent wakeups handling (pa=
-tch [7/9])
-> > > and makes some other changes that may be regarded as cleanups.
-> > >
-> > > Please review.
-> >
-> > Hi Rafael,
-> > that looks promising. I'll review the individual patches in detail now,=
- but
-> > I let a few tests run overnight and can report that there's no signific=
-ant
-> > behaviour change with the series on an arm64 (no polling state, rk3399)=
-, which
-> > is my expected result.
-> >
-> > I'll get something running on a system with a polling state as well.
-> > (I don't have a POWER system, so that will just be x86, adding Aboorva.=
-)
->
->
-> Christian,
->
-> Thanks for adding me to the thread.
->
-> Rafael,
->
-> I did some tests with the patch on a Pseries Power10 system:
->
-> Here are the system details:
->
-> -------------------------------------------------------------------------=
--------
-> Architecture:                         ppc64le
-> Byte Order:                           Little Endian
-> CPU(s):                               48
-> On-line CPU(s) list:                  0-47
-> Model name:                           POWER10 (architected), altivec supp=
-orted
-> Model:                                2.0 (pvr 0080 0200)
-> Thread(s) per core:                   8
-> Core(s) per socket:                   6
-> Socket(s):                            1
-> Physical sockets:                     8
-> Physical chips:                       1
-> Physical cores/chip:                  10
->
-> -------------------------------------------------------------------------=
--------
-> # cpupower idle-info
-> CPUidle driver: pseries_idle
-> CPUidle governor: menu
-> analyzing CPU 5:
->
-> Number of idle states: 2
-> Available idle states: snooze Shared Cede
-> snooze:
-> Flags/Description: snooze
-> Latency: 0
-> Usage: 1411724
-> Duration: 27481504
-> Shared Cede:
-> Flags/Description: Shared Cede
-> Latency: 10
-> Usage: 326573
-> Duration: 31098864616
-> -------------------------------------------------------------------------=
--------
->
-> How to infer the results:
->
-> Above Diff (%) and Below Diff (%) represent the number of cpuidle misses,
-> indicating how frequently the selected cpuidle state was either too deep =
-or
-> too shallow. So, these values should not be too high.
-> -------------------------------------------------------------------------=
--------
->
-> The below test is done using a predictable timer and non-timer benchmark =
-[1]:
->
-> -------------------------------------------------------------------------=
--------
-> Menu Governor:
-> -------------------------------------------------------------------------=
--------
->
-> With pipe wakeup (non-timer):
->
-> -------------------------------------------------------------------------=
--------------------------------
->    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
-tal Below Diff  Below Diff (%)
-> -------------------------------------------------------------------------=
--------------------------------
-> 0           5.980           1656304                 2        0.000121    =
-             0        0.000000
-> 1          10.959            901972              1954        0.216636    =
-             0        0.000000
-> -------------------------------------------------------------------------=
--------------------------------
-> 2          15.726            243971            237112       97.188600    =
-             0        0.000000
-> 3          20.813            232069            227258       97.926910    =
-             0        0.000000
-> 4          30.896            209884            206492       98.383869    =
-             0        0.000000
-> 5          40.991            216704            213642       98.587013    =
-             0        0.000000
-> 6          51.002            195632            192963       98.635704    =
-             0        0.000000
-> 7          61.014            163726            161506       98.644076    =
-             0        0.000000
-> 8          71.006            140739            138809       98.628667    =
-             0        0.000000
-> 9          81.008            123386            120725       97.843353    =
-             0        0.000000
-> 10        101.020             98974             81235       82.077111    =
-             0        0.000000
-> -------------------------------------------------------------------------=
--------------------------------
-> 11        111.044             90018              1513        1.680775    =
-            12        0.013331
-> 12        121.015             82704               189        0.228526    =
-            77        0.093103
-> 13        131.028             76534               272        0.355398    =
-           321        0.419421
-> 14        141.008             71610               698        0.974724    =
-           693        0.967742
-> 15        151.021             66869               666        0.995977    =
-           656        0.981023
-> 16        161.027             62709               611        0.974342    =
-           605        0.964774
-> 17        171.033             59063               593        1.004013    =
-           593        1.004013
-> 18        181.019             55819               571        1.022949    =
-           541        0.969204
-> 19        191.016             52998               641        1.209480    =
-           628        1.184950
-> 20        201.017             50353               551        1.094274    =
-           501        0.994975
-> 21        251.054             40535               289        0.712964    =
-           398        0.981868
-> 22        301.037             33966               252        0.741918    =
-           330        0.971560
-> 23        351.038             29279               216        0.737730    =
-           294        1.004133
-> 24        401.047             25765               190        0.737435    =
-           262        1.016883
-> 25        451.060             23021               185        0.803614    =
-           187        0.812302
-> 26        501.049             20831               150        0.720081    =
-           216        1.036916
-> 27       1001.076             10951                77        0.703132    =
-           126        1.150580
->
-> With timer wakeup:
->
-> -------------------------------------------------------------------------=
--------------------------------
->    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
-tal Below Diff  Below Diff (%)
-> -------------------------------------------------------------------------=
--------------------------------
-> 0           7.590           1310772                 0        0.000000    =
-             0        0.000000
-> 1          12.631            789377               780        0.098812    =
-             0        0.000000
-> 2          21.791            458001             52321       11.423774    =
-             0        0.000000
-> 3          22.648            440752                36        0.008168    =
-             0        0.000000
-> 4          32.644            305983                 0        0.000000    =
-             0        0.000000
-> 5          42.646            234305                 0        0.000000    =
-             0        0.000000
-> 6          52.647            189858                 2        0.001053    =
-             0        0.000000
-> 7          62.649            159561                10        0.006267    =
-             0        0.000000
-> 8          72.644            137643                 5        0.003633    =
-             1        0.000727
-> 9          82.666            120963                 5        0.004133    =
-             0        0.000000
-> 10        102.654             97442                 3        0.003079    =
-           610        0.626013
-> 11        145.805             69937               441        0.630568    =
-          1345        1.923159
-> 12        156.057             64511                75        0.116259    =
-           439        0.680504
-> 13        166.047             60765               215        0.353822    =
-           534        0.878795
-> 14        175.894             57564               178        0.309221    =
-           687        1.193454
-> 15        185.933             54471               255        0.468139    =
-           638        1.171265
-> 16        195.975             51403                98        0.190650    =
-           212        0.412427
-> 17        206.062             49281               174        0.353077    =
-           577        1.170837
-> 18        216.188             46980                33        0.070243    =
-           571        1.215411
-> 19        226.346             44879                30        0.066846    =
-           543        1.209920
-> 20        236.353             43081                27        0.062673    =
-           516        1.197744
-> 21        286.158             35782                 5        0.013974    =
-           154        0.430384
-> 22        336.730             30531                11        0.036029    =
-           266        0.871246
-> 23        386.730             26722                18        0.067360    =
-           232        0.868198
-> 24        436.770             23797                 9        0.037820    =
-           196        0.823633
-> 25        487.229             21359                13        0.060864    =
-           229        1.072148
-> 26        537.375             19557                13        0.066472    =
-           259        1.324334
-> 27       1037.871             10638                12        0.112803    =
-           127        1.193833
->
-> -------------------------------------------------------------------------=
--------
-> Teo governor:
-> -------------------------------------------------------------------------=
--------
->
-> With pipe wakeup (non-timer):
->
-> -------------------------------------------------------------------------=
--------------------------------
->    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
-tal Below Diff  Below Diff (%)
-> -------------------------------------------------------------------------=
--------------------------------
-> 0           5.972           1657561                 6        0.000362    =
-             0        0.000000
-> 1          10.964            907279                 0        0.000000    =
-             0        0.000000
-> 2          15.977            623681                 0        0.000000    =
-             0        0.000000
-> 3          20.980            475385                 1        0.000210    =
-             0        0.000000
-> 4          30.981            322151                 0        0.000000    =
-             0        0.000000
-> 5          40.975            243749                 0        0.000000    =
-             0        0.000000
-> 6          50.977            195989                 0        0.000000    =
-             0        0.000000
-> 7          60.981            163876                 0        0.000000    =
-             0        0.000000
-> 8          70.978            140818                 0        0.000000    =
-             0        0.000000
-> 9          80.976            123460                 0        0.000000    =
-             1        0.000810
-> 10        100.970             99038                 0        0.000000    =
-            16        0.016155
-> -------------------------------------------------------------------------=
--------------------------------
-> 11        111.027            106919              5388        5.039329    =
-         16873       15.781105
-> -------------------------------------------------------------------------=
--------------------------------
-> 12        121.017             83074               381        0.458627    =
-           443        0.533260
-> 13        131.024             76588               323        0.421737    =
-           373        0.487021
-> 14        141.027             71592               695        0.970779    =
-           695        0.970779
-> 15        151.023             66874               669        1.000389    =
-           662        0.989921
-> 16        161.026             62719               607        0.967809    =
-           595        0.948676
-> 17        171.027             59064               581        0.983679    =
-           574        0.971827
-> 18        181.020             55817               561        1.005070    =
-           532        0.953115
-> 19        191.020             52883               523        0.988976    =
-           446        0.843371
-> 20        201.025             50509               670        1.326496    =
-           645        1.277000
-> 21        251.037             40544               280        0.690608    =
-           409        1.008781
-> 22        301.033             33988               263        0.773803    =
-           349        1.026833
-> 23        351.036             29285               221        0.754653    =
-           299        1.021001
-> 24        401.042             25777               203        0.787524    =
-           272        1.055204
-> 25        451.040             23029               174        0.755569    =
-           238        1.033480
-> 26        501.048             20838               157        0.753431    =
-           224        1.074959
-> 27       1001.097             10949                79        0.721527    =
-           134        1.223856
->
-> With timer wakeup:
->
-> -------------------------------------------------------------------------=
--------------------------------
->    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
-tal Below Diff  Below Diff (%)
-> -------------------------------------------------------------------------=
--------------------------------
-> 0           7.541           1319205                 0        0.000000    =
-             0        0.000000
-> 1          12.546            794464                 0        0.000000    =
-             0        0.000000
-> 2          17.540            568954                 0        0.000000    =
-             0        0.000000
-> 3          22.572            442307                 0        0.000000    =
-             0        0.000000
-> 4          32.583            306443                 0        0.000000    =
-             1        0.000326
-> 5          42.597            233238                 0        0.000000    =
-             0        0.000000
-> 6          52.587            190067                 0        0.000000    =
-             0        0.000000
-> 7          62.590            159714                 0        0.000000    =
-             1        0.000626
-> 8          72.574            137755                 0        0.000000    =
-             2        0.001452
-> 9          82.581            121081                 0        0.000000    =
-             0        0.000000
-> 10        102.589             97491                 0        0.000000    =
-          1912        1.961207
-> 11        146.385             68906                47        0.068209    =
-           599        0.869300
-> 12        156.548             64565                86        0.133199    =
-           670        1.037714
-> 13        166.588             60562               100        0.165120    =
-           518        0.855322
-> 14        176.676             57264               263        0.459276    =
-           642        1.121123
-> 15        186.563             54262               293        0.539973    =
-           601        1.107589
-> 16        195.986             51668               192        0.371603    =
-           526        1.018038
-> 17        206.860             49028                97        0.197846    =
-           564        1.150363
-> 18        216.899             46669                27        0.057854    =
-           460        0.985665
-> 19        227.016             44528                22        0.049407    =
-           367        0.824201
-> 20        237.055             42883                28        0.065294    =
-           507        1.182287
-> 21        286.998             35665                 9        0.025235    =
-           283        0.793495
-> 22        337.410             30439                 7        0.022997    =
-           264        0.867308
-> 23        387.522             26652                18        0.067537    =
-           251        0.941768
-> 24        437.570             23742                 8        0.033696    =
-           221        0.930840
-> 25        487.804             21293                10        0.046964    =
-            94        0.441460
-> 26        537.884             19505                 7        0.035888    =
-           243        1.245834
-> 27       1038.863             10633                 4        0.037619    =
-           135        1.269632
->
-> -------------------------------------------------------------------------=
--------
-> Teo Governor with patch
-> -------------------------------------------------------------------------=
--------
->
-> With pipe wakeup (non-timer):
->
-> -------------------------------------------------------------------------=
--------------------------------
->    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
-tal Below Diff  Below Diff (%)
-> -------------------------------------------------------------------------=
--------------------------------
-> 0           5.959           1661754                 5        0.000301    =
-             0        0.000000
-> 1          10.963            907497                 2        0.000220    =
-             0        0.000000
-> 2          15.968            623957                 2        0.000321    =
-             0        0.000000
-> 3          20.970            475574                 2        0.000421    =
-             0        0.000000
-> 4          30.974            321718                 2        0.000622    =
-             0        0.000000
-> 5          40.974            243714                 2        0.000821    =
-             0        0.000000
-> 6          50.983            195931                 2        0.001021    =
-             0        0.000000
-> 7          60.974            163876                 2        0.001220    =
-             1        0.000610
-> 8          70.973            140810                 2        0.001420    =
-             1        0.000710
-> 9          80.988            123420                 1        0.000810    =
-             4        0.003241
-> 10        100.994             99014                 2        0.002020    =
-            20        0.020199
-> -------------------------------------------------------------------------=
--------------------------------
-> 11        111.023            135597             11864        8.749456    =
-         45561       33.600301 =3D> This is observed even
-> -------------------------------------------------------------------------=
--------------------------------   without the patch,
-> 12        121.035             82948               348        0.419540    =
-           352        0.424362    when the sleep interval
-> 13        131.019             76342                82        0.107411    =
-            48        0.062875    is almost equal to the
-> 14        141.028             70948                70        0.098664    =
-            57        0.080341    residency time of state1.
-> 15        151.023             66278                81        0.122212    =
-            69        0.104107
-> 16        161.021             62146                65        0.104592    =
-            51        0.082065
-> 17        171.023             58509                64        0.109385    =
-            47        0.080330
-> 18        181.026             55301                64        0.115730    =
-            48        0.086798
-> 19        191.033             52407                67        0.127846    =
-            45        0.085866
-> 20        201.024             49803                52        0.104411    =
-            48        0.096380
-> 21        251.042             39911                39        0.097717    =
-            45        0.112751
-> 22        301.040             33302                29        0.087082    =
-            40        0.120113
-> 23        351.045             28572                37        0.129497    =
-            34        0.118998
-> 24        401.057             25005                20        0.079984    =
-            27        0.107978
-> 25        451.055             22246                21        0.094399    =
-            26        0.116875
-> 26        501.053             20031                14        0.069892    =
-            25        0.124807
-> 27       1001.099             10055                 7        0.069617    =
-            15        0.149180
->
->
-> With timer wakeup:
->
-> -------------------------------------------------------------------------=
--------------------------------
->    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
-tal Below Diff  Below Diff (%)
-> -------------------------------------------------------------------------=
--------------------------------
-> 0           7.566           1314872                 0        0.000000    =
-             0        0.000000
-> 1          12.553            794091                 0        0.000000    =
-             0        0.000000
-> 2          17.573            567627                 0        0.000000    =
-             0        0.000000
-> 3          22.631            441084                 0        0.000000    =
-             0        0.000000
-> 4          32.633            306095                 0        0.000000    =
-             0        0.000000
-> 5          42.631            234377                 0        0.000000    =
-             0        0.000000
-> 6          52.634            189899                 0        0.000000    =
-             0        0.000000
-> 7          62.642            159572                 0        0.000000    =
-             0        0.000000
-> 8          72.645            137619                 0        0.000000    =
-             1        0.000727
-> 9          82.616            121037                 0        0.000000    =
-             1        0.000826
-> 10        102.636             97423                 0        0.000000    =
-          1047        1.074695
-> 11        145.823             69245                43        0.062098    =
-           680        0.982020
-> 12        155.912             64546                90        0.139435    =
-           478        0.740557
-> 13        166.103             60709               219        0.360737    =
-           501        0.825248
-> 14        176.036             57483               196        0.340970    =
-           639        1.111633
-> 15        186.043             54448               250        0.459154    =
-           623        1.144211
-> 16        195.552             51428               124        0.241114    =
-           230        0.447227
-> 17        205.990             49270               141        0.286178    =
-           527        1.069616
-> 18        216.300             46931                39        0.083101    =
-           545        1.161279
-> 19        226.288             44884                23        0.051243    =
-           520        1.158542
-> 20        236.372             43056                20        0.046451    =
-           493        1.145020
-> 21        285.985             35724                 1        0.002799    =
-           119        0.333109
-> 22        336.636             30526                11        0.036035    =
-           262        0.858285
-> 23        386.522             26772                17        0.063499    =
-           218        0.814284
-> 24        436.749             23857                26        0.108983    =
-           208        0.871862
-> 25        487.204             21358                 9        0.042139    =
-           240        1.123701
-> 26        537.312             19530                 7        0.035842    =
-           235        1.203277
-> 27       1038.147             10610                 2        0.018850    =
-           119        1.121583
-> -------------------------------------------------------------------------=
--------
->
->
-> I also did some tests with postgres (pgbench) - with the patch:
->
-> +---------------------------+--------------------+------------------+
-> | Metric                    | Shared Cede        | Snooze           |
-> +---------------------------+--------------------+------------------+
-> | Total Usage Difference    | 119,453            | 20,472,846       |
-> | Total Time Difference     | 502.79 seconds     | 324.90 seconds   |
-> | Total Above Difference    | 74,500 (0.36%)     | 0                |
-> | Total Below Difference    | 0                  | 336,703 (1.64%)  |
-> +---------------------------+--------------------+------------------+
->
-> % Above Diff =3D 0.36% of total usage
-> % Below Diff =3D 1.64% of total usage
->
->
-> Using both the deterministic micro-benchmark and pgbench, I observed that=
- the
-> teo governor with the patch as anticipated does not cause any noticable i=
-ncrease in the cpuidle
-> state prediction miss on PowerPC (pseries) (% above and below diff).
->
-> So, for the entire series:
->
-> Tested-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+The LicheePi 4A board, featuring the T-HEAD TH1520 SoC, includes an Imagination
+Technologies BXM-4-64 GPU. Initial support for this GPU was provided through a
+downstream driver [1]. Recently, efforts have been made to upstream support for
+the Rogue family GPUs, which the BXM-4-64 is part of [2].
 
-Thank you, much appreciated!
+While the initial upstream driver focused on the AXE-1-16 GPU, newer patches
+have introduced support for the BXS-4-64 GPU [3]. The modern upstream
+drm/imagination driver is expected to support the BXM-4-64 as well [4][5]. As
+this support is being developed, it's crucial to upstream the necessary glue
+code including clock and power-domain drivers so they're ready for integration
+with the drm/imagination driver.
 
-> [1]: https://github.com/AboorvaDevarajan/linux-utils/tree/main/cpuidle/cp=
-uidle_wakeup
+Recent Progress:
+
+Firmware Improvements:
+Since August, the vendor has provided updated firmware
+[6][7] that correctly initiates the firmware for the BXM-4-64.
+
+Mesa Driver Testing:
+The vendor-supplied Mesa driver [8] partially works with Vulkan examples, such
+as rendering a triangle using Sascha Willems' Vulkan samples [9]. Although the
+triangle isn't rendered correctly (only the blue background appears), shader
+job submissions function properly, and IOCTL calls are correctly invoked.  For
+testing, we used the following resources:
+
+Kernel Source: Custom kernel with necessary modifications [10].
+Mesa Driver: Vendor-provided Mesa implementation [11].
+
+Dependencies:
+Testing required a functional Display Processing Unit (DPU) and HDMI driver,
+which are currently not upstreamed. Efforts are underway to upstream the DPU
+DC8200 driver used in StarFive boards [12], which is the same DPU used on the
+LicheePi 4A. Once the DPU and HDMI drivers are upstreamed, GPU support can be
+fully upstream.
+
+Testing Status:
+This series has been tested by performing a probe-only operation, confirming
+that the firmware begins execution. The probe function initiates firmware
+execution and waits for the firmware to flip a specific status bit.
+
+[   12.637880] powervr ffef400000.gpu: [drm] loaded firmware powervr/rogue_36.52.104.182_v1.fw
+[   12.648979] powervr ffef400000.gpu: [drm] FW version v1.0 (build 6645434 OS)
+[   12.678906] [drm] Initialized powervr 1.0.0 for ffef400000.gpu on minor 0
+
+Power Management:
+Full power management capabilities require implementing the T-HEAD SoC AON
+protocol messaging via the hardware mailbox. Support for the mailbox was merged
+in kernel 6.13 [13], and the AON protocol implementation is part of this
+series, since v2. Therefore this series support full power management
+capabilities for the GPU driver.
+
+Thanks Krzysztof and Stephen for taking the time to review the last revision !
+Your guidance and the direction was very helpful.
+
+Since the merge window just started I'm going to keep the RFC prefix for the
+v3 revision.
+
+v3:
+
+Device Tree Changes:
+ - consolidated device tree representation by merging aon and power-domain nodes
+   while maintaining separate drivers internally
+ - power-domain driver is now instantiated from within the aon driver
+ - updated img,powervr-rogue.yaml to use allOf and oneOf for better schema
+   organization
+
+AP Clock Driver Improvements:
+ - reworked driver to support multiple clock controllers through .compatible
+   and .data instead of using multiple address spaces in dt-binding. This change
+   allows to re-use the driver code for multiple clock controllers.
+
+Code Quality and Documentation:
+ - fixed optional module dependencies in Kconfig
+ - added kernel-doc comments for all exported functions
+ - implemented th1520_aon_remove() to properly clean up mailbox channel
+   resources
+ - removed unnecessary of.h header in multiple drivers
+ - refactored reset driver to use zero cells
+
+v2:
+
+Removed AP_SUBSYS clock refactoring commits (1-6):
+ - instead of refactoring, I opted to extend the current driver and its
+   associated device tree node to include support for a second address space.
+
+Expanded patchset scope to fully support power management capabilities:
+ - introduced a new firmware driver to manage power-related operations.
+ - rewrote the power-domain driver to function alongside the firmware driver.
+   These nodes in the device tree lack direct address spaces, despite
+   representing HW blocks. Control is achieved via firmware protocol messages
+   transmitted through a mailbox to the E902 core.
+
+Implemented a reset controller for the TH1520 SoC:
+ - developed a reset controller driver for the TH1520 to manage reset
+   sequences.
+ - updated the drm/imagination driver to act as a reset controller consumer.
+   While this patchset is focused on the LPI4A board, the reset controller is
+   designed to be useful for other boards, such as the BPI-3F, which also require
+   a reset sequence after power-up.
+
+Updated dt-bindings:
+ - added new dt-bindings for power, reset, and firmware nodes.
+ - updated the powervr dt-binding to include reset support and new compatibles.
+ - ran dtbs_check and dt_binding_check to ensure compliance.
+
+Addressed code quality:
+ - resolved all checkpatch issues using --strict, except for the call to
+   devm_clk_hw_register_gate_parent_data().  The current implementation remains
+   preferable in this context, and clang-format aligns with this choice.
+
+Also included the mailbox device tree commit, already queued for 6.14 [14] for
+completeness.
+
+References:
+
+[1] Downstream Driver Source:
+    https://gitlab.freedesktop.org/frankbinns/powervr/-/blob/cb1929932095649a24f051b9cfdd2cd2ceab35cb/drivers/gpu/drm/img-rogue/Kconfig
+
+[2] Initial Upstream Driver Series:
+    https://lore.kernel.org/all/cover.1700668843.git.donald.robson@imgtec.com/
+
+[3] BXS-4-64 GPU Support Patches:
+    https://lore.kernel.org/all/20241105-sets-bxs-4-64-patch-v1-v1-0-4ed30e865892@imgtec.com/
+
+[4] Firmware Issue Discussion 1:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/1
+
+[5] Firmware Issue Discussion 2:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/2
+
+[6] Firmware Update Commit 1:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/6ac2247e9a1d1837af495fb6d0fbd6f35547c2d1
+
+[7] Firmware Update Commit 2:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/efbebc90f25adb2b2e1499e3cc24ea3f3c3e4f4c
+
+[8] Vendor-Provided Mesa Driver:
+    https://gitlab.freedesktop.org/imagination/mesa/-/tree/dev/devinfo
+
+[9] Sascha Willems' Vulkan Samples:     https://github.com/SaschaWillems/Vulkan
+
+[10] Test Kernel Source:
+    https://github.com/mwilczy/linux/tree/2_December_reference_linux_kernel_imagination
+
+[11] Test Mesa Driver:
+    https://github.com/mwilczy/mesa-reference
+
+[12] DPU DC8200 Driver Upstream Attempt:
+    https://lore.kernel.org/all/20241120061848.196754-1-keith.zhao@starfivetech.com/
+
+[13] Pull request kernel 6.13 for mailbox
+    https://lore.kernel.org/all/CABb+yY33qnivK-PzqpSMgmtbFid4nS8wcNvP7wED9DXrYAyLKg@mail.gmail.com/
+
+[14] Mailbox commit queued for 6.14
+    https://lore.kernel.org/all/20241104100734.1276116-4-m.wilczynski@samsung.com/
+
+Michal Wilczynski (18):
+  dt-bindings: clock: Add VO subsystem clock controller support
+  clk: thead: Add clock support for VO subsystem in T-Head TH1520 SoC
+  dt-bindings: firmware: thead,th1520: Add support for firmware node
+  firmware: thead: Add AON firmware protocol driver
+  pmdomain: thead: Add power-domain driver for TH1520
+  riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+  dt-bindings: reset: Add T-HEAD TH1520 SoC Reset Controller
+  reset: thead: Add TH1520 reset controller driver
+  drm/imagination: Add reset controller support for GPU initialization
+  dt-bindings: gpu: Add 'resets' property for GPU initialization
+  dt-bindings: gpu: Add compatibles for T-HEAD TH1520 GPU
+  drm/imagination: Add support for IMG BXM-4-64 GPU
+  drm/imagination: Enable PowerVR driver for RISC-V
+  riscv: dts: thead: Add device tree VO clock controller
+  riscv: dts: thead: Add mailbox node
+  riscv: dts: thead: Introduce power domain nodes with aon firmware
+  riscv: dts: thead: Introduce reset controller node
+  riscv: dts: thead: Add GPU node to TH1520 device tree
+
+ .../bindings/clock/thead,th1520-clk-ap.yaml   |  16 +-
+ .../bindings/firmware/thead,th1520-aon.yaml   |  53 ++++
+ .../bindings/gpu/img,powervr-rogue.yaml       |  58 +++-
+ .../bindings/reset/thead,th1520-reset.yaml    |  44 +++
+ MAINTAINERS                                   |   7 +
+ arch/riscv/Kconfig.socs                       |   1 +
+ arch/riscv/boot/dts/thead/th1520.dtsi         |  49 ++++
+ drivers/clk/thead/clk-th1520-ap.c             | 197 +++++++++++--
+ drivers/firmware/Kconfig                      |   9 +
+ drivers/firmware/Makefile                     |   1 +
+ drivers/firmware/thead,th1520-aon.c           | 271 ++++++++++++++++++
+ drivers/gpu/drm/imagination/Kconfig           |   2 +-
+ drivers/gpu/drm/imagination/pvr_device.c      |  21 ++
+ drivers/gpu/drm/imagination/pvr_device.h      |   9 +
+ drivers/gpu/drm/imagination/pvr_drv.c         |   1 +
+ drivers/gpu/drm/imagination/pvr_power.c       |  15 +-
+ drivers/pmdomain/Kconfig                      |   1 +
+ drivers/pmdomain/Makefile                     |   1 +
+ drivers/pmdomain/thead/Kconfig                |  12 +
+ drivers/pmdomain/thead/Makefile               |   2 +
+ drivers/pmdomain/thead/th1520-pm-domains.c    | 174 +++++++++++
+ drivers/reset/Kconfig                         |  10 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-th1520.c                  | 144 ++++++++++
+ .../dt-bindings/clock/thead,th1520-clk-ap.h   |  33 +++
+ .../dt-bindings/firmware/thead,th1520-aon.h   |  18 ++
+ .../linux/firmware/thead/thead,th1520-aon.h   | 186 ++++++++++++
+ 27 files changed, 1293 insertions(+), 43 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/thead,th1520-reset.yaml
+ create mode 100644 drivers/firmware/thead,th1520-aon.c
+ create mode 100644 drivers/pmdomain/thead/Kconfig
+ create mode 100644 drivers/pmdomain/thead/Makefile
+ create mode 100644 drivers/pmdomain/thead/th1520-pm-domains.c
+ create mode 100644 drivers/reset/reset-th1520.c
+ create mode 100644 include/dt-bindings/firmware/thead,th1520-aon.h
+ create mode 100644 include/linux/firmware/thead/thead,th1520-aon.h
+
+-- 
+2.34.1
+
 
