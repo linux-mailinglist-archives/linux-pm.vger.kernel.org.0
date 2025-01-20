@@ -1,138 +1,120 @@
-Return-Path: <linux-pm+bounces-20677-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20678-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1A4E0A16834
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 09:27:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CC88AA16847
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 09:36:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53FCF164793
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:27:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E10DE3A442E
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:36:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2082E192D70;
-	Mon, 20 Jan 2025 08:27:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1111F194C77;
+	Mon, 20 Jan 2025 08:36:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wWlQllzM"
+	dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b="CXYXMxsV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00178001.pphosted.com (mx08-00178001.pphosted.com [91.207.212.93])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9152A192B9D
-	for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 08:27:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2491F149DF0;
+	Mon, 20 Jan 2025 08:36:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=91.207.212.93
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737361649; cv=none; b=EdZ/Xec7ihVgw1hqPv64esioyqLbYLaFcQO3mq6uRNWx1/8ZL9i6M9QIq+EGI2xjGzDtE5PELQhgQXCS+tiSr/j7Fnoc43bo/HLBaOo2Z4iVObiB9Cqv3Nvye0vbVX3UFvuAKwhCMU+DgUkSWWrn7HgXAe9EZrqUv8uOcpnp3qk=
+	t=1737362209; cv=none; b=Oj9pPyXsS/K4RNg3zG/F+JISsRj9vE7NT7O07rLjux29PRRIMVbB9WuDBOe/sgbm2fFQJh/+t++8k6fNepwE87rhegkqycDjeSYVjgaLPoQoh0F60hTzPfr72vBkt+cMbMYUqWrWtfVAktms9HQBitPn7wau5DRFhK7hOWrSwRc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737361649; c=relaxed/simple;
-	bh=k/he5g/Q1W1hnR2AfJUN60Y/8ZYkF98SPQTAJw8PaD8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=oVHgJb5oNg5dLgPWow3JBNiNd31knjYV24W260NUy/Sq3MBqSb1DDaaCvOap+8s3C6/q79Wwb7mBWL+i41INeCIXt3KIGgyO2H5AIo57saIBqaKL+OqV5cjMG2dYuchWBgy5ldE3Np3Nz3ahA6U2zzs0ycfG5PFVYcHNorHVEfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wWlQllzM; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2efded08c79so5721513a91.0
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 00:27:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737361647; x=1737966447; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=txq8rBXOHWYPjqwGosZpWRv2yZ4sfOBXhUvzeOGs/60=;
-        b=wWlQllzMSdUOvseNpzrkmE40zA0qfZleuAWFzdootjrqA9apzdMDS3IauNK2F6uiwL
-         /WUDzYhkfik6qNsHwZ4i3kNzB973a5X1ii6ZRRPOhlYDx6Ux7aEujseZxQyIYvjRg022
-         35zjGb8Gh9l5U7XmYeSh/57Nv21WUH25A9hwafOxjM8CCi4AUXW+/3KjvISZhV9NlY5Z
-         VqrHCnRJBwgRdcHYrYyUdL9K0K8uic0xeSzGGFuNe1gB1nohGsoglW2Ftt9XBSxKcvyr
-         cjtT1D1/mBbaQGZZDxY1yHdzk2//NGJ7exbAsCAwvIGvtzxneg62PS3LsiACv1W8YfrL
-         9xEg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737361647; x=1737966447;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=txq8rBXOHWYPjqwGosZpWRv2yZ4sfOBXhUvzeOGs/60=;
-        b=fXqmPjW+bh42YT7u9a8XChBCSG1yuH7FGOEUMrb2W84KIWyJ5n2WgsTxPlGQDpBymI
-         XtdKldaihbWG8QF2UP9YSdXDt0oi2cKBzP8ZjWAaDxMP7FwxP4EigaQVoIGt9U0cVTSC
-         aRRxfjqO+x0L6VLb654L/KzEAERbMSonW0GJu5HAt5Fjm1GjPvo8sUtPNqYJNFmGzSrq
-         beCaCs20HrRp2MDmLYt+DlxvrHsSApW5WutuX9iwkYOZHT/2dYJlhDuqKtPIJSCtvzGc
-         vBBqeBk0susairIBFqOZzX/ghs8y2gPmADc5BeJpX0c6G7Cgwg/bG1drql7++F21Qwhw
-         lO1w==
-X-Forwarded-Encrypted: i=1; AJvYcCU/aDKaCTLW3MEhZ6Kx6wjdDVrw/OLS8lUW714B1gkoUHTq4hMjq873/eD4kGjO24yCboInI/TUNQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyjt56RfIIgpjxTkFJiA6jmTasJkfK4eonavcpM1lnWgb+yNijZ
-	GFEm3VOoPKWCVU3k0ggftJ4gyUw8PxqsPE7LL7gZsdtkOTCD9rZo6V82X9mVHQ0=
-X-Gm-Gg: ASbGncuufwXpUdf2A9lKy27LfpTo0dyz8oSEiAqXIV273DGmbyOnB9kcdBtLHIG8m9T
-	gqOU2SjgeGZgp0umIUyLT6AGeuQpfJ0GBLyhLdb+E8+3GQ8yAjNb0+//WliS4qeIKZh5hqTJA2W
-	6prMtWxsjd+35zGYE2AJ70Qb7c4XjHFbErmSug3w/tFMYFVgHqwtqrkc2sqCZH+vEVFBBKfzat7
-	GFDQIlehZcSqh2Erx3O+sbwi+SKrN7jzSZDysBoMx6EDTOIpO1o3SxfCcNCi6E91MQb3KDU
-X-Google-Smtp-Source: AGHT+IFVdwonDpHN+adlbLlBEuh//ImaYoIrRKQopNjsfhqMsUTTfq8vo6zTThyW4+jJcm5VfD779A==
-X-Received: by 2002:a17:90b:37ce:b0:2ee:8358:385 with SMTP id 98e67ed59e1d1-2f782c6292emr18197215a91.4.1737361646677;
-        Mon, 20 Jan 2025 00:27:26 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f77619e6a5sm7753797a91.26.2025.01.20.00.27.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 00:27:26 -0800 (PST)
-Date: Mon, 20 Jan 2025 13:57:23 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com,
-	lihuisong@huawei.com, fanghao11@huawei.com
-Subject: Re: [PATCH v2 1/4] cpufreq: Fix re-boost issue after hotplugging a
- cpu
-Message-ID: <20250120082723.am7rxujmdvzz4eky@vireshk-i7>
-References: <20250117101457.1530653-1-zhenglifeng1@huawei.com>
- <20250117101457.1530653-2-zhenglifeng1@huawei.com>
+	s=arc-20240116; t=1737362209; c=relaxed/simple;
+	bh=iPRD2KWoZvbHZFTPohaghCcVvZX1drMbrOqQgWvHJmg=;
+	h=Message-ID:Subject:From:To:CC:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=hfbYR/PCm7VOCHnlanjIvo8yEepwBG4gSJfZS+BjtZaoWkPtNk+mb/REk94u0peEB8ZbKoPvgoXYt3CH8/umT5NLXEm5HyPe21Zqh23ZGf6oBUmDANDrM96iKiJRJlDbcesp7OngPzRbqkdEsK0XYvnLqKhRUOQ8k+/Oljm/Ghk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com; spf=pass smtp.mailfrom=foss.st.com; dkim=pass (2048-bit key) header.d=foss.st.com header.i=@foss.st.com header.b=CXYXMxsV; arc=none smtp.client-ip=91.207.212.93
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=foss.st.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=foss.st.com
+Received: from pps.filterd (m0046660.ppops.net [127.0.0.1])
+	by mx07-00178001.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50K8VeAT027721;
+	Mon, 20 Jan 2025 09:36:03 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=foss.st.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=selector1; bh=
+	iPRD2KWoZvbHZFTPohaghCcVvZX1drMbrOqQgWvHJmg=; b=CXYXMxsVof+3Wz47
+	pE44y6yoapWMYfryXmQmgwWCVrd1MV0ICGv6PCjjCMpIGQttUaApGosIU58zgpIy
+	vfdnQJxX6cGKfRGAp3ZpqnpIE7lZsFFFXHdLnyFbraBYqqeX3+/5oAX1Pbbh1H/g
+	Z1zTGqiGugZk7RQcr0gTqlv93umVokS7DlAb9sFO5hlHNEJSBXw0+ZY+mD6TTi8q
+	wd2UcMwGP0xxMcy1k29Bv3kXT/8msT6uHT/J0WL9iuUCn+QdGxedMk/pXBcccG5m
+	0McvNf2JQUoo1Ch89bbYfGv1cFMej52XR4TunA24staAgIpqHMkvR8bmpyyMAHax
+	nVGU9g==
+Received: from beta.dmz-ap.st.com (beta.dmz-ap.st.com [138.198.100.35])
+	by mx07-00178001.pphosted.com (PPS) with ESMTPS id 449jdf875u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 20 Jan 2025 09:36:03 +0100 (CET)
+Received: from euls16034.sgp.st.com (euls16034.sgp.st.com [10.75.44.20])
+	by beta.dmz-ap.st.com (STMicroelectronics) with ESMTP id 1005640048;
+	Mon, 20 Jan 2025 09:33:58 +0100 (CET)
+Received: from Webmail-eu.st.com (shfdag1node1.st.com [10.75.129.69])
+	by euls16034.sgp.st.com (STMicroelectronics) with ESMTP id 17DC127B404;
+	Mon, 20 Jan 2025 09:32:10 +0100 (CET)
+Received: from [192.168.8.15] (10.48.86.148) by SHFDAG1NODE1.st.com
+ (10.75.129.69) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.37; Mon, 20 Jan
+ 2025 09:32:09 +0100
+Message-ID: <98652dc2f29b172a9caafe55d04cb965768e2a66.camel@foss.st.com>
+Subject: Re: [Linux-stm32] [PATCH v2 06/12] rtc: stm32: Use resource managed
+ API to simplify code
+From: Antonio Borneo <antonio.borneo@foss.st.com>
+To: "Peng Fan (OSS)" <peng.fan@oss.nxp.com>,
+        "Rafael J. Wysocki"
+	<rafael@kernel.org>,
+        Len Brown <len.brown@intel.com>, Pavel Machek
+	<pavel@ucw.cz>,
+        Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        "Dmitry
+ Torokhov" <dmitry.torokhov@gmail.com>,
+        Alexandre Belloni
+	<alexandre.belloni@bootlin.com>,
+        Maxime Coquelin <mcoquelin.stm32@gmail.com>,
+        Alexandre Torgue <alexandre.torgue@foss.st.com>,
+        Linus Walleij
+	<linus.walleij@linaro.org>,
+        Conor Dooley <conor.dooley@microchip.com>,
+        Daire
+ McNamara <daire.mcnamara@microchip.com>
+CC: <linux-rtc@vger.kernel.org>, Peng Fan <peng.fan@nxp.com>,
+        <linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>, <linux-input@vger.kernel.org>,
+        <linux-riscv@lists.infradead.org>,
+        <linux-stm32@st-md-mailman.stormreply.com>,
+        <linux-arm-kernel@lists.infradead.org>
+Date: Mon, 20 Jan 2025 09:32:07 +0100
+In-Reply-To: <20250103-wake_irq-v2-6-e3aeff5e9966@nxp.com>
+References: <20250103-wake_irq-v2-0-e3aeff5e9966@nxp.com>
+	 <20250103-wake_irq-v2-6-e3aeff5e9966@nxp.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.48.4 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250117101457.1530653-2-zhenglifeng1@huawei.com>
+X-ClientProxiedBy: EQNCAS1NODE3.st.com (10.75.129.80) To SHFDAG1NODE1.st.com
+ (10.75.129.69)
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-20_01,2025-01-20_02,2024-11-22_01
 
-Hi,
+On Fri, 2025-01-03 at 16:41 +0800, Peng Fan (OSS) wrote:
+> From: Peng Fan <peng.fan@nxp.com>
+>=20
+> Use devm_pm_set_wake_irq and devm_device_init_wakeup to cleanup the
+> error handling code and 'driver.remove()' hook.
+>=20
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> ---
 
-I am bit confused by the sequence of events here and need some
-clarification. Lets assume that CPU can go from 1 GHz to 1.5 GHz
-without boost enabled and with boost it can go to 2 GHz.
+Reviewed-by: Antonio Borneo <antonio.borneo@foss.st.com>
 
-On 17-01-25, 18:14, Lifeng Zheng wrote:
-> It turns out that cpuX will stay on the base frequency after performing
-> these operations:
-> 
-> 1. boost all cpus: echo 1 > /sys/devices/system/cpu/cpufreq/boost
-
-Boost enabled here, max_freq_req = 2 GHz.
-
-> 2. offline the cpu: echo 0 > /sys/devices/system/cpu/cpuX/online
-> 
-> 3. deboost all cpus: echo 0 > /sys/devices/system/cpu/cpufreq/boost
-> 
-> 4. online the cpu: echo 1 > /sys/devices/system/cpu/cpuX/online
-
-Boost is disabled currently here, but max_freq_req = 2 GHz, which is
-incorrect and the current change you are proposing fixes it I think.
-But it is not what you are claiming to fix.
-
-> 5. boost all cpus again: echo 1 > /sys/devices/system/cpu/cpufreq/boost
-
-Boost enabled again here, and max_freq_req = 2 GHz is the correct
-value.
-
-So the CPU doesn't stay at base frequency here, but 2 GHz only.
-
-> This is because max_freq_req of the policy is not updated during the online
-> process, and the value of max_freq_req before the last offline is retained.
-
-which was 2 GHz in your example.
-
-> When the CPU is boosted again, freq_qos_update_request() will do nothing
-> because the old value is the same as the new one. This causes the CPU stay
-> on the base frequency. Update max_freq_req  in cpufreq_online() will solve
-> this problem.
-
--- 
-viresh
+Thanks,
+Antonio
 
