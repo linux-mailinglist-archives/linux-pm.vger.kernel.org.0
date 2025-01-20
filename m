@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-20665-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20666-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9613DA166F7
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:11:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7415AA166FD
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:11:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D93D91699C8
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 07:11:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AE3FB16937F
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 07:11:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AC7118C34B;
-	Mon, 20 Jan 2025 07:11:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2144618DF89;
+	Mon, 20 Jan 2025 07:11:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vQ17/4Jk"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="giERC5za"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42E661442E8;
-	Mon, 20 Jan 2025 07:11:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5790189520;
+	Mon, 20 Jan 2025 07:11:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737357072; cv=none; b=Va3GPdi/8Mh2JSAAVZVDTKxpcIvNzdgWO5A1FzoDtXqFVhKU8cJFuLiy2jCLiLL+wB0TOiqkNFJw6xG2fGiQ7blaZYaxz8/+rKs2nALbjhdbz4V+XagxXvSrKdjUWBAXIyH80hSNCXQybM3KK3tZBTh6uvFck5To+VajxHgytHs=
+	t=1737357088; cv=none; b=MepB3jgc7sMwp4x+/XYYHEEehNWblCzEcl/jEoC/IkHWlJYVUlVFZS0ua80M03C+lW3O3h74MnriirC4F6zmFNIwN7frDrwp+cRmN97SX2/hoEpaSt1Vq5LGpY/XFN5sBiIo1f8eRzoxG8i/MqtrRq7Qh0ijANce6wmd7MuxGTU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737357072; c=relaxed/simple;
-	bh=38I2TwMCqqilG2XBKnBpjOcjQWKVr3qLbHU+u/xh1nI=;
+	s=arc-20240116; t=1737357088; c=relaxed/simple;
+	bh=s0JdIP9vTBPTjueayczoG8sLEk1ZvCpf2Eqt1qnAMPc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Na9JBGdNBMBeuCoo2dEMXTZzTE7/jqYMC/a7pxQxC+ussZ1qrnQIu+YKVksQyiSHNQlWMavUdvemqXbSGPFlG8ic3fpllAU2L5qvHWIa4ax/nKU8WqBmGKcQVOB5FOcLLiNrjzGN3XlL6sjUd8qrUlhiWY8IBp5KxHz7BqrAZz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vQ17/4Jk; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 77775C4CEDD;
-	Mon, 20 Jan 2025 07:11:07 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=OiCtKbAscholoPU0YW7C3Pu/0/jggnnbs+bWj0+iELEsVmR4wqolqziIDAOuFTsbYao59kO3qHrbSEwL/LgLbY+d/2yz+RApf1uih81FJbjHlaSfzcLRdwlzR/Y8dF6VHSGgcqdJ6gW4QZRL+fGs9fblq09eHxx4jRMflHzkqhk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=giERC5za; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 129CFC4CEDD;
+	Mon, 20 Jan 2025 07:11:22 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737357071;
-	bh=38I2TwMCqqilG2XBKnBpjOcjQWKVr3qLbHU+u/xh1nI=;
+	s=k20201202; t=1737357087;
+	bh=s0JdIP9vTBPTjueayczoG8sLEk1ZvCpf2Eqt1qnAMPc=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=vQ17/4JkZW1n+aZJxDL9bez/mLUb3e7LcCa9WpPeXtjVQ/BzrMNvPPhlOLwf19DGe
-	 8WN3NZ2JW45kOsk/+hweaz4lDKZB0Q3WQjTnOF4tDk0bCYW2J0QJze7cBcf7nHQQbx
-	 dHd4zLA0ialsOF52/gT8IGHGLd+W/TWiKwlrzwnqdYmhHwsUnQoWTEwqGSexb4Hd0P
-	 POE75xg11qIg65tFL2oABhZVLUaVet2DIh1tKiyBO8iOoFjUPS+XHm74HF+3BnG4qd
-	 qqcFEiyNUhNN3+20AgJ7Q4U/cWmEUj+bXHBwOUKreFJdiN14MG6VCI9bKByG4VL1dC
-	 C7J9KnW1/yotA==
-Date: Mon, 20 Jan 2025 07:11:05 +0000
+	b=giERC5za0y3GJclwdWnPaT0atKy4t962Z+JQ8PiK2SWjWALwqXeeZmbAuAg0WUuIe
+	 5Pu4Wd52inTbp2TnCpk0Bs5k2lYdQFAOrFVPsvOp5KUm0rppNIwxe6nMYC8RoH9Rmc
+	 WaefSjnfrObkkPXP18R6EYfrE0d3YZ/aHOKvWKMRWI6EJU+JKZD18irDuTfI65q5HT
+	 lgXQLiBet+/yxR2yRbaqzTznUFjm4NvimmPWlF33HrAYTFe8TVKX1T1l3n+nwYfBhD
+	 p5SzjxPqoYGk/EaBswJcaFCtFD1e94UX5nNUPVR8QeyS0739flMQQMn61OdLo35S5o
+	 gz92Beu/mGHdw==
+Date: Mon, 20 Jan 2025 07:11:20 +0000
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Ahmad Fatoum <a.fatoum@pengutronix.de>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -61,11 +61,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-security-module@vger.kernel.org,
 	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: Re: [PATCH v2 03/12] docs: thermal: sync hardware protection doc
- with code
-Message-ID: <Z433CXhyYHqYEn4N@google.com>
+Subject: Re: [PATCH v2 04/12] reboot: describe do_kernel_restart's cmd
+ argument in kernel-doc
+Message-ID: <Z433GGEmEuuaDE7G@google.com>
 References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
- <20250113-hw_protection-reboot-v2-3-161d3fc734f0@pengutronix.de>
+ <20250113-hw_protection-reboot-v2-4-161d3fc734f0@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,24 +74,15 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250113-hw_protection-reboot-v2-3-161d3fc734f0@pengutronix.de>
+In-Reply-To: <20250113-hw_protection-reboot-v2-4-161d3fc734f0@pengutronix.de>
 
-On Mon, Jan 13, 2025 at 05:25:28PM +0100, Ahmad Fatoum wrote:
-> Originally, the thermal framework's only hardware protection action was
-> to trigger a shutdown. This has been changed a little over a year ago to
-> also support rebooting as alternative hardware protection action.
+On Mon, Jan 13, 2025 at 05:25:29PM +0100, Ahmad Fatoum wrote:
+> A W=1 build rightfully complains about the function's kernel-doc
+> being incomplete.
 > 
-> Update the documentation to reflect this.
+> Describe its single parameter to fix this.
 > 
-> Fixes: 62e79e38b257 ("thermal/thermal_of: Allow rebooting after critical temp")
 > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-With a possible typo,
 Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-
-> +At first, the kernel will attempt an orderly power-off or reboot, but
-> +accepts a delay after which it proceeds to do a forced power-off or
-> +reboot, respectively. If this fails, ``emergency restart()`` is invoked
-                                                   ^
-s/ /_/?
 
