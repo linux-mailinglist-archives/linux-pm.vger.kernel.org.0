@@ -1,116 +1,116 @@
-Return-Path: <linux-pm+bounces-20684-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20685-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8954A16A7A
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 11:10:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 09138A16AC1
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 11:29:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 260C316104F
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 10:10:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59103166668
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 10:29:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9BC01AF0C2;
-	Mon, 20 Jan 2025 10:10:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EF6C1B414F;
+	Mon, 20 Jan 2025 10:29:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hro/JAcX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C1C91AF0B0;
-	Mon, 20 Jan 2025 10:09:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CEB418FDC8;
+	Mon, 20 Jan 2025 10:29:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737367800; cv=none; b=HIf1JX52cYa24Jt4jWorb0Z+40Kd75SC/nynD2pKEIm4KSPAV6YGMFb9AtAXt1ykWCArS+f73La4YoMv8OGYF4VLn9d2Koj/c01QQxm986V+MImzp0Rlrxx/crhGNuhJN1OL4PdR12yN0yAneYOB8ferl4ZK1iCu5wOLoe8ytHM=
+	t=1737368980; cv=none; b=jsFCy/BaT52dhiKk5LNG4S2kIPpouk40GZpB+gtYqmpWk2epbbw91JiLRyEfERmMxMdVYc8F3bG/WzEF9u8At+mCieUYgPweSFf2RytssYTgpELEAgkO/L+8EjV/8HPGIhpsZNoLd8D54Hl0g2RX/Rq7+hs3ANcO2QU/r/99exc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737367800; c=relaxed/simple;
-	bh=UxOQKa4WkPcS1zv5zpAbRahS3K3XYRt4gKb0MtALyIE=;
-	h=Message-ID:Date:MIME-Version:To:Cc:From:Subject:Content-Type; b=DcymbCVbEC8hWhSX9E8KImbzfFubRLSEmYISYQIyPXft4EnY6BvQpoW0WM4btUnIBzgEf/bG3lg6XsvyJVtED+kAsYYSxOaVCmbuT6+q3Z+f6IvqH0fy7z5yRMyvCrq3Uoec9dXCiIFC/54rs/CEA5FfLNUEZGvAJL1ZAjJaFw8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 047321063;
-	Mon, 20 Jan 2025 02:10:26 -0800 (PST)
-Received: from [10.57.34.174] (unknown [10.57.34.174])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9CC8F3F66E;
-	Mon, 20 Jan 2025 02:09:54 -0800 (PST)
-Message-ID: <5a8deed4-7764-4729-a9d4-9520c25fa7e8@arm.com>
-Date: Mon, 20 Jan 2025 10:09:46 +0000
+	s=arc-20240116; t=1737368980; c=relaxed/simple;
+	bh=5+KuJyvD0Cc+bCHcr9Ef9KT8l8mKwIGskoiH678TfHk=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fHyXlH/KSuOcECN/M+mqC/38DpzmwhOd+jIDNv8R/HFu4XYDaNlm48Z8p5kOkREwkDqFlGiKsFUo2UMGCgnTmlXePBawdwscdX3SAZOq3MrfzUY3QNY4EwuS3gNau4XlCHofv5QdgWTT3fys22NLa8yGZERJVoblFCBhgvy6lTc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hro/JAcX; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A9DEC4CEDD;
+	Mon, 20 Jan 2025 10:29:39 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737368979;
+	bh=5+KuJyvD0Cc+bCHcr9Ef9KT8l8mKwIGskoiH678TfHk=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=Hro/JAcXZ0b8TgiIvv+8tEIDQEE9Kqgy3/W9FyrH5TnLwxwaJMuWLvi9hOmvTZ4qQ
+	 /qaBoN75okTuDGxiGXKZx71yuoiAWJIjU/7Y8t/ttucGzfRgwIXJ2oLSpqP0d1b5ey
+	 QmME3Bz1fnM2HoufpTuX9CWGyGJfPyWas+ocqRDhhGmEfvBDbWbgjXaMplEwPrOOl0
+	 s0NbNrF9cCyLCZJ0pR/Ee8RqwEiB1W7Phh+1AAAfu9WXM6Nwwkdui78X5yhOkxHJX/
+	 RBvjIIQM4qPcl6baRqV01CfqTzv0ZF06q2N+0jSoMN5GhxdZMBuWQrtu/7sHOd2Cjx
+	 uhP1tE4xnMvJg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tZp2L-000000007D4-39CR;
+	Mon, 20 Jan 2025 11:29:42 +0100
+Date: Mon, 20 Jan 2025 11:29:41 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Bjorn Helgaas <helgaas@kernel.org>
+Cc: Krishna Chaitanya Chundru <quic_krichai@quicinc.com>, rafael@kernel.org,
+	ulf.hansson@linaro.org, Kevin Xie <kevin.xie@starfivetech.com>,
+	Lorenzo Pieralisi <lpieralisi@kernel.org>,
+	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
+	Markus.Elfring@web.de, quic_mrana@quicinc.com,
+	m.szyprowski@samsung.com, linux-pm@vger.kernel.org,
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
+	regressions@lists.linux.dev
+Subject: Re: [PATCH v7 2/2] PCI: Enable runtime pm of the host bridge
+Message-ID: <Z44llTKsKfbEcnnI@hovoldconsulting.com>
+References: <20250113162549.a2y7dlwnsfetryyw@thinkpad>
+ <20250114211653.GA487608@bhelgaas>
+ <20250119152940.6yum3xnrvqx2xjme@thinkpad>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Content-Language: en-US
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Cc: Vincent Guittot <vincent.guittot@linaro.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>,
- Mel Gorman <mgorman@suse.de>, Valentin Schneider <vschneid@redhat.com>,
- linux-pm <linux-pm@vger.kernel.org>
-From: Christian Loehle <christian.loehle@arm.com>
-Subject: [PATCH] cpufreq/schedutil: Only bind threads if needed
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250119152940.6yum3xnrvqx2xjme@thinkpad>
 
-Remove the unconditional binding of sugov kthreads to the affected CPUs
-if the cpufreq driver indicates that updates can happen from any CPU.
-This allows userspace to set affinities to either save power (waking up
-bigger CPUs on HMP can be expensive) or increasing performance (by
-letting the utilized CPUs run without preemption of the sugov kthread).
+On Sun, Jan 19, 2025 at 08:59:40PM +0530, Manivannan Sadhasivam wrote:
+> On Tue, Jan 14, 2025 at 03:16:53PM -0600, Bjorn Helgaas wrote:
+> > On Mon, Jan 13, 2025 at 09:55:49PM +0530, Manivannan Sadhasivam wrote:
+> > > On Tue, Jan 07, 2025 at 03:27:59PM +0100, Johan Hovold wrote:
 
-Signed-off-by: Christian Loehle <christian.loehle@arm.com>
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-Acked-by: Vincent Guittot <vincent.guittot@linaro.org>
-Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-Acked-by: Juri Lelli <juri.lelli@redhat.com>
----
-- RESEND: pick up tags
-- v2: Add comment for the dl_task_check_affinity return (Juri)
-v2: https://lore.kernel.org/lkml/a4a70646-98a4-4b85-955e-62d66ba68927@arm.com/
-v1: https://lore.kernel.org/lkml/480f2140-ea59-4e1d-a68d-18cbcec10941@arm.com/
+> > > > > > I just noticed that this change in 6.13-rc1 is causing the
+> > > > > > following warning on resume from suspend on machines like the
+> > > > > > Lenovo ThinkPad X13s:
 
- kernel/sched/cpufreq_schedutil.c | 6 +++++-
- kernel/sched/syscalls.c          | 7 +++++++
- 2 files changed, 12 insertions(+), 1 deletion(-)
+> > > > > > 	pci0004:00: pcie4: Enabling runtime PM for inactive device with active children
 
-diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_schedutil.c
-index 28c77904ea74..a81444501158 100644
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -691,7 +691,11 @@ static int sugov_kthread_create(struct sugov_policy *sg_policy)
- 	}
- 
- 	sg_policy->thread = thread;
--	kthread_bind_mask(thread, policy->related_cpus);
-+	if (policy->dvfs_possible_from_any_cpu)
-+		set_cpus_allowed_ptr(thread, policy->related_cpus);
-+	else
-+		kthread_bind_mask(thread, policy->related_cpus);
-+
- 	init_irq_work(&sg_policy->irq_work, sugov_irq_work);
- 	mutex_init(&sg_policy->work_lock);
- 
-diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
-index ff0e5ab4e37c..8230358d2b90 100644
---- a/kernel/sched/syscalls.c
-+++ b/kernel/sched/syscalls.c
-@@ -1139,6 +1139,13 @@ int dl_task_check_affinity(struct task_struct *p, const struct cpumask *mask)
- 	if (!task_has_dl_policy(p) || !dl_bandwidth_enabled())
- 		return 0;
- 
-+	/*
-+	 * The special/sugov task isn't part of regular bandwidth/admission
-+	 * control so let userspace change affinities.
-+	 */
-+	if (dl_entity_is_special(&p->dl))
-+		return 0;
-+
- 	/*
- 	 * Since bandwidth control happens on root_domain basis,
- 	 * if admission test is enabled, we only admit -deadline
--- 
-2.34.1
+> > > > > > which may have unpopulated ports (this laptop SKU does not
+> > > > > > have a modem).
+
+> > What's the plan for this?  Does anybody have a proposal?
+> > 
+> 
+> TBH, I don't know how to fix this issue in a proper way. I need inputs from
+> Rafael/Ulf.
+> 
+> > IIUC there is no functional issue, but the new warning must be fixed,
+> > and it would sure be nice to do it before v6.13.  If there *is* a
+> > functional problem, we need to consider a revert ASAP.
+> > 
+> 
+> There is no functional problem that I'm aware of, so revert is not warranted.
+
+I'd argue for reverting the offending commit as that is the only way to
+make sure that the new warning is ever addressed.
+
+Vendors unfortunately do not a have a good track record of following up
+and fixing issues like this.
+
+Judging from a quick look at the code (and the commit message of the
+patch in question), no host controller driver depends on the commit in
+question as the ones that do enable runtime PM just resume
+unconditionally at probe() currently (i.e. effectively ignores the state
+of their children).
+
+Johan
 
