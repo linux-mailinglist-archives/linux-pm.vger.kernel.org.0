@@ -1,56 +1,56 @@
-Return-Path: <linux-pm+bounces-20699-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20700-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 400E4A1701C
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 17:25:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58996A17024
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 17:26:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 60118168AC6
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 16:25:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B952F3A52E7
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 16:26:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F7781E9B3D;
-	Mon, 20 Jan 2025 16:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47A9F1E9B19;
+	Mon, 20 Jan 2025 16:26:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P/MM51JF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GWPFKJD/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26B5719BA6;
-	Mon, 20 Jan 2025 16:25:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D5C91E98E6;
+	Mon, 20 Jan 2025 16:26:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737390304; cv=none; b=MeFURHp5WGvizsfEGaiAJPX/Nprvsfx56lqumZazptqQtcYO86bRcpyyZcZewlp2R8ZbaVG4HNprS0O6q8VT+sH1XF/LixrdNni0RpfdBa/w65byZRasx6Q4nO8/naqgZjPylNbdYSl7a9rguqJzFfZNOTuaCDoIAw7xDozNcEQ=
+	t=1737390394; cv=none; b=gp1yXX1jhbPnFVrX4IbpjhTShGEUS+mLXp3txuQNWj3zbkpQC0ozik1VUR0e8RaQ3uuqvHuFQvVeAr+6PuWUC8slDkCB0kxL9N4dDT7x2NwArbRnus6blszNxtFz0qUJw5oi6PsN0MjVVaJsxmKOX3H/yzUmXq08zrKTgKuyHsc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737390304; c=relaxed/simple;
-	bh=7ZzqyichqoiwkTcfnPJ4A94FUOoESHk4egTLW0r3VGQ=;
+	s=arc-20240116; t=1737390394; c=relaxed/simple;
+	bh=ETbJq8dU4q87jQt1++VBArfsan8YoscgZTS2ZEDmBf4=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=F1EhqTIymaPHlKQtwIlHODWXpRZxjqJBytpEnmLjcN+fsfECIYj7ETcIH4DG/iC53F6MC2EI8oruLpd3cBfmpqdN2IWBRrqrPEagvku2yaMmdfvd+VJ4U3SMAJm4QScI4uDwRQEFDe7z0yTZkkX5srRWeRnzyNQ8bx/U3ZAu5qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P/MM51JF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 929BDC4CEE3;
-	Mon, 20 Jan 2025 16:25:03 +0000 (UTC)
+	 To:Cc:Content-Type; b=GQjSMcRyC7jJ4q4kuQPH6W3pC/Gev7NtWD7LucYDkB+7jtDcF4C+CeTg+ZB1c+LfN2AdrJ8biWED7Z1AZY+WCc+hFzUFDo7FZTl6LKsc5O1X81vuYzR89yb1kgqcCyK8/B6gwr2GaQpSn++m4eKvFMb2sf7CsOKh9LnIr7HutJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GWPFKJD/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8A0FFC4CEDD;
+	Mon, 20 Jan 2025 16:26:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737390303;
-	bh=7ZzqyichqoiwkTcfnPJ4A94FUOoESHk4egTLW0r3VGQ=;
+	s=k20201202; t=1737390393;
+	bh=ETbJq8dU4q87jQt1++VBArfsan8YoscgZTS2ZEDmBf4=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=P/MM51JFchF5ZJTkyzTCEBxZk1SoOpUWlAQP73lO/4+7F3SnCWeSKDrU7707Mg0e2
-	 C3bK7wrB7VJEaLmKrlqHM+hpSUWfic2iMzD7QvIxR0qCz3GNbViTncEkeRV2qzglKq
-	 yEoyXSdv/nNtcTansbXQTwMQFKyp96mx7qhvUN2fstOHr+Tjped68lNp3N9hTyWvt0
-	 dyCJi3GSQxJzSvtZsJKlMQDq6xWah5yRtNWx7ovWdnR0EAsa8dB6agVdyBM2uQ9Y3/
-	 kdx+Iw9Dp7y7PPbCeU32WpWqoop+TEGQPx/96cJuLDM7U73X99U/6KHlzGpqCQgZf5
-	 8E3y+LN+H8wNg==
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3eb9ba53f90so1231518b6e.1;
-        Mon, 20 Jan 2025 08:25:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUg15TK2wTKa6VEGAnQ5PLgoe2jfIezqwTQnSl2Dibn5PVUr/gNFJSHF0OQhkMcXxIYduucmyc8pYo+6oQ=@vger.kernel.org, AJvYcCWKJEcpW+MmHTmnc072wZ9iNhYua9HvuMpofUp9ZHTn+QDsC9vSLcxfvTH0gtf/tUzqL0t3Sh/yzjo=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy9Bwr5z1QeB3RUeNo1JA3o8j4vaYmb5fy3yfZcbAE5/mO6IwyU
-	Q8skP6LgY6ClTw2C6UzWbr9QXEug2EUDesUQhBVybVsTwJygWPeUXxWZirndha3kTCAKiBYTCf4
-	dBjoMe59isuMonZ/zEfyTmLvNPyA=
-X-Google-Smtp-Source: AGHT+IH8Wq4tbKkaILyw/NKYz6CriUgdQ8M9eISBK+wqgvAvFDVjbtFER4NItYT11Zj1TcZGGS/qCfjuFMTw1pFhH5U=
-X-Received: by 2002:a05:6808:8413:b0:3ea:582a:f68 with SMTP id
- 5614622812f47-3f19fd28c47mr6802049b6e.26.1737390302766; Mon, 20 Jan 2025
- 08:25:02 -0800 (PST)
+	b=GWPFKJD/WFHwtxb5GL0IbqWmKqdsocC0jAZz+AK0UTL1Jej0wKxapkgLKWHWV4W9F
+	 HYa6tuEZmwlOExPf0IZLcSaYM4GVs5vfK0s2n2IHoxDHHf0b7sI6KfzlFaLrTil4jM
+	 EbMLgDwevBK89NlRBwDhBPq5LO+V7xf0j53+MbRUeXRsxiMA2jL4PKqxfQUXiEgajw
+	 zkPROsW7q+toXOgOoAEJaV0i+Rf1DiEeEzopN5KIOq6HR1PARZ80mKeg9yw9GaB9MY
+	 V14vHVF4d3pYJUqILYoBewIgkXflGDkLCmANdcBOdULRNOy7xtxwLnn9z45M9mNOMw
+	 4k+WAxIvrzI/g==
+Received: by mail-ot1-f44.google.com with SMTP id 46e09a7af769-723442fd88aso1377579a34.3;
+        Mon, 20 Jan 2025 08:26:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW40nBzHE5TD76FKqXEu2N6u6q4MIsPtnPDpnpzTJqu2qo0NXXFlE2XRwz8Wvwd9hEwhiScQz2aQVz0+Q0=@vger.kernel.org, AJvYcCXnqB74fH0eAx4Z3ow6PApjEGSG4P2BHEm7QPokvKkeO0CBpznOIRBTlmv9ggtP6nMsQTnMQI+n1qM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBTFuRLZXTR/9OImvrz/jFMV7gj1pygzcwu9VWEhzGODwca6qN
+	XkXTs3PtWJ01CDKTaCropoe+7pfaFKSnH3MygFQWNKMA4B1j0bMfydX5VNcDORL06UycMsWMPZE
+	b1YHxsynS/dzMCOuHQpZYnsTF4bc=
+X-Google-Smtp-Source: AGHT+IHNGfeESwwph0ktCv0j06GjXDqKrzDtbQzM4AYs1qoRfxXEUFwcmg76bhI+YrJ6/zov548nr9DeKmrOH9GT4OU=
+X-Received: by 2002:a05:6830:610e:b0:718:615:462d with SMTP id
+ 46e09a7af769-7249da8fb2cmr8783593a34.13.1737390392741; Mon, 20 Jan 2025
+ 08:26:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -58,470 +58,570 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <6116275.lOV4Wx5bFT@rjwysocki.net> <d095149c-fb76-40e8-a459-05e4d2e50cf5@arm.com>
-In-Reply-To: <d095149c-fb76-40e8-a459-05e4d2e50cf5@arm.com>
+ <2007eace0fa9f591917cdd228c2cb66f045480d0.camel@linux.ibm.com>
+In-Reply-To: <2007eace0fa9f591917cdd228c2cb66f045480d0.camel@linux.ibm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 20 Jan 2025 17:24:47 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0guCNRFcU1Xa6ekpWxguKmUcHNvfSdY2Wph13mFPMcs0w@mail.gmail.com>
-X-Gm-Features: AbW1kvYmzLOmWpyqNdkOp4fq706ecIBXvdPkzt7pl3Fx4LYap4e-_z2C8SznBeY
-Message-ID: <CAJZ5v0guCNRFcU1Xa6ekpWxguKmUcHNvfSdY2Wph13mFPMcs0w@mail.gmail.com>
+Date: Mon, 20 Jan 2025 17:26:17 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g54OGuUJYazM4yhn=Y0WM0TegYJnxZwoTcVgGD7mpXug@mail.gmail.com>
+X-Gm-Features: AbW1kvaDT7V1QSwrV_Hf7js2LBofrRasHm1_t2IjPms30dzzF1asnKEy4Ab6LsU
+Message-ID: <CAJZ5v0g54OGuUJYazM4yhn=Y0WM0TegYJnxZwoTcVgGD7mpXug@mail.gmail.com>
 Subject: Re: [PATCH v1 0/9] cpuidle: teo: Cleanups and very frequent wakeups
  handling update
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	Aboorva Devarajan <aboorvad@linux.ibm.com>, LKML <linux-kernel@vger.kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+To: Aboorva Devarajan <aboorvad@linux.ibm.com>
+Cc: Christian Loehle <christian.loehle@arm.com>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, Linux PM <linux-pm@vger.kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 15, 2025 at 3:52=E2=80=AFPM Christian Loehle
-<christian.loehle@arm.com> wrote:
+On Mon, Jan 20, 2025 at 9:17=E2=80=AFAM Aboorva Devarajan
+<aboorvad@linux.ibm.com> wrote:
 >
-> On 1/13/25 18:32, Rafael J. Wysocki wrote:
-> > Hi Everyone,
+> On Wed, 2025-01-15 at 14:52 +0000, Christian Loehle wrote:
+> > On 1/13/25 18:32, Rafael J. Wysocki wrote:
+> > > Hi Everyone,
+> > >
+> > > This supersedes
+> > >
+> > > https://lore.kernel.org/linux-pm/4953183.GXAFRqVoOG@rjwysocki.net/
+> > >
+> > > but because the majority of patches in it are new, I've decided to co=
+unt
+> > > version numbers back from 1.
+> > >
+> > > This addresses a relatively recently added inconsistency in behavior =
+of the teo
+> > > governor regarding the handling of very frequent wakeups handling (pa=
+tch [7/9])
+> > > and makes some other changes that may be regarded as cleanups.
+> > >
+> > > Please review.
 > >
-> > This supersedes
+> > Hi Rafael,
+> > that looks promising. I'll review the individual patches in detail now,=
+ but
+> > I let a few tests run overnight and can report that there's no signific=
+ant
+> > behaviour change with the series on an arm64 (no polling state, rk3399)=
+, which
+> > is my expected result.
 > >
-> > https://lore.kernel.org/linux-pm/4953183.GXAFRqVoOG@rjwysocki.net/
-> >
-> > but because the majority of patches in it are new, I've decided to coun=
-t
-> > version numbers back from 1.
-> >
-> > This addresses a relatively recently added inconsistency in behavior of=
- the teo
-> > governor regarding the handling of very frequent wakeups handling (patc=
-h [7/9])
-> > and makes some other changes that may be regarded as cleanups.
-> >
-> > Please review.
+> > I'll get something running on a system with a polling state as well.
+> > (I don't have a POWER system, so that will just be x86, adding Aboorva.=
+)
 >
-> Hi Rafael,
-> that looks promising. I'll review the individual patches in detail now, b=
-ut
-> I let a few tests run overnight and can report that there's no significan=
-t
-> behaviour change with the series on an arm64 (no polling state, rk3399), =
-which
-> is my expected result.
 >
-> I'll get something running on a system with a polling state as well.
-> (I don't have a POWER system, so that will just be x86, adding Aboorva.)
+> Christian,
 >
-> Tested-by: Christian Loehle <christian.loehle@arm.com>
-> for the entire series
+> Thanks for adding me to the thread.
+>
+> Rafael,
+>
+> I did some tests with the patch on a Pseries Power10 system:
+>
+> Here are the system details:
+>
+> -------------------------------------------------------------------------=
+-------
+> Architecture:                         ppc64le
+> Byte Order:                           Little Endian
+> CPU(s):                               48
+> On-line CPU(s) list:                  0-47
+> Model name:                           POWER10 (architected), altivec supp=
+orted
+> Model:                                2.0 (pvr 0080 0200)
+> Thread(s) per core:                   8
+> Core(s) per socket:                   6
+> Socket(s):                            1
+> Physical sockets:                     8
+> Physical chips:                       1
+> Physical cores/chip:                  10
+>
+> -------------------------------------------------------------------------=
+-------
+> # cpupower idle-info
+> CPUidle driver: pseries_idle
+> CPUidle governor: menu
+> analyzing CPU 5:
+>
+> Number of idle states: 2
+> Available idle states: snooze Shared Cede
+> snooze:
+> Flags/Description: snooze
+> Latency: 0
+> Usage: 1411724
+> Duration: 27481504
+> Shared Cede:
+> Flags/Description: Shared Cede
+> Latency: 10
+> Usage: 326573
+> Duration: 31098864616
+> -------------------------------------------------------------------------=
+-------
+>
+> How to infer the results:
+>
+> Above Diff (%) and Below Diff (%) represent the number of cpuidle misses,
+> indicating how frequently the selected cpuidle state was either too deep =
+or
+> too shallow. So, these values should not be too high.
+> -------------------------------------------------------------------------=
+-------
+>
+> The below test is done using a predictable timer and non-timer benchmark =
+[1]:
+>
+> -------------------------------------------------------------------------=
+-------
+> Menu Governor:
+> -------------------------------------------------------------------------=
+-------
+>
+> With pipe wakeup (non-timer):
+>
+> -------------------------------------------------------------------------=
+-------------------------------
+>    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
+tal Below Diff  Below Diff (%)
+> -------------------------------------------------------------------------=
+-------------------------------
+> 0           5.980           1656304                 2        0.000121    =
+             0        0.000000
+> 1          10.959            901972              1954        0.216636    =
+             0        0.000000
+> -------------------------------------------------------------------------=
+-------------------------------
+> 2          15.726            243971            237112       97.188600    =
+             0        0.000000
+> 3          20.813            232069            227258       97.926910    =
+             0        0.000000
+> 4          30.896            209884            206492       98.383869    =
+             0        0.000000
+> 5          40.991            216704            213642       98.587013    =
+             0        0.000000
+> 6          51.002            195632            192963       98.635704    =
+             0        0.000000
+> 7          61.014            163726            161506       98.644076    =
+             0        0.000000
+> 8          71.006            140739            138809       98.628667    =
+             0        0.000000
+> 9          81.008            123386            120725       97.843353    =
+             0        0.000000
+> 10        101.020             98974             81235       82.077111    =
+             0        0.000000
+> -------------------------------------------------------------------------=
+-------------------------------
+> 11        111.044             90018              1513        1.680775    =
+            12        0.013331
+> 12        121.015             82704               189        0.228526    =
+            77        0.093103
+> 13        131.028             76534               272        0.355398    =
+           321        0.419421
+> 14        141.008             71610               698        0.974724    =
+           693        0.967742
+> 15        151.021             66869               666        0.995977    =
+           656        0.981023
+> 16        161.027             62709               611        0.974342    =
+           605        0.964774
+> 17        171.033             59063               593        1.004013    =
+           593        1.004013
+> 18        181.019             55819               571        1.022949    =
+           541        0.969204
+> 19        191.016             52998               641        1.209480    =
+           628        1.184950
+> 20        201.017             50353               551        1.094274    =
+           501        0.994975
+> 21        251.054             40535               289        0.712964    =
+           398        0.981868
+> 22        301.037             33966               252        0.741918    =
+           330        0.971560
+> 23        351.038             29279               216        0.737730    =
+           294        1.004133
+> 24        401.047             25765               190        0.737435    =
+           262        1.016883
+> 25        451.060             23021               185        0.803614    =
+           187        0.812302
+> 26        501.049             20831               150        0.720081    =
+           216        1.036916
+> 27       1001.076             10951                77        0.703132    =
+           126        1.150580
+>
+> With timer wakeup:
+>
+> -------------------------------------------------------------------------=
+-------------------------------
+>    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
+tal Below Diff  Below Diff (%)
+> -------------------------------------------------------------------------=
+-------------------------------
+> 0           7.590           1310772                 0        0.000000    =
+             0        0.000000
+> 1          12.631            789377               780        0.098812    =
+             0        0.000000
+> 2          21.791            458001             52321       11.423774    =
+             0        0.000000
+> 3          22.648            440752                36        0.008168    =
+             0        0.000000
+> 4          32.644            305983                 0        0.000000    =
+             0        0.000000
+> 5          42.646            234305                 0        0.000000    =
+             0        0.000000
+> 6          52.647            189858                 2        0.001053    =
+             0        0.000000
+> 7          62.649            159561                10        0.006267    =
+             0        0.000000
+> 8          72.644            137643                 5        0.003633    =
+             1        0.000727
+> 9          82.666            120963                 5        0.004133    =
+             0        0.000000
+> 10        102.654             97442                 3        0.003079    =
+           610        0.626013
+> 11        145.805             69937               441        0.630568    =
+          1345        1.923159
+> 12        156.057             64511                75        0.116259    =
+           439        0.680504
+> 13        166.047             60765               215        0.353822    =
+           534        0.878795
+> 14        175.894             57564               178        0.309221    =
+           687        1.193454
+> 15        185.933             54471               255        0.468139    =
+           638        1.171265
+> 16        195.975             51403                98        0.190650    =
+           212        0.412427
+> 17        206.062             49281               174        0.353077    =
+           577        1.170837
+> 18        216.188             46980                33        0.070243    =
+           571        1.215411
+> 19        226.346             44879                30        0.066846    =
+           543        1.209920
+> 20        236.353             43081                27        0.062673    =
+           516        1.197744
+> 21        286.158             35782                 5        0.013974    =
+           154        0.430384
+> 22        336.730             30531                11        0.036029    =
+           266        0.871246
+> 23        386.730             26722                18        0.067360    =
+           232        0.868198
+> 24        436.770             23797                 9        0.037820    =
+           196        0.823633
+> 25        487.229             21359                13        0.060864    =
+           229        1.072148
+> 26        537.375             19557                13        0.066472    =
+           259        1.324334
+> 27       1037.871             10638                12        0.112803    =
+           127        1.193833
+>
+> -------------------------------------------------------------------------=
+-------
+> Teo governor:
+> -------------------------------------------------------------------------=
+-------
+>
+> With pipe wakeup (non-timer):
+>
+> -------------------------------------------------------------------------=
+-------------------------------
+>    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
+tal Below Diff  Below Diff (%)
+> -------------------------------------------------------------------------=
+-------------------------------
+> 0           5.972           1657561                 6        0.000362    =
+             0        0.000000
+> 1          10.964            907279                 0        0.000000    =
+             0        0.000000
+> 2          15.977            623681                 0        0.000000    =
+             0        0.000000
+> 3          20.980            475385                 1        0.000210    =
+             0        0.000000
+> 4          30.981            322151                 0        0.000000    =
+             0        0.000000
+> 5          40.975            243749                 0        0.000000    =
+             0        0.000000
+> 6          50.977            195989                 0        0.000000    =
+             0        0.000000
+> 7          60.981            163876                 0        0.000000    =
+             0        0.000000
+> 8          70.978            140818                 0        0.000000    =
+             0        0.000000
+> 9          80.976            123460                 0        0.000000    =
+             1        0.000810
+> 10        100.970             99038                 0        0.000000    =
+            16        0.016155
+> -------------------------------------------------------------------------=
+-------------------------------
+> 11        111.027            106919              5388        5.039329    =
+         16873       15.781105
+> -------------------------------------------------------------------------=
+-------------------------------
+> 12        121.017             83074               381        0.458627    =
+           443        0.533260
+> 13        131.024             76588               323        0.421737    =
+           373        0.487021
+> 14        141.027             71592               695        0.970779    =
+           695        0.970779
+> 15        151.023             66874               669        1.000389    =
+           662        0.989921
+> 16        161.026             62719               607        0.967809    =
+           595        0.948676
+> 17        171.027             59064               581        0.983679    =
+           574        0.971827
+> 18        181.020             55817               561        1.005070    =
+           532        0.953115
+> 19        191.020             52883               523        0.988976    =
+           446        0.843371
+> 20        201.025             50509               670        1.326496    =
+           645        1.277000
+> 21        251.037             40544               280        0.690608    =
+           409        1.008781
+> 22        301.033             33988               263        0.773803    =
+           349        1.026833
+> 23        351.036             29285               221        0.754653    =
+           299        1.021001
+> 24        401.042             25777               203        0.787524    =
+           272        1.055204
+> 25        451.040             23029               174        0.755569    =
+           238        1.033480
+> 26        501.048             20838               157        0.753431    =
+           224        1.074959
+> 27       1001.097             10949                79        0.721527    =
+           134        1.223856
+>
+> With timer wakeup:
+>
+> -------------------------------------------------------------------------=
+-------------------------------
+>    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
+tal Below Diff  Below Diff (%)
+> -------------------------------------------------------------------------=
+-------------------------------
+> 0           7.541           1319205                 0        0.000000    =
+             0        0.000000
+> 1          12.546            794464                 0        0.000000    =
+             0        0.000000
+> 2          17.540            568954                 0        0.000000    =
+             0        0.000000
+> 3          22.572            442307                 0        0.000000    =
+             0        0.000000
+> 4          32.583            306443                 0        0.000000    =
+             1        0.000326
+> 5          42.597            233238                 0        0.000000    =
+             0        0.000000
+> 6          52.587            190067                 0        0.000000    =
+             0        0.000000
+> 7          62.590            159714                 0        0.000000    =
+             1        0.000626
+> 8          72.574            137755                 0        0.000000    =
+             2        0.001452
+> 9          82.581            121081                 0        0.000000    =
+             0        0.000000
+> 10        102.589             97491                 0        0.000000    =
+          1912        1.961207
+> 11        146.385             68906                47        0.068209    =
+           599        0.869300
+> 12        156.548             64565                86        0.133199    =
+           670        1.037714
+> 13        166.588             60562               100        0.165120    =
+           518        0.855322
+> 14        176.676             57264               263        0.459276    =
+           642        1.121123
+> 15        186.563             54262               293        0.539973    =
+           601        1.107589
+> 16        195.986             51668               192        0.371603    =
+           526        1.018038
+> 17        206.860             49028                97        0.197846    =
+           564        1.150363
+> 18        216.899             46669                27        0.057854    =
+           460        0.985665
+> 19        227.016             44528                22        0.049407    =
+           367        0.824201
+> 20        237.055             42883                28        0.065294    =
+           507        1.182287
+> 21        286.998             35665                 9        0.025235    =
+           283        0.793495
+> 22        337.410             30439                 7        0.022997    =
+           264        0.867308
+> 23        387.522             26652                18        0.067537    =
+           251        0.941768
+> 24        437.570             23742                 8        0.033696    =
+           221        0.930840
+> 25        487.804             21293                10        0.046964    =
+            94        0.441460
+> 26        537.884             19505                 7        0.035888    =
+           243        1.245834
+> 27       1038.863             10633                 4        0.037619    =
+           135        1.269632
+>
+> -------------------------------------------------------------------------=
+-------
+> Teo Governor with patch
+> -------------------------------------------------------------------------=
+-------
+>
+> With pipe wakeup (non-timer):
+>
+> -------------------------------------------------------------------------=
+-------------------------------
+>    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
+tal Below Diff  Below Diff (%)
+> -------------------------------------------------------------------------=
+-------------------------------
+> 0           5.959           1661754                 5        0.000301    =
+             0        0.000000
+> 1          10.963            907497                 2        0.000220    =
+             0        0.000000
+> 2          15.968            623957                 2        0.000321    =
+             0        0.000000
+> 3          20.970            475574                 2        0.000421    =
+             0        0.000000
+> 4          30.974            321718                 2        0.000622    =
+             0        0.000000
+> 5          40.974            243714                 2        0.000821    =
+             0        0.000000
+> 6          50.983            195931                 2        0.001021    =
+             0        0.000000
+> 7          60.974            163876                 2        0.001220    =
+             1        0.000610
+> 8          70.973            140810                 2        0.001420    =
+             1        0.000710
+> 9          80.988            123420                 1        0.000810    =
+             4        0.003241
+> 10        100.994             99014                 2        0.002020    =
+            20        0.020199
+> -------------------------------------------------------------------------=
+-------------------------------
+> 11        111.023            135597             11864        8.749456    =
+         45561       33.600301 =3D> This is observed even
+> -------------------------------------------------------------------------=
+-------------------------------   without the patch,
+> 12        121.035             82948               348        0.419540    =
+           352        0.424362    when the sleep interval
+> 13        131.019             76342                82        0.107411    =
+            48        0.062875    is almost equal to the
+> 14        141.028             70948                70        0.098664    =
+            57        0.080341    residency time of state1.
+> 15        151.023             66278                81        0.122212    =
+            69        0.104107
+> 16        161.021             62146                65        0.104592    =
+            51        0.082065
+> 17        171.023             58509                64        0.109385    =
+            47        0.080330
+> 18        181.026             55301                64        0.115730    =
+            48        0.086798
+> 19        191.033             52407                67        0.127846    =
+            45        0.085866
+> 20        201.024             49803                52        0.104411    =
+            48        0.096380
+> 21        251.042             39911                39        0.097717    =
+            45        0.112751
+> 22        301.040             33302                29        0.087082    =
+            40        0.120113
+> 23        351.045             28572                37        0.129497    =
+            34        0.118998
+> 24        401.057             25005                20        0.079984    =
+            27        0.107978
+> 25        451.055             22246                21        0.094399    =
+            26        0.116875
+> 26        501.053             20031                14        0.069892    =
+            25        0.124807
+> 27       1001.099             10055                 7        0.069617    =
+            15        0.149180
+>
+>
+> With timer wakeup:
+>
+> -------------------------------------------------------------------------=
+-------------------------------
+>    Sleep Interval  Total Usage Diff  Total Above Diff  Above Diff (%)  To=
+tal Below Diff  Below Diff (%)
+> -------------------------------------------------------------------------=
+-------------------------------
+> 0           7.566           1314872                 0        0.000000    =
+             0        0.000000
+> 1          12.553            794091                 0        0.000000    =
+             0        0.000000
+> 2          17.573            567627                 0        0.000000    =
+             0        0.000000
+> 3          22.631            441084                 0        0.000000    =
+             0        0.000000
+> 4          32.633            306095                 0        0.000000    =
+             0        0.000000
+> 5          42.631            234377                 0        0.000000    =
+             0        0.000000
+> 6          52.634            189899                 0        0.000000    =
+             0        0.000000
+> 7          62.642            159572                 0        0.000000    =
+             0        0.000000
+> 8          72.645            137619                 0        0.000000    =
+             1        0.000727
+> 9          82.616            121037                 0        0.000000    =
+             1        0.000826
+> 10        102.636             97423                 0        0.000000    =
+          1047        1.074695
+> 11        145.823             69245                43        0.062098    =
+           680        0.982020
+> 12        155.912             64546                90        0.139435    =
+           478        0.740557
+> 13        166.103             60709               219        0.360737    =
+           501        0.825248
+> 14        176.036             57483               196        0.340970    =
+           639        1.111633
+> 15        186.043             54448               250        0.459154    =
+           623        1.144211
+> 16        195.552             51428               124        0.241114    =
+           230        0.447227
+> 17        205.990             49270               141        0.286178    =
+           527        1.069616
+> 18        216.300             46931                39        0.083101    =
+           545        1.161279
+> 19        226.288             44884                23        0.051243    =
+           520        1.158542
+> 20        236.372             43056                20        0.046451    =
+           493        1.145020
+> 21        285.985             35724                 1        0.002799    =
+           119        0.333109
+> 22        336.636             30526                11        0.036035    =
+           262        0.858285
+> 23        386.522             26772                17        0.063499    =
+           218        0.814284
+> 24        436.749             23857                26        0.108983    =
+           208        0.871862
+> 25        487.204             21358                 9        0.042139    =
+           240        1.123701
+> 26        537.312             19530                 7        0.035842    =
+           235        1.203277
+> 27       1038.147             10610                 2        0.018850    =
+           119        1.121583
+> -------------------------------------------------------------------------=
+-------
+>
+>
+> I also did some tests with postgres (pgbench) - with the patch:
+>
+> +---------------------------+--------------------+------------------+
+> | Metric                    | Shared Cede        | Snooze           |
+> +---------------------------+--------------------+------------------+
+> | Total Usage Difference    | 119,453            | 20,472,846       |
+> | Total Time Difference     | 502.79 seconds     | 324.90 seconds   |
+> | Total Above Difference    | 74,500 (0.36%)     | 0                |
+> | Total Below Difference    | 0                  | 336,703 (1.64%)  |
+> +---------------------------+--------------------+------------------+
+>
+> % Above Diff =3D 0.36% of total usage
+> % Below Diff =3D 1.64% of total usage
+>
+>
+> Using both the deterministic micro-benchmark and pgbench, I observed that=
+ the
+> teo governor with the patch as anticipated does not cause any noticable i=
+ncrease in the cpuidle
+> state prediction miss on PowerPC (pseries) (% above and below diff).
+>
+> So, for the entire series:
+>
+> Tested-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
 
-Thanks, much appreciated!
+Thank you, much appreciated!
 
-> I'll just dump some of the raw results here for reference.
-> teo-X is teo with everything up to X/9 applied. teo-m is mainline, teo is
-> the entire series (equivalent to teo-9).
->
-> Everything is done with fio direct random4k read. Range of real devices
-> with varying latency, mapper/slow is 51ms timer delay, nullb0 is
-> essentially CPU-bound, few intercepts expected.
-> --
->
-> device   gov     iter    iops    idles   idle_misses     idle_miss_ratio =
-        belows  aboves
-> mmcblk1         menu    0       1284    344126  106309  0.309   89264   1=
-7045
-> mmcblk1         menu    1       1340    358646  109469  0.305   91726   1=
-7743
-> mmcblk1         menu    2       1316    348812  106773  0.306   89845   1=
-6928
-> mmcblk1         teo     0       2023    559551  30053   0.054   2962    2=
-7091
-> mmcblk1         teo     1       2007    548422  25816   0.047   2113    2=
-3703
-> mmcblk1         teo     2       2010    557120  29434   0.053   2782    2=
-6652
-> mmcblk1         teo-m   0       2010    542790  23336   0.043   1720    2=
-1616
-> mmcblk1         teo-m   1       2009    554912  29239   0.053   2750    2=
-6489
-> mmcblk1         teo-m   2       2013    548384  26444   0.048   2180    2=
-4264
-> mmcblk1         teo-1   0       2030    524056  3571    0.007   610     2=
-961
-> mmcblk1         teo-1   1       2022    559304  27074   0.048   3373    2=
-3701
-> mmcblk1         teo-1   2       2009    554744  27406   0.049   2964    2=
-4442
-> mmcblk1         teo-2   0       2012    542886  18233   0.034   2140    1=
-6093
-> mmcblk1         teo-2   1       2010    554094  27680   0.050   2957    2=
-4723
-> mmcblk1         teo-2   2       2010    555222  28549   0.051   3085    2=
-5464
-> mmcblk1         teo-3   0       2011    556816  28708   0.052   3076    2=
-5632
-> mmcblk1         teo-3   1       2015    546998  20280   0.037   2414    1=
-7866
-> mmcblk1         teo-3   2       2020    549758  20802   0.038   2662    1=
-8140
-> mmcblk1         teo-4   0       2026    536464  11692   0.022   1457    1=
-0235
-> mmcblk1         teo-4   1       2031    557978  25464   0.046   2928    2=
-2536
-> mmcblk1         teo-4   2       2012    553812  26323   0.048   2943    2=
-3380
-> mmcblk1         teo-5   0       2021    557966  3454    0.006   3003    4=
-51
-> mmcblk1         teo-5   1       2027    546630  18400   0.034   2303    1=
-6097
-> mmcblk1         teo-5   2       2012    554390  28013   0.051   2990    2=
-5023
-> mmcblk1         teo-6   0       2037    539956  12764   0.024   1701    1=
-1063
-> mmcblk1         teo-6   1       2019    556202  29074   0.052   3071    2=
-6003
-> mmcblk1         teo-6   2       2017    555004  26814   0.048   2869    2=
-3945
-> mmcblk1         teo-7   0       2028    545802  23806   0.044   1625    2=
-2181
-> mmcblk1         teo-7   1       2019    557030  29913   0.054   2990    2=
-6923
-> mmcblk1         teo-7   2       2018    553236  28534   0.052   2657    2=
-5877
-> mmcblk1         teo-8   0       2018    554662  28595   0.052   2660    2=
-5935
-> mmcblk1         teo-8   1       2014    554646  28947   0.052   2721    2=
-6226
-> mmcblk1         teo-8   2       2014    543828  29379   0.054   2915    2=
-6464
-> mmcblk1         teo-9   0       2013    555356  28867   0.052   2719    2=
-6148
-> mmcblk1         teo-9   1       2015    557254  29709   0.053   2836    2=
-6873
-> mmcblk1         teo-9   2       2030    559272  29321   0.052   3052    2=
-6269
-> mmcblk2         menu    0       2885    434990  140864  0.324   123507  1=
-7357
-> mmcblk2         menu    1       2766    450918  152931  0.339   135384  1=
-7547
-> mmcblk2         menu    2       2960    407712  125573  0.308   109224  1=
-6349
-> mmcblk2         teo     0       5677    741006  24131   0.033   2233    2=
-1898
-> mmcblk2         teo     1       5652    714494  24412   0.034   2680    2=
-1732
-> mmcblk2         teo     2       5660    752410  20497   0.027   1809    1=
-8688
-> mmcblk2         teo-m   0       5683    855232  23454   0.027   1934    2=
-1520
-> mmcblk2         teo-m   1       5588    517234  32016   0.062   5443    2=
-6573
-> mmcblk2         teo-m   2       5654    668648  29108   0.044   3171    2=
-5937
-> mmcblk2         teo-1   0       5666    773452  25740   0.033   3430    2=
-2310
-> mmcblk2         teo-1   1       5638    668190  27619   0.041   4150    2=
-3469
-> mmcblk2         teo-1   2       5689    866340  28191   0.033   3122    2=
-5069
-> mmcblk2         teo-2   0       5769    859462  2116    0.002   1835    2=
-81
-> mmcblk2         teo-2   1       5577    611956  25490   0.042   8647    1=
-6843
-> mmcblk2         teo-2   2       5665    721308  25826   0.036   2876    2=
-2950
-> mmcblk2         teo-3   0       5677    805946  30345   0.038   3877    2=
-6468
-> mmcblk2         teo-3   1       5752    855840  14392   0.017   2588    1=
-1804
-> mmcblk2         teo-3   2       5740    825580  27403   0.033   3750    2=
-3653
-> mmcblk2         teo-4   0       5664    777848  3435    0.004   3229    2=
-06
-> mmcblk2         teo-4   1       5660    728926  25796   0.035   2871    2=
-2925
-> mmcblk2         teo-4   2       5689    774342  7844    0.010   2838    5=
-006
-> mmcblk2         teo-5   0       5672    781618  2733    0.003   2551    1=
-82
-> mmcblk2         teo-5   1       5693    866530  28658   0.033   3332    2=
-5326
-> mmcblk2         teo-5   2       5687    837294  12172   0.015   2338    9=
-834
-> mmcblk2         teo-6   0       5859    892798  5226    0.006   3566    1=
-660
-> mmcblk2         teo-6   1       5696    864197  24962   0.029   2796    2=
-2166
-> mmcblk2         teo-6   2       5671    788200  26612   0.034   3157    2=
-3455
-> mmcblk2         teo-7   0       5617    525864  30143   0.057   3739    2=
-6404
-> mmcblk2         teo-7   1       5732    802794  25553   0.032   3240    2=
-2313
-> mmcblk2         teo-7   2       5838    858620  12661   0.015   188     1=
-2473
-> mmcblk2         teo-8   0       5696    780894  24440   0.031   2928    2=
-1512
-> mmcblk2         teo-8   1       5868    862794  12978   0.015   187     1=
-2791
-> mmcblk2         teo-8   2       5607    660124  31632   0.048   6728    2=
-4904
-> mmcblk2         teo-9   0       5652    669318  28330   0.042   2692    2=
-5638
-> mmcblk2         teo-9   1       5657    710892  29291   0.041   3233    2=
-6058
-> mmcblk2         teo-9   2       5594    740988  37086   0.050   10275   2=
-6811
-> nvme0n1         menu    0       4775    384186  70675   0.184   54346   1=
-6329
-> nvme0n1         menu    1       5211    409374  69545   0.170   53484   1=
-6061
-> nvme0n1         menu    2       7213    535088  81312   0.152   64253   1=
-7059
-> nvme0n1         teo     0       10655   754882  29476   0.039   2960    2=
-6516
-> nvme0n1         teo     1       10627   755322  29324   0.039   3011    2=
-6313
-> nvme0n1         teo     2       10559   749498  29850   0.040   3265    2=
-6585
-> nvme0n1         teo-m   0       10353   738802  29937   0.041   2996    2=
-6941
-> nvme0n1         teo-m   1       10629   748148  27076   0.036   2349    2=
-4727
-> nvme0n1         teo-m   2       10477   743256  28193   0.038   2645    2=
-5548
-> nvme0n1         teo-1   0       10947   772905  24896   0.032   3150    2=
-1746
-> nvme0n1         teo-1   1       10412   732894  21868   0.030   2423    1=
-9445
-> nvme0n1         teo-1   2       10530   748377  26338   0.035   3479    2=
-2859
-> nvme0n1         teo-2   0       10570   751961  5195    0.007   2853    2=
-342
-> nvme0n1         teo-2   1       10482   732428  18667   0.025   2102    1=
-6565
-> nvme0n1         teo-2   2       10829   768292  26400   0.034   3189    2=
-3211
-> nvme0n1         teo-3   0       10493   746638  26371   0.035   3320    2=
-3051
-> nvme0n1         teo-3   1       10445   742924  27871   0.038   3027    2=
-4844
-> nvme0n1         teo-3   2       10920   775112  25646   0.033   3520    2=
-2126
-> nvme0n1         teo-4   0       10500   734792  18125   0.025   2283    1=
-5842
-> nvme0n1         teo-4   1       11091   783828  25904   0.033   3031    2=
-2873
-> nvme0n1         teo-4   2       10413   736248  23786   0.032   2660    2=
-1126
-> nvme0n1         teo-5   0       10479   744340  26933   0.036   3096    2=
-3837
-> nvme0n1         teo-5   1       10740   764188  27065   0.035   3062    2=
-4003
-> nvme0n1         teo-5   2       10500   747060  25962   0.035   3233    2=
-2729
-> nvme0n1         teo-6   0       10715   757772  2186    0.003   1872    3=
-14
-> nvme0n1         teo-6   1       10485   734878  17620   0.024   2174    1=
-5446
-> nvme0n1         teo-6   2       10478   744106  26909   0.036   3007    2=
-3902
-> nvme0n1         teo-7   0       10549   750022  30416   0.041   3320    2=
-7096
-> nvme0n1         teo-7   1       10611   752182  29877   0.040   3332    2=
-6545
-> nvme0n1         teo-7   2       11170   791572  30790   0.039   3453    2=
-7337
-> nvme0n1         teo-8   0       10622   752523  29002   0.039   2745    2=
-6257
-> nvme0n1         teo-8   1       10424   739904  28641   0.039   2756    2=
-5885
-> nvme0n1         teo-8   2       10533   731440  22101   0.030   1280    2=
-0821
-> nvme0n1         teo-9   0       10367   727768  24895   0.034   1820    2=
-3075
-> nvme0n1         teo-9   1       10815   766230  29378   0.038   3136    2=
-6242
-> nvme0n1         teo-9   2       10426   739224  28173   0.038   2563    2=
-5610
-> sda     menu    0       872     526240  175645  0.334   159373  16272
-> sda     menu    1       900     536434  188122  0.351   170749  17373
-> sda     menu    2       901     534826  189778  0.355   171745  18033
-> sda     teo     0       1687    999108  16015   0.016   1249    14766
-> sda     teo     1       1668    1007551         31316   0.031   5809    2=
-5507
-> sda     teo     2       1682    985830  18784   0.019   1003    17781
-> sda     teo-m   0       1676    969984  25825   0.027   3191    22634
-> sda     teo-m   1       1682    995266  30340   0.030   4040    26300
-> sda     teo-m   2       1681    940562  20830   0.022   1508    19322
-> sda     teo-1   0       1680    996214  15553   0.016   2192    13361
-> sda     teo-1   1       1674    1050168         28033   0.027   4011    2=
-4022
-> sda     teo-1   2       1665    808202  35292   0.044   8873    26419
-> sda     teo-2   0       1689    1013360         546     0.001   243     3=
-03
-> sda     teo-2   1       1672    1033806         29432   0.028   4363    2=
-5069
-> sda     teo-2   2       1667    1046100         31110   0.030   6395    2=
-4715
-> sda     teo-3   0       1625    922694  40891   0.044   22925   17966
-> sda     teo-3   1       1670    894480  27946   0.031   3045    24901
-> sda     teo-3   2       1658    1009366         28514   0.028   8887    1=
-9627
-> sda     teo-4   0       1674    977280  3605    0.004   3279    326
-> sda     teo-4   1       1677    960990  2861    0.003   1058    1803
-> sda     teo-4   2       1660    1016592         33894   0.033   7687    2=
-6207
-> sda     teo-5   0       1678    1033470         16996   0.016   2163    1=
-4833
-> sda     teo-5   1       1667    873077  25011   0.029   4393    20618
-> sda     teo-5   2       1672    1042020         24589   0.024   3858    2=
-0731
-> sda     teo-6   0       1680    962686  7255    0.008   1797    5458
-> sda     teo-6   1       1682    1055472         28602   0.027   5081    2=
-3521
-> sda     teo-6   2       1675    989244  19110   0.019   5620    13490
-> sda     teo-7   0       1618    1001000         51178   0.051   26011   2=
-5167
-> sda     teo-7   1       1666    1047310         34032   0.032   6520    2=
-7512
-> sda     teo-7   2       1676    982046  28788   0.029   2836    25952
-> sda     teo-8   0       1618    975930  52929   0.054   26386   26543
-> sda     teo-8   1       1678    1023796         16182   0.016   2191    1=
-3991
-> sda     teo-8   2       1633    981693  43520   0.044   18782   24738
-> sda     teo-9   0       1661    1029494         32423   0.031   5855    2=
-6568
-> sda     teo-9   1       1678    969400  17843   0.018   2763    15080
-> sda     teo-9   2       1679    1055060         32288   0.031   5607    2=
-6681
-> mtdblock3       menu    0       180     278442  80547   0.289   65714   1=
-4833
-> mtdblock3       menu    1       167     379840  109168  0.287   93460   1=
-5708
-> mtdblock3       menu    2       155     373948  126262  0.338   107799  1=
-8463
-> mtdblock3       teo     0       256     663190  29333   0.044   4836    2=
-4497
-> mtdblock3       teo     1       257     808114  29394   0.036   2742    2=
-6652
-> mtdblock3       teo     2       257     456150  25812   0.057   2468    2=
-3344
-> mtdblock3       teo-m   0       257     624492  24678   0.040   2326    2=
-2352
-> mtdblock3       teo-m   1       256     734548  31165   0.042   4307    2=
-6858
-> mtdblock3       teo-m   2       257     812004  30479   0.038   3510    2=
-6969
-> mtdblock3       teo-1   0       253     759708  34146   0.045   10081   2=
-4065
-> mtdblock3       teo-1   1       254     730160  23105   0.032   7156    1=
-5949
-> mtdblock3       teo-1   2       253     721558  32848   0.046   10028   2=
-2820
-> mtdblock3       teo-2   0       257     666426  4948    0.007   782     4=
-166
-> mtdblock3       teo-2   1       256     682046  25126   0.037   4886    2=
-0240
-> mtdblock3       teo-2   2       253     639950  36029   0.056   11074   2=
-4955
-> mtdblock3       teo-3   0       252     709122  37198   0.052   12603   2=
-4595
-> mtdblock3       teo-3   1       257     709680  30000   0.042   3670    2=
-6330
-> mtdblock3       teo-3   2       254     540408  32696   0.061   9035    2=
-3661
-> mtdblock3       teo-4   0       256     442356  28281   0.064   3785    2=
-4496
-> mtdblock3       teo-4   1       254     588362  16934   0.029   5663    1=
-1271
-> mtdblock3       teo-4   2       257     628776  28300   0.045   3667    2=
-4633
-> mtdblock3       teo-5   0       250     762594  43008   0.056   16752   2=
-6256
-> mtdblock3       teo-5   1       256     586098  29744   0.051   4035    2=
-5709
-> mtdblock3       teo-5   2       262     903736  375     0.000   139     2=
-36
-> mtdblock3       teo-6   0       250     795274  42742   0.054   17160   2=
-5582
-> mtdblock3       teo-6   1       256     800172  28195   0.035   4016    2=
-4179
-> mtdblock3       teo-6   2       257     523365  26260   0.050   2788    2=
-3472
-> mtdblock3       teo-7   0       261     944626  31616   0.033   5090    2=
-6526
-> mtdblock3       teo-7   1       258     647048  28997   0.045   2728    2=
-6269
-> mtdblock3       teo-7   2       260     901858  18521   0.021   3698    1=
-4823
-> mtdblock3       teo-8   0       256     914076  27272   0.030   6844    2=
-0428
-> mtdblock3       teo-8   1       256     809113  31696   0.039   4672    2=
-7024
-> mtdblock3       teo-8   2       252     798396  40223   0.050   13270   2=
-6953
-> mtdblock3       teo-9   0       259     726886  30515   0.042   4002    2=
-6513
-> mtdblock3       teo-9   1       262     892854  9411    0.011   1686    7=
-725
-> mtdblock3       teo-9   2       259     909528  16583   0.018   3054    1=
-3529
-> nullb0  menu    0       107364  86086   20668   0.240   2604    18064
-> nullb0  menu    1       107701  85072   20251   0.238   2808    17443
-> nullb0  menu    2       107976  85178   20591   0.242   3063    17528
-> nullb0  teo     0       105758  84464   28872   0.342   3429    25443
-> nullb0  teo     1       106892  87122   30255   0.347   3722    26533
-> nullb0  teo     2       107080  83374   27911   0.335   2918    24993
-> nullb0  teo-m   0       107702  88337   29824   0.338   2956    26868
-> nullb0  teo-m   1       108218  88130   29710   0.337   3038    26672
-> nullb0  teo-m   2       106993  86866   30033   0.346   3664    26369
-> nullb0  teo-1   0       106416  82936   23635   0.285   3186    20449
-> nullb0  teo-1   1       107570  87425   27682   0.317   3220    24462
-> nullb0  teo-1   2       107832  75656   19434   0.257   2775    16659
-> nullb0  teo-2   0       106320  88182   28603   0.324   3213    25390
-> nullb0  teo-2   1       107316  79968   21643   0.271   3081    18562
-> nullb0  teo-2   2       108007  84018   25244   0.300   3034    22210
-> nullb0  teo-3   0       106989  85160   24558   0.288   3601    20957
-> nullb0  teo-3   1       107325  83582   24994   0.299   2963    22031
-> nullb0  teo-3   2       107063  77066   18978   0.246   2913    16065
-> nullb0  teo-4   0       107990  86156   25012   0.290   3404    21608
-> nullb0  teo-4   1       107352  75750   15096   0.199   2671    12425
-> nullb0  teo-4   2       107685  87644   26047   0.297   3825    22222
-> nullb0  teo-5   0       106687  87788   13428   0.153   2937    10491
-> nullb0  teo-5   1       107820  86442   25703   0.297   3686    22017
-> nullb0  teo-5   2       108319  81498   22895   0.281   2713    20182
-> nullb0  teo-6   0       107784  84364   24239   0.287   3459    20780
-> nullb0  teo-6   1       108762  83854   24017   0.286   3289    20728
-> nullb0  teo-6   2       106024  88238   27778   0.315   3253    24525
-> nullb0  teo-7   0       106041  86354   30076   0.348   3420    26656
-> nullb0  teo-7   1       108039  79564   26805   0.337   2924    23881
-> nullb0  teo-7   2       107389  88264   30713   0.348   3156    27557
-> nullb0  teo-8   0       106465  87924   29679   0.338   2958    26721
-> nullb0  teo-8   1       107215  81348   27038   0.332   2916    24122
-> nullb0  teo-8   2       108238  87070   29284   0.336   2971    26313
-> nullb0  teo-9   0       107220  84508   28894   0.342   3411    25483
-> nullb0  teo-9   1       107400  86920   29945   0.345   3579    26366
-> nullb0  teo-9   2       107845  87686   30439   0.347   3784    26655
-> mapper/dm-slow  menu    0       19      85216   20060   0.235   2478    1=
-7582
-> mapper/dm-slow  teo     0       19      86454   28959   0.335   2860    2=
-6099
-> mapper/dm-slow  teo-m   0       19      84740   28056   0.331   2582    2=
-5474
-> mapper/dm-slow  teo-1   0       19      88698   28945   0.326   3210    2=
-5735
-> mapper/dm-slow  teo-2   0       19      83138   24326   0.293   2589    2=
-1737
-> mapper/dm-slow  teo-3   0       19      86416   27274   0.316   2998    2=
-4276
-> mapper/dm-slow  teo-4   0       19      89286   29369   0.329   3151    2=
-6218
-> mapper/dm-slow  teo-5   0       19      88516   29213   0.330   3163    2=
-6050
-> mapper/dm-slow  teo-6   0       19      87896   24675   0.281   3113    2=
-1562
-> mapper/dm-slow  teo-7   0       19      83986   27976   0.333   2788    2=
-5188
-> mapper/dm-slow  teo-8   0       19      88072   29667   0.337   2962    2=
-6705
-> mapper/dm-slow  teo-9   0       19      87260   29428   0.337   2923    2=
-6505
->
+> [1]: https://github.com/AboorvaDevarajan/linux-utils/tree/main/cpuidle/cp=
+uidle_wakeup
 
