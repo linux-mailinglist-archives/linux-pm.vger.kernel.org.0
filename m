@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-20669-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20670-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 09ADDA1670F
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:12:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1671BA16714
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:12:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 24A9F169AF8
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 07:12:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 918A516A16F
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 07:12:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBB218E054;
-	Mon, 20 Jan 2025 07:12:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4489018E76F;
+	Mon, 20 Jan 2025 07:12:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hwvmPTuq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N5L2v4Pj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67AA513D51E;
-	Mon, 20 Jan 2025 07:12:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1C3145A18;
+	Mon, 20 Jan 2025 07:12:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737357137; cv=none; b=rnZy3RBPlT0RZSazQOPUGB8SuCQCwES6egj2GCNDxZL+zHerWXJjdRVhOxYxkKjBjFHAM71N9U/3gFbDA5ybhUNvwG0iOkezRniMtj7v/wpV5y82lu+LZ4iZETlxSZo0uS4YGj8YbBMl/0HASyzfRwHwSE3HgLfocVe4rQimq00=
+	t=1737357151; cv=none; b=oIkXMsqlf9TXXcJU637Vu6ziXFtrhK4/1lYzDI3NnbkWN7EJO61kOiyhY8LiGOTKjtVXtsIfZB5JObncSG9qHHgoqKz+ExoktMS9a+Y3fEAzRtTJB82F9ynRodr2mFGJFU3iW9Z7STiTO4H4wVXINf2duE4P6LiUjejxqDsxLCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737357137; c=relaxed/simple;
-	bh=GSuvmwgujWLvjtQ0kXfh/uYXyb3X/2AbdMW2za39cWc=;
+	s=arc-20240116; t=1737357151; c=relaxed/simple;
+	bh=QS1LXxg7UI7EocGr8KzebCZCoC8/u+5kQnGxVDbm7nA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O8HBGpuVF1xjQ9ri3rZQz3BD9ArEfSMUrRriWKHBaYNYnyfDjlAmoeMVxQG1MGdp6YaWFdsD67E//UXioiEwHpmY5LNiJzIMSIUwEeTRMN0W9l/Ed1/ZYKosJRPYhcHqh7/0E7iRIPw0a6/Lx/cdJrKm3l9YP/Cb2/PPMifY3jc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hwvmPTuq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5CAA1C4CEDD;
-	Mon, 20 Jan 2025 07:12:11 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=ZjMfMkAZDIiUx0YEYpQUiw8vR7mGfjYnYr8zAbpzxyLqmnAUnMCsKzvpiuk9TpcWI6+W1Sbzb1h/0cJ4K2JqX+EOl5a7Jjj9v8PPU/cj2Gx4Et2W7P4QzWE8IL8evGOkwQ1udzZJdSCJauGR9cC+RusILYWJtSwvSjEOp6u5oSE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N5L2v4Pj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 267A7C4CEDD;
+	Mon, 20 Jan 2025 07:12:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737357135;
-	bh=GSuvmwgujWLvjtQ0kXfh/uYXyb3X/2AbdMW2za39cWc=;
+	s=k20201202; t=1737357150;
+	bh=QS1LXxg7UI7EocGr8KzebCZCoC8/u+5kQnGxVDbm7nA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=hwvmPTuqll9nS7fSTP/JQ23IpSjCbj8Y2+uaEoTQ/OIIQDvg4UVyumwgtpK8bnnYi
-	 FspJkblkW5qpFJ85d7n8SeynyUmlZmD2afIC9aVKbOWA2bowDET2kftB0Zvoz+vqCo
-	 0+7xVIKb4pZV9413DODfcTzc1nzl/T09UMSbjgNH3WOW39R0KEsBJG/bPQMzNhBmfL
-	 zb0m0uVto5WGEm9X+mPvvIZaJPcDZ0QH7GNsaFkSDz89LfKP1ribfIPAej35kLNRM8
-	 vu5aLkUy2dpxSf2E/3BD6Levypq83UnSHxPE8XwvNntYkfEyCxzmludru8B0dveMcw
-	 uANSVDTFxUUMw==
-Date: Mon, 20 Jan 2025 07:12:09 +0000
+	b=N5L2v4PjLHEfWrH51CobGDDELtSWQDD1L03na7hq2kOGvNS2K/0BntuvqWh1qOltq
+	 x+is7YT2KFluPMZXKVIhKAa49mckUAfaFpW4WKYDAy2IhBNwnKwKKLT+jvcQnlAukt
+	 t7H2mt2JBz7c+PXOshiQqhkJjA5cC57C1jJNtKKpC2fUHdF3M6lV56MIjzsLTfruDD
+	 xxgCwtDwoLDIVJnLXuZV/PkzWkAKLetPvXo6t0qtOhoggVpZ43cU7jYffOD1WWf+cB
+	 Efl8tfVoOrqeOoPYatIr7WyaJ5I7kZ9mHT12oTd88jwmn3NDfGGspr9ZU1pmRYSc1H
+	 /WJ0w2iOmi7ww==
+Date: Mon, 20 Jan 2025 07:12:24 +0000
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Ahmad Fatoum <a.fatoum@pengutronix.de>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -60,12 +60,12 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
 	linux-security-module@vger.kernel.org,
 	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
-	kernel@pengutronix.de, Matteo Croce <mcroce@microsoft.com>
-Subject: Re: [PATCH v2 07/12] reboot: add support for configuring emergency
- hardware protection action
-Message-ID: <Z433SVbr-h3JCycF@google.com>
+	kernel@pengutronix.de
+Subject: Re: [PATCH v2 08/12] regulator: allow user configuration of hardware
+ protection action
+Message-ID: <Z433WMKjFx7KJJqN@google.com>
 References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
- <20250113-hw_protection-reboot-v2-7-161d3fc734f0@pengutronix.de>
+ <20250113-hw_protection-reboot-v2-8-161d3fc734f0@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,44 +74,31 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250113-hw_protection-reboot-v2-7-161d3fc734f0@pengutronix.de>
+In-Reply-To: <20250113-hw_protection-reboot-v2-8-161d3fc734f0@pengutronix.de>
 
-On Mon, Jan 13, 2025 at 05:25:32PM +0100, Ahmad Fatoum wrote:
-> We currently leave the decision of whether to shutdown or reboot to
-> protect hardware in an emergency situation to the individual drivers.
+On Mon, Jan 13, 2025 at 05:25:33PM +0100, Ahmad Fatoum wrote:
+> When the core detects permanent regulator hardware failure or imminent
+> power failure of a critical supply, it will call hw_protection_shutdown
+> in an attempt to do a limited orderly shutdown followed by powering off
+> the system.
 > 
-> This works out in some cases, where the driver detecting the critical
-> failure has inside knowledge: It binds to the system management controller
-> for example or is guided by hardware description that defines what to do.
+> This doesn't work out well for many unattended embedded systems that don't
+> have support for shutdown and that power on automatically when power is
+> supplied:
 > 
-> In the general case, however, the driver detecting the issue can't know
-> what the appropriate course of action is and shouldn't be dictating the
-> policy of dealing with it.
+>   - A brief power cycle gets detected by the driver
+>   - The kernel powers down the system and SoC goes into shutdown mode
+>   - Power is restored
+>   - The system remains oblivious to the restored power
+>   - System needs to be manually power cycled for a duration long enough
+>     to drain the capacitors
 > 
-> Therefore, add a global hw_protection toggle that allows the user to
-> specify whether shutdown or reboot should be the default action when the
-> driver doesn't set policy.
-> 
-> This introduces no functional change yet as hw_protection_trigger() has
-> no callers, but these will be added in subsequent commits.
+> Allow users to fix this by calling the newly introduced
+> hw_protection_trigger() instead: This way the hw_protection commandline
+> or sysfs parameter is used to dictate the policy of dealing with the
+> regulator fault.
 > 
 > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-With a minor comment,
 Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
-
-> diff --git a/Documentation/ABI/testing/sysfs-kernel-reboot b/Documentation/ABI/testing/sysfs-kernel-reboot
-> index 837330fb251134ffdf29cd68f0b2a845b088e5a0..133f54707d533665c68a5946394540ec50b149e5 100644
-> --- a/Documentation/ABI/testing/sysfs-kernel-reboot
-> +++ b/Documentation/ABI/testing/sysfs-kernel-reboot
-> @@ -30,3 +30,11 @@ KernelVersion:	5.11
->  Contact:	Matteo Croce <mcroce@microsoft.com>
->  Description:	Don't wait for any other CPUs on reboot and
->  		avoid anything that could hang.
-> +
-> +What:		/sys/kernel/reboot/hw_protection
-> +Date:		Feb 2025
-> +KernelVersion:	6.14
-
-The info might need to be adjusted if the series would be for 6.15. 
 
