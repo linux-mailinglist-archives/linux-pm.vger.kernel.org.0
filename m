@@ -1,183 +1,178 @@
-Return-Path: <linux-pm+bounces-20658-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20659-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1CBF8A1652D
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 02:37:40 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68F29A16595
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 04:15:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D9CB47A1811
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 01:37:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DDB81887B81
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 03:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 907E68BEC;
-	Mon, 20 Jan 2025 01:37:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="yaUsNjJZ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560423D96A;
+	Mon, 20 Jan 2025 03:15:35 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFA3F63CB
-	for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 01:37:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7014AB641;
+	Mon, 20 Jan 2025 03:15:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737337052; cv=none; b=sCK0SxkxWmVOs2uvxQHfsd9Q7lYF4SI9bYk8hibU0Gjr2TVSHaPcZBcQyX3wjZohI7npjjGpRQu7Y23xD6tfX3l25qfajr1aJ8mazESbYx9L/6HcFIwKEt5zkR6IP+svLAwLt0ai3tXRHMvysoHqvTYDhq1bTTP1KUNp3dRKDek=
+	t=1737342935; cv=none; b=BuycJ713hb2aNKTFoyUIYyqjR1MN+qej20fNBnMClmR0nURUjn0ErNx/8pWa7NqMxSmTgJcFxwpK3i+xuppr9Jn4+U6PkMECnaf48W2m/oLRaceYNyzonXanEsy1izMlvEjk0w2sYyhgRhgm/jfhZD7V7rbe/gbjmvy3mS/0a34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737337052; c=relaxed/simple;
-	bh=rCmnMKKFzku7FqSoKaR5AwFfRv2POEJpFQrVLWFD+Fw=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=mbDUth3MqsZgrMFGDJUE+G3K/NbjS2+EkFM1hqMTwQ8EMN3SWsXPI7GVteAHsbMcjtU7OkFphUvVFSrXK8wk+KDJxz1Ho2iyReQxaG09x6MKoqlVK5MaCR+PaUVA77BhU6ngZ3p61V/dQlxMeOyGrDnaeMwBbUgcOWG+EE8moJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=yaUsNjJZ; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-216717543b7so108928355ad.0
-        for <linux-pm@vger.kernel.org>; Sun, 19 Jan 2025 17:37:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1737337050; x=1737941850; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Y6VQnIfvZ/lup9D+mQ3Zzp+UehiZWo7JVkyFBohiYU=;
-        b=yaUsNjJZNXzjriprtBzovkDrLjlwtd2qOoUghY9pNKiS+hW+d8nKFOhYDH3bs49W2R
-         51FDwBHrmSuzeY6f5SRDu+NEi4z8Ta/F9RHoJE0XH2lIgtQcAcz5x+IFl0laIpRnNdTz
-         wDtNkUdppzU0UeYDfYyXAxw6gSoL4Z2mrjmUCjFiVS7w9kAiDZ6RatotpCainuEiA987
-         GbtQV0CBs31pG89McWbSfmPFy4V1Z5QCq3gkdUopgSHL9MBWGKmy5LUGyiH7L6T8r0eE
-         8sWYgm2kZRhEEByxZ4rekuR87xqiKPuTrfnwD2t7XH3/RUEKob+h9QAbCTixyeRVCrEm
-         5Diw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737337050; x=1737941850;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=/Y6VQnIfvZ/lup9D+mQ3Zzp+UehiZWo7JVkyFBohiYU=;
-        b=jvQropOIcI/e4GtzmM65Pld3acJ7ZTXDP6TeH1VPex1xgODEHijpdSrNObYDaGx2Ed
-         nzD5kph5q9bEJwNZavz1b7hb3CIF8YBKQK9/iz8ojA2CIPAEscksoqQpK1Gavohy8u1X
-         rSwGT6lyckmfCBoAX3eSHnNQLJ5u8hAzIG60FShz//NXooDOfFzUL3AJBBOvwt8KBh7x
-         ZRV55HwIv0MoYHlaTFpNOVYfwX0b9ie/RZtrPu+dcLOkoyjNTpV1YX3m7UaiKNb9DIfP
-         TX5LQ8+46c+ZI9AHJbkJSV80NyLsMk+O3X+dWGP7CMpliqPNQ5PEJSEF1LVQbCF32tvJ
-         hMmA==
-X-Forwarded-Encrypted: i=1; AJvYcCXM82K90x1ukFmVS2S9pT4W51zwan6ri6G55vBa6TeQ/8ehZuh1t3TLV+CXCbuR02UXTZIDeCtgQQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKKUhawoHynLjmQyynfMaV6CMWNQN9g1qNHV4JVLYl86D/kFls
-	EY3p2ZXQI0pHkPA2xVpmHxEc2+dJGJMURkGZIkH/CKrc0fIhmW54vHfjtQr5W8uhU0NEbw==
-X-Google-Smtp-Source: AGHT+IFSAReJ7jfnKMa4zOYU8azU3lnxfGKU541snA6s900oDc0E7ZeapZxnmGB+S+Ca2EEFShI7I57O
-X-Received: from pgbbm27.prod.google.com ([2002:a65:6e9b:0:b0:7fd:5722:fd50])
- (user=keyz job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6a20:564c:b0:1e1:b183:2243
- with SMTP id adf61e73a8af0-1eb2160f8c8mr12995970637.39.1737337050122; Sun, 19
- Jan 2025 17:37:30 -0800 (PST)
-Date: Mon, 20 Jan 2025 09:36:16 +0800
-In-Reply-To: <20250118072438.3647805-1-keyz@google.com>
+	s=arc-20240116; t=1737342935; c=relaxed/simple;
+	bh=qwUUNjDHTBEo9eddLfnKwuShyPehHmQwFQV5Bk1cI68=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=qL1GHO1Wd7SbvMUAqN1fCF+v2IgnB2/DoZufCDfq3yQH40rPJO3UdPAqgSEH33CObV1/wx40/A5BNobpVi48FleqAvAdP0f+OAd2WenzbKx0HWiaBdyAz4Of0Kq1CQkNTMrmEtRAqc1EoYsVtWBPum+BzLSB80fMUxAMnY4bwbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.17])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4YbwRj0C71z1JHg5;
+	Mon, 20 Jan 2025 11:14:25 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id E918B1A0188;
+	Mon, 20 Jan 2025 11:15:22 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 20 Jan
+ 2025 11:15:21 +0800
+Message-ID: <0705775a-1040-4564-b97b-2ed397803723@huawei.com>
+Date: Mon, 20 Jan 2025 11:15:11 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <20250118072438.3647805-1-keyz@google.com>
-X-Mailer: git-send-email 2.48.0.rc2.279.g1de40edade-goog
-Message-ID: <20250120013616.1116126-1-keyz@google.com>
-Subject: [PATCH v2] cpuidle: psci: Add trace for PSCI domain idle
-From: Keita Morisaki <keyz@google.com>
-To: rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
-	linux-kernel@vger.kernel.org, linux-trace-kernel@vger.kernel.org, 
-	lpieralisi@kernel.org, sudeep.holla@arm.com, rafael@kernel.org, 
-	daniel.lezcano@linaro.org, linux-pm@vger.kernel.org
-Cc: aarontian@google.com, yimingtseng@google.com, 
-	Keita Morisaki <keyz@google.com>
+MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 6/6] cpufreq: CPPC: Support for autonomous selection in
+ cppc_cpufreq
+To: Mario Limonciello <mario.limonciello@amd.com>, Russell Haley
+	<yumpusamongus@gmail.com>, <rafael@kernel.org>, <lenb@kernel.org>,
+	<robert.moore@intel.com>, <viresh.kumar@linaro.org>
+CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
+	<gautham.shenoy@amd.com>, <ray.huang@amd.com>, <pierre.gondois@arm.com>,
+	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <hepeng68@huawei.com>,
+	<fanghao11@huawei.com>
+References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
+ <20250113122104.3870673-7-zhenglifeng1@huawei.com>
+ <21654032-a394-4da9-8ee9-d7cb9df8c855@gmail.com>
+ <6909eef3-20aa-4341-9177-a42323a0d5c6@huawei.com>
+ <270a1cce-8afe-497a-b30b-56157d75a863@amd.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <270a1cce-8afe-497a-b30b-56157d75a863@amd.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-The trace event cpu_idle provides insufficient information for debugging
-PSCI requests due to lacking access to determined PSCI domain idle
-states. The cpu_idle usually only shows -1, 0, or 1 regardless how many
-idle states the power domain has.
+On 2025/1/17 22:30, Mario Limonciello wrote:
 
-Add new trace events namely psci_domain_idle_enter and
-psci_domain_idle_exit to trace enter and exit events with a determined
-idle state.
+> On 1/16/2025 21:11, zhenglifeng (A) wrote:
+>> On 2025/1/16 19:39, Russell Haley wrote:
+>>
+>>> Hello,
+>>>
+>>> I noticed something here just as a user casually browsing the mailing list.
+>>>
+>>> On 1/13/25 6:21 AM, Lifeng Zheng wrote:
+>>>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
+>>>> driver.
+>>>>
+>>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>>>> ---
+>>>>   .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++++
+>>>>   drivers/cpufreq/cppc_cpufreq.c                | 109 ++++++++++++++++++
+>>>>   2 files changed, 163 insertions(+)
+>>>>
+>>>> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>>> index 206079d3bd5b..3d87c3bb3fe2 100644
+>>>> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>>> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>>> @@ -268,6 +268,60 @@ Description:    Discover CPUs in the same CPU frequency coordination domain
+>>>>           This file is only present if the acpi-cpufreq or the cppc-cpufreq
+>>>>           drivers are in use.
+>>>>   
+>>>
+>>> [...snip...]
+>>>
+>>>> +What:        /sys/devices/system/cpu/cpuX/cpufreq/energy_perf
+>>>> +Date:        October 2024
+>>>> +Contact:    linux-pm@vger.kernel.org
+>>>> +Description:    Energy performance preference
+>>>> +
+>>>> +        Read/write an 8-bit integer from/to this file. This file
+>>>> +        represents a range of values from 0 (performance preference) to
+>>>> +        0xFF (energy efficiency preference) that influences the rate of
+>>>> +        performance increase/decrease and the result of the hardware's
+>>>> +        energy efficiency and performance optimization policies.
+>>>> +
+>>>> +        Writing to this file only has meaning when Autonomous Selection is
+>>>> +        enabled.
+>>>> +
+>>>> +        This file only presents if the cppc-cpufreq driver is in use.
+>>>
+>>> In intel_pstate driver, there is file with near-identical semantics:
+>>>
+>>> /sys/devices/system/cpu/cpuX/cpufreq/energy_performance_preference
+>>>
+>>> It also accepts a few string arguments and converts them to integers.
+>>>
+>>> Perhaps the same name should be used, and the semantics made exactly
+>>> identical, and then it could be documented as present for either
+>>> cppc_cpufreq OR intel_pstate?
+>>>
+>>> I think would be more elegant if userspace tooling could Just Work with
+>>> either driver.
+>>>
+>>> One might object that the frequency selection behavior that results from
+>>> any particular value of the register itself might be different, but they
+>>> are *already* different between Intel's P and E-cores in the same CPU
+>>> package. (Ugh.)
+>>
+>> Yes, I should use the same name. Thanks.
+>>
+>> As for accepting string arguments and converting them to integers, I don't
+>> think it is necessary. It'll be a litte confused if someone writes a raw
+>> value and reads a string I think. I prefer to let users freely set this
+>> value.
+>>
+>> In addition, there are many differences between the implementations of
+>> energy_performance_preference in intel_pstate and cppc_cpufreq (and
+>> amd-pstate...). It is really difficult to explain all this differences in
+>> this document. So I'll leave it to be documented as present for
+>> cppc_cpufreq only.
+> 
+> At least the interface to userspace I think we should do the best we can to be the same between all the drivers if possible.
+> 
+> For example; I've got a patch that I may bring up in a future kernel cycle that adds raw integer writes to amd-pstates energy_performance_profile to behave the same way intel-pstate does.
 
-These new trace events will help developers debug CPUidle issues on ARM
-systems using PSCI by providing more detailed information about the
-requested idle states.
+I agree that it's better to keep this interface consistent across different
+drivers. But in my opinion, the implementation of intel_pstate
+energy_performance_preference is not really nice. Someone may write a raw
+value but read a string, or read strings for some values and read raw
+values for some other values. It is inconsistent. It may be better to use
+some other implementation, such as seperating the operations of r/w strings
+and raw values into two files.
 
-Signed-off-by: Keita Morisaki <keyz@google.com>
----
-v1->v2: Split the ftrace event into two (psci_domain_idle_(enter|exit))
-		and rephrase the commit message accordingly. Rebased onto the latest.
+I think it's better to consult Rafael and Viresh about how this should
+evolve.
 
- drivers/cpuidle/cpuidle-psci.c |  3 +++
- include/trace/events/power.h   | 37 ++++++++++++++++++++++++++++++++++
- 2 files changed, 40 insertions(+)
+> 
+>>
+>>>
+>>> -- 
+>>> Thanks,
+>>> Russell
+>>>
+>>>
+>>>
+>>
+> 
 
-diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-index 2562dc001fc1..dd8d776d6e39 100644
---- a/drivers/cpuidle/cpuidle-psci.c
-+++ b/drivers/cpuidle/cpuidle-psci.c
-@@ -25,6 +25,7 @@
- #include <linux/syscore_ops.h>
-
- #include <asm/cpuidle.h>
-+#include <trace/events/power.h>
-
- #include "cpuidle-psci.h"
- #include "dt_idle_states.h"
-@@ -74,7 +75,9 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
- 	if (!state)
- 		state = states[idx];
-
-+	trace_psci_domain_idle_enter(dev->cpu, state, s2idle);
- 	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
-+	trace_psci_domain_idle_exit(dev->cpu, state, s2idle);
-
- 	if (s2idle)
- 		dev_pm_genpd_resume(pd_dev);
-diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-index d2349b6b531a..9253e83b9bb4 100644
---- a/include/trace/events/power.h
-+++ b/include/trace/events/power.h
-@@ -62,6 +62,43 @@ TRACE_EVENT(cpu_idle_miss,
- 		(unsigned long)__entry->state, (__entry->below)?"below":"above")
- );
-
-+DECLARE_EVENT_CLASS(psci_domain_idle,
-+
-+	TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-+
-+	TP_ARGS(cpu_id, state, s2idle),
-+
-+	TP_STRUCT__entry(
-+		__field(u32,		cpu_id)
-+		__field(u32,		state)
-+		__field(bool,		s2idle)
-+	),
-+
-+	TP_fast_assign(
-+		__entry->cpu_id = cpu_id;
-+		__entry->state = state;
-+		__entry->s2idle = s2idle;
-+	),
-+
-+	TP_printk("cpu_id=%lu state=0x%lx is_s2idle=%s",
-+		  (unsigned long)__entry->cpu_id, (unsigned long)__entry->state,
-+		  (__entry->s2idle)?"yes":"no")
-+);
-+
-+DEFINE_EVENT(psci_domain_idle, psci_domain_idle_enter,
-+
-+	TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-+
-+	TP_ARGS(cpu_id, state, s2idle)
-+);
-+
-+DEFINE_EVENT(psci_domain_idle, psci_domain_idle_exit,
-+
-+	TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-+
-+	TP_ARGS(cpu_id, state, s2idle)
-+);
-+
- TRACE_EVENT(powernv_throttle,
-
- 	TP_PROTO(int chip_id, const char *reason, int pmax),
-
-base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
---
-2.48.0.rc2.279.g1de40edade-goog
 
