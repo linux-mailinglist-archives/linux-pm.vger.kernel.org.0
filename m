@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-20670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20671-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1671BA16714
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:12:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7EB8BA16717
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 08:12:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 918A516A16F
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 07:12:34 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 91EE43A25B0
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 07:12:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4489018E76F;
-	Mon, 20 Jan 2025 07:12:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A618A18E050;
+	Mon, 20 Jan 2025 07:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="N5L2v4Pj"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Jlr5gqBh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1C3145A18;
-	Mon, 20 Jan 2025 07:12:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7001E145A18;
+	Mon, 20 Jan 2025 07:12:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737357151; cv=none; b=oIkXMsqlf9TXXcJU637Vu6ziXFtrhK4/1lYzDI3NnbkWN7EJO61kOiyhY8LiGOTKjtVXtsIfZB5JObncSG9qHHgoqKz+ExoktMS9a+Y3fEAzRtTJB82F9ynRodr2mFGJFU3iW9Z7STiTO4H4wVXINf2duE4P6LiUjejxqDsxLCs=
+	t=1737357168; cv=none; b=nkYRyTdiFm+qBgiqQ83bmNKVMKSXN72G4Unxvtpkyw5LdDZevi+6k9U/7Vppq88Hu2B/ZLeuWpZRx7admZ0uQDuVFHm4ucSFC18AjA8og+Fb6b+N61IK9y7mnrmkOYOdkWiPyOCg132Zz7TgtUBS4m/pCAnnnLvLbY3Ad6x7Tu0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737357151; c=relaxed/simple;
-	bh=QS1LXxg7UI7EocGr8KzebCZCoC8/u+5kQnGxVDbm7nA=;
+	s=arc-20240116; t=1737357168; c=relaxed/simple;
+	bh=6L242JdL3R+3UW1TjFijzpluk+ULCIhTMfosffkxXqA=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZjMfMkAZDIiUx0YEYpQUiw8vR7mGfjYnYr8zAbpzxyLqmnAUnMCsKzvpiuk9TpcWI6+W1Sbzb1h/0cJ4K2JqX+EOl5a7Jjj9v8PPU/cj2Gx4Et2W7P4QzWE8IL8evGOkwQ1udzZJdSCJauGR9cC+RusILYWJtSwvSjEOp6u5oSE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=N5L2v4Pj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 267A7C4CEDD;
-	Mon, 20 Jan 2025 07:12:25 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=P+QGT/HQ8EqRFr2JvuZfCEokWrqbVdE8i/049q+hKD0ePlxZM5EmkaKKMAMOqdksezyKE3tBdmuef1UIwv7ZwgXC9xyOhs0pIiLE/Aet4hREgg64h8RRkkd/NuFll7v+a24BhwVngRu/c59FDhhNSaRPxQABnxYqtqLrRN4Q0hY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Jlr5gqBh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1416C4CEDD;
+	Mon, 20 Jan 2025 07:12:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737357150;
-	bh=QS1LXxg7UI7EocGr8KzebCZCoC8/u+5kQnGxVDbm7nA=;
+	s=k20201202; t=1737357168;
+	bh=6L242JdL3R+3UW1TjFijzpluk+ULCIhTMfosffkxXqA=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=N5L2v4PjLHEfWrH51CobGDDELtSWQDD1L03na7hq2kOGvNS2K/0BntuvqWh1qOltq
-	 x+is7YT2KFluPMZXKVIhKAa49mckUAfaFpW4WKYDAy2IhBNwnKwKKLT+jvcQnlAukt
-	 t7H2mt2JBz7c+PXOshiQqhkJjA5cC57C1jJNtKKpC2fUHdF3M6lV56MIjzsLTfruDD
-	 xxgCwtDwoLDIVJnLXuZV/PkzWkAKLetPvXo6t0qtOhoggVpZ43cU7jYffOD1WWf+cB
-	 Efl8tfVoOrqeOoPYatIr7WyaJ5I7kZ9mHT12oTd88jwmn3NDfGGspr9ZU1pmRYSc1H
-	 /WJ0w2iOmi7ww==
-Date: Mon, 20 Jan 2025 07:12:24 +0000
+	b=Jlr5gqBhQ4AsoZq5p+p80/zefksblLc7pz5OWERx1jLCOCw/iAv0aLPL1gfSl0cf/
+	 opvc3ygxyxtBTBswO/koS1khR8E4RtWlLjTq4lfIyL2SHpw50WGM8DeLUSq7HcATHZ
+	 05z5culFT+IlmO0BbOsmcr44vo/6h/JRoh0ISz7Kyv3xFLeZLg26D30EsZvO/LxOQm
+	 K4rldMP59akgLOj1lh3/vsTAUUBVavUGGTrilF8pRrYC+t4CWqP+aOBInpG7ELJ+Gu
+	 P3hgXzxNUkpx77vbDn7SUA3hIFthdeQLjGH55bjfyrFQ1hdDIiRph171F48/cWsnok
+	 gpieyulZEcuJA==
+Date: Mon, 20 Jan 2025 07:12:41 +0000
 From: Tzung-Bi Shih <tzungbi@kernel.org>
 To: Ahmad Fatoum <a.fatoum@pengutronix.de>
 Cc: Andrew Morton <akpm@linux-foundation.org>,
@@ -61,11 +61,11 @@ Cc: Andrew Morton <akpm@linux-foundation.org>,
 	linux-security-module@vger.kernel.org,
 	chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
 	kernel@pengutronix.de
-Subject: Re: [PATCH v2 08/12] regulator: allow user configuration of hardware
- protection action
-Message-ID: <Z433WMKjFx7KJJqN@google.com>
+Subject: Re: [PATCH v2 09/12] platform/chrome: cros_ec_lpc: prepare for
+ hw_protection_shutdown removal
+Message-ID: <Z433aYZ1JB_t5jrb@google.com>
 References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
- <20250113-hw_protection-reboot-v2-8-161d3fc734f0@pengutronix.de>
+ <20250113-hw_protection-reboot-v2-9-161d3fc734f0@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,31 +74,24 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250113-hw_protection-reboot-v2-8-161d3fc734f0@pengutronix.de>
+In-Reply-To: <20250113-hw_protection-reboot-v2-9-161d3fc734f0@pengutronix.de>
 
-On Mon, Jan 13, 2025 at 05:25:33PM +0100, Ahmad Fatoum wrote:
-> When the core detects permanent regulator hardware failure or imminent
-> power failure of a critical supply, it will call hw_protection_shutdown
-> in an attempt to do a limited orderly shutdown followed by powering off
-> the system.
+On Mon, Jan 13, 2025 at 05:25:34PM +0100, Ahmad Fatoum wrote:
+> In the general case, a driver doesn't know which of system shutdown or
+> reboot is the better action to take to protect hardware in an emergency
+> situation. For this reason, hw_protection_shutdown is going to be
+> removed in favor of hw_protection_trigger, which defaults to shutdown,
+> but may be configured at kernel runtime to be a reboot instead.
 > 
-> This doesn't work out well for many unattended embedded systems that don't
-> have support for shutdown and that power on automatically when power is
-> supplied:
+> The ChromeOS EC situation is different as we do know that shutdown is
+> the correct action as the EC is programmed to force reset after the
+> short period, thus replace hw_protection_shutdown with
+> __hw_protection_trigger with HWPROT_ACT_SHUTDOWN as argument to
+> maintain the same behavior.
 > 
->   - A brief power cycle gets detected by the driver
->   - The kernel powers down the system and SoC goes into shutdown mode
->   - Power is restored
->   - The system remains oblivious to the restored power
->   - System needs to be manually power cycled for a duration long enough
->     to drain the capacitors
-> 
-> Allow users to fix this by calling the newly introduced
-> hw_protection_trigger() instead: This way the hw_protection commandline
-> or sysfs parameter is used to dictate the policy of dealing with the
-> regulator fault.
+> No functional change.
 > 
 > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-Reviewed-by: Tzung-Bi Shih <tzungbi@kernel.org>
+Acked-by: Tzung-Bi Shih <tzungbi@kernel.org>
 
