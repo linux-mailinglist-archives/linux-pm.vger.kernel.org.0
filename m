@@ -1,178 +1,160 @@
-Return-Path: <linux-pm+bounces-20659-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20660-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68F29A16595
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 04:15:39 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 63BA4A165B9
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 04:35:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0DDB81887B81
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 03:15:43 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2D2607A0677
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 03:35:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 560423D96A;
-	Mon, 20 Jan 2025 03:15:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A254333987;
+	Mon, 20 Jan 2025 03:35:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vVGpsD2S"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7014AB641;
-	Mon, 20 Jan 2025 03:15:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D47E914A4F9
+	for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 03:35:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737342935; cv=none; b=BuycJ713hb2aNKTFoyUIYyqjR1MN+qej20fNBnMClmR0nURUjn0ErNx/8pWa7NqMxSmTgJcFxwpK3i+xuppr9Jn4+U6PkMECnaf48W2m/oLRaceYNyzonXanEsy1izMlvEjk0w2sYyhgRhgm/jfhZD7V7rbe/gbjmvy3mS/0a34=
+	t=1737344132; cv=none; b=dlBCQMyT87HkyC4PtcBIxXnCQCmPfwXNN73jS5b1CmxllYAXQ7eLqc1ihARucbfqpJb9Q5lVZTMxmr7MPmfCNo00E9mhwHMsJtU9C0hSXT8kcRGNTFQBg/u5ch4wZvAAwnxkDbqeXL9eS2br4B2aPK5XOfwsvj5H/O7LRqtutvo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737342935; c=relaxed/simple;
-	bh=qwUUNjDHTBEo9eddLfnKwuShyPehHmQwFQV5Bk1cI68=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=qL1GHO1Wd7SbvMUAqN1fCF+v2IgnB2/DoZufCDfq3yQH40rPJO3UdPAqgSEH33CObV1/wx40/A5BNobpVi48FleqAvAdP0f+OAd2WenzbKx0HWiaBdyAz4Of0Kq1CQkNTMrmEtRAqc1EoYsVtWBPum+BzLSB80fMUxAMnY4bwbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.17])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4YbwRj0C71z1JHg5;
-	Mon, 20 Jan 2025 11:14:25 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id E918B1A0188;
-	Mon, 20 Jan 2025 11:15:22 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 20 Jan
- 2025 11:15:21 +0800
-Message-ID: <0705775a-1040-4564-b97b-2ed397803723@huawei.com>
-Date: Mon, 20 Jan 2025 11:15:11 +0800
+	s=arc-20240116; t=1737344132; c=relaxed/simple;
+	bh=KWRCx4xozR/GhpmwGP7oVsCNRlMGA83eCiiTKE8o/f8=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=dOSS+PoOqIiIZ5yKhAsOMWhNOpxMrexn7KHeuItwPrhqGyylinXGN/a9x3CPyTjyPMbPb8rkFkAYUwONb7/25SRzDxAXbTDzB/5op7Wvx+d5vBYprOIkyjb6cPv/QTsp9fg2rC8VYaLM0ofn+dSIFCgbXNTaj+laW9XsgfC9JNg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vVGpsD2S; arc=none smtp.client-ip=209.85.214.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-215770613dbso50774035ad.2
+        for <linux-pm@vger.kernel.org>; Sun, 19 Jan 2025 19:35:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737344130; x=1737948930; darn=vger.kernel.org;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=XgG1E066ViJFiVwtsV0FQB0JGhNO+nqLMbzNvzOmFag=;
+        b=vVGpsD2SksDeqNxnjA0+Jhy+xY2nyKCTxGLit+tVBZxZsFOKxInrgApdj6oQ2q2p+8
+         TMSKPZAU5vZc/Qi9z9591hSxvY1ZLc5E5hdv66uspFtW2QYlv6gwT9AJesoaCuSAxLYj
+         lrmddDSGGJqFh/5DiqJSI1unq8PEkjJonScpzWDwZJRdmld4AGVYf1/UNPMtdJ1tbHxD
+         OQUs6dxLh9j2yKBgFgXYBJlrQygUCxus4gvkkXjy9VZAQAlD++ZnNancYTyhN4OWN1LL
+         F7werA49W8Fy+mSvXgw2/rj+c3DE3VAg6X6D42Mjt21+nZq0nR+7iQk+UpvoJosCo/9u
+         3Pag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737344130; x=1737948930;
+        h=content-disposition:mime-version:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XgG1E066ViJFiVwtsV0FQB0JGhNO+nqLMbzNvzOmFag=;
+        b=dapv+20hZeUP9gWZu+eIfhMeEuBLzQv2mf90EF8LjALKtXFq7UnjaDB71Uhthnd7t0
+         MDmVjVIOYZ479YuL8ZpSc4MZD/31ZxoxhHH56hHqWAQTqOzHCT8KHNbyLQTaI9NX6fG8
+         g6FOxvVxcs/kv7g2K16TjHRM5qufUFQuyQlPOjtBRMoCO7Kc08Lc678EP3L0R2eSBN60
+         c3vfhikbViQs3L4tleroq7VgzIDZoLWyq7GpIa8j+jeaqtaRO34N66TGGSZmiKec38Yf
+         g5hAUlAFZn5LmRK5jvU640lrg6ai8b5P52FqPfi7wJ5x4ctRP2ySNfqeroXABjk4lpUB
+         JSvA==
+X-Gm-Message-State: AOJu0YwG8YR8Hon4I/dGektnKMXkhM7GmRG5HwVw2mMg64l4RZjUiKoH
+	fgPdpZ8qSX1YTS/sZDPB9sZFs0POpRgaCFRaY463LUEA4xP4dl+qVOFE0+MoU8M=
+X-Gm-Gg: ASbGnctfKkxAZyBgpjtiTcIphjYyjl4dFKrqdXogh0gyov0X0RvB4J9g2Har+0TcZXh
+	xAZnAu4yYZm1wEBp05mUdMQ4Pg1nQPyeoZWbnAnwVdb3jEbF4NIfraoy+m0d9wdKe2RunpxBiy/
+	CXXlnpWcUwbOccaLIChZFFa9sOF6wt4D32ir9+zV1e7R3OStcMiMl16eEwUgTUZLCEAEi2mkZlY
+	rSxJZ6tz3ZJoSOfYnSGQQMN4+jMNjFpNx+XBxO8XAqNqsk8fXoHhNzNbZdV4DL8IqWjO/qj
+X-Google-Smtp-Source: AGHT+IH2geBQuQTR1e8z59IdIUFZ544EOHq+qFieB0Jpj4ShSxKjTzNPc7dI5S+nyy5c+7jfKA4eag==
+X-Received: by 2002:a05:6a00:3a11:b0:729:597:4faa with SMTP id d2e1a72fcca58-72dafb530bdmr17340921b3a.16.1737344130115;
+        Sun, 19 Jan 2025 19:35:30 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dabaa751asm5906473b3a.162.2025.01.19.19.35.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 19 Jan 2025 19:35:29 -0800 (PST)
+Date: Mon, 20 Jan 2025 09:05:27 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+Subject: [GIT PULL] cpufreq/arm updates for 6.14
+Message-ID: <20250120033527.w7s6bzbuw3sa63u3@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 6/6] cpufreq: CPPC: Support for autonomous selection in
- cppc_cpufreq
-To: Mario Limonciello <mario.limonciello@amd.com>, Russell Haley
-	<yumpusamongus@gmail.com>, <rafael@kernel.org>, <lenb@kernel.org>,
-	<robert.moore@intel.com>, <viresh.kumar@linaro.org>
-CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<gautham.shenoy@amd.com>, <ray.huang@amd.com>, <pierre.gondois@arm.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <hepeng68@huawei.com>,
-	<fanghao11@huawei.com>
-References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
- <20250113122104.3870673-7-zhenglifeng1@huawei.com>
- <21654032-a394-4da9-8ee9-d7cb9df8c855@gmail.com>
- <6909eef3-20aa-4341-9177-a42323a0d5c6@huawei.com>
- <270a1cce-8afe-497a-b30b-56157d75a863@amd.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <270a1cce-8afe-497a-b30b-56157d75a863@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-On 2025/1/17 22:30, Mario Limonciello wrote:
+Hi Rafael,
 
-> On 1/16/2025 21:11, zhenglifeng (A) wrote:
->> On 2025/1/16 19:39, Russell Haley wrote:
->>
->>> Hello,
->>>
->>> I noticed something here just as a user casually browsing the mailing list.
->>>
->>> On 1/13/25 6:21 AM, Lifeng Zheng wrote:
->>>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
->>>> driver.
->>>>
->>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
->>>> ---
->>>>   .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++++
->>>>   drivers/cpufreq/cppc_cpufreq.c                | 109 ++++++++++++++++++
->>>>   2 files changed, 163 insertions(+)
->>>>
->>>> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
->>>> index 206079d3bd5b..3d87c3bb3fe2 100644
->>>> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
->>>> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
->>>> @@ -268,6 +268,60 @@ Description:    Discover CPUs in the same CPU frequency coordination domain
->>>>           This file is only present if the acpi-cpufreq or the cppc-cpufreq
->>>>           drivers are in use.
->>>>   
->>>
->>> [...snip...]
->>>
->>>> +What:        /sys/devices/system/cpu/cpuX/cpufreq/energy_perf
->>>> +Date:        October 2024
->>>> +Contact:    linux-pm@vger.kernel.org
->>>> +Description:    Energy performance preference
->>>> +
->>>> +        Read/write an 8-bit integer from/to this file. This file
->>>> +        represents a range of values from 0 (performance preference) to
->>>> +        0xFF (energy efficiency preference) that influences the rate of
->>>> +        performance increase/decrease and the result of the hardware's
->>>> +        energy efficiency and performance optimization policies.
->>>> +
->>>> +        Writing to this file only has meaning when Autonomous Selection is
->>>> +        enabled.
->>>> +
->>>> +        This file only presents if the cppc-cpufreq driver is in use.
->>>
->>> In intel_pstate driver, there is file with near-identical semantics:
->>>
->>> /sys/devices/system/cpu/cpuX/cpufreq/energy_performance_preference
->>>
->>> It also accepts a few string arguments and converts them to integers.
->>>
->>> Perhaps the same name should be used, and the semantics made exactly
->>> identical, and then it could be documented as present for either
->>> cppc_cpufreq OR intel_pstate?
->>>
->>> I think would be more elegant if userspace tooling could Just Work with
->>> either driver.
->>>
->>> One might object that the frequency selection behavior that results from
->>> any particular value of the register itself might be different, but they
->>> are *already* different between Intel's P and E-cores in the same CPU
->>> package. (Ugh.)
->>
->> Yes, I should use the same name. Thanks.
->>
->> As for accepting string arguments and converting them to integers, I don't
->> think it is necessary. It'll be a litte confused if someone writes a raw
->> value and reads a string I think. I prefer to let users freely set this
->> value.
->>
->> In addition, there are many differences between the implementations of
->> energy_performance_preference in intel_pstate and cppc_cpufreq (and
->> amd-pstate...). It is really difficult to explain all this differences in
->> this document. So I'll leave it to be documented as present for
->> cppc_cpufreq only.
-> 
-> At least the interface to userspace I think we should do the best we can to be the same between all the drivers if possible.
-> 
-> For example; I've got a patch that I may bring up in a future kernel cycle that adds raw integer writes to amd-pstates energy_performance_profile to behave the same way intel-pstate does.
+The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
 
-I agree that it's better to keep this interface consistent across different
-drivers. But in my opinion, the implementation of intel_pstate
-energy_performance_preference is not really nice. Someone may write a raw
-value but read a string, or read strings for some values and read raw
-values for some other values. It is inconsistent. It may be better to use
-some other implementation, such as seperating the operations of r/w strings
-and raw values into two files.
+  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
 
-I think it's better to consult Rafael and Viresh about how this should
-evolve.
+are available in the Git repository at:
 
-> 
->>
->>>
->>> -- 
->>> Thanks,
->>> Russell
->>>
->>>
->>>
->>
-> 
+  git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git tags/cpufreq-arm-updates-6.14
 
+for you to fetch changes up to 84cf9e541cccb8cb698518a9897942e8c78f1d83:
+
+  cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver (2025-01-17 09:05:07 +0530)
+
+----------------------------------------------------------------
+ARM cpufreq updates for 6.14
+
+- Extended support for more SoCs in apple cpufreq driver (Hector Martin
+  and Nick Chan).
+
+- Add new cpufreq driver for Airoha SoCs (Christian Marangi).
+
+- Fix using cpufreq-dt as module (Andreas Kemnade).
+
+- Minor fixes for Sparc, scmi, and Qcom drivers (Ethan Carter Edwards,
+  Sibi Sankar and Manivannan Sadhasivam).
+
+----------------------------------------------------------------
+Andreas Kemnade (1):
+      cpufreq: fix using cpufreq-dt as module
+
+Christian Marangi (2):
+      dt-bindings: cpufreq: Document support for Airoha EN7581 CPUFreq
+      cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver
+
+Ethan Carter Edwards (1):
+      cpufreq: sparc: change kzalloc to kcalloc
+
+Hector Martin (1):
+      cpufreq: apple-soc: Drop setting the PS2 field on M2+
+
+Manivannan Sadhasivam (2):
+      cpufreq: qcom: Fix qcom_cpufreq_hw_recalc_rate() to query LUT if LMh IRQ is not available
+      cpufreq: qcom: Implement clk_ops::determine_rate() for qcom_cpufreq* clocks
+
+Nick Chan (6):
+      dt-bindings: cpufreq: apple,cluster-cpufreq: Add A7-A11, T2 compatibles
+      cpufreq: apple-soc: Allow per-SoC configuration of APPLE_DVFS_CMD_PS1
+      cpufreq: apple-soc: Use 32-bit read for status register
+      cpufreq: apple-soc: Increase cluster switch timeout to 400us
+      cpufreq: apple-soc: Set fallback transition latency to APPLE_DVFS_TRANSITION_TIMEOUT
+      cpufreq: apple-soc: Add Apple A7-A8X SoC cpufreq support
+
+Sibi Sankar (1):
+      cpufreq: scmi: Register for limit change notifications
+
+ Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml |  55 +++++++++++++++++++++++++++++++++++++++++++++++++
+ Documentation/devicetree/bindings/cpufreq/apple,cluster-cpufreq.yaml |  10 ++++++++-
+ drivers/cpufreq/Kconfig                                              |   2 +-
+ drivers/cpufreq/Kconfig.arm                                          |   8 ++++++++
+ drivers/cpufreq/Makefile                                             |   1 +
+ drivers/cpufreq/airoha-cpufreq.c                                     | 152 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/cpufreq/apple-soc-cpufreq.c                                  |  56 ++++++++++++++++++++++++++++++++++++++++----------
+ drivers/cpufreq/cpufreq-dt-platdev.c                                 |   4 ++--
+ drivers/cpufreq/qcom-cpufreq-hw.c                                    |  34 +++++++++++++++++++++---------
+ drivers/cpufreq/scmi-cpufreq.c                                       |  45 ++++++++++++++++++++++++++++++++++++++++
+ drivers/cpufreq/sparc-us2e-cpufreq.c                                 |   2 +-
+ drivers/cpufreq/sparc-us3-cpufreq.c                                  |   2 +-
+ 12 files changed, 344 insertions(+), 27 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/cpufreq/airoha,en7581-cpufreq.yaml
+ create mode 100644 drivers/cpufreq/airoha-cpufreq.c
+
+-- 
+viresh
 
