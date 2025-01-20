@@ -1,132 +1,191 @@
-Return-Path: <linux-pm+bounces-20693-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20694-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 23880A16E61
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 15:23:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 61799A16EC8
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 15:50:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 329BF163702
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 14:22:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D9C51684C6
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 14:49:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 221881DEFD4;
-	Mon, 20 Jan 2025 14:22:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b="xmGoqtlD"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1EF1E3DF2;
+	Mon, 20 Jan 2025 14:49:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 75A2213D531
-	for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 14:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E2C01E3DE4;
+	Mon, 20 Jan 2025 14:49:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737382978; cv=none; b=gGbjyFXCbUaymEixACYTJ4mglR659E93AIEgKjm5JEQ95jHUdmGOdPG7jwXOH2OFqvnHtL7TgLl3nTWy7chnaNF0pNQeEDtWLNAeGR0I81ce+PgkXXe6q4r/MerbGC4jh/xwYzZ8PqQLcsX/i/XUrBw4pZg4GGbcfIdb3J6M0+g=
+	t=1737384596; cv=none; b=kAsEpfh7svkf7yqYxTp5cv0HWDtO5A3wKsmLuiUWt5vXGBlC/5oQldaEAsb1fhWCD64rARH7MlNpCCFycxuHhdXc8SxdE3eV3B0Ypg0WMpJqjiqcC2DD1hINvIvnoeGKqBCZl0uLyJBQZLbLrYu31xVgUoT23Z5DBrZO8NSJhtg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737382978; c=relaxed/simple;
-	bh=0zxAHiO8jy3sLY81tVYjQ19iaaZrsPlckIo1I4N2wTc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=HlFXHHXprCgmtJFrLJ5cRCYrK8LCS4PrYAd8vmhgsbOV+ZBfXFYikXdI14Fxk5gmMCzSrIt3AZUSTYGuIkM4GD8Mww68wPrslF1x0eZ440yyohQ0GYYDiKTRYwRaiJ9TZzGANr1lHu6zUIlP6+nrmeBKMqlIVS4Y4ce2TCXcgrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl; spf=none smtp.mailfrom=bgdev.pl; dkim=pass (2048-bit key) header.d=bgdev-pl.20230601.gappssmtp.com header.i=@bgdev-pl.20230601.gappssmtp.com header.b=xmGoqtlD; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=bgdev.pl
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=bgdev.pl
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43635796b48so28935235e9.0
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 06:22:56 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=bgdev-pl.20230601.gappssmtp.com; s=20230601; t=1737382975; x=1737987775; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OgaYrQ5Jc68X26MGso1qnr32BkbRj0NV0A3CpvOUERM=;
-        b=xmGoqtlDCpRKugG+PiS2+TrgvAZkfF7XRn4p7kqWF7ERuufpohF9REx2ZlnuGI7xwU
-         jsbcgc7i7jx/GlFIkMl703K/eyJT2AANVd/yWtkS0nTIq8XfkpVf3lIQuszAO/joxcvr
-         82oQawPTIpyv8pBefpOuLoqwn2sz8gcYMm5nPaTtrYY9Zjh1Ttp6aRYymLX3iKwDgDgd
-         34SOz4x/1fjH/YqJQrj3jU7puOWzX7/JAy6Xa9yQInhvlCEjB8WiA7dqTZ3EjmM1BgdX
-         ymPafbZceKKBg+WSp81blSN+7UHhUPsuaKhuVDV4kHqz8sTS6Il6+dgyn9sEN7Vs2WHS
-         l9Dg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737382975; x=1737987775;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=OgaYrQ5Jc68X26MGso1qnr32BkbRj0NV0A3CpvOUERM=;
-        b=EOa3pFrPjvcksq18UzgwcA9SJjQ3Bz6z0hE+V7fOcN+YcOM/yqKTA3glny1gfS+xhd
-         hT0fJZuHcp/7T27yMHNomPYB5MRmjxpRUE/o3xMnj/3vDw8p4tYzNFSZoRgiGLd40+dL
-         PH2Y0nwXTTg7G/KLvfJM3q121PjbrjkAmTNTx9QNnefQuwlThKsJOwKPlmPW4zFa5v9H
-         uqfT/3gRL9nUsxU0UFW6UbvF3R+3vCrBHcM1cVaMgBZdrqTYMYUa6c7FoyBS0NDMG7jJ
-         UD6/JSLVTWuNLpshCzIbt9RJYroxUzHBZu2sWBKCxB/qw8zVdp6YlSRNcTVXgLEjhsQJ
-         Jr5w==
-X-Gm-Message-State: AOJu0Yy8fqIZjN1x8hHOZgBIYfQjnX07wW0yMaIP8KJ9YAVh3bdTEIeJ
-	JKwpXJwE8mRnLnbBK5QqeTBBd2VpCWVPhjdhip+scXz/1TUvGeDUsRmD/I2cbDDPOHSN9OitbDL
-	p
-X-Gm-Gg: ASbGnctvmuJP+vgKZ+lbIXS0jTMWt3H2AR4ignZNmFesL+F/vwdOP7w8bs9OTJxXqWT
-	rPPgBEGwPoCnanNh3NhE4U4iJRHHPMWvhRilX4mEnzlzAtFr7r/xZe+KEytXf3YzQBVlMXGKdvk
-	0Cwh1Ev3K8qfS1MiMQPB1viJniHooEnAX+gvrd/z0Gh4Q6MfsGGpmVTGU09SbP4EGvzHJrDspwD
-	ORVFVCzc19vSZMlpB0b6U39f7V3iR1hKa2YyHOJ/+WMb+PDEGWj6IZ3iC9RkYQkGD1Uvg==
-X-Google-Smtp-Source: AGHT+IENLZPpaKkzLvm/nzIzLTRK5MlqU6/eFeCsGq9M89SoCSLvjbAPZ1fyAjvWmL6dB0FuQNKI0Q==
-X-Received: by 2002:a05:600c:35cf:b0:434:f1bd:1e40 with SMTP id 5b1f17b1804b1-438918c6162mr100691995e9.6.1737382974563;
-        Mon, 20 Jan 2025 06:22:54 -0800 (PST)
-Received: from brgl-uxlite.home ([2a01:cb1d:dc:7e00:1e6f:aa81:b243:8253])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-43890409758sm144972755e9.2.2025.01.20.06.22.53
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 06:22:54 -0800 (PST)
-From: Bartosz Golaszewski <brgl@bgdev.pl>
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
-Subject: [GIT PULL] pwrseq updates for v6.14-rc1
-Date: Mon, 20 Jan 2025 15:22:51 +0100
-Message-ID: <20250120142251.330065-1-brgl@bgdev.pl>
-X-Mailer: git-send-email 2.45.2
+	s=arc-20240116; t=1737384596; c=relaxed/simple;
+	bh=Lz4XZCsWuH3FfKd8cbIPejJRiC2dpV7ujU8RZWqZtLY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iUQ0tszdg9pp6kUo4UgFZ4ePG4sypOe0hltLdXE5HKBTNfT9lhTj+ThZ6ZIzMiyho1A99rai6tAwiP2BR1dFxw0Ez+ChN/XetrPaYCue+xOrgaHbqVVrLc/f/G4sU01eYn337Tl4LZKc1+s0m52F4U/XqG/HQR6fih7tylMLU/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id EF56D1063;
+	Mon, 20 Jan 2025 06:50:21 -0800 (PST)
+Received: from [10.57.94.139] (unknown [10.57.94.139])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABB173F740;
+	Mon, 20 Jan 2025 06:49:49 -0800 (PST)
+Message-ID: <256a7620-2d21-4474-b64d-b1e8effbc975@arm.com>
+Date: Mon, 20 Jan 2025 15:49:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 6/6] cpufreq: CPPC: Support for autonomous selection in
+ cppc_cpufreq
+To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>,
+ Mario Limonciello <mario.limonciello@amd.com>,
+ Russell Haley <yumpusamongus@gmail.com>, rafael@kernel.org, lenb@kernel.org,
+ robert.moore@intel.com, viresh.kumar@linaro.org
+Cc: acpica-devel@lists.linux.dev, linux-acpi@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, linuxarm@huawei.com,
+ jonathan.cameron@huawei.com, gautham.shenoy@amd.com, ray.huang@amd.com,
+ zhanjie9@hisilicon.com, lihuisong@huawei.com, hepeng68@huawei.com,
+ fanghao11@huawei.com
+References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
+ <20250113122104.3870673-7-zhenglifeng1@huawei.com>
+ <21654032-a394-4da9-8ee9-d7cb9df8c855@gmail.com>
+ <6909eef3-20aa-4341-9177-a42323a0d5c6@huawei.com>
+ <270a1cce-8afe-497a-b30b-56157d75a863@amd.com>
+ <0705775a-1040-4564-b97b-2ed397803723@huawei.com>
+Content-Language: en-US
+From: Pierre Gondois <pierre.gondois@arm.com>
+In-Reply-To: <0705775a-1040-4564-b97b-2ed397803723@huawei.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Bartosz Golaszewski <bartosz.golaszewski@linaro.org>
 
-Linus,
 
-Please pull the following set of changes for the power sequencing
-subsystem. We added support for another Qualcomm WCN model and a FIXME
-comment that explains why we still need to keep a GPIO workaround for now
-despite having merged a set of changes to the PCI code that seemingly
-fixed the underlying problem.
+On 1/20/25 04:15, zhenglifeng (A) wrote:
+> On 2025/1/17 22:30, Mario Limonciello wrote:
+> 
+>> On 1/16/2025 21:11, zhenglifeng (A) wrote:
+>>> On 2025/1/16 19:39, Russell Haley wrote:
+>>>
+>>>> Hello,
+>>>>
+>>>> I noticed something here just as a user casually browsing the mailing list.
+>>>>
+>>>> On 1/13/25 6:21 AM, Lifeng Zheng wrote:
+>>>>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
+>>>>> driver.
+>>>>>
+>>>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+>>>>> ---
+>>>>>    .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++++
+>>>>>    drivers/cpufreq/cppc_cpufreq.c                | 109 ++++++++++++++++++
+>>>>>    2 files changed, 163 insertions(+)
+>>>>>
+>>>>> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>>>> index 206079d3bd5b..3d87c3bb3fe2 100644
+>>>>> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>>>> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
+>>>>> @@ -268,6 +268,60 @@ Description:    Discover CPUs in the same CPU frequency coordination domain
+>>>>>            This file is only present if the acpi-cpufreq or the cppc-cpufreq
+>>>>>            drivers are in use.
+>>>>>    
+>>>>
+>>>> [...snip...]
+>>>>
+>>>>> +What:        /sys/devices/system/cpu/cpuX/cpufreq/energy_perf
+>>>>> +Date:        October 2024
+>>>>> +Contact:    linux-pm@vger.kernel.org
+>>>>> +Description:    Energy performance preference
+>>>>> +
+>>>>> +        Read/write an 8-bit integer from/to this file. This file
+>>>>> +        represents a range of values from 0 (performance preference) to
+>>>>> +        0xFF (energy efficiency preference) that influences the rate of
+>>>>> +        performance increase/decrease and the result of the hardware's
+>>>>> +        energy efficiency and performance optimization policies.
+>>>>> +
+>>>>> +        Writing to this file only has meaning when Autonomous Selection is
+>>>>> +        enabled.
+>>>>> +
+>>>>> +        This file only presents if the cppc-cpufreq driver is in use.
+>>>>
+>>>> In intel_pstate driver, there is file with near-identical semantics:
+>>>>
+>>>> /sys/devices/system/cpu/cpuX/cpufreq/energy_performance_preference
+>>>>
+>>>> It also accepts a few string arguments and converts them to integers.
+>>>>
+>>>> Perhaps the same name should be used, and the semantics made exactly
+>>>> identical, and then it could be documented as present for either
+>>>> cppc_cpufreq OR intel_pstate?
+>>>>
+>>>> I think would be more elegant if userspace tooling could Just Work with
+>>>> either driver.
+>>>>
+>>>> One might object that the frequency selection behavior that results from
+>>>> any particular value of the register itself might be different, but they
+>>>> are *already* different between Intel's P and E-cores in the same CPU
+>>>> package. (Ugh.)
+>>>
+>>> Yes, I should use the same name. Thanks.
+>>>
+>>> As for accepting string arguments and converting them to integers, I don't
+>>> think it is necessary. It'll be a litte confused if someone writes a raw
+>>> value and reads a string I think. I prefer to let users freely set this
+>>> value.
+>>>
+>>> In addition, there are many differences between the implementations of
+>>> energy_performance_preference in intel_pstate and cppc_cpufreq (and
+>>> amd-pstate...). It is really difficult to explain all this differences in
+>>> this document. So I'll leave it to be documented as present for
+>>> cppc_cpufreq only.
+>>
+>> At least the interface to userspace I think we should do the best we can to be the same between all the drivers if possible.
+>>
+>> For example; I've got a patch that I may bring up in a future kernel cycle that adds raw integer writes to amd-pstates energy_performance_profile to behave the same way intel-pstate does.
+> 
+> I agree that it's better to keep this interface consistent across different
+> drivers. But in my opinion, the implementation of intel_pstate
+> energy_performance_preference is not really nice. Someone may write a raw
+> value but read a string, or read strings for some values and read raw
+> values for some other values. It is inconsistent. It may be better to use
+> some other implementation, such as seperating the operations of r/w strings
+> and raw values into two files.
 
-Details are in the signed tag.
+I agree it would be better to be sure of the type to expect when reading the
+energy_performance_preference file. The epp values in the range 0-255 with 0
+being the performance value for all interfaces.
 
-Best Regards,
-Bartosz Golaszewski
+In the current epp strings, it seems there is a big gap between the PERFORMANCE
+and the BALANCE_PERFORMANCE strings. Maybe it would be good to complete it:
+EPP_PERFORMANCE		0x00
+EPP_BALANCE_PERFORMANCE	0x40      // state value changed
+EPP_BALANCE		0x80      // new state
+EPP_BALANCE_POWERSAVE	0xC0
+EPP_POWERSAVE		0xFF
 
-The following changes since commit 40384c840ea1944d7c5a392e8975ed088ecf0b37:
+NIT: The mapping seems to be slightly different for intel_pstate and amd-pstate
+currently:
+drivers/cpufreq/amd-pstate.c
+#define AMD_CPPC_EPP_PERFORMANCE		0x00
+#define AMD_CPPC_EPP_BALANCE_PERFORMANCE	0x80
+#define AMD_CPPC_EPP_BALANCE_POWERSAVE		0xBF
+#define AMD_CPPC_EPP_POWERSAVE			0xFF
 
-  Linux 6.13-rc1 (2024-12-01 14:28:56 -0800)
+arch/x86/include/asm/msr-index.h
+#define HWP_EPP_PERFORMANCE		0x00
+#define HWP_EPP_BALANCE_PERFORMANCE	0x80
+#define HWP_EPP_BALANCE_POWERSAVE	0xC0   <------ Different from AMD_CPPC_EPP_BALANCE_POWERSAVE
+#define HWP_EPP_POWERSAVE		0xFF
 
-are available in the Git repository at:
+> 
+> I think it's better to consult Rafael and Viresh about how this should
+> evolve.
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/brgl/linux.git tags/pwrseq-updates-for-v6.14-rc1
-
-for you to fetch changes up to 29da3e8748f97dcf01498b00d42a3e7574ece80b:
-
-  power: sequencing: qcom-wcn: explain why we need the WLAN_EN GPIO hack (2025-01-13 09:07:20 +0100)
-
-----------------------------------------------------------------
-pwrseq updates for v6.14-rc1
-
-- support a new model in the qcom-wcn pwrseq driver
-- explain the need to keep the WLAN_EN GPIO workaround for now with
-  a FIXME comment
-
-----------------------------------------------------------------
-Bartosz Golaszewski (1):
-      power: sequencing: qcom-wcn: explain why we need the WLAN_EN GPIO hack
-
-Janaki Ramaiah Thota (1):
-      power: sequencing: qcom-wcn: add support for the WCN6750 PMU
-
- drivers/power/sequencing/pwrseq-qcom-wcn.c | 29 +++++++++++++++++++++++++++++
- 1 file changed, 29 insertions(+)
+Yes indeed
 
