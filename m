@@ -1,169 +1,136 @@
-Return-Path: <linux-pm+bounces-20696-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20697-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EC49A16F38
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 16:28:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AB003A16F5C
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 16:38:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E9F4418892E9
-	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 15:28:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA9B43A8491
+	for <lists+linux-pm@lfdr.de>; Mon, 20 Jan 2025 15:38:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2EDD41E5738;
-	Mon, 20 Jan 2025 15:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B29121E98EB;
+	Mon, 20 Jan 2025 15:38:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="e/SFFPdp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hv42iZ4J"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 868E61E5714
-	for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 15:28:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8ED91E885A;
+	Mon, 20 Jan 2025 15:38:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737386920; cv=none; b=miW/lnuzcUsYudOekP2zoAA37U9P97p0jd45FgGSLiH/DI6qeRcgwzqKx6JyU/r5xnM1cJcYBzthvsV+NoEKkDazVnUCEp5N3xpi7CyEKVU9XJOwxbqXuOnVQ7wO9m91BkMelemhkHtgpPQJDJkfn57w07FOF8RfSirE9IXytd4=
+	t=1737387536; cv=none; b=jlHLxcy8YoPKGaBVBb+w+JGEeOHKgjC4jbACNXM7Cl0DoAvfvv68St24atHSmLBxa98s7iRaeBRcF4ElvEBNaBPmteOMCl5h9elqEDyaTSND9u7yP3HkY5V4ELyISyrxBukgWezpOn85M2owjmPf8aDE7B0fJ4vUsH/3kcnt3dQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737386920; c=relaxed/simple;
-	bh=VAWkKFMuuvGFwc4lV9U8KFWWhfAs+x3tBpzqXY33AtI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Q2BcQFc4kLe2pBSiLAVzJxQQemrwo3jSQuS79SOUGFIGuH1dB4wjBcxCQbiR0lVQDWXkrp5p6ya+xDjGorEYodcnuqfdqrt5SO1XBvycKbmuOK5kHLQdmm0Slc3mGxLT6I+U5xbOgxh1o1Qi1cH66x2iTa0nVKtXbmURJE6GJlI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=e/SFFPdp; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-2166f1e589cso111107835ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 07:28:38 -0800 (PST)
+	s=arc-20240116; t=1737387536; c=relaxed/simple;
+	bh=l+YYGTm2zzIcbCgqHlNlez++LIbLtqhh+Pn409TvJho=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=esyYprRJtRs7jF9XZdHIaN/hOF+89O3/L7ArjoVR1avCPTYEcbvuMYt23Asny81E4f6eFs4ti794h8PeUiJtuTIwc83lsvs8XIKqeRyvKatwJxGDX+IvpmPfXEMHcCnFWS0QerKfRiAnNNCzbkE61Rdore4YK8p4Tjk2/ztqC6U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hv42iZ4J; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-4362bae4d7dso33124535e9.1;
+        Mon, 20 Jan 2025 07:38:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737386918; x=1737991718; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=Ge/AXIemwm1awQOTNlXpVZkK91To9JlcVieMAvqiKWA=;
-        b=e/SFFPdpfCxKnQ9Uhigb5Oa7CjJ6r5xJjQaUJpKjJXzBhBRKQRwV2kHerHuoJGmXBq
-         9fcWEIDZwaiM3KYLGKP5pqn2MygkXutilbNUQ6MEbpSlp5LolD4kNH4fwqcS1xLgWPIX
-         8BR6Bn5/MWoqlb633frJ8QJLrdM40Cehh6qvgQHZLS+Gt3/G14rDQjDerVpcwoIFNByp
-         2bplpGiz/L2BOKUgEWS2jPeKq9dp3MyHT4BAz02cq/oLLy6IVjJIBi8Q4zvsdY8Ohffx
-         OfPyV4OIjUG/jZ1alp8WDm2fpxy3AwALDtF9uConNkF7ZZfxFym8JKuj8vul98gDtsrr
-         8d8w==
+        d=gmail.com; s=20230601; t=1737387533; x=1737992333; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=FUNH5OV+WC/QzjXwldloXCvwJvNBFYqSY2qbuibPXTY=;
+        b=hv42iZ4JJIYTTZYrSz1RNRNNBpviWs9/OgJu1Ip6YGLzx5wrihHzxjgmCNxdArDZpH
+         svg8Yca6Bu94peccrADVrPA7EB1Big4ukvFiWfH5xBJJC6yAad4hGY/hGflo97i4GLMY
+         h18c0ZRcwEeOhNgBuatObZlQGJOAHvtK/hPkMVWS9OaDJb4/x+PHxf8HfKq4+7Aas36f
+         xp8tEUCutHntpQ6tXigJrfvqGSQBxnSMhyiPWnV6RDcYRnfoqEgRtFuTRPQkMlw3lIgS
+         1sQDrkKeKjqiKEr8gR9f21FWkGK0imiouNBtxi+w3j5JRaZ5Xsju5WtQjexHTvrek3PL
+         dtLQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737386918; x=1737991718;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Ge/AXIemwm1awQOTNlXpVZkK91To9JlcVieMAvqiKWA=;
-        b=mq+kesLwbuElGXzVO6vMTMZqJYm8kl8d4tupl2dvgt8dLZCjif6CyUO2gDUM4YI3+X
-         8f0raz8zCDQLiWAW901c0f4+lQWNQr/H/RsyLVT9nWAzqsoOgp2b3FX2zAE+2xfnMRmg
-         BxNvoxfRDYRzS5EMFHp3craFsTZpPtoFK9/Amd9Xjp5XM1KAW9oIlo91zA2vKFkivXbs
-         jO+hKyb5YYAjzQ9Wg2U/VvyMbYNcxxcdn+fWtJGy6a35U9cLKbeVzUNuKoX1S6EV7xnt
-         TXruiAOqjJf7/nkXPs1t81Y1/O0ty9XyWV81fkZUC2WL3J5FgTinutq/rjrm9Wnq6PLz
-         Ltiw==
-X-Forwarded-Encrypted: i=1; AJvYcCXNidP+SKVhx6RVt8mj6TMVK7nlQDW5BttL8rHp5O6JulOEUwAHdLsyBY144ciq84lci5yooznIbQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yys4IjrLDwUOSdblNoB4qxPpcJ7BfHgjHMVNtTDcqBM+xCaN6ky
-	JIswyXS7XBQgwRaQB0uBVjPlDsbXLd58n8B/wRBMWfo/dRu44UL0Vw6Cn2XJUg==
-X-Gm-Gg: ASbGncuR+R8yiBl3FfJm8yoBspjRXnuYyIaQI03oyjOaUbOMG9+BqpAuUX94HyxFxGs
-	voY/35jf3jndjip5s6hdRiLL7tjgSgD5+DNLl165fVTFkQbDmEPIAgkpqa/UH4donlv7toi4nVw
-	qgaj7eKPWMbPY5LwzT7O6U1QvFO5KgRtU3AZ2e7R0AZsMlYiQscSts1Pib9E9rGahXVZKpjVvnc
-	LbcrK0syKK1KNJ1TP3VX3KBbkbsKQhez7muJX4Pi6pdhek+o0HOr5drBox52oAs4YpciMeYaLUz
-	WNgYfx0=
-X-Google-Smtp-Source: AGHT+IFEYzzBuALfLBnZY/0Oioq2g+BcnanbnfQw4KIaV+WjpwymnqzEgNX6z1yArWAvcbtux5os8A==
-X-Received: by 2002:a17:902:e546:b0:216:281f:820d with SMTP id d9443c01a7336-21c3553b6famr223740225ad.11.1737386917771;
-        Mon, 20 Jan 2025 07:28:37 -0800 (PST)
-Received: from thinkpad ([117.213.102.234])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2cea2caasm61864755ad.51.2025.01.20.07.28.32
+        d=1e100.net; s=20230601; t=1737387533; x=1737992333;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=FUNH5OV+WC/QzjXwldloXCvwJvNBFYqSY2qbuibPXTY=;
+        b=F047UjFlGUeYwrhOvNxol1IFvPNIjknywi6x5nbj+OQvR+6ntVRmpoTlFxVt6mN5hc
+         PRUkiFuCD8Zt0uDDJjONCjpTgO4yyD2Y+AVoiHa16p4Qwtr8+jgR9+rA9eI8z7UsmygV
+         0OXRp9kvtBZxVZpgTfZY0Wjd2juKscF+5GTLWxPocwHW5uYbSUuapjRa9ktB1Ovd3xEg
+         S7uw11frgimWx+KuiGhbcgjKnBwV3ZbFsoUsyRW3HZJrBzUo/vUFtFIxX+hFBCMD+Dp1
+         ScxjMN+kmSoC4zs5cXpjU0l+WKnQ6oTjzboks9wbOK4gmmy8jUa8tEPRWYgz6R8ivrj1
+         qJCQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUU7+61bw/B760YsbzZX0M8hoY8wybTRzOJi1cy00TZ3/D6vyIdF+foSBrFjftu3f56za3oeGZc3H+sxCw=@vger.kernel.org, AJvYcCVg8a4ZagkDzsmWA+I30djdv3Jd2leFyJw3SBEVHHDoEPyS5L++w7nbdm/6e5p55wYDQWk/ievOnNw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyEjzubqWWHa4FuIgaelDty2ADtYxMElh4uFN6g0Q1FmXUIAg2g
+	NgAP9qzd8BFJd4tDs8Y5/8dDO5MLbd6mTwEAHFiHWJBGvHLO83Rf
+X-Gm-Gg: ASbGncvsun4gYo/MKsDhFRE2mCm6ZLQ9hT3ezGOxbqylEBYS6GupDKQWLvMLg2N/WK2
+	bs2wzk1Flku91Iv8g2JQvJak3Qf80cICNes02YkLKU/SHaXPYtCPHTfuck9/sB4QLTt8rLAQleb
+	srr37UFWkXjjffQZpFFEw6cjfc01gMggp1bb7Z1pu7B9PjIwzLtqoFk5zec4KkKlSoj2+EltEiX
+	EODgYtntWzml4lcwcTsro9P83hjjKu3u0vYKi8ngJ1t8uCYVtRq/i4GszN6F5iEvld1VNzpPHgL
+	fmscuHY6XTLaEl67KltZeSIeLQq9dt1WGRk7vFI=
+X-Google-Smtp-Source: AGHT+IFq/N1M/Fzfqtl5Tsax6f2eFNQebWQPzXxA/LFVpMMquGf/Nb5tqY6jgvqwOtRwfXgtC13vBQ==
+X-Received: by 2002:a05:600c:4508:b0:431:547e:81d0 with SMTP id 5b1f17b1804b1-438913e1c00mr147505135e9.11.1737387532941;
+        Mon, 20 Jan 2025 07:38:52 -0800 (PST)
+Received: from localhost.localdomain (93-34-91-161.ip49.fastwebnet.it. [93.34.91.161])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-438904084e7sm144141375e9.6.2025.01.20.07.38.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 07:28:37 -0800 (PST)
-Date: Mon, 20 Jan 2025 20:58:29 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>,
-	Krishna Chaitanya Chundru <quic_krichai@quicinc.com>,
-	rafael@kernel.org, ulf.hansson@linaro.org,
-	Kevin Xie <kevin.xie@starfivetech.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Markus.Elfring@web.de, quic_mrana@quicinc.com,
-	m.szyprowski@samsung.com, linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	regressions@lists.linux.dev
-Subject: Re: [PATCH v7 2/2] PCI: Enable runtime pm of the host bridge
-Message-ID: <20250120152829.7wrnwdji2bnfqrhw@thinkpad>
-References: <20250113162549.a2y7dlwnsfetryyw@thinkpad>
- <20250114211653.GA487608@bhelgaas>
- <20250119152940.6yum3xnrvqx2xjme@thinkpad>
- <Z44llTKsKfbEcnnI@hovoldconsulting.com>
+        Mon, 20 Jan 2025 07:38:52 -0800 (PST)
+From: Christian Marangi <ansuelsmth@gmail.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Nathan Chancellor <nathan@kernel.org>,
+	Nick Desaulniers <ndesaulniers@google.com>,
+	Bill Wendling <morbo@google.com>,
+	Justin Stitt <justinstitt@google.com>,
+	Christian Marangi <ansuelsmth@gmail.com>,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org,
+	llvm@lists.linux.dev
+Cc: Sudeep Holla <sudeep.holla@arm.com>,
+	kernel test robot <lkp@intel.com>
+Subject: [PATCH] pmdomain: airoha: Fix compilation error with Clang-20 and Thumb2 mode
+Date: Mon, 20 Jan 2025 16:38:09 +0100
+Message-ID: <20250120153817.11807-1-ansuelsmth@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z44llTKsKfbEcnnI@hovoldconsulting.com>
 
-On Mon, Jan 20, 2025 at 11:29:41AM +0100, Johan Hovold wrote:
-> On Sun, Jan 19, 2025 at 08:59:40PM +0530, Manivannan Sadhasivam wrote:
-> > On Tue, Jan 14, 2025 at 03:16:53PM -0600, Bjorn Helgaas wrote:
-> > > On Mon, Jan 13, 2025 at 09:55:49PM +0530, Manivannan Sadhasivam wrote:
-> > > > On Tue, Jan 07, 2025 at 03:27:59PM +0100, Johan Hovold wrote:
-> 
-> > > > > > > I just noticed that this change in 6.13-rc1 is causing the
-> > > > > > > following warning on resume from suspend on machines like the
-> > > > > > > Lenovo ThinkPad X13s:
-> 
-> > > > > > > 	pci0004:00: pcie4: Enabling runtime PM for inactive device with active children
-> 
-> > > > > > > which may have unpopulated ports (this laptop SKU does not
-> > > > > > > have a modem).
-> 
-> > > What's the plan for this?  Does anybody have a proposal?
-> > > 
-> > 
-> > TBH, I don't know how to fix this issue in a proper way. I need inputs from
-> > Rafael/Ulf.
-> > 
-> > > IIUC there is no functional issue, but the new warning must be fixed,
-> > > and it would sure be nice to do it before v6.13.  If there *is* a
-> > > functional problem, we need to consider a revert ASAP.
-> > > 
-> > 
-> > There is no functional problem that I'm aware of, so revert is not warranted.
-> 
-> I'd argue for reverting the offending commit as that is the only way to
-> make sure that the new warning is ever addressed.
-> 
+The use of R7 in the SMCCC conflicts with the compiler's use of R7 as a frame
+pointer in Thumb2 mode, which is forcibly enabled by Clang when profiling
+hooks are inserted via the -pg switch.
 
-How come reverting becomes the *only* way to address the issue? There seems to
-be nothing wrong with the commit in question and the same pattern in being used
-in other drivers as well. The issue looks to be in the PM core.
+This is a known issue and similar driver workaround this with a Makefile
+ifdef. Exact workaround are applied in
+drivers/firmware/arm_scmi/transports/Makefile and other similar driver.
 
-Moreover, the warning is not causing any functional issue as far as I know. So
-just reverting the commit that took so much effort to get merged for the sake of
-hiding a warning doesn't feel right to me.
+Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
+Reported-by: kernel test robot <lkp@intel.com>
+Closes: https://lore.kernel.org/oe-kbuild-all/202501201840.XmpHXpQ4-lkp@intel.com/
+Fixes: 82e703dd438b ("pmdomain: airoha: Add Airoha CPU PM Domain support")
+Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+---
+ drivers/pmdomain/mediatek/Makefile | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-> Vendors unfortunately do not a have a good track record of following up
-> and fixing issues like this.
-> 
-
-I'm not relying on vendors here. I am looking into this issue and would like to
-fix the warning/issue on my own. That's why I shared my observation with
-Ulf/Rafael.
-
-> Judging from a quick look at the code (and the commit message of the
-> patch in question), no host controller driver depends on the commit in
-> question as the ones that do enable runtime PM just resume
-> unconditionally at probe() currently (i.e. effectively ignores the state
-> of their children).
-> 
-
-Right. There are a couple of pieces that needs to be fixed to have the runtime
-PM working from top to bottom in the PCIe hierarchy. This is also one more
-reason why I believe that the commit wouldn't have caused any functional issue.
-
-- Mani
-
+diff --git a/drivers/pmdomain/mediatek/Makefile b/drivers/pmdomain/mediatek/Makefile
+index 0f6edce9239b..18ba92e3c418 100644
+--- a/drivers/pmdomain/mediatek/Makefile
++++ b/drivers/pmdomain/mediatek/Makefile
+@@ -2,3 +2,10 @@
+ obj-$(CONFIG_MTK_SCPSYS)		+= mtk-scpsys.o
+ obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS) 	+= mtk-pm-domains.o
+ obj-$(CONFIG_AIROHA_CPU_PM_DOMAIN) 	+= airoha-cpu-pmdomain.o
++
++ifeq ($(CONFIG_THUMB2_KERNEL)$(CONFIG_CC_IS_CLANG),yy)
++# The use of R7 in the SMCCC conflicts with the compiler's use of R7 as a frame
++# pointer in Thumb2 mode, which is forcibly enabled by Clang when profiling
++# hooks are inserted via the -pg switch.
++CFLAGS_REMOVE_airoha-cpu-pmdomain.o += $(CC_FLAGS_FTRACE)
++endif
 -- 
-மணிவண்ணன் சதாசிவம்
+2.47.1
+
 
