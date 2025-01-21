@@ -1,136 +1,114 @@
-Return-Path: <linux-pm+bounces-20756-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20757-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 858F5A17A72
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 10:46:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40A37A17A77
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 10:47:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4228D7A0585
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 09:46:47 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DAFB07A2E19
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 09:47:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7E11BE23F;
-	Tue, 21 Jan 2025 09:46:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E33D31C3C04;
+	Tue, 21 Jan 2025 09:47:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mS94ByCw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QFw3hIUx"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901BB3BBE5
-	for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 09:46:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A29CC1B3950;
+	Tue, 21 Jan 2025 09:47:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737452810; cv=none; b=OIwsmpx52RerJu4GFG7OXX2xpE2Uar1GFlZtWVHPdzYg6ysLYvcSIAKpSkifMqNq4gYjfisY6VVXkBeQq4xLi8VpfzfA56ocTbG80fmtdn8xDvYr4s1VpKVn6bQJhpSyV9x1y3Jfe5NGaglULoz1qn6AWpLSuZbIQ6X5FzXXAw4=
+	t=1737452832; cv=none; b=Y+HUlObTKV/f9/TANVQAb3HklLSWyKs/zMgwsjBzxfYfTRVPuPW7AC97x52bxyoMjREzsPwfZ1MrP0kdnCh+M9s34zHOsOxR8h8DC9LZoClWMdPcTmV7O0p9WXgYeiLcA0vSUmv3YIYFd2LKfVD1Qv7orqqNHBXkMPKhMAvsHiQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737452810; c=relaxed/simple;
-	bh=1I+Uuama9ugZyQKsEohJdKjjc55GB3IcqY9SnNbolsQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=aJq8HWwXtZ2rffEY+9L7g7looFcXwolD/QCqXxaj/+T/zZLuU+Mda7ZktPksyKKNWEJvqOU/OqOwk+QMdigzVFVk17X8hLIGd9RnCKwsCAxAQZ1ZPNoUumRh2LX6gs4t17VPsSOuVJmhEvBiYSRlvLY6y/tlHilMu5+y2n4x9Ts=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mS94ByCw; arc=none smtp.client-ip=209.85.219.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e3a26de697fso8427529276.3
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 01:46:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737452807; x=1738057607; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=xCznPro7DzazvTiUhQrmITM+It7rrjrCA9i0Q4NMQd0=;
-        b=mS94ByCwoazYn5agMSJCfV49vWPyyKcP+fIjGUIMSx+D+YxEdWu2xOM1dDIMwJh1ad
-         tJ+zstROR0CbL3yx/i+RW018AI+uCyFhBSyl9No9AEl9xAJGHlEpC07VWz+hdjuimL1z
-         uK+S6Fl/Z7k2qZbegcALlPUm6BSsJzq8H3ZMmk8g/Q3o3/sm2xFr8BO55TZRMMB0DGBJ
-         +/wUNnNUYBR++suXUtUt/HG8zXY29O8pTdJaVu6NCOj/LsRYJOROLNFvp4Re5KPwkfv/
-         H2M4PORAP4Olha5Mi94rPVfWC908EyKGPoJPPeOkthyUBksVcMjh7zJgUoQlCPNcvnrr
-         PEPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737452807; x=1738057607;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xCznPro7DzazvTiUhQrmITM+It7rrjrCA9i0Q4NMQd0=;
-        b=umd4hfGjdppN3lliJWFlSR8oMZrq9uCC3wTivqaSRZqSJORqwdMMjo+JFUHZx4XMgE
-         EPFUpi9uiCZYyMD2G/li/ePAeHGwAuCORzRORoa0Ap6ejVM973D2roc4MZiB0EXegCLS
-         fImG81UB8u3tp3xpb5oCLq2cASiPG0dsA2aL0F1cj2ThOhcsozE5EcbSZO3f0B14lL1r
-         FesPkZFhGHqLhkewFad6dCmMCRBoK4YH3i3QkQ33lkmdhCMKHw16n8SF8x9Pz2OKGl4g
-         KPwPfbN8hAw94HDJKqMMQmocJ8BQo8/RBBj4vUYt6RkONgJhlZRQJdFIwfvP+yibXhrB
-         hT2w==
-X-Forwarded-Encrypted: i=1; AJvYcCUKc4kty9pUNf4C0BLCINmFnKnpLw0VxuV8npOKeUTYiGbp9OkIXUf1AYmD4z/C1E0aLk17n2i/OA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YznyBgYjN2k8fxV0o1occFZy0VPofaDkCRjnrEn6BaW/wxj3eT5
-	SOm043XagllWQYFZMOwDFz4BAuvc+EMaFjyCryjsf6yr1G8WpGE+b3+foXe8rr36BRZ9sGa4561
-	eHGV+VO9WV0MXCpgmgI7JBg2Mzre2RvVS4ZRtYw==
-X-Gm-Gg: ASbGnctNsHMqCjJsJqkhxPo1SoBPYma3HhUro5Dd5mFUbBbc3pJm/9AGfWrRB9QNhoa
-	dJx3PSV+hlGlwdqaWsfa4SCeN7ljHzDctfxIzwS1Vc7DZwmjZfBo=
-X-Google-Smtp-Source: AGHT+IE4NvWjhVwcZefMFMPsNF1/yZL/+GizgE7O5W0l1UUq/sk+Rp9xLLX7buviHENqfSARwR8NAFZJ6rRHBgoskwA=
-X-Received: by 2002:a05:690c:7344:b0:6ef:5ab8:2c53 with SMTP id
- 00721157ae682-6f6eb68695cmr133051747b3.19.1737452807535; Tue, 21 Jan 2025
- 01:46:47 -0800 (PST)
+	s=arc-20240116; t=1737452832; c=relaxed/simple;
+	bh=gOL40yEr1/NPatRuvUJBWXcIzOUAyp06nqREo6aK9zg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=OWQc36HNqhX5DLhO4uMRqqwwRwZx3aHdomaQ8OP/8mX/3Mi5fkI/sjuYWkJT18RFa7bE1p81gyzP6+VesXih1oD5Kl5zilFmpYsRTNnreOCkqSd2KhFVXveyH+20y81Lx0ls4xE/LoojY/qNl3qvZ+KgldP1ukqOfMBjBAuzIJQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QFw3hIUx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8EFCAC4CEDF;
+	Tue, 21 Jan 2025 09:47:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737452832;
+	bh=gOL40yEr1/NPatRuvUJBWXcIzOUAyp06nqREo6aK9zg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=QFw3hIUxRpB0pMNWW0ecfvl/6pcMDQLWAHAlTacL7xDYfmxnfuC2GgHgmQtGA7lA/
+	 HJOeo177MwbuT8NRlE5PllCCq85/rUPQFQig62PxdRqJrgvkTAVu2CssMFUkaT1oNX
+	 5hyF7ug7CtXd3SZWU/NKZN4QfJkaErG6w1aIqu/zSnzKIRUpfzpgu4KQrrI/bFNWbZ
+	 NTC/bMqfhPAhj4hkrtbE7q+PknOLGSPlUWMPT9Ju3401Mnl1SRtydWjtFuBcCKS3dR
+	 M9Y8x32vW601rin/e5SpoULr1kgQU+1jVQPYtgOpe0keb4APlUOx8lmu94YtAq67/0
+	 ocYLgz1JQbhzw==
+Date: Tue, 21 Jan 2025 10:47:09 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
+	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org, 
+	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com, 
+	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com, mripard@kernel.org, 
+	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch, ulf.hansson@linaro.org, 
+	jszhang@kernel.org, p.zabel@pengutronix.de, m.szyprowski@samsung.com, 
+	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
+Subject: Re: [RFC v3 01/18] dt-bindings: clock: Add VO subsystem clock
+ controller support
+Message-ID: <20250121-raptor-of-terrific-perfection-cafc27@krzk-bin>
+References: <20250120172111.3492708-1-m.wilczynski@samsung.com>
+ <CGME20250120172120eucas1p23993cdbbe65e82054b9cb92fb704103b@eucas1p2.samsung.com>
+ <20250120172111.3492708-2-m.wilczynski@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250120153817.11807-1-ansuelsmth@gmail.com>
-In-Reply-To: <20250120153817.11807-1-ansuelsmth@gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 21 Jan 2025 10:46:11 +0100
-X-Gm-Features: AbW1kvZ21pVNkI7qM7rGH-9wFnhv5SdIw9t28_ewxvHO8LS13hlMrra20J6gTIc
-Message-ID: <CAPDyKFpBtnsEfMg73UHdXzZvSNHaL8H4N1h6-2wAMnFWNTM75w@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: airoha: Fix compilation error with Clang-20 and
- Thumb2 mode
-To: Christian Marangi <ansuelsmth@gmail.com>
-Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
-	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev, 
-	Sudeep Holla <sudeep.holla@arm.com>, kernel test robot <lkp@intel.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250120172111.3492708-2-m.wilczynski@samsung.com>
 
-On Mon, 20 Jan 2025 at 16:38, Christian Marangi <ansuelsmth@gmail.com> wrote:
->
-> The use of R7 in the SMCCC conflicts with the compiler's use of R7 as a frame
-> pointer in Thumb2 mode, which is forcibly enabled by Clang when profiling
-> hooks are inserted via the -pg switch.
->
-> This is a known issue and similar driver workaround this with a Makefile
-> ifdef. Exact workaround are applied in
-> drivers/firmware/arm_scmi/transports/Makefile and other similar driver.
->
-> Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202501201840.XmpHXpQ4-lkp@intel.com/
-> Fixes: 82e703dd438b ("pmdomain: airoha: Add Airoha CPU PM Domain support")
-> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
+On Mon, Jan 20, 2025 at 06:20:54PM +0100, Michal Wilczynski wrote:
+>  properties:
+>    compatible:
+> -    const: thead,th1520-clk-ap
+> +    enum:
+> +      - thead,th1520-clk-ap
+> +      - thead,th1520-clk-vo
+>  
+>    reg:
+>      maxItems: 1
+>  
+>    clocks:
+>      items:
+> -      - description: main oscillator (24MHz)
+> +      - description: main oscillator (24MHz) or CLK_VIDEO_PLL
 
-Applied for next, thanks!
+thead,th1520-clk-ap gets also VIDEO_PLL? Aren't both serving the same
+purpose from these devices point of view? Bindings are telling what this
+device is expecting.
 
-Kind regards
-Uffe
-
-> ---
->  drivers/pmdomain/mediatek/Makefile | 7 +++++++
->  1 file changed, 7 insertions(+)
->
-> diff --git a/drivers/pmdomain/mediatek/Makefile b/drivers/pmdomain/mediatek/Makefile
-> index 0f6edce9239b..18ba92e3c418 100644
-> --- a/drivers/pmdomain/mediatek/Makefile
-> +++ b/drivers/pmdomain/mediatek/Makefile
-> @@ -2,3 +2,10 @@
->  obj-$(CONFIG_MTK_SCPSYS)               += mtk-scpsys.o
->  obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS)    += mtk-pm-domains.o
->  obj-$(CONFIG_AIROHA_CPU_PM_DOMAIN)     += airoha-cpu-pmdomain.o
+>  
+>    "#clock-cells":
+>      const: 1
+> @@ -51,3 +54,10 @@ examples:
+>          clocks = <&osc>;
+>          #clock-cells = <1>;
+>      };
 > +
-> +ifeq ($(CONFIG_THUMB2_KERNEL)$(CONFIG_CC_IS_CLANG),yy)
-> +# The use of R7 in the SMCCC conflicts with the compiler's use of R7 as a frame
-> +# pointer in Thumb2 mode, which is forcibly enabled by Clang when profiling
-> +# hooks are inserted via the -pg switch.
-> +CFLAGS_REMOVE_airoha-cpu-pmdomain.o += $(CC_FLAGS_FTRACE)
-> +endif
-> --
-> 2.47.1
->
+> +    clock-controller@ff010000 {
+> +        compatible = "thead,th1520-clk-vo";
+
+Difference in one property does not justify new example. If there is
+goign to be resend, just drop.
+
+
+> +        reg = <0xff010000 0x1000>;
+> +        clocks = <&clk CLK_VIDEO_PLL>;
+> +        #clock-cells = <1>;
+
+Best regards,
+Krzysztof
+
 
