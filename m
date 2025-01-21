@@ -1,39 +1,39 @@
-Return-Path: <linux-pm+bounces-20772-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20773-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61150A180D7
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 16:15:29 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCDFBA180F2
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 16:17:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0932018887D3
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 15:15:33 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C85E1888B1F
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 15:17:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B080F14EC5B;
-	Tue, 21 Jan 2025 15:15:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BBE71F37CF;
+	Tue, 21 Jan 2025 15:17:48 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62184EBE;
-	Tue, 21 Jan 2025 15:15:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B90D027702;
+	Tue, 21 Jan 2025 15:17:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737472523; cv=none; b=oIJXhxn5BzXVv4DdM3L82Bsyfk+e9D3uPTQBBBXr4aQCbK1Ap1sYDP22NkZucVBMjSl5xPstkJSc+dDVr0YnnQINCymwMnmV1khm+CsreF09Ac7UTs4VhbqdFzaFUaHXSjuAogT6s8rBR3qR5kCBg5JBxoMGhjWTlpVXpbvXCFE=
+	t=1737472668; cv=none; b=N8TG0V5kL+mZOZbGEp+D9/AMWaEl1E8eBnmDCrpAfDvf+AKYjHclt9CM1tJemNOxaGxaoLTHp0nsdGvm49PTjnMIIYjRVsVN5/LYT2G2lDim6G9OqEiBgr1x0uvHmO3c+FVS+m0M9XnS3Bl2/Ee5z2JDy9Anr8lM3O5PVXo4knA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737472523; c=relaxed/simple;
-	bh=+n+sIJXaTD1gGUpYrtaMwNZ9Xm0JBUHoumwhed+5Nao=;
+	s=arc-20240116; t=1737472668; c=relaxed/simple;
+	bh=Qt50z9NOv9swMXPOtRERAX2U8qd86VshX39fG83ZO+s=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=GylwHNhx7VKyqAEgHRKjj88/7wqWljNSzw9SPefHsbaLMAGVqWdBCLq2CTgvJh4XqBPOKsG9oKl4yAMfE8Rob9Ocas7GZZy5f1GbhtbyJJapSlM5nALjI60QPjyVTYSN4fXHb9qCodJ+CWdkE/x3pz/GQp6dZVgOnHs0526bHsA=
+	 Content-Type:Content-Disposition:In-Reply-To; b=Vxws0LNTwPIms+SFjeyaiaGl5LUOwaScrIcqIKtEBIsFQ9tfCc92tUueViQ/fa17Rb3/5BVVTWyEMJ6uqo7h+/cRFOpFld9Gx/tqBIs6Ijw+gwq0wMi53Iqa9N+Fu7ECdPTy7Xwi5gXm2FkQ0os2pfXs3XU6GnuSKM/nKXVuGfQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7ED31063;
-	Tue, 21 Jan 2025 07:15:48 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 8270F12FC;
+	Tue, 21 Jan 2025 07:18:14 -0800 (PST)
 Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB5E33F66E;
-	Tue, 21 Jan 2025 07:15:16 -0800 (PST)
-Date: Tue, 21 Jan 2025 16:14:32 +0100
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E67B73F66E;
+	Tue, 21 Jan 2025 07:17:40 -0800 (PST)
+Date: Tue, 21 Jan 2025 16:17:02 +0100
 From: Beata Michalska <beata.michalska@arm.com>
 To: Viresh Kumar <viresh.kumar@linaro.org>
 Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
@@ -41,13 +41,18 @@ Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
 	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
 	rafael@kernel.org, sumitg@nvidia.com, yang@os.amperecomputing.com,
 	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
-	zhanjie9@hisilicon.com
-Subject: Re: [PATCH v9 1/5] cpufreq: Allow arch_freq_get_on_cpu to return an
- error
-Message-ID: <Z4-52JUmR7A-7NJP@arm.com>
+	zhanjie9@hisilicon.com, Jonathan Corbet <corbet@lwn.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>, Phil Auld <pauld@redhat.com>,
+	x86@kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v9 2/5] cpufreq: Introduce an optional cpuinfo_avg_freq
+ sysfs entry
+Message-ID: <Z4-6bsDzfe9CLcVf@arm.com>
 References: <20250121084435.2839280-1-beata.michalska@arm.com>
- <20250121084435.2839280-2-beata.michalska@arm.com>
- <20250121104706.2gcegucb6hcuksrd@vireshk-i7>
+ <20250121084435.2839280-3-beata.michalska@arm.com>
+ <20250121105355.sdrgmjv2w2256qfn@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -56,109 +61,48 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250121104706.2gcegucb6hcuksrd@vireshk-i7>
+In-Reply-To: <20250121105355.sdrgmjv2w2256qfn@vireshk-i7>
 
-On Tue, Jan 21, 2025 at 04:17:06PM +0530, Viresh Kumar wrote:
+On Tue, Jan 21, 2025 at 04:23:55PM +0530, Viresh Kumar wrote:
 > On 21-01-25, 08:44, Beata Michalska wrote:
-> > Allow arch_freq_get_on_cpu to return an error for cases when retrieving
-> > current CPU frequency is not possible, whether that being due to lack of
-> > required arch support or due to other circumstances when the current
-> > frequency cannot be determined at given point of time.
-> > 
-> > Signed-off-by: Beata Michalska <beata.michalska@arm.com>
-> > ---
-> >  arch/x86/kernel/cpu/aperfmperf.c | 2 +-
-> >  arch/x86/kernel/cpu/proc.c       | 7 +++++--
-> >  drivers/cpufreq/cpufreq.c        | 8 ++++----
-> >  include/linux/cpufreq.h          | 2 +-
-> >  4 files changed, 11 insertions(+), 8 deletions(-)
-> > 
-> > diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-> > index f642de2ebdac..6cf31a1649c4 100644
-> > --- a/arch/x86/kernel/cpu/aperfmperf.c
-> > +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> > @@ -498,7 +498,7 @@ void arch_scale_freq_tick(void)
-> >   */
-> >  #define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
-> >  
-> > -unsigned int arch_freq_get_on_cpu(int cpu)
-> > +int arch_freq_get_on_cpu(int cpu)
-> >  {
-> >  	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
-> >  	unsigned int seq, freq;
-> > diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-> > index 41ed01f46bd9..d79f5845a463 100644
-> > --- a/arch/x86/kernel/cpu/proc.c
-> > +++ b/arch/x86/kernel/cpu/proc.c
-> > @@ -86,9 +86,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
-> >  		seq_printf(m, "microcode\t: 0x%x\n", c->microcode);
-> >  
-> >  	if (cpu_has(c, X86_FEATURE_TSC)) {
-> > -		unsigned int freq = arch_freq_get_on_cpu(cpu);
-> > +		int freq = arch_freq_get_on_cpu(cpu);
-> >  
-> > -		seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
-> > +		if (freq <= 0)
-> > +			seq_puts(m, "cpu MHz\t\t: Unknown\n");
-> > +		else
-> > +			seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
-> >  	}
-> >  
-> >  	/* Cache size */
 > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > index 418236fef172..6f45684483c4 100644
+> > index 6f45684483c4..b2a8efa83c98 100644
 > > --- a/drivers/cpufreq/cpufreq.c
 > > +++ b/drivers/cpufreq/cpufreq.c
-> > @@ -728,18 +728,18 @@ show_one(cpuinfo_transition_latency, cpuinfo.transition_latency);
-> >  show_one(scaling_min_freq, min);
-> >  show_one(scaling_max_freq, max);
-> >  
-> > -__weak unsigned int arch_freq_get_on_cpu(int cpu)
-> > +__weak int arch_freq_get_on_cpu(int cpu)
-> >  {
-> > -	return 0;
-> > +	return -EOPNOTSUPP;
+> > @@ -733,12 +733,20 @@ __weak int arch_freq_get_on_cpu(int cpu)
+> >  	return -EOPNOTSUPP;
 > >  }
 > >  
 > >  static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
 > >  {
 > >  	ssize_t ret;
-> > -	unsigned int freq;
-> > +	int freq;
+> >  	int freq;
 > >  
-> >  	freq = arch_freq_get_on_cpu(policy->cpu);
-> > -	if (freq)
-> > +	if (freq > 0)
+> > -	freq = arch_freq_get_on_cpu(policy->cpu);
+> > +	freq = IS_ENABLED(CONFIG_CPUFREQ_ARCH_CUR_FREQ)
+> > +		? arch_freq_get_on_cpu(policy->cpu)
+> > +		: 0;
+> > +
+> >  	if (freq > 0)
+> >  		ret = sysfs_emit(buf, "%u\n", freq);
+> >  	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
 > 
-> >= ?
+> Maybe this should be a separate commit ? And also I am not very happy
+Initially it was supposed to be one, but then the rest of the series justifies
+the changes so it made sense to send those in one go.
+> with the new kconfig option. I don't want others to use it as we want
+> to get rid of this for X86 too eventually. Making it a kconfig option
+> allows anyone to enable it and then depend on it without us knowing..
 > 
-> Since we can return error now, 0 should be considered a valid
-> frequency value ?
-Theoretically speaking - it should, though what would 0 actually
-represent then ?
+> Rather just write it as "if (x86)", with a comment on what we plan to
+> do with it in few release cycles.
+Right, those changes are based on discussion in [1].
 
+---
+[1] https://lore.kernel.org/all/CAJZ5v0gCRKzaFrwkoBpLHQUxoP_+jAyhMiCkLQaBUpduk9yxtA@mail.gmail.com/
 ---
 BR
 Beata
-> 
-> >  		ret = sysfs_emit(buf, "%u\n", freq);
-> >  	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
-> >  		ret = sysfs_emit(buf, "%u\n", cpufreq_driver->get(policy->cpu));
-> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> > index 7fe0981a7e46..02fd4746231d 100644
-> > --- a/include/linux/cpufreq.h
-> > +++ b/include/linux/cpufreq.h
-> > @@ -1184,7 +1184,7 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
-> >  }
-> >  #endif
-> >  
-> > -extern unsigned int arch_freq_get_on_cpu(int cpu);
-> > +extern int arch_freq_get_on_cpu(int cpu);
-> >  
-> >  #ifndef arch_set_freq_scale
-> >  static __always_inline
-> > -- 
-> > 2.25.1
 > 
 > -- 
 > viresh
