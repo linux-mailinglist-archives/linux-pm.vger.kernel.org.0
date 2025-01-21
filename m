@@ -1,91 +1,86 @@
-Return-Path: <linux-pm+bounces-20740-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20741-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2594DA17760
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 07:38:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2E229A17764
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 07:38:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2C9F03A8063
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 06:37:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A9FE3A800B
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 06:38:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF17D192B8C;
-	Tue, 21 Jan 2025 06:38:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A5F31A2632;
+	Tue, 21 Jan 2025 06:38:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u8kQjO03"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lSyL5MkT"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+Received: from mail-pj1-f41.google.com (mail-pj1-f41.google.com [209.85.216.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4019F154C0D
-	for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 06:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ACD3419E7D3
+	for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 06:38:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737441481; cv=none; b=RZYm271hd9HDiY0eEi1pG6HA27aoJKD6Eh7f0yvH1rDWnfcm+LqJrTlPDuQDwxPSHa3NV7JFiED1Vtm0I+rGQ3N/d7Qn/bBd81xggxiTo7grUWtlvr3vGZOt4PYmfHQCz8EYQT0JtFRY4FT+x0aVJeBKHalDs8R1Km2S83VdhYo=
+	t=1737441500; cv=none; b=PCJTru2koWmDGAIJYNdXj+nG5Ox6RXHg7i7vhOAVBxq2KS5mhnz4RBnyhuxj2PKenvJorLBpVI/With7dgYDUc6HkPf6jUCJ2nqUagoBfRsenWPpnCheQZDgN6YzpqyxtNlbxw5qskMxDFuTwcvpzNRLaCJPpJvkd8ywGCG3G68=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737441481; c=relaxed/simple;
-	bh=FdZGtAaM/TXT0Jr+7xJOqpe1COzhlczVOT6FVqXwtlw=;
+	s=arc-20240116; t=1737441500; c=relaxed/simple;
+	bh=l/nvJRdym5+NrLV9hCSmCraq6G7ZYR36R5IuPSuo4aw=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SJ+QetTxRzEI0rkv3UZtNxa0YyPdN5MVRmmxwdxXWnL+2DviEu39/ajZA6LlMazuBIuc0PNxtSSp1vf6BFVhiKQmzyteKUdJkyFDJzQvKvHpdC4qJtqFQUHmTznqs8jXJwS+w5n0idNBN4X0x4nvcBUMHZeMovTBTM5SNSa3JLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u8kQjO03; arc=none smtp.client-ip=209.85.214.174
+	 Content-Type:Content-Disposition:In-Reply-To; b=Hm3HD+H/A6W/c3awOdx0Q9wtDPWh5QrLbmoQEsAvGuG1zdi4amIzYGwqSfY2X5vOWmIELfEX8UHMigMiqtVJDrFaZOBiC9jmFrkd0T6HKQHlfPP99iO080FiDMUsWnPW6jhh9zyaUm2NIlryYlfFai8ygkdp4h4EEGwmkxgNfqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lSyL5MkT; arc=none smtp.client-ip=209.85.216.41
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21631789fcdso75433635ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 22:37:59 -0800 (PST)
+Received: by mail-pj1-f41.google.com with SMTP id 98e67ed59e1d1-2ef70c7efa5so7203467a91.2
+        for <linux-pm@vger.kernel.org>; Mon, 20 Jan 2025 22:38:18 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737441479; x=1738046279; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1737441498; x=1738046298; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=V1kXJ0dbTzsw+3qkFK+nnuSxVs4azc6yWs2Zy5LVe+0=;
-        b=u8kQjO03qK/6O+oBISHNZDs2YK078MCYyW12jqIBBitZkM9POhMNaFYEQG8f0lZR8L
-         LUBOyU1O3pY/thd61yjO/eE2fSw1Nl3EAV8UF/sAoRyoalVjSpBXn16cIY30Nx3gDCry
-         AwWK3G9ZCSVPnX79aS3yxYd4yv+JF+MxeWBXxrA1ZGeXEkxPrGdcMMIPbjs807qa5W7+
-         xEjIlxiYCX7AwT9fkNxWPqL571as22BxXaTLLNcwHuqvSSwAiQEZyUoc0CZqvSSxmOCP
-         QE6zBJebg3qVn8Bg2CUteS1lQqJfEscE4aFWIK08hSiZWnM+FhgW2qQVyzf9RPIeyxcL
-         mgsw==
+        bh=mRufwChv4MdaJHMyB6cyYRQD/TJGCE25RrotEvK53F8=;
+        b=lSyL5MkTKmeOeGg4mSm9KlvGfi89AZ6ZhSuJkgA8wf9f/uK/pQiHwTsE37qOatvuhX
+         TNgaqTcljyD1N4U6JxgWXpGQjwc9lKhGMmenI1X32nZT0tjqFGqL/LgjWg8oqNLvctH4
+         uOKD2arOPLzVpfXLMzxDXmbq79um9p+WCLbAKRa3qXXG9tlz7UrtispcT4tm9MHmjQ9k
+         /TQCFhLMNB7V55DpB9KFj3eCe4QZDhUI4cXTnnLY0oXg0URMP6p9E9MV4vPX0OD66eRu
+         3eKKVzcnRVTKl0HsJPYnWiGNKBAoAVOIUu3qhHUn4sv5BhD0q9p1fUrIjnRwvuieQVDf
+         0l7A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737441479; x=1738046279;
+        d=1e100.net; s=20230601; t=1737441498; x=1738046298;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=V1kXJ0dbTzsw+3qkFK+nnuSxVs4azc6yWs2Zy5LVe+0=;
-        b=hcDjYZJaAYKtyDdndGzPX6+5Av40kISKeXYp0A8g5pK1arEJ7OLKH+ocexQaYqsm9N
-         D2VgeaAmUtT9Lx1xK8ksg2HZ+Td9z5Jd2TTNyx4cdeXyHXUg2hmnBsosC/SCVSQRDiwy
-         axhpLSk+Xw1LiHjnwK7ud1y/KY6+2/+D0ZfolB/UQdgWk4f5fHg6Gpiq8HTk21uh8/tT
-         VRd7h3YWvkseSte+igCm2YVPZvBsYmzOe04pfESc9xHj2R6zJBGAgDvJqaLyXNw2Xycn
-         4zxEr4pFD91wC2RTjvY/TSINEXVgaiT71gcuLmv8uvsq7NkaX9od/6lvmRL5kd9mT9Qb
-         ahpQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW1dZL4lEN/e4lcvgIbeWQbYYy41Cs5evqcXz7pJpVHUatisDiQv73YfDKdGuvtlrHNhTqpXhN7+Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBYQb69X48TRJU4wk/+LfhVAdCF6VfO8LJ65oo6ITbo1bUn7/O
-	aM0V/tc1djHp89t7Junql9/eX6nYIPGf/lPmJpQSZgO4KrduEq7Y2d5yfOeoWG0=
-X-Gm-Gg: ASbGncuNUqeLTJJ70dRJq1A9Q/dBo5rgq3IkKlQyQFO3Oz2IllI3H7i21KMM/xx7vW0
-	t2iG2cmMH7Bx3cmc3768+9BDJP2f56LDD0clI6Ydt8eoxtC1YvXfx+D+z+ZNBQhVVz8Ut/eTubc
-	+vr22EEK/c4s1ij/peX3AokMJSLrWidCs6G7XjM/kcG23kjJY3MObLLo5xwLY1tdJteGM6pY2T3
-	zQ1oDXFmHPHDIsW4wXkCgTSoopyqg3POz7bRxdn9zbD3WfqGO9olcVSOvdAxThAOohqcHhR
-X-Google-Smtp-Source: AGHT+IF4tI8Gk35yzbZsOpYJY6h2+3h6rRku5D5843xUPH4A5zFeTN1f55KTda1Wh+k3REjGZR5L7A==
-X-Received: by 2002:a05:6a20:7355:b0:1ea:f941:8d8e with SMTP id adf61e73a8af0-1eb2171e8f0mr23188974637.16.1737441478374;
-        Mon, 20 Jan 2025 22:37:58 -0800 (PST)
+        bh=mRufwChv4MdaJHMyB6cyYRQD/TJGCE25RrotEvK53F8=;
+        b=LO26ziiP5TOBhVWX8meY5sikTk7qRPM/dobUPevmNObyxCnlAnoawN6dPH5cY/4MnP
+         p5/aJLxjNcTH+lk9DpuEmPTfKA99LA2neDG2KPC57I/U0y55DqCCUTGLYq5J7RxhOG3S
+         /yxT1G7Ef3AWt2ggGPI/a8HxBM2uCg0AjMUNL77hxAJ6yV6dlVopiSQxWT2kXAY8nY0q
+         bTzD/4LvohzHbHC9GSd921TP1sVB5Q6YSHLAj9V2a+7DLbm7viPpQfouJ/eVM9ywqytv
+         K1EWbu453SpcDOMLYemrfsn/fsDvGUUIQjvRAi8P+qJ5vVveYqPs0CXWaidVE/4EdlRS
+         SxUA==
+X-Forwarded-Encrypted: i=1; AJvYcCVtT1XCpOtWnrCPZBu022Xy/sa3EZywmyny3gRGqHC5UDJKe8SIP76YH8fT0RxCNQUxaIws64562g==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy6VW30zlHawfBU+f7nxjdxcJ3N9WFlC6GLMRbW8mOYQjiHSYuy
+	KA8p9W88wyMKKv8g/6vsAvi8pcbIOegYwk5hIeiSsHBqjz7eFcWTTd4JX1I85aw=
+X-Gm-Gg: ASbGnctW0fnL82srjAJtSJbKVzKH1oP5KjyajZvAGAWuUsrmLTESb/PZ3VYS36Fg1jS
+	emapA8JgHDZRer61u0DyY48t+tfQ6gv4kXzdH8K+jHfzBJBaazRR1K8I1rbjmwSoN8x+ERWcoEG
+	HCk+PMl8cneaBcJHetbBSA6dkDNTD9dQkneOMuzvSkGjpC84pkjNb9MiCJZwl+BYfA+aUCZVDOK
+	ni3CZ0oKAFqx1IigDm13hbWvcBsOgOdcH5b4ow8ICoQZlqlDOa9461F0gUQxUlPLLWMIIeL
+X-Google-Smtp-Source: AGHT+IEClUaaJoaKoa8wsRdioCcuzH6zZftWsAVTKXgGmWvDnoRtcMd0FcjmRSyQSEktPUTWzRxlgQ==
+X-Received: by 2002:a17:90b:264e:b0:2f1:3355:4a8f with SMTP id 98e67ed59e1d1-2f782c4c47emr22836667a91.4.1737441497988;
+        Mon, 20 Jan 2025 22:38:17 -0800 (PST)
 Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dababc2bfsm8381451b3a.175.2025.01.20.22.37.57
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f77614cba8sm9804112a91.15.2025.01.20.22.38.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 20 Jan 2025 22:37:57 -0800 (PST)
-Date: Tue, 21 Jan 2025 12:07:55 +0530
+        Mon, 20 Jan 2025 22:38:17 -0800 (PST)
+Date: Tue, 21 Jan 2025 12:08:15 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+To: Lifeng Zheng <zhenglifeng1@huawei.com>
 Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
 	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com,
 	lihuisong@huawei.com, fanghao11@huawei.com
-Subject: Re: [PATCH v2 2/4] cpufreq: Introduce a more generic way to set
- default per-policy boost flag
-Message-ID: <20250121063755.sdlbaeappbhobihg@vireshk-i7>
+Subject: Re: [PATCH v2 0/4] cpufreq: Fix some boost errors related to CPU
+ online and offline.
+Message-ID: <20250121063815.ddqh7t2qt32cwx7e@vireshk-i7>
 References: <20250117101457.1530653-1-zhenglifeng1@huawei.com>
- <20250117101457.1530653-3-zhenglifeng1@huawei.com>
- <20250120090102.erm2ffkbnwa5vraa@vireshk-i7>
- <0c910772-368b-4e30-9ce2-1f68510703c4@huawei.com>
- <20250121042024.pstn2otfqnnajgxl@vireshk-i7>
- <2f9433f1-a826-4198-b4aa-9089f566916f@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -94,29 +89,31 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <2f9433f1-a826-4198-b4aa-9089f566916f@huawei.com>
+In-Reply-To: <20250117101457.1530653-1-zhenglifeng1@huawei.com>
 
-On 21-01-25, 14:22, zhenglifeng (A) wrote:
-> On 2025/1/21 12:20, Viresh Kumar wrote:
+On 17-01-25, 18:14, Lifeng Zheng wrote:
+> This patch series fix some boost errors related to CPU online and offline:
 > 
-> > On 21-01-25, 09:45, zhenglifeng (A) wrote:
-> >> On 2025/1/20 17:01, Viresh Kumar wrote:
-> >>> On 17-01-25, 18:14, Lifeng Zheng wrote:
-> >>>> +	/* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
-> >>>> +	if (policy->boost_enabled != cpufreq_boost_enabled()) {
-> >>>> +		policy->boost_enabled = cpufreq_boost_enabled();
-> >>>> +		ret = cpufreq_driver->set_boost(policy, policy->boost_enabled);
-> >>>
-> >>> I though you agreed to do some optimization here ?
-> >>
-> >> Sorry. Do I miss something here?
-> > 
-> > https://lore.kernel.org/all/17c7ed77-21f1-4093-91fc-f3eaa863d312@huawei.com/
-> > 
+>  - patch 1 fix an error that causes the CPU stay on base frequency after a
+>    specific operation
 > 
-> I think I already done that, isn't it?
+>  - patch 2 introduce a more generic way to set default per-policy boost
+>    flag and fix a error that causes the per-policy boost flag remians true
+>    when cpufreq_driver boost disabled
+> 
+>  - patch 3 fix an error in cppc_cpufreq that causes the CPU stay on base
+>    frequency when boost flag is true
+> 
+>  - patch 4 remove the set_boost in acpi_cpufreq_cpu_init(), since it will
+>    be executed in cpufreq_online
+> 
+> Change since v1:
+>  - remove update of min_freq_req
+>  - optimize the conditions for executing set_boost in cpufreq_online
+>  - fix another error in cppc_cpufreq
+>  - remove set_boost in acpi_cpufreq_cpu_init()
 
-And I misread /facepalm .
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
 -- 
 viresh
