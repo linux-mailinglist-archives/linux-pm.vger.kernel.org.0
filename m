@@ -1,248 +1,178 @@
-Return-Path: <linux-pm+bounces-20746-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20747-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 24DBBA1795D
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 09:41:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ABD1A17966
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 09:45:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 55EEB1629A6
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 08:40:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4BE663A9051
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 08:44:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64DDA1B87EA;
-	Tue, 21 Jan 2025 08:40:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A3AB1B87C2;
+	Tue, 21 Jan 2025 08:45:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0CC51B85FD
-	for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 08:40:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4EEDC1B4228;
+	Tue, 21 Jan 2025 08:44:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737448854; cv=none; b=rMd8h2tppzUZ/qpMIzLPqnoMPcuayDh2M8ly4IPykeC0x3CTqZMmyYWY4g3v6jQC7jX3mkICbOi5U3urra89sZLjyBn8JRFQ6oFfmFSccxfYw73vg5EBM4CN8QXB3PMJL/Dv4/pGKx2H33hxb8D9nMQttvf6Shis9wrVc7nf9co=
+	t=1737449101; cv=none; b=UrWxB8uxd7cFQo08lmmHjGgSTeUt54bm2DTMqTeQcKeD6MadtMKmguqBCarjIm6r8DI5bUqP4C/EmoxSsze/8HB6vGOZ37J2HhGM8SJKh4HjAMvc9IPg3uQh1ij/HIsPOECzLaaSKrERt8fcEv2T2JY+Ns45rdDuEcwW2JeqCY4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737448854; c=relaxed/simple;
-	bh=36O2BN9nelhepzdN+0Xvr+eVYf2IRYBwSs2OD5GML8c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=MOPJ9JYJnDSSfDjHRJyEhKxhyUKK2mssQfdtya2z0ETm/zYAujNaxKgAoNYUbsNhqT0lHBb+3rv84HuF6tcARTesCHQTME1chcNEyjxqnemtbFPF50lTCw52kCrmu40FBaiNa2KWj+pYgi6+SFsRBjvMarO2czy6ng5/wFwUmQY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
-	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1ta9o8-0002nl-E3; Tue, 21 Jan 2025 09:40:24 +0100
-Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
-	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1ta9o6-0014s0-2e;
-	Tue, 21 Jan 2025 09:40:22 +0100
-Received: from pza by lupine with local (Exim 4.96)
-	(envelope-from <p.zabel@pengutronix.de>)
-	id 1ta9o6-0001o9-2I;
-	Tue, 21 Jan 2025 09:40:22 +0100
-Message-ID: <8f231c35fbb7304ee781d9c8d1eaeaf5753374de.camel@pengutronix.de>
-Subject: Re: [RFC v3 08/18] reset: thead: Add TH1520 reset controller driver
-From: Philipp Zabel <p.zabel@pengutronix.de>
-To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com, 
- sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-  drew@pdp7.com, guoren@kernel.org, wefu@redhat.com,
- jassisinghbrar@gmail.com,  paul.walmsley@sifive.com, palmer@dabbelt.com,
- aou@eecs.berkeley.edu,  frank.binns@imgtec.com, matt.coster@imgtec.com, 
- maarten.lankhorst@linux.intel.com, mripard@kernel.org, tzimmermann@suse.de,
-  airlied@gmail.com, simona@ffwll.ch, ulf.hansson@linaro.org,
- jszhang@kernel.org,  m.szyprowski@samsung.com
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-Date: Tue, 21 Jan 2025 09:40:22 +0100
-In-Reply-To: <20250120172111.3492708-9-m.wilczynski@samsung.com>
-References: <20250120172111.3492708-1-m.wilczynski@samsung.com>
-	 <CGME20250120172129eucas1p236f71df4e30f821f7682263ee8ecec06@eucas1p2.samsung.com>
-	 <20250120172111.3492708-9-m.wilczynski@samsung.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.46.4-2 
+	s=arc-20240116; t=1737449101; c=relaxed/simple;
+	bh=1d3O42Z/OFMK7IOkVt8miHaVZTIyGZmxXrTjBTXpyOQ=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=pSuuibShVWetziBJ4giOIuxHq+I4RVY2/wyo0s8hIRbuBD7XjEuw+pUAhkdHkCj/ydEepze9JBNphthbJTcsZPCwQZRqPU+9rfniSytsuwWdk9EyQEQmlwNLS2sr7W0IRO/otQ4lfNK9TnVaZIeR1Ytc5atX9y8ht9QpDIfArCA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C5D5A106F;
+	Tue, 21 Jan 2025 00:45:26 -0800 (PST)
+Received: from e125905.cambridge.arm.com (e125905.cambridge.arm.com [10.1.194.73])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id AB4A03F66E;
+	Tue, 21 Jan 2025 00:44:54 -0800 (PST)
+From: Beata Michalska <beata.michalska@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	ionela.voinescu@arm.com,
+	sudeep.holla@arm.com,
+	will@kernel.org,
+	catalin.marinas@arm.com,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org
+Cc: sumitg@nvidia.com,
+	yang@os.amperecomputing.com,
+	vanshikonda@os.amperecomputing.com,
+	lihuisong@huawei.com,
+	zhanjie9@hisilicon.com,
+	Jonathan Corbet <corbet@lwn.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Phil Auld <pauld@redhat.com>,
+	x86@kernel.org,
+	linux-doc@vger.kernel.org
+Subject: [PATCH v9 0/5] Add support for AArch64 AMUv1-based average freq
+Date: Tue, 21 Jan 2025 08:44:30 +0000
+Message-Id: <20250121084435.2839280-1-beata.michalska@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
-X-SA-Exim-Mail-From: p.zabel@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Transfer-Encoding: 8bit
 
-On Mo, 2025-01-20 at 18:21 +0100, Michal Wilczynski wrote:
-> Introduce reset controller driver for the T-HEAD TH1520 SoC. The
-> controller manages hardware reset lines for various SoC subsystems, such
-> as the GPU.
+Hi All,
 
-This statement is confusing, given the implementation only handles a
-single (GPU) reset control.
+This series adds support for obtaining an average CPU frequency based on
+a hardware provided feedback. The average frequency is being exposed via
+dedicated yet optional cpufreq sysfs attribute - cpuinfo_avg_freq.
+The architecture specific bits are being provided for AArch64, caching on
+existing implementation for FIE and AMUv1 support: the frequency scale
+factor, updated on each sched tick, serving as a base for retrieving
+the frequency for a given CPU, representing an average frequency
+reported between the ticks.
 
-> By exposing these resets via the Linux reset subsystem,
-> drivers can request and control hardware resets to reliably initialize
-> or recover key components.
->=20
-> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> ---
->  MAINTAINERS                  |   1 +
->  drivers/reset/Kconfig        |  10 +++
->  drivers/reset/Makefile       |   1 +
->  drivers/reset/reset-th1520.c | 144 +++++++++++++++++++++++++++++++++++
->  4 files changed, 156 insertions(+)
->  create mode 100644 drivers/reset/reset-th1520.c
->=20
-> diff --git a/MAINTAINERS b/MAINTAINERS
-> index 1b6e894500ef..18382a356b12 100644
-> --- a/MAINTAINERS
-> +++ b/MAINTAINERS
-> @@ -20197,6 +20197,7 @@ F:	drivers/mailbox/mailbox-th1520.c
->  F:	drivers/net/ethernet/stmicro/stmmac/dwmac-thead.c
->  F:	drivers/pinctrl/pinctrl-th1520.c
->  F:	drivers/pmdomain/thead/
-> +F:	drivers/reset/reset-th1520.c
->  F:	include/dt-bindings/clock/thead,th1520-clk-ap.h
->  F:	include/dt-bindings/firmware/thead,th1520-aon.h
->  F:	include/linux/firmware/thead/thead,th1520-aon.h
-> diff --git a/drivers/reset/Kconfig b/drivers/reset/Kconfig
-> index 5b3abb6db248..fa0943c3d1de 100644
-> --- a/drivers/reset/Kconfig
-> +++ b/drivers/reset/Kconfig
-> @@ -272,6 +272,16 @@ config RESET_SUNXI
->  	help
->  	  This enables the reset driver for Allwinner SoCs.
-> =20
-> +config RESET_TH1520
-> +	tristate "T-HEAD 1520 reset controller"
-> +	depends on ARCH_THEAD || COMPILE_TEST
-> +	select REGMAP_MMIO
-> +	help
-> +	  This driver provides support for the T-HEAD TH1520 SoC reset controll=
-er,
-> +	  which manages hardware reset lines for SoC components such as the GPU=
-.
-> +	  Enable this option if you need to control hardware resets on TH1520-b=
-ased
-> +	  systems.
-> +
->  config RESET_TI_SCI
->  	tristate "TI System Control Interface (TI-SCI) reset driver"
->  	depends on TI_SCI_PROTOCOL || (COMPILE_TEST && TI_SCI_PROTOCOL=3Dn)
-> diff --git a/drivers/reset/Makefile b/drivers/reset/Makefile
-> index 677c4d1e2632..d6c2774407ae 100644
-> --- a/drivers/reset/Makefile
-> +++ b/drivers/reset/Makefile
-> @@ -35,6 +35,7 @@ obj-$(CONFIG_RESET_SIMPLE) +=3D reset-simple.o
->  obj-$(CONFIG_RESET_SOCFPGA) +=3D reset-socfpga.o
->  obj-$(CONFIG_RESET_SUNPLUS) +=3D reset-sunplus.o
->  obj-$(CONFIG_RESET_SUNXI) +=3D reset-sunxi.o
-> +obj-$(CONFIG_RESET_TH1520) +=3D reset-th1520.o
->  obj-$(CONFIG_RESET_TI_SCI) +=3D reset-ti-sci.o
->  obj-$(CONFIG_RESET_TI_SYSCON) +=3D reset-ti-syscon.o
->  obj-$(CONFIG_RESET_TI_TPS380X) +=3D reset-tps380x.o
-> diff --git a/drivers/reset/reset-th1520.c b/drivers/reset/reset-th1520.c
-> new file mode 100644
-> index 000000000000..e4278f49c62f
-> --- /dev/null
-> +++ b/drivers/reset/reset-th1520.c
-> @@ -0,0 +1,144 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright (c) 2024 Samsung Electronics Co., Ltd.
-> + * Author: Michal Wilczynski <m.wilczynski@samsung.com>
-> + */
-> +
-> +#include <linux/mod_devicetable.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/reset-controller.h>
-> +#include <linux/regmap.h>
-> +
-> + /* register offset in VOSYS_REGMAP */
-> +#define TH1520_GPU_RST_CFG		0x0
-> +#define TH1520_GPU_RST_CFG_MASK		GENMASK(2, 0)
-> +
-> +/* register values */
-> +#define TH1520_GPU_SW_GPU_RST		BIT(0)
-> +#define TH1520_GPU_SW_CLKGEN_RST	BIT(1)
-> +
-> +struct th1520_reset_priv {
-> +	struct reset_controller_dev rcdev;
-> +	struct regmap *map;
-> +};
-> +
-> +static inline struct th1520_reset_priv *
-> +to_th1520_reset(struct reset_controller_dev *rcdev)
-> +{
-> +	return container_of(rcdev, struct th1520_reset_priv, rcdev);
-> +}
-> +
-> +static void th1520_rst_gpu_enable(struct regmap *reg)
-> +{
-> +	int val;
-> +
-> +	/* if the GPU is not in a reset state it, put it into one */
-> +	regmap_read(reg, TH1520_GPU_RST_CFG, &val);
-> +	if (val)
-> +		regmap_update_bits(reg, TH1520_GPU_RST_CFG,
-> +				   TH1520_GPU_RST_CFG_MASK, 0x0);
-> +
-> +	/* rst gpu clkgen */
-> +	regmap_set_bits(reg, TH1520_GPU_RST_CFG, TH1520_GPU_SW_CLKGEN_RST);
-> +
-> +	/*
-> +	 * According to the hardware manual, a delay of at least 32 clock
-> +	 * cycles is required between de-asserting the clkgen reset and
-> +	 * de-asserting the GPU reset. Assuming a worst-case scenario with
-> +	 * a very high GPU clock frequency, a delay of 1 microsecond is
-> +	 * sufficient to ensure this requirement is met across all
-> +	 * feasible GPU clock speeds.
-> +	 */
-> +	udelay(1);
-> +
-> +	/* rst gpu */
-> +	regmap_set_bits(reg, TH1520_GPU_RST_CFG, TH1520_GPU_SW_GPU_RST);
+The changes have been rather lightly (due to some limitations) tested on
+an FVP model.
 
-This sequence of TH1520_GPU_RST_CFG register accesses should be
-protected by a lock.
+Note that [PATCH 2/4] arm64: amu: Delay allocating cpumask for AMU FIE support
+can be merged independently.
+Additionally, this series depends on [6]
 
-[...]
-> +static int th1520_reset_assert(struct reset_controller_dev *rcdev, unsig=
-ned long id)
-> +{
-> +	struct th1520_reset_priv *priv =3D to_th1520_reset(rcdev);
-> +
-> +	th1520_rst_gpu_disable(priv->map);
-> +
-> +	return 0;
-> +}
-> +
-> +static int th1520_reset_deassert(struct reset_controller_dev *rcdev, uns=
-igned long id)
-> +{
-> +	struct th1520_reset_priv *priv =3D to_th1520_reset(rcdev);
-> +
-> +	th1520_rst_gpu_enable(priv->map);
-> +
-> +	return 0;
-> +}
-> +
-> +static int th1520_reset_xlate(struct reset_controller_dev *rcdev,
-> +			      const struct of_phandle_args *reset_spec)
-> +{
-> +	return 0;
-> +}
+Relevant discussions:
+[1] https://lore.kernel.org/all/20240229162520.970986-1-vanshikonda@os.amperecomputing.com/
+[2] https://lore.kernel.org/all/7eozim2xnepacnnkzxlbx34hib4otycnbn4dqymfziqou5lw5u@5xzpv3t7sxo3/
+[3] https://lore.kernel.org/all/20231212072617.14756-1-lihuisong@huawei.com/
+[4] https://lore.kernel.org/lkml/ZIHpd6unkOtYVEqP@e120325.cambridge.arm.com/T/#m4e74cb5a0aaa353c60fedc6cfb95ab7a6e381e3c
+[5] https://lore.kernel.org/all/20240603081331.3829278-1-beata.michalska@arm.com/
+[6] https://lore.kernel.org/all/20240827154818.1195849-1-ionela.voinescu@arm.com/
 
-These all explicitly handle only a single reset control, which is in
-conflict with the commit message of this patch and the dt-binding
-patch. Will more reset controls be added to this driver in the future?
+v9:
+- Moved changes to arch_freq_get_on_cpu to a separate patch
 
+v8:
+- Drop introducing new function and reuse arch_freq_get_on_cpu, guarding its use
+  in scaling_cur_freq sysfs handler with dedicated config for x86
 
-regards
-Philipp
+v7:
+- Dropping 'arch_topology: init capacity_freq_ref to 0' patch from the series
+  as this one has been sent separately as an independent change
+  [https://lore.kernel.org/all/20240827154818.1195849-1-ionela.voinescu@arm.com/]
+- Including in the series change that introduces new sysfs entry [PATCH 1/4]
+- Consequently modifying previously arch_freq_get_on_cpu to match reqs for new
+  sysfs attribute
+- Dropping an idea of considering a CPU that has been idle for a while as a
+  valid source of information for obtaining an AMU-counter based frequency
+- Some minor cosmetic changes
+
+v6:
+ - delay allocating cpumask for AMU FIE support instead of invalidating the mask
+   upon failure to register cpufreq policy notifications
+ - drop the change to cpufreq core (for cpuinfo_cur_freq) as this one will be
+   sent as a separate change
+
+v5:
+ - Fix invalid access to cpumask
+ - Reworked finding reference cpu when getting the freq
+
+v4:
+- dropping seqcount
+- fixing identifying active cpu within given policy
+- skipping full dynticks cpus when retrieving the freq
+- bringing back plugging in arch_freq_get_on_cpu into cpuinfo_cur_freq
+
+v3:
+- dropping changes to cpufreq_verify_current_freq
+- pulling in changes from Ionela initializing capacity_freq_ref to 0
+  (thanks for that!)  and applying suggestions made by her during last review:
+	- switching to arch_scale_freq_capacity and arch_scale_freq_ref when
+	  reversing freq scale factor computation
+	- swapping shift with multiplication
+- adding time limit for considering last scale update as valid
+- updating frequency scale factor upon entering idle
+
+v2:
+- Splitting the patches
+- Adding comment for full dyntick mode
+- Plugging arch_freq_get_on_cpu into cpufreq_verify_current_freq instead
+  of in show_cpuinfo_cur_freq to allow the framework to stay more in sync
+  with potential freq changes
+
+CC: Jonathan Corbet <corbet@lwn.net>
+CC: Thomas Gleixner <tglx@linutronix.de>
+CC: Ingo Molnar <mingo@redhat.com>
+CC: Borislav Petkov <bp@alien8.de>
+CC: Dave Hansen <dave.hansen@linux.intel.com>
+CC: H. Peter Anvin <hpa@zytor.com>
+CC: Phil Auld <pauld@redhat.com>
+CC: x86@kernel.org
+CC: linux-doc@vger.kernel.org
+
+*** BLURB HERE ***
+
+Beata Michalska (5):
+  cpufreq: Allow arch_freq_get_on_cpu to return an error
+  cpufreq: Introduce an optional cpuinfo_avg_freq sysfs entry
+  arm64: amu: Delay allocating cpumask for AMU FIE support
+  arm64: Provide an AMU-based version of arch_freq_get_on_cpu
+  arm64: Update AMU-based freq scale factor on entering idle
+
+ Documentation/admin-guide/pm/cpufreq.rst |  16 ++-
+ arch/arm64/kernel/topology.c             | 144 +++++++++++++++++++----
+ arch/x86/kernel/cpu/aperfmperf.c         |   2 +-
+ arch/x86/kernel/cpu/proc.c               |   7 +-
+ drivers/cpufreq/Kconfig.x86              |  12 ++
+ drivers/cpufreq/cpufreq.c                |  38 +++++-
+ include/linux/cpufreq.h                  |   2 +-
+ 7 files changed, 189 insertions(+), 32 deletions(-)
+
+-- 
+2.25.1
+
 
