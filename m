@@ -1,162 +1,135 @@
-Return-Path: <linux-pm+bounces-20768-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20769-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A1C6A17C26
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 11:47:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4283BA17C4D
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 11:54:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 059BB3A6AAD
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 10:47:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6215C162AE6
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 10:54:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3344F1F12E2;
-	Tue, 21 Jan 2025 10:47:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75A11F0E32;
+	Tue, 21 Jan 2025 10:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="lAopDuXA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mHhxAHcE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9723F1B0F1E;
-	Tue, 21 Jan 2025 10:47:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CF9C1BEF82
+	for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 10:53:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737456455; cv=none; b=AWGtzA0YKlrb8tuw7QzMlNoquwNGHPhHMURkizg+ueYi10NB0IxRdpjwqn2JFf+klOX5RG3S+duLrUwC95IEH6HdPHEo0vXcPEVK8k07Ioy9gce8fTS5/FhLLzybZMCD9keyCSeYi40J+zeKYBpM6HiBkdKWxfVvNMcoEGPqIHw=
+	t=1737456839; cv=none; b=Khd2hEtos5Shb5/zqVd1nez4Lk3o5ALW+zVds6c9btTIHyqpd77iH051LDIiIrh+UYfF2UEHQDWTG17P5i4v+lnCibk3fxd/Ws9Wdrq6Q1pDd/16MusB6hnmy+zVRJR0+EdC2nCrEqrVtSiGben1Yd992/RsEJdR7aGywrQbbIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737456455; c=relaxed/simple;
-	bh=EWaUNnruHpal+zW0Tc0ycVqyE0sHBEGQZtpuE9Jg4dk=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UyydlAPCI/lXJYsmpCNZ6Ejn5i4lhuJ+Hin4rtLdxX6lSYFI7eGpKJkvR/zU/W1VHjRi27wrEjQDBxfXK8w89rFyHkSCtGoHQ7pmVqLCDMSLZF74Q8hh8JVacMe9HfODjq1FJr2KT4OPxZuXlbp+tetuMOcoqfyigN168DtnZaw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=lAopDuXA; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [10.156.205.88] (unknown [167.220.238.88])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 3571C205A9D6;
-	Tue, 21 Jan 2025 02:47:28 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 3571C205A9D6
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1737456453;
-	bh=0p9kCPX0kFOEZOIBaQgiLe2sNq8cghl604dX/e+fCK8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=lAopDuXA60YAgdosgvAgfkgCazTII9V7wWa/8Mlz02BIA7k/oczJScx2D4fM9nVLm
-	 YYkon7r8GCQhgmxjqvEaoSNBbUz6Jqatsr1fFT0NOE68Dlfag33/rqCcEcX2ZqnaJq
-	 jyxqxweMzxBITuutSmC4d3G0o8+GRUZMu39raYaM=
-Message-ID: <f9606b7c-e20c-43cb-bc03-1deecb0d7539@linux.microsoft.com>
-Date: Tue, 21 Jan 2025 16:17:27 +0530
+	s=arc-20240116; t=1737456839; c=relaxed/simple;
+	bh=0ynwDrtDkg1RPfVG987QiweEJhmx1Sy57xEmZffD17M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Sf9Dq7cpOeCJ31XJi5Htie4z8SZbQczYC+HILwVlT/bqWhn/fdEwtSFPRdgV27fn5/7N1zt9OQOVyjlXkMsb4GMORXQ+9sOts1beJ875CQtjFnSnk/WACuz1BJjGQftpudKbgRrs1MKWuKo0houd+zqkyjzEQyZJrHhEPp++MbU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mHhxAHcE; arc=none smtp.client-ip=209.85.214.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2166651f752so125538095ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 02:53:58 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737456837; x=1738061637; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ENcOYGqRioU/9ihcSEEFfnUaDfvEIG5xAfpIwJ8DI8A=;
+        b=mHhxAHcEvNSvxr3GKPuedsXvO/+WZfQnBwyK7ZP8uG8XulGcMVXxRQCL7bI2AYQ3yj
+         pxRdtTHsYAYUZee8xP1xkkxMVigmLmeLfAIU9Y/p347jey6h8OA/Od17V0iZvxbtZicC
+         tDF9aaAeQ6sJW/D9DjKQV8L77XnPpLzFvy+9gJ2MgvqhOJUgdBje7gicyno0CERWAQ6t
+         +Ga7B0AARoJny0yUrbtKMx79Sa/hRyZ8HW3m6k/B1IRkvh4fYkioeBs2DusPTBEEkXjJ
+         ab/+taNiM+Wn75oj3fexoP9p7aSGlffY+7CYC2hp5cj09O5StU8gP0EIHWsxIVm7qCl4
+         DknA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737456837; x=1738061637;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ENcOYGqRioU/9ihcSEEFfnUaDfvEIG5xAfpIwJ8DI8A=;
+        b=KRXgmzMtVKUS0Sx+hBnUMK9PBoLz2tMw0BG/KZ303p7yyeKONdQFTVah6ibXNfQUWr
+         YW4fgolwtb78T1lc3sOUQ5YMApaEvGsOCxcpvBA5iMyxQo8OOgM06WcWwTowN5v0PB87
+         2TI1VAM1ml4O/uUtpUGQWxctzSsaLFKqWhQc51SCgFoy7S29KauRQHVeTgq5Vw05j3GG
+         /r1BU3AK9endTrfuScho4t1Jk5T82XZB8segJAURy3tVpkzBduudv3ynxR6yVT94cntB
+         Q2UFRuqWv3vib31VEDAn9epOrYTNDyr+V4CiEZQDlMFhZxFRAUJccBVUyUUmfKRc6vld
+         mk4g==
+X-Forwarded-Encrypted: i=1; AJvYcCXwfSq+6DWZD18YBkXd4ZmVZvxFZfA+K/txQB4Cg0ywINV7ZLyOKdOtANUqfwRZ4AiNYFs0N+hZdQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyj7/GlgexXdriijDFpOvq1Ed8+hqPswQyV6k+Mdku+VTujsLr3
+	Ugc5jxoJA0wiDCY9ZXvOrOdaCc8I8z64KlshYBMfjjTOzfV/nqivqiW6UKcWM3U=
+X-Gm-Gg: ASbGncvC2e8nblmYb0iBk0vErkPkfpn8NBOkDpqPYbGrJHqd+ZKlhh39TceTO8Cu6AU
+	u3R1SiwBJDIc3+qJQtqh9MWDJlDJTeZxwLuaFKsKGebYRdTAaanoHr8fkEneM9Ck75jjfx1gw+7
+	wCip+1rIpQ7dVRtXVaTjHhu5iZbdH9Aafxiau1mEemrBFjVooyHsRrAqKQ6J3LZObbny0s3oM92
+	peYih63t00XDYix/20soAdz6obLIx0/0r64vkFaKZ2UnMqOxHo2MfwOveVT/SnUetND0TU+
+X-Google-Smtp-Source: AGHT+IEuSER7ZHNDig6EsFOlbiWEGwJUjzQk6/UxpR2ZgEZDY1r5dRIoJzux0fIbg2I24q8x/2ZFgg==
+X-Received: by 2002:a17:903:32c9:b0:216:46f4:7e3d with SMTP id d9443c01a7336-21c3550f34emr265771255ad.15.1737456837580;
+        Tue, 21 Jan 2025 02:53:57 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21c2ceb767asm75949395ad.84.2025.01.21.02.53.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 21 Jan 2025 02:53:56 -0800 (PST)
+Date: Tue, 21 Jan 2025 16:23:55 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Beata Michalska <beata.michalska@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
+	rafael@kernel.org, sumitg@nvidia.com, yang@os.amperecomputing.com,
+	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
+	zhanjie9@hisilicon.com, Jonathan Corbet <corbet@lwn.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>, Phil Auld <pauld@redhat.com>,
+	x86@kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v9 2/5] cpufreq: Introduce an optional cpuinfo_avg_freq
+ sysfs entry
+Message-ID: <20250121105355.sdrgmjv2w2256qfn@vireshk-i7>
+References: <20250121084435.2839280-1-beata.michalska@arm.com>
+ <20250121084435.2839280-3-beata.michalska@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 1/5] cpufreq: Allow arch_freq_get_on_cpu to return an
- error
-To: Beata Michalska <beata.michalska@arm.com>, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
- ionela.voinescu@arm.com, sudeep.holla@arm.com, will@kernel.org,
- catalin.marinas@arm.com, rafael@kernel.org, viresh.kumar@linaro.org
-Cc: sumitg@nvidia.com, yang@os.amperecomputing.com,
- vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
- zhanjie9@hisilicon.com
-References: <20250121084435.2839280-1-beata.michalska@arm.com>
- <20250121084435.2839280-2-beata.michalska@arm.com>
-Content-Language: en-US
-From: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
-In-Reply-To: <20250121084435.2839280-2-beata.michalska@arm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250121084435.2839280-3-beata.michalska@arm.com>
 
-
-On 21-01-2025 14:14, Beata Michalska wrote:
-> Allow arch_freq_get_on_cpu to return an error for cases when retrieving
-> current CPU frequency is not possible, whether that being due to lack of
-> required arch support or due to other circumstances when the current
-> frequency cannot be determined at given point of time.
->
-> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
-> ---
->   arch/x86/kernel/cpu/aperfmperf.c | 2 +-
->   arch/x86/kernel/cpu/proc.c       | 7 +++++--
->   drivers/cpufreq/cpufreq.c        | 8 ++++----
->   include/linux/cpufreq.h          | 2 +-
->   4 files changed, 11 insertions(+), 8 deletions(-)
->
-> diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-> index f642de2ebdac..6cf31a1649c4 100644
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -498,7 +498,7 @@ void arch_scale_freq_tick(void)
->    */
->   #define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
->   
-> -unsigned int arch_freq_get_on_cpu(int cpu)
-> +int arch_freq_get_on_cpu(int cpu)
->   {
->   	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
->   	unsigned int seq, freq;
-> diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-> index 41ed01f46bd9..d79f5845a463 100644
-> --- a/arch/x86/kernel/cpu/proc.c
-> +++ b/arch/x86/kernel/cpu/proc.c
-> @@ -86,9 +86,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->   		seq_printf(m, "microcode\t: 0x%x\n", c->microcode);
->   
->   	if (cpu_has(c, X86_FEATURE_TSC)) {
-> -		unsigned int freq = arch_freq_get_on_cpu(cpu);
-> +		int freq = arch_freq_get_on_cpu(cpu);
->   
-> -		seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
-> +		if (freq <= 0)
-> +			seq_puts(m, "cpu MHz\t\t: Unknown\n");
-> +		else
-> +			seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
->   	}
->   
->   	/* Cache size */
+On 21-01-25, 08:44, Beata Michalska wrote:
 > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 418236fef172..6f45684483c4 100644
+> index 6f45684483c4..b2a8efa83c98 100644
 > --- a/drivers/cpufreq/cpufreq.c
 > +++ b/drivers/cpufreq/cpufreq.c
-> @@ -728,18 +728,18 @@ show_one(cpuinfo_transition_latency, cpuinfo.transition_latency);
->   show_one(scaling_min_freq, min);
->   show_one(scaling_max_freq, max);
->   
-> -__weak unsigned int arch_freq_get_on_cpu(int cpu)
-> +__weak int arch_freq_get_on_cpu(int cpu)
->   {
-> -	return 0;
-> +	return -EOPNOTSUPP;
->   }
->   
->   static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
->   {
->   	ssize_t ret;
-> -	unsigned int freq;
-> +	int freq;
->   
->   	freq = arch_freq_get_on_cpu(policy->cpu);
-> -	if (freq)
-> +	if (freq > 0)
->   		ret = sysfs_emit(buf, "%u\n", freq);
->   	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
->   		ret = sysfs_emit(buf, "%u\n", cpufreq_driver->get(policy->cpu));
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 7fe0981a7e46..02fd4746231d 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -1184,7 +1184,7 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
->   }
->   #endif
->   
-> -extern unsigned int arch_freq_get_on_cpu(int cpu);
-> +extern int arch_freq_get_on_cpu(int cpu);
->   
->   #ifndef arch_set_freq_scale
->   static __always_inline
+> @@ -733,12 +733,20 @@ __weak int arch_freq_get_on_cpu(int cpu)
+>  	return -EOPNOTSUPP;
+>  }
+>  
+>  static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
+>  {
+>  	ssize_t ret;
+>  	int freq;
+>  
+> -	freq = arch_freq_get_on_cpu(policy->cpu);
+> +	freq = IS_ENABLED(CONFIG_CPUFREQ_ARCH_CUR_FREQ)
+> +		? arch_freq_get_on_cpu(policy->cpu)
+> +		: 0;
+> +
+>  	if (freq > 0)
+>  		ret = sysfs_emit(buf, "%u\n", freq);
+>  	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
 
-Looks good to me.
+Maybe this should be a separate commit ? And also I am not very happy
+with the new kconfig option. I don't want others to use it as we want
+to get rid of this for X86 too eventually. Making it a kconfig option
+allows anyone to enable it and then depend on it without us knowing..
 
-Reviewed-by: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
+Rather just write it as "if (x86)", with a comment on what we plan to
+do with it in few release cycles.
 
-
+-- 
+viresh
 
