@@ -1,72 +1,53 @@
-Return-Path: <linux-pm+bounces-20771-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20772-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0808FA17EEA
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 14:34:52 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 61150A180D7
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 16:15:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC8961882C50
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 13:34:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0932018887D3
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 15:15:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B40301F191E;
-	Tue, 21 Jan 2025 13:34:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I+iqqr3t"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B080F14EC5B;
+	Tue, 21 Jan 2025 15:15:23 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CAB51F2C27;
-	Tue, 21 Jan 2025 13:34:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62184EBE;
+	Tue, 21 Jan 2025 15:15:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737466487; cv=none; b=Ebb523xi3bsyZsc0O+/Rkiaq7mXDwo26fcPrjwgAkZKDndWG/Nt89g3Sh/ZVCh89+1TOi89+TrAJ/pVVx8HW6Tf/iVl6QBILeGOI9fe/3mQaKD0n3NCZr3mdN7IM2UPYtkL4got6vLKFn7dKMXG7U2x3dtIVyauPp0Mt6H81oJM=
+	t=1737472523; cv=none; b=oIJXhxn5BzXVv4DdM3L82Bsyfk+e9D3uPTQBBBXr4aQCbK1Ap1sYDP22NkZucVBMjSl5xPstkJSc+dDVr0YnnQINCymwMnmV1khm+CsreF09Ac7UTs4VhbqdFzaFUaHXSjuAogT6s8rBR3qR5kCBg5JBxoMGhjWTlpVXpbvXCFE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737466487; c=relaxed/simple;
-	bh=1bMuTZFoWoA0iduATjRFPX5ecjUihC+lQ3BWZcc9jF0=;
+	s=arc-20240116; t=1737472523; c=relaxed/simple;
+	bh=+n+sIJXaTD1gGUpYrtaMwNZ9Xm0JBUHoumwhed+5Nao=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=f9c4c8Caw2WjCkJXTvd5bqZDYXfxuBzjRWV87U1qBkGpzwHCFBc6GkuFLm5CrUpByeQ37N1tVlVEcFw3fTjz24vx84s3Gb95d3NKBBtFDnoPQgdvfxrPdxzrKCaxzUt7jUCS6G7uuZTgq/UBXyaw8of41WOfSq8CTSncno8oECI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I+iqqr3t; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0127C4CEE0;
-	Tue, 21 Jan 2025 13:34:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737466485;
-	bh=1bMuTZFoWoA0iduATjRFPX5ecjUihC+lQ3BWZcc9jF0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=I+iqqr3t9V7O7AglMTOqrogqcLFRq/Ttxc6HkCv5ZDLfYwDveBQGy9pf6nFwPqURu
-	 Nsf9uQP4AmHn/2id+FTSx9SBzlXg+QtdPz3mXjGPhMCIDQbdmxQGQ8ZGTU9P670Ykg
-	 plUaq8gD5MR/kfbRs3sB2q8TSq2KsE7XcfaHB+khdFb1l5yUURfKqhRlIuFLY5x6Se
-	 VlY4l03aXppeeRWTOLrHSrU9RmqbDw1vJrDAkdAoXhjWKFChXiDSu8D1d6qFL7FIL3
-	 AlysmN6wgyn+S6yfVX9SpIcdNmt1aiB8TA/UCNINsvufK94GsYgx7AetvCS8S7/Gix
-	 WkW/xhv0sHDUg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1taEP3-000000005yb-3xY6;
-	Tue, 21 Jan 2025 14:34:49 +0100
-Date: Tue, 21 Jan 2025 14:34:49 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>,
-	Krishna Chaitanya Chundru <quic_krichai@quicinc.com>,
-	rafael@kernel.org, ulf.hansson@linaro.org,
-	Kevin Xie <kevin.xie@starfivetech.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Markus.Elfring@web.de, quic_mrana@quicinc.com,
-	m.szyprowski@samsung.com, linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	regressions@lists.linux.dev
-Subject: Re: [PATCH v7 2/2] PCI: Enable runtime pm of the host bridge
-Message-ID: <Z4-ieduktJmnHukJ@hovoldconsulting.com>
-References: <20250113162549.a2y7dlwnsfetryyw@thinkpad>
- <20250114211653.GA487608@bhelgaas>
- <20250119152940.6yum3xnrvqx2xjme@thinkpad>
- <Z44llTKsKfbEcnnI@hovoldconsulting.com>
- <20250120152829.7wrnwdji2bnfqrhw@thinkpad>
- <Z4-eufq4M04XHjck@hovoldconsulting.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=GylwHNhx7VKyqAEgHRKjj88/7wqWljNSzw9SPefHsbaLMAGVqWdBCLq2CTgvJh4XqBPOKsG9oKl4yAMfE8Rob9Ocas7GZZy5f1GbhtbyJJapSlM5nALjI60QPjyVTYSN4fXHb9qCodJ+CWdkE/x3pz/GQp6dZVgOnHs0526bHsA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C7ED31063;
+	Tue, 21 Jan 2025 07:15:48 -0800 (PST)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BB5E33F66E;
+	Tue, 21 Jan 2025 07:15:16 -0800 (PST)
+Date: Tue, 21 Jan 2025 16:14:32 +0100
+From: Beata Michalska <beata.michalska@arm.com>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
+	rafael@kernel.org, sumitg@nvidia.com, yang@os.amperecomputing.com,
+	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
+	zhanjie9@hisilicon.com
+Subject: Re: [PATCH v9 1/5] cpufreq: Allow arch_freq_get_on_cpu to return an
+ error
+Message-ID: <Z4-52JUmR7A-7NJP@arm.com>
+References: <20250121084435.2839280-1-beata.michalska@arm.com>
+ <20250121084435.2839280-2-beata.michalska@arm.com>
+ <20250121104706.2gcegucb6hcuksrd@vireshk-i7>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -75,17 +56,110 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z4-eufq4M04XHjck@hovoldconsulting.com>
+In-Reply-To: <20250121104706.2gcegucb6hcuksrd@vireshk-i7>
 
-On Tue, Jan 21, 2025 at 02:18:49PM +0100, Johan Hovold wrote:
-> After taking a closer look now, I agree that the underlying issue seems
-> to be in PM core.
+On Tue, Jan 21, 2025 at 04:17:06PM +0530, Viresh Kumar wrote:
+> On 21-01-25, 08:44, Beata Michalska wrote:
+> > Allow arch_freq_get_on_cpu to return an error for cases when retrieving
+> > current CPU frequency is not possible, whether that being due to lack of
+> > required arch support or due to other circumstances when the current
+> > frequency cannot be determined at given point of time.
+> > 
+> > Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+> > ---
+> >  arch/x86/kernel/cpu/aperfmperf.c | 2 +-
+> >  arch/x86/kernel/cpu/proc.c       | 7 +++++--
+> >  drivers/cpufreq/cpufreq.c        | 8 ++++----
+> >  include/linux/cpufreq.h          | 2 +-
+> >  4 files changed, 11 insertions(+), 8 deletions(-)
+> > 
+> > diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
+> > index f642de2ebdac..6cf31a1649c4 100644
+> > --- a/arch/x86/kernel/cpu/aperfmperf.c
+> > +++ b/arch/x86/kernel/cpu/aperfmperf.c
+> > @@ -498,7 +498,7 @@ void arch_scale_freq_tick(void)
+> >   */
+> >  #define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
+> >  
+> > -unsigned int arch_freq_get_on_cpu(int cpu)
+> > +int arch_freq_get_on_cpu(int cpu)
+> >  {
+> >  	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
+> >  	unsigned int seq, freq;
+> > diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
+> > index 41ed01f46bd9..d79f5845a463 100644
+> > --- a/arch/x86/kernel/cpu/proc.c
+> > +++ b/arch/x86/kernel/cpu/proc.c
+> > @@ -86,9 +86,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
+> >  		seq_printf(m, "microcode\t: 0x%x\n", c->microcode);
+> >  
+> >  	if (cpu_has(c, X86_FEATURE_TSC)) {
+> > -		unsigned int freq = arch_freq_get_on_cpu(cpu);
+> > +		int freq = arch_freq_get_on_cpu(cpu);
+> >  
+> > -		seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
+> > +		if (freq <= 0)
+> > +			seq_puts(m, "cpu MHz\t\t: Unknown\n");
+> > +		else
+> > +			seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
+> >  	}
+> >  
+> >  	/* Cache size */
+> > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> > index 418236fef172..6f45684483c4 100644
+> > --- a/drivers/cpufreq/cpufreq.c
+> > +++ b/drivers/cpufreq/cpufreq.c
+> > @@ -728,18 +728,18 @@ show_one(cpuinfo_transition_latency, cpuinfo.transition_latency);
+> >  show_one(scaling_min_freq, min);
+> >  show_one(scaling_max_freq, max);
+> >  
+> > -__weak unsigned int arch_freq_get_on_cpu(int cpu)
+> > +__weak int arch_freq_get_on_cpu(int cpu)
+> >  {
+> > -	return 0;
+> > +	return -EOPNOTSUPP;
+> >  }
+> >  
+> >  static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
+> >  {
+> >  	ssize_t ret;
+> > -	unsigned int freq;
+> > +	int freq;
+> >  
+> >  	freq = arch_freq_get_on_cpu(policy->cpu);
+> > -	if (freq)
+> > +	if (freq > 0)
 > 
-> Possibly introduced by Rafael's commit 6e176bf8d461 ("PM: sleep: core:
-> Do not skip callbacks in the resume phase") which moved the set_active()
-> call from resume_noirq() to resume_early().
+> >= ?
+> 
+> Since we can return error now, 0 should be considered a valid
+> frequency value ?
+Theoretically speaking - it should, though what would 0 actually
+represent then ?
 
-Scratch the last paragraph, I misread the diff, sorry.
-
-Johan
+---
+BR
+Beata
+> 
+> >  		ret = sysfs_emit(buf, "%u\n", freq);
+> >  	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
+> >  		ret = sysfs_emit(buf, "%u\n", cpufreq_driver->get(policy->cpu));
+> > diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+> > index 7fe0981a7e46..02fd4746231d 100644
+> > --- a/include/linux/cpufreq.h
+> > +++ b/include/linux/cpufreq.h
+> > @@ -1184,7 +1184,7 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
+> >  }
+> >  #endif
+> >  
+> > -extern unsigned int arch_freq_get_on_cpu(int cpu);
+> > +extern int arch_freq_get_on_cpu(int cpu);
+> >  
+> >  #ifndef arch_set_freq_scale
+> >  static __always_inline
+> > -- 
+> > 2.25.1
+> 
+> -- 
+> viresh
 
