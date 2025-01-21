@@ -1,97 +1,136 @@
-Return-Path: <linux-pm+bounces-20755-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20756-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B0BE5A17A44
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 10:35:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 858F5A17A72
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 10:46:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0343516A4F5
-	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 09:35:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4228D7A0585
+	for <lists+linux-pm@lfdr.de>; Tue, 21 Jan 2025 09:46:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 290D51C1F07;
-	Tue, 21 Jan 2025 09:35:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C7E11BE23F;
+	Tue, 21 Jan 2025 09:46:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="mS94ByCw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f178.google.com (mail-yb1-f178.google.com [209.85.219.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C901BDAA2
-	for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 09:35:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 901BB3BBE5
+	for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 09:46:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737452135; cv=none; b=R1p5DQ1dSGy2DpKWE6roIq2m8A5E9RhocWZ/OD831fhynNGfkRIpKPd36dqNFQdbtnb03vNymEx55LSLVwoZStTD7agYkdGOvgfBvCaHY++5KqUo36DuGLH7kQreeruv6OHmgzx+6aG9VxgCvVokkR5BfXwpSks4wROmtMZFlTk=
+	t=1737452810; cv=none; b=OIwsmpx52RerJu4GFG7OXX2xpE2Uar1GFlZtWVHPdzYg6ysLYvcSIAKpSkifMqNq4gYjfisY6VVXkBeQq4xLi8VpfzfA56ocTbG80fmtdn8xDvYr4s1VpKVn6bQJhpSyV9x1y3Jfe5NGaglULoz1qn6AWpLSuZbIQ6X5FzXXAw4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737452135; c=relaxed/simple;
-	bh=UOt96m3Ai0Um04yoDoVTR8MiDB83yaiSBVo5rTHIuVE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=mC3ozozjvIvTzNa6cix+++bTcYqbml/pM+ru5sJVnyqGCPBQlZl8na5Gv2m36AYieQLq+Mw7CmUVQZEIc15inrIIKh1cyBCrmOdn9J5RntaZFQmgV/3/qJlOnR9FGrJArVxEPTScOp1SCRotXQgMp5Seb+xzEsdrUZedRiUzTVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1taAfG-0005Xs-1G; Tue, 21 Jan 2025 10:35:18 +0100
-Message-ID: <825acb12-ac34-49fe-b2d1-d42e08e0cebc@pengutronix.de>
-Date: Tue, 21 Jan 2025 10:35:15 +0100
+	s=arc-20240116; t=1737452810; c=relaxed/simple;
+	bh=1I+Uuama9ugZyQKsEohJdKjjc55GB3IcqY9SnNbolsQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aJq8HWwXtZ2rffEY+9L7g7looFcXwolD/QCqXxaj/+T/zZLuU+Mda7ZktPksyKKNWEJvqOU/OqOwk+QMdigzVFVk17X8hLIGd9RnCKwsCAxAQZ1ZPNoUumRh2LX6gs4t17VPsSOuVJmhEvBiYSRlvLY6y/tlHilMu5+y2n4x9Ts=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=mS94ByCw; arc=none smtp.client-ip=209.85.219.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f178.google.com with SMTP id 3f1490d57ef6-e3a26de697fso8427529276.3
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 01:46:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737452807; x=1738057607; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xCznPro7DzazvTiUhQrmITM+It7rrjrCA9i0Q4NMQd0=;
+        b=mS94ByCwoazYn5agMSJCfV49vWPyyKcP+fIjGUIMSx+D+YxEdWu2xOM1dDIMwJh1ad
+         tJ+zstROR0CbL3yx/i+RW018AI+uCyFhBSyl9No9AEl9xAJGHlEpC07VWz+hdjuimL1z
+         uK+S6Fl/Z7k2qZbegcALlPUm6BSsJzq8H3ZMmk8g/Q3o3/sm2xFr8BO55TZRMMB0DGBJ
+         +/wUNnNUYBR++suXUtUt/HG8zXY29O8pTdJaVu6NCOj/LsRYJOROLNFvp4Re5KPwkfv/
+         H2M4PORAP4Olha5Mi94rPVfWC908EyKGPoJPPeOkthyUBksVcMjh7zJgUoQlCPNcvnrr
+         PEPg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737452807; x=1738057607;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=xCznPro7DzazvTiUhQrmITM+It7rrjrCA9i0Q4NMQd0=;
+        b=umd4hfGjdppN3lliJWFlSR8oMZrq9uCC3wTivqaSRZqSJORqwdMMjo+JFUHZx4XMgE
+         EPFUpi9uiCZYyMD2G/li/ePAeHGwAuCORzRORoa0Ap6ejVM973D2roc4MZiB0EXegCLS
+         fImG81UB8u3tp3xpb5oCLq2cASiPG0dsA2aL0F1cj2ThOhcsozE5EcbSZO3f0B14lL1r
+         FesPkZFhGHqLhkewFad6dCmMCRBoK4YH3i3QkQ33lkmdhCMKHw16n8SF8x9Pz2OKGl4g
+         KPwPfbN8hAw94HDJKqMMQmocJ8BQo8/RBBj4vUYt6RkONgJhlZRQJdFIwfvP+yibXhrB
+         hT2w==
+X-Forwarded-Encrypted: i=1; AJvYcCUKc4kty9pUNf4C0BLCINmFnKnpLw0VxuV8npOKeUTYiGbp9OkIXUf1AYmD4z/C1E0aLk17n2i/OA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YznyBgYjN2k8fxV0o1occFZy0VPofaDkCRjnrEn6BaW/wxj3eT5
+	SOm043XagllWQYFZMOwDFz4BAuvc+EMaFjyCryjsf6yr1G8WpGE+b3+foXe8rr36BRZ9sGa4561
+	eHGV+VO9WV0MXCpgmgI7JBg2Mzre2RvVS4ZRtYw==
+X-Gm-Gg: ASbGnctNsHMqCjJsJqkhxPo1SoBPYma3HhUro5Dd5mFUbBbc3pJm/9AGfWrRB9QNhoa
+	dJx3PSV+hlGlwdqaWsfa4SCeN7ljHzDctfxIzwS1Vc7DZwmjZfBo=
+X-Google-Smtp-Source: AGHT+IE4NvWjhVwcZefMFMPsNF1/yZL/+GizgE7O5W0l1UUq/sk+Rp9xLLX7buviHENqfSARwR8NAFZJ6rRHBgoskwA=
+X-Received: by 2002:a05:690c:7344:b0:6ef:5ab8:2c53 with SMTP id
+ 00721157ae682-6f6eb68695cmr133051747b3.19.1737452807535; Tue, 21 Jan 2025
+ 01:46:47 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/12] reboot: add support for configuring emergency
- hardware protection action
-To: Tzung-Bi Shih <tzungbi@kernel.org>
-Cc: Andrew Morton <akpm@linux-foundation.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Fabio Estevam
- <festevam@denx.de>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Jonathan Corbet <corbet@lwn.net>, Serge Hallyn <serge@hallyn.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Matti Vaittinen <mazziesaccount@gmail.com>,
- Benson Leung <bleung@chromium.org>, Guenter Roeck <groeck@chromium.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-security-module@vger.kernel.org, chrome-platform@lists.linux.dev,
- devicetree@vger.kernel.org, kernel@pengutronix.de,
- Matteo Croce <mcroce@microsoft.com>
-References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
- <20250113-hw_protection-reboot-v2-7-161d3fc734f0@pengutronix.de>
- <Z433SVbr-h3JCycF@google.com>
-Content-Language: en-US
-From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <Z433SVbr-h3JCycF@google.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+References: <20250120153817.11807-1-ansuelsmth@gmail.com>
+In-Reply-To: <20250120153817.11807-1-ansuelsmth@gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 21 Jan 2025 10:46:11 +0100
+X-Gm-Features: AbW1kvZ21pVNkI7qM7rGH-9wFnhv5SdIw9t28_ewxvHO8LS13hlMrra20J6gTIc
+Message-ID: <CAPDyKFpBtnsEfMg73UHdXzZvSNHaL8H4N1h6-2wAMnFWNTM75w@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: airoha: Fix compilation error with Clang-20 and
+ Thumb2 mode
+To: Christian Marangi <ansuelsmth@gmail.com>
+Cc: Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+	Nathan Chancellor <nathan@kernel.org>, Nick Desaulniers <ndesaulniers@google.com>, 
+	Bill Wendling <morbo@google.com>, Justin Stitt <justinstitt@google.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-mediatek@lists.infradead.org, llvm@lists.linux.dev, 
+	Sudeep Holla <sudeep.holla@arm.com>, kernel test robot <lkp@intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-Hi,
+On Mon, 20 Jan 2025 at 16:38, Christian Marangi <ansuelsmth@gmail.com> wrote:
+>
+> The use of R7 in the SMCCC conflicts with the compiler's use of R7 as a frame
+> pointer in Thumb2 mode, which is forcibly enabled by Clang when profiling
+> hooks are inserted via the -pg switch.
+>
+> This is a known issue and similar driver workaround this with a Makefile
+> ifdef. Exact workaround are applied in
+> drivers/firmware/arm_scmi/transports/Makefile and other similar driver.
+>
+> Suggested-by: Sudeep Holla <sudeep.holla@arm.com>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202501201840.XmpHXpQ4-lkp@intel.com/
+> Fixes: 82e703dd438b ("pmdomain: airoha: Add Airoha CPU PM Domain support")
+> Signed-off-by: Christian Marangi <ansuelsmth@gmail.com>
 
-On 20.01.25 08:12, Tzung-Bi Shih wrote:
->> +What:		/sys/kernel/reboot/hw_protection
->> +Date:		Feb 2025
->> +KernelVersion:	6.14
-> 
-> The info might need to be adjusted if the series would be for 6.15. 
+Applied for next, thanks!
 
-I was being optimistic, but ye, now v6.15 would be earliest.
-I will wait a bit to see if there's more feedback and then send v3
-with the suggested changes and tags.
+Kind regards
+Uffe
 
-Thank you for taking the time,
-Ahmad
-
-
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
+> ---
+>  drivers/pmdomain/mediatek/Makefile | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/pmdomain/mediatek/Makefile b/drivers/pmdomain/mediatek/Makefile
+> index 0f6edce9239b..18ba92e3c418 100644
+> --- a/drivers/pmdomain/mediatek/Makefile
+> +++ b/drivers/pmdomain/mediatek/Makefile
+> @@ -2,3 +2,10 @@
+>  obj-$(CONFIG_MTK_SCPSYS)               += mtk-scpsys.o
+>  obj-$(CONFIG_MTK_SCPSYS_PM_DOMAINS)    += mtk-pm-domains.o
+>  obj-$(CONFIG_AIROHA_CPU_PM_DOMAIN)     += airoha-cpu-pmdomain.o
+> +
+> +ifeq ($(CONFIG_THUMB2_KERNEL)$(CONFIG_CC_IS_CLANG),yy)
+> +# The use of R7 in the SMCCC conflicts with the compiler's use of R7 as a frame
+> +# pointer in Thumb2 mode, which is forcibly enabled by Clang when profiling
+> +# hooks are inserted via the -pg switch.
+> +CFLAGS_REMOVE_airoha-cpu-pmdomain.o += $(CC_FLAGS_FTRACE)
+> +endif
+> --
+> 2.47.1
+>
 
