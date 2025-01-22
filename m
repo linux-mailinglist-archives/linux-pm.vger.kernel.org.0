@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-20789-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20790-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 85DFDA18CEE
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 08:44:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73794A18CF4
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 08:45:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6BCAB3AB3D5
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 07:44:19 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 41CB57A47AE
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 07:45:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C3911C07EC;
-	Wed, 22 Jan 2025 07:44:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D71B1C302E;
+	Wed, 22 Jan 2025 07:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K9W5Y/dN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mtHrG3ms"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 407B41BEF76;
-	Wed, 22 Jan 2025 07:44:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C8B01C245C;
+	Wed, 22 Jan 2025 07:45:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737531858; cv=none; b=AqIYT2jdf2s7y4NVuIjjaAGvc+23dk6khquGSmFK3iVQjuSlaWWg7A2/3cyKIAWCq9hwkj+wYzsvm/e11l7hS22iP8/vA/Vblu0c0J3/O+j8PFx6dRLL0ifxNXikuqxhpQ1cDteQ6VfII2KHvDrjHWwcG8USsuZS/uBRXcrribU=
+	t=1737531908; cv=none; b=fseDzMXNmZU5wX3Rr5PJUxOXD/wcBNfAdX9KeUM1VBh1pajIPIUhEJGBdQ74dRiNTdL5sNpdVDM5PzXjiiiQJ0gztVm9qwMNdvEziaFx9kSbsQ4XKTszDQW3KAWsHpNXRSIOP8Nu4B7ZNo7bov8hv6kqV63JReDM93rHOmQtTHM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737531858; c=relaxed/simple;
-	bh=6hmpeOLVmNPCEJz4gTuZE2inQNbfyQ4ZBcEWfrl0WGQ=;
+	s=arc-20240116; t=1737531908; c=relaxed/simple;
+	bh=jdWZU7kFs1EGlYK6lGC7SbOqK0+gXAh737oaITjmdw8=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jTiPeP0nTGXyDDbEtEufJsK4AXNW+bfwNmFUctIpqCeEWOoMtZHo4G9t3vFTxPecPKnZ6Jm05un5fizH1fLfLMMM1DP3geR+Qw+9gql3AXZQvuFseaXtyy6TnBfJTExfb8RuF7dYjZpKT4fZ1q6/VhgIM+tX2u8CyV2bw3nX1+c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K9W5Y/dN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73D87C4CED6;
-	Wed, 22 Jan 2025 07:44:09 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=RncZkH1h+BgHUSYRk4D/pMj7OImz7q9rnCQmT7YYCoa4e65pUGODXxgpXTjTGABwB9dZLgDGLJt4z5P0NQ77SzSMSLUraplmFv1XyjDwEJWzxKKCE6Ny7XFcuvOZwjYiCXzW1GeMwh3TIxZjOpCH4ScLyjklL6mTJ1hP2mgxB0s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mtHrG3ms; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CB96EC4CED6;
+	Wed, 22 Jan 2025 07:44:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737531857;
-	bh=6hmpeOLVmNPCEJz4gTuZE2inQNbfyQ4ZBcEWfrl0WGQ=;
+	s=k20201202; t=1737531907;
+	bh=jdWZU7kFs1EGlYK6lGC7SbOqK0+gXAh737oaITjmdw8=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K9W5Y/dNMuWHCj/eHNPQ+hzQ1JZEl2xf08jiqVslfQnFTkcPMQo+fcotSgkDTHgT0
-	 SpWlfWFpsrse6cEb5+8QF66zcWyi14tTw+pL3iyloRRHwqXPXogPXc9d426uUDvCFm
-	 lU9SGDzuwvJqt/86jJ/BdwZJutG5akd0lINkVocYR95qE/ltDcZB07SgpznGW5EHjr
-	 UvdwBeafU2nJKJ/c3fKxYNAbLxxbqBZvdoiWIHfx3jjFNGDAKAzsqvLFhlOGIQLIdU
-	 HZl6a3tSdRpnaIznL7xYHiMcogCzJnf21HfKLp1wanIYgbtnmyFLUu57a+2n8iLLcf
-	 /5ESBphv7roqQ==
-Message-ID: <99c1ac06-cbb4-4319-b006-9f7095509803@kernel.org>
-Date: Wed, 22 Jan 2025 08:44:07 +0100
+	b=mtHrG3msqsZbskloOltinEQJqWIbRPhel0Pr7a1vknidkgPm4DoXiGyGlUOHSmhtS
+	 6sLILTMhvaUt4VZOPNeYAfQzZ5NWMlSiJXqGQBnwEXTUxEpRmm5tug1Sej0z4ejgb+
+	 6rk9uImHYMMCBVOMQkowOc56cWb+lTgXHHfXXLNMXkEfTcwo+pegCwMKUgEkU42HsN
+	 6OFcxy/1/dKpGjuQcrKy+0W4f9gX/b8XUfO2Hq1o152QHEHNEjIkRfdJGe+kGfYFCa
+	 Fy5tYnaCWXyxSUQfmlKXwkgvs0uOJMB+mwLRLVwJcwbq3XeI4OaYVku9Y1Gj6cavAQ
+	 L1Ck3AwF1oVTg==
+Message-ID: <251f8319-f865-493f-9fe0-7512d7bb042b@kernel.org>
+Date: Wed, 22 Jan 2025 08:44:56 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v3 01/18] dt-bindings: clock: Add VO subsystem clock
- controller support
+Subject: Re: [RFC v3 03/18] dt-bindings: firmware: thead,th1520: Add support
+ for firmware node
 To: Michal Wilczynski <m.wilczynski@samsung.com>
 Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
  krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
@@ -65,10 +65,10 @@ Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
  linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
  linux-pm@vger.kernel.org
 References: <20250120172111.3492708-1-m.wilczynski@samsung.com>
- <CGME20250120172120eucas1p23993cdbbe65e82054b9cb92fb704103b@eucas1p2.samsung.com>
- <20250120172111.3492708-2-m.wilczynski@samsung.com>
- <20250121-raptor-of-terrific-perfection-cafc27@krzk-bin>
- <8af66556-90d9-4360-ac38-f300f487f55a@samsung.com>
+ <CGME20250120172123eucas1p13564bf2d07000506caf44cf55bda7fd9@eucas1p1.samsung.com>
+ <20250120172111.3492708-4-m.wilczynski@samsung.com>
+ <20250121-lively-cocky-lorikeet-e0a3db@krzk-bin>
+ <167cdd54-895d-4ecf-873a-b5a1bbc11eb8@samsung.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -114,50 +114,25 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <8af66556-90d9-4360-ac38-f300f487f55a@samsung.com>
+In-Reply-To: <167cdd54-895d-4ecf-873a-b5a1bbc11eb8@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
-On 21/01/2025 22:29, Michal Wilczynski wrote:
-> 
-> 
-> On 1/21/25 10:47, Krzysztof Kozlowski wrote:
->> On Mon, Jan 20, 2025 at 06:20:54PM +0100, Michal Wilczynski wrote:
->>>  properties:
->>>    compatible:
->>> -    const: thead,th1520-clk-ap
->>> +    enum:
->>> +      - thead,th1520-clk-ap
->>> +      - thead,th1520-clk-vo
->>>  
->>>    reg:
->>>      maxItems: 1
->>>  
->>>    clocks:
->>>      items:
->>> -      - description: main oscillator (24MHz)
->>> +      - description: main oscillator (24MHz) or CLK_VIDEO_PLL
+On 21/01/2025 22:31, Michal Wilczynski wrote:
+>>> +#define TH1520_AON_VDEC_PD	1
+>>> +#define TH1520_AON_NPU_PD	2
+>>> +#define TH1520_AON_VENC_PD	3
+>>> +#define TH1520_AON_GPU_PD	4
+>>> +#define TH1520_AON_DSP0_PD	5
+>>> +#define TH1520_AON_DSP1_PD	6
 >>
->> thead,th1520-clk-ap gets also VIDEO_PLL? Aren't both serving the same
->> purpose from these devices point of view? Bindings are telling what this
->> device is expecting.
+>> I don't see these being used in the driver. Can you point me?
 > 
-> Since thead,th1520-clk-ap configures PLL clocks it takes the oscillator
-> 24MHz as an input, so no.
-> 
-> The VO subsystem takes as an input VIDEO_PLL that's configured by the
-> AP.
+> Those are used in the power-domain driver
+> [RFC v3 05/18] pmdomain: thead: Add power-domain driver for TH1520:
+> https://lore.kernel.org/all/20250120172111.3492708-6-m.wilczynski@samsung.com/
 
-I understood that, but you really did not answer to my question. How is
-the input called? Not how is the clock called.
-
-> 
-> I could do something like this if this needs to be formally expressed in
-> the schema:
-
-It is enough to put it in description.
-
-
+Then this is wrong patch and wrong filename.
 
 Best regards,
 Krzysztof
