@@ -1,113 +1,134 @@
-Return-Path: <linux-pm+bounces-20800-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20801-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B3D1A1903D
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 12:02:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2138CA1907A
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 12:18:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6D0CF7A3E25
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 11:01:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0857D3A1966
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 11:18:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 149532116EF;
-	Wed, 22 Jan 2025 11:01:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 270CD1EE7B6;
+	Wed, 22 Jan 2025 11:18:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="YrSuY77B"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kYGtcph2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 860FD18AE2;
-	Wed, 22 Jan 2025 11:01:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54E13136A;
+	Wed, 22 Jan 2025 11:18:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737543718; cv=none; b=XLO3CKzodMUhBGTGkhARX+ypexEbCtS2dR0wgIv9EiMVyjxau1ZQEjCsrd7igqTTMxXuGeZEd5qkDCynGd7EiXOCuVYdzkDisA8tjFtl1pCO3/IPycLIoDKCN8ZRh05WMq7hkmDN+hADJldG87RZceXeepd6L6Ghi/ShpjOCO2U=
+	t=1737544719; cv=none; b=TVY2U6L5L7JXQhCCzj9qKbsMCS9hPJLzSbg1rCELaPqa7iAAx3aWgJIR/LfT/vEIEQ3B0aFLxk78oRxCjDwmKSk5NFBSUtrid0mvnDuZqwUtHg3a1U2uL+bukNLXrkQ4Qq+tOSkVShWwROxpxG6so2ToW+RQQsl9UuDoXPW8Uz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737543718; c=relaxed/simple;
-	bh=ahegWa745mU+Vmqnh+ev9dNyAQR5ZkIBYktO62Z+AZk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DkMfbtby0hgu459TIMvkDdltqGtcrio56v4a6zbVZec+BfAq9wiePAtX5CuOh6brBRYMwkFRYXWlTzxyo4G4iuWGLPD868l0qIvd4oR9QzPiTSA+DI3Kfems5VS/cIJYN5eLZ6jXRGi7g74bqPn1eSigir9EVgVPkYVAOpIlf+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=YrSuY77B; arc=none smtp.client-ip=209.85.216.44
+	s=arc-20240116; t=1737544719; c=relaxed/simple;
+	bh=VkIsIxFqNnFXBeJpYhyYhbtCp2L6Z0FpexhGbCLsYwY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pGWRBItwvuqdfGn8u8L26oT96Djn5RK/u6oXF3XaLSREF5P8ZLjAIJCC4fIKkxe6q0poOvL+oE3AHbugpQdQ/XCdAF+Yc7uFq0zdPb1zWhz1f8i7TXuwKWMrYHKpnmtPvzNtxCVkh/h13BVvxCgRsHiXGSlPe73Cj7aTi6aD2xM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kYGtcph2; arc=none smtp.client-ip=209.85.208.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2ee86a1a92dso9411138a91.1;
-        Wed, 22 Jan 2025 03:01:56 -0800 (PST)
+Received: by mail-lj1-f175.google.com with SMTP id 38308e7fff4ca-3043e84c687so54882241fa.1;
+        Wed, 22 Jan 2025 03:18:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737543716; x=1738148516; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=ahegWa745mU+Vmqnh+ev9dNyAQR5ZkIBYktO62Z+AZk=;
-        b=YrSuY77BnW3QDwR9zcwmSmMGluhh6OMreBy7HkGefmNATHT5ZKVxqCSVULmvczO5b5
-         sRzPvvA6AthtbLmh4atg4actrdM2msb+sPqiWRLq6D5obJszrmF5C4eHaJM2Efi0k+LH
-         GuD4BNX29lETDdqgwzhhrSNMEnU13AsWG8it+siCbGE1HI6MqNRmG/pZR+djdi1I0VFu
-         5zgU5gAFU2My9nQp55Fi2byDRBXYx6WivQT/nBIp8gVsrQaC3jbhvnPo+lbbL6xzgZvY
-         Xy/FcMahvzL8aQgJCJdKOcu93m9O+3WsG08st2/1gydfvZTlxNyMKDq+hwTq1jT0oEtW
-         wWAA==
+        d=gmail.com; s=20230601; t=1737544715; x=1738149515; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=IHnhEphz7DnDm4X924MxgWq7ImAvK6C+Os9CX2NZWyk=;
+        b=kYGtcph2tAIIo5P6KxamaMNDTu6eqUd9FGEbqYlX0MTL/ka2H849M2fXWqImhR9sSa
+         QCxOB3SdbAP5UyTZ5iMW2VRQU7ttxQcL4vZRQi2VsHsu2h+BT/wNDdk4tPQ3X0tusFMf
+         81HOJS35EYTh7I+EVVcz9LnuHFpUTCfARUH5SckmYoPO/6CAcD+LIy/aYHPXh8P9LmLa
+         Qp/Obt38YIWzCPtl1hwtuqZVuZBbgQUxUjiEjm4bMEu2U4QjveZ2cl3MOh9zjh6T5EYg
+         ZGiuUNe54Pk3YlC62Zu8+e3YqwDEl53BDyDnkvhHNp2cwKgUchZdou6JEVMMygg4hZ7o
+         Um0A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737543716; x=1738148516;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=ahegWa745mU+Vmqnh+ev9dNyAQR5ZkIBYktO62Z+AZk=;
-        b=ist9xM3497sDkxSimX24inew40lU1pjYHIWpYePCJa4xoYjhZ4mR0cbJBdYdY0qo6x
-         fCHdfRQKT30o7gJBhKr5Lr2Qjz260lyXGnasLFZVsrrKV96nyMLPQFjHgPxPcCnrGCy2
-         hlpZbPBlzSOSyp5vgKrGNmBBv/V4IfIwm7I6fWFAvzF9GsaYaHNyzpj5Qlu2SYuezt2m
-         HGN3SbLBez9HI8mol/W/dj2134BCI+bPCA4cw/qABsbDMZ20BqDwcCWNEI2msHUxuXh2
-         UECJmcZph5i7YQTyH6UCp1+VOJQ7HHX56a8EVGSfhDNtYO8xNtZccKgLKwfbzGYlyxQz
-         4IqQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUABSXFkwXsCcasZQ7eBygM8FXvTha9YSE2do+ckZP2PVHlB/M0aqwyosoOKTdJ61voMtMQ6M4dBiwK@vger.kernel.org, AJvYcCUZkM1b8gxmYdBczYqQcljuO4t6A/WuSzQFRKmsNlVP5I26nnmhh8Gcpxie5ADtvTLVso6WXaeauMom4Ci74e0IotmeBvsM@vger.kernel.org, AJvYcCV3mvi7CeaT0C/tzyZkoPqJaKJ0AFn2fdbTDNK5FsegZLkGqJ4V8qScVINbmjNeBXJNd4IZG1HmHWiT@vger.kernel.org, AJvYcCVOYfcu7PpCQUnfn2WMBxvF2O11hYFV9wFtmlDMJvuQWY7QCha/J/y6ObRnqpD8yGeCt40uLA1XZeY=@vger.kernel.org, AJvYcCVtovPxB/Z/8zyxsL/TFXbJ446LNxppNwKDoktyOGBcqlP7cMeFsZXls/3LQEyYFAC9JUgLG1P14t/TOcbb@vger.kernel.org
-X-Gm-Message-State: AOJu0YwZgpwnF75CqtHa8W15BUv2E2s/oDjVjZyOXqB+9hgMIJQRQ/7P
-	K6uMOinxHI4wndyihBAvRRvhmRMclxzhSvpkvruYkTOTkyzFw/d+VDwTsmZJ0PQCknZlY8UBfSo
-	jD7SqRkeYuIIE0X7cAzLF6h7WwF4=
-X-Gm-Gg: ASbGncuH42sTPIZpvHNKhh2r3qn2ev5sRzKP8u1sFugFy9fDcmg8rv0kLhCu0Y59Zoz
-	6LadhdNpLj/3Tc40wwEiw7FJtu+KQFqDsQFcH+wOv/KvpI4h2xLrL
-X-Google-Smtp-Source: AGHT+IFPgblVHaEjnM6nhcreTldchYyIJTpY55eKVObaVzFagqAwIyDjIvNPwSyVAwhYwCsUN6FF7RqNwMBujjZOwbw=
-X-Received: by 2002:a17:90b:51ca:b0:2ee:5bc9:75c7 with SMTP id
- 98e67ed59e1d1-2f782c4bdc3mr26294095a91.5.1737543715747; Wed, 22 Jan 2025
- 03:01:55 -0800 (PST)
+        d=1e100.net; s=20230601; t=1737544715; x=1738149515;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=IHnhEphz7DnDm4X924MxgWq7ImAvK6C+Os9CX2NZWyk=;
+        b=YapRiHPzn0R6x/oFuvX1HqJLNtASoeMSpKkeMZwnbRXjgbFKW74Ac/iyGEsk5EO5vF
+         epwfLhA10vXRyp5te8Vwm6YIhwRh7n/okrTqQOMnYNoaUejNv47E+hwAegQusCFLeYPH
+         8YIZYKNVQh/1acTJFOqxFRq5IlUB9mdhF4lvU4MNU1TU+qZjWOWAnga6D72FG/Rfaecp
+         b92z0Tc7avNZbQUPg7zZL4388xaZZlLwdNDl+QfW/zG/relzKJgUvc59r2CvjmUW4uDY
+         DLZxYN7KLrYqqaOmJS6l62bK7CfWdfXB0luiQ1cC+066xnHuS1XmvKOXvOI0GC3PUJWJ
+         S3fQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV1jM81k6adoDy9tPaTv5CHthvc3TuZhETxTlbxs58TqVMRiQqOqIdxZ3C1T77kQHLioMrRbq4x05eB@vger.kernel.org, AJvYcCVJXrFaN//TM0tl/emOtV5/OoC9/rklfnq3gIFfiV8QM2C5toU+GLec9yS7Z1AMysDBeCWUcONIzVA=@vger.kernel.org, AJvYcCVQ6DcE6FKDxnEdrzi4efhyPUhqVuOdX7wl63uFThSCLnBzxHtfIWzm5TSbl0k06jOcJW6a0tmF5orkgw3OcuTHXeia+HVX@vger.kernel.org, AJvYcCVeyiIRPC/shcCe1NfscNYeU61aWUF0iW0F4FUdtspTll0RbsxsJ7vKG7BZ1baYMICg1DQoSVx8R+6E@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNx13W0YEo+bKSv/PA2spl3tYjpJ73+bHUWIKNxFYxTenjt5Ui
+	jZFMtX7EvvyRzatQ+C/5nZqM4bAijGNWJWX/Xr+wLgOQ4fQponXY
+X-Gm-Gg: ASbGncvaAVFHovNtJ8UGMwWEa7w93NvMaBIeGJnK0xkh04CH01drfhXEm5l/6zfYlF/
+	SNR94VSFDnZfPv1pIUKHsfkzMdYfdoFYhTAEFNjAP74KkHZxk+TKJ7CtKwy9ykm+WbMS4DD/NjQ
+	1YCXgNIs/Du3IIt/SvWVzKm/Mn27BhKMoKxEOZVTO5Iwp/7Fcyc+hPUbkuSC/LcDVV4YxgfqEAa
+	8CNsS6YvKXexxuH0TCjA8OfLpp/G7wNIg0U+t7kygxZAWumvOXKt8z8+7DjvQ12roRJuQTuuCvO
+	wxCRgxo=
+X-Google-Smtp-Source: AGHT+IFhihhIAFdpOqRUkM/GOfhDJsLCkBNl8oVs51jpSRx6+pmdoU/RFlOu7IKHaOw9TUD6UWkJVQ==
+X-Received: by 2002:a2e:b8ce:0:b0:300:34b2:f89e with SMTP id 38308e7fff4ca-3072ca97ef0mr77473731fa.17.1737544715028;
+        Wed, 22 Jan 2025 03:18:35 -0800 (PST)
+Received: from [172.16.183.207] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3072a35a057sm26180611fa.48.2025.01.22.03.18.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 22 Jan 2025 03:18:33 -0800 (PST)
+Message-ID: <eb123791-a63d-4a59-a8c2-e7716201d976@gmail.com>
+Date: Wed, 22 Jan 2025 13:18:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de> <20250113-hw_protection-reboot-v2-3-161d3fc734f0@pengutronix.de>
-In-Reply-To: <20250113-hw_protection-reboot-v2-3-161d3fc734f0@pengutronix.de>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 08/12] regulator: allow user configuration of hardware
+ protection action
+To: Ahmad Fatoum <a.fatoum@pengutronix.de>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Fabio Estevam
+ <festevam@denx.de>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Jonathan Corbet <corbet@lwn.net>, Serge Hallyn <serge@hallyn.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Guenter Roeck <groeck@chromium.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
+ chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+ kernel@pengutronix.de
+References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
+ <20250113-hw_protection-reboot-v2-8-161d3fc734f0@pengutronix.de>
+Content-Language: en-US, en-AU, en-GB, en-BW
 From: Matti Vaittinen <mazziesaccount@gmail.com>
-Date: Wed, 22 Jan 2025 13:01:43 +0200
-X-Gm-Features: AbW1kvYA1CSvpEvQV0avkVcXZAcP3BsGSp9Mve19t_aSvzY4TVkLSF5gkliB-RI
-Message-ID: <CANhJrGM=DHmXxKrfwQ80-6wqZqMLx7Yv=jC0ZV0B9D92FAcd6A@mail.gmail.com>
-Subject: Re: [PATCH v2 03/12] docs: thermal: sync hardware protection doc with code
-To: Ahmad Fatoum <a.fatoum@pengutronix.de>
-Cc: Andrew Morton <akpm@linux-foundation.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Fabio Estevam <festevam@denx.de>, "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Jonathan Corbet <corbet@lwn.net>, Serge Hallyn <serge@hallyn.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>, 
-	Guenter Roeck <groeck@chromium.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-doc@vger.kernel.org, 
-	linux-security-module@vger.kernel.org, chrome-platform@lists.linux.dev, 
-	devicetree@vger.kernel.org, kernel@pengutronix.de
-Content-Type: text/plain; charset="UTF-8"
+In-Reply-To: <20250113-hw_protection-reboot-v2-8-161d3fc734f0@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-ma 13.1.2025 klo 18.26 Ahmad Fatoum (a.fatoum@pengutronix.de) kirjoitti:
->
-> Originally, the thermal framework's only hardware protection action was
-> to trigger a shutdown. This has been changed a little over a year ago to
-> also support rebooting as alternative hardware protection action.
->
-> Update the documentation to reflect this.
->
-> Fixes: 62e79e38b257 ("thermal/thermal_of: Allow rebooting after critical temp")
+On 13/01/2025 18:25, Ahmad Fatoum wrote:
+> When the core detects permanent regulator hardware failure or imminent
+> power failure of a critical supply, it will call hw_protection_shutdown
+> in an attempt to do a limited orderly shutdown followed by powering off
+> the system.
+> 
+> This doesn't work out well for many unattended embedded systems that don't
+> have support for shutdown and that power on automatically when power is
+> supplied:
+> 
+>    - A brief power cycle gets detected by the driver
+>    - The kernel powers down the system and SoC goes into shutdown mode
+>    - Power is restored
+>    - The system remains oblivious to the restored power
+>    - System needs to be manually power cycled for a duration long enough
+>      to drain the capacitors
+> 
+> Allow users to fix this by calling the newly introduced
+> hw_protection_trigger() instead: This way the hw_protection commandline
+> or sysfs parameter is used to dictate the policy of dealing with the
+> regulator fault.
+> 
 > Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
 Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-Matti Vaittinen
-Linux kernel developer at ROHM Semiconductors
-Oulu Finland
-
-~~ When things go utterly wrong vim users can always type :help! ~~
 
