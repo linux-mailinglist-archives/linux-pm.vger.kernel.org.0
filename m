@@ -1,87 +1,86 @@
-Return-Path: <linux-pm+bounces-20787-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20788-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 41DD3A18C70
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 07:58:53 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D9299A18C7A
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 08:00:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1414A18803EE
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 06:58:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8274F1884E41
+	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 07:00:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BBBEC1B87D1;
-	Wed, 22 Jan 2025 06:58:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E68701C07CB;
+	Wed, 22 Jan 2025 07:00:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bAaO/DVT"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Ly2m0ges"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F2C1E1B424F
-	for <linux-pm@vger.kernel.org>; Wed, 22 Jan 2025 06:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6B391C1AB6
+	for <linux-pm@vger.kernel.org>; Wed, 22 Jan 2025 07:00:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737529119; cv=none; b=ImBJGhDmEVntKyrYVG0B5Gksq219T4L1sJ7u5YbiZW+3pB2g2MXuamYCmw7TpKiKWMxCZ2Vclxc+rXm7782ymj1r2ZxMHLN4PdO0wOCL0HqmwGDSopFB4YPsM/mXB5Kk/U+h/obaoz41MPfHnluag4XeR15PXcEHfcC79jGbKAk=
+	t=1737529206; cv=none; b=GlFUSRycwdqVNtAWDKhUaMSOdfgWAI4OApyhPAlDaO0ePT0wg+CFLUlBXKBl40N/M/cLcSUO0xN5kByGj2n4OEYVF1iCNm6yGl+qpMMzE4YtGa6j2vN3mZiaHyINMf0gESjd+wS/J81W7Kye+U0hs4KBZ1xPlkUiliSmAKekvaY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737529119; c=relaxed/simple;
-	bh=9oSExSdoybPi+Uw9osvbFjCTKI2I/ihwNaxi67HaoBo=;
+	s=arc-20240116; t=1737529206; c=relaxed/simple;
+	bh=rE3huaUwuvRW31ymAALiNNK+Xoq032LfTLcrVI/CohE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VNAFGNYprQXbqao0J1ElfT9vo3G3wv9LRq+AFJfRRF64jw/Ca0ZNEWRZkA1SKH32caBPSXypXqUtA27usJORRfedEyv5hid0Xer+/vKo5KFI3cRMjto/gOl7MlIO3jAFE7IZGICOfHWnwtmEaWLxeArPHC6Wbwgj63bHde9gI4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bAaO/DVT; arc=none smtp.client-ip=209.85.214.178
+	 Content-Type:Content-Disposition:In-Reply-To; b=sPHzb3wy/3UPSqgoSucbNJVkcfZSEzmry7JydTSFz092bshz12FTPCNhLNGGO3o6ymwYtRUR5gqNnb6O0usr+kSSOiTey4Shd/S2449eomTp23DYbWquZjfx4hpxImjnnA+d/cqwKNQ4VMOhVw9NwM7xmHWKX/CIn3oL639aoR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Ly2m0ges; arc=none smtp.client-ip=209.85.214.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21636268e43so143578535ad.2
-        for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 22:58:37 -0800 (PST)
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-21619108a6bso112146125ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 21 Jan 2025 23:00:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737529117; x=1738133917; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1737529203; x=1738134003; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=98nwCRYv2SeYsyOZNSoNm6lFlX/EwFYW68/vkffV1uA=;
-        b=bAaO/DVTNOWNYGUUmNgOq0nEU8mDdv4D6wyhRLjfKaA0D19ZNnBthCl+fpfVF6rGlZ
-         D0B7LHW3IvwR37R1fifXG/tWHLEwqcou941pjUCOcy17P+/7LQjwiQQssXhET4zA9GId
-         cTDMjrdBx+9xJgb0QFk2Ovn7TbaVZ3PqPoMO9HeJHr2PgYoA1tv13KI3aHYnHSXSiTmm
-         pKH6mup9NNe3AuTSS2JWJG0rjVpl7zWvS7lIe5hddub5ct3Nx7MyApPES6nyvxlBWVMz
-         TxaCxBBcEM+nzK/kftP+BWnasLrHgnLrPgljB2w/maULEJ6mbnvY6sx+rOU9dN1kWyl+
-         9SpA==
+        bh=W0cpSsSU+s48P7VGsqPLX+zN61KloEKzbVZ7uGDypMk=;
+        b=Ly2m0gesf1d9Q9bxX227CLmU1n5PfAUYHpHN3jsm348QvsGv4Yw8EtW2ksFDfrgo0W
+         nbOjeWf6SNaKtq6tL/hby5fjDLqYzoxwafQrFzW+92hb6hSGM4alnVt/z8JvSpFvmm80
+         DVmoMcir3j016yufURPgco9DnvAAgciHcYBDLnWUMWZcQ8dmQcAExOKTIji+un4h0Zhq
+         Dxdx1+Jv+fm1OYPm5h0BQJnrkOkoaOI71uwoYEgF2fx1tR1yID2XLWY5UohaWdH+vAxX
+         1vUJMQ6Ue7lvFdv7a+RRLOqAb43DRLsSxhsXumZdfh6sWAnVVRN6zkdgKYP1i9s1+3rO
+         DMjA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737529117; x=1738133917;
+        d=1e100.net; s=20230601; t=1737529203; x=1738134003;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=98nwCRYv2SeYsyOZNSoNm6lFlX/EwFYW68/vkffV1uA=;
-        b=bwwE5R7PcalZGw88haxBzuWL/E8k3+HJI3JwGaE73H1pgst77SpJ3Cm4hM7KYwB2uU
-         dOnm/d48asLrYD37Sp5KvOiSmWstHxML6QdmihMlKprwaTXxIr76kry7VgVe9wkeMPQl
-         DUfylXoHXfjJin1HnZtLjENlKyXixbxSDkz5O/6PlEupwhzvwM1YhCS23jkfLyXMaxHS
-         6+YnZdIB7lyUz56LODqAFZlIEvea9w6G5/IBB8xB/sKd3LSRoTpPPLJ9WawTnBOuEhe+
-         haRO+zCFkp/2WmwGNvfayAZwcY2s/ILe7L6f973eHu3WdR2Rjom2pfJi8z87jtNe/+Ut
-         PkRg==
-X-Forwarded-Encrypted: i=1; AJvYcCVS/HXpp5Hk4rsuPA1j9fyP4YV7omGq81gKSxa36VgBRamizUtRaIjtyJMPoMruE9kpV1yoMI3gfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxQGTpfRsm+tLoKhiWvuwKu1mOccWrMQmJtGKenvn9bMCKncOrY
-	KTDwVFEzyOBXTsn7eJUC7Q7ZdqncTpT9++MxEocconKIiJoL6X3HTz3cLxU8pVQ=
-X-Gm-Gg: ASbGncsNaKRJNcwqikMfhR2XfsA+EyOC8ROBkrIBL4QkzjhQlhsksuqnH04X/DURU8M
-	MvHo0uAej1U57AEBXoXZYRRtZZnNDlj/6dpq5FDyxEw8dsg+oHoQknzC9OL2H9FMIN7GqkgRiFD
-	FE0+enUbYDr24zI6ePZPImCcIE58zJ57X36KBdvcn0K1HeCwJXWcW65fwPUhPs5mbzqOZJxfzRN
-	ICg5t4jI1JMTGgWBlU2P8muVuAT3/MGtE29t5fjK+qDxMss/v5PlaOp+M2sS2tet7l1ITex
-X-Google-Smtp-Source: AGHT+IFlyQTrbWJ70KA4F7+yV/Afg3zlHDmPMltEFy0yFNqRhEfo+qrlLDzqJAfprSQh6gV4oL8egQ==
-X-Received: by 2002:a05:6a20:9144:b0:1e1:a9dd:5a58 with SMTP id adf61e73a8af0-1eb215ec11cmr37960260637.30.1737529117262;
-        Tue, 21 Jan 2025 22:58:37 -0800 (PST)
+        bh=W0cpSsSU+s48P7VGsqPLX+zN61KloEKzbVZ7uGDypMk=;
+        b=uHDdR8Bm7EeAhiLKlg1jQUt78VT3zvNWB1y3wU5R5ll6SHenTcNOZtvstvmf8mYesX
+         cwdwFN91ZIiBjTkqfzJiaP8nb9paWg+qm0fp9u3h/L9+1t2uKeLzqwrnJjHSVbnnSGPn
+         Iee2boMVnTUyuR1kf1e2M9AKW/Knyp6hB3k6yHh8TFseGuW/PhiDjz7Qnmq/Cdxh8wdg
+         LKJvFa18TUKwf2+ztlFVYLSCUa9ULN7jUu0BP+3QN5G4Oarhc7D2ErSWYPKQc5D1wIG3
+         0q/XN+/Dt5hmqesfEVpLJ7xlMUKto3P7s44X4SbkT4u1wdmZSDY4svwgpDkBzlp8j2HD
+         cgRQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXZDobgJGUL0vLE9EJJO2nl4RBILpicOHMvUGw6fWQIkdHnAecyXjNaWnzJg/qQSxaZiDHT9rNjPg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzLgjFPlvuVR5AUKrAG2yxMkkC5c46N1cz9ElqK8GMDomWVbwA9
+	5uREk0ufnFyBK7LYOYN3tmF9ReeSzKE6rVYT1SGm2M3GjWRB69G/jUbxBe6z2ws=
+X-Gm-Gg: ASbGncskcgEhbb8BznDMABq2GC6FgrWiBmHYvN7oJdqubGVdLac9Od4fn8DZN6cGN7Q
+	g2LwB6GKbGCVdKtdATQhtWPPbnLzP1j+oy1zdF+AQl1Rr8D+ALGSpXOG/3UgZhmeWUDAK7v0myy
+	HpNJE8ML4ZRNW1h/ukrw1ZNL2hdWJwgf6hphB4e+BckPMn4TV0hxvnwf7+GivGxJCQ1m278EXyj
+	g7nD8GWmrj1Bqm7cmwdMOeCp0VayNlyPf/spNiLNC0vupA8DlBlFU5XR/e0fYIslhSaDO7I
+X-Google-Smtp-Source: AGHT+IGCQkIn7ZTTkuomqxvmrLN2VvgdOGMSBHS9ZrBTJ2eSunnuFvbJbM/+2VYv6IstsZzPPKTOrA==
+X-Received: by 2002:a05:6a20:244d:b0:1db:e464:7b69 with SMTP id adf61e73a8af0-1eb214e82damr30884725637.20.1737529203154;
+        Tue, 21 Jan 2025 23:00:03 -0800 (PST)
 Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab9b9b1esm10519029b3a.99.2025.01.21.22.58.36
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dabacdb13sm10193287b3a.168.2025.01.21.23.00.02
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 21 Jan 2025 22:58:36 -0800 (PST)
-Date: Wed, 22 Jan 2025 12:28:34 +0530
+        Tue, 21 Jan 2025 23:00:02 -0800 (PST)
+Date: Wed, 22 Jan 2025 12:30:00 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Arnd Bergmann <arnd@kernel.org>
 Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
+	Christian Marangi <ansuelsmth@gmail.com>,
 	Arnd Bergmann <arnd@arndb.de>,
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] cpufreq: s3c64xx: hide unused variable
-Message-ID: <20250122065834.c4va6uwjrfny2mfv@vireshk-i7>
-References: <20250122065216.1371158-1-arnd@kernel.org>
+	Pierre Gondois <pierre.gondois@arm.com>, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: airoha: add CONFIG_OF dependency
+Message-ID: <20250122070000.sawplgg5tfhrvdfw@vireshk-i7>
+References: <20250122065516.1483301-1-arnd@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,53 +89,42 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250122065216.1371158-1-arnd@kernel.org>
+In-Reply-To: <20250122065516.1483301-1-arnd@kernel.org>
 
-On 22-01-25, 07:52, Arnd Bergmann wrote:
+On 22-01-25, 07:55, Arnd Bergmann wrote:
 > From: Arnd Bergmann <arnd@arndb.de>
 > 
-> A previous compiler warning fix extended an #ifdef block, but that
-> led to another warning in some builds:
+> Compile-testing without CONFIG_OF leads to a harmless build warning:
 > 
-> drivers/cpufreq/s3c64xx-cpufreq.c:27:28: error: 's3c64xx_dvfs_table' defined but not used [-Werror=unused-variable]
->    27 | static struct s3c64xx_dvfs s3c64xx_dvfs_table[] = {
+> drivers/cpufreq/airoha-cpufreq.c:109:34: error: 'airoha_cpufreq_match_list' defined but not used [-Werror=unused-const-variable=]
+>   109 | static const struct of_device_id airoha_cpufreq_match_list[] __initconst = {
+>       |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
 > 
-> Add yet another #ifdef check around that variable.
+> It would be possible to mark the variable as __maybe_unused to shut up
+> that warning, but a Kconfig dependency seems more appropriate as this still
+> allows build testing in allmodconfig and randconfig builds on all
+> architectures.
 > 
-> Fixes: 76b218721e5f ("cpufreq: s3c64xx: Fix compilation warning")
+> Fixes: 84cf9e541ccc ("cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver")
 > Signed-off-by: Arnd Bergmann <arnd@arndb.de>
 > ---
+>  drivers/cpufreq/Kconfig.arm | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index 704e84d00639..9e46960f6a86 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -18,6 +18,7 @@ config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
+>  config ARM_AIROHA_SOC_CPUFREQ
+>  	tristate "Airoha EN7581 SoC CPUFreq support"
+>  	depends on ARCH_AIROHA || COMPILE_TEST
+> +	depends on OF
+>  	select PM_OPP
+>  	default ARCH_AIROHA
+>  	help
 
-I too have sent a fix this morning:
-236b227e929e5adc04d1e9e7af6845a46c8e9432.1737525916.git.viresh.kumar@linaro.org
-
-> I wonder if the driver should instead depend on CONFIG_REGULATOR
-> and drop the #ifdef checks.
-
-The way CONFIG_REGULATOR is used in the driver, it seems like it can
-be used without regulators too. The initial commit also confirms this.
-
-commit b3748ddd80569ec753f62e709629b8c639143222
-Author: Mark Brown <broonie@opensource.wolfsonmicro.com>
-Date:   Mon Jun 15 11:23:20 2009 +0100
-
-    [ARM] S3C64XX: Initial support for DVFS
-
-    This patch provides initial support for CPU frequency scaling on the
-    Samsung S3C ARM processors. Currently only S3C6410 processors are
-    supported, though addition of another data table with supported clock
-    rates should be sufficient to enable support for further CPUs.
-
-    Use the regulator framework to provide optional support for DVFS in
-    the S3C cpufreq driver. When a software controllable regulator is
-    configured the driver will use it to lower the supply voltage when
-    running at a lower frequency, giving improved power savings.
-
-    When regulator support is disabled or no regulator can be obtained
-    for VDDARM the driver will fall back to scaling only the frequency.
-
-    Signed-off-by: Mark Brown <broonie@opensource.wolfsonmicro.com>
-    Signed-off-by: Ben Dooks <ben-linux@fluff.org>
+Applied. Thanks.
 
 -- 
 viresh
