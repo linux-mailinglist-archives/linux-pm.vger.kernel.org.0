@@ -1,159 +1,109 @@
-Return-Path: <linux-pm+bounces-20891-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20892-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36964A1AAA5
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 20:49:20 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 012A7A1AADC
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 21:07:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A72618880D1
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 19:49:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B8F403A81E8
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 20:07:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73D5618872D;
-	Thu, 23 Jan 2025 19:49:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8261ADC8E;
+	Thu, 23 Jan 2025 20:07:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EqFILXrf"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jUdOYgWu"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3FD0E155A59;
-	Thu, 23 Jan 2025 19:48:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 037FA1ADC70;
+	Thu, 23 Jan 2025 20:07:37 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737661740; cv=none; b=SansJhcMB0XSB/+bhwP+3edo9ptlZhnp7kooPQ8SwbJjAIXp8zVI95c86bYumt1uMvsj4J0bb1ksjWdCMAC0T+kiY6k1OJ8CYPvOhZ3ZezjCKdr1o41wk0drvg8kzQMBVPH5tooD6r95/4wdgjQRhMl35Mztp1mLQxcp06gltHo=
+	t=1737662858; cv=none; b=AvHOw2qnd8KY2kQKqJfIO5gTQj+MPDTbVKXKTG6AUKO2tC0LTtle9xPsh12r8+WNQHSOOyzaQsFcrbqPz0zSYirkD9MW350bINqd/xsO+k1cjryYtZoZtRr+HUpSOqqFwR0qQ4uwOOxcaUVUKpSJ/xX8dA47FCrEWtfEbja4K0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737661740; c=relaxed/simple;
-	bh=b4vDZnBnRJMAExr0E30kjS5qChTkUb0rbppiv1HRSJI=;
+	s=arc-20240116; t=1737662858; c=relaxed/simple;
+	bh=e2OVK8Ddfw9uI2kSKge59UBY8eO5YlBqbhZSC/ylD5s=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DPFlGJ9k2mV7QQrpEAaXUv/v7v40HWfOHX9RYbaZGE6v2agncjD/rbD7wI0DTD0mS14jzT6OgVbkUqv/W0f1tt76za+l8RU37Fm/Dm0bBVNF7pKO4uH/JC5UEe0Ol+9n/527LAk+/jhtieh/HjwXh2gfzkj1D+DGovXLOKcnmQc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EqFILXrf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B5D9FC4CEDF;
-	Thu, 23 Jan 2025 19:48:59 +0000 (UTC)
+	 To:Cc:Content-Type; b=AnhDpxIWJSju1qqrDlLGlVMZ00rRtzld5svLsBYpdIzUaimpjgCUmtRs4r3f1EyzbDBZVrlTbRdX0Fg1qbTJVBdVCb6qKmZiDg4CTx9DsbstrjGbt4dUs3jBBazPPfk+mA8Fl8lx7zPSGKVSt67BF6OF9j7164ffpmNcpS9L4NU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jUdOYgWu; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 60A8BC4CEDF;
+	Thu, 23 Jan 2025 20:07:37 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737661739;
-	bh=b4vDZnBnRJMAExr0E30kjS5qChTkUb0rbppiv1HRSJI=;
+	s=k20201202; t=1737662857;
+	bh=e2OVK8Ddfw9uI2kSKge59UBY8eO5YlBqbhZSC/ylD5s=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=EqFILXrfuR2ZIidhuGa5elmndxPWGARZ4+4SUQ2LogGGqSbmkEFngJj3ERNUU5Axy
-	 YYUlQPgrWtS8Bo+FycDGiEFlKSSOw1QJSLV1SkcYzR3JUh5wJOsWKDKhy+f9dHUYrm
-	 7pLUtWpNp2N+2Y0sK8B4CyIWN9Oj9mVmr/pc6wO0nOggRziN+6xsno0t+ylDSmez+f
-	 hHOhgGyHUHGaLZIo95ILsDiPy3DdHTK6ShflF5RwVdt51e0wRjNvkhkge2MoFni6GY
-	 d+OtMIPxV+S9hN6vnPi6I9YS/z47Wg42UQk9TAYDVlKrPFiHJYy97CE2ilrI6E2Cfo
-	 Fe1T5Gag59atw==
-Received: by mail-oi1-f176.google.com with SMTP id 5614622812f47-3eb7edfa42dso706342b6e.2;
-        Thu, 23 Jan 2025 11:48:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUGJh1b0eXI23JaXiiLByoLQ6wo7CgPw+QgQ7PtQf3pyS3cbWsZaIpbh963m3SK3p42XLf2vBgnPmw=@vger.kernel.org, AJvYcCUg0I2jWu0jGyD7ijwIvrO4uqHdhclgxuV3+fPwUQLqKZVVWnc2UXJKHomE+P2fGCx3QdzHkNxrP6NAGVo=@vger.kernel.org, AJvYcCVdYJ5oGQzZqQCvm26KPp0BJpBeFA7V/N9Z/5N6mvOfXaA4tVH+ykxPAC9hr1+qYeXhDmb/H7al@vger.kernel.org, AJvYcCWFkkKFstd5AHcqiQaXLlYTpzmJEksdyAkpCI1tESn4DI1ZGJvPW9uUW4vj9XBYRa9WI3zd1yxXHQb4pRqqTAIcY/k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwA74q8x7Ooi4b3gOe4eMTcOdcKb4dSqEsY6+M62fPYIE4UkNNL
-	2RuthEveBhzytxNw4IamC22R5ndND+xYUDmY46FUFEL8WOjPD6GZ5DZCBYt1zwrDBl1Aa8bs63X
-	K/9oX2Y1E6jLF1+VsSvUwkD4RB3g=
-X-Google-Smtp-Source: AGHT+IEn7eMjaHs+zmgjFd4WWVQahCuGuBBNarJzdEYSnQbw32rD83EbOPgQ6J9LSZlnM3ccjdpcf7atXcTLmBuPCOI=
-X-Received: by 2002:a05:6808:4c88:b0:3ea:f791:3caf with SMTP id
- 5614622812f47-3f19fc2ac4fmr14986057b6e.17.1737661739096; Thu, 23 Jan 2025
- 11:48:59 -0800 (PST)
+	b=jUdOYgWuGHXGx62S6wluJxpqf2oMdMy42NtlncxMz9xovpZcKqn9se5XXs3GGbOrO
+	 iQh6K/M9lH2qchPVWYkhUGp8JkUnWCg7c95mwS/Jm/2oGPHjjfjtRwutiHSNTWoo3G
+	 ZXd5ROteCTkBksivXe+rKKTMd1xp4KZn3uQcGT4COgY+Z3toQoes6gGjl767RD8UKm
+	 AcqI6yhKKixVfzS9AMFyMqStdXauHa/ZBSLUmonWpQG6xFF2pzPK79VhRhRIFPI5VU
+	 y3t7dho6ccxRteZStP4VNxsZzX79H18/SiYzDOMQa9u0Dx2QB+2zlvTzfOyxFukyMz
+	 8WlEZWxu5b2gw==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-29e70c9dc72so765898fac.0;
+        Thu, 23 Jan 2025 12:07:37 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVjuIlTmeo1na18mEHWUKvZsnJPI7q4bE6R1IBTppli48JnlYPSMqrwkfC4AkWAetgvwRJhqoCRGhgBrL4=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzBvugtZvp2oBE4gK/6YCKmyJpv+x3tLF/9DrXDaScxiMoAm5nD
+	nb77+i12IBN5qYR0EF9tWWEyyOpvWpnRMt6jsCI51DQXLZTqkUIqtvaWKB1qsBl05E/ktRDCTeA
+	aSR5aEnmM/qC5hogg3f1Swai2GHk=
+X-Google-Smtp-Source: AGHT+IGbDwDE0IJNwA5kmFlJAW0zX7Ply0nT/HfUDMfW8PB0wBqUHp63naKhr7pwMu1YxqdpV/Ek/1x8C/IzaGZjxhQ=
+X-Received: by 2002:a05:6871:5e08:b0:29e:70c7:a3eb with SMTP id
+ 586e51a60fabf-2b1c099a815mr14567233fac.7.1737662856719; Thu, 23 Jan 2025
+ 12:07:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <236b227e929e5adc04d1e9e7af6845a46c8e9432.1737525916.git.viresh.kumar@linaro.org>
-In-Reply-To: <236b227e929e5adc04d1e9e7af6845a46c8e9432.1737525916.git.viresh.kumar@linaro.org>
+References: <20250117101457.1530653-1-zhenglifeng1@huawei.com> <20250121063815.ddqh7t2qt32cwx7e@vireshk-i7>
+In-Reply-To: <20250121063815.ddqh7t2qt32cwx7e@vireshk-i7>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 23 Jan 2025 20:48:48 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gz2WLtwJca5oAgZ23C+UmX18k9fvCbzRAEV6zZL4jiiQ@mail.gmail.com>
-X-Gm-Features: AWEUYZkHJTFNwFesQmZCHaWO-zzZKYYgHYBBgsz-SFLTIOGI_LaSzdS3jIxf3XU
-Message-ID: <CAJZ5v0gz2WLtwJca5oAgZ23C+UmX18k9fvCbzRAEV6zZL4jiiQ@mail.gmail.com>
-Subject: Re: [PATCH V2] cpufreq: s3c64xx: Fix compilation warning
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org, 
-	Vincent Guittot <vincent.guittot@linaro.org>, kernel test robot <lkp@intel.com>, stable@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-samsung-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Thu, 23 Jan 2025 21:07:25 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0joB+xnRKLn_sFFFOsUnkD8smP=nEJCobDGsTQkkYnciQ@mail.gmail.com>
+X-Gm-Features: AWEUYZkatgqjdJahuOD__u7Lertm9jP3BkwY_xf3QD77wmQNP-drNa2SfuQKcQ8
+Message-ID: <CAJZ5v0joB+xnRKLn_sFFFOsUnkD8smP=nEJCobDGsTQkkYnciQ@mail.gmail.com>
+Subject: Re: [PATCH v2 0/4] cpufreq: Fix some boost errors related to CPU
+ online and offline.
+To: Viresh Kumar <viresh.kumar@linaro.org>, Lifeng Zheng <zhenglifeng1@huawei.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linuxarm@huawei.com, jonathan.cameron@huawei.com, zhanjie9@hisilicon.com, 
+	lihuisong@huawei.com, fanghao11@huawei.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Jan 22, 2025 at 7:06=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+On Tue, Jan 21, 2025 at 7:38=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
 rg> wrote:
 >
-> The driver generates following warning when regulator support isn't
-> enabled in the kernel. Fix it.
+> On 17-01-25, 18:14, Lifeng Zheng wrote:
+> > This patch series fix some boost errors related to CPU online and offli=
+ne:
+> >
+> >  - patch 1 fix an error that causes the CPU stay on base frequency afte=
+r a
+> >    specific operation
+> >
+> >  - patch 2 introduce a more generic way to set default per-policy boost
+> >    flag and fix a error that causes the per-policy boost flag remians t=
+rue
+> >    when cpufreq_driver boost disabled
+> >
+> >  - patch 3 fix an error in cppc_cpufreq that causes the CPU stay on bas=
+e
+> >    frequency when boost flag is true
+> >
+> >  - patch 4 remove the set_boost in acpi_cpufreq_cpu_init(), since it wi=
+ll
+> >    be executed in cpufreq_online
+> >
+> > Change since v1:
+> >  - remove update of min_freq_req
+> >  - optimize the conditions for executing set_boost in cpufreq_online
+> >  - fix another error in cppc_cpufreq
+> >  - remove set_boost in acpi_cpufreq_cpu_init()
 >
->    drivers/cpufreq/s3c64xx-cpufreq.c: In function 's3c64xx_cpufreq_set_ta=
-rget':
-> >> drivers/cpufreq/s3c64xx-cpufreq.c:55:22: warning: variable 'old_freq' =
-set but not used [-Wunused-but-set-variable]
->       55 |         unsigned int old_freq, new_freq;
->          |                      ^~~~~~~~
-> >> drivers/cpufreq/s3c64xx-cpufreq.c:54:30: warning: variable 'dvfs' set =
-but not used [-Wunused-but-set-variable]
->       54 |         struct s3c64xx_dvfs *dvfs;
->          |                              ^~~~
->
-> Reported-by: kernel test robot <lkp@intel.com>
-> Closes: https://lore.kernel.org/oe-kbuild-all/202501191803.CtfT7b2o-lkp@i=
-ntel.com/
-> Cc: <stable@vger.kernel.org> # v5.4+
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
-> V2: Move s3c64xx_dvfs_table too inside ifdef.
+> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Applied as 6.14-rc material.
-
-If you'd rather apply it yourself, please let me know and I'll drop it.
-
-Thanks!
-
->  drivers/cpufreq/s3c64xx-cpufreq.c | 11 +++++++----
->  1 file changed, 7 insertions(+), 4 deletions(-)
->
-> diff --git a/drivers/cpufreq/s3c64xx-cpufreq.c b/drivers/cpufreq/s3c64xx-=
-cpufreq.c
-> index c6bdfc308e99..9cef71528076 100644
-> --- a/drivers/cpufreq/s3c64xx-cpufreq.c
-> +++ b/drivers/cpufreq/s3c64xx-cpufreq.c
-> @@ -24,6 +24,7 @@ struct s3c64xx_dvfs {
->         unsigned int vddarm_max;
->  };
->
-> +#ifdef CONFIG_REGULATOR
->  static struct s3c64xx_dvfs s3c64xx_dvfs_table[] =3D {
->         [0] =3D { 1000000, 1150000 },
->         [1] =3D { 1050000, 1150000 },
-> @@ -31,6 +32,7 @@ static struct s3c64xx_dvfs s3c64xx_dvfs_table[] =3D {
->         [3] =3D { 1200000, 1350000 },
->         [4] =3D { 1300000, 1350000 },
->  };
-> +#endif
->
->  static struct cpufreq_frequency_table s3c64xx_freq_table[] =3D {
->         { 0, 0,  66000 },
-> @@ -51,15 +53,16 @@ static struct cpufreq_frequency_table s3c64xx_freq_ta=
-ble[] =3D {
->  static int s3c64xx_cpufreq_set_target(struct cpufreq_policy *policy,
->                                       unsigned int index)
->  {
-> -       struct s3c64xx_dvfs *dvfs;
-> -       unsigned int old_freq, new_freq;
-> +       unsigned int new_freq =3D s3c64xx_freq_table[index].frequency;
->         int ret;
->
-> +#ifdef CONFIG_REGULATOR
-> +       struct s3c64xx_dvfs *dvfs;
-> +       unsigned int old_freq;
-> +
->         old_freq =3D clk_get_rate(policy->clk) / 1000;
-> -       new_freq =3D s3c64xx_freq_table[index].frequency;
->         dvfs =3D &s3c64xx_dvfs_table[s3c64xx_freq_table[index].driver_dat=
-a];
->
-> -#ifdef CONFIG_REGULATOR
->         if (vddarm && new_freq > old_freq) {
->                 ret =3D regulator_set_voltage(vddarm,
->                                             dvfs->vddarm_min,
-> --
-> 2.31.1.272.g89b43f80a514
->
->
+All patches in the series applied as 6.14-rc material, thanks!
 
