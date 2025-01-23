@@ -1,132 +1,121 @@
-Return-Path: <linux-pm+bounces-20826-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20827-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 756C5A19B6E
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 00:24:03 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92C91A19D62
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 04:44:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 51B1E188D635
-	for <lists+linux-pm@lfdr.de>; Wed, 22 Jan 2025 23:24:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DB634168103
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 03:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF7D51CB518;
-	Wed, 22 Jan 2025 23:23:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1A5112C7FD;
+	Thu, 23 Jan 2025 03:44:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="Um2U5XD6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GdNeMPoE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4314F1C3C1A;
-	Wed, 22 Jan 2025 23:23:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 213CC8615A
+	for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 03:44:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737588237; cv=none; b=GBk8Yxvs86GJ/I/x9Ag3c6U8/PKjYZ1nJG98gR/dBQJ0YqfF4VRA+6ZNjU37AA8HL8mzFkvwv6f3Dl/KLcCUHyOK/FnymjCAlXfb3oEy8fdlz33px67+7UuqzxHDi9aMMrIDXXAC0/3VebWg9Sv8sAwUp5aDxKJFxOXKk4SUJy8=
+	t=1737603844; cv=none; b=RrmsNsx6i0vGGq4FEvpyaARNrfhhp51ewv5hI6MXotnlZorGMND65klieC392r3bI9hURn+rAI/BDz+wiKbfU8Mz2VKYI+ebQ3XBYcutnuAVlgMg/Sd46Lp948prkYS+mR/QzNMKoXCNN2apsp8Hq59luy+Kgx+atQOTEDltyV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737588237; c=relaxed/simple;
-	bh=PQ9ID+y+HYqvdGcyA/HuZ8MXuYAda/StiIy444/tIYw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=YPa6+N4v+RkyiQFYFc8CL9Muj4EolAqUyca3q/SKqQQ5DBdHh+lSUSMF/UqNFuN1XLqi4g6t5VQ7/EGH8BvS/R/ycvdzdEVv1T5IfwMvmCXw7VQPcemc+cdaDQM4ZQMAfDxUqjxVuGkA8IZrz0A0PX08AV6+smjDW7+5w3iXNHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=Um2U5XD6; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50MGpaE4004030;
-	Wed, 22 Jan 2025 23:23:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	PQ9ID+y+HYqvdGcyA/HuZ8MXuYAda/StiIy444/tIYw=; b=Um2U5XD6HENLY6Va
-	PQ/7Zee4uMIm2K5uJ68ivcvwIAnr6h5XRGJgLLX0Eaq1Gf8IukTMAwtOBZm6toFO
-	v1a2UA/4CC7w5k5tylnhPm9o7HhtkmI9wIXDz/9mGZUCYFXqlaKNlN3nz/pWNaIm
-	uBBy8YvJmR0FycamItBe9an9EGQdYSfVrywjY+260lxhYhS6JAqE8ohBtQ6SkiQU
-	ZbnK91SybUy2Lns4g9E6JexZtlTUoVY4ucMlWg48hvnzo0HrLDafyWh+BBBbR5x3
-	8TRJDH7js2jdCzQd1oZlCG6/iaAeKSkrcIECGY98iVQ0AOZn41z/KqDpdd/d45aA
-	Bgts9g==
-Received: from nalasppmta03.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44b4jm0s1t-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 23:23:33 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50MNNWJQ007045
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 22 Jan 2025 23:23:32 GMT
-Received: from [10.81.24.74] (10.49.16.6) by nalasex01a.na.qualcomm.com
- (10.47.209.196) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Wed, 22 Jan
- 2025 15:23:32 -0800
-Message-ID: <36af1162-cd43-4045-bb43-b8bbf44f9788@quicinc.com>
-Date: Wed, 22 Jan 2025 15:23:29 -0800
+	s=arc-20240116; t=1737603844; c=relaxed/simple;
+	bh=70QXJ1fUDSF1/EMFEoazUOtCExyx/cHHDB4wx0+O1s0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WK6nTL+Lq6r/EzuHcnqEyEKYNixZ7pjIYVKVfmiSvoS8vIp1Uef1aRg+mQOeJcNPZarvlqZM1o0kegAMmu+7I18G4aYw4aHIL74/mryF6dXHdAZDrny19uLOLk+ZBQerIV+cuphS6PLZAdxip82TDgeLoLonrTuL6RBBj5XA9Cs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GdNeMPoE; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2efd81c7ca4so684942a91.2
+        for <linux-pm@vger.kernel.org>; Wed, 22 Jan 2025 19:44:02 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737603842; x=1738208642; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=R72c6XuQv5WvOJOqP2KYpXDCD+4Gn1lpWJ4fFcfXZ0o=;
+        b=GdNeMPoEx9udRn30HmlRgZucp4Gy4UNCxLxRyTyEiisFkaChDbFQKzX2592E9WiZnP
+         7RkUXaN/uzhuuW80dGIwjPRZAxivXAp3VpF2n2rWT48qxBpIX+WJktUPng6jgSyv2WYA
+         aLz9ss+AW8q+TJnWqkPvX1E/vNbLtvpVEfZ0Dy5+KGEuzyGjwX6MoNJbQDLJjzCy3VGY
+         8trbtpTju+5pDd70DAgUHURYfBWpt6Swi7pQYaY3jONbwh0l+TBvKKy4VuHRoHKimRK1
+         VB5Nb1rdis/8AWOwuE/Hw9zKOZpqtC4DfUs+2RqZZhA415ITgyAdcl2jOLgSfyclTRra
+         RfRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737603842; x=1738208642;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=R72c6XuQv5WvOJOqP2KYpXDCD+4Gn1lpWJ4fFcfXZ0o=;
+        b=pBghieUD5VkClz/LaVzUKLX4qrrdydVjABw6D9W8Ucr8+af+G72GSqjg2SsSEWp9Gr
+         6dhZp6NU7p8KnOSwL8/I9E3LdfrorzDu45JNYaGXcN/p9wr7Kat2z6gx1cYsf2i/olDB
+         xBrhe8N2u83bWn3qAsheBnIavcMAbpI9rmzFqxOjPL/cswmQKxQuJLkZhFAUx3iXZvRd
+         ZAazof1TRXPDmSvxbu4zYRluIEs4hKcpY8xF5/A7U01HsEnk9x2eKTL1nv+16cYKfKmf
+         yApg9k3mKgIVwup/FxkvDanfEL3q1JVV+qeAohn93CscQSdWgRcEHoD3SG0vpuMH91Fi
+         V98g==
+X-Forwarded-Encrypted: i=1; AJvYcCWoiR0tL86nzoAdJaesXWQDqZleWmLnygZEOuO5jiYX5+LBEWrgAs0yZw1Baad2l4AErf28l3FC7w==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy3jtTtGeTirkkVeoZnJ+WjYY0GmcCs5oLVMCrnvnu+Ff5VJbEm
+	boFeP6yhskHxKIAGlrUkHOTveIEHC0wOvjaAjGXO41I3mlGTKhi5QS+hfoJUXbc=
+X-Gm-Gg: ASbGnctPFLF2GcEYY/tODKqx4zj9nDAbkOGiacJB8GuC1pT1lfBjKKZp/XMaJQhy3XQ
+	Tlx9LfhNfblSM6mrMwMTlkF8QMrzYRUxOdf7sLi6YpA/Q3RxEG5iwE0BVYOnQOJ4+zoxuZCccv2
+	o1UmOLA/tWYkJPtHjFRqjTQ73Sg/OQkK//B79X1O1r1bW9gS1VRtWjYZW5Yr77sXjMucHBUAJUY
+	sE/ZOD3zuw4F6kSXWfB6TFpzZtvkQau1P4uFtw2CyrNJ2xrsDdhQmp93htTviFUtf/ILcYR8ZV2
+	9/Ccmt4=
+X-Google-Smtp-Source: AGHT+IFYMjUGvNd0ZVMIg8ZM9TNP3wdvfJpc+nt1WjZ/r0Fm5w99jQ04/Kks0iX0dZ5f2Icp+icS8Q==
+X-Received: by 2002:a17:90b:530f:b0:2ea:5054:6c44 with SMTP id 98e67ed59e1d1-2f782d86491mr34109958a91.31.1737603842385;
+        Wed, 22 Jan 2025 19:44:02 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7e6a5e30csm2570979a91.7.2025.01.22.19.44.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 22 Jan 2025 19:44:01 -0800 (PST)
+Date: Thu, 23 Jan 2025 09:13:59 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org,
+	Yury Norov <yury.norov@gmail.com>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>
+Subject: Re: [PATCH V7 06/16] rust: Add bindings for cpumask
+Message-ID: <20250123034359.pz7w64fyr6fopl4r@vireshk-i7>
+References: <cover.1736766672.git.viresh.kumar@linaro.org>
+ <4f233d3f6d593ba2e1cdde68af44200cae74f6f2.1736766672.git.viresh.kumar@linaro.org>
+ <CANiq72=o+uc3ZnNrdkuoSGSL8apNE4z4QwpvsiLfGzXFywSLrQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 05/12] clk: sunxi-ng: add CCU drivers for V853
-To: Andras Szemzo <szemzo.andras@gmail.com>,
-        Michael Turquette
-	<mturquette@baylibre.com>,
-        Stephen Boyd <sboyd@kernel.org>, Rob Herring
-	<robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley
-	<conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-        Jernej Skrabec
-	<jernej.skrabec@gmail.com>,
-        Samuel Holland <samuel@sholland.org>,
-        Linus
- Walleij <linus.walleij@linaro.org>,
-        Philipp Zabel <p.zabel@pengutronix.de>,
-        Maxime Ripard <mripard@kernel.org>
-CC: Vinod Koul <vkoul@kernel.org>, Kishon Vijay Abraham I <kishon@kernel.org>,
-        Ulf Hansson <ulf.hansson@linaro.org>,
-        Paul Walmsley
-	<paul.walmsley@sifive.com>,
-        Palmer Dabbelt <palmer@dabbelt.com>,
-        Albert Ou
-	<aou@eecs.berkeley.edu>,
-        =?UTF-8?Q?Uwe_Kleine-K=C3=B6nig?=
-	<u.kleine-koenig@baylibre.com>,
-        Florian Fainelli
-	<florian.fainelli@broadcom.com>,
-        <linux-clk@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-sunxi@lists.linux.dev>,
-        <linux-kernel@vger.kernel.org>, <linux-phy@lists.infradead.org>,
-        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <linux-riscv@lists.infradead.org>
-References: <20250110123923.270626-1-szemzo.andras@gmail.com>
- <20250110123923.270626-6-szemzo.andras@gmail.com>
-From: Jeff Johnson <quic_jjohnson@quicinc.com>
-Content-Language: en-US
-In-Reply-To: <20250110123923.270626-6-szemzo.andras@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nalasex01a.na.qualcomm.com (10.47.209.196) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 0rtJg0pCT2kcaINT24J2xEvyArlsT86f
-X-Proofpoint-GUID: 0rtJg0pCT2kcaINT24J2xEvyArlsT86f
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-22_10,2025-01-22_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 impostorscore=0
- spamscore=0 mlxlogscore=922 priorityscore=1501 phishscore=0 mlxscore=0
- suspectscore=0 lowpriorityscore=0 adultscore=0 bulkscore=0 malwarescore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2411120000
- definitions=main-2501220170
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72=o+uc3ZnNrdkuoSGSL8apNE4z4QwpvsiLfGzXFywSLrQ@mail.gmail.com>
 
-On 1/10/25 04:39, Andras Szemzo wrote:> +module_platform_driver(sun8i_v853_r_ccu_driver);
-> +
-> +MODULE_IMPORT_NS("SUNXI_CCU");
-> +MODULE_LICENSE("GPL");
+On 22-01-25, 15:40, Miguel Ojeda wrote:
+> On Mon, Jan 13, 2025 at 12:23 PM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> >  rust/kernel/cpumask.rs | 85 ++++++++++++++++++++++++++++++++++++++++++
+> 
+> BITMAP API maintains `cpumask` on the C side -- Cc'ing them, since
+> they didn't seem to be in the loop?
+> 
+> Relatedly, should this have a `MAINTAINERS` entry?
 
-Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
-description is missing"), a module without a MODULE_DESCRIPTION() will
-result in a warning with make W=1. Please add a MODULE_DESCRIPTION()
-to avoid this warning in all of your new modules.
+Updated MAINTAINERS for this and clk bindings now. Will be part of V8.
 
+-- 
+viresh
 
