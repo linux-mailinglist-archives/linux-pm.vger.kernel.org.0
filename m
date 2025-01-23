@@ -1,146 +1,124 @@
-Return-Path: <linux-pm+bounces-20893-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20894-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F406CA1AAE3
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 21:10:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C81B2A1AB09
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 21:16:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B87A63ABE00
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 20:10:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C11D918826FB
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 20:16:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4D901ADC77;
-	Thu, 23 Jan 2025 20:10:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4139D191F8E;
+	Thu, 23 Jan 2025 20:16:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YBSZOFpO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="NFPQYhUj"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2E118872D;
-	Thu, 23 Jan 2025 20:10:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C298146A71
+	for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 20:16:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737663046; cv=none; b=lejp3EwTKJfNiibfKTgfyhPpvjZaPcqEGMTgVyBDS3ZDGm6Z38SbLFttI5iW8+BJpvVAujmCy63YrwjdLX2nnpnINZGEQFtWtGl+IG/MvGtt9xsopDiguoh4JuNe/3A/qgp6od0CWLfuv7eNC4HhRhA4krPVVSHRw8upHG3xZwA=
+	t=1737663367; cv=none; b=hb9wfocjdD+DyX2ZRm8dNLFmXNqHxczlmCVn9tE/T5TRz2I68EqD1XyaJUeX5YsDC8ohvJyW/PGtQ6EXbp48QpsWQ8PvSVJBDxhYdw+GRAj0C4AP4vfmzCw/fnN6FNif2w7EnqpEnAZpYJF2ynvP4EV+Lb+ungQbkU8ZvyDoWv4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737663046; c=relaxed/simple;
-	bh=qL3PJ7U4L6GLdQsWeJfgNaoIGfeOFzKldfjTjUPrhMc=;
+	s=arc-20240116; t=1737663367; c=relaxed/simple;
+	bh=z8KtELFGH1p3dWeaKia0wRfPsFSoCK2V3xW2HWKvdLU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ML7H+BNV4T74AdDHmUIdq/TMsP13IwpkrciFTU0YX7skrQ5hFar+ZtVxDzBZVL2nE3JStbJDn3iansUDbOwz0Y6Vr/MXLs8/3r7TcOjyLdH8pP8C4WbrGWaJxSESBjZPdqUEcx/rgXRpNcS5FeyiZ6n2ZAiFYUthH09KY6m7tvM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YBSZOFpO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC5A6C4CEE2;
-	Thu, 23 Jan 2025 20:10:45 +0000 (UTC)
+	 To:Cc:Content-Type; b=XlhX3ZnPEWOQoR3M/PZkDAsD6Xf7kw3gqRGNCzQ/49CL3kTJTONH12dDUJjS175IhLrJfeTvB/PY3EWRelgiwIWj15Nl9gRa4She3T2NFnNBb92fd2p4cj3Z0U+suioN0wz6mVIIHyDUoLK2yv1p8KHVY3e7qAJXiM7x071S6ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=NFPQYhUj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 891DEC4CEDF
+	for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 20:16:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737663045;
-	bh=qL3PJ7U4L6GLdQsWeJfgNaoIGfeOFzKldfjTjUPrhMc=;
+	s=k20201202; t=1737663366;
+	bh=z8KtELFGH1p3dWeaKia0wRfPsFSoCK2V3xW2HWKvdLU=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YBSZOFpOcM/aSFnoESUvlnSZfCjMuznPJcmYy3ngp5yvI3ZlCNGtKsKMUGoEy/ful
-	 Ohk6KW0M85iNxVKq1ch5LiMieFMyOnrj9zRiialsmcttpTSZ0a9KJhQ8jxfjICY1Xd
-	 zSTF0ZqLfPbsRP+v0OzZvz7eseEQfxj3hC8qqIOzXUjxKnAZuVzbg9eEep047tQ+3g
-	 yMXWmXmuwok6PEjfkc9H27UoZtXAmPCln4U4c4KGDH3WVQfyfcMBPg6Y0DQ08gpl5x
-	 Ak22GQN1m1R17esJwz7O6rcMs1iQaNR1V5NuF7VhoRhFblSNclnv5pUlZfW5NOGXpJ
-	 Ju2ccX9Zb4orQ==
-Received: by mail-oi1-f177.google.com with SMTP id 5614622812f47-3eba7784112so762826b6e.2;
-        Thu, 23 Jan 2025 12:10:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU5xmeK988VQEAEKM4WooFw4H5nR7/75bZVtIj3RUj0ooKXKtengT/1ewE4n6k9i13BcHqSDGHS85o=@vger.kernel.org, AJvYcCVAniJBh11hgPUOgWTE40kbQi9vd4VIirPoqBNvUan7bsolSjg/xzsmEKKB+Y1WojecV8vvxUnjyrIzVyI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwypQfK42SKcDzgKvecwT59iwoNKg6XzH6noIfoh/Q2ObYJKd1F
-	LV1MXvy2YhY3MGEDxLc/4UJarr04eHrlkcOLzyqbp/WfO+vfVVYtAjXivqzqsbPvMXZMXkj4DJ+
-	cBzyIxAvvrfCOqy2UrYwRuLVoWNU=
-X-Google-Smtp-Source: AGHT+IFB758LNltDOV/4VqAtC8tPEids+QnSGbTsIm4MaOgW98uNReIWuBTVAFzRQySF0e6R0K2nE8XV1nO3X4iF6nI=
-X-Received: by 2002:a05:6808:4e15:b0:3ec:d34f:4c6f with SMTP id
- 5614622812f47-3f19fc55c98mr11800107b6e.15.1737663045140; Thu, 23 Jan 2025
- 12:10:45 -0800 (PST)
+	b=NFPQYhUjILid9yOT/9rdebrbVXrHxd+XBhkhqcBV9mN0Q02zY4VoMqGdFuoSlVhAK
+	 jHSJ8gPqpEXaoiZwsO6j0Kmyxc4YGmSJ/0GZpeEnms5IgxeQQZ7/LvzaciAlQPVYqH
+	 YyRw/My1dpzVsSybxDsTW54CJjWwEZZAKLwqRQnFojIqTWOTQ75rLVzIMzB+1DxW8K
+	 IpxoU+ZlHrAYMBgOai38zAvHjRvi95/cKB/wwY7qp4/f90YpzrAbhJRzvJMcqTKtDF
+	 qtunXVqkskEzUx7OVe7KL+87iXVHm/r09gVNzaHfCfK4gO4M7TZibuzuVfp01xRu8A
+	 ZfjJup/FRzf5Q==
+Received: by mail-oi1-f181.google.com with SMTP id 5614622812f47-3eb9bbcc936so817863b6e.0
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 12:16:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWWfupSzTNOaaeKPt63p/gIQFXkBEpYjWX3x0pOlbNvRKkF5CbaXF2kVc2Ngju0As8VvyTd+toUGQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzlBEDU3UVT+Jbhf64ff28or/fK64v6z8QEihKoanMSlkLGCqIN
+	Qy7Y7DHsdvHL98qld3iNXjIbVIQ8+pxdabBHnN29d6MHztgrQp0lAXfkpjCFh+rLz4OaiJv0hOK
+	0cg58TYMksUmSvGfZ5WdDt/s8+ug=
+X-Google-Smtp-Source: AGHT+IF9R2P47OyYoUdCFXKYEWDoFWGHk4lrLJgRNn2b0Qj5nbcBBjzbqlIoWrpGoyaPBySh1kAAA4o/HQjzZ+IP/l0=
+X-Received: by 2002:a05:6808:16ac:b0:3e7:b3d9:4109 with SMTP id
+ 5614622812f47-3f19fca15e4mr17153659b6e.22.1737663365883; Thu, 23 Jan 2025
+ 12:16:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5a8deed4-7764-4729-a9d4-9520c25fa7e8@arm.com>
-In-Reply-To: <5a8deed4-7764-4729-a9d4-9520c25fa7e8@arm.com>
+References: <20250119143205.2103-1-vulab@iscas.ac.cn>
+In-Reply-To: <20250119143205.2103-1-vulab@iscas.ac.cn>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 23 Jan 2025 21:10:33 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hyMTFq6P-oZ34Ds5q=stDR=B2jLt3Qo0QQAo3t3Cu+Wg@mail.gmail.com>
-X-Gm-Features: AWEUYZklJ1hsdmzrW1ZkMjH3iCEXddrCfU9LydoViSkicH5yMdGrY8EzfrxiQ2U
-Message-ID: <CAJZ5v0hyMTFq6P-oZ34Ds5q=stDR=B2jLt3Qo0QQAo3t3Cu+Wg@mail.gmail.com>
-Subject: Re: [PATCH] cpufreq/schedutil: Only bind threads if needed
-To: Christian Loehle <christian.loehle@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
-	Ingo Molnar <mingo@redhat.com>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>, 
-	Dietmar Eggemann <dietmar.eggemann@arm.com>, Steven Rostedt <rostedt@goodmis.org>, 
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
-	Valentin Schneider <vschneid@redhat.com>, linux-pm <linux-pm@vger.kernel.org>
+Date: Thu, 23 Jan 2025 21:15:54 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jzstox2aU6XjC9yJAm_m6nczyiENv5UKkdru07Gf8OAw@mail.gmail.com>
+X-Gm-Features: AWEUYZm_lGU1gSgJT8oPHBUv86TQMvkj-Bfv9i1QpnspAcvUPUOQgyce4dt11p4
+Message-ID: <CAJZ5v0jzstox2aU6XjC9yJAm_m6nczyiENv5UKkdru07Gf8OAw@mail.gmail.com>
+Subject: Re: [PATCH] PM: hibernate: Add error handling for syscore_suspend()
+To: Wentao Liang <vulab@iscas.ac.cn>
+Cc: rafael@kernel.org, quic_nprakash@quicinc.com, liangwentao@iscas.ac.cn, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Jan 20, 2025 at 11:10=E2=80=AFAM Christian Loehle
-<christian.loehle@arm.com> wrote:
+On Sun, Jan 19, 2025 at 3:39=E2=80=AFPM Wentao Liang <vulab@iscas.ac.cn> wr=
+ote:
 >
-> Remove the unconditional binding of sugov kthreads to the affected CPUs
-> if the cpufreq driver indicates that updates can happen from any CPU.
-> This allows userspace to set affinities to either save power (waking up
-> bigger CPUs on HMP can be expensive) or increasing performance (by
-> letting the utilized CPUs run without preemption of the sugov kthread).
+> In hibernation_platform_enter(), the code did not check the
+> return value of syscore_suspend(), potentially leading to a
+> situation where syscore_resume() would be called even if
+> syscore_suspend() failed. This could cause unpredictable
+> behavior or system instability.
 >
-> Signed-off-by: Christian Loehle <christian.loehle@arm.com>
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
-> Acked-by: Vincent Guittot <vincent.guittot@linaro.org>
-> Acked-by: Rafael J. Wysocki <rafael@kernel.org>
-> Acked-by: Juri Lelli <juri.lelli@redhat.com>
+> This commit modifies the suspend/resume sequence to properly
+> handle errors returned by syscore_suspend(). If an error occurs
+> during the suspend process, the code now jumps to 'Enable_irqs'
+> label, skipping the resume call, and only enabling interrupts
+> after setting the system state to SYSTEM_RUNNING.
+>
+> Fixes: 40dc166cb5dd ("PM / Core: Introduce struct syscore_ops for core su=
+bsystems PM")
+> Signed-off-by: Wentao Liang <vulab@iscas.ac.cn>
 > ---
-> - RESEND: pick up tags
-> - v2: Add comment for the dl_task_check_affinity return (Juri)
-> v2: https://lore.kernel.org/lkml/a4a70646-98a4-4b85-955e-62d66ba68927@arm=
-.com/
-> v1: https://lore.kernel.org/lkml/480f2140-ea59-4e1d-a68d-18cbcec10941@arm=
-.com/
+>  kernel/power/hibernate.c | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
 >
->  kernel/sched/cpufreq_schedutil.c | 6 +++++-
->  kernel/sched/syscalls.c          | 7 +++++++
->  2 files changed, 12 insertions(+), 1 deletion(-)
+> diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+> index 1f87aa01ba44..8e5702811732 100644
+> --- a/kernel/power/hibernate.c
+> +++ b/kernel/power/hibernate.c
+> @@ -608,7 +608,11 @@ int hibernation_platform_enter(void)
 >
-> diff --git a/kernel/sched/cpufreq_schedutil.c b/kernel/sched/cpufreq_sche=
-dutil.c
-> index 28c77904ea74..a81444501158 100644
-> --- a/kernel/sched/cpufreq_schedutil.c
-> +++ b/kernel/sched/cpufreq_schedutil.c
-> @@ -691,7 +691,11 @@ static int sugov_kthread_create(struct sugov_policy =
-*sg_policy)
->         }
->
->         sg_policy->thread =3D thread;
-> -       kthread_bind_mask(thread, policy->related_cpus);
-> +       if (policy->dvfs_possible_from_any_cpu)
-> +               set_cpus_allowed_ptr(thread, policy->related_cpus);
-> +       else
-> +               kthread_bind_mask(thread, policy->related_cpus);
+>         local_irq_disable();
+>         system_state =3D SYSTEM_SUSPEND;
+> -       syscore_suspend();
 > +
->         init_irq_work(&sg_policy->irq_work, sugov_irq_work);
->         mutex_init(&sg_policy->work_lock);
->
-> diff --git a/kernel/sched/syscalls.c b/kernel/sched/syscalls.c
-> index ff0e5ab4e37c..8230358d2b90 100644
-> --- a/kernel/sched/syscalls.c
-> +++ b/kernel/sched/syscalls.c
-> @@ -1139,6 +1139,13 @@ int dl_task_check_affinity(struct task_struct *p, =
-const struct cpumask *mask)
->         if (!task_has_dl_policy(p) || !dl_bandwidth_enabled())
->                 return 0;
->
-> +       /*
-> +        * The special/sugov task isn't part of regular bandwidth/admissi=
-on
-> +        * control so let userspace change affinities.
-> +        */
-> +       if (dl_entity_is_special(&p->dl))
-> +               return 0;
+> +       error =3D syscore_suspend();
+> +       if (error)
+> +               goto Enable_irqs;
 > +
->         /*
->          * Since bandwidth control happens on root_domain basis,
->          * if admission test is enabled, we only admit -deadline
+>         if (pm_wakeup_pending()) {
+>                 error =3D -EAGAIN;
+>                 goto Power_up;
+> @@ -620,6 +624,7 @@ int hibernation_platform_enter(void)
+>
+>   Power_up:
+>         syscore_resume();
+> + Enable_irqs:
+>         system_state =3D SYSTEM_RUNNING;
+>         local_irq_enable();
+>
 > --
 
-Applied as 6.14-rc material, thanks!
+Applied (with some edits in the changelog) as 6.14-rc material, thanks!
 
