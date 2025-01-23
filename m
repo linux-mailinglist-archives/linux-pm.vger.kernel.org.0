@@ -1,134 +1,140 @@
-Return-Path: <linux-pm+bounces-20830-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20831-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C13BA19F74
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 08:55:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 27238A1A03D
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 09:58:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D7F237A66C5
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 07:55:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EAB1E3A720F
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 08:58:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88CF720101E;
-	Thu, 23 Jan 2025 07:55:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D1B220C47E;
+	Thu, 23 Jan 2025 08:58:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ZQ5KMTHU"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M6McpOru"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-wr1-f52.google.com (mail-wr1-f52.google.com [209.85.221.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 148DB2F2A;
-	Thu, 23 Jan 2025 07:55:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C08520C00D;
+	Thu, 23 Jan 2025 08:58:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737618912; cv=none; b=ruv7rL6VYm9aM83PJe3A9r3gdgso2ImSoTxnxBxM1RUSCSReWrpTr9XAT+eWpHn/PGyHsGmqN94vcNDAWoP6qjcJp7ItuS/KER7Cq7lcPSDjj7s8bQ1+EhkVnNuPUrxQvkV1vn/j0ergf28xmB1+4CLGrogBWK59JChWRGeHD2o=
+	t=1737622712; cv=none; b=hZsbB5wVREDrik8N71Vrdl3tbmbD7DijTocK6EahFRHPLGBpzT4xwaQ63pHU7NACrdoCoGyQhXBaIRcFNewKEcz5OOj729yqYMs506JWrKWvudzOwGw+EM/baXpUWgNvQpg+w9DB37aCXl8uIM5MVMo8x81xK1jlGO1/pi8Bppk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737618912; c=relaxed/simple;
-	bh=8NoWRzP4qG9zzO0MS5fIRyHfvNlYSS2dL9XxxmE87Ck=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=KHQkGq7JpIBOB6KaZ0Y3ItAsVxn9F3ipx+TS6iZSA9pBd+bDbOtRh9VBNYDv63rTvvirPU2n4h4gGRmaoqYbUC/+AByfyliALNKmrTF70zMJ6O/5cj7iE3DD25xqnVPpguPamHk/PPZuFlvhT+it18Pw1TFbPLoFw7qhRCQw/2E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ZQ5KMTHU; arc=none smtp.client-ip=209.85.216.46
+	s=arc-20240116; t=1737622712; c=relaxed/simple;
+	bh=HkyeRQ66zp1oc6NXegGG+5zPV8GgPQJyFzgH5zMyigE=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=q7D9bM2jwpCv1Zw7HLbrJp1IptI1z8hQj/wceh5Kn894BrG2bRws/r3eTWWlB7NHgaX2SJLDswA/DLLd4zKy/Yt+tNK0+jW0QQGaG3Cyt32GXqFuRiR3fSxYdYilVnmtO7t35i/F+/I/SUqPK1Vnoevpo5vpvve1I2FEZBFSy8w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M6McpOru; arc=none smtp.client-ip=209.85.221.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ef748105deso921645a91.1;
-        Wed, 22 Jan 2025 23:55:10 -0800 (PST)
+Received: by mail-wr1-f52.google.com with SMTP id ffacd0b85a97d-38be3bfb045so1221273f8f.0;
+        Thu, 23 Jan 2025 00:58:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1737618910; x=1738223710; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=xRp5CBhPMxzufEjk9azD6SyDttl6LU7ag5HNsBe1+xA=;
-        b=ZQ5KMTHU2XIuHUf8K2/ho0DTPp31KAwlQUPGsgvZnP14rJVVP/CRg7qBKnbdbg34tZ
-         0YuTYHs7XEnitAms60JnKtGlqo+aLwkijW8kceEtcb+/1esSozqYoyCsGybYPMptrEkG
-         gPI0Xpxza5RotYPyKxPxpu8Smulth7/VTrFmcwEPJYvBc0cApLFjVp6jKYxAnrOsbD4k
-         MN0CCl2byu9S8n4ovwmrpp0UWdLCDQUbkrXjhatpRP5aVMkHKmZC79Npr3emSfsZitzx
-         vo6upa3K1eTjdLNNRuF+r9UF+pv2TVS+loEHltzBUUMqXbECfrCobPEBbf/V5obCt1uC
-         yu9Q==
+        d=gmail.com; s=20230601; t=1737622709; x=1738227509; darn=vger.kernel.org;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=HkyeRQ66zp1oc6NXegGG+5zPV8GgPQJyFzgH5zMyigE=;
+        b=M6McpOruscsWDOzcdeDw/uEBtammRmlfH3opcjr5YJwVGs0cTG0ojYJK2iD86Xve69
+         +Q9GKu+C7vxmvi8CXP6o/UJZNvidPvxuVag1kBRd4vQ7cOZ+bPrncMHZpKkiwZfY52z6
+         WeR90hPbivu1sVlUkQUq+P+bbxj7ILKTIyarcNrpZ+p2AStUqxZdV+1tfXHjm3EX9qoZ
+         9T8EtX/y5St/7sA9rUBiQbdvtt9SnpTNpbNVO6P9q2oJhlj+jE+JEYB6F11iXkoVKMmO
+         ieTs18wlT2fDvdVe/oWekYewiyXMzI9K5V0lcrP1/hAnGsjKGYB8/TVuT9erF4qdT4N8
+         1qpg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737618910; x=1738223710;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=xRp5CBhPMxzufEjk9azD6SyDttl6LU7ag5HNsBe1+xA=;
-        b=dpkOseQ+Qdg1Spt3taAlvgQIl1xnJv+y5tsRLRbykUarXmhF7rNdZMcacwhZ23HTjR
-         07nD/hDQrz9ARtbkccPWvoIGP1kQeoWAp5/er1/HQH6TOlnRrLwhwSY6jKf0+5ZKYQKw
-         hLNoFlaVuHfneoXkic7Wg7eW7EtXJKuK17O0NrLHotTGEBrmLKw8he7IAT63vcbjpq0s
-         SOxoxhgFrxoy1yKG6OSmOrJ6BAwE32TPbtmTxobXbJJhr687ApIldNTi+n5h6SlZWNY7
-         A5MW4w1kiA/EoO36WSxFSu0QMGiK9xMRJm6G3JAJ/Pm8BRNSqWp0djyrsyupP6bASKfg
-         0lZA==
-X-Forwarded-Encrypted: i=1; AJvYcCVeQJ40866qJ47wyD7YH/M/KESqx+yRPbhdtslECziaFVnY3x2Z359bbrGx6Ha7j/wsKEG88CHK/1I=@vger.kernel.org, AJvYcCWfTcM0zcHZ43PEb7rUSaEzwRIXEZo2EdATlIpXerFXK9IVrIq5hfM+HikzmkjSkVezT+IJN3PNd94UaFkz@vger.kernel.org, AJvYcCXoSaRTWaf8GmxelR4Vrom3B/Ied8bzINXc8dC/FIM1LMnRVZ//DAMFOACCm/xBLlQERpBWe3z6tQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxnOQntYiM0NNg5rV0DuXWyr85saOucfv8FhvAQQCcZxEyzujoD
-	hCv9O2LdxvFBPPzfdh40ZLpmJxnQ1hZGEWcD5CH1R/je91HgqkZG
-X-Gm-Gg: ASbGncvvFiHTS+VVfr/zlpRHaekrsM7ll8bGQSt/y0dxLvUKnrHt6K+yKwtLUfljEXK
-	AZSYz5HUTeY/npTseJa70FaB4Vpy2gErh1HXWJkgMSEDeIrlVFpNsDPcfyVPmtKmuEGGW64SWMv
-	p1HTNLb+KbRMD14OL13FxvXjDd3Fm22TeWLEGP/xoJakvhG92qqSknXVOYD9pJS5scptdiH7KX8
-	nQDnKb8G8Aox7Zh71x3bt95r4sbFTUN2S3Bw1NcwdlY9TI0IT/U6+HHsvQjMQF1w3E6WKSrJvLY
-	bB8d+oMtCzc=
-X-Google-Smtp-Source: AGHT+IH5a1uZ6R8BHzUEUJWuugPyK5QOM/E7bx4Ds/bwSkjYLPzhV2WX09cBDNQfEL1Ldq9Nlt+d+w==
-X-Received: by 2002:a05:6a00:3006:b0:728:e1f9:b680 with SMTP id d2e1a72fcca58-72daf9df7e2mr34655239b3a.6.1737618910201;
-        Wed, 22 Jan 2025 23:55:10 -0800 (PST)
-Received: from phytium-Ubuntu.. ([218.76.62.144])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72dab848321sm12477217b3a.76.2025.01.22.23.55.06
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 22 Jan 2025 23:55:09 -0800 (PST)
-From: zuoqian <zuoqian113@gmail.com>
-To: sudeep.holla@arm.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: cristian.marussi@arm.com,
-	arm-scmi@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	zuoqian <zuoqian113@gmail.com>
-Subject: [PATCH] cpufreq: scpi: compare against frequency instead of rate
-Date: Thu, 23 Jan 2025 07:53:20 +0000
-Message-ID: <20250123075321.4442-1-zuoqian113@gmail.com>
-X-Mailer: git-send-email 2.43.0
+        d=1e100.net; s=20230601; t=1737622709; x=1738227509;
+        h=to:references:message-id:content-transfer-encoding:cc:date
+         :in-reply-to:from:subject:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=HkyeRQ66zp1oc6NXegGG+5zPV8GgPQJyFzgH5zMyigE=;
+        b=bL7PHrwghmopBrjPJJPKE/48y6ecgrott4zh0flVYzuLuxpce8DbXXGOp/ogfylzWH
+         WifdFTw3Q7z/dcpTzXQV/bRjtjgZ6QDiiG4lFvBKC+WSFZd5RFCK/bzcUH/HrB5i97X5
+         6uvpe5+Vxooz7s872nRLICNd8z6wN2N9n1SeEntqXE6sFLX5dFBdHowLtdZcBHPws29D
+         NBtkjh6+Ctf58nhWO8JGmyP3JOqKeUEN+I3Q7JXr2BZKorFJtNn9Jw6SRXgreoq7cOHY
+         UBHzh5n1a0fUyjZfGX6FGO77vLh0gzsmcenwOActP0XxLaEdbxoTfB4GPLb7F/aoYyC+
+         tazA==
+X-Forwarded-Encrypted: i=1; AJvYcCUG9HGVrzQBKBU0g31UqMQuDa5QIgSwlxrgQdLkfOWWuBxH8zEW5FBgBVndjQkgk9CC599i41dCg3y2@vger.kernel.org, AJvYcCV5qdw6yK6syI5FVjQZDsFP1SgIiNFZet0w90iM1emuAXlAaDymhuK1BPDW9ajApM+Av4Oe12/fHkU=@vger.kernel.org, AJvYcCV7CF0CIggqXvBVr1Md5lYICke1z/c8m8Rfc9xFg8SqF2og9Tly8dVQr8p2Ag5ZDcWohDuVPFW6tgdDsluC@vger.kernel.org, AJvYcCWT6VellgufhCioEGlwIWznbB1xdkkiSPGL6qDXTPb+xWmW5TsZic0ofk8pJp++WhV5U+KaHLSio/SleQ==@vger.kernel.org, AJvYcCWtv4uhBjeAolPeYmg572b2gZhCz4r9Z98IXKQV1yX8iXHggpQty7FiOqELu+tg+J3JLs4N0NS82RnE@vger.kernel.org
+X-Gm-Message-State: AOJu0YzHgUJGPUtRUuBWkJzw1qlHl5A8KEWg5NxrDSyYhTK4eNrjdQs4
+	V6cJTw1C2jhOZsvT/7xlGOPO/tv9W4A3ThSyLk04t6mJw1SZHHvP
+X-Gm-Gg: ASbGncvcBV8dJFoY7Q4AfWVAL7ofMSpmuK01ECNJ9OC+RGJfP9XLt2n8D+OAdJKJTB+
+	k92moCJztV8ejPSq+lpLBNw7nADNvwz2jp7tNtjYFmWMCJ7FOsTmyKNFW0gkclKji3otVj1emaf
+	o9o0qg+bfJlI3APQnUNpELBVSntWkVxZ4pKkUy+AzJPgjWg6sJh1D611rSf1TzBlyBc/8wmgeXL
+	ZMIi4Hj/nkenWPtZGvY8ZNBPgiZjLhj/gAPE9V8hLoDyWCkgS9kzXOOCGyU1G3j+UkSW1dhkxXg
+	hrqR1P3hPp2jByLhBACsGvCQxTKXmjM1DVkm5MUn6eQ=
+X-Google-Smtp-Source: AGHT+IHc1t5fGPvcthsivd2P9fI8/r4mtQiSRE3tXH+2jfQUvFcq70i0y1FajJPpW7lEuohcXqidQg==
+X-Received: by 2002:adf:f8c5:0:b0:388:c61d:4415 with SMTP id ffacd0b85a97d-38c22275647mr1806903f8f.18.1737622709399;
+        Thu, 23 Jan 2025 00:58:29 -0800 (PST)
+Received: from smtpclient.apple (185.174.17.62.zt.hu. [185.174.17.62])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf322236csm18793946f8f.39.2025.01.23.00.58.27
+        (version=TLS1_2 cipher=ECDHE-ECDSA-AES128-GCM-SHA256 bits=128/128);
+        Thu, 23 Jan 2025 00:58:29 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51\))
+Subject: Re: [PATCH 05/12] clk: sunxi-ng: add CCU drivers for V853
+From: =?utf-8?B?QW5kcsOhcyBTemVtesWR?= <szemzo.andras@gmail.com>
+In-Reply-To: <36af1162-cd43-4045-bb43-b8bbf44f9788@quicinc.com>
+Date: Thu, 23 Jan 2025 09:58:17 +0100
+Cc: Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>,
+ Chen-Yu Tsai <wens@csie.org>,
+ Jernej Skrabec <jernej.skrabec@gmail.com>,
+ Samuel Holland <samuel@sholland.org>,
+ Linus Walleij <linus.walleij@linaro.org>,
+ Philipp Zabel <p.zabel@pengutronix.de>,
+ Maxime Ripard <mripard@kernel.org>,
+ Vinod Koul <vkoul@kernel.org>,
+ Kishon Vijay Abraham I <kishon@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ Paul Walmsley <paul.walmsley@sifive.com>,
+ Palmer Dabbelt <palmer@dabbelt.com>,
+ Albert Ou <aou@eecs.berkeley.edu>,
+ =?utf-8?Q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+ Florian Fainelli <florian.fainelli@broadcom.com>,
+ linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org,
+ linux-sunxi@lists.linux.dev,
+ linux-kernel@vger.kernel.org,
+ linux-phy@lists.infradead.org,
+ linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org,
+ linux-riscv@lists.infradead.org
+Content-Transfer-Encoding: quoted-printable
+Message-Id: <266DB665-67E8-40FA-8BE6-E7F82955BAEB@gmail.com>
+References: <20250110123923.270626-1-szemzo.andras@gmail.com>
+ <20250110123923.270626-6-szemzo.andras@gmail.com>
+ <36af1162-cd43-4045-bb43-b8bbf44f9788@quicinc.com>
+To: Jeff Johnson <quic_jjohnson@quicinc.com>
+X-Mailer: Apple Mail (2.3776.700.51)
 
-The CPU rate from clk_get_rate() may not be divisible by 1000
-(e.g., 133333333). But the rate calculated from frequency is always
-divisible by 1000 (e.g., 133333000).
-Comparing the rate causes a warning during CPU scaling:
-"cpufreq: __target_index: Failed to change cpu frequency: -5".
-When we choose to compare frequency here, the issue does not occur.
 
-Signed-off-by: zuoqian <zuoqian113@gmail.com>
----
- drivers/cpufreq/scpi-cpufreq.c | 5 +++--
- 1 file changed, 3 insertions(+), 2 deletions(-)
+> On 23 Jan 2025, at 00:23, Jeff Johnson <quic_jjohnson@quicinc.com> =
+wrote:
+>=20
+> On 1/10/25 04:39, Andras Szemzo wrote:> =
++module_platform_driver(sun8i_v853_r_ccu_driver);
+>> +
+>> +MODULE_IMPORT_NS("SUNXI_CCU");
+>> +MODULE_LICENSE("GPL");
+>=20
+> Since commit 1fffe7a34c89 ("script: modpost: emit a warning when the
+> description is missing"), a module without a MODULE_DESCRIPTION() will
+> result in a warning with make W=3D1. Please add a MODULE_DESCRIPTION()
+> to avoid this warning in all of your new modules.
+>=20
 
-diff --git a/drivers/cpufreq/scpi-cpufreq.c b/drivers/cpufreq/scpi-cpufreq.c
-index cd89c1b9832c..3bff4bb5ab4a 100644
---- a/drivers/cpufreq/scpi-cpufreq.c
-+++ b/drivers/cpufreq/scpi-cpufreq.c
-@@ -39,8 +39,9 @@ static unsigned int scpi_cpufreq_get_rate(unsigned int cpu)
- static int
- scpi_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
- {
--	u64 rate = policy->freq_table[index].frequency * 1000;
-+	unsigned long freq = policy->freq_table[index].frequency;
- 	struct scpi_data *priv = policy->driver_data;
-+	u64 rate = freq * 1000;
- 	int ret;
- 
- 	ret = clk_set_rate(priv->clk, rate);
-@@ -48,7 +49,7 @@ scpi_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
- 	if (ret)
- 		return ret;
- 
--	if (clk_get_rate(priv->clk) != rate)
-+	if (clk_get_rate(priv->clk) / 1000 != freq)
- 		return -EIO;
- 
- 	return 0;
--- 
-2.43.0
-
+Thanks for pointing it out, I=E2=80=99ll add it.=
 
