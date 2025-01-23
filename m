@@ -1,124 +1,137 @@
-Return-Path: <linux-pm+bounces-20895-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20896-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2B5BA1AB1E
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 21:23:19 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2D3E1A1AB58
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 21:31:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC4BA188E347
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 20:23:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BE9067A1524
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 20:31:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2DFB1BD9E5;
-	Thu, 23 Jan 2025 20:23:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A9101C5D42;
+	Thu, 23 Jan 2025 20:27:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F2HTLWdr"
+	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="PKzXCC4u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oi1-f173.google.com (mail-oi1-f173.google.com [209.85.167.173])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 87DD51BBBCF;
-	Thu, 23 Jan 2025 20:23:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CD6081CEEBA
+	for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 20:27:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737663794; cv=none; b=GU2Y8hT5WqAvWBRGL1tFM5du/QxWacoBvP6wM7CqniKgTPIZevUSe9sQcRqWLThtpC5LCFAbfcsvvcvYUruegSOe0uGsK7DCr+R/AYt7/7WD+wK+9YziSJ3khZD0Mv2bIUpS/vzI4Gn4H8ZbRQz47Yce599ERRdQ2aX4fxVzBwY=
+	t=1737664026; cv=none; b=pdRP4tKoc6ROIXKdRUEWbW+911M/6O66Ro7RQ7ribP5YzMRtwxnLiwSqOg/Nn5Rz63mjk3fLHAYX2PhT/bxJ5ADeAL2pW5Ry+iZ8yZd30IuKGEehMM76m6m4fDBpbbtjNlI/NKicUFgXjWrdKzWMql9U1kdvG3oE204EyZw3M/M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737663794; c=relaxed/simple;
-	bh=/o3pzg47qzK2DuVov2Rd5ZbRyGQiTF3K8gIMnIKed8g=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=FB3d7V6YF7UpmZjRV8y106ysN/g7wOQGV1cCVEh16I5gKRU85vdB2MOenkmFbjWMpMfVkNQv1/UX+rTHtLpRGzgRpkL37UMaugquMGpnGiOgsdTvs2OBtlzZsp5MTReUG3XtWcl9gzYd/CkOWzsiWbLVIg9fMlLz5V3OOSp9UHw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F2HTLWdr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2154C4CEE2;
-	Thu, 23 Jan 2025 20:23:13 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1737663793;
-	bh=/o3pzg47qzK2DuVov2Rd5ZbRyGQiTF3K8gIMnIKed8g=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=F2HTLWdrfD/Dj2M9gtcqW0oTQcTMPwFMIH+ngZ2jwbs5HEPP5d6zr7NkTHiF0H2QZ
-	 gYEAzElLn5AwEe3pa3CMnqIZKBv3JmM7VNt79GUPEEHqZTI7Y4Bt1ovgSThNIle4nW
-	 mmphlDBPYrMo4ENQatQfmUCUmDo4C8CK84dLNGWo99bTCDtlaXcO4hRJRpjXMcsdiV
-	 G5EeBbbKh4SSnDaAIE6ChNo06Tj2JCDNqCnh4YbDIhbr1ROwRrgWp9HjX+R8Mq4DwE
-	 SXTphUSK3LbmyKrOJnuPZpYjqBbq+TKSEXr7BSSnBnbgqRjrf5VCI+WTL7NTd4Cj0/
-	 M75L/jzKj6M3Q==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2a3c075ddb6so729651fac.2;
-        Thu, 23 Jan 2025 12:23:13 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUz5QPuBxtQLldQPZ3vKUpwln3/ZFEYr0j31i0XFJSEU/7R0Y7OfSV6Wilt6EYIUIM1De6X/DeSue5uyoQ=@vger.kernel.org, AJvYcCV0eYmPWTUkZ7iGcUGHRs5YbAfmCVFpc4PBFjLcr9gdbO7nLRs6xaOhq4lSSQ02XqRZMdlrc1j9Gjw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwD3UkADkrm7nfDcpD9L1Y4aYnmjcyEGg8pGstD/9JnuEszn0Ue
-	MWVWOmNOEKPI62Pwtf7aQKTCVPTwEBb1ekwk4ybeGptmW2rNImWnMTM1WLEe8sfRpm7xFQPJEG+
-	fBZyVcWwtHXl89gT5MfvygR5w1u8=
-X-Google-Smtp-Source: AGHT+IGKBCFNRqK20+/uCHxzPlOteqKRHon1vQEvXJCMrN40Z9vh7642R2XNpWCjBVhAimooCET0CCY49DYlPj1Y1zU=
-X-Received: by 2002:a05:6871:a4c9:b0:277:caf7:3631 with SMTP id
- 586e51a60fabf-2b1c08466bfmr17108997fac.5.1737663793108; Thu, 23 Jan 2025
- 12:23:13 -0800 (PST)
+	s=arc-20240116; t=1737664026; c=relaxed/simple;
+	bh=/htVanBsjhyysSuMmKzY72TCFuvP7tDtqfAcUDG54/A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CDb3Q5AeN+H3XyeqVBrKm6rh3LNQkw/+DxfsmkZjUktg3IxpKXI+yMhg9pZqE/oClZHHmD/c2J9A+a29Zoc8/YF6H9qEjXYEFl01nk7DGkUN4XSCtyQJSEXCmpSggZAGjNiqomlAPvy0VhysXhCL5gPJVJFGEjvpRoUHH8UyQb8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=PKzXCC4u; arc=none smtp.client-ip=209.85.167.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
+Received: by mail-oi1-f173.google.com with SMTP id 5614622812f47-3eb8bdcac2eso336786b6e.0
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 12:27:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=broadcom.com; s=google; t=1737664024; x=1738268824; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
+        bh=RnTOe7yFWT4UYNJIuLdQZTeHUNhoeVu47fqL7N52te8=;
+        b=PKzXCC4uyycLDjLqjEfGnm1wanyxUzCrk67HqLN7fD/SulTPt13LV5/5vkd5PK3M/f
+         dBThMMT5B18rRoBqiSmnCQGGgAX0LsOxtOcgkZ8nU4Ni3X0YunAbzGIfW4m8JEC+zJNJ
+         81xdkFfU3RwDP4L/XBy25tV9sb83DKvd1WuuQ=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737664024; x=1738268824;
+        h=content-transfer-encoding:in-reply-to:autocrypt:from
+         :content-language:references:cc:to:subject:user-agent:mime-version
+         :date:message-id:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=RnTOe7yFWT4UYNJIuLdQZTeHUNhoeVu47fqL7N52te8=;
+        b=uXKBWkmaNyb0x1z7NB1wWUiQwzhg52Ob5dfNLbDrrjGCNYl373VmRyrx6EwhAaYfd6
+         bfvTClg3pDc9LRqnfggmyeTk0gqd5ELQhhxYXgQg0+ppXOXEM/2Zc7QMuUhRDUrMsHDr
+         jcDOzx9QdBxQtbAcj7nRwYSKX++oL9VyBI/D40xFvPtwivzpIFrTvqv+yYJCUNGf4Jkl
+         JDHYKEWnoyefkqeZAGKXu4SwF1x0iaPpNpGfRVqNrUcXN+pAO+C0nXWmu4wUQA4uRCDa
+         jYdR3aYvUia/P349k+0gpF9WN+c8cb3YxO3/dK8nw287igH2xLSnwLrvoa3sUXorDmmC
+         NdpQ==
+X-Gm-Message-State: AOJu0YyX3YN9BttITcqF9XmiTB5MI1rDqIqwGrhUby3/gKMyzq0ZQoVc
+	+0mQwqma2PEfaVglBZJj9oJ5YeKM2txwEIsyy1ZCK7hG8PWxmZKTgCYir5PrzIUQqHoIBT0etB8
+	=
+X-Gm-Gg: ASbGnct/QVFNM3VIZg5FUmY51hBsgZZ/iC8+/36GbCXfTkM5pMAbAEZb7//ngPVCuJu
+	i2nN906end4y/szeVD8KRH22eEh6PwStlgmRQGYSjImWCRviT+tLF6TKqntPaad0NA/FGyj9n/6
+	c5NUAGTWXazLyD1QuavPO0jpV1tPtvs+5Ldg6/WCGFxp1Hdb2Bfw5cXZfzblx0N6Geu4D4IyEJ6
+	EptS7G57rLqOzVU98nKsfkWYPB8kVU6uyYWS3FgzzUwUyGDqrkBSMOMqyzbPLukuonDBI+xgYJY
+	qpfkaGUwIQoCPBCU3l8AOR3KsEIFCjHPCnptzwaii/Jf
+X-Google-Smtp-Source: AGHT+IGoXpwCo6KUpEa1mgyEsN3GlaOew1nrW9GfIqCjqRaZGtjUxFVw4Q2NPiRX3bzz35kSues//A==
+X-Received: by 2002:a05:6808:490e:b0:3ec:d251:d758 with SMTP id 5614622812f47-3f19fc9e9e8mr13292209b6e.23.1737664023776;
+        Thu, 23 Jan 2025 12:27:03 -0800 (PST)
+Received: from [10.67.48.245] ([192.19.223.252])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f1f08c2f03sm58176b6e.30.2025.01.23.12.27.01
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 23 Jan 2025 12:27:02 -0800 (PST)
+Message-ID: <f27f9f63-32d3-4e90-9e12-2f893198f02e@broadcom.com>
+Date: Thu, 23 Jan 2025 12:27:00 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250116154354.149297-1-andriy.shevchenko@linux.intel.com>
- <CAJZ5v0izBnSGjmjO7T+_gEhrSib0==_bRXnsLEdzEjbH0cZDqg@mail.gmail.com>
- <Z4kwK6JCm5RDI4nG@smile.fi.intel.com> <CAJZ5v0jdqtyF_Prf6TETwaLJ3Cr3sK4rFnU68C5ioqKq8OF02A@mail.gmail.com>
- <Z4k0zGk83gtilO0n@smile.fi.intel.com> <CAJZ5v0iJPHPE9pJx2VTz5OwinwyLPD=H3SQJGViyt4_9uAgwNA@mail.gmail.com>
- <Z4pdh4LNSOzkatoi@smile.fi.intel.com>
-In-Reply-To: <Z4pdh4LNSOzkatoi@smile.fi.intel.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 23 Jan 2025 21:23:02 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0ihURJTjYNhzmxa4gtz0giRUfNGgR4p9kys0zHfXAQY=Q@mail.gmail.com>
-X-Gm-Features: AWEUYZllU_ou3rfSTNQPYbiFmSXRzLpAX7PTHras34vfIgZ-eKv-zR0EMvncixY
-Message-ID: <CAJZ5v0ihURJTjYNhzmxa4gtz0giRUfNGgR4p9kys0zHfXAQY=Q@mail.gmail.com>
-Subject: Re: [PATCH v2 1/1] PM: Revert "Add EXPORT macros for exporting PM functions"
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Len Brown <len.brown@intel.com>, 
-	Pavel Machek <pavel@ucw.cz>, Richard Fitzgerald <rf@opensource.cirrus.com>, 
-	Adrian Hunter <adrian.hunter@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 06/33] cpufreq: brcmstb: Stop setting common freq
+ attributes
+To: Viresh Kumar <viresh.kumar@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Markus Mayer <mmayer@broadcom.com>,
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>
+Cc: linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>,
+ linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org
+References: <cover.1737631669.git.viresh.kumar@linaro.org>
+ <3e6d8f8ac58727a8ca4d2a57fd90600618085936.1737631669.git.viresh.kumar@linaro.org>
+Content-Language: en-US
+From: Florian Fainelli <florian.fainelli@broadcom.com>
+Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
+ xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
+ M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
+ JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
+ PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
+ KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
+ AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
+ IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
+ ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
+ bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
+ Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
+ tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
+ TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
+ zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
+ WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
+ IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
+ U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
+ 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
+ pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
+ MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
+ IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
+ gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
+ obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
+ N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
+ CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
+ C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
+ wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
+ EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
+ fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
+ MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
+ 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
+ 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
+In-Reply-To: <3e6d8f8ac58727a8ca4d2a57fd90600618085936.1737631669.git.viresh.kumar@linaro.org>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Jan 17, 2025 at 2:39=E2=80=AFPM Andy Shevchenko
-<andriy.shevchenko@linux.intel.com> wrote:
->
-> On Thu, Jan 16, 2025 at 08:18:19PM +0100, Rafael J. Wysocki wrote:
-> > On Thu, Jan 16, 2025 at 5:33=E2=80=AFPM Andy Shevchenko
-> > <andriy.shevchenko@linux.intel.com> wrote:
-> > > On Thu, Jan 16, 2025 at 05:27:59PM +0100, Rafael J. Wysocki wrote:
-> > > > On Thu, Jan 16, 2025 at 5:13=E2=80=AFPM Andy Shevchenko
-> > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > On Thu, Jan 16, 2025 at 05:09:29PM +0100, Rafael J. Wysocki wrote=
-:
-> > > > > > On Thu, Jan 16, 2025 at 4:44=E2=80=AFPM Andy Shevchenko
-> > > > > > <andriy.shevchenko@linux.intel.com> wrote:
-> > > > > > >
-> > > > > > > The introduced macros are not doing what they intend for, nam=
-ely
-> > > > > > > they won't eliminate the code when CONFIG_PM=3Dn.
-> > > > > >
-> > > > > > I don't think they have ever been expected to eliminate the cod=
-e then.
-> > > > > > They just don't export the symbols in that case.
-> > > > >
-> > > > > Then I'm really puzzled with (potential) usefulness of them to be=
-gin with.
-> > > > > Having a dead code that is not exported is doubtful benefit.
-> > > >
-> > > > Arguably, exported dead code is even worse.
-> > > >
-> > > > Anyway, it is hard to say what they are good for if there are no us=
-ers.
-> > > >
-> > > > My point really is that you don't need to add anything beyond "this
-> > > > stuff has no users" to get it removed and arguing about what the
-> > > > unused stuff was intended for is not very useful so to speak.
-> > >
-> > > I see. Shall I send a v3 with the reduced commit message?
-> >
-> > It's there in my queue and I can take care of the changelog, so no need=
-.
->
-> Ah, thanks!
+On 1/23/25 03:35, Viresh Kumar wrote:
+> The cpufreq core handles this now, the driver can skip setting it.
+> 
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Applied now, thanks!
+Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
+-- 
+Florian
 
