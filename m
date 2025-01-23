@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-20832-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20833-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 74E92A1A1F7
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 11:36:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B6F5A1A201
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 11:40:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4210E188DB11
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 10:36:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3B41A188E33F
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 10:40:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C61F20DD41;
-	Thu, 23 Jan 2025 10:36:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77FFD20DD43;
+	Thu, 23 Jan 2025 10:40:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="aMrFwEix"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="k4AePRlw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB014186A;
-	Thu, 23 Jan 2025 10:36:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5E46186A;
+	Thu, 23 Jan 2025 10:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737628589; cv=none; b=aEL/VneP6+YuDAneown/IuPVkAbnGS/P3PCBXPou3HKfYsngKlMnUIYo8KjDQsPl6/jgFWrsw3gwPSlZkIK4vAGqEuXfk5xpBMsinV0M/qWMmi3hPlijD4eYv5XD82tHSZnkT5ezraLYMCsaHnZ//b73ugjNPxYG+bgwTUtiahg=
+	t=1737628826; cv=none; b=RBCBn5mrxqryPk50J25Sggcaw5yglrd0i7TpUiQ/MZUvrpUa4QUpEpMZjFdu/fdtQPPqpNvdv7YOA/5YpG0K4T0uF1lPXsGVcJw25Zc0fz6p4K4hgv1M8EKg8MOjbI8lKH3U6BpitjVvut/45sOs9hd+Aw3hofUzbscTrGLtUik=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737628589; c=relaxed/simple;
-	bh=yeOngZHOJaGaTHkZJfVVp3OdxskJww+jY8vzIs4TCxg=;
+	s=arc-20240116; t=1737628826; c=relaxed/simple;
+	bh=rNhX+mGVLDlxXBCfcI27SJX1oV/gtvNgZjrIKTR/guE=;
 	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=j1ypn77FiIcsVjMx4AzTk/Yh6zTv+EoxCB5As5bnyY9poLpAXa70VbaWIYRVl7to5ogGEtYft4ALydGpIsTsXA9XwrSXMY14nCEWmJOa6b2DsIZZ1QGAkfTdYhJwrWBLdSlEBx5fGUY6wKVOcTzBpU5jzVhJcN7v5CIyN8y8QmM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=aMrFwEix; arc=none smtp.client-ip=205.220.180.131
+	 In-Reply-To:Content-Type; b=eQteMgSH3ceBn5X1Ms5uxl3cdiEJxNrG/0JY18dxe9+/XpxYf2f2ssZVKBjSFq1yakJArgIVutg74bIuF1Zta72gvdFTYYwc/tslaYYR612hCiOMfHF9xOGP5r9PBwKfVqc6Fc6layuWpl3fqCWpKKKvujimb8mUpGVr+EBr82Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=k4AePRlw; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50NA3HPl016535;
-	Thu, 23 Jan 2025 10:36:23 GMT
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50N6fm3T015645;
+	Thu, 23 Jan 2025 10:40:21 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
 	cc:content-transfer-encoding:content-type:date:from:in-reply-to
 	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	QfmCLbUabp4yVNBHV/Ri1VGNWl5Mrqof2hOoSquHnWA=; b=aMrFwEixE3lRFd3q
-	QJjdLLVK2/Rs/NICEFKZGoFnuvzlYJ/LX6FfvAbmG6MgBgKcisrRmMSyaxfR1mti
-	37GhK02Je1H93gas94XVw+D/M8OOPsZTs8iB4zQWsB7UoQFfHd2JRCO+hqtAObjl
-	PiMkHcZhL/IOzd9rEZVJZ1/n6zt0VenAmFfSs/H3IMSyeM/AFJtLWr93WX1S55Z2
-	zjB6BburT1O35EA/p8j1lQrc25oHdasSOLPbYSoO7JqBDWgVv+jwoAUh9LN4BxKQ
-	+qTDHeEmc5zQpRvGWKtR3D8UZdMS4a9ZMh+wZ3GjRwV9Z4zZda4P50dnRV1bP/As
-	svP4sg==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44bknxg2ph-1
+	29Du6oyo5iqjeNExZHXtY/IB4GNJgkj9T6QUvrEyiCM=; b=k4AePRlwVWFVVK9j
+	cFrXG/FMETP8vBmPoeySWySZGLEdtxZbJYWgATEm4vFPuFgfrtZTOZXRqafb7CKP
+	rDePAdOw5RGmHsKao6XXpWPcD8KDkjHQW4g3k55eAFlCX2cWoT8kgOaypoSlSCHM
+	ccudZMcNAPg5/MIbwlBuxkOH6UDPGa1eCoCTYM9EeFXifsDyUr68fXB+H/Tqi5/s
+	2rwDUAI62gZo/lxKTR3L/SHjQrvsC9dzmA0wTPXCjfwnvtnKNDKEkwOUdL3W9mND
+	Jxz8/6+d49+3gl3VrPwQjI0WKDwBeJptDsKaGOWGrlw+1Iw07v3u8igJNYrQM/5Y
+	DfF7yQ==
+Received: from nasanppmta01.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44bgqrgj2h-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Jan 2025 10:36:23 +0000 (GMT)
+	Thu, 23 Jan 2025 10:40:21 +0000 (GMT)
 Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50NAaIRg017838
+	by NASANPPMTA01.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50NAeK0o019532
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Jan 2025 10:36:18 GMT
+	Thu, 23 Jan 2025 10:40:20 GMT
 Received: from [10.216.27.253] (10.80.80.8) by nasanex01b.na.qualcomm.com
  (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 23 Jan
- 2025 02:36:13 -0800
-Message-ID: <91ec5b74-2fda-4aa8-bc87-c8e99f046391@quicinc.com>
-Date: Thu, 23 Jan 2025 16:05:59 +0530
+ 2025 02:40:15 -0800
+Message-ID: <5bd43ab2-68a0-47b7-b9c2-5b6d0726cc16@quicinc.com>
+Date: Thu, 23 Jan 2025 16:10:10 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,8 +65,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V7 1/5] interconnect: core: Add dynamic id allocation
- support
+Subject: Re: [PATCH V7 2/5] interconnect: qcom: Add multidev EPSS L3 support
 To: Bjorn Andersson <andersson@kernel.org>
 CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
         Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -74,133 +73,275 @@ CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
         Konrad Dybcio <konradybcio@kernel.org>,
         Odelu Kukatla
 	<quic_okukatla@quicinc.com>,
-        Mike Tipton <mdtipton@quicinc.com>,
+        Mike Tipton <mdptipton@quicinc.com>,
         "Vivek
  Aknurwar" <viveka@quicinc.com>,
         Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
         <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
         <linux-kernel@vger.kernel.org>
 References: <20250111161429.51-1-quic_rlaggysh@quicinc.com>
- <20250111161429.51-2-quic_rlaggysh@quicinc.com>
- <pu3s3fjkt2663wce2632s25oys56wkhsc22lcc5ydepfc4pbll@n73ouprb25zj>
+ <20250111161429.51-3-quic_rlaggysh@quicinc.com>
+ <lm6gvcrnd2pcphex4pugxie7m47qlvrgvsvuf75w4uumwoouew@qcuvxeb3u72s>
 Content-Language: en-US
 From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <pu3s3fjkt2663wce2632s25oys56wkhsc22lcc5ydepfc4pbll@n73ouprb25zj>
+In-Reply-To: <lm6gvcrnd2pcphex4pugxie7m47qlvrgvsvuf75w4uumwoouew@qcuvxeb3u72s>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
  nasanex01b.na.qualcomm.com (10.46.141.250)
 X-QCInternal: smtphost
 X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: 6fu28QVKq1PxSakHRnEES0rZ1fBAh4Kh
-X-Proofpoint-GUID: 6fu28QVKq1PxSakHRnEES0rZ1fBAh4Kh
+X-Proofpoint-ORIG-GUID: bdaUswPB7Dm6W-_oIuATGuSejKFxE1bB
+X-Proofpoint-GUID: bdaUswPB7Dm6W-_oIuATGuSejKFxE1bB
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-01-23_04,2025-01-22_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 clxscore=1015 phishscore=0 spamscore=0 adultscore=0
- mlxscore=0 suspectscore=0 impostorscore=0 mlxlogscore=999 bulkscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=999 spamscore=0
+ priorityscore=1501 mlxscore=0 suspectscore=0 lowpriorityscore=0
+ malwarescore=0 bulkscore=0 phishscore=0 adultscore=0 clxscore=1015
+ impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2411120000 definitions=main-2501230081
 
 
 
-On 1/12/2025 2:27 AM, Bjorn Andersson wrote:
-> On Sat, Jan 11, 2025 at 04:14:25PM +0000, Raviteja Laggyshetty wrote:
->> Current interconnect framework is based on static IDs for creating node
->> and registering with framework. This becomes a limitation for topologies
->> where there are multiple instances of same interconnect provider. Add
->> icc_node_create_alloc_id() API to create icc node with dynamic id, this
->> will help to overcome the dependency on static IDs.
+On 1/12/2025 2:38 AM, Bjorn Andersson wrote:
+> On Sat, Jan 11, 2025 at 04:14:26PM +0000, Raviteja Laggyshetty wrote:
+>> EPSS on SA8775P has two instances which requires creation of two device
+>> nodes with different compatible and device data because of unique
+>> icc node id and name limitation in interconnect framework.
+>> Add multidevice support to osm-l3 code to get unique node id from icc
+>> framework.
 >>
 >> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
 >> ---
->>  drivers/interconnect/core.c           | 32 +++++++++++++++++++++++++++
->>  include/linux/interconnect-provider.h |  6 +++++
->>  2 files changed, 38 insertions(+)
+>>  drivers/interconnect/qcom/osm-l3.c | 91 ++++++++++++++++++++++--------
+>>  1 file changed, 67 insertions(+), 24 deletions(-)
 >>
->> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
->> index 9d5404a07e8a..0b7093eb51af 100644
->> --- a/drivers/interconnect/core.c
->> +++ b/drivers/interconnect/core.c
->> @@ -858,6 +858,38 @@ struct icc_node *icc_node_create(int id)
->>  }
->>  EXPORT_SYMBOL_GPL(icc_node_create);
+>> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
+>> index 6a656ed44d49..8e98d1c9a840 100644
+>> --- a/drivers/interconnect/qcom/osm-l3.c
+>> +++ b/drivers/interconnect/qcom/osm-l3.c
+>> @@ -1,6 +1,7 @@
+>>  // SPDX-License-Identifier: GPL-2.0
+>>  /*
+>>   * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
+>> + * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
+>>   */
 >>  
->> +/**
->> + * icc_node_create_alloc_id() - create node and dynamically allocate id
->> + * @start_id: min id to be allocated
->> + *
->> + * Return: icc_node pointer on success, or ERR_PTR() on error
->> + */
->> +struct icc_node *icc_node_create_alloc_id(int start_id)
+>>  #include <linux/args.h>
+>> @@ -11,6 +12,7 @@
+>>  #include <linux/kernel.h>
+>>  #include <linux/module.h>
+>>  #include <linux/of.h>
+>> +#include <linux/of_address.h>
+>>  #include <linux/platform_device.h>
+>>  
+>>  #include <dt-bindings/interconnect/qcom,osm-l3.h>
+>> @@ -34,6 +36,9 @@
+>>  
+>>  #define OSM_L3_MAX_LINKS		1
+>>  
+>> +#define OSM_L3_NODE_ID_START		10000
+>> +#define OSM_NODE_NAME_SUFFIX_SIZE	10
+>> +
+>>  #define to_osm_l3_provider(_provider) \
+>>  	container_of(_provider, struct qcom_osm_l3_icc_provider, provider)
+>>  
+>> @@ -55,46 +60,40 @@ struct qcom_osm_l3_icc_provider {
+>>   */
+>>  struct qcom_osm_l3_node {
+>>  	const char *name;
+>> -	u16 links[OSM_L3_MAX_LINKS];
+>> +	const char *links[OSM_L3_MAX_LINKS];
+>>  	u16 id;
+>>  	u16 num_links;
+>>  	u16 buswidth;
+>>  };
+>>  
+>>  struct qcom_osm_l3_desc {
+>> -	const struct qcom_osm_l3_node * const *nodes;
+>> +	struct qcom_osm_l3_node * const *nodes;
+>>  	size_t num_nodes;
+>>  	unsigned int lut_row_size;
+>>  	unsigned int reg_freq_lut;
+>>  	unsigned int reg_perf_state;
+>>  };
+>>  
+>> -enum {
+>> -	OSM_L3_MASTER_NODE = 10000,
+>> -	OSM_L3_SLAVE_NODE,
+>> -};
+>> -
+>> -#define DEFINE_QNODE(_name, _id, _buswidth, ...)			\
+>> -	static const struct qcom_osm_l3_node _name = {			\
+>> +#define DEFINE_QNODE(_name, _buswidth, ...)				\
+>> +	static struct qcom_osm_l3_node _name = {			\
+>>  		.name = #_name,						\
+>> -		.id = _id,						\
+>>  		.buswidth = _buswidth,					\
+>>  		.num_links = COUNT_ARGS(__VA_ARGS__),			\
+>> -		.links = { __VA_ARGS__ },				\
+>> +		__VA_OPT__(.links = { #__VA_ARGS__ })			\
+>>  	}
+>>  
+>> -DEFINE_QNODE(osm_l3_master, OSM_L3_MASTER_NODE, 16, OSM_L3_SLAVE_NODE);
+>> -DEFINE_QNODE(osm_l3_slave, OSM_L3_SLAVE_NODE, 16);
+>> +DEFINE_QNODE(osm_l3_master, 16, osm_l3_slave);
+>> +DEFINE_QNODE(osm_l3_slave, 16);
+>>  
+>> -static const struct qcom_osm_l3_node * const osm_l3_nodes[] = {
+>> +static struct qcom_osm_l3_node * const osm_l3_nodes[] = {
+>>  	[MASTER_OSM_L3_APPS] = &osm_l3_master,
+>>  	[SLAVE_OSM_L3] = &osm_l3_slave,
+>>  };
+>>  
+>> -DEFINE_QNODE(epss_l3_master, OSM_L3_MASTER_NODE, 32, OSM_L3_SLAVE_NODE);
+>> -DEFINE_QNODE(epss_l3_slave, OSM_L3_SLAVE_NODE, 32);
+>> +DEFINE_QNODE(epss_l3_master, 32, epss_l3_slave);
+>> +DEFINE_QNODE(epss_l3_slave, 32);
+>>  
+>> -static const struct qcom_osm_l3_node * const epss_l3_nodes[] = {
+>> +static struct qcom_osm_l3_node * const epss_l3_nodes[] = {
+>>  	[MASTER_EPSS_L3_APPS] = &epss_l3_master,
+>>  	[SLAVE_EPSS_L3_SHARED] = &epss_l3_slave,
+>>  };
+>> @@ -123,6 +122,19 @@ static const struct qcom_osm_l3_desc epss_l3_l3_vote = {
+>>  	.reg_perf_state = EPSS_REG_L3_VOTE,
+>>  };
+>>  
+>> +static u16 get_node_id_by_name(const char *node_name,
+>> +			       const struct qcom_osm_l3_desc *desc)
+>> +{
+>> +	struct qcom_osm_l3_node *const *nodes = desc->nodes;
+>> +	int i;
+>> +
+>> +	for (i = 0; i < desc->num_nodes; i++) {
+>> +		if (!strcmp(nodes[i]->name, node_name))
+>> +			return nodes[i]->id;
+>> +	}
+>> +	return 0;
+>> +}
+>> +
+>>  static int qcom_osm_l3_set(struct icc_node *src, struct icc_node *dst)
+>>  {
+>>  	struct qcom_osm_l3_icc_provider *qp;
+>> @@ -164,10 +176,11 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>>  	const struct qcom_osm_l3_desc *desc;
+>>  	struct icc_onecell_data *data;
+>>  	struct icc_provider *provider;
+>> -	const struct qcom_osm_l3_node * const *qnodes;
+>> +	struct qcom_osm_l3_node * const *qnodes;
+>>  	struct icc_node *node;
+>>  	size_t num_nodes;
+>>  	struct clk *clk;
+>> +	u64 addr;
+>>  	int ret;
+>>  
+>>  	clk = clk_get(&pdev->dev, "xo");
+>> @@ -188,6 +201,10 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>>  	if (!qp)
+>>  		return -ENOMEM;
+>>  
+>> +	ret = of_property_read_reg(pdev->dev.of_node, 0, &addr, NULL);
+>> +	if (ret)
+>> +		return ret;
+>> +
+>>  	qp->base = devm_platform_ioremap_resource(pdev, 0);
+>>  	if (IS_ERR(qp->base))
+>>  		return PTR_ERR(qp->base);
+>> @@ -242,26 +259,51 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
+>>  
+>>  	icc_provider_init(provider);
+>>  
+>> +	/* create icc nodes */
+>>  	for (i = 0; i < num_nodes; i++) {
+>> -		size_t j;
+>> +		char *node_name;
+>> +		size_t len;
+>>  
+>> -		node = icc_node_create(qnodes[i]->id);
+>> +		node = icc_node_create_alloc_id(OSM_L3_NODE_ID_START);
+>>  		if (IS_ERR(node)) {
+>>  			ret = PTR_ERR(node);
+>>  			goto err;
+>>  		}
+>> +		qnodes[i]->id = node->id;
+>> +
+>> +		/* len = strlen(node->name) + @ + 8 (base-address) + NULL */
+>> +		len = strlen(qnodes[i]->name) + OSM_NODE_NAME_SUFFIX_SIZE;
+>> +		node_name = devm_kzalloc(&pdev->dev, len, GFP_KERNEL);
+>> +		if (!node_name) {
+>> +			ret = -ENOMEM;
+>> +			goto err;
+>> +		}
+>> +
+>> +		snprintf(node_name, len, "%s@%08llx", qnodes[i]->name, addr);
+>> +		node->name = node_name;
 > 
-> By having clients pass in start_id, you distribute the decision of what
-> a "good number" is across multiple parts of the system (or you have
-> clients relying on getting [start_id, start_id + N) back).
+> I don't think it's reasonable to duplicate this logic and the decision
+> of naming convention in each provider driver. Please provide a generic
+> solution in the framework.
 > 
-> Wouldn't it be better to hide that choice in one place (inside the icc
-> framework)?
+I will be moving the logic to framework.
 > 
+> PS. Not that I want you to use it here, but for the next time be aware
+> of devm_kasprintf().
+> 
+Will make use of devm_kasprintf in the next patch revision.
+>>  
+>> -		node->name = qnodes[i]->name;
+>>  		/* Cast away const and add it back in qcom_osm_l3_set() */
+>>  		node->data = (void *)qnodes[i];
+>>  		icc_node_add(node, provider);
+>>  
+>> -		for (j = 0; j < qnodes[i]->num_links; j++)
+>> -			icc_link_create(node, qnodes[i]->links[j]);
+>> -
+>>  		data->nodes[i] = node;
+>>  	}
+>>  
+>> +	/* create links in topolgy */
+>> +	for (i = 0; i < num_nodes; i++) {
+>> +		size_t j;
+>> +
+>> +		node = data->nodes[i];
+>> +		for (j = 0; j < qnodes[i]->num_links; j++) {
+>> +			u16 link_node_id = get_node_id_by_name(qnodes[i]->links[j], desc);
+> 
+> Isn't that O(i^2*j) string comparisons? I don't find that acceptable.
 
-Yes, inline to Dmitry's suggestion I will be moving the start_id to
-framework and all dynamic allocations will start from 10000.
+Agreed, I will be linking the nodes using pointers instead of strings,
+this will avoid additional loops and lookups while creating the links.
+
+> 
+>> +
+>> +			if (link_node_id)
+>> +				icc_link_create(node, link_node_id);
+>> +			else
+>> +				goto err;
+>> +		}
+>> +	}
+>> +
+>>  	ret = icc_provider_register(provider);
+>>  	if (ret)
+>>  		goto err;
+>> @@ -284,6 +326,7 @@ static const struct of_device_id osm_l3_of_match[] = {
+>>  	{ .compatible = "qcom,sm8150-osm-l3", .data = &osm_l3 },
+>>  	{ .compatible = "qcom,sc8180x-osm-l3", .data = &osm_l3 },
+>>  	{ .compatible = "qcom,sm8250-epss-l3", .data = &epss_l3_perf_state },
+>> +	{ .compatible = "qcom,sa8775p-epss-l3", .data = &epss_l3_perf_state },
+> 
+> With the exception of sc8180x, this list is sorted alphabetically.
+> Please insert your entry where it makes sense.
+> 
+Sure, I will fix it in next patch series.
 
 > Regards,
 > Bjorn
 > 
->> +{
->> +	struct icc_node *node;
->> +	int id;
->> +
->> +	mutex_lock(&icc_lock);
->> +
->> +	node = kzalloc(sizeof(*node), GFP_KERNEL);
->> +	if (!node)
->> +		return ERR_PTR(-ENOMEM);
->> +
->> +	id = idr_alloc(&icc_idr, node, start_id, 0, GFP_KERNEL);
->> +	if (id < 0) {
->> +		WARN(1, "%s: couldn't get idr\n", __func__);
->> +		kfree(node);
->> +		node = ERR_PTR(id);
->> +		goto out;
->> +	}
->> +	node->id = id;
->> +out:
->> +	mutex_unlock(&icc_lock);
->> +
->> +	return node;
->> +}
->> +EXPORT_SYMBOL_GPL(icc_node_create_alloc_id);
->> +
->>  /**
->>   * icc_node_destroy() - destroy a node
->>   * @id: node id
->> diff --git a/include/linux/interconnect-provider.h b/include/linux/interconnect-provider.h
->> index f5aef8784692..4fc7a5884374 100644
->> --- a/include/linux/interconnect-provider.h
->> +++ b/include/linux/interconnect-provider.h
->> @@ -117,6 +117,7 @@ struct icc_node {
->>  int icc_std_aggregate(struct icc_node *node, u32 tag, u32 avg_bw,
->>  		      u32 peak_bw, u32 *agg_avg, u32 *agg_peak);
->>  struct icc_node *icc_node_create(int id);
->> +struct icc_node *icc_node_create_alloc_id(int start_id);
->>  void icc_node_destroy(int id);
->>  int icc_link_create(struct icc_node *node, const int dst_id);
->>  void icc_node_add(struct icc_node *node, struct icc_provider *provider);
->> @@ -141,6 +142,11 @@ static inline struct icc_node *icc_node_create(int id)
->>  	return ERR_PTR(-ENOTSUPP);
->>  }
->>  
->> +static inline struct icc_node *icc_node_create_alloc_id(int start_id)
->> +{
->> +	return ERR_PTR(-EOPNOTSUPP);
->> +}
->> +
->>  static inline void icc_node_destroy(int id)
->>  {
->>  }
+>>  	{ }
+>>  };
+>>  MODULE_DEVICE_TABLE(of, osm_l3_of_match);
 >> -- 
 >> 2.39.2
 >>
