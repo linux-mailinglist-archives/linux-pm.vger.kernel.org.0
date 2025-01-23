@@ -1,151 +1,155 @@
-Return-Path: <linux-pm+bounces-20834-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20835-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 927C2A1A227
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 11:47:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6C568A1A2B1
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 12:12:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22A4E166199
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 10:47:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A42A3A8683
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 11:12:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C6A20DD43;
-	Thu, 23 Jan 2025 10:47:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B24F20E032;
+	Thu, 23 Jan 2025 11:12:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WWG9pLdt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KwyJVDmN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f50.google.com (mail-wr1-f50.google.com [209.85.221.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 54956186A;
-	Thu, 23 Jan 2025 10:47:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A55620DD7F
+	for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 11:12:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737629249; cv=none; b=T64E/y5NN6kDma9NGydWnMskGRFoTA7GYnG23QLo+8zpEgVq/9m6FkTbKcweRYeMqD9vq9z9wuFfo+JJL8q10PRh7Ws7VvAluqiAiySneZg6J1foHq5ehlPWyK3OjHXgewWJOBNdwuMfwN/4JIfA/bFab0VDPA9bnwlsVx13eGY=
+	t=1737630742; cv=none; b=Z0ZywxY6hgIK/twiCKmyxUQuj86vIuAVyFi+SIxmzgocQ5CRKM96zsXTh7/QUU3xYxzyUMCL68IOhAqtUvBhqjoixmmPlh1L7eRJs/v1Uwsv4UMbvRHhFOOCbRmB9aU0jzmHk6jWEhRwwIXHb7NhhC+Pxr6dJGQ+ot/e511A1lc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737629249; c=relaxed/simple;
-	bh=Cewj0Md/NTh4ZJ5h70KHilACclNk2qKU09zvX8tHOaA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=TRs9mcI8zcZW/bNZidhgaJ/5iJKc3DoeaTtVA6CTwUkUB/lsD6F4KnNFFcTC/jazSfmNByCUgHl81LIIumQcOEZdAMXHoFHZq5AYnrs8zULhd9urhLpCbNhRzZtSMo/c4WkOn91Mefvzhbp9FUH0jhqpq3nWAyqmOMAoxPdlzds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WWG9pLdt; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50N6flWl015635;
-	Thu, 23 Jan 2025 10:47:25 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	LXFfOM3cM4Bctga8ghtT0qc4KDj4JJJKBXLnvvtPKx0=; b=WWG9pLdtRAqTg7JL
-	Tdf/pxXTPGf8bohIAyI+IG+8AIFBefFfITqZzvHzRYYm7BqOwP8c3u+4OdzMH2uK
-	82WJN88olLSkJsW96mPHFhCuzQh5AnJY3InAvzHaL8CJaEAp6yrfMySaTJwxSYV6
-	ZOtmVbJEdQo6hQ+n176bZLH9/ecw5Tqz9QqgdtN7JOHz7HKNRFxUhr3RqIM4ay09
-	n0qbTSFvYbMMpoH8F+ArJN6hoRu1Y6ErB1ifqezL1UcSmH/fPV31emDuFtXbBNH/
-	BBBTr6XXer4xIKyAMErzORV/aUx4rGvMBlrAZcB4MIhdNF+US18oliudPZLvIVbk
-	VEtSaw==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44bgqrgjq4-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Jan 2025 10:47:25 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50NAlOIm009702
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 23 Jan 2025 10:47:24 GMT
-Received: from [10.216.27.253] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 23 Jan
- 2025 02:47:19 -0800
-Message-ID: <50b0f587-e4b6-4767-b284-f68a1e12b7d3@quicinc.com>
-Date: Thu, 23 Jan 2025 16:17:14 +0530
+	s=arc-20240116; t=1737630742; c=relaxed/simple;
+	bh=4bqdqaqoRBmiz1tlNvw3LlwQw5yawGiciwSgedzynzs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=sV5Q3Wva98aDdxFmNuXynK4IKvlAEHxFGukBtf4XuEiWSsJdy3xPbr0Vty3nvebRWg1F7dXvZH3PtfeJVCDTJa3lCOR6p517BYwsm1OPTLzTyiB1pLA+ixaBmJM58G7Pacb5Yu0Ifv9+ZoCzVdk3NJb7leZi3fixvD7/RDubpGw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KwyJVDmN; arc=none smtp.client-ip=209.85.221.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f50.google.com with SMTP id ffacd0b85a97d-385e3621518so365369f8f.1
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 03:12:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737630739; x=1738235539; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=ScXAOgZXW83Gqjl3thNs/+nZmT78yMbe9xCFOetszKo=;
+        b=KwyJVDmNm4AacVP6TMbOUsbeGcp4gCVP4zdgaQZpolOLxtR5waTWLOtiOgx265H7DQ
+         /4n+5egYc3zx/hslKLt2GMvPt6nNP52eAgm0KorfNmq8TxspdwVlHZNcYtXfh8plkIaI
+         3fmg/t/Eu4/56Z9FzcU0L1p5audT5x7DEW7R4Kabq3JbgfII9dN9o52Z1excQMrIC/Hl
+         u7YpYEOba97sojTXJJK4cb7USndOGOMEqW7JjFeS93YD2qZ3mm9pPXb3a1fYjeF3vvyp
+         4z+AxrB+alT+C3IXXuyjTuR2lDXVn4tPi3Is+TWgiKow9VV6VropcZoGZYg7/u7rbxA3
+         NrZw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737630739; x=1738235539;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ScXAOgZXW83Gqjl3thNs/+nZmT78yMbe9xCFOetszKo=;
+        b=Dk5iiAREi32GBZCbyS6rGVP3Nr4DoVpjOI/hJ+zLgkMLCmTuLJXhHL3vlnvRcT214D
+         FdXywU7L/9+YpI2djk78Q3EGMGAVUyI6sAUX4sRrU8nqw5FaIIBqYI5GKlTz9d4rJH02
+         cgoEHkpX7wP6LeJim1btwOcsSB1RvEEbp2+juBEBO/mRCWiW5kQDbIlQlCSVornepiO5
+         NgyjKaSvg09pNzlk+eXfnxqCAOG8XNZzTQesq4NIpPjJpxQORGlikEwjUALookYw/V2M
+         78OTBIDIhxXWEwT+tq9YGF18sJWCH1ybGPMd1KFktya9Cja14aRU8lX6ew1EswQ7P5gD
+         VQxg==
+X-Forwarded-Encrypted: i=1; AJvYcCXy00s5xjn9BZemZtVZ0EYP15HsoP3tuvfkJu1BoY7FlW3DfD5UFyIfRhlXvXUsOYIy0ROpc1VtpA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuP/io7YejcfIFe6Ykx5dX8oCg95ytrdNXSD9rC+KkMQJOp4e8
+	USWrlvUwZXwVVP+VSTV2o189pGZWQW8pySUuiovH77lmEx+kAu24yC8n27Onvc8=
+X-Gm-Gg: ASbGncshhUP+6/1RDPsXgkuw/5nM+a6xzyKKKsZK7TU0D8zvqSoVXUqQ3Vno1U/fc97
+	6S0gcQ9t6T+Z49wScHyk1F9nDmhUzPr/9COIxdxIwTFI1rINhnCJKdEh5edgSUyBdE5SO4Kw9h+
+	CJkD8dG41ld/qz+UBrWccGTQ9YcSJe+DakhC63WPhLDhO1IuHmM3CTWCy+V0TZfz6/VBiOuvr4i
+	f1GqssQ+NvOcR2EsAZbCjJeTcBG0ju1ZO3JCY0INtRKtV7YYsI4azkZg7/WYzoPyF4NqqGoLqLO
+	otaZ0+dKcQ==
+X-Google-Smtp-Source: AGHT+IGTjg5cb3hrIHI+2Cx43xQLT48/6W5YSS8YYVdSRsOlyfnn/x4sEOrUIHztwV+B3Orib4yu3w==
+X-Received: by 2002:a5d:5f4d:0:b0:38a:614b:8632 with SMTP id ffacd0b85a97d-38bf57a6969mr27614248f8f.39.1737630738817;
+        Thu, 23 Jan 2025 03:12:18 -0800 (PST)
+Received: from localhost ([196.207.164.177])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38bf3275595sm19117151f8f.67.2025.01.23.03.12.17
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 03:12:18 -0800 (PST)
+Date: Thu, 23 Jan 2025 14:12:14 +0300
+From: Dan Carpenter <dan.carpenter@linaro.org>
+To: zuoqian <zuoqian113@gmail.com>,
+	Ionela Voinescu <ionela.voinescu@arm.com>
+Cc: sudeep.holla@arm.com, rafael@kernel.org, viresh.kumar@linaro.org,
+	cristian.marussi@arm.com, arm-scmi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] cpufreq: scpi: compare against frequency instead of rate
+Message-ID: <ad11dfc1-5e88-4421-b427-3955d4220133@stanley.mountain>
+References: <20250123075321.4442-1-zuoqian113@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V7 1/5] interconnect: core: Add dynamic id allocation
- support
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        "Mike
- Tipton" <mdtipton@quicinc.com>,
-        Vivek Aknurwar <viveka@quicinc.com>,
-        "Sibi
- Sankar" <quic_sibis@quicinc.com>,
-        <linux-arm-msm@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-References: <20250111161429.51-1-quic_rlaggysh@quicinc.com>
- <20250111161429.51-2-quic_rlaggysh@quicinc.com>
- <x4lsksrpwe5z6ti7gi2kufyhrpvffsmo2im3oqhqgfaft2ihfm@7xnd6bvy47rv>
-Content-Language: en-US
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <x4lsksrpwe5z6ti7gi2kufyhrpvffsmo2im3oqhqgfaft2ihfm@7xnd6bvy47rv>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: jDCtysMep1kIE7Pmf0Y51rPEy_zaK0Gb
-X-Proofpoint-GUID: jDCtysMep1kIE7Pmf0Y51rPEy_zaK0Gb
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-01-23_04,2025-01-22_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxlogscore=695 spamscore=0
- priorityscore=1501 mlxscore=0 suspectscore=0 lowpriorityscore=0
- malwarescore=0 bulkscore=0 phishscore=0 adultscore=0 clxscore=1015
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2411120000 definitions=main-2501230082
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250123075321.4442-1-zuoqian113@gmail.com>
 
-
-
-On 1/13/2025 1:44 PM, Dmitry Baryshkov wrote:
-> On Sat, Jan 11, 2025 at 04:14:25PM +0000, Raviteja Laggyshetty wrote:
->> Current interconnect framework is based on static IDs for creating node
->> and registering with framework. This becomes a limitation for topologies
->> where there are multiple instances of same interconnect provider. Add
->> icc_node_create_alloc_id() API to create icc node with dynamic id, this
->> will help to overcome the dependency on static IDs.
+On Thu, Jan 23, 2025 at 07:53:20AM +0000, zuoqian wrote:
+> The CPU rate from clk_get_rate() may not be divisible by 1000
+> (e.g., 133333333). But the rate calculated from frequency is always
+> divisible by 1000 (e.g., 133333000).
+> Comparing the rate causes a warning during CPU scaling:
+> "cpufreq: __target_index: Failed to change cpu frequency: -5".
+> When we choose to compare frequency here, the issue does not occur.
 > 
-> This doesn't overcome the dependency on static ID. Drivers still have to
-> manually lookup the resulting ID and use it to link the nodes. Instead
-> ICC framework should be providing a completely dynamic solution:
-> - icc_node_create() should get a completely dynamic counterpart. Use
->   e.g. 1000000 as a dynamic start ID.
-> - icc_link_create() shold get a counterpart which can create a link
->   between two icc_node instances directly, without an additional lookup.
+> Signed-off-by: zuoqian <zuoqian113@gmail.com>
+> ---
+>  drivers/cpufreq/scpi-cpufreq.c | 5 +++--
+>  1 file changed, 3 insertions(+), 2 deletions(-)
 > 
+> diff --git a/drivers/cpufreq/scpi-cpufreq.c b/drivers/cpufreq/scpi-cpufreq.c
+> index cd89c1b9832c..3bff4bb5ab4a 100644
+> --- a/drivers/cpufreq/scpi-cpufreq.c
+> +++ b/drivers/cpufreq/scpi-cpufreq.c
+> @@ -39,8 +39,9 @@ static unsigned int scpi_cpufreq_get_rate(unsigned int cpu)
+>  static int
+>  scpi_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
+>  {
+> -	u64 rate = policy->freq_table[index].frequency * 1000;
 
-Agreed, with current implementation, still there is dependency on IDs
-for linking the nodes.
-Instead of relying on node names for the links, array of struct pointers
-will be used, this will eliminate the need for ID lookup and avoids
-extra loops.
-Instead of providing counter part for the ICC framework APIs which
-involves duplication of most of the code, I will modify the existing
-icc_node_create, icc_link_create and icc_node_add APIs to support both
-static and dynamic IDs.
+policy->freq_table[index].frequency is a u32 so in this original
+calculation, even though "rate" is declared as a u64, it can't actually
+be more than UINT_MAX.
 
-> You can check if your implementation is correct if you can refactor
-> existing ICC drivers (e.g. icc-clk and/or icc-rpm to drop ID arrays
-> completely).
-> 
-ok, I will check the implementation on icc-rpmh driver for sa8775p SoC.
->>
->> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->> ---
->>  drivers/interconnect/core.c           | 32 +++++++++++++++++++++++++++
->>  include/linux/interconnect-provider.h |  6 +++++
->>  2 files changed, 38 insertions(+)
->>
-> 
+> +	unsigned long freq = policy->freq_table[index].frequency;
+>  	struct scpi_data *priv = policy->driver_data;
+> +	u64 rate = freq * 1000;
+
+So you've fixed this by casting policy->freq_table[index].frequency
+to unsigned long, which fixes the problem on 64bit systems but it still
+remains on 32bit systems.  It would be better to declare freq as a u64.
+
+We keep fixing and then breaking this as undocumented parts of larger
+patches.  :P  It should really be done by itself and the Fixes tag would
+point to:
+Fixes: 1a0419b0db46 ("cpufreq: move invariance setter calls in cpufreq core")
+
+>  	int ret;
+>  
+>  	ret = clk_set_rate(priv->clk, rate);
+> @@ -48,7 +49,7 @@ scpi_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
+>  	if (ret)
+>  		return ret;
+>  
+> -	if (clk_get_rate(priv->clk) != rate)
+> +	if (clk_get_rate(priv->clk) / 1000 != freq)
+
+
+Sure, I don't know this code well but your commit message seems reasonable.
+Add a Fixes tag for this line.
+
+Fixes: 343a8d17fa8d ("cpufreq: scpi: remove arm_big_little dependency")
+
+regards,
+dan carpenter
+
 
 
