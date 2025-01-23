@@ -1,168 +1,252 @@
-Return-Path: <linux-pm+bounces-20876-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20877-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D2E2A1A590
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 15:15:55 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id ED26DA1A681
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 16:04:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41025160944
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 14:15:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3638D160EEF
+	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 15:04:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0128C211485;
-	Thu, 23 Jan 2025 14:15:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB749211706;
+	Thu, 23 Jan 2025 15:04:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="EmOgN8sw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="euHoumo0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E382D2101B5
-	for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 14:15:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEC4E20FAB7;
+	Thu, 23 Jan 2025 15:04:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737641747; cv=none; b=PxCtaz8gJ4ov/uVuJ3GS9IBjDj6mBQHnDwjkXPHXSet9DHHGSpLXKbZTc6cDP4z08OpWP0EpaaEq6n7Aw/Xu7RFA5QD7OXrug5tHnuWKYyoks7FnTBr9DIFMvgcDo7eVmiVsWU49oppHtHx3qP5VMdxIlrT5CfffsxMqNOiNrqw=
+	t=1737644682; cv=none; b=EFeYlRoJNgd9nNA86l45wEJYmq0KE1Kq5NqqZ8+NIBB5ujuowNi/Ev5rdw43YmnLJHK3FDachalt/kbCGWHUl58G+VOcGPTMlOL87t60glMI6QVNUWBpeS3IrONl1lWkcD+zrtmmGD7n3CEz00K4Al2i7vW7/+SAIbDp9qKxAUI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737641747; c=relaxed/simple;
-	bh=2rQgFqOIcnjcZOPLL3KNhK491zzBMXS9Ek94uJnqom0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=UfMFnHRh45T5s0Vk8+nWaHTdwAEvd7oUQm7GtBGMAEG8pmRfAnuqUPXrbnJtYIUYdoKRGNEKHtnZtveayTYUtLLyoak8jPvGPh8qVfkdTaZN8jPDde5EWFa2ERftNxGve0hYuzSMihy3dvJ5HHyifOCM3QvBBE2jDnPvAdFlIzc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=EmOgN8sw; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-54024aa9febso1067874e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 06:15:45 -0800 (PST)
+	s=arc-20240116; t=1737644682; c=relaxed/simple;
+	bh=pYAMylE78DUDOBG70XplaLvE0hv+KbuQajcSyAuUzGI=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=FNWD7iOANneZ3WHXNzx+nro4thLE+2lZqFBFetHDTDV3KO/5iLHWxg7EQR+VDrBCdaEf/2g6mLWu04KyWdsfoLcRTDI6GZHd+YB1oR8Ak5Fov72yoKf2ZzjdppUSKDxvwtScuiUhuzoquqB++X9UY4Oi/oTgI0HdNazltzPon8c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=euHoumo0; arc=none smtp.client-ip=209.85.208.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5d96944401dso1856214a12.0;
+        Thu, 23 Jan 2025 07:04:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737641744; x=1738246544; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=g1ToMyTjMs2jLgsOp4dn6EsxiilccUPfzThLkca0KWU=;
-        b=EmOgN8swlHIGaeKpzjI421KJe27QvLpCMblAAQeu5Kc7TE64x1J8JRC2UYDXz3J1pP
-         0Rj1C4nf/th++xEfvf28PNmb9SHF6xFv6vTs+4/tYmgv0GtSHYmYpPrA5Vi8Svvq7uA9
-         INMKtbVu2+msROmnjkCoP/zFghl6rPexroMPSLgAY/PahG4QfJ+rxD9s/3cE5Rj+qfJ3
-         b6VPLCwLV32vcF9gPv6bt2fsTTjtREtB7B9KM+yUYeTOSef8Wftee9bJ6pmzgT5muy4+
-         6Eb6grnFb5Q7iFC9G3Cb6p4bTdCgyOgfKmpeLsD0UtUQSMhtBVbbYIMVYo9pqlX/ETWv
-         QiXA==
+        d=gmail.com; s=20230601; t=1737644679; x=1738249479; darn=vger.kernel.org;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=wngw1Qfbo332tUwRkteO/A0VtPLLJx5lhcBxfodB8jQ=;
+        b=euHoumo0G15lnFlDS+qMsfijVoVyTo1TtCCbYRQSCXkrDT/NV6bIgqWUA7A9nS8QdZ
+         zLuZ+f+q8zpwTPLrYfb0hhTcdroTPmRioQ0nZ5xknjyD5tpm5cmiP8/BnqL7PJ90CkoP
+         wtruEe1V+sW0VieHI7PRfxTuOWcspIlncmMHxiCEQyb3VtM0AAQApqVINL5VF7dniy0h
+         Rbx7vPyv39ol9qvX8dlzVEn6UsBEQ6BHpuujsN4+ZPZMo5QlL64/AxEG4PoH5COs52AI
+         7DPBLgg3H9Ate9/wE7bkzi9donP8kg0ox50fFQOiDDRHcBfDl77OllscKz7TUMN/0sE5
+         Jgug==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737641744; x=1738246544;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1737644679; x=1738249479;
+        h=cc:to:content-transfer-encoding:mime-version:message-id:date
+         :subject:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=g1ToMyTjMs2jLgsOp4dn6EsxiilccUPfzThLkca0KWU=;
-        b=FKPnvivEQSlwXR80y3Do2IGgy8d9kY+3f1HETFuJ9WTFz+VFB7nNPjy1Ha86X3zGiY
-         /4UDSvFNEChRWZA46fggKlubjZUDHZKNkZcun8mkQnsuwsUxznyCA3hRWmAmfCXYoYKM
-         tD8Usgv4ypZptO2QDtB+jZwgxLZyO467WW+ZSbNbGHQB2lre1AiO5ZLnSJHBBhAsJNBG
-         wx8l8eCbfzQ5y4VZ6cOFFspmjuvoib1bh/2Gigz62uf+QTeGpaDFNNxfgknGHp831eA6
-         tsfeyfJy7mSMGNQGDF/txtQqh5CMxIwmylFavYIkLg0wmCSEy2g1VqTouc0xZav5hEsh
-         +fjw==
-X-Forwarded-Encrypted: i=1; AJvYcCWIkI5pKqNmaE30RbISqGw6CZh5L81DOkoI4u1wCI47an93jnP/DeoF9U3P+vBDgRibIsJrOP4XxA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwylCrj6pdN8geS0RhjMh6l91F2KljDw4pNReKEU7ZNU4Wqgt5O
-	L533hT2vdAYIzo6R0wXmJbcd8Os+zG4sYCBOnNcu0oPYAc0aHzFcbZcFa9mth+8=
-X-Gm-Gg: ASbGnctFIl93O8k97BKRSxeS210sBYDT0os+uKtTkV/uWG3TW0e6PvrVQdAMJfHo/bR
-	KqHpUOSU5dO/LYadVsqGvPlxKOeZC3lwcC8pRjcVdNQAlk2c8awR1aHI1YxRDUZh84nSuHZtTWs
-	szST5GC3PIXvjB5Eae0ZH+GrRH6itZNPbuGnRwegpuP1rc6IGFYMqtRnIVm16Gq010d+0tH2GSA
-	VSm7BFO8DAA+sYV5olOP8Opi1GTmc9grtAHwB1y3XqER4V+XtyHx8G/RioW4znTKmji1uiJg4/k
-	vVn+0C2eTC0JM2V1kzv5+dxzH37fs7QrRirZAWR1D3m8R/RMeV2ayjQ=
-X-Google-Smtp-Source: AGHT+IHplopuHQYOeHKQxzSgMWlfVO0WOZMzXUZ9QofYSuMY+TN8CSqm5hG6oBjV6GjzjpVF5ldH2g==
-X-Received: by 2002:ac2:4195:0:b0:540:3566:985c with SMTP id 2adb3069b0e04-5439c251121mr6875642e87.26.1737641743965;
-        Thu, 23 Jan 2025 06:15:43 -0800 (PST)
-Received: from uffe-tuxpro14.. (h-178-174-189-39.A498.priv.bahnhof.se. [178.174.189.39])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-543bb6bf5b1sm778726e87.118.2025.01.23.06.15.42
+        bh=wngw1Qfbo332tUwRkteO/A0VtPLLJx5lhcBxfodB8jQ=;
+        b=uS2DK0OA4JGxwB8NaAr/hRS2B/5AUXgey9ViwbmhnzwyXhlaa3ZPNpr7Ytze/yXKEu
+         msG5M4RiKNgeknopg0kq609+TO64l4bslvoaKDIGMGiKIxbi//QbbWKN9HKwvp4t3LhC
+         sLBypZ2II00eghrpbDkd5kkfXxoeexxZT18cmndiWf/VkhcW4EYHhRUL9pu4UGdYD0KF
+         0nQKdjIO9jPTkYIa8RpbgyfjfKWbvUspwxGY167yEUl5/OGTAobu3bi6KgASlJKUtEtP
+         yXGtbYWA5NsvbcCvF4Auni209bLHQCZhGDVXp8bcuw3HoLIOc0viIDm8vAu2vBC8n+F1
+         6V+Q==
+X-Forwarded-Encrypted: i=1; AJvYcCUutnS+mlMXJPfsxY+yWPSTb/JLYCY+cZFWL+Y8muVc8xmkTIXXOqFo6iF0UwA4VSG4YY4tnAHvxiO9kIU=@vger.kernel.org, AJvYcCVaFC/1XaPKrkl0Qmin5CfR2utPmVFVHULK7wihvNL8l3miPeXuaDrVNJw4Cz0Sev4yPOuoAIAjdEh/iXYM@vger.kernel.org, AJvYcCVoZ+YniXUIzncT+a4MH2a+YpfFHLrmAgF66+lPdenaGG6Z0roY3N8KhU+bqy6rcHam7mWBvFviap1B@vger.kernel.org, AJvYcCWQZDRebUsooav4L8lyMsKzCAfRVkJibfrkMWCQ+exnQBUpre7/UmT3lb5Kzpxt8HCv6OGlcQ9VBgp23Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzsDUOYAXymJAc9VH/MxyQeqK9ImYn8ZDsruQ3jmB5gHyhqccrO
+	pPjXNVSYpGcKiXoJwVGf3VRq6hay9QQTUq5M7xnI4c8G/9nVh+yZ
+X-Gm-Gg: ASbGncvAEY1HbB6CTcZLsyjngXONKTwS+ES8k1JmPT4nYUhNfawYw5meP0LXQ+wuH7S
+	bdJiRCZ6SA+cg1g7K66hVp0hJw+ytetSi9DYUYKi6em67MbL9lOdw11DE1kni3eFDQ9cAKBi9yw
+	78vtVytZ3LWLZ/6dy5calQcg7qmy0RRptxmKj4gKwRwyGc3QeRr22zNBMNxdorfn+5WC+oR8/qw
+	GOeaDNO4vjcgMHGTyMSh2MIG/nMSEnLYqZwfzYKJjtRiLqDVMVHAZPwWxjnDFM9kkn0FxE4tgni
+	y5cxeMXCud9uYA==
+X-Google-Smtp-Source: AGHT+IFCskicJhfr4+Yyi+bpW5QAdYXDnAjSRmZ+/p7hyy+jepP9pDvj/LhxaPQC+vCst9gNGbSRVA==
+X-Received: by 2002:a17:907:7fa8:b0:aaf:123a:e4f0 with SMTP id a640c23a62f3a-ab38b0b6886mr2687262166b.6.1737644678641;
+        Thu, 23 Jan 2025 07:04:38 -0800 (PST)
+Received: from [127.0.1.1] ([46.53.242.22])
+        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-ab384f2903esm1084727266b.109.2025.01.23.07.04.37
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 06:15:43 -0800 (PST)
-From: Ulf Hansson <ulf.hansson@linaro.org>
-To: Linus <torvalds@linux-foundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Cc: Ulf Hansson <ulf.hansson@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: [GIT PULL] pmdomain/cpuidle-psci updates for v6.14
-Date: Thu, 23 Jan 2025 15:15:40 +0100
-Message-ID: <20250123141540.265172-1-ulf.hansson@linaro.org>
-X-Mailer: git-send-email 2.43.0
+        Thu, 23 Jan 2025 07:04:38 -0800 (PST)
+From: Dzmitry Sankouski <dsankouski@gmail.com>
+Subject: [PATCH v17 0/7] Add support for Maxim Integrated MAX77705 PMIC
+Date: Thu, 23 Jan 2025 18:04:25 +0300
+Message-Id: <20250123-starqltechn_integration_upstream-v17-0-8b06685b6612@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAHlakmcC/43UzW7bMAwA4FcpfJ4HUv/aae8xDIV+qMRA4rS2Y
+ 7Qo8u6juq314sN0MSAB/kRSIt+6maaB5u7bw1s30TrMw2XkBdovD106hvFA/ZB5oxMgFBi0/by
+ E6fm0UDqOj8O40GEKC//0eH2al4nCuY/JGachikKyYyaGmfo4hTEdGRqvpxNvPk1Uhpf3g3/85
+ PVxmJfL9Poexyrr7t8T3f9PXGUPPclijBGANqTvh3MYTl/T5dxVfFWfoEfZACoGRRZUsk7aWXs
+ P6m2EDTVZdY0QQMqCCjPuQPMBIkALaBiELF3U4CHpHWg3oGhJ2TLoYwlBFhUwwD3oNqDEBtDVG
+ pbAl5KElED3oP8E+dMAegY5spxkDCSiuwcRtqJqEJFr2NtMTpNypI3YkbglfQuJTOYE2jsnHAH
+ uSLEhm94Oivp4suPHq1Txap+43JBNl421Y0pMBiFZcHKf+EfLaEBo6UGsPVMMOUVJQPZmR+oNi
+ aaFrF2TihA+ky9W7xM3W7KplrVvEEMJ3NXCmn9Gxe33YJro+cqDcPkznW63XwsRybEmBQAA
+To: Sebastian Reichel <sre@kernel.org>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
+ Purism Kernel Team <kernel@puri.sm>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-leds@vger.kernel.org, Dzmitry Sankouski <dsankouski@gmail.com>, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+X-Mailer: b4 0.14.0
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1737644676; l=6789;
+ i=dsankouski@gmail.com; s=20240619; h=from:subject:message-id;
+ bh=pYAMylE78DUDOBG70XplaLvE0hv+KbuQajcSyAuUzGI=;
+ b=QEU2xxMDnHmkWKD2aO2vwK7duviNfImG93DtZ6W0COqXEzkZExMswMzzkGNQcRQzRxce1TUYC
+ 2Njio7yeYVuCEhoQkT7mfqbe2CX1bVuJfxYOh0nGeVLP4DTi7U5GBsx
+X-Developer-Key: i=dsankouski@gmail.com; a=ed25519;
+ pk=YJcXFcN1EWrzBYuiE2yi5Mn6WLn6L1H71J+f7X8fMag=
 
-Hi Linus,
+The Maxim MAX77705 is a Companion Power Management and Type-C
+interface IC which includes charger, fuelgauge, LED, haptic motor driver and
+Type-C management IC. It's used in Samsung S series smart phones
+starting from S9 model.
 
-Here's the pull-request with the pmdomain and cpuidle-psci updates for v6.14.
-Details about the highlights are as usual found in the signed tag.
+Add features:
+  - charger
+  - fuelgauge
+  - haptic
+  - led
 
-Please pull this in!
+Signed-off-by: Dzmitry Sankouski <dsankouski@gmail.com>
+---
+Changes in v17:
+- update trailers
+- fix led driver regmap creation
+- rebase on latest linux-power-supply
+- Link to v16: https://lore.kernel.org/r/20250117-starqltechn_integration_upstream-v16-0-11afa877276c@gmail.com
 
-Kind regards
-Ulf Hansson
+Changes in v16:
+- cleanup review fixes
+- Link to v15: https://lore.kernel.org/r/20250116-starqltechn_integration_upstream-v15-0-cf229de9f758@gmail.com
 
+Changes in v15:
+- update copyright year
+- fix mA/mV in charing driver
+- rebase on latest linux-power-supply tree
+- various formatting and optimization review comments fixes
+- Link to v14: https://lore.kernel.org/r/20250108-starqltechn_integration_upstream-v14-0-f6e84ec20d96@gmail.com
 
-The following changes since commit 726efa92e02b460811e8bc6990dd742f03b645ea:
+Changes in v14:
+- binding review fixes
+- add trailers
+- Link to v13: https://lore.kernel.org/r/20241223-starqltechn_integration_upstream-v13-0-fbc610c70832@gmail.com
 
-  pmdomain: imx8mp-blk-ctrl: add missing loop break condition (2025-01-16 16:10:32 +0100)
+Changes in v13:
+- revert: max17042 binding: split in 2 files, so its binding code can be reused
+- include previously removed patch:
+  'dt-bindings: power: supply: max17042: add max77705 support'
+- use same of_node for matching simple-mfd-i2c and setting max17042
+  driver
+- Link to v12: https://lore.kernel.org/r/20241217-starqltechn_integration_upstream-v12-0-ed840944f948@gmail.com
 
-are available in the Git repository at:
+Changes in v12:
+- charger: move out of mfd because separate device
+- charger: add it's own binding file
+- fuel gauge: move to simple-mfd-i2c along with additional measurement
+  capabilities, which will be implemented in max77705-hwmon driver
+- fix review comments
+- reorder commits to stick mfd together
+- Link to v11: https://lore.kernel.org/r/20241209-starqltechn_integration_upstream-v11-0-dc0598828e01@gmail.com
 
-  git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git tags/pmdomain-v6.14
+Changes in v11:
+- charger: code review fixes
+- max17042 binding: split in 2 files, so its binding code can be reused
+  in MFD bindings
+- Link to v10: https://lore.kernel.org/r/20241204-starqltechn_integration_upstream-v10-0-7de85e48e562@gmail.com
 
-for you to fetch changes up to 885f5669f2abd0db34c9832259f77240d5350e36:
+Changes in v10:
+- drop NACKed 'dt-bindings: power: supply: max17042: remove reg from
+  required' patch
+- review fixes
+- use dev_err_probe for errors in probe functions
+- Link to v9: https://lore.kernel.org/r/20241202-starqltechn_integration_upstream-v9-0-a1adc3bae2b8@gmail.com
 
-  pmdomain: airoha: Fix compilation error with Clang-20 and Thumb2 mode (2025-01-21 10:45:24 +0100)
+Changes in v9:
+- fuel gauge: use max17042 driver instead of separate max77705
+- fix kernel bot error
+- charger: enable interrupt after power supply registration
+- add dependency on max17042 patch series
+- Link to v8: https://lore.kernel.org/r/20241031-starqltechn_integration_upstream-v8-0-2fa666c2330e@gmail.com
 
-----------------------------------------------------------------
-pmdomain core:
- - Add support for naming idlestates through DT
+Changes in v8:
+- Fix comment style
+- join line where possible to fit in 100 chars
+- Link to v7: https://lore.kernel.org/r/20241023-starqltechn_integration_upstream-v7-0-9bfaa3f4a1a0@gmail.com
 
-pmdomain providers:
- - arm: Explicitly request the current state at init for the SCMI PM domain
- - mediatek: Add Airoha CPU PM Domain support for CPU frequency scaling
- - ti: Add per-device latency constraint management to the ti_sci PM domain
+Changes in v7:
+- Fix review comments
+- Link to v6: https://lore.kernel.org/r/20241007-starqltechn_integration_upstream-v6-0-0d38b5090c57@gmail.com
 
-cpuidle-psci:
- - Enable system-wakeup through GENPD_FLAG_ACTIVE_WAKEUP
+Changes in v6:
+- fix binding review comments
+- update trailers
+- Link to v5: https://lore.kernel.org/r/20240617-starqltechn_integration_upstream-v5-0-e0033f141d17@gmail.com
 
-----------------------------------------------------------------
-Christian Marangi (2):
-      pmdomain: airoha: Add Airoha CPU PM Domain support
-      pmdomain: airoha: Fix compilation error with Clang-20 and Thumb2 mode
+Changes in v5:
+- Split patchset per subsystem
+- Link to v4: https://lore.kernel.org/r/20240913-starqltechn_integration_upstream-v4-0-2d2efd5c5877@gmail.com
 
-Kevin Hilman (3):
-      pmdomain: ti_sci: add per-device latency constraint management
-      pmdomain: ti_sci: add wakeup constraint management
-      pmdomain: ti_sci: handle wake IRQs for IO daisy chain wakeups
+Changes in v4:
+- Rewrite max77705, max77705_charger, max77705_fuel_gauge from scratch
+- Reorder patches:
+  - squash max77705 subdevice bindings in core file because
+    no resources there
+  - split device tree changes
+- Use _ as space for filenames in power/supply like the majority
+- Link to v3: https://lore.kernel.org/r/20240618-starqltechn_integration_upstream-v3-0-e3f6662017ac@gmail.com
 
-Konrad Dybcio (2):
-      dt-bindings: power: domain-idle-state: Allow idle-state-name
-      pmdomain: core: Support naming idle states
+---
+Dzmitry Sankouski (7):
+      dt-bindings: power: supply: add maxim,max77705 charger
+      dt-bindings: mfd: add maxim,max77705
+      power: supply: max77705: Add charger driver for Maxim 77705
+      mfd: simple-mfd-i2c: Add MAX77705 support
+      mfd: Add new driver for MAX77705 PMIC
+      input: max77693: add max77705 haptic support
+      leds: max77705: Add LEDs support
 
-Patrick Delaunay (1):
-      cpuidle: psci: Activate GENPD_FLAG_ACTIVE_WAKEUP with OSI
+ Documentation/devicetree/bindings/mfd/maxim,max77705.yaml          | 158 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ Documentation/devicetree/bindings/power/supply/maxim,max77705.yaml |  50 ++++++++++++++++++++++++
+ MAINTAINERS                                                        |   4 ++
+ drivers/input/misc/Kconfig                                         |   6 +--
+ drivers/input/misc/max77693-haptic.c                               |  13 ++++++-
+ drivers/leds/Kconfig                                               |   8 ++++
+ drivers/leds/Makefile                                              |   1 +
+ drivers/leds/leds-max77705.c                                       | 275 ++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/mfd/Kconfig                                                |  13 +++++++
+ drivers/mfd/Makefile                                               |   1 +
+ drivers/mfd/max77705.c                                             | 182 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ drivers/mfd/simple-mfd-i2c.c                                       |  11 ++++++
+ drivers/power/supply/Kconfig                                       |   6 +++
+ drivers/power/supply/Makefile                                      |   1 +
+ drivers/power/supply/max77705_charger.c                            | 581 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/mfd/max77693-common.h                                |   4 +-
+ include/linux/mfd/max77705-private.h                               | 195 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ include/linux/power/max77705_charger.h                             | 195 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+ 18 files changed, 1699 insertions(+), 5 deletions(-)
+---
+base-commit: b4a95b8fd3e67c1222c76bdd1078d43c9a11d132
+change-id: 20240617-starqltechn_integration_upstream-bc86850b2fe3
 
-Peng Fan (2):
-      pmdomain: imx8m[p]-blk-ctrl: Suppress bind attrs
-      pmdomain: imx-gpcv2: Suppress bind attrs
+Best regards,
+-- 
+Dzmitry Sankouski <dsankouski@gmail.com>
 
-Sudeep Holla (1):
-      pmdomain: arm: scmi_pm_domain: Send an explicit request to set the current state
-
-Ulf Hansson (2):
-      pmdomain: Merge branch fixes into next
-      pmdomain: Merge branch fixes into next
-
- .../bindings/power/domain-idle-state.yaml          |   5 +
- drivers/cpuidle/cpuidle-psci-domain.c              |   1 +
- drivers/pmdomain/arm/scmi_pm_domain.c              |   8 ++
- drivers/pmdomain/core.c                            |  15 ++-
- drivers/pmdomain/imx/gpcv2.c                       |   2 +
- drivers/pmdomain/imx/imx8m-blk-ctrl.c              |   1 +
- drivers/pmdomain/imx/imx8mp-blk-ctrl.c             |   1 +
- drivers/pmdomain/mediatek/Kconfig                  |  12 ++
- drivers/pmdomain/mediatek/Makefile                 |   8 ++
- drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c    | 144 +++++++++++++++++++++
- drivers/pmdomain/ti/ti_sci_pm_domains.c            |  81 ++++++++++++
- include/linux/pm_domain.h                          |   1 +
- 12 files changed, 276 insertions(+), 3 deletions(-)
- create mode 100644 drivers/pmdomain/mediatek/airoha-cpu-pmdomain.c
 
