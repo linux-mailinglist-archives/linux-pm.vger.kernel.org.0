@@ -1,221 +1,409 @@
-Return-Path: <linux-pm+bounces-20940-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20941-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2784A1B509
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 12:53:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9DA9FA1B7BC
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 15:18:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1485616CCB9
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 11:53:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80F45188E019
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 14:18:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3C0E219E82;
-	Fri, 24 Jan 2025 11:53:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9540286354;
+	Fri, 24 Jan 2025 14:18:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HURcme60"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ua1-f45.google.com (mail-ua1-f45.google.com [209.85.222.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3016E4A1D;
-	Fri, 24 Jan 2025 11:53:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB3784317E;
+	Fri, 24 Jan 2025 14:18:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737719600; cv=none; b=ZlHlE+nA4E8IenqZIFecUnsTjPKY7rHy53Ys8QLse+tIVjFw6tpGxlqtuR3gU/9ngSml0yeZ9dXh9mQHiF0ECTorParXNsYFZz/zaqARjEszOfT3PrBD4NWjrobhhLCYP/32O81QEnqGqmAQG/cNHQVUDO7JGUDo5CIB08MbZQI=
+	t=1737728312; cv=none; b=q9xCGUt0tu1CKFGGS1aMhzSYAsRawH8R8FhSOqkP4QPFJKL4oXlZCQKv9vitCl6YpE93sdGUNAwiJxQCPRWyNqsq7oM0Ivy+KsxH0ZxcHCDk4PhIaUnxEx9rP/UUfpeY7AoEey8l+Rt6LFx4RamK1I4gMSn9kL4GSY/N/d9+HQQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737719600; c=relaxed/simple;
-	bh=nukl0AS0H3HcVJPLvvuFUjSXOWJ8ZHCgAEM1ia0cFWE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fLlVqdce1RX8ZdgDMHjCXQJ9Mq6tebL8ET4olLWdXxnxqIgcvK8PWiTayFJCASXVGpGTKlMHor/3lusRQt0hNADQV2j0XyWoc8IlGpA15w1zoYtU8PqorBHLzKdU6bdRc9QcP1X57IQ1J1OM1Hq2bADCIpg1iUb6b53jxGpKkJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ua1-f45.google.com with SMTP id a1e0cc1a2514c-85c436db302so1027527241.0;
-        Fri, 24 Jan 2025 03:53:17 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737719596; x=1738324396;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=RqDzgxf1kvCyI/cu6hM536XE35QQW+U62tk2dF7KKTM=;
-        b=EJ9odGkqQoWhkSOW51TGNKgNkg4sqza+0buW2WOd+3zdueGhWbhXn1ybqclazhzMWB
-         MSzSFVveq+Ky/cHXN9DLU1T5ZEdhVE5E1afTqNR9FxGtl2Z9qIJbaaEfrNZSXkjVDPIG
-         dp2i6uect2UocZWm2mXGQ+vk99y0fXT4jQBO8ihEG3+DvjCuAXRL9StAk2As7gLxQHVy
-         Pai8VhLp81u7BnN6WHb+oVpoEncQggAibfdbogAMeof8Si8iJeI4bOM0ruBnz6sSmkRh
-         UE+PM/h/XVnI0/1QztTNkuZrAjPeU6UAWGwgzFEPNLJ6iNLlNxk0mgJ8t2FNSChTk1Y2
-         AK6A==
-X-Forwarded-Encrypted: i=1; AJvYcCV7Bx9+xqf2Iga8xUPAnYBi5NQQqZ37o1P8xiHcEllz9cfFJ3grMJpzV2uo2tnY6m21IKcnXR65uf4=@vger.kernel.org, AJvYcCXJ+YJWm0T6D2gqMBB2Xk+iXDS82bDVcenO7SBgUeBP3OlEy7tm4eLlBGn06lY6Sjq6axBTASRQgjVf225Bj0vVMt0=@vger.kernel.org, AJvYcCXjuR/T6e/v56JRlc/9nTnqkVbtMWyXihA1z4tpiB0eqdBUkqLCoQ8KsXglvu1XBSXl0K5j19HA2X6W@vger.kernel.org
-X-Gm-Message-State: AOJu0YyexskRtsWiQTJHuLnslbeaiq0FYsMGd9hR3bvUSqHqeRTgi/Bg
-	lQV+Bnz4pnvw7kUflY3z+87WodDcqtAVB20eecu8oRcvWyVvJXZ9pFqM1F26
-X-Gm-Gg: ASbGncucX+9Nnb+XOkj96jYoC8rKZPGOHfZvUBXDCj39rcATce6UIkpWROjELgXi+Bw
-	NVGpOw5jzw/JzRnHXYQ47afcbz18zBGGhuVbh7i3mdEfhWnYCZxheaEFT6SXaP3rixiF4+4Knsf
-	TUJSNi6iiKRlkn6xYVnPqU9qqWPcay013jcCbv4jTHGfXfJ7q/oeTpEuJOxMiMrFwOuVM+1KGeG
-	g4in9eJeF59U9FWdbVOipDkwDSXZ0h/lYCVTvMzqJZfufJHb2r5nxZdR+1LS085XgRNr1tkEUGj
-	E/QmlDz+u/A0kMecdSRBlfJ0v5zb9HRFZ8D3dI5CI2M=
-X-Google-Smtp-Source: AGHT+IH6efQPim/4GXer4SJAkTTE3rxMTt6G/fvb6D44Gf1ydYJVFZs0PdOCi0+VM8qunIg0lvuR3A==
-X-Received: by 2002:a05:6102:1085:b0:4af:f1c6:af04 with SMTP id ada2fe7eead31-4b709cd1cc4mr2254013137.8.1737719596354;
-        Fri, 24 Jan 2025 03:53:16 -0800 (PST)
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
-        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4b709996756sm376536137.26.2025.01.24.03.53.16
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 24 Jan 2025 03:53:16 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4aff04f17c7so1937273137.0;
-        Fri, 24 Jan 2025 03:53:16 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUpIr5TFvYWB9KH7H8j5pMavkYRY6z/1WOHN7TbWf/1CVeaGc4r10kuTI5lB/g5MtzvWAaNO0/2OFtpZJtD7tKevBw=@vger.kernel.org, AJvYcCUvJdX2vGkNxOOb2Ny81sQKzpI4Q3zJuoaN7eKI7uvsLupUYP9dCR6eqiy0LSmAEN7Hp53/2gxwvdQ=@vger.kernel.org, AJvYcCWzaKhDvfznjIi8TUqvOLyBKX1SbASLsSidD+xTwrb1HmtC/jIE9eZdhpsNzS79ECSP/NF4H0KUuDv7@vger.kernel.org
-X-Received: by 2002:a67:e2ca:0:b0:4af:57df:8697 with SMTP id
- ada2fe7eead31-4b709d0b4f6mr2410290137.10.1737719595958; Fri, 24 Jan 2025
- 03:53:15 -0800 (PST)
+	s=arc-20240116; t=1737728312; c=relaxed/simple;
+	bh=M/VPdcE0C/7q3pYsaP0muz7Dbg7CDuXeXmvJvHrsiQQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=pDYjIkls/abpLRyaHA0Mdg+mkBJzjb/nHscEY5vXVyg8Q1EYvThvk7L8rPxClhja30MW7QpqaHfOOvu0curJlsgm4WbD/XbmKPNI8U0WPNwYRvKPX45kX/PEVmYM+fhKcjzmCPBn1hhpFy/MmKE3uVsDHRqPJ+k/9CvsQ6cQw6o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HURcme60; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1737728311; x=1769264311;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=M/VPdcE0C/7q3pYsaP0muz7Dbg7CDuXeXmvJvHrsiQQ=;
+  b=HURcme60a5C1ifHWsQ/chlBO6ii7PPjuLexUZ4+A0wjTcrPN0Ryqoldl
+   RCTfUfbBcQqCRXHSua9VHH4gs0zBZ11uswAsm0jsXDwUQIw/8z0SMctWV
+   2XUanhSOfL62lSOBebn/a2kHjcTfusd/c72oGVBCvg2JzheX5FSbzLmfS
+   BJBX+WR0DmLs1nEljQkYWm3H3w6mpMloqIkOWH9lW37TvGg4nE5l7IlgV
+   WLeRj1MkdFBPZCpM+66LbwyPQrYvz8sfV+AXRWRv2DxVsXHfnnJtMsgbt
+   BM+xZWxuI2g2YGrrieATf9DJGYwF8mK7oFHvNR6iNc8Ug1HM9grT8hXZ7
+   A==;
+X-CSE-ConnectionGUID: IOq+alAnTZCYs6vvRzGDhw==
+X-CSE-MsgGUID: DnY7EdzYSbW27Ch54RQOTw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11325"; a="37961297"
+X-IronPort-AV: E=Sophos;i="6.13,231,1732608000"; 
+   d="scan'208";a="37961297"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 06:18:30 -0800
+X-CSE-ConnectionGUID: +jz/2B9xReyZes9X90f8qQ==
+X-CSE-MsgGUID: iVUFuWKoQdKLMqfaDPqGoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="131078574"
+Received: from spandruv-desk.jf.intel.com ([10.54.75.16])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Jan 2025 06:18:28 -0800
+Message-ID: <bf3d232eef124080eb0482ff1b43c17739a1c50b.camel@linux.intel.com>
+Subject: Re: [PATCH v4 6/6] cpufreq: CPPC: Support for autonomous selection
+ in cppc_cpufreq
+From: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>
+To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>, Mario Limonciello	
+ <mario.limonciello@amd.com>, Pierre Gondois <pierre.gondois@arm.com>, 
+ Russell Haley <yumpusamongus@gmail.com>, rafael@kernel.org,
+ lenb@kernel.org, robert.moore@intel.com, 	viresh.kumar@linaro.org
+Cc: acpica-devel@lists.linux.dev, linux-acpi@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linuxarm@huawei.com, 	jonathan.cameron@huawei.com, gautham.shenoy@amd.com,
+ ray.huang@amd.com, 	zhanjie9@hisilicon.com, lihuisong@huawei.com,
+ hepeng68@huawei.com, 	fanghao11@huawei.com
+Date: Fri, 24 Jan 2025 06:18:28 -0800
+In-Reply-To: <0c511da2-6a4a-4fa2-9d82-da45d1afe346@huawei.com>
+References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
+	 <20250113122104.3870673-7-zhenglifeng1@huawei.com>
+	 <21654032-a394-4da9-8ee9-d7cb9df8c855@gmail.com>
+	 <6909eef3-20aa-4341-9177-a42323a0d5c6@huawei.com>
+	 <270a1cce-8afe-497a-b30b-56157d75a863@amd.com>
+	 <0705775a-1040-4564-b97b-2ed397803723@huawei.com>
+	 <256a7620-2d21-4474-b64d-b1e8effbc975@arm.com>
+	 <32d084f3-f114-420e-affa-2f7ba107de0d@amd.com>
+	 <eadd291e-c797-4d7d-b1f9-f8778fa58b23@huawei.com>
+	 <6267261b-4e4a-475f-b17d-5473d72b2c2a@linux.intel.com>
+	 <9f5f8181-7d0e-415d-b473-0e3c6601ccc3@amd.com>
+	 <0c511da2-6a4a-4fa2-9d82-da45d1afe346@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 (3.54.2-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1728377971.git.geert+renesas@glider.be> <CAMuHMdXsmAqQL+2+D_y+u1z4nn8JO+xF-mq6wWJ0pAH58n5Wiw@mail.gmail.com>
- <b273599f-8653-4e98-ac64-09c91b0a1592@arm.com> <CAMuHMdUYnTRDHRdWYHBdJ3hNBKOXBtRMOsu1NiJFET7P-+zc4g@mail.gmail.com>
- <96d1f356-b36b-4c14-bdd5-c38836bac418@arm.com> <CAMuHMdW25MC-RoCw72_EJ22e4Ae36N1CM8a-r=r7e=kA2-AgHA@mail.gmail.com>
- <CAMuHMdUoEA0W_1jmUPZ48Zi7N1wbo435-LvAf35O=EvYvO6KDQ@mail.gmail.com> <CAMuHMdXUhqdSCvsDbqu0To8psuBuWpnZtqy+PRTcVqdFeQ2rYQ@mail.gmail.com>
-In-Reply-To: <CAMuHMdXUhqdSCvsDbqu0To8psuBuWpnZtqy+PRTcVqdFeQ2rYQ@mail.gmail.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 24 Jan 2025 12:53:03 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdWXJuTg-B9tboCgWCjot3iWj-HdLLNot2kRL2bTc-8UBw@mail.gmail.com>
-X-Gm-Features: AWEUYZn2aZ5H9gU6vNkj9rT5bd5uwgOy5qONQEwhzWJT4eBOQW7AUPGaRnyNv0w
-Message-ID: <CAMuHMdWXJuTg-B9tboCgWCjot3iWj-HdLLNot2kRL2bTc-8UBw@mail.gmail.com>
-Subject: Re: [PATCH/RFC 0/2] arm64: dts: renesas: Re-add voltages to OPP tables
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: Magnus Damm <magnus.damm@gmail.com>, 
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, linux-pm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-Hi Lukasz,
-
-On Tue, Dec 10, 2024 at 3:28=E2=80=AFPM Geert Uytterhoeven <geert@linux-m68=
-k.org> wrote:
-> On Wed, Nov 13, 2024 at 5:58=E2=80=AFPM Geert Uytterhoeven <geert@linux-m=
-68k.org> wrote:
-> > On Mon, Nov 4, 2024 at 4:15=E2=80=AFPM Geert Uytterhoeven <geert@linux-=
-m68k.org> wrote:
-> > > On Mon, Oct 28, 2024 at 2:41=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.=
-com> wrote:
-> > > > On 10/28/24 11:34, Geert Uytterhoeven wrote:
-> > > > > On Fri, Oct 25, 2024 at 5:40=E2=80=AFPM Lukasz Luba <lukasz.luba@=
-arm.com> wrote:
-> > > > >> On 10/22/24 14:36, Geert Uytterhoeven wrote:
-> > > > >>> On Tue, Oct 8, 2024 at 11:14=E2=80=AFAM Geert Uytterhoeven
-> > > > >>> <geert+renesas@glider.be> wrote:
-> > > > >>>> When CONFIG_ENERGY_MODEL=3Dy, an error is printed on RZ/G2E an=
-d R-Car E3:
-> > > > >>>>
-> > > > >>>>       cpu cpu0: EM: invalid perf. state: -22
-> > > > >>>>
-> > > > >>>> This happens because the Operating Points Parameters tables do=
- not list
-> > > > >>>> voltages, as they are all identical.  Previously, it was assum=
-ed they
-> > > > >>>> were optional, and unused, when none of the CPU nodes is tied =
-to a
-> > > > >>>> regulator using the "cpu-supply" property.  This assumption tu=
-rned out
-> > > > >>>> to be incorrect, causing the reported error message.
-> > > > >>>>
-> > > > >>>> This RFC patch series fixes this by adding the missing voltage=
-s.
-> > > > >>>>
-> > > > >>>> Note that the Energy Model calculates energy efficiency by div=
-iding the
-> > > > >>>> (estimated) CPU power consumption by CPU core clock frequency.=
-  When all
-> > > > >>>> voltages have the same value, the former is proportional to cl=
-ock
-> > > > >>>> frequency, and energy efficiency becomes a constant.  Hence al=
-l
-> > > > >>>> operating points are considered to have the same efficiency, a=
-nd the
-> > > > >>>> Energy Model always picks the one with the highest clock rate =
-(see also
-> > > > >>>> [1]).
-> > > > >>>>
-> > > > >>>> Alternatively, the Energy Model could be changed to silently i=
-gnore OPP
-> > > > >>>> tables with missing frequencies.  IMHO this is not an unusual =
-case.
-> > > > >>>>
-> > > > >>>> Which approach should be taken?
-> > > > >>>> Thanks for your comments!
-> > > > >>>
-> > > > >>> Any comments from the Energy Model and PM people?
-> > > > >>
-> > > > >> My apologies for delay.
-> > > > >>
-> > > > >> So you had issue with bogus Voltage values and removed them.
-> > > > >>
-> > > > >> There is another way to setup EM properly, via DT:
-> > > > >> "opp-microwatt" [1].
-> > > > >>
-> > > > >> That micro watt value won't confuse other subsystems, like
-> > > > >> your regulator fwk. It will only be used by the EM fwk.
-> > > > >>
-> > > > >> This would be an alternative to your voltage values.
-> > > > >> Sounds better to you?
-> > > > >
-> > > > > For opp-microwatt, I do need to know the actual power consumption
-> > > > > of the core, right?
-> > > >
-> > > > Correct. You can try to derived that in a way you did and put below=
-.
-> > > > Although, Dhrystone is a synthetic micro-benchmark with small
-> > > > impact to data caches, so it will not use much power.
-> > >
-> > > Do you have a suggestion for a better load test? stress-ng?
-> > >
-> > > > > Full system power consumption while running the in-kernel
-> > > > > Dhrystones benchmark:
-> > > > >
-> > > > > 800 MHz: avg 4972,55 mW, stdef 20,474 mW
-> > > > > 1000 MHz: avg 5025,93 mW, stdef 18,644 mW
-> > > > > 1200 MHz: avg 5059,63 mW, stdef 15,425 mW
-> > > >
-> > > > Right. From those power values can be try to derive the
-> > > > 'CPU only power' values - assuming only one core was
-> > > > running the test.
-> > > >
-> > > > AFAIU you don't have proper DVFS due to missing voltage scaling.
-> > >
-> > > Indeed.
-> > >
-> > > > Therefore...
-> > > > Out of that I got these CPU power values:
-> > > > 800MHz -> 174mW
-> > >
-> > > =3D> 217.5 =C2=B5W/MHz
-> > >
-> > > > 1000MHz -> 212mW
-> > >
-> > > =3D> 212 =C2=B5W/MHz
-> > >
-> > > > 1200MHz -> 261mW
-> >
-> > BTW, how did you get from my avg mW values above to your CPU power mW
-> > values? I seem to be missing something...
->
-> Ping...
-
-Gentle ping.
-Thanks!
-
-Gr{oetje,eeting}s,
-
-                        Geert
-
---=20
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
-.org
-
-In personal conversations with technical people, I call myself a hacker. Bu=
+On Fri, 2025-01-24 at 11:53 +0800, zhenglifeng (A) wrote:
+> On 2025/1/24 1:05, Mario Limonciello wrote:
+>=20
+> > On 1/23/2025 10:46, Srinivas Pandruvada wrote:
+> > >=20
+> > > On 1/20/25 18:42, zhenglifeng (A) wrote:
+> > > > On 2025/1/21 1:44, Mario Limonciello wrote:
+> > > >=20
+> > > > > On 1/20/2025 08:49, Pierre Gondois wrote:
+> > > > > >=20
+> > > > > > On 1/20/25 04:15, zhenglifeng (A) wrote:
+> > > > > > > On 2025/1/17 22:30, Mario Limonciello wrote:
+> > > > > > >=20
+> > > > > > > > On 1/16/2025 21:11, zhenglifeng (A) wrote:
+> > > > > > > > > On 2025/1/16 19:39, Russell Haley wrote:
+> > > > > > > > >=20
+> > > > > > > > > > Hello,
+> > > > > > > > > >=20
+> > > > > > > > > > I noticed something here just as a user casually
+> > > > > > > > > > browsing the mailing list.
+> > > > > > > > > >=20
+> > > > > > > > > > On 1/13/25 6:21 AM, Lifeng Zheng wrote:
+> > > > > > > > > > > Add sysfs interfaces for CPPC autonomous
+> > > > > > > > > > > selection in the cppc_cpufreq
+> > > > > > > > > > > driver.
+> > > > > > > > > > >=20
+> > > > > > > > > > > Signed-off-by: Lifeng Zheng
+> > > > > > > > > > > <zhenglifeng1@huawei.com>
+> > > > > > > > > > > ---
+> > > > > > > > > > > =C2=A0=C2=A0=C2=A0 .../ABI/testing/sysfs-devices-syst=
+em-cpu=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> > > > > > > > > > > |=C2=A0 54 +++++++++
+> > > > > > > > > > > =C2=A0=C2=A0=C2=A0 drivers/cpufreq/cppc_cpufreq.c=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0
+> > > > > > > > > > > | 109 +++++++ ++++ +++++++
+> > > > > > > > > > > =C2=A0=C2=A0=C2=A0 2 files changed, 163 insertions(+)
+> > > > > > > > > > >=20
+> > > > > > > > > > > diff --git a/Documentation/ABI/testing/sysfs-
+> > > > > > > > > > > devices-system-cpu b/
+> > > > > > > > > > > Documentation/ABI/testing/sysfs-devices-system-
+> > > > > > > > > > > cpu
+> > > > > > > > > > > index 206079d3bd5b..3d87c3bb3fe2 100644
+> > > > > > > > > > > --- a/Documentation/ABI/testing/sysfs-devices-
+> > > > > > > > > > > system-cpu
+> > > > > > > > > > > +++ b/Documentation/ABI/testing/sysfs-devices-
+> > > > > > > > > > > system-cpu
+> > > > > > > > > > > @@ -268,6 +268,60 @@ Description:=C2=A0=C2=A0=C2=A0 D=
+iscover
+> > > > > > > > > > > CPUs in the same CPU frequency coordination
+> > > > > > > > > > > domain
+> > > > > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 This file is only present if the
+> > > > > > > > > > > acpi-cpufreq or the cppc-cpufreq
+> > > > > > > > > > > =C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 drivers are in use.
+> > > > > > > > > > [...snip...]
+> > > > > > > > > >=20
+> > > > > > > > > > > +What:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0
+> > > > > > > > > > > /sys/devices/system/cpu/cpuX/cpufreq/energy_perf
+> > > > > > > > > > > +Date:=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Octo=
+ber 2024
+> > > > > > > > > > > +Contact:=C2=A0=C2=A0=C2=A0 linux-pm@vger.kernel.org
+> > > > > > > > > > > +Description:=C2=A0=C2=A0=C2=A0 Energy performance pr=
+eference
+> > > > > > > > > > > +
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Read/writ=
+e an 8-bit integer from/to this
+> > > > > > > > > > > file. This file
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 represent=
+s a range of values from 0
+> > > > > > > > > > > (performance preference) to
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0xFF (ene=
+rgy efficiency preference) that
+> > > > > > > > > > > influences the rate of
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 performan=
+ce increase/decrease and the
+> > > > > > > > > > > result of the hardware's
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 energy ef=
+ficiency and performance
+> > > > > > > > > > > optimization policies.
+> > > > > > > > > > > +
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 Writing t=
+o this file only has meaning
+> > > > > > > > > > > when Autonomous Selection is
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 enabled.
+> > > > > > > > > > > +
+> > > > > > > > > > > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 This file=
+ only presents if the cppc-
+> > > > > > > > > > > cpufreq driver is in use.
+> > > > > > > > > > In intel_pstate driver, there is file with near-
+> > > > > > > > > > identical semantics:
+> > > > > > > > > >=20
+> > > > > > > > > > /sys/devices/system/cpu/cpuX/cpufreq/energy_perform
+> > > > > > > > > > ance_preference
+> > > > > > > > > >=20
+> > > > > > > > > > It also accepts a few string arguments and converts
+> > > > > > > > > > them to integers.
+> > > > > > > > > >=20
+> > > > > > > > > > Perhaps the same name should be used, and the
+> > > > > > > > > > semantics made exactly
+> > > > > > > > > > identical, and then it could be documented as
+> > > > > > > > > > present for either
+> > > > > > > > > > cppc_cpufreq OR intel_pstate?
+> > > > > > > > > >=20
+> > > > > > > > > > I think would be more elegant if userspace tooling
+> > > > > > > > > > could Just Work with
+> > > > > > > > > > either driver.
+> > > > > > > > > >=20
+> > > > > > > > > > One might object that the frequency selection
+> > > > > > > > > > behavior that results from
+> > > > > > > > > > any particular value of the register itself might
+> > > > > > > > > > be different, but they
+> > > > > > > > > > are *already* different between Intel's P and E-
+> > > > > > > > > > cores in the same CPU
+> > > > > > > > > > package. (Ugh.)
+> > > > > > > > > Yes, I should use the same name. Thanks.
+> > > > > > > > >=20
+> > > > > > > > > As for accepting string arguments and converting them
+> > > > > > > > > to integers, I don't
+> > > > > > > > > think it is necessary. It'll be a litte confused if
+> > > > > > > > > someone writes a raw
+> > > > > > > > > value and reads a string I think. I prefer to let
+> > > > > > > > > users freely set this
+> > > > > > > > > value.
+> > > > > > > > >=20
+> > > > > > > > > In addition, there are many differences between the
+> > > > > > > > > implementations of
+> > > > > > > > > energy_performance_preference in intel_pstate and
+> > > > > > > > > cppc_cpufreq (and
+> > > > > > > > > amd-pstate...). It is really difficult to explain all
+> > > > > > > > > this differences in
+> > > > > > > > > this document. So I'll leave it to be documented as
+> > > > > > > > > present for
+> > > > > > > > > cppc_cpufreq only.
+> > > > > > > > At least the interface to userspace I think we should
+> > > > > > > > do the best we can to be the same between all the
+> > > > > > > > drivers if possible.
+> > > > > > > >=20
+> > > > > > > > For example; I've got a patch that I may bring up in a
+> > > > > > > > future kernel cycle that adds raw integer writes to
+> > > > > > > > amd-pstates energy_performance_profile to behave the
+> > > > > > > > same way intel-pstate does.
+> > > > > > > I agree that it's better to keep this interface
+> > > > > > > consistent across different
+> > > > > > > drivers. But in my opinion, the implementation of
+> > > > > > > intel_pstate
+> > > > > > > energy_performance_preference is not really nice. Someone
+> > > > > > > may write a raw
+> > > > > > > value but read a string, or read strings for some values
+> > > > > > > and read raw
+> > > > > > > values for some other values. It is inconsistent. It may
+> > > > > > > be better to use
+> > > > > > > some other implementation, such as seperating the
+> > > > > > > operations of r/w strings
+> > > > > > > and raw values into two files.
+> > > > > > I agree it would be better to be sure of the type to expect
+> > > > > > when reading the
+> > > > > > energy_performance_preference file. The epp values in the
+> > > > > > range 0-255 with 0
+> > > > > > being the performance value for all interfaces.
+> > > > > >=20
+> > > > > > In the current epp strings, it seems there is a big gap
+> > > > > > between the PERFORMANCE
+> > > > > > and the BALANCE_PERFORMANCE strings. Maybe it would be good
+> > > > > > to complete it:
+> > > > > > EPP_PERFORMANCE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x00
+> > > > > > EPP_BALANCE_PERFORMANCE=C2=A0=C2=A0=C2=A0 0x40=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 // state value changed
+> > > > > > EPP_BALANCE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0x80=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0 // new state
+> > > > > > EPP_BALANCE_POWERSAVE=C2=A0=C2=A0=C2=A0 0xC0
+> > > > > > EPP_POWERSAVE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0xFF
+> > > > > >=20
+> > > > > > NIT: The mapping seems to be slightly different for
+> > > > > > intel_pstate and amd-pstate
+> > > > > > currently:
+> > > > > > drivers/cpufreq/amd-pstate.c
+> > > > > > #define AMD_CPPC_EPP_PERFORMANCE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0 0x00
+> > > > > > #define AMD_CPPC_EPP_BALANCE_PERFORMANCE=C2=A0=C2=A0=C2=A0 0x80
+> > > > > > #define AMD_CPPC_EPP_BALANCE_POWERSAVE=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0 0xBF
+> > > > > > #define AMD_CPPC_EPP_POWERSAVE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 0xFF
+> > > > > >=20
+> > > > > > arch/x86/include/asm/msr-index.h
+> > > > > > #define HWP_EPP_PERFORMANCE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 0x00
+> > > > > > #define HWP_EPP_BALANCE_PERFORMANCE=C2=A0=C2=A0=C2=A0 0x80
+> > > > > > #define HWP_EPP_BALANCE_POWERSAVE=C2=A0=C2=A0=C2=A0 0xC0=C2=A0=
+=C2=A0 <------
+> > > > > > Different from AMD_CPPC_EPP_BALANCE_POWERSAVE
+> > > > > > #define HWP_EPP_POWERSAVE=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0 0xFF
+> > > > > >=20
+> > > > > > > I think it's better to consult Rafael and Viresh about
+> > > > > > > how this should
+> > > > > > > evolve.
+> > > > > > Yes indeed
+> > > > > Maybe it's best to discuss what the goal of raw EPP number
+> > > > > writes is to decide what to do with it.
+> > > > >=20
+> > > > > IE in intel-pstate is it for userspace to be able to actually
+> > > > > utilize something besides the strings all the time?=C2=A0 Or is i=
 t
-when I'm talking to journalists I just say "programmer" or something like t=
-hat.
-                                -- Linus Torvalds
+> > > > > just for debugging to find better values for strings in the
+> > > > > future?
+> > > > >=20
+> > > > > If the former maybe we're better off splitting to
+> > > > > 'energy_performance_preference' and
+> > > > > 'energy_performance_preference_int'.
+> > > > >=20
+> > > > > If the latter maybe we're better off putting the integer
+> > > > > writes and reads into debugfs instead and making
+> > > > > 'energy_performance_preference' return -EINVAL while a non-
+> > > > > predefined value is in use.
+> > >=20
+> > > In Intel case EPP values can be different based on processor. In
+> > > some case they they end up sharing the same CPU model. So strings
+> > > are not suitable for all cases. Also there is different
+> > > preference of EPP between Chrome systems and non chrome distro.
+> > > For example Chrome has some resource manager which can change and
+> > > same on Intel distros with LPMD.
+> > >=20
+> >=20
+> > Thanks for confirming it is intentional and changing it would break
+> > existing userspace.
+> >=20
+> > And FWIW even in Windows there are more than 4 situational values
+> > used like we have in Linux today.
+> >=20
+> > As the status quo is there I personally feel that we should do the
+> > exact same for other implementation of
+> > energy_performance_preference.
+>=20
+> I still don't think this implementation is nice, for the following
+> reasons:
+>=20
+> 1. Users may write raw value but read string. It's odd.
+>=20
+> 2. Sometimes a raw value is read and sometimes a character string is
+> read.
+> The userspace tool needs to adapt this.
+>=20
+> 3. Reading and writing EPP strings is not really general in driver.
+> It is
+> more reasonable to use the userspace tool to implement it.
+>=20
+> In order not to break existing userspace, I'll rename the file to
+> 'energy_performance_preference_int' or
+> 'energy_performance_preference_val'
+> in cppc_cpufreq and only support reading and writing raw value. As
+> for
+> accepting string arguments, it's not necessary for cppc_cpufreq for
+> now.
+> It's easy to add this feature but hard to remove, so I'll leave it to
+> the
+> future if it is really needed.
+>=20
+> As for amd-pstate and intel_pstate, you can decide how
+> energy_performance_preference should evolve. But I strongly recommend
+> splitting it.
+
+No. User space can deal with this already. Atleast this has one
+interface. If you split you need to keep them consistent. You can write
+a raw value  to new attribute and then can read a string from the other
+attribute, which means different.
+
+This is not the only place where strings and raw values can be written
+in sysfs. Also true for energy_perf_bias.
+
+
+Thanks,
+Srinivas
+
+
+
+>=20
+> Regards,
+>=20
+> Lifeng
+>=20
+> >=20
+> > >=20
+> > > Thanks,
+> > >=20
+> > > Srinivas
+> > >=20
+> > >=20
+> > > > I think it's the former.
+> > > >=20
+> > > > I added the author of the patch that allows raw energy
+> > > > performance
+> > > > preference value in intel_pstate to ask about what the goal is
+> > > > and if this
+> > > > would be ok to do the modification mentioned above.
+> > > >=20
+> > > > To see the patch from
+> > > > https://lore.kernel.org/=C2=A0all/20200626183401.1495090-3-srinivas=
+.pandruvada@linux.intel.c
+> > > > om/
+> > > >=20
+> > > > Anyway, the purpose of this patch is to allow users write and
+> > > > read raw EPP
+> > > > number. So maybe I can just rename the file to
+> > > > 'energy_performance_preference_int'?
+> > > >=20
+> >=20
+>=20
+
 
