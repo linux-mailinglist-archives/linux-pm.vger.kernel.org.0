@@ -1,47 +1,47 @@
-Return-Path: <linux-pm+bounces-20907-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20908-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A0C22A1AF58
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 05:15:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AF10A1AF8E
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 05:44:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D6443A1639
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 04:15:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D610167E99
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 04:44:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27A971D63E0;
-	Fri, 24 Jan 2025 04:15:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04B971D6DBB;
+	Fri, 24 Jan 2025 04:43:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="Vpm4VR+I"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="R7/V3+qS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 72D181D5CEB;
-	Fri, 24 Jan 2025 04:15:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5F5881DA622;
+	Fri, 24 Jan 2025 04:43:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737692133; cv=none; b=T5X23/zbPXVGwIUtkpV7SqTe5098kNJfzq8ebdQqaBj4YQlg4loPq//XnPd1V18l6mgXoA4j+SiPWbADJIypy7j+NBxyfL1Eu0h5OYIo2qw2hlbdzOawJN7GhIxhkaoqvxNzvnuBfIWb6OXfAxRTDu501us8Qqz7dfuf0NDqWiY=
+	t=1737693817; cv=none; b=bOwT2T3jsLqPPC1aFaEbqvLWKCnnAytROiYHqmVCfdabCbrpVPOGJryst3I9IRad35Ad4G0zSi/lZl9flo/stIjdlK3YSy/jmRjF8NHafm3KqwGOj79UFywpxcploUhXQKZ4pRkhRmDMJW+VaEZ6psZSkXv4Vu9NNDIgpApkULA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737692133; c=relaxed/simple;
-	bh=EWaUNnruHpal+zW0Tc0ycVqyE0sHBEGQZtpuE9Jg4dk=;
+	s=arc-20240116; t=1737693817; c=relaxed/simple;
+	bh=oXWlxy89SZ6kqYejlFPHHR+ILJatGaXSItW71m23ypA=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Kw2fqJL3N8N3MT+hHv9lKC9O4+7MmflThlW+98R9EDJwjhWipoAc6t0x7UObhieCfID5I3i4P45NCaV6qsIOBNV55cJwRmw0RxwIDSg7Z40gf0En1aRrs4bcWI03bFutYgZCUuKWortcf2QKhVF/kOUKVLP3RyUu20SrVQKZIns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=Vpm4VR+I; arc=none smtp.client-ip=13.77.154.182
+	 In-Reply-To:Content-Type; b=E22m00YVOpClDGGZgj9LciJN5w/SM2bB4IU+Gt7Zjvuv8uh9ZNP70sdc9/HQ8OaNr1rNqUb4FmsVwz51/yH03fY85eroEHvoXgyyaKh7jvSzcj8vlcebtkxHDQAliMyFekLfETSRsrA3qEt4P33MIcCsosl8y/PJe/frhUcTwx4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=R7/V3+qS; arc=none smtp.client-ip=13.77.154.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.79.193.133] (unknown [4.194.122.170])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 85E492109A4F;
-	Thu, 23 Jan 2025 20:15:21 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 85E492109A4F
+Received: from [100.79.193.133] (unknown [4.194.122.162])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 587782109A4D;
+	Thu, 23 Jan 2025 20:43:32 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 587782109A4D
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1737692125;
-	bh=0p9kCPX0kFOEZOIBaQgiLe2sNq8cghl604dX/e+fCK8=;
+	s=default; t=1737693815;
+	bh=QKFTMq+hnBTZnKp36KmBoZtDRC/OW8f8R/+Z8qZPaAU=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Vpm4VR+InpBq4Y3Eid7fFT5i1qwVtNVR7e5SIEu1yBJ0pkYqSTpqIVFUmmJ5G+2yb
-	 F880cxxnwPG34WnvaV7ir4i7Hx99FBaRKOWMA0xWRV3++8WegzWsTedxU8wpNU8QEd
-	 ELnWB+zMdd0wRR/DFmmhuMUQPCCAEOYWNelOzxiA=
-Message-ID: <7380ab36-9cbb-455f-95ac-36b2a17db434@linux.microsoft.com>
-Date: Fri, 24 Jan 2025 09:45:19 +0530
+	b=R7/V3+qSr0OQfR/J1vW+FSrLbRjpPFu0F+UUsldIlli3fhu6edaCEvHPoQIjwhhlY
+	 WLWF5MECEWqCCx7suk84F0ierfNQ/OqCtdYgJpnCcOLq2tsGWJ6kL26fiY/8h7S5MN
+	 66VOaynimLozQnwQwYi25fSs/hD4evh4QoTRENm4=
+Message-ID: <e78d7ddd-6e49-4b16-a1e5-79558d73ce52@linux.microsoft.com>
+Date: Fri, 24 Jan 2025 10:13:30 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -49,8 +49,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 1/5] cpufreq: Allow arch_freq_get_on_cpu to return an
- error
+Subject: Re: [PATCH v9 4/5] arm64: Provide an AMU-based version of
+ arch_freq_get_on_cpu
 To: Beata Michalska <beata.michalska@arm.com>, linux-kernel@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
  ionela.voinescu@arm.com, sudeep.holla@arm.com, will@kernel.org,
@@ -59,103 +59,202 @@ Cc: sumitg@nvidia.com, yang@os.amperecomputing.com,
  vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
  zhanjie9@hisilicon.com
 References: <20250121084435.2839280-1-beata.michalska@arm.com>
- <20250121084435.2839280-2-beata.michalska@arm.com>
+ <20250121084435.2839280-5-beata.michalska@arm.com>
 Content-Language: en-US
 From: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
-In-Reply-To: <20250121084435.2839280-2-beata.michalska@arm.com>
+In-Reply-To: <20250121084435.2839280-5-beata.michalska@arm.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 
 On 21-01-2025 14:14, Beata Michalska wrote:
-> Allow arch_freq_get_on_cpu to return an error for cases when retrieving
-> current CPU frequency is not possible, whether that being due to lack of
-> required arch support or due to other circumstances when the current
-> frequency cannot be determined at given point of time.
+> With the Frequency Invariance Engine (FIE) being already wired up with
+> sched tick and making use of relevant (core counter and constant
+> counter) AMU counters, getting the average frequency for a given CPU,
+> can be achieved by utilizing the frequency scale factor which reflects
+> an average CPU frequency for the last tick period length.
 >
+> The solution is partially based on APERF/MPERF implementation of
+> arch_freq_get_on_cpu.
+>
+> Suggested-by: Ionela Voinescu <ionela.voinescu@arm.com>
 > Signed-off-by: Beata Michalska <beata.michalska@arm.com>
 > ---
->   arch/x86/kernel/cpu/aperfmperf.c | 2 +-
->   arch/x86/kernel/cpu/proc.c       | 7 +++++--
->   drivers/cpufreq/cpufreq.c        | 8 ++++----
->   include/linux/cpufreq.h          | 2 +-
->   4 files changed, 11 insertions(+), 8 deletions(-)
+>   arch/arm64/kernel/topology.c | 109 +++++++++++++++++++++++++++++++----
+>   1 file changed, 99 insertions(+), 10 deletions(-)
 >
-> diff --git a/arch/x86/kernel/cpu/aperfmperf.c b/arch/x86/kernel/cpu/aperfmperf.c
-> index f642de2ebdac..6cf31a1649c4 100644
-> --- a/arch/x86/kernel/cpu/aperfmperf.c
-> +++ b/arch/x86/kernel/cpu/aperfmperf.c
-> @@ -498,7 +498,7 @@ void arch_scale_freq_tick(void)
+> diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+> index cb180684d10d..5f5738b174c7 100644
+> --- a/arch/arm64/kernel/topology.c
+> +++ b/arch/arm64/kernel/topology.c
+> @@ -17,6 +17,7 @@
+>   #include <linux/cpufreq.h>
+>   #include <linux/init.h>
+>   #include <linux/percpu.h>
+> +#include <linux/sched/isolation.h>
+>   
+>   #include <asm/cpu.h>
+>   #include <asm/cputype.h>
+> @@ -88,18 +89,28 @@ int __init parse_acpi_topology(void)
+>    * initialized.
 >    */
->   #define MAX_SAMPLE_AGE	((unsigned long)HZ / 50)
+>   static DEFINE_PER_CPU_READ_MOSTLY(unsigned long, arch_max_freq_scale) =  1UL << (2 * SCHED_CAPACITY_SHIFT);
+> -static DEFINE_PER_CPU(u64, arch_const_cycles_prev);
+> -static DEFINE_PER_CPU(u64, arch_core_cycles_prev);
+>   static cpumask_var_t amu_fie_cpus;
 >   
-> -unsigned int arch_freq_get_on_cpu(int cpu)
-> +int arch_freq_get_on_cpu(int cpu)
+> +struct amu_cntr_sample {
+> +	u64		arch_const_cycles_prev;
+> +	u64		arch_core_cycles_prev;
+> +	unsigned long	last_scale_update;
+> +};
+> +
+> +static DEFINE_PER_CPU_SHARED_ALIGNED(struct amu_cntr_sample, cpu_amu_samples);
+> +
+>   void update_freq_counters_refs(void)
 >   {
->   	struct aperfmperf *s = per_cpu_ptr(&cpu_samples, cpu);
->   	unsigned int seq, freq;
-> diff --git a/arch/x86/kernel/cpu/proc.c b/arch/x86/kernel/cpu/proc.c
-> index 41ed01f46bd9..d79f5845a463 100644
-> --- a/arch/x86/kernel/cpu/proc.c
-> +++ b/arch/x86/kernel/cpu/proc.c
-> @@ -86,9 +86,12 @@ static int show_cpuinfo(struct seq_file *m, void *v)
->   		seq_printf(m, "microcode\t: 0x%x\n", c->microcode);
+> -	this_cpu_write(arch_core_cycles_prev, read_corecnt());
+> -	this_cpu_write(arch_const_cycles_prev, read_constcnt());
+> +	struct amu_cntr_sample *amu_sample = this_cpu_ptr(&cpu_amu_samples);
+> +
+> +	amu_sample->arch_core_cycles_prev = read_corecnt();
+> +	amu_sample->arch_const_cycles_prev = read_constcnt();
+>   }
 >   
->   	if (cpu_has(c, X86_FEATURE_TSC)) {
-> -		unsigned int freq = arch_freq_get_on_cpu(cpu);
-> +		int freq = arch_freq_get_on_cpu(cpu);
+>   static inline bool freq_counters_valid(int cpu)
+>   {
+> +	struct amu_cntr_sample *amu_sample = per_cpu_ptr(&cpu_amu_samples, cpu);
+> +
+>   	if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
+>   		return false;
 >   
-> -		seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
-> +		if (freq <= 0)
-> +			seq_puts(m, "cpu MHz\t\t: Unknown\n");
-> +		else
-> +			seq_printf(m, "cpu MHz\t\t: %u.%03u\n", freq / 1000, (freq % 1000));
+> @@ -108,8 +119,8 @@ static inline bool freq_counters_valid(int cpu)
+>   		return false;
 >   	}
 >   
->   	/* Cache size */
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 418236fef172..6f45684483c4 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -728,18 +728,18 @@ show_one(cpuinfo_transition_latency, cpuinfo.transition_latency);
->   show_one(scaling_min_freq, min);
->   show_one(scaling_max_freq, max);
+> -	if (unlikely(!per_cpu(arch_const_cycles_prev, cpu) ||
+> -		     !per_cpu(arch_core_cycles_prev, cpu))) {
+> +	if (unlikely(!amu_sample->arch_const_cycles_prev ||
+> +		     !amu_sample->arch_core_cycles_prev)) {
+>   		pr_debug("CPU%d: cycle counters are not enabled.\n", cpu);
+>   		return false;
+>   	}
+> @@ -152,17 +163,22 @@ void freq_inv_set_max_ratio(int cpu, u64 max_rate)
 >   
-> -__weak unsigned int arch_freq_get_on_cpu(int cpu)
-> +__weak int arch_freq_get_on_cpu(int cpu)
+>   static void amu_scale_freq_tick(void)
 >   {
-> -	return 0;
-> +	return -EOPNOTSUPP;
+> +	struct amu_cntr_sample *amu_sample = this_cpu_ptr(&cpu_amu_samples);
+>   	u64 prev_core_cnt, prev_const_cnt;
+>   	u64 core_cnt, const_cnt, scale;
+>   
+> -	prev_const_cnt = this_cpu_read(arch_const_cycles_prev);
+> -	prev_core_cnt = this_cpu_read(arch_core_cycles_prev);
+> +	prev_const_cnt = amu_sample->arch_const_cycles_prev;
+> +	prev_core_cnt = amu_sample->arch_core_cycles_prev;
+>   
+>   	update_freq_counters_refs();
+>   
+> -	const_cnt = this_cpu_read(arch_const_cycles_prev);
+> -	core_cnt = this_cpu_read(arch_core_cycles_prev);
+> +	const_cnt = amu_sample->arch_const_cycles_prev;
+> +	core_cnt = amu_sample->arch_core_cycles_prev;
+>   
+> +	/*
+> +	 * This should not happen unless the AMUs have been reset and the
+> +	 * counter values have not been restored - unlikely
+> +	 */
+>   	if (unlikely(core_cnt <= prev_core_cnt ||
+>   		     const_cnt <= prev_const_cnt))
+>   		return;
+> @@ -182,6 +198,8 @@ static void amu_scale_freq_tick(void)
+>   
+>   	scale = min_t(unsigned long, scale, SCHED_CAPACITY_SCALE);
+>   	this_cpu_write(arch_freq_scale, (unsigned long)scale);
+> +
+> +	amu_sample->last_scale_update = jiffies;
 >   }
 >   
->   static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
+>   static struct scale_freq_data amu_sfd = {
+> @@ -189,6 +207,77 @@ static struct scale_freq_data amu_sfd = {
+>   	.set_freq_scale = amu_scale_freq_tick,
+>   };
+>   
+> +static __always_inline bool amu_fie_cpu_supported(unsigned int cpu)
+> +{
+> +	return cpumask_available(amu_fie_cpus) &&
+> +		cpumask_test_cpu(cpu, amu_fie_cpus);
+> +}
+> +
+> +#define AMU_SAMPLE_EXP_MS	20
+> +
+> +int arch_freq_get_on_cpu(int cpu)
+> +{
+> +	struct amu_cntr_sample *amu_sample;
+> +	unsigned int start_cpu = cpu;
+> +	unsigned long last_update;
+> +	unsigned int freq = 0;
+> +	u64 scale;
+> +
+> +	if (!amu_fie_cpu_supported(cpu) || !arch_scale_freq_ref(cpu))
+> +		return -EOPNOTSUPP;
+> +
+> +retry:
+> +	amu_sample = per_cpu_ptr(&cpu_amu_samples, cpu);
+> +
+> +	last_update = amu_sample->last_scale_update;
+> +
+> +	/*
+> +	 * For those CPUs that are in full dynticks mode, or those that have
+> +	 * not seen tick for a while, try an alternative source for the counters
+> +	 * (and thus freq scale), if available, for given policy: this boils
+> +	 * down to identifying an active cpu within the same freq domain, if any.
+> +	 */
+> +	if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
+> +	    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
+> +		struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> +		int ref_cpu = cpu;
+> +
+> +		if (!policy)
+> +			return -EINVAL;
+> +
+> +		if (!cpumask_intersects(policy->related_cpus,
+> +					housekeeping_cpumask(HK_TYPE_TICK))) {
+> +			cpufreq_cpu_put(policy);
+> +			return -EOPNOTSUPP;
+> +		}
+> +
+> +
+> +		do {
+> +			ref_cpu = cpumask_next_wrap(ref_cpu, policy->cpus,
+> +						    start_cpu, false);
+> +
+> +		} while (ref_cpu < nr_cpu_ids && idle_cpu(ref_cpu));
+> +
+> +		cpufreq_cpu_put(policy);
+> +
+> +		if (ref_cpu >= nr_cpu_ids)
+> +			/* No alternative to pull info from */
+> +			return -EAGAIN;
+> +
+> +		cpu = ref_cpu;
+> +		goto retry;
+
+If you are going to spin a new revision, can you use while loop instead 
+of using goto for looping? This will help improve the readability.
+
+> +	}
+> +	/*
+> +	 * Reversed computation to the one used to determine
+> +	 * the arch_freq_scale value
+> +	 * (see amu_scale_freq_tick for details)
+> +	 */
+> +	scale = arch_scale_freq_capacity(cpu);
+> +	freq = scale * arch_scale_freq_ref(cpu);
+> +	freq >>= SCHED_CAPACITY_SHIFT;
+> +	return freq;
+> +}
+> +
+>   static void amu_fie_setup(const struct cpumask *cpus)
 >   {
->   	ssize_t ret;
-> -	unsigned int freq;
-> +	int freq;
->   
->   	freq = arch_freq_get_on_cpu(policy->cpu);
-> -	if (freq)
-> +	if (freq > 0)
->   		ret = sysfs_emit(buf, "%u\n", freq);
->   	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
->   		ret = sysfs_emit(buf, "%u\n", cpufreq_driver->get(policy->cpu));
-> diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
-> index 7fe0981a7e46..02fd4746231d 100644
-> --- a/include/linux/cpufreq.h
-> +++ b/include/linux/cpufreq.h
-> @@ -1184,7 +1184,7 @@ static inline int of_perf_domain_get_sharing_cpumask(int pcpu, const char *list_
->   }
->   #endif
->   
-> -extern unsigned int arch_freq_get_on_cpu(int cpu);
-> +extern int arch_freq_get_on_cpu(int cpu);
->   
->   #ifndef arch_set_freq_scale
->   static __always_inline
-
-Looks good to me.
-
-Reviewed-by: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
-
+>   	int cpu;
 
