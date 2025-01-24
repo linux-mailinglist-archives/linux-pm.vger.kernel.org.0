@@ -1,87 +1,87 @@
-Return-Path: <linux-pm+bounces-20929-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20930-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CA6ACA1B238
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 10:01:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ACF26A1B22F
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 10:01:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 116773AEACF
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 09:01:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DC927A19D5
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 09:01:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 696C521CA1F;
-	Fri, 24 Jan 2025 08:59:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE6121ADA3;
+	Fri, 24 Jan 2025 08:59:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="vMXJxbCw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qFutLe9o"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6D2C21CA12
-	for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 08:59:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC0121CFFD
+	for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 08:59:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737709153; cv=none; b=pMSROrwgDfynAFURlDHlcYmhfqYA5XvjpLXdlTpYULaXtD6pQnIzvmA98GzgzLYD6VJAFcWBLccyJAF1NI0oFL+LIC7l4T3aAs4UsHZZKt4LPctj4JW3TOeBqAphSCqij9XeeBXvVYTso2yCeotGd6yAgPJgiFdQXmQLGn7SiWU=
+	t=1737709157; cv=none; b=pn6KILGMRrcfsI/kVc9XWLlyQbiRkogA5O4GVRTCZjASnDO5N9vUfVCKNbjiKGHmdKv9G9Z9OSe8sQccwAemYcndm9PSbliJKTb9sIUCl6vUyg+ycZyGxFLORRMnOHt/5bKsDt4wCo8jdLHa/qeAf0/2C8aq3KHKmxleIrcf0aY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737709153; c=relaxed/simple;
-	bh=vHiYt7vyvuTJG+6H+4GLHJZ9r0KvgIZnQowmLqEx3JQ=;
+	s=arc-20240116; t=1737709157; c=relaxed/simple;
+	bh=Gx5tAkuM3tQafFNc5Mhe6PmrPMAavPP6iPSppEjU5/8=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=AbExSrrXHrakyxcNanZybfo9xK8uur6t3aPjrJ9X9/kk9pIEIEVCEuOv7/FYbAF+1SUVp5Hh3j3jP1LZZu02JyPiCR0biEThWy+PdvbDPA5VriieVPBmwdWxW0veDbpxpJM9Gi3M0uWvi/bsvCJyziCcEIqUeNB6LlXN4WX7qJY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=vMXJxbCw; arc=none smtp.client-ip=209.85.214.177
+	 MIME-Version; b=ryxmErbkjbMb8rF1PD/wKREXUoFyxCn3LuM7NOMNMEr+AsO1CzFeUoSPzDEi1kVq3gfTYFINc+CbPlnc/xpgG/GZTk4Ylkr9eMMwuXmB5lwm4FrvIJ15pXsHF4+m/GW6IGAabF/eNLlmsrvWK2TSxiONbb4g0lAe6/Izn3h/61Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qFutLe9o; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2166022c5caso29276735ad.2
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 00:59:11 -0800 (PST)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2f43da61ba9so2663009a91.2
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 00:59:15 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737709151; x=1738313951; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1737709155; x=1738313955; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=p945ECaq9P80WMODWEJG85jptgTxpTyGy7Go/5N1kDQ=;
-        b=vMXJxbCwpdu0D4J7HFbHuTsGyOEuW/jHwOqAFg58kT5KLWBVRlfr36X0LgpcOq21UE
-         eKVODHRbBC7G8mRuJOwS0dHI2qksLilfmpzjzKwOOcrOmmgt3PJpu+tGLIowVVkZix2M
-         BERiEbIHZLawOEIHZeYHh1RKlVc6ng2qqhqkNdIAHbPmmvrv7s+caBKqWP7h1de/YQWm
-         P7boG/Z1K/bThOT5hnrRJu3Xqmd+dxobrbgy680FE7+6kuap6QiSOUEvvYBOorO/31ON
-         pRvdajIqg2CklrLASOFsXliT28U5Cc/BiV4ftOvTz5NvPSTjExpOWFktvo/CXDkVRFQR
-         FcZg==
+        bh=s94rBGytqIBo4tekti3AaboReTxXzjmT35D71HaGAY0=;
+        b=qFutLe9oOhB3lpPmToxh/n6n6lHObAtWO+of6rVF1ON1/nxpLisgqaWc457GEgeoFr
+         DWerTDRNEXWe5PbKGbgOfStRMaEG8kf6UbB1dZCGKLlQG01KTsG58fjqELWFgbhnkW+7
+         PoZUO0doDyf4PN/11pwA3RbzVUOLMMAEO5aa3UGCDwGLH714hVy6RsiGMlG5DQiWLAzv
+         HuVQrNE4eUamLKyEm4OLbXcFnQh+jZrGZhXFV6+UXUQ3kJ4Sd+XAUXoY+kb4oxru1kK2
+         KX0/wSdgCgBoNICgLEgaZWGC9U2TxpSqAV6LnWvv882GQNIXPaqJWN8Di4rGq4WGTO7p
+         5VEg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737709151; x=1738313951;
+        d=1e100.net; s=20230601; t=1737709155; x=1738313955;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=p945ECaq9P80WMODWEJG85jptgTxpTyGy7Go/5N1kDQ=;
-        b=gJ6HqmZGmlFljizpcEPERMz2nhqYkEVPL8YW28rJoHVmXIRPC9qOM8IvWTofdOSe7Q
-         oXKHMB3GClfnVcGYJvLx/dB61mPRspF/HwcPvEblHkdT8Fd/Oaw4RHaH7ZP+IeudV4Hu
-         okXtD40H7xkRKH9z/TUlKMa5Crgz/aRYCKPc27BYlsUlhcDA9bxypxji9Z60ehsnBNtW
-         toAR5BSr/Af4MRLPbj5fhu0DiD2hD5Z15BZgDzHNOC7VBe897+ra15cks0hgiI9b93PT
-         PpjjiaIfasMG1oh+PcpnmCAVqt4xN/m9DMMYXeinQT7Q8LbGF2tyLeC3zx+7Q/rOo7fv
-         lRWA==
-X-Gm-Message-State: AOJu0YySJD5spltSz4J4lDkVujN4oI2LJcZeaFbhYJ9dte6L6rurgw2p
-	6TkuWwarsY3upHRN3WUHZSjznWdxGHx0x6Y59tU6A4Uy8M6dpCMT41XR3hVexnC6EVsmtr4XjYI
-	W
-X-Gm-Gg: ASbGncuPMoF5yKnjdEphNmWDHFklEY6Y/kWbZ3b4iDawr5fBBPBocaDnkp4KCzR+SBO
-	kmLgjckcIHFgajHiPXPUbgo8g+rVOXRv9DxEOiJjzWfCrlGtcp0jJoEUHTfBkBfp1eATQ5nvZAl
-	8bZ/EbMaXf/oF5M8D4wBkS5RW+9UdDGObzUgp5WZA3KghZ9WrqjmIdx/H/vgOchOHX4rLPoApOg
-	3QniB8CjmeenQBv5XOQxFAm7aRdt/SLBahVvX3sJc+H+fBUdA6S5Yoxd2QB1EAj+epFJIAY+k4h
-	nOPOxeQ=
-X-Google-Smtp-Source: AGHT+IHmp/m1FnjKUe6ha9HUOGa0p8k+59e/B1rJ5ftyPx/opbLtw59hiYoa4G65siJHRA37syBgsw==
-X-Received: by 2002:a17:902:d58b:b0:216:3e9a:89e with SMTP id d9443c01a7336-21c355b70ccmr503518985ad.35.1737709151226;
-        Fri, 24 Jan 2025 00:59:11 -0800 (PST)
+        bh=s94rBGytqIBo4tekti3AaboReTxXzjmT35D71HaGAY0=;
+        b=SThcnnYdxooHpzaO0JgIXqbsSuID3h0yeiMpIrBU9ETwcYjQPKSChqyXAGcdcxrZaq
+         I+0dElXoxmMrQ91VzSJWPpnjrBWnLNZ1aOl8nlb72YGPyw05DvCTRlgbbzfiqs8coJXD
+         bZLf6inCtjRG7h10QB4zSIchhYRvY76IqfV6R+lE2z+OW0qwUz7IUtt77zGObQZYOZHs
+         UZu90c2j2M+Qlf7KwItZoPsGzb4PHG+4A15m0DmzTOKwUBV4IZ2MVn5U59rrmCLfW8/k
+         +AsGQmKO66AYoR3gNO08w8dpgs6LDdO20ZW6Vcx2cJd2EzR98mbvlL5oCMW5XVKOstER
+         X45g==
+X-Gm-Message-State: AOJu0Yx+eW151cmWvDXM9Xic5Bu7eBpXa79T6aN3JPrmS/0C+hSJ4clc
+	t4XH6Gi6FIADYdh82NKKA2k9kGvwQwvtbRV6AUY1ZYUQvsYntjpaNJzDfZJO3WQ=
+X-Gm-Gg: ASbGncv2Ulc2V+KJjc6Up7xG5oYnlIKOR664ODsBt0f2c+hvxB9ureDW4X68yt+6U7w
+	7dd0Men1jYneByuWMIdmGPPfaV74UrN/MRIW/LgtlozXKF7qdsxu16MxzQA7B45YNgvBll9doEW
+	QRRgBoaqNyRlQ+A9x0voJWrgbsphUQmghMR2igZUpLc8VSbZSSBhpJD4Q1tLTotOBDU1RxANqKv
+	Mil4iu/SqWWGRv4uPoKKut6C6UrJU6VCPG+sVzn5s423KzP1qvTYwfbPVjbsyoqz6tyAd3zwLSZ
+	s0crr9ngUjZJJvguhw==
+X-Google-Smtp-Source: AGHT+IGd324gk3vUxN6Dj/7u4RkiZpPJbthb1QKDynr38KHf328GZ4u/AOfJCn10b0DpZhUS9hZTMg==
+X-Received: by 2002:a05:6a00:1412:b0:71e:4930:162c with SMTP id d2e1a72fcca58-72daf94f6a5mr41280675b3a.6.1737709155304;
+        Fri, 24 Jan 2025 00:59:15 -0800 (PST)
 Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da3ea3adesm11668875ad.74.2025.01.24.00.59.10
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72f8a78e3e5sm1358044b3a.172.2025.01.24.00.59.14
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 00:59:10 -0800 (PST)
+        Fri, 24 Jan 2025 00:59:14 -0800 (PST)
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>
 Cc: linux-pm@vger.kernel.org,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Lifeng Zheng <zhenglifeng1@huawei.com>,
+	linux-arm-msm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 12/15] cpufreq: dt: Set .set_boost directly
-Date: Fri, 24 Jan 2025 14:28:16 +0530
-Message-Id: <e499720e04b548726212c3896ec4e4a887087ffd.1737707712.git.viresh.kumar@linaro.org>
+Subject: [PATCH 13/15] cpufreq: qcom: Set .set_boost directly
+Date: Fri, 24 Jan 2025 14:28:17 +0530
+Message-Id: <c59085ea0f1e97791f5ecc255886c2bcfa7a7b34.1737707712.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1737707712.git.viresh.kumar@linaro.org>
 References: <cover.1737707712.git.viresh.kumar@linaro.org>
@@ -111,42 +111,34 @@ only when really required.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/cpufreq-dt.c | 14 +-------------
- 1 file changed, 1 insertion(+), 13 deletions(-)
+ drivers/cpufreq/qcom-cpufreq-hw.c | 7 +------
+ 1 file changed, 1 insertion(+), 6 deletions(-)
 
-diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
-index 072ccf0c2e41..778916f89a51 100644
---- a/drivers/cpufreq/cpufreq-dt.c
-+++ b/drivers/cpufreq/cpufreq-dt.c
-@@ -114,20 +114,7 @@ static int cpufreq_init(struct cpufreq_policy *policy)
- 	policy->cpuinfo.transition_latency = transition_latency;
- 	policy->dvfs_possible_from_any_cpu = true;
+diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
+index 7d83d7d2ccc8..4b3b3dbc7d38 100644
+--- a/drivers/cpufreq/qcom-cpufreq-hw.c
++++ b/drivers/cpufreq/qcom-cpufreq-hw.c
+@@ -566,12 +566,6 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
+ 		return -ENODEV;
+ 	}
  
--	/* Support turbo/boost mode */
 -	if (policy_has_boost_freq(policy)) {
--		/* This gets disabled by core on driver unregister */
 -		ret = cpufreq_enable_boost_support();
 -		if (ret)
--			goto out_clk_put;
+-			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
 -	}
 -
- 	return 0;
--
--out_clk_put:
--	clk_put(cpu_clk);
--
--	return ret;
+ 	return qcom_cpufreq_hw_lmh_init(policy, index);
  }
  
- static int cpufreq_online(struct cpufreq_policy *policy)
-@@ -162,6 +149,7 @@ static struct cpufreq_driver dt_cpufreq_driver = {
- 	.offline = cpufreq_offline,
- 	.register_em = cpufreq_register_em_with_opp,
- 	.name = "cpufreq-dt",
-+	.set_boost = cpufreq_boost_set_sw,
- 	.suspend = cpufreq_generic_suspend,
+@@ -610,6 +604,7 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
+ 	.fast_switch    = qcom_cpufreq_hw_fast_switch,
+ 	.name		= "qcom-cpufreq-hw",
+ 	.ready		= qcom_cpufreq_ready,
++	.set_boost	= cpufreq_boost_set_sw,
  };
  
+ static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
 -- 
 2.31.1.272.g89b43f80a514
 
