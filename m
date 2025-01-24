@@ -1,141 +1,170 @@
-Return-Path: <linux-pm+bounces-20919-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20916-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6ECF8A1B219
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 09:59:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53FC0A1B210
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 09:58:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 27C983AB680
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 08:58:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0041916D706
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 08:58:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F52921A43C;
-	Fri, 24 Jan 2025 08:58:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96DCE219A80;
+	Fri, 24 Jan 2025 08:58:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="bWYdEBiI"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qiupq5x5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D10421A424;
-	Fri, 24 Jan 2025 08:58:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B7BA0218ADD
+	for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 08:58:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737709120; cv=none; b=evIoaBi/gECFiA6iE9nQla50RZ2/hz8Y9AU5CSLp543dSN585FTcVufiCz1iwvf1iEacRdyEFMn2qqZaY8dBNg6n5Ou0V2dEYNVwjXaJ8tTTYkADPoX2pJpwVF7W+YF3DqnoqEQlrNejtKwcyVsso2tg/kCF+NIcVmX2QcbDbEE=
+	t=1737709113; cv=none; b=Jn8ksdhVDs626zUXcyj5BgCZkGS3mQdBxN3/oO3+xUEtGfOTisrLu2yHNuBtl/r4tOKs1+EqnMzMq0mf8EcUVZniRiL8f8CfIxRp6Hz6LG+dmyA4iFCJISE+uXV36VyKHungg6xv45j1X+E5aO0LQ/SemoGv9dHo/KsSUF1m/+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737709120; c=relaxed/simple;
-	bh=00BIKWjEFdesAJiVHawtYMPiLZHbdAdarr4Sl8y0DgI=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=uVEM10RjCzsbnq4fjBmTcPqn3gjTfsuXjVoVHhl8WzADKvk+Xo9C3RzNS1gFKIMnuqSL/I6EH2ha2W8wtT14EeoB61q1RVKpOUi4Da55OIT6EOqyzt/p3zrOl+58ENGU5iSFGjm+RU/+1Oh2w3vUFEGgwFRbyPv1LGWR+TPjOSY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=bWYdEBiI; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 67C1FA09FF;
-	Fri, 24 Jan 2025 09:58:36 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=91vGKH59fvOB6uF7f30s
-	PCflWM08DH4/8R/h6OH+xOk=; b=bWYdEBiIDfkr5t2LBwXOpExJcaNdyEpjr3q2
-	ujGRpZDepB+Fx3X3FYnLbdlDmMxfY3wHv0NYj6BUtLajCg44fS555JfAKXu/+f49
-	qu9A574fniGVyIevXemx7T1caMjd6NJr+sZSb/2sW315WOaAuQMgB9x2MqhTNkU5
-	On4CKaM4B/ep3/QMX9gY8i9nJJSoKN8pajGpyixUlc5blKLnoIFkc4lHc3rmBIdg
-	rQWc+cKNU99krC1xf8pOMHpVXaRbB7XDlK55Ek5GU1uS9GieGzhqx0PRzduawBUU
-	sgr59jdZzZHacGyk9t0Tyr6zLp1tYoHB1trhaDB4UnsWhaKoirFEwnHtvhntNpTG
-	7k/APjH6FD3pfQWHiG78iYXuFVQ9r0gdCZ4sE/Vz98Vv/lUpemkky1sKAYu0XjkS
-	TVBNa2Z7F8vb1MgrF3DMe3hBUvgl8R9TtNM+FAvBBNayDlgrroxxA/FKQO/BXh3e
-	3aljHpxEVc0tyUJx1t+gu78iZTUPVELAE3NbEk1ncS/zoilz1InQAfMz7oaQSFZE
-	VKZ+lXImIMm4fM2U542tYqr6Er0Ni1im0U9lzAJuycrW88k4LVyM/zEpPYA7DV0J
-	86WA0YFH+JE9KQkZfJw2C9vdjQrmup3iGmI+qNdrOump5JWjQLZlIIAm+UpK1VIq
-	yTsUm3g=
-From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-To: =?UTF-8?q?Cs=C3=B3k=C3=A1s=2C=20Bence?= <csokas.bence@prolan.hu>, "Mark
- Brown" <broonie@kernel.org>, Varshini Rajendran
-	<varshini.rajendran@microchip.com>, Tudor Ambarus <tudor.ambarus@linaro.org>,
-	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<linux-kernel@vger.kernel.org>
-CC: Vinod Koul <vkoul@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>,
-	Krzysztof Kozlowski <krzk@kernel.org>, <dmaengine@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, Alexander Dahl <ada@thorsis.com>, Nicolas Ferre
-	<nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Subject: [PATCH v2 4/4] spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
-Date: Fri, 24 Jan 2025 09:52:27 +0100
-Message-ID: <20250124085221.766303-15-csokas.bence@prolan.hu>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250124085221.766303-4-csokas.bence@prolan.hu>
-References: <20250124085221.766303-4-csokas.bence@prolan.hu>
+	s=arc-20240116; t=1737709113; c=relaxed/simple;
+	bh=fNI4UdDtZI4AVcTD8TnjHEnynSXd6Y+lcwnBOlUgb0k=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=MBtUMqtinb+iRCWHVz5lN2e+pwINayv1AmPl6Uu7o7EojAviD3wX4wGwqKX1ybcntb3WyJMgib4lcXnCa3Q0IHdV9rpVBLtx9j3C7zaaye9H9mSulBienzHjclkvubbUC8sSVctchegiLxM6YCadtAdy3Zm1SG8tJtj/tulRBh4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qiupq5x5; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-2164b1f05caso31538475ad.3
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 00:58:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737709110; x=1738313910; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=a4AqRX4jgpQUQupuoQFqpmYTbRVzBhfX6O9GAy7aKKQ=;
+        b=qiupq5x5QB9lQevzihRGuBXv0IfAAG2rlaNizZukib61T7eXb9WMGdVg8sHx3prPyF
+         pyALGugpO90wpX+VaZdylLtGFOvcgTro9iWGcc0WHV6/lrgkQZW0N2/o1YVYtaudmZxT
+         ftm0jDg57UibfG6PZfifqu7fLPSSGy7P83EOarbhJwSpqCEn5DC5qU13poN99eJINn0e
+         idbknwz4Dn8uwZ+tuCKNgGPwaiD8hEh8ikaLCFO+kPyaDMxMtgjLsm7vIx0FI/XGXGx1
+         CjNeU1oUtS06Rc8zc4t9RYL+Xf9unljTMXzuL8AqMOSU311AbW1urLdye61TVSungj2H
+         GTUw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737709110; x=1738313910;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=a4AqRX4jgpQUQupuoQFqpmYTbRVzBhfX6O9GAy7aKKQ=;
+        b=ljZGgwQwcaExtIBrGCg0+2iMxKq8RkSHgJjX1MUf9b/hiGYCvfeIkpEyCM0zcKJTzw
+         Eq2A7SFMvj4rycQUpEVFiZjD5NaPd2bPx0RmCfdvUOit5pF5bHJkztvBl1ufcqroPeW1
+         GXCTyWh8fsi10Ff/xtL0cq7mojIs6Lbrwi4Y/HJX9w306kqdd0HkxlNbynAY4/TYth97
+         CGDyIZVZ3Qe5F0mVYOnHTbDNou53Dwc+quKtPvY5kU4biVUaB9rI3p865p5IiSJUIJTi
+         qaT1R0LSTMBoyi5h4kfheLCbTjAzt8QC3vdjxBbRH7jU99zKV0xam2AwJ65Pg1iD+4uQ
+         YFfg==
+X-Gm-Message-State: AOJu0Yy/+l/0OYIPYGXuxXsPP2J4MUhJgF3V1n7v8MsaJjwR/Sdlcnwb
+	/xMggO/M0yw4VKaX4Ay54Jy1G8ZNJdXZIQAgeUNOOFWxSGFZpQRqQzriKE8OX5U=
+X-Gm-Gg: ASbGncvIwi1oOn92urQmnw+3BElhfX6AFtqWOYNtSEBnzl7NC3ZgXY14PvxH2kr4Hxk
+	fvZkqAvACZVkemP1d49poiIw85OVS9I8VlZMUAizJH0NG2w1719RggO+W1QRgrrK9E8JtQ8Wx/w
+	FLRPjqhnDIY6eCWsV27DaAifEJuUFGwAJhyGe3ESHuAhFtj1headq22eKCNWr9FgR/+WY21QhWp
+	295Fz++RSs3g/6wKnMZttBGtflM9fUfKmTM9iBQIkOEqJaOQd7CzV2xcWOaP7BlzZ8KYdZEG1FQ
+	/9wr/a0=
+X-Google-Smtp-Source: AGHT+IGaLv3P86dnfhfsz8clY+KvPxRH7m/1Pd0NzNkAaLxjGYIDOwn76y4qMRrSSuP3v13w1OIdqA==
+X-Received: by 2002:a17:903:320e:b0:217:9172:2ce1 with SMTP id d9443c01a7336-21c35544407mr480084755ad.22.1737709110054;
+        Fri, 24 Jan 2025 00:58:30 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da3d9e1b2sm11621015ad.17.2025.01.24.00.58.29
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 24 Jan 2025 00:58:29 -0800 (PST)
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
+	Christophe Leroy <christophe.leroy@csgroup.eu>,
+	Cristian Marussi <cristian.marussi@arm.com>,
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>,
+	Hector Martin <marcan@marcan.st>,
+	Huacai Chen <chenhuacai@kernel.org>,
+	Huang Rui <ray.huang@amd.com>,
+	Madhavan Srinivasan <maddy@linux.ibm.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Michael Ellerman <mpe@ellerman.id.au>,
+	Naveen N Rao <naveen@kernel.org>,
+	Nicholas Piggin <npiggin@gmail.com>,
+	Perry Yuan <perry.yuan@amd.com>,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	Sven Peter <sven@svenpeter.dev>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	WANG Xuerui <kernel@xen0n.name>
+Cc: linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Lifeng Zheng <zhenglifeng1@huawei.com>,
+	arm-scmi@vger.kernel.org,
+	asahi@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	linuxppc-dev@lists.ozlabs.org,
+	loongarch@lists.linux.dev
+Subject: [PATCH 00/15] cpufreq: simplify boost handling
+Date: Fri, 24 Jan 2025 14:28:04 +0530
+Message-Id: <cover.1737707712.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1737709115;VERSION=7984;MC=139577634;ID=70505;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
-X-ESET-Antispam: OK
-X-EsetResult: clean, is OK
-X-EsetId: 37303A29ACD94852677063
 
-Fix unbalanced PM in error path of `atmel_qspi_probe()`
-by using `devm_pm_runtime_*()` functions.
+Hello,
 
-Reported-by: Alexander Dahl <ada@thorsis.com>
-Closes: https://lore.kernel.org/linux-spi/20250110-paycheck-irregular-bcddab1276c7@thorsis.com/
-Fixes: 5af42209a4d2 ("spi: atmel-quadspi: Add support for sama7g5 QSPI")
-Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
----
- drivers/spi/atmel-quadspi.c | 18 +++++-------------
- 1 file changed, 5 insertions(+), 13 deletions(-)
+The boost feature can be controlled at two levels currently, driver
+level (applies to all policies) and per-policy.
 
-diff --git a/drivers/spi/atmel-quadspi.c b/drivers/spi/atmel-quadspi.c
-index b1fb4426c78d..f2164685d3d5 100644
---- a/drivers/spi/atmel-quadspi.c
-+++ b/drivers/spi/atmel-quadspi.c
-@@ -1426,22 +1426,18 @@ static int atmel_qspi_probe(struct platform_device *pdev)
- 
- 	pm_runtime_set_autosuspend_delay(&pdev->dev, 500);
- 	pm_runtime_use_autosuspend(&pdev->dev);
--	pm_runtime_set_active(&pdev->dev);
--	pm_runtime_enable(&pdev->dev);
--	pm_runtime_get_noresume(&pdev->dev);
-+	devm_pm_runtime_set_active(&pdev->dev);
-+	devm_pm_runtime_enable(&pdev->dev);
-+	devm_pm_runtime_get_noresume(&pdev->dev);
- 
- 	err = atmel_qspi_init(aq);
- 	if (err)
- 		return err;
- 
- 	err = spi_register_controller(ctrl);
--	if (err) {
--		pm_runtime_put_noidle(&pdev->dev);
--		pm_runtime_disable(&pdev->dev);
--		pm_runtime_set_suspended(&pdev->dev);
--		pm_runtime_dont_use_autosuspend(&pdev->dev);
-+	if (err)
- 		return err;
--	}
-+
- 	pm_runtime_mark_last_busy(&pdev->dev);
- 	pm_runtime_put_autosuspend(&pdev->dev);
- 
-@@ -1511,10 +1507,6 @@ static void atmel_qspi_remove(struct platform_device *pdev)
- 		 */
- 		dev_warn(&pdev->dev, "Failed to resume device on remove\n");
- 	}
--
--	pm_runtime_disable(&pdev->dev);
--	pm_runtime_dont_use_autosuspend(&pdev->dev);
--	pm_runtime_put_noidle(&pdev->dev);
- }
- 
- static int __maybe_unused atmel_qspi_suspend(struct device *dev)
+Currently most of the drivers enables driver level boost support from the
+per-policy ->init() callback, which isn't really efficient as that gets called
+for each policy and then there is online/offline path too where this gets done
+unnecessarily.
+
+Also it is possible to have a scenario where not all cpufreq policies support
+boost frequencies. And letting sysfs (or other parts of the kernel) enable boost
+feature for that policy isn't correct.
+
+Simplify and cleanup handling of boost to solve these issues.
+
+Pushed here:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/boost
+
+Rebased over few dependencies from PM tree, will push to the arm-cpufreq tree
+after merge window is closed.
+
+Viresh Kumar (15):
+  cpufreq: staticize cpufreq_boost_trigger_state()
+  cpufreq: Export cpufreq_boost_set_sw()
+  cpufreq: Introduce policy->boost_supported flag
+  cpufreq: acpi: Set policy->boost_supported
+  cpufreq: amd: Set policy->boost_supported
+  cpufreq: cppc: Set policy->boost_supported
+  cpufreq: Restrict enabling boost on policies with no boost frequencies
+  cpufreq: apple: Set .set_boost directly
+  cpufreq: loongson: Set .set_boost directly
+  cpufreq: powernv: Set .set_boost directly
+  cpufreq: scmi: Set .set_boost directly
+  cpufreq: dt: Set .set_boost directly
+  cpufreq: qcom: Set .set_boost directly
+  cpufreq: staticize policy_has_boost_freq()
+  cpufreq: Remove cpufreq_enable_boost_support()
+
+ drivers/cpufreq/acpi-cpufreq.c      |  3 +++
+ drivers/cpufreq/amd-pstate.c        |  4 ++--
+ drivers/cpufreq/apple-soc-cpufreq.c | 10 +---------
+ drivers/cpufreq/cppc_cpufreq.c      |  9 +--------
+ drivers/cpufreq/cpufreq-dt.c        | 14 +-------------
+ drivers/cpufreq/cpufreq.c           | 30 ++++++++++++-----------------
+ drivers/cpufreq/freq_table.c        |  7 +++++--
+ drivers/cpufreq/loongson3_cpufreq.c | 10 +---------
+ drivers/cpufreq/powernv-cpufreq.c   |  5 +----
+ drivers/cpufreq/qcom-cpufreq-hw.c   |  7 +------
+ drivers/cpufreq/scmi-cpufreq.c      | 11 +----------
+ include/linux/cpufreq.h             | 20 ++++++-------------
+ 12 files changed, 35 insertions(+), 95 deletions(-)
+
 -- 
-2.48.1
-
+2.31.1.272.g89b43f80a514
 
 
