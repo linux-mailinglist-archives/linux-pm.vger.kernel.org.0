@@ -1,105 +1,122 @@
-Return-Path: <linux-pm+bounces-20933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20935-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E2C0A1B23C
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 10:02:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 549A9A1B273
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 10:18:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB01E16E10C
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 09:02:01 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 002A53A2BDD
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 09:17:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05F4121ADC3;
-	Fri, 24 Jan 2025 09:00:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59ACB1DB12B;
+	Fri, 24 Jan 2025 09:17:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B2yi5eQg"
+	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="VFQJCpZK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f169.google.com (mail-pl1-f169.google.com [209.85.214.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4B3CD219A8C
-	for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 09:00:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7752F320B;
+	Fri, 24 Jan 2025 09:17:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737709203; cv=none; b=mvZwRteOyZ7wZrSaBx9KhIzdk58PDA3kZOvpt+3LUDaghEvf3RtVyJiSYf/DnKuDqD+oP/yvfp1cw+/muDZSz4/W9s4eaFOeG+3bRqMJlZK9H+fJwXGKL2RM9CcehRKyJFpwP1v927bCCnsWDJrzABh5Zl0G4mWikKAllJOuDjw=
+	t=1737710276; cv=none; b=clix2xhAVhfR2yIslf2LNhV0jKmcOypHciHyRjlMMREZA/JOVnoV6RoZp9FygYE4lrHbc1bs5Ua6+izNJUCcDnbZNMWBl2CYu5GmJpBxyTGp3EoN0ebs07V1rbOcZkAiFcvI6IsFHHxx99KI3tg5kAxe8kbrqgcGT3yo0RWOtPA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737709203; c=relaxed/simple;
-	bh=qtnew2yqeoDd0x537XOPRKdgWkJTuwX13XGRTTtXA7E=;
+	s=arc-20240116; t=1737710276; c=relaxed/simple;
+	bh=5iaD945UFs16M0VLUKCVVeiefXEYpCmIw2bvVfwkn5A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZfrZBsUYt1H25Ua+ceEho04X0LKBj+VfC7/D1CLJBRsnenT1fBvmlTb4+oBv0BI66aN2xzqZO8ehWoLk1kD+RhzF4a9BFlDPYT6bzTrlyQ6k66SzRqSpmqzCLnQmN04B4m5PfGJ9FZ6JYwzNTO1OiJNsAhCotETs2ad18K+ifFo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=B2yi5eQg; arc=none smtp.client-ip=209.85.214.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f169.google.com with SMTP id d9443c01a7336-21661be2c2dso32146815ad.1
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 01:00:01 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737709201; x=1738314001; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=ybu4sa/kF8nFIfMJZSBPwPbNLo1uM5t6aB+PxaUymyc=;
-        b=B2yi5eQgGrlMnB2lqMYnQcUyAERlEDFZqVy6Yc5MnqmwGMmYhOIoJTQTDcnPCYxFzO
-         0TkqaGkE9X3Ty+V/kUuruDexQVUkELbNLa3+BzIr9IGwrIAJPvuGj8D6R2NiVN0GD502
-         Hsx2ZTpJZOdUsgY/ivsAdYiacys9eHq3p+AS00u/8d4BNmJZi3M/dj7R5rR2s/WX0APz
-         EG2lmJWiV3T/jiF5FhapG6iVOBuZ2ZAKld9iRaExd2T94908A1LVxf9KOoeUEVjurB6Q
-         fenr8wp60kMYDLcNZ/VZA+e3P/p5LY0MtzaAAVN/tNP2Si0BC3eQfdw43ZjDD1Uzibp3
-         9xSQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737709201; x=1738314001;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ybu4sa/kF8nFIfMJZSBPwPbNLo1uM5t6aB+PxaUymyc=;
-        b=vWX70Eidw9Mo+2hKYA3QVL6bPIn0mS6hF7G6tanMkLNm/nK8wPSJ+ytlmu8eJVA3ZS
-         fRCeYbnbv0kOJDKA2VLJwqqldJO6CN+8HPYx5mCbCN1xSlB6A9yXr3D8HA8VFFLGEbqX
-         WOaJGGa+3QP3bDdTo9LUX5AWHXJc/t9yzCAEjEOOjM0IiOEmaCAlOLS8tbheytCW7bjm
-         62Vois+n3jaH1sq8Ec1gjXwOkowR5ZkMu7QMBrrr/S5+YgjyUbThMeKkP6Glr9bjf+hJ
-         fWDM7OzWx5l8ao1LDOheq/crHinW+m+j0Of6uwhYZFLj/GdBpC9W0D+kEAYQ3AoZbJ8v
-         qcjQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUexYVgHnGEXuSBucxP17Dbvqrxb1D0ED3wHW9nyzsJGoJbeyXDO5ATOaBw8iwtGEWl/b2whwPcJw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyc69XYCQO6gWXrWxAq0OUiPy1l67i+5CYh0wmAvTG06mmG7WpK
-	mtCxIPfj5OO4tH+H+3mtI86Nunruy+4EdhalmTjpHKVElnOuD2pM8K6MlomJSKg=
-X-Gm-Gg: ASbGncvyxcVgHDq8fKUfL2qWoSXJgEakONfKgbY9rb2czxps8+CbaBo5NfUXLTWtXzN
-	g1ZXvS2GBkitxyRzlZf+fCFIXB6AEYqERl1s2W5Dou83hNK8qwCIIWUqwCNkX/qyxFfDjlNsbVt
-	Sl++QLEnML0hXnT40KRgCeckd4NZxn9KYLXADxjgQ8hungxPHIb5PqN0VbXByGuVCxOu18jChYY
-	Uk2RDIIIxr2+yyAd26kp1n0cGBcGXA1BGpfPmHq0r3kRBCCsHBfQ/xmW/wHz10yxqLIZcXW3Zzr
-	DoA38wk=
-X-Google-Smtp-Source: AGHT+IEVjb6llFvLZA8fLj1bIz8+qKQpMGL2fjpHl/XTJZwBk2LNSSpZ5Go/YNe4GEiy0dzgoymSRg==
-X-Received: by 2002:a05:6a21:4d81:b0:1e0:d4f4:5b2f with SMTP id adf61e73a8af0-1eb215a885cmr51384037637.32.1737709201540;
-        Fri, 24 Jan 2025 01:00:01 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72f8a6d2ca5sm1346622b3a.81.2025.01.24.01.00.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 01:00:00 -0800 (PST)
-Date: Fri, 24 Jan 2025 14:29:59 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com,
-	lihuisong@huawei.com, fanghao11@huawei.com
-Subject: Re: [PATCH v2 4/4] cpufreq: ACPI: Remove set_boost in
- acpi_cpufreq_cpu_init()
-Message-ID: <20250124085959.r3cf7qfd7fxz2iiw@vireshk-i7>
-References: <20250117101457.1530653-1-zhenglifeng1@huawei.com>
- <20250117101457.1530653-5-zhenglifeng1@huawei.com>
- <20250121061418.2eiifftsv6q7jxlm@vireshk-i7>
+	 Content-Type:Content-Disposition:In-Reply-To; b=gKiHO5LUuQdySR6xHWD+jcT4cpPfIckkCNZ+vmwCdBM1S3b3QiKChaTxvgb0Pr5/Ua0qzGlE/2UF4sg2tiW0EH7Vp2XoOUzhSDi+tvJtp4ianKxqnhldDULAKi276c3mjnW91NSwrggzGA6cTjaa4D5WXqJQX1Xr1Dt+DUuM8Nc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=VFQJCpZK; arc=none smtp.client-ip=217.92.40.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 87EBB148468B;
+	Fri, 24 Jan 2025 10:08:22 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
+	t=1737709705;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=3TDGL1Yo9WUa7EYaDeq6rKMNtM8TcEfBcdKsVKLdb84=;
+	b=VFQJCpZKT4v2bWICHiuu78a9CGYgUp1sr7cnCedBloWdD6GWPAXnghsRSedlkPBeZ7gcDX
+	3wMP5P5oZWvn1VZHiyIumpvTQulgLLDXlJ3kIxxBomhPYNKkAqeHZek3r0NUFmZzoUcidw
+	c3ghwwguuC8kmP9MsfzNUBzQ4GF1gDmzEbtjGTAzt0ymipFgDK2eGzhXE/CKbuBj/hWCXZ
+	aeukNE8V+gGxqOO9gEpk2vRFFdWop9cagbY3oiqnaImpqy06e9aD2J9EW0/a+oOcZ43uxb
+	8sUG8VcCvNUD7W+sCamjNgpw9iX29qjLnafEEteCBlXQBO8VJ7WxXt0QFbHJgQ==
+Date: Fri, 24 Jan 2025 10:08:21 +0100
+From: Alexander Dahl <ada@thorsis.com>
+To: Bence =?iso-8859-1?B?Q3Pza+Fz?= <csokas.bence@prolan.hu>
+Cc: Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Varshini Rajendran <varshini.rajendran@microchip.com>,
+	Alexander Dahl <ada@thorsis.com>, linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, dmaengine@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 0/4] Add more devm_ functions to simplify probe path
+ in drivers/spi/atmel-quadspi.c
+Message-ID: <20250124-stumble-unpeeled-165f2211dcfb@thorsis.com>
+Mail-Followup-To: Bence =?iso-8859-1?B?Q3Pza+Fz?= <csokas.bence@prolan.hu>,
+	Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>,
+	Varshini Rajendran <varshini.rajendran@microchip.com>,
+	linux-spi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	dmaengine@vger.kernel.org, linux-pm@vger.kernel.org
+References: <20250124085221.766303-4-csokas.bence@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250121061418.2eiifftsv6q7jxlm@vireshk-i7>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250124085221.766303-4-csokas.bence@prolan.hu>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+X-Last-TLS-Session-Version: TLSv1.3
 
-On 21-01-25, 11:44, Viresh Kumar wrote:
-> There are more cleanups in drivers that can be done though. I will try
-> that once this series is merged.
+Hello,
 
-https://lore.kernel.org/751338633b070ee570c3c7da053bd6b9497ee50e.1737707712.git.viresh.kumar@linaro.org
+Am Fri, Jan 24, 2025 at 09:52:16AM +0100 schrieb Bence Csókás:
+> The probe function of the atmel-quadspi driver got quite convoluted,
+> especially since the addition of SAMA7G5 support, that was forward-ported
+> from an older vendor kernel. To alleivate this - and similar problems in
+> the future - an effort was made to migrate as many functions as possible,
+> to their devm_ managed counterparts. The few functions, which did not yet
+> have a devm_ variant, are added in patch 1 and 2 of this series. Patch 3
+> and 4 then use these APIs to simplify and fix the probe() function.
+> 
+> Change in v2: rebased onto Linus' master, which is:
+> commit bc8198dc7ebc ("Merge tag 'sched_ext-for-6.14' of
+>  git://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext")
 
--- 
-viresh
+You can pass '--base master' or '--base=auto' to `git format-patch`
+which adds a machine readable line to your patch or cover letter like
+this:
+
+base-commit: bc8198dc7ebc492ec3e9fa1617dcdfbe98e73b17
+
+This way tools can find out which commit your series was based on.
+See for reasoning:
+
+https://people.kernel.org/monsieuricon/all-patches-must-include-base-commit-info
+
+I'll look into your patch series in February, after my holidays.
+
+Greets
+Alex
 
