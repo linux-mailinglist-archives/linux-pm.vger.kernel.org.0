@@ -1,87 +1,86 @@
-Return-Path: <linux-pm+bounces-20930-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20931-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACF26A1B22F
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 10:01:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 56E6FA1B236
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 10:01:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DC927A19D5
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 09:01:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D373816DAC3
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 09:01:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BEE6121ADA3;
-	Fri, 24 Jan 2025 08:59:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2BF821D58B;
+	Fri, 24 Jan 2025 08:59:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qFutLe9o"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xowX1gjQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2EC0121CFFD
-	for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 08:59:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6807721ADA7
+	for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 08:59:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737709157; cv=none; b=pn6KILGMRrcfsI/kVc9XWLlyQbiRkogA5O4GVRTCZjASnDO5N9vUfVCKNbjiKGHmdKv9G9Z9OSe8sQccwAemYcndm9PSbliJKTb9sIUCl6vUyg+ycZyGxFLORRMnOHt/5bKsDt4wCo8jdLHa/qeAf0/2C8aq3KHKmxleIrcf0aY=
+	t=1737709160; cv=none; b=Sc0wVZsb6pUpstg1XXRGSdDOzKPpikOeGkM9ojBoCQQQrH6Likyw0ryOYefEdQrWgdXzPEmYzw4SBjuaV1IARYse4tjjOtOKdEq0hz7Kjw2VRxcSv7+Kz4Yt08Tat2NhZzvUVhfnZOnsmUciTUkr6JH6xQJNiUpw3qt5XySZqZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737709157; c=relaxed/simple;
-	bh=Gx5tAkuM3tQafFNc5Mhe6PmrPMAavPP6iPSppEjU5/8=;
+	s=arc-20240116; t=1737709160; c=relaxed/simple;
+	bh=/D0wEY8VdyUkeWsPm6hW6l3uuIlRBiW1w21cWrdjAPo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=ryxmErbkjbMb8rF1PD/wKREXUoFyxCn3LuM7NOMNMEr+AsO1CzFeUoSPzDEi1kVq3gfTYFINc+CbPlnc/xpgG/GZTk4Ylkr9eMMwuXmB5lwm4FrvIJ15pXsHF4+m/GW6IGAabF/eNLlmsrvWK2TSxiONbb4g0lAe6/Izn3h/61Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qFutLe9o; arc=none smtp.client-ip=209.85.216.46
+	 MIME-Version; b=pC8/h8jWFxgQR8UhPE2pw6MMhE9GRbE6WC97S74sTur6sy6LT3VK+Nok5/s6dfAr/MW8yeitZKQfB4M9BEt0T/9hYdTBjfZacNDAvOZrOxzqFUqc3JUxJZGgl5xSQSIa4BJLP/dV0awQAjO6xFv5xBV0CM8stVWSqt/fWfSym6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xowX1gjQ; arc=none smtp.client-ip=209.85.216.50
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2f43da61ba9so2663009a91.2
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 00:59:15 -0800 (PST)
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2ee989553c1so3315854a91.3
+        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 00:59:19 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737709155; x=1738313955; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1737709158; x=1738313958; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=s94rBGytqIBo4tekti3AaboReTxXzjmT35D71HaGAY0=;
-        b=qFutLe9oOhB3lpPmToxh/n6n6lHObAtWO+of6rVF1ON1/nxpLisgqaWc457GEgeoFr
-         DWerTDRNEXWe5PbKGbgOfStRMaEG8kf6UbB1dZCGKLlQG01KTsG58fjqELWFgbhnkW+7
-         PoZUO0doDyf4PN/11pwA3RbzVUOLMMAEO5aa3UGCDwGLH714hVy6RsiGMlG5DQiWLAzv
-         HuVQrNE4eUamLKyEm4OLbXcFnQh+jZrGZhXFV6+UXUQ3kJ4Sd+XAUXoY+kb4oxru1kK2
-         KX0/wSdgCgBoNICgLEgaZWGC9U2TxpSqAV6LnWvv882GQNIXPaqJWN8Di4rGq4WGTO7p
-         5VEg==
+        bh=VdfuIG9tkRoWMs45pN6MvWj7AvWDsc8epda9DxPI0Fs=;
+        b=xowX1gjQC2USzCqyC9sXHS2mIvS1iUqz3q2G71awSOmHMTlNF7A2kX1xko/bLqbkVq
+         JIWgoPGFV/9I6TiorK7+bSZmXCf2oCNTZ1ocAEPE8hCcu2TdUM8GJCGsAQtxVh5jt1Z2
+         nqSoyEouc7xZWYM8jBO5KOXdmYuyMb4In6C4YZx5LmZhEG0k+4gGin4GZsrsQS5pr3li
+         sqato9av/vL5Cvfo5Cx6DZD0Tq42XqhByIvXds+SJVgZw76azpX8QDCsthWoPvl1SpUn
+         on/K9xttlvyLHUiWGnn7qggwHadX4NpuGT//mLL3Dwjf2cTBscmufVdaWDLmkl/q0mVo
+         EOcw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737709155; x=1738313955;
+        d=1e100.net; s=20230601; t=1737709159; x=1738313959;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=s94rBGytqIBo4tekti3AaboReTxXzjmT35D71HaGAY0=;
-        b=SThcnnYdxooHpzaO0JgIXqbsSuID3h0yeiMpIrBU9ETwcYjQPKSChqyXAGcdcxrZaq
-         I+0dElXoxmMrQ91VzSJWPpnjrBWnLNZ1aOl8nlb72YGPyw05DvCTRlgbbzfiqs8coJXD
-         bZLf6inCtjRG7h10QB4zSIchhYRvY76IqfV6R+lE2z+OW0qwUz7IUtt77zGObQZYOZHs
-         UZu90c2j2M+Qlf7KwItZoPsGzb4PHG+4A15m0DmzTOKwUBV4IZ2MVn5U59rrmCLfW8/k
-         +AsGQmKO66AYoR3gNO08w8dpgs6LDdO20ZW6Vcx2cJd2EzR98mbvlL5oCMW5XVKOstER
-         X45g==
-X-Gm-Message-State: AOJu0Yx+eW151cmWvDXM9Xic5Bu7eBpXa79T6aN3JPrmS/0C+hSJ4clc
-	t4XH6Gi6FIADYdh82NKKA2k9kGvwQwvtbRV6AUY1ZYUQvsYntjpaNJzDfZJO3WQ=
-X-Gm-Gg: ASbGncv2Ulc2V+KJjc6Up7xG5oYnlIKOR664ODsBt0f2c+hvxB9ureDW4X68yt+6U7w
-	7dd0Men1jYneByuWMIdmGPPfaV74UrN/MRIW/LgtlozXKF7qdsxu16MxzQA7B45YNgvBll9doEW
-	QRRgBoaqNyRlQ+A9x0voJWrgbsphUQmghMR2igZUpLc8VSbZSSBhpJD4Q1tLTotOBDU1RxANqKv
-	Mil4iu/SqWWGRv4uPoKKut6C6UrJU6VCPG+sVzn5s423KzP1qvTYwfbPVjbsyoqz6tyAd3zwLSZ
-	s0crr9ngUjZJJvguhw==
-X-Google-Smtp-Source: AGHT+IGd324gk3vUxN6Dj/7u4RkiZpPJbthb1QKDynr38KHf328GZ4u/AOfJCn10b0DpZhUS9hZTMg==
-X-Received: by 2002:a05:6a00:1412:b0:71e:4930:162c with SMTP id d2e1a72fcca58-72daf94f6a5mr41280675b3a.6.1737709155304;
-        Fri, 24 Jan 2025 00:59:15 -0800 (PST)
+        bh=VdfuIG9tkRoWMs45pN6MvWj7AvWDsc8epda9DxPI0Fs=;
+        b=sJqDOBZXRmRh8dD3coBBe8AYJmrWP6vq5W3FE5QRcLeHHsjZib/FYGeCzr5Q2CXYxr
+         0958TdMS7KGvEGUtY6rrliAcKMSELPEWG/ksZAS4Gh4IysYMlu75kFT+P+Ti9EHEb/X4
+         St8B2JZCdWaOnBqQ/ThJuhOyz33y1142x4Ykn3Tx1MAkHy4J2qTTJJy7/+Ap7eS2cZEr
+         2RGcEq+vwrdh4MX9uw9QeM7sSWQHctSF31AduXGwcFBZns0na4ZcAbemiIaEYvvisFzj
+         M+XHbYRvXGWxiekvWrIcmjUfYnebCFuoPN6hEqLkT/3CuWYLZerQJtbXyhO2TXKVz+XX
+         YogA==
+X-Gm-Message-State: AOJu0YzEZ3qRZXCi+tNPbjIWbZBqbxNB2+tnEBXrh0B9pxFfIoh38Lgf
+	TkYIE5K3PP+jtofjvCQwU38gg6mBFiTdZ6bOIQMRyE+QUFee7kazDS0nRPQmzy8=
+X-Gm-Gg: ASbGnctXOuqW5t57NzdE2hyASmRC2Z7NquHusD741ruI43mfle5o4tVakdMh/mm862m
+	8rzZDBIwOgzDc9Ok42be6F5uLHpE2I+Uwj/HVAanifODQIrRVPIG0VkkWJAgY5P8XazNFVoSUeA
+	d7wy0CZRv78TWCnViBxXq1Wthym2dN94pbeOGFyBZubqct7QStwdC3TrcbhPTYYKeoK7ed4aeXq
+	Q92+EH3Y7hkU0spWlY5gTLUE3sTATq2ARf5EIKL/jqhShMT5XaeK7na+c6QtvFQx4plZk4P3vRP
+	eID/kGA=
+X-Google-Smtp-Source: AGHT+IFyETTLRpIP2DcDtY8Wno03W5rknQHs2W31kpnLpgPIWSJmax8BGf/jcQf027eMdfYyAmkCiw==
+X-Received: by 2002:a17:90b:4c06:b0:2ee:7862:1b10 with SMTP id 98e67ed59e1d1-2f782c701f7mr44177780a91.11.1737709158729;
+        Fri, 24 Jan 2025 00:59:18 -0800 (PST)
 Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72f8a78e3e5sm1358044b3a.172.2025.01.24.00.59.14
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7ffaf80d1sm1246694a91.35.2025.01.24.00.59.17
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 00:59:14 -0800 (PST)
+        Fri, 24 Jan 2025 00:59:18 -0800 (PST)
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Viresh Kumar <viresh.kumar@linaro.org>
 Cc: linux-pm@vger.kernel.org,
 	Vincent Guittot <vincent.guittot@linaro.org>,
 	Lifeng Zheng <zhenglifeng1@huawei.com>,
-	linux-arm-msm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 13/15] cpufreq: qcom: Set .set_boost directly
-Date: Fri, 24 Jan 2025 14:28:17 +0530
-Message-Id: <c59085ea0f1e97791f5ecc255886c2bcfa7a7b34.1737707712.git.viresh.kumar@linaro.org>
+Subject: [PATCH 14/15] cpufreq: staticize policy_has_boost_freq()
+Date: Fri, 24 Jan 2025 14:28:18 +0530
+Message-Id: <d03eed3f051a7694bbee89a7269813e78c12bcaa.1737707712.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 In-Reply-To: <cover.1737707712.git.viresh.kumar@linaro.org>
 References: <cover.1737707712.git.viresh.kumar@linaro.org>
@@ -93,52 +92,60 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The boost feature can be controlled at two levels currently, driver
-level (applies to all policies) and per-policy.
-
-Currently the driver enables driver level boost support from the
-per-policy ->init() callback, which isn't really efficient as that gets
-called for each policy and then there is online/offline path too where
-this gets done unnecessarily.
-
-Instead set the .set_boost field directly and always enable the boost
-support. If a policy doesn't support boost feature, the core will not
-enable it for that policy.
-
-Keep the initial state of driver level boost to disabled and let the
-user enable it if required as ideally the boost frequencies must be used
-only when really required.
+policy_has_boost_freq() isn't used outside of freq_table.c now, mark it
+static.
 
 Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 ---
- drivers/cpufreq/qcom-cpufreq-hw.c | 7 +------
- 1 file changed, 1 insertion(+), 6 deletions(-)
+ drivers/cpufreq/freq_table.c | 3 +--
+ include/linux/cpufreq.h      | 6 ------
+ 2 files changed, 1 insertion(+), 8 deletions(-)
 
-diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-index 7d83d7d2ccc8..4b3b3dbc7d38 100644
---- a/drivers/cpufreq/qcom-cpufreq-hw.c
-+++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-@@ -566,12 +566,6 @@ static int qcom_cpufreq_hw_cpu_init(struct cpufreq_policy *policy)
- 		return -ENODEV;
- 	}
+diff --git a/drivers/cpufreq/freq_table.c b/drivers/cpufreq/freq_table.c
+index 185070052b41..c03a91502f84 100644
+--- a/drivers/cpufreq/freq_table.c
++++ b/drivers/cpufreq/freq_table.c
+@@ -14,7 +14,7 @@
+  *                     FREQUENCY TABLE HELPERS                       *
+  *********************************************************************/
  
--	if (policy_has_boost_freq(policy)) {
--		ret = cpufreq_enable_boost_support();
--		if (ret)
--			dev_warn(cpu_dev, "failed to enable boost: %d\n", ret);
--	}
--
- 	return qcom_cpufreq_hw_lmh_init(policy, index);
+-bool policy_has_boost_freq(struct cpufreq_policy *policy)
++static bool policy_has_boost_freq(struct cpufreq_policy *policy)
+ {
+ 	struct cpufreq_frequency_table *pos, *table = policy->freq_table;
+ 
+@@ -27,7 +27,6 @@ bool policy_has_boost_freq(struct cpufreq_policy *policy)
+ 
+ 	return false;
+ }
+-EXPORT_SYMBOL_GPL(policy_has_boost_freq);
+ 
+ int cpufreq_frequency_table_cpuinfo(struct cpufreq_policy *policy,
+ 				    struct cpufreq_frequency_table *table)
+diff --git a/include/linux/cpufreq.h b/include/linux/cpufreq.h
+index b017af4398b9..466d186166da 100644
+--- a/include/linux/cpufreq.h
++++ b/include/linux/cpufreq.h
+@@ -783,7 +783,6 @@ ssize_t cpufreq_show_cpus(const struct cpumask *mask, char *buf);
+ #ifdef CONFIG_CPU_FREQ
+ bool cpufreq_boost_enabled(void);
+ int cpufreq_enable_boost_support(void);
+-bool policy_has_boost_freq(struct cpufreq_policy *policy);
+ int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state);
+ 
+ /* Find lowest freq at or above target in a table in ascending order */
+@@ -1163,11 +1162,6 @@ static inline int cpufreq_enable_boost_support(void)
+ 	return -EINVAL;
  }
  
-@@ -610,6 +604,7 @@ static struct cpufreq_driver cpufreq_qcom_hw_driver = {
- 	.fast_switch    = qcom_cpufreq_hw_fast_switch,
- 	.name		= "qcom-cpufreq-hw",
- 	.ready		= qcom_cpufreq_ready,
-+	.set_boost	= cpufreq_boost_set_sw,
- };
- 
- static unsigned long qcom_cpufreq_hw_recalc_rate(struct clk_hw *hw, unsigned long parent_rate)
+-static inline bool policy_has_boost_freq(struct cpufreq_policy *policy)
+-{
+-	return false;
+-}
+-
+ static inline int cpufreq_boost_set_sw(struct cpufreq_policy *policy, int state)
+ {
+ 	return -EOPNOTSUPP;
 -- 
 2.31.1.272.g89b43f80a514
 
