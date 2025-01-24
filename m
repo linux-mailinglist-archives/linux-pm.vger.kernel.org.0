@@ -1,116 +1,126 @@
-Return-Path: <linux-pm+bounces-20901-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20902-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8DB3A1AC12
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 22:48:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 07C5EA1AF02
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 04:25:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86FB87A1239
-	for <lists+linux-pm@lfdr.de>; Thu, 23 Jan 2025 21:47:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FC6C3A851A
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 03:25:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A0FD1C07DC;
-	Thu, 23 Jan 2025 21:47:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F33911D63DE;
+	Fri, 24 Jan 2025 03:25:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="KBXt9lEE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74A1613D520;
-	Thu, 23 Jan 2025 21:47:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F0FC1EA65
+	for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 03:25:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737668875; cv=none; b=KzlO8N690ES1gf5d/VnabjVdfHCAsg69dneSvIlT5lk7K5TMWSFikgOh2e+U/obyw9Hrhe6x4t+mqjZJGYRBDTLomKVYgh7njC3EUQFPZID3/8gg2bJq6Aw9Ptb/04JbmjsK0oh8fqIV4zqo7f7HjO+KoTWRzBiOqBbU1U/J4ws=
+	t=1737689110; cv=none; b=deWeZzukoa9FSwKRbvTLmYpgzTgfzDR3G2h23zp79qm6+JzRRCXFUwyrhi+u5dMqDu7nIb7F6YOYeJU6oXVFfYnvacrZtKDkyP/qQwsCPT9CDpzku6jFXm6LiIZeDee57o40Mbo7h41ttobqVMLT6sY5V3tUwfWi9ZcQZSakbUo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737668875; c=relaxed/simple;
-	bh=kzmLEOAZ0rTU1ollLjWGBjU7Ohqr4Khh71V8j3pSV68=;
+	s=arc-20240116; t=1737689110; c=relaxed/simple;
+	bh=7/SOS7HoIFwX/6lhvUTSOww4LUw/RnVOhKBKWv0uOzk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CHJwFue/61tqTfTpL2rs/gsf6/sGWRcPQBD2ijEJXqoZiG7aOQfaCcc53+DeSJdyeVLvkv5GovKhe7aFUD6VhzDJ/DxM5b6NWo7J1cbC2GkwV3+UZTZia7vqddanUkFj9yn4SunOqdjkW0L4PRef0eyKztlF8cPkhbSoUWe4oFc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 849D51063;
-	Thu, 23 Jan 2025 13:48:20 -0800 (PST)
-Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 489A93F66E;
-	Thu, 23 Jan 2025 13:47:47 -0800 (PST)
-Date: Thu, 23 Jan 2025 22:47:07 +0100
-From: Beata Michalska <beata.michalska@arm.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
-	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
-	rafael@kernel.org, sumitg@nvidia.com, yang@os.amperecomputing.com,
-	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
-	zhanjie9@hisilicon.com, Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>, Phil Auld <pauld@redhat.com>,
-	x86@kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v9 2/5] cpufreq: Introduce an optional cpuinfo_avg_freq
- sysfs entry
-Message-ID: <Z5K42yXtcDSZGuUF@arm.com>
-References: <20250121084435.2839280-1-beata.michalska@arm.com>
- <20250121084435.2839280-3-beata.michalska@arm.com>
- <20250121105355.sdrgmjv2w2256qfn@vireshk-i7>
- <Z4-6bsDzfe9CLcVf@arm.com>
- <20250122060902.5pgfr5g24jpjrxw3@vireshk-i7>
+	 Content-Type:Content-Disposition:In-Reply-To; b=jQuVNco102vOayReGlFHiXA9Ha/hDF0cPXRd76iQe49ayS0CCAj5LoGsiYm5IDB0YazN21en4MJCHNvY0Z8Oixhekg3kc8SdZ9byVxTPMX+kt0dLDG4szxJYvwkPu0bIBghzzdVdcj97rvvQFxgtB80QmGQ5pLuNwm9ve5vbxI8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=KBXt9lEE; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2f43da61ba9so2395155a91.2
+        for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 19:25:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1737689108; x=1738293908; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=NZVGarXm8F3wmNaZlX6Uo9ZJAp39A7Hk9H8iGkJJROc=;
+        b=KBXt9lEEDX1qM8TX+VH7jnl1qiF5d5ftEFbBOO2MoM7T592VsTequ9zGqnq0xQTLGJ
+         xvg/8JFa/J7E06fA1V8+e6nSp2EhHjKM5cp6LCTOPr/SjjVHP15KhiELb8ECkbDw1dPo
+         l12Kp4PDK1N1RzUBgvqA2MGAb7isBUmmIfcVx2IVwdtxuE35KgcFyADSIZ3wqKGpAS3a
+         zbx2asG8NMgTQAbYa68mkfytpSJN9wrKUEn1h+qO0NGUM9zKXUjCOmAN/VywPVAmmyxp
+         RTJDLuDos9gRmKnnlJI24lldPsjZodLHLbl2GegO12z9qzUI2AGCvJD7inX1bUK5tJ7D
+         /zMw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737689108; x=1738293908;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=NZVGarXm8F3wmNaZlX6Uo9ZJAp39A7Hk9H8iGkJJROc=;
+        b=lk4h5/OSAq/7yUR4pkqZ1yhjJC4Vbl12r4qiMhjrz4nchhtyUGLMhVA/qHFxR4foXR
+         ouc1tK8YT97AVVJCJnh9uzNXxxCmYIvrZAd6RQXtFQ6CSqdEFrCeaVN34xRfb/kdZdI8
+         GdMXqk+W/cPYIinc0WtfX1OhxsOMPUvnzWYTGYv+JDm03H3jbIPObmokOVDII7ySgO2V
+         G0wSeRsbhhHB4Eq7y8xBj89BJ7IlebEKZc3e2IF4zBL9LuS83rkUm22wuLfsWlkkvgJ9
+         zXrIBY2n0x8gzWfm8HGf/yi4x70zgmUO1piYyEPR5qcgGBMiOB0bruyYHpKhr/El0cNl
+         1edA==
+X-Forwarded-Encrypted: i=1; AJvYcCWsKXlmTpO/FHB9JQfYzLOym49dLvnKlYLADZgyzzWDEGKdOspi44FdFx+oW3+kMsKFoZWqv9sWbg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwROmobyj0Tcliqt2Ne4KnxuM2jFLWdLJyW/TrjhRHsvMwm8R+e
+	IwywFUPFlV1miQyzJZNQDK2t+p4PRMlvpXaQBsqbzoLTv9Z3Gy23h6EhtErK3/U=
+X-Gm-Gg: ASbGncvJe7/MVi3se0hz9cddbyW5OZ7kXOObUu5NNYXT1ASD2qRsd52SXSSkletiLfW
+	1WsoHeKvRKBeKjd+errp1a1+9xjRKgd5nEdCSk+mHDpTpXhqkC3EDwpLfjDjNfC8axxVkynW3Xs
+	PAmVKuqzwe/fmOx1866XDalMjl/9Jyjxo27dZyISksmTCCkFrXIbbl5cATFEVe6gt7iiIaCzEM6
+	LuwHyWWqN3T6Eryrl2b+/lOA1eZyz/T19OajEww4pLZRDMuMlgDe9oT8z/3iSKtyfWy/5Yjyonr
+	R/imGuU=
+X-Google-Smtp-Source: AGHT+IH3EOFfjRy2pHQZCow+ihTX4jvDoolzW8UTSKno/rqcqAGRzh/TvGK8xVaNUiDNlVEdvHjT3Q==
+X-Received: by 2002:a17:90b:258b:b0:2ee:f80c:688d with SMTP id 98e67ed59e1d1-2f782d4f168mr39207230a91.25.1737689107809;
+        Thu, 23 Jan 2025 19:25:07 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f7ffa6acd0sm596795a91.28.2025.01.23.19.25.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 23 Jan 2025 19:25:07 -0800 (PST)
+Date: Fri, 24 Jan 2025 08:55:02 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Krzysztof Kozlowski <krzk@kernel.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	kernel test robot <lkp@intel.com>, stable@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-samsung-soc@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V2] cpufreq: s3c64xx: Fix compilation warning
+Message-ID: <20250124032502.nj25mu5mko36qjaq@vireshk-i7>
+References: <236b227e929e5adc04d1e9e7af6845a46c8e9432.1737525916.git.viresh.kumar@linaro.org>
+ <CAJZ5v0gz2WLtwJca5oAgZ23C+UmX18k9fvCbzRAEV6zZL4jiiQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250122060902.5pgfr5g24jpjrxw3@vireshk-i7>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gz2WLtwJca5oAgZ23C+UmX18k9fvCbzRAEV6zZL4jiiQ@mail.gmail.com>
 
-On Wed, Jan 22, 2025 at 11:39:02AM +0530, Viresh Kumar wrote:
-> On 21-01-25, 16:17, Beata Michalska wrote:
-> > On Tue, Jan 21, 2025 at 04:23:55PM +0530, Viresh Kumar wrote:
-> > > On 21-01-25, 08:44, Beata Michalska wrote:
-> > > > diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> > > > index 6f45684483c4..b2a8efa83c98 100644
-> > > > --- a/drivers/cpufreq/cpufreq.c
-> > > > +++ b/drivers/cpufreq/cpufreq.c
-> > > > @@ -733,12 +733,20 @@ __weak int arch_freq_get_on_cpu(int cpu)
-> > > >  	return -EOPNOTSUPP;
-> > > >  }
-> > > >  
-> > > >  static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
-> > > >  {
-> > > >  	ssize_t ret;
-> > > >  	int freq;
-> > > >  
-> > > > -	freq = arch_freq_get_on_cpu(policy->cpu);
-> > > > +	freq = IS_ENABLED(CONFIG_CPUFREQ_ARCH_CUR_FREQ)
-> > > > +		? arch_freq_get_on_cpu(policy->cpu)
-> > > > +		: 0;
-> > > > +
-> > > >  	if (freq > 0)
-> > > >  		ret = sysfs_emit(buf, "%u\n", freq);
-> > > >  	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
-> > > 
-> > > Maybe this should be a separate commit ? And also I am not very happy
-> > Initially it was supposed to be one, but then the rest of the series justifies
-> > the changes so it made sense to send those in one go.
-> > > with the new kconfig option. I don't want others to use it as we want
-> > > to get rid of this for X86 too eventually. Making it a kconfig option
-> > > allows anyone to enable it and then depend on it without us knowing..
-> > > 
-> > > Rather just write it as "if (x86)", with a comment on what we plan to
-> > > do with it in few release cycles.
-> > Right, those changes are based on discussion in [1].
+On 23-01-25, 20:48, Rafael J. Wysocki wrote:
+> On Wed, Jan 22, 2025 at 7:06 AM Viresh Kumar <viresh.kumar@linaro.org> wrote:
+> >
+> > The driver generates following warning when regulator support isn't
+> > enabled in the kernel. Fix it.
+> >
+> >    drivers/cpufreq/s3c64xx-cpufreq.c: In function 's3c64xx_cpufreq_set_target':
+> > >> drivers/cpufreq/s3c64xx-cpufreq.c:55:22: warning: variable 'old_freq' set but not used [-Wunused-but-set-variable]
+> >       55 |         unsigned int old_freq, new_freq;
+> >          |                      ^~~~~~~~
+> > >> drivers/cpufreq/s3c64xx-cpufreq.c:54:30: warning: variable 'dvfs' set but not used [-Wunused-but-set-variable]
+> >       54 |         struct s3c64xx_dvfs *dvfs;
+> >          |                              ^~~~
+> >
+> > Reported-by: kernel test robot <lkp@intel.com>
+> > Closes: https://lore.kernel.org/oe-kbuild-all/202501191803.CtfT7b2o-lkp@intel.com/
+> > Cc: <stable@vger.kernel.org> # v5.4+
+> > Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+> > ---
+> > V2: Move s3c64xx_dvfs_table too inside ifdef.
 > 
-> Ahh I see.. What about making it depend on X86 for now, as we really
-> don't want new users to use it ?
-Do you mean the new config option? If so, it is in Kconfig.x86 already.
-Unless you have smth else in mind ?
+> Applied as 6.14-rc material.
 
----
-BR
-Beata
-> 
-> -- 
-> viresh
+Thanks.
+
+-- 
+viresh
 
