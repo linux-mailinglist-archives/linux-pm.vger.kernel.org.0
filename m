@@ -1,166 +1,109 @@
-Return-Path: <linux-pm+bounces-20911-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20912-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE8F4A1AFC1
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 06:15:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 286D4A1B1FE
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 09:56:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 730F33A8BAB
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 05:15:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE3E4188F273
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 08:56:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1AC7146A79;
-	Fri, 24 Jan 2025 05:15:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 37CF3207A00;
+	Fri, 24 Jan 2025 08:56:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="sKUdHu1U"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="I2wpu0CY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 06F1717E0
-	for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 05:15:18 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 37C0C1DB134;
+	Fri, 24 Jan 2025 08:56:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737695720; cv=none; b=YbgOnmvbTeylmco1f7VCTnKyZY0KHpM0vsZAmxRbV2u1gSjIXhMjtbFHXOdHSf3jWjiGovVl9PhToLPR1JCBBtBptbLathK36pbS2zh5//fb6AMawcny29Kr4ZLQoB6CWDrswKxUy8r3VonwywhF4juNWDBKZDZuRJ1jpFhRMrI=
+	t=1737708975; cv=none; b=TBHycdPLn2k0KCdqSGTj97MHM8rB7tz5GAoSw2c2CmRNjtvpE2gMkCnKKZn4Im8VV6lWfBzKMmlS148Cm0ihhUsM+q6l+dMWGXh2qdiPw0n21r0tgbAFOoHJdLv3E+LZL3lktQfVbHen+uOsCEDLcga3ZvJvdMjPkEV0wTXYC/w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737695720; c=relaxed/simple;
-	bh=C94Z0eniOrhY8vfSK2Shz75ZMGzMu8k4tzHOc3eDo0o=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JwxirnfYYMniwggesR/NRVFLWn3XijZZ7zjyhIXY+sEGIWihv/wWkUcbA+B3qAbu8wkBA+Q+pkZlUb9p+RafQqV5iM4a0VaKThQpzSehn41/quTAutgz/FnyuxwPOq8r1CtAJ5XKAFSIHkvIQk40iJgkGZFlMoDbuFx7CSwO3G4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=sKUdHu1U; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21a7ed0155cso28989205ad.3
-        for <linux-pm@vger.kernel.org>; Thu, 23 Jan 2025 21:15:18 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737695718; x=1738300518; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=5V8IjvQyQoDv88IF/KIjDx1xtX5os/gbeTbjuMxwHYo=;
-        b=sKUdHu1UozfZdnDVbbLT9DjhSSA24jndPO1PJVFU9WaZ5Jv3vrPk0TNsW953poesQO
-         /g2ApDpYIN79R+ihLEGORpgbe0PAm36Q+PpiEi4+uW2BIx73bI7555019oOvuQSEHv4s
-         LLemgnjCWVogoZgrDU95dQnTSDVJ+Mri6rLv62xLFpV5DE68JT18ro1VbnNB0pcMLHlZ
-         c61J0E00KsRfIh7dkk5sr9EpE5TiASGN6/7SbgIM+TeeV+8vdc0TCuG4cPZD2broyb4o
-         xdc59wQDpcXKSt8tfug4Um81MGcoxbZheZ3XH1+/L8ZR74BA+JCRs6uw1eFXVVnfmQOi
-         OwJQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737695718; x=1738300518;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5V8IjvQyQoDv88IF/KIjDx1xtX5os/gbeTbjuMxwHYo=;
-        b=RK2m0aRwYZ1dBJ7gPFDH+WeRJ9bFIQKspauehKliMn2hdJKnmBCG2KYeOPQqeq4KFO
-         RlMoxL1FshWMGcwxH9FPYZkAK19+nYiNciPTvR0O3Wd1gpONsNEmOi1gtzqdccoCf3cN
-         00FOpVC/KjYOJR4G7wMMvrlq1WfHHOYRNMU4SpaDjoh2V/qe6kf3jnJ+mTIgUNT5GJWo
-         gxuxPq22wqh70POMkhD036Px+bc0hE4yz50Gx8Jmokb7C03KlB10jgCJGs15rtmVJyDR
-         q2Gj0+b5jJSahKV/BX9RaIyUlEuAr/LEcs1NNjP06CYWUBbrsBLHR8tXZxTDHjMe48/5
-         WbXQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXK4b0Lrn4NyanMkuTUNBZosIoSvQ3wT02LTkaZcsw1nIqODI8SbRGN7nFmZoMBWLQMpjoR4Op0sg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzAHFG2LdpTFWA4wwu1u0xRlTo4/HxZNAOoPf2rkotJShyRUcyy
-	UXpyE1g+Hk0Jv684N0dA0h3GV0Ljjutypl6HBWcTRIH0y3S0RF1oD94ZAzFgXQ==
-X-Gm-Gg: ASbGncvQRomBq9jnFZXCs2CfDlY5XGn1tAqxUzbrJGi7Oj7aF6dd6Dt5t25Dupu7l1K
-	1Xca7gsj4529RStn7rwE0kfK6Mj66byeikTtjBvuuXXAeK4MJJCcZEooksIxeb7RGoVa79fYyYZ
-	tVE46+UKdhViZmWE2g0gL3c17l16Y3Rneeg4ITmpD+6Oa6DYcj9I3/TXNRV3HFLA9udETc5oR0H
-	zrfUqiLVoTe73O+XxQKgoZytYnSIf4fXQpgXQsjqdAJRAOnqNCnGI543CuYadLKEvRiF6Zc8oQE
-	O8C/wT4/r4qYFPU=
-X-Google-Smtp-Source: AGHT+IEDPeDAS7uVIV0ZkrrydW8dzxtvB6pScgknE489KkEpgCZmqJC4AgG/7nH7vooXPlAoLJr2Sw==
-X-Received: by 2002:a17:902:e54d:b0:216:39fa:5cb4 with SMTP id d9443c01a7336-21c3556155cmr444408595ad.25.1737695718282;
-        Thu, 23 Jan 2025 21:15:18 -0800 (PST)
-Received: from thinkpad ([120.60.136.37])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da3ea2844sm7898155ad.57.2025.01.23.21.15.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 23 Jan 2025 21:15:17 -0800 (PST)
-Date: Fri, 24 Jan 2025 10:45:09 +0530
-From: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-To: Johan Hovold <johan@kernel.org>
-Cc: Bjorn Helgaas <helgaas@kernel.org>,
-	Krishna Chaitanya Chundru <quic_krichai@quicinc.com>,
-	rafael@kernel.org, ulf.hansson@linaro.org,
-	Kevin Xie <kevin.xie@starfivetech.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>,
-	Krzysztof =?utf-8?Q?Wilczy=C5=84ski?= <kw@linux.com>,
-	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>,
-	Markus.Elfring@web.de, quic_mrana@quicinc.com,
-	m.szyprowski@samsung.com, linux-pm@vger.kernel.org,
-	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org,
-	regressions@lists.linux.dev
-Subject: Re: [PATCH v7 2/2] PCI: Enable runtime pm of the host bridge
-Message-ID: <20250124051509.djzjoml2zcq2xvvz@thinkpad>
-References: <20250113162549.a2y7dlwnsfetryyw@thinkpad>
- <20250114211653.GA487608@bhelgaas>
- <20250119152940.6yum3xnrvqx2xjme@thinkpad>
- <Z44llTKsKfbEcnnI@hovoldconsulting.com>
- <20250120152829.7wrnwdji2bnfqrhw@thinkpad>
- <Z4-eufq4M04XHjck@hovoldconsulting.com>
+	s=arc-20240116; t=1737708975; c=relaxed/simple;
+	bh=Hqlynt3aXaASMjV6IHpr6I7vkH/wXBNRmEpnJSwFjOo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=UeKlgMjTyX0B8F1p+JS1+7/JoQq3Sd0tcZGPXkED3DNY7gMAGZHQOUExttqxKJNxno7WVOdyPjkJwYNK2/qq8Oh57ez2r+ld3V4fBE/nlh4qXL2lfWtDA+Ezmdk+qtkL0ERYfZ19X6y5b+WCRgJ3fm9mWWGxb1RHagL2PI6FYFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=I2wpu0CY; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 77A16A09FF;
+	Fri, 24 Jan 2025 09:56:02 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=2pmYbnPeKyxt+7NbOVL6/kIIAp9oX3TCI0RQTsRH730=; b=
+	I2wpu0CYQR3CbV7x/T8QxbdvunrCx/t0jUpMRxMYpyId8G1pMhUNmdxEX83rMcNT
+	pOmVn95QyZYXyo2TL12E5CBBTmuzCI4utQ6vYMyPvWinrw3cm/qcFJ8Dve7ncTbk
+	tE3RBCH/UbX1PG0Dy+HrfOUpLWdDfHUj+mz6Rvy5CqovsI5+EstokJIeMPk4AxZB
+	MC/706/lLvOIotm6HCExFUfSvsZNlv/u4uvP0LNcOHwUfwEHdAWLaFhl8FV80f1n
+	f1tuG4uJFPua4e8ZNvIl8O/9z02dE2R9Ir6eX+fz0HhxSK2Jo/5ujwxPMfjZO54S
+	HYPRFgp0O/+N0+fHM2cSTNtaNMRFZylvKBRnh9i9cQlcdHvu5WSlYMJfOzBYG5Uc
+	QFtKtaIJiZQockkYKNCogeMiAwc1ZI4r8LmfJwbSQ/tXvq3jnkz5aqCoG+pVEHcD
+	vy6Epopg1/SE3QTEQjCKbdAYEjviyliCGoB3oy7nK/hicCr0hm1eSCNhe3v4tn9r
+	1NNyj6t6dE7cZsVVcqNuyZ3UyN5UFjEZp6EFI/F8cGokMbgiY7xtwERhz6XNxYei
+	Lag+JNCYz2nlwDNx81wLR0zyqOCj3kgg6oS0JaTfWovgkmz4Z4Dg3EA1fTZcqSiO
+	5iQsfTe3+NOx9o1oDeoFH28XFX7l02ShVkcUgTh9AU8=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To:
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
+	<broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
+	<pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Nicolas
+ Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Varshini Rajendran
+	<varshini.rajendran@microchip.com>, Alexander Dahl <ada@thorsis.com>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<dmaengine@vger.kernel.org>, <linux-pm@vger.kernel.org>
+Subject: [PATCH v2 0/4] Add more devm_ functions to simplify probe path in drivers/spi/atmel-quadspi.c
+Date: Fri, 24 Jan 2025 09:52:16 +0100
+Message-ID: <20250124085221.766303-4-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z4-eufq4M04XHjck@hovoldconsulting.com>
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1737708961;VERSION=7984;MC=4288689662;ID=70488;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29ACD94852677063
 
-On Tue, Jan 21, 2025 at 02:18:49PM +0100, Johan Hovold wrote:
-> On Mon, Jan 20, 2025 at 08:58:29PM +0530, Manivannan Sadhasivam wrote:
-> > On Mon, Jan 20, 2025 at 11:29:41AM +0100, Johan Hovold wrote:
-> 
-> > > I'd argue for reverting the offending commit as that is the only way to
-> > > make sure that the new warning is ever addressed.
-> 
-> > How come reverting becomes the *only* way to address the issue?
-> 
-> I didn't say it was the only way to address the issue, just that it's
-> the only way to make sure that the new warning gets addressed. Once code
-> is upstream, some vendors tend to lose interest.
-> 
-> > There seems to
-> > be nothing wrong with the commit in question and the same pattern in being used
-> > in other drivers as well. The issue looks to be in the PM core.
-> 
-> After taking a closer look now, I agree that the underlying issue seems
-> to be in PM core.
-> 
-> Possibly introduced by Rafael's commit 6e176bf8d461 ("PM: sleep: core:
-> Do not skip callbacks in the resume phase") which moved the set_active()
-> call from resume_noirq() to resume_early().
-> 
-> > Moreover, the warning is not causing any functional issue as far as I know. So
-> > just reverting the commit that took so much effort to get merged for the sake of
-> > hiding a warning doesn't feel right to me.
-> 
-> My point was simply that this commit introduced a new warning in 6.13,
-> and there is still no fix available. The code is also effectively dead,
-> well aside from triggering the warning, and runtime suspending the host
-> controller cannot even be tested with mainline yet (and this was
-> unfortunately not made clear in the commit message).
-> 
-> The change should have been part of a series that actually enabled the
-> functionality and not just a potential piece of it which cannot yet be
-> tested. Also, for Qualcomm controllers, we don't even yet have proper
-> suspend so it's probably not a good idea to throw runtime PM into the
-> mix there just yet.
-> 
+The probe function of the atmel-quadspi driver got quite convoluted,
+especially since the addition of SAMA7G5 support, that was forward-ported
+from an older vendor kernel. To alleivate this - and similar problems in
+the future - an effort was made to migrate as many functions as possible,
+to their devm_ managed counterparts. The few functions, which did not yet
+have a devm_ variant, are added in patch 1 and 2 of this series. Patch 3
+and 4 then use these APIs to simplify and fix the probe() function.
 
-There are multiple pieces needed to be stitch together to enable runtime PM in
-the PCIe topology. And each one of them seemed to be controversial enough (due
-to common code etc...). So that's the reason they were sent separately. Though
-I must admit that the full picture and the limitation of not being able to
-exercise the runtime PM should've been mentioned.
+Change in v2: rebased onto Linus' master, which is:
+commit bc8198dc7ebc ("Merge tag 'sched_ext-for-6.14' of
+ git://git.kernel.org/pub/scm/linux/kernel/git/tj/sched_ext")
 
-> But, sure, a revert would have made more sense last week. I guess you
-> have a few more weeks to address this now. We can always backport a
-> revert once rc1 is out.
-> 
+Bence Csókás (4):
+  dma: Add devm_dma_request_chan()
+  pm: runtime: Add new devm functions
+  spi: atmel-quadspi: Use `devm_dma_request_chan()`
+  spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
 
-Sure. I've pinged Ulf offline and he promised to look into it asap.
-
-- Mani
+ drivers/base/power/runtime.c | 36 +++++++++++++++++++++
+ drivers/dma/dmaengine.c      | 30 +++++++++++++++++
+ drivers/spi/atmel-quadspi.c  | 62 ++++++++++--------------------------
+ include/linux/dmaengine.h    |  7 ++++
+ include/linux/pm_runtime.h   |  4 +++
+ 5 files changed, 93 insertions(+), 46 deletions(-)
 
 -- 
-மணிவண்ணன் சதாசிவம்
+2.48.1
+
+
 
