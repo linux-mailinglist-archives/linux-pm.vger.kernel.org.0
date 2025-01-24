@@ -1,187 +1,154 @@
-Return-Path: <linux-pm+bounces-20938-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20939-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61B5AA1B3EE
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 11:51:58 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F58DA1B466
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 12:06:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0DEA73A6CE9
-	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 10:51:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D31373A744E
+	for <lists+linux-pm@lfdr.de>; Fri, 24 Jan 2025 11:05:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 958F71D14EC;
-	Fri, 24 Jan 2025 10:51:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32E9821A94D;
+	Fri, 24 Jan 2025 11:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DAm09OYU"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="e2xss22X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f42.google.com (mail-wr1-f42.google.com [209.85.221.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EA281CDFC1
-	for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 10:51:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1D0021A928;
+	Fri, 24 Jan 2025 11:05:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737715914; cv=none; b=UgwDJsq5YY9Q7gXvMSHfJ11AVnMG2EkoWftrUqIIPk2uUTo2KilQOeLQmeZZF/wdXEbS8cNuBoClpwIUkf8AtzOKiiJV+e/RFciRcpqX4J5D0tLFLb5FFP9zNCQvZAHg3KMSa923eak6NcuowZGhTj2fPmC1dyKrCNR25sJPZUc=
+	t=1737716750; cv=none; b=n9RqMMJ1Vk+nqs1Sc/87OpN8xHkmrBtqu+1TmvfiIartGvgdQ9LLdtmpDWuS6psQODlPRpQq4xXRrYLlEV9X2lryJjM+TAvqWUoSgajZNPF757q2601KmdfMMF1uDVZ3bmJqRz/O9sVbxveQNwWxwuq0KcNLyfT/WwABNf8iBWs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737715914; c=relaxed/simple;
-	bh=B/1l3tdtCZ9PRYzReDHc6UkLBAY6SnrhKfJIycn3/Gk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aYGMz/NR/DI0ZUIoshxydLMHUr0daS+xUM0aXB8BD+DQNULv/5nkAo4poqN33I7x+X+VPpLYacvOD2n5zrR++Pi7/pSagOAFIcaxDw3VVZyQQkorK7I+7tiwB+9UbnxgEnMhUbL01lHTUbDK+YsoRhaNU760AWMpn1me3EKnkKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DAm09OYU; arc=none smtp.client-ip=209.85.221.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f42.google.com with SMTP id ffacd0b85a97d-385d7b4da2bso1798845f8f.1
-        for <linux-pm@vger.kernel.org>; Fri, 24 Jan 2025 02:51:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737715911; x=1738320711; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=tGTlLozxCo1nf43/X/aagzssis+Atz8YpkZYRRrzAY0=;
-        b=DAm09OYUCJHkxonVXjZalcz4Xfmevxg5Zqdd/kDgJiSewZk0pNGS1IbP8eJB6eJ4Ma
-         O1hHqlFwuq2Qvix0WsrUozye7A66428W2sKreu9KbB1FlRbwI+2zT+vauhd/V+nzT9Un
-         nEY+rQkcxiNL4J179N7U1U48CuPqTsQ6mAAbzNIwzldnar0zWrWt3q7wMP/AFwGERHcl
-         p8Q3f7NjNLpwVg/ca08EAEXt98gXXWTdYssTNeP5rItQzWOtk3mC/IzO3lzhl4zGVqNg
-         R9/S2ylg3PtjeoFNGMW929K10yFPuS7/nliMPEvQrnxyDU/7ZuhYt2Q0rF7itsMv0HiR
-         5LKg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737715911; x=1738320711;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=tGTlLozxCo1nf43/X/aagzssis+Atz8YpkZYRRrzAY0=;
-        b=ABncTgTVVA3jRIhcoMEndrfZvFnmCoIhspQaWB6Trdnbh/t3y8x2QLRbGv9LP3Fcfp
-         uWS0K2RxqCBjDwffjkU37IRLvkaQ2gXJ5ngQTLYnJk8FD+LyCuf73axNMSaWY6eyZbw+
-         Ch9CE9vog/7HEjjliOaEwsvrRbniJOwv1UoBLL5lmrrkCGoQmr3iznBkFTCaNtMFYZyi
-         qqASK0s0Aj/W1OaNka7gs9v3VNUv51FzxXLF2t9rOz4qD7g+L+WHfJYa3x4LFkVB1lpE
-         LX0OCTxtmtSBO7Vde0oRQOP/3fUCHghWXTiaG6ahN15DFCTXUPvHWjm3GLAQgno/U4dz
-         VwNw==
-X-Forwarded-Encrypted: i=1; AJvYcCXs+xtpFpGJYM5T7hiTjzcdNOfG16GIYvGAXnfPMPJkpcfFNUZWcpI8p+N8FxlTjFjuDZIUB+x1HA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLb0dHsJF2vSjMbkX6AZZM8XtlB4hgX6cvfKkdTD1QKpfo8jUW
-	ZcMJeIRWZ2hpa10jMMmFrsbE8Lwma9RSmohmLVLyj/ozuwv/pbF8Q8+46udBHzs=
-X-Gm-Gg: ASbGncux+jC29ClIKRo2X4piUs4mMrmHPHQl0l/ya1WfioNfccRvrWLok8bOA9emnNE
-	aeiLQLQkOMVaHTFazi38jwNTVFHntU/YlRKBX7LkUTATRc2cCDb+kau6ds2PhqSveumhbWD6gC9
-	vRTAi58Prjwz/PYaccJ5uhU0OIeJsOQM081bLOo5LfxiexUZ23FzhWG9zS8H/OjMRdaEj1qSBS0
-	yitX/blgfS4q8k5MadLWaVP8/goXFaALGrXzV8CXKmIcJAUw1t7nkyeJv6F4VnqK8vI+pHeNWLk
-	X4y/etagOw==
-X-Google-Smtp-Source: AGHT+IFYQo9jNiHBgOR8bRaxcWjkfxh6Y7QIEImm5C6fb5pC+YqVIPsrpJEhp0PabuCFZK+cqqd41g==
-X-Received: by 2002:a05:6000:2a6:b0:385:eb7c:5d0f with SMTP id ffacd0b85a97d-38bf566a239mr28879962f8f.26.1737715909296;
-        Fri, 24 Jan 2025 02:51:49 -0800 (PST)
-Received: from localhost ([196.207.164.177])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c2a1c418esm2332243f8f.95.2025.01.24.02.51.48
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 24 Jan 2025 02:51:48 -0800 (PST)
-Date: Fri, 24 Jan 2025 13:51:44 +0300
-From: Dan Carpenter <dan.carpenter@linaro.org>
-To: zuoqian <zuoqian113@gmail.com>
-Cc: Sudeep Holla <sudeep.holla@arm.com>,
-	Ionela Voinescu <ionela.voinescu@arm.com>,
-	"rafael@kernel.org" <rafael@kernel.org>,
-	"viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
-	"cristian.marussi@arm.com" <cristian.marussi@arm.com>,
-	"arm-scmi@vger.kernel.org" <arm-scmi@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org" <linux-arm-kernel@lists.infradead.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH] cpufreq: scpi: compare against frequency instead of rate
-Message-ID: <d7e5ba38-046f-49ff-8201-409756218e75@stanley.mountain>
-References: <20250123075321.4442-1-zuoqian113@gmail.com>
- <ad11dfc1-5e88-4421-b427-3955d4220133@stanley.mountain>
- <Z5IzMhTOhtujyH0n@bogus>
- <8ebf8f26-c3d9-43c0-b417-ce3131a84eb4@stanley.mountain>
- <6793606d.050a0220.a73fe.0803@mx.google.com>
+	s=arc-20240116; t=1737716750; c=relaxed/simple;
+	bh=CBFb9cadK6CI8XSq0vtxlBS7O6t7I082PLHFx/6xqJg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=ahl10iwXLIzs4MXajAcKNNV+lcvUxj03MRreSQ84VpmCG2JfzxKnPzxrRtahn65XXPsB3oV4w5/U5WFl9eusudGCCBXskfaWnv14i9E4DZukLUazy39iWq7oByQCoutg969y+03sxJbmadooFbHiuf8Rc7VbCZgSX10LJrTHQ2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=e2xss22X; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6C542C4CEF0;
+	Fri, 24 Jan 2025 11:05:49 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1737716749;
+	bh=CBFb9cadK6CI8XSq0vtxlBS7O6t7I082PLHFx/6xqJg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=e2xss22X+GyHcg3L8RAGJnHI3wDEOvPUmDUd72VUO16PECn3RbKh71bUJsCjz4MHd
+	 34alIyJ7KAOL1PhHPmxJ8W6ZekOE7ybWqTa8Yi/U5HZVx5iPXhA7OQsPv/iDuqwGdD
+	 RIoAyWvWanAC5dkN7+Vej8NoM8kxx4GFamPhoe4GdoZ4pWSeVhC8DVAMStEOXmq/IH
+	 b9xNJyKxptQn4ZmyTBB2eKnumhh359jLGlyW5QahtLgPUgFatOjU2FaacQhNvAWxZB
+	 Q7fZYMvH/pSF/rbwsu8wZDf4msxdCVQ5/q+XOaDGzvw3VuUt/w/QtKOeNm+aFsPuEO
+	 qOqYyDaSZwucA==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-29e5aedbebdso1053430fac.0;
+        Fri, 24 Jan 2025 03:05:49 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUEA64ceVm0Ej1oNehdyIZgNxhuqr/RuUAFuWJym5f78hLnAQ7PG0kO52ieyP3VEEISDIg+BOmvvAM=@vger.kernel.org, AJvYcCVroL6+JevdKO2+uKMAIZShweCRxkYaPd3tBvh/jGT2TiNc5nbksFWfbbL7KoOMP0Eiu27/5KBZfQ==@vger.kernel.org, AJvYcCVtCBAEnmNQ/GoNG9DQzp4NT7AkuIaAaihmdedFoUFjZCob2j+BvPItXopmy5tAYIkjt/nQpDHX8pk/HaZuNg==@vger.kernel.org, AJvYcCVv02tgNR9vqTxZ1XmEWJyhgZrsmOZqTe4GUk6TP3nDko3tINIjifeRxNLvpv7FhfbuY2O4bbv8EtwrbC2k@vger.kernel.org
+X-Gm-Message-State: AOJu0YwXfBTtzZScGtWDUDVjs677HPIiEp9jaVl4pTFE7InnPxWFJHCL
+	aIdD/PPyMGYblmWQS5st9fA5ioU3+pSC0n5Hq4x61ngzHKNhJA3bmLBNzyy6/7B9tYsUZWW2Unb
+	n6b9IgtO0JYtremhXaFcLGH8lbkc=
+X-Google-Smtp-Source: AGHT+IF9SQa/+bL5eAQooEMEc4F5um8UWTrom9xFFpSH41EcICfOloxWkQjjLH9ovO30qYEM+acRaxA2bbdUNAtBaco=
+X-Received: by 2002:a05:6871:6187:b0:29e:4a13:603f with SMTP id
+ 586e51a60fabf-2b1c09e6ad7mr17574182fac.4.1737716748305; Fri, 24 Jan 2025
+ 03:05:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <6793606d.050a0220.a73fe.0803@mx.google.com>
+References: <cover.1737707712.git.viresh.kumar@linaro.org>
+In-Reply-To: <cover.1737707712.git.viresh.kumar@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 24 Jan 2025 12:05:36 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jYSZQKkLN-TO_h0AazhHZtHgpavTnnAscLPYLmjX3LaA@mail.gmail.com>
+X-Gm-Features: AWEUYZn3vDpFuQgrmPTKrUBYJK1_bLxZl9mOCsSZPYdX_ojBCvjxJpMU7z9GFhg
+Message-ID: <CAJZ5v0jYSZQKkLN-TO_h0AazhHZtHgpavTnnAscLPYLmjX3LaA@mail.gmail.com>
+Subject: Re: [PATCH 00/15] cpufreq: simplify boost handling
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+	Christophe Leroy <christophe.leroy@csgroup.eu>, Cristian Marussi <cristian.marussi@arm.com>, 
+	"Gautham R. Shenoy" <gautham.shenoy@amd.com>, Hector Martin <marcan@marcan.st>, 
+	Huacai Chen <chenhuacai@kernel.org>, Huang Rui <ray.huang@amd.com>, 
+	Madhavan Srinivasan <maddy@linux.ibm.com>, Mario Limonciello <mario.limonciello@amd.com>, 
+	Michael Ellerman <mpe@ellerman.id.au>, Naveen N Rao <naveen@kernel.org>, 
+	Nicholas Piggin <npiggin@gmail.com>, Perry Yuan <perry.yuan@amd.com>, 
+	Sudeep Holla <sudeep.holla@arm.com>, Sven Peter <sven@svenpeter.dev>, 
+	WANG Xuerui <kernel@xen0n.name>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Lifeng Zheng <zhenglifeng1@huawei.com>, 
+	arm-scmi@vger.kernel.org, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linuxppc-dev@lists.ozlabs.org, 
+	loongarch@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Jan 24, 2025 at 09:42:01AM +0000, zuoqian wrote:
-> On Thu, Jan 23, 2025 at 04:04:13PM +0300, Dan Carpenter wrote:
-> > On Thu, Jan 23, 2025 at 12:16:50PM +0000, Sudeep Holla wrote:
-> > > (for some reason I don't have the original email)
-> > > 
-> > > On Thu, Jan 23, 2025 at 02:12:14PM +0300, Dan Carpenter wrote:
-> > > > On Thu, Jan 23, 2025 at 07:53:20AM +0000, zuoqian wrote:
-> > > > > The CPU rate from clk_get_rate() may not be divisible by 1000
-> > > > > (e.g., 133333333). But the rate calculated from frequency is always
-> > > > > divisible by 1000 (e.g., 133333000).
-> > > > > Comparing the rate causes a warning during CPU scaling:
-> > > > > "cpufreq: __target_index: Failed to change cpu frequency: -5".
-> > > > > When we choose to compare frequency here, the issue does not occur.
-> > > > > 
-> > > > > Signed-off-by: zuoqian <zuoqian113@gmail.com>
-> > > > > ---
-> > > > >  drivers/cpufreq/scpi-cpufreq.c | 5 +++--
-> > > > >  1 file changed, 3 insertions(+), 2 deletions(-)
-> > > > > 
-> > > > > diff --git a/drivers/cpufreq/scpi-cpufreq.c b/drivers/cpufreq/scpi-cpufreq.c
-> > > > > index cd89c1b9832c..3bff4bb5ab4a 100644
-> > > > > --- a/drivers/cpufreq/scpi-cpufreq.c
-> > > > > +++ b/drivers/cpufreq/scpi-cpufreq.c
-> > > > > @@ -39,8 +39,9 @@ static unsigned int scpi_cpufreq_get_rate(unsigned int cpu)
-> > > > >  static int
-> > > > >  scpi_cpufreq_set_target(struct cpufreq_policy *policy, unsigned int index)
-> > > > >  {
-> > > > > -	u64 rate = policy->freq_table[index].frequency * 1000;
-> > > > 
-> > > > policy->freq_table[index].frequency is a u32 so in this original
-> > > > calculation, even though "rate" is declared as a u64, it can't actually
-> > > > be more than UINT_MAX.
-> > > >
-> > > 
-> > > Agreed and understood.
-> > > 
-> > > > > +	unsigned long freq = policy->freq_table[index].frequency;
-> > > > >  	struct scpi_data *priv = policy->driver_data;
-> > > > > +	u64 rate = freq * 1000;
-> > > >
-> > > > So you've fixed this by casting policy->freq_table[index].frequency
-> > > > to unsigned long, which fixes the problem on 64bit systems but it still
-> > > > remains on 32bit systems.  It would be better to declare freq as a u64.
-> > > >
-> > > 
-> > > Just trying to understand if that matters. freq is in kHz as copied
-> > > from policy->freq_table[index].frequency and we compare it with
-> > > kHZ below as the obtained clock rate is divided by 1000. What am I
-> > > missing ? If it helps, it can be renamed as freq_in_khz and even keep
-> > > it as "unsigned int" as in struct cpufreq_frequency_table.
-> > > 
-> > 
-> > 
-> > I misunderstood the integer overflow bug because I read too much into the
-> > fact that "rate" was declared as a u64.  It would have been fine to
-> > declare it as a unsigned long.  The cpufreq internals don't support
-> > anything more than ULONG_MAX.  I have heard someone say that new systems
-> > are bumping up against the 4GHz limit but presumably that would only be
-> > high end 64bit systems, not old 32bit system.
-> > 
-> > The ->freq_table[] frequency is in kHz so a u32 is fine.  I guess if we
-> > get frequencies of a THz then we'll have to update that.  But when we
-> > convert to Hz then we need a cast to avoid an integer overflow for systems
-> > which are over the 4GHz boundary.
-> > 
-> > 	unsigned long rate = (unsigned long)khz * 1000;
-> > 
-> > The second bug is that we need to compare kHz instead of Hz and that's
-> > straight forward.
-> > 
-> > regards,
-> > dan carpenter
-> >
-> 
-> Thank you for your valuable feedback.I will make the changes to the patch and 
-> resubmit it, including renaming freq and keeping it as an "unsigned int".
+On Fri, Jan 24, 2025 at 9:58=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> Hello,
+>
+> The boost feature can be controlled at two levels currently, driver
+> level (applies to all policies) and per-policy.
+>
+> Currently most of the drivers enables driver level boost support from the
+> per-policy ->init() callback, which isn't really efficient as that gets c=
+alled
+> for each policy and then there is online/offline path too where this gets=
+ done
+> unnecessarily.
+>
+> Also it is possible to have a scenario where not all cpufreq policies sup=
+port
+> boost frequencies. And letting sysfs (or other parts of the kernel) enabl=
+e boost
+> feature for that policy isn't correct.
+>
+> Simplify and cleanup handling of boost to solve these issues.
 
-If you keep it as unsigned int then you will need to add a cast when you
-do the "* 1000" multiplication.  Please make freq and rate both unsigned
-longs.
+I guess this depends on the previous series?
 
-regards,
-dan carpenter
-
+> Pushed here:
+>
+> git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/pm.git cpufreq/boos=
+t
+>
+> Rebased over few dependencies from PM tree, will push to the arm-cpufreq =
+tree
+> after merge window is closed.
+>
+> Viresh Kumar (15):
+>   cpufreq: staticize cpufreq_boost_trigger_state()
+>   cpufreq: Export cpufreq_boost_set_sw()
+>   cpufreq: Introduce policy->boost_supported flag
+>   cpufreq: acpi: Set policy->boost_supported
+>   cpufreq: amd: Set policy->boost_supported
+>   cpufreq: cppc: Set policy->boost_supported
+>   cpufreq: Restrict enabling boost on policies with no boost frequencies
+>   cpufreq: apple: Set .set_boost directly
+>   cpufreq: loongson: Set .set_boost directly
+>   cpufreq: powernv: Set .set_boost directly
+>   cpufreq: scmi: Set .set_boost directly
+>   cpufreq: dt: Set .set_boost directly
+>   cpufreq: qcom: Set .set_boost directly
+>   cpufreq: staticize policy_has_boost_freq()
+>   cpufreq: Remove cpufreq_enable_boost_support()
+>
+>  drivers/cpufreq/acpi-cpufreq.c      |  3 +++
+>  drivers/cpufreq/amd-pstate.c        |  4 ++--
+>  drivers/cpufreq/apple-soc-cpufreq.c | 10 +---------
+>  drivers/cpufreq/cppc_cpufreq.c      |  9 +--------
+>  drivers/cpufreq/cpufreq-dt.c        | 14 +-------------
+>  drivers/cpufreq/cpufreq.c           | 30 ++++++++++++-----------------
+>  drivers/cpufreq/freq_table.c        |  7 +++++--
+>  drivers/cpufreq/loongson3_cpufreq.c | 10 +---------
+>  drivers/cpufreq/powernv-cpufreq.c   |  5 +----
+>  drivers/cpufreq/qcom-cpufreq-hw.c   |  7 +------
+>  drivers/cpufreq/scmi-cpufreq.c      | 11 +----------
+>  include/linux/cpufreq.h             | 20 ++++++-------------
+>  12 files changed, 35 insertions(+), 95 deletions(-)
+>
+> --
+> 2.31.1.272.g89b43f80a514
+>
 
