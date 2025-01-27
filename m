@@ -1,244 +1,174 @@
-Return-Path: <linux-pm+bounces-20979-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20980-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16DADA1D8F3
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 16:03:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D742CA1D91A
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 16:12:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 46F46160688
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 15:03:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E66A51886DD8
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 15:12:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BABE37603F;
-	Mon, 27 Jan 2025 15:03:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67DCA13AA27;
+	Mon, 27 Jan 2025 15:12:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="eO7/ToV5"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="KGG265+9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30FAB136327
-	for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2025 15:03:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AD5C213959D
+	for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2025 15:12:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737990191; cv=none; b=Iq1RlVk0qXx+PVtKJMYt0x82RlRAGxT29vew/gPbcgg57ajKusqABuYX1g/qclOvGrLMvi0lHdG+iTVhePKUHoIhMCxPXj4mly3KExXB6aY+DlCqu1/Caqez6HQZTuEuspLwSwfsK3BmLYhx60HUupCjc7I1vAIM+HCDWlYV8Kg=
+	t=1737990732; cv=none; b=o0gpp01boxPmS/8o3BRsXahQfHOnvGrbuaoR9+X3VQXzyQORRskJpQkkNxE8Y82lAmyJt+xfLzT6OeFsfjmWha86HO+NY2Nn/jjSZyw3mlhhUxozjYyampUoJa/HboE8bMUlrGFOpF1DjZtIaj7/Lbe7FVDaiX6XDCZlK9IyoDQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737990191; c=relaxed/simple;
-	bh=KgQQ5YANRbxtmZcEfox8jlX6dfC8/IJ+VxKphZA7qPs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mX8oXJalM8vhd4vcmb1XSeIo7E4kcic0GhxUKiBy33A+XlHrSvlxDPM1DPzEOJ/xXVBK5hI/F/A9sUivs3AC4JZGpguIs9IUnGzYtQ1WhB758rqq9clSW/456pkEmhRk4ZcopInBzppcw9Wlv/0KzDjdxfXyRprdzOVxNuBMErs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=eO7/ToV5; arc=none smtp.client-ip=209.85.219.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e573136107bso7365404276.3
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2025 07:03:08 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1737990188; x=1738594988; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NXZQ6nb4ZjNmSWmyYgZm9Czv4PRceNRa178kP6HZ8M0=;
-        b=eO7/ToV5q+w+TfV7R8OaW/k3RWkcgG+5XSSKpXgSmn9Kzfsr42IEiTRsLNpeVR2Baz
-         cnrrhFDqhctw1TB+1tS8AtR0H+nTrDvq9KCE8S5hoKqIyLxHCanAwh6Xd6f3YKZKQyZ0
-         JpsWSDgnGhBVdp9JXbbZrQnCVuUYdlbHLC6vc/z41bEUIVwy61LnpGYe5SoVYJX+Nas+
-         UNQF7Sj6lpkN8W0zvrs0pAl70+IXsiHqaZ6DqwO25zaulCQrWqUKk+bvyL5CJXGCMvlq
-         k55whc0JvC8NKj2AW0sDwlx4SbY0N5iUcKPI8CU1avha312El5ioG0iAcNN8ZD6L+VF5
-         mnxQ==
+	s=arc-20240116; t=1737990732; c=relaxed/simple;
+	bh=0/2bJnEnDs8um6XYYODDkPZ2omRK56ST66i1OlyJEKA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=lXEeuQelt1XyPYdNZScAPJvyiYo+CMqE6mvCL45xUukFemSM2x7xCPuwK1v5HySxG2o2iWpmArieiKAOxHO1+06AeCJGLLNLAXSOI+VVzgJqSCjIsLksO0nUuhlBlrBZn3J+zoGsVaziPumwNhXSRh8ueRLKs5xpeLoEGdpxP0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=KGG265+9; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50R9m0NM028379
+	for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2025 15:12:10 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	dQpvtI6u3lxTYx1xzlqCxqIm9uDJhDvieISDzIxyB3U=; b=KGG265+9kok1dsaT
+	jn6yay7UsmHlM/Z8GeR6dq0lOj8NRdcbVnkCK9FjAgc3tAtygj884BfBU/Y4duZb
+	mAXtAxfG1N2FPdjXGLFHUxV4wf1zWn1YDYibnQLOlvw7OayBOOgtyoNDv8dco2mk
+	0F7Tmw0NOeJUz7SbgEXcBRbHfGi9GFQ/iNh+MbHy++Ghsr8jKLvRvUBVuqyVuXOV
+	uBhYWn7rBrnJSv/tDYBYL27oRJXd7ixngJkN9WnhNZNKuTiWIKxAPLl2CVNmGde/
+	evcctEhYbEKA64Y+lA/s5bonhY3+b58n5Vp1TPM6RkwN4gNpSks69TV10fbfc5DV
+	VQwpKw==
+Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com [209.85.222.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44e7tj8pb8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2025 15:12:09 +0000 (GMT)
+Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7b6e43ed084so90667785a.0
+        for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2025 07:12:09 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1737990188; x=1738594988;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=NXZQ6nb4ZjNmSWmyYgZm9Czv4PRceNRa178kP6HZ8M0=;
-        b=e8HbQxCgSQoEU51VAblOgcOIm5lvB594/nDE1xy+sCQhpDaxQhdsE8qS4n7s44VCpO
-         S0NkZ+VXAP3MmlBhUJwSxbj7jj81D12PDZPettenXPa9dUvgYRwnUOxR3kSv/XtWtOHs
-         E2FR24Et4C/H51QhjNug9lydRSAZO3dQhV8jyVHSP1VldR82+KXzFPVb5rwTspk2AApv
-         czjnCaQo/VUw7Ylg7x9du/qkGoVL/aiIt0syXecf9C4sIJbVde6Fg2jfGh4YEZzClpBb
-         D9h7PJWFpOzWnjslZsOkeD22++eeO1DwN8TyFli8JmxN7Alk+WFLf2g0MxLM4Za6AtG2
-         p50A==
-X-Forwarded-Encrypted: i=1; AJvYcCXC4rX/thVujHh5L7oVAQaOrEkhSiID+TYISMAR0kcbrD2+rRKKiB6gqmo96vU5oaTjSGnV85JMIg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzd6qKa0JVrnClgBNSLzL12DNz9Brb/wg0Po896oT+pDoXBIghr
-	N7LsEEkYfOQU8/r/aHvo09EHxgwnvc7tJP7RQg+qEGnOn2e6Cv+n2mzzyrLWXWmdO61N3cf42nK
-	MxuHMRvqgqBqrZ1qdJwm5h3fUqqvrXYZCYgWgJg==
-X-Gm-Gg: ASbGncupHcj64SXGbbbSH6k9Phiu5iUvaE5E4U6Jyxr/uECyP1DKKzYhfGFjQNKrqjf
-	/bfkoODKWIwL150Le17YyxlgfB6fHxJwOMbTC9k7LBmngGUgG3c/9h2IjWDTeWb8=
-X-Google-Smtp-Source: AGHT+IEt6T/uZdsMbBRTR7v5lKTj+sx8hluU13fEefiuxj0xUTMAIdxo11ZKTBwu3aNDvJlMgWAozLpYi/KSFkSLEJY=
-X-Received: by 2002:a05:6902:1501:b0:e58:1412:95e5 with SMTP id
- 3f1490d57ef6-e5814129711mr17108491276.32.1737990187961; Mon, 27 Jan 2025
- 07:03:07 -0800 (PST)
+        d=1e100.net; s=20230601; t=1737990728; x=1738595528;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=dQpvtI6u3lxTYx1xzlqCxqIm9uDJhDvieISDzIxyB3U=;
+        b=ItI8nWRZYJgyJ+vZFRiz58iBztyGADjHAHyN2FEshCQcsyeioKrvXblYPxgJiSM4Wu
+         dZOsFdLZ2k3c20hOH/j1zxjyN60pNLrELD/njR10wZJo2RTKbiOHyk2GZ2ay/venKx1J
+         h0NakmTIjY5hd7oZ2XlB6z14ih+6FQH9gAaV+6tSlQSfbOMCuJ0IN3qu3XHeYfjuIBi8
+         12fX8Wcj1wjGQuAp/Ywwc+vaiEwkrvHUko/mAxXD6JdK3tPI4+11zFONxfsA5dTXd8hF
+         Jc43mZc+oPgHR12eey+b/uZQn/bdp9QLlQJZ6ar1zL3mfR/K7yoJHSvx9dcwJ0S8HaEQ
+         er3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCXv5UAH80vyQ/n6NtVH24RxLfz8H81+Tt9mPErheA4VEymYKHUpmVFCuinGQDP/8OtmDT2S26z90Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwYCicOoYLMpRUSnjp5Gg8K6ZaRObrBMZ5Z6V+ouaMdYRQtlgum
+	Y0EMRkrB58/DECOg+ZuNMcCthuEFDJyvgv5UcLjNl5w07EV0XyfkqUhxKYsZBZCNNIacIkagR+Z
+	8e8z7bqm582DftiBCSzv46QPhQvSnfnU5PhbHgkL9M1XJ1AKF624X1FD0TQ==
+X-Gm-Gg: ASbGncuUGbbTAw9D5HEeoXpa/wdqgQQKmkzfXgCbaY3mcjXb9XZFCMsy/HbqTHgQiPM
+	7llJVMPt7k59fL+2tp17g7Sp65ZB0J35ZaYmKaMoF9fD3VH2ZnABYuw0xpbGryhxqrPpNzyf+Lr
+	MEHQ2K2wyggZVwQKeT5u4+iBjgbozzX5rGb8RxgJW93VwGRxOPmogS9NkAH81AOaTcV26FM4HNK
+	fNmGkS5ExFkgX7sr3mGGAWVE7fwqAbpZtsB3eK4g+AyJTJQ1i3UQjtUOhROKUzPUVXDwgUM2jzn
+	RW14urdxwmixGqjtLq7EC37g6+Y/Jo4CgjyL8nwwmQQzXFRqd6m8JFFwL8c=
+X-Received: by 2002:a05:622a:1b92:b0:467:692b:754f with SMTP id d75a77b69052e-46e12ba7bbcmr222256431cf.13.1737990728546;
+        Mon, 27 Jan 2025 07:12:08 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGAXSyKsvfmhX3h/ssch181jhsbqIKNv4LNE3vkPaU53NS6RVkISKb6uv5OLWtSlIdF4nr7xQ==
+X-Received: by 2002:a05:622a:1b92:b0:467:692b:754f with SMTP id d75a77b69052e-46e12ba7bbcmr222256191cf.13.1737990727978;
+        Mon, 27 Jan 2025 07:12:07 -0800 (PST)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab6760ab363sm598975666b.114.2025.01.27.07.12.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 27 Jan 2025 07:12:07 -0800 (PST)
+Message-ID: <7e118726-b22b-4c7b-9966-07c3b1ff709c@oss.qualcomm.com>
+Date: Mon, 27 Jan 2025 16:12:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250103140042.1619703-1-claudiu.beznea.uj@bp.renesas.com>
- <20250103140042.1619703-2-claudiu.beznea.uj@bp.renesas.com>
- <20250104135225.2573285b@jic23-huawei> <44e4a6b4-39a4-49d0-b3a5-fc5545c39a56@tuxon.dev>
- <20250111131409.36bebfd3@jic23-huawei> <bb987a1b-a999-478c-8e35-124fcf41561d@tuxon.dev>
- <CAPDyKFoJ3pLU-5_b5MSxMZd7B1cfOvmcdqR4FGkU2Wb7No0mcw@mail.gmail.com>
- <20250117155226.00002691@huawei.com> <CAPDyKFpQUMOFtA-QCbYdaeKSDGJpnjcA+tiKZ=kzmrjYRtFZdw@mail.gmail.com>
- <20250124184137.0000047a@huawei.com> <CAPDyKFrqDfYEQHk0RsRi2LnMw_HgGozMW9JP9xmkAq52O7eztg@mail.gmail.com>
- <20250127123250.00002784@huawei.com>
-In-Reply-To: <20250127123250.00002784@huawei.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 27 Jan 2025 16:02:32 +0100
-X-Gm-Features: AWEUYZkibkIQT8TcMqUAUe1XzBqCQ3T6nHOIS2uELscvJhEfdW2W4UhZK7QYCLM
-Message-ID: <CAPDyKFoCx3jQOptPrY0CYNpH1R+fszF3MUQLSTn_nreyi5-vPw@mail.gmail.com>
-Subject: Re: [PATCH 1/2] iio: adc: rzg2l_adc: Drop devm_pm_runtime_enable()
-To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-Cc: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Jonathan Cameron <jic23@kernel.org>, 
-	prabhakar.mahadev-lad.rj@bp.renesas.com, lars@metafoo.de, 
-	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, 
-	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	linux-pm@vger.kernel.org, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 3/4] cpufreq: qcom-nvmem: Enable cpufreq for ipq5424
+To: Sricharan R <quic_srichara@quicinc.com>, andersson@kernel.org,
+        mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+        krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
+        rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
+        linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+        devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org
+References: <20250127093128.2611247-1-quic_srichara@quicinc.com>
+ <20250127093128.2611247-4-quic_srichara@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20250127093128.2611247-4-quic_srichara@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: bRVnFDEeNI2h1Fn3Vab3GOctfGNDJmSR
+X-Proofpoint-GUID: bRVnFDEeNI2h1Fn3Vab3GOctfGNDJmSR
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-27_07,2025-01-27_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 impostorscore=0
+ suspectscore=0 mlxlogscore=999 clxscore=1015 spamscore=0 mlxscore=0
+ priorityscore=1501 adultscore=0 bulkscore=0 lowpriorityscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501270121
 
-On Mon, 27 Jan 2025 at 13:32, Jonathan Cameron
-<Jonathan.Cameron@huawei.com> wrote:
->
-> On Mon, 27 Jan 2025 11:47:44 +0100
-> Ulf Hansson <ulf.hansson@linaro.org> wrote:
->
-> > [...]
-> >
-> > > > > > > Do consider OK to change the order in pm_runtime_disable_action() to get
-> > > > > > > rid of these issues, e.g.:
-> > > > > > >
-> > > > > > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > > > > > > index 2ee45841486b..f27d311d2619 100644
-> > > > > > > --- a/drivers/base/power/runtime.c
-> > > > > > > +++ b/drivers/base/power/runtime.c
-> > > > > > > @@ -1547,8 +1547,8 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
-> > > > > > >
-> > > > > > >  static void pm_runtime_disable_action(void *data)
-> > > > > > >  {
-> > > > > > > -       pm_runtime_dont_use_autosuspend(data);
-> > > > > > >         pm_runtime_disable(data);
-> > > > > > > +       pm_runtime_dont_use_autosuspend(data);
-> > > > > > >  }
-> > > > > > >
-> > > > > > > though I see a rpm_resume() call is still possible though pm_runtime_disable().
-> > > > > >
-> > > > > > I am still worried about keeping the device runtime enabled during a
-> > > > > > window when we have turned off all resources for the device. Typically
-> > > > > > we want to leave the device in a low power state after unbind.
-> > > > > >
-> > > > > > That said, I would rather just drop the devm_pm_runtime_enable() API
-> > > > > > altogether and convert all users of it into
-> > > > > > pm_runtime_enable|disable(), similar to what your patch does.
-> > > > >
-> > > > > That is making a mess of a lot of automated cleanup for a strange
-> > > > > runtime pm related path.  This is pain a driver should not have
-> > > > > to deal with, though I'm not clear what the right solution is!
-> > > > >
-> > > > > Key is that drivers should not mix devm managed cleanup and not, so
-> > > > > that means that anything that happens after runtime pm is enabled
-> > > > > has to be torn down manually.  One solution to this might be to
-> > > > > always enable it late assuming that is safe to do so there is
-> > > > > never anything else done after it in the probe path of a driver.
-> > > >
-> > > > The problem is that runtime PM isn't really comparable to other
-> > > > resources that we are managing through devm* functions.
-> > > >
-> > > > Enabling runtime PM for a device changes the behaviour for how
-> > > > power-mgmt is handled for the device. Enabling/disabling of runtime PM
-> > > > really needs to be explicitly controlled by the driver for the device.
-> > >
-> > > I'm sorry to say I'm not yet convinced.
-> >
-> > Okay, let me try one more time. :-)
->
-> +CC Greg as the disagreement here is really a philosophy of what
-> devm cleanup is relative to remove.  Perhaps Greg or Rafael can
-> given some guidance on the intent there.
->
-> Mind you I think I found another subsystem working around this
-> and in a somewhat more elegant, general way (to my eyes anyway!)
->
-> https://elixir.bootlin.com/linux/v6.12.6/source/drivers/i2c/i2c-core-base.c#L630
-> https://lore.kernel.org/all/YFf1GFPephFxC0mC@google.com/
->
-> +CC Dmitry.
->
-> I2C creates an extra devres group and releases it before devm_pm_domain_detach()
-> As all devm calls from the driver end up in that group, they are released
-> before dev_pm_domain_detach()
->
+On 27.01.2025 10:31 AM, Sricharan R wrote:
+> From: Md Sadre Alam <quic_mdalam@quicinc.com>
+> 
+> IPQ5424 have different OPPs available for the CPU based on
+> SoC variant. This can be determined through use of an eFuse
+> register present in the silicon.
+> 
+> Added support for ipq5424 on nvmem driver which helps to
+> determine OPPs at runtime based on the eFuse register which
+> has the CPU frequency limits. opp-supported-hw dt binding
+> can be used to indicate the available OPPs for each limit.
+> 
+> nvmem driver also creates the "cpufreq-dt" platform_device after
+> passing the version matching data to the OPP framework so that the
+> cpufreq-dt handles the actual cpufreq implementation.
+> 
+> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> ---
+>  drivers/cpufreq/cpufreq-dt-platdev.c | 1 +
+>  drivers/cpufreq/qcom-cpufreq-nvmem.c | 5 +++++
+>  2 files changed, 6 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/cpufreq-dt-platdev.c b/drivers/cpufreq/cpufreq-dt-platdev.c
+> index 9c198bd4f7e9..4045bc3ce805 100644
+> --- a/drivers/cpufreq/cpufreq-dt-platdev.c
+> +++ b/drivers/cpufreq/cpufreq-dt-platdev.c
+> @@ -187,6 +187,7 @@ static const struct of_device_id blocklist[] __initconst = {
+>  	{ .compatible = "ti,am62p5", },
+>  
+>  	{ .compatible = "qcom,ipq5332", },
+> +	{ .compatible = "qcom,ipq5424", },
+>  	{ .compatible = "qcom,ipq6018", },
+>  	{ .compatible = "qcom,ipq8064", },
+>  	{ .compatible = "qcom,ipq8074", },
+> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> index 3a8ed723a23e..102f7f1b031c 100644
+> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
+> @@ -200,6 +200,10 @@ static int qcom_cpufreq_kryo_name_version(struct device *cpu_dev,
+>  	case QCOM_ID_IPQ9574:
+>  		drv->versions = 1 << (unsigned int)(*speedbin);
+>  		break;
+> +	case QCOM_ID_IPQ5424:
+> +	case QCOM_ID_IPQ5404:
+> +		drv->versions =  (*speedbin != 0x3b) ? BIT(0) : BIT(1);
 
-How would that address the problem I pointed out with runtime PM
-below? This problem isn't limited to attaching/detaching PM domains.
+Perhaps:
 
->
-> >
-> > >
-> > > Devm callbacks are explicitly registered by the driver so that they
-> > > are unwound in a specific order.  Many other parts of driver
-> > > registration rely on this ordering.  This does not seem different
-> > > for runtime PM than anything else.
-> >
-> > If you compare clocks, for example. It's the driver that is in full
-> > control of the clock gating/ungating. When the ->remove() callback
-> > runs, the driver typically makes sure that it leaves the clock gated.
-> > Then it doesn't really matter when the clock resource gets released.
-> > The point is, the driver is in full control of the resource.
->
-> Not a good example. devm_clk_get_enabled() does not gate the clock until
+drv->versions =  (*speedbin == 0x3b) ? BIT(1) : BIT(0);
 
-I was not referring to devm_clk_get_enable(), but rather just devm_clk_get().
+But ultimately both work:
 
-To me devm_clk_get_enable() is another interface that we should avoid.
-For example, what if the clock is already gated when the ->remove()
-callback runs? Then we need to ungate the clock just to make the
-devres path happy so it doesn't gate an already gated clock. And this,
-just to save one or two lines of code.
+Reviewed-by: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
 
-Don't get me wrong, I certainly like the devm* functions in general,
-but it's not a good fit for everything.
-
-> the devm cleanup. The assumption being that nothing that affects
-> it runs between the remove() and devm cleanup.  So pretty much identical
-> to the runtime pm case.  They being that you have to obey ordering so
-> that if you need to run something after the clock is disabled then
-> you register that callback before you call devm_clk_get_enabled()
->
-> >
-> > If runtime PM would remain enabled beyond the call to the ->remove()
-> > callback, it would mean that the driver's runtime PM callbacks could
-> > be called too. For example, userspace via sysfs may at any point
-> > decide to runtime resume the device. In other words, we may end up
-> > calling the runtime PM callbacks in the driver, when they are not
-> > intended to be called. In the worst case, I guess we could even end up
-> > trying to control resources (like a clock) from the ->runtime
-> > _resume() callback, when the references to these resources may already
-> > have been released.
->
-> This is all about what we consider remove. To me, with devm_ manged cleanup
-> in place, both remove() and devm_ cleanup count as parts of that remove
-> process.
-
-There is no straightforward process here, if you would keep runtime PM
-enabled beyond ->remove(). Things can happen in parallel.
-
-In that case, drivers would need to extend their runtime PM callbacks
-to cope with more complicated conditions, as resources that those use
-may have been released. Moreover, how can we make sure that the device
-is put into a low power state after the ->remove() has been called?
-
->
-> One option I did wonder about was having a devm_pm_domain_attach()
-> A little cheeky but I think the call in platform_probe() is late enough
-> that we don't run into the checks on no devm_ calls before driver probe.
->
-> That would shuffle the dev_pm_domain_detach() to the end of the
-> devm_ cleanup.  Mind you the i2c approach above seems better.
-
-Again, this isn't limited to PM domains.
-
-[...]
-
-Kind regards
-Uffe
+Konrad
 
