@@ -1,195 +1,346 @@
-Return-Path: <linux-pm+bounces-20982-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20983-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3279A1D9D6
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 16:44:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C135A1DB1A
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 18:17:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1D8C51680B4
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 15:44:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2875718836A9
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 17:17:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB4A4152E12;
-	Mon, 27 Jan 2025 15:43:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DEE5157493;
+	Mon, 27 Jan 2025 17:17:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xnzFcBe/"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MGFci6Wg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2058.outbound.protection.outlook.com [40.107.93.58])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D576213C809
-	for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2025 15:43:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.58
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1737992606; cv=fail; b=XCoEX4kLdI5WLniXhMkRvkHvzB9lK+Zcr51sIaoBJn6cI4F3r+6dnb4QOuqpL5D8dGRWibn0EfoovTz894qTlODpxJBYYM8CNdHbqAWB5WX3EucT3XgDJKpMsoqbj8H57tYChLyUPyoBfPSeTasRvyihIoy8e2qE/gx29EBk4NQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1737992606; c=relaxed/simple;
-	bh=XyFvYYTGxwQnTONJdqD1e6tstx3waUcFN1nERXYFto8=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=f3oEhluEBoyqhib1N4svblIXxeO1aQn6dXKDK8uKvNSXa93KvVLhjhVUjqnRzGuU4M8MKQMRzaSRsOQjtvu+WZQbAMObC4MYMiNxb+Is+J0OFdISyvkeYzebmjNk5DsFDnGImLxB+C9Hz63+igItpUedKLwO5Y6NilbOPdFj0ao=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=xnzFcBe/; arc=fail smtp.client-ip=40.107.93.58
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=CygRlpydx3Hj50w0i1hXTxiDA10EHgjMljOF7u+zrE2Wyo/1f4rt+wjwimzS+cIJ6pS9sdAKw/drBV6D3M1FbStbqehwuHex+PQAr10wDgPlAzVBt09ks05G9e4eMMKEsEuJlQOJHz8l68Xr0iVEvzSnCuV1zBrDP2zozkr3sz+DzLz2gHg3Xy+57VPthR+cCCQyY9cmVg98atOjYpFejxO7FxZXQvU0POvN3uyUDaUpbg6u5zhzJNzXo3tiIY0jWjypked5Brw7s3vENqtdG9tBgjaHj21+U9APTRcIIOW/pWzjJviZvkho1vjt7n4/dthYep6LSHooqU9nZn2BbQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=x/ujWZVio0KP7UNkgIcWeSmLIVlKlCdKfWYrPoNn4jg=;
- b=hR5Gc2MwS4/rxNvS4nsQIJA09xmxMsPntuXedrJrrxWm9Uxs6YoMzEXge5y/DlUbPltHTviwZm3EuzO/I5bIqtWltw4wgbr0caT1+pcyXMX/K6AdIwVkuBv1ZCoigkYbXX6IJNMo4GkIznoFPEvsSm21cJvuNtzxk+ppl0/OZ+WTkz3psQSeygJ9z2AVExGsByKfG1P+3FVkEEdOm2AJ8mP7V8pBqO3qazkGqT3MqQIcw30L9P9RIl2NdKLBKmDSUdsMNxkXAive4eA6qyfMROwXZ5nck4ESYyp5ut9mQ2xSWPn3WDeT3PCvHyMMDJ6sIK85Py6if9R74E8eptGPBg==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=x/ujWZVio0KP7UNkgIcWeSmLIVlKlCdKfWYrPoNn4jg=;
- b=xnzFcBe/td3hBmSpdRLVSQ+EtKrxIwNBn3R35dNhn1LkZL75fusP/Dy3ebbEaJl+ihUujV7eg+Z34YdRTCKn1/54UOXr+0FHYhkq2Bw4TidTaoZ+Ez+IYJvm8OTVJSJ3VqmIKucg2oH73+vAZaxKaoOPTRwD9fyGOfGp/Hh8+AY=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by SA1PR12MB7441.namprd12.prod.outlook.com (2603:10b6:806:2b9::8) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8377.22; Mon, 27 Jan
- 2025 15:43:22 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.8377.021; Mon, 27 Jan 2025
- 15:43:22 +0000
-Message-ID: <5dff1719-c4e9-4ebf-ae0b-73b9de98df05@amd.com>
-Date: Mon, 27 Jan 2025 09:43:20 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: Warning `amd_pstate: the _CPC object is not present in SBIOS or
- ACPI disabled` (Dell PowerEdge R7625, AMD EPYC 9174F)
-To: Paul Menzel <pmenzel@molgen.mpg.de>, Huang Rui <ray.huang@amd.com>,
- "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Cc: linux-pm@vger.kernel.org
-References: <2b811df7-5278-4cfc-b8a0-7d6d72d3358d@molgen.mpg.de>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <2b811df7-5278-4cfc-b8a0-7d6d72d3358d@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: SA9PR10CA0017.namprd10.prod.outlook.com
- (2603:10b6:806:a7::22) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 520541F95A;
+	Mon, 27 Jan 2025 17:17:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1737998264; cv=none; b=H6g5LJ6qX63ksk6cKfKm5UVfrL8yxL/Euda26QL0nzi8KDdNy86N4nHsHunB3G0aW8gm4pm8oVzpou+cDnKxZoTNKtruRlfJ9GD62QaDRkZbEOFxzZF6S55KDsPXY8p7U6uv8AFm8JTx7ODO3OB407A8mBqS3+f176gNzL1KfgE=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1737998264; c=relaxed/simple;
+	bh=X4RrfmLSQKm796VLP8MLWGQzFQ3rW1jsDvPoTVrkh/E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=CDc7jIT01gKC9sMAki0Bmn8iq1+5LeSabMEx9COscWco2KkUPceA8lFfJMEa8ZrPF0A6hhHcWjg7xOf3yUdlaQ8ibFBfgpC1nOGk8ZT6zC9e1mVvekuWnvDVsIgOEIJgU+KCbkQt6IcepG7sax6XTWkdT8BkIMdmpg9RkS+P3Uw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MGFci6Wg; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-216281bc30fso4166555ad.0;
+        Mon, 27 Jan 2025 09:17:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1737998261; x=1738603061; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=NJq4F5R52EihkJnORvxW1Duv4b4PNbOuy1hXm+tIhDA=;
+        b=MGFci6WgrrtP4cu3DZU9V14pIp6KQFEPvxNo9ncWNXlJ30Vcj1fQ2e0ro/zdvKA37c
+         GUw0ePzXQa8gT0pG/t3Pr2oUDkPfUNEIDM0XbE/04XtPieBnGLMiDKVUOul0QZxgZuKM
+         D+Rda2w3JFMdWORsMFILdOPoSQed4QUUtLj4RuJMWvxYab6sBR32JgmdoQh72wgf1/cy
+         YzCZCZXeG3NycCVoEVHV00+oAQSNNE+WcsMllA1/ph6LX+b8fJX0JFqKDHKI6zv0cDQ+
+         Pl4NaSsRVLIbiRWoLFCj83L9YxU64SLGUNA636QX7vDFOkqnCC667zY0+ZEZpYYd+qFF
+         HecA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1737998261; x=1738603061;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=NJq4F5R52EihkJnORvxW1Duv4b4PNbOuy1hXm+tIhDA=;
+        b=MWApGwoDykClv1f+ZsGUUBhQSIR7rP425RWwJvapi4UzuzSKis70aDy75MyUs4W661
+         sVGXB6GL4/odpcj8DIqxHRONDicOqvKK30ihv3Khn3J7K67Gb3dqoeEOiSnKepYoUGxJ
+         vG+nRgSpKeJ//M1q7f7J3Xfz1evm1KYPJhv5bZ5rGIgNhEl+1pH7flbHwYMHJ254r6BN
+         4A4G2taUaoUOum7uguFCCgkHQHXV779zxmh+/Hy972cfrtHdJ//dTGovbsyxZVwuN1Vq
+         sJZ/kF2s2+2Fq41Kr05ds6QGbGK3JnHukKc6IksuLUbOGNaZHSTIK6vcSJ3/MujYlPdW
+         HaPw==
+X-Forwarded-Encrypted: i=1; AJvYcCUGgKPhTlOTZmGaooSqRgdsSfwcu7xANzx35DpksOi9mKQcqAbJYn+Ye+SQ/DtZzSCXiB5CCZKx/NIzy4X9@vger.kernel.org, AJvYcCUmR0Zh+4yNetIamp3KXtvxSnfydvl4zj1mQcdj1m8CFRYasOBmbbjZ9JCjPkb7tzOxG5lHNsuVkGxbA5w=@vger.kernel.org, AJvYcCVrjmlHpFFD1LxQVxR+dGpKsF2bzfqcYtAG2e2tS/G7BRrlmZ39HQKXZ0qwGUT8DrWhBNgPVAuXhcM=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyU/EcyHj4qy5uv1933OrT4mMtGIX6tPm+9+VzCuhxRmpmTddaT
+	NFuvGgYb/Mt+7y8WkIFjiZXxqThRcScKvGQp3HLGO+spPC64zw2EVHimFh1+3ID9xM3P2WImXb4
+	h0L1MKN6UsE30MhAJ86OjVWjgCmA=
+X-Gm-Gg: ASbGncsD+VKSZQEfaDzXS8wpR/j+zio80cPhVbZ22vP0EVSmDpkuPOw8Y9WskQxmqWv
+	KsP7EyHY2G69JhYvnGUpCsEVyvW3gNVE7KphXvKca2jvXMDsvpI+KyNfclzScugPond35yJrxo2
+	BVe5CTcD6pmysoWOnBHM8=
+X-Google-Smtp-Source: AGHT+IG48HR0KtIpd4V+2VRj7rni5YpEd9979Gv8ZvYiepf73ADFYTxGHnhAHYPiGLsj85FC0xIsC3/5SZ9H2fCLaJI=
+X-Received: by 2002:a17:903:22d0:b0:215:63a0:b58c with SMTP id
+ d9443c01a7336-21c356780cfmr582137805ad.46.1737998259884; Mon, 27 Jan 2025
+ 09:17:39 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|SA1PR12MB7441:EE_
-X-MS-Office365-Filtering-Correlation-Id: 0d261118-9b90-4a06-84da-08dd3ee95426
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?dUZxVkNiSWJxanZwT3h1ajRWSEQxZkt4S21yaVA0UXVqQVlMTWpVTEZtM2xw?=
- =?utf-8?B?Y1FydkRZVkorZGNIWnpJU3BsTnhLQ3o2V0ROQVNwa3RwaThxSzlqdlJEZ05m?=
- =?utf-8?B?clpMY3ZvbUZrQytVMG82dFNCTkVqVnNLa3EwT2s2bVJRR2RYOUVOdzRnV0xX?=
- =?utf-8?B?NjVQT2Q0NjJaUGo0TngyWmwzaENCMElBMVB2Uk1vRWhqWVBmVFZJcFYzOWp3?=
- =?utf-8?B?N24wdUR4NmsxUnhqcy9iNWdPUXlxamVHeVBuNEFObmU5TGhaWXhiZytibHpi?=
- =?utf-8?B?UVlWOXVRcS9HWjRJRVE1OU92cDZnTmlSbTY1RlZoemJ0aURxNFdHVC81S295?=
- =?utf-8?B?NEhuRDdObE50SkVKTkI2ZXJBbGM3d1RkWFF5UklVODdyQUNBMzhEVGFkaTBP?=
- =?utf-8?B?T2VQMFZnaTBYbFFVQ08wLzVhYTNIZ1lFcit5QXh6aG5YelFsTlAxQ214WDVK?=
- =?utf-8?B?aldQZzh4SkMvZzk0ZGxwZkxyMkZiU3RyNGNWdWErY0p5RFZXa09QVkFDazVU?=
- =?utf-8?B?RnVydEZZZWl1N04yMHhpb0pjQlNjdlE5VWp4NitZaW9NR2h1NXJkZEdCTTFQ?=
- =?utf-8?B?OHlPdWhJSXZ0UjZBbHVlQkxhUENqTzZsbkxrU3RFVzhKSzk2T2RpNTYzT0VW?=
- =?utf-8?B?UURrVWplMU1CQ0l4MWQreEt6bDN5U1JyQUVEYW5wWXhKdkdQam9nd21FVkFw?=
- =?utf-8?B?d0NMQnZUMWJjdXBCWk0wd3NXeEJzRDJ1TXowZUFCeUxMOWxjWVN6TnQ3ekZh?=
- =?utf-8?B?ZVBYZ0NmYjBpR2E1K2NtK01oUmNpandaclI0OHdWMXpUWVRwdUVzYlhDR2Nt?=
- =?utf-8?B?TUVvMlEzdmg4cXhxTU1LUGl4eUFoeHpyV1VxT0dJdHNtRnEvQlgzc2E4enY1?=
- =?utf-8?B?ZDE1WnRUdHNkRWVwdUZmUFdrY3c5eklMRGZYVXpYV2FMckR3SDIzR1U2QkJL?=
- =?utf-8?B?Y284bmVnZHA3NnltczVOVFFDWkw2cS9CSnVvR0Fld2JIL0NHcmZmdzJBSnVr?=
- =?utf-8?B?VGRnajFaRnVEa0p1NW1FSGVaVkxmODJvaEJobDZqblVZUHI4U2NSZDBoN0ta?=
- =?utf-8?B?d2NyNXk0cC9hUXNwNnBEMWJwTG5ZbHFpUERxanB2N1FwYWhIZm1YY1huTjdz?=
- =?utf-8?B?Q3h3YS9mTExmUFAxRUIrYThqUCt4bm10RVNkNndCUnpxcU9Pd1FuNzMrczV2?=
- =?utf-8?B?YWVTcEZHY0hjNCsxUUV3ck5sT2pmYjE3UWNCNkJWZ2NkNWJUeXJXY0ZhSzY1?=
- =?utf-8?B?enAwd2c5ZjNTcW9ZQUNTR0ZPRWNYM2R0bUZVdEo5dWNnZ0pNOElrUy9wbFhp?=
- =?utf-8?B?d2VMVEoycTUzdXVXYkdBWFlnTmJXRnNCRW0vZmpBaDEyYm4xYTREaTZubWZh?=
- =?utf-8?B?dGJHUkVUcWhlMWFtbjVVd1I2cHluWGJuSzdZUnhvU0NzSzJTNTdLMDk1VVlX?=
- =?utf-8?B?SytHV0lWUjVHZUhyT2EyMzhFSlVDamM2Tm1CWnlpbWtsU1puWDNNcGJFcW53?=
- =?utf-8?B?ZEhadjlQZHVwWGR2ekdta2hYcjMySml3VEV6VTVTc21DNVoyakJqa3BOR200?=
- =?utf-8?B?TDl3K0JpUERFNkxaRFY3WWs0NE4yR0lsaVkzc291cnVHbXNtVzdUL0ovdFdu?=
- =?utf-8?B?aTdPYnZyZjJGZXFNM2lScUFOS0ZIVXNER2lINll3clZPejZDZ3UwV3hBdXRF?=
- =?utf-8?B?a0lLU3h3RlBxZlIzM3hiMFM2TUxnSE40d0JJNWFWUzhhN0dKY21LMmdpMFNP?=
- =?utf-8?B?SUlKbkZDRUxLRHZxb0JHcTIvSi9NQlJiUGgvQVdsdUhXVXFsSXg1aFIrL2hG?=
- =?utf-8?B?b2RrSWo1ZjJFQ1oxbktNYnE3Z1d5aE1zVkJoSHN4dEF6UE9kZlFwS2pCK3pE?=
- =?utf-8?Q?NVtrjTmEH3GtU?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?VU5SMFNmUVRvTXhoaDRwaENsYng4Wll5VWk1Q1gzSVZRTHNZSnk4V09CWU1O?=
- =?utf-8?B?bjliaUVDYjFnUDVGdmlNTnF2dURLSGZXdEw4dThKVkM5T0ZYUStxRVQzTm9B?=
- =?utf-8?B?Tm1rbk5wSVJtWGdjOTBEcnJvbTNkUVp3VE1pb3ZYMHdDVUJ5V3RMNGlLMTZm?=
- =?utf-8?B?RTR3bzF6YUIrMHRkQ0xwb21Kcm5GTXJPUHhwMmRVckF6bGt5K3cvV2psbmhO?=
- =?utf-8?B?R0hsY3U5TWY4RmdwNlEvb2N6c0tlb0JhRHhET0k1MnFOdm5OTzhxS0FKUW9C?=
- =?utf-8?B?OG1DT1NWUVo2Ynk5R094Mlp0ZVhnaGMwK2d6QVFvTHpPY3YzTHVjcW1vMHJ1?=
- =?utf-8?B?WWFQYmZvNmk0SlNnSnZidDZCME54SytoOHVzdHhHd2RVNFduWlZISUZMQUZF?=
- =?utf-8?B?OWJwaWVwbXBIeEdSZktJNThHZzlDV0RqNml4RHhaNmg1L3h2Zm4wK210VGJW?=
- =?utf-8?B?MUc4QUZUNWUyTWpieGF5b1B4NTJNMy9HTnBHd2pOclBJN3FQOUZXaUV1U3d2?=
- =?utf-8?B?R2Y2aytGdkkvZ01UV2RvcXlzNEFOV0tDNjBRQVk1SkVkY29mUGNZQk03N3Uz?=
- =?utf-8?B?L1A0c0VkaUNMc1dMYkswV2k4amswZUtqUm1oL0thaE02QXhlUGhoKzdCQ1F4?=
- =?utf-8?B?aGIrYkZ1NEZOb1poWGRMRHl6Wmhtc0hZY3l4ck9qam53YnRmNk5sOXRkT1py?=
- =?utf-8?B?MHA5VER3cUlDdDNCd0kzajd4LzdxMG5mZ1lKKzEveU5Jck9ja2pDV1FFdWli?=
- =?utf-8?B?aXlRUDZnYVZ0cTk4VEFRUmZjbG01cVU5U0dqY1ExQlRUUW00RXRvd29UR3Zz?=
- =?utf-8?B?Q043MGVrY2JqN29mby9qRXpJWkJqL3k3VWRUOHRTVk4vblNFelFPT3JEVDFY?=
- =?utf-8?B?WGRVOENUbysvemFaeFFNd2ducGs5SXQrY3JaWWRUWVhnUkN4NEErbEtKN2Zn?=
- =?utf-8?B?cGo0KzFNQWtQSkFNd2xRbzlzTGdLMlNkWVc0ZVhkTWVlT3NnWEszREtya1Jp?=
- =?utf-8?B?SDUzMGw4S0p5VGxQLzZ6TTM4L21URGxDeWV6ZjEzL0JKOEw2cC9iR09rd2lF?=
- =?utf-8?B?RU12UXIvSDVTWXgwa0s0YWRvVHB4NUxZaE1zSjg5R256eG41QWdrT0F1QnFh?=
- =?utf-8?B?ZVVrdi93NXpCZ3hvalFUZVJZYk50T1RyN242aU9jVXF5MVRuMWdmZ0ZhVEdm?=
- =?utf-8?B?S2F4SC9TbkJ0NVEvQk9TSHYrYjRKUEFNOERMQkZpRnJ6ek1yMHo1UHQ2Z0RN?=
- =?utf-8?B?OVh4RFdNbVJiNTNVWW9DTy9iRFRrU3FuVEIxOCtyTUF6RXNpZjQ5NmtMeFZD?=
- =?utf-8?B?NkYyTC9lYVFVQ1JVOVpUVEdvb3RzM2ZMMHVqME9ycjkvbmZUNVk0YWR6SlFZ?=
- =?utf-8?B?QSt5ZkFnVXB4VmRWeGsyaGQzaTNMa2JzRUEvblNtSW9RNXBkbW1iT3NvRDRE?=
- =?utf-8?B?RmxTK3VGbVY3WDlqSG1uNjBMMTh1L3ZsTS9BZG93d3NnR0NPL0RoWGpCMVRj?=
- =?utf-8?B?NFFwOVArbHJ2b0NwNGdJWWtYcTA5enRsKzRTN0l5cTI2US9hRTI0M0N4ZTlD?=
- =?utf-8?B?RGhxdHl3MUVudXZibU9LZ1FkRUp5UjZrMkN4bTdvUWtOR2UyOFMwT25KaFJG?=
- =?utf-8?B?Q29oc0hTV2ZVNE5GNXpETkNReVBsdTFacEhWSEJKdHR1bVk0KyttYXpCTHg3?=
- =?utf-8?B?LzlGditWTGlxUVU2Q2pxWWh0Tm1iYnhpQktDYzRKUW9iVUc1NWR4ZzRPaDNz?=
- =?utf-8?B?L3hOanRERENOcGpxdy9DRXhicjVQZ2E0QlllaDN2aW0wVVlYaDVtN01ncHZn?=
- =?utf-8?B?enRnNnBoU09DNkVqWklkTW9vV2laQlljd3lsdC8zL0JRYzZtdk5kOUo1R0VM?=
- =?utf-8?B?VkZJcGRZWmU3OUp1RC9GVjN3ZUFFN0VlbTJCWnlhbjBPWkt3Vm1nNU1JTGpi?=
- =?utf-8?B?VmZ5ZWRiUEpsQ04xUStSL01VdzNjUW1GMVl5ODdxTE1sTExLek5Sa2M0S2Ry?=
- =?utf-8?B?MFJvNmtSZDlOMXk1WXdqVnVxeHZiSmFNNnJ5K2IwRWcyMUZzNDRqcVJSK3p0?=
- =?utf-8?B?MGFmS1RsVXM1SklIbDFaSlhQSTJJMEk5T1U0L0JIdVNEd0VUWGFscjlndk9F?=
- =?utf-8?Q?egmX+GgEtA5gF8nLnjyJT2dKS?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 0d261118-9b90-4a06-84da-08dd3ee95426
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Jan 2025 15:43:21.9797
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: GsTB5veYzlZ1qFeTyEzD1kDglARMCkbKdU+DN5ySaHAwR8EuVF+JqwdVHY9h0nsXJO1LmFnu7tN5qxZxg0jKsg==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SA1PR12MB7441
+References: <CAO6a-9_aPLCx2CqecQBGbK78_=+-tT44RepPkrBjpkWSvjj4Tg@mail.gmail.com>
+ <CAO6a-98cdSvyd7jgAyGNmsC2nxmRSyr3GppxvZU9yHU1xqwz3g@mail.gmail.com>
+ <20241211055052.gbxnyqpui3t3zpw5@lcpd911> <20241211121825.GA2054801@bogus>
+ <20241211143428.kaoovhiwar74dy6x@lcpd911> <Z1rbLdWW75KQw5cl@bogus>
+In-Reply-To: <Z1rbLdWW75KQw5cl@bogus>
+From: Vivek yadav <linux.ninja23@gmail.com>
+Date: Mon, 27 Jan 2025 22:47:28 +0530
+X-Gm-Features: AWEUYZmvkfg7G9UyzXYIBb0JSKee0hyMWDe0xrSrlhdRHKhJHC925vN_hf6pY84
+Message-ID: <CAO6a-98XFxbCnOMp5ARwPssjYomyNKWjT=WTk=z2+ZKyOAQ0jQ@mail.gmail.com>
+Subject: Re: Fwd: ARM64: CPUIdle driver is not select any Idle state other
+ then WFI
+To: Sudeep Holla <sudeep.holla@arm.com>
+Cc: Dhruva Gole <d-gole@ti.com>, linux-newbie@vger.kernel.org, linux-pm@vger.kernel.org, 
+	daniel.lezcano@linaro.org, lpieralisi@kernel.org, krzk@kernel.org, 
+	christian.loehle@arm.com, quic_sibis@quicinc.com, cristian.marussi@arm.com, 
+	linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+	vigneshr@ti.com, khilman@ti.com, sebin.francis@ti.com, khilman@baylibre.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 1/27/2025 06:41, Paul Menzel wrote:
-> Dear Linux folks,
-> 
-> 
-> On a Dell PowerEdge R7625 with two 32x AMD EPYC 9174F Linux 6.12 logs
-> 
->      $ dmesg | grep -e "DMI:" -e "Linux version" -e microcode
->      [    0.000000] Linux version 6.12.11.mx64.479 
-> (root@lucy.molgen.mpg.de) (gcc (GCC) 12.3.0, GNU ld (GNU Binutils) 2.41) 
-> #1 SMP PREEMPT_DYNAMIC Fri Jan 24 13:30:47 CET 2025
->      [    0.000000] DMI: Dell Inc. PowerEdge R7625/0M7YXP, BIOS 1.10.6 
-> 12/06/2024
->      [    0.000000] DMI: Memory slots populated: 4/24
->      [    9.487804] amd_pstate: the _CPC object is not present in SBIOS 
-> or ACPI disabled
->      [    9.733516] microcode: Current revision: 0x0a101148
-> 
-> ACPI is enabled. What can I do about the warning?
+Hi @Dhruva Gole,
 
-You can look if the BIOS has any options for enabling it.  They might be 
-called "CPPC".
+Q.1. Does your CA-53 properly go into CPUIdle state and come out of
+sleep state ?
+Q.2. Can you provide a snapshot of command
+cat /sys/devices/system/cpu/cpu*/cpuidle/state*/usage  ?
+Q.3. How frequently CPUs are going into custom state1 (other than
+standard WFI state) ?
 
+> Any further luck on this?
+
+I am still facing some issues. This issue is not closed yet.
+
+>
+> idle-states {
+>       entry-method =3D "psci";
+>        cpu_ret_l: cpu-retention-l {
+>          compatible =3D "arm,idle-state";
+>          arm,psci-suspend-param =3D <0x00010001>;
+>          local-timer-stop;
+>          entry-latency-us =3D <55>;
+>           exit-latency-us =3D <140>;
+>           min-residency-us =3D <780>;
+>     };
+> };
+>
+> I am using ``Menu governor`` with the ``psci_idle driver`` in its origina=
+l form.
+> After booting Linux I find out that the CPUIdle core is never going
+> inside the ``cpu-retention`` state.
+> To check time spent by CPU in any state. I am using the below command.
+>
+> ``cat /sys/devices/system/cpu/cpu*/cpuidle/state*/time``
+
+As of now I made some changes in the DT node. After making changes in
+latency (which is mentioned below).
+
+ idle-states {
+       entry-method =3D "psci";
+        cpu_ret_l: cpu-retention-l {
+          compatible =3D "arm,idle-state";
+          arm,psci-suspend-param =3D <0x00000000>;
+          local-timer-stop;
+          entry-latency-us =3D <300000>; # 300ms
+           exit-latency-us =3D <300000>; # 300ms
+           min-residency-us =3D <1000000>; # 1 sec
+     };
+ };
+
+I can see that  CA-55 went into a sleep state (state1) using command
+``cat /sys/devices/system/cpu/cpu*/cpuidle/state*/time``.
+As you mention earlier in a multicore system (2 or more) at least one
+core keeps working and does not go into sleep state. It should happen
+as per theory and other developers' case.
+
+In my case, after some time, both CPUs (CPU0 and CPU1) go into sleep
+state (state1). Hence the system console hangs.
+
+My expectations are,
+If I type anything on keyboard. UART interrupt should take out CPUs
+from sleep state and execute commands. OR some periodic timer should
+take the CPU out of sleep. Which is not happening as of now.
+As you said  we can safely remove`` local-timer-stop``. It means local
+timers are working for the CPUs and triggering interrupts ?
+
+Any discussion on this topic will definitely help me.
+
+Regards,
+Vivek Yadav
+
+On Thu, Dec 12, 2024 at 6:16=E2=80=AFPM Sudeep Holla <sudeep.holla@arm.com>=
+ wrote:
+>
+> On Wed, Dec 11, 2024 at 08:04:28PM +0530, Dhruva Gole wrote:
+> > On Dec 11, 2024 at 12:18:25 +0000, Sudeep Holla wrote:
+> > > On Wed, Dec 11, 2024 at 11:20:52AM +0530, Dhruva Gole wrote:
+> > [...]
+> > > > >
+> > > > >
+> > > > > Hi @all,
+> > > > >
+> > > > > I am working on one custom SoC. Where I add one CPUIdle state for
+> > > > > ``arm,cortex-a55`` processor.
+> > > >
+> > > > Any further luck on this?
+> > > >
+> > > > I have also been working on something similar[1] but on an A53 core=
+ on
+> > > > TI-K3 AM62x processor.
+> > >
+> > > Does upstream DTS have support for this platform to understand it bet=
+ter ?
+> > > Even reference to any complete DT file for the platform will help.
+> >
+> > Yes, you can ref to the AM625 (CPU layout) DT here:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tre=
+e/arch/arm64/boot/dts/ti/k3-am625.dtsi
+> >
+> > The board/starter kit DT is:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tre=
+e/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+> >
+> > The patches for idle state are not upstream, and only exist in this
+> > patch of mine here:
+> > https://github.com/DhruvaG2000/v-linux/commit/0fd088d624276a2e72b8dc666=
+0d261ab6d194f4b
+> >
+>
+> "arm,psci-suspend-param" indicate that this idle state doesn't loose the
+> cpu context which means timer doesn't stop. So adding "local-timer-stop"
+> sound completely wrong to me.
+>
+> > [...]
+> > > > See this chunk in the kernel cpuidle driver:
+> > > >   if (broadcast && tick_broadcast_enter()) {
+> > > >
+> > > > When I dug deeper into tick_broadcast_enter it always returns somet=
+hing
+> > > > non zero and hence in my case it was entering the if block and trie=
+d to
+> > > > find a deepest state. Then the deepest state would always return WF=
+I and
+> > > > not the idle-state I had added.
+> > > >
+>
+> It depends. If this is the last CPU and since you have marked the state w=
+ith
+> "local-timer-stop" and the system doesn't have any other timers to use as
+> source of broadcast, it prevents one of the CPU entering that state. So y=
+ou
+> could be matching all the above conditions on your platform and hence you
+> are observing the above.
+>
+> > > > What we found out was on our kernel we end up using
+> > > >
+> > > > kernel/time/tick-broadcast-hrtimer.c
+> > > >
+> > > > This always seems to be keeping atleast 1 CPU busy and prevents idl=
+e.
+> > > > If we remove the local-timer-stop it was helping us, but we still n=
+eed
+> > > > to dig into the full impact of what that entails and I am still
+> > > > interested in finding out how so many other users of similar idle-s=
+tate
+> > > > implementation are able to do so without trouble.
+> > > >
+> > >
+>
+> As mentioned about adding "local-timer-stop" for a retention state seems
+> pure wrong in my opinion as it contradicts to the fact that context is
+> retained.
+>
+> > > Interesting. So if the platform is functional removing local-timer-st=
+op,
+> > > I am bit confused. Either there is something else that is getting it =
+out
+> >
+> > Yes it was interesting to us too, as to how the RCU didn't kick in and
+> > system continued to function as though nothing was wrong.
+> >
+>
+> It worked as if it was a state with context lost. So there might be some
+> impact on the latency though it as the kernel assumed context lost and
+> re-entered/resumed through resume entry point rather than where it called
+> cpu_suspend() similar to wfi(). I mean only on the CPUs it was able to
+> enter this state as one of the CPU will never enter this if there are no
+> system timers to act as broadcast timer.
+>
+> Does you system not have Arch timers memory mapped interface enabled and
+> interrupt wired to GIC(other than PPIs) ? Look at Juno R2 as example.
+>
+> > > from the idle state so, it should be fine and it could be just some
+> >
+> > It's probably UART keypresses or some userspace processes that get
+> > scheduled that bring the CPUs back out of TF-A's cpu_standby.
+>
+> I doubt the CPU resume from suspend is based on some userspace event.
+>
+> > Is it possible that EL1 interrupts can bring EL3 out of WFI? Is yes the=
+n
+> > it explains the behaviour. The arch timer could also be continuing to
+> > tick and bringing the CPUs out of ATF WFI.
+> >
+>
+> Yes but that doesn't explain the behaviour. It could be just the timer
+> event from the broadcast timer.
+>
+> > > misconfiguration.
+> > >
+> > > > Arm64 recommends to use arch_timer instead of external timers. Once=
+ we
+> > > > enter el3, timer interrupts to el1 is blocked and hence it's equiva=
+lent
+> > > > to local-timer-stop, so it does make sense to keep this property, b=
+ut
+> > > > then how are others able to enter idle-states for all plugged CPUs =
+at
+> > > > the same time?
+> > > >
+> > >
+> > > Some systems have system timer that can take over as broadcast timer =
+when
+> > > CPUs enter deeper idle states where the local timers are stopped.
+> >
+> > In CPUIdle we're not really clock gating anything so the timer does kee=
+p
+> > ticking. So in this particular case it might make sense to remove the
+> > local-timer-stop property from the idle-state.
+> >
+>
+> Correct in your case it is retention state and hence local CPU timers
+> keep ticking and you can safely drop that property. However if you add
+> deeper idle states like CPU OFF with the power rail cut off, then you nee=
+d
+> some system timer to act as backup/broadcast timer so that all the CPUs
+> can enter the state concurrently and wake up successfully.
+>
+> > However we're looking into taking this further and putting interconnect
+> > and few other PLLs in bypass which could cause arch timer for eg. to
+> > tick slower.
+>
+> I assume it will be present as another timer with the rate set appropriat=
+ely.
+>
+> > In this case would it still make sense to omit the property?
+>
+> No, you should mark it as stopped even if it is running at slower rate
+> as I am not sure if the local CPU timer support can handle rate change.
+>
+> > We may even have some usecases planned where we may turn OFF
+> > the CPU once it is in TF-A cpu_standby/ WFI. What would be the right
+> > approach in such scenarios?
+> >
+>
+> As mentioned above, this will be separate state and all CPUs can use this
+> if there is another system broadcast timer.
+>
+> > Could you provide any examples where the local-timer-stop property is
+> > being used and an alternative timer can be configured once we enter the
+> > idle-state where CPU CTX maybe lost or clocks maybe bypass?
+> > great if you could share some example implementation if you're aware.
+>
+> As I mentioned, Juno R2 is an example. It was broken on R0 with some SoC
+> errata(can't recall all the details as I looked at it almost a decade ago=
+)
+>
+> --
+> Regards,
+> Sudeep
 
