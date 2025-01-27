@@ -1,310 +1,256 @@
-Return-Path: <linux-pm+bounces-20984-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20985-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8897A1DC00
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 19:24:38 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57AC9A1DCFD
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 20:57:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 048BE7A3040
-	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 18:24:29 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DA8F163E36
+	for <lists+linux-pm@lfdr.de>; Mon, 27 Jan 2025 19:57:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 20BE418C035;
-	Mon, 27 Jan 2025 18:24:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B58711946B1;
+	Mon, 27 Jan 2025 19:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sMNiz1n8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1FB071F60A;
-	Mon, 27 Jan 2025 18:24:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 813A21917F1;
+	Mon, 27 Jan 2025 19:57:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738002271; cv=none; b=jGnSdXAq0cFKCic1Q+oM31jyWg0Rr4I0//Shntlni8QfYTYmTUx7lgiRLTgCyPrRGZBXFhXlZCC6CrPNMWMU958E8Jpk6qjJwVinSkO35OA0CUK0VV5n10EhwlSBWHqx+rdKo/jvDuitykhHfDh+4xClYh1HzNF7YxPBhc9U3fA=
+	t=1738007860; cv=none; b=YwKRAgmbXEUb93PqUt9zDq/h+ONgq6kz1dke8s6VCrP/gMqHh6VAfI2Gb1ysWfJk3LH/3nET65Zm7UlFDgEdu2Yd+qhmhMN6q3hr0XIeDLTime0tdSwdZ+FqiGx7XaMFHzxB7iZEsUer9ojFlAu1MIlMszmjctdZfqcPvWhQ+7w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738002271; c=relaxed/simple;
-	bh=Ocgrby39zYD+gB37RMFk3KQ8gTxLYp5ua4xEOWPRXT8=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=CWoOf1QtAUSl4MgOHLBq8G50QgK+f4BNGgii3AxYY0TbjWTqPO2rc7dhtjqQwfAXafSl99QaD1AvCI3Wy847+9nra0Wq0mmJR2QfRIiAtid+erixlnW0tEXpj6mEuqwvKWUhXUEDODDs00e1blbVsizjEomF/idYllw53ENAAIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.231])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YhcHt540Mz6K9FS;
-	Tue, 28 Jan 2025 02:23:54 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 96323140A35;
-	Tue, 28 Jan 2025 02:24:25 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 27 Jan
- 2025 19:24:24 +0100
-Date: Mon, 27 Jan 2025 18:24:23 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-CC: Claudiu Beznea <claudiu.beznea@tuxon.dev>, Jonathan Cameron
-	<jic23@kernel.org>, <prabhakar.mahadev-lad.rj@bp.renesas.com>,
-	<lars@metafoo.de>, <linux-iio@vger.kernel.org>,
-	<linux-renesas-soc@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Claudiu
- Beznea" <claudiu.beznea.uj@bp.renesas.com>, "Rafael J. Wysocki"
-	<rafael@kernel.org>, <linux-pm@vger.kernel.org>, Greg Kroah-Hartman
-	<gregkh@linuxfoundation.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH 1/2] iio: adc: rzg2l_adc: Drop devm_pm_runtime_enable()
-Message-ID: <20250127182423.000013a7@huawei.com>
-In-Reply-To: <CAPDyKFoCx3jQOptPrY0CYNpH1R+fszF3MUQLSTn_nreyi5-vPw@mail.gmail.com>
-References: <20250103140042.1619703-1-claudiu.beznea.uj@bp.renesas.com>
-	<20250103140042.1619703-2-claudiu.beznea.uj@bp.renesas.com>
-	<20250104135225.2573285b@jic23-huawei>
-	<44e4a6b4-39a4-49d0-b3a5-fc5545c39a56@tuxon.dev>
-	<20250111131409.36bebfd3@jic23-huawei>
-	<bb987a1b-a999-478c-8e35-124fcf41561d@tuxon.dev>
-	<CAPDyKFoJ3pLU-5_b5MSxMZd7B1cfOvmcdqR4FGkU2Wb7No0mcw@mail.gmail.com>
-	<20250117155226.00002691@huawei.com>
-	<CAPDyKFpQUMOFtA-QCbYdaeKSDGJpnjcA+tiKZ=kzmrjYRtFZdw@mail.gmail.com>
-	<20250124184137.0000047a@huawei.com>
-	<CAPDyKFrqDfYEQHk0RsRi2LnMw_HgGozMW9JP9xmkAq52O7eztg@mail.gmail.com>
-	<20250127123250.00002784@huawei.com>
-	<CAPDyKFoCx3jQOptPrY0CYNpH1R+fszF3MUQLSTn_nreyi5-vPw@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1738007860; c=relaxed/simple;
+	bh=0FQQNYJHrCHJeLMJ2LS4Zd/Go9CcRwLyMKTld/I0v8k=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DFH/vk43iAWF+Kbf73WR19o0lpzfK5NnAF0u+tw/28MafJlTYdzhKO6P8RhK9mY4n/s0gM9laVXK/TCOpgG5bJ4JTH0vjm6gPezeEFOJl50tX/1z8AwIc5U3/GdPPmyl4U7nBss/+0MVhC4L4BdqGFYz9ePsL8PoxNfAPUsc6hg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sMNiz1n8; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04C73C4CEEA;
+	Mon, 27 Jan 2025 19:57:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738007860;
+	bh=0FQQNYJHrCHJeLMJ2LS4Zd/Go9CcRwLyMKTld/I0v8k=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sMNiz1n8W2nQsVNhf5uHcq2u5TJGMl7bO5BVwEKNzyyBBcgmveQmEZCSNZWZwfPW3
+	 wuGHyMIwpzLONfFyygy7QryAPTWgBBXZG0SZbg8d+1DY5s9amTBUGfHYoxPd/bZMpz
+	 Arax0u7lvWXVxgMty1BtN81FrZu932WyKvhaFoevvFV56m/bB6wrXyor8VDbUw+/CX
+	 L8VHVVufj4rNMgti+8BY1H/jMDsdPGagUnOx+Iumm8Ra19N/R6ca9csCD1iannB2Rx
+	 /GNqpye4rzHKjp1b7z/ewa3w0m9jumtaHqi4Q72RBjQOc2rr4GBGRfMtHBuI/OYX6R
+	 VB7koZJIMikYg==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5f2ed0b70d6so2360776eaf.3;
+        Mon, 27 Jan 2025 11:57:39 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVDkYYyzvwiamPdjdMGWNESTz9Icj7V3Q349fqcOk7qfVFV9xoj2wfB8DcL2pCiVVz3RG1kNzoUuhI=@vger.kernel.org, AJvYcCWOxGlLaeJEThnAjm1cAE/akChmnxFuAxm0TG+iujWCjnmEzFYP4ZMVdxc4G3+DV2i4hufv5CR5EMw5@vger.kernel.org, AJvYcCXoSS7+DTgzvT0ZcpYkhMWylSQRcnWLtjEnv7Cg675WNKNx7OiH/ZUFNL63vzZ+zV7JYlrmjMU2xFZtn+Y=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzuRShLsHYLyC9eY6y566BubWFFEyhKhWAEgRa1BMDAbxVFF4/J
+	yYExz4RIsGOEW3NxUtljtpcSGMBa+7OQzZ1Ngc6QO3HKkX06iKeAvKku6iZCUOS4TSIq4Yk6eyZ
+	ofmEn3LAFZCVUGlr1Vr4N/oIJtac=
+X-Google-Smtp-Source: AGHT+IEWMTQD0uVdyod+sr7GU7wtPx6+jbF5hXizyEE6NR1yMYaBOq7d3oMmZWolBM3eKha0C7/HuV9ERdARRyyouQ4=
+X-Received: by 2002:a05:6820:2710:b0:5f8:a3df:a9b with SMTP id
+ 006d021491bc7-5fa388a07c8mr24179204eaf.8.1738007858991; Mon, 27 Jan 2025
+ 11:57:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml100012.china.huawei.com (7.191.174.184) To
- frapeml500008.china.huawei.com (7.182.85.71)
+References: <20241111-runtime_pm-v7-0-9c164eefcd87@quicinc.com>
+ <20241111-runtime_pm-v7-2-9c164eefcd87@quicinc.com> <Z30p2Etwf3F2AUvD@hovoldconsulting.com>
+ <7882105f-93a3-fab9-70a2-2dc55d6becfc@quicinc.com> <Z3057yuNjnn0NPqk@hovoldconsulting.com>
+ <20250113162549.a2y7dlwnsfetryyw@thinkpad> <CAPDyKFr=iudHra-AESDW3xM4iNqOD-v8wseBEK0NAHYUH0kE7w@mail.gmail.com>
+In-Reply-To: <CAPDyKFr=iudHra-AESDW3xM4iNqOD-v8wseBEK0NAHYUH0kE7w@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 27 Jan 2025 20:57:26 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h-NrdoAdJ5ZTC1wZhh2BzonSW6ek1ux01-c7L5SLby8A@mail.gmail.com>
+X-Gm-Features: AWEUYZnhse4LT7h59hjCPJr-pPx1IdSDJ1ByJ4nwIaHU25iwJKkaWU7LGgCHgts
+Message-ID: <CAJZ5v0h-NrdoAdJ5ZTC1wZhh2BzonSW6ek1ux01-c7L5SLby8A@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] PCI: Enable runtime pm of the host bridge
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, rafael@kernel.org, 
+	Johan Hovold <johan@kernel.org>, Krishna Chaitanya Chundru <quic_krichai@quicinc.com>, 
+	Kevin Xie <kevin.xie@starfivetech.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Markus.Elfring@web.de, 
+	quic_mrana@quicinc.com, m.szyprowski@samsung.com, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	regressions@lists.linux.dev
+Content-Type: multipart/mixed; boundary="0000000000000dbe52062cb57da8"
 
-On Mon, 27 Jan 2025 16:02:32 +0100
-Ulf Hansson <ulf.hansson@linaro.org> wrote:
+--0000000000000dbe52062cb57da8
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-> On Mon, 27 Jan 2025 at 13:32, Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
+On Mon, Jan 27, 2025 at 3:32=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> On Mon, 13 Jan 2025 at 17:25, Manivannan Sadhasivam
+> <manivannan.sadhasivam@linaro.org> wrote:
 > >
-> > On Mon, 27 Jan 2025 11:47:44 +0100
-> > Ulf Hansson <ulf.hansson@linaro.org> wrote:
-> >  
-> > > [...]
-> > >  
-> > > > > > > > Do consider OK to change the order in pm_runtime_disable_action() to get
-> > > > > > > > rid of these issues, e.g.:
-> > > > > > > >
-> > > > > > > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > > > > > > > index 2ee45841486b..f27d311d2619 100644
-> > > > > > > > --- a/drivers/base/power/runtime.c
-> > > > > > > > +++ b/drivers/base/power/runtime.c
-> > > > > > > > @@ -1547,8 +1547,8 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
-> > > > > > > >
-> > > > > > > >  static void pm_runtime_disable_action(void *data)
-> > > > > > > >  {
-> > > > > > > > -       pm_runtime_dont_use_autosuspend(data);
-> > > > > > > >         pm_runtime_disable(data);
-> > > > > > > > +       pm_runtime_dont_use_autosuspend(data);
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > > though I see a rpm_resume() call is still possible though pm_runtime_disable().  
-> > > > > > >
-> > > > > > > I am still worried about keeping the device runtime enabled during a
-> > > > > > > window when we have turned off all resources for the device. Typically
-> > > > > > > we want to leave the device in a low power state after unbind.
-> > > > > > >
-> > > > > > > That said, I would rather just drop the devm_pm_runtime_enable() API
-> > > > > > > altogether and convert all users of it into
-> > > > > > > pm_runtime_enable|disable(), similar to what your patch does.  
-> > > > > >
-> > > > > > That is making a mess of a lot of automated cleanup for a strange
-> > > > > > runtime pm related path.  This is pain a driver should not have
-> > > > > > to deal with, though I'm not clear what the right solution is!
-> > > > > >
-> > > > > > Key is that drivers should not mix devm managed cleanup and not, so
-> > > > > > that means that anything that happens after runtime pm is enabled
-> > > > > > has to be torn down manually.  One solution to this might be to
-> > > > > > always enable it late assuming that is safe to do so there is
-> > > > > > never anything else done after it in the probe path of a driver.  
+> > + Ulf (for the runtime PM related question)
+> >
+> > On Tue, Jan 07, 2025 at 03:27:59PM +0100, Johan Hovold wrote:
+> > > On Tue, Jan 07, 2025 at 07:40:39PM +0530, Krishna Chaitanya Chundru w=
+rote:
+> > > > On 1/7/2025 6:49 PM, Johan Hovold wrote:
+> > >
+> > > > >> @@ -3106,6 +3106,17 @@ int pci_host_probe(struct pci_host_bridge=
+ *bridge)
+> > > > >>                  pcie_bus_configure_settings(child);
+> > > > >>
+> > > > >>          pci_bus_add_devices(bus);
+> > > > >> +
+> > > > >> +        /*
+> > > > >> +         * Ensure pm_runtime_enable() is called for the control=
+ler drivers,
+> > > > >> +         * before calling pci_host_probe() as pm frameworks exp=
+ects if the
+> > > > >> +         * parent device supports runtime pm then it needs to e=
+nabled before
+> > > > >> +         * child runtime pm.
+> > > > >> +         */
+> > > > >> +        pm_runtime_set_active(&bridge->dev);
+> > > > >> +        pm_runtime_no_callbacks(&bridge->dev);
+> > > > >> +        devm_pm_runtime_enable(&bridge->dev);
+> > > > >> +
+> > > > >>          return 0;
+> > > > >>   }
+> > > > >>   EXPORT_SYMBOL_GPL(pci_host_probe);
 > > > > >
-> > > > > The problem is that runtime PM isn't really comparable to other
-> > > > > resources that we are managing through devm* functions.
-> > > > >
-> > > > > Enabling runtime PM for a device changes the behaviour for how
-> > > > > power-mgmt is handled for the device. Enabling/disabling of runtime PM
-> > > > > really needs to be explicitly controlled by the driver for the device.  
-> > > >
-> > > > I'm sorry to say I'm not yet convinced.  
+> > > > > I just noticed that this change in 6.13-rc1 is causing the follow=
+ing
+> > > > > warning on resume from suspend on machines like the Lenovo ThinkP=
+ad
+> > > > > X13s:
 > > >
-> > > Okay, let me try one more time. :-)  
-> >
-> > +CC Greg as the disagreement here is really a philosophy of what
-> > devm cleanup is relative to remove.  Perhaps Greg or Rafael can
-> > given some guidance on the intent there.
-> >
-> > Mind you I think I found another subsystem working around this
-> > and in a somewhat more elegant, general way (to my eyes anyway!)
-> >
-> > https://elixir.bootlin.com/linux/v6.12.6/source/drivers/i2c/i2c-core-base.c#L630
-> > https://lore.kernel.org/all/YFf1GFPephFxC0mC@google.com/
-> >
-> > +CC Dmitry.
-> >
-> > I2C creates an extra devres group and releases it before devm_pm_domain_detach()
-> > As all devm calls from the driver end up in that group, they are released
-> > before dev_pm_domain_detach()
-> >  
-> 
-> How would that address the problem I pointed out with runtime PM
-> below? This problem isn't limited to attaching/detaching PM domains.
-
-It's associated with anything that happens after a driver remove is done.
-We just disagree on when that remove is finished. There is nothing special about
-the remove() callback, that is just part of remove process.
-No magic transition of state that allows new things to happen follows
-the device driver remove finishing. Sure you can get the remove
-handling ordering wrong whether devm is in use or not.  The trick is
-almost always to never mix devm and not.  Once you need a single bit of
-manual unwinding stop with the devm and do everything beyond that point
-by hand (in probe order, before that point in remove order)
-
-> 
-> >  
-> > >  
-> > > >
-> > > > Devm callbacks are explicitly registered by the driver so that they
-> > > > are unwound in a specific order.  Many other parts of driver
-> > > > registration rely on this ordering.  This does not seem different
-> > > > for runtime PM than anything else.  
+> > > > Can you confirm if you are seeing this issue is seen in the boot-up
+> > > > case also. As this part of the code executes only at the boot time =
+and
+> > > > will not have effect in resume from suspend.
 > > >
-> > > If you compare clocks, for example. It's the driver that is in full
-> > > control of the clock gating/ungating. When the ->remove() callback
-> > > runs, the driver typically makes sure that it leaves the clock gated.
-> > > Then it doesn't really matter when the clock resource gets released.
-> > > The point is, the driver is in full control of the resource.  
-> >
-> > Not a good example. devm_clk_get_enabled() does not gate the clock until  
-> 
-> I was not referring to devm_clk_get_enable(), but rather just devm_clk_get().
-> 
-> To me devm_clk_get_enable() is another interface that we should avoid.
-> For example, what if the clock is already gated when the ->remove()
-> callback runs? Then we need to ungate the clock just to make the
-> devres path happy so it doesn't gate an already gated clock. And this,
-> just to save one or two lines of code.
-
-If someone is using a clock that is gated by other calls in the driver
-that then indeed the use of devm_clk_get_enabled() is inappropriate
-or they turn they do need to enable the clock and turn it off again
-as you mention which is a mess but often needs doing anyway as we
-commonly need some clocks at least to put a device into a low power
-state.
-
-> 
-> Don't get me wrong, I certainly like the devm* functions in general,
-> but it's not a good fit for everything.
-
-For anything that a driver otherwise calls in remove() they are
-a direct equivalent that is just called automatically. (though apparently
-not quite in platform drivers!) If you have a sequence that is
-sufficiently complex they may not be a good fit. I just don't think
-that the sequence in this driver (and many others) is complex.
-The driver code (with the above change from i2c ported to platform code
-to fix the specific problem) is a lot simpler before Claudia's v2 to
-change the handling. 32 lines added to work around this...
-
-> 
-> > the devm cleanup. The assumption being that nothing that affects
-> > it runs between the remove() and devm cleanup.  So pretty much identical
-> > to the runtime pm case.  They being that you have to obey ordering so
-> > that if you need to run something after the clock is disabled then
-> > you register that callback before you call devm_clk_get_enabled()
-> >  
+> > > No, I only see it during resume. And enabling runtime PM can (and in
+> > > this case, obviously does) impact system suspend as well.
 > > >
-> > > If runtime PM would remain enabled beyond the call to the ->remove()
-> > > callback, it would mean that the driver's runtime PM callbacks could
-> > > be called too. For example, userspace via sysfs may at any point
-> > > decide to runtime resume the device. In other words, we may end up
-> > > calling the runtime PM callbacks in the driver, when they are not
-> > > intended to be called. In the worst case, I guess we could even end up
-> > > trying to control resources (like a clock) from the ->runtime
-> > > _resume() callback, when the references to these resources may already
-> > > have been released.  
+> > > > >   pci0004:00: pcie4: Enabling runtime PM for inactive device with=
+ active children
+> > >
+> > > > I believe this is not causing any functional issues.
+> > >
+> > > It still needs to be fixed.
+> > >
+> > > > > which may have unpopulated ports (this laptop SKU does not have a=
+ modem).
+> > >
+> > > > Can you confirm if this warning goes away if there is some endpoint
+> > > > connected to it.
+> > >
+> > > I don't have anything to connect to the slot in this machine, but thi=
+s
+> > > seems to be the case as I do not see this warning for the populated
+> > > slots, nor on the CRD reference design which has a modem on PCIe4.
+> > >
 > >
-> > This is all about what we consider remove. To me, with devm_ manged cleanup
-> > in place, both remove() and devm_ cleanup count as parts of that remove
-> > process.  
-> 
-> There is no straightforward process here, if you would keep runtime PM
-> enabled beyond ->remove(). Things can happen in parallel.
-
-How?  Nothing magic happens when a driver remove() ends.
-So there is no difference at all in a driver calling runtime pm disable
-in that code or in devres cleanup that happens immediately after that
-in the bus driver remove.
-
-> 
-> In that case, drivers would need to extend their runtime PM callbacks
-> to cope with more complicated conditions, as resources that those use
-> may have been released. Moreover, how can we make sure that the device
-> is put into a low power state after the ->remove() has been called?
-
-This is a fair question.  Also one commonly handled by drivers using devm
-though perhaps not for the reason you are thinking.  Key is that most
-drivers should not rely at all on runtime PM being built let alone
-enabled. 
-
-Solution is normally a devm_add_action_or_reset() call that
-registers a call to put the device into a low power state.
-
-Sequence is normally something like:
-
-1) enable clks etc.
-2) Turn the power on.
-3) device setup
-4) enable runtime PM after setting the state to active. Let autosuspend
-   do it's work.
-
-On remove (all devm_ managed).
-5) disable runtime PM.
-6) Turn the power off (may involve a check on whether it is already
-   off though in many cases it's idempotent so we don't bother checking).
-7) disable clocks.
-
-in this particular driver I'm assuming that the low power state is
-handled via the reset lines being put back into reset by the
-the unwind of the two
-devm_reset_control_get_exclusive_deasserted() calls.
-
-
-> 
+> > Yes, this is only happening for unpopulated slots and the warning shows=
+ up only
+> > if runtime PM is enabled for both PCI bridge and host bridge. This patc=
+h enables
+> > the runtime PM for host bridge and if the PCI bridge runtime PM is also=
+ enabled
+> > (only happens now for ACPI/BIOS based platforms), then the warning show=
+s up only
+> > if the PCI bridge was RPM suspended (mostly happens if there was no dev=
+ice
+> > connected) during the system wide resume time.
 > >
-> > One option I did wonder about was having a devm_pm_domain_attach()
-> > A little cheeky but I think the call in platform_probe() is late enough
-> > that we don't run into the checks on no devm_ calls before driver probe.
+> > For the sake of reference, PCI host bridge is the parent of PCI bridge.
 > >
-> > That would shuffle the dev_pm_domain_detach() to the end of the
-> > devm_ cleanup.  Mind you the i2c approach above seems better.  
-> 
-> Again, this isn't limited to PM domains.
+> > Looking at where the warning gets triggered (in pm_runtime_enable()), w=
+e have
+> > the below checks:
+> >
+> > dev->power.runtime_status =3D=3D RPM_SUSPENDED
+> > !dev->power.ignore_children
+> > atomic_read(&dev->power.child_count) > 0
+> >
+> > When pm_runtime_enable() gets called for PCI host bridge:
+> >
+> > dev->power.runtime_status =3D RPM_SUSPENDED
+> > dev->power.ignore_children =3D 0
+> > dev->power.child_count =3D 1
+> >
+> > First 2 passes seem legit, but the issue is with the 3rd one. Here, the
+> > child_count of 1 means that the PCI host bridge has an 'active' child (=
+which is
+> > the PCI bridge). The PCI bridge was supposed to be RPM_SUSPENDED as the=
+ resume
+> > process should first resume the parent (PCI host bridge). But this is n=
+ot the
+> > case here.
+> >
+> > Then looking at where the child_count gets incremented, it leads to
+> > pm_runtime_set_active() of device_resume_noirq(). pm_runtime_set_active=
+() is
+> > only called for a device if dev_pm_skip_suspend() succeeds, which requi=
+res
+> > DPM_FLAG_SMART_SUSPEND flag to be set and the device to be runtime susp=
+ended.
+> >
+> > This criteria matches for PCI bridge. So its status was set to 'RPM_ACT=
+IVE' even
+> > though the parent PCI host bridge was still in the RPM_SUSPENDED state.=
+ I don't
+> > think this is a valid condition as seen from the warning triggered for =
+PCI host
+> > bridge when pm_runtime_enable() is called from device_resume_early():
+> >
+> > pci0004:00: pcie4: Enabling runtime PM for inactive device with active =
+children
+>
+> Thanks for the detailed analysis, much appreciated.
+>
+> So this seems to boil down to the fact that the PM core calls
+> pm_runtime_set_active() for a device, when it really should not. If
+> there is a clever way to avoid that, I think we need Rafael's opinion
+> on.
 
-All comes down to when you think driver remove is finished.
-I think the answer to that in the above i2c scheme is after the
-release of the devres group, not after end of remove call.
+Actually, not really.
 
-Anything that the bus driver does will then occur after the
-device driver devres cleanup is done.  That puts all cleanup
-in device driver remove() immediately before the devres cleanup
-of anything setup in probe(), making manual unwinding and automatic
-unwinding effective the same.
+The status of the child and the child count of the parent have no
+meaning until runtime PM is enabled for the parent.  They can be
+manipulated freely before this happens with no consequences and all
+will be fine as long as those settings are consistent when runtime PM
+is enabled for the parent.
 
-So for me the right fix here is to make the same thing happen
-for platform devices as for i2c ones.
+Now, they aren't consistent at that point because
+dev_pm_skip_suspend() returns false for the parent as it has
+DPM_FLAG_SMART_SUSPEND clear.
 
-Jonathan
+To me, this looks like a coding mistake because all devices that have
+power.must_resume set should also be set to RPM_ACTIVE before
+re-enabling runtime PM for them, so the attached patch should work.
 
+--0000000000000dbe52062cb57da8
+Content-Type: text/x-patch; charset="US-ASCII"; name="pm-sleep-must_resume.patch"
+Content-Disposition: attachment; filename="pm-sleep-must_resume.patch"
+Content-Transfer-Encoding: base64
+Content-ID: <f_m6fgz9y50>
+X-Attachment-Id: f_m6fgz9y50
 
-> 
-> [...]
-> 
-> Kind regards
-> Uffe
-
+LS0tCiBkcml2ZXJzL2Jhc2UvcG93ZXIvbWFpbi5jIHwgICAgNiArKystLS0KIDEgZmlsZSBjaGFu
+Z2VkLCAzIGluc2VydGlvbnMoKyksIDMgZGVsZXRpb25zKC0pCgotLS0gYS9kcml2ZXJzL2Jhc2Uv
+cG93ZXIvbWFpbi5jCisrKyBiL2RyaXZlcnMvYmFzZS9wb3dlci9tYWluLmMKQEAgLTY1NiwxMiAr
+NjU2LDEyIEBACiAJICogc28gY2hhbmdlIGl0cyBzdGF0dXMgYWNjb3JkaW5nbHkuCiAJICoKIAkg
+KiBPdGhlcndpc2UsIHRoZSBkZXZpY2UgaXMgZ29pbmcgdG8gYmUgcmVzdW1lZCwgc28gc2V0IGl0
+cyBQTS1ydW50aW1lCi0JICogc3RhdHVzIHRvICJhY3RpdmUiLCBidXQgZG8gdGhhdCBvbmx5IGlm
+IERQTV9GTEFHX1NNQVJUX1NVU1BFTkQgaXMgc2V0Ci0JICogdG8gYXZvaWQgY29uZnVzaW5nIGRy
+aXZlcnMgdGhhdCBkb24ndCB1c2UgaXQuCisJICogc3RhdHVzIHRvICJhY3RpdmUiIHVubGVzcyBp
+dHMgcG93ZXIubXVzdF9yZXN1bWUgZmxhZyBpcyBjbGVhciwgaW4KKwkgKiB3aGljaCBjYXNlIGl0
+IGlzIG5vdCBuZWNlc3NhcnkgdG8gdXBkYXRlIGl0cyBQTS1ydW50aW1lIHN0YXR1cy4KIAkgKi8K
+IAlpZiAoc2tpcF9yZXN1bWUpCiAJCXBtX3J1bnRpbWVfc2V0X3N1c3BlbmRlZChkZXYpOwotCWVs
+c2UgaWYgKGRldl9wbV9za2lwX3N1c3BlbmQoZGV2KSkKKwllbHNlIGlmIChkZXYtPnBvd2VyLm11
+c3RfcmVzdW1lKQogCQlwbV9ydW50aW1lX3NldF9hY3RpdmUoZGV2KTsKIAogCWlmIChkZXYtPnBt
+X2RvbWFpbikgewo=
+--0000000000000dbe52062cb57da8--
 
