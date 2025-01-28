@@ -1,180 +1,188 @@
-Return-Path: <linux-pm+bounces-21064-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21065-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4216BA212BA
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 20:52:35 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2336A21368
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 22:02:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 59F65188A7F3
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 19:52:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D4B573A8270
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 21:02:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7C581F9AA1;
-	Tue, 28 Jan 2025 19:48:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E3E01DF733;
+	Tue, 28 Jan 2025 21:02:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="CNxgZhcG"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="lugd+JEl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from mout.web.de (mout.web.de [212.227.17.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05DAB1F91DE
-	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 19:48:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9855255887;
+	Tue, 28 Jan 2025 21:02:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738093734; cv=none; b=Fpk+g/t+7hLLOBEG5ZFtNfFsZ89oyheaRg1/m1V4FVZ/hsdwDbrUpA2UlaYsGu2rPZz8dY59k750KOPSZwEXwYM13T02lgnscfcCfGNz1Y4I6ly1+IpVNSuCDu1r0Meb+ZtOTyCcF58BHL1RGAn21X2/B8LV26kOQr0DolglmTs=
+	t=1738098164; cv=none; b=BMNRC8H3iK95KZ6QQRmoVEJ2idqDjZpsW+HpUwRdqvZQZgH2z3q4pIcaO6OCWJ1aKTFphRfWpvjHkffyQchjzSyfXh91IkJYdT6KrHfys0JenNEvJdCk/q1gm3lBGphUPo1+7ywTy0GVCheIeNkiMJrveaVK80B/HBKcZ+6VFak=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738093734; c=relaxed/simple;
-	bh=TtksT9hap2TJwbA3M9qEwfaScDYn9rIlJty2hDGsRwA=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:MIME-Version:
-	 Content-Type:References; b=s6ZemJ6gQ6HZfl9J5aFCeM827CJb0SmCOit1zhcOMCWxEZi99k5iSk+7gJ3Cvs0y2ScyRWI5RDcy29sypym1rveVKPM0NAHrwKZeLZyOd6BLbrxlXXcvqDnvoUiFvxvoAilPj4hMb5UPj+lOSkEFdiGljNiSNr67Jb+UvE7up5M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=CNxgZhcG; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250128194851euoutp0254dbea6ebfe7b3b4848a6f02224ed5ae~e8wpHhXt20773407734euoutp02X
-	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 19:48:51 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250128194851euoutp0254dbea6ebfe7b3b4848a6f02224ed5ae~e8wpHhXt20773407734euoutp02X
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1738093731;
-	bh=vt7JWzghtAmS4fKJN8Ir00QUirp5ujThWVAc+56dmcM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CNxgZhcGjcpvAthpuJEXiAkruh9b4Lovk42IzlZaLsEiy8WWiZrN3P/FfsOrSx4I1
-	 9y8WnLHZI1uaQsGOEDTecePedUYrvs2MDb12fZNQvNohVfUBYj2HqED+V/Cp0YxaIG
-	 DJHRyaL325s3Zyz+HIqcLRwbzc5gdmx4KdClUeKs=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20250128194850eucas1p11f9e60d10d2e7c183dc984e76151c4d4~e8woS9N4J1601016010eucas1p13;
-	Tue, 28 Jan 2025 19:48:50 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id C3.C2.20409.2A439976; Tue, 28
-	Jan 2025 19:48:50 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
-	20250128194849eucas1p1c957dedd293b3091d8dfb35bdfa1fb0c~e8wnEPIKG1601116011eucas1p18;
-	Tue, 28 Jan 2025 19:48:49 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250128194849eusmtrp2e8eaba1fb03f93c070f3988728d2da39~e8wnDgw6k0493804938eusmtrp2N;
-	Tue, 28 Jan 2025 19:48:49 +0000 (GMT)
-X-AuditID: cbfec7f4-c0df970000004fb9-2c-679934a295ca
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id 51.F0.19920.1A439976; Tue, 28
-	Jan 2025 19:48:49 +0000 (GMT)
-Received: from AMDC4942.home (unknown [106.210.136.40]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250128194847eusmtip1fc75fd1ce7c2e9e3f0336886a24de17f~e8wlX99iV0756107561eusmtip1V;
-	Tue, 28 Jan 2025 19:48:47 +0000 (GMT)
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-To: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
-	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
-	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
-	m.szyprowski@samsung.com
-Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org, Michal Wilczynski
-	<m.wilczynski@samsung.com>
-Subject: [PATCH v4 18/18] riscv: dts: thead: Add GPU node to TH1520 device
- tree
-Date: Tue, 28 Jan 2025 20:48:16 +0100
-Message-Id: <20250128194816.2185326-19-m.wilczynski@samsung.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250128194816.2185326-1-m.wilczynski@samsung.com>
+	s=arc-20240116; t=1738098164; c=relaxed/simple;
+	bh=mfMB/kOJwWCWBi7AtFus1i5A8KKc2SzYD9VfPPB6/Bk=;
+	h=Message-ID:Date:MIME-Version:To:Cc:References:Subject:From:
+	 In-Reply-To:Content-Type; b=fuYgz03dOehmWdW6aKYsAV8FxZ6PcsyruP+zj9JmsWnoLrjv9cc1NTWMmbrEkxHxIRCQ11YROer0V6iPt87GlJIXijEfWShyEyXoG2kKD5VcGhYYOH1s/rRBx/a6XznfPyQESmNKgZ8V6Lt3XzbMz1opliLSw/IWZLV2l1DLE5s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=lugd+JEl; arc=none smtp.client-ip=212.227.17.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1738098159; x=1738702959; i=markus.elfring@web.de;
+	bh=3umHLMGrcLo5C0gV5DfFSpcRm6HAQK73Bd3Y1mC2uB4=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:To:Cc:References:
+	 Subject:From:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=lugd+JElfIBEVWJEly/xpiC37xATW6N6QL/mFXzaImqmdRiGu9El4suaNDc5SBIJ
+	 f7yuPAtB4XVuylj3u7G5BczelJ5/emDxHQ30PDVNcC9rtRKBhqRseJy6OASoL+Iq9
+	 ArcQ3FyUW9yd6zl6HvZ2Xlf0WV4HKCmnClbV719vvUnC+rm0ypbfdtPwsGGbVAZnj
+	 WkCAfzZcvm0TYZkxsVNFrodDO6tQZu6OcvhdWzOTgMDymVvgzqDR+mTdyiZV8tA4+
+	 QU/te2bbCzVTLcIj2amNj5TwWzdApX4spmArstqfs3lmriJ7U+3XkJ3feVPqxmnLX
+	 mxBXcCqystTm/wZ5ww==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.70.40]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1Mi4z5-1szA8E0tNZ-00bwwr; Tue, 28
+ Jan 2025 22:02:39 +0100
+Message-ID: <565fb1db-3618-4636-8820-1ca77dad07a2@web.de>
+Date: Tue, 28 Jan 2025 22:02:29 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxbVRjGc+69vfdSZd6WEU4AURsdkUVWCZrjZgi6Oe9kkLG4kJgIdHBX
-	mKWQFpybRkv4EGonY6GZFBhY2fisndB2fMpkSDemdYMJiMDYHOFj3SiDkm1mVMpF3X/P+7y/
-	c573PTk0LraQgXS6MptTKWUKCSkkbP0PHa8YI8vlUn1ZGLo0YsSQ9W8DhZq7HRiq7nMI0OSg
-	BUPX3Qsk+n76KoVmu3MJNFxfRaG8fjOJ5gyTJFrUTQrQUEcliZaO9wFkW8onkalvgkJmdzWG
-	vl20Eqi2rQOgwuKzAnRt4B00MXmJQHNDOhwVGp5Bnq42Cq0O/0Cgins9FLI4SwXIbkpA+T1l
-	RHQIuzBaQLHOuTmCvVi0TLHdKzUE226YoFhd+y+AbWksJtnx4S6SPX05nr3xlR1jW2u/YPNN
-	/Rhb8ljKLvz4O8l+bWkE7GDeCLVP/IHwzVROkf4xp9oWlSxMa/VMYVkzwk++y0vSgDu0FtA0
-	ZCKh5qZEC4S0mKkHcEA3S/HFMoBV2mKSL5YAXNGXEFrgs37Cfm5ewDfqADyjsW9QTgBLmyvX
-	KZKJgFN11evUZqaAgAU/5wJvgTMzANpuV5Jeyo+Jh+5qJ+adhGBegmNng7y2LxMNS1tLBHzc
-	c7Dnp19xr/ZZ81se1xM8I4KXy2+va3yNybNW4DxvEkKXO5HXu2Cj8fTGPX5w3m6heB0MPe3V
-	GK8z4ZT1/sbZz2C7zr6hd8BxxyPSOxrOvAzNHdt4+y34191WjH+7TXD0roifYBM8aTuF87Yv
-	LCoU8/QWqNcd/y/UUW/bCGXhoCeXPAFeMDyxi+GJXQz/59YAvBEEcDnqDDmnjlByR8LVsgx1
-	jlIenpKZ0QLWPvaVVftyG6ibXwzvBRgNegGkcclm3w8d38jFvqmyo8c4VWaSKkfBqXtBEE1I
-	AnyNPQVyMSOXZXMfcVwWp/q3i9E+gRosI7jkS1ckXeIISWxuiqnzO5Clp5NvBk4PWbfqnQPv
-	N9zYZb/oeu9RXIw5Fo90hV4Y2psymrJVmy/d4fx8xWN7mDKe1FmzpDGf3zc/diRmzy37ikNU
-	tHO8Qvrg6tMXnFX3T/52KGX/dmnT6xEW9cxhSdinz1aEbG9QnDrW9G5CnH+qCY53US216rnV
-	O2PlQZ5DV/yvR6/8EW/O14nSog4qY3d3vtig1xgdBTMJwScOu/zzcqzDlQE1B4LLotNvZTu6
-	joadUSQO7S27Nli2ADtytLPGN5Zj7zG7G3ZqXnM/H1fxdub5c1GhyaLYxpHQXsVTDX8agTvQ
-	FJSgjDrYKZ1+gPVJCHWa7NUwXKWW/QN5kRGYRwQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrCKsWRmVeSWpSXmKPExsVy+t/xu7oLTWamG1yaKWFx4voiJoutv2ex
-	W6zZe47JYv6Rc6wW9y5tYbK48vU9m8W6pxfYLV7sbWSxuLZiLrtF87H1bBYvZ91js/jYc4/V
-	4vKuOWwWn3uPMFps+9zCZrH2yF12i/Vf5zNZLPy4lcViyY5djBZtnctYLS6ecrW4e+8Ei8XL
-	yz3MFm2z+C3+79nBbvHv2kYWi9nv9rNbbHkzkdXi+Npwi5b9U1gc5Dze32hl93jz8iWLx+GO
-	L+wee78tYPHYOesuu0fPzjOMHptWdbJ53Lm2h81j3slAj/vdx5k8Ni+p92hZe4zJo/+vgcf7
-	fVfZPPq2rGL0uNR8nT1AKErPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/O
-	JiU1J7MstUjfLkEvY/P/B0wFz7kqFjfHNzC+5uhi5OSQEDCROL7hFWsXIxeHkMBSRon5m++y
-	QiRkJK51v2SBsIUl/lzrYoMoesUo8fbGFnaQBJuAkcSD5fPBGkQEFrNI7N1XCVLELPCWUeL6
-	zI1g3cIC/hKPzyxj6mLk4GARUJW4tUwaJMwr4CAxcXM/1DJ5if0HzzKD2JxA8U1/V4C1CgnY
-	Szx6O4MNol5Q4uTMJ2BxZqD65q2zmScwCsxCkpqFJLWAkWkVo0hqaXFuem6xoV5xYm5xaV66
-	XnJ+7iZGYHLZduzn5h2M81591DvEyMTBeIhRgoNZSYQ39tyMdCHelMTKqtSi/Pii0pzU4kOM
-	pkBnT2SWEk3OB6a3vJJ4QzMDU0MTM0sDU0szYyVxXrfL59OEBNITS1KzU1MLUotg+pg4OKUa
-	mHYc7fJ+IbxXSjL07v1FwZOer4pNyj9tF/f/+/7XvonJB79P1QsT3+Uzubon+e0cBecJ7ZM2
-	bL/R9EXogbblLsktazpjeiUt0zmmHJ4Ylff4ZHHdqv/O8qk3fSouB/UxeAV4cxoZL7cOZ49b
-	zlda/+VUe9bq9osRqxQ3FO+KFE2dH6Z72qf9aIPNfvf79xYss9qkr/Nob8eS7vI3DPqa78X5
-	6gNmvfPcu/m7aX/w4cVxUT87BFWPaf6seVhVd3rC5Qbzv+tUdZOr+LZWzONUXy65eKny16O3
-	hD/UtW7yE3Y/tKPL4OTOlcbbWErVl31KLWnn3RfMfjk62qvz0qZjat5C7+alOclu+Wm+WH2C
-	kxJLcUaioRZzUXEiAHobLJy3AwAA
-X-CMS-MailID: 20250128194849eucas1p1c957dedd293b3091d8dfb35bdfa1fb0c
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250128194849eucas1p1c957dedd293b3091d8dfb35bdfa1fb0c
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20250128194849eucas1p1c957dedd293b3091d8dfb35bdfa1fb0c
-References: <20250128194816.2185326-1-m.wilczynski@samsung.com>
-	<CGME20250128194849eucas1p1c957dedd293b3091d8dfb35bdfa1fb0c@eucas1p1.samsung.com>
+User-Agent: Mozilla Thunderbird
+To: Easwar Hariharan <eahariha@linux.microsoft.com>, cocci@inria.fr
+Cc: LKML <linux-kernel@vger.kernel.org>, kernel-janitors@vger.kernel.org,
+ linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-nvme@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-xfs@vger.kernel.org,
+ ceph-devel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net,
+ imx@lists.linux.dev, kernel@pengutronix.de,
+ linux-arm-kernel@lists.infradead.org,
+ Andrew Morton <akpm@linux-foundation.org>, Carlos Maiolino <cem@kernel.org>,
+ Chris Mason <clm@fb.com>, Christoph Hellwig <hch@lst.de>,
+ Damien Le Moal <dlemoal@kernel.org>, "Darrick J. Wong" <djwong@kernel.org>,
+ David Sterba <dsterba@suse.com>, Dick Kennedy <dick.kennedy@broadcom.com>,
+ Dongsheng Yang <dongsheng.yang@easystack.cn>,
+ Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+ James Bottomley <James.Bottomley@HansenPartnership.com>,
+ James Smart <james.smart@broadcom.com>, Jaroslav Kysela <perex@perex.cz>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+ Josef Bacik <josef@toxicpanda.com>, Julia Lawall <Julia.Lawall@inria.fr>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Ilya Dryomov <idryomov@gmail.com>,
+ Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>,
+ Keith Busch <kbusch@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+ Mark Brown <broonie@kernel.org>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Nicolas Palix <nicolas.palix@imag.fr>, Niklas Cassel <cassel@kernel.org>,
+ Oded Gabbay <ogabbay@kernel.org>, Ricardo Ribalda <ribalda@google.com>,
+ Sagi Grimberg <sagi@grimberg.me>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Sebastian Reichel <sre@kernel.org>,
+ Selvin Xavier <selvin.xavier@broadcom.com>, Shawn Guo <shawnguo@kernel.org>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, Takashi Iwai <tiwai@suse.com>,
+ Victor Gambier <victor.gambier@inria.fr>, Xiubo Li <xiubli@redhat.com>,
+ Yaron Avizrat <yaron.avizrat@intel.com>
+References: <20250128-converge-secs-to-jiffies-part-two-v1-1-9a6ecf0b2308@linux.microsoft.com>
+Subject: Re: [PATCH 01/16] coccinelle: misc: secs_to_jiffies: Patch
+ expressions too
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20250128-converge-secs-to-jiffies-part-two-v1-1-9a6ecf0b2308@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:iHXXXI1GgZe21qv8LaB36WZ2Vsbh+30ctHdeuhjL58pow7ObI/n
+ WkL1BRfcGc3xPTE7WTH/8blOzYTn9sr9kmiu0JlwbK+4b714M1NEuSxTjO0wec15e2/vSDy
+ uDaoXgXEnc15+k7LwhSrDlieAakHXlujaBdoTKMERuZeGqcF/lr7wB/BevoNLo+FU7wzIqQ
+ aOajvgo+YHQHBAbcH9fBg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:rl1+EWWMtaU=;EqS9WTtqlVexMZSa5Jv6osEpxMn
+ hvF5ExxFi69MshCqN0iCQJ9CsPgR4dRizBjf15Nun4PB2G1xVTkt8gPKouGwCsVTv8Wm+WqU2
+ TfM0O0GAReZpmFXq82LdrG2sTl+5GS7MW/XeczWoOvfmlQZGUTxAeiabHe982tQ5sjQ7pvBjj
+ b6JYk30LAwHaptKVJlAyYDTQrNqQmKm1fInHh1R0BqLWD7yAbmIhzOgsGDyapCyRzZ/6L58Kd
+ qMLJCmj8kp6OcGrtC6qyfn6vENJ3sKXUzDCjeFjZsblLj6AZqVFqPaGkr3WDBvgVlzknwCsuL
+ dTDBwwDzhXWZDpsnaBHnS8iI6b9y60B0/WwOzfqaZ2vol6lFD69SHUFtYn0ZgHvwiCZm9xktA
+ JWX2pS3My9yJ+hVoYQ8Roh/du8QDa/Pm1AN3y4siXvV4Vd2p4r7avPuVYF89xPfhqeOiCUyim
+ 74txrmxIhNJtDI2TJ2SHQYS2r1gUY8+ioCwT2SsVmzxEdV795ccbiiKzw3KT1teQ1CRIhkeZF
+ k+me759e21qqFhzCA+W+kKa3oNrQvnrx3MFGbr/WoIwLxlyqLG25aVhqwuWvn7yyDaFQ60QKw
+ tMPxLX6+iV8IWzhIUyb4CtEkcgWiVVNm59osGitJw6HZJgsmDNDR4zs4DWL+Q5VGOpmwSVC0x
+ Q+nvkt0/jEV6wgWG8uEad4c+rNAUrw9rtdYU5HViYfJzdE2v/knRfZBUzOkgi6O5iMZtJ3Lxi
+ rKMYnBh+OfDHRaOKzTHuD/jxsBh2wri3J7QnuWvzCczLpsppJHq+CGdZvNevnxIcUGmYGqYZs
+ K5WU8xokNX6ip+Z6iQRZjHliRbfF3LPa1bz58C8lLJ8UJMr2uicwiVhyCmJXfhfnTsF1UEjV3
+ 2Bjsxn/TOrbOtdszIeVMV7ChLFk0OwufgZxaGxw/3gOyHaPOUZ3Mz/eBUr3BiSQtFPFl4bvd4
+ GwFqEoazTKVX6f87q5CL/ThpkFTHi+muon/dhBj6NFEXz0Vk7JlO2YBAbv+PnanDfW0BCvaKH
+ DuZIBZebVIcC++l0MdC0iSdO+kNr3TXnRpRd2Pyhqn0qD+C8W+jzV6x520UF9whVDkCQlAjr8
+ R1OTygelS4A8CdLcvmF1P6DSPVs1dfnOMm4gzJp4/NcmbxhgSRgtg23Df90/CTB3FnVaeTOWC
+ m6owGzbKvieq3OLAkE+SPXE4/jRQF+NmzzaRCayhBpQ==
 
-Add a device tree node for the IMG BXM-4-64 GPU present in the T-HEAD
-TH1520 SoC used by the Lichee Pi 4A board. This node enables support for
-the GPU using the drm/imagination driver.
+> Teach the script to suggest conversions for timeout patterns where the
+> arguments to msecs_to_jiffies() are expressions as well.
 
-By adding this node, the kernel can recognize and initialize the GPU,
-providing graphics acceleration capabilities on the Lichee Pi 4A and
-other boards based on the TH1520 SoC.
+I propose to take another look at implementation details for such a script=
+ variant
+according to the semantic patch language.
 
-Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
----
- arch/riscv/boot/dts/thead/th1520.dtsi | 12 ++++++++++++
- 1 file changed, 12 insertions(+)
 
-diff --git a/arch/riscv/boot/dts/thead/th1520.dtsi b/arch/riscv/boot/dts/thead/th1520.dtsi
-index bdbb1b985b0b..b4b3add0d98d 100644
---- a/arch/riscv/boot/dts/thead/th1520.dtsi
-+++ b/arch/riscv/boot/dts/thead/th1520.dtsi
-@@ -498,6 +498,18 @@ clk: clock-controller@ffef010000 {
- 			#clock-cells = <1>;
- 		};
- 
-+		gpu: gpu@ffef400000 {
-+			compatible = "thead,th1520-gpu", "img,img-bxm";
-+			reg = <0xff 0xef400000 0x0 0x100000>;
-+			interrupt-parent = <&plic>;
-+			interrupts = <102 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk_vo CLK_GPU_CORE>,
-+				 <&clk_vo CLK_GPU_CFG_ACLK>;
-+			clock-names = "core", "mem";
-+			power-domains = <&aon TH1520_GPU_PD>;
-+			resets = <&rst TH1520_RESET_ID_GPU>;
-+		};
-+
- 		rst: reset-controller@ffef528000 {
- 			compatible = "thead,th1520-reset";
- 			reg = <0xff 0xef528000 0x0 0x4f>;
--- 
-2.34.1
+=E2=80=A6
+> +++ b/scripts/coccinelle/misc/secs_to_jiffies.cocci
+> @@ -11,12 +11,22 @@
+>
+>  virtual patch
+=E2=80=A6
+> -@depends on patch@ constant C; @@
+> +@depends on patch@
+> +expression E;
+> +@@
+>
+> -- msecs_to_jiffies(C * MSEC_PER_SEC)
+> -+ secs_to_jiffies(C)
+> +-msecs_to_jiffies
+> ++secs_to_jiffies
+> + (E
+> +- * \( 1000 \| MSEC_PER_SEC \)
+> + )
 
+1. I do not see a need to keep an SmPL rule for the handling of constants
+   (or literals) after the suggested extension for expressions.
+
+2. I find it nice that you indicate an attempt to make the shown SmPL code
+   a bit more succinct.
+   Unfortunately, further constraints should be taken better into account
+   for the current handling of isomorphisms (and corresponding SmPL disjun=
+ctions).
+   Thus I would find an SmPL rule (like the following) more appropriate.
+
+@adjustment@
+expression e;
+@@
+-msecs_to_jiffies
++secs_to_jiffies
+ (
+(
+-e * 1000
+|
+-e * MSEC_PER_SEC
+)
++e
+ )
+
+
+3. It seems that you would like to support only a single operation mode so=
+ far.
+   This system aspect can trigger further software development challenges.
+
+
+Regards,
+Markus
 
