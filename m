@@ -1,175 +1,128 @@
-Return-Path: <linux-pm+bounces-21010-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21011-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 10E97A2095D
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 12:14:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6102BA2096A
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 12:15:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 450B93A5CEA
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 11:14:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BDDC18898FE
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 11:15:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF5B619F40A;
-	Tue, 28 Jan 2025 11:14:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3358819DFA5;
+	Tue, 28 Jan 2025 11:15:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="CjLUuY5g"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="fq3NizUY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7930819F103;
-	Tue, 28 Jan 2025 11:14:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D78219B5A3;
+	Tue, 28 Jan 2025 11:15:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738062865; cv=none; b=suynWelZOxQKdF9qzY4IHeRZm1yt/VZJ/0hwYYScBQEeKmJVlbD7Vvv1s2u5ni22ZwdHvP7nNApsLi4CQu8r402KK+i8D48UHfzaiXlzPAdmYzLhFekvdFnSrGIDXKSmSHVaXZnduFkYW6WTD/zkZPNZ53lPLh8PEnXS/xjcu6Q=
+	t=1738062949; cv=none; b=WuhTYLi8FEdqomJpwRd1r+dAiN60suqlIjVrnIZyiaKQr6ui6yOIjNlOiT18JDaVscbtxD4CgWyDyBXNVGekfHRK7GQywo7efNAoI2mNzERsfah5D16aWl97AXrBThPagE01wX9Opb9ngtdJ0t81KqWlp0MWSII0OwhN5nKNJXE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738062865; c=relaxed/simple;
-	bh=Jcf1R/yTJoD8mRNd+L+foDCFOMRh6wZdrsACFFxZBLo=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=D+QA1KMjMumixcuJ63Z5tLGBGB0/4eF40lJa/M36UoEcj16W/3TDP6UcN5YWy76qMxgU4lW59Uf9shL5SOwnGiYOWTNixhaJjkzZ3qeXvOF+3Tz9hr7nXIgtEQooQKp5evOxB8RNxNrdCa4x8Qy19Tt43hrsEnS3LQML/glnuno=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=CjLUuY5g; arc=none smtp.client-ip=198.47.19.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0265.itg.ti.com ([10.180.67.224])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 50SBE8xm1951268
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 28 Jan 2025 05:14:09 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1738062849;
-	bh=PaB9zjJJf1lkvcUrXACl1LaqEcDbvmCXCZVlOwFJpjk=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=CjLUuY5gVLXfuB/N5oPB5Hy6DKS1ul4QdAh56ZC4if4GiuWN2kTZtfxJkUh7BjCfE
-	 Ge8wr+E1MxbqobYs2RuwWQ0dtiSKcftyaFKPnP5/oLRaLIGFPXRG19p+775xapS0ZB
-	 WjU9/WaPw5HxrBcRGQOGvo/lg4XamXfiz/RbsUgs=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 50SBE8H0002142
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Tue, 28 Jan 2025 05:14:08 -0600
-Received: from DFLE100.ent.ti.com (10.64.6.21) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 28
- Jan 2025 05:14:08 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE100.ent.ti.com
- (10.64.6.21) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Tue, 28 Jan 2025 05:14:08 -0600
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 50SBE7JV125661;
-	Tue, 28 Jan 2025 05:14:08 -0600
-Date: Tue, 28 Jan 2025 16:44:07 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Sudeep Holla <sudeep.holla@arm.com>
-CC: Vivek yadav <linux.ninja23@gmail.com>, <linux-newbie@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <daniel.lezcano@linaro.org>,
-        <lpieralisi@kernel.org>, <krzk@kernel.org>, <christian.loehle@arm.com>,
-        <quic_sibis@quicinc.com>, <cristian.marussi@arm.com>,
-        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
-        <vigneshr@ti.com>, <khilman@ti.com>, <sebin.francis@ti.com>,
-        <khilman@baylibre.com>
-Subject: Re: Fwd: ARM64: CPUIdle driver is not select any Idle state other
- then WFI
-Message-ID: <20250128111407.6hbefatwhuomstzo@lcpd911>
-References: <CAO6a-9_aPLCx2CqecQBGbK78_=+-tT44RepPkrBjpkWSvjj4Tg@mail.gmail.com>
- <CAO6a-98cdSvyd7jgAyGNmsC2nxmRSyr3GppxvZU9yHU1xqwz3g@mail.gmail.com>
- <20241211055052.gbxnyqpui3t3zpw5@lcpd911>
- <20241211121825.GA2054801@bogus>
- <20241211143428.kaoovhiwar74dy6x@lcpd911>
- <Z1rbLdWW75KQw5cl@bogus>
- <CAO6a-98XFxbCnOMp5ARwPssjYomyNKWjT=WTk=z2+ZKyOAQ0jQ@mail.gmail.com>
- <20250128094720.sgk7gyr5oawzxbez@bogus>
+	s=arc-20240116; t=1738062949; c=relaxed/simple;
+	bh=E8KFS27CRKfPp6G6hdrpX3eQpbeYEtcFdqanIuJU1HY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=jo0TTwC+DLkvbLoviDIj10W0t3rH2mbp9kgPIqHiHWJQCorKIwzR48kQjwvjQVscNbkcyG6Zm3Q7jXOo+Z8o/5NvmWMd8/FhQV0MXkOvF4GSuIauw2HzGIyQR7fJ4vfjctnMyX++dJwQ5yXyoUDCzP2O0FbBoXc0gl5EkjyTo4I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=fq3NizUY; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50SASp3Q000612;
+	Tue, 28 Jan 2025 11:15:43 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	4yQn3hXS4IOBISiTZ5W1+CtoCKEdnvLkWw7+KmukyFE=; b=fq3NizUYglDKMT3e
+	fFUESFcwgkHorBZPKyzaqY4hlOBWaqVOR1Zcn0Ym67vcGdG+OugWF41PMOlhJ7bU
+	yxWCF4PR0KySJPhKaz0zB/Z1C9fBrIbpUmA3WYwm4YEn2USkw43fdVRUew11xWuo
+	VFrroAOdGUm4NMZM1G21Cx52oIcQ3cqIczuBlORm/BJbqoJVv3VVru7OK5Zmi/iK
+	ymbfmbB34pbS7Kvv8+1DzSutY3jc7Qt6akIHBFOekSN3Jnn3bNC1uBRI3LsXHZ2H
+	hcYjrmjFe77aUbZi4R3FFvOMj99tkTErQw/MpH/il+HJtcTQ9pGkXcO8u8nSukfo
+	uxj7Lg==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44ewh483qd-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Jan 2025 11:15:43 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 50SBFggV009131
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 28 Jan 2025 11:15:42 GMT
+Received: from [10.216.7.168] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 28 Jan
+ 2025 03:15:37 -0800
+Message-ID: <92836021-ee0e-4fb4-bf01-49b46a5af3a4@quicinc.com>
+Date: Tue, 28 Jan 2025 16:45:34 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250128094720.sgk7gyr5oawzxbez@bogus>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] dt-bindings: clock: ipq5424-apss-clk: Add ipq5424
+ apss clock controller
+To: Krzysztof Kozlowski <krzk@kernel.org>, <andersson@kernel.org>,
+        <mturquette@baylibre.com>, <sboyd@kernel.org>, <robh@kernel.org>,
+        <krzk+dt@kernel.org>, <conor+dt@kernel.org>, <konradybcio@kernel.org>,
+        <rafael@kernel.org>, <viresh.kumar@linaro.org>, <ilia.lin@kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, <linux-clk@vger.kernel.org>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>
+References: <20250127093128.2611247-1-quic_srichara@quicinc.com>
+ <20250127093128.2611247-2-quic_srichara@quicinc.com>
+ <0c26af56-ed7a-4de8-ac47-7447298b87f0@kernel.org>
+Content-Language: en-US
+From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+In-Reply-To: <0c26af56-ed7a-4de8-ac47-7447298b87f0@kernel.org>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: ustmTcFVNmwC-lrca2Hv5HU82kAJDDiJ
+X-Proofpoint-ORIG-GUID: ustmTcFVNmwC-lrca2Hv5HU82kAJDDiJ
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-28_04,2025-01-27_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 bulkscore=0
+ phishscore=0 suspectscore=0 spamscore=0 priorityscore=1501 mlxscore=0
+ malwarescore=0 adultscore=0 clxscore=1015 lowpriorityscore=0
+ mlxlogscore=903 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2411120000 definitions=main-2501280086
 
-Hi Sudeep and Vivek,
 
-On Jan 28, 2025 at 09:47:20 +0000, Sudeep Holla wrote:
-> On Mon, Jan 27, 2025 at 10:47:28PM +0530, Vivek yadav wrote:
-> > Hi @Dhruva Gole,
-> > 
-> > Q.1. Does your CA-53 properly go into CPUIdle state and come out of
-> > sleep state ?
+
+On 1/28/2025 1:04 PM, Krzysztof Kozlowski wrote:
+> On 27/01/2025 10:31, Sricharan R wrote:
+>> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>>
+>> The CPU core in ipq5424 is clocked by a huayra PLL with RCG support.
+>> The RCG and PLL have a separate register space from the GCC.
+>> Also the L3 cache has a separate pll and needs to be scaled along
+>> with the CPU.
+>>
+>> Co-developed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 > 
-> Yes, well tested on other SoCs. Seems like system integration issue.
-
-Yes, with the local-timer-stop property removed, all A53 cores do enter
-idle in TF-A at the same time.
-
-> > As of now I made some changes in the DT node. After making changes in
-> > latency (which is mentioned below).
-> > 
-> >  idle-states {
-> >        entry-method = "psci";
-> >         cpu_ret_l: cpu-retention-l {
-> >           compatible = "arm,idle-state";
-> >           arm,psci-suspend-param = <0x00000000>;
-> >           local-timer-stop;
-> >           entry-latency-us = <300000>; # 300ms
-> >            exit-latency-us = <300000>; # 300ms
-> >            min-residency-us = <1000000>; # 1 sec
-> >      };
-> >  };
-> >
+> Considering that there were multiple conflicting patches coming from
+> Qualcomm around IPQ SoCs and that we are in the merge window, I will
+> skip this patch.
 > 
-> Does these align with expectation of PSCI implementation in the firmware ?
-
-Just to add here, value of that parameter has some encoded
-meaning and is given in the PSCI standard:
-Table 7 power_state parameter bit fields in Original format
-https://developer.arm.com/documentation/den0022/fb/?lang=en
-
+> I suspect this duplicates the other chip as well, but that's your task
+> to sync up internally.
 > 
-> 
-> > I can see that  CA-55 went into a sleep state (state1) using command
-> > ``cat /sys/devices/system/cpu/cpu*/cpuidle/state*/time``.
-> > As you mention earlier in a multicore system (2 or more) at least one
-> > core keeps working and does not go into sleep state. It should happen
-> > as per theory and other developers' case.
-> > 
-> > In my case, after some time, both CPUs (CPU0 and CPU1) go into sleep
-> > state (state1). Hence the system console hangs.
-> > 
-> > My expectations are,
-> > If I type anything on keyboard. UART interrupt should take out CPUs
-> > from sleep state and execute commands. OR some periodic timer should
-> > take the CPU out of sleep. Which is not happening as of now.
-> > As you said  we can safely remove`` local-timer-stop``. It means local
-> > timers are working for the CPUs and triggering interrupts ?
-> > 
-> 
-> Please go the thread and understand when and why you need local-timer-stop and
-> how it is related to the arm,psci-suspend-param value(especially the state
-> context loss bit)
+ok, but this .yaml is specific to IPQ5424 and would not conflict with
+IPQ5332. That said, will post it after merge window as a part of
+V3 (for other patch changes) to avoid any confusion.
 
-Yes this is the important bit, if you know that on your platform the
-A53s are just not going to power off or stop timers upon entering idle
-then you must remove the local-timer-stop property from your DT
-cpu_ret_l.
-However, if you do have a scenario where the timer would be getting
-stopped or modified in idle scenario, then linux needs to be able to use
-another timer that is routed to the GIC and is unaffected while the
-system is in idle.
-
-This is what my understanding is so far, I am yet to do experiments with
-local-timer-stop + different timer in the case of idle.
-
-> 
-> I have not got response to my questions. You can just play with DT and get
-> things working here if the firmware expectation, hardware functionality
-> and DT properties don't align.
-
-I have responded to the thread now, sorry for not getting back earlier!
-
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+Regards,
+  Sricharan
 
