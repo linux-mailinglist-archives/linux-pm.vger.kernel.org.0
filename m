@@ -1,195 +1,169 @@
-Return-Path: <linux-pm+bounces-21024-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21025-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0797CA20E83
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 17:27:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 33C81A210B7
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 19:22:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A84E37A29EA
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 16:26:28 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90393164127
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 18:22:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE34A1DB34E;
-	Tue, 28 Jan 2025 16:27:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0EC91DED64;
+	Tue, 28 Jan 2025 18:21:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="TFmaGkOa"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="rbsRgRXs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4732D1DA2E0
-	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 16:27:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2A411B040E;
+	Tue, 28 Jan 2025 18:21:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738081636; cv=none; b=eK3Cpt/WTELdHCkboZ5v9P1nA34osNXsZ1bDQE1DnCbt8OAJ6vP0H5JVsktm4OJw/n4aYFLGfzBJb8ajqGsflqMP7hMUPm0fjCAQardCYSm+2Cj4UHhBSMkcsafeZJh54CRuwsJfzcFvoORg3AgRiDNHyuN8UXMTUFLT4IPignk=
+	t=1738088519; cv=none; b=fjXo6ARyHRjpEv5+fwPpoIil7BgOxxmnmi0LnvisazEsrfGTosFyYc69ksQjA5y7V0hCKLNw9n7v1r16ngAb/5vX+1RagV6l+FO0HS3aBw4bWN2TWpLaxtJpiEWwiQf7OGTnWO8aLRvw6LYcXkJUB2U5gUdxfphQKMzTzlDup5M=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738081636; c=relaxed/simple;
-	bh=bG+t/CzJT5bkoQhWeyO22+5w5KevtD23rkGzScuT6Ks=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:In-Reply-To:
-	 Content-Type:References; b=O6Z4MX61zYSPiydmuj0bazoZd6r3+q62XrKoSUnz0Q9PB7CrSWZRtCILLWxzcXOsa182yboL06HN8HewZvlt0PUkB/d1sIipTgyth8Bc0LEmH+4QCa5SJ8kAdTOpAhzS9SPdNyOMaAoOEOUnpEoQuYyBJMiI6PxqF1dy4rpdPt8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=TFmaGkOa; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250128162712euoutp02842a43bdf0088ae75ca827841e8c9168~e6AlGzKZ12638826388euoutp02a
-	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 16:27:12 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250128162712euoutp02842a43bdf0088ae75ca827841e8c9168~e6AlGzKZ12638826388euoutp02a
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1738081632;
-	bh=fFbTh+PWSmdRFBoGu9O4DUva9iXla1md7758aeiDLz4=;
-	h=Date:Subject:From:To:Cc:In-Reply-To:References:From;
-	b=TFmaGkOaOngHdMQ/pXWXbzPxRWkXqYTQQ7blYdU3MnDfl4Ui55OQEmZS92nkRU0QK
-	 9TX/PY4ci0p5GYDsRhsOWS2re8kN/l4fph6zMyF8e9fF3u2UyhZjQvigLMkKzbjp+H
-	 aiwUFOqcNtxzG4ahagzXxHPBOw/dUlGvc2SLwdcg=
-Received: from eusmges2new.samsung.com (unknown [203.254.199.244]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20250128162712eucas1p1c6f2938e96b8144aaccff7d0c3905440~e6Akmdgug0040500405eucas1p1R;
-	Tue, 28 Jan 2025 16:27:12 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges2new.samsung.com (EUCPMTA) with SMTP id 6C.C2.20409.06509976; Tue, 28
-	Jan 2025 16:27:12 +0000 (GMT)
-Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250128162711eucas1p2bfe8403d51943e5d5e7bc99c165a3a3b~e6AkKpP0F2095320953eucas1p2R;
-	Tue, 28 Jan 2025 16:27:11 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
-	20250128162711eusmtrp14491c4910474d6a0c0a4fb4333444735~e6AkJufsr1458214582eusmtrp1e;
-	Tue, 28 Jan 2025 16:27:11 +0000 (GMT)
-X-AuditID: cbfec7f4-c0df970000004fb9-38-67990560a4fa
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 84.F2.19654.F5509976; Tue, 28
-	Jan 2025 16:27:11 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250128162710eusmtip144e6661f192407d315ac892b5ee175de~e6Ai2D0jv2024520245eusmtip1G;
-	Tue, 28 Jan 2025 16:27:10 +0000 (GMT)
-Message-ID: <51846fb3-3d86-4ba7-8504-0725d3cd738f@samsung.com>
-Date: Tue, 28 Jan 2025 17:27:10 +0100
+	s=arc-20240116; t=1738088519; c=relaxed/simple;
+	bh=sHSV1VeTK4GqSPaEADJvEkDZCJZ38hJL0yKDoC4Uqao=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=ONYJFT5ZwSxKjIxoakPd2yH0nFIxQW3+nAnM+XCto6/hjkt+8C9GT12r/2BI89dik1hb8Hny0dQSEO++h0V/oGWpz5rNQSd15V2KqDoKVdo50XdnNqrwQqCFFzMBNNU94RCh04HIPD1mqZU8aOgz3Fy8kR+YeGGDPHdj+a3Js/4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=rbsRgRXs; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from eahariha-devbox.internal.cloudapp.net (unknown [40.91.112.99])
+	by linux.microsoft.com (Postfix) with ESMTPSA id 5C2E02037175;
+	Tue, 28 Jan 2025 10:21:57 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 5C2E02037175
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1738088517;
+	bh=DWnZxqt2SesB4Fck6kqsaU204yIBxTyh+Yo+gWHnxew=;
+	h=From:Subject:Date:To:Cc:From;
+	b=rbsRgRXsDhgQ49qwzz8O9F+b3CIaPu+u/u5bFNXstLiqFfaEZgC1iIU54pEJ4SCC9
+	 qXRUrwxGkFwK11MEhKH4r7I0e/4uhHl3G7yCK3E3A4G+YwxkrF4Z/N40iZHmQckLfV
+	 +mfJ829accGVQ64/iuqsqnpCIMIptrmhiAA8pmnE=
+From: Easwar Hariharan <eahariha@linux.microsoft.com>
+Subject: [PATCH 00/16] Converge on using secs_to_jiffies() part two
+Date: Tue, 28 Jan 2025 18:21:45 +0000
+Message-Id: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v3 04/18] firmware: thead: Add AON firmware protocol
- driver
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
-	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
-	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
-	m.szyprowski@samsung.com, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
-	linux-pm@vger.kernel.org
-Content-Language: en-US
-In-Reply-To: <0324973c-2180-4077-a000-b7b6d895b7aa@samsung.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02SfUxbZRTGfW9v771tUrgUTF9Rx0LG4pyygajvnEPmmLlomGiWmGwaaLa7
-	DsdX2nXTzY/yMdygncCQj4IWcANsVj5qYaWhVFltGczC2AZIoEyFZCDIKh1kKMXRdsp/v/Oc
-	5815zslLcYRXiVAqNeM4K80Qp4UTfLzd9qD/+RRupWR72QqJeobrMNT2t5pEl80ODGmsDi5y
-	DhowdOv+PIGapgZIdNecjaOhxq9JlGtrJtC02kmg/v4WErmUTi66aaom0ILKClD7Qh6BdNZx
-	EtW62nB00WgCKP9cPRfd6N2Lxp09OJq+qeSgfHUgWu00ksgz1Iqjqj8tJDLMFnORXfceyrOU
-	4nEbmPmRMyQzOz2NM1fPuknGvFiDMx3qcZJRdlwHjF57jmDGhjoJ5ptr7zAThXaM+f7i50ye
-	zoYxX65sZ+a7bhPMeYMWMIO5w2SS8AD/1cNsWuoJVrotNoV/tLbBCrLs/I+Gij2EAgxQBYBH
-	QToGDruNnALAp4R0I4AaTTnmK9wANiunuL5iAcAC8yLn0ZOl7y75XQ0AFlsq/cUcgNcNjfia
-	S0DHQu3UIrnGOB0Bq1ZngE8PgtcqJ72ex+kwODFa4fUE02/DpsLb3DUm6Gh4p0Hj5RB6Cxxe
-	WfLG4NCdXFhW2uJtcGgRHJ3UYGvMo1+D5TmDmE8Pg1fmqr0bQfoGH2p6nf7c8bDngRv3cTCc
-	sRtIHz8F+y4o/XomvNP2l9//CexQ2v28E445lokCQD0csAU2m7b55N2wtWTWK0M6AI7MBfki
-	BMCS9nKOTxbAs/lCn3sz/Eqp+m+oo7EdKwLh6nVXUa9bTL1uGfX/c2sArgUiVi5Ll7Cy6Az2
-	ZKRMnC6TZ0giD2Wm68HDf97nsbuNoGHGFdkNMAp0A0hxwkMEHzgqJELBYfHHp1hpZrJUnsbK
-	usGTFB4uEtRZzkiEtER8nD3Gslms9FEXo3ihCuwIoGZsn5bxkuIU708I5LlGg+HyclhOb32x
-	2Fl193Rl4NYBUXCmsui5mOVC4Hol+V7r6hPchJgR3bGTp35sUaTMHjwR77miv9WVwB9SyWP7
-	E7+oFWe/+Fn2rpyDNaKc0Q8jdrwRVb/pH0dKyB8Hdr+ZzFv1MBx4vvDbH5Rq+87ZIzNxqKKl
-	7d6cqeunsYSquv18W6i1ZE+QfrDnLVFAoCL/UFGWLnSxQOdOTFrauO/dkR1btYmWpgu1P0ed
-	Rpd6m2o8Val79728oflpV/DqZOnvGf3teboJ3saA/fH66vL7quG53wBm6vvlGVWAxbVnl/Yx
-	2vBr9EutParNEamvv7Ap0WwOx2VHxVHPcqQy8b+TFE+hVgQAAA==
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKKsWRmVeSWpSXmKPExsVy+t/xu7rxrDPTDXauU7c4cX0Rk8XW37PY
-	LdbsPcdkMf/IOVaLe5e2MFlc+fqezWLd0wvsFi/2NrJYXFsxl92i+dh6NouXs+6xWZw/v4Hd
-	4mPPPVaLy7vmsFl87j3CaLHtcwubxdojd9ktFn7cymKxZMcuRou2zmWsFhdPuVrcvXeCxeLl
-	5R5mi7ZZ/Bb/9+xgt/h3bSOLxex3+9kttryZyGpxfG24Rcv+KSwOch7vb7Sye7x5+ZLF43DH
-	F3aPvd8WsHjsnHWX3aNn5xlGj02rOtk87lzbw+Yx72Sgx/3u40wem5fUe7SsPcbk0f/XwOP9
-	vqtsHn1bVjF6XGq+zh4gFKVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9n
-	k5Kak1mWWqRvl6CXsXD5EcaC41wV1yb+Y2tgvMDRxcjJISFgIvF95VKmLkYuDiGBpYwSyy5e
-	ZoNIyEhc637JAmELS/y51sUGUfSaUWJFywZ2kASvgJ3EqqffwGwWAVWJ2f9fMULEBSVOznwC
-	1iwqIC9x/9YMsBphAV+JJdf2M4HYbAJGEg+Wz2cFsUUENCWu//3OCrKAWWAPq8ThzZ+htq1n
-	krj0cRVYB7OAuMStJ/PBbE4Be4npTZeAbA6guLrE+nlCECXyEtvfzmGewCg0C8kds5B0z0Lo
-	mIWkYwEjyypGkdTS4tz03GIjveLE3OLSvHS95PzcTYzA9LXt2M8tOxhXvvqod4iRiYPxEKME
-	B7OSCG/suRnpQrwpiZVVqUX58UWlOanFhxhNgWExkVlKNDkfmEDzSuINzQxMDU3MLA1MLc2M
-	lcR52a6cTxMSSE8sSc1OTS1ILYLpY+LglGpgmhkpFen85fHhW6F71sgEGC2b/zmMNytTba3N
-	NM17uwImv+WVYYrSZg97kSPq0bX01u+rglURPc0PJzoVvVnw58WZd73fXs6Wd02+UH7jgvf/
-	3pD2SUfCHJ8V+HvH7i4tvNPq5c/IsPjmD7v1lp9+C68MvPg3Mrty9oO6KdbZFdd331TRPnPV
-	Vdjo5xXbFvuPHhGu0Y/W73g1adGZdXc4F0nlcfHtvTu/43tjfpTo5h+af7lbP025rhj6zTro
-	tFLjguldRU0GqqFCL2bU/3l8omxxs1T024LqCFPV7Qrdhx85aXuJMB+vVX2oxe92vfJ7s8jk
-	0IVPTnZvL5zWF/ux7PbZtnVzPj8IbjfpXXzxpRJLcUaioRZzUXEiAD4ihYDoAwAA
-X-CMS-MailID: 20250128162711eucas1p2bfe8403d51943e5d5e7bc99c165a3a3b
-X-Msg-Generator: CA
 Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250120172124eucas1p233b3f6da39e7064db62b02a66bc1ac29
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20250120172124eucas1p233b3f6da39e7064db62b02a66bc1ac29
-References: <20250120172111.3492708-1-m.wilczynski@samsung.com>
-	<CGME20250120172124eucas1p233b3f6da39e7064db62b02a66bc1ac29@eucas1p2.samsung.com>
-	<20250120172111.3492708-5-m.wilczynski@samsung.com>
-	<20250121-small-ruby-seahorse-7475d0@krzk-bin>
-	<0324973c-2180-4077-a000-b7b6d895b7aa@samsung.com>
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIADogmWcC/x2NMQrDMAwAvxI0VxAbE0O/UjoYV2qUwQ6SSQshf
+ 6/oeDfcnWCkQgb36QSlQ0x6cwi3Cepa2ptQXs4Q55hCDBlrbwepe6NqODpuwuwF3IsOHJ+OnNI
+ ccikLLxm8syuxfP+Px/O6fgSSOflzAAAA
+X-Change-ID: 20241217-converge-secs-to-jiffies-part-two-f44017aa6f67
+To: Andrew Morton <akpm@linux-foundation.org>, 
+ Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
+ Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>, 
+ James Smart <james.smart@broadcom.com>, 
+ Dick Kennedy <dick.kennedy@broadcom.com>, 
+ "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
+ "Martin K. Petersen" <martin.petersen@oracle.com>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
+ David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
+ Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
+ Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
+ Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
+ "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+ Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+ Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
+ Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+ Sascha Hauer <s.hauer@pengutronix.de>, 
+ Pengutronix Kernel Team <kernel@pengutronix.de>, 
+ Fabio Estevam <festevam@gmail.com>, 
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+ Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
+ Selvin Xavier <selvin.xavier@broadcom.com>, 
+ Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
+ Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>
+Cc: cocci@inria.fr, linux-kernel@vger.kernel.org, 
+ linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+ linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+ ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
+ linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
+ linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+ linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
+ ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org, 
+ Easwar Hariharan <eahariha@linux.microsoft.com>
+X-Mailer: b4 0.14.2
 
+This is the second series (part 1*) that converts users of msecs_to_jiffies() that
+either use the multiply pattern of either of:
+- msecs_to_jiffies(N*1000) or
+- msecs_to_jiffies(N*MSEC_PER_SEC)
 
+where N is a constant or an expression, to avoid the multiplication.
 
-On 1/28/25 16:54, Michal Wilczynski wrote:
-> 
-> 
-> On 1/21/25 10:56, Krzysztof Kozlowski wrote:
-> 
->>> diff --git a/include/linux/firmware/thead/thead,th1520-aon.h b/include/linux/firmware/thead/thead,th1520-aon.h
->>> new file mode 100644
->>> index 000000000000..3daa17c01d17
->>> --- /dev/null
->>> +++ b/include/linux/firmware/thead/thead,th1520-aon.h
->>> @@ -0,0 +1,186 @@
->>> +/* SPDX-License-Identifier: GPL-2.0 */
->>> +/*
->>> + * Copyright (C) 2021 Alibaba Group Holding Limited.
->>> + */
->>> +
->>> +#ifndef _THEAD_AON_H
->>> +#define _THEAD_AON_H
->>> +
->>> +#include <linux/device.h>
->>> +#include <linux/types.h>
->>> +
->>> +#define AON_RPC_MSG_MAGIC (0xef)
->>> +#define TH1520_AON_RPC_VERSION 2
->>> +#define TH1520_AON_RPC_MSG_NUM 7
->>> +
->>> +extern struct th1520_aon_chan *aon_chan;
->>
->> Drop all externs.
-> 
-> This is required so the code will compile as the
-> int th1520_aon_call_rpc(struct th1520_aon_chan *aon_chan, void *msg);
-> is non static and exposed in the same header.
-> 
-> I really would like to keep th1520_aon_call_rpc in this header, as it
-> could be useful for other drivers to construct their own RPC calls to
-> reboot or shutdown the system e.g watchdog.
+The conversion is made with Coccinelle with the secs_to_jiffies() script
+in scripts/coccinelle/misc. Attention is paid to what the best change
+can be rather than restricting to what the tool provides.
 
-Oh I get it, simply drop extern not the whole expression, sorry it's
-fine.
+Andrew has kindly agreed to take the series through mm.git modulo the
+patches maintainers want to pick through their own trees.
 
-> 
->>
->>
->> Best regards,
->> Krzysztof
->>
->>
+This series is based on next-20250128
+
+Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+
+* https://lore.kernel.org/all/20241210-converge-secs-to-jiffies-v3-0-ddfefd7e9f2a@linux.microsoft.com/
+
+---
+Easwar Hariharan (16):
+      coccinelle: misc: secs_to_jiffies: Patch expressions too
+      scsi: lpfc: convert timeouts to secs_to_jiffies()
+      accel/habanalabs: convert timeouts to secs_to_jiffies()
+      ALSA: ac97: convert timeouts to secs_to_jiffies()
+      btrfs: convert timeouts to secs_to_jiffies()
+      rbd: convert timeouts to secs_to_jiffies()
+      libceph: convert timeouts to secs_to_jiffies()
+      libata: zpodd: convert timeouts to secs_to_jiffies()
+      xfs: convert timeouts to secs_to_jiffies()
+      power: supply: da9030: convert timeouts to secs_to_jiffies()
+      nvme: convert timeouts to secs_to_jiffies()
+      spi: spi-fsl-lpspi: convert timeouts to secs_to_jiffies()
+      spi: spi-imx: convert timeouts to secs_to_jiffies()
+      platform/x86/amd/pmf: convert timeouts to secs_to_jiffies()
+      platform/x86: thinkpad_acpi: convert timeouts to secs_to_jiffies()
+      RDMA/bnxt_re: convert timeouts to secs_to_jiffies()
+
+ .../accel/habanalabs/common/command_submission.c   |  2 +-
+ drivers/accel/habanalabs/common/debugfs.c          |  2 +-
+ drivers/accel/habanalabs/common/device.c           |  2 +-
+ drivers/accel/habanalabs/common/habanalabs_drv.c   |  2 +-
+ drivers/ata/libata-zpodd.c                         |  3 +--
+ drivers/block/rbd.c                                |  6 +++---
+ drivers/infiniband/hw/bnxt_re/qplib_rcfw.c         |  2 +-
+ drivers/nvme/host/core.c                           |  6 ++----
+ drivers/platform/x86/amd/pmf/acpi.c                |  3 ++-
+ drivers/platform/x86/thinkpad_acpi.c               |  2 +-
+ drivers/power/supply/da9030_battery.c              |  3 +--
+ drivers/scsi/lpfc/lpfc_init.c                      |  4 ++--
+ drivers/scsi/lpfc/lpfc_scsi.c                      | 12 +++++------
+ drivers/scsi/lpfc/lpfc_sli.c                       | 24 ++++++++--------------
+ drivers/scsi/lpfc/lpfc_vport.c                     |  2 +-
+ drivers/spi/spi-fsl-lpspi.c                        |  2 +-
+ drivers/spi/spi-imx.c                              |  2 +-
+ fs/btrfs/disk-io.c                                 |  6 +++---
+ fs/xfs/xfs_icache.c                                |  2 +-
+ fs/xfs/xfs_sysfs.c                                 |  7 +++----
+ net/ceph/ceph_common.c                             | 10 ++++-----
+ net/ceph/osd_client.c                              |  3 +--
+ scripts/coccinelle/misc/secs_to_jiffies.cocci      | 22 ++++++++++++++------
+ sound/pci/ac97/ac97_codec.c                        |  3 +--
+ 24 files changed, 63 insertions(+), 69 deletions(-)
+---
+base-commit: 9a87ce288fe30f268b3a598422fe76af9bb2c2d2
+change-id: 20241217-converge-secs-to-jiffies-part-two-f44017aa6f67
+
+Best regards,
+-- 
+Easwar Hariharan <eahariha@linux.microsoft.com>
+
 
