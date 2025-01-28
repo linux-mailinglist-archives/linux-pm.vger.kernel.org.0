@@ -1,181 +1,273 @@
-Return-Path: <linux-pm+bounces-21022-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21023-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5D258A20DD7
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 16:59:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 775CAA20E06
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 17:07:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 941403A61C4
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 15:59:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AF7A43A6ABE
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 16:07:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BCF91D90DB;
-	Tue, 28 Jan 2025 15:59:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12501CDA2D;
+	Tue, 28 Jan 2025 16:07:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="eKfbjJF3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QXT5VuPU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E0D71D63FD
-	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 15:59:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C41BF1ACED3;
+	Tue, 28 Jan 2025 16:07:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738079989; cv=none; b=Kj30WKaAQ+Vr8ChP2xOYgkSBnw3wdZPqphtLzeUhJEC3eqVreFh8ME5//mhI847c1E3Hf4vOJLOrtZeR15Au+hSsoHwcio8eql5CJRpBEdNypi0pNSz6enQS0VnBlxyNeJNO6hHwSC4nyCTb1pytipkcj3/PyKaYN3M9octMSAE=
+	t=1738080441; cv=none; b=qZJ3cvMwOkvsY1U0c9WltNTSlqc2fVlmkPUKgWEMmg6zqinikJcDAcEmBp6qewm/KWwmQdlfSQq+WRHTeLCR5e9j0ZNr1jIjzpEVKPHl39w2o/t4yti9LZ4vbJsmpkt7raWL6Vx4Qy4yYfJgJ8Dk6Qpbi/uzwgu9dH66yW5Pk/s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738079989; c=relaxed/simple;
-	bh=AyGYx44x/LxsX+GE0pirsfezoMh4jSTmt8+h1nxcqFg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=QWgj88zjFibcOAWJctws2fVHT5mkGmLa9UJSVyUknKpZdaxMwhUlcDNNE0L/jcIqW46Np+5XYYmTlalcTJjfkZeFkCVAG6/dQY4tQh3/nORLEWn4U5hFSqkFqyBVeRLkF7evi7gmUelFH1kUjBh68/fhcLy0j+GBpOP5paLl7Tw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=eKfbjJF3; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250128155944euoutp029fc112d9ad6582abffc00f34e460dc8a~e5omVSQR_2663826638euoutp02K
-	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 15:59:44 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250128155944euoutp029fc112d9ad6582abffc00f34e460dc8a~e5omVSQR_2663826638euoutp02K
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1738079984;
-	bh=iwJ+epY4nSd+sLjdpwzOYTKuCc1d7Es+yGTdW2i3PBc=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=eKfbjJF3lyf5iEGiWw8QUA/EOlL4r6JQPwua64OaPT4xTF6Po1YRMHp+GiLPxUeyz
-	 LN9skB1H+8gcw4TNhrRhPJRqEao6/oEeS8CA/8OqoIsDhmG90RbrIoRr7sB6jBYhqy
-	 oyntdtYJpp0x99FurAb3VtvHbCyMn1x6bWe0DoP0=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
-	20250128155944eucas1p2d96354f049a647c89aa1e1cd9abac150~e5ol2hEv-0796807968eucas1p2h;
-	Tue, 28 Jan 2025 15:59:44 +0000 (GMT)
-Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id 6C.1E.20397.0FEF8976; Tue, 28
-	Jan 2025 15:59:44 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250128155943eucas1p2a013a245dc7ebb3789dbd935ac4227fc~e5olaK1XY1919719197eucas1p2t;
-	Tue, 28 Jan 2025 15:59:43 +0000 (GMT)
-Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250128155943eusmtrp2555de54ab9e83820cf9f12f834b2aa38~e5olZJVJW0160501605eusmtrp2L;
-	Tue, 28 Jan 2025 15:59:43 +0000 (GMT)
-X-AuditID: cbfec7f5-ed1d670000004fad-45-6798fef0b33c
-Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
-	eusmgms2.samsung.com (EUCPMTA) with SMTP id 4F.CF.19654.FEEF8976; Tue, 28
-	Jan 2025 15:59:43 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
-	20250128155942eusmtip272ccc759c57bd6953e7f8d3ee7843ec4~e5okLEtjt3036030360eusmtip2b;
-	Tue, 28 Jan 2025 15:59:42 +0000 (GMT)
-Message-ID: <4c8a5979-c0e0-460f-9809-4cf8b10e40ce@samsung.com>
-Date: Tue, 28 Jan 2025 16:59:42 +0100
+	s=arc-20240116; t=1738080441; c=relaxed/simple;
+	bh=KZcE1bukQorwGQCYZJKJZzamF7Is7wgBgtj2gMrFu7U=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DYefy02ifROt+nLpBtqTckZ2nXBVgvS1i7EY6MtFZbuW0p1vze971BCrJDgbd9D1l2YcHWwn0EStUWbt8/GZosHC7aRzI/nZ5JUceoj9QbvoJ3S8ahF4mRs2IvQHFr249dok/a9BXyllfzM4mR7xSTfMvlM0XHVycgNqXfeJWYc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QXT5VuPU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9C7CDC4CEE8;
+	Tue, 28 Jan 2025 16:07:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738080441;
+	bh=KZcE1bukQorwGQCYZJKJZzamF7Is7wgBgtj2gMrFu7U=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=QXT5VuPUkPFrTNsXMBCgL/4JEjK3LimZ7Cqd8yBIpszco7wflbiRcn0RACxL+AwWv
+	 BUAKiyCeysqDqXs8hjID4AUi2fCdrWCVf3JDJQvNy4MgAa1W1+IrmRdyK+lBQzqkLO
+	 Fr4hTtHY7OGqWiAGjbKiix4JII/o0UVMLbI+0prt1ccdOPlrfeeAXTYe9FEan3qI6o
+	 X/2MhZKfxPM3UHxZFTFilI8hAezvgg7moEifAICCSuc90WFY7Z8WErlFSJgFp9VI6N
+	 n89HnJC5mGsuJblsILhO0tWogckgigHTkP1YbJ8XLH15dnPUy45MDlJkr1zijJgULu
+	 mJMh1Et54IcJA==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5f321876499so3074440eaf.1;
+        Tue, 28 Jan 2025 08:07:21 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVjONS9uxajHLs7pLpBavQFhezw/gzRkcMZxLYCfOTCITrIf2rh25uircJHwNK9GHHXIT4MQSCVXII=@vger.kernel.org, AJvYcCXcWWiJFjvhpatdNgbh97x9JlvUQC7AL0AdK4G01McgutJ0UrpueOke/JWB/hU1Rr9QwY59yUD7ohRsPzk=@vger.kernel.org, AJvYcCXuzYvkB0gZbXEOj0L6peXKTsuj6pxFD+pqL5NJIx6ryxo1ggVnQa7mf5UjwjdiyWbien4hiUSqiNOs@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywe490DjMNKdiaio4HJNotTSJlPco78CrJj4bsqgP2AzAt4YfYs
+	ivhT1laBP+NOZveIH5NHYqtjsLa+rcq+v3gjxtGt9nysCVta1i3fEKABG/0YDOSM+MOTuTvNtth
+	e8XKUzBNfSFwQO3IhK8BB/a7L4XY=
+X-Google-Smtp-Source: AGHT+IFppnrp+e0tvUYXh1qQv3AmDN9KyKq0jV/1mxaQcS7c99bB3bgMMoQyY9H+pYrZo17m5R0do2ONTCA2fS7+yYU=
+X-Received: by 2002:a05:6820:503:b0:5fa:3ba7:d27 with SMTP id
+ 006d021491bc7-5fbf5168bdcmr2118524eaf.4.1738080440777; Tue, 28 Jan 2025
+ 08:07:20 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFC v3 05/18] pmdomain: thead: Add power-domain driver for
- TH1520
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
-	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
-	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	jszhang@kernel.org, p.zabel@pengutronix.de, m.szyprowski@samsung.com,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
-	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <CAPDyKFrKKZ4RL5y+sCKAOK71ap7O3aTTc6rY9NrvcHt4hh6EVQ@mail.gmail.com>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA01SfVRTdRj2d+/dvWOewWWg/DKLwr6wAo04/lIOSgc696gds0g9Hg1W3IbJ
-	19lAjegEOBaDUYAIY0AzQOXQAMOBgOOjSQwIl2IC6YYrlQJBvqTEjOV2qfjved/3ed/nfd7z
-	8nGRgVzFPxCXyErjxDE+pIBo7Jo3vzy1oJasO3l9OeoeLMdQw18aCulazRjSdpp5aLhfj6Gf
-	5iZJVHv7EoV+b00j0EBVGYWOdtWRaFQzTKJp1TAPXWkpJdFsTidAjbNyEtV0Win09XQDgSqb
-	WgBSKE/x0OXeMGQd7ibQ6BUVjhQaN2Q3NFFoYeBbApXcbaeQfjyPh0w1u5G8vYDY8gQzOZRB
-	MeOjowRzIfMexbT+cYJgmjVWilE19wGmvlpJMpYBA8l81bOTuZFtwpizlZ8x8poujPny73XM
-	ZNtVkvlCXw2Y/qOD1FuivYKgKDbmwCFW6h8cKYi+WlRPJqQJjxjn2olUMCPIAnw+pF+FXWfC
-	s4CAL6KrAPx54TLOBfcAvDtowrhgFsCC+WqQBVycHb35ZQRXOA2gvWhokTUBoPXSQ56DJaSD
-	odJi4Dk0CPpZaFQncWl32FN8i3DgFbQ3vHFNTTmwB70TXuyxObEn/QI0/PIjzzETp8t5sKeh
-	wtmA017w2i0t5sAk/Qq0ndY6tVweNVsqCjGO4w3PTZQ6PUD6ogB+YzmFc2uHwtJ8yyL2gGMm
-	PcXh1dDezA2FdDy0NcwsclJgs8q0iDdBi/kB6TCD076wrsWfS4fAC2NlOHdHVzg04c6t4Arz
-	G4sW00KYqRBx7OfgcVXOf6LmqkYsF/hollxFs8SkZokZzf+6JwBRDbzYJFmshJUFxLGH/WTi
-	WFlSnMTvg/jYevDowX9YMM01gaqxaT8jwPjACCAf9/EU7jerJSJhlPjjZFYaHyFNimFlRvA4
-	n/DxEpa3Z0hEtEScyB5k2QRW+m8V47usSsUKYCWw2cZRtlUZ5Jr34YRvX2FH8p0QccV+a1t3
-	WGim3GNj8tanttP3w4LTjjw85oUpI6OeH9p2faDwpcCPXH5zT10ZUGL/lNQF5q5+cYtQTeii
-	ff3k3zfalqUff1sYuSbjcGyYfSHFl8mZcuvNDdq348yDKa1i2yevu54XpJzsdzMa1kzq1r6W
-	oE3X1itaSLbcs26lPq9u3H1X4tMl9zePzC/L/jwsZLdufQQ2dqe2f+sbEcKUd2qbdxQvrx0p
-	OD81s2Gj/x5cFv5Yeltivzr1zxXjN29vPjQTGZgYcI4OfWbq5tnvijtG3uO9v/dg3Lv1bb9u
-	wjdgu/pC3yzs0Hc/6R0+uW+PDyGLFq9fi0tl4n8A4DKPEk8EAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFjrPKsWRmVeSWpSXmKPExsVy+t/xe7rv/81IN1j0VcvixPVFTBZbf89i
-	t1iz9xyTxfwj51gt7l3awmRx5et7Not1Ty+wW7zY28hicW3FXHaL5mPr2SxezrrHZvGx5x6r
-	xeVdc9gsPvceYbTY9rmFzWLtkbvsFgs/bmWxWLJjF6NFW+cyVouLp1wt7t47wWLx8nIPs0Xb
-	LH6L/3t2sFv8u7aRxWL2u/3sFlveTGS1OL423KJl/xQWB1mP9zda2T3evHzJ4nG44wu7x95v
-	C1g8ds66y+7Rs/MMo8emVZ1sHneu7WHzmHcy0ON+93Emj81L6j1a1h5j8uj/a+Dxft9VNo++
-	LasYPS41X2cPEIrSsynKLy1JVcjILy6xVYo2tDDSM7S00DMysdQzNDaPtTIyVdK3s0lJzcks
-	Sy3St0vQy7g6fRNbQSNvxaGv+1kaGD9xdTFyckgImEicmjSXpYuRi0NIYCmjxMJ9T5ghEjIS
-	17pfskDYwhJ/rnWxQRS9ZpS4erqfCSTBK2An0XlnD2sXIwcHi4CqxKEZpRBhQYmTM5+A9YoK
-	yEvcvzWDHcQWFgiUOHvyAZgtIqAhsefheVaQmcwCi1glthzazw6xYAKTRN/+c2wgVcwC4hK3
-	nswHW8YmYCTxYPl8VhCbE2jSncXTmEAWMwuoS6yfJwRRLi+x/e0c5gmMQrOQ3DELyaRZCB2z
-	kHQsYGRZxSiSWlqcm55bbKRXnJhbXJqXrpecn7uJEZiyth37uWUH48pXH/UOMTJxMB5ilOBg
-	VhLhjT03I12INyWxsiq1KD++qDQntfgQoykwKCYyS4km5wOTZl5JvKGZgamhiZmlgamlmbGS
-	OC/blfNpQgLpiSWp2ampBalFMH1MHJxSDUy54RXrPb37FvAFxDRwFD9ccahDuchNarN4smz7
-	EfkSpRwZB8Y911dEiyXs0HeMXFksxjuv2fJW4G+eK/rHBfPZxTPcmi7uYBetnBVwee1yxg9f
-	t/k2vdKyYiysOOe/Q3XuhL/CRwUquLqi376e7eQY9v75tH0+exZHKa2f09l/47nTDfX6cE1p
-	vvvGgrF/L37Rt+Z/bagZ+pXz1o70JAdfo7n/Qssq1if+/aBy0mjCnRnL+Rne+fluWXBc3CYw
-	dP+LHJE0Hx0J/mn/M9R7r0+J+CL0zvTp8xmNCaJpS2tVXZW2u4cdVH0yrVyy1OtGgm7DxwKB
-	Df3OXHHNO6/Uxl78wnVvlaRUzO2mbS4flFiKMxINtZiLihMBosuwKuIDAAA=
-X-CMS-MailID: 20250128155943eucas1p2a013a245dc7ebb3789dbd935ac4227fc
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250120172125eucas1p141540607f423eea4c55b2bd22ff5adf0
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20250120172125eucas1p141540607f423eea4c55b2bd22ff5adf0
-References: <CGME20250120172125eucas1p141540607f423eea4c55b2bd22ff5adf0@eucas1p1.samsung.com>
-	<20250120172111.3492708-1-m.wilczynski@samsung.com>
-	<20250120172111.3492708-6-m.wilczynski@samsung.com>
-	<CAPDyKFrKKZ4RL5y+sCKAOK71ap7O3aTTc6rY9NrvcHt4hh6EVQ@mail.gmail.com>
+References: <20241111-runtime_pm-v7-0-9c164eefcd87@quicinc.com>
+ <20241111-runtime_pm-v7-2-9c164eefcd87@quicinc.com> <Z30p2Etwf3F2AUvD@hovoldconsulting.com>
+ <7882105f-93a3-fab9-70a2-2dc55d6becfc@quicinc.com> <Z3057yuNjnn0NPqk@hovoldconsulting.com>
+ <20250113162549.a2y7dlwnsfetryyw@thinkpad> <CAPDyKFr=iudHra-AESDW3xM4iNqOD-v8wseBEK0NAHYUH0kE7w@mail.gmail.com>
+ <CAJZ5v0h-NrdoAdJ5ZTC1wZhh2BzonSW6ek1ux01-c7L5SLby8A@mail.gmail.com>
+ <CAJZ5v0iAa8r9F8MMt7WhbfSRF5MeWnrDRUTeG5HrY5TBHtfZaw@mail.gmail.com> <20250128155830.xc6y2swqqw5okt32@thinkpad>
+In-Reply-To: <20250128155830.xc6y2swqqw5okt32@thinkpad>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 28 Jan 2025 17:07:09 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0imDLwgP+d753s5dVG9cybbK+PFiKwoYmsC13AhjWJ8EQ@mail.gmail.com>
+X-Gm-Features: AWEUYZnjD4AXkuQo0i_7dvCWA9QyU7OzVrOMlqY1zImHh0g0icCNwlXFK9LDjsc
+Message-ID: <CAJZ5v0imDLwgP+d753s5dVG9cybbK+PFiKwoYmsC13AhjWJ8EQ@mail.gmail.com>
+Subject: Re: [PATCH v7 2/2] PCI: Enable runtime pm of the host bridge
+To: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Johan Hovold <johan@kernel.org>, Krishna Chaitanya Chundru <quic_krichai@quicinc.com>, 
+	Kevin Xie <kevin.xie@starfivetech.com>, Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+	=?UTF-8?Q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+	Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, Markus.Elfring@web.de, 
+	quic_mrana@quicinc.com, m.szyprowski@samsung.com, linux-pm@vger.kernel.org, 
+	linux-pci@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	regressions@lists.linux.dev
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Tue, Jan 28, 2025 at 4:58=E2=80=AFPM Manivannan Sadhasivam
+<manivannan.sadhasivam@linaro.org> wrote:
+>
+> On Tue, Jan 28, 2025 at 12:47:09PM +0100, Rafael J. Wysocki wrote:
+> > On Mon, Jan 27, 2025 at 8:57=E2=80=AFPM Rafael J. Wysocki <rafael@kerne=
+l.org> wrote:
+> > >
+> > > On Mon, Jan 27, 2025 at 3:32=E2=80=AFPM Ulf Hansson <ulf.hansson@lina=
+ro.org> wrote:
+> > > >
+> > > > On Mon, 13 Jan 2025 at 17:25, Manivannan Sadhasivam
+> > > > <manivannan.sadhasivam@linaro.org> wrote:
+> > > > >
+> > > > > + Ulf (for the runtime PM related question)
+> > > > >
+> > > > > On Tue, Jan 07, 2025 at 03:27:59PM +0100, Johan Hovold wrote:
+> > > > > > On Tue, Jan 07, 2025 at 07:40:39PM +0530, Krishna Chaitanya Chu=
+ndru wrote:
+> > > > > > > On 1/7/2025 6:49 PM, Johan Hovold wrote:
+> > > > > >
+> > > > > > > >> @@ -3106,6 +3106,17 @@ int pci_host_probe(struct pci_host_=
+bridge *bridge)
+> > > > > > > >>                  pcie_bus_configure_settings(child);
+> > > > > > > >>
+> > > > > > > >>          pci_bus_add_devices(bus);
+> > > > > > > >> +
+> > > > > > > >> +        /*
+> > > > > > > >> +         * Ensure pm_runtime_enable() is called for the c=
+ontroller drivers,
+> > > > > > > >> +         * before calling pci_host_probe() as pm framewor=
+ks expects if the
+> > > > > > > >> +         * parent device supports runtime pm then it need=
+s to enabled before
+> > > > > > > >> +         * child runtime pm.
+> > > > > > > >> +         */
+> > > > > > > >> +        pm_runtime_set_active(&bridge->dev);
+> > > > > > > >> +        pm_runtime_no_callbacks(&bridge->dev);
+> > > > > > > >> +        devm_pm_runtime_enable(&bridge->dev);
+> > > > > > > >> +
+> > > > > > > >>          return 0;
+> > > > > > > >>   }
+> > > > > > > >>   EXPORT_SYMBOL_GPL(pci_host_probe);
+> > > > > > > >
+> > > > > > > > I just noticed that this change in 6.13-rc1 is causing the =
+following
+> > > > > > > > warning on resume from suspend on machines like the Lenovo =
+ThinkPad
+> > > > > > > > X13s:
+> > > > > >
+> > > > > > > Can you confirm if you are seeing this issue is seen in the b=
+oot-up
+> > > > > > > case also. As this part of the code executes only at the boot=
+ time and
+> > > > > > > will not have effect in resume from suspend.
+> > > > > >
+> > > > > > No, I only see it during resume. And enabling runtime PM can (a=
+nd in
+> > > > > > this case, obviously does) impact system suspend as well.
+> > > > > >
+> > > > > > > >   pci0004:00: pcie4: Enabling runtime PM for inactive devic=
+e with active children
+> > > > > >
+> > > > > > > I believe this is not causing any functional issues.
+> > > > > >
+> > > > > > It still needs to be fixed.
+> > > > > >
+> > > > > > > > which may have unpopulated ports (this laptop SKU does not =
+have a modem).
+> > > > > >
+> > > > > > > Can you confirm if this warning goes away if there is some en=
+dpoint
+> > > > > > > connected to it.
+> > > > > >
+> > > > > > I don't have anything to connect to the slot in this machine, b=
+ut this
+> > > > > > seems to be the case as I do not see this warning for the popul=
+ated
+> > > > > > slots, nor on the CRD reference design which has a modem on PCI=
+e4.
+> > > > > >
+> > > > >
+> > > > > Yes, this is only happening for unpopulated slots and the warning=
+ shows up only
+> > > > > if runtime PM is enabled for both PCI bridge and host bridge. Thi=
+s patch enables
+> > > > > the runtime PM for host bridge and if the PCI bridge runtime PM i=
+s also enabled
+> > > > > (only happens now for ACPI/BIOS based platforms), then the warnin=
+g shows up only
+> > > > > if the PCI bridge was RPM suspended (mostly happens if there was =
+no device
+> > > > > connected) during the system wide resume time.
+> > > > >
+> > > > > For the sake of reference, PCI host bridge is the parent of PCI b=
+ridge.
+> > > > >
+> > > > > Looking at where the warning gets triggered (in pm_runtime_enable=
+()), we have
+> > > > > the below checks:
+> > > > >
+> > > > > dev->power.runtime_status =3D=3D RPM_SUSPENDED
+> > > > > !dev->power.ignore_children
+> > > > > atomic_read(&dev->power.child_count) > 0
+> > > > >
+> > > > > When pm_runtime_enable() gets called for PCI host bridge:
+> > > > >
+> > > > > dev->power.runtime_status =3D RPM_SUSPENDED
+> > > > > dev->power.ignore_children =3D 0
+> > > > > dev->power.child_count =3D 1
+> > > > >
+> > > > > First 2 passes seem legit, but the issue is with the 3rd one. Her=
+e, the
+> > > > > child_count of 1 means that the PCI host bridge has an 'active' c=
+hild (which is
+> > > > > the PCI bridge). The PCI bridge was supposed to be RPM_SUSPENDED =
+as the resume
+> > > > > process should first resume the parent (PCI host bridge). But thi=
+s is not the
+> > > > > case here.
+> > > > >
+> > > > > Then looking at where the child_count gets incremented, it leads =
+to
+> > > > > pm_runtime_set_active() of device_resume_noirq(). pm_runtime_set_=
+active() is
+> > > > > only called for a device if dev_pm_skip_suspend() succeeds, which=
+ requires
+> > > > > DPM_FLAG_SMART_SUSPEND flag to be set and the device to be runtim=
+e suspended.
+> > > > >
+> > > > > This criteria matches for PCI bridge. So its status was set to 'R=
+PM_ACTIVE' even
+> > > > > though the parent PCI host bridge was still in the RPM_SUSPENDED =
+state. I don't
+> > > > > think this is a valid condition as seen from the warning triggere=
+d for PCI host
+> > > > > bridge when pm_runtime_enable() is called from device_resume_earl=
+y():
+> > > > >
+> > > > > pci0004:00: pcie4: Enabling runtime PM for inactive device with a=
+ctive children
+> > > >
+> > > > Thanks for the detailed analysis, much appreciated.
+> > > >
+> > > > So this seems to boil down to the fact that the PM core calls
+> > > > pm_runtime_set_active() for a device, when it really should not. If
+> > > > there is a clever way to avoid that, I think we need Rafael's opini=
+on
+> > > > on.
+> > >
+> > > Actually, not really.
+> > >
+> > > The status of the child and the child count of the parent have no
+> > > meaning until runtime PM is enabled for the parent.  They can be
+> > > manipulated freely before this happens with no consequences and all
+> > > will be fine as long as those settings are consistent when runtime PM
+> > > is enabled for the parent.
+> > >
+> > > Now, they aren't consistent at that point because
+> > > dev_pm_skip_suspend() returns false for the parent as it has
+> > > DPM_FLAG_SMART_SUSPEND clear.
+> > >
+> > > To me, this looks like a coding mistake because all devices that have
+> > > power.must_resume set should also be set to RPM_ACTIVE before
+> > > re-enabling runtime PM for them, so the attached patch should work.
+> >
+> > Having reflected on it a bit I think that it's better to avoid
+> > changing the existing behavior too much, so attached is a new version
+> > of the patch.
+> >
+> > It is along the same lines as before, but it doesn't go as far as the
+> > previous version.  Namely, in addition to what the existing code does,
+> > it will cause the runtime PM status to be set to RPM_ACTIVE for the
+> > devices whose dependents will have it set which should address the
+> > problem at hand if I'm not mistaken.
+> >
+> > I'd appreciated giving it a go on a system where the warning is printed=
+.
+> >
+>
+> This patch indeed makes the warning go away and I don't spot any other is=
+sues.
+> So you can add my Tested-by tag while submitting the fix.
+>
+> Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+>
+> Thanks a lot!
 
-
-On 1/21/25 10:55, Ulf Hansson wrote:
-> On Mon, 20 Jan 2025 at 18:21, Michal Wilczynski
-> <m.wilczynski@samsung.com> wrote:
->>
->> The T-Head TH1520 SoC contains multiple power islands that can be
->> programmatically turned on and off using the AON (Always-On) protocol
->> and a hardware mailbox [1]. The relevant mailbox driver has already been
->> merged into the mainline kernel in commit 5d4d263e1c6b ("mailbox:
->> Introduce support for T-head TH1520 Mailbox driver");
->>
->> This commit introduces a power-domain driver for the TH1520 SoC, which
->> is using AON firmware protocol to communicate with E902 core through the
->> hardware mailbox. This way it can send power on/off commands to the E902
->> core.
->>
->> Link: https://protect2.fireeye.com/v1/url?k=aca9147a-cd220149-aca89f35-000babff9bb7-dfbb0fd97ae06334&q=1&e=7a720b7b-4489-48b9-b901-404180e7bc23&u=https%3A%2F%2Fopenbeagle.org%2Fbeaglev-ahead%2Fbeaglev-ahead%2F-%2Fblob%2Fmain%2Fdocs%2FTH1520%2520System%2520User%2520Manual.pdf [1]
->>
->> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
-> 
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
-> 
-> I guess this depends on patch2 and patch3. Not sure what's the best
-> way to merge this, but I can certainly funnel them all three through
-> my pmdomain tree if that sounds feasible. Just let me know.
-> 
-> Kind regards
-> Uffe
-
-Thanks Ulf. I've made some changes based on my discussion with
-Krzysztof, so I'll hold off on adding your Reviewed-by tag until v4.
-Once we've addressed any remaining comments, it would be great if you
-could take the firmware and power-domain patches through your tree.
-
-> 
->> ---
-
+Thank you!
 
