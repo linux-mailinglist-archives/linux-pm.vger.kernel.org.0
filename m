@@ -1,145 +1,222 @@
-Return-Path: <linux-pm+bounces-20991-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20992-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D2523A2037F
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 05:24:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D5B83A20405
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 06:34:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1ED4F3A6EDE
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 04:24:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D64F1652CD
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 05:34:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 629D8199E84;
-	Tue, 28 Jan 2025 04:24:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E3DB1D86C7;
+	Tue, 28 Jan 2025 05:33:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="Pw7ahbTG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WAPyNA+9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D7792198A06
-	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 04:24:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4588D1D47B5;
+	Tue, 28 Jan 2025 05:33:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738038291; cv=none; b=a/KQm2VHe/5AWxKojKp3ThK5L8qQ81jzKDcR21tQxwKRiwJzJQjuOKZCQDZX3BqgMXev8aY9kJwu7bdfXW9zN0th1nxhtPwThKo3xcKa++2nrpuUCvDdlUPcmvLYUNLjhCZdAWHnn2Pa/gDshbZ0EmP2ok71IXgS5eYeabTNdvA=
+	t=1738042426; cv=none; b=sCfGIgWuCNonCrgAmYYo5E5aoqcrWXsy6fy4SIsGrStoJii9iUUBHxqiBkqDENnEVswRzyOVmJ4a5H5Lfvs80Q3IRS4sBH/bUIfZaIvBJoDYykOJa/1yn7MqjueS2inbknvUgvYo3o8f0rh3T6xn9XaLEcF5Z8l+ptENpU+20ng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738038291; c=relaxed/simple;
-	bh=9pPScUxaXH3Noy9LJrFwGVwB6nP+al9S0wDXhxf+xAQ=;
-	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
-	 To:Cc:Content-Type; b=tp95klLsrlfMKZzEFhemYO6Zehps3sLR1mn4nfTazigPqpR+WEwxebdYRQG4XXyN5thkkkzLYD1duMysx2/2F0ZWt8hURQJiv/iVKyDIBCFyo5F+/e2UYmM7NbstnNBLnsO45UgVnwc/gR1nlQplwEfN1kO0sKdCy3mkz3sUT1U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=Pw7ahbTG; arc=none smtp.client-ip=209.85.214.201
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com
-Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2162f80040aso93601585ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 27 Jan 2025 20:24:49 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1738038289; x=1738643089; darn=vger.kernel.org;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:from:to:cc:subject:date:message-id:reply-to;
-        bh=bu3J2SiM3EvMSMPeW7x/ZDWaOfsREkmMvF5jvQ/561M=;
-        b=Pw7ahbTGR630FyMpAYrlY3ig8IVWIgyuG97Du5UPqNut3wZdPpZP6qzEft7trncaTK
-         dlfFxoJBMTc5QZ/w49NLhBY6leDXjyuUYVOuD2+imsvjV4cXPDpluS8cJPymBkuW0qTg
-         B0bkS8w593O9w+vW7OUMtXgz2o9diJzP7qJIyB+j/BC/S46/saQjV5+hlrlj+X60Z6bS
-         /Hc3wZJYPBlVQGy55rJt00tMUTcgrUe1it2n5XAJzAIlnYM+4kiOuE15BbeqezHusfCY
-         pzoKzpdUN8/TiU9U96L09UZumuPdGUmSejXxhyq88XBmG+J3cVCl5qc4rd/68nZv2HzB
-         b+zw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738038289; x=1738643089;
-        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
-         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=bu3J2SiM3EvMSMPeW7x/ZDWaOfsREkmMvF5jvQ/561M=;
-        b=I+2OQtJCg29p44UkCZs/NaSCaaiLG7OAyLblsBRRBLyN+uBJrsLkcCwrrD9CkeBovk
-         FJ2bO4+vpzp+gswXTk3qLq0QyHlOVHyB0gQ/9JEt6SnDxWTV6iKj1/LR1zUblQ3p3cbq
-         WhnmaL06B1wQECc4dLYpLKBPZKTyGUUe7c750SD9LJDstAVGy/ATWjHSIU1vVXhE0NRe
-         97eNOS7luGcYKBiN1NK8TIyi+OwwRLkFydanGrF11CrCHd0nHNsmbbiQ6o5hIcfm0gbF
-         Rwwxcu5jdovWKNJKKfpP9ZOiHCzkz1Fd3BUd02KxjMLp5wRPtiNj1hbKGUex8Gn5Cs/9
-         8LDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVCqGg54ORDZOled3fjxgikrjdp/FXZe3NGR5ZGBtmgqe6fS/IJWgxxwPCBbhwx+p4/8Z2SUVozzA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtGGLQyCpPW8z+GsQWn64MHBvkfpKSCo62a0jRJP4KW/SGhqHF
-	6wn22zm4ElUoNQB88Hmv5eFUPhL067UxsMonAPvYaPYmiVpByB9nk8gQML3RwxMkLfLAdQ==
-X-Google-Smtp-Source: AGHT+IHFqSoHXLdhNPrTC3YRwuLwCUJpWxmu6MnWjbEB7WtYAER1cmeowowTeLs3ri7TD8slgqXM1sxX
-X-Received: from plhv17.prod.google.com ([2002:a17:903:2391:b0:216:eefe:2c35])
- (user=keyz job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:d48a:b0:212:67a5:ab2d
- with SMTP id d9443c01a7336-21c35604a08mr795458485ad.44.1738038289058; Mon, 27
- Jan 2025 20:24:49 -0800 (PST)
-Date: Tue, 28 Jan 2025 12:24:44 +0800
-In-Reply-To: <31dd8c5d-0bc4-4d84-9ac9-7ca248e952cf@arm.com>
+	s=arc-20240116; t=1738042426; c=relaxed/simple;
+	bh=Hjt3TJ7xTzMLlSQnonHGbm3oLTto5HuJhlxie89G82I=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=az2wNbLvDqt+XxjePxgko57f+lxaZVRlMM3DqBio7V24eRBQWeMN6x6O0238dpVo0vYmJJi2IsgbxPlGq2TW1ENAwCA0Ds7ipq8rW1gbsV4H9cqwpJfe9i+kvQAHp0DGIQPAEIjWH9FsPsZvdeRnVh/Kb1gh/2qtPsg2VMGsiyk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WAPyNA+9; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738042424; x=1769578424;
+  h=date:from:to:cc:subject:message-id;
+  bh=Hjt3TJ7xTzMLlSQnonHGbm3oLTto5HuJhlxie89G82I=;
+  b=WAPyNA+9CiiojTSojGbjYeNJOYzpgZz8WONTSOa61O5Wmx0eCEkMMuYG
+   OIYKzCF/1hmNovdyxqPK1qOVmVoVaFTejFWZbF17S+faZKOSNVLiTYlhE
+   ndEBPbdDd9aBWzslkwsC2a520dfVfkR11C+30skdxyH03z5J4tw7qUYZa
+   zhTNMMYBrxxK5RdxuPfvbdnfoWhcXW+DMHvpfejCSYZY7mq1XtNydU+d6
+   htJT75sBp/0JvnbSKIg95xpXysTH24skr60hNY0lCtzm4Lc5h7paM+cHo
+   SdddlLcSG6D8w9SpJZxjGmln3fKnTyA3SGjr4LV7M5ycy/GAOpjGiMIGy
+   A==;
+X-CSE-ConnectionGUID: 1eQ236osQEOQBKC83VdODA==
+X-CSE-MsgGUID: mSxWjkXeR9ydeFdiOBCtHg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="49110037"
+X-IronPort-AV: E=Sophos;i="6.13,240,1732608000"; 
+   d="scan'208";a="49110037"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 21:33:43 -0800
+X-CSE-ConnectionGUID: l8qNhke3TOOiLOOadxo97g==
+X-CSE-MsgGUID: T7TQ9voTQimLj2SrenIQBg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="145847431"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa001.jf.intel.com with ESMTP; 27 Jan 2025 21:33:42 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tceEF-000hUF-2x;
+	Tue, 28 Jan 2025 05:33:39 +0000
+Date: Tue, 28 Jan 2025 13:33:32 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ fc2f1c3f6a69162be891295f651a6322055c8325
+Message-ID: <202501281318.Gko1ocFp-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-References: <31dd8c5d-0bc4-4d84-9ac9-7ca248e952cf@arm.com>
-X-Mailer: git-send-email 2.48.1.262.g85cc9f2d1e-goog
-Message-ID: <20250128042445.24920-1-keyz@google.com>
-Subject: Re: [PATCH v2] cpuidle: psci: Add trace for PSCI domain idle
-From: Keita Morisaki <keyz@google.com>
-To: christian.loehle@arm.com
-Cc: aarontian@google.com, daniel.lezcano@linaro.org, keyz@google.com, 
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-trace-kernel@vger.kernel.org, lpieralisi@kernel.org, 
-	mathieu.desnoyers@efficios.com, mhiramat@kernel.org, rafael@kernel.org, 
-	rostedt@goodmis.org, sudeep.holla@arm.com, yimingtseng@google.com
-Content-Type: text/plain; charset="UTF-8"
 
-> > The trace event cpu_idle provides insufficient information for debugging
-> > PSCI requests due to lacking access to determined PSCI domain idle
-> > states. The cpu_idle usually only shows -1, 0, or 1 regardless how many
-> > idle states the power domain has.
-> >
-> > Add new trace events namely psci_domain_idle_enter and
-> > psci_domain_idle_exit to trace enter and exit events with a determined
-> > idle state.
-> >
-> > These new trace events will help developers debug CPUidle issues on ARM
-> > systems using PSCI by providing more detailed information about the
-> > requested idle states.
-> >
-> > Signed-off-by: Keita Morisaki <keyz@google.com>
-> > ---
-> > v1->v2: Split the ftrace event into two (psci_domain_idle_(enter|exit))
-> > 		and rephrase the commit message accordingly. Rebased onto the latest.
-> Which makes it different to cpu_idle event FWIW.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: fc2f1c3f6a69162be891295f651a6322055c8325  Merge branch 'experimental/intel_pstate/eas-take1' into bleeding-edge
 
-Yes, psci_domain_idle_(enter|exit) are not meant to replace cpu_idle nor a
-variant of it. It's new and different events that provide finer=grained info.
+elapsed time: 937m
 
-> >  drivers/cpuidle/cpuidle-psci.c |  3 +++
-> >  include/trace/events/power.h   | 37 ++++++++++++++++++++++++++++++++++
-> >  2 files changed, 40 insertions(+)
-> >
-> > diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> > index 2562dc001fc1..dd8d776d6e39 100644
-> > --- a/drivers/cpuidle/cpuidle-psci.c
-> > +++ b/drivers/cpuidle/cpuidle-psci.c
-> > @@ -25,6 +25,7 @@
-> >  #include <linux/syscore_ops.h>
-> >
-> >  #include <asm/cpuidle.h>
-> > +#include <trace/events/power.h>
-> >
-> >  #include "cpuidle-psci.h"
-> >  #include "dt_idle_states.h"
-> > @@ -74,7 +75,9 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
-> >  	if (!state)
-> >  		state = states[idx];
-> >
-> > +	trace_psci_domain_idle_enter(dev->cpu, state, s2idle);
-> >  	ret = psci_cpu_suspend_enter(state) ? -1 : idx;
-> > +	trace_psci_domain_idle_exit(dev->cpu, state, s2idle);
-> Not tracking ret seems odd, is that fine?
+configs tested: 128
+configs skipped: 4
 
-I think it's fine not to track ret here.
-__psci_enter_domain_idle_state does not seems to care the return value of
-psci_cpu_suspend_enter to me because it just proceeds with executing subsequent
-functions regardless of ret, and returns ret to the higher function. If the
-value should be traced, it should probably be done in a lower layer or a higher
-layer.
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Another small small reason I'm not interested in adding ret to the
-trace_psci_domain_idle_exit's arguments is that
-trace_psci_domain_idle_(enter|exit) currently share the same trace event
-(i.e. same set of arguments) and it makes the trace events simple.
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20250127    gcc-13.2.0
+arc                   randconfig-002-20250127    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                              allyesconfig    gcc-14.2.0
+arm                          moxart_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250127    gcc-14.2.0
+arm                   randconfig-002-20250127    gcc-14.2.0
+arm                   randconfig-003-20250127    clang-16
+arm                   randconfig-004-20250127    clang-18
+arm                         s5pv210_defconfig    gcc-14.2.0
+arm                           sama7_defconfig    clang-16
+arm                       versatile_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250127    gcc-14.2.0
+arm64                 randconfig-002-20250127    gcc-14.2.0
+arm64                 randconfig-003-20250127    gcc-14.2.0
+arm64                 randconfig-004-20250127    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250127    gcc-14.2.0
+csky                  randconfig-002-20250127    gcc-14.2.0
+hexagon                          allmodconfig    clang-20
+hexagon                           allnoconfig    clang-20
+hexagon                          allyesconfig    clang-18
+hexagon               randconfig-001-20250127    clang-17
+hexagon               randconfig-002-20250127    clang-20
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250127    gcc-12
+i386        buildonly-randconfig-002-20250127    clang-19
+i386        buildonly-randconfig-003-20250127    gcc-12
+i386        buildonly-randconfig-004-20250127    gcc-12
+i386        buildonly-randconfig-005-20250127    gcc-12
+i386        buildonly-randconfig-006-20250127    clang-19
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250127    gcc-14.2.0
+loongarch             randconfig-002-20250127    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                        m5407c3_defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                       bmips_be_defconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250127    gcc-14.2.0
+nios2                 randconfig-002-20250127    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                generic-64bit_defconfig    gcc-14.2.0
+parisc                randconfig-001-20250127    gcc-14.2.0
+parisc                randconfig-002-20250127    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                     ep8248e_defconfig    gcc-14.2.0
+powerpc                      ep88xc_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250127    clang-16
+powerpc               randconfig-002-20250127    gcc-14.2.0
+powerpc               randconfig-003-20250127    gcc-14.2.0
+powerpc                    socrates_defconfig    gcc-14.2.0
+powerpc64             randconfig-001-20250127    gcc-14.2.0
+powerpc64             randconfig-002-20250127    gcc-14.2.0
+powerpc64             randconfig-003-20250127    gcc-14.2.0
+riscv                            allmodconfig    clang-20
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-20
+riscv                               defconfig    clang-19
+riscv                 randconfig-001-20250127    clang-20
+riscv                 randconfig-002-20250127    clang-16
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-20
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                  randconfig-001-20250127    clang-20
+s390                  randconfig-002-20250127    clang-20
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                        dreamcast_defconfig    gcc-14.2.0
+sh                ecovec24-romimage_defconfig    gcc-14.2.0
+sh                    randconfig-001-20250127    gcc-14.2.0
+sh                    randconfig-002-20250127    gcc-14.2.0
+sh                           sh2007_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250127    gcc-14.2.0
+sparc                 randconfig-002-20250127    gcc-14.2.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20250127    gcc-14.2.0
+sparc64               randconfig-002-20250127    gcc-14.2.0
+um                               allmodconfig    clang-20
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-20
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250127    clang-20
+um                    randconfig-002-20250127    gcc-12
+um                           x86_64_defconfig    clang-15
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250127    clang-19
+x86_64      buildonly-randconfig-002-20250127    clang-19
+x86_64      buildonly-randconfig-003-20250127    clang-19
+x86_64      buildonly-randconfig-004-20250127    clang-19
+x86_64      buildonly-randconfig-005-20250127    gcc-12
+x86_64      buildonly-randconfig-006-20250127    clang-19
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                          iss_defconfig    gcc-14.2.0
+xtensa                randconfig-001-20250127    gcc-14.2.0
+xtensa                randconfig-002-20250127    gcc-14.2.0
+
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
