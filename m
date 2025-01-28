@@ -1,43 +1,72 @@
-Return-Path: <linux-pm+bounces-21019-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21020-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BBF18A20CA6
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 16:09:45 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DE004A20DB5
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 16:54:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E2FF51882C35
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 15:09:49 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 118EB1882B05
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 15:54:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90BAC1B042A;
-	Tue, 28 Jan 2025 15:09:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 272D51D86F1;
+	Tue, 28 Jan 2025 15:54:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="hzLrmj/i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
+Received: from mailout1.w1.samsung.com (mailout1.w1.samsung.com [210.118.77.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE5C742AA3;
-	Tue, 28 Jan 2025 15:09:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27E771CF5E2
+	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 15:54:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738076979; cv=none; b=WT26PlzshKP4gJg0PlgBx+3y4AFqUHxN4MygaUxJz+ttRON05nKTF45iMoFmKSIIzCT+cE1s2eTLZW2HtVsYrdnotHD2QIK10yFiF6JFCly2WzwB2ek9fb4uS41nvAgeyWVZpykkhCwdTXtvpzlchlhSeUgqUzjPIN36CIXmJyM=
+	t=1738079687; cv=none; b=b2L2tKHoBxpkVaF3Fndl+c+haY2LSBnLR/rJ8fUDZrsCp8HX8Qfr2tXPJn49J0LgeKk9gPl/Wr0/vz8wVm7rtxfAdMhCLiam1mpybeYwF6pzvsHPagt1bSsYxJ6jsAD00/0INNWXzICaqsEc4bCq2tb2Bg/9Q/406zgMh7DRSVw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738076979; c=relaxed/simple;
-	bh=bsjmKyniqMWd6rhrX4DwYWCF9H1Bh7oTRUwDP+gUhfQ=;
-	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
-	 In-Reply-To:Content-Type; b=nEqIZSdXnEqcmyFLgGL5x0C033DM7yiprk5LRpEx84F9Jju9/HpO5GAKAOZ80YrfzOhjkEmMAbWSmrvIpr0C5YHKl1NZugmFavNxw7fZOjzT4K4G2wtN551WT1ETLTxsR0F99fpqgdBErZGUDjj/luhbB0rY8vuRSNkQApj1eQM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
-Received: from [141.14.220.45] (g45.guest.molgen.mpg.de [141.14.220.45])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: pmenzel)
-	by mx.molgen.mpg.de (Postfix) with ESMTPSA id D5DCE61E647BA;
-	Tue, 28 Jan 2025 16:08:43 +0100 (CET)
-Message-ID: <e26bc00f-1675-4aac-bd02-60774ff5901a@molgen.mpg.de>
-Date: Tue, 28 Jan 2025 16:08:43 +0100
+	s=arc-20240116; t=1738079687; c=relaxed/simple;
+	bh=1xXmo7fSzX5xJn4I3NvhjoFCB5Vr1PhhkgBVFu2Ofk8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=CxpLp26kU0g3WGZdE6gzOhG++lyCY+Op8I3ow91zGqBKsr94ltd3jr5Vc6RwAbNkxFy2iTFn29YBuoRMGbh3+LeXTINvACgNFHuxOEdl4nvjNEvz11WntR3Oxqmy0i9AKKWwr9wEavEWBTzfQsmY4Vn2jpOLdFtgLGr53xZ88c8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=hzLrmj/i; arc=none smtp.client-ip=210.118.77.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
+	by mailout1.w1.samsung.com (KnoxPortal) with ESMTP id 20250128155442euoutp01d0500efccc1d5cc0eb5918b3eca9d4e6~e5kMw9zQn3025530255euoutp017
+	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 15:54:42 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout1.w1.samsung.com 20250128155442euoutp01d0500efccc1d5cc0eb5918b3eca9d4e6~e5kMw9zQn3025530255euoutp017
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1738079682;
+	bh=mvpuymEbp4aI2batWLH2Tq0iHDbwofquNtT7dusR37Q=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=hzLrmj/iJq2mcM3vKYvBFrStcJGeg30tr3Sw+/GjcUdsvFCPkCvbAde0WQ1nE/CIw
+	 nj1Y+ekjteKU0D5n23WtXCJYO1TB1JuVw/bSPDfuDqdxpRBUdCJWHBMZfnnRcTPYpX
+	 DKQyGsgeRVWdGmlZoSrw5WVl32Za/aZ5wGhkas4A=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTP id
+	20250128155441eucas1p2b185981c1709cfbf2834aec9d3d6fe06~e5kMHkqd50179801798eucas1p2b;
+	Tue, 28 Jan 2025 15:54:41 +0000 (GMT)
+Received: from eucas1p1.samsung.com ( [182.198.249.206]) by
+	eusmges3new.samsung.com (EUCPMTA) with SMTP id 34.4D.20397.1CDF8976; Tue, 28
+	Jan 2025 15:54:41 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
+	20250128155440eucas1p2b5044db92977d2cfbad1b5346634c960~e5kLWjpio3183431834eucas1p2z;
+	Tue, 28 Jan 2025 15:54:40 +0000 (GMT)
+Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
+	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20250128155440eusmtrp1c37431ff6e99842ca2d82978659286f0~e5kLTSVGl2660026600eusmtrp1e;
+	Tue, 28 Jan 2025 15:54:40 +0000 (GMT)
+X-AuditID: cbfec7f5-e59c770000004fad-bf-6798fdc14932
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+	eusmgms1.samsung.com (EUCPMTA) with SMTP id 5B.34.19920.0CDF8976; Tue, 28
+	Jan 2025 15:54:40 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250128155439eusmtip24583f31f0967761cc25db731eb189555~e5kJ_R0Py0461804618eusmtip2D;
+	Tue, 28 Jan 2025 15:54:39 +0000 (GMT)
+Message-ID: <0324973c-2180-4077-a000-b7b6d895b7aa@samsung.com>
+Date: Tue, 28 Jan 2025 16:54:39 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -45,138 +74,114 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Warnings `Could not retrieve perf counters (-19)` and
- `amd_pstate: the _CPC object is not present in SBIOS or ACPI disabled` (Dell
- PowerEdge R7625, AMD EPYC 9174F)
-From: Paul Menzel <pmenzel@molgen.mpg.de>
-To: Gautham Ranjal Shenoy <gautham.shenoy@amd.com>,
- Mario Limonciello <Mario.Limonciello@amd.com>, Ray Huang
- <Ray.Huang@amd.com>, Thomas Gleixner <tglx@linutronix.de>,
- Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
- Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc: linux-pm@vger.kernel.org, linux-acpi@vger.kernel.org,
- LKML <linux-kernel@vger.kernel.org>
-References: <2b811df7-5278-4cfc-b8a0-7d6d72d3358d@molgen.mpg.de>
- <5dff1719-c4e9-4ebf-ae0b-73b9de98df05@amd.com>
- <DS7PR12MB82528A694056F1FBA20CE01E96EF2@DS7PR12MB8252.namprd12.prod.outlook.com>
- <d09f52d8-e084-4875-9608-5b3db2554f3d@molgen.mpg.de>
+Subject: Re: [RFC v3 04/18] firmware: thead: Add AON firmware protocol
+ driver
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
+	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
+	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
+	m.szyprowski@samsung.com, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
+	linux-pm@vger.kernel.org
 Content-Language: en-US
-In-Reply-To: <d09f52d8-e084-4875-9608-5b3db2554f3d@molgen.mpg.de>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <20250121-small-ruby-seahorse-7475d0@krzk-bin>
+Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02Sf1CTdRzH+z7Ps+cZy8njsNtX7NjdPLqgRBTKb2d5mVjPWWdyXuXVmS15
+	mpxj4OZCxbsMkJCNlPHTQaBAQsREkPEraMmPDaUbDGQQbYB3yoEHLAIykR8xHir+e70/vz+f
+	+/BxkZn05UcqT7EqpUwhJQVEjeWJbevthRx58KUfA1B7XyGGTE8NFCpvsmGooNXGQ4Pd1Ri6
+	N+sm0Y2HXRQabfqaQI7S7yiUYKkg0ZhhkESdnTcpNKUb5KGehjwSTae2AlQznUgiY6uLQtem
+	TAQqrmsAKOnidR6y392HXIPtBBrr0eEoyeCNlhrrKLToqCRQ7qSZQtXjaTxkNX6EEs0ZxJt+
+	jLv/AsWMj40RTEvyDMU0/XWVYOoNLorR1f8KmKqyiyTjdDSSTP6dcGZIa8WYW8VfMYlGC8Zc
+	Wghm3D/3ksy31WWA6U7oow6KPha8HsEqIr9kVdt2fyY4buq1YDHpXqf77ut450ELlQL4fEiH
+	widDZAoQ8EV0KYDzjqZVMQNgzy9Ly8JrWUwDqM17zcOeBLvrFsEFlQDYOzLJ48QEgPoB+0pZ
+	Ib0baud3eJCg/eFS105PrpDeAO9ceUB4+DlaAocGcigP+9DvwxvaXp6HN9IBsG/h8UpJnG7k
+	wayMmysOnBbDgQcFmIdJegccLilYsXvRu2Bf/gjFxUhg7UQe7kmGtF0Ac1tyMW7qMJjkblxl
+	H/jIWk1x/DzsSNcRHEfDYdOfOMfnYL3Ousq7oNM2R3qWwZenq2jYxpn3wEr9OMldcT3sn9jA
+	jbAe6muycc4shMlJIi76BZipS/2vqa20BrsMpIY1VzGsWdKwZhnD/32vAqIMiFmNOkrOqkOU
+	bGyQWhal1ijlQceio6rA8o93LFpn60Dpo6mgZoDxQTOAfFy6UXjEliMXCSNkZ86yquijKo2C
+	VTeDzXxCKhYWmi/IRbRcdoo9wbIxrOpfL8b38j2PbfEWfNK256TfmXcdMbM98t9HjYEuS3lk
+	78MTc+7sdTaqc9EYG5c1uL9SKX3r73lJXtfo4cRQ/NBRzFEoSgj2TW3L2bfuWql3yMvfaw5u
+	3Vu499mCCkBGfBpyRJLf7RW9v31O+7YiITvS2JKMJDOvDDc4Sg5bixRtlfb7tb4dJ//I6lbf
+	fc9RHl4vMWjiin9yviT+5rLGvGnT5pkDw4FX0nSvzh5yxsUFtM7FX3+ceftpf9W5+JAAnr8j
+	/pkfPnB9oTFkyo/FHIi9N/7h9sqg0aKiF53+TmW96Z3CsPRwPO3s8OfN/rW/9e8s8hMpJlPM
+	pyNDfYyzGWEjC280h28JE5NavV5KqI/LtgfiKrXsH/GZRhRSBAAA
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrMKsWRmVeSWpSXmKPExsVy+t/xe7oH/s5IN/g2X9fixPVFTBZbf89i
+	t1iz9xyTxfwj51gt7l3awmRx5et7Not1Ty+wW7zY28hicW3FXHaL5mPr2SxezrrHZnH+/AZ2
+	i48991gtLu+aw2bxufcIo8W2zy1sFmuP3GW3WPhxK4vFkh27GC3aOpexWlw85Wpx994JFouX
+	l3uYLdpm8Vv837OD3eLftY0sFrPf7We32PJmIqvF8bXhFi37p7A4yHm8v9HK7vHm5UsWj8Md
+	X9g99n5bwOKxc9Zddo+enWcYPTat6mTzuHNtD5vHvJOBHve7jzN5bF5S79Gy9hiTR/9fA4/3
+	+66yefRtWcXocan5OnuAUJSeTVF+aUmqQkZ+cYmtUrShhZGeoaWFnpGJpZ6hsXmslZGpkr6d
+	TUpqTmZZapG+XYJextarx5gKJnNWXH/Yw9rAeJi9i5GTQ0LAROLi3c0sXYxcHEICSxklOh8v
+	ZIJIyEhc637JAmELS/y51sUGUfSaUWLf7WVADgcHr4CdRPcfIxCTRUBV4v8Fc5ByXgFBiZMz
+	n4C1igrIS9y/NQNsl7CAr8SSa/vBxosIaEpc//udFWQks8AeVonDmz9Dzf/FKPFo0TmwDmYB
+	cYlbT+aDdbAJGEk8WD6fFcTmFLCWuD7vGTvIYmYBdYn184QgyuUltr+dwzyBUWgWkjtmIZk0
+	C6FjFpKOBYwsqxhFUkuLc9Nziw31ihNzi0vz0vWS83M3MQJT17ZjPzfvYJz36qPeIUYmDsZD
+	jBIczEoivLHnZqQL8aYkVlalFuXHF5XmpBYfYjQFBsVEZinR5Hxg8swriTc0MzA1NDGzNDC1
+	NDNWEud1u3w+TUggPbEkNTs1tSC1CKaPiYNTqoEpz/b/g1P6V8UuPtqc0KwQ9r8hmI3JbKpk
+	n9mz3xIV6a3ZjzZuOaJwWKSgsrzkdfm/kwd339mWM7/OMJff5fZn/tq/Yfp8P9Lj9iuYbkrJ
+	/hKo1nbILIxf+atrS/2ZXSz+26eGiEZY/FbadOP1artjTD0aM5oZEx7PLOxQ01RoWy203nN2
+	gJzZl/cy25ku2c3rVqlpWPZ1Pcf+A7n9ktMzGC93ivCl9J5Qs6oW7PK0vCd7nNM0K4DVeLlX
+	qKKT9H8+rf/BzcyVy6pXWDG9yZghq1u5VGf5nY9duWWJK/pm8qarsttXtUobWc+M117zO8C7
+	6Myegj2a6eEd7S/ENh89v6Zk78rCfXcWLpK3UWIpzkg01GIuKk4EALc2jiLmAwAA
+X-CMS-MailID: 20250128155440eucas1p2b5044db92977d2cfbad1b5346634c960
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250120172124eucas1p233b3f6da39e7064db62b02a66bc1ac29
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20250120172124eucas1p233b3f6da39e7064db62b02a66bc1ac29
+References: <20250120172111.3492708-1-m.wilczynski@samsung.com>
+	<CGME20250120172124eucas1p233b3f6da39e7064db62b02a66bc1ac29@eucas1p2.samsung.com>
+	<20250120172111.3492708-5-m.wilczynski@samsung.com>
+	<20250121-small-ruby-seahorse-7475d0@krzk-bin>
 
-[Cc: +x86 maintainers and ACPI list]
-
-Dear Linux folks,
 
 
-Am 28.01.25 um 11:49 schrieb Paul Menzel:
+On 1/21/25 10:56, Krzysztof Kozlowski wrote:
 
-> Thank you for your quick replies. Gautham, messages with HTML are 
-> rejected by Linux kernel lists.
+>> diff --git a/include/linux/firmware/thead/thead,th1520-aon.h b/include/linux/firmware/thead/thead,th1520-aon.h
+>> new file mode 100644
+>> index 000000000000..3daa17c01d17
+>> --- /dev/null
+>> +++ b/include/linux/firmware/thead/thead,th1520-aon.h
+>> @@ -0,0 +1,186 @@
+>> +/* SPDX-License-Identifier: GPL-2.0 */
+>> +/*
+>> + * Copyright (C) 2021 Alibaba Group Holding Limited.
+>> + */
+>> +
+>> +#ifndef _THEAD_AON_H
+>> +#define _THEAD_AON_H
+>> +
+>> +#include <linux/device.h>
+>> +#include <linux/types.h>
+>> +
+>> +#define AON_RPC_MSG_MAGIC (0xef)
+>> +#define TH1520_AON_RPC_VERSION 2
+>> +#define TH1520_AON_RPC_MSG_NUM 7
+>> +
+>> +extern struct th1520_aon_chan *aon_chan;
+> 
+> Drop all externs.
+
+This is required so the code will compile as the
+int th1520_aon_call_rpc(struct th1520_aon_chan *aon_chan, void *msg);
+is non static and exposed in the same header.
+
+I really would like to keep th1520_aon_call_rpc in this header, as it
+could be useful for other drivers to construct their own RPC calls to
+reboot or shutdown the system e.g watchdog.
+
 > 
 > 
-> Am 28.01.25 um 04:51 schrieb Shenoy, Gautham Ranjal:
-> 
->> As Mario mentioned, you need to enable the CPPC option. Looking for 
->> some of the Dell PowerEdge documentation, there is an option called 
->> "Collaborative CPU Performance Control" (https://www.dell.com/support/manuals/en-in/poweredge-r730/r730_ompublication/system-profile-settings-details?guid=guid-2e9b46a1-71e3-4072-9d86-db648757f0e6&lang=en-us).
->>
->> [cid:fe57df8f-3d99-4ea0-8f6e-b0daae49bb0e]
->> Can you please try enabling it ?
-> 
-> You quoted the Dell PowerEdge R730. I couldn’t find it in the *Dell 
-> PowerEdge R7625 Installation and Service Manual* [1], and also it’s not 
-> listed in the iDRAC9 Web site (attached with added `.txt` extension to 
-> trick the Linux list).
-
-The amd_pstate warning seems to be related to the perf counters warning 
-Linux prints earlier:
-
-     $ dmesg --level alert,crit,err,warn
-     [    2.666393] Spectre V2 : WARNING: Unprivileged eBPF is enabled 
-with eIBRS on, data leaks possible via Spectre v2 BHB attacks!
-     [    8.109446] Could not retrieve perf counters (-19)
-     [    9.386551] scsi 0:0:4:0: set ignore_delay_remove for handle(0x0012)
-     [    9.487804] amd_pstate: the _CPC object is not present in SBIOS 
-or ACPI disabled
-     [   14.726193] wmi_bus wmi_bus-PNP0C14:00: [Firmware Bug]: WQBC 
-data block query control method not found
-
-x86 maintainers, the original report with the Linux logs attached is in 
-the archive [3].
-
-It looks like, there is something missing in the Dell firmware to enable 
-the feature.
-
-The perf counters warning is from `amd_set_max_freq_ratio()` in 
-`arch/x86/kernel/acpi/cppc.c`:
-
-```
-static void amd_set_max_freq_ratio(void)
-{
-         struct cppc_perf_caps perf_caps;
-         u64 numerator, nominal_perf;
-         u64 perf_ratio;
-         int rc;
-
-         rc = cppc_get_perf_caps(0, &perf_caps);
-         if (rc) {
-                 pr_warn("Could not retrieve perf counters (%d)\n", rc);
-                 return;
-         }
-         […]
-}
-```
-
-With
-
-     include/uapi/asm-generic/errno-base.h:#define	ENODEV		19	/* No such 
-device */
-
-this is returned by in `drivers/acpi/cppc_acpi.c`:
-
-```
-/**
-  * cppc_get_perf_caps - Get a CPU's performance capabilities.
-  * @cpunum: CPU from which to get capabilities info.
-  * @perf_caps: ptr to cppc_perf_caps. See cppc_acpi.h
-  *
-  * Return: 0 for success with perf_caps populated else -ERRNO.
-  */
-int cppc_get_perf_caps(int cpunum, struct cppc_perf_caps *perf_caps)
-{
-         struct cpc_desc *cpc_desc = per_cpu(cpc_desc_ptr, cpunum);
-         […]
-         if (!cpc_desc) {
-                 pr_debug("No CPC descriptor for CPU:%d\n", cpunum);
-                 return -ENODEV;
-         }
-         […]
-}
-```
-
-Just for your information.
-
-
-Kind regards,
-
-Paul
-
-
-> PS:
-> 
->> -- 
->>
->> Thanks and Regards
->>
->> Gautham.
-> 
-> Only if you care: Your signature delimiter misses a space at the end [2].
+> Best regards,
+> Krzysztof
 > 
 > 
-> [1]: https://www.dell.com/support/manuals/de-de/poweredge-r7625/per7625_ism_pub/system-profile-settings?guid=guid-9f6b6652-4079-45e7-90f5-1c8feee08ec0&lang=en-us
-> [2]: https://en.wikipedia.org/wiki/Signature_block#Standard_delimiter
-[3]: 
-https://lore.kernel.org/linux-pm/d09f52d8-e084-4875-9608-5b3db2554f3d@molgen.mpg.de/T/#t
 
