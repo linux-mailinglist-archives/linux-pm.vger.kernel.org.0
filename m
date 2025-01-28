@@ -1,136 +1,136 @@
-Return-Path: <linux-pm+bounces-21000-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21001-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 22780A205D0
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 09:18:33 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1167EA2065C
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 09:44:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6938C18886DA
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 08:18:37 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 571583A8DB5
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 08:44:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 455BB1DC994;
-	Tue, 28 Jan 2025 08:18:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0945A1DF27F;
+	Tue, 28 Jan 2025 08:43:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qrFiKzBO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IGuRR//H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9735166F1A
-	for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 08:18:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBF31DF250;
+	Tue, 28 Jan 2025 08:42:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738052308; cv=none; b=Dh1RoUjEx4QRlu435CkAh0z7qrpCz9XPZ/LkP6moivoHHLYPcI+NGHZJ1FIDU8nBU7sJE+9AtQ2EwrnhqmW6cWCxMQMPZPlVuN4qiyVm891bT3pKgERt5gaWJvYLx2rqP2AyfhfXsdLJlN7OfWz4UHMoecMIE/rucPFxko4c+BU=
+	t=1738053779; cv=none; b=fz7eN5sSOpJGN6gh7ht8i/p3ymBvAIfHIdHUeNiZomeL9HMnGjLLlGUnyAmk/kflK1NnGFXs9PHAIauz83H7ukR6cs13Z/5GT0YyJHtMUQFAelS4LC8r4LPTTOVKeERsR/A966VHOV9+rSBNM1X7l1oTvD3Tq3dLxELfdmu48g4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738052308; c=relaxed/simple;
-	bh=mH3TeXRXeNIlRo1TrcetDq4meEAgHdCVaEYb6938LpU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VB2TlL7V+jXMI1hNNl0B1Jm/id91GwSVNtYMbMvnC7Egy0maetL51e8POuyaiC1dUhiXLm120srFTWjUzq6A6uXWSqcTDDH/1M4k6jWoKpgZapTGDC37IYVeeiCTIzjJJsBSaGK8mqY83Dli1P8ggoR1/gHJuTvIHBGY66n71+8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qrFiKzBO; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2164b1f05caso91015495ad.3
-        for <linux-pm@vger.kernel.org>; Tue, 28 Jan 2025 00:18:26 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738052306; x=1738657106; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=yaGWsF28qt5Jmz9b8bZehMWnKFK742c5atFbL/t08ns=;
-        b=qrFiKzBOnFqbKaCMfXhkGEFXuCotK2YWVGVL34NyGVQhPlssBSWbzox2BNKk7SnVnD
-         1I48R6EWkAwE8gzyGL1K5ACd4TqIclgpGJSWfZ8DakAtTwXohlUIHqaLUwpMYCjpKijo
-         l9Su8Socg2WEkrfuzX2NJY/mxWsNkkyePsKkXY4xKuwMIlEkvU+XNYD0m/Yk0WAgBabi
-         rVN+97ExPCRcnsv51tclmhZpoygFafZIaiGAXhhfFNDwSXTgfB0tDROXcp5EbkAkVD3S
-         xVtFnFbxasC2ibnL+rVGoC3Fn5Bcp2jlTAUt+/lcZfk8KSZva0pcQHllYIBpqYZMPHzB
-         vKzA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738052306; x=1738657106;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=yaGWsF28qt5Jmz9b8bZehMWnKFK742c5atFbL/t08ns=;
-        b=N8PJFZrRpOBeJaRFtDRon1uNgQ5TEosnuNWMHw/66K6zUMBXt8QkNvy7g4p2hNBUL7
-         OtqYx9ETnbd7QfW6BS3QE/2yeNCWK8gkkNRK8h4QGFlJuSqORT+Hp9wUV16kdlqId4sE
-         CZqZa9LuaVGJy8oWs4pSfMkK9YUJc6IfSeYl6vlamAPjOgZVcY9eTYyTRYOJ6UfJDxU2
-         2Cxb3JaERlCc3pU9xR4ynyxKyXWMm/ZzJYMY3pPb4tOJHfzJ4/eQC32SjZF9oUfNOZ/p
-         rYISOMlNO0y2c3KMc0AbXu7LeNPi5bGS7NEJlb4WEzKCEsL90/zjEODiQvhiQ3TAP5wK
-         B/7Q==
-X-Forwarded-Encrypted: i=1; AJvYcCWmd8JC490Ck4RWn/2ZnfV53t40oMzFRlRgGqU4PIRKZMbW0wplJkHg5vUg/LXOLqXrS5e7naXfSA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxq1/dsuz978moMRw+ehs6m0upl20yEaAhPBaQ/jL221GtAe05F
-	K7lmcqq4N9M2JhtN6mpEZNcLQt52H3NdcEimQDkRxqJ0qkIo+h1sEFGvZDWOqGvOlM8GAYl/U7G
-	/
-X-Gm-Gg: ASbGncvktKng13RGBYsdwE8sk7aZvuYyl4dE3MDIA/WLBCARQcNHPSJiuyDGFD8jqVN
-	FIwyQDfFLpJFQQwPukEoRZlDli+DMvh3WAImoMCrZg6JwHwASeeYfNL8cJS8WVnwodAdfqXPAPy
-	4mYRFLJkIvMO6aJLpPzedcXwqx0GkVvRhPVvj5gwQGtxOMf1Uxcr5gwdr2GOYE4jyjxU043y9qk
-	DV/vEJy928oT7EDZm/vh8P01q/IIbY2HR9V2aZvCOq1T7TwzNprnPPP/bgiyiCepZma8oUVw4cf
-	fwCrHlrcuSqYDn6dvg==
-X-Google-Smtp-Source: AGHT+IGj3rys8L7y0l7miRYjcb7aG2QGL5B/s2BFTMx0JDHVuuzvFof9j5Q6SVAnylyyKwg07DUgog==
-X-Received: by 2002:a17:902:d583:b0:215:4d90:4caf with SMTP id d9443c01a7336-21c353e700fmr725778565ad.14.1738052306076;
-        Tue, 28 Jan 2025 00:18:26 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da3d9c55dsm76592135ad.10.2025.01.28.00.18.24
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 28 Jan 2025 00:18:25 -0800 (PST)
-Date: Tue, 28 Jan 2025 13:48:23 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Beata Michalska <beata.michalska@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
-	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
-	rafael@kernel.org, sumitg@nvidia.com, yang@os.amperecomputing.com,
-	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
-	zhanjie9@hisilicon.com
-Subject: Re: [PATCH v9 1/5] cpufreq: Allow arch_freq_get_on_cpu to return an
- error
-Message-ID: <20250128081823.o3q6gjcjca5ju3u6@vireshk-i7>
-References: <20250121084435.2839280-1-beata.michalska@arm.com>
- <20250121084435.2839280-2-beata.michalska@arm.com>
- <20250121104706.2gcegucb6hcuksrd@vireshk-i7>
- <Z4-52JUmR7A-7NJP@arm.com>
- <20250122061250.kxdpkkvce4g5nar2@vireshk-i7>
- <Z5K4aDaZIbhRCbOP@arm.com>
- <20250124033333.jrqbhuyd6qtogn2c@vireshk-i7>
- <Z5iQ02AIDalsUXe-@arm.com>
+	s=arc-20240116; t=1738053779; c=relaxed/simple;
+	bh=odlb6+92LTfYeJcLKPY87bv0xB6K2iBjaAxL4Nwu4rY=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=EvuFmcTi+bXpH3Jh00y/4ZzUYgZ3yCnZGo+wK9+ioDTVCqkDqjCEzolhYRSYrQRT49Mbl4ig7Qp7L0bc9zci8xqEMkd59kWgphyd7VfIgLsBELz9FuHE8IlKzAYmQb0Yg96YafX7bqsd8+7cK+N+L8QRtpHeD/lILA8m3nyUJ9E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IGuRR//H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E16EC4CED3;
+	Tue, 28 Jan 2025 08:42:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738053779;
+	bh=odlb6+92LTfYeJcLKPY87bv0xB6K2iBjaAxL4Nwu4rY=;
+	h=From:Date:Subject:To:Cc:Reply-To:From;
+	b=IGuRR//HZGY/MQPUFtzyCd3Qc/cdimBlBPAJKPI4j1nI0AhFNMPVqII/5hYJDGpcQ
+	 qwk5VtEx6lI9aGDNXpQ/+Kxq0+Y2SUNlqOnXBbebGd75P+Fi4c93KfySTbflTv26mC
+	 DOjOppRNj4MLyHJdembXxl491A5PNipuey89oElTBe0lVIcBxdukM+Pwbmg55IvFlM
+	 y2P0fNYsPHMY0lk/dSiEhlf9DDl8PxjM38770YcYD8IFZL93sufU269HOB6eIVBxN/
+	 YDUIPRBscE2LqqLD/5u6i3e+z4InDEnncVeKAN9JqsIYZhsDJrYKdhmYArQMMoJeTo
+	 EkXyiKVrcOl5Q==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1B9C0218D;
+	Tue, 28 Jan 2025 08:42:59 +0000 (UTC)
+From: Anthony Ruhier via B4 Relay <devnull+aruhier.mailbox.org@kernel.org>
+Date: Tue, 28 Jan 2025 09:42:56 +0100
+Subject: [PATCH] power: supply: qcom_battmgr: abs() on POWER_NOW property
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z5iQ02AIDalsUXe-@arm.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250128-patch-qcomm-bat-uint-power-v1-1-54a63d8ada92@mailbox.org>
+X-B4-Tracking: v=1; b=H4sIAJCYmGcC/x3MQQ6DIBAAwK+YPXcThUC1X2l6QFzqHgQKVE2Mf
+ 5d4nMsckCkxZXg1ByRaOXPwFd2jATsb/yXkqRpEK1TbiR6jKXbGnw3LgqMp+GdfMIaNEqrnIJ3
+ UsrdKQw1iIsf7nb8/53kBJDqtGWwAAAA=
+X-Change-ID: 20250128-patch-qcomm-bat-uint-power-5793f3638c56
+To: Sebastian Reichel <sre@kernel.org>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-kernel@vger.kernel.org, Anthony Ruhier <aruhier@mailbox.org>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=openpgp-sha256; l=2103;
+ i=aruhier@mailbox.org; h=from:subject:message-id;
+ bh=lSOxkdOf6gRdpUszCsRF5pZ7uZYHKUdsGgP+kJrQraU=;
+ b=owGbwMvMwCVW2Nrw47jsO3/G02pJDOkzZkziyNm+UOVmxY1KtjcWd2cap2/oK358t8bUme1Wd
+ vHZis6vHaUsDGJcDLJiiiwl+6OEb6t03HdYu5wFZg4rE8gQBi5OAZhIiCPDfzfPczHv5gZtuKa1
+ ZfrHysAy+S1t/B5R0dMYvqQoKCZ1XmBkePOcddadw00mrxO8m19N33rN9bLsYoayC5xL3TW+/DX
+ LZQcA
+X-Developer-Key: i=aruhier@mailbox.org; a=openpgp;
+ fpr=F4A378DD8D494AE48EBA554CB00FBC7D08D231D9
+X-Endpoint-Received: by B4 Relay for aruhier@mailbox.org/default with
+ auth_id=302
+X-Original-From: Anthony Ruhier <aruhier@mailbox.org>
+Reply-To: aruhier@mailbox.org
 
-On 28-01-25, 09:09, Beata Michalska wrote:
-> On Fri, Jan 24, 2025 at 09:03:33AM +0530, Viresh Kumar wrote:
-> > On 23-01-25, 22:45, Beata Michalska wrote:
-> > > That would mean we are opting for presenting '0' value (whatever that means)
-> > > instead of trying alternative ways of getting 'current' frequency ?
-> > > This is still the scaling_cur_freq.
-> > 
-> > A return value of 0 should typically mean something went wrong
-> > somewhere and didn't return the right value to us.
-> If smth goes wrong, an error should be returned, shoulnd't it?
+From: Anthony Ruhier <aruhier@mailbox.org>
 
-Right, but what if no error is detected and still a value of 0 is
-returned somehow ? That's what I was talking about.
+The value for the POWER_NOW property is by default negative when the
+battery is discharging, positive when charging.
 
-> > - For the print message, I think we should just print the value
-> >   instead of UNKNOWN. Let the user / developer decide what to do with
-> >   it.
-> Are you refering to the x86 show_cpuinfo behaviour altered by this patch ?
+However on x1e laptops it breaks several userland tools that give a
+prediction of the battery run time (such as the acpi command, powertop
+or the waybar battery module), as these tools do not expect a negative
+value for /sys/class/power_supply/qcom-battmgr-bat/power_now. They
+estimate the battery run time by dividing the value of energy_full by
+power_now. The battery percentage is calculated by dividing energy_full
+by energy_now, therefore it is not impacted.
 
-Yes
+While having a negative number during discharge makes sense, it is not
+standard with how other battery drivers expose it. Instead, it seems
+standard to have a positive value for power_now, and rely on the status
+file instead to know if the battery is charging or discharging. It is
+what other x86 laptops do.
 
-> > - As for trying other mechanism to find the frequency now, maybe you
-> >   are right and looking for an alternate way is the right way to go.
-> >   And that would be consistent with existing behavior too.
-> > 
-> That would mean that changes to show_scaling_cur_freq are fine ?
+Without the patch:
+    $ acpi
+    Battery 0: Discharging, 98%, discharging at zero rate - will never fully discharge.
 
-Yes.
+With the patch:
+    $ acpi
+    Battery 0: Discharging, 97%, 10:18:27 remaining
 
+---
+Signed-off-by: Anthony Ruhier <aruhier@mailbox.org>
+---
+ drivers/power/supply/qcom_battmgr.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
+index 47d29271ddf400b76dd5b0a1b8d1ba86c017afc0..3e2e0c5af2814df0eb0bfc408d4b3d26399ab4e4 100644
+--- a/drivers/power/supply/qcom_battmgr.c
++++ b/drivers/power/supply/qcom_battmgr.c
+@@ -530,7 +530,7 @@ static int qcom_battmgr_bat_get_property(struct power_supply *psy,
+ 		val->intval = battmgr->status.current_now;
+ 		break;
+ 	case POWER_SUPPLY_PROP_POWER_NOW:
+-		val->intval = battmgr->status.power_now;
++		val->intval = abs(battmgr->status.power_now);
+ 		break;
+ 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
+ 		if (unit != QCOM_BATTMGR_UNIT_mAh)
+
+---
+base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
+change-id: 20250128-patch-qcomm-bat-uint-power-5793f3638c56
+
+Best regards,
 -- 
-viresh
+Anthony Ruhier <aruhier@mailbox.org>
+
+
 
