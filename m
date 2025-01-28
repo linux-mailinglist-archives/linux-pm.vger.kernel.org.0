@@ -1,136 +1,246 @@
-Return-Path: <linux-pm+bounces-21001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1167EA2065C
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 09:44:19 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 73484A2065E
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 09:44:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 571583A8DB5
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 08:44:11 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C195D161EA0
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 08:44:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0945A1DF27F;
-	Tue, 28 Jan 2025 08:43:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF15B1DF73E;
+	Tue, 28 Jan 2025 08:43:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IGuRR//H"
+	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="RiUqmmwz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBF31DF250;
-	Tue, 28 Jan 2025 08:42:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 024DF1DF250;
+	Tue, 28 Jan 2025 08:43:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738053779; cv=none; b=fz7eN5sSOpJGN6gh7ht8i/p3ymBvAIfHIdHUeNiZomeL9HMnGjLLlGUnyAmk/kflK1NnGFXs9PHAIauz83H7ukR6cs13Z/5GT0YyJHtMUQFAelS4LC8r4LPTTOVKeERsR/A966VHOV9+rSBNM1X7l1oTvD3Tq3dLxELfdmu48g4=
+	t=1738053799; cv=none; b=hdHR4aRBVj8jb4jUa0o+A5WczOLbvA9SWKSv9G5dEzLhKts8Uhk+snAv4GNPeaHPL0znWz1ZUVVPAO5eqcHrxcsit4cbIQkxE2oaVryhY4UxXdRJlwS3QwEKueLXM0m3iu2122ELVhMlZPaBCYWwRnxuOqvtjvTgeD0yBpKZqnA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738053779; c=relaxed/simple;
-	bh=odlb6+92LTfYeJcLKPY87bv0xB6K2iBjaAxL4Nwu4rY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=EvuFmcTi+bXpH3Jh00y/4ZzUYgZ3yCnZGo+wK9+ioDTVCqkDqjCEzolhYRSYrQRT49Mbl4ig7Qp7L0bc9zci8xqEMkd59kWgphyd7VfIgLsBELz9FuHE8IlKzAYmQb0Yg96YafX7bqsd8+7cK+N+L8QRtpHeD/lILA8m3nyUJ9E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IGuRR//H; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3E16EC4CED3;
-	Tue, 28 Jan 2025 08:42:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738053779;
-	bh=odlb6+92LTfYeJcLKPY87bv0xB6K2iBjaAxL4Nwu4rY=;
-	h=From:Date:Subject:To:Cc:Reply-To:From;
-	b=IGuRR//HZGY/MQPUFtzyCd3Qc/cdimBlBPAJKPI4j1nI0AhFNMPVqII/5hYJDGpcQ
-	 qwk5VtEx6lI9aGDNXpQ/+Kxq0+Y2SUNlqOnXBbebGd75P+Fi4c93KfySTbflTv26mC
-	 DOjOppRNj4MLyHJdembXxl491A5PNipuey89oElTBe0lVIcBxdukM+Pwbmg55IvFlM
-	 y2P0fNYsPHMY0lk/dSiEhlf9DDl8PxjM38770YcYD8IFZL93sufU269HOB6eIVBxN/
-	 YDUIPRBscE2LqqLD/5u6i3e+z4InDEnncVeKAN9JqsIYZhsDJrYKdhmYArQMMoJeTo
-	 EkXyiKVrcOl5Q==
-Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
-	by smtp.lore.kernel.org (Postfix) with ESMTP id 2F1B9C0218D;
-	Tue, 28 Jan 2025 08:42:59 +0000 (UTC)
-From: Anthony Ruhier via B4 Relay <devnull+aruhier.mailbox.org@kernel.org>
-Date: Tue, 28 Jan 2025 09:42:56 +0100
-Subject: [PATCH] power: supply: qcom_battmgr: abs() on POWER_NOW property
+	s=arc-20240116; t=1738053799; c=relaxed/simple;
+	bh=mv2rPtHELzUJ6LiSr+Q2GP0bcTy+8h8kORsCbqZC3Po=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Awvk8/ZyDzcnAta6BNZ2lBlEt+Vgl0XuVF/DU08Sw4gkwZ7qrfS/30Eyca72OLegc8DF6Mq90LinIP8PUsLCdarKbuyCXJ2Nvmjf6+Y/9OSiJT/PF4fVGqzHZkS4WLsLeFuW0WDLo8PLLDoW168NZ4iqzcjKDhM1DBmUGIO+Jic=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=RiUqmmwz; arc=none smtp.client-ip=13.77.154.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
+Received: from [10.156.205.88] (unknown [167.220.238.88])
+	by linux.microsoft.com (Postfix) with ESMTPSA id BA02E210C30E;
+	Tue, 28 Jan 2025 00:43:11 -0800 (PST)
+DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com BA02E210C30E
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
+	s=default; t=1738053797;
+	bh=RjY6XWu9bYvJieoB9WujKXm/zDnVJNV14+gQrDpL06I=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=RiUqmmwzqe/kgLTv7kFrDs5XWnA/PurwEA0aVFQLQqXATZhGufIWwOLDcxHPtsmJc
+	 YVRCsc5cIxraEG2e/ItJAzUygR3FHQMGDMtzdgVRG46kr00QqmJN5roMAVcRa1fiWk
+	 sfiRy0bfB9S/DN/S6yg4us3CxlkISUkDQT755Tao=
+Message-ID: <4006e0b5-b641-4dfb-8c1f-b8b7d8ab63ca@linux.microsoft.com>
+Date: Tue, 28 Jan 2025 14:13:09 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 2/5] cpufreq: Introduce an optional cpuinfo_avg_freq
+ sysfs entry
+To: Beata Michalska <beata.michalska@arm.com>, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
+ ionela.voinescu@arm.com, sudeep.holla@arm.com, will@kernel.org,
+ catalin.marinas@arm.com, rafael@kernel.org, viresh.kumar@linaro.org
+Cc: sumitg@nvidia.com, yang@os.amperecomputing.com,
+ vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
+ zhanjie9@hisilicon.com, Jonathan Corbet <corbet@lwn.net>,
+ Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+ Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>,
+ "H . Peter Anvin" <hpa@zytor.com>, Phil Auld <pauld@redhat.com>,
+ x86@kernel.org, linux-doc@vger.kernel.org
+References: <20250121084435.2839280-1-beata.michalska@arm.com>
+ <20250121084435.2839280-3-beata.michalska@arm.com>
+Content-Language: en-US
+From: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
+In-Reply-To: <20250121084435.2839280-3-beata.michalska@arm.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250128-patch-qcomm-bat-uint-power-v1-1-54a63d8ada92@mailbox.org>
-X-B4-Tracking: v=1; b=H4sIAJCYmGcC/x3MQQ6DIBAAwK+YPXcThUC1X2l6QFzqHgQKVE2Mf
- 5d4nMsckCkxZXg1ByRaOXPwFd2jATsb/yXkqRpEK1TbiR6jKXbGnw3LgqMp+GdfMIaNEqrnIJ3
- UsrdKQw1iIsf7nb8/53kBJDqtGWwAAAA=
-X-Change-ID: 20250128-patch-qcomm-bat-uint-power-5793f3638c56
-To: Sebastian Reichel <sre@kernel.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, Anthony Ruhier <aruhier@mailbox.org>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2103;
- i=aruhier@mailbox.org; h=from:subject:message-id;
- bh=lSOxkdOf6gRdpUszCsRF5pZ7uZYHKUdsGgP+kJrQraU=;
- b=owGbwMvMwCVW2Nrw47jsO3/G02pJDOkzZkziyNm+UOVmxY1KtjcWd2cap2/oK358t8bUme1Wd
- vHZis6vHaUsDGJcDLJiiiwl+6OEb6t03HdYu5wFZg4rE8gQBi5OAZhIiCPDfzfPczHv5gZtuKa1
- ZfrHysAy+S1t/B5R0dMYvqQoKCZ1XmBkePOcddadw00mrxO8m19N33rN9bLsYoayC5xL3TW+/DX
- LZQcA
-X-Developer-Key: i=aruhier@mailbox.org; a=openpgp;
- fpr=F4A378DD8D494AE48EBA554CB00FBC7D08D231D9
-X-Endpoint-Received: by B4 Relay for aruhier@mailbox.org/default with
- auth_id=302
-X-Original-From: Anthony Ruhier <aruhier@mailbox.org>
-Reply-To: aruhier@mailbox.org
 
-From: Anthony Ruhier <aruhier@mailbox.org>
 
-The value for the POWER_NOW property is by default negative when the
-battery is discharging, positive when charging.
+On 21-01-2025 14:14, Beata Michalska wrote:
+> Currently the CPUFreq core exposes two sysfs attributes that can be used
+> to query current frequency of a given CPU(s): namely cpuinfo_cur_freq
+> and scaling_cur_freq. Both provide slightly different view on the
+> subject and they do come with their own drawbacks.
+>
+> cpuinfo_cur_freq provides higher precision though at a cost of being
+> rather expensive. Moreover, the information retrieved via this attribute
+> is somewhat short lived as frequency can change at any point of time
+> making it difficult to reason from.
+>
+> scaling_cur_freq, on the other hand, tends to be less accurate but then
+> the actual level of precision (and source of information) varies between
+> architectures making it a bit ambiguous.
+>
+> The new attribute, cpuinfo_avg_freq, is intended to provide more stable,
+> distinct interface, exposing an average frequency of a given CPU(s), as
+> reported by the hardware, over a time frame spanning no more than a few
+> milliseconds. As it requires appropriate hardware support, this
+> interface is optional.
+>
+> Note that under the hood, the new attribute relies on the information
+> provided by arch_freq_get_on_cpu, which, up to this point, has been
+> feeding data for scaling_cur_freq attribute, being the source of
+> ambiguity when it comes to interpretation. This has been amended by
+> restoring the intended behavior for scaling_cur_freq, with a new
+> dedicated config option to maintain status quo for those, who may need
+> it.
+>
+> CC: Jonathan Corbet <corbet@lwn.net>
+> CC: Thomas Gleixner <tglx@linutronix.de>
+> CC: Ingo Molnar <mingo@redhat.com>
+> CC: Borislav Petkov <bp@alien8.de>
+> CC: Dave Hansen <dave.hansen@linux.intel.com>
+> CC: H. Peter Anvin <hpa@zytor.com>
+> CC: Phil Auld <pauld@redhat.com>
+> CC: x86@kernel.org
+> CC: linux-doc@vger.kernel.org
+>
+> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+> ---
+>   Documentation/admin-guide/pm/cpufreq.rst | 16 ++++++++++++-
+>   drivers/cpufreq/Kconfig.x86              | 12 ++++++++++
+>   drivers/cpufreq/cpufreq.c                | 30 +++++++++++++++++++++++-
+>   3 files changed, 56 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
+> index a21369eba034..e9969174026c 100644
+> --- a/Documentation/admin-guide/pm/cpufreq.rst
+> +++ b/Documentation/admin-guide/pm/cpufreq.rst
+> @@ -248,6 +248,19 @@ are the following:
+>   	If that frequency cannot be determined, this attribute should not
+>   	be present.
+>   
+> +``cpuinfo_avg_freq``
+> +        An average frequency (in KHz) of all CPUs belonging to a given policy,
+> +        derived from a hardware provided feedback and reported on a time frame
+> +        spanning at most few milliseconds.
+> +
+> +        This is expected to be based on the frequency the hardware actually runs
+> +        at and, as such, might require specialised hardware support (such as AMU
+> +        extension on ARM). If one cannot be determined, this attribute should
+> +        not be present.
+> +
+> +        Note, that failed attempt to retrieve current frequency for a given
+> +        CPU(s) will result in an appropriate error.
+> +
+>   ``cpuinfo_max_freq``
+>   	Maximum possible operating frequency the CPUs belonging to this policy
+>   	can run at (in kHz).
+> @@ -293,7 +306,8 @@ are the following:
+>   	Some architectures (e.g. ``x86``) may attempt to provide information
+>   	more precisely reflecting the current CPU frequency through this
+>   	attribute, but that still may not be the exact current CPU frequency as
+> -	seen by the hardware at the moment.
+> +	seen by the hardware at the moment. This behavior though, is only
+> +	available via c:macro:``CPUFREQ_ARCH_CUR_FREQ`` option.
+>   
+>   ``scaling_driver``
+>   	The scaling driver currently in use.
+> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
+> index 97c2d4f15d76..212e1b9afe21 100644
+> --- a/drivers/cpufreq/Kconfig.x86
+> +++ b/drivers/cpufreq/Kconfig.x86
+> @@ -340,3 +340,15 @@ config X86_SPEEDSTEP_RELAXED_CAP_CHECK
+>   	  option lets the probing code bypass some of those checks if the
+>   	  parameter "relaxed_check=1" is passed to the module.
+>   
+> +config CPUFREQ_ARCH_CUR_FREQ
+> +	default y
+> +	bool "Current frequency derived from HW provided feedback"
+> +	help
+> +	  This determines whether the scaling_cur_freq sysfs attribute returns
+> +	  the last requested frequency or a more precise value based on hardware
+> +	  provided feedback (as architected counters).
+> +	  Given that a more precise frequency can now be provided via the
+> +	  cpuinfo_avg_cur_freq attribute, by enabling this option,
+> +	  scaling_cur_freq maintains the provision of a counter based frequency,
+> +	  for compatibility reasons.
+> +
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 6f45684483c4..b2a8efa83c98 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -733,12 +733,20 @@ __weak int arch_freq_get_on_cpu(int cpu)
+>   	return -EOPNOTSUPP;
+>   }
+>   
+> +static inline bool cpufreq_avg_freq_supported(struct cpufreq_policy *policy)
+> +{
+> +	return arch_freq_get_on_cpu(policy->cpu) != -EOPNOTSUPP;
+> +}
+> +
+>   static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
+>   {
+>   	ssize_t ret;
+>   	int freq;
+>   
+> -	freq = arch_freq_get_on_cpu(policy->cpu);
+> +	freq = IS_ENABLED(CONFIG_CPUFREQ_ARCH_CUR_FREQ)
+> +		? arch_freq_get_on_cpu(policy->cpu)
+> +		: 0;
+> +
+>   	if (freq > 0)
+>   		ret = sysfs_emit(buf, "%u\n", freq);
+>   	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
+> @@ -783,6 +791,19 @@ static ssize_t show_cpuinfo_cur_freq(struct cpufreq_policy *policy,
+>   	return sysfs_emit(buf, "<unknown>\n");
+>   }
+>   
+> +/*
+> + * show_cpuinfo_avg_freq - average CPU frequency as detected by hardware
+> + */
+> +static ssize_t show_cpuinfo_avg_freq(struct cpufreq_policy *policy,
+> +				     char *buf)
+> +{
+> +	int avg_freq = arch_freq_get_on_cpu(policy->cpu);
+> +
+> +	if (avg_freq > 0)
+> +		return sysfs_emit(buf, "%u\n", avg_freq);
+> +	return avg_freq != 0 ? avg_freq : -EINVAL;
+> +}
+> +
+>   /*
+>    * show_scaling_governor - show the current policy for the specified CPU
+>    */
+> @@ -945,6 +966,7 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
+>   }
+>   
+>   cpufreq_freq_attr_ro_perm(cpuinfo_cur_freq, 0400);
+> +cpufreq_freq_attr_ro(cpuinfo_avg_freq);
+>   cpufreq_freq_attr_ro(cpuinfo_min_freq);
+>   cpufreq_freq_attr_ro(cpuinfo_max_freq);
+>   cpufreq_freq_attr_ro(cpuinfo_transition_latency);
+> @@ -1072,6 +1094,12 @@ static int cpufreq_add_dev_interface(struct cpufreq_policy *policy)
+>   			return ret;
+>   	}
+>   
+> +	if (cpufreq_avg_freq_supported(policy)) {
+> +		ret = sysfs_create_file(&policy->kobj, &cpuinfo_avg_freq.attr);
+> +		if (ret)
+> +			return ret;
+> +	}
+> +
+>   	ret = sysfs_create_file(&policy->kobj, &scaling_cur_freq.attr);
+>   	if (ret)
+>   		return ret;
 
-However on x1e laptops it breaks several userland tools that give a
-prediction of the battery run time (such as the acpi command, powertop
-or the waybar battery module), as these tools do not expect a negative
-value for /sys/class/power_supply/qcom-battmgr-bat/power_now. They
-estimate the battery run time by dividing the value of energy_full by
-power_now. The battery percentage is calculated by dividing energy_full
-by energy_now, therefore it is not impacted.
+Looks good to me.
 
-While having a negative number during discharge makes sense, it is not
-standard with how other battery drivers expose it. Instead, it seems
-standard to have a positive value for power_now, and rely on the status
-file instead to know if the battery is charging or discharging. It is
-what other x86 laptops do.
-
-Without the patch:
-    $ acpi
-    Battery 0: Discharging, 98%, discharging at zero rate - will never fully discharge.
-
-With the patch:
-    $ acpi
-    Battery 0: Discharging, 97%, 10:18:27 remaining
-
----
-Signed-off-by: Anthony Ruhier <aruhier@mailbox.org>
----
- drivers/power/supply/qcom_battmgr.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/qcom_battmgr.c b/drivers/power/supply/qcom_battmgr.c
-index 47d29271ddf400b76dd5b0a1b8d1ba86c017afc0..3e2e0c5af2814df0eb0bfc408d4b3d26399ab4e4 100644
---- a/drivers/power/supply/qcom_battmgr.c
-+++ b/drivers/power/supply/qcom_battmgr.c
-@@ -530,7 +530,7 @@ static int qcom_battmgr_bat_get_property(struct power_supply *psy,
- 		val->intval = battmgr->status.current_now;
- 		break;
- 	case POWER_SUPPLY_PROP_POWER_NOW:
--		val->intval = battmgr->status.power_now;
-+		val->intval = abs(battmgr->status.power_now);
- 		break;
- 	case POWER_SUPPLY_PROP_CHARGE_FULL_DESIGN:
- 		if (unit != QCOM_BATTMGR_UNIT_mAh)
-
----
-base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
-change-id: 20250128-patch-qcomm-bat-uint-power-5793f3638c56
-
-Best regards,
--- 
-Anthony Ruhier <aruhier@mailbox.org>
-
+Reviewed-by: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
 
 
