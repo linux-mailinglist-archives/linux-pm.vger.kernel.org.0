@@ -1,354 +1,299 @@
-Return-Path: <linux-pm+bounces-21007-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21008-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ACCAEA20926
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 11:59:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F495A20934
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 12:05:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id EABD83A37F1
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 10:59:12 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C128D16768A
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 11:05:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E1319F104;
-	Tue, 28 Jan 2025 10:59:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A500B19ABC3;
+	Tue, 28 Jan 2025 11:05:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="whQX0YI5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2C9619E97F;
-	Tue, 28 Jan 2025 10:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F71C5789D;
+	Tue, 28 Jan 2025 11:04:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738061955; cv=none; b=FaktyIZoslsqhOD8Uc3SL0xn4nTZT2ZjeSyBXGBh1+IRU5DE+xgEOw8HqsWcxys+HAuhTZjlSF91ap04M+zB+n8JQ97hnkU0ZEBDWRgfcRDdWo+l9D3DKxsAM+pzPfha0Dk+noKYP09NMQRachzzt4VFy8JnBM7YPnU7X2p3n5U=
+	t=1738062302; cv=none; b=GYqjDHNOPMAuC4seTgG7u/YspXFfDsk8Pq09pSQJxbk9r/PYLBQuGJFESHPqGWK8sFahvqv+j5MABrPEZfn58agTYx8GJw805EVCgofUJpUZ09Gqw1u6bmrqjT2YEo7yrH6q84U4BPmka7Qy8lAVg3aoBiDhdnSGvTPgbrYaX40=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738061955; c=relaxed/simple;
-	bh=8ojFLk68VTsJN7CwXxExMrS+ItnmWxY5Y4i7VA2NATc=;
-	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=A5cmPP1QEoRH3a+hBQECdPWQyrw4zfLhsvQA9JDt23vyBR2QabMHcgZqg1H0+LMHPVjgtZVqB2MOkg5X5IoKE47C+Xqnz4Eq+7MdORSaQV8+sy0a/2TXoWdlPbj8oEOcKt4xcDeR90RBaFY/rTNt3sd3fwqKSAx/dxueekHPGBY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.18.186.31])
-	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4Yj2Kk1SDJz6L4wZ;
-	Tue, 28 Jan 2025 18:56:58 +0800 (CST)
-Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
-	by mail.maildlp.com (Postfix) with ESMTPS id 712E214051A;
-	Tue, 28 Jan 2025 18:59:10 +0800 (CST)
-Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
- (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Tue, 28 Jan
- 2025 11:59:09 +0100
-Date: Tue, 28 Jan 2025 10:59:08 +0000
-From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-CC: Ulf Hansson <ulf.hansson@linaro.org>, Claudiu Beznea
-	<claudiu.beznea@tuxon.dev>, Jonathan Cameron <jic23@kernel.org>,
-	<prabhakar.mahadev-lad.rj@bp.renesas.com>, <lars@metafoo.de>,
-	<linux-iio@vger.kernel.org>, <linux-renesas-soc@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, Claudiu Beznea
-	<claudiu.beznea.uj@bp.renesas.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
-	<linux-pm@vger.kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>
-Subject: Re: [PATCH 1/2] iio: adc: rzg2l_adc: Drop devm_pm_runtime_enable()
-Message-ID: <20250128105908.0000353b@huawei.com>
-In-Reply-To: <CAMuHMdWAKkAdeZmS14i9ndkK3rcR1tCwxsLabJfbtDW2LkdTHg@mail.gmail.com>
-References: <20250103140042.1619703-1-claudiu.beznea.uj@bp.renesas.com>
-	<20250103140042.1619703-2-claudiu.beznea.uj@bp.renesas.com>
-	<20250104135225.2573285b@jic23-huawei>
-	<44e4a6b4-39a4-49d0-b3a5-fc5545c39a56@tuxon.dev>
-	<20250111131409.36bebfd3@jic23-huawei>
-	<bb987a1b-a999-478c-8e35-124fcf41561d@tuxon.dev>
-	<CAPDyKFoJ3pLU-5_b5MSxMZd7B1cfOvmcdqR4FGkU2Wb7No0mcw@mail.gmail.com>
-	<20250117155226.00002691@huawei.com>
-	<CAPDyKFpQUMOFtA-QCbYdaeKSDGJpnjcA+tiKZ=kzmrjYRtFZdw@mail.gmail.com>
-	<20250124184137.0000047a@huawei.com>
-	<CAPDyKFrqDfYEQHk0RsRi2LnMw_HgGozMW9JP9xmkAq52O7eztg@mail.gmail.com>
-	<20250127123250.00002784@huawei.com>
-	<CAPDyKFoCx3jQOptPrY0CYNpH1R+fszF3MUQLSTn_nreyi5-vPw@mail.gmail.com>
-	<20250127182423.000013a7@huawei.com>
-	<CAMuHMdWAKkAdeZmS14i9ndkK3rcR1tCwxsLabJfbtDW2LkdTHg@mail.gmail.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
+	s=arc-20240116; t=1738062302; c=relaxed/simple;
+	bh=YKq+LdJvSYGSOCVDoPAW+0vfGM0pt1Em0Gi91Qu0d9c=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=s9b4Bq2a/BF5hNv3fwQ0EuW6+AhQuChPQut3HeT1ZvZ+tEg1YkDsJDoAEy2KoHugK54anu2jkrXRNtHofEmgNw9O3n1rQlx5DWmtd5fj7XcnDTKXqf68skTaKzeQ4AXEsxBpsLrczNOxAZc7DIV7FY776uKN9MMpLKD+31mBoX4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=whQX0YI5; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 50SB4bL81989976
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Tue, 28 Jan 2025 05:04:37 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1738062277;
+	bh=80z538fDpsOAJagStMvrMe9E0US1OlsIlPBUBIdnQtk=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=whQX0YI51l7oi9B3oDwAXd6nxEPONzJ0ue0B0h7vjut8vVXSLknHAErd9j7hTKgTf
+	 AKn+KSCLTDJo699691NO6FnkyN34lxycvnKtt3I7T5SgNwPJ2AsbPTZ0qre4iXskMB
+	 az7qBiwqj2S6l9RQXsbvUWDqX3Cda9QOjmNC6j0w=
+Received: from DLEE115.ent.ti.com (dlee115.ent.ti.com [157.170.170.26])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 50SB4bf8091305;
+	Tue, 28 Jan 2025 05:04:37 -0600
+Received: from DLEE104.ent.ti.com (157.170.170.34) by DLEE115.ent.ti.com
+ (157.170.170.26) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Tue, 28
+ Jan 2025 05:04:36 -0600
+Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE104.ent.ti.com
+ (157.170.170.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Tue, 28 Jan 2025 05:04:36 -0600
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 50SB4Zrj009716;
+	Tue, 28 Jan 2025 05:04:36 -0600
+Date: Tue, 28 Jan 2025 16:34:35 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Sudeep Holla <sudeep.holla@arm.com>
+CC: Vivek yadav <linux.ninja23@gmail.com>, <linux-newbie@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <daniel.lezcano@linaro.org>,
+        <lpieralisi@kernel.org>, <krzk@kernel.org>, <christian.loehle@arm.com>,
+        <quic_sibis@quicinc.com>, <cristian.marussi@arm.com>,
+        <linux-arm-kernel@lists.infradead.org>, <linux-kernel@vger.kernel.org>,
+        <vigneshr@ti.com>, <khilman@ti.com>, <sebin.francis@ti.com>,
+        <khilman@baylibre.com>
+Subject: Re: Fwd: ARM64: CPUIdle driver is not select any Idle state other
+ then WFI
+Message-ID: <20250128110435.iclttnaav6mrjrvn@lcpd911>
+References: <CAO6a-9_aPLCx2CqecQBGbK78_=+-tT44RepPkrBjpkWSvjj4Tg@mail.gmail.com>
+ <CAO6a-98cdSvyd7jgAyGNmsC2nxmRSyr3GppxvZU9yHU1xqwz3g@mail.gmail.com>
+ <20241211055052.gbxnyqpui3t3zpw5@lcpd911>
+ <20241211121825.GA2054801@bogus>
+ <20241211143428.kaoovhiwar74dy6x@lcpd911>
+ <Z1rbLdWW75KQw5cl@bogus>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="US-ASCII"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: lhrpeml500011.china.huawei.com (7.191.174.215) To
- frapeml500008.china.huawei.com (7.182.85.71)
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <Z1rbLdWW75KQw5cl@bogus>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Tue, 28 Jan 2025 08:59:33 +0100
-Geert Uytterhoeven <geert@linux-m68k.org> wrote:
+Hi Sudeep,
 
-> Hi Jonathan,
-> 
-> On Mon, 27 Jan 2025 at 19:24, Jonathan Cameron
-> <Jonathan.Cameron@huawei.com> wrote:
-> > On Mon, 27 Jan 2025 16:02:32 +0100
-> > Ulf Hansson <ulf.hansson@linaro.org> wrote:  
-> > > On Mon, 27 Jan 2025 at 13:32, Jonathan Cameron
-> > > <Jonathan.Cameron@huawei.com> wrote:  
-> > > > On Mon, 27 Jan 2025 11:47:44 +0100
-> > > > Ulf Hansson <ulf.hansson@linaro.org> wrote:  
-> > > > > > > > > > Do consider OK to change the order in pm_runtime_disable_action() to get
-> > > > > > > > > > rid of these issues, e.g.:
-> > > > > > > > > >
-> > > > > > > > > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-> > > > > > > > > > index 2ee45841486b..f27d311d2619 100644
-> > > > > > > > > > --- a/drivers/base/power/runtime.c
-> > > > > > > > > > +++ b/drivers/base/power/runtime.c
-> > > > > > > > > > @@ -1547,8 +1547,8 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
-> > > > > > > > > >
-> > > > > > > > > >  static void pm_runtime_disable_action(void *data)
-> > > > > > > > > >  {
-> > > > > > > > > > -       pm_runtime_dont_use_autosuspend(data);
-> > > > > > > > > >         pm_runtime_disable(data);
-> > > > > > > > > > +       pm_runtime_dont_use_autosuspend(data);
-> > > > > > > > > >  }
-> > > > > > > > > >
-> > > > > > > > > > though I see a rpm_resume() call is still possible though pm_runtime_disable().  
-> > > > > > > > >
-> > > > > > > > > I am still worried about keeping the device runtime enabled during a
-> > > > > > > > > window when we have turned off all resources for the device. Typically
-> > > > > > > > > we want to leave the device in a low power state after unbind.
-> > > > > > > > >
-> > > > > > > > > That said, I would rather just drop the devm_pm_runtime_enable() API
-> > > > > > > > > altogether and convert all users of it into
-> > > > > > > > > pm_runtime_enable|disable(), similar to what your patch does.  
-> > > > > > > >
-> > > > > > > > That is making a mess of a lot of automated cleanup for a strange
-> > > > > > > > runtime pm related path.  This is pain a driver should not have
-> > > > > > > > to deal with, though I'm not clear what the right solution is!
-> > > > > > > >
-> > > > > > > > Key is that drivers should not mix devm managed cleanup and not, so
-> > > > > > > > that means that anything that happens after runtime pm is enabled
-> > > > > > > > has to be torn down manually.  One solution to this might be to
-> > > > > > > > always enable it late assuming that is safe to do so there is
-> > > > > > > > never anything else done after it in the probe path of a driver.  
-> > > > > > >
-> > > > > > > The problem is that runtime PM isn't really comparable to other
-> > > > > > > resources that we are managing through devm* functions.
-> > > > > > >
-> > > > > > > Enabling runtime PM for a device changes the behaviour for how
-> > > > > > > power-mgmt is handled for the device. Enabling/disabling of runtime PM
-> > > > > > > really needs to be explicitly controlled by the driver for the device.  
-> > > > > >
-> > > > > > I'm sorry to say I'm not yet convinced.  
+On Dec 12, 2024 at 12:46:37 +0000, Sudeep Holla wrote:
+> On Wed, Dec 11, 2024 at 08:04:28PM +0530, Dhruva Gole wrote:
+> > On Dec 11, 2024 at 12:18:25 +0000, Sudeep Holla wrote:
+> > > On Wed, Dec 11, 2024 at 11:20:52AM +0530, Dhruva Gole wrote:
+> > [...]
 > > > > >
-> > > > > Okay, let me try one more time. :-)  
-> > > >
-> > > > +CC Greg as the disagreement here is really a philosophy of what
-> > > > devm cleanup is relative to remove.  Perhaps Greg or Rafael can
-> > > > given some guidance on the intent there.
-> > > >
-> > > > Mind you I think I found another subsystem working around this
-> > > > and in a somewhat more elegant, general way (to my eyes anyway!)
-> > > >
-> > > > https://elixir.bootlin.com/linux/v6.12.6/source/drivers/i2c/i2c-core-base.c#L630
-> > > > https://lore.kernel.org/all/YFf1GFPephFxC0mC@google.com/
-> > > >
-> > > > +CC Dmitry.
-> > > >
-> > > > I2C creates an extra devres group and releases it before devm_pm_domain_detach()
-> > > > As all devm calls from the driver end up in that group, they are released
-> > > > before dev_pm_domain_detach()  
-> > >
-> > > How would that address the problem I pointed out with runtime PM
-> > > below? This problem isn't limited to attaching/detaching PM domains.  
-> >
-> > It's associated with anything that happens after a driver remove is done.
-> > We just disagree on when that remove is finished. There is nothing special about
-> > the remove() callback, that is just part of remove process.
-> > No magic transition of state that allows new things to happen follows
-> > the device driver remove finishing. Sure you can get the remove
-> > handling ordering wrong whether devm is in use or not.  The trick is
-> > almost always to never mix devm and not.  Once you need a single bit of
-> > manual unwinding stop with the devm and do everything beyond that point
-> > by hand (in probe order, before that point in remove order)
-> >  
-> > > > > > Devm callbacks are explicitly registered by the driver so that they
-> > > > > > are unwound in a specific order.  Many other parts of driver
-> > > > > > registration rely on this ordering.  This does not seem different
-> > > > > > for runtime PM than anything else.  
 > > > > >
-> > > > > If you compare clocks, for example. It's the driver that is in full
-> > > > > control of the clock gating/ungating. When the ->remove() callback
-> > > > > runs, the driver typically makes sure that it leaves the clock gated.
-> > > > > Then it doesn't really matter when the clock resource gets released.
-> > > > > The point is, the driver is in full control of the resource.  
+> > > > > Hi @all,
+> > > > >
+> > > > > I am working on one custom SoC. Where I add one CPUIdle state for
+> > > > > ``arm,cortex-a55`` processor.
 > > > >
-> > > > Not a good example. devm_clk_get_enabled() does not gate the clock until  
-> > >
-> > > I was not referring to devm_clk_get_enable(), but rather just devm_clk_get().
-> > >
-> > > To me devm_clk_get_enable() is another interface that we should avoid.
-> > > For example, what if the clock is already gated when the ->remove()
-> > > callback runs? Then we need to ungate the clock just to make the
-> > > devres path happy so it doesn't gate an already gated clock. And this,
-> > > just to save one or two lines of code.  
-> >
-> > If someone is using a clock that is gated by other calls in the driver
-> > that then indeed the use of devm_clk_get_enabled() is inappropriate
-> > or they turn they do need to enable the clock and turn it off again
-> > as you mention which is a mess but often needs doing anyway as we
-> > commonly need some clocks at least to put a device into a low power
-> > state.
-> >  
-> > >
-> > > Don't get me wrong, I certainly like the devm* functions in general,
-> > > but it's not a good fit for everything.  
-> >
-> > For anything that a driver otherwise calls in remove() they are
-> > a direct equivalent that is just called automatically. (though apparently
-> > not quite in platform drivers!) If you have a sequence that is
-> > sufficiently complex they may not be a good fit. I just don't think
-> > that the sequence in this driver (and many others) is complex.
-> > The driver code (with the above change from i2c ported to platform code
-> > to fix the specific problem) is a lot simpler before Claudia's v2 to
-> > change the handling. 32 lines added to work around this...
-> >  
-> > >  
-> > > > the devm cleanup. The assumption being that nothing that affects
-> > > > it runs between the remove() and devm cleanup.  So pretty much identical
-> > > > to the runtime pm case.  They being that you have to obey ordering so
-> > > > that if you need to run something after the clock is disabled then
-> > > > you register that callback before you call devm_clk_get_enabled()
-> > > >  
-> > > > > If runtime PM would remain enabled beyond the call to the ->remove()
-> > > > > callback, it would mean that the driver's runtime PM callbacks could
-> > > > > be called too. For example, userspace via sysfs may at any point
-> > > > > decide to runtime resume the device. In other words, we may end up
-> > > > > calling the runtime PM callbacks in the driver, when they are not
-> > > > > intended to be called. In the worst case, I guess we could even end up
-> > > > > trying to control resources (like a clock) from the ->runtime
-> > > > > _resume() callback, when the references to these resources may already
-> > > > > have been released.  
+> > > > Any further luck on this?
 > > > >
-> > > > This is all about what we consider remove. To me, with devm_ manged cleanup
-> > > > in place, both remove() and devm_ cleanup count as parts of that remove
-> > > > process.  
+> > > > I have also been working on something similar[1] but on an A53 core on
+> > > > TI-K3 AM62x processor.
+> > > 
+> > > Does upstream DTS have support for this platform to understand it better ?
+> > > Even reference to any complete DT file for the platform will help.
+> > 
+> > Yes, you can ref to the AM625 (CPU layout) DT here:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/arm64/boot/dts/ti/k3-am625.dtsi
+> > 
+> > The board/starter kit DT is:
+> > https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/arch/arm64/boot/dts/ti/k3-am625-sk.dts
+> > 
+> > The patches for idle state are not upstream, and only exist in this
+> > patch of mine here:
+> > https://github.com/DhruvaG2000/v-linux/commit/0fd088d624276a2e72b8dc6660d261ab6d194f4b
+> >
+> 
+> "arm,psci-suspend-param" indicate that this idle state doesn't loose the
+> cpu context which means timer doesn't stop. So adding "local-timer-stop"
+> sound completely wrong to me.
+> 
+
+OK Understood.
+Removing that does indeed help, and works in the case where our local
+timers are not touched. System is indeed entering WFI on all 4 cores at
+the same time, confirmed this via some logic I implemented in TF-A.
+
+> > [...]
+> > > > See this chunk in the kernel cpuidle driver:
+> > > > 	if (broadcast && tick_broadcast_enter()) {
+> > > >
+> > > > When I dug deeper into tick_broadcast_enter it always returns something
+> > > > non zero and hence in my case it was entering the if block and tried to
+> > > > find a deepest state. Then the deepest state would always return WFI and
+> > > > not the idle-state I had added.
+> > > >
+> 
+> It depends. If this is the last CPU and since you have marked the state with
+> "local-timer-stop" and the system doesn't have any other timers to use as
+> source of broadcast, it prevents one of the CPU entering that state. So you
+> could be matching all the above conditions on your platform and hence you
+> are observing the above.
+
+Yes, this is most likely the reason.
+
+> 
+> > > > What we found out was on our kernel we end up using
+> > > >
+> > > > kernel/time/tick-broadcast-hrtimer.c
+> > > >
+> > > > This always seems to be keeping atleast 1 CPU busy and prevents idle.
+> > > > If we remove the local-timer-stop it was helping us, but we still need
+> > > > to dig into the full impact of what that entails and I am still
+> > > > interested in finding out how so many other users of similar idle-state
+> > > > implementation are able to do so without trouble.
+> > > >
 > > >
-> > > There is no straightforward process here, if you would keep runtime PM
-> > > enabled beyond ->remove(). Things can happen in parallel.  
+> 
+> As mentioned about adding "local-timer-stop" for a retention state seems
+> pure wrong in my opinion as it contradicts to the fact that context is
+> retained.
+> 
+> > > Interesting. So if the platform is functional removing local-timer-stop,
+> > > I am bit confused. Either there is something else that is getting it out
 > >
-> > How?  Nothing magic happens when a driver remove() ends.
-> > So there is no difference at all in a driver calling runtime pm disable
-> > in that code or in devres cleanup that happens immediately after that
-> > in the bus driver remove.
-> >  
-> > > In that case, drivers would need to extend their runtime PM callbacks
-> > > to cope with more complicated conditions, as resources that those use
-> > > may have been released. Moreover, how can we make sure that the device
-> > > is put into a low power state after the ->remove() has been called?  
+> > Yes it was interesting to us too, as to how the RCU didn't kick in and
+> > system continued to function as though nothing was wrong.
 > >
-> > This is a fair question.  Also one commonly handled by drivers using devm
-> > though perhaps not for the reason you are thinking.  Key is that most
-> > drivers should not rely at all on runtime PM being built let alone
-> > enabled.  
 > 
-> Drivers for components on SoCs that use PM Domains must use
-> Runtime PM, as that is the only available method to control the PM Domain.
+> It worked as if it was a state with context lost. So there might be some
+> impact on the latency though it as the kernel assumed context lost and
+> re-entered/resumed through resume entry point rather than where it called
+> cpu_suspend() similar to wfi(). I mean only on the CPUs it was able to
+> enter this state as one of the CPU will never enter this if there are no
+> system timers to act as broadcast timer.
+> 
+> Does you system not have Arch timers memory mapped interface enabled and
+> interrupt wired to GIC(other than PPIs) ? Look at Juno R2 as example.
 
-Ok. So you explicitly disable the interfaces to turn runtime pm off. Fair
-enough.  Though in the driver I would want to see explicit statement of
-that. I don't want to go dig in the parent to find out.  My assumption
-will always be that runtime PM might be disabled unless I see
-a dependency or comment telling me otherwise.
+It has arch timers mem mapped and irq wired to GIC (I have talked more
+on this at the last)
+Your analysis seems right, if there is local-timer-stop case, then
+our platform doesn't really provide an alternate timer today.
 
 > 
-> > Solution is normally a devm_add_action_or_reset() call that
-> > registers a call to put the device into a low power state.
+> > > from the idle state so, it should be fine and it could be just some
+> > 
+> > It's probably UART keypresses or some userspace processes that get
+> > scheduled that bring the CPUs back out of TF-A's cpu_standby.
+> 
+> I doubt the CPU resume from suspend is based on some userspace event.
+> 
+> > Is it possible that EL1 interrupts can bring EL3 out of WFI? Is yes then
+> > it explains the behaviour. The arch timer could also be continuing to
+> > tick and bringing the CPUs out of ATF WFI.
 > >
-> > Sequence is normally something like:
+> 
+> Yes but that doesn't explain the behaviour. It could be just the timer
+> event from the broadcast timer.
+> 
+> > > misconfiguration.
+> > > 
+> > > > Arm64 recommends to use arch_timer instead of external timers. Once we
+> > > > enter el3, timer interrupts to el1 is blocked and hence it's equivalent
+> > > > to local-timer-stop, so it does make sense to keep this property, but
+> > > > then how are others able to enter idle-states for all plugged CPUs at
+> > > > the same time?
+> > > >
+> > > 
+> > > Some systems have system timer that can take over as broadcast timer when
+> > > CPUs enter deeper idle states where the local timers are stopped.
+> > 
+> > In CPUIdle we're not really clock gating anything so the timer does keep
+> > ticking. So in this particular case it might make sense to remove the
+> > local-timer-stop property from the idle-state.
 > >
-> > 1) enable clks etc.  
 > 
-> Can be done explicitly, or using pm_runtime_resume_and_get() in case
-> of a clock domain.
+> Correct in your case it is retention state and hence local CPU timers
+> keep ticking and you can safely drop that property. However if you add
+> deeper idle states like CPU OFF with the power rail cut off, then you need
+> some system timer to act as backup/broadcast timer so that all the CPUs
+> can enter the state concurrently and wake up successfully.
 > 
-> > 2) Turn the power on.  
+> > However we're looking into taking this further and putting interconnect
+> > and few other PLLs in bypass which could cause arch timer for eg. to
+> > tick slower.
 > 
-> I assume you mean through a regulator, GPIO, or (deasserted) reset
-> signal?
-> In case of a PM Domain, that is done using pm_runtime_resume_and_get()
-> again.
+> I assume it will be present as another timer with the rate set appropriately.
+> 
+> > In this case would it still make sense to omit the property? 
+> 
+> No, you should mark it as stopped even if it is running at slower rate
+> as I am not sure if the local CPU timer support can handle rate change.
 
-Often a register write or similar to bring a device out of a low
-power state.  That register usually sits in the space of the ADC etc.
-Can be done via runtime PM callbacks in the ADC driver.  Often is, though
-common sequence is to enable directly in probe() then enable runtime
-pm to turn it off again.  Here where you have clocks etc in the pm domain
-I guess an early runtime pm resume does most of that, but I'd assume
-the reset deasserts in the driver are also part of that.
-The reset is not done in the PM domain code here. It is being
-done in this driver.
+OK, makes sense.
 
 > 
-> > 3) device setup
-> > 4) enable runtime PM after setting the state to active. Let autosuspend
-> >    do it's work.
+> > We may even have some usecases planned where we may turn OFF
+> > the CPU once it is in TF-A cpu_standby/ WFI. What would be the right
+> > approach in such scenarios?
 > >
-> > On remove (all devm_ managed).
-> > 5) disable runtime PM.
-> > 6) Turn the power off (may involve a check on whether it is already
-> >    off though in many cases it's idempotent so we don't bother checking).
-> > 7) disable clocks.
-> >
-> > in this particular driver I'm assuming that the low power state is
-> > handled via the reset lines being put back into reset by the
-> > the unwind of the two
-> > devm_reset_control_get_exclusive_deasserted() calls.  
 > 
-> No, power control is handled by the PM (Power and Clock!) Domain, which
-> controls both the power area (R9A08G045_PD_ADC) and the module clocks
-> (R9A08G045_ADC_ADCLK, R9A08G045_ADC_PCLK).
-
-Ok, though putting the device into reset is also a common way to put
-something into power saving, just not here.
-
-Aim of this illustration wasn't so much about this specific example or
-indeed anything using runtime pm and pm domains.  It was more to make
-the point that the flow is a general problem and easily handled in
-a driver.  We can do 'anything' in devm calls.  The balance of
-what makes sense is not driven by the complexity of a specific call it is
-driven by the rule of thumb that everything after the first non devm
-cleanup thing (that needs code in remove) must not use devm.
-
-Sometimes it is safe, but it makes reasoning about ordering much
-harder so I will reject any driver doing it from a maintainability
-point of view.  I have simply seen too many subtle bugs as a result
-of mixing and matching devres cleanup and driver remove calls.
-
-I reiterate that (to me) there is nothing special about this aspect of
-how we should handle pm domains.  They should not be complicating
-the driver code I see. If anything they should be making it simpler!
-In the proposed changes in this series they make the driver more
-complex.
-
-As per the earlier reply and Dmitry's follow up seems there is
-a common solution to this problem used by other buses.
-If there are problems with that then absolutely fine to consider
-something else, but so far I've not understood there to be one.
-
-Basically I'm asking for someone to point me to specific real
-driver code that solution breaks. I think that can only happen
-if devm_ cleanup in a driver is relying on the pm domain being
-down.   Superficially I'd argue any case that does that is
-dubious and probably wants improving, but obviously need real
-examples to consider.  Maybe there is something subtle.
-
-Jonathan
-
-
-
-
+> As mentioned above, this will be separate state and all CPUs can use this
+> if there is another system broadcast timer.
 > 
-> Gr{oetje,eeting}s,
+> > Could you provide any examples where the local-timer-stop property is
+> > being used and an alternative timer can be configured once we enter the
+> > idle-state where CPU CTX maybe lost or clocks maybe bypass?
+> > great if you could share some example implementation if you're aware.
 > 
->                         Geert
-> 
+> As I mentioned, Juno R2 is an example. It was broken on R0 with some SoC
+> errata(can't recall all the details as I looked at it almost a decade ago)
 
+Sorry for the late response, Thanks for all the pointers!
+I will go through juno R2 once and understand what's going on.
+
+What I see maybe helping it is as you mentioned these timers being
+routed to GIC. [1]
+
+8<---------------------------------------------------------------------------
+memtimer: timer@2a810000 {
+	compatible = "arm,armv7-timer-mem";
+	reg = <0x0 0x2a810000 0x0 0x10000>;
+	clock-frequency = <50000000>;
+	#address-cells = <1>;
+	#size-cells = <1>;
+	ranges = <0 0x0 0x2a820000 0x20000>;
+	status = "disabled";
+	frame@2a830000 {
+		frame-number = <1>;
+		interrupts = <GIC_SPI 60 IRQ_TYPE_LEVEL_HIGH>;
+		reg = <0x10000 0x10000>;
+	};
+};
+--------------------------------------------------------------------------->8
+
+I will have to go back and see how I can use some of the timers on my
+SoC that lie outside the A53s to register as clocks incase of
+local-timer-stop scenario.
+We already have few timers [2], I will check which one would be the
+right one to use, and remove it from being used as a pwm timer and
+rather be used for the A53 timer. This[3] is the driver for our platform.
+
+[1]
+https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/arm/juno-base.dtsi#L10
+[2]
+https://github.com/torvalds/linux/blob/master/arch/arm64/boot/dts/ti/k3-am62-main.dtsi#L247
+[3]
+https://github.com/torvalds/linux/blob/master/drivers/clocksource/timer-ti-dm-systimer.c
+
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
