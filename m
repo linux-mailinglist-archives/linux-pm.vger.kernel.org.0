@@ -1,222 +1,217 @@
-Return-Path: <linux-pm+bounces-20992-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-20993-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D5B83A20405
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 06:34:24 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7E49A20418
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 06:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2D64F1652CD
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 05:34:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E48041885A26
+	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 05:40:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E3DB1D86C7;
-	Tue, 28 Jan 2025 05:33:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 502C51ACEC6;
+	Tue, 28 Jan 2025 05:40:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="WAPyNA+9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iNDBdPJn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4588D1D47B5;
-	Tue, 28 Jan 2025 05:33:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1BF442A92;
+	Tue, 28 Jan 2025 05:40:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738042426; cv=none; b=sCfGIgWuCNonCrgAmYYo5E5aoqcrWXsy6fy4SIsGrStoJii9iUUBHxqiBkqDENnEVswRzyOVmJ4a5H5Lfvs80Q3IRS4sBH/bUIfZaIvBJoDYykOJa/1yn7MqjueS2inbknvUgvYo3o8f0rh3T6xn9XaLEcF5Z8l+ptENpU+20ng=
+	t=1738042850; cv=none; b=p+azheBEW3Wvf8Pw2cpr89NUp7h0JYiFVbiTiZYY841d7GFXW2fSprZKCPNjXAdyaHFyeiv8AO9JyDFTQSjX1P//kWd/l0dqKz5KNLz+JbEh8Dcq1gxOKGPNDUafh98nemygDGIQFfjeQwNRLX44GYgk0MjLADdG1sEyqJd9Ydc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738042426; c=relaxed/simple;
-	bh=Hjt3TJ7xTzMLlSQnonHGbm3oLTto5HuJhlxie89G82I=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=az2wNbLvDqt+XxjePxgko57f+lxaZVRlMM3DqBio7V24eRBQWeMN6x6O0238dpVo0vYmJJi2IsgbxPlGq2TW1ENAwCA0Ds7ipq8rW1gbsV4H9cqwpJfe9i+kvQAHp0DGIQPAEIjWH9FsPsZvdeRnVh/Kb1gh/2qtPsg2VMGsiyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=WAPyNA+9; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738042424; x=1769578424;
-  h=date:from:to:cc:subject:message-id;
-  bh=Hjt3TJ7xTzMLlSQnonHGbm3oLTto5HuJhlxie89G82I=;
-  b=WAPyNA+9CiiojTSojGbjYeNJOYzpgZz8WONTSOa61O5Wmx0eCEkMMuYG
-   OIYKzCF/1hmNovdyxqPK1qOVmVoVaFTejFWZbF17S+faZKOSNVLiTYlhE
-   ndEBPbdDd9aBWzslkwsC2a520dfVfkR11C+30skdxyH03z5J4tw7qUYZa
-   zhTNMMYBrxxK5RdxuPfvbdnfoWhcXW+DMHvpfejCSYZY7mq1XtNydU+d6
-   htJT75sBp/0JvnbSKIg95xpXysTH24skr60hNY0lCtzm4Lc5h7paM+cHo
-   SdddlLcSG6D8w9SpJZxjGmln3fKnTyA3SGjr4LV7M5ycy/GAOpjGiMIGy
-   A==;
-X-CSE-ConnectionGUID: 1eQ236osQEOQBKC83VdODA==
-X-CSE-MsgGUID: mSxWjkXeR9ydeFdiOBCtHg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11328"; a="49110037"
-X-IronPort-AV: E=Sophos;i="6.13,240,1732608000"; 
-   d="scan'208";a="49110037"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Jan 2025 21:33:43 -0800
-X-CSE-ConnectionGUID: l8qNhke3TOOiLOOadxo97g==
-X-CSE-MsgGUID: T7TQ9voTQimLj2SrenIQBg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="145847431"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa001.jf.intel.com with ESMTP; 27 Jan 2025 21:33:42 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tceEF-000hUF-2x;
-	Tue, 28 Jan 2025 05:33:39 +0000
-Date: Tue, 28 Jan 2025 13:33:32 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- fc2f1c3f6a69162be891295f651a6322055c8325
-Message-ID: <202501281318.Gko1ocFp-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1738042850; c=relaxed/simple;
+	bh=fp/AKR08leJQyxoIVH0K+aUyLAtVoeweGwz7qftQjQg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z34ww2+Dxwqz1ractwRUHSufzzOAmL7bmPAKC6ZLIms0+gKhw+BUwojtm45An5fPfkplUiaQ54isdRoUmOXElLdS4PE/id53SJkaBR32DfOyK07ZYDD/MqQMGd9W+x0+zCGB831UZIt8za+Ly+axZmefvvKHObDl2dFCw7vnFlg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iNDBdPJn; arc=none smtp.client-ip=209.85.214.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21619108a6bso89443155ad.3;
+        Mon, 27 Jan 2025 21:40:48 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738042848; x=1738647648; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+SSF90F8yfJ8x0hIchNY8H6SvKBtg5lmJmCIqNZqmQ0=;
+        b=iNDBdPJnRwP7S1eL+36A/6VMMWfkyNZ2B39OH1738DeiMpYzdBhF2/5dsIEvaRu8Az
+         73dl52sd3DsF6iOsBQK2irHnd/cW6qFpCr3nfEY+2g/5mO1ZfaZ2OS226AEFDrvDNKem
+         MbYe+EdbA1VV25zuQ668zZCYFMkjyl2DjWD8sEO0Np8yti9lYqLnI035wIaDeMkYuwfM
+         6FE8DUD2+1WBVZklmhHg5Yu6dJauuIzCM7yL37g9ZiSeUb0QiahjWckmAIUaAP7BOMDU
+         B0OAORpC6YoST1Whg50KxM32MNgvaYHSJYZjYKcnlUtT7+FXYNca+d/tjVZQGSMj8A3w
+         wwrQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738042848; x=1738647648;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+SSF90F8yfJ8x0hIchNY8H6SvKBtg5lmJmCIqNZqmQ0=;
+        b=JBSoEr7ceGAGexRplUP2sPb1K+i2/w/8SrEWtReMy64NRxdO2WoQbII12/8+w9P+O7
+         vSV3tK45w3YNAwzNIFqCbjHXdmDKaEP0+odC1fq9ZQY81Cw6d6vHNYA3rNY/ig/9S/C6
+         eFnS8zSIhffWQIZyOYjDx5eCtxVLMI5s435F31jCNSPyC2trvDsBTt0EY/1aROhP16IW
+         7pu+YXAnMTtu2mFnJjuKjLlceHDs1W6MBJS/BAKBdSXVFaWRpLPSbaGakb8yLNAkKLTo
+         Ha5HYVL5mjXJ2AzC029DfnCwQ+d7bFCu2gNpBTd/Ci95Bfn1ZNu2OVCHAMHG7dNj0ndc
+         n4aQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUIZv+6ULhl36Sq4L7RywIUW9vskssKYIdtFx2F6VQ1qfyf3nRjohIl3UdHgPF7EBCvGD0GNlpbdNWqBCKw@vger.kernel.org, AJvYcCVWHpRXjtlvTSPCIjSoLtiJc3RHOw6z4aHm/6ye4K80mTyPZu+x3kdIJm/6OCTrCtSNYb0sz2nPrIecFfz2pIpqdTw=@vger.kernel.org, AJvYcCWqcbLpgzyBNWXj0/tGBh5XuMeCCGfajjBSdBzMbfKtHKsfc2ctocD+j/wUXtxqITwu3eqZmYQcLMk=@vger.kernel.org, AJvYcCXNUcvRRcOFLfFKkGIeuSL55MrNhfjukA+JQAKPNYPBj1hNRA2wn/o57SPFEbm5aCLqLd8w23UXy+U=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwotzvDD9/dpAWvYMK0AYWehe7y47f5Q2Hg6OnyzehgCJvra/dt
+	8ayvqAdWNmccDHERLqp7fuW0ALN5owbc9I9aN4dk7VmjEt+CbQTL
+X-Gm-Gg: ASbGncsquCKXNn2p2OL84xQIUuAmRpTeoSPhqKxPaxn0oJUYZG8nj6aoUud9xUu2yRY
+	MtNI44AfYOjdcAZ3neSzqpIsOwJXSKy4xyOtNsg+VfljJ5YWrRjewJXP6dJI3TbSSxfxB/c6pYx
+	9tgBRbdcV/9uOujLbn/FJEv4YLxTzDasMd3sKf8dsl7mb+x4fRLnPVjRfiUqiNLBzwubfgr/29N
+	2WcOKRkzVQgfrT+/YP6tw8owZ7bzremPWGepsgi1mdq6vKwNj9ZwfBzdlTVDaHs9mkGFApXdJzR
+	wg+sZzMqWq8CJXxm
+X-Google-Smtp-Source: AGHT+IFrI6uP8tYy0mKk4T2DvFbyzTZKJTN/fkpEQtKd5Pfd6b5+ZPMZJecQ51L7PGR+AEOJS0S3pw==
+X-Received: by 2002:a17:903:1ca:b0:216:282d:c692 with SMTP id d9443c01a7336-21c355a4923mr737047195ad.34.1738042847687;
+        Mon, 27 Jan 2025 21:40:47 -0800 (PST)
+Received: from google.com ([2620:15c:9d:2:8037:dfc5:6e64:2e4e])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21da3d9c5casm72788775ad.26.2025.01.27.21.40.46
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 27 Jan 2025 21:40:47 -0800 (PST)
+Date: Mon, 27 Jan 2025 21:40:44 -0800
+From: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+To: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Jonathan Cameron <jic23@kernel.org>,
+	prabhakar.mahadev-lad.rj@bp.renesas.com, lars@metafoo.de,
+	linux-iio@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Subject: Re: [PATCH 1/2] iio: adc: rzg2l_adc: Drop devm_pm_runtime_enable()
+Message-ID: <Z5ht3NrbAOazH7ze@google.com>
+References: <20250111131409.36bebfd3@jic23-huawei>
+ <bb987a1b-a999-478c-8e35-124fcf41561d@tuxon.dev>
+ <CAPDyKFoJ3pLU-5_b5MSxMZd7B1cfOvmcdqR4FGkU2Wb7No0mcw@mail.gmail.com>
+ <20250117155226.00002691@huawei.com>
+ <CAPDyKFpQUMOFtA-QCbYdaeKSDGJpnjcA+tiKZ=kzmrjYRtFZdw@mail.gmail.com>
+ <20250124184137.0000047a@huawei.com>
+ <CAPDyKFrqDfYEQHk0RsRi2LnMw_HgGozMW9JP9xmkAq52O7eztg@mail.gmail.com>
+ <20250127123250.00002784@huawei.com>
+ <CAPDyKFoCx3jQOptPrY0CYNpH1R+fszF3MUQLSTn_nreyi5-vPw@mail.gmail.com>
+ <20250127182423.000013a7@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250127182423.000013a7@huawei.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: fc2f1c3f6a69162be891295f651a6322055c8325  Merge branch 'experimental/intel_pstate/eas-take1' into bleeding-edge
+On Mon, Jan 27, 2025 at 06:24:23PM +0000, Jonathan Cameron wrote:
+> On Mon, 27 Jan 2025 16:02:32 +0100
+> Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> 
+> > On Mon, 27 Jan 2025 at 13:32, Jonathan Cameron
+> > <Jonathan.Cameron@huawei.com> wrote:
+> > >
+> > > On Mon, 27 Jan 2025 11:47:44 +0100
+> > > Ulf Hansson <ulf.hansson@linaro.org> wrote:
+> > >  
+> > > > [...]
+> > > >  
+> > > > > > > > > Do consider OK to change the order in pm_runtime_disable_action() to get
+> > > > > > > > > rid of these issues, e.g.:
+> > > > > > > > >
+> > > > > > > > > diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> > > > > > > > > index 2ee45841486b..f27d311d2619 100644
+> > > > > > > > > --- a/drivers/base/power/runtime.c
+> > > > > > > > > +++ b/drivers/base/power/runtime.c
+> > > > > > > > > @@ -1547,8 +1547,8 @@ EXPORT_SYMBOL_GPL(pm_runtime_enable);
+> > > > > > > > >
+> > > > > > > > >  static void pm_runtime_disable_action(void *data)
+> > > > > > > > >  {
+> > > > > > > > > -       pm_runtime_dont_use_autosuspend(data);
+> > > > > > > > >         pm_runtime_disable(data);
+> > > > > > > > > +       pm_runtime_dont_use_autosuspend(data);
+> > > > > > > > >  }
+> > > > > > > > >
+> > > > > > > > > though I see a rpm_resume() call is still possible though pm_runtime_disable().  
+> > > > > > > >
+> > > > > > > > I am still worried about keeping the device runtime enabled during a
+> > > > > > > > window when we have turned off all resources for the device. Typically
+> > > > > > > > we want to leave the device in a low power state after unbind.
+> > > > > > > >
+> > > > > > > > That said, I would rather just drop the devm_pm_runtime_enable() API
+> > > > > > > > altogether and convert all users of it into
+> > > > > > > > pm_runtime_enable|disable(), similar to what your patch does.  
+> > > > > > >
+> > > > > > > That is making a mess of a lot of automated cleanup for a strange
+> > > > > > > runtime pm related path.  This is pain a driver should not have
+> > > > > > > to deal with, though I'm not clear what the right solution is!
+> > > > > > >
+> > > > > > > Key is that drivers should not mix devm managed cleanup and not, so
+> > > > > > > that means that anything that happens after runtime pm is enabled
+> > > > > > > has to be torn down manually.  One solution to this might be to
+> > > > > > > always enable it late assuming that is safe to do so there is
+> > > > > > > never anything else done after it in the probe path of a driver.  
+> > > > > >
+> > > > > > The problem is that runtime PM isn't really comparable to other
+> > > > > > resources that we are managing through devm* functions.
+> > > > > >
+> > > > > > Enabling runtime PM for a device changes the behaviour for how
+> > > > > > power-mgmt is handled for the device. Enabling/disabling of runtime PM
+> > > > > > really needs to be explicitly controlled by the driver for the device.  
+> > > > >
+> > > > > I'm sorry to say I'm not yet convinced.  
+> > > >
+> > > > Okay, let me try one more time. :-)  
+> > >
+> > > +CC Greg as the disagreement here is really a philosophy of what
+> > > devm cleanup is relative to remove.  Perhaps Greg or Rafael can
+> > > given some guidance on the intent there.
+> > >
+> > > Mind you I think I found another subsystem working around this
+> > > and in a somewhat more elegant, general way (to my eyes anyway!)
+> > >
+> > > https://elixir.bootlin.com/linux/v6.12.6/source/drivers/i2c/i2c-core-base.c#L630
+> > > https://lore.kernel.org/all/YFf1GFPephFxC0mC@google.com/
+> > >
+> > > +CC Dmitry.
+> > >
+> > > I2C creates an extra devres group and releases it before devm_pm_domain_detach()
+> > > As all devm calls from the driver end up in that group, they are released
+> > > before dev_pm_domain_detach()
 
-elapsed time: 937m
+There is also a similar fix in HID core.
 
-configs tested: 128
-configs skipped: 4
+> > >  
+> > 
+> > How would that address the problem I pointed out with runtime PM
+> > below? This problem isn't limited to attaching/detaching PM domains.
+> 
+> It's associated with anything that happens after a driver remove is done.
+> We just disagree on when that remove is finished. There is nothing special about
+> the remove() callback, that is just part of remove process.
+> No magic transition of state that allows new things to happen follows
+> the device driver remove finishing. Sure you can get the remove
+> handling ordering wrong whether devm is in use or not.  The trick is
+> almost always to never mix devm and not.  Once you need a single bit of
+> manual unwinding stop with the devm and do everything beyond that point
+> by hand (in probe order, before that point in remove order)
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Right, this is a classic problem of mixing devm-managed resources and
+ordinary ones. Every time we have a bus remove() method that is not
+trivial we need to make sure the resources are released in the right
+order, which is:
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250127    gcc-13.2.0
-arc                   randconfig-002-20250127    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                          moxart_defconfig    gcc-14.2.0
-arm                   randconfig-001-20250127    gcc-14.2.0
-arm                   randconfig-002-20250127    gcc-14.2.0
-arm                   randconfig-003-20250127    clang-16
-arm                   randconfig-004-20250127    clang-18
-arm                         s5pv210_defconfig    gcc-14.2.0
-arm                           sama7_defconfig    clang-16
-arm                       versatile_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250127    gcc-14.2.0
-arm64                 randconfig-002-20250127    gcc-14.2.0
-arm64                 randconfig-003-20250127    gcc-14.2.0
-arm64                 randconfig-004-20250127    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250127    gcc-14.2.0
-csky                  randconfig-002-20250127    gcc-14.2.0
-hexagon                          allmodconfig    clang-20
-hexagon                           allnoconfig    clang-20
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250127    clang-17
-hexagon               randconfig-002-20250127    clang-20
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250127    gcc-12
-i386        buildonly-randconfig-002-20250127    clang-19
-i386        buildonly-randconfig-003-20250127    gcc-12
-i386        buildonly-randconfig-004-20250127    gcc-12
-i386        buildonly-randconfig-005-20250127    gcc-12
-i386        buildonly-randconfig-006-20250127    clang-19
-i386                                defconfig    clang-19
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250127    gcc-14.2.0
-loongarch             randconfig-002-20250127    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                        m5407c3_defconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                       bmips_be_defconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250127    gcc-14.2.0
-nios2                 randconfig-002-20250127    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                generic-64bit_defconfig    gcc-14.2.0
-parisc                randconfig-001-20250127    gcc-14.2.0
-parisc                randconfig-002-20250127    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc                     ep8248e_defconfig    gcc-14.2.0
-powerpc                      ep88xc_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20250127    clang-16
-powerpc               randconfig-002-20250127    gcc-14.2.0
-powerpc               randconfig-003-20250127    gcc-14.2.0
-powerpc                    socrates_defconfig    gcc-14.2.0
-powerpc64             randconfig-001-20250127    gcc-14.2.0
-powerpc64             randconfig-002-20250127    gcc-14.2.0
-powerpc64             randconfig-003-20250127    gcc-14.2.0
-riscv                            allmodconfig    clang-20
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-20
-riscv                               defconfig    clang-19
-riscv                 randconfig-001-20250127    clang-20
-riscv                 randconfig-002-20250127    clang-16
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-20
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    clang-15
-s390                  randconfig-001-20250127    clang-20
-s390                  randconfig-002-20250127    clang-20
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-14.2.0
-sh                        dreamcast_defconfig    gcc-14.2.0
-sh                ecovec24-romimage_defconfig    gcc-14.2.0
-sh                    randconfig-001-20250127    gcc-14.2.0
-sh                    randconfig-002-20250127    gcc-14.2.0
-sh                           sh2007_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250127    gcc-14.2.0
-sparc                 randconfig-002-20250127    gcc-14.2.0
-sparc64                             defconfig    gcc-14.2.0
-sparc64               randconfig-001-20250127    gcc-14.2.0
-sparc64               randconfig-002-20250127    gcc-14.2.0
-um                               allmodconfig    clang-20
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-20
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250127    clang-20
-um                    randconfig-002-20250127    gcc-12
-um                           x86_64_defconfig    clang-15
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250127    clang-19
-x86_64      buildonly-randconfig-002-20250127    clang-19
-x86_64      buildonly-randconfig-003-20250127    clang-19
-x86_64      buildonly-randconfig-004-20250127    clang-19
-x86_64      buildonly-randconfig-005-20250127    gcc-12
-x86_64      buildonly-randconfig-006-20250127    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                          iss_defconfig    gcc-14.2.0
-xtensa                randconfig-001-20250127    gcc-14.2.0
-xtensa                randconfig-002-20250127    gcc-14.2.0
+1. Driver-allocated resources
+2. Bus-allocated resources
+3. Driver-core allocated resources.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Establishing a devres group before calling into drivers' probe() methods
+(and releasing it before doing the rest of the cleanup in remove()) is
+one such way.
+
+Thanks.
+
+-- 
+Dmitry
 
