@@ -1,222 +1,113 @@
-Return-Path: <linux-pm+bounces-21084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21085-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8434A21A3E
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 10:47:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id D82D0A21A7D
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 10:58:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D9B843A6C92
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 09:47:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E3293A2515
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 09:58:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 98EA41AED5C;
-	Wed, 29 Jan 2025 09:47:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C41761AF4E9;
+	Wed, 29 Jan 2025 09:58:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="i5Mwxy/R";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pmRhPydC";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="i5Mwxy/R";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="pmRhPydC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ld5SlCTd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out2.suse.de (smtp-out2.suse.de [195.135.223.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93C741CAB3;
-	Wed, 29 Jan 2025 09:47:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97A561AE005;
+	Wed, 29 Jan 2025 09:58:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738144024; cv=none; b=nwoMF9/YuZQIW6mkx4xw89czMem5HtKo+SNZi8LEppW1aPnBU6kJMIrnK42kryYfa9OUvLUvuhOn/vPaq20bj5Q9dEJrhhKPBY6lloXj9ic+DxJd3d6nS3ggcKQ7Wtb8hRvehBIhUm8n/RBB8uHrkVZ7CseTc5ushPfoarbzNc4=
+	t=1738144700; cv=none; b=ebna3ly006UiE7kku97A1N0u+LRDC4I/obqSRKnASRxaaDbap+be+b6TcBwlvJZn6hpIUNcHcmOgJXSBmS7JDoaUeXdwxm+9RwEy9mz3Knwk2t/wLVNd//i1gjokq/Z4VuczDhFy7L1hqjHAWUsuHWFhRzmfRLPFOw0s6YlqPOE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738144024; c=relaxed/simple;
-	bh=2tmtqzDlpvJYjOhymjjxXT2d5hZdqgkkSfR6apUc4LU=;
-	h=Date:Message-ID:From:To:Cc:Subject:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=FqE/gwuVPySoE0WXAd2B3AmCF0OFoHbiceZE5nNcQU1543krnjXCSjXM5JpltQqGcP4Ww7iHcLUWlZf/PZ6VdLgNkN3SxnRDbLc4X1vBhJUxyFUnJmts/45la1LSg5cUwFr41mdkbuACjTTxjlOAVHG8rd1BoUm7GqtvXmfAa8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=i5Mwxy/R; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pmRhPydC; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=i5Mwxy/R; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=pmRhPydC; arc=none smtp.client-ip=195.135.223.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out2.suse.de (Postfix) with ESMTPS id BC3B51F365;
-	Wed, 29 Jan 2025 09:46:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1738144014; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5GnOF+VEY7TThX1eeQY6brGBNSRNv8obohwk3AJ667M=;
-	b=i5Mwxy/RNBFOPwFWyefOclI67Mfl4LeClU7BnbzMU2Z49ioZnnFhEdIes2aDRWIG5Qpb0p
-	rLBunYuvEC7qM4x5OkOhkaKWeK+V8WjsDgKTMLf0D51Ecutz5uFtjpJqDsgAbMqJDTQ7GK
-	s83Yq9bri99hD1Q5u+s3qZtg9o5bDOg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1738144014;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5GnOF+VEY7TThX1eeQY6brGBNSRNv8obohwk3AJ667M=;
-	b=pmRhPydCZ+RgrhzOPZu1wdQVPJGdMmu2lFLf4y8etatrnARzlhrJMUPMdZgyI5WSug4evo
-	LP9tmUY05JKAOgCQ==
-Authentication-Results: smtp-out2.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b="i5Mwxy/R";
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=pmRhPydC
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1738144014; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5GnOF+VEY7TThX1eeQY6brGBNSRNv8obohwk3AJ667M=;
-	b=i5Mwxy/RNBFOPwFWyefOclI67Mfl4LeClU7BnbzMU2Z49ioZnnFhEdIes2aDRWIG5Qpb0p
-	rLBunYuvEC7qM4x5OkOhkaKWeK+V8WjsDgKTMLf0D51Ecutz5uFtjpJqDsgAbMqJDTQ7GK
-	s83Yq9bri99hD1Q5u+s3qZtg9o5bDOg=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1738144014;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:content-type:content-type:
-	 in-reply-to:in-reply-to:references:references;
-	bh=5GnOF+VEY7TThX1eeQY6brGBNSRNv8obohwk3AJ667M=;
-	b=pmRhPydCZ+RgrhzOPZu1wdQVPJGdMmu2lFLf4y8etatrnARzlhrJMUPMdZgyI5WSug4evo
-	LP9tmUY05JKAOgCQ==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id 6489C137DB;
-	Wed, 29 Jan 2025 09:46:53 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id C9NOFw35mWf7LAAAD6G6ig
-	(envelope-from <tiwai@suse.de>); Wed, 29 Jan 2025 09:46:53 +0000
-Date: Wed, 29 Jan 2025 10:46:53 +0100
-Message-ID: <87o6zq6jg2.wl-tiwai@suse.de>
-From: Takashi Iwai <tiwai@suse.de>
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: Andrew Morton <akpm@linux-foundation.org>,	Yaron Avizrat
- <yaron.avizrat@intel.com>,	Oded Gabbay <ogabbay@kernel.org>,	Julia Lawall
- <Julia.Lawall@inria.fr>,	Nicolas Palix <nicolas.palix@imag.fr>,	James Smart
- <james.smart@broadcom.com>,	Dick Kennedy <dick.kennedy@broadcom.com>,
-	"James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K. Petersen" <martin.petersen@oracle.com>,	Jaroslav Kysela
- <perex@perex.cz>,	Takashi Iwai <tiwai@suse.com>,	Chris Mason <clm@fb.com>,
-	Josef Bacik <josef@toxicpanda.com>,	David Sterba <dsterba@suse.com>,	Ilya
- Dryomov <idryomov@gmail.com>,	Dongsheng Yang <dongsheng.yang@easystack.cn>,
-	Jens Axboe <axboe@kernel.dk>,	Xiubo Li <xiubli@redhat.com>,	Damien Le Moal
- <dlemoal@kernel.org>,	Niklas Cassel <cassel@kernel.org>,	Carlos Maiolino
- <cem@kernel.org>,	"Darrick J. Wong" <djwong@kernel.org>,	Sebastian Reichel
- <sre@kernel.org>,	Keith Busch <kbusch@kernel.org>,	Christoph Hellwig
- <hch@lst.de>,	Sagi Grimberg <sagi@grimberg.me>,	Frank Li
- <Frank.Li@nxp.com>,	Mark Brown <broonie@kernel.org>,	Shawn Guo
- <shawnguo@kernel.org>,	Sascha Hauer <s.hauer@pengutronix.de>,	Pengutronix
- Kernel Team <kernel@pengutronix.de>,	Fabio Estevam <festevam@gmail.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,	Hans de Goede
- <hdegoede@redhat.com>,	Ilpo =?ISO-8859-1?Q?J=E4rvinen?=
- <ilpo.jarvinen@linux.intel.com>,	Henrique de Moraes Holschuh
- <hmh@hmh.eng.br>,	Selvin Xavier <selvin.xavier@broadcom.com>,	Kalesh AP
- <kalesh-anakkur.purayil@broadcom.com>,	Jason Gunthorpe <jgg@ziepe.ca>,	Leon
- Romanovsky <leon@kernel.org>,	cocci@inria.fr,
-	linux-kernel@vger.kernel.org,	linux-scsi@vger.kernel.org,
-	dri-devel@lists.freedesktop.org,	linux-sound@vger.kernel.org,
-	linux-btrfs@vger.kernel.org,	ceph-devel@vger.kernel.org,
-	linux-block@vger.kernel.org,	linux-ide@vger.kernel.org,
-	linux-xfs@vger.kernel.org,	linux-pm@vger.kernel.org,
-	linux-nvme@lists.infradead.org,	linux-spi@vger.kernel.org,
-	imx@lists.linux.dev,	linux-arm-kernel@lists.infradead.org,
-	platform-driver-x86@vger.kernel.org,	ibm-acpi-devel@lists.sourceforge.net,
-	linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 04/16] ALSA: ac97: convert timeouts to secs_to_jiffies()
-In-Reply-To: <20250128-converge-secs-to-jiffies-part-two-v1-4-9a6ecf0b2308@linux.microsoft.com>
-References: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
-	<20250128-converge-secs-to-jiffies-part-two-v1-4-9a6ecf0b2308@linux.microsoft.com>
-User-Agent: Wanderlust/2.15.9 (Almost Unreal) Emacs/27.2 Mule/6.0
+	s=arc-20240116; t=1738144700; c=relaxed/simple;
+	bh=HLPvuEe4EPSdLs2KeGIixiMKBPNwPL7PucYfSurJfRk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=V7OPUTCzT3T3j/aZ6YoMiz7ngSP3wos6WXSGFiQ1reh3ZLa2lbQTv20wFIuD42YvZb5ykltDJC3/b0PPt/MOgaIKMJPxoV7Pc/dl/FYnx/54MWTdxXqlcbbzfzE/iW/VkHr2bK0Q2YPTfEDy+HFBa7r+lfQLJj4CcEooYiyQMa8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ld5SlCTd; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 109EEC4CED3;
+	Wed, 29 Jan 2025 09:58:20 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738144700;
+	bh=HLPvuEe4EPSdLs2KeGIixiMKBPNwPL7PucYfSurJfRk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ld5SlCTdTGgGzWzSMuu5sySev8TOHx7OuuY9nNNbjrBr/jg3J+kRPfzs6GGWtJiqm
+	 4U0aPuJUpCum+J1W/33MeVcH+8S9hWeqyA5hkW8snYwxEct3F2yzCNh/TIgNfnluQO
+	 NhwNDxKKcUl8wHCizprNIUXliK/Ja/TtsgAKBeT9UIlxV0JH9mwXnhDBtDPKS06M1L
+	 TgaajIZFSjZyIEd03pOKFzWvMJcSsCG6XslT7SCv/5ad1d9pl2zC64j7iuv8+fMRM1
+	 eNm4xrZsCiD/1cF99Hg+Rkvw6ghQJOYUiN6yUXyAxxGI9/go7yeFBD1TS8wTeqHZmD
+	 Sa5QBNc1nVkGQ==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-5f2efd94787so4322498eaf.2;
+        Wed, 29 Jan 2025 01:58:20 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU4YtGN9Jx/inNMslVUAwVDyIkbjiKDhK3iDDxnZPikQPZHJwcJltVR8mwEIaeqhMtk8sHFDJnUNPA=@vger.kernel.org, AJvYcCVS+F/+E0JnJ6hPaKl3bR1Y5tsA9CYO/BCYvZuKV+8kN3CEro6ooaWtLSeJCCaasICb8kX975fSpkn5j5I=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyulekrwMgLWShtI+gwfkLgBFIVSiAg51JeQP57c/GgRCB1x0b/
+	PtP+M5pvP4nBjx84m0DX+hca7MDmmvbnBY59SSrppvTSOjEWpf+wjFsWQz4/CCKJXG7q4Tu/hff
+	tsVkI+vm5ct81LTNLwT8i0OQmahg=
+X-Google-Smtp-Source: AGHT+IHAvSvTproHby0CG23Ns42GWLqzKybIZpVySwe/6iGYVEniblMuZNax9/EhZLrP4C8bshjPSl0xbt/q9P2zC5c=
+X-Received: by 2002:a05:6820:c82:b0:5f8:d128:c7d6 with SMTP id
+ 006d021491bc7-5fc0028a9a0mr1418073eaf.1.1738144699271; Wed, 29 Jan 2025
+ 01:58:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0 (generated by SEMI-EPG 1.14.7 - "Harue")
-Content-Type: text/plain; charset=US-ASCII
-X-Rspamd-Queue-Id: BC3B51F365
-X-Spam-Score: -2.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-2.01 / 50.00];
-	BAYES_HAM(-3.00)[100.00%];
-	SUSPICIOUS_RECIPS(1.50)[];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	ARC_NA(0.00)[];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	MIME_TRACE(0.00)[0:+];
-	FROM_HAS_DN(0.00)[];
-	FREEMAIL_CC(0.00)[linux-foundation.org,intel.com,kernel.org,inria.fr,imag.fr,broadcom.com,HansenPartnership.com,oracle.com,perex.cz,suse.com,fb.com,toxicpanda.com,gmail.com,easystack.cn,kernel.dk,redhat.com,lst.de,grimberg.me,nxp.com,pengutronix.de,amd.com,linux.intel.com,hmh.eng.br,ziepe.ca,vger.kernel.org,lists.freedesktop.org,lists.infradead.org,lists.linux.dev,lists.sourceforge.net];
-	RCVD_TLS_ALL(0.00)[];
-	TO_MATCH_ENVRCPT_SOME(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	FROM_EQ_ENVFROM(0.00)[];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	RCPT_COUNT_GT_50(0.00)[59];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	DKIM_TRACE(0.00)[suse.de:+];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+MIME-Version: 1.0
+References: <455e18c947bd9529701a2f1c796f0f934d1354d7.1738050679.git.viresh.kumar@linaro.org>
+In-Reply-To: <455e18c947bd9529701a2f1c796f0f934d1354d7.1738050679.git.viresh.kumar@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 29 Jan 2025 10:58:08 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gjGvBxsEB-RgdtOiMzc4MRLvTVWi4DA3MbaLO3GckSpA@mail.gmail.com>
+X-Gm-Features: AWEUYZkkM6krShFyORy91kg2gqndKAwrio9kMOXe2SNrHEJ9sxOaKtWrbyCn3Pk
+Message-ID: <CAJZ5v0gjGvBxsEB-RgdtOiMzc4MRLvTVWi4DA3MbaLO3GckSpA@mail.gmail.com>
+Subject: Re: [PATCH] cpufreq: airoha: Depends on OF
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, kernel test robot <lkp@intel.com>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 28 Jan 2025 19:21:49 +0100,
-Easwar Hariharan wrote:
-> 
-> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
-> secs_to_jiffies().  As the value here is a multiple of 1000, use
-> secs_to_jiffies() instead of msecs_to_jiffies to avoid the multiplication.
-> 
-> This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci with
-> the following Coccinelle rules:
-> 
-> @depends on patch@
-> expression E;
-> @@
-> 
-> -msecs_to_jiffies
-> +secs_to_jiffies
-> (E
-> - * \( 1000 \| MSEC_PER_SEC \)
-> )
-> 
-> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
-
-Acked-by: Takashi Iwai <tiwai@suse.de>
-
-
-thanks,
-
-Takashi
-
-
+On Tue, Jan 28, 2025 at 8:51=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.o=
+rg> wrote:
+>
+> The Airoha cpufreq depends on OF and must be marked as such. With the
+> kernel compiled without OF support, we get following warning:
+>
+> drivers/cpufreq/airoha-cpufreq.c:109:34: warning: 'airoha_cpufreq_match_l=
+ist' defined but not used [-Wunused-const-variable=3D]
+>     109 | static const struct of_device_id airoha_cpufreq_match_list[] __=
+initconst =3D {
+>         |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+>
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202501251941.0fXlcd1D-lkp@i=
+ntel.com/
+> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 > ---
->  sound/pci/ac97/ac97_codec.c | 3 +--
->  1 file changed, 1 insertion(+), 2 deletions(-)
-> 
-> diff --git a/sound/pci/ac97/ac97_codec.c b/sound/pci/ac97/ac97_codec.c
-> index 6e710dce5c6068ec20c2da751b6f5372ad1df211..88ac37739b7653f69af430dd0163f5ab4ddf0d0c 100644
-> --- a/sound/pci/ac97/ac97_codec.c
-> +++ b/sound/pci/ac97/ac97_codec.c
-> @@ -2461,8 +2461,7 @@ int snd_ac97_update_power(struct snd_ac97 *ac97, int reg, int powerup)
->  		 * (for avoiding loud click noises for many (OSS) apps
->  		 *  that open/close frequently)
->  		 */
-> -		schedule_delayed_work(&ac97->power_work,
-> -				      msecs_to_jiffies(power_save * 1000));
-> +		schedule_delayed_work(&ac97->power_work, secs_to_jiffies(power_save));
->  	else {
->  		cancel_delayed_work(&ac97->power_work);
->  		update_power_regs(ac97);
-> 
-> -- 
-> 2.43.0
-> 
+>  drivers/cpufreq/Kconfig.arm | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+> index 704e84d00639..0ee5c691fb36 100644
+> --- a/drivers/cpufreq/Kconfig.arm
+> +++ b/drivers/cpufreq/Kconfig.arm
+> @@ -17,7 +17,7 @@ config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
+>
+>  config ARM_AIROHA_SOC_CPUFREQ
+>         tristate "Airoha EN7581 SoC CPUFreq support"
+> -       depends on ARCH_AIROHA || COMPILE_TEST
+> +       depends on (ARCH_AIROHA && OF) || COMPILE_TEST
+>         select PM_OPP
+>         default ARCH_AIROHA
+>         help
+> --
+
+Applied as 6.14-rc material (or please let me know if you'd rather
+apply it yourself).
+
+Thanks!
 
