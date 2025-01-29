@@ -1,128 +1,108 @@
-Return-Path: <linux-pm+bounces-21067-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21068-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5951AA2148A
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 23:42:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F0ECA2156D
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 01:16:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6583F7A2615
-	for <lists+linux-pm@lfdr.de>; Tue, 28 Jan 2025 22:41:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BEABD1887E03
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 00:16:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B95CC1DFD99;
-	Tue, 28 Jan 2025 22:42:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 813701547C3;
+	Wed, 29 Jan 2025 00:16:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b="NUNSUUGt"
+	dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b="AS2j4JP5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from ms.lwn.net (ms.lwn.net [45.79.88.28])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F052B18F2D8;
-	Tue, 28 Jan 2025 22:42:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.79.88.28
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EFFC543166;
+	Wed, 29 Jan 2025 00:16:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738104123; cv=none; b=ZSF1tzNNEft+ZEMz5E4zgPPXk+febAiAn33i/Eh/A6X2yRIlMKHMYXePkYGjBA29YrW1R0lzdzk27xkElQ1TfsRtEt5A+Csf4YkVhqrQuLgDt0bgaRRhNqmMnL/t6zPWAoS/PF7kQE0QMZlFM67269x0X7WL/qUqMWlBuZ/lMyE=
+	t=1738109807; cv=none; b=ofv9nweN/Unhza8ODLA/fSuHdda1p+DXhE523b/yp/k7zUNza6/CTuCcCaA7ZxUikgEn7PryvTLKZIwlc4xnbvCjWfnar6+D9GeT9shVnok7hIdjjguYjMJda68R6Bd/BJvgW1hkrY+545Nwx0mnOMBoUJR/oExBqV60GY6zX80=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738104123; c=relaxed/simple;
-	bh=AOq0SJfJiBWND1wZ8FCd25+xqo3YTjsEqxOPO7EP2Os=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:Message-ID:
-	 MIME-Version:Content-Type; b=FstZ4C6DuUxK9n5M/3sg7jpX/GB3dpw1cVdd0Rje5e+IrzQ204QiRqwwmVyx07DktIGradd5Ie/WbNADPj5RPL0y8Zpyb+ibRpIexleAFtYiDUFvEW3KX+VkOpd/umHn281FNaZhLY+iyFPjMBcDcp1VSYcbo8UhwRuSgJsix8o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net; spf=pass smtp.mailfrom=lwn.net; dkim=pass (2048-bit key) header.d=lwn.net header.i=@lwn.net header.b=NUNSUUGt; arc=none smtp.client-ip=45.79.88.28
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=lwn.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=lwn.net
-DKIM-Filter: OpenDKIM Filter v2.11.0 ms.lwn.net 06ECA403FA
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=lwn.net; s=20201203;
-	t=1738104121; bh=+meNH1juZBBtvrp/xo2cF0Sh2lEGZRx9Dv3JEMGVfwQ=;
-	h=From:To:Cc:Subject:In-Reply-To:References:Date:From;
-	b=NUNSUUGtYAw8IZ7v+u9urKWTHqRqgIaFDi/LwOklT1yZ+dVdXczOD9aTVo9dL8GaQ
-	 OAf5s35W/sLcrCXBP9L1rzztGXQrZf82Io4oQsEPVhxr2Gmfam9dfHpeHYHM4gAzS8
-	 Z5wJvtiQGdryhtYMX/RqM8UUTkxsZ7qqsI/DxEU04UzFD7wrLVaAgpDF9YgOAVZODR
-	 ghFfoDDu31L5plmrTy4y8+t+6MkL5TJscft0G5BNRz45gjvAU7I+oGLILjgoaHhU9M
-	 9iNee1I8iwhHjJ3JhYnCMWXNAtQ6QziZH5AMs5lTvSyDYyN1vQVIIWC4TLGwjRIBKs
-	 EZQClEOOCB0lQ==
-Received: from localhost (unknown [IPv6:2601:280:5e00:625::1fe])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by ms.lwn.net (Postfix) with ESMTPSA id 06ECA403FA;
-	Tue, 28 Jan 2025 22:42:00 +0000 (UTC)
-From: Jonathan Corbet <corbet@lwn.net>
-To: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Linux Doc Mailing
- List <linux-doc@vger.kernel.org>, Greg Kroah-Hartman
- <gregkh@linuxfoundation.org>
-Cc: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>, Mauro Carvalho Chehab
- <mchehab+huawei@kernel.org>, linux-kernel@vger.kernel.org,
- bpf@vger.kernel.org, coresight@lists.linaro.org,
- linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
- linux-f2fs-devel@lists.sourceforge.net, linux-hardening@vger.kernel.org,
- linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
- linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
- workflows@vger.kernel.org
-Subject: Re: [RFC v2 00/38] Improve ABI documentation generation
-In-Reply-To: <cover.1738020236.git.mchehab+huawei@kernel.org>
-References: <cover.1738020236.git.mchehab+huawei@kernel.org>
-Date: Tue, 28 Jan 2025 15:42:00 -0700
-Message-ID: <87h65i7e87.fsf@trenco.lwn.net>
+	s=arc-20240116; t=1738109807; c=relaxed/simple;
+	bh=zZU6hynWCHp+6F/RCQmfqyOYkRbiqQZ0uQFQk367ytg=;
+	h=Date:From:To:Cc:Subject:Message-Id:In-Reply-To:References:
+	 Mime-Version:Content-Type; b=AeI2jjTOyzblWUgseBqsS4twqul6hxxLOzsNmtxWsBmQfrO132FEEf19nWxg/xk4CjJ/TQmWHqPc2unJvqvj4Ly0V13xd4XbehliYvkN3jUxIBz4PeI0EvXrNSJd9RcfmJ+KEFr7kgg0Ed2USPBCVjAFOEqXe6IuOGeoHCTyj9A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linux-foundation.org header.i=@linux-foundation.org header.b=AS2j4JP5; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 994C4C4CED3;
+	Wed, 29 Jan 2025 00:16:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linux-foundation.org;
+	s=korg; t=1738109806;
+	bh=zZU6hynWCHp+6F/RCQmfqyOYkRbiqQZ0uQFQk367ytg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=AS2j4JP5RIAisJwaJPGo5rdD+WQkiOVOSd2qjWS7o62PB/KfGo+AtIeEIRlVi8ca4
+	 DcFpL5pMszZR4AoEDS94lZdMmpR+YhI7fvUGwBGQGj85DpwI7Ag5fgschNnRNtAEJ5
+	 EXSOU+Vpu5p468XbHO3vy3GdYQe6R4CubgmVMLqk=
+Date: Tue, 28 Jan 2025 16:16:43 -0800
+From: Andrew Morton <akpm@linux-foundation.org>
+To: Easwar Hariharan <eahariha@linux.microsoft.com>
+Cc: Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay
+ <ogabbay@kernel.org>, Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix
+ <nicolas.palix@imag.fr>, James Smart <james.smart@broadcom.com>, Dick
+ Kennedy <dick.kennedy@broadcom.com>, "James E.J. Bottomley"
+ <James.Bottomley@HansenPartnership.com>, "Martin K. Petersen"
+ <martin.petersen@oracle.com>, Jaroslav Kysela <perex@perex.cz>, Takashi
+ Iwai <tiwai@suse.com>, Chris Mason <clm@fb.com>, Josef Bacik
+ <josef@toxicpanda.com>, David Sterba <dsterba@suse.com>, Ilya Dryomov
+ <idryomov@gmail.com>, Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens
+ Axboe <axboe@kernel.dk>, Xiubo Li <xiubli@redhat.com>, Damien Le Moal
+ <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, Carlos Maiolino
+ <cem@kernel.org>, "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel
+ <sre@kernel.org>, Keith Busch <kbusch@kernel.org>, Christoph Hellwig
+ <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, Frank Li
+ <Frank.Li@nxp.com>, Mark Brown <broonie@kernel.org>, Shawn Guo
+ <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix
+ Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, Hans de Goede
+ <hdegoede@redhat.com>, Ilpo =?ISO-8859-1?Q?J=E4rvinen?=
+ <ilpo.jarvinen@linux.intel.com>, Henrique de Moraes Holschuh
+ <hmh@hmh.eng.br>, Selvin Xavier <selvin.xavier@broadcom.com>, Kalesh AP
+ <kalesh-anakkur.purayil@broadcom.com>, Jason Gunthorpe <jgg@ziepe.ca>, Leon
+ Romanovsky <leon@kernel.org>, cocci@inria.fr, linux-kernel@vger.kernel.org,
+ linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org,
+ linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ ceph-devel@vger.kernel.org, linux-block@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org,
+ linux-spi@vger.kernel.org, imx@lists.linux.dev,
+ linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org,
+ ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
+Subject: Re: [PATCH 00/16] Converge on using secs_to_jiffies() part two
+Message-Id: <20250128161643.289d9fe705ef2fdba0b82a52@linux-foundation.org>
+In-Reply-To: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
+References: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
+X-Mailer: Sylpheed 3.8.0beta1 (GTK+ 2.24.33; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain
+Mime-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-Mauro Carvalho Chehab <mchehab+huawei@kernel.org> writes:
+On Tue, 28 Jan 2025 18:21:45 +0000 Easwar Hariharan <eahariha@linux.microsoft.com> wrote:
 
-> Hi Jon/Greg,
->
-> That's the second version of my RFC patches meant to modenize the ABI
-> parser that I wrote in Perl.
+> This is the second series (part 1*) that converts users of msecs_to_jiffies() that
+> either use the multiply pattern of either of:
+> - msecs_to_jiffies(N*1000) or
+> - msecs_to_jiffies(N*MSEC_PER_SEC)
+> 
+> where N is a constant or an expression, to avoid the multiplication.
+> 
+> The conversion is made with Coccinelle with the secs_to_jiffies() script
+> in scripts/coccinelle/misc. Attention is paid to what the best change
+> can be rather than restricting to what the tool provides.
+> 
+> Andrew has kindly agreed to take the series through mm.git modulo the
+> patches maintainers want to pick through their own trees.
 
-I have a couple of minor comments on the individual patches, but overall
-I do like this direction.
+I added patches 2-16 to mm.git.  If any of these later get merged into
+a subsystem tree, Stephen will tell us and I'll drop the mm.git copy.
 
-It would be nice, though, if the code were a bit more extensively
-commented.  Parts of it get into the "twistly maze of regexes" mode that
-can be awfully hard to follow.
-
-> On this series we have:
->
-> patches 1 to 11: several bug fixes addressing issues at ABI symbols;
-
-1-3 aren't needed - it seems you already upstreamed #2?
-
-For the rest, is there any reason to not apply them right away?  They
-just seem like worthwhile fixes.
-
-> patch 12: a fix for scripts/documentation-file-ref-check
-> patches 13-15: create new script with rest and search logic and 
->   minimally integrate with kernel_abi Sphinx extension(phase 1);
-> patches 16-19: implement phase 2: class integration (phase 2);
-> patch 20: fix a bug at kernel_abi: the way it splits lines is buggy;
-> patches  21-24: rewrite kernel_abi logic to make it simpler and more
->   robust;
-> patches 25-27: add cross-reference support at automarkup;
-> patches 28-36: several ABI cleanups to cope with the improvements;
-> patch 37: implement undefined command;
-> patch 38: get rid of the old Perl script.
->
-> To make it easier to review/apply, I may end breaking the next version
-> on a couple of different patchsets. Still it would be nice to have more
-> people testing it and providing some feedback.
-
-I've looked over everything, though with limited depth.  My testing
-hasn't turned up any problems.  I've only tested with current Sphinx,
-have you tried this with the more ancient versions we support?
-
-[It's probably time to raise our minimum version again, especially now
-that current Sphinx has better performance.]
-
-I don't see a whole lot of reasons not to apply this set shortly after
-the merge window; anybody disagree?
-
-Thanks,
-
-jon
 
