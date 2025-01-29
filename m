@@ -1,107 +1,65 @@
-Return-Path: <linux-pm+bounces-21096-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21097-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A07ACA21D9F
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 14:13:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1080FA21F02
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 15:22:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0B161188850D
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 13:13:19 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 231853A63E9
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 14:22:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF84E31A89;
-	Wed, 29 Jan 2025 13:13:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E1D1BEF74;
+	Wed, 29 Jan 2025 14:22:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="SxBm5goJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="djFiyaI1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC2E82CA9;
-	Wed, 29 Jan 2025 13:13:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC0FD1B4250;
+	Wed, 29 Jan 2025 14:22:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738156389; cv=none; b=PyFzC6kJ0jFowwD0nfgvsJ7ZZYxmaOnstxAaMY7iyEboxMcQuTEAv9FOOTgaL3DqsiTonJ4J77pZa1hEjrBVvFJUfnpWJTjXWdqYRGALTgduEE5c85PDYxd/CoFojB03+0NNsqD97xzar5ptK2/oIZbc+QhIXqQEOXwsEBMOdmE=
+	t=1738160531; cv=none; b=MqzDk1aNZ+SSNVjv43r4DyISKUzQeEur/oOfPpDJVbGMYIhfSoem97n2BmiBhK0LOSlbUi6MHFZMfYIHkszoGcX92cm12kX+0gBhYvhpZ0agiWJyX50xHbA2Vi80OMyiKsC13Ly+IxtIKsD73SR11miLV9aFhQ8o4Nw35yCqzDM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738156389; c=relaxed/simple;
-	bh=uWLMAkjiPxmd0IZ1cdFsHKZZFguDfleylm6v197BRzQ=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=ARMhNx1n9bES05kDWAepJ5y3q8rZYyi8p/4J8ZHrvQvT0EdpWvQfAQH1xqZo/87qDwRYT59eiSHTwVf7gcz2QxCNsu5Z7DxUThGsGNhsbMgLX+mswDSCUesSq1KyMaBY1fxIWD4dnZ7o/k0De5FAp3xhlzu4Ob1ycJU+VBKCveY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=SxBm5goJ; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738156388; x=1769692388;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=uWLMAkjiPxmd0IZ1cdFsHKZZFguDfleylm6v197BRzQ=;
-  b=SxBm5goJ+drv5/j21Nr5L4bB4AiKSLqdl2lYsm1T+xntrZBkeN0w8M1G
-   F4+NyhAgrsl+fxFpq7CVKVv5bZ5TG8R2r9ALR7mZHn8ifAxDjViTWF9n2
-   Qfeq1wtGoBTmk2U4tQ7WMchq3EE+X/8v1H0sOUbLglOQs+gH1LZTe1tFI
-   rw9aLIelfb6Pk4CJOaoZdF+4IhUiy0K/KB7NE5qfaBpzkCHW714QRBeEk
-   Q+7U1kkK2AckCQsce2i90njW9G8nEXxHkKqoPxYUtVpVSotop9EE/u155
-   b1Aa+BuhHplKP3brftgSYN4fRO8fdv0S49WLNBP0cF4ag6En7yfknR6NS
-   A==;
-X-CSE-ConnectionGUID: Xq1YKzuARa+e19SIixMJMQ==
-X-CSE-MsgGUID: baOTcUmERJ+Zx4XQgK+dTw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11329"; a="56203313"
-X-IronPort-AV: E=Sophos;i="6.13,243,1732608000"; 
-   d="scan'208";a="56203313"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 05:13:06 -0800
-X-CSE-ConnectionGUID: VQdEsMXqR8qBKjmeEKbOAw==
-X-CSE-MsgGUID: O+KtZNkvRJq7JgLfGnW4VQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="113646751"
-Received: from ettammin-mobl2.ger.corp.intel.com (HELO localhost) ([10.245.245.222])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 29 Jan 2025 05:12:52 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Wed, 29 Jan 2025 15:12:49 +0200 (EET)
-To: Easwar Hariharan <eahariha@linux.microsoft.com>
-cc: Andrew Morton <akpm@linux-foundation.org>, 
-    Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
-    Julia Lawall <Julia.Lawall@inria.fr>, 
-    Nicolas Palix <nicolas.palix@imag.fr>, 
-    James Smart <james.smart@broadcom.com>, 
-    Dick Kennedy <dick.kennedy@broadcom.com>, 
-    "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
-    "Martin K. Petersen" <martin.petersen@oracle.com>, 
-    Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
-    Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
-    David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
-    Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
-    Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
-    Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
-    "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
-    Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
-    Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
-    Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
-    Sascha Hauer <s.hauer@pengutronix.de>, 
-    Pengutronix Kernel Team <kernel@pengutronix.de>, 
-    Fabio Estevam <festevam@gmail.com>, 
-    Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
-    Hans de Goede <hdegoede@redhat.com>, 
-    Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
-    Selvin Xavier <selvin.xavier@broadcom.com>, 
-    Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
-    Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
-    cocci@inria.fr, LKML <linux-kernel@vger.kernel.org>, 
-    linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
-    linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
-    ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
-    linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
-    linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
-    linux-spi@vger.kernel.org, imx@lists.linux.dev, 
-    linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
-    ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
-Subject: Re: [PATCH 14/16] platform/x86/amd/pmf: convert timeouts to
- secs_to_jiffies()
-In-Reply-To: <20250128-converge-secs-to-jiffies-part-two-v1-14-9a6ecf0b2308@linux.microsoft.com>
-Message-ID: <e8207616-6079-be0d-d482-6577616a4cc7@linux.intel.com>
-References: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com> <20250128-converge-secs-to-jiffies-part-two-v1-14-9a6ecf0b2308@linux.microsoft.com>
+	s=arc-20240116; t=1738160531; c=relaxed/simple;
+	bh=/uy2KVK+92bnjkNkIT1iw5CrTdiZ0e2lwuNq07xf8OM=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=dIjz3OvimteobWYLHRjzWMXoKzWhEPpYBp/O6JqsOwdVvdewpUnFs1NaqCTilPqJWha4nHJJxRgrUqN6Ert/SPUSHV3gZV96iRKaCGnvu0jrAToRkBvclybo2sg/eWRoCriqyANIdJ1Hi/K9TsDOeM+JG4ZBtncizAKGRA2A1hI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=djFiyaI1; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 69A63C4CED3;
+	Wed, 29 Jan 2025 14:22:07 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738160530;
+	bh=/uy2KVK+92bnjkNkIT1iw5CrTdiZ0e2lwuNq07xf8OM=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=djFiyaI1DlJWiFHE8181GXXxjAr3wEqHuYYG3QsXELwZvDKxnRVxjUbFdIQbTnmLU
+	 Lt9fufnc/G7WtGz9dtGAS3ZPyc4zzMF7RCfLnP+iBbDKwR+eb444lgkHrtJ/IVzKnP
+	 WXttUr2Yxs6fWKBISWq0/x5ZYEIrKYg1CFR9lX/xH1tZyDicoyC+ae2lT5AysNsQ5+
+	 Zrzl0ec3PcPgnqhqfetOvYwj+teyI/gwI8joVAbOMvx/WjRa3zWtMYKccoxnJSJUEq
+	 elKqiXQFndQZbOtUJb0kgnqPfoQifhZUjqbQYA3D92ZpRy6VKsPv9SGhYwjgHdtLhq
+	 gPYPXMPtSHgOQ==
+Date: Wed, 29 Jan 2025 15:22:03 +0100
+From: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+To: Jonathan Corbet <corbet@lwn.net>
+Cc: Linux Doc Mailing List <linux-doc@vger.kernel.org>, Greg Kroah-Hartman
+ <gregkh@linuxfoundation.org>, linux-kernel@vger.kernel.org,
+ bpf@vger.kernel.org, coresight@lists.linaro.org,
+ linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+ linux-f2fs-devel@lists.sourceforge.net, linux-hardening@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-media@vger.kernel.org,
+ linux-pm@vger.kernel.org, linux-usb@vger.kernel.org,
+ linux-wireless@vger.kernel.org, netdev@vger.kernel.org,
+ workflows@vger.kernel.org
+Subject: Re: [RFC v2 00/38] Improve ABI documentation generation
+Message-ID: <20250129152203.0dda53ca@foz.lan>
+In-Reply-To: <20250129024518.69c0be81@foz.lan>
+References: <cover.1738020236.git.mchehab+huawei@kernel.org>
+	<87h65i7e87.fsf@trenco.lwn.net>
+	<20250129024518.69c0be81@foz.lan>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -109,52 +67,119 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-On Tue, 28 Jan 2025, Easwar Hariharan wrote:
+Em Wed, 29 Jan 2025 02:45:18 +0100
+Mauro Carvalho Chehab <mchehab+huawei@kernel.org> escreveu:
 
-> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
-> secs_to_jiffies().  As the value here is a multiple of 1000, use
-> secs_to_jiffies() instead of msecs_to_jiffies to avoid the multiplication.
+> > I've only tested with current Sphinx,
+> > have you tried this with the more ancient versions we support?  
 > 
-> This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci with
-> the following Coccinelle rules:
-> 
-> @depends on patch@
-> expression E;
-> @@
-> 
-> -msecs_to_jiffies
-> +secs_to_jiffies
-> (E
-> - * \( 1000 \| MSEC_PER_SEC \)
-> )
-> 
-> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
-> ---
->  drivers/platform/x86/amd/pmf/acpi.c | 3 ++-
->  1 file changed, 2 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/platform/x86/amd/pmf/acpi.c b/drivers/platform/x86/amd/pmf/acpi.c
-> index dd5780a1d06e1dc979fcff5bafd6729bc4937eab..6b7effe80b78b7389b320ee65fa5d2373f782a2f 100644
-> --- a/drivers/platform/x86/amd/pmf/acpi.c
-> +++ b/drivers/platform/x86/amd/pmf/acpi.c
-> @@ -220,7 +220,8 @@ static void apmf_sbios_heartbeat_notify(struct work_struct *work)
->  	if (!info)
->  		return;
->  
-> -	schedule_delayed_work(&dev->heart_beat, msecs_to_jiffies(dev->hb_interval * 1000));
-> +	schedule_delayed_work(&dev->heart_beat,
-> +			      secs_to_jiffies(dev->hb_interval));
->  	kfree(info);
->  }
+> Not yet, but I double-checked at Sphinx documentation to be sure that
+> I won't be using any newer methods: I just kept using the same Sphinx
+> API as used by other extensions at the Kernel.
 
-Hi,
+Just checked it with Python 3.6 and Sphinx 3.4 on Fedora 41 with:
 
-So you made the line shorter but still added the newline char for some 
-reason even if the original didn't have one?? Please don't enforce 80 
-chars limit with patches like this.
+	sudo dnf install python3.6.x86_64
+	python3.6 -m venv Sphinx-3.4
+	pip install alabaster Sphinx==3.4.3 pyyaml
 
--- 
- i.
+There were some issues related to problems with early f-string
+support, as reported by Akira.
 
+After applying the enclosed patch, it is now working fine. The only
+drawback is here:
+
+	- print(f"Defined on file{'s'[:len(files) ^ 1]}:\t{", ".join(files)}")
+	+ print("Defined on file(s):\t" + ", ".join(files))
+
+As I removed the file/files auto-plural logic depending on the files
+array length. Not a big deal.
+
+I'll double-check if there's no other diff between old/new version
+and add the enclosed patch in the end.
+
+Thanks,
+Mauro
+
+[PATCH] scripts/get_abi.py: make it backward-compatible with Python 3.6
+
+Despite being introduced on Python 3.6, the original implementation
+was too limited: it doesn't accept anything but the argument.
+
+Even on python 3.10.12, support was still limited, as more complex
+operations cause SyntaxError:
+
+	Exception occurred:
+	  File ".../linux/Documentation/sphinx/kernel_abi.py", line 48, in <module>
+	    from get_abi import AbiParser
+	  File ".../linux/scripts/get_abi.py", line 525
+	    msg += f"{part}\n{"-" * len(part)}\n\n"
+                       ^
+	SyntaxError: f-string: expecting '}'
+
+Replace f-strings by normal string concatenation when it doesn't
+work on Python 3.6.
+
+Reported-by: Akira Yokosawa <akiyks@gmail.com>
+Signed-off-by: Mauro Carvalho Chehab <mchehab+huawei@kernel.org>
+
+diff --git a/scripts/get_abi.py b/scripts/get_abi.py
+index 543bed397c8c..e6e94f721fff 100755
+--- a/scripts/get_abi.py
++++ b/scripts/get_abi.py
+@@ -522,7 +522,7 @@ class AbiParser:
+ 
+                 if cur_part and cur_part != part:
+                     part = cur_part
+-                    msg += f"{part}\n{"-" * len(part)}\n\n"
++                    msg += part + "\n"+ "-" * len(part) +"\n\n"
+ 
+                 msg += f".. _{key}:\n\n"
+ 
+@@ -546,7 +546,7 @@ class AbiParser:
+                     msg += f"Defined on file :ref:`{base} <{ref[1]}>`\n\n"
+ 
+             if wtype == "File":
+-                msg += f"{names[0]}\n{"-" * len(names[0])}\n\n"
++                msg += names[0] +"\n" + "-" * len(names[0]) +"\n\n"
+ 
+             desc = v.get("description")
+             if not desc and wtype != "File":
+@@ -570,7 +570,8 @@ class AbiParser:
+ 
+             users = v.get("users")
+             if users and users.strip(" \t\n"):
+-                msg += f"Users:\n\t{users.strip("\n").replace('\n', '\n\t')}\n\n"
++                users = users.strip("\n").replace('\n', '\n\t')
++                msg += f"Users:\n\t{users}\n\n"
+ 
+             ln = v.get("line_no", 1)
+ 
+@@ -596,7 +597,9 @@ class AbiParser:
+                 elif len(lines) == 1:
+                     f.append(f"{fname}:{lines[0]}")
+                 else:
+-                    f.append(f"{fname} lines {", ".join(str(x) for x in lines)}")
++                    m = fname + "lines "
++                    m += ", ".join(str(x) for x in lines)
++                    f.append(m)
+ 
+             self.log.warning("%s is defined %d times: %s", what, len(f), "; ".join(f))
+ 
+@@ -644,10 +647,11 @@ class AbiParser:
+                     if users:
+                         print(f"Users:\t\t\t{users}")
+ 
+-                    print(f"Defined on file{'s'[:len(files) ^ 1]}:\t{", ".join(files)}")
++                    print("Defined on file(s):\t" + ", ".join(files))
+ 
+                     if desc:
+-                        print(f"\n{desc.strip("\n")}\n")
++                        desc = desc.strip("\n")
++                        print(f"\n{desc}\n")
+ 
+         if not found_keys:
+             print(f"Regular expression /{expr}/ not found.")
 
