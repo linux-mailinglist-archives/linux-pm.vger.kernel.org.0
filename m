@@ -1,105 +1,97 @@
-Return-Path: <linux-pm+bounces-21081-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21082-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3605DA21914
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 09:31:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E8505A21969
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 09:51:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 90C85164947
-	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 08:31:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1F9273A288C
+	for <lists+linux-pm@lfdr.de>; Wed, 29 Jan 2025 08:51:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C80E31990D9;
-	Wed, 29 Jan 2025 08:31:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 923921990D9;
+	Wed, 29 Jan 2025 08:51:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="UbeITJ5A"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="4b42LYYs"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-oa1-f73.google.com (mail-oa1-f73.google.com [209.85.160.73])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A9E12942A;
-	Wed, 29 Jan 2025 08:31:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1181D1A2380
+	for <linux-pm@vger.kernel.org>; Wed, 29 Jan 2025 08:51:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.73
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738139493; cv=none; b=udqrYV+MljSaPuR0pQEBWJeYBEFFKTBPnTtSXdJKhU6XjPX4jGGJAOgYybn1t7G5bNSog6BjBSgkYUhexSe6POetZVxWbjftVFnVzAaa+tSwdK638buwW1hAhYjGRz4yirjtgeDPvrtp7NKWlnXCfG3cXlX1lmSmbUj2h0HB6NE=
+	t=1738140668; cv=none; b=VgQGSfVnRc+QDaUwMYOoiSk4YpEvN2eOaDbpO7/XEKhvm0ykB+hVErrZLfkRKhmmzEe132HElCP2f6eGKD4bmYnxX9zhuIAIJQ/lTxT3Tw9ddRViWI2gKxQFdye8JJfFavgxGdi/0RkVGr73+X9MlP7iGnH2zXmuyKmTeUfhp8I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738139493; c=relaxed/simple;
-	bh=1i9xeWHCdj2kFFNXh4FS09VY47+eopjPE5WbdC/+VuA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=CEchgdy9hQ8qjXBWcCYjjtE8dqG5wtdlLLrRLYIhXzTedBTMEBIuV0aXcDbMZtj56s1gTR8HSVD7Xm8JifMpirqOk/+Z47IOr6zFu1l76SdS2ASdmuTPHvL990JilYAxFjMRZBmpKgHb/EWu8f3SglZjE2JjSvM6grIOqhhsc+Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=UbeITJ5A; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 117EEC4CED3;
-	Wed, 29 Jan 2025 08:31:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738139493;
-	bh=1i9xeWHCdj2kFFNXh4FS09VY47+eopjPE5WbdC/+VuA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=UbeITJ5A3aFsCDiJ0YtA+smR7T8RShy499XoMdRrgT7eC9F6bytcoa5S6jRtw1Yh3
-	 IKD3nnm2LY4CWJiQCJaxnbZ5pgyWesIyiFJZsPxyRH0PBIu7HUn6yWrDkPSGd/3pqs
-	 2mNE9dfZrmtS/n1y+HxUP6jF0sTOSGXtT9DfBtoAVCsQxhFBsJoOG7q1uoCg5TfCK8
-	 T/aHULTB9UJXQ0fo4mLsoi5nJUV3bP9l9TZSDeQQ4x75EIKdyKwcuCU+wO1ev2dDwk
-	 XWWQXz+oVCwsndzleIktZKAqfS+jGi5nmFjcMFBOGU9kZ3ZHarTTl5NuHrxlj4Ucqk
-	 L7lZKlMC2Df3Q==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1td3U1-000000004nP-0heR;
-	Wed, 29 Jan 2025 09:31:37 +0100
-Date: Wed, 29 Jan 2025 09:31:37 +0100
-From: Johan Hovold <johan@kernel.org>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Linux PCI <linux-pci@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Kevin Xie <kevin.xie@starfivetech.com>
-Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
- parents and children
-Message-ID: <Z5nnaU5VnDK9yNTW@hovoldconsulting.com>
-References: <12619233.O9o76ZdvQC@rjwysocki.net>
+	s=arc-20240116; t=1738140668; c=relaxed/simple;
+	bh=EbK8CG3zwHwysZnvAo3A2+mZ2myHIVEiysKYTIFeDEM=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=eQ3ace572WkU7+KPLHCH+iKqeCXAf+KBVCOTgMUg2vZq8lIB/obJi9R3mR9YPIkXNxDnoEcNJ99rWOjDzYSUyZKDe1rVm4hALsfbI/tUDJOnBTQ50eTYjwHD4BRG7qt0Jv1HyU0Fc9ysw2ho1ELF5iywpw9Hug3+mL0W4EP2ZBg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=4b42LYYs; arc=none smtp.client-ip=209.85.160.73
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com
+Received: by mail-oa1-f73.google.com with SMTP id 586e51a60fabf-2a983c18244so4944514fac.1
+        for <linux-pm@vger.kernel.org>; Wed, 29 Jan 2025 00:51:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738140666; x=1738745466; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=EbK8CG3zwHwysZnvAo3A2+mZ2myHIVEiysKYTIFeDEM=;
+        b=4b42LYYsEVMfzv+2DTojEFqbIeRiRxQCi6GRmIkehbtUqlvh7In/5BH1wCXnvdPARz
+         sXmZG3cpAUXEUjeBLMZE03u1gJKmJ/3ZJi1l7vK4xky8aYxTc0WT4vAWdRbM6lmO8Q2i
+         INP1lSebLwIKm1v/W1rxhRJEGD05TZPota5cW4kB8LVgriKEbKxjtL0czYnBxEG7YPl3
+         0CwPKKWXgbq4BtWorh4HQKkQxgOmdDND3Mb6wf9RJT+lndG3j+QPaiF9SQN/6wgQW0n3
+         vh7I+g7Ky+J8DMJGGSar2PNe64ivT8ap7boymI1hXpuDBBQsSnOSaOQ8PNFeDsDuO31s
+         XHyg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738140666; x=1738745466;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=EbK8CG3zwHwysZnvAo3A2+mZ2myHIVEiysKYTIFeDEM=;
+        b=o/zfHt4vZtS6OoxKtQAppOqYEvdXkB3lezLCdOX3BoOYnYys4n9AJ1O7hQU+IBXRxV
+         X0FoZAMxNgTpNgt/1/MW/cs86WH2RCspLcowMbvq8X1f4gNr9tpg9iSOHffUiluPFo7X
+         7mCFHXfqRW5MsS0fODTBSu15qMGnCu5iBaNowpdwrSQ3wKMM9TX4UX/cM26zOFwdqASb
+         Dwk2PAr0eRb5kpOewfj7ukQn0jL76x5c1xkNR0vQ5x1LBlegRUrLeRKeXWjwGE4CUwxm
+         Jm+Yo39jRdKA7FgTqFB9uVwcw7OFeSKVk+SfoJaLQi6301QtDK+BFjyHG9pbU4TBMQPG
+         h8oQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXr4eghzdF3W53Akn8GYBU9lUIi8Uk16QdPrUr7TA/1E4tNEZYk2Pt3L0/2+GBnU7Vt4tTJB+ShvA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwAeni6zFnAHr5m2d/060mmAQTuGrZn2KUj0wSiiAwOfttNofo7
+	4BCCtkXYA4qe9Xxe8hD1GbHVHnGFfXloeM7bBZ6MzKAsaU0SispSBtTGfk39c+zd824+sQ==
+X-Google-Smtp-Source: AGHT+IFYeVGRIDbBJSoDxW1qLEQa6txtsI65vSSYVM7r1a1CEXTC692rDv36eVRGCThjx3Uetdze5Vm2
+X-Received: from oabpp13.prod.google.com ([2002:a05:6870:9d0d:b0:297:19ee:9d16])
+ (user=keyz job=prod-delivery.src-stubby-dispatcher) by 2002:a05:6871:5cc:b0:2a7:d345:c0bb
+ with SMTP id 586e51a60fabf-2b32f261922mr1412517fac.27.1738140666051; Wed, 29
+ Jan 2025 00:51:06 -0800 (PST)
+Date: Wed, 29 Jan 2025 16:51:02 +0800
+In-Reply-To: <f697970e-3796-41cb-9904-d61cbedec428@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <12619233.O9o76ZdvQC@rjwysocki.net>
+Mime-Version: 1.0
+References: <f697970e-3796-41cb-9904-d61cbedec428@arm.com>
+X-Mailer: git-send-email 2.48.1.262.g85cc9f2d1e-goog
+Message-ID: <20250129085102.1055165-1-keyz@google.com>
+Subject: Re: [PATCH v2] cpuidle: psci: Add trace for PSCI domain idle
+From: Keita Morisaki <keyz@google.com>
+To: christian.loehle@arm.com
+Cc: aarontian@google.com, daniel.lezcano@linaro.org, keyz@google.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, lpieralisi@kernel.org, 
+	mathieu.desnoyers@efficios.com, mhiramat@kernel.org, rafael@kernel.org, 
+	rostedt@goodmis.org, sudeep.holla@arm.com, yimingtseng@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Jan 28, 2025 at 08:24:41PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Commit 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the
-> resume phase") overlooked the case in which the parent of a device with
-> DPM_FLAG_SMART_SUSPEND set did not use that flag and could be runtime-
-> suspended before a transition into a system-wide sleep state.  In that
-> case, if the child is resumed during the subsequent transition from
-> that state into the working state, its runtime PM status will be set to
-> RPM_ACTIVE, but the runtime PM status of the parent will not be updated
-> accordingly, even though the parent will be resumed too, because of the
-> dev_pm_skip_suspend() check in device_resume_noirq().
-> 
-> Address this problem by tracking the need to set the runtime PM status
-> to RPM_ACTIVE during system-wide resume transitions for devices with
-> DPM_FLAG_SMART_SUSPEND set and all of the devices depended on by them.
-> 
-> Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the resume phase")
-> Closes: https://lore.kernel.org/linux-pm/Z30p2Etwf3F2AUvD@hovoldconsulting.com/
-> Reported-by: Johan Hovold <johan@kernel.org>
-> Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > Yes, psci_domain_idle_(enter|exit) are not meant to replace cpu_idle nor a
+> > variant of it. It's new and different events that provide finer=grained info.
 
-Thanks for tracking this down Mani, and thanks Rafael for the quick fix.
+> I mentioned it because it means it doesn't benefit from cpu_idle tooling
+> directly, which is slightly odd, but fine with me.
 
-As expected this makes the warning go away also in my setup, and the
-patch itself looks correct to me:
-
-Reviewed-by: Johan Hovold <johan+linaro@kernel.org>
-Tested-by: Johan Hovold <johan+linaro@kernel.org>
-
-Johan
+I might not fully understand your comments.
+Do you mean that even mentioning cpu_idle in the commit message does not feel
+right to you, or utilizing cpu_idle by exposing the determined state instead of
+adding new trace events is the right direction?
 
