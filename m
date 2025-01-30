@@ -1,181 +1,174 @@
-Return-Path: <linux-pm+bounces-21113-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21114-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6657AA228C3
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2025 07:04:05 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F27AA228C7
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2025 07:08:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B31D11885500
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2025 06:04:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1B9567A295A
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2025 06:07:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6214D1714A5;
-	Thu, 30 Jan 2025 06:03:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1FD019048F;
+	Thu, 30 Jan 2025 06:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="g7fZzUTL"
+	dkim=pass (2048-bit key) header.d=astier.eu header.i=@astier.eu header.b="1+hEJYBp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="pA19uaPq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
+Received: from fout-b1-smtp.messagingengine.com (fout-b1-smtp.messagingengine.com [202.12.124.144])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15153143888;
-	Thu, 30 Jan 2025 06:03:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 662811898F2;
+	Thu, 30 Jan 2025 06:08:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=202.12.124.144
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738217039; cv=none; b=H3pgP9lqUG0rAzQtoye/JKPK9hVTLHDYpv6ETbL4eLyuPH7SwLP0Av3SEalXgkVHcLkEjOlTocX7H82oNaA72jbmAFN4aP9MLT2grjLCCi7ihSIa0/7yMx98BcIogNhgwHfgCRrpVRHIOMv37cw3WK8XD4Gl5Soj5XBMYpABW18=
+	t=1738217307; cv=none; b=fFsG/rb0hvS0AvdzD+iWaZJlWl4NQplL1OOWKWi27ex9qcsWkjA0JF8+R3cniFSP71Q2l7j9Wi3zTVZqDnbu+5//Al+xwg73oWzQaVFl6IhATp8bxXSvwpTSL/kKEwfzrFKWHtJcrY6UqUvA8j7RI8QVsDLs6e5dg09jXJgjrPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738217039; c=relaxed/simple;
-	bh=s1zUvTHRkaek8Npas98ir8k9p9BDNafnifvrQq/9uVI=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=S6Zh+yHGLHaDbPsSx3DGGW4yMy9yR5C0Z0Qp9p374UhZ9BVNQF72qU1Xo9o6Dp2FFNJDbLA+x9mrNSw2ehf1EBm+qV5uM2YlRQlV+oF5mXwYm54ZUNSObslH7vHa6pM6+WVlEubB3jFbRsXFIIar1ayeMN74AJHlnSpyrHdbLGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=g7fZzUTL; arc=none smtp.client-ip=198.47.19.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 50U63jCP1439196
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Thu, 30 Jan 2025 00:03:46 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1738217026;
-	bh=P5qPXySFcHqEAbBezikrxMrr4mwdZc+B2wFlGFVpSeY=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=g7fZzUTLVzv6FGoxPxIR+yg8kotEXm0oNplgrgfqzVvE5t3Cuig7hSd0irnr6lh9C
-	 lIts5NEDoh1svOSHEzDqzcBG8CUGl3s7ThyqqFUoluu0FSrCTVTO2SvzzxMKGXa68A
-	 pAdE12VyfVuLxY0rxTlqVDHharWHUsa0EUpJBH90=
-Received: from DLEE114.ent.ti.com (dlee114.ent.ti.com [157.170.170.25])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 50U63jIQ100483
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Thu, 30 Jan 2025 00:03:45 -0600
-Received: from lewvowa02.ent.ti.com (10.180.75.80) by DLEE114.ent.ti.com
- (157.170.170.25) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Thu, 30
- Jan 2025 00:03:45 -0600
-Received: from DLEE105.ent.ti.com (157.170.170.35) by lewvowa02.ent.ti.com
- (10.180.75.80) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256) id 15.1.2507.34; Thu, 30 Jan
- 2025 00:03:45 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE105.ent.ti.com
- (157.170.170.35) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Thu, 30 Jan 2025 00:03:45 -0600
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 50U63iEw037602;
-	Thu, 30 Jan 2025 00:03:45 -0600
-Date: Thu, 30 Jan 2025 11:33:44 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        "Markus
- Schneider-Pargmann" <msp@baylibre.com>,
-        Kevin Hilman <khilman@baylibre.com>,
-        Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-Subject: Re: [RFC PATCH] PM: wakeup: set device_set_wakeup_capable to false
- in case of error
-Message-ID: <20250130060344.phyq2toikbjcwciq@lcpd911>
-References: <20250129112056.3051949-1-d-gole@ti.com>
- <CAJZ5v0iEoTapZP1-QHxe8UDc1oq3y12Tph0-mU=1NhPjNpYLQw@mail.gmail.com>
+	s=arc-20240116; t=1738217307; c=relaxed/simple;
+	bh=hWxX0k8NfWnIIBYC4hnebw+/2oeVHme7dZRUuFADz/Q=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=U7LVDHutFs6wrizdckxUrwFFbdEl/zZYAPBY8AzM5L2jVuVvZwBgAI9dGKQbORDmvO2tYoE02joIzPAx6CpC0dGYAdRHA2QJn/TA1H6E2/O2IM0+QkxCKae4kyEtFSyur9jf8Oacf5QYwGgrbkyzN+mqy1X2O8XzjabrcSR3yck=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astier.eu; spf=pass smtp.mailfrom=astier.eu; dkim=pass (2048-bit key) header.d=astier.eu header.i=@astier.eu header.b=1+hEJYBp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=pA19uaPq; arc=none smtp.client-ip=202.12.124.144
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=astier.eu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=astier.eu
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfout.stl.internal (Postfix) with ESMTP id 12E321140168;
+	Thu, 30 Jan 2025 01:08:24 -0500 (EST)
+Received: from phl-imap-06 ([10.202.2.83])
+  by phl-compute-01.internal (MEProxy); Thu, 30 Jan 2025 01:08:24 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=astier.eu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1738217303;
+	 x=1738303703; bh=eXlxeAbfF+h/MVR2CK24l8IlVBLEsznJYpx0+feHxYY=; b=
+	1+hEJYBp5STrJrCmuvGpK9zMFz6e0UFBjwmO7gzlGRp5U/XTPWLSidnCvJbahlMR
+	8/xFbwxHCeWgG0+vKcQaPY5K0Uw0P8+j77a+LPAhaBHMQisuvu6JVBZsD2kHdj8x
+	uDwKJTs5RhEBZWFv/yhzeCK4p5uCLKIGi8sPG9EZFOTtBceNRbDurQc0+OxXfSXP
+	2oMxgWrZ9RFL3LHU1GltFTlErl8rcpywhzFu1ZbNT1eSvfDW6DXLkikVp+4gi5AQ
+	68hr9xgorfupFzW1DmjhKpCth7ULVOIXN/KfuesONQXu9bY8GAFeelW5gLSPyPH8
+	Cls/emIrbsnlO/JTa5ojfQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738217303; x=
+	1738303703; bh=eXlxeAbfF+h/MVR2CK24l8IlVBLEsznJYpx0+feHxYY=; b=p
+	A19uaPqwp/V7coy8JuMqKnU2g+QEzJYYk4KT/JyjIkMeqHO5CIXcETzDzscf5FbC
+	5es2dPJa2p7DfCg7pCkMl+fC3lbeo2aXzpEk1j7Hdit0URZ7kHDGMF4oLrInBEZ2
+	+9PVYPfXgcjtoom7CdpdQMorvpYLVG9oUMDy3suFRMnIIWmSDP9Ps3dv3OAh1cHn
+	vGQMmsX7nkRn/ZHmHXQsGbIXHqjFMb/DHR98AIxdlr+Zbcfz4fRrybRjeiSj1lMD
+	HHHeqw6TBQrGlYQUW1VQyEpAz1JkF2OE3LiQ8Uso16JGu0TPVI63wcGsAwFt0h02
+	oDBcC5mT3+PW6gBZzUxGA==
+X-ME-Sender: <xms:VxebZ_ZQzhcvFY4M0z4rNHy_bM8t_-LjrbhgL5CqrU8goOFacsUjmA>
+    <xme:VxebZ-aYU76BpzFae4Nnr2HQomAYhkooQ1wWPBKKaOty129dFFT_rp_1KB87D0EZW
+    wjQlMVtoFQDhPl93Ck>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehtdegucetufdoteggodetrfdotf
+    fvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggvpdfu
+    rfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpihgvnh
+    htshculddquddttddmnegoufhushhpvggtthffohhmrghinhculdegledmnecujfgurhep
+    ofggfffhvfevkfgjfhfutgfgsehtqhertdertdejnecuhfhrohhmpedftehnihhsshgvuc
+    etshhtihgvrhdfuceorghnihhsshgvsegrshhtihgvrhdrvghuqeenucggtffrrghtthgv
+    rhhnpeelkeegvddtudduheeugfejiedvgffggeeiueeuveevkeelgeeljeefgedvtdeihe
+    enucffohhmrghinhepghhithhhuhgsrdhiohenucevlhhushhtvghrufhiiigvpedtnecu
+    rfgrrhgrmhepmhgrihhlfhhrohhmpegrnhhishhsvgesrghsthhivghrrdgvuhdpnhgspg
+    hrtghpthhtohepudehpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehgrghrhies
+    ghgrrhihghhuohdrnhgvthdprhgtphhtthhopegrlhgvgidrghgrhihnohhrsehgmhgrih
+    hlrdgtohhmpdhrtghpthhtohepsghoqhhunhdrfhgvnhhgsehgmhgrihhlrdgtohhmpdhr
+    tghpthhtoheprghlihgtvghrhihhlhesghhoohhglhgvrdgtohhmpdhrtghpthhtoheprg
+    drhhhinhgusghorhhgsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehojhgvuggrsehk
+    vghrnhgvlhdrohhrghdprhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpd
+    hrtghpthhtohepvhhinhgtvghnthdrghhuihhtthhotheslhhinhgrrhhordhorhhgpdhr
+    tghpthhtohepvhhirhgvshhhrdhkuhhmrghrsehlihhnrghrohdrohhrgh
+X-ME-Proxy: <xmx:VxebZx8WX4TEvLHGAWX_jt1xf4PVNVADi63R3Yyb4S5VULGg3Ebaaw>
+    <xmx:VxebZ1qx01XW7gelKc2dT7GkhXFW74GrRHj5I0OjXljHAq6O2Nlu1w>
+    <xmx:VxebZ6ojtYOHwxNp0ZGZwXlwiNM74Zj6lyLDgZ0i49Ejcc0IY-WudQ>
+    <xmx:VxebZ7SHyZ_0y1kP1PH5INzlSoCaHmBinlM62CLEhxMzJoKuuxaQww>
+    <xmx:VxebZ1Bnfg7LN-2DJKoUhPrdmW9acqMiryilfD6EQ5z-oRP_Y7W_1RJu>
+Feedback-ID: iccec46d4:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id 73E5929C006F; Thu, 30 Jan 2025 01:08:23 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0iEoTapZP1-QHxe8UDc1oq3y12Tph0-mU=1NhPjNpYLQw@mail.gmail.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Date: Thu, 30 Jan 2025 07:08:04 +0100
+From: "Anisse Astier" <anisse@astier.eu>
+To: "Viresh Kumar" <viresh.kumar@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Miguel Ojeda" <ojeda@kernel.org>, "Alex Gaynor" <alex.gaynor@gmail.com>,
+ "Boqun Feng" <boqun.feng@gmail.com>, "Gary Guo" <gary@garyguo.net>,
+ =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ "Benno Lossin" <benno.lossin@proton.me>,
+ "Andreas Hindborg" <a.hindborg@kernel.org>,
+ "Alice Ryhl" <aliceryhl@google.com>, "Trevor Gross" <tmgross@umich.edu>,
+ linux-pm@vger.kernel.org, "Vincent Guittot" <vincent.guittot@linaro.org>,
+ linux-kernel@vger.kernel.org, rust-for-linux@vger.kernel.org
+Message-Id: <4919d080-43e4-41e3-a392-fddb1aac2666@app.fastmail.com>
+In-Reply-To: <20250130045814.ve2jsdi3wmzdlhbw@vireshk-i7>
+References: <20250122131812.466080-1-anisse@astier.eu>
+ <20250122133952.501055-1-anisse@astier.eu>
+ <20250130045814.ve2jsdi3wmzdlhbw@vireshk-i7>
+Subject: Re: [PATCH v2] rust: macros: enable use of hyphens in module names
+Content-Type: text/plain; charset=utf-8
+Content-Transfer-Encoding: quoted-printable
 
-Hi Rafael,
 
-On Jan 29, 2025 at 17:18:24 +0100, Rafael J. Wysocki wrote:
-> On Wed, Jan 29, 2025 at 12:21 PM Dhruva Gole <d-gole@ti.com> wrote:
-> >
-> > In device_init_wakeup enable, we first set device_set_wakeup_capable to
-> > true. However in case the device_wakeup_enable fails for whatever reason,
-> > there was no error handling being done.
-> > Consequenty, there was no cleanup being done to device_set_wakeup_capable.
-> 
-> s/Consequenty/Consequently/
 
-My bad. I will fix it if we decide to revise this patch.
+Jeu 30 janv 2025, =C3=A0 05:58, Viresh Kumar a =C3=A9crit=E2=80=AF:
+> On 22-01-25, 14:39, Anisse Astier wrote:
+>> +    /* Rust does not allow hyphens in identifiers, use underscore in=
+stead */
+>> +    let name_identifier =3D info.name.replace("-", "_");
+>
+> With CLIPPY=3D1 W=3D1, this gives:
+>
+> warning: single-character string constant used as pattern
+>    --> /mnt/ssd/all/work/repos/kernel/linux/rust/macros/module.rs:186:=
+45
+>     |
+> 186 |     let name_identifier =3D info.name.replace("-", "_");
+>     |                                             ^^^ help: consider=20
+> using a `char`: `'-'`
+>     |
+>     =3D help: for further information visit=20
+> https://rust-lang.github.io/rust-clippy/master/index.html#single_char_=
+pattern
+>     =3D note: `-W clippy::single-char-pattern` implied by `-W clippy::=
+all`
+>     =3D help: to override `-W clippy::all` add=20
+> `#[allow(clippy::single_char_pattern)]`
+>
+> warning: 1 warning emitted
+>
+> This fixes it:
+>
+> diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+> index 1eff30d2ca6a..2e740bbdb598 100644
+> --- a/rust/macros/module.rs
+> +++ b/rust/macros/module.rs
+> @@ -183,7 +183,7 @@ pub(crate) fn module(ts: TokenStream) -> TokenStre=
+am {
+>      let info =3D ModuleInfo::parse(&mut it);
+>
+>      /* Rust does not allow hyphens in identifiers, use underscore ins=
+tead */
+> -    let name_identifier =3D info.name.replace("-", "_");
+> +    let name_identifier =3D info.name.replace('-', "_");
+>      let mut modinfo =3D ModInfoBuilder::new(name_identifier.as_ref());
+>      if let Some(author) =3D info.author {
+>          modinfo.emit("author", &author);
+>
+>
+> Will include it in my V8 now, unless you have any objections to it.
 
-> 
-> > If a certain API is enabling something, it should take care of disabling it
-> > in error scenarios. In this case device_init_wakeup should on it's own
-> > check for errors and clean up accordingly.
-> 
-> Why do you think that failing device_wakeup_enable() will always mean
-> that the device is not in fact wakeup capable?
+No objections and nice catch!
 
-Well, I was looking at it more from a mirror image perspective.
-By definition,
-@enable: Whether or not to enable @dev as a wakeup device.
+Regards,
 
-If this is false, then in that path we are marking device "not wakeup
-capable".
-Then why not apply the same logic if something goes bad while trying to
-"enable" the device as wakeup?
-
-Why must a device claim to be wakeup capable if device_wakeup_enable
-went bad?
-
-Or, then the other way round, why must we device_set_wakeup_capable
-false in the case where we just want to disable the device wakeup?
-It's not like we're taking away the capability itself right? Just
-disabling it for that moment?
-
-I am just trying to make sense of the definiton both ways, enable / disable.
-
-> 
-> > Cc: Joe Hattori <joe@pf.is.s.u-tokyo.ac.jp>
-> > Signed-off-by: Dhruva Gole <d-gole@ti.com>
-> > ---
-> >
-> > This patch was briefly proposed in a related thread [1], where this discussion
-> > was taking place.
-> > That probably got missed due to some confusion around the device_init_wakeup
-> > return value.
-> >
-> > There is infact error returning being done in drivers/base/power/wakeup.c, and
-> > ideally we should be using that info as done in this patch.
-> >
-> > If this patch get accepted, it might even bring forth few hidden bugs
-> > due to missing error handling, and it will also change the patch for
-> > devm_device_init_wakeup() helper slightly[2].
-> >
-> > [1] https://lore.kernel.org/linux-pm/20241218064335.c72gmw56ogtp36a2@lcpd911/
-> > [2] https://lore.kernel.org/linux-pm/20241214021652.3432500-1-joe@pf.is.s.u-tokyo.ac.jp/
-> >
-> > ---
-> >  include/linux/pm_wakeup.h | 6 +++++-
-> >  1 file changed, 5 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/include/linux/pm_wakeup.h b/include/linux/pm_wakeup.h
-> > index d501c09c60cd..ed62a7055a54 100644
-> > --- a/include/linux/pm_wakeup.h
-> > +++ b/include/linux/pm_wakeup.h
-> > @@ -231,9 +231,13 @@ static inline void pm_wakeup_hard_event(struct device *dev)
-> >   */
-> >  static inline int device_init_wakeup(struct device *dev, bool enable)
-> >  {
-> > +       int err;
-> >         if (enable) {
-> >                 device_set_wakeup_capable(dev, true);
-> > -               return device_wakeup_enable(dev);
-> > +               err = device_wakeup_enable(dev);
-> > +               if (err)
-> > +                       device_set_wakeup_capable(dev, false);
-> > +               return err;
-> >         }
-> >         device_wakeup_disable(dev);
-> >         device_set_wakeup_capable(dev, false);
-> > --
-> > 2.34.1
-> >
-
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+Anisse=20
 
