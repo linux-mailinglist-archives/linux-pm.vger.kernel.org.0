@@ -1,315 +1,278 @@
-Return-Path: <linux-pm+bounces-21128-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21129-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94CDEA22D88
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2025 14:19:26 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CE82A22E6C
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2025 15:00:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCF45188748C
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2025 13:19:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 912BB7A213D
+	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2025 13:59:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1BEF1E2848;
-	Thu, 30 Jan 2025 13:19:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A6D51E5700;
+	Thu, 30 Jan 2025 14:00:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pjnRDida"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="UXn4vhIH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71BEE819;
-	Thu, 30 Jan 2025 13:19:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63D83187FEC
+	for <linux-pm@vger.kernel.org>; Thu, 30 Jan 2025 14:00:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738243161; cv=none; b=kyZyyVACoo8kgThXrDF++IqbSCZgUW2GQRnzxMrkYAAC0kAXp2ZOKEzbvQsrjERAUL39q9D7TvJaFQjzKEzbzMGabHzSQyt6Rx3HW4gt2eTCKYPK+4uz4rGh+TNf+pH1NPJKeDLEIDfr6Jv0Gcklqg0IVKtS7sZMJ0sdJwtYmZ8=
+	t=1738245648; cv=none; b=amIpK4PmR4354nNg6e5JYE/hxFbcHbVuWXJcvaMbqbvw3OsiWSnGaQ5AaMMytStJWsfOOtlGJG0pRJ/HEBY6+NtfoLjVzxvHyDcBRsEoVnT5hgjYhpqADCfUL5ln6xRPMEhtH68JK2Dac/GgoDbbD0GSPSruiuea0lpzSaL793w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738243161; c=relaxed/simple;
-	bh=d0fQXsgYaqdw22vo14ZJcic4Yd0EFPXGVcjLVtYasCs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EhfS/2dqwzbWnYm6y89L+6ewIHT8v/aR1kKoBXSSZAEpMQdr6Z/jSsILvBvOZf7+84orT0M+l49yCFax31g+Nlr5smOUVAa/TAtsC3Je6aFKFB2UuZL1TmF1DZH02HGHXPOWSoY8JDRwsDN/EUVSE+FTXISJL6W2pm9+vRcJazg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pjnRDida; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id DCC94C4CEE0;
-	Thu, 30 Jan 2025 13:19:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738243160;
-	bh=d0fQXsgYaqdw22vo14ZJcic4Yd0EFPXGVcjLVtYasCs=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=pjnRDidavSlir7nsvL3qUhkCstiFPh3TgABu9pVx09NH+Gz+ZJehgGznftu27JA/r
-	 XuQRCSHfTEG5RFrv+FVRTlD8Ywjll5Mn6fjXIVz23JRex9UoAjhD2NuswAZaP/bzxU
-	 UMdZi1F0tUOz4cLtEpt2eSf7mdM9NymWAn6cp2jIFuWtqL4CinaFRruOFuKiaEtfle
-	 +mbdTxnVtBNnXu4MtjQpns+IQE9eBvML/9jvC+mwdBikNLTrBRLzPlOr2WYtAZzgBg
-	 mYQtDmk0s959TGdOmEEa19qQvgdq7ID12oe0jJqOUCcQxMgUdbjHbK/qYcLhB8yPMn
-	 2qUlCMB9ugtFA==
-Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-71deb3745easo159443a34.3;
-        Thu, 30 Jan 2025 05:19:20 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVonIp/ght7llnadQtljcFtPJF9dSwcA6G18zidmzI2DXrsHsMoQv9jJkxYprIfgxQRyqIJCa0pUXE=@vger.kernel.org, AJvYcCWndxXSSIJDb1lj0gvd29gjDHNUcvWJVB9zDaMlYzCLdE8Mv+eFpbnEeyNUoC2D+4wSJOCP3WLBQIeXna8=@vger.kernel.org, AJvYcCXNlOPnnIYV6AldN4/4i8gsbTcziqAul1QALthCQrqxJ7MNTEm++belhWUK/vqgvY41GoSQ9wOmoe4g@vger.kernel.org
-X-Gm-Message-State: AOJu0YyygsIg1QCcZO+W/yy1bRg6q9KbIBMGCiWbipVDj4YNInfT6Qxm
-	mTnDUrI/8NhEmm+Bot9BDIc8WuRPmG1CFfnrf9ceTy12i73//pyh601ClS3oSD0yBqtvQH15L5b
-	T7C9uUHeZGyjSZFJJAhIu0NxxPT4=
-X-Google-Smtp-Source: AGHT+IHaApAH2151fdQMr2K/rWXcq1IdxdXfRWxi2MmSzy1jmhyjcfQCMBVbsYm7hN21Oljw+1RbMonmbAllyu9MA+o=
-X-Received: by 2002:a05:6870:4e07:b0:288:563b:e48d with SMTP id
- 586e51a60fabf-2b32f03426dmr4140022fac.10.1738243159985; Thu, 30 Jan 2025
- 05:19:19 -0800 (PST)
+	s=arc-20240116; t=1738245648; c=relaxed/simple;
+	bh=aJpkp7InaYydNvpRZDWndJBX9xM+VW/kg3kkESwZVfA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=OdXZPFOrr3Raq0k3jOfXi6UPTsJItm+dpupQrXAkqy62TT8HdzjoBViT7zzS5+FEH6sqoVssgvnnlUitU6/hYv9eaM5Vo6KkRUxZr+1XysFbIfAh2o/882uAk4KZ8TLQkml9KH2D8233WNx9Fnffw+gMOttX8SKsd45c75EmVCs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=UXn4vhIH; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738245645;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=5pEqdPkEqJQT8krAuLESl2ph61LT66PtGsU3+s8d+nc=;
+	b=UXn4vhIH8YQacFcK5KHYBNdJtm6beXlDDM0kZesHFwcl9AxV8fkOP/Vdmo/A0utRn063HE
+	ITqWhM2+qgYdhaNsiam+R4rEB8Yxvs/hGY7DdDOhtjFGq2OTJ1GHfqmp3WUs4gwmmC2Mpz
+	Deew9WI65wUe9FL0dCiD+uOaDIOyFpQ=
+Received: from mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com
+ (ec2-54-186-198-63.us-west-2.compute.amazonaws.com [54.186.198.63]) by
+ relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
+ cipher=TLS_AES_256_GCM_SHA384) id us-mta-610-JPHgXIslOMGPcDoovm9fpQ-1; Thu,
+ 30 Jan 2025 09:00:41 -0500
+X-MC-Unique: JPHgXIslOMGPcDoovm9fpQ-1
+X-Mimecast-MFC-AGG-ID: JPHgXIslOMGPcDoovm9fpQ
+Received: from mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.15])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mx-prod-mc-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id E025819560BA;
+	Thu, 30 Jan 2025 14:00:38 +0000 (UTC)
+Received: from shalem.redhat.com (unknown [10.39.195.0])
+	by mx-prod-int-02.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A1A0B1956094;
+	Thu, 30 Jan 2025 14:00:36 +0000 (UTC)
+From: Hans de Goede <hdegoede@redhat.com>
+To: Sebastian Reichel <sre@kernel.org>
+Cc: Hans de Goede <hdegoede@redhat.com>,
+	platform-driver-x86@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	=?UTF-8?q?Thomas=20Wei=C3=9Fschuh?= <linux@weissschuh.net>,
+	Armin Wolf <W_Armin@gmx.de>
+Subject: [PATCH] power: supply: core: Fix extension related lockdep warning
+Date: Thu, 30 Jan 2025 15:00:35 +0100
+Message-ID: <20250130140035.20636-1-hdegoede@redhat.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12619233.O9o76ZdvQC@rjwysocki.net> <CAPDyKFpc5p3sXZ6LfdVgt8jR5ZbsQExTgeyMNA-PzcWs5A9U0A@mail.gmail.com>
- <CAJZ5v0gvQjp_P-5Ww7iN1cGiiMJ6tvLLnPpkTQNk++KhoRe=GA@mail.gmail.com>
- <CAPDyKFrBO+r8qYRrhoFZN21__8RuR61ofbsGQZbA=pyQbti5CA@mail.gmail.com>
- <CAJZ5v0jTutgKeXtg3YLR1Onw9gOmvHudHamVVgMxEsieNDXViw@mail.gmail.com> <CAPDyKFpmNPhyV3YoBFu7KnW04550DQgqzGHAbGLLqp7=TggVtw@mail.gmail.com>
-In-Reply-To: <CAPDyKFpmNPhyV3YoBFu7KnW04550DQgqzGHAbGLLqp7=TggVtw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 30 Jan 2025 14:19:08 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0iYHBeMra_ba-1Ht4xoPGsyt7gg05RtGxoa_gG91s1xEA@mail.gmail.com>
-X-Gm-Features: AWEUYZmtyfD-QjORpGH8sT5RY4RaUd5cb129O2vvjWcJUTrONPCuwcwwF2sdMz0
-Message-ID: <CAJZ5v0iYHBeMra_ba-1Ht4xoPGsyt7gg05RtGxoa_gG91s1xEA@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
- parents and children
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Bjorn Helgaas <helgaas@kernel.org>, 
-	Linux PCI <linux-pci@vger.kernel.org>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Kevin Xie <kevin.xie@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-Scanned-By: MIMEDefang 3.0 on 10.30.177.15
 
-On Thu, Jan 30, 2025 at 12:11=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.or=
-g> wrote:
->
-> On Wed, 29 Jan 2025 at 17:58, Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
-> >
-> > On Wed, Jan 29, 2025 at 5:42=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro=
-.org> wrote:
-> > >
-> > > On Wed, 29 Jan 2025 at 16:55, Rafael J. Wysocki <rafael@kernel.org> w=
-rote:
-> > > >
-> > > > On Wed, Jan 29, 2025 at 12:53=E2=80=AFPM Ulf Hansson <ulf.hansson@l=
-inaro.org> wrote:
-> > > > >
-> > > > > On Tue, 28 Jan 2025 at 20:24, Rafael J. Wysocki <rjw@rjwysocki.ne=
-t> wrote:
-> > > > > >
-> > > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > >
-> > > > > > Commit 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in=
- the
-> > > > > > resume phase") overlooked the case in which the parent of a dev=
-ice with
-> > > > > > DPM_FLAG_SMART_SUSPEND set did not use that flag and could be r=
-untime-
-> > > > > > suspended before a transition into a system-wide sleep state.  =
-In that
-> > > > > > case, if the child is resumed during the subsequent transition =
-from
-> > > > > > that state into the working state, its runtime PM status will b=
-e set to
-> > > > > > RPM_ACTIVE, but the runtime PM status of the parent will not be=
- updated
-> > > > > > accordingly, even though the parent will be resumed too, becaus=
-e of the
-> > > > > > dev_pm_skip_suspend() check in device_resume_noirq().
-> > > > > >
-> > > > > > Address this problem by tracking the need to set the runtime PM=
- status
-> > > > > > to RPM_ACTIVE during system-wide resume transitions for devices=
- with
-> > > > > > DPM_FLAG_SMART_SUSPEND set and all of the devices depended on b=
-y them.
-> > > > > >
-> > > > > > Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in=
- the resume phase")
-> > > > > > Closes: https://lore.kernel.org/linux-pm/Z30p2Etwf3F2AUvD@hovol=
-dconsulting.com/
-> > > > > > Reported-by: Johan Hovold <johan@kernel.org>
-> > > > > > Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.=
-org>
-> > > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > > ---
-> > > > > >  drivers/base/power/main.c |   29 ++++++++++++++++++++---------
-> > > > > >  include/linux/pm.h        |    1 +
-> > > > > >  2 files changed, 21 insertions(+), 9 deletions(-)
-> > > > > >
-> > > > > > --- a/drivers/base/power/main.c
-> > > > > > +++ b/drivers/base/power/main.c
-> > > > > > @@ -656,13 +656,15 @@
-> > > > > >          * so change its status accordingly.
-> > > > > >          *
-> > > > > >          * Otherwise, the device is going to be resumed, so set=
- its PM-runtime
-> > > > > > -        * status to "active", but do that only if DPM_FLAG_SMA=
-RT_SUSPEND is set
-> > > > > > -        * to avoid confusing drivers that don't use it.
-> > > > > > +        * status to "active" unless its power.set_active flag =
-is clear, in
-> > > > > > +        * which case it is not necessary to update its PM-runt=
-ime status.
-> > > > > >          */
-> > > > > > -       if (skip_resume)
-> > > > > > +       if (skip_resume) {
-> > > > > >                 pm_runtime_set_suspended(dev);
-> > > > > > -       else if (dev_pm_skip_suspend(dev))
-> > > > > > +       } else if (dev->power.set_active) {
-> > > > > >                 pm_runtime_set_active(dev);
-> > > > > > +               dev->power.set_active =3D false;
-> > > > > > +       }
-> > > > > >
-> > > > > >         if (dev->pm_domain) {
-> > > > > >                 info =3D "noirq power domain ";
-> > > > > > @@ -1189,18 +1191,24 @@
-> > > > > >         return PMSG_ON;
-> > > > > >  }
-> > > > > >
-> > > > > > -static void dpm_superior_set_must_resume(struct device *dev)
-> > > > > > +static void dpm_superior_set_must_resume(struct device *dev, b=
-ool set_active)
-> > > > > >  {
-> > > > > >         struct device_link *link;
-> > > > > >         int idx;
-> > > > > >
-> > > > > > -       if (dev->parent)
-> > > > > > +       if (dev->parent) {
-> > > > > >                 dev->parent->power.must_resume =3D true;
-> > > > > > +               if (set_active)
-> > > > > > +                       dev->parent->power.set_active =3D true;
-> > > > > > +       }
-> > > > > >
-> > > > > >         idx =3D device_links_read_lock();
-> > > > > >
-> > > > > > -       list_for_each_entry_rcu_locked(link, &dev->links.suppli=
-ers, c_node)
-> > > > > > +       list_for_each_entry_rcu_locked(link, &dev->links.suppli=
-ers, c_node) {
-> > > > > >                 link->supplier->power.must_resume =3D true;
-> > > > > > +               if (set_active)
-> > > > > > +                       link->supplier->power.set_active =3D tr=
-ue;
-> > > > >
-> > > > > If I understand correctly, the suppliers are already handled when=
- the
-> > > > > pm_runtime_set_active() is called for consumers, so the above sho=
-uld
-> > > > > not be needed.
-> > > >
-> > > > It is needed because pm_runtime_set_active() doesn't cause the sett=
-ing
-> > > > to propagate to the parent's/suppliers of the suppliers AFAICS.
-> > >
-> > > Hmm, even if that sounds reasonable, I don't think it's a good idea a=
-s
-> > > it may introduce interesting propagation problems between drivers.
-> > >
-> > > For example, consider that Saravana is trying to enable runtime PM fo=
-r
-> > > fw_devlinks. It would mean synchronization issues for the runtime PM
-> > > status, all over the place.
-> >
-> > What synchronization issues?
->
-> Changing the runtime PM status for a parent/supplier that doesn't have
-> DPM_FLAG_SMART_SUSPEND, is likely to confuse their drivers.
+Since commit 6037802bbae8 ("power: supply: core: implement extension API")
+there is the following ABBA deadlock (simplified) between the LED trigger
+code and the power-supply code:
 
-I'm not sure why though.
+1) When registering a power-supply class device, power_supply_register()
+calls led_trigger_register() from power_supply_create_triggers() in
+a scoped_guard(rwsem_read, &psy->extensions_sem) context.
+led_trigger_register() then in turn takes a LED subsystem lock.
+So here we have the following locking order:
 
-> You also removed that part of the comment a few lines above, in
-> device_resume_noirq(). I am not sure I understand why?
+* Read-lock extensions_sem
+* Lock LED subsystem lock(s)
 
-Not removed, but replaced.
+2) When registering a LED class device, with its default trigger set
+to a power-supply LED trigger (which has already been registered)
+The LED class code calls power_supply_led_trigger_activate() when
+setting up the default trigger. power_supply_led_trigger_activate()
+calls power_supply_get_property() to determine the initial value of
+to assign to the LED and that read-locks extensions_sem. So now we
+have the following locking order:
 
-The set_active flag is only set for devices with
-DPM_FLAG_SMART_SUSPEND set and devices depended on by them.  Also, it
-is only set for devices whose must_resume is set, which for devices
-with DPM_FLAG_SMART_SUSPEND means that they literally must be resumed.
-Consequently, the devices depended on by them also must be resumed.
+* Lock LED subsystem lock(s)
+* Read-lock extensions_sem
 
-> >
-> > > That said, is even consumer/suppliers part of the problem we are
-> > > trying to solve?
-> >
-> > They are in general.
-> >
-> > It's just that stuff that was runtime-suspended prior to a system-wide
-> > suspend may need to be resumed and marked as RPM_ACTIVE during
-> > system-wide resume because one of the devices wants/needs to be
-> > resumed then.
-> >
-> > If this turns out to be problematic, the problem will need to be
-> > addressed, but for now I'm not seeing why there would be a problem.
-> >
-> > > >
-> > > > > That said, maybe we instead allow parent/child to work in the sim=
-ilar
-> > > > > way as for consumer/suppliers, when pm_runtime_set_active() is ca=
-lled
-> > > > > for the child. In other words, when pm_runtime_set_active() is ca=
-lled
-> > > > > for a child and the parent is runtime PM enabled, let's runtime r=
-esume
-> > > > > it too, as we do for suppliers. Would that work, you think?
-> > > >
-> > > > The parent is not runtime-PM enabled when this happens.
-> > >
-> > > That sounds really weird to me.
-> > >
-> > > Does that mean that the parent has not been system resumed either?
-> >
-> > Yes.
-> >
-> > It hasn't been resumed yet, but it is known that it will be resumed.
-> >
-> > > If so, isn't that really the root cause for this problem,
-> >
-> > No, it is not.
-> >
-> > > or what am I missing?
-> >
-> > Essentially, what I said above.
-> >
-> > If a device that was suspended prior to a system-wide suspend
-> > wants/needs to be resumed during the subsequent system-wide resume,
-> > and it was runtime-PM-enabled before the suspend transition, it needs
-> > to (a) be runtime-PM-enabled during the subsequent system-wide resume
-> > transition and (b) it also needs to be marked as RPM_ACTIVE because in
-> > fact it is not suspended any more.  The existing code before the patch
-> > takes care of this for the device itself, but not for the devices it
-> > depends on which also need to be resumed (which happens) and marked as
-> > RPM_ACTIVE (which doesn't happen) and the patch just makes sure that
-> > the latter will happen.
->
-> Thanks for clarifying!
->
-> >
-> > Actually, what happens now is that the actual state of the parent
-> > during the system-wide resume, right before re-enabling runtime PM for
-> > it, does not match its runtime PM status which is still RPM_SUSPENDED.
-> > That's what is fixed here and it applies to the parent as well as to
-> > all of the other devices depended on by the child and the parent.
->
-> Well, unfortunately I don't think it will work to call
-> pm_runtime_set_active() for parents/suppliers like this.
+Fixing this is easy, there is no need to hold the extensions_sem when
+calling power_supply_create_triggers() since all triggers are always
+created rather then checking for the presence of certain attributes as
+power_supply_add_hwmon_sysfs() does. Move power_supply_create_triggers()
+out of the guard block to fix this.
 
-As stated above, if a device with DPM_FLAG_SMART_SUSPEND has
-power.must_resume set, it must be resumed.  Therefore, all of the
-devices depended on by it must be resumed (literally, they need to be
-powered up and configured to work).  This is already a rule without
-the patch.
+Here is the lockdep report fixed by this change:
 
-Accordingly, they all effectively will be "active" and so their
-runtime PM status must reflect this.
+[   31.249343] ======================================================
+[   31.249378] WARNING: possible circular locking dependency detected
+[   31.249413] 6.13.0-rc6+ #251 Tainted: G         C  E
+[   31.249440] ------------------------------------------------------
+[   31.249471] (udev-worker)/553 is trying to acquire lock:
+[   31.249501] ffff892adbcaf660 (&psy->extensions_sem){.+.+}-{4:4}, at: power_supply_get_property.part.0+0x22/0x150
+[   31.249574]
+               but task is already holding lock:
+[   31.249603] ffff892adbc0bad0 (&led_cdev->trigger_lock){+.+.}-{4:4}, at: led_trigger_set_default+0x34/0xe0
+[   31.249657]
+               which lock already depends on the new lock.
 
-I don't see anything that cannot work, but I see why it is broken
-without this patch.
+[   31.249696]
+               the existing dependency chain (in reverse order) is:
+[   31.249735]
+               -> #2 (&led_cdev->trigger_lock){+.+.}-{4:4}:
+[   31.249778]        down_write+0x3b/0xd0
+[   31.249803]        led_trigger_set_default+0x34/0xe0
+[   31.249833]        led_classdev_register_ext+0x311/0x3a0
+[   31.249863]        input_leds_connect+0x1dc/0x2a0
+[   31.249889]        input_attach_handler.isra.0+0x75/0x90
+[   31.249921]        input_register_device.cold+0xa1/0x150
+[   31.249955]        hidinput_connect+0x8a2/0xb80
+[   31.249982]        hid_connect+0x582/0x5c0
+[   31.250007]        hid_hw_start+0x3f/0x60
+[   31.250030]        hid_device_probe+0x122/0x1f0
+[   31.250053]        really_probe+0xde/0x340
+[   31.250080]        __driver_probe_device+0x78/0x110
+[   31.250105]        driver_probe_device+0x1f/0xa0
+[   31.250132]        __device_attach_driver+0x85/0x110
+[   31.250160]        bus_for_each_drv+0x78/0xc0
+[   31.250184]        __device_attach+0xb0/0x1b0
+[   31.250207]        bus_probe_device+0x94/0xb0
+[   31.250230]        device_add+0x64a/0x860
+[   31.250252]        hid_add_device+0xe5/0x240
+[   31.250279]        usbhid_probe+0x4dc/0x620
+[   31.250303]        usb_probe_interface+0xe4/0x2a0
+[   31.250329]        really_probe+0xde/0x340
+[   31.250353]        __driver_probe_device+0x78/0x110
+[   31.250377]        driver_probe_device+0x1f/0xa0
+[   31.250404]        __device_attach_driver+0x85/0x110
+[   31.250431]        bus_for_each_drv+0x78/0xc0
+[   31.250455]        __device_attach+0xb0/0x1b0
+[   31.250478]        bus_probe_device+0x94/0xb0
+[   31.250501]        device_add+0x64a/0x860
+[   31.250523]        usb_set_configuration+0x606/0x8a0
+[   31.250552]        usb_generic_driver_probe+0x3e/0x60
+[   31.250579]        usb_probe_device+0x3d/0x120
+[   31.250605]        really_probe+0xde/0x340
+[   31.250629]        __driver_probe_device+0x78/0x110
+[   31.250653]        driver_probe_device+0x1f/0xa0
+[   31.250680]        __device_attach_driver+0x85/0x110
+[   31.250707]        bus_for_each_drv+0x78/0xc0
+[   31.250731]        __device_attach+0xb0/0x1b0
+[   31.250753]        bus_probe_device+0x94/0xb0
+[   31.250776]        device_add+0x64a/0x860
+[   31.250798]        usb_new_device.cold+0x141/0x38f
+[   31.250828]        hub_event+0x1166/0x1980
+[   31.250854]        process_one_work+0x20f/0x580
+[   31.250879]        worker_thread+0x1d1/0x3b0
+[   31.250904]        kthread+0xee/0x120
+[   31.250926]        ret_from_fork+0x30/0x50
+[   31.250954]        ret_from_fork_asm+0x1a/0x30
+[   31.250982]
+               -> #1 (triggers_list_lock){++++}-{4:4}:
+[   31.251022]        down_write+0x3b/0xd0
+[   31.251045]        led_trigger_register+0x40/0x1b0
+[   31.251074]        power_supply_register_led_trigger+0x88/0x150
+[   31.251107]        power_supply_create_triggers+0x55/0xe0
+[   31.251135]        __power_supply_register.part.0+0x34e/0x4a0
+[   31.251164]        devm_power_supply_register+0x70/0xc0
+[   31.251190]        bq27xxx_battery_setup+0x1a1/0x6d0 [bq27xxx_battery]
+[   31.251235]        bq27xxx_battery_i2c_probe+0xe5/0x17f [bq27xxx_battery_i2c]
+[   31.251272]        i2c_device_probe+0x125/0x2b0
+[   31.251299]        really_probe+0xde/0x340
+[   31.251324]        __driver_probe_device+0x78/0x110
+[   31.251348]        driver_probe_device+0x1f/0xa0
+[   31.251375]        __driver_attach+0xba/0x1c0
+[   31.251398]        bus_for_each_dev+0x6b/0xb0
+[   31.251421]        bus_add_driver+0x111/0x1f0
+[   31.251445]        driver_register+0x6e/0xc0
+[   31.251470]        i2c_register_driver+0x41/0xb0
+[   31.251498]        do_one_initcall+0x5e/0x3a0
+[   31.251522]        do_init_module+0x60/0x220
+[   31.251550]        __do_sys_init_module+0x15f/0x190
+[   31.251575]        do_syscall_64+0x93/0x180
+[   31.251598]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   31.251629]
+               -> #0 (&psy->extensions_sem){.+.+}-{4:4}:
+[   31.251668]        __lock_acquire+0x13ce/0x21c0
+[   31.251694]        lock_acquire+0xcf/0x2e0
+[   31.251719]        down_read+0x3e/0x170
+[   31.251741]        power_supply_get_property.part.0+0x22/0x150
+[   31.251774]        power_supply_update_leds+0x8d/0x230
+[   31.251804]        power_supply_led_trigger_activate+0x18/0x20
+[   31.251837]        led_trigger_set+0x1fc/0x300
+[   31.251863]        led_trigger_set_default+0x90/0xe0
+[   31.251892]        led_classdev_register_ext+0x311/0x3a0
+[   31.251921]        devm_led_classdev_multicolor_register_ext+0x6e/0xb80 [led_class_multicolor]
+[   31.251969]        ktd202x_probe+0x464/0x5c0 [leds_ktd202x]
+[   31.252002]        i2c_device_probe+0x125/0x2b0
+[   31.252027]        really_probe+0xde/0x340
+[   31.252052]        __driver_probe_device+0x78/0x110
+[   31.252076]        driver_probe_device+0x1f/0xa0
+[   31.252103]        __driver_attach+0xba/0x1c0
+[   31.252125]        bus_for_each_dev+0x6b/0xb0
+[   31.252148]        bus_add_driver+0x111/0x1f0
+[   31.252172]        driver_register+0x6e/0xc0
+[   31.252197]        i2c_register_driver+0x41/0xb0
+[   31.252225]        do_one_initcall+0x5e/0x3a0
+[   31.252248]        do_init_module+0x60/0x220
+[   31.252274]        __do_sys_init_module+0x15f/0x190
+[   31.253986]        do_syscall_64+0x93/0x180
+[   31.255826]        entry_SYSCALL_64_after_hwframe+0x76/0x7e
+[   31.257614]
+               other info that might help us debug this:
 
-> I think we need the drivers for the parents/suppliers to be in
-> agreement with the behaviour of DPM_FLAG_SMART_SUSPEND to allow the
-> propagation. Not sure how to best achieve this though.
+[   31.257619] Chain exists of:
+                 &psy->extensions_sem --> triggers_list_lock --> &led_cdev->trigger_lock
 
-It would be good to actually identify the cases in which it may not
-work and they can be fixed on top of this patch.
+[   31.257630]  Possible unsafe locking scenario:
+
+[   31.257632]        CPU0                    CPU1
+[   31.257633]        ----                    ----
+[   31.257634]   lock(&led_cdev->trigger_lock);
+[   31.257637]                                lock(triggers_list_lock);
+[   31.257640]                                lock(&led_cdev->trigger_lock);
+[   31.257643]   rlock(&psy->extensions_sem);
+[   31.257646]
+                *** DEADLOCK ***
+
+[   31.289433] 4 locks held by (udev-worker)/553:
+[   31.289443]  #0: ffff892ad9658108 (&dev->mutex){....}-{4:4}, at: __driver_attach+0xaf/0x1c0
+[   31.289463]  #1: ffff892adbc0bbc8 (&led_cdev->led_access){+.+.}-{4:4}, at: led_classdev_register_ext+0x1c7/0x3a0
+[   31.289476]  #2: ffffffffad0e30b0 (triggers_list_lock){++++}-{4:4}, at: led_trigger_set_default+0x2c/0xe0
+[   31.289487]  #3: ffff892adbc0bad0 (&led_cdev->trigger_lock){+.+.}-{4:4}, at: led_trigger_set_default+0x34/0xe0
+
+Fixes: 6037802bbae8 ("power: supply: core: implement extension API")
+Cc: Thomas Weißschuh <linux@weissschuh.net>
+Cc: Armin Wolf <W_Armin@gmx.de>
+Signed-off-by: Hans de Goede <hdegoede@redhat.com>
+---
+ drivers/power/supply/power_supply_core.c | 8 ++++----
+ 1 file changed, 4 insertions(+), 4 deletions(-)
+
+diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+index d0bb52a7a036..76c340b38015 100644
+--- a/drivers/power/supply/power_supply_core.c
++++ b/drivers/power/supply/power_supply_core.c
+@@ -1592,11 +1592,11 @@ __power_supply_register(struct device *parent,
+ 	if (rc)
+ 		goto register_thermal_failed;
+ 
+-	scoped_guard(rwsem_read, &psy->extensions_sem) {
+-		rc = power_supply_create_triggers(psy);
+-		if (rc)
+-			goto create_triggers_failed;
++	rc = power_supply_create_triggers(psy);
++	if (rc)
++		goto create_triggers_failed;
+ 
++	scoped_guard(rwsem_read, &psy->extensions_sem) {
+ 		rc = power_supply_add_hwmon_sysfs(psy);
+ 		if (rc)
+ 			goto add_hwmon_sysfs_failed;
+-- 
+2.47.1
+
 
