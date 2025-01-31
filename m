@@ -1,490 +1,588 @@
-Return-Path: <linux-pm+bounces-21170-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21174-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DE78A23C20
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 11:20:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C98BA23FC8
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 16:40:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AABB188A572
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 10:20:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4F5D77A3ADF
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 15:39:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11AF71A4F22;
-	Fri, 31 Jan 2025 10:20:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 498E21E9B17;
+	Fri, 31 Jan 2025 15:40:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yy2JWT2z"
+	dkim=pass (2048-bit key) header.d=imgtec.com header.i=@imgtec.com header.b="jQuECRaq";
+	dkim=pass (1024-bit key) header.d=IMGTecCRM.onmicrosoft.com header.i=@IMGTecCRM.onmicrosoft.com header.b="elixgdlC"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx07-00376f01.pphosted.com (mx07-00376f01.pphosted.com [185.132.180.163])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2474171092
-	for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 10:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738318802; cv=none; b=dRZNvVN9xdVUlgEdJpiHfpjpWF0A2KIylWxp+FzycvdLq9FJMh983cwYKlp9UmgJJ/c7TMGvw+DvGA+cfEehYWb7BpWaNn+FOyHvHN409iu2a6mp/mQvKRVkndFe8gw6PBIhwc6L5axd4oaJHKYBXVotm4VlOj1UnmPZxB5t7F0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738318802; c=relaxed/simple;
-	bh=/Xqen7OPlPRa4hIDxkny6+bzhunAkw/3xPpAzO5ip58=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ryI1Cq9FzN1CIiu8ud1VNpciD6DN/988w6SX4lYtgityLvaoZN9r3Ad4T9X0RTOdrROg+rmTgvW72VQzZ0NW67CKtYiaGcF98PmitW71HHS0u9YheAiRebKHVgUj1i88jCbohKVg+MP0L7tTowfvQyjdkcbN3Ebdb3aTxqK3YLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yy2JWT2z; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-436249df846so12283285e9.3
-        for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 02:19:59 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDFA41DED4F;
+	Fri, 31 Jan 2025 15:40:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=185.132.180.163
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738338012; cv=fail; b=b38Q3Mgb+9IpFzyTd/D5EnikJwzb13ciPeg7ehXVF2FsxupeTdasSz/joKTfit2MEC/MmfM5WjotM0yp41xQ2o06AAftNsEvsqyPMt+ycji+m7NBE1bXqfKgTfnaoKpy5k+Z+lHzCqMzPF4fWRJ6Ycy280f0pAfDa5IQVqryppM=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738338012; c=relaxed/simple;
+	bh=lorBCHWCVvzweZXQlQea5ELhvoMPV45FwJSrzza8jNo=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=kxc7V826MhNK3wCIfKRhcN8al0AEfpAGpRqQ1nPspMIVQ42khHKKxuXYsqrxQiw1GKGK4RerP6o/jkgJWNbW9L9W+XnRPXu02456b6M4D5ZW7Hf2TJA7lt7zrWkxVAp0OkSymUc6nn20RdRJNGEZIn63sJUA1HxG5C7t3AR3AX4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=imgtec.com; spf=pass smtp.mailfrom=imgtec.com; dkim=pass (2048-bit key) header.d=imgtec.com header.i=@imgtec.com header.b=jQuECRaq; dkim=pass (1024-bit key) header.d=IMGTecCRM.onmicrosoft.com header.i=@IMGTecCRM.onmicrosoft.com header.b=elixgdlC; arc=fail smtp.client-ip=185.132.180.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=imgtec.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=imgtec.com
+Received: from pps.filterd (m0168889.ppops.net [127.0.0.1])
+	by mx07-00376f01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50VF56W0028214;
+	Fri, 31 Jan 2025 15:39:23 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=imgtec.com; h=cc
+	:content-type:date:from:in-reply-to:message-id:mime-version
+	:references:subject:to; s=dk201812; bh=FeQuJktGbolO6dSkTnc8NDkHx
+	lBsl0FwpxpCtpoh66o=; b=jQuECRaqmCqX6bk6Zfm1KVpqDG7O6LDbDbljOZPCs
+	BC+fbuAcgVrVxF0hQQwVyUZ8W5+axeCvMD3wkaFBPr+E/xAYtRGn47erYxIwsk6t
+	d0tgKgzk+7fyVNi5TrjlcBC4flwWRreJxSVgAFmmtPDGVRPoLhesOFQFa61mbk8Q
+	xLomGEaSJlF3Fbn8VCXTphwCK5mu+uSmbxtWR0OhcWrgdp6nFo1riN0r/VL7Rz9H
+	IN3pOVhvKsDzICTZa/UjJUwewKej5XS3burMa8RUkDUYmJlvcK0gHVidQln6mBKo
+	xowlEHaUWs8NJPqXobARwC5oOaINgGnVdI3qo4i6HV/HQ==
+Received: from lo2p265cu024.outbound.protection.outlook.com (mail-uksouthazlp17011029.outbound.protection.outlook.com [40.93.67.29])
+	by mx07-00376f01.pphosted.com (PPS) with ESMTPS id 44ep3c302s-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 31 Jan 2025 15:39:21 +0000 (GMT)
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=nY4q+xg3k8Up2VzYs37Kt4Tieh3rKdYgifV+EJJD2CvPKwUKnWX6XYEFRbLcosJMmRenaYO3dYxxgDH3n8xdQZP+kJMRemD+IV1KsJaaCvcU7++JldZ2qEUqP7t/7EJ1QiKYD+3J4ugAHXbxL8TgwacmkBGlhC9bwvoQKKMDhNBiIF7E+Q/vLKS5nNYcisCixSUHaLdVzWDO8huX7WEHCD2Z6vtNl/sq2S+jw5UcPeP0RU03bDu5j6ZcPgjtXwjbZjsxHLy9EFiZZOjq4NiKxET+ZIWh6r+k9yLl2cvfmrvv2EDpcYfqnvfW9RaEV7po3ZdvWZz1IcadBYbjBsbxrg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=FeQuJktGbolO6dSkTnc8NDkHxlBsl0FwpxpCtpoh66o=;
+ b=UyrEmJypSQ/vYKWTqZGrAY5X8N508AGjneBaKY9x97bAANDEK6bbn7fb2N9TuuUdiQrdgLHv06TFTySCgq+KB4ah4I+uNNtI6MbQCvl0hjaInwR0lgc966Rh+XU2nvtr6KHa6KeXGmxb3MdZuO6rLAvINLHnn66HtRF6PkcOy8jANXd9o97oTt53DK/rhVGdD/2b4Fq0B7q6wPWJEn4m4ZHrz1rO0qcnKnApHQYGIsPMKWCPjHLw4eYMJCNS/xP64Z1MmA2TFJx8uCC+kGpLvqovKw/OMR98W6JR63lNy0CAiTkLKblmlwYSOM0ec7soUqjBqbOAwFBEEWnMW3RnCw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=imgtec.com; dmarc=pass action=none header.from=imgtec.com;
+ dkim=pass header.d=imgtec.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738318798; x=1738923598; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=sMKEFp2iY1ooXPFXuah13Z2j8Gd6Pr/iXVngt99gS+c=;
-        b=yy2JWT2z+O0A/ewKdY2+AQJcHR32C/QUK2M1Lj/F7BHibNoY3Rt0rsxW24aPAZ66X7
-         CAJC6OzYNae8FlM3ZD2NqfwUAsOhLaPkRYQxbh/kkMhz8lM2P+oS1vcIIaf9e8sQbAd8
-         jBl7OAXqOaQteezRbp0Z8SymdLgx5k8BMyMAXOrJ16NwAPCEWMsrxaJ33cwAKmlV/YU2
-         3QjcwnNBOtNkSAT9r/hJtIex6w1OMr0Vpe17G2jQ51NDhvuziC+eknVpt57mw5NXQ2GP
-         mG25AIsHS03FBwrIjSsUj0JRr62jYpztaQPgo3uBr/B4wTjpKevlfmUxs9dmzUHxCNWv
-         jq6Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738318798; x=1738923598;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=sMKEFp2iY1ooXPFXuah13Z2j8Gd6Pr/iXVngt99gS+c=;
-        b=hHQ4i7sNSTjBT4wbA4EqkciYo9tXAt4TB/Qs/RZWOiGfyYe7FqUaIY7NaslTOdBIbf
-         7jLtnBes7GsRfld3TDyiriGo26rUIcUK/lnab8thOYKK6W22IwQGn39TweojjXPr3vOu
-         O5GZ1B4oi9Ih5mpIGsK5ECcnmZGGUXxWliRmHRwFHEiPPsCmxlcTTLcNqqmyvRkXYXvW
-         X2LzPFXEjTIsK08cyzSwQENxxPNH31A0a1OlqM7vvfLdCU8dnoKXLYYN6hTK+cI5E5EB
-         6iB6+fOK85PMEKPCfzN2+nwKVGyaAOpLNvPW3tbgEjvmg837lkj5CiHmtW8TaePivA1z
-         l8XA==
-X-Gm-Message-State: AOJu0Yzmhj02QyGEu7MHpqUXxm3dAkQcbdEdDDrUbKwWGO6NB3MvVOBQ
-	bl1Qx0UriYxTru1co++l1lUH4h/55l1DOa2O+TB+9ng1qdUz72AId7oJYrVN7bU=
-X-Gm-Gg: ASbGncsoJ0uO+k8FYvGmi7yna0f88BzLFOBwnMqJ6GZMtBx8uvV/8khsH8GA4oEYrHK
-	hP6bDURM1p9D+ZekdPeJCvU12Vp8cmAG6im5hQuDfVYztwGL9JwFh5uPYJf/VBcQXBfGaYWiei2
-	YJ0Hp0TllCGNXlnGmYOvZ2gDyYuHNRgelK0odzk5fsakFlBlK8+TaHCRb8klzNZmWevDgv0aDJJ
-	V25Kc5ScOYmLg3rkj1v78dVpG1evtFGXjjiW2s46zcp4x/BNcIdmtf7sLPmoUhbTObcanKIa0WQ
-	9r96CqG23gvvEFCacVNqJxuT+xGxnKiRtIowQ3d5aDywDspo7KeKKP8=
-X-Google-Smtp-Source: AGHT+IFZNXsQuum6x6xRWf12F8+xm9RtbvKoDUhlQmJkPtJJdDXPK7wmN6KvRldwONlJY8dd+oDrNA==
-X-Received: by 2002:a05:6000:1563:b0:385:ee40:2d75 with SMTP id ffacd0b85a97d-38c51960d9amr8876284f8f.20.1738318796298;
-        Fri, 31 Jan 2025 02:19:56 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-438dcc2c4ddsm85201155e9.17.2025.01.31.02.19.55
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 31 Jan 2025 02:19:55 -0800 (PST)
-Message-ID: <b69fe059-5aff-4fbd-879e-166d67310563@linaro.org>
-Date: Fri, 31 Jan 2025 11:19:54 +0100
+ d=IMGTecCRM.onmicrosoft.com; s=selector2-IMGTecCRM-onmicrosoft-com;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=FeQuJktGbolO6dSkTnc8NDkHxlBsl0FwpxpCtpoh66o=;
+ b=elixgdlCe0JjKOlGrkywIzDYVcqnLZ1uV7paREcfyDOuikirta453jP2XFzBdxM8enpYudLSn8Xy2YUXLjORJM04m+3+MzCMQ2T33K8n4hsk7Tnso0AtVa6QleJafpSaCcC4mMaX/hFeV+ZSfLCmoN4BpGSUaZLOkOFJxwjG6LA=
+Received: from CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM (2603:10a6:400:e7::8) by
+ LO0P265MB5503.GBRP265.PROD.OUTLOOK.COM (2603:10a6:600:287::8) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.20.8398.20; Fri, 31 Jan 2025 15:39:18 +0000
+Received: from CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::8e9d:6b2f:9881:1e15]) by CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM
+ ([fe80::8e9d:6b2f:9881:1e15%6]) with mapi id 15.20.8398.020; Fri, 31 Jan 2025
+ 15:39:18 +0000
+From: Matt Coster <Matt.Coster@imgtec.com>
+To: Michal Wilczynski <m.wilczynski@samsung.com>,
+        "mturquette@baylibre.com"
+	<mturquette@baylibre.com>,
+        "sboyd@kernel.org" <sboyd@kernel.org>,
+        "robh@kernel.org" <robh@kernel.org>,
+        "krzk+dt@kernel.org"
+	<krzk+dt@kernel.org>,
+        "conor+dt@kernel.org" <conor+dt@kernel.org>,
+        "drew@pdp7.com" <drew@pdp7.com>,
+        "guoren@kernel.org" <guoren@kernel.org>,
+        "wefu@redhat.com" <wefu@redhat.com>,
+        "jassisinghbrar@gmail.com"
+	<jassisinghbrar@gmail.com>,
+        "paul.walmsley@sifive.com"
+	<paul.walmsley@sifive.com>,
+        "palmer@dabbelt.com" <palmer@dabbelt.com>,
+        "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>,
+        Frank Binns
+	<Frank.Binns@imgtec.com>,
+        "maarten.lankhorst@linux.intel.com"
+	<maarten.lankhorst@linux.intel.com>,
+        "mripard@kernel.org"
+	<mripard@kernel.org>,
+        "tzimmermann@suse.de" <tzimmermann@suse.de>,
+        "airlied@gmail.com" <airlied@gmail.com>,
+        "simona@ffwll.ch" <simona@ffwll.ch>,
+        "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>,
+        "jszhang@kernel.org"
+	<jszhang@kernel.org>,
+        "p.zabel@pengutronix.de" <p.zabel@pengutronix.de>,
+        "m.szyprowski@samsung.com" <m.szyprowski@samsung.com>
+CC: "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
+        "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
+        "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+        "linux-riscv@lists.infradead.org" <linux-riscv@lists.infradead.org>,
+        "dri-devel@lists.freedesktop.org" <dri-devel@lists.freedesktop.org>,
+        "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>
+Subject: Re: [PATCH v4 00/18] Enable drm/imagination BXM-4-64 Support for
+ LicheePi 4A
+Thread-Topic: [PATCH v4 00/18] Enable drm/imagination BXM-4-64 Support for
+ LicheePi 4A
+Thread-Index: AQHbc/ZKrCzvlwQrNEav83Jv2KY+wA==
+Date: Fri, 31 Jan 2025 15:39:17 +0000
+Message-ID: <ed7a463e-9654-41c3-91f6-f3f877fd9a20@imgtec.com>
+References:
+ <CGME20250128194825eucas1p14e2cb0a85c397dea297e9c4177cf1585@eucas1p1.samsung.com>
+ <20250128194816.2185326-1-m.wilczynski@samsung.com>
+In-Reply-To: <20250128194816.2185326-1-m.wilczynski@samsung.com>
+Accept-Language: en-GB, en-US
+Content-Language: en-US
+X-MS-Has-Attach: yes
+X-MS-TNEF-Correlator:
+x-ms-publictraffictype: Email
+x-ms-traffictypediagnostic: CWXP265MB3397:EE_|LO0P265MB5503:EE_
+x-ms-office365-filtering-correlation-id: a5668a97-aed4-45f9-a119-08dd420d6c81
+x-ms-exchange-senderadcheck: 1
+x-ms-exchange-antispam-relay: 0
+x-microsoft-antispam:
+ BCL:0;ARA:13230040|376014|7416014|366016|1800799024|38070700018|921020;
+x-microsoft-antispam-message-info:
+ =?utf-8?B?MmxsUGc5c1lFaUMvSXVWMDIzZWJZakJWY21uWmU0VzF2SGUybTM1MUpWbTVH?=
+ =?utf-8?B?YVRMVWM4Y09VeGN3cXNBcUx4VGFuekdNQ3h2MU9mNWIyemd1cEVGemljSE5l?=
+ =?utf-8?B?Qkg3QzRVZW9kcmErUHFHT0RTRnJVY1VieEFDb0tYRGowdUxLL3hLdDdKdWhP?=
+ =?utf-8?B?RUR0Q0lsWXpUNXF6a20rMkI3RUZGN3o3MFdSbkc2V0hXODh4SC9kSWdQcVlE?=
+ =?utf-8?B?emM1WlpaaUEzUUdHMW9hQ1JUdjUxT045Z0pqQzZrZUJtWU54N3ZlSjc1VE5W?=
+ =?utf-8?B?cEFZZFJ4Uk5kQXdMc1FBQU1rNWc0QnVRNmozSVE0WjllWWZyZDJBaEVwbmZV?=
+ =?utf-8?B?eVpKVThxMkdlRTgyWTZJTFIvblhFZjkySzRrQXJnSmx3ODVVeGRkNmhDRkNq?=
+ =?utf-8?B?empoR0hiak1DMWJ6dWZKYmp1K05tK1VMUU0xa2wzOUdIM0xSZ2NWVUZWaFJw?=
+ =?utf-8?B?V1R4VTlvSkgycWFPTnE2czhUR3RIUiszeW9oZkhmZnJtK2NyVWRzUkpMVzRn?=
+ =?utf-8?B?QWZsTjViVno4QXIrOHFaT1VUdEtpSmg1VWdlamZYS083QnZHSWsrMjRHYmY1?=
+ =?utf-8?B?bnl4MTZIWlMrZDBxU0FrbDE0eXZqOSsyckpmY2lJbHFXem1YMXM0eVpFUzlm?=
+ =?utf-8?B?Q1p2a2ErMDc1b2l2K1FtTWRWVDdnV2EzUVJ4V2FtbDZkTDU0UXRqQVlhUGJm?=
+ =?utf-8?B?S0xQK1BobURpRTM2K2NTK25HU3BYV1hBSGUzc3I4WDRmaWlWRmtLTWl0VjZq?=
+ =?utf-8?B?RVBUM2NMMHVTakorb1VqY3kvZVI0NllMYUxJMmNUS2JpNTBzcWFwaUtSZWVS?=
+ =?utf-8?B?eG9Dak1iNnV1WmxzaDRzczlWMFpQc0U4RTdJRlN5Y2V6N0JOSTZESVlMQzRw?=
+ =?utf-8?B?ekM3M0tCNXFzdkFlSG11VFJGWGtUY0VONkkzVlptQWcwelRkckUwM0UzMGhv?=
+ =?utf-8?B?Q2dJVytSeHM1ajM5Sm9qanhmKzVZWUt5d3hTT3BsMlg4S3Vvc3V0Ync0d3Q3?=
+ =?utf-8?B?akdhM2pNQTc1dlRxWmgxbTJrVERkQmZFRVEyS3I3eUZrWmRqRjRpanA3R3Bt?=
+ =?utf-8?B?ODVCR3l6OHNZaUhqbkl6UWlxQlMzYU9UclZrUFZ3NWJZb2lNcUIxWFIzQm5C?=
+ =?utf-8?B?YU4zUHZNTkx4cjhGS2tWbXJSTDVicTljcWdVTGw3cHNOOWFVRk5TMnFiOWNj?=
+ =?utf-8?B?eFhpOVV0b3AvRFBHVTJiTTdCcy83aFp6ZDdBcmYxNXY0UVdJUmViTHFvdVY3?=
+ =?utf-8?B?M2J6YmdqM1pudlRURmZKa2xFV1AvMUNRR0NNcklPNmFsWGpLSDhuRElETFRU?=
+ =?utf-8?B?Z1dSNTdZNndYUUNFRXRIV1BrRllTaXZzZDhocllqSW9MTVJQYWI2dmRaVGJ0?=
+ =?utf-8?B?QlZrb0JRUkhheThTNkVRWlVYb0I3aTdSK0VhUEZSZGdvMWxheFNPbzlTQ3NL?=
+ =?utf-8?B?a0xadTZtTnlUUHlMRzFIamU1RGdVaUdWZGk2K1hjQXRlNWk5d20wTmFzTVY0?=
+ =?utf-8?B?VUpSV1oveTZBUUloWWNnWHUxdm5VcDBDcFVSc1dZQ2NNUGNqNk1LMDJKbU90?=
+ =?utf-8?B?NUlRK2xaWlBuOVMxenBPZjhYbTE5TkFBb0hDWmowSnVVTTJEZS9Ed3hnQ2JQ?=
+ =?utf-8?B?dlFWTFo0NjcyV3dZU0lFaTJ5cy85dTBGR2wxekxwSVRjK05FWTM0dHJZVitE?=
+ =?utf-8?B?ZE5RZXZzaWV3b3hJUEFaSDJoMDBSU0FxOW5qb09BYTlsTDBPUDBGd1RVa1BC?=
+ =?utf-8?B?ZWZhNXNvNTQwdHYxTEkxdnhkVVJDWmZ5eU9mRGlSZVA0YjN0REFWYmMrbkFz?=
+ =?utf-8?B?UmNydTJqZ3FObXN0RkhSd0xuYnhzcGZ6TUE3T0MvY1V2eTJpU3BpQkZzbU1v?=
+ =?utf-8?B?a2U3dEY2Y1Myb0d0K2pqNXp0TWcra1RoaFd6Mlk3Z2VpOUJnd2QwaWhJdXAz?=
+ =?utf-8?Q?b0BUghLm2sw=3D?=
+x-forefront-antispam-report:
+ CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700018)(921020);DIR:OUT;SFP:1102;
+x-ms-exchange-antispam-messagedata-chunkcount: 1
+x-ms-exchange-antispam-messagedata-0:
+ =?utf-8?B?bVZBZVdHSnJSS3grZnpjZlp3Vm9BODM4dXpYNHovVjA4a2s4SkNaZ1VSSHZX?=
+ =?utf-8?B?Uk5kSjYwalpzSHJLMGRhMlNZamtabHpFMi9WV2h3SUNQSFdqdVY2NWNqMy9S?=
+ =?utf-8?B?UWw0cFFmSlZIZzl3MzRUUEFFcTVOdlUwU1VWdWdyVkdPWmFHemJuU2F1Rlpm?=
+ =?utf-8?B?VjM5NEJub3pSSzlmUWNwTll5V2FRS1lXNkJrZVB5V2Z0YTBlODliU3N2ejZC?=
+ =?utf-8?B?RlR6MG1HYWs4YTVReUpNbHBqLy9PZ254VHlJMWd4emdlQXE2cytQZTlqNG5G?=
+ =?utf-8?B?Mk1DQ001NHhCQjJJQnY0Rm9IdS9IVWxRU2Iva2lYU3pSVkd2WGFCZFA2blZx?=
+ =?utf-8?B?MlRIMW5aMVQ5eXY5Q1MzSHN5elpUanJOYll5dnZRVHNiNHZIa2x1aFRvVWha?=
+ =?utf-8?B?VTkxaWhRcjJ3bDZHc1VvNnlUTXVtelhrTUpEb0JSUkNwR2tMNDBRKzF2aGtQ?=
+ =?utf-8?B?UnRaMEpsZElteFRaRnN2ZDcwYzNHMWZCOGhDWTVIUlBqMmJhcGhWSzlSbDJs?=
+ =?utf-8?B?akwzQXhuTU1WZjFoV1h1L3phdnNWdnhCNzF0eEF6bmgrTmtFQVR0MnM3TUpa?=
+ =?utf-8?B?VmhGMlFSdjQrZlRFRUNZYzdFLzZJdWJpNTA4UHQ0T2FNMXc0MTZZR25KYXRq?=
+ =?utf-8?B?RzBad3F6YmpTTUJ6Q3U3aDRhak5oK2lUMnEvM2dIVlpRK3Bkc0haVFdCZ1RM?=
+ =?utf-8?B?Rk5YU0pHaU03SlJHa2tXdVltODZmOUNzNFgwUWJKYUNkSmRsYTU4cGVEQ2d0?=
+ =?utf-8?B?dTduY2Z2eUlqUFlwQVJUcG9CL2R0Vkk1RkptKzRYZUEvUmFjVEZKOUxLYW5R?=
+ =?utf-8?B?b1dzUVVKTnhUUG5mc2dqWW9WZTYrYnBWRHdTNW5iSS9mRG5uM1RrVXlLUUVB?=
+ =?utf-8?B?ZWhSRmYwczFmKzZ6dWI3ZEtPZUVsOW9pbWJDU1FvZXU1c1h2UEVRZGg3dE0r?=
+ =?utf-8?B?bFFrcGFXR01LcVhGakZJZ1lMS2VZNGhieGRrNlZzSmxnKzZCcE02cDM2TERj?=
+ =?utf-8?B?bVFaV3RvajNNSDdmM2c0K3hkSWcrc1JGSzFqeHk3TTZSL1cyZ0pEY3dkNUM0?=
+ =?utf-8?B?NFhTcnhzMGFTdmVWMi9hbXVyVlFBcnBPVFZmb2J4bzRxVW1YbWJPZ3BOcldY?=
+ =?utf-8?B?bTZPMk5zdzVrQWJ1bEd4RTJ2cFo3aDlJd0cxaklkRitZeDc0Rm9zY1BjNVkv?=
+ =?utf-8?B?cFo3RHZ3V1p5dFBTRG9vREpXQUZuZVlWb2FVV21VelZQSVk0azlPMWFOcGt4?=
+ =?utf-8?B?T3Y3emI4bW5rOTVQbkJRSnZCMjY3azVZdnZpRkVOY2NSay9jeEpCTW45Qnkz?=
+ =?utf-8?B?ZWZqMm50bHFXTzZKRXFXVG5zMXYwbDZVYnBQWGFUSU5FMUM1QnRQMHlwc2JO?=
+ =?utf-8?B?N2tLdWMwY2ZEZFF2a0dCZ2ZtVVVsdi8xdUdFalRVWVIvTzBqTkJLc21BWkpk?=
+ =?utf-8?B?d29aNFRvQ1NYWFpVWkRid2g1OWV6SXRtUE1qNzIzUXRWK3NCUnN3aXR4WnRj?=
+ =?utf-8?B?SXVTVTlPdlVISmN2ajJyOFhxUGRBaGtneEd1VkhOa0R2VEZxZnFKZEU3V3J0?=
+ =?utf-8?B?ck1WYy9GUGVHVzNadG15MjFTOGVweUJGeVJydW5ZRy9uc0lEeTNBQ0hiR0hZ?=
+ =?utf-8?B?Ull6RUZ6LzRUUkxXQkhONU4rRFFSY3RYOW9CeVFtNXV6aGk4ajlZU0ovNHpB?=
+ =?utf-8?B?T0ZTVkx1MFBQZGRaOXIvL2crcTZROEw1T0dTL2NRR1FveSs4N1FlaVRTcWFx?=
+ =?utf-8?B?Z1N0ZDdaQjhlUHVuOS9lZ2p3cUN5bGpxUTMyMjRmTlJXeVNVZDJiWEhNSjMw?=
+ =?utf-8?B?empIVldwelUrVFJnRVE4aGNCL3VxRUk5a2tqWkI1R2lwQUl5MHN5V2ZYMDZY?=
+ =?utf-8?B?K2RkMElOb2FpOE9WS3VoeTlwcUNZTmhlM2RXRzlic08vNzZ6Z2hNVitWZlF1?=
+ =?utf-8?B?UlVCdk1jVVFBN2phenMrOGo3RzJwbkJtTHlNU3FvOWpuRzlzVllQc1RTZ2c2?=
+ =?utf-8?B?UkVFZ1I1bzBxZ3ozUzNadnRCNk45dm5DMG1tS0dPOFU3L1p4QWI4V3pBanVx?=
+ =?utf-8?B?VUc1RW45WURlZzhGTWo2VzRSeHBFZzl2ZWQxWWg2eS90U294cHZSN3NWNmkw?=
+ =?utf-8?B?UzVaS1hRZGl5MWEzYnNTOXJtaWxEZzN4dnIxK0NINVpHYk1makJIWGpzMDhZ?=
+ =?utf-8?B?NXc9PQ==?=
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature";
+	boundary="------------cVQCRBBaOuw34poed0u77Vud"
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 2/2] thermal: imx91: Add support for i.MX91 thermal
- monitoring unit
-To: Frank Li <Frank.Li@nxp.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Pengfei Li <pengfei.li_1@nxp.com>,
- Marco Felsch <m.felsch@pengutronix.de>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
- linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
-References: <20241216-imx91tmu-v4-0-75caef7481b8@nxp.com>
- <20241216-imx91tmu-v4-2-75caef7481b8@nxp.com>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20241216-imx91tmu-v4-2-75caef7481b8@nxp.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+X-OriginatorOrg: imgtec.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-AuthSource: CWXP265MB3397.GBRP265.PROD.OUTLOOK.COM
+X-MS-Exchange-CrossTenant-Network-Message-Id: a5668a97-aed4-45f9-a119-08dd420d6c81
+X-MS-Exchange-CrossTenant-originalarrivaltime: 31 Jan 2025 15:39:17.8621
+ (UTC)
+X-MS-Exchange-CrossTenant-fromentityheader: Hosted
+X-MS-Exchange-CrossTenant-id: 0d5fd8bb-e8c2-4e0a-8dd5-2c264f7140fe
+X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
+X-MS-Exchange-CrossTenant-userprincipalname: Emiu2vSSKSZ06BC04Kj8oO2O/A5SDJHcWulx3Nj+TKuSdQW1eqZGBepKwJc2xZPsti7dKP/uxojSAIuuXCInBw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LO0P265MB5503
+X-Proofpoint-GUID: 8J4kW2lK5B32wMp2aiqSENRUujuSGBV1
+X-Authority-Analysis: v=2.4 cv=PoBpbxM3 c=1 sm=1 tr=0 ts=679ceeaa cx=c_pps a=mRJfeTHGti1YOx0CH8CfHg==:117 a=wKuvFiaSGQ0qltdbU6+NXLB8nM8=:19 a=Ol13hO9ccFRV9qXi2t6ftBPywas=:19 a=xqWC_Br6kY4A:10 a=VdSt8ZQiCzkA:10 a=WnR_qW7rlZcA:10 a=NgoYpvdbvlAA:10
+ a=e5mUnYsNAAAA:8 a=VwQbUJbxAAAA:8 a=r_1tXGB3AAAA:8 a=NEAV23lmAAAA:8 a=Bq6zwJu1AAAA:8 a=pGLkceISAAAA:8 a=VeCtzijpZ1WmsS6HqsMA:9 a=QEXdDO2ut3YA:10 a=P1_s_JGqDwQImzC-o0EA:9 a=FfaGCDsud1wA:10 a=Vxmtnl_E_bksehYqCbjh:22 a=t8nPyN_e6usw4ciXM-Pk:22
+ a=KQ6X2bKhxX7Fj2iT9C4S:22
+X-Proofpoint-ORIG-GUID: 8J4kW2lK5B32wMp2aiqSENRUujuSGBV1
 
-On 16/12/2024 20:25, Frank Li wrote:
-> From: Pengfei Li <pengfei.li_1@nxp.com>
-> 
-> Introduce support for the i.MX91 thermal monitoring unit, which features a
-> single sensor for the CPU. The register layout differs from other chips,
-> necessitating the creation of a dedicated file for this.
+--------------cVQCRBBaOuw34poed0u77Vud
+Content-Type: multipart/mixed; boundary="------------6fiNF2KUwoS7kQR0FbbzFCwd";
+ protected-headers="v1"
+From: Matt Coster <matt.coster@imgtec.com>
+To: Michal Wilczynski <m.wilczynski@samsung.com>, mturquette@baylibre.com,
+ sboyd@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ drew@pdp7.com, guoren@kernel.org, wefu@redhat.com, jassisinghbrar@gmail.com,
+ paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu,
+ frank.binns@imgtec.com, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+ ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
+ m.szyprowski@samsung.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+ dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
+Message-ID: <ed7a463e-9654-41c3-91f6-f3f877fd9a20@imgtec.com>
+Subject: Re: [PATCH v4 00/18] Enable drm/imagination BXM-4-64 Support for
+ LicheePi 4A
+References: <CGME20250128194825eucas1p14e2cb0a85c397dea297e9c4177cf1585@eucas1p1.samsung.com>
+ <20250128194816.2185326-1-m.wilczynski@samsung.com>
+In-Reply-To: <20250128194816.2185326-1-m.wilczynski@samsung.com>
 
-Please a bit more information about the sensor (eg. resolution, I guess 1°C)
+--------------6fiNF2KUwoS7kQR0FbbzFCwd
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-> Signed-off-by: Pengfei Li <pengfei.li_1@nxp.com>
-> Signed-off-by: Peng Fan <peng.fan@nxp.com>
-> Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
-> Signed-off-by: Frank Li <Frank.Li@nxp.com>
-> ---
-> Change from v3 to v4
-> - Add Macro's review tag
-> - Use devm_add_action()
-> - Move pm_runtim_put before thermal_of_zone_register()
-> 
-> change from v2 to v3
-> - add IMX91_TMU_ prefix for register define
-> - remove unused register define
-> - fix missed pm_runtime_put() at error path in imx91_tmu_get_temp()
-> - use dev variable in probe function
-> - use pm_runtime_set_active() in probe
-> - move START to imx91_tmu_get_temp()
-> - use DEFINE_RUNTIME_DEV_PM_OPS()
-> - keep set reset value because there are not sw "reset" bit in controller,
-> uboot may change and enable tmu.
-> 
-> change from v1 to v2
-> - use low case for hexvalue
-> - combine struct imx91_tmu and tmu_sensor
-> - simplify imx91_tmu_start() and imx91_tmu_enable()
-> - use s16 for imx91_tmu_get_temp(), which may negative value
-> - use reverse christmas tree style
-> - use run time pm
-> - use oneshot to sample temp
-> - register thermal zone after hardware init
-> ---
->   drivers/thermal/Kconfig         |  10 ++
->   drivers/thermal/Makefile        |   1 +
->   drivers/thermal/imx91_thermal.c | 263 ++++++++++++++++++++++++++++++++++++++++
->   3 files changed, 274 insertions(+)
-> 
-> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
-> index d3f9686e26e71..da403ed86aeb1 100644
-> --- a/drivers/thermal/Kconfig
-> +++ b/drivers/thermal/Kconfig
-> @@ -296,6 +296,16 @@ config IMX8MM_THERMAL
->   	  cpufreq is used as the cooling device to throttle CPUs when the passive
->   	  trip is crossed.
->   
-> +config IMX91_THERMAL
-> +	tristate "Temperature sensor driver for NXP i.MX91 SoC"
-> +	depends on ARCH_MXC || COMPILE_TEST
-> +	depends on OF
+On 28/01/2025 19:47, Michal Wilczynski wrote:
+> The LicheePi 4A board, featuring the T-HEAD TH1520 SoC, includes an Ima=
+gination
+> Technologies BXM-4-64 GPU. Initial support for this GPU was provided th=
+rough a
+> downstream driver [1]. Recently, efforts have been made to upstream sup=
+port for
+> the Rogue family GPUs, which the BXM-4-64 is part of [2].
+>=20
+> While the initial upstream driver focused on the AXE-1-16 GPU, newer pa=
+tches
+> have introduced support for the BXS-4-64 GPU [3]. The modern upstream
+> drm/imagination driver is expected to support the BXM-4-64 as well [4][=
+5]. As
+> this support is being developed, it's crucial to upstream the necessary=
+ glue
+> code including clock and power-domain drivers so they're ready for inte=
+gration
+> with the drm/imagination driver.
+>=20
+> Recent Progress:
+>=20
+> Firmware Improvements:
+> Since August, the vendor has provided updated firmware
+> [6][7] that correctly initiates the firmware for the BXM-4-64.
+>=20
+> Mesa Driver Testing:
+> The vendor-supplied Mesa driver [8] partially works with Vulkan example=
+s, such
+> as rendering a triangle using Sascha Willems' Vulkan samples [9]. Altho=
+ugh the
+> triangle isn't rendered correctly (only the blue background appears), s=
+hader
+> job submissions function properly, and IOCTL calls are correctly invoke=
+d.  For
+> testing, we used the following resources:
+>=20
+> Kernel Source: Custom kernel with necessary modifications [10].
+> Mesa Driver: Vendor-provided Mesa implementation [11].
+>=20
+> Dependencies:
+> Testing required a functional Display Processing Unit (DPU) and HDMI dr=
+iver,
+> which are currently not upstreamed. Efforts are underway to upstream th=
+e DPU
+> DC8200 driver used in StarFive boards [12], which is the same DPU used =
+on the
+> LicheePi 4A. Once the DPU and HDMI drivers are upstreamed, GPU support =
+can be
+> fully upstream.
+>=20
+> Testing Status:
+> This series has been tested by performing a probe-only operation, confi=
+rming
+> that the firmware begins execution. The probe function initiates firmwa=
+re
+> execution and waits for the firmware to flip a specific status bit.
+>=20
+> [   12.637880] powervr ffef400000.gpu: [drm] loaded firmware powervr/ro=
+gue_36.52.104.182_v1.fw
+> [   12.648979] powervr ffef400000.gpu: [drm] FW version v1.0 (build 664=
+5434 OS)
+> [   12.678906] [drm] Initialized powervr 1.0.0 for ffef400000.gpu on mi=
+nor 0
+>=20
+> Power Management:
+> Full power management capabilities require implementing the T-HEAD SoC =
+AON
+> protocol messaging via the hardware mailbox. Support for the mailbox wa=
+s merged
+> in kernel 6.13 [13], and the AON protocol implementation is part of thi=
+s
+> series, since v2. Therefore this series support full power management
+> capabilities for the GPU driver.
+>=20
+> Thanks everyone for taking the time to review the last revision ! Your
+> guidance and the direction was very helpful.
 
-s/OF/THERMAL_OF/
+Hi Michal,
 
-> +	help
-> +	  Support for Temperature sensor found on NXP i.MX91 SoC.
-> +	  It supports one critical trip point and one passive trip point. The
-> +	  cpufreq is used as the cooling device to throttle CPUs when the passive
-> +	  trip is crossed.
+This is awesome, thanks for contributing! I apologise for not responding
+to earlier versions (things have been pretty busy here), but they have
+very much been on my radar.
 
-This help message is inaccurate. It should describe the sensor not the 
-thermal configuration which is coming from the device tree for a 
-specific platform.
+I see you're already aware of my other B-Series patchs[3]; would you
+mind rebasing these changes on top of those? We're making some not
+insignificant changes to the bindings which will conflict with any new
+GPUs added in the meantime. I'll leave comments in this series where I
+suspect the conflicts will appear.
 
->   config K3_THERMAL
->   	tristate "Texas Instruments K3 thermal support"
->   	depends on ARCH_K3 || COMPILE_TEST
-> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
-> index 9abf43a74f2bb..08da241e6a598 100644
-> --- a/drivers/thermal/Makefile
-> +++ b/drivers/thermal/Makefile
-> @@ -50,6 +50,7 @@ obj-$(CONFIG_ARMADA_THERMAL)	+= armada_thermal.o
->   obj-$(CONFIG_IMX_THERMAL)	+= imx_thermal.o
->   obj-$(CONFIG_IMX_SC_THERMAL)	+= imx_sc_thermal.o
->   obj-$(CONFIG_IMX8MM_THERMAL)	+= imx8mm_thermal.o
-> +obj-$(CONFIG_IMX91_THERMAL)	+= imx91_thermal.o
->   obj-$(CONFIG_MAX77620_THERMAL)	+= max77620_thermal.o
->   obj-$(CONFIG_QORIQ_THERMAL)	+= qoriq_thermal.o
->   obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
-> diff --git a/drivers/thermal/imx91_thermal.c b/drivers/thermal/imx91_thermal.c
-> new file mode 100644
-> index 0000000000000..ef5e8e181dd0f
-> --- /dev/null
-> +++ b/drivers/thermal/imx91_thermal.c
-> @@ -0,0 +1,263 @@
-> +// SPDX-License-Identifier: GPL-2.0
-> +/*
-> + * Copyright 2024 NXP.
-> + */
-> +
-> +#include <linux/bitfield.h>
-> +#include <linux/clk.h>
-> +#include <linux/err.h>
-> +#include <linux/iopoll.h>
-> +#include <linux/nvmem-consumer.h>
-> +#include <linux/module.h>
-> +#include <linux/of.h>
-> +#include <linux/of_device.h>
-> +#include <linux/platform_device.h>
-> +#include <linux/pm_runtime.h>
-> +#include <linux/thermal.h>
-> +
-> +#define IMX91_TMU_STAT0				0x10
-> +#define IMX91_TMU_STAT0_DRDY0_IF_MASK		BIT(16)
-> +
-> +#define IMX91_TMU_DATA0				0x20
-> +
-> +#define IMX91_TMU_CTRL1_SET			0x204
-> +#define IMX91_TMU_CTRL1_CLR			0x208
-> +#define IMX91_TMU_CTRL1_EN			BIT(31)
-> +#define IMX91_TMU_CTRL1_START			BIT(30)
-> +#define IMX91_TMU_CTRL1_STOP			BIT(29)
-> +#define IMX91_TMU_CTRL1_RES_MASK		GENMASK(19, 18)
-> +#define IMX91_TMU_CTRL1_MEAS_MODE_MASK		GENMASK(25, 24)
-> +#define   IMX91_TMU_CTRL1_MEAS_MODE_SINGLE	0
-> +#define   IMX91_TMU_CTRL1_MEAS_MODE_CONTINUES	1
-> +#define   IMX91_TMU_CTRL1_MEAS_MODE_PERIODIC	2
-> +
-> +#define IMX91_TMU_REF_DIV			0x280
-> +#define IMX91_TMU_DIV_EN			BIT(31)
-> +#define IMX91_TMU_DIV_MASK			GENMASK(23, 16)
-> +#define IMX91_TMU_DIV_MAX			255
-> +
-> +#define IMX91_TMU_PUD_ST_CTRL			0x2b0
-> +#define IMX91_TMU_PUDL_MASK			GENMASK(23, 16)
-> +
-> +#define IMX91_TMU_TRIM1				0x2e0
-> +#define IMX91_TMU_TRIM2				0x2f0
-> +
-> +#define IMX91_TMU_TEMP_LOW_LIMIT		-40000
-> +#define IMX91_TMU_TEMP_HIGH_LIMIT		125000
-> +
-> +#define IMX91_TMU_DEFAULT_TRIM1_CONFIG		0xb561bc2d
-> +#define IMX91_TMU_DEFAULT_TRIM2_CONFIG		0x65d4
-> +
-> +struct imx91_tmu {
-> +	void __iomem *base;
-> +	struct clk *clk;
-> +	struct device *dev;
-> +	struct thermal_zone_device *tzd;
+Cheers,
+Matt
 
-This field is pointless because used only in the probe function.
+> Since this patchset is slowly getting closer to being ready I'm droppin=
+g the
+> RFC prefix with the v4.
+>=20
+> v4:
+>=20
+> Device Tree Changes:
+> - restructured power device tree bindings by abstracting power-domain I=
+Ds from
+>   firmware IDs, with the mappings now defined in a dedicated header fil=
+e
+> - retained existing clock-names in img,powervr-rogue.yaml to maintain A=
+BI
+>   compatibility, despite having only one downstream user
+> - enhanced documentation for new Video Output (VO) clock inputs in devi=
+ce tree
+>   bindings
+>=20
+> Reset Driver Changes:
+> - reverted reset-cells configuration to single cell as in v2
+> - maintained reset definitions in device tree bindings while deferring
+>   implementation of watchdog timer (WDT) reset functionality
+> - addressed implementation issues in the DRM/Imagination reset driver
+>=20
+> Power Domain Changes:
+> - added workaround to disable AUDIO power domain to prevent firmware cr=
+ashes
+>=20
+> v3:
+>=20
+> Device Tree Changes:
+>  - consolidated device tree representation by merging aon and power-dom=
+ain nodes
+>    while maintaining separate drivers internally
+>  - power-domain driver is now instantiated from within the aon driver
+>  - updated img,powervr-rogue.yaml to use allOf and oneOf for better sch=
+ema
+>    organization
+>=20
+> AP Clock Driver Improvements:
+>  - reworked driver to support multiple clock controllers through .compa=
+tible
+>    and .data instead of using multiple address spaces in dt-binding. Th=
+is change
+>    allows to re-use the driver code for multiple clock controllers
+>=20
+> Code Quality and Documentation:
+>  - fixed optional module dependencies in Kconfig
+>  - added kernel-doc comments for all exported functions
+>  - implemented th1520_aon_remove() to properly clean up mailbox channel=
 
-> +};
-> +
-> +static void imx91_tmu_start(struct imx91_tmu *tmu, bool start)
-> +{
-> +	u32 val = start ? IMX91_TMU_CTRL1_START : IMX91_TMU_CTRL1_STOP;
-> +
-> +	writel_relaxed(val, tmu->base + IMX91_TMU_CTRL1_SET);
-> +}
-> +
-> +static void imx91_tmu_enable(struct imx91_tmu *tmu, bool enable)
-> +{
-> +	u32 reg = enable ? IMX91_TMU_CTRL1_SET : IMX91_TMU_CTRL1_CLR;
-> +
-> +	writel_relaxed(IMX91_TMU_CTRL1_EN, tmu->base + reg);
-> +}
-> +
-> +static int imx91_tmu_get_temp(struct thermal_zone_device *tz, int *temp)
-> +{
-> +	struct imx91_tmu *tmu = thermal_zone_device_priv(tz);
-> +	s16 data;
-> +	int ret;
-> +	u32 val;
-> +
-> +	ret = pm_runtime_resume_and_get(tmu->dev);
-> +	if (ret < 0)
-> +		return ret;
-> +
-> +	imx91_tmu_start(tmu, true);
+>    resources
+>  - removed unnecessary of.h header in multiple drivers
+>  - refactored reset driver to use zero cells
+>=20
+> v2:
+>=20
+> Removed AP_SUBSYS clock refactoring commits (1-6):
+>  - instead of refactoring, I opted to extend the current driver and its=
 
-Same question as [1]
+>    associated device tree node to include support for a second address =
+space.
+>=20
+> Expanded patchset scope to fully support power management capabilities:=
 
-Do you really want to start and stop the sensor between two reads ?
+>  - introduced a new firmware driver to manage power-related operations.=
 
-> +	ret = readl_relaxed_poll_timeout(tmu->base + IMX91_TMU_STAT0, val,
-> +					 val & IMX91_TMU_STAT0_DRDY0_IF_MASK, 1000, 40000);
-> +	if (ret) {
-> +		ret = -EAGAIN;
-> +		goto out;
-> +	}
-> +
-> +	/* DATA0 is 16bit signed number */
-> +	data = readw_relaxed(tmu->base + IMX91_TMU_DATA0);
-> +	*temp = data * 1000 / 64;
+>  - rewrote the power-domain driver to function alongside the firmware d=
+river.
+>    These nodes in the device tree lack direct address spaces, despite
+>    representing HW blocks. Control is achieved via firmware protocol me=
+ssages
+>    transmitted through a mailbox to the E902 core.
+>=20
+> Implemented a reset controller for the TH1520 SoC:
+>  - developed a reset controller driver for the TH1520 to manage reset
+>    sequences.
+>  - updated the drm/imagination driver to act as a reset controller cons=
+umer.
+>    While this patchset is focused on the LPI4A board, the reset control=
+ler is
+>    designed to be useful for other boards, such as the BPI-3F, which al=
+so require
+>    a reset sequence after power-up.
+>=20
+> Updated dt-bindings:
+>  - added new dt-bindings for power, reset, and firmware nodes.
+>  - updated the powervr dt-binding to include reset support and new comp=
+atibles.
+>  - ran dtbs_check and dt_binding_check to ensure compliance.
+>=20
+> Addressed code quality:
+>  - resolved all checkpatch issues using --strict, except for the call t=
+o
+>    devm_clk_hw_register_gate_parent_data().  The current implementation=
+ remains
+>    preferable in this context, and clang-format aligns with this choice=
+=2E
+>=20
+> References:
+>=20
+> [1] Downstream Driver Source:
+>     https://gitlab.freedesktop.org/frankbinns/powervr/-/blob/cb19299320=
+95649a24f051b9cfdd2cd2ceab35cb/drivers/gpu/drm/img-rogue/Kconfig
+>=20
+> [2] Initial Upstream Driver Series:
+>     https://lore.kernel.org/all/cover.1700668843.git.donald.robson@imgt=
+ec.com/
+>=20
+> [3] BXS-4-64 GPU Support Patches:
+>     https://lore.kernel.org/all/20241105-sets-bxs-4-64-patch-v1-v1-0-4e=
+d30e865892@imgtec.com/
+>=20
+> [4] Firmware Issue Discussion 1:
+>     https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/=
+1
+>=20
+> [5] Firmware Issue Discussion 2:
+>     https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/=
+2
+>=20
+> [6] Firmware Update Commit 1:
+>     https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/=
+6ac2247e9a1d1837af495fb6d0fbd6f35547c2d1
+>=20
+> [7] Firmware Update Commit 2:
+>     https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/=
+efbebc90f25adb2b2e1499e3cc24ea3f3c3e4f4c
+>=20
+> [8] Vendor-Provided Mesa Driver:
+>     https://gitlab.freedesktop.org/imagination/mesa/-/tree/dev/devinfo
+>=20
+> [9] Sascha Willems' Vulkan Samples:
+>     https://github.com/SaschaWillems/Vulkan
+>=20
+> [10] Test Kernel Source:
+>     https://github.com/mwilczy/linux/tree/2_December_reference_linux_ke=
+rnel_imagination
+>=20
+> [11] Test Mesa Driver:
+>     https://github.com/mwilczy/mesa-reference
+>=20
+> [12] DPU DC8200 Driver Upstream Attempt:
+>     https://lore.kernel.org/all/20241120061848.196754-1-keith.zhao@star=
+fivetech.com/
+>=20
+> [13] Pull request kernel 6.13 for mailbox
+>     https://lore.kernel.org/all/CABb+yY33qnivK-PzqpSMgmtbFid4nS8wcNvP7w=
+ED9DXrYAyLKg@mail.gmail.com/
+>=20
+> Michal Wilczynski (18):
+>   dt-bindings: clock: thead: Add TH1520 VO clock controller
+>   clk: thead: Add clock support for VO subsystem in T-Head TH1520 SoC
+>   dt-bindings: firmware: thead,th1520: Add support for firmware node
+>   firmware: thead: Add AON firmware protocol driver
+>   dt-bindings: power: Add TH1520 SoC power domains
+>   pmdomain: thead: Add power-domain driver for TH1520
+>   riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+>   dt-bindings: reset: Add T-HEAD TH1520 SoC Reset Controller
+>   reset: thead: Add TH1520 reset controller driver
+>   drm/imagination: Add reset controller support for GPU initialization
+>   dt-bindings: gpu: Add 'resets' property for GPU initialization
+>   dt-bindings: gpu: Add support for T-HEAD TH1520 GPU
+>   drm/imagination: Add support for IMG BXM-4-64 GPU
+>   drm/imagination: Enable PowerVR driver for RISC-V
+>   riscv: dts: thead: Add device tree VO clock controller
+>   riscv: dts: thead: Introduce power domain nodes with aon firmware
+>   riscv: dts: thead: Introduce reset controller node
+>   riscv: dts: thead: Add GPU node to TH1520 device tree
+>=20
+>  .../bindings/clock/thead,th1520-clk-ap.yaml   |  17 +-
+>  .../bindings/firmware/thead,th1520-aon.yaml   |  53 ++++
+>  .../bindings/gpu/img,powervr-rogue.yaml       |  42 ++-
+>  .../bindings/reset/thead,th1520-reset.yaml    |  44 +++
+>  MAINTAINERS                                   |   8 +
+>  arch/riscv/Kconfig.socs                       |   1 +
+>  arch/riscv/boot/dts/thead/th1520.dtsi         |  34 +++
+>  drivers/clk/thead/clk-th1520-ap.c             | 197 +++++++++++--
+>  drivers/firmware/Kconfig                      |   9 +
+>  drivers/firmware/Makefile                     |   1 +
+>  drivers/firmware/thead,th1520-aon.c           | 268 ++++++++++++++++++=
 
-cf units.h
+>  drivers/gpu/drm/imagination/Kconfig           |   2 +-
+>  drivers/gpu/drm/imagination/pvr_device.c      |  21 ++
+>  drivers/gpu/drm/imagination/pvr_device.h      |   9 +
+>  drivers/gpu/drm/imagination/pvr_drv.c         |   1 +
+>  drivers/gpu/drm/imagination/pvr_power.c       |  12 +-
+>  drivers/pmdomain/Kconfig                      |   1 +
+>  drivers/pmdomain/Makefile                     |   1 +
+>  drivers/pmdomain/thead/Kconfig                |  12 +
+>  drivers/pmdomain/thead/Makefile               |   2 +
+>  drivers/pmdomain/thead/th1520-pm-domains.c    | 193 +++++++++++++
+>  drivers/reset/Kconfig                         |  10 +
+>  drivers/reset/Makefile                        |   1 +
+>  drivers/reset/reset-th1520.c                  | 178 ++++++++++++
+>  .../dt-bindings/clock/thead,th1520-clk-ap.h   |  33 +++
+>  .../dt-bindings/power/thead,th1520-power.h    |  19 ++
+>  .../dt-bindings/reset/thead,th1520-reset.h    |  15 +
+>  .../linux/firmware/thead/thead,th1520-aon.h   | 197 +++++++++++++
+>  28 files changed, 1344 insertions(+), 37 deletions(-)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/thead,th=
+1520-aon.yaml
+>  create mode 100644 Documentation/devicetree/bindings/reset/thead,th152=
+0-reset.yaml
+>  create mode 100644 drivers/firmware/thead,th1520-aon.c
+>  create mode 100644 drivers/pmdomain/thead/Kconfig
+>  create mode 100644 drivers/pmdomain/thead/Makefile
+>  create mode 100644 drivers/pmdomain/thead/th1520-pm-domains.c
+>  create mode 100644 drivers/reset/reset-th1520.c
+>  create mode 100644 include/dt-bindings/power/thead,th1520-power.h
+>  create mode 100644 include/dt-bindings/reset/thead,th1520-reset.h
+>  create mode 100644 include/linux/firmware/thead/thead,th1520-aon.h
+>=20
 
-	*temp = (data * MILLIDEGREE_PER_DEGREE) / A_LITERAL;
+--=20
+Matt Coster
+E: matt.coster@imgtec.com
 
-> +	if (*temp < IMX91_TMU_TEMP_LOW_LIMIT || *temp > IMX91_TMU_TEMP_HIGH_LIMIT)
-> +		ret = -EAGAIN;
-> +
-> +out:
-> +	pm_runtime_put(tmu->dev);
-> +
-> +	return ret;
-> +}
-> +
-> +static struct thermal_zone_device_ops tmu_tz_ops = {
-> +	.get_temp = imx91_tmu_get_temp,
+--------------6fiNF2KUwoS7kQR0FbbzFCwd--
 
-Why not add the change_mode ops ?
+--------------cVQCRBBaOuw34poed0u77Vud
+Content-Type: application/pgp-signature; name="OpenPGP_signature.asc"
+Content-Description: OpenPGP digital signature
+Content-Disposition: attachment; filename="OpenPGP_signature.asc"
 
-> +};
-> +
-> +static int imx91_init_from_nvmem_cells(struct imx91_tmu *tmu)
-> +{
-> +	struct device *dev = tmu->dev;
-> +	u32 trim1, trim2;
-> +	int ret;
-> +
-> +	ret = nvmem_cell_read_u32(dev, "trim1", &trim1);
-> +	if (ret)
-> +		return ret;
-> +
-> +	ret = nvmem_cell_read_u32(dev, "trim2", &trim2);
-> +	if (ret)
-> +		return ret;
-> +
-> +	if (trim1 == 0 || trim2 == 0)
-> +		return -EINVAL;
-> +
-> +	writel_relaxed(trim1, tmu->base + IMX91_TMU_TRIM1);
-> +	writel_relaxed(trim2, tmu->base + IMX91_TMU_TRIM2);
-> +
-> +	return 0;
-> +}
-> +
-> +static void imx91_tmu_action_remove(void *data)
-> +{
-> +	struct imx91_tmu *tmu = data;
-> +
-> +	/* disable tmu */
-> +	imx91_tmu_enable(tmu, false);
-> +}
-> +
-> +static int imx91_tmu_probe(struct platform_device *pdev)
-> +{
-> +	struct device *dev = &pdev->dev;
-> +	struct imx91_tmu *tmu;
-> +	unsigned long rate;
-> +	u32 div;
-> +	int ret;
-> +
-> +	tmu = devm_kzalloc(dev, sizeof(struct imx91_tmu), GFP_KERNEL);
-> +	if (!tmu)
-> +		return -ENOMEM;
-> +
-> +	tmu->dev = dev;
-> +
-> +	tmu->base = devm_platform_ioremap_resource(pdev, 0);
-> +	if (IS_ERR(tmu->base))
-> +		return dev_err_probe(dev, PTR_ERR(tmu->base), "failed to get io resource");
-> +
-> +	tmu->clk = devm_clk_get_enabled(dev, NULL);
-> +	if (IS_ERR(tmu->clk))
-> +		return dev_err_probe(dev, PTR_ERR(tmu->clk), "failed to get tmu clock\n");
-> +
-> +	platform_set_drvdata(pdev, tmu);
-> +
-> +	/* disable the monitor during initialization */
-> +	imx91_tmu_enable(tmu, false);
-> +	imx91_tmu_start(tmu, false);
-> +
-> +	ret = imx91_init_from_nvmem_cells(tmu);
-> +	if (ret) {
-> +		writel_relaxed(IMX91_TMU_DEFAULT_TRIM1_CONFIG, tmu->base + IMX91_TMU_TRIM1);
-> +		writel_relaxed(IMX91_TMU_DEFAULT_TRIM2_CONFIG, tmu->base + IMX91_TMU_TRIM2);
-> +	}
-> +
-> +	/* The typical conv clk is 4MHz, the output freq is 'rate / (div + 1)' */
-> +	rate = clk_get_rate(tmu->clk);
-> +	div = (rate / 4000000) - 1;
+-----BEGIN PGP SIGNATURE-----
 
-Use literals please (eg. 4 * HZ_PER_MHZ)
+wnsEABYIACMWIQS4qDmoJvwmKhjY+nN5vBnz2d5qsAUCZ5zupQUDAAAAAAAKCRB5vBnz2d5qsEAr
+AP41Plr+hl931JRWiDunqCgjpOl6jUZcdB5/AEUTUrv91QEA7IEn5P+M9znhoINoKqdvez5QXQ7n
+U1TaSnqiTIZHyQk=
+=7KYl
+-----END PGP SIGNATURE-----
 
-> +	if (div > IMX91_TMU_DIV_MAX)
-> +		return dev_err_probe(dev, -EINVAL, "clock divider exceed hardware limitation");
-> +
-> +	/* Set divider value and enable divider */
-> +	writel_relaxed(IMX91_TMU_DIV_EN | FIELD_PREP(IMX91_TMU_DIV_MASK, div),
-> +		       tmu->base + IMX91_TMU_REF_DIV);
-> +
-> +	/* Set max power up delay: 'Tpud(ms) = 0xFF * 1000 / 4000000' */
-> +	writel_relaxed(FIELD_PREP(IMX91_TMU_PUDL_MASK, 100U), tmu->base + IMX91_TMU_PUD_ST_CTRL);
-> +
-> +	/*
-> +	 * Set resolution mode
-> +	 * 00b - Conversion time = 0.59325 ms
-> +	 * 01b - Conversion time = 1.10525 ms
-> +	 * 10b - Conversion time = 2.12925 ms
-> +	 * 11b - Conversion time = 4.17725 ms
-> +	 */
-> +	writel_relaxed(FIELD_PREP(IMX91_TMU_CTRL1_RES_MASK, 0x3), tmu->base + IMX91_TMU_CTRL1_CLR);
-> +	writel_relaxed(FIELD_PREP(IMX91_TMU_CTRL1_RES_MASK, 0x1), tmu->base + IMX91_TMU_CTRL1_SET);
-> +
-> +	writel_relaxed(IMX91_TMU_CTRL1_MEAS_MODE_MASK, tmu->base + IMX91_TMU_CTRL1_CLR);
-> +	writel_relaxed(FIELD_PREP(IMX91_TMU_CTRL1_MEAS_MODE_MASK, IMX91_TMU_CTRL1_MEAS_MODE_SINGLE),
-> +		       tmu->base + IMX91_TMU_CTRL1_SET);
-> +
-> +	pm_runtime_set_active(dev);
-> +	devm_pm_runtime_enable(dev);
-> +	pm_runtime_put(dev);
-> +
-> +	tmu->tzd = devm_thermal_of_zone_register(dev, 0, tmu, &tmu_tz_ops);
-> +	if (IS_ERR(tmu->tzd))
-> +		return dev_err_probe(dev, PTR_ERR(tmu->tzd),
-> +				     "failed to register thermal zone sensor\n");
-> +
-> +	ret = devm_add_action(dev, imx91_tmu_action_remove, tmu);
-
-Should it be moved before devm_thermal_of_zone_register(), so if the 
-thermal zone creation fails, it will stop the sensor which was 
-previously started ?
-
-> +	if (ret)
-> +		return dev_err_probe(dev, ret, "Failure to add action imx91_tmu_action_remove()\n");
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx91_tmu_runtime_suspend(struct device *dev)
-> +{
-> +	struct imx91_tmu *tmu = dev_get_drvdata(dev);
-> +
-> +	/* disable tmu */
-> +	imx91_tmu_enable(tmu, false);
-> +
-> +	clk_disable_unprepare(tmu->clk);
-> +
-> +	return 0;
-> +}
-> +
-> +static int imx91_tmu_runtime_resume(struct device *dev)
-> +{
-> +	struct imx91_tmu *tmu = dev_get_drvdata(dev);
-> +	int ret;
-> +
-> +	ret = clk_prepare_enable(tmu->clk);
-> +	if (ret)
-> +		return ret;
-> +
-> +	imx91_tmu_enable(tmu, true);
-> +
-> +	return 0;
-> +}
-> +
-> +static DEFINE_RUNTIME_DEV_PM_OPS(imx91_tmu_pm_ops, imx91_tmu_runtime_suspend,
-> +				 imx91_tmu_runtime_resume, NULL);
-> +
-> +static const struct of_device_id imx91_tmu_table[] = {
-> +	{ .compatible = "fsl,imx91-tmu", },
-> +	{ },
-> +};
-> +MODULE_DEVICE_TABLE(of, imx91_tmu_table);
-> +
-> +static struct platform_driver imx91_tmu = {
-> +	.driver = {
-> +		.name	= "imx91_thermal",
-> +		.pm	= pm_ptr(&imx91_tmu_pm_ops),
-> +		.of_match_table = imx91_tmu_table,
-> +	},
-> +	.probe = imx91_tmu_probe,
-> +};
-> +module_platform_driver(imx91_tmu);
-> +
-> +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
-> +MODULE_DESCRIPTION("i.MX91 Thermal Monitor Unit driver");
-> +MODULE_LICENSE("GPL");
-> 
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+--------------cVQCRBBaOuw34poed0u77Vud--
 
