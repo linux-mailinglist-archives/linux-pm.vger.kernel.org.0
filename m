@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-21180-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21181-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CDEE7A2404C
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 17:25:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF757A24051
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 17:25:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5274D3A3B9F
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 16:25:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0B2E188942A
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 16:25:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 251281E9B15;
-	Fri, 31 Jan 2025 16:25:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 593E11F03DB;
+	Fri, 31 Jan 2025 16:25:09 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4A05B1E3DEF;
-	Fri, 31 Jan 2025 16:25:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ACD81EF0AF;
+	Fri, 31 Jan 2025 16:25:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738340707; cv=none; b=Tyj8X0LjV9pBwAkSj2QYxhCC9ZSPvg2MB27xcx4Vc6WPEv+2CrVjXcD8bkT/X19bjpCAQBQsVi2TQW2//aJf1KphKzP+vszNBYF6FrKT+NVRF/AlzbtZCM41VzdkwzmRyTmdMnz+NPSf3MAQYKq7pAGHdwiepk62oP7vfJqNTCM=
+	t=1738340709; cv=none; b=Vxm4N+hSpqKnjuy4eNWl/VkVtuOF7m1VOge/UHpLJPhCME0/Yq7flkvkSl8FYNlq87mX77RkI+nbjQNXasFewU+G+8GRCrdra6VTpbDXlb6EyGAdev44B+SKhpE6idQA/JOZC9c7+yzLj3xRJMESDcCcvQgv/P5xwzTQbWLtyLY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738340707; c=relaxed/simple;
-	bh=fAcXhWvmhSsUcqShJlK6GIc9eUEY6+YnjVWSG7s/htE=;
+	s=arc-20240116; t=1738340709; c=relaxed/simple;
+	bh=40HaCEe5DjZyspmdUEgntS5N7WgXRft5q7xv9Phd3Wk=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=kmI5zonvZ4jDyxb01GoRrRdi1Mfn71IRTKZLb7kG7T+RcwykZNlbeOiu7mMETyTiuqdFIh7w9jlKz7zb0hM5tEjWqoMgbkoNfABi1VhEx3d7etH29QoXPxZ4xuPMhR18w6EHsqeaYfFAgIUGhRDZkYUGx6VWODFZLjdlKpTdFeE=
+	 MIME-Version; b=HQc+X97uf7JgjtN+TeG2hVXDbj3ZTjWFdfblaNIznAVNMwkMus4hfQEn8aETAoeWKlXRfbmSUP7K1BuUd3dR+cj6EPShA7CuxsMq52MIPv+DWw6on2ehryYvgaoRq6fC8d+UdTSqqMQFV8MQqCW7knudpLyj9lsVtwOpr+2TZJQ=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E744A150C;
-	Fri, 31 Jan 2025 08:25:29 -0800 (PST)
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 5A9C5168F;
+	Fri, 31 Jan 2025 08:25:32 -0800 (PST)
 Received: from e125905.cambridge.arm.com (e125905.cambridge.arm.com [10.1.194.73])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 47BFC3F694;
-	Fri, 31 Jan 2025 08:25:01 -0800 (PST)
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id D43033F694;
+	Fri, 31 Jan 2025 08:25:04 -0800 (PST)
 From: Beata Michalska <beata.michalska@arm.com>
 To: linux-kernel@vger.kernel.org,
 	linux-arm-kernel@lists.infradead.org,
@@ -48,19 +48,10 @@ Cc: sumitg@nvidia.com,
 	vanshikonda@os.amperecomputing.com,
 	lihuisong@huawei.com,
 	zhanjie9@hisilicon.com,
-	ptsm@linux.microsoft.com,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	Phil Auld <pauld@redhat.com>,
-	x86@kernel.org,
-	linux-doc@vger.kernel.org
-Subject: [PATCH v10 2/4] cpufreq: Introduce an optional cpuinfo_avg_freq sysfs entry
-Date: Fri, 31 Jan 2025 16:24:37 +0000
-Message-Id: <20250131162439.3843071-3-beata.michalska@arm.com>
+	ptsm@linux.microsoft.com
+Subject: [PATCH v10 3/4] arm64: Provide an AMU-based version of arch_freq_get_on_cpu
+Date: Fri, 31 Jan 2025 16:24:38 +0000
+Message-Id: <20250131162439.3843071-4-beata.michalska@arm.com>
 In-Reply-To: <20250131162439.3843071-1-beata.michalska@arm.com>
 References: <20250131162439.3843071-1-beata.michalska@arm.com>
 Precedence: bulk
@@ -71,175 +62,196 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Currently the CPUFreq core exposes two sysfs attributes that can be used
-to query current frequency of a given CPU(s): namely cpuinfo_cur_freq
-and scaling_cur_freq. Both provide slightly different view on the
-subject and they do come with their own drawbacks.
+With the Frequency Invariance Engine (FIE) being already wired up with
+sched tick and making use of relevant (core counter and constant
+counter) AMU counters, getting the average frequency for a given CPU,
+can be achieved by utilizing the frequency scale factor which reflects
+an average CPU frequency for the last tick period length.
 
-cpuinfo_cur_freq provides higher precision though at a cost of being
-rather expensive. Moreover, the information retrieved via this attribute
-is somewhat short lived as frequency can change at any point of time
-making it difficult to reason from.
+The solution is partially based on APERF/MPERF implementation of
+arch_freq_get_on_cpu.
 
-scaling_cur_freq, on the other hand, tends to be less accurate but then
-the actual level of precision (and source of information) varies between
-architectures making it a bit ambiguous.
-
-The new attribute, cpuinfo_avg_freq, is intended to provide more stable,
-distinct interface, exposing an average frequency of a given CPU(s), as
-reported by the hardware, over a time frame spanning no more than a few
-milliseconds. As it requires appropriate hardware support, this
-interface is optional.
-
-Note that under the hood, the new attribute relies on the information
-provided by arch_freq_get_on_cpu, which, up to this point, has been
-feeding data for scaling_cur_freq attribute, being the source of
-ambiguity when it comes to interpretation. This has been amended by
-restoring the intended behavior for scaling_cur_freq, with a new
-dedicated config option to maintain status quo for those, who may need
-it.
-
-CC: Jonathan Corbet <corbet@lwn.net>
-CC: Thomas Gleixner <tglx@linutronix.de>
-CC: Ingo Molnar <mingo@redhat.com>
-CC: Borislav Petkov <bp@alien8.de>
-CC: Dave Hansen <dave.hansen@linux.intel.com>
-CC: H. Peter Anvin <hpa@zytor.com>
-CC: Phil Auld <pauld@redhat.com>
-CC: x86@kernel.org
-CC: linux-doc@vger.kernel.org
-
+Suggested-by: Ionela Voinescu <ionela.voinescu@arm.com>
 Signed-off-by: Beata Michalska <beata.michalska@arm.com>
 Reviewed-by: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
 Reviewed-by: Sumit Gupta <sumitg@nvidia.com>
 ---
- Documentation/admin-guide/pm/cpufreq.rst | 17 +++++++++++++-
- drivers/cpufreq/Kconfig.x86              | 12 ++++++++++
- drivers/cpufreq/cpufreq.c                | 30 +++++++++++++++++++++++-
- 3 files changed, 57 insertions(+), 2 deletions(-)
+ arch/arm64/kernel/topology.c | 112 +++++++++++++++++++++++++++++++----
+ 1 file changed, 102 insertions(+), 10 deletions(-)
 
-diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/admin-guide/pm/cpufreq.rst
-index a21369eba034..3950583f2b15 100644
---- a/Documentation/admin-guide/pm/cpufreq.rst
-+++ b/Documentation/admin-guide/pm/cpufreq.rst
-@@ -248,6 +248,20 @@ are the following:
- 	If that frequency cannot be determined, this attribute should not
- 	be present.
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index cb180684d10d..bd238e5c2133 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -17,6 +17,7 @@
+ #include <linux/cpufreq.h>
+ #include <linux/init.h>
+ #include <linux/percpu.h>
++#include <linux/sched/isolation.h>
  
-+``cpuinfo_avg_freq``
-+        An average frequency (in KHz) of all CPUs belonging to a given policy,
-+        derived from a hardware provided feedback and reported on a time frame
-+        spanning at most few milliseconds.
-+
-+        This is expected to be based on the frequency the hardware actually runs
-+        at and, as such, might require specialised hardware support (such as AMU
-+        extension on ARM). If one cannot be determined, this attribute should
-+        not be present.
-+
-+        Note, that failed attempt to retrieve current frequency for a given
-+        CPU(s) will result in an appropriate error, i.e: EAGAIN for CPU that
-+        remains idle (raised on ARM).
-+
- ``cpuinfo_max_freq``
- 	Maximum possible operating frequency the CPUs belonging to this policy
- 	can run at (in kHz).
-@@ -293,7 +307,8 @@ are the following:
- 	Some architectures (e.g. ``x86``) may attempt to provide information
- 	more precisely reflecting the current CPU frequency through this
- 	attribute, but that still may not be the exact current CPU frequency as
--	seen by the hardware at the moment.
-+	seen by the hardware at the moment. This behavior though, is only
-+	available via c:macro:``CPUFREQ_ARCH_CUR_FREQ`` option.
- 
- ``scaling_driver``
- 	The scaling driver currently in use.
-diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
-index 97c2d4f15d76..2c5c228408bf 100644
---- a/drivers/cpufreq/Kconfig.x86
-+++ b/drivers/cpufreq/Kconfig.x86
-@@ -340,3 +340,15 @@ config X86_SPEEDSTEP_RELAXED_CAP_CHECK
- 	  option lets the probing code bypass some of those checks if the
- 	  parameter "relaxed_check=1" is passed to the module.
- 
-+config CPUFREQ_ARCH_CUR_FREQ
-+	default y
-+	bool "Current frequency derived from HW provided feedback"
-+	help
-+	  This determines whether the scaling_cur_freq sysfs attribute returns
-+	  the last requested frequency or a more precise value based on hardware
-+	  provided feedback (as architected counters).
-+	  Given that a more precise frequency can now be provided via the
-+	  cpuinfo_avg_freq attribute, by enabling this option,
-+	  scaling_cur_freq maintains the provision of a counter based frequency,
-+	  for compatibility reasons.
-+
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 96b013ea177c..a2f31fbb1774 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -734,12 +734,20 @@ __weak int arch_freq_get_on_cpu(int cpu)
- 	return -EOPNOTSUPP;
- }
- 
-+static inline bool cpufreq_avg_freq_supported(struct cpufreq_policy *policy)
-+{
-+	return arch_freq_get_on_cpu(policy->cpu) != -EOPNOTSUPP;
-+}
-+
- static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char *buf)
- {
- 	ssize_t ret;
- 	int freq;
- 
--	freq = arch_freq_get_on_cpu(policy->cpu);
-+	freq = IS_ENABLED(CONFIG_CPUFREQ_ARCH_CUR_FREQ)
-+		? arch_freq_get_on_cpu(policy->cpu)
-+		: 0;
-+
- 	if (freq > 0)
- 		ret = sysfs_emit(buf, "%u\n", freq);
- 	else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
-@@ -784,6 +792,19 @@ static ssize_t show_cpuinfo_cur_freq(struct cpufreq_policy *policy,
- 	return sysfs_emit(buf, "<unknown>\n");
- }
- 
-+/*
-+ * show_cpuinfo_avg_freq - average CPU frequency as detected by hardware
-+ */
-+static ssize_t show_cpuinfo_avg_freq(struct cpufreq_policy *policy,
-+				     char *buf)
-+{
-+	int avg_freq = arch_freq_get_on_cpu(policy->cpu);
-+
-+	if (avg_freq > 0)
-+		return sysfs_emit(buf, "%u\n", avg_freq);
-+	return avg_freq != 0 ? avg_freq : -EINVAL;
-+}
-+
- /*
-  * show_scaling_governor - show the current policy for the specified CPU
+ #include <asm/cpu.h>
+ #include <asm/cputype.h>
+@@ -88,18 +89,28 @@ int __init parse_acpi_topology(void)
+  * initialized.
   */
-@@ -946,6 +967,7 @@ static ssize_t show_bios_limit(struct cpufreq_policy *policy, char *buf)
+ static DEFINE_PER_CPU_READ_MOSTLY(unsigned long, arch_max_freq_scale) =  1UL << (2 * SCHED_CAPACITY_SHIFT);
+-static DEFINE_PER_CPU(u64, arch_const_cycles_prev);
+-static DEFINE_PER_CPU(u64, arch_core_cycles_prev);
+ static cpumask_var_t amu_fie_cpus;
+ 
++struct amu_cntr_sample {
++	u64		arch_const_cycles_prev;
++	u64		arch_core_cycles_prev;
++	unsigned long	last_scale_update;
++};
++
++static DEFINE_PER_CPU_SHARED_ALIGNED(struct amu_cntr_sample, cpu_amu_samples);
++
+ void update_freq_counters_refs(void)
+ {
+-	this_cpu_write(arch_core_cycles_prev, read_corecnt());
+-	this_cpu_write(arch_const_cycles_prev, read_constcnt());
++	struct amu_cntr_sample *amu_sample = this_cpu_ptr(&cpu_amu_samples);
++
++	amu_sample->arch_core_cycles_prev = read_corecnt();
++	amu_sample->arch_const_cycles_prev = read_constcnt();
  }
  
- cpufreq_freq_attr_ro_perm(cpuinfo_cur_freq, 0400);
-+cpufreq_freq_attr_ro(cpuinfo_avg_freq);
- cpufreq_freq_attr_ro(cpuinfo_min_freq);
- cpufreq_freq_attr_ro(cpuinfo_max_freq);
- cpufreq_freq_attr_ro(cpuinfo_transition_latency);
-@@ -1073,6 +1095,12 @@ static int cpufreq_add_dev_interface(struct cpufreq_policy *policy)
- 			return ret;
+ static inline bool freq_counters_valid(int cpu)
+ {
++	struct amu_cntr_sample *amu_sample = per_cpu_ptr(&cpu_amu_samples, cpu);
++
+ 	if ((cpu >= nr_cpu_ids) || !cpumask_test_cpu(cpu, cpu_present_mask))
+ 		return false;
+ 
+@@ -108,8 +119,8 @@ static inline bool freq_counters_valid(int cpu)
+ 		return false;
  	}
  
-+	if (cpufreq_avg_freq_supported(policy)) {
-+		ret = sysfs_create_file(&policy->kobj, &cpuinfo_avg_freq.attr);
-+		if (ret)
-+			return ret;
-+	}
+-	if (unlikely(!per_cpu(arch_const_cycles_prev, cpu) ||
+-		     !per_cpu(arch_core_cycles_prev, cpu))) {
++	if (unlikely(!amu_sample->arch_const_cycles_prev ||
++		     !amu_sample->arch_core_cycles_prev)) {
+ 		pr_debug("CPU%d: cycle counters are not enabled.\n", cpu);
+ 		return false;
+ 	}
+@@ -152,17 +163,22 @@ void freq_inv_set_max_ratio(int cpu, u64 max_rate)
+ 
+ static void amu_scale_freq_tick(void)
+ {
++	struct amu_cntr_sample *amu_sample = this_cpu_ptr(&cpu_amu_samples);
+ 	u64 prev_core_cnt, prev_const_cnt;
+ 	u64 core_cnt, const_cnt, scale;
+ 
+-	prev_const_cnt = this_cpu_read(arch_const_cycles_prev);
+-	prev_core_cnt = this_cpu_read(arch_core_cycles_prev);
++	prev_const_cnt = amu_sample->arch_const_cycles_prev;
++	prev_core_cnt = amu_sample->arch_core_cycles_prev;
+ 
+ 	update_freq_counters_refs();
+ 
+-	const_cnt = this_cpu_read(arch_const_cycles_prev);
+-	core_cnt = this_cpu_read(arch_core_cycles_prev);
++	const_cnt = amu_sample->arch_const_cycles_prev;
++	core_cnt = amu_sample->arch_core_cycles_prev;
+ 
++	/*
++	 * This should not happen unless the AMUs have been reset and the
++	 * counter values have not been restored - unlikely
++	 */
+ 	if (unlikely(core_cnt <= prev_core_cnt ||
+ 		     const_cnt <= prev_const_cnt))
+ 		return;
+@@ -182,6 +198,8 @@ static void amu_scale_freq_tick(void)
+ 
+ 	scale = min_t(unsigned long, scale, SCHED_CAPACITY_SCALE);
+ 	this_cpu_write(arch_freq_scale, (unsigned long)scale);
 +
- 	ret = sysfs_create_file(&policy->kobj, &scaling_cur_freq.attr);
- 	if (ret)
- 		return ret;
++	amu_sample->last_scale_update = jiffies;
+ }
+ 
+ static struct scale_freq_data amu_sfd = {
+@@ -189,6 +207,80 @@ static struct scale_freq_data amu_sfd = {
+ 	.set_freq_scale = amu_scale_freq_tick,
+ };
+ 
++static __always_inline bool amu_fie_cpu_supported(unsigned int cpu)
++{
++	return cpumask_available(amu_fie_cpus) &&
++		cpumask_test_cpu(cpu, amu_fie_cpus);
++}
++
++#define AMU_SAMPLE_EXP_MS	20
++
++int arch_freq_get_on_cpu(int cpu)
++{
++	struct amu_cntr_sample *amu_sample;
++	unsigned int start_cpu = cpu;
++	unsigned long last_update;
++	unsigned int freq = 0;
++	u64 scale;
++
++	if (!amu_fie_cpu_supported(cpu) || !arch_scale_freq_ref(cpu))
++		return -EOPNOTSUPP;
++
++	while (1) {
++
++		amu_sample = per_cpu_ptr(&cpu_amu_samples, cpu);
++
++		last_update = amu_sample->last_scale_update;
++
++		/*
++		 * For those CPUs that are in full dynticks mode, or those that have
++		 * not seen tick for a while, try an alternative source for the counters
++		 * (and thus freq scale), if available, for given policy: this boils
++		 * down to identifying an active cpu within the same freq domain, if any.
++		 */
++		if (!housekeeping_cpu(cpu, HK_TYPE_TICK) ||
++		    time_is_before_jiffies(last_update + msecs_to_jiffies(AMU_SAMPLE_EXP_MS))) {
++			struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
++			int ref_cpu = cpu;
++
++			if (!policy)
++				return -EINVAL;
++
++			if (!cpumask_intersects(policy->related_cpus,
++						housekeeping_cpumask(HK_TYPE_TICK))) {
++				cpufreq_cpu_put(policy);
++				return -EOPNOTSUPP;
++			}
++
++
++			do {
++				ref_cpu = cpumask_next_wrap(ref_cpu, policy->cpus,
++							    start_cpu, false);
++
++			} while (ref_cpu < nr_cpu_ids && idle_cpu(ref_cpu));
++
++			cpufreq_cpu_put(policy);
++
++			if (ref_cpu >= nr_cpu_ids)
++				/* No alternative to pull info from */
++				return -EAGAIN;
++
++			cpu = ref_cpu;
++		} else {
++			break;
++		}
++	}
++	/*
++	 * Reversed computation to the one used to determine
++	 * the arch_freq_scale value
++	 * (see amu_scale_freq_tick for details)
++	 */
++	scale = arch_scale_freq_capacity(cpu);
++	freq = scale * arch_scale_freq_ref(cpu);
++	freq >>= SCHED_CAPACITY_SHIFT;
++	return freq;
++}
++
+ static void amu_fie_setup(const struct cpumask *cpus)
+ {
+ 	int cpu;
 -- 
 2.25.1
 
