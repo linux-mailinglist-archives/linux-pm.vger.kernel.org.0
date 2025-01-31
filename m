@@ -1,374 +1,490 @@
-Return-Path: <linux-pm+bounces-21169-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21170-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1B7CDA23BC8
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 11:02:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0DE78A23C20
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 11:20:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2FB727A3C27
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 10:01:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6AABB188A572
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 10:20:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4382C199384;
-	Fri, 31 Jan 2025 10:02:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11AF71A4F22;
+	Fri, 31 Jan 2025 10:20:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="I5a9PqjS"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yy2JWT2z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f174.google.com (mail-yw1-f174.google.com [209.85.128.174])
+Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CFCE3145A18
-	for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 10:01:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2474171092
+	for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 10:19:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738317722; cv=none; b=Ek7boD9Chqg0Q4JexcFB3mepX3rwRot3jqHapTacG0ZPegoaL1chpiRBiSvF+NEqqjUvWp/DsfXwg9LCtnaLe4H26iqzNaSgQegfL8cDuH56XOqtt65oHeIJO3uArgu8wNa0aIaGzwq4R1RlTvpdPfeWvG3WH0LaAt0ClCCsB58=
+	t=1738318802; cv=none; b=dRZNvVN9xdVUlgEdJpiHfpjpWF0A2KIylWxp+FzycvdLq9FJMh983cwYKlp9UmgJJ/c7TMGvw+DvGA+cfEehYWb7BpWaNn+FOyHvHN409iu2a6mp/mQvKRVkndFe8gw6PBIhwc6L5axd4oaJHKYBXVotm4VlOj1UnmPZxB5t7F0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738317722; c=relaxed/simple;
-	bh=qBmWxHPyt4GHn+FiS9ceSYpS6oMpB1Pu/XcSqyTfHcs=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LRdeU4VUcTsSpWtlw0se9bjjfVFiDdkurEJ6PCcOljTFh77ZtjP3TZgdhxZXWYhw0+IDBPjXOfLJXHl9NzYL6vB+WngwzMQxjOUrBxsWWjleSYKl0YzetSTy2iTOpMiymJAeoESVN7umu/fB8o8N/KQR7x2yw6HsXNB52eX9fFQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=I5a9PqjS; arc=none smtp.client-ip=209.85.128.174
+	s=arc-20240116; t=1738318802; c=relaxed/simple;
+	bh=/Xqen7OPlPRa4hIDxkny6+bzhunAkw/3xPpAzO5ip58=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ryI1Cq9FzN1CIiu8ud1VNpciD6DN/988w6SX4lYtgityLvaoZN9r3Ad4T9X0RTOdrROg+rmTgvW72VQzZ0NW67CKtYiaGcF98PmitW71HHS0u9YheAiRebKHVgUj1i88jCbohKVg+MP0L7tTowfvQyjdkcbN3Ebdb3aTxqK3YLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yy2JWT2z; arc=none smtp.client-ip=209.85.128.43
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f174.google.com with SMTP id 00721157ae682-6eff5f6fe07so6056137b3.1
-        for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 02:01:58 -0800 (PST)
+Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-436249df846so12283285e9.3
+        for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 02:19:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738317718; x=1738922518; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=UNPItEyi98SQiBBEgcMLg4G92zZVZL1hhECBq/slwds=;
-        b=I5a9PqjSL/mn1hwKL7T0H/hkpplDF09KQZ5jizKcfXwWQSKkRGgAvJqehf3kKMFBlF
-         98n3Ncucis2aiL6G0MsjVpJm0/SacrZD8Hy+4ZSy8NqvDCdPCDy0MA+yz2mtC9tA+Hye
-         P9RAJVZYmDZkEllSdICVoRI61ePOpiZGKKkxuK/P2quH6eq0qPiDENUPRUPrKrXhXnzg
-         yy1R3Aat2JrQFqxmtWZYVXXhATLJDoPFFQP8RWWkAWp5bRLHh1msBTKpj+8wET9sidxI
-         4H5yhuIjDauGAiiJaRCoF+UiKCq7N4JKPnI47QcOoZvF1evOvH+OTHN6OlSDgRHRs8Xz
-         fAwQ==
+        d=linaro.org; s=google; t=1738318798; x=1738923598; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=sMKEFp2iY1ooXPFXuah13Z2j8Gd6Pr/iXVngt99gS+c=;
+        b=yy2JWT2z+O0A/ewKdY2+AQJcHR32C/QUK2M1Lj/F7BHibNoY3Rt0rsxW24aPAZ66X7
+         CAJC6OzYNae8FlM3ZD2NqfwUAsOhLaPkRYQxbh/kkMhz8lM2P+oS1vcIIaf9e8sQbAd8
+         jBl7OAXqOaQteezRbp0Z8SymdLgx5k8BMyMAXOrJ16NwAPCEWMsrxaJ33cwAKmlV/YU2
+         3QjcwnNBOtNkSAT9r/hJtIex6w1OMr0Vpe17G2jQ51NDhvuziC+eknVpt57mw5NXQ2GP
+         mG25AIsHS03FBwrIjSsUj0JRr62jYpztaQPgo3uBr/B4wTjpKevlfmUxs9dmzUHxCNWv
+         jq6Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738317718; x=1738922518;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=UNPItEyi98SQiBBEgcMLg4G92zZVZL1hhECBq/slwds=;
-        b=Zelxe9CNH3vYiNfKO5/WqeobikM+wZm10ldxoMGQ6ARiJXCLiSagWq8S2W8cMCEgY5
-         OVs0r9TeIxI0BKpu2+ggbnZyjLpQq79xaUQNwta2AP2zi4V9CJZbMtCed0z6gTIutiHk
-         zorAbkAIetUWrh/QqqO2eZEOg63LAVtnextNls0HYN34BT2RpiyzwGHyV6MXXvYFfWhv
-         wpta995Z9hPqP17tgXZvefArBwv9p0pWGLJwV+/scsA5RaP3sW7lVgM2mhVbRoVN3r/8
-         1tEHy7OccZJvJGB+6w9N7tim3T57c6NkrWVgXvc+Z77htHh2WPn99BK0L3uyGMrKxl0e
-         1LBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUIpx7hDdtqQ73qPLgPo8eUxk0Sl3duAUb29O+356zb0SR6jz3gPdcSgyrUl+NCENwWHqwBt13joQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyiBnATy5rtvod2YBscvnat3/4aE6J5GSUC6Ivw3AwBzxD50pBL
-	FSWG416ucutI4uTZFMksO3vL2QukSNxIFF3rd/gccKCYhsXb5OR5tde/fgyPKNuyyYNUh4jUP0N
-	wR+XtRCdytiONssrRD/LrvU3DgAbJ/hrI3x3OxA==
-X-Gm-Gg: ASbGncsxlVC3L481H9EAYDxMQrQ7rkzBQWBv3KfojgF+MmpkjzSbACLc9cF0KJ4K73U
-	De0Q3+V+KlBp1jeTpfE8rsXANUL1KsD9R1fLzm/wzjkmQbeSKtTjtz4RwhosPkL3SfeRa05eVkg
-	==
-X-Google-Smtp-Source: AGHT+IGq8M9/lR1ZKiMO+tf8yR+mmMTfufT64RjTnG/KKnQbWHBNhPOmhr63qsRaNyxywLZ/IWV+xWPpuJqTsi9uSJI=
-X-Received: by 2002:a05:690c:6f08:b0:6e2:1c94:41f8 with SMTP id
- 00721157ae682-6f8c199c18cmr61316827b3.10.1738317717558; Fri, 31 Jan 2025
- 02:01:57 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738318798; x=1738923598;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sMKEFp2iY1ooXPFXuah13Z2j8Gd6Pr/iXVngt99gS+c=;
+        b=hHQ4i7sNSTjBT4wbA4EqkciYo9tXAt4TB/Qs/RZWOiGfyYe7FqUaIY7NaslTOdBIbf
+         7jLtnBes7GsRfld3TDyiriGo26rUIcUK/lnab8thOYKK6W22IwQGn39TweojjXPr3vOu
+         O5GZ1B4oi9Ih5mpIGsK5ECcnmZGGUXxWliRmHRwFHEiPPsCmxlcTTLcNqqmyvRkXYXvW
+         X2LzPFXEjTIsK08cyzSwQENxxPNH31A0a1OlqM7vvfLdCU8dnoKXLYYN6hTK+cI5E5EB
+         6iB6+fOK85PMEKPCfzN2+nwKVGyaAOpLNvPW3tbgEjvmg837lkj5CiHmtW8TaePivA1z
+         l8XA==
+X-Gm-Message-State: AOJu0Yzmhj02QyGEu7MHpqUXxm3dAkQcbdEdDDrUbKwWGO6NB3MvVOBQ
+	bl1Qx0UriYxTru1co++l1lUH4h/55l1DOa2O+TB+9ng1qdUz72AId7oJYrVN7bU=
+X-Gm-Gg: ASbGncsoJ0uO+k8FYvGmi7yna0f88BzLFOBwnMqJ6GZMtBx8uvV/8khsH8GA4oEYrHK
+	hP6bDURM1p9D+ZekdPeJCvU12Vp8cmAG6im5hQuDfVYztwGL9JwFh5uPYJf/VBcQXBfGaYWiei2
+	YJ0Hp0TllCGNXlnGmYOvZ2gDyYuHNRgelK0odzk5fsakFlBlK8+TaHCRb8klzNZmWevDgv0aDJJ
+	V25Kc5ScOYmLg3rkj1v78dVpG1evtFGXjjiW2s46zcp4x/BNcIdmtf7sLPmoUhbTObcanKIa0WQ
+	9r96CqG23gvvEFCacVNqJxuT+xGxnKiRtIowQ3d5aDywDspo7KeKKP8=
+X-Google-Smtp-Source: AGHT+IFZNXsQuum6x6xRWf12F8+xm9RtbvKoDUhlQmJkPtJJdDXPK7wmN6KvRldwONlJY8dd+oDrNA==
+X-Received: by 2002:a05:6000:1563:b0:385:ee40:2d75 with SMTP id ffacd0b85a97d-38c51960d9amr8876284f8f.20.1738318796298;
+        Fri, 31 Jan 2025 02:19:56 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-438dcc2c4ddsm85201155e9.17.2025.01.31.02.19.55
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 31 Jan 2025 02:19:55 -0800 (PST)
+Message-ID: <b69fe059-5aff-4fbd-879e-166d67310563@linaro.org>
+Date: Fri, 31 Jan 2025 11:19:54 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12619233.O9o76ZdvQC@rjwysocki.net> <CAPDyKFpc5p3sXZ6LfdVgt8jR5ZbsQExTgeyMNA-PzcWs5A9U0A@mail.gmail.com>
- <CAJZ5v0gvQjp_P-5Ww7iN1cGiiMJ6tvLLnPpkTQNk++KhoRe=GA@mail.gmail.com>
- <CAPDyKFrBO+r8qYRrhoFZN21__8RuR61ofbsGQZbA=pyQbti5CA@mail.gmail.com>
- <CAJZ5v0jTutgKeXtg3YLR1Onw9gOmvHudHamVVgMxEsieNDXViw@mail.gmail.com>
- <CAPDyKFpmNPhyV3YoBFu7KnW04550DQgqzGHAbGLLqp7=TggVtw@mail.gmail.com> <CAJZ5v0iYHBeMra_ba-1Ht4xoPGsyt7gg05RtGxoa_gG91s1xEA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iYHBeMra_ba-1Ht4xoPGsyt7gg05RtGxoa_gG91s1xEA@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 31 Jan 2025 11:01:21 +0100
-X-Gm-Features: AWEUYZnI8RrzdQhuYe1gfwY0F5z4zjQ4LzaqkzRxe-pub1Yp6d4IRZsjMDcV4PM
-Message-ID: <CAPDyKFqkqOXD0oVZoOFR4O6ucqLS4n85_S4SNPvPAc6hfaELgw@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
- parents and children
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Bjorn Helgaas <helgaas@kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
-	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Kevin Xie <kevin.xie@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 2/2] thermal: imx91: Add support for i.MX91 thermal
+ monitoring unit
+To: Frank Li <Frank.Li@nxp.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
+ Sascha Hauer <s.hauer@pengutronix.de>,
+ Pengutronix Kernel Team <kernel@pengutronix.de>,
+ Fabio Estevam <festevam@gmail.com>, Pengfei Li <pengfei.li_1@nxp.com>,
+ Marco Felsch <m.felsch@pengutronix.de>
+Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, Peng Fan <peng.fan@nxp.com>
+References: <20241216-imx91tmu-v4-0-75caef7481b8@nxp.com>
+ <20241216-imx91tmu-v4-2-75caef7481b8@nxp.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20241216-imx91tmu-v4-2-75caef7481b8@nxp.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Thu, 30 Jan 2025 at 14:19, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Jan 30, 2025 at 12:11=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.=
-org> wrote:
-> >
-> > On Wed, 29 Jan 2025 at 17:58, Rafael J. Wysocki <rafael@kernel.org> wro=
-te:
-> > >
-> > > On Wed, Jan 29, 2025 at 5:42=E2=80=AFPM Ulf Hansson <ulf.hansson@lina=
-ro.org> wrote:
-> > > >
-> > > > On Wed, 29 Jan 2025 at 16:55, Rafael J. Wysocki <rafael@kernel.org>=
- wrote:
-> > > > >
-> > > > > On Wed, Jan 29, 2025 at 12:53=E2=80=AFPM Ulf Hansson <ulf.hansson=
-@linaro.org> wrote:
-> > > > > >
-> > > > > > On Tue, 28 Jan 2025 at 20:24, Rafael J. Wysocki <rjw@rjwysocki.=
-net> wrote:
-> > > > > > >
-> > > > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > > >
-> > > > > > > Commit 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks =
-in the
-> > > > > > > resume phase") overlooked the case in which the parent of a d=
-evice with
-> > > > > > > DPM_FLAG_SMART_SUSPEND set did not use that flag and could be=
- runtime-
-> > > > > > > suspended before a transition into a system-wide sleep state.=
-  In that
-> > > > > > > case, if the child is resumed during the subsequent transitio=
-n from
-> > > > > > > that state into the working state, its runtime PM status will=
- be set to
-> > > > > > > RPM_ACTIVE, but the runtime PM status of the parent will not =
-be updated
-> > > > > > > accordingly, even though the parent will be resumed too, beca=
-use of the
-> > > > > > > dev_pm_skip_suspend() check in device_resume_noirq().
-> > > > > > >
-> > > > > > > Address this problem by tracking the need to set the runtime =
-PM status
-> > > > > > > to RPM_ACTIVE during system-wide resume transitions for devic=
-es with
-> > > > > > > DPM_FLAG_SMART_SUSPEND set and all of the devices depended on=
- by them.
-> > > > > > >
-> > > > > > > Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks =
-in the resume phase")
-> > > > > > > Closes: https://lore.kernel.org/linux-pm/Z30p2Etwf3F2AUvD@hov=
-oldconsulting.com/
-> > > > > > > Reported-by: Johan Hovold <johan@kernel.org>
-> > > > > > > Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linar=
-o.org>
-> > > > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > > > ---
-> > > > > > >  drivers/base/power/main.c |   29 ++++++++++++++++++++-------=
---
-> > > > > > >  include/linux/pm.h        |    1 +
-> > > > > > >  2 files changed, 21 insertions(+), 9 deletions(-)
-> > > > > > >
-> > > > > > > --- a/drivers/base/power/main.c
-> > > > > > > +++ b/drivers/base/power/main.c
-> > > > > > > @@ -656,13 +656,15 @@
-> > > > > > >          * so change its status accordingly.
-> > > > > > >          *
-> > > > > > >          * Otherwise, the device is going to be resumed, so s=
-et its PM-runtime
-> > > > > > > -        * status to "active", but do that only if DPM_FLAG_S=
-MART_SUSPEND is set
-> > > > > > > -        * to avoid confusing drivers that don't use it.
-> > > > > > > +        * status to "active" unless its power.set_active fla=
-g is clear, in
-> > > > > > > +        * which case it is not necessary to update its PM-ru=
-ntime status.
-> > > > > > >          */
-> > > > > > > -       if (skip_resume)
-> > > > > > > +       if (skip_resume) {
-> > > > > > >                 pm_runtime_set_suspended(dev);
-> > > > > > > -       else if (dev_pm_skip_suspend(dev))
-> > > > > > > +       } else if (dev->power.set_active) {
-> > > > > > >                 pm_runtime_set_active(dev);
-> > > > > > > +               dev->power.set_active =3D false;
-> > > > > > > +       }
-> > > > > > >
-> > > > > > >         if (dev->pm_domain) {
-> > > > > > >                 info =3D "noirq power domain ";
-> > > > > > > @@ -1189,18 +1191,24 @@
-> > > > > > >         return PMSG_ON;
-> > > > > > >  }
-> > > > > > >
-> > > > > > > -static void dpm_superior_set_must_resume(struct device *dev)
-> > > > > > > +static void dpm_superior_set_must_resume(struct device *dev,=
- bool set_active)
-> > > > > > >  {
-> > > > > > >         struct device_link *link;
-> > > > > > >         int idx;
-> > > > > > >
-> > > > > > > -       if (dev->parent)
-> > > > > > > +       if (dev->parent) {
-> > > > > > >                 dev->parent->power.must_resume =3D true;
-> > > > > > > +               if (set_active)
-> > > > > > > +                       dev->parent->power.set_active =3D tru=
-e;
-> > > > > > > +       }
-> > > > > > >
-> > > > > > >         idx =3D device_links_read_lock();
-> > > > > > >
-> > > > > > > -       list_for_each_entry_rcu_locked(link, &dev->links.supp=
-liers, c_node)
-> > > > > > > +       list_for_each_entry_rcu_locked(link, &dev->links.supp=
-liers, c_node) {
-> > > > > > >                 link->supplier->power.must_resume =3D true;
-> > > > > > > +               if (set_active)
-> > > > > > > +                       link->supplier->power.set_active =3D =
-true;
-> > > > > >
-> > > > > > If I understand correctly, the suppliers are already handled wh=
-en the
-> > > > > > pm_runtime_set_active() is called for consumers, so the above s=
-hould
-> > > > > > not be needed.
-> > > > >
-> > > > > It is needed because pm_runtime_set_active() doesn't cause the se=
-tting
-> > > > > to propagate to the parent's/suppliers of the suppliers AFAICS.
-> > > >
-> > > > Hmm, even if that sounds reasonable, I don't think it's a good idea=
- as
-> > > > it may introduce interesting propagation problems between drivers.
-> > > >
-> > > > For example, consider that Saravana is trying to enable runtime PM =
-for
-> > > > fw_devlinks. It would mean synchronization issues for the runtime P=
-M
-> > > > status, all over the place.
-> > >
-> > > What synchronization issues?
-> >
-> > Changing the runtime PM status for a parent/supplier that doesn't have
-> > DPM_FLAG_SMART_SUSPEND, is likely to confuse their drivers.
->
-> I'm not sure why though.
->
-> > You also removed that part of the comment a few lines above, in
-> > device_resume_noirq(). I am not sure I understand why?
->
-> Not removed, but replaced.
->
-> The set_active flag is only set for devices with
-> DPM_FLAG_SMART_SUSPEND set and devices depended on by them.  Also, it
-> is only set for devices whose must_resume is set, which for devices
-> with DPM_FLAG_SMART_SUSPEND means that they literally must be resumed.
-> Consequently, the devices depended on by them also must be resumed.
->
-> > >
-> > > > That said, is even consumer/suppliers part of the problem we are
-> > > > trying to solve?
-> > >
-> > > They are in general.
-> > >
-> > > It's just that stuff that was runtime-suspended prior to a system-wid=
-e
-> > > suspend may need to be resumed and marked as RPM_ACTIVE during
-> > > system-wide resume because one of the devices wants/needs to be
-> > > resumed then.
-> > >
-> > > If this turns out to be problematic, the problem will need to be
-> > > addressed, but for now I'm not seeing why there would be a problem.
-> > >
-> > > > >
-> > > > > > That said, maybe we instead allow parent/child to work in the s=
-imilar
-> > > > > > way as for consumer/suppliers, when pm_runtime_set_active() is =
-called
-> > > > > > for the child. In other words, when pm_runtime_set_active() is =
-called
-> > > > > > for a child and the parent is runtime PM enabled, let's runtime=
- resume
-> > > > > > it too, as we do for suppliers. Would that work, you think?
-> > > > >
-> > > > > The parent is not runtime-PM enabled when this happens.
-> > > >
-> > > > That sounds really weird to me.
-> > > >
-> > > > Does that mean that the parent has not been system resumed either?
-> > >
-> > > Yes.
-> > >
-> > > It hasn't been resumed yet, but it is known that it will be resumed.
-> > >
-> > > > If so, isn't that really the root cause for this problem,
-> > >
-> > > No, it is not.
-> > >
-> > > > or what am I missing?
-> > >
-> > > Essentially, what I said above.
-> > >
-> > > If a device that was suspended prior to a system-wide suspend
-> > > wants/needs to be resumed during the subsequent system-wide resume,
-> > > and it was runtime-PM-enabled before the suspend transition, it needs
-> > > to (a) be runtime-PM-enabled during the subsequent system-wide resume
-> > > transition and (b) it also needs to be marked as RPM_ACTIVE because i=
-n
-> > > fact it is not suspended any more.  The existing code before the patc=
-h
-> > > takes care of this for the device itself, but not for the devices it
-> > > depends on which also need to be resumed (which happens) and marked a=
-s
-> > > RPM_ACTIVE (which doesn't happen) and the patch just makes sure that
-> > > the latter will happen.
-> >
-> > Thanks for clarifying!
-> >
-> > >
-> > > Actually, what happens now is that the actual state of the parent
-> > > during the system-wide resume, right before re-enabling runtime PM fo=
-r
-> > > it, does not match its runtime PM status which is still RPM_SUSPENDED=
-.
-> > > That's what is fixed here and it applies to the parent as well as to
-> > > all of the other devices depended on by the child and the parent.
-> >
-> > Well, unfortunately I don't think it will work to call
-> > pm_runtime_set_active() for parents/suppliers like this.
->
-> As stated above, if a device with DPM_FLAG_SMART_SUSPEND has
-> power.must_resume set, it must be resumed.  Therefore, all of the
-> devices depended on by it must be resumed (literally, they need to be
-> powered up and configured to work).  This is already a rule without
-> the patch.
->
-> Accordingly, they all effectively will be "active" and so their
-> runtime PM status must reflect this.
+On 16/12/2024 20:25, Frank Li wrote:
+> From: Pengfei Li <pengfei.li_1@nxp.com>
+> 
+> Introduce support for the i.MX91 thermal monitoring unit, which features a
+> single sensor for the CPU. The register layout differs from other chips,
+> necessitating the creation of a dedicated file for this.
 
-From a theoretical point of view, yes I agree.
+Please a bit more information about the sensor (eg. resolution, I guess 1°C)
 
->
-> I don't see anything that cannot work, but I see why it is broken
-> without this patch.
+> Signed-off-by: Pengfei Li <pengfei.li_1@nxp.com>
+> Signed-off-by: Peng Fan <peng.fan@nxp.com>
+> Reviewed-by: Marco Felsch <m.felsch@pengutronix.de>
+> Signed-off-by: Frank Li <Frank.Li@nxp.com>
+> ---
+> Change from v3 to v4
+> - Add Macro's review tag
+> - Use devm_add_action()
+> - Move pm_runtim_put before thermal_of_zone_register()
+> 
+> change from v2 to v3
+> - add IMX91_TMU_ prefix for register define
+> - remove unused register define
+> - fix missed pm_runtime_put() at error path in imx91_tmu_get_temp()
+> - use dev variable in probe function
+> - use pm_runtime_set_active() in probe
+> - move START to imx91_tmu_get_temp()
+> - use DEFINE_RUNTIME_DEV_PM_OPS()
+> - keep set reset value because there are not sw "reset" bit in controller,
+> uboot may change and enable tmu.
+> 
+> change from v1 to v2
+> - use low case for hexvalue
+> - combine struct imx91_tmu and tmu_sensor
+> - simplify imx91_tmu_start() and imx91_tmu_enable()
+> - use s16 for imx91_tmu_get_temp(), which may negative value
+> - use reverse christmas tree style
+> - use run time pm
+> - use oneshot to sample temp
+> - register thermal zone after hardware init
+> ---
+>   drivers/thermal/Kconfig         |  10 ++
+>   drivers/thermal/Makefile        |   1 +
+>   drivers/thermal/imx91_thermal.c | 263 ++++++++++++++++++++++++++++++++++++++++
+>   3 files changed, 274 insertions(+)
+> 
+> diff --git a/drivers/thermal/Kconfig b/drivers/thermal/Kconfig
+> index d3f9686e26e71..da403ed86aeb1 100644
+> --- a/drivers/thermal/Kconfig
+> +++ b/drivers/thermal/Kconfig
+> @@ -296,6 +296,16 @@ config IMX8MM_THERMAL
+>   	  cpufreq is used as the cooling device to throttle CPUs when the passive
+>   	  trip is crossed.
+>   
+> +config IMX91_THERMAL
+> +	tristate "Temperature sensor driver for NXP i.MX91 SoC"
+> +	depends on ARCH_MXC || COMPILE_TEST
+> +	depends on OF
 
-You are right that the behaviour is broken and needs to be fixed, but
-I am not convinced that $subject patch is the way forward. See more
-below.
+s/OF/THERMAL_OF/
 
->
-> > I think we need the drivers for the parents/suppliers to be in
-> > agreement with the behaviour of DPM_FLAG_SMART_SUSPEND to allow the
-> > propagation. Not sure how to best achieve this though.
->
-> It would be good to actually identify the cases in which it may not
-> work and they can be fixed on top of this patch.
+> +	help
+> +	  Support for Temperature sensor found on NXP i.MX91 SoC.
+> +	  It supports one critical trip point and one passive trip point. The
+> +	  cpufreq is used as the cooling device to throttle CPUs when the passive
+> +	  trip is crossed.
 
-The problem with $subject patch is that drivers/buses are required to
-check the runtime PM status, with pm_runtime_suspended(),
-pm_runtime_status_suspended() or pm_runtime_active() in one of its
-system suspend/resume callbacks , to synchronize it with the HW state
-for its device (turn on/off clocks for example).
+This help message is inaccurate. It should describe the sensor not the 
+thermal configuration which is coming from the device tree for a 
+specific platform.
 
-Certainly, we can not rely on drivers to conform to this behaviour and
-there are plenty of cases where they really don't. For example, we
-have drivers that only implements runtime PM support or simply don't
-care about the runtime PM status during system resume, but just leaves
-the device in the state it is already in.
+>   config K3_THERMAL
+>   	tristate "Texas Instruments K3 thermal support"
+>   	depends on ARCH_K3 || COMPILE_TEST
+> diff --git a/drivers/thermal/Makefile b/drivers/thermal/Makefile
+> index 9abf43a74f2bb..08da241e6a598 100644
+> --- a/drivers/thermal/Makefile
+> +++ b/drivers/thermal/Makefile
+> @@ -50,6 +50,7 @@ obj-$(CONFIG_ARMADA_THERMAL)	+= armada_thermal.o
+>   obj-$(CONFIG_IMX_THERMAL)	+= imx_thermal.o
+>   obj-$(CONFIG_IMX_SC_THERMAL)	+= imx_sc_thermal.o
+>   obj-$(CONFIG_IMX8MM_THERMAL)	+= imx8mm_thermal.o
+> +obj-$(CONFIG_IMX91_THERMAL)	+= imx91_thermal.o
+>   obj-$(CONFIG_MAX77620_THERMAL)	+= max77620_thermal.o
+>   obj-$(CONFIG_QORIQ_THERMAL)	+= qoriq_thermal.o
+>   obj-$(CONFIG_DA9062_THERMAL)	+= da9062-thermal.o
+> diff --git a/drivers/thermal/imx91_thermal.c b/drivers/thermal/imx91_thermal.c
+> new file mode 100644
+> index 0000000000000..ef5e8e181dd0f
+> --- /dev/null
+> +++ b/drivers/thermal/imx91_thermal.c
+> @@ -0,0 +1,263 @@
+> +// SPDX-License-Identifier: GPL-2.0
+> +/*
+> + * Copyright 2024 NXP.
+> + */
+> +
+> +#include <linux/bitfield.h>
+> +#include <linux/clk.h>
+> +#include <linux/err.h>
+> +#include <linux/iopoll.h>
+> +#include <linux/nvmem-consumer.h>
+> +#include <linux/module.h>
+> +#include <linux/of.h>
+> +#include <linux/of_device.h>
+> +#include <linux/platform_device.h>
+> +#include <linux/pm_runtime.h>
+> +#include <linux/thermal.h>
+> +
+> +#define IMX91_TMU_STAT0				0x10
+> +#define IMX91_TMU_STAT0_DRDY0_IF_MASK		BIT(16)
+> +
+> +#define IMX91_TMU_DATA0				0x20
+> +
+> +#define IMX91_TMU_CTRL1_SET			0x204
+> +#define IMX91_TMU_CTRL1_CLR			0x208
+> +#define IMX91_TMU_CTRL1_EN			BIT(31)
+> +#define IMX91_TMU_CTRL1_START			BIT(30)
+> +#define IMX91_TMU_CTRL1_STOP			BIT(29)
+> +#define IMX91_TMU_CTRL1_RES_MASK		GENMASK(19, 18)
+> +#define IMX91_TMU_CTRL1_MEAS_MODE_MASK		GENMASK(25, 24)
+> +#define   IMX91_TMU_CTRL1_MEAS_MODE_SINGLE	0
+> +#define   IMX91_TMU_CTRL1_MEAS_MODE_CONTINUES	1
+> +#define   IMX91_TMU_CTRL1_MEAS_MODE_PERIODIC	2
+> +
+> +#define IMX91_TMU_REF_DIV			0x280
+> +#define IMX91_TMU_DIV_EN			BIT(31)
+> +#define IMX91_TMU_DIV_MASK			GENMASK(23, 16)
+> +#define IMX91_TMU_DIV_MAX			255
+> +
+> +#define IMX91_TMU_PUD_ST_CTRL			0x2b0
+> +#define IMX91_TMU_PUDL_MASK			GENMASK(23, 16)
+> +
+> +#define IMX91_TMU_TRIM1				0x2e0
+> +#define IMX91_TMU_TRIM2				0x2f0
+> +
+> +#define IMX91_TMU_TEMP_LOW_LIMIT		-40000
+> +#define IMX91_TMU_TEMP_HIGH_LIMIT		125000
+> +
+> +#define IMX91_TMU_DEFAULT_TRIM1_CONFIG		0xb561bc2d
+> +#define IMX91_TMU_DEFAULT_TRIM2_CONFIG		0x65d4
+> +
+> +struct imx91_tmu {
+> +	void __iomem *base;
+> +	struct clk *clk;
+> +	struct device *dev;
+> +	struct thermal_zone_device *tzd;
 
-Moreover, we have the users of pm_runtime_force_suspend|resume(),
-which we also know *not* to work with DPM_FLAG_SMART_SUSPEND and thus
-$subject patch too. I am less worried about these cases though, as I
-believe we should be able to fix them, by taking into account the
-suggested "->power.set_active flag", or something along those lines.
+This field is pointless because used only in the probe function.
 
-That said, it seems like we need another way forward.
+> +};
+> +
+> +static void imx91_tmu_start(struct imx91_tmu *tmu, bool start)
+> +{
+> +	u32 val = start ? IMX91_TMU_CTRL1_START : IMX91_TMU_CTRL1_STOP;
+> +
+> +	writel_relaxed(val, tmu->base + IMX91_TMU_CTRL1_SET);
+> +}
+> +
+> +static void imx91_tmu_enable(struct imx91_tmu *tmu, bool enable)
+> +{
+> +	u32 reg = enable ? IMX91_TMU_CTRL1_SET : IMX91_TMU_CTRL1_CLR;
+> +
+> +	writel_relaxed(IMX91_TMU_CTRL1_EN, tmu->base + reg);
+> +}
+> +
+> +static int imx91_tmu_get_temp(struct thermal_zone_device *tz, int *temp)
+> +{
+> +	struct imx91_tmu *tmu = thermal_zone_device_priv(tz);
+> +	s16 data;
+> +	int ret;
+> +	u32 val;
+> +
+> +	ret = pm_runtime_resume_and_get(tmu->dev);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	imx91_tmu_start(tmu, true);
 
-Kind regards
-Uffe
+Same question as [1]
+
+Do you really want to start and stop the sensor between two reads ?
+
+> +	ret = readl_relaxed_poll_timeout(tmu->base + IMX91_TMU_STAT0, val,
+> +					 val & IMX91_TMU_STAT0_DRDY0_IF_MASK, 1000, 40000);
+> +	if (ret) {
+> +		ret = -EAGAIN;
+> +		goto out;
+> +	}
+> +
+> +	/* DATA0 is 16bit signed number */
+> +	data = readw_relaxed(tmu->base + IMX91_TMU_DATA0);
+> +	*temp = data * 1000 / 64;
+
+cf units.h
+
+	*temp = (data * MILLIDEGREE_PER_DEGREE) / A_LITERAL;
+
+> +	if (*temp < IMX91_TMU_TEMP_LOW_LIMIT || *temp > IMX91_TMU_TEMP_HIGH_LIMIT)
+> +		ret = -EAGAIN;
+> +
+> +out:
+> +	pm_runtime_put(tmu->dev);
+> +
+> +	return ret;
+> +}
+> +
+> +static struct thermal_zone_device_ops tmu_tz_ops = {
+> +	.get_temp = imx91_tmu_get_temp,
+
+Why not add the change_mode ops ?
+
+> +};
+> +
+> +static int imx91_init_from_nvmem_cells(struct imx91_tmu *tmu)
+> +{
+> +	struct device *dev = tmu->dev;
+> +	u32 trim1, trim2;
+> +	int ret;
+> +
+> +	ret = nvmem_cell_read_u32(dev, "trim1", &trim1);
+> +	if (ret)
+> +		return ret;
+> +
+> +	ret = nvmem_cell_read_u32(dev, "trim2", &trim2);
+> +	if (ret)
+> +		return ret;
+> +
+> +	if (trim1 == 0 || trim2 == 0)
+> +		return -EINVAL;
+> +
+> +	writel_relaxed(trim1, tmu->base + IMX91_TMU_TRIM1);
+> +	writel_relaxed(trim2, tmu->base + IMX91_TMU_TRIM2);
+> +
+> +	return 0;
+> +}
+> +
+> +static void imx91_tmu_action_remove(void *data)
+> +{
+> +	struct imx91_tmu *tmu = data;
+> +
+> +	/* disable tmu */
+> +	imx91_tmu_enable(tmu, false);
+> +}
+> +
+> +static int imx91_tmu_probe(struct platform_device *pdev)
+> +{
+> +	struct device *dev = &pdev->dev;
+> +	struct imx91_tmu *tmu;
+> +	unsigned long rate;
+> +	u32 div;
+> +	int ret;
+> +
+> +	tmu = devm_kzalloc(dev, sizeof(struct imx91_tmu), GFP_KERNEL);
+> +	if (!tmu)
+> +		return -ENOMEM;
+> +
+> +	tmu->dev = dev;
+> +
+> +	tmu->base = devm_platform_ioremap_resource(pdev, 0);
+> +	if (IS_ERR(tmu->base))
+> +		return dev_err_probe(dev, PTR_ERR(tmu->base), "failed to get io resource");
+> +
+> +	tmu->clk = devm_clk_get_enabled(dev, NULL);
+> +	if (IS_ERR(tmu->clk))
+> +		return dev_err_probe(dev, PTR_ERR(tmu->clk), "failed to get tmu clock\n");
+> +
+> +	platform_set_drvdata(pdev, tmu);
+> +
+> +	/* disable the monitor during initialization */
+> +	imx91_tmu_enable(tmu, false);
+> +	imx91_tmu_start(tmu, false);
+> +
+> +	ret = imx91_init_from_nvmem_cells(tmu);
+> +	if (ret) {
+> +		writel_relaxed(IMX91_TMU_DEFAULT_TRIM1_CONFIG, tmu->base + IMX91_TMU_TRIM1);
+> +		writel_relaxed(IMX91_TMU_DEFAULT_TRIM2_CONFIG, tmu->base + IMX91_TMU_TRIM2);
+> +	}
+> +
+> +	/* The typical conv clk is 4MHz, the output freq is 'rate / (div + 1)' */
+> +	rate = clk_get_rate(tmu->clk);
+> +	div = (rate / 4000000) - 1;
+
+Use literals please (eg. 4 * HZ_PER_MHZ)
+
+> +	if (div > IMX91_TMU_DIV_MAX)
+> +		return dev_err_probe(dev, -EINVAL, "clock divider exceed hardware limitation");
+> +
+> +	/* Set divider value and enable divider */
+> +	writel_relaxed(IMX91_TMU_DIV_EN | FIELD_PREP(IMX91_TMU_DIV_MASK, div),
+> +		       tmu->base + IMX91_TMU_REF_DIV);
+> +
+> +	/* Set max power up delay: 'Tpud(ms) = 0xFF * 1000 / 4000000' */
+> +	writel_relaxed(FIELD_PREP(IMX91_TMU_PUDL_MASK, 100U), tmu->base + IMX91_TMU_PUD_ST_CTRL);
+> +
+> +	/*
+> +	 * Set resolution mode
+> +	 * 00b - Conversion time = 0.59325 ms
+> +	 * 01b - Conversion time = 1.10525 ms
+> +	 * 10b - Conversion time = 2.12925 ms
+> +	 * 11b - Conversion time = 4.17725 ms
+> +	 */
+> +	writel_relaxed(FIELD_PREP(IMX91_TMU_CTRL1_RES_MASK, 0x3), tmu->base + IMX91_TMU_CTRL1_CLR);
+> +	writel_relaxed(FIELD_PREP(IMX91_TMU_CTRL1_RES_MASK, 0x1), tmu->base + IMX91_TMU_CTRL1_SET);
+> +
+> +	writel_relaxed(IMX91_TMU_CTRL1_MEAS_MODE_MASK, tmu->base + IMX91_TMU_CTRL1_CLR);
+> +	writel_relaxed(FIELD_PREP(IMX91_TMU_CTRL1_MEAS_MODE_MASK, IMX91_TMU_CTRL1_MEAS_MODE_SINGLE),
+> +		       tmu->base + IMX91_TMU_CTRL1_SET);
+> +
+> +	pm_runtime_set_active(dev);
+> +	devm_pm_runtime_enable(dev);
+> +	pm_runtime_put(dev);
+> +
+> +	tmu->tzd = devm_thermal_of_zone_register(dev, 0, tmu, &tmu_tz_ops);
+> +	if (IS_ERR(tmu->tzd))
+> +		return dev_err_probe(dev, PTR_ERR(tmu->tzd),
+> +				     "failed to register thermal zone sensor\n");
+> +
+> +	ret = devm_add_action(dev, imx91_tmu_action_remove, tmu);
+
+Should it be moved before devm_thermal_of_zone_register(), so if the 
+thermal zone creation fails, it will stop the sensor which was 
+previously started ?
+
+> +	if (ret)
+> +		return dev_err_probe(dev, ret, "Failure to add action imx91_tmu_action_remove()\n");
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx91_tmu_runtime_suspend(struct device *dev)
+> +{
+> +	struct imx91_tmu *tmu = dev_get_drvdata(dev);
+> +
+> +	/* disable tmu */
+> +	imx91_tmu_enable(tmu, false);
+> +
+> +	clk_disable_unprepare(tmu->clk);
+> +
+> +	return 0;
+> +}
+> +
+> +static int imx91_tmu_runtime_resume(struct device *dev)
+> +{
+> +	struct imx91_tmu *tmu = dev_get_drvdata(dev);
+> +	int ret;
+> +
+> +	ret = clk_prepare_enable(tmu->clk);
+> +	if (ret)
+> +		return ret;
+> +
+> +	imx91_tmu_enable(tmu, true);
+> +
+> +	return 0;
+> +}
+> +
+> +static DEFINE_RUNTIME_DEV_PM_OPS(imx91_tmu_pm_ops, imx91_tmu_runtime_suspend,
+> +				 imx91_tmu_runtime_resume, NULL);
+> +
+> +static const struct of_device_id imx91_tmu_table[] = {
+> +	{ .compatible = "fsl,imx91-tmu", },
+> +	{ },
+> +};
+> +MODULE_DEVICE_TABLE(of, imx91_tmu_table);
+> +
+> +static struct platform_driver imx91_tmu = {
+> +	.driver = {
+> +		.name	= "imx91_thermal",
+> +		.pm	= pm_ptr(&imx91_tmu_pm_ops),
+> +		.of_match_table = imx91_tmu_table,
+> +	},
+> +	.probe = imx91_tmu_probe,
+> +};
+> +module_platform_driver(imx91_tmu);
+> +
+> +MODULE_AUTHOR("Peng Fan <peng.fan@nxp.com>");
+> +MODULE_DESCRIPTION("i.MX91 Thermal Monitor Unit driver");
+> +MODULE_LICENSE("GPL");
+> 
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
