@@ -1,102 +1,79 @@
-Return-Path: <linux-pm+bounces-21165-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21166-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7F3DA23817
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 00:51:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E7AE9A238B6
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 03:00:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 31666163E1E
-	for <lists+linux-pm@lfdr.de>; Thu, 30 Jan 2025 23:51:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 53C491889B3D
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 02:00:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56F501C1AD4;
-	Thu, 30 Jan 2025 23:51:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E0847B3E1;
+	Fri, 31 Jan 2025 01:59:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gpRyInyd"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MZPiJe3s"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25B4D1898FB;
-	Thu, 30 Jan 2025 23:51:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39146F06A;
+	Fri, 31 Jan 2025 01:59:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738281070; cv=none; b=pe7PyjdELXKG5TIG4pCD0/njQmv0MxiBDKGjmW7nuj9LOA0yQzkyHjiH3zQFNdxvYzooS0HC9vwJC5eDgAfC8iRcLmfgn/bL+5mhcy2Tpbt7CVeTZ+PojNpCw4II2PcgDa95QGc2cifwTIIu6H5KjnETcTc9XyfwlUZIFeX4f2Y=
+	t=1738288794; cv=none; b=HqxQf3+9Dpvk8FUmxrcQAkedYrtsMc544mWH5NNHBxfru8YgHQYiAswe0oGhToK6Uo6mCdesl5ZIEQ7FZHrPon6ezo9hDII6GK4tG5qjli3POTttWzxpIjurZEbXFfFpxAH7TGYLh4W93cgcvzePzeEa16eEk/8niyDoAyheEJQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738281070; c=relaxed/simple;
-	bh=CXkPOjcny3vetfrWYsxwyCNypUJvo8NXQtKAtso3d9Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=iVSXT0Ke60NexJiXX0fBJ0A3XCqkslx/4BUhDuSPV8RSNqIypZ05Q22DGZPUug4NjOqHK+4cgIoHHVxM3+eR4FrzkjEiat/HwtmfF6UhLN8Q6cVNT4bFuRMnP3RTkVehUFy59T70Tlf/4HpJBHLWUsr5dr4+1XyEGO0JmcGQ38s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gpRyInyd; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 047F6C4CED2;
-	Thu, 30 Jan 2025 23:51:08 +0000 (UTC)
+	s=arc-20240116; t=1738288794; c=relaxed/simple;
+	bh=IhcNBrI+ypILh1hImihIpu9cAvHlO5KTM5kJsWXtt/k=;
+	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=U4EUhmsRw94I6VdZs6us/VNLyGS5gNPgvYIav+h8FxtM4ywlzjUzBiZuJAuUpx3goRoh/L2jk0jbFWIXtKJQQ+Ns7iGhb1vuG+giSk/gmsPrWymfwzmUioxuzGYiGWJGxsslLpbjEmfRlucV6pb3JuUetVU4B2D0rf06e/6FJgU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MZPiJe3s; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D26B5C4CEE0;
+	Fri, 31 Jan 2025 01:59:53 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738281069;
-	bh=CXkPOjcny3vetfrWYsxwyCNypUJvo8NXQtKAtso3d9Y=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=gpRyInydaL6BItpyZo9f6LIndF0jEQC1eBbQoOhqQQ6YCIwhO+FNm+BpTrt2IWoeA
-	 kmp7qtIV8V5HCHbJ+VthUU21TTnymeXdqqd8DKpFA/G78Lm8h+AEc5dOgcdD3U+k3P
-	 ji36Kr4aM6eEX4EGTiTH7Ajskja5LK3zJwirY7rJDDhyEVqGfp+Bdmy4QGVv2opYBk
-	 SEgkzTy5YvU1TgqujPhYhd87eiElDS1q1DWH4adVhDBwr+DdWgoBupDB0JIsRkhTvo
-	 fjfSp5riCTismgJXk5dUAblbU9E3YI0JY3Y55xJP/i+iuaxGw11M4Ag1EzNgPqqUue
-	 TN22vbc2Z7GqQ==
-Date: Thu, 30 Jan 2025 17:51:08 -0600
-From: Rob Herring <robh@kernel.org>
-To: Ryan.Wanner@microchip.com
-Cc: lee@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	claudiu.beznea@tuxon.dev, sre@kernel.org,
-	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
-	p.zabel@pengutronix.de, linux@armlinux.org.uk,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rtc@vger.kernel.org
-Subject: Re: [PATCH 08/16] dt-bindings: at91rm9260-rtt: add
- microchip,sama7d65-rtt
-Message-ID: <20250130235108.GA1889615-robh@kernel.org>
-References: <cover.1738257860.git.Ryan.Wanner@microchip.com>
- <f5642fad5d7a97772ae22c76840c5c51ee79ec0f.1738257860.git.Ryan.Wanner@microchip.com>
+	s=k20201202; t=1738288793;
+	bh=IhcNBrI+ypILh1hImihIpu9cAvHlO5KTM5kJsWXtt/k=;
+	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
+	b=MZPiJe3smlspWy4FeTxjHorg6pLNRf+H9AmQzs2ux8E3YBPGLRmNcEC+5/uOFD/hd
+	 /iOh3hhlfZ7uDClM3XtzYgvah2It9oI2aW7vdBICR7/EN5/6ztlnnDSMrUM6VcoDkJ
+	 i/avDAVadW2tXG1SAOEoTLI1UCpdMuttLLinlUb7orF2IK8PFQsoOmdTLUhZVCOC31
+	 m74NibITvaWr5veol1StwcLUqBqSZ9Qne9m5pEsja44UP4wKLW99+LyvMLWzqf12qC
+	 WY6YhDhR2QouOdZfvlbdfFua5dQ0f8ytOnLt9dSVrg8X28MdS4XmDapn2pfr47T9eg
+	 7YBv+/ChWE2oQ==
+Received: from [10.30.226.235] (localhost [IPv6:::1])
+	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 70ECE380AA66;
+	Fri, 31 Jan 2025 02:00:21 +0000 (UTC)
+Subject: Re: [GIT PULL] More power management updates for v6.14-rc1
+From: pr-tracker-bot@kernel.org
+In-Reply-To: <CAJZ5v0ip_MwjtS+2MfUqkdC+y6nSevQf8-bUosMkLt1yYJEpqA@mail.gmail.com>
+References: <CAJZ5v0ip_MwjtS+2MfUqkdC+y6nSevQf8-bUosMkLt1yYJEpqA@mail.gmail.com>
+X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
+X-PR-Tracked-Message-Id: <CAJZ5v0ip_MwjtS+2MfUqkdC+y6nSevQf8-bUosMkLt1yYJEpqA@mail.gmail.com>
+X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.14-rc1-2
+X-PR-Tracked-Commit-Id: a01e0f47a7a10668c178f058bcf136f8ec897286
+X-PR-Merge-Tree: torvalds/linux.git
+X-PR-Merge-Refname: refs/heads/master
+X-PR-Merge-Commit-Id: f55b0671e3f90824ac06dc06b988075eb9c6830c
+Message-Id: <173828881993.1146049.10558745735369794147.pr-tracker-bot@kernel.org>
+Date: Fri, 31 Jan 2025 02:00:19 +0000
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, ACPI Devel Maling List <linux-acpi@vger.kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <f5642fad5d7a97772ae22c76840c5c51ee79ec0f.1738257860.git.Ryan.Wanner@microchip.com>
 
-On Thu, Jan 30, 2025 at 10:33:48AM -0700, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Add SAMA7D65 RTT compatible to DT bindings documentation.
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
->  .../devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml       | 5 +++++
->  1 file changed, 5 insertions(+)
-> 
-> diff --git a/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> index a7f6c1d1a08ab..078b753f453b4 100644
-> --- a/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> +++ b/Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml
-> @@ -23,6 +23,11 @@ properties:
->                - microchip,sam9x60-rtt
->                - microchip,sam9x7-rtt
->            - const: atmel,at91sam9260-rtt
-> +      - items:
-> +          - enum:
-> +              - microchip,sama7d65-rtt
-> +          - const: microchip,sama7g5-rtt
-> +          - const: atmel,at91sam9260-rtt
+The pull request you sent on Thu, 30 Jan 2025 22:05:13 +0100:
 
-Does being compatible with 7g5 provide something over 9260? If not, 
-probably better to just have 9260 as the only fallback.
+> git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git pm-6.14-rc1-2
 
->        - items:
->            - const: microchip,sama7g5-rtt
->            - const: microchip,sam9x60-rtt
-> -- 
-> 2.43.0
-> 
+has been merged into torvalds/linux.git:
+https://git.kernel.org/torvalds/c/f55b0671e3f90824ac06dc06b988075eb9c6830c
+
+Thank you!
+
+-- 
+Deet-doot-dot, I am a bot.
+https://korg.docs.kernel.org/prtracker.html
 
