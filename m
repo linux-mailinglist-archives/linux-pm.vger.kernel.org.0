@@ -1,59 +1,101 @@
-Return-Path: <linux-pm+bounces-21182-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21183-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 389CDA24053
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 17:26:00 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 74DE6A242AD
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 19:33:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85C9A164D70
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 16:25:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 915F81627FB
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 18:33:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8746E1EC01E;
-	Fri, 31 Jan 2025 16:25:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CB8D11F1511;
+	Fri, 31 Jan 2025 18:33:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="NiBwzQZO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0CECB1F0E2C;
-	Fri, 31 Jan 2025 16:25:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D30221EF097
+	for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 18:33:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738340712; cv=none; b=cvG8LKhBNRgtBgDpL9uaGbNMu2KOgCG+1n8d8EQWIRLLPYfYxsZ/FaOand78nbeCrUWt+gtNNp52fen3UgYoDNDJNIqKNbDKOjDUcBfz8s8YNQ5DagxPSMok+Dlf2GZmaE08NpxSR6YmBNSooEjitbe6+3/2GVLhBwb715Z9vn4=
+	t=1738348385; cv=none; b=pmSTrZN9e77E6ItCdy0XMZr5lhf/7UNXc2j5lFaiUaKFQ6WecO8gB+VcAMBO+U/pLs/XP3nLVoXoQ/pLQjjGbUEQqqC5YOmTR8eO7dtzQP8fAyZokZks9hi/Wtq9Q3VswHvaV7zoPIqZdC5O/pdGSz+R13Dx4sRpyFjfQX40sOs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738340712; c=relaxed/simple;
-	bh=UrPeDcBjCasShll16HrywUAszFC33HX30upT7GhLdsc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=HiLx76q4VFpaOh6XOwtsDRyRxfej3tOQ+bADNd194ShdN8krdwA8G3xsgSsH2OdCfF7zmPSac+xBJzpEYTPZyA63BljFF7J3C4E4m1CdAG0RsHOubifmNjYBrFHSKCBCxiG4lMqf+7ubF1iOC3G/p3HOopW8t87y+XysI5y1B7w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id C221DFEC;
-	Fri, 31 Jan 2025 08:25:34 -0800 (PST)
-Received: from e125905.cambridge.arm.com (e125905.cambridge.arm.com [10.1.194.73])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 4656F3F694;
-	Fri, 31 Jan 2025 08:25:07 -0800 (PST)
-From: Beata Michalska <beata.michalska@arm.com>
-To: linux-kernel@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	ionela.voinescu@arm.com,
-	sudeep.holla@arm.com,
-	will@kernel.org,
-	catalin.marinas@arm.com,
-	rafael@kernel.org,
-	viresh.kumar@linaro.org
-Cc: sumitg@nvidia.com,
-	yang@os.amperecomputing.com,
-	vanshikonda@os.amperecomputing.com,
-	lihuisong@huawei.com,
-	zhanjie9@hisilicon.com,
-	ptsm@linux.microsoft.com
-Subject: [PATCH v10 4/4] arm64: Update AMU-based freq scale factor on entering idle
-Date: Fri, 31 Jan 2025 16:24:39 +0000
-Message-Id: <20250131162439.3843071-5-beata.michalska@arm.com>
-In-Reply-To: <20250131162439.3843071-1-beata.michalska@arm.com>
-References: <20250131162439.3843071-1-beata.michalska@arm.com>
+	s=arc-20240116; t=1738348385; c=relaxed/simple;
+	bh=mCPNNfQ+mXH4SaFBhVI8w7CNWsoJtut/rmZTlH9X238=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=HSmbjZMfgu+WTfIFfLBm7oyi20+dlepvdk9hbW6BuA3YpreUvlbddKB8rLaZO4FvDS9ueOmbhUnCVfgPvciA9qVQfehmmSU0rRFAsHPaCkKK+lh6ypn+K+g2AV5TyJbG4MnwqWevD81s6Bv0F+8LIG5b5hYkQxUdNCD72iyYAdo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=NiBwzQZO; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 50VD3mUZ010309
+	for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 18:33:02 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=VLRbXMmwZCBDiegFB6xNj0wrH8d23vZFWhr
+	pgC8eiB8=; b=NiBwzQZOaKzarPHRFYiw83z8Jktn0eKZl26dv/VeGJjWkOXM99U
+	9cXjmOXLUh0meVzbfqijX24RdKvAae6gJJYCKf2/yO31ETCHgwdkQ7yOxifsNIga
+	AitLcHYte1W8XFAIdCcGrFyDIh6DAjwH2ZCPl7qcXhSfIZfUCreHPXtlYFc1Dimj
+	qWk5ndqRGca+60aZeMiw++/mpw/jb9doLTAfitS1YN4bqIYMjpC1CjqolO+L4kvR
+	j85Ykn4Qt+zWIY29ZWjKWOIzlQ78iSIrCKvWLyUbCQKu4uGwVIamVZTmie4S6FZz
+	2vFLmfbIM7uqQaJC/+PB5B/SjCcuQfjSS/Q==
+Received: from mail-pj1-f70.google.com (mail-pj1-f70.google.com [209.85.216.70])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44gy2q8rvn-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 18:33:01 +0000 (GMT)
+Received: by mail-pj1-f70.google.com with SMTP id 98e67ed59e1d1-2ef9dbeb848so4361818a91.0
+        for <linux-pm@vger.kernel.org>; Fri, 31 Jan 2025 10:33:01 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738348381; x=1738953181;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=VLRbXMmwZCBDiegFB6xNj0wrH8d23vZFWhrpgC8eiB8=;
+        b=QbPVzEkf0Jg7C6+mAs1OMCH3XdQ/iPQLZhEr7X4WdEMoVv3Bdcwm3cwcmj2vvYCd2N
+         EQFAE9/PqixR5JQkoLex/FNQvgv6/II5vbtXFqTmHjegBhhusZWK0ORwRuIsQf2X8Kxl
+         bOXOrSZ9aEfdoMNYKrzl0dDhojj81Ob3waSPkYQSQD28fk8RtdjrGFOd89W9VHgofTS1
+         78rWv2eGuaiMbGh1/2RMD/OwqZIFQhdjvfIsguXbHNePX4CVb4c4zfHFYr3gY7nHqQWH
+         dN4MyKo5499Xmnk41a9qpNiz9fuus5eB5F1VcStYskAAJEJjwxACwL5V5afGNCxOhIRR
+         pPUA==
+X-Forwarded-Encrypted: i=1; AJvYcCWO06DB7PmLqlU7ysZcibRERpQ3Szh0QrxyRoLRalXT6zsGWKA3TrR8STywLA1bOt2D7slxN3+ZxA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw4Kbl5bBIkpiYBhoHzMIiiChSnl4u4kGprkYiFPNVh413kgdag
+	f9qe/YvhIBr3GzCn80Tlg6t4PR1ex6tr3rrCSy9jUcXjHYj2068n0wbBtrR/5OzeyLmINoE790k
+	fxtbzm8b43GwOT9nX6Y+sWyDXrvnB6ANxtp2JoCAs45luDsh40UHzHpo+qQ==
+X-Gm-Gg: ASbGnct43XrWaSMFRayCjNkyRRAYa25ehZDvlKkrSEyAYIih+Cz2s1qB2QAXLkC7jQF
+	hmWrnARHRYo5i1az2EFEph9J6R+90/mJZKWz4x4R5b0Ng5x2b6BGSnKZ7kSjOSBt2+pDq2+3pkz
+	RXOEAKEljr7h9lhdQkTygXPjTgD2RPgJhZCPaK1osaFlEOYnLSDswkN6uc5axuMHlDuGJa0t07l
+	Jk0HghgkqW34kt3JiiZyd9Nt050oj8dJZ72w1S0ePVpDAzoFNWVkDr54G+UXVes8cK9MQXDrgPB
+	kV/OnDUmTH0baaShVu/j1LbSD8uRsVue7ihE4Ttj
+X-Received: by 2002:a05:6a00:2149:b0:72f:d50a:9096 with SMTP id d2e1a72fcca58-72fd50a921dmr14048189b3a.8.1738348380799;
+        Fri, 31 Jan 2025 10:33:00 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFVIFdjy9mcPPQqVGEnO1Ke3flUWcfPUyVjjSHEovFnSVxSnSZS93jsbtVJXGdphqMKz/skZQ==
+X-Received: by 2002:a05:6a00:2149:b0:72f:d50a:9096 with SMTP id d2e1a72fcca58-72fd50a921dmr14048138b3a.8.1738348380282;
+        Fri, 31 Jan 2025 10:33:00 -0800 (PST)
+Received: from hu-jprakash-hyd.qualcomm.com ([202.46.22.19])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe69ce9f4sm3714919b3a.146.2025.01.31.10.32.52
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 31 Jan 2025 10:32:59 -0800 (PST)
+From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+To: jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+        agross@kernel.org, andersson@kernel.org, dmitry.baryshkov@linaro.org,
+        konradybcio@kernel.org, daniel.lezcano@linaro.org, sboyd@kernel.org,
+        amitk@kernel.org, thara.gopinath@gmail.com, lee@kernel.org,
+        rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com,
+        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+        quic_kamalw@quicinc.com
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, lars@metafoo.de,
+        devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+        linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
+        jishnu.prakash@oss.qualcomm.com, quic_skakitap@quicinc.com,
+        neil.armstrong@linaro.org
+Subject: [PATCH V5 0/5] Add support for QCOM SPMI PMIC5 Gen3 ADC
+Date: Sat,  1 Feb 2025 00:02:37 +0530
+Message-Id: <20250131183242.3653595-1-jishnu.prakash@oss.qualcomm.com>
+X-Mailer: git-send-email 2.25.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -61,47 +103,165 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
+X-Proofpoint-GUID: DSo3GqNz-SkIRWAcWhMST0bzbhnXiZX8
+X-Proofpoint-ORIG-GUID: DSo3GqNz-SkIRWAcWhMST0bzbhnXiZX8
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-01-31_06,2025-01-31_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011
+ priorityscore=1501 mlxscore=0 phishscore=0 bulkscore=0 adultscore=0
+ impostorscore=0 lowpriorityscore=0 suspectscore=0 spamscore=0
+ mlxlogscore=999 malwarescore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2501170000 definitions=main-2501310140
 
-Now that the frequency scale factor has been activated for retrieving
-current frequency on a given CPU, trigger its update upon entering
-idle. This will, to an extent, allow querying last known frequency
-in a non-invasive way. It will also improve the frequency scale factor
-accuracy when a CPU entering idle did not receive a tick for a while.
-As a consequence, for idle cores, the reported frequency will be the
-last one observed before entering the idle state.
+PMIC5 Gen3 has a similar ADC architecture to that on PMIC5 Gen2,
+with all SW communication to ADC going through PMK8550 which
+communicates with other PMICs through PBS. The major difference is
+that the register interface used here is that of an SDAM present on
+PMK8550, rather than a dedicated ADC peripheral. There may be more than one
+SDAM used for ADC5 Gen3. Each ADC SDAM has eight channels, each of which may
+be used for either immediate reads (same functionality as previous PMIC5 and
+PMIC5 Gen2 ADC peripherals) or recurring measurements (same as PMIC5 and PMIC5
+Gen2 ADC_TM functionality). In this case, we have VADC and ADC_TM functionality
+combined into the same driver.
 
-Suggested-by: Vanshidhar Konda <vanshikonda@os.amperecomputing.com>
-Signed-off-by: Beata Michalska <beata.michalska@arm.com>
-Reviewed-by: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
-Reviewed-by: Sumit Gupta <sumitg@nvidia.com>
----
- arch/arm64/kernel/topology.c | 13 +++++++++++++
- 1 file changed, 13 insertions(+)
+Patch 1 is a cleanup, to move the QCOM ADC dt-bindings files from
+dt-bindings/iio to dt-bindings/iio/adc folder, as they are
+specifically for ADC devices. It also fixes all compilation errors
+with this change in driver and devicetree files and similar errors
+in documentation for dtbinding check.
 
-diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
-index bd238e5c2133..6f0cab8e746b 100644
---- a/arch/arm64/kernel/topology.c
-+++ b/arch/arm64/kernel/topology.c
-@@ -213,6 +213,19 @@ static __always_inline bool amu_fie_cpu_supported(unsigned int cpu)
- 		cpumask_test_cpu(cpu, amu_fie_cpus);
- }
- 
-+void arch_cpu_idle_enter(void)
-+{
-+	unsigned int cpu = smp_processor_id();
-+
-+	if (!amu_fie_cpu_supported(cpu))
-+		return;
-+
-+	/* Kick in AMU update but only if one has not happened already */
-+	if (housekeeping_cpu(cpu, HK_TYPE_TICK) &&
-+	    time_is_before_jiffies(per_cpu(cpu_amu_samples.last_scale_update, cpu)))
-+		amu_scale_freq_tick();
-+}
-+
- #define AMU_SAMPLE_EXP_MS	20
- 
- int arch_freq_get_on_cpu(int cpu)
+Patch 2 splits out the common ADC channel properties used on older
+VADC devices, which would also be reused on ADC5 Gen3.
+
+Patch 3 adds bindings for ADC5 Gen3 peripheral.
+
+Patch 4 adds the main driver for ADC5 Gen3.
+
+Patch 5 adds the auxiliary thermal driver which supports the ADC_TM
+functionality of ADC5 Gen3.
+
+Changes since v4:
+- Split common ADC channel properties out into a separate file to use as 
+  ref for ADC5 Gen3 and moved ADC5 Gen3 documentation into a separate
+  file as suggested by reviewers.
+- Addressed few reviewer comments in driver patches.
+- Link to v4: https://lore.kernel.org/all/20241030185854.4015348-1-quic_jprakash@quicinc.com/
+
+Changes since v3:
+- Updated files affected by adc file path change in /arch/arm folder,
+  which were missed earlier.
+- Added ADC5 Gen3 documentation changes in existing qcom,spmi-vadc.yaml file
+  instead of adding separate file and addressed reviewer comments for all bindings.
+- Addressed review comments in driver patch. Split out TM functionality into
+  auxiliary driver in separate patch and added required changes in main driver.
+- Link to v3: https://lore.kernel.org/all/20231231171237.3322376-1-quic_jprakash@quicinc.com/
+
+Changes since v2:
+- Reordered patches to keep cleanup change for ADC files first.
+- Moved ADC5 Gen3 documentation into a separate file
+
+Changes since v1:
+- Dropped patches 1-5 for changing 'ADC7' peripheral name to 'ADC5 Gen2'.
+- Addressed reviewer comments for binding and driver patches for ADC5 Gen3.
+- Combined patches 8-11 into a single patch as requested by reviewers to make
+  the change clearer and made all fixes required in same patch.
+
+Jishnu Prakash (5):
+  dt-bindings: iio/adc: Move QCOM ADC bindings to iio/adc folder
+  dt-bindings: iio: adc: Split out QCOM VADC channel properties
+  dt-bindings: iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+  iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+  thermal: qcom: add support for PMIC5 Gen3 ADC thermal monitoring
+
+ .../bindings/iio/adc/qcom,spmi-adc5-gen3.yaml | 157 ++++
+ .../iio/adc/qcom,spmi-vadc-common.yaml        |  87 +++
+ .../bindings/iio/adc/qcom,spmi-vadc.yaml      |  81 +-
+ .../bindings/mfd/qcom,spmi-pmic.yaml          |   2 +-
+ .../bindings/thermal/qcom-spmi-adc-tm-hc.yaml |   2 +-
+ .../bindings/thermal/qcom-spmi-adc-tm5.yaml   |   6 +-
+ arch/arm/boot/dts/qcom/pm8226.dtsi            |   2 +-
+ arch/arm/boot/dts/qcom/pm8941.dtsi            |   2 +-
+ arch/arm/boot/dts/qcom/pma8084.dtsi           |   2 +-
+ arch/arm/boot/dts/qcom/pmx55.dtsi             |   2 +-
+ arch/arm64/boot/dts/qcom/pm4125.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm6125.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm6150.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm6150l.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pm660.dtsi           |   2 +-
+ arch/arm64/boot/dts/qcom/pm660l.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm7250b.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pm8150.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8150b.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pm8150l.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pm8916.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8937.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8950.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8953.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8994.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pm8998.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pmi632.dtsi          |   2 +-
+ arch/arm64/boot/dts/qcom/pmi8950.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pmm8155au_1.dtsi     |   2 +-
+ arch/arm64/boot/dts/qcom/pmp8074.dtsi         |   2 +-
+ arch/arm64/boot/dts/qcom/pms405.dtsi          |   2 +-
+ .../boot/dts/qcom/qcm6490-fairphone-fp5.dts   |   4 +-
+ .../boot/dts/qcom/qcm6490-shift-otter.dts     |   4 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dts       |   2 +-
+ arch/arm64/boot/dts/qcom/sc7280-idp.dtsi      |   2 +-
+ arch/arm64/boot/dts/qcom/sc7280-qcard.dtsi    |   4 +-
+ arch/arm64/boot/dts/qcom/sc8180x-pmics.dtsi   |   2 +-
+ .../boot/dts/qcom/sc8280xp-huawei-gaokun3.dts |   2 +-
+ .../qcom/sc8280xp-lenovo-thinkpad-x13s.dts    |   2 +-
+ .../dts/qcom/sc8280xp-microsoft-blackrock.dts |   2 +-
+ arch/arm64/boot/dts/qcom/sc8280xp-pmics.dtsi  |   6 +-
+ .../boot/dts/qcom/sm7225-fairphone-fp4.dts    |   2 +-
+ .../boot/dts/qcom/sm7325-nothing-spacewar.dts |   6 +-
+ arch/arm64/boot/dts/qcom/sm8450-hdk.dts       |   8 +-
+ drivers/iio/adc/Kconfig                       |  30 +
+ drivers/iio/adc/Makefile                      |   2 +
+ drivers/iio/adc/qcom-adc5-gen3-common.c       |  99 +++
+ drivers/iio/adc/qcom-spmi-adc5-gen3.c         | 724 ++++++++++++++++++
+ drivers/iio/adc/qcom-spmi-adc5.c              |   2 +-
+ drivers/iio/adc/qcom-spmi-vadc.c              |   2 +-
+ drivers/thermal/qcom/Kconfig                  |  10 +
+ drivers/thermal/qcom/Makefile                 |   1 +
+ drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c | 489 ++++++++++++
+ .../iio/adc/qcom,spmi-adc5-gen3-pm8550.h      |  46 ++
+ .../iio/adc/qcom,spmi-adc5-gen3-pm8550b.h     |  85 ++
+ .../iio/adc/qcom,spmi-adc5-gen3-pm8550vx.h    |  22 +
+ .../iio/adc/qcom,spmi-adc5-gen3-pmk8550.h     |  52 ++
+ .../iio/{ => adc}/qcom,spmi-adc7-pm7325.h     |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pm8350.h     |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pm8350b.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pmk8350.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pmr735a.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-pmr735b.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-adc7-smb139x.h    |   2 +-
+ .../iio/{ => adc}/qcom,spmi-vadc.h            |  81 ++
+ include/linux/iio/adc/qcom-adc5-gen3-common.h | 164 ++++
+ 66 files changed, 2117 insertions(+), 137 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/qcom,spmi-adc5-gen3.yaml
+ create mode 100644 Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml
+ create mode 100644 drivers/iio/adc/qcom-adc5-gen3-common.c
+ create mode 100644 drivers/iio/adc/qcom-spmi-adc5-gen3.c
+ create mode 100644 drivers/thermal/qcom/qcom-spmi-adc-tm5-gen3.c
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550b.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550vx.h
+ create mode 100644 include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pmk8550.h
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm7325.h (98%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350.h (98%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pm8350b.h (99%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmk8350.h (97%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735a.h (95%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-pmr735b.h (95%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-adc7-smb139x.h (93%)
+ rename include/dt-bindings/iio/{ => adc}/qcom,spmi-vadc.h (77%)
+ create mode 100644 include/linux/iio/adc/qcom-adc5-gen3-common.h
+
+
+base-commit: 5ffa57f6eecefababb8cbe327222ef171943b183
 -- 
 2.25.1
 
