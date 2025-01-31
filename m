@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-21196-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21197-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2A92A2459A
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 00:17:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2CB5EA2459E
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 00:17:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E343B1889864
-	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 23:17:40 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 126153A684B
+	for <lists+linux-pm@lfdr.de>; Fri, 31 Jan 2025 23:17:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2EFB1F3FFA;
-	Fri, 31 Jan 2025 23:17:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E941F4272;
+	Fri, 31 Jan 2025 23:17:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="eNX7uDaD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TgxU0J4n"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f178.google.com (mail-oi1-f178.google.com [209.85.167.178])
+Received: from mail-ot1-f52.google.com (mail-ot1-f52.google.com [209.85.210.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E44E1B85D7;
-	Fri, 31 Jan 2025 23:17:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D994E7081F;
+	Fri, 31 Jan 2025 23:17:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.210.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738365445; cv=none; b=S/qOq8NPIV5HpH/fGrD00G+W6+Q028gG0b1jyOAK03QbVA4BfJ/nGFjpZYfGuSPDEjq9r9WHs94Usy0Pl6Y8ELZpd30egd0AilaToh0FM0i4G5B3SfGctO2oNTYFzWECiJHNFdsTHl+o97OKoOUsueezMeR/td5Z3Ej0lflyw/M=
+	t=1738365446; cv=none; b=u481fiUJ6lof9ftSVWwBrpiIHDpeNXjjET9ibK99YuH/xO1XHwjDYTYs3Z5q6n6a9OOBYAWm0YZsTY7gQZA6fzvuMpjApe2UVNDLRJGBQ64pLopqBOtNQ5WTUNTxJSpiF8xILUKH4JeKl4sTlWTsJpG5ki/uLbnlh0yNqwQn+XY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738365445; c=relaxed/simple;
-	bh=IEY9ErTuFfVaSJ9cLvDWiM8qfCPKp286AcHbTTYJngI=;
+	s=arc-20240116; t=1738365446; c=relaxed/simple;
+	bh=E/t/k6EfGTIeDC7lGiOVWu6BC0LxkfF4ArWRMg5BOrE=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eUNVbhpRVu+bv5VuhTGknruYgulkPuk8owRdbg7szBmR4lIY/Oo1XDFcmW1AQZcu8H6435mIm7BSZuJueBRhKj4X2cowmIIkhR3xJ8cRQ7YSNg38z50SlWXrBztE5cr9OlNd4W1d7WJRDtdV4PfQ4rX5OdUgn9F9mbDnyCUEWsk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=eNX7uDaD; arc=none smtp.client-ip=209.85.167.178
+	 MIME-Version; b=rRE+aqLEWFyIG4INj4aLuL2L7BSU5siRgFzfsrtj740xMf5bjfOrFDcldzArAdQDqG5S1VJZWCtv46vjhiJaqFzz0ERagOwsRlaGT7uBMocsrMlPG4/Dx/+3uMw4wguGKLYpnMJoWqOSjCjQNbfwT+c+oGyvn/fw9THGfMkr73M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TgxU0J4n; arc=none smtp.client-ip=209.85.210.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3eb880e5ac2so1448435b6e.2;
-        Fri, 31 Jan 2025 15:17:23 -0800 (PST)
+Received: by mail-ot1-f52.google.com with SMTP id 46e09a7af769-71e15717a2dso1345435a34.3;
+        Fri, 31 Jan 2025 15:17:24 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738365443; x=1738970243; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738365444; x=1738970244; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=b6RZRMBZ4GNAqGDERJs8E4i7kY25Yy4QpxNyKVAYuxs=;
-        b=eNX7uDaDcDu1G10or/E3UGC5wkjzeN0gMF8buJM98qbi9xtfBDxrCHc0GwCa/Qxdov
-         R34dPcjEiemSfTlMsui+U+B4+kQfnZDy+dXmMPVAc2LRuoNY3x/dIr+LoQuTWdmqNNDo
-         I3w/N1cetAU2Oc0KoMW1pxhTKFlx+rJsKc+Zk2l2+KTYbnF6PAskk+aREAowW5Dr7aFP
-         41Vlx82rRpXFagsGsONxK2WyvxPxTUZoxr5dxIg8aa0q3PUFGGPHFjUPMakFLMyUUuWD
-         Xi0/ZFwwsszQoa9LKlNDJkaca+BVZi/5ltAsfChncPxtTJy6ENQ52evo2rg0b56zc5Jd
-         Ju+A==
+        bh=Z74CjKyGOGsBmIUznySLFrDCv0ADaabpNorixVGmQWw=;
+        b=TgxU0J4nNpxvLqHJ0RKsfS3glaQ7JpTnuALkAWZXV5mRW9h/3sVPpJfYSI4O+cIFIk
+         qPHU9wFPKoNfvOK9stfsXw28aOF4UkYYKHi7GMRxQa3uMXLy00dFbzq9GZX8vadbbGCw
+         4QWfUte1b/dtYNpc3vBlF4fcBF/iiBa/iu0bY94DlIwPgXhXht6IptR7MOr3WaQgHPfg
+         2pNFo0wvB6iBGTK9/py62yeKGycZYIPJG3/And4UjZXHhbTNP+VpwDB+hHI/gE8sJ3TL
+         J+TL7QsON1usxCGbbdups9k2oDY2DMddPTm+hgiV3t3pDi6NQfk5SBVpEJEycvHm4paH
+         Rz9Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738365443; x=1738970243;
+        d=1e100.net; s=20230601; t=1738365444; x=1738970244;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=b6RZRMBZ4GNAqGDERJs8E4i7kY25Yy4QpxNyKVAYuxs=;
-        b=keSVwL0tOiGSGKbYSnz1e2Iqvr61TXbb4WQvxwsOBlkMaE5dZ6IKSFY0U0Hk7x5mnG
-         0RDrZUXlBQJKWAlcCL1MiZ5oTAqqSZMRLM4+eDVpPLLa8sSEzbUW6g4V30pal+eyNl1A
-         xFFu/JHR9IzrGUaOatrsk/cVZ7/bEn+dA5B8K2lFOc0p4AOlmjQDrRF85zf40uCMhWbB
-         yi8BA/Wt5VtdwUkOBRqjhwf02jLBd7wsdrYVOQr3yAUBuD2qEiEczpuTnyEBbXzhFKlq
-         8oLIV3M9gU8pgkKb7sly3o548bYpRthnw3ruRc0HQ+Ple73NDb8nM9OKR4NzenIhcwXi
-         xbEA==
-X-Forwarded-Encrypted: i=1; AJvYcCVFU8ZCuJfP5fCLahGc405DhuSf5n7A3gTB71SK53SikDZL8QDJEVkq4LCJSmFbfXBoxzTk1DQk6A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwavRLe5D/KmFsrYhersNtrPW9pgDyx2gJD22JcfLHulZpPWACM
-	fPcXbYxtHMXQuFU88JsdJ2AClqq2AxooTeV3lMgW89ZZk2D/9dwO
-X-Gm-Gg: ASbGncvN80HHyAxcUPCN619WjqJH4v35ZnbVkI2vszMwwq5TlwOse9vtXHrK5aply54
-	JoRF1zIJ+8zqEIIRBE7wz7RXRBpp7vb6/98ENF58BhzqoRU0Ws7aUZ8UfnCNMeuevbyrAzuzc79
-	uUHRB0z9hcnfX5evqMkzXvGjbdQ2+3cVZ+gKo7ErLw10E6GFf08hihx8jVNGPJgcUZY2oUb9rTc
-	61S4oZVKCfCs6BDTk7K6f8E5xMarpp5syfd8gjWMulKDr1gRpwjwVLJU2FG3bzYIs28W9PeVlyV
-	PEJrY4v/+hGQyCnrLaISpD2YMztF0lkxPo4=
-X-Google-Smtp-Source: AGHT+IFDTbTeKnf7somAR/gbcEcKZyGG5BhbzPu0AxnisSfPlBNH3bQ3i0JKMOx/PEVM6WOznG5JOQ==
-X-Received: by 2002:a05:6808:19a4:b0:3e6:580e:f12c with SMTP id 5614622812f47-3f323a3eb95mr9621238b6e.10.1738365443167;
+        bh=Z74CjKyGOGsBmIUznySLFrDCv0ADaabpNorixVGmQWw=;
+        b=LFL4QYFuo2Qg0xhGBgJanvYOVafEbVqtB1i6TDdWxDgHob8AOtVQHZiDA5ljDVruoI
+         07XU3L60t5CZFB/MTaH77UegIFFao/G/YDHOh3ejfh5YMLA1a7p6IB5AIxyrIQyTC92/
+         sfxkFQ0i98y5dMfOXRGcW6l7txGtuHMUx+a3wZm03s7iuZwFhbQ2PORkKkJXhfZCyMKF
+         8UqpUrz3FI2PsuwgRyhDHChMDJVkOzJnL3aDRwkT32oRvia7MYA0qSTvUVarB8xWyHkv
+         lRpxE9aabTmBtiBioZD489UHKxRlRvNtzUOv/JfLJvZm9nV64v6qQwOGvBqCk1MmhSoX
+         HewA==
+X-Forwarded-Encrypted: i=1; AJvYcCUcrCpWThG3p3UIRkhT2Zw+GeswWP6zoEYdoGAwoc0LMhFRkmWTc5HoS4efPwNC6Mg9SDQExZdnSA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxxNSjVH3J08W1miyvl3dtJVVke3AJq8ioTtbBNgCuutGPipGlM
+	UTjV6Zs5ATSJhjD9iLDNvwmWNa9nTAgHTMt+g3Ra1e3QTA7fvSt+
+X-Gm-Gg: ASbGncvJHuhLA/cNkYKEJS02iKOUPx9dG0KAldyQGEHnk+i7eBHSHRJA8Y6fSLy73Jw
+	t4XMHh304In0C/RvyEzVRtegIZywyy8dWT/UfpmmlIbjD7RYDs8pBgASdFkBGqBV3DKXxS+p86k
+	yCTLdy9Xnb7HaxSU0GqRW0WqxYZaJs3KHCK8flXevRt9KlyeEQPl5LrMXjabBvd/3L/9WHpHwZt
+	BqUq3t7iozYLpbNEb/MFUP03DXq4Des2qVDnLPjXsOzXTeBkkcPJC/AOcMtiH4/fbNTWLGwnSM8
+	J9QHBOO+VRprvfhqejgve5ioS7k0GrQ9G9k=
+X-Google-Smtp-Source: AGHT+IGhsSOs3k11DfQOkk9ydz9xjmi+WCq+e89tyN+zDtdBn0uZu/QVaP4CDdiW4iSwL+L6Q1sR7g==
+X-Received: by 2002:a05:6808:2015:b0:3eb:74ed:5a32 with SMTP id 5614622812f47-3f323a63fd6mr8828111b6e.22.1738365443945;
         Fri, 31 Jan 2025 15:17:23 -0800 (PST)
 Received: from localhost.localdomain ([2600:1700:fb0:1bcf:d061:e6e5:c6da:b514])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f33365bf31sm1099128b6e.34.2025.01.31.15.17.22
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f33365bf31sm1099128b6e.34.2025.01.31.15.17.23
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 31 Jan 2025 15:17:22 -0800 (PST)
+        Fri, 31 Jan 2025 15:17:23 -0800 (PST)
 From: Chris Morgan <macroalpha82@gmail.com>
 To: linux-sunxi@lists.linux.dev
 Cc: devicetree@vger.kernel.org,
@@ -85,9 +85,9 @@ Cc: devicetree@vger.kernel.org,
 	robh@kernel.org,
 	sre@kernel.org,
 	Chris Morgan <macromorgan@hotmail.com>
-Subject: [PATCH 3/5] mfd: axp20x: AXP717: Add AXP717_TS_PIN_CFG to writeable regs
-Date: Fri, 31 Jan 2025 17:14:53 -0600
-Message-ID: <20250131231455.153447-4-macroalpha82@gmail.com>
+Subject: [PATCH 4/5] power: supply: axp20x_battery: Update temp sensor for AXP717 from device tree
+Date: Fri, 31 Jan 2025 17:14:54 -0600
+Message-ID: <20250131231455.153447-5-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250131231455.153447-1-macroalpha82@gmail.com>
 References: <20250131231455.153447-1-macroalpha82@gmail.com>
@@ -101,41 +101,60 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-Add AXP717_TS_PIN_CFG (register 0x50) to the table of writeable
-registers so that the temperature sensor can be configured by the
-battery driver.
+Allow a boolean property of "x-powers,no-thermistor" to specify devices
+where the ts pin is not connected to anything. This works around an
+issue found with some devices where the efuse is not programmed
+correctly from the factory or when the register gets set erroneously.
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
 ---
- drivers/mfd/axp20x.c       | 2 +-
- include/linux/mfd/axp20x.h | 1 +
- 2 files changed, 2 insertions(+), 1 deletion(-)
+ drivers/power/supply/axp20x_battery.c | 19 +++++++++++++++++++
+ 1 file changed, 19 insertions(+)
 
-diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
-index cff56deba24f..baf51dea98b0 100644
---- a/drivers/mfd/axp20x.c
-+++ b/drivers/mfd/axp20x.c
-@@ -222,7 +222,7 @@ static const struct regmap_range axp717_writeable_ranges[] = {
- 	regmap_reg_range(AXP717_PMU_FAULT, AXP717_MODULE_EN_CONTROL_1),
- 	regmap_reg_range(AXP717_MIN_SYS_V_CONTROL, AXP717_BOOST_CONTROL),
- 	regmap_reg_range(AXP717_VSYS_V_POWEROFF, AXP717_VSYS_V_POWEROFF),
--	regmap_reg_range(AXP717_IRQ0_EN, AXP717_IRQ4_EN),
-+	regmap_reg_range(AXP717_IRQ0_EN, AXP717_TS_PIN_CFG),
- 	regmap_reg_range(AXP717_IRQ0_STATE, AXP717_IRQ4_STATE),
- 	regmap_reg_range(AXP717_ICC_CHG_SET, AXP717_CV_CHG_SET),
- 	regmap_reg_range(AXP717_DCDC_OUTPUT_CONTROL, AXP717_CPUSLDO_CONTROL),
-diff --git a/include/linux/mfd/axp20x.h b/include/linux/mfd/axp20x.h
-index c3df0e615fbf..3c5aecf1d4b5 100644
---- a/include/linux/mfd/axp20x.h
-+++ b/include/linux/mfd/axp20x.h
-@@ -137,6 +137,7 @@ enum axp20x_variants {
- #define AXP717_IRQ2_STATE		0x4a
- #define AXP717_IRQ3_STATE		0x4b
- #define AXP717_IRQ4_STATE		0x4c
-+#define AXP717_TS_PIN_CFG		0x50
- #define AXP717_ICC_CHG_SET		0x62
- #define AXP717_ITERM_CHG_SET		0x63
- #define AXP717_CV_CHG_SET		0x64
+diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+index 3c3158f31a48..345a1bbe50ad 100644
+--- a/drivers/power/supply/axp20x_battery.c
++++ b/drivers/power/supply/axp20x_battery.c
+@@ -89,6 +89,8 @@
+ #define AXP717_BAT_CC_MIN_UA		0
+ #define AXP717_BAT_CC_MAX_UA		3008000
+ 
++#define AXP717_TS_PIN_DISABLE		BIT(4)
++
+ struct axp20x_batt_ps;
+ 
+ struct axp_data {
+@@ -117,6 +119,7 @@ struct axp20x_batt_ps {
+ 	/* Maximum constant charge current */
+ 	unsigned int max_ccc;
+ 	const struct axp_data	*data;
++	bool ts_disable;
+ };
+ 
+ static int axp20x_battery_get_max_voltage(struct axp20x_batt_ps *axp20x_batt,
+@@ -984,6 +987,22 @@ static void axp717_set_battery_info(struct platform_device *pdev,
+ 	int ccc = info->constant_charge_current_max_ua;
+ 	int val;
+ 
++	axp_batt->ts_disable = (device_property_read_bool(axp_batt->dev,
++							  "x-powers,no-thermistor"));
++
++	/*
++	 * Under rare conditions an incorrectly programmed efuse for
++	 * the temp sensor on the PMIC may trigger a fault condition.
++	 * Allow users to hard-code if the ts pin is not used to work
++	 * around this problem.
++	 */
++	if (axp_batt->ts_disable) {
++		regmap_update_bits(axp_batt->regmap,
++				   AXP717_TS_PIN_CFG,
++				   AXP717_TS_PIN_DISABLE,
++				   AXP717_TS_PIN_DISABLE);
++	}
++
+ 	if (vmin > 0 && axp717_set_voltage_min_design(axp_batt, vmin))
+ 		dev_err(&pdev->dev,
+ 			"couldn't set voltage_min_design\n");
 -- 
 2.43.0
 
