@@ -1,419 +1,199 @@
-Return-Path: <linux-pm+bounces-21209-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21210-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BC3EA2490B
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 13:36:06 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3FA61A24915
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 13:43:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEC613A4B26
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 12:35:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B36DC1649C1
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 12:43:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD6A11A0BD7;
-	Sat,  1 Feb 2025 12:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RMhrRqAI"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43AD51A23BE;
+	Sat,  1 Feb 2025 12:43:14 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9CA79AD39;
-	Sat,  1 Feb 2025 12:35:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76ABAD39;
+	Sat,  1 Feb 2025 12:43:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738413359; cv=none; b=LS4DNrMbhBPd4AcstRSgfcEwgzvLwzEiRpps4S0ROhf/R80+v0Yr+P2HnChcoknAzweU5cX6JcdF9NEJcvtktlNs09Xee5uQ3RJYvG7tgNAmMDsuU19KTPKnvUiqBXIZlSVDVyJEfh9IUo0hVu8Fu7lsL0k+Scv8W0BwieP2VU4=
+	t=1738413794; cv=none; b=u7RRKZYQy9M1DPGYgxe5sL838ckqq3abtMea6GsX6CUhG5fltkqXhtdC8CTPodMM9i7JF9g9qn1WajHJc+RyvChyyp+MvhhU9dIBfqqgHmzAa6QAjXFeMBgS60CEw4VfkxeP9s8YRP8Jqv00lRRR0OCf48sDW6bcgVCef3A6gQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738413359; c=relaxed/simple;
-	bh=RgMmX8KiM6ihpw0PWKKTKRNdVYUqPLP5yB825c9Ru9U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=rQLS/xRqEB8Dl7x04bpYC5kpr7o7weeyFJCk+JtEKIXu252mqw39500OrY/QV6WJn1/7zhnC9WnocOzhLus+KCe9PZxkfd2DpJH5nyHEiIMb4eQL9cMzUxa06pQj23lpvjM5V/ZmuG4jZNgzDTSmvdRkMK9GG7M5jho9nUmV1+g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RMhrRqAI; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0EB93C4CEE5;
-	Sat,  1 Feb 2025 12:35:59 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738413359;
-	bh=RgMmX8KiM6ihpw0PWKKTKRNdVYUqPLP5yB825c9Ru9U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=RMhrRqAIEHavSF8Gd9xYEbhejT6MF1E5nzxupPB3LvbxVp6cANnvyJ/pooEiPFgnj
-	 58IoYxu+JXVNxQpCIyP37DJw+u8IJoVRJwHRCYuK9QDgHvhSfKd2UpDMHY2tSo+g1n
-	 VzvEA+8zJbbWBCJaHpAFAy2oCQ8d6o1QtD0xuVZTqzFw/2ZEMo04gk48iScd4ApGzE
-	 XHChdjwyvwdXvKmNwzKqyR6xxj675D0Bi9wDpcTqV1+s0Vc4gbJtU8G1w8SXFr0jRE
-	 4G8sNkksFU8bKWsSgccJkFlMiXLvy2DBU11USmKG/GCzm6rdSUmIu9GzYkUFMJl8Kc
-	 WviaXFf3T9EWw==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-2a3d8857a2bso1513035fac.1;
-        Sat, 01 Feb 2025 04:35:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVYH+7TyzR20EEXz0C2paQ0Skm/Qy/M3iVkeqeVda85nKguFEdIEsLywnvNRQ8/U8ohtN1+L90y0kYh@vger.kernel.org, AJvYcCVxLGjoCQfHuTbD7u11EyqSB4UC7dx2Jq3Yxkfkf5vEn6ngEl34LCX5PL2kCbcKhbpWTf2vzzsT5U4=@vger.kernel.org, AJvYcCWXvWj5i7dOTV2SwgysVOeUDqSoCX4axUKZWMDpqta9npf0GzgdMUy5q3RrrSg63z2IFr4ZofN/k8chTmo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzBrCdj7NneFroRiWFU0Vt2MXNxtrNsbTjftvhN3/5JLQgzY4Br
-	CK8PLFCBLTQQBnx5GDUQAtsuuZf7PiPzQnxybNRWRs8pj+95eSMnBkROWbXdyNLU2MOhAj/pE7Y
-	7ALREGjaJWnzgktxrwG2dtcS6ZRw=
-X-Google-Smtp-Source: AGHT+IETPNEbQmNEnmo7eepKnCD9va+98QbDghNLEv6/+wzGxkNSrWBTfzSjL082zcsi+BOlYUmeQoHZKnSEwWrJuWc=
-X-Received: by 2002:a05:6870:7d8e:b0:29e:4d0e:a2b6 with SMTP id
- 586e51a60fabf-2b32f056aa4mr9510761fac.10.1738413358150; Sat, 01 Feb 2025
- 04:35:58 -0800 (PST)
+	s=arc-20240116; t=1738413794; c=relaxed/simple;
+	bh=GNMY0qMhhZCbl6+kaMsUuxtmkZfRtOSFWGDSkd4IvC0=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=XQJys+751uMbusefaPZ0guMPtpglWhSetx+CMfxe/Pz5d2OhTm5RkoWQBts2JTsftZQexi0SzzTZKzfDODN7mBvmsR4aim+Bx3G1HZBkg3J1R8L3QD9wBiuLnHAMnQ9RJi7STV4LtiS6E5i/wYGsztdunTJUMFbb6yiIBV6/cXI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0BD7339;
+	Sat,  1 Feb 2025 04:43:35 -0800 (PST)
+Received: from [10.57.36.53] (unknown [10.57.36.53])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24D023F63F;
+	Sat,  1 Feb 2025 04:43:07 -0800 (PST)
+Message-ID: <3861524b-b266-4e54-b7ab-fdccbb7b4177@arm.com>
+Date: Sat, 1 Feb 2025 12:43:05 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12619233.O9o76ZdvQC@rjwysocki.net> <CAPDyKFpc5p3sXZ6LfdVgt8jR5ZbsQExTgeyMNA-PzcWs5A9U0A@mail.gmail.com>
- <CAJZ5v0gvQjp_P-5Ww7iN1cGiiMJ6tvLLnPpkTQNk++KhoRe=GA@mail.gmail.com>
- <CAPDyKFrBO+r8qYRrhoFZN21__8RuR61ofbsGQZbA=pyQbti5CA@mail.gmail.com>
- <CAJZ5v0jTutgKeXtg3YLR1Onw9gOmvHudHamVVgMxEsieNDXViw@mail.gmail.com>
- <CAPDyKFpmNPhyV3YoBFu7KnW04550DQgqzGHAbGLLqp7=TggVtw@mail.gmail.com>
- <CAJZ5v0iYHBeMra_ba-1Ht4xoPGsyt7gg05RtGxoa_gG91s1xEA@mail.gmail.com> <CAPDyKFqkqOXD0oVZoOFR4O6ucqLS4n85_S4SNPvPAc6hfaELgw@mail.gmail.com>
-In-Reply-To: <CAPDyKFqkqOXD0oVZoOFR4O6ucqLS4n85_S4SNPvPAc6hfaELgw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 1 Feb 2025 13:35:47 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jAEJ7DPS4yarwL5Nx_8EVNR0XepjnsCdNuM4pF=Cw9bg@mail.gmail.com>
-X-Gm-Features: AWEUYZmoiyPGi_H9u0_JWhgECfp7HjJdmTWVS63Vge6ROEPYWqrLo-ASsOl7WsI
-Message-ID: <CAJZ5v0jAEJ7DPS4yarwL5Nx_8EVNR0XepjnsCdNuM4pF=Cw9bg@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
- parents and children
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Bjorn Helgaas <helgaas@kernel.org>, 
-	Linux PCI <linux-pci@vger.kernel.org>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Kevin Xie <kevin.xie@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+From: Christian Loehle <christian.loehle@arm.com>
+Subject: Re: [RFC][PATCH v021 0/9] cpufreq: intel_pstate: Enable EAS on hybrid
+ platforms without SMT
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
+ Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>, "Zhang, Rui" <rui.zhang@intel.com>
+References: <5861970.DvuYhMxLoT@rjwysocki.net>
+ <be830a7a-410e-4864-adaf-0c68bb1135f1@arm.com>
+ <CAJZ5v0hHc5y6LhVRRePr2n2nu=C4XE+Xi-A+D=uxDcsFZDjOJg@mail.gmail.com>
+Content-Language: en-US
+In-Reply-To: <CAJZ5v0hHc5y6LhVRRePr2n2nu=C4XE+Xi-A+D=uxDcsFZDjOJg@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Fri, Jan 31, 2025 at 11:02=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.or=
-g> wrote:
->
-> On Thu, 30 Jan 2025 at 14:19, Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
-> >
-> > On Thu, Jan 30, 2025 at 12:11=E2=80=AFPM Ulf Hansson <ulf.hansson@linar=
-o.org> wrote:
-> > >
-> > > On Wed, 29 Jan 2025 at 17:58, Rafael J. Wysocki <rafael@kernel.org> w=
-rote:
-> > > >
-> > > > On Wed, Jan 29, 2025 at 5:42=E2=80=AFPM Ulf Hansson <ulf.hansson@li=
-naro.org> wrote:
-> > > > >
-> > > > > On Wed, 29 Jan 2025 at 16:55, Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
-> > > > > >
-> > > > > > On Wed, Jan 29, 2025 at 12:53=E2=80=AFPM Ulf Hansson <ulf.hanss=
-on@linaro.org> wrote:
-> > > > > > >
-> > > > > > > On Tue, 28 Jan 2025 at 20:24, Rafael J. Wysocki <rjw@rjwysock=
-i.net> wrote:
-> > > > > > > >
-> > > > > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > > > > > > >
-> > > > > > > > Commit 6e176bf8d461 ("PM: sleep: core: Do not skip callback=
-s in the
-> > > > > > > > resume phase") overlooked the case in which the parent of a=
- device with
-> > > > > > > > DPM_FLAG_SMART_SUSPEND set did not use that flag and could =
-be runtime-
-> > > > > > > > suspended before a transition into a system-wide sleep stat=
-e.  In that
-> > > > > > > > case, if the child is resumed during the subsequent transit=
-ion from
-> > > > > > > > that state into the working state, its runtime PM status wi=
-ll be set to
-> > > > > > > > RPM_ACTIVE, but the runtime PM status of the parent will no=
-t be updated
-> > > > > > > > accordingly, even though the parent will be resumed too, be=
-cause of the
-> > > > > > > > dev_pm_skip_suspend() check in device_resume_noirq().
-> > > > > > > >
-> > > > > > > > Address this problem by tracking the need to set the runtim=
-e PM status
-> > > > > > > > to RPM_ACTIVE during system-wide resume transitions for dev=
-ices with
-> > > > > > > > DPM_FLAG_SMART_SUSPEND set and all of the devices depended =
-on by them.
-> > > > > > > >
-> > > > > > > > Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callback=
-s in the resume phase")
-> > > > > > > > Closes: https://lore.kernel.org/linux-pm/Z30p2Etwf3F2AUvD@h=
-ovoldconsulting.com/
-> > > > > > > > Reported-by: Johan Hovold <johan@kernel.org>
-> > > > > > > > Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@lin=
-aro.org>
-> > > > > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.co=
-m>
-> > > > > > > > ---
-> > > > > > > >  drivers/base/power/main.c |   29 ++++++++++++++++++++-----=
-----
-> > > > > > > >  include/linux/pm.h        |    1 +
-> > > > > > > >  2 files changed, 21 insertions(+), 9 deletions(-)
-> > > > > > > >
-> > > > > > > > --- a/drivers/base/power/main.c
-> > > > > > > > +++ b/drivers/base/power/main.c
-> > > > > > > > @@ -656,13 +656,15 @@
-> > > > > > > >          * so change its status accordingly.
-> > > > > > > >          *
-> > > > > > > >          * Otherwise, the device is going to be resumed, so=
- set its PM-runtime
-> > > > > > > > -        * status to "active", but do that only if DPM_FLAG=
-_SMART_SUSPEND is set
-> > > > > > > > -        * to avoid confusing drivers that don't use it.
-> > > > > > > > +        * status to "active" unless its power.set_active f=
-lag is clear, in
-> > > > > > > > +        * which case it is not necessary to update its PM-=
-runtime status.
-> > > > > > > >          */
-> > > > > > > > -       if (skip_resume)
-> > > > > > > > +       if (skip_resume) {
-> > > > > > > >                 pm_runtime_set_suspended(dev);
-> > > > > > > > -       else if (dev_pm_skip_suspend(dev))
-> > > > > > > > +       } else if (dev->power.set_active) {
-> > > > > > > >                 pm_runtime_set_active(dev);
-> > > > > > > > +               dev->power.set_active =3D false;
-> > > > > > > > +       }
-> > > > > > > >
-> > > > > > > >         if (dev->pm_domain) {
-> > > > > > > >                 info =3D "noirq power domain ";
-> > > > > > > > @@ -1189,18 +1191,24 @@
-> > > > > > > >         return PMSG_ON;
-> > > > > > > >  }
-> > > > > > > >
-> > > > > > > > -static void dpm_superior_set_must_resume(struct device *de=
-v)
-> > > > > > > > +static void dpm_superior_set_must_resume(struct device *de=
-v, bool set_active)
-> > > > > > > >  {
-> > > > > > > >         struct device_link *link;
-> > > > > > > >         int idx;
-> > > > > > > >
-> > > > > > > > -       if (dev->parent)
-> > > > > > > > +       if (dev->parent) {
-> > > > > > > >                 dev->parent->power.must_resume =3D true;
-> > > > > > > > +               if (set_active)
-> > > > > > > > +                       dev->parent->power.set_active =3D t=
-rue;
-> > > > > > > > +       }
-> > > > > > > >
-> > > > > > > >         idx =3D device_links_read_lock();
-> > > > > > > >
-> > > > > > > > -       list_for_each_entry_rcu_locked(link, &dev->links.su=
-ppliers, c_node)
-> > > > > > > > +       list_for_each_entry_rcu_locked(link, &dev->links.su=
-ppliers, c_node) {
-> > > > > > > >                 link->supplier->power.must_resume =3D true;
-> > > > > > > > +               if (set_active)
-> > > > > > > > +                       link->supplier->power.set_active =
-=3D true;
-> > > > > > >
-> > > > > > > If I understand correctly, the suppliers are already handled =
-when the
-> > > > > > > pm_runtime_set_active() is called for consumers, so the above=
- should
-> > > > > > > not be needed.
-> > > > > >
-> > > > > > It is needed because pm_runtime_set_active() doesn't cause the =
-setting
-> > > > > > to propagate to the parent's/suppliers of the suppliers AFAICS.
-> > > > >
-> > > > > Hmm, even if that sounds reasonable, I don't think it's a good id=
-ea as
-> > > > > it may introduce interesting propagation problems between drivers=
-.
-> > > > >
-> > > > > For example, consider that Saravana is trying to enable runtime P=
-M for
-> > > > > fw_devlinks. It would mean synchronization issues for the runtime=
- PM
-> > > > > status, all over the place.
-> > > >
-> > > > What synchronization issues?
-> > >
-> > > Changing the runtime PM status for a parent/supplier that doesn't hav=
-e
-> > > DPM_FLAG_SMART_SUSPEND, is likely to confuse their drivers.
-> >
-> > I'm not sure why though.
-> >
-> > > You also removed that part of the comment a few lines above, in
-> > > device_resume_noirq(). I am not sure I understand why?
-> >
-> > Not removed, but replaced.
-> >
-> > The set_active flag is only set for devices with
-> > DPM_FLAG_SMART_SUSPEND set and devices depended on by them.  Also, it
-> > is only set for devices whose must_resume is set, which for devices
-> > with DPM_FLAG_SMART_SUSPEND means that they literally must be resumed.
-> > Consequently, the devices depended on by them also must be resumed.
-> >
-> > > >
-> > > > > That said, is even consumer/suppliers part of the problem we are
-> > > > > trying to solve?
-> > > >
-> > > > They are in general.
-> > > >
-> > > > It's just that stuff that was runtime-suspended prior to a system-w=
-ide
-> > > > suspend may need to be resumed and marked as RPM_ACTIVE during
-> > > > system-wide resume because one of the devices wants/needs to be
-> > > > resumed then.
-> > > >
-> > > > If this turns out to be problematic, the problem will need to be
-> > > > addressed, but for now I'm not seeing why there would be a problem.
-> > > >
-> > > > > >
-> > > > > > > That said, maybe we instead allow parent/child to work in the=
- similar
-> > > > > > > way as for consumer/suppliers, when pm_runtime_set_active() i=
-s called
-> > > > > > > for the child. In other words, when pm_runtime_set_active() i=
-s called
-> > > > > > > for a child and the parent is runtime PM enabled, let's runti=
-me resume
-> > > > > > > it too, as we do for suppliers. Would that work, you think?
-> > > > > >
-> > > > > > The parent is not runtime-PM enabled when this happens.
-> > > > >
-> > > > > That sounds really weird to me.
-> > > > >
-> > > > > Does that mean that the parent has not been system resumed either=
-?
-> > > >
-> > > > Yes.
-> > > >
-> > > > It hasn't been resumed yet, but it is known that it will be resumed=
-.
-> > > >
-> > > > > If so, isn't that really the root cause for this problem,
-> > > >
-> > > > No, it is not.
-> > > >
-> > > > > or what am I missing?
-> > > >
-> > > > Essentially, what I said above.
-> > > >
-> > > > If a device that was suspended prior to a system-wide suspend
-> > > > wants/needs to be resumed during the subsequent system-wide resume,
-> > > > and it was runtime-PM-enabled before the suspend transition, it nee=
-ds
-> > > > to (a) be runtime-PM-enabled during the subsequent system-wide resu=
-me
-> > > > transition and (b) it also needs to be marked as RPM_ACTIVE because=
- in
-> > > > fact it is not suspended any more.  The existing code before the pa=
-tch
-> > > > takes care of this for the device itself, but not for the devices i=
-t
-> > > > depends on which also need to be resumed (which happens) and marked=
- as
-> > > > RPM_ACTIVE (which doesn't happen) and the patch just makes sure tha=
-t
-> > > > the latter will happen.
-> > >
-> > > Thanks for clarifying!
-> > >
-> > > >
-> > > > Actually, what happens now is that the actual state of the parent
-> > > > during the system-wide resume, right before re-enabling runtime PM =
-for
-> > > > it, does not match its runtime PM status which is still RPM_SUSPEND=
-ED.
-> > > > That's what is fixed here and it applies to the parent as well as t=
-o
-> > > > all of the other devices depended on by the child and the parent.
-> > >
-> > > Well, unfortunately I don't think it will work to call
-> > > pm_runtime_set_active() for parents/suppliers like this.
-> >
-> > As stated above, if a device with DPM_FLAG_SMART_SUSPEND has
-> > power.must_resume set, it must be resumed.  Therefore, all of the
-> > devices depended on by it must be resumed (literally, they need to be
-> > powered up and configured to work).  This is already a rule without
-> > the patch.
-> >
-> > Accordingly, they all effectively will be "active" and so their
-> > runtime PM status must reflect this.
->
-> From a theoretical point of view, yes I agree.
->
-> >
-> > I don't see anything that cannot work, but I see why it is broken
-> > without this patch.
->
-> You are right that the behaviour is broken and needs to be fixed, but
-> I am not convinced that $subject patch is the way forward. See more
-> below.
->
-> >
-> > > I think we need the drivers for the parents/suppliers to be in
-> > > agreement with the behaviour of DPM_FLAG_SMART_SUSPEND to allow the
-> > > propagation. Not sure how to best achieve this though.
-> >
-> > It would be good to actually identify the cases in which it may not
-> > work and they can be fixed on top of this patch.
->
-> The problem with $subject patch is that drivers/buses are required to
-> check the runtime PM status, with pm_runtime_suspended(),
-> pm_runtime_status_suspended() or pm_runtime_active() in one of its
-> system suspend/resume callbacks , to synchronize it with the HW state
-> for its device (turn on/off clocks for example).
+On 1/27/25 13:57, Rafael J. Wysocki wrote:
+> On Sat, Jan 25, 2025 at 12:18 PM Dietmar Eggemann
+> <dietmar.eggemann@arm.com> wrote:
+>>
+>> On 29/11/2024 16:55, Rafael J. Wysocki wrote:
+>>
+>> [...]
+>>
+>>> For easier access, the series is available on the experimental/intel_ostate
+>>> branch in linux-pm.git:
+>>>
+>>> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=experimental/intel_pstate
+>>
+>> I was wondering how we can test the EAS behaviour (power/perf) on Intel
+>> hybrid machines.
+> 
+> Thanks a lot for looking into this, much appreciated!
+> 
+>> I have system-wide RAPL 'power/energy-{cores,pkg}' events for power
+>> (energy) on my i7-13700K (nosmt) so I can run an rt-app workload
+>> (e.g. 30 5% tasks (0.8ms/16ms)) with:
+>>
+>> perf stat -e power/energy-cores/,power/energy-pkg/ --repeat 10 ./rt-app.sh
+>>
+>> Plus I can check for negative slack for those rt-app-test tasks (perf)
+>> and do ftrace-based task placement evaluation.
+>>
+>> base:
+>>
+>>  Performance counter stats for 'system wide' (10 runs):
+>>
+>>        52.67 Joules power/energy-cores/       ( +-  1.24% )
+>>        85.09 Joules power/energy-pkg/         ( +-  0.83% )
+>>
+>>    34.922801 +- 0.000736 seconds time elapsed ( +-  0.00% )
+>>
+>>
+>> EAS:
+>>
+>>  Performance counter stats for 'system wide' (10 runs):
+>>
+>>        45.55 Joules power/energy-cores/       ( +-  1.07% )
+>>        75.73 Joules power/energy-pkg/         ( +-  0.67% )
+>>
+>>    34.93183 +- 0.00514 seconds time elapsed  ( +-  0.01% )
+>>
+>> Do you have another (maybe more sophisticated) test methodology?
+> 
+> Not really more sophisticated, but we cast a wider net, so to speak.
+> 
+> For taks placement testing we use an internal utility that can create
+> arbitrary synthetic workloads and plot CPU utilization (and other
+> things) while they are running.  It is kind of similar to rt-app
+> AFAICS.
+> 
+> We also run various benchmarks and measure energy usage during these
+> runs, first in order to check if EAS helps in the cases when it is
+> expected to help, but also to see how it affects the benchmark scores
+> in general (because we don't want it to make too much of a "negative"
+> difference for "performance" workloads).
 
-Well, I'm kind of unaware of this requirement.
+Any insights always appreciated.
+I have an OSPM talk accepted about the recent EAS overutilized
+proposals, which does touch upon being able to switch out of EAS
+quickly enough, too. I will be including some x86 results from our
+test machine, too.
 
-It clearly is not even followed by the code without the $subject patch.
+> 
+> The above results are basically in-line with what we are observing,
+> but we often see less of a difference in terms of energy usage between
+> the baseline and EAS enabled.
+> 
+> We also see a lot of task migrations between CPUs in the "low-cost"
+> PD, mostly in the utilization range where we would expect EAS to make
+> a difference.  Those migrations are a bit of a concern although they
+> don't seem to affect benchmark scores.
+> 
+> We think that those migrations are related to the preference of CPUs
+> with the largest spare capacity, so I'm working on an alternative
+> approach to enabling EAS that will use per-CPU PDs to see if the
+> migrations can be reduced this way.
 
-The real requirement is that the runtime PM status at the point when
-runtime PM is re-enabled, that is in device_resume_early(), must
-reflect the current actual HW state.
+We've had something like this actually, you might be interested [1].
+You'd want something more flexible in terms of the margins (or a
+non-energy-based approach based on e.g. spare-cap [2]), but just
+sidestepping the CPU selection within the cluster?
 
-> Certainly, we can not rely on drivers to conform to this behaviour and
-> there are plenty of cases where they really don't. For example, we
-> have drivers that only implements runtime PM support or simply don't
-> care about the runtime PM status during system resume, but just leaves
-> the device in the state it is already in.
+Is there anything specifically worrying you about frequent e-core
+wakeup migrations? A few things come to mind immediately like:
+Idle state latency, cache, DVFS, per-core internals like branch
+predictor training, maybe turbo states would also favor the same
+core(s) to be active?
+(I've played with the series, too and still have lots of questions
+on how this interact with turbo states, but given that we can't
+really deterministically trigger them, trying to experiment/measure
+anything seems rather futile?)
 
-Drivers that only support runtime PM are broken with respect to system
-sleep ATM.  They need to be made to support system sleep or they
-cannot be used on systems that use system sleep.  There may be a way
-around this for system suspend/resume (see below), but not for
-hibernation.
+Interestingly if anything we were more interested in reducing CPU
+wakeups in the big cores, because of their higher static leakage,
+while little cores have low static leakage and low cpuidle wakeup
+cost and latency.
 
-> Moreover, we have the users of pm_runtime_force_suspend|resume(),
-> which we also know *not* to work with DPM_FLAG_SMART_SUSPEND and thus
-> $subject patch too. I am less worried about these cases though, as I
-> believe we should be able to fix them, by taking into account the
-> suggested "->power.set_active flag", or something along those lines.
+[1]
+It should be noted that we were always more concerned between the
+uArch differences instead of breaking ties between intra-cluster CPUs,
+simply because that's where the big efficiency gains are.
 
-Yes, and that's what I'm going to do.
+https://lore.kernel.org/lkml/20220412134220.1588482-1-vincent.donnefort@arm.com/
 
-> That said, it seems like we need another way forward.
+[2]
+Vincent Guittot's is currently proposing this, I don't think it would
+work well ootb because of the single-OPP approach you took, but maybe
+going from "same OPP" to e.g. "5% cap diff" remedies that?
+https://lore.kernel.org/lkml/20241217160720.2397239-4-vincent.guittot@linaro.org/
 
-I still don't see why, sorry.
 
-I guess the concern is that if a device suddenly needs to be resumed
-during system resume even though it was runtime-suspended before the
-preceding system suspend, there is no way to tell its driver/bus
-type/etc that this is the case if they all decide to leave the device
-as is, but as I have said for multiple times in this thread, leaving a
-device as is during system resume may not be an option unless it is a
-leaf device without any subordinates.  This has always been the case.
+Anyway to provide something useful on this thread as well, testing
+on our Raptor Lake with nosmt (=8+8) (note that this doesn't necessarily
+translate into the lunar lake series that is the focus here).
+I can reproduce the same efficiency gains of around 20-25% on
+common workloads, e.g. 20 iterations of 5mins Firefox 4K youtube
+video playback (Acquired by RAPL power/energy-cores/ in Joules):
 
-We'll see if there is any damage resulting from the $subject change
-and we'll fix it if so.
+EAS:
+628.6145 +-30.4479693342421
+CAS:
+829.172 +-29.422507961369337
+(-24.2% energy used with EAS)
 
-In the future, though, I'd like to integrate system resume with
-runtime PM more than it is now.  Namely, it should be possible to move
-the re-enabling of runtime PM to the front of device_resume_early()
-and then use pm_runtime_resume() for resuming devices whose drivers
-support runtime PM (I don't see any fundamental obstacles to this).
-One benefit of doing this would be that pm_runtime_resume() would
-automatically trigger a runtime resume for all of the "superior"
-devices, so they could be left in whatever state they had been in
-before the preceding system suspend regardless of what happens to
-their "subordinates".  It is likely that some kind of driver opt-in
-will be needed for this or maybe the core can figure it out by itself.
-
-It can look at what callbacks are implemented etc.  For example, if a
-driver only implements :runtime_suspend() and :runtime_resume() and no
-other PM callbacks, it is reasonable to assume that the devices
-handled by it should be suspended and resumed with the help of the
-runtime PM infrastructure even during system-wide suspend/resume (that
-doesn't apply to hibernation, though).
+FWIW Dietmar's patch of adding cpu_capacity sysfs for the intel_pstate
+setup path is pretty handy for testing at least, maybe it could still
+be considered for upstream:
+https://lore.kernel.org/lkml/91b37d34-6d9a-4623-87d8-0ff648ea2415@arm.com/
 
