@@ -1,199 +1,282 @@
-Return-Path: <linux-pm+bounces-21210-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21211-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FA61A24915
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 13:43:18 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 12BECA2494E
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 14:10:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B36DC1649C1
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 12:43:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 723EA1659F9
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 13:10:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43AD51A23BE;
-	Sat,  1 Feb 2025 12:43:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DAC8E191F77;
+	Sat,  1 Feb 2025 13:10:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="D4fc7Le8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E76ABAD39;
-	Sat,  1 Feb 2025 12:43:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15DE22C9A;
+	Sat,  1 Feb 2025 13:10:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738413794; cv=none; b=u7RRKZYQy9M1DPGYgxe5sL838ckqq3abtMea6GsX6CUhG5fltkqXhtdC8CTPodMM9i7JF9g9qn1WajHJc+RyvChyyp+MvhhU9dIBfqqgHmzAa6QAjXFeMBgS60CEw4VfkxeP9s8YRP8Jqv00lRRR0OCf48sDW6bcgVCef3A6gQg=
+	t=1738415413; cv=none; b=HvxyAYMHTh/CFiI2y7JQphVfJE6q8hwdq+deYXXHdDUWnRNDnTWaUY3J/pv+d6tCAV7nafnEzYqYNohkazv3sSEjUhdwPUSoa/rvqv78csv2nu8g6oD1JUR6MHNr2WN5whIYX73HyJRcBSDj440XZ7KLPw2jtZgYPnO8Q5JfenM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738413794; c=relaxed/simple;
-	bh=GNMY0qMhhZCbl6+kaMsUuxtmkZfRtOSFWGDSkd4IvC0=;
-	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
-	 In-Reply-To:Content-Type; b=XQJys+751uMbusefaPZ0guMPtpglWhSetx+CMfxe/Pz5d2OhTm5RkoWQBts2JTsftZQexi0SzzTZKzfDODN7mBvmsR4aim+Bx3G1HZBkg3J1R8L3QD9wBiuLnHAMnQ9RJi7STV4LtiS6E5i/wYGsztdunTJUMFbb6yiIBV6/cXI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F0BD7339;
-	Sat,  1 Feb 2025 04:43:35 -0800 (PST)
-Received: from [10.57.36.53] (unknown [10.57.36.53])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 24D023F63F;
-	Sat,  1 Feb 2025 04:43:07 -0800 (PST)
-Message-ID: <3861524b-b266-4e54-b7ab-fdccbb7b4177@arm.com>
-Date: Sat, 1 Feb 2025 12:43:05 +0000
+	s=arc-20240116; t=1738415413; c=relaxed/simple;
+	bh=2sbcPYaI7LMmBLdT1eyqM0PhsEcSMbyXYvhubj6PkpU=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=jUHgSbRv7+a4/uZ5vKOHj4EpJsGf5SXnO8eiQ++6OduhOSdmO/86UkLd3of+TcsPoc34iy5CJp+F4hjhyI3qjJsW0sJ1jwBuNuIB+hD4WHf2w0uZMbs6VTdjJyI3vR8wxoUxBjR+mvqFouzucgNwg1D6gobRPSzd0Wh3cRgRd6g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=D4fc7Le8; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738415411; x=1769951411;
+  h=date:from:to:cc:subject:message-id;
+  bh=2sbcPYaI7LMmBLdT1eyqM0PhsEcSMbyXYvhubj6PkpU=;
+  b=D4fc7Le8FCKEsvwtBRXBi3yK9HlWM3sOYa8LQMRzdk83NyrR/30uh+Va
+   b3oYa2PQFercIGofCnn2J8ZrsVSaUerJJgXfiF23FVvCjAQVRy3YW24f6
+   ozprUUxmErjHg7iwGgALSNs/3z2kRzeJ0UWQCMLYrCXUqlQ7vtDO+a3Me
+   2hNeIz6wpQBX5TyRzM87rHPwKqH3vFi2V+uwkChtPzanBka4wP74YhCcN
+   nKRY6mXK1GzRnxUwtDDTD5OKdT84i8MfisbTwO9aEV6JTOXBFd6FXv87V
+   SEcgOWqkOF/hlnnAPPqc2pzlSVxrbsEjHNo+QCslH4Fq5wjzHzDzOUl8T
+   Q==;
+X-CSE-ConnectionGUID: U7LXibXFSc2MUu2iR2K4Hg==
+X-CSE-MsgGUID: Q6nMP4QQQrqvTEmnflXcuA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11333"; a="50354518"
+X-IronPort-AV: E=Sophos;i="6.13,251,1732608000"; 
+   d="scan'208";a="50354518"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2025 05:10:10 -0800
+X-CSE-ConnectionGUID: m2DT4iodT4uYNIKC1X4eyQ==
+X-CSE-MsgGUID: Ss9LqbDISXK4pXuCYnxAbA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="140743811"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa001.fm.intel.com with ESMTP; 01 Feb 2025 05:10:08 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1teDGA-000oAt-2P;
+	Sat, 01 Feb 2025 13:10:06 +0000
+Date: Sat, 01 Feb 2025 21:10:00 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ d264195f361da236672efb0d696ec7b62472aa6c
+Message-ID: <202502012153.AHXrH3D8-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-From: Christian Loehle <christian.loehle@arm.com>
-Subject: Re: [RFC][PATCH v021 0/9] cpufreq: intel_pstate: Enable EAS on hybrid
- platforms without SMT
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>,
- Lukasz Luba <lukasz.luba@arm.com>, Peter Zijlstra <peterz@infradead.org>,
- Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
- Morten Rasmussen <morten.rasmussen@arm.com>,
- Vincent Guittot <vincent.guittot@linaro.org>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
- Pierre Gondois <pierre.gondois@arm.com>, "Zhang, Rui" <rui.zhang@intel.com>
-References: <5861970.DvuYhMxLoT@rjwysocki.net>
- <be830a7a-410e-4864-adaf-0c68bb1135f1@arm.com>
- <CAJZ5v0hHc5y6LhVRRePr2n2nu=C4XE+Xi-A+D=uxDcsFZDjOJg@mail.gmail.com>
-Content-Language: en-US
-In-Reply-To: <CAJZ5v0hHc5y6LhVRRePr2n2nu=C4XE+Xi-A+D=uxDcsFZDjOJg@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 1/27/25 13:57, Rafael J. Wysocki wrote:
-> On Sat, Jan 25, 2025 at 12:18 PM Dietmar Eggemann
-> <dietmar.eggemann@arm.com> wrote:
->>
->> On 29/11/2024 16:55, Rafael J. Wysocki wrote:
->>
->> [...]
->>
->>> For easier access, the series is available on the experimental/intel_ostate
->>> branch in linux-pm.git:
->>>
->>> https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=experimental/intel_pstate
->>
->> I was wondering how we can test the EAS behaviour (power/perf) on Intel
->> hybrid machines.
-> 
-> Thanks a lot for looking into this, much appreciated!
-> 
->> I have system-wide RAPL 'power/energy-{cores,pkg}' events for power
->> (energy) on my i7-13700K (nosmt) so I can run an rt-app workload
->> (e.g. 30 5% tasks (0.8ms/16ms)) with:
->>
->> perf stat -e power/energy-cores/,power/energy-pkg/ --repeat 10 ./rt-app.sh
->>
->> Plus I can check for negative slack for those rt-app-test tasks (perf)
->> and do ftrace-based task placement evaluation.
->>
->> base:
->>
->>  Performance counter stats for 'system wide' (10 runs):
->>
->>        52.67 Joules power/energy-cores/       ( +-  1.24% )
->>        85.09 Joules power/energy-pkg/         ( +-  0.83% )
->>
->>    34.922801 +- 0.000736 seconds time elapsed ( +-  0.00% )
->>
->>
->> EAS:
->>
->>  Performance counter stats for 'system wide' (10 runs):
->>
->>        45.55 Joules power/energy-cores/       ( +-  1.07% )
->>        75.73 Joules power/energy-pkg/         ( +-  0.67% )
->>
->>    34.93183 +- 0.00514 seconds time elapsed  ( +-  0.01% )
->>
->> Do you have another (maybe more sophisticated) test methodology?
-> 
-> Not really more sophisticated, but we cast a wider net, so to speak.
-> 
-> For taks placement testing we use an internal utility that can create
-> arbitrary synthetic workloads and plot CPU utilization (and other
-> things) while they are running.  It is kind of similar to rt-app
-> AFAICS.
-> 
-> We also run various benchmarks and measure energy usage during these
-> runs, first in order to check if EAS helps in the cases when it is
-> expected to help, but also to see how it affects the benchmark scores
-> in general (because we don't want it to make too much of a "negative"
-> difference for "performance" workloads).
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: d264195f361da236672efb0d696ec7b62472aa6c  Merge branch 'experimental/intel_pstate/eas-take1' into bleeding-edge
 
-Any insights always appreciated.
-I have an OSPM talk accepted about the recent EAS overutilized
-proposals, which does touch upon being able to switch out of EAS
-quickly enough, too. I will be including some x86 results from our
-test machine, too.
+elapsed time: 995m
 
-> 
-> The above results are basically in-line with what we are observing,
-> but we often see less of a difference in terms of energy usage between
-> the baseline and EAS enabled.
-> 
-> We also see a lot of task migrations between CPUs in the "low-cost"
-> PD, mostly in the utilization range where we would expect EAS to make
-> a difference.  Those migrations are a bit of a concern although they
-> don't seem to affect benchmark scores.
-> 
-> We think that those migrations are related to the preference of CPUs
-> with the largest spare capacity, so I'm working on an alternative
-> approach to enabling EAS that will use per-CPU PDs to see if the
-> migrations can be reduced this way.
+configs tested: 188
+configs skipped: 5
 
-We've had something like this actually, you might be interested [1].
-You'd want something more flexible in terms of the margins (or a
-non-energy-based approach based on e.g. spare-cap [2]), but just
-sidestepping the CPU selection within the cluster?
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Is there anything specifically worrying you about frequent e-core
-wakeup migrations? A few things come to mind immediately like:
-Idle state latency, cache, DVFS, per-core internals like branch
-predictor training, maybe turbo states would also favor the same
-core(s) to be active?
-(I've played with the series, too and still have lots of questions
-on how this interact with turbo states, but given that we can't
-really deterministically trigger them, trying to experiment/measure
-anything seems rather futile?)
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    clang-21
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    clang-18
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    clang-18
+arc                              allyesconfig    gcc-13.2.0
+arc                      axs103_smp_defconfig    clang-21
+arc                   randconfig-001-20250201    gcc-13.2.0
+arc                   randconfig-002-20250201    gcc-13.2.0
+arm                              allmodconfig    clang-18
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                               allnoconfig    gcc-14.2.0
+arm                              allyesconfig    clang-18
+arm                              allyesconfig    gcc-14.2.0
+arm                         axm55xx_defconfig    clang-21
+arm                        neponset_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250201    gcc-14.2.0
+arm                   randconfig-002-20250201    clang-18
+arm                   randconfig-003-20250201    gcc-14.2.0
+arm                   randconfig-004-20250201    gcc-14.2.0
+arm                           sama7_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250201    gcc-14.2.0
+arm64                 randconfig-002-20250201    clang-16
+arm64                 randconfig-003-20250201    gcc-14.2.0
+arm64                 randconfig-004-20250201    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                  randconfig-001-20250201    gcc-14.2.0
+csky                  randconfig-002-20250201    gcc-14.2.0
+hexagon                          allmodconfig    clang-21
+hexagon                           allnoconfig    clang-21
+hexagon                           allnoconfig    gcc-14.2.0
+hexagon                          allyesconfig    clang-18
+hexagon                          allyesconfig    clang-21
+hexagon               randconfig-001-20250201    clang-21
+hexagon               randconfig-002-20250201    clang-21
+i386                             allmodconfig    clang-19
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-19
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-19
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250201    clang-19
+i386        buildonly-randconfig-002-20250201    gcc-12
+i386        buildonly-randconfig-003-20250201    gcc-12
+i386        buildonly-randconfig-004-20250201    gcc-12
+i386        buildonly-randconfig-005-20250201    gcc-12
+i386        buildonly-randconfig-006-20250201    clang-19
+i386                                defconfig    clang-19
+i386                  randconfig-001-20250201    clang-19
+i386                  randconfig-002-20250201    clang-19
+i386                  randconfig-003-20250201    clang-19
+i386                  randconfig-004-20250201    clang-19
+i386                  randconfig-005-20250201    clang-19
+i386                  randconfig-006-20250201    clang-19
+i386                  randconfig-007-20250201    clang-19
+i386                  randconfig-011-20250201    clang-19
+i386                  randconfig-012-20250201    clang-19
+i386                  randconfig-013-20250201    clang-19
+i386                  randconfig-014-20250201    clang-19
+i386                  randconfig-015-20250201    clang-19
+i386                  randconfig-016-20250201    clang-19
+i386                  randconfig-017-20250201    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch             randconfig-001-20250201    gcc-14.2.0
+loongarch             randconfig-002-20250201    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250201    gcc-14.2.0
+nios2                 randconfig-002-20250201    gcc-14.2.0
+openrisc                          allnoconfig    clang-21
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    clang-21
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-12
+parisc                randconfig-001-20250201    gcc-14.2.0
+parisc                randconfig-002-20250201    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    clang-21
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                      bamboo_defconfig    clang-21
+powerpc                   currituck_defconfig    clang-21
+powerpc                       holly_defconfig    clang-21
+powerpc               randconfig-001-20250201    clang-21
+powerpc               randconfig-002-20250201    clang-18
+powerpc               randconfig-003-20250201    gcc-14.2.0
+powerpc                     sequoia_defconfig    gcc-14.2.0
+powerpc64             randconfig-001-20250201    gcc-14.2.0
+powerpc64             randconfig-002-20250201    gcc-14.2.0
+powerpc64             randconfig-003-20250201    gcc-14.2.0
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    clang-21
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-21
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20250201    clang-21
+riscv                 randconfig-001-20250201    gcc-14.2.0
+riscv                 randconfig-002-20250201    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                             allmodconfig    gcc-14.2.0
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    gcc-12
+s390                  randconfig-001-20250201    gcc-14.2.0
+s390                  randconfig-002-20250201    clang-21
+s390                  randconfig-002-20250201    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                         apsh4a3a_defconfig    gcc-14.2.0
+sh                                  defconfig    gcc-12
+sh                ecovec24-romimage_defconfig    gcc-14.2.0
+sh                            migor_defconfig    gcc-14.2.0
+sh                    randconfig-001-20250201    gcc-14.2.0
+sh                    randconfig-002-20250201    gcc-14.2.0
+sh                             sh03_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250201    gcc-14.2.0
+sparc                 randconfig-002-20250201    gcc-14.2.0
+sparc64                             defconfig    gcc-12
+sparc64               randconfig-001-20250201    gcc-14.2.0
+sparc64               randconfig-002-20250201    gcc-14.2.0
+um                               alldefconfig    clang-21
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-18
+um                                allnoconfig    clang-21
+um                               allyesconfig    clang-21
+um                               allyesconfig    gcc-12
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250201    clang-18
+um                    randconfig-001-20250201    gcc-14.2.0
+um                    randconfig-002-20250201    clang-21
+um                    randconfig-002-20250201    gcc-14.2.0
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250201    clang-19
+x86_64      buildonly-randconfig-002-20250201    gcc-12
+x86_64      buildonly-randconfig-003-20250201    gcc-12
+x86_64      buildonly-randconfig-004-20250201    gcc-12
+x86_64      buildonly-randconfig-005-20250201    clang-19
+x86_64      buildonly-randconfig-006-20250201    gcc-12
+x86_64                              defconfig    clang-19
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                randconfig-001-20250201    clang-19
+x86_64                randconfig-002-20250201    clang-19
+x86_64                randconfig-003-20250201    clang-19
+x86_64                randconfig-004-20250201    clang-19
+x86_64                randconfig-005-20250201    clang-19
+x86_64                randconfig-006-20250201    clang-19
+x86_64                randconfig-007-20250201    clang-19
+x86_64                randconfig-008-20250201    clang-19
+x86_64                randconfig-071-20250201    clang-19
+x86_64                randconfig-072-20250201    clang-19
+x86_64                randconfig-073-20250201    clang-19
+x86_64                randconfig-074-20250201    clang-19
+x86_64                randconfig-075-20250201    clang-19
+x86_64                randconfig-076-20250201    clang-19
+x86_64                randconfig-077-20250201    clang-19
+x86_64                randconfig-078-20250201    clang-19
+x86_64                               rhel-9.4    clang-19
+x86_64                           rhel-9.4-bpf    clang-19
+x86_64                         rhel-9.4-kunit    clang-19
+x86_64                           rhel-9.4-ltp    clang-19
+x86_64                          rhel-9.4-rust    clang-19
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250201    gcc-14.2.0
+xtensa                randconfig-002-20250201    gcc-14.2.0
 
-Interestingly if anything we were more interested in reducing CPU
-wakeups in the big cores, because of their higher static leakage,
-while little cores have low static leakage and low cpuidle wakeup
-cost and latency.
-
-[1]
-It should be noted that we were always more concerned between the
-uArch differences instead of breaking ties between intra-cluster CPUs,
-simply because that's where the big efficiency gains are.
-
-https://lore.kernel.org/lkml/20220412134220.1588482-1-vincent.donnefort@arm.com/
-
-[2]
-Vincent Guittot's is currently proposing this, I don't think it would
-work well ootb because of the single-OPP approach you took, but maybe
-going from "same OPP" to e.g. "5% cap diff" remedies that?
-https://lore.kernel.org/lkml/20241217160720.2397239-4-vincent.guittot@linaro.org/
-
-
-Anyway to provide something useful on this thread as well, testing
-on our Raptor Lake with nosmt (=8+8) (note that this doesn't necessarily
-translate into the lunar lake series that is the focus here).
-I can reproduce the same efficiency gains of around 20-25% on
-common workloads, e.g. 20 iterations of 5mins Firefox 4K youtube
-video playback (Acquired by RAPL power/energy-cores/ in Joules):
-
-EAS:
-628.6145 +-30.4479693342421
-CAS:
-829.172 +-29.422507961369337
-(-24.2% energy used with EAS)
-
-FWIW Dietmar's patch of adding cpu_capacity sysfs for the intel_pstate
-setup path is pretty handy for testing at least, maybe it could still
-be considered for upstream:
-https://lore.kernel.org/lkml/91b37d34-6d9a-4623-87d8-0ff648ea2415@arm.com/
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
