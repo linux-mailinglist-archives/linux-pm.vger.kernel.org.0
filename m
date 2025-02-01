@@ -1,135 +1,123 @@
-Return-Path: <linux-pm+bounces-21204-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21205-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3DF37A24876
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 12:08:51 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F01F6A24880
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 12:19:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCE331885781
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 11:08:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 1CA077A3106
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 11:19:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C1F4153838;
-	Sat,  1 Feb 2025 11:08:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 74F8776025;
+	Sat,  1 Feb 2025 11:19:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b="L5I5qo/W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.gmx.net (mout.gmx.net [212.227.17.22])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 15D4B19A;
-	Sat,  1 Feb 2025 11:08:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C234B4A3E
+	for <linux-pm@vger.kernel.org>; Sat,  1 Feb 2025 11:19:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.22
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738408126; cv=none; b=HrvJpTteaZMc1o0fh7gqbcXt+clTAZedKBYsJ267o4Xd/X4HfC4RUduJ9g5CTUZbQY/6lg2zHdbfVtTehiPqrxb/4ptOjwh4XKbLCV3Axrv+p8okUE6uK/07+tWQ+7ZQ6THdPFgC5pDKWqEei89AHqHu9SLI0OimyTGi4QyykjI=
+	t=1738408788; cv=none; b=lvbSqm6Sy54XTsxuPLnh6AyNshbM8L/gHsj0fAY3w+mDiFz16+LpNZtgRT78glNz5SvkkPkrV9TXO0DSBG4lvKJmVIGBS/mLNfP2M//K0LyPedLDW1esIW5/X+oy0QrHY5+JgFKIc3PvYIz2kCdEbE4ao35sYNCI04e79i9bgm0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738408126; c=relaxed/simple;
-	bh=lV2M1tUa4SWHGmKYz293Rfyic2j7Zxh3fh/VhcUO9mk=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=HRAULcVARkwLgaEHgScR+h2JViMMXdH2H5pFRwe54Cmsb0UUjpMI0J5HCZdICnaoT0Y8ippdo8UZOUY01gVTTNSVvAsVH9Cc/1r+wyiOLt+i4wY5cVWXUqK2+w3eyHE2b7BMNuZs+rDhSl9ALV+1N4xNSagRnX3utw34mxAeAW8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-543cc81ddebso3234822e87.1;
-        Sat, 01 Feb 2025 03:08:44 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738408122; x=1739012922;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=zJdFRpY9/VgrRdJOyKoz6hilS+1z3UkKtKPtOxUttZo=;
-        b=K2hOsnNAjpsApCJ8p9+FL7pORg2ZujoXpNtAFiSVw+cn12E9bIWNVR/deXAYS8lVEn
-         1AIOkf64h3UEYX5wfN/6FiedTf4a1UaoOLsLBi1FBXXF4aIZ3kuprpvXC/2nkXnYE0MO
-         IjTYdtChLPh0wM1WAHNQaH7CRjYyqEFnMWga0vptYlzE9lMrDvq/tYVUUDqE4aFQvWqp
-         29PcceknBAvdrPYCImKtf4C6s69jYmxIHag+wGgcW0mBSZ1cbkV4Vj2BaFE08lL4ED75
-         OlNfVOCxNnZxnwMUxK2HJQhjUoKw4bXflu4167lReLkHoaD5aAGJPD6psOkVN2taYka3
-         EKJg==
-X-Forwarded-Encrypted: i=1; AJvYcCVuMECbUblC06KwWhe3JU1D+x9cJw+c/VafjhSyEgc7+M+b/axvEiR1iWW5zHKO0QFj8/TYCQJjU1Tm@vger.kernel.org, AJvYcCXbtgnOpS/KHPpp4/izYbVgf/qpaojpYlShlPQIi47Br3lBclMo5byrdDjwAnFtCXYyN18jXP/SAJI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkPPwtX+FfrTRJCfPZl0egodrF5wex4UtIIhEvhFC8/Y4WdocC
-	UygtKX0sPcK0YoQxDnhamn7s1c3Fv6JyilUeUZwQWmHoIBMg5fs/OwI8Ev2g
-X-Gm-Gg: ASbGnctS96F0tVUzQE3bZ9gEjK4bo/nB3eET+ye9xKQExKLe48NG3PtNh+LjxstntDG
-	hJsPW8KHODaXr3fBuzjGoh1ZDWtCwiSNUxJDwidEIo1Ou2V5tkVaVztNFY1YnMs6FfExAtA5Pfm
-	zbgg/4RgkTjCWJP01vvEa2IDWsBGw03TBvqBbOGYu1E1KLTHV9SKacyHvNQN92n29mzUOJ43ZGL
-	6GbaRlr/Y+fc6vY4l65jaqgb5VRu+WukreZ4iPDp3ipgXBVW93pMfrWj4ZFpySkDtAwd1Y0eFun
-	hnD7an8NB3LcwFN2epK5j9lBXQkhg0PIDUipQdtVOyhm0q5z
-X-Google-Smtp-Source: AGHT+IEvvGuT9l7QynQdhRuG0fHwjiOstf8aganqygVYeT4w2Nb2XESEv7Ek0z6f1SAy/Zx4wjQrOw==
-X-Received: by 2002:a05:6512:118b:b0:542:2e04:eb6f with SMTP id 2adb3069b0e04-543e4beaafbmr4711851e87.14.1738408121638;
-        Sat, 01 Feb 2025 03:08:41 -0800 (PST)
-Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com. [209.85.208.178])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-543ebe219c4sm728947e87.105.2025.02.01.03.08.41
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 01 Feb 2025 03:08:41 -0800 (PST)
-Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-30229d5b21cso20665351fa.1;
-        Sat, 01 Feb 2025 03:08:41 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUIEhTGe3u9T0VijWY8xNvvmdhEqP+z0jdlrWZYVkKUa6sZMHd3UX+SfiQBJlZbTHQMeQfuy+fXIZxS@vger.kernel.org, AJvYcCVOWoNKQYxmiEtE6NooUUgCOL+We+WfYcVkAI/bL3vrmfm3Sj/5h1cranO1vjrFSfuI19NM2PqqL50=@vger.kernel.org
-X-Received: by 2002:a05:651c:50e:b0:305:d86a:4f01 with SMTP id
- 38308e7fff4ca-3079696b37fmr54303631fa.31.1738408121144; Sat, 01 Feb 2025
- 03:08:41 -0800 (PST)
+	s=arc-20240116; t=1738408788; c=relaxed/simple;
+	bh=wB5I4RxD5M3GEMA2q059Dbq+xGu50e2eenkHQePRcCM=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=CpoTgh1UzhkUdnsYXt85xkkx0/S62+C2aAbcC+id4c/5RzAihZlmLhnD+9YGM+vHQICHw2cCaCC/xbs0zlB/076RhrPLknhJvGe838BqbzybdbSAePHPzGCOU8CjXD131T7XnSdiMucsRNxDaX1SGrl3a/OWalZ3X2p0DeCG9q4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net; spf=pass smtp.mailfrom=gmx.net; dkim=pass (2048-bit key) header.d=gmx.net header.i=wahrenst@gmx.net header.b=L5I5qo/W; arc=none smtp.client-ip=212.227.17.22
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.net
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.net;
+	s=s31663417; t=1738408774; x=1739013574; i=wahrenst@gmx.net;
+	bh=WL/TkWmYI9gtqcLq6PPlC4DiEjBnRh+Q5zQrz+U6qaY=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
+	 MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=L5I5qo/WAVuOdT8v436r/j2OI7L0yupboyc0iRdms9X2t8bs/OpEEThVp4MV8ICH
+	 dg3q0lk+8GW/C51H4qHit9VXVCIlqeXsu8hNGTYEHem6Hx5ZnQRCW3QioL43J0smr
+	 b+vmUrCNTimefHzkG2QIxJ73R8YCc2JLKJxgw10Cm0l39fPDnMC3DF4EmjYKT+y2j
+	 fqjBaiwxk8smIklvy7SiZmf3i5tH7FF6J3eOLen3BBH+6lfzVfj/wdWErQsCoQ2bB
+	 YJVHR8c3t+O5GkdHlCn2V7Gn2woX5ORPJf2JKSGsD53Ufqt702kRhMYbVa9okq7XI
+	 YoRB30+NKfaD4Wqgjg==
+X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
+Received: from stefanw-SCHENKER ([37.4.251.153]) by mail.gmx.net (mrgmx105
+ [212.227.17.168]) with ESMTPSA (Nemesis) id 1MJE27-1ttNnx0huF-00La56; Sat, 01
+ Feb 2025 12:19:34 +0100
+From: Stefan Wahren <wahrenst@gmx.net>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Ray Jui <rjui@broadcom.com>,
+	Scott Branden <sbranden@broadcom.com>
+Cc: Peter Robinson <pbrobinson@gmail.com>,
+	"Ivan T . Ivanov" <iivanov@suse.de>,
+	linux-arm-kernel@lists.infradead.org,
+	bcm-kernel-feedback-list@broadcom.com,
+	linux-pm@vger.kernel.org,
+	Stefan Wahren <wahrenst@gmx.net>
+Subject: [PATCH] pmdomain: bcm2835-power: set flag GENPD_FLAG_ACTIVE_WAKEUP
+Date: Sat,  1 Feb 2025 12:19:26 +0100
+Message-Id: <20250201111926.31278-1-wahrenst@gmx.net>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250131231455.153447-1-macroalpha82@gmail.com>
-In-Reply-To: <20250131231455.153447-1-macroalpha82@gmail.com>
-Reply-To: wens@csie.org
-From: Chen-Yu Tsai <wens@csie.org>
-Date: Sat, 1 Feb 2025 19:08:28 +0800
-X-Gmail-Original-Message-ID: <CAGb2v67YFBoTaDb2_M9w5zVgDrc0dQofg1B=tOrO23zjUQncEQ@mail.gmail.com>
-X-Gm-Features: AWEUYZmt5WAKw7Sa62l6O-dikObFL-05KwH7Ig2AS6totJP4XZ-9LOk_VWKpsrQ
-Message-ID: <CAGb2v67YFBoTaDb2_M9w5zVgDrc0dQofg1B=tOrO23zjUQncEQ@mail.gmail.com>
-Subject: Re: [PATCH 0/5] Fix RG35XX Battery Charging Issues
-To: Chris Morgan <macroalpha82@gmail.com>, lee@kernel.org
-Cc: linux-sunxi@lists.linux.dev, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, samuel@sholland.org, jernej.skrabec@gmail.com, 
-	conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, sre@kernel.org, 
-	Chris Morgan <macromorgan@hotmail.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:eHSujGayAUVb5qsQ4zzAxxtzVidue2urGLApdidbuvcCD7Zolav
+ VE0f6w/ohqfSkyFLFPrkGJ0oAQm/7TMiPJgguYBBEIrCYMWO0HJFljc5yS3pIhwaWAK1cHn
+ oPtxhUiQUHFC1ofN6/5wpm86ZbtW4AfaaXKF5sggSo+hbM9mecwsCNR76BIuM9jprJZKJ7+
+ n/0wE/wbp4tLtOGkvNfHA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:PyBjBBj9g3c=;0KkeeFHr9XmW6JZlFronhZf2nxA
+ Dpw6Qm5Cu1++XqJ/vVtJcyXcon5fPTosEwdwbEu2qKRbp2dimMbGtQjinvqQH0bBZl6SaywVV
+ vSQkN5u3JT7zTzup9Q0gATpoDwpHP8Y1WawTwaTozgrk2cHuCLglIv2Ru4XfEFF/LHWZFmBRz
+ 6LEvocpZNz6TgbpFu9YD4cPJui1LRwnM69VBaTf18jN5NpNKq6JkGtC71X5I7X08J1Mh0QZD6
+ g9kDsxJxc9HzTRlWeOV2JQsD0c4CGfhKyufHVWFMVNZ9gL+ylzTApYytJck7ITLwlY4phFmw6
+ qcJ9nuXy6lMjWuzCee0/FBu219GR3kQ37XtfExIX4YObiaMRUQoeUr6G9TyumaoDLNoPm9wg7
+ ynwgblJ97Txft33qaFiSS68aYcAnzifBjP3ei2+QO64iQUwcQjPrFVF1cHpl9yyS+E8Rujaim
+ 5GmKdUbExQ5h/DeaO3eHejEnWKRStmIHag9zTgs9fJhOTEP4YBsysx5yQH3L+rBFJpjtqR8P9
+ aWYY5AhB/IJk04zy2OiV4OkrkH5eNh4ul8edqPe6JkscEiutMO09PFUYj8Q88Drx86nyq+aw+
+ ajespB//APZYfNDOZrPYztHv3vPzX6ix0Nnxpt9ktxrY3cmup6Yr/HT1JDPJm9uxwoQKH1xgC
+ FvVX+TU0YJnTpD7f6K7LkdFkeTgMM0oyv/wc1TrI1/tuYG8M7OxOfWKtzEikujWlta7DHC3Ac
+ 0dEmim1U6t9rO+zCvOSosw/GGNl/7ABPMaqntMku+ymdE7j96Qs5AuyEBkG3LF2V/T+FQRuWH
+ i5Lmy4up4bNbThD/6Z8bVeD0JPI2+nkfHKsSxjs0N/uxdH4oJO4S1SC3aKI7831TOLXTqavgv
+ A9W/Osm1bigLWOPtLZ1aafEZdjBnPLTO4Fzusqys6gLaMksPVcodcifyI1QUSxgaTlV8Egr1O
+ 3SJgk981w9Um11gXlhW/3/fx195aWEq86dXN4QouIvbWQkAhonDPpE3a1GO6SsE5Jysxw3KHO
+ w/8Fu06buEKhAe+0Z1GmEwBN+xdOAhh6Z8KiDfsRtpeCayn2XpbyHhwDIQOl+eu7Q0ttKL/i0
+ va/lKKLEyxSs/0A8X/Gpu+xMvktw8zT36F+AyYhpu4oO7XRnauW7hwoZkIBE1/lL8YRg1QdEt
+ rXCbEFPtKcLelCbrUPCe/WS4sw3CWbmQp0UGSu/URqk8GWD8XWOVUWEsYZTwzBlx9dzqYPrmO
+ Yp4eEMb+y5RbKImUIfzJMC6Qixoj/kkzSqxKaZmnf1UtmWJM9DsQt2H+b0TY7jtzyz1OKa1ah
+ CMt+02QHa8XRcqltkU5zGxxlkiOfVqcA0LXmyUECUe2Ujw=
 
-On Sat, Feb 1, 2025 at 7:17=E2=80=AFAM Chris Morgan <macroalpha82@gmail.com=
-> wrote:
->
-> From: Chris Morgan <macromorgan@hotmail.com>
->
-> The Anbernic RG35XX devices sometimes fail to charge when the register
-> for the battery temperature sensor is set to the incorrect value either
-> by user error or an incorrectly programmed efuse. Allow users to
-> hard-code if a temperature sensor is not present (which is the case for
-> all Anbernic RGxx series devices) to prevent this issue from causing
-> problems. Additionally, a bug was identified with the handling of PMU
-> faults while this fix was being tested.
->
-> Chris Morgan (5):
->   power: supply: axp20x_battery: Fix fault handling for AXP717
->   dt-bindings: power: supply: axp20x-battery: Add x-powers,no-thermistor
->   mfd: axp20x: AXP717: Add AXP717_TS_PIN_CFG to writeable regs
+Set flag GENPD_FLAG_ACTIVE_WAKEUP to bcm2835_power genpd, then when a
+device is set as wakeup source using device_set_wakeup_enable, the power
+domain could be kept on to make sure the device could wakeup the system.
 
->   power: supply: axp20x_battery: Update temp sensor for AXP717 from
->     device tree
+Signed-off-by: Stefan Wahren <wahrenst@gmx.net>
+=2D--
+ drivers/pmdomain/bcm/bcm2835-power.c | 1 +
+ 1 file changed, 1 insertion(+)
 
-Lee, FYI this power supply patch has a compile time dependency on the
-mfd patch, due to the new register offset macro.
+diff --git a/drivers/pmdomain/bcm/bcm2835-power.c b/drivers/pmdomain/bcm/b=
+cm2835-power.c
+index d2f0233cb620..d3cd816979ac 100644
+=2D-- a/drivers/pmdomain/bcm/bcm2835-power.c
++++ b/drivers/pmdomain/bcm/bcm2835-power.c
+@@ -520,6 +520,7 @@ bcm2835_init_power_domain(struct bcm2835_power *power,
+ 	}
 
-Chris, in the future, if you are aware of build time dependencies,
-please mention them in the cover letter. That would help maintainers
-sort out how to land things.
+ 	dom->base.name =3D name;
++	dom->base.flags =3D GENPD_FLAG_ACTIVE_WAKEUP;
+ 	dom->base.power_on =3D bcm2835_power_pd_power_on;
+ 	dom->base.power_off =3D bcm2835_power_pd_power_off;
 
+=2D-
+2.34.1
 
-Thanks
-ChenYu
-
-
->   arm64: dts: allwinner: rg35xx: Add no-thermistor property for battery
->
->  .../x-powers,axp20x-battery-power-supply.yaml | 22 ++++++--
->  .../sun50i-h700-anbernic-rg35xx-2024.dts      |  1 +
->  drivers/mfd/axp20x.c                          |  2 +-
->  drivers/power/supply/axp20x_battery.c         | 50 +++++++++++++------
->  include/linux/mfd/axp20x.h                    |  1 +
->  5 files changed, 56 insertions(+), 20 deletions(-)
->
-> --
-> 2.43.0
->
 
