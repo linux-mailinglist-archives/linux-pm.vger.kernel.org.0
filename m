@@ -1,131 +1,139 @@
-Return-Path: <linux-pm+bounces-21199-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21200-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C846A245D7
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 01:11:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id CF34BA2481F
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 11:07:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0A9443A8552
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 00:11:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80C9F1888C51
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 10:07:05 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 193F02C9A;
-	Sat,  1 Feb 2025 00:11:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B20EB149C54;
+	Sat,  1 Feb 2025 10:06:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b="VAieKTRU"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="mWa5qUSZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux.microsoft.com (linux.microsoft.com [13.77.154.182])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6958B629;
-	Sat,  1 Feb 2025 00:11:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=13.77.154.182
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A359E140E38;
+	Sat,  1 Feb 2025 10:06:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738368706; cv=none; b=EfOr2AueiKCrE6e6bafHX50hGrP0LkZtd+TWaPBNY3T+DdgnGhpIlQ6bQmJPg8/5x8oBHp8pwzYivwK8i4FeDtfKCyN0Mhcq8lhuaQTiO8JJXJsp179qzJwlRBV65oG/w6BYx8TPtDXrY2QP24S4BttdvH9MQcOPvR/CHmUJRRQ=
+	t=1738404414; cv=none; b=hOBl9iJPf7mDTTsofKYMnarJ/iNYSwutCEsxBaO/vOZdQizDWdHFw64K6f7WVwB0QwNljSd5hN9Szc3ZIG2vWsY2I/1pQ1NysiC2dUAClYrtVnWJLqwEybaNtz7wv0JZpbdbAq1fG5XWzSnmIbRnqcXyGeUNa4kXycmq3p418mI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738368706; c=relaxed/simple;
-	bh=MYKomRfEqunKF+5LDSAdQtifzb1Zt5hNQibIdFjJ+s8=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=ien2NZeGrw1V2KBJmjzy20S23UL2MD2y8OH1JJCfbdPJimvNplJvMxT3OuOSgxkDub5wrR+Qe9ZUAPheNwCzr2PPh1WeeUh6yEQFcZ+glIwbXsAfgCFs2noD8Zj47Wv5kYd6SXiOFOmCJdM4HBNvYUMfwx1CnrD8PQ/zBgoTLqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com; spf=pass smtp.mailfrom=linux.microsoft.com; dkim=pass (1024-bit key) header.d=linux.microsoft.com header.i=@linux.microsoft.com header.b=VAieKTRU; arc=none smtp.client-ip=13.77.154.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.microsoft.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.microsoft.com
-Received: from [100.65.234.206] (unknown [20.236.11.185])
-	by linux.microsoft.com (Postfix) with ESMTPSA id 7E312210C329;
-	Fri, 31 Jan 2025 16:11:36 -0800 (PST)
-DKIM-Filter: OpenDKIM Filter v2.11.0 linux.microsoft.com 7E312210C329
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=linux.microsoft.com;
-	s=default; t=1738368698;
-	bh=URcW5d1wFUuTsZZ61zIwPjo02bqd3Xwwrj5siI/ejR4=;
-	h=Date:Cc:Subject:To:References:From:In-Reply-To:From;
-	b=VAieKTRUQduuqC4WMWksNFGAWFpl7wH2vcfIqWTtocImegfQz7yg09xx/uVhF84+8
-	 X7djRP48uKGESU6HAg1NDd667oKEWQCkly+4NL3U6jOR2q4YvgMKiwE4cdu5TQF7bE
-	 8JEcr4WkbAHOc5PABGxI8dv7PLkq6NUdzzexdebM=
-Message-ID: <632be2db-78d2-4249-92f0-3f60e0373172@linux.microsoft.com>
-Date: Fri, 31 Jan 2025 16:11:37 -0800
+	s=arc-20240116; t=1738404414; c=relaxed/simple;
+	bh=luDz7nI8Z256mCk8I1VhfshnLLJ2vZ3M4FOHRZSBCY0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fDOKdd8VP9v5d8+zq+csz/f0usK0qS6oG2RRiUTSiQ2VMqyuWC8pGDRw/Fp+Owt/m7ypAx3qwOfaFE/EUvraeeL/ecH0ppKLUZysMT63KnPASzyAEg/ysXhDUx54fX1MRfZU6FfNzM8YVTL5wKKQOehyZYmMggKMxiPNt6O44Zo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=mWa5qUSZ; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738404413; x=1769940413;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=luDz7nI8Z256mCk8I1VhfshnLLJ2vZ3M4FOHRZSBCY0=;
+  b=mWa5qUSZNsVZCaVJYWpS+CdXFitLHa7CfdPRHFdO1EzsfFq/zBlKXOAX
+   d7lCK0NawZSA0CVMXxmRq7bjSwNzfC+4r4f6BfqCxS88mdtgZVEQb0FWr
+   752FBHhD29ZYT2EybNHrIlGkjdhmjL/CZpO2QNyE72aLFmaqTarGbuzYA
+   gg4Ja6/KbkNIgMFdL4M3P9hWfiaWHiMC/SnMTLSLDfvvJCZV/FDz/8pkt
+   t9BTpIojR43Px2DELHJmbp4X5ySzYHkFiZ2OqAA5i9niX8v2hMINLzJ/H
+   6dHi+gEBLcq4gqsMX5r0ezWSXlWOXil7udO+GP6lTZGOl7F0nT9YpfMC7
+   Q==;
+X-CSE-ConnectionGUID: KhSR4uSSRYGoMHkL24Lhug==
+X-CSE-MsgGUID: 9obNOxFZQRWtofe4m8eh3A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11332"; a="50350373"
+X-IronPort-AV: E=Sophos;i="6.13,251,1732608000"; 
+   d="scan'208";a="50350373"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2025 02:06:52 -0800
+X-CSE-ConnectionGUID: z3vE1xROSnC5BDhYcDTqew==
+X-CSE-MsgGUID: 04/zztnwRc6n0ytaPWhdEw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,251,1732608000"; 
+   d="scan'208";a="110415798"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa009.fm.intel.com with ESMTP; 01 Feb 2025 02:06:46 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1teAOh-000nzT-1T;
+	Sat, 01 Feb 2025 10:06:43 +0000
+Date: Sat, 1 Feb 2025 18:06:21 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, jic23@kernel.org,
+	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+	agross@kernel.org, andersson@kernel.org,
+	dmitry.baryshkov@linaro.org, konradybcio@kernel.org,
+	daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
+	thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
+	subbaraman.narayanamurthy@oss.qualcomm.com,
+	david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+	quic_kamalw@quicinc.com
+Cc: oe-kbuild-all@lists.linux.dev, rui.zhang@intel.com, lukasz.luba@arm.com,
+	lars@metafoo.de, devicetree@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	cros-qcom-dts-watchers@chromium.org,
+	jishnu.prakash@oss.qualcomm.com, quic_skakitap@quicinc.com,
+	neil.armstrong@linaro.org
+Subject: Re: [PATCH V5 4/5] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+Message-ID: <202502011915.MIBVfCtZ-lkp@intel.com>
+References: <20250131183242.3653595-5-jishnu.prakash@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Cc: cocci@inria.fr, kernel-janitors@vger.kernel.org,
- eahariha@linux.microsoft.com, LKML <linux-kernel@vger.kernel.org>,
- linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
- linux-ide@vger.kernel.org, linux-nvme@lists.infradead.org,
- linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
- linux-scsi@vger.kernel.org, linux-sound@vger.kernel.org,
- linux-spi@vger.kernel.org, linux-xfs@vger.kernel.org,
- ceph-devel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
- dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net,
- imx@lists.linux.dev, kernel@pengutronix.de,
- linux-arm-kernel@lists.infradead.org,
- Andrew Morton <akpm@linux-foundation.org>, Carlos Maiolino <cem@kernel.org>,
- Chris Mason <clm@fb.com>, Christoph Hellwig <hch@lst.de>,
- Damien Le Moal <dlemoal@kernel.org>, "Darrick J. Wong" <djwong@kernel.org>,
- David Sterba <dsterba@suse.com>, Dick Kennedy <dick.kennedy@broadcom.com>,
- Dongsheng Yang <dongsheng.yang@easystack.cn>,
- Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>,
- Hans de Goede <hdegoede@redhat.com>,
- Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
- James Bottomley <James.Bottomley@HansenPartnership.com>,
- James Smart <james.smart@broadcom.com>, Jaroslav Kysela <perex@perex.cz>,
- Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
- Josef Bacik <josef@toxicpanda.com>, Julia Lawall <Julia.Lawall@inria.fr>,
- =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
- Ilya Dryomov <idryomov@gmail.com>,
- Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>,
- Keith Busch <kbusch@kernel.org>, Leon Romanovsky <leon@kernel.org>,
- Mark Brown <broonie@kernel.org>,
- "Martin K. Petersen" <martin.petersen@oracle.com>,
- Nicolas Palix <nicolas.palix@imag.fr>, Niklas Cassel <cassel@kernel.org>,
- Oded Gabbay <ogabbay@kernel.org>, Ricardo Ribalda <ribalda@google.com>,
- Sagi Grimberg <sagi@grimberg.me>, Sascha Hauer <s.hauer@pengutronix.de>,
- Sebastian Reichel <sre@kernel.org>,
- Selvin Xavier <selvin.xavier@broadcom.com>, Shawn Guo <shawnguo@kernel.org>,
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, Takashi Iwai <tiwai@suse.com>,
- Victor Gambier <victor.gambier@inria.fr>, Xiubo Li <xiubli@redhat.com>,
- Yaron Avizrat <yaron.avizrat@intel.com>,
- Ricardo Ribalda <ribalda@chromium.org>
-Subject: Re: [PATCH 01/16] coccinelle: misc: secs_to_jiffies: Patch
- expressions too
-To: Markus Elfring <Markus.Elfring@web.de>
-References: <20250128-converge-secs-to-jiffies-part-two-v1-1-9a6ecf0b2308@linux.microsoft.com>
- <e06cb7f5-7aa3-464c-a8a1-2c7b9b6a29eb@web.de>
-From: Easwar Hariharan <eahariha@linux.microsoft.com>
-Content-Language: en-US
-In-Reply-To: <e06cb7f5-7aa3-464c-a8a1-2c7b9b6a29eb@web.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250131183242.3653595-5-jishnu.prakash@oss.qualcomm.com>
 
-On 1/30/2025 3:01 AM, Markus Elfring wrote:
->> Teach the script to suggest conversions for timeout patterns where the
->> arguments to msecs_to_jiffies() are expressions as well.
-> 
-> Does anything hinder to benefit any more from a source code analysis approach
-> (like the following by the extended means of the semantic patch language)?
-> 
+Hi Jishnu,
 
-Thank you, this is much more useful feedback, specifically due to the
-suggested patch below. I did intend to learn about the other modes and
-progressively upgrade secs_to_jiffies.cocci with them in the future once
-the existing instances were resolved, to help with future code
-submissions. The patch below will be super helpful in that.
+kernel test robot noticed the following build errors:
 
-As it stands, I'll fix up the current rules in v2 following your
-suggestion to keep the multiplication in each line to allow Coccinelle
-to use the commutativity properties and find more instances.
+[auto build test ERROR on 5ffa57f6eecefababb8cbe327222ef171943b183]
 
-I'll refrain from implementing the report mode until current instances
-have been fixed because of the issue we have already seen[1] with CI
-builds being broken. I would not want to break a strict CI build that is
-looking for coccicheck REPORT to return 0 results.
+url:    https://github.com/intel-lab-lkp/linux/commits/Jishnu-Prakash/dt-bindings-iio-adc-Move-QCOM-ADC-bindings-to-iio-adc-folder/20250201-023723
+base:   5ffa57f6eecefababb8cbe327222ef171943b183
+patch link:    https://lore.kernel.org/r/20250131183242.3653595-5-jishnu.prakash%40oss.qualcomm.com
+patch subject: [PATCH V5 4/5] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+config: sh-allmodconfig (https://download.01.org/0day-ci/archive/20250201/202502011915.MIBVfCtZ-lkp@intel.com/config)
+compiler: sh4-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250201/202502011915.MIBVfCtZ-lkp@intel.com/reproduce)
 
-[1]:
-https://lore.kernel.org/all/20250129-secs_to_jiffles-v1-1-35a5e16b9f03@chromium.org/
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502011915.MIBVfCtZ-lkp@intel.com/
 
-<snip>
+All errors (new ones prefixed by >>):
 
-Thanks,
-Easwar (he/him)
+   drivers/iio/adc/qcom-adc5-gen3-common.c: In function 'adc5_gen3_update_dig_param':
+>> drivers/iio/adc/qcom-adc5-gen3-common.c:72:18: error: implicit declaration of function 'FIELD_PREP' [-Wimplicit-function-declaration]
+      72 |         *data |= FIELD_PREP(ADC5_GEN3_DIG_PARAM_CAL_SEL_MASK, prop->cal_method);
+         |                  ^~~~~~~~~~
+
+
+vim +/FIELD_PREP +72 drivers/iio/adc/qcom-adc5-gen3-common.c
+
+    67	
+    68	void adc5_gen3_update_dig_param(struct adc5_channel_common_prop *prop, u8 *data)
+    69	{
+    70		/* Update calibration select and decimation ratio select */
+    71		*data &= ~(ADC5_GEN3_DIG_PARAM_CAL_SEL_MASK | ADC5_GEN3_DIG_PARAM_DEC_RATIO_SEL_MASK);
+  > 72		*data |= FIELD_PREP(ADC5_GEN3_DIG_PARAM_CAL_SEL_MASK, prop->cal_method);
+    73		*data |= FIELD_PREP(ADC5_GEN3_DIG_PARAM_DEC_RATIO_SEL_MASK, prop->decimation);
+    74	}
+    75	EXPORT_SYMBOL(adc5_gen3_update_dig_param);
+    76	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
