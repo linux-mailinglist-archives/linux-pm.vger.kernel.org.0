@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-21237-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21238-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5315FA24F24
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:20 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id C8070A24F25
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 145663A50F8
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:13:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 81A693A511D
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:13:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7631A1FAC4F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B48011FBC85;
 	Sun,  2 Feb 2025 17:13:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qkhS3dcR"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fO+umJvE"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5276A1FAC49
-	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9081D1FAC58
+	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738516398; cv=none; b=kp9/x2KnWJ/TKqSLShS84zXd5bYOL6UbylX8awEGnrDcd3hIpwFz6Y9+KZxQzIZjvYfQJDUm4y5I0a5sx7PCmLwxEvhmYEMTHITKnjoqUvg/x3YIlp6BUl4T2Q9ReZdE9uhEk43Uf4WJcqOzYKQ03B6oPc/duyZJBBcV8OZnsi8=
+	t=1738516398; cv=none; b=p/2s9YwDwlTLS5DaHa5G1EIUKaqDO9whSJLjAXP0xo2qRzh6MaoS1o3Wr7QxoJfylXcP6gZwAdIl6LPdAATzuG5GCx6jf77s1eEpwGhwmd5VM5S+JOn2uZutHennoy5+d88bBziuuLBG6YaZOcDEtdEBT12bmba7K1KcZOuGqig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738516398; c=relaxed/simple;
-	bh=NXxhaLkNHyjZBr/TAIvYzTDQUP+loMJ8uv5sQozQKow=;
+	bh=WmfjOgS7hlMT/ZPiOYjYQeFGWmHwA8wgdwYjiEshNOw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=GrWoSQ62OKw6bsBC3Vp0ilGj+K5Vh0XVgDXPdI/5hknvuBjjxSWu2C/TslXO7EkDumI1I+4yEo+zMKbwXOMIrzh8QmGnJkP+LXzt5nyCfaCNNESHrMIPb21L4Jyga95S8WR1R9SWAXt2UA7swuX6SrlimNGhDMANJOMk5JvkT3E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qkhS3dcR; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA496C4CEE0;
-	Sun,  2 Feb 2025 17:13:15 +0000 (UTC)
+	 MIME-Version; b=ddIgTDf3UAzfrTIK3TMtgWrXZZE2ZpL9O2HLu4avf5yByipdp4uoPQzmZeyErtNBt7lekqJd3PJ1ihBXh11cdSMVfXKZlCpaPX86q9AsllZALAuhl0HdztOnBcBHAp2e6ohBlNwWEIAyC0tve0Tk50SruKxBaoYgky1SGC2IeG0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fO+umJvE; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 302FBC4CED1;
+	Sun,  2 Feb 2025 17:13:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738516396;
-	bh=NXxhaLkNHyjZBr/TAIvYzTDQUP+loMJ8uv5sQozQKow=;
+	s=k20201202; t=1738516398;
+	bh=WmfjOgS7hlMT/ZPiOYjYQeFGWmHwA8wgdwYjiEshNOw=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=qkhS3dcRANYumWYfCjNpvqGAZFLkxiUUkOH929W1aerijs8iJ530FOKcs6RYOGieO
-	 VSXWAXxohK9mSWhtyDXPRraAGU/n9q7WhE7RxxhKu3+ZNn112FbStwfKLV1QCRGQ7v
-	 IHdpw7LV9caNB84wUU+RArTVEylZ84Um6NlYqZxfDj5jZstJTe7mkfnmwxbXTV8ArD
-	 kal9KfSp+4J0cMhSCfmU6vcO53cS/AA02QhGniZ7YGVkiPZRdVmR9OOevkgV8np3iL
-	 hVuOSSGYSPBX++/O7csMTxoJp4PaA/3pAVzcQzuzuWRi1JErv/TzVbYVmiGUo4XpaS
-	 +tCvvfAxDJPYA==
+	b=fO+umJvECJiOBvoJy31pBZOavkauBMqwPOdMSatyi/ViDin19g/RBax6VutNUSYi2
+	 ins+fuw515fH2ESvbMqs9tDHxDnSFWHHBDGQfjI1WgweerGuHbESiRZS5x2OJjRV6M
+	 W118fNFPOjUW6sEhzVK/Jj1ib9t9hqPw27XJsDbWy2IVJgn+U0aIrAlym6GEUL/FUW
+	 g+MsrTXkzwdML1BU8enTSFzKKDmhOFOYcQdYUdwBHX9Kma78j+gSXFGP/ahAzilmci
+	 d48W6FiMeaF6Ihfo3q6ze4XozwShSFL43Jt3fSmwcCiTWgF9zekCLUm5YUpzo6KK1Y
+	 UKPiKPhcFZj8A==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 14/25] tools/power turbostat: Check for non-zero value when MSR probing
-Date: Sun,  2 Feb 2025 11:09:30 -0600
-Message-ID: <7c6fee25bdf5c8f8a1bcc6fa3566fffb7fe9eb9a.1738515889.git.len.brown@intel.com>
+Subject: [PATCH 15/25] tools/power turbostat: Return default value for unmapped PMT domains
+Date: Sun,  2 Feb 2025 11:09:31 -0600
+Message-ID: <34537ddd208d614dbefeb97823ae1c79e7771588.1738515889.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
 References: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
@@ -63,48 +63,31 @@ Content-Transfer-Encoding: 8bit
 
 From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 
-For some MSRs, for example, the Platform Energy Counter (RAPL PSYS), it
-is required to additionally check for a non-zero value to confirm that
-it is present.
-
-From Intel SDM vol. 4:
-
-    Platform Energy Counter (R/O)
-    This MSR is valid only if both platform vendor hardware
-    implementation and BIOS enablement support it.
-    This MSR will read 0 if not valid.
+When requesting PMT counters with --add command, user may want to skip
+specifying values for all the domains (that is, cpu, core, package etc).
+For the domains that user did not provide information on how to read the
+counter, return default value - zero.
 
 Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 10 +++++++---
- 1 file changed, 7 insertions(+), 3 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index adcf5f0a0633..6b72b922e2f5 100644
+index 6b72b922e2f5..60b1ade8659b 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2113,13 +2113,17 @@ int get_msr(int cpu, off_t offset, unsigned long long *msr)
- int probe_msr(int cpu, off_t offset)
+@@ -4615,7 +4615,8 @@ unsigned long pmt_gen_value_mask(unsigned int lsb, unsigned int msb)
+ 
+ unsigned long pmt_read_counter(struct pmt_counter *ppmt, unsigned int domain_id)
  {
- 	ssize_t retval;
--	unsigned long long dummy;
-+	unsigned long long value;
+-	assert(domain_id < ppmt->num_domains);
++	if (domain_id >= ppmt->num_domains)
++		return 0;
  
- 	assert(!no_msr);
- 
--	retval = pread(get_msr_fd(cpu), &dummy, sizeof(dummy), offset);
-+	retval = pread(get_msr_fd(cpu), &value, sizeof(value), offset);
- 
--	if (retval != sizeof(dummy))
-+	/*
-+	 * Expect MSRs to accumulate some non-zero value since the system was powered on.
-+	 * Treat zero as a read failure.
-+	 */
-+	if (retval != sizeof(value) || value == 0)
- 		return 1;
- 
- 	return 0;
+ 	const unsigned long *pmmio = ppmt->domains[domain_id].pcounter;
+ 	const unsigned long value = pmmio ? *pmmio : 0;
 -- 
 2.43.0
 
