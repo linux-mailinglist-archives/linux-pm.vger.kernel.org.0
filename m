@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-21246-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21247-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9906FA24F2D
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 179DEA24F2E
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12ED8162F17
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:13:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 882FF1639AB
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:13:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0FFEA1FBC91;
-	Sun,  2 Feb 2025 17:13:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EFFB81FBC8C;
+	Sun,  2 Feb 2025 17:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZvqRnfV3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rsPUwTqJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DF71C1FBC83
-	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CC9D11FBC83
+	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738516410; cv=none; b=OLn2u+0TsYveTle7fmGWpADhVOJaR2yeaAkDozjgtFPaw2TErgftp9l97y/IPywVWiRt0C39CmRYoPyFpJwQMCUMzBgtFHxW85ELUBfxx5uO/UAPSc+urYXYklVP4b8+twy+J/SFZIDCSUOIhE1AIjlsm+1HTtBbnJzy2OTylZE=
+	t=1738516411; cv=none; b=B29DasARxfrxwuN+q0OUS9c62DxH9GkarX59SXGlPLLhrm7UIn+NFVz9Akf0yQ1eZXtvWixSuWvoqNzkRV5l95d/58W7tA6RR+HduwtkKsj0QJUT9qfYjfztxdqw1zZMZp9T2HXRfoA6tVSMma05sDDe0VJ9IHfhQKF2kQUUNS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738516410; c=relaxed/simple;
-	bh=SZkNjPY0jaCu7dScCcBFarX5Jns6URGV09FAWZnPqY8=;
+	s=arc-20240116; t=1738516411; c=relaxed/simple;
+	bh=90HlGdqnG/+vaKlBUf3XFfUskofiLY/e6tjr0WDH7/I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=KLP7i9PjomBbiuPtsadpwMTAtEVnOUj0HGIhmlw6PVg2qR6CrVzlDzufcildJ/VknwkxsXJQD1JiFxMUH7o6Z2K5dzHOl87qH1fXKyV1wTmkBtnTNqWmzP4JPaQG74VIcLytqbh58tl0hFhLpGBKTSHLoKtAS6nZG9lVKBGzo+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZvqRnfV3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3C36C4CEE0;
-	Sun,  2 Feb 2025 17:13:28 +0000 (UTC)
+	 MIME-Version; b=eNbZ9e9mjYcWPDB/hS4PN80/3y8YCcQly2b+fH2oJ0VL1Fgf8JJEvn/N5bsjkPNlINm3XaQOZ8auw3JLvyGgasPtfUz+NPDdXSSyjVSBNeFHOAcrEGUg5b0NiRgbw+dPlpoGAfJ0K7+NCyU5kvGNoDKQoPoIqUShFO+moGYLYCo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rsPUwTqJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52BD7C4CEE0;
+	Sun,  2 Feb 2025 17:13:30 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738516409;
-	bh=SZkNjPY0jaCu7dScCcBFarX5Jns6URGV09FAWZnPqY8=;
+	s=k20201202; t=1738516411;
+	bh=90HlGdqnG/+vaKlBUf3XFfUskofiLY/e6tjr0WDH7/I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=ZvqRnfV3vsqcl1k2KofxF3HD73qbsWqdwvOSw/qikI8rnDPnA5uHyHofwm/9yybPE
-	 Ue8VZ1YjP0A0/YjJCgBH5dyRgE3C6UAwwt3OOtZVxc0bH0L9BDEk15ab4k4IWKiyrr
-	 7B6qwCWuA5WN7vQjuFVVfJ/aGdBfXu0rD56Y2/E1hRx1boOzbYvGx6oelVamEzE8uN
-	 Muld06qJAU7lpZDyeLJ/iNVSiY2VZJbuA5woinvx6gt2vZ579SfA5HmsGhdQUAkurL
-	 mxWkJoW9ohjnwqIGY+ZdOl0mn/qnPlCU8umCNLrekcQad4vBw1vUm567qMkYyIiSfb
-	 ZPZ3qOlJ8ooSA==
+	b=rsPUwTqJ3mp85+3NKV9AoNHJhHDxQNspkPpaig8Gb1v3/mexp+6bxQN2U9B/zYPl0
+	 eUbSFHUyebSuOWi1KE6cRwilVDaM/j0+VatajLdNcZIafCiGSYdHyxmaQvsD2hzKw7
+	 2/bbhxN+DmdP05vDbnj1FeixmpnJunAClwhBpNQvNzTgRWb5HddA9jLo5FLy2kzRCk
+	 KHuUgx+qqniqyzKPt5HDYhywRBATvSd1BJK/YQl+ZRghlUrBfGKf/qOLYaSC65GwLu
+	 j8Xzp7xFLhJJrT6ilevwQdmJ5bg+RE1B8OcnahiXYEJKu5ylftX8bEYV/hp26wvkBb
+	 3e3mqucHYBuXQ==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
-Cc: Len Brown <len.brown@intel.com>,
-	Zhang Rui <rui.zhang@intel.com>
-Subject: [PATCH 23/25] tools/power turbostat: Harden one-shot mode against cpu offline
-Date: Sun,  2 Feb 2025 11:09:39 -0600
-Message-ID: <5499b5ac0b2c661cc37190a23a4aee9308b3d3ee.1738515889.git.len.brown@intel.com>
+Cc: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
+	Len Brown <len.brown@intel.com>
+Subject: [PATCH 24/25] tools/power turbostat: Add CPU%c1e BIC for CWF
+Date: Sun,  2 Feb 2025 11:09:40 -0600
+Message-ID: <5ce1e9bbb2a1d43cf9e613cb03e65ecdfd309fe9.1738515889.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
 References: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
@@ -61,132 +61,125 @@ Reply-To: Len Brown <lenb@kernel.org>
 Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 
-From: Len Brown <len.brown@intel.com>
+From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 
-when turbostat interval mode can't migrate to a CPU, it complains,
-prints no data, re-initializes with the new CPU configuration
-and starts a new interval.
+Intel Clearwater Forest report PMT telemetry with GUID 0x14421519, which
+can be used to obtain module c1e residency counter of type tcore clock.
 
-But this strategy in the face of a CPU hotplug offline during an interval
-doesn't help in one-shot mode.  When the missing CPU is discovered
-at the end of the interval, the forked program has already returned
-and there is nothing left for a new interval to measure.
+Add early support for the counter by using heuristic that should work
+for the Clearwater Forest platforms.
 
-So instead of aborting get_coutners() and delta_cpu() if a missing CPU
-is detected, complain, but carry on and output what statistics are
-actually present.
-
-Use the same strategy for delta_cpu when aperf:mperf are observed
-to have been reset -- complain, but carry on and print data for
-the CPUs that are still present.
-
-Interval mode error handling is unchanged.
-
-One-shot mode can now do this:
-
-$ sudo chcpu -e 1 ; sudo ./turbostat --quiet --show PkgWatt,Busy%,CPU chcpu -d 1
-CPU 1 enabled
-CPU 1 disabled
-get_counters: Could not migrate to CPU 1
-./turbostat: Counter reset detected
-0.036920 sec
-CPU	Busy%	PkgWatt
--	0.00	10.00
-0	99.73	10.00
-1	0.00
-2	91.53
-3	16.83
-
-Suggested-by: Zhang Rui <rui.zhang@intel.com>
+Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 27 ++++++++++++---------------
- 1 file changed, 12 insertions(+), 15 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 68 +++++++++++++++++++++++++++
+ 1 file changed, 68 insertions(+)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 1f188a0908da..8df08819e7b4 100644
+index 8df08819e7b4..364a44a7d7ae 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -2063,6 +2063,8 @@ int for_all_cpus(int (func) (struct thread_data *, struct core_data *, struct pk
+@@ -205,6 +205,7 @@ struct msr_counter bic[] = {
+ 	{ 0x0, "SysWatt", NULL, 0, 0, 0, NULL, 0 },
+ 	{ 0x0, "Sys_J", NULL, 0, 0, 0, NULL, 0 },
+ 	{ 0x0, "NMI", NULL, 0, 0, 0, NULL, 0 },
++	{ 0x0, "CPU%c1e", NULL, 0, 0, 0, NULL, 0 },
+ };
+ 
+ #define MAX_BIC (sizeof(bic) / sizeof(struct msr_counter))
+@@ -270,6 +271,7 @@ struct msr_counter bic[] = {
+ #define	BIC_SysWatt		(1ULL << 59)
+ #define	BIC_Sys_J		(1ULL << 60)
+ #define	BIC_NMI			(1ULL << 61)
++#define	BIC_CPU_c1e		(1ULL << 62)
+ 
+ #define BIC_TOPOLOGY (BIC_Package | BIC_Node | BIC_CoreCnt | BIC_PkgCnt | BIC_Core | BIC_CPU | BIC_Die)
+ #define BIC_THERMAL_PWR (BIC_CoreTmp | BIC_PkgTmp | BIC_PkgWatt | BIC_CorWatt | BIC_GFXWatt | BIC_RAMWatt | BIC_PKG__ | BIC_RAM__ | BIC_SysWatt)
+@@ -1538,6 +1540,14 @@ static struct msr_counter_arch_info msr_counter_arch_infos[] = {
+ #define PMT_MTL_DC6_GUID           0x1a067102
+ #define PMT_MTL_DC6_SEQ            0
+ 
++#define PMT_COUNTER_CWF_MC1E_OFFSET_BASE          20936
++#define PMT_COUNTER_CWF_MC1E_OFFSET_INCREMENT     24
++#define PMT_COUNTER_CWF_MC1E_NUM_MODULES_PER_FILE 12
++#define PMT_COUNTER_CWF_CPUS_PER_MODULE           4
++#define PMT_COUNTER_CWF_MC1E_LSB                  0
++#define PMT_COUNTER_CWF_MC1E_MSB                  63
++#define PMT_CWF_MC1E_GUID                         0x14421519
++
+ unsigned long long tcore_clock_freq_hz = 800000000;
+ 
+ #define PMT_COUNTER_NAME_SIZE_BYTES      16
+@@ -9367,11 +9377,69 @@ int pmt_add_counter(unsigned int guid, unsigned int seq, const char *name, enum
+ 
+ void pmt_init(void)
  {
- 	int retval, pkg_no, core_no, thread_no, node_no;
- 
-+	retval = 0;
++	int cpu_num;
++	unsigned long seq, offset, mod_num;
 +
- 	for (pkg_no = 0; pkg_no < topo.num_packages; ++pkg_no) {
- 		for (node_no = 0; node_no < topo.nodes_per_pkg; node_no++) {
- 			for (core_no = 0; core_no < topo.cores_per_node; ++core_no) {
-@@ -2078,14 +2080,12 @@ int for_all_cpus(int (func) (struct thread_data *, struct core_data *, struct pk
- 					c = GET_CORE(core_base, core_no, node_no, pkg_no);
- 					p = GET_PKG(pkg_base, pkg_no);
- 
--					retval = func(t, c, p);
--					if (retval)
--						return retval;
-+					retval |= func(t, c, p);
- 				}
- 			}
- 		}
+ 	if (BIC_IS_ENABLED(BIC_Diec6)) {
+ 		pmt_add_counter(PMT_MTL_DC6_GUID, PMT_MTL_DC6_SEQ, "Die%c6", PMT_TYPE_XTAL_TIME,
+ 				PMT_COUNTER_MTL_DC6_LSB, PMT_COUNTER_MTL_DC6_MSB, PMT_COUNTER_MTL_DC6_OFFSET,
+ 				SCOPE_PACKAGE, FORMAT_DELTA, 0, PMT_OPEN_TRY);
  	}
--	return 0;
-+	return retval;
- }
- 
- int is_cpu_first_thread_in_core(struct thread_data *t, struct core_data *c, struct pkg_data *p)
-@@ -3620,12 +3620,10 @@ int delta_cpu(struct thread_data *t, struct core_data *c,
- 
- 	/* always calculate thread delta */
- 	retval = delta_thread(t, t2, c2);	/* c2 is core delta */
--	if (retval)
--		return retval;
- 
- 	/* calculate package delta only for 1st core in package */
- 	if (is_cpu_first_core_in_package(t, c, p))
--		retval = delta_package(p, p2);
-+		retval |= delta_package(p, p2);
- 
- 	return retval;
- }
-@@ -5748,6 +5746,8 @@ int for_all_cpus_2(int (func) (struct thread_data *, struct core_data *,
- {
- 	int retval, pkg_no, node_no, core_no, thread_no;
- 
-+	retval = 0;
 +
- 	for (pkg_no = 0; pkg_no < topo.num_packages; ++pkg_no) {
- 		for (node_no = 0; node_no < topo.nodes_per_pkg; ++node_no) {
- 			for (core_no = 0; core_no < topo.cores_per_node; ++core_no) {
-@@ -5769,14 +5769,12 @@ int for_all_cpus_2(int (func) (struct thread_data *, struct core_data *,
- 					p = GET_PKG(pkg_base, pkg_no);
- 					p2 = GET_PKG(pkg_base2, pkg_no);
- 
--					retval = func(t, c, p, t2, c2, p2);
--					if (retval)
--						return retval;
-+					retval |= func(t, c, p, t2, c2, p2);
- 				}
- 			}
- 		}
- 	}
--	return 0;
-+	return retval;
++	if (BIC_IS_ENABLED(BIC_CPU_c1e)) {
++		seq = 0;
++		offset = PMT_COUNTER_CWF_MC1E_OFFSET_BASE;
++		mod_num = 0;	/* Relative module number for current PMT file. */
++
++		/* Open the counter for each CPU. */
++		for (cpu_num = 0; cpu_num < topo.max_cpu_num;) {
++
++			if (cpu_is_not_allowed(cpu_num))
++				goto next_loop_iter;
++
++			/*
++			 * Set the scope to CPU, even though CWF report the counter per module.
++			 * CPUs inside the same module will read from the same location, instead of reporting zeros.
++			 *
++			 * CWF with newer firmware might require a PMT_TYPE_XTAL_TIME intead of PMT_TYPE_TCORE_CLOCK.
++			 */
++			pmt_add_counter(PMT_CWF_MC1E_GUID, seq, "CPU%c1e", PMT_TYPE_TCORE_CLOCK,
++					PMT_COUNTER_CWF_MC1E_LSB, PMT_COUNTER_CWF_MC1E_MSB, offset, SCOPE_CPU,
++					FORMAT_DELTA, cpu_num, PMT_OPEN_TRY);
++
++			/*
++			 * Rather complex logic for each time we go to the next loop iteration,
++			 * so keep it as a label.
++			 */
++next_loop_iter:
++			/*
++			 * Advance the cpu number and check if we should also advance offset to
++			 * the next counter inside the PMT file.
++			 *
++			 * On Clearwater Forest platform, the counter is reported per module,
++			 * so open the same counter for all of the CPUs inside the module.
++			 * That way, reported table show the correct value for all of the CPUs inside the module,
++			 * instead of zeros.
++			 */
++			++cpu_num;
++			if (cpu_num % PMT_COUNTER_CWF_CPUS_PER_MODULE == 0) {
++				offset += PMT_COUNTER_CWF_MC1E_OFFSET_INCREMENT;
++				++mod_num;
++			}
++
++			/*
++			 * There are PMT_COUNTER_CWF_MC1E_NUM_MODULES_PER_FILE in each PMT file.
++			 *
++			 * If that number is reached, seq must be incremented to advance to the next file in a sequence.
++			 * Offset inside that file and a module counter has to be reset.
++			 */
++			if (mod_num == PMT_COUNTER_CWF_MC1E_NUM_MODULES_PER_FILE) {
++				++seq;
++				offset = PMT_COUNTER_CWF_MC1E_OFFSET_BASE;
++				mod_num = 0;
++			}
++		}
++	}
  }
  
- /*
-@@ -9462,10 +9460,9 @@ int fork_it(char **argv)
- 	timersub(&tv_odd, &tv_even, &tv_delta);
- 	if (for_all_cpus_2(delta_cpu, ODD_COUNTERS, EVEN_COUNTERS))
- 		fprintf(outf, "%s: Counter reset detected\n", progname);
--	else {
--		compute_average(EVEN_COUNTERS);
--		format_all_counters(EVEN_COUNTERS);
--	}
-+
-+	compute_average(EVEN_COUNTERS);
-+	format_all_counters(EVEN_COUNTERS);
- 
- 	fprintf(outf, "%.6f sec\n", tv_delta.tv_sec + tv_delta.tv_usec / 1000000.0);
- 
+ void turbostat_init()
 -- 
 2.43.0
 
