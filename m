@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-21240-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21241-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 04D04A24F27
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:24 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03AF7A24F28
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 73057162EE9
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:13:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F4C0162EC5
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:13:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444AD1FBC8B;
-	Sun,  2 Feb 2025 17:13:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C4D421FBC87;
+	Sun,  2 Feb 2025 17:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aAJrW/Tw"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eL06eiIH"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2042A1FAC52
-	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A13AD1D7E57
+	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738516401; cv=none; b=iLgNXWB6M+dZsTxV6tDF6zXBaj8m5QmMmVv1aTSEGR2I1HjSqRj0hHjQzIr3Bn5Ma+X/4TxvyN2PdSVymoIDiwGwy+eYMMaeXreErknfcbTE2Uk0ONlpJ/H8XIwGtMWd+GSVjyq5T8zdRZUPYPkrM1HzCbb8BfnpOfJcxET9I/c=
+	t=1738516402; cv=none; b=HU0W76KbJOnOu47ZH3yMwGRRJhgL3aEOsfHjsDesfaTZzs+3+RsMIY/oTm0uW1kr/IB4u8A7HFnuUPsN+idU3ZngM7E2iQsf+D5fnrchSgNG+xFS+eUst8v6aFTdCB4rwx/vP/X2nmGeQsB8aTb1WzTkTLLmahymcaWsxvxIdsQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738516401; c=relaxed/simple;
-	bh=uREfF30nWOFy42XQ5hKVpFSe4MjlgRSdzUlXw76xFng=;
+	s=arc-20240116; t=1738516402; c=relaxed/simple;
+	bh=7awYaxrnmNyDutDWYIlYHhVNIQYf7BAxMHJzD19aLDA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aASZ6Duf2Ww9NKCnfCDASqn2vjFOAo1+0hXnnh+H/eJbmjlRtD1OiY9IHHlkoDdM25GwsxRRKui301A5JyrqSZnhYhp53GvJNrZn85AZGf9h50BSVl7ZvBti8uAWUhWtSDJNZt3ZtgZAJqDuExHyOxl9tY+uNjIyrntxS0xwy70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aAJrW/Tw; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4058C4CED1;
-	Sun,  2 Feb 2025 17:13:19 +0000 (UTC)
+	 MIME-Version; b=qnnmIlWSZKqfD3m+MILarls1PibdGFH7GS6lr3YNVGDgnsUyIbKikaTdHOjobSGMFNT/GkyYvHnW7OoU48t31M7FaArgayN27a5X50Y4fgmKIks3/i7n56WBU4hXrEmZSQeUSDDg87ZHbU7HkgXtwEx1OJktjZyI/JyNreoTrW4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eL06eiIH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A01BC4CEE0;
+	Sun,  2 Feb 2025 17:13:20 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738516400;
-	bh=uREfF30nWOFy42XQ5hKVpFSe4MjlgRSdzUlXw76xFng=;
+	s=k20201202; t=1738516402;
+	bh=7awYaxrnmNyDutDWYIlYHhVNIQYf7BAxMHJzD19aLDA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=aAJrW/TwD1bvNYKaSEK02kWg1ZrpWH7dt/djDUySERMOZiwDr1ldkqKDHD9aAyN5Y
-	 EgqX8mS/1LYSZSZu3Ot6QTQdquII4vIpR09aEfWkPEZQHK7uvK/5uoXUuH6KTjNmsJ
-	 sMnM77wPc432Ov1GB4Cwo2JFQJmICmVz9rMD0vO5HndPDkEUSoP/EGlQR2YnU24Ehf
-	 q39ZolBf2UTxp64K1tZBbI29Qyd4++pxN9q1NTc6hqYxrODW0xI0dSA+mWxZ6vNyht
-	 b/KBYb5hqo9VI6Cc4bZ0+x1lMu0eNiT5t4TEB/NNQiGiXSIF6+uRysssI8merxjpyk
-	 Zyct6yae9MHMg==
+	b=eL06eiIHBEYv76IE1XoSPVsuSrvetiPwSqcJMuhruzVAdvJ+hVPwvnHC0u9UhFtJR
+	 D3m2ivfpr2z8GZomZ/cyLDoOV8MmJLhHpJBvkaYtWBuDoBPEw0Go71Tve45K3ALAyD
+	 ctCEBXqfSUBEb28aTw+83Um4R5BqIGiORVtptjsC+62wQDH8MeP/gjSB/oROBiacIN
+	 QcvDZ5HQuKY+N5FsVvwGJZepdy66FR3yPVtkpNlMBGqWtRedGamYL5nkF8mm6Gs10c
+	 mgL0HEJAdHzgnMX2YlwEGB9cGbgg67i37PJOb9Kcz0x9WV7ze8P62wVMU4AKUgXosD
+	 6Jeks/W2zhzLw==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 17/25] tools/power turbostat: Add PMT directory iterator helper
-Date: Sun,  2 Feb 2025 11:09:33 -0600
-Message-ID: <4265a86582eaa224d171328be0c71e2a7ccd194f.1738515889.git.len.brown@intel.com>
+Subject: [PATCH 18/25] tools/power turbostat: Allow mapping multiple PMT files with the same GUID
+Date: Sun,  2 Feb 2025 11:09:34 -0600
+Message-ID: <16ce467875ef8572b82f9af30fcf7b2f65fc2e95.1738515889.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
 References: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
@@ -63,124 +63,146 @@ Content-Transfer-Encoding: 8bit
 
 From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 
-PMT directories exposed in sysfs use the following pattern:
-  telem%u
-for example:
-  telem0, telem2, telem3, ..., telem15, telem16
+Some platforms may expose multiple telemetry files identified with the
+same GUID. Interpreting it correctly, to associate given counter with a
+CPU, core or a package requires more metadata from the user.
 
-This naming scheme preserves the ordering from the PCIe discovery, which
-is important to correctly map the telemetry directory to the specific
-domain (cpu, core, package etc).
-
-Because readdir() traverses the entries in alphabetical order, causing
-for example "telem13" to be traversed before "telem3", it is necessary
-to use scandir() with custom compare() callback to preserve the PCIe
-ordering.
+Parse and create  ordered, linked list of those PMT aggregators, so that
+we can identify specific aggregator with GUID + sequence number.
 
 Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 87 +++++++++++++++++++++++++++
- 1 file changed, 87 insertions(+)
+ tools/power/x86/turbostat/turbostat.c | 75 ++++++++++++++-------------
+ 1 file changed, 40 insertions(+), 35 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 14c495886746..6104d5bcca5c 100644
+index 6104d5bcca5c..f76e1de3f968 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1589,6 +1589,93 @@ struct pmt_counter {
- 	struct pmt_domain_info *domains;
- };
+@@ -9033,46 +9033,35 @@ int parse_telem_info_file(int fd_dir, const char *info_filename, const char *for
  
-+/*
-+ * PMT telemetry directory iterator.
-+ * Used to iterate telemetry files in sysfs in correct order.
-+ */
-+struct pmt_diriter_t
-+{
-+	DIR *dir;
-+	struct dirent **namelist;
-+	unsigned int num_names;
-+	unsigned int current_name_idx;
-+};
-+
-+int pmt_telemdir_filter(const struct dirent *e)
-+{
-+	unsigned int dummy;
-+	return sscanf(e->d_name, "telem%u", &dummy);
-+}
-+
-+int pmt_telemdir_sort(const struct dirent **a, const struct dirent **b)
-+{
-+	unsigned int aidx = 0, bidx = 0;
-+
-+	sscanf((*a)->d_name, "telem%u", &aidx);
-+	sscanf((*b)->d_name, "telem%u", &bidx);
-+
-+	return aidx >= bidx;
-+}
-+
-+const struct dirent* pmt_diriter_next(struct pmt_diriter_t *iter)
-+{
-+	const struct dirent *ret = NULL;
-+
-+	if (!iter->dir)
-+		return NULL;
-+
-+	if (iter->current_name_idx >= iter->num_names)
-+		return NULL;
-+
-+	ret = iter->namelist[iter->current_name_idx];
-+	++iter->current_name_idx;
-+
-+	return ret;
-+}
-+
-+const struct dirent* pmt_diriter_begin(struct pmt_diriter_t *iter, const char *pmt_root_path)
-+{
-+	int num_names = iter->num_names;
-+
-+	if (!iter->dir) {
-+		iter->dir = opendir(pmt_root_path);
-+		if (iter->dir == NULL)
-+			return NULL;
-+
-+		num_names = scandir(pmt_root_path, &iter->namelist, pmt_telemdir_filter, pmt_telemdir_sort);
-+		if (num_names == -1)
-+			return NULL;
-+	}
-+
-+	iter->current_name_idx = 0;
-+	iter->num_names = num_names;
-+
-+	return pmt_diriter_next(iter);
-+}
-+
-+void pmt_diriter_init(struct pmt_diriter_t *iter)
-+{
-+	memset(iter, 0, sizeof(*iter));
-+}
-+
-+void pmt_diriter_remove(struct pmt_diriter_t *iter)
-+{
-+	if (iter->namelist) {
-+		for (unsigned int i = 0; i < iter->num_names; i++) {
-+			free(iter->namelist[i]);
-+			iter->namelist[i] = NULL;
-+		}
-+	}
-+
-+	free(iter->namelist);
-+	iter->namelist = NULL;
-+	iter->num_names = 0;
-+	iter->current_name_idx = 0;
-+
-+	closedir(iter->dir);
-+	iter->dir = NULL;
-+}
-+
- unsigned int pmt_counter_get_width(const struct pmt_counter *p)
+ struct pmt_mmio *pmt_mmio_open(unsigned int target_guid)
  {
- 	return (p->msb - p->lsb) + 1;
+-	DIR *dirp;
+-	struct dirent *entry;
++	struct pmt_diriter_t pmt_iter;
++	const struct dirent *entry;
+ 	struct stat st;
+-	unsigned int telem_idx;
+ 	int fd_telem_dir, fd_pmt;
+ 	unsigned long guid, size, offset;
+ 	size_t mmap_size;
+ 	void *mmio;
+-	struct pmt_mmio *ret = NULL;
++	struct pmt_mmio *head = NULL, *last = NULL;
++	struct pmt_mmio *new_pmt = NULL;
+ 
+ 	if (stat(SYSFS_TELEM_PATH, &st) == -1)
+ 		return NULL;
+ 
+-	dirp = opendir(SYSFS_TELEM_PATH);
+-	if (dirp == NULL)
++	pmt_diriter_init(&pmt_iter);
++	entry = pmt_diriter_begin(&pmt_iter, SYSFS_TELEM_PATH);
++	if (!entry) {
++		pmt_diriter_remove(&pmt_iter);
+ 		return NULL;
++	}
+ 
+-	for (;;) {
+-		entry = readdir(dirp);
+-
+-		if (entry == NULL)
+-			break;
+-
+-		if (strcmp(entry->d_name, ".") == 0)
+-			continue;
+-
+-		if (strcmp(entry->d_name, "..") == 0)
+-			continue;
+-
+-		if (sscanf(entry->d_name, "telem%u", &telem_idx) != 1)
+-			continue;
+-
+-		if (fstatat(dirfd(dirp), entry->d_name, &st, 0) == -1) {
++	for (;entry != NULL; entry = pmt_diriter_next(&pmt_iter)) {
++		if (fstatat(dirfd(pmt_iter.dir), entry->d_name, &st, 0) == -1) {
+ 			break;
+ 		}
+ 
+ 		if (!S_ISDIR(st.st_mode))
+ 			continue;
+ 
+-		fd_telem_dir = openat(dirfd(dirp), entry->d_name, O_RDONLY);
++		fd_telem_dir = openat(dirfd(pmt_iter.dir), entry->d_name, O_RDONLY);
+ 		if (fd_telem_dir == -1) {
+ 			break;
+ 		}
+@@ -9106,35 +9095,51 @@ struct pmt_mmio *pmt_mmio_open(unsigned int target_guid)
+ 		mmap_size = ROUND_UP_TO_PAGE_SIZE(size);
+ 		mmio = mmap(0, mmap_size, PROT_READ, MAP_SHARED, fd_pmt, 0);
+ 		if (mmio != MAP_FAILED) {
+-
+ 			if (debug)
+ 				fprintf(stderr, "%s: 0x%lx mmaped at: %p\n", __func__, guid, mmio);
+ 
+-			ret = calloc(1, sizeof(*ret));
++			new_pmt = calloc(1, sizeof(*new_pmt));
+ 
+-			if (!ret) {
++			if (!new_pmt) {
+ 				fprintf(stderr, "%s: Failed to allocate pmt_mmio\n", __func__);
+ 				exit(1);
+ 			}
+ 
+-			ret->guid = guid;
+-			ret->mmio_base = mmio;
+-			ret->pmt_offset = offset;
+-			ret->size = size;
++			/*
++			 * Create linked list of mmaped regions,
++			 * but preserve the ordering from sysfs.
++			 * Ordering is important for the user to
++			 * use the seq=%u parameter when adding a counter.
++			 */
++			new_pmt->guid = guid;
++			new_pmt->mmio_base = mmio;
++			new_pmt->pmt_offset = offset;
++			new_pmt->size = size;
++			new_pmt->next = pmt_mmios;
++
++			if (last)
++				last->next = new_pmt;
++			else
++				head = new_pmt;
+ 
+-			ret->next = pmt_mmios;
+-			pmt_mmios = ret;
++			last = new_pmt;
+ 		}
+ 
+ loop_cleanup_and_break:
+ 		close(fd_pmt);
+ 		close(fd_telem_dir);
+-		break;
+ 	}
+ 
+-	closedir(dirp);
++	pmt_diriter_remove(&pmt_iter);
+ 
+-	return ret;
++	/*
++	 * If we found something, stick just
++	 * created linked list to the front.
++	 */
++	if (head)
++		pmt_mmios = head;
++
++	return head;
+ }
+ 
+ struct pmt_mmio *pmt_mmio_find(unsigned int guid)
 -- 
 2.43.0
 
