@@ -1,139 +1,106 @@
-Return-Path: <linux-pm+bounces-21216-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21217-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4100CA24C28
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 00:37:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47FF6A24D99
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 11:42:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C52D41884E39
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Feb 2025 23:37:44 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CB1453A27F2
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 10:42:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1EB1CDFB9;
-	Sat,  1 Feb 2025 23:37:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A15461D63D9;
+	Sun,  2 Feb 2025 10:42:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="X944o5e9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="060c/uhO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f201.google.com (mail-pl1-f201.google.com [209.85.214.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B1A31CAA71;
-	Sat,  1 Feb 2025 23:37:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2376D1D6188
+	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 10:42:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738453054; cv=none; b=Q7oX8hvNX7OvUJyiOIo4BE4uKgV88rS8FQztKROZAoio7A78hcd5uhe+fjrjTCpK2AYMVsZg04+oRKGqySpmdqS0RyakYlZrBhGHxBu4Cvo2NZ9+Hc4hRrIJRyJ8nOLdJi5JYvdx/lY/9lAaAem0jQUBCPW1uI176vlwQst/VtI=
+	t=1738492937; cv=none; b=QULpjHOZqmPRRd7k5eUXr0iPTx2lG4DdnDWAL6WLM0Oeo++DsHT6GadTRntfwoMYfsZfcryhvkpqACdFHL1v2OLi15UuF0OSM2CeyJ1TxJZCJKJPKALiWQEp/BEmXg9eZvIc27gFvaiDidDO2N2Hfy8mGraWakACwgBFxrl/jzg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738453054; c=relaxed/simple;
-	bh=VniUty94QaFSvir46bJwxI1Xq3DeV+IIZnzat/jKmTQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=NAccUhzZcMPYYx6srKa4XRNPxJX1R5KZepdcU0cN5co+8klrnCMFSdaissXBCBLLQypNBMDHlluHT5liQ3KfIHkCSG8S7mah+OSj+Bkm9tUigpJZEAqdVW1iDnpw76EDyRv3SETT1Ar0T+ia9326CLxxOC/gKNCu9DYJU5MXs9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=X944o5e9; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738453052; x=1769989052;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=VniUty94QaFSvir46bJwxI1Xq3DeV+IIZnzat/jKmTQ=;
-  b=X944o5e9RKJPEO7C7+Kkuz0r1nWpBbH/eAtp8ye9ElSIDCvcI117wY/0
-   9tAgyt/9FiwEXzk/FCYn9qfVEbMGQsN0B3PJMzL/b1kV2/V96pBUH1YMI
-   kMUBz+l86VCtx3aabT7vxfqLteYzvKPTKDbFrL/H+j5T1yUT+EgsJXpjP
-   8hmJM3NcRIja1PUPDd3NY1goFg8xbqmsr+VSD6GrHKr1oOTQyamOw7ZpE
-   nRm45B+HyuI37Cne2qrsRqLUr6Ggw5U1cg9hGA0Ftb6tCDuQKk6aC7nTj
-   ebbQBivSrjBN+L4oNmAl0vOZILd1TI6IL4aFYYnQra5+/nXKx5uNR/uvu
-   A==;
-X-CSE-ConnectionGUID: t/X8mKtLRQuoiHy4QosGOQ==
-X-CSE-MsgGUID: Hn/8c1VaRxO9iSbshGmBaw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11333"; a="41817797"
-X-IronPort-AV: E=Sophos;i="6.13,252,1732608000"; 
-   d="scan'208";a="41817797"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 01 Feb 2025 15:37:31 -0800
-X-CSE-ConnectionGUID: UhFc5lhwTheiX5AfnWEEcQ==
-X-CSE-MsgGUID: DDSgqk4YRIe/h/gpgI7ZGQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
-   d="scan'208";a="114932082"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa003.jf.intel.com with ESMTP; 01 Feb 2025 15:37:24 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1teN3B-000p1L-3C;
-	Sat, 01 Feb 2025 23:37:21 +0000
-Date: Sun, 2 Feb 2025 07:36:35 +0800
-From: kernel test robot <lkp@intel.com>
-To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>, jic23@kernel.org,
-	robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-	agross@kernel.org, andersson@kernel.org,
-	dmitry.baryshkov@linaro.org, konradybcio@kernel.org,
-	daniel.lezcano@linaro.org, sboyd@kernel.org, amitk@kernel.org,
-	thara.gopinath@gmail.com, lee@kernel.org, rafael@kernel.org,
-	subbaraman.narayanamurthy@oss.qualcomm.com,
-	david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
-	quic_kamalw@quicinc.com
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
-	rui.zhang@intel.com, lukasz.luba@arm.com, lars@metafoo.de,
-	devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
-	linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
-	jishnu.prakash@oss.qualcomm.com, quic_skakitap@quicinc.com,
-	neil.armstrong@linaro.org
-Subject: Re: [PATCH V5 4/5] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
-Message-ID: <202502020700.dqk9AzTu-lkp@intel.com>
-References: <20250131183242.3653595-5-jishnu.prakash@oss.qualcomm.com>
+	s=arc-20240116; t=1738492937; c=relaxed/simple;
+	bh=zkD5IRGZ/9bPr0CC0yAMX9lXRbXYUMweItegShby6uE=;
+	h=Date:In-Reply-To:Mime-Version:References:Message-ID:Subject:From:
+	 To:Cc:Content-Type; b=uV91ocHHBKNC677ezXmGdGswJc6kP353esyfDqFl4760w8vHVee+21cd/OyLjWhuXg1Iqq9Rhi98Wn8CnQZS3y4vnpZMig4ejP42D+NCNpScdpOU31zQNEEJuXWDZ1OjHnz09/K0UIBaikaWZ599+6vpWumu6Jw10foSD2gWxos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=060c/uhO; arc=none smtp.client-ip=209.85.214.201
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=flex--keyz.bounces.google.com
+Received: by mail-pl1-f201.google.com with SMTP id d9443c01a7336-2163c2f32fdso109465605ad.2
+        for <linux-pm@vger.kernel.org>; Sun, 02 Feb 2025 02:42:15 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1738492935; x=1739097735; darn=vger.kernel.org;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:from:to:cc:subject:date:message-id:reply-to;
+        bh=zkD5IRGZ/9bPr0CC0yAMX9lXRbXYUMweItegShby6uE=;
+        b=060c/uhOWQe5m+YBtjrrvTg0GvS+5T80wFg8GPivsatUuNX7aAIdNafhJCWiC/kscN
+         vqVaPOpfL7MXIvENQAUJvuRNPAVsbd7Xc6Z+ENDWvp7UHWBfBjv8xrHagxlOAkezhZg7
+         XnAvXsabg8X3ewkqn0TiQggo7Z4711bbegY46M99RIleWnbuWNGvGfbPgZGMBi6/2fhy
+         004zWP6X4PeBFUL0eM0k7yhadAnzhKg6TwzvPoKIZE9fThnjJIzQF4c4NHLiRC4wkOOE
+         OAp3Ms+vAYj0Xgr55mwrVMYDPol9m9uF17KPjlB0D3fT2og8anadDC2nwro0Kg2AhM1a
+         x3GQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738492935; x=1739097735;
+        h=cc:to:from:subject:message-id:references:mime-version:in-reply-to
+         :date:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=zkD5IRGZ/9bPr0CC0yAMX9lXRbXYUMweItegShby6uE=;
+        b=vpaJ8llMeymnRw6xBjQFdq6dER016Iqv/XN0iahuBlO+psGTaMPQ2zZ1OwzPHOkswo
+         4h7bd/P6qziKveSUQuuiNDT9V7LgCosZa6s2MvBo0aNiBnxSebtBLTGTyQuiah+MznaC
+         WKTBte7Qxw4COLrVT2Jcta0LPTJI9PzvhQxWFP3uiQANWgzAKBd4IvrMY1mFb+FIbNEI
+         wWE8x8lmlRw/z1YGI6sdYYfQ0kXR7tZuk5XWx0srm6/UolhX8fGLABeCXVHePJGb+MIo
+         kDBGdtOMihNewlrO3lcOlEMEd90ugiD1q4qvExTUrSg6cBvWWiO7HdHMqCIAigIgvmUa
+         9nQw==
+X-Forwarded-Encrypted: i=1; AJvYcCUDboNjHDEIHX/nYpGJCBWFXunHPhB48C3DuM/L8qh7j74QCgih/wJMb3WmcRH59u/w8+jAU8eK8A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw5vwZldJwgLRe2Etb9YXZ/h03VuW2TyaLcaInuJKmD0cqAW8Ng
+	K2Y5+0yvmhb6MOBBqYN8z6SaSJVzWzIeY9+Pi5Uh80DQ/mJCfhzrehs6jN4kRiLYcjChuQ==
+X-Google-Smtp-Source: AGHT+IFo+c59bClMb3w3IGnlN130wN7y6oOR1HcCzkELMUY8CVZ2GcCuOdp4NbrOfZUYhOCT0CSDVHhP
+X-Received: from pgtq4.prod.google.com ([2002:a65:6844:0:b0:a87:a3b9:db3d])
+ (user=keyz job=prod-delivery.src-stubby-dispatcher) by 2002:a17:902:c941:b0:216:25a2:2ebe
+ with SMTP id d9443c01a7336-21dd7c65844mr278809895ad.19.1738492935252; Sun, 02
+ Feb 2025 02:42:15 -0800 (PST)
+Date: Sun,  2 Feb 2025 18:42:11 +0800
+In-Reply-To: <7hy0ysi4pf.fsf@baylibre.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250131183242.3653595-5-jishnu.prakash@oss.qualcomm.com>
+Mime-Version: 1.0
+References: <7hy0ysi4pf.fsf@baylibre.com>
+X-Mailer: git-send-email 2.48.1.362.g079036d154-goog
+Message-ID: <20250202104211.2764016-1-keyz@google.com>
+Subject: Re: [PATCH v3] cpuidle: psci: Add trace for PSCI domain idle
+From: Keita Morisaki <keyz@google.com>
+To: khilman@kernel.org
+Cc: aarontian@google.com, daniel.lezcano@linaro.org, keyz@google.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-trace-kernel@vger.kernel.org, lpieralisi@kernel.org, 
+	mathieu.desnoyers@efficios.com, mhiramat@kernel.org, rafael@kernel.org, 
+	rostedt@goodmis.org, sudeep.holla@arm.com, yimingtseng@google.com
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Jishnu,
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
+>
+> I've been using some local trace_printk() to do exactly this, so I fully
+> support having some official tracepoints here.
+>
+> For my local hacks, I was trackin the state index as well as the state
+> value since for quick debug, I find the index to more human readable
+> than the state value, which I have to compare with the
+> arm,psci-suspend-pararm from the DT.
+>
+> Anyways, thanks for submitting this!
+>
+> Kevin
 
-kernel test robot noticed the following build errors:
-
-[auto build test ERROR on 5ffa57f6eecefababb8cbe327222ef171943b183]
-
-url:    https://github.com/intel-lab-lkp/linux/commits/Jishnu-Prakash/dt-bindings-iio-adc-Move-QCOM-ADC-bindings-to-iio-adc-folder/20250201-023723
-base:   5ffa57f6eecefababb8cbe327222ef171943b183
-patch link:    https://lore.kernel.org/r/20250131183242.3653595-5-jishnu.prakash%40oss.qualcomm.com
-patch subject: [PATCH V5 4/5] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
-config: hexagon-allyesconfig (https://download.01.org/0day-ci/archive/20250202/202502020700.dqk9AzTu-lkp@intel.com/config)
-compiler: clang version 18.1.8 (https://github.com/llvm/llvm-project 3b5b5c1ec4a3095ab096dd780e84d7ab81f3d7ff)
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250202/202502020700.dqk9AzTu-lkp@intel.com/reproduce)
-
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202502020700.dqk9AzTu-lkp@intel.com/
-
-All errors (new ones prefixed by >>):
-
->> drivers/iio/adc/qcom-adc5-gen3-common.c:72:11: error: call to undeclared function 'FIELD_PREP'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
-      72 |         *data |= FIELD_PREP(ADC5_GEN3_DIG_PARAM_CAL_SEL_MASK, prop->cal_method);
-         |                  ^
-   1 error generated.
-
-
-vim +/FIELD_PREP +72 drivers/iio/adc/qcom-adc5-gen3-common.c
-
-    67	
-    68	void adc5_gen3_update_dig_param(struct adc5_channel_common_prop *prop, u8 *data)
-    69	{
-    70		/* Update calibration select and decimation ratio select */
-    71		*data &= ~(ADC5_GEN3_DIG_PARAM_CAL_SEL_MASK | ADC5_GEN3_DIG_PARAM_DEC_RATIO_SEL_MASK);
-  > 72		*data |= FIELD_PREP(ADC5_GEN3_DIG_PARAM_CAL_SEL_MASK, prop->cal_method);
-    73		*data |= FIELD_PREP(ADC5_GEN3_DIG_PARAM_DEC_RATIO_SEL_MASK, prop->decimation);
-    74	}
-    75	EXPORT_SYMBOL(adc5_gen3_update_dig_param);
-    76	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Thank you so much for the endorsement.
+Showing the index sounds like a good idea, although it should be done in a
+different layer (probably in the GenPD governor or cpuidle-psci driver?) because
+idx here should be the different index from the one we're looking for.
+I will keep my patch as it is just for now. Thank you for the idea!
 
