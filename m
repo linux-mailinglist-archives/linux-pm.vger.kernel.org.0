@@ -1,300 +1,142 @@
-Return-Path: <linux-pm+bounces-21221-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21222-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8891EA24E4F
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 14:38:34 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CCEDDA24EB0
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 15:38:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F40D0162CAD
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 13:38:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6EFD43A4E0B
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 14:38:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DB331D90CB;
-	Sun,  2 Feb 2025 13:38:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14D761FAC30;
+	Sun,  2 Feb 2025 14:38:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kjxMu+dO"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MRsQeMtS"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AB71D90A7;
-	Sun,  2 Feb 2025 13:38:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D03031D7E57;
+	Sun,  2 Feb 2025 14:38:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738503510; cv=none; b=Ij2bT2EuCUIXMce4KWGNn0ISIO6u79u47booNVf178JJ/5ahJaXmJym1DmvPlbn9U6UqEn5eOpO1shFuQr93WhxyyiNpLE6vr7gWhjg5MIfu+Ga2Nw13NEcAW6oxDQECTG01L134mVT4xQvsbkMeSw2MKJhJFQuLjfAzDDItxcA=
+	t=1738507119; cv=none; b=SgAXcaJocbZKbx85MAAEKeKz0FWwhDZhsqMTad//LSLyKuKCkjxLhtvjzzeZ39XvjYhXVsL3hmME7kBfrrM2SRJ3x4eVJdfg/Dvhrz1TjKtlGotG9jOajkZEoZ78prcC6+wQ5A19R8vbfG/asJD5p1s5k1gIq8XMC3Gxi+VOl88=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738503510; c=relaxed/simple;
-	bh=Rh/X6LJOfTkJBDg+yE0C0DAq5GEv901Lhj/SFiZN/J0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Ktz8FrgaIDfDe4uMG6AgOr5JUJmrG1NVZvAYvKmCaD+5BKXEGp/ZUdLgIWCW4M6VQGIjmn7YhblKkofLnKQB8WLADUaF0BhVSEO1t395y+oMhushCCqUGPEUtL3u1+nGjSzAFoJWaMoQ60wgCWfv8CrqgOXJS2xOVa04jjSfD6E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kjxMu+dO; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 524C4C4CED1;
-	Sun,  2 Feb 2025 13:38:29 +0000 (UTC)
+	s=arc-20240116; t=1738507119; c=relaxed/simple;
+	bh=VC3TvpTS3OgA37PYjJzVzTBE9twfsQyPycmL+dK3wBA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=GKdxNFHGJ/l43t87FrMMKRt0s5bVBSdU5xVkm0xM0bkqh175Cd6G1Tnz3PIDxHVqkjjjs/LUobni663iSjTBBD17lvPaRPe6Sg6Uns4irmMSjKkOhIlxJfW5ePfTqOwXLjwPvZXNfjHB6PlQp2rZuwpsVbrRVIzithm4iqdUXNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MRsQeMtS; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 259F0C4CED1;
+	Sun,  2 Feb 2025 14:38:32 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738503510;
-	bh=Rh/X6LJOfTkJBDg+yE0C0DAq5GEv901Lhj/SFiZN/J0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=kjxMu+dOuFedE+UllPmgXHV0OKqHmlA82QA+b404nq5BAzo3XxU05wpTDpok+QC6p
-	 2IapFJODjTyTMS0n4EBrmD22xxWhySNI0kWhKK9TCzSb7HoRrHfR9oBGXEuntSWAR9
-	 njHpL9/QQO7Bv+ASc/zA7BbwFfPAWvYUrxASapVdihykNgao/8ZB0ayfzT2PVQby6T
-	 2GWw/ak24CQEw6q/PD/Xds2yctxzUHCY7ODtymr+th/GjcK8Ns+q86Aktx391jfuSM
-	 MlisXCj/UTGxGCOc1qqIEcNx81ZnINOLq+XOHDK0M7j6S9L0HsE4C9Dheam9VKxE+h
-	 OFhFkY7a7X+qA==
-Date: Sun, 2 Feb 2025 14:38:25 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-Cc: jic23@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
-	conor+dt@kernel.org, agross@kernel.org, andersson@kernel.org, 
-	dmitry.baryshkov@linaro.org, konradybcio@kernel.org, daniel.lezcano@linaro.org, 
-	sboyd@kernel.org, amitk@kernel.org, thara.gopinath@gmail.com, lee@kernel.org, 
-	rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com, 
-	david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com, quic_kamalw@quicinc.com, 
-	rui.zhang@intel.com, lukasz.luba@arm.com, lars@metafoo.de, devicetree@vger.kernel.org, 
-	linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org, quic_skakitap@quicinc.com, 
-	neil.armstrong@linaro.org
-Subject: Re: [PATCH V5 3/5] dt-bindings: iio: adc: Add support for QCOM PMIC5
- Gen3 ADC
-Message-ID: <20250202-pragmatic-sparkling-spider-ccd90b@krzk-bin>
-References: <20250131183242.3653595-1-jishnu.prakash@oss.qualcomm.com>
- <20250131183242.3653595-4-jishnu.prakash@oss.qualcomm.com>
+	s=k20201202; t=1738507118;
+	bh=VC3TvpTS3OgA37PYjJzVzTBE9twfsQyPycmL+dK3wBA=;
+	h=Date:Subject:To:References:From:In-Reply-To:From;
+	b=MRsQeMtSY+inEX470+z190fXTmCy/XJsG9DcJGD9GGaXRAdKyo5aGjZg+Bvj6nx2y
+	 mFm4a0d5H6HlVKyMcBdHFcOjimNMZNMgHop2pBWrIAdGYalK8gv0mxzVUnSAi/2QEV
+	 sXpLxitPs4qTr129yOmb3/CwdHIsUaWlyOJLyDUySYvPDVbuMcqptZJhpl1W0JEw+5
+	 kr0yFrrUlehxg04AD29TB3GBc5d3BbV9f0wejwzZAtp3Yt2HLLB2O4u0q/Tlk1XtAH
+	 LoYPMyq/MmiI945iT5mmtJcg0DNOdUIz1ixwZSseZuYpAZWld1Ff2QM2LOxG/cMExC
+	 XBPhaMKS6Bcyw==
+Message-ID: <4e1c3a64-5c66-4312-b96a-334eac933684@kernel.org>
+Date: Sun, 2 Feb 2025 15:38:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250131183242.3653595-4-jishnu.prakash@oss.qualcomm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/4] dt-bindings: clock: ipq5424-apss-clk: Add ipq5424
+ apss clock controller
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+ Sricharan R <quic_srichara@quicinc.com>, andersson@kernel.org,
+ mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, konradybcio@kernel.org,
+ rafael@kernel.org, viresh.kumar@linaro.org, ilia.lin@kernel.org,
+ linux-arm-msm@vger.kernel.org, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20250127093128.2611247-1-quic_srichara@quicinc.com>
+ <20250127093128.2611247-2-quic_srichara@quicinc.com>
+ <0c26af56-ed7a-4de8-ac47-7447298b87f0@kernel.org>
+ <ee608de8-ad3c-4cb4-994d-fc3cf930e29c@oss.qualcomm.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <ee608de8-ad3c-4cb4-994d-fc3cf930e29c@oss.qualcomm.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Sat, Feb 01, 2025 at 12:02:40AM +0530, Jishnu Prakash wrote:
- 
-> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-adc5-gen3.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-adc5-gen3.yaml
-> new file mode 100644
-> index 000000000000..d6f2d18623d4
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-adc5-gen3.yaml
-> @@ -0,0 +1,157 @@
-> +# SPDX-License-Identifier: (GPL-2.0 OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/iio/adc/qcom,spmi-adc5-gen3.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Qualcomm's SPMI PMIC ADC5 Gen3
-> +
-> +maintainers:
-> +  - Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-> +
-> +description: |
-> +  SPMI PMIC5 Gen3 voltage ADC (ADC) provides interface to
-> +  clients to read voltage. It is a 16-bit sigma-delta ADC.
-> +  It also performs the same thermal monitoring function as
-> +  the existing ADC_TM devices.
+On 01/02/2025 16:21, Konrad Dybcio wrote:
+> On 28.01.2025 8:34 AM, Krzysztof Kozlowski wrote:
+>> On 27/01/2025 10:31, Sricharan R wrote:
+>>> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>>>
+>>> The CPU core in ipq5424 is clocked by a huayra PLL with RCG support.
+>>> The RCG and PLL have a separate register space from the GCC.
+>>> Also the L3 cache has a separate pll and needs to be scaled along
+>>> with the CPU.
+>>>
+>>> Co-developed-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>>> Signed-off-by: Md Sadre Alam <quic_mdalam@quicinc.com>
+>>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+>>
+>> Considering that there were multiple conflicting patches coming from
+>> Qualcomm around IPQ SoCs and that we are in the merge window, I will
+>> skip this patch.
+> 
+> I think you confused this with something else, I don't see any other IPQ
+> clock patches
 
-Don't wrap at 61, but at 80. See Coding style.
-
-> +
-> +properties:
-> +  compatible:
-> +    const: qcom,spmi-adc5-gen3
-> +
-> +  reg:
-> +    items:
-> +      - description: SDAM0 base address in the SPMI PMIC register map
-> +      - description: SDAM1 base address
-> +    minItems: 1
-
-Why is this flexible?
-
-> +
-> +  '#address-cells':
-> +    const: 1
-> +
-> +  '#size-cells':
-> +    const: 0
-> +
-> +  '#io-channel-cells':
-> +    const: 1
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 1
-> +
-> +  interrupts:
-> +    items:
-> +      - description: SDAM0 end of conversion (EOC) interrupt
-> +      - description: SDAM1 EOC interrupt
-> +    minItems: 1
-
-Same question.
-
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: sdam0
-> +      - const: sdam1
-> +    minItems: 1
-
-So basically interrupt 0 and 1, just drop the names property entirely.
-
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - '#address-cells'
-> +  - '#size-cells'
-> +  - '#io-channel-cells'
-> +  - interrupts
-> +  - interrupt-names
-> +
-> +patternProperties:
-
-required block always goes after all properties, not in the middle.
-
-> +  "^channel@[0-9a-f]+$":
-> +    type: object
-> +    unevaluatedProperties: false
-> +    description: |
-
-Do not need '|' unless you need to preserve formatting.
-
-> +      Represents the external channels which are connected to the ADC.
-> +    $ref: /schemas/iio/adc/qcom,spmi-vadc-common.yaml
-> +
-> +    properties:
-> +      qcom,decimation:
-> +        enum: [ 85, 340, 1360 ]
-> +        default: 1360
-> +
-> +      qcom,hw-settle-time:
-> +        enum: [ 15, 100, 200, 300, 400, 500, 600, 700, 1000, 2000, 4000,
-> +                8000, 16000, 32000, 64000, 128000 ]
-> +        default: 15
-> +
-> +      qcom,avg-samples:
-> +        enum: [ 1, 2, 4, 8, 16 ]
-> +        default: 1
-> +
-> +      qcom,adc-tm:
-> +        description:
-> +          ADC_TM is a threshold monitoring feature in HW which can be enabled on any
-> +          ADC channel, to trigger an IRQ for threshold violation. In earlier ADC
-> +          generations, it was implemented in a separate device (documented in
-> +          Documentation/devicetree/bindings/thermal/qcom-spmi-adc-tm5.yaml.)
-> +          In Gen3, this feature can be enabled in the same ADC device for any channel
-> +          and threshold monitoring and IRQ triggering are handled in FW (PBS) instead of
-> +          another dedicated HW block.
-> +          This property indicates ADC_TM monitoring is done on this channel.
-> +        type: boolean
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pmk8550.h>
-> +    #include <dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550.h>
-> +    #include <dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550b.h>
-> +    #include <dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550vx.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    pmic {
-> +      #address-cells = <1>;
-> +      #size-cells = <0>;
-> +
-> +      adc@9000 {
-> +        compatible = "qcom,spmi-adc5-gen3";
-> +        reg = <0x9000>, <0x9100>;
-> +        interrupts = <0x0 0x90 0x1 IRQ_TYPE_EDGE_RISING>,
-> +                      <0x0 0x91 0x1 IRQ_TYPE_EDGE_RISING>;
-> +        interrupt-names = "sdam0", "sdam1";
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +        #io-channel-cells = <1>;
-> +        #thermal-sensor-cells = <1>;
-> +
-> +        /* PMK8550 Channel nodes */
-> +        channel@3 {
-> +          reg = <PMK8550_ADC5_GEN3_DIE_TEMP(0)>;
-> +          label = "pmk8550_die_temp";
-> +          qcom,pre-scaling = <1 1>;
-> +        };
-> +
-> +        channel@44 {
-> +          reg = <PMK8550_ADC5_GEN3_AMUX_THM1_XO_THERM_100K_PU(0)>;
-> +          label = "pmk8550_xo_therm";
-> +          qcom,pre-scaling = <1 1>;
-> +          qcom,ratiometric;
-> +          qcom,hw-settle-time = <200>;
-> +          qcom,adc-tm;
-> +        };
-> +
-> +        /* PM8550 Channel nodes */
-> +        channel@103 {
-> +          reg = <PM8550_ADC5_GEN3_DIE_TEMP(1)>;
-> +          label = "pm8550_die_temp";
-> +          qcom,pre-scaling = <1 1>;
-> +        };
-> +
-> +        /* PM8550B Channel nodes */
-> +        channel@78f {
-> +          reg = <PM8550B_ADC5_GEN3_VBAT_SNS_QBG(7)>;
-> +          label = "pm8550b_vbat_sns_qbg";
-> +          qcom,pre-scaling = <1 3>;
-> +        };
-> +
-> +        /* PM8550VS_C Channel nodes */
-> +        channel@203 {
-> +          reg = <PM8550VS_ADC5_GEN3_DIE_TEMP(2)>;
-> +          label = "pm8550vs_c_die_temp";
-> +          qcom,pre-scaling = <1 1>;
-> +        };
-> +      };
-> +    };
-> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml
-> index cd087911ee88..1531153e6ea8 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc-common.yaml
-> @@ -17,8 +17,8 @@ properties:
->      description:
->        ADC channel number.
->        See include/dt-bindings/iio/adc/qcom,spmi-vadc.h
-> -      For PMIC7 ADC, the channel numbers are specified separately per PMIC
-> -      in the PMIC-specific files in include/dt-bindings/iio/adc.
-> +      For PMIC7 ADC and PMIC5 Gen3 ADC, the channel numbers are specified
-> +      separately per PMIC in the PMIC-specific files in include/dt-bindings/iio/adc.
->      maxItems: 1
->  
->    label:
-> diff --git a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-> index b0ccad00c1a6..b77af38440fe 100644
-> --- a/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-> +++ b/Documentation/devicetree/bindings/iio/adc/qcom,spmi-vadc.yaml
-> @@ -15,6 +15,8 @@ description: |
->    voltage. The VADC is a 15-bit sigma-delta ADC.
->    SPMI PMIC5/PMIC7 voltage ADC (ADC) provides interface to clients to read
->    voltage. The VADC is a 16-bit sigma-delta ADC.
-> +  Note that PMIC7 ADC is the generation between PMIC5 and PMIC5 Gen3 ADC,
-> +  it can be considered like PMIC5 Gen2.
->  
->  properties:
->    compatible:
-> diff --git a/include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550.h b/include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550.h
-> new file mode 100644
-> index 000000000000..9940715683b4
-> --- /dev/null
-> +++ b/include/dt-bindings/iio/adc/qcom,spmi-adc5-gen3-pm8550.h
-
-
-Which is the name/model of the device? PM8550? If so, then this must
-follow standard compatible naming, so qcom,pm8550-foo-bar. Unless device
-name is somehow different.
-
-Also drop redundant pieces here - can it be anything else than SPMI?
-Like I2C?
+The conflicts were not about clocks, but I just don't want to spend my
+time to figure out whether clocks also have conflicting work or not.
 
 Best regards,
 Krzysztof
-
 
