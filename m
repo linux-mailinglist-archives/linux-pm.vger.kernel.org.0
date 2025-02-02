@@ -1,53 +1,54 @@
-Return-Path: <linux-pm+bounces-21234-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21235-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 08526A24F21
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:16 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 358DBA24F22
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFA861884B3F
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:13:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1BEF162F01
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:13:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 101451FAC49;
-	Sun,  2 Feb 2025 17:13:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77D011FAC58;
+	Sun,  2 Feb 2025 17:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tqkRQ7Jr"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sbLgJ7Je"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E05BF1D7E57
-	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 519C11D7E57
+	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738516393; cv=none; b=j2nl9KzPybVJFjdjuTqY5UqkXP9Si9RLIzzyxFxsXd698vJAM7RxD3xNPb5fLL8pCc+FxEVpaTQ/OVvbHFau+JtkUGFQncT8hOrxgxl6t8+5XcUjzzivcC1ffsu2SCH5vVib/3P41kpSQrWxgldHuQVJE2PSA1sKz2LKAl7ke8I=
+	t=1738516394; cv=none; b=SC5EMd6lmtOqi/q1gGzY0m3lGXHYFySYdIsoudv9MDVebSthqDttwpA2STMtNVo+jlu9eBOc+uB8l8142iaI/cljaT2hw1XoqD3fd3Ry6p+Sl7dCxTF2J18YaZAGHicZjIhK3IjkqEgjSs6qsnZqEg01ppyuz4+cVwWRENCB1A0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738516393; c=relaxed/simple;
-	bh=WFpmSrIgIrhNo6DTrNv+2W8Ut9DCsZ2P6okj3zjDCzQ=;
+	s=arc-20240116; t=1738516394; c=relaxed/simple;
+	bh=EvVJn3xRrjbeDc84ltW7ovM+DtAxQ+oFlxMhDD7729I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FRhR6c4szkH3Sb/SEy/QcyXky+Cld2mYDbO+oFJwHv87Xsijzgsoq92H480StzuuuUQPpN3qQMkZKlWQUW9EFBfKEOsbmAQcRn4UXNTc8cZTdprPozhxgcdEG+dpnr+vrSCGgHZ3zCsWQmLIPSmO2Wb1Tslx6GVznf+PUuveqds=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tqkRQ7Jr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5F3DFC4CEE0;
-	Sun,  2 Feb 2025 17:13:11 +0000 (UTC)
+	 MIME-Version; b=u8QI+Ai7uI7eTptXN7sAJZZpBsBmlKd2Ga3blhXgsry/UoAeRvpv8YZpZk2tIrvmUZZudiUbVSn88mftew2tCwA7+gu0PYkWfFHqOAQ4S7ZY2VPFizOvegYNlGyZ0W3NfvgbHjSLYyoWNo/eO67v/QajYkz6apn66avs1S39z34=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sbLgJ7Je; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30F58C4CEE5;
+	Sun,  2 Feb 2025 17:13:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738516392;
-	bh=WFpmSrIgIrhNo6DTrNv+2W8Ut9DCsZ2P6okj3zjDCzQ=;
+	s=k20201202; t=1738516394;
+	bh=EvVJn3xRrjbeDc84ltW7ovM+DtAxQ+oFlxMhDD7729I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=tqkRQ7JrAsCGqUx3zSW1BPdTFDhl9RasYJWitMM/DtbTYYq7j5e0V9TukiHCPnAGK
-	 ufkxKZRC43NLHAG+5TmUJ/PjnXwODCU9dIbM0QTfaXBcWwY5YtwTcP8fXVPC8dn6Vz
-	 l3UJ3Rh9MazjHmtLBPwlyLIt6EWGLxSBnfmGpBC2HS+FyDYOa6/E8otDz71pbRUc+s
-	 t1XfKoEV+ofXeSh5i3+ygM17JXv1HgxnwwX8tUMK5NiGrt4NNyzPj4nT4A0j3EGdXa
-	 ++rLpl6mCRcUsTHlvIhG4HyBoUV5izykv+MnmBwX0wrcvW1yEUCmBTP+Cm+D8WeV4J
-	 6GqYmNLy0iplg==
+	b=sbLgJ7JeMivQVUY/3rllUC9ThtBNlzDvwBUbESGVzYLaHALp8QTX2Ah18PR2cvM9q
+	 /NNu677cidC7yw8DzTz47cYqd86U6IOU4XScjRvHo2h8+ms8d01p94Q9M1wgcJAfaV
+	 KUPc/UYcgiZgwiuqtJ4S991ieEvlrkKPEUVckQIuqWJN4V8X3d4CrpFrnSc21KSy5P
+	 j3KuHr0t7r5lJetd9HfQQwcZg+ylpDZpme3cND8aRc0hJX41H0WezeLA5QGvlcKXFU
+	 DbLWdTmXe70pOyQB2FrOdYC+295+lbwYNT6saUu7VnHJns3bOVYatw6l0NIhxQ1/Ql
+	 pJRt1CuAE/G4Q==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>,
+	Zhang Rui <rui.zhang@intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 11/25] tools/power turbostat: Fix PMT mmaped file size rounding
-Date: Sun,  2 Feb 2025 11:09:27 -0600
-Message-ID: <2f60f03934a50bc1fb69bb4f47a25cddd6807b0b.1738515889.git.len.brown@intel.com>
+Subject: [PATCH 12/25] tools/power turbostat: Add fixed RAPL PSYS divisor for SPR
+Date: Sun,  2 Feb 2025 11:09:28 -0600
+Message-ID: <debe797c1e972ebe434c90f3fa7f54d9cf7ab251.1738515889.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
 References: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
@@ -63,40 +64,66 @@ Content-Transfer-Encoding: 8bit
 
 From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 
-This (the old code) is just not how you round up to a page size.
-Noticed on a recent Intel platform. Previous ones must have been
-reporting sizes already aligned to a page and so the bug was missed when
-testing.
+Intel Sapphire Rapids is an exception and has fixed divisor for RAPL PSYS
+counter set to 1.0. Add a platform bit and enable it for SPR.
 
-Fixes: f0e4ed752fda ("tools/power turbostat: Add early support for PMT counters")
+Reported-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 4 +++-
- 1 file changed, 3 insertions(+), 1 deletion(-)
+ tools/power/x86/turbostat/turbostat.c | 11 +++++++++--
+ 1 file changed, 9 insertions(+), 2 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 1d99aaf9681b..a2ca1c6c3638 100644
+index a2ca1c6c3638..1bcecfed721b 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -95,6 +95,8 @@
- #define INTEL_ECORE_TYPE	0x20
- #define INTEL_PCORE_TYPE	0x40
+@@ -358,7 +358,7 @@ unsigned long long cpuidle_cur_sys_lpi_us;
+ unsigned int tj_max;
+ unsigned int tj_max_override;
+ double rapl_power_units, rapl_time_units;
+-double rapl_dram_energy_units, rapl_energy_units;
++double rapl_dram_energy_units, rapl_energy_units, rapl_psys_energy_units;
+ double rapl_joule_counter_range;
+ unsigned int crystal_hz;
+ unsigned long long tsc_hz;
+@@ -424,6 +424,7 @@ struct platform_features {
+ 	bool has_per_core_rapl;	/* Indicates cores energy collection is per-core, not per-package. AMD specific for now */
+ 	bool has_rapl_divisor;	/* Divisor for Energy unit raw value from MSR_RAPL_POWER_UNIT */
+ 	bool has_fixed_rapl_unit;	/* Fixed Energy Unit used for DRAM RAPL Domain */
++	bool has_fixed_rapl_psys_unit;	/* Fixed Energy Unit used for PSYS RAPL Domain */
+ 	int rapl_quirk_tdp;	/* Hardcoded TDP value when cannot be retrieved from hardware */
+ 	int tcc_offset_bits;	/* TCC Offset bits in MSR_IA32_TEMPERATURE_TARGET */
+ 	bool enable_tsc_tweak;	/* Use CPU Base freq instead of TSC freq for aperf/mperf counter */
+@@ -824,6 +825,7 @@ static const struct platform_features spr_features = {
+ 	.has_msr_core_c1_res = 1,
+ 	.has_irtl_msrs = 1,
+ 	.has_cst_prewake_bit = 1,
++	.has_fixed_rapl_psys_unit = 1,
+ 	.trl_msrs = TRL_BASE | TRL_CORECOUNT,
+ 	.rapl_msrs = RAPL_PKG_ALL | RAPL_DRAM_ALL | RAPL_PSYS,
+ };
+@@ -1292,7 +1294,7 @@ static const struct rapl_counter_arch_info rapl_counter_arch_infos[] = {
+ 	 .msr = MSR_PLATFORM_ENERGY_STATUS,
+ 	 .msr_mask = 0x00000000FFFFFFFF,
+ 	 .msr_shift = 0,
+-	 .platform_rapl_msr_scale = &rapl_energy_units,
++	 .platform_rapl_msr_scale = &rapl_psys_energy_units,
+ 	 .rci_index = RAPL_RCI_INDEX_ENERGY_PLATFORM,
+ 	 .bic = BIC_SysWatt | BIC_Sys_J,
+ 	 .compat_scale = 1.0,
+@@ -7112,6 +7114,11 @@ void rapl_probe_intel(void)
+ 	else
+ 		rapl_dram_energy_units = rapl_energy_units;
  
-+#define ROUND_UP_TO_PAGE_SIZE(n) (((n) + 0x1000UL-1UL) & ~(0x1000UL-1UL))
++	if (platform->has_fixed_rapl_psys_unit)
++		rapl_psys_energy_units = 1.0;
++	else
++		rapl_psys_energy_units = rapl_energy_units;
 +
- enum counter_scope { SCOPE_CPU, SCOPE_CORE, SCOPE_PACKAGE };
- enum counter_type { COUNTER_ITEMS, COUNTER_CYCLES, COUNTER_SECONDS, COUNTER_USEC, COUNTER_K2M };
- enum counter_format { FORMAT_RAW, FORMAT_DELTA, FORMAT_PERCENT, FORMAT_AVERAGE };
-@@ -8996,7 +8998,7 @@ struct pmt_mmio *pmt_mmio_open(unsigned int target_guid)
- 		if (fd_pmt == -1)
- 			goto loop_cleanup_and_break;
- 
--		mmap_size = (size + 0x1000UL) & (~0x1000UL);
-+		mmap_size = ROUND_UP_TO_PAGE_SIZE(size);
- 		mmio = mmap(0, mmap_size, PROT_READ, MAP_SHARED, fd_pmt, 0);
- 		if (mmio != MAP_FAILED) {
- 
+ 	time_unit = msr >> 16 & 0xF;
+ 	if (time_unit == 0)
+ 		time_unit = 0xA;
 -- 
 2.43.0
 
