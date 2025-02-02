@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-21227-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21228-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CB98A24F1A
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDEFCA24F1B
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2C8E07A22D1
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:12:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B39057A2315
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5AC621F9F73;
-	Sun,  2 Feb 2025 17:13:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C327A1FAC34;
+	Sun,  2 Feb 2025 17:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b5rAOCbH"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lvzdrw8H"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35A6F1FB3
-	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F8411F8917
+	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738516381; cv=none; b=mL4ivmLq4jBCQHjoXb2DbFX3JfN13MYp3qtYo5ptcTNJ8pOdiP0TDwDD7vte+WWO0HC4i1bCSc7gasQYmBZo7bGQbLHDtmrZC/IdpXDo95rzCQ66W0EDUK9GTt4KMxpiQvrUS6MGZTGGRB+QDNp7nlf9eHgvvOa7zQb5j4YYkBw=
+	t=1738516382; cv=none; b=E7wTZjc8Yg3NunaBABFM9va/WeKLCDVgjUsaZBhDcgByAS1kcdFoKYmxa6ve4IwOA3uRpW2MUkqSvdjWXmoxy8gMgHpe9W6HesdSLMXahjBFY0LiX/xhCr7CUX5Vrchv7IcIB4IVDY3h+SyZw9FFkxOQX2ZMb7FwpeMX+oSvuvs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738516381; c=relaxed/simple;
-	bh=TEUaU05jxt59+KeEFDC6WN9ihOzyeYXXFs4+57aIEhc=;
+	s=arc-20240116; t=1738516382; c=relaxed/simple;
+	bh=wQvAfClLg/NJt+BX1HeP7ba8swpvY0Vu2Be+yznQT2E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=SuiPP6Df99ZBRru2cWheMHrHg4mP81cUX7ijnMZuFOPTjhia+MxX7QrLd0DpNa/Vl7eGn2RXYT6ho1kvDM7QcuQbFAW64s6mBHrmgfj/Va0mLMYfXItuWGVZ1OSlWHFWBfw9w5f4/SJ8IVbgwdmgQKTUGV4mucUjZS6XG8/Csuo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b5rAOCbH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A000BC4CEE1;
-	Sun,  2 Feb 2025 17:12:59 +0000 (UTC)
+	 MIME-Version; b=Lc71WQ1q68hXcumZzD5yiGrmErmvgXaY18xkUKGLRlUHutTTmiiWv8zLDM03iwNy11ij8aj/61YQkuNTFhqWHKM4YgIGz0rq1PfpbqywocjwYw0SSPhapOb1L0Sbz91iUbWO1AOWPByby3+xcprBb7Sng8/EvUyXfKevXmFrj28=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lvzdrw8H; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 21417C4CED1;
+	Sun,  2 Feb 2025 17:13:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738516380;
-	bh=TEUaU05jxt59+KeEFDC6WN9ihOzyeYXXFs4+57aIEhc=;
+	s=k20201202; t=1738516382;
+	bh=wQvAfClLg/NJt+BX1HeP7ba8swpvY0Vu2Be+yznQT2E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=b5rAOCbHL9YlFQU4W/YmGdaMLuf4fbHbuQUrjP4Jes5NZWyHaipB5xilckqTPfFuq
-	 asFMKyHhH3rbGQGuQus4c+QqVyhvvyqXnkNc7BMuDeIHJZIEpBDgsGXxxyfJU7i697
-	 8gb3ZvFtv9Iw865Ax+c/9TYuDp326ulnBS5IjyavkQp9jXlZ1en9GOf6g4Pvun/JJ9
-	 SS1qTjhWt7zbcKNG4qO3N8dH6wqKZMPWByuQeULmsJweovqlbaWrKxC0aSJj5f0pdv
-	 bxO0blKDa4fvsV0QBxakNmcvCcFqfzfM7Kh7L8qcz2tjYfuGN57LcCT8LsKOW3SxQl
-	 M5R1whWjTOvhw==
+	b=lvzdrw8HGDeZBSFk1RSsDvNFJgHBgs8nUbxnx4up1leir5msn9MzS1TqIOqhxlR/O
+	 CEq33zCnMwxH3AAiDBQczcdezUMk2hmri4wNxjt1+rgKnP8OJH94Bcl2BYApriaPQs
+	 o5/PT6+vAfEnQsZeEYcjTMl9eGdbH5L9lUs9lCNQ/f6sPAYcMviR3ZAgURSNLgfuSF
+	 Vdcr6ST13OH4KSD39blJfTcBSZrJmCAIR37g7oyUScUXhzNTkscL8VEk3CRP65V7pX
+	 IQFrjPK6Wr6eCEFUJxUKi6ZaAQCS6AS39PqAEqUOpWRE5fBF+zjWoVmJ7FGNzQvN96
+	 s4QKLN8UU/qNA==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
 Cc: Zhang Rui <rui.zhang@intel.com>,
 	Len Brown <len.brown@intel.com>
-Subject: [PATCH 04/25] tools/power turbostat: Exit on unsupported Intel models
-Date: Sun,  2 Feb 2025 11:09:20 -0600
-Message-ID: <4133be39e216130a86382fb5cfbaf6851a6f7a45.1738515889.git.len.brown@intel.com>
+Subject: [PATCH 05/25] tools/power turbostat: Exit on unsupported Vendors
+Date: Sun,  2 Feb 2025 11:09:21 -0600
+Message-ID: <48c62ba1b407140229e92f5cfae6ae113fc4af8e.1738515889.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
 References: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
@@ -63,40 +63,56 @@ Content-Transfer-Encoding: 8bit
 
 From: Zhang Rui <rui.zhang@intel.com>
 
-Turbostat requires per-platform enabling for Intel CPU models due to
-platform-specific features. When running on unsupported Intel CPU
-models, turbostat currently operates with limited default features,
-which can lead to users unknowingly using an outdated version of the
-tool.
+Turbostat currently supports x86 processors from Intel, AMD, and Hygon.
+The behavior of turbostat on CPUs from other vendors has not been
+evaluated and may lead to incorrect or undefined behavior.
 
-Enhance turbostat to exit by default when run on unsupported Intel CPU
-models, with a clear message to users, informing them that their CPU
-model is not supported and advising them to update to the latest version
-of turbostat for full functionality.
-
-[lenb: updated error message wording]
+Enhance turbostat to exit by default when running on an unsupported CPU
+vendor. This ensures that users are aware that their CPU is not
+currently supported by turbostat, guiding them to seek support for their
+specific hardware through future patches.
 
 Signed-off-by: Zhang Rui <rui.zhang@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ tools/power/x86/turbostat/turbostat.c | 8 ++++++--
+ 1 file changed, 6 insertions(+), 2 deletions(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index e203f109dd2e..5e894b71003c 100644
+index 5e894b71003c..cb659b274554 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -1079,6 +1079,10 @@ void probe_platform_features(unsigned int family, unsigned int model)
- 			return;
+@@ -1056,9 +1056,9 @@ void probe_platform_features(unsigned int family, unsigned int model)
+ {
+ 	int i;
+ 
+-	platform = &default_features;
+ 
+ 	if (authentic_amd || hygon_genuine) {
++		platform = &default_features;
+ 		if (max_extended_level >= 0x80000007) {
+ 			unsigned int eax, ebx, ecx, edx;
+ 
+@@ -1071,7 +1071,7 @@ void probe_platform_features(unsigned int family, unsigned int model)
+ 	}
+ 
+ 	if (!genuine_intel)
+-		return;
++		goto end;
+ 
+ 	for (i = 0; turbostat_pdata[i].features; i++) {
+ 		if (VFM_FAMILY(turbostat_pdata[i].vfm) == family && VFM_MODEL(turbostat_pdata[i].vfm) == model) {
+@@ -1080,6 +1080,10 @@ void probe_platform_features(unsigned int family, unsigned int model)
  		}
  	}
-+
-+	fprintf(stderr, "Unsupported platform detected.\n"
-+		"\tSee RUN THE LATEST VERSION on turbostat(8)\n");
-+	exit(1);
- }
  
- /* Model specific support End */
++end:
++	if (platform)
++		return;
++
+ 	fprintf(stderr, "Unsupported platform detected.\n"
+ 		"\tSee RUN THE LATEST VERSION on turbostat(8)\n");
+ 	exit(1);
 -- 
 2.43.0
 
