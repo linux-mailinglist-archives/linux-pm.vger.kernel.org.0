@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-21230-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21231-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ABE3A24F1C
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:10 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6FD3A24F1F
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 18:13:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 005B01884BEF
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:13:15 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EF0AD7A22A6
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 17:12:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 919B31FAC53;
-	Sun,  2 Feb 2025 17:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF4051FAC52;
+	Sun,  2 Feb 2025 17:13:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CnTc+fmN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ij0eIol/"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D53A1FAC46
-	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B0971FAC34
+	for <linux-pm@vger.kernel.org>; Sun,  2 Feb 2025 17:13:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738516385; cv=none; b=RjUYdraa2yDd4bixSou3MwiC1yDVOJAcvnBXNwXNATjcf27QLBtsLTtLgTfKN5W5EAeeBokZUt0pSyul6++koT3H44MwGExO8koZzMac+lT14m9/cZeOlaBfBvPQKPL/Wrkp5VPT0vnCwJeCXaVUZTQ67bWt/reeUlV0E0YcjeQ=
+	t=1738516387; cv=none; b=BFhSe6IJxnY1ByTVCrWh6qLu24SJ+ihdYtcbp33iIkt8GDN31hCvm/LDVpsf+SFOzopLtYlsniz3HIJd+KeJp2Sw7TgRD5bbTFoUZRHK5Ggb3/xgk3ntCm8NFnlChkzAvjfcWeRm0K14cfX+BHx3cZ68dgNUnlBwA3rb4EhkHQ4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738516385; c=relaxed/simple;
-	bh=h6cbDga1vMkMlHFF16RpT/8JhquiFTawIQvLXM0PzF0=;
+	s=arc-20240116; t=1738516387; c=relaxed/simple;
+	bh=xz3ylO83r/1iuIodRRdE+lYtRBGpl+8bAhGm5AorPpA=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=c8qEjsK5ieVGL4I5C9Xq+Tx3p8iFic4Z/lgALq/hKqE+6a3pkr7dxS88I4Ot3RUMgxZCrn3LE8czNxGmgLjtdjYXXWlLKMMCQ23vuvnXZPLAGX6A1N0FIH+NqP0C769yTma9PO3mfDzT0VihevawX3Cl3MH28aVlJPJyyk250OM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CnTc+fmN; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 32DB6C4CEE1;
-	Sun,  2 Feb 2025 17:13:03 +0000 (UTC)
+	 MIME-Version; b=gNA87pnbD1XiMBP66yUeVgoRNfFybIXnOa2bzNzi02ky7hyOua5pMd3wcnufUEtuC9hzySIhLBzGyyg0OIKFtfBCXoFQkj460iKEwlVZ98WE50rg4PfiqmZ3K9i3N+efeyvpO8vKIn+ZJYfId8GQ3L50TQgjhetITpU1wOqAUt0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ij0eIol/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E9AD6C4CEE0;
+	Sun,  2 Feb 2025 17:13:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738516385;
-	bh=h6cbDga1vMkMlHFF16RpT/8JhquiFTawIQvLXM0PzF0=;
+	s=k20201202; t=1738516387;
+	bh=xz3ylO83r/1iuIodRRdE+lYtRBGpl+8bAhGm5AorPpA=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:Reply-To:From;
-	b=CnTc+fmNGI9SCuDNSHqo0qnQ7gHslNyNMikr1GCrleaQlqctKGoBI0ztIBl6C8UTl
-	 e7Raugk/ahkniVvHqjxgTwa/LkmROMlCj3jyrxHdh4MEPR+FJkZ+cAF5iDPY9af6Wc
-	 P6VKQJaGY0TAskT2Eg4Z+mYDOza4NU5fr3nD65KR+qa3Npp0c33hWnqhwvz2DmwYd7
-	 BydaFcjxCydN6xbxd506NgBzPcZQ2bjqs8KYBNZhGnabVvQhvMBerwjfl62pIp50v9
-	 4vo97gUyPGK3SS0dg3AjKPfJHhOqlpO+qHzGBba68PlmyyDOjfhx9iNArHBmoNtHP6
-	 tcFm0LJ4TKpzA==
+	b=ij0eIol/NE+/561VbZkFxxnmdnJcDG3tr5fSwKbJ8DiVEESkgq84kx7LqX07XXt9S
+	 RQFWuIA4SN2TnOX8Rm8pzU+GmvBigYH5jq55QZGr1sMy2BqZPfWJS9JewtHlpsYJPp
+	 6g/eNVn6I+JKp1nVYyymZ1guxdIWf2pA8hFLfdGzhiW32S9jM3OiGen1Docz82Iyed
+	 nnqgzTw+1Y4MQJAdnSha42y/qjuGIvxDX4S5ti7xf55pPMsXXZzrZcu7a//PB/9xal
+	 Ze1FqxdGA2AVGQO80KpYGYDqlkoxmDf1yl8GvQiSxhjlVUQkjQesEGAe0VeTM07DB1
+	 inHG5qwhYfVkw==
 From: Len Brown <lenb@kernel.org>
 To: linux-pm@vger.kernel.org
-Cc: Zhang Rui <rui.zhang@intel.com>,
-	Len Brown <len.brown@intel.com>
-Subject: [PATCH 07/25] tools/power turbostat: Introduce --force parameter
-Date: Sun,  2 Feb 2025 11:09:23 -0600
-Message-ID: <3d94026af328d3d355d15c1d7fe73278f77c6a42.1738515889.git.len.brown@intel.com>
+Cc: Len Brown <len.brown@intel.com>,
+	Artem Bityutskiy <artem.bityutskiy@intel.com>
+Subject: [PATCH 08/25] tools/power turbostat: add Busy% to "show idle"
+Date: Sun,  2 Feb 2025 11:09:24 -0600
+Message-ID: <05c14d8fd71b9c19391d0b4d65b1c1764e1c440f.1738515889.git.len.brown@intel.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
 References: <e8a99af68c068865dbac7f3330e97bf8e96edf33.1738515889.git.len.brown@intel.com>
@@ -61,95 +61,27 @@ Reply-To: Len Brown <lenb@kernel.org>
 Organization: Intel Open Source Technology Center
 Content-Transfer-Encoding: 8bit
 
-From: Zhang Rui <rui.zhang@intel.com>
+From: Len Brown <len.brown@intel.com>
 
-Turbostat currently exits under the following conditions:
-1. When running on non-Intel/AMD/Hygon x86 vendors.
-2. When running on Intel models that lack specific platform features.
-
-Introduce a new `--force` parameter that allows turbostat to run on
-these unsupported platforms with minimal default feature support. This
-provides users with the flexibility to gather basic information even on
-unsupported systems.
-
-[lenb: updated warning message text]
-
-Signed-off-by: Zhang Rui <rui.zhang@intel.com>
+Suggested-by: Artem Bityutskiy <artem.bityutskiy@intel.com>
 Signed-off-by: Len Brown <len.brown@intel.com>
 ---
- tools/power/x86/turbostat/turbostat.c | 17 +++++++++++++++--
- 1 file changed, 15 insertions(+), 2 deletions(-)
+ tools/power/x86/turbostat/turbostat.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/tools/power/x86/turbostat/turbostat.c b/tools/power/x86/turbostat/turbostat.c
-index 5165450a8187..7accc4a73366 100644
+index 7accc4a73366..7a10e51a1349 100644
 --- a/tools/power/x86/turbostat/turbostat.c
 +++ b/tools/power/x86/turbostat/turbostat.c
-@@ -326,6 +326,7 @@ unsigned int rapl_joules;
- unsigned int summary_only;
- unsigned int list_header_only;
- unsigned int dump_only;
-+unsigned int force_load;
- unsigned int has_aperf;
- unsigned int has_aperf_access;
- unsigned int has_epb;
-@@ -1058,7 +1059,8 @@ void probe_platform_features(unsigned int family, unsigned int model)
+@@ -270,7 +270,7 @@ struct msr_counter bic[] = {
+ #define BIC_TOPOLOGY (BIC_Package | BIC_Node | BIC_CoreCnt | BIC_PkgCnt | BIC_Core | BIC_CPU | BIC_Die )
+ #define BIC_THERMAL_PWR ( BIC_CoreTmp | BIC_PkgTmp | BIC_PkgWatt | BIC_CorWatt | BIC_GFXWatt | BIC_RAMWatt | BIC_PKG__ | BIC_RAM__)
+ #define BIC_FREQUENCY (BIC_Avg_MHz | BIC_Busy | BIC_Bzy_MHz | BIC_TSC_MHz | BIC_GFXMHz | BIC_GFXACTMHz | BIC_SAMMHz | BIC_SAMACTMHz | BIC_UNCORE_MHZ)
+-#define BIC_IDLE (BIC_sysfs | BIC_CPU_c1 | BIC_CPU_c3 | BIC_CPU_c6 | BIC_CPU_c7 | BIC_GFX_rc6 | BIC_Pkgpc2 | BIC_Pkgpc3 | BIC_Pkgpc6 | BIC_Pkgpc7 | BIC_Pkgpc8 | BIC_Pkgpc9 | BIC_Pkgpc10 | BIC_CPU_LPI | BIC_SYS_LPI | BIC_Mod_c6 | BIC_Totl_c0 | BIC_Any_c0 | BIC_GFX_c0 | BIC_CPUGFX | BIC_SAM_mc6 | BIC_Diec6)
++#define BIC_IDLE (BIC_Busy | BIC_sysfs | BIC_CPU_c1 | BIC_CPU_c3 | BIC_CPU_c6 | BIC_CPU_c7 | BIC_GFX_rc6 | BIC_Pkgpc2 | BIC_Pkgpc3 | BIC_Pkgpc6 | BIC_Pkgpc7 | BIC_Pkgpc8 | BIC_Pkgpc9 | BIC_Pkgpc10 | BIC_CPU_LPI | BIC_SYS_LPI | BIC_Mod_c6 | BIC_Totl_c0 | BIC_Any_c0 | BIC_GFX_c0 | BIC_CPUGFX | BIC_SAM_mc6 | BIC_Diec6)
+ #define BIC_OTHER ( BIC_IRQ | BIC_SMI | BIC_ThreadC | BIC_CoreTmp | BIC_IPC)
  
- 
- 	if (authentic_amd || hygon_genuine) {
--		platform = &default_features;
-+		/* fallback to default features on unsupported models */
-+		force_load++;
- 		if (max_extended_level >= 0x80000007) {
- 			unsigned int eax, ebx, ecx, edx;
- 
-@@ -1067,7 +1069,7 @@ void probe_platform_features(unsigned int family, unsigned int model)
- 			if ((edx & (1 << 14)) && family >= 0x17)
- 				platform = &amd_features_with_rapl;
- 		}
--		return;
-+		goto end;
- 	}
- 
- 	if (!genuine_intel)
-@@ -1081,6 +1083,11 @@ void probe_platform_features(unsigned int family, unsigned int model)
- 	}
- 
- end:
-+	if (force_load && !platform) {
-+		fprintf(outf, "Forced to run on unsupported platform!\n");
-+		platform = &default_features;
-+	}
-+
- 	if (platform)
- 		return;
- 
-@@ -2160,6 +2167,8 @@ void help(void)
- 		"		displays the raw counter values\n"
- 		"  -e, --enable [all | column]\n"
- 		"		shows all or the specified disabled column\n"
-+		"  -f, --force\n"
-+		"		force load turbostat with minimum default features on unsupported platforms.\n"
- 		"  -H, --hide [column | column,column,...]\n"
- 		"		hide the specified column(s)\n"
- 		"  -i, --interval sec.subsec\n"
-@@ -9942,6 +9951,7 @@ void cmdline(int argc, char **argv)
- 		{ "Dump", no_argument, 0, 'D' },
- 		{ "debug", no_argument, 0, 'd' },	/* internal, not documented */
- 		{ "enable", required_argument, 0, 'e' },
-+		{ "force", no_argument, 0, 'f' },
- 		{ "interval", required_argument, 0, 'i' },
- 		{ "IPC", no_argument, 0, 'I' },
- 		{ "num_iterations", required_argument, 0, 'n' },
-@@ -10002,6 +10012,9 @@ void cmdline(int argc, char **argv)
- 			/* --enable specified counter */
- 			bic_enabled = bic_enabled | bic_lookup(optarg, SHOW_LIST);
- 			break;
-+		case 'f':
-+			force_load++;
-+			break;
- 		case 'd':
- 			debug++;
- 			ENABLE_BIC(BIC_DISABLED_BY_DEFAULT);
+ #define BIC_DISABLED_BY_DEFAULT	(BIC_USEC | BIC_TOD | BIC_APIC | BIC_X2APIC | BIC_SysWatt | BIC_Sys_J)
 -- 
 2.43.0
 
