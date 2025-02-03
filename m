@@ -1,79 +1,114 @@
-Return-Path: <linux-pm+bounces-21250-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21251-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 98631A25003
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 21:55:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50305A25208
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 06:32:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2091A16304A
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Feb 2025 20:55:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB7D018842DB
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 05:32:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 298F12144DE;
-	Sun,  2 Feb 2025 20:55:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721BD38FB9;
+	Mon,  3 Feb 2025 05:32:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jxjA21DH"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="IhEt0J1/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 000F83595A;
-	Sun,  2 Feb 2025 20:55:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46794A31;
+	Mon,  3 Feb 2025 05:32:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738529744; cv=none; b=tJkyJrQa+FJPJIH9Sk+uDCrpDgdUOxKFVSlgv7NxVIyF6whvtwqyQezYu3h1x1/9rJ/HVhQKjG5h6f8nbuj0oRHwpUfGvryBrAAhyu/JHmxRMMshKzbCOgGv8O4YsqKHr0VPm5siI2v/pNTTihUbmFDWudgax5TpVQ2icHONf7c=
+	t=1738560753; cv=none; b=TxHoQWriQ/uXwnJF7LZXXR3yrD/Eu4lEc61yQzx/oMH+Ubkuu4cYnrVuMDLkQ6xizTaaHoJEaj5UYVBz7eZ2ZaHk7PSxhc9x/6XEZXIh+w+ZPD1sdEkk92tK5vHB37YOqVWJmpn45+mtvif1Dn0UVfB7Kdwhznz85u2RlPwN/Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738529744; c=relaxed/simple;
-	bh=iR0I3EdR0iBssTSZp7kBFnWRXLSQCQlMDJ4XwMl5rfE=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=QPyOyRSuEVgt1RnwcvVhDNUAfJDkS+kBHVnoIHrLI/zt1eITAU4mMRJthQgXSOSHwzaxi/ieX+ddFTooz20Q/wlP42KkvcKtGOighTMbqJiZD8fZl3ocDePk0+/DNp2td50Ol7mRgFRP66oj1g5/byKhvgKs3w37yAeUrKOXtEw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jxjA21DH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2E67C4CED1;
-	Sun,  2 Feb 2025 20:55:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738529743;
-	bh=iR0I3EdR0iBssTSZp7kBFnWRXLSQCQlMDJ4XwMl5rfE=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=jxjA21DHBsO3EEkoI6U0QfRu+PfUI0QbsoGwx2NjYPe5JmjOjTHBLALQbDi2NNmTf
-	 arLPkVqcMSfPnVF34NbdiCEcj5Drc52D186XuIn753AnBjiwVTOzO9J1EWWdYUfxhB
-	 FLRT6PNF7nwalVVvfyFGOf2hji4st8+dv9ircNXNomwl4Kd7/ETK1tGk8C6R3ISr/e
-	 M+SStXqls8rtgXbB2W+1htKNhHERJC6Hs6nMoKnb/NGtty9DVYbg1fWbL20zZ+NwHU
-	 hSQx6qfFFZk8RrrgZV+fTWhZ41bhPlDl6lSlx24K1hoVQG/M64U32Y8X6MZD7j3akv
-	 ANain4Ni3tqQg==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB0C0380AA70;
-	Sun,  2 Feb 2025 20:56:11 +0000 (UTC)
-Subject: Re: [GIT PULL] turbostat-2025.02.02 for Linux-6.14
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <CAJvTdKmaGD8YJj4HKuNhE8Kkr_s5VH=DhXcc75xxHtxqcdYp0Q@mail.gmail.com>
-References: <CAJvTdKmaGD8YJj4HKuNhE8Kkr_s5VH=DhXcc75xxHtxqcdYp0Q@mail.gmail.com>
-X-PR-Tracked-List-Id: <linux-pm.vger.kernel.org>
-X-PR-Tracked-Message-Id: <CAJvTdKmaGD8YJj4HKuNhE8Kkr_s5VH=DhXcc75xxHtxqcdYp0Q@mail.gmail.com>
-X-PR-Tracked-Remote: git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-2025.02.02
-X-PR-Tracked-Commit-Id: 2c4627c8ced77855b106c7104ecab70837d53799
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: d79bc8f79baacdd2549ec4af6d963ce3e69d7330
-Message-Id: <173852977057.2208626.622267848896307504.pr-tracker-bot@kernel.org>
-Date: Sun, 02 Feb 2025 20:56:10 +0000
-To: Len Brown <lenb@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, Linux PM list <linux-pm@vger.kernel.org>, Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+	s=arc-20240116; t=1738560753; c=relaxed/simple;
+	bh=eGOn5dFfGAgVayjEzz+z3LRXFqGKO19ZQPoQCSAh5PM=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VbhWq+ibKFHGr2LqarrOzapa/ZgVJgXinZbZKJUCATgWRE4g44H1w9SrfdYNFCOkGXixktRySrNiT//6qIprxhrM3abT0n1ibKLGStQynpyL0JEadMYwtScezI9fUG+jS9vpJfymkxr3CcOSrRLQwkn6+92BdvKU+iZKjv8LE0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=IhEt0J1/; arc=none smtp.client-ip=198.47.19.246
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0266.itg.ti.com ([10.180.67.225])
+	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 5135WABI2079317
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
+	Sun, 2 Feb 2025 23:32:10 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1738560730;
+	bh=sJRCeXGc4CmZX5CorqP/Un236xITOhXU5/Sey4Z70Gc=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=IhEt0J1/bmpse9TL/fuyWBscEypWazoerivCRiD2WQRmva9xbW6XL3QTNcZhKNT0w
+	 OEbogSKsQWmx+habwrp7dO/4TQ35wsj3fCgkWAS8BuogrhZ4TytHNRSG2TEtsZhoXP
+	 CaLx/PPTvMw2GuWjQJTjqRphY1gD0q25xARWvL1M=
+Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
+	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 5135WADP081440;
+	Sun, 2 Feb 2025 23:32:10 -0600
+Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE112.ent.ti.com
+ (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sun, 2
+ Feb 2025 23:32:09 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Sun, 2 Feb 2025 23:32:09 -0600
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 5135W8x0077312;
+	Sun, 2 Feb 2025 23:32:09 -0600
+Date: Mon, 3 Feb 2025 11:02:08 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Keita Morisaki <keyz@google.com>
+CC: <rostedt@goodmis.org>, <mhiramat@kernel.org>,
+        <mathieu.desnoyers@efficios.com>, <linux-kernel@vger.kernel.org>,
+        <linux-trace-kernel@vger.kernel.org>, <lpieralisi@kernel.org>,
+        <sudeep.holla@arm.com>, <rafael@kernel.org>,
+        <daniel.lezcano@linaro.org>, <linux-pm@vger.kernel.org>,
+        <aarontian@google.com>, <yimingtseng@google.com>,
+        Kevin Hilman <khilman@baylibre.com>
+Subject: Re: [PATCH v4] cpuidle: psci: Add trace for PSCI domain idle
+Message-ID: <20250203053208.l4o2o5g3imdzl6vj@lcpd911>
+References: <20250202104211.2764016-1-keyz@google.com>
+ <20250202104608.2766080-1-keyz@google.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <20250202104608.2766080-1-keyz@google.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-The pull request you sent on Sun, 2 Feb 2025 11:16:39 -0600:
+Hi Keita,
 
-> git://git.kernel.org/pub/scm/linux/kernel/git/lenb/linux.git tags/turbostat-2025.02.02
+On Feb 02, 2025 at 18:46:08 +0800, Keita Morisaki wrote:
+> The trace event cpu_idle provides insufficient information for debugging
+> PSCI requests due to lacking access to determined PSCI domain idle
+> states. The cpu_idle usually only shows -1, 0, or 1 regardless how many
+> idle states the power domain has.
+> 
+> Add new trace events namely psci_domain_idle_enter and
+> psci_domain_idle_exit to trace enter and exit events with a determined
+> idle state.
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/d79bc8f79baacdd2549ec4af6d963ce3e69d7330
+Thanks for this, will really ease those psci idle debugs for everyone!
 
-Thank you!
+> 
+> These new trace events will help developers debug CPUidle issues on ARM
+> systems using PSCI by providing more detailed information about the
+> requested idle states.
+> 
+> Signed-off-by: Keita Morisaki <keyz@google.com>
+> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
+> Tested-by: Kevin Hilman <khilman@baylibre.com>
+
+Reviewed-by: Dhruva Gole <d-gole@ti.com>
+
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
