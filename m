@@ -1,63 +1,63 @@
-Return-Path: <linux-pm+bounces-21258-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21259-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EE392A253A0
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 09:09:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21851A253A5
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 09:10:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A0D9E164043
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 08:09:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 607F23A4F27
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 08:09:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D58C61FC11E;
-	Mon,  3 Feb 2025 08:09:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C03951FBCB3;
+	Mon,  3 Feb 2025 08:09:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="INrGHksn"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="f/uhVN2q"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 07CE71FAC56;
-	Mon,  3 Feb 2025 08:09:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EAC51FA178;
+	Mon,  3 Feb 2025 08:09:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738570157; cv=none; b=Ggr7gyRPjiys4DgPqAL5T9mlQmy1ylhBIJkGx/kDCfC1H5JTRb3EcHb8L7fmiu+cazUsLbZn7AkU7OzZqKZVefgx513jWJiSshNhbRtd3loTnOE5fQIUnrvhpEFkID72KaSN803u9WyLPfmLiIOXg0Fyidx+5XF7iPsNN2fZdrk=
+	t=1738570163; cv=none; b=ehXVtvi42wMZWH1ctnD3+zeOOxFG+HOgJMhu8omwX3BCm6V50G9s4/S6siGan3f4kThr4d4fIWJZrStVVMhITr2qGIC+KYC6LRfvE7qao7vVEhd189yOjSWIBVQ/29D2VpKX8pm0SAB1lzT/+XM1b+R8SM4OWH/om+qqUn8VNL8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738570157; c=relaxed/simple;
-	bh=D+RhCNvD41bLngc68/4K+jMhVH3uRcMiXJfibIbqF8s=;
+	s=arc-20240116; t=1738570163; c=relaxed/simple;
+	bh=GXYV0orH70R2NryxmvHyRUUP/UpUF2N+PCzrF2VKTgA=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=bEbQbYxJvMQmAwa7owXIdUr5MbLQqKjSA04kcNUPh4SgMuMvMkSJQVKGLzhzzKGss2VkzjkeKK30G4j8u3XIlVP6xFKuu1B6jNeLpGKvks5i8H3+6oz5xj2VzpX3mMN2Pdp2UHM3hSZubXApEWpJaqoPDsqy5Km+IeElAL9Mh0w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=INrGHksn; arc=none smtp.client-ip=192.198.163.11
+	 MIME-Version; b=nkztn5NiXVtM8ZJd/iNBEvcsNnaNlr4s+glEQZ7lMKc6i92HNccSRhCEr0/EVqWUvDqhKhkyFtSKZOHhuTKYV7nM9RUJYOsE72G1+MPimQVe+tif2ZMGdg/HVd04OLQ5tOdqy/8kOSSd+94EJFzNfeb5Nsf4ubzj069zKtRw7bs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=f/uhVN2q; arc=none smtp.client-ip=192.198.163.11
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738570156; x=1770106156;
+  t=1738570161; x=1770106161;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=D+RhCNvD41bLngc68/4K+jMhVH3uRcMiXJfibIbqF8s=;
-  b=INrGHksnAYKu+X2jKqFcHEET+pf3wBAIgDbLLEF5FHrdBxHX96NMn9SR
-   y/f+bpGtI1K7KCAYuRuCjD/WWCXFMqhgZHLyxQyCw9D9BO7cm2O0TTzm5
-   qOrIIO0Rbr7pBexPFrrK8y5qpeNUDbg/Wt6bKjMJpX3cyOJ5qsSkVzflL
-   ao4scaD7WcjuaipzPVLStGm6ND8esuwp3JGT0B37NvYfzl/KmvoN1bijj
-   kg8iPwFRXd9H9FBRAtzslGs+OZjHcSskXljgD5Cg7BQ5UmHjithOQTX2+
-   vIs4WMZGnJexMKy982r7XfFsTWFSW8W5TvrKdKp2J+58hdajEbhDpEMeA
+  bh=GXYV0orH70R2NryxmvHyRUUP/UpUF2N+PCzrF2VKTgA=;
+  b=f/uhVN2qJE5JvOmNzvFBszeIdwKHy5ba4C5VR4eAVYSzrlQlliHUMUIt
+   3Qg5IVgfcwhHADCn1XXj6sjg06DUqQ3acGFxdyqYKOrrYOP/K3oKMAv6U
+   WAs5H7y0oSUtdKf8NOWBtAu7CQcMFCQrboiAzahvQxi7cxDOmJs6VxXuo
+   SyQmshHO3FKybyWU7eM48diAgeZNrm5G9IeR9BCORg2pdCgPHqGYQfnVs
+   kwSOnrtHwuq93lycBDmp5lKF9RWb8uqKQE7P1vkl1tj3gLKM4zt+GZujQ
+   ZBzivK/yKLER1TjN27hwMa69BHLOfKBIZWAITnZ/5wCouDSv3aOGsLeRk
    g==;
-X-CSE-ConnectionGUID: 98Sw0lDJR1S9L+ks1/XOiw==
-X-CSE-MsgGUID: z9kEdj8pT/S77fiaC2WlAQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="49654106"
+X-CSE-ConnectionGUID: CFXbkBdsS4qiJnEB+w7mAQ==
+X-CSE-MsgGUID: L6SfeLrfR+Goa1sGccMH/A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11334"; a="49654126"
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="49654106"
+   d="scan'208";a="49654126"
 Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:09:15 -0800
-X-CSE-ConnectionGUID: SPjaVgVwQQOHTG/GGQxWRA==
-X-CSE-MsgGUID: TKqmoqLNRMCcQWt6tYnRIA==
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 00:09:21 -0800
+X-CSE-ConnectionGUID: 0KnX28oERXyAzskGY7P7pw==
+X-CSE-MsgGUID: WibekBpTQp6sbziYAsh78g==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,255,1732608000"; 
-   d="scan'208";a="110788441"
+   d="scan'208";a="110788491"
 Received: from jraag-z790m-itx-wifi.iind.intel.com ([10.190.239.23])
-  by fmviesa009.fm.intel.com with ESMTP; 03 Feb 2025 00:09:12 -0800
+  by fmviesa009.fm.intel.com with ESMTP; 03 Feb 2025 00:09:17 -0800
 From: Raag Jadav <raag.jadav@intel.com>
 To: gregkh@linuxfoundation.org,
 	rafael@kernel.org,
@@ -77,9 +77,9 @@ Cc: linux-gpio@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-iio@vger.kernel.org,
 	Raag Jadav <raag.jadav@intel.com>
-Subject: [PATCH v3 03/20] devres: Introduce devm_kmemdup_array()
-Date: Mon,  3 Feb 2025 13:38:45 +0530
-Message-Id: <20250203080902.1864382-4-raag.jadav@intel.com>
+Subject: [PATCH v3 04/20] pinctrl: intel: copy communities using devm_kmemdup_array()
+Date: Mon,  3 Feb 2025 13:38:46 +0530
+Message-Id: <20250203080902.1864382-5-raag.jadav@intel.com>
 X-Mailer: git-send-email 2.34.1
 In-Reply-To: <20250203080902.1864382-1-raag.jadav@intel.com>
 References: <20250203080902.1864382-1-raag.jadav@intel.com>
@@ -91,33 +91,39 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Introduce '_array' variant of devm_kmemdup() which is more robust and
-consistent with alloc family of helpers.
+Copy communities using devm_kmemdup_array() instead of doing it manually.
 
-Suggested-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-Reviewed-by: Dmitry Torokhov <dmitry.torokhov@gmail.com>
+Reviewed-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
 Reviewed-by: Linus Walleij <linus.walleij@linaro.org>
 ---
- include/linux/device/devres.h | 5 +++++
- 1 file changed, 5 insertions(+)
+ drivers/pinctrl/intel/pinctrl-intel.c | 6 ++----
+ 1 file changed, 2 insertions(+), 4 deletions(-)
 
-diff --git a/include/linux/device/devres.h b/include/linux/device/devres.h
-index 128d65defafc..6ef400abfe21 100644
---- a/include/linux/device/devres.h
-+++ b/include/linux/device/devres.h
-@@ -79,6 +79,11 @@ void devm_kfree(struct device *dev, const void *p);
+diff --git a/drivers/pinctrl/intel/pinctrl-intel.c b/drivers/pinctrl/intel/pinctrl-intel.c
+index 527e4b87ae52..0a1905869472 100644
+--- a/drivers/pinctrl/intel/pinctrl-intel.c
++++ b/drivers/pinctrl/intel/pinctrl-intel.c
+@@ -1577,8 +1577,8 @@ int intel_pinctrl_probe(struct platform_device *pdev,
+ 	 * to the registers.
+ 	 */
+ 	pctrl->ncommunities = pctrl->soc->ncommunities;
+-	pctrl->communities = devm_kcalloc(dev, pctrl->ncommunities,
+-					  sizeof(*pctrl->communities), GFP_KERNEL);
++	pctrl->communities = devm_kmemdup_array(dev, pctrl->soc->communities, pctrl->ncommunities,
++						sizeof(*pctrl->communities), GFP_KERNEL);
+ 	if (!pctrl->communities)
+ 		return -ENOMEM;
  
- void * __realloc_size(3)
- devm_kmemdup(struct device *dev, const void *src, size_t len, gfp_t gfp);
-+static inline void *devm_kmemdup_array(struct device *dev, const void *src,
-+				       size_t n, size_t size, gfp_t flags)
-+{
-+	return devm_kmemdup(dev, src, size_mul(size, n), flags);
-+}
+@@ -1588,8 +1588,6 @@ int intel_pinctrl_probe(struct platform_device *pdev,
+ 		u32 offset;
+ 		u32 value;
  
- char * __malloc
- devm_kstrdup(struct device *dev, const char *s, gfp_t gfp);
+-		*community = pctrl->soc->communities[i];
+-
+ 		regs = devm_platform_ioremap_resource(pdev, community->barno);
+ 		if (IS_ERR(regs))
+ 			return PTR_ERR(regs);
 -- 
 2.34.1
 
