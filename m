@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-21305-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21304-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 81D57A25E32
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 16:16:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6F9DFA25DFE
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 16:10:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 92B8C3AA0DB
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 15:08:27 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5DC93188335E
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 15:08:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6920D209667;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 319A2208970;
 	Mon,  3 Feb 2025 15:08:28 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4AEE520897C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 168EB205AD5;
 	Mon,  3 Feb 2025 15:08:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738595308; cv=none; b=utUKe9kHFoJV1Cl5wnH81ht73VdtlxOU+Rsk/opYchD+myvdniZ0sEAO5braPjK04DPlXCy3FGE3daFdavzNAVPM/nytVHAr7RwV9Se+2gWuSZIJoeUItmrptbqKFgEDaza6ZggOb0vLSl9hXsg4zCKXZ5TIoQRzdM1SjRNHy0c=
+	t=1738595308; cv=none; b=eA4niBEO95C0DO0xVGdvXvgqFxnNH9I4DR2oCbFNdVvd1WsmA5oe7r3OrlyLNdTZG5+8gEx+XQtnE5EEuzze9CzYQDQBPw6H8odBQxyYBgudwH2cSQLLcrpSPH+Hg1JJNBnmKkM2MfREmCnIxiTk+norBr9spp1UX1G1FClcOkk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738595308; c=relaxed/simple;
-	bh=xvNR/QUSPuereDKwzJjmn4QtJzLR/7rvTocjTiqaCDM=;
+	bh=dKO5GkWUZU5gayOisHhrMC45mTSknVbvwTp14gr4dqk=;
 	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=RfCWtR3WnuZCQdTjgPIa2d3wiGhlL9T9ilG2+vwf5QFCqQB7RooZozySXEwDkrWAy7T/UuqtzN0kQuQnl1JPkyS2NOKKRqvUIeujL0lUIqoMUUhYJ71WlSROsbPUOmco8xzWR1nVblr78etZIClqv4Vs6SLDXEwdZxum1DNmZoo=
+	 MIME-Version:Content-Type; b=Ru01a22i8upr0ZZ0WIJ8MdlH2zm32eQNTO88f0aRHFo0G2xXCKPAJsPl1mZCXL6eSuDGyK++jAnzVdEH5Yrwc5PoOrqnpoVeaXMhL1NghEI4UMCNIByDdRKPbhlLurqQx8RJKahb9dCMZmciyEEeZdfvh03duWmUrEFDU1TQdms=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 542B9C4AF09;
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 50B93C4CEE0;
 	Mon,  3 Feb 2025 15:08:27 +0000 (UTC)
 Received: by venus (Postfix, from userid 1000)
-	id 45DEB1807D5; Mon, 03 Feb 2025 16:08:24 +0100 (CET)
+	id 4025F1807D4; Mon, 03 Feb 2025 16:08:24 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: linux-sunxi@lists.linux.dev, Chris Morgan <macroalpha82@gmail.com>
-Cc: devicetree@vger.kernel.org, linux-pm@vger.kernel.org, lee@kernel.org, 
- samuel@sholland.org, jernej.skrabec@gmail.com, wens@csie.org, 
- conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, sre@kernel.org, 
- Chris Morgan <macromorgan@hotmail.com>
-In-Reply-To: <20250131231455.153447-1-macroalpha82@gmail.com>
-References: <20250131231455.153447-1-macroalpha82@gmail.com>
-Subject: Re: (subset) [PATCH 0/5] Fix RG35XX Battery Charging Issues
-Message-Id: <173859530427.32012.7830763224536465875.b4-ty@collabora.com>
+To: Sebastian Reichel <sre@kernel.org>, Hans de Goede <hdegoede@redhat.com>
+Cc: platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, 
+ =?utf-8?q?Thomas_Wei=C3=9Fschuh?= <linux@weissschuh.net>, 
+ Armin Wolf <W_Armin@gmx.de>
+In-Reply-To: <20250130140035.20636-1-hdegoede@redhat.com>
+References: <20250130140035.20636-1-hdegoede@redhat.com>
+Subject: Re: [PATCH] power: supply: core: Fix extension related lockdep
+ warning
+Message-Id: <173859530425.32012.15699999203802341443.b4-ty@collabora.com>
 Date: Mon, 03 Feb 2025 16:08:24 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -53,23 +53,23 @@ Content-Transfer-Encoding: 7bit
 X-Mailer: b4 0.14.2
 
 
-On Fri, 31 Jan 2025 17:14:50 -0600, Chris Morgan wrote:
-> From: Chris Morgan <macromorgan@hotmail.com>
+On Thu, 30 Jan 2025 15:00:35 +0100, Hans de Goede wrote:
+> Since commit 6037802bbae8 ("power: supply: core: implement extension API")
+> there is the following ABBA deadlock (simplified) between the LED trigger
+> code and the power-supply code:
 > 
-> The Anbernic RG35XX devices sometimes fail to charge when the register
-> for the battery temperature sensor is set to the incorrect value either
-> by user error or an incorrectly programmed efuse. Allow users to
-> hard-code if a temperature sensor is not present (which is the case for
-> all Anbernic RGxx series devices) to prevent this issue from causing
-> problems. Additionally, a bug was identified with the handling of PMU
-> faults while this fix was being tested.
+> 1) When registering a power-supply class device, power_supply_register()
+> calls led_trigger_register() from power_supply_create_triggers() in
+> a scoped_guard(rwsem_read, &psy->extensions_sem) context.
+> led_trigger_register() then in turn takes a LED subsystem lock.
+> So here we have the following locking order:
 > 
 > [...]
 
 Applied, thanks!
 
-[1/5] power: supply: axp20x_battery: Fix fault handling for AXP717
-      commit: 98380110bd48fbfd6a798ee11fffff893d36062c
+[1/1] power: supply: core: Fix extension related lockdep warning
+      commit: 64dd6edfc421479e416301c48b79cece8d0351fc
 
 Best regards,
 -- 
