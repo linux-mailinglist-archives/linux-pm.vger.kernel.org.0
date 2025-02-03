@@ -1,117 +1,99 @@
-Return-Path: <linux-pm+bounces-21293-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21294-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70CFCA2577A
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 11:57:46 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 597A3A257D6
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 12:15:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F01C03A821C
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 10:57:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD5B5166F64
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 11:15:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFADE201256;
-	Mon,  3 Feb 2025 10:57:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="TDJ9aP9Y"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B27EE202F62;
+	Mon,  3 Feb 2025 11:15:04 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f175.google.com (mail-pl1-f175.google.com [209.85.214.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from frasgout.his.huawei.com (frasgout.his.huawei.com [185.176.79.56])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2BB97201028
-	for <linux-pm@vger.kernel.org>; Mon,  3 Feb 2025 10:57:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C7BD4202C30;
+	Mon,  3 Feb 2025 11:15:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.176.79.56
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738580262; cv=none; b=MYBL/UUIuTml3qUC9K5hEWqtNU7x9lu2ua9ticBZuO0CCnrf4wpdQSl0ZtltAD/gvep1HGaWas+el5i0AFBmMR+gGjq3dIXLiM/e7lwtNBvfStFgSldVA4YS1IKPArgSNWVhM84hyZoWhs0eQH+80Bo8djnuonaDhznAZ0aXb7A=
+	t=1738581304; cv=none; b=H1jls9p7ug6kZFTI8wKMF23eoQrmkQPRIv98dn6ozFSxgmKK0vW2goXW4Tuu0YqhlU73VodzuimAj3VuDdku+GpV+c2uTqXqtWOfmRX5iNP/WiVbL4Wb2PcpeY1Rl1DUZ0b0lTMMEKgl+kPxg+7k8EKheg+rwPhOngEZAINAgYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738580262; c=relaxed/simple;
-	bh=RSm57b1dkEfJMPQ6LC6fNuCid7ssRIrM/WbGvIrovN8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=FA/GWTnq3qiGLBZuFR25iMzHx0HFIOndh4F6IkNJariiIYNM9yvs1FDhgKmTgxRl1bJLELldUqvF0/VNp0jnvV3FOpIvy9llWzoByhdPGAyi8biF4i7ixM6MM8qwO8duwWQqgiA1zLYG2WIpIuDstLonTSzdwhTJtDwjQrX1tbY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=TDJ9aP9Y; arc=none smtp.client-ip=209.85.214.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f175.google.com with SMTP id d9443c01a7336-2164b662090so81628045ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2025 02:57:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738580260; x=1739185060; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=T5wzLBJUEmaueHPGAWBI0Wr2N1tn0LQYWkY5tyBdPNM=;
-        b=TDJ9aP9YocUsU+BEbFGfSIfD6hafCWhysYjp3Mk1ILqF06ioY93zeDVGtB5/IjpXLZ
-         7SdrQEb4O9i56tfD1iu3NvKFSkI/tOzGBsIw2P1ebjli7G+KAHNrjOW0t+gPDgcjE4UY
-         wX5PwFkEgo8sf8al049ozz2F8xMcrnoQIFLe4RMCIpe+11fqokWj2AAekI2yJHhu+M7b
-         uuy9JT/o7vcxRIh8zfqejmfvKOtqkZ/IWMu9hxgXd0UnSKw47htftctJb25Zr8S1PPkt
-         W9vtqtxCUTM79hkTwr7w7Fl1Dr6NeEixYJ0aif3NBndMdjv1YboAllTPsikOrr9mb/Gy
-         Se7Q==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738580260; x=1739185060;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=T5wzLBJUEmaueHPGAWBI0Wr2N1tn0LQYWkY5tyBdPNM=;
-        b=ZRFwXKSeLf28hrGGD/1DpLocd/0OLLBpjwR/q1GToqfJi0CpM5yZCI313NNv3I3GYJ
-         siqXjblLXp5lQb4WUKYF7lLCbDvd6rZeYUZ7IC88EGl1sUDj7Q3t8jfcWG+Rh3pYygrA
-         78m0rF8ojxSKMnmRT4OM+9qgdEcqlQfPe53205OOvxd0XXvm8RaJh0yDBQU7Mhl3gdoH
-         YxqtfrrNCRiicWJJm4eBliLRXkOo/2aPZV7rr5idzYXhtuh/UceYMdDJTiVNFV/mDQDy
-         YqIDGL91G14YvIHFwmdBCX2m5Pq6cnfVY1CLiS3LNCtv+ETxQXdKhp0pkUo5DttV9Drc
-         uHGg==
-X-Forwarded-Encrypted: i=1; AJvYcCVzCKDD3n9lnBS2joZ/Q2S1+ljpSUxlqAxKurphdsyn7xEYJ5KPFBhVoS559/Y5ddJedAcVmyow4A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuacTTxoJFVNb4viHyHxHkew3/GNL631oCs2HTfhtQ1TQ2Gf4a
-	jxzFMQMuhAquGjyvqG8e9H4H7cVmlQAOodpnCKXKRxTrpyL6eu8YrhYQbx4/bxE=
-X-Gm-Gg: ASbGncsHjoK9QmAvJuDP1Kd7QtLtM9kllLxn6gNuhdUejCq4e28zkcP7M9dSn4inwx5
-	RAoLhu0fJ3f6mNR4B00PnSM5t/UK4DPswY1R8Ihfkjik4X648Qjv//N6iabRAQqMUi7oXKmO9LE
-	b3ZQmjUaXVOOIwuYXwk8CJc7ZfG0bwLIOxCznKJCC4ovGR4BRJFlWiEF7/Ru4S7KziP/JDYP+HT
-	o5be3pmhdn0CFhNBL/02TCRpgLn56gfU/RYvqV9q0GtqFHEpvkBh1myRgF6DdEHmSMMX/kaI72L
-	XgHHABpgQQDGk73nHA==
-X-Google-Smtp-Source: AGHT+IGmjWIWKYEvHYasG0wmYEL/dNtj1S2N14U+kYyH1kl5FnrXzEkQXJKqSrqibFN1LCe+FoWnVg==
-X-Received: by 2002:a05:6a00:2908:b0:726:64a5:5f67 with SMTP id d2e1a72fcca58-72fd0c03db4mr30024540b3a.12.1738580260474;
-        Mon, 03 Feb 2025 02:57:40 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe69ba3c1sm8370690b3a.108.2025.02.03.02.57.39
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 02:57:39 -0800 (PST)
-Date: Mon, 3 Feb 2025 16:27:37 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Marek =?utf-8?B?QmVow7pu?= <kabel@kernel.org>
-Cc: bschnei@gmail.com, "Rafael J . Wysocki" <rafael@kernel.org>,
-	Sebastian Hesselbarth <sebastian.hesselbarth@gmail.com>,
-	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, Benjamin Schneider <ben@bens.haus>,
-	Andrew Lunn <andrew@lunn.ch>,
-	Gregory CLEMENT <gregory.clement@bootlin.com>
-Subject: Re: [PATCH] cpufreq: enable 1200Mhz clock speed for armada-37xx
-Message-ID: <20250203105737.ilu6kldt4onzcygs@vireshk-i7>
-References: <20241125211452.14987-1-ben@bens.haus>
- <20241212070712.txkxgmiugzji3doz@vireshk-i7>
- <fjdblv62k3nhqgy7decdldtieo4zyv6phxofx72dreyq7jbm4f@qmkp3e2wyplb>
+	s=arc-20240116; t=1738581304; c=relaxed/simple;
+	bh=Sh62TUgO9nu9uV2ysqDVSkHBdGr8aWWz1Gt2+gIoWWc=;
+	h=Date:From:To:CC:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=u6jTtP/M9ptAC8yS9ISMQN5xdeSHhahOYLeoe4DSv5wQ6vPtYoHaoDTSfU4UnK6BV53UsgldSdKvpprSlyICCRprUIZGKf0FVxKMfHZ1aUZv8afPWaG+BLl57MJE8F3kF3p6Kho94mHKEpqIH0c/Rg8dl0AcDl0o3zb4KHAys0o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=185.176.79.56
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.18.186.31])
+	by frasgout.his.huawei.com (SkyGuard) with ESMTP id 4YmkNr2CjGz6L4tr;
+	Mon,  3 Feb 2025 19:12:28 +0800 (CST)
+Received: from frapeml500008.china.huawei.com (unknown [7.182.85.71])
+	by mail.maildlp.com (Postfix) with ESMTPS id 11D70140155;
+	Mon,  3 Feb 2025 19:15:00 +0800 (CST)
+Received: from localhost (10.203.177.66) by frapeml500008.china.huawei.com
+ (7.182.85.71) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.1.2507.39; Mon, 3 Feb
+ 2025 12:14:59 +0100
+Date: Mon, 3 Feb 2025 11:14:58 +0000
+From: Jonathan Cameron <Jonathan.Cameron@huawei.com>
+To: Raag Jadav <raag.jadav@intel.com>
+CC: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	<gregkh@linuxfoundation.org>, <rafael@kernel.org>,
+	<linus.walleij@linaro.org>, <mika.westerberg@linux.intel.com>,
+	<dmitry.torokhov@gmail.com>, <lgirdwood@gmail.com>, <broonie@kernel.org>,
+	<sre@kernel.org>, <jic23@kernel.org>, <przemyslaw.kitszel@intel.com>,
+	<linux-gpio@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+	<linux-input@vger.kernel.org>, <linux-sound@vger.kernel.org>,
+	<linux-pm@vger.kernel.org>, <linux-iio@vger.kernel.org>
+Subject: Re: [PATCH v3 14/20] iio: adc: xilinx-xadc-core: use
+ devm_kmemdup_array()
+Message-ID: <20250203111458.00002a5d@huawei.com>
+In-Reply-To: <Z6CdnPryJkBHO9PK@black.fi.intel.com>
+References: <20250203080902.1864382-1-raag.jadav@intel.com>
+	<20250203080902.1864382-15-raag.jadav@intel.com>
+	<Z6CSYn7ZDVNELIIv@smile.fi.intel.com>
+	<Z6CdnPryJkBHO9PK@black.fi.intel.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.42; x86_64-w64-mingw32)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=iso-8859-1
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <fjdblv62k3nhqgy7decdldtieo4zyv6phxofx72dreyq7jbm4f@qmkp3e2wyplb>
+Content-Type: text/plain; charset="US-ASCII"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: lhrpeml500002.china.huawei.com (7.191.160.78) To
+ frapeml500008.china.huawei.com (7.182.85.71)
 
-On 15-12-24, 22:23, Marek Behún wrote:
-> On Thu, Dec 12, 2024 at 12:37:12PM +0530, Viresh Kumar wrote:
-> > Marek,
+On Mon, 3 Feb 2025 12:42:36 +0200
+Raag Jadav <raag.jadav@intel.com> wrote:
+
+> On Mon, Feb 03, 2025 at 11:54:42AM +0200, Andy Shevchenko wrote:
+> > On Mon, Feb 03, 2025 at 01:38:56PM +0530, Raag Jadav wrote:  
+> > > Convert to use devm_kmemdup_array() which is more robust.  
+> > 
+> > ...
+> >   
+> > > -	channels = devm_kmemdup(dev, channel_templates,
+> > > -				sizeof(channels[0]) * max_channels, GFP_KERNEL);
+> > > +	channels = devm_kmemdup_array(dev, channel_templates, max_channels,
+> > > +				      sizeof(channels[0]), GFP_KERNEL);  
+> > 
+> > I would use more regular sizeof(*channels)  
 > 
-> ...
+> This might get confusing since we're assigning it back to channels.
 > 
-> > Any inputs on this before I apply it ?
+It looks like standard pattern.  Assign X * the thing to the thing.
+
+So I'd prefer sizeof(*channels) here as well.
+
+> Raag
 > 
-> Viresh, let me try to test it this week on Turris Mox.
+> 
 
-Hi Marek,
-
-I am inclined to apply this unless you have an objection ..
-Please let me know.
-
--- 
-viresh
 
