@@ -1,124 +1,124 @@
-Return-Path: <linux-pm+bounces-21312-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21313-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E8353A26382
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 20:17:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9443A26444
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 21:12:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8DFD63A2DDB
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 19:17:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 062C01614AC
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 20:12:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 67993211280;
-	Mon,  3 Feb 2025 19:15:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51D5013C3C2;
+	Mon,  3 Feb 2025 20:12:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="hYhm3W1Q"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="eUvrNH8v"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31553211269;
-	Mon,  3 Feb 2025 19:15:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 23B0B522A;
+	Mon,  3 Feb 2025 20:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738610126; cv=none; b=gIvraDttNwcjHVBwEcMmk+f9KvTx5IxC+KUB0GYsCtj09UKp9ahAjpGxzj8kK+4R+cglSX3Hh8w1e+9k7nYus91M4ArqFL0ZBn9Plvh1jzkOcXiGlXsfUT9ksoJxj6t+P0oEjx4QvAzrQCAoJ3c9fA1ff1q9q2KbExnvVdgljSU=
+	t=1738613570; cv=none; b=jhn+igES6wkEXr0P7u5pl3M7Ez9pySzMw4IIkK/oH9dRgakFeGmZcLqya1ga4Rq3i6gU3u03dgl0JBVmUE8PfFxkvyhtOTcS35RHWeZfh1UKQ/BK50H/VkIqrIvNbyST5myhW5qswnKb6m2rGv2fRZSh0AxPj9w8huaq/biXXVQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738610126; c=relaxed/simple;
-	bh=BDPM7u1CRvEI1Kn3lZuF8kskwCiEX3Kitywmg+8MwZU=;
-	h=Content-Type:MIME-Version:Subject:From:Message-Id:Date:References:
-	 In-Reply-To:To:Cc; b=JVgbqGGoX14QL+VPu//ujlbZ6H7T+5koFGirLhEhbbXIfxbHqwzW+fzLSELMn8aVedZOL1rameY7EOIlhfnYPsDAmB6GraFI1PPAA8SDffXlE9iaHaZamwR8BfExug6OoE8PXZowK6XiNE1E/pBQs1vApbCdj/0FUNPriP4TPqY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=hYhm3W1Q; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9CC92C4CED2;
-	Mon,  3 Feb 2025 19:15:25 +0000 (UTC)
+	s=arc-20240116; t=1738613570; c=relaxed/simple;
+	bh=eG2IPK5sPmlrFBWUFh+RLYKGrlmKlAjDRe5QcO5P5GI=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=rz4bnVjvPh97yNKxM2mKiU1k0B1KbV12ZmCO77W5gjdqLOHRSLlJwOzVoG9w7Tk/CSYpG+xkIZ4fuKVaHbCZZK+oiRXaOQog9fNuaOyVlm5YGkJt1LpAZhD5uMvo5nbPc3S1T7oAdl/CezXy1B1+NPpD7k2EMkxhQplKjLruDT0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=eUvrNH8v; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8726AC4CEE5;
+	Mon,  3 Feb 2025 20:12:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738610125;
-	bh=BDPM7u1CRvEI1Kn3lZuF8kskwCiEX3Kitywmg+8MwZU=;
-	h=Subject:From:Date:References:In-Reply-To:To:Cc:From;
-	b=hYhm3W1QYCkDsN1crFMcC5vC3MonK+qkCAOz+WwdhOVUHZ0HLjZTQAsg3tl7o9s8H
-	 BU+bqi9jyOYbxwC9ei76Mq8ptcXqsd5SOh/+8og70lDYJL3RqtnPerGIZTHCANkamQ
-	 Yckq82B8xZnfo+4rNvq7hQkLnKU+EQGYkdYhQiJAOqj4uCdhBQcjpFfp1P/bTDp3Yi
-	 HOV2GGByqpfdPESu++AwzdFyQr0pmhKP6IC3N45Oo9VeJUx9wz3qUds6G2jzdwYpTR
-	 CH+85Ld4snwX3gUvih7vhRHBGwI6rZla+uTR8mjJBtjlPBw44r3zYQ1Yg3dnH2nSQb
-	 8qk8l0+zUOkqw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id EB437380AA67;
-	Mon,  3 Feb 2025 19:15:53 +0000 (UTC)
-Content-Type: text/plain; charset="utf-8"
+	s=k20201202; t=1738613569;
+	bh=eG2IPK5sPmlrFBWUFh+RLYKGrlmKlAjDRe5QcO5P5GI=;
+	h=From:Date:Subject:To:Cc:From;
+	b=eUvrNH8vZx4QvXbGaLJSOP/oGTGtQzUzDuwspkYhOOOWhwVidxK92O4KNRyHK/91Q
+	 uRpJ7Sp8TDy+7RG6iUxQUBo7yROijvNTgxBwpS96YfJurmXnFNfF+n9+LaYleFHdSg
+	 YVQMYWLvlQfaN+wqKGFLKnneOMwHxddm6WOXrAy5nSu0C6xFMy66oco6O0SgDVPWD8
+	 /m7DAowV8RcRK4ZmRiiF79WR9Je1D2f1UmJZVTGibLsPelNBG0sFrIxrm+f/B7xRQ/
+	 dE2iId4QASVHZ9TwSQuBkP7RX6EnrJmLy7cRBfcP/clMW7EokbXaFS6dlYnyJ9Xkj+
+	 ltGD9nVD++MLg==
+Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5f321876499so2535256eaf.1;
+        Mon, 03 Feb 2025 12:12:49 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU9WjvqfSJg9vXrc6evEFLXaRUUWRZUull+9+b3wUq4aJzmM0Ijd+ukbg0J2cDOZAmYorCw11Gw/NlEE2g=@vger.kernel.org, AJvYcCXq5RNMSlW2MhHrQBnhhYLhrvkkAXSnFvcimiM9RkibSYRjwLbUtKPWEFqXGloywoenG19dJf+Yd08=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyfmWXDcsnFAGo2p9nWgY3onBVmOuuaLHoK2U+R8DGQN+BtzzOS
+	zdU0zv/xSMcGD8mQg/fWnNSkQsQB4TyTz0KbX16CzpAo5mWruYZOE2YntTasidpDc3XIoHr55Qm
+	JKI3yIqNZpCTD2E2Lanca6/vVg1U=
+X-Google-Smtp-Source: AGHT+IFvlcyI88YyxfQjmWaIJxi8/D3mhhw/h/Xarh0sXbPC6zgrTUKXc7dWN9ur49vtzFJmYvzJdmhEg0leG78Mr0o=
+X-Received: by 2002:a4a:d08b:0:b0:5f2:c0df:7ed5 with SMTP id
+ 006d021491bc7-5fc3bf5874fmr386760eaf.3.1738613568803; Mon, 03 Feb 2025
+ 12:12:48 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Subject: Re: [PATCH v2 00/12] pm: Introduce devm_pm_set_wake_irq
-From: patchwork-bot+linux-riscv@kernel.org
-Message-Id: 
- <173861015275.3409359.13632354633861115390.git-patchwork-notify@kernel.org>
-Date: Mon, 03 Feb 2025 19:15:52 +0000
-References: <20250103-wake_irq-v2-0-e3aeff5e9966@nxp.com>
-In-Reply-To: <20250103-wake_irq-v2-0-e3aeff5e9966@nxp.com>
-To: Peng Fan <peng.fan@oss.nxp.com>
-Cc: linux-riscv@lists.infradead.org, rafael@kernel.org, len.brown@intel.com,
- pavel@ucw.cz, gregkh@linuxfoundation.org, dmitry.torokhov@gmail.com,
- alexandre.belloni@bootlin.com, mcoquelin.stm32@gmail.com,
- alexandre.torgue@foss.st.com, linus.walleij@linaro.org,
- conor.dooley@microchip.com, daire.mcnamara@microchip.com,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-input@vger.kernel.org, linux-rtc@vger.kernel.org,
- linux-stm32@st-md-mailman.stormreply.com,
- linux-arm-kernel@lists.infradead.org, linux-arm-msm@vger.kernel.org,
- peng.fan@nxp.com
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 3 Feb 2025 21:12:37 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iKmynOQ5vKSQbg1J_FmavwZE-nRONovOZ0mpMVauheWg@mail.gmail.com>
+X-Gm-Features: AWEUYZlg0pfw8ANAD7dIS37BOlgitXSC9gnRxIBpuMXS1W0hQkz8dJAWXX3S_UY
+Message-ID: <CAJZ5v0iKmynOQ5vKSQbg1J_FmavwZE-nRONovOZ0mpMVauheWg@mail.gmail.com>
+Subject: [Regression in 6.14-rc1] System suspend/resume broken by PCI commit 1db806ec06b7c
+To: Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>
+Cc: Linux PCI <linux-pci@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
+	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hello:
+Hi,
 
-This series was applied to riscv/linux.git (fixes)
-by Rafael J. Wysocki <rafael.j.wysocki@intel.com>:
+The following commit:
 
-On Fri, 03 Jan 2025 16:41:12 +0800 you wrote:
-> This was a retry to address [1][2], to let common code handle
-> dev_pm_clear_wake_irq. Then no need to call dev_pm_clear_wake_irq
-> in each driver.remove() hook and error handling path.
-> 
-> In this patchset, I include input and rtc patches to show the usage
-> to avoid introducing an API without users. There are still
-> other places using dev_pm_clear_wake_irq. If this patchset is
-> good for you, I could start to clean up other drivers such as mmc and
-> etc.
-> 
-> [...]
+commit 1db806ec06b7c6e08e8af57088da067963ddf117
+Author: Jian-Hong Pan <jhp@endlessos.org>
+Date:   Fri Nov 15 15:22:02 2024 +0800
 
-Here is the summary with links:
-  - [v2,01/12] PM: sleep: wakeirq: Introduce device-managed variant of dev_pm_set_wake_irq
-    https://git.kernel.org/riscv/c/fd8318a32573
-  - [v2,02/12] input: keyboard: ep93xx_keypad: Use devm_pm_set_wake_irq
-    (no matching commit)
-  - [v2,03/12] input: keyboard: omap4_keypad: Use devm_pm_set_wake_irq
-    (no matching commit)
-  - [v2,04/12] input: misc: nxp-bbnsm-pwrkey: Use resource managed API to simplify code
-    (no matching commit)
-  - [v2,05/12] input: touchscreen: ti_am335x_tsc: Use resource managed API to simplify code
-    (no matching commit)
-  - [v2,06/12] rtc: stm32: Use resource managed API to simplify code
-    (no matching commit)
-  - [v2,07/12] rtc: nxp-bbnsm: Use resource managed API to simplify code
-    (no matching commit)
-  - [v2,08/12] rtc: ds1343: Use devm_pm_set_wake_irq
-    (no matching commit)
-  - [v2,09/12] rtc: pm8xxx: Use devm_pm_set_wake_irq
-    (no matching commit)
-  - [v2,10/12] rtc: ab8500: Use resource managed API to simplify code
-    (no matching commit)
-  - [v2,11/12] rtc: mpfs: Use devm_pm_set_wake_irq
-    (no matching commit)
-  - [v2,12/12] rtc: pl031: Use resource managed API to simplify code
-    (no matching commit)
+   PCI/ASPM: Save parent L1SS config in pci_save_aspm_l1ss_state()
 
-You are awesome, thank you!
--- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/patchwork/pwbot.html
+   After 17423360a27a ("PCI/ASPM: Save L1 PM Substates Capability for
+   suspend/resume"), pci_save_aspm_l1ss_state(dev) saves the L1SS state for
+   "dev", and pci_restore_aspm_l1ss_state(dev) restores the state for both
+   "dev" and its parent.
 
+   The problem is that unless pci_save_state() has been used in some other
+   path and has already saved the parent L1SS state, we will restore junk t=
+o
+   the parent, which means the L1 Substates likely won't work correctly.
 
+   Save the L1SS config for both the device and its parent in
+   pci_save_aspm_l1ss_state().  When restoring, we need both because L1SS m=
+ust
+   be enabled at the parent (the Downstream Port) before being enabled at t=
+he
+   child (the Upstream Port).
+
+   Link: https://lore.kernel.org/r/20241115072200.37509-3-jhp@endlessos.org
+   Fixes: 17423360a27a ("PCI/ASPM: Save L1 PM Substates Capability for
+suspend/resume")
+   Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D218394
+   Suggested-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
+   Signed-off-by: Jian-Hong Pan <jhp@endlessos.org>
+   [bhelgaas: parallel save/restore structure, simplify commit log, patch a=
+t
+   https://lore.kernel.org/r/20241212230340.GA3267194@bhelgaas]
+   Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
+   Tested-by: Jian-Hong Pan <jhp@endlessos.org> # Asus B1400CEAE
+
+broke system suspend/resume on my Dell XPS13 9360.  It doesn't even
+pass suspend/resume testing after "echo devices > /sys/power/pm_test".
+
+It looks like PCIe links are all down during resume after the above
+commit, but it is rather hard to collect any data in that state.
+
+Reverting the above commit on top of 6.14-rc1 makes things work again,
+no problem.
+
+I'm unsure what exactly the problem is ATM, but I'm going to check a
+couple of theories.
+
+Cheers, Rafael
 
