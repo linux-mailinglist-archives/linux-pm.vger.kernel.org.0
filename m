@@ -1,197 +1,167 @@
-Return-Path: <linux-pm+bounces-21300-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21301-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id B963DA25908
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 13:13:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3C48A25980
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 13:35:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5FAC17A10D6
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 12:12:05 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 63F611884F00
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 12:35:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D97C2040A6;
-	Mon,  3 Feb 2025 12:12:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ECC22040A1;
+	Mon,  3 Feb 2025 12:35:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="RwpBMjvh"
+	dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b="dcFHh2th"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.thorsis.com (mail.thorsis.com [217.92.40.78])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC07620409A
-	for <linux-pm@vger.kernel.org>; Mon,  3 Feb 2025 12:12:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9B0121FFC69;
+	Mon,  3 Feb 2025 12:35:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.92.40.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738584774; cv=none; b=fmqDX5CN4uEbpYJTJMxOYxpS6CWyveLvW6Chd0ClolQHP5di+JngrUVa6u8/PvrTgB3VWGFf9ekA/rIybblbz5ioGitPZ5J6Fau3VG0X8oFi6m831HoIuBUGXTv3NjEyk3qDlh/BbCKAIErqLZpwpv93xPa+Mr7uguMTJEB25zw=
+	t=1738586128; cv=none; b=DAxNEJRvXLAZLlgspC45RlyCOOSj2E181fqqRn7ETbriIUfoa+Cr/pPxKMIw5Z3n1WAQ6cWD1gH6vwyUfRQuS7qObPMqrS5Su/+qM1caawpQcCxLiG472L/4R/fPJ+n/1Zks1PvzZgT4olvwZO96wJ5+1gPPx2atymWF59vPnMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738584774; c=relaxed/simple;
-	bh=Al5nN7+VVsS+6jTXW2BhemO8tZMv7evAKrd72FfIn8c=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wr5dx9X2r5CNaB94bJNTKGI5yojrKzFXJuHk1XmLeJcrlxicqQr3lGfc5ip840M6wSKMXVtbfrYPMj/QICFceU6qc+2BbOXVRNaQ9ijdEc6C9T08ahNtCLfB+UyJqhNbRkDynG65nNsFNkkJOi587NA0zrSHlCtJvFj4cnJ480E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=RwpBMjvh; arc=none smtp.client-ip=209.85.128.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6f973c0808dso509577b3.0
-        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2025 04:12:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738584771; x=1739189571; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=G1fCnNO9BE+pRYsCkXAChxvPSR83W+kvApJS3N7O428=;
-        b=RwpBMjvhc76XSBYuCALvMc+iK/K0mSKq9fTFPQuu4KEfONDzTIpNXTCg29fgHyM00n
-         XQKKqulzsIDmkae2zkOS6vWIaqOpiy59T1lSdIKsNn9GHw79qD03dNuTuYoPPuk4WGPo
-         GaVV+O+Zs0NdVT7YuFx2peo3K1TzshxVobFyYIWZUxwbO/zaWofvsgO3pgjDBP1FBz9G
-         ZFu4jAr6oZepExmSKJOWTUpNmp5mnnPmMGMBs6Mad3o9b9/i83/jNRpqJMdC0C3uvKTq
-         xPYGDfXKd+7ROUyQYN6wuJxIELzCvM/JHzzMtUv6koW/qtXSkKKmUvgr8eX6hQXf4iqK
-         0UQA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738584771; x=1739189571;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=G1fCnNO9BE+pRYsCkXAChxvPSR83W+kvApJS3N7O428=;
-        b=WPJNLPwKBIQcW2CnwqBYekmKCy4x6SsPo56m4g85cDN56SAiuRrcze6Yluf36BcWPf
-         NpKs8kFMrY/yWBwbuTvJczz/4Fa6wIn2Mn5rQ1xDctAfHOgMybPznGB/KI+Q4Cd2AsBm
-         ghUdbi3M1FL7i+xzXORaYqiqW7cHG/ro0ACFvZ/j6wxjgZKgb6VW2cVOtQGKSIlS2dMo
-         UIZ/U/ebF2GmPBtjXCWWgyo1UA0Xut/M4UdkRpswDif/Q8ZDF+GvV4RjMIfLU/WQrgqc
-         DM89EwMRl7IIWbCGr12HBwcj60GF5qUWLzZObFlgKU2js5srxW900kAXhn0QN3cRE1PA
-         sf1w==
-X-Forwarded-Encrypted: i=1; AJvYcCULtYau5YXVth3DRBzax3fa0/DPElXE7UTMhULQR+0m9vcndgNSDCu80iPZTTHHAAuG1Urq5gecTw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzG6/JVn8f0GmIhrsbhpiuPZuALFuJ8x4z4oizisl7RdVyd/Hii
-	WvMyEw4/QJNPvJz99Kt16+RZT2M1N766KeB9afl3wfT5JrtF6RajesRBt2XAX97T5Ae00xv8cqE
-	j3NC3mvLD1IiYFMxP4MzWhtjJfQVAS6MJ3mCZ5Q==
-X-Gm-Gg: ASbGnct56Jy5OSS7GgTf7wxdLu0cuK7pJWo+YImUBIsv3J54Lpy5MgPnI/y2YzRq/q4
-	ZJxcG8lkhOQfiALpp3PrWv/yMl189dLoJc5LIjUPVaFwo7tWE1cF4LG88eoZDDW3Q5x/XhkQ8XQ
-	==
-X-Google-Smtp-Source: AGHT+IFRUR8JbA29f5mpJGLTtBTaacsV+IGEaozqrnO9adT6XC3/4NobaMzzaIo2HNZrmPqrTbZHo5WN9mGkT+rdHeQ=
-X-Received: by 2002:a05:690c:3581:b0:6f6:7b02:2568 with SMTP id
- 00721157ae682-6f7a8423943mr162561157b3.32.1738584771686; Mon, 03 Feb 2025
- 04:12:51 -0800 (PST)
+	s=arc-20240116; t=1738586128; c=relaxed/simple;
+	bh=CxfZW7dBnO3GBXmccZ9Y/mBeu6zRLvvGYqVPWtDM8rI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=mNr5kxnDTzocd9kv4p9wttEOC2sEnAwTtqqePwqpfyon0uwSmoMDQKSq28YZQqD1pDhgjFIIYh3+U4Uta5XTFPitoPn0brGlqb51amalU+jDjwg9+YK9J6GKiBlm0XFROmRa5nhd59geUD7xkq2vY/FA9SFAE/GkYVuXuKA6WoQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com; spf=pass smtp.mailfrom=thorsis.com; dkim=pass (2048-bit key) header.d=thorsis.com header.i=@thorsis.com header.b=dcFHh2th; arc=none smtp.client-ip=217.92.40.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=thorsis.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=thorsis.com
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id 7F6CF14830BD;
+	Mon,  3 Feb 2025 13:27:03 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=thorsis.com; s=dkim;
+	t=1738585624;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=YKnI1H6bH4Cdf0+aRcBE2xV6xY9vSuXcbUzXoEYfRuc=;
+	b=dcFHh2thNZzdlG/h8AL7zj5T96WsL+ZwTrkv5rpW0fA/Kbb4iKWfX1iy4NXnl+IExfYHop
+	OM2xWT4w4gmASbcQBsWPh5kUdKj34Oe3rPrXk3ylNGsjiWjeVDagfe3x8y4tQpyr3i1Qs3
+	z61tW7ik4TKnPj7QLFWnn/A9T6xJ+vX/LY4j8RGwXTXs5R60oK9Oyt05jvFYV4MQ7Cgq0B
+	+T1VU0dr5xPXc/7tRVI7CYFm5tcrP7pi7DGNXeSlJdY4e6kLkddZv/ucgIso/5dGdkCWff
+	aXLMZjF3FNIwnkApjt/Q9ykr97zmzLKwRjPYP7JXmdTtTrWuE2j2K3k7BAySwQ==
+Date: Mon, 3 Feb 2025 13:27:02 +0100
+From: Alexander Dahl <ada@thorsis.com>
+To: Bence =?iso-8859-1?B?Q3Pza+Fz?= <csokas.bence@prolan.hu>
+Cc: dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 1/4] dma: Add devm_dma_request_chan()
+Message-ID: <20250203-chalice-ninth-8235590e29d2@thorsis.com>
+Mail-Followup-To: Bence =?iso-8859-1?B?Q3Pza+Fz?= <csokas.bence@prolan.hu>,
+	dmaengine@vger.kernel.org, linux-kernel@vger.kernel.org,
+	Mark Brown <broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>, linux-spi@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, linux-pm@vger.kernel.org
+References: <20250124085221.766303-4-csokas.bence@prolan.hu>
+ <20250124085221.766303-8-csokas.bence@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12619233.O9o76ZdvQC@rjwysocki.net> <CAPDyKFpc5p3sXZ6LfdVgt8jR5ZbsQExTgeyMNA-PzcWs5A9U0A@mail.gmail.com>
- <CAJZ5v0gvQjp_P-5Ww7iN1cGiiMJ6tvLLnPpkTQNk++KhoRe=GA@mail.gmail.com>
- <CAPDyKFrBO+r8qYRrhoFZN21__8RuR61ofbsGQZbA=pyQbti5CA@mail.gmail.com>
- <CAJZ5v0jTutgKeXtg3YLR1Onw9gOmvHudHamVVgMxEsieNDXViw@mail.gmail.com>
- <CAPDyKFpmNPhyV3YoBFu7KnW04550DQgqzGHAbGLLqp7=TggVtw@mail.gmail.com>
- <CAJZ5v0iYHBeMra_ba-1Ht4xoPGsyt7gg05RtGxoa_gG91s1xEA@mail.gmail.com>
- <CAPDyKFqkqOXD0oVZoOFR4O6ucqLS4n85_S4SNPvPAc6hfaELgw@mail.gmail.com> <CAJZ5v0jAEJ7DPS4yarwL5Nx_8EVNR0XepjnsCdNuM4pF=Cw9bg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0jAEJ7DPS4yarwL5Nx_8EVNR0XepjnsCdNuM4pF=Cw9bg@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 3 Feb 2025 13:12:15 +0100
-X-Gm-Features: AWEUYZntgiPQgKGhnRjLHhrJxgceqb9ss7gC4Ai8-DSdXsy0Am7_yZUV7wpNkTU
-Message-ID: <CAPDyKFp9RGFAGjChF6jLqy9GttbJm06BGAfOLdZaXUrcagfCgg@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
- parents and children
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Bjorn Helgaas <helgaas@kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
-	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Kevin Xie <kevin.xie@starfivetech.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250124085221.766303-8-csokas.bence@prolan.hu>
+User-Agent: Mutt/2.2.12 (2023-09-09)
+X-Last-TLS-Session-Version: TLSv1.3
 
-[...]
+Hello,
 
-> >
-> > The problem with $subject patch is that drivers/buses are required to
-> > check the runtime PM status, with pm_runtime_suspended(),
-> > pm_runtime_status_suspended() or pm_runtime_active() in one of its
-> > system suspend/resume callbacks , to synchronize it with the HW state
-> > for its device (turn on/off clocks for example).
->
-> Well, I'm kind of unaware of this requirement.
->
-> It clearly is not even followed by the code without the $subject patch.
->
-> The real requirement is that the runtime PM status at the point when
-> runtime PM is re-enabled, that is in device_resume_early(), must
-> reflect the current actual HW state.
+Am Fri, Jan 24, 2025 at 09:52:20AM +0100 schrieb Bence Csókás:
+> Expand the arsenal of devm functions for DMA
+> devices, this time for requesting channels.
+> 
+> Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+> ---
+>  drivers/dma/dmaengine.c   | 30 ++++++++++++++++++++++++++++++
+>  include/linux/dmaengine.h |  7 +++++++
+>  2 files changed, 37 insertions(+)
+> 
+> diff --git a/drivers/dma/dmaengine.c b/drivers/dma/dmaengine.c
+> index c1357d7f3dc6..02c29d26ac85 100644
+> --- a/drivers/dma/dmaengine.c
+> +++ b/drivers/dma/dmaengine.c
+> @@ -926,6 +926,36 @@ void dma_release_channel(struct dma_chan *chan)
+>  }
+>  EXPORT_SYMBOL_GPL(dma_release_channel);
+>  
+> +static void dmaenginem_release_channel(void *chan)
+> +{
+> +	dma_release_channel(chan);
+> +}
+> +
+> +/**
+> + * devm_dma_request_chan - try to allocate an exclusive slave channel
+> + * @dev:	pointer to client device structure
+> + * @name:	slave channel name
+> + *
+> + * Returns pointer to appropriate DMA channel on success or an error pointer.
+> + *
+> + * The operation is managed and will be undone on driver detach.
+> + */
+> +
+> +struct dma_chan *devm_dma_request_chan(struct device *dev, const char *name)
+> +{
+> +	struct dma_chan *chan = dma_request_chan(dev, name);
+> +	int ret = 0;
+> +
+> +	if (!IS_ERR(chan))
+> +		ret = devm_add_action_or_reset(dev, dmaenginem_release_channel, chan);
 
-Right. Seems like we are in agreement, just that there seems to be
-multiple ways to describe the similar problem.
+Why not using dma_release_channel() directly here?  What's the point
+of introducing dmaenginem_release_channel() further above?
 
->
-> > Certainly, we can not rely on drivers to conform to this behaviour and
-> > there are plenty of cases where they really don't. For example, we
-> > have drivers that only implements runtime PM support or simply don't
-> > care about the runtime PM status during system resume, but just leaves
-> > the device in the state it is already in.
->
-> Drivers that only support runtime PM are broken with respect to system
-> sleep ATM.  They need to be made to support system sleep or they
-> cannot be used on systems that use system sleep.  There may be a way
-> around this for system suspend/resume (see below), but not for
-> hibernation.
+Greets
+Alex
 
-I think calling them broken may be to take this a step too far.
-
-While I certainly agree that these drivers have room for some
-improvements, it looks to me that these drivers work today, but may
-not with $subject patch.
-
->
-> > Moreover, we have the users of pm_runtime_force_suspend|resume(),
-> > which we also know *not* to work with DPM_FLAG_SMART_SUSPEND and thus
-> > $subject patch too. I am less worried about these cases though, as I
-> > believe we should be able to fix them, by taking into account the
-> > suggested "->power.set_active flag", or something along those lines.
->
-> Yes, and that's what I'm going to do.
->
-> > That said, it seems like we need another way forward.
->
-> I still don't see why, sorry.
->
-> I guess the concern is that if a device suddenly needs to be resumed
-> during system resume even though it was runtime-suspended before the
-> preceding system suspend, there is no way to tell its driver/bus
-> type/etc that this is the case if they all decide to leave the device
-> as is, but as I have said for multiple times in this thread, leaving a
-> device as is during system resume may not be an option unless it is a
-> leaf device without any subordinates.  This has always been the case.
->
-> We'll see if there is any damage resulting from the $subject change
-> and we'll fix it if so.
->
-> In the future, though, I'd like to integrate system resume with
-> runtime PM more than it is now.  Namely, it should be possible to move
-> the re-enabling of runtime PM to the front of device_resume_early()
-> and then use pm_runtime_resume() for resuming devices whose drivers
-> support runtime PM (I don't see any fundamental obstacles to this).
-> One benefit of doing this would be that pm_runtime_resume() would
-> automatically trigger a runtime resume for all of the "superior"
-> devices, so they could be left in whatever state they had been in
-> before the preceding system suspend regardless of what happens to
-> their "subordinates".  It is likely that some kind of driver opt-in
-> will be needed for this or maybe the core can figure it out by itself.
-
-Right, I am certainly interested to discuss this topic too. It's not
-an easy thing and the biggest problem is that we can't really just
-change the behaviour without a big risk of breaking things.
-
-Some kind of opt-in behaviour is the only thing that can work, in my
-opinion. Anyway, I am here to review and discuss. :-)
-
->
-> It can look at what callbacks are implemented etc.  For example, if a
-> driver only implements :runtime_suspend() and :runtime_resume() and no
-> other PM callbacks, it is reasonable to assume that the devices
-> handled by it should be suspended and resumed with the help of the
-> runtime PM infrastructure even during system-wide suspend/resume (that
-> doesn't apply to hibernation, though).
-
-Maybe this can work in some opt-in/out way, but certainly not as a
-solution for all.
-
-For example, we have subsystems that deal with system suspend/resume
-quite differently, where drivers instead implement some subsystem
-specific callbacks, rather than the common system suspend/resume ops.
-
-Kind regards
-Uffe
+> +
+> +	if (ret)
+> +		return ERR_PTR(ret);
+> +
+> +	return chan;
+> +}
+> +EXPORT_SYMBOL_GPL(devm_dma_request_chan);
+> +
+>  /**
+>   * dmaengine_get - register interest in dma_channels
+>   */
+> diff --git a/include/linux/dmaengine.h b/include/linux/dmaengine.h
+> index 346251bf1026..ffb54b52ef0c 100644
+> --- a/include/linux/dmaengine.h
+> +++ b/include/linux/dmaengine.h
+> @@ -1528,6 +1528,7 @@ struct dma_chan *__dma_request_channel(const dma_cap_mask_t *mask,
+>  
+>  struct dma_chan *dma_request_chan(struct device *dev, const char *name);
+>  struct dma_chan *dma_request_chan_by_mask(const dma_cap_mask_t *mask);
+> +struct dma_chan *devm_dma_request_chan(struct device *dev, const char *name);
+>  
+>  void dma_release_channel(struct dma_chan *chan);
+>  int dma_get_slave_caps(struct dma_chan *chan, struct dma_slave_caps *caps);
+> @@ -1564,6 +1565,12 @@ static inline struct dma_chan *dma_request_chan_by_mask(
+>  {
+>  	return ERR_PTR(-ENODEV);
+>  }
+> +
+> +static inline struct dma_chan *devm_dma_request_chan(struct device *dev, const char *name)
+> +{
+> +	return ERR_PTR(-ENODEV);
+> +}
+> +
+>  static inline void dma_release_channel(struct dma_chan *chan)
+>  {
+>  }
+> -- 
+> 2.48.1
+> 
+> 
+> 
 
