@@ -1,143 +1,141 @@
-Return-Path: <linux-pm+bounces-21291-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21292-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D9F8A2576A
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 11:54:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A0E1A2576D
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 11:54:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0DBB166CB9
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 10:54:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1A990166D62
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 10:54:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B54220125D;
-	Mon,  3 Feb 2025 10:54:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3608E20126B;
+	Mon,  3 Feb 2025 10:54:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fu/SaBch"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="iAWAW67Z";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UUBtY33Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fout-a4-smtp.messagingengine.com (fout-a4-smtp.messagingengine.com [103.168.172.147])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E482010E1
-	for <linux-pm@vger.kernel.org>; Mon,  3 Feb 2025 10:54:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3DDD6201034;
+	Mon,  3 Feb 2025 10:54:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.147
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738580062; cv=none; b=E/mi1QfVEyzKA+cfCjjO7DbqmjyRKa9gNFtBJb0OYhX2eBJrG/K5MT9esY7oTnk1s5cX42yR35a9vpHOaIHd8YrIpN84PB/Jxj2NDFUQeqKJWPj7OOr7Yp0h4ijcs5KpKXpNVUSfE0m4TAJaCs4p5l/ZtyerBWJklOFpHKXCGLA=
+	t=1738580085; cv=none; b=V3nyTsnZgRRTyGOeVozdhD+m7VeAE/TlyRx/o45zKZFiHB6HqXIOSPHpyWpenZof4hiwpdgLyo5hGNUqe4nDX4s5C5AqVdTeSNCRsA5d2UChnTiUDP6OSsn3crCgbhXU1J5aZi5n9drDZ4gjH5sJQ3bX2VZ64Jk4vyzmLULVURk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738580062; c=relaxed/simple;
-	bh=aa1FV4l+STIwrscM9YECQHnEnudQCLxRLs9TbwVG6pE=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SSRQZq0wss8pbLA431IMl81T3jRtETOlIGNec7pcoKlLywseJ65TX9IB8O2iWHIdHWJWjUTviP/oTRHs7hEVuje/bsEs1gCe2FwVJjFTErweL4BgHRKFSn2T3Kpz5QNZCeuN8j67GYaznAnQdAiQmvU7MgEVCab01wJe/n3OW8Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fu/SaBch; arc=none smtp.client-ip=209.85.214.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21ddb406f32so64899835ad.2
-        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2025 02:54:20 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738580060; x=1739184860; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zgoepmzow92M5TjxAmUfNkYISiNmmdFHKPfzWUElINg=;
-        b=Fu/SaBchJNT51MHHPAGUa+cXrPmDFJAmBUixxYtO3uzmp23UrARRFgwgxpjjSusjuS
-         Xqz+1FHfOC8hft7SdAQvAmRXJ9NPTnUuiu2eN6byCysQqHXibqb7sWqMoZV11MdKEDYk
-         yMO2DsrzEnP9w5ONmlV3g0S41qTHOcYFviN3WvlPefdfmmXLlacDk36ADoSowz3LXE/D
-         rm4x/T6lzA0cUhshtDnTTt2XiuZl+GeN0+BNVM147x7hEgJUekdSN4J3Tv8PgwnpVLqJ
-         ZneCMP8j2eo2JX7JwJw4jwMa+XkuT5URF1l7ZAUAK3xp9Gg/QMhSsPEVlfujxE+hX5fm
-         +dGw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738580060; x=1739184860;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Zgoepmzow92M5TjxAmUfNkYISiNmmdFHKPfzWUElINg=;
-        b=jnX5bKf7c0Xn8uEJ4pptjWCK7FKHFoCuwunuiPllCXojMnwdjIt96duFL4QhHnsDXf
-         VWRgNfYTBPTPtMNTNiGnnaiEy/VLQhQqIMxsVzSA1rvbb1bjDN3a+wkv3jYGssGXC89a
-         lpLkeRyUw335Nj/tIN89mlz8MhF7Z7lmrud5k4jZnDgfXhodbWw0HmtMXvpCLNanLkrA
-         psbMhW6KoOGTrIL+0pJDuAMPCdNIjkbyYIFA7at/kMXcvUIS0c6o3Df/QRcn3izwXLiX
-         xVcFg4mx1vPHyYGxD46E7nw5vXab305bqjB1SUMuPLc7tVS764WIwasXZF9w3gIq7x9p
-         zHWw==
-X-Gm-Message-State: AOJu0YyBrYqNowh+Z/WZAeFymr1kMuyuse9KVvo6URc3lDbLKRRrFNKi
-	09iWGH5yQL7/wgq8nj1ewaIlhAGIOj4h0PmXMjYditCfoyXYJqZlRrHbGz3uTNs=
-X-Gm-Gg: ASbGncsjBP/g7Hon2BSShcJtu/KXl7Owb+//QSHUer9EULB4c8LdNza/3e70L5ihPPX
-	KW2UMxENtdYUvPCkbTK/R7+edPH4FP/NC3p8643Mb4r/wnpSvXZqL91Ibihcopf3XA6Ol/Np2Hd
-	39Az5nzoqIBlgam3cg/qioxZICL7+wWH1kl4YwWfWdRwIvmJxxWVOkdekhTRzoTC/u5v3KZ4C02
-	aIBWvqcKsv0mJlByDqL7X4jPpLFw1mTRE3gFWNDW4ZRsLFRFzJcdwAuwy79jY9NQ5blQ2PLdXLc
-	aC7ObThMQarvi0GjzA==
-X-Google-Smtp-Source: AGHT+IFqfHSwetvYfA/FzIoXp3I2Mqr/lsbSnyEV3QTlwurazJwiw64SL9y1p/I4Ms3nJKLMSyjBcQ==
-X-Received: by 2002:a05:6a00:acc:b0:726:f7c9:7b28 with SMTP id d2e1a72fcca58-72fd0be1799mr37521013b3a.8.1738580060025;
-        Mon, 03 Feb 2025 02:54:20 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe69ba3c1sm8364034b3a.108.2025.02.03.02.54.19
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 02:54:19 -0800 (PST)
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Christian Marangi <ansuelsmth@gmail.com>
-Cc: linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Arnd Bergmann <arnd@arndb.de>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH V2] cpufreq: airoha: modify CONFIG_OF dependency
-Date: Mon,  3 Feb 2025 16:24:15 +0530
-Message-Id: <9d51d2710061dfa7f2568287c6ed125b858b7318.1738580005.git.viresh.kumar@linaro.org>
-X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+	s=arc-20240116; t=1738580085; c=relaxed/simple;
+	bh=+/Di4h1qeXkRupXv3IUSSHONLZcjGGQuZMIx64goYoA=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=oZ4+RIW19c2eWojxkiFiLd3PETpj+jZLEdVDrbX2HBx9V1PdFwhQQxlXEWFL1b9aRMRSVBtWd3CsZVtnOPn6A6xvRLqlP6S6CC3O32ZiCkxCLwZ+yrm4y3La7/tWFHvCs7Y90n8nyNkNcgQTJ9vlHzYKY7U1G7J6Z17LrKJfL0A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=iAWAW67Z; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UUBtY33Z; arc=none smtp.client-ip=103.168.172.147
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
+	by mailfout.phl.internal (Postfix) with ESMTP id 32C1313801A7;
+	Mon,  3 Feb 2025 05:54:42 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-10.internal (MEProxy); Mon, 03 Feb 2025 05:54:42 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1738580082;
+	 x=1738666482; bh=DiaCxIAAI53nKzTtEbXz18A8HBU6oz0mrAWO1i/orWo=; b=
+	iAWAW67Z1v86W+SBQRThflq4erQoe+BttiXIwHmd7CLUFSEaE9ujZHOyMMLCqWA0
+	iO95qn9PTPb+MP5R+WQZ3j5lxin/6294OewiaxF3/ZCOt65620U/WmRhxO2S7pXW
+	aE566f0vwRwpYGWItVDVWh9QxlG9UPHrVVgFMkiLPEns3T5Yt1ZOOJhjeMSfyacg
+	AvICW/lPiMhkbPNRbRyGy6dTWj3MyipVoOk8SnsaNwOj7V9g39Zx0RyamAmfphbq
+	eYil188cjo2vBjBK8Lxa3PtjaUGb+FmGdGBQbA7eTdZO+GxA8sn0UENHFCojIsYd
+	KdMFdiw9ae7YGsvatPMsog==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1738580082; x=
+	1738666482; bh=DiaCxIAAI53nKzTtEbXz18A8HBU6oz0mrAWO1i/orWo=; b=U
+	UBtY33ZtIynhNyxbq7q2sDjFJ6JhlehP24kBs7zYg90iCpreRzQf/v7qoyEJhbCe
+	Ibj7ooRGfRJ2qhYmHK+/4Nf99+/HNvcAMrjvY0ulLV89giOt1hPYGN6sBvrVVKLm
+	IdlB+aYd6a1rnn4X+RW2GhftK4KPI6804h8BL3EY0Yz+e2vIaomLMpuy3vNePZ4T
+	0ujWUY/W1v2+UxKbwtK8yOD9MLg/1esdYIx3mauBlyQ5gvSVYiYqmdH7DCls32jU
+	m8mTIcNZxgLZFNq4mvUhblhs14kqkIIBra746jAFnQdEH4KAU3+QoDEKPEuZNMJ0
+	653tVrdDL3zouA1U6mazA==
+X-ME-Sender: <xms:cqCgZ67VdE9HNracQKdQixa2r7ZZEtoKR7cX6SvQobDArlJC1IhdEQ>
+    <xme:cqCgZz5rF_UV1gQFRy9zDttMKN2ICTKM31c3hEwI34v_cZUhFan0-glHEdOkUNtqw
+    dJIBoYqL5wa9iWFWTU>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddujeegtdcutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopeej
+    pdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehpihgvrhhrvgdrghhonhguohhish
+    esrghrmhdrtghomhdprhgtphhtthhopegrnhhsuhgvlhhsmhhthhesghhmrghilhdrtgho
+    mhdprhgtphhtthhopegrrhhnugeskhgvrhhnvghlrdhorhhgpdhrtghpthhtoheprhgrfh
+    grvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhopehvihhrvghshhdrkhhumhgrrhes
+    lhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrh
+    drkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgv
+    rhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:cqCgZ5e12v0LRN8mAn3NaTPL24l__jSi5I1E7mI09VP7Wba0vL1AhQ>
+    <xmx:cqCgZ3JnXDMMtsAWktOnoqSFKqMDqW2CEdliOacTKrPv__T1Diw4vw>
+    <xmx:cqCgZ-I7pFg_pkHtlb5yBWpI3Ra0L28HBExxjN2bu2aMbc-DAABkhQ>
+    <xmx:cqCgZ4wn-fyPPKqX7qDNeXQ3KoB3KIwP7c7w8seoBE6GcQPBEwh-Nw>
+    <xmx:cqCgZ28Cm9RGAp3jxEDQ715stMZqua6bFizDSnF09gkKgDoNvQ8aCOr_>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id EC79B2220072; Mon,  3 Feb 2025 05:54:41 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Date: Mon, 03 Feb 2025 11:54:21 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Viresh Kumar" <viresh.kumar@linaro.org>
+Cc: "Arnd Bergmann" <arnd@kernel.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Christian Marangi" <ansuelsmth@gmail.com>,
+ "Pierre Gondois" <pierre.gondois@arm.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Message-Id: <d1ed3940-976b-47d0-b5e0-9bf08f687246@app.fastmail.com>
+In-Reply-To: <20250203092141.irtn3qf5feowg4jt@vireshk-i7>
+References: <20250122065516.1483301-1-arnd@kernel.org>
+ <20250122070000.sawplgg5tfhrvdfw@vireshk-i7>
+ <3ccab07b-6cb9-46be-8a8e-e7745f5a951f@app.fastmail.com>
+ <20250203092141.irtn3qf5feowg4jt@vireshk-i7>
+Subject: Re: [PATCH] cpufreq: airoha: add CONFIG_OF dependency
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-From: Arnd Bergmann <arnd@arndb.de>
+On Mon, Feb 3, 2025, at 10:21, Viresh Kumar wrote:
+>
+> Going to send this patch now, lemme know if it looks okay:
+>
+>
+>     It would be possible to mark the variable as __maybe_unused to shut up
+>     that warning, but a Kconfig dependency seems more appropriate as this still
+>     allows build testing in allmodconfig and randconfig builds on all
+>     architectures.
+>
+>     An earlier commit, b865a8404642 ("cpufreq: airoha: Depends on OF"),
+>     tried to fix it incorrectly. ARCH_AIROHA already requires CONFIG_OF, so
+>     this change does nothing, and the dependency is still missing for the
+>     COMPILE_TEST case.
+>
+>     Fix it properly.
+>
+>     Fixes: 84cf9e541ccc ("cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver")
+>     Fixes: b865a8404642 ("cpufreq: airoha: Depends on OF")
+>     Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+>     [ Viresh: updated commit log and fixed rebase conflict ]
+>     Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Compile-testing without CONFIG_OF leads to a harmless build warning:
+Looks good to me, thanks!
 
-drivers/cpufreq/airoha-cpufreq.c:109:34: error: 'airoha_cpufreq_match_list' defined but not used [-Werror=unused-const-variable=]
-  109 | static const struct of_device_id airoha_cpufreq_match_list[] __initconst = {
-      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
-
-It would be possible to mark the variable as __maybe_unused to shut up
-that warning, but a Kconfig dependency seems more appropriate as this still
-allows build testing in allmodconfig and randconfig builds on all
-architectures.
-
-An earlier commit, b865a8404642 ("cpufreq: airoha: Depends on OF"),
-tried to fix it incorrectly. ARCH_AIROHA already requires CONFIG_OF, so
-this change does nothing, and the dependency is still missing for the
-COMPILE_TEST case.
-
-Fix it properly.
-
-Fixes: 84cf9e541ccc ("cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver")
-Fixes: b865a8404642 ("cpufreq: airoha: Depends on OF")
-Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-[ Viresh: updated commit log and fixed rebase conflict ]
-Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
----
-V2:
-- Fixed rebase conflicts.
-- Updated commit log.
-
- drivers/cpufreq/Kconfig.arm | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
-
-diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
-index 0ee5c691fb36..9e46960f6a86 100644
---- a/drivers/cpufreq/Kconfig.arm
-+++ b/drivers/cpufreq/Kconfig.arm
-@@ -17,7 +17,8 @@ config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
- 
- config ARM_AIROHA_SOC_CPUFREQ
- 	tristate "Airoha EN7581 SoC CPUFreq support"
--	depends on (ARCH_AIROHA && OF) || COMPILE_TEST
-+	depends on ARCH_AIROHA || COMPILE_TEST
-+	depends on OF
- 	select PM_OPP
- 	default ARCH_AIROHA
- 	help
--- 
-2.31.1.272.g89b43f80a514
-
+    Arnd
 
