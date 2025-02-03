@@ -1,212 +1,408 @@
-Return-Path: <linux-pm+bounces-21306-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21307-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEA58A25EE5
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 16:36:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC23FA26000
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 17:30:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2837F3AAC68
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 15:34:42 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8B06E1880229
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 16:30:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F2C2520A5CA;
-	Mon,  3 Feb 2025 15:34:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3BC4120B1E8;
+	Mon,  3 Feb 2025 16:30:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="h5+OGA5E"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="YmygVOyP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2083.outbound.protection.outlook.com [40.107.93.83])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F83F209F58;
-	Mon,  3 Feb 2025 15:34:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.83
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738596878; cv=fail; b=FYC7a74T6K1oiFmjg9QfUHbAnpEe6AOQlBIdxON4xzWeBPuon97p6fIPMo/iDSEVsugM2IzQpz3LzilyC72FgvQB8bEznoZ9DI1fTGES5KnONMgPkVyebZE3rZ0aJEXtZwTvPRBcDuk8Dl0rbo4/q8dXCaDGW7r82URR5QMezzI=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738596878; c=relaxed/simple;
-	bh=COTiaxeTFHr/2MRPMj7iexrn1kbK9I9X7HwFHlKCCaA=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=UxqvTG+xMzqki9HvmlGtKN0shvzkXIwicAG5X5rKFobHi0OzlXxqsKMx6go8LEw8j/6cRlvjYgWkxyzxnxST0nzl7c+ZXPxfpjFcJRW1AkBVIyrLZ/L1keBMlk6jeeblMa6jxD5NFryfZFA51XodzSNLLuLMrpMWM9CsoYft50c=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=h5+OGA5E; arc=fail smtp.client-ip=40.107.93.83
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZXJn2BZoHGSauNX4b0EiMPRIKiI9g7DH8+f01RJh0hOssRG5VQz5TW/G+jByi05DfBQYABoCZO5wb1JRHMlXxuamqsdR+C2EjYC1Kf44kljwTnjy6N9wbBDW4H5OPyOmqm26gmbgq5XbDXms2C+8vEncZOHTmV6g2Jc2LEOyMGzqFPFHgAiTWuK/dz/eAWGniwUOBJBNc9k6hEe/XU6YRCWANy6xJYPF/2IypvsHETGFPLq1VIeKQCosuLdY5jkPo5E5g7iKmbuLlKgQm/zf6sRaiwmHKj9+DCEsRfMjzYpkDlfiXMIBLZ/qfdlv7/TPN0turLryhLSxk/+qaILwWw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=aq8yLcNUKyLIE6MKDAzAGY8IyZOv3tpg5DrsIxSBs/M=;
- b=u4+GLsZXerv9/f+suocumzmTHY9qauCgy7zKL7trPavrpACNdSrEjjplZTYsREYCdE+hghF+FEFZ6NxFWprsjHfCycIkYIIL1svu4RypQcPbgtvxnPLmOMTJ6XlLIhwKYZVD+NPbEpN4D/bk3IyWz2YRNom/hw0ANyaOLhxsyMePSOFg7seybGCCGKkyMQWjp8TENuUHcLP9NGr4BtIUWHI1bSC3Bu9Jb5J2YkeJRgHmjV+SfqjHXiPePaOHaavZrZWtc0muWHnDQ+srQrXUNy4ceFOYFxuo09TC+DfP1y2S1Ud/pkHQVSORqBfpx9zBqZn659ahX5C+97kF5ert1Q==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=aq8yLcNUKyLIE6MKDAzAGY8IyZOv3tpg5DrsIxSBs/M=;
- b=h5+OGA5EROULGx+2odCh2rORADyspqXPM2TtI9pbu5gPN9bRvrzdZ5xTdzY/DTelJGkKRBwpWgeMzY/i3DiMcPuyLhFetlVjPFj0CuoYS65J08AHcwzdX5W45jvJymOYyq6ByqPE/OCNcIp483W4M0j7/fASisA2gJM2fbeBUfs=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
- by DS7PR12MB8417.namprd12.prod.outlook.com (2603:10b6:8:eb::21) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8398.25; Mon, 3 Feb
- 2025 15:34:34 +0000
-Received: from MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
- ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.8398.025; Mon, 3 Feb 2025
- 15:34:34 +0000
-Message-ID: <f10aab50-5d82-489b-8543-76301bf22e70@amd.com>
-Date: Mon, 3 Feb 2025 09:34:32 -0600
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpufreq/amd-pstate: Remove unnecessary driver_lock in
- set_boost
-To: Viresh Kumar <viresh.kumar@linaro.org>,
- Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
-Cc: gautham.shenoy@amd.com, rafael@kernel.org, linux-kernel@vger.kernel.org,
- linux-pm@vger.kernel.org
-References: <20250130085251.155146-1-dhananjay.ugwekar@amd.com>
- <20250203104811.ccf3pj53cjlhwvti@vireshk-i7>
-Content-Language: en-US
-From: Mario Limonciello <mario.limonciello@amd.com>
-In-Reply-To: <20250203104811.ccf3pj53cjlhwvti@vireshk-i7>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SA0PR12CA0015.namprd12.prod.outlook.com
- (2603:10b6:806:6f::20) To MN0PR12MB6101.namprd12.prod.outlook.com
- (2603:10b6:208:3cb::10)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AD1720A5C0
+	for <linux-pm@vger.kernel.org>; Mon,  3 Feb 2025 16:30:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1738600240; cv=none; b=Fp7jLVCqSvzHiguhsWdx0jzmpxv+ZCgLP5syPvNl9Dfm/BhkZokI8asWovBjGE00BYl67b92Dqn1xnyoxgOBod+EoljBc9IPTg0JkrdCAzHWwB8sezoxSnmcWC2x5AoDVp+b+a8LJSZ4sfCnrQlrazpI2R5g1PGs/gCKH+7BGY4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1738600240; c=relaxed/simple;
+	bh=n//MYP3HUKx2pg/IUyZ4yEkd7tkeIUN66Lf4iSZKjfo=;
+	h=Message-ID:Date:MIME-Version:Subject:From:To:Cc:References:
+	 In-Reply-To:Content-Type; b=U6bf53UzwjIsZMi7/1qOmKddnluVtP4xrWu5R5XMaj0voP8hvokMnpLRrLmFAGNufffO7Dut6MvLtcaZVkhPsqRcXf3P/PlXypKyKjDWiS1wx64hQugz/iDayDg6qEHaTOo8OfbuhET35+AbhfoBYKkVtWQBnCGheq+ADYpgVDg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=YmygVOyP; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-3862b40a6e0so2778062f8f.0
+        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2025 08:30:37 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1738600235; x=1739205035; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=4w6UmI8zApfFjzpF1ITEcZX/xk8zGVgfYD57VZOtxmU=;
+        b=YmygVOyPfx2xU82WgLP5AzM/iZBAGAlkO4DtesIi3VmF6rGufd6qWFvcR5bj1uao/8
+         BgJycXocc6X0b9VkmUAt/p2bRMMnGl+dhrnH2lp9DL+WScXKXEfXikvbTZnDf6FG5uKP
+         ijD5eZ2r4qW9IGeTzu+GD+cyVgh5WM91EuimuExIYTfS/30AvUnJepWb8I5QkwUyV6NC
+         1VPdXph3Z9rhv2mgHcYK0ENAjGeovUK0zrYE0uHY1yRP+rYGiijgVuIz53MTZ9Lfbx8K
+         Ci5QJui9YnGqepoYLO5PEiD0EOvkJq5k0WH5wJ5Gw715z0XoXW2M8PzhB+khNqxXErjE
+         +UAg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738600235; x=1739205035;
+        h=content-transfer-encoding:in-reply-to:content-language:references
+         :cc:to:from:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4w6UmI8zApfFjzpF1ITEcZX/xk8zGVgfYD57VZOtxmU=;
+        b=qzXwS6bp/2g2zSiWMFQn7ZcZhFh4AE3RwgCt76zEsgfUkarlEHuvEH0woemeTzSutk
+         pcmk2CR1u47af5p4tr0cbZM7PuXhQb1cdR/f8oaqdnTmabcQZqlitbIT9Mo+8wI92byp
+         3vB7Bs5SkJCCvTaehajLDsRJtoSMvtsvjdrpBb6NQog201rsYdWVwlc5keTIwZzA/VTG
+         g+ahZZbIsK8NWf5Y0yrrNkfJeUgaw1R8ILkSpE/OpecNovN8xCqjSIpw29gbVgXPZRA6
+         6B+e4GVqvvBRYjeiyoXTgzqdVfqJQLxbJgtvq2Rc7l5hfYsHa/lxYzvdHVwe4kqAZ2Db
+         CCGA==
+X-Forwarded-Encrypted: i=1; AJvYcCWl9AA6kF8YRMlASI9hZuqap+5lfMiUiPNi0VGt54MrCk+BwFsNrD/FFwCrHh0/fqjjfHhHIXjT+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpM5MUV4FJtYC+e/oMRryxVrAVBqIUIi0JBYZ7KxcUldTr1FK6
+	/91GCxUjaTpzrvEfrgax2/A8tJ7GwJsxqwp4Tc+aqNsDkmzF/uEmAvRPsf5Zthw=
+X-Gm-Gg: ASbGnctd2G3B6Rkf/PsR+WAtyl95ns7z2pSEKzHMGG48BJIfI37t039+MDODvQo1Pne
+	bBU+25bot/RIzgavyeg/lfoRdgy/o+7hvh8k0NhEoZLgChbkdmhpxrbSwXYuzDMMfCeDV1LHU0T
+	UCwH9wQkOAaWUtOhObda2PT0+KgJL49vryeG4QoXTo5eV/Rd2c2HBv9r4fDdrCL3bREICLuj7oC
+	ooDgEF49RjSSSG07RlfBpi5H8miSJuUCF6wq6EK8OQyqX/3gREwxCbC6QZNf/bG/Skov3dYAI4a
+	RE/Go7XfxJmjRVxJlqtVGsW3
+X-Google-Smtp-Source: AGHT+IHDKGWZDdu9KvAZ5cKLRS+DMqDNkg23q/oCJosK4PIMEE8v9HnxxhxTqL283NqvyKO/CgE6nA==
+X-Received: by 2002:a5d:6d86:0:b0:38a:518d:97b with SMTP id ffacd0b85a97d-38c519311d8mr17660310f8f.11.1738600233881;
+        Mon, 03 Feb 2025 08:30:33 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.173])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38c5c1b579dsm13247381f8f.78.2025.02.03.08.30.32
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Feb 2025 08:30:33 -0800 (PST)
+Message-ID: <11da7631-8eae-4ffa-a131-2a8b33e0743d@tuxon.dev>
+Date: Mon, 3 Feb 2025 18:30:31 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|DS7PR12MB8417:EE_
-X-MS-Office365-Filtering-Correlation-Id: 49e81032-7424-4ee3-b68d-08dd446842d5
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?ck04ekVBNk04WXdYbGhqeUI1MzFXWkpwNkVSNDYzVHhDOGdCa1lDZ29OVE83?=
- =?utf-8?B?MGRjZ1BaZFdmKzQ3NXlRVUJwSlN4Z3hSTEhSL05yMjROeHBWS2NzbWdyWmgv?=
- =?utf-8?B?RG5TNHpMNnVaQkcwZDVHZU8wODVocnNQYWt0NmJYZTN4a21RT0VyK3U5cGlW?=
- =?utf-8?B?bHdQcGhVY3o4aXg0eTBnZUdxWXVlR3ViNmhTN0tJMW1ielh2bHRPWWVRZVRU?=
- =?utf-8?B?ZWt3WTZmaS9KV3JoTHVOUUdWc1FwVXMwNlViZDRDQ0w4djVtL0srZXcvWDVa?=
- =?utf-8?B?ZWlMc3VoOXl1MnZLbDdtRVA0S0g0OGl6OWd0Q25iNldHVzQ5SEFYdC9vSHpJ?=
- =?utf-8?B?MVlBaTdPa0lMRWIzYlU0WjdscGNOUi9qamk5MmF5V084cit5YWxsbEp2Z3ND?=
- =?utf-8?B?L2lSZSttOEJsNWg5NC9VTjZhREJVNUtwL0RsaWVETHI0SVNIT25rNjRDR01r?=
- =?utf-8?B?bFFmemQwZEFuL2c5Y3hqUkRIeW10c1FRSjF5bGFxV3F0NUxxMmhKUTh4akJS?=
- =?utf-8?B?WUV2Vjk5aDFmZkdLcTBKTW1raGEzSEdWY2dnbDUwSGl4TWZsbThOWVZwYTNS?=
- =?utf-8?B?YlcrUUxIbUdBa1BpTXBJR1dFQ2UxUE5LRkJFOHRHYVNVV1BIcHNFSzhGN0NL?=
- =?utf-8?B?LzNUZjllSXlGLzQwR0g3eThrcnN4enl4czJlY3UxNTJwc2VNYzBJUGZ2SzJJ?=
- =?utf-8?B?c2FqVGhkb1ZhRFZ6NnVUK2hSZnZucDRJWkVuZmJFa0tKMlV4bzVmRE5hRTRu?=
- =?utf-8?B?WWcyMFFjdTErWlpEZEVSQnM2NGF0WDkvYnFsTHJBUlowcFpLUlpIakxmOG5M?=
- =?utf-8?B?Wm9HTW5TNVdNTko5WDlOTld1TzRNWTYrOTB4SUNWM3AzMGo1VmtCazl5elNC?=
- =?utf-8?B?ZzF1VGQwaHQza05PYlA0Y3gzQlhWU1BybGtzVnFjdkE2OEFKRjE0eFdJMWdE?=
- =?utf-8?B?Q3JQdFprengvL0grV01PUFhnanZiTTVvcGZLUWxyZXdWdFF0ck85SDBaOXNq?=
- =?utf-8?B?N1NieitINVo2SWhnZm51RXVBWncxN0Zla0wwT3NrdDV1TVV5K21Lb2JzTEVq?=
- =?utf-8?B?amM2OWFMQ2dmZFBQY0FEeVdxM1BUY2xKV2VHNEpNUTZXK1JHZkdLOHRwb3lp?=
- =?utf-8?B?TnlqN1ZUMXA0ek1uTm90a3ZsTURWOE1ickhROGl2VlhHcnlBekJtWFhGQ0gv?=
- =?utf-8?B?d1c3b2FzZTlWZ1pvQk1qOGhiais0VmJtWDVrQW90U1o2eEMvVmRCUVljT29l?=
- =?utf-8?B?a3o5WHNjOUprZnhiM01EWUQ2MTI3ME92a1hmUTVXWlFhdWJ0NkdQZDEyWjZT?=
- =?utf-8?B?aU1ZMmxjdWNGZGZsN1FTK3pGcGRHN2dNVmpNY0h1S0dHK2FjUHBlRzZKNkFQ?=
- =?utf-8?B?M1JnMGNkNjcwenpyTis0Rkl4MDY2M2QyUjI5bVJtNFRXR3I4TDFNeVVFeGhv?=
- =?utf-8?B?VUxYWEdRSGl5N053RmtkOHNZcGtpOFBMRWVNZHVBa1c3bTJKNDBaZk42SkZo?=
- =?utf-8?B?TUNzSWFNdnNBd2k1aUhYY3JqSitGZ0UwU3pzTC9XYzlsOGhPVnlwbXQwMTFS?=
- =?utf-8?B?OXorbElWTUwyU01LNGNUNVZmMFpKaWtITzl1V2ZpeVlQTWJ1R00xUUNVdmtK?=
- =?utf-8?B?UTBMS3IrZzBpanE3UE5PaGJRamxiSGZkWG5XNEtiTDdvekgyUXE2WHd3MXNm?=
- =?utf-8?B?UlhwY2tOaCtKQkdxUmVjUU5xM2ZsaE1HRU9hdE05SjJCaDZqY1ZTdGxJL0Ny?=
- =?utf-8?B?TGFxampaUnY2UFEvU1ZBYXhlQ2hKSXJaV280V0p4VjlvN0h6bml2cG4rcFRa?=
- =?utf-8?B?ekZEekhQekNxMkViR0RZMi91T2I0QVZEYjlhK2dpWmlwc3FCWUkxbUVqVmNv?=
- =?utf-8?Q?rq+b8KFs5PY5A?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?OVhSMnQ4NFVpMVpnbW9teTZqREZ2WmRscmdTQzZEN3pKc1VZdFMwNExBTDhI?=
- =?utf-8?B?b1pjbkdDbEdnaGNIbWRwRXBsVHJ5a1FFZnRZZWZjaTJmV0I4eWUzejEyVlpq?=
- =?utf-8?B?S2hsc0FRWW9KczhEVXAzcktDeERWdWozRkJCaUhQUGpvdklhQjVRKzN6SS9m?=
- =?utf-8?B?THRYSkhjc1cvZkhkaFVCejNpR0hhRWt1RVlKTFhRanBZbDJWbHFTT2xpREda?=
- =?utf-8?B?MVBtV21aZEJ4UzhQQ1lBK3ArOUFHWWtIbVVaTTdmUExoM2FOdTYrTm5NMFU1?=
- =?utf-8?B?OXc5TUd2U2wrd3NRTGgybzN0cTVmZ1pOTVZmZExDVWg4bmZya3FkV2V1RFZZ?=
- =?utf-8?B?cktObSs2NWhkV0RJQm9qZHF6Qks0R0VuOEpnbFVNbnlhd2ZSTG9UME1telc1?=
- =?utf-8?B?cmVSWFp3eVpNZEtRMVkydUZVSUh6Vis0WFlsaEcyMW45WlY4Q2wrc0ZkTVE4?=
- =?utf-8?B?bGtsNTJIZGYvSjIwN011cGZhc0JWNFhmOXVPeXVacFNLWjNlMFVQdUJ1K3ZI?=
- =?utf-8?B?bWRWazhGdEs4QkhoaFRWenhIL0RaazUwWWxERW1PUTBxRzVUZjN5K1RzTDA2?=
- =?utf-8?B?eEVuOWlQN3NlN2g2SXQ2TG4yR1pONytqMFBKcEhqdWVkTWd3R1Azdlp3bDFB?=
- =?utf-8?B?SUlLQlBpN2RYWCtKd3N3MnlpT3p5cE4zOWh5SmVDVWwzUlluVFpKd1ExQ2VZ?=
- =?utf-8?B?V0RYaHdZOXI4R1Npby9KRHdFRU5ldHoyaTl5YkpLTU1JMjNYczZTR3BuN1pH?=
- =?utf-8?B?b2JSejExVmwyd041U3BacVpkaEhpV3IwTDVDYVlDemRzdkRwZjRCOEpvQzFm?=
- =?utf-8?B?ZnNVem5WQUZNbXcyMWlMZmhObGdBMXJKRk1yYk5uNXMvQUZPUHM0ZHFUMFhs?=
- =?utf-8?B?MThWbThwWkJ4ZjNtdTlObCtKclpPVklxSGxlQ3hiZ2thYkNyajB1VnlkRXN4?=
- =?utf-8?B?WDQyL3lsQ0tRTzJUUml3TE1IUFRmdEU4Slg4R0gySk5WM1VIK0t0MEFCMHd3?=
- =?utf-8?B?UXg1M1A1WTBoTWR5a3lCU2xaVktxWEVhWEZXSjkwdk5qaE5yUldhYjhLbUl2?=
- =?utf-8?B?QlBPeTNtbkZrY2JTMmhmdGVuTlhNNVNZbmZXN2dBZ2wrcWJFdDdQK3FTcHl4?=
- =?utf-8?B?UWh2eWV2UXlZUkJjRk5TN2FkZ3RkM0xpaVBoRDF6VjMxM3lKVU0wME53bUpU?=
- =?utf-8?B?V3BYVGx4SVV5WVliRjl5M0V5MDNDaFM3TEJ5SnpuS0U5eEtEbnpEYXlZbGtm?=
- =?utf-8?B?UC9CNXJOVVBTUUE2WUphbW1nSFRWSDRwZHA4aldERUVCOWE2bEp0Qkw4UjZU?=
- =?utf-8?B?OVU3eWVtUWlrSEg4UDJRWWNwa1FNa2dsUE1BY3pUU2FsU2EzeHQyakt6U3kx?=
- =?utf-8?B?UG5QbDNPMmxOSmZIMVJOeGhacGlUbXdNekFDWU5qK0c5YVovVXBCczhkRE1B?=
- =?utf-8?B?ZGRhTDV6YlpLWnArbmJoaTgrYUppYlVJb2t3MTBEdE03Y2k2VlVubU00cDE4?=
- =?utf-8?B?R0JwRDZVT0h2dGhYQTU0akMwNTZvTjlPMWhJVEpERDNVQm9hUFc0Y2tvQW50?=
- =?utf-8?B?dndHQStkdVMrQlRoUDFIL0xDMGJOQVlwTWVhRzI5UTBoRjhCOWtBbmQ4T2Nm?=
- =?utf-8?B?Q1MyKzA4dEZEek4rb2FGR3ZuNzQvOUVKOVhJK2Q5eTRpWHNpbkFqREJORTl5?=
- =?utf-8?B?SGJIU2lBbVRtK1dpb3AvVUgvdFVtaGlvVHpGZ2xMQXpJc2JXZnJKSUR4RGFp?=
- =?utf-8?B?MjN2c3dOdWc0VUF6YURCaGM5c3Uwb0J4OTZJZHM1cUVuZFFQMXdlRk16bUVJ?=
- =?utf-8?B?VFFFYkhDandpRGlYUzlsKzlPbGc2angxUjd2QklyTWtzbkdieVp4TFRQZHQ1?=
- =?utf-8?B?K3N4MWswQ0c1eEFDM3lPWXFSb1NFdmhLT0Rqb1FSWHgzZCtCeWY5cDFwU2JD?=
- =?utf-8?B?YlIwV1A4NlpUalIzdzE4YTRrTlhqb1pwbmNHNGJDVTk0ZUVOQnc0RGxNNStT?=
- =?utf-8?B?cUIwN3IxRlROb3F0UGhmTXh5bi9Ha3BpQUR0dTVIWmNyQitZellLVXFuR2hO?=
- =?utf-8?B?eG1iUjZKckR6eTY2RWRMU2J6WGVVOXFjUTVLSTYyZUZJNWVLMHhLUEhRM2hI?=
- =?utf-8?Q?QIrLU1Lal7oYqVAWM+TNVDapk?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 49e81032-7424-4ee3-b68d-08dd446842d5
-X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Feb 2025 15:34:34.6499
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: b7Ap00c4j/X/eAr9xrCXIHwJoaEQUBD/4Aq1+VZXkNkLfdca2JBowiMdFWFbcCxkh8xb98ecSpiA1CiaTwjoqQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB8417
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/6] thermal: of: Export non-devres helper to
+ register/unregister thermal zone
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: rafael@kernel.org, rui.zhang@intel.com, lukasz.luba@arm.com,
+ robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ geert+renesas@glider.be, magnus.damm@gmail.com, mturquette@baylibre.com,
+ sboyd@kernel.org, p.zabel@pengutronix.de, ulf.hansson@linaro.org,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-renesas-soc@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-clk@vger.kernel.org,
+ Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+References: <20250103163805.1775705-1-claudiu.beznea.uj@bp.renesas.com>
+ <20250103163805.1775705-3-claudiu.beznea.uj@bp.renesas.com>
+ <Z5pkUNNvsWPjRQvy@mai.linaro.org>
+ <65a16c3f-456e-40ec-91b0-afb57269ed46@tuxon.dev>
+ <Z5tPR_tv7vWDkUI7@mai.linaro.org>
+ <6ed7d545-82d7-4bca-95ec-95447586bb58@tuxon.dev>
+ <b496d933-3c57-4b02-ab65-0582a30939af@linaro.org>
+ <98ddf1b6-1804-4116-b4e2-f54a62c27966@tuxon.dev>
+ <7d1bf72b-183a-429d-9a0c-10e1936a9abe@linaro.org>
+ <e7374f91-a65d-4882-8a9b-de478582e09e@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <e7374f91-a65d-4882-8a9b-de478582e09e@tuxon.dev>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2/3/2025 04:48, Viresh Kumar wrote:
-> On 30-01-25, 08:52, Dhananjay Ugwekar wrote:
->> set_boost is a per-policy function call, hence a driver wide lock is
->> unnecessary. Also this mutex_acquire can collide with the mutex_acquire
->> from the mode-switch path in status_store(), which can lead to a
->> deadlock. So, remove it.
->>
->> Signed-off-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
->> ---
->> PS: This patch should ideally go before [1], as that patch uncovers this
->> bug and actually leads to a deadlock when switching the amd_pstate driver
->> mode.
->> [1] https://lore.kernel.org/linux-pm/e16c06d4b8ffdb20e802ffe648f14dc515e60426.1737707712.git.viresh.kumar@linaro.org/
->> ---
->>   drivers/cpufreq/amd-pstate.c | 1 -
->>   1 file changed, 1 deletion(-)
->>
->> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->> index d5be51bf8692..93788bce7e6a 100644
->> --- a/drivers/cpufreq/amd-pstate.c
->> +++ b/drivers/cpufreq/amd-pstate.c
->> @@ -740,7 +740,6 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
->>   		pr_err("Boost mode is not supported by this processor or SBIOS\n");
->>   		return -EOPNOTSUPP;
->>   	}
->> -	guard(mutex)(&amd_pstate_driver_lock);
->>   
->>   	ret = amd_pstate_cpu_boost_update(policy, state);
->>   	refresh_frequency_limits(policy);
+Hi, Daniel,
+
+On 31.01.2025 01:16, Claudiu Beznea wrote:
+> Hi, Daniel,
 > 
-> Applied. Thanks.
+> On 31.01.2025 00:33, Daniel Lezcano wrote:
+>> On 30/01/2025 21:53, Claudiu Beznea wrote:
+>>> Hi, Daniel,
+>>>
+>>> On 30.01.2025 19:24, Daniel Lezcano wrote:
+>>>> On 30/01/2025 11:30, Claudiu Beznea wrote:
+>>>>>
+>>>>>
+>>>>> On 30.01.2025 12:07, Daniel Lezcano wrote:
+>>>>>> On Thu, Jan 30, 2025 at 11:08:03AM +0200, Claudiu Beznea wrote:
+>>>>>>> Hi, Daniel,
+>>>>
+>>>> [ ... ]
+>>>>
+>>>>>>>> Would the IP need some cycles to capture the temperature accurately
+>>>>>>>> after the
+>>>>>>>> clock is enabled ?
+>>>>>>>
+>>>>>>> There is nothing about this mentioned about this in the HW manual of the
+>>>>>>> RZ/G3S SoC. The only points mentioned are as described in the driver
+>>>>>>> code:
+>>>>>>> - wait at least 3us after each IIO channel read
+>>>>>>> - wait at least 30us after enabling the sensor
+>>>>>>> - wait at least 50us after setting OE bit in TSU_SM
+>>>>>>>
+>>>>>>> For this I chose to have it implemented as proposed.
+>>>>>>
+>>>>>> IMO, disabling/enabling the clock between two reads through the pm
+>>>>>> runtime may
+>>>>>> not be a good thing, especially if the system enters a thermal situation
+>>>>>> where
+>>>>>> it has to mitigate.
+>>>>>>
+>>>>>> Without any testing capturing the temperatures and compare between the
+>>>>>> always-on
+>>>>>> and on/off, it is hard to say if it is true or not. Up to you to test
+>>>>>> that or
+>>>>>> not. If you think it is fine, then let's go with it.
+>>>>>
+>>>>> I tested it with and w/o the runtime PM and on/off support (so, everything
+>>>>> ON from the probe) and the reported temperature values were similar.
+>>>>
+>>>>
+>>>> Did you remove the roundup to 0.5°C ?
+>>>
+>>> I did the testing as suggested and, this time, collected results and
+>>> compared side by side. I read the temperature for 10 minutes, 60 seconds
+>>> after the Linux prompt showed up. There is, indeed, a slight difference b/w
+>>> the 2 cases.
+>>>
+>>> When the runtime PM doesn't touch the clocks on read the reported
+>>> temperature varies b/w 53-54 degrees while when the runtime PM
+>>> enables/disables the clocks a single read reported 55 degrees, the rest
+>>> reported 54 degrees.
+>>>
+>>> I plotted the results side by side here:
+>>> https://i2.paste.pics/f07eaeddc2ccc3c6695fe5056b52f4a2.png?
+>>> trs=0a0eaab99bb59ebcb10051eb298f437c7cd50c16437a87392aebc16cd9013e18&rand=vWXm2VTrbt
+>>>
+>>> Please let me know how do you consider it.
+>>
+> 
+> After sending this to you I figured it out that precision is lost somewhere
+> so I re-tested it with the following diff (multiplied parts of the equation
+> with 1000):
+> 
+> diff --git a/drivers/thermal/renesas/rzg3s_thermal.c
+> b/drivers/thermal/renesas/rzg3s_thermal.c
+> index 6719f9ca05eb..84e18ff69d7c 100644
+> --- a/drivers/thermal/renesas/rzg3s_thermal.c
+> +++ b/drivers/thermal/renesas/rzg3s_thermal.c
+> @@ -83,7 +83,7 @@ static int rzg3s_thermal_get_temp(struct
+> thermal_zone_device *tz, int *temp)
+>         }
+> 
+>         ret = 0;
+> -       ts_code_ave = DIV_ROUND_CLOSEST(ts_code_ave, TSU_READ_STEPS);
+> +       ts_code_ave = DIV_ROUND_CLOSEST(MCELSIUS(ts_code_ave), TSU_READ_STEPS);
+> 
+>         /*
+>          * According to the HW manual (section 40.4.4 Procedure for
+> Measuring the Temperature)
+> @@ -91,11 +91,8 @@ static int rzg3s_thermal_get_temp(struct
+> thermal_zone_device *tz, int *temp)
+>          *
+>          * Tj = (ts_code_ave - priv->calib0) * 165 / (priv->calib0 -
+> priv->calib1) - 40
+>          */
+> -       *temp = DIV_ROUND_CLOSEST((ts_code_ave - priv->calib1) * 165,
+> -                                 (priv->calib0 - priv->calib1)) - 40;
+> -
+> -       /* Report it in mili degrees Celsius and round it up to 0.5 degrees
+> Celsius. */
+> -       *temp = roundup(MCELSIUS(*temp), 500);
+> +       *temp = DIV_ROUND_CLOSEST((u64)(ts_code_ave -
+> MCELSIUS(priv->calib1)) * MCELSIUS(165),
+> +                                 MCELSIUS(priv->calib0 - priv->calib1)) -
+> MCELSIUS(40);
+> 
+>  rpm_put:
+>         pm_runtime_mark_last_busy(dev);
+> 
+> With this, the results seems similar b/w runtime PM and no runtime PM cases.
+> 
+> The tests were executed after the board was off for few hours. The
+> first test was with runtime PM suspend/resume on each read. Then the board
+> was rebooted and re-run the test w/o runtime PM suspend/resume on reads.
+> 
+> Figure with results is here:
+> https://i2.paste.pics/5f353a4f04b07b4bead3086624aba23f.png?trs=0a0eaab99bb59ebcb10051eb298f437c7cd50c16437a87392aebc16cd9013e18&rand=5n34QNjWID
+> 
+> 
+>> Thanks for taking the time to provide a figure
+>>
+>> Testing thermal can be painful because it should be done under certain
+>> conditions.
+>>
+>> I guess there was no particular work load on the system when running the
+>> tests.
+> 
+> No load, indeed.
+> 
+>>
+>> At the first glance, it seems, without the pm runtime, the measurement is
+>> more precise as it catches more thermal changes. But the test does not give
+>> information about the thermal behavior under stress. And one second
+>> sampling is too long to really figure it out.
+>>
+>> In the kernel source tree, there is a tool to read the temperature in an
+>> optimized manner, you may want to use it to read the temperature at a
+>> higher rate. It is located in tools/thermal/thermometer
+>>
+>> Compiling is a bit fuzzy ATM, so until it is fixed, here are the steps:
+>>
+>> (you should install libconfig-dev and libnl-3-dev packages).
+>>
+>> cd $LINUX_DIR/tools/thermal/lib
+>> make
+>> LD_LIBRARY_PATH=$LD_LIBRARY_PATH:$LINUX_DIR/tools/thermal/lib
+>>
+>> cd $LINUX_DIR/tools
+>> make thermometer
+>>
+>>
+>>
+>> Then change directory:
+>>
+>> cd $LINUX_DIR/tools/thermal/thermometer
+>>
+>>
+>> Run the tool:
+>>
+>> ./thermometer -o out -c t.conf -l DEBUG -- <my_command>
+>>
+>>
+>> The content of the configuration file t.conf is:
+>>
+>> thermal-zones = (
+>>           {    name = "cpu[0_9].*-thermal";
+>>         polling = 100; }
+>>       )
+>>
+>> All the captured data will be in the 'out' directory
+>>
+>> For 'my_command', I suggest to use a script containing:
+>>
+>> sleep 10; dhrystone -t 1 -r 120; sleep 10
+>>
+>> If you need the dhrystone binary, let me know.
+>>
+>> The thermal zone device tree configuration should be changed to use a 65°C
+>> passive trip point instead of 100°C (and the kernel setup with the step
+>> wise governor as default).
+>>>> The resulting figure from the temperature should show a flat temperature
+>> figure during 10 seconds, then the temperature increasing until reaching
+>> the temperature threshold of 65°C, the temperature stabilizing around it,
+>> then followed by a temperature decreasing when the test finishes.
+>>
+>> If the temperature does not reach the limit, decrease the trip point
+>> temperature or increase the dhrystone duration (the -r 120 option)
+>>
+>> At this point, you should the test with and without pm runtime but in order
+>> to have consistent results, you should wait ~20 minutes between two tests.
+>>
+>> The shape of the figures will give the immediate information about how the
+>> mitigation vs thermal sensor vs cooling device behave.
+>>
+>> Additionally, you can enable the thermal DEBUGFS option and add the
+>> collected information statistics from /sys/kernel/debug/thermal/*** in the
+>> results.
+>>
+>>
+>> Hope that helps
+> 
+> Thank you for all these details. I'll have a look on it but starting with
+> Monday as I won't have access to setup in the following days.
+
+I re-run the tests with the thermometer application that you indicated.
+
+This is the conf I used:
+
+thermal-zones = (
+          {    name = "cpu-thermal";
+        polling = 100; }
+      )
+
+The used device tree is as follows:
+
+	thermal-zones {
+		cpu_thermal: cpu-thermal {
+			polling-delay-passive = <250>;
+			polling-delay = <1000>;
+			thermal-sensors = <&tsu>;
+			sustainable-power = <423>;
+
+			cooling-maps {
+				map0 {
+					trip = <&target>;
+					cooling-device = <&cpu0 0 2>;
+					contribution = <1024>;
+				};
+			};
+
+			trips {
+				sensor_crit: sensor-crit {
+					temperature = <125000>;
+					hysteresis = <1000>;
+					type = "critical";
+				};
+
+				target: trip-point {
+					temperature = <56000>;
+					hysteresis = <1000>;
+					type = "passive";
+				};
+			};
+		};
+	};
+
+I executed with:
+
+time ./thermometer -o out -l DEBUG -c t.conf -- ./test.sh
+
+where test.sh is:
+
+sleep 10; time echo 100000000 | dhry; sleep 10
+
+My dhry has no -t or -r option so I passed the number of runs checking that
+the test executes for 120 seconds.
+
+I executed first the thermometer application with runtime PM suspend/resume
+on temperature read, then wait for ~25 minutes then executed the tests w/o
+runtime PM suspend/resume on temperature read.
+
+The output of the thermometer application is as follows:
+
+- runtime PM suspend/resume when reading: https://p.fr33tux.org/5bbb4d
+- no runtime PM suspend/resumes when reading: https://p.fr33tux.org/c9a7cf
+- full console log while testing: https://p.fr33tux.org/ace3a6
+
+I also plotted the results for visual comparison as follows:
+
+1/ RPM + no-RPM (continuous time base):
+https://i2.paste.pics/c3956d15a7a889a9e1ee5b60529b42f6.png?rand=axUi4IsA1C
+
+2/ RPM + no-RPM (first samples, for side by side comparison):
+https://i2.paste.pics/e2a30af590e28a091415e3afb74eb0ac.png?rand=XQhoxUe1EM
+
+3/ RPM only:
+https://i2.paste.pics/977d4de070b8e2a19694ae2b4ba3c5fc.png?rand=IfZOkonRd9
+
+4/ no-RPM only:
+https://i2.paste.pics/5d6e3d0a124e5e4b3b8b397d7b5b057c.png?rand=UaigrMRNvy
+
+Please let me know how your input.
+
+Thank you,
+Claudiu
+
+
+> 
+> Thank you,
+> Claudiu
+> 
+>>
+>>
+>>
+>>
+>>
+>>
 > 
 
-Sorry for my delay with the recent holiday.
-I have no concerns with this going to the start of the series.
-
-Acked-by: Mario Limonciello <mario.limonciello@amd.com>
 
