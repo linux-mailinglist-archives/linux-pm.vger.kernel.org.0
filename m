@@ -1,119 +1,143 @@
-Return-Path: <linux-pm+bounces-21290-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21291-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4DC99A2575F
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 11:52:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D9F8A2576A
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 11:54:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 18ECE188233E
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 10:52:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D0DBB166CB9
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 10:54:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 13128201256;
-	Mon,  3 Feb 2025 10:51:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B54220125D;
+	Mon,  3 Feb 2025 10:54:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PjGpBAiz"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Fu/SaBch"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C03E201246
-	for <linux-pm@vger.kernel.org>; Mon,  3 Feb 2025 10:51:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E8E482010E1
+	for <linux-pm@vger.kernel.org>; Mon,  3 Feb 2025 10:54:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738579911; cv=none; b=OsqWTaaByKsEitsrBsqYDxR4FFSBlqa7b1XjYpSEs+ekaN8QBqBI48eaDTIYXaR0eGFS7Bk11rJhBQ/JEFODPxxyTa8grYi/gpL02AdU4zZX5IPT76O2hkHFIqqCUnK8RSYAQoJPTnYPcjKYAwMxlhorbv9v9iP3cPmB8y1rReU=
+	t=1738580062; cv=none; b=E/mi1QfVEyzKA+cfCjjO7DbqmjyRKa9gNFtBJb0OYhX2eBJrG/K5MT9esY7oTnk1s5cX42yR35a9vpHOaIHd8YrIpN84PB/Jxj2NDFUQeqKJWPj7OOr7Yp0h4ijcs5KpKXpNVUSfE0m4TAJaCs4p5l/ZtyerBWJklOFpHKXCGLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738579911; c=relaxed/simple;
-	bh=gJC4QoiK8MGigX6f3IDnwGzKPQ76ZnM7gy6Q3GmPbPU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=SFPp5Rx5NFa+wel3K8/soU4hN1pzAHnQSfkImPbbQXBRTks5pgTaFEN6kdO2Q+rX4xudeUr+u59xu+C6RsAuzDPJ3AUwB9hWucWyJDrDEa86JQRpmwCqTkPLIgAeshEMsX/VsvEn9ePrrpCEvBsOuIkCw/7DnbS6OwMHTDCnCho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PjGpBAiz; arc=none smtp.client-ip=209.85.214.177
+	s=arc-20240116; t=1738580062; c=relaxed/simple;
+	bh=aa1FV4l+STIwrscM9YECQHnEnudQCLxRLs9TbwVG6pE=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=SSRQZq0wss8pbLA431IMl81T3jRtETOlIGNec7pcoKlLywseJ65TX9IB8O2iWHIdHWJWjUTviP/oTRHs7hEVuje/bsEs1gCe2FwVJjFTErweL4BgHRKFSn2T3Kpz5QNZCeuN8j67GYaznAnQdAiQmvU7MgEVCab01wJe/n3OW8Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Fu/SaBch; arc=none smtp.client-ip=209.85.214.171
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-21669fd5c7cso71596215ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2025 02:51:49 -0800 (PST)
+Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-21ddb406f32so64899835ad.2
+        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2025 02:54:20 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738579909; x=1739184709; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=TpTYY6NVHOTQPLmGd20ggvva9b+UkoAqQ2BAc0zy2SM=;
-        b=PjGpBAizk3WBsKH+mvf4Euf7wN9WJ/bCh9s4uqYerP96BExD84Pgbb7rtr9V5WAY16
-         XKuZx7/h8v9QsWd2/hNjGRErnjGtBLgHfsOy+KCD3I2OOqaEtpWB8tD14KNDk1RgOk8t
-         /iodKbS06SDU2n6yYEPuA5y51PeVox3Nl5Pw0PHux/3f4/+qiU2J42w1GO9Tqo04GJ7X
-         i/eN2BButEoFzw1Zn5nmZXt2Z/JfJE3j/Z9xlM17EhdQsdfPJ8r7qjYxW0Q6WGklK7NG
-         698Jo6ngdBc0VIz3K/VDN/45q/zn+Af0ZXWQJBdfQtpsoTRmlE7Qs6VRVfEuaoEoragc
-         ohnA==
+        d=linaro.org; s=google; t=1738580060; x=1739184860; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Zgoepmzow92M5TjxAmUfNkYISiNmmdFHKPfzWUElINg=;
+        b=Fu/SaBchJNT51MHHPAGUa+cXrPmDFJAmBUixxYtO3uzmp23UrARRFgwgxpjjSusjuS
+         Xqz+1FHfOC8hft7SdAQvAmRXJ9NPTnUuiu2eN6byCysQqHXibqb7sWqMoZV11MdKEDYk
+         yMO2DsrzEnP9w5ONmlV3g0S41qTHOcYFviN3WvlPefdfmmXLlacDk36ADoSowz3LXE/D
+         rm4x/T6lzA0cUhshtDnTTt2XiuZl+GeN0+BNVM147x7hEgJUekdSN4J3Tv8PgwnpVLqJ
+         ZneCMP8j2eo2JX7JwJw4jwMa+XkuT5URF1l7ZAUAK3xp9Gg/QMhSsPEVlfujxE+hX5fm
+         +dGw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738579909; x=1739184709;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=TpTYY6NVHOTQPLmGd20ggvva9b+UkoAqQ2BAc0zy2SM=;
-        b=ok09fWJKb+/l4b+QoyGhb8XoSzXyN3diXba5yMVBZVhssWBPy7e8anbV5s7Anup03y
-         WcP9HAE72pAYbvlQoJ4aWH17C6PGJCroUawmUkDuSrAIia9kWiXsFyun8a3UanKxq9TP
-         oJaGRINBdSQ7IFq/KxDSMM4VKF+YiUypylENLzZachNs7Y6/SvQvNvac9ICYcUTGg38o
-         Up9P9VXwCjiplAAn0twx2VPw2m4MvPHk++6tXNPnA+eSdIfLmtT2IDDk+pmE3F+Xhg45
-         ZxUpHn3g69A1lfr/LwDUNORISfR940gL0f9FtxE1lxxHemZP/g7WRkJiFGmU3vmlq27l
-         vgLA==
-X-Forwarded-Encrypted: i=1; AJvYcCWVtSNEhYPMMFgI2rNW8Wp34dPFQ3vdvGHv9120/F5OVqM8dAO5KyZUFjsONGtvdzDg5L/Xf+Svcg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyzQMsmYCvLusv0ZsAvxy0IYTIsePj0zbmJolLGK2MjaAwpveJa
-	FcApsu/2tmfb+n9FkoqUY8XipMXgve9zcKA6jRGxiz8M/E5TE5WUtf8yjXbM7Tk=
-X-Gm-Gg: ASbGncvKdOUYqqbXrEJieuMPIQr0W3qZ7ED0FZ7+gtpl7DnflsIht3bauRRhkS0DRf+
-	4LHLu/YrYLmp3vfXhh2kED/o2Xr+E1eRmgsGAC0IWtWWZjCdEaTUh0QRuRG2Qo3skMdYhAwbAsA
-	f7YM3xsAxjsdDoeCBttmEjVTafQgSHvsEp3SvgZeStKW26b3pdOc7gyUS6Kse4sQKrfwxI/HRqn
-	TlBCXxgdVCEXxF+7c8FeZFkq/C73WH3TWLpu0mVqEieheB5C+SpgdqYKe9sS01Vg8aF5VGjuuMW
-	6gfrPdO26m5DCyVv4A==
-X-Google-Smtp-Source: AGHT+IGxMLDlIMSaw3Z8cWeu4NnMK2JLensF+qmNnQk7oU5j+h5mOuW/KaB0EYuSyfJh18W/YDA4sw==
-X-Received: by 2002:a05:6a20:9188:b0:1e8:b17a:a556 with SMTP id adf61e73a8af0-1ed7a5f9136mr35623177637.15.1738579908746;
-        Mon, 03 Feb 2025 02:51:48 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738580060; x=1739184860;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Zgoepmzow92M5TjxAmUfNkYISiNmmdFHKPfzWUElINg=;
+        b=jnX5bKf7c0Xn8uEJ4pptjWCK7FKHFoCuwunuiPllCXojMnwdjIt96duFL4QhHnsDXf
+         VWRgNfYTBPTPtMNTNiGnnaiEy/VLQhQqIMxsVzSA1rvbb1bjDN3a+wkv3jYGssGXC89a
+         lpLkeRyUw335Nj/tIN89mlz8MhF7Z7lmrud5k4jZnDgfXhodbWw0HmtMXvpCLNanLkrA
+         psbMhW6KoOGTrIL+0pJDuAMPCdNIjkbyYIFA7at/kMXcvUIS0c6o3Df/QRcn3izwXLiX
+         xVcFg4mx1vPHyYGxD46E7nw5vXab305bqjB1SUMuPLc7tVS764WIwasXZF9w3gIq7x9p
+         zHWw==
+X-Gm-Message-State: AOJu0YyBrYqNowh+Z/WZAeFymr1kMuyuse9KVvo6URc3lDbLKRRrFNKi
+	09iWGH5yQL7/wgq8nj1ewaIlhAGIOj4h0PmXMjYditCfoyXYJqZlRrHbGz3uTNs=
+X-Gm-Gg: ASbGncsjBP/g7Hon2BSShcJtu/KXl7Owb+//QSHUer9EULB4c8LdNza/3e70L5ihPPX
+	KW2UMxENtdYUvPCkbTK/R7+edPH4FP/NC3p8643Mb4r/wnpSvXZqL91Ibihcopf3XA6Ol/Np2Hd
+	39Az5nzoqIBlgam3cg/qioxZICL7+wWH1kl4YwWfWdRwIvmJxxWVOkdekhTRzoTC/u5v3KZ4C02
+	aIBWvqcKsv0mJlByDqL7X4jPpLFw1mTRE3gFWNDW4ZRsLFRFzJcdwAuwy79jY9NQ5blQ2PLdXLc
+	aC7ObThMQarvi0GjzA==
+X-Google-Smtp-Source: AGHT+IFqfHSwetvYfA/FzIoXp3I2Mqr/lsbSnyEV3QTlwurazJwiw64SL9y1p/I4Ms3nJKLMSyjBcQ==
+X-Received: by 2002:a05:6a00:acc:b0:726:f7c9:7b28 with SMTP id d2e1a72fcca58-72fd0be1799mr37521013b3a.8.1738580060025;
+        Mon, 03 Feb 2025 02:54:20 -0800 (PST)
 Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe6a1a766sm8026943b3a.161.2025.02.03.02.51.47
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe69ba3c1sm8364034b3a.108.2025.02.03.02.54.19
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 02:51:48 -0800 (PST)
-Date: Mon, 3 Feb 2025 16:21:46 +0530
+        Mon, 03 Feb 2025 02:54:19 -0800 (PST)
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Dan Carpenter <dan.carpenter@linaro.org>
-Cc: zuoqian <zuoqian113@gmail.com>, sudeep.holla@arm.com,
-	cristian.marussi@arm.com, rafael@kernel.org,
-	arm-scmi@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v2] cpufreq: scpi: compare kHz instead of Hz
-Message-ID: <20250203105146.6yuzypgb65bu4xrq@vireshk-i7>
-References: <20250123075321.4442-1-zuoqian113@gmail.com>
- <20250125084950.1680-1-zuoqian113@gmail.com>
- <967a5b3e-197a-4b90-9fe3-9b10782d677c@stanley.mountain>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Christian Marangi <ansuelsmth@gmail.com>
+Cc: linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH V2] cpufreq: airoha: modify CONFIG_OF dependency
+Date: Mon,  3 Feb 2025 16:24:15 +0530
+Message-Id: <9d51d2710061dfa7f2568287c6ed125b858b7318.1738580005.git.viresh.kumar@linaro.org>
+X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <967a5b3e-197a-4b90-9fe3-9b10782d677c@stanley.mountain>
+Content-Transfer-Encoding: 8bit
 
-On 25-01-25, 16:04, Dan Carpenter wrote:
-> On Sat, Jan 25, 2025 at 08:49:49AM +0000, zuoqian wrote:
-> > The CPU rate from clk_get_rate() may not be divisible by 1000
-> > (e.g., 133333333). But the rate calculated from frequency(kHz) is
-> > always divisible by 1000 (e.g., 133333000).
-> > Comparing the rate causes a warning during CPU scaling:
-> > "cpufreq: __target_index: Failed to change cpu frequency: -5".
-> > When we choose to compare kHz here, the issue does not occur.
-> > 
-> > Fixes: 343a8d17fa8d ("cpufreq: scpi: remove arm_big_little dependency")
-> > Signed-off-by: zuoqian <zuoqian113@gmail.com>
-> > ---
-> > V1 -> V2: rename freq to freq_khz, change rate to unsigned long, and
-> > update patch summary.
-> 
-> Thanks!
-> 
-> Reviewed-by: Dan Carpenter <dan.carpenter@linaro.org>
+From: Arnd Bergmann <arnd@arndb.de>
 
-Applied. Thanks.
+Compile-testing without CONFIG_OF leads to a harmless build warning:
 
+drivers/cpufreq/airoha-cpufreq.c:109:34: error: 'airoha_cpufreq_match_list' defined but not used [-Werror=unused-const-variable=]
+  109 | static const struct of_device_id airoha_cpufreq_match_list[] __initconst = {
+      |                                  ^~~~~~~~~~~~~~~~~~~~~~~~~
+
+It would be possible to mark the variable as __maybe_unused to shut up
+that warning, but a Kconfig dependency seems more appropriate as this still
+allows build testing in allmodconfig and randconfig builds on all
+architectures.
+
+An earlier commit, b865a8404642 ("cpufreq: airoha: Depends on OF"),
+tried to fix it incorrectly. ARCH_AIROHA already requires CONFIG_OF, so
+this change does nothing, and the dependency is still missing for the
+COMPILE_TEST case.
+
+Fix it properly.
+
+Fixes: 84cf9e541ccc ("cpufreq: airoha: Add EN7581 CPUFreq SMCCC driver")
+Fixes: b865a8404642 ("cpufreq: airoha: Depends on OF")
+Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+[ Viresh: updated commit log and fixed rebase conflict ]
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+V2:
+- Fixed rebase conflicts.
+- Updated commit log.
+
+ drivers/cpufreq/Kconfig.arm | 3 ++-
+ 1 file changed, 2 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/cpufreq/Kconfig.arm b/drivers/cpufreq/Kconfig.arm
+index 0ee5c691fb36..9e46960f6a86 100644
+--- a/drivers/cpufreq/Kconfig.arm
++++ b/drivers/cpufreq/Kconfig.arm
+@@ -17,7 +17,8 @@ config ARM_ALLWINNER_SUN50I_CPUFREQ_NVMEM
+ 
+ config ARM_AIROHA_SOC_CPUFREQ
+ 	tristate "Airoha EN7581 SoC CPUFreq support"
+-	depends on (ARCH_AIROHA && OF) || COMPILE_TEST
++	depends on ARCH_AIROHA || COMPILE_TEST
++	depends on OF
+ 	select PM_OPP
+ 	default ARCH_AIROHA
+ 	help
 -- 
-viresh
+2.31.1.272.g89b43f80a514
+
 
