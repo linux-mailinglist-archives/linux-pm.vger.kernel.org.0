@@ -1,114 +1,156 @@
-Return-Path: <linux-pm+bounces-21251-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21252-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50305A25208
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 06:32:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3914EA252EF
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 08:23:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB7D018842DB
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 05:32:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CE6141883EE3
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 07:23:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721BD38FB9;
-	Mon,  3 Feb 2025 05:32:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7813E1E766F;
+	Mon,  3 Feb 2025 07:23:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="IhEt0J1/"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="tPjM0uN4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllvem-ot04.ext.ti.com (fllvem-ot04.ext.ti.com [198.47.19.246])
+Received: from mout.web.de (mout.web.de [217.72.192.78])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46794A31;
-	Mon,  3 Feb 2025 05:32:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.246
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E8E31D95A9;
+	Mon,  3 Feb 2025 07:23:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738560753; cv=none; b=TxHoQWriQ/uXwnJF7LZXXR3yrD/Eu4lEc61yQzx/oMH+Ubkuu4cYnrVuMDLkQ6xizTaaHoJEaj5UYVBz7eZ2ZaHk7PSxhc9x/6XEZXIh+w+ZPD1sdEkk92tK5vHB37YOqVWJmpn45+mtvif1Dn0UVfB7Kdwhznz85u2RlPwN/Po=
+	t=1738567395; cv=none; b=MvQ7fvaIQuH/AnrO2OJqPohyoK6KYGrpcwiv3Jb5cd+NChAJsxyo2FMqr7lHc75bKngRmFopRS/jqfmUDG0E1BP5oKhwJuZfCOCknIZL3pHFR8B2el0R/YITw+akonKuA+0VJzFZvfvVWxjhiFyhU9z0IGoSJhk+ip9/Y6Q28qU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738560753; c=relaxed/simple;
-	bh=eGOn5dFfGAgVayjEzz+z3LRXFqGKO19ZQPoQCSAh5PM=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VbhWq+ibKFHGr2LqarrOzapa/ZgVJgXinZbZKJUCATgWRE4g44H1w9SrfdYNFCOkGXixktRySrNiT//6qIprxhrM3abT0n1ibKLGStQynpyL0JEadMYwtScezI9fUG+jS9vpJfymkxr3CcOSrRLQwkn6+92BdvKU+iZKjv8LE0o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=IhEt0J1/; arc=none smtp.client-ip=198.47.19.246
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from lelv0266.itg.ti.com ([10.180.67.225])
-	by fllvem-ot04.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 5135WABI2079317
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=NO);
-	Sun, 2 Feb 2025 23:32:10 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1738560730;
-	bh=sJRCeXGc4CmZX5CorqP/Un236xITOhXU5/Sey4Z70Gc=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=IhEt0J1/bmpse9TL/fuyWBscEypWazoerivCRiD2WQRmva9xbW6XL3QTNcZhKNT0w
-	 OEbogSKsQWmx+habwrp7dO/4TQ35wsj3fCgkWAS8BuogrhZ4TytHNRSG2TEtsZhoXP
-	 CaLx/PPTvMw2GuWjQJTjqRphY1gD0q25xARWvL1M=
-Received: from DFLE112.ent.ti.com (dfle112.ent.ti.com [10.64.6.33])
-	by lelv0266.itg.ti.com (8.15.2/8.15.2) with ESMTP id 5135WADP081440;
-	Sun, 2 Feb 2025 23:32:10 -0600
-Received: from DFLE113.ent.ti.com (10.64.6.34) by DFLE112.ent.ti.com
- (10.64.6.33) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Sun, 2
- Feb 2025 23:32:09 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Sun, 2 Feb 2025 23:32:09 -0600
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 5135W8x0077312;
-	Sun, 2 Feb 2025 23:32:09 -0600
-Date: Mon, 3 Feb 2025 11:02:08 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Keita Morisaki <keyz@google.com>
-CC: <rostedt@goodmis.org>, <mhiramat@kernel.org>,
-        <mathieu.desnoyers@efficios.com>, <linux-kernel@vger.kernel.org>,
-        <linux-trace-kernel@vger.kernel.org>, <lpieralisi@kernel.org>,
-        <sudeep.holla@arm.com>, <rafael@kernel.org>,
-        <daniel.lezcano@linaro.org>, <linux-pm@vger.kernel.org>,
-        <aarontian@google.com>, <yimingtseng@google.com>,
-        Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH v4] cpuidle: psci: Add trace for PSCI domain idle
-Message-ID: <20250203053208.l4o2o5g3imdzl6vj@lcpd911>
-References: <20250202104211.2764016-1-keyz@google.com>
- <20250202104608.2766080-1-keyz@google.com>
+	s=arc-20240116; t=1738567395; c=relaxed/simple;
+	bh=pL2jDbwM2tnoDPxkIcout16iJtvsCV65sn/2QOSZBsY=;
+	h=Message-ID:Date:MIME-Version:From:Subject:To:Cc:References:
+	 In-Reply-To:Content-Type; b=ua6r/yBjKdafsset+0V1csFIUecxXaCFLbNR3twTR1JbRXRHtifd+HjbfUQ9/dlO82O8WQOi8SzAqnCO3YMADfpzKIpq8xdNa0JNCxzexm9xXNJq0L8KlHeelrXqtcClg4QMrMuWWDmSnbtomqHSBJhoLgFpxMxOoEwFvulvZw0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=tPjM0uN4; arc=none smtp.client-ip=217.72.192.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1738567338; x=1739172138; i=markus.elfring@web.de;
+	bh=pL2jDbwM2tnoDPxkIcout16iJtvsCV65sn/2QOSZBsY=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:From:Subject:To:
+	 Cc:References:In-Reply-To:Content-Type:Content-Transfer-Encoding:
+	 cc:content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=tPjM0uN4I/GdAFp31++PG26z4Vto4PmHwwKCB+iJ4HIbRwu5joJXwvRpwBps1Vk5
+	 BsR+TBN1/gKQUNN6ZGncM+nvFp4kAyRHyxYGr6ANswR2VhX+Sk5BqHpIiTEwtoqV7
+	 CYW45ezkvs7otl2YrqdQlFPAZudQCI5wDpQYRd/iR3EILMUFNGcUyJSc7iDH9JyOD
+	 FbUpses7uVefH5D3IUULvsEYhibYuqoSt+k+uleYwhAQhNpVKuTLS08qGiRMwzU3I
+	 whTVatnsqGvJVTwBvBpdjC7mCZHIZcsSw0Qqlo/EOLaII4kL6LfqeSBy35+o25YKu
+	 kUv/J7OgQXFBoRqg1w==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.70.29]) by smtp.web.de (mrweb105
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MjgX3-1szyFN23FD-00mF3n; Mon, 03
+ Feb 2025 08:22:18 +0100
+Message-ID: <875fe1a2-64b4-43f9-8b6c-60e416a37248@web.de>
+Date: Mon, 3 Feb 2025 08:22:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250202104608.2766080-1-keyz@google.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+User-Agent: Mozilla Thunderbird
+From: Markus Elfring <Markus.Elfring@web.de>
+Subject: Re: [01/16] coccinelle: misc: secs_to_jiffies: Patch expressions too
+To: Easwar Hariharan <eahariha@linux.microsoft.com>, cocci@inria.fr
+Cc: kernel-janitors@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
+ linux-block@vger.kernel.org, linux-btrfs@vger.kernel.org,
+ linux-ide@vger.kernel.org, linux-nvme@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-xfs@vger.kernel.org,
+ ceph-devel@vger.kernel.org, platform-driver-x86@vger.kernel.org,
+ dri-devel@lists.freedesktop.org, ibm-acpi-devel@lists.sourceforge.net,
+ imx@lists.linux.dev, kernel@pengutronix.de,
+ linux-arm-kernel@lists.infradead.org,
+ Andrew Morton <akpm@linux-foundation.org>, Carlos Maiolino <cem@kernel.org>,
+ Chris Mason <clm@fb.com>, Christoph Hellwig <hch@lst.de>,
+ Damien Le Moal <dlemoal@kernel.org>, "Darrick J. Wong" <djwong@kernel.org>,
+ David Sterba <dsterba@suse.com>, Dick Kennedy <dick.kennedy@broadcom.com>,
+ Dongsheng Yang <dongsheng.yang@easystack.cn>,
+ Fabio Estevam <festevam@gmail.com>, Frank Li <Frank.Li@nxp.com>,
+ Hans de Goede <hdegoede@redhat.com>,
+ Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+ James Bottomley <James.Bottomley@HansenPartnership.com>,
+ James Smart <james.smart@broadcom.com>, Jaroslav Kysela <perex@perex.cz>,
+ Jason Gunthorpe <jgg@ziepe.ca>, Jens Axboe <axboe@kernel.dk>,
+ Josef Bacik <josef@toxicpanda.com>, Julia Lawall <Julia.Lawall@inria.fr>,
+ =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Ilya Dryomov <idryomov@gmail.com>,
+ Kalesh Anakkur Purayil <kalesh-anakkur.purayil@broadcom.com>,
+ Keith Busch <kbusch@kernel.org>, Leon Romanovsky <leon@kernel.org>,
+ Mark Brown <broonie@kernel.org>,
+ "Martin K. Petersen" <martin.petersen@oracle.com>,
+ Nicolas Palix <nicolas.palix@imag.fr>, Niklas Cassel <cassel@kernel.org>,
+ Oded Gabbay <ogabbay@kernel.org>, Ricardo Ribalda <ribalda@google.com>,
+ Sagi Grimberg <sagi@grimberg.me>, Sascha Hauer <s.hauer@pengutronix.de>,
+ Sebastian Reichel <sre@kernel.org>,
+ Selvin Xavier <selvin.xavier@broadcom.com>, Shawn Guo <shawnguo@kernel.org>,
+ Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, Takashi Iwai <tiwai@suse.com>,
+ Victor Gambier <victor.gambier@inria.fr>, Xiubo Li <xiubli@redhat.com>,
+ Yaron Avizrat <yaron.avizrat@intel.com>,
+ Ricardo Ribalda <ribalda@chromium.org>
+References: <20250128-converge-secs-to-jiffies-part-two-v1-1-9a6ecf0b2308@linux.microsoft.com>
+ <e06cb7f5-7aa3-464c-a8a1-2c7b9b6a29eb@web.de>
+ <632be2db-78d2-4249-92f0-3f60e0373172@linux.microsoft.com>
+Content-Language: en-GB
+In-Reply-To: <632be2db-78d2-4249-92f0-3f60e0373172@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:unmzcva3DfFDe8J5T/SEse13ECLrm00SFr+jMbswdVLKuVhkuYO
+ KrTlmHqHj2q9ogvXNY+OT9rpa/y77P4OKcbhTRE4HQfNnHl3vyWWfzK02lPKs/doF/0oo/N
+ zaSBPOg0Tas1K5KCmS6LhNSs0R2vs1xLG29Gypkmwc3S031NZBDDMgkSSAGcQ2a7o9N0Sjo
+ 97PGMtERfjxkxxcBQ4+cg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:ttbGuD59yWE=;aR8uoScoWimrSRCmRkUV4SeMiC4
+ W79hOF4H0lhnQHYtzx3m5sNeqoeEjllyRz8YO7qpX8lmmz5+tS5bf6f8vLVqYn9Kaf48xHqma
+ GMO3bXWom5xZ+oVyIxDcLJs8p7PgYEA5ypLybnd2/T+GawWIBGs+YXCKBHx9HvPqPogF+ZWbt
+ K+TyhUDO5bQsBtbetxS3RKRmFHZaezGpeiwamE4tJBcayt8rdci1cnRAVxZjRrnyUeMDPgD6w
+ WKKXvMYQI9xNIms2eXtV9M1bxbS+lhSfb6gN7tJf2LwY4iDuINHUwQnKRfA26lORiGW/UmxpA
+ VDJglYJvc0HJJqymSDraa9W3b84J+5STNVqd3FDiOGXm1u1Lg5SvWgA1viCB3U/T6eNlmBKxu
+ cW3HuColf7JWTbOCtYKQMticsxdqTUl6/icidZDIKeZA/6BTvCAJ5yo10i++PE5kYqE0mQ1ho
+ 4NVa2X6CB+FFnhhsQwwWTKFynfvg6dK/P1RIrFw78t5WsC8zz4qm64j7mnJS57vOm+HlNeNlJ
+ dATJc1VHQDMoj9hjzdFzfzgZw9h5kyLYh8oVruDNFJ/+FH75gEuWoZlsU8KTOZQFV7EoxkSYe
+ EVfenvSMPnmSzjQa+vNyzYbKtqQOPF88CdXdnAAym8guV56rCHkNBsyBuIPwADo10ZAjBpNzA
+ OBRBkYWMqMkvqRqoLGiggpeqewsL9YdiEBa4oesyjAGQIw7IJ8/0snpG+f+cuMaO7kmaB6nHE
+ nOpJS6Z9qzdfoJVXgs+47u+CzVBhVhWLqb0XCPk9jzzEHfYLkrIHTUIhakYc7nZUEAyJDC73r
+ /hzw3PToNCTxBrUrwiTLOAoOxpa5fcHyJWusNq5FrbAxgole7higv+1sBb8NprFHptypkZ+Cw
+ iq1xF2BAP1xbwfSfH760NHJ4EMEjOMI/iDzAJwPxQkxSlaDBQ4Gbv5ujQYBd3YMxgiuIGsl/w
+ MdFuwIfMQU5oEMCItKFmMAIf7k7pEPQrOuKnG6AZ/LH/H2vUdfQfPyq8wJxV64EFZr9eSy6wJ
+ Oy+t8DI1kdV301z/zAZQ8OpU2xnB8IxTLqrcbF63n+gYPUELXtWaXOoIbr5o0TxUA7XsBRCAL
+ PYOoStHMrzPoz4tMq6bqU3gJQfZq4+hT0/1xGvJHF3EYYHdBGWrL7T8ngj9APgUClmkiUid9u
+ qhcbZXpp66SsJcS9vzL/rjOnWJmMD3M+Ha1/NMDr7Hx2giHnnM35m2TcteG0N0JcefSzkj9ds
+ f+5nMopNsnV7A3egbviqSJLT+UcbhaOvEXNf4avchAw4jPQ3zsTkczrYbZ8buav0UwNGXIMsG
+ NwU97T/pGW1qLPWQZzQJs0EPaXBDrr4upn8u/GPLFGYGs6cf+BXQ4GT4mOQgByfpkCi
 
-Hi Keita,
+> As it stands, I'll fix up the current rules in v2 following your
+> suggestion to keep the multiplication in each line to allow Coccinelle
+> to use the commutativity properties and find more instances.
 
-On Feb 02, 2025 at 18:46:08 +0800, Keita Morisaki wrote:
-> The trace event cpu_idle provides insufficient information for debugging
-> PSCI requests due to lacking access to determined PSCI domain idle
-> states. The cpu_idle usually only shows -1, 0, or 1 regardless how many
-> idle states the power domain has.
-> 
-> Add new trace events namely psci_domain_idle_enter and
-> psci_domain_idle_exit to trace enter and exit events with a determined
-> idle state.
-
-Thanks for this, will really ease those psci idle debugs for everyone!
-
-> 
-> These new trace events will help developers debug CPUidle issues on ARM
-> systems using PSCI by providing more detailed information about the
-> requested idle states.
-> 
-> Signed-off-by: Keita Morisaki <keyz@google.com>
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Tested-by: Kevin Hilman <khilman@baylibre.com>
-
-Reviewed-by: Dhruva Gole <d-gole@ti.com>
+Corresponding software development challenges can eventually be clarified =
+further.
 
 
--- 
-Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+> I'll refrain from implementing the report mode until current instances
+> have been fixed because of the issue we have already seen[1] with CI
+> builds being broken. I would not want to break a strict CI build that is
+> looking for coccicheck REPORT to return 0 results.
+
+You got into the mood to test support for an information in the software d=
+ocumentation.
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/dev-tools/coccinelle.rst?h=3Dv6.13#n92
+=E2=80=9C=E2=80=A6
+Note that not all semantic patches implement all modes.
+=E2=80=A6=E2=80=9D
+
+Regards,
+Markus
 
