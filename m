@@ -1,168 +1,184 @@
-Return-Path: <linux-pm+bounces-21314-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21315-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 162F2A2646A
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 21:31:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1802AA26571
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 22:19:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 86AA816385E
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 20:31:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F2F716480D
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Feb 2025 21:19:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BAD7720DD5C;
-	Mon,  3 Feb 2025 20:31:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F082520E71F;
+	Mon,  3 Feb 2025 21:19:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="P+IPzuv1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Z4DBgFuy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A533153801;
-	Mon,  3 Feb 2025 20:31:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C2E71D5159;
+	Mon,  3 Feb 2025 21:19:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738614696; cv=none; b=jfb6en408xf6d14nqVOCfKBK+h9KlJ1aQUNWl4qjdDmy8agmWms1nXxCSPT+M4+JDxpXAUkppi/He5s4+sRefR/S7XBaa+fk6Rwalr7mCFS9QzWqo0fI60Q2v/aSjzuQYRRXc8v7Nuf9i7axyWJw6TjA569YKWr+9D/6+WFvodA=
+	t=1738617576; cv=none; b=iXgQg4xCpSAd/QThsJFWPgvui3QkIawazEcq2cPLNpWZeWRuiqTzdeFcK/KKgXRmLN2Reoi53N9J4MRr92MqZWnAsZ7nqOdXIny2HtDpUJLHb7Z0nhK6vmhtJKhFLALHGu8hBOVvixK3Lir7if4Pb7SDEnaOLEPsivUrXVISNYw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738614696; c=relaxed/simple;
-	bh=hKS9hHDte0poh5qGTVY5mGyAl4OwczulSl9FzFwNUS8=;
+	s=arc-20240116; t=1738617576; c=relaxed/simple;
+	bh=ofj6JP1j6Y98Ose9xyS7S3SdHxczj7+yv4cnT8ALfhw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iVypoul6H5jSVSgUIIP430mVtSy5wOhgxUacR0y2rHBEs6UtPmlthcNdBn8T1NWrlcB8U+I4zXDHahj083FO2K2mzVjslmusJXaOWbHGeNSQtRmLAXGz/tfbewA7PvbNkrGPW+ti+kYLiOjvPca+1z1CmbJsjkSeJzls0vNi710=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=P+IPzuv1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6BACC4CEE2;
-	Mon,  3 Feb 2025 20:31:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738614695;
-	bh=hKS9hHDte0poh5qGTVY5mGyAl4OwczulSl9FzFwNUS8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=P+IPzuv1DOTI+P0BFI1hKwLg6vk3pcDTmJfa/YxM0utjU0Njq8lC7y6D60+iqgeq1
-	 pCo15/8CTUQnrE043XCyexR9MMNM/+6ehzQQ1+Id00CfOxrgRIBCjy4Wn+GdL6S21S
-	 hnbnNBFThgIeUwR7crots0uFZhXM2A/0SIJ8xI+GX4Ik8EFo7sgKWA/dBNCZLB95N+
-	 wWGEklCaa9fNCbyhAK5AMnnBwlcvVwrdgru0vi5QJeVMqAIxJr2BPAUnfMgHbU0QUv
-	 yeQh1kOks9MdbiavEf4F+K5kxv+lqcyD38P0F4881EvxvGIsYGld5rxtINltcLjF8b
-	 RjNy3Pi9zfucQ==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-5f321876499so2544174eaf.1;
-        Mon, 03 Feb 2025 12:31:35 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUBMKLfq3EX6TWCMxFXpnUdRzoFqKhaonbzDfyAkTVA1wLTbmnOC8wIIRrMSDCEg0ljLvlMcnkN+CfIJgs=@vger.kernel.org, AJvYcCUFkClieTajQc19YPYSm5Z9k9CN+3JQSeqAS9nQXmJlbT5GeO+J233EiWjSW/7S5bp2GqVpEN5/2GQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxk1/zHKDpxmtA6+0sXlJ+VzCH49RbribPMX/lGAlflklDdlCxd
-	42G0iycAJJXKkmFax8gIS8OWu+gVuEILHHBu3SYC70zvB7dRL+WS/gCNi0V4kz3KwE8i99l/ePg
-	Gnih52GTR1yM4cxNzF/Q7fm8ZGnw=
-X-Google-Smtp-Source: AGHT+IEkalc8T8PcfxcP6bu+F9tv4889ULAW6/eBwNH+NL0R02igrcnEIMOC0V7MaxgprUQuPCkTZXoowId1r+TXU0M=
-X-Received: by 2002:a05:6820:1993:b0:5fa:61a7:16b8 with SMTP id
- 006d021491bc7-5fc3bed7ec7mr533972eaf.2.1738614695109; Mon, 03 Feb 2025
- 12:31:35 -0800 (PST)
+	 To:Cc:Content-Type; b=TKTuiuGpzVOBh1Dmzbws5NPGBxWbbUZoprisnpLR3uYp3J5NMmAra56Xptd067Un8wDa5HkgjpbPOA4VpC96wpfSArU1zBXTj3r2P1rd7lMh9BNRQ7ceVCJx2Ev0LklG/MV0VEqOL/xHjcxEJWirmZnMUoC+XXhCdCxUbM8DJbM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Z4DBgFuy; arc=none smtp.client-ip=209.85.216.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ee8aa26415so8446300a91.1;
+        Mon, 03 Feb 2025 13:19:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738617574; x=1739222374; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=E1RprFycDuHJldRn/ezrS+F5IM4jHFkaXUl211fTz08=;
+        b=Z4DBgFuykrZqDu1upZJ84eRLEMqLfFKX/p8Ue4Bt3alKw64qkzVBSfgHnFDYNSR4Pm
+         Ttkm6F75KIX5misHMBY4EHbwf8BPPYI4IE06iCzFAQAZk8gPAigau7bDQmT70Ahcfbmh
+         qHl67eu/+a7nB1hBb9MyIENHHgOX5VKvDaUGaCTAZzuD7Cg+MIe9SB90dp6qXVovb0Gu
+         ymZswTHlpw75FlMKqwOfDUvos/aK3ZzSaPnodIcSmZtMj7GRectKgSmhphM+BqXcScm5
+         LjtP45aLtqdjsiKDE+AOV2Sj90RwMvWEZvH/qUMjb9vAaLbM+t+YUEr7eodgMh1bLeLo
+         J/GA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738617574; x=1739222374;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=E1RprFycDuHJldRn/ezrS+F5IM4jHFkaXUl211fTz08=;
+        b=jeO/QL3x+2GbXR984ZBzqVfLkyhNzyKQRvHIrODjUGlvICPSBETdt+rfABgo56y1gZ
+         r210AJbYDiUEHROM+9Ackp4Wf6LRQzOp3QPJ/8XIskx9qlyFaf4ooQ4t52OoBDX+K4sY
+         Fvfs/M3QGrSZL2DeZIkaIBVOwMSQBnBA6m3kMk1SUt0+sNmn2Oq8/NzgJF5J7vckJQ7H
+         ZaS8RUDxF320PujJOz6MqVU3J+WUTYmGNlB1ZFvn0YNx1BNBQHlO956NSwG6d3NEUZ1M
+         SjOWn3nM8ht2OoGq7LBgOkYCK4h7NB56lWN0MS4MPkxvFJ9j1YGLH+RA2CAXTGz6r7+w
+         JTww==
+X-Forwarded-Encrypted: i=1; AJvYcCUJpe3ycE+G6sip/Dz20D682kGflFR3mKSBiLkRiiVJastzU05Dg6Fa6hk2+JeIOz4YgFwN8mY5JhxnrMw=@vger.kernel.org, AJvYcCULfmGoMI0QBvWeqGZ5v1fbvZ/vnXU2xrODroYCp8rV4y8GaQIPWKI2MqT4PynvhFbLAVqn9gFET8Cp7A==@vger.kernel.org, AJvYcCUdekDuxZgEFzXSpphBDQRoPkkefDgZRqdEopSBOrBtFSTsp72lay3/c+/l5uM3p7vM4n71rrnvk8sQ8iA=@vger.kernel.org, AJvYcCV4bj0n81xB+tYZw/illWJdbRSNR2w83zW+KfPO7//S6JJl1Pj93eNg4m1GxztlOV5lV4vteNSQ7gZkNg==@vger.kernel.org, AJvYcCVFQyQj+7TEr7T+jZFoGcQyyXESPKljizShOBGfb0ypdnufH9VPZ7f6LUyC9JTvwEB9Ma6EjBo+WFGe@vger.kernel.org, AJvYcCVIqofbX745Us/vOLeigmClTYtKFg9STRQmzoW8SwOLkYxey7A82vktd/NEIVhye3c6+PMM++4AsjvmnSM=@vger.kernel.org, AJvYcCVmFm4MxsMoylNE4tKEPiU0fqaLiJRIp6AilynKGdZD9nTlbdo41UJ0UHYgVsm3qQ6a3GDng0vPt2XD@vger.kernel.org, AJvYcCWKVHdaVzta6WsTGcU4oNgTegxlD8TKP5zn9BK44Oxvm7cp8hFA8C0TqyN9XH08Z8TEtrhm27kUEQVd@vger.kernel.org, AJvYcCWmQQenG4bnnOcy3lVw+BxPBM7PKEv/F1UfPbcrKvu2gZ8wpuV7ltQEubyEN+FmsRLvmHqt4E1nMsI=@vger.kernel.org, AJvYcCX1aQy4lxshEe0P9tYftRsWGvTh
+ JVX/ZMPMPpe6KxbceJUyAr50IONQNEYuLsMvVVoKso58+6ZPRTl8@vger.kernel.org, AJvYcCXBnWUGrvZZrWnUn2D0Rxg1t7fgp/ghTiHFlqKMSt0TCYPjvIeofyDG7/XC3Q7pXvOz01YDABprXOUK2MTZNSaeDu3l+A==@vger.kernel.org, AJvYcCXuNT1kngL+byCHKiB+uAy67tygETz8kqTV8QsTm0Zcc4TX9MhuGEhEZtOFihwchSPS/2YJGMheZErHqv/o@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYnCRY+jMAfk8JzXNQ5wlzlPfUIzlNI9tmNgFDz9glsQgIGziC
+	ChHolYga5JsbVztE4TFLnXnPzl6QsPL1s/sp+bzH8VXiMpmjn9wl/xQ8dE8iLENwxtzB668cgKu
+	wLDB8ZwS1gT4Kjwizv+XMURBFfLo=
+X-Gm-Gg: ASbGncvA4/hiQFF1O/D6wMn+3b4gKQaESvApR1hJ54ApFW85I6VQEzBvTbnR6gXuUMW
+	AY3/ewbQHwH5br3Yx9P7hfs58uY419Tr+wi3fTKQe54jqWcrlncvKtaxKsCGunFIeRb7wbbQv
+X-Google-Smtp-Source: AGHT+IG/z3EJhnf9SR0K4H9KlI981FGgmyEgJkvQWHpkkih0UJEnWjGg3KJxlOWE94AU8gGejkz3MNO9Uh3+nXXaTBI=
+X-Received: by 2002:a17:90b:5146:b0:2ea:3f34:f18d with SMTP id
+ 98e67ed59e1d1-2f83abdebdfmr37965262a91.10.1738617574433; Mon, 03 Feb 2025
+ 13:19:34 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJZ5v0iKmynOQ5vKSQbg1J_FmavwZE-nRONovOZ0mpMVauheWg@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iKmynOQ5vKSQbg1J_FmavwZE-nRONovOZ0mpMVauheWg@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 3 Feb 2025 21:31:23 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i=yBSFW82E=s=mx7ztVzmnoUwbxkDRnYyDztAWK9VcsQ@mail.gmail.com>
-X-Gm-Features: AWEUYZln1HaqrQ7HyD2CNLhMUGnhBd0yYFeGqX09_j-6xNSUxaZ5RuoHcZdBECw
-Message-ID: <CAJZ5v0i=yBSFW82E=s=mx7ztVzmnoUwbxkDRnYyDztAWK9VcsQ@mail.gmail.com>
-Subject: Re: [Regression in 6.14-rc1] System suspend/resume broken by PCI
- commit 1db806ec06b7c
-To: Bjorn Helgaas <bhelgaas@google.com>, Jian-Hong Pan <jhp@endlessos.org>
-Cc: Linux PCI <linux-pci@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	=?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
-	"Thorsten Leemhuis (regressions address)" <regressions@leemhuis.info>, 
-	Linux regressions mailing list <regressions@lists.linux.dev>
-Content-Type: multipart/mixed; boundary="0000000000004dd730062d42c757"
-
---0000000000004dd730062d42c757
+References: <20250128-converge-secs-to-jiffies-part-two-v1-0-9a6ecf0b2308@linux.microsoft.com>
+ <20250128-converge-secs-to-jiffies-part-two-v1-6-9a6ecf0b2308@linux.microsoft.com>
+ <dd0358b1-7c8a-4c9e-88c5-2e1db69a3a35@linux.microsoft.com>
+In-Reply-To: <dd0358b1-7c8a-4c9e-88c5-2e1db69a3a35@linux.microsoft.com>
+From: Ilya Dryomov <idryomov@gmail.com>
+Date: Mon, 3 Feb 2025 22:19:23 +0100
+X-Gm-Features: AWEUYZmGyX5TH9PuhG1vFlJR4zNh-9wcNWLcslfb_ZiDi-fTNv4o-akZqj7ScMc
+Message-ID: <CAOi1vP_UTjuF5y5oEVquk45udBZ41WqxQpHufD5oK2wbQkobhA@mail.gmail.com>
+Subject: Re: [PATCH 06/16] rbd: convert timeouts to secs_to_jiffies()
+To: Easwar Hariharan <eahariha@linux.microsoft.com>
+Cc: Andrew Morton <akpm@linux-foundation.org>, Dongsheng Yang <dongsheng.yang@easystack.cn>, 
+	Jens Axboe <axboe@kernel.dk>, ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
+	Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
+	Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>, 
+	James Smart <james.smart@broadcom.com>, Dick Kennedy <dick.kennedy@broadcom.com>, 
+	"James E.J. Bottomley" <James.Bottomley@hansenpartnership.com>, 
+	"Martin K. Petersen" <martin.petersen@oracle.com>, Jaroslav Kysela <perex@perex.cz>, 
+	Takashi Iwai <tiwai@suse.com>, Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
+	David Sterba <dsterba@suse.com>, Xiubo Li <xiubli@redhat.com>, 
+	Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
+	"Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, Keith Busch <kbusch@kernel.org>, 
+	Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
+	Mark Brown <broonie@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
+	Hans de Goede <hdegoede@redhat.com>, =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
+	Henrique de Moraes Holschuh <hmh@hmh.eng.br>, Selvin Xavier <selvin.xavier@broadcom.com>, 
+	Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, Jason Gunthorpe <jgg@ziepe.ca>, 
+	Leon Romanovsky <leon@kernel.org>, cocci@inria.fr, linux-kernel@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
+	linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
+	linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
+	linux-spi@vger.kernel.org, imx@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
+	ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 3, 2025 at 9:12=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
+On Wed, Jan 29, 2025 at 10:03=E2=80=AFPM Easwar Hariharan
+<eahariha@linux.microsoft.com> wrote:
 >
-> Hi,
+> On 1/28/2025 10:21 AM, Easwar Hariharan wrote:
+> > Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
+> > secs_to_jiffies().  As the value here is a multiple of 1000, use
+> > secs_to_jiffies() instead of msecs_to_jiffies to avoid the multiplicati=
+on.
+> >
+> > This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci w=
+ith
+> > the following Coccinelle rules:
+> >
+> > @depends on patch@
+> > expression E;
+> > @@
+> >
+> > -msecs_to_jiffies
+> > +secs_to_jiffies
+> > (E
+> > - * \( 1000 \| MSEC_PER_SEC \)
+> > )
+> >
+> > Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+> > ---
+> >  drivers/block/rbd.c | 6 +++---
+> >  1 file changed, 3 insertions(+), 3 deletions(-)
+> >
 >
-> The following commit:
+> <snip>
 >
-> commit 1db806ec06b7c6e08e8af57088da067963ddf117
-> Author: Jian-Hong Pan <jhp@endlessos.org>
-> Date:   Fri Nov 15 15:22:02 2024 +0800
+> > @@ -6283,9 +6283,9 @@ static int rbd_parse_param(struct fs_parameter *p=
+aram,
+> >               break;
+> >       case Opt_lock_timeout:
+> >               /* 0 is "wait forever" (i.e. infinite timeout) */
+> > -             if (result.uint_32 > INT_MAX / 1000)
+> > +             if (result.uint_32 > INT_MAX)
+> >                       goto out_of_range;
+> > -             opt->lock_timeout =3D msecs_to_jiffies(result.uint_32 * 1=
+000);
+> > +             opt->lock_timeout =3D secs_to_jiffies(result.uint_32);
+> >               break;
+> >       case Opt_pool_ns:
+> >               kfree(pctx->spec->pool_ns);
+> >
 >
->    PCI/ASPM: Save parent L1SS config in pci_save_aspm_l1ss_state()
+> Hi Ilya, Dongsheng, Jens, others,
 >
->    After 17423360a27a ("PCI/ASPM: Save L1 PM Substates Capability for
->    suspend/resume"), pci_save_aspm_l1ss_state(dev) saves the L1SS state f=
-or
->    "dev", and pci_restore_aspm_l1ss_state(dev) restores the state for bot=
-h
->    "dev" and its parent.
->
->    The problem is that unless pci_save_state() has been used in some othe=
-r
->    path and has already saved the parent L1SS state, we will restore junk=
- to
->    the parent, which means the L1 Substates likely won't work correctly.
->
->    Save the L1SS config for both the device and its parent in
->    pci_save_aspm_l1ss_state().  When restoring, we need both because L1SS=
- must
->    be enabled at the parent (the Downstream Port) before being enabled at=
- the
->    child (the Upstream Port).
->
->    Link: https://lore.kernel.org/r/20241115072200.37509-3-jhp@endlessos.o=
-rg
->    Fixes: 17423360a27a ("PCI/ASPM: Save L1 PM Substates Capability for
-> suspend/resume")
->    Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D218394
->    Suggested-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
->    Signed-off-by: Jian-Hong Pan <jhp@endlessos.org>
->    [bhelgaas: parallel save/restore structure, simplify commit log, patch=
- at
->    https://lore.kernel.org/r/20241212230340.GA3267194@bhelgaas]
->    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
->    Tested-by: Jian-Hong Pan <jhp@endlessos.org> # Asus B1400CEAE
->
-> broke system suspend/resume on my Dell XPS13 9360.  It doesn't even
-> pass suspend/resume testing after "echo devices > /sys/power/pm_test".
->
-> It looks like PCIe links are all down during resume after the above
-> commit, but it is rather hard to collect any data in that state.
->
-> Reverting the above commit on top of 6.14-rc1 makes things work again,
-> no problem.
->
-> I'm unsure what exactly the problem is ATM, but I'm going to check a
-> couple of theories.
+> Could you please review this hunk and confirm the correct range check
+> here? I figure this is here because of the multiplier to
+> msecs_to_jiffies() and therefore unneeded after the conversion. If so, I
 
-The attached change makes it work again, FWIW, but moving the
-parent->l1ss check alone below the pdev l1ss saving doesn't help.
+Hi Easwar,
 
-So it is either the parent check against NULL or the
-pcie_downstream_port(pdev) one that breaks it.  I guess the former,
-but I'll test it tomorrow.
+I'm not sure why INT_MAX / 1000 was used for an option which is defined
+as fsparam_u32 and accessed through result.uint_32, but yes, this check
+appears to be unneeded after the conversion to me.
 
---0000000000004dd730062d42c757
-Content-Type: text/x-patch; charset="US-ASCII"; name="pci-l1ss-save.patch"
-Content-Disposition: attachment; filename="pci-l1ss-save.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m6pi4x5r0>
-X-Attachment-Id: f_m6pi4x5r0
+> noticed patch 07 has similar range checks that I neglected to fix and
+> can do in a v2.
 
-LS0tCiBkcml2ZXJzL3BjaS9wY2llL2FzcG0uYyB8ICAgMTIgKystLS0tLS0tLS0tCiAxIGZpbGUg
-Y2hhbmdlZCwgMiBpbnNlcnRpb25zKCspLCAxMCBkZWxldGlvbnMoLSkKCi0tLSBhL2RyaXZlcnMv
-cGNpL3BjaWUvYXNwbS5jCisrKyBiL2RyaXZlcnMvcGNpL3BjaWUvYXNwbS5jCkBAIC04NSwxNSAr
-ODUsNyBAQAogCXN0cnVjdCBwY2lfY2FwX3NhdmVkX3N0YXRlICpzYXZlX3N0YXRlOwogCXUzMiAq
-Y2FwOwogCi0JLyoKLQkgKiBJZiB0aGlzIGlzIGEgRG93bnN0cmVhbSBQb3J0LCB3ZSBuZXZlciBy
-ZXN0b3JlIHRoZSBMMVNTIHN0YXRlCi0JICogZGlyZWN0bHk7IHdlIG9ubHkgcmVzdG9yZSBpdCB3
-aGVuIHdlIHJlc3RvcmUgdGhlIHN0YXRlIG9mIHRoZQotCSAqIFVwc3RyZWFtIFBvcnQgYmVsb3cg
-aXQuCi0JICovCi0JaWYgKHBjaWVfZG93bnN0cmVhbV9wb3J0KHBkZXYpIHx8ICFwYXJlbnQpCi0J
-CXJldHVybjsKLQotCWlmICghcGRldi0+bDFzcyB8fCAhcGFyZW50LT5sMXNzKQorCWlmICghcGRl
-di0+bDFzcykKIAkJcmV0dXJuOwogCiAJLyoKQEAgLTEwOCw3ICsxMDAsNyBAQAogCXBjaV9yZWFk
-X2NvbmZpZ19kd29yZChwZGV2LCBwZGV2LT5sMXNzICsgUENJX0wxU1NfQ1RMMiwgY2FwKyspOwog
-CXBjaV9yZWFkX2NvbmZpZ19kd29yZChwZGV2LCBwZGV2LT5sMXNzICsgUENJX0wxU1NfQ1RMMSwg
-Y2FwKyspOwogCi0JaWYgKHBhcmVudC0+c3RhdGVfc2F2ZWQpCisJaWYgKCFwYXJlbnQgfHwgcGFy
-ZW50LT5zdGF0ZV9zYXZlZCB8fCAhcGFyZW50LT5sMXNzKQogCQlyZXR1cm47CiAKIAkvKgo=
---0000000000004dd730062d42c757--
+Go ahead but note that two of them also reject 0 -- that part needs to
+stay ;)
+
+Thanks,
+
+                Ilya
 
