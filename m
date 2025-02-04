@@ -1,185 +1,121 @@
-Return-Path: <linux-pm+bounces-21332-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21333-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 584E6A27575
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 16:11:06 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E46F9A275B7
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 16:22:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA40C3A3008
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 15:10:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C1B151885A5B
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 15:22:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B2CE213E69;
-	Tue,  4 Feb 2025 15:11:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1418213E8B;
+	Tue,  4 Feb 2025 15:22:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="b0X9vjul"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="pAgKqfmC"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F5132135D1;
-	Tue,  4 Feb 2025 15:10:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7173B207E1D;
+	Tue,  4 Feb 2025 15:22:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738681860; cv=none; b=pYF2xMUf7YQ31i5+2qeNZv29rMxJacFWZCfhNU9cW4R5mvijbGotoCiW1e3R1H1Ltbl9wtDcNCLIubVExiJMHGCVwKSTwznb85BkPYAwrwDWLXTSQzleulADUuzejjsCt51UarMv0Sm5sNn9PKNoDCmKjTkPkXKvVQ96my6dg+8=
+	t=1738682525; cv=none; b=GlmhCijrxbYaepZ6uEopSEuuhqk0dGc4QUPwlT6Be0KOBzSEQ5LPRIJwOymWSkzpvTlRFuvPNTIb6m6Ecje23VvNEUn5/rA8rVYJrWuVkMUrj8DYuPmPRkXscdtmaKpNZp9n3Xeq+1BOLCNhBwDWAouLxajClziGw+//60vAfyY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738681860; c=relaxed/simple;
-	bh=Bzu4jtQIUnIF8X4IR31+HofzpffJIQYmIBgKgA2+fO4=;
+	s=arc-20240116; t=1738682525; c=relaxed/simple;
+	bh=AzbpRGdKbPf6wJzevutq+/uz630hnwh38GaabT8ZwFg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LqCR3af7O07EqxlXiQ3jZS3ckqHOu3WmFlABUtb+O9e1V9WGRZZqZhlhvn0a6wAmEmdG9iKTdb/mCyAnUwXUcmJV/b6asa/7AvkYfw/BzMIW803+V/CtdqpKY/47FdwU5DG/wTfXHgz9JfieqX3E8RlaNaYMYsJnn8A6LlPwuxI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=b0X9vjul; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A1042C4CEE9;
-	Tue,  4 Feb 2025 15:10:59 +0000 (UTC)
+	 To:Cc:Content-Type; b=gfPWtPt2Kxfl3IIaAr5s/2KdO8SGfAJH8G5iZkJovYVR/N2AAaj8Rss7LfYhYd8PwS9B91k5sKXhSpxBnW7hEZtGaFiVjEhkW/uu/n/LUeOQmS7RsV1UVWUHZo8najUfwPYHtoThVBwPQu7EoJHm78AiMk8xrlkW6WO5lpS1rNQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=pAgKqfmC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7BE1C4CEE2;
+	Tue,  4 Feb 2025 15:22:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738681859;
-	bh=Bzu4jtQIUnIF8X4IR31+HofzpffJIQYmIBgKgA2+fO4=;
+	s=k20201202; t=1738682524;
+	bh=AzbpRGdKbPf6wJzevutq+/uz630hnwh38GaabT8ZwFg=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=b0X9vjulsBaGpMeKOu2J/+tjRqQ8yeAb6yzDQvv265BDEER9fgBSE1lvT++F6Z3Rf
-	 3gDviT9zN8Je7742jAP52p8plZ4v3GOu9N/QyGadWZXP7CU0ugFhHpUSelL9YILmrB
-	 OPgeddJKbZRzJFFp0eXTPHjwfOzSM8COs8Kd+JkYpsNpGMfoC6iTTcZ/L3nipEhyUF
-	 Yeuh425D/zFXRokdXCW5LxOs+txL4c8t5u+ufx624wS9EOKaSjyPhmZKgTPgToSXUp
-	 qM3sxJ6AORc0XdX4GGYFXY9VaGa0EEQzAehPOUb9BUapnYGOROB2eKVzjidGyeYueL
-	 Npfws2dBVij/w==
-Received: by mail-oi1-f178.google.com with SMTP id 5614622812f47-3eb8db8ae9aso2384228b6e.1;
-        Tue, 04 Feb 2025 07:10:59 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU5k0wK6itZRf9+dfriVU3wheq9/R3MJOkR007qRRt4H97KGGpQP+l/kT70qni0b3eRKz3jXcnk+BOM@vger.kernel.org, AJvYcCWKldRY4KcQO+NeTD8c++mPEtWUfizelmqH+SwZsHJdv697E4c+xnNX4keAtRsVdrn4Y/AyWElQHjVeuFE=@vger.kernel.org, AJvYcCX2oOSZNA7raN8B4otblEoyiI8RJdSJmTqUYc48cjVgAjLyBKfnZJNnnn4Z9prAJdyj8GpNky7rWTY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvDSTGwv/rOp7nYfjyat9+V3fjUhAOSMhDMUVo/LzI965w7V0Y
-	S2lMNTIeZzxMVkoKEsKcwXvx+p/AfOcCdQTOHhtc264YKnARJocTIiHA5j2AwJU4zimGZ9CwCxW
-	Zrha9Fys90AIkj0g0+6EleBD9HXE=
-X-Google-Smtp-Source: AGHT+IGd7nEAjJRKGOJuEdhdnKBoJU/T/F7ZhSfENXDZPw2xh36kHN/a8fzVyl8RsbVmv800Yz99C3pZxsEaXQQO4m8=
-X-Received: by 2002:a05:6808:3307:b0:3eb:84f6:923a with SMTP id
- 5614622812f47-3f323a91921mr17333887b6e.22.1738681858808; Tue, 04 Feb 2025
- 07:10:58 -0800 (PST)
+	b=pAgKqfmC11E0AxPZiRtULbpMg3UK/l6Tl0uEu4StOag4W0qZxC5hesleWRFetKUIT
+	 z4xln+UpB5YCKuNSne3PWjkZ6jdtIUYcQ/XmYiNZVhqxxoyJ2CYuNwx6RTtlJAst8X
+	 7vHNASWgeN9IGRl1nJ1M3kM8dOomS3U6Tb5VAmrNTKhyfcwmxlbxLbzhcKU+Sv8Nbn
+	 3f2o2s3uvTM2o6nDQ523+ryMMhiLfWso/ZYEFhsOJyisDQsu1Gm1yED7T9S0C9biit
+	 z1dnBrfiSiNiTJrCsvneIarIIUtSVPb2TFZYwh0fCRohJmW6RskDyZhWxo7dB26dR3
+	 dGeGs4m+qZEkA==
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-724a5d0427fso3332247a34.1;
+        Tue, 04 Feb 2025 07:22:04 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUAHBLcWxPftUgFZ1hxuQA49aUo4/pBO8OqCNSWjKixkGxZHui0NmvU8M14gPpPA+rHS8M4dX9wx7U=@vger.kernel.org, AJvYcCX7DfoyIRV+6zp7+S0s8sWXT/+Wkl/2kEYXKmQv4TTmT1kkJFoKvWNG1/gfz4Kbur/r92yDkOlf5CQ=@vger.kernel.org, AJvYcCXswc2AjWM8gMs8yHtCHLaGroRNF5qEYF092znILRl58P86vPo1UxJQYawLuy8EWKGEtIVwnKPR+ciQYT6G@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx0dCP+2kRJWi52wBH9KPDbg+9DyW+AHK4glpp+SPvMprIVtSML
+	oSIEoUQCBrEutxQlm/7ll5GVbt247jsYbxPAuc73Uo4qMAPRcrdjJ7nwThvllEF8BPOtftsGrqQ
+	fu10sxp/XUOOSJShwJb2NP85nmpw=
+X-Google-Smtp-Source: AGHT+IHXNNH2iL3z3LfsL0gC/p6gCB6nfPHaNpH5W9Mu8Om11TlTX/ywnYwePR7tTmA/km95JzqdhbducF1vauBaBYY=
+X-Received: by 2002:a05:6830:4101:b0:71d:63fc:2ea6 with SMTP id
+ 46e09a7af769-7265676102cmr20020883a34.8.1738682524078; Tue, 04 Feb 2025
+ 07:22:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAJZ5v0iKmynOQ5vKSQbg1J_FmavwZE-nRONovOZ0mpMVauheWg@mail.gmail.com>
- <CAJZ5v0i=yBSFW82E=s=mx7ztVzmnoUwbxkDRnYyDztAWK9VcsQ@mail.gmail.com> <9aa469fd-da5b-70fc-147e-dd4a50cf5af6@linux.intel.com>
-In-Reply-To: <9aa469fd-da5b-70fc-147e-dd4a50cf5af6@linux.intel.com>
+References: <20250128141139.2033088-1-darcari@redhat.com> <e9188365425d2a4c0dfa7cfa2b17ad3d9fcf2735.camel@gmail.com>
+ <afbe2137-398b-4053-93e7-2a03aeb32220@redhat.com>
+In-Reply-To: <afbe2137-398b-4053-93e7-2a03aeb32220@redhat.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 4 Feb 2025 16:10:46 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j157A=v6S8X4+QXRrmUfk2uN5DkRJ5RXd4e4o3hVucqg@mail.gmail.com>
-X-Gm-Features: AWEUYZlS4aGIFuwoDNhbxBZ986dhW5tdw0Z6J7ryEiKR2Y-8ET-o7hvETdycpIQ
-Message-ID: <CAJZ5v0j157A=v6S8X4+QXRrmUfk2uN5DkRJ5RXd4e4o3hVucqg@mail.gmail.com>
-Subject: Re: [Regression in 6.14-rc1] System suspend/resume broken by PCI
- commit 1db806ec06b7c
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
-	Jian-Hong Pan <jhp@endlessos.org>, Linux PCI <linux-pci@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, 
-	"Thorsten Leemhuis (regressions address)" <regressions@leemhuis.info>, 
-	Linux regressions mailing list <regressions@lists.linux.dev>
+Date: Tue, 4 Feb 2025 16:21:53 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hp8f3Xjb7bkDR_+RYfTE1ck=qop_QMZ3+z4w7T0VS66g@mail.gmail.com>
+X-Gm-Features: AWEUYZk2uqbzU7b8O05V0_65OsZ7SJvwTa4Ez8YXzh5OpN7iliAG-pbh_x-uwFY
+Message-ID: <CAJZ5v0hp8f3Xjb7bkDR_+RYfTE1ck=qop_QMZ3+z4w7T0VS66g@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: introduce 'use_acpi_cst' module parameter
+To: David Arcari <darcari@redhat.com>
+Cc: dedekind1@gmail.com, linux-pm@vger.kernel.org, 
+	Jonathan Corbet <corbet@lwn.net>, Jacob Pan <jacob.jun.pan@linux.intel.com>, 
+	Len Brown <lenb@kernel.org>, Prarit Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Ilpo,
-
-On Tue, Feb 4, 2025 at 8:48=E2=80=AFAM Ilpo J=C3=A4rvinen
-<ilpo.jarvinen@linux.intel.com> wrote:
+On Tue, Feb 4, 2025 at 2:07=E2=80=AFPM David Arcari <darcari@redhat.com> wr=
+ote:
 >
-> On Mon, 3 Feb 2025, Rafael J. Wysocki wrote:
 >
-> > On Mon, Feb 3, 2025 at 9:12=E2=80=AFPM Rafael J. Wysocki <rafael@kernel=
-.org> wrote:
-> > >
-> > > Hi,
+> Hi Artem,
 >
-> Hi Rafael,
->
-> > > The following commit:
-> > >
-> > > commit 1db806ec06b7c6e08e8af57088da067963ddf117
-> > > Author: Jian-Hong Pan <jhp@endlessos.org>
-> > > Date:   Fri Nov 15 15:22:02 2024 +0800
-> > >
-> > >    PCI/ASPM: Save parent L1SS config in pci_save_aspm_l1ss_state()
-> > >
-> > >    After 17423360a27a ("PCI/ASPM: Save L1 PM Substates Capability for
-> > >    suspend/resume"), pci_save_aspm_l1ss_state(dev) saves the L1SS sta=
-te for
-> > >    "dev", and pci_restore_aspm_l1ss_state(dev) restores the state for=
- both
-> > >    "dev" and its parent.
-> > >
-> > >    The problem is that unless pci_save_state() has been used in some =
-other
-> > >    path and has already saved the parent L1SS state, we will restore =
-junk to
-> > >    the parent, which means the L1 Substates likely won't work correct=
-ly.
-> > >
-> > >    Save the L1SS config for both the device and its parent in
-> > >    pci_save_aspm_l1ss_state().  When restoring, we need both because =
-L1SS must
-> > >    be enabled at the parent (the Downstream Port) before being enable=
-d at the
-> > >    child (the Upstream Port).
-> > >
-> > >    Link: https://lore.kernel.org/r/20241115072200.37509-3-jhp@endless=
-os.org
-> > >    Fixes: 17423360a27a ("PCI/ASPM: Save L1 PM Substates Capability fo=
-r
-> > > suspend/resume")
-> > >    Closes: https://bugzilla.kernel.org/show_bug.cgi?id=3D218394
-> > >    Suggested-by: Ilpo J=C3=A4rvinen <ilpo.jarvinen@linux.intel.com>
-> > >    Signed-off-by: Jian-Hong Pan <jhp@endlessos.org>
-> > >    [bhelgaas: parallel save/restore structure, simplify commit log, p=
-atch at
-> > >    https://lore.kernel.org/r/20241212230340.GA3267194@bhelgaas]
-> > >    Signed-off-by: Bjorn Helgaas <bhelgaas@google.com>
-> > >    Tested-by: Jian-Hong Pan <jhp@endlessos.org> # Asus B1400CEAE
-> > >
-> > > broke system suspend/resume on my Dell XPS13 9360.  It doesn't even
-> > > pass suspend/resume testing after "echo devices > /sys/power/pm_test"=
-.
-> > >
-> > > It looks like PCIe links are all down during resume after the above
-> > > commit, but it is rather hard to collect any data in that state.
-> > >
-> > > Reverting the above commit on top of 6.14-rc1 makes things work again=
-,
-> > > no problem.
-> > >
-> > > I'm unsure what exactly the problem is ATM, but I'm going to check a
-> > > couple of theories.
+> On 2/4/25 7:23 AM, Artem Bityutskiy wrote:
+> > Hi David,
 > >
-> > The attached change makes it work again, FWIW, but moving the
-> > parent->l1ss check alone below the pdev l1ss saving doesn't help.
+> > On Tue, 2025-01-28 at 09:11 -0500, David Arcari wrote:
 > >
-> > So it is either the parent check against NULL or the
-> > pcie_downstream_port(pdev) one that breaks it.  I guess the former,
-> > but I'll test it tomorrow.
+> >> +The ``use_acpi_cst`` module parameter (recognized by ``intel_idle`` i=
+f the
+> >> +kernel has been configured with ACPI support) can be set to make the =
+driver
+> >> +ignore the per cpu idle states in lieu of ACPI idle states. ``use_acp=
+i_cst``
+> >> +has no effect if ``no_acpi`` is set).
+> >
+> > With this change, there will be three parameters:
+> >
+> > * no_acpi
+> > * use_acpi
+> > * use_acpi_cst
+> >
+> > I would like to make the naming as intuitive as possible. We do not ren=
+ame the
+> > first 2, but for the 3rd one, I think "force_acpi" would be a better na=
+me. Or
+> > perhaps "no_native"?
 >
-> Neither of those is the root cause
-
-Well, not quite.
-
-> but it's bit hard to see from the code
-> itself because the parent->saved_state check your test patch also removed
-
-My patch hasn't removed that check.
-
-Besides, suspend/resume works on my system without commit
-1db806ec06b7c6e0 and the parent->saved_state only affects the parent,
-so it clearly cannot be the culprit here.
-
-> looks very logical on a glance (but that's the problematic line).
+> The problem with force_acpi is it is very similar to force_use_acpi
+> which is what intel_idle.c uses internally:
 >
-> The fix is already here with the explanation:
+> drivers/idle/intel_idle.c:module_param_named(use_acpi, force_use_acpi,
+> bool, 0444);
 >
-> https://lore.kernel.org/linux-pci/20250131152913.2507-1-ilpo.jarvinen@lin=
-ux.intel.com/T/#u
+> That said, I am not attached to the 'use_acpi_cst' parameter name.
 
-So it turns out that the minimum fux that works here is what I posted.
-That is, the upfront pcie_downstream_port(pdev) check needs to be
-dropped and the !parent check needs to be moved after saving the
-pdev's state.
+IMV this is rather about ignoring the built-in states table
+altogether, IOW something like "pretend that you don't recognize the
+processor".
 
-IOW, it looks like on this platform, it is necessary to save the l1ss
-state for a Root Port.
+But it could be something like "prefer_acpi" as far as I'm concerned.
 
