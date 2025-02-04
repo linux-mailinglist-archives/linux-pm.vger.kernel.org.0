@@ -1,450 +1,149 @@
-Return-Path: <linux-pm+bounces-21318-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21319-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6CFABA26836
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 01:11:07 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99C36A2686A
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 01:19:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 506753A44F7
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 00:10:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 308FB3A4482
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 00:19:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E5187249EB;
-	Tue,  4 Feb 2025 00:10:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DD1B4A11;
+	Tue,  4 Feb 2025 00:19:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="w95DlM63"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="cMpUs07r"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC13318EB0
-	for <linux-pm@vger.kernel.org>; Tue,  4 Feb 2025 00:10:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 634034685;
+	Tue,  4 Feb 2025 00:19:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738627830; cv=none; b=koO7Nt5WFvDJ6aPYsJzgWN6GUkKHwr3HPpEODb4D5wOk4S8+G2AV88FKyxmDYKqV36PQTS2MSqbYg6eZBn5i3IE2FGAdGvj2z7n2JWtUpiLJIUj1ZclLOq+caldREtBYWOkKF1yHCxA8Cr3sU0Bm/i2urwYOO/lcKW3iOG2HFSw=
+	t=1738628378; cv=none; b=Yb1JAf82JyclmedaMyTNAee1zn9miYxEbdZ0pI8Ogfbb13blU3awfwFk+XQkBGzIxWqHr1G4YDrlTz5hdE7ZOfxWK1lVh8IKOPnYwozDddKEsr1xPzTRQFn8VHG5vbnYMMoAG2KK8kIyY5GypdF6SuJ9QZZOIwoilRp7/TlbvzY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738627830; c=relaxed/simple;
-	bh=afFbwZhPvABw9QtnhyLoeWFZ1DAKvScTsQg8dH8fITI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=TOKBHwCZGmAV1+CKQMBlMRUmY/+K3AM4ehGNnxT7fKriIT42i6QT3vzrK+s5NHpK/CpxVeGwP0llcg1fMsl9gYHMR4cZMHg1M//J2oj69zwZwGoqrP4paLbmvMzJquGDWpxwlgh7BiPqH45DVSH/kVs3ymDQo5351NOdDrppc+I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=w95DlM63; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21669fd5c7cso88709525ad.3
-        for <linux-pm@vger.kernel.org>; Mon, 03 Feb 2025 16:10:28 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1738627828; x=1739232628; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IZC6hwdmsqFUIUOrfafnyuVDJQQmUYi4erRt9zplJew=;
-        b=w95DlM63ExLLX/g2yW3FBG661vb8xIZCxLLMKzT83xMEYyIJXATpW/64582N+L3VgK
-         E4w43h0kVH29EZOfnuxB/Ty8jD5QC4vtno66jSDZXx2Bojd6ZXaE4U5DdxvXyuyBLjRP
-         5btWbiL0EeeYbb6tr5QxGP+i4LnTdzIV3lgzv5woXu9so6tbYpbEE6vTt4YQr0lRmAPb
-         jKb+ikunvB0slqld7vkWxA7y9F1xPJnzQN88kXgLJa+/Bu4jUdOXYfCcJf62i3bwrgZ7
-         8p9KYFvDUxH1TeUz4QQ2rTBNcqXvCLoswJ/PMmUF6kIaG/F+tkXcR8wqE55MSE3G0qAY
-         BFzw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738627828; x=1739232628;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IZC6hwdmsqFUIUOrfafnyuVDJQQmUYi4erRt9zplJew=;
-        b=QzPVwSs011nwnRtAifJNzLUqk0BtxHlo3sh84EfTO1sqo4QCG7DOY+qaabFWzo7UCY
-         Uby8XRSKhlux+E9pTptOzep1uP11KTji5c7UWeZg32i1pBrjLJz6Fsd8UhXmBQa5JIx3
-         NiEdigEW0SG13+sjf1aTGC86gp/bI0VSSEa9iWRK3ZSpEi+in4bEI3JW8xETBp0+pAgM
-         6fbzLCKxNCvBYD1Gjh3KsBXPrpln8ZEyxSCsAvZQrWVdZURFAopOXLbdIVO8hfK9Iqir
-         KEROZjfqRRe6gjVzFQwnoaE74a20KbDqGscIG8XqTEFT1J418pmA8xMN+6bEum+/ir70
-         S3UQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVjqrmau09HobkVLjtC4G804xAzKOxW2HkOFfKbn3KmOEsg6OfIwKu38NEwxKmDi0pLZw671y/jqA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw+sTBAamGoEWBgRJKNeWwx0ABlf6OOyCa9uAgDnXy/k2paTYuz
-	J0Ew6NCJqxPZ7nuaar/g89T3/Yq3O5MkcSi7tjjbP2xiLgvsDQWAvwIurymu+3w=
-X-Gm-Gg: ASbGncvrl4eg5WaMJAdHxSwRveoxVzZB+TgaV2emkKguUOic3B5uv71SsVsPUUsx3Yc
-	Fbv2ECXXxXyvUyZCAUuOze28vAsccxJItSZKy2nayKQrgBaaJgAefn5mK2JLnSmX2pqbqcM7LRq
-	pp0uc8p0q1W1UkFBmtn393q9/ckdDye9tN1tHQWM2wRc76XnAa10eD/BWNB05hVffSBMeqtlpJC
-	7QmSkm89MYWi8fx7pXtl9kH5e/A3hDkIoq5YtChOV634g/sdDHvIbzLKEJbqH/Tt3U8zR3K2/lf
-	Akds6oAG1fJeAi07REW32lBIF+8Ac5E=
-X-Google-Smtp-Source: AGHT+IHHGXlWF6SoH1LocgByYURB2i6ZZlSMHYhnVurxdmpMOSoe1ozZwwR8TPZih/wzLmmPut7sgA==
-X-Received: by 2002:a05:6a20:9186:b0:1dc:e8d:c8f0 with SMTP id adf61e73a8af0-1ed7a6b825amr41908107637.29.1738627827687;
-        Mon, 03 Feb 2025 16:10:27 -0800 (PST)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-acebe85656bsm7279199a12.36.2025.02.03.16.10.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 03 Feb 2025 16:10:27 -0800 (PST)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Mon, 03 Feb 2025 16:10:08 -0800
-Subject: [PATCH 2/2] tools: Remove redundant quiet setup
+	s=arc-20240116; t=1738628378; c=relaxed/simple;
+	bh=HtmJ68Du1OtG4cQ3+U33oObZAL0YpP1itzBptGRqH2Y=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=PxxA+poNK/074CYe8wculJ5i+7OyUxSfcdTxRiETPVKtl2elJs2HBbl4IPudZjRbtCuvaUZb0gIq90YfNuiwVC3Auj8rxVn7xrqutHsLPrOLTemfcXRoKLpHYpqe+nA4Zf9KXr+A4Wef2qNu2/Z7H35vIqwXedToViApUdLAUHA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=cMpUs07r; arc=none smtp.client-ip=192.198.163.10
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738628376; x=1770164376;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=HtmJ68Du1OtG4cQ3+U33oObZAL0YpP1itzBptGRqH2Y=;
+  b=cMpUs07rBVbR6s3z+5KD67sPAp0tbl4S2WeAUfg/1P54PeYgs1jlNgQv
+   3hLtL3IfZb3BSZk7OrPZLHjU9+S25pOS/ppJTa8lu78EW2XqMLGmp3BDl
+   SaKx6EZdrlmXZH42dswO/OMvblrDV3AM28tg5+hsBOfgRKIIb1C547SQd
+   ZjRyxkXPt3vOJuelMmGwaOOrSuhR2LKyu1HOwICp1tsyg3GBurS9buAeL
+   IoGy39h5GA9eKxfenGx0tvAS4c7mPDGPR2ixlFtlSBU4r5z8Gab54/WSw
+   Jn8IUKFsOWd0zPChaa7FmsJH5iW9FCP82m9lUyrQh18exROwUpwhV29HM
+   w==;
+X-CSE-ConnectionGUID: gCLfThiIQGqJmhSYVJ6ADQ==
+X-CSE-MsgGUID: yxNJpS0pRESE6AOcw/CDQw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="50553784"
+X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
+   d="scan'208";a="50553784"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 16:19:35 -0800
+X-CSE-ConnectionGUID: VjX/llIyRfy0Urs9iygLAA==
+X-CSE-MsgGUID: xPRiRAGiReurXvlNSDcUWQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="147635271"
+Received: from inaky-mobl1.amr.corp.intel.com (HELO [10.125.109.238]) ([10.125.109.238])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 03 Feb 2025 16:19:35 -0800
+Message-ID: <08c212d4-cad2-430f-8c94-a87f48ff50b6@intel.com>
+Date: Mon, 3 Feb 2025 16:19:37 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v9 3/4] intel_idle: Provide the default enter_dead()
+ handler
+To: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>, x86@kernel.org
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ rafael.j.wysocki@intel.com, len.brown@intel.com,
+ artem.bityutskiy@linux.intel.com, dave.hansen@linux.intel.com
+References: <20250110115953.6058-1-patryk.wlazlyn@linux.intel.com>
+ <20250110115953.6058-4-patryk.wlazlyn@linux.intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20250110115953.6058-4-patryk.wlazlyn@linux.intel.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250203-quiet_tools-v1-2-d25c8956e59a@rivosinc.com>
-References: <20250203-quiet_tools-v1-0-d25c8956e59a@rivosinc.com>
-In-Reply-To: <20250203-quiet_tools-v1-0-d25c8956e59a@rivosinc.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
- Quentin Monnet <qmo@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
- Steven Rostedt <rostedt@goodmis.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-trace-kernel@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10090; i=charlie@rivosinc.com;
- h=from:subject:message-id; bh=afFbwZhPvABw9QtnhyLoeWFZ1DAKvScTsQg8dH8fITI=;
- b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/rCqDeTpkiHBfRO/vXAKPf2ZhFGY/vgjpir1lMVTJfuT
- Pl+sFeuo5SFQYyLQVZMkYXnWgNz6x39sqOiZRNg5rAygQxh4OIUgIk4fWX4p+b74rTp5tW72jvr
- TjEGqjKn7xKTCWwSWDgzepahyeGfDxj+2cdaeeWnHZLwOW6z6+2X1HmGCV5Bb57+Z5z/8Un8+Un
- fuAE=
-X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
- fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
 
-Q is exported from Makefile.include so it is not necessary to manually
-set it.
+On 1/10/25 03:59, Patryk Wlazlyn wrote:
+> +static __cpuidle void intel_idle_enter_dead(struct cpuidle_device *dev,
+> +					    int index)
+> +{
+> +	struct cpuidle_driver *drv = cpuidle_get_cpu_driver(dev);
+> +	struct cpuidle_state *state = &drv->states[index];
+> +	unsigned long eax = flg2MWAIT(state->flags);
+> +
+> +	mwait_play_dead(eax);
+> +}
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- tools/arch/arm64/tools/Makefile           |  6 ------
- tools/bpf/Makefile                        |  6 ------
- tools/bpf/bpftool/Documentation/Makefile  |  6 ------
- tools/bpf/bpftool/Makefile                |  6 ------
- tools/bpf/resolve_btfids/Makefile         |  2 --
- tools/bpf/runqslower/Makefile             |  5 +----
- tools/lib/bpf/Makefile                    | 13 -------------
- tools/lib/perf/Makefile                   | 13 -------------
- tools/lib/thermal/Makefile                | 13 -------------
- tools/objtool/Makefile                    |  6 ------
- tools/testing/selftests/bpf/Makefile.docs |  6 ------
- tools/testing/selftests/hid/Makefile      |  2 --
- tools/thermal/lib/Makefile                | 13 -------------
- tools/tracing/latency/Makefile            |  6 ------
- tools/tracing/rtla/Makefile               |  6 ------
- tools/verification/rv/Makefile            |  6 ------
- 16 files changed, 1 insertion(+), 114 deletions(-)
+The __cpuidle marks this as noinstr, but cpuidle_get_cpu_driver() is not
+noinstr, so the objtool complains:
 
-diff --git a/tools/arch/arm64/tools/Makefile b/tools/arch/arm64/tools/Makefile
-index 7b42feedf647190ad498de0937e8fb557e40f39c..de4f1b66ef0148b7bfd0fd16655ad854c7542240 100644
---- a/tools/arch/arm64/tools/Makefile
-+++ b/tools/arch/arm64/tools/Makefile
-@@ -13,12 +13,6 @@ AWK	?= awk
- MKDIR	?= mkdir
- RM	?= rm
- 
--ifeq ($(V),1)
--Q =
--else
--Q = @
--endif
--
- arm64_tools_dir = $(top_srcdir)/arch/arm64/tools
- arm64_sysreg_tbl = $(arm64_tools_dir)/sysreg
- arm64_gen_sysreg = $(arm64_tools_dir)/gen-sysreg.awk
-diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-index 243b79f2b451e52ca196f79dc46befd1b3dab458..062bbd6cd048e9e42f9bc8f9972ec96594f3dbd2 100644
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -27,12 +27,6 @@ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- FEATURE_USER = .bpf
- FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled
- FEATURE_DISPLAY = libbfd
-diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
-index 4315652678b9f2e27e48b7815f3b9ddc70a57165..bf843f328812e10dd65a73f355f74e6825ad95b9 100644
---- a/tools/bpf/bpftool/Documentation/Makefile
-+++ b/tools/bpf/bpftool/Documentation/Makefile
-@@ -5,12 +5,6 @@ INSTALL ?= install
- RM ?= rm -f
- RMDIR ?= rmdir --ignore-fail-on-non-empty
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- prefix ?= /usr/local
- mandir ?= $(prefix)/man
- man8dir = $(mandir)/man8
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index dd9f3ec842017f1dd24054bf3a0986d546811dc4..6ea4823b770cbbe7fd9eb7da79956cc1dae1f204 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -7,12 +7,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- BPF_DIR = $(srctree)/tools/lib/bpf
- 
- ifneq ($(OUTPUT),)
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 4b8079f294f65b284481e9a2bf6ff52594a4669a..afbddea3a39c64ffb2efc874a3637b6401791c5b 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -5,10 +5,8 @@ include ../../scripts/Makefile.arch
- srctree := $(abspath $(CURDIR)/../../../)
- 
- ifeq ($(V),1)
--  Q =
-   msg =
- else
--  Q = @
-   ifeq ($(silent),1)
-     msg =
-   else
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index c4f1f1735af659c2e660a322dbf6912d9a5724bc..e49203ebd48c18607a6136a9e805ccf16ee960d3 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -26,10 +26,7 @@ VMLINUX_BTF_PATHS := $(if $(O),$(O)/vmlinux)		\
- VMLINUX_BTF_PATH := $(or $(VMLINUX_BTF),$(firstword			       \
- 					  $(wildcard $(VMLINUX_BTF_PATHS))))
- 
--ifeq ($(V),1)
--Q =
--else
--Q = @
-+ifneq ($(V),1)
- MAKEFLAGS += --no-print-directory
- submake_extras := feature_display=0
- endif
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 857a5f7b413d6dc4cbe7bc4167496674dd08d875..168140f8e6461bd06db40e23d21a3fb8847ccbf4 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -53,13 +53,6 @@ include $(srctree)/tools/scripts/Makefile.include
- 
- # copy a bit from Linux kbuild
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
- INCLUDES = -I$(or $(OUTPUT),.) \
- 	   -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi \
- 	   -I$(srctree)/tools/arch/$(SRCARCH)/include
-@@ -96,12 +89,6 @@ override CFLAGS += $(CLANG_CROSS_FLAGS)
- # flags specific for shared library
- SHLIB_FLAGS := -DSHARED -fPIC
- 
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- # Disable command line variables (CFLAGS) override from top
- # level Makefile (perf), otherwise build Makefile will get
- # the same command line setup.
-diff --git a/tools/lib/perf/Makefile b/tools/lib/perf/Makefile
-index 3a9b2140aa048ea919c69ed2240bf0ea444dbf21..e9a7ac2c062e2b398c2f22af41907b62815ca07e 100644
---- a/tools/lib/perf/Makefile
-+++ b/tools/lib/perf/Makefile
-@@ -39,19 +39,6 @@ libdir = $(prefix)/$(libdir_relative)
- libdir_SQ = $(subst ','\'',$(libdir))
- libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- TEST_ARGS := $(if $(V),-v)
- 
- # Set compile option CFLAGS
-diff --git a/tools/lib/thermal/Makefile b/tools/lib/thermal/Makefile
-index 8890fd57b110ccc1a837d37624a5dead00f18656..a1f5e388644d31d36f973d3ddce48d036ee0a083 100644
---- a/tools/lib/thermal/Makefile
-+++ b/tools/lib/thermal/Makefile
-@@ -39,19 +39,6 @@ libdir = $(prefix)/$(libdir_relative)
- libdir_SQ = $(subst ','\'',$(libdir))
- libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- # Set compile option CFLAGS
- ifdef EXTRA_CFLAGS
-   CFLAGS := $(EXTRA_CFLAGS)
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index f56e2772753414ff8d3462bdebbc8e95e7667fcd..7a65948892e569cbe1d6e5a78db68bb35102cd26 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -46,12 +46,6 @@ HOST_OVERRIDES := CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)"
- AWK = awk
- MKDIR = mkdir
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- BUILD_ORC := n
- 
- ifeq ($(SRCARCH),x86)
-diff --git a/tools/testing/selftests/bpf/Makefile.docs b/tools/testing/selftests/bpf/Makefile.docs
-index eb6a4fea8c794d8354363ac8daa0baac3e3bd060..f7f9e7088bb38c7507282990fb62921ca7a636d2 100644
---- a/tools/testing/selftests/bpf/Makefile.docs
-+++ b/tools/testing/selftests/bpf/Makefile.docs
-@@ -7,12 +7,6 @@ INSTALL ?= install
- RM ?= rm -f
- RMDIR ?= rmdir --ignore-fail-on-non-empty
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- prefix ?= /usr/local
- mandir ?= $(prefix)/man
- man2dir = $(mandir)/man2
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index 0336353bd15f0d56dbed6c8fa02f53c234f949e1..2839d2612ce3a70f4332f8e886586e9cca6f03cb 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -43,10 +43,8 @@ TEST_GEN_PROGS = hid_bpf hidraw
- # $3 - target (assumed to be file); only file name will be emitted;
- # $4 - optional extra arg, emitted as-is, if provided.
- ifeq ($(V),1)
--Q =
- msg =
- else
--Q = @
- msg = @printf '  %-8s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
- MAKEFLAGS += --no-print-directory
- submake_extras := feature_display=0
-diff --git a/tools/thermal/lib/Makefile b/tools/thermal/lib/Makefile
-index f2552f73a64c7eb1be24c27b3a1414617391315b..056d212f25cf51cd8c02260fbe2ef28dda5e4acb 100644
---- a/tools/thermal/lib/Makefile
-+++ b/tools/thermal/lib/Makefile
-@@ -39,19 +39,6 @@ libdir = $(prefix)/$(libdir_relative)
- libdir_SQ = $(subst ','\'',$(libdir))
- libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- # Set compile option CFLAGS
- ifdef EXTRA_CFLAGS
-   CFLAGS := $(EXTRA_CFLAGS)
-diff --git a/tools/tracing/latency/Makefile b/tools/tracing/latency/Makefile
-index 6518b03e05c71b4fa84498f9628adf81a38c9f56..257a56b1899f23837de533353e9c2cebdb6035bd 100644
---- a/tools/tracing/latency/Makefile
-+++ b/tools/tracing/latency/Makefile
-@@ -37,12 +37,6 @@ FEATURE_TESTS	+= libtracefs
- FEATURE_DISPLAY	:= libtraceevent
- FEATURE_DISPLAY	+= libtracefs
- 
--ifeq ($(V),1)
--  Q 		=
--else
--  Q 		= @
--endif
--
- all: $(LATENCY-COLLECTOR)
- 
- include $(srctree)/tools/build/Makefile.include
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 8b5101457c70b48e9c720f1ba53293f1307c15a2..0b61208db604ec0754024c3007db6b2fe74a613c 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -37,12 +37,6 @@ FEATURE_DISPLAY	:= libtraceevent
- FEATURE_DISPLAY	+= libtracefs
- FEATURE_DISPLAY	+= libcpupower
- 
--ifeq ($(V),1)
--  Q		=
--else
--  Q		= @
--endif
--
- all: $(RTLA)
- 
- include $(srctree)/tools/build/Makefile.include
-diff --git a/tools/verification/rv/Makefile b/tools/verification/rv/Makefile
-index 411d62b3d8eb93abf85526ad33cafd783df86bc1..5b898360ba4818b12e8a16c27bd88c75d0076fb9 100644
---- a/tools/verification/rv/Makefile
-+++ b/tools/verification/rv/Makefile
-@@ -35,12 +35,6 @@ FEATURE_TESTS	+= libtracefs
- FEATURE_DISPLAY	:= libtraceevent
- FEATURE_DISPLAY	+= libtracefs
- 
--ifeq ($(V),1)
--  Q		=
--else
--  Q		= @
--endif
--
- all: $(RV)
- 
- include $(srctree)/tools/build/Makefile.include
+vmlinux.o: warning: objtool: intel_idle_enter_dead+0x7: call to
+cpuidle_get_cpu_driver() leaves .noinstr.text section
 
--- 
-2.43.0
+Patryk, can you fix this up, resync against 6.14-rc1 (there are some
+minor merge conflicts) and resubmit, please?
 
+I assume that it's OK to just make cpuidle_get_cpu_driver() __cpuidle
+too. It doesn't do much.
 
