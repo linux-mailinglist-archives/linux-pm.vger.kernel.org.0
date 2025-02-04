@@ -1,300 +1,213 @@
-Return-Path: <linux-pm+bounces-21343-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21345-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 91367A27771
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 17:42:29 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 20C92A27832
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 18:20:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5401F18818EB
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 16:42:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CD78A1883EFB
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 17:20:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D1AEA215767;
-	Tue,  4 Feb 2025 16:42:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="s3Qfw2uq"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38B04216616;
+	Tue,  4 Feb 2025 17:19:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBA662153E4;
-	Tue,  4 Feb 2025 16:42:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B3AE216385
+	for <linux-pm@vger.kernel.org>; Tue,  4 Feb 2025 17:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738687344; cv=none; b=X/wU89ueZLKX+n9I8t2IScGU2GBO3Eh58oGu23L1h4QN7AVPCdweySVzVthoLWL6VThdEkKeWPfOxuaorJBXwnbpfJpUtFsLcX+4kyeLsLB5FRUBnQ4eyPEvfcP2F1TGPttQ42PZVd04QRAIPYOxVjLYT4YjpWGmDApb0/9Vrck=
+	t=1738689555; cv=none; b=knasySVm1+pmbClAyRGYQ2rMVjTTGerHts9pEbVYuAjaq87ROoSUgkxCt8ScP1AgxLdOQteXSdMD5XK+eoRbsaynUxYqy2+GDogDiZR6YyqD1H6JEehC4XuroLZg59gl1mruiN66LAhMGlnffyHAdt4j9ZNcEAfI6pVki2sktwM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738687344; c=relaxed/simple;
-	bh=wsijlzgMdoHW4uBDacfOb2+5G542Bpq47cnyb4TwGWQ=;
+	s=arc-20240116; t=1738689555; c=relaxed/simple;
+	bh=48SY1O6657ygyTl0Qqylk4SilVwsM+xj4X+rzO7pz30=;
 	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:Mime-Version; b=cqWoHBPYZzQuYO97mSw5WKLACz5Wuke1gUAp3iOJH8zCConLuS9V0/miuexlBBommstQKhBu5zfD4s/2qmMdMraLPbSAfPHKjPB4mTeqYSMVmKHAjcllUeDFrSXH+PO7ZrxQC4RCPe1NxHVmxGWFBuhcwtYnq+bomla6bqtXTPU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=s3Qfw2uq; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 514GEovB023103;
-	Tue, 4 Feb 2025 16:42:00 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=Lsnxs4
-	YYuwcy4ednIOPPvdwcYVW7AaeXTcdlCgi8uJI=; b=s3Qfw2uqHujKVOQsorwMPx
-	FTlDtXqE1ID/TJrm8Bgz/UTc1/t4eKIWRFSbqWEiv6QAKNhLCNWMWOC+wRda8Uat
-	DRpr/bmgmBstkrQ4JD6xdioee2jn1pHfux+4DcdVU+lVbl0syOwc4vIQqvLub1AV
-	3EzuNmEYVQX7EWH10i7SWkbnX/YUwwZO5YEPOA3d//CIxYvmtkzexMJnpiNb9zuZ
-	ca3hRrGgAsT8q/UCIewK+yrFL/O3Khc9KJv/Tt1VUPIZWkS2MoNSmmjFiP7Y90wd
-	LHAS8nX7wRkB86Ng10N5KI1eNiGt1JKvvc3YlIItr3nMJjHkUrzyyx9H4Ln8do3w
-	==
-Received: from ppma12.dal12v.mail.ibm.com (dc.9e.1632.ip4.static.sl-reverse.com [50.22.158.220])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44kcq7u7tf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Feb 2025 16:42:00 +0000 (GMT)
-Received: from pps.filterd (ppma12.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma12.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 514FZg47016271;
-	Tue, 4 Feb 2025 16:41:59 GMT
-Received: from smtprelay06.dal12v.mail.ibm.com ([172.16.1.8])
-	by ppma12.dal12v.mail.ibm.com (PPS) with ESMTPS id 44hwxsckh9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Tue, 04 Feb 2025 16:41:59 +0000
-Received: from smtpav01.wdc07v.mail.ibm.com (smtpav01.wdc07v.mail.ibm.com [10.39.53.228])
-	by smtprelay06.dal12v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 514GfwUN22217308
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Tue, 4 Feb 2025 16:41:58 GMT
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 7CDE058055;
-	Tue,  4 Feb 2025 16:41:58 +0000 (GMT)
-Received: from smtpav01.wdc07v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 000D958059;
-	Tue,  4 Feb 2025 16:41:52 +0000 (GMT)
-Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com (unknown [9.171.15.121])
-	by smtpav01.wdc07v.mail.ibm.com (Postfix) with ESMTP;
-	Tue,  4 Feb 2025 16:41:52 +0000 (GMT)
-Message-ID: <c9e56c5f54cc33338762c94e9bed7b5a0d5de812.camel@linux.ibm.com>
-Subject: Re: [PATCH v2 2/4] cpufreq: Introduce a more generic way to set
- default per-policy boost flag
-From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: Lifeng Zheng <zhenglifeng1@huawei.com>, rafael@kernel.org,
-        viresh.kumar@linaro.org
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        linuxarm@huawei.com, jonathan.cameron@huawei.com,
-        zhanjie9@hisilicon.com, lihuisong@huawei.com, fanghao11@huawei.com,
-        gautam@linux.ibm.com, aboorvad@linux.ibm.com
-Date: Tue, 04 Feb 2025 22:11:50 +0530
-In-Reply-To: <20250117101457.1530653-3-zhenglifeng1@huawei.com>
-References: <20250117101457.1530653-1-zhenglifeng1@huawei.com>
-	 <20250117101457.1530653-3-zhenglifeng1@huawei.com>
+	 Content-Type:MIME-Version; b=AquwrvQzXrZiWILgWWhRD8ATLlfQRUHOIRtCPGgjyDmNNL8e8wiTp7CWO4UABO6lPJ/TjeQpyYrUlExoLlC+gKBtVsCOYsS+C3Pu8yfpDjbifvtIyAsJB/ciS/DFDQG6Ire2u8z4dEWs4tP29nDS5JvUhZMrlIYwCpcX2LhQfOc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tfMZF-0005M0-My; Tue, 04 Feb 2025 18:18:33 +0100
+Received: from lupine.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::4e] helo=lupine)
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tfMZC-003VAT-0S;
+	Tue, 04 Feb 2025 18:18:30 +0100
+Received: from pza by lupine with local (Exim 4.96)
+	(envelope-from <p.zabel@pengutronix.de>)
+	id 1tfMZC-000B3w-05;
+	Tue, 04 Feb 2025 18:18:30 +0100
+Message-ID: <48261cdfab6e0bc16e5327664b06728e1894422a.camel@pengutronix.de>
+Subject: Re: [PATCH v4 09/18] reset: thead: Add TH1520 reset controller
+ driver
+From: Philipp Zabel <p.zabel@pengutronix.de>
+To: Michal Wilczynski <m.wilczynski@samsung.com>, Matt Coster
+ <Matt.Coster@imgtec.com>, "mturquette@baylibre.com"
+ <mturquette@baylibre.com>,  "sboyd@kernel.org" <sboyd@kernel.org>,
+ "robh@kernel.org" <robh@kernel.org>, "krzk+dt@kernel.org"
+ <krzk+dt@kernel.org>, "conor+dt@kernel.org" <conor+dt@kernel.org>, 
+ "drew@pdp7.com" <drew@pdp7.com>, "guoren@kernel.org" <guoren@kernel.org>,
+ "wefu@redhat.com" <wefu@redhat.com>, "jassisinghbrar@gmail.com"
+ <jassisinghbrar@gmail.com>,  "paul.walmsley@sifive.com"
+ <paul.walmsley@sifive.com>, "palmer@dabbelt.com" <palmer@dabbelt.com>, 
+ "aou@eecs.berkeley.edu" <aou@eecs.berkeley.edu>, Frank Binns
+ <Frank.Binns@imgtec.com>,  "maarten.lankhorst@linux.intel.com"
+ <maarten.lankhorst@linux.intel.com>, "mripard@kernel.org"
+ <mripard@kernel.org>,  "tzimmermann@suse.de" <tzimmermann@suse.de>,
+ "airlied@gmail.com" <airlied@gmail.com>,  "simona@ffwll.ch"
+ <simona@ffwll.ch>, "ulf.hansson@linaro.org" <ulf.hansson@linaro.org>, 
+ "jszhang@kernel.org" <jszhang@kernel.org>, "m.szyprowski@samsung.com"
+ <m.szyprowski@samsung.com>
+Cc: "linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>, 
+	"devicetree@vger.kernel.org"
+	 <devicetree@vger.kernel.org>, "linux-kernel@vger.kernel.org"
+	 <linux-kernel@vger.kernel.org>, "linux-riscv@lists.infradead.org"
+	 <linux-riscv@lists.infradead.org>, "dri-devel@lists.freedesktop.org"
+	 <dri-devel@lists.freedesktop.org>, "linux-pm@vger.kernel.org"
+	 <linux-pm@vger.kernel.org>
+Date: Tue, 04 Feb 2025 18:18:29 +0100
+In-Reply-To: <e83ea320-23f0-41ed-934c-2f1687b55ec1@samsung.com>
+References: <20250128194816.2185326-1-m.wilczynski@samsung.com>
+	 <CGME20250128194836eucas1p151c4fc83a17173fd1b79bfc959976301@eucas1p1.samsung.com>
+	 <20250128194816.2185326-10-m.wilczynski@samsung.com>
+	 <816db99d-7088-4c1a-af03-b9a825ac09dc@imgtec.com>
+	 <e83ea320-23f0-41ed-934c-2f1687b55ec1@samsung.com>
 Content-Type: text/plain; charset="UTF-8"
-X-Mailer: Evolution 3.28.5 (3.28.5-26.el8_10) 
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.46.4-2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Transfer-Encoding: 7bit
-X-TM-AS-GCONF: 00
-X-Proofpoint-GUID: bXPXgGszO0mZJjVHWcNz1aleg5HtmDpS
-X-Proofpoint-ORIG-GUID: bXPXgGszO0mZJjVHWcNz1aleg5HtmDpS
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-04_08,2025-02-04_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 phishscore=0
- suspectscore=0 mlxlogscore=999 spamscore=0 priorityscore=1501
- malwarescore=0 impostorscore=0 bulkscore=0 adultscore=0 clxscore=1011
- lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2501170000 definitions=main-2502040127
+MIME-Version: 1.0
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: p.zabel@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-On Fri, 2025-01-17 at 18:14 +0800, Lifeng Zheng wrote:
+On Mo, 2025-02-03 at 19:15 +0100, Michal Wilczynski wrote:
+>=20
+> On 1/31/25 16:39, Matt Coster wrote:
+> > On 28/01/2025 19:48, Michal Wilczynski wrote:
+> > > Add reset controller driver for the T-HEAD TH1520 SoC that manages
+> > > hardware reset lines for various subsystems. The driver currently
+> > > implements support for GPU reset control, with infrastructure in plac=
+e
+> > > to extend support for NPU and Watchdog Timer resets in future updates=
+.
+> > >=20
+> > > Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> > > ---
+> > >  MAINTAINERS                  |   1 +
+> > >  drivers/reset/Kconfig        |  10 ++
+> > >  drivers/reset/Makefile       |   1 +
+> > >  drivers/reset/reset-th1520.c | 178 +++++++++++++++++++++++++++++++++=
+++
+> > >  4 files changed, 190 insertions(+)
+> > >  create mode 100644 drivers/reset/reset-th1520.c
+> > >=20
+[...]
+> > > diff --git a/drivers/reset/reset-th1520.c b/drivers/reset/reset-th152=
+0.c
+> > > new file mode 100644
+> > > index 000000000000..48afbc9f1cdd
+> > > --- /dev/null
+> > > +++ b/drivers/reset/reset-th1520.c
+> > > @@ -0,0 +1,178 @@
+[...]
+> > > +static void th1520_rst_gpu_enable(struct regmap *reg,
+> > > +				  struct mutex *gpu_seq_lock)
+> > > +{
+> > > +	int val;
+> > > +
+> > > +	mutex_lock(gpu_seq_lock);
+> > > +
+> > > +	/* if the GPU is not in a reset state it, put it into one */
+> > > +	regmap_read(reg, TH1520_GPU_RST_CFG, &val);
+> > > +	if (val)
+> > > +		regmap_update_bits(reg, TH1520_GPU_RST_CFG,
+> > > +				   TH1520_GPU_RST_CFG_MASK, 0x0);
 
-> In cpufreq_online() of cpufreq.c, the per-policy boost flag is already set
-> to mirror the cpufreq_driver boost during init but using freq_table to
-> judge if the policy has boost frequency. There are two drawbacks to this
-> approach:
-> 
-> 1. It doesn't work for the cpufreq drivers that do not use a frequency
-> table. For now, acpi-cpufreq and amd-pstate have to enable boost in policy
-> initialization. And cppc_cpufreq never set policy to boost when going
-> online no matter what the cpufreq_driver boost flag is.
-> 
-> 2. If the cpu goes offline when cpufreq_driver boost enabled and then goes
-> online when cpufreq_driver boost disabled, the per-policy boost flag will
-> unreasonably remain true.
-> 
-> Running set_boost at the end of the online process is a more generic way
-> for all cpufreq drivers.
-> 
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 16 ++++++++++++----
->  1 file changed, 12 insertions(+), 4 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 5882d7f5e3c1..5a3566c2eb8d 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1409,10 +1409,6 @@ static int cpufreq_online(unsigned int cpu)
->  			goto out_free_policy;
->  		}
->  
-> -		/* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
-> -		if (cpufreq_boost_enabled() && policy_has_boost_freq(policy))
-> -			policy->boost_enabled = true;
-> -
->  		/*
->  		 * The initialization has succeeded and the policy is online.
->  		 * If there is a problem with its frequency table, take it
-> @@ -1573,6 +1569,18 @@ static int cpufreq_online(unsigned int cpu)
->  	if (new_policy && cpufreq_thermal_control_enabled(cpufreq_driver))
->  		policy->cdev = of_cpufreq_cooling_register(policy);
->  
-> +	/* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
-> +	if (policy->boost_enabled != cpufreq_boost_enabled()) {
-> +		policy->boost_enabled = cpufreq_boost_enabled();
-> +		ret = cpufreq_driver->set_boost(policy, policy->boost_enabled);
-> +		if (ret) {
-> +			/* If the set_boost fails, the online operation is not affected */
-> +			pr_info("%s: CPU%d: Cannot %s BOOST\n", __func__, policy->cpu,
-> +				policy->boost_enabled ? "enable" : "disable");
-> +			policy->boost_enabled = !policy->boost_enabled;
-> +		}
-> +	}
-> +
->  	pr_debug("initialization complete\n");
->  
->  
-> 	return 0;
+BIT(2) is not documented, but cleared here.
 
-Hi,
+> > > +
+> > > +	/* rst gpu clkgen */
+> > > +	regmap_set_bits(reg, TH1520_GPU_RST_CFG, TH1520_GPU_SW_CLKGEN_RST);
+> >=20
+> > Do you know what this resets? From our side, the GPU only has a single
+> > reset line (which I assume to be GPU_RESET).
+>=20
+> This is clock generator reset, as described in the manual 5.4.2.6.1
+> GPU_RST_CFG. It does reside in the same register as the GPU reset line.
+>=20
+> I think this is required because the MEM clock gate is somehow broken
+> and marked as 'reserved' in manual, so instead as a workaround, since we
+> can't reliably enable the 'mem' clock it's a good idea to reset the
+> whole CLKGEN of the GPU.
 
-This patch causes a boot-time crash on PowerNV (Power9-baremetal systems) when WoF
-(Workload Optimized Frequency - boost) is enabled, starting from v6.14-rc1.
+If this is a workaround for broken gating of the "mem" clock, would it
+be possible (and reasonable) to make this a separate reset control that
+is handled by the clock driver? ...
 
-The crash happens due to null pointer dereference of the `set_boost` function.
+> > > +
+> > > +	/*
+> > > +	 * According to the hardware manual, a delay of at least 32 clock
+> > > +	 * cycles is required between de-asserting the clkgen reset and
+> > > +	 * de-asserting the GPU reset. Assuming a worst-case scenario with
+> > > +	 * a very high GPU clock frequency, a delay of 1 microsecond is
+> > > +	 * sufficient to ensure this requirement is met across all
+> > > +	 * feasible GPU clock speeds.
+> > > +	 */
+> > > +	udelay(1);
+> >=20
+> > I don't love that this procedure appears in the platform reset driver.
+> > I appreciate it may not be clear from the SoC TRM, but this is the
+> > standard reset procedure for all IMG Rogue GPUs. The currently
+> > supported TI SoC handles this in silicon, when power up/down requests
+> > are sent so we never needed to encode it in the driver before.
+> >=20
+> > Strictly speaking, the 32 cycle delay is required between power and
+> > clocks being enabled and the reset line being deasserted. If nothing
+> > here touches power or clocks (which I don't think it should), the delay
+> > could potentially be lifted to the GPU driver.
 
-`set_boost` is only assigned after the cpufreq driver is registered on PowerNV
-as below, 
+... This could be expressed as a delay between clk_prepare_enable() and
+reset_control_deassert() in the GPU driver then.
 
-Initialization Flow: (powernv_cpufreq_init -> cpufreq_enable_boost_support -> 
-                      initializes set_boost).
+> Yeah you're making excellent points here, I think it would be a good   =
+=20
+> idea to place the delay in the GPU driver, since this is specific to the
+> whole family of the GPU's not the SoC itself.
+>
+> > Is it expected that if a device exposes a reset in devicetree that it
+> > can be cleanly reset without interaction with the device driver itself?
+> > I.E. in this case, is it required that the reset driver alone can clean=
+ly
+> > reset the GPU?
 
-However, with this patch, `set_boost` is invoked in `cpufreq_register_driver`
-before it is initialized.
+No, the "resets" property should just describe the physical
+connection(s) between reset controller and the device.
 
-Access Flow:         (powernv_cpufreq_init -> cpufreq_register_driver -> cpufreq_online -> 
-                      attempts to access cpufreq_driver->set_boost,
-                      which is still NULL at this point).
+It is fine for the device driver to manually assert the reset, enable
+clocks and power, delay, and then deassert the reset, if that is the
+device specific reset procedure.
 
-This causes a boot-time crash as follows:
+> I'm not sure what the community as a whole thinks about that, so maybe
+> someone else can answer this, but I would code SoC specific stuff in the
+> reset driver for the SoC, and the GPU specific stuff (like the delay) in
+> the GPU driver code. I wasn't sure whether the delay was specific to the
+> SoC or the GPU so I've put it here.
 
-[    9.393946][    T1] BUG: Unable to handle kernel instruction fetch (NULL pointer?)
-[    9.393946][    T1] BUG: Unable to handle kernel instruction fetch (NULL pointer?)
-[    9.396285][    T1] Faulting instruction address: 0x00000000
-[    9.396285][    T1] Faulting instruction address: 0x00000000
-[    9.398545][    T1] Oops: Kernel access of bad area, sig: 7 [#1]
-[    9.398545][    T1] Oops: Kernel access of bad area, sig: 7 [#1]
-[    9.398804][    T1] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA PowerNV
-[    9.398804][    T1] LE PAGE_SIZE=64K MMU=Radix SMP NR_CPUS=2048 NUMA PowerNV
-[    9.400114][    T1] Modules linked in:
-[    9.400114][    T1] Modules linked in:
-[    9.400283][    T1] CPU: 19 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.14.0-rc1-dirty #23
-[    9.400283][    T1] CPU: 19 UID: 0 PID: 1 Comm: swapper/0 Not tainted 6.14.0-rc1-dirty #23
-[    9.400605][    T1] Hardware name: 0000000000000000 POWER9 0x4e1202 opal:v6.6-111-gd362ae4f-root-dirty-157d5e1 PowerNV
-[    9.400605][    T1] Hardware name: 0000000000000000 POWER9 0x4e1202 opal:v6.6-111-gd362ae4f-root-dirty-157d5e1 PowerNV
-[    9.403093][    T1] NIP:  0000000000000000 LR: c000000000f7a574 CTR: 0000000000000000
-[    9.403093][    T1] NIP:  0000000000000000 LR: c000000000f7a574 CTR: 0000000000000000
-[    9.404397][    T1] REGS: c00020000419f680 TRAP: 0400   Not tainted  (6.14.0-rc1-dirty)
-[    9.404397][    T1] REGS: c00020000419f680 TRAP: 0400   Not tainted  (6.14.0-rc1-dirty)
-[    9.407771][    T1] MSR:  9000000002089033 <SF,HV,VEC,EE,ME,IR,DR,RI,LE>  CR: 84000482  XER: 00000000
-[    9.407771][    T1] MSR:  9000000002089033 <SF,HV,VEC,EE,ME,IR,DR,RI,LE>  CR: 84000482  XER: 00000000
-[    9.409191][    T1] CFAR: c000000000f7a570 IRQMASK: 0 
-[    9.409191][    T1] GPR00: c000000000f7a51c c00020000419f920 c000000001ea3200 c00020002455f800 
-[    9.409191][    T1] GPR04: 0000000000000001 0000000000000000 0000000000000001 0000000000000000 
-[    9.409191][    T1] GPR08: 0000000000000000 c000000002a1f280 0000000000000001 0000000000000000 
-[    9.409191][    T1] GPR12: 0000000000000000 c000003ffefe0900 c00000000001101c 0000000000000000 
-[    9.409191][    T1] GPR16: 0000000000000000 0000000000000000 c000000002c20b80 000000000000005a 
-[    9.409191][    T1] GPR20: c00000007ffa0a14 c000000002973200 c000000002c1ff38 c00020002455fc48 
-[    9.409191][    T1] GPR24: c0000000029752f8 c000000002c1ff10 c00020002455fcb8 0000000000000000 
-[    9.409191][    T1] GPR28: c000000002a71be0 0000000000000000 c00020002455f800 c000000002a1f0a0 
-[    9.409191][    T1] CFAR: c000000000f7a570 IRQMASK: 0 
-[    9.409191][    T1] GPR00: c000000000f7a51c c00020000419f920 c000000001ea3200 c00020002455f800 
-[    9.409191][    T1] GPR04: 0000000000000001 0000000000000000 0000000000000001 0000000000000000 
-[    9.409191][    T1] GPR08: 0000000000000000 c000000002a1f280 0000000000000001 0000000000000000 
-[    9.409191][    T1] GPR12: 0000000000000000 c000003ffefe0900 c00000000001101c 0000000000000000 
-[    9.409191][    T1] GPR16: 0000000000000000 0000000000000000 c000000002c20b80 000000000000005a 
-[    9.409191][    T1] GPR20: c00000007ffa0a14 c000000002973200 c000000002c1ff38 c00020002455fc48 
-[    9.409191][    T1] GPR24: c0000000029752f8 c000000002c1ff10 c00020002455fcb8 0000000000000000 
-[    9.409191][    T1] GPR28: c000000002a71be0 0000000000000000 c00020002455f800 c000000002a1f0a0 
-[    9.415226][    T1] NIP [0000000000000000] 0x0
-[    9.415226][    T1] NIP [0000000000000000] 0x0
-[    9.417435][    T1] LR [c000000000f7a574] cpufreq_online+0x440/0xe14
-[    9.417435][    T1] LR [c000000000f7a574] cpufreq_online+0x440/0xe14
-[    9.419701][    T1] Call Trace:
-[    9.419701][    T1] Call Trace:
-[    9.422849][    T1] [c00020000419f920] [c000000000f7a51c] cpufreq_online+0x3e8/0xe14 (unreliable)
-[    9.422849][    T1] [c00020000419f920] [c000000000f7a51c] cpufreq_online+0x3e8/0xe14 (unreliable)
-[    9.430225][    T1] [c00020000419fa00] [c000000000f7b030] cpufreq_add_dev+0xb4/0xd8
-[    9.430225][    T1] [c00020000419fa00] [c000000000f7b030] cpufreq_add_dev+0xb4/0xd8
-[    9.434547][    T1] [c00020000419fa30] [c000000000c89e18] subsys_interface_register+0x18c/0x1d4
-[    9.434547][    T1] [c00020000419fa30] [c000000000c89e18] subsys_interface_register+0x18c/0x1d4
-[    9.440934][    T1] [c00020000419faa0] [c000000000f763a8] cpufreq_register_driver+0x1f0/0x370
-[    9.440934][    T1] [c00020000419faa0] [c000000000f763a8] cpufreq_register_driver+0x1f0/0x370
-[    9.444314][    T1] [c00020000419fb20] [c000000002093340] powernv_cpufreq_init+0x690/0xa10
-[    9.444314][    T1] [c00020000419fb20] [c000000002093340] powernv_cpufreq_init+0x690/0xa10
-[    9.444686][    T1] [c00020000419fc30] [c000000000010cb8] do_one_initcall+0x60/0x2c8
-[    9.444686][    T1] [c00020000419fc30] [c000000000010cb8] do_one_initcall+0x60/0x2c8
-[    9.445024][    T1] [c00020000419fd00] [c0000000020059ec] kernel_init_freeable+0x33c/0x530
-[    9.445024][    T1] [c00020000419fd00] [c0000000020059ec] kernel_init_freeable+0x33c/0x530
-[    9.446375][    T1] [c00020000419fde0] [c000000000011048] kernel_init+0x34/0x26c
-[    9.446375][    T1] [c00020000419fde0] [c000000000011048] kernel_init+0x34/0x26c
-[    9.448684][    T1] [c00020000419fe50] [c00000000000debc] ret_from_kernel_user_thread+0x14/0x1c
-[    9.448684][    T1] [c00020000419fe50] [c00000000000debc] ret_from_kernel_user_thread+0x14/0x1c
+I agree.
 
-[    9.455840][    T1] ---[ end trace 0000000000000000 ]---
-[    9.455840][    T1] ---[ end trace 0000000000000000 ]---
-
-The fix will be to initialize set_boost earlier in powernv_cpufreq_init before calling
-cpufreq_register_driver.
-
-Quickly tried this patch and it resolves the issue:
-
----
-
-diff --git a/drivers/cpufreq/powernv-cpufreq.c b/drivers/cpufreq/powernv-cpufreq.c
-index ae79d909943b..2dd61de34a28 100644
---- a/drivers/cpufreq/powernv-cpufreq.c
-+++ b/drivers/cpufreq/powernv-cpufreq.c
-@@ -1127,8 +1127,10 @@ static int __init powernv_cpufreq_init(void)
-        if (rc)
-                goto out;
- 
--       if (powernv_pstate_info.wof_enabled)
-+       if (powernv_pstate_info.wof_enabled) {
-                powernv_cpufreq_driver.boost_enabled = true;
-+               powernv_cpufreq_driver.set_boost = cpufreq_boost_set_sw;
-+       }
-        else
-                powernv_cpu_freq_attr[SCALING_BOOST_FREQS_ATTR_INDEX] = NULL;
- 
-@@ -1138,9 +1140,6 @@ static int __init powernv_cpufreq_init(void)
-                goto cleanup;
-        }
- 
--       if (powernv_pstate_info.wof_enabled)
--               cpufreq_enable_boost_support();
--
-        register_reboot_notifier(&powernv_cpufreq_reboot_nb);
-        opal_message_notifier_register(OPAL_MSG_OCC, &powernv_cpufreq_opal_nb);
- 
----
-
-I noticed that Viresh is working on a similar patch [1] as part of a broader patchset
-to simplify boost handling, which should also resolve this issue.
-
-Should we merge this patch [1] and related patches since this is causing a crash,
-or submit a separate patch to fix this?
-
-[1]: https://lore.kernel.org/all/9b4af20d5b415f41e866ddd8bde9cf6441c463b8.1737707712.git.viresh.kumar@linaro.org/
-
-Regards,
-Aboorva
-
+regards
+Philipp
 
