@@ -1,149 +1,142 @@
-Return-Path: <linux-pm+bounces-21348-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21349-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E345BA27ACE
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 20:04:42 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 36861A27CF7
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 21:58:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C167E1885E2D
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 19:04:47 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E364F18859F4
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 20:58:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01B9219A94;
-	Tue,  4 Feb 2025 19:04:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2664C219E98;
+	Tue,  4 Feb 2025 20:58:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qm55WJ7V"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="C9W1B5Kk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FD78216E19;
-	Tue,  4 Feb 2025 19:04:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12245206F16;
+	Tue,  4 Feb 2025 20:58:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738695861; cv=none; b=auX9Xr00e/O6lHt6kQ7UhoNFsu6OybPxgpBbBb6Fr71DpPo2qxAm4ZznOjQMoLXru2d5/wgzvj8eGopcMsPRQZt1fUYjQHPCGGFifT6jMD5/31Sfj7Skc9ZG+BKaPcrct+HyfAuUMQiuXeIZWjKOyVlgYH+umKPfcCBkeqsaUoU=
+	t=1738702710; cv=none; b=oR2lu1dAQ0rf45zyczqbqnBAlAKsuAfI79UcadnO39ziqXj7P9XMylVXhssnZP7GcElSfpYmKyOWFGQ7VOXNEwTYrnzB83kbp5oLO1rMiAIroZKxkO1TPg1vM+qwSyI1lcaYzWrWEHTlxYXUuTGao0gXPHLDtjhv9kqiubU++iw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738695861; c=relaxed/simple;
-	bh=v8r4gg3IpnzC66jwjrXxr6aYUfmgZLy5LJ4cFgHuXWk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ufimIT3VUUQIrjmwRAP5ttDJCcKCey/XnGxlKmNKF9an6qSh2i+GDR3A8GlKrkyU7I4ubBCJ4NIe8zUeaa0uTVHWK5Dc7p/DFJ/uAeoe4ezE+xMBxhgMhGi1cLHKIW90OWOrTIIFk4lZomre968Nts1G1GITAWhQrb0wMMz5bUA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qm55WJ7V; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A038BC4CEE6;
-	Tue,  4 Feb 2025 19:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738695860;
-	bh=v8r4gg3IpnzC66jwjrXxr6aYUfmgZLy5LJ4cFgHuXWk=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qm55WJ7V++ofH+9NdJIp2TUVPrgUBOq3LYr0DXa0rfxPMshEJdxIA1e6+0WNngOo6
-	 g0wvmw5eeQJyGSGZxqCw76SPDx2aEaYvrlfDdhRqVaIQrs37h09DmmdUHHfoUky1NE
-	 eyA+BL6k7iwn8iXkhIWfL8nQCgrqUR4a34o90tjkKmqHJbyYZLf9R/lNjTMl0K7jVR
-	 OoZtK/QrD7Pb3ftUogY/lomBj+fMekVJ/wvBTMc2xiuQe69zrLYHMFhV09OIlxNvmf
-	 NFVy+myPKj4Hh8ktc1Fk/Cup/FIQ4BSfTdzd17nViB1zBZ2b6r3EtZ84FQOj/xmJKg
-	 TNKfxMx0CGclg==
-Date: Tue, 4 Feb 2025 11:04:17 -0800
-From: Namhyung Kim <namhyung@kernel.org>
-To: Charlie Jenkins <charlie@rivosinc.com>
-Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>,
-	Alexei Starovoitov <ast@kernel.org>,
-	Daniel Borkmann <daniel@iogearbox.net>,
-	Andrii Nakryiko <andrii@kernel.org>,
-	Martin KaFai Lau <martin.lau@linux.dev>,
-	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>,
-	Yonghong Song <yonghong.song@linux.dev>,
-	John Fastabend <john.fastabend@gmail.com>,
-	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>,
-	Hao Luo <haoluo@google.com>, Jiri Olsa <jolsa@kernel.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Quentin Monnet <qmo@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>,
-	Jiri Kosina <jikos@kernel.org>,
-	Benjamin Tissoires <bentiss@kernel.org>,
-	Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	"linux-perf-use." <linux-perf-users@vger.kernel.org>,
-	Linux Power Management <linux-pm@vger.kernel.org>,
-	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>,
-	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>,
-	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
-Subject: Re: [PATCH 0/2] tools: Unify top-level quiet infrastructure
-Message-ID: <Z6JksXDRh8OSAh-u@google.com>
-References: <20250203-quiet_tools-v1-0-d25c8956e59a@rivosinc.com>
- <CAADnVQKTqRBQBA-yxB9EYPMgayP3rOE4iDhg+QD++2d=jxfY=Q@mail.gmail.com>
- <Z6JdwSsAk1xCiSrn@ghost>
+	s=arc-20240116; t=1738702710; c=relaxed/simple;
+	bh=bd49s9n1RiJ/STXaReO0I+d0CBUSCzhNE2UcYmxqo78=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=etLv2ifeuK1YlTGP3C606on8DnIvFUcA0sNJ3o6Awl1d5N7nDhGIXSAUEZeA9jOVBFuX0GZlKu196bMo6gtHbZMw2Xdk2MjMoWDKcQJLX65gB5H8PHIZjCNizxe4Kb19wZR1uGuKrkegVUekuVl2oqOxck/BoJyrTGm2xGIZSOA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=C9W1B5Kk; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id d802d552b2d24223; Tue, 4 Feb 2025 21:58:19 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id C579283011A;
+	Tue,  4 Feb 2025 21:58:18 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1738702699;
+	bh=bd49s9n1RiJ/STXaReO0I+d0CBUSCzhNE2UcYmxqo78=;
+	h=From:Subject:Date;
+	b=C9W1B5KkH1ubCDrnOTnJSDFOseA8fmhbtK+JWCJPZkfbrEGTVS26bFGKtkwCFK/Xl
+	 dVYH4aDNet/jRd2HZYW4rduW1dCOBSLWzhppx+7ef1yj9Tw5h7LHkkk3Yu7AXN0atV
+	 rm4kPxn48aER2u11QQVCLd979OnuGgGh1evigJGX/ScDoJn5yGz8ZPZcKBp8ZqaohM
+	 U6tCsEk/EMLaJKrrvmrZwYsEl8b4NSwu+aN/9WcSZy1H224rSNcSZzTTz0hxJNO+7P
+	 F9TAgzTMmWBUxWSwM+qexbB9nW90OVqsGNIBHvvZXzSJIdI2lDGckHa/7wsK1VJl6k
+	 5oFTEvwU/AXaw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Christian Loehle <christian.loehle@arm.com>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Aboorva Devarajan <aboorvad@linux.ibm.com>
+Subject:
+ [RFT][PATCH v1] cpuidle: teo: Avoid selecting deepest idle state over-eagerly
+Date: Tue, 04 Feb 2025 21:58:18 +0100
+Message-ID: <12630185.O9o76ZdvQC@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z6JdwSsAk1xCiSrn@ghost>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvudehhecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegudfhvdfgieehudfhjeefuedtledvfeeileeikeejudeugfekiedvudfgudeuheenucffohhmrghinhepshhpvggtrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepiedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheptghhrhhishhtihgrnhdrlhhovghhlhgvsegrrhhmrdgtohhmpdhrtghpthhtoheprghrthg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=6 Fuz1=6 Fuz2=6
 
-Hello,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-On Tue, Feb 04, 2025 at 10:34:41AM -0800, Charlie Jenkins wrote:
-> On Tue, Feb 04, 2025 at 05:18:42PM +0000, Alexei Starovoitov wrote:
-> > On Tue, Feb 4, 2025 at 12:10 AM Charlie Jenkins <charlie@rivosinc.com> wrote:
-> > >
-> > > The quiet infrastructure was moved out of Makefile.build to accomidate
-> > > the new syscall table generation scripts in perf. Syscall table
-> > > generation wanted to also be able to be quiet, so instead of again
-> > > copying the code to set the quiet variables, the code was moved into
-> > > Makefile.perf to be used globally. This was not the right solution. It
-> > > should have been moved even further upwards in the call chain.
-> > > Makefile.include is imported in many files so this seems like a proper
-> > > place to put it.
-> > >
-> > > To:
-> > >
-> > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-> > > ---
-> > > Charlie Jenkins (2):
-> > >       tools: Unify top-level quiet infrastructure
-> > >       tools: Remove redundant quiet setup
-> > >
-> > >  tools/arch/arm64/tools/Makefile           |  6 -----
-> > >  tools/bpf/Makefile                        |  6 -----
-> > >  tools/bpf/bpftool/Documentation/Makefile  |  6 -----
-> > >  tools/bpf/bpftool/Makefile                |  6 -----
-> > >  tools/bpf/resolve_btfids/Makefile         |  2 --
-> > >  tools/bpf/runqslower/Makefile             |  5 +---
-> > >  tools/build/Makefile                      |  8 +-----
-> > >  tools/lib/bpf/Makefile                    | 13 ----------
-> > 
-> > Nack.
-> > libbpf and bpftool are synced independently to github
-> > and released from there.
-> > This change breaks it.
+It has been observed that the recent teo governor update which concluded
+with commit 16c8d7586c19 ("cpuidle: teo: Skip sleep length computation
+for low latency constraints") caused the max-jOPS score of the SPECjbb
+2015 benchmark [1] on Intel Granite Rapids to decrease by around 1.4%.
+While it may be argued that this is not a significant increase, the
+previous score can be restored by tweaking the inequality used by teo
+to decide whether or not to preselect the deepest enabled idle state.
+That change also causes the critical-jOPS score of SPECjbb to increase
+by around 2%.
 
-Sorry, I overlooked this part and merged a change that touched the
-common files into the perf tree.
+Namely, the likelihood of selecting the deepest enabled idle state in
+teo on the platform in question has increased after commit 13ed5c4a6d9c
+("cpuidle: teo: Skip getting the sleep length if wakeups are very
+frequent") because some timer wakeups were previously counted as non-
+timer ones and they were effectively added to the left-hand side of the
+inequality deciding whether or not to preselect the deepest idle state.
 
-f2868b1a66d4f40f ("perf tools: Expose quiet/verbose variables in Makefile.perf")
+Many of them are now (accurately) counted as timer wakeups, so the left-
+hand side of that inequality is now effectively smaller in some cases,
+especially when timer wakeups often occur in the range below the target
+residency of the deepest enabled idle state and idle states with target
+residencies below CPUIDLE_FLAG_POLLING are often selected, but the
+majority of recent idle intervals are still above that value most of
+the time.  As a result, the deepest enabled idle state may be selected
+more often than it used to be selected in some cases.
 
-Unfortunately, it's already in v6.14-rc1.
+To counter that effect, add the sum of the hits metric for all of the
+idle states below the candidate one (which is the deepest enabled idle
+state at that point) to the left-hand side of the inequality mentioned
+above.  This will cause it to be more balanced because, in principle,
+putting both timer and non-timer wakeups on both sides of it is more
+consistent than only taking into account the timer wakeups in the range
+above the target residency of the deepest enabled idle state.
 
-> 
-> Can you explain how it breaks it? Currently bpftool and resolve_btfids
-> don't build quietly so this was an attempt to fix that.
+Link: https://www.spec.org/jbb2015/
+Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/cpuidle/governors/teo.c |    6 +++---
+ 1 file changed, 3 insertions(+), 3 deletions(-)
 
-So I think you will need something like this for v6.14.  Again, sorry
-about the trouble.
+--- a/drivers/cpuidle/governors/teo.c
++++ b/drivers/cpuidle/governors/teo.c
+@@ -349,13 +349,13 @@
+ 	}
+ 
+ 	/*
+-	 * If the sum of the intercepts metric for all of the idle states
+-	 * shallower than the current candidate one (idx) is greater than the
++	 * If the sum of the intercepts and hits metric for all of the idle
++	 * states below the current candidate one (idx) is greater than the
+ 	 * sum of the intercepts and hits metrics for the candidate state and
+ 	 * all of the deeper states, a shallower idle state is likely to be a
+ 	 * better choice.
+ 	 */
+-	if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
++	if (2 * (idx_intercept_sum + idx_hit_sum) > cpu_data->total) {
+ 		int first_suitable_idx = idx;
+ 
+ 		/*
 
-Thanks,
-Namhyung
+
 
 
