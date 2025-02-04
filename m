@@ -1,137 +1,160 @@
-Return-Path: <linux-pm+bounces-21324-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21325-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9CB52A271C2
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 13:24:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D394A2727E
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 14:12:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 319A2162BFF
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 12:24:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 26C183A17FB
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 13:11:58 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29DBB20E016;
-	Tue,  4 Feb 2025 12:23:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E146A2135AC;
+	Tue,  4 Feb 2025 12:52:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SMfrjbyT"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="OC1Bntae"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f43.google.com (mail-ed1-f43.google.com [209.85.208.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61DE520D4ED;
-	Tue,  4 Feb 2025 12:23:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0882D211A24
+	for <linux-pm@vger.kernel.org>; Tue,  4 Feb 2025 12:52:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738671812; cv=none; b=XVl59rIAyzZkR4kVOuMKRXv71IhogvXHblBTvUof1V9fwxL1L3Q+eMAe0j++H3T0fT+BZYQHloGWt965AeIQCW9Uu66yyes/2+Uh7ye0nRNSkD1gjnIBVHgab+v0VViCEAGiDN4pFAgLyujRN4dZlqCd1PLppvPpjs6mmqH7S2o=
+	t=1738673573; cv=none; b=CWq7i5t6gHRN+84h3uupCYtACyzvnTO0R7XSOrLPnV/wno+fEpW3sNeRLRM9B+tgeuVhEiScq2khLMLKdJMxML6Gx0/431EYfxjPWMYZzpl1mGyqOiFFkc3afi9j2ILW00G3UEO6sUu3qQ18qrIP0USfms67xZtyCaDAmzm6/PA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738671812; c=relaxed/simple;
-	bh=1AwBVmhsE6RjZNivDIyJD1c+DOs2FE3JauK+zQhNYbo=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=AT9Ekr9HvhfLGS+Huh8lG1BSkBDp9CtVlRpK1KLdUx54gQmleTpPHNGhfPam9+dKacTWo6NJDwlUrCMZ7hwpjuBYq7MDIAuL5SjEK/Q6A8xp8X4VBoWt/VDy2t7KX71V/NuzOhXa4ZylkphM4DDQMbKqWLT1wo+MigBlHD4YTdk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SMfrjbyT; arc=none smtp.client-ip=209.85.208.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f43.google.com with SMTP id 4fb4d7f45d1cf-5dca451f922so4278083a12.2;
-        Tue, 04 Feb 2025 04:23:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738671808; x=1739276608; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:reply-to:from:subject:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=6JW6nXgkGnw+4YwH5C7jTt8bg63lJJkPHEUKmMZ4igM=;
-        b=SMfrjbyTaSjqHQfUz05REEJqyzfebMUuJ2gBJY1bRwd+GoLkJ4R+v8Mtreh42rL6nh
-         sspbQREbKTCBUB9gMC888r1/gAgNTeWKsgSbJMLSak8H7hUeCIxi+w3+JQnMz/CAP3gw
-         mGhd9/+CvfX8pKvpa0vrFgZc1f/4c7Qaiigw2GqGVN98eEw6tq8M4Zz/1aSakjMXe52B
-         81zUqtITQMGgCzGwk4eKDxFe745jefT7caTygfOodrehEuXZ53b6hebQu1l7FDJ6xrDh
-         Jy8TppNItJzZ+Y3g8HxMRlhtUppCZhYrZYmm3UFFrYeppUCLyRU5FogrYLGVWneEdoml
-         Ru2A==
+	s=arc-20240116; t=1738673573; c=relaxed/simple;
+	bh=tdSryqq+nxgkvS3zFFee1YefkpUm59QAMRrn28AGXa8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=grkSFS5MEFz/MlrSN2VltUKQNu1+qEFSltE2ARg3sJpUkzDNUQCQFG3/dgh/SSQyhprAiv5+dpMFw28Txj4TrbplUXvueq7+Kcko+53W/A2PU6XKgcTiMbtAasxjAP/B+b7Edqing5/c09GYkp8v/HfKj6wqMZVyMsQ2V6XBtr0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=OC1Bntae; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738673570;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=pvOSzWz/fXFYgL1SHq0V9p8J5l8O+whyYebMY7GcFOU=;
+	b=OC1BntaefQ1eu6vqhk2wvkNON7w7HWBeXGrQsFoC50i9uR677Q7hUxgsPHa9SvFjKBk6bj
+	4iK8A/YBk1aTxIRJTtrfoIQ1a9yx0CDCVyZ5afo+j5a6CBbj6mGpDJmRVvwvdye83Ypzkd
+	pFbe7hX4O5KT48CkfFVSIIoClafwK5o=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-641-cAkTo9ZnN_-mGbDNr_j6YA-1; Tue, 04 Feb 2025 07:52:47 -0500
+X-MC-Unique: cAkTo9ZnN_-mGbDNr_j6YA-1
+X-Mimecast-MFC-AGG-ID: cAkTo9ZnN_-mGbDNr_j6YA
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6e42cf312a3so2328106d6.3
+        for <linux-pm@vger.kernel.org>; Tue, 04 Feb 2025 04:52:47 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738671808; x=1739276608;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:reply-to:from:subject:message-id
+        d=1e100.net; s=20230601; t=1738673567; x=1739278367;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=6JW6nXgkGnw+4YwH5C7jTt8bg63lJJkPHEUKmMZ4igM=;
-        b=TRz10F3xdmqF391kMdLWD8KtdDMYkJ0ZkIhyAs1aD3zL3Dbd8k848nstgOwhn1LBve
-         It2AN6yNXFetcD7UtNQHGIAPyA9WTCrD3SqcXulqaaghZ/3cTUyQnw6XE8q7KgLg4TyW
-         +f31/MYBR3iH1P1vVxr/z+3PKyXTrXnbp88qnVgyUpJ2PddmrmWDTONCzgm2nv6nVBwM
-         ax0x4dSRii2jEl9zj1Mmb2L3uQyrZXhelnN/NxLbTLONhf0vnE4undRtVNokSWAaFjUq
-         lUVLR8ak1KAfsDIVMgDuMtpLa9Eni85LBq8sHTYbyWKen8uYB1oJeBrbfZvBi27MhLKm
-         +n0g==
-X-Forwarded-Encrypted: i=1; AJvYcCUBeJst4E9ofKJd6OaqBZE49+f86LAQ97+yQeQMZ1T1i6gtXRQzjwFKNopFZrZgzP2Esiu7zjMGZe8=@vger.kernel.org, AJvYcCUxIhP7iCy3PY51m3flRg3Z9Njjp7fUNovq1CXPCWCFEbqnC5zKgv01RB6TqF2gYznU+cTztgORPaL7FaFQ@vger.kernel.org, AJvYcCWSkOCX92GL8dvYzZaAAqxvRWg2ZqSEVaW+rLL2xid5Y4WY/WqcSAjtPneMEZ0aP4a5NVUC4x1NRao=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyxAKdfqSvA5/+GYTeKqe/7//zecsE6p/1co6nzIfw602vY20GO
-	Q36Zp/XCSeIzntkHrvnjy5AXLkob3sWgB93Hj7pMjm2ckQ0DqtSs
-X-Gm-Gg: ASbGncsJr86XRmCfYUJMwMywazOGDNHhXinMEaO3//BQTuIzHuGJ8LV/+B2Y6qFnc6I
-	IvxSr29BxmVODLqCbffddrWpnNiFidu6b9PoYieN0s0NaBjvvKCbU5iw4M1zKrYJYPtvytkAygW
-	WRYLEuHNRxfwkLE5lal8nQ7grYYdIMpujihWP7C32XRqialDcmNs706m2hFaSOTudzxfiqN3gLN
-	QRDMTrzYiTf0jrFwV0I7XzWChTg6L0dB3ZRvEnDsASfsadbKLseiqtPR+30TqiFHLqX3mL5ItA0
-	Cvwn9Op8IwE6HYQOgDqYHHyHX0HMT3V0pkieUtflHN1QMA==
-X-Google-Smtp-Source: AGHT+IErkO44neLieHc6hwPzIGiBDdT4ITuB44WevvVWTsjc7SP/HSFfpELM4neDw/ug1OjRMfoI5Q==
-X-Received: by 2002:a05:6402:e96:b0:5dc:7464:2228 with SMTP id 4fb4d7f45d1cf-5dc7464261cmr21034232a12.2.1738671808162;
-        Tue, 04 Feb 2025 04:23:28 -0800 (PST)
-Received: from abityuts-desk1.ger.corp.intel.com ([134.191.196.181])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dc723e4ceasm9184143a12.21.2025.02.04.04.23.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 04:23:27 -0800 (PST)
-Message-ID: <e9188365425d2a4c0dfa7cfa2b17ad3d9fcf2735.camel@gmail.com>
-Subject: Re: [PATCH] intel_idle: introduce 'use_acpi_cst' module parameter
-From: Artem Bityutskiy <dedekind1@gmail.com>
-Reply-To: dedekind1@gmail.com
-To: David Arcari <darcari@redhat.com>, linux-pm@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>, Jacob Pan
- <jacob.jun.pan@linux.intel.com>,  Len Brown <lenb@kernel.org>, Prarit
- Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-Date: Tue, 04 Feb 2025 14:23:24 +0200
-In-Reply-To: <20250128141139.2033088-1-darcari@redhat.com>
-References: <20250128141139.2033088-1-darcari@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+        bh=pvOSzWz/fXFYgL1SHq0V9p8J5l8O+whyYebMY7GcFOU=;
+        b=ma8SEZj0iUJkrjRng4G2PWgtZGCEEC87LxB4dlw19298zV3C1WFStoYGnP49U17r6L
+         UBrBJFg+twXQWGErB+5WcU0E4KDgBDHnthm+WCIc0ea/YCz9PXSbTHvQvQu8tYzpw6ST
+         0vKM2a+Qst3DB7eMEl0PbwKIBMMNfvnobwZgMlbUxwOQnLj59OIhbBNPiDvoti651Oz1
+         DkKCR7D1Iq1hr2pL4IJlWjhBQonPJQv2HF5V0eVvSe6tNRvLMm+jtLT/rlMM61Xnr3Uu
+         IWSAhNKroDzJfamGFS6qoOLzS53c2Q0arnWix4poc6Pu4XfpHjTS1GtNKh7mjaPC2fLm
+         wn0w==
+X-Forwarded-Encrypted: i=1; AJvYcCWk//S3F2CabzfonrzTA9wC+qW0D1qdfWKzx3k9NBgKTyW4rQDAAMkuc82xl48jhZMJYhwnjuM8UA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz32eNiw09h1/DVCABj+GfbGJkZOZ/bGEF3mxRmZeGUbpQGJ3VI
+	cq9icT7pZjYzHU0HZFV6S8FFI8N7TtUh5Mdc6pnV6BnruI2tdMgvIyLUm8sddYttJLNrmQVImDn
+	cAyvQg8PKinUCngH2a8kjb/elKVvHR8HDK2WozwW22M3nDjeZBjvrtbzX
+X-Gm-Gg: ASbGncuuifoLuIQ8h5eCKZtpVGOjanLlDWSdIXDggbPO9gwqJCN7GoldZN2ghKV2ac3
+	78ys6NbYuxGrD7F79I3WTZ6T1KQow9tDnKGfplqwgbhRsh3I6BBIfziep52acUt9xs9A8s8xZS1
+	n5REvGw9EYYP/BWvWZM1KIARlqhP/+nzWkgqLqrV1aUouHqZ0LRrfr7uMTCDnyWVT0S63GI/7hH
+	ZLbK1iKm5YILUzsG7CrnfMSUMU9nr42siemPyT3m+bW7anmiBjmoYuMWKvtFoHQZPsuMIt82SS2
+	NnH+
+X-Received: by 2002:a05:6214:48d:b0:6d8:a67e:b2fb with SMTP id 6a1803df08f44-6e243c7bf68mr389612506d6.39.1738673567401;
+        Tue, 04 Feb 2025 04:52:47 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEcgbWPNl7P8tA5g1YmE4r9A5UoaGRH3/2GoingbBKNmrPxXra0qeVOzHPtGDTdRQvEw8kNTA==
+X-Received: by 2002:a05:6214:48d:b0:6d8:a67e:b2fb with SMTP id 6a1803df08f44-6e243c7bf68mr389612246d6.39.1738673567139;
+        Tue, 04 Feb 2025 04:52:47 -0800 (PST)
+Received: from [10.26.1.94] ([66.187.232.136])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e254922a85sm61433486d6.81.2025.02.04.04.52.46
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 04 Feb 2025 04:52:46 -0800 (PST)
+Message-ID: <afbe2137-398b-4053-93e7-2a03aeb32220@redhat.com>
+Date: Tue, 4 Feb 2025 07:52:45 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] intel_idle: introduce 'use_acpi_cst' module parameter
+To: dedekind1@gmail.com, linux-pm@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>,
+ Jacob Pan <jacob.jun.pan@linux.intel.com>, Len Brown <lenb@kernel.org>,
+ Prarit Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250128141139.2033088-1-darcari@redhat.com>
+ <e9188365425d2a4c0dfa7cfa2b17ad3d9fcf2735.camel@gmail.com>
+Content-Language: en-US
+From: David Arcari <darcari@redhat.com>
+In-Reply-To: <e9188365425d2a4c0dfa7cfa2b17ad3d9fcf2735.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi David,
 
-On Tue, 2025-01-28 at 09:11 -0500, David Arcari wrote:
+Hi Artem,
 
-> +The ``use_acpi_cst`` module parameter (recognized by ``intel_idle`` if t=
-he
-> +kernel has been configured with ACPI support) can be set to make the dri=
-ver
-> +ignore the per cpu idle states in lieu of ACPI idle states. ``use_acpi_c=
-st``
-> +has no effect if ``no_acpi`` is set).
+On 2/4/25 7:23 AM, Artem Bityutskiy wrote:
+> Hi David,
+> 
+> On Tue, 2025-01-28 at 09:11 -0500, David Arcari wrote:
+> 
+>> +The ``use_acpi_cst`` module parameter (recognized by ``intel_idle`` if the
+>> +kernel has been configured with ACPI support) can be set to make the driver
+>> +ignore the per cpu idle states in lieu of ACPI idle states. ``use_acpi_cst``
+>> +has no effect if ``no_acpi`` is set).
+> 
+> With this change, there will be three parameters:
+> 
+> * no_acpi
+> * use_acpi
+> * use_acpi_cst
+> 
+> I would like to make the naming as intuitive as possible. We do not rename the
+> first 2, but for the 3rd one, I think "force_acpi" would be a better name. Or
+> perhaps "no_native"?
 
-With this change, there will be three parameters:
+The problem with force_acpi is it is very similar to force_use_acpi 
+which is what intel_idle.c uses internally:
 
-* no_acpi
-* use_acpi
-* use_acpi_cst
+drivers/idle/intel_idle.c:module_param_named(use_acpi, force_use_acpi, 
+bool, 0444);
 
-I would like to make the naming as intuitive as possible. We do not rename =
-the
-first 2, but for the 3rd one, I think "force_acpi" would be a better name. =
-Or
-perhaps "no_native"?
+That said, I am not attached to the 'use_acpi_cst' parameter name.
 
-* no_acpi - Do not use ACPI at all. Only native mode is available, no ACPI =
-mode.
-* use_acpi - No-op in ACPI mode, consult ACPI tables for C-states on/off
-  status in native mode.
-* force_acpi (or no_native?) - Work only in ACPI mode, no native mode avail=
-able
-  (ignore all custom tables).
+> 
+> * no_acpi - Do not use ACPI at all. Only native mode is available, no ACPI mode.
+> * use_acpi - No-op in ACPI mode, consult ACPI tables for C-states on/off
+>    status in native mode.
+> * force_acpi (or no_native?) - Work only in ACPI mode, no native mode available
+>    (ignore all custom tables).
+> 
+> Additionally, I think we should enhance the documentation for 'no_acpi' and
+> 'use_acpi' while we're at it. Otherwise, it is hard to distinguish between these
+> three options. Would you consider another patch that improves the documentation
+> for 'no_acpi' and 'use_acpi', and then adds the third parameter?
 
-Additionally, I think we should enhance the documentation for 'no_acpi' and
-'use_acpi' while we're at it. Otherwise, it is hard to distinguish between =
-these
-three options. Would you consider another patch that improves the documenta=
-tion
-for 'no_acpi' and 'use_acpi', and then adds the third parameter?
+I'm happy to resubmit. I guess I could use 'no_native' for the new 
+parameter and then update the documentation as you suggest above.
 
-Thanks, Artem!
+Does that work?
+
+> 
+> Thanks, Artem!
+> 
+
+Best,
+-DA
+
 
