@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-21336-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21337-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3BF64A276AC
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 17:01:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 535D4A276AD
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 17:01:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 648C01883FFD
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 16:01:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1463164265
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Feb 2025 16:01:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C6ECF21516A;
-	Tue,  4 Feb 2025 16:01:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B73F5215198;
+	Tue,  4 Feb 2025 16:01:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="iAHFxNBI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EVBfhA+s"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oi1-f180.google.com (mail-oi1-f180.google.com [209.85.167.180])
+Received: from mail-oi1-f170.google.com (mail-oi1-f170.google.com [209.85.167.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 11E85AD2D;
-	Tue,  4 Feb 2025 16:01:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1ABCB21517D;
+	Tue,  4 Feb 2025 16:01:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738684862; cv=none; b=UWg2c/1/v/t6NSVi5gzR2qRrf2qopswI0eLwUmo5IRgC9aKPESka68LPdHgCbtCOJ9FBWqbfbz7k0HmjQSu15A0upho+T03yi1PSS56h6TvhyGNqmHkt6tfWYge02W6tw4zwBY+vXkc1F+agWgOMZH2E8Ub+3u763FPEco0NNVA=
+	t=1738684863; cv=none; b=NVAqY7RuXaMTCQRAzGrLEnDnvAZZ8SZO2lOk+jMwPNyXwm2DanUri3zB3EUzTwGtjUW7F6/1+CEwxmfJM1KQi0s7/C7WJw1P4VbLGVtUpaVFJP5ArUeUM/Ei2jTsCiQVZCd+QbFLmVjI/jDT6q5CV6kCZ5N5aM1DYFIG/k0SWE4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738684862; c=relaxed/simple;
-	bh=Zw4geiqrec6cHDyNVp5ah68FGJHispIhBZyciy8rD9E=;
+	s=arc-20240116; t=1738684863; c=relaxed/simple;
+	bh=gHtHSfNR3XwHSs8fl5jUsqaUzIZ9r16vjKwIdtE7nig=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=W6wuc75OFo/0BYxRNdMe7uSye5sKCq/LdLkjTQl2hMdKcb9ZpLP6CygamlNccQsnbPpyza/ei8yLjglKtxPetTtA2kknR6bL9qFBuuT/Jqx4B/gUUigHQFkb9WgSk2kzwSkAec1O4nK6E4JelsO0P8W1YqettsaMcnSIs/knp/c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=iAHFxNBI; arc=none smtp.client-ip=209.85.167.180
+	 MIME-Version; b=cPvsD9Qxu62X0t81Semk6dCegqjk/xj5lhG4VR50WQotp9djxMOrkq6ETTg3OrvBMI+xu/nVqHikDh+3lGWV3siGpyWXxTVbq8dw3eOZsqSbYJxstTpvpPFef6Jj9oETyL6sc8grNnyF4Xx9fk6d0gbg82q1s4Lc4SV73XTaiwY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EVBfhA+s; arc=none smtp.client-ip=209.85.167.170
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-oi1-f180.google.com with SMTP id 5614622812f47-3eb7f3b1342so2807434b6e.1;
-        Tue, 04 Feb 2025 08:01:00 -0800 (PST)
+Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3eba5848ee4so1444440b6e.3;
+        Tue, 04 Feb 2025 08:01:01 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738684860; x=1739289660; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738684861; x=1739289661; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=qHlljfy889XgONy8L5QfUbtDDGX6j94H9380ihQ7yjQ=;
-        b=iAHFxNBIfJZuTxVc/WkyDv7MVbTXyjCH9Y6RY16ybI7OVzfyvYwIJCCdxbcfGtfOOA
-         qYKeNPoNAdqlsKT8x8OAR8ood5PCkdXBqkjkMC0MBL0mY22cV8M+xRgHjajl4GukAD/m
-         rNKPPWYrD2qeOK5tpkg7aWp+lAs0BHEHu7GZ6GIfq5YOlWjNJml2UXpAV9PCeCETs/L9
-         7SWlscJdo0R9fAbvgbljyRssG1oz0XV3fA0X/gdTAih0oHNmXADg0ky/gEWhkrh490oX
-         B1mSleJF2NdqpeX6qwWNnF/+WWBIfzezs3jVBdy7+nVeocxOW95esOol/i7JoRByMZdf
-         nSDg==
+        bh=ivl6HogrA7oXfSru2BLUm6InkAsQKXYHbfgBQ8l+uUo=;
+        b=EVBfhA+sdS8ai0UVB338omDtPDsut2lzLzeCD04oHeeTJ9LOv0b+RHTS9wSwLxo+Tg
+         iDcVZxCau0MEkTlsNl3bVPYBJW1nC3i68ENLSG/iUZaGhK4m5g5rSNDL3HvfUKRkVnbo
+         WbtVCoZMfa3dE/InnwlXL7JAr8eRiWcYt/YhsThNQm3x9WE8yD/1dcPUz4YlqJnjudaB
+         CRXVB4qA3U/gJ/Ds3TgomhB3ILclWtTEgLq7PBp8Bt03Xw/QvYBorXAxITNuzDUg8K3s
+         aDXmva+CYf0i/9P2uonXLnygybqnmEmCBTYbptO+DmSRlIk8PYJK+ulclLnDnbJJVkb+
+         l+cw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738684860; x=1739289660;
+        d=1e100.net; s=20230601; t=1738684861; x=1739289661;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=qHlljfy889XgONy8L5QfUbtDDGX6j94H9380ihQ7yjQ=;
-        b=hh32Oo/OmDgEdIhrhf+r25OkOGSc6tSg+TKYLlNcJ5GP0XEnzZJMzJNe0E+7vz85Q2
-         B56UDNJa+8L91psZEVR6KiA2z/4AFlg66r4OwVUZK8NMeLlMrlpFi0guLf4vf+cn9AKL
-         LgH54+GnQEiwL11ANRXMof2k6N+/TyVPVKGQOPMRGNGA9x/NZty7Xxh3O2pp0khh0gvS
-         VT0a4jZjFGa5BSIhdLW4/6fV0x3o89XkLUqy/V5d9lOOIShfMwK6BojmCRDhpY+AySF1
-         GdDH0PcsToipJJd1eBneIrhzMaS7q3KGKsIkC1xnLzkKKxTf63eJtvfYFhog0gl15TQY
-         hJoA==
-X-Forwarded-Encrypted: i=1; AJvYcCUH+RzXvfeCALyqB8a7c5Ho9eHgNOKoM6lfWa5JhjASAaR0hYALSqPsDvRg1UdwNQpGWOIghxodiw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxK/qBSISLFq8XFKqbR4YAhDBeahEkX9MGkaObiJA7QoyPE1V5m
-	TsDX6rWWlGjzZTKr1ZAipnEo+/fPeOq8GUsV/mKIczYeMlDr2Y77
-X-Gm-Gg: ASbGncsdoHuu22ecbP50sPppJjgm/JA+DXYn1eR6Skl8lJLngfXnyzg0jDgTgNUn6Jp
-	pMwwITpgdeHJlkiPaykFFx1/PpvWdoEnasEOmhUvO3wV+mU1xfcP8PD2L2RP58EWu9Q7w2g6heC
-	cAhrdPjRJIWE60RMCwMR6DRhtO1fCa7PciEHdGZeWylMbg+G5ucRCKYd6vcSC6YRWh05fasg4AA
-	S6tC8WE69UE5EJzW5SiSRAOwgWHMRm6Cy1Q3kw5BtdUWygHy+MJCtFKNtfrZHTwexCQHdL1HoEH
-	2sAx4/ICrbMe+sL+hH8tv+LsVpnYa1BvnqE=
-X-Google-Smtp-Source: AGHT+IGaIZAPvAttTrRBItEFWc9qMjMXZM9Cgd/5fO7zmh2Rf9f7b6ITgUhhswhFOvU7exbhdKvtSg==
-X-Received: by 2002:a05:6808:1793:b0:3f1:b153:3105 with SMTP id 5614622812f47-3f323af0374mr20723191b6e.26.1738684859999;
-        Tue, 04 Feb 2025 08:00:59 -0800 (PST)
+        bh=ivl6HogrA7oXfSru2BLUm6InkAsQKXYHbfgBQ8l+uUo=;
+        b=wL4nFHTqQIdHjwp1SXYKqzl1iP3sLcqHwQ9nCYHr8T9g9SmXHI6cuzA3znkUwSXCNt
+         rgL24XrGqfWBc0/hxuD3EQ3yvOk+jTlqgHNK0SVOMOMCKMs9kM8FrbpYcML1ZUYazenK
+         oqrVmkB/hYidlTLnuq0/7AFmziIlcaDtg/WLPBZa4ziROj/jRf4MaOzvV7qt9yidaLGJ
+         Wf6i1dl4saO7YIN1kVgg6ALF7YQcllwEn5pP//2rUjUrxy7SmV4Z1vCa1ubiRh66nbhB
+         K6lyVKNNqf2YCW0MNmppAySiCq8j10WxIkKKXrPxqeo7YlSBH1j/PSOIlLkzq6FQfblR
+         cP5w==
+X-Forwarded-Encrypted: i=1; AJvYcCWTMkkDu56TK9xPO6jTDR5VoZb+yyP14Zo1dGiSGDQpeEZsjXCbAfUciFCQ8SEGInxfDqVga+kSZA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJnu6RfXkDh5//56wUfNVMSRgivpLOfdC5eyUDlgM710Wch7gM
+	qcm/yBaQar+0XsyIsZ4Ye4pX8pEaI5BJAxX5b9wFuz8UloCWpudsbWJumA==
+X-Gm-Gg: ASbGncv6DUJv1z+I68kozPmeI00AsPvkfVS71eCtpAILCU53RgoSW3kcg3Q0sQBD8PJ
+	ttDCBznIPV7Cjzy12uHcwHo5vu6pdGbdOwgYoJusv79tPZBZK+BYUnYzwpAByMCoGdH+UlMS1le
+	o0BrWPGNHdUcLtu2ATEm+m/8tfmTfNIcar28OiK4SVQAq3Ivzz3t/7sHZPzYSXspZovdAcENquP
+	Fo53CJ3kIuKwSGbW4jNm06Z0JBUbN/O0TB9pPAjtxGQy3ybpZ0G7ATyV8spJwKvMDs6XiZ/vy9B
+	8dX0I6uTBvAWQXkSIT8IrQy0aZMvOrbH89E=
+X-Google-Smtp-Source: AGHT+IHy0B2vYqgAr9PIDLfyic3sok55FBROOwkHMKSQuiGSE7DGkWQzewjBscPIUMOj2/aA2OWPdw==
+X-Received: by 2002:a05:6808:2f07:b0:3ea:6149:d6fd with SMTP id 5614622812f47-3f323a14825mr20694508b6e.2.1738684860768;
+        Tue, 04 Feb 2025 08:01:00 -0800 (PST)
 Received: from localhost.localdomain ([2600:1700:fb0:1bcf:f8ca:b029:fcc5:5836])
-        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f33365be86sm3039570b6e.31.2025.02.04.08.00.59
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f33365be86sm3039570b6e.31.2025.02.04.08.01.00
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 08:00:59 -0800 (PST)
+        Tue, 04 Feb 2025 08:01:00 -0800 (PST)
 From: Chris Morgan <macroalpha82@gmail.com>
 To: linux-sunxi@lists.linux.dev
 Cc: devicetree@vger.kernel.org,
@@ -84,11 +84,10 @@ Cc: devicetree@vger.kernel.org,
 	krzk+dt@kernel.org,
 	robh@kernel.org,
 	sre@kernel.org,
-	Chris Morgan <macromorgan@hotmail.com>,
-	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Subject: [PATCH V2 1/4] dt-bindings: power: supply: axp20x-battery: Add  x-powers,no-thermistor
-Date: Tue,  4 Feb 2025 09:58:31 -0600
-Message-ID: <20250204155835.161973-2-macroalpha82@gmail.com>
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: [PATCH V2 2/4] mfd: axp20x: AXP717: Add AXP717_TS_PIN_CFG to writeable  regs
+Date: Tue,  4 Feb 2025 09:58:32 -0600
+Message-ID: <20250204155835.161973-3-macroalpha82@gmail.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250204155835.161973-1-macroalpha82@gmail.com>
 References: <20250204155835.161973-1-macroalpha82@gmail.com>
@@ -102,57 +101,40 @@ Content-Transfer-Encoding: 8bit
 
 From: Chris Morgan <macromorgan@hotmail.com>
 
-Add the vendor specific boolean property of x-powers,no-thermistor.
-This property optionally describes hardware where no thermistor is
-present on the battery and is specific to the AXP717. In rare
-circumstances this value can be set incorrectly in the efuse of the
-PMIC, and if it is not hard-coded the device will fail to charge.
+Add AXP717_TS_PIN_CFG (register 0x50) to the table of writeable
+registers so that the temperature sensor can be configured by the
+battery driver.
 
 Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
-Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 ---
- .../x-powers,axp20x-battery-power-supply.yaml | 20 ++++++++++++++++---
- 1 file changed, 17 insertions(+), 3 deletions(-)
+ drivers/mfd/axp20x.c       | 1 +
+ include/linux/mfd/axp20x.h | 1 +
+ 2 files changed, 2 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml
-index 5ccd375eb294..3504c76a01d8 100644
---- a/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml
-+++ b/Documentation/devicetree/bindings/power/supply/x-powers,axp20x-battery-power-supply.yaml
-@@ -14,9 +14,6 @@ maintainers:
-   - Chen-Yu Tsai <wens@csie.org>
-   - Sebastian Reichel <sre@kernel.org>
- 
--allOf:
--  - $ref: power-supply.yaml#
--
- properties:
-   compatible:
-     oneOf:
-@@ -35,7 +32,24 @@ properties:
-       this gauge.
-     $ref: /schemas/types.yaml#/definitions/phandle
- 
-+  x-powers,no-thermistor:
-+    type: boolean
-+    description: Indicates that no thermistor is connected to the TS pin
-+
- required:
-   - compatible
- 
-+allOf:
-+  - $ref: power-supply.yaml#
-+  - if:
-+      not:
-+        properties:
-+          compatible:
-+            contains:
-+              enum:
-+                - x-powers,axp717-battery-power-supply
-+    then:
-+      properties:
-+        x-powers,no-thermistor: false
-+
- additionalProperties: false
+diff --git a/drivers/mfd/axp20x.c b/drivers/mfd/axp20x.c
+index cff56deba24f..e9914e8a29a3 100644
+--- a/drivers/mfd/axp20x.c
++++ b/drivers/mfd/axp20x.c
+@@ -224,6 +224,7 @@ static const struct regmap_range axp717_writeable_ranges[] = {
+ 	regmap_reg_range(AXP717_VSYS_V_POWEROFF, AXP717_VSYS_V_POWEROFF),
+ 	regmap_reg_range(AXP717_IRQ0_EN, AXP717_IRQ4_EN),
+ 	regmap_reg_range(AXP717_IRQ0_STATE, AXP717_IRQ4_STATE),
++	regmap_reg_range(AXP717_TS_PIN_CFG, AXP717_TS_PIN_CFG),
+ 	regmap_reg_range(AXP717_ICC_CHG_SET, AXP717_CV_CHG_SET),
+ 	regmap_reg_range(AXP717_DCDC_OUTPUT_CONTROL, AXP717_CPUSLDO_CONTROL),
+ 	regmap_reg_range(AXP717_ADC_CH_EN_CONTROL, AXP717_ADC_CH_EN_CONTROL),
+diff --git a/include/linux/mfd/axp20x.h b/include/linux/mfd/axp20x.h
+index c3df0e615fbf..3c5aecf1d4b5 100644
+--- a/include/linux/mfd/axp20x.h
++++ b/include/linux/mfd/axp20x.h
+@@ -137,6 +137,7 @@ enum axp20x_variants {
+ #define AXP717_IRQ2_STATE		0x4a
+ #define AXP717_IRQ3_STATE		0x4b
+ #define AXP717_IRQ4_STATE		0x4c
++#define AXP717_TS_PIN_CFG		0x50
+ #define AXP717_ICC_CHG_SET		0x62
+ #define AXP717_ITERM_CHG_SET		0x63
+ #define AXP717_CV_CHG_SET		0x64
 -- 
 2.43.0
 
