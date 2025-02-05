@@ -1,38 +1,38 @@
-Return-Path: <linux-pm+bounces-21365-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21363-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6311FA284A3
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 07:52:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC27CA2843E
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 07:22:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C256C3A696B
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 06:52:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84C2F1884F4A
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 06:22:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0A422836B;
-	Wed,  5 Feb 2025 06:52:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89A92227BB1;
+	Wed,  5 Feb 2025 06:22:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="EyvtoPjn"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="jFBvJHT2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m3289.qiye.163.com (mail-m3289.qiye.163.com [220.197.32.89])
+Received: from mail-m1973171.qiye.163.com (mail-m1973171.qiye.163.com [220.197.31.71])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0346921517A;
-	Wed,  5 Feb 2025 06:52:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECE78227B96;
+	Wed,  5 Feb 2025 06:22:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.31.71
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738738336; cv=none; b=j18khY7b6+zCIqIq6UPzMgk5kIVMplTS6Nmj3sQn1w0Rjm/Pv+GwtJ0ITXWviy0zbeCnzzOkbc8tpGE/SLmJzeI44/CuZhhS7yZbIFRM6SFGadgqLSolk0pVnazGrC0aeyqQWbO7o3IVgayB2NGL2/mUMbajqjUygwbZ/cwf7KE=
+	t=1738736536; cv=none; b=UNHK4oxyXE09BEiXTbrD/WcvYkiOliucnE07fMTSOyXWd8kfNxIG5GL4+ji/I4w0hZ7Cy3Kizls85V5HHpdsw6NKk+v/sMJCtMnWu9JFf9uW0NIxaNuwLgtd7ryzFliNqBH9hDGu38N5E7I6gDbtGty1h3HXcDTUAoUFKZeALKQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738738336; c=relaxed/simple;
-	bh=SGB3QWwTbnOY/dRtg9F0+JSwM2H3uiSHXb87SVLKkTo=;
-	h=From:To:Cc:Subject:Date:Message-Id; b=AyVBkvybzBJqt+DrJM2h+eA4Ku6XCNmP2y5atZK5mG8yJEKQxw8OR1ZIa8HtuyftltdMawP1V4QYKEtodxehDUjYXUNlVj3YG8nYjghYdi2myaq5R74HDJ+0sQYRmTesjzDTEPr+vXrhS7suxXdZwgfF0LWMG+3vV2XImeI9gLQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=EyvtoPjn; arc=none smtp.client-ip=220.197.32.89
+	s=arc-20240116; t=1738736536; c=relaxed/simple;
+	bh=1WjUIeQxdIVWe3Z8YGm5vuAxb6SrOC1jbiDVQy7pwIs=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=eXfKXyMlCJlDkqiFaNR5ZdNMshdKgORl5aTrkmIdA4ikeRfRJzX68JN6wVi9MgXlCtzkqUhW++v1UxJjF/IkKkrKpHQ+3NVG34CbQ7777cZtQzcuS81QdUzuwm8D+nTcfWADr2DiSGJSnU1BJVMI+V6CtYL5AGzvTfJl03OYseo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=jFBvJHT2; arc=none smtp.client-ip=220.197.31.71
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
 Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id a34c45df;
-	Wed, 5 Feb 2025 14:16:41 +0800 (GMT+08:00)
+	by smtp.qiye.163.com (Hmail) with ESMTP id a34c461c;
+	Wed, 5 Feb 2025 14:16:59 +0800 (GMT+08:00)
 From: Shawn Lin <shawn.lin@rock-chips.com>
 To: Rob Herring <robh+dt@kernel.org>,
 	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
@@ -53,22 +53,24 @@ Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
 	devicetree@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: [PATCH v7 0/7] Initial support for RK3576 UFS controller
-Date: Wed,  5 Feb 2025 14:15:49 +0800
-Message-Id: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+Subject: [PATCH v7 1/7] dt-bindings: ufs: Document Rockchip UFS host controller
+Date: Wed,  5 Feb 2025 14:15:50 +0800
+Message-Id: <1738736156-119203-2-git-send-email-shawn.lin@rock-chips.com>
 X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
 X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGU9OHlYaS09LQhpOHUpNTE1WFRQJFh
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQkMeTlZOH0NPGElNTkwYTkpWFRQJFh
 	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
 	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a94d4c0efd809cckunma34c45df
+X-HM-Tid: 0a94d4c133d509cckunma34c461c
 X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nio6FAw4KzISEgsKAj8#SxdP
-	QxwwFDRVSlVKTEhDTEhNSUtISUtJVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUhDQ0k3Bg++
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6NDo6Pxw6TDIJEgsQODoTS0NI
+	EAwwCgJVSlVKTEhDTEhNSUlLQklDVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUhCQ0s3Bg++
 DKIM-Signature:a=rsa-sha256;
-	b=EyvtoPjnKvd2GCieDWWecf644Er9ayVEOwIBiJWqKu7sv27AO/U50GvCPfBrLfT0G9/WWVkGPYPXuEVXovhpvRf9UiZMDWkJasJYtA4IGhWkOQT3wu1O9ZMosHp7YUE4JBzEgDtXRDgshJ5DBfh4EwAFiyskk8/YEWFX16LRy7o=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=LvWGWQfFisDUe17eK1lZRK/TZq7bEeDm1pbtMWmlHfY=;
+	b=jFBvJHT2/rhr5L8asz6+/gnKunPTKNbCppfECRuLFZ9MgkKuJ/5zfGwfboAINRlaFollg+Om1scIJFODCGGUEJk2I2W5BKKY05PhJhVzUlbIKM+AjnvfUOFDe8H7wHL5kGV2WkXjpkXZccdfiCo7REq+P0UkBN2hY6NVxzN+bOQ=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=BHEbijEH0aNaPphsBT1odyRXOEOUu8ftse2aZETggD8=;
 	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -76,103 +78,146 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 
-This patchset adds initial UFS controller supprt for RK3576 SoC.
-Patch 1 is the dt-bindings. Patch 2-4 deal with rpm and spm support
-in advanced suggested by Ulf. Patch 5 exports two new APIs for host
-driver. Patch 6 and 7 are the host driver and dtsi support.
+Document Rockchip UFS host controller for RK3576 SoC.
 
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+---
 
-Changes in v7:
-- add definitions for all kinds of hex values if possible
-- Misc log and comment improvement
-- use udelay for less than 10us cases
-- other improvements suggested by Mani
-- Use 0x0 for consistency
-- Collect Mani's acked-by tag
-
+Changes in v7: None
 Changes in v6:
 - fix indentation to 4 spaces suggested by Krzysztof
-- export dev_pm_genpd_rpm_always_on()
-- replace host drivers with glue drivers suggested by Mani
-- add Main's review tag
-- remove UFS_MAX_CLKS
-- improve err log
-- remove hardcoded clocks
-- remove comment from ufs_rockchip_device_reset()
-- remove pm_runtime_* from ufs_rockchip_remove()
-- rebase to scsi/next
-- move ufs_rockchip_set_pm_lvl to ufs_rockchip_rk3576_init()
-- add comments about device_set_awake_path()
-- remove comments suggested by Mani
 
 Changes in v5:
 - use ufshc for devicetree example suggested by Mani
-- fix a compile warning
-- use device_set_awake_path() and disable ref_out_clk in suspend
-- remove pd_id from header
-- reconstruct ufs_rockchip_hce_enable_notify() to workaround hce enable
-  without using new quirk
 
 Changes in v4:
 - properly describe reset-gpios
-- deal with power domain of rpm and spm suggested by Ulf
-- Fix typo and disable clks in ufs_rockchip_remove
-- remove clk_disable_unprepare(host->ref_out_clk) from
-  ufs_rockchip_remove
 
 Changes in v3:
 - rename the file to rockchip,rk3576-ufshc.yaml
 - add description for reset-gpios
 - use rockchip,rk3576-ufshc as compatible
-- reword Kconfig description
-- elaborate more about controller in commit msg
-- use rockchip,rk3576-ufshc for compatible
-- remove useless header file
-- remove inline for ufshcd_is_device_present
-- use usleep_range instead
-- remove initialization, reverse Xmas order
-- remove useless varibles
-- check vops for null
-- other small fixes for err path
-- remove pm_runtime_set_active
-- fix the active and inactive reset-gpios logic
-- fix rpm_lvl and spm_lvl to 5 and move to end of probe path
-- remove unnecessary system PM callbacks
-- use UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE instead
-  of UFSHCI_QUIRK_BROKEN_HCE
 
 Changes in v2:
 - rename the file
 - add reset-gpios
 
-Shawn Lin (6):
-  dt-bindings: ufs: Document Rockchip UFS host controller
-  soc: rockchip: add header for suspend mode SIP interface
-  pmdomain: rockchip: Add smc call to inform firmware
-  scsi: ufs: core: Export ufshcd_dme_reset() and ufshcd_dme_enable()
-  scsi: ufs: rockchip: initial support for UFS
-  arm64: dts: rockchip: Add UFS support for RK3576 SoC
-
-Ulf Hansson (1):
-  pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
-
- .../bindings/ufs/rockchip,rk3576-ufshc.yaml        | 105 ++++++
- arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  24 ++
- drivers/pmdomain/core.c                            |  35 ++
- drivers/pmdomain/rockchip/pm-domains.c             |   8 +
- drivers/ufs/core/ufshcd.c                          |   6 +-
- drivers/ufs/host/Kconfig                           |  12 +
- drivers/ufs/host/Makefile                          |   1 +
- drivers/ufs/host/ufs-rockchip.c                    | 353 +++++++++++++++++++++
- drivers/ufs/host/ufs-rockchip.h                    |  90 ++++++
- include/linux/pm_domain.h                          |   7 +
- include/soc/rockchip/rockchip_sip.h                |   3 +
- include/ufs/ufshcd.h                               |   2 +
- 12 files changed, 644 insertions(+), 2 deletions(-)
+ .../bindings/ufs/rockchip,rk3576-ufshc.yaml        | 105 +++++++++++++++++++++
+ 1 file changed, 105 insertions(+)
  create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
- create mode 100644 drivers/ufs/host/ufs-rockchip.c
- create mode 100644 drivers/ufs/host/ufs-rockchip.h
 
+diff --git a/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml b/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
+new file mode 100644
+index 0000000..c7d17cf4
+--- /dev/null
++++ b/Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
+@@ -0,0 +1,105 @@
++# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
++%YAML 1.2
++---
++$id: http://devicetree.org/schemas/ufs/rockchip,rk3576-ufshc.yaml#
++$schema: http://devicetree.org/meta-schemas/core.yaml#
++
++title: Rockchip UFS Host Controller
++
++maintainers:
++  - Shawn Lin <shawn.lin@rock-chips.com>
++
++allOf:
++  - $ref: ufs-common.yaml
++
++properties:
++  compatible:
++    const: rockchip,rk3576-ufshc
++
++  reg:
++    maxItems: 5
++
++  reg-names:
++    items:
++      - const: hci
++      - const: mphy
++      - const: hci_grf
++      - const: mphy_grf
++      - const: hci_apb
++
++  clocks:
++    maxItems: 4
++
++  clock-names:
++    items:
++      - const: core
++      - const: pclk
++      - const: pclk_mphy
++      - const: ref_out
++
++  power-domains:
++    maxItems: 1
++
++  resets:
++    maxItems: 4
++
++  reset-names:
++    items:
++      - const: biu
++      - const: sys
++      - const: ufs
++      - const: grf
++
++  reset-gpios:
++    maxItems: 1
++    description: |
++      GPIO specifiers for host to reset the whole UFS device including PHY and
++      memory. This gpio is active low and should choose the one whose high output
++      voltage is lower than 1.5V based on the UFS spec.
++
++required:
++  - compatible
++  - reg
++  - reg-names
++  - clocks
++  - clock-names
++  - interrupts
++  - power-domains
++  - resets
++  - reset-names
++  - reset-gpios
++
++unevaluatedProperties: false
++
++examples:
++  - |
++    #include <dt-bindings/clock/rockchip,rk3576-cru.h>
++    #include <dt-bindings/reset/rockchip,rk3576-cru.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++    #include <dt-bindings/power/rockchip,rk3576-power.h>
++    #include <dt-bindings/pinctrl/rockchip.h>
++    #include <dt-bindings/gpio/gpio.h>
++
++    soc {
++        #address-cells = <2>;
++        #size-cells = <2>;
++
++        ufshc: ufshc@2a2d0000 {
++            compatible = "rockchip,rk3576-ufshc";
++            reg = <0x0 0x2a2d0000 0x0 0x10000>,
++                  <0x0 0x2b040000 0x0 0x10000>,
++                  <0x0 0x2601f000 0x0 0x1000>,
++                  <0x0 0x2603c000 0x0 0x1000>,
++                  <0x0 0x2a2e0000 0x0 0x10000>;
++            reg-names = "hci", "mphy", "hci_grf", "mphy_grf", "hci_apb";
++            clocks = <&cru ACLK_UFS_SYS>, <&cru PCLK_USB_ROOT>, <&cru PCLK_MPHY>,
++                     <&cru CLK_REF_UFS_CLKOUT>;
++            clock-names = "core", "pclk", "pclk_mphy", "ref_out";
++            interrupts = <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH>;
++            power-domains = <&power RK3576_PD_USB>;
++            resets = <&cru SRST_A_UFS_BIU>, <&cru SRST_A_UFS_SYS>, <&cru SRST_A_UFS>,
++                     <&cru SRST_P_UFS_GRF>;
++            reset-names = "biu", "sys", "ufs", "grf";
++            reset-gpios = <&gpio4 RK_PD0 GPIO_ACTIVE_LOW>;
++        };
++    };
 -- 
 2.7.4
 
