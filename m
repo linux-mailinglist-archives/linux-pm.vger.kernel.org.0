@@ -1,130 +1,203 @@
-Return-Path: <linux-pm+bounces-21389-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21390-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BA2ACA289E9
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 13:09:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 03A47A28ABA
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 13:52:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5522A166037
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 12:09:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 613C93A5DB2
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 12:52:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E70DF22B8D0;
-	Wed,  5 Feb 2025 12:09:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50EEC4C76;
+	Wed,  5 Feb 2025 12:52:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="WXGeTlvF"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NRiXift6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f50.google.com (mail-ed1-f50.google.com [209.85.208.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E1C5A22B8B2
-	for <linux-pm@vger.kernel.org>; Wed,  5 Feb 2025 12:09:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CF8F9DF5C;
+	Wed,  5 Feb 2025 12:52:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738757367; cv=none; b=tvoNfXGjXFVwquv9p08YsSsUzPny1TAyt1G+HTZNrrfMq2Oi4/PPDc80jS79cvp6Nz43bGhB1AkvcHm54kaLXmmNvC4bAHdJjGrt2wUnnFwjZVeRCQe2IaQZhfWiMx2rkW1qRIXehCD5w+Ls2rhKGctQUv2O0LcrVs/aNzN3ikU=
+	t=1738759952; cv=none; b=IxJwFnO5va1q4FMSQ1xWa43/j8jEjBX1bAx4sanvOBUyYE8kXqJ4UYYulLP43JhBtaZRJoLhAhNRhKQzX+3OKqImB334D9/rMUrbfcSadIz6UUhS35IpNI3/VnZub9r+7HXvRUXt8O5G/hqKhL/A5efyLkxszumB7pukR3GXF5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738757367; c=relaxed/simple;
-	bh=LDhM1BQbzgJZCOl2D+iOUX/VC2C3LFvRV3VuZiTJ94w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VScKtu2tRqBGuEx4an99N/3IOcjF6ITzSS5D72ugnSyUT/ImbN+he/WlpU/IQSucFC2YUwEdUidvFADJvzM3CQ4TMZ5scw4CXQnUfN4ZmPg1GZSCdwo/F61MZbDsA5dQ309kQ9Alcv51F7K7Oya0nc5CZ9ETCEMo5zLd3dvmZs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=WXGeTlvF; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1738757364;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=Oqorq3VqEu/wsOnV6J86n8Ow1XVNycma2QB/zT3uRJw=;
-	b=WXGeTlvFkwM/BHLqWOOP/bxSDLIFd2nuqqBt7T/ErluixNVZ8AitsAq3KHU58balOAPk/S
-	cvSDXVTorr2oYtL/bfj93hvWf6L94wq27O91mYqxJOzgQ6DStC7/+oSk+JQ+BoyfzjbVxu
-	V0KoIEmxXEaK3E0/BZ6HBfUP7JaNQq4=
-Received: from mail-qk1-f197.google.com (mail-qk1-f197.google.com
- [209.85.222.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-84-1WSfzjTFOgaWV8GaCSSBKw-1; Wed, 05 Feb 2025 07:09:23 -0500
-X-MC-Unique: 1WSfzjTFOgaWV8GaCSSBKw-1
-X-Mimecast-MFC-AGG-ID: 1WSfzjTFOgaWV8GaCSSBKw
-Received: by mail-qk1-f197.google.com with SMTP id af79cd13be357-7b6e1b0373bso1114304885a.2
-        for <linux-pm@vger.kernel.org>; Wed, 05 Feb 2025 04:09:23 -0800 (PST)
+	s=arc-20240116; t=1738759952; c=relaxed/simple;
+	bh=45BY3DS1djtWDIlfvJbwSMK8G513VCijeE4jgdsghbA=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=PFJejvvD+elrAqjJA6ZpqNZ+41e5j6GivjpZmuWbECSGzv9zbv6hXSEQy+POFA4CvcRdZC589b9rnvE1vMWfOljOlVa5eFYvDrxGQkzYHdEzajWAvVeMKz2Qlg+k7xCKMtsbgCYx53nBTaD12W4xjSjxnwycIDFueAG/iReakvs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NRiXift6; arc=none smtp.client-ip=209.85.208.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f50.google.com with SMTP id 4fb4d7f45d1cf-5dce1d61b44so629794a12.2;
+        Wed, 05 Feb 2025 04:52:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1738759948; x=1739364748; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=yYwdC6FkM1FkoHrBLoPreNjUtz/aJNsrJlKRqn3rXe4=;
+        b=NRiXift6VxtIvcGmyvOgKA2pENFiSY+gRJ+GrN9gvOdjlETRfBqG4tndzjOYkm4Ve5
+         ZP6qIG9VREF+7+MXNMVY3OsIp+o6GtgiedQjtIO9xQ4qwyEBPVe2bfK8ZAJWDDVQvSYI
+         lS53WbxI6M2D3XMS0/lug6mLGiShApgYV5MihbwNLJvTLToJolDJ0j+gFOoaoIuZ7KiP
+         WRI33B3RnXZmx8NPlQKphIniPtktJnXfatZ/b3xZPe86hnDMEVx/Z7IVwoMjsGBLqBNn
+         KY/WM0q+2s8QADEXR/Y/1yyRL9oyllzXfBZ90KHMAjumbyavh18lxgYUZ7krjsCCXtCI
+         kw9A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738757363; x=1739362163;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Oqorq3VqEu/wsOnV6J86n8Ow1XVNycma2QB/zT3uRJw=;
-        b=mgbJGAFSFuxHien7d/rkcnPxnybi6tmRuOaDAguuTEx2rYjgTdKJM7AsirWGdYH3pP
-         7xOz5AaXF0Tps5EAVowiZOg7upFHMbDvGBf14LWE5CX8/08QxGX6jBkDrdbxzaDZ5WE7
-         UIV581eFGMs2X9riynSCRKJrv1WuVLHK53WFauAYOSvbADlATWFPphBfpSR6EDRCndhT
-         vGLAWcqqrtNMM7nv6TtNdHX6w6scQrZL8PHH1VokkleKuaPsNgeuS05p3RjSszrMDAVk
-         TdzcRHSxsV2C9QqIwDKzP/v15Lm6gH3Fq+70wsChKZ5qhZhGHA+Rtsw/rdB+EgcU6nGd
-         84gg==
-X-Gm-Message-State: AOJu0Yx30C6DJKfu9xKB7Rc3NxLkjpuniRmSWCTNf8dF/PcSHYtjC4Sf
-	hAcSuM9zaV12Z9g1u28BMKsts7BRivPCXKfh7M8d8fAEE0BAD1JHWSTCpQ0wY5McC3rSwzhN7ku
-	IllML7Y3PxWP86Wgr3ypXNk3hPAOdpjX7+CHypnayQ91STQbCBjjLjSUn
-X-Gm-Gg: ASbGnct35iLmKEclaES1PavsVEiP9p8w6KWKYJwFTfFzOQwMB543wNhyILq5z/8ftwy
-	9p9ReImoSr6JLoOb5WjI90lNG9i0CWpdYDWpsWcZYBbiftfjSiDiyaOi8/kKMwxb5fkZoTKoMWp
-	FA7qz/0Ciw5bmmHZuHEGZsf9FX3MZA+wfn9y6NS7pDNHfS47Wiu1oqfI1p3glmHo23/MRGoVMkD
-	pVWlBH9N2ijX30STmBomms7rlow2cnAAhOxPph/1yK4598teaDG+uS6MT41ZGfB8L2v/6FnJlcO
-	sdYI
-X-Received: by 2002:a05:620a:8905:b0:7b6:e9db:3b21 with SMTP id af79cd13be357-7c039fd4a7amr350587985a.14.1738757363191;
-        Wed, 05 Feb 2025 04:09:23 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IG8PXyJhl1DaAL6BKHNBlLuayS4yGl4Jjz2cYcxmO+tPT+BXqNI9LVpnE08fvB9D/gtSMRQcQ==
-X-Received: by 2002:a05:620a:8905:b0:7b6:e9db:3b21 with SMTP id af79cd13be357-7c039fd4a7amr350585285a.14.1738757362905;
-        Wed, 05 Feb 2025 04:09:22 -0800 (PST)
-Received: from [10.26.1.94] ([66.187.232.136])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c00a90ce2esm742414585a.103.2025.02.05.04.09.22
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 05 Feb 2025 04:09:22 -0800 (PST)
-Message-ID: <e2eabe42-45b8-4930-af55-857f6e8a4317@redhat.com>
-Date: Wed, 5 Feb 2025 07:09:21 -0500
+        d=1e100.net; s=20230601; t=1738759948; x=1739364748;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=yYwdC6FkM1FkoHrBLoPreNjUtz/aJNsrJlKRqn3rXe4=;
+        b=QdHxZ6Ay3kdFiSUCBTRjj67ZMfXPLsE3Ga6T5qejxvuBKyHHtL5TZ2aJ9VZXXngOtD
+         lyOMsppId0AvBmFfwHdaU9DRtpJ1jeETa4jK+ZRhF473/OcvMr50P5nACRsAPbNg1mdl
+         uyCj5KpWLQbz1h4Bo3nR2nK5IMz52QgXDW9ROvNq25dReKLkUL3XY2J0JJlFxcAWF76N
+         qMDoGFjkyDmuHuPpppZjhAVsHpoHzZBeKmCR9e/uKUK8WjUP1nafvKDW8Bv2JjZuNq7k
+         QhjtBENcswBiO1FmkXu+eYOhXBpJNIy5icb9Q8NExWWo3NXtcRULyznAhlMszsPaePdu
+         L/8w==
+X-Forwarded-Encrypted: i=1; AJvYcCU4Y4BRVS4iIsHFzo1kiQWBEchDotaDI3OUX++hvWK3Qn6Q/ULrSMVxoCDwnXMylJ3gHNEU0qtrzEun@vger.kernel.org, AJvYcCVEarEn2DDHWIWtPMXOpsYjqwkRlhylTUisrdele6iv2m/1r6XfKd3mdnYy3g2PbGVV6SMGAEP6B/4mFg==@vger.kernel.org, AJvYcCVtfKJbBQenfpoLcB0jE86jTwdaq2/ms917lGS8/KmjhHDKRTIH1zt0lTxmDbTyhQDEGirZ6xn/ebsBtZuC@vger.kernel.org, AJvYcCXVpErJi0/gOw6PMieT/XezL8DGwsmf0Kiz2rqstdxxzZGkq0lbZ1kGMtxhpDj9I3Zt6FxpV7Oj7p+y@vger.kernel.org, AJvYcCXmgI+OlQ9ekpPAYJ4Lsk0xMvRQoR1szg63YUsXmu25Bhlu0RuWczAVjw4vesXl1PV+S6nwP7S4Gmw=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw0dP+71N8rqeWLp46GghUuMPdA6NVOfeBpfJCTNJuDMLIV1EzN
+	ZauZ0SrvNumRGv5W3afhOkN/7Ng9bMFz8XgLtKJuFMiITZPYZtx/
+X-Gm-Gg: ASbGnct9zudnbgiPgLdkDWeSeNpvw7M1f88s+Sb9uLD1yikPxr99gFxE9iDGYFPenwL
+	KtDr4/wTtlaUYSXt37mDSR1CfuT2svDJVV1MEy7dkavD6spyw9jZXoRSbbyjLK6XIprl0q5WoIB
+	+fTMev8m9LvkOwc7JcWO1s71+Kg9TdiyMtU+8PEebJ+DTgzvsELgb507O07PMOxU1daArfclW6Q
+	fYAiLFi68HDbNcmIrILq2kBZ0f0Ykxg4lAfxVD6bXRrRgLZjBMTe0qN0UqtqF/z+ylb7qPg7X5Y
+	b5On28P4F3i7cqEAzmVHqZSf89wrsSdRvCAlItdeMx4GkQ==
+X-Google-Smtp-Source: AGHT+IGwwnpMG9KpubRS1ckqsKV0lRhKkSXdJJkp9LazwK0ad82cff1p5Us/UKXT3VoqZffwLnJ1uw==
+X-Received: by 2002:a05:6402:388c:b0:5d9:8877:895a with SMTP id 4fb4d7f45d1cf-5dcdb732cd0mr3409724a12.17.1738759947712;
+        Wed, 05 Feb 2025 04:52:27 -0800 (PST)
+Received: from localhost.localdomain (185.174.17.62.zt.hu. [185.174.17.62])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dc724055e5sm11559997a12.45.2025.02.05.04.52.26
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 05 Feb 2025 04:52:27 -0800 (PST)
+From: Andras Szemzo <szemzo.andras@gmail.com>
+To: Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Maxime Ripard <mripard@kernel.org>
+Cc: Vinod Koul <vkoul@kernel.org>,
+	Kishon Vijay Abraham I <kishon@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	=?UTF-8?q?Uwe=20Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-kernel@vger.kernel.org,
+	linux-phy@lists.infradead.org,
+	linux-gpio@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org
+Subject: [PATCH v2 00/10] Support for Allwinner V853 SoC
+Date: Wed,  5 Feb 2025 13:52:15 +0100
+Message-Id: <20250205125225.1152849-1-szemzo.andras@gmail.com>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] intel_idle: introduce 'use_acpi_cst' module parameter
-To: "Rafael J. Wysocki" <rafael@kernel.org>, dedekind1@gmail.com
-Cc: linux-pm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>,
- Len Brown <lenb@kernel.org>, Prarit Bhargava <prarit@redhat.com>,
- linux-doc@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250128141139.2033088-1-darcari@redhat.com>
- <e9188365425d2a4c0dfa7cfa2b17ad3d9fcf2735.camel@gmail.com>
- <afbe2137-398b-4053-93e7-2a03aeb32220@redhat.com>
- <CAJZ5v0hp8f3Xjb7bkDR_+RYfTE1ck=qop_QMZ3+z4w7T0VS66g@mail.gmail.com>
- <c3f03a5837e191c5371593ac0a0e3c56e4204567.camel@gmail.com>
- <CAJZ5v0gKsqrruwSBQLk_1cC8MMRyznzE-FbsqDyzs7xFMgZoQQ@mail.gmail.com>
-Content-Language: en-US
-From: David Arcari <darcari@redhat.com>
-In-Reply-To: <CAJZ5v0gKsqrruwSBQLk_1cC8MMRyznzE-FbsqDyzs7xFMgZoQQ@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
+V85x is a SoC from Allwinner with video encoding targeted for the field of
+IP Camera. It integrates the single CA7 core, and a T-Head E907 RISC-V mcu.
+The SoC has the usual Allwinner peripherals and a Vivante NPU.
+V853 is a BGA package without DRAM, V851s/V851s3 has the same die with
+co-packaged 64MB/128MB DRAM (in a QFN88 package).
 
+This patchset tries to add basical support for the V853 device family.
 
-On 2/4/25 12:33 PM, Rafael J. Wysocki wrote:
-> On Tue, Feb 4, 2025 at 5:30 PM Artem Bityutskiy <dedekind1@gmail.com> wrote:
->>
->> On Tue, 2025-02-04 at 16:21 +0100, Rafael J. Wysocki wrote:
->>> But it could be something like "prefer_acpi" as far as I'm concerned.
->>
->> When I see "prefer_acpi", my intuition tells that it is just a preference:
->> "prefer ACPI, but may be native too". But I understood that the patch is about
->> "only ACPI and never native".
->>
->> The reasons I suggested "no_native":
->> * Sort of consistent with "no_acpi"
->> * Suggests that native won't work.
-> 
-> "no_native" would be fine by me too.
-> 
+Changelog - v2:
+ - rebased on 6.14-rc1
+ - add a needed gate with key support to sunxi clk
+ - rewrite the ccu-r driver
+ - fix license issues
+ - remove the pinctrl binding, as it has beed applied
+ - rework the pinctrl driver, use the new sunxi dt based mux support. This new pinctrl
+   driver depends on the new sunxi device-tree based mux support patch series [1].
+ - remove the new usb phy binding, as the v853's usb phy is very close to d1/a64
+ - add a board dts
+ - ccu: add module description
+ - ccu: fix PLL enable bits, and min multipliers
+ - ccu: change PLL flags to CLK_SET_RATE_GATE
+ - ccu: use SUNXI_CCU_M_HWS at peripheral PLLs
+ - ccu: convert the VIDEO and CSI PLLs from nm type to nkmp according to BSP
+ - ccu: cpu axi clk use pointer
+ - ccu: fix comments
+ - ccu: swap i2s1 and i2s0 bus clocks
+ - ccu: fix indentation
+ - ccu: fix RST_BUS_SPIF order
+ - ccu: convert RST_RISCV_CLK_GATING from reset to gate
 
-I will send out a v2 using 'no_native' for the new parameter.
+[1]: https://lore.kernel.org/linux-sunxi/20241111005750.13071-1-andre.przywara@arm.com/T/
 
--DA
+Andras Szemzo (10):
+  clk: sunxi-ng: allow key feature in ccu reset and gate
+  pinctrl: sunxi: add driver for Allwinner V853
+  dt-bindings: clock: sunxi-ng: add compatibles for V853
+  clk: sunxi-ng: add CCU drivers for V853
+  dt-bindings: power: add V853 ppu bindings
+  pmdomain: sunxi: add V853 ppu support
+  dt-bindings: phy: allwinner: add v853 usb phy
+  phy: allwinner: add v853 usb phy compatible
+  ARM: dts: sun8i: add DTSI file for V853
+  ARM: dts: sun8i: add DTS file for yuzuki-lizard V851s
+
+ .../clock/allwinner,sun4i-a10-ccu.yaml        |    3 +
+ .../phy/allwinner,sun50i-a64-usb-phy.yaml     |    2 +
+ .../power/allwinner,sun20i-d1-ppu.yaml        |    1 +
+ arch/arm/boot/dts/allwinner/Makefile          |    1 +
+ .../boot/dts/allwinner/sun8i-v851s-lizard.dts |  196 +++
+ arch/arm/boot/dts/allwinner/sun8i-v853.dtsi   |  656 ++++++++++
+ drivers/clk/sunxi-ng/Kconfig                  |   10 +
+ drivers/clk/sunxi-ng/Makefile                 |    4 +
+ drivers/clk/sunxi-ng/ccu-sun8i-v853-r.c       |  120 ++
+ drivers/clk/sunxi-ng/ccu-sun8i-v853-r.h       |   14 +
+ drivers/clk/sunxi-ng/ccu-sun8i-v853.c         | 1145 +++++++++++++++++
+ drivers/clk/sunxi-ng/ccu-sun8i-v853.h         |   14 +
+ drivers/clk/sunxi-ng/ccu_common.h             |    2 +
+ drivers/clk/sunxi-ng/ccu_gate.c               |    6 +
+ drivers/clk/sunxi-ng/ccu_gate.h               |   14 +
+ drivers/clk/sunxi-ng/ccu_mux.c                |    4 +-
+ drivers/clk/sunxi-ng/ccu_reset.c              |    7 +
+ drivers/clk/sunxi-ng/ccu_reset.h              |    2 +-
+ drivers/phy/allwinner/phy-sun4i-usb.c         |   10 +
+ drivers/pinctrl/sunxi/Kconfig                 |    5 +
+ drivers/pinctrl/sunxi/Makefile                |    1 +
+ drivers/pinctrl/sunxi/pinctrl-sun8i-v853.c    |   53 +
+ drivers/pmdomain/sunxi/sun20i-ppu.c           |   15 +
+ .../clock/allwinner,sun8i-v853-ccu.h          |  132 ++
+ .../clock/allwinner,sun8i-v853-r-ccu.h        |   16 +
+ .../power/allwinner,sun8i-v853-ppu.h          |   10 +
+ .../reset/allwinner,sun8i-v853-ccu.h          |   60 +
+ .../reset/allwinner,sun8i-v853-r-ccu.h        |   14 +
+ 28 files changed, 2513 insertions(+), 4 deletions(-)
+ create mode 100644 arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dts
+ create mode 100644 arch/arm/boot/dts/allwinner/sun8i-v853.dtsi
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun8i-v853-r.c
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun8i-v853-r.h
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun8i-v853.c
+ create mode 100644 drivers/clk/sunxi-ng/ccu-sun8i-v853.h
+ create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun8i-v853.c
+ create mode 100644 include/dt-bindings/clock/allwinner,sun8i-v853-ccu.h
+ create mode 100644 include/dt-bindings/clock/allwinner,sun8i-v853-r-ccu.h
+ create mode 100644 include/dt-bindings/power/allwinner,sun8i-v853-ppu.h
+ create mode 100644 include/dt-bindings/reset/allwinner,sun8i-v853-ccu.h
+ create mode 100644 include/dt-bindings/reset/allwinner,sun8i-v853-r-ccu.h
+
+-- 
+2.39.5
 
 
