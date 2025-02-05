@@ -1,156 +1,111 @@
-Return-Path: <linux-pm+bounces-21367-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21368-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2488EA284AB
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 07:53:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DCA72A284C1
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 08:00:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B38601667F9
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 06:53:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C7E461886A10
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 07:00:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BD36228377;
-	Wed,  5 Feb 2025 06:53:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 183C52288CA;
+	Wed,  5 Feb 2025 07:00:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="OztpeoIQ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B0hrGShp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m49202.qiye.163.com (mail-m49202.qiye.163.com [45.254.49.202])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83FA221517A;
-	Wed,  5 Feb 2025 06:53:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.202
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C68072165F3
+	for <linux-pm@vger.kernel.org>; Wed,  5 Feb 2025 07:00:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738738430; cv=none; b=VpcYmCeesjgBdUORSqfhJCYwgp/xfI4NERZp+hPSDzpSpQRhdSw2ERlF+Ve7k7SM4HI9UuyQcs0X5wITHFpDjuRsedVAENy0xqIhArPxrSzHIgikR0GUDzYoEo0LpGPzFrCjIZZrt/Z6cjKdjfDsUw+csCQR30BdZFN4byjRzrI=
+	t=1738738813; cv=none; b=fHVoKb6YGZfK88hktXox8B5OC2SKgOd79KdEs6pYoEjXCT0zxQlRhs4BhBdvAi00UHUQ3toP+BlGoQ0nOL+cvfT1Hay+iit6/M+p0NMn1fHssTjVgx/j2YERoaHEsAeFxE18m14ad0RYbcjcz5sRD64CvsN0EH34OM1Aq6Og7fs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738738430; c=relaxed/simple;
-	bh=yT2vByNZnLKMoecatN+Y+a/G5hoWbJR7ZL8sZCSE3Pc=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=pp+xTeio5FiqdEo0T2vlJe35o5uJ1qAl+lqdycPnVDLyvMRoTX1Vxtwl3ImprYEqnodZcOLf62j5EfQToevsyhVI5GQSUZj7XlVE2bNvqBxYJs8yoCW43VU4tcjQuLRZECfyK4Op0VJVXSpMRFiap13+iQtUS1GnsVBdDtcvsYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=OztpeoIQ; arc=none smtp.client-ip=45.254.49.202
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from localhost.localdomain (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id a34e52b8;
-	Wed, 5 Feb 2025 14:18:19 +0800 (GMT+08:00)
-From: Shawn Lin <shawn.lin@rock-chips.com>
-To: Rob Herring <robh+dt@kernel.org>,
-	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
-	"Martin K . Petersen" <martin.petersen@oracle.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Heiko Stuebner <heiko@sntech.de>,
-	"Rafael J . Wysocki" <rafael@kernel.org>
-Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Alim Akhtar <alim.akhtar@samsung.com>,
-	Avri Altman <avri.altman@wdc.com>,
-	Bart Van Assche <bvanassche@acm.org>,
-	YiFeng Zhao <zyf@rock-chips.com>,
-	Liang Chen <cl@rock-chips.com>,
-	linux-scsi@vger.kernel.org,
-	linux-rockchip@lists.infradead.org,
-	devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Shawn Lin <shawn.lin@rock-chips.com>
-Subject: [PATCH v7 5/7] scsi: ufs: core: Export ufshcd_dme_reset() and ufshcd_dme_enable()
-Date: Wed,  5 Feb 2025 14:15:54 +0800
-Message-Id: <1738736156-119203-6-git-send-email-shawn.lin@rock-chips.com>
-X-Mailer: git-send-email 2.7.4
-In-Reply-To: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
-References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQ09ITVZOTR9LTx1NHRlMHkNWFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a94d4c26db509cckunma34e52b8
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MU06PCo6MjINDgtDODcpHCpJ
-	L08KCglVSlVKTEhDTEhNSEtKS0xDVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUlJQkg3Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=OztpeoIQaadXhInVaxSz6SrW4MXIUqpglyw6hyB8h8SQrPlnunzycFFkxFC+wLbo0e58uU+GTGnvT9MlnCUnwTR8mWI8LBz2pURW7hdDWMhrnWMPiUPSwmvNM3Uu9/HJuvKdcYSNQCS8xYrNXbNYzRBjVVxzT0KYqI/ynUkA8kk=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=tQBe00/5+XR3AuyJ7x8v0mQNDVOcfg72dNI5pbcGOVo=;
-	h=date:mime-version:subject:message-id:from;
+	s=arc-20240116; t=1738738813; c=relaxed/simple;
+	bh=im78vuXKud+rm5BqDu/3RU+3fVMHUBCmxgAjcZkyagc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=hAviimXPmSguaLeNs/JBKP2cKQLLyoyOc/+ar+8yF+W8Fi3BGIgg6TOPJs/q3KZDy2T2ynXjRAustbeH4s64rxS/aM1nMU7Xqqil4JLlPy7Bxt3rC9tW2Xe+OimZFxBm0hPYFia0LvG46G5rTJN+5h5Yi1AAD5QfTzbizE016nQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=B0hrGShp; arc=none smtp.client-ip=209.85.214.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21f16af1f71so7749085ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 04 Feb 2025 23:00:10 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1738738810; x=1739343610; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=+8ws3eogQ75UF4XPAfpmrJb1OdBIIOKRn93Q6XsSWXQ=;
+        b=B0hrGShp7cQGi+DnrA0R/c6eym9L9/W+xiniPfroqfJHeC0uwGNF03RGdETmWc7m31
+         /fMePmsdr8iykw6MCVS03sG6EdKnimyYgEua+W2pau/sJT1FlD/vYOm/kk34ctPJfc1P
+         B3i5rAivbazWVtAqIrVC4lY7MQvoFaZad0zyDpjRFNuOXBA2qCR1HooZffwH5atTa2ai
+         WXEB2aVneNBXHUBR+m++8V4M+dV0WdyvZOJF+iywwaiBbizn3FFrAf1cGwQTk2rgNczK
+         ABN9E1OFDu78xvwUKXEmtDgPlYrySGbSyMqlEpk5EGLxeBPFM4hPpWO1Wt5zwWkrwT7D
+         A1Wg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738738810; x=1739343610;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=+8ws3eogQ75UF4XPAfpmrJb1OdBIIOKRn93Q6XsSWXQ=;
+        b=H/i6dWYDermSrv4HJTYSObH9gZozFpuAzXC/4A+Jc5kAXRzYYQUGU4SL7Nxj23r/CE
+         WyQHByxClDCkwGjX3t4fGj7l0H8U8NcCkP3606WcTao2JHK3Qt5MMvepq8o+2iYDcLH3
+         SASE+yi6RRZmQG4UrE7UmSknnTEe6ScOmpSLyx1gF/63z8CiLvZ0Eq6m7UBkTu43hoQz
+         QY3A5iADOXxoBb0QqPx82yw259o1t6LL5KvrpV2KtpNkXLM18gL9K2dnvX13jnMCDVS1
+         TgeUKfdwwXE0sNe6ofzx8utvdwt27+SbJIJM75DYZFt9GIJlFNr8PGINcFaC+qSXr2V1
+         dj3A==
+X-Forwarded-Encrypted: i=1; AJvYcCUsxGnOXu2asUjJ3A8x1e4HuD9sC214MjediP3VExzHUnIRCF4Za/kLdVPVP7GP4bcSHDN9bbRPfg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxPKceG2paW3r+9NXiJck+i35zM8UUC+/48rkqriLtklPaZaXMb
+	UL7zSxcBLTuyNvUHg+tNAlul7fOkLP7A4RnDZF1Zzcxw0Ws++oDeX5PG+qBgJKE=
+X-Gm-Gg: ASbGnctz02HgSJtphtLD7Q+4uYMXs4lZMYznWjlX2lfck3t1OO08CEcVD6blCrut6jm
+	PwjtLM+G8d4Id3Dp/47msxwa6NGjO6wZUq1kdWrM942IoqLIk0o6rpGkBTT+ktfQNfA6nmXMf7H
+	Ra3yw6+U/FlG6CgSu+s5L586hQPIwTxpdx9ilFYU4BZw4EetQyW/O5cA1JBs3JL8PeYJCK+tvFc
+	sFoG8leMP2qpAOQuKIN+4A0U5Koic3FBLvl9pMHLRiFs9xjNbgWVvobmYDoa6EM1avLJ1p7OZua
+	QhSKvNN60OzUwXhPcA==
+X-Google-Smtp-Source: AGHT+IFcBfowwoWBH0FBPbI4cZlw9NudpkT74gZC6XMMWGu1ebXPwbrRqUXqsIP4PMl1f/5/sfi3NQ==
+X-Received: by 2002:a05:6300:668a:b0:1e1:94ee:c37a with SMTP id adf61e73a8af0-1ede883b7b3mr3096336637.15.1738738810041;
+        Tue, 04 Feb 2025 23:00:10 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-72fe69ba380sm11638732b3a.118.2025.02.04.23.00.08
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 04 Feb 2025 23:00:09 -0800 (PST)
+Date: Wed, 5 Feb 2025 12:30:06 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Beata Michalska <beata.michalska@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
+	rafael@kernel.org, sumitg@nvidia.com, yang@os.amperecomputing.com,
+	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
+	zhanjie9@hisilicon.com, ptsm@linux.microsoft.com
+Subject: Re: [PATCH v10 1/4] cpufreq: Allow arch_freq_get_on_cpu to return an
+ error
+Message-ID: <20250205070006.zpslntq6nwo73o4u@vireshk-i7>
+References: <20250131162439.3843071-1-beata.michalska@arm.com>
+ <20250131162439.3843071-2-beata.michalska@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250131162439.3843071-2-beata.michalska@arm.com>
 
-These two APIs will be used by glue driver if they need a different
-HCE process.
+On 31-01-25, 16:24, Beata Michalska wrote:
+> Allow arch_freq_get_on_cpu to return an error for cases when retrieving
+> current CPU frequency is not possible, whether that being due to lack of
+> required arch support or due to other circumstances when the current
+> frequency cannot be determined at given point of time.
+> 
+> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+> Reviewed-by: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
 
-Reviewed-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
----
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-Changes in v7: None
-Changes in v6:
-- replace host drivers with glue drivers suggested by Mani
-- add Main's review tag
-
-Changes in v5: None
-Changes in v4: None
-Changes in v3: None
-Changes in v2: None
-
- drivers/ufs/core/ufshcd.c | 6 ++++--
- include/ufs/ufshcd.h      | 2 ++
- 2 files changed, 6 insertions(+), 2 deletions(-)
-
-diff --git a/drivers/ufs/core/ufshcd.c b/drivers/ufs/core/ufshcd.c
-index cd404ad..d9cb60d 100644
---- a/drivers/ufs/core/ufshcd.c
-+++ b/drivers/ufs/core/ufshcd.c
-@@ -4002,7 +4002,7 @@ static int ufshcd_dme_link_startup(struct ufs_hba *hba)
-  *
-  * Return: 0 on success, non-zero value on failure.
-  */
--static int ufshcd_dme_reset(struct ufs_hba *hba)
-+int ufshcd_dme_reset(struct ufs_hba *hba)
- {
- 	struct uic_command uic_cmd = {
- 		.command = UIC_CMD_DME_RESET,
-@@ -4016,6 +4016,7 @@ static int ufshcd_dme_reset(struct ufs_hba *hba)
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(ufshcd_dme_reset);
- 
- int ufshcd_dme_configure_adapt(struct ufs_hba *hba,
- 			       int agreed_gear,
-@@ -4041,7 +4042,7 @@ EXPORT_SYMBOL_GPL(ufshcd_dme_configure_adapt);
-  *
-  * Return: 0 on success, non-zero value on failure.
-  */
--static int ufshcd_dme_enable(struct ufs_hba *hba)
-+int ufshcd_dme_enable(struct ufs_hba *hba)
- {
- 	struct uic_command uic_cmd = {
- 		.command = UIC_CMD_DME_ENABLE,
-@@ -4055,6 +4056,7 @@ static int ufshcd_dme_enable(struct ufs_hba *hba)
- 
- 	return ret;
- }
-+EXPORT_SYMBOL_GPL(ufshcd_dme_enable);
- 
- static inline void ufshcd_add_delay_before_dme_cmd(struct ufs_hba *hba)
- {
-diff --git a/include/ufs/ufshcd.h b/include/ufs/ufshcd.h
-index 650ff23..31661a4 100644
---- a/include/ufs/ufshcd.h
-+++ b/include/ufs/ufshcd.h
-@@ -1369,6 +1369,8 @@ extern int ufshcd_system_thaw(struct device *dev);
- extern int ufshcd_system_restore(struct device *dev);
- #endif
- 
-+extern int ufshcd_dme_reset(struct ufs_hba *hba);
-+extern int ufshcd_dme_enable(struct ufs_hba *hba);
- extern int ufshcd_dme_configure_adapt(struct ufs_hba *hba,
- 				      int agreed_gear,
- 				      int adapt_val);
 -- 
-2.7.4
-
+viresh
 
