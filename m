@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-21396-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21397-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 160EBA28AD8
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 13:54:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2690BA28ADD
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 13:54:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4161164CBB
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 12:53:57 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 697DE7A360B
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 12:53:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABDFE13C8E2;
-	Wed,  5 Feb 2025 12:52:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2002614884F;
+	Wed,  5 Feb 2025 12:52:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="nMIemiy0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ics1Y27U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49E482D98;
-	Wed,  5 Feb 2025 12:52:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3336713B58F;
+	Wed,  5 Feb 2025 12:52:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738759962; cv=none; b=d7iL7OHhHh0qYD7RfnxRAApP75z10x9mkQ15nObw100KG9NgQ+yDs9hhKgBcYo2Ma8V4D5mHrgnUqZ9mS28nGHoItitAIQURbgQnHsSHU3qKjb+99a/0t0HytVvGwiHtGmR/FO+72EhVuscZHCgOM0w5rZTzpG0/e9wBJ6E/UPY=
+	t=1738759964; cv=none; b=GzXDCSf+K9NMZ4FiTcGzki47LjPa+tgVYQZPz0nA+Hej+TR4t/546woNf5AdJAIH4fxaSq2n3tcWB2t6cR4YimMIojefj9/w0fpnkbHe7MqZy9l9xHTWlnQlNZTu92kmt7ZABKHvOR2SHErWiZRtEaou6t34pKnTqFfdL3ALpng=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738759962; c=relaxed/simple;
-	bh=sNeUaSsNfk2mWBS/Z6Pa2pSYUp7Gc/6G9bD5NGx0EYg=;
+	s=arc-20240116; t=1738759964; c=relaxed/simple;
+	bh=6Ldci5NJcLk9QDLef0QdLFO2TFiUZ4r9u/pld6Lsudo=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=JFvOCaTp5RpxxASdaPSiRjtOB+xEjo1w7dI34GPKGASt7dyLbOrcVQWPelNhmjWx7SUTIhD8necPEIuPEQphzZm2IicP4qiaSuulAOLOxvWsq3X02BBB8SS7H8BOEWN8F7CzQbIKLHq9DusDE/H9ylwWuczLNB7Ra0fNDiKukT4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=nMIemiy0; arc=none smtp.client-ip=209.85.218.42
+	 MIME-Version; b=fT15tS08od0gPpEgO4joRZHH4TBh+e0MafeQxg7FKosdzsMbZLO/mQLiE3fKzb4gqE0qBJZw+eDoM01xOJX63VNmREMWp8O35s3yOu/6JnM5/XXQpTuQXNB7dwL6qJSclvxOa9b6C8Djco5Un+yYshirmWRu/TWQIvF8XZuuzaI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ics1Y27U; arc=none smtp.client-ip=209.85.208.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-aaeec07b705so1127780666b.2;
-        Wed, 05 Feb 2025 04:52:40 -0800 (PST)
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5d3ecae02beso9361474a12.0;
+        Wed, 05 Feb 2025 04:52:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738759959; x=1739364759; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1738759960; x=1739364760; darn=vger.kernel.org;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=ZEOAzVx6WPB9stA5mr4n7x/fL+LclH0gvOV71KsByXY=;
-        b=nMIemiy0DZhD2uXOPS0xlHmM0PTVbTf43TShrB4Jpu3F/qDf2+x2X4XoyUMcmGUtZr
-         E5Wo89MmaN8ya3IPRk9gV5GRjr3e4PLUvTjEwVMuqLmflaUrr+eA6VxADhp1jm5gpD9o
-         Jws/wiZrGA830rujfPlR39RjSXvPKjqh6e8Yp/ZjaomWgCbom2Y4i2JJahngA2cDH+zB
-         vPdPvnrEGwmOKsb4Dm+Y1zsoCkQhUxKaQi+hrPhRaeLyDESNrywNG3E7qbfjG3ZPVwnG
-         YLQEhnkHpcIory4ZdfEbq+t638zrQgYhzMuJxIDKrv4Z55tVgHPGSHLYZ7waUJnzeqTd
-         neag==
+        bh=fnyUK6beMeleaf/vnmqhL9TlcUqLD4J+xrVEoCblRp0=;
+        b=Ics1Y27UzFiEi9C/1wM7dQARYSjriT6r/M5jrd3U2/Zkh21fWFBYBvihq/1ZLtVzJx
+         ZKKzB85fSiAvd2X1XvL031cvteQfBy0/ZQz2W1QYpbF3Xp2KaelMwBQj7OP5lPT4IbT9
+         v40JdVl37u35q232iNRCt8/T6caoLmC1Nzf2DpynNFUCxyrp+kIDrkeWY7rUDxwaeE+Z
+         kVtT6A80DJ2qknfRiXHlNw0TLXecddyCEhs8aD692dLJfrrffbWiSRPHnYLS57DEtzMh
+         iQUH8JOqMjcys7wUOrl3aoVZHHfYV2SUlFuiEaZJNIbIRHelkZjw2uRV9WGtxerBGoCg
+         98zw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738759959; x=1739364759;
+        d=1e100.net; s=20230601; t=1738759960; x=1739364760;
         h=content-transfer-encoding:mime-version:references:in-reply-to
          :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=ZEOAzVx6WPB9stA5mr4n7x/fL+LclH0gvOV71KsByXY=;
-        b=hVPbV2SPbsPVdwg6njRQ3W6RlPg4pzZqVL+SkFXrLBLq4e1wlGPlxf18Qt81oELLr5
-         ifLUf+llwAudIv3f1ucAegcDuq+lqG2v5AMueI+Jq33LG4fl+mHSUHEfotkLfmAxuCVs
-         nwTqTxXIWDjP+57yy0WWAH6KbnZuijAAvA+COiCTf0uVTO5SlcG4yxBgdNmroPntGCza
-         6egJ3g+WXr7wpRXrq4CSBGJAxIJkfm7fwS8TIqB4ve7hRXd26a1Ks0Sw6rOhmb7hUhpq
-         HIlOMbR1ImaoihXuFUCBbSBHaL8AEKNueSRXMMKJmItFJaZqTdZvmz+JvU5Hm6ErzXRL
-         MwBA==
-X-Forwarded-Encrypted: i=1; AJvYcCUi0C96n5V/agLFfjFZ1JUvGWMrOAPysBpS4Vh3wcepot48fTyy9hvb5GzYGxnEh9p4np+rrNsreZT4hQ==@vger.kernel.org, AJvYcCV1cQXL3nkJRV9wj9sBns3BIwxcEr1r0CD7+fwcfGK6eJ2R/2d11HvMth1sGnnJweKGhVM4sVL//RdV@vger.kernel.org, AJvYcCV2uJjLCkEsfRYulaSRP4OqpzDk06TkhAnbmkcdd8+UobzKhgVjsJhUx0eqZFMYh8IzPqdREzQizBqqqRwH@vger.kernel.org, AJvYcCVP6W/DS1HRbEV2I6CL2otyY+AOrJgDlKXB/eICWhcgFcTI0l/io23eg/0/wm/mLIesGuSEKGb7vBlF@vger.kernel.org, AJvYcCXOqcYuwuY6aZEsHzE4C/9v5Zyl2zgPR9xGxfumBgqa/18fj0uX0QIDCODiXOuvrDsSz0lewHTvVMU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyoSbi74j4qlGtQgbhMDJpR4fAkTYQ4bDJArTQG/G6NUpOc8GBe
-	siKoPDU/jRb3HMzYTEiINL8YZ5Pd2OduBZi2W/B6ny1kChuaS43f
-X-Gm-Gg: ASbGnctZA2r7QFGbVm0idE1u6f6ZFX2h2PXmXE1MMlLiiSdRAn47zIDDoc9li0Imayz
-	mpqVe1kcpUavHdXc3wFdZ2rpPrXVJC52CnSO6S0M9xTFrLE+f7DT7Fqs9Z8Uev+pX+qidx1663w
-	rkppVGqoGAy0E/+U7cTCxkMEhWrySxMRVYb4rM/zIbTOHavfZgVBfq/9irbHShBAzDzy9yC9DWJ
-	izBjXE4W1Nn5TUnmdDXSl4xmQNulC7gmNj+TAzIzdchzQNWtMxDkuytDaHNuw90KJoQl8oU3gG6
-	xyWd2hd5WJEpeLBWBDLtEyaA1ANBhyp59IogHzE+8wBcUw==
-X-Google-Smtp-Source: AGHT+IGXrMqsMiP0zkOFbpXcUy0rvilFMJQHNVAo7U33xcsXTT7GzHgk1vRH+nlowH9w2lytesYKDg==
-X-Received: by 2002:a17:907:3fa1:b0:aaf:86a2:651f with SMTP id a640c23a62f3a-ab75e2fc295mr281783466b.38.1738759958692;
-        Wed, 05 Feb 2025 04:52:38 -0800 (PST)
+        bh=fnyUK6beMeleaf/vnmqhL9TlcUqLD4J+xrVEoCblRp0=;
+        b=e/J2gep7uyPJP3Blfqp7UIFKhzvBWG3kCGA8aq3Pt6jlBY7A5rxf3gAFKlVCJCyfst
+         K4+tqI3S/F4iaKVMqFL5RF3ZXLf36x82Pd+EdmSH5E5xNEWQ8sHwlerddehyo2x02Gql
+         FRH06DECTuq8K/EbgNpjZ76UbzPNN03GE6lBZ32dkUmB9VDJGMhg5OaIbfj/qgIpbviq
+         9ZxOxOm+J5Mg9HoUgaVgoyLKfxbZVj/W7fszSq97vo+cRIjz5YDZEtF3taM/b4SS7Sxa
+         9W6mB/Gf2Xn9vBOtsFv5GjRlLMQLNBDHNGI/IrqC+nnTfi47HaMpO/UCvXjOcpYTKJ3o
+         sgMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUyrAA4VKU3mFu/qY/Te/WEcG++j+tyyC77Uyp4zVVmuH/Gk4LD7rGmDusHoqPz9Yut8RZnTuhhWrEb@vger.kernel.org, AJvYcCVDlGWo9TmBgpyIUGYDYxoUmSsu5l0CkvIAWt5rYU5u/smSNVcz0kkZZN5/MSPb+jMJvecR4jI7vIjJ+MkM@vger.kernel.org, AJvYcCWEKEB1GwmYpVdVcy/am8ScAR7BFVq+rYUQ7LUvC8F5/Jb9EW4Q6mWCmUox2aODK+A29vSl9ZVGd5U=@vger.kernel.org, AJvYcCWOZ8lfozlY6tzTKoQ+l/RR1/taXzoXXbbFPC7o05xQOoWZiH1xuScVZYhPnIk4bFyx0sXhl+hi9zhSvw==@vger.kernel.org, AJvYcCXt9KWqYUPZSJA9K5QIuD4+aDqpuQ4sk08CT6aIM6OJEoqo65ait34lACtPr4RV5CpEuVBm4Y52iMTq@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyx4cv6fMoV3XfM1hE0VYLNP1UaFFhsKbAeU8RMBsWxOR5vzlp3
+	dY+BlToo7pTvU9N6MTrKaQat4ouoFuBo7MN5tfMuuJ29WG3OF1Pp
+X-Gm-Gg: ASbGncvmcOue1hgtAhYNLyVA0+5v6AjpkF36CX+Xp78+3vFR0JLHzwEdUVs9N+ef+KI
+	I/BQ58mzGviD/1hla5/rzuAiVYb4BcdSVWvvj6b9ge8eso0pW1OW63L8t2GynCdpckCtJdWqxzi
+	JboersQSk0cJuJ9nin1w4YfhQ0nZzrn6ispgnliLFK5UI2q7HFLh3zGpFgX/S4iTBTVJMH2AmP0
+	g1mRskY6jXr2corzwiPqU1bzYJC0M97ywyK9MOaca2x5txa2lp0NJIGsZOM1J4bq6CMsVvIhW3/
+	npTzAKUjPM9qYtrxCIT7LKD5PgArFFkaMdFgarnrffAemQ==
+X-Google-Smtp-Source: AGHT+IE0wywWb/Z15BOQfyDS/LKQnpnhSIPGUcQiGwnAhhs+76luZoRksyVgrmGjUEmSc4D72uhXsQ==
+X-Received: by 2002:a05:6402:388c:b0:5d9:8877:895a with SMTP id 4fb4d7f45d1cf-5dcdb732cd0mr3410442a12.17.1738759960294;
+        Wed, 05 Feb 2025 04:52:40 -0800 (PST)
 Received: from localhost.localdomain (185.174.17.62.zt.hu. [185.174.17.62])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dc724055e5sm11559997a12.45.2025.02.05.04.52.37
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dc724055e5sm11559997a12.45.2025.02.05.04.52.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2025 04:52:38 -0800 (PST)
+        Wed, 05 Feb 2025 04:52:39 -0800 (PST)
 From: Andras Szemzo <szemzo.andras@gmail.com>
 To: Michael Turquette <mturquette@baylibre.com>,
 	Stephen Boyd <sboyd@kernel.org>,
@@ -101,9 +101,9 @@ Cc: Vinod Koul <vkoul@kernel.org>,
 	linux-gpio@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-riscv@lists.infradead.org
-Subject: [PATCH v2 06/10] pmdomain: sunxi: add V853 ppu support
-Date: Wed,  5 Feb 2025 13:52:21 +0100
-Message-Id: <20250205125225.1152849-7-szemzo.andras@gmail.com>
+Subject: [PATCH v2 07/10] dt-bindings: phy: allwinner: add v853 usb phy
+Date: Wed,  5 Feb 2025 13:52:22 +0100
+Message-Id: <20250205125225.1152849-8-szemzo.andras@gmail.com>
 X-Mailer: git-send-email 2.39.5
 In-Reply-To: <20250205125225.1152849-1-szemzo.andras@gmail.com>
 References: <20250205125225.1152849-1-szemzo.andras@gmail.com>
@@ -115,44 +115,29 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-V853 has a similar ppu like Allwinner D1, add compatible and the available pd names.
+Document Allwinner v853 USB phy.
 
 Signed-off-by: Andras Szemzo <szemzo.andras@gmail.com>
 ---
- drivers/pmdomain/sunxi/sun20i-ppu.c | 15 +++++++++++++++
- 1 file changed, 15 insertions(+)
+ .../devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml   | 2 ++
+ 1 file changed, 2 insertions(+)
 
-diff --git a/drivers/pmdomain/sunxi/sun20i-ppu.c b/drivers/pmdomain/sunxi/sun20i-ppu.c
-index 8700f9dd5f75..9f002748d224 100644
---- a/drivers/pmdomain/sunxi/sun20i-ppu.c
-+++ b/drivers/pmdomain/sunxi/sun20i-ppu.c
-@@ -182,11 +182,26 @@ static const struct sun20i_ppu_desc sun20i_d1_ppu_desc = {
- 	.num_domains	= ARRAY_SIZE(sun20i_d1_ppu_pd_names),
- };
+diff --git a/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml b/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
+index 21209126ed00..815742c4f5fb 100644
+--- a/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
++++ b/Documentation/devicetree/bindings/phy/allwinner,sun50i-a64-usb-phy.yaml
+@@ -19,9 +19,11 @@ properties:
+       - enum:
+           - allwinner,sun20i-d1-usb-phy
+           - allwinner,sun50i-a64-usb-phy
++          - allwinner,sun8i-v853-usb-phy
+       - items:
+           - const: allwinner,sun50i-a100-usb-phy
+           - const: allwinner,sun20i-d1-usb-phy
++          - const: allwinner,sun8i-v853-usb-phy
  
-+static const char *const sun8i_v853_ppu_pd_names[] = {
-+	"RISCV",
-+	"NPU",
-+	"VE",
-+};
-+
-+static const struct sun20i_ppu_desc sun8i_v853_ppu_desc = {
-+	.names		= sun8i_v853_ppu_pd_names,
-+	.num_domains	= ARRAY_SIZE(sun8i_v853_ppu_pd_names),
-+};
-+
- static const struct of_device_id sun20i_ppu_of_match[] = {
- 	{
- 		.compatible	= "allwinner,sun20i-d1-ppu",
- 		.data		= &sun20i_d1_ppu_desc,
- 	},
-+	{
-+		.compatible	= "allwinner,sun8i-v853-ppu",
-+		.data		= &sun8i_v853_ppu_desc,
-+	},
- 	{ }
- };
- MODULE_DEVICE_TABLE(of, sun20i_ppu_of_match);
+   reg:
+     items:
 -- 
 2.39.5
 
