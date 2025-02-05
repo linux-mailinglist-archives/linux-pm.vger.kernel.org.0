@@ -1,129 +1,387 @@
-Return-Path: <linux-pm+bounces-21359-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21360-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EF402A28383
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 06:02:02 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E7DFA2841C
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 07:13:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 64D587A285F
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 05:01:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0288418815FA
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 06:13:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D181721D586;
-	Wed,  5 Feb 2025 05:01:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rbbg5Boo"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6BB08221DA3;
+	Wed,  5 Feb 2025 06:13:23 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9200A214202
-	for <linux-pm@vger.kernel.org>; Wed,  5 Feb 2025 05:01:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64AC521D5B2;
+	Wed,  5 Feb 2025 06:13:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738731713; cv=none; b=oDvDNZ1mTI83c7Fs8SgglJOZzNmUh9G0rUZsdi6lFg+PZirO+j7KNpCVrlCtWqSDPH+9+BJulZPhkwrW0H6I5gfPC375wBoYD+vr6CmK9jeBa0gYD70Vjxqh0MT2CPpCNBBu2Ki1kvblx8CJQtzPpvoUCGsauGg9ufS/O/WjQLc=
+	t=1738736003; cv=none; b=u54BTjpU9e2cjeQ7GIa8EyT8hnC6SA3WiEGijG6wAaLCyxqAOHXf/9bS+4s+5R9NbaeS6tBcRhp7XkOKUf7kbp4AES7DQBHzSGA6k1LTaaZRQdoEfogS2caaQk5a/2f9jGgIqv9jFQ93zOpMq26/9KOk/fhUL6wCdb5HaRRmqLA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738731713; c=relaxed/simple;
-	bh=fwCHjFRk35mzj5sI7+uT1IUow+zrDz9kGdE/IzX1SzE=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=rAycq38EgzQ/yX/n1EI6zp+WJp7dmoAJcPR/AV+SBuLhEy0rSY0Ht2ZrFW3L/vAIcputzkKR3umElkHztMpQhZ5amMrBKXhelP7/HxiEtkEghCyKIVTj1GEalCL16xhR42wqdwMw/uUSiK3lPHjlH4lqa4LR1zlIAyeSl5ZQv/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rbbg5Boo; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2166f1e589cso55642165ad.3
-        for <linux-pm@vger.kernel.org>; Tue, 04 Feb 2025 21:01:51 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738731711; x=1739336511; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=p0swfSSPD+og1Pzr3e9g725D1t2rKfUqhh/5xRm6XfU=;
-        b=rbbg5Boo/jAoCrZcDMGrBTmTWachS5HOHzpWMVaW9OREBxBnWDScGhFhSbUHTLs06g
-         8Qf2B/hbOw6e+GP29aT0NniVBnxozpqPXNyeZkW+y37dU29B4vdgCC8bRGIISfKy6Kg3
-         rbk3tzV/0OdudVEhnZO5E00IaMup+zWd4+eY6U4GDyGKLO/jUEsdyknkIKNyWVegIns6
-         ye2KxuLww6QTeBywpuYgEOu9GqyyhmygWiHUNwfzYfZbGj6PgR+8DNm6uLWiTz9k1CXc
-         JOeQ8bi7yvl8tz6urYNJkQveSW7ZAGJhaRb9gNZwRKbKExT5ZoEWUHykdMB1cvxJ+4T7
-         MlnA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738731711; x=1739336511;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=p0swfSSPD+og1Pzr3e9g725D1t2rKfUqhh/5xRm6XfU=;
-        b=QygWg1LFJpafvU+DK8+EaqDOcTi9TIIN9oiSKVHIyzTjG9EtRQQPcH5Y3cgpFBbofA
-         vxaJ1/dqP0MxWRqUVRJNiNoZR6yh0w3Cm2H6GyMlkAnB3wA2kE+B6GTrsOitO016dJUo
-         HRzaPuQfIKu0vpK5tbFQhxux0OAushjSNsP+/8xnLy6U/8YKb74ZPoi0lZCq2nGEvaR6
-         xSNOcflwhgbSkUEhGLNeHS+x5ss38vutYMEURIKnjvXYw5hjKzyEjsM9/GXub4o2Gn3A
-         K1TbHfn41oY0CL6vn33nOFNkn2qQtgzjwOx3GRjyqMLxtCxVVkdhiuCUJaxK1962sxcN
-         7NPw==
-X-Forwarded-Encrypted: i=1; AJvYcCVbhpR4OTEG/2EJFv1e0pK9H1O9btrjamszrQWyjjcC1HVtEdM451+DldrL9ui3bnvFdqiK2XQ8SA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwvvIsuaWV8rDxfFB7b7Ql5sh4YfeeHYdBfZ1ENtwVwp42JeWMe
-	oSkwPQCOu7p2jBT+QlYg1StC1ewPN8SbeDDwxonnfijwvZ5pug7iucK7oUNE8mg=
-X-Gm-Gg: ASbGncsG5smp6uT/X5gJNAcEI7Uv679BLXQe332OIp2bK/BxhlOmFXXzoLatzFy8kp+
-	X8PPx8qVeLI8b8R8odYchNBf3eet5z0WRPPdzSm3LQ9FNv5KfxaHGDRu1z7dKL91Oc411rhJW6E
-	yd4ABLYagVoapQ4NE/g01R73xdhZEe8GqnSYOgU/h327+TzsSXEi+B0S/RV//Fgq3o6uopYcVNo
-	BD9v8gICykbxDLuaQ6g8lv7SGly6VLrd0EfVGUBI3ajCkYYjO7s4kSnGELYLXCASumzMnQZC1uo
-	8wfaSOAM3wUvPRCFnQ==
-X-Google-Smtp-Source: AGHT+IEK1SsVPM3FY80ZXjnzpYTsubF/iE9BdMFRWlXVghXMGUaasnmObK/mq0H2BixXG4K9ZJcJIw==
-X-Received: by 2002:a17:903:2291:b0:21f:1391:171b with SMTP id d9443c01a7336-21f17f115dfmr31036995ad.44.1738731710796;
-        Tue, 04 Feb 2025 21:01:50 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21de32ea495sm105426275ad.126.2025.02.04.21.01.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 21:01:50 -0800 (PST)
-Date: Wed, 5 Feb 2025 10:31:47 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Aboorva Devarajan <aboorvad@linux.ibm.com>
-Cc: Lifeng Zheng <zhenglifeng1@huawei.com>, rafael@kernel.org,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linuxarm@huawei.com, jonathan.cameron@huawei.com,
-	zhanjie9@hisilicon.com, lihuisong@huawei.com, fanghao11@huawei.com,
-	gautam@linux.ibm.com
-Subject: Re: [PATCH v2 2/4] cpufreq: Introduce a more generic way to set
- default per-policy boost flag
-Message-ID: <20250205050147.hfctwo6aw75rardc@vireshk-i7>
-References: <20250117101457.1530653-1-zhenglifeng1@huawei.com>
- <20250117101457.1530653-3-zhenglifeng1@huawei.com>
- <c9e56c5f54cc33338762c94e9bed7b5a0d5de812.camel@linux.ibm.com>
+	s=arc-20240116; t=1738736003; c=relaxed/simple;
+	bh=p10IvJqFqcFd2UYdA7sFGlvIhojWB/exVMZMRq2vW8E=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=dNY0TwncQ7Js0jmQhVFHloKCIU8hL756wetDPSd1EZ0Sh28jch3dUeIXCXniFc579NBFaLzL2gjTaPiwP2vGgTUklMgXD4bQgVcXCqVhGS2kGxaiJP/Uni2WSpPLXhvxE7oOG5TxF7uLhHFtutVz7XZiGREMenikOSL0ffegbzc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
+Received: from mail.maildlp.com (unknown [172.19.163.252])
+	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YnqZk6npBz11TS4;
+	Wed,  5 Feb 2025 14:09:50 +0800 (CST)
+Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
+	by mail.maildlp.com (Postfix) with ESMTPS id C1F2C1800E6;
+	Wed,  5 Feb 2025 14:13:15 +0800 (CST)
+Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
+ (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 5 Feb
+ 2025 14:13:14 +0800
+Message-ID: <be69bd58-e5f0-4b4c-8eaf-37eefaef4f90@huawei.com>
+Date: Wed, 5 Feb 2025 14:13:14 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c9e56c5f54cc33338762c94e9bed7b5a0d5de812.camel@linux.ibm.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 6/6] cpufreq: CPPC: Support for autonomous selection in
+ cppc_cpufreq
+To: srinivas pandruvada <srinivas.pandruvada@linux.intel.com>, Mario
+ Limonciello <mario.limonciello@amd.com>, Pierre Gondois
+	<pierre.gondois@arm.com>, Russell Haley <yumpusamongus@gmail.com>,
+	<rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
+	<viresh.kumar@linaro.org>
+CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
+	<gautham.shenoy@amd.com>, <ray.huang@amd.com>, <zhanjie9@hisilicon.com>,
+	<lihuisong@huawei.com>, <hepeng68@huawei.com>, <fanghao11@huawei.com>
+References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
+ <20250113122104.3870673-7-zhenglifeng1@huawei.com>
+ <21654032-a394-4da9-8ee9-d7cb9df8c855@gmail.com>
+ <6909eef3-20aa-4341-9177-a42323a0d5c6@huawei.com>
+ <270a1cce-8afe-497a-b30b-56157d75a863@amd.com>
+ <0705775a-1040-4564-b97b-2ed397803723@huawei.com>
+ <256a7620-2d21-4474-b64d-b1e8effbc975@arm.com>
+ <32d084f3-f114-420e-affa-2f7ba107de0d@amd.com>
+ <eadd291e-c797-4d7d-b1f9-f8778fa58b23@huawei.com>
+ <6267261b-4e4a-475f-b17d-5473d72b2c2a@linux.intel.com>
+ <9f5f8181-7d0e-415d-b473-0e3c6601ccc3@amd.com>
+ <0c511da2-6a4a-4fa2-9d82-da45d1afe346@huawei.com>
+ <bf3d232eef124080eb0482ff1b43c17739a1c50b.camel@linux.intel.com>
+From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
+In-Reply-To: <bf3d232eef124080eb0482ff1b43c17739a1c50b.camel@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
+X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
+ kwepemh100008.china.huawei.com (7.202.181.93)
 
-On 04-02-25, 22:11, Aboorva Devarajan wrote:
-> I noticed that Viresh is working on a similar patch [1] as part of a broader patchset
-> to simplify boost handling, which should also resolve this issue.
+Hello,
+
+Sorry for my delay due to the recent holiday.
+
+On 2025/1/24 22:18, srinivas pandruvada wrote:
+
+> On Fri, 2025-01-24 at 11:53 +0800, zhenglifeng (A) wrote:
+>> On 2025/1/24 1:05, Mario Limonciello wrote:
+>>
+>>> On 1/23/2025 10:46, Srinivas Pandruvada wrote:
+>>>>
+>>>> On 1/20/25 18:42, zhenglifeng (A) wrote:
+>>>>> On 2025/1/21 1:44, Mario Limonciello wrote:
+>>>>>
+>>>>>> On 1/20/2025 08:49, Pierre Gondois wrote:
+>>>>>>>
+>>>>>>> On 1/20/25 04:15, zhenglifeng (A) wrote:
+>>>>>>>> On 2025/1/17 22:30, Mario Limonciello wrote:
+>>>>>>>>
+>>>>>>>>> On 1/16/2025 21:11, zhenglifeng (A) wrote:
+>>>>>>>>>> On 2025/1/16 19:39, Russell Haley wrote:
+>>>>>>>>>>
+>>>>>>>>>>> Hello,
+>>>>>>>>>>>
+>>>>>>>>>>> I noticed something here just as a user casually
+>>>>>>>>>>> browsing the mailing list.
+>>>>>>>>>>>
+>>>>>>>>>>> On 1/13/25 6:21 AM, Lifeng Zheng wrote:
+>>>>>>>>>>>> Add sysfs interfaces for CPPC autonomous
+>>>>>>>>>>>> selection in the cppc_cpufreq
+>>>>>>>>>>>> driver.
+>>>>>>>>>>>>
+>>>>>>>>>>>> Signed-off-by: Lifeng Zheng
+>>>>>>>>>>>> <zhenglifeng1@huawei.com>
+>>>>>>>>>>>> ---
+>>>>>>>>>>>>     .../ABI/testing/sysfs-devices-system-cpu     
+>>>>>>>>>>>> |  54 +++++++++
+>>>>>>>>>>>>     drivers/cpufreq/cppc_cpufreq.c               
+>>>>>>>>>>>> | 109 +++++++ ++++ +++++++
+>>>>>>>>>>>>     2 files changed, 163 insertions(+)
+>>>>>>>>>>>>
+>>>>>>>>>>>> diff --git a/Documentation/ABI/testing/sysfs-
+>>>>>>>>>>>> devices-system-cpu b/
+>>>>>>>>>>>> Documentation/ABI/testing/sysfs-devices-system-
+>>>>>>>>>>>> cpu
+>>>>>>>>>>>> index 206079d3bd5b..3d87c3bb3fe2 100644
+>>>>>>>>>>>> --- a/Documentation/ABI/testing/sysfs-devices-
+>>>>>>>>>>>> system-cpu
+>>>>>>>>>>>> +++ b/Documentation/ABI/testing/sysfs-devices-
+>>>>>>>>>>>> system-cpu
+>>>>>>>>>>>> @@ -268,6 +268,60 @@ Description:    Discover
+>>>>>>>>>>>> CPUs in the same CPU frequency coordination
+>>>>>>>>>>>> domain
+>>>>>>>>>>>>             This file is only present if the
+>>>>>>>>>>>> acpi-cpufreq or the cppc-cpufreq
+>>>>>>>>>>>>             drivers are in use.
+>>>>>>>>>>> [...snip...]
+>>>>>>>>>>>
+>>>>>>>>>>>> +What:       
+>>>>>>>>>>>> /sys/devices/system/cpu/cpuX/cpufreq/energy_perf
+>>>>>>>>>>>> +Date:        October 2024
+>>>>>>>>>>>> +Contact:    linux-pm@vger.kernel.org
+>>>>>>>>>>>> +Description:    Energy performance preference
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        Read/write an 8-bit integer from/to this
+>>>>>>>>>>>> file. This file
+>>>>>>>>>>>> +        represents a range of values from 0
+>>>>>>>>>>>> (performance preference) to
+>>>>>>>>>>>> +        0xFF (energy efficiency preference) that
+>>>>>>>>>>>> influences the rate of
+>>>>>>>>>>>> +        performance increase/decrease and the
+>>>>>>>>>>>> result of the hardware's
+>>>>>>>>>>>> +        energy efficiency and performance
+>>>>>>>>>>>> optimization policies.
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        Writing to this file only has meaning
+>>>>>>>>>>>> when Autonomous Selection is
+>>>>>>>>>>>> +        enabled.
+>>>>>>>>>>>> +
+>>>>>>>>>>>> +        This file only presents if the cppc-
+>>>>>>>>>>>> cpufreq driver is in use.
+>>>>>>>>>>> In intel_pstate driver, there is file with near-
+>>>>>>>>>>> identical semantics:
+>>>>>>>>>>>
+>>>>>>>>>>> /sys/devices/system/cpu/cpuX/cpufreq/energy_perform
+>>>>>>>>>>> ance_preference
+>>>>>>>>>>>
+>>>>>>>>>>> It also accepts a few string arguments and converts
+>>>>>>>>>>> them to integers.
+>>>>>>>>>>>
+>>>>>>>>>>> Perhaps the same name should be used, and the
+>>>>>>>>>>> semantics made exactly
+>>>>>>>>>>> identical, and then it could be documented as
+>>>>>>>>>>> present for either
+>>>>>>>>>>> cppc_cpufreq OR intel_pstate?
+>>>>>>>>>>>
+>>>>>>>>>>> I think would be more elegant if userspace tooling
+>>>>>>>>>>> could Just Work with
+>>>>>>>>>>> either driver.
+>>>>>>>>>>>
+>>>>>>>>>>> One might object that the frequency selection
+>>>>>>>>>>> behavior that results from
+>>>>>>>>>>> any particular value of the register itself might
+>>>>>>>>>>> be different, but they
+>>>>>>>>>>> are *already* different between Intel's P and E-
+>>>>>>>>>>> cores in the same CPU
+>>>>>>>>>>> package. (Ugh.)
+>>>>>>>>>> Yes, I should use the same name. Thanks.
+>>>>>>>>>>
+>>>>>>>>>> As for accepting string arguments and converting them
+>>>>>>>>>> to integers, I don't
+>>>>>>>>>> think it is necessary. It'll be a litte confused if
+>>>>>>>>>> someone writes a raw
+>>>>>>>>>> value and reads a string I think. I prefer to let
+>>>>>>>>>> users freely set this
+>>>>>>>>>> value.
+>>>>>>>>>>
+>>>>>>>>>> In addition, there are many differences between the
+>>>>>>>>>> implementations of
+>>>>>>>>>> energy_performance_preference in intel_pstate and
+>>>>>>>>>> cppc_cpufreq (and
+>>>>>>>>>> amd-pstate...). It is really difficult to explain all
+>>>>>>>>>> this differences in
+>>>>>>>>>> this document. So I'll leave it to be documented as
+>>>>>>>>>> present for
+>>>>>>>>>> cppc_cpufreq only.
+>>>>>>>>> At least the interface to userspace I think we should
+>>>>>>>>> do the best we can to be the same between all the
+>>>>>>>>> drivers if possible.
+>>>>>>>>>
+>>>>>>>>> For example; I've got a patch that I may bring up in a
+>>>>>>>>> future kernel cycle that adds raw integer writes to
+>>>>>>>>> amd-pstates energy_performance_profile to behave the
+>>>>>>>>> same way intel-pstate does.
+>>>>>>>> I agree that it's better to keep this interface
+>>>>>>>> consistent across different
+>>>>>>>> drivers. But in my opinion, the implementation of
+>>>>>>>> intel_pstate
+>>>>>>>> energy_performance_preference is not really nice. Someone
+>>>>>>>> may write a raw
+>>>>>>>> value but read a string, or read strings for some values
+>>>>>>>> and read raw
+>>>>>>>> values for some other values. It is inconsistent. It may
+>>>>>>>> be better to use
+>>>>>>>> some other implementation, such as seperating the
+>>>>>>>> operations of r/w strings
+>>>>>>>> and raw values into two files.
+>>>>>>> I agree it would be better to be sure of the type to expect
+>>>>>>> when reading the
+>>>>>>> energy_performance_preference file. The epp values in the
+>>>>>>> range 0-255 with 0
+>>>>>>> being the performance value for all interfaces.
+>>>>>>>
+>>>>>>> In the current epp strings, it seems there is a big gap
+>>>>>>> between the PERFORMANCE
+>>>>>>> and the BALANCE_PERFORMANCE strings. Maybe it would be good
+>>>>>>> to complete it:
+>>>>>>> EPP_PERFORMANCE        0x00
+>>>>>>> EPP_BALANCE_PERFORMANCE    0x40      // state value changed
+>>>>>>> EPP_BALANCE        0x80      // new state
+>>>>>>> EPP_BALANCE_POWERSAVE    0xC0
+>>>>>>> EPP_POWERSAVE        0xFF
+>>>>>>>
+>>>>>>> NIT: The mapping seems to be slightly different for
+>>>>>>> intel_pstate and amd-pstate
+>>>>>>> currently:
+>>>>>>> drivers/cpufreq/amd-pstate.c
+>>>>>>> #define AMD_CPPC_EPP_PERFORMANCE        0x00
+>>>>>>> #define AMD_CPPC_EPP_BALANCE_PERFORMANCE    0x80
+>>>>>>> #define AMD_CPPC_EPP_BALANCE_POWERSAVE        0xBF
+>>>>>>> #define AMD_CPPC_EPP_POWERSAVE            0xFF
+>>>>>>>
+>>>>>>> arch/x86/include/asm/msr-index.h
+>>>>>>> #define HWP_EPP_PERFORMANCE        0x00
+>>>>>>> #define HWP_EPP_BALANCE_PERFORMANCE    0x80
+>>>>>>> #define HWP_EPP_BALANCE_POWERSAVE    0xC0   <------
+>>>>>>> Different from AMD_CPPC_EPP_BALANCE_POWERSAVE
+>>>>>>> #define HWP_EPP_POWERSAVE        0xFF
+>>>>>>>
+>>>>>>>> I think it's better to consult Rafael and Viresh about
+>>>>>>>> how this should
+>>>>>>>> evolve.
+>>>>>>> Yes indeed
+>>>>>> Maybe it's best to discuss what the goal of raw EPP number
+>>>>>> writes is to decide what to do with it.
+>>>>>>
+>>>>>> IE in intel-pstate is it for userspace to be able to actually
+>>>>>> utilize something besides the strings all the time?  Or is it
+>>>>>> just for debugging to find better values for strings in the
+>>>>>> future?
+>>>>>>
+>>>>>> If the former maybe we're better off splitting to
+>>>>>> 'energy_performance_preference' and
+>>>>>> 'energy_performance_preference_int'.
+>>>>>>
+>>>>>> If the latter maybe we're better off putting the integer
+>>>>>> writes and reads into debugfs instead and making
+>>>>>> 'energy_performance_preference' return -EINVAL while a non-
+>>>>>> predefined value is in use.
+>>>>
+>>>> In Intel case EPP values can be different based on processor. In
+>>>> some case they they end up sharing the same CPU model. So strings
+>>>> are not suitable for all cases. Also there is different
+>>>> preference of EPP between Chrome systems and non chrome distro.
+>>>> For example Chrome has some resource manager which can change and
+>>>> same on Intel distros with LPMD.
+>>>>
+>>>
+>>> Thanks for confirming it is intentional and changing it would break
+>>> existing userspace.
+>>>
+>>> And FWIW even in Windows there are more than 4 situational values
+>>> used like we have in Linux today.
+>>>
+>>> As the status quo is there I personally feel that we should do the
+>>> exact same for other implementation of
+>>> energy_performance_preference.
+>>
+>> I still don't think this implementation is nice, for the following
+>> reasons:
+>>
+>> 1. Users may write raw value but read string. It's odd.
+>>
+>> 2. Sometimes a raw value is read and sometimes a character string is
+>> read.
+>> The userspace tool needs to adapt this.
+>>
+>> 3. Reading and writing EPP strings is not really general in driver.
+>> It is
+>> more reasonable to use the userspace tool to implement it.
+>>
+>> In order not to break existing userspace, I'll rename the file to
+>> 'energy_performance_preference_int' or
+>> 'energy_performance_preference_val'
+>> in cppc_cpufreq and only support reading and writing raw value. As
+>> for
+>> accepting string arguments, it's not necessary for cppc_cpufreq for
+>> now.
+>> It's easy to add this feature but hard to remove, so I'll leave it to
+>> the
+>> future if it is really needed.
+>>
+>> As for amd-pstate and intel_pstate, you can decide how
+>> energy_performance_preference should evolve. But I strongly recommend
+>> splitting it.
 > 
-> Should we merge this patch [1] and related patches since this is causing a crash,
-> or submit a separate patch to fix this?
+> No. User space can deal with this already. 
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index d434096b7515..7c1f7f5142da 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1590,7 +1590,8 @@ static int cpufreq_online(unsigned int cpu)
-                policy->cdev = of_cpufreq_cooling_register(policy);
+I know that. What I mean is that user space had to do more to adapt this
+"sometims value sometimes string" situation. This could have been avoided.
 
-        /* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
--       if (policy->boost_enabled != cpufreq_boost_enabled()) {
-+       if (cpufreq_driver->set_boost &&
-+           policy->boost_enabled != cpufreq_boost_enabled()) {
-                policy->boost_enabled = cpufreq_boost_enabled();
-                ret = cpufreq_driver->set_boost(policy, policy->boost_enabled);
-                if (ret) {
+> Atleast this has one
+> interface. If you split you need to keep them consistent. You can write
+> a raw value  to new attribute and then can read a string from the other
+> attribute, which means different.
 
-I think the right fix for now should be something like this. My series
-(which will be part of next merge window) can go in separately and
-revert this change then (as we won't see this problem then).
+I won't do any change in amd-pstate and intel_pstate because it involves
+too much. I'll only add a new file in cppc_cpufreq for reading and writing
+EPP raw value.
 
-Please send a fix with something like this if it works fine, so Rafael
-can apply.
+> 
+> This is not the only place where strings and raw values can be written
+> in sysfs. Also true for energy_perf_bias.
+> 
+> 
+> Thanks,
+> Srinivas
+> 
+> 
+> 
+>>
+>> Regards,
+>>
+>> Lifeng
+>>
+>>>
+>>>>
+>>>> Thanks,
+>>>>
+>>>> Srinivas
+>>>>
+>>>>
+>>>>> I think it's the former.
+>>>>>
+>>>>> I added the author of the patch that allows raw energy
+>>>>> performance
+>>>>> preference value in intel_pstate to ask about what the goal is
+>>>>> and if this
+>>>>> would be ok to do the modification mentioned above.
+>>>>>
+>>>>> To see the patch from
+>>>>> https://lore.kernel.org/ all/20200626183401.1495090-3-srinivas.pandruvada@linux.intel.c
+>>>>> om/
+>>>>>
+>>>>> Anyway, the purpose of this patch is to allow users write and
+>>>>> read raw EPP
+>>>>> number. So maybe I can just rename the file to
+>>>>> 'energy_performance_preference_int'?
+>>>>>
+>>>
+>>
+> 
+> 
 
--- 
-viresh
 
