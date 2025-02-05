@@ -1,219 +1,128 @@
-Return-Path: <linux-pm+bounces-21411-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21412-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F4D2A29554
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 16:54:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 20339A29635
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 17:27:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A26583A940C
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 15:53:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC2221668C9
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 16:27:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E3760195811;
-	Wed,  5 Feb 2025 15:52:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 009EE1D8E07;
+	Wed,  5 Feb 2025 16:27:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UyKylPmT"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Eeqnleog"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.13])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 495D01B6CE3
-	for <linux-pm@vger.kernel.org>; Wed,  5 Feb 2025 15:52:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEAEA1B6CE3;
+	Wed,  5 Feb 2025 16:27:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738770745; cv=none; b=LY3vkDjJWp7oUUMNLPFWcDOXY+tRfvByYjd75zKij2wMM2rYnZ28LJ+DTsyYQH/ywBAsTYsaHeW+G+d+nZFoQY6CwrMZ58PFeD8cgMSjKbr8EyV+k8Ahv/CIqdxqI6i5O54hptEmd+pnPIZijxq7A2Qti8YBBMthi7ptM58tww0=
+	t=1738772835; cv=none; b=WNA0WuGznMlBDtGB1rXGQD8+8hCzcORkCztD4EBTo5BFWsc3yeROF4E6isn2B6tMyDPJjaOZIcC44w9/NMpoNtsW5S5WtlHQRr5L8KzlByLBE1cDRSJ7qkzv8UwFkcdsabZFJroTk1ody2qUrojLKSl0MVVZCHytHkZ7lxpNuH8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738770745; c=relaxed/simple;
-	bh=8g5Q+/bH4UDe9bA4r8IedJnW/2tHuDoeACpjvTizwXE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=aZq8gjiAoFutnyYRAdhndOfZm3qC1Zd9pRCoEnt7WZm5cXzXhV3jgohW3rhRUwCmcQb/Wvg3ILh9+aPEw7yily8W5RdBiPkwokebdOFxgSeFWr0IhilbBCBQVma65omnnh834Z0jzuWZBSO6eWg7OqT9VR4H2i9FgUD4dg0nLWk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UyKylPmT; arc=none smtp.client-ip=198.175.65.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1738772835; c=relaxed/simple;
+	bh=kMFmV0IehhGOWygBpPpcYAxC51tino8AxCfonOIIqPg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=MTgzFOc9o5Dg6L1uxKHvjzDoQOhbi/yr60KMOAEa+eWCEgVImqMhiFjjaplewsZDexRNEgEOq83ftR7/DECNQCPIahv2W4jI6/wTDpcdS2QbBjog18vpvfxTpwW8z3T7BpGp9kTMegObK95FTl8qNS7Uv3mugHMABMmLD3GdzbY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Eeqnleog; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738770745; x=1770306745;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=8g5Q+/bH4UDe9bA4r8IedJnW/2tHuDoeACpjvTizwXE=;
-  b=UyKylPmTvkT4qyP/yhj8b8n/Li/K6oLrZ7HAtNblHwXjs6tmYL46ehyT
-   JviSRR0q0PyWDA9G8LnK8j7lXyg2v8G6WnNH7g/HbPHT8G6vN1SwVAaEr
-   2V2lpCf8PKKON1fRkfjKSyUdnFrMgNWIcYKs86ehBM/TMz6rCm3I9/ByM
-   /j+OYfntJh4HdK7XslxeuDT+BKHrPbx/ybC2kfdfDD9wZbGQ9oUBml5lX
-   fjbpEHjvqpenNrMdd+PmRzJ05k8mHcwgZ89eEoQ3DpX4rycKAUnP72RF/
-   wGHRtiKcQcIuZgBRQaz5r824oYZxVloV1ypt/TGaKvdzifwbc07ElpUYS
+  t=1738772834; x=1770308834;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=kMFmV0IehhGOWygBpPpcYAxC51tino8AxCfonOIIqPg=;
+  b=Eeqnleoga2Q45nQL2sqOaTSNja4TMC9NsI+qCIFls3KckGk7fEl9z/NM
+   YOsS3l7q/Utwv//buxi4lpAYNDtxjTp/Qdveq16dJ7b0x3rE/wk2i4Fhc
+   z5a5xQx51ufWySFuIa5SyRdQ1vOtSd1lWMCdM2cp1l8vZXGEez+34QKue
+   txXhfdXh+/+H4Uh9JtK8snweAmPakPF8A9bRI1+8X00oqZcAv0VLRYiwn
+   8cGI+lJ/pRW5JmmJb+q1g7NAoS80XqgMwPm6zanUZJMSKuv+gmaMj5Gty
+   LafXZXlTjQfsxOtYL/Jujo7Ylbyw3D1ZYurWYkFTJSsajHxwqMDQdTBnb
    A==;
-X-CSE-ConnectionGUID: TztyBPnAS6qBxs5k7WD8iw==
-X-CSE-MsgGUID: GqiUnsYVR8mDNqOg5PRt9A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="50331016"
-X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
-   d="scan'208";a="50331016"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by orvoesa105.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 07:52:25 -0800
-X-CSE-ConnectionGUID: dWrR5ZAaSl6b7WgJjFOJlg==
-X-CSE-MsgGUID: wZ+0PgUdS8mwBNIqtmKUTw==
+X-CSE-ConnectionGUID: kpJ8X0gtQSKq8lmrFLY5Og==
+X-CSE-MsgGUID: PzcyMN75Q+OplXhhPIN2xA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="39245291"
+X-IronPort-AV: E=Sophos;i="6.13,262,1732608000"; 
+   d="scan'208";a="39245291"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 08:27:13 -0800
+X-CSE-ConnectionGUID: F55qeeNmQcmnG0H6IgCGsQ==
+X-CSE-MsgGUID: N9UgH9j7TG2lpT+LvpkA3Q==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,261,1732608000"; 
-   d="scan'208";a="111516325"
-Received: from powerlab.fi.intel.com (HELO powerlab.backendnet) ([10.237.71.25])
-  by fmviesa009.fm.intel.com with ESMTP; 05 Feb 2025 07:52:22 -0800
-From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-To: x86@kernel.org
-Cc: Linux PM Mailing List <linux-pm@vger.kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Artem Bityutskiy <dedekind1@gmail.com>,
-	dave.hansen@linux.intel.com,
-	gautham.shenoy@amd.com
-Subject: [PATCH v11 4/4] x86/smp: Eliminate mwait_play_dead_cpuid_hint()
-Date: Wed,  5 Feb 2025 17:52:11 +0200
-Message-ID: <20250205155211.329780-5-artem.bityutskiy@linux.intel.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250205155211.329780-1-artem.bityutskiy@linux.intel.com>
-References: <20250205155211.329780-1-artem.bityutskiy@linux.intel.com>
+X-IronPort-AV: E=Sophos;i="6.13,262,1732608000"; 
+   d="scan'208";a="115994605"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 05 Feb 2025 08:27:09 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tfiF1-000vmJ-0I;
+	Wed, 05 Feb 2025 16:27:07 +0000
+Date: Thu, 6 Feb 2025 00:27:03 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raag Jadav <raag.jadav@intel.com>, gregkh@linuxfoundation.org,
+	rafael@kernel.org, linus.walleij@linaro.org,
+	mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+	dmitry.torokhov@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+	sre@kernel.org, jic23@kernel.org, przemyslaw.kitszel@intel.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-iio@vger.kernel.org, Raag Jadav <raag.jadav@intel.com>
+Subject: Re: [PATCH v3 01/20] driver core: Split devres APIs to
+ device/devres.h
+Message-ID: <202502060025.XJwUub6I-lkp@intel.com>
+References: <20250203080902.1864382-2-raag.jadav@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250203080902.1864382-2-raag.jadav@intel.com>
 
-From: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
+Hi Raag,
 
-Currently, mwait_play_dead_cpuid_hint() looks up the MWAIT hint of the
-deepest idle state by inspecting CPUID leaf 0x5 with the assumption
-that, if the number of sub-states for a given major C-state is nonzero,
-those sub-states are always represented by consecutive numbers starting
-from 0. This assumption is not based on the documented platform behavior
-and in fact it is not met on recent Intel platforms.
+kernel test robot noticed the following build warnings:
 
-For example, Intel's Sierra Forest report two C-states with two
-substates each in cpuid leaf 0x5:
+[auto build test WARNING on 2014c95afecee3e76ca4a56956a936e23283f05b]
 
-  Name*   target cstate    target subcstate (mwait hint)
-  ===========================================================
-  C1      0x00             0x00
-  C1E     0x00             0x01
+url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/driver-core-Split-devres-APIs-to-device-devres-h/20250203-161554
+base:   2014c95afecee3e76ca4a56956a936e23283f05b
+patch link:    https://lore.kernel.org/r/20250203080902.1864382-2-raag.jadav%40intel.com
+patch subject: [PATCH v3 01/20] driver core: Split devres APIs to device/devres.h
+config: um-randconfig-r112-20250205 (https://download.01.org/0day-ci/archive/20250206/202502060025.XJwUub6I-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 355d0b186f178668b103068537e517f3d52ad639)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250206/202502060025.XJwUub6I-lkp@intel.com/reproduce)
 
-  --      0x10             ----
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502060025.XJwUub6I-lkp@intel.com/
 
-  C6S     0x20             0x22
-  C6P     0x20             0x23
+sparse warnings: (new ones prefixed by >>)
+   drivers/net/pcs/pcs-xpcs-plat.c: note: in included file (through include/linux/device.h):
+>> include/linux/device/devres.h:106:23: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+   include/linux/device/devres.h:106:23: sparse:     expected void [noderef] __iomem *
+   include/linux/device/devres.h:106:23: sparse:     got void *
 
-  --      0x30             ----
+vim +106 include/linux/device/devres.h
 
-  /* No more (sub)states all the way down to the end. */
-  ===========================================================
+   102	
+   103	static inline
+   104	void __iomem *devm_ioremap_resource(struct device *dev, const struct resource *res)
+   105	{
+ > 106		return ERR_PTR(-EINVAL);
+   107	}
+   108	
 
-   * Names of the cstates are not included in the CPUID leaf 0x5,
-     they are taken from the product specific documentation.
-
-Notice that hints 0x20 and 0x21 are not defined for C-state 0x20
-(C6), so the existing MWAIT hint lookup in
-mwait_play_dead_cpuid_hint() based on the CPUID leaf 0x5 contents does
-not work in this case.
-
-Instead of using MWAIT hint lookup that is not guaranteed to work,
-make native_play_dead() rely on the idle driver for the given platform
-to put CPUs going offline into appropriate idle state and, if that
-fails, fall back to hlt_play_dead().
-
-Accordingly, drop mwait_play_dead_cpuid_hint() altogether and make
-native_play_dead() call cpuidle_play_dead() instead of it
-unconditionally with the assumption that it will not return if it is
-successful. Still, in case cpuidle_play_dead() fails, call
-hlt_play_dead() at the end.
-
-Signed-off-by: Patryk Wlazlyn <patryk.wlazlyn@linux.intel.com>
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Acked-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- arch/x86/kernel/smpboot.c | 54 +++++----------------------------------
- 1 file changed, 7 insertions(+), 47 deletions(-)
-
-diff --git a/arch/x86/kernel/smpboot.c b/arch/x86/kernel/smpboot.c
-index 8aad14e43f54..5746084bafe4 100644
---- a/arch/x86/kernel/smpboot.c
-+++ b/arch/x86/kernel/smpboot.c
-@@ -1258,6 +1258,10 @@ void play_dead_common(void)
- 	local_irq_disable();
- }
- 
-+/*
-+ * We need to flush the caches before going to sleep, lest we have
-+ * dirty data in our caches when we come back up.
-+ */
- void __noreturn mwait_play_dead(unsigned int eax_hint)
- {
- 	struct mwait_cpu_dead *md = this_cpu_ptr(&mwait_cpu_dead);
-@@ -1303,50 +1307,6 @@ void __noreturn mwait_play_dead(unsigned int eax_hint)
- 	}
- }
- 
--/*
-- * We need to flush the caches before going to sleep, lest we have
-- * dirty data in our caches when we come back up.
-- */
--static inline void mwait_play_dead_cpuid_hint(void)
--{
--	unsigned int eax, ebx, ecx, edx;
--	unsigned int highest_cstate = 0;
--	unsigned int highest_subcstate = 0;
--	int i;
--
--	if (boot_cpu_data.x86_vendor == X86_VENDOR_AMD ||
--	    boot_cpu_data.x86_vendor == X86_VENDOR_HYGON)
--		return;
--	if (!this_cpu_has(X86_FEATURE_MWAIT))
--		return;
--	if (!this_cpu_has(X86_FEATURE_CLFLUSH))
--		return;
--
--	eax = CPUID_LEAF_MWAIT;
--	ecx = 0;
--	native_cpuid(&eax, &ebx, &ecx, &edx);
--
--	/*
--	 * eax will be 0 if EDX enumeration is not valid.
--	 * Initialized below to cstate, sub_cstate value when EDX is valid.
--	 */
--	if (!(ecx & CPUID5_ECX_EXTENSIONS_SUPPORTED)) {
--		eax = 0;
--	} else {
--		edx >>= MWAIT_SUBSTATE_SIZE;
--		for (i = 0; i < 7 && edx; i++, edx >>= MWAIT_SUBSTATE_SIZE) {
--			if (edx & MWAIT_SUBSTATE_MASK) {
--				highest_cstate = i;
--				highest_subcstate = edx & MWAIT_SUBSTATE_MASK;
--			}
--		}
--		eax = (highest_cstate << MWAIT_SUBSTATE_SIZE) |
--			(highest_subcstate - 1);
--	}
--
--	mwait_play_dead(eax);
--}
--
- /*
-  * Kick all "offline" CPUs out of mwait on kexec(). See comment in
-  * mwait_play_dead().
-@@ -1397,9 +1357,9 @@ void native_play_dead(void)
- 	play_dead_common();
- 	tboot_shutdown(TB_SHUTDOWN_WFS);
- 
--	mwait_play_dead_cpuid_hint();
--	if (cpuidle_play_dead())
--		hlt_play_dead();
-+	/* Below returns only on error. */
-+	cpuidle_play_dead();
-+	hlt_play_dead();
- }
- 
- #else /* ... !CONFIG_HOTPLUG_CPU */
 -- 
-2.47.1
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
