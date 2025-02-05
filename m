@@ -1,288 +1,179 @@
-Return-Path: <linux-pm+bounces-21361-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21365-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E591A2841F
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 07:13:52 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6311FA284A3
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 07:52:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 156A91881F2B
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 06:13:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C256C3A696B
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 06:52:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 92ED1223339;
-	Wed,  5 Feb 2025 06:13:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A0A422836B;
+	Wed,  5 Feb 2025 06:52:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="EyvtoPjn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga02-in.huawei.com (szxga02-in.huawei.com [45.249.212.188])
+Received: from mail-m3289.qiye.163.com (mail-m3289.qiye.163.com [220.197.32.89])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6FCBA221DA3;
-	Wed,  5 Feb 2025 06:13:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.188
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0346921517A;
+	Wed,  5 Feb 2025 06:52:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.89
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738736027; cv=none; b=CkvtVZiWWrjmFy5KJlaLXihES8LKwwAaVtup1oeSEvDZECSQxLMbgPqWl52rS7L4guS0vQHq8k4jmBJujyfo9Ql21FZmA+7qDpl/GrMAaHzwzjpxHw0+bF/5aVIEhLDKiJp+iYV9F6fpa93PL0ieMraUrxQorjzCSzSbi+b1d+k=
+	t=1738738336; cv=none; b=j18khY7b6+zCIqIq6UPzMgk5kIVMplTS6Nmj3sQn1w0Rjm/Pv+GwtJ0ITXWviy0zbeCnzzOkbc8tpGE/SLmJzeI44/CuZhhS7yZbIFRM6SFGadgqLSolk0pVnazGrC0aeyqQWbO7o3IVgayB2NGL2/mUMbajqjUygwbZ/cwf7KE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738736027; c=relaxed/simple;
-	bh=wp4BYmlHfTkLuIMdUrFAUM0htZkNnvijjGk3fNwIxBg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=kfSZjkpxBuUv9J8lOYZ3vOOXU93K/DADznnFieOnuC0YTvCW67LWvPbrI40rHLoJ0jSvnBmocV7AHdC85Q9i6YpIIyQ1vQ44Mc3BnvgRBtzk8Jd4IX/cxJf3hs3lVGITwlODRgTPfH5ye+7og21OuTXSBH6z8ZxMOpkZGhXYGbs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.188
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga02-in.huawei.com (SkyGuard) with ESMTP id 4YnqdK2XzPzrRgr;
-	Wed,  5 Feb 2025 14:12:05 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 8EC9D14034D;
-	Wed,  5 Feb 2025 14:13:41 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 5 Feb
- 2025 14:13:40 +0800
-Message-ID: <e7fbfb9d-6889-4e78-985d-e18694c7cb9c@huawei.com>
-Date: Wed, 5 Feb 2025 14:13:40 +0800
+	s=arc-20240116; t=1738738336; c=relaxed/simple;
+	bh=SGB3QWwTbnOY/dRtg9F0+JSwM2H3uiSHXb87SVLKkTo=;
+	h=From:To:Cc:Subject:Date:Message-Id; b=AyVBkvybzBJqt+DrJM2h+eA4Ku6XCNmP2y5atZK5mG8yJEKQxw8OR1ZIa8HtuyftltdMawP1V4QYKEtodxehDUjYXUNlVj3YG8nYjghYdi2myaq5R74HDJ+0sQYRmTesjzDTEPr+vXrhS7suxXdZwgfF0LWMG+3vV2XImeI9gLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=EyvtoPjn; arc=none smtp.client-ip=220.197.32.89
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id a34c45df;
+	Wed, 5 Feb 2025 14:16:41 +0800 (GMT+08:00)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [PATCH v7 0/7] Initial support for RK3576 UFS controller
+Date: Wed,  5 Feb 2025 14:15:49 +0800
+Message-Id: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGU9OHlYaS09LQhpOHUpNTE1WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a94d4c0efd809cckunma34c45df
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nio6FAw4KzISEgsKAj8#SxdP
+	QxwwFDRVSlVKTEhDTEhNSUtISUtJVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUhDQ0k3Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=EyvtoPjnKvd2GCieDWWecf644Er9ayVEOwIBiJWqKu7sv27AO/U50GvCPfBrLfT0G9/WWVkGPYPXuEVXovhpvRf9UiZMDWkJasJYtA4IGhWkOQT3wu1O9ZMosHp7YUE4JBzEgDtXRDgshJ5DBfh4EwAFiyskk8/YEWFX16LRy7o=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=LvWGWQfFisDUe17eK1lZRK/TZq7bEeDm1pbtMWmlHfY=;
+	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 6/6] cpufreq: CPPC: Support for autonomous selection in
- cppc_cpufreq
-To: Russell Haley <yumpusamongus@gmail.com>, Mario Limonciello
-	<mario.limonciello@amd.com>, Srinivas Pandruvada
-	<srinivas.pandruvada@linux.intel.com>, Pierre Gondois
-	<pierre.gondois@arm.com>, <rafael@kernel.org>, <lenb@kernel.org>,
-	<robert.moore@intel.com>, <viresh.kumar@linaro.org>
-CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<gautham.shenoy@amd.com>, <ray.huang@amd.com>, <zhanjie9@hisilicon.com>,
-	<lihuisong@huawei.com>, <hepeng68@huawei.com>, <fanghao11@huawei.com>
-References: <20250113122104.3870673-1-zhenglifeng1@huawei.com>
- <20250113122104.3870673-7-zhenglifeng1@huawei.com>
- <21654032-a394-4da9-8ee9-d7cb9df8c855@gmail.com>
- <6909eef3-20aa-4341-9177-a42323a0d5c6@huawei.com>
- <270a1cce-8afe-497a-b30b-56157d75a863@amd.com>
- <0705775a-1040-4564-b97b-2ed397803723@huawei.com>
- <256a7620-2d21-4474-b64d-b1e8effbc975@arm.com>
- <32d084f3-f114-420e-affa-2f7ba107de0d@amd.com>
- <eadd291e-c797-4d7d-b1f9-f8778fa58b23@huawei.com>
- <6267261b-4e4a-475f-b17d-5473d72b2c2a@linux.intel.com>
- <9f5f8181-7d0e-415d-b473-0e3c6601ccc3@amd.com>
- <0c511da2-6a4a-4fa2-9d82-da45d1afe346@huawei.com>
- <6a54f96b-28c9-4cbc-8c8f-a07a3a7048e5@gmail.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <6a54f96b-28c9-4cbc-8c8f-a07a3a7048e5@gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemh100008.china.huawei.com (7.202.181.93)
 
-Hello,
+This patchset adds initial UFS controller supprt for RK3576 SoC.
+Patch 1 is the dt-bindings. Patch 2-4 deal with rpm and spm support
+in advanced suggested by Ulf. Patch 5 exports two new APIs for host
+driver. Patch 6 and 7 are the host driver and dtsi support.
 
-Sorry for my delay due to the recent holiday.
 
-On 2025/1/24 22:32, Russell Haley wrote:
+Changes in v7:
+- add definitions for all kinds of hex values if possible
+- Misc log and comment improvement
+- use udelay for less than 10us cases
+- other improvements suggested by Mani
+- Use 0x0 for consistency
+- Collect Mani's acked-by tag
 
-> On 1/23/25 9:53 PM, zhenglifeng (A) wrote:
->> On 2025/1/24 1:05, Mario Limonciello wrote:
->>
->>> On 1/23/2025 10:46, Srinivas Pandruvada wrote:
->>>>
->>>> On 1/20/25 18:42, zhenglifeng (A) wrote:
->>>>> On 2025/1/21 1:44, Mario Limonciello wrote:
->>>>>
->>>>>> On 1/20/2025 08:49, Pierre Gondois wrote:
->>>>>>>
->>>>>>> On 1/20/25 04:15, zhenglifeng (A) wrote:
->>>>>>>> On 2025/1/17 22:30, Mario Limonciello wrote:
->>>>>>>>
->>>>>>>>> On 1/16/2025 21:11, zhenglifeng (A) wrote:
->>>>>>>>>> On 2025/1/16 19:39, Russell Haley wrote:
->>>>>>>>>>
->>>>>>>>>>> Hello,
->>>>>>>>>>>
->>>>>>>>>>> I noticed something here just as a user casually browsing the mailing list.
->>>>>>>>>>>
->>>>>>>>>>> On 1/13/25 6:21 AM, Lifeng Zheng wrote:
->>>>>>>>>>>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
->>>>>>>>>>>> driver.
->>>>>>>>>>>>
->>>>>>>>>>>> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
->>>>>>>>>>>> ---
->>>>>>>>>>>>     .../ABI/testing/sysfs-devices-system-cpu      |  54 +++++++++
->>>>>>>>>>>>     drivers/cpufreq/cppc_cpufreq.c                | 109 +++++++ ++++ +++++++
->>>>>>>>>>>>     2 files changed, 163 insertions(+)
->>>>>>>>>>>>
->>>>>>>>>>>> diff --git a/Documentation/ABI/testing/sysfs-devices-system-cpu b/ Documentation/ABI/testing/sysfs-devices-system-cpu
->>>>>>>>>>>> index 206079d3bd5b..3d87c3bb3fe2 100644
->>>>>>>>>>>> --- a/Documentation/ABI/testing/sysfs-devices-system-cpu
->>>>>>>>>>>> +++ b/Documentation/ABI/testing/sysfs-devices-system-cpu
->>>>>>>>>>>> @@ -268,6 +268,60 @@ Description:    Discover CPUs in the same CPU frequency coordination domain
->>>>>>>>>>>>             This file is only present if the acpi-cpufreq or the cppc-cpufreq
->>>>>>>>>>>>             drivers are in use.
->>>>>>>>>>> [...snip...]
->>>>>>>>>>>
->>>>>>>>>>>> +What:        /sys/devices/system/cpu/cpuX/cpufreq/energy_perf
->>>>>>>>>>>> +Date:        October 2024
->>>>>>>>>>>> +Contact:    linux-pm@vger.kernel.org
->>>>>>>>>>>> +Description:    Energy performance preference
->>>>>>>>>>>> +
->>>>>>>>>>>> +        Read/write an 8-bit integer from/to this file. This file
->>>>>>>>>>>> +        represents a range of values from 0 (performance preference) to
->>>>>>>>>>>> +        0xFF (energy efficiency preference) that influences the rate of
->>>>>>>>>>>> +        performance increase/decrease and the result of the hardware's
->>>>>>>>>>>> +        energy efficiency and performance optimization policies.
->>>>>>>>>>>> +
->>>>>>>>>>>> +        Writing to this file only has meaning when Autonomous Selection is
->>>>>>>>>>>> +        enabled.
->>>>>>>>>>>> +
->>>>>>>>>>>> +        This file only presents if the cppc-cpufreq driver is in use.
->>>>>>>>>>> In intel_pstate driver, there is file with near-identical semantics:
->>>>>>>>>>>
->>>>>>>>>>> /sys/devices/system/cpu/cpuX/cpufreq/energy_performance_preference
->>>>>>>>>>>
->>>>>>>>>>> It also accepts a few string arguments and converts them to integers.
->>>>>>>>>>>
->>>>>>>>>>> Perhaps the same name should be used, and the semantics made exactly
->>>>>>>>>>> identical, and then it could be documented as present for either
->>>>>>>>>>> cppc_cpufreq OR intel_pstate?
->>>>>>>>>>>
->>>>>>>>>>> I think would be more elegant if userspace tooling could Just Work with
->>>>>>>>>>> either driver.
->>>>>>>>>>>
->>>>>>>>>>> One might object that the frequency selection behavior that results from
->>>>>>>>>>> any particular value of the register itself might be different, but they
->>>>>>>>>>> are *already* different between Intel's P and E-cores in the same CPU
->>>>>>>>>>> package. (Ugh.)
->>>>>>>>>> Yes, I should use the same name. Thanks.
->>>>>>>>>>
->>>>>>>>>> As for accepting string arguments and converting them to integers, I don't
->>>>>>>>>> think it is necessary. It'll be a litte confused if someone writes a raw
->>>>>>>>>> value and reads a string I think. I prefer to let users freely set this
->>>>>>>>>> value.
->>>>>>>>>>
->>>>>>>>>> In addition, there are many differences between the implementations of
->>>>>>>>>> energy_performance_preference in intel_pstate and cppc_cpufreq (and
->>>>>>>>>> amd-pstate...). It is really difficult to explain all this differences in
->>>>>>>>>> this document. So I'll leave it to be documented as present for
->>>>>>>>>> cppc_cpufreq only.
->>>>>>>>> At least the interface to userspace I think we should do the best we can to be the same between all the drivers if possible.
->>>>>>>>>
->>>>>>>>> For example; I've got a patch that I may bring up in a future kernel cycle that adds raw integer writes to amd-pstates energy_performance_profile to behave the same way intel-pstate does.
->>>>>>>> I agree that it's better to keep this interface consistent across different
->>>>>>>> drivers. But in my opinion, the implementation of intel_pstate
->>>>>>>> energy_performance_preference is not really nice. Someone may write a raw
->>>>>>>> value but read a string, or read strings for some values and read raw
->>>>>>>> values for some other values. It is inconsistent. It may be better to use
->>>>>>>> some other implementation, such as seperating the operations of r/w strings
->>>>>>>> and raw values into two files.
->>>>>>> I agree it would be better to be sure of the type to expect when reading the
->>>>>>> energy_performance_preference file. The epp values in the range 0-255 with 0
->>>>>>> being the performance value for all interfaces.
->>>>>>>
->>>>>>> In the current epp strings, it seems there is a big gap between the PERFORMANCE
->>>>>>> and the BALANCE_PERFORMANCE strings. Maybe it would be good to complete it:
->>>>>>> EPP_PERFORMANCE        0x00
->>>>>>> EPP_BALANCE_PERFORMANCE    0x40      // state value changed
->>>>>>> EPP_BALANCE        0x80      // new state
->>>>>>> EPP_BALANCE_POWERSAVE    0xC0
->>>>>>> EPP_POWERSAVE        0xFF
->>>>>>>
->>>>>>> NIT: The mapping seems to be slightly different for intel_pstate and amd-pstate
->>>>>>> currently:
->>>>>>> drivers/cpufreq/amd-pstate.c
->>>>>>> #define AMD_CPPC_EPP_PERFORMANCE        0x00
->>>>>>> #define AMD_CPPC_EPP_BALANCE_PERFORMANCE    0x80
->>>>>>> #define AMD_CPPC_EPP_BALANCE_POWERSAVE        0xBF
->>>>>>> #define AMD_CPPC_EPP_POWERSAVE            0xFF
->>>>>>>
->>>>>>> arch/x86/include/asm/msr-index.h
->>>>>>> #define HWP_EPP_PERFORMANCE        0x00
->>>>>>> #define HWP_EPP_BALANCE_PERFORMANCE    0x80
->>>>>>> #define HWP_EPP_BALANCE_POWERSAVE    0xC0   <------ Different from AMD_CPPC_EPP_BALANCE_POWERSAVE
->>>>>>> #define HWP_EPP_POWERSAVE        0xFF
->>>>>>>
->>>>>>>> I think it's better to consult Rafael and Viresh about how this should
->>>>>>>> evolve.
->>>>>>> Yes indeed
->>>>>> Maybe it's best to discuss what the goal of raw EPP number writes is to decide what to do with it.
->>>>>>
->>>>>> IE in intel-pstate is it for userspace to be able to actually utilize something besides the strings all the time?  Or is it just for debugging to find better values for strings in the future?
->>>>>>
->>>>>> If the former maybe we're better off splitting to 'energy_performance_preference' and 'energy_performance_preference_int'.
->>>>>>
->>>>>> If the latter maybe we're better off putting the integer writes and reads into debugfs instead and making 'energy_performance_preference' return -EINVAL while a non-predefined value is in use.
->>>>
->>>> In Intel case EPP values can be different based on processor. In some case they they end up sharing the same CPU model. So strings are not suitable for all cases. Also there is different preference of EPP between Chrome systems and non chrome distro. For example Chrome has some resource manager which can change and same on Intel distros with LPMD.
->>>>
->>>
->>> Thanks for confirming it is intentional and changing it would break existing userspace.
->>>
->>> And FWIW even in Windows there are more than 4 situational values used like we have in Linux today.
->>>
->>> As the status quo is there I personally feel that we should do the exact same for other implementation of energy_performance_preference.
->>
->> I still don't think this implementation is nice, for the following reasons:
->>
->> 1. Users may write raw value but read string. It's odd.
->>
->> 2. Sometimes a raw value is read and sometimes a character string is read.
->> The userspace tool needs to adapt this.
->>
->> 3. Reading and writing EPP strings is not really general in driver. It is
->> more reasonable to use the userspace tool to implement it.
->>
->> In order not to break existing userspace, I'll rename the file to
->> 'energy_performance_preference_int' or 'energy_performance_preference_val'
->> in cppc_cpufreq and only support reading and writing raw value. As for
->> accepting string arguments, it's not necessary for cppc_cpufreq for now.
->> It's easy to add this feature but hard to remove, so I'll leave it to the
->> future if it is really needed.
->>
->> As for amd-pstate and intel_pstate, you can decide how
->> energy_performance_preference should evolve. But I strongly recommend
->> splitting it.
->>
->> Regards,
->>
->> Lifeng
-> 
-> I agree that not being able to write-read-confirm a numeric value that
-> happens to match one of the strings is... ugly. I have seen cases of
-> userspace fighting with firmware for control of the EPP, and detecting
-> that's happening is difficult if there are *other* reasons you might not
-> get back what you just wrote.
-> 
-> However, the desktop userspace pretty much only uses the strings anyway,
-> and they serve to translate arbitrary non-linear hardware-specific
-> scales into something userspace can build policy on. They are somewhat
-> less magic than the raw values, although still, IMO, pretty magic.
-> 
-> The raw values don't have consistent interpretation other than that
-> higher numbers give monotonically increasing efficiency for that
-> specific core, and I use that wording particularly. Lower numbers may
-> not increase performance because of long-term power/thermal limits, and
-> on asymmetric-CPU machines, the same number may not mean the same thing
-> for different cores in the same CPU package.
-> 
-> Leaving it up to userspace means either you need machine-model-specific
-> golden images, manually tuned by a skilled administrator, or CPU model
-> checks and an out-of-tree hardware database that somehow everyone
-> collaborates on. That database would likely miss a lot of things that
-> aren't popular X86 CPUs less than 5 years old.
-> 
-> Thanks,
-> 
-> Russell
+Changes in v6:
+- fix indentation to 4 spaces suggested by Krzysztof
+- export dev_pm_genpd_rpm_always_on()
+- replace host drivers with glue drivers suggested by Mani
+- add Main's review tag
+- remove UFS_MAX_CLKS
+- improve err log
+- remove hardcoded clocks
+- remove comment from ufs_rockchip_device_reset()
+- remove pm_runtime_* from ufs_rockchip_remove()
+- rebase to scsi/next
+- move ufs_rockchip_set_pm_lvl to ufs_rockchip_rk3576_init()
+- add comments about device_set_awake_path()
+- remove comments suggested by Mani
 
-If userspace only uses the strings, then it makes more sense to split it I
-think.
+Changes in v5:
+- use ufshc for devicetree example suggested by Mani
+- fix a compile warning
+- use device_set_awake_path() and disable ref_out_clk in suspend
+- remove pd_id from header
+- reconstruct ufs_rockchip_hce_enable_notify() to workaround hce enable
+  without using new quirk
 
->>>
->>
-> 
+Changes in v4:
+- properly describe reset-gpios
+- deal with power domain of rpm and spm suggested by Ulf
+- Fix typo and disable clks in ufs_rockchip_remove
+- remove clk_disable_unprepare(host->ref_out_clk) from
+  ufs_rockchip_remove
+
+Changes in v3:
+- rename the file to rockchip,rk3576-ufshc.yaml
+- add description for reset-gpios
+- use rockchip,rk3576-ufshc as compatible
+- reword Kconfig description
+- elaborate more about controller in commit msg
+- use rockchip,rk3576-ufshc for compatible
+- remove useless header file
+- remove inline for ufshcd_is_device_present
+- use usleep_range instead
+- remove initialization, reverse Xmas order
+- remove useless varibles
+- check vops for null
+- other small fixes for err path
+- remove pm_runtime_set_active
+- fix the active and inactive reset-gpios logic
+- fix rpm_lvl and spm_lvl to 5 and move to end of probe path
+- remove unnecessary system PM callbacks
+- use UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE instead
+  of UFSHCI_QUIRK_BROKEN_HCE
+
+Changes in v2:
+- rename the file
+- add reset-gpios
+
+Shawn Lin (6):
+  dt-bindings: ufs: Document Rockchip UFS host controller
+  soc: rockchip: add header for suspend mode SIP interface
+  pmdomain: rockchip: Add smc call to inform firmware
+  scsi: ufs: core: Export ufshcd_dme_reset() and ufshcd_dme_enable()
+  scsi: ufs: rockchip: initial support for UFS
+  arm64: dts: rockchip: Add UFS support for RK3576 SoC
+
+Ulf Hansson (1):
+  pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
+
+ .../bindings/ufs/rockchip,rk3576-ufshc.yaml        | 105 ++++++
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  24 ++
+ drivers/pmdomain/core.c                            |  35 ++
+ drivers/pmdomain/rockchip/pm-domains.c             |   8 +
+ drivers/ufs/core/ufshcd.c                          |   6 +-
+ drivers/ufs/host/Kconfig                           |  12 +
+ drivers/ufs/host/Makefile                          |   1 +
+ drivers/ufs/host/ufs-rockchip.c                    | 353 +++++++++++++++++++++
+ drivers/ufs/host/ufs-rockchip.h                    |  90 ++++++
+ include/linux/pm_domain.h                          |   7 +
+ include/soc/rockchip/rockchip_sip.h                |   3 +
+ include/ufs/ufshcd.h                               |   2 +
+ 12 files changed, 644 insertions(+), 2 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
+ create mode 100644 drivers/ufs/host/ufs-rockchip.c
+ create mode 100644 drivers/ufs/host/ufs-rockchip.h
+
+-- 
+2.7.4
 
 
