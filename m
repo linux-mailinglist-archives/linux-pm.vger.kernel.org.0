@@ -1,151 +1,141 @@
-Return-Path: <linux-pm+bounces-21369-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21371-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE928A284C7
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 08:01:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A58B2A285C1
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 09:41:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7F7AE7A1BE4
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 07:00:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 96C0616788D
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 08:41:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAFB2228C84;
-	Wed,  5 Feb 2025 07:01:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B54EB22A4C2;
+	Wed,  5 Feb 2025 08:41:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dO+s0RYT"
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="U5mFfZr1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m155115.qiye.163.com (mail-m155115.qiye.163.com [101.71.155.115])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC29321773E
-	for <linux-pm@vger.kernel.org>; Wed,  5 Feb 2025 07:01:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5989422A1EF;
+	Wed,  5 Feb 2025 08:41:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=101.71.155.115
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738738870; cv=none; b=gb6v6VMUT6e7G6Ql0rl8KePEeKDANdFcdnv9HJIwiRwMZ489tSk6gqTHwU1GK6HxzvA6t2wYQkOaMmoOhMoRLdENc+azGNpB2O8jeKLa34k14aK2WZxW7QSOXs4or9a4IJ+p8ChET73iPMOjWQrIgemd6AualFZCDLgi7sgnSVU=
+	t=1738744867; cv=none; b=dssUi1/SMtUKGmBWcmdtULimMI43zUYZmfuIzCNOclrmXxmwpAdTN1SpFnJTpwyraYm+KHeAgO2ygScUYWyEGsHGEJICycZEcplIBi3Qdc9c6wQSCYncVmcQQJJLUtDc4rdq6MsB0hMBXio3QI9Q5KfxcoI9ffLzTtrLClyGDvM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738738870; c=relaxed/simple;
-	bh=aD/NIW5FUnM9KNWUYbfUMGjaLngniGnrcJF+wI6pOuk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZhUS6eF5cOWXAZwyKxb0R9baDjnUB9Pke3TCzfqhBAZAV95X4dIEmxicIZW7IIsq9WEqkeC1HbrBH463Su0gl6uWV5Jro9+pdJOBbK9+YyTXLswqENw0zTiT4w5FGp7JkQJT+CccIwH0GXZTgiYVr1jRcOgcS7yEzexc52rraLA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dO+s0RYT; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2f9cd8ecbceso2282373a91.0
-        for <linux-pm@vger.kernel.org>; Tue, 04 Feb 2025 23:01:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738738867; x=1739343667; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6N/xvMPywVw8Ta/fzMCKBPH/2e9AxLxEOg5T5Sofx6w=;
-        b=dO+s0RYTJNP9wUMtR0QLLgc1OOesLMB2lodX4zejPIG+1W0oaKf6PxlmH2Y7Z4aNkk
-         dCtQN+rhskNJ5H3XavcjRGrKbTAlHfah7vTjJvR/GY6tJIokskLNNgvdK4ZTiMiIYbej
-         SR6D4VX7vxhV4XRuuaTlOVqhjMgv5M7cVj09l0Xzwyd/9L4E7mQ+ZkTZ2fvBN0QkmyfY
-         KTWbasf1vWJjul3l5GNekOc6VwsiSLKN91bD0GB25DdhC9My+Hem5V5gtasIJXY/LE/4
-         Q1bmeqAf/aPKbLlkwr0uqcs9oDHKjE+TUfgqrqeUy8Xk6R8zJw412rp/GCv+U3Sua2bq
-         kMsA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738738867; x=1739343667;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6N/xvMPywVw8Ta/fzMCKBPH/2e9AxLxEOg5T5Sofx6w=;
-        b=dvv7YvBxExsHDqRi9C2N6B4IdDNxSqp+A0iJMYImJRThj5fL8UeTykfSpIoXPgbQkK
-         SUQKAbmyzDa6DeKSo8Vazyl/StAY3lIHOtaoTPznU8SnHNFrq/Dyi+kNIJ18Fp/8eMRe
-         CKWICgVl/U2/Tx4i7NXgT+ZZWKgvRRaaPi23++XwP0gbK50vUDOhNdo6MyaHaNHgkiwR
-         +bzg/RhjbmqIPMIUXkdnUuYkhiaIObO1LfIMQufSJ0MuSWGYFthyl2uAYj9p1RzKODjr
-         m8bcLWlVsH4GmiV7oKc4I/7UY1aCz0aUAeF3lvyh2exmfbiedTZZxI5e+kHGxEHd/ZGJ
-         /sDQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUStdgJP356CSokSak2QZddM5oQYjXrENzbe7YOEa4fDZ6tCWF1uoiUDtEoFgrKoVgGe09enNQM9Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwLAdLG6lP14zCRqMAjv0cZv/OkI0G1EQmByNuJTeqYnkBi0jTF
-	mj0IaHuTDzGkkVOYSIAM9HN2L4W94jlIv2nH7x5OqmYdY4W0dHH6yxonvmwKY8s=
-X-Gm-Gg: ASbGncsNpDc2JnrAn/0y/wD8dDA1Js+mp4b85HzFvX1Dloc3lnfcD39bMiotDcId+LU
-	ISCpz/WzABseHq9600s5sbalCXU5cX2nDM9cZJCvBAeJEOS6wPfoFfTh+jHbpBPZ/c0Bbss5vI3
-	0vawTBp28LL0hij/M0sV7x0TDkkBcbvzsXC05fuMvghZ9+q2IB5PQhSGtrl0BI08ng5HmyJAk43
-	VFqz30JARq2xXtzXqyjVrPoSP8B7w9QWPV9n232zkEwvQjQ/vlzpyoGK5dvhUcqwh/o6p4XRkcJ
-	Qg+myPczZkeeDuPKMQ==
-X-Google-Smtp-Source: AGHT+IEu7fqxtK7w5SoEhI6cbco/xUvu7X3eM4no2kX0m2LQwZj0KIS55DISe84WBXdk8tWZ91sBcg==
-X-Received: by 2002:a17:90b:38c3:b0:2ea:3d2e:a0d7 with SMTP id 98e67ed59e1d1-2f9e0792de0mr2925113a91.15.1738738866797;
-        Tue, 04 Feb 2025 23:01:06 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2f9e1e4253bsm762453a91.49.2025.02.04.23.01.05
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Feb 2025 23:01:06 -0800 (PST)
-Date: Wed, 5 Feb 2025 12:31:04 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Beata Michalska <beata.michalska@arm.com>
-Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
-	sudeep.holla@arm.com, will@kernel.org, catalin.marinas@arm.com,
-	rafael@kernel.org, sumitg@nvidia.com, yang@os.amperecomputing.com,
-	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com,
-	zhanjie9@hisilicon.com, ptsm@linux.microsoft.com,
-	Jonathan Corbet <corbet@lwn.net>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	"H . Peter Anvin" <hpa@zytor.com>, Phil Auld <pauld@redhat.com>,
-	x86@kernel.org, linux-doc@vger.kernel.org
-Subject: Re: [PATCH v10 2/4] cpufreq: Introduce an optional cpuinfo_avg_freq
- sysfs entry
-Message-ID: <20250205070104.6k4n3zcyuki366am@vireshk-i7>
-References: <20250131162439.3843071-1-beata.michalska@arm.com>
- <20250131162439.3843071-3-beata.michalska@arm.com>
+	s=arc-20240116; t=1738744867; c=relaxed/simple;
+	bh=bNt3g41MbGOhRUtyPJTnQPZ+/OsEb8ekcvaA54K8B9s=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=aUkZTQli1zFZn8Hlsll7O4ZHq4gRQwyD64xJ/A6m7M3tHigZybaMvo/sl1aN4dXN5hAeTFQUZUTW1bQukuD9LKmtHFEo2KRTNdiEZF++4NRPBYAb4Cpe1bmJ2r4OmBvCFmgTq1WCW1Lzl3Mz+1M6B5yUWmJoSZQcam8fCeSxevc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=U5mFfZr1; arc=none smtp.client-ip=101.71.155.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from localhost.localdomain (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id a34e52fb;
+	Wed, 5 Feb 2025 14:18:36 +0800 (GMT+08:00)
+From: Shawn Lin <shawn.lin@rock-chips.com>
+To: Rob Herring <robh+dt@kernel.org>,
+	"James E . J . Bottomley" <James.Bottomley@HansenPartnership.com>,
+	"Martin K . Petersen" <martin.petersen@oracle.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	"Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Alim Akhtar <alim.akhtar@samsung.com>,
+	Avri Altman <avri.altman@wdc.com>,
+	Bart Van Assche <bvanassche@acm.org>,
+	YiFeng Zhao <zyf@rock-chips.com>,
+	Liang Chen <cl@rock-chips.com>,
+	linux-scsi@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Shawn Lin <shawn.lin@rock-chips.com>
+Subject: [PATCH v7 7/7] arm64: dts: rockchip: Add UFS support for RK3576 SoC
+Date: Wed,  5 Feb 2025 14:15:56 +0800
+Message-Id: <1738736156-119203-8-git-send-email-shawn.lin@rock-chips.com>
+X-Mailer: git-send-email 2.7.4
+In-Reply-To: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQk9CSFZNTkNLTkxPGU5NGB1WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a94d4c2af6d09cckunma34e52fb
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Nxw6Myo6ETIQEgs#EjcrHBor
+	EwIwCxFVSlVKTEhDTEhNSEpMQ09PVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUpCSEI3Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=U5mFfZr1sdZFCWiqy8e46HIrf3ILOWz6zcrZR9gIKDOVFyKDGv9l6sb9Y4BUzQyUBMCa/5Hu29CePBxDLaW2MrUGAyn0cD6yXRuETVSd//zKpxM3HDnMN5T77EtzggDXhfmT0DtyfEpxS+vtowhhug6ZY69/Wh7R+/9/GZOp8rg=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
+	bh=zXet6/X8S9LRHFBz6ujYL262DrXxbFU9c0/qc0AtD7Q=;
+	h=date:mime-version:subject:message-id:from;
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250131162439.3843071-3-beata.michalska@arm.com>
 
-On 31-01-25, 16:24, Beata Michalska wrote:
-> Currently the CPUFreq core exposes two sysfs attributes that can be used
-> to query current frequency of a given CPU(s): namely cpuinfo_cur_freq
-> and scaling_cur_freq. Both provide slightly different view on the
-> subject and they do come with their own drawbacks.
-> 
-> cpuinfo_cur_freq provides higher precision though at a cost of being
-> rather expensive. Moreover, the information retrieved via this attribute
-> is somewhat short lived as frequency can change at any point of time
-> making it difficult to reason from.
-> 
-> scaling_cur_freq, on the other hand, tends to be less accurate but then
-> the actual level of precision (and source of information) varies between
-> architectures making it a bit ambiguous.
-> 
-> The new attribute, cpuinfo_avg_freq, is intended to provide more stable,
-> distinct interface, exposing an average frequency of a given CPU(s), as
-> reported by the hardware, over a time frame spanning no more than a few
-> milliseconds. As it requires appropriate hardware support, this
-> interface is optional.
-> 
-> Note that under the hood, the new attribute relies on the information
-> provided by arch_freq_get_on_cpu, which, up to this point, has been
-> feeding data for scaling_cur_freq attribute, being the source of
-> ambiguity when it comes to interpretation. This has been amended by
-> restoring the intended behavior for scaling_cur_freq, with a new
-> dedicated config option to maintain status quo for those, who may need
-> it.
-> 
-> CC: Jonathan Corbet <corbet@lwn.net>
-> CC: Thomas Gleixner <tglx@linutronix.de>
-> CC: Ingo Molnar <mingo@redhat.com>
-> CC: Borislav Petkov <bp@alien8.de>
-> CC: Dave Hansen <dave.hansen@linux.intel.com>
-> CC: H. Peter Anvin <hpa@zytor.com>
-> CC: Phil Auld <pauld@redhat.com>
-> CC: x86@kernel.org
-> CC: linux-doc@vger.kernel.org
-> 
-> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
-> Reviewed-by: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
-> Reviewed-by: Sumit Gupta <sumitg@nvidia.com>
+Add ufshc node to rk3576.dtsi, so the board using UFS could
+enable it.
 
-Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+Acked-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+---
 
+Changes in v7:
+- Use 0x0 for consistency
+- Collect Mani's acked-by tag
+
+Changes in v6:
+- remove comments suggested by Mani
+
+Changes in v5: None
+Changes in v4: None
+Changes in v3: None
+Changes in v2: None
+
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi | 24 ++++++++++++++++++++++++
+ 1 file changed, 24 insertions(+)
+
+diff --git a/arch/arm64/boot/dts/rockchip/rk3576.dtsi b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+index 4dde954..bd55bd8 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3576.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3576.dtsi
+@@ -1221,6 +1221,30 @@
+ 			};
+ 		};
+ 
++		ufshc: ufshc@2a2d0000 {
++			compatible = "rockchip,rk3576-ufshc";
++			reg = <0x0 0x2a2d0000 0x0 0x10000>,
++			      <0x0 0x2b040000 0x0 0x10000>,
++			      <0x0 0x2601f000 0x0 0x1000>,
++			      <0x0 0x2603c000 0x0 0x1000>,
++			      <0x0 0x2a2e0000 0x0 0x10000>;
++			reg-names = "hci", "mphy", "hci_grf", "mphy_grf", "hci_apb";
++			clocks = <&cru ACLK_UFS_SYS>, <&cru PCLK_USB_ROOT>, <&cru PCLK_MPHY>,
++				 <&cru CLK_REF_UFS_CLKOUT>;
++			clock-names = "core", "pclk", "pclk_mphy", "ref_out";
++			assigned-clocks = <&cru CLK_REF_OSC_MPHY>;
++			assigned-clock-parents = <&cru CLK_REF_MPHY_26M>;
++			interrupts = <GIC_SPI 361 IRQ_TYPE_LEVEL_HIGH>;
++			power-domains = <&power RK3576_PD_USB>;
++			pinctrl-0 = <&ufs_refclk>;
++			pinctrl-names = "default";
++			resets = <&cru SRST_A_UFS_BIU>, <&cru SRST_A_UFS_SYS>,
++				 <&cru SRST_A_UFS>, <&cru SRST_P_UFS_GRF>;
++			reset-names = "biu", "sys", "ufs", "grf";
++			reset-gpios = <&gpio4 RK_PD0 GPIO_ACTIVE_LOW>;
++			status = "disabled";
++		};
++
+ 		sdmmc: mmc@2a310000 {
+ 			compatible = "rockchip,rk3576-dw-mshc";
+ 			reg = <0x0 0x2a310000 0x0 0x4000>;
 -- 
-viresh
+2.7.4
+
 
