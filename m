@@ -1,410 +1,288 @@
-Return-Path: <linux-pm+bounces-21435-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21436-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id DDF9CA29920
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 19:30:43 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9FEFA299FB
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 20:17:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4F38F188B042
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 18:30:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AC6993A3DEF
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 19:17:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B4C1FF1DB;
-	Wed,  5 Feb 2025 18:28:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D93DD1FFC42;
+	Wed,  5 Feb 2025 19:17:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="HMuKfM3P"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="IjjsPKkN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D69F1FF1B9;
-	Wed,  5 Feb 2025 18:28:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9EFFF1DBB03;
+	Wed,  5 Feb 2025 19:17:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738780129; cv=none; b=SjijBz5zw3CmSNCOlL2euoGV6EDXKED3gUTLnUMn0+wtSbHoq5I8sok/uoYhq7A2cnP66X6f/LdTCsNYFKHdYRjV0+Eit2z197SRB8b9sc7VHBAP8v71d3iVgk458KTiJ5RqFY93Xpt/CRWfbhSesJKRqUvGynWNS7vxgPf0obM=
+	t=1738783029; cv=none; b=FX5OB9IDyrfQT3FoNkIh8eSBMETxpS+bXCuJaCyScTG7n4NloSpov/3weyqoHv/EsuCeqpw/sez6XLo8ayruA1T3DDvQtP+lqhSUHbaMA8c2LPRc3x22tZJX3oRflF/WzTujIVtnS0CcFndV+tDTwGAbraEaBIcFSzECUkbtlFg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738780129; c=relaxed/simple;
-	bh=FUtSE/UE1A9Ya3HqBgx1wq++NUUcC8vMx2Nvn4FKgWU=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=tgBWi4+GYUS1BJHay/dIwyXdgVzQfTWmDpgTu884Y8Z2XbUWd1vLTFC/LXMvfcEKzFMAYmdvzuCEyc9n9r+H+8AYK1z/BtxgRuwprBEiPTiutUQPSmQuGTd/lzzasDYwyJUDZPP2ZujOjUI1peONyADfLiuDxVqWy7JuGIAonlw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=HMuKfM3P; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279867.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 515EkkqQ019506;
-	Wed, 5 Feb 2025 18:28:41 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	R8mNYremigxjTzd7LhYMh2Mavq9HiTNMD8SDWGPWAlM=; b=HMuKfM3PfPnhZ/pX
-	iTn1M1IK0F+3FoS7xKHebvI3PDA9VpBKn1SrWmfvr6tVJss9qThwHtISsuBOwGc6
-	C3aWQJe0rZdmd22kx9xYzvA5rtdYHVep2jxQOjH3zO+r8FRcChshE2lStN+xRA+t
-	m0xGm2MYzbmxJ+utl2eZ8d/E7vTegvZjPe4Hnp81Oy6hOF9Q5dn8CwtK4KCx/tUF
-	0ME2pnRafOOTJUIlrw5gxjfctbOBq9B46vhbWTTN5qbAmcBe+zTBuL5M78ZmNNDu
-	wRhKvj+oEmS/7mHD+yyDZdF7KSTVKdhmPRn0ngoBsfE5pY3RvXXf/sk6wnuJNRqz
-	6E/lOw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44m9txgmjh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Feb 2025 18:28:41 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 515ISeoK007700
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 5 Feb 2025 18:28:40 GMT
-Received: from c194c8e2f407.qualcomm.com (10.80.80.8) by
- nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 5 Feb 2025 10:28:36 -0800
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>
-CC: Odelu Kukatla <quic_okukatla@quicinc.com>,
-        Mike Tipton
-	<quic_mdtipton@quicinc.com>,
-        Jeff Johnson <quic_jjohnson@quicinc.com>,
-        "Andrew Halaney" <ahalaney@redhat.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>,
-        "Shivnandan
- Kumar" <quic_kshivnan@quicinc.com>
-Subject: [PATCH V8 7/7] arm64: dts: qcom: sa8775p: Add CPU OPP tables to scale DDR/L3
-Date: Wed, 5 Feb 2025 18:27:43 +0000
-Message-ID: <20250205182743.915-8-quic_rlaggysh@quicinc.com>
-X-Mailer: git-send-email 2.39.2
-In-Reply-To: <20250205182743.915-1-quic_rlaggysh@quicinc.com>
-References: <20250205182743.915-1-quic_rlaggysh@quicinc.com>
+	s=arc-20240116; t=1738783029; c=relaxed/simple;
+	bh=RudzayPq+ls6/2gLbJyVXITOTNOFPZ85hq9AVF8CDPk=;
+	h=Date:Content-Type:MIME-Version:From:Cc:To:In-Reply-To:References:
+	 Message-Id:Subject; b=PGwH/BB2bZL/fInoRWsG/oGGW3pzVBLf9YjahF1b8HGQGdIXkQpf7maY3745B30zOORFEGw8/RFuqLAL1Bv1YnHgXlm9jfbcQLoYiF5Phl3Z+Uzc2OAn8eMKg2mmtJH/Ad7Cdm21OLq9ojQF6fccg8+zdOeakr/5GKjsi5bpA9U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=IjjsPKkN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E7EFC4CED1;
+	Wed,  5 Feb 2025 19:17:09 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738783029;
+	bh=RudzayPq+ls6/2gLbJyVXITOTNOFPZ85hq9AVF8CDPk=;
+	h=Date:From:Cc:To:In-Reply-To:References:Subject:From;
+	b=IjjsPKkNuj+m+6+KbEQVTd5oah6lDbVouJ+AINnzPPejRrf0UEdXRphc6v8FnI1iW
+	 +nZ8CXSNlCnKnRGGRVTdtknEw6UovKVQ6EsYqce5wU8HU5w6xTXytyp9MJtnkz2ePb
+	 OekZI8Bx1yAa9IzEJux67Z23K9mNzNoiYUXh02YSrCrLaXN1g7VMxf2nW7pluGnMcH
+	 yyADoxA4no0dTX/JpxTrV2m5p4JGqmi9P9H294IF3ym/EBnXysL6sdebN8vB+Myy75
+	 jPiRJdszx0agZ8ARs+zX98RHGdjOb150rI+YVtrXaoaehkVzRVhpYVNNZNCaSZfxSh
+	 uquOSOauvi96Q==
+Date: Wed, 05 Feb 2025 13:17:08 -0600
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: hwIQrOBYoxys8Ixu4EYtY2mZYvQ1FPKq
-X-Proofpoint-GUID: hwIQrOBYoxys8Ixu4EYtY2mZYvQ1FPKq
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-05_06,2025-02-05_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- bulkscore=0 impostorscore=0 adultscore=0 mlxlogscore=999 clxscore=1015
- mlxscore=0 spamscore=0 lowpriorityscore=0 phishscore=0 priorityscore=1501
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
- definitions=main-2502050141
+From: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-kernel@vger.kernel.org, 
+ linux-sunxi@lists.linux.dev, linux-clk@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, Paul Walmsley <paul.walmsley@sifive.com>, 
+ Philipp Zabel <p.zabel@pengutronix.de>, Palmer Dabbelt <palmer@dabbelt.com>, 
+ Jernej Skrabec <jernej.skrabec@gmail.com>, 
+ linux-arm-kernel@lists.infradead.org, Chen-Yu Tsai <wens@csie.org>, 
+ linux-pm@vger.kernel.org, Linus Walleij <linus.walleij@linaro.org>, 
+ Samuel Holland <samuel@sholland.org>, Stephen Boyd <sboyd@kernel.org>, 
+ Vinod Koul <vkoul@kernel.org>, Michael Turquette <mturquette@baylibre.com>, 
+ Kishon Vijay Abraham I <kishon@kernel.org>, linux-phy@lists.infradead.org, 
+ Albert Ou <aou@eecs.berkeley.edu>, Ulf Hansson <ulf.hansson@linaro.org>, 
+ =?utf-8?q?Uwe_Kleine-K=C3=B6nig?= <u.kleine-koenig@baylibre.com>, 
+ Maxime Ripard <mripard@kernel.org>, linux-riscv@lists.infradead.org, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ devicetree@vger.kernel.org
+To: Andras Szemzo <szemzo.andras@gmail.com>
+In-Reply-To: <20250205125225.1152849-1-szemzo.andras@gmail.com>
+References: <20250205125225.1152849-1-szemzo.andras@gmail.com>
+Message-Id: <173878294158.2545960.16253374239758023814.robh@kernel.org>
+Subject: Re: [PATCH v2 00/10] Support for Allwinner V853 SoC
 
-From: Jagadeesh Kona <quic_jkona@quicinc.com>
 
-Add OPP tables required to scale DDR and L3 per freq-domain
-on SA8775P platform.
+On Wed, 05 Feb 2025 13:52:15 +0100, Andras Szemzo wrote:
+> V85x is a SoC from Allwinner with video encoding targeted for the field of
+> IP Camera. It integrates the single CA7 core, and a T-Head E907 RISC-V mcu.
+> The SoC has the usual Allwinner peripherals and a Vivante NPU.
+> V853 is a BGA package without DRAM, V851s/V851s3 has the same die with
+> co-packaged 64MB/128MB DRAM (in a QFN88 package).
+> 
+> This patchset tries to add basical support for the V853 device family.
+> 
+> Changelog - v2:
+>  - rebased on 6.14-rc1
+>  - add a needed gate with key support to sunxi clk
+>  - rewrite the ccu-r driver
+>  - fix license issues
+>  - remove the pinctrl binding, as it has beed applied
+>  - rework the pinctrl driver, use the new sunxi dt based mux support. This new pinctrl
+>    driver depends on the new sunxi device-tree based mux support patch series [1].
+>  - remove the new usb phy binding, as the v853's usb phy is very close to d1/a64
+>  - add a board dts
+>  - ccu: add module description
+>  - ccu: fix PLL enable bits, and min multipliers
+>  - ccu: change PLL flags to CLK_SET_RATE_GATE
+>  - ccu: use SUNXI_CCU_M_HWS at peripheral PLLs
+>  - ccu: convert the VIDEO and CSI PLLs from nm type to nkmp according to BSP
+>  - ccu: cpu axi clk use pointer
+>  - ccu: fix comments
+>  - ccu: swap i2s1 and i2s0 bus clocks
+>  - ccu: fix indentation
+>  - ccu: fix RST_BUS_SPIF order
+>  - ccu: convert RST_RISCV_CLK_GATING from reset to gate
+> 
+> [1]: https://lore.kernel.org/linux-sunxi/20241111005750.13071-1-andre.przywara@arm.com/T/
+> 
+> Andras Szemzo (10):
+>   clk: sunxi-ng: allow key feature in ccu reset and gate
+>   pinctrl: sunxi: add driver for Allwinner V853
+>   dt-bindings: clock: sunxi-ng: add compatibles for V853
+>   clk: sunxi-ng: add CCU drivers for V853
+>   dt-bindings: power: add V853 ppu bindings
+>   pmdomain: sunxi: add V853 ppu support
+>   dt-bindings: phy: allwinner: add v853 usb phy
+>   phy: allwinner: add v853 usb phy compatible
+>   ARM: dts: sun8i: add DTSI file for V853
+>   ARM: dts: sun8i: add DTS file for yuzuki-lizard V851s
+> 
+>  .../clock/allwinner,sun4i-a10-ccu.yaml        |    3 +
+>  .../phy/allwinner,sun50i-a64-usb-phy.yaml     |    2 +
+>  .../power/allwinner,sun20i-d1-ppu.yaml        |    1 +
+>  arch/arm/boot/dts/allwinner/Makefile          |    1 +
+>  .../boot/dts/allwinner/sun8i-v851s-lizard.dts |  196 +++
+>  arch/arm/boot/dts/allwinner/sun8i-v853.dtsi   |  656 ++++++++++
+>  drivers/clk/sunxi-ng/Kconfig                  |   10 +
+>  drivers/clk/sunxi-ng/Makefile                 |    4 +
+>  drivers/clk/sunxi-ng/ccu-sun8i-v853-r.c       |  120 ++
+>  drivers/clk/sunxi-ng/ccu-sun8i-v853-r.h       |   14 +
+>  drivers/clk/sunxi-ng/ccu-sun8i-v853.c         | 1145 +++++++++++++++++
+>  drivers/clk/sunxi-ng/ccu-sun8i-v853.h         |   14 +
+>  drivers/clk/sunxi-ng/ccu_common.h             |    2 +
+>  drivers/clk/sunxi-ng/ccu_gate.c               |    6 +
+>  drivers/clk/sunxi-ng/ccu_gate.h               |   14 +
+>  drivers/clk/sunxi-ng/ccu_mux.c                |    4 +-
+>  drivers/clk/sunxi-ng/ccu_reset.c              |    7 +
+>  drivers/clk/sunxi-ng/ccu_reset.h              |    2 +-
+>  drivers/phy/allwinner/phy-sun4i-usb.c         |   10 +
+>  drivers/pinctrl/sunxi/Kconfig                 |    5 +
+>  drivers/pinctrl/sunxi/Makefile                |    1 +
+>  drivers/pinctrl/sunxi/pinctrl-sun8i-v853.c    |   53 +
+>  drivers/pmdomain/sunxi/sun20i-ppu.c           |   15 +
+>  .../clock/allwinner,sun8i-v853-ccu.h          |  132 ++
+>  .../clock/allwinner,sun8i-v853-r-ccu.h        |   16 +
+>  .../power/allwinner,sun8i-v853-ppu.h          |   10 +
+>  .../reset/allwinner,sun8i-v853-ccu.h          |   60 +
+>  .../reset/allwinner,sun8i-v853-r-ccu.h        |   14 +
+>  28 files changed, 2513 insertions(+), 4 deletions(-)
+>  create mode 100644 arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dts
+>  create mode 100644 arch/arm/boot/dts/allwinner/sun8i-v853.dtsi
+>  create mode 100644 drivers/clk/sunxi-ng/ccu-sun8i-v853-r.c
+>  create mode 100644 drivers/clk/sunxi-ng/ccu-sun8i-v853-r.h
+>  create mode 100644 drivers/clk/sunxi-ng/ccu-sun8i-v853.c
+>  create mode 100644 drivers/clk/sunxi-ng/ccu-sun8i-v853.h
+>  create mode 100644 drivers/pinctrl/sunxi/pinctrl-sun8i-v853.c
+>  create mode 100644 include/dt-bindings/clock/allwinner,sun8i-v853-ccu.h
+>  create mode 100644 include/dt-bindings/clock/allwinner,sun8i-v853-r-ccu.h
+>  create mode 100644 include/dt-bindings/power/allwinner,sun8i-v853-ppu.h
+>  create mode 100644 include/dt-bindings/reset/allwinner,sun8i-v853-ccu.h
+>  create mode 100644 include/dt-bindings/reset/allwinner,sun8i-v853-r-ccu.h
+> 
+> --
+> 2.39.5
+> 
+> 
+> 
 
-If a single OPP table is used for both CPU domains, then
-_allocate_opp_table() won't be invoked for CPU4 but instead
-CPU4 will be added as device under the CPU0 OPP table. Due
-to this, dev_pm_opp_of_find_icc_paths() won't be invoked for
-CPU4 device and hence CPU4 won't be able to independently scale
-it's interconnects. Both CPU0 and CPU4 devices will scale the
-same ICC path which can lead to one device overwriting the BW
-vote placed by other device. Hence CPU0 and CPU4 require separate
-OPP tables to allow independent scaling of DDR and L3 frequencies
-for each CPU domain, with the final DDR and L3 frequencies being
-an aggregate of both.
 
-Co-developed-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
-Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
-Signed-off-by: Jagadeesh Kona <quic_jkona@quicinc.com>
-Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
----
- arch/arm64/boot/dts/qcom/sa8775p.dtsi | 210 ++++++++++++++++++++++++++
- 1 file changed, 210 insertions(+)
+My bot found new DTB warnings on the .dts files added or changed in this
+series.
 
-diff --git a/arch/arm64/boot/dts/qcom/sa8775p.dtsi b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-index d02b4abe9e8d..8b071deb115f 100644
---- a/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-+++ b/arch/arm64/boot/dts/qcom/sa8775p.dtsi
-@@ -52,6 +52,11 @@ cpu0: cpu@0 {
- 			next-level-cache = <&l2_0>;
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3_cl0 MASTER_EPSS_L3_APPS
-+					 &epss_l3_cl0 SLAVE_EPSS_L3_SHARED>;
- 			l2_0: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -76,6 +81,11 @@ cpu1: cpu@100 {
- 			next-level-cache = <&l2_1>;
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3_cl0 MASTER_EPSS_L3_APPS
-+					 &epss_l3_cl0 SLAVE_EPSS_L3_SHARED>;
- 			l2_1: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -95,6 +105,11 @@ cpu2: cpu@200 {
- 			next-level-cache = <&l2_2>;
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3_cl0 MASTER_EPSS_L3_APPS
-+					 &epss_l3_cl0 SLAVE_EPSS_L3_SHARED>;
- 			l2_2: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -114,6 +129,11 @@ cpu3: cpu@300 {
- 			next-level-cache = <&l2_3>;
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			operating-points-v2 = <&cpu0_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3_cl0 MASTER_EPSS_L3_APPS
-+					 &epss_l3_cl0 SLAVE_EPSS_L3_SHARED>;
- 			l2_3: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -133,6 +153,11 @@ cpu4: cpu@10000 {
- 			next-level-cache = <&l2_4>;
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			operating-points-v2 = <&cpu4_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3_cl1 MASTER_EPSS_L3_APPS
-+					 &epss_l3_cl1 SLAVE_EPSS_L3_SHARED>;
- 			l2_4: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -158,6 +183,11 @@ cpu5: cpu@10100 {
- 			next-level-cache = <&l2_5>;
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			operating-points-v2 = <&cpu4_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3_cl1 MASTER_EPSS_L3_APPS
-+					 &epss_l3_cl1 SLAVE_EPSS_L3_SHARED>;
- 			l2_5: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -177,6 +207,11 @@ cpu6: cpu@10200 {
- 			next-level-cache = <&l2_6>;
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			operating-points-v2 = <&cpu4_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3_cl1 MASTER_EPSS_L3_APPS
-+					 &epss_l3_cl1 SLAVE_EPSS_L3_SHARED>;
- 			l2_6: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -196,6 +231,11 @@ cpu7: cpu@10300 {
- 			next-level-cache = <&l2_7>;
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			operating-points-v2 = <&cpu4_opp_table>;
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3_cl1 MASTER_EPSS_L3_APPS
-+					 &epss_l3_cl1 SLAVE_EPSS_L3_SHARED>;
- 			l2_7: l2-cache {
- 				compatible = "cache";
- 				cache-level = <2>;
-@@ -285,6 +325,176 @@ cluster_sleep_apss_rsc_pc: cluster-sleep-1 {
- 		};
- 	};
- 
-+	cpu0_opp_table: opp-table-cpu0 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		cpu0_opp_1267mhz: opp-1267200000 {
-+			opp-hz = /bits/ 64 <1267200000>;
-+			opp-peak-kBps = <6220800 29491200>;
-+		};
-+
-+		cpu0_opp_1363mhz: opp-1363200000 {
-+			opp-hz = /bits/ 64 <1363200000>;
-+			opp-peak-kBps = <6220800 29491200>;
-+		};
-+
-+		cpu0_opp_1459mhz: opp-1459200000 {
-+			opp-hz = /bits/ 64 <1459200000>;
-+			opp-peak-kBps = <6220800 29491200>;
-+		};
-+
-+		cpu0_opp_1536mhz: opp-1536000000 {
-+			opp-hz = /bits/ 64 <1536000000>;
-+			opp-peak-kBps = <6220800 29491200>;
-+		};
-+
-+		cpu0_opp_1632mhz: opp-1632000000 {
-+			opp-hz = /bits/ 64 <1632000000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu0_opp_1708mhz: opp-1708800000 {
-+			opp-hz = /bits/ 64 <1708800000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu0_opp_1785mhz: opp-1785600000 {
-+			opp-hz = /bits/ 64 <1785600000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu0_opp_1862mhz: opp-1862400000 {
-+			opp-hz = /bits/ 64 <1862400000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu0_opp_1939mhz: opp-1939200000 {
-+			opp-hz = /bits/ 64 <1939200000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu0_opp_2016mhz: opp-2016000000 {
-+			opp-hz = /bits/ 64 <2016000000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu0_opp_2112mhz: opp-2112000000 {
-+			opp-hz = /bits/ 64 <2112000000>;
-+			opp-peak-kBps = <8371200 49766400>;
-+		};
-+
-+		cpu0_opp_2188mhz: opp-2188800000 {
-+			opp-hz = /bits/ 64 <2188800000>;
-+			opp-peak-kBps = <8371200 49766400>;
-+		};
-+
-+		cpu0_opp_2265mhz: opp-2265600000 {
-+			opp-hz = /bits/ 64 <2265600000>;
-+			opp-peak-kBps = <8371200 49766400>;
-+		};
-+
-+		cpu0_opp_2361mhz: opp-2361600000 {
-+			opp-hz = /bits/ 64 <2361600000>;
-+			opp-peak-kBps = <12787200 51609600>;
-+		};
-+
-+		cpu0_opp_2457mhz: opp-2457600000 {
-+			opp-hz = /bits/ 64 <2457600000>;
-+			opp-peak-kBps = <12787200 51609600>;
-+		};
-+
-+		cpu0_opp_2553mhz: opp-2553600000 {
-+			opp-hz = /bits/ 64 <2553600000>;
-+			opp-peak-kBps = <12787200 54681600>;
-+		};
-+	};
-+
-+	cpu4_opp_table: opp-table-cpu4 {
-+		compatible = "operating-points-v2";
-+		opp-shared;
-+
-+		cpu4_opp_1267mhz: opp-1267200000 {
-+			opp-hz = /bits/ 64 <1267200000>;
-+			opp-peak-kBps = <6220800 29491200>;
-+		};
-+
-+		cpu4_opp_1363mhz: opp-1363200000 {
-+			opp-hz = /bits/ 64 <1363200000>;
-+			opp-peak-kBps = <6220800 29491200>;
-+		};
-+
-+		cpu4_opp_1459mhz: opp-1459200000 {
-+			opp-hz = /bits/ 64 <1459200000>;
-+			opp-peak-kBps = <6220800 29491200>;
-+		};
-+
-+		cpu4_opp_1536mhz: opp-1536000000 {
-+			opp-hz = /bits/ 64 <1536000000>;
-+			opp-peak-kBps = <6220800 29491200>;
-+		};
-+
-+		cpu4_opp_1632mhz: opp-1632000000 {
-+			opp-hz = /bits/ 64 <1632000000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu4_opp_1708mhz: opp-1708800000 {
-+			opp-hz = /bits/ 64 <1708800000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu4_opp_1785mhz: opp-1785600000 {
-+			opp-hz = /bits/ 64 <1785600000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu4_opp_1862mhz: opp-1862400000 {
-+			opp-hz = /bits/ 64 <1862400000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu4_opp_1939mhz: opp-1939200000 {
-+			opp-hz = /bits/ 64 <1939200000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu4_opp_2016mhz: opp-2016000000 {
-+			opp-hz = /bits/ 64 <2016000000>;
-+			opp-peak-kBps = <6835200 39321600>;
-+		};
-+
-+		cpu4_opp_2112mhz: opp-2112000000 {
-+			opp-hz = /bits/ 64 <2112000000>;
-+			opp-peak-kBps = <8371200 49766400>;
-+		};
-+
-+		cpu4_opp_2188mhz: opp-2188800000 {
-+			opp-hz = /bits/ 64 <2188800000>;
-+			opp-peak-kBps = <8371200 49766400>;
-+		};
-+
-+		cpu4_opp_2265mhz: opp-2265600000 {
-+			opp-hz = /bits/ 64 <2265600000>;
-+			opp-peak-kBps = <8371200 49766400>;
-+		};
-+
-+		cpu4_opp_2361mhz: opp-2361600000 {
-+			opp-hz = /bits/ 64 <2361600000>;
-+			opp-peak-kBps = <12787200 51609600>;
-+		};
-+
-+		cpu4_opp_2457mhz: opp-2457600000 {
-+			opp-hz = /bits/ 64 <2457600000>;
-+			opp-peak-kBps = <12787200 51609600>;
-+		};
-+
-+		cpu4_opp_2553mhz: opp-2553600000 {
-+			opp-hz = /bits/ 64 <2553600000>;
-+			opp-peak-kBps = <12787200 54681600>;
-+		};
-+	};
-+
- 	dummy-sink {
- 		compatible = "arm,coresight-dummy-sink";
- 
--- 
-2.39.2
+Some warnings may be from an existing SoC .dtsi. Or perhaps the warnings
+are fixed by another series. Ultimately, it is up to the platform
+maintainer whether these warnings are acceptable or not. No need to reply
+unless the platform maintainer has comments.
+
+If you already ran DT checks and didn't see these error(s), then
+make sure dt-schema is up to date:
+
+  pip3 install dtschema --upgrade
+
+
+New warnings running 'make CHECK_DTBS=y for arch/arm/boot/dts/allwinner/' for 20250205125225.1152849-1-szemzo.andras@gmail.com:
+
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: /: memory: False schema does not allow {'reg': [[1073741824, 67108864]]}
+	from schema $id: http://devicetree.org/schemas/root-node.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: /: memory: 'device_type' is a required property
+	from schema $id: http://devicetree.org/schemas/memory.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: /: failed to match any schema with compatible: ['yuzukihd,lizard', 'allwinner,sun8i-v853', 'allwinner,sun8i']
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: /: failed to match any schema with compatible: ['yuzukihd,lizard', 'allwinner,sun8i-v853', 'allwinner,sun8i']
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: /: failed to match any schema with compatible: ['yuzukihd,lizard', 'allwinner,sun8i-v853', 'allwinner,sun8i']
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: cpu@0: compatible: ['arm,cortex-a7', 'arm,armv7'] is too long
+	from schema $id: http://devicetree.org/schemas/arm/cpus.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: /cpus/cpu@0: failed to match any schema with compatible: ['arm,cortex-a7', 'arm,armv7']
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: pinctrl@2000000: uart0-ph9-pins: 'allwinner,pinmux' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/pinctrl/allwinner,sun4i-a10-pinctrl.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: pinctrl@2000000: spi0-pins: 'allwinner,pinmux' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/pinctrl/allwinner,sun4i-a10-pinctrl.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: pinctrl@2000000: i2c2-ph11-pins: 'allwinner,pinmux' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/pinctrl/allwinner,sun4i-a10-pinctrl.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: pinctrl@2000000: mmc0-pins: 'allwinner,pinmux' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/pinctrl/allwinner,sun4i-a10-pinctrl.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: pinctrl@2000000: mmc1-pins: 'allwinner,pinmux' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/pinctrl/allwinner,sun4i-a10-pinctrl.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: clock-controller@2001000: clock-names:1: 'losc' was expected
+	from schema $id: http://devicetree.org/schemas/clock/allwinner,sun4i-a10-ccu.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: clock-controller@2001000: clock-names:2: 'iosc' was expected
+	from schema $id: http://devicetree.org/schemas/clock/allwinner,sun4i-a10-ccu.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: serial@2500000: dma-names:0: 'tx' was expected
+	from schema $id: http://devicetree.org/schemas/serial/snps-dw-apb-uart.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: serial@2500000: dma-names:1: 'rx' was expected
+	from schema $id: http://devicetree.org/schemas/serial/snps-dw-apb-uart.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: serial@2500000: Unevaluated properties are not allowed ('dma-names' was unexpected)
+	from schema $id: http://devicetree.org/schemas/serial/snps-dw-apb-uart.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: serial@2500400: dma-names:0: 'tx' was expected
+	from schema $id: http://devicetree.org/schemas/serial/snps-dw-apb-uart.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: serial@2500400: dma-names:1: 'rx' was expected
+	from schema $id: http://devicetree.org/schemas/serial/snps-dw-apb-uart.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: serial@2500800: dma-names:0: 'tx' was expected
+	from schema $id: http://devicetree.org/schemas/serial/snps-dw-apb-uart.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: serial@2500800: dma-names:1: 'rx' was expected
+	from schema $id: http://devicetree.org/schemas/serial/snps-dw-apb-uart.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: serial@2500c00: dma-names:0: 'tx' was expected
+	from schema $id: http://devicetree.org/schemas/serial/snps-dw-apb-uart.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: serial@2500c00: dma-names:1: 'rx' was expected
+	from schema $id: http://devicetree.org/schemas/serial/snps-dw-apb-uart.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: syscon@3000000: sram@20000:sram-section@0:compatible: 'oneOf' conditional failed, one must be fixed:
+	['allwinner,sun8i-v3s-sram-c', 'allwinner,sun4i-a10-sram-c1'] is too long
+	'allwinner,sun4i-a10-sram-a3-a4' was expected
+	'allwinner,sun4i-a10-sram-c1' was expected
+	'allwinner,sun4i-a10-sram-d' was expected
+	'allwinner,sun50i-a64-sram-c' was expected
+	'allwinner,sun8i-v3s-sram-c' is not one of ['allwinner,sun5i-a13-sram-a3-a4', 'allwinner,sun7i-a20-sram-a3-a4']
+	'allwinner,sun8i-v3s-sram-c' is not one of ['allwinner,sun5i-a13-sram-c1', 'allwinner,sun7i-a20-sram-c1', 'allwinner,sun8i-a23-sram-c1', 'allwinner,sun8i-h3-sram-c1', 'allwinner,sun8i-r40-sram-c1', 'allwinner,sun50i-a64-sram-c1', 'allwinner,sun50i-h5-sram-c1', 'allwinner,sun50i-h6-sram-c1']
+	'allwinner,sun8i-v3s-sram-c' is not one of ['allwinner,suniv-f1c100s-sram-d', 'allwinner,sun5i-a13-sram-d', 'allwinner,sun7i-a20-sram-d']
+	'allwinner,sun50i-h6-sram-c' was expected
+	from schema $id: http://devicetree.org/schemas/sram/allwinner,sun4i-a10-system-control.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: /soc/syscon@3000000/sram@20000/sram-section@0: failed to match any schema with compatible: ['allwinner,sun8i-v3s-sram-c', 'allwinner,sun4i-a10-sram-c1']
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: hwlock@3005000: '#hwlock-cells' is a required property
+	from schema $id: http://devicetree.org/schemas/hwlock/allwinner,sun6i-a31-hwspinlock.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: hwlock@3005000: 'clock-names', 'interrupts', 'reset-names' do not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/hwlock/allwinner,sun6i-a31-hwspinlock.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: hstimer@3008000: interrupts: [[0, 55, 4], [0, 56, 4]] is too short
+	from schema $id: http://devicetree.org/schemas/timer/allwinner,sun5i-a13-hstimer.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: phy@4100400: reg: [[68158464, 256], [68163584, 256]] is too short
+	from schema $id: http://devicetree.org/schemas/phy/allwinner,sun50i-a64-usb-phy.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: phy@4100400: reg-names: ['phy_ctrl', 'pmu0'] is too short
+	from schema $id: http://devicetree.org/schemas/phy/allwinner,sun50i-a64-usb-phy.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: phy@4100400: clocks: [[1, 94]] is too short
+	from schema $id: http://devicetree.org/schemas/phy/allwinner,sun50i-a64-usb-phy.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: phy@4100400: clock-names: ['usb0_phy'] is too short
+	from schema $id: http://devicetree.org/schemas/phy/allwinner,sun50i-a64-usb-phy.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: phy@4100400: resets: [[1, 38]] is too short
+	from schema $id: http://devicetree.org/schemas/phy/allwinner,sun50i-a64-usb-phy.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: phy@4100400: reset-names: ['usb0_reset'] is too short
+	from schema $id: http://devicetree.org/schemas/phy/allwinner,sun50i-a64-usb-phy.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: phy@4100400: 'usb0_id_det-gpio' does not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/phy/allwinner,sun50i-a64-usb-phy.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: clock-controller@7010000: clocks: [[4], [5, 2], [5, 0], [1, 10], [1, 19]] is too long
+	from schema $id: http://devicetree.org/schemas/clock/allwinner,sun4i-a10-ccu.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: clock-controller@7010000: clock-names:1: 'losc' was expected
+	from schema $id: http://devicetree.org/schemas/clock/allwinner,sun4i-a10-ccu.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: clock-controller@7010000: clock-names:2: 'iosc' was expected
+	from schema $id: http://devicetree.org/schemas/clock/allwinner,sun4i-a10-ccu.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: clock-controller@7010000: clock-names: ['hosc', 'iosc', 'losc', 'pll-periph', 'pll-audio'] is too long
+	from schema $id: http://devicetree.org/schemas/clock/allwinner,sun4i-a10-ccu.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: clock-controller@7010000: clocks: [[4], [5, 2], [5, 0], [1, 10], [1, 19]] is too long
+	from schema $id: http://devicetree.org/schemas/clock/allwinner,sun4i-a10-ccu.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: clock-controller@7010000: clock-names: ['hosc', 'iosc', 'losc', 'pll-periph', 'pll-audio'] is too long
+	from schema $id: http://devicetree.org/schemas/clock/allwinner,sun4i-a10-ccu.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: intc-nmi@7010320: $nodename:0: 'intc-nmi@7010320' does not match '^interrupt-controller(@[0-9a-f,]+)*$'
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/allwinner,sun7i-a20-sc-nmi.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: intc-nmi@7010320: Unevaluated properties are not allowed ('#address-cells' was unexpected)
+	from schema $id: http://devicetree.org/schemas/interrupt-controller/allwinner,sun7i-a20-sc-nmi.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: rtc@7090000: clocks: [[17, 4]] is too short
+	from schema $id: http://devicetree.org/schemas/rtc/allwinner,sun6i-a31-rtc.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: rtc@7090000: clock-names: ['bus'] is too short
+	from schema $id: http://devicetree.org/schemas/rtc/allwinner,sun6i-a31-rtc.yaml#
+arch/arm/boot/dts/allwinner/sun8i-v851s-lizard.dtb: rtc@7090000: 'resets', 'wakeup-source' do not match any of the regexes: 'pinctrl-[0-9]+'
+	from schema $id: http://devicetree.org/schemas/rtc/allwinner,sun6i-a31-rtc.yaml#
+
+
+
+
 
 
