@@ -1,125 +1,150 @@
-Return-Path: <linux-pm+bounces-21426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2BAD9A29885
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 19:14:27 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 92F41A298D6
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 19:23:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id C55141889052
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 18:14:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41B8A1609FC
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Feb 2025 18:23:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B78F1FDA6D;
-	Wed,  5 Feb 2025 18:14:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C60B1FDE0A;
+	Wed,  5 Feb 2025 18:22:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="abEViVS3"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="bQixVIb1"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0b-001b2d01.pphosted.com (mx0b-001b2d01.pphosted.com [148.163.158.5])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 81FB11A83ED;
-	Wed,  5 Feb 2025 18:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CEBAD1FCFEE;
+	Wed,  5 Feb 2025 18:22:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.158.5
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738779255; cv=none; b=HeFM9ThQ7sY6u5dvx3MWsuqgwb41LjDAtui4UrAsh7XSg0tJu3ZBoDlfrpTdPZAp3nKQt+3LibnMr+1dQMzDUaDix/BxsvL8+RyEB/OesEe0lqk9fELf/hVPXGeYqBEkBeDubeBNAc/67C8ZSoBWjC+ogQeJ5G3VFbdtm3mMsvA=
+	t=1738779765; cv=none; b=f3om4a1I5hnH61Hv6aayjz2s2oN2+zONWFu8tT4+pn0dJxpCHP+RMfgQX65JJ/poZfBsn1CUYcFlvQqLtQRGeq3GXQX5uECuO4q/QqQaYrGQranxu9rDa/kAU2QDX91RhBr3XTpoVngp5QTOPlJ62xxQ3gYgjjnBYbgOpX6wUKk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738779255; c=relaxed/simple;
-	bh=BNuuoIKCTW2XZ1ATUd3BE3PJ9sf5RKJy22TzPwiBTmg=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=mvF2hDLCV+z2Zi4+AphXgStgokToDmmfXZWeoEloJVXrqRLBJ46025OwAsuaZ9tynPdR/mPczC3CRPzsyCPNY3yEfJGsq7AUDL+q+QdablWxJCxgUB7vdbd/NBom9oMcyvm8MUVEUSGRG5SVPPwzfj0hpml2ZxyLC7MimoSc4Q0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=abEViVS3; arc=none smtp.client-ip=148.163.158.5
+	s=arc-20240116; t=1738779765; c=relaxed/simple;
+	bh=UhKjAEvUlgLqcIBwowVI/5aAQM33TNsjXHHzxCT6W3o=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:Mime-Version; b=PsUBQC5UgS7YCNkOhrFfuZL/AppWBrpuQegWdNDwIEGr62bftDtSjyOK5dejIdZE5awcmOWZAiV4JTeHHC6IGHvCYtL68v6eN2ek33UdUrkp/Ns55+TI622CpmsLmo+d4RtOJHJEIFeaZbASE1c9YhO4BhK56FxnTuxRXpAJdLo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=bQixVIb1; arc=none smtp.client-ip=148.163.158.5
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
 Received: from pps.filterd (m0360072.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 515HVweX000796;
-	Wed, 5 Feb 2025 18:14:03 GMT
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 515Gc5FF000853;
+	Wed, 5 Feb 2025 18:22:23 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=pp1; bh=N3/TgxWVs+9amURuIjA6GRq5FPbB7J4yXlYz2oN7e
-	SE=; b=abEViVS3/TzX4e6XTw01ULsj9In5RcdOzn6m3XO6xncUQPyIcV/k6Vxqx
-	Ea+esY3M76L9oPcK8jL9J0gtdCiFYoFZvSBz5R3KG5LnnVn1FlTDi9yfGidyUQbb
-	5S6olZEWG8cz9EXT9V2oRR4sU16CjWOnQs6HH6yWvdRggReE0EWo24E5FO6Ghurn
-	FFA1+NWYf5yyOJep6sBcEsSHuI49wSrw9SEV6T1/+ogg9nc93jZ8zp1+ln4wN8kG
-	TvQxPZi9FrSIsOBF2CXVbmpGMLNyVK4gpmfrH6Wj2j7FR04xCyV2KolPMzcVpGTG
-	h7WWtp9fGDHgu26KbcnEAMUm+Klww==
-Received: from ppma11.dal12v.mail.ibm.com (db.9e.1632.ip4.static.sl-reverse.com [50.22.158.219])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44m3pnu45g-1
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=fGyMzg
+	dDHOTQOZby2pCVFXcYnOqjiULTzjKXP6uGg7s=; b=bQixVIb1ecIyMvGOyE1fYs
+	FDQ3opWEf9zwGC75Lu/GMb/YuKYuGroCGMa0C+GXsT9GIblekFRw7vBptAuhEw1f
+	ke0ABxYpd+8y/wc9naTYC17v8jybYZgUWfFnpmoVJg91CdPfOaUyMhHaPsi5VzYw
+	i/qeZb3yIr7Pgd5PjmFJJkrEsxa9MDo9sRDhe2fG5ls074nKPE7ttI+XXzL0GhuM
+	vDbqdOKb+eTddI1LgX7izveGf2uXbPgAejhuU6Ti1p3HFeIfLLD3wpO9S1acg1It
+	v0zuYmYJw9jEqDKKLCs2dp1wE4nMgkEAIsA8L24sWqNJwnfydiz6iw9mq1nleEoA
+	==
+Received: from ppma21.wdc07v.mail.ibm.com (5b.69.3da9.ip4.static.sl-reverse.com [169.61.105.91])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 44m3pnu5bk-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Feb 2025 18:14:03 +0000 (GMT)
-Received: from pps.filterd (ppma11.dal12v.mail.ibm.com [127.0.0.1])
-	by ppma11.dal12v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 515HVlas021493;
-	Wed, 5 Feb 2025 18:14:02 GMT
-Received: from smtprelay07.fra02v.mail.ibm.com ([9.218.2.229])
-	by ppma11.dal12v.mail.ibm.com (PPS) with ESMTPS id 44j0n1htty-1
+	Wed, 05 Feb 2025 18:22:22 +0000 (GMT)
+Received: from pps.filterd (ppma21.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma21.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 515GI2nZ024510;
+	Wed, 5 Feb 2025 18:22:22 GMT
+Received: from smtprelay06.wdc07v.mail.ibm.com ([172.16.1.73])
+	by ppma21.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44hxxna6vj-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 05 Feb 2025 18:14:02 +0000
-Received: from smtpav02.fra02v.mail.ibm.com (smtpav02.fra02v.mail.ibm.com [10.20.54.101])
-	by smtprelay07.fra02v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 515IDxaX33030528
+	Wed, 05 Feb 2025 18:22:22 +0000
+Received: from smtpav04.wdc07v.mail.ibm.com (smtpav04.wdc07v.mail.ibm.com [10.39.53.231])
+	by smtprelay06.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 515IML5x15598238
 	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 5 Feb 2025 18:13:59 GMT
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 0BDB720143;
-	Wed,  5 Feb 2025 18:13:59 +0000 (GMT)
-Received: from smtpav02.fra02v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id C53F620141;
-	Wed,  5 Feb 2025 18:13:55 +0000 (GMT)
-Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com.com (unknown [9.171.42.237])
-	by smtpav02.fra02v.mail.ibm.com (Postfix) with ESMTP;
-	Wed,  5 Feb 2025 18:13:55 +0000 (GMT)
+	Wed, 5 Feb 2025 18:22:21 GMT
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id BE8C758054;
+	Wed,  5 Feb 2025 18:22:21 +0000 (GMT)
+Received: from smtpav04.wdc07v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 9FAF358045;
+	Wed,  5 Feb 2025 18:22:15 +0000 (GMT)
+Received: from li-34d1fccc-27cd-11b2-a85c-c167793e56f7.ibm.com (unknown [9.171.42.237])
+	by smtpav04.wdc07v.mail.ibm.com (Postfix) with ESMTP;
+	Wed,  5 Feb 2025 18:22:15 +0000 (GMT)
+Message-ID: <f724fc01a5013e97c8414a36d754f08bd3093db2.camel@linux.ibm.com>
+Subject: Re: [PATCH v2 2/4] cpufreq: Introduce a more generic way to set
+ default per-policy boost flag
 From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: rafael@kernel.org, viresh.kumar@linaro.org, zhenglifeng1@huawei.com
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
-        gautam@linux.ibm.com, aboorvad@linux.ibm.com
-Subject: [PATCH 1/1] cpufreq: prevent NULL dereference in cpufreq_online
-Date: Wed,  5 Feb 2025 23:43:47 +0530
-Message-ID: <20250205181347.2079272-1-aboorvad@linux.ibm.com>
-X-Mailer: git-send-email 2.43.5
+To: Viresh Kumar <viresh.kumar@linaro.org>
+Cc: Lifeng Zheng <zhenglifeng1@huawei.com>, rafael@kernel.org,
+        linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+        linuxarm@huawei.com, jonathan.cameron@huawei.com,
+        zhanjie9@hisilicon.com, lihuisong@huawei.com, fanghao11@huawei.com,
+        gautam@linux.ibm.com
+Date: Wed, 05 Feb 2025 23:52:12 +0530
+In-Reply-To: <20250205050147.hfctwo6aw75rardc@vireshk-i7>
+References: <20250117101457.1530653-1-zhenglifeng1@huawei.com>
+	 <20250117101457.1530653-3-zhenglifeng1@huawei.com>
+	 <c9e56c5f54cc33338762c94e9bed7b5a0d5de812.camel@linux.ibm.com>
+	 <20250205050147.hfctwo6aw75rardc@vireshk-i7>
+Content-Type: text/plain; charset="UTF-8"
+X-Mailer: Evolution 3.28.5 (3.28.5-26.el8_10) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Mime-Version: 1.0
+Content-Transfer-Encoding: 7bit
 X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: RmWeyWoMQL1qjyLhtIbtAIZbdrfxXXKk
-X-Proofpoint-GUID: RmWeyWoMQL1qjyLhtIbtAIZbdrfxXXKk
+X-Proofpoint-ORIG-GUID: FQvVeqg2XwWm83YKHIXLXaNQ1HYd9V9q
+X-Proofpoint-GUID: FQvVeqg2XwWm83YKHIXLXaNQ1HYd9V9q
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-05_06,2025-02-05_03,2024-11-22_01
 X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
- lowpriorityscore=0 phishscore=0 malwarescore=0 mlxlogscore=921 spamscore=0
+ lowpriorityscore=0 phishscore=0 malwarescore=0 mlxlogscore=999 spamscore=0
  mlxscore=0 suspectscore=0 adultscore=0 priorityscore=1501 bulkscore=0
  impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
  engine=8.19.0-2501170000 definitions=main-2502050138
 
-Ensure `cpufreq_driver->set_boost` is non-NULL before using it in
-`cpufreq_online` to prevent a potential NULL pointer dereference.
+On Wed, 2025-02-05 at 10:31 +0530, Viresh Kumar wrote:
+> On 04-02-25, 22:11, Aboorva Devarajan wrote:
+> > I noticed that Viresh is working on a similar patch [1] as part of a broader patchset
+> > to simplify boost handling, which should also resolve this issue.
+> > 
+> > Should we merge this patch [1] and related patches since this is causing a crash,
+> > or submit a separate patch to fix this?
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index d434096b7515..7c1f7f5142da 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1590,7 +1590,8 @@ static int cpufreq_online(unsigned int cpu)
+>                 policy->cdev = of_cpufreq_cooling_register(policy);
+> 
+>         /* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
+> -       if (policy->boost_enabled != cpufreq_boost_enabled()) {
+> +       if (cpufreq_driver->set_boost &&
+> +           policy->boost_enabled != cpufreq_boost_enabled()) {
+>                 policy->boost_enabled = cpufreq_boost_enabled();
+>                 ret = cpufreq_driver->set_boost(policy, policy->boost_enabled);
+>                 if (ret) {
+> 
+> I think the right fix for now should be something like this. My series
+> (which will be part of next merge window) can go in separately and
+> revert this change then (as we won't see this problem then).
+> 
+> Please send a fix with something like this if it works fine, so Rafael
+> can apply.
+> 
 
-Reported-by: Gautam Menghani <gautam@linux.ibm.com>
-Closes: https://lore.kernel.org/all/c9e56c5f54cc33338762c94e9bed7b5a0d5de812.camel@linux.ibm.com/
-Fixes: dd016f379ebc ("cpufreq: Introduce a more generic way to set default per-policy boost flag")
-Suggested-by: Viresh Kumar <viresh.kumar@linaro.org>
-Signed-off-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
----
- drivers/cpufreq/cpufreq.c | 3 ++-
- 1 file changed, 2 insertions(+), 1 deletion(-)
+Hi Viresh,
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index e0048856ecee..30ffbddc7ece 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1571,7 +1571,8 @@ static int cpufreq_online(unsigned int cpu)
- 		policy->cdev = of_cpufreq_cooling_register(policy);
- 
- 	/* Let the per-policy boost flag mirror the cpufreq_driver boost during init */
--	if (policy->boost_enabled != cpufreq_boost_enabled()) {
-+	if (cpufreq_driver->set_boost &&
-+	    policy->boost_enabled != cpufreq_boost_enabled()) {
- 		policy->boost_enabled = cpufreq_boost_enabled();
- 		ret = cpufreq_driver->set_boost(policy, policy->boost_enabled);
- 		if (ret) {
--- 
-2.34.1
+Thanks, I have posted a patch for this:
+https://lore.kernel.org/all/20250205181347.2079272-1-aboorvad@linux.ibm.com/
+
+this should get past the boot-time crash for now, until your patchset 
+to simplify boost handling is merged.
+
+Regards,
+Aboorva
 
 
