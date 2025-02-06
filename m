@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-21510-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21511-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DB3D4A2B480
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 22:58:17 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3619DA2B481
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 22:58:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DFAF3A7787
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 21:57:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 421C6162892
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 21:58:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 46B21246350;
-	Thu,  6 Feb 2025 21:57:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1BE13259499;
+	Thu,  6 Feb 2025 21:57:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZbO8tj7S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fLnH7lEK"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1612B24634C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E3B32259483;
 	Thu,  6 Feb 2025 21:57:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738879043; cv=none; b=GEVy+fO/XIY/YBXMGnLhFJ8nyOHsAWe+xUmPgokEECIFjTMEHtW2X+8vVTHBvp3lczDXRvXkNzOaJWR6WbRJa23kwm6D6b5dqfQ941V51BvTTW6ycFECz1HDQXptHLFhokVakzse3RI35xTt2gvEJKusGvVppbtLcdkEi1cwrAQ=
+	t=1738879044; cv=none; b=eSmYmqBHgbuazo0ktDI1Zdlzg9Bjd/V/QqctStGtk6C8HTEjYXwP5qjcQLsfhYdDaDsNDeVAq/97KXOH+nGiIKK8g5b40MyGW8ly5kFjq0a9USLTGmrylMRohYFTewHe/Wu+iVaomevqMmC4i8mEMeKvQzcwY+emZItzTXhie0k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738879043; c=relaxed/simple;
-	bh=6yZ8qTdVouNCiIKHB3w8w1TOr7DR8ltTSCBoE2vw5fM=;
+	s=arc-20240116; t=1738879044; c=relaxed/simple;
+	bh=SctYPNo35jzvmJTpkstLkgXOB6nJ920jf0cSOSsTqiU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=etJl9Ouhl6hJJqsYXFqO9FP+fTXmjD3WmuwKaa+se23hlEbCEWDl99v3ePP/95KwvELdS5fSowHYNxaDpR8vZrDf3hnv7IpkPXn2YjZ/6sDDWao0DTVU7EN2yCG3guoTre6vBl0MPikiN2uj2ux4aM5tHzY9g15apojQQbOulcs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZbO8tj7S; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 51194C4CEDD;
-	Thu,  6 Feb 2025 21:57:22 +0000 (UTC)
+	 MIME-Version; b=WlyObEt0MadQYiTHnKWSBy1NUlNIv7w14OfzOSW+7wozTZxWyDDNVzs/Ou3so6n/nu3FJvlqLUiXqrTVKzKDJEj3KxgvSYpi5ikjZeDZpT8MgFIFwFqJvdz3s59xMW4t9anR5QxVzZlamhp177BJN1P2mXaYv2C6hIYrA2rkxk4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fLnH7lEK; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2F45BC4CEE0;
+	Thu,  6 Feb 2025 21:57:23 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738879042;
-	bh=6yZ8qTdVouNCiIKHB3w8w1TOr7DR8ltTSCBoE2vw5fM=;
+	s=k20201202; t=1738879043;
+	bh=SctYPNo35jzvmJTpkstLkgXOB6nJ920jf0cSOSsTqiU=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=ZbO8tj7SMu/07p1twP2iPymXiFeQn/OVjg+H0tW6C2HlDbsbDlq8XdAxpKkJJ+AiF
-	 i5nu8TQFU6zf01Ev8eFFugMXxvkQ2YLJSCczjU1/rK6UyXvI3Sqc4W04MGyMvcMKCD
-	 DjhjC27caopkdDGb7OnyUd3ya6/1y+gS2707cNpzXT/yivzBfirL3Qsq3mgZSa6jvq
-	 TBzQJS2RQIueVtoLztuyviOHnLPw2fAlq09AhT1yJR6OOYKdEFF94MjQOkoUsk2EO+
-	 9P6+k6ASY/rNSpXSnIUqVqUewRUVtcIsavAeZlvh7AA4c6yucPOEicU0ILwPPBIS3B
-	 1CqYvYJRvsakA==
+	b=fLnH7lEK0yDkxRUvlv+fqs+zdZXyvxOa/EexqETNgQR57LroKPU61FXlzAMOALkTo
+	 10L9InuZX5GsSFVdaqNKLFH0k6wdDmFgwHP2YBrxlDt0UXz3eZUjp3+X+bWn05ind1
+	 azmflJ+rWjiRn7REYFOzrBE8MqmJ9p4UpdqyYD7FfVU+nDUZKaaZv/38AMPNAgOsZv
+	 SdMPCgmWo6Cip5P0hlM5zfAVWSvWaNmzBc11+TRhHdp7IuBrj8mOfuxj4+euhy1HOB
+	 WCtjVrIw/tdnrtHqXfDryvOeFe4T4EAqq6Z6G1IAhkvmF+3r9JcaVn3pqA1/WnyDK6
+	 HIwILi9UITvCQ==
 From: Mario Limonciello <superm1@kernel.org>
 To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
 	Perry Yuan <perry.yuan@amd.com>
@@ -48,9 +48,9 @@ Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
 	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
 	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK),
 	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH 06/14] cpufreq/amd-pstate-ut: Use _free macro to free put policy
-Date: Thu,  6 Feb 2025 15:56:51 -0600
-Message-ID: <20250206215659.3350066-7-superm1@kernel.org>
+Subject: [PATCH 07/14] cpufreq/amd-pstate: Replace all AMD_CPPC_* macros with masks
+Date: Thu,  6 Feb 2025 15:56:52 -0600
+Message-ID: <20250206215659.3350066-8-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250206215659.3350066-1-superm1@kernel.org>
 References: <20250206215659.3350066-1-superm1@kernel.org>
@@ -64,144 +64,112 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-Using a scoped cleanup macro simplifies cleanup code.
+Bitfield masks are easier to follow and less error prone.
 
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/cpufreq/amd-pstate-ut.c | 33 ++++++++++++++-------------------
- 1 file changed, 14 insertions(+), 19 deletions(-)
+ arch/x86/include/asm/msr-index.h | 18 +++++++++---------
+ arch/x86/kernel/acpi/cppc.c      |  2 +-
+ drivers/cpufreq/amd-pstate-ut.c  |  8 ++++----
+ drivers/cpufreq/amd-pstate.c     | 16 ++++++----------
+ 4 files changed, 20 insertions(+), 24 deletions(-)
 
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index 3eadc4d5de837..f77335ebae981 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -700,15 +700,15 @@
+ #define MSR_AMD_CPPC_REQ		0xc00102b3
+ #define MSR_AMD_CPPC_STATUS		0xc00102b4
+ 
+-#define AMD_CPPC_LOWEST_PERF(x)		(((x) >> 0) & 0xff)
+-#define AMD_CPPC_LOWNONLIN_PERF(x)	(((x) >> 8) & 0xff)
+-#define AMD_CPPC_NOMINAL_PERF(x)	(((x) >> 16) & 0xff)
+-#define AMD_CPPC_HIGHEST_PERF(x)	(((x) >> 24) & 0xff)
+-
+-#define AMD_CPPC_MAX_PERF(x)		(((x) & 0xff) << 0)
+-#define AMD_CPPC_MIN_PERF(x)		(((x) & 0xff) << 8)
+-#define AMD_CPPC_DES_PERF(x)		(((x) & 0xff) << 16)
+-#define AMD_CPPC_ENERGY_PERF_PREF(x)	(((x) & 0xff) << 24)
++#define AMD_CPPC_LOWEST_PERF_MASK	GENMASK(7, 0)
++#define AMD_CPPC_LOWNONLIN_PERF_MASK	GENMASK(15, 8)
++#define AMD_CPPC_NOMINAL_PERF_MASK	GENMASK(23, 16)
++#define AMD_CPPC_HIGHEST_PERF_MASK	GENMASK(31, 24)
++
++#define AMD_CPPC_MAX_PERF_MASK		GENMASK(7, 0)
++#define AMD_CPPC_MIN_PERF_MASK		GENMASK(15, 8)
++#define AMD_CPPC_DES_PERF_MASK		GENMASK(23, 16)
++#define AMD_CPPC_EPP_PERF_MASK		GENMASK(31, 24)
+ 
+ /* AMD Performance Counter Global Status and Control MSRs */
+ #define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS	0xc0000300
+diff --git a/arch/x86/kernel/acpi/cppc.c b/arch/x86/kernel/acpi/cppc.c
+index d745dd586303c..d68a4cb0168fa 100644
+--- a/arch/x86/kernel/acpi/cppc.c
++++ b/arch/x86/kernel/acpi/cppc.c
+@@ -149,7 +149,7 @@ int amd_get_highest_perf(unsigned int cpu, u32 *highest_perf)
+ 		if (ret)
+ 			goto out;
+ 
+-		val = AMD_CPPC_HIGHEST_PERF(val);
++		val = FIELD_GET(AMD_CPPC_HIGHEST_PERF_MASK, val);
+ 	} else {
+ 		ret = cppc_get_highest_perf(cpu, &val);
+ 		if (ret)
 diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-index d9ab98c6f56b1..adaa62fb2b04e 100644
+index adaa62fb2b04e..2595faa492bf1 100644
 --- a/drivers/cpufreq/amd-pstate-ut.c
 +++ b/drivers/cpufreq/amd-pstate-ut.c
-@@ -26,6 +26,7 @@
- #include <linux/module.h>
- #include <linux/moduleparam.h>
- #include <linux/fs.h>
-+#include <linux/cleanup.h>
- 
- #include <acpi/cppc_acpi.h>
- 
-@@ -127,10 +128,11 @@ static void amd_pstate_ut_check_perf(u32 index)
- 	u32 highest_perf = 0, nominal_perf = 0, lowest_nonlinear_perf = 0, lowest_perf = 0;
- 	u64 cap1 = 0;
- 	struct cppc_perf_caps cppc_perf;
--	struct cpufreq_policy *policy = NULL;
- 	struct amd_cpudata *cpudata = NULL;
- 
- 	for_each_possible_cpu(cpu) {
-+		struct cpufreq_policy *policy __free(put_cpufreq_policy) = NULL;
-+
- 		policy = cpufreq_cpu_get(cpu);
- 		if (!policy)
- 			break;
-@@ -141,7 +143,7 @@ static void amd_pstate_ut_check_perf(u32 index)
- 			if (ret) {
- 				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
- 				pr_err("%s cppc_get_perf_caps ret=%d error!\n", __func__, ret);
--				goto skip_test;
-+				return;
+@@ -158,10 +158,10 @@ static void amd_pstate_ut_check_perf(u32 index)
+ 				return;
  			}
  
- 			highest_perf = cppc_perf.highest_perf;
-@@ -153,7 +155,7 @@ static void amd_pstate_ut_check_perf(u32 index)
- 			if (ret) {
- 				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
- 				pr_err("%s read CPPC_CAP1 ret=%d error!\n", __func__, ret);
--				goto skip_test;
-+				return;
- 			}
- 
- 			highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
-@@ -166,7 +168,7 @@ static void amd_pstate_ut_check_perf(u32 index)
- 		    !cpudata->hw_prefcore) {
- 			pr_err("%s cpu%d highest=%d %d highest perf doesn't match\n",
- 				__func__, cpu, highest_perf, cpudata->perf.highest_perf);
--			goto skip_test;
-+			return;
- 		}
- 		if ((nominal_perf != READ_ONCE(cpudata->perf.nominal_perf)) ||
- 			(lowest_nonlinear_perf != READ_ONCE(cpudata->perf.lowest_nonlinear_perf)) ||
-@@ -176,7 +178,7 @@ static void amd_pstate_ut_check_perf(u32 index)
- 				__func__, cpu, nominal_perf, cpudata->perf.nominal_perf,
- 				lowest_nonlinear_perf, cpudata->perf.lowest_nonlinear_perf,
- 				lowest_perf, cpudata->perf.lowest_perf);
--			goto skip_test;
-+			return;
+-			highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
+-			nominal_perf = AMD_CPPC_NOMINAL_PERF(cap1);
+-			lowest_nonlinear_perf = AMD_CPPC_LOWNONLIN_PERF(cap1);
+-			lowest_perf = AMD_CPPC_LOWEST_PERF(cap1);
++			highest_perf = FIELD_GET(AMD_CPPC_HIGHEST_PERF_MASK, cap1);
++			nominal_perf = FIELD_GET(AMD_CPPC_NOMINAL_PERF_MASK, cap1);
++			lowest_nonlinear_perf = FIELD_GET(AMD_CPPC_LOWNONLIN_PERF_MASK, cap1);
++			lowest_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
  		}
  
- 		if (!((highest_perf >= nominal_perf) &&
-@@ -187,15 +189,11 @@ static void amd_pstate_ut_check_perf(u32 index)
- 			pr_err("%s cpu%d highest=%d >= nominal=%d > lowest_nonlinear=%d > lowest=%d > 0, the formula is incorrect!\n",
- 				__func__, cpu, highest_perf, nominal_perf,
- 				lowest_nonlinear_perf, lowest_perf);
--			goto skip_test;
-+			return;
- 		}
--		cpufreq_cpu_put(policy);
- 	}
+ 		if (highest_perf != READ_ONCE(cpudata->perf.highest_perf) &&
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 71636bd9884c8..cd96443fc117f 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -89,11 +89,6 @@ static bool cppc_enabled;
+ static bool amd_pstate_prefcore = true;
+ static struct quirk_entry *quirks;
  
- 	amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
--	return;
--skip_test:
--	cpufreq_cpu_put(policy);
- }
- 
+-#define AMD_CPPC_MAX_PERF_MASK		GENMASK(7, 0)
+-#define AMD_CPPC_MIN_PERF_MASK		GENMASK(15, 8)
+-#define AMD_CPPC_DES_PERF_MASK		GENMASK(23, 16)
+-#define AMD_CPPC_EPP_PERF_MASK		GENMASK(31, 24)
+-
  /*
-@@ -206,10 +204,11 @@ static void amd_pstate_ut_check_perf(u32 index)
- static void amd_pstate_ut_check_freq(u32 index)
- {
- 	int cpu = 0;
--	struct cpufreq_policy *policy = NULL;
- 	struct amd_cpudata *cpudata = NULL;
+  * AMD Energy Preference Performance (EPP)
+  * The EPP is used in the CCLK DPM controller to drive
+@@ -445,12 +440,13 @@ static int msr_init_perf(struct amd_cpudata *cpudata)
  
- 	for_each_possible_cpu(cpu) {
-+		struct cpufreq_policy *policy __free(put_cpufreq_policy) = NULL;
+ 	perf.highest_perf = numerator;
+ 	perf.max_limit_perf = numerator;
+-	perf.min_limit_perf = AMD_CPPC_LOWEST_PERF(cap1);
+-	perf.nominal_perf = AMD_CPPC_NOMINAL_PERF(cap1);
+-	perf.lowest_nonlinear_perf = AMD_CPPC_LOWNONLIN_PERF(cap1);
+-	perf.lowest_perf = AMD_CPPC_LOWEST_PERF(cap1);
++	perf.min_limit_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
++	perf.nominal_perf = FIELD_GET(AMD_CPPC_NOMINAL_PERF_MASK, cap1);
++	perf.lowest_nonlinear_perf = FIELD_GET(AMD_CPPC_LOWNONLIN_PERF_MASK, cap1);
++	perf.lowest_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
+ 	WRITE_ONCE(cpudata->perf, perf);
+-	WRITE_ONCE(cpudata->prefcore_ranking, AMD_CPPC_HIGHEST_PERF(cap1));
++	WRITE_ONCE(cpudata->prefcore_ranking, FIELD_GET(AMD_CPPC_HIGHEST_PERF_MASK, cap1));
 +
- 		policy = cpufreq_cpu_get(cpu);
- 		if (!policy)
- 			break;
-@@ -223,14 +222,14 @@ static void amd_pstate_ut_check_freq(u32 index)
- 			pr_err("%s cpu%d max=%d >= nominal=%d > lowest_nonlinear=%d > min=%d > 0, the formula is incorrect!\n",
- 				__func__, cpu, policy->cpuinfo.max_freq, cpudata->nominal_freq,
- 				cpudata->lowest_nonlinear_freq, policy->cpuinfo.min_freq);
--			goto skip_test;
-+			return;
- 		}
- 
- 		if (cpudata->lowest_nonlinear_freq != policy->min) {
- 			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
- 			pr_err("%s cpu%d cpudata_lowest_nonlinear_freq=%d policy_min=%d, they should be equal!\n",
- 				__func__, cpu, cpudata->lowest_nonlinear_freq, policy->min);
--			goto skip_test;
-+			return;
- 		}
- 
- 		if (cpudata->boost_supported) {
-@@ -242,20 +241,16 @@ static void amd_pstate_ut_check_freq(u32 index)
- 				pr_err("%s cpu%d policy_max=%d should be equal cpu_max=%d or cpu_nominal=%d !\n",
- 					__func__, cpu, policy->max, policy->cpuinfo.max_freq,
- 					cpudata->nominal_freq);
--				goto skip_test;
-+				return;
- 			}
- 		} else {
- 			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
- 			pr_err("%s cpu%d must support boost!\n", __func__, cpu);
--			goto skip_test;
-+			return;
- 		}
--		cpufreq_cpu_put(policy);
- 	}
- 
- 	amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
--	return;
--skip_test:
--	cpufreq_cpu_put(policy);
+ 	return 0;
  }
  
- static int amd_pstate_set_mode(enum amd_pstate_mode mode)
 -- 
 2.43.0
 
