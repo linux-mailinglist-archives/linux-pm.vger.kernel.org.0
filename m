@@ -1,46 +1,43 @@
-Return-Path: <linux-pm+bounces-21446-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21447-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 45572A2A0E6
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 07:28:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D4DA9A2A290
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 08:44:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E9953A1E24
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 06:27:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 109B1161A88
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 07:44:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71F3422370F;
-	Thu,  6 Feb 2025 06:27:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 31B1E224AF3;
+	Thu,  6 Feb 2025 07:44:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from mx3.molgen.mpg.de (mx3.molgen.mpg.de [141.14.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E65192561D;
-	Thu,  6 Feb 2025 06:27:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EBCA2E64A;
+	Thu,  6 Feb 2025 07:44:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=141.14.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738823275; cv=none; b=crMrpwaqngQD7/YcAkZGrnbut1evD0sGR8dgsxafIn00ZsMo6JPGRBql0p1cYh7uRHJ9dqdkyOXJHqX7htwi9OS44uIT6GqUmzwQXHcwztN459Aiu2+7jorEQoPyYZIOZhfykokKmj02shk9EZ0iEDOxNtuwimORXwIzF2Ra8Co=
+	t=1738827855; cv=none; b=XN25sDOo3R5Kn9Jq4ctySNJija0byOpAqhXGqUZwD4J1/iNReNJ6zmueHRIkyDCiRkmQGbdMep3qaATgZr2Mw2DG8x4VmxP5S8qwu7XUmKSLGihUN5ORD3N3uYhjtpPojnReRPwWR7mNQLcdmKUQ3CFUESQCkgF4QjOqY3WLtAo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738823275; c=relaxed/simple;
-	bh=YBHaTZW+tpKp36RzIrAFZSbRfY45BlzSnxis70lzJM8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=c9nGgK6QNkrEeJc6u2OPQvMndeXxeHupk44SbtMXoS00sW6ub/7ndUtbAgjuYI4twRxE42xhKT7ygIBZzOBJx/sdNacdusy2Xq0bmAonevEHTZoWrGP2ljAFOS9hXHCT6sKF8TXxWFc0ObWm9oKMer2ovqN77JE3sc1hxaJfSWY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.214])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4YpRsm60Jrz22mPq;
-	Thu,  6 Feb 2025 14:25:00 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 04AF41A016C;
-	Thu,  6 Feb 2025 14:27:47 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 6 Feb
- 2025 14:27:46 +0800
-Message-ID: <78c6dbea-ccbc-4380-a6e9-96dd76deb999@huawei.com>
-Date: Thu, 6 Feb 2025 14:27:45 +0800
+	s=arc-20240116; t=1738827855; c=relaxed/simple;
+	bh=H4J90HwwvYoMaaB9zxa9TtYASQnFpOPtRX++W7y9Lts=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=uKEh1EWfWinnaOdSUW4pG5fjtxNhxrnBaArZ35jcsWwmcMzsPzXahvaUX4pLS0A6XOgvuysds+G0ucF02c+T10dIvM8TLiEWBj26ZcskJ3OY8Cp+v0gNbP1qKPEWWrK+jbrXT6uarsLez7zu8B4vZ27/jAtXowG3EgfIOiBNwU8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de; spf=pass smtp.mailfrom=molgen.mpg.de; arc=none smtp.client-ip=141.14.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=molgen.mpg.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=molgen.mpg.de
+Received: from [10.59.18.202] (p4fff09b4.dip0.t-ipconnect.de [79.255.9.180])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: pmenzel)
+	by mx.molgen.mpg.de (Postfix) with ESMTPSA id EAB0C61E647AE;
+	Thu, 06 Feb 2025 08:43:31 +0100 (CET)
+Message-ID: <7e9bc19e-1a9b-4875-907a-86196876ac4c@molgen.mpg.de>
+Date: Thu, 6 Feb 2025 08:43:30 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,70 +45,67 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/15] cpufreq: cppc: Set policy->boost_supported
-To: Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki"
-	<rafael@kernel.org>
-CC: <linux-pm@vger.kernel.org>, Vincent Guittot <vincent.guittot@linaro.org>,
-	<linux-kernel@vger.kernel.org>
-References: <cover.1737707712.git.viresh.kumar@linaro.org>
- <c744751c8f61cae509959270176ebdef77326ba2.1737707712.git.viresh.kumar@linaro.org>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <c744751c8f61cae509959270176ebdef77326ba2.1737707712.git.viresh.kumar@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Subject: Re: Linux warns `rtsx_pci 0000:3b:00.0: PM: dpm_run_callback():
+ pci_pm_resume returns -110`
+To: Bjorn Helgaas <helgaas@kernel.org>
+Cc: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+ Bjorn Helgaas <bhelgaas@google.com>, linux-pci@vger.kernel.org,
+ linux-pm@vger.kernel.org, regressions@lists.linux.dev,
+ Ulf Hansson <ulf.hansson@linaro.org>, linux-mmc@vger.kernel.org,
+ LKML <linux-kernel@vger.kernel.org>, Hans de Goede <hdegoede@redhat.com>
+References: <20250205233817.GA949434@bhelgaas>
+Content-Language: en-US
+From: Paul Menzel <pmenzel@molgen.mpg.de>
+In-Reply-To: <20250205233817.GA949434@bhelgaas>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On 2025/1/24 16:58, Viresh Kumar wrote:
+#regzbot monitor: 
+https://lore.kernel.org/linux-pci/20250131152913.2507-1-ilpo.jarvinen@linux.intel.com/
 
-> With a later commit, the cpufreq core will call the ->set_boost()
-> callback only if the policy supports boost frequency. The
-> boost_supported flag is set by the cpufreq core if policy->freq_table is
-> set and one or more boost frequencies are present.
-> 
-> For other drivers, the flag must be set explicitly.
-> 
-> With this, the local variable boost_supported isn't required anymore.
-> 
-> Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
-> ---
->  drivers/cpufreq/cppc_cpufreq.c | 9 +--------
->  1 file changed, 1 insertion(+), 8 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> index 7fa89b601d2a..08117fb9c1eb 100644
-> --- a/drivers/cpufreq/cppc_cpufreq.c
-> +++ b/drivers/cpufreq/cppc_cpufreq.c
-> @@ -34,8 +34,6 @@
->   */
->  static LIST_HEAD(cpu_data_list);
->  
-> -static bool boost_supported;
-> -
->  static struct cpufreq_driver cppc_cpufreq_driver;
->  
->  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-> @@ -653,7 +651,7 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
->  	 * is supported.
->  	 */
->  	if (caps->highest_perf > caps->nominal_perf)
-> -		boost_supported = true;
-> +		policy->boost_supported = true;
->  
->  	/* Set policy->cur to max now. The governors will adjust later. */
->  	policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
-> @@ -791,11 +789,6 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
->  	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
->  	int ret;
->  
-> -	if (!boost_supported) {
-> -		pr_err("BOOST not supported by CPU or firmware\n");
-> -		return -EINVAL;
-> -	}
-> -
->  	if (state)
->  		policy->max = cppc_perf_to_khz(caps, caps->highest_perf);
->  	else
+Dear Bjorn,
 
-Reviewed-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+
+Thank you for your reply.
+
+Am 06.02.25 um 00:38 schrieb Bjorn Helgaas:
+> On Wed, Feb 05, 2025 at 10:48:24PM +0100, Paul Menzel wrote:
+>> Thank you for your instant reply.
+>>
+>> Am 05.02.25 um 09:44 schrieb Ilpo Järvinen:
+>>> On Tue, 4 Feb 2025, Paul Menzel wrote:
+>>>
+>>>> #regzbot introduced: b46c89c08f41..aa22f4da2a46
+>>
+>>>> On the Intel Kaby Lake laptop Dell XPS 13 9360, at least Linux
+>>>> 6.13.0-07632-gaa22f4da2a46 logs the new warnings:
+>>
+>> (Just a side note, these are actually logged with level error.)
+>>
+>>>>       rtsx_pci 0000:3b:00.0: Unable to change power state from D0 to D3hot, device inaccessible
+>>>>       rtsx_pci 0000:3b:00.0: PM: dpm_run_callback(): pci_pm_resume returns -110
+>>>>       rtsx_pci 0000:3b:00.0: PM: failed to resume async: error -110
+>>>>
+>>>> These were not present up to including Linux 6.13.0-07078-gb46c89c08f41.
+>> ...
+> 
+>>> Please try if this fix helps:
+>>>
+>>> https://lore.kernel.org/linux-pci/20250131152913.2507-1-ilpo.jarvinen@linux.intel.com/
+>>
+>> Yes, after applying the patch these errors were *not* logged in three ACPI
+>> S3 suspend/resume cycles.
+> 
+> Thanks, I added your Reported-by to the patch, which should appear in
+> v6.14-rc2.  Happy to also add your Tested-by if you feel confident
+> enough.
+
+Sure.
+
+Tested-by: Paul Menzel <pmenzel@molgen.mpg.de> # Dell XPS 13 9360
+
+
+Kind regards,
+
+Paul
 
