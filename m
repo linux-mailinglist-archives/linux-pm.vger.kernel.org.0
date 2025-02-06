@@ -1,98 +1,95 @@
-Return-Path: <linux-pm+bounces-21452-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21453-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id D7ADEA2A465
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 10:30:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF5B6A2A468
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 10:30:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B1BE03A74F7
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 09:29:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 685D23A82D3
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 09:30:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E31D4227593;
-	Thu,  6 Feb 2025 09:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED7A1228C97;
+	Thu,  6 Feb 2025 09:28:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rswwmq7Z"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zUoR3pTF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6E84226887
-	for <linux-pm@vger.kernel.org>; Thu,  6 Feb 2025 09:28:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 08253227597
+	for <linux-pm@vger.kernel.org>; Thu,  6 Feb 2025 09:28:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738834137; cv=none; b=X5I3gDdCyq0vJE0WTnA3MKo2+HPYb16DJLSZGKQYJQEiF9kE1R32axiwHN0HWFEYjaerfjMYpbY1OmB2SJqgEOcLoyMQvGrGnheSctulEq8ZuyHjgMaYA6FOE/srIFUb2SwMRfum98vHgrymD4blc769e9QtFtsW39Z7tUUlVfg=
+	t=1738834139; cv=none; b=nY8y09YGQI3F/K9lQGY++BsqVTwgnX6vEMX1ynpI3C5jqG7DS0Kg8q/YFKaqmBYtKYGAFJOBthN6Du/RUAdgvim5uZlYwM1YZZHl/b5jCQmzDsAVv6hGpMfPdvYyvK1rRm00lnwAdge1hxUXJEtSsongu9twvF6nUZIYJuydC/0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738834137; c=relaxed/simple;
-	bh=xydhrXNwbR6b23NtRkGsxwSBfZgDAxPgbGHs9xWaEVc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=tIP0wCM1T3mcj3lcCHF98E6lmQQtO/uJD1PlGLlrzCl1D4w6n8RTckvlAjkua2QQIYnUwiydpf/esZhuSeqZKeK6zzQK2pWI8kI5b0Ejh87JS1w4FpOgCzuolCIO88tpHlHoDeZ7R/ZGOg34k6J2IegUfS1T5dOcgysBi2FnTA0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rswwmq7Z; arc=none smtp.client-ip=209.85.214.173
+	s=arc-20240116; t=1738834139; c=relaxed/simple;
+	bh=Ot/T0jCd4T7tNCR433fIHwM84YOZJZy/rRbe6ZLnftM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=ppz6MquGOBZ/k3LCfSq658Tg+hrnwq4yF5N3tmVbTfGoqsVjr5A1P0bSI8OG0z/cfrB2I4FPFfRxtSpMn/LpHSgVNR0xzQhvzhQtbUwiTjDjL/GmIbkXYtfzo1USccWEMXUxB/P62PhcAm3Spm6oNiwWVqSRJBnpRJvZf1z/ESI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zUoR3pTF; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-21661be2c2dso12908525ad.1
-        for <linux-pm@vger.kernel.org>; Thu, 06 Feb 2025 01:28:54 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21670dce0a7so16610285ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 06 Feb 2025 01:28:57 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738834134; x=1739438934; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=UNiJjfxZrKVMTDCAqOVZp5Rhiszwav3OEDmf8+LxyHc=;
-        b=rswwmq7ZtRgBqKUefbHZsTxz7jwgOu5gX9d1gqhFCRJZrwSsEXhLzFvZgqudNYnHz8
-         s1UU1Z/novLDMCEzb4c+5pbZlke6Nb/nduYlg+ualueTSbhj9Ji2wrr+7cjkkbPEemM7
-         aRHQZONl+rolk/jSL4EjCUcsG17IWnx/GacWZIGxbhF7Jr+UtCfS6PYI4VIVUQLihfSa
-         e+wEkYhlEMiWPydrug1/xGe87IgZ3jNjj2lB7qpnInJ1vpmZcQKc2zNu/C3hnG4uYJ/w
-         UHkKYZQfvZO5qCywWZ8MMF6dbZB/wcMuVcSUjIE83u2x2wnrzq7smv1bxK5jU0DZEAJ0
-         woGg==
+        d=linaro.org; s=google; t=1738834137; x=1739438937; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H9/+ITx7jdgxCni5rtLO0HfiqPVNFjTWeSm9ZunqSOA=;
+        b=zUoR3pTF6YmbxQRUQ8Ws3B0zZbQMmK0CTochc8/i7A/gnubm0ADABBO9+k7MXWRqAS
+         urZGm2dDo2ZZePeWLFvvihxJ1TYZzJZJ3HjMW5+DO27fr8/V/NtablMOmIyPK+WAMOuD
+         084PT5xrhzqYZMelFQWI7MTZY/unlUScwFsjzqR6k2MYKqRhr7Q/9NvJvhQGyE82J6dU
+         4FmZ+hDMzSoPcOy1IoFb/d9Npmy74SBGSrvoLxtoMmbda9Vb0fA83qWGT8YnODCzsF3n
+         nKPoUKXyCjMoUpvxK4tFr1r4azrehnKIQBe/prHlKI2kNAkKN3Ba5YB78ILHlnMVw7eV
+         51GQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738834134; x=1739438934;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=UNiJjfxZrKVMTDCAqOVZp5Rhiszwav3OEDmf8+LxyHc=;
-        b=JgeYyY2u6u6UNZMqkulnG/MJjL51k5bSdcY6B31sFTRZx4lSCL9sYGjkDQlwzCD8Hf
-         u7v8xhA7wFxhHbiDti0SoVPifMLLRuUPGtP0Fg6ie5aRpezZeDYTVRrMbmGM3KSCnQZH
-         BoMKJqZ9GOzEekq40GxHda/ignTPzzU3BCIBrukdP4kIzysHAx8bX0E1EQuQmDfTnThI
-         HXsNXd3aCy96CnzNIjRtYN/LLeM4hR4Yb3e41de2uDrHslG+clnr4txqEM2mFjA+xIQa
-         Ahfcx+QaMeJumdwmHqONHwzLipR7SX1fiOnHEIdiHQIdK7OCETEU5+o276RSDv8ZP9Yb
-         LWyQ==
-X-Gm-Message-State: AOJu0Yx4Ykb9CvEVXafLrHMTB5hxGguvnd8H9wwXLrx3Yvfae3rWyU40
-	asnonBnvuknuh1X8QmWY8xzN8s9yRQkvc9UNorEpWTKLOsCCBgNPnxM3UDoGUfs=
-X-Gm-Gg: ASbGncu9kB220EBbh8wF60K3wB/iNCGzbwTj/HJGK+YGotouHxWvbW33cXOQdeDarfN
-	Dq2J56FgJhF3x/w0VrGyZxDpNKyuYJ+XRDTBaqdDN4+BzhU31SH4+YlPoaAxjOLenzRjuURCkfA
-	9Pszf56HC7BpYJBSt4zkbNcOktB6ERZVdPPeptusERIsdBzpB/vM/4e0wLORqg6ozsImmprOY2z
-	Rl8ZJyhLHI3msRZ4p79uJVcQoPCURSOi9PFRGmUW+t8zg5d77Z41w67A4JZ89RMgKpmxrYN26rw
-	52wN3MAYNM9CPtstIg==
-X-Google-Smtp-Source: AGHT+IGnSqJQjNRy6mCYk0/OJtqZQdpZtORA2QNISIKIb5NfeUD1BwRd+d4p1y7xF51rpRHpqEukhQ==
-X-Received: by 2002:a17:903:190:b0:21f:3a7b:f4f1 with SMTP id d9443c01a7336-21f3a7bf8d0mr19186405ad.32.1738834133861;
-        Thu, 06 Feb 2025 01:28:53 -0800 (PST)
+        d=1e100.net; s=20230601; t=1738834137; x=1739438937;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H9/+ITx7jdgxCni5rtLO0HfiqPVNFjTWeSm9ZunqSOA=;
+        b=c4a8BgmpEkyiCVjOC3hNyCdTJR51PpuEknUeAo5Ot3r5KdOOvZniYABSPRcghtqprA
+         VuC0ipLCZpJ1/auwFoCPJ4Vp88LC2b1jtqOTBT3hFaqReeGwX7GROGP0gerXKIfUtzkI
+         0+WX4BRzGT5LyQ1ajFoLoMeDL/tHVjdI2mPMUqn/aQSWqz979ELPVfxKRrGhGjYu9lIA
+         vp+p0/pRwHrI+PpqBmiShmUdge+yOXRAAb4YEwAVzNusUXqXr6TTTKkevunP6P7Ivh4k
+         h3QX3UYMfMx8cgm6SNUVoRAyZQcyVf4eeMVd7KOlfKW6cmx0YAIyw4gDGf40J8iGaYj+
+         Bkcg==
+X-Forwarded-Encrypted: i=1; AJvYcCUhiV8fjG7+Q+11M9ePk9igjcCtT0lQ0q0LeNPzWjfYu/SLhoVwjN4XeRIqC/E0Mz7mpPdX82U8Ig==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzJBcHBW4DpvKzBeVnAJ0cthQglGMdmy5sbbfxWJu3u/hhOXPLe
+	57ze/OsOH4KZRrJSE4sWM0RTYOV5rnSPRGEkAZakQlV5XL6Kp+klRRdnrT8rGa0=
+X-Gm-Gg: ASbGncuHhPsrMGQpCK9XiTl3r79VYg4/3LUBNJ0eNbiFoG1kTnUuC/FsA5192Z3FPGb
+	9v9zRI+jn4Zz/GansNJxo2TuX7f3/IZbzQqbRaQkfdpB/KH+GZopQh7UgL/Tdgi6T29R1GzYBO2
+	R8UsySJxjPErVTxsB9kgbkXYT+snvhlG7nFqQVtjF4QkKufybkh77BK8n6zU2C0ieL5IOhEbDy8
+	fnZ8XerGz+2ddkEujkCbr88SJlRRfGJ8vExEqFg8LNn6Wb7dupr1yKKC09sxoKWV4w++YCKPGt4
+	hR9QIF+/KCbRnuzZHw==
+X-Google-Smtp-Source: AGHT+IGJC2iQJEI3sTGW6GjKdvP/nRc87YJ1GkI47hpYxHY8P6Qy5pjuZWMZBFlY67UgbnD1fdAThg==
+X-Received: by 2002:a17:903:41c1:b0:21e:ff3a:7593 with SMTP id d9443c01a7336-21f17dde2d4mr80139535ad.6.1738834137385;
+        Thu, 06 Feb 2025 01:28:57 -0800 (PST)
 Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fa09b3ee47sm871574a91.39.2025.02.06.01.28.52
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3653b02dsm8145955ad.74.2025.02.06.01.28.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2025 01:28:53 -0800 (PST)
+        Thu, 06 Feb 2025 01:28:56 -0800 (PST)
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
 	Danilo Krummrich <dakr@redhat.com>,
+	Miguel Ojeda <ojeda@kernel.org>,
 	Alex Gaynor <alex.gaynor@gmail.com>,
-	Alice Ryhl <aliceryhl@google.com>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Benno Lossin <benno.lossin@proton.me>,
-	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
 	Boqun Feng <boqun.feng@gmail.com>,
 	Gary Guo <gary@garyguo.net>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Miguel Ojeda <ojeda@kernel.org>,
-	Nishanth Menon <nm@ti.com>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Trevor Gross <tmgross@umich.edu>,
-	Viresh Kumar <vireshk@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Yury Norov <yury.norov@gmail.com>
-Cc: linux-pm@vger.kernel.org,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	linux-pm@vger.kernel.org,
 	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
 	rust-for-linux@vger.kernel.org,
 	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
 	Erik Schilling <erik.schilling@linaro.org>,
@@ -100,12 +97,13 @@ Cc: linux-pm@vger.kernel.org,
 	Joakim Bech <joakim.bech@linaro.org>,
 	Rob Herring <robh@kernel.org>,
 	Anisse Astier <anisse@astier.eu>,
-	linux-clk@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH V8 00/14] Rust bindings for cpufreq and OPP core + sample driver
-Date: Thu,  6 Feb 2025 14:58:21 +0530
-Message-Id: <cover.1738832118.git.viresh.kumar@linaro.org>
+Subject: [PATCH V8 01/14] rust: macros: enable use of hyphens in module names
+Date: Thu,  6 Feb 2025 14:58:22 +0530
+Message-Id: <99ca28045252ba77c302d74e57c2976e60744c4d.1738832118.git.viresh.kumar@linaro.org>
 X-Mailer: git-send-email 2.31.1.272.g89b43f80a514
+In-Reply-To: <cover.1738832118.git.viresh.kumar@linaro.org>
+References: <cover.1738832118.git.viresh.kumar@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -114,143 +112,88 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hello,
+From: Anisse Astier <anisse@astier.eu>
 
-I am seeking a few Acks for this patch series before merging it into the PM tree
-for the 6.15 merge window, unless there are any objections.
+Some modules might need naming that contains hyphens "-" to match the
+auto-probing by name in the platform devices that comes from the device
+tree.
 
-This series introduces initial Rust bindings for two subsystems: cpufreq and
-Operating Performance Points (OPP). The bindings cover most of the interfaces
-exposed by these subsystems. It also includes minimal bindings for the clk and
-cpumask frameworks, which are required by the cpufreq bindings.
+But rust identifiers cannot contain hyphens, so replace the module name
+by an underscore anywhere we'd use it as an identifier.
 
-Additionally, a sample cpufreq driver, rcpufreq-dt, is included. This is a
-duplicate of the existing cpufreq-dt driver, which is a platform-agnostic,
-device-tree-based driver commonly used on ARM platforms.
+Signed-off-by: Anisse Astier <anisse@astier.eu>
+Reviewed-by: Alice Ryhl <aliceryhl@google.com>
+[Viresh: Replace "-" with '-']
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+---
+ rust/macros/module.rs | 17 ++++++++++-------
+ 1 file changed, 10 insertions(+), 7 deletions(-)
 
-The implementation has been tested using QEMU, ensuring that frequency
-transitions, various configurations, and driver binding/unbinding work as
-expected. However, performance measurements have not been conducted yet.
-
-For those interested in testing these patches, they can be found at:
-
-git://git.kernel.org/pub/scm/linux/kernel/git/vireshk/linux.git rust/cpufreq-dt
-
-This version is rebased on v6.14-rc1.
-
---
-Viresh
-
-V7->V8:
-- Updated cpumask bindings to work with !CONFIG_CPUMASK_OFFSTACK case.
-- Dropped few patches (property_present() and opp helpers), as they are already
-  merged.
-- from_cpu() is marked unsafe.
-- Included a patch by Anisse Astier, to solve a long standing issue with this
-  series.
-- Dropped: "DO-NOT_MERGE: cpufreq: Rename cpufreq-dt platdev."
-- Updated MAINTAINERS for new files.
-- Other minor changes / cleanups.
-
-V6->V7:
-- from_cpu() is moved to cpu.rs and doesn't return ARef anymore, but just a
-  reference.
-- Dropped cpufreq_table_len() and related validation in cpufreq core.
-- Solved the issue with BIT() macro differently, using an enum now.
-- Few patches are broken into smaller / independent patches.
-- Improved Commit logs and SAFETY comments at few places.
-- Removed print message from cpufreq driver.
-- Rebased over linux-next/master.
-- Few other minor changes.
-
-V5->V6:
-- Rebase over latest rust/dev branch, which changed few interfaces that the
-  patches were using.
-- Included all other patches, which weren't included until now to focus only on
-  core APIs.
-- Other minor cleanups, additions.
-
-V4->V5:
-- Rename Registration::register() as new().
-- Provide a new API: Registration::new_foreign_owned() and use it for
-  rcpufreq_dt driver.
-- Update MAINTAINERS file.
-
-V3->V4:
-- Fix bugs with freeing of OPP structure. Dropped the Drop routine and fixed
-  reference counting.
-- Registration object of the cpufreq core is modified a bit to remove the
-  registered field, and few other cleanups.
-- Use Devres for instead of platform data.
-- Improve SAFETY comments.
-
-V2->V3:
-- Rebased on latest rust-device changes, which removed `Data` and so few changes
-  were required to make it work.
-- use srctree links (Alice Ryhl).
-- Various changes the OPP creation APIs, new APIs: from_raw_opp() and
-  from_raw_opp_owned() (Alice Ryhl).
-- Inline as_raw() helpers (Alice Ryhl).
-- Add new interface (`OPP::Token`) for dynamically created OPPs.
-- Add Reviewed-by tag from Manos.
-- Modified/simplified cpufreq registration structure / method a bit.
-
-V1->V2:
-- Create and use separate bindings for OF, clk, cpumask, etc (not included in
-  this patchset but pushed to the above branch). This helped removing direct
-  calls from the driver.
-- Fix wrong usage of Pinning + Vec.
-- Use Token for OPP Config.
-- Use Opaque, transparent and Aref for few structures.
-- Broken down into smaller patches to make it easy for reviewers.
-- Based over staging/rust-device.
-
-Thanks.
-
-Anisse Astier (1):
-  rust: macros: enable use of hyphens in module names
-
-Viresh Kumar (13):
-  cpufreq: Use enum for cpufreq flags that use BIT()
-  rust: cpu: Add from_cpu()
-  rust: Add cpumask helpers
-  rust: Add bindings for cpumask
-  rust: Add bare minimal bindings for clk framework
-  rust: Add initial bindings for OPP framework
-  rust: Extend OPP bindings for the OPP table
-  rust: Extend OPP bindings for the configuration options
-  rust: Add initial bindings for cpufreq framework
-  rust: Extend cpufreq bindings for policy and driver ops
-  rust: Extend cpufreq bindings for driver registration
-  rust: Extend OPP bindings with CPU frequency table
-  cpufreq: Add Rust based cpufreq-dt driver
-
- MAINTAINERS                     |    6 +
- drivers/cpufreq/Kconfig         |   12 +
- drivers/cpufreq/Makefile        |    1 +
- drivers/cpufreq/rcpufreq_dt.rs  |  238 +++++++
- include/linux/cpufreq.h         |   96 +--
- rust/bindings/bindings_helper.h |    5 +
- rust/helpers/cpufreq.c          |   10 +
- rust/helpers/cpumask.c          |   40 ++
- rust/helpers/helpers.c          |    2 +
- rust/kernel/clk.rs              |   48 ++
- rust/kernel/cpu.rs              |   31 +
- rust/kernel/cpufreq.rs          | 1054 +++++++++++++++++++++++++++++++
- rust/kernel/cpumask.rs          |  138 ++++
- rust/kernel/lib.rs              |    8 +
- rust/kernel/opp.rs              |  889 ++++++++++++++++++++++++++
- rust/macros/module.rs           |   17 +-
- 16 files changed, 2543 insertions(+), 52 deletions(-)
- create mode 100644 drivers/cpufreq/rcpufreq_dt.rs
- create mode 100644 rust/helpers/cpufreq.c
- create mode 100644 rust/helpers/cpumask.c
- create mode 100644 rust/kernel/clk.rs
- create mode 100644 rust/kernel/cpu.rs
- create mode 100644 rust/kernel/cpufreq.rs
- create mode 100644 rust/kernel/cpumask.rs
- create mode 100644 rust/kernel/opp.rs
-
+diff --git a/rust/macros/module.rs b/rust/macros/module.rs
+index cdf94f4982df..2e740bbdb598 100644
+--- a/rust/macros/module.rs
++++ b/rust/macros/module.rs
+@@ -182,7 +182,9 @@ pub(crate) fn module(ts: TokenStream) -> TokenStream {
+ 
+     let info = ModuleInfo::parse(&mut it);
+ 
+-    let mut modinfo = ModInfoBuilder::new(info.name.as_ref());
++    /* Rust does not allow hyphens in identifiers, use underscore instead */
++    let name_identifier = info.name.replace('-', "_");
++    let mut modinfo = ModInfoBuilder::new(name_identifier.as_ref());
+     if let Some(author) = info.author {
+         modinfo.emit("author", &author);
+     }
+@@ -298,14 +300,14 @@ mod __module_init {{
+                     #[doc(hidden)]
+                     #[link_section = \"{initcall_section}\"]
+                     #[used]
+-                    pub static __{name}_initcall: extern \"C\" fn() -> kernel::ffi::c_int = __{name}_init;
++                    pub static __{name_identifier}_initcall: extern \"C\" fn() -> kernel::ffi::c_int = __{name_identifier}_init;
+ 
+                     #[cfg(not(MODULE))]
+                     #[cfg(CONFIG_HAVE_ARCH_PREL32_RELOCATIONS)]
+                     core::arch::global_asm!(
+                         r#\".section \"{initcall_section}\", \"a\"
+-                        __{name}_initcall:
+-                            .long   __{name}_init - .
++                        __{name_identifier}_initcall:
++                            .long   __{name_identifier}_init - .
+                             .previous
+                         \"#
+                     );
+@@ -313,7 +315,7 @@ mod __module_init {{
+                     #[cfg(not(MODULE))]
+                     #[doc(hidden)]
+                     #[no_mangle]
+-                    pub extern \"C\" fn __{name}_init() -> kernel::ffi::c_int {{
++                    pub extern \"C\" fn __{name_identifier}_init() -> kernel::ffi::c_int {{
+                         // SAFETY: This function is inaccessible to the outside due to the double
+                         // module wrapping it. It is called exactly once by the C side via its
+                         // placement above in the initcall section.
+@@ -323,12 +325,12 @@ mod __module_init {{
+                     #[cfg(not(MODULE))]
+                     #[doc(hidden)]
+                     #[no_mangle]
+-                    pub extern \"C\" fn __{name}_exit() {{
++                    pub extern \"C\" fn __{name_identifier}_exit() {{
+                         // SAFETY:
+                         // - This function is inaccessible to the outside due to the double
+                         //   module wrapping it. It is called exactly once by the C side via its
+                         //   unique name,
+-                        // - furthermore it is only called after `__{name}_init` has returned `0`
++                        // - furthermore it is only called after `__{name_identifier}_init` has returned `0`
+                         //   (which delegates to `__init`).
+                         unsafe {{ __exit() }}
+                     }}
+@@ -369,6 +371,7 @@ unsafe fn __exit() {{
+         ",
+         type_ = info.type_,
+         name = info.name,
++        name_identifier = name_identifier,
+         modinfo = modinfo.buffer,
+         initcall_section = ".initcall6.init"
+     )
 -- 
 2.31.1.272.g89b43f80a514
 
