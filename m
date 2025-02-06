@@ -1,118 +1,99 @@
-Return-Path: <linux-pm+bounces-21450-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21451-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7263DA2A33C
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 09:34:21 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E6AFCA2A345
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 09:36:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CCCD87A2A63
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 08:33:25 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3ABDB3A52B5
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 08:36:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BE2E2225403;
-	Thu,  6 Feb 2025 08:34:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="NJeCzxv9"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA03822541D;
+	Thu,  6 Feb 2025 08:36:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f42.google.com (mail-ej1-f42.google.com [209.85.218.42])
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F55E155744;
-	Thu,  6 Feb 2025 08:34:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 138C922541B;
+	Thu,  6 Feb 2025 08:36:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738830853; cv=none; b=J1+OtKslBPXHF2LN64A4wc89l/lOsCR8UtP5V5gI6hsOc6T/5y36k6tdukQKZsf+WtWqZbh0Y37yI5vNXQ6HRQE1+uBycLp8nalSNBbJS2MOWsO7SF3fgNyH+3MCxBpNdRztpvPzNSJ/+v5K87KB4VAVFV6yvK2C5vEQ4VzuPek=
+	t=1738830998; cv=none; b=rBr0Cz783PKFSxqQccPqEmK782BVfZN0ToF+7/zR1AFpNRmYRwJNa099E/hipqLyPViJRIezqLwtyIF+EJxofjmc90vcNMlsK7+POGgl6dtBNlOMbQKCnKtBjkPzjHYDxigKMyEL3DoPUxIaRcgvETRhFmuMBMdLT42PAG49m0c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738830853; c=relaxed/simple;
-	bh=EsWpPxpAOGFLvStOxAhL1M5zaj7cdVeBzDGre8Tkkds=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Eii/P6TOwR3maDxCF/d4BxKbpdHUgahRC5OOmq+7Jdi70HQ757XBsCJituFKCYijuNu5ibbxepZQF4O4jlg1VKZqF5PeQ89TCdE0BZgE4C6R7OOqHqpFmgLtx6QM/cZP+X9rTQZNFbmE+PmDq1xau07JEYxugeuivFHV33qqBjA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=NJeCzxv9; arc=none smtp.client-ip=209.85.218.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+	s=arc-20240116; t=1738830998; c=relaxed/simple;
+	bh=4nOk8pWLYAICpsS4N//QuGSjtR5x1pA5WzM/nQvbZ1I=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=kGK+k/7w9Bev+XM7Md0k9yRQnKbGDBlSIzDIpyxCfNfpz4hdCUy6tN1UKDErUDhHZ6Rf7SQTYQ5/YKWxq4/gAP+x4/JIvCPXWN+zy1v2zM4VHhrFAbIgNTt18AA2mRvFVXHmbWRVqBivL/NvjTZjJVh9R8a+ssiTie+ImBF+rAU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f42.google.com with SMTP id a640c23a62f3a-ab751a7f67bso88735766b.1;
-        Thu, 06 Feb 2025 00:34:11 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738830850; x=1739435650; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=aeZFt1rArRFB+N1bmGi/tEoDVNsfzDRgwCe0uabyFSo=;
-        b=NJeCzxv984SgeiLprurkfeTeHbQCeXM3S/GbT6vGBelh+AC1JQWHy+BoyVDpebjyd9
-         bcDvNx/RRPEvohMYwOjLkri5HZSFT/gAgEdPH96+s/JqdHHdn1U11x4zDArB6ll+8L4f
-         GFOXf41dULbukTz1ywM7ORYGyXvzvzAjtGpfr+sT+Yv4o9V0adFqQOvidrtL/pIPYtlj
-         cUH6BOxJxSz0nvO+PkX75pS0AIEMCvo4sI2JABfPMhs5pm1IjvAK/wTzESo9ih3SAENU
-         Zd6xdjSckVVojR0+oQgfcDTs5IXX9XvWD7J6cgQvrDVpl5bUWl4VkhILroVod+1TrtO7
-         hw4g==
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-53f22fd6887so707142e87.2;
+        Thu, 06 Feb 2025 00:36:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738830850; x=1739435650;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=aeZFt1rArRFB+N1bmGi/tEoDVNsfzDRgwCe0uabyFSo=;
-        b=Dq6eYvOM87VTKwzUE3Cj0uSScFEfI9ooZCX3+tAAXHXhsX/asAOFtXqI0LVpP4TMLd
-         oA3Ef7hvcBi6+nv9S5S6imx+Om+siAKY0oDCYQd75eivTeSKoJ1KXWssDdgvwat2hogE
-         pPrrwms0WSfWI3bOdDWzmHbMvmE1kpRi/8NGcDoKN/nqzKFVu4DPhMUrkZHvWg3QyeCE
-         /Vt50l16zAsij4WanHOqXAnkFvCSohm5teqmKF75pN3LVZUYr6CWnUPodVwTAAMA3Suk
-         qMh1G86aoiRNdmZjzEaKy+MPWY4cgHuNCDwFivDnWVHZOe3OA0wLUyHWduDtb769Kf0Y
-         pb9w==
-X-Forwarded-Encrypted: i=1; AJvYcCWEAOdHp+Rk1UbfhjtxvLyhttVsW4hK0dQxFKU+jBhEPJRigIfh/ftSsCRe/JV0C7IDSccBtX3YFZmo+RNa@vger.kernel.org, AJvYcCXY/HpT0nI2V4ZhU+Xrf0B3QtmX5PO/8k5WtaztFXxvckadZv6tu5m6KKqgL3t7cnMxcQ4Iji1UGU35RbhvGsU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzXwtH1LYO0LB4n0qvsLK4kMKyO5GNCc/Ig4bskZGunscsEFGmB
-	aG3Y1BX3bQ2wFzBah5Hb8misJ1/H1FECc2SYlD51GheMQ2+MdDdU
-X-Gm-Gg: ASbGncv51dfAHh/v2qL5Hyy6y2+8DULkHnVguG2PLiqi83dnj4LDq1+DqvTCNqE5HkR
-	B1gApnLrdPvZxQeUBQE5f5W3TKkSZwTyVV92rmLj0OHzcdrLBs2rdXAM2RqJ7VY/UHi075W4Ix1
-	cYlC5za59dgRutXNYL1oGZRGhR/wet5BTYsTCI2WEDBoxI1pT4wQjKiwpB3FmIfb6lGPWTeIXEe
-	yRdTA5sHQPK4HhmMnGEj6BZxduN93NfxJKr/Rii3M6q0Net1Z0zi7bsSscpRk6otxOU3WZiDxxV
-	t8EbkYVb8k1gDFmD
-X-Google-Smtp-Source: AGHT+IHjAFLAgoaw34EAPH1Yfd7rJf09sgjORniG26A+IbYzuQhQj3t/kiLKn825AlAU87fIkOZI+w==
-X-Received: by 2002:a17:907:940f:b0:ab3:4b0c:ea44 with SMTP id a640c23a62f3a-ab75e221e8bmr661752166b.9.1738830850096;
-        Thu, 06 Feb 2025 00:34:10 -0800 (PST)
-Received: from void.cudy.net ([46.210.137.151])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dcf1b7adf4sm492050a12.26.2025.02.06.00.34.08
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2025 00:34:09 -0800 (PST)
-From: Andrew Kreimer <algonell@gmail.com>
-To: Sebastian Reichel <sre@kernel.org>,
-	Chen-Yu Tsai <wens@csie.org>
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	kernel-janitors@vger.kernel.org,
-	Andrew Kreimer <algonell@gmail.com>
-Subject: [PATCH] power: supply: axp20x_usb_power: Fix typo in dev_warn message
-Date: Thu,  6 Feb 2025 10:33:47 +0200
-Message-ID: <20250206083405.10286-1-algonell@gmail.com>
-X-Mailer: git-send-email 2.48.1.220.gbc204b7427
+        d=1e100.net; s=20230601; t=1738830994; x=1739435794;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=nPNUgPEwPqReofueOuszjwUqvB1T3BtBEFEUwDkOhxg=;
+        b=hl8wpvzhOuOoIANV4gPNeTrfLQMVJtuGaviZk/vRZ+Yak4m/gs0+AbVP0nIRxfOGUV
+         iwM7RYRbUhNhPR5g6pF/XurQ0Nuh/vzc9Fg5qqpQ/xaERlyH6A7RgyNUKZvOGpRh0CuJ
+         hjNlBEXquG3zJl+H5x8TAqiwEvhfIZ0UQd87kP/PgcDndOdTg4jPYaIH8CQPxUvK1QOU
+         3duyJRCKCNDPneFdCP3yFiLCpd4YgZyjdYSjaxu+156yX24zU/8jyPn5ru/IQhvVpGcF
+         NGl597WgDBXmdW/4HTSZZqEs7OURqhLkxcOq5HemYEXjY+uAoCEPsxzG0pa6oJLS+m4G
+         WShQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWFSfqPzeNUcbPcl7jjTJDzS59qtANyUqboL/qjiort3tnbJo7lB11A5nipB42FI24SKXJPURM77+tRHZLL77E=@vger.kernel.org, AJvYcCWVphiSAX9suQx2JsaqNgXu6Ve9rrROvn5gSNSlArzEC+6Ydf6yscKvV2URCcwcOsGROdS7Oozc8G8=@vger.kernel.org, AJvYcCWygJZtOHs09eK2yZ9tGqXNBr1wxYHax8686UuAkDb5MykTNguvclpgmRkjeMOE7AkLavy65jDbBnvU+BVv@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrLg52eYmPb+0vo28FOOSRy7HaGdlD10Pmv/l6GnYCcZA6KPS5
+	bKhwU+hS4qZ+3IXv6dd4TZKEnYkJ+YSaH1HG1mFI+lOGJ8shi5WrgraBdxb0
+X-Gm-Gg: ASbGncsfjvCca2Tf96c1slUaFvhZM69zi9Ah6v6DG28+YMBRLNJULoGleSfHDfIbX9r
+	EpHtGVFTmXyJ0/f6S/UQDG4ayfAPcVE/j6ljmnOc0RZk+ZmZXYGgyQrZvaVhnmguXep/79FZRhA
+	qnA7CR7NsAbCa+ivkq1j40txjQNSGXXGF0ghCcjjZ2lnIJcgh5R5U6vhBoscJ+tMpodNL+28eLk
+	/6Q1XTjw5H2+hMFuyriN8T7/WjW4Jok05OPnajjyIuJM3j0Wbpuv1LiJsFYKimDG5ZZmBpPQhcR
+	eH1QBk8/Rax7ThhQGjA5oxoVvLCPuvLMqJT2zedm0gazINGa
+X-Google-Smtp-Source: AGHT+IHHlnOsV7GsHFyaaCeU49S1qOu/eGnDYIC2FZ+3zEnJvAY7xGc3hEUB7g7jndxjHKVnH145VA==
+X-Received: by 2002:a05:6512:1597:b0:542:2e04:e9b8 with SMTP id 2adb3069b0e04-544059fc5e8mr1942471e87.8.1738830993328;
+        Thu, 06 Feb 2025 00:36:33 -0800 (PST)
+Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com. [209.85.208.177])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5441053eb06sm74019e87.29.2025.02.06.00.36.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Feb 2025 00:36:33 -0800 (PST)
+Received: by mail-lj1-f177.google.com with SMTP id 38308e7fff4ca-307325f2436so5754201fa.0;
+        Thu, 06 Feb 2025 00:36:33 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUqyVSiVvxyFr9QFJD1mbGvydGgsQF1jpic4boOCruAmu8c8DJ7dxP6H+bTWoXn+M6uYvcXF4ptBtILP+PN7ck=@vger.kernel.org, AJvYcCVyg1T88qZv7UG5+f6f88vGOVYcS7OBzg4eBiLrDvYq3zPXDHh8oDNnK9WYO/lUUjTxWJqaXqTGC9sMzAcd@vger.kernel.org, AJvYcCWebQNhQut8+vbMHT5TDRWu3wlR5c/TORcltTSNTosMdiadpqi0tAX7qDz8U/ET7+hRZm0HPwAo6Mk=@vger.kernel.org
+X-Received: by 2002:a2e:9e84:0:b0:307:dec6:e1cd with SMTP id
+ 38308e7fff4ca-307e091c8bbmr1713891fa.14.1738830992833; Thu, 06 Feb 2025
+ 00:36:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250206083405.10286-1-algonell@gmail.com>
+In-Reply-To: <20250206083405.10286-1-algonell@gmail.com>
+Reply-To: wens@csie.org
+From: Chen-Yu Tsai <wens@csie.org>
+Date: Thu, 6 Feb 2025 16:36:20 +0800
+X-Gmail-Original-Message-ID: <CAGb2v65chOJmkXHaqLQxw=h0kQ9+X9p2DvA3RMAnEpqPrbFkKw@mail.gmail.com>
+X-Gm-Features: AWEUYZml9YHH6v35qXnGbahPptAl23nBxSGK2Pdxe7HhbBeOk4_n9YxfNLcJupY
+Message-ID: <CAGb2v65chOJmkXHaqLQxw=h0kQ9+X9p2DvA3RMAnEpqPrbFkKw@mail.gmail.com>
+Subject: Re: [PATCH] power: supply: axp20x_usb_power: Fix typo in dev_warn message
+To: Andrew Kreimer <algonell@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	kernel-janitors@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-There is a typo in a dev_warn message:
- - reqested -> requested
+On Thu, Feb 6, 2025 at 4:34=E2=80=AFPM Andrew Kreimer <algonell@gmail.com> =
+wrote:
+>
+> There is a typo in a dev_warn message:
+>  - reqested -> requested
+>
+> Fix it via codespell.
+>
+> Signed-off-by: Andrew Kreimer <algonell@gmail.com>
 
-Fix it via codespell.
-
-Signed-off-by: Andrew Kreimer <algonell@gmail.com>
----
- drivers/power/supply/axp20x_usb_power.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
-
-diff --git a/drivers/power/supply/axp20x_usb_power.c b/drivers/power/supply/axp20x_usb_power.c
-index 9722912268fe..1c30851054ae 100644
---- a/drivers/power/supply/axp20x_usb_power.c
-+++ b/drivers/power/supply/axp20x_usb_power.c
-@@ -492,7 +492,7 @@ static int axp717_usb_power_set_input_current_limit(struct axp20x_usb_power *pow
- 
- 	if (power->max_input_cur && (intval > power->max_input_cur)) {
- 		dev_warn(power->dev,
--			 "reqested current %d clamped to max current %d\n",
-+			 "requested current %d clamped to max current %d\n",
- 			 intval, power->max_input_cur);
- 		intval = power->max_input_cur;
- 	}
--- 
-2.48.1.220.gbc204b7427
-
+Acked-by: Chen-Yu Tsai <wens@csie.org>
 
