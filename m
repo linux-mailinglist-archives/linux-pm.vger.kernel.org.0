@@ -1,119 +1,258 @@
-Return-Path: <linux-pm+bounces-21441-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21442-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 243CAA29E28
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 02:00:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 17BBCA29E4E
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 02:28:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B1AA2167DC3
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 01:00:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 62BD53A588A
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 01:28:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D78542AF07;
-	Thu,  6 Feb 2025 01:00:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BA2EB38DE0;
+	Thu,  6 Feb 2025 01:28:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uay2lbrI"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SQ6pAlI9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+Received: from mail-pl1-f176.google.com (mail-pl1-f176.google.com [209.85.214.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D55C022094
-	for <linux-pm@vger.kernel.org>; Thu,  6 Feb 2025 01:00:28 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E70242AD02;
+	Thu,  6 Feb 2025 01:28:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738803630; cv=none; b=Rgo5mFElSA9vXmpldfLBLJWAs/P+GgcOdaAUsWsq0vgtRcYrjgtudmFv2p86B5naPfcg0xT9sgdQ/hfbHcqt4ikbJggGqcYYPQk9fSHZZx6VSYlX0ZNxzGp05rAinRnxpu9IV/MXtGDOv1SvDboKa1ceYdxep1shdztXB2huzfg=
+	t=1738805315; cv=none; b=RxILStN5zBhr08A1OsEi7esIBrRnbAldxzWrPo8u1NwZC/cADJU4KFMY+eRtnBZpT7LIQjn287W+HbGGaNhv6bCs4JH/uUBAtAAaNulqDn38eKgZ8hKppjqwPts33m6rI6P9Z8u7ex30b+ixCtsCPG9afVlxCT/bquuAgCuVeMg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738803630; c=relaxed/simple;
-	bh=YA9beyVyNV2UIf6sOTfOynJf8z+PiAQR/WP4EysO5Rg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c2iC3SLhVgvBXJa1WNhP+e1aj+a0B3rauNKCrW3UoC8hoO8q3NURfuEdbLQkt75dFbKUMOVKW/TjVvqHB3gtk3Wt6M/wg73i8bPNdkFZZT4h+RqiYeAybHf8u0z8Fen8CN2q0lRDlO/mXBmrFlEL2VMIXH2RB1jvhw0iil/NQ5Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uay2lbrI; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5439e331cceso472642e87.1
-        for <linux-pm@vger.kernel.org>; Wed, 05 Feb 2025 17:00:28 -0800 (PST)
+	s=arc-20240116; t=1738805315; c=relaxed/simple;
+	bh=clh2tfGXEKkbWkJuVRoDBfayvnFN0owsIXBdxYeNISk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=HhhqsRPD5uMc36bTql7NljO3XaU0clZLqbD8ha7l7Q/Wd3N2luiNzRABzJm13YPnmjpXHNPdnUyoR0czOtxu3PyYFdkzA1F+65op2PwaSg+omQC94Ih9xWiQV1ZDqP5eeEgn6WodTKIE/owzfXdSKajAh6knn92D4J0QSHdWjnQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SQ6pAlI9; arc=none smtp.client-ip=209.85.214.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f176.google.com with SMTP id d9443c01a7336-2166f1e589cso9735625ad.3;
+        Wed, 05 Feb 2025 17:28:33 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738803627; x=1739408427; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=64EGE0H9PZ2lu5z080wv8hkP5sMcDd9LMSd8Y5hei2c=;
-        b=uay2lbrIphuPFUCcLrqYtEIK6aI2VGKjw0uGP9Euye9HH/J1XQY5a0mLt10tTd31PT
-         4bfcNax+FhnkvznleBp5mGNp3gmuCziVgJNX69vAxh828AaeqRnfB4QHixvJEv4gwy8T
-         TES3F+MPpoxJy9dMSCr7PZ4x1wPdSbVlecmdcigDJQ+RhPp8aVij5lYLrhP/ctV5FGtK
-         na2Zkf0Gxc3aBq1iNJVxnjkSGMYUsxmKc+mnAGcCL+jOjCRfs/qk40d588O3HdLBjANk
-         q/RO3x0dWz0/kSU0j/R05aIMMp+tZWih1+YLiSqUA6dATahrX2I08Nk/QmwHTLcZTS1g
-         FMtA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738803627; x=1739408427;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+        d=gmail.com; s=20230601; t=1738805313; x=1739410113; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=64EGE0H9PZ2lu5z080wv8hkP5sMcDd9LMSd8Y5hei2c=;
-        b=EX7mdNng+nLzqaHXOqEucLkDFR8SvxZzAWpVronZEPDnVDbrCvriyXm2gABbDHBynn
-         0jtVokbhvrT3sNDajMTr6e7TL0yxWw2BvFof0o/GlHfyYnBaJzi3XDtpHC1e3nof6e+S
-         EGiRCy3RgPtVJmWzV0PE/iE7xNbMgDrjxUKVOJ8BzFH5++bJ0qUrzHjjgWXTe+1p9o6v
-         WlWMWgDW5pTsU5Q1fF/rtuupc38LiYoxu7oeAmV+aEScGIDRC9LQE7t7898jetN7zSBG
-         DYMlT3Qv3wgLPdM2QzF+1VEZ9V9Rmu0AqES17Vsw34vPBwKZFoSS55nYwXwDZ8W5NVq1
-         nlrg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJHokxuTHzzW6smlk7GCvXA8LbfAd6O5Ts798ZuNsKu2bPpW+X5d101ujT8hbFgm5Q2gjyGk6Z8A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDBN3ZworZOKv0C0mk13GfmEteo2Z+N7X4zLQZCD669Yo6LkAI
-	57YB5kH5g1f5yLEUFiEJrydYpFn6mgHrjZArtl0PVZtx2TeHFmm3C4XNoAAIcp0=
-X-Gm-Gg: ASbGnctm+K86cguEHhwYmvHxTGLq4rjd82rEK7YLKZT3/A/rHwhYC2OBzjee6P0V143
-	qWDW3/JzSmyxyYde/WQDF/MTTVfILyvj2wkZTcz8cWwAjGzDFMWWLmjj/cAFPBY0dR+CyhLTd02
-	+IBCDaErrZDRWJDVJTpL+F46UqHzkGpfMeO77r8GyQD0sj7NH01QmQtpXhVDfP9Mb0m65WkZnY1
-	HGfS0Piyoh0LmSSe2I6cmZJMrZUY5EGaOQ4EFB1XA0cLeTPwJ2E7ZAdGzznG9UBwf8yuGsnllUl
-	3kQj0/xzKFm55MojamAYd6nYNbYiZcB5zqFKoGLYdoCFZuII4KVgaduEV8E/hEBnLzSJnAU=
-X-Google-Smtp-Source: AGHT+IHnLGYjiexVyjpyM2PLfRR2Axnq7Xdo6KWRYUCGpLamUudjFaOtVpU/Aplwgvu0XsO0JkhcgA==
-X-Received: by 2002:ac2:4e04:0:b0:540:353a:df90 with SMTP id 2adb3069b0e04-54405a6912emr1688393e87.43.1738803626872;
-        Wed, 05 Feb 2025 17:00:26 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-544105bfc8esm2878e87.127.2025.02.05.17.00.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2025 17:00:25 -0800 (PST)
-Date: Thu, 6 Feb 2025 03:00:23 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Odelu Kukatla <quic_okukatla@quicinc.com>, Mike Tipton <quic_mdtipton@quicinc.com>, 
-	Jeff Johnson <quic_jjohnson@quicinc.com>, Andrew Halaney <ahalaney@redhat.com>, 
-	Sibi Sankar <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 5/7] interconnect: qcom: sa8775p: Add dynamic icc node
- id support
-Message-ID: <ujsy5e4u7inz5mzdh5m672zkfcrd6igoypgkak2assfpvlcrve@mmjlabr6rh5a>
-References: <20250205182743.915-1-quic_rlaggysh@quicinc.com>
- <20250205182743.915-6-quic_rlaggysh@quicinc.com>
+        bh=eRvjh4lUXS/FqYAnsO+QmQYUHjBjCN0Nceh7ZqfHMtQ=;
+        b=SQ6pAlI9BkVTkqEVD7VhUlnajP1ySgf3sFAGDCm1Qkja/8bLWXKHkzjs1a9LRE5rIG
+         SQeQPR5k7EjWERy+hcJhcs9lJabogecDKUH9+wE+1pOuA0XUKTt+/JaFzQ6qhKRJYMvf
+         WcYYLdh2WwjLxO0SA3/h1JitBCnxtiM0tjbo4r+OxmrUImhiyeGp9YQ5xFKSUn6d1VGR
+         9tksp+B6zvNV9ZHxI1KPrH6sjqjfknxu+4j2G8P6WUQno/gKl/XgxzPdIQy2L1djcn1q
+         HEirOyh1w3V0r+mvmmRas2X8R5DrGV9B4rbIt71dya51+2R9bJ4n9rWW5Vlxai0Mchwq
+         QEWw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738805313; x=1739410113;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=eRvjh4lUXS/FqYAnsO+QmQYUHjBjCN0Nceh7ZqfHMtQ=;
+        b=CBRrfuSpuhQ33ouXabseDNxYGzL8dRhsXrpnHzp1+Xbw2+nn7lbg4FSZ+DXHIPhecX
+         DOTzN7JZywWKws2k9/SMsE3/Tfv084c4YZ6blqoFWdxzPFmyD/nVvf4X02UqzzpYyWHU
+         JDNFMkX8RjANI+Fir7CLf+dMLaycpAtMVJUJxkZtQT0LOcJUw5NyEpzro65Y4FDEzZHQ
+         +lBnGbXCcELB5WuBDRj3LGpLVJP1tN9BJeApdKnTBYNWPlMQcyC9SkMgO0lIsm2bWaSq
+         9N3x+Aa2yr3Cm68cCkmQrUWm5cbPWn4JAtudsa4FTSqXYByncfypV4QIEvQpwfUFXM05
+         6HMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUTxgY6hlNJuwhaRuaNNqmZMLLtTgPE3vtUb57fRtU4TIrvDmUlB8lU4ic5PWHtDsNK0uY=@vger.kernel.org, AJvYcCUsVOGNRNxZPpUKo7xu+TcWxXN+vxmojtI6ajukmiAR9ixp7bx2zcye2/B5LwcmeHBG0DrBVLwiy8bixCr2ZQEZ@vger.kernel.org, AJvYcCWFbB53Zkkwl5xYEWVRgjXn7LLqyNk2MhvQi12tYMhKgTEe7p7nGBA66QLNs6LGKOG+LWhUCly3IOlZRrdT6nBaqA==@vger.kernel.org, AJvYcCWWQR0/RQ2yJe/eyanSdlovSfvNZULBvvGmraT73mnYwWcXnbvEozu+2z+WdGhy8fYKNh2icIGnewtjFkMdsbc7fggT@vger.kernel.org, AJvYcCXCwfA9byXJC2JtL+eNRqDtzdYsLvcOvZqJzyawOhMZ5/V+uxoY3L44mj8iLVwTgSLei0zAeXVRXz14XuU=@vger.kernel.org, AJvYcCXcmMDVmJG6a6q3sf6+9h9mxbN8fnzTaThRyQ+rESAWmguVZSzbS9XTmIG6PXii+fEFVMHGt94j/O7CNiIc@vger.kernel.org, AJvYcCXm4l+FEs5zGxy49SCkD9SYNmn/k21Y3GZiXwJRluz+vbhQVpTKWkc47KbD9pG0R+V+7be0N9liwyE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzXxP8iyNLY/eeUL5tKR9E80pqBh5KjHUm9yIjF9qlym+VPsVxF
+	CaFgIFEkW+bbn+N/xfScAD0XRBE1RipIwXYKp9FDVzK4IzIh3NYXtMMFOJkWhDK6bIfkJBng0Oh
+	WinPlf/lKFPUlpq9t6zIESeo22As=
+X-Gm-Gg: ASbGncttxrELntXGbXo4U4ZGng8uYEIG6+PnmKANHCFubMMFIWxQkCk06ESfx2CJn5i
+	G12rvWcYBP8jeCcj9e+Wda2Esb7kjsvkf1A9IBlO6+2+knKLMUmM8Z98BTnA+pFV266k9o1oa3P
+	k3rVyAvv4ZtziF
+X-Google-Smtp-Source: AGHT+IHbBLU9Yp+KgnLDKo9nDxmvDiMpB2P2eCS3pSqU+ciOVfvltT7NgM9NDohKwcgz1sTHUPwVZ1B1B8ZxWNOrSek=
+X-Received: by 2002:a05:6a20:c78d:b0:1e6:5323:58d1 with SMTP id
+ adf61e73a8af0-1ede88aa5dcmr8780768637.26.1738805312996; Wed, 05 Feb 2025
+ 17:28:32 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250205182743.915-6-quic_rlaggysh@quicinc.com>
+References: <20250203-quiet_tools-v1-0-d25c8956e59a@rivosinc.com>
+ <CAADnVQKTqRBQBA-yxB9EYPMgayP3rOE4iDhg+QD++2d=jxfY=Q@mail.gmail.com>
+ <Z6JdwSsAk1xCiSrn@ghost> <Z6JksXDRh8OSAh-u@google.com> <CAADnVQKmKf6wY3dg+PfAxtrrFWGO7D-m83dEndjWksPfWDt5wQ@mail.gmail.com>
+ <Z6Khl1rHIAb7wOXw@ghost>
+In-Reply-To: <Z6Khl1rHIAb7wOXw@ghost>
+From: Andrii Nakryiko <andrii.nakryiko@gmail.com>
+Date: Wed, 5 Feb 2025 17:28:19 -0800
+X-Gm-Features: AWEUYZlPBcKhnlnzEHzYVL21RVck5Pbw-X3QYTAmjmTe7rjtAGdrSN0T9YRAupA
+Message-ID: <CAEf4Bza5nKk6_fVY2vmJjZgPb40zB+R3REy8==ZLc98eg1iHTA@mail.gmail.com>
+Subject: Re: [PATCH 0/2] tools: Unify top-level quiet infrastructure
+To: Charlie Jenkins <charlie@rivosinc.com>
+Cc: Alexei Starovoitov <alexei.starovoitov@gmail.com>, Namhyung Kim <namhyung@kernel.org>, 
+	Alexei Starovoitov <ast@kernel.org>, Daniel Borkmann <daniel@iogearbox.net>, 
+	Andrii Nakryiko <andrii@kernel.org>, Martin KaFai Lau <martin.lau@linux.dev>, 
+	Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
+	Yonghong Song <yonghong.song@linux.dev>, John Fastabend <john.fastabend@gmail.com>, 
+	KP Singh <kpsingh@kernel.org>, Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
+	Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, 
+	Arnaldo Carvalho de Melo <acme@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
+	Alexander Shishkin <alexander.shishkin@linux.intel.com>, Ian Rogers <irogers@google.com>, 
+	Adrian Hunter <adrian.hunter@intel.com>, Quentin Monnet <qmo@kernel.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, 
+	Josh Poimboeuf <jpoimboe@kernel.org>, Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
+	Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
+	Steven Rostedt <rostedt@goodmis.org>, bpf <bpf@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, 
+	"linux-perf-use." <linux-perf-users@vger.kernel.org>, 
+	Linux Power Management <linux-pm@vger.kernel.org>, 
+	"open list:KERNEL SELFTEST FRAMEWORK" <linux-kselftest@vger.kernel.org>, 
+	"open list:HID CORE LAYER" <linux-input@vger.kernel.org>, 
+	linux-trace-kernel <linux-trace-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 05, 2025 at 06:27:41PM +0000, Raviteja Laggyshetty wrote:
-> Discard the static IDs from node data and set the default node ID
-> to -1 to indicate the for dynamic ID allocation.
-> Update the topology to use node pointers for links instead of static
-> IDs, and rearrange the node definitions to avoid undefined references.
+On Tue, Feb 4, 2025 at 3:24=E2=80=AFPM Charlie Jenkins <charlie@rivosinc.co=
+m> wrote:
+>
+> On Tue, Feb 04, 2025 at 11:02:42PM +0000, Alexei Starovoitov wrote:
+> > On Tue, Feb 4, 2025 at 7:04=E2=80=AFPM Namhyung Kim <namhyung@kernel.or=
+g> wrote:
+> > >
+> > > Hello,
+> > >
+> > > On Tue, Feb 04, 2025 at 10:34:41AM -0800, Charlie Jenkins wrote:
+> > > > On Tue, Feb 04, 2025 at 05:18:42PM +0000, Alexei Starovoitov wrote:
+> > > > > On Tue, Feb 4, 2025 at 12:10=E2=80=AFAM Charlie Jenkins <charlie@=
+rivosinc.com> wrote:
+> > > > > >
+> > > > > > The quiet infrastructure was moved out of Makefile.build to acc=
+omidate
+> > > > > > the new syscall table generation scripts in perf. Syscall table
+> > > > > > generation wanted to also be able to be quiet, so instead of ag=
+ain
+> > > > > > copying the code to set the quiet variables, the code was moved=
+ into
+> > > > > > Makefile.perf to be used globally. This was not the right solut=
+ion. It
+> > > > > > should have been moved even further upwards in the call chain.
+> > > > > > Makefile.include is imported in many files so this seems like a=
+ proper
+> > > > > > place to put it.
+> > > > > >
+> > > > > > To:
+> > > > > >
+> > > > > > Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
+> > > > > > ---
+> > > > > > Charlie Jenkins (2):
+> > > > > >       tools: Unify top-level quiet infrastructure
+> > > > > >       tools: Remove redundant quiet setup
+> > > > > >
+> > > > > >  tools/arch/arm64/tools/Makefile           |  6 -----
+> > > > > >  tools/bpf/Makefile                        |  6 -----
+> > > > > >  tools/bpf/bpftool/Documentation/Makefile  |  6 -----
+> > > > > >  tools/bpf/bpftool/Makefile                |  6 -----
+> > > > > >  tools/bpf/resolve_btfids/Makefile         |  2 --
+> > > > > >  tools/bpf/runqslower/Makefile             |  5 +---
+> > > > > >  tools/build/Makefile                      |  8 +-----
+> > > > > >  tools/lib/bpf/Makefile                    | 13 ----------
+> > > > >
+> > > > > Nack.
+> > > > > libbpf and bpftool are synced independently to github
+> > > > > and released from there.
+> > > > > This change breaks it.
+> > >
+> > > Sorry, I overlooked this part and merged a change that touched the
+> > > common files into the perf tree.
+> > >
+> > > f2868b1a66d4f40f ("perf tools: Expose quiet/verbose variables in Make=
+file.perf")
+> > >
+> > > Unfortunately, it's already in v6.14-rc1.
+> > >
+> > > >
+> > > > Can you explain how it breaks it? Currently bpftool and resolve_btf=
+ids
+> > > > don't build quietly so this was an attempt to fix that.
+> > >
+> > > So I think you will need something like this for v6.14.  Again, sorry
+> > > about the trouble.
+> >
+> > Just revert f2868b1a66d4f40f that created this mess.
+>
+> Why are you opposed to unifying this helpers among the various projects
+> in tools? Can you explain what about this breaks the Github syncing flow
+> and why it cannot be resolved? It doesn't make sense to duplicate "Q=3D"
+> in every Makefile anybody ever wants to add to tools just because bpf
+> syncing isn't robust.
 
-I think it might be better to forward-declare all node entries at the
-top and then keep currently defined nodes in place. Otherwise the diff
-is pretty unreadable.
+Alexei's concern about Github mirrors of bpftool and libbpf isn't
+valid. Github versions of those projects use their own independent
+Makefiles anyways, so your change doesn't break that aspect.
 
-> 
-> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-> ---
->  drivers/interconnect/qcom/sa8775p.c | 2194 ++++++++++++---------------
->  1 file changed, 962 insertions(+), 1232 deletions(-)
-> 
+But your change *does* break both libbpf's and bpftool's make output
+*in the kernel repo*. With this patch we basically don't have "quiet"
+mode anymore:
 
--- 
-With best wishes
-Dmitry
+$ git co f2868b1a66d4f40f07e985b0beead606b2753602
+HEAD is now at f2868b1a66d4 perf tools: Expose quiet/verbose variables
+in Makefile.perf
+$ git log --oneline -n1
+f2868b1a66d4 (HEAD) perf tools: Expose quiet/verbose variables in Makefile.=
+perf
+$ pwd
+/home/andriin/linux/tools/lib/bpf
+$ make
+  gcc -Wp,-MD,/data/users/andriin/linux/tools/lib/bpf/staticobjs/.libbpf.o.=
+d
+-Wp,-MT,/data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf.o -g
+-O2 -std=3Dgnu89 -Wbad-function-cast -Wdeclaration-after-statement
+-Wformat-security -Wformat-y2k -Winit-self -Wmissing-declarations
+-Wmissing-prototypes -Wnested-externs -Wno-system-headers
+-Wold-style-definition -Wpacked -Wredundant-decls -Wstrict-prototypes
+-Wswitch-default -Wswitch-enum -Wundef -Wwrite-strings -Wformat
+-Wno-type-limits -Wstrict-aliasing=3D3 -Wshadow -Wno-switch-enum -Werror
+-Wall -I/data/users/andriin/linux/tools/lib/bpf/
+-I/data/users/andriin/linux/tools/include
+-I/data/users/andriin/linux/tools/include/uapi
+-I/data/users/andriin/linux/tools/arch/x86/include -fvisibility=3Dhidden
+-D_LARGEFILE64_SOURCE -D_FILE_OFFSET_BITS=3D64 -D"BUILD_STR(s)=3D#s" -c -o
+/data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf.o libbpf.c
+^Cmake[2]: *** [/data/users/andriin/linux/tools/build/Makefile.build:86:
+/data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf.o] Interrupt
+make[1]: *** [Makefile:165:
+/data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf-in.o]
+Interrupt
+make: *** [Makefile:143: all] Interrupt
+
+$ git co HEAD~
+Previous HEAD position was f2868b1a66d4 perf tools: Expose
+quiet/verbose variables in Makefile.perf
+HEAD is now at e9cbc854d8b1 perf config: Add a function to set one
+variable in .perfconfig
+$ make
+  CC      /data/users/andriin/linux/tools/lib/bpf/staticobjs/libbpf.o
+^C
+
+So, can you please check and fix?
+
+Also, looking at your patch:
+
+a) you removed the `"$(origin V)", "command line"` check from both
+perf and libbpf, so that's not really an equivalent change/behavior
+now
+
+b) a bit sloppy on assignment:
+
++ifeq ($(V),1)
++  quiet =3D
++  Q =3D
++else
++  quiet=3Dquiet_
++  Q=3D@
++endif
+
+note the spaces around '=3D', try to keep stuff like this consistent
+(and if this was shell, it would bite you as well)
+
+>
+> - Charlie
+>
 
