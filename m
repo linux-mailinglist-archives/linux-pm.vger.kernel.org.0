@@ -1,87 +1,79 @@
-Return-Path: <linux-pm+bounces-21444-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21445-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C1DEA2A025
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 06:28:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D94F5A2A0BD
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 07:13:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AC028163BB9
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 05:28:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C5E573A6D07
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Feb 2025 06:13:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60611223324;
-	Thu,  6 Feb 2025 05:27:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C5362248AC;
+	Thu,  6 Feb 2025 06:13:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="z218f1wG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Z3miBtWu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.15])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5EA022331F
-	for <linux-pm@vger.kernel.org>; Thu,  6 Feb 2025 05:27:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 255F722488B;
+	Thu,  6 Feb 2025 06:13:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738819679; cv=none; b=YT9SHW1w590kvcgdv6Jt1vCjsgY7D8p31UPXQvD9e8i+MyZww9+FaR5kYb7592+vjSCL9ujuGdR3QY2gxrnhga24myJY5exMTgf4VMIKJJxh89oW1/JzJX6o6f9GHRdIV7EHb06CsP59vO/JzSPn0bgFCw43oZGpw/9h4d77aJs=
+	t=1738822404; cv=none; b=MkVFO+VDjIpZidvS8q8bGyWAv8TofT0S3uE0gDxMOlzVIHFyUDmx5h3OLbBwgAUWs3c9vUz6SvYyS0ENdPi1xwSi+uYTUsB2BSEfs5E6fhwPmgJJCXcT6cLPsv/EplvCfz1hrjMCukbHMU+5LMb4Bkh3L5xEjSXQjCBYByyYBJM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738819679; c=relaxed/simple;
-	bh=UjMdMXdzfY8FA3OIjvPbpQ2pM3XdG3LmxQG3cALELwQ=;
+	s=arc-20240116; t=1738822404; c=relaxed/simple;
+	bh=G/uXESj2JGAsl3H6oUiYOmRWk8xQHzLvrNq4aQWgpTc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=H3Ws7f2HMOECH0u/hQaDFz+TSqQlPBGBOVhb8U6240QHDLPGrdtWFk8XemULLtpiE/ayEgEVqozU5hAmvN+IbeAdK5GdXb3hvP/yGWfiibwSJZILbWvpw+S+6KT5Fqk9PnjHdQ9HkeMJlEOI9n68puXSoE1vlAmtIhFmqZ9843I=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=z218f1wG; arc=none smtp.client-ip=209.85.214.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-21661be2c2dso10246895ad.1
-        for <linux-pm@vger.kernel.org>; Wed, 05 Feb 2025 21:27:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738819677; x=1739424477; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=N5TuaKcHCHKRHmy6UIoV5V210kvNYMZbMQRWf3DAlzE=;
-        b=z218f1wG/yYIELH4Evon3ardntw/HbbfDmkBaHBNfH78gchqYsDZu4vCA5vqJ5vUQU
-         KDGGPJn/L+31A67q2Dk2vHk/RRu9SoPfvokHLXWjclj+wv7EC0AZrrawXR/1VOuS9RT8
-         TwS2QrI/n2ISsnknDGvoordQbVVOCO6Y/WQic8oUzGe3TBbV6atrXRJQmGY8ALOC3aLQ
-         wAJElvpZLmmoX3WdmBX/qzj3C3Jm1u2yaYZxbEJdDC+nxsfc7XWpW/pHbRQCA5yEbGLk
-         MZVbigje0PDD3D9Z/p7ZCTDCO8L+yMMujgoM7lH1s3hp29DMWgQBJrgAULD94ewi48jQ
-         mprA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738819677; x=1739424477;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=N5TuaKcHCHKRHmy6UIoV5V210kvNYMZbMQRWf3DAlzE=;
-        b=dBecQcIuugPnUHRXaPHW8E8FEwgReo7sOFNaOm/gQPL0tryZ1mOHxS22Z6cuOKNseX
-         bZdPvgpSiWaFoqKnxXJETeoQj6A/+JXOcVjGOskrQIkwqKCJtdIMZlGSgHrzZMLb8kfF
-         +9dybpDfIgSVX2q7ldUzxEf0CHz2WA4IGvv3LibuHhCILqr+hei0MJMMMTkujQRxhBek
-         BXA/d+e39mxacqpjSMUzfLI/X2w23MT9F5j8/ddTPtvigcjoaP2HL0ShIBsJmYB69eBj
-         /Wqzj5btDbNt2qgDng/jTNzp/h2htqvJazxKGHvVD1YRhfKODCPo+OEhhR8bBYXacePk
-         vdNg==
-X-Forwarded-Encrypted: i=1; AJvYcCVMfv9D4FmMgR1v7NeY4PfHb42eapuw0if0bCSEshSdBJb2alaU3EGNsl87JYcYLJVs3IunQzYVbw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxW+FQy9xVvpj2jLe+fI7ijLtY4LsaHxH2VIVM0ostiAMb6LUut
-	HVTLCLuuQj4kW5pVNVetvg4E7pbXFjDbNTpWLNibYO5sz08bSr+FJX+Ru7/+xN8=
-X-Gm-Gg: ASbGncumnYu+TOZSpfJZEERura3JmWe7afMytp80+mLGnP3+EB9hd+Upl51NCtHD9jn
-	9PkePP1DnGRTkXz65xdxiMFq39+RCEJt9ZjAwfm08NB+SrAP5veAEDPkmcnCv0q9+nN7Fjx1ER3
-	AubfI50bSoGOEJaAaJTJPzI4I3ErVE8CoAxzSImF4OQH1jnai2oTwEukxguROGm8DEO3rjTbYS/
-	AKIdRKW3nsU5bE+J+fi8eEFK00M+EdDelkjv9PdHmUQtWfgjpFy+BIUN4RPPOI8siqZAos5SEFE
-	6Dvz03Ke2ZmhPuLffg==
-X-Google-Smtp-Source: AGHT+IHOn7iWRBNscDl6r4DQ+HQlP4sycPSn7NOLs7VrTo4POwB3zeP6AMKOQs+Jwf8U4Z2smBr7vQ==
-X-Received: by 2002:a17:902:da85:b0:216:1543:195d with SMTP id d9443c01a7336-21f17e46190mr100438965ad.25.1738819676962;
-        Wed, 05 Feb 2025 21:27:56 -0800 (PST)
-Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3689e280sm3312565ad.219.2025.02.05.21.27.55
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 05 Feb 2025 21:27:56 -0800 (PST)
-Date: Thu, 6 Feb 2025 10:57:54 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 06/15] cpufreq: cppc: Set policy->boost_supported
-Message-ID: <20250206052754.3p5axkd4tsz5knhe@vireshk-i7>
-References: <cover.1737707712.git.viresh.kumar@linaro.org>
- <c744751c8f61cae509959270176ebdef77326ba2.1737707712.git.viresh.kumar@linaro.org>
- <d7acce9e-fafc-4b1d-80f9-2ddc46b5a28d@huawei.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=p1F2yz5mHIl/VJHwZmW2v6NT6oyHS5qzKSXoLBAPyz6CL3XXgJoJzg7u7bR+Ra2UcpdL351VrM7nqPHwFXF6ZEOYHs0yOuzlNJPiKDbaWyHzHTCBuzFr8mlPQi5SJkJvX7su2ouBTDqIJZwWyegLefLbN9sBW592WcUAQTo6LoA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Z3miBtWu; arc=none smtp.client-ip=198.175.65.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738822401; x=1770358401;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=G/uXESj2JGAsl3H6oUiYOmRWk8xQHzLvrNq4aQWgpTc=;
+  b=Z3miBtWuGFUkNhVXT4H32dUp32y6rG0fzbDs14Ryrjd1mKWdaIub/n7h
+   b+HnqTo6VB0hTfjPYenv63iR5Ar3FI5nJv96dBRwgSIlSXXK9QSmMEkz/
+   2+QfmybDXh3WsyXOO0wrUpiu5k2/YQshazOwysuk/TSDNwIfcP0Om+oFj
+   zey13Sw/H5FpNfCx9B1yXvxDxf6QwGTXD3fcGDNGME4uoJtKOW6dG2o4J
+   +RnbtoVvTezqTjM3LqRQhu//ywRFpR0TAGNr63xXHVtNKy3EWPp/w5IRW
+   QazsDoqqGgOwxy1txKJzWP7fIUh0SK3YXB2/AdDoqZeO77nRLu8ZAY/xT
+   Q==;
+X-CSE-ConnectionGUID: luFTepNvQcKeeySPLn8scg==
+X-CSE-MsgGUID: XbELIW5WRuKxjWoXAJkZQA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11336"; a="43072687"
+X-IronPort-AV: E=Sophos;i="6.13,263,1732608000"; 
+   d="scan'208";a="43072687"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by orvoesa107.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 22:13:20 -0800
+X-CSE-ConnectionGUID: 73IRZEykTVCpRWvAzcgH3g==
+X-CSE-MsgGUID: dam6islsRUyXPtS40V2PVA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,263,1732608000"; 
+   d="scan'208";a="110897994"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by orviesa009.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Feb 2025 22:13:15 -0800
+Date: Thu, 6 Feb 2025 08:13:12 +0200
+From: Raag Jadav <raag.jadav@intel.com>
+To: kernel test robot <lkp@intel.com>, andriy.shevchenko@linux.intel.com
+Cc: gregkh@linuxfoundation.org, rafael@kernel.org, linus.walleij@linaro.org,
+	mika.westerberg@linux.intel.com, dmitry.torokhov@gmail.com,
+	lgirdwood@gmail.com, broonie@kernel.org, sre@kernel.org,
+	jic23@kernel.org, przemyslaw.kitszel@intel.com,
+	oe-kbuild-all@lists.linux.dev, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH v3 01/20] driver core: Split devres APIs to
+ device/devres.h
+Message-ID: <Z6RS-A2FFjYuPoyn@black.fi.intel.com>
+References: <20250203080902.1864382-2-raag.jadav@intel.com>
+ <202502060025.XJwUub6I-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,62 +82,45 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <d7acce9e-fafc-4b1d-80f9-2ddc46b5a28d@huawei.com>
+In-Reply-To: <202502060025.XJwUub6I-lkp@intel.com>
 
-On 06-02-25, 11:58, zhenglifeng (A) wrote:
-> On 2025/1/24 16:58, Viresh Kumar wrote:
-> > diff --git a/drivers/cpufreq/cppc_cpufreq.c b/drivers/cpufreq/cppc_cpufreq.c
-> > index 7fa89b601d2a..08117fb9c1eb 100644
-> > --- a/drivers/cpufreq/cppc_cpufreq.c
-> > +++ b/drivers/cpufreq/cppc_cpufreq.c
-> > @@ -34,8 +34,6 @@
-> >   */
-> >  static LIST_HEAD(cpu_data_list);
-> >  
-> > -static bool boost_supported;
-> > -
-> >  static struct cpufreq_driver cppc_cpufreq_driver;
-> >  
-> >  #ifdef CONFIG_ACPI_CPPC_CPUFREQ_FIE
-> > @@ -653,7 +651,7 @@ static int cppc_cpufreq_cpu_init(struct cpufreq_policy *policy)
-> >  	 * is supported.
-> >  	 */
-> >  	if (caps->highest_perf > caps->nominal_perf)
-> > -		boost_supported = true;
-> > +		policy->boost_supported = true;
-> >  
-> >  	/* Set policy->cur to max now. The governors will adjust later. */
-> >  	policy->cur = cppc_perf_to_khz(caps, caps->highest_perf);
-> > @@ -791,11 +789,6 @@ static int cppc_cpufreq_set_boost(struct cpufreq_policy *policy, int state)
-> >  	struct cppc_perf_caps *caps = &cpu_data->perf_caps;
-> >  	int ret;
-> >  
-> > -	if (!boost_supported) {
-> > -		pr_err("BOOST not supported by CPU or firmware\n");
-> > -		return -EINVAL;
-> > -	}
-> > -
-> >  	if (state)
-> >  		policy->max = cppc_perf_to_khz(caps, caps->highest_perf);
-> >  	else
+On Thu, Feb 06, 2025 at 12:27:03AM +0800, kernel test robot wrote:
+> Hi Raag,
 > 
-> I have a little question. With the old boost_supported flag as false, it
-> will fail when you operate the global boost flag. But if you replace it
-> with the per-policy boost_supported flag, the global boost_enabled flag can
-> be set to true without any error, even no policy's boost_enabled flag
-> changed. Is this interface behavior change OK?
+> kernel test robot noticed the following build warnings:
+> 
+> [auto build test WARNING on 2014c95afecee3e76ca4a56956a936e23283f05b]
+> 
+> url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/driver-core-Split-devres-APIs-to-device-devres-h/20250203-161554
+> base:   2014c95afecee3e76ca4a56956a936e23283f05b
+> patch link:    https://lore.kernel.org/r/20250203080902.1864382-2-raag.jadav%40intel.com
+> patch subject: [PATCH v3 01/20] driver core: Split devres APIs to device/devres.h
+> config: um-randconfig-r112-20250205 (https://download.01.org/0day-ci/archive/20250206/202502060025.XJwUub6I-lkp@intel.com/config)
+> compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 355d0b186f178668b103068537e517f3d52ad639)
+> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250206/202502060025.XJwUub6I-lkp@intel.com/reproduce)
+> 
+> If you fix the issue in a separate patch/commit (i.e. not just a new version of
+> the same patch/commit), kindly add following tags
+> | Reported-by: kernel test robot <lkp@intel.com>
+> | Closes: https://lore.kernel.org/oe-kbuild-all/202502060025.XJwUub6I-lkp@intel.com/
+> 
+> sparse warnings: (new ones prefixed by >>)
+>    drivers/net/pcs/pcs-xpcs-plat.c: note: in included file (through include/linux/device.h):
+> >> include/linux/device/devres.h:106:23: sparse: sparse: incorrect type in return expression (different address spaces) @@     expected void [noderef] __iomem * @@     got void * @@
+>    include/linux/device/devres.h:106:23: sparse:     expected void [noderef] __iomem *
+>    include/linux/device/devres.h:106:23: sparse:     got void *
+> 
+> vim +106 include/linux/device/devres.h
+> 
+>    102	
+>    103	static inline
+>    104	void __iomem *devm_ioremap_resource(struct device *dev, const struct resource *res)
+>    105	{
+>  > 106		return ERR_PTR(-EINVAL);
+>    107	}
+>    108	
 
-Right, so earlier even if a single policy didn't support boost, the code disabled
-boost for all of them. Or it was rather racy, as the last policy to be
-initialized will decide if boost will be supported or not. This is surely
-incorrect.
+Andy, are we expecting this?
 
-The global boost flag can be enabled disabled without worrying about any
-individual policy. If the policy supports boost, it will follow the global boost
-here, else it shouldn't take part in the change.
-
-So yes, the new interface does the right thing here.
-
--- 
-viresh
+Raag
 
