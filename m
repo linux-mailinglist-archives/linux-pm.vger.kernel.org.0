@@ -1,70 +1,67 @@
-Return-Path: <linux-pm+bounces-21532-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21533-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E48DA2C302
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 13:48:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0657EA2C300
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 13:48:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E593E7A623C
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 12:47:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 289DE169B14
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 12:48:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77FA51E5B6C;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D101E7C02;
 	Fri,  7 Feb 2025 12:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="BytzGPT3"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="I00Ncdq5"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD051DC99E;
-	Fri,  7 Feb 2025 12:48:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B241DFE04;
+	Fri,  7 Feb 2025 12:48:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738932491; cv=none; b=lhsBDRI8JFoY6Tg4SR0FAmUAzu4TFMN7tqE24LRE0mAISQU7lp7sm2Q6rg0kD8j4RP50d2/N6VfGO04OTIRpFEMnZsC5UGrSSf4SPTHS0P4f41eFYzF8dsnNQDKtU34r4teK/d1ST2md6aKU626ZyqKpiI2i94vHal2B7Df81Ls=
+	t=1738932491; cv=none; b=qj+XD+eXQQ8esDdGTaK71vL5hSBOKY/88t5D9LQ2ZJk3jjPx952mfmJAso65JPF/BdQ9K1aPfC+PCnUV2gE7ey99Nj+16rtg8HhaGoQI+zs3NmjkaHUOzm0ptnyuzXLEY5OltJLiOQtbozZXIDeJ1VjmXymTwHKjN7tlQfBtjMU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1738932491; c=relaxed/simple;
-	bh=Z7GlX4G3CLXl4PdntmkGapZgBz10huhVzZfNPwGxMJY=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dR9HmUdtU6WrndBEwJWzk623y4l2fw6GqaJcaTu+x5YpVYlLhDVp7PHmKmtFN/BVKHpJS/1dIjj8HccY3TaYgy/CfHF/IF6etyZZZ9hssKvwLN0W/tWFz0g57y5RhU5TKFNKnUAzJdmG1XVsKUkciarC22VyJxnEYeX7f3Hd978=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=BytzGPT3; arc=none smtp.client-ip=193.68.50.107
+	bh=hMjK0JKCLQkifVL6xcp5SP3Txd+JKmmgLvrhO1+qQ0Q=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=O99oxLEtNkMF8HZ8N/uenjjduGfyN3ISAk1IiKQdSwCt373DldSUOzouX0/YYMqsAhO4NAsv/clnoR8/ThZ/XVjVtrlEF0MsRbVWkvkTksX5gZ0SSrc+/UL9R+LWaXwFK4vOEY/X+7hpiFEowBYBmX+VrkVC8Az9Oso9S0s5g+w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=I00Ncdq5; arc=none smtp.client-ip=193.68.50.107
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
 Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 9D100A037B;
-	Fri,  7 Feb 2025 13:48:05 +0100 (CET)
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id BC947A0F18;
+	Fri,  7 Feb 2025 13:48:07 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
 	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:message-id:mime-version:reply-to:subject:subject:to
-	:to; s=mail; bh=BCu/ryqDczot25TDMnKcJhaUWntHdW2uO8lsXLpQ4VQ=; b=
-	BytzGPT360C98IhBFxeTx3NOwsyn+LLjSv0HyYRHltnx/CHg6fMAUgNUP0g/vhjs
-	HJxPAeodhFy0B9L8D+VPCYnu98rFe4cKHSX/pojtKyvogse4DqFFAbg51iZ2Jup5
-	uIxAv+GAjZemdhK5q5MI/MPNV7WbWu1fyaoPYgvY6svrrFaBp0nRadftitN00V5D
-	pzR5HEXN65zo1P+kvq0W5U7nf6H8KYekVzRcB8DAYKyDC0q9SdChzmib9RP2W9EF
-	Hjq/LD2nIqLG5a4Q0+oThW6llaY4XNGwZvFLuVeonmW/LKGf3ztbwQF86bU1w2ED
-	wmdGDqj9mMFWbvbAVzr77z75vqzYYAbFqPy9iAvdB+GCvSPsPU+wtvC6yGdtLwJI
-	y8BkaR6EFSwIqjbZSUsmqlDSH9EIyqGuWDOp6+jRRvddW/TY0Z/ncsWqzfX0Ckry
-	QSAQ7jIvcO96yTxLPoTddO2EAZcNQIKRvcCbUSYLvoKz/+2KphB+qP3TyvMh4fmT
-	26DbUX/oORlbm50fgAzvDeZ3Yd7CIqen5uEGq3CfegZacs6yVTjjLMfVScpOAcus
-	TE6BU59rVCQ1HTxjXJxUthHBY7RTKe92xlAAO6xfmM9Tqgb6iRBkXfljpFvsXwTM
-	8axDWRciHBAbucV/68S2oTKfum+ucJ5A8Nd7pygzZYk=
+	:from:from:in-reply-to:message-id:mime-version:references
+	:reply-to:subject:subject:to:to; s=mail; bh=ZlOzh0yVdNtO9Xo4eTT0
+	ptUq5hK7+DDJWK0WMdAATE0=; b=I00Ncdq5bnyZ1gHuVLtUxodELmGWlUAAugOl
+	uN9SmvWdbv0Q4SoB3hJSW9bYORBuA8QAgHufWHYI9C6ipvDS/GuVBmcsYO0iAsab
+	NRf1U90UF2PGmoQ/MK7DMKHnwnxwG8nn9/6iWk5WYewI0bRDr8ausZFKSiZ8kTmD
+	h88FI86uu5OERM852zon0qJXPk92jU2l0LVcvn6bPWeFlSSYZEfk4AbUINGpx2TM
+	I44OawH/zeB/PXCpfOO6pA3xeeU8LCd/qPQgJ1xBmLY2U9k0IPzhdTYA21OjxKXG
+	yr1swowVhzJlNY0wTqP1ousxgaLr7UaF0aMWzkR2WVw5QsoRU0AwofD+tvdrxK0x
+	6WqPQM0Svi3N/xERj2LwgMiNVQTLrIWJIj0tC7g8fjFBblSMO2mwds6Zcjmf2z9h
+	a/L2qG8VZUAhVjSplUOU0z/bVpawXxtYGgkcgJOmbeHNMSQ+UxAsG/NPrZ17zlqH
+	VqVucwESHt4BIkCWAITmAp3FMDQE8zoLyl7QRLfpk5ejpUYm2CQlUBB4/xvMceyU
+	tmfFjoKeaAA0LGJEVVeH4GantbXx5RFKpPjyLro+b28jYvJ7bclRv4UF+/Ta9wJR
+	TcJlOe9KbH89lc9ubv+XhvpJdGtD534HDLmw7ZXPmBsD0nIUEWsClW8LIB580qbu
+	a5ZTO4c=
 From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-To:
-CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
-	<broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>, "Rafael J . Wysocki"
-	<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
-	<pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Nicolas
- Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
-	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
-	Tudor Ambarus <tudor.ambarus@linaro.org>, Varshini Rajendran
-	<varshini.rajendran@microchip.com>, Alexander Dahl <ada@thorsis.com>,
-	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
-	<dmaengine@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>
-Subject: [PATCH for-6.14 v3 0/4] Add more devm_ functions to simplify probe path in drivers/spi/atmel-quadspi.c
-Date: Fri, 7 Feb 2025 13:47:55 +0100
-Message-ID: <20250207124802.165408-1-csokas.bence@prolan.hu>
+To: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, "Rafael J.
+ Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
+	<pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Danilo
+ Krummrich" <dakr@kernel.org>
+Subject: [PATCH for-6.14 v3 2/4] pm: runtime: Add new devm functions
+Date: Fri, 7 Feb 2025 13:47:57 +0100
+Message-ID: <20250207124802.165408-3-csokas.bence@prolan.hu>
 X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250207124802.165408-1-csokas.bence@prolan.hu>
+References: <20250207124802.165408-1-csokas.bence@prolan.hu>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -73,46 +70,99 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1738932485;VERSION=7985;MC=412144077;ID=401531;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1738932487;VERSION=7985;MC=164966442;ID=401534;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
 X-ESET-Antispam: OK
 X-EsetResult: clean, is OK
 X-EsetId: 37303A29ACD94852617560
 
-The probe function of the atmel-quadspi driver got quite convoluted,
-especially since the addition of SAMA7G5 support, that was forward-ported
-from an older vendor kernel. To alleivate this - and similar problems in
-the future - an effort was made to migrate as many functions as possible,
-to their devm_ managed counterparts. The few functions, which did not yet
-have a devm_ variant, are added in patch 1 and 2 of this series. Patch 3
-and 4 then use these APIs to simplify and fix the probe() function.
+Add `devm_pm_runtime_set_active()` and
+`devm_pm_runtime_get_noresume()` for
+simplifying common use cases in drivers.
 
-Patch 4 in particular, fixes a bug present in 6.14-rc1, where the PM get()
-and put() calls were imbalanced.
+Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+---
+ drivers/base/power/runtime.c | 36 ++++++++++++++++++++++++++++++++++++
+ include/linux/pm_runtime.h   |  4 ++++
+ 2 files changed, 40 insertions(+)
 
-Links to previous versions:
-pre-series:
-https://lore.kernel.org/linux-kernel/20241222141427.819222-1-csokas.bence@prolan.hu/
-https://lore.kernel.org/linux-kernel/20250114222851.1023194-1-csokas.bence@prolan.hu/
-v1:
-https://lore.kernel.org/linux-kernel/20250115160244.1102881-1-csokas.bence@prolan.hu/
-v2:
-https://lore.kernel.org/linux-kernel/20250124085221.766303-8-csokas.bence@prolan.hu/
-
-Bence Csókás (4):
-  dma: Add devm_dma_request_chan()
-  pm: runtime: Add new devm functions
-  spi: atmel-quadspi: Use `devm_dma_request_chan()`
-  spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
-
- drivers/base/power/runtime.c | 36 +++++++++++++++++++++
- drivers/dma/dmaengine.c      | 30 +++++++++++++++++
- drivers/spi/atmel-quadspi.c  | 62 ++++++++++--------------------------
- include/linux/dmaengine.h    |  7 ++++
- include/linux/pm_runtime.h   |  4 +++
- 5 files changed, 93 insertions(+), 46 deletions(-)
-
-
-base-commit: bb066fe812d6fb3a9d01c073d9f1e2fd5a63403b
+diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+index 2ee45841486b..f0a6c64bec19 100644
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1545,6 +1545,24 @@ void pm_runtime_enable(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(pm_runtime_enable);
+ 
++static void pm_runtime_set_suspended_action(void *data)
++{
++	pm_runtime_set_suspended(data);
++}
++
++/**
++ * devm_pm_runtime_set_active - devres-enabled version of pm_runtime_set_active.
++ *
++ * @dev: Device to handle.
++ */
++int devm_pm_runtime_set_active(struct device *dev)
++{
++	pm_runtime_set_active(dev);
++
++	return devm_add_action_or_reset(dev, pm_runtime_set_suspended_action, dev);
++}
++EXPORT_SYMBOL_GPL(devm_pm_runtime_set_active);
++
+ static void pm_runtime_disable_action(void *data)
+ {
+ 	pm_runtime_dont_use_autosuspend(data);
+@@ -1567,6 +1585,24 @@ int devm_pm_runtime_enable(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
+ 
++static void pm_runtime_put_noidle_action(void *data)
++{
++	pm_runtime_put_noidle(data);
++}
++
++/**
++ * devm_pm_runtime_get_noresume - devres-enabled version of pm_runtime_get_noresume.
++ *
++ * @dev: Device to handle.
++ */
++int devm_pm_runtime_get_noresume(struct device *dev)
++{
++	pm_runtime_get_noresume(dev);
++
++	return devm_add_action_or_reset(dev, pm_runtime_put_noidle_action, dev);
++}
++EXPORT_SYMBOL_GPL(devm_pm_runtime_get_noresume);
++
+ /**
+  * pm_runtime_forbid - Block runtime PM of a device.
+  * @dev: Device to handle.
+diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+index d39dc863f612..d7eca86150b8 100644
+--- a/include/linux/pm_runtime.h
++++ b/include/linux/pm_runtime.h
+@@ -93,7 +93,9 @@ extern void pm_runtime_new_link(struct device *dev);
+ extern void pm_runtime_drop_link(struct device_link *link);
+ extern void pm_runtime_release_supplier(struct device_link *link);
+ 
++int devm_pm_runtime_set_active(struct device *dev);
+ extern int devm_pm_runtime_enable(struct device *dev);
++int devm_pm_runtime_get_noresume(struct device *dev);
+ 
+ /**
+  * pm_suspend_ignore_children - Set runtime PM behavior regarding children.
+@@ -276,7 +278,9 @@ static inline void __pm_runtime_disable(struct device *dev, bool c) {}
+ static inline void pm_runtime_allow(struct device *dev) {}
+ static inline void pm_runtime_forbid(struct device *dev) {}
+ 
++static inline int devm_pm_runtime_set_active(struct device *dev) { return 0; }
+ static inline int devm_pm_runtime_enable(struct device *dev) { return 0; }
++static inline int devm_pm_runtime_get_noresume(struct device *dev) { return 0; }
+ 
+ static inline void pm_suspend_ignore_children(struct device *dev, bool enable) {}
+ static inline void pm_runtime_get_noresume(struct device *dev) {}
 -- 
 2.48.1
 
