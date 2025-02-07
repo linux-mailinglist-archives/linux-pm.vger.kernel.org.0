@@ -1,225 +1,121 @@
-Return-Path: <linux-pm+bounces-21540-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21541-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 035ACA2C5B3
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 15:39:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1F3FBA2C5CB
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 15:45:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 861AE166A10
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 14:39:27 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B619E169AF0
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 14:45:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 36B7823ED74;
-	Fri,  7 Feb 2025 14:39:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB0381F8AE5;
+	Fri,  7 Feb 2025 14:45:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="GZDiHM6K"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TyZzT7ie"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 515742206A0;
-	Fri,  7 Feb 2025 14:39:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887861DED42;
+	Fri,  7 Feb 2025 14:45:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738939164; cv=none; b=mSQErec7TXgus0iC7lvPdID4Q6+ZrSbBGJw84EqxcdaaKOQQv5TDfGQnRhHmzfeXDixMcSukZRwOsl5Iyx14/EVEbfd0X9k6xHB6RXKgWne18BBjBfd0xnx87TJjWdxPDt1hVs/9QHQsSRU93kHBMI+78gBYaGmCDXEbEYbPwLQ=
+	t=1738939524; cv=none; b=Z7J/iaRBP/GAxKHXIJ8rayddHcVeX7d/zAMVNkCKI6UBcPgCNnDKVCwFWc6kClPqHQmZytwhkcsLB82bb1sdB7Ab82TQnMFz0c1C7j+UQXfnFCgQ8c79nAKxrCAoMhOJnE29wkUwsKVIHXySdZSYbXM7TKSruwofMAa4FeaSKIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738939164; c=relaxed/simple;
-	bh=WX2weuHovWSP5rerh3+sJhzBIsvChXP6sCz8+E0z/D8=;
-	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
-	 MIME-Version:Content-Type; b=qsVsn4H0OmIusqa0EGmE/U497rajI26p9C/IOGyQQgx9cNTSh6XgVAc/eNN443z3itsn+pXevZsl5MZ3ccINDd4CnvjONqhNmsNmcRhwgmA9NtouWpm0pbXLTHjegZX9Fnc9N7VZt8C+ki+RIonVWBZKw1nTAiOs1Wl47b4dtuw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=GZDiHM6K; arc=none smtp.client-ip=192.198.163.11
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1738939162; x=1770475162;
-  h=from:date:to:cc:subject:in-reply-to:message-id:
-   references:mime-version;
-  bh=WX2weuHovWSP5rerh3+sJhzBIsvChXP6sCz8+E0z/D8=;
-  b=GZDiHM6K1wInYU/9m/xbcxk+02jvYlHBEyju9oQ8nsbvFg/XAshN7yVB
-   W06JJ43Yws+jqbA1vkkObxNyOSi6zayre9RUkoT4uxiLXVDvZOxDR5Bj1
-   H4JBlQxW5kkulbUcjCGuD8/NeaZ7hDiNga0jaP/G7kbHr7cf2mARqy+Z9
-   /X8XmVGr2ciA1JGIkyOTcc4eUq65ClTuEO1ZkijamPWZ93gYpLWaFlLkP
-   JpyFopzzdmUqpJ4G6+kX0UQ4X1ytWpYyo85HuMSkn45sRQYhtTKY/yNC6
-   mkWzuprhNDHGLeBGyO1nC/xuTFe81+u/ItrDZCl98Si2nXHwYvgtIkC6V
-   w==;
-X-CSE-ConnectionGUID: vMa0zDw7RrqSp/tJPQB1RQ==
-X-CSE-MsgGUID: 86Xb5EYeRJe5XEkgYJ2APA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="50200995"
-X-IronPort-AV: E=Sophos;i="6.13,267,1732608000"; 
-   d="scan'208";a="50200995"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 06:39:22 -0800
-X-CSE-ConnectionGUID: lPNAxEStQIyGEJ3GrS7vBA==
-X-CSE-MsgGUID: RLyj55TBR6y4JLkdfOWPuQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,267,1732608000"; 
-   d="scan'208";a="112052091"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.116])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 06:39:19 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Date: Fri, 7 Feb 2025 16:39:15 +0200 (EET)
-To: Xi Pardee <xi.pardee@linux.intel.com>
-cc: rajvi0912@gmail.com, irenic.rajneesh@gmail.com, 
-    david.e.box@linux.intel.com, Hans de Goede <hdegoede@redhat.com>, 
-    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
-    linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 5/5] platform/x86/intel/pmc: Add Arrow Lake U/H support
- to intel_pmc_core driver
-In-Reply-To: <20250205001601.689782-6-xi.pardee@linux.intel.com>
-Message-ID: <49869a94-ef6d-7f77-298e-493c25ae0679@linux.intel.com>
-References: <20250205001601.689782-1-xi.pardee@linux.intel.com> <20250205001601.689782-6-xi.pardee@linux.intel.com>
+	s=arc-20240116; t=1738939524; c=relaxed/simple;
+	bh=5DOXsTBCLWDukYgXDGE7HUsUDmPI33tceJtDhzkYxaM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=bI5qljOUP83w/DUNmSWpsmbZT8X1aRvmzYEVRFNnJVbU084fPygrlyhQKI3ihvJ0QDVUg6GmCz5RGLS74IdRXaoLom0RS0ZiAILJHiaGTP/ADpa9lFYHg3CtZvRNBr9gyUcuglmcU4WqmkkVclBp/zE+o188TCc723tsteAK3ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TyZzT7ie; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE8BC4CED1;
+	Fri,  7 Feb 2025 14:45:23 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1738939524;
+	bh=5DOXsTBCLWDukYgXDGE7HUsUDmPI33tceJtDhzkYxaM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=TyZzT7iez1xN+DTFavfHdH1dfXEpqOsmB/Gk5ZpxqfU5k3kQIzhTXOQXdYSAqrWuw
+	 9sEo23k5ZSjUkyhf6srq7WSDcAWRzR2bSpOzcmy1UzwNI8NSM4FI/reI8+DruZZApy
+	 ayHVjGBIjHHHMR4e2w3MNdt890O+3vY5zjYbBirNu7lOxAe9veMmkEalf8eBKDoOwT
+	 6AL/ApI4B4anv5Xnf+tky5Zoubv+i9I10bUN+XvFDwoXyd19Xm2ghHA0ZfZIhnvdka
+	 d1HSmRWs7SBsMXQXlS3r5GWHEe1L/NkKvKA3ndJF1fWJqzO924DwQZVtma/NF+rLnG
+	 dN39uY/uwuwDg==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tgPbo-0000000076Y-0mEN;
+	Fri, 07 Feb 2025 15:45:32 +0100
+Date: Fri, 7 Feb 2025 15:45:32 +0100
+From: Johan Hovold <johan@kernel.org>
+To: Jon Hunter <jonathanh@nvidia.com>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Linux PCI <linux-pci@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Kevin Xie <kevin.xie@starfivetech.com>,
+	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
+ parents and children
+Message-ID: <Z6YcjFBWAVVVANf2@hovoldconsulting.com>
+References: <12619233.O9o76ZdvQC@rjwysocki.net>
+ <1c2433d4-7e0f-4395-b841-b8eac7c25651@nvidia.com>
+ <Z6YPpbRF_U0TxAbf@hovoldconsulting.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z6YPpbRF_U0TxAbf@hovoldconsulting.com>
 
-On Tue, 4 Feb 2025, Xi Pardee wrote:
+On Fri, Feb 07, 2025 at 02:50:29PM +0100, Johan Hovold wrote:
 
-> Add Arrow Lake U and Arrow Lake H support in intel_pmc_core driver.
+> Yeah, I hit something like this yesterday as well and did confirm that
+> reverting this commit makes the problem go away. Haven't had time to dig
+> much further.
 > 
-> Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
-> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
-> ---
->  drivers/platform/x86/intel/pmc/arl.c  | 37 +++++++++++++++++++++++++++
->  drivers/platform/x86/intel/pmc/core.c |  2 ++
->  drivers/platform/x86/intel/pmc/core.h |  2 ++
->  3 files changed, 41 insertions(+)
-> 
-> diff --git a/drivers/platform/x86/intel/pmc/arl.c b/drivers/platform/x86/intel/pmc/arl.c
-> index 2e604f934f068..f62763865207b 100644
-> --- a/drivers/platform/x86/intel/pmc/arl.c
-> +++ b/drivers/platform/x86/intel/pmc/arl.c
-> @@ -16,6 +16,7 @@
->  #define IOEP_LPM_REQ_GUID	0x5077612
->  #define SOCS_LPM_REQ_GUID	0x8478657
->  #define PCHS_LPM_REQ_GUID	0x9684572
-> +#define SOCM_LPM_REQ_GUID	0x2625030
->  
->  static const u8 ARL_LPM_REG_INDEX[] = {0, 4, 5, 6, 8, 9, 10, 11, 12, 13, 14, 15, 16, 20};
->  
-> @@ -650,6 +651,7 @@ const struct pmc_reg_map arl_pchs_reg_map = {
->  	.etr3_offset = ETR3_OFFSET,
->  };
->  
-> +#define PMC_DEVID_SOCM 0x777f
->  #define PMC_DEVID_SOCS 0xae7f
->  #define PMC_DEVID_IOEP 0x7ecf
->  #define PMC_DEVID_PCHS 0x7f27
-> @@ -669,11 +671,17 @@ static struct pmc_info arl_pmc_info_list[] = {
->  		.devid	= PMC_DEVID_PCHS,
->  		.map	= &arl_pchs_reg_map,
->  	},
-> +	{
-> +		.guid	= SOCM_LPM_REQ_GUID,
-> +		.devid	= PMC_DEVID_SOCM,
-> +		.map	= &mtl_socm_reg_map,
-> +	},
->  	{}
->  };
->  
->  #define ARL_NPU_PCI_DEV			0xad1d
->  #define ARL_GNA_PCI_DEV			0xae4c
-> +#define ARL_H_GNA_PCI_DEV		0x774c
->  /*
->   * Set power state of select devices that do not have drivers to D3
->   * so that they do not block Package C entry.
-> @@ -684,6 +692,12 @@ static void arl_d3_fixup(void)
->  	pmc_core_set_device_d3(ARL_GNA_PCI_DEV);
->  }
->  
-> +static void arl_h_d3_fixup(void)
-> +{
-> +	pmc_core_set_device_d3(ARL_NPU_PCI_DEV);
-> +	pmc_core_set_device_d3(ARL_H_GNA_PCI_DEV);
-> +}
-> +
->  static int arl_resume(struct pmc_dev *pmcdev)
->  {
->  	arl_d3_fixup();
-> @@ -691,6 +705,13 @@ static int arl_resume(struct pmc_dev *pmcdev)
->  	return cnl_resume(pmcdev);
->  }
->  
-> +static int arl_h_resume(struct pmc_dev *pmcdev)
-> +{
-> +	arl_h_d3_fixup();
-> +
-> +	return cnl_resume(pmcdev);
-> +}
-> +
->  struct pmc_dev_info arl_pmc_dev = {
->  	.pci_func = 0,
->  	.dmu_guid = ARL_PMT_DMU_GUID,
-> @@ -701,8 +722,24 @@ struct pmc_dev_info arl_pmc_dev = {
->  	.init = arl_core_init,
->  };
->  
-> +struct pmc_dev_info arl_h_pmc_dev = {
-> +	.pci_func = 2,
-> +	.dmu_guid = ARL_PMT_DMU_GUID,
-> +	.regmap_list = arl_pmc_info_list,
-> +	.map = &mtl_socm_reg_map,
-> +	.suspend = cnl_suspend,
-> +	.resume = arl_h_resume,
-> +	.init = arl_h_core_init,
-> +};
+> [  110.522368] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
 
-This struct should come after the init function so you don't need to 
-forward declare the init function and can make the init function a static 
-one (as with the other cases in patch 4).
+> [  110.855238] Call trace:
+> [  110.857861]  simple_pm_bus_runtime_suspend+0x14/0x48 (P)
+> [  110.863425]  pm_generic_runtime_suspend+0x2c/0x44
+> [  110.868362]  pm_runtime_force_suspend+0x54/0x100
+> [  110.873217]  dpm_run_callback+0xb4/0x228
+> [  110.877347]  device_suspend_noirq+0x70/0x2a8
+> [  110.881844]  dpm_noirq_suspend_devices+0xe0/0x230
+> [  110.886778]  dpm_suspend_noirq+0x24/0x98
+> [  110.890904]  suspend_devices_and_enter+0x368/0x678
+> [  110.895941]  pm_suspend+0x1b4/0x348
+> [  110.899627]  state_store+0x8c/0xfc
+> [  110.903228]  kobj_attr_store+0x18/0x2c
+> [  110.907195]  sysfs_kf_write+0x4c/0x78
+> [  110.911074]  kernfs_fop_write_iter+0x120/0x1b4
+> [  110.915735]  vfs_write+0x2ac/0x358
+> [  110.919352]  ksys_write+0x68/0xfc
+> [  110.922873]  __arm64_sys_write+0x1c/0x28
+> [  110.927002]  invoke_syscall+0x48/0x110
+> [  110.930969]  el0_svc_common.constprop.0+0x40/0xe0
+> [  110.935907]  do_el0_svc+0x1c/0x28
+> [  110.939427]  el0_svc+0x48/0x114
+> [  110.942769]  el0t_64_sync_handler+0xc8/0xcc
+> [  110.947180]  el0t_64_sync+0x198/0x19c
+> [  110.951059] Code: a9be7bfd 910003fd a90153f3 f9403c00 (f9400014)
+> [  110.957428] ---[ end trace 0000000000000000 ]---
 
-> +
->  int arl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
->  {
->  	arl_d3_fixup();
->  	return generic_core_init(pmcdev, pmc_dev_info);
->  }
-> +
-> +int arl_h_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
-> +{
-> +	arl_h_d3_fixup();
-> +	return generic_core_init(pmcdev, pmc_dev_info);
-> +}
-> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
-> index 628cb22221fbc..d819478fea29a 100644
-> --- a/drivers/platform/x86/intel/pmc/core.c
-> +++ b/drivers/platform/x86/intel/pmc/core.c
-> @@ -1410,6 +1410,8 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
->  	X86_MATCH_VFM(INTEL_RAPTORLAKE_S,	&adl_pmc_dev),
->  	X86_MATCH_VFM(INTEL_METEORLAKE_L,	&mtl_pmc_dev),
->  	X86_MATCH_VFM(INTEL_ARROWLAKE,		&arl_pmc_dev),
-> +	X86_MATCH_VFM(INTEL_ARROWLAKE_H,	&arl_h_pmc_dev),
-> +	X86_MATCH_VFM(INTEL_ARROWLAKE_U,	&arl_h_pmc_dev),
->  	X86_MATCH_VFM(INTEL_LUNARLAKE_M,	&lnl_pmc_dev),
->  	{}
->  };
-> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
-> index 94039930422b3..0f0ee97ee00a8 100644
-> --- a/drivers/platform/x86/intel/pmc/core.h
-> +++ b/drivers/platform/x86/intel/pmc/core.h
-> @@ -624,9 +624,11 @@ extern struct pmc_dev_info tgl_pmc_dev;
->  extern struct pmc_dev_info adl_pmc_dev;
->  extern struct pmc_dev_info mtl_pmc_dev;
->  extern struct pmc_dev_info arl_pmc_dev;
-> +extern struct pmc_dev_info arl_h_pmc_dev;
->  extern struct pmc_dev_info lnl_pmc_dev;
->  
->  int arl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
-> +int arl_h_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
+Ok, so the driver data is never set and runtime PM is never enabled for
+this simple bus device, which uses pm_runtime_force_suspend() for system
+sleep.
 
-Not needed.
+This used to work as the runtime PM state was left at 'suspended', which
+makes pm_runtime_force_suspend() return early, but now we can end up
+with a call to the driver runtime PM ops that dereference the NULL
+driver data.
 
->  int mtl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
->  int lnl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
->  int tgl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
-> 
-
--- 
- i.
-
+Johan
 
