@@ -1,121 +1,114 @@
-Return-Path: <linux-pm+bounces-21541-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21542-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F3FBA2C5CB
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 15:45:29 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 52407A2C632
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 15:52:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B619E169AF0
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 14:45:27 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id A21377A49CC
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 14:50:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB0381F8AE5;
-	Fri,  7 Feb 2025 14:45:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2E1A223F277;
+	Fri,  7 Feb 2025 14:48:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TyZzT7ie"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UaI62Dec"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887861DED42;
-	Fri,  7 Feb 2025 14:45:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 97D02238D56;
+	Fri,  7 Feb 2025 14:48:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738939524; cv=none; b=Z7J/iaRBP/GAxKHXIJ8rayddHcVeX7d/zAMVNkCKI6UBcPgCNnDKVCwFWc6kClPqHQmZytwhkcsLB82bb1sdB7Ab82TQnMFz0c1C7j+UQXfnFCgQ8c79nAKxrCAoMhOJnE29wkUwsKVIHXySdZSYbXM7TKSruwofMAa4FeaSKIA=
+	t=1738939723; cv=none; b=ttp7uhJoGH+shfo3HxXqddmU9rGpcZtvHfz5mA1Y/Wzq1UbSGhm1nzPIesiAKf7319kPX/iy5V0CKZRIN44CmKQ8t92dPoZ2GkJBo6jbQ51omv3WL5k6VZckJ8+Cqg/fpOzB0uTbknBgDnbut1s8pHBad2GeVx2hhZLINWhfDxQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738939524; c=relaxed/simple;
-	bh=5DOXsTBCLWDukYgXDGE7HUsUDmPI33tceJtDhzkYxaM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=bI5qljOUP83w/DUNmSWpsmbZT8X1aRvmzYEVRFNnJVbU084fPygrlyhQKI3ihvJ0QDVUg6GmCz5RGLS74IdRXaoLom0RS0ZiAILJHiaGTP/ADpa9lFYHg3CtZvRNBr9gyUcuglmcU4WqmkkVclBp/zE+o188TCc723tsteAK3ms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TyZzT7ie; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EAE8BC4CED1;
-	Fri,  7 Feb 2025 14:45:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738939524;
-	bh=5DOXsTBCLWDukYgXDGE7HUsUDmPI33tceJtDhzkYxaM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TyZzT7iez1xN+DTFavfHdH1dfXEpqOsmB/Gk5ZpxqfU5k3kQIzhTXOQXdYSAqrWuw
-	 9sEo23k5ZSjUkyhf6srq7WSDcAWRzR2bSpOzcmy1UzwNI8NSM4FI/reI8+DruZZApy
-	 ayHVjGBIjHHHMR4e2w3MNdt890O+3vY5zjYbBirNu7lOxAe9veMmkEalf8eBKDoOwT
-	 6AL/ApI4B4anv5Xnf+tky5Zoubv+i9I10bUN+XvFDwoXyd19Xm2ghHA0ZfZIhnvdka
-	 d1HSmRWs7SBsMXQXlS3r5GWHEe1L/NkKvKA3ndJF1fWJqzO924DwQZVtma/NF+rLnG
-	 dN39uY/uwuwDg==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tgPbo-0000000076Y-0mEN;
-	Fri, 07 Feb 2025 15:45:32 +0100
-Date: Fri, 7 Feb 2025 15:45:32 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Jon Hunter <jonathanh@nvidia.com>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Linux PCI <linux-pci@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Kevin Xie <kevin.xie@starfivetech.com>,
-	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
- parents and children
-Message-ID: <Z6YcjFBWAVVVANf2@hovoldconsulting.com>
-References: <12619233.O9o76ZdvQC@rjwysocki.net>
- <1c2433d4-7e0f-4395-b841-b8eac7c25651@nvidia.com>
- <Z6YPpbRF_U0TxAbf@hovoldconsulting.com>
+	s=arc-20240116; t=1738939723; c=relaxed/simple;
+	bh=5XIlGZsiLQw2hQ6a1oSKBh7M9NzM4ngrTEXTXgaUFr0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=mINKGWPh/VZPcg6QE0qHBdn/WagQNh3u5hH3O2qbCQsI8TJcwXMbwI/z6SpTvIxDbpQNm/RSuILYOKDRLvJY6TmqwrCWkHzPkYX8nNTY14k2Egdiuh97Tx2FOUzHYwKyeYzpR8lo6z8PEeE9EdW3EewXHOhSNpEKE4IQTh+pu8M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UaI62Dec; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738939722; x=1770475722;
+  h=message-id:subject:from:to:cc:date:in-reply-to:
+   references:content-transfer-encoding:mime-version;
+  bh=5XIlGZsiLQw2hQ6a1oSKBh7M9NzM4ngrTEXTXgaUFr0=;
+  b=UaI62DecYncQ9pUWSqS9fWd9WXQjMj4yax8lx1MBOzLkp8RMG7MKOt5O
+   2pQG2HQX0UAus4xBpzX3/Mb4B+HKYx2VcPiA3GcubXQVHHfTglrpQmZnx
+   zWQfRzPaekFRSfN595rb9P+un5vlm/1bxy5b6MEcryiZ/o/vhkyL0no3n
+   guffdbB8E7r9x8Qawvu2mfB0ojKMrK4lj8YcF+HCSfrFTP/W3M9aOSjow
+   DArOSjFBvoqp9OcyhT4odd6iFXsruncMMklkpV1UPq//NBflV56rCXYSJ
+   ENMvz+si3OwPGj2J7UrKDoB8anD0zFEhlFvJXQK0M3f4HCAY6MJUsUNkl
+   Q==;
+X-CSE-ConnectionGUID: WgKSAi6CRwW5Cn822uCI4w==
+X-CSE-MsgGUID: CtYN7sAPQmyfHitXNazW7w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="39274297"
+X-IronPort-AV: E=Sophos;i="6.13,267,1732608000"; 
+   d="scan'208";a="39274297"
+Received: from fmviesa001.fm.intel.com ([10.60.135.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 06:48:41 -0800
+X-CSE-ConnectionGUID: 7Z+7UNi+QQe9rL9NzE4/cg==
+X-CSE-MsgGUID: DflmxkABT/WG7ezG8AN8Ww==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="142415230"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmviesa001.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 06:48:41 -0800
+Received: from abityuts-desk1.ger.corp.intel.com (abityuts-desk1.fi.intel.com [10.237.68.150])
+	by linux.intel.com (Postfix) with ESMTP id BB49D20B5713;
+	Fri,  7 Feb 2025 06:48:38 -0800 (PST)
+Message-ID: <4917ca35e5e0c7035f09c02d5080a69ed3e88c44.camel@linux.intel.com>
+Subject: Re: [RFT][PATCH v1 0/5] cpuidle: menu: Avoid discarding useful
+ information when processing recent idle intervals
+From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM
+ <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano
+	 <daniel.lezcano@linaro.org>, Christian Loehle <christian.loehle@arm.com>, 
+ Aboorva Devarajan <aboorvad@linux.ibm.com>
+Date: Fri, 07 Feb 2025 16:48:37 +0200
+In-Reply-To: <1916668.tdWV9SEqCh@rjwysocki.net>
+References: <1916668.tdWV9SEqCh@rjwysocki.net>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z6YPpbRF_U0TxAbf@hovoldconsulting.com>
 
-On Fri, Feb 07, 2025 at 02:50:29PM +0100, Johan Hovold wrote:
+Hi,
 
-> Yeah, I hit something like this yesterday as well and did confirm that
-> reverting this commit makes the problem go away. Haven't had time to dig
-> much further.
-> 
-> [  110.522368] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+thanks for the patches!
 
-> [  110.855238] Call trace:
-> [  110.857861]  simple_pm_bus_runtime_suspend+0x14/0x48 (P)
-> [  110.863425]  pm_generic_runtime_suspend+0x2c/0x44
-> [  110.868362]  pm_runtime_force_suspend+0x54/0x100
-> [  110.873217]  dpm_run_callback+0xb4/0x228
-> [  110.877347]  device_suspend_noirq+0x70/0x2a8
-> [  110.881844]  dpm_noirq_suspend_devices+0xe0/0x230
-> [  110.886778]  dpm_suspend_noirq+0x24/0x98
-> [  110.890904]  suspend_devices_and_enter+0x368/0x678
-> [  110.895941]  pm_suspend+0x1b4/0x348
-> [  110.899627]  state_store+0x8c/0xfc
-> [  110.903228]  kobj_attr_store+0x18/0x2c
-> [  110.907195]  sysfs_kf_write+0x4c/0x78
-> [  110.911074]  kernfs_fop_write_iter+0x120/0x1b4
-> [  110.915735]  vfs_write+0x2ac/0x358
-> [  110.919352]  ksys_write+0x68/0xfc
-> [  110.922873]  __arm64_sys_write+0x1c/0x28
-> [  110.927002]  invoke_syscall+0x48/0x110
-> [  110.930969]  el0_svc_common.constprop.0+0x40/0xe0
-> [  110.935907]  do_el0_svc+0x1c/0x28
-> [  110.939427]  el0_svc+0x48/0x114
-> [  110.942769]  el0t_64_sync_handler+0xc8/0xcc
-> [  110.947180]  el0t_64_sync+0x198/0x19c
-> [  110.951059] Code: a9be7bfd 910003fd a90153f3 f9403c00 (f9400014)
-> [  110.957428] ---[ end trace 0000000000000000 ]---
+On Thu, 2025-02-06 at 15:21 +0100, Rafael J. Wysocki wrote:
+> Hi Everyone,
+>=20
+> This work had been triggered by a report that commit 0611a640e60a ("event=
+poll:
+> prefer kfree_rcu() in __ep_remove()") had caused the critical-jOPS metric=
+ of
+> the SPECjbb 2015 benchmark [1] to drop by around 50% even though it gener=
+ally
+> reduced kernel overhead.=C2=A0 Indeed, it was found during further invest=
+igation
+> that the total interrupt rate while running the SPECjbb workload had fall=
+en as
+> a result of that commit by 55% and the local timer interrupt rate had fal=
+len
+> by
+> almost 80%.
 
-Ok, so the driver data is never set and runtime PM is never enabled for
-this simple bus device, which uses pm_runtime_force_suspend() for system
-sleep.
+I ran SPECjbb2015 with and it doubles critical-jOPS and basically makes it
+"normal" again. Thanks!
 
-This used to work as the runtime PM state was left at 'suspended', which
-makes pm_runtime_force_suspend() return early, but now we can end up
-with a call to the driver runtime PM ops that dereference the NULL
-driver data.
+Reported-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-Johan
 
