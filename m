@@ -1,88 +1,128 @@
-Return-Path: <linux-pm+bounces-21521-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21522-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7D6CFA2B9F9
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 05:00:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3945A2BA15
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 05:17:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E3340162D3E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 04:00:02 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D5BE3A3FA2
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 04:16:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 377051DE2CC;
-	Fri,  7 Feb 2025 04:00:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D906C1DE2AE;
+	Fri,  7 Feb 2025 04:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xA6j1h3H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga08-in.huawei.com (szxga08-in.huawei.com [45.249.212.255])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A59EC15445D;
-	Fri,  7 Feb 2025 03:59:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.255
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CBBC2417CA
+	for <linux-pm@vger.kernel.org>; Fri,  7 Feb 2025 04:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738900800; cv=none; b=oltgsjl/1mSQ7d4qH3afXM232ZNMyXO34DJ3KiiLE4Hv42tDuDZOQQcoMHxwYi+VgGu/1qHIqyAziJZsAAW2GZyDRtJrvdnk7H7whC90JSL5yKnLJzAyboGMiCpI11V/sh8qsRriNc+XvaU6L87Qjrv3GzadIFpz0xbNaoj2c4c=
+	t=1738901819; cv=none; b=E+i7DYOG/lo21wf2fzpNAQa5Mz2qe31XR09No+TAwtoCWPa1ilOEuDhaqyJ9ON10ydyBMEzQtKfAaFneh8+clm3TuTmG2jzCeGSc5I0LeEhgykj0C90aI8O2FsRCoyJWuJCzCc3y2mulXjOx5taHwk0jb11iHUAcrXQw74b5Il0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738900800; c=relaxed/simple;
-	bh=xfEJh4u+WX9uN/15nbOGQboQ20mTsV2Z+FQUCm7exow=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=JkMusSj2qOJdvaAeChvyu3oid/qunZkMbEhflZ6TJ82S7fxC6CPHJHY8UqhwhP6+0iAXDjX/beW6buU+g3X2VAvHOofNowzz+Y+7sgufraBM6mkCgJWDeIkbQaW8kLjdrgRS37xUo/3twlRsvon7Yp/CQcOKOszdLTi4qow05r4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.255
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.252])
-	by szxga08-in.huawei.com (SkyGuard) with ESMTP id 4Yq0Vt3GcLz1W5D7;
-	Fri,  7 Feb 2025 11:55:34 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 9C7A21800DB;
-	Fri,  7 Feb 2025 11:59:54 +0800 (CST)
-Received: from localhost.huawei.com (10.50.165.33) by
- kwepemh100008.china.huawei.com (7.202.181.93) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Fri, 7 Feb 2025 11:59:53 +0800
-From: Lifeng Zheng <zhenglifeng1@huawei.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linuxarm@huawei.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <zhenglifeng1@huawei.com>,
-	<fanghao11@huawei.com>
-Subject: [PATCH] cpufreq: Use str_enable_disable() helper
-Date: Fri, 7 Feb 2025 11:59:53 +0800
-Message-ID: <20250207035953.2420053-1-zhenglifeng1@huawei.com>
-X-Mailer: git-send-email 2.33.0
+	s=arc-20240116; t=1738901819; c=relaxed/simple;
+	bh=tJr/h/82XdaXhwtSYvOC9IfBxa/rDwuLDiIbbM4xvQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=fZEJfl3yD2YMLM84R9jw0jFRWT6dOFzKm2hHeQBBcq3ri9QEWs5eD+iFMnBaoNm6aTjY6g4k1z2Y3O9+khgOF9KKSvs8Z84IdALfYVqm/h86I/J/MxlI3q9ovfzWAyWKKTxR4Yg38ZfsAwss0cy7PV22MPBSSxMlA91/ZzIgLjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xA6j1h3H; arc=none smtp.client-ip=209.85.214.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21634338cfdso39711245ad.2
+        for <linux-pm@vger.kernel.org>; Thu, 06 Feb 2025 20:16:57 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1738901817; x=1739506617; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/PGwJeZbBL1as/rhK6k6WMBCNMpCiV74c6vEaEy0GrI=;
+        b=xA6j1h3H/httufssY6b4/X1F+Qpk5vIUBon0ZkL3IWRQyGy/D9eZqsVCOzkoOoyter
+         w07qSgDW4QavsH9MR8Suh7sxC2yU+RGRFd3tbOma8NvMbqTJ2y5k4UM+1j9ZyRHChZoN
+         UNob+yBh/APsoeV9SULkwEv6er8d6PChTZrktOUkzcbEpfGlSk9nUruzUduUrk/wMNl1
+         kfTV5fVfboukqWWmeE1iRRBUbZ7T/X3tjmfPBbz/6Cr3z8nZOg7C7kX/FqUdQ3jHKC2C
+         cebLnRx6aubrLxmfJu24uV5EudeRw3yw1AkR+/DfM1MSen5S+XTiPfZh6JyMfVgYzopG
+         YzDQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738901817; x=1739506617;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/PGwJeZbBL1as/rhK6k6WMBCNMpCiV74c6vEaEy0GrI=;
+        b=bcV4ycmJklZzYkFc/Qqe5Xw47vd9tUO4xsJAsxHilOKQcTqPnYAVN2+bU6qML4hxwu
+         j219KQgmuFmVpcmD0QD4N/71GwDbOs+91QZzelXg+P7z9mSD6DI95AJ+6fZhoc0TxndL
+         A99LfWYSq3PJIh1snFnVxvNU848Vya1i9T++Ux3kw7OBmoYbGT5+qZ+oy1TivW1z0rZY
+         cwXR6CJtHnZgW88BpsbE2VFpGEGmyuo8hEaHdK+GfAybk/+u6cikaQQ0s77Il+XFim3o
+         WEiyTH6n3BGhQl0yFB1LwFdyQpba1f5uX+kdwX4ddBgGShdWi11U6E0LC3Uesk954rUf
+         9olQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWYayPf7ek4QhGb/0FPllHAXCQGknipvcuLCTeeWQPusq5JNiHjEQ9anybIKMD9idZekG+m0eg4Sw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjFdjs0+MteDqysjlRh3xuc0adledfulQl1jEPKyne5VUppUta
+	nm1XUNj2s17mlJ468t6UxYsGxSKafuonp+S+vPIAEO/w5htsMmjcNd7qL9itUNYRk281BTZHX66
+	V
+X-Gm-Gg: ASbGncsOjXgmQzGwba9AkwAZFwkdtYI5jHqEZE2VBT8SnQF53Rs4aeyMwk1pxpuxrph
+	Kg8MmGSidM9esyDax4diww/mxok5QPxlkZ3EhVeXV54cmcxikH88EQuIzXee1urpyaHJYTvJbnO
+	PfYya5lXrPW2vBTiFIuUWMx3SK+8+KfbzIl70Xt1Nsu46v5DaC/bmDad2TRkxI/ulR0yqRMlrTs
+	X0xhQWr+sM5ByyIdFPhtf1PDK+vtSZiFhuIZbCdJdOmRATtdgU9GXt0yl+i4CMabzueVgFmtR1n
+	lSNyLbURkRsRuAsXxA==
+X-Google-Smtp-Source: AGHT+IEaLCJ/CIOckb+5DvHUOnJDGJC8wnrzMC5q0EsvjDFp+53jkrTnbvgOr5BU0EJtP7/tyv+yvQ==
+X-Received: by 2002:a17:903:2987:b0:216:2e6d:babd with SMTP id d9443c01a7336-21f4e6a99acmr27767115ad.15.1738901817366;
+        Thu, 06 Feb 2025 20:16:57 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ad51aecd846sm1791664a12.30.2025.02.06.20.16.56
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Feb 2025 20:16:56 -0800 (PST)
+Date: Fri, 7 Feb 2025 09:46:54 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Lifeng Zheng <zhenglifeng1@huawei.com>
+Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
+	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com,
+	lihuisong@huawei.com, fanghao11@huawei.com
+Subject: Re: [PATCH] cpufreq: Use str_enable_disable() helper
+Message-ID: <20250207041654.62xollzzkehl6rjk@vireshk-i7>
+References: <20250207035953.2420053-1-zhenglifeng1@huawei.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems706-chm.china.huawei.com (10.3.19.183) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250207035953.2420053-1-zhenglifeng1@huawei.com>
 
-Commit f994c1cb6c43 ("cpufreq: Use str_enable_disable()-like helpers") has
-already introduced helpers from string_choices.h and replaced ternary
-syntax with it. Use str_enable_disable() helper in this line to stay
-consistent.
+On 07-02-25, 11:59, Lifeng Zheng wrote:
+> Commit f994c1cb6c43 ("cpufreq: Use str_enable_disable()-like helpers") has
+> already introduced helpers from string_choices.h and replaced ternary
+> syntax with it. Use str_enable_disable() helper in this line to stay
+> consistent.
+> 
+> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
+> ---
+>  drivers/cpufreq/cpufreq.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 30ffbddc7ece..a12e1da89163 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -1578,7 +1578,7 @@ static int cpufreq_online(unsigned int cpu)
+>  		if (ret) {
+>  			/* If the set_boost fails, the online operation is not affected */
+>  			pr_info("%s: CPU%d: Cannot %s BOOST\n", __func__, policy->cpu,
+> -				policy->boost_enabled ? "enable" : "disable");
+> +				str_enable_disable(policy->boost_enabled));
+>  			policy->boost_enabled = !policy->boost_enabled;
+>  		}
+>  	}
 
-Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
----
- drivers/cpufreq/cpufreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+Applied, thanks.
 
-diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-index 30ffbddc7ece..a12e1da89163 100644
---- a/drivers/cpufreq/cpufreq.c
-+++ b/drivers/cpufreq/cpufreq.c
-@@ -1578,7 +1578,7 @@ static int cpufreq_online(unsigned int cpu)
- 		if (ret) {
- 			/* If the set_boost fails, the online operation is not affected */
- 			pr_info("%s: CPU%d: Cannot %s BOOST\n", __func__, policy->cpu,
--				policy->boost_enabled ? "enable" : "disable");
-+				str_enable_disable(policy->boost_enabled));
- 			policy->boost_enabled = !policy->boost_enabled;
- 		}
- 	}
+Rafael, I have picked this since I am carrying other boost related
+changes via my series. Please let me know if you want to pick it up
+for rc.
+
 -- 
-2.33.0
-
+viresh
 
