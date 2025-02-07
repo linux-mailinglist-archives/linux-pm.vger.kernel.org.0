@@ -1,192 +1,453 @@
-Return-Path: <linux-pm+bounces-21538-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21539-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7ECAEA2C41D
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 14:50:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6431A2C5AC
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 15:38:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 898AC16B6BE
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 13:50:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 526BF166D9B
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 14:38:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DC361F63E8;
-	Fri,  7 Feb 2025 13:50:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDFFD23F279;
+	Fri,  7 Feb 2025 14:38:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Tu8nr7/I"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Ns1Cb7AO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 33A1313BAE4;
-	Fri,  7 Feb 2025 13:50:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7061D22069A;
+	Fri,  7 Feb 2025 14:38:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738936221; cv=none; b=gaypW9TeRiK6NNfNA7fALKMsn+1lS/M1tlOFnA6Tm557Ec+gHRz+dUOtcJ0K1XwXxCFmn8j7PzkloUMvSogVLgIP5ToClShvxnvnqwGGSZ/EMPNj0xNhG47PJzZEriOCmnNiHoUfw5kX7Xufo/sKztydpzAXdg+0l/oQY6sT5z0=
+	t=1738939083; cv=none; b=NWEr1dmluKkULMjShNcO3Rp5RMSflUoc5RSQtc/6L6HPSdK+rRrGbZBnl+snufe91Py019l0KsDYWq12ouMK4Y3jmkc3NIUnOHAl0edYN0prZ4Hj1paJs7Oh6+h7Nw4utYiBHSpdqi/wOT8XrTH3ETSIWyjhlhxaKCcqvZMDpZ8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738936221; c=relaxed/simple;
-	bh=HdiibnTlxgzZttepD4t7cwMKLWgurPZtGPoNMkNkJvM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=JG3irscNe4fV52ISasKzodVkQ3Cgjbm+V+43b4Jo+dAcTzYlPwmDKKspuyyPUVkmB9wfbxzBjszB7vJ2N2/UkMxTiOKhG9wr3dnQLep7620mns5dHQ7stSO4fhSodjExSJ3bGQve3e+s0rov4xkSUAe4shj3Nx8uH3J0maWpJys=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Tu8nr7/I; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id A2DA0C4CEDF;
-	Fri,  7 Feb 2025 13:50:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738936220;
-	bh=HdiibnTlxgzZttepD4t7cwMKLWgurPZtGPoNMkNkJvM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=Tu8nr7/IxuTd2BWH0Dbgn6A+XDj+X7Z8VZ+Aay8gfc5EAKtdu4IuPC5ppicUgfuI2
-	 YPSoKaQZAsx/kiHe3iZCICYPa1qpYpXcD13lJWtnpVYPRqIXkP78bU6Xk7yXJLwuMT
-	 o+AhUqQWVZgt77ZwqPu0imfZ0lTUUgb+CVNdSH2cvUY5HQGzATQHeGWngL0sqCTl5I
-	 Mcgp2xZdsG/hk1UM+P9zEdHJUXszjoIXsD64VBzLKIXcmBRcRunLPJZ15/JVkFpB1s
-	 uLq0kTkmN/ffgKcBTw7gUuL2hJa7NZxBUF4VOGoUlcOiTAECkrFS1PCAbko0xHsTRp
-	 dCpfZ1c5btsfQ==
-Received: from johan by xi.lan with local (Exim 4.97.1)
-	(envelope-from <johan@kernel.org>)
-	id 1tgOkX-000000000xd-1lBk;
-	Fri, 07 Feb 2025 14:50:29 +0100
-Date: Fri, 7 Feb 2025 14:50:29 +0100
-From: Johan Hovold <johan@kernel.org>
-To: Jon Hunter <jonathanh@nvidia.com>,
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Bjorn Helgaas <helgaas@kernel.org>,
-	Linux PCI <linux-pci@vger.kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
-	Kevin Xie <kevin.xie@starfivetech.com>,
-	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
- parents and children
-Message-ID: <Z6YPpbRF_U0TxAbf@hovoldconsulting.com>
-References: <12619233.O9o76ZdvQC@rjwysocki.net>
- <1c2433d4-7e0f-4395-b841-b8eac7c25651@nvidia.com>
+	s=arc-20240116; t=1738939083; c=relaxed/simple;
+	bh=l4/rMm8twDUDq6TnCd4W8D7z+S0XRd5IU3rNZkqWUwg=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=B0Ocap/CRTwAShJgQVCFrIpvB4smRoWqWAhS5zUU8cbbFE3j9hxlqfhqpRv1eiHW0Y4KajN8Yodd9MjRpaINcWjzb4Erw0484zONcyfktYTaBZ8YhobHdAaPEWb5ktncY2+lMw/DEiHXx4Z73+aNnaHybgs6myZrgPYttXmk43c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Ns1Cb7AO; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738939082; x=1770475082;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=l4/rMm8twDUDq6TnCd4W8D7z+S0XRd5IU3rNZkqWUwg=;
+  b=Ns1Cb7AOFXbSKSlUUkGxFE3h/1/d5QldYvmOTZCeyAkpt2n5PpWTpf8o
+   QHQXmSF2GrqX6xkK5h+vgWLsNxNSWSmOLODYQeoeXCF8z8t+2JSuOTE1p
+   RjT3mqDHQ+KDxKi6RLx/PKdjm5P5qcMAK+Zg5M+U4OOoWl8jSctub6liA
+   mR1UiNj+Rvr0YR9Oxl/NXmSbBvmgaxdEI9lK8R1dKA1J4y4gTxn6dHEJK
+   w4yI4r/UTH4d9mHsmeYlT6i4N5/0u25OrLFF1Ujk7KkEPMejPNWGX+ECb
+   hnt+vT0m4D7prIvOyzBBmkCLlhJADgdpCensP23sIocXQrcGCKLUdzjj5
+   g==;
+X-CSE-ConnectionGUID: /guOBKCXSYKCtWO5WHS2jA==
+X-CSE-MsgGUID: DQmQSJ5BSri0z3NlzVZWAQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="49823594"
+X-IronPort-AV: E=Sophos;i="6.13,267,1732608000"; 
+   d="scan'208";a="49823594"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 06:38:01 -0800
+X-CSE-ConnectionGUID: 2+z0PdkNRziarHiEhq7rPA==
+X-CSE-MsgGUID: 8a2YwncrQ8WQ5kOjjjdTmA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="111389851"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.244.116])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 06:37:58 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Fri, 7 Feb 2025 16:37:54 +0200 (EET)
+To: Xi Pardee <xi.pardee@linux.intel.com>
+cc: rajvi0912@gmail.com, irenic.rajneesh@gmail.com, 
+    david.e.box@linux.intel.com, Hans de Goede <hdegoede@redhat.com>, 
+    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-pm@vger.kernel.org
+Subject: Re: [PATCH v5 4/5] platform/x86/intel/pmc: Remove simple init
+ functions
+In-Reply-To: <20250205001601.689782-5-xi.pardee@linux.intel.com>
+Message-ID: <5f100129-5675-bcf4-3998-a34b68d3eb88@linux.intel.com>
+References: <20250205001601.689782-1-xi.pardee@linux.intel.com> <20250205001601.689782-5-xi.pardee@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1c2433d4-7e0f-4395-b841-b8eac7c25651@nvidia.com>
+Content-Type: text/plain; charset=US-ASCII
 
-On Fri, Feb 07, 2025 at 01:38:58PM +0000, Jon Hunter wrote:
-> On 28/01/2025 19:24, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > 
-> > Commit 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the
-> > resume phase") overlooked the case in which the parent of a device with
-> > DPM_FLAG_SMART_SUSPEND set did not use that flag and could be runtime-
-> > suspended before a transition into a system-wide sleep state.  In that
-> > case, if the child is resumed during the subsequent transition from
-> > that state into the working state, its runtime PM status will be set to
-> > RPM_ACTIVE, but the runtime PM status of the parent will not be updated
-> > accordingly, even though the parent will be resumed too, because of the
-> > dev_pm_skip_suspend() check in device_resume_noirq().
-> > 
-> > Address this problem by tracking the need to set the runtime PM status
-> > to RPM_ACTIVE during system-wide resume transitions for devices with
-> > DPM_FLAG_SMART_SUSPEND set and all of the devices depended on by them.
-> > 
-> > Fixes: 6e176bf8d461 ("PM: sleep: core: Do not skip callbacks in the resume phase")
-> > Closes: https://lore.kernel.org/linux-pm/Z30p2Etwf3F2AUvD@hovoldconsulting.com/
-> > Reported-by: Johan Hovold <johan@kernel.org>
-> > Tested-by: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, 4 Feb 2025, Xi Pardee wrote:
 
-> I am seeing the following crash during suspend on a couple of our boards (with mainline/next) and bisect is pointing to this commit ...
+> Remove simple init functions to avoid duplicate code. Store
+> init function performing architecture specific action in the
+> corresponding pmc_dev_info structure. Replace init function
+> with pmc_dev_info structure in X86_MATCH_VFM() of core.c.
 > 
-> [  216.311009] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-
-> [  216.468986] Call trace:
-> [  216.471179]  simple_pm_bus_runtime_suspend+0x14/0x48 (P)
-> [  216.476775]  pm_generic_runtime_suspend+0x2c/0x44
-> [  216.481499]  pm_runtime_force_suspend+0x54/0x14c
-> [  216.486049]  device_suspend_noirq+0x6c/0x278
-> [  216.490253]  dpm_suspend_noirq+0xc0/0x198
-> [  216.494278]  suspend_devices_and_enter+0x210/0x4c0
-> [  216.499348]  pm_suspend+0x164/0x1c8
-> [  216.503023]  state_store+0x8c/0xfc
-> [  216.506260]  kobj_attr_store+0x18/0x2c
-> [  216.509940]  sysfs_kf_write+0x44/0x54
-> [  216.513699]  kernfs_fop_write_iter+0x118/0x1a8
-> [  216.518163]  vfs_write+0x2b0/0x35c
-> [  216.521399]  ksys_write+0x68/0xfc
-> [  216.524810]  __arm64_sys_write+0x1c/0x28
-> [  216.528574]  invoke_syscall+0x48/0x110
-> [  216.532253]  el0_svc_common.constprop.0+0x40/0xe8
-> [  216.536628]  do_el0_svc+0x20/0x2c
-> [  216.540299]  el0_svc+0x30/0xd0
-> [  216.543016]  el0t_64_sync_handler+0x144/0x168
-> [  216.547736]  el0t_64_sync+0x198/0x19c
-> [  216.551327] Code: a9be7bfd 910003fd a90153f3 f9403c00 (f9400014)
-> [  216.557197] ---[ end trace 0000000000000000 ]---
+> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+> ---
+>  drivers/platform/x86/intel/pmc/adl.c  |  7 +--
+>  drivers/platform/x86/intel/pmc/arl.c  |  7 +--
+>  drivers/platform/x86/intel/pmc/cnp.c  |  6 +--
+>  drivers/platform/x86/intel/pmc/core.c | 61 +++++++++++++++------------
+>  drivers/platform/x86/intel/pmc/core.h | 26 ++++++++----
+>  drivers/platform/x86/intel/pmc/icl.c  |  7 +--
+>  drivers/platform/x86/intel/pmc/lnl.c  |  7 +--
+>  drivers/platform/x86/intel/pmc/mtl.c  |  7 +--
+>  drivers/platform/x86/intel/pmc/spt.c  |  7 +--
+>  drivers/platform/x86/intel/pmc/tgl.c  | 19 +++------
+>  10 files changed, 72 insertions(+), 82 deletions(-)
 > 
-> I have not looked any further, but if you have any thoughts, let me know.
+> diff --git a/drivers/platform/x86/intel/pmc/adl.c b/drivers/platform/x86/intel/pmc/adl.c
+> index ac37f4ece9c70..de361a316d51d 100644
+> --- a/drivers/platform/x86/intel/pmc/adl.c
+> +++ b/drivers/platform/x86/intel/pmc/adl.c
+> @@ -311,13 +311,8 @@ const struct pmc_reg_map adl_reg_map = {
+>  	.pson_residency_counter_step = TGL_PSON_RES_COUNTER_STEP,
+>  };
+>  
+> -static struct pmc_dev_info adl_pmc_dev = {
+> +struct pmc_dev_info adl_pmc_dev = {
+>  	.map = &adl_reg_map,
+>  	.suspend = cnl_suspend,
+>  	.resume = cnl_resume,
+>  };
+> -
+> -int adl_core_init(struct pmc_dev *pmcdev)
+> -{
+> -	return generic_core_init(pmcdev, &adl_pmc_dev);
+> -}
+> diff --git a/drivers/platform/x86/intel/pmc/arl.c b/drivers/platform/x86/intel/pmc/arl.c
+> index 91f8e9ab1c2e6..2e604f934f068 100644
+> --- a/drivers/platform/x86/intel/pmc/arl.c
+> +++ b/drivers/platform/x86/intel/pmc/arl.c
+> @@ -691,17 +691,18 @@ static int arl_resume(struct pmc_dev *pmcdev)
+>  	return cnl_resume(pmcdev);
+>  }
+>  
+> -static struct pmc_dev_info arl_pmc_dev = {
+> +struct pmc_dev_info arl_pmc_dev = {
+>  	.pci_func = 0,
+>  	.dmu_guid = ARL_PMT_DMU_GUID,
+>  	.regmap_list = arl_pmc_info_list,
+>  	.map = &arl_socs_reg_map,
+>  	.suspend = cnl_suspend,
+>  	.resume = arl_resume,
+> +	.init = arl_core_init,
+>  };
+>  
+> -int arl_core_init(struct pmc_dev *pmcdev)
+> +int arl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
+>  {
+>  	arl_d3_fixup();
+> -	return generic_core_init(pmcdev, &arl_pmc_dev);
+> +	return generic_core_init(pmcdev, pmc_dev_info);
+>  }
+> diff --git a/drivers/platform/x86/intel/pmc/cnp.c b/drivers/platform/x86/intel/pmc/cnp.c
+> index 6d268058e40b9..f147ec51c7fd0 100644
+> --- a/drivers/platform/x86/intel/pmc/cnp.c
+> +++ b/drivers/platform/x86/intel/pmc/cnp.c
+> @@ -274,13 +274,9 @@ int cnl_resume(struct pmc_dev *pmcdev)
+>  	return pmc_core_resume_common(pmcdev);
+>  }
+>  
+> -static struct pmc_dev_info cnp_pmc_dev = {
+> +struct pmc_dev_info cnp_pmc_dev = {
+>  	.map = &cnp_reg_map,
+>  	.suspend = cnl_suspend,
+>  	.resume = cnl_resume,
+>  };
+>  
+> -int cnp_core_init(struct pmc_dev *pmcdev)
+> -{
+> -	return generic_core_init(pmcdev, &cnp_pmc_dev);
+> -}
+> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+> index d1cbf49ce5bc9..628cb22221fbc 100644
+> --- a/drivers/platform/x86/intel/pmc/core.c
+> +++ b/drivers/platform/x86/intel/pmc/core.c
+> @@ -1388,29 +1388,29 @@ int generic_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
+>  }
+>  
+>  static const struct x86_cpu_id intel_pmc_core_ids[] = {
+> -	X86_MATCH_VFM(INTEL_SKYLAKE_L,		spt_core_init),
+> -	X86_MATCH_VFM(INTEL_SKYLAKE,		spt_core_init),
+> -	X86_MATCH_VFM(INTEL_KABYLAKE_L,		spt_core_init),
+> -	X86_MATCH_VFM(INTEL_KABYLAKE,		spt_core_init),
+> -	X86_MATCH_VFM(INTEL_CANNONLAKE_L,	cnp_core_init),
+> -	X86_MATCH_VFM(INTEL_ICELAKE_L,		icl_core_init),
+> -	X86_MATCH_VFM(INTEL_ICELAKE_NNPI,	icl_core_init),
+> -	X86_MATCH_VFM(INTEL_COMETLAKE,		cnp_core_init),
+> -	X86_MATCH_VFM(INTEL_COMETLAKE_L,	cnp_core_init),
+> -	X86_MATCH_VFM(INTEL_TIGERLAKE_L,	tgl_l_core_init),
+> -	X86_MATCH_VFM(INTEL_TIGERLAKE,		tgl_core_init),
+> -	X86_MATCH_VFM(INTEL_ATOM_TREMONT,	tgl_l_core_init),
+> -	X86_MATCH_VFM(INTEL_ATOM_TREMONT_L,	icl_core_init),
+> -	X86_MATCH_VFM(INTEL_ROCKETLAKE,		tgl_core_init),
+> -	X86_MATCH_VFM(INTEL_ALDERLAKE_L,	tgl_l_core_init),
+> -	X86_MATCH_VFM(INTEL_ATOM_GRACEMONT,	tgl_l_core_init),
+> -	X86_MATCH_VFM(INTEL_ALDERLAKE,		adl_core_init),
+> -	X86_MATCH_VFM(INTEL_RAPTORLAKE_P,	tgl_l_core_init),
+> -	X86_MATCH_VFM(INTEL_RAPTORLAKE,		adl_core_init),
+> -	X86_MATCH_VFM(INTEL_RAPTORLAKE_S,	adl_core_init),
+> -	X86_MATCH_VFM(INTEL_METEORLAKE_L,	mtl_core_init),
+> -	X86_MATCH_VFM(INTEL_ARROWLAKE,		arl_core_init),
+> -	X86_MATCH_VFM(INTEL_LUNARLAKE_M,	lnl_core_init),
+> +	X86_MATCH_VFM(INTEL_SKYLAKE_L,		&spt_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_SKYLAKE,		&spt_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_KABYLAKE_L,		&spt_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_KABYLAKE,		&spt_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_CANNONLAKE_L,	&cnp_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_ICELAKE_L,		&icl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_ICELAKE_NNPI,	&icl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_COMETLAKE,		&cnp_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_COMETLAKE_L,	&cnp_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_TIGERLAKE_L,	&tgl_l_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_TIGERLAKE,		&tgl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_ATOM_TREMONT,	&tgl_l_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_ATOM_TREMONT_L,	&icl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_ROCKETLAKE,		&tgl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_ALDERLAKE_L,	&tgl_l_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_ATOM_GRACEMONT,	&tgl_l_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_ALDERLAKE,		&adl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_RAPTORLAKE_P,	&tgl_l_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_RAPTORLAKE,		&adl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_RAPTORLAKE_S,	&adl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_METEORLAKE_L,	&mtl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_ARROWLAKE,		&arl_pmc_dev),
+> +	X86_MATCH_VFM(INTEL_LUNARLAKE_M,	&lnl_pmc_dev),
+>  	{}
+>  };
+>  
+> @@ -1494,7 +1494,7 @@ static int pmc_core_probe(struct platform_device *pdev)
+>  	static bool device_initialized;
+>  	struct pmc_dev *pmcdev;
+>  	const struct x86_cpu_id *cpu_id;
+> -	int (*core_init)(struct pmc_dev *pmcdev);
+> +	struct pmc_dev_info *pmc_dev_info;
+>  	struct pmc *primary_pmc;
+>  	int ret;
+>  
+> @@ -1514,7 +1514,7 @@ static int pmc_core_probe(struct platform_device *pdev)
+>  	if (!cpu_id)
+>  		return -ENODEV;
+>  
+> -	core_init = (int (*)(struct pmc_dev *))cpu_id->driver_data;
+> +	pmc_dev_info = (struct pmc_dev_info *)cpu_id->driver_data;
+>  
+>  	/* Primary PMC */
+>  	primary_pmc = devm_kzalloc(&pdev->dev, sizeof(*primary_pmc), GFP_KERNEL);
+> @@ -1536,11 +1536,16 @@ static int pmc_core_probe(struct platform_device *pdev)
+>  	 * Sunrisepoint PCH regmap can't be used. Use Cannon Lake PCH regmap
+>  	 * in this case.
+>  	 */
+> -	if (core_init == spt_core_init && !pci_dev_present(pmc_pci_ids))
+> -		core_init = cnp_core_init;
+> +	if (pmc_dev_info == &spt_pmc_dev && !pci_dev_present(pmc_pci_ids))
+> +		pmc_dev_info = &cnp_pmc_dev;
 
-Yeah, I hit something like this yesterday as well and did confirm that
-reverting this commit makes the problem go away. Haven't had time to dig
-much further.
+Could you make one extra patch out of this which moves this quirk and its 
+comment into .init function in spt.c.
 
-[  110.522368] Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
-[  110.531751] Mem abort info:
-[  110.534785]   ESR = 0x0000000096000004
-[  110.538799]   EC = 0x25: DABT (current EL), IL = 32 bits
-[  110.544421]   SET = 0, FnV = 0
-[  110.547716]   EA = 0, S1PTW = 0
-[  110.551097]   FSC = 0x04: level 0 translation fault
-[  110.556274] Data abort info:
-[  110.559385]   ISV = 0, ISS = 0x00000004, ISS2 = 0x00000000
-[  110.565188]   CM = 0, WnR = 0, TnD = 0, TagAccess = 0
-[  110.570536]   GCS = 0, Overlay = 0, DirtyBit = 0, Xs = 0
-[  110.576157] user pgtable: 4k pages, 48-bit VAs, pgdp=0000000892256000
-[  110.582946] [0000000000000000] pgd=0000000000000000, p4d=0000000000000000
-[  110.590348] Internal error: Oops: 0000000096000004 [#1] PREEMPT SMP
-...
-[  110.742358] CPU: 2 UID: 0 PID: 420 Comm: suspend-test.sh Not tainted 6.13.0 #118
-[  110.750067] Hardware name: Qualcomm CRD, BIOS 6.0.231221.BOOT.MXF.2.4-00348.1-HAMOA-1 12/21/2023
-[  110.759198] pstate: 81400005 (Nzcv daif +PAN -UAO -TCO +DIT -SSBS BTYPE=--)
-[  110.766462] pc : simple_pm_bus_runtime_suspend+0x14/0x48
-[  110.772048] lr : pm_generic_runtime_suspend+0x2c/0x44
-[  110.777352] sp : ffff8000839d3a20
-[  110.780866] x29: ffff8000839d3a20 x28: ffff0edf80fff810 x27: ffffa2dc2d1f1d30
-[  110.788303] x26: ffffa2dc2dd82000 x25: 0000000000000002 x24: ffffa2dc2cc7aca0
-[  110.795741] x23: ffffa2dc2dd1e000 x22: 0000000000000000 x21: ffffa2dc2d090e50
-[  110.803177] x20: ffffa2dc2c612498 x19: ffff0edf80fff810 x18: 0000000000000030
-[  110.810615] x17: 0005002c00000000 x16: ffffa2dc2c614ce4 x15: ffffffffffffffff
-[  110.818052] x14: 0000000000000000 x13: ffff0edf80fff980 x12: 705f64706e65675f
-[  110.825490] x11: ffffa2dc2d9c5890 x10: 0000000000000000 x9 : 0000000000000000
-[  110.832927] x8 : ffffa2dc2d2af000 x7 : ffff8000839d3a10 x6 : ffff8000839d39b0
-[  110.840364] x5 : ffff8000839d4000 x4 : 0000000000000004 x3 : ffff0edf953e0000
-[  110.847801] x2 : ffffa2dc2c4e5784 x1 : 0000000000000000 x0 : 0000000000000000
-[  110.855238] Call trace:
-[  110.857861]  simple_pm_bus_runtime_suspend+0x14/0x48 (P)
-[  110.863425]  pm_generic_runtime_suspend+0x2c/0x44
-[  110.868362]  pm_runtime_force_suspend+0x54/0x100
-[  110.873217]  dpm_run_callback+0xb4/0x228
-[  110.877347]  device_suspend_noirq+0x70/0x2a8
-[  110.881844]  dpm_noirq_suspend_devices+0xe0/0x230
-[  110.886778]  dpm_suspend_noirq+0x24/0x98
-[  110.890904]  suspend_devices_and_enter+0x368/0x678
-[  110.895941]  pm_suspend+0x1b4/0x348
-[  110.899627]  state_store+0x8c/0xfc
-[  110.903228]  kobj_attr_store+0x18/0x2c
-[  110.907195]  sysfs_kf_write+0x4c/0x78
-[  110.911074]  kernfs_fop_write_iter+0x120/0x1b4
-[  110.915735]  vfs_write+0x2ac/0x358
-[  110.919352]  ksys_write+0x68/0xfc
-[  110.922873]  __arm64_sys_write+0x1c/0x28
-[  110.927002]  invoke_syscall+0x48/0x110
-[  110.930969]  el0_svc_common.constprop.0+0x40/0xe0
-[  110.935907]  do_el0_svc+0x1c/0x28
-[  110.939427]  el0_svc+0x48/0x114
-[  110.942769]  el0t_64_sync_handler+0xc8/0xcc
-[  110.947180]  el0t_64_sync+0x198/0x19c
-[  110.951059] Code: a9be7bfd 910003fd a90153f3 f9403c00 (f9400014)
-[  110.957428] ---[ end trace 0000000000000000 ]---
+>  	mutex_init(&pmcdev->lock);
+> -	ret = core_init(pmcdev);
+> +
+> +	if (pmc_dev_info->init)
+> +		ret = pmc_dev_info->init(pmcdev, pmc_dev_info);
+> +	else
+> +		ret = generic_core_init(pmcdev, pmc_dev_info);
+> +
+>  	if (ret) {
+>  		pmc_core_clean_structure(pdev);
+>  		return ret;
+> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
+> index 7c9e999ee6318..94039930422b3 100644
+> --- a/drivers/platform/x86/intel/pmc/core.h
+> +++ b/drivers/platform/x86/intel/pmc/core.h
+> @@ -446,6 +446,7 @@ enum pmc_index {
+>   *			specific attributes of the primary PMC
+>   * @suspend:		Function to perform platform specific suspend
+>   * @resume:		Function to perform platform specific resume
+> + * @init:		Function to perform platform specific init action
+>   */
+>  struct pmc_dev_info {
+>  	u8 pci_func;
+> @@ -454,6 +455,7 @@ struct pmc_dev_info {
+>  	const struct pmc_reg_map *map;
+>  	void (*suspend)(struct pmc_dev *pmcdev);
+>  	int (*resume)(struct pmc_dev *pmcdev);
+> +	int (*init)(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
+>  };
+>  
+>  extern const struct pmc_bit_map msr_map[];
+> @@ -613,15 +615,21 @@ extern void pmc_core_set_device_d3(unsigned int device);
+>  extern int pmc_core_ssram_init(struct pmc_dev *pmcdev, int func);
+>  
+>  int generic_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
+> -int spt_core_init(struct pmc_dev *pmcdev);
+> -int cnp_core_init(struct pmc_dev *pmcdev);
+> -int icl_core_init(struct pmc_dev *pmcdev);
+> -int tgl_core_init(struct pmc_dev *pmcdev);
+> -int tgl_l_core_init(struct pmc_dev *pmcdev);
+> -int adl_core_init(struct pmc_dev *pmcdev);
+> -int mtl_core_init(struct pmc_dev *pmcdev);
+> -int arl_core_init(struct pmc_dev *pmcdev);
+> -int lnl_core_init(struct pmc_dev *pmcdev);
+> +
+> +extern struct pmc_dev_info spt_pmc_dev;
+> +extern struct pmc_dev_info cnp_pmc_dev;
+> +extern struct pmc_dev_info icl_pmc_dev;
+> +extern struct pmc_dev_info tgl_l_pmc_dev;
+> +extern struct pmc_dev_info tgl_pmc_dev;
+> +extern struct pmc_dev_info adl_pmc_dev;
+> +extern struct pmc_dev_info mtl_pmc_dev;
+> +extern struct pmc_dev_info arl_pmc_dev;
+> +extern struct pmc_dev_info lnl_pmc_dev;
+> +
+> +int arl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
+> +int mtl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
+> +int lnl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
+> +int tgl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info);
 
-Johan
+These 4 function doesn't look like they need to be put into a header.
+Instead, reorganize the struct and init function within each file so you 
+can put assign it into .init.
+
+>  void cnl_suspend(struct pmc_dev *pmcdev);
+>  int cnl_resume(struct pmc_dev *pmcdev);
+> diff --git a/drivers/platform/x86/intel/pmc/icl.c b/drivers/platform/x86/intel/pmc/icl.c
+> index 0e4565dea0452..6952c8ef58a01 100644
+> --- a/drivers/platform/x86/intel/pmc/icl.c
+> +++ b/drivers/platform/x86/intel/pmc/icl.c
+> @@ -50,11 +50,6 @@ const struct pmc_reg_map icl_reg_map = {
+>  	.etr3_offset = ETR3_OFFSET,
+>  };
+>  
+> -static struct pmc_dev_info icl_pmc_dev = {
+> +struct pmc_dev_info icl_pmc_dev = {
+>  	.map = &icl_reg_map,
+>  };
+> -
+> -int icl_core_init(struct pmc_dev *pmcdev)
+> -{
+> -	return generic_core_init(pmcdev, &icl_pmc_dev);
+> -}
+> diff --git a/drivers/platform/x86/intel/pmc/lnl.c b/drivers/platform/x86/intel/pmc/lnl.c
+> index 1142e65225be7..519b4b0e325e1 100644
+> --- a/drivers/platform/x86/intel/pmc/lnl.c
+> +++ b/drivers/platform/x86/intel/pmc/lnl.c
+> @@ -550,14 +550,15 @@ static int lnl_resume(struct pmc_dev *pmcdev)
+>  	return cnl_resume(pmcdev);
+>  }
+>  
+> -static struct pmc_dev_info lnl_pmc_dev = {
+> +struct pmc_dev_info lnl_pmc_dev = {
+>  	.map = &lnl_socm_reg_map,
+>  	.suspend = cnl_suspend,
+>  	.resume = lnl_resume,
+> +	.init = lnl_core_init,
+>  };
+>  
+> -int lnl_core_init(struct pmc_dev *pmcdev)
+> +int lnl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
+>  {
+>  	lnl_d3_fixup();
+> -	return generic_core_init(pmcdev, &lnl_pmc_dev);
+> +	return generic_core_init(pmcdev, pmc_dev_info);
+>  }
+> diff --git a/drivers/platform/x86/intel/pmc/mtl.c b/drivers/platform/x86/intel/pmc/mtl.c
+> index 28ea8fe8a493f..0678df8fb5e3c 100644
+> --- a/drivers/platform/x86/intel/pmc/mtl.c
+> +++ b/drivers/platform/x86/intel/pmc/mtl.c
+> @@ -990,17 +990,18 @@ static int mtl_resume(struct pmc_dev *pmcdev)
+>  	return cnl_resume(pmcdev);
+>  }
+>  
+> -static struct pmc_dev_info mtl_pmc_dev = {
+> +struct pmc_dev_info mtl_pmc_dev = {
+>  	.pci_func = 2,
+>  	.dmu_guid = MTL_PMT_DMU_GUID,
+>  	.regmap_list = mtl_pmc_info_list,
+>  	.map = &mtl_socm_reg_map,
+>  	.suspend = cnl_suspend,
+>  	.resume = mtl_resume,
+> +	.init = mtl_core_init,
+>  };
+>  
+> -int mtl_core_init(struct pmc_dev *pmcdev)
+> +int mtl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
+>  {
+>  	mtl_d3_fixup();
+> -	return generic_core_init(pmcdev, &mtl_pmc_dev);
+> +	return generic_core_init(pmcdev, pmc_dev_info);
+>  }
+> diff --git a/drivers/platform/x86/intel/pmc/spt.c b/drivers/platform/x86/intel/pmc/spt.c
+> index ab5f66fcb0c30..956b2ec1c7510 100644
+> --- a/drivers/platform/x86/intel/pmc/spt.c
+> +++ b/drivers/platform/x86/intel/pmc/spt.c
+> @@ -134,11 +134,6 @@ const struct pmc_reg_map spt_reg_map = {
+>  	.pm_vric1_offset = SPT_PMC_VRIC1_OFFSET,
+>  };
+>  
+> -static struct pmc_dev_info spt_pmc_dev = {
+> +struct pmc_dev_info spt_pmc_dev = {
+>  	.map = &spt_reg_map,
+>  };
+> -
+> -int spt_core_init(struct pmc_dev *pmcdev)
+> -{
+> -	return generic_core_init(pmcdev, &spt_pmc_dev);
+> -}
+> diff --git a/drivers/platform/x86/intel/pmc/tgl.c b/drivers/platform/x86/intel/pmc/tgl.c
+> index bc3cb949c672e..9f210d4095bd9 100644
+> --- a/drivers/platform/x86/intel/pmc/tgl.c
+> +++ b/drivers/platform/x86/intel/pmc/tgl.c
+> @@ -285,19 +285,21 @@ void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev)
+>  	ACPI_FREE(out_obj);
+>  }
+>  
+> -static struct pmc_dev_info tgl_l_pmc_dev = {
+> +struct pmc_dev_info tgl_l_pmc_dev = {
+>  	.map = &tgl_reg_map,
+>  	.suspend = cnl_suspend,
+>  	.resume = cnl_resume,
+> +	.init = tgl_core_init,
+>  };
+>  
+> -static struct pmc_dev_info tgl_pmc_dev = {
+> +struct pmc_dev_info tgl_pmc_dev = {
+>  	.map = &tgl_h_reg_map,
+>  	.suspend = cnl_suspend,
+>  	.resume = cnl_resume,
+> +	.init = tgl_core_init,
+>  };
+>  
+> -static int tgl_core_generic_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
+> +int tgl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
+>  {
+>  	int ret;
+>  
+> @@ -306,15 +308,6 @@ static int tgl_core_generic_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pm
+>  		return ret;
+>  
+>  	pmc_core_get_tgl_lpm_reqs(pmcdev->pdev);
+> -	return 0;
+> -}
+>  
+> -int tgl_l_core_init(struct pmc_dev *pmcdev)
+> -{
+> -	return tgl_core_generic_init(pmcdev, &tgl_l_pmc_dev);
+> -}
+> -
+> -int tgl_core_init(struct pmc_dev *pmcdev)
+> -{
+> -	return tgl_core_generic_init(pmcdev, &tgl_pmc_dev);
+> +	return 0;
+>  }
+> 
+
+-- 
+ i.
+
 
