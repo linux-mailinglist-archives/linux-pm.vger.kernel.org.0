@@ -1,123 +1,161 @@
-Return-Path: <linux-pm+bounces-21554-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21555-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E9554A2C93C
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 17:48:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A2DD3A2C9E8
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 18:13:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8C1931662AE
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 16:48:08 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 638B77A5429
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 17:12:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C3D21624DA;
-	Fri,  7 Feb 2025 16:48:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52409192B6D;
+	Fri,  7 Feb 2025 17:13:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dfROce6b"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="Fw0mloFd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD6842E40B;
-	Fri,  7 Feb 2025 16:48:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9924A18FDAE
+	for <linux-pm@vger.kernel.org>; Fri,  7 Feb 2025 17:13:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738946885; cv=none; b=rNrHqQkHYT78dlJmAeGhMlj1w20hBhTlA1g4stSBatPmRxiL69YCtWCwZkbgz7+Qobc80h47N9PBxaVMz/7zJgRLu6n5itNC3yRZYvacpAJ2wQ3AfP7wLdErTmIx5wFDLQKN5zI+sWCsODaLiFZdZS8YwaB8aIUnSxgHMPpl3uY=
+	t=1738948421; cv=none; b=WwTqWmn1/VrzAhxAN3XwPjolWFBlr+fLg2j++1/j/9yQmi2Oo1xONXXUwqdSZ3ShPJ8ALT25RVUnogVS4VVHziyW6KErIEumgljxXcW13E+2yxrgacbLN69WDnlw8A3/9Xs1me/ouMsGwYwZNfzwKaQwaCq7I5fufjU0ssFz9ZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738946885; c=relaxed/simple;
-	bh=/zF2LhwagKWXf+jGYAxOXKMLCv7q9b93kla4OYElc8I=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=sWdr2dh3NQ8zyYaBsoU6Z2Nrg8PFKMlUUOY2FcbZxc6+J4bGdloJMYX4EEl81emTCcKkM8uGn69MxafvkTbJCp25hfh2tfV4bjo9xUOZ3vWuy7JGWD2rPAqrjVpON8ZOWYzcQDtwlCSCuhfeLl6Wsb/mI1UQuTkPHqgYzwVvlPA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dfROce6b; arc=none smtp.client-ip=209.85.222.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7b6e5ee6ac7so171398085a.0;
-        Fri, 07 Feb 2025 08:48:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738946881; x=1739551681; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:from:to:cc:subject:date:message-id:reply-to;
-        bh=OLvPkZKAPsSMnxafsZaEnvYemBph/BJy+bYFdl2FKPc=;
-        b=dfROce6b+NBrMPPQRjmXcUN2Tv04JApjB/CBl/q5ZrI1rP+rzwCDzWXBJsZBmsrrBo
-         cx/+JiXgIs1Q9mp1oUrkopYyIjFFj6GNtrZ+hj45UyHxLcaGspzyvgbV+dVzI+eAp9r1
-         4T4j1zNiUU129gEEk8MnOlC5Bzrje4HgVYks5hs/JVOiZ8r1Q7LANkT0ncONruu2bkwe
-         MkrP2eXVg5S0PfjdNZkqVq7OtUlTpp2x7Go0KaIIiPXce1iLNHAcwp9nhU+kWVCJCdne
-         n6wvhw3uWVyRlipPLlyDN6VGvmfVfKFuf47HupI1T9fgpiEHx3YoqxXkYbOG/TB3dLsJ
-         eP6w==
+	s=arc-20240116; t=1738948421; c=relaxed/simple;
+	bh=BLOWmoRmbHy/gnuzM8xwn2yz4ukNppwSyIISh/gH96A=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=AOxPR6oecKL9sFNRYI8DbzqXLPxU6A4YaJ4T5TtfIsdOYsuJO7Tf3+prXL02VAC60PgN6bakurblhLerNXLlkg7J+pwduA86jflD5CpSstOcw1U2ZNsdnW3o+RLZEjaxB3kgVTFClepN5wEcq5IF0A+oHW3MHjjjV4PgdASCxjU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=Fw0mloFd; arc=none smtp.client-ip=170.10.133.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1738948418;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=4xExkY7a9dfcmWWKsnQJ8PF5WnPHcZhnPPJN0QoVJGQ=;
+	b=Fw0mloFdAg1eyeMHiOClG5Qd0eeU3eVxPt6QcHMeLxX6HvSbnJhIUsIgQiaAkgAWm8m2y0
+	iUnpVjopApB/ztfGac+HkVVBvOOljEew0C9cFzHccdzHhjNhCRpX28Y4hoqCCBc1qg+aPG
+	yvxI2ivvm044HN1V2s5eACHZoZ+Tbp0=
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com
+ [209.85.219.72]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-324-CGdqye--ObaD8U8ymAMTOw-1; Fri, 07 Feb 2025 12:13:35 -0500
+X-MC-Unique: CGdqye--ObaD8U8ymAMTOw-1
+X-Mimecast-MFC-AGG-ID: CGdqye--ObaD8U8ymAMTOw
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6e4434d78e5so38229936d6.0
+        for <linux-pm@vger.kernel.org>; Fri, 07 Feb 2025 09:13:35 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738946881; x=1739551681;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:to
-         :from:x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=OLvPkZKAPsSMnxafsZaEnvYemBph/BJy+bYFdl2FKPc=;
-        b=ljG4cPFiRoduWiwxYckxDzgmZtip2+tijXG56brG03zDjYbFAbM6IazxcKZCqTFt7P
-         CeH0P32BRJ/yXSdKh+rYBIUe+tH8LIdsXzLPS4g4599XoFHtcg6D36t03rgiErRtVPor
-         IUSmq5PcVlmOMDJNT5ZC/6MeeMAq+lf0TOiaDRkqPlUEvzsiuJpGmfmNq+ljEbXpis8L
-         k/pf14Q4RXY5QNQox42XD6NnoJIWen3/juOm7ZFCnC3t0dPxCphRAIj/63JzB//p65vl
-         2Jk2CJO6WrPyzZmmb+IqAED59DBTMQaPZmrJYZL+wNC0PT+mMIupVHmzKBfP4RWT4L0P
-         650Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVVpOZPJg+pGCahh5dVkzDgBJoCQDyW9qttts6/N8ZTuB38P099lOpMXLtmzOs+dFI/4zt1z/L7xA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YywvDWGTBqywcQZsJ+GHLf0ZLMbiF8gvFW27kLaOn1ZRBDWGqGf
-	blGsT3uP3eQ4aHRD3IRwFsyxDKIgwWLz0AO7d1zzJTFa+rkqThkeMJW6rL3l
-X-Gm-Gg: ASbGnctEXoHG9Pe0d4Bt3X3cFy0DzhknedmmieTUsjwMADe7KmWoH4nFn8OkM1o4sKJ
-	tX4ZXbfYrrfqL1rQWT5YE6Z+sS0L+jHYS78POSpPj3+3dNLNQ/wCE1W3FR1vxzhFPxfknlOd4pZ
-	56hXrpx/EfmKTpKY1Y/iM/9VXjPFPp/FKmcCKNLNeLy3w7lKCTbiggntYHDmMiMwCN+QjVunqDS
-	HYtLSD89CbmF1Xv2RuS4i3yF7ZlPiSNBlxYkuBoBc+msrCKVll0O+8lIwJHicf5MX9f6NQYYTlQ
-	h8xq9QUmxKzBS/VuI8/EdMJ4OTYU6Q5JdOceiKsFOOApILiRk25d0eMaxMg=
-X-Google-Smtp-Source: AGHT+IEr3FTDT7SjKLFcV/86PKpmd1Ulc9pLBA2vnFIK1IvijuUo0pqO49m1oZQlx0sqziOn6memSg==
-X-Received: by 2002:a05:620a:4448:b0:7b6:c92e:2e6f with SMTP id af79cd13be357-7c047c1b895mr615602285a.22.1738946881480;
-        Fri, 07 Feb 2025 08:48:01 -0800 (PST)
-Received: from localhost.localdomain (pppoe-209-91-167-254.vianet.ca. [209.91.167.254])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c041ed0304sm208492185a.115.2025.02.07.08.48.00
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 07 Feb 2025 08:48:00 -0800 (PST)
-From: Trevor Woerner <twoerner@gmail.com>
-To: linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Heiko Stuebner <heiko@sntech.de>,
-	linux-pm@vger.kernel.org (open list:THERMAL),
-	linux-arm-kernel@lists.infradead.org (moderated list:ARM/Rockchip SoC support),
-	linux-rockchip@lists.infradead.org (open list:ARM/Rockchip SoC support)
-Subject: [PATCH] thermal/drivers/rockchip: add missing rk3328 mapping entry
-Date: Fri,  7 Feb 2025 11:47:40 -0500
-Message-ID: <20250207164740.14475-1-twoerner@gmail.com>
-X-Mailer: git-send-email 2.44.0.501.g19981daefd7c
+        d=1e100.net; s=20230601; t=1738948415; x=1739553215;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=4xExkY7a9dfcmWWKsnQJ8PF5WnPHcZhnPPJN0QoVJGQ=;
+        b=gVqglQWJvrn1b2NnntkG6FbX+wgEpqueaA/cLHORQfYqvpV9DNhE/XU8Qx4KlkUDZ1
+         dQFOexYHwWFsgzIIf4TU0Xid8ueBKmGH6F4JyOnI8NcrJ2kF52WAlBKJMf2FkJOSg5Dl
+         OplGu8jTHPfa8bYNIGLwYM+kBxSM4bGrlQ6Q9HPpGuOmYKFo4wzdDni5pngI4qzCS+/y
+         L9B+BiWiyoQB1mNqq5QioY1nao6GD86tHGQNtNCu5XlFUVc2zpcaceU3S2BylPrVqumL
+         49Nz3Z2SiQVGJrOIbLvvoD1hNtfm/t/5m+kRDxJ+n6YNq5AeaV4twTEMchYLku6BiSFR
+         AdPw==
+X-Forwarded-Encrypted: i=1; AJvYcCVjqZBNpTZjg3T22+n4JdP0GVNn5394vY2LHNbxmaPQ3SZ2OY6iIJI/Th2ZPNt5i4eDcNniXgEoNg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YygvD8HTvmqDtAFzWfUrqXhdievHbFbDEzkSZG8aG1d3djG1J8T
+	ySoRUory6VokWdJI+tGL+B5V2u7sTQIvWQ0WkIXMwvCuNb1XD2vYzixxSxbL1Y2/d0SOdQpLb//
+	Gc8bsFM5XRPBxmpy/GdCz1UQBpAKC0NCgrgZ4etweOfs9q+BYgN++Ckx38bXKDkw+
+X-Gm-Gg: ASbGncveEO8VxGc/GEAQLEjZ0yQgnRvSZVpIL0GWa8MyVDH5w9uABqiFp+TiYLX7elI
+	UiOR5hTgLzoijpe8GS/0glKGJ3CR1c4eHF2OIfjvetoy8doqFQY7P2Urz4YvosR0L6YDyE6sYcx
+	39Mtg2m1paGK3B/FV3LyUtQk926A7UVSEd4mVMrnHBStOqpPsrjp688i5lQ2nBfZZ9s7T2T3cXA
+	c+dPnNGCzKzL/0FlzL+KArKIaPF+kc13naF0gompQLXfriyXWfmH1KQkTncT6aJOc/SBI91hIr5
+	Ba8S
+X-Received: by 2002:a05:6214:2526:b0:6e4:34ed:c571 with SMTP id 6a1803df08f44-6e445674b58mr67413606d6.27.1738948414587;
+        Fri, 07 Feb 2025 09:13:34 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IEmRysRMMAuZgbKXJBfFfQlbWetjxagGtq3aooaiwcNUXxsKgWhnuH6aSZCDZB6CMm/i/IdTA==
+X-Received: by 2002:a05:6214:2526:b0:6e4:34ed:c571 with SMTP id 6a1803df08f44-6e445674b58mr67413256d6.27.1738948414309;
+        Fri, 07 Feb 2025 09:13:34 -0800 (PST)
+Received: from [10.26.1.94] ([66.187.232.136])
+        by smtp.gmail.com with ESMTPSA id 6a1803df08f44-6e44150c6e9sm14437056d6.6.2025.02.07.09.13.33
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Feb 2025 09:13:33 -0800 (PST)
+Message-ID: <9241eff1-0c2d-4c82-a77d-cb8b67cab6f9@redhat.com>
+Date: Fri, 7 Feb 2025 12:13:32 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] intel_idle: introduce 'no_native' module parameter
+To: dedekind1@gmail.com, linux-pm@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>,
+ Jacob Pan <jacob.jun.pan@linux.intel.com>, Len Brown <lenb@kernel.org>,
+ Prarit Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250128141139.2033088-1-darcari@redhat.com>
+ <20250206164009.816232-1-darcari@redhat.com>
+ <6c258775cdf2f8f3c370c0cb81daf22dacf6aeed.camel@gmail.com>
+Content-Language: en-US
+From: David Arcari <darcari@redhat.com>
+In-Reply-To: <6c258775cdf2f8f3c370c0cb81daf22dacf6aeed.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-The mapping table for the rk3328 is missing the entry for -25°C which is
-found in the TRM[1] §9.5.2 "Temperature-to-code mapping".
 
-NOTE: the kernel uses the tsadc_q_sel=1'b1 mode which is defined as:
-      4096-<code in table>. Whereas the table in the TRM gives the code
-      "3774" for -25°C, the kernel uses 4096-3774=322.
+Hi Artem,
 
-Link: https://opensource.rock-chips.com/images/9/97/Rockchip_RK3328TRM_V1.1-Part1-20170321.pdf
-Signed-off-by: Trevor Woerner <twoerner@gmail.com>
----
- drivers/thermal/rockchip_thermal.c | 1 +
- 1 file changed, 1 insertion(+)
+On 2/7/25 10:55 AM, Artem Bityutskiy wrote:
+> Hi David,
+> 
+> On Thu, 2025-02-06 at 11:40 -0500, David Arcari wrote:
+>> +The ``no_acpi``, ``use_acpi`` and ``no_native`` module parameters are
+>> +recognized by ``intel_idle`` if the kernel has been configured with ACPI
+>> +support).
+> 
+> And if kernel was not configured with ACPI support, are these not recognized? Or
+> they are just no-op basically?
 
-diff --git a/drivers/thermal/rockchip_thermal.c b/drivers/thermal/rockchip_thermal.c
-index f551df48eef9..a8ad85feb68f 100644
---- a/drivers/thermal/rockchip_thermal.c
-+++ b/drivers/thermal/rockchip_thermal.c
-@@ -386,6 +386,7 @@ static const struct tsadc_table rk3328_code_table[] = {
- 	{296, -40000},
- 	{304, -35000},
- 	{313, -30000},
-+	{322, -25000},
- 	{331, -20000},
- 	{340, -15000},
- 	{349, -10000},
--- 
-2.44.0.501.g19981daefd7c
+They are a no-op - the flags are all set to false so ACPI C-state tables 
+are ignored.
+
+> 
+> Looks like there is a stray ")" at the end.
+> 
+
+Yes I will fix that.
+
+>> +
+>> +``no_acpi`` - Do not use ACPI at all.  Only native mode is available, no
+>> +ACPI mode.
+>> +
+>> +``use_acpi`` - No-op in ACPI mode; however, the driver will consult ACPI
+>> +tables for C-states on/off status in native mode.
+> 
+> I think "however" part is a bit confusing. Would you consider re-phrasing
+> without "however" ?
+
+Sure - so is this better:
+
+``use_acpi`` - No-op in ACPI mode, the driver will consult ACPI tabees 
+for C-states on/off status in native mode.
+
+Thanks,
+-DA
+> 
+>> +
+>> +``no_native`` - Work only in ACPI mode, no native mode available (ignore
+>> +all custom tables).
+> 
+> Other than these small nitpicks,
+> 
+> Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> 
+> (I tested it on an Intel Broadwell platform).
+> 
+> Thanks!
+> 
 
 
