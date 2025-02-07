@@ -1,87 +1,109 @@
-Return-Path: <linux-pm+bounces-21522-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21523-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E3945A2BA15
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 05:17:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8D9FBA2BC20
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 08:15:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D5BE3A3FA2
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 04:16:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2DF00163CB9
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 07:15:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D906C1DE2AE;
-	Fri,  7 Feb 2025 04:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71BB81A0BDB;
+	Fri,  7 Feb 2025 07:15:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xA6j1h3H"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="DL+i4tep"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2CBBC2417CA
-	for <linux-pm@vger.kernel.org>; Fri,  7 Feb 2025 04:16:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0AB119E98C
+	for <linux-pm@vger.kernel.org>; Fri,  7 Feb 2025 07:15:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738901819; cv=none; b=E+i7DYOG/lo21wf2fzpNAQa5Mz2qe31XR09No+TAwtoCWPa1ilOEuDhaqyJ9ON10ydyBMEzQtKfAaFneh8+clm3TuTmG2jzCeGSc5I0LeEhgykj0C90aI8O2FsRCoyJWuJCzCc3y2mulXjOx5taHwk0jb11iHUAcrXQw74b5Il0=
+	t=1738912543; cv=none; b=cwigN2vcu7dhaIyaGRTTkiFAugrtXDYO6/vR4/xZZtuKtz4f3k4R17iw19k88rCeXj60zUVnFLQrb2KTw0m6TFZ0YGz7M+762CtcKRkT3fx9lQXkmyCpCPi2VERDTcC/ziiB467iVRKOCD8mfTiPxEfGgRG/JoCe5wLzCmuNl64=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738901819; c=relaxed/simple;
-	bh=tJr/h/82XdaXhwtSYvOC9IfBxa/rDwuLDiIbbM4xvQo=;
+	s=arc-20240116; t=1738912543; c=relaxed/simple;
+	bh=dUnNqw1brKPXE6dDQeYeK/FFGBNMkG1EB3CHxG+wkJY=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fZEJfl3yD2YMLM84R9jw0jFRWT6dOFzKm2hHeQBBcq3ri9QEWs5eD+iFMnBaoNm6aTjY6g4k1z2Y3O9+khgOF9KKSvs8Z84IdALfYVqm/h86I/J/MxlI3q9ovfzWAyWKKTxR4Yg38ZfsAwss0cy7PV22MPBSSxMlA91/ZzIgLjE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xA6j1h3H; arc=none smtp.client-ip=209.85.214.182
+	 Content-Type:Content-Disposition:In-Reply-To; b=XsWzOhAh9jL0GDTCbMfi1+sm0BevXaP+Qu6WxYzAONRqCf3eF+9jFreZUKhWDY1TKY07vXO034gNMka5sFNokTbeBO1dqAPbD9azBN7qJI1DxJC+0XW/Cf3161c2q9A/9i/ZeDzZc7PKLAWSioa4XLCrnvP0ClxUy3WvpYZw7Vw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=DL+i4tep; arc=none smtp.client-ip=209.85.214.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-21634338cfdso39711245ad.2
-        for <linux-pm@vger.kernel.org>; Thu, 06 Feb 2025 20:16:57 -0800 (PST)
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-21634338cfdso42773665ad.2
+        for <linux-pm@vger.kernel.org>; Thu, 06 Feb 2025 23:15:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1738901817; x=1739506617; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1738912541; x=1739517341; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=/PGwJeZbBL1as/rhK6k6WMBCNMpCiV74c6vEaEy0GrI=;
-        b=xA6j1h3H/httufssY6b4/X1F+Qpk5vIUBon0ZkL3IWRQyGy/D9eZqsVCOzkoOoyter
-         w07qSgDW4QavsH9MR8Suh7sxC2yU+RGRFd3tbOma8NvMbqTJ2y5k4UM+1j9ZyRHChZoN
-         UNob+yBh/APsoeV9SULkwEv6er8d6PChTZrktOUkzcbEpfGlSk9nUruzUduUrk/wMNl1
-         kfTV5fVfboukqWWmeE1iRRBUbZ7T/X3tjmfPBbz/6Cr3z8nZOg7C7kX/FqUdQ3jHKC2C
-         cebLnRx6aubrLxmfJu24uV5EudeRw3yw1AkR+/DfM1MSen5S+XTiPfZh6JyMfVgYzopG
-         YzDQ==
+        bh=ZE4R1S1j/M6pE22+nPWcID1WidunmigR9GW3OBmBoT4=;
+        b=DL+i4tep+7bgTVKJpktqcmJkyOAk52S1Y4nXzYtMukimi8FFddEiltDD4TC1lzTWEo
+         puWLcXl0gmYRYX6biIwq7H11D7cfp/PSUqA+nXVEAqWbojaEuucTTBjPwSKvMuNr2/HE
+         lUQGOBHV8WtE2D+29tK+8gmuBAgJOCK+V0S6hPZ0k6NFOTssbVOeokHql47UbDp4SrhD
+         fbTfBjfdZWMQaYZNCWKRVAm7rb1/YMv0koObwimFz816Hj8zG4vpE4sEBBn9PAHnlLth
+         LrQ+JfBZUxxAQxZvkUyyHoB+a9KyyqgvaYbnfMUVhpyvD0VsEw/hCpP1P2qWWlla+juf
+         kVZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738901817; x=1739506617;
+        d=1e100.net; s=20230601; t=1738912541; x=1739517341;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=/PGwJeZbBL1as/rhK6k6WMBCNMpCiV74c6vEaEy0GrI=;
-        b=bcV4ycmJklZzYkFc/Qqe5Xw47vd9tUO4xsJAsxHilOKQcTqPnYAVN2+bU6qML4hxwu
-         j219KQgmuFmVpcmD0QD4N/71GwDbOs+91QZzelXg+P7z9mSD6DI95AJ+6fZhoc0TxndL
-         A99LfWYSq3PJIh1snFnVxvNU848Vya1i9T++Ux3kw7OBmoYbGT5+qZ+oy1TivW1z0rZY
-         cwXR6CJtHnZgW88BpsbE2VFpGEGmyuo8hEaHdK+GfAybk/+u6cikaQQ0s77Il+XFim3o
-         WEiyTH6n3BGhQl0yFB1LwFdyQpba1f5uX+kdwX4ddBgGShdWi11U6E0LC3Uesk954rUf
-         9olQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWYayPf7ek4QhGb/0FPllHAXCQGknipvcuLCTeeWQPusq5JNiHjEQ9anybIKMD9idZekG+m0eg4Sw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwjFdjs0+MteDqysjlRh3xuc0adledfulQl1jEPKyne5VUppUta
-	nm1XUNj2s17mlJ468t6UxYsGxSKafuonp+S+vPIAEO/w5htsMmjcNd7qL9itUNYRk281BTZHX66
-	V
-X-Gm-Gg: ASbGncsOjXgmQzGwba9AkwAZFwkdtYI5jHqEZE2VBT8SnQF53Rs4aeyMwk1pxpuxrph
-	Kg8MmGSidM9esyDax4diww/mxok5QPxlkZ3EhVeXV54cmcxikH88EQuIzXee1urpyaHJYTvJbnO
-	PfYya5lXrPW2vBTiFIuUWMx3SK+8+KfbzIl70Xt1Nsu46v5DaC/bmDad2TRkxI/ulR0yqRMlrTs
-	X0xhQWr+sM5ByyIdFPhtf1PDK+vtSZiFhuIZbCdJdOmRATtdgU9GXt0yl+i4CMabzueVgFmtR1n
-	lSNyLbURkRsRuAsXxA==
-X-Google-Smtp-Source: AGHT+IEaLCJ/CIOckb+5DvHUOnJDGJC8wnrzMC5q0EsvjDFp+53jkrTnbvgOr5BU0EJtP7/tyv+yvQ==
-X-Received: by 2002:a17:903:2987:b0:216:2e6d:babd with SMTP id d9443c01a7336-21f4e6a99acmr27767115ad.15.1738901817366;
-        Thu, 06 Feb 2025 20:16:57 -0800 (PST)
+        bh=ZE4R1S1j/M6pE22+nPWcID1WidunmigR9GW3OBmBoT4=;
+        b=sTMHR5RmNRxfMdNJYOEK9igdptC5XlAvk8R4SncDN8mUp9xxigK1iSc+7H5wwMJAZU
+         q1DgNxjRJpDhuUoJGbZlrpfo+PuJHxi2evcge4O6CqlSjuN5oJ+3k8xE6HMLvH98uHeU
+         LneXH83ObAl/4H4uWwEvmUtBZTqi0MU9ozCnuO5AYX87yFNso3Q1Fa6vzK8QmoVdFNIt
+         XQtnv9vdLNq75Ohjd6mQfv4yiG9gb02QAXZ59DCoNF4yLlHhNOz1UVJTHWrdQHTJffFz
+         zvt03h3jof12WGa/GY2yNV5GJPwxSzpp2n9onhcGlZuIbAIOrQFQUgHYwzRS7vELGOqD
+         E8rQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVd8MSIVyk1iMWo7U345zCIp5x0V7vlwqfivfha1nm/gZ1NJTj91s9F6SE47Pk1L8JcCxdfzcFWig==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOZJgtGkL4r5Y0a8yGJqYMD/K6a3P95pIRO2QUPC30DPxU3txN
+	yvKPnLs2sUwrICI7Yefb0OPPcrbkoTreiOhzKH2GiylsNIWxZQ0wZ+t6PGIds2Y=
+X-Gm-Gg: ASbGncu0uVaXqQX/MKjGrL7lzeBRpBIZfoYinoa0as5e2WuAbKz5v5LPacIa5yJltSa
+	y7lB9wZ8Hkd3kUcH/t4rwaShDTewvXm4XMCNNqDyQwWmOAEh63gnSt1TUSNcGrbhApEhF/FgVEA
+	KCZgD2SHOTTzMPdiv7IFflkc930CJ4pabEREkA0j5eJcaHrVhTdVICp3xO6CBLAWWOz97HaUe7E
+	Bu9XjQnwAgas7TGmcIPeYjh0A4djoyXRC2i1NCzUacrSVNGRN84MRNHnPsDw3W4IbsbrD7K5dsk
+	POxkUWijS1M4803oqA==
+X-Google-Smtp-Source: AGHT+IG0HmX1b0ZP7iCDqtRYBLY1OA2uSMSxmzc5p4sdX0Udih5vnsk0XFTryW6rzf65b5fUm+ItCQ==
+X-Received: by 2002:a05:6a00:4fc7:b0:71e:4cff:2654 with SMTP id d2e1a72fcca58-7305d44a475mr3508897b3a.6.1738912541001;
+        Thu, 06 Feb 2025 23:15:41 -0800 (PST)
 Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-ad51aecd846sm1791664a12.30.2025.02.06.20.16.56
+        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73048bf135dsm2358026b3a.113.2025.02.06.23.15.39
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 06 Feb 2025 20:16:56 -0800 (PST)
-Date: Fri, 7 Feb 2025 09:46:54 +0530
+        Thu, 06 Feb 2025 23:15:40 -0800 (PST)
+Date: Fri, 7 Feb 2025 12:45:38 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Lifeng Zheng <zhenglifeng1@huawei.com>
-Cc: rafael@kernel.org, linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linuxarm@huawei.com,
-	jonathan.cameron@huawei.com, zhanjie9@hisilicon.com,
-	lihuisong@huawei.com, fanghao11@huawei.com
-Subject: Re: [PATCH] cpufreq: Use str_enable_disable() helper
-Message-ID: <20250207041654.62xollzzkehl6rjk@vireshk-i7>
-References: <20250207035953.2420053-1-zhenglifeng1@huawei.com>
+To: Danilo Krummrich <dakr@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Danilo Krummrich <dakr@redhat.com>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Benno Lossin <benno.lossin@proton.me>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Miguel Ojeda <ojeda@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Peter Zijlstra <peterz@infradead.org>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Trevor Gross <tmgross@umich.edu>, Viresh Kumar <vireshk@kernel.org>,
+	Yury Norov <yury.norov@gmail.com>, linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	Anisse Astier <anisse@astier.eu>, linux-clk@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 00/14] Rust bindings for cpufreq and OPP core + sample
+ driver
+Message-ID: <20250207071538.xjxauatta2jsedz4@vireshk-i7>
+References: <cover.1738832118.git.viresh.kumar@linaro.org>
+ <Z6Sgwbgfp-9SCr8Y@pollux>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,38 +112,49 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250207035953.2420053-1-zhenglifeng1@huawei.com>
+In-Reply-To: <Z6Sgwbgfp-9SCr8Y@pollux>
 
-On 07-02-25, 11:59, Lifeng Zheng wrote:
-> Commit f994c1cb6c43 ("cpufreq: Use str_enable_disable()-like helpers") has
-> already introduced helpers from string_choices.h and replaced ternary
-> syntax with it. Use str_enable_disable() helper in this line to stay
-> consistent.
-> 
-> Signed-off-by: Lifeng Zheng <zhenglifeng1@huawei.com>
-> ---
->  drivers/cpufreq/cpufreq.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
-> index 30ffbddc7ece..a12e1da89163 100644
-> --- a/drivers/cpufreq/cpufreq.c
-> +++ b/drivers/cpufreq/cpufreq.c
-> @@ -1578,7 +1578,7 @@ static int cpufreq_online(unsigned int cpu)
->  		if (ret) {
->  			/* If the set_boost fails, the online operation is not affected */
->  			pr_info("%s: CPU%d: Cannot %s BOOST\n", __func__, policy->cpu,
-> -				policy->boost_enabled ? "enable" : "disable");
-> +				str_enable_disable(policy->boost_enabled));
->  			policy->boost_enabled = !policy->boost_enabled;
->  		}
->  	}
+Hi Danilo,
 
-Applied, thanks.
+On 06-02-25, 12:45, Danilo Krummrich wrote:
+> I gave it a quick shot and it seems there are a few Clippy warnings,
 
-Rafael, I have picked this since I am carrying other boost related
-changes via my series. Please let me know if you want to pick it up
-for rc.
+I could find only one (related to core::format_args), are there more ?
+
+(Earlier I had a debug commit on top of the series in my branch and
+Clippy didn't give any warnings as format_flags was getting used from
+there.)
+
+> plus rustfmtcheck complains.
+
+I am not sure how to solve them.
+
+Diff in rust/kernel/cpufreq.rs at line 628:
+
+         // SAFETY: The C code returns a valid pointer here, which is again passed to the C code in
+         // an array.
+-        attr[next] = unsafe {
+-            addr_of_mut!(bindings::cpufreq_freq_attr_scaling_available_freqs) as *mut _
+-        };
++        attr[next] =
++            unsafe { addr_of_mut!(bindings::cpufreq_freq_attr_scaling_available_freqs) as *mut _ };
+         next += 1;
+
+         if boost {
+
+If I move the code as suggested here, then I get warning about not
+adding a SAFETY comment for unsafe code (which looks to be a tool
+specific bug).
+
+I can move the entire thing into the unsafe block, but the assignment
+to attr[next] isn't unsafe.
+
+What do yo suggest here ?
+
+> There are also two minor checkpatch complaints about line length.
+
+Yeah, they came from the first commit (which wasn't written by me and
+so I avoided touching it), fixed now.
 
 -- 
 viresh
