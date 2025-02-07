@@ -1,173 +1,120 @@
-Return-Path: <linux-pm+bounces-21531-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21532-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A8735A2C14A
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 12:07:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3E48DA2C302
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 13:48:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 768EB188D65A
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 11:07:53 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E593E7A623C
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 12:47:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9CB941DEFEB;
-	Fri,  7 Feb 2025 11:07:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 77FA51E5B6C;
+	Fri,  7 Feb 2025 12:48:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="O5Wz4xXk"
+	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="BytzGPT3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 085961DED64;
-	Fri,  7 Feb 2025 11:07:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AD051DC99E;
+	Fri,  7 Feb 2025 12:48:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738926451; cv=none; b=jISeG3tUhw8mUSuZNYetO9N4ixx8GJX7uyiN0w/L8yYgPb/SK9XlYPpWGml8eTQuGd7/c2FesN7ob37vH5C2X40pt5/ir+rQpgETVDQQ0HitAbPnry7AFtWiS4CPZ/x9l16FN9gHv8UzrlqLEo5+Xw+EPG6qkDvYqk2Tjq6uQDI=
+	t=1738932491; cv=none; b=lhsBDRI8JFoY6Tg4SR0FAmUAzu4TFMN7tqE24LRE0mAISQU7lp7sm2Q6rg0kD8j4RP50d2/N6VfGO04OTIRpFEMnZsC5UGrSSf4SPTHS0P4f41eFYzF8dsnNQDKtU34r4teK/d1ST2md6aKU626ZyqKpiI2i94vHal2B7Df81Ls=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738926451; c=relaxed/simple;
-	bh=tX2VhS1SeREZEEWfKhsYfi87lp8g4mnQweSe4p8Ykfo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AUpllPH95WWz8zl1uuQqzTrbqePOCZaqC07Am8G5bJJD0g+lUdJBnW5WlPQF57ziNj2/aRd1cSuD2iHkwDiX7KyL8TbNFOYcv1ciwn/auHaM1VoaFom5A4Zfz8sn2RsbKE5dzcJqIuUZz6Q8auXxpIA/ibGayxL8vZj9LfZfeQo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=O5Wz4xXk; arc=none smtp.client-ip=209.85.216.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2f74e6c6cbcso446302a91.2;
-        Fri, 07 Feb 2025 03:07:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1738926449; x=1739531249; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=mX3UWjqcmjhwdy78xAQGr+U0/dUkqStaWJmr9P/RfFg=;
-        b=O5Wz4xXk8syOtmtz7Y5fEScSZEfY/Yc9Hqlpi26kEML6CERHwaNQyLfYE6emw3lT7a
-         UGfMrxn8s23j+hWnaCOXrfxN8ucDooibi3kcDWeIkOQSFDTOcBC0DMZjdBvRorDf2aum
-         36khANTspF0hvAejbGYapyfPEdjoFmUEZ7v+z/uK6fQT0jhpFequyKfai9pZDM0pNRzc
-         +laQ/d8fYa3fUBCPfUzTfr+VqAS6Hz/fSMh/+RiguQhXXAVnT7uyHMAfcOfPx46r7gtE
-         vOskpPnCvxz4YR7IwwsDL/cMh3SCt6bE8WPENER5ciWCPRnnhNu4yA3XRZtUZOr5nnVk
-         sySA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1738926449; x=1739531249;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=mX3UWjqcmjhwdy78xAQGr+U0/dUkqStaWJmr9P/RfFg=;
-        b=EvnzIvBhBR9joyM39IcvVHCUmCGFxcGXM5U47YwnngiYBoQFdstkIQ2eFUo+w1delK
-         8KhMtQNfTbjdXXNQmOVuhzpz6yQwZRhgKBkLZfKjE2P5blSMxo4KxZyOyOkZuCndnouA
-         3+Aa4o8bdXpD+BiLhjepWeHa7uFyD73ntWuGMgqpnmtRiUXLCnzUzyHzOroO6R2sSaBz
-         fy6iYN0HM2ao27kDalnaJoOt+bLMVGBrL0TTncQ587YbFP19hd6/AvmX824KKNGwLQxx
-         KRIXiItevf67UEFTaSD8b6EmWj5ybj7m8JWcoOynhvud+s72KThhEv6UZLFFG5HFK4W+
-         pgwg==
-X-Forwarded-Encrypted: i=1; AJvYcCU9bizb3e671ENmJyqKLiHpS1AAKJv65ivr9+STyrTKn2DBH35vNSxough7zwbCN6lFUmz8YzJsQjZHuqkP@vger.kernel.org, AJvYcCVQydHdexinyMh2AzYCrDpPL7YrQRJBMmOfa9RC+xNIlzw+dUBdXtwXisK6JjdoChdDv/OSS7vELopEN5hOGm4=@vger.kernel.org, AJvYcCXgXvA3FqNCdIVR3xnJF69xICv+9Tpict2cT3vX80edXtjAxH3AILqQPS6mUnkaIfz+8448ygNzfGA=@vger.kernel.org, AJvYcCXuPRCIrJvvXRqQAd81BiAO1Q3kPEVvE9SnBLG23SGpQSmx4PwstntHsw9GNpMilH5KDo2A/8aXiik=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6m6LkqGoq7UhFyYU4ApzmbHXw8MlQ5Dg8WQNTvIDE7cFjSWGg
-	9TbYahPqCYcuKvkCbvUaxkfXIHL3CWrlei3W+rq6sEz5A7FqFCln2mlPbim1RUGqq9fvO1osGQc
-	ivMgkbISTuKe3xRA2keNoCr1D1kQ=
-X-Gm-Gg: ASbGncu6WMPS+7e1Ru0Jnpz1lXudBoB/PbJus2k3TxELs4rpXWM6djzqinq2fJQjjiA
-	XvXNU+9oDRggSRzHAmtXgR2QpC3kDJLSLV8dIDn+R1sCVGhgpHxsQduMBIq4MAWhc/XJZ6D6C
-X-Google-Smtp-Source: AGHT+IE/3gWtecB4TuXpei0yuNOQwHNbelMV9DCjald55tyxQFeC6FoGlBVQILPWu4B8zeWlzZ2N/WpKVfFEjQUhemA=
-X-Received: by 2002:a17:90b:3903:b0:2ea:5e0c:2844 with SMTP id
- 98e67ed59e1d1-2fa243ed977mr1750269a91.5.1738926449145; Fri, 07 Feb 2025
- 03:07:29 -0800 (PST)
+	s=arc-20240116; t=1738932491; c=relaxed/simple;
+	bh=Z7GlX4G3CLXl4PdntmkGapZgBz10huhVzZfNPwGxMJY=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=dR9HmUdtU6WrndBEwJWzk623y4l2fw6GqaJcaTu+x5YpVYlLhDVp7PHmKmtFN/BVKHpJS/1dIjj8HccY3TaYgy/CfHF/IF6etyZZZ9hssKvwLN0W/tWFz0g57y5RhU5TKFNKnUAzJdmG1XVsKUkciarC22VyJxnEYeX7f3Hd978=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=BytzGPT3; arc=none smtp.client-ip=193.68.50.107
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
+Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
+	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id 9D100A037B;
+	Fri,  7 Feb 2025 13:48:05 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:from:from:message-id:mime-version:reply-to:subject:subject:to
+	:to; s=mail; bh=BCu/ryqDczot25TDMnKcJhaUWntHdW2uO8lsXLpQ4VQ=; b=
+	BytzGPT360C98IhBFxeTx3NOwsyn+LLjSv0HyYRHltnx/CHg6fMAUgNUP0g/vhjs
+	HJxPAeodhFy0B9L8D+VPCYnu98rFe4cKHSX/pojtKyvogse4DqFFAbg51iZ2Jup5
+	uIxAv+GAjZemdhK5q5MI/MPNV7WbWu1fyaoPYgvY6svrrFaBp0nRadftitN00V5D
+	pzR5HEXN65zo1P+kvq0W5U7nf6H8KYekVzRcB8DAYKyDC0q9SdChzmib9RP2W9EF
+	Hjq/LD2nIqLG5a4Q0+oThW6llaY4XNGwZvFLuVeonmW/LKGf3ztbwQF86bU1w2ED
+	wmdGDqj9mMFWbvbAVzr77z75vqzYYAbFqPy9iAvdB+GCvSPsPU+wtvC6yGdtLwJI
+	y8BkaR6EFSwIqjbZSUsmqlDSH9EIyqGuWDOp6+jRRvddW/TY0Z/ncsWqzfX0Ckry
+	QSAQ7jIvcO96yTxLPoTddO2EAZcNQIKRvcCbUSYLvoKz/+2KphB+qP3TyvMh4fmT
+	26DbUX/oORlbm50fgAzvDeZ3Yd7CIqen5uEGq3CfegZacs6yVTjjLMfVScpOAcus
+	TE6BU59rVCQ1HTxjXJxUthHBY7RTKe92xlAAO6xfmM9Tqgb6iRBkXfljpFvsXwTM
+	8axDWRciHBAbucV/68S2oTKfum+ucJ5A8Nd7pygzZYk=
+From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
+To:
+CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, Mark Brown
+	<broonie@kernel.org>, Vinod Koul <vkoul@kernel.org>, "Rafael J . Wysocki"
+	<rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
+	<pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Nicolas
+ Ferre" <nicolas.ferre@microchip.com>, Alexandre Belloni
+	<alexandre.belloni@bootlin.com>, Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Tudor Ambarus <tudor.ambarus@linaro.org>, Varshini Rajendran
+	<varshini.rajendran@microchip.com>, Alexander Dahl <ada@thorsis.com>,
+	<linux-spi@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<dmaengine@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>
+Subject: [PATCH for-6.14 v3 0/4] Add more devm_ functions to simplify probe path in drivers/spi/atmel-quadspi.c
+Date: Fri, 7 Feb 2025 13:47:55 +0100
+Message-ID: <20250207124802.165408-1-csokas.bence@prolan.hu>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1738832118.git.viresh.kumar@linaro.org> <Z6Sgwbgfp-9SCr8Y@pollux>
- <20250207071538.xjxauatta2jsedz4@vireshk-i7>
-In-Reply-To: <20250207071538.xjxauatta2jsedz4@vireshk-i7>
-From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
-Date: Fri, 7 Feb 2025 12:07:14 +0100
-X-Gm-Features: AWEUYZms7tganxn6t-nVTSipJtfvYNnMyzk79dgVfbWiEhhyHiIvoGcdoMyxUWw
-Message-ID: <CANiq72k4N_bD3_QxFKveyjGsSeXJX7y6fKU4EVt0hBOcq9q7tA@mail.gmail.com>
-Subject: Re: [PATCH V8 00/14] Rust bindings for cpufreq and OPP core + sample driver
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Danilo Krummrich <dakr@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Danilo Krummrich <dakr@redhat.com>, Alex Gaynor <alex.gaynor@gmail.com>, 
-	Alice Ryhl <aliceryhl@google.com>, Andreas Hindborg <a.hindborg@kernel.org>, 
-	Benno Lossin <benno.lossin@proton.me>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
-	Michael Turquette <mturquette@baylibre.com>, Miguel Ojeda <ojeda@kernel.org>, Nishanth Menon <nm@ti.com>, 
-	Peter Zijlstra <peterz@infradead.org>, Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
-	Stephen Boyd <sboyd@kernel.org>, Thomas Gleixner <tglx@linutronix.de>, Trevor Gross <tmgross@umich.edu>, 
-	Viresh Kumar <vireshk@kernel.org>, Yury Norov <yury.norov@gmail.com>, linux-pm@vger.kernel.org, 
-	Vincent Guittot <vincent.guittot@linaro.org>, rust-for-linux@vger.kernel.org, 
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, 
-	=?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>, 
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, 
-	Anisse Astier <anisse@astier.eu>, linux-clk@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1738932485;VERSION=7985;MC=412144077;ID=401531;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
+X-ESET-Antispam: OK
+X-EsetResult: clean, is OK
+X-EsetId: 37303A29ACD94852617560
 
-On Fri, Feb 7, 2025 at 8:15=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.or=
-g> wrote:
->
-> If I move the code as suggested here, then I get warning about not
-> adding a SAFETY comment for unsafe code (which looks to be a tool
-> specific bug).
+The probe function of the atmel-quadspi driver got quite convoluted,
+especially since the addition of SAMA7G5 support, that was forward-ported
+from an older vendor kernel. To alleivate this - and similar problems in
+the future - an effort was made to migrate as many functions as possible,
+to their devm_ managed counterparts. The few functions, which did not yet
+have a devm_ variant, are added in patch 1 and 2 of this series. Patch 3
+and 4 then use these APIs to simplify and fix the probe() function.
 
-The warning is there even if you don't run `rustfmt`, and it does not
-look like a bug to me -- what Clippy is complaining about is that you
-don't actually need the `unsafe` block to begin with:
+Patch 4 in particular, fixes a bug present in 6.14-rc1, where the PM get()
+and put() calls were imbalanced.
 
-    error: unnecessary `unsafe` block
-    --> rust/kernel/cpufreq.rs:631:22
-        |
-    631 |         attr[next] =3D unsafe {
-        |                      ^^^^^^ unnecessary `unsafe` block
-        |
-        =3D note: `-D unused-unsafe` implied by `-D warnings`
-        =3D help: to override `-D warnings` add `#[allow(unused_unsafe)]`
+Links to previous versions:
+pre-series:
+https://lore.kernel.org/linux-kernel/20241222141427.819222-1-csokas.bence@prolan.hu/
+https://lore.kernel.org/linux-kernel/20250114222851.1023194-1-csokas.bence@prolan.hu/
+v1:
+https://lore.kernel.org/linux-kernel/20250115160244.1102881-1-csokas.bence@prolan.hu/
+v2:
+https://lore.kernel.org/linux-kernel/20250124085221.766303-8-csokas.bence@prolan.hu/
 
-since those operations are safe. Or am I missing something?
+Bence Csókás (4):
+  dma: Add devm_dma_request_chan()
+  pm: runtime: Add new devm functions
+  spi: atmel-quadspi: Use `devm_dma_request_chan()`
+  spi: atmel-quadspi: Fix unbalanced pm_runtime by using devm_ API
 
-Then, when you remove it, Clippy will complain that there should not
-be a SAFETY comment:
+ drivers/base/power/runtime.c | 36 +++++++++++++++++++++
+ drivers/dma/dmaengine.c      | 30 +++++++++++++++++
+ drivers/spi/atmel-quadspi.c  | 62 ++++++++++--------------------------
+ include/linux/dmaengine.h    |  7 ++++
+ include/linux/pm_runtime.h   |  4 +++
+ 5 files changed, 93 insertions(+), 46 deletions(-)
 
-    error: statement has unnecessary safety comment
-    --> rust/kernel/cpufreq.rs:625:9
-        |
-    625 |         attr[next] =3D
-addr_of_mut!(bindings::cpufreq_freq_attr_scaling_available_freqs) as
-*mut _;
-        |
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^=
-^^^^^^^^^^^^^^
-        |
-    help: consider removing the safety comment
-    --> rust/kernel/cpufreq.rs:623:9
-        |
-    623 |         // SAFETY: The C code returns a valid pointer here,
-which is again passed to the C code in
-        |
-^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^^=
-^^^^^^^^^^^^^^^
-        =3D help: for further information visit
-https://rust-lang.github.io/rust-clippy/master/index.html#unnecessary_safet=
-y_comment
-        =3D note: `-D clippy::unnecessary-safety-comment` implied by `-D wa=
-rnings`
-        =3D help: to override `-D warnings` add
-`#[allow(clippy::unnecessary_safety_comment)]`
 
-And `rustfmt` will put things in a single line, since now they fit.
+base-commit: bb066fe812d6fb3a9d01c073d9f1e2fd5a63403b
+-- 
+2.48.1
 
-I would suggest reviewing all the SAFETY comments around this code,
-i.e. something may be wrong, since these were not needed, and thus you
-may have wanted to describe them elsewhere.
 
-In any case, passing `rustfmtcheck` is a requirement. So in the worst
-case, if you do find such a bug in e.g. Clippy, you may always
-`expect` or `allow` the lint or disable `rustfmt` in that region of
-code. But that should be really rare, and in such a case it should be
-reported upstream.
-
-I also found other build issues in the branch you mention in your
-cover letter, so please double-check everything looks good before
-adding it to linux-next. Please also make it Clippy-clean.
-
-I hope that helps!
-
-Cheers,
-Miguel
 
