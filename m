@@ -1,170 +1,129 @@
-Return-Path: <linux-pm+bounces-21533-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21534-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0657EA2C300
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 13:48:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 70CA6A2C30A
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 13:49:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 289DE169B14
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 12:48:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BC38E188A999
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 12:49:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0D101E7C02;
-	Fri,  7 Feb 2025 12:48:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BEC71E5B71;
+	Fri,  7 Feb 2025 12:48:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b="I00Ncdq5"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="iNLakeYL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fw2.prolan.hu (fw2.prolan.hu [193.68.50.107])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70B241DFE04;
-	Fri,  7 Feb 2025 12:48:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=193.68.50.107
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A5F0E1E5B6C;
+	Fri,  7 Feb 2025 12:48:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738932491; cv=none; b=qj+XD+eXQQ8esDdGTaK71vL5hSBOKY/88t5D9LQ2ZJk3jjPx952mfmJAso65JPF/BdQ9K1aPfC+PCnUV2gE7ey99Nj+16rtg8HhaGoQI+zs3NmjkaHUOzm0ptnyuzXLEY5OltJLiOQtbozZXIDeJ1VjmXymTwHKjN7tlQfBtjMU=
+	t=1738932527; cv=none; b=AI+0DhA4WjSXbpPUjqXcb2eWWcRZxwqAc/mB6fvEQsw+yRpxyeOCRR5+u1B8N9qzN4fKV0B/X/52a5HemM6Hyud2UBwUFP0FRvCRfo1RSa3VAtZGmn9IdhmVB+LCwxLoFF8XwhTs5HO9Bqp1gDqlmf4ThFaSC7PZzFAEdSDW4dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738932491; c=relaxed/simple;
-	bh=hMjK0JKCLQkifVL6xcp5SP3Txd+JKmmgLvrhO1+qQ0Q=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=O99oxLEtNkMF8HZ8N/uenjjduGfyN3ISAk1IiKQdSwCt373DldSUOzouX0/YYMqsAhO4NAsv/clnoR8/ThZ/XVjVtrlEF0MsRbVWkvkTksX5gZ0SSrc+/UL9R+LWaXwFK4vOEY/X+7hpiFEowBYBmX+VrkVC8Az9Oso9S0s5g+w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu; spf=pass smtp.mailfrom=prolan.hu; dkim=pass (4096-bit key) header.d=prolan.hu header.i=@prolan.hu header.b=I00Ncdq5; arc=none smtp.client-ip=193.68.50.107
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=prolan.hu
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=prolan.hu
-Received: from proxmox-mailgw.intranet.prolan.hu (localhost.localdomain [127.0.0.1])
-	by proxmox-mailgw.intranet.prolan.hu (Proxmox) with ESMTP id BC947A0F18;
-	Fri,  7 Feb 2025 13:48:07 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=prolan.hu; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:from:from:in-reply-to:message-id:mime-version:references
-	:reply-to:subject:subject:to:to; s=mail; bh=ZlOzh0yVdNtO9Xo4eTT0
-	ptUq5hK7+DDJWK0WMdAATE0=; b=I00Ncdq5bnyZ1gHuVLtUxodELmGWlUAAugOl
-	uN9SmvWdbv0Q4SoB3hJSW9bYORBuA8QAgHufWHYI9C6ipvDS/GuVBmcsYO0iAsab
-	NRf1U90UF2PGmoQ/MK7DMKHnwnxwG8nn9/6iWk5WYewI0bRDr8ausZFKSiZ8kTmD
-	h88FI86uu5OERM852zon0qJXPk92jU2l0LVcvn6bPWeFlSSYZEfk4AbUINGpx2TM
-	I44OawH/zeB/PXCpfOO6pA3xeeU8LCd/qPQgJ1xBmLY2U9k0IPzhdTYA21OjxKXG
-	yr1swowVhzJlNY0wTqP1ousxgaLr7UaF0aMWzkR2WVw5QsoRU0AwofD+tvdrxK0x
-	6WqPQM0Svi3N/xERj2LwgMiNVQTLrIWJIj0tC7g8fjFBblSMO2mwds6Zcjmf2z9h
-	a/L2qG8VZUAhVjSplUOU0z/bVpawXxtYGgkcgJOmbeHNMSQ+UxAsG/NPrZ17zlqH
-	VqVucwESHt4BIkCWAITmAp3FMDQE8zoLyl7QRLfpk5ejpUYm2CQlUBB4/xvMceyU
-	tmfFjoKeaAA0LGJEVVeH4GantbXx5RFKpPjyLro+b28jYvJ7bclRv4UF+/Ta9wJR
-	TcJlOe9KbH89lc9ubv+XhvpJdGtD534HDLmw7ZXPmBsD0nIUEWsClW8LIB580qbu
-	a5ZTO4c=
-From: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>
-To: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>
-CC: =?UTF-8?q?Bence=20Cs=C3=B3k=C3=A1s?= <csokas.bence@prolan.hu>, "Rafael J.
- Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek
-	<pavel@ucw.cz>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Danilo
- Krummrich" <dakr@kernel.org>
-Subject: [PATCH for-6.14 v3 2/4] pm: runtime: Add new devm functions
-Date: Fri, 7 Feb 2025 13:47:57 +0100
-Message-ID: <20250207124802.165408-3-csokas.bence@prolan.hu>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250207124802.165408-1-csokas.bence@prolan.hu>
-References: <20250207124802.165408-1-csokas.bence@prolan.hu>
+	s=arc-20240116; t=1738932527; c=relaxed/simple;
+	bh=B583Jt+dZN0idFwnznXbNLEdBMPIyxuJIgGbaof1NUQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=LSxGFMxjQcxhwvOeDlpIZxjRO0N259489vH3/SYzwJRMTEHPH6Tjhy8sUHYlc1ybkJp086I/5mm9V86D8HZkWLXscxd/2tXRxKe+1NphLPiDt61KH/9ojLEsiHuQ7g2U7jeFKV7MfyT/qyhu4mA1FtAj7aaKeQ3+bqkEyD7Tm0Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=iNLakeYL; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id 120da5e98b0c8ecc; Fri, 7 Feb 2025 13:48:41 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id CF36C6BAA02;
+	Fri,  7 Feb 2025 13:48:40 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1738932521;
+	bh=B583Jt+dZN0idFwnznXbNLEdBMPIyxuJIgGbaof1NUQ=;
+	h=From:Subject:Date;
+	b=iNLakeYLi+BrC5iPPaK53O9ZiJkiYEIu4KKa6Fad8zSOv7dpbXcLofQvJlUBVl5jg
+	 iy+ZO9AxrSJ7Av2qQjde30MAUWUUQ8ARufDIjtFQS9HdM+kRNYHnixZ5QGUD1UZkBw
+	 ZOv/7NYzfZ8zQ+lP7NiFtcDPOOjJFrD9lX32ZButH3+bgdHRFZNCIuoeilxE+wOIMD
+	 LEr85K4qxNpgFVxNZzqmmy15awR/nwcCBN0o4mBo9ujXfmkj8UyqX76LQqStuO5nF+
+	 3CMZ+ZVaEsHtjySxNVAQIE4BWt+i4NxuhgyjPBQtrugoXpfH9EBSNIKLz5ox+D3Y08
+	 TNlKOW6HQtGXw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Zhang Rui <rui.zhang@intel.com>
+Subject: [PATCH v1] cpufreq: intel_pstate: Relocate platform preference check
+Date: Fri, 07 Feb 2025 13:48:40 +0100
+Message-ID: <2776745.mvXUDI8C0e@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 7Bit
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ESET-AS: R=OK;S=0;OP=CALC;TIME=1738932487;VERSION=7985;MC=164966442;ID=401534;TRN=0;CRV=0;IPC=;SP=0;SIPS=0;PI=3;F=0
-X-ESET-Antispam: OK
-X-EsetResult: clean, is OK
-X-EsetId: 37303A29ACD94852617560
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: spam:low
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddvleeffecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnegoufhprghmkfhpucdlfedttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucfuphgrmhfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeegpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdhprghnughruhhvrggurgeslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehruhhirdiihhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=4 Fuz1=4 Fuz2=4
 
-Add `devm_pm_runtime_set_active()` and
-`devm_pm_runtime_get_noresume()` for
-simplifying common use cases in drivers.
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Signed-off-by: Bence Csókás <csokas.bence@prolan.hu>
+Move the invocation of intel_pstate_platform_pwr_mgmt_exists() before
+checking whether or not HWP is enabled because it does not depend on
+any code running before it except for the vendor check and if CPU
+performance scaling is going to be carried out by the platform, all of
+the code that runs before that function (again, except for the vendor
+check) is redundant.
+
+This is not expected to alter any functionality except for the ordering
+of messages printed by intel_pstate_init() when it is going to return an
+error before attempting to register the driver.
+
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/base/power/runtime.c | 36 ++++++++++++++++++++++++++++++++++++
- include/linux/pm_runtime.h   |  4 ++++
- 2 files changed, 40 insertions(+)
+ drivers/cpufreq/intel_pstate.c |   18 +++++++++---------
+ 1 file changed, 9 insertions(+), 9 deletions(-)
 
-diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
-index 2ee45841486b..f0a6c64bec19 100644
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1545,6 +1545,24 @@ void pm_runtime_enable(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(pm_runtime_enable);
+--- a/drivers/cpufreq/intel_pstate.c
++++ b/drivers/cpufreq/intel_pstate.c
+@@ -3688,6 +3688,15 @@
+ 	if (boot_cpu_data.x86_vendor != X86_VENDOR_INTEL)
+ 		return -ENODEV;
  
-+static void pm_runtime_set_suspended_action(void *data)
-+{
-+	pm_runtime_set_suspended(data);
-+}
++	/*
++	 * The Intel pstate driver will be ignored if the platform
++	 * firmware has its own power management modes.
++	 */
++	if (intel_pstate_platform_pwr_mgmt_exists()) {
++		pr_info("P-states controlled by the platform\n");
++		return -ENODEV;
++	}
 +
-+/**
-+ * devm_pm_runtime_set_active - devres-enabled version of pm_runtime_set_active.
-+ *
-+ * @dev: Device to handle.
-+ */
-+int devm_pm_runtime_set_active(struct device *dev)
-+{
-+	pm_runtime_set_active(dev);
-+
-+	return devm_add_action_or_reset(dev, pm_runtime_set_suspended_action, dev);
-+}
-+EXPORT_SYMBOL_GPL(devm_pm_runtime_set_active);
-+
- static void pm_runtime_disable_action(void *data)
- {
- 	pm_runtime_dont_use_autosuspend(data);
-@@ -1567,6 +1585,24 @@ int devm_pm_runtime_enable(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
+ 	id = x86_match_cpu(hwp_support_ids);
+ 	if (id) {
+ 		hwp_forced = intel_pstate_hwp_is_enabled();
+@@ -3743,15 +3752,6 @@
+ 		default_driver = &intel_cpufreq;
  
-+static void pm_runtime_put_noidle_action(void *data)
-+{
-+	pm_runtime_put_noidle(data);
-+}
-+
-+/**
-+ * devm_pm_runtime_get_noresume - devres-enabled version of pm_runtime_get_noresume.
-+ *
-+ * @dev: Device to handle.
-+ */
-+int devm_pm_runtime_get_noresume(struct device *dev)
-+{
-+	pm_runtime_get_noresume(dev);
-+
-+	return devm_add_action_or_reset(dev, pm_runtime_put_noidle_action, dev);
-+}
-+EXPORT_SYMBOL_GPL(devm_pm_runtime_get_noresume);
-+
- /**
-  * pm_runtime_forbid - Block runtime PM of a device.
-  * @dev: Device to handle.
-diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
-index d39dc863f612..d7eca86150b8 100644
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -93,7 +93,9 @@ extern void pm_runtime_new_link(struct device *dev);
- extern void pm_runtime_drop_link(struct device_link *link);
- extern void pm_runtime_release_supplier(struct device_link *link);
+ hwp_cpu_matched:
+-	/*
+-	 * The Intel pstate driver will be ignored if the platform
+-	 * firmware has its own power management modes.
+-	 */
+-	if (intel_pstate_platform_pwr_mgmt_exists()) {
+-		pr_info("P-states controlled by the platform\n");
+-		return -ENODEV;
+-	}
+-
+ 	if (!hwp_active && hwp_only)
+ 		return -ENOTSUPP;
  
-+int devm_pm_runtime_set_active(struct device *dev);
- extern int devm_pm_runtime_enable(struct device *dev);
-+int devm_pm_runtime_get_noresume(struct device *dev);
- 
- /**
-  * pm_suspend_ignore_children - Set runtime PM behavior regarding children.
-@@ -276,7 +278,9 @@ static inline void __pm_runtime_disable(struct device *dev, bool c) {}
- static inline void pm_runtime_allow(struct device *dev) {}
- static inline void pm_runtime_forbid(struct device *dev) {}
- 
-+static inline int devm_pm_runtime_set_active(struct device *dev) { return 0; }
- static inline int devm_pm_runtime_enable(struct device *dev) { return 0; }
-+static inline int devm_pm_runtime_get_noresume(struct device *dev) { return 0; }
- 
- static inline void pm_suspend_ignore_children(struct device *dev, bool enable) {}
- static inline void pm_runtime_get_noresume(struct device *dev) {}
--- 
-2.48.1
+
 
 
 
