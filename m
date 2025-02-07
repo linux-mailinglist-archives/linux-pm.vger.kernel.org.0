@@ -1,265 +1,343 @@
-Return-Path: <linux-pm+bounces-21560-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21561-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6EEE4A2CAF2
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 19:14:44 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77856A2CE0D
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 21:22:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6B7D33AA366
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 18:14:35 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 56B9A7A2046
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Feb 2025 20:21:18 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3FD019DF64;
-	Fri,  7 Feb 2025 18:14:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4212198831;
+	Fri,  7 Feb 2025 20:22:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Z+la3ER1"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUt8iOOh"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C0858199EB7;
-	Fri,  7 Feb 2025 18:14:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EC4023C8C7
+	for <linux-pm@vger.kernel.org>; Fri,  7 Feb 2025 20:22:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738952080; cv=none; b=QadlWuDlLzNrMbJM+nZNzGjaF5JsOet2PPcYrvovTyPkU/rvSeGOYK8wKy4wLop/l/199Ogsmk6rkbJ2+qNp7BwffsbItu1tH8jGTy8rYn5kvo8Rb538htXcgcjIPlqO7mfK8tUaRKhLmBgNkqNnFSzvZxkPnhWXOKDiT1HDQfQ=
+	t=1738959727; cv=none; b=NQYGCQmLz8I+96cuaMESlCo82xUScJQddPBIJcfuUxJaH5vk0pxyXltoYIvSau4dhIkcgP7+34FBWOSASQWX3boxjdhrvn8QIkaCQXpSTr/1nNKSVrVGGK0HhO/YMwBWwVjGguZ/0v2DyuXX0D4mGm1LSNrSmKHgdbgE8HTp2GA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738952080; c=relaxed/simple;
-	bh=2vRQARBPfRDe4Y7LUWzZxwe6nvtPE+deE1jVBXnCDRM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=gx0lu5ro3GfMw0AYsDP6jmo8VTfAmN4rG8OCfb97eetU9XrgiL8bz404H6kafQvLZuBlN7KhCeRwz/m7f+XpPq+Er9tNr7Idq/psKblnQQc6Iw7xSN8G8jfegPzmVNVGTTWavPbI77gwjipdwm+FztDhqhPY7vdRyVCxDX7wOlk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Z+la3ER1; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3BE80C4CEE5;
-	Fri,  7 Feb 2025 18:14:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1738952080;
-	bh=2vRQARBPfRDe4Y7LUWzZxwe6nvtPE+deE1jVBXnCDRM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Z+la3ER1pTtRYJCGc5WodTYtCbhNFjnKTd2flqLFtAwWANwKZBmF8BvdDt0oEbzOA
-	 eK7hXvvvk5T9nGy8/5YksIBna5j4vBuV38bVxbkkkzp/U1+rnNJkjmWBeiEA2cyHPN
-	 LgKooOIU94q1ozAAkUQjklavjNyXb6bHSjnu0611vBoHlO6MGk9SnHz3yfYGOE/KQk
-	 oa9MeUxI+Tgw4o3hQfA4YjAybLCZGZ4ETry86e0LRzFcWZaYtJA/dVlwvlP76yf14P
-	 /OI1PLt6832NaQ0VvJE0SkZHkwpXLnAznr2erI1Jv94H+HRB+xysLdB/A/2rjBxcpl
-	 5FGERo52uk+oQ==
-Received: by mail-oo1-f51.google.com with SMTP id 006d021491bc7-5fa2a2bdde9so677304eaf.0;
-        Fri, 07 Feb 2025 10:14:40 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUM3pzl5no+QXVQJZy0TIc7P/iduxd1qCMYxSispAnLCCvhBzXCTw7jeNyJ5F/6mfn4x2WjzieYuYg/wOE=@vger.kernel.org, AJvYcCVg5OJ5oKPgU79Viu9pQ0WVjo96EzA6qyw/r59efeF7Ueks7VN18smO8P6IgG19uCyHJrwB/BUU4WE9@vger.kernel.org, AJvYcCWIvToEI6mjr+YT2j2ub5n60MBwBIWaxvXG+Tb8xOppsxx3HWTNk4UtR2YrYzrzu4WnM5O4+J4Ef3isMKE=@vger.kernel.org, AJvYcCXq2rQJbYZjpRMUq9bqIhHgZR1taCYt2ykdmxrnsx4ngXBlLc7Z4ux4ldUbLifFqo0k++5RJ9oiquY=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwsVHlTxzulWqI6Fk+1SQyUcqOf3g8W56KNG27ZWVa0c84A+m22
-	t0KMPqesunklxVLLS/QJY7UpeG8pUgpr4Fr2UO1JSSumG3uMECAIEpMJXvYg6b0engrubkSa/Ye
-	yMWq/4kleN/8tTg1QO96yfzjgGGM=
-X-Google-Smtp-Source: AGHT+IHGI0WXftuL7wk8a3wFGS2gQ6lju6Fy2RlUNGM9RMxSD4fsyY9blHC5wTJ99nQoBl2LvRdE2HLCP4IXR/lyXfg=
-X-Received: by 2002:a05:6820:209:b0:5fa:61b9:3efb with SMTP id
- 006d021491bc7-5fc5e70f19fmr2791995eaf.4.1738952079465; Fri, 07 Feb 2025
- 10:14:39 -0800 (PST)
+	s=arc-20240116; t=1738959727; c=relaxed/simple;
+	bh=kR3MsemlREgOKLybmUlY5TThscWyRlxnJUr5mp/sAs0=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=Evg/XJA7j1qMm4hO7L9Sk0CgBTgmJJzUMnSybvkoCEyPX/io2OUfSTlZUcjn40h6hz5R7D2IbeiZ3QCGGrDcFOgabCgwrqVQxszM4ftTVJu30xjOWdA+X3/OOoPVauI4AJxr0J+AgtmWxtbprMlQPMkaTo6EWfFpg62vypgrI1w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUt8iOOh; arc=none smtp.client-ip=192.198.163.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1738959726; x=1770495726;
+  h=date:from:to:cc:subject:message-id;
+  bh=kR3MsemlREgOKLybmUlY5TThscWyRlxnJUr5mp/sAs0=;
+  b=HUt8iOOhZAtAuPOV7NJK715B4HLMgkFMcb7845ZBmwr0PRAi+vX9x79f
+   8e+EITQdWdMDrl2dinZQKdpqAgBdQeMo4RmYQPjRHOYfmqI1O2X+vtQE7
+   40ay2wYF0Gk7N16wxxntFKu3webnYJ/s8TAg0hEr1Va0cMQ+JyWUfr17V
+   mE8S6bflK5tD/fRjvdUM25yI+i8eDAtN4Om4YOJspQ069Yfvx2iBxlKin
+   lJk+RwI6wIz4bfwpY9eu12rtV1O1tYMPJtk/f/lyN8ebC5ljGUKZiP7KE
+   hWT3nIxssl4ce35k2Ng58KFIxANDcPBOpIRuQRmqed4bu4AJJacLQMdSQ
+   g==;
+X-CSE-ConnectionGUID: mU8YgaNTRwa0R6+phQeybg==
+X-CSE-MsgGUID: C+8bMdG/SlagzlHL13OPfQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11338"; a="39507214"
+X-IronPort-AV: E=Sophos;i="6.13,268,1732608000"; 
+   d="scan'208";a="39507214"
+Received: from orviesa003.jf.intel.com ([10.64.159.143])
+  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Feb 2025 12:22:05 -0800
+X-CSE-ConnectionGUID: ZxyMAkh3Ts6Xvz1u1mgJeA==
+X-CSE-MsgGUID: 0oy9oiDkSEyQv1HINb7zKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.11,199,1725346800"; 
+   d="scan'208";a="116561121"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa003.jf.intel.com with ESMTP; 07 Feb 2025 12:22:03 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tgUrR-000yzf-10;
+	Fri, 07 Feb 2025 20:22:01 +0000
+Date: Sat, 08 Feb 2025 04:21:08 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org
+Subject: [amd-pstate:amd-pstate-fixes] BUILD SUCCESS
+ 3ace20038e19f23fe73259513f1f08d4bf1a3c83
+Message-ID: <202502080402.mfy1UDQB-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <12619233.O9o76ZdvQC@rjwysocki.net> <1c2433d4-7e0f-4395-b841-b8eac7c25651@nvidia.com>
- <Z6YPpbRF_U0TxAbf@hovoldconsulting.com> <Z6YcjFBWAVVVANf2@hovoldconsulting.com>
- <CAJZ5v0iHjkfoh2A+hAmMCTG9_nBcJrsRYFD0Hp4ZChYUo7bFEg@mail.gmail.com>
- <Z6YviAFD4Az3EIBa@hovoldconsulting.com> <Z6Y0NlW40yHTIlzm@hovoldconsulting.com>
-In-Reply-To: <Z6Y0NlW40yHTIlzm@hovoldconsulting.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 7 Feb 2025 19:14:27 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gBCQW2wwdB+4SyBXtqiis2k1Z2L8SOVKwcVbNxPHqvYA@mail.gmail.com>
-X-Gm-Features: AWEUYZlA78d4afzHjo-SK92VyRsVbR94MpDMbDNVuWS4dzSNsm4T_ttlhRpNfD0
-Message-ID: <CAJZ5v0gBCQW2wwdB+4SyBXtqiis2k1Z2L8SOVKwcVbNxPHqvYA@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
- parents and children
-To: Johan Hovold <johan@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Jon Hunter <jonathanh@nvidia.com>, 
-	"Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Bjorn Helgaas <helgaas@kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
-	Ulf Hansson <ulf.hansson@linaro.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Kevin Xie <kevin.xie@starfivetech.com>, 
-	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
-Content-Type: multipart/mixed; boundary="000000000000fa9276062d915482"
 
---000000000000fa9276062d915482
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git amd-pstate-fixes
+branch HEAD: 3ace20038e19f23fe73259513f1f08d4bf1a3c83  cpufreq/amd-pstate: Fix cpufreq_policy ref counting
 
-On Fri, Feb 7, 2025 at 5:26=E2=80=AFPM Johan Hovold <johan@kernel.org> wrot=
-e:
->
-> On Fri, Feb 07, 2025 at 05:06:32PM +0100, Johan Hovold wrote:
-> > On Fri, Feb 07, 2025 at 04:41:18PM +0100, Rafael J. Wysocki wrote:
-> > > On Fri, Feb 7, 2025 at 3:45=E2=80=AFPM Johan Hovold <johan@kernel.org=
-> wrote:
-> > > > On Fri, Feb 07, 2025 at 02:50:29PM +0100, Johan Hovold wrote:
-> >
-> > > > Ok, so the driver data is never set and runtime PM is never enabled=
- for
-> > > > this simple bus device, which uses pm_runtime_force_suspend() for s=
-ystem
-> > > > sleep.
-> > >
-> > > This is kind of confusing.  Why use pm_runtime_force_suspend() if
-> > > runtime PM is never enabled and cannot really work?
-> >
-> > It's only done for some buses that this driver handles. The driver is
-> > buggy; I'm preparing a fix for it regardless of the correctness of the
-> > commit that now triggered this.
->
-> Hmm. The driver implementation is highly odd, but actually works as long
-> as the runtime PM status is left at 'suspended' (as
-> pm_runtime_force_resume() won't enable runtime PM unless it was enabled
-> before suspend).
->
-> So we'd strictly only need something like the below if we are going to
-> keep the set_active propagation.
+elapsed time: 1427m
 
-I think you are right.
+configs tested: 250
+configs skipped: 4
 
-> diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-bus.c
-> index 5dea31769f9a..d8e029e7e53f 100644
-> --- a/drivers/bus/simple-pm-bus.c
-> +++ b/drivers/bus/simple-pm-bus.c
-> @@ -109,9 +109,29 @@ static int simple_pm_bus_runtime_resume(struct devic=
-e *dev)
->         return 0;
->  }
->
-> +static int simple_pm_bus_suspend(struct device *dev)
-> +{
-> +       struct simple_pm_bus *bus =3D dev_get_drvdata(dev);
-> +
-> +       if (!bus)
-> +               return 0;
-> +
-> +       return pm_runtime_force_suspend(dev);
-> +}
-> +
-> +static int simple_pm_bus_resume(struct device *dev)
-> +{
-> +       struct simple_pm_bus *bus =3D dev_get_drvdata(dev);
-> +
-> +       if (!bus)
-> +               return 0;
-> +
-> +       return pm_runtime_force_resume(dev);
-> +}
-> +
->  static const struct dev_pm_ops simple_pm_bus_pm_ops =3D {
->         RUNTIME_PM_OPS(simple_pm_bus_runtime_suspend, simple_pm_bus_runti=
-me_resume, NULL)
-> -       NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_fo=
-rce_resume)
-> +       NOIRQ_SYSTEM_SLEEP_PM_OPS(simple_pm_bus_suspend, simple_pm_bus_re=
-sume)
->  };
->
->  #define ONLY_BUS       ((void *) 1) /* Match if the device is only a bus=
-. */
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-In the meantime, I've cut the attached (untested) patch that should
-take care of the pm_runtime_force_suspend() issue altogether.
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    clang-21
+alpha                            allyesconfig    gcc-14.2.0
+alpha                               defconfig    clang-19
+alpha                               defconfig    gcc-14.2.0
+arc                              allmodconfig    clang-18
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-14.2.0
+arc                              allyesconfig    clang-18
+arc                              allyesconfig    gcc-13.2.0
+arc                                 defconfig    gcc-14.2.0
+arc                     haps_hs_smp_defconfig    clang-19
+arc                   randconfig-001-20250207    gcc-13.2.0
+arc                   randconfig-001-20250208    gcc-13.2.0
+arc                   randconfig-002-20250207    gcc-13.2.0
+arc                   randconfig-002-20250208    gcc-13.2.0
+arm                              allmodconfig    clang-18
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    gcc-14.2.0
+arm                              allyesconfig    clang-18
+arm                              allyesconfig    gcc-14.2.0
+arm                         at91_dt_defconfig    clang-21
+arm                                 defconfig    gcc-14.2.0
+arm                         lpc32xx_defconfig    clang-21
+arm                         lpc32xx_defconfig    gcc-14.2.0
+arm                          pxa910_defconfig    gcc-14.2.0
+arm                   randconfig-001-20250207    gcc-13.2.0
+arm                   randconfig-001-20250207    gcc-14.2.0
+arm                   randconfig-001-20250208    gcc-13.2.0
+arm                   randconfig-002-20250207    gcc-13.2.0
+arm                   randconfig-002-20250207    gcc-14.2.0
+arm                   randconfig-002-20250208    gcc-13.2.0
+arm                   randconfig-003-20250207    gcc-13.2.0
+arm                   randconfig-003-20250207    gcc-14.2.0
+arm                   randconfig-003-20250208    gcc-13.2.0
+arm                   randconfig-004-20250207    clang-21
+arm                   randconfig-004-20250207    gcc-13.2.0
+arm                   randconfig-004-20250208    gcc-13.2.0
+arm                         s3c6400_defconfig    clang-19
+arm                         wpcm450_defconfig    clang-19
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                               defconfig    gcc-14.2.0
+arm64                 randconfig-001-20250207    gcc-13.2.0
+arm64                 randconfig-001-20250207    gcc-14.2.0
+arm64                 randconfig-001-20250208    gcc-13.2.0
+arm64                 randconfig-002-20250207    gcc-13.2.0
+arm64                 randconfig-002-20250207    gcc-14.2.0
+arm64                 randconfig-002-20250208    gcc-13.2.0
+arm64                 randconfig-003-20250207    clang-16
+arm64                 randconfig-003-20250207    gcc-13.2.0
+arm64                 randconfig-003-20250208    gcc-13.2.0
+arm64                 randconfig-004-20250207    clang-21
+arm64                 randconfig-004-20250207    gcc-13.2.0
+arm64                 randconfig-004-20250208    gcc-13.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                                defconfig    clang-21
+csky                                defconfig    gcc-14.2.0
+csky                  randconfig-001-20250207    gcc-14.2.0
+csky                  randconfig-002-20250207    gcc-14.2.0
+hexagon                          alldefconfig    clang-21
+hexagon                          allmodconfig    clang-21
+hexagon                           allnoconfig    gcc-14.2.0
+hexagon                          allyesconfig    clang-18
+hexagon                          allyesconfig    clang-21
+hexagon                             defconfig    gcc-14.2.0
+hexagon               randconfig-001-20250207    clang-21
+hexagon               randconfig-001-20250207    gcc-14.2.0
+hexagon               randconfig-002-20250207    clang-17
+hexagon               randconfig-002-20250207    gcc-14.2.0
+i386                             allmodconfig    clang-19
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    clang-19
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    clang-19
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250207    gcc-12
+i386        buildonly-randconfig-001-20250208    gcc-11
+i386        buildonly-randconfig-002-20250207    gcc-12
+i386        buildonly-randconfig-002-20250208    gcc-11
+i386        buildonly-randconfig-003-20250207    gcc-12
+i386        buildonly-randconfig-003-20250208    gcc-11
+i386        buildonly-randconfig-004-20250207    gcc-12
+i386        buildonly-randconfig-004-20250208    gcc-11
+i386        buildonly-randconfig-005-20250207    clang-19
+i386        buildonly-randconfig-005-20250207    gcc-12
+i386        buildonly-randconfig-005-20250208    gcc-11
+i386        buildonly-randconfig-006-20250207    clang-19
+i386        buildonly-randconfig-006-20250207    gcc-12
+i386        buildonly-randconfig-006-20250208    gcc-11
+i386                                defconfig    clang-19
+i386                  randconfig-001-20250207    gcc-12
+i386                  randconfig-002-20250207    gcc-12
+i386                  randconfig-003-20250207    gcc-12
+i386                  randconfig-004-20250207    gcc-12
+i386                  randconfig-005-20250207    gcc-12
+i386                  randconfig-006-20250207    gcc-12
+i386                  randconfig-007-20250207    gcc-12
+i386                  randconfig-011-20250207    gcc-12
+i386                  randconfig-012-20250207    gcc-12
+i386                  randconfig-013-20250207    gcc-12
+i386                  randconfig-014-20250207    gcc-12
+i386                  randconfig-015-20250207    gcc-12
+i386                  randconfig-016-20250207    gcc-12
+i386                  randconfig-017-20250207    gcc-12
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch                           defconfig    gcc-14.2.0
+loongarch             randconfig-001-20250207    gcc-14.2.0
+loongarch             randconfig-002-20250207    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+m68k                                defconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+microblaze                          defconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+mips                           gcw0_defconfig    clang-19
+nios2                             allnoconfig    gcc-14.2.0
+nios2                               defconfig    gcc-14.2.0
+nios2                 randconfig-001-20250207    gcc-14.2.0
+nios2                 randconfig-002-20250207    gcc-14.2.0
+openrisc                          allnoconfig    clang-21
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-12
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    clang-21
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-12
+parisc                randconfig-001-20250207    gcc-14.2.0
+parisc                randconfig-002-20250207    gcc-14.2.0
+parisc64                            defconfig    gcc-14.2.0
+powerpc                     akebono_defconfig    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    clang-21
+powerpc                          allyesconfig    clang-16
+powerpc                          allyesconfig    gcc-14.2.0
+powerpc                 canyonlands_defconfig    clang-19
+powerpc                          g5_defconfig    gcc-14.2.0
+powerpc                     mpc83xx_defconfig    clang-21
+powerpc                      ppc44x_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250207    clang-21
+powerpc               randconfig-001-20250207    gcc-14.2.0
+powerpc               randconfig-002-20250207    clang-21
+powerpc               randconfig-002-20250207    gcc-14.2.0
+powerpc               randconfig-003-20250207    gcc-14.2.0
+powerpc                     tqm5200_defconfig    clang-19
+powerpc                     tqm8540_defconfig    gcc-14.2.0
+powerpc64             randconfig-001-20250207    gcc-14.2.0
+powerpc64             randconfig-002-20250207    clang-21
+powerpc64             randconfig-002-20250207    gcc-14.2.0
+powerpc64             randconfig-003-20250207    gcc-14.2.0
+riscv                            allmodconfig    clang-21
+riscv                            allmodconfig    gcc-14.2.0
+riscv                             allnoconfig    clang-21
+riscv                            allyesconfig    clang-21
+riscv                            allyesconfig    gcc-14.2.0
+riscv                               defconfig    gcc-12
+riscv                 randconfig-001-20250207    gcc-14.2.0
+riscv                 randconfig-002-20250207    gcc-14.2.0
+s390                             allmodconfig    clang-19
+s390                             allmodconfig    gcc-14.2.0
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-14.2.0
+s390                          debug_defconfig    gcc-14.2.0
+s390                                defconfig    gcc-12
+s390                  randconfig-001-20250207    gcc-14.2.0
+s390                  randconfig-002-20250207    clang-21
+s390                  randconfig-002-20250207    gcc-14.2.0
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-12
+sh                        edosk7760_defconfig    clang-21
+sh                    randconfig-001-20250207    gcc-14.2.0
+sh                    randconfig-002-20250207    gcc-14.2.0
+sh                   sh7770_generic_defconfig    clang-21
+sh                              ul2_defconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250207    gcc-14.2.0
+sparc                 randconfig-002-20250207    gcc-14.2.0
+sparc64                             defconfig    gcc-12
+sparc64               randconfig-001-20250207    gcc-14.2.0
+sparc64               randconfig-002-20250207    gcc-14.2.0
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-21
+um                               allyesconfig    clang-21
+um                               allyesconfig    gcc-12
+um                                  defconfig    gcc-12
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250207    clang-21
+um                    randconfig-001-20250207    gcc-14.2.0
+um                    randconfig-002-20250207    gcc-12
+um                    randconfig-002-20250207    gcc-14.2.0
+um                           x86_64_defconfig    gcc-12
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250207    clang-19
+x86_64      buildonly-randconfig-001-20250207    gcc-12
+x86_64      buildonly-randconfig-001-20250208    clang-19
+x86_64      buildonly-randconfig-002-20250207    clang-19
+x86_64      buildonly-randconfig-002-20250208    clang-19
+x86_64      buildonly-randconfig-003-20250207    clang-19
+x86_64      buildonly-randconfig-003-20250208    clang-19
+x86_64      buildonly-randconfig-004-20250207    clang-19
+x86_64      buildonly-randconfig-004-20250208    clang-19
+x86_64      buildonly-randconfig-005-20250207    clang-19
+x86_64      buildonly-randconfig-005-20250208    clang-19
+x86_64      buildonly-randconfig-006-20250207    clang-19
+x86_64      buildonly-randconfig-006-20250208    clang-19
+x86_64                              defconfig    clang-19
+x86_64                              defconfig    gcc-11
+x86_64                                  kexec    clang-19
+x86_64                randconfig-001-20250207    clang-19
+x86_64                randconfig-002-20250207    clang-19
+x86_64                randconfig-003-20250207    clang-19
+x86_64                randconfig-004-20250207    clang-19
+x86_64                randconfig-005-20250207    clang-19
+x86_64                randconfig-006-20250207    clang-19
+x86_64                randconfig-007-20250207    clang-19
+x86_64                randconfig-008-20250207    clang-19
+x86_64                randconfig-071-20250207    gcc-12
+x86_64                randconfig-071-20250208    gcc-12
+x86_64                randconfig-072-20250207    gcc-12
+x86_64                randconfig-072-20250208    gcc-12
+x86_64                randconfig-073-20250207    gcc-12
+x86_64                randconfig-073-20250208    gcc-12
+x86_64                randconfig-074-20250207    gcc-12
+x86_64                randconfig-074-20250208    gcc-12
+x86_64                randconfig-075-20250207    gcc-12
+x86_64                randconfig-075-20250208    gcc-12
+x86_64                randconfig-076-20250207    gcc-12
+x86_64                randconfig-076-20250208    gcc-12
+x86_64                randconfig-077-20250207    gcc-12
+x86_64                randconfig-077-20250208    gcc-12
+x86_64                randconfig-078-20250207    gcc-12
+x86_64                randconfig-078-20250208    gcc-12
+x86_64                               rhel-9.4    clang-19
+x86_64                           rhel-9.4-bpf    clang-19
+x86_64                         rhel-9.4-kunit    clang-19
+x86_64                           rhel-9.4-ltp    clang-19
+x86_64                          rhel-9.4-rust    clang-19
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250207    gcc-14.2.0
+xtensa                randconfig-002-20250207    gcc-14.2.0
+xtensa                         virt_defconfig    clang-19
+xtensa                    xip_kc705_defconfig    clang-21
 
-It changes the code to only set the device's runtime PM status to
-"active" if runtime PM is going to be enabled for it by the first
-pm_runtime_enable() call, which never happens for devices where
-runtime PM has never been enabled (because it is disabled for them
-once again in device_suspend_late()) and for devices subject to
-pm_runtime_force_suspend() during system suspend (because it disables
-runtime PM for them once again).
-
---000000000000fa9276062d915482
-Content-Type: text/x-patch; charset="US-ASCII"; name="pm-runtime-cond-set-active.patch"
-Content-Disposition: attachment; filename="pm-runtime-cond-set-active.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m6v342uq0>
-X-Attachment-Id: f_m6v342uq0
-
-LS0tCiBkcml2ZXJzL2Jhc2UvcG93ZXIvbWFpbi5jICAgIHwgICAyMCArKysrKysrKysrKysrKysr
-LS0tLQogZHJpdmVycy9iYXNlL3Bvd2VyL3J1bnRpbWUuYyB8ICAgNDEgKysrKysrKysrKysrKysr
-KysrKysrKysrKysrKysrKysrKysrLS0tLS0KIGluY2x1ZGUvbGludXgvcG1fcnVudGltZS5oICAg
-fCAgICA1ICsrKysrCiAzIGZpbGVzIGNoYW5nZWQsIDU3IGluc2VydGlvbnMoKyksIDkgZGVsZXRp
-b25zKC0pCgotLS0gYS9kcml2ZXJzL2Jhc2UvcG93ZXIvbWFpbi5jCisrKyBiL2RyaXZlcnMvYmFz
-ZS9wb3dlci9tYWluLmMKQEAgLTY1NSwxNCArNjU1LDI1IEBACiAJICogdGhpcyBkZXZpY2UgbGF0
-ZXIsIGl0IG5lZWRzIHRvIGFwcGVhciBhcyAic3VzcGVuZGVkIiB0byBQTS1ydW50aW1lLAogCSAq
-IHNvIGNoYW5nZSBpdHMgc3RhdHVzIGFjY29yZGluZ2x5LgogCSAqCi0JICogT3RoZXJ3aXNlLCB0
-aGUgZGV2aWNlIGlzIGdvaW5nIHRvIGJlIHJlc3VtZWQsIHNvIHNldCBpdHMgUE0tcnVudGltZQot
-CSAqIHN0YXR1cyB0byAiYWN0aXZlIiB1bmxlc3MgaXRzIHBvd2VyLnNldF9hY3RpdmUgZmxhZyBp
-cyBjbGVhciwgaW4KLQkgKiB3aGljaCBjYXNlIGl0IGlzIG5vdCBuZWNlc3NhcnkgdG8gdXBkYXRl
-IGl0cyBQTS1ydW50aW1lIHN0YXR1cy4KKwkgKiBPdGhlcndpc2UsIHRoZSBkZXZpY2UgaXMgZ29p
-bmcgdG8gYmUgcmVzdW1lZCwgc28gdHJ5IHRvIHVwZGF0ZSBpdHMKKwkgKiBQTS1ydW50aW1lIHN0
-YXR1cyB1bmxlc3MgaXRzIHBvd2VyLnNldF9hY3RpdmUgZmxhZyBpcyBjbGVhciwgaW4gd2hpY2gK
-KwkgKiBjYXNlIGl0IGlzIG5vdCBuZWNlc3NhcnkgdG8gZG8gdGhhdC4KIAkgKi8KIAlpZiAoc2tp
-cF9yZXN1bWUpIHsKIAkJcG1fcnVudGltZV9zZXRfc3VzcGVuZGVkKGRldik7CiAJfSBlbHNlIGlm
-IChkZXYtPnBvd2VyLnNldF9hY3RpdmUpIHsKLQkJcG1fcnVudGltZV9zZXRfYWN0aXZlKGRldik7
-CisJCS8qCisJCSAqIElmIFBNLXJ1bnRpbWUgaXMgbm90IGdvaW5nIHRvIGJlIGFjdHVhbGx5IGVu
-YWJsZWQgZm9yIHRoZQorCQkgKiBkZXZpY2UgYnkgYSBzdWJzZXF1ZW50IHBtX3J1bnRpbWVfZW5h
-YmxlZCgpIGNhbGwsIGl0IG1heQorCQkgKiBoYXZlIG5ldmVyIGJlZW4gZW5hYmxlZCBvciBwbV9y
-dW50aW1lX2ZvcmNlX3N1c3BlbmQoKSBtYXkKKwkJICogaGF2ZSBiZWVuIHVzZWQuICBEb24ndCB1
-cGRhdGUgdGhlIFBNLXJ1bnRpbWUgc3RhdHVlIGluCisJCSAqIHRoYXQgY2FzZSBhbmQgc2V0IHBv
-d2VyLm5lZWRzX2ZvcmNlX3Jlc3VtZSBpbiBjYXNlCisJCSAqIHBtX3J1bnRpbWVfZm9yY2VfcmVz
-dW1lKCkgd2lsbCBiZSBjYWxsZWQgZm9yIHRoZSBkZXZpY2UKKwkJICogc3Vic2VxdWVudGx5Lgor
-CQkgKi8KKwkJaWYgKHBtX3J1bnRpbWVfY29uZF9zZXRfYWN0aXZlKGRldikgPiAwKQorCQkJZGV2
-LT5wb3dlci5uZWVkc19mb3JjZV9yZXN1bWUgPSB0cnVlOworCiAJCWRldi0+cG93ZXIuc2V0X2Fj
-dGl2ZSA9IGZhbHNlOwogCX0KIApAQCAtOTg4LDYgKzk5OSw3IEBACiAgRW5kOgogCWVycm9yID0g
-ZHBtX3J1bl9jYWxsYmFjayhjYWxsYmFjaywgZGV2LCBzdGF0ZSwgaW5mbyk7CiAJZGV2LT5wb3dl
-ci5pc19zdXNwZW5kZWQgPSBmYWxzZTsKKwlkZXYtPnBvd2VyLm5lZWRzX2ZvcmNlX3Jlc3VtZSA9
-IGZhbHNlOwogCiAgVW5sb2NrOgogCWRldmljZV91bmxvY2soZGV2KTsKLS0tIGEvZHJpdmVycy9i
-YXNlL3Bvd2VyL3J1bnRpbWUuYworKysgYi9kcml2ZXJzL2Jhc2UvcG93ZXIvcnVudGltZS5jCkBA
-IC0xMjUzLDkgKzEyNTMsMTAgQEAKIEVYUE9SVF9TWU1CT0xfR1BMKHBtX3J1bnRpbWVfZ2V0X2lm
-X2luX3VzZSk7CiAKIC8qKgotICogX19wbV9ydW50aW1lX3NldF9zdGF0dXMgLSBTZXQgcnVudGlt
-ZSBQTSBzdGF0dXMgb2YgYSBkZXZpY2UuCisgKiBwbV9ydW50aW1lX3NldF9zdGF0dXNfaW50ZXJu
-YWwgLSBTZXQgcnVudGltZSBQTSBzdGF0dXMgb2YgYSBkZXZpY2UuCiAgKiBAZGV2OiBEZXZpY2Ug
-dG8gaGFuZGxlLgogICogQHN0YXR1czogTmV3IHJ1bnRpbWUgUE0gc3RhdHVzIG9mIHRoZSBkZXZp
-Y2UuCisgKiBAY29uZDogQ2hhbmdlIHRoZSBzdGF0dXMgaWYgcnVudGltZSBQTSB3aWxsIGJlIGVu
-YWJsZWQgYnkgdGhlIG5leHQgYXR0ZW1wdC4KICAqCiAgKiBJZiBydW50aW1lIFBNIG9mIHRoZSBk
-ZXZpY2UgaXMgZGlzYWJsZWQgb3IgaXRzIHBvd2VyLnJ1bnRpbWVfZXJyb3IgZmllbGQgaXMKICAq
-IGRpZmZlcmVudCBmcm9tIHplcm8sIHRoZSBzdGF0dXMgbWF5IGJlIGNoYW5nZWQgZWl0aGVyIHRv
-IFJQTV9BQ1RJVkUsIG9yIHRvCkBAIC0xMjc1LDggKzEyNzYsMTIgQEAKICAqIG9mIHRoZSBAc3Rh
-dHVzIHZhbHVlKSBhbmQgdGhlIHN1cHBsaWVycyB3aWxsIGJlIGRlYWN0aWNhdGVkIG9uIGV4aXQu
-ICBUaGUKICAqIGVycm9yIHJldHVybmVkIGJ5IHRoZSBmYWlsaW5nIHN1cHBsaWVyIGFjdGl2YXRp
-b24gd2lsbCBiZSByZXR1cm5lZCBpbiB0aGF0CiAgKiBjYXNlLgorICoKKyAqIElmIEBjb25kIGlz
-IHNldCwgb25seSBjaGFuZ2UgdGhlIHN0YXR1cyBpZiBwb3dlci5kaXNhYmxlX2RlcHRoIGlzIGVx
-dWFsIHRvIDEsCisgKiBvciBkbyBub3RoaW5nIGFuZCByZXR1cm4gKHBvd2VyLmRpc2FibGVfZGVw
-dGggLSAxKSBvdGhlcndpc2UuCiAgKi8KLWludCBfX3BtX3J1bnRpbWVfc2V0X3N0YXR1cyhzdHJ1
-Y3QgZGV2aWNlICpkZXYsIHVuc2lnbmVkIGludCBzdGF0dXMpCitzdGF0aWMgaW50IHBtX3J1bnRp
-bWVfc2V0X3N0YXR1c19pbnRlcm5hbChzdHJ1Y3QgZGV2aWNlICpkZXYsCisJCQkJCSAgdW5zaWdu
-ZWQgaW50IHN0YXR1cywgYm9vbCBjb25kKQogewogCXN0cnVjdCBkZXZpY2UgKnBhcmVudCA9IGRl
-di0+cGFyZW50OwogCWJvb2wgbm90aWZ5X3BhcmVudCA9IGZhbHNlOwpAQCAtMTI5MiwxMCArMTI5
-NywyNiBAQAogCSAqIFByZXZlbnQgUE0tcnVudGltZSBmcm9tIGJlaW5nIGVuYWJsZWQgZm9yIHRo
-ZSBkZXZpY2Ugb3IgcmV0dXJuIGFuCiAJICogZXJyb3IgaWYgaXQgaXMgZW5hYmxlZCBhbHJlYWR5
-IGFuZCB3b3JraW5nLgogCSAqLwotCWlmIChkZXYtPnBvd2VyLnJ1bnRpbWVfZXJyb3IgfHwgZGV2
-LT5wb3dlci5kaXNhYmxlX2RlcHRoKQotCQlkZXYtPnBvd2VyLmRpc2FibGVfZGVwdGgrKzsKLQll
-bHNlCisJaWYgKGRldi0+cG93ZXIucnVudGltZV9lcnJvcikgeworCQlpZiAoY29uZCkKKwkJCWVy
-cm9yID0gLUVJTlZBTDsKKwkJZWxzZQorCQkJZGV2LT5wb3dlci5kaXNhYmxlX2RlcHRoKys7CisJ
-fSBlbHNlIGlmIChkZXYtPnBvd2VyLmRpc2FibGVfZGVwdGgpIHsKKwkJLyoKKwkJICogSWYgY29u
-ZCBpcyBzZXQsIG9ubHkgYXR0ZW1wdCB0byBjaGFuZ2UgdGhlIHN0YXR1cyBpZiB0aGUKKwkJICog
-bmV4dCBpbnZvY2F0aW9uIG9mIHBtX3J1bnRpbWVfZW5hYmxlKCkgZm9yIHRoZSBkZXZpY2UgaXMK
-KwkJICogZ29pbmcgdG8gYWN0dWFsbHkgZW5hYmxlIHJ1bnRpbWUgUE0gZm9yIGl0LgorCQkgKgor
-CQkgKiBUaGlzIGlzIHVzZWQgaW4gYSBjb3JuZXIgY2FzZSBkdXJpbmcgc3lzdGVtLXdpZGUgcmVz
-dW1lLgorCQkgKi8KKwkJaWYgKGNvbmQgJiYgZGV2LT5wb3dlci5kaXNhYmxlX2RlcHRoID4gMSkK
-KwkJCWVycm9yID0gZGV2LT5wb3dlci5kaXNhYmxlX2RlcHRoIC0gMTsKKwkJZWxzZQorCQkJZGV2
-LT5wb3dlci5kaXNhYmxlX2RlcHRoKys7CisJfSBlbHNlIHsKIAkJZXJyb3IgPSAtRUFHQUlOOwor
-CX0KIAogCXNwaW5fdW5sb2NrX2lycXJlc3RvcmUoJmRldi0+cG93ZXIubG9jaywgZmxhZ3MpOwog
-CkBAIC0xMzc2LDYgKzEzOTcsMTYgQEAKIAogCXJldHVybiBlcnJvcjsKIH0KKworaW50IHBtX3J1
-bnRpbWVfY29uZF9zZXRfYWN0aXZlKHN0cnVjdCBkZXZpY2UgKmRldikKK3sKKwlyZXR1cm4gcG1f
-cnVudGltZV9zZXRfc3RhdHVzX2ludGVybmFsKGRldiwgUlBNX0FDVElWRSwgdHJ1ZSk7Cit9CisK
-K2ludCBfX3BtX3J1bnRpbWVfc2V0X3N0YXR1cyhzdHJ1Y3QgZGV2aWNlICpkZXYsIHVuc2lnbmVk
-IGludCBzdGF0dXMpCit7CisJcmV0dXJuIHBtX3J1bnRpbWVfc2V0X3N0YXR1c19pbnRlcm5hbChk
-ZXYsIHN0YXR1cywgZmFsc2UpOworfQogRVhQT1JUX1NZTUJPTF9HUEwoX19wbV9ydW50aW1lX3Nl
-dF9zdGF0dXMpOwogCiAvKioKLS0tIGEvaW5jbHVkZS9saW51eC9wbV9ydW50aW1lLmgKKysrIGIv
-aW5jbHVkZS9saW51eC9wbV9ydW50aW1lLmgKQEAgLTc1LDYgKzc1LDcgQEAKIGV4dGVybiBpbnQg
-cG1fcnVudGltZV9nZXRfaWZfYWN0aXZlKHN0cnVjdCBkZXZpY2UgKmRldik7CiBleHRlcm4gaW50
-IHBtX3J1bnRpbWVfZ2V0X2lmX2luX3VzZShzdHJ1Y3QgZGV2aWNlICpkZXYpOwogZXh0ZXJuIGlu
-dCBwbV9zY2hlZHVsZV9zdXNwZW5kKHN0cnVjdCBkZXZpY2UgKmRldiwgdW5zaWduZWQgaW50IGRl
-bGF5KTsKK2V4dGVybiBpbnQgcG1fcnVudGltZV9jb25kX3NldF9hY3RpdmUoc3RydWN0IGRldmlj
-ZSAqZGV2KTsKIGV4dGVybiBpbnQgX19wbV9ydW50aW1lX3NldF9zdGF0dXMoc3RydWN0IGRldmlj
-ZSAqZGV2LCB1bnNpZ25lZCBpbnQgc3RhdHVzKTsKIGV4dGVybiBpbnQgcG1fcnVudGltZV9iYXJy
-aWVyKHN0cnVjdCBkZXZpY2UgKmRldik7CiBleHRlcm4gdm9pZCBwbV9ydW50aW1lX2VuYWJsZShz
-dHJ1Y3QgZGV2aWNlICpkZXYpOwpAQCAtMjY4LDYgKzI2OSwxMCBAQAogewogCXJldHVybiAtRUlO
-VkFMOwogfQorc3RhdGljIGlubGluZSBpbnQgcG1fcnVudGltZV9jb25kX3NldF9hY3RpdmUoc3Ry
-dWN0IGRldmljZSAqZGV2KQoreworCXJldHVybiAxOworfQogc3RhdGljIGlubGluZSBpbnQgX19w
-bV9ydW50aW1lX3NldF9zdGF0dXMoc3RydWN0IGRldmljZSAqZGV2LAogCQkJCQkgICAgdW5zaWdu
-ZWQgaW50IHN0YXR1cykgeyByZXR1cm4gMDsgfQogc3RhdGljIGlubGluZSBpbnQgcG1fcnVudGlt
-ZV9iYXJyaWVyKHN0cnVjdCBkZXZpY2UgKmRldikgeyByZXR1cm4gMDsgfQo=
---000000000000fa9276062d915482--
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
