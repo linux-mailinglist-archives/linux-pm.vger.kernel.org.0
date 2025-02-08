@@ -1,210 +1,185 @@
-Return-Path: <linux-pm+bounces-21583-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21584-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39C1CA2D5C8
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 12:25:17 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 45A91A2D5CD
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 12:31:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C0CBB7A4A1F
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 11:24:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EB2287A4BB1
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 11:30:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A01CC2451DC;
-	Sat,  8 Feb 2025 11:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E1481AF0D0;
+	Sat,  8 Feb 2025 11:31:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qDq71QIB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jPHDG1za"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 78DEF1B3929;
-	Sat,  8 Feb 2025 11:24:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5EFB192D8E;
+	Sat,  8 Feb 2025 11:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739013898; cv=none; b=SC/QHARKlxqmw6usMrEQpgiI/0gw3ASGQn7F8+4W1dtldiWF1W1lQb1MMKLTpG3Ffx6gaTOaUL/Bg5+q8fV3bUP0jGrmcN0BNEQLiuOuF6Y3CIqRgNxC6YhI3TM6tuxsiGUH1qj5b6riTOYcDMkOJATcLB/evMf/RMAO0fyFEJc=
+	t=1739014270; cv=none; b=GbGd56Ff4TKZeUjEKafSv6hfw8kDTOrFsAfMTNVMHx1yo5BlCaPVDW0+LTW85lYWSuYzG/VlQ66r7zT9O3GTK4+XtSRUtOB3UC14TRJAeWbkVMtRrlk8s9r8I4N4CBCB8IPGfYE6NK7/BaWiTCuuBZnI1urnYit+hHMYWjqqVlc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739013898; c=relaxed/simple;
-	bh=v0kY2q5RP2GhNxjivPWegKlE87r10bfakOnRz0kN0k8=;
+	s=arc-20240116; t=1739014270; c=relaxed/simple;
+	bh=a9PtbP4iTsYXTPmKRarNcrQugYoPQf/03FrbZJrRghA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=G8+YBUCoGLk8xfLvQHfd5fY1Q1Tghyk+Z3UcU8VrSAEOiS0DD797oOmAXEeicbrnuV80yw13Vtp/98NunetmfrgVLuINSSAO0tfVNGghmuC8YtoKGXHIZzgtV0CRpjvNJUE1kLTkV8uv+K4XX7HNFpSBJA2tr8OV6hhWNPjsgDs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qDq71QIB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D8D2CC4CED6;
-	Sat,  8 Feb 2025 11:24:57 +0000 (UTC)
+	 To:Cc:Content-Type; b=aYx7eQ/qH/fFYhJGqEG2ONdY0DIIOvXCcrFXMlxoMeC4WwjeNWa7Q1GZUKzOQEcalM/kWzP+A54tiMAlv2ZZauhhmXlGoh6zUC/wc0jf8Vow5lH9Fm1dvbq8hnzXm0PgzGbhf6KBqbPsMTRyUq+Jkcpbopp/55N1HcN8Q2PBaMw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jPHDG1za; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3854CC4CEE6;
+	Sat,  8 Feb 2025 11:31:10 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739013897;
-	bh=v0kY2q5RP2GhNxjivPWegKlE87r10bfakOnRz0kN0k8=;
+	s=k20201202; t=1739014270;
+	bh=a9PtbP4iTsYXTPmKRarNcrQugYoPQf/03FrbZJrRghA=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=qDq71QIB9p5nG6bJipYxnoLHZGDJSFhFhyWjQXe+dGoo5hB85aQvZzlPtWG/lggI9
-	 Ig2YduyYbxFcLbd4TJDU2wRVO792mw2sFE+XLgKXuf6XzMg6f+OnxDH0Ez5sC+aDIB
-	 pB+iD7xBiFfyusFKsvF9qqqqhYFcBnC8kukedvPd4N+sAibiT7b64TnJUwczW22Tyl
-	 ail48RAJ41N2Sx4fQT9dPc6jRk76zhrMIX8xMLsFYRejmeNjoQ0DzHNaUDEwEoGNc0
-	 Q9gZFp4z0fgusja7krrBHb8lP/HdVQo21T93NcJGxJJ4a5AgPISIWbMQdz+cZdnTKA
-	 nRTaYsNocszbQ==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5f2e31139d9so1503796eaf.0;
-        Sat, 08 Feb 2025 03:24:57 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUwwYBCyHN/OxyPUU4rBl5ws/w+t8cTyGjaA2oOqcTXgSH+UMgGfmRbdFKYUYoNlj6rgG+Daz0o2bO5b9Q=@vger.kernel.org, AJvYcCVZ5SpoiWHonY1WgnLXWYUc0uZjfiykCmn41hbce8d57GWyBUqmjeot7FMdRwMayysXBnQr5kEiO+k=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHaT3of5POfNPM2Oy6fkN25Kb8OUa0QxAbCi5FRBMAgFs2F3Bs
-	vnay31P2biA45ZNmbVjEo+01MSxi0RLtxGDYwXGZ//LUfMV1ziwiQ65VVDLXBNifwXL030XGJDP
-	OQCHMS7ALjp0wtAKde+QPPe+hpKQ=
-X-Google-Smtp-Source: AGHT+IGUtyAYBfOlhtXoZxL94yJwaOt4l//XmIev+fbw3I9vvksmNXaU42SX8RaOvXevlk06GW7ZOujF+PpnWBqCdQI=
-X-Received: by 2002:a05:6820:827:b0:5fa:73ed:de8 with SMTP id
- 006d021491bc7-5fc5e71b079mr4214415eaf.6.1739013897093; Sat, 08 Feb 2025
- 03:24:57 -0800 (PST)
+	b=jPHDG1zaotlpXhf5asfnoBeYZASB+OATIwAB7wTXvZeHWb6vhtOkJz+rlQfBDSP+m
+	 Gc2IqbA/GKqCzA1be/ZE5Rvi0lmbNckZJdz8yCXaIUuwbbEN4YmfChEbtGnCESxVBc
+	 je2D0grSqMiyAnyFg+WmGFPrOFpGol03Fy7Kl+r6PLKlXNcWjNDTRxmLdJl5/q1zqK
+	 /VYkWBJt0pz0cuEpzyvhSrwqD5ZSvFZz15JErFwTgV+7+iDCABzgZBx9ghFupwzhz8
+	 pLz2hCLOL/scExAT8SgCOFRPmMwdwNyagKJkYrwjCImtt54cqVpHPjiwWDke+Xy2kX
+	 dps4vvnCXKvxQ==
+Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5f89aa7a101so1038509eaf.2;
+        Sat, 08 Feb 2025 03:31:10 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWiUZUPf45uPjJUHOwks95JqzAcjjVTey32epNfGNReWFjLLxdqpbfe/bJcVURrFzzVZ6w6l2WvAZzfrho=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzad72Ep3GdUYBsVDPn4c5fssqWMIK24jDC2egwjKMEvBXt3tCq
+	X+IHy6BO8K3xUqNTFr7W727+n5RDOBckzZqjoIGDjvPlN72GGyNEQl6F4GoSZXTa1dNLwrSjZLA
+	Xms9w400E58uL59MuJtZyWUHpCqo=
+X-Google-Smtp-Source: AGHT+IG1JlJtCnvqJUSiOxWkeEOCsazdBVYeG4ryDNk5FqiAtEwLYO8UOk3RYcnS+pcYGFl5IsC3XRkr77BvVSaXdl0=
+X-Received: by 2002:a05:6820:1c8d:b0:5f8:a3df:a9b with SMTP id
+ 006d021491bc7-5fc5e71241bmr3327386eaf.8.1739014269461; Sat, 08 Feb 2025
+ 03:31:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12630185.O9o76ZdvQC@rjwysocki.net> <009d01db79b9$aecd1c70$0c675550$@telus.net>
-In-Reply-To: <009d01db79b9$aecd1c70$0c675550$@telus.net>
+References: <20250207124802.165408-1-csokas.bence@prolan.hu> <20250207124802.165408-3-csokas.bence@prolan.hu>
+In-Reply-To: <20250207124802.165408-3-csokas.bence@prolan.hu>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 8 Feb 2025 12:24:45 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jELEw3yAoRFLPgEcfBRoUyd6tKSNHO2Q1O6_CoeR1Bng@mail.gmail.com>
-X-Gm-Features: AWEUYZm-gRCi0A1sn3TIJUROeDBBRYieqfiS8FTKYRJKUHGfsYCZFVE-q2W_HYs
-Message-ID: <CAJZ5v0jELEw3yAoRFLPgEcfBRoUyd6tKSNHO2Q1O6_CoeR1Bng@mail.gmail.com>
-Subject: Re: [RFT][PATCH v1] cpuidle: teo: Avoid selecting deepest idle state over-eagerly
-To: Doug Smythies <dsmythies@telus.net>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Christian Loehle <christian.loehle@arm.com>, 
-	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, 
-	Aboorva Devarajan <aboorvad@linux.ibm.com>, Linux PM <linux-pm@vger.kernel.org>
+Date: Sat, 8 Feb 2025 12:30:57 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gEdo_BeZh2tnxJMzoosxL5zzJXyf6wi7SR9du7MoQmUw@mail.gmail.com>
+X-Gm-Features: AWEUYZn7qNNPJwyjn01tuOBK_DdGPdz60cKCzLPxqXPH1jhK6KH04nQCttSsB-Q
+Message-ID: <CAJZ5v0gEdo_BeZh2tnxJMzoosxL5zzJXyf6wi7SR9du7MoQmUw@mail.gmail.com>
+Subject: Re: [PATCH for-6.14 v3 2/4] pm: runtime: Add new devm functions
+To: =?UTF-8?B?QmVuY2UgQ3PDs2vDoXM=?= <csokas.bence@prolan.hu>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Danilo Krummrich <dakr@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-Hi Doug,
-
-On Sat, Feb 8, 2025 at 12:40=E2=80=AFAM Doug Smythies <dsmythies@telus.net>=
- wrote:
+On Fri, Feb 7, 2025 at 1:48=E2=80=AFPM Bence Cs=C3=B3k=C3=A1s <csokas.bence=
+@prolan.hu> wrote:
 >
-> Hi Rafael,
+> Add `devm_pm_runtime_set_active()` and
+> `devm_pm_runtime_get_noresume()` for
+> simplifying common use cases in drivers.
 >
-> On 2025.02.04 12:58 Rafael J. Wysocki wrote:
-> >
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > It has been observed that the recent teo governor update which conclude=
-d
-> > with commit 16c8d7586c19 ("cpuidle: teo: Skip sleep length computation
-> > for low latency constraints") caused the max-jOPS score of the SPECjbb
-> > 2015 benchmark [1] on Intel Granite Rapids to decrease by around 1.4%.
-> > While it may be argued that this is not a significant increase, the
-> > previous score can be restored by tweaking the inequality used by teo
-> > to decide whether or not to preselect the deepest enabled idle state.
-> > That change also causes the critical-jOPS score of SPECjbb to increase
-> > by around 2%.
-> >
-> > Namely, the likelihood of selecting the deepest enabled idle state in
-> > teo on the platform in question has increased after commit 13ed5c4a6d9c
-> > ("cpuidle: teo: Skip getting the sleep length if wakeups are very
-> > frequent") because some timer wakeups were previously counted as non-
-> > timer ones and they were effectively added to the left-hand side of the
-> > inequality deciding whether or not to preselect the deepest idle state.
-> >
-> > Many of them are now (accurately) counted as timer wakeups, so the left=
--
-> > hand side of that inequality is now effectively smaller in some cases,
-> > especially when timer wakeups often occur in the range below the target
-> > residency of the deepest enabled idle state and idle states with target
-> > residencies below CPUIDLE_FLAG_POLLING are often selected, but the
-> > majority of recent idle intervals are still above that value most of
-> > the time.  As a result, the deepest enabled idle state may be selected
-> > more often than it used to be selected in some cases.
-> >
-> > To counter that effect, add the sum of the hits metric for all of the
-> > idle states below the candidate one (which is the deepest enabled idle
-> > state at that point) to the left-hand side of the inequality mentioned
-> > above.  This will cause it to be more balanced because, in principle,
-> > putting both timer and non-timer wakeups on both sides of it is more
-> > consistent than only taking into account the timer wakeups in the range
-> > above the target residency of the deepest enabled idle state.
-> >
-> > Link: https://www.spec.org/jbb2015/
-> > Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >  drivers/cpuidle/governors/teo.c |    6 +++---
-> >  1 file changed, 3 insertions(+), 3 deletions(-)
-> >
-> > --- a/drivers/cpuidle/governors/teo.c
-> > +++ b/drivers/cpuidle/governors/teo.c
-> > @@ -349,13 +349,13 @@
-> >         }
-> >
-> >         /*
-> > -        * If the sum of the intercepts metric for all of the idle stat=
-es
-> > -        * shallower than the current candidate one (idx) is greater th=
-an the
-> > +        * If the sum of the intercepts and hits metric for all of the =
-idle
-> > +        * states below the current candidate one (idx) is greater than=
- the
-> >          * sum of the intercepts and hits metrics for the candidate sta=
-te and
-> >          * all of the deeper states, a shallower idle state is likely t=
-o be a
-> >          * better choice.
-> >          */
-> > -       if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
-> > +       if (2 * (idx_intercept_sum + idx_hit_sum) > cpu_data->total) {
-> >                 int first_suitable_idx =3D idx;
-> >
-> >                 /*
+> Signed-off-by: Bence Cs=C3=B3k=C3=A1s <csokas.bence@prolan.hu>
+
+So I don't like this and it is not as straightforward as it looks, but
+let me have a look at the entire series again and see why you think
+this is useful.
+
+> ---
+>  drivers/base/power/runtime.c | 36 ++++++++++++++++++++++++++++++++++++
+>  include/linux/pm_runtime.h   |  4 ++++
+>  2 files changed, 40 insertions(+)
 >
-> I have only just started testing the recent idle governor changes,
-> and have not gotten very far yet.
+> diff --git a/drivers/base/power/runtime.c b/drivers/base/power/runtime.c
+> index 2ee45841486b..f0a6c64bec19 100644
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1545,6 +1545,24 @@ void pm_runtime_enable(struct device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(pm_runtime_enable);
 >
-> There is a significant increase in processor package power during idle
-> with this patch, about 5 times increase (400%).
-
-Thanks for this data point!
-
-The restoration of the 1.4% benchmark score is not worth this cost IMV.
-
-> My processor: Intel(R) Core(TM) i5-10600K CPU @ 4.10GHz
-> Distro: Ubuntu 24.04.1, server, no desktop GUI.
-> CPU frequency scaling driver: intel_pstate
-> HWP: disabled.
-> CPU frequency scaling governor: performance
+> +static void pm_runtime_set_suspended_action(void *data)
+> +{
+> +       pm_runtime_set_suspended(data);
+> +}
+> +
+> +/**
+> + * devm_pm_runtime_set_active - devres-enabled version of pm_runtime_set=
+_active.
+> + *
+> + * @dev: Device to handle.
+> + */
+> +int devm_pm_runtime_set_active(struct device *dev)
+> +{
+> +       pm_runtime_set_active(dev);
+> +
+> +       return devm_add_action_or_reset(dev, pm_runtime_set_suspended_act=
+ion, dev);
+> +}
+> +EXPORT_SYMBOL_GPL(devm_pm_runtime_set_active);
+> +
+>  static void pm_runtime_disable_action(void *data)
+>  {
+>         pm_runtime_dont_use_autosuspend(data);
+> @@ -1567,6 +1585,24 @@ int devm_pm_runtime_enable(struct device *dev)
+>  }
+>  EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
 >
-> Idle states:
-> $ grep . /sys/devices/system/cpu/cpu0/cpuidle/state*/name
-> /sys/devices/system/cpu/cpu0/cpuidle/state0/name:POLL
-> /sys/devices/system/cpu/cpu0/cpuidle/state1/name:C1_ACPI
-> /sys/devices/system/cpu/cpu0/cpuidle/state2/name:C2_ACPI
-> /sys/devices/system/cpu/cpu0/cpuidle/state3/name:C3_ACPI
+> +static void pm_runtime_put_noidle_action(void *data)
+> +{
+> +       pm_runtime_put_noidle(data);
+> +}
+> +
+> +/**
+> + * devm_pm_runtime_get_noresume - devres-enabled version of pm_runtime_g=
+et_noresume.
+> + *
+> + * @dev: Device to handle.
+> + */
+> +int devm_pm_runtime_get_noresume(struct device *dev)
+> +{
+> +       pm_runtime_get_noresume(dev);
+> +
+> +       return devm_add_action_or_reset(dev, pm_runtime_put_noidle_action=
+, dev);
+> +}
+> +EXPORT_SYMBOL_GPL(devm_pm_runtime_get_noresume);
+> +
+>  /**
+>   * pm_runtime_forbid - Block runtime PM of a device.
+>   * @dev: Device to handle.
+> diff --git a/include/linux/pm_runtime.h b/include/linux/pm_runtime.h
+> index d39dc863f612..d7eca86150b8 100644
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -93,7 +93,9 @@ extern void pm_runtime_new_link(struct device *dev);
+>  extern void pm_runtime_drop_link(struct device_link *link);
+>  extern void pm_runtime_release_supplier(struct device_link *link);
 >
-> Test durations were >=3D 45 minutes each.
+> +int devm_pm_runtime_set_active(struct device *dev);
+>  extern int devm_pm_runtime_enable(struct device *dev);
+> +int devm_pm_runtime_get_noresume(struct device *dev);
 >
-> Kernel 6.14-rc1: Includes cpuidle: teo: Cleanups and very frequent wakeup=
-s handling update
-> Average Idle Power: teo governor: 2.199 watts (+25.51%)
-> Average Idle power: menu governor: 1.873 watts (+6.91%)
-
-menu hasn't changed in 6.14-rc1, so this would be variation between
-runs I suppose.
-
-> Kernel 6.14-rc1-p: Added this patch for teo and "cpuidle: menu: Avoid dis=
-carding useful information when processing recent idle intervals" for menu
-> Average Idle Power: teo governor: 9.401 watts (+436.6%)
-> Only 69.61% idle is in the deepest idle state. More typically it would be=
- 98% to 99%.
-
-Ah, not good.
-
-OK, this clearly doesn't go in the right direction.
-
-> 28.6531% idle time is in state 1. More typically it would be 0.03%
-> Average Idle Power: menu governor: 1.820 watts (+3.9%)
+>  /**
+>   * pm_suspend_ignore_children - Set runtime PM behavior regarding childr=
+en.
+> @@ -276,7 +278,9 @@ static inline void __pm_runtime_disable(struct device=
+ *dev, bool c) {}
+>  static inline void pm_runtime_allow(struct device *dev) {}
+>  static inline void pm_runtime_forbid(struct device *dev) {}
 >
-> Kernel 6.13: before "cpuidle: teo: Cleanups and very frequent wakeups han=
-dling update"
-> Average Idle Power: teo governor: 1.752 watts (reference: 0.0%)
-> Average Idle power: menu governor: 1.909 watts (+9.0%)
-
-Thanks, I'm just going to drop this patch then.
-
-If you don't mind, I'll have a couple more teo updates for testing.
+> +static inline int devm_pm_runtime_set_active(struct device *dev) { retur=
+n 0; }
+>  static inline int devm_pm_runtime_enable(struct device *dev) { return 0;=
+ }
+> +static inline int devm_pm_runtime_get_noresume(struct device *dev) { ret=
+urn 0; }
+>
+>  static inline void pm_suspend_ignore_children(struct device *dev, bool e=
+nable) {}
+>  static inline void pm_runtime_get_noresume(struct device *dev) {}
+> --
+> 2.48.1
+>
+>
 
