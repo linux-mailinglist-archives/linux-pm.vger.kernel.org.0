@@ -1,90 +1,104 @@
-Return-Path: <linux-pm+bounces-21579-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21580-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 892BDA2D312
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 03:29:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5594A2D43C
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 07:21:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA051188E315
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 02:29:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8A8AD16BDAC
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 06:21:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7BD414F102;
-	Sat,  8 Feb 2025 02:29:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A37119DF8D;
+	Sat,  8 Feb 2025 06:21:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b="F04Uk0a4"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=truemaisha.co.tz header.i=@truemaisha.co.tz header.b="h9z6RkdQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m16.mail.126.com (m16.mail.126.com [117.135.210.6])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A19214A0B3;
-	Sat,  8 Feb 2025 02:29:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=117.135.210.6
+Received: from server-598995.kolorio.com (server-598995.kolorio.com [162.241.152.247])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D83C15098A
+	for <linux-pm@vger.kernel.org>; Sat,  8 Feb 2025 06:21:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=162.241.152.247
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738981782; cv=none; b=VxGCjQlQjgjqVryuwcAe+Z37XkA8k8dMMiLMiU8j+yBt7rxkCUZPfUkuMuloR3NKOkbxyGMd/5q6GN6iuK5Ru3IFetpp3uElQR60EXni8cgBcuTivA71/LLgoS0dgtaxxXDbiRUa2J+9hDnQ35UdkoSWHdYmsDw9c9IeIsGq4uQ=
+	t=1738995679; cv=none; b=n27XUIWdYlC8MBARspv95OPXWDNFAYCNAaTF+eA+i+ZlmC92FbXhkkRSx4yDcqukXtQrZo27M6s9TcZJs4vVIt9d33SIQy1b93ShTEa7xvizX2M7HJks7sxS2DA+6HwnKOuLagnsSxYiUh62DnJn9FiKynxHTdw7KAWGGjF/IeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738981782; c=relaxed/simple;
-	bh=1ayZThS4msoIvPZQgLkxwrGfGnmeet4xVbM6xGLFnSM=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=KuPQfvQsG7Azbi/u2Kx8f+ppC3pAVVXxuQcUXKA88MeVtwoO0S5myA94KqMmhqAwftptNjlL8IMe6OXk1uusu8Nzm+biX4ioXIwKOjKwkmBHzyIIYmUUeuzJiInip3IJl79yQktg3wLu2gd8wxpnhx8L2LVzbTaStaUkwuxR7xQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com; spf=pass smtp.mailfrom=126.com; dkim=pass (1024-bit key) header.d=126.com header.i=@126.com header.b=F04Uk0a4; arc=none smtp.client-ip=117.135.210.6
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=126.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=126.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=126.com;
-	s=s110527; h=From:Subject:Date:Message-Id:MIME-Version; bh=pzOuT
-	ODRPxLBhorZWDPkE5VkjqDkamSBFuV/3CY9Sco=; b=F04Uk0a4O56vfW8qBD/LT
-	OPGu6R6/4wD+cJ/eiXOeKUvXcGS3+axRG4uVhrRj3dDkQzZCVsJs3YM/y0Vrft7A
-	b4jz1it1I7O7MxFpeUYkiWdT34M/LcBxYxTF/WD+bjjCTkW4OCzv8Kea4DEpiVXn
-	3MBc+q1yArW2+buudyQXlc=
-Received: from localhost.localdomain (unknown [])
-	by gzsmtp5 (Coremail) with SMTP id QCkvCgD33xL5vaZn22O9Ag--.16835S2;
-	Sat, 08 Feb 2025 10:14:18 +0800 (CST)
-From: pleasurefish@126.com
-To: myungjoo.ham@samsung.com,
-	kyungmin.park@samsung.com,
-	cw00.choi@samsung.com,
-	ansuelsmth@gmail.com
-Cc: linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	pls <pleasurefish@126.com>
-Subject: [PATCH] PM / devfreq: Fix a typo in trans_stat
-Date: Fri,  7 Feb 2025 16:13:50 -1000
-Message-Id: <20250208021350.5931-1-pleasurefish@126.com>
-X-Mailer: git-send-email 2.39.5
+	s=arc-20240116; t=1738995679; c=relaxed/simple;
+	bh=gl4+7vNxgV9+JzZtw7EthQ6aGDgi0WVn3wQV/lnKiyo=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=uT5pKlL27+sf5V98paTAFbTwVT7L0gCQ2eVLMkvj1rXNfKiTNQ6Ou5TDGxKqdeiikymwyL8s1rafby7CKFBtslXy4ShYzrurvufC0wFuOVnuo9FD42zMViFSSggOzJoWO2w4SLd1vwNB4iW8SlPLZQfpQexNnIywun+J/C7BgMo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=truemaisha.co.tz; spf=pass smtp.mailfrom=truemaisha.co.tz; dkim=pass (2048-bit key) header.d=truemaisha.co.tz header.i=@truemaisha.co.tz header.b=h9z6RkdQ; arc=none smtp.client-ip=162.241.152.247
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=truemaisha.co.tz
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=truemaisha.co.tz
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=truemaisha.co.tz; s=default; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:Sender:Cc:Content-ID:
+	Content-Description:Resent-Date:Resent-From:Resent-Sender:Resent-To:Resent-Cc
+	:Resent-Message-ID:In-Reply-To:References:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=gl4+7vNxgV9+JzZtw7EthQ6aGDgi0WVn3wQV/lnKiyo=; b=h9z6RkdQu0McdI0180AlqlmYOM
+	FvYcvkwisgEyvRCGWvhSYKkNc3ZGk30pdSR+MJHG1Nl9RkY5EklSZbuLXOrFXgr5aqU2UeadVbPli
+	KUUS2AfcwQSlOb1qCSEQp2fzwl9znq5EcDv5i8dVtiMgMyup1TUIVPzu+hb3BYJBpSetV34PK2SwM
+	k/C+yVvYVT5LTQTRxe0HqVI2aKzARiv0rEjN/LQRCVeKNJjIfjDrCPKnZSbvZrrjfN8kt4YHW791N
+	r64j2O13aK6nBDEh/WxXr7MhY4qtL3S5eF8ZtXUB/+BHYPzuC5sZm+fi01gRSaXHkZNo+/mjWXRd8
+	uCOgBNfA==;
+Received: from [74.208.124.33] (port=54041 helo=truemaisha.co.tz)
+	by server-598995.kolorio.com with esmtpsa  (TLS1.2) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96.2)
+	(envelope-from <chrispinerick@truemaisha.co.tz>)
+	id 1tgeDK-0003YV-1V
+	for linux-pm@vger.kernel.org;
+	Sat, 08 Feb 2025 00:21:15 -0600
+Reply-To: dsong@aa4financialservice.com
+From: David Song <chrispinerick@truemaisha.co.tz>
+To: linux-pm@vger.kernel.org
+Subject: Re: The business loan- 
+Date: 08 Feb 2025 06:21:16 +0000
+Message-ID: <20250208015436.3AF45B1C6537267D@truemaisha.co.tz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-CM-TRANSID:QCkvCgD33xL5vaZn22O9Ag--.16835S2
-X-Coremail-Antispam: 1Uf129KBjvdXoW7Wr4UXr47uw1xGF47GFWUtwb_yoW3WFc_C3
-	sF9Fs7XrW0ywnrWw1fCr4Fv34Iy3Wa9r1F9r4ag3yaqr47Z3yxArW29r98XrnrWrWUZrWD
-	XrW8Xa1UAr48ZjkaLaAFLSUrUUUUjb8apTn2vfkv8UJUUUU8Yxn0WfASr-VFAUDa7-sFnT
-	9fnUUvcSsGvfC2KfnxnUUI43ZEXa7xR_dgA7UUUUU==
-X-CM-SenderInfo: 5soht2xxuhwxlvk6ij2wof0z/1tbiFhjs4WelxH+QfwACsX
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-AntiAbuse: This header was added to track abuse, please include it with any abuse report
+X-AntiAbuse: Primary Hostname - server-598995.kolorio.com
+X-AntiAbuse: Original Domain - vger.kernel.org
+X-AntiAbuse: Originator/Caller UID/GID - [47 12] / [47 12]
+X-AntiAbuse: Sender Address Domain - truemaisha.co.tz
+X-Get-Message-Sender-Via: server-598995.kolorio.com: authenticated_id: chrispinerick@truemaisha.co.tz
+X-Authenticated-Sender: server-598995.kolorio.com: chrispinerick@truemaisha.co.tz
+X-Source: 
+X-Source-Args: 
+X-Source-Dir: 
 
-From: pls <pleasurefish@126.com>
+Hello,
 
-Fixes: 4920ee6dcfaf ("PM / devfreq: Convert to use sysfs_emit_at() API")
-Signed-off-by: pls <pleasurefish@126.com>
----
- drivers/devfreq/devfreq.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+My name is David Song, at AA4 FS, we are a consultancy and
+brokerage Firm specializing in Growth Financial Loan and joint
+partnership venture. We specialize in investments in all Private
+and public sectors in a broad range of areas within our Financial
+Investment Services.
 
-diff --git a/drivers/devfreq/devfreq.c b/drivers/devfreq/devfreq.c
-index 98657d3b9435..a0223c60f4eb 100644
---- a/drivers/devfreq/devfreq.c
-+++ b/drivers/devfreq/devfreq.c
-@@ -1743,7 +1743,7 @@ static ssize_t trans_stat_show(struct device *dev,
- 	for (i = 0; i < max_state; i++) {
- 		if (len >= PAGE_SIZE - 1)
- 			break;
--		if (df->freq_table[2] == df->previous_freq)
-+		if (df->freq_table[i] == df->previous_freq)
- 			len += sysfs_emit_at(buf, len, "*");
- 		else
- 			len += sysfs_emit_at(buf, len, " ");
--- 
-2.39.5
+ We are experts in financial and operational management, due
+diligence and capital planning in all markets and industries. Our
+Investors wish to invest in any viable Project presented by your
+Management after reviews on your Business Project Presentation
+Plan.
+
+ We look forward to your Swift response. We also offer commission
+to consultants and brokers for any partnership referrals.
+
+ Regards,
+David Song
+Senior Broker
+
+AA4 Financial Services
+13 Wonersh Way, Cheam,
+Sutton, Surrey, SM2 7LX
+Email: dsong@aa4financialservice.com
 
 
