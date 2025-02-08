@@ -1,126 +1,106 @@
-Return-Path: <linux-pm+bounces-21590-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21591-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 191D4A2D743
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 17:22:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id A9257A2D788
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 17:43:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 207433A7395
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 16:22:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34F7D1626E8
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 16:43:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 32BD41F30B5;
-	Sat,  8 Feb 2025 16:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88179241CB4;
+	Sat,  8 Feb 2025 16:42:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kcUBmrrc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="PsBGOhYh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2831F30B0;
-	Sat,  8 Feb 2025 16:22:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55A05241CB1;
+	Sat,  8 Feb 2025 16:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739031745; cv=none; b=MDUteSHjgq50XcSG27f/lG3Y0nFOfKehbPZwKys6rkbXB2aiJgJDU71cphTbsY3Z3AQiF3RG2qBBnQzPwBf4dOam4USWCEgbMQ5ZLAQ5MyEG/wEaqnY90r0vcu1M+u+f3T9F6ZGywPRkyHKy60fCejnArUXMSNx0NEJKz3MFANQ=
+	t=1739032946; cv=none; b=pf0hqjbKLr/cliNTqfpX7O5NFZKMaSkorW24rRY7Icf4V5r35KKXz1hfhsVUnp56OVAc6/jWLYDRkMvN9FyNsIQ4+to3yrLTR0caWWo7RmOOfPbuek/IuW387lhcb/KUrs1FZvzCuj0RjD1Hn+4iQo9uKMozuLqBLXllzs6bcPM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739031745; c=relaxed/simple;
-	bh=Dnni8GKPdcukcrtd2Tff75EhjCO+JRljRFGY6qeFkb8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y5tqzq/ripYJXvv5R/11sUNaJpGDSP0wJqXdudJlrXR3c1XxX8fM6ctX9nKMK8pRSU8s3mO+PMmBc8upok7ntljZNazeoaeSp7A+vvgeE5dSHPWhOeQqB2UD/LNBrFscWylP5HshGfU9sURamBIp+OU+jZi9b4VnE4+ai/E+I1o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kcUBmrrc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 48299C4CED6;
-	Sat,  8 Feb 2025 16:22:24 +0000 (UTC)
+	s=arc-20240116; t=1739032946; c=relaxed/simple;
+	bh=DgPsBUG1mZURTvdZonNnm5wpyoUmtVyXOPK1IrfDxEY=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rPrFIwKylv2LCFCJtdPZFpd/adYAH6cRsxoB3OqTDP2gon6ZZPGxIH2FMV5HQnLqsMT7GpujpGYYXs/WrwF2hBaQh6jFe18y4ov2QupWkQwjvK726cYeaRomsGxfOX+7dGbRY+Oji4qZ/JTKd0rTRB6wMCFwvgUmgjGMLKdoOSU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=PsBGOhYh; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1DCCC4CED6;
+	Sat,  8 Feb 2025 16:42:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739031744;
-	bh=Dnni8GKPdcukcrtd2Tff75EhjCO+JRljRFGY6qeFkb8=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kcUBmrrcLD7nU+nXCUnvY49YC3G3awge9rTbeWD3y9gaBPwfh8iW9Zr4rJJWpZVqp
-	 aDXKuweAopfXqBG0ENoqkz+++/73dAVgTh5LKN3dlrY6tNbEu/dfPb+S41DaCuTCsp
-	 dClmOBlMkiVPjcdctGSY6k2lEaYLpkRTVKRf/kEnoPsF3UN0oGhYiG/jYkb2DrWsC5
-	 AUAY4hqejrzoOWP2eSKMWVW59pHywwhHyb1J2rvJpEfKPlQqTsOxr3knR9wakRMhdl
-	 5pDfspJXyHYwFPuhKwXtbFc+CLMm3ldjU/E9AxOpN9tEJCZNXBzVbGVb6gg1Xu0I2j
-	 5tHmpY/iSYxbw==
-From: Mario Limonciello <superm1@kernel.org>
-To: "Rafael J . Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	linux-acpi@vger.kernel.org (open list:ACPI),
-	linux-pm@vger.kernel.org (open list:HIBERNATION (aka Software Suspend, aka swsusp)),
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH 4/4] ACPI: battery: Wake system on AC plug or unplug in over s2idle
-Date: Sat,  8 Feb 2025 10:22:10 -0600
-Message-ID: <20250208162210.3929473-5-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250208162210.3929473-1-superm1@kernel.org>
-References: <20250208162210.3929473-1-superm1@kernel.org>
+	s=k20201202; t=1739032945;
+	bh=DgPsBUG1mZURTvdZonNnm5wpyoUmtVyXOPK1IrfDxEY=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=PsBGOhYhaKpHqCNcPMBGbPr7AdvYG8Ti5Oz+otCVCvAMtL88q2PQRpoaHp8hJH9cV
+	 Y9ilRokFxm2Wop5qRa819CN3rUsXYVOEZpp1e0o3NtSmdUtJJpjpP9NuBjcBDHQpKy
+	 Eoea5OMH7RxPopOZMzVqFm+qXK6BsVTC0hWLTo1yD6Cy6doeRZ9NxXRauv3iWMs5q7
+	 Lc7CBDzAixd/eMHqdHN2z1/cuO3X6bQbW9EBOI00kFQLPaea1gxf4CQsR4zrCBjdyF
+	 noecdmR98+W7GT/RFXsDt0vKra6kXPFVsqra9QYIcbETLFBf7MfztOtTAxyd0AVSop
+	 iN7fcS6p6k12Q==
+Received: from johan by xi.lan with local (Exim 4.97.1)
+	(envelope-from <johan@kernel.org>)
+	id 1tgnuc-0000000048t-0XvO;
+	Sat, 08 Feb 2025 17:42:34 +0100
+Date: Sat, 8 Feb 2025 17:42:34 +0100
+From: Johan Hovold <johan@kernel.org>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Jon Hunter <jonathanh@nvidia.com>,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Bjorn Helgaas <helgaas@kernel.org>,
+	Linux PCI <linux-pci@vger.kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+	Kevin Xie <kevin.xie@starfivetech.com>,
+	"linux-tegra@vger.kernel.org" <linux-tegra@vger.kernel.org>
+Subject: Re: [PATCH v1] PM: sleep: core: Synchronize runtime PM status of
+ parents and children
+Message-ID: <Z6eJeo34N0q2ldQ9@hovoldconsulting.com>
+References: <12619233.O9o76ZdvQC@rjwysocki.net>
+ <1c2433d4-7e0f-4395-b841-b8eac7c25651@nvidia.com>
+ <Z6YPpbRF_U0TxAbf@hovoldconsulting.com>
+ <Z6YcjFBWAVVVANf2@hovoldconsulting.com>
+ <CAJZ5v0iHjkfoh2A+hAmMCTG9_nBcJrsRYFD0Hp4ZChYUo7bFEg@mail.gmail.com>
+ <Z6YviAFD4Az3EIBa@hovoldconsulting.com>
+ <Z6Y0NlW40yHTIlzm@hovoldconsulting.com>
+ <CAJZ5v0gBCQW2wwdB+4SyBXtqiis2k1Z2L8SOVKwcVbNxPHqvYA@mail.gmail.com>
+ <CAJZ5v0gUcy4V-iztFumRZDUArQHiXE01vW3uC8Y01xnBD6Xi0Q@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0gUcy4V-iztFumRZDUArQHiXE01vW3uC8Y01xnBD6Xi0Q@mail.gmail.com>
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+On Sat, Feb 08, 2025 at 01:10:19PM +0100, Rafael J. Wysocki wrote:
+> On Fri, Feb 7, 2025 at 7:14 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
 
-On Windows the OS will wake up when plugged or unplugged from AC adapter.
-Depending upon whether the system was plugged in or unplugged will
-determine whether the "display turns on".  If there is no user activity
-for some time then it goes back to sleep.
+> > > > > > On Fri, Feb 07, 2025 at 02:50:29PM +0100, Johan Hovold wrote:
 
-In Linux plugging or unplugging an adapter will wake the SoC from HW
-sleep but then the Linux kernel puts it right back into HW sleep
-immediately unless there is another interrupt active (such as a PME or
-GPIO).
+> > > > > > Ok, so the driver data is never set and runtime PM is never enabled for
+> > > > > > this simple bus device, which uses pm_runtime_force_suspend() for system
+> > > > > > sleep.
 
-To get closer to the Windows behavior, record the state of the battery
-when going into suspend and compare it when updating battery status
-during the s2idle loop. If it's changed, wake the system.
+> For now, the power.set_active propagation can be restricted to the
+> parent of the device with DPM_FLAG_SMART_SUSPEND set that needs to be
+> resumed and that will just be sufficient ATM, so attached is a patch
+> doing this.
 
-This can be restored to previous behavior by disabling the ACPI battery
-device `power/wakeup` sysfs file.
+I can confirm that this fixes the simple-pm-bus regression (without
+reintroducing the pci warning) in case you want to get this to Linus
+for rc2:
 
-Link: https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-wake-sources#environmental-context-changes-1
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/acpi/battery.c | 8 ++++++++
- 1 file changed, 8 insertions(+)
+Tested-by: Johan Hovold <johan+linaro@kernel.org>
 
-diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-index 72c8a509695e6..91f79927cc720 100644
---- a/drivers/acpi/battery.c
-+++ b/drivers/acpi/battery.c
-@@ -125,6 +125,7 @@ struct acpi_battery {
- 	int state;
- 	int power_unit;
- 	int capacity_suspend;
-+	int suspend_state;
- 	unsigned long flags;
- };
- 
-@@ -1012,6 +1013,12 @@ static inline bool acpi_battery_should_wake(struct acpi_battery *battery)
- 		return true;
- 	}
- 
-+	if (battery->state != battery->suspend_state) {
-+		pm_pr_dbg("Waking due to battery state changed from 0x%x to 0x%x",
-+			  battery->suspend_state, battery->state);
-+		return true;
-+	}
-+
- 	return false;
- }
- 
-@@ -1313,6 +1320,7 @@ static int acpi_battery_suspend(struct device *dev)
- 		return -EINVAL;
- 
- 	battery->capacity_suspend = battery->capacity_now;
-+	battery->suspend_state = battery->state;
- 
- 	return 0;
- }
--- 
-2.43.0
-
+Johan
 
