@@ -1,151 +1,149 @@
-Return-Path: <linux-pm+bounces-21594-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21595-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93E64A2D7EA
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 18:59:58 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7101BA2D864
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 20:56:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 921753A7C8E
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 17:59:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B442A7A35E8
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 19:55:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0D031922F8;
-	Sat,  8 Feb 2025 17:59:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0BBDE1F3B85;
+	Sat,  8 Feb 2025 19:56:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="H2UdqEj5"
+	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="LV5zBUFn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B644A241103;
-	Sat,  8 Feb 2025 17:59:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22DAF19DF8D
+	for <linux-pm@vger.kernel.org>; Sat,  8 Feb 2025 19:56:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739037594; cv=none; b=XnsVgIIUr+2xP1R3IRc736kDN5qLdgPZesugf8/FNE9udFZQlBQfXI3V9XH6XLxI39MLDPKztS6gnIJI/9hoLJoiIcwWJTtlNpKTacugPjCweoWmLGrWpx91JRXK+ZDj9X1wBCNyhTc32e9pIXjhSiQX9SlaD3F8bXz+qA771jE=
+	t=1739044573; cv=none; b=nsEcTAUryK9P3qLp1aoqZWPqJZFE91KAtrgg5WkxSf4Zk47ye16xmBBbguY7CtCLrJhQvRjelsAJW2TDnj+Hh0WE97GD7FbrPoneuDgjtmfJE1U0KOiJrnHnE21g1itewik3QrCkkuX8WYed6P19MLOFRM24C6l8YyScxIsPlHY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739037594; c=relaxed/simple;
-	bh=KzldU6J3Gf92ol1FiAe0esXgaxmHztRlUH2ond0TeGU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=eb2Wiej3ezpzcOGoFT1OA2AcaAzIW2ge3NxtLkToWJihI2AELOtc2sDKaSVazo1019Dj6VosWNhrbZgHLboRyMuMiHDo1+MYcWNaUYi0XCUyp0TsRafcchowhZjLhn7E1gaHrrbqqTLK69A4NFvNJF7g5jcY5SIT7duR/8H0SM8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=H2UdqEj5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9454BC4CEE5;
-	Sat,  8 Feb 2025 17:59:54 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739037594;
-	bh=KzldU6J3Gf92ol1FiAe0esXgaxmHztRlUH2ond0TeGU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=H2UdqEj56IGWeuD2b03UdqtVadyL71uLR21cIJ4INfcc0hIgVPJEaI9AXmQ+LTnLu
-	 7v76Zy6MnBHpPQTI4aT2UTmoMy3Z7DnB2WgF/H31Y8LUu6Og4/jXqrw6sgQgOydtT+
-	 AvP093TNQ8djdWsS3R+D9wBGm4ClLqfyMICg2gY6dP6SJ18IpyF+fMIam8Su5plt+Q
-	 7M0GBQCE9WrBZDbSuDxgzlc3/FNvFSYK6B0JWCxg0IoNy7SSP+zSdt6UAQnPlo4Gju
-	 25E4rYE3r3pSUx6n5YtRNEkU/KGTbBn8AxAgact8zfNB9fSkFr3x9+PtNWHu6PWWQG
-	 xmkgGBvpBch4Q==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3eb6b16f1a0so872069b6e.3;
-        Sat, 08 Feb 2025 09:59:54 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXeYzsrWmCJH/KqHqkDUBdGT8mdX9Nu7CXHx+BKDRWeZhZSFAkU73/PVd3hkTAHZizGszYAO3rV+q8=@vger.kernel.org, AJvYcCXjkMTcldBkFt1zpFAHiBu3JArVQrE9cemPFWLyvuBpSt03ZJ+ZttGALzfkOMuWkn1zGNySpIUzZ1O0@vger.kernel.org
-X-Gm-Message-State: AOJu0YxKbYiB8qt+lFCZrcQGpP6ybMeE02mVMzgGOHYzJwe3FyTX/mE7
-	HmXJ8t8vTB7F7E1j1UrogQcZ/PpMgXVoCUF9qZ6LRePuomVYOb7SBYAFdleD3Gg+P6il09SQTVQ
-	v8t0TVpyUMHgOG9PSJOJAnNyAWhk=
-X-Google-Smtp-Source: AGHT+IFPssbwoiV4Dp4g+8lPMXJlr6LWvEGUm0t2cz6ZLx7bISc7fzClJHiUVDDA2YY7IssmH7MbqWKE3d0J1ZIaejg=
-X-Received: by 2002:a05:6808:80c4:b0:3eb:4a36:8744 with SMTP id
- 5614622812f47-3f39230d6acmr5473984b6e.17.1739037593891; Sat, 08 Feb 2025
- 09:59:53 -0800 (PST)
+	s=arc-20240116; t=1739044573; c=relaxed/simple;
+	bh=1drWUIgvHFq0hezfTkFnWaTwhco6irh+3Gr9yrHOpOU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W3HXhC4TjYVHE+1BW/Mo5LnE6UAnWmpJFXxDjYSJ1rRQIu+2VOQ3lK2DSlCNLh8OSjefhaLYz+yZHgkOcLyO9OREBklR4kVOFWgWWFA/na149SdoRR/5H9dklcwWALQIOyDY0ifYr/PxDI9yChuhfs9I14bLKUeMQWZWtXX+dwI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=LV5zBUFn; arc=none smtp.client-ip=170.10.129.124
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
+	s=mimecast20190719; t=1739044570;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=qJrBPQnhtPlXH6IxDYHNsAVehPX7LGhNXc/5vBp7/qY=;
+	b=LV5zBUFnRP9vixvNRpQuXjrqLiwjXIQumXXnjbQobHFA9t1NMixNRhYD8umt5sKr5dc54G
+	KH/BtfywJ5TFXJ6SAtPe2QMNA/zMEMqVDFn3zz7b+REF2IVCH7x8A1BjyCrHvxudYIvcqr
+	/hzLQeBeIAA6JakV8nWQ1Wnn/e0pAjA=
+Received: from mail-oi1-f200.google.com (mail-oi1-f200.google.com
+ [209.85.167.200]) by relay.mimecast.com with ESMTP with STARTTLS
+ (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
+ us-mta-259-j07LXBhAMAes5matTfkcng-1; Sat, 08 Feb 2025 14:56:07 -0500
+X-MC-Unique: j07LXBhAMAes5matTfkcng-1
+X-Mimecast-MFC-AGG-ID: j07LXBhAMAes5matTfkcng
+Received: by mail-oi1-f200.google.com with SMTP id 5614622812f47-3f3aa4b60bbso386042b6e.3
+        for <linux-pm@vger.kernel.org>; Sat, 08 Feb 2025 11:56:07 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739044564; x=1739649364;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=qJrBPQnhtPlXH6IxDYHNsAVehPX7LGhNXc/5vBp7/qY=;
+        b=cNQ2FWRlJp5frSwCc3RJXHssY/z0Wfu3ZFkliqPNtLCtauOdDn84jiUiib+0bY1rLT
+         0cRl9RsiufqOwc3ybroRH9XWqomOHIU9Cq9K5i2N0qCDBGRpTBbDu4wdXc7a56jO80DF
+         Nt5HWsQ6oLTE9CVyBXmvtc2vXGE4rcxZhwxaR12pbTc9K4iBE0O46yRHlepW+1hmPC1D
+         NkbWcsQZGxEPVMou/k11womNIe29SZq8JBDrBNmxl8UDGmwxlorMicyWJAaXuXFSYjpu
+         niCYFDDsL67v98K6yyXjzEELUIJasWbSUcpS2t4itjgdPdNZBKWbKk5K0pHud62viVGT
+         I4yg==
+X-Forwarded-Encrypted: i=1; AJvYcCXzin2NAAsx8lfQbbjpw4cc8+h5hFnhKXKEJqFF/cscykg0/g7vbChwkQNvnwaVDsxDK/Q3yPR9rQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwTw6TKoSBX/DaGOj37zc2tfnbiKbdxeAzVJV1dII4jxNyYTov
+	iRGJiPIHeEhi8ntgsCmoiCmJJ1ZONMjszxcaHX1px4HYgYRRXUMeLzLXCB/fe7c0dsZXPQVKMeg
+	GfWq3Tva6eZf1LtZZC0m3W5Zo3LrkII5fnsrdZ58KiEOtef2aTCEZWy6I
+X-Gm-Gg: ASbGnct2AMJy4zVW5JqSBigxjYeawRirl1hp8hyMDCWnmWCexyBWoeUqV5viQ3wqnvU
+	KJhHWMdd5EmOrFCZs3DOZHslePfjl3jYwa3KF6ujM7AUaEsyVxkLUiP1NqfwcrUNLkAPHcAOwzT
+	sJDcBh93adPcb+09RTpOuoiOpKkMbQkLr2Spmp02LxAVzkMZS2eBDWy2Mx4JhfuobjdnVRQtAY2
+	QyUM2p0xJz+AJdwGwbcgB3xWH5KVJPgI3Fjrg48sRpr4bIilSlnxPFpOflmD9P+MPkjH0sRVZmO
+	oY0P
+X-Received: by 2002:a05:6808:80cc:b0:3e6:3116:99d0 with SMTP id 5614622812f47-3f39222b3fbmr5393568b6e.13.1739044564699;
+        Sat, 08 Feb 2025 11:56:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IF77f8SjJ5aO8jURW5smUN5SBZK/+nJGx6pVJEW7YxApvAY6WlsUk5VVFGjgRkKRDc4TDJ/xA==
+X-Received: by 2002:a05:6808:80cc:b0:3e6:3116:99d0 with SMTP id 5614622812f47-3f39222b3fbmr5393561b6e.13.1739044564465;
+        Sat, 08 Feb 2025 11:56:04 -0800 (PST)
+Received: from [10.26.1.94] ([66.187.232.136])
+        by smtp.gmail.com with ESMTPSA id 5614622812f47-3f389fda9a7sm1417358b6e.48.2025.02.08.11.56.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Sat, 08 Feb 2025 11:56:04 -0800 (PST)
+Message-ID: <720944c4-48b2-4d1c-8a02-d81416ed7484@redhat.com>
+Date: Sat, 8 Feb 2025 14:56:02 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250208162210.3929473-1-superm1@kernel.org> <20250208162210.3929473-5-superm1@kernel.org>
-In-Reply-To: <20250208162210.3929473-5-superm1@kernel.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 8 Feb 2025 18:59:42 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j4+8nqQRtcAihpVgOHWUPE54nTWienCpFk1U7easVPnA@mail.gmail.com>
-X-Gm-Features: AWEUYZkaLUPUFCPmsO46FDgRZ-V6E8IG6u6q_QSweKo5UGiMK6sG_h_aCT0apN4
-Message-ID: <CAJZ5v0j4+8nqQRtcAihpVgOHWUPE54nTWienCpFk1U7easVPnA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] ACPI: battery: Wake system on AC plug or unplug in
- over s2idle
-To: Mario Limonciello <superm1@kernel.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
-	"open list:ACPI" <linux-acpi@vger.kernel.org>, 
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2] intel_idle: introduce 'no_native' module parameter
+To: dedekind1@gmail.com, linux-pm@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>,
+ Jacob Pan <jacob.jun.pan@linux.intel.com>, Len Brown <lenb@kernel.org>,
+ Prarit Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250128141139.2033088-1-darcari@redhat.com>
+ <20250206164009.816232-1-darcari@redhat.com>
+ <6c258775cdf2f8f3c370c0cb81daf22dacf6aeed.camel@gmail.com>
+ <9241eff1-0c2d-4c82-a77d-cb8b67cab6f9@redhat.com>
+ <c25d3b9abced9263da463b3ef4f31fff73878189.camel@gmail.com>
+Content-Language: en-US
+From: David Arcari <darcari@redhat.com>
+In-Reply-To: <c25d3b9abced9263da463b3ef4f31fff73878189.camel@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Sat, Feb 8, 2025 at 5:22=E2=80=AFPM Mario Limonciello <superm1@kernel.or=
-g> wrote:
->
-> From: Mario Limonciello <mario.limonciello@amd.com>
->
-> On Windows the OS will wake up when plugged or unplugged from AC adapter.
-> Depending upon whether the system was plugged in or unplugged will
-> determine whether the "display turns on".  If there is no user activity
-> for some time then it goes back to sleep.
->
-> In Linux plugging or unplugging an adapter will wake the SoC from HW
-> sleep but then the Linux kernel puts it right back into HW sleep
-> immediately unless there is another interrupt active (such as a PME or
-> GPIO).
->
-> To get closer to the Windows behavior, record the state of the battery
-> when going into suspend and compare it when updating battery status
-> during the s2idle loop. If it's changed, wake the system.
->
-> This can be restored to previous behavior by disabling the ACPI battery
-> device `power/wakeup` sysfs file.
 
-Why is this desirable?
 
-What if the AC is connected to a suspended laptop when the lid is
-still closed?  Is it really a good idea to resume it then?
+On 2/8/25 5:37 AM, Artem Bityutskiy wrote:
+> On Fri, 2025-02-07 at 12:13 -0500, David Arcari wrote:
+>>> And if kernel was not configured with ACPI support, are these not
+>>> recognized? Or
+>>> they are just no-op basically?
+>>
+>> They are a no-op - the flags are all set to false so ACPI C-state tables
+>> are ignored.
+> 
+> It would be nice to mention this too. Otherwise it sounds a bit incomplete. Like
+> this:
+> 
+> 	If A then B. (nothing about "else").
+> 
+> Better way:
+> 
+> 	If A then B, else C.
+> 
+> :-)
 
-Frankly, I'd prefer the existing behavior to be still the default.
+I actually took that from what was already there.
 
-> Link: https://learn.microsoft.com/en-us/windows-hardware/design/device-ex=
-periences/modern-standby-wake-sources#environmental-context-changes-1
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> ---
->  drivers/acpi/battery.c | 8 ++++++++
->  1 file changed, 8 insertions(+)
->
-> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
-> index 72c8a509695e6..91f79927cc720 100644
-> --- a/drivers/acpi/battery.c
-> +++ b/drivers/acpi/battery.c
-> @@ -125,6 +125,7 @@ struct acpi_battery {
->         int state;
->         int power_unit;
->         int capacity_suspend;
-> +       int suspend_state;
->         unsigned long flags;
->  };
->
-> @@ -1012,6 +1013,12 @@ static inline bool acpi_battery_should_wake(struct=
- acpi_battery *battery)
->                 return true;
->         }
->
-> +       if (battery->state !=3D battery->suspend_state) {
-> +               pm_pr_dbg("Waking due to battery state changed from 0x%x =
-to 0x%x",
-> +                         battery->suspend_state, battery->state);
-> +               return true;
-> +       }
-> +
->         return false;
->  }
->
-> @@ -1313,6 +1320,7 @@ static int acpi_battery_suspend(struct device *dev)
->                 return -EINVAL;
->
->         battery->capacity_suspend =3D battery->capacity_now;
-> +       battery->suspend_state =3D battery->state;
->
->         return 0;
->  }
-> --
-> 2.43.0
->
->
+So I can add "In the case that ACPI is not configured these flags have 
+no impact on functionality."
+
+Does that work?
+
+-DA
+
+> 
+>>>
+>> Sure - so is this better:
+>>
+>> ``use_acpi`` - No-op in ACPI mode, the driver will consult ACPI tabees
+>> for C-states on/off status in native mode.
+> 
+> Yes, thanks!
+> 
+
 
