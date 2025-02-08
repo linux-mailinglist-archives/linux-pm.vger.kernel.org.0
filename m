@@ -1,41 +1,87 @@
-Return-Path: <linux-pm+bounces-21577-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21578-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 62D2DA2D28C
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 02:17:10 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E303EA2D2BE
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 02:48:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 20E6A16CA03
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 01:17:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DB33618859BE
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Feb 2025 01:48:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A86982899;
-	Sat,  8 Feb 2025 01:16:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ABD312C499;
+	Sat,  8 Feb 2025 01:48:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="EyTlnxcN"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="TsB+Vd+W"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-m32106.qiye.163.com (mail-m32106.qiye.163.com [220.197.32.106])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9103B1DDE9;
-	Sat,  8 Feb 2025 01:16:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=220.197.32.106
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECCCC1E492
+	for <linux-pm@vger.kernel.org>; Sat,  8 Feb 2025 01:48:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1738977419; cv=none; b=TiTARRADQBfWwbiqrRs+Tdn3B1vHYZxV0Ei/XVJNh5Yk/yADULHV7ZdB5NRiScERBS7FeIbnwaopGbvWYvrs46uzhRv5LPxCowIa/6MctQl97psPdLWGtAbu6lehfIcIR11mAsijuFZdMGQsjOkIK60JRO/pkkmhhG7L1+XZHcs=
+	t=1738979321; cv=none; b=U5pAWodUah4XW9ULguLQE8Adg8dRpC6rhdYY8ekFSU4nKJCwkx2wmwiJdHw+DX7tYUDqY+7GfUhU/rovTmGKyR2dvYrNTdWIzqHvc5GXjTxoSlcUM8fAyGPxKqza12v6vtmBM1RK71q8MTnNumao59QdrhWo6L8A+bGG2GdIJco=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1738977419; c=relaxed/simple;
-	bh=rZxfDjUQ4oAzhda6/Pw6O5ZJKwwEgFhJANAcnJ/L2ao=;
-	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
-	 In-Reply-To:Content-Type; b=sh1MHEI3PyIusLRMPErdckcTiKpyfEFm/SwnrMufwb7y8Xk7srBuGU3anRofnOyWWd5fVNPN/BW8zbRc8bgfphsF0UMi3pKNO/kQB0rPiaEq4qln//9Q8QOm/7MlsU+/ltFFIHhi94YRCi9BwOcOVY+5QaCKu0kQZ77xeGq8lvA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=EyTlnxcN; arc=none smtp.client-ip=220.197.32.106
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
-Received: from [172.16.12.45] (unknown [58.22.7.114])
-	by smtp.qiye.163.com (Hmail) with ESMTP id a749478c;
-	Sat, 8 Feb 2025 09:01:26 +0800 (GMT+08:00)
-Message-ID: <e2f0ecc2-25ba-428b-b643-a33cb6e32898@rock-chips.com>
-Date: Sat, 8 Feb 2025 09:01:27 +0800
+	s=arc-20240116; t=1738979321; c=relaxed/simple;
+	bh=VpnMtAzmUxjiP0Pu54O3XMOA1CWxorcIsLG1hejl4CY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=QCGMv2twreLgVEoBnyJwKvuR8kJkLk6wg8JICQPqDAfAVHQjwtN9XZb0LAkYXCN6lBeSmtTUZUUagunTTvJ/IxWDN5FfWourLlhy+cX0X2j1MenQSQoQp+trAbJ8uYaNr/QjocIzO2wr9ujxduwobCoYXXA0Z/MWv7YtDNqokbQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=TsB+Vd+W; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5180JmKl008091
+	for <linux-pm@vger.kernel.org>; Sat, 8 Feb 2025 01:48:38 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	xl9UdSwizgDLzhJeCFKLohTvtuP335q16GE/Hoo/GDI=; b=TsB+Vd+WjAPWLV8S
+	SWRLnk3lUbmSLak+N6HWs8Y2yR/zz0dXx94bjOjbYjn+04Al3ZHfQQb3ZTKgxx4H
+	bV298dCuuBKRsctsaHNI7mj/DSuRkNhEsQFxpm5MH8Y4FFlP8crhoRu7bSDcBiEd
+	J7ckFc/2hmALwhubbfE9pV3epDkL+j6rkcCXtIhZ7LOe4z5WHYATQ+Z2FZV6xfCV
+	z8nu5LjUvPXF15rtGpFxu5Osr/qggExRTK/Qznqb+Nk8EyWGZoj7U2lAmlhc+VgU
+	QiPNJlOvw+8Lri6OyMfeky/c69DGaHuA68q+35cy7BsN/u0gO9laxdZHcuLUWITD
+	TxwvQA==
+Received: from mail-qk1-f199.google.com (mail-qk1-f199.google.com [209.85.222.199])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44nvmkg478-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Sat, 08 Feb 2025 01:48:38 +0000 (GMT)
+Received: by mail-qk1-f199.google.com with SMTP id af79cd13be357-7b6e132c31eso34400385a.3
+        for <linux-pm@vger.kernel.org>; Fri, 07 Feb 2025 17:48:38 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1738979318; x=1739584118;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xl9UdSwizgDLzhJeCFKLohTvtuP335q16GE/Hoo/GDI=;
+        b=B+s6OY027VxcTRgNN64RiIC/rkHFsKAaMMNV4V+b7pLdlG+KIl3H8ecDVISXRqcOFC
+         uqSYnPrbuI6q6jkDYGDOBnsGzi8JX23woaDvzWNcxzD2rHc6LhpJevlwEsZUpGIZfoaG
+         p17q8CIwG1N5Q6Ox0ozroAINzWzxjpcGAv8gysCX84dBoVEOLaG5hC+ln0dVq6C9eR9D
+         suIMBVb1xUir5+AfDnfAUZEsMUHAouV5PyAnEjz3HT1unyBOx6pcagAexlUDakTKxEBn
+         IkwzCACJNdE/OmJ6xqjBOR3x0u1O30qGLqVPd7d39e/DWDWd/n/l+9ptyVmOkx/xgKOl
+         6GBg==
+X-Forwarded-Encrypted: i=1; AJvYcCXSnbaZbMgxnV2tRl29HspkHgIzAudySPhGJd8byUg35F+EBlhoMpsTFUdEmBNiYbM/0WtaWu6SoA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4j4Xd2M69if9aQcszLHZAjZnPoxX8dbtMRfLVmhbLqzNnVhjc
+	smWztJrwftrlseXTsCqg1KVg6DdtG7y/HPqs7BjXlaN4LfGzu1FwQrKZqQUdCaReWH8EhgYD82+
+	Zfroc0WbdLkSmTePZmI3Dlz6nTBqBg6bcYxXzfzoa/H8dE+ifg8VDYXVOjw==
+X-Gm-Gg: ASbGncurSdN3hoAnsCQolCXV+OHHw30eHx8C6++30bKg4oEDzNlaH8C+YrQ6fXQmhFB
+	rRdKC0zUWKThfdxfqR19gV/D57GDBvIi9j4WtCBfi7XxkYb5Eteuuv0TknWMf+2p/JMxA444mP/
+	Rl6E6XiOuxNKPSVOmN0lExmv56AVVWfgUOivnZ1XG3x4mvHfKFoE3XJuRh7PO23MNKzEhFNq4Jf
+	0jFdbEBZnw9yJmGhZHE/Z1Jua7hgcDH+dk5m++eAXO04Jjacmb1PEDnnnq/QYprn0CcXdCn5UcM
+	emsLkY3xjTY6jBaX+M22XcZjagcv6ITHpT8pqGjld7X8GZyVRIDar3lJy28=
+X-Received: by 2002:a05:620a:244d:b0:7b6:d26e:9d76 with SMTP id af79cd13be357-7c047c4ae40mr346170785a.14.1738979317967;
+        Fri, 07 Feb 2025 17:48:37 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE5DxAxvukpLhR34rHx9sdZvjTULj5Sql9mnUYRGRBbRwhSXMt6xgJkwCmMUpmSdxZ5jouzaA==
+X-Received: by 2002:a05:620a:244d:b0:7b6:d26e:9d76 with SMTP id af79cd13be357-7c047c4ae40mr346169885a.14.1738979317611;
+        Fri, 07 Feb 2025 17:48:37 -0800 (PST)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7a275537csm32549966b.66.2025.02.07.17.48.34
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 07 Feb 2025 17:48:36 -0800 (PST)
+Message-ID: <a02922b6-7b48-4305-8cf3-8019cbe9a069@oss.qualcomm.com>
+Date: Sat, 8 Feb 2025 02:48:33 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -43,160 +89,74 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Cc: shawn.lin@rock-chips.com, Rob Herring <robh+dt@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
- Bart Van Assche <bvanassche@acm.org>, YiFeng Zhao <zyf@rock-chips.com>,
- Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org,
- linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
- linux-pm@vger.kernel.org
-Subject: Re: [PATCH v7 0/7] Initial support for RK3576 UFS controller
-To: Ulf Hansson <ulf.hansson@linaro.org>,
- "James E . J . Bottomley" <james.bottomley@hansenpartnership.com>,
- "Martin K . Petersen" <martin.petersen@oracle.com>
-References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
- <CAPDyKFq+pWXq75xEtfkeCkmkdZtfp9dAFej4M+6rO6EAUULf=w@mail.gmail.com>
-Content-Language: en-GB
-From: Shawn Lin <shawn.lin@rock-chips.com>
-In-Reply-To: <CAPDyKFq+pWXq75xEtfkeCkmkdZtfp9dAFej4M+6rO6EAUULf=w@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
-X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
-	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZGUsZQ1YeQ0oaQkwZSkpLQk9WFRQJFh
-	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
-	hVSktLVUpCS0tZBg++
-X-HM-Tid: 0a94e313640209cckunma749478c
-X-HM-MType: 1
-X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6Pgw6Nxw6CzIRGgMOKCtISz00
-	IwMwCxJVSlVKTEhDQkxNT0NDSk5PVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
-	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQU9MSEo3Bg++
-DKIM-Signature:a=rsa-sha256;
-	b=EyTlnxcNxHq+jPstL4itjJJIQg0tHEMz7vXUHWhWgZydlK6DNC2yOs/1y2S0Ik4c+2IFQCQfOQDfOimr6dSEyxKQyVRnef5Hqlj41RDl5dfmZvzgJAuYlzCg1FW50hI28Ci3If4ik9ixWAOCJxSWzfzVhJlmh0xsstQQxkRUQEo=; s=default; c=relaxed/relaxed; d=rock-chips.com; v=1;
-	bh=zqiqX1eIhEi+d4tOiY9PyRcewyPQx3p/Go2zpFzeFK0=;
-	h=date:mime-version:subject:message-id:from;
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8750: Add BWMONs
+To: Stephan Gerhold <stephan.gerhold@linaro.org>,
+        Melody Olvera <quic_molvera@quicinc.com>
+Cc: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+        Trilok Soni <quic_tsoni@quicinc.com>, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org,
+        Shivnandan Kumar <quic_kshivnan@quicinc.com>
+References: <20250113-sm8750_bwmon_master-v1-0-f082da3a3308@quicinc.com>
+ <20250113-sm8750_bwmon_master-v1-2-f082da3a3308@quicinc.com>
+ <Z4k8T31cw_CxHFLC@linaro.org>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <Z4k8T31cw_CxHFLC@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: sJt4kXDlmgUlp6WM8rc2gjSdJP0K6AJO
+X-Proofpoint-GUID: sJt4kXDlmgUlp6WM8rc2gjSdJP0K6AJO
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-07_11,2025-02-07_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0
+ priorityscore=1501 lowpriorityscore=0 clxscore=1015 suspectscore=0
+ mlxlogscore=999 mlxscore=0 bulkscore=0 spamscore=0 phishscore=0
+ impostorscore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
+ scancount=1 engine=8.19.0-2501170000 definitions=main-2502080011
 
-Hi Ulf,
+On 16.01.2025 6:05 PM, Stephan Gerhold wrote:
+> On Mon, Jan 13, 2025 at 01:08:18PM -0800, Melody Olvera wrote:
+>> From: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+>>
+>> Add the CPU BWMONs for SM8750 SoCs.
+>>
+>> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>> ---
+>>  arch/arm64/boot/dts/qcom/sm8750.dtsi | 74 ++++++++++++++++++++++++++++++++++++
+>>  1 file changed, 74 insertions(+)
+>>
+>> diff --git a/arch/arm64/boot/dts/qcom/sm8750.dtsi b/arch/arm64/boot/dts/qcom/sm8750.dtsi
+>> index 3bbd7d18598ee0a3a0d5130c03a3166e1fc14d82..09fe3149da1926b74a98280fe209ae7f423db864 100644
+>> --- a/arch/arm64/boot/dts/qcom/sm8750.dtsi
+>> +++ b/arch/arm64/boot/dts/qcom/sm8750.dtsi
+>> @@ -2802,6 +2802,80 @@ rpmhpd_opp_super_turbo_no_cpr: opp-480 {
+>>  			};
+>>  		};
+>>  
+>> +		/* cluster0 */
+>> +		pmu@240b3400 {
+>> +			compatible = "qcom,sm8750-cpu-bwmon", "qcom,sdm845-bwmon";
+>> +			reg = <0x0 0x240b3400 0x0 0x600>;
+>> +
+>> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+>> +
+>> +			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+>> +					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
+> 
+> The start of the interconnect path is QCOM_ICC_TAG_ACTIVE_ONLY, but the
+> destination is QCOM_ICC_TAG_ALWAYS? This is strange. Interconnect used
+> by the CPU should be QCOM_ICC_TAG_ACTIVE_ONLY.
 
-在 2025/2/7 18:17, Ulf Hansson 写道:
-> On Wed, 5 Feb 2025 at 07:16, Shawn Lin <shawn.lin@rock-chips.com> wrote:
->>
->> This patchset adds initial UFS controller supprt for RK3576 SoC.
->> Patch 1 is the dt-bindings. Patch 2-4 deal with rpm and spm support
->> in advanced suggested by Ulf. Patch 5 exports two new APIs for host
->> driver. Patch 6 and 7 are the host driver and dtsi support.
-> 
-> Looks like this series is almost ready to be merged?
-> 
-> If so, may I suggest that I pick patch2, patch3 and patch4 via my
-> pmdomain tree and share them via an immutable branch, so they can be
-> pulled into James/Martin's scsi tree? Or do you prefer another route?
-> 
+I'm not sure if this is a question, but I second, both should be ACTIVE_ONLY
 
-Thanks for the review. I'm fine with both. Let's wait for James/Martin's
-opinion.
-
-> Kind regards
-> Uffe
-> 
->>
->>
->> Changes in v7:
->> - add definitions for all kinds of hex values if possible
->> - Misc log and comment improvement
->> - use udelay for less than 10us cases
->> - other improvements suggested by Mani
->> - Use 0x0 for consistency
->> - Collect Mani's acked-by tag
->>
->> Changes in v6:
->> - fix indentation to 4 spaces suggested by Krzysztof
->> - export dev_pm_genpd_rpm_always_on()
->> - replace host drivers with glue drivers suggested by Mani
->> - add Main's review tag
->> - remove UFS_MAX_CLKS
->> - improve err log
->> - remove hardcoded clocks
->> - remove comment from ufs_rockchip_device_reset()
->> - remove pm_runtime_* from ufs_rockchip_remove()
->> - rebase to scsi/next
->> - move ufs_rockchip_set_pm_lvl to ufs_rockchip_rk3576_init()
->> - add comments about device_set_awake_path()
->> - remove comments suggested by Mani
->>
->> Changes in v5:
->> - use ufshc for devicetree example suggested by Mani
->> - fix a compile warning
->> - use device_set_awake_path() and disable ref_out_clk in suspend
->> - remove pd_id from header
->> - reconstruct ufs_rockchip_hce_enable_notify() to workaround hce enable
->>    without using new quirk
->>
->> Changes in v4:
->> - properly describe reset-gpios
->> - deal with power domain of rpm and spm suggested by Ulf
->> - Fix typo and disable clks in ufs_rockchip_remove
->> - remove clk_disable_unprepare(host->ref_out_clk) from
->>    ufs_rockchip_remove
->>
->> Changes in v3:
->> - rename the file to rockchip,rk3576-ufshc.yaml
->> - add description for reset-gpios
->> - use rockchip,rk3576-ufshc as compatible
->> - reword Kconfig description
->> - elaborate more about controller in commit msg
->> - use rockchip,rk3576-ufshc for compatible
->> - remove useless header file
->> - remove inline for ufshcd_is_device_present
->> - use usleep_range instead
->> - remove initialization, reverse Xmas order
->> - remove useless varibles
->> - check vops for null
->> - other small fixes for err path
->> - remove pm_runtime_set_active
->> - fix the active and inactive reset-gpios logic
->> - fix rpm_lvl and spm_lvl to 5 and move to end of probe path
->> - remove unnecessary system PM callbacks
->> - use UFSHCI_QUIRK_DME_RESET_ENABLE_AFTER_HCE instead
->>    of UFSHCI_QUIRK_BROKEN_HCE
->>
->> Changes in v2:
->> - rename the file
->> - add reset-gpios
->>
->> Shawn Lin (6):
->>    dt-bindings: ufs: Document Rockchip UFS host controller
->>    soc: rockchip: add header for suspend mode SIP interface
->>    pmdomain: rockchip: Add smc call to inform firmware
->>    scsi: ufs: core: Export ufshcd_dme_reset() and ufshcd_dme_enable()
->>    scsi: ufs: rockchip: initial support for UFS
->>    arm64: dts: rockchip: Add UFS support for RK3576 SoC
->>
->> Ulf Hansson (1):
->>    pmdomain: core: Introduce dev_pm_genpd_rpm_always_on()
->>
->>   .../bindings/ufs/rockchip,rk3576-ufshc.yaml        | 105 ++++++
->>   arch/arm64/boot/dts/rockchip/rk3576.dtsi           |  24 ++
->>   drivers/pmdomain/core.c                            |  35 ++
->>   drivers/pmdomain/rockchip/pm-domains.c             |   8 +
->>   drivers/ufs/core/ufshcd.c                          |   6 +-
->>   drivers/ufs/host/Kconfig                           |  12 +
->>   drivers/ufs/host/Makefile                          |   1 +
->>   drivers/ufs/host/ufs-rockchip.c                    | 353 +++++++++++++++++++++
->>   drivers/ufs/host/ufs-rockchip.h                    |  90 ++++++
->>   include/linux/pm_domain.h                          |   7 +
->>   include/soc/rockchip/rockchip_sip.h                |   3 +
->>   include/ufs/ufshcd.h                               |   2 +
->>   12 files changed, 644 insertions(+), 2 deletions(-)
->>   create mode 100644 Documentation/devicetree/bindings/ufs/rockchip,rk3576-ufshc.yaml
->>   create mode 100644 drivers/ufs/host/ufs-rockchip.c
->>   create mode 100644 drivers/ufs/host/ufs-rockchip.h
->>
->> --
->> 2.7.4
->>
-> 
-
+Konrad
 
