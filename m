@@ -1,158 +1,107 @@
-Return-Path: <linux-pm+bounces-21601-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21602-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D959A2DDFF
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Feb 2025 14:15:06 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 771C3A2DE34
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Feb 2025 15:04:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 436AE7A2DA2
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Feb 2025 13:14:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4B7F63A60B6
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Feb 2025 14:04:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 515081DDA0E;
-	Sun,  9 Feb 2025 13:14:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE9581D90C5;
+	Sun,  9 Feb 2025 14:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tb6KVJpE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TSFPuqkr"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 27B4A1CCB40;
-	Sun,  9 Feb 2025 13:14:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C94E14A0A8;
+	Sun,  9 Feb 2025 14:04:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739106895; cv=none; b=lTdJqDjbytH4sKhvGOuipoEZRbOQ0U6M6kIpQB9m8y7x6Hp2n2rVTPOFX9frrpJ6aQkhXX1pHIBMM03r4tXym7v/rFe0k4RKaKVL5ClrIiCnsp0U0FnnfIaIZDzDRBxFT8ZApXQ0dSBJ1bLgqVLnlnAXBD/shNdvMYiaptwuL4w=
+	t=1739109891; cv=none; b=omJBuBS7ZvFu0Uyj7E5QokBpcjGbTSAADxX57/1v9BH1m2Gma/yE74QEhUDBbXoL3iDtOOaTC7YGHBuIlFQI+50k+G3O1jGY/FdtJ1EETllFX3gb+8OQegS9Z3djXo6Xuvt5pPdnWNvSffGFrOccceUyDBVjJqWaWIyhWW7xHws=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739106895; c=relaxed/simple;
-	bh=m9ABgq92X6dt+i15/YVnew19GZmmZSD0DqPt/PUyE7A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Aqp1IfUfQDUvMpRpyNp1mixm3VCeoG+tUWr1xxdVFyVujMiRLEEes5UJ0QFzdHctNV3a9dAeIYac88poyCOUChmbZ1HcCPEFPs6LYcJDnsdPtrwoW41ym8RcWaZoq35SgrXgMvUn3PgPLg5lN63EAGyW5JhqgSZh1/D5+zJK+4k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tb6KVJpE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E6A72C4CEDD;
-	Sun,  9 Feb 2025 13:14:53 +0000 (UTC)
+	s=arc-20240116; t=1739109891; c=relaxed/simple;
+	bh=qI21Q5zO33j93WU5qSHhhcQYc+eC6aCL10g4Ll7hy/I=;
+	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=TDTjgX23U9taGVkhfkNi7gEPCDo848q8iauKQJsm+lPtWDXbjhH8D115aAztStZ4mQUPYMvNGbuaxGqNkj/KW4n6sYAA5s+hqLg2bJviv1w/JR4C481VHT7ln/uZTLG3Ids+D2AgLBpoLCtwacY28NqsG/b6B67qDlzQLTaP6bA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TSFPuqkr; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC479C4CEDD;
+	Sun,  9 Feb 2025 14:04:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739106894;
-	bh=m9ABgq92X6dt+i15/YVnew19GZmmZSD0DqPt/PUyE7A=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=tb6KVJpEqU2m36GAjeaDrwHn+RjFGRv76tWjXcTynm8Hb4Urpisc1GtMf4N9w4HMZ
-	 ARylDgU+f/+qiMlVm14TN8hxaGUXe+/C/yNsvr9J8vU/BYoFbB1k7fJ9c95aY7k73d
-	 TAFwsn/JX0PQVIYo6YYDDPXizvYJ+tIxbeSrGofmECxsfKxVcff60LlKDqupr3kQAR
-	 BZI/mClOeSsHUPQ/ahfA/c7xaNR1LjyQzucV6oAk9p0HBP0oYr50R8UPKKD3+O9rNt
-	 Erj0DrIgK6A4W9LZ9ZLDaabMdGVUL5Tehc8O0+OxXD/xnYFb9+v4pEoBgFEUZxyZm+
-	 WCVbkczi0ummQ==
-Message-ID: <4e6cc95f-90dd-4f55-bb53-50de7d280d62@kernel.org>
-Date: Sun, 9 Feb 2025 07:14:52 -0600
+	s=k20201202; t=1739109890;
+	bh=qI21Q5zO33j93WU5qSHhhcQYc+eC6aCL10g4Ll7hy/I=;
+	h=From:Date:Subject:To:Cc:From;
+	b=TSFPuqkrXU2laJf2EPZdHcA/Ky4lxVz4GtIsFdYBTxY0/jMEVLAnGmnhSMGe0wdW7
+	 CsaudyX3NfKsjH9iGDX3mnXYZK9Pr8QeFaZyOEtsQlC0VQ1bCoduSWgomPuqp198BD
+	 Eh/s/0LddmVaAqCNB4aq5WYnih4ngO+vTI///n4vtbhBdtqrmMeqrEWNfgp5w5LBrk
+	 +HHwBJ/AgtorLzodHWa25FcsL4z3kDlXQAn7LzlQfoCWtdVPNNuf6jFRQ66bFNctYv
+	 DPYGXb7DKIDUI9AJDHO49cWOOnF0Inf3EqtobWUE6rIX2nImjewuz0etNdgNxzygLG
+	 5zdQFPVMPqTHQ==
+Received: by mail-oi1-f171.google.com with SMTP id 5614622812f47-3eba50d6da7so989748b6e.2;
+        Sun, 09 Feb 2025 06:04:50 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXjRpKWGJT85JKUdKWWF4y1IwifyHvWaSNcU17qJr9DCPDh84fGMen9FtlNU1LR9aO2HUm4wXlvnT/+4EE=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxdiiLndJ+ey0RtAqKGGutqt4PgmoXrMrP4+uedodA+Usx0iGZ3
+	yRNydWT+bzGt4Ct0B2lJydVx7lSa3ZBffiYllcgR2LYKakTnvqb7+3yLTkH2jaVmFjrlMzMY8Jr
+	VA8M6rgu563bbpqQTIPYsVxquBv8=
+X-Google-Smtp-Source: AGHT+IHhzpspj1DIOZ4PtZvOzVipHy2O/HZsMdOTXW7mjXDy8Az68ueCYgoUk2zddJ6f4+KzdLuBg27U3wAbr6+Vo98=
+X-Received: by 2002:a05:6808:11c3:b0:3e9:2090:c030 with SMTP id
+ 5614622812f47-3f39237974amr5672932b6e.25.1739109890073; Sun, 09 Feb 2025
+ 06:04:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 4/4] ACPI: battery: Wake system on AC plug or unplug in
- over s2idle
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>,
- "open list:ACPI" <linux-acpi@vger.kernel.org>,
- "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
- <linux-pm@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
-References: <20250208162210.3929473-1-superm1@kernel.org>
- <20250208162210.3929473-5-superm1@kernel.org>
- <CAJZ5v0j4+8nqQRtcAihpVgOHWUPE54nTWienCpFk1U7easVPnA@mail.gmail.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <CAJZ5v0j4+8nqQRtcAihpVgOHWUPE54nTWienCpFk1U7easVPnA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Sun, 9 Feb 2025 15:04:36 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0ggiSiuop5WeC5AZOHC_P_etyiOOW-EZstc3_i_8dEz3w@mail.gmail.com>
+X-Gm-Features: AWEUYZlVQjHS2XyUFMFmMn-Nt5kqfM9Ea7ouVW1Ng-snpmYgA1_M_B5EpL1mi3w
+Message-ID: <CAJZ5v0ggiSiuop5WeC5AZOHC_P_etyiOOW-EZstc3_i_8dEz3w@mail.gmail.com>
+Subject: [GIT PULL] Additional power management fix for v6.14-rc2
+To: Linus Torvalds <torvalds@linux-foundation.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>, 
+	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+
+Hi Linus,
+
+Please pull from the tag
+
+ git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+ pm-6.14-rc2-2
+
+with top-most commit 7585946243d614bd2cd4e13377be2c711c9539e0
+
+ PM: sleep: core: Restrict power.set_active propagation
+
+on top of commit 73195bed7899150cd1005cf0a902b68793adad23
+
+ Merge branch 'pm-powercap'
+
+to receive an additional power management fix for 6.14-rc2.
+
+This fixes a recently introduced kernel crash due to a NULL pointer
+dereference during system-wide suspend (Rafael Wysocki).
+
+It is not present in linux-next, which is an exception as far as I am
+concerned, but since the fix is effectively a partial revert and it has
+been tested, I've decided to fast-track it so it gets into 6.14-rc2, if
+possible.
+
+Thanks!
 
 
+---------------
 
-On 2/8/25 11:59, Rafael J. Wysocki wrote:
-> On Sat, Feb 8, 2025 at 5:22 PM Mario Limonciello <superm1@kernel.org> wrote:
->>
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> On Windows the OS will wake up when plugged or unplugged from AC adapter.
->> Depending upon whether the system was plugged in or unplugged will
->> determine whether the "display turns on".  If there is no user activity
->> for some time then it goes back to sleep.
->>
->> In Linux plugging or unplugging an adapter will wake the SoC from HW
->> sleep but then the Linux kernel puts it right back into HW sleep
->> immediately unless there is another interrupt active (such as a PME or
->> GPIO).
->>
->> To get closer to the Windows behavior, record the state of the battery
->> when going into suspend and compare it when updating battery status
->> during the s2idle loop. If it's changed, wake the system.
->>
->> This can be restored to previous behavior by disabling the ACPI battery
->> device `power/wakeup` sysfs file.
-> 
-> Why is this desirable?
-> 
-> What if the AC is connected to a suspended laptop when the lid is
-> still closed?  Is it really a good idea to resume it then?
+Rafael J. Wysocki (1):
+      PM: sleep: core: Restrict power.set_active propagation
 
-Yes; that's the exact situation I wanted this to work.  I have a dock 
-connected to some monitors, power supply, keyboard, and mouse.  I want 
-the machine to wake up when it's connected to the dock but still closed.
+---------------
 
-That's how Windows works at least.
-
-> 
-> Frankly, I'd prefer the existing behavior to be still the default.
-
-Since this is hooking into the existing wakeups that can happen for 
-battery I guess that there isn't a good way to configure one but not the 
-other.
-
-Would it be better to do something similar in the ACPI power supply device?
-
-> 
->> Link: https://learn.microsoft.com/en-us/windows-hardware/design/device-experiences/modern-standby-wake-sources#environmental-context-changes-1
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->>   drivers/acpi/battery.c | 8 ++++++++
->>   1 file changed, 8 insertions(+)
->>
->> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
->> index 72c8a509695e6..91f79927cc720 100644
->> --- a/drivers/acpi/battery.c
->> +++ b/drivers/acpi/battery.c
->> @@ -125,6 +125,7 @@ struct acpi_battery {
->>          int state;
->>          int power_unit;
->>          int capacity_suspend;
->> +       int suspend_state;
->>          unsigned long flags;
->>   };
->>
->> @@ -1012,6 +1013,12 @@ static inline bool acpi_battery_should_wake(struct acpi_battery *battery)
->>                  return true;
->>          }
->>
->> +       if (battery->state != battery->suspend_state) {
->> +               pm_pr_dbg("Waking due to battery state changed from 0x%x to 0x%x",
->> +                         battery->suspend_state, battery->state);
->> +               return true;
->> +       }
->> +
->>          return false;
->>   }
->>
->> @@ -1313,6 +1320,7 @@ static int acpi_battery_suspend(struct device *dev)
->>                  return -EINVAL;
->>
->>          battery->capacity_suspend = battery->capacity_now;
->> +       battery->suspend_state = battery->state;
->>
->>          return 0;
->>   }
->> --
->> 2.43.0
->>
->>
-
+ drivers/base/power/main.c | 21 +++++++++------------
+ 1 file changed, 9 insertions(+), 12 deletions(-)
 
