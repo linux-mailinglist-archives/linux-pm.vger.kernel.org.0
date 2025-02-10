@@ -1,156 +1,174 @@
-Return-Path: <linux-pm+bounces-21679-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21680-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F3EE5A2EBD1
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 12:49:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id A762FA2EC0F
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 12:58:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51C85164DAA
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:49:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id ABA5E188469F
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:58:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F6511F3D59;
-	Mon, 10 Feb 2025 11:48:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 475171FC115;
+	Mon, 10 Feb 2025 11:58:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yk4Lqtfy"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="FhW7dZuf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF261F3D58;
-	Mon, 10 Feb 2025 11:48:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F611F63E8;
+	Mon, 10 Feb 2025 11:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739188086; cv=none; b=PeQXaK2ZwydCA6CizackZVGaBDKWeGp5DipH7V12LWCKC2danGvRUscp0xZA0TfGT31JVUfh4C5yfh77OL49ukDEAoDaJpEgEpVdIaDqx2c9lfGKrb3NnNmAufz3mZkXHcgfa52NZWEsWaBYgV63rnQXgJmEUIxZ0aWe32Ki53Y=
+	t=1739188695; cv=none; b=OJsohykqp/m7TIJRmWGc4MnzNw6TqpDcsb92TA2JYDpQXBFG5jUAowrUAEp7FrmBSozDQ1T5bMVZ5ABBRcg8LS49Ru2WHEhT4dGABHPz34H0M/S2DRgEes07icvD6d/ggNnnSv/B1MAryVVd2Zzn6+wtBlE2dGFO+QDo9PSh5hI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739188086; c=relaxed/simple;
-	bh=7xr6eif59D5Z0cBZLVAON47L6iycbPs+daElwJ+WYIY=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=RdkZUfYL1cVXaNclI7B3A7uvKzWjdeLXrwUSngi0QSD8GgignXXyaZ9YRIRlt7Y2ywKJNUFITi026Y21ZYnobNDSomGvATFjZWPI97C1U0H6jRSVt8Zal1J4ZvOvSBOtel41ZXyvGqXpJwFL6nDNWRgMgVq9v1qoYiMlnY4XlnM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yk4Lqtfy; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aaec61d0f65so948691966b.1;
-        Mon, 10 Feb 2025 03:48:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739188083; x=1739792883; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=HVl3EUiEdR+2nH8WWZkP4Nhw+7rNyWyQ5wQqq3ShzRs=;
-        b=Yk4LqtfyidftPUhLJ92QON69Wwn6fmuvd4WZgTlXh0hl1f4NAPQlfbYgJmE/gkmtno
-         ZmeL47ybPstNGW2wHeoJd76YaToCWN+tI5dH4VRrSRqlt4K5RNn6ciUNhk5ChDt6SI4g
-         znMcbcGu26EellmrRpTJtqmqApn+7oorr+VUY3pWQNbKnGQ/YvvoNjpJnpZPehFkuB+g
-         +6BaVIvWdwonfuRdi1XlmjcQGTKXaV019tLfqg1/sKzs5vCIYSgufU6UR5VmQDz4cYL3
-         Np5dbth0Y6LbUFawC7uqx2tighQUV+8j6hXgdU+Cbgpalc+z9WxVLha/Z8bIHRR4nlWW
-         /IVg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739188083; x=1739792883;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=HVl3EUiEdR+2nH8WWZkP4Nhw+7rNyWyQ5wQqq3ShzRs=;
-        b=X3i/E3/ZlSlL58ts6jM6BpaVWxLfxl4k/wqq7UiYv8csRKeSbc9d+OCBa+HVralXgK
-         u4HIXv1gRt7PANMKUbkT/Z3cqPxZqfLVL01jUBEGVgHGdPn2IxVPImTzTyUrFRid49HR
-         fIB2aVLokAx58y28A3oYW4QlE/ZLGuvb1op+tX8esV8szR/08XcCTx+HwRCAQrBUnluW
-         4eAGiMYxo6Obs+Y/TMa0Jea9DAcZKd+9ZxwEheRaUJEW1BWFNL+0IB0JUGjah9lfWtwT
-         ypH7t+eoeMbaG+mGJAhUf2afNsKc3CveHf9rEqvwV1AIeusMJYVvDTWMqht3AUni6Yfn
-         9dEA==
-X-Forwarded-Encrypted: i=1; AJvYcCW+OCmqMeJA7Pq+6HCTDlvM0fulst7/MYBRIXAkRJUIdx9i8xid/ML84tu+669DWU9V6d0E+y+o5vM=@vger.kernel.org, AJvYcCXBDHI+IODG4E9z1Ji0O6bVo7lgHzXoUwqVvgH8et+ImUfxyQdqd1M1U5o4G2Gxw6PwYp+NSAh2l74n@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzh2VuLDmVbQedhvnoDN0ZQQJPalWhQ7ug4cB3bQQsCDVgfBPCM
-	G3Rug/m/i70SyIYqX7XiF6a4ZFXbMaxzG02VvUIORWv3mMIMSfEGjcQSgF87
-X-Gm-Gg: ASbGncvVigyKivj1mS6JL1IXpLRppW/EKGWX/6tb7srAEg6NN5E1rhH6E+vQn3RfV5H
-	tashmJU7uk8BggNTGsVJ1O/AxWsU4U8yCALkLQTJ6FpppILEEmhHf8hdOTfaF3tsdho/WyQUjiI
-	12xpMCwzLwzWhYvSGftV123MGmn4I9Imi1mbk4j7P3mumknRjCr5aL+Uc8+e6iDBmjfQr9E+OIp
-	QeQSCcu0tX1EnWhvzV/sqXa6BPjwn5pKK5BfRhJ5LnBr1EjiDXLbH5AGc5pYSPZF2ju21sT6ppR
-	BeXiiR5Vxwg8YEaKun0FA/6SACpaF2bf
-X-Google-Smtp-Source: AGHT+IGY3dILn6ts/Eq3QIZU6ECVgNuSbLxMNRT8V0H+TQxvFHnWdoPp+ST/buUvAjzzmdL3OQMGTA==
-X-Received: by 2002:a17:907:9719:b0:aae:8841:2bba with SMTP id a640c23a62f3a-ab789b84353mr1350942666b.22.1739188082366;
-        Mon, 10 Feb 2025 03:48:02 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7bc28c58csm252975066b.135.2025.02.10.03.48.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 03:48:01 -0800 (PST)
-Message-ID: <e17ef70f7536bd1bf0b4d0f7258f91cffac76a20.camel@gmail.com>
-Subject: Re: [PATCH 08/10] riscv/arm64: dts: cv18xx: Add sysctl and reset
- nodes
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Inochi Amaoto <inochiama@gmail.com>, soc@lists.linux.dev
-Cc: Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto
- <inochiama@outlook.com>, 	linux-pm@vger.kernel.org,
- linux-riscv@lists.infradead.org, 	devicetree@vger.kernel.org, Haylen Chu
- <heylenay@outlook.com>, 	linux-arm-kernel@lists.infradead.org, Sebastian
- Reichel <sre@kernel.org>,  Arnd Bergmann	 <arnd@arndb.de>, Philipp Zabel
- <p.zabel@pengutronix.de>, Rob Herring	 <robh@kernel.org>, Krzysztof
- Kozlowski <krzk+dt@kernel.org>, Conor Dooley	 <conor+dt@kernel.org>, Lee
- Jones <lee@kernel.org>
-Date: Mon, 10 Feb 2025 12:47:59 +0100
-In-Reply-To: <h73zitljaig7nrccd3f23i655imswv54tf667dhq3dord7rxsr@unqncqlorvc6>
-References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
-	 <20250209220646.1090868-9-alexander.sverdlin@gmail.com>
-	 <h73zitljaig7nrccd3f23i655imswv54tf667dhq3dord7rxsr@unqncqlorvc6>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1739188695; c=relaxed/simple;
+	bh=Avi8Jp4lXtNhe6dygVfFalnwotyIhkW4f+KRhkFCo4g=;
+	h=From:Date:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=jp5wnhEA1OTLz4wEyEab3C+phxDJb9+DWUDFT9dCCUMAot7W5Vbi/mYsVVv9kYSkPk/fA4XAfn2G9szbvtRNXP+h8hh0uTSJc/MW9owxhdwXGVYpt70IcYQmklzeAPq4NvHI+4MPrZtTxOGkJpSjvrQpNzlAks2+6N0lW/JvBF4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=FhW7dZuf; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739188693; x=1770724693;
+  h=from:date:to:cc:subject:in-reply-to:message-id:
+   references:mime-version;
+  bh=Avi8Jp4lXtNhe6dygVfFalnwotyIhkW4f+KRhkFCo4g=;
+  b=FhW7dZufJQan6AsxqFTAwEO83bKujX+FhxBvPxXbFH5MF9Y3wTA6byIN
+   3JZ5VElnvZlfBHYGinrqH+jIZ8Z4Kv/ReUU6/+3eqpqlTjRl5kBeldPCX
+   RsMXV9zvdt4zrZ/f+Tljo68GRLMtvVv5X6e4IxCmO9qxSU/I55JvxP+Kl
+   3goIudxy9SgEeTqr9gHWKxhB56HbKvC6v7m9sopMNSpSXN3tNfTypo+gi
+   DSJM/VbbrZncMzNhLZv2FE2xzfdX8LKbLYSze08gCLdo+58uHp3kIPGcD
+   vPhNeJzMl4QnE5lB+df8Lz0eqMgYSw7uv6FzYbh4YkgvpHewB78e0LU4m
+   A==;
+X-CSE-ConnectionGUID: PdRbncyOTZ2CTukDyM4L7g==
+X-CSE-MsgGUID: r64XYF0sTyybZKJb14fAfA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11340"; a="51156162"
+X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
+   d="scan'208";a="51156162"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 03:58:13 -0800
+X-CSE-ConnectionGUID: tGsI6Nf+RcK38Fr/ELC9lA==
+X-CSE-MsgGUID: eeot4O6BQRawInG5lVj1Qw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="112010875"
+Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.72])
+  by orviesa010-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 03:58:09 -0800
+From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
+Date: Mon, 10 Feb 2025 13:58:06 +0200 (EET)
+To: Xi Pardee <xi.pardee@linux.intel.com>
+cc: rajvi0912@gmail.com, irenic.rajneesh@gmail.com, 
+    david.e.box@linux.intel.com, Hans de Goede <hdegoede@redhat.com>, 
+    platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>, 
+    linux-pm@vger.kernel.org
+Subject: Re: [PATCH v6 5/6] platform/x86:intel/pmc: Move arch specific action
+ to init function
+In-Reply-To: <20250207225615.401235-6-xi.pardee@linux.intel.com>
+Message-ID: <69b2b41b-5fcd-a7f2-576a-b00f2d390d8e@linux.intel.com>
+References: <20250207225615.401235-1-xi.pardee@linux.intel.com> <20250207225615.401235-6-xi.pardee@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
 
-Thanks for quick feedback Inochi!
+On Fri, 7 Feb 2025, Xi Pardee wrote:
 
-On Mon, 2025-02-10 at 13:13 +0800, Inochi Amaoto wrote:
-> On Sun, Feb 09, 2025 at 11:06:33PM +0100, Alexander Sverdlin wrote:
-> > Add reset controller node and required sysctl nodes.
-> >=20
-> > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-> > ---
-> > =C2=A0 arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi | 16 +++++++++++++=
-+++
-> > =C2=A0 1 file changed, 16 insertions(+)
-> >=20
-> > diff --git a/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi b/arch/riscv=
-/boot/dts/sophgo/cv18xx-periph.dtsi
-> > index 53834b0658b2..d793b6db4ed1 100644
-> > --- a/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
-> > +++ b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
-> > @@ -309,5 +309,21 @@ dmac: dma-controller@4330000 {
-> > =C2=A0=C2=A0			snps,data-width =3D <4>;
-> > =C2=A0=C2=A0			status =3D "disabled";
-> > =C2=A0=C2=A0		};
-> > +
->=20
-> > +		rtcsys_ctrl: syscon@5025000 {
-> > +			compatible =3D "sophgo,cv1800-rtcsys-ctrl", "syscon";
-> > +			reg =3D <0x05025000 0x1000>;
-> > +		};
-> > +
-> > +		rtcsys_core: syscon@5026000 {
-> > +			compatible =3D "sophgo,cv1800-rtcsys-core", "syscon";
-> > +			reg =3D <0x05026000 0x1000>;
-> > +		};
-> > +
-> > +		soc-reset {
-> > +			compatible =3D "sophgo,cv1800-reset";
-> > +			sophgo,rtcsys-ctrl =3D <&rtcsys_ctrl>;
-> > +			sophgo,rtcsys-core =3D <&rtcsys_core>;
-> > +		};
->=20
-> I think these node is not suitable for riscv. It should use SBI SRST
-> extension to restart.
+> Move arch specific action from core.c to the init() function of spt.c.
+> 
+> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
+> ---
+>  drivers/platform/x86/intel/pmc/core.c | 13 -------------
+>  drivers/platform/x86/intel/pmc/spt.c  | 21 +++++++++++++++++++++
+>  2 files changed, 21 insertions(+), 13 deletions(-)
+> 
+> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
+> index 628cb22221fbc..06821c41fbeb9 100644
+> --- a/drivers/platform/x86/intel/pmc/core.c
+> +++ b/drivers/platform/x86/intel/pmc/core.c
+> @@ -1416,11 +1416,6 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
+>  
+>  MODULE_DEVICE_TABLE(x86cpu, intel_pmc_core_ids);
+>  
+> -static const struct pci_device_id pmc_pci_ids[] = {
+> -	{ PCI_VDEVICE(INTEL, SPT_PMC_PCI_DEVICE_ID) },
+> -	{ }
+> -};
+> -
+>  /*
+>   * This quirk can be used on those platforms where
+>   * the platform BIOS enforces 24Mhz crystal to shutdown
+> @@ -1531,14 +1526,6 @@ static int pmc_core_probe(struct platform_device *pdev)
+>  	if (!pmcdev->pkgc_res_cnt)
+>  		return -ENOMEM;
+>  
+> -	/*
+> -	 * Coffee Lake has CPU ID of Kaby Lake and Cannon Lake PCH. So here
+> -	 * Sunrisepoint PCH regmap can't be used. Use Cannon Lake PCH regmap
+> -	 * in this case.
+> -	 */
+> -	if (pmc_dev_info == &spt_pmc_dev && !pci_dev_present(pmc_pci_ids))
+> -		pmc_dev_info = &cnp_pmc_dev;
+> -
+>  	mutex_init(&pmcdev->lock);
+>  
+>  	if (pmc_dev_info->init)
+> diff --git a/drivers/platform/x86/intel/pmc/spt.c b/drivers/platform/x86/intel/pmc/spt.c
+> index 956b2ec1c7510..9289cd76b0145 100644
+> --- a/drivers/platform/x86/intel/pmc/spt.c
+> +++ b/drivers/platform/x86/intel/pmc/spt.c
+> @@ -8,6 +8,8 @@
+>   *
+>   */
+>  
+> +#include <linux/pci.h>
+> +
+>  #include "core.h"
+>  
+>  const struct pmc_bit_map spt_pll_map[] = {
+> @@ -134,6 +136,25 @@ const struct pmc_reg_map spt_reg_map = {
+>  	.pm_vric1_offset = SPT_PMC_VRIC1_OFFSET,
+>  };
+>  
+> +static const struct pci_device_id pmc_pci_ids[] = {
+> +	{ PCI_VDEVICE(INTEL, SPT_PMC_PCI_DEVICE_ID) },
+> +	{ }
+> +};
+> +
+> +static int spt_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
+> +{
+> +	/*
+> +	 * Coffee Lake has CPU ID of Kaby Lake and Cannon Lake PCH. So here
+> +	 * Sunrisepoint PCH regmap can't be used. Use Cannon Lake PCH regmap
+> +	 * in this case.
+> +	 */
+> +	if (!pci_dev_present(pmc_pci_ids))
+> +		return generic_core_init(pmcdev, &cnp_pmc_dev);
+> +
+> +	return generic_core_init(pmcdev, pmc_dev_info);
+> +}
+> +
+>  struct pmc_dev_info spt_pmc_dev = {
+>  	.map = &spt_reg_map,
+> +	.init = spt_core_init,
+>  };
+> 
 
-Independent from the particular form, or its correctness, this is still HW
-description, right? It would be a "policy" for the kernel configuration, if
-the particular build would rely on the FW or a kernel driver to reboot.
+Hi,
 
-In other words, the HW block remains in place, no matter if it's controlled
-by a kernel module or a FW. What the point in hiding it from the RiscV part
-of DT, keeping on ARM64 side only?
+I've applied all but this patch into the review-ilpo-next branch.
 
---=20
-Alexander Sverdlin.
+This change is good otherwise but I'd prefer the pmc_pci_ids be named 
+better such that it actually relates to why it exists :-). So please 
+respin this patch.
+
+-- 
+ i.
 
 
