@@ -1,163 +1,206 @@
-Return-Path: <linux-pm+bounces-21668-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21669-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1A5FA2E9F5
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:50:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D628CA2EA4A
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:59:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8CEB816633B
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 10:50:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A3AB7A3920
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 10:54:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A80521CD1FD;
-	Mon, 10 Feb 2025 10:50:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E171E98E1;
+	Mon, 10 Feb 2025 10:52:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pHqPS8R+"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="xDwV/oDm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f171.google.com (mail-lj1-f171.google.com [209.85.208.171])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10on2043.outbound.protection.outlook.com [40.107.92.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AB213192D7E
-	for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 10:50:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739184644; cv=none; b=ctgPOHAETq+d+jh/XhIOcfg3Ib1AN4/Gid2W6M0QIJPGU9VPTD5KAF3bXDzslmAvff/2CAi+jJV516jhb9NFlVnyuV8H+rSO5G6W59t9fbiqiYIOl93MGmUWNjMzbS3uH9Hlm9/CaBiT9LG2EGrlYBJ4jHLbXJtb/hK9macykZs=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739184644; c=relaxed/simple;
-	bh=ICUmdBt8XRJXVFbrpD7aAUnbaAPGI4U1gNjK3X4TlX8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=jkbQ1EA4FxBaVlH8pAhgZLvrAjaY5daZuBgEO4L5V+J4WZvGLJYet7uRXAVNWp2QBdPTbBEkPLJDhxBl+mR4xBqXVuUUBcOgC7jBksoz8MgvKLtkMPxyHZ5vzt22oJTmkRKblt6jKBnt8VpT9gIU0aAkWSXeQfhdF8TrFkSfkho=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pHqPS8R+; arc=none smtp.client-ip=209.85.208.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f171.google.com with SMTP id 38308e7fff4ca-30613802a59so43314811fa.0
-        for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 02:50:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739184641; x=1739789441; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=hvFzwRKL6EFJPM/4hbqGptZn0OaUv9Jm6JVL6aPi71Y=;
-        b=pHqPS8R+DmsEH1+IaoRj/9tOVl45iy5Dmm2A8gU5UJojGzGElHkLQi1q37RV1TcIvu
-         qaVXCuNMLOQkM85+Z6Hs+jUrup20kJbppdwCMvreBNQGdhYiz3t3se5FgM1wOCrgvpz1
-         G4+GwK+AHHHzt5FM+4/aPMxCBEyygVDi7eaCVw+lLraVn6c+qbFATLaW1DWO4NqGJ8pu
-         2d48amIhphVWmbCXKqRPoZEeuDvqW7/bOisSgZy7WY+XX/CGB9EryjH5H2hDqnAuuE/M
-         /REvbyY1ecr2SDfqeJ2NIvkOZQ9D8D3pxuoxD85K+nHL9JWkSzg1xer7F5hg16bIXoaM
-         ObLA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739184641; x=1739789441;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=hvFzwRKL6EFJPM/4hbqGptZn0OaUv9Jm6JVL6aPi71Y=;
-        b=VniOe8h4TTgxQVFwFwteDI5KFG5ejnvqqv+/Grnn85sJZdHdrdxR/Ezt0OIzSNgrR7
-         NnxeAclfz57IhK2NdqgRHw9k3a9nVbiBILBgRD4W/DPH2o6+AVTEucUVRBz9PSgnaYE8
-         KbqSPCj/D1Mt+jVAxdhU6+rHWCv05Ye7RMRS0iif4a53pzjXJo0zb47pXc268yLejSA5
-         O6g9J8MeXIp91YCx+42N2pmc6GW3LlxN53j/emJVIe59WxejsGkIE8cDOR2mQnYQ+dk3
-         bsDXITTQnIvdOP3qJRr2TXzZReuKpYxz0JtnwBEAoISJKHFyd9yiBcvfhpi80Zim+DRz
-         4LEg==
-X-Forwarded-Encrypted: i=1; AJvYcCUOQLI692tcFq/rH8r0bLaLms4ybXCfI12PrIX0DenxC4IAmSVR6DThF6Srjz3fG+MLC6uzcpFKTA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxye4lTp+EXOvaWM2No8iitTtqLu7ACnVxMA/vikoDHwpln6YBY
-	kduiGpgQtQKZjtA2p5U71coG8kwwLKKP+0nqWMRh15gGOEcgFksBDfnqiEyO3bQ=
-X-Gm-Gg: ASbGncuKoRItX29442Twvz5eB1lNbhXrrLjJXhzTSC6YdFlmGnZfcVjDt6Kkn/FUYkT
-	k7FspOFn7wMpQrygwtrPxBOGI2MFvm89ajMCaK/EBW99cOHdtO9izBLymTywUlD2l6B3UV64Nq7
-	2yTrC70wFFqQ3FYxDAb63SSB+UjcsKk5q0J3RIiTvmYln80FayQIBwO4NuFleAa+YTp3kdUyWT7
-	ogube1nY4iwMwuhWPgSqjWiL4W/PGzxxJIUqePfxwIzC7CRjDqGqUmxU+iQvpyOcEZv9sFeH1XN
-	JEWdfVJcu6ClSLZ2Ml2fxtF2EN3C7wMlwYdPoalkm95dMyIRjikicyabp7SjO85rBHbXOrU=
-X-Google-Smtp-Source: AGHT+IE0t33F67YCixyaHQxIxAgdVJ1K3UHAFFUTrLatNRBrJe1hONkFkblGv5KgnVrurTiuJQHrfQ==
-X-Received: by 2002:a2e:ab08:0:b0:301:12:1ef3 with SMTP id 38308e7fff4ca-307e57bc4b0mr44406991fa.4.1739184640660;
-        Mon, 10 Feb 2025 02:50:40 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-307de2bb126sm12560731fa.72.2025.02.10.02.50.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 02:50:39 -0800 (PST)
-Date: Mon, 10 Feb 2025 12:50:37 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Odelu Kukatla <quic_okukatla@quicinc.com>, Mike Tipton <quic_mdtipton@quicinc.com>, 
-	Jeff Johnson <quic_jjohnson@quicinc.com>, Andrew Halaney <ahalaney@redhat.com>, 
-	Sibi Sankar <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 2/7] interconnect: core: Add dynamic id allocation
- support
-Message-ID: <bwiuhfgv4jw7tlwjqffgrxvskxbpf4forz46nn5g3vihz3z5od@w25y7hdprykf>
-References: <20250205182743.915-1-quic_rlaggysh@quicinc.com>
- <20250205182743.915-3-quic_rlaggysh@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796CB1E990E;
+	Mon, 10 Feb 2025 10:52:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.92.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739184769; cv=fail; b=V5p0dVyGq2eZwqMDtu5MvKUWv6aXaphHUcz3oKDXaT9AGqreGtXNAHViY7/DYo2AZa8Ob2r/OajlQoRQxByM17wjh4A9st/LaWo4zRmatRapRIbDRxrgfhm3AMc2MQt9M0ctIf61ddmGBVyy94ZKB7FQvb6XLSxvd0aqWLMphbc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739184769; c=relaxed/simple;
+	bh=uSW7I27cjHAebVldWoJSQMNz+sYEynASiJwNa4Z+V+w=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=QFJkpQtiEyutc5jojDQMXrm4BpR5w+Ppws3s+vsjLmLAeGiw5ZOK2YWNIu3I1C4hGhqBRL/xyIdTKi+5toPnvFYmWfRFF5ELLHZ8NJ1VdPwmJ/QXGV3Mb7/TV9uBDEbMtPGwKflX5RZCF0FOk49AOTxn8z+iaFR/UZeZHc5FdlU=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=xDwV/oDm; arc=fail smtp.client-ip=40.107.92.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=NYyGrvk1CLhM4RWIhPWMvHavrNiJYeV7D4zIOBbRltHDplFOn9KT62XbcWXfKnp2zwGjVf6aki0Px8RtGxdCzvepPhioi7EFGg0AE96GyjZYr2jkInP9G3Otog7AoODXRz5ROyFAWuanpPSrgognOdfBuUNIyNlh6mMc2pgSseGa4KacnKeO/ZevhBsN48adeKhMbOefd5FdI4oyU2zyYQ6DvXTURnUmn2KmlZvHYL2T42zElTitOYe5QtgaLihAzt6ngLHR/HJJrywe8MmBoYnwnIOXRv7ou2jD0DYjI59mGCAnwL+S/Qh46mJQUv+ghQIeLurXzr1swTdcabIQew==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=nxdcQSV7WoEi6gAWiR4Q06X3zN4VoQMrjzSMjTuiqpg=;
+ b=MCLgKajlAQW5P7bMH/5J7UQDqrQrOgkutSgUHkFBc9QgOgSUeCtUuObhk3xmmQh7RtHLYjoIRq+/VGEWGMMV3G66O1I/0/oFlJGBPxfqukrjY60FyVbT33XhX8Tm4vhQDkJtJ+IO3S5D4m8Tg6YKX+QeDGEX8TpYj88NHN0vQXKnrWfjc97Gg3fQwuziIq1I2mlURPZFvlZTAGtGIO0cIbavh/G+/1yOoNSmuvosuhnYvAXcYztejZNNql0qnIziz1/a7KylO606iTZE8+jf4bdSf/5W8HpVe4IxtaIAPTNDIcu1SYvsOvYhB4ypiOuyGcrP97BVRBipdl1QEV1GyA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=nxdcQSV7WoEi6gAWiR4Q06X3zN4VoQMrjzSMjTuiqpg=;
+ b=xDwV/oDmtLQh/IIi5vjB9rN20H79t3xNAnsm7Gwtre/6RyG+xZtiZploS1Dgj7cTIQb19twiIdzMp3EM+2wYk1njQe9735T2v3ia2rMGqHXonMAdXUn80Jf5HYq6zVY4675LVZ8qok+vXi4zJABX5XAGaHQrrXqQJLDuPHqQdQk=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
+ SN7PR12MB6959.namprd12.prod.outlook.com (2603:10b6:806:261::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.12; Mon, 10 Feb
+ 2025 10:52:45 +0000
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.8422.015; Mon, 10 Feb 2025
+ 10:52:44 +0000
+Date: Mon, 10 Feb 2025 16:22:34 +0530
+From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
+Cc: mario.limonciello@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 09/12] cpufreq/amd-pstate: Fix cpufreq_policy ref counting
+Message-ID: <Z6nacnX/CcynO2Cv@BLRRASHENOY1.amd.com>
+References: <20250205112523.201101-1-dhananjay.ugwekar@amd.com>
+ <20250205112523.201101-10-dhananjay.ugwekar@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250205112523.201101-10-dhananjay.ugwekar@amd.com>
+X-ClientProxiedBy: BMXP287CA0020.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:b00:2c::28) To DS7PR12MB8252.namprd12.prod.outlook.com
+ (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250205182743.915-3-quic_rlaggysh@quicinc.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|SN7PR12MB6959:EE_
+X-MS-Office365-Filtering-Correlation-Id: 5df2973f-d4bc-4abc-a5d4-08dd49c10c7f
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?dbk+fGg63Me3nDtrbLEhgIQ4tF46cPpzxi36NJ4WO5TlRvg+eg6ENMM2RvT3?=
+ =?us-ascii?Q?+Z4GvXzgT3/FzNWbTV8bBzBFlv48z64RqBvQi4A0aB37yl4NY9luUZw1+JeQ?=
+ =?us-ascii?Q?VRy3gnpxR0P4/8wohfg6fVDaDKgPAXzALyGLi/inkwRtiz1a7+LPPt0bgrFA?=
+ =?us-ascii?Q?dqaGTUcrUaTOdayADL3U7a4XAT+zNVTYRh3TagNAP7N/YsQjRy9SQ4r21fBT?=
+ =?us-ascii?Q?ZaFdJ7GSsYoCxKJDCXqFGNZy0HPjK1zkidfh4FVmiE2eSa1C8VaBlDJZ1QBK?=
+ =?us-ascii?Q?2HHPpU3UEWXe/ucgPKutPkTIINRkkmnGZhYV2SZPMTxTfuIvUZCZj/ycqIi/?=
+ =?us-ascii?Q?Hokd4lmFehpA2rUoE32hk0Sy4IDU5MXw9F87NH0pr9y93caW/53ldC7d449A?=
+ =?us-ascii?Q?4FD49NoNwnE01q5e8k6cG/RPneZTg6UO3yuOS/fDa+5foLAtAt3OpCglf00l?=
+ =?us-ascii?Q?q3PUCjG9n4u1QfPcmnlXML4D3t+IJJ1PSKj84Llb6hXLENSZG3TEO1CVIgLJ?=
+ =?us-ascii?Q?GxZ8bpcYB+eXuQAOegy048zNtRnrQq2ydDrQSeNGIggX/j6cDYjUZnlAEUB6?=
+ =?us-ascii?Q?rgvEJnSespnNiXDdxp4DbKAMl+HCZrJHaFUTOcvRAAt0+NKWVRN46qkFRuB8?=
+ =?us-ascii?Q?t6yBJ5INM8msto/rtUuTOIM52AmRnIsjTNlQb8qnzqXL1OwqIQEeP1YcIDxV?=
+ =?us-ascii?Q?Jfm7txhdktuYbAyn0OHrAdRdMx45dMu/jx+QbwqOeVbAjwnwhdAR91n5uqu3?=
+ =?us-ascii?Q?G0JGLPPxNe89mK05w/1tK43Kwi/32rmoB2VU/RjG28BmTLIWa4wb2NWAMeqd?=
+ =?us-ascii?Q?jbi0Xtoy9DfZh8Q2cCaHEoYtfnJN27ntezHOsg+B1OFgl5PuoMuAIpEbgtce?=
+ =?us-ascii?Q?v/YCl2+RBd/69ju1zwZLvmalluDX4GU0BgcNb2TJhsyHZRXzcDCxRZ6J7J+c?=
+ =?us-ascii?Q?aZtoEodldTzCJ6xPMqD4BoaAcb0AR6jmqxsYaYZHz/AcR058P2icMXZ53bjL?=
+ =?us-ascii?Q?Uo3UvCk/hJMKjgysoWQY7s35zeUOLdZjZzZlvo8AElkbfYPY43WOJ9Hz7ZJ6?=
+ =?us-ascii?Q?Kl3wWK3Ck1H+ZNSlKhnsZxZcpw4xNw71MHQfE2244IprEbS+U4ES9VaaXmbw?=
+ =?us-ascii?Q?t2CvM45OOFW/86ffFW2lMKUFfDZEIbojCeg1DQXJFH3lQlvgG12XreBvTBwv?=
+ =?us-ascii?Q?MRiFLB5bwtHKlB664DfBiYmFDXYr3fyBrYu34uCK4pPQXe+V/gIs+V2Dz0hr?=
+ =?us-ascii?Q?NGwKE6kHxJUcgBkbv8pcRJh3sbh4WZbkm/sffb7J1buZwM8UU83ZhK15YfMP?=
+ =?us-ascii?Q?cxxlSoJQQCjxqa4djMbBajjySNFwWhe/nrY/qGMs4ymdA47vXtYR5LCt5SXm?=
+ =?us-ascii?Q?n20Q5WdQAkzZKLhAm1wZxCCBVFxT?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?l2RjTkDSqCSeZdB14UMPrY3rUmP3RHMIavPDS1f1HbCbru4vXaNlclW/A/4k?=
+ =?us-ascii?Q?3r3moxkzDBcJS+6xcoiCv5QhCFjJewmD1IPWRprQsPXOHbULqFZC3ouGwP8M?=
+ =?us-ascii?Q?nwghei19gzcrtluBpJ/A6oFj8kU8/NShZHjyB+53PP/bTw72yWazT9hmdpBD?=
+ =?us-ascii?Q?Ih8tUUSKzdVEBZb7CyScrX4B+nIzJoAutjmH4zN77DfOwutWa76BkZGvpJG6?=
+ =?us-ascii?Q?N6xVBbPwX6qD/BFF9h8dab2IOdXaW3UaSGSAgP9JkxAQyX2yG2Jz1bL90+Ej?=
+ =?us-ascii?Q?0DrxaEBVQIGPtTDxJaqqQ65oMLREJXrA5j8hdl0AMPkD75OmGJUuJ/9CTyHI?=
+ =?us-ascii?Q?gK0ancSwSxhdQ0hOC1efdWrx7H4sn72iwqPjfkFWk/WxbX5Ar5dszlTSy1ri?=
+ =?us-ascii?Q?OsS8DIKHFNQl/j6FznmTruJ1A1o5tGUQhXJ9TsAJX9GZhIivT+v6giAKZCPI?=
+ =?us-ascii?Q?w60MF+eBmfKTcQ/efEJsU3NsQK3qYEjd4FHokOneqVMfZrwL/Y7pYXCA7+68?=
+ =?us-ascii?Q?YXbmfjm4obLreGB5Y56ZJsxqU35E9sT66UWgiRoNJzjHFCisjD+PPkydrza0?=
+ =?us-ascii?Q?PQSIQTyLi2uZ/iuo66YjrIrAnkJIdopk/uIBq1RksasJxrVGSB3ZraSX6Z8w?=
+ =?us-ascii?Q?E0FZk81c7s9GOk7PUEoRCRLpg6ZPEW+7g73XbW3QkOkwj5iwwzHWjYztzOCB?=
+ =?us-ascii?Q?E+jypln0ayxkUm1HkH43h5N1tZt9W0Qr5OvrBt+8fewHeIoPJ7W064sNv0A1?=
+ =?us-ascii?Q?Jo4r74D2ZUulvhoFhrjKUV4Ipc1GIbLxgxiD7KLHmflwmxJm2p+Q3xvuSXSN?=
+ =?us-ascii?Q?aqoNbsNv82fqCbWbTFQPYKpAXssIysvokSmoMXpA6ob2aewvvB9Fdu9PzvQr?=
+ =?us-ascii?Q?DQAd8yh5UzhqpUmXkpIwbEyD1uEbccZ3qKAt0nrTGqKvHsdK8UoYwydfLGrU?=
+ =?us-ascii?Q?AJjUfCut+BFLF52k+KoGKNWv3cvAGr+/RI2oQSWCGhx1wHG24Cq4HXFjwwYG?=
+ =?us-ascii?Q?5pTRG96eDVyQ0bXJZBuOinaK4ix6oQoSyAgwLDETHXJBEXSN4lHhdtWCIswm?=
+ =?us-ascii?Q?6R61ulJhO0KeKJhKOp5YYizKi5mmcLO/wLq/Fpe6VVztRkiWQmBmWPTi76ti?=
+ =?us-ascii?Q?dMql4zag5SHDNUikOBRE82+7IwkO8kbzLhgd3M0mucenaoGMzLcdwp281Bii?=
+ =?us-ascii?Q?0ZfRGFWRO83gb53lveMpQrmBsZuQv5YVWqQc7gD7jvm7XziMw+fK6OWicDcJ?=
+ =?us-ascii?Q?cuMzSEhmrv6bYBpdGgo72XWzmFZgfhvTiwss2y0Osrr8u9gDmx2RB741v92J?=
+ =?us-ascii?Q?EAAM3Fp9BvWdmytSbjTxcoEgSIOd0HlH1sMrxRVXGaBr/+tiVKQTGY04xIvy?=
+ =?us-ascii?Q?SkyFSiwbHw3bkBQaRC6pxDt4Qs2I8S5bwANZwtZVjylmdpLgdUWfCAoRW+R3?=
+ =?us-ascii?Q?ap4dGQr6iVNXq4VpocdqZ6V5DgxVZ7x4h3G88n/lisqXZ1ayhAmENvniQ+8o?=
+ =?us-ascii?Q?mVILV1FuefBLVih0VcrntlwAS2Jft9jJybKs8AJn6U3wz6UbMknnw4p/rMqN?=
+ =?us-ascii?Q?YsqIBp6OjU7Llh0j7BP/ge0U6hdg/HxhFlEM5/aO?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 5df2973f-d4bc-4abc-a5d4-08dd49c10c7f
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2025 10:52:44.7036
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: tqHAvfz8juH/ITQWfFDTex+X1TKbhG6T2cgz6sYXgOgf+rzJTmD4WZYKp7FtlSwE1bQ/RtBz9HKBgorNqwHi0w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6959
 
-On Wed, Feb 05, 2025 at 06:27:38PM +0000, Raviteja Laggyshetty wrote:
-> The current interconnect framework relies on static IDs for node
-> creation and registration, which limits topologies with multiple
-> instances of the same interconnect provider. To address this, update
-> the interconnect framework APIs icc_node_create() and icc_link_create()
-> APIs to dynamically allocate IDs for interconnect nodes during creation.
-> This change removes the dependency on static IDs, allowing multiple
-> instances of the same hardware, such as EPSS L3.
+On Wed, Feb 05, 2025 at 11:25:20AM +0000, Dhananjay Ugwekar wrote:
+> amd_pstate_update_limits() takes a cpufreq_policy reference but doesn't
+> decrement the refcount in one of the exit paths, fix that.
 > 
-> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-> ---
->  drivers/interconnect/core.c | 13 ++++++++++++-
->  1 file changed, 12 insertions(+), 1 deletion(-)
-> 
-> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
-> index 9d5404a07e8a..40700246f1b6 100644
-> --- a/drivers/interconnect/core.c
-> +++ b/drivers/interconnect/core.c
-> @@ -20,6 +20,8 @@
->  
->  #include "internal.h"
->  
-> +#define ICC_DYN_ID_START 10000
-> +
->  #define CREATE_TRACE_POINTS
->  #include "trace.h"
->  
-> @@ -826,7 +828,12 @@ static struct icc_node *icc_node_create_nolock(int id)
->  	if (!node)
->  		return ERR_PTR(-ENOMEM);
->  
-> -	id = idr_alloc(&icc_idr, node, id, id + 1, GFP_KERNEL);
-> +	/* negative id indicates dynamic id allocation */
-> +	if (id < 0)
+> Fixes: 45722e777fd9 ("cpufreq: amd-pstate: Optimize amd_pstate_update_limits()")
+> Signed-off-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
 
-Nit: I think it might be better to add an explicit define for that and
-to decline all other negatdive values. Please leave us some room for
-future expansion.
+Thanks for fixing this.
 
-> +		id = idr_alloc(&icc_idr, node, ICC_DYN_ID_START, 0, GFP_KERNEL);
-> +	else
-> +		id = idr_alloc(&icc_idr, node, id, id + 1, GFP_KERNEL);
-> +
->  	if (id < 0) {
->  		WARN(1, "%s: couldn't get idr\n", __func__);
->  		kfree(node);
-> @@ -962,6 +969,10 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
->  	node->avg_bw = node->init_avg;
->  	node->peak_bw = node->init_peak;
->  
-> +	if (node->id >= ICC_DYN_ID_START)
-> +		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
-> +					    node->name, dev_name(provider->dev));
-> +
->  	if (node->avg_bw || node->peak_bw) {
->  		if (provider->pre_aggregate)
->  			provider->pre_aggregate(node);
-> -- 
-> 2.39.2
-> 
+Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
 -- 
-With best wishes
-Dmitry
+Thanks and Regards
+gautham.
+
+> ---
+>  drivers/cpufreq/amd-pstate.c | 9 +++++----
+>  1 file changed, 5 insertions(+), 4 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 107ad953ce43..9c939be59042 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -821,20 +821,21 @@ static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata)
+>  
+>  static void amd_pstate_update_limits(unsigned int cpu)
+>  {
+> -	struct cpufreq_policy *policy = cpufreq_cpu_get(cpu);
+> +	struct cpufreq_policy *policy = NULL;
+>  	struct amd_cpudata *cpudata;
+>  	u32 prev_high = 0, cur_high = 0;
+>  	int ret;
+>  	bool highest_perf_changed = false;
+>  
+> +	if (!amd_pstate_prefcore)
+> +		return;
+> +
+> +	policy = cpufreq_cpu_get(cpu);
+>  	if (!policy)
+>  		return;
+>  
+>  	cpudata = policy->driver_data;
+>  
+> -	if (!amd_pstate_prefcore)
+> -		return;
+> -
+>  	guard(mutex)(&amd_pstate_driver_lock);
+>  
+>  	ret = amd_get_highest_perf(cpu, &cur_high);
+> -- 
+> 2.34.1
+> 
 
