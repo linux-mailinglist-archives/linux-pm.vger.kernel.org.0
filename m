@@ -1,228 +1,219 @@
-Return-Path: <linux-pm+bounces-21696-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21697-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 601C9A2EECE
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 14:50:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8CBDA2EF40
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 15:09:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79BDF1639C0
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 13:50:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79D00162FD8
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 14:09:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 179C7230991;
-	Mon, 10 Feb 2025 13:50:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97EDB233154;
+	Mon, 10 Feb 2025 14:09:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="BwTWG7Ia"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nfH7h3o/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2053.outbound.protection.outlook.com [40.107.244.53])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FB3B22FDE5;
-	Mon, 10 Feb 2025 13:50:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.53
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739195454; cv=fail; b=RxyI4xnKyYiH4n2zwuDkF+0zuWDK0EJghacJyIG33L63GFibuKT5NhFATi63oVscaTrtP5xP3M8Ez64LEnOc8vta4clM7C6kUpDV//7+HYfPazVCDckKRbaPrY3mX9Yhw9omlBav86T40nO9N/eFFStdTHPO3vc0JSyPG27K/SY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739195454; c=relaxed/simple;
-	bh=xtDbg9bmdPX3Cll6DQTP10FQbNgg3L2CMVoqbPJ8C7E=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=mBTVMxw5zxMgfUnbr9n+ScoieDESci6TMf8RYx+PsyAwRpesud6OEXWHvk8YsoLVOsbSXdKsGZRhxYmWAjUE/jlPFRKe2gYldCqxOas3NGzouKh/9wcIA5ODPDdqKBJ1dXb+ADgCGSms/xCzaL12lyiG3xLK7cuIzrjK4X2fiXU=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=BwTWG7Ia; arc=fail smtp.client-ip=40.107.244.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=ZGLa5zXItNj0/FJuJvaMDxyVGVSEpVl/qmMeLdLg+6DaMy1uuoQ19QHi4RCfyaSQFeUBJKSQY1GWci4B73mJa6hvFLYgpnMP4nU+rwmu9CHdvECTnVfU0cjqNBR8gb0SgniGmhC/OuQixdvvbqLu495WWRi25XUKbEr3BetKhx75sdqktyIwm+BtAlQJojYGX/NyThwArRvQMzVGQ7ZT9/WugtVTKvUFXsW14eEDSJ6ICtCUY7a3JsqP9Lctd8lMe6ocP1vxWP5nKnfy0BUAkmoXYSgET9bKrdIb8k3KCO0Q9QbTxwd8nQVt07aylW7ldLHpZ0n26cRD60c0BDKqQg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Qq8KihL/EO+486s2E6J8g2iOJQBYf1yaow4Wct7N5Sg=;
- b=gIJOxb0dm7XdXLFrtd0QJaVezp0fPt5j82ufRC1yi6E5ol3U3dfN2lmHsJ36iAU/eBwaJDDXrUYWQolV5pfovKFNufHvjxFEN4YhkzvlIgTX3V6NJZrdLoBQgi8phGclc7G7ofRrtEajUnpNWjccnpbtY+0oPHBIRftCnwJuXkZUWyox9yZ0d3tUJSOui1FMW7y1d/kkJuilMGkEmPfWTRiMR5g9QykNr1KyGmoZuu9n3ZlHEB56ej7xgNQjMd0FsOmBm2lvN1DghVi72xbUnZmVqctRhTtKyXcFw+kN4jL4JntDFBSQCoQ1K8sLS1uZlZyY/JVwWALWFX8YwPN9Yw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Qq8KihL/EO+486s2E6J8g2iOJQBYf1yaow4Wct7N5Sg=;
- b=BwTWG7IaY0zlvRr4T2sww5/XBPczyJujqr7VKGMGuVIRVPAW4xtwuvFSjmnpVynYUbcZLjVx/RcgFVuyMTi4kOe71R1ru26nYOKxgy6IMyn3RYMC4s5MQYyKTqPG271mfbXtYeuHUIPU5d5ihecCwUd2pG43+UHs/L39ZVcrKZ0=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- IA1PR12MB6068.namprd12.prod.outlook.com (2603:10b6:208:3ec::10) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.19; Mon, 10 Feb
- 2025 13:50:49 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.8422.015; Mon, 10 Feb 2025
- 13:50:48 +0000
-Date: Mon, 10 Feb 2025 19:20:38 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-Cc: Mario Limonciello <superm1@kernel.org>, Perry Yuan <perry.yuan@amd.com>,
-	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH 01/14] cpufreq/amd-pstate: Show a warning when a CPU
- fails to setup
-Message-ID: <Z6oELkyt+XEMp/nk@BLRRASHENOY1.amd.com>
-References: <20250206215659.3350066-1-superm1@kernel.org>
- <20250206215659.3350066-2-superm1@kernel.org>
- <c7b4e115-91b6-4964-ad4a-58e8924997a3@amd.com>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <c7b4e115-91b6-4964-ad4a-58e8924997a3@amd.com>
-X-ClientProxiedBy: PN3PR01CA0091.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:9b::20) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 70F73233126;
+	Mon, 10 Feb 2025 14:09:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739196572; cv=none; b=Iv0tM/wKqOCqaAPvM6/Y1oJaAupnmoxXOenZcgwRep1hRLwlS+JPxG15GsfGDGWYTZ35RkX9McBeiC1prQeaMq6IEYcSB+MbR3laL1VipyoF6C6kqoIGaQof18lqCxzpwejC45cU3JEhKwoF0PuoFV+6+ZJP700ynwtCwb5rzYg=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739196572; c=relaxed/simple;
+	bh=RSJHSeUykncMmWA9ukvup+xfsW+60QnBx5gLQnMN9s8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=WITRGbv5uvTGZEv9tWyxNedGxBdikMw6NPRE8PPgzIx1Lh6cCFky8ZUVrWvYY4QoC2FBIGDf/PQgK5bn4iNEtM6q0GFq3yeSP30yS7BYrdjLs6hcM7nxi6p71wFAlARvjrjsPlXB8SWlY5mTtV3f3f2YMdHdohUsBg/hdPhb6WA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nfH7h3o/; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739196571; x=1770732571;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=RSJHSeUykncMmWA9ukvup+xfsW+60QnBx5gLQnMN9s8=;
+  b=nfH7h3o/it8x81p0PiR86bc0oaXV43ohYPo8SRcuOletF7TdYQGSbswY
+   rZryLF1i0VpXgY+LqSRT8hv5ebMYHZfbW9+I9d1Y4bAXW7mlcM/LUHCDH
+   8xuZAhBxLVa22YajRG3wMGrhIsH+meXiJpVb7lHgivZbQGv1Y8UWNTUqU
+   dkV5lGoJu4BglarK5t7UMMkuSVkf/EKFB7fD/eAIFLQjJg4V3F5DGCo3U
+   x8+6UKCI/hTgXj4WP+6OmxdXd+fBZExnBO390doXQpp3RZ6jnC/V83jpN
+   Hgf7A5W/ExwFh7BG90ayc6Ym+gbb54YzjV82UmWsanrqDAMG5rGhzY6t+
+   w==;
+X-CSE-ConnectionGUID: eO6MFeVQTPq66FHNDkn9oQ==
+X-CSE-MsgGUID: mO3JrCCkT0ODKjO1GqY4gg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="39012595"
+X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
+   d="scan'208";a="39012595"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 06:09:30 -0800
+X-CSE-ConnectionGUID: O5WsGvLGTVGQ7i8p3P/9Aw==
+X-CSE-MsgGUID: wJB6oeoBTRyy3NjF1mo6DQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,274,1732608000"; 
+   d="scan'208";a="143065127"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa002.jf.intel.com with ESMTP; 10 Feb 2025 06:09:26 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1thUTS-0012rN-2A;
+	Mon, 10 Feb 2025 14:09:22 +0000
+Date: Mon, 10 Feb 2025 22:08:28 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raag Jadav <raag.jadav@intel.com>, gregkh@linuxfoundation.org,
+	rafael@kernel.org, linus.walleij@linaro.org,
+	mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+	dmitry.torokhov@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+	sre@kernel.org, jic23@kernel.org, przemyslaw.kitszel@intel.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-iio@vger.kernel.org, Raag Jadav <raag.jadav@intel.com>
+Subject: Re: [PATCH v4 01/20] driver core: Split devres APIs to
+ device/devres.h
+Message-ID: <202502102137.SA3rtuTB-lkp@intel.com>
+References: <20250210064906.2181867-2-raag.jadav@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|IA1PR12MB6068:EE_
-X-MS-Office365-Filtering-Correlation-Id: 64d1c586-1a36-41f0-34e4-08dd49d9ecb0
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?F6Cy7mOw5w+7P7+camsB246ZUHFTIW5Lri/mXdleeuWMtIICjF+KVbH0hU4u?=
- =?us-ascii?Q?hl19gQeTwoE0iVairunjYygK96aYhNYlyq3f4o8UY+izrOkfCwIPmV+jjEW8?=
- =?us-ascii?Q?85yXnmVqlMKH5tzlYQ3flb3ZWdB+wteDobPhm0hTEciRyvlFLszB3GTzkCs9?=
- =?us-ascii?Q?DGHFZ7+9YKLkXlmJWmbcoJBuLES/qSzRD/G7AD5jtebKMYRb794Mbx5eZ55+?=
- =?us-ascii?Q?pveeQshttnAtKUr4pA3X9VeXV00P78fb9YE9Q8AO27u7GDytndyVxhQ4vvBi?=
- =?us-ascii?Q?z6Kx4doi8eCv32NDmGhTE2CWW3tJH6P2i+R6YBP28/4gTnY7BjfeDj4c2ftd?=
- =?us-ascii?Q?Tv4SlBDa/gHhC8QVPzuH/NSk2j9JU+fn7g/D3rZFVO4GVO5GhMldV5pbl140?=
- =?us-ascii?Q?Cl6rTiZBioHP2cUvyKh3t7M66GMv/9PpqmMCk+E4zYziK5WTstM+gBtYP0Si?=
- =?us-ascii?Q?VTqJpIQGY6evVH1/lh3JAmm198Jj27AgqeeOfdFa2He6Y7CRjY7Ahr3qezco?=
- =?us-ascii?Q?SB3mZpRR3LI6uZROLBgEZ4i4XfNxZyV8yyK1uyT515HVGYBdNO8Xqvmd5Nx+?=
- =?us-ascii?Q?UQ2YOL77AbbVmt3PwxdrhY6hB1hfdGwRRHD9sfzOHJuQUBLD/hLH6LwqMA/Z?=
- =?us-ascii?Q?jQ7KTaeMr35vKSYyJte57h9o8dyGm/1FiP0/f1tujyaJkafhyXRmWB54SKvH?=
- =?us-ascii?Q?A9Pk6CkY9eiQA6PvqCLdrqORhd5zI8YwNiV68Mmxpcm9FrieQ6H/drF0Jxi4?=
- =?us-ascii?Q?z+ngy8prH63zrx9J423z4XlfUgpZbuBHrwi+KFXzGnKuOy2rDOl5XMqwphgH?=
- =?us-ascii?Q?MGkt/U2O3XF61bFojNoPT8/LEH8RmJMfZBU1aFPixkEh4GIq5F5Zh/LmkEHG?=
- =?us-ascii?Q?S0CE6xlbY+9PnCDXJYnyaXkMHwfDEZDYuMFzVyT5EMNOP4/FsevXiIeY3VV6?=
- =?us-ascii?Q?tsgYLxz/xwhtsdx+4f9mumLWayYTd7DYLUFp10t+m9F76IUO27aDf8AglgxX?=
- =?us-ascii?Q?oNv9N8lDCfTloPQVV+SEBnmdZNET6wvZHWFHlVqclFdsNrmku+rBeyHXCNfE?=
- =?us-ascii?Q?hRFUpQAPsJi3CrNaK4KV9GdK+ANdXwrjwbAWA3HWyBBHrq4BmcxqpyjFPdUG?=
- =?us-ascii?Q?SgbAhQz7qZDcfXO+cIl/iR3hy4T2pE6kInMY6phrC0YY4BA103dOUhpiE4Z9?=
- =?us-ascii?Q?G6ttNyk/UK4oUvSgrlFFvh7lsCwgSmmPVfMbTvLu24BHAVmpcW157MkEjJWZ?=
- =?us-ascii?Q?jXq8WrcTlFNsAMeK+S+xmBONEjmS7qCdbm9i0ikJnPmLs6owDV7eC4N9cnqk?=
- =?us-ascii?Q?rgtUJ1D/0+lI2MrvURMSRQf7pkY3VyczE8Gef4SGAf7DLx4bn9IANNYDx3Lh?=
- =?us-ascii?Q?HDVKAExWksCAK+EuNpjPTvb5kiBg?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?xB6Kb1+jJL6bVXRwyc7ZoAjFMO7UQzr8IkAzCVRlZWN3pCksbcj5hy+ag6ZP?=
- =?us-ascii?Q?n8jk6v2LSg/ndCUFcYRJ/j/P8BRkF4e7Yi/x1eq2a7XAd9jXyquVwmE8HMY/?=
- =?us-ascii?Q?8CNx3blOLIjP2/43TEnXdTqonALkBZ55hFzJegshyAcjis29u++S692IZiSD?=
- =?us-ascii?Q?7x421VTNcshtolbaiUwMw/rB6ovjghiOE+3JV9xHhaPgnieUkDx4jYxkzMHM?=
- =?us-ascii?Q?IHfY7XXEOtDXUKSKzg4W61zEXaA+Ha8G+vbxBpMvg3py00nYGoPS9YkTHNkO?=
- =?us-ascii?Q?0tyvV1z3mKAFaDyGJIvirXfGw/LOGrOpYPnIXdg0U+e4inQLd0CCBTuL+nrX?=
- =?us-ascii?Q?M6o9JC8rYxTCHk3MaQGhnp11PR9YeEi4AZwkQhTvsAk7+n+ocdPqycExdgI1?=
- =?us-ascii?Q?okrbQrpSH98aB4mBWfbO/salKMrq5ltQI3r+Ef8DxnrHVw3Wr3aCtKWhhkSu?=
- =?us-ascii?Q?tmeJ4E8RzOHsgh8h15onD3rIG2eyvivMlOK+sqG2ZbaWwQZ8luYnFv1NwVb0?=
- =?us-ascii?Q?i4/QlKeSjO12QLnZ/8n8BmgW6shBmcji5cVVn47148C5M/MYKR0nngMSFtLc?=
- =?us-ascii?Q?9XGFv9YTbfJHd1xzpzcUwnlVYPaW+S3vsXhSHNvke62s5bUcO6356NEY1p7/?=
- =?us-ascii?Q?nPj0THfbpFoHGoudaYqMUYXkVI9TNZjK1wKjO2FVqfiY3Fv625CPurzGPX1R?=
- =?us-ascii?Q?SLbdYYVPA1PbJR2mRM/oo8TnbmtlkQ10qIFs4ue5cfVMSVNn5XP+b6W8/lF7?=
- =?us-ascii?Q?XtreDRcPlNQOIq4JIME/sbtBu3DKr8dDDUb2uJhk3zLD3Avy/2+A0i05e69w?=
- =?us-ascii?Q?b1Wm77jgiXk/qFTxLR3mqvqaBowZG0XMe5MJolO+CZyk87s6Gp6E3jRcuuaD?=
- =?us-ascii?Q?VA/h8hXWjVf2Ep7iF3HdfoUEGoEQ3BsGhqenEBZQV8YfbopUULN357ew2DCh?=
- =?us-ascii?Q?GzbFOlJ03QeEjfHmebeUs3P0JnL1zZJycHjV5W9w+2yJpdaIXB1e01uOcmNG?=
- =?us-ascii?Q?27F5FP8hvmS2zf+AotQOIUjx9WwK0dmNpF+nuEt+XryZQEOpLwQ6IG3k8c+2?=
- =?us-ascii?Q?xFgU6F4sLL3HtWOqb7FNCm+j9HrU4VN0lx8SuA/a1i0TotMeSAfVPMIkpTsN?=
- =?us-ascii?Q?hhBS47U/g1yaOfDmhisoaEcFUctisVYCDuwyVoOjFLiFXX/zHpvGJ2TO5sWA?=
- =?us-ascii?Q?WgbcgfdLBeDQe4YNaITabi8KbRasII8n4+fhf3LquUjSRGBLCqgPCMCA1RtO?=
- =?us-ascii?Q?BtXPAhtln9GfBOcwRc1472o4sIIjo3oAuypF/xGA7+KhvMX08AApgVTBqFB5?=
- =?us-ascii?Q?zvc+ufTm47VniF7pUMNG9pSU5HqnFa4SVtRfo4rJekS/D1WTLUOOLztPbOOl?=
- =?us-ascii?Q?+3SB4bw6Hngs9pPi0tYzbfF/Qq7uPl3EdWuL/wzWgbW5MRfx61Pznezdngdg?=
- =?us-ascii?Q?pKbJ7I0r1J/Yy4Lch/gGkL4xSY2cJex4w0VtRIedAQKXyGrmopiJxdcVY1aQ?=
- =?us-ascii?Q?RTB/MjyUGg3b4NhgbPcFnyW2KIOnD/3U4+2Hsg0UIudCjdlcsG3G+PVtBcbh?=
- =?us-ascii?Q?PztyuKFOjd+d6voqvwfruMFvnswrVehL5BCHZtjw?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 64d1c586-1a36-41f0-34e4-08dd49d9ecb0
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2025 13:50:48.8092
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: 7Gf79PSZWJ98v7HoYBaarTKk7pyAiXBi6G9X7UPRhbSnCaYE2D7qW6oG42XiS6IgDWOQ/3vSjDwCd6kILiNIOQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB6068
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250210064906.2181867-2-raag.jadav@intel.com>
 
-On Mon, Feb 10, 2025 at 05:29:24PM +0530, Dhananjay Ugwekar wrote:
-> On 2/7/2025 3:26 AM, Mario Limonciello wrote:
-> > From: Mario Limonciello <mario.limonciello@amd.com>
-> > 
-> > I came across a system that MSR_AMD_CPPC_CAP1 for some CPUs isn't
-> > populated.  This is an unexpected behavior that is most likely a
-> > BIOS bug. In the event it happens I'd like users to report bugs
-> > to properly root cause and get this fixed.
-> 
-> I'm okay with this patch, but I see a similar pr_debug in caller cpufreq_online(),
-> so not sure if this is strictly necessary.
-> 
-> 1402                 /*
-> 1403                  * Call driver. From then on the cpufreq must be able
-> 1404                  * to accept all calls to ->verify and ->setpolicy for this CPU.
-> 1405                  */
-> 1406                 ret = cpufreq_driver->init(policy);
-> 1407                 if (ret) {
-> 1408                         pr_debug("%s: %d: initialization failed\n", __func__,
-> 1409                                  __LINE__);
-> 1410                         goto out_free_policy;
-> 1411                  
->
+Hi Raag,
 
-Well, the pr_debug() doesn't always get printed unless the loglevel is
-set to debug, which is usually done by the developers and not the end
-users.
+kernel test robot noticed the following build errors:
 
-However you have a point that since the code jumps to free_cpudata1 on
-failures from amd_pstate_init_perf(), amd_pstate_init_freq(),
-amd_pstate_init_boost_support(), freq_qos_add_request(). So the
-pr_warn() doesn't indicate that the failure is due to
-MSR_AMD_CPPC_CAP1 not being populated.
+[auto build test ERROR on a1e062ab4a1f19bb0e94093ef90ab9a74f1f7744]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/driver-core-Split-devres-APIs-to-device-devres-h/20250210-145732
+base:   a1e062ab4a1f19bb0e94093ef90ab9a74f1f7744
+patch link:    https://lore.kernel.org/r/20250210064906.2181867-2-raag.jadav%40intel.com
+patch subject: [PATCH v4 01/20] driver core: Split devres APIs to device/devres.h
+config: powerpc-randconfig-003-20250210 (https://download.01.org/0day-ci/archive/20250210/202502102137.SA3rtuTB-lkp@intel.com/config)
+compiler: powerpc-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250210/202502102137.SA3rtuTB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502102137.SA3rtuTB-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+   In file included from include/linux/device/devres.h:7,
+                    from include/linux/device.h:31,
+                    from arch/powerpc/include/asm/io.h:22,
+                    from drivers/video/fbdev/sis/init.h:64,
+                    from drivers/video/fbdev/sis/init.c:59:
+   include/linux/io.h: In function 'pci_remap_cfgspace':
+>> include/linux/io.h:106:16: error: implicit declaration of function 'ioremap_np' [-Wimplicit-function-declaration]
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                ^~~~~~~~~~
+>> include/linux/io.h:106:44: error: implicit declaration of function 'ioremap' [-Wimplicit-function-declaration]
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                                            ^~~~~~~
+>> include/linux/io.h:106:42: error: returning 'int' from a function with return type 'void *' makes pointer from integer without a cast [-Wint-conversion]
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h: At top level:
+>> arch/powerpc/include/asm/io.h:885:22: error: conflicting types for 'ioremap'; have 'void *(phys_addr_t,  long unsigned int)' {aka 'void *(unsigned int,  long unsigned int)'}
+     885 | extern void __iomem *ioremap(phys_addr_t address, unsigned long size);
+         |                      ^~~~~~~
+   include/linux/io.h:106:44: note: previous implicit declaration of 'ioremap' with type 'int()'
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                                            ^~~~~~~
+   In file included from arch/powerpc/include/asm/io.h:1031:
+>> include/asm-generic/io.h:1161:20: error: conflicting types for 'ioremap_np'; have 'void *(phys_addr_t,  size_t)' {aka 'void *(unsigned int,  unsigned int)'}
+    1161 | #define ioremap_np ioremap_np
+         |                    ^~~~~~~~~~
+   include/asm-generic/io.h:1162:29: note: in expansion of macro 'ioremap_np'
+    1162 | static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
+         |                             ^~~~~~~~~~
+   include/linux/io.h:106:16: note: previous implicit declaration of 'ioremap_np' with type 'int()'
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                ^~~~~~~~~~
+--
+   In file included from include/linux/device/devres.h:7,
+                    from include/linux/device.h:31,
+                    from arch/powerpc/include/asm/io.h:22,
+                    from drivers/video/fbdev/sis/init301.h:64,
+                    from drivers/video/fbdev/sis/init301.c:72:
+   include/linux/io.h: In function 'pci_remap_cfgspace':
+>> include/linux/io.h:106:16: error: implicit declaration of function 'ioremap_np' [-Wimplicit-function-declaration]
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                ^~~~~~~~~~
+>> include/linux/io.h:106:44: error: implicit declaration of function 'ioremap' [-Wimplicit-function-declaration]
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                                            ^~~~~~~
+>> include/linux/io.h:106:42: error: returning 'int' from a function with return type 'void *' makes pointer from integer without a cast [-Wint-conversion]
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                ~~~~~~~~~~~~~~~~~~~~~~~~~~^~~~~~~~~~~~~~~~~~~~~~~
+   arch/powerpc/include/asm/io.h: At top level:
+>> arch/powerpc/include/asm/io.h:885:22: error: conflicting types for 'ioremap'; have 'void *(phys_addr_t,  long unsigned int)' {aka 'void *(unsigned int,  long unsigned int)'}
+     885 | extern void __iomem *ioremap(phys_addr_t address, unsigned long size);
+         |                      ^~~~~~~
+   include/linux/io.h:106:44: note: previous implicit declaration of 'ioremap' with type 'int()'
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                                            ^~~~~~~
+   In file included from arch/powerpc/include/asm/io.h:1031:
+>> include/asm-generic/io.h:1161:20: error: conflicting types for 'ioremap_np'; have 'void *(phys_addr_t,  size_t)' {aka 'void *(unsigned int,  unsigned int)'}
+    1161 | #define ioremap_np ioremap_np
+         |                    ^~~~~~~~~~
+   include/asm-generic/io.h:1162:29: note: in expansion of macro 'ioremap_np'
+    1162 | static inline void __iomem *ioremap_np(phys_addr_t offset, size_t size)
+         |                             ^~~~~~~~~~
+   include/linux/io.h:106:16: note: previous implicit declaration of 'ioremap_np' with type 'int()'
+     106 |         return ioremap_np(offset, size) ?: ioremap(offset, size);
+         |                ^~~~~~~~~~
+   drivers/video/fbdev/sis/init301.c: In function 'SiS_SetCRT2ModeRegs':
+   drivers/video/fbdev/sis/init301.c:2687:24: warning: variable 'modeflag' set but not used [-Wunused-but-set-variable]
+    2687 |   unsigned short i, j, modeflag, tempah=0;
+         |                        ^~~~~~~~
+   drivers/video/fbdev/sis/init301.c: In function 'SiS_SetGroup1':
+   drivers/video/fbdev/sis/init301.c:6233:52: warning: variable 'resinfo' set but not used [-Wunused-but-set-variable]
+    6233 |   unsigned short  pushbx=0, CRT1Index=0, modeflag, resinfo=0;
+         |                                                    ^~~~~~~
+
+
+vim +/ioremap_np +106 include/linux/io.h
+
+7d3dcf26a6559f Christoph Hellwig 2015-08-10   84  
+4d312ac057da57 Arnd Bergmann     2023-05-16   85  /* architectures can override this */
+4d312ac057da57 Arnd Bergmann     2023-05-16   86  pgprot_t __init early_memremap_pgprot_adjust(resource_size_t phys_addr,
+4d312ac057da57 Arnd Bergmann     2023-05-16   87  					unsigned long size, pgprot_t prot);
+4d312ac057da57 Arnd Bergmann     2023-05-16   88  
+4d312ac057da57 Arnd Bergmann     2023-05-16   89  
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19   90  #ifdef CONFIG_PCI
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19   91  /*
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19   92   * The PCI specifications (Rev 3.0, 3.2.5 "Transaction Ordering and
+b10eb2d50911f9 Hector Martin     2021-03-25   93   * Posting") mandate non-posted configuration transactions. This default
+b10eb2d50911f9 Hector Martin     2021-03-25   94   * implementation attempts to use the ioremap_np() API to provide this
+b10eb2d50911f9 Hector Martin     2021-03-25   95   * on arches that support it, and falls back to ioremap() on those that
+b10eb2d50911f9 Hector Martin     2021-03-25   96   * don't. Overriding this function is deprecated; arches that properly
+b10eb2d50911f9 Hector Martin     2021-03-25   97   * support non-posted accesses should implement ioremap_np() instead, which
+b10eb2d50911f9 Hector Martin     2021-03-25   98   * this default implementation can then use to return mappings compliant with
+b10eb2d50911f9 Hector Martin     2021-03-25   99   * the PCI specification.
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  100   */
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  101  #ifndef pci_remap_cfgspace
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  102  #define pci_remap_cfgspace pci_remap_cfgspace
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  103  static inline void __iomem *pci_remap_cfgspace(phys_addr_t offset,
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  104  					       size_t size)
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  105  {
+b10eb2d50911f9 Hector Martin     2021-03-25 @106  	return ioremap_np(offset, size) ?: ioremap(offset, size);
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  107  }
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  108  #endif
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  109  #endif
+cf9ea8ca4a0bea Lorenzo Pieralisi 2017-04-19  110  
 
 -- 
-Thanks and Regards
-gautham.
-
-
-
-> Thanks,
-> Dhananjay
-> 
-> > 
-> > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
-> > ---
-> >  drivers/cpufreq/amd-pstate.c | 2 ++
-> >  1 file changed, 2 insertions(+)
-> > 
-> > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> > index f425fb7ec77d7..573643654e8d6 100644
-> > --- a/drivers/cpufreq/amd-pstate.c
-> > +++ b/drivers/cpufreq/amd-pstate.c
-> > @@ -1034,6 +1034,7 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
-> >  free_cpudata2:
-> >  	freq_qos_remove_request(&cpudata->req[0]);
-> >  free_cpudata1:
-> > +	pr_warn("Failed to initialize CPU %d: %d\n", policy->cpu, ret);
-> >  	kfree(cpudata);
-> >  	return ret;
-> >  }
-> > @@ -1527,6 +1528,7 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
-> >  	return 0;
-> >  
-> >  free_cpudata1:
-> > +	pr_warn("Failed to initialize CPU %d: %d\n", policy->cpu, ret);
-> >  	kfree(cpudata);
-> >  	return ret;
-> >  }
-> 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
