@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-21654-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21655-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 560A7A2E616
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 09:12:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05BC6A2E6D3
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 09:48:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2F4DC3A16B6
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 08:12:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4D4016411E
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 08:48:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 608C91BD4E4;
-	Mon, 10 Feb 2025 08:12:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499FE1BEF76;
+	Mon, 10 Feb 2025 08:48:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fx287jsE"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K2SDVJWL"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2978D1BD00C;
-	Mon, 10 Feb 2025 08:12:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4981B87EF;
+	Mon, 10 Feb 2025 08:48:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739175130; cv=none; b=S66b4QUMuqVVZ+/2kR5/mjV0sUJ60HtTSQtpBscDr67G65cEFFWMrJ93H+z9OvEoaeSKfSa1nDW6S6lL2G5o8/iOjRd5kfvNAdqCFLvwXPYs3sVhm8LZ1IgEoQM+HbQ009Y6hO1ycGIEkWBdORCvi2zHBO5f/OyJrxVz9JgIqLg=
+	t=1739177329; cv=none; b=kadHgL8RBn7r16n3NxX1a29PBzZ3SQw9H8fsMYD+ss2HW5q/VyJdflmVqKwFx19QnIThZwVrz3/jh1VCmAimhNqHzxtg8Sc82mgtnjZsXY74ZoGh4Hx7YYEFG83+kAJ9AcNFESwO8b27eZ47U4uGoG7+SVyZWfPJ4OsYouQvenc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739175130; c=relaxed/simple;
-	bh=s/wEQHp9D4HLcuK43KrByU9JTfmtEf3h3muu17wBL+c=;
+	s=arc-20240116; t=1739177329; c=relaxed/simple;
+	bh=Csdi8n6yF0exFBFNZzRyKvad72rgIjHHmUgvSYicT+g=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=oX2MkmyWCXWtBQc1ird/4SJouVgVkOwp/BpZhIU86BIUjZv1HcirBLc8bxGGOEju+KTWHlYuvMO34BQBxEuA0Hu40mWWIZG9eANmOiliyFXT2SOvq7zXwU7gLR6ul8HunD54ZZVRFTg+m4XZ6T0OX86XiYh+Qpkd+P2BEvShTWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fx287jsE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 30DA8C4CED1;
-	Mon, 10 Feb 2025 08:12:03 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=MKC0WE33CExmSQzmlF+S9W8r6Kdp/B9ieCWVAmjFY7KJ7DTrcsQfdmgmgVyhkIAIx2BfgMovEqfZ4nb7KOX/5ZOUY4hj+PYcf1pMvPci/D8g+7CQonbEFK5auIABZcLMwQKh/cKwoQg9lGWAkS9ZOpRtdqOGY+jls73Q+RTTfpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K2SDVJWL; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16897C4CED1;
+	Mon, 10 Feb 2025 08:48:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739175129;
-	bh=s/wEQHp9D4HLcuK43KrByU9JTfmtEf3h3muu17wBL+c=;
+	s=k20201202; t=1739177328;
+	bh=Csdi8n6yF0exFBFNZzRyKvad72rgIjHHmUgvSYicT+g=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=fx287jsEyQasQIyD4qa+rI97L+iVffHU9GlRG9zDZciMWXk2FiKEweFtBbFb7RrUe
-	 O5o4Zz9RPrKVFIRmtbkk3QXvTy9HkhKX8x20IfQRfw0xBoCuGg/BVSSRMa0aGzhk0m
-	 DGc1paLZ4xUh4N1ZSQayQ6wxWIHN+dW0RFgub6xPLl9V2rnxCuyUTHGoZnO1ShW4mE
-	 SqMHjT3oFwULCgZAHnQyOEv3aArnEqhaxv5C4C7ZS5pBmTuSoO/2P6cAJonjMh/OgD
-	 hpTMto5BG3SKKCIj/prGxIcSiH8COi8hohTcTWvVwBqBS7ihFMuQa1xB8gZLpsulI3
-	 NVqzN6Xn+B0Xg==
-Message-ID: <3e69dc53-cf05-479b-9707-eabc2eae9291@kernel.org>
-Date: Mon, 10 Feb 2025 09:12:01 +0100
+	b=K2SDVJWL3iDIFLTdOXx05V3eh9pHZgqVaq2RSS2NfbnR+Ed0sjDCCOYIOQxsBIb/k
+	 Lc00YDkG2O1MMl3XtumOK/xcrASMskuEv/szomCEQ5q/xzG9TWnL4/NU/E5x+qiEDu
+	 ncFrMn2x/ZwNvLb7gL95N05dQYpST3q6yydtpUdXRCU8dcx6NGF/mdFzRP0hYCUmUy
+	 LITWkjoWODIzI9ZZ/soIgeW/DtibbGDOhclBXyKqQpJV/73I+Oce/IpZKF0XWle9YJ
+	 z+xhuCDCCdYkLXsgpTpeBR8RcNH31GiSCtgLeBmEGWjo+zK9l78GX4mqkImHc4reJz
+	 riU3eb9sOU3UA==
+Message-ID: <fe1fb66d-285d-41b6-af71-89f6f93d1cf0@kernel.org>
+Date: Mon, 10 Feb 2025 09:48:41 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,28 +50,21 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: Patchset status - 'Add support for Maxim Integrated MAX77705
- PMIC'
-To: Dzmitry Sankouski <dsankouski@gmail.com>,
- Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>,
- Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>,
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>,
- Hans de Goede <hdegoede@redhat.com>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, linux-pm@vger.kernel.org,
- open list <linux-kernel@vger.kernel.org>,
- "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
- <devicetree@vger.kernel.org>, linux-input@vger.kernel.org,
- linux-leds@vger.kernel.org
-References: <CABTCjFBx-QpCKFWs5MPCgLAjJWT6ygrvS_A0nJk2BBxmWAxF+Q@mail.gmail.com>
- <e67c0375-1024-483b-aabf-6a11339ab9af@linaro.org>
- <CABTCjFBvYkEG0WYhCt6tP_cO8Ct82t0=UhwBefZEJrUiFc7vAw@mail.gmail.com>
-Content-Language: en-US
+Subject: Re: [PATCH 06/10] dt-bindings: mfd: syscon: Add Cvitek CV18xx rtcsys
+ core and ctrl compatible
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@lists.linux.dev
+Cc: Chen Wang <unicorn_wang@outlook.com>,
+ Inochi Amaoto <inochiama@outlook.com>, linux-pm@vger.kernel.org,
+ linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+ Haylen Chu <heylenay@outlook.com>, linux-arm-kernel@lists.infradead.org,
+ Sebastian Reichel <sre@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+ Philipp Zabel <p.zabel@pengutronix.de>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>
+References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
+ <20250209220646.1090868-7-alexander.sverdlin@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
  xsFNBFVDQq4BEAC6KeLOfFsAvFMBsrCrJ2bCalhPv5+KQF2PS2+iwZI8BpRZoV+Bd5kWvN79
  cFgcqTTuNHjAvxtUG8pQgGTHAObYs6xeYJtjUH0ZX6ndJ33FJYf5V3yXqqjcZ30FgHzJCFUu
@@ -115,48 +108,15 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <CABTCjFBvYkEG0WYhCt6tP_cO8Ct82t0=UhwBefZEJrUiFc7vAw@mail.gmail.com>
+In-Reply-To: <20250209220646.1090868-7-alexander.sverdlin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 10/02/2025 08:11, Dzmitry Sankouski wrote:
-> вс, 9 февр. 2025 г. в 22:38, Krzysztof Kozlowski
-> <krzysztof.kozlowski@linaro.org>:
->>
->> On 09/02/2025 15:13, Dzmitry Sankouski wrote:
->>> For the patchset I sent 2 weeks ago, [patchwork][1] shows status
->>> 'Handled Elsewhere, archived'. Is anything blocking it?
->>>
->>> [1]: https://patchwork.kernel.org/project/linux-pm/list/?series=927848&archive=both&state=*
->>
->> That's PM patchwork, not necessarily power supply. But anyway, what does
->> the cover letter say? Who do you expect to merge it? Above link does not
->> provide cover letter, unfortunately.
->>
-> 
-> I didn't found anything related to power supply in the list of mail lists at
-> https://subspace.kernel.org/vger.kernel.org.html.
-> 
-> However I found my series in linux-input with New status.
-> 
-> Here is my cover letter:
-> https://lore.kernel.org/all/20250123-starqltechn_integration_upstream-v17-0-8b06685b6612@gmail.com/
+On 09/02/2025 23:06, Alexander Sverdlin wrote:
+> These syscon blocks will be used for CV18xx reset driver.
 
 
-Nothing in cover letter gives any expectations or directions of merging,
-so maybe that was a factor here?
-
-
-> 
-> I guess I would expect a person from the MAINTAINERS list to merge it?  In that
-> case it would be Chanwoo Choi <cw00.choi@samsung.com> and
-> Krzysztof Kozlowski <krzk@kernel.org> from
-> MAXIM PMIC AND MUIC DRIVERS FOR EXYNOS BASED BOARDS entry.
-
-Haha, nice! :) There is no such subsystem. This cannot be taken by these
-maintainers because there is nowhere they could put it and no one would
-take it from them even if they did find the place.
-
+No, implement proper reset block instead of abusing syscon.
 
 Best regards,
 Krzysztof
