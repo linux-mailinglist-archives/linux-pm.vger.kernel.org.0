@@ -1,187 +1,156 @@
-Return-Path: <linux-pm+bounces-21678-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21679-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCBC2A2EB25
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 12:32:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3EE5A2EBD1
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 12:49:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 057E17A3E3F
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:31:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 51C85164DAA
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:49:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900221DF749;
-	Mon, 10 Feb 2025 11:32:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F6511F3D59;
+	Mon, 10 Feb 2025 11:48:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ArL8VDkD"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Yk4Lqtfy"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA50A1957FF
-	for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 11:32:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7DF261F3D58;
+	Mon, 10 Feb 2025 11:48:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739187134; cv=none; b=FnDKHU6OjiGDc8+1si139CzwHiPKTHJMqZO9oeuI0Z2lP1+WofjmZpEq0UPLHBp8I7CxIRNKRFtkq6mx+7/78hgFMI0oqWOAmW8VQe/WWw17Hl3gtu9Z9OyEgiZenUkeYUGzd/wUJghzDb0N3nkXEyVAwye2ToO5BNj9Eoed3WY=
+	t=1739188086; cv=none; b=PeQXaK2ZwydCA6CizackZVGaBDKWeGp5DipH7V12LWCKC2danGvRUscp0xZA0TfGT31JVUfh4C5yfh77OL49ukDEAoDaJpEgEpVdIaDqx2c9lfGKrb3NnNmAufz3mZkXHcgfa52NZWEsWaBYgV63rnQXgJmEUIxZ0aWe32Ki53Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739187134; c=relaxed/simple;
-	bh=9yL8yKsVg56eXF6gBgrbmMDEHR/t0nnj17bTdgOkCA0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=O3NWDwP4k7FW2WJIwDmhh4kGRHi5NjHWpTt5Q+gzAkZy7V3LHmTbvyzNZUeICY0Q1P8hT/OTXnqAulCt2LHi05pMPefLdp+G0imDbSt2i7bCrQ/Fyb1r0CRQYWMa0QdnKJuzZ3Kv4L6dwHlyFv//OK5WQILVT0cGeESZA++39qg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ArL8VDkD; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e5372a2fbddso3448090276.3
-        for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 03:32:12 -0800 (PST)
+	s=arc-20240116; t=1739188086; c=relaxed/simple;
+	bh=7xr6eif59D5Z0cBZLVAON47L6iycbPs+daElwJ+WYIY=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=RdkZUfYL1cVXaNclI7B3A7uvKzWjdeLXrwUSngi0QSD8GgignXXyaZ9YRIRlt7Y2ywKJNUFITi026Y21ZYnobNDSomGvATFjZWPI97C1U0H6jRSVt8Zal1J4ZvOvSBOtel41ZXyvGqXpJwFL6nDNWRgMgVq9v1qoYiMlnY4XlnM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Yk4Lqtfy; arc=none smtp.client-ip=209.85.218.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-aaec61d0f65so948691966b.1;
+        Mon, 10 Feb 2025 03:48:04 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739187131; x=1739791931; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K0t7XPMJtnScQiFAUkjXlhhg/FgQ9ukhMGIEHnDiTC8=;
-        b=ArL8VDkD1DO0w75b9uzLu1QfVV2U/xSyzaBV9aasCM67TOJJISiMm4JRArMLp4kbm5
-         2pRCjQMb99x/eMTAE4xibqfh+FH5/7WzB8Ish83dHkXZx9V62ERD1a6QC9bVubw24C+P
-         6q1sqEYDQyGkc8WBtsCC7c3yOVKuR35KCZQr3QEU0PSEtJhVAU178rB31vaYxVi4cDbC
-         LOtfcm5yvinCrHifUl+QuxVJj9nvSAeLzmSRepni4R+LRCakkPCzg5jtHmB2HkDqk7Yx
-         K0xdgBk4skSLqdXP7oXFhMx4+ilXtNgcJ4Elf+uJv9XEQWk3KZpsRJdjTYl9j1aEsN2h
-         f9Kw==
+        d=gmail.com; s=20230601; t=1739188083; x=1739792883; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=HVl3EUiEdR+2nH8WWZkP4Nhw+7rNyWyQ5wQqq3ShzRs=;
+        b=Yk4LqtfyidftPUhLJ92QON69Wwn6fmuvd4WZgTlXh0hl1f4NAPQlfbYgJmE/gkmtno
+         ZmeL47ybPstNGW2wHeoJd76YaToCWN+tI5dH4VRrSRqlt4K5RNn6ciUNhk5ChDt6SI4g
+         znMcbcGu26EellmrRpTJtqmqApn+7oorr+VUY3pWQNbKnGQ/YvvoNjpJnpZPehFkuB+g
+         +6BaVIvWdwonfuRdi1XlmjcQGTKXaV019tLfqg1/sKzs5vCIYSgufU6UR5VmQDz4cYL3
+         Np5dbth0Y6LbUFawC7uqx2tighQUV+8j6hXgdU+Cbgpalc+z9WxVLha/Z8bIHRR4nlWW
+         /IVg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739187131; x=1739791931;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K0t7XPMJtnScQiFAUkjXlhhg/FgQ9ukhMGIEHnDiTC8=;
-        b=GJXBZLRZ+BlfFC78sNzZ9L90A2NItISZ2dzIUMCNUeqFXZ6/6kMNaI9Yr/F+8/37H/
-         Nj47b6gL8NwHC0C+fPdKzryEGsYitwWidL9mEfXqv1Uim5JTOPP5FwODNqcG2xUzcNMj
-         knEMh2O7JKULOgQjWC2zRpdJq5uViQbMOcBn/+hZ//GhFTFnyRSscfDBbVQMHe3WIs03
-         WWT9jLLg9GmitCSFHMntl97FkoI5CtbbnaZODXSBAYbIKOEygh94nJLKPcQEkTqxGU+q
-         uBGkldFb1s2BVVxSv7xkaklwlhk0OErYM5vBCRCf/s5XfnJ7+t4gL9AhB+EiHka8Kxxl
-         bnEQ==
-X-Gm-Message-State: AOJu0Yz9oswPu3WxONfudNS6opfK0npFcC3vflQHFwLAYDbPCByXScLY
-	zC1eJ5bvsFsG8Qh/oxqsuIFk5EmOumAt6LJ/ggvZ/NwA4vevI2MwXgtYmLIgZoJqJknlTgNo3qO
-	bKrACmoBbfkGEybiQveHB8z+2Up1NzZjNmn9csQ==
-X-Gm-Gg: ASbGnctTBI1bnR9Mrm74B9baesDbQe4USxvwslVaXbRWjYiYaq/D3H00egghdzCYi83
-	tiKUyXE8IGv/022P3X6bdEo8zRoA8CZI1CMguTX4rJ+XI8Jw4K74b22jo2Bb75Z/qWeybSCOS2A
-	==
-X-Google-Smtp-Source: AGHT+IG0aR9/4plkySCbp1bqTtI82MdpqrOiHVZLPWZsEQ6ce+6yiD5Wlvdmwvaf0DBMBOWwyD2Skk7a8hAGjrj5wzE=
-X-Received: by 2002:a05:6902:32a2:b0:e5b:54b0:6ad5 with SMTP id
- 3f1490d57ef6-e5b54b06b74mr5887024276.43.1739187131488; Mon, 10 Feb 2025
- 03:32:11 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739188083; x=1739792883;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=HVl3EUiEdR+2nH8WWZkP4Nhw+7rNyWyQ5wQqq3ShzRs=;
+        b=X3i/E3/ZlSlL58ts6jM6BpaVWxLfxl4k/wqq7UiYv8csRKeSbc9d+OCBa+HVralXgK
+         u4HIXv1gRt7PANMKUbkT/Z3cqPxZqfLVL01jUBEGVgHGdPn2IxVPImTzTyUrFRid49HR
+         fIB2aVLokAx58y28A3oYW4QlE/ZLGuvb1op+tX8esV8szR/08XcCTx+HwRCAQrBUnluW
+         4eAGiMYxo6Obs+Y/TMa0Jea9DAcZKd+9ZxwEheRaUJEW1BWFNL+0IB0JUGjah9lfWtwT
+         ypH7t+eoeMbaG+mGJAhUf2afNsKc3CveHf9rEqvwV1AIeusMJYVvDTWMqht3AUni6Yfn
+         9dEA==
+X-Forwarded-Encrypted: i=1; AJvYcCW+OCmqMeJA7Pq+6HCTDlvM0fulst7/MYBRIXAkRJUIdx9i8xid/ML84tu+669DWU9V6d0E+y+o5vM=@vger.kernel.org, AJvYcCXBDHI+IODG4E9z1Ji0O6bVo7lgHzXoUwqVvgH8et+ImUfxyQdqd1M1U5o4G2Gxw6PwYp+NSAh2l74n@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzh2VuLDmVbQedhvnoDN0ZQQJPalWhQ7ug4cB3bQQsCDVgfBPCM
+	G3Rug/m/i70SyIYqX7XiF6a4ZFXbMaxzG02VvUIORWv3mMIMSfEGjcQSgF87
+X-Gm-Gg: ASbGncvVigyKivj1mS6JL1IXpLRppW/EKGWX/6tb7srAEg6NN5E1rhH6E+vQn3RfV5H
+	tashmJU7uk8BggNTGsVJ1O/AxWsU4U8yCALkLQTJ6FpppILEEmhHf8hdOTfaF3tsdho/WyQUjiI
+	12xpMCwzLwzWhYvSGftV123MGmn4I9Imi1mbk4j7P3mumknRjCr5aL+Uc8+e6iDBmjfQr9E+OIp
+	QeQSCcu0tX1EnWhvzV/sqXa6BPjwn5pKK5BfRhJ5LnBr1EjiDXLbH5AGc5pYSPZF2ju21sT6ppR
+	BeXiiR5Vxwg8YEaKun0FA/6SACpaF2bf
+X-Google-Smtp-Source: AGHT+IGY3dILn6ts/Eq3QIZU6ECVgNuSbLxMNRT8V0H+TQxvFHnWdoPp+ST/buUvAjzzmdL3OQMGTA==
+X-Received: by 2002:a17:907:9719:b0:aae:8841:2bba with SMTP id a640c23a62f3a-ab789b84353mr1350942666b.22.1739188082366;
+        Mon, 10 Feb 2025 03:48:02 -0800 (PST)
+Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7bc28c58csm252975066b.135.2025.02.10.03.48.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Feb 2025 03:48:01 -0800 (PST)
+Message-ID: <e17ef70f7536bd1bf0b4d0f7258f91cffac76a20.camel@gmail.com>
+Subject: Re: [PATCH 08/10] riscv/arm64: dts: cv18xx: Add sysctl and reset
+ nodes
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: Inochi Amaoto <inochiama@gmail.com>, soc@lists.linux.dev
+Cc: Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto
+ <inochiama@outlook.com>, 	linux-pm@vger.kernel.org,
+ linux-riscv@lists.infradead.org, 	devicetree@vger.kernel.org, Haylen Chu
+ <heylenay@outlook.com>, 	linux-arm-kernel@lists.infradead.org, Sebastian
+ Reichel <sre@kernel.org>,  Arnd Bergmann	 <arnd@arndb.de>, Philipp Zabel
+ <p.zabel@pengutronix.de>, Rob Herring	 <robh@kernel.org>, Krzysztof
+ Kozlowski <krzk+dt@kernel.org>, Conor Dooley	 <conor+dt@kernel.org>, Lee
+ Jones <lee@kernel.org>
+Date: Mon, 10 Feb 2025 12:47:59 +0100
+In-Reply-To: <h73zitljaig7nrccd3f23i655imswv54tf667dhq3dord7rxsr@unqncqlorvc6>
+References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
+	 <20250209220646.1090868-9-alexander.sverdlin@gmail.com>
+	 <h73zitljaig7nrccd3f23i655imswv54tf667dhq3dord7rxsr@unqncqlorvc6>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <6137505.lOV4Wx5bFT@rjwysocki.net>
-In-Reply-To: <6137505.lOV4Wx5bFT@rjwysocki.net>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 10 Feb 2025 12:31:34 +0100
-X-Gm-Features: AWEUYZmHSQbQffF7_ka9s0NS0kXgD2P_JnaSOcnNvX6dibEuupIM41BukF4WqIA
-Message-ID: <CAPDyKFqEK3jBQxmuGTRHGHgyNUY+veE+iiujgcJpyOuLjw0vBg@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: sleep: core: Restrict power.set_active propagation
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Bjorn Helgaas <helgaas@kernel.org>, 
-	Linux PCI <linux-pci@vger.kernel.org>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Kevin Xie <kevin.xie@starfivetech.com>, 
-	Jon Hunter <jonathanh@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
 
-On Sat, 8 Feb 2025 at 18:54, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> Commit 3775fc538f53 ("PM: sleep: core: Synchronize runtime PM status of
-> parents and children") exposed an issue related to simple_pm_bus_pm_ops
-> that uses pm_runtime_force_suspend() and pm_runtime_force_resume() as
-> bus type PM callbacks for the noirq phases of system-wide suspend and
-> resume.
->
-> The problem is that pm_runtime_force_suspend() does not distinguish
-> runtime-suspended devices from devices for which runtime PM has never
-> been enabled, so if it sees a device with runtime PM status set to
-> RPM_ACTIVE, it will assume that runtime PM is enabled for that device
-> and so it will attempt to suspend it with the help of its runtime PM
-> callbacks which may not be ready for that.  As it turns out, this
-> causes simple_pm_bus_runtime_suspend() to crash due to a NULL pointer
-> dereference.
->
-> Another problem related to the above commit and simple_pm_bus_pm_ops is
-> that setting runtime PM status of a device handled by the latter to
-> RPM_ACTIVE will actually prevent it from being resumed because
-> pm_runtime_force_resume() only resumes devices with runtime PM status
-> set to RPM_SUSPENDED.
->
-> To mitigate these issues, do not allow power.set_active to propagate
-> beyond the parent of the device with DPM_FLAG_SMART_SUSPEND set that
-> will need to be resumed, which should be a sufficient stop-gap for the
-> time being, but they will need to be properly addressed in the future
-> because in general during system-wide resume it is necessary to resume
-> all devices in a dependency chain in which at least one device is going
-> to be resumed.
->
-> Fixes: 3775fc538f53 ("PM: sleep: core: Synchronize runtime PM status of parents and children")
-> Closes: https://lore.kernel.org/linux-pm/1c2433d4-7e0f-4395-b841-b8eac7c25651@nvidia.com/
-> Reported-by: Jon Hunter <jonathanh@nvidia.com>
-> Tested-by: Johan Hovold <johan+linaro@kernel.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Thanks for quick feedback Inochi!
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+On Mon, 2025-02-10 at 13:13 +0800, Inochi Amaoto wrote:
+> On Sun, Feb 09, 2025 at 11:06:33PM +0100, Alexander Sverdlin wrote:
+> > Add reset controller node and required sysctl nodes.
+> >=20
+> > Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> > ---
+> > =C2=A0 arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi | 16 +++++++++++++=
++++
+> > =C2=A0 1 file changed, 16 insertions(+)
+> >=20
+> > diff --git a/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi b/arch/riscv=
+/boot/dts/sophgo/cv18xx-periph.dtsi
+> > index 53834b0658b2..d793b6db4ed1 100644
+> > --- a/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+> > +++ b/arch/riscv/boot/dts/sophgo/cv18xx-periph.dtsi
+> > @@ -309,5 +309,21 @@ dmac: dma-controller@4330000 {
+> > =C2=A0=C2=A0			snps,data-width =3D <4>;
+> > =C2=A0=C2=A0			status =3D "disabled";
+> > =C2=A0=C2=A0		};
+> > +
+>=20
+> > +		rtcsys_ctrl: syscon@5025000 {
+> > +			compatible =3D "sophgo,cv1800-rtcsys-ctrl", "syscon";
+> > +			reg =3D <0x05025000 0x1000>;
+> > +		};
+> > +
+> > +		rtcsys_core: syscon@5026000 {
+> > +			compatible =3D "sophgo,cv1800-rtcsys-core", "syscon";
+> > +			reg =3D <0x05026000 0x1000>;
+> > +		};
+> > +
+> > +		soc-reset {
+> > +			compatible =3D "sophgo,cv1800-reset";
+> > +			sophgo,rtcsys-ctrl =3D <&rtcsys_ctrl>;
+> > +			sophgo,rtcsys-core =3D <&rtcsys_core>;
+> > +		};
+>=20
+> I think these node is not suitable for riscv. It should use SBI SRST
+> extension to restart.
 
-Kind regards
-Uffe
+Independent from the particular form, or its correctness, this is still HW
+description, right? It would be a "policy" for the kernel configuration, if
+the particular build would rely on the FW or a kernel driver to reboot.
 
-> ---
->  drivers/base/power/main.c |   21 +++++++++------------
->  1 file changed, 9 insertions(+), 12 deletions(-)
->
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -1191,24 +1191,18 @@
->         return PMSG_ON;
->  }
->
-> -static void dpm_superior_set_must_resume(struct device *dev, bool set_active)
-> +static void dpm_superior_set_must_resume(struct device *dev)
->  {
->         struct device_link *link;
->         int idx;
->
-> -       if (dev->parent) {
-> +       if (dev->parent)
->                 dev->parent->power.must_resume = true;
-> -               if (set_active)
-> -                       dev->parent->power.set_active = true;
-> -       }
->
->         idx = device_links_read_lock();
->
-> -       list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node) {
-> +       list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node)
->                 link->supplier->power.must_resume = true;
-> -               if (set_active)
-> -                       link->supplier->power.set_active = true;
-> -       }
->
->         device_links_read_unlock(idx);
->  }
-> @@ -1287,9 +1281,12 @@
->                 dev->power.must_resume = true;
->
->         if (dev->power.must_resume) {
-> -               dev->power.set_active = dev->power.set_active ||
-> -                       dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND);
-> -               dpm_superior_set_must_resume(dev, dev->power.set_active);
-> +               if (dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND)) {
-> +                       dev->power.set_active = true;
-> +                       if (dev->parent && !dev->parent->power.ignore_children)
-> +                               dev->parent->power.set_active = true;
-> +               }
-> +               dpm_superior_set_must_resume(dev);
->         }
->
->  Complete:
->
->
->
+In other words, the HW block remains in place, no matter if it's controlled
+by a kernel module or a FW. What the point in hiding it from the RiscV part
+of DT, keeping on ARM64 side only?
+
+--=20
+Alexander Sverdlin.
+
 
