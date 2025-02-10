@@ -1,48 +1,48 @@
-Return-Path: <linux-pm+bounces-21655-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21656-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 05BC6A2E6D3
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 09:48:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2F10EA2E6E5
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 09:50:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A4D4016411E
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 08:48:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 385E1164FB2
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 08:50:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 499FE1BEF76;
-	Mon, 10 Feb 2025 08:48:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4ECEA1C3308;
+	Mon, 10 Feb 2025 08:50:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="K2SDVJWL"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RpYRz5Jb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A4981B87EF;
-	Mon, 10 Feb 2025 08:48:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2156D1C3039;
+	Mon, 10 Feb 2025 08:50:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739177329; cv=none; b=kadHgL8RBn7r16n3NxX1a29PBzZ3SQw9H8fsMYD+ss2HW5q/VyJdflmVqKwFx19QnIThZwVrz3/jh1VCmAimhNqHzxtg8Sc82mgtnjZsXY74ZoGh4Hx7YYEFG83+kAJ9AcNFESwO8b27eZ47U4uGoG7+SVyZWfPJ4OsYouQvenc=
+	t=1739177407; cv=none; b=UrcBCp4vL0DqidpDBfx+6ldl2sVbxNC+qTWJ5XzPCSBiq2Yu8FrUou2oHgzTstcVgYNm8t+8vnq1zOTMEGCibwEELzKgP27+akZNmv2S0uKkKQVFV2rMS7hTV+yBDZEX+XoDQ4Fh89JU5Ydallwl626+V0qIjjUpDQSDquk0CvI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739177329; c=relaxed/simple;
-	bh=Csdi8n6yF0exFBFNZzRyKvad72rgIjHHmUgvSYicT+g=;
+	s=arc-20240116; t=1739177407; c=relaxed/simple;
+	bh=8hjj0EAONyY4sxgZ8zHmz/2RP75tn/S8NEUojDDmNVY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=MKC0WE33CExmSQzmlF+S9W8r6Kdp/B9ieCWVAmjFY7KJ7DTrcsQfdmgmgVyhkIAIx2BfgMovEqfZ4nb7KOX/5ZOUY4hj+PYcf1pMvPci/D8g+7CQonbEFK5auIABZcLMwQKh/cKwoQg9lGWAkS9ZOpRtdqOGY+jls73Q+RTTfpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=K2SDVJWL; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 16897C4CED1;
-	Mon, 10 Feb 2025 08:48:43 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=ttXe2t0s/SPmkgrPLe8d8JR9dzUzsnkvWakz0QaNJaiCH3rPEsY32SPabAZM3yjeft+NTd613j+5WQjvAQWbX2CzkrgVw5zseaeaRZKJ5QVewRruYHlDJvBinu6SIqBcj07+nIjFRdfdgZO0UosO/yU7jb1FY5nBdACY+YYeMoM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RpYRz5Jb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5C667C4CEE6;
+	Mon, 10 Feb 2025 08:50:00 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739177328;
-	bh=Csdi8n6yF0exFBFNZzRyKvad72rgIjHHmUgvSYicT+g=;
+	s=k20201202; t=1739177405;
+	bh=8hjj0EAONyY4sxgZ8zHmz/2RP75tn/S8NEUojDDmNVY=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=K2SDVJWL3iDIFLTdOXx05V3eh9pHZgqVaq2RSS2NfbnR+Ed0sjDCCOYIOQxsBIb/k
-	 Lc00YDkG2O1MMl3XtumOK/xcrASMskuEv/szomCEQ5q/xzG9TWnL4/NU/E5x+qiEDu
-	 ncFrMn2x/ZwNvLb7gL95N05dQYpST3q6yydtpUdXRCU8dcx6NGF/mdFzRP0hYCUmUy
-	 LITWkjoWODIzI9ZZ/soIgeW/DtibbGDOhclBXyKqQpJV/73I+Oce/IpZKF0XWle9YJ
-	 z+xhuCDCCdYkLXsgpTpeBR8RcNH31GiSCtgLeBmEGWjo+zK9l78GX4mqkImHc4reJz
-	 riU3eb9sOU3UA==
-Message-ID: <fe1fb66d-285d-41b6-af71-89f6f93d1cf0@kernel.org>
-Date: Mon, 10 Feb 2025 09:48:41 +0100
+	b=RpYRz5JbC0s6hXobe2Igrwipeh3oa4c8G4Z78uEz+xg6DobpDi0WowBgpcicLplQe
+	 97BmLEoOztUzHRnejaBSxEDBZH9DKsTfl4M8X/DaFYeOvrv/Hcj3bc2aeceQO7PpXt
+	 4IWNVdOaEfssHtrvgPNSfxq7OT4UWgDtpum8IMKFTKqxrN7uIglul72dRo4eIO08PJ
+	 fgLDqsEeeyvhQ6/Y71KUs7D6CNGic/+IY4fND0vJPg/F+Qz4y1DRSKLZ7PynUm1eS1
+	 lsVfVpNR/lXz9TQoHkiqVGG14wXBZDwLbkLq3/VIpDxZKoC1uMuGylr4SiVajoWUWu
+	 DjcKQ290qWFRg==
+Message-ID: <703db762-93f4-45f6-a97b-5aea59620a03@kernel.org>
+Date: Mon, 10 Feb 2025 09:49:58 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,8 +50,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 06/10] dt-bindings: mfd: syscon: Add Cvitek CV18xx rtcsys
- core and ctrl compatible
+Subject: Re: [PATCH 07/10] dt-bindings: reset: sophgo: Add CV18xx reset
+ controller
 To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, soc@lists.linux.dev
 Cc: Chen Wang <unicorn_wang@outlook.com>,
  Inochi Amaoto <inochiama@outlook.com>, linux-pm@vger.kernel.org,
@@ -62,7 +62,7 @@ Cc: Chen Wang <unicorn_wang@outlook.com>,
  Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
  <conor+dt@kernel.org>, Lee Jones <lee@kernel.org>
 References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
- <20250209220646.1090868-7-alexander.sverdlin@gmail.com>
+ <20250209220646.1090868-8-alexander.sverdlin@gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -108,15 +108,82 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <20250209220646.1090868-7-alexander.sverdlin@gmail.com>
+In-Reply-To: <20250209220646.1090868-8-alexander.sverdlin@gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 
 On 09/02/2025 23:06, Alexander Sverdlin wrote:
-> These syscon blocks will be used for CV18xx reset driver.
+> Add DT bindings for CV18xx reset controller. The power/reboot driver is
+> going to use only 4 bits from two different MMIO regions which can be
+> potentially used by other subsystems/drivers, therefore the resources
+> are not being claimed directly by the device/driver, but via syscons
+> instead.
+> 
+> Link: https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01/sg2000_trm_en.pdf
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> ---
+>  .../bindings/reset/sophgo,cv1800-reset.yaml   | 38 +++++++++++++++++++
+>  1 file changed, 38 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
+> 
+> diff --git a/Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml b/Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
+> new file mode 100644
+> index 000000000000..4f058f99df5f
+> --- /dev/null
+> +++ b/Documentation/devicetree/bindings/reset/sophgo,cv1800-reset.yaml
+> @@ -0,0 +1,38 @@
+> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> +%YAML 1.2
+> +---
+> +$id: http://devicetree.org/schemas/reset/sophgo,cv1800-reset.yaml#
+> +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> +
+> +title: Cvitek CV18xx/Sophgo SG2000 Reset Controller
+> +
+> +maintainers:
+> +  - Alexander Sverdlin <alexander.sverdlin@gmail.com>
+> +
+> +properties:
+> +  compatible:
+> +    const: sophgo,cv1800-reset
+> +
+
+Missing reset cells.
+
+> +  sophgo,rtcsys-ctrl:
+> +    description: phandle of the "RTCSYS_CTRL" syscon block
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+> +
+> +  sophgo,rtcsys-core:
+> +    description: phandle of the "RTCSYS_CORE" syscon block
+> +    $ref: /schemas/types.yaml#/definitions/phandle
+
+This does not look right - entirely fake device. And your DTS next patch
+proves it.
+
+> +
+> +required:
+> +  - compatible
+> +  - sophgo,rtcsys-ctrl
+> +  - sophgo,rtcsys-core
+> +
+> +additionalProperties: false
+> +
+> +examples:
+> +  - |
+> +    soc-reset {
+
+Node names should be generic. See also an explanation and list of
+examples (not exhaustive) in DT specification:
+https://devicetree-specification.readthedocs.io/en/latest/chapter2-devicetree-basics.html#generic-names-recommendation
 
 
-No, implement proper reset block instead of abusing syscon.
+> +        compatible = "sophgo,cv1800-reset";
+> +        sophgo,rtcsys-ctrl = <&rtcsys_ctrl>;
+> +        sophgo,rtcsys-core = <&rtcsys_core>;
+> +    };
+> +...
+
 
 Best regards,
 Krzysztof
