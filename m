@@ -1,137 +1,143 @@
-Return-Path: <linux-pm+bounces-21734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21735-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEBB2A2FB22
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 21:55:11 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 57B4FA2FB90
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 22:14:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 031E81888ACB
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 20:55:17 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0E7887A1309
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 21:13:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C664A1BCA0F;
-	Mon, 10 Feb 2025 20:55:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E567324C666;
+	Mon, 10 Feb 2025 21:14:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="DeWyZeah"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="ZCmQHn16"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 029D4264609;
-	Mon, 10 Feb 2025 20:55:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41BDF264634;
+	Mon, 10 Feb 2025 21:14:09 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739220907; cv=none; b=lfWAX51nbTtQr6DSlFE7oI80vDggsSyrqryTlJq6roz/gnkkRBhwShZKmk96ebCab8Hk3EqhKX+X9I85ECRw+H0Es7ORHmpkgCVwJuUOIH3z36TAojCqbdJApkJmmUJwXJqFHO2F6y89cFTj4UiCPVy6sMJD+VhPaKv0VeAqOyU=
+	t=1739222051; cv=none; b=ZYqmni5xE64Ak46QzhBjtqV97nKyykBbuOSMBCzvWLvV20V1Msdj2bA/6udMx2zkiwkZXff2h/WAnNHKhE4aTIbP79yqTREavt7tLvqzL8Dy0gbDQMiox2nkQcA+XB+8Af1TkVbTjcu840o2KmOL30IzVBenXf+iKQCHt6I1Jcs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739220907; c=relaxed/simple;
-	bh=WpjZBk1tco5NPGp1mA5Zogy2Y/Xj4BgJWgEyk1N9n9c=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=SdnWOwqORhFkxbURubeU5n3mxONvelJjlwT5xMStJc9G+8S1svawT5Abv/mVyBU/d0Qc1ABiHxwn+VHemtBG3YE/4mGklWlvXDPIWfZMw38dtrMO1botOTTQAUEcQtKayz5Rtbi1+ARWJgHxYJQDRAL5OmSk0Yav2TDrxHpWO6k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=DeWyZeah; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ab7ca64da5dso197276266b.0;
-        Mon, 10 Feb 2025 12:55:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739220904; x=1739825704; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=WpjZBk1tco5NPGp1mA5Zogy2Y/Xj4BgJWgEyk1N9n9c=;
-        b=DeWyZeahiQnq3SjicNfM+GaYquN5oZKdC+IQWFlC5rw0U3VRpIG1aQYfGzD+RfuTnC
-         3pt4uFkkrnASiiZGKqEzGB7payV8wk6wpcUUAWw7xJJ7zehhCEEazcWdjeHo5/BX5aMU
-         y7EDEp+/WfWBjbemzhD3Wf9QjDSuCJzGIVgsZ9p6FPJUfyaQl2tDmXi9aeGpEcbiNTbq
-         TW/w/rCllZnfXvFFEynyDNy8xHkxL4JqBuUcg+RPIQekSaE4rDdCpLR3ZsRltAOTu4zV
-         hFPOrj6eNbd+AxqZTbt0zhmb3UohFrp/6uQH1uJQZ9uEFJJcxSu9Gft7JbhWbIO49IHO
-         2hUA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739220904; x=1739825704;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WpjZBk1tco5NPGp1mA5Zogy2Y/Xj4BgJWgEyk1N9n9c=;
-        b=RQJYgcIzjf9fJIqx1H/Q1sSVKhSUoCSjgdaBa8xzMw/MBIHRCpCwJYuwsg89i572li
-         Ss3P9B2K2LxK94NJqlL0cllyfH5hyWZhLVksxETA9VedFeJB2724IjD00na0Pf7uuKNy
-         tA5dh1B8PrbcQi/DYVgwsIabjoLvztNw8+1bLVmQyZ4okruYIueIWEiLWTQVfZONki1t
-         Xjy8tXcJ7//XswTGZs/OVf84VEXqs8oCDdGcsKMgc4cwKbbTn/A0FMEQcvyvmaq5nYsc
-         wE4q9teo+NdizzQk5Cm6HSLCAOl91C1fpw53OfHOuAmbG/Eh1VItZ0LfjBLweNWr+m2l
-         JMPg==
-X-Forwarded-Encrypted: i=1; AJvYcCWN+tl2ZZAKazuKIRIyzAtv7k0v/PUhiDbSK7youXy/s9W3yKkJpiec1sy4W5IOTjGNGosfJx0VdRBp@vger.kernel.org, AJvYcCXmB41shyZ2hitCHSwgQgBwOSyv8bAqRErUmheEsPmq1lo12acAuwFPM/pIjcdRIb8R1AIhnEtNkhA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyktsTutesbH0GJfuhuRc3yT4MLycqv5dJtMxg6jGSsaLTB5vCn
-	p6FqJ/GbvyQKonlUcrfbYLUTMHBAWni6BTk2v77y5zpZ+zeT/WBO
-X-Gm-Gg: ASbGncvUpsawrVgKTxgZXp32YgdhrY20qnN8vuEIrVY/rEnb6xb84o9a/IVLeN4Tg4M
-	Wr7yMccLCbGFEAjad6UVg9Z0n1LaUjuaCJzRwza8uZIoaauxmSFs8r3kA8po+dX7fZA+oILGlty
-	53YyasPRt7CA76SdkXm+9bxCAGS2i7FVTuOpv9iXglkSrQzAZeE02AibFr5FMNgPVc6BV8ezk0j
-	MJQlEfud/34nWNt/AeTQzJ/XYQY2tfFNj5b6t6YmE+LlpHLZ6RRYIo3PjphjQi7p01HJ4VeO5NW
-	hUduVD4gMemqXue847j1DkRwUhz/SjgQ
-X-Google-Smtp-Source: AGHT+IFJYUVYcZgeTbbOIf2IE2QjryPq2pdJRg1RIOBNc7TQaHZymLDKrGCSZgTlknghtW+yN9uTHw==
-X-Received: by 2002:a17:906:c109:b0:ab7:b9b5:60ff with SMTP id a640c23a62f3a-ab7daf01893mr82813066b.2.1739220903984;
-        Mon, 10 Feb 2025 12:55:03 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7cc737d81sm179019066b.176.2025.02.10.12.55.02
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 12:55:03 -0800 (PST)
-Message-ID: <77c0db160bcaa7c2a68c04a0d33a561b2834f764.camel@gmail.com>
-Subject: Re: [PATCH 00/10] arm64 support for Milk-V Duo Module 01 EVB
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Inochi Amaoto <inochiama@gmail.com>, Yixun Lan <dlan@gentoo.org>
-Cc: soc@lists.linux.dev, Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto
-	 <inochiama@outlook.com>, Lee Jones <lee@kernel.org>, Rob Herring
- <robh@kernel.org>,  Krzysztof Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Philipp Zabel	 <p.zabel@pengutronix.de>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,  Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Sebastian
- Reichel <sre@kernel.org>, 	devicetree@vger.kernel.org, Haylen Chu
- <heylenay@outlook.com>, 	linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org, 	linux-pm@vger.kernel.org
-Date: Mon, 10 Feb 2025 21:55:01 +0100
-In-Reply-To: <eoeyutuu4mrpsu7snkk5ll6kmm4344qsgbnncss6gerlcvvea7@usuf5v7w5ffp>
-References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
-	 <eoeyutuu4mrpsu7snkk5ll6kmm4344qsgbnncss6gerlcvvea7@usuf5v7w5ffp>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1739222051; c=relaxed/simple;
+	bh=41SDJqeOvWQc658it1sXNAN/P9R8aH989E9RDDpERWg=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=T1LcTcSuh6goaA8x579E50AGBYEEA8fYAnC7jUnYQu1P8kpIdNgTFZ3WNxtInfgYx620EzI+j8GnnwAZf8pZd/V4hRI5BLwxtaOh250f8ZkqAHMGnnTnWOMQqOKZmBuxcMYkTXFlvqr4rLe/8FzmkGd1LKSvVXkOZVnKBC9AsNc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=ZCmQHn16; arc=none smtp.client-ip=68.232.154.123
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1739222050; x=1770758050;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=41SDJqeOvWQc658it1sXNAN/P9R8aH989E9RDDpERWg=;
+  b=ZCmQHn16m31iF71sVc6PQZAecx16XZUnV/CDxsZygYvk7X1TNb+LYobl
+   /4xX4leDmaNW8YI0qMeHAVu7HZSfRIK8r6k4jWe4Rd9NGdccnl02fNzIc
+   fyeTpWJd+SfFgtvsrgvLLkuHr6+T/qDOj5TSJOz/fkdCFXrCUMHwdPInX
+   Q6xxrNMsW2+CBqsra5I2DxXG4k3hRe/HMl4w2t/Th/s+IS7QQon6/nd+f
+   xd/3/HFzZ/A9522yZORgTeGNqbcc3fIRNZzI2tOfurIDlfx+TCvNlZjLB
+   yeX+1jlF8cX/5ZKcHZyEpnJUmfGkh97cH7SFkNEveTFK2PS3WykdK4C1Z
+   A==;
+X-CSE-ConnectionGUID: AYqW9AG9RbOJ2Xf8Pt97Yw==
+X-CSE-MsgGUID: 0K7I9XjESoy6ucluOHAdrA==
+X-IronPort-AV: E=Sophos;i="6.13,275,1732604400"; 
+   d="scan'208";a="205027961"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Feb 2025 14:14:03 -0700
+Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
+ chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Mon, 10 Feb 2025 14:13:45 -0700
+Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
+ chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
+ 15.1.2507.35 via Frontend Transport; Mon, 10 Feb 2025 14:13:45 -0700
+From: <Ryan.Wanner@microchip.com>
+To: <lee@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
+	<conor+dt@kernel.org>, <claudiu.beznea@tuxon.dev>, <sre@kernel.org>,
+	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
+	<p.zabel@pengutronix.de>
+CC: <linux@armlinux.org.uk>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>, "Ryan
+ Wanner" <Ryan.Wanner@microchip.com>
+Subject: [PATCH v2 00/15] Enable Power Modes Support for SAMA7D65 SoC
+Date: Mon, 10 Feb 2025 14:13:00 -0700
+Message-ID: <cover.1739221064.git.Ryan.Wanner@microchip.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
 
-Hi Inochi!
+From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-On Mon, 2025-02-10 at 13:33 +0800, Inochi Amaoto wrote:
-> > It would probably make sense that the whole series would go into SOC tr=
-ee,
-> > even though technically nothing prevents the reboot/reset driver to com=
-e
-> > in PM/reset tree. If everything would come together, `reboot` command w=
-ould
-> > work out of the box.
-> >=20
-> > [1] https://milkv.io/docs/duo/getting-started/duo-module-01
-> > [2] https://github.com/milkv-duo/duo-buildroot-sdk-v2/releases/
-> > [3] https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v=
-1.01/sg2000_trm_en.pdf
-> >=20
->=20
-> This reboot implentment across the RTC and 8051 domain, which is
-> still a big problem to be upstreamed. This should be designed=20
+This patch set adds support for low power modes for the SAMA7D65 SoC and
+the required components and changes for low power modes.
 
-Now I've got it. The problem is not in the reboot procedure, but
-rather how to model this thing in the DT, because of all these
-unrelated functions brought into two HW address spaces...
+The series includes changes in the asm code to account for the addtional
+clocks that are in this SoC.
 
-> carefully and needs further discussion. Adding these two syscon
-> compatiable may be not a good idea and cause some problem. I invite
-> Yixun to this talk and he may give some useful suggestions.
->=20
-> At last, I prefer this goes to an separate patch series, and
-> implement with rtc device.
+The Device tree additions are to enable all the components needed to
+keep the SoC in low power mode.
 
---=20
-Alexander Sverdlin.
+There are some DTB check warnings but that is due to the dt-binding not
+in the correct .yaml file format.
+
+Changes v1 -> v2:
+- Add missing compatible for ddr3phy, it is now in both syscon sets.
+- Fix alphabetical ordering for sama7d65.
+- Remove the incorrect reorganizing patch.
+- Remove sama7g5-rtt as a compatible for sama7d65-rtt and add
+  sama7d65-rtt as a compatible wake up source in the pm driver.
+
+Li Bin (1):
+  ARM: at91: pm: fix at91_suspend_finish for ZQ calibration
+
+Ryan Wanner (14):
+  dt-bindings: mfd: syscon: add microchip,sama7d65-ddr3phy
+  dt-bindings: mfd: syscon: add microchip,sama7d65-sfrbu
+  dt-bindings: sram: Add microchip,sama7d65-sram
+  dt-bindings: power: reset: atmel,sama5d2-shdwc: Add
+    microchip,sama7d65-shdwc
+  dt-bindings: reset: atmel,at91sam9260-reset: add
+    microchip,sama7d65-rstc
+  dt-bindings: rtc: at91rm9200: add microchip,sama7d65-rtc
+  dt-bindings: at91rm9260-rtt: add microchip,sama7d65-rtt
+  ARM: at91: Add PM support to sama7d65
+  ARM: at91: pm: add DT compatible support for sama7d65
+  ARM: at91: PM: Add Backup mode for SAMA7D65
+  ARM: at91: pm: Enable ULP0 for SAMA7D65
+  power: reset: at91-sama5d2_shdwc: Add sama7d65 PMC
+  ARM: dts: microchip: sama7d65: Add Reset and Shutdown and PM support
+  ARM: dts: microchip: add shutdown controller and rtt timer
+
+ .../devicetree/bindings/mfd/syscon.yaml       |  3 +
+ .../power/reset/atmel,sama5d2-shdwc.yaml      |  5 +
+ .../reset/atmel,at91sam9260-reset.yaml        |  5 +
+ .../bindings/rtc/atmel,at91rm9200-rtc.yaml    |  3 +
+ .../bindings/rtc/atmel,at91sam9260-rtt.yaml   |  3 +
+ .../devicetree/bindings/sram/sram.yaml        |  1 +
+ .../dts/microchip/at91-sama7d65_curiosity.dts | 14 +++
+ arch/arm/boot/dts/microchip/sama7d65.dtsi     | 77 +++++++++++++++
+ arch/arm/mach-at91/Kconfig                    |  1 +
+ arch/arm/mach-at91/pm.c                       | 54 ++++++++---
+ arch/arm/mach-at91/pm.h                       |  1 +
+ arch/arm/mach-at91/pm_data-offsets.c          |  2 +
+ arch/arm/mach-at91/pm_suspend.S               | 97 +++++++++++++++++--
+ drivers/power/reset/at91-sama5d2_shdwc.c      |  1 +
+ 14 files changed, 245 insertions(+), 22 deletions(-)
+
+-- 
+2.43.0
 
 
