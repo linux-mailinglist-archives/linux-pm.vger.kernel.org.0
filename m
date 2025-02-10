@@ -1,260 +1,189 @@
-Return-Path: <linux-pm+bounces-21670-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21671-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 270E4A2EA3C
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:57:30 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A1210A2EA48
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:58:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 87EF3168A39
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 10:57:13 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 415D4163AC3
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 10:58:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D27701DE3B8;
-	Mon, 10 Feb 2025 10:57:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD1971CD1FD;
+	Mon, 10 Feb 2025 10:58:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ezuv+mLV"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="nmoM+2G0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f52.google.com (mail-lf1-f52.google.com [209.85.167.52])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2046.outbound.protection.outlook.com [40.107.244.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B2A71CEACB
-	for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 10:57:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.52
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739185027; cv=none; b=N9B5yPlReItlIpE2aICEuoin99L0m73tNwWdQG5rCzgE2cWgvXxd8JATPcIJCpCe9BUnG7xcofZF9MPuqGvxF0gpsHU1PN5CxbhmgRphZY1fwJ7PTqjgl2f+6rf6HPMNMDdBXI3JzJywOy9Tu8OKjzqcGu54LlkTte4SEPtlgwc=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739185027; c=relaxed/simple;
-	bh=iyDDi1r4riFULUgod5wCm2MoIyCOnVwU3km7vkRgHgg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=fPcmC9O7sHe88lj6uKGUIbIWpmHLHZGQhL8v6pDTlU7JDsr5Yr7e26SBnHOk/cPnGlIIuWi6H9UzG6mGYXB+OBnasP4ObALotBbO0A8HYbjmjgnPStkobsiFm7FhjnSHAYXONo2c0LEoS2f/io23PUYoCACo/02I36eOzD7XLx0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ezuv+mLV; arc=none smtp.client-ip=209.85.167.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f52.google.com with SMTP id 2adb3069b0e04-5450475df04so1983638e87.0
-        for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 02:57:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739185023; x=1739789823; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=6xd+vxcqG1mZGT915T0HX9ILQH/E7rjAK2oLVDx9yII=;
-        b=ezuv+mLVh82zeTpiJ3bNiqw5ygj2NriYPftMzParFxgKTi3AdObY3aU7pPKca9vKP3
-         KTpH8V/XYhxoLzAgMWjFNZHN6uBfm3mgtkqWay8cebPOzfqcSfE6BHu20G1qDNDThOKM
-         Uw1Ao4zOxXT22c22WJm7d9/p3cDVIFSdbc3l8d15KsD8pEBeZxBE0gCuN34Okzs5Ndem
-         BGv6hqTkt8cv6lGo2Uro8EjUYuE6fqPHX05UcnlUVvy9aw+pcozq1BQMMzXg2uybBnA8
-         fLV3AKjIJYGnTtao8ulr9OvKtdm3hpyB+Hfk8BkcTDnDZiuc3/tiX6A3NZg/friy9wLz
-         QBaA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739185023; x=1739789823;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=6xd+vxcqG1mZGT915T0HX9ILQH/E7rjAK2oLVDx9yII=;
-        b=kVGSEAIaz7EkmJ0f98GYlav/tq11/HiyXZDeu3nHf5huT+td8LE8seqRsbP3EDKUH6
-         EKDAKbQE9SoIAG+w8mw5LgFF/kVSUchRMKO1Hgdli3nzhVs8gt94hxUQkaVIUF7oiBCv
-         GIB5FYtuWH84Bhe9gK7pqWa3gFXjCvIpHcn3Tk/74ekJ90sB2M0WqV6eU1F833q7EsE8
-         gNtEysX6VfeMUa+z1aQI4c11pHkP3nNN93eJI0db6ocl6YHQ/E6pOo7o8z2xMn0zOkUP
-         R79DIm7KI9uPorZnKKF6dxk0xIAWHFtd3FYIoQXQOYEmVyZGhCiRewvNGqCuOGt/W1H7
-         n2IA==
-X-Forwarded-Encrypted: i=1; AJvYcCW/7CCA3RFcIaJdwWXBZ2zDixBEwa1Koz5CsK7qwaII3HCE4o+38S5jTf2v7x7As+tE94xK8V2MlA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZAYOAM7P9bAtqojaaDrDpvc9o6AyYFnl50NKeniPg76R2cr9m
-	0nl/ICm1usq0U9Iw0zsVxXbUOhmNE8Y6O2PsdgbQCsupTiI53iIixSXzNr8tOxM=
-X-Gm-Gg: ASbGncvyeH6KHZqPQqAM40u3AE//3v/4PqKp6jmgjEyy4DkpNK9G56N5UGfI7SW5Ot1
-	Zh/CODQPs1q2qIESXXcV5QGCPG6ITRflHULUFNKWMxDJQPvULT0ug41y6qjUu9RCVdATNBhAn9U
-	1WeE3lXKDoh7PIrLAk/2664E3BTD0jVGhAbyBiSe0fyU6oZANxH6EjWPc2rE5rAsx7+D07+YPuR
-	/B3OcdxFx++WWW6sQN7uCe5fGTTZ1E9glVDOS8na0eurNPbrXKmSnBLko79QNlfoQNw2UMKRFPs
-	MIqosums0ZT6FOvdyq5yqrSBz0TYfrqYJTeDsL0PpYCNr23czxdMWWBLZ+iC8dVl4F2XZtE=
-X-Google-Smtp-Source: AGHT+IHwDEpaVSkoV9uzP8u1aUI2Q7JyUrXFsxYabhPcKGbqKSc1h4oh6oLKcGACEjWOIjuumC9uOA==
-X-Received: by 2002:a05:6512:e89:b0:545:ea9:1a17 with SMTP id 2adb3069b0e04-5450ea91b4amr641356e87.13.1739185022967;
-        Mon, 10 Feb 2025 02:57:02 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5450d27e43csm228979e87.214.2025.02.10.02.57.01
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 02:57:01 -0800 (PST)
-Date: Mon, 10 Feb 2025 12:57:00 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-Cc: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Bjorn Andersson <andersson@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Odelu Kukatla <quic_okukatla@quicinc.com>, Mike Tipton <quic_mdtipton@quicinc.com>, 
-	Jeff Johnson <quic_jjohnson@quicinc.com>, Andrew Halaney <ahalaney@redhat.com>, 
-	Sibi Sankar <quic_sibis@quicinc.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 3/7] interconnect: qcom: Add multidev EPSS L3 support
-Message-ID: <fclfywuw3p43pcj42gi2w5kutvnto3rcrdng2zl2pzgpvz7dis@cjx2e6v4skfm>
-References: <20250205182743.915-1-quic_rlaggysh@quicinc.com>
- <20250205182743.915-4-quic_rlaggysh@quicinc.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5810B1CAA88;
+	Mon, 10 Feb 2025 10:58:49 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.46
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739185131; cv=fail; b=qDYqGB1668FPY7Xgzwlclloc/TP9J4CjPx0eekB2iOCwWCG8W7n2c7HEJgX/VpOGz9Z/3blLkZuTS6xUjCWtRNbzU0aLxmY5IwWIB2AGdMxCkSlLB4LM8+1ql7Wt7+Umr9RKNPk4HIvIZNA2CWuSCthUX4zSg2vG/EmDP3Rq9/M=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739185131; c=relaxed/simple;
+	bh=iYq0ZatOfNUK5T55ECN8U8IDPxsNORH4888bzOO0W9A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=IqIS2Rx76RPGs9j0tPQ6Kd4tCVZGOmMIHhwsQWXVce6L50I7PjzB1NUaqLxQEDRXJOJnhyvTy0eoJQJa3o/e3Sny3InsVGCccJt2JjP9pXzwJA9X1GGjlTGeji9pNIgSRKz4ihdBByq0NSXspCrh4CW8VKVbXw4UrGg9xK1m6DY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=nmoM+2G0; arc=fail smtp.client-ip=40.107.244.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=YQeyLaWNrWPryVPjGb6Y0qTkWCgWAvdlYWkHglATfndfinUZgR5BYh3I5U8bux2U2C4OzztSV2iFi4f9LuRaaJ2VfQ2FJs3Xfl19WaUdoDuzREkfQLrc8n2IUBWjOFtdoQJVcp9sAcFR0u7iTFQUkXPP47rEtUAZ3McB9Vy7cA5+e+hP1ZPnBKJFYhDwpmXoX/WVN6ZMhOxC33wtaFOCvpWKSe7R58z3lJyQyOhTERZD3Yr/insffKqGnRa8KF5sP+GxB1xAjEHVc6xrIAREX4zfSqbKHbu3Wdox3md1TXSHcQ9OxtPWG0WCRtIcUcBNgBOnDEjn6YQnggk0YcyFFA==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=h4bXCtMilVFruXw55IcbgSYnX9Hj3cCNvWrbKz8ahp8=;
+ b=deuElKWRA2tp/N+lgz71ZWyyw2OPPPPMIRqOHKqidy95dy1zzmEf1NY8Qtw3DGlUOMqkQRpSmuERo9U9p2ra+1E8samLql0BtVpgufZhk4mDWQZ39D4E+notIoQ4+YuY8xWel8lwbSaTZdxSgiRL03y7Mp2SPrsbwNQMe+uKwja2ols/gEllG4sHFLyaErtIweQQEeyS/j5iFwybarhpu9fKupjrO1fC6DCkE3EEauKYADosRpKt9K/9VmE5N64nYAfD8NHCwgTWI/qXEziYRdXFmzZi9o4IBPkzuv9ybSAp3Grp2wPgGZwcj7tdnhF/IorN1AtYFRmoYjDA4+e4Yg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=h4bXCtMilVFruXw55IcbgSYnX9Hj3cCNvWrbKz8ahp8=;
+ b=nmoM+2G0kd/af29HqBXT9x4YAkKD6gu1kc1/vzxzI6xqISKJdsFfNWXWOdDpHnqq/f7YpYF7ffPhrAuY0jHdDczfvTa9E4XWVX95r09d9tlDdxmj5WzhxMxcyZYtaKTX3q2Zk6lAo1t0GItrobSpuK4gqLbgvugC8kVLI8h6Uvc=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
+ SN7PR12MB6959.namprd12.prod.outlook.com (2603:10b6:806:261::13) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.12; Mon, 10 Feb
+ 2025 10:58:48 +0000
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7%6]) with mapi id 15.20.8422.015; Mon, 10 Feb 2025
+ 10:58:48 +0000
+Date: Mon, 10 Feb 2025 16:28:39 +0530
+From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
+Cc: mario.limonciello@amd.com, rafael@kernel.org, viresh.kumar@linaro.org,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 10/12] cpufreq/amd-pstate: Add missing NULL ptr check in
+ amd_pstate_update
+Message-ID: <Z6nb3xGSiSfXzIN3@BLRRASHENOY1.amd.com>
+References: <20250205112523.201101-1-dhananjay.ugwekar@amd.com>
+ <20250205112523.201101-11-dhananjay.ugwekar@amd.com>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250205112523.201101-11-dhananjay.ugwekar@amd.com>
+X-ClientProxiedBy: PN3PR01CA0081.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c01:9a::20) To DS7PR12MB8252.namprd12.prod.outlook.com
+ (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250205182743.915-4-quic_rlaggysh@quicinc.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|SN7PR12MB6959:EE_
+X-MS-Office365-Filtering-Correlation-Id: fbd3f2e3-d969-47b1-af01-08dd49c1e512
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?mSa5vBaqMW6IaF4oEmTiORUl3VTtFH4jHTN8IsELmMO7cxOQJpMZM+/LTpjn?=
+ =?us-ascii?Q?8Zvdp4bR0ho8p+11qU4NWjFc6+NlwMGV4gBdIgUJCPc2cElqSjE2NJlanmf6?=
+ =?us-ascii?Q?xSvslIDwLS0KmPQ691doY3xk2mLFd9HM5jv5XH5oF9rdhNq4FjXqFPKV+BzV?=
+ =?us-ascii?Q?lBmPzkd+btIuLkUytIL5tqL7hBPIB0Fm1dVl/5Wg95fn2aOtWG182tZA0tWu?=
+ =?us-ascii?Q?J3JyOjyr5JZFdgDAoJ7YTh+aU8tmnbDGZi4lrerQn9QGh8HW5WWTGAATH5ap?=
+ =?us-ascii?Q?40X5p6mB8HQ44oR3yNPAujiK/lYTrnUSgoW1SBMGL+OK14HN1yHPdt9WM18v?=
+ =?us-ascii?Q?uc7Az4D6CX3maTW+v2kmNxEQPlSzIdc1H+fK0UrpJy7IZ8MaVtObe/Zh6pTq?=
+ =?us-ascii?Q?vOSToLBZmly8lxBWt1JXhinFw8a9QoiVRiVmm7QBLh35juTpRYDFUjZ8EqYW?=
+ =?us-ascii?Q?Ij0sOlW7EifwKgB6e0W8P7qDX6X68LSPdbNwobJA1kpFGsvWBQZGuH536BCB?=
+ =?us-ascii?Q?S7WlBKv8TDa+Ex8LvPO+bGxAAt9VHgC4OISh3dF1jVXgkvT2VB2M8op6CQee?=
+ =?us-ascii?Q?quXRoWJZrB7hdBYWdERf1NGWf+nxVY+ngp9KJxlr9aKFG9SwyygqKO2Y/6Mt?=
+ =?us-ascii?Q?e2mm8xI45SdCMXCvJBr9GbNCABDwczJoBrgW60IgiT/JzbyDpujlpVBhMOgQ?=
+ =?us-ascii?Q?MJfuIKh6VZVRcgLHB8gIXkfHWELCpJPyyhjsjATKFDOF6AKqQxGq4q5AFM9t?=
+ =?us-ascii?Q?C+XvSl76GYkTDV49SKxeLgPXN1eQk1b/s/lOVroKozi8p7g9W/tsW5IP7wOp?=
+ =?us-ascii?Q?x2fPcLwfRiJQ60kWLSnqjYtjPV9Ueow2deC+nxxcYrbbCyx5b/oKN3yqxjpY?=
+ =?us-ascii?Q?j4PIEHxFIQIEldlZHVJBVwHEus/OpjcIP9t+4oROxL6eFmZw5PFtt92nTOvl?=
+ =?us-ascii?Q?NO4SLfQR3Ud9cadHluDf9L4NSjZUVELRhcC10CAIJjLlmv7ogXFxushFXhSL?=
+ =?us-ascii?Q?p4GofFNOt8NdZUDMOh65BGuhBvUR5wESHppzcwKWUGSIiMiupMHnHhL91pox?=
+ =?us-ascii?Q?GiqlVDrHsUGkleyP/HAF53y3PW+3fM64rcXimaZIpnl9me7AibySSLlFLkbc?=
+ =?us-ascii?Q?NgyytAQky+rsU1dwTcJgNPS6d+ODB6rxAR6gdf8xB4dtIjY03uiB4VFuzB1F?=
+ =?us-ascii?Q?9uqBqunCEzdW05GXU4j49PgOiCPGoJEA0lH7vfaepWMuZF5Z0VITSTWaJ92Y?=
+ =?us-ascii?Q?asu8rm42RWCn6nOz/o7zGW8d1vyESMzW4ZBZPPlh6UucW69Lhghbtt1hLP2g?=
+ =?us-ascii?Q?dy9xRWlyeVD35X3+bNe4imJS09w3SpV27v9hmazWnuuS2QWZeiARonbQgF4/?=
+ =?us-ascii?Q?DqofETXCcZeksGNx8VsNYUuaW1DQ?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?E/nqL/Wa/IM2+37YaYKCt8RVhg/yY8h9tNFTm3HtULBgKS5ulpCPskkkPmGi?=
+ =?us-ascii?Q?0acgYJy7oOmY11mExk4hwNwm2B+pE7rfx11PlsiuKO6H92TmbjkmZicOFD+J?=
+ =?us-ascii?Q?OBSG26xu8bOfwCfHS3xgoMw+RZyB2rcWSYLR0q5ulLH3Qj/2rqtla5i1iaJK?=
+ =?us-ascii?Q?Xun1WtA2GAUxp/i413PajCR6QTtLdJtar1aEcieJXtDRUyb17Fb7RoO0pT9u?=
+ =?us-ascii?Q?dtAfof3qvvNGLkeNk62ZNt9tgpdHGd6Zx//2QW4jFZqt2HejWE/v8gDiYNIM?=
+ =?us-ascii?Q?+tG8YhtwCWznGiwxVIGL2RxXOFQ8sKd9A93HSEpIGuVQU5T8ueK7sLbjeShA?=
+ =?us-ascii?Q?BdBHSY4Fyxp1139SVCT9HchHjh9SSmXAoKrMr6OaVRndAxgEMC/jBD+wnPx7?=
+ =?us-ascii?Q?WHFzs1Ane1yhJ+9qVl5k1srHghU37jR9MWY07Fnx473bNGnHxgbcz0WoxnZw?=
+ =?us-ascii?Q?6gfmy3OobssbfkT5E8jLMBIou6VrfbZXNOu7Ci+60tKDZaJJ8xxEnVN8Tv6b?=
+ =?us-ascii?Q?7Lt4K5OD9rBfMaeCFbKMWYgfoQ+Z2gJhsVBzxfZaZtldH4a8O7lDL/XZmKOy?=
+ =?us-ascii?Q?YC7QNwulEod1mUGDP8u6CIKf/mA65go/QDBtlhbQthRFTL+juaSM0wzIiGz2?=
+ =?us-ascii?Q?1PW2nu62baJwapbDXjvA7EtUQw6jKDkHWwvZ4SZlmzBGBHf2hMs/OuTBobkd?=
+ =?us-ascii?Q?gGpf1wutTwh1MECmXSxcYfJ/rMzGnQh0MCtIObseAzDtQXPdgHcknJY/NWtz?=
+ =?us-ascii?Q?Ixo8C43snebLrKerVjBFsBkG2KC7i83aoOv2+/lddAoAmTQhfDYLeQOvknjt?=
+ =?us-ascii?Q?M1Nkyrox1U8IA4DeIF5u4P5boRkwbICwCEHMo7yUVjgT6FDX8lIpEqqPGVFb?=
+ =?us-ascii?Q?ICkkYbctywwi9DTz4beI3utm8rlHsrN6Z3zrIHTiWNMn8a/3bAgOqxoPtb+i?=
+ =?us-ascii?Q?xhG6wIfde1OvvfUi6xvOoWlbyQ476TmeBP1Ot8+7UB4vWkRaJICad0JZYYyg?=
+ =?us-ascii?Q?zqe6RipawgQn5tzoy9FDjuB9X7P9T+RPqVaDZJ5onyDvuUokqDZ/VkoGUeS8?=
+ =?us-ascii?Q?PQPXVBbxSJFiVocqLM0maTC/+9v95jJrgnllUNuRhInl1T9IDbnOZTqaWtZ+?=
+ =?us-ascii?Q?wqc7Du8yXoRl0HKfZZelmCwMszxVxbVI9AVocV+MO9dUsRDkzqo7L5laBPyj?=
+ =?us-ascii?Q?38WrWeMcSWmCcBJT7FKoita8Wm/QUDNNSD35YCAsLnPx4ToYdusQREP+bbuN?=
+ =?us-ascii?Q?nzm58PDsM2W17OPLtJ+ca8qEUPcBqVpAV9VsKcHZg1BNE7sNY6OMfqde2rt9?=
+ =?us-ascii?Q?btXlSM/7UV5KUU75xefdJGekTlkSw7DK5UvPWx77gZEAEv6pHe3r4JqEzz7g?=
+ =?us-ascii?Q?/T4+PNMqQWKajZENk4lGu8WkjQfd0BBxZ+YJgUYoOMYkJyq4/cFnLAgrecbN?=
+ =?us-ascii?Q?WzRTZraEX/ot30EhvkoHogbDQ30GBdp2ELu1GrQj+06D/cmyjLwGIX+yiqTe?=
+ =?us-ascii?Q?t2AMUDauYVCS3HEaR2zNLc2xFT5ESNotN5WqGURCrEVrkUJ7oGv57fau4z5b?=
+ =?us-ascii?Q?spyjIvs2t90j8bL8opFb2H9J8rRdwsUQpLypiWcm?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: fbd3f2e3-d969-47b1-af01-08dd49c1e512
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 10 Feb 2025 10:58:48.0345
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: b34s5vUdcJr1Xc3nD4OhfK2VuboC7jbw49bDM2eslO+wUb09DZPbhdcm21HC3s286CTqzIjKT367kVNcs1aEmg==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR12MB6959
 
-On Wed, Feb 05, 2025 at 06:27:39PM +0000, Raviteja Laggyshetty wrote:
-> EPSS on SA8775P has two instances, necessitating the creation of two
-> device nodes with different compatibles due to the unique ICC node ID
-> and name limitations in the interconnect framework. Add multidevice
-> support for the OSM-L3 provider to dynamically obtain unique node IDs
-> and register with the framework.
-> 
-> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-> ---
->  drivers/interconnect/qcom/osm-l3.c | 46 +++++++++++++++++-------------
->  1 file changed, 26 insertions(+), 20 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
-> index 6a656ed44d49..da2d82700b5a 100644
-> --- a/drivers/interconnect/qcom/osm-l3.c
-> +++ b/drivers/interconnect/qcom/osm-l3.c
-> @@ -1,6 +1,7 @@
->  // SPDX-License-Identifier: GPL-2.0
->  /*
->   * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
-> + * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
->   */
->  
->  #include <linux/args.h>
-> @@ -33,6 +34,7 @@
->  #define EPSS_REG_PERF_STATE		0x320
->  
->  #define OSM_L3_MAX_LINKS		1
-> +#define ALLOC_DYN_ID			-1
+On Wed, Feb 05, 2025 at 11:25:21AM +0000, Dhananjay Ugwekar wrote:
+> Check if policy is NULL before dereferencing it in amd_pstate_update.
 
-This should be defined by ICC framework.
-
->  
->  #define to_osm_l3_provider(_provider) \
->  	container_of(_provider, struct qcom_osm_l3_icc_provider, provider)
-> @@ -55,46 +57,40 @@ struct qcom_osm_l3_icc_provider {
->   */
->  struct qcom_osm_l3_node {
->  	const char *name;
-> -	u16 links[OSM_L3_MAX_LINKS];
-> -	u16 id;
-> +	struct qcom_osm_l3_node *links[OSM_L3_MAX_LINKS];
-> +	int id;
->  	u16 num_links;
->  	u16 buswidth;
->  };
->  
->  struct qcom_osm_l3_desc {
-> -	const struct qcom_osm_l3_node * const *nodes;
-> +	struct qcom_osm_l3_node * const *nodes;
->  	size_t num_nodes;
->  	unsigned int lut_row_size;
->  	unsigned int reg_freq_lut;
->  	unsigned int reg_perf_state;
->  };
->  
-> -enum {
-> -	OSM_L3_MASTER_NODE = 10000,
-> -	OSM_L3_SLAVE_NODE,
-> -};
-> -
-> -#define DEFINE_QNODE(_name, _id, _buswidth, ...)			\
-> -	static const struct qcom_osm_l3_node _name = {			\
-> +#define DEFINE_QNODE(_name, _buswidth, ...)			\
-> +	static struct qcom_osm_l3_node _name = {			\
->  		.name = #_name,						\
-> -		.id = _id,						\
->  		.buswidth = _buswidth,					\
->  		.num_links = COUNT_ARGS(__VA_ARGS__),			\
->  		.links = { __VA_ARGS__ },				\
->  	}
->  
-> -DEFINE_QNODE(osm_l3_master, OSM_L3_MASTER_NODE, 16, OSM_L3_SLAVE_NODE);
-> -DEFINE_QNODE(osm_l3_slave, OSM_L3_SLAVE_NODE, 16);
-> +DEFINE_QNODE(osm_l3_slave, 16);
-> +DEFINE_QNODE(osm_l3_master, 16, &osm_l3_slave);
->  
-> -static const struct qcom_osm_l3_node * const osm_l3_nodes[] = {
-> +static struct qcom_osm_l3_node * const osm_l3_nodes[] = {
->  	[MASTER_OSM_L3_APPS] = &osm_l3_master,
->  	[SLAVE_OSM_L3] = &osm_l3_slave,
->  };
->  
-> -DEFINE_QNODE(epss_l3_master, OSM_L3_MASTER_NODE, 32, OSM_L3_SLAVE_NODE);
-> -DEFINE_QNODE(epss_l3_slave, OSM_L3_SLAVE_NODE, 32);
-> +DEFINE_QNODE(epss_l3_slave, 32);
-> +DEFINE_QNODE(epss_l3_master, 32, &epss_l3_slave);
->  
-> -static const struct qcom_osm_l3_node * const epss_l3_nodes[] = {
-> +static struct qcom_osm_l3_node * const epss_l3_nodes[] = {
->  	[MASTER_EPSS_L3_APPS] = &epss_l3_master,
->  	[SLAVE_EPSS_L3_SHARED] = &epss_l3_slave,
->  };
-> @@ -164,7 +160,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->  	const struct qcom_osm_l3_desc *desc;
->  	struct icc_onecell_data *data;
->  	struct icc_provider *provider;
-> -	const struct qcom_osm_l3_node * const *qnodes;
-> +	struct qcom_osm_l3_node * const *qnodes;
->  	struct icc_node *node;
->  	size_t num_nodes;
->  	struct clk *clk;
-> @@ -242,6 +238,10 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->  
->  	icc_provider_init(provider);
->  
-> +	/*Initialize IDs to ALLOC_DYN_ID to indicate dynamic id allocation*/
-> +	for (i = 0; i < num_nodes; i++)
-> +		qnodes[i]->id = ALLOC_DYN_ID;
-
-This can be initialized statically.
-
-> +
->  	for (i = 0; i < num_nodes; i++) {
->  		size_t j;
->  
-> @@ -250,14 +250,19 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->  			ret = PTR_ERR(node);
->  			goto err;
->  		}
-> +		qnodes[i]->id = node->id;
-
-Should not be necessary.
-
->  
->  		node->name = qnodes[i]->name;
->  		/* Cast away const and add it back in qcom_osm_l3_set() */
->  		node->data = (void *)qnodes[i];
->  		icc_node_add(node, provider);
->  
-> -		for (j = 0; j < qnodes[i]->num_links; j++)
-> -			icc_link_create(node, qnodes[i]->links[j]);
-> +		for (j = 0; j < qnodes[i]->num_links; j++) {
-> +			struct qcom_osm_l3_node *link_node = qnodes[i]->links[j];
-> +
-> +			icc_link_create(node, link_node->id);
-
-Please add icc_link_nodes() (or something like that), taking two struct
-icc_node instances. Then you can use it here, instead of reading back
-the ID. Ideally the 'ID' should become an internal detail which is of no
-concern for the ICC drivers.
-
-> +			link_node->id = (node->links[node->num_links - 1])->id;
-> +		}
->  
->  		data->nodes[i] = node;
->  	}
-> @@ -278,6 +283,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->  static const struct of_device_id osm_l3_of_match[] = {
->  	{ .compatible = "qcom,epss-l3", .data = &epss_l3_l3_vote },
->  	{ .compatible = "qcom,osm-l3", .data = &osm_l3 },
-> +	{ .compatible = "qcom,sa8775p-epss-l3", .data = &epss_l3_perf_state },
->  	{ .compatible = "qcom,sc7180-osm-l3", .data = &osm_l3 },
->  	{ .compatible = "qcom,sc7280-epss-l3", .data = &epss_l3_perf_state },
->  	{ .compatible = "qcom,sdm845-osm-l3", .data = &osm_l3 },
-> -- 
-> 2.39.2
-> 
+Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
 -- 
-With best wishes
-Dmitry
+Thanks and Regards
+gautham.
+
+
+> 
+> Fixes: e8f555daacd3 ("cpufreq/amd-pstate: fix setting policy current frequency value")
+> Signed-off-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
+> ---
+>  drivers/cpufreq/amd-pstate.c | 3 +++
+>  1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index 9c939be59042..6a604f0797d9 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -551,6 +551,9 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u8 min_perf,
+>  	struct cpufreq_policy *policy = cpufreq_cpu_get(cpudata->cpu);
+>  	u8 nominal_perf = READ_ONCE(cpudata->nominal_perf);
+>  
+> +	if (!policy)
+> +		return;
+> +
+>  	des_perf = clamp_t(u8, des_perf, min_perf, max_perf);
+>  
+>  	policy->cur = perf_to_freq(cpudata, des_perf);
+> -- 
+> 2.34.1
+> 
 
