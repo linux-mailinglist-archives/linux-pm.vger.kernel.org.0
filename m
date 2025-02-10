@@ -1,91 +1,120 @@
-Return-Path: <linux-pm+bounces-21713-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21714-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 646E8A2F3BE
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 17:37:09 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1BE24A2F420
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 17:50:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BFB7E1885EE3
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 16:37:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8B233A1174
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 16:50:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 552C01F4625;
-	Mon, 10 Feb 2025 16:37:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D95CA2586CE;
+	Mon, 10 Feb 2025 16:50:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="epcN3QYS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tCi+UeAo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 209202580D6;
-	Mon, 10 Feb 2025 16:37:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 999832586C2;
+	Mon, 10 Feb 2025 16:50:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739205425; cv=none; b=ZdKhL02tpCyZRy09VvRSfnt3Z6qYPqawmGFP8zk/femEvKJxQaPvXqAuhNreCK9Nq8e+ls5Yjw82AuTmY8poVbR81C6/G0R9M3XH1opyhMeOMUASBZymguz8siyRLa4kglmddNKfam0NaDGOaAzd2fuYvsMI9qYxOULAU9LPRY8=
+	t=1739206213; cv=none; b=oMBGDtPT+uWgcwa/cJjCO8uxu2rOteQTCHFpKmYOc0Fr0uIiBjBNzoavDUuqiXYKC5JBOXrAajs385/FOcAwRQNsK7H/r19vf0QD5DAaVMGVmvgrmCyWlBADxLptCuGUSxdTYCD6jwBDJ7hRT4FHzG1xyMtqFJWQmfHg03T0/zE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739205425; c=relaxed/simple;
-	bh=pfpzmuq24TwF+06dco5as3bO4qJhodsYwsIa1AqMl8Q=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Zg9rFP1Sqk6rHUSDxCwavtMIvS7CRO7OTnkEiJxzJd9jbey6qXg4IxiwQlGxfoPAQnbvb3ugVFT0i1cMcU/nhaX2p7DJGahV48rCize1kKdZ/L2VNJTn4f9/xx6FSygNAVGiytyFL4xXBXrL7EZKw4Ye1EJO7yxJsEnHVPF3WTo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=epcN3QYS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1EAD7C4CED1;
-	Mon, 10 Feb 2025 16:36:59 +0000 (UTC)
+	s=arc-20240116; t=1739206213; c=relaxed/simple;
+	bh=RoQqBYbP9aHYBtW9G+kY1z2Gcw7QCa9D5m8qCyEWhgg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=URFFBCfYRadB4n0YdwHsB69GCMC5owl3rG8GJHG/TxCH3xFCSTOinlgdL8O29FvdvYe7S9Vz5mRBrCTSSLBjlr39fH5/NqdhE4Zvpc6ECSkq7w3/xwQz1klpLgU20kSNLLGW6LMT7zkd5Gyi+5ECyZAvxTKaajvJuc/L49FDG7w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tCi+UeAo; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 86225C4CED1;
+	Mon, 10 Feb 2025 16:50:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739205424;
-	bh=pfpzmuq24TwF+06dco5as3bO4qJhodsYwsIa1AqMl8Q=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=epcN3QYSWuIIIk/Db2P8XQu5Ddu1B8GmBhUxdkPEutuOrxxm03ixaHdmL1nN/8OEX
-	 y2wTb9kXguPvZ6dfwKkkgcqPW57+ZApqinbEsUSF6OLgUdqXHtV4ZHU8zffXA+HnUn
-	 mEUAgM1Nyd1RbIKM4HEHV8+TZiLR4SKVDCjn/vtpXmf7Mfs/Mt1eBdt/bHxZix2Ofp
-	 PYEeOa8eB+D8kmLs59wxxJNbwm5OIthMBpdmAMKj1VsfWBib2KBDYoLI5+1wbPvjEh
-	 fHE0/nVh975H4xkkPJJDqoyXC6PIH0mMhODGZ/Qs6iEkhhShEmXocsOJNmB9e7rZxn
-	 1bD/BqEd4jSig==
+	s=k20201202; t=1739206213;
+	bh=RoQqBYbP9aHYBtW9G+kY1z2Gcw7QCa9D5m8qCyEWhgg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=tCi+UeAoP//GzfkCV1Sm1qDrMrgDldX0pf1R5NIar3SiKfRurctKExQiugQquMZVn
+	 KFIauFPrDvSjX4NN1Y7aq1kWZEXqaqRpcDJ78/u3U5sMte4/OLJ0mYAdlzfbd0gTW/
+	 Nwqj1t/xX/SfnrQ17BtYg3CMFE+75MgUmhZ9vHTRBdips1NzvFrTsK3Mj3wbR0rZEY
+	 fdSJaz5yru8jFc4Ngt0Cl8/3l4bqI6LKfKUh5PMDr/xh0YmAPxCpPPl1kv73zJIoPL
+	 VC7FMEPDDPeiIOyUkqKds+cfyihJwAcdRd++c5QAnZPPZJwRLduKnYDulK9AlG/21i
+	 y6ztCLYQv+xQA==
+Date: Mon, 10 Feb 2025 16:50:06 +0000
 From: Lee Jones <lee@kernel.org>
-To: Val Packett <val@packett.cool>
-Cc: Fabien Parent <parent.f@gmail.com>, 
- Dmitry Torokhov <dmitry.torokhov@gmail.com>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>, 
- Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
- Lee Jones <lee@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Eddie Huang <eddie.huang@mediatek.com>, 
- Alexandre Belloni <alexandre.belloni@bootlin.com>, 
- Javier Carrasco <javier.carrasco.cruz@gmail.com>, 
- Yassine Oudjana <y.oudjana@protonmail.com>, 
- Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
- linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org
-In-Reply-To: <20241226050205.30241-5-val@packett.cool>
-References: <20241226050205.30241-1-val@packett.cool>
- <20241226050205.30241-5-val@packett.cool>
-Subject: Re: (subset) [PATCH 4/9] mfd: mt6397: Add support for MT6392 pmic
-Message-Id: <173920541986.1887800.1972669785800121190.b4-ty@kernel.org>
-Date: Mon, 10 Feb 2025 16:36:59 +0000
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Dzmitry Sankouski <dsankouski@gmail.com>,
+	Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+	Sebastian Reichel <sre@kernel.org>,
+	Chanwoo Choi <cw00.choi@samsung.com>, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>,
+	Pavel Machek <pavel@ucw.cz>, Hans de Goede <hdegoede@redhat.com>,
+	Marek Szyprowski <m.szyprowski@samsung.com>,
+	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+	Purism Kernel Team <kernel@puri.sm>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org,
+	open list <linux-kernel@vger.kernel.org>,
+	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>,
+	linux-input@vger.kernel.org, linux-leds@vger.kernel.org
+Subject: Re: Patchset status - 'Add support for Maxim Integrated MAX77705
+ PMIC'
+Message-ID: <20250210165006.GB1868108@google.com>
+References: <CABTCjFBx-QpCKFWs5MPCgLAjJWT6ygrvS_A0nJk2BBxmWAxF+Q@mail.gmail.com>
+ <e67c0375-1024-483b-aabf-6a11339ab9af@linaro.org>
+ <CABTCjFBvYkEG0WYhCt6tP_cO8Ct82t0=UhwBefZEJrUiFc7vAw@mail.gmail.com>
+ <3e69dc53-cf05-479b-9707-eabc2eae9291@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-Mailer: b4 0.13.0
+In-Reply-To: <3e69dc53-cf05-479b-9707-eabc2eae9291@kernel.org>
 
-On Thu, 26 Dec 2024 01:58:04 -0300, Val Packett wrote:
-> Update the MT6397 MFD driver to support the MT6392 PMIC.
+On Mon, 10 Feb 2025, Krzysztof Kozlowski wrote:
+
+> On 10/02/2025 08:11, Dzmitry Sankouski wrote:
+> > вс, 9 февр. 2025 г. в 22:38, Krzysztof Kozlowski
+> > <krzysztof.kozlowski@linaro.org>:
+> >>
+> >> On 09/02/2025 15:13, Dzmitry Sankouski wrote:
+> >>> For the patchset I sent 2 weeks ago, [patchwork][1] shows status
+> >>> 'Handled Elsewhere, archived'. Is anything blocking it?
+> >>>
+> >>> [1]: https://patchwork.kernel.org/project/linux-pm/list/?series=927848&archive=both&state=*
+> >>
+> >> That's PM patchwork, not necessarily power supply. But anyway, what does
+> >> the cover letter say? Who do you expect to merge it? Above link does not
+> >> provide cover letter, unfortunately.
+> >>
+> > 
+> > I didn't found anything related to power supply in the list of mail lists at
+> > https://subspace.kernel.org/vger.kernel.org.html.
+> > 
+> > However I found my series in linux-input with New status.
+> > 
+> > Here is my cover letter:
+> > https://lore.kernel.org/all/20250123-starqltechn_integration_upstream-v17-0-8b06685b6612@gmail.com/
 > 
+> Nothing in cover letter gives any expectations or directions of merging,
+> so maybe that was a factor here?
 > 
+> > I guess I would expect a person from the MAINTAINERS list to merge it?  In that
+> > case it would be Chanwoo Choi <cw00.choi@samsung.com> and
+> > Krzysztof Kozlowski <krzk@kernel.org> from
+> > MAXIM PMIC AND MUIC DRIVERS FOR EXYNOS BASED BOARDS entry.
+> 
+> Haha, nice! :) There is no such subsystem. This cannot be taken by these
+> maintainers because there is nowhere they could put it and no one would
+> take it from them even if they did find the place.
 
-Applied, thanks!
+It's likely that I would take the set.
 
-[4/9] mfd: mt6397: Add support for MT6392 pmic
-      commit: 896b1eb4ca771b37ea50feb4d90a78dd4e9cb388
-
---
+-- 
 Lee Jones [李琼斯]
-
 
