@@ -1,110 +1,187 @@
-Return-Path: <linux-pm+bounces-21677-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21678-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFBA1A2EB05
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 12:26:36 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CCBC2A2EB25
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 12:32:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4C6FB7A401C
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:25:40 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 057E17A3E3F
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 11:31:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8F8791DF738;
-	Mon, 10 Feb 2025 11:26:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 900221DF749;
+	Mon, 10 Feb 2025 11:32:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ArL8VDkD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E796D1DCB24;
-	Mon, 10 Feb 2025 11:26:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA50A1957FF
+	for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 11:32:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739186784; cv=none; b=l5803dAu5sI8VPd4VgJEM7syE+8s5TXVfcBGkC5+nD/DJsscpgGqT4y+88uxiQeNHzIgtambp4nx9HOi2GjjXOZGBTHwvE3AOSMqWJKbba40lyBCFfe60vyovqdEV0EezlZIPmNM/wlC+1EyQK9lJqyC/y9CrBXInGgviWdMvjY=
+	t=1739187134; cv=none; b=FnDKHU6OjiGDc8+1si139CzwHiPKTHJMqZO9oeuI0Z2lP1+WofjmZpEq0UPLHBp8I7CxIRNKRFtkq6mx+7/78hgFMI0oqWOAmW8VQe/WWw17Hl3gtu9Z9OyEgiZenUkeYUGzd/wUJghzDb0N3nkXEyVAwye2ToO5BNj9Eoed3WY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739186784; c=relaxed/simple;
-	bh=4A+9AS7XUuPFQBrIrVMzc8DAD6y7ciR+xgYvNRW55w4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=DQlFpF+cUsPgkl8X1WBFCRRBdyaZ3Q6OiCex++laNKfRan8kmObpshQGG2j595UjVE3dDWHmDlBJWTkRUpQ2BBETMT/DTRbK9H6Zq/XOyPAl0hLQeQ1nIvMFgbzI6ArhZlV0dN/Mvod3oX5dzO0cYvX96UmZlKJ5KZVqw+HZpo0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1CE741007;
-	Mon, 10 Feb 2025 03:26:44 -0800 (PST)
-Received: from [10.57.77.229] (unknown [10.57.77.229])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4057F3F5A1;
-	Mon, 10 Feb 2025 03:26:21 -0800 (PST)
-Message-ID: <8d075300-1faf-4bdf-9b55-eee35528eba5@arm.com>
-Date: Mon, 10 Feb 2025 11:26:19 +0000
+	s=arc-20240116; t=1739187134; c=relaxed/simple;
+	bh=9yL8yKsVg56eXF6gBgrbmMDEHR/t0nnj17bTdgOkCA0=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O3NWDwP4k7FW2WJIwDmhh4kGRHi5NjHWpTt5Q+gzAkZy7V3LHmTbvyzNZUeICY0Q1P8hT/OTXnqAulCt2LHi05pMPefLdp+G0imDbSt2i7bCrQ/Fyb1r0CRQYWMa0QdnKJuzZ3Kv4L6dwHlyFv//OK5WQILVT0cGeESZA++39qg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ArL8VDkD; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e5372a2fbddso3448090276.3
+        for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 03:32:12 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739187131; x=1739791931; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K0t7XPMJtnScQiFAUkjXlhhg/FgQ9ukhMGIEHnDiTC8=;
+        b=ArL8VDkD1DO0w75b9uzLu1QfVV2U/xSyzaBV9aasCM67TOJJISiMm4JRArMLp4kbm5
+         2pRCjQMb99x/eMTAE4xibqfh+FH5/7WzB8Ish83dHkXZx9V62ERD1a6QC9bVubw24C+P
+         6q1sqEYDQyGkc8WBtsCC7c3yOVKuR35KCZQr3QEU0PSEtJhVAU178rB31vaYxVi4cDbC
+         LOtfcm5yvinCrHifUl+QuxVJj9nvSAeLzmSRepni4R+LRCakkPCzg5jtHmB2HkDqk7Yx
+         K0xdgBk4skSLqdXP7oXFhMx4+ilXtNgcJ4Elf+uJv9XEQWk3KZpsRJdjTYl9j1aEsN2h
+         f9Kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739187131; x=1739791931;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K0t7XPMJtnScQiFAUkjXlhhg/FgQ9ukhMGIEHnDiTC8=;
+        b=GJXBZLRZ+BlfFC78sNzZ9L90A2NItISZ2dzIUMCNUeqFXZ6/6kMNaI9Yr/F+8/37H/
+         Nj47b6gL8NwHC0C+fPdKzryEGsYitwWidL9mEfXqv1Uim5JTOPP5FwODNqcG2xUzcNMj
+         knEMh2O7JKULOgQjWC2zRpdJq5uViQbMOcBn/+hZ//GhFTFnyRSscfDBbVQMHe3WIs03
+         WWT9jLLg9GmitCSFHMntl97FkoI5CtbbnaZODXSBAYbIKOEygh94nJLKPcQEkTqxGU+q
+         uBGkldFb1s2BVVxSv7xkaklwlhk0OErYM5vBCRCf/s5XfnJ7+t4gL9AhB+EiHka8Kxxl
+         bnEQ==
+X-Gm-Message-State: AOJu0Yz9oswPu3WxONfudNS6opfK0npFcC3vflQHFwLAYDbPCByXScLY
+	zC1eJ5bvsFsG8Qh/oxqsuIFk5EmOumAt6LJ/ggvZ/NwA4vevI2MwXgtYmLIgZoJqJknlTgNo3qO
+	bKrACmoBbfkGEybiQveHB8z+2Up1NzZjNmn9csQ==
+X-Gm-Gg: ASbGnctTBI1bnR9Mrm74B9baesDbQe4USxvwslVaXbRWjYiYaq/D3H00egghdzCYi83
+	tiKUyXE8IGv/022P3X6bdEo8zRoA8CZI1CMguTX4rJ+XI8Jw4K74b22jo2Bb75Z/qWeybSCOS2A
+	==
+X-Google-Smtp-Source: AGHT+IG0aR9/4plkySCbp1bqTtI82MdpqrOiHVZLPWZsEQ6ce+6yiD5Wlvdmwvaf0DBMBOWwyD2Skk7a8hAGjrj5wzE=
+X-Received: by 2002:a05:6902:32a2:b0:e5b:54b0:6ad5 with SMTP id
+ 3f1490d57ef6-e5b54b06b74mr5887024276.43.1739187131488; Mon, 10 Feb 2025
+ 03:32:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 2/2] PM: EM: Slightly reduce em_check_capacity_update()
- overhead
+References: <6137505.lOV4Wx5bFT@rjwysocki.net>
+In-Reply-To: <6137505.lOV4Wx5bFT@rjwysocki.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 10 Feb 2025 12:31:34 +0100
+X-Gm-Features: AWEUYZmHSQbQffF7_ka9s0NS0kXgD2P_JnaSOcnNvX6dibEuupIM41BukF4WqIA
+Message-ID: <CAPDyKFqEK3jBQxmuGTRHGHgyNUY+veE+iiujgcJpyOuLjw0vBg@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: sleep: core: Restrict power.set_active propagation
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-References: <6137833.lOV4Wx5bFT@rjwysocki.net>
- <1925950.tdWV9SEqCh@rjwysocki.net>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <1925950.tdWV9SEqCh@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Alan Stern <stern@rowland.harvard.edu>, Bjorn Helgaas <helgaas@kernel.org>, 
+	Linux PCI <linux-pci@vger.kernel.org>, Johan Hovold <johan@kernel.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Kevin Xie <kevin.xie@starfivetech.com>, 
+	Jon Hunter <jonathanh@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
 
-
-
-On 1/27/25 13:38, Rafael J. Wysocki wrote:
+On Sat, 8 Feb 2025 at 18:54, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Every iteration of the loop over all possible CPUs in
-> em_check_capacity_update() causes get_cpu_device() to be called twice
-> for the same CPU, once indirectly via em_cpu_get() and once directly.
-> 
-> Get rid of the indirect get_cpu_device() call by moving the direct
-> invocation of it earlier and using em_pd_get() instead of em_cpu_get()
-> to get a pd pointer for the dev one returned by it.
-> 
-> This also exposes the fact that dev is needed to get a pd, so the code
-> becomes somewhat easier to follow after it.
-> 
-> No functional impact.
-> 
+>
+> Commit 3775fc538f53 ("PM: sleep: core: Synchronize runtime PM status of
+> parents and children") exposed an issue related to simple_pm_bus_pm_ops
+> that uses pm_runtime_force_suspend() and pm_runtime_force_resume() as
+> bus type PM callbacks for the noirq phases of system-wide suspend and
+> resume.
+>
+> The problem is that pm_runtime_force_suspend() does not distinguish
+> runtime-suspended devices from devices for which runtime PM has never
+> been enabled, so if it sees a device with runtime PM status set to
+> RPM_ACTIVE, it will assume that runtime PM is enabled for that device
+> and so it will attempt to suspend it with the help of its runtime PM
+> callbacks which may not be ready for that.  As it turns out, this
+> causes simple_pm_bus_runtime_suspend() to crash due to a NULL pointer
+> dereference.
+>
+> Another problem related to the above commit and simple_pm_bus_pm_ops is
+> that setting runtime PM status of a device handled by the latter to
+> RPM_ACTIVE will actually prevent it from being resumed because
+> pm_runtime_force_resume() only resumes devices with runtime PM status
+> set to RPM_SUSPENDED.
+>
+> To mitigate these issues, do not allow power.set_active to propagate
+> beyond the parent of the device with DPM_FLAG_SMART_SUSPEND set that
+> will need to be resumed, which should be a sufficient stop-gap for the
+> time being, but they will need to be properly addressed in the future
+> because in general during system-wide resume it is necessary to resume
+> all devices in a dependency chain in which at least one device is going
+> to be resumed.
+>
+> Fixes: 3775fc538f53 ("PM: sleep: core: Synchronize runtime PM status of parents and children")
+> Closes: https://lore.kernel.org/linux-pm/1c2433d4-7e0f-4395-b841-b8eac7c25651@nvidia.com/
+> Reported-by: Jon Hunter <jonathanh@nvidia.com>
+> Tested-by: Johan Hovold <johan+linaro@kernel.org>
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
+
 > ---
->   kernel/power/energy_model.c |    4 ++--
->   1 file changed, 2 insertions(+), 2 deletions(-)
-> 
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -774,7 +774,8 @@
->   		}
->   		cpufreq_cpu_put(policy);
->   
-> -		pd = em_cpu_get(cpu);
-> +		dev = get_cpu_device(cpu);
-> +		pd = em_pd_get(dev);
->   		if (!pd || em_is_artificial(pd))
->   			continue;
->   
-> @@ -798,7 +799,6 @@
->   		pr_debug("updating cpu%d cpu_cap=%lu old capacity=%lu\n",
->   			 cpu, cpu_capacity, em_max_perf);
->   
-> -		dev = get_cpu_device(cpu);
->   		em_adjust_new_capacity(dev, pd);
->   	}
->   
-> 
-> 
-> 
-
-
-LGTM
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+>  drivers/base/power/main.c |   21 +++++++++------------
+>  1 file changed, 9 insertions(+), 12 deletions(-)
+>
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1191,24 +1191,18 @@
+>         return PMSG_ON;
+>  }
+>
+> -static void dpm_superior_set_must_resume(struct device *dev, bool set_active)
+> +static void dpm_superior_set_must_resume(struct device *dev)
+>  {
+>         struct device_link *link;
+>         int idx;
+>
+> -       if (dev->parent) {
+> +       if (dev->parent)
+>                 dev->parent->power.must_resume = true;
+> -               if (set_active)
+> -                       dev->parent->power.set_active = true;
+> -       }
+>
+>         idx = device_links_read_lock();
+>
+> -       list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node) {
+> +       list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node)
+>                 link->supplier->power.must_resume = true;
+> -               if (set_active)
+> -                       link->supplier->power.set_active = true;
+> -       }
+>
+>         device_links_read_unlock(idx);
+>  }
+> @@ -1287,9 +1281,12 @@
+>                 dev->power.must_resume = true;
+>
+>         if (dev->power.must_resume) {
+> -               dev->power.set_active = dev->power.set_active ||
+> -                       dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND);
+> -               dpm_superior_set_must_resume(dev, dev->power.set_active);
+> +               if (dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND)) {
+> +                       dev->power.set_active = true;
+> +                       if (dev->parent && !dev->parent->power.ignore_children)
+> +                               dev->parent->power.set_active = true;
+> +               }
+> +               dpm_superior_set_must_resume(dev);
+>         }
+>
+>  Complete:
+>
+>
+>
 
