@@ -1,53 +1,53 @@
-Return-Path: <linux-pm+bounces-21737-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21738-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3E528A2FB94
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 22:14:32 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86366A2FB99
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 22:14:43 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0E6513A50AC
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 21:14:23 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF50118850DF
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 21:14:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 461F124CEF9;
-	Mon, 10 Feb 2025 21:14:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47E7024E4D8;
+	Mon, 10 Feb 2025 21:14:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="nddwYDOa"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="1d8zElVk"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9E85F24CEC2;
-	Mon, 10 Feb 2025 21:14:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94F3424CEDA;
+	Mon, 10 Feb 2025 21:14:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739222054; cv=none; b=BpruRBpKpfMBj+3jFDja9IG4sADpXgpKsT1DeIpbxuv5jTyvzSVBxRF+JyrXDD4wUtmpCOf3suCXj0XBSamTpKi/tJcaeA5AK7frSsmlh9JrGqh+B41EWWFA9Xr7A8sah79BMtEG/CWHAvijqBcJTN9Op2/fFbQnRHmssq8XDEM=
+	t=1739222055; cv=none; b=rUVYKWfbT7MAOGnMBeYJt/+OoTEtGETLYiEpsdmTvHRGZMEtqKEOFKrHZhGz365G0mpiDnoXWzd0xUS7rj9Q0RQQSPlpO8WuAL/5py0CY0PS4n+oCf1Vw0GMMr4ZeJwzt8q0APLOx+FPCRFfJ6kU/3Zz+RriJh78k08PsCb99yA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739222054; c=relaxed/simple;
-	bh=aiQoWYNRJ/dv2h1OgqJMCbQ0EI2M94Iym3ylq7+qTuU=;
+	s=arc-20240116; t=1739222055; c=relaxed/simple;
+	bh=JPp2/UjtVC/1QYbxK2ob9oSJCUlFkk0IV44VgvHtOM0=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Pdf3fjHLD3sQgPOwoU8Y7emJWwsiEdD2YlvLJ36Zsq/HlpB6vesAQGaij3ehXmPdVxuOIaqquu13ti3E1IUrQsvwAYB7vdM/MvaQfTysUYF1JVAImYt35dOpzpG7t18X4abSTZ1qEgGCc10AXK09R3r182iap2mk+iGv6gZsVmc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=nddwYDOa; arc=none smtp.client-ip=68.232.154.123
+	 MIME-Version:Content-Type; b=AXksSeZDCO3TH3Q6u+2za6y9hlTGjc06xe5bjjJIupnGYxwXtKMN4G+GwfCO5VVejMHGLaXNO5hrBcpU1jVDj8tK5WMqB1Yqbd9OmS2ZXFf+GbgpqwpSNDm1mamQ0HMrWo+CSRjZH/wpUGSQGfcNeJ7XvGYj5+W3zwLGjmc6k/c=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=1d8zElVk; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1739222052; x=1770758052;
+  t=1739222053; x=1770758053;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=aiQoWYNRJ/dv2h1OgqJMCbQ0EI2M94Iym3ylq7+qTuU=;
-  b=nddwYDOaFEFkVMrtYBQV0SBd4M+DWtZOKFimEqV/YRI91EQPpCw546aO
-   rdvih7JUENiUHH+qL7sCkXBdYhTAECGsn/WZlEre0WaxNjzVejzGLxTnm
-   Rjf3en5QgnM/8J0BTTQQ3PW/huBec7F8sqY5NzTTQnQX82j+2LTAQRa73
-   qaSUGcDgx0p2ZghCSYpZTmmfKd6v7z4HvlILa91pvP4Tj052Be9ow5PUD
-   UOgsePGMFPwXNmlM5g2Bl7TfxPcg1Yu7TMsoQaY569rg7BbKTFhik54lZ
-   SM7+z0PUAEuZRFS6dcj7bCKoLw2+2UW+85B71RDlt9ziNFpFi3+iKHmmJ
+  bh=JPp2/UjtVC/1QYbxK2ob9oSJCUlFkk0IV44VgvHtOM0=;
+  b=1d8zElVk8MPnipnjRyqb3hs2OLUqR0CZazawNNyH7eGO93rdbMOUKefc
+   0kkatvuNK449WlAPn1MTW+3ihQZ+zJpKPCz93m0/9pX5zeEHLQQftphlF
+   0/+CxtWPxaI4Asb2NsxWniPrgCumObuE9a9y0oVbVMYLx6sO+UKU4wxWm
+   tM6B/kC8RT9Cz2YNQOgF3vxvr8h1C+3Rluea5k7Dh48odTKdNGWcAAHSC
+   00aAYMe4Y/UAM9VXNA3BrwiHCTxbTOyDJenlVystVKpY+55ccUVUzoD9c
+   OLG7wH+cVjPgwUc8htnIx+dv8quWOe8Lrg0IHDH40Qm1oTGrRGGCnyLFf
    g==;
 X-CSE-ConnectionGUID: AYqW9AG9RbOJ2Xf8Pt97Yw==
-X-CSE-MsgGUID: jEPCBY4XTh2OhSwp14lhMQ==
+X-CSE-MsgGUID: 6qhWjTegRmqIA0yHx2jYwQ==
 X-IronPort-AV: E=Sophos;i="6.13,275,1732604400"; 
-   d="scan'208";a="205027966"
+   d="scan'208";a="205027968"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Feb 2025 14:14:03 -0700
@@ -67,9 +67,9 @@ CC: <linux@armlinux.org.uk>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>, "Ryan
  Wanner" <Ryan.Wanner@microchip.com>
-Subject: [PATCH v2 02/15] dt-bindings: mfd: syscon: add microchip,sama7d65-sfrbu
-Date: Mon, 10 Feb 2025 14:13:02 -0700
-Message-ID: <4cac19e32295c708d72b9fc6ba342b5c961fb6c3.1739221064.git.Ryan.Wanner@microchip.com>
+Subject: [PATCH v2 03/15] dt-bindings: sram: Add microchip,sama7d65-sram
+Date: Mon, 10 Feb 2025 14:13:03 -0700
+Message-ID: <384759dc826f9e37b43a69a1f2f6b79f56b99d38.1739221064.git.Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1739221064.git.Ryan.Wanner@microchip.com>
 References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
@@ -84,25 +84,26 @@ Content-Type: text/plain
 
 From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Add SAMA7D65 SFRBU compatible string to DT bindings documentation
+Add microchip,sama7d65-sram compatibility to DT binding documentation.
 
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 ---
- Documentation/devicetree/bindings/mfd/syscon.yaml | 1 +
+ Documentation/devicetree/bindings/sram/sram.yaml | 1 +
  1 file changed, 1 insertion(+)
 
-diff --git a/Documentation/devicetree/bindings/mfd/syscon.yaml b/Documentation/devicetree/bindings/mfd/syscon.yaml
-index 51d896c88dafa..727292ffe092e 100644
---- a/Documentation/devicetree/bindings/mfd/syscon.yaml
-+++ b/Documentation/devicetree/bindings/mfd/syscon.yaml
-@@ -91,6 +91,7 @@ select:
-           - microchip,mpfs-sysreg-scb
-           - microchip,sam9x60-sfr
-           - microchip,sama7d65-ddr3phy
-+          - microchip,sama7d65-sfrbu
-           - microchip,sama7g5-ddr3phy
-           - mscc,ocelot-cpu-syscon
-           - mstar,msc313-pmsleep
+diff --git a/Documentation/devicetree/bindings/sram/sram.yaml b/Documentation/devicetree/bindings/sram/sram.yaml
+index 7c1337e159f23..3071c5075ee48 100644
+--- a/Documentation/devicetree/bindings/sram/sram.yaml
++++ b/Documentation/devicetree/bindings/sram/sram.yaml
+@@ -31,6 +31,7 @@ properties:
+         - amlogic,meson-gxbb-sram
+         - arm,juno-sram-ns
+         - atmel,sama5d2-securam
++        - microchip,sama7d65-securam
+         - nvidia,tegra186-sysram
+         - nvidia,tegra194-sysram
+         - nvidia,tegra234-sysram
 -- 
 2.43.0
 
