@@ -1,450 +1,181 @@
-Return-Path: <linux-pm+bounces-21727-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21728-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0DACA2F739
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 19:35:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DA0CA2F7A7
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 19:45:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 59137167C4E
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 18:35:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9CE08188A785
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 18:45:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7A07257AD7;
-	Mon, 10 Feb 2025 18:35:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 316F32586C2;
+	Mon, 10 Feb 2025 18:44:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="wajH00IG"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AuH9vNyp"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 511AD25742E
-	for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 18:35:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 12D5D257AF7;
+	Mon, 10 Feb 2025 18:44:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739212509; cv=none; b=PZxjSzdE4jc/1jXmRmxSk+8SV31Gtc3GoJ4xX24i4yLY5nUVZBp8OfjJcEbTk7MqgA1zW/QyHNve49vYWP32ckxKu3fF/ZyZVM7igYn2ATPTbgiaa5Oo1nEliMjenCXfmgD4XlYMpZCQf6xy/c+qd5YL5y+FG09OuXZLfu8dulo=
+	t=1739213046; cv=none; b=RXXTebJiXAwiyK5h9lNPYjWVseXDh48PG9CtRdBxou7BcrwCWHyNUSY/z3Fu7tnqaOspHMldjevqanoGdMnIgGEXvV1a63/G+nj2kZGEaf0UBEXmRjK3ueNLqbcKPPmU2xbQp84fgWitVeLd/PLfhZaOqIuValuwfcjwEnxXUWA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739212509; c=relaxed/simple;
-	bh=afFbwZhPvABw9QtnhyLoeWFZ1DAKvScTsQg8dH8fITI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=dX1+ZbnZReZg2Tacjc3AhmutcJGXcmo2I4OZ6/VZW4RSf1fuEBseHxUambYrGWJkBUesBrXBIh80UKvE9BumYWRaOa48gj/pxORyv0Q/KVxdnO0KSNdRpvja2saE9ekenLKesBfISzfak3etosv4CUAVNwe2/JXjWRBta9qYb7c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=wajH00IG; arc=none smtp.client-ip=209.85.214.170
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21f74c4e586so39368985ad.0
-        for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 10:35:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1739212505; x=1739817305; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=IZC6hwdmsqFUIUOrfafnyuVDJQQmUYi4erRt9zplJew=;
-        b=wajH00IGPM8LMRdwak4iQ5X/8GVVgAsmyAPewes8oPNsjQM3bjOlOUA9YtHBV1c7U/
-         A67oPMctVoL53ZcoiBDMuELYSzwst2w1W5RU+QFjc7sVOS5Kz/bJxFQ1RbibRH3QruxP
-         tjXL48K9hCUN+r1rVPx15W5KwyXxZlmvkn9s5UYiSfMhULPzlNVTmfKNxECE6fWLhvF7
-         odMY2Mfe9PosoCZ431uGchljvlbZUDD4RLQfCpoMCWJNnjqB5CCn6K2Ge/PKRGq4qwqs
-         7WlAKScmbbPtfJVxv6pCt0Y7k1f9ZfIq/DrH70zuQbwmSSIxVja0irQ4MGEGSVquYXYk
-         krlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739212505; x=1739817305;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=IZC6hwdmsqFUIUOrfafnyuVDJQQmUYi4erRt9zplJew=;
-        b=EeaTkrYFLw2THOKZvJBIxDSLT/wnzX2R5b3yZ46L0GzIrf3GLCdxprhlfrRkgYhGc7
-         AsJEKkuuOChAlCaxsoNPQtLjU7PAdg5EdKy98TwPvaWkuvFZ8hVCYlw6v2zJTiYzLjaC
-         sq7VdhfZdMLY91H+dkcQ7gREu7Pf9WI7PmRA7SVrhGElsHoNaGvmEy6ktR9PvFxsmaD6
-         kh4+UkqXzugluVPcFym3ziNkDC+vVFiclkXlEErM2al+b4iTMZ7B7NVEPzp1raSvjhHm
-         XWXQ2qv4NbTl4uWmd9UDMOfT7CVZNLk1xynpCRZRTzz4LUusUKI+hdrXuQTIoBI+YVaY
-         rYLQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXbIediyN73WoJMkBHKo6JssDal5JyOsQpXPleWU5lgsd8f93ka91XP5eMp1fFTkldJMtOzxdWgnA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzRhJQ6Cqlf87i7ZbBhEl+6loj46WEM5jA259FlV8rRaq6lGcK4
-	Mhtv8g8yKugpvwQdqnJNLXSeqOgOQcq21KQXWQi47WnPhc6llm1ILsu6Qn+rFAs=
-X-Gm-Gg: ASbGncuwDG097uvQgc8mVVqQRp3Tn6n0H3/d+xHE4nonjBIu7xFM/8KYdtOmWyiITyC
-	CIYhK3SF7rWyWzIIr2/DtSPI7eVxT0ablUGKY1sGDpi056eMcGHbkfYyadY4el1WxZkpo3KWa9W
-	XdsADhJYnFPr6dxRr6YndoPEjYhqYSYKNXmObztd69zAzdknJRS53Hla1F/s4TuxVbg98+UIzag
-	JYE86okt3pKuZVJuN/LncxGIPm7Xs1qfvv2hNMffSFxxP4uQaw1X6INDg3jbYLwHTWe2YR03pp7
-	RBm7k476emwUmUA+WVZj69UqwTG0Hkg=
-X-Google-Smtp-Source: AGHT+IHtp08VQuun5C1yu46ll/uFsvIp/+Quz02mNlB+fHEav3tysjyfH3BKOpexgQ5joBYuNTCv8A==
-X-Received: by 2002:a17:903:2f83:b0:215:89a0:416f with SMTP id d9443c01a7336-21fb64460e9mr7223045ad.30.1739212505447;
-        Mon, 10 Feb 2025 10:35:05 -0800 (PST)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3650e6b5sm82534815ad.46.2025.02.10.10.35.03
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 10 Feb 2025 10:35:04 -0800 (PST)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Mon, 10 Feb 2025 10:34:43 -0800
-Subject: [PATCH v2 2/2] tools: Remove redundant quiet setup
+	s=arc-20240116; t=1739213046; c=relaxed/simple;
+	bh=F/oLFAsAG4O3sgYtk2OCtyqCA7pKAu0hVAyFxYmR1LI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=R0cdf6vgK/KDhNSxrDsjhRXY/LgHIyUtwaJlIgrjgPmbx9RS4GOsP9JrsCWp49ImN4pHbdSv7vaKoq3mhRGDt+Cbw2qR/tECy3MJ3H8UCbMYHBCiVoy5gUBhKmd8H/HlkCjgCqU0JzmXQF+/kKAdBTrZsvi8NYNWLljc7/q+Q3M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AuH9vNyp; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739213044; x=1770749044;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=F/oLFAsAG4O3sgYtk2OCtyqCA7pKAu0hVAyFxYmR1LI=;
+  b=AuH9vNypspWPmFDQfFMZJshgiUeszyOAPkjsZPc+QeK2X6BpANF3wSeT
+   4Yxhg9FxGG6pDWBX+okPzp92ppahN9cYMHP02ITYPZr9WEVqdkjjX1obY
+   fIeYJq4U4F3nDCqrKFjp0mc9YoyvS8jjVvJzUR4r/HJ9JYQu2v2N+s63N
+   n38Kyii1jL5B/uq8qNIsLythEfPq59GU9Ml4d03llwT9TV3fGOg0GH9Pp
+   hOdKw94PNUdmwO8KMndH1dhqIpW0MhbbuMZlh5FeTLr/qkRu+wHxwFuiE
+   AQJuNO2W2i0k/9bHiOAbtkNWiFfO2n/RZ/sDc0Rq8U9GJeY1IgyPLPZvZ
+   w==;
+X-CSE-ConnectionGUID: Zw3wK6DgSACfTTNCIPPv2w==
+X-CSE-MsgGUID: RK3AUgDpRB++mWYQyO2phA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="50446546"
+X-IronPort-AV: E=Sophos;i="6.13,275,1732608000"; 
+   d="scan'208";a="50446546"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 10 Feb 2025 10:44:03 -0800
+X-CSE-ConnectionGUID: 9rYFJW/PQUKsazG2Bj+83w==
+X-CSE-MsgGUID: fCjjHb5vSfyS3GeQ/UtrLQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,275,1732608000"; 
+   d="scan'208";a="117352813"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa004.fm.intel.com with ESMTP; 10 Feb 2025 10:43:59 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1thYlA-0013Ct-2b;
+	Mon, 10 Feb 2025 18:43:56 +0000
+Date: Tue, 11 Feb 2025 02:43:26 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raag Jadav <raag.jadav@intel.com>, gregkh@linuxfoundation.org,
+	rafael@kernel.org, linus.walleij@linaro.org,
+	mika.westerberg@linux.intel.com, andriy.shevchenko@linux.intel.com,
+	dmitry.torokhov@gmail.com, lgirdwood@gmail.com, broonie@kernel.org,
+	sre@kernel.org, jic23@kernel.org, przemyslaw.kitszel@intel.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-gpio@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-iio@vger.kernel.org, Raag Jadav <raag.jadav@intel.com>
+Subject: Re: [PATCH v4 01/20] driver core: Split devres APIs to
+ device/devres.h
+Message-ID: <202502110256.ZtYROQTy-lkp@intel.com>
+References: <20250210064906.2181867-2-raag.jadav@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250210-quiet_tools-v2-2-b2f18cbf72af@rivosinc.com>
-References: <20250210-quiet_tools-v2-0-b2f18cbf72af@rivosinc.com>
-In-Reply-To: <20250210-quiet_tools-v2-0-b2f18cbf72af@rivosinc.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
- Quentin Monnet <qmo@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
- Steven Rostedt <rostedt@goodmis.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-trace-kernel@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10090; i=charlie@rivosinc.com;
- h=from:subject:message-id; bh=afFbwZhPvABw9QtnhyLoeWFZ1DAKvScTsQg8dH8fITI=;
- b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/oqt0u/FxybH+p4mC9Zx/PRSWbdmew734Zp/dy93/bY9
- p6Fp/eWdpSyMIhxMciKKbLwXGtgbr2jX3ZUtGwCzBxWJpAhDFycAjCRehtGhl1F0efO6NpNY9/B
- rPv9RaPrVk75XSdeKIvcjDnmKnts6gWG/0l3TM5cu5r8r35nrNzheXeO5/UUalspTHr6qfh6fGf
- zbn4A
-X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
- fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250210064906.2181867-2-raag.jadav@intel.com>
 
-Q is exported from Makefile.include so it is not necessary to manually
-set it.
+Hi Raag,
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
----
- tools/arch/arm64/tools/Makefile           |  6 ------
- tools/bpf/Makefile                        |  6 ------
- tools/bpf/bpftool/Documentation/Makefile  |  6 ------
- tools/bpf/bpftool/Makefile                |  6 ------
- tools/bpf/resolve_btfids/Makefile         |  2 --
- tools/bpf/runqslower/Makefile             |  5 +----
- tools/lib/bpf/Makefile                    | 13 -------------
- tools/lib/perf/Makefile                   | 13 -------------
- tools/lib/thermal/Makefile                | 13 -------------
- tools/objtool/Makefile                    |  6 ------
- tools/testing/selftests/bpf/Makefile.docs |  6 ------
- tools/testing/selftests/hid/Makefile      |  2 --
- tools/thermal/lib/Makefile                | 13 -------------
- tools/tracing/latency/Makefile            |  6 ------
- tools/tracing/rtla/Makefile               |  6 ------
- tools/verification/rv/Makefile            |  6 ------
- 16 files changed, 1 insertion(+), 114 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/tools/arch/arm64/tools/Makefile b/tools/arch/arm64/tools/Makefile
-index 7b42feedf647190ad498de0937e8fb557e40f39c..de4f1b66ef0148b7bfd0fd16655ad854c7542240 100644
---- a/tools/arch/arm64/tools/Makefile
-+++ b/tools/arch/arm64/tools/Makefile
-@@ -13,12 +13,6 @@ AWK	?= awk
- MKDIR	?= mkdir
- RM	?= rm
- 
--ifeq ($(V),1)
--Q =
--else
--Q = @
--endif
--
- arm64_tools_dir = $(top_srcdir)/arch/arm64/tools
- arm64_sysreg_tbl = $(arm64_tools_dir)/sysreg
- arm64_gen_sysreg = $(arm64_tools_dir)/gen-sysreg.awk
-diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-index 243b79f2b451e52ca196f79dc46befd1b3dab458..062bbd6cd048e9e42f9bc8f9972ec96594f3dbd2 100644
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -27,12 +27,6 @@ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- FEATURE_USER = .bpf
- FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled
- FEATURE_DISPLAY = libbfd
-diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
-index 4315652678b9f2e27e48b7815f3b9ddc70a57165..bf843f328812e10dd65a73f355f74e6825ad95b9 100644
---- a/tools/bpf/bpftool/Documentation/Makefile
-+++ b/tools/bpf/bpftool/Documentation/Makefile
-@@ -5,12 +5,6 @@ INSTALL ?= install
- RM ?= rm -f
- RMDIR ?= rmdir --ignore-fail-on-non-empty
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- prefix ?= /usr/local
- mandir ?= $(prefix)/man
- man8dir = $(mandir)/man8
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index dd9f3ec842017f1dd24054bf3a0986d546811dc4..6ea4823b770cbbe7fd9eb7da79956cc1dae1f204 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -7,12 +7,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- BPF_DIR = $(srctree)/tools/lib/bpf
- 
- ifneq ($(OUTPUT),)
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 4b8079f294f65b284481e9a2bf6ff52594a4669a..afbddea3a39c64ffb2efc874a3637b6401791c5b 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -5,10 +5,8 @@ include ../../scripts/Makefile.arch
- srctree := $(abspath $(CURDIR)/../../../)
- 
- ifeq ($(V),1)
--  Q =
-   msg =
- else
--  Q = @
-   ifeq ($(silent),1)
-     msg =
-   else
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index c4f1f1735af659c2e660a322dbf6912d9a5724bc..e49203ebd48c18607a6136a9e805ccf16ee960d3 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -26,10 +26,7 @@ VMLINUX_BTF_PATHS := $(if $(O),$(O)/vmlinux)		\
- VMLINUX_BTF_PATH := $(or $(VMLINUX_BTF),$(firstword			       \
- 					  $(wildcard $(VMLINUX_BTF_PATHS))))
- 
--ifeq ($(V),1)
--Q =
--else
--Q = @
-+ifneq ($(V),1)
- MAKEFLAGS += --no-print-directory
- submake_extras := feature_display=0
- endif
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 857a5f7b413d6dc4cbe7bc4167496674dd08d875..168140f8e6461bd06db40e23d21a3fb8847ccbf4 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -53,13 +53,6 @@ include $(srctree)/tools/scripts/Makefile.include
- 
- # copy a bit from Linux kbuild
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
- INCLUDES = -I$(or $(OUTPUT),.) \
- 	   -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi \
- 	   -I$(srctree)/tools/arch/$(SRCARCH)/include
-@@ -96,12 +89,6 @@ override CFLAGS += $(CLANG_CROSS_FLAGS)
- # flags specific for shared library
- SHLIB_FLAGS := -DSHARED -fPIC
- 
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- # Disable command line variables (CFLAGS) override from top
- # level Makefile (perf), otherwise build Makefile will get
- # the same command line setup.
-diff --git a/tools/lib/perf/Makefile b/tools/lib/perf/Makefile
-index 3a9b2140aa048ea919c69ed2240bf0ea444dbf21..e9a7ac2c062e2b398c2f22af41907b62815ca07e 100644
---- a/tools/lib/perf/Makefile
-+++ b/tools/lib/perf/Makefile
-@@ -39,19 +39,6 @@ libdir = $(prefix)/$(libdir_relative)
- libdir_SQ = $(subst ','\'',$(libdir))
- libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- TEST_ARGS := $(if $(V),-v)
- 
- # Set compile option CFLAGS
-diff --git a/tools/lib/thermal/Makefile b/tools/lib/thermal/Makefile
-index 8890fd57b110ccc1a837d37624a5dead00f18656..a1f5e388644d31d36f973d3ddce48d036ee0a083 100644
---- a/tools/lib/thermal/Makefile
-+++ b/tools/lib/thermal/Makefile
-@@ -39,19 +39,6 @@ libdir = $(prefix)/$(libdir_relative)
- libdir_SQ = $(subst ','\'',$(libdir))
- libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- # Set compile option CFLAGS
- ifdef EXTRA_CFLAGS
-   CFLAGS := $(EXTRA_CFLAGS)
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index f56e2772753414ff8d3462bdebbc8e95e7667fcd..7a65948892e569cbe1d6e5a78db68bb35102cd26 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -46,12 +46,6 @@ HOST_OVERRIDES := CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)"
- AWK = awk
- MKDIR = mkdir
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- BUILD_ORC := n
- 
- ifeq ($(SRCARCH),x86)
-diff --git a/tools/testing/selftests/bpf/Makefile.docs b/tools/testing/selftests/bpf/Makefile.docs
-index eb6a4fea8c794d8354363ac8daa0baac3e3bd060..f7f9e7088bb38c7507282990fb62921ca7a636d2 100644
---- a/tools/testing/selftests/bpf/Makefile.docs
-+++ b/tools/testing/selftests/bpf/Makefile.docs
-@@ -7,12 +7,6 @@ INSTALL ?= install
- RM ?= rm -f
- RMDIR ?= rmdir --ignore-fail-on-non-empty
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- prefix ?= /usr/local
- mandir ?= $(prefix)/man
- man2dir = $(mandir)/man2
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index 0336353bd15f0d56dbed6c8fa02f53c234f949e1..2839d2612ce3a70f4332f8e886586e9cca6f03cb 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -43,10 +43,8 @@ TEST_GEN_PROGS = hid_bpf hidraw
- # $3 - target (assumed to be file); only file name will be emitted;
- # $4 - optional extra arg, emitted as-is, if provided.
- ifeq ($(V),1)
--Q =
- msg =
- else
--Q = @
- msg = @printf '  %-8s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
- MAKEFLAGS += --no-print-directory
- submake_extras := feature_display=0
-diff --git a/tools/thermal/lib/Makefile b/tools/thermal/lib/Makefile
-index f2552f73a64c7eb1be24c27b3a1414617391315b..056d212f25cf51cd8c02260fbe2ef28dda5e4acb 100644
---- a/tools/thermal/lib/Makefile
-+++ b/tools/thermal/lib/Makefile
-@@ -39,19 +39,6 @@ libdir = $(prefix)/$(libdir_relative)
- libdir_SQ = $(subst ','\'',$(libdir))
- libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- # Set compile option CFLAGS
- ifdef EXTRA_CFLAGS
-   CFLAGS := $(EXTRA_CFLAGS)
-diff --git a/tools/tracing/latency/Makefile b/tools/tracing/latency/Makefile
-index 6518b03e05c71b4fa84498f9628adf81a38c9f56..257a56b1899f23837de533353e9c2cebdb6035bd 100644
---- a/tools/tracing/latency/Makefile
-+++ b/tools/tracing/latency/Makefile
-@@ -37,12 +37,6 @@ FEATURE_TESTS	+= libtracefs
- FEATURE_DISPLAY	:= libtraceevent
- FEATURE_DISPLAY	+= libtracefs
- 
--ifeq ($(V),1)
--  Q 		=
--else
--  Q 		= @
--endif
--
- all: $(LATENCY-COLLECTOR)
- 
- include $(srctree)/tools/build/Makefile.include
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 8b5101457c70b48e9c720f1ba53293f1307c15a2..0b61208db604ec0754024c3007db6b2fe74a613c 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -37,12 +37,6 @@ FEATURE_DISPLAY	:= libtraceevent
- FEATURE_DISPLAY	+= libtracefs
- FEATURE_DISPLAY	+= libcpupower
- 
--ifeq ($(V),1)
--  Q		=
--else
--  Q		= @
--endif
--
- all: $(RTLA)
- 
- include $(srctree)/tools/build/Makefile.include
-diff --git a/tools/verification/rv/Makefile b/tools/verification/rv/Makefile
-index 411d62b3d8eb93abf85526ad33cafd783df86bc1..5b898360ba4818b12e8a16c27bd88c75d0076fb9 100644
---- a/tools/verification/rv/Makefile
-+++ b/tools/verification/rv/Makefile
-@@ -35,12 +35,6 @@ FEATURE_TESTS	+= libtracefs
- FEATURE_DISPLAY	:= libtraceevent
- FEATURE_DISPLAY	+= libtracefs
- 
--ifeq ($(V),1)
--  Q		=
--else
--  Q		= @
--endif
--
- all: $(RV)
- 
- include $(srctree)/tools/build/Makefile.include
+[auto build test WARNING on a1e062ab4a1f19bb0e94093ef90ab9a74f1f7744]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/driver-core-Split-devres-APIs-to-device-devres-h/20250210-145732
+base:   a1e062ab4a1f19bb0e94093ef90ab9a74f1f7744
+patch link:    https://lore.kernel.org/r/20250210064906.2181867-2-raag.jadav%40intel.com
+patch subject: [PATCH v4 01/20] driver core: Split devres APIs to device/devres.h
+config: powerpc-allyesconfig (https://download.01.org/0day-ci/archive/20250211/202502110256.ZtYROQTy-lkp@intel.com/config)
+compiler: clang version 16.0.6 (https://github.com/llvm/llvm-project 7cbf1a2591520c2491aa35339f227775f4d3adf6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250211/202502110256.ZtYROQTy-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502110256.ZtYROQTy-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/input/input.c:14:
+   In file included from include/linux/input/mt.h:11:
+   In file included from include/linux/input.h:19:
+   In file included from include/linux/device.h:31:
+   In file included from include/linux/device/devres.h:7:
+   In file included from include/linux/io.h:14:
+   In file included from arch/powerpc/include/asm/io.h:274:
+>> arch/powerpc/include/asm/eeh.h:304:45: warning: declaration of 'struct iommu_group' will not be visible outside of this function [-Wvisibility]
+   struct eeh_pe *eeh_iommu_group_to_pe(struct iommu_group *group);
+                                               ^
+   1 warning generated.
+--
+   In file included from drivers/input/touchscreen/mms114.c:10:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:31:
+   In file included from include/linux/device/devres.h:7:
+   In file included from include/linux/io.h:14:
+   In file included from arch/powerpc/include/asm/io.h:274:
+>> arch/powerpc/include/asm/eeh.h:304:45: warning: declaration of 'struct iommu_group' will not be visible outside of this function [-Wvisibility]
+   struct eeh_pe *eeh_iommu_group_to_pe(struct iommu_group *group);
+                                               ^
+   drivers/input/touchscreen/mms114.c:507:15: warning: cast to smaller integer type 'enum mms_type' from 'const void *' [-Wvoid-pointer-to-enum-cast]
+           data->type = (enum mms_type)match_data;
+                        ^~~~~~~~~~~~~~~~~~~~~~~~~
+   2 warnings generated.
+--
+   In file included from drivers/input/touchscreen/wdt87xx_i2c.c:12:
+   In file included from include/linux/i2c.h:13:
+   In file included from include/linux/acpi.h:14:
+   In file included from include/linux/device.h:31:
+   In file included from include/linux/device/devres.h:7:
+   In file included from include/linux/io.h:14:
+   In file included from arch/powerpc/include/asm/io.h:274:
+>> arch/powerpc/include/asm/eeh.h:304:45: warning: declaration of 'struct iommu_group' will not be visible outside of this function [-Wvisibility]
+   struct eeh_pe *eeh_iommu_group_to_pe(struct iommu_group *group);
+                                               ^
+   drivers/input/touchscreen/wdt87xx_i2c.c:1156:36: warning: unused variable 'wdt87xx_acpi_id' [-Wunused-const-variable]
+   static const struct acpi_device_id wdt87xx_acpi_id[] = {
+                                      ^
+   2 warnings generated.
+
+
+vim +304 arch/powerpc/include/asm/eeh.h
+
+55037d176107c3 arch/powerpc/include/asm/eeh.h Gavin Shan        2012-09-07  292  
+c44e4ccadaca58 arch/powerpc/include/asm/eeh.h Sam Bobroff       2019-08-16  293  void eeh_show_enabled(void);
+d125aedb404204 arch/powerpc/include/asm/eeh.h Oliver O'Halloran 2020-09-18  294  int __init eeh_init(struct eeh_ops *ops);
+3e938052fb7655 arch/powerpc/include/asm/eeh.h Gavin Shan        2014-09-30  295  int eeh_check_failure(const volatile void __iomem *token);
+f8f7d63fd96ead arch/powerpc/include/asm/eeh.h Gavin Shan        2012-09-07  296  int eeh_dev_check_failure(struct eeh_dev *edev);
+685a0bc00abcf1 arch/powerpc/include/asm/eeh.h Sam Bobroff       2019-08-16  297  void eeh_addr_cache_init(void);
+e86350f70a02e5 arch/powerpc/include/asm/eeh.h Oliver O'Halloran 2020-03-06  298  void eeh_probe_device(struct pci_dev *pdev);
+807a827d4e7455 arch/powerpc/include/asm/eeh.h Gavin Shan        2013-07-24  299  void eeh_remove_device(struct pci_dev *);
+188fdea69fa91d arch/powerpc/include/asm/eeh.h Sam Bobroff       2018-11-29  300  int eeh_unfreeze_pe(struct eeh_pe *pe);
+5cfb20b96f624e arch/powerpc/include/asm/eeh.h Gavin Shan        2014-09-30  301  int eeh_pe_reset_and_recover(struct eeh_pe *pe);
+212d16cdca2d0f arch/powerpc/include/asm/eeh.h Gavin Shan        2014-06-10  302  int eeh_dev_open(struct pci_dev *pdev);
+212d16cdca2d0f arch/powerpc/include/asm/eeh.h Gavin Shan        2014-06-10  303  void eeh_dev_release(struct pci_dev *pdev);
+212d16cdca2d0f arch/powerpc/include/asm/eeh.h Gavin Shan        2014-06-10 @304  struct eeh_pe *eeh_iommu_group_to_pe(struct iommu_group *group);
+212d16cdca2d0f arch/powerpc/include/asm/eeh.h Gavin Shan        2014-06-10  305  int eeh_pe_set_option(struct eeh_pe *pe, int option);
+212d16cdca2d0f arch/powerpc/include/asm/eeh.h Gavin Shan        2014-06-10  306  int eeh_pe_get_state(struct eeh_pe *pe);
+1ef52073fd25ea arch/powerpc/include/asm/eeh.h Sam Bobroff       2018-11-29  307  int eeh_pe_reset(struct eeh_pe *pe, int option, bool include_passed);
+212d16cdca2d0f arch/powerpc/include/asm/eeh.h Gavin Shan        2014-06-10  308  int eeh_pe_configure(struct eeh_pe *pe);
+ec33d36e5ab5d5 arch/powerpc/include/asm/eeh.h Gavin Shan        2015-03-26  309  int eeh_pe_inject_err(struct eeh_pe *pe, int type, int func,
+ec33d36e5ab5d5 arch/powerpc/include/asm/eeh.h Gavin Shan        2015-03-26  310  		      unsigned long addr, unsigned long mask);
+b0e2b828dfca64 arch/powerpc/include/asm/eeh.h Narayana Murty N  2024-09-09  311  int eeh_pe_inject_mmio_error(struct pci_dev *pdev);
+e2a296eeaa3444 include/asm-powerpc/eeh.h      Linas Vepstas     2005-11-03  312  
 
 -- 
-2.43.0
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
