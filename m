@@ -1,134 +1,153 @@
-Return-Path: <linux-pm+bounces-21650-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21651-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id A07EDA2E533
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 08:12:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA486A2E535
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 08:13:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D52C41884C43
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 07:12:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82272162C2F
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 07:13:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C87361ACEAB;
-	Mon, 10 Feb 2025 07:11:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cY6nSKwn"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6B4811A2622;
+	Mon, 10 Feb 2025 07:12:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29C69130E58;
-	Mon, 10 Feb 2025 07:11:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85B7E130E58
+	for <linux-pm@vger.kernel.org>; Mon, 10 Feb 2025 07:12:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739171519; cv=none; b=W5H4CUXkddXNdenS/Wqn2n7irjQ6nj8GkJ+Bg3ialRpqWMU+xYVYNozs+cMe5wvv7PBSFOp5ftDIrzH8yt9vR5W8ct1UF4BxbDQbMSEL4lPkJaOYO8cAviWGHGZFrSXpvIlkBMo9upVvfiDW6iAkOC3ggjjAtB3KgCMMVxugQRw=
+	t=1739171578; cv=none; b=nRLoI+84p4qcZ4yJRMLtxEkDYBxWLUvYL9wVSnNb00POZyDSdw/g2DYdFMDxaCSpTEJYTI7/D9vbB2IplL39RZrJuD8s+g3t1llTm8JVPg107MVaWO/Jhp259FtrF7Y7nt3NcrerwQvlhDc7CYkSAJJAuTYcV3bBl9GATKA7ZVo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739171519; c=relaxed/simple;
-	bh=H3GEoIqEgWbPMNxEhTrT/w4m5WQ5UgLYo290XO3njYE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TuU9bEi3/TItaI8uH2UQ/WktjC4nj48XSudo+7deu/iI/9d43c8fn993LslF/+2K0EHYei55ajRmumv7xfx4nbYhOyso7Ksmv/ASuB6Mht9EA5LD5EDLXMjDss5pVuu/ItKOjzDmQuHN/YwXFDwjFRkoWOl9k+1RVDClVXo+ATM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cY6nSKwn; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4bb0e7e6cceso235901137.1;
-        Sun, 09 Feb 2025 23:11:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739171517; x=1739776317; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=w9v7M60N7k/hqWmhBY/iyMoBnIb4DpUfGV8sZCADpqE=;
-        b=cY6nSKwnYoRfGTLq/4AzMbf6Y75LrhqKUK24p2SeXmNOgzhVj+uzOJSqNj/Isuc9ov
-         RU1wRgVpPEdk9STynOkrvIArZzcrPW6HyXfKP0NF3vuqsVGS39BuXNF0WNnE/wTzItAS
-         qJZA5icJlAIW3mNdF+cTwIrwCzaLaqs+IR1THzxXGTqycl1YTNsrORC6JuQWD5NFdnqX
-         Z9eg4GkmTGi/ArP3Np60/MKeMDXw/jN7V33MBl2rsUYsMgdkedZp1uuxceWpGi2PTykT
-         rE0XxRs5oV4Via1lxt1VjfqcFvPiY1LQrt9mYz1zBgeKpdiGl3JMLgvuCScuW2dlHkOm
-         fRHA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739171517; x=1739776317;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=w9v7M60N7k/hqWmhBY/iyMoBnIb4DpUfGV8sZCADpqE=;
-        b=uW3LEwddByb9YbHWNk/81BJEKTmYSavAw/Cb0y8jWpY/3TBgEmOAMyZ6sew27q2Zit
-         umyw8+X6UqjkpvUaAZMryJXqwD+ENaxYbFLpB7cqnRSvvjdfT4ykGX7cLokipWgFBydL
-         CEMcnXCc7+Ma3fw1KtIn0MShyl2mfQGcF7flx0EMxWRpWUA3kJpeiQRE2nZ92Auw23Ro
-         DbzUUXHvHWx9ekhvf5n6aTIL58MiF4iZz193jiQ21M6W00Yix61avu2xBJ7QTXyeoJgj
-         g7ghCuq5eR9O2QNY3PmLtvBgW1r7wTypIeMCrCqNyIuOSDh6MGDsn24wkHDoRGfBDVSb
-         EMkw==
-X-Forwarded-Encrypted: i=1; AJvYcCUeabvITNpYBYGBiWiTUmGC5XRdR+S96sUIhR5HukRhpoYt/N2Zu6mOor2v6DfI9LpBAEFuqqmFqNg=@vger.kernel.org, AJvYcCUwky0kPj6aEhj9+Si8StrFbJOgsdHCF/uACsdR39qFK/2OEpO+oxJ76/BG0mn0Rrvyd3rcD9QLsHRQU3uk@vger.kernel.org, AJvYcCV07yvPngT5zj9KUB4LVUXUnuoKIUFgIHziZdV4jm9ZphtiWK7pqwjqlKtljNeA9r1AQUiUnvFPKGfY@vger.kernel.org, AJvYcCWavdpPlP98FkhtKssZGKBL/4LLaAL7JWRxJPM9m/dHXlNNbmzNzVP5RFP5u+fxTX7vZXKP9lAMpUgffrY=@vger.kernel.org, AJvYcCXPfhmqEuov6RjQLQWtoOVV0clX0ZtfNC5f0PnEBIgKAtFLYCinZ7fYRV98h3qzQF2NNnA2nlMT/1m1/Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwEnX/K3ZWWE6UQHURnWS7qaDZhPI0jKl9GlnT9miIaALcQBnhq
-	DfT5OgSQ40TzsNfFyq9OtQwFN9E43RN0heG49TM7YV/TlE4jA7d3eX/Y4SAVOQq2fOaiePf4HWn
-	/qAou6vNlnbtSmGLu8Q/KTp6wkwQ=
-X-Gm-Gg: ASbGncsx57HvsOthy/SLBbdI/9rqIv+YL/HStsWPdF3WvAN3jFhSvSdBEWVsT78WSGm
-	04fn7jLJ/X4+/TAsjlwxh5Dpa9vJz1cQJFey1Pyaqf20a3sSjE5RgcvS0URbOKbEJHPGIbqk=
-X-Google-Smtp-Source: AGHT+IHL5q/jtji7+1Vd8bARh6p5DubUkwFmeTKo/+J2lD9ripmH8UXPhv8PlDl44fvPDSEJKmEQwMdR0u0m9ooKraQ=
-X-Received: by 2002:a05:6102:304a:b0:4bb:5d61:1288 with SMTP id
- ada2fe7eead31-4bb5d611a73mr2792124137.23.1739171516931; Sun, 09 Feb 2025
- 23:11:56 -0800 (PST)
+	s=arc-20240116; t=1739171578; c=relaxed/simple;
+	bh=+0YVdGEHTSADgE6t4aBp9DBgOd+FdZfGkbsaG3cBKAw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=VbUZkJuqeuQTKkDyeMTC8IgMqnNmLzWjtbK8UkHFqfiw8OAdbeyBdhqjbut7E59Ho5mZf1n02ZFC1cppNFUbQwmcLT66Sr5w8VRTzF7ESKMgO0qi34sX6+dfIjk5rdxap2QzoDreVRtZYL9V8XPZyFAOlE/Kd/0nPqFxUB2t+3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com; spf=fail smtp.mailfrom=gmail.com; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=gmail.com
+X-CSE-ConnectionGUID: jWKh9jXTTEOf19WLUWLaeQ==
+X-CSE-MsgGUID: hf3rPdMGTH6X7dvMQk5DxQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11340"; a="38972178"
+X-IronPort-AV: E=Sophos;i="6.13,273,1732608000"; 
+   d="scan'208";a="38972178"
+Received: from orviesa006.jf.intel.com ([10.64.159.146])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 09 Feb 2025 23:12:56 -0800
+X-CSE-ConnectionGUID: A9ewnuPSTLGdfTHtKR7xkA==
+X-CSE-MsgGUID: Ag5bdkihTGmBvp+UeT1OTg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,273,1732608000"; 
+   d="scan'208";a="112047392"
+Received: from powerlab.fi.intel.com (HELO powerlab.backendnet) ([10.237.71.25])
+  by orviesa006.jf.intel.com with ESMTP; 09 Feb 2025 23:12:55 -0800
+From: Artem Bityutskiy <dedekind1@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM Mailing List <linux-pm@vger.kernel.org>
+Subject: [PATCH] intel_idle: cleanup BYT/CHT auto demotion disable
+Date: Mon, 10 Feb 2025 09:12:53 +0200
+Message-ID: <20250210071253.2991030-1-dedekind1@gmail.com>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CABTCjFBx-QpCKFWs5MPCgLAjJWT6ygrvS_A0nJk2BBxmWAxF+Q@mail.gmail.com>
- <e67c0375-1024-483b-aabf-6a11339ab9af@linaro.org>
-In-Reply-To: <e67c0375-1024-483b-aabf-6a11339ab9af@linaro.org>
-From: Dzmitry Sankouski <dsankouski@gmail.com>
-Date: Mon, 10 Feb 2025 10:11:45 +0300
-X-Gm-Features: AWEUYZk6CIEra92QKBlWA-4eq8zR0aFX3oxFj_GszgMw82sXZR5leVvr7QeEdtw
-Message-ID: <CABTCjFBvYkEG0WYhCt6tP_cO8Ct82t0=UhwBefZEJrUiFc7vAw@mail.gmail.com>
-Subject: Re: Patchset status - 'Add support for Maxim Integrated MAX77705 PMIC'
-To: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Chanwoo Choi <cw00.choi@samsung.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Dmitry Torokhov <dmitry.torokhov@gmail.com>, 
-	Pavel Machek <pavel@ucw.cz>, Hans de Goede <hdegoede@redhat.com>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org, 
-	open list <linux-kernel@vger.kernel.org>, 
-	"open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS" <devicetree@vger.kernel.org>, linux-input@vger.kernel.org, 
-	linux-leds@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-=D0=B2=D1=81, 9 =D1=84=D0=B5=D0=B2=D1=80. 2025=E2=80=AF=D0=B3. =D0=B2 22:38=
-, Krzysztof Kozlowski
-<krzysztof.kozlowski@linaro.org>:
->
-> On 09/02/2025 15:13, Dzmitry Sankouski wrote:
-> > For the patchset I sent 2 weeks ago, [patchwork][1] shows status
-> > 'Handled Elsewhere, archived'. Is anything blocking it?
-> >
-> > [1]: https://patchwork.kernel.org/project/linux-pm/list/?series=3D92784=
-8&archive=3Dboth&state=3D*
->
-> That's PM patchwork, not necessarily power supply. But anyway, what does
-> the cover letter say? Who do you expect to merge it? Above link does not
-> provide cover letter, unfortunately.
->
+From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
-I didn't found anything related to power supply in the list of mail lists a=
-t
-https://subspace.kernel.org/vger.kernel.org.html.
+Bay Trail (BYT) and Cherry Trail (CHT) platforms have a very specific way
+of disabling auto-demotion via specific MSR bits. Clean up the code so that
+BYT/CHT-specifics do not show up in the common 'struct idle_cpu' data
+structure.
 
-However I found my series in linux-input with New status.
+Remove the 'byt_auto_demotion_disable_flag' flag from 'struct idle_cpu',
+because a better coding pattern is to avoid very case-specific fields like
+'bool byt_auto_demotion_disable_flag' in a common data structure, which is
+used for all platforms, not only BYT/CHT. The code is just more readable
+when common data structures contain only commonly used fields.
 
-Here is my cover letter:
-https://lore.kernel.org/all/20250123-starqltechn_integration_upstream-v17-0=
--8b06685b6612@gmail.com/
+Instead, match BYT/CHT in the 'intel_idle_init_cstates_icpu()' function,
+and introduce a small helper to take care of BYT/CHT auto-demotion. This
+is consistent with how platform-specific things are done for other
+platforms.
 
-I guess I would expect a person from the MAINTAINERS list to merge it?  In =
-that
-case it would be Chanwoo Choi <cw00.choi@samsung.com> and
-Krzysztof Kozlowski <krzk@kernel.org> from
-MAXIM PMIC AND MUIC DRIVERS FOR EXYNOS BASED BOARDS entry.
+No intended functional changes, compile-tested only.
 
---=20
+Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+---
+ drivers/idle/intel_idle.c | 21 +++++++++++++--------
+ 1 file changed, 13 insertions(+), 8 deletions(-)
 
-Best regards,
-Dzmitry
+diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+index 118fe1d37c22..324814dc34fa 100644
+--- a/drivers/idle/intel_idle.c
++++ b/drivers/idle/intel_idle.c
+@@ -89,7 +89,6 @@ struct idle_cpu {
+ 	 * Indicate which enable bits to clear here.
+ 	 */
+ 	unsigned long auto_demotion_disable_flags;
+-	bool byt_auto_demotion_disable_flag;
+ 	bool disable_promotion_to_c1e;
+ 	bool use_acpi;
+ };
+@@ -1463,13 +1462,11 @@ static const struct idle_cpu idle_cpu_snx __initconst = {
+ static const struct idle_cpu idle_cpu_byt __initconst = {
+ 	.state_table = byt_cstates,
+ 	.disable_promotion_to_c1e = true,
+-	.byt_auto_demotion_disable_flag = true,
+ };
+ 
+ static const struct idle_cpu idle_cpu_cht __initconst = {
+ 	.state_table = cht_cstates,
+ 	.disable_promotion_to_c1e = true,
+-	.byt_auto_demotion_disable_flag = true,
+ };
+ 
+ static const struct idle_cpu idle_cpu_ivb __initconst = {
+@@ -2055,6 +2052,15 @@ static void __init spr_idle_state_table_update(void)
+ 	}
+ }
+ 
++/**
++ * byt_cht_auto_demotion_disable - Disable Bay/Cherry Trail auto-demotion.
++ */
++static void __init byt_cht_auto_demotion_disable(void)
++{
++	wrmsrl(MSR_CC6_DEMOTION_POLICY_CONFIG, 0);
++	wrmsrl(MSR_MC6_DEMOTION_POLICY_CONFIG, 0);
++}
++
+ static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
+ {
+ 	unsigned int mwait_cstate = (MWAIT_HINT2CSTATE(mwait_hint) + 1) &
+@@ -2136,6 +2142,10 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 	case INTEL_ATOM_GRACEMONT:
+ 		adl_idle_state_table_update();
+ 		break;
++	case INTEL_ATOM_SILVERMONT:
++	case INTEL_ATOM_AIRMONT:
++		byt_cht_auto_demotion_disable();
++		break;
+ 	}
+ 
+ 	for (cstate = 0; cstate < CPUIDLE_STATE_MAX; ++cstate) {
+@@ -2178,11 +2188,6 @@ static void __init intel_idle_init_cstates_icpu(struct cpuidle_driver *drv)
+ 
+ 		drv->state_count++;
+ 	}
+-
+-	if (icpu->byt_auto_demotion_disable_flag) {
+-		wrmsrl(MSR_CC6_DEMOTION_POLICY_CONFIG, 0);
+-		wrmsrl(MSR_MC6_DEMOTION_POLICY_CONFIG, 0);
+-	}
+ }
+ 
+ /**
+-- 
+2.47.1
+
 
