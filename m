@@ -1,129 +1,184 @@
-Return-Path: <linux-pm+bounces-21750-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21751-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64B7CA2FBD3
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 22:17:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C7D66A2FBEE
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 22:24:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 328AD3A447A
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 21:17:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6DF41165285
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Feb 2025 21:24:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 88EC525A2A7;
-	Mon, 10 Feb 2025 21:14:23 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D8BB1C07F6;
+	Mon, 10 Feb 2025 21:24:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="dDwEnlh/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="t9l0mpnQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE0A5256C6B;
-	Mon, 10 Feb 2025 21:14:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 44021189B8C;
+	Mon, 10 Feb 2025 21:24:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739222063; cv=none; b=eIXtepFhgDukadQ+xM6ohNcJA8ymlDZqPXNvNSldIDVBMLtcRg0pMnqeZkPQPeTgDHaK6UYht6IaXbJXayTPZA8k7AU09FeXW1OWGEFakp31AQFtg5OjEspuef79gxZg5RgbURXJ9Ko0DTw/qOo2qvw7pZAQXyhRwRd30xe19+0=
+	t=1739222684; cv=none; b=qdFmlZzujExMwxUvmqwQISyUG9lUxUI3uNqefZ1WBz7ng6kk/y66Ab9JhDX84aUkyo0Vxk4UlBdSHbEyCz49a8YIQ7kOKxJ12JKQTkaYXBMDIscvFVJgOf+jUG5xT8EmWdO/gYXP7OAtpVKL2LaD/PaoVt8omD0k04bcHRyWnk4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739222063; c=relaxed/simple;
-	bh=unETEqL21PPGjcJ+5ThZ5Xx9TlKma2kepF5jLOEMdPY=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=OJfWwL6xPeo/mHrkSnEdZqD5WbYnfWx5OPXdN+Z0rpgfzDeNkLKHROn/eAAHvyHNsZBTjbTgEoNe7SPgUzZZQ/4hcmxZaBFPeiYIT8OdjcGcGlz31lszBO7lS51xOyMAO/B3I3IYU/N/aiiU/JPNBRt+3zf7kFEHYBQKc0A/TMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=dDwEnlh/; arc=none smtp.client-ip=68.232.154.123
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1739222061; x=1770758061;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=unETEqL21PPGjcJ+5ThZ5Xx9TlKma2kepF5jLOEMdPY=;
-  b=dDwEnlh//fm9WkQOm9Th9vpn88QnBCfcrvol9jw9fsbMrbCqnd0tjMwJ
-   Jm6WT03DbahE4haHRNbLeezHg1wrEDBc8PJugDKOTKiiROS5nX+5U6sZu
-   fiy07Eza1ZIthNRpHIFU+yJ59xKuEn0+LQOoG58AeIU+0qVdE0cXrtnd3
-   n300gu5mVDkzttFblyJ7UXdpLo8tx43CQRSiVNbQ8VjcdvFP4y951fN+9
-   IghVvNLknX++Ay42d0Nr5rp5SMOsC1X8zXABt6IJlzdQkxK4Km+WaX/H6
-   OdJFPSFsCCT9p0i2hUaQaeLsxMxwynmfjWpIkdKcVTrBg/cQH5UKqUtZB
-   w==;
-X-CSE-ConnectionGUID: AYqW9AG9RbOJ2Xf8Pt97Yw==
-X-CSE-MsgGUID: 0agEuR3bS46pa3Vj3mw/1g==
-X-IronPort-AV: E=Sophos;i="6.13,275,1732604400"; 
-   d="scan'208";a="205027996"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa6.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 10 Feb 2025 14:14:07 -0700
-Received: from chn-vm-ex03.mchp-main.com (10.10.85.151) by
- chn-vm-ex02.mchp-main.com (10.10.85.144) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Mon, 10 Feb 2025 14:13:47 -0700
-Received: from ryan-Precision-3630-Tower.microchip.com (10.10.85.11) by
- chn-vm-ex03.mchp-main.com (10.10.85.151) with Microsoft SMTP Server id
- 15.1.2507.35 via Frontend Transport; Mon, 10 Feb 2025 14:13:47 -0700
-From: <Ryan.Wanner@microchip.com>
-To: <lee@kernel.org>, <robh@kernel.org>, <krzk+dt@kernel.org>,
-	<conor+dt@kernel.org>, <claudiu.beznea@tuxon.dev>, <sre@kernel.org>,
-	<nicolas.ferre@microchip.com>, <alexandre.belloni@bootlin.com>,
-	<p.zabel@pengutronix.de>
-CC: <linux@armlinux.org.uk>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>, "Ryan
- Wanner" <Ryan.Wanner@microchip.com>
-Subject: [PATCH v2 15/15] ARM: dts: microchip: add shutdown controller and rtt timer
-Date: Mon, 10 Feb 2025 14:13:15 -0700
-Message-ID: <709f5268da63c123cc4eee9e47875324df81c454.1739221064.git.Ryan.Wanner@microchip.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <cover.1739221064.git.Ryan.Wanner@microchip.com>
-References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
+	s=arc-20240116; t=1739222684; c=relaxed/simple;
+	bh=IiZI6Y+jSHKNVuJcmPYi5fkyq5b2zOSr7oCwF4V/zF8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=IG3vT2kCCu4z1taZQ9QsU3PUyKR4jgbHnYlqb+FesUtDRwlC6OQoZznKk+icAYPnblm5NWgxeHvnKsZLksi64X1Ki2CKzti2qDco/d4bKLp2Um0/UqCnItxf+1SvemDdgwIShK97+nvEURuFhIUpJ+x3lashU+nHrCDNO/XgS6s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=t9l0mpnQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 131D0C4CED1;
+	Mon, 10 Feb 2025 21:24:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739222683;
+	bh=IiZI6Y+jSHKNVuJcmPYi5fkyq5b2zOSr7oCwF4V/zF8=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=t9l0mpnQDIGjED4MiXFbdwmG6tEhvX5Jm6TUzQZ5rUg8c5JtM+25z/YPfVt7r/ASq
+	 wB8DyPexaTzgoCPG5xg8rNL2ltuPvVbAcFmoKl+JI/mYpSVUUnu2e4xh9GC9KF2SFI
+	 Qnc0vcHSPaQDbxc8bBTDzuEtJryBQQvsgIxGcqUkD1GdCPDyJvQtKaAl96KjSfstGD
+	 SzzhKfCwqeY/XYpq56Klpsb3Vbuitk2sblF4Y4ti0CEaLajv9OKY3QQMBIYu+eOK0b
+	 REExXNT8ItbKWsfCNUWy2KVmbBz6w73c3D5VZtz4Zqs3x5qEkYBcb689LTPSclUH9k
+	 Y0uX5hhO94tgg==
+Message-ID: <c8527274-fd84-4745-b996-d1c66694aba4@kernel.org>
+Date: Mon, 10 Feb 2025 15:24:42 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/4] ACPI: battery: Save and report battery capacity over
+ suspend
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Pavel Machek <pavel@ucw.cz>, "open list:ACPI" <linux-acpi@vger.kernel.org>,
+ "open list:HIBERNATION (aka Software Suspend, aka swsusp)"
+ <linux-pm@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
+References: <20250208162210.3929473-1-superm1@kernel.org>
+ <20250208162210.3929473-3-superm1@kernel.org>
+ <bzltxadthnef5c4xaidfcjuq7tt2h23znn76povptoxbb2iax6@xvuzfqbtomzb>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <bzltxadthnef5c4xaidfcjuq7tt2h23znn76povptoxbb2iax6@xvuzfqbtomzb>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-From: Ryan Wanner <Ryan.Wanner@microchip.com>
+On 2/10/2025 09:23, Sebastian Reichel wrote:
+> Hi,
+> 
+> On Sat, Feb 08, 2025 at 10:22:08AM -0600, Mario Limonciello wrote:
+>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>
+>> To find out if a device is malfunctioning over suspend it's often
+>> interesting to know how much battery was lost.
+>>
+>> At the start of the suspend cycle cache the amount of battery.
+>> During resume, read the battery level again and if the battery
+>> has decreased report the difference to the suspend stats using
+>> pm_report_sleep_energy()
+>>
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+> 
+> This code assumes, that there is only a single battery, but there
+> can be more than one battery supplying the system. For example
+> Thinkpads used to have an internal battery and a user swappable
+> one.
+> 
+> Also it seems in almost all cases debugging this from userspace
+> by dropping a script in /usr/lib/systemd/system-sleep is good
+> enough, so I wonder if extending the kernel ABI makes sense at
+> all.
+> 
 
-Add shutdown controller and rtt timer to support shutdown and wake up.
+Thanks for looking.  I think it could be extended to add all the 
+batteries up and collectively look at how much each went down.
 
-Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
----
- .../boot/dts/microchip/at91-sama7d65_curiosity.dts | 14 ++++++++++++++
- 1 file changed, 14 insertions(+)
+But that's a good point it's pretty easy to do the same thing from 
+userspace.
 
-diff --git a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-index 0f86360fb733a..d1d0b06fbfc43 100644
---- a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-+++ b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-@@ -77,6 +77,11 @@ pinctrl_uart6_default: uart6-default {
- 	};
- };
- 
-+&rtt {
-+	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-+	status = "disabled";
-+};
-+
- &sdmmc1 {
- 	bus-width = <4>;
- 	pinctrl-names = "default";
-@@ -84,6 +89,15 @@ &sdmmc1 {
- 	status = "okay";
- };
- 
-+&shdwc {
-+	debounce-delay-us = <976>;
-+	status = "okay";
-+
-+	input@0 {
-+		reg = <0>;
-+	};
-+};
-+
- &slow_xtal {
- 	clock-frequency = <32768>;
- };
--- 
-2.43.0
+> Greetings,
+> 
+> -- Sebastian
+> 
+>>   drivers/acpi/battery.c | 30 ++++++++++++++++++++++++++----
+>>   1 file changed, 26 insertions(+), 4 deletions(-)
+>>
+>> diff --git a/drivers/acpi/battery.c b/drivers/acpi/battery.c
+>> index 6760330a8af55..f21bfd02a26d1 100644
+>> --- a/drivers/acpi/battery.c
+>> +++ b/drivers/acpi/battery.c
+>> @@ -124,6 +124,7 @@ struct acpi_battery {
+>>   	char oem_info[MAX_STRING_LENGTH];
+>>   	int state;
+>>   	int power_unit;
+>> +	int capacity_suspend;
+>>   	unsigned long flags;
+>>   };
+>>   
+>> @@ -1011,9 +1012,6 @@ static int acpi_battery_update(struct acpi_battery *battery, bool resume)
+>>   		return 0;
+>>   	}
+>>   
+>> -	if (resume)
+>> -		return 0;
+>> -
+>>   	if (!battery->update_time) {
+>>   		result = acpi_battery_get_info(battery);
+>>   		if (result)
+>> @@ -1032,6 +1030,14 @@ static int acpi_battery_update(struct acpi_battery *battery, bool resume)
+>>   			return result;
+>>   	}
+>>   
+>> +	if (resume) {
+>> +		if (battery->capacity_suspend > battery->capacity_now)
+>> +			pm_report_sleep_energy(battery->capacity_suspend - battery->capacity_now);
+>> +		else
+>> +			pm_report_sleep_energy(0);
+>> +		return 0;
+>> +	}
+>> +
+>>   	/*
+>>   	 * Wakeup the system if battery is critical low
+>>   	 * or lower than the alarm level
+>> @@ -1285,6 +1291,22 @@ static void acpi_battery_remove(struct acpi_device *device)
+>>   }
+>>   
+>>   /* this is needed to learn about changes made in suspended state */
+>> +static int acpi_battery_suspend(struct device *dev)
+>> +{
+>> +	struct acpi_battery *battery;
+>> +
+>> +	if (!dev)
+>> +		return -EINVAL;
+>> +
+>> +	battery = acpi_driver_data(to_acpi_device(dev));
+>> +	if (!battery)
+>> +		return -EINVAL;
+>> +
+>> +	battery->capacity_suspend = battery->capacity_now;
+>> +
+>> +	return 0;
+>> +}
+>> +
+>>   static int acpi_battery_resume(struct device *dev)
+>>   {
+>>   	struct acpi_battery *battery;
+>> @@ -1301,7 +1323,7 @@ static int acpi_battery_resume(struct device *dev)
+>>   	return 0;
+>>   }
+>>   
+>> -static DEFINE_SIMPLE_DEV_PM_OPS(acpi_battery_pm, NULL, acpi_battery_resume);
+>> +static DEFINE_SIMPLE_DEV_PM_OPS(acpi_battery_pm, acpi_battery_suspend, acpi_battery_resume);
+>>   
+>>   static struct acpi_driver acpi_battery_driver = {
+>>   	.name = "battery",
+>> -- 
+>> 2.43.0
+>>
+>>
 
 
