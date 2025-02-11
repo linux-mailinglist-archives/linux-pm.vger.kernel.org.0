@@ -1,208 +1,163 @@
-Return-Path: <linux-pm+bounces-21898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21908-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02ABDA31797
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:26:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 508E1A317EA
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:42:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D5EB27A2FA9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:25:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2604D3A6798
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:42:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC1382627F6;
-	Tue, 11 Feb 2025 21:25:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBB512676CE;
+	Tue, 11 Feb 2025 21:37:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="KAmVYPl3"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KGN5w9gJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590B32627E3;
-	Tue, 11 Feb 2025 21:25:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4A11D263F57;
+	Tue, 11 Feb 2025 21:37:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739309154; cv=none; b=pw8QZobIflxXVpeznX4Azn3K3CE8+aMoQBr1oh8sMJSq9lIosvXuW1sUzlFrk9JROHMnDayuqrAxLqmLq0r3QTqMeKqSUyCdrVGfQ49pRCRYeOH6u0K36LuDGPKRlJviO4INP6RyJkQxU1sNUNCzdZk5JlgnvMz+PiG78kKWvbo=
+	t=1739309860; cv=none; b=HNfMvWccp7j9N0a72SVHTE8gMIku5dS56QJKSszp1exrL4Ne1IX93AsGg87Gz0CK19r8rrho2t+E8tLnd5V6mSuAaL5RlHdcDxAYyHcCgWEcYsgmdxn3ylvoqcPm9CJ9iuh2vqZ8PKMAUHBwEgMaCCjwe99b5rwONexTFcdFeU8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739309154; c=relaxed/simple;
-	bh=cRfV58Kh8+/WrvCJJWhBR/V0oGVgKQc3FHgkhJO9CEE=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rbd4k5MLGgZfCl3LiR2LOfxbVQvHexpkRo/J9XapRjG0+Q4mdsK1ydHJegHx3mysPJA74hdUrzdnJZ8666LAmoSvGh3ZUMz34UQFebQTI002Z2qhD0B0HPjI0B+Dw6of1/+esGJbX2hq0SCqQGRSxeBUfFH2zutIUooNBLoHj/8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=KAmVYPl3; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 31469b2175be8e51; Tue, 11 Feb 2025 22:25:43 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 3E994770175;
-	Tue, 11 Feb 2025 22:25:43 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1739309143;
-	bh=cRfV58Kh8+/WrvCJJWhBR/V0oGVgKQc3FHgkhJO9CEE=;
-	h=From:Subject:Date;
-	b=KAmVYPl3THXVXJPDHj7GSdRgIqGt6gy1+wrnDKKSB0vpQEpPX1ZBWZB7PJTugLHg1
-	 Axni2/ZNjmuWWPcWjtPcKgLb7Tqalcj8+pp7WsPsudQ0YTkHgiNeV9qMDelXV1BI+i
-	 NlYXkH9KBVtDCgj8yAVpw1hYxA93kAxNqyOCI72eFVKG/KxsqNr+B9RQLUzv0/I++S
-	 F4gimHNrsZ7+9ETrZrxmyM2vV75SLCuTxD5g2SKcmFKqw4OUZZhOfG1aWaVEQGVRtf
-	 ccbeKgni+wMor+wWQ0mpydz7ru/eRS6NYp2PSOJqPOVUl3hYFlzxzFKiAJL2gR1b9A
-	 6u19KVx+2i0uQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
- Johan Hovold <johan@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH v1 10/10] PM: runtime: Discover the lack of runtime PM support
-Date: Tue, 11 Feb 2025 22:25:29 +0100
-Message-ID: <2511990.jE0xQCEvom@rjwysocki.net>
-In-Reply-To: <2314745.iZASKD2KPV@rjwysocki.net>
-References: <2314745.iZASKD2KPV@rjwysocki.net>
+	s=arc-20240116; t=1739309860; c=relaxed/simple;
+	bh=XKbAUeYtUw75h5ZAra0XFiv2T2PGq52hQCmLhO8mPb4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WoMmwHUAPbrjSVTXYlCNTpK7y74UAq8r7m/ZLQTjAhvXBE8SEPGlJvDr6RNMhRHv5YnxcPFFeneJmApRabVbrSFt0PTpt8px+CMqsLW7xAa3m6mNB2rvbaBa51Ev4Ut2iJidQSe6iTHiuA+UOMbI+wc+2DfKrwkOhhkZ5EFv1eo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KGN5w9gJ; arc=none smtp.client-ip=209.85.216.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2fa1c3ac70cso1334712a91.0;
+        Tue, 11 Feb 2025 13:37:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739309858; x=1739914658; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=akzFHrt13Sf+zIMfS9Ii+SJ+PVxb1KqnXMwjp26RJ/w=;
+        b=KGN5w9gJ31IcwtQzfHOx030GPXZeZFoVMpzZT8BxjJ4sGNaFaTksTSEve0fa3DGHKg
+         bjgqwyxp0TsPOS+6+woLzQI7p99mJZFYXfLHtMs/U671izQgRvva6X+8dNxmc4nzc5ho
+         Qtm/g6xQh4hy3PAZ6NwZjI4uRtTOX/dVV2/stG0jWjYKoolYNVbZh2sxfupwOVzRwSad
+         kGxHeYDl0H4hckmsHLIWgz/kv6PJFtfhmE+UfIFC6MYiC+ltgwkbHAHOEERmO/dnJDHU
+         8vXNUGQLkFnvmHFkN+1L/oP7tpccR3t+u8J00W20mb171Tpgu8lOZWqTo1GqzGpbQ1/v
+         539w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739309858; x=1739914658;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=akzFHrt13Sf+zIMfS9Ii+SJ+PVxb1KqnXMwjp26RJ/w=;
+        b=vvYPMUDlDVyITis3v22ap86OUu4HfRetc4utT8iWyV1Ub/qsI3KEhQz1qswl1vf96Y
+         1BGe1uy4bN1LRyTxplkQjIQXuCHzd4cnbVWZeS/h1lTA0Ko/Dxvl4s5qtC468jR9f6FT
+         gAMvul21ah1dwepRmQKHh2Gl7+FmamyamdC04ZfiFxg6YxPW4wrxp6ZsjOVy1NFSbNu4
+         /QpLbXJNjJnaDyl9p0oFsCVrsx+SyrP7LEy5VxEcvpsXbzkLq6ddydO1RiLyBW5x/tsi
+         Ne3q/H2QSJv6OcGuIU1virak4/FWWXGYHWDlmizFL/DgfpmkrEXRYoqByOnRvhyyw+Ht
+         5VAA==
+X-Forwarded-Encrypted: i=1; AJvYcCVr3/uQe8WVfyzRGxt8FE7kK1KDhPB/edM67iluA8TLOKMxT9+dmCaufypE5B1Ep4PSmLeXg/AxLIJHW4Q=@vger.kernel.org, AJvYcCWRVQdeR1o71FmLixNioz08j8lw9hn6sQ/yDXfWiype6ls/VdJWOMEdrq8WPZi1Nv9CfIwdeti5vL8=@vger.kernel.org, AJvYcCXHQd1lrbumu6ZmjtK2Lr1kNEJnlLPFJylaC7PY7DQ08mm5TQ36DPUTNFtq2+JXatNb00PqFWP74/1dKduJRIw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YwyqTbp0vYlXyKrobY6WT/CygDASaryoTOIkh3vjYB9ftHemBpM
+	2IIEcZSofHWqQU6lsYT4VRToCLbA3P1fcXKMhoev0eLcsqva14VMnjOJRMd9GeD33D/DNSCAeoQ
+	GNa/K/IpwCUAYcZSm1mUVG8ewncY=
+X-Gm-Gg: ASbGncuxI+ZqZP3J9jCwsR0ektC/u3m4Li7keZklcEjV0irtvPUw0GFMCh77IuVj0FX
+	5Y890sWFNdqZ1w+t2S1qAYGZnY8KH4KjmZQ24yw+0xoL/lWNjJXvPrSrXqmyyR9bkNJ70k1s+
+X-Google-Smtp-Source: AGHT+IGaXS1EDa6yC/VYlIlgcCMZhbiBlWn7y6h9gigI5MM1OjNIt2C44T9+/GZ4SCA6mmKeQDKqx9OcBnX/akiH2jE=
+X-Received: by 2002:a17:90b:3845:b0:2ee:948b:72d3 with SMTP id
+ 98e67ed59e1d1-2fbf5bb8de3mr405275a91.1.1739309858447; Tue, 11 Feb 2025
+ 13:37:38 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <cover.1738832118.git.viresh.kumar@linaro.org> <db0166341ce824c157d0c58c240b3efc6aec6f6e.1738832118.git.viresh.kumar@linaro.org>
+ <Z6qTelPSqpFk439l@thinkpad> <20250211042908.nyftiw7gtxosfjwc@vireshk-i7> <Z6t51xodSV21ER4M@thinkpad>
+In-Reply-To: <Z6t51xodSV21ER4M@thinkpad>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Tue, 11 Feb 2025 22:37:26 +0100
+X-Gm-Features: AWEUYZngWJ1M-awjFN_5Da2lJECVQzCBMpv2S6V7HN11_MwJfmvJvmjOQij9-yk
+Message-ID: <CANiq72=3MR9F9ur-aQYP4P81RBreAr=UiGg5iaSuFjjd5Q4Y7Q@mail.gmail.com>
+Subject: Re: [PATCH V8 04/14] rust: Add cpumask helpers
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor <alex.gaynor@gmail.com>, 
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>, 
+	=?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, 
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, 
+	=?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>, 
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+	Jason Gunthorpe <jgg@nvidia.com>, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegvddtkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehjohhhrghnsehkvghrnhgvlhdrohhrghdprhgtphh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Tue, Feb 11, 2025 at 5:24=E2=80=AFPM Yury Norov <yury.norov@gmail.com> w=
+rote:
+>
+> No, not Okay.
+>
+> To begin with, this is the 8th version of the same patch, but you
+> only now bothered to CC someone who is listed in MAINTAINERS. This is
+> not how the community works.
 
-Previous changes have updated the PM core to special-case devices that
-have never had runtime PM enabled in some places, but what if a device
-had had runtime PM enabled at one point, but then it was permanently
-disabled?  Arguably, there is not much of a difference between such
-devices and the devices that have never had runtime PM enabled as far
-as system-wide suspend and resume is concerned, so they should be
-handled in the same way.
+Yeah, that is not good.
 
-For this reason, add a mechanism for discovering "lost" runtime PM
-support in devices with the help of the power.last_status field used
-for saving the last runtime PM status of the device known at the time
-when runtime PM was disabled for it.
+For what it is worth, we try to make this very clear:
 
-That field is set to RPM_INVALID initially and whenever runtime PM is
-enabled for a device (that is, when its power.disable_depth counter
-drops down to zero) and it is set to the current runtime PM status of
-the device when runtime PM is disabled (that is, the power.disable_depth
-counter becomes nonzero).  Therefore, if power.last_status is equal to
-RPM_INVALID for a device with runtime PM disabled, it means that
-runtime PM has never been enabled for that device.
+    https://rust-for-linux.com/contributing#submitting-new-abstractions-and=
+-modules
 
-The PM core will now change the power.last_status value to RPM_UNKNOWN
-for devices having runtime PM disabled and power.last_status different
-from RPM_INVALID during the "prepare" phase of system suspend.  Then,
-__pm_runtime_disable() called subsequently on the device will set
-power.last_status to RPM_INVALID unless it changes from RPM_UNKNOWN
-to some other value in the meantime which requires enabling runtime PM
-for the device.  When power.last_status becomes RPM_INVALID and runtime
-PM is still disabled, the device will be handled as a "no runtime PM
-support" one from that point on until runtime PM is enabled for it
-again.
+i.e. that maintainers need to be Cc'd and contacted as soon as
+possible (possibly even before writing the code).
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/main.c    |    6 ++++++
- drivers/base/power/runtime.c |   25 +++++++++++++++++++++++++
- include/linux/pm.h           |    1 +
- include/linux/pm_runtime.h   |    2 ++
- 4 files changed, 34 insertions(+)
+> You also made it a patch bomb that touches multiple critical and very
+> sensitive subsystems. You link them to an experimental and unstable
+> project, and do it in a way that makes it really easy to slip through
+> maintainers' attention.
 
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1817,6 +1817,12 @@
- 	 * it again during the complete phase.
- 	 */
- 	pm_runtime_get_noresume(dev);
-+	/*
-+	 * Devices that have had runtime PM disabled recently may need to be
-+	 * handled as though they have never supported it, so arrange for
-+	 * detecting that situation.
-+	 */
-+	pm_runtime_kick_last_status(dev);
- 
- 	if (dev->power.syscore)
- 		return 0;
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1480,6 +1480,9 @@
- 
- 	if (dev->power.disable_depth > 0) {
- 		dev->power.disable_depth++;
-+		if (dev->power.last_status == RPM_UNKNOWN)
-+			dev->power.last_status = RPM_INVALID;
-+
- 		goto out;
- 	}
- 
-@@ -1568,6 +1571,28 @@
- EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
- 
- /**
-+ * pm_runtime_kick_last_status - Start runtime PM support verification.
-+ * @dev: Target device.
-+ *
-+ * If runtime PM is currently disabled for @dev, but it has been enabled at one
-+ * point, change power.last_status for it to RPM_UNKNOWN, and if it is still
-+ * RPM_UNKNOWN when __pm_runtime_disabled() is called for @dev next time, it
-+ * will be changed to RPM_INVALID indicating no runtime PM support going
-+ * forward until pm_runtime_enable() is called for @dev.
-+ *
-+ * This function is used by the PM core.
-+ */
-+void pm_runtime_kick_last_status(struct device *dev)
-+{
-+	spin_lock_irq(&dev->power.lock);
-+
-+	if (dev->power.disable_depth && dev->power.last_status != RPM_INVALID)
-+		dev->power.last_status = RPM_UNKNOWN;
-+
-+	spin_unlock_irq(&dev->power.lock);
-+}
-+
-+/**
-  * pm_runtime_forbid - Block runtime PM of a device.
-  * @dev: Device to handle.
-  *
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -597,6 +597,7 @@
- 	RPM_RESUMING,
- 	RPM_SUSPENDED,
- 	RPM_SUSPENDING,
-+	RPM_UNKNOWN,
- };
- 
- /*
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -80,6 +80,7 @@
- extern int pm_runtime_barrier(struct device *dev);
- extern void pm_runtime_enable(struct device *dev);
- extern void __pm_runtime_disable(struct device *dev, bool check_resume);
-+extern void pm_runtime_kick_last_status(struct device *dev);
- extern void pm_runtime_allow(struct device *dev);
- extern void pm_runtime_forbid(struct device *dev);
- extern void pm_runtime_no_callbacks(struct device *dev);
-@@ -288,6 +289,7 @@
- static inline int pm_runtime_barrier(struct device *dev) { return 0; }
- static inline void pm_runtime_enable(struct device *dev) {}
- static inline void __pm_runtime_disable(struct device *dev, bool c) {}
-+static inline void pm_runtime_kick_last_status(struct device *dev) {}
- static inline void pm_runtime_allow(struct device *dev) {}
- static inline void pm_runtime_forbid(struct device *dev) {}
- 
+Not sure what you mean by "unstable project", but I agree that the
+patch series, unless Viresh is the maintainer of the C side of
+everything added, it should be discussed and maintenance discussed
+accordingly before merging anything.
 
+This is what we have done for everything else, and that has not changed.
 
+I try to spot cases where this is not done, which is why I Cc'd you in
+v7 and told Viresh to please do so, and he did -- I don't think he was
+trying to bypass on purpose:
 
+    https://lore.kernel.org/rust-for-linux/CANiq72=3Do+uc3ZnNrdkuoSGSL8apNE=
+4z4QwpvsiLfGzXFywSLrQ@mail.gmail.com/
+
+> That would make things even worse. Before you wanted me to maintain
+> rust linkage. Now you want me to get approval from someone else who
+> maintains rust linkage. In case I need to change something, I want to
+> be able to just change.
+
+Like Danilo mentions, there are several ways to go forward here. For
+some ideas/context, please see:
+
+    https://rust-for-linux.com/rust-kernel-policy#how-is-rust-introduced-in=
+-a-subsystem
+
+(Thanks Jason for linking the page)
+
+And, yeah, whoever ends up maintaining this, then they should of
+course be testing it properly with Rust enabled with a proper config
+for that and so on, just like one would do for anything else. By the
+way, it is possible to request Intel's 0day to build with Rust
+enabled.
+
+(Side-note: to clarify, there are different parties involved here --
+"Rust team" is fairly ambiguous.)
+
+Cheers,
+Miguel
 
