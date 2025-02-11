@@ -1,79 +1,79 @@
-Return-Path: <linux-pm+bounces-21790-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21791-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16914A30656
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 09:52:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 15797A30674
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 09:55:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C7ED1167FB4
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 08:52:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EC92165EC1
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 08:54:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71A2C1F0E5A;
-	Tue, 11 Feb 2025 08:51:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16AE61F0E3C;
+	Tue, 11 Feb 2025 08:53:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="q0m6pnsN"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BAn9ulat"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+Received: from mail-wr1-f44.google.com (mail-wr1-f44.google.com [209.85.221.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C56761F03EC
-	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 08:51:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B091EF0B6
+	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 08:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739263879; cv=none; b=AVM2PVk7H4YQ3X0lNc5wuqbbAa+A+ZP1KARYuPpziVME4q/RPU3uLUS2hoWFcIoHb9LyOxkipSp3H/vsA2EeYpFuDZhmdFshahZPm6W36k8iUsG+CK6YrCBGCJqBilXNR/xxkWRBLKHMsv8dHBiq5CtVyzhzWl23hgvEt0g0/7I=
+	t=1739264038; cv=none; b=jrb8jSuP1OLpTJXWHMTg1vDpQvnI7F7/OmuGBeTmAYw3+E5+XMn6e0P9eJ58ZUuJaPgVnjgayL5zKMTO5yUH2H6EfrVoirPU3jdA+RVBy1nHco9ltWhX00UMfeYDncIWdzglP0wPPSy3Fp71WswmqMF+JAGyM4BIEB+1T5/pwQg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739263879; c=relaxed/simple;
-	bh=uwOvEKjgbgfkSheXhWF/TM+S9VjTRURKDguxj/FPaIw=;
+	s=arc-20240116; t=1739264038; c=relaxed/simple;
+	bh=E97S9Di08n2Zwttga37TWY/Ab91xIrEIh6c+b1GeuY0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=U0rqw0hDHaeThMw7NoO/iaXzq2VSJULqk6Rlbkbdg7kXNJwPRbSD9pfjUDJvpoTSiVxT3mkZTS2OUSuSvni4Gdpp6l5n6DIdzAypE7kw7OuA5r+sDpbKb1rqJi8ZcdFux60i4QtCuUuTpvhA058rLqro1MFo/YcPsYlWSfTvjko=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=q0m6pnsN; arc=none smtp.client-ip=209.85.128.53
+	 In-Reply-To:Content-Type; b=WqUSoAOwXrecY1f/GuEW8vfYY+6osLFRN4hs0Fy3gHg86o2lQIjyR5zJQOVMW3zZAjkN2gRBwpU0fgYVnklH9QMQMGlUU6JevO0bqM3SI2tg/l6qz9lVq0Io6N/PClAvaNn9aUEQPKQDSRYGI+ld5KbkK7aCylqAnB0+36GQ3Ys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BAn9ulat; arc=none smtp.client-ip=209.85.221.44
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43944c51e41so19095225e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 00:51:16 -0800 (PST)
+Received: by mail-wr1-f44.google.com with SMTP id ffacd0b85a97d-38dd14c9a66so1307525f8f.0
+        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 00:53:55 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739263875; x=1739868675; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1739264034; x=1739868834; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :from:to:cc:subject:date:message-id:reply-to;
-        bh=MBuVpfBGZc5QukwlLAhOoPlDs013WB9zKRqFDryvqwM=;
-        b=q0m6pnsNvD08BHOucBX1kSYTIvBNSLzODyqxsTlpHsZObXnQW3MdeGchgJ8x81jSMu
-         GMrnxwPnFJgLVBXORKgHFx5ueoxvxNPzxrWYIzQ07r3WXRm7weK67XME1GV6dCSak01x
-         v/ooB54Bacc44aacXw5oy0L8URk2k4ZTwK8DD7TIZUt1NSZN8SfIvqzFEXu4aR01/lFG
-         CudSrovyme/UgWOn5HIc4qvZgLohffsVwZ6aGc0appLsUPOgD6z3A+fJN5+c0yuqQt2i
-         dQApsFfmFPq1NKBRTB0T65yG9KnsoD8bhqqaBcscISfaz5k4HLR3mcGOzoZjWxKcJ/PA
-         kWmQ==
+        bh=Wn7f5KmIzBSGwAjAxMKL/5WhoZoIiEa6FOztIQtXGwY=;
+        b=BAn9ulatUqXcxf5V04lalC1ewJcwtpz8hrCdhp0XwtMRy48Lnt1yVKJpPnLg5HIsCr
+         M9nj9vwXzE3f5Rr7I21LV8hPH4KiKqLndmPQqQsIHWptP9IcYnTfmSdjPdy2BPfNwJlx
+         VfamofOv+2+xzF0ymRcfamI4XqWCeKhI7NWvVEUftFHDnHD3Ru9Kd8T7aJ/qcFYaweRM
+         gTfS1gRP3wfXiBueqFZPC5ilWkL/EqgiyAbYyDzMeSJh7ShN4AO+dyFHyjiZQqI6MQoD
+         idR5B7mkS3SJ21QqCJfhBuVunNd+vlkMWcba6MR9qXboHZjblIHqlIp54nByrqMll0ag
+         kOzA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739263875; x=1739868675;
+        d=1e100.net; s=20230601; t=1739264034; x=1739868834;
         h=content-transfer-encoding:in-reply-to:from:content-language
          :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=MBuVpfBGZc5QukwlLAhOoPlDs013WB9zKRqFDryvqwM=;
-        b=vSVe9uFlyuPVhBi6NOZ6g156QhU1tV1FRZPCfklMhQQws5W7wFi57Z+duQsLPvWY6f
-         GQ4Zt+Q2GIDM9wrLv8yIO2bc8IIc+aCMxxLF4TTIgXvi2vs+oOxvJeUHZiM2ta8Qgb4A
-         zUc/VJooFr+vrLgfU9KQmgtWaDeE4lxxiR7npYvKbAPL4Z+btqfZd5xvEdf1LEfEGy8a
-         WQZE2U8dz5+G2tsrkQlQc9ZU7+NFJri95az/9C/fXhMCo1doYUGs9K+O2ttov+u2frRG
-         mHulVXvFdy05KLFDh4AKxG/nglYOZcWBgTAhcjo5bXFH2tks6JKWgfT6yrIumuD4Q3Lh
-         QqKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUenIU1S06tIqCwHxD2ZDhqCaraix8UvmvB7x9BOC/EpQldH7ePybCt1Xm9hTq/lvEybMPvdjMkLQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEwZbtCLhtLldVd573tSrYB8CmLOa46H4eV/TCAjA4nM+JShES
-	Z9dXIBl0x/OTVYi0qkYMojsw5fzKyw1fgRSPWqLwHvBosmfED7FS+mgot2jrlkE=
-X-Gm-Gg: ASbGncvjDCfzJ0rSINRcAj4D+PxhYZ1QXxz+7iPK2XA+uJ9NTE62ngCDd8OyPB177cw
-	yEMBMeWQiDUB0ekYe4qeuHR9XXoIBo/yu+7ZSEhdwMuH036AQtssD0bJilrhIX2sEHUXpawMBeA
-	awyO5zuWIH2f08C6FMSWYsBi3euIs2hl6+6059AuEnLIZO3lq3FgYLE5Ee6vVkywcDAPM8O2Sw6
-	+P3w74hL7PZfUWpwVbJvDq4EEsQsiYnF5qITeXvzfScW/ri8TQ0l45rs+5sdM0uiqJ+wScMqiUJ
-	JFm4ffqG3WvT2OAfZWgArqdpk2DaZyN8fdP+LOkAasmxgGEsXZlOlX4=
-X-Google-Smtp-Source: AGHT+IFO+zzAA08bfzxBeaVgp6Y5tU1Gn5sLS7Hh+RKdG5t/UoXpSO2gVdVDv0cTsXvcW1Ndi56IrA==
-X-Received: by 2002:a05:6000:154f:b0:38b:d7d2:12f6 with SMTP id ffacd0b85a97d-38dc8d98e9amr11900744f8f.2.1739263875007;
-        Tue, 11 Feb 2025 00:51:15 -0800 (PST)
+        bh=Wn7f5KmIzBSGwAjAxMKL/5WhoZoIiEa6FOztIQtXGwY=;
+        b=dhgSC5orQ6LdG/10SGOBET18TnHmHXUc8IyXnNYiI38W+iv66b4aCSuW4AB92tSBAd
+         5tkC5fF9xSOYW/fLakjVZhT5h39F3ThilXXy9gkomhYJqdgmYezctsfHZs6WQAn6+Xti
+         d6TGc+JWehwILux9Igy2cF1zlvz0il/FCgsC43cRRaGKFuUOzaoBRSc58Vrc4Iuba+fH
+         wjDZ2TeAJ0VFKSReEqNs7IKp0Uxbo64D7S6K7Kk+XNYEI3XfJ1h21xHm/fB1q4BhVehl
+         mR9HgllI4OFMtjZkncMHmXriv/b6gewGFLLgKrqPukNqAqlyseq5RlTNves+fnaUXM82
+         xc7w==
+X-Forwarded-Encrypted: i=1; AJvYcCWSQA/r4lbE+0d5PLr6vAI7Rc9+9buge8Hx4koM3AhngkNwb6hffS7Ye9BVviWVcwDOhpG+WQzi8Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxnN4xyWea9AcpE8t4jKpLLqv7aetksSZkHpi4VYn8Xzj5qqbux
+	7qOC0be/CB186VRgHta86RUkASW186BoctnfwyE5qMTCjbB8SVNn3NB8/ooZVgQ=
+X-Gm-Gg: ASbGnct79GgTdDT76VlrPU3kpm4/SJDd7pRipTFekGxThdSKo+0x97X7s1vfNycJnKy
+	fZh+25MdckAMJ2kxMxWpjwO935n5S5BcDaSSdZ85gSq/k45NeWKmevxWM8GHW5ErGTiqdxqtFwG
+	sZJ20KSzEnCvS5zhEkGfO0amzVKAVyM884+iA54bfuf2npSu8RAjA0EzmfIi47rwLpIBdKqDB21
+	A3ttC+MBx8lSMCgyzlc7BqHp7ANImDedsneKyQ+Kifr32kuceklox5iYiQRoRlAqVbwRE5Gu2ad
+	YKYt5HXn9u7z3UGkvdl0ERmrIYhtwyGrsXp8eJY3S1ecl2aiONmKJfQ=
+X-Google-Smtp-Source: AGHT+IHJl8az0biIroaElZQMVe7CvDinXzmDIW3C9slxWarkLuaunRbzDNQ1/xMc93YOJwVs4z36yw==
+X-Received: by 2002:a05:6000:400f:b0:385:fc70:7f6 with SMTP id ffacd0b85a97d-38dc8d985c8mr12045557f8f.7.1739264033847;
+        Tue, 11 Feb 2025 00:53:53 -0800 (PST)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38dc0c5a894sm13914977f8f.95.2025.02.11.00.51.13
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-38dcb4410e6sm11284454f8f.8.2025.02.11.00.53.52
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Feb 2025 00:51:14 -0800 (PST)
-Message-ID: <fe0b0066-5f06-412e-b66a-f3cf6ba74e9d@linaro.org>
-Date: Tue, 11 Feb 2025 09:51:13 +0100
+        Tue, 11 Feb 2025 00:53:53 -0800 (PST)
+Message-ID: <843953fe-4c81-4176-845b-0ce9ecb0f84e@linaro.org>
+Date: Tue, 11 Feb 2025 09:53:52 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,59 +81,45 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RESEND v2 0/5] thermal/drivers/mediatek/lvts: Fixes for
- suspend and IRQ storm, and cleanups
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+Subject: Re: [PATCH 0/2] Thermal support for BCM74110
+To: Florian Fainelli <florian.fainelli@broadcom.com>,
+ linux-kernel@vger.kernel.org
+Cc: Markus Mayer <mmayer@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Matthias Brugger
- <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Alexandre Mergnat <amergnat@baylibre.com>, Balsam CHIHI <bchihi@baylibre.com>
-Cc: kernel@collabora.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- linux-mediatek@lists.infradead.org, Hsin-Te Yuan <yuanhsinte@chromium.org>,
- Chen-Yu Tsai <wenst@chromium.org>, =?UTF-8?Q?Bernhard_Rosenkr=C3=A4nzer?=
- <bero@baylibre.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- stable@vger.kernel.org
-References: <20250113-mt8192-lvts-filtered-suspend-fix-v2-0-07a25200c7c6@collabora.com>
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>,
+ "open list:BROADCOM STB AVS TMON DRIVER" <linux-pm@vger.kernel.org>,
+ "open list:OPEN FIRMWARE AND FLATTENED DEVICE TREE BINDINGS"
+ <devicetree@vger.kernel.org>,
+ "moderated list:BROADCOM BCM7XXX ARM ARCHITECTURE"
+ <linux-arm-kernel@lists.infradead.org>
+References: <20250116193842.758788-1-florian.fainelli@broadcom.com>
 Content-Language: en-US
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250113-mt8192-lvts-filtered-suspend-fix-v2-0-07a25200c7c6@collabora.com>
+In-Reply-To: <20250116193842.758788-1-florian.fainelli@broadcom.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 13/01/2025 14:27, Nícolas F. R. A. Prado wrote:
-> Patches 1 and 2 of this series fix the issue reported by Hsin-Te Yuan
-> [1] where MT8192-based Chromebooks are not able to suspend/resume 10
-> times in a row. Either one of those patches on its own is enough to fix
-> the issue, but I believe both are desirable, so I've included them both
-> here.
+On 16/01/2025 20:38, Florian Fainelli wrote:
+> This small patch series updates the existing brcmstb_thermal driver to
+> support the BCM74110 chip which uses a different process node requiring
+> an update to the thermal equation.
 > 
-> Patches 3-5 fix unrelated issues that I've noticed while debugging.
-> Patch 3 fixes IRQ storms when the temperature sensors drop to 20
-> Celsius. Patches 4 and 5 are cleanups to prevent future issues.
+> Florian Fainelli (2):
+>    dt-bindings: thermal: Update for BCM74110
+>    thermal: brcmstb_thermal: Add support for BCM74110
 > 
-> To test this series, I've run 'rtcwake -m mem -d 60' 10 times in a row
-> on a MT8192-Asurada-Spherion-rev3 Chromebook and checked that the wakeup
-> happened 60 seconds later (+-5 seconds). I've repeated that test on 10
-> separate runs. Not once did the chromebook wake up early with the series
-> applied.
+>   .../devicetree/bindings/thermal/brcm,avs-tmon.yaml    |  1 +
+>   drivers/thermal/broadcom/brcmstb_thermal.c            | 11 +++++++++--
+>   2 files changed, 10 insertions(+), 2 deletions(-)
 > 
-> I've also checked that during those runs, the LVTS interrupt didn't
-> trigger even once, while before the series it would trigger a few times
-> per run, generally during boot or resume.
-> 
-> Finally, as a sanity check I've verified that the interrupts still work
-> by lowering the thermal trip point to 45 Celsius and running 'stress -c
-> 8'. Indeed they still do, and the temperature showed by the
-> thermal_temperature ftrace event matched the expected value.
-> 
-> [1] https://lore.kernel.org/all/20241108-lvts-v1-1-eee339c6ca20@chromium.org/
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
 
 Applied, thanks
+
+   -- D.
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
