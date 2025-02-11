@@ -1,147 +1,162 @@
-Return-Path: <linux-pm+bounces-21904-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21888-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 243D4A317A2
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:26:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B48FA31715
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:02:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D454A3A4342
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:26:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5D2BB1888F2E
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:02:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47EF26868E;
-	Tue, 11 Feb 2025 21:25:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B70A264F95;
+	Tue, 11 Feb 2025 21:02:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="c/sF42oi"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Eg6XAMzb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f42.google.com (mail-ed1-f42.google.com [209.85.208.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E09F262803;
-	Tue, 11 Feb 2025 21:25:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A600326563F;
+	Tue, 11 Feb 2025 21:02:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739309157; cv=none; b=i7bxUBpIhjHwTRGn2fsnBUc9i7/9XnRW2s9S0fQqjmiXjVO5uJSbmRTRakwWtU+g36SV8St2SRPMayQcggCwSF50t4DUb2wCYQ54tUaL3juqHPjx1w7ec8yt8mo6D+mhtYE8gSH/w1PTE7Tja1Bi8AJwGHpRFUarIhCzAf5X4dA=
+	t=1739307739; cv=none; b=e82si+12MBRqCu4WsEiQTXm79XyEO6s1PImd3epu2Xfgu1El2cm1o7hOBqEUaas9CJ4Ubsbwzg3mLvXb714UM5D9JcfJGVsLz+WyXFzBRob6e21IvuuZAivmWGZWGjoKBrcMWwQBA79ljvIttBBwuOmhNGciFxpOZG2L7gmGE1Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739309157; c=relaxed/simple;
-	bh=IZxrj6Gu0pIXpywIgOSybDUHKnFS0Y4eMhTg3+5V+js=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=D1XZ9NEPr2rJ1wQR31naftQwtm4pRw9TxVKGmVklylyEJeuuxhY7WWIWtlYPpezshhvWWwHSsvkFLyBDxpwMbxfG7CwAaKLX8x0YHq5pbRqcBqA7GHuZqgUOZ8apSHY6XtI+nRKHSinfO90bnuQk/8D1jNEtjMFFiNfDQ58kMgc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=c/sF42oi; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id cbb5aeea9cca1d0b; Tue, 11 Feb 2025 22:25:53 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id F20D3770175;
-	Tue, 11 Feb 2025 22:25:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1739309153;
-	bh=IZxrj6Gu0pIXpywIgOSybDUHKnFS0Y4eMhTg3+5V+js=;
-	h=From:Subject:Date;
-	b=c/sF42oid7G9JckXojZiUZzCaI7i9gYL/7L3Mjd3eQP45ZHvToVrSoLuNuHgw41n2
-	 mxoajGMy/X5Rcq0mYGryz6Qna/dgG0Bt8T9NjlrBfGBBWNGwnmrULbOj5ONhRMBwX4
-	 s288plxfAwTYj0CSZb+3v+FCdy3Gn19gW5o37Tp1Hmi8r7p4K+bhA7Gu3hKyTPzMFy
-	 vFIqzK1c8IumlcnEEwz6IJkn+sYzmD3jjf8yUPHYyElOEL0/aBgj/uw3E2KYzfCrt7
-	 wjNAzqeAD+7GQXkrBiudtf18bKPvFdF0xxSyJzx1rDbIkgStCGHDYUoX4425hWKG2x
-	 hvo6GAyaTUMkw==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
- Johan Hovold <johan@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Jon Hunter <jonathanh@nvidia.com>
-Subject:
- [PATCH v1 00/10] PM: Make the core and pm_runtime_force_suspend/resume()
- agree more
-Date: Tue, 11 Feb 2025 22:01:24 +0100
-Message-ID: <2314745.iZASKD2KPV@rjwysocki.net>
+	s=arc-20240116; t=1739307739; c=relaxed/simple;
+	bh=ft9S8SqsolK3whhc7XXUN7Q8EDYX3DgvWorDRfJ1fMM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=W8bY90dISKvyQt2zUmnrzCUf7l9eLDYoGtfS/VkZIyUFEkW/v4e7/CmIc+x/9e1MPmJsivk8MImkE7BL7D8/iF9vssN0h3bIWsxYRO8Up5RwJFw6hLMb6l4oKDo09K3PSfORtyW+K9wceXjbeWTITvsWvidn+NtYkNPgUGMv6Mg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Eg6XAMzb; arc=none smtp.client-ip=209.85.208.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f42.google.com with SMTP id 4fb4d7f45d1cf-5de5a8a96abso6242827a12.3;
+        Tue, 11 Feb 2025 13:02:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739307735; x=1739912535; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=xZyUrG6+M9kIYP0+SgijnDH3fs7yuMG/QqkNcnw9Coc=;
+        b=Eg6XAMzbCyemUyarE+LyF/Exa6I0qK3mnpGYwUO0NDn/frLBIDyw6wA4aP69ibuE7d
+         +Baym/yGiZ8e3K93QL3KDl+nHJm0b7ZwbM5eCEfdhrAWBYn+rnyGGlh3Ed2fFvMXhH9R
+         b8mAd7ir2lkpsyKMPyM1TrRy/RXDy2II4Ojybwv0kp61hNsn7tKZG2Ok7uaBR81ab4Pl
+         /wRbZYsVA0O/qC5A/7IZnSKAUXezLsrDXS4rFn+zQEbPFXK1eKKil74uxECDHwNAXrVS
+         N4W+cdC6+xzMU40/kcS4JbELlTzMktClr9hHfhTeGvZ+dwxlK0E/mWdUHmuq1yKKyeYn
+         55WA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739307735; x=1739912535;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=xZyUrG6+M9kIYP0+SgijnDH3fs7yuMG/QqkNcnw9Coc=;
+        b=r+pEqxxdEsI3zwA+ZnaoN5p9phshIr/2jTJCAjHiYg6t7LDE/h+/AUA4ngzTi+3Veq
+         f90Wnlk9RELWWpyuvkNFNVyH5ZpdD0PxhRqyGxn8IwUH0/3Rx0M4sbLRBtx7vhnsWhwL
+         4iYS3UGh5QMTu7zO3sGuV8XhBljgQnEgY68NaYvQzG4GunJGEgNnNCzqucKqNYvxTuqR
+         OLceQ6aJvN25s6MM6I606djjmO7AIFZ6hfIJMYgNrkaR5JCnYcaam2ujpj1sXWghUZ5Y
+         WuBXEbX678+ERmqxsfvCGp2CTcXWTO6eP1trrMK1A6PrEZIzi10AKsoSDgS1QzYMWspj
+         QJ/Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW/GbpGcilhRbIBz3lZyepq1z+kfQkhITwzebLtiCEHUvIIZz5uT2soKyRc1fJAvHovxQt1XVDxcg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwrK/3ubuuuPYD7iQo0U93V/ruCdfSbdkU/JmlOgzNpSMHR9i4K
+	OuYaekLlX2Ak7vcwa/W9KIowLbQDSq4rbVhil1Pf+yaTmApx5qwC
+X-Gm-Gg: ASbGncsUggWcPlKzhE3pFBnyBhalaHKnrPtAmxF+nOtuQqbhyZnbbz0LGcknIU0zUez
+	rcmdOD5VB/g0WOP3MhAIlhIxx4AIR1GjTg4VJZsZGS1CNQMlUeLKsOHLHkipkuizEk2lpK8OO0H
+	t0gRjybaIbOEbpXsgbpert/8tQFw1v/dmF+DqAWIbpUIFqO+uggmOi7SP+sVSTrqOBsXwGMQjNl
+	KiiJklOvlLKqHw2dJEePP6Ceh38AHWI54NE2JQyksx7iY/B+RqCE8qkhKsT7N8AqxWlGBfMIpkL
+	LPN4PFu9aJNS9KSYnL9c3ZGRN+2ZLDD8dGxZzMZlh1Olyl1zaUAS818ot/JSduyKzOOq
+X-Google-Smtp-Source: AGHT+IHqLEivGCVvNMQ6NNhVQpp4h9odmjTAzgocmscHHvn9K6CfBFVwrXAxIVu+9+avU/K/FUwa6Q==
+X-Received: by 2002:a05:6402:5290:b0:5dc:cfc5:9324 with SMTP id 4fb4d7f45d1cf-5deaddebf28mr1573710a12.30.1739307734700;
+        Tue, 11 Feb 2025 13:02:14 -0800 (PST)
+Received: from [192.168.1.23] (146.10-240-81.adsl-dyn.isp.belgacom.be. [81.240.10.146])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7732e70bfsm1132746466b.104.2025.02.11.13.02.13
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Feb 2025 13:02:14 -0800 (PST)
+Message-ID: <fc9e1b15-ed1a-4d7f-aee7-7687e4deaa91@gmail.com>
+Date: Tue, 11 Feb 2025 22:02:12 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegvddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgvrhhnsehrohiflhgrnhgurdhhrghrvhgrrhgurdgvughupdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohepjhhohhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V2 3/4] power: supply: axp20x_battery: Update temp sensor
+ for AXP717 from device tree
+To: Chris Morgan <macroalpha82@gmail.com>, linux-sunxi@lists.linux.dev
+Cc: devicetree@vger.kernel.org, linux-pm@vger.kernel.org, lee@kernel.org,
+ samuel@sholland.org, jernej.skrabec@gmail.com, wens@csie.org,
+ conor+dt@kernel.org, krzk+dt@kernel.org, robh@kernel.org, sre@kernel.org,
+ Chris Morgan <macromorgan@hotmail.com>
+References: <20250204155835.161973-1-macroalpha82@gmail.com>
+ <20250204155835.161973-4-macroalpha82@gmail.com>
+Content-Language: en-US
+From: Philippe Simons <simons.philippe@gmail.com>
+In-Reply-To: <20250204155835.161973-4-macroalpha82@gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-Hi Everyone,
+Tested on Allwinner H700 devices.
 
-This series is a result of the discussion on a recently reported issue
-with device runtime PM status propagation during system resume and
-the resulting patches:
+Tested-by: Philippe Simons <simons.philippe@gmail.com>
 
-https://lore.kernel.org/linux-pm/12619233.O9o76ZdvQC@rjwysocki.net/
-https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwysocki.net/
-
-Overall, due to restrictions related to pm_runtime_force_suspend() and
-pm_runtime_force_resume(), it was necessary to limit the RPM_ACTIVE
-setting propagation to the parent of the first device in a dependency
-chain that turned out to have to be resumed during system resume even
-though it was runtime-suspended before system suspend.
-
-Those restrictions are that (1) pm_runtime_force_suspend() attempts to
-suspend devices that have never had runtime PM enabled if their runtime
-PM status is currently RPM_ACTIVE and (2) pm_runtime_force_resume()
-will skip device whose runtime PM status is currently RPM_ACTIVE.
-
-The purpose of this series is to eliminate the above restrictions and
-get pm_runtime_force_suspend() and pm_runtime_force_resume() to agree
-more with what the core does.
-
-First off, it turns out that detecting devices that have never had
-runtime PM enabled is not really hard - it is sufficient to check
-their power.last_status data when runtime PM is disabled.  If
-power.last_status is RPM_INVALID at that point, runtime PM has never
-been enabled for the given device, so patch [01/10] adds a helper
-function for checking that.
-
-Patch [02/10] makes the PM core use the new function to avoid setting
-power.set_active for devices with no runtime PM support which really
-is a fixup on top of
-
-https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwysocki.net/
-
-Patch [03/10] modifies pm_runtime_force_suspend() to skip devices
-with no runtime PM support with the help of the new function.
-
-Next, patch [04/10] uses the observation that the runtime PM status
-check in pm_runtime_force_resume() is redundant and drops that check.
-
-Patch [05/10] removes the wakeirq enabling from the pm_runtime_force_resume()
-error path because it is not really a good idea to enable wakeirqs during
-system resume.
-
-Patch [06/10] makes the PM core somewhat more consistent with
-pm_runtime_force_suspend() and patch [07/10] prepares it for the subsequent
-changes.
-
-Patch [08/10] changes pm_runtime_force_resume() to handle the case in
-which the runtime PM status of the device has been updated by the core to
-RPM_ACTIVE after pm_runtime_force_suspend() left it in RPM_SUSPENDED.
-
-Patch [09/10] restores the RPM_ACTIVE setting propagation to parents
-and suppliers, but it takes exceptions into account (for example, devices
-with no runtime PM support).
-
-Finally, patch [10/10] adds a mechanism to discover cases in which runtime PM
-is disabled for a device permanently even though it has been enabled for that
-device at one point.
-
-Please have a look and let me know if you see any problems.
-
-Thanks!
-
-
-
+On 04/02/2025 16:58, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
+>
+> Allow a boolean property of "x-powers,no-thermistor" to specify devices
+> where the ts pin is not connected to anything. This works around an
+> issue found with some devices where the efuse is not programmed
+> correctly from the factory or when the register gets set erroneously.
+>
+> Signed-off-by: Chris Morgan <macromorgan@hotmail.com>
+> ---
+>   drivers/power/supply/axp20x_battery.c | 21 +++++++++++++++++++++
+>   1 file changed, 21 insertions(+)
+>
+> diff --git a/drivers/power/supply/axp20x_battery.c b/drivers/power/supply/axp20x_battery.c
+> index 3c3158f31a48..f4cf129a0b68 100644
+> --- a/drivers/power/supply/axp20x_battery.c
+> +++ b/drivers/power/supply/axp20x_battery.c
+> @@ -89,6 +89,8 @@
+>   #define AXP717_BAT_CC_MIN_UA		0
+>   #define AXP717_BAT_CC_MAX_UA		3008000
+>   
+> +#define AXP717_TS_PIN_DISABLE		BIT(4)
+> +
+>   struct axp20x_batt_ps;
+>   
+>   struct axp_data {
+> @@ -117,6 +119,7 @@ struct axp20x_batt_ps {
+>   	/* Maximum constant charge current */
+>   	unsigned int max_ccc;
+>   	const struct axp_data	*data;
+> +	bool ts_disable;
+>   };
+>   
+>   static int axp20x_battery_get_max_voltage(struct axp20x_batt_ps *axp20x_batt,
+> @@ -984,6 +987,24 @@ static void axp717_set_battery_info(struct platform_device *pdev,
+>   	int ccc = info->constant_charge_current_max_ua;
+>   	int val;
+>   
+> +	axp_batt->ts_disable = (device_property_read_bool(axp_batt->dev,
+> +							  "x-powers,no-thermistor"));
+> +
+> +	/*
+> +	 * Under rare conditions an incorrectly programmed efuse for
+> +	 * the temp sensor on the PMIC may trigger a fault condition.
+> +	 * Allow users to hard-code if the ts pin is not used to work
+> +	 * around this problem. Note that this requires the battery
+> +	 * be correctly defined in the device tree with a monitored
+> +	 * battery node.
+> +	 */
+> +	if (axp_batt->ts_disable) {
+> +		regmap_update_bits(axp_batt->regmap,
+> +				   AXP717_TS_PIN_CFG,
+> +				   AXP717_TS_PIN_DISABLE,
+> +				   AXP717_TS_PIN_DISABLE);
+> +	}
+> +
+>   	if (vmin > 0 && axp717_set_voltage_min_design(axp_batt, vmin))
+>   		dev_err(&pdev->dev,
+>   			"couldn't set voltage_min_design\n");
 
