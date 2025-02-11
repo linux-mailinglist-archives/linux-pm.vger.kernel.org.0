@@ -1,144 +1,166 @@
-Return-Path: <linux-pm+bounces-21881-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21882-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3ACFAA316AA
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:30:58 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8DAC4A316EA
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:53:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E2E533A69ED
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 20:30:48 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3DAC83A1CF0
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 20:53:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F58B265635;
-	Tue, 11 Feb 2025 20:30:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DCD6262D3B;
+	Tue, 11 Feb 2025 20:53:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="MyAIEIKc"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jSBZjkuG"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.20])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E15A726562F;
-	Tue, 11 Feb 2025 20:30:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2224C1EE7DC;
+	Tue, 11 Feb 2025 20:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.20
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739305854; cv=none; b=WzrqH1yGZ8HwRpviTjMAPyHkOskijqJG+qJMpX6A45RIOQSHhWD+QFvMLMTuc7E2/UwZHxgygskAxsE02GcTbhsIRADT9UF4KLLzdNVGXrdn8oN1KRNG8wI0CyE5/dxj5D0o7R9kmx/uvckdIF/iuW4b3NJWz0MvsJClmhVPKfw=
+	t=1739307198; cv=none; b=CJrnQfuCDEkrFWupQ30Bnx/6ZSRVscDKd+CP33nZ8fJ0VIkMdIbLXYqC+/yUnqXi3QOAyAvk2sNiWoJ4drn10K/xqQ02odrTmuqXkPULYUlSe8x4FNBvXxo2wKIPfs5xikNfcvVmLP/nmYW7vzAsnVjuB2+vN66St99axRcpWEM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739305854; c=relaxed/simple;
-	bh=D8rlnhGgOeAoSStj3i498DmFHncRDjC2SZuU9y2OCtQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dTmRHuKuUD8dUKKdTU+xgcnDG+H4m0KVwYLnoxsJGzF8+SxUY9DqapmSfTHsgrJiqGwmnZGPoCAjKo+cKR8vLvjzAxSYQkNnik5SijbPDMcIKM+z2N2jZmcQcZ+SwfSvgDjidxTsFH+ZJe10Fin3hKbiybzKLbLoHQPMRfFNuuk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=MyAIEIKc; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5de64873d18so6050359a12.2;
-        Tue, 11 Feb 2025 12:30:52 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739305851; x=1739910651; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=OQGuDxDQUb2uUg1lPaNmdFHJpnrBsC6P0qXJSEPK2EE=;
-        b=MyAIEIKcq0ZeVJ5OZMyMVROvHBY0SrLxYyXb4AldOn6tRKC7A9Qij/TnAgmrvaEkhl
-         4Z/Ix3P/pXzjKnKvVG5DgAy+EXAu/NBwabiWFN5kSIiQhadkvzSt3HNYqTpJWW5vIG1s
-         u66dmMI7TqSJDPtmicQpFd2mntRFp+/QXf7oK2rQWJ4W+vduEAQBGJ/J3kfGkeosq/aH
-         0t/eFMV2SRT4BtxNi7WJeCrENxPa0yEiaaVTkHML2mmgPw8IConGP02bkC7SsEB6xEqu
-         Nb2LSHYoud07h0w5+xsSRMPTJALO5qPtxPOL+rHL1aYGdHcyfeRUiQAOvxqWz2cC6hz6
-         3SeQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739305851; x=1739910651;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=OQGuDxDQUb2uUg1lPaNmdFHJpnrBsC6P0qXJSEPK2EE=;
-        b=qFjaz7m5+w+Y0hqccCfo/FD48eIR6kUEiGsi/L99Jyn+Jhl+6Yqfk3Qn5ZEATke6Im
-         Xp3NqIuYl2gqlUc/LDIQdQOLvsDJHL6ZY1K77NS6NaYTGMeZlPmQoPPHGTDSXpIk6AUo
-         LqeEEZG4YfLqES3I5KVMeCP3krDiNw924WITVPL1RU5mYCR38h0IUnojPj0fPSAv79vh
-         lFI3e3Vdga/66Ddnj2DYWabGYOR+7T70DT+vOlW9xgCpJNq09sLMkyxU9BHaI+RXG8/Z
-         RExfOlKoH72n12c6nOKHkTIiZoUHPzyxORMc6yH4paN3xo3xLIwXfRdxjKajN5nDvvrG
-         dpuw==
-X-Forwarded-Encrypted: i=1; AJvYcCVXRJl2Q2foS/uTfH0SIIDU9QU76qiuyoZtWKozjdVy2VrXGS6rP7AA1oQhW9FkPIbFBQ5oCWU8@vger.kernel.org, AJvYcCWKPwcQwbAdKLNTeJq4kA15vwpEo36gzKjMojDAhdlW0ROdQoj0YBCFZcnCIGFK4/sGUYql/pciBXD4Yl+5@vger.kernel.org, AJvYcCXDCBYktRpob58ldtYTgi0vxpuxGtoTp3eR4A7GW+N99ZM6vGmU45dxL8+yXMhVxFuc20sovqejcfpB6Aft@vger.kernel.org, AJvYcCXjJZFTCD3QNv/FjotqYSSUQlb7o6NLWRyUjuW4584CehLAZMZqLbnLrljzke22azeO9z1zoQW8v/c=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDz0b0jn+TXIkk7pXomLxAhWzz2oMQMyIHYnxEKeiWcFG7NQWB
-	V4DkTlJM6JNPYeoVLh+6QXSmQXmTz7uzt4j8KuUNEImZiwgEoY9emB5a7bvmy+4mYt/taIZkF1y
-	vZ0GxgeW2kNS8FATB1v0ExO2s6sE=
-X-Gm-Gg: ASbGncskGISvgJrtSy11eDcIlSrwlRH6MgHlOJY6kV1EhKYKGolfb0YNdY4bHq7DJAY
-	7jn4HHfD1UBYBdcHRVSXcTVmSL2AjQPVDXr5wR3nKOX0W6qYiKl4x3gImlgICSRe4TflbsdZN
-X-Google-Smtp-Source: AGHT+IEEGVBUptOIKr/vGakwvds0RDuYmv16k6LUMOxOXYI/gn2/BUXi9QFHNW2x9uLs0HMV4a21OETB6WtLcxC2t48=
-X-Received: by 2002:a05:6402:2085:b0:5dc:cf9b:b034 with SMTP id
- 4fb4d7f45d1cf-5deadd92165mr559976a12.14.1739305850702; Tue, 11 Feb 2025
- 12:30:50 -0800 (PST)
+	s=arc-20240116; t=1739307198; c=relaxed/simple;
+	bh=8sphWtJykSdh/06Ktz9t9+80uXqBvCL0k4WcR3tRdhU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FIuk53F5Jh2ngFBeiiPQ+jHRS3r5xl2GdDymvcn/9x0/Y8aTuQMLw5rRVQif0PtaZpedXZK/2DuVjGZAXG62GgHtM/ZPwzxgWaTtBH/iM1I5BxWITr5kQkroT7tveUQ0ZYaUcOSWVSx/ZbtmndcJZlqPhkMywWofkv6/smerfco=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jSBZjkuG; arc=none smtp.client-ip=198.175.65.20
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739307197; x=1770843197;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=8sphWtJykSdh/06Ktz9t9+80uXqBvCL0k4WcR3tRdhU=;
+  b=jSBZjkuGtL5JgsLJIQX4LgyF0UMXt5mLi21F8tqkyguSnXLLocgJiDqT
+   69kxqHl5ziR4Ks1MKhtmaLE9Cx0Gi3H74eljLUM1l9Y2Mw2tcF1DoAj4Z
+   rH7rz/5mDtntIii3Lqo0TRkSPtOY2AKyo+sLkjM5LQKHRGGq7yvBnKJe9
+   /kqyf48rqV4A2/le/SM3TPmHK1mFUAFY+yuflcJJ+SKr7SHRm7YbB4jYt
+   QAXrccOoHtIaaK0YOxm2rpBmNEMn2BFvVEXtG0hQobijA68fYsOgvtXmb
+   yDDOlo4EVOvUuo18V6TOo85Z1KkozZa9GRPBQ5g9sVKGD+SwuMnxyKDEh
+   w==;
+X-CSE-ConnectionGUID: mBM01KgKTu2Ty2rrqdLzQg==
+X-CSE-MsgGUID: i35HvJ3QQp2OKxIq+BApVw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="39640210"
+X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
+   d="scan'208";a="39640210"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa112.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 12:53:17 -0800
+X-CSE-ConnectionGUID: LXCnERC9RhmWG1D/VhEbPw==
+X-CSE-MsgGUID: YSCEat7OSRelzneUWD7QDQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="149807404"
+Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.108.48]) ([10.125.108.48])
+  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 12:53:16 -0800
+Message-ID: <b9c21518-54fc-4907-8fc3-d492a3f33bdf@intel.com>
+Date: Tue, 11 Feb 2025 12:53:15 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250211-work-acct-v1-0-1c16aecab8b3@kernel.org> <20250211-work-acct-v1-2-1c16aecab8b3@kernel.org>
-In-Reply-To: <20250211-work-acct-v1-2-1c16aecab8b3@kernel.org>
-From: Amir Goldstein <amir73il@gmail.com>
-Date: Tue, 11 Feb 2025 21:30:39 +0100
-X-Gm-Features: AWEUYZlThT5fe-k1kkTGf00clBuDf-JG6eqz8Aq4p3RAFE_xeEBujJ-igzEEeoQ
-Message-ID: <CAOQ4uxjncBJ=+-2J70m5sPtLiCzdHZ_mNWr4tVgGTODsMuQCvQ@mail.gmail.com>
-Subject: Re: [PATCH 2/2] acct: block access to kernel internal filesystems
-To: Christian Brauner <brauner@kernel.org>
-Cc: Zicheng Qu <quzicheng@huawei.com>, Linus Torvalds <torvalds@linux-foundation.org>, 
-	jlayton@kernel.org, axboe@kernel.dk, joel.granados@kernel.org, 
-	tglx@linutronix.de, viro@zeniv.linux.org.uk, hch@lst.de, len.brown@intel.com, 
-	pavel@ucw.cz, pengfei.xu@intel.com, rafael@kernel.org, tanghui20@huawei.com, 
-	zhangqiao22@huawei.com, judy.chenhui@huawei.com, linux-kernel@vger.kernel.org, 
-	linux-fsdevel@vger.kernel.org, syzkaller-bugs@googlegroups.com, 
-	linux-pm@vger.kernel.org, stable@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 05/17] x86/cpu/intel: Fix page copy performance for
+ extended Families
+To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
+ Dave Hansen <dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ Kan Liang <kan.liang@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Andy Lutomirski <luto@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Zhang Rui <rui.zhang@intel.com>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ David Laight <david.laight.linux@gmail.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20250211194407.2577252-1-sohil.mehta@intel.com>
+ <20250211194407.2577252-6-sohil.mehta@intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20250211194407.2577252-6-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 11, 2025 at 6:17=E2=80=AFPM Christian Brauner <brauner@kernel.o=
-rg> wrote:
->
-> There's no point in allowing anything kernel internal nor procfs or
-> sysfs.
->
-> Reported-by: Zicheng Qu <quzicheng@huawei.com>
-> Link: https://lore.kernel.org/r/20250127091811.3183623-1-quzicheng@huawei=
-.com
-> Fixes: 1da177e4c3f4 ("Linux-2.6.12-rc2")
-> Cc: <stable@vger.kernel.org>
-> Signed-off-by: Christian Brauner <brauner@kernel.org>
+On 2/11/25 11:43, Sohil Mehta wrote:
+> +	/*
+> +	 * Modern CPUs are generally expected to have a sane fast string
+> +	 * implementation. However, the BIOS may disable it on certain CPUs
+> +	 * via the architectural FAST_STRING bit.
+> +	 */
+> +	if (IS_ENABLED(CONFIG_X86_64) && (c->x86 == 6 || c->x86 > 15))
+> +		set_cpu_cap(c, X86_FEATURE_REP_GOOD);
 
-Reviewed-by: Amir Goldstein <amir73il@gmail.com>
+I'm not sure the BIOS comment is helpful here.
 
-> ---
->  kernel/acct.c | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
->
-> diff --git a/kernel/acct.c b/kernel/acct.c
-> index 48283efe8a12..6520baa13669 100644
-> --- a/kernel/acct.c
-> +++ b/kernel/acct.c
-> @@ -243,6 +243,20 @@ static int acct_on(struct filename *pathname)
->                 return -EACCES;
->         }
->
-> +       /* Exclude kernel kernel internal filesystems. */
-> +       if (file_inode(file)->i_sb->s_flags & (SB_NOUSER | SB_KERNMOUNT))=
- {
-> +               kfree(acct);
-> +               filp_close(file, NULL);
-> +               return -EINVAL;
-> +       }
-> +
-> +       /* Exclude procfs and sysfs. */
-> +       if (file_inode(file)->i_sb->s_iflags & SB_I_USERNS_VISIBLE) {
-> +               kfree(acct);
-> +               filp_close(file, NULL);
-> +               return -EINVAL;
-> +       }
-> +
->         if (!(file->f_mode & FMODE_CAN_WRITE)) {
->                 kfree(acct);
->                 filp_close(file, NULL);
->
-> --
-> 2.47.2
->
->
+Also, at this point, let's just make the check >=6 (or the >=PPRO
+equivalent).
+
+It will only matter if *all* of these are true:
+1. Someone has a 64-bit capable P4 that powers on
+2. They're running a 64-bit mainline kernel
+3. String copy is *actually* slower than the alternative
+4. They are performance sensitive enough to notice
+
+We don't even know the answer to #3 for sure. Let's just say what we're
+doing in a comment:
+
+	/* Assume that any 64-bit CPU has a good implementation */
 
