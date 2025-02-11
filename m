@@ -1,111 +1,147 @@
-Return-Path: <linux-pm+bounces-21899-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21891-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C3BE1A3179A
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:26:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 5CCA0A31725
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:04:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5D525167A79
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:26:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 12426161EC8
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:04:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C493B26280A;
-	Tue, 11 Feb 2025 21:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99A7E264F97;
+	Tue, 11 Feb 2025 21:04:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="je/cD9aK"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Mfl8POSo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC82E2627ED;
-	Tue, 11 Feb 2025 21:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D391D2641E8;
+	Tue, 11 Feb 2025 21:04:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739309155; cv=none; b=NgDgPumUDT8zAir8JJxXB1rTHYcnjt2ueN6kpHjvAsm2mKkqc0RTGyyi1OFdeO3LMWkS3D3JRvDcXHhRbpFgCw1p9NR7fjbojN6lBZcjbiZin6Xss3/gbzpEBII34jKxtxcNjOZfP90KiRWQ1GUAYe9YxaZN0wyCyqlB1RWIjC0=
+	t=1739307842; cv=none; b=BLasUlRCrXO5rCPt7sY1WW1ziXPiOAzxPgUIyiVbTvaaTD82HpeF8zKuExDK7HLS3auJNcCtJMr535BKIFo7NkDCNgIXBQv3XUySecIQJdCuk97g5kTIvM4yS+5Ig7gQQ8eaBenPPcctIBFSrRrPehZmtK33BMlWneXLCPp/HPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739309155; c=relaxed/simple;
-	bh=r47D1nHsFRyaXb3tGPZo++1XHzRRqEr4SbHWAOD9FZM=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=VHZ6QtP5NLDdsIOcaCItBTDklPB9SsU65wEINXOtaSzSmtQf56mUAo1pIdMk5gwjxdJZVEhF8/6U7VJT9ygslD5rHaKY988f+IuRuk7ptx2T9rI64Log4Hm+2AtMK24xfPAV+srIBIP/sV9KN9qtmdsnE2kxa1uzTYnP2dUs4DY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=je/cD9aK; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 7fa35b1fd5a3c8fe; Tue, 11 Feb 2025 22:25:51 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 1A7BE770175;
-	Tue, 11 Feb 2025 22:25:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1739309151;
-	bh=r47D1nHsFRyaXb3tGPZo++1XHzRRqEr4SbHWAOD9FZM=;
-	h=From:Subject:Date;
-	b=je/cD9aKEfVAqAHV8ssEnV+YNzP3llrt5nl6HCqVbRKb8LECxcXdI4pknPxPHvNFI
-	 sj2UKOTgUge/kiPgnHdg9orE2UFsDKZ4xchH7KvdCN1WFpiW3ydvEs10SLIqQBp1Xl
-	 AL+Ed6d19xsY2dmWdqgeb6PSBMtUBz1AhauQNlZRoiygqDxxqqORPwZN/rZr5kpqw6
-	 hP539J6dIiZWR9TCOpUWfSlFvOfwJZ0DeE75T+dmnBow/4XDCaGIKXk5z7RZ7rgWYl
-	 YW/3yyAIFgufnSY+8f+I8c13XpDYWi2Yy/kvA7axI+Yu7S7138k75wVu24ZPp9KKfx
-	 lcOAZc0XIOTQQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
- Johan Hovold <johan@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Jon Hunter <jonathanh@nvidia.com>
-Subject:
- [PATCH v1 02/10] PM: sleep: core: Use pm_runtime_no_support() during
- set_active updates
-Date: Tue, 11 Feb 2025 22:03:56 +0100
-Message-ID: <3876702.kQq0lBPeGt@rjwysocki.net>
-In-Reply-To: <2314745.iZASKD2KPV@rjwysocki.net>
-References: <2314745.iZASKD2KPV@rjwysocki.net>
+	s=arc-20240116; t=1739307842; c=relaxed/simple;
+	bh=nOPsFDny/WIUaQzrv5i+Dt5JkAIMBrAABHalo4mXwA4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CJTym5ketxMNJEJl70ghxjrh3d168tqrErQMInH6Je2JYS8sBIsQDsLE8yGLHH1EO4nTUkFl32LBjJrAGrBaexlYEAOPrNMvlUFZDTjPhdiBfYv7PvFgIn4uwxIf6bxSdvzAq6y/DJXS9/rH48kaYjaLq7cmbmiBxA4QYkkXw2U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Mfl8POSo; arc=none smtp.client-ip=198.175.65.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739307841; x=1770843841;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=nOPsFDny/WIUaQzrv5i+Dt5JkAIMBrAABHalo4mXwA4=;
+  b=Mfl8POSo47RVb2DqDP4AimHrL4O9FY/fRnj9T+gDx8LobbqU6ZhzKcJu
+   B+IStTcx92Xh9TYYt+xTZ7nxv7CpXisHmagLgik8OqWWNcZSa3M4nXLbD
+   T+QuLeAMPfrUqigUlGn2UfEyCNa/pe0bj4oCXwiHELB/443AGWErRU/wo
+   /gWie8FYdad6rtnN64AzJkZaSkbLV408TYZRECuG3TMTmwXdFfOFCI4d3
+   7vW3nRXkFAkZOFI2YrDJtD2lYjXZBFWRtzRtjSATQCmv+ozYMwq6YVsJs
+   zXGBk1UDwc28s87ZbCjPUS+ZlJq6G/I2eQ55uoQJfBa5aexrN6Fw/ZS0f
+   g==;
+X-CSE-ConnectionGUID: upMSaswWQPGKTCqtGsBkRA==
+X-CSE-MsgGUID: bEt50OSgQGGnBRnpnu9xLg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="51339349"
+X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
+   d="scan'208";a="51339349"
+Received: from fmviesa003.fm.intel.com ([10.60.135.143])
+  by orvoesa104.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 13:04:00 -0800
+X-CSE-ConnectionGUID: HWfP58q/SP6dlJd6i/cFIQ==
+X-CSE-MsgGUID: /UqW6zk9Rl2xWVlZuBSS1Q==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="116712734"
+Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.108.48]) ([10.125.108.48])
+  by fmviesa003-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 13:03:58 -0800
+Message-ID: <4859bba8-59a1-4cf6-ae74-e9ed7a9c4a2e@intel.com>
+Date: Tue, 11 Feb 2025 13:03:57 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegvddtkecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedunecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehjohhhrghnsehkvghrnhgvlhdrohhrghdprhgtphh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 11/17] x86/cpu/intel: Replace Family 15 checks with VFM
+ ones
+To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
+ Dave Hansen <dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ Kan Liang <kan.liang@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Andy Lutomirski <luto@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Zhang Rui <rui.zhang@intel.com>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ David Laight <david.laight.linux@gmail.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20250211194407.2577252-1-sohil.mehta@intel.com>
+ <20250211194407.2577252-12-sohil.mehta@intel.com>
+Content-Language: en-US
+From: Dave Hansen <dave.hansen@intel.com>
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20250211194407.2577252-12-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 2/11/25 11:44, Sohil Mehta wrote:
+> Introduce names for some old pentium 4 models and replace the x86_model
+> checks with VFM ones.
 
-It is pointless to set power.set_active for devices that have never had
-runtime PM enabled, so don't do that.
-
-Fixes: 7585946243d6 ("PM: sleep: core: Restrict power.set_active propagation")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/main.c |    6 ++++--
- 1 file changed, 4 insertions(+), 2 deletions(-)
-
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1281,9 +1281,11 @@
- 		dev->power.must_resume = true;
- 
- 	if (dev->power.must_resume) {
--		if (dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND)) {
-+		if (dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) &&
-+		    !pm_runtime_no_support(dev)) {
- 			dev->power.set_active = true;
--			if (dev->parent && !dev->parent->power.ignore_children)
-+			if (dev->parent && !dev->parent->power.ignore_children &&
-+			    !pm_runtime_no_support(dev->parent))
- 				dev->parent->power.set_active = true;
- 		}
- 		dpm_superior_set_must_resume(dev);
-
-
-
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 
