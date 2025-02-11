@@ -1,166 +1,194 @@
-Return-Path: <linux-pm+bounces-21822-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21823-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2C04EA30BF1
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 13:43:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 629F8A30BF4
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 13:45:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2AA61886D85
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 12:43:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 15E31163A94
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 12:45:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07496204873;
-	Tue, 11 Feb 2025 12:43:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E6F213E61;
+	Tue, 11 Feb 2025 12:45:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OjMlWr4L"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="ZhJUw8/A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f49.google.com (mail-wm1-f49.google.com [209.85.128.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2890F6FB9;
-	Tue, 11 Feb 2025 12:43:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B0CB204859;
+	Tue, 11 Feb 2025 12:45:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739277818; cv=none; b=WFTfNS6kYJnlFh39sAQD2xqokNrlf4e/naBMXlkSzG+q3fCMnsTsutNjFDSzghDSJhh0aQ1m++pavm3oeZa2T2Fr8wm8UHh28PzI6J1lRAPOO7XxsTmrtJYPVlUrQkF9SaU75LwugOcEKt0D/B0HcCLcvUypaIc//KEV1aIRZi0=
+	t=1739277908; cv=none; b=n9Twn3EDvfCuQUTOhbUujFJY0m4GXn1sngiGP1VkVp8J5+EhcoAq+Xbaa2qRh0n7MDnvMErsQw2suqv2D1ABnjIwjr3xtMUAbJv68gzZgz0+CMqzTFW6HPFwFyWUkUrsnr7xylFiEfQqqdaMwlT8HN1h/uOsTZF3Sj8VN7AIzWw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739277818; c=relaxed/simple;
-	bh=uepduHjDPy55AkkCGXbAU8w+LO18qfkEQA77TDsyyXM=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=FivNtL793kuoXJNcWpQPtV7UDA33T1WCzYhysWrZIOIlQIp7ATHj+dDpY9kMXvzpO9Whc/88masEvdaMxA0vihunuXsapMWDGTJtU6kKpU78agg3cpKGWGANJpC7iD+tIq9n8baRn8zY06VsBzELAloRrp4A+L1mbr+JqLlxhbg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OjMlWr4L; arc=none smtp.client-ip=209.85.128.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f49.google.com with SMTP id 5b1f17b1804b1-439350f1a0bso17866595e9.0;
-        Tue, 11 Feb 2025 04:43:36 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739277815; x=1739882615; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=uepduHjDPy55AkkCGXbAU8w+LO18qfkEQA77TDsyyXM=;
-        b=OjMlWr4L7vFaPgFwcMHjFximY+8gx242R2mtTXx7AXXoJfe8kS+PYWub2dyDAFbP+L
-         jQ9MPdImhr5KRXbvlEGRRnunIhTJjWWyi7blEm05l146eeOE7ryiVRm/Hfg28t3SENCR
-         6q4Z5TZe+gv65rSwWfX+UX3efXSxVdeC7yqIk+bWVDggVeaw8AwONlmArnZrjBO2uOFz
-         FQd55sMc8TqWWNcGyTKG29iyOSxl6pDZL/nge7jxlerE+REScjJHqXApu7sXhPMKYb7Z
-         Fc/gygzktHRvv4DGJjEFI/65p1kAf96KfUuVOdypC4hcL9mMwCPm0Yv2Kfnplu8/sZ4w
-         d9yg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739277815; x=1739882615;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=uepduHjDPy55AkkCGXbAU8w+LO18qfkEQA77TDsyyXM=;
-        b=ETAM4mjifOT3pSVLrl74skUT753p15G5Rdj5qsIk5m+3LkJzFk5+O3sufuqSH/7Ywa
-         qTW4T15NvrPGPjwR2tZ14DDgYG/fRzelPMQnx8Ylz6bjdb3Vs/qBdUcPEhm93tXGREOg
-         UuwAuRMNf1ifqW0c455uf02MQmtJkxjVHOPBcV2UsrJbB0qHc1Z0FR7oZ67pEGMJJRk4
-         a9pw2Z+pQzRGG2H+Tc1P/TOjl7uVarEOMKSwQdsTMbQLC9SRJL7xs0OXK+IDTgNxH9qx
-         E5ngbbQw/MlXADlE5Z6vjzimWQLU/tO7rzPyhAqhKbnpCszOYyVQB471M90chFgSUlR2
-         lHsw==
-X-Forwarded-Encrypted: i=1; AJvYcCUIb01nZh9o7MC54aB4D7+uWjWCpF9rgLEH86G6AB23ETglmaCpWaIFujQ3XSMYh2nSUM8EW+Uiy5c=@vger.kernel.org, AJvYcCUdHV5uPEZckqLdsLGJh6qedr9K+uwCqEjIwGjstS7r/GtZbbK05OkmNWKsi4jQtp8TinsBvo8NrhfU@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw1SoFNPazcgIndfK7zIkN2wLU4mjz/DyvqE4SnPsNsBelmfNvC
-	UbLGr1D/gi0qrqxayE1GY+HUzqsnP25gSl2xC8L0j/bBIQB84kuj
-X-Gm-Gg: ASbGnctOvyUEPvIbXPYYn68MrtCfVT8ZxjMU6x9bJz7lwTc3ZUs5iz7Vn3FSDjMbMej
-	viIEyBuGCVsguTXuI70hOCRAs/qgi2gn5kBZmnL+6x3iuJwk83McrTKNw4G+HqKc8Euww9TMt7v
-	izau2N2G68sn7+5mVrE8Dycu5XFVGLYoqF8t9KjWCQz+7BzZ5scFrbDdnWnzdGq2GJe+ulhWIm8
-	znO3dmwLy9dP+DlaEvh5T4bUPsKM5wqWW9KvW9mCOQNH0NpubeZ4MvCE4tuqZYcoGzkroj3Icoq
-	lSJO/5lWB2YpX53JasB0roepwqbbTwB4
-X-Google-Smtp-Source: AGHT+IEBhVLUgJKyLV9yDCk2soLE+OEkOUesnwWNG1Lpa/Ktin9FkzYLpEqwqMjhtsNnoPajSZttXg==
-X-Received: by 2002:a7b:ce8c:0:b0:439:31a6:276a with SMTP id 5b1f17b1804b1-4394ceaf874mr28491015e9.2.1739277815164;
-        Tue, 11 Feb 2025 04:43:35 -0800 (PST)
-Received: from giga-mm.home ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dcd8213f2sm11711856f8f.67.2025.02.11.04.43.34
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 04:43:34 -0800 (PST)
-Message-ID: <b1f05bff1d6c3f0cb1b381c15dcf222ec4c7f1b1.camel@gmail.com>
-Subject: Re: [PATCH v2 0/7] arm64 support for Milk-V Duo Module 01 EVB
-From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-To: Conor Dooley <conor@kernel.org>
-Cc: soc@lists.linux.dev, Chen Wang <unicorn_wang@outlook.com>, Inochi Amaoto
-	 <inochiama@outlook.com>, Lee Jones <lee@kernel.org>, Rob Herring
- <robh@kernel.org>,  Krzysztof Kozlowski	 <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Philipp Zabel	 <p.zabel@pengutronix.de>, Catalin
- Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>, Arnd
- Bergmann <arnd@arndb.de>, Paul Walmsley <paul.walmsley@sifive.com>,  Palmer
- Dabbelt <palmer@dabbelt.com>, Albert Ou <aou@eecs.berkeley.edu>, Sebastian
- Reichel <sre@kernel.org>, 	devicetree@vger.kernel.org, Haylen Chu
- <heylenay@outlook.com>, 	linux-arm-kernel@lists.infradead.org,
- linux-riscv@lists.infradead.org, 	linux-pm@vger.kernel.org, Jisheng Zhang
- <jszhang@kernel.org>, Chao Wei	 <chao.wei@sophgo.com>
-Date: Tue, 11 Feb 2025 13:43:31 +0100
-In-Reply-To: <20250211-backwash-jester-2fdd6740000e@spud>
-References: <20250210220951.1248533-1-alexander.sverdlin@gmail.com>
-	 <20250211-backwash-jester-2fdd6740000e@spud>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.2 
+	s=arc-20240116; t=1739277908; c=relaxed/simple;
+	bh=V9k10qmJrqoARBr2IWZK7XdaH8IuPpMg51At5ra5rDI=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=oQK3favxk6yBLrSROR9nQbIhCO8AeT7SZ/N1c0kAG/1UYt2Fi6i91RVhx1O+GRHilyJu2tZ50YZ1kslD9pCNcDHSL15ce0BCCJSm2U343iVupJ4vAv4O+zYrnj/N4YB3fTTa3rHZT1jrSyzdj3+UDsieptAXSkoaYhIyJ1GQvLM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=ZhJUw8/A; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279870.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51BCRSEX030318;
+	Tue, 11 Feb 2025 12:44:57 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-type:date:from:message-id:mime-version:subject:to; s=
+	qcppdkim1; bh=yXCCH/PU40ZjxFTTlFdpHNTE8a98ecuNdKQIWGUHmH0=; b=Zh
+	JUw8/ATmAGY4Fk1MEEJNJbkUGt0MluOf6ox0zxJXSjzVG/SoKWOrKKSl2tYGo9kS
+	6dyJl+x+M8OlWDwqABRomwdx4KWNfAF8fka/j2uBk7CV8346JJxUVkkRcxYmSh4f
+	mFtu1xa0S4E37cDX69PHX/SWFHR7TQknocDomPPhC1PeYhCl9H5ir5DtiyhCj9R7
+	a28N7LqWG8kuaf0xRAFsw7MH0VaCQFq4TDXatp3inJ62wj9WPYNTdU1gHle8lN7w
+	Z5LsYvlGmsNX73SSOxG0CBEDjd8BaHfkzXwGRtqEY8+s9nRmfYHVpvgIPRSjhr4F
+	DwHbLTzWqb8xG4yO5BRA==
+Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44qxg9hett-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Feb 2025 12:44:57 +0000 (GMT)
+Received: from nasanex01c.na.qualcomm.com (nasanex01c.na.qualcomm.com [10.45.79.139])
+	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51BCiuJH030672
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 11 Feb 2025 12:44:56 GMT
+Received: from codeaurora.org (10.80.80.8) by nasanex01c.na.qualcomm.com
+ (10.45.79.139) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 11 Feb
+ 2025 04:44:53 -0800
+From: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+To: "Rafael J . Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano
+	<daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+	<lukasz.luba@arm.com>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        "Manaf
+ Meethalavalappu Pallikunhi" <quic_manafm@quicinc.com>
+Subject: [PATCH] thermal: core: Fix race between zone registration and userspace sysfs access
+Date: Tue, 11 Feb 2025 18:14:21 +0530
+Message-ID: <20250211124421.27169-1-quic_manafm@quicinc.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01c.na.qualcomm.com (10.45.79.139)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: xWoqyAvGEUuoP-kEgL07Eft6Do_HqTKD
+X-Proofpoint-GUID: xWoqyAvGEUuoP-kEgL07Eft6Do_HqTKD
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-11_05,2025-02-11_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 adultscore=0
+ mlxscore=0 priorityscore=1501 malwarescore=0 spamscore=0 impostorscore=0
+ mlxlogscore=999 lowpriorityscore=0 phishscore=0 clxscore=1015
+ suspectscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502110081
 
-Hi Conor!
+Currently, the thermal zone sysfs is created before setting the
+governor for that thermal zone during registration. If a thermal
+zone is being registered while a userspace module tries to access
+the same thermal zone policy sysfs node, it can lead to a potential
+NULL pointer dereference issue in the policy sysfs path.
 
-On Tue, 2025-02-11 at 10:50 +0000, Conor Dooley wrote:
-> On Mon, Feb 10, 2025 at 11:09:40PM +0100, Alexander Sverdlin wrote:
-> > This series adds very basic support for Milk-V Duo Module 01 EVB [1] in
-> > arm64 mode. The SoC (SG2000) is dual-arch, RiscV and ARM64, the latter =
-has
-> > been chosen because the upstream toolchain can be utilized.
->=20
-> > =C2=A0 .../{riscv =3D> soc/sophgo}/sophgo.yaml=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 7 +-
-> > =C2=A0 arch/arm64/Kconfig.platforms=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 =
-6 ++
-> > =C2=A0 arch/arm64/boot/dts/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 =
-1 +
-> > =C2=A0 arch/arm64/boot/dts/sophgo/Makefile=C2=A0=C2=A0=C2=A0=C2=A0=C2=
-=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +
->=20
-> I'd expect this to be maintained alongside the riscv support, how come
-> there's no maintainers entry change here?
+To avoid this race condition, set the thermal zone governor first
+before enabling the thermal zone sysfs during registration.
+This change fixes below issue,
 
-MAINTAINERS file has "K: sophgo" entry already, I suppose new files will
-fall into this category? That's why I've ignored this specific checkpatch w=
-arning
-in all patches. Am I wrong?
+[ 20.964589]   Unable to handle kernel NULL pointer dereference at virtual address 0000000000000000
+[ 21.049645]   pstate: 63400005 (nZCv daif +PAN -UAO +TCO +DIT -SSBS BTYPE=--)
+[ 21.049647]   pc : policy_show+0x1c/0x3c
+[ 21.049652]   lr : dev_attr_show+0x38/0x7c
+[ 21.049655]   sp : ffffffc09a98bbf0
+[ 21.049657]   x29: ffffffc09a98bbf0 x28: ffffff885b940000 x27: 0000000000000000
+[ 21.049660]   x26: 0000000000000000 x25: 000000007ffff001 x24: 0000000000000001
+[ 21.049664]   x23: ffffffdca6334c78 x22: ffffff88a2b2fe00 x21: ffffff881cee8000
+[ 21.049667]   x20: ffffff8868318018 x19: ffffffdca7640d78 x18: ffffffdca74d94c0
+[ 21.049670]   x17: 00000000ae84bcd4 x16: 00000000ae84bcd4 x15: 000000002df29963
+[ 21.049673]   x14: 00000000cbef29c7 x13: 000000004e61db0a x12: ffffff885b940be0
+[ 21.049677]   x11: ffffff881cee8000 x10: 0000000000000000 x9 : ffffffdca59f00b8
+[ 21.049680]   x8 : 0000000000000000 x7 : 0000000000000000 x6 : 000000000000003f
+[ 21.049683]   x5 : 0000000000000040 x4 : 0000000000000000 x3 : 0000000000000004
+[ 21.049686]   x2 : ffffff881cee8000 x1 : ffffffdca66e5bfb x0 : ffffff881cee8000
+[ 21.049689]   Call trace:
+[ 21.049690]    policy_show+0x1c/0x3c
+[ 21.049692]    dev_attr_show+0x38/0x7c
+[ 21.049695]    sysfs_kf_seq_show+0xd8/0x160
+[ 21.049699]    kernfs_seq_show+0x44/0x54
+[ 21.049701]    seq_read_iter+0x16c/0x4ec
+[ 21.049705]    kernfs_fop_read_iter+0x64/0x1d8
+[ 21.049709]    vfs_read+0x2d8/0x33c
+[ 21.049711]    ksys_read+0x78/0xe8
+[ 21.049714]    __arm64_sys_read+0x1c/0x2c
+[ 21.049716]    invoke_syscall+0x58/0x10c
+[ 21.049719]    el0_svc_common+0xa8/0xdc
+[ 21.049722]    do_el0_svc+0x1c/0x28
+[ 21.049724]    el0_svc+0x40/0x90
+[ 21.049726]    el0t_64_sync_handler+0x70/0xbc
+[ 21.049728]    el0t_64_sync+0x1a8/0x1ac
+[ 21.049731]   Code: f9435008 aa0203e0 d00054e1 912fec21 (f9400108)
 
-> > =C2=A0 .../sophgo/sg2000-milkv-duo-module-01-evb.dts | 31 +++++++
-> > =C2=A0 .../sophgo/sg2000-milkv-duo-module-01.dtsi=C2=A0=C2=A0=C2=A0 | 8=
-5 +++++++++++++++++
-> > =C2=A0 arch/arm64/boot/dts/sophgo/sg2000.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 | 75 +++++++++++++++
-> > =C2=A0 arch/arm64/configs/defconfig=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 |=C2=A0 =
-5 +
-> > =C2=A0 arch/riscv/boot/dts/sophgo/cv1800b.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 | 64 ++++++++++---
-> > =C2=A0 arch/riscv/boot/dts/sophgo/cv1812h.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0 | 64 ++++++++++---
-> > =C2=A0 arch/riscv/boot/dts/sophgo/cv181x.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 |=C2=A0 2 +-
-> > =C2=A0 arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi=C2=A0=C2=A0=C2=A0 | 5=
-7 ++++++++++++
-> > =C2=A0 arch/riscv/boot/dts/sophgo/cv18xx.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 | 91 +++++--------------
-> > =C2=A0 arch/riscv/boot/dts/sophgo/sg2002.dtsi=C2=A0=C2=A0=C2=A0=C2=A0=
-=C2=A0=C2=A0=C2=A0 | 64 ++++++++++---
-> > =C2=A0 14 files changed, 451 insertions(+), 103 deletions(-)
-> > =C2=A0 rename Documentation/devicetree/bindings/{riscv =3D> soc/sophgo}=
-/sophgo.yaml (80%)
-> > =C2=A0 create mode 100644 arch/arm64/boot/dts/sophgo/Makefile
-> > =C2=A0 create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-m=
-odule-01-evb.dts
-> > =C2=A0 create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-m=
-odule-01.dtsi
-> > =C2=A0 create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
-> > =C2=A0 create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi
+Signed-off-by: Manaf Meethalavalappu Pallikunhi <quic_manafm@quicinc.com>
+---
+ drivers/thermal/thermal_core.c | 16 ++++++++--------
+ 1 file changed, 8 insertions(+), 8 deletions(-)
 
---=20
-Alexander Sverdlin.
+diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+index 2328ac0d8561..c6e6b229cc6e 100644
+--- a/drivers/thermal/thermal_core.c
++++ b/drivers/thermal/thermal_core.c
+@@ -1589,6 +1589,11 @@ thermal_zone_device_register_with_trips(const char *type,
+ 
+ 	tz->state = TZ_STATE_FLAG_INIT;
+ 
++	thermal_zone_device_init(tz);
++	result = thermal_zone_init_governor(tz);
++	if (result)
++		goto unregister;
++
+ 	/* sys I/F */
+ 	/* Add nodes that are always present via .groups */
+ 	result = thermal_zone_create_device_groups(tz);
+@@ -1600,19 +1605,14 @@ thermal_zone_device_register_with_trips(const char *type,
+ 		thermal_zone_destroy_device_groups(tz);
+ 		goto remove_id;
+ 	}
+-	thermal_zone_device_init(tz);
+ 	result = device_register(&tz->device);
+ 	if (result)
+ 		goto release_device;
+ 
+-	result = thermal_zone_init_governor(tz);
+-	if (result)
+-		goto unregister;
+-
+ 	if (!tz->tzp || !tz->tzp->no_hwmon) {
+ 		result = thermal_add_hwmon_sysfs(tz);
+ 		if (result)
+-			goto unregister;
++			goto release_device;
+ 	}
+ 
+ 	result = thermal_thresholds_init(tz);
+@@ -1629,12 +1629,12 @@ thermal_zone_device_register_with_trips(const char *type,
+ 
+ remove_hwmon:
+ 	thermal_remove_hwmon_sysfs(tz);
+-unregister:
+-	device_del(&tz->device);
+ release_device:
+ 	put_device(&tz->device);
+ remove_id:
+ 	ida_free(&thermal_tz_ida, id);
++unregister:
++	device_del(&tz->device);
+ free_tzp:
+ 	kfree(tz->tzp);
+ free_tz:
+-- 
 
 
