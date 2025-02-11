@@ -1,129 +1,105 @@
-Return-Path: <linux-pm+bounces-21894-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21906-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A39E1A3174C
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:08:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED830A317A3
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:26:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0CB981889400
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:08:38 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 857DC169293
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:26:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3904E265CB1;
-	Tue, 11 Feb 2025 21:08:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 14A8D2686A1;
+	Tue, 11 Feb 2025 21:25:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WQ+4Fr4o"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="UdE3VJlu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3E9F2641E8;
-	Tue, 11 Feb 2025 21:08:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EC726280D;
+	Tue, 11 Feb 2025 21:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739308098; cv=none; b=J6A8JfIEkoZyVpwHDHvkmzm8xan06Noh37rreduxxfBozP2L072U+9vkDJgCZY6MUwH5Qob5KjDtb3bSEngI13MC6i0aiEZzecCh0ceyNnHWKYY0XH+AfZ7N3s2o243/aT+Xkab1L3msaMdwBqJrjDOYKuOWMA19LvTOjIlLZh0=
+	t=1739309158; cv=none; b=Yr5XR9OM/XHQhFe8R6sLzbqQ5vmJ5Tx2mu/RqflV3R4x7fT1N8g83oW/mC3VAS7YvTl41fg+4JB1tKOvdP6vwm+iYf3YYoOIWAD7HE+ySitP4gqav+aztIv8Sy5EgvatBVksJYCnKxKJsKkL+kV7j7EKwvw3crXDSV4uyMhD5Jc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739308098; c=relaxed/simple;
-	bh=bGAOKA1MkNL81iEciQ/YaP9238hsjmHj0yVs2PHuZjM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OzQNReQMe7hgX1Pl9QJjtdCKFV6XP2MQbcfTIh85sllnI/a3HZDKso2T1uUaWmxAq2G40dte0cueJkng8zoHNXrRCldyurphOSag67sunN/Lx3O5azXHRbc62P/f4uY8h0CjW2f6kzwSyFMmFmtTE/xVg5tNabyv72oZOsjf9PM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WQ+4Fr4o; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 26979C4CEE2;
-	Tue, 11 Feb 2025 21:08:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739308095;
-	bh=bGAOKA1MkNL81iEciQ/YaP9238hsjmHj0yVs2PHuZjM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WQ+4Fr4obzotuKZeY0/kEEylnLtsOD6qn4FsTE6130dX+MJjMj/w+e8PP+Rimq72C
-	 TrSDrPoODZpQ0mWRSCDfuz5DIEnbG4cxoY5xlGdm+mXlMGfSE1wUUT/m3Jspj+9rrA
-	 G81fXqid9RUh9II6oOuWG9CkvC3Lbz3ogvPg7KAEakKMpacaZBCIQWesFL8M9BTx6U
-	 Zbzo+M49Pq+rEzRVuGgmkNbc7Ew8iY78IZleQNZb3B+N5X07Yyb4F1putZOT+qAPRP
-	 5y1Ze4HTH/9MfNe8uOxWCKn4VxNHAhJ+YFRaj67QNEb3ULeJzPFkuvAsj7C99etlv+
-	 6Sy+bxDDNG+AA==
-Date: Tue, 11 Feb 2025 15:08:14 -0600
-From: Rob Herring <robh@kernel.org>
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: Andras Szemzo <szemzo.andras@gmail.com>,
-	Michael Turquette <mturquette@baylibre.com>,
-	Stephen Boyd <sboyd@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, Chen-Yu Tsai <wens@csie.org>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Samuel Holland <samuel@sholland.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Maxime Ripard <mripard@kernel.org>, Vinod Koul <vkoul@kernel.org>,
-	Kishon Vijay Abraham I <kishon@kernel.org>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Uwe =?iso-8859-1?Q?Kleine-K=F6nig?= <u.kleine-koenig@baylibre.com>,
-	Florian Fainelli <florian.fainelli@broadcom.com>,
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, linux-sunxi@lists.linux.dev,
-	linux-kernel@vger.kernel.org, linux-phy@lists.infradead.org,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-riscv@lists.infradead.org
-Subject: Re: [PATCH v2 09/10] ARM: dts: sun8i: add DTSI file for V853
-Message-ID: <20250211210814.GB1172102-robh@kernel.org>
-References: <20250205125225.1152849-1-szemzo.andras@gmail.com>
- <20250205125225.1152849-10-szemzo.andras@gmail.com>
- <20250206161958.1ae885db@donnerap.manchester.arm.com>
+	s=arc-20240116; t=1739309158; c=relaxed/simple;
+	bh=zmNhGZJdY16x0lBsxEUPSi9daEXT4yca9scHTcNRzzU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=klVxPIRLK4P/POJSMgcINUJk/DRbHur+jSCXJEXaf9jpBcOnKBxlbt4WMhAAgS0sC/Htw/NJrtCkEH00tCxE3qKSWsnX1IK2X/o6k1vl0t93HsitjHEx5FI1YfwKj4bMTlRNGg/PXMOho7hX/205RHCu65BjysRu6Ke+yyRl0K4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=UdE3VJlu; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id 9daabc391473d490; Tue, 11 Feb 2025 22:25:48 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 0B026770175;
+	Tue, 11 Feb 2025 22:25:48 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1739309148;
+	bh=zmNhGZJdY16x0lBsxEUPSi9daEXT4yca9scHTcNRzzU=;
+	h=From:Subject:Date;
+	b=UdE3VJluhfkRx/T9oWQ97SBw5OQ80FdN/4yRVlBX5ep0aPRdpHYTj55d0Wt+ye4IK
+	 5KcRI1zAz3TCSoZznKPcyL/LgqGmOJBC0nwwtzjCsAYRYT9oMhgd6ebeL06hYOX5An
+	 k7+hXmuPoGrp72XSfqHzpMipnluGlaWRNw2w9EjIe3/C8EZSwao12JIljnFAL7cTvB
+	 uXeJUqp40lGJ2i1srQgAfQBFP8aDDemicGhLVqL4mjiorhNDgICsTKenyKwMCTcCpP
+	 wvPyt2YG+senpQEP7z4Kqx8KxKmEFPreQ5oAUCDNZkJPrzdJT0f2/oAi9Do1EwCGmt
+	 KGXHAAOp+L5tg==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Johan Hovold <johan@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Jon Hunter <jonathanh@nvidia.com>
+Subject:
+ [PATCH v1 05/10] PM: runtime: Do not enable wakeup IRQs during system resume
+Date: Tue, 11 Feb 2025 22:09:11 +0100
+Message-ID: <8546164.NyiUUSuA9g@rjwysocki.net>
+In-Reply-To: <2314745.iZASKD2KPV@rjwysocki.net>
+References: <2314745.iZASKD2KPV@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250206161958.1ae885db@donnerap.manchester.arm.com>
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegvddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehjohhhrghnsehkvghrnhgvlhdrohhrghdprhgtphh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
-On Thu, Feb 06, 2025 at 04:19:58PM +0000, Andre Przywara wrote:
-> On Wed,  5 Feb 2025 13:52:24 +0100
-> Andras Szemzo <szemzo.andras@gmail.com> wrote:
-> 
-> Hi,
-> 
-> > V853/V851 is a new SoC by Allwinner. Add a basic dtsi file for it.
-> > 
-> > Signed-off-by: Andras Szemzo <szemzo.andras@gmail.com>
-> > ---
-> >  arch/arm/boot/dts/allwinner/sun8i-v853.dtsi | 656 ++++++++++++++++++++
-> >  1 file changed, 656 insertions(+)
-> >  create mode 100644 arch/arm/boot/dts/allwinner/sun8i-v853.dtsi
-> > 
-> > diff --git a/arch/arm/boot/dts/allwinner/sun8i-v853.dtsi b/arch/arm/boot/dts/allwinner/sun8i-v853.dtsi
-> > new file mode 100644
-> > index 000000000000..8b82b8783127
-> > --- /dev/null
-> > +++ b/arch/arm/boot/dts/allwinner/sun8i-v853.dtsi
-> > @@ -0,0 +1,656 @@
-> > +// SPDX-License-Identifier: (GPL-2.0-only OR MIT)
-> > +// Copyright (C) 2024 Andras Szemzo <szemzo.andras@gmail.com>
-> > +
-> > +#include <dt-bindings/clock/sun6i-rtc.h>
-> > +#include <dt-bindings/clock/allwinner,sun8i-v853-r-ccu.h>
-> > +#include <dt-bindings/reset/allwinner,sun8i-v853-r-ccu.h>
-> > +#include <dt-bindings/clock/allwinner,sun8i-v853-ccu.h>
-> > +#include <dt-bindings/reset/allwinner,sun8i-v853-ccu.h>
-> > +#include <dt-bindings/interrupt-controller/arm-gic.h>
-> > +#include <dt-bindings/power/allwinner,sun8i-v853-ppu.h>
-> > +
-> > +/ {
-> > +	#address-cells = <1>;
-> > +	#size-cells = <1>;
-> > +
-> > +	dcxo: dcxo-clk {
-> 
-> What's people's opinion about the node name? Traditionally we call this
-> "osc24M", in all the other SoCs except D1 and A100. So is this the new
-> black?
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-That's documented (but not enforced) in fixed-clock.yaml now. It's 
-"clock-<freq-in-hz>".
+Enabling system wakeup IRQs during system resume transitions is
+not particularly useful, even on errors, so don't do it in the
+pm_runtime_force_resume() error path.
 
-Rob
+Fixes: c46a0d5ae4f9 ("PM: runtime: Extend support for wakeirq for force_suspend|resume")
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/base/power/runtime.c |    1 -
+ 1 file changed, 1 deletion(-)
+
+--- a/drivers/base/power/runtime.c
++++ b/drivers/base/power/runtime.c
+@@ -1978,7 +1978,6 @@
+ 	ret = callback ? callback(dev) : 0;
+ 	if (ret) {
+ 		pm_runtime_set_suspended(dev);
+-		dev_pm_enable_wake_irq_check(dev, false);
+ 		goto out;
+ 	}
+ 
+
+
+
 
