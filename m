@@ -1,147 +1,147 @@
-Return-Path: <linux-pm+bounces-21886-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21904-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5DA44A31708
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:01:08 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 243D4A317A2
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:26:41 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0D31E3A4822
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:00:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D454A3A4342
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 62D442641E8;
-	Tue, 11 Feb 2025 21:01:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47EF26868E;
+	Tue, 11 Feb 2025 21:25:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="UPY8gUI9"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="c/sF42oi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B580C26563F;
-	Tue, 11 Feb 2025 21:01:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E09F262803;
+	Tue, 11 Feb 2025 21:25:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739307663; cv=none; b=CGFanLXc4/dxz/hn68kBtCWa71G+ds0g35OYw1yt/NMUBwIRirAoOXElIAYUqPQmW3gl1/HoBlX/j5CUrKShOhn81Hi/j2zkdeF4ZTicLpbpWmm4jKDWemAR5LQkfg+vadeuIlaf4XsBtK0SsH+Yqek8y6CvhjO8WRe+fQ+Fay8=
+	t=1739309157; cv=none; b=i7bxUBpIhjHwTRGn2fsnBUc9i7/9XnRW2s9S0fQqjmiXjVO5uJSbmRTRakwWtU+g36SV8St2SRPMayQcggCwSF50t4DUb2wCYQ54tUaL3juqHPjx1w7ec8yt8mo6D+mhtYE8gSH/w1PTE7Tja1Bi8AJwGHpRFUarIhCzAf5X4dA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739307663; c=relaxed/simple;
-	bh=RjQmjlKqTv6LwLQd3gwxLhAr78AqkMUY8fkfjOd54lc=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=I2GUYgTGUCgZFN5kywZ7SKaCL6mZjZVyQJdxx56LN8LkulN/ILMufYxZLmQdr15WAFPJvkMazwvcFVEL0O5+g4zZ+ACn4GEbALLGAhubC+EuMgPm6B/NqkSfocELL3Iqls+kbmMzui+zUkvh8HyM2Yz3N1aTMQICWTJoyow8jQw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=UPY8gUI9; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739307662; x=1770843662;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=RjQmjlKqTv6LwLQd3gwxLhAr78AqkMUY8fkfjOd54lc=;
-  b=UPY8gUI9ywbGH4ErMsD/hLwdItPZm4Drcq6Cp9FvNOe95kjQV40rbp6B
-   O6zWonQFz0HkSnrvgdJO68S66K4fiIJaSeezStY7os4NnaaQkiqiDDPxa
-   pleIf/cHhHzRUVdbtiJ0Wo7L6oIm3ve9SkWlTw1RJizV6HIxjLK9mk07k
-   /U4WI0hW0DFNMra72z6Xy7wixJVj+R9J7rW8wemH5aRCDeqBRkTIJtED0
-   EmUy7/8zv6KulB+pSAZiIBpkKoJFk64Gc6tVjw64fpONBOJ7/BY8jv0XL
-   2QmV5KbtxNvm9APlXOexQUmZ5PsHg2SMiSUnexB9KU8uzA8XcLNyjHB9d
-   g==;
-X-CSE-ConnectionGUID: nqIKP8RkQnGDTiYQ/grSxw==
-X-CSE-MsgGUID: OBVqdnJXRi2sBdYwf1uUZw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="65301659"
-X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
-   d="scan'208";a="65301659"
-Received: from fmviesa001.fm.intel.com ([10.60.135.141])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 13:01:01 -0800
-X-CSE-ConnectionGUID: r9vsfxAHTuSYuqavoo6KtQ==
-X-CSE-MsgGUID: OOw7sX69Rjqu40PF1GmQfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="143534819"
-Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.108.48]) ([10.125.108.48])
-  by smtpauth.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 13:00:59 -0800
-Message-ID: <7f5de627-e08a-4284-a464-dc3a73af3b0b@intel.com>
-Date: Tue, 11 Feb 2025 13:00:58 -0800
+	s=arc-20240116; t=1739309157; c=relaxed/simple;
+	bh=IZxrj6Gu0pIXpywIgOSybDUHKnFS0Y4eMhTg3+5V+js=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=D1XZ9NEPr2rJ1wQR31naftQwtm4pRw9TxVKGmVklylyEJeuuxhY7WWIWtlYPpezshhvWWwHSsvkFLyBDxpwMbxfG7CwAaKLX8x0YHq5pbRqcBqA7GHuZqgUOZ8apSHY6XtI+nRKHSinfO90bnuQk/8D1jNEtjMFFiNfDQ58kMgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=c/sF42oi; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id cbb5aeea9cca1d0b; Tue, 11 Feb 2025 22:25:53 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id F20D3770175;
+	Tue, 11 Feb 2025 22:25:52 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1739309153;
+	bh=IZxrj6Gu0pIXpywIgOSybDUHKnFS0Y4eMhTg3+5V+js=;
+	h=From:Subject:Date;
+	b=c/sF42oid7G9JckXojZiUZzCaI7i9gYL/7L3Mjd3eQP45ZHvToVrSoLuNuHgw41n2
+	 mxoajGMy/X5Rcq0mYGryz6Qna/dgG0Bt8T9NjlrBfGBBWNGwnmrULbOj5ONhRMBwX4
+	 s288plxfAwTYj0CSZb+3v+FCdy3Gn19gW5o37Tp1Hmi8r7p4K+bhA7Gu3hKyTPzMFy
+	 vFIqzK1c8IumlcnEEwz6IJkn+sYzmD3jjf8yUPHYyElOEL0/aBgj/uw3E2KYzfCrt7
+	 wjNAzqeAD+7GQXkrBiudtf18bKPvFdF0xxSyJzx1rDbIkgStCGHDYUoX4425hWKG2x
+	 hvo6GAyaTUMkw==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Johan Hovold <johan@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Jon Hunter <jonathanh@nvidia.com>
+Subject:
+ [PATCH v1 00/10] PM: Make the core and pm_runtime_force_suspend/resume()
+ agree more
+Date: Tue, 11 Feb 2025 22:01:24 +0100
+Message-ID: <2314745.iZASKD2KPV@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/17] x86/mtrr: Modify a x86_model check to an Intel
- VFM check
-To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
- Dave Hansen <dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
- Arnaldo Carvalho de Melo <acme@kernel.org>,
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
- Alexander Shishkin <alexander.shishkin@linux.intel.com>,
- Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
- Adrian Hunter <adrian.hunter@intel.com>,
- Kan Liang <kan.liang@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>,
- Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
- Andy Lutomirski <luto@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Zhang Rui <rui.zhang@intel.com>,
- Andrew Cooper <andrew.cooper3@citrix.com>,
- David Laight <david.laight.linux@gmail.com>,
- linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-hwmon@vger.kernel.org
-References: <20250211194407.2577252-1-sohil.mehta@intel.com>
- <20250211194407.2577252-10-sohil.mehta@intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <20250211194407.2577252-10-sohil.mehta@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegvddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgvrhhnsehrohiflhgrnhgurdhhrghrvhgrrhgurdgvughupdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohepjhhohhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
-On 2/11/25 11:43, Sohil Mehta wrote:
-> Simplify one of the last few Intel x86_model checks in arch/x86 by
-> substituting it with a VFM one.
+Hi Everyone,
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+This series is a result of the discussion on a recently reported issue
+with device runtime PM status propagation during system resume and
+the resulting patches:
+
+https://lore.kernel.org/linux-pm/12619233.O9o76ZdvQC@rjwysocki.net/
+https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwysocki.net/
+
+Overall, due to restrictions related to pm_runtime_force_suspend() and
+pm_runtime_force_resume(), it was necessary to limit the RPM_ACTIVE
+setting propagation to the parent of the first device in a dependency
+chain that turned out to have to be resumed during system resume even
+though it was runtime-suspended before system suspend.
+
+Those restrictions are that (1) pm_runtime_force_suspend() attempts to
+suspend devices that have never had runtime PM enabled if their runtime
+PM status is currently RPM_ACTIVE and (2) pm_runtime_force_resume()
+will skip device whose runtime PM status is currently RPM_ACTIVE.
+
+The purpose of this series is to eliminate the above restrictions and
+get pm_runtime_force_suspend() and pm_runtime_force_resume() to agree
+more with what the core does.
+
+First off, it turns out that detecting devices that have never had
+runtime PM enabled is not really hard - it is sufficient to check
+their power.last_status data when runtime PM is disabled.  If
+power.last_status is RPM_INVALID at that point, runtime PM has never
+been enabled for the given device, so patch [01/10] adds a helper
+function for checking that.
+
+Patch [02/10] makes the PM core use the new function to avoid setting
+power.set_active for devices with no runtime PM support which really
+is a fixup on top of
+
+https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwysocki.net/
+
+Patch [03/10] modifies pm_runtime_force_suspend() to skip devices
+with no runtime PM support with the help of the new function.
+
+Next, patch [04/10] uses the observation that the runtime PM status
+check in pm_runtime_force_resume() is redundant and drops that check.
+
+Patch [05/10] removes the wakeirq enabling from the pm_runtime_force_resume()
+error path because it is not really a good idea to enable wakeirqs during
+system resume.
+
+Patch [06/10] makes the PM core somewhat more consistent with
+pm_runtime_force_suspend() and patch [07/10] prepares it for the subsequent
+changes.
+
+Patch [08/10] changes pm_runtime_force_resume() to handle the case in
+which the runtime PM status of the device has been updated by the core to
+RPM_ACTIVE after pm_runtime_force_suspend() left it in RPM_SUSPENDED.
+
+Patch [09/10] restores the RPM_ACTIVE setting propagation to parents
+and suppliers, but it takes exceptions into account (for example, devices
+with no runtime PM support).
+
+Finally, patch [10/10] adds a mechanism to discover cases in which runtime PM
+is disabled for a device permanently even though it has been enabled for that
+device at one point.
+
+Please have a look and let me know if you see any problems.
+
+Thanks!
+
+
+
 
