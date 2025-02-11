@@ -1,190 +1,242 @@
-Return-Path: <linux-pm+bounces-21912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21913-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5C323A31817
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:45:54 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D31ADA3184D
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:54:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 737C8188B8D0
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:45:45 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 85CF63A6EDD
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1572267AE6;
-	Tue, 11 Feb 2025 21:45:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2B5D267AE6;
+	Tue, 11 Feb 2025 21:54:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="jZInSFJt"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZqAzjL3I"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D49862676D2;
-	Tue, 11 Feb 2025 21:45:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA5FD267715;
+	Tue, 11 Feb 2025 21:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739310316; cv=none; b=ef1zXD/UCRROTMYWXCqHeJDJC/qpL7umR8JTzuNFpBLAZ7xDzwbCYAf+DG0GmKkjCSg80eVrKBjCpV8Kn3XGsDi+enD5atYnrJqYDAXtwMnAdiyKEYFAsziCrYb3WBhKORDjhnOgIRQn9eRWhC731IzN5Gj4BhGMvR7wqwZlQHY=
+	t=1739310895; cv=none; b=NFsvPvq8XwKYW/XpHFAQiugYTfFaZ7WSIe68F5MZJZKWh0v64SvuDQvQSqxqv37upVAuORYOA47GHdXR6cotJhjJQS3ga/UKxyZl4dc9c2zpbqHVu47e6KklJL0yiykQSD6opjKjb721+77QSpjRj7HLe8xtc89d2fLFAvF/Y1s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739310316; c=relaxed/simple;
-	bh=z7yrne3lH+j+1s6AtvmZ4Bzg6adoesjnw/4Ul78d4yE=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JSza2OYtv63CvdL9GpKlSkr8JpIjZD+LtskvKD6fUevIxf076t5uZXUd6SxKg58mzVrFkIiI2+0BJyhdAVUjtMpslrckLg8BhZqQbDXh7+EwQ9jnavUGtOvkI/P8Dbk9upn1GQFfDSSCWFWL5onsgiHZXKoptg3PpEpahz6xPqQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=jZInSFJt; arc=none smtp.client-ip=209.85.128.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43948f77f1aso15539415e9.0;
-        Tue, 11 Feb 2025 13:45:14 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739310313; x=1739915113; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=l9QVqFb0F4vJH3S/5y/Imik4nUJo70kordZ2BPM5ORk=;
-        b=jZInSFJtaTuyMpE43bC0DURFwGq+En4CCvOk3ViVbDZqzYLUW9n7IAiJfCMxvAJeMn
-         MSwjsWX0KlxsF25zFxxMCj4jce3Wemi5XjO5tIIBlqBsEtfkdREFyUIontiDTmYhcESR
-         Jy/6FwBQqZAtnQmGu3t6LqxtCZtrtryYrjsIwQ4m03iJKfxiDgPL/RFDhO0cfXoIWcEP
-         9qv3oWpHVdIKmwl51nicPWglol81kgG7FYSxFrrHG46hm2Dt8kK+PG8hBrNPdRfPBg2x
-         lhWne//+6eT66H9wVPEXojaO8jcNCTZ67c0Vdy0t0M18j3PdXQ8jVDDTgOTIn2BxX/zX
-         GVmA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739310313; x=1739915113;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:subject:cc:to:from:date:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=l9QVqFb0F4vJH3S/5y/Imik4nUJo70kordZ2BPM5ORk=;
-        b=YSrJ7eO1xi2OmnpwMto16uFkFLDzl9Uwu81O+guNScJOsJMcSTm03MdFi81Trwm9Oi
-         hjaCChOc94N0hY1aMi3K3gowbPyuSVznVkVNvZp91az7TighqAHb/IxKwRv6u7bzKf2T
-         KFcPmXuLUq9kxT279h3SQo5sbZ21DYOxx77zqtzoEgkgGDMdZT1A/8l4LGCHt6TLGz3j
-         Oem9xeJRJ6dTt/UVSIjM9FAlrDOWJPMQPXXSjc4YRkUDFst/jsk3W2Zv90/UlR4D4eVq
-         LlxNStEXgPCXqXdRIxVxmRqoc8yqZoZPvn/mUTl6GdZIInJ5FwNjSFJNGYHlRwMyd/J1
-         zUfA==
-X-Forwarded-Encrypted: i=1; AJvYcCUCvlbfaVzTN6hOqyz/mImk7WwYFnxToDmUfeAJ7bt8mqrm0nDhtyfEGrnTRBTh5JptvY9v1Sj0f+I=@vger.kernel.org, AJvYcCUORwNvlgqlc41DGZTDOB8+BboM+5nB63X7SEh164FtlJ84grO0+RQO+eh9YHifUoRx6llMN7t4NKYQa2UtHnwCWw==@vger.kernel.org, AJvYcCVOyHa+oovZbf7sktM0Z/tdCCDr8jHJ4LAha98RsRBYfGSvtC1CgFNhjN0jr1zJNVzBKoGS1qopkBxO5SE=@vger.kernel.org, AJvYcCVykrv6NTqpDmVKnZTXgLjVhO6nvkHbXLwdZCvDXrifiZeUi4gsFraKHM0Rmp2625j0qFASEPglYYZ82Bf9@vger.kernel.org, AJvYcCXsIn6ZVG8G1sJMWUIVFc8LymCVv4ns0LjpmbIZBZQuMujlY/IVIZokBSHzZD+MPiw5Vu/kkL9KVnxp@vger.kernel.org
-X-Gm-Message-State: AOJu0YyOwpJFeMik+opMZTLGyABjJCO7dMNCKToW532VOmzq5NpO2KTm
-	GIv62qu+HgKNAo4cKY5sLfTowse0MQd6WEyywZ9BMO0kSKU82hWR
-X-Gm-Gg: ASbGncuzasa/PbeCVC7EFPsO0p5KNhDJZzvotGhXQc8XGcql4td7DdMm4LiHSLba77s
-	HYFJa9NvFfRlz7dNh/KXJf5vabJIiM9uh47I2I+fKXxffK6kp4ST4+mTpnt7w58LYV62W3UtEPm
-	pGkZowZHgEDnUYqmtbcW3fM7nDaHp499KsYMQ3tLfkSusmRwo9MrhGWVw/XlG+bLuDelciszIP+
-	ATsJ0KexlFDwBo65wZ4kdMHM+SyBSwXBg8XaZj4w5C9IXvMZvhz0kbq35TeNapmwhB+9Kmu+REt
-	yLit5H1N0OBrwTt3v5OrQ3cPKB5vR3w+KLvsUOHOoj314IWkMhI48w==
-X-Google-Smtp-Source: AGHT+IEjFMRaO0UZ6wft/wxo/+IRAbLWtbO1fwLdZMCQbltj99k8Ofj68ppzmanMrEJJGKF4/cn8cw==
-X-Received: by 2002:a05:600c:1d1b:b0:434:a468:4a57 with SMTP id 5b1f17b1804b1-439581bfdc2mr6022405e9.26.1739310312538;
-        Tue, 11 Feb 2025 13:45:12 -0800 (PST)
-Received: from pumpkin (82-69-66-36.dsl.in-addr.zen.co.uk. [82.69.66.36])
-        by smtp.gmail.com with ESMTPSA id 5b1f17b1804b1-4395076a2a2sm14643765e9.3.2025.02.11.13.45.11
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 13:45:11 -0800 (PST)
-Date: Tue, 11 Feb 2025 21:45:09 +0000
-From: David Laight <david.laight.linux@gmail.com>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org, Dave Hansen
- <dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>, Peter
- Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>, Arnaldo
- Carvalho de Melo <acme@kernel.org>, Namhyung Kim <namhyung@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>, Alexander Shishkin
- <alexander.shishkin@linux.intel.com>, Jiri Olsa <jolsa@kernel.org>, Ian
- Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, Kan
- Liang <kan.liang@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>,
- Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>, "Rafael
- J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>, Andy
- Lutomirski <luto@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
- Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>,
- Guenter Roeck <linux@roeck-us.net>, Zhang Rui <rui.zhang@intel.com>, Andrew
- Cooper <andrew.cooper3@citrix.com>, linux-perf-users@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-hwmon@vger.kernel.org
-Subject: Re: [PATCH v2 04/17] x86/cpu/intel: Fix the movsl alignment
- preference for extended Families
-Message-ID: <20250211214509.281dc3be@pumpkin>
-In-Reply-To: <5b954a96-1034-467d-a5dc-3d3f7bc112a1@intel.com>
-References: <20250211194407.2577252-1-sohil.mehta@intel.com>
-	<20250211194407.2577252-5-sohil.mehta@intel.com>
-	<5b954a96-1034-467d-a5dc-3d3f7bc112a1@intel.com>
-X-Mailer: Claws Mail 4.1.1 (GTK 3.24.38; arm-unknown-linux-gnueabihf)
+	s=arc-20240116; t=1739310895; c=relaxed/simple;
+	bh=JiHkYv+yHpx5zhHNv+/BiNE2HCAAInWk1HbFBDsRpcU=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=exhj0TPKD7Cijy6W0250B5+MrqLUqRJVRI+iijPuovvSYTVVvHVKsxEPxeSy/xKXBZePRChJomMoAiQjv/rmpAA20NfalMP3TUUs0xXsBJsYJ/Wq6jU3EXyHX5OuJYFYcEMXG1VXgFHaKSX82oeVf5oK/EytucnETsyUUiDzSvo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZqAzjL3I; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id A745FC4CEDD;
+	Tue, 11 Feb 2025 21:54:54 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739310895;
+	bh=JiHkYv+yHpx5zhHNv+/BiNE2HCAAInWk1HbFBDsRpcU=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=ZqAzjL3IJhi29MTc92h1RMRcOUKsIjjuc7hkmi7x5bpfmZhaHES9k5Mg2zeAWm/NU
+	 L88Ak+vTxvr7Jd/aCRGEjA9/hezd1uGkcYE2lQ/rZy68zX75p9TniiEVjKOdhFOiRJ
+	 bWnaGcXDkIKsjNnxKNj6YFL7w27qhg4BBUVN3Dfz/wyYU+qpmlcoL+eyHAmyGlCbi/
+	 iB6bpdwMonriG/XlPYdafvWkv25NCZxg9rpqtrPFqX8sQUY8hgAP16h3YY5F/UqS5x
+	 GxenLxwa/Sl3ZjFD77P0iwy+9xGepzXlP/iCI5ntKeuAhDNg5vqTCR8uHVTgspAiyF
+	 UPCRrgzlRjPrg==
+Message-ID: <bfcafbaf-c407-412b-a5e4-d152e2a565d7@kernel.org>
+Date: Tue, 11 Feb 2025 15:54:53 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=US-ASCII
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 04/14] cpufreq/amd-pstate: Overhaul locking
+To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+ "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>
+Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
+ <linux-kernel@vger.kernel.org>,
+ "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+References: <20250206215659.3350066-1-superm1@kernel.org>
+ <20250206215659.3350066-5-superm1@kernel.org>
+ <adccc912-bf93-4320-8011-21c0220c839a@amd.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <adccc912-bf93-4320-8011-21c0220c839a@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
-On Tue, 11 Feb 2025 12:26:48 -0800
-Dave Hansen <dave.hansen@intel.com> wrote:
-
-> We should really rename intel_workarounds() to make it more clear that
-> it's 32-bit only. But I digress...
+On 2/10/2025 23:02, Dhananjay Ugwekar wrote:
+> On 2/7/2025 3:26 AM, Mario Limonciello wrote:
+>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>
+>> amd_pstate_cpu_boost_update() and refresh_frequency_limits() both
+>> update the policy state and have nothing to do with the amd-pstate
+>> driver itself.
+>>
+>> A global "limits" lock doesn't make sense because each CPU can have
+>> policies changed independently.  Instead introduce locks into to the
+>> cpudata structure and lock each CPU independently.
+>>
+>> The remaining "global" driver lock is used to ensure that only one
+>> entity can change driver modes at a given time.
+>>
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> ---
+>>   drivers/cpufreq/amd-pstate.c | 27 +++++++++++++++++----------
+>>   drivers/cpufreq/amd-pstate.h |  2 ++
+>>   2 files changed, 19 insertions(+), 10 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+>> index 77bc6418731ee..dd230ed3b9579 100644
+>> --- a/drivers/cpufreq/amd-pstate.c
+>> +++ b/drivers/cpufreq/amd-pstate.c
+>> @@ -196,7 +196,6 @@ static inline int get_mode_idx_from_str(const char *str, size_t size)
+>>   	return -EINVAL;
+>>   }
+>>   
+>> -static DEFINE_MUTEX(amd_pstate_limits_lock);
+>>   static DEFINE_MUTEX(amd_pstate_driver_lock);
+>>   
+>>   static u8 msr_get_epp(struct amd_cpudata *cpudata)
+>> @@ -283,6 +282,8 @@ static int msr_set_epp(struct amd_cpudata *cpudata, u8 epp)
+>>   	u64 value, prev;
+>>   	int ret;
+>>   
+>> +	lockdep_assert_held(&cpudata->lock);
 > 
-> On 2/11/25 11:43, Sohil Mehta wrote:
-> > The alignment preference for 32-bit movsl based bulk memory move has
-> > been 8-byte for a long time. However this preference is only set for
-> > Family 6 and 15 processors.
-> > 
-> > Extend the preference to upcoming Family numbers 18 and 19 to maintain
-> > legacy behavior. Also, use a VFM based check instead of switching based
-> > on Family numbers. Refresh the comment to reflect the new check.  
-> "Legacy behavior" is not important here. If anyone is running 32-bit
-> kernel binaries on their brand new CPUs they (as far as I know) have a
-> few screws loose. They don't care about performance or security and we
-> shouldn't care _for_ them.
+> After making the perf_cached variable writes atomic, do we still need a cpudata->lock ?
+
+My concern was specifically that userspace could interact with multiple 
+sysfs files that influence the atomic perf variable (and the HW) at the 
+same time.  So you would not have a deterministic behavior if they 
+raced.  But if you take the mutex on all the paths that this could 
+happen it will be a FIFO.
+
 > 
-> If the code yielded the "wrong" movsl_mask.mask for 18/19, it wouldn't
-> matter one bit.
+> Regards,
+> Dhananjay
 > 
-> The thing that _does_ matter is someone auditing to figure out whether
-> the code comprehends families>15 or whether it would break in horrible
-> ways. The new check is shorter and it's more obvious that it will work
-> forever.
-
-For any Intel non-atom processors since the Ivy bridge the only alignment
-that makes real difference is aligning the destination to a 32 byte boundary.
-That does make it twice as fast (32 bytes/clock rather than 16).
-The source alignment never matters.
-(I've got access to one of the later 64-bit 8 core atoms - but can't
-remember how it behaves.)
-
-For short (IRC 1..32) byte transfers the cost is constant.
-The cost depends on the cpu, Ivy bridge is something like 40 clocks.
-Lower for later cpu.
-(Unlike the P4 where the overhead is some 163 clocks.)
-It also makes no difference whether you do 'rep movsb' or 'rep movsq'.
-
-For any of those cpu I'm not sure it is ever worth using anything
-other than 'rep movsb' unless the length is known to be very short,
-likely a multiply of 4/8 and preferably constant.
-Doing a function call and a one or two mispredictable branches will
-soon eat into the overhead. Not to mention displacing code from the I-cache.
-Unless you are micro-optimising a very hot path it really isn't worth
-doing anything else.
-
-OTOH even some recent AMD cpu are reported not to have FRSM and will
-execute 'rep movsb' slowly.
-
-I did 'discover' that code at the weekend, just the memory load to
-get the mask is going to slow things down.
-Running a benchmark test it'll be in cache and the branch predictor
-will remember what you are doing.
-Come in 'cold cache' and (IIRC) Intel cpu have a 50% chance of predicting
-a branch taken (no static predict - eg backward taken).
-
-Even for normal memory accesses I've not seen any significant slowdown
-for misaligned memory accesses.
-Ones that cross a cache line might end up being 2 uops, but the cpu
-can do two reads/clock (with a following wind) and it is hard to write
-a code loop that gets close to sustaining that.
-
-I'll have tested the IP checksum (adc loop) code with misaligned buffers.
-I don't even remember a significant slowdown for the version that does
-three memory reads every two clocks (which seems to be the limit).
-
-I actually suspect that any copies that matter are aligned so the cost
-of the check far outways the benefit across all the calls.
-
-One optimisation that seems to be absent is that if you are doing a
-register copy loop, then any trailing bytes can be copied by doing
-a misaligned copy of the last word (and I mean word, not 16 bits)
-of the buffer - copying a few bytes twice.
-
-	David
-
+>> +
+>>   	value = prev = READ_ONCE(cpudata->cppc_req_cached);
+>>   	value &= ~AMD_CPPC_EPP_PERF_MASK;
+>>   	value |= FIELD_PREP(AMD_CPPC_EPP_PERF_MASK, epp);
+>> @@ -315,6 +316,8 @@ static int shmem_set_epp(struct amd_cpudata *cpudata, u8 epp)
+>>   	int ret;
+>>   	struct cppc_perf_ctrls perf_ctrls;
+>>   
+>> +	lockdep_assert_held(&cpudata->lock);
+>> +
+>>   	if (epp == cpudata->epp_cached)
+>>   		return 0;
+>>   
+>> @@ -335,6 +338,8 @@ static int amd_pstate_set_energy_pref_index(struct cpufreq_policy *policy,
+>>   	struct amd_cpudata *cpudata = policy->driver_data;
+>>   	u8 epp;
+>>   
+>> +	guard(mutex)(&cpudata->lock);
+>> +
+>>   	if (!pref_index)
+>>   		epp = cpudata->epp_default;
+>>   	else
+>> @@ -750,7 +755,6 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
+>>   		pr_err("Boost mode is not supported by this processor or SBIOS\n");
+>>   		return -EOPNOTSUPP;
+>>   	}
+>> -	guard(mutex)(&amd_pstate_driver_lock);
+>>   
+>>   	ret = amd_pstate_cpu_boost_update(policy, state);
+>>   	refresh_frequency_limits(policy);
+>> @@ -973,6 +977,9 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>>   
+>>   	cpudata->cpu = policy->cpu;
+>>   
+>> +	mutex_init(&cpudata->lock);
+>> +	guard(mutex)(&cpudata->lock);
+>> +
+>>   	ret = amd_pstate_init_perf(cpudata);
+>>   	if (ret)
+>>   		goto free_cpudata1;
+>> @@ -1179,8 +1186,6 @@ static ssize_t store_energy_performance_preference(
+>>   	if (ret < 0)
+>>   		return -EINVAL;
+>>   
+>> -	guard(mutex)(&amd_pstate_limits_lock);
+>> -
+>>   	ret = amd_pstate_set_energy_pref_index(policy, ret);
+>>   
+>>   	return ret ? ret : count;
+>> @@ -1353,8 +1358,10 @@ int amd_pstate_update_status(const char *buf, size_t size)
+>>   	if (mode_idx < 0 || mode_idx >= AMD_PSTATE_MAX)
+>>   		return -EINVAL;
+>>   
+>> -	if (mode_state_machine[cppc_state][mode_idx])
+>> +	if (mode_state_machine[cppc_state][mode_idx]) {
+>> +		guard(mutex)(&amd_pstate_driver_lock);
+>>   		return mode_state_machine[cppc_state][mode_idx](mode_idx);
+>> +	}
+>>   
+>>   	return 0;
+>>   }
+>> @@ -1375,7 +1382,6 @@ static ssize_t status_store(struct device *a, struct device_attribute *b,
+>>   	char *p = memchr(buf, '\n', count);
+>>   	int ret;
+>>   
+>> -	guard(mutex)(&amd_pstate_driver_lock);
+>>   	ret = amd_pstate_update_status(buf, p ? p - buf : count);
+>>   
+>>   	return ret < 0 ? ret : count;
+>> @@ -1472,6 +1478,9 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+>>   
+>>   	cpudata->cpu = policy->cpu;
+>>   
+>> +	mutex_init(&cpudata->lock);
+>> +	guard(mutex)(&cpudata->lock);
+>> +
+>>   	ret = amd_pstate_init_perf(cpudata);
+>>   	if (ret)
+>>   		goto free_cpudata1;
+>> @@ -1558,6 +1567,8 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+>>   	union perf_cached perf;
+>>   	u8 epp;
+>>   
+>> +	guard(mutex)(&cpudata->lock);
+>> +
+>>   	amd_pstate_update_min_max_limit(policy);
+>>   
+>>   	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
+>> @@ -1646,8 +1657,6 @@ static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
+>>   	if (cpudata->suspended)
+>>   		return 0;
+>>   
+>> -	guard(mutex)(&amd_pstate_limits_lock);
+>> -
+>>   	if (trace_amd_pstate_epp_perf_enabled()) {
+>>   		trace_amd_pstate_epp_perf(cpudata->cpu, perf.highest_perf,
+>>   					  AMD_CPPC_EPP_BALANCE_POWERSAVE,
+>> @@ -1684,8 +1693,6 @@ static int amd_pstate_epp_resume(struct cpufreq_policy *policy)
+>>   	struct amd_cpudata *cpudata = policy->driver_data;
+>>   
+>>   	if (cpudata->suspended) {
+>> -		guard(mutex)(&amd_pstate_limits_lock);
+>> -
+>>   		/* enable amd pstate from suspend state*/
+>>   		amd_pstate_epp_reenable(policy);
+>>   
+>> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
+>> index a140704b97430..6d776c3e5712a 100644
+>> --- a/drivers/cpufreq/amd-pstate.h
+>> +++ b/drivers/cpufreq/amd-pstate.h
+>> @@ -96,6 +96,8 @@ struct amd_cpudata {
+>>   	bool	boost_supported;
+>>   	bool	hw_prefcore;
+>>   
+>> +	struct mutex	lock;
+>> +
+>>   	/* EPP feature related attributes*/
+>>   	u8	epp_cached;
+>>   	u32	policy;
+> 
 
 
