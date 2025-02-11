@@ -1,226 +1,160 @@
-Return-Path: <linux-pm+bounces-21900-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21896-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C4DCA3179B
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:26:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 11984A31785
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:20:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9A58E167A00
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:26:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA66D168E30
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:20:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEC6A262810;
-	Tue, 11 Feb 2025 21:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A560266F13;
+	Tue, 11 Feb 2025 21:20:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="FSG2BFPQ"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HjqeJrpO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC7F32627EC;
-	Tue, 11 Feb 2025 21:25:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 92AEA266F0B;
+	Tue, 11 Feb 2025 21:20:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739309155; cv=none; b=e00qaohZjYwzPEvtbNmdeLhtzxhLaxHaAcDYP0dnRXko+gCBJJyl2Y5JLgafgoDCm2373m48qQG7v0V9UL+TlP5XsiyK009DbJG+p+aIdVKbyagIebcHcFbp27YEi9n8zk4ZbyT4AZn7m1emkeG9wcPhY2sUzNKILl2Jo8HO95Q=
+	t=1739308804; cv=none; b=lWfIZcWctldstL4BxaOJM65oKZNf9YRVMGHPLuh5DTRuPk1smaCCobzbMmnC5olEiMPPpuErXlOokyFURQP/6ulbQ4XMsC2MOR7eURTlP6LRsdqP4gG/qH/UvW+TC9QVuX21LMKo4NKbLHbijTIv4OpIvALxYhu+EXuMdK9lZxU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739309155; c=relaxed/simple;
-	bh=OrkfWzk4rOwXdbaA05EwAtgqA26NxnytAlDoPhIdPEY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=lQKewzB4C7EJp0tEmLWWCVx6tV68dGKmoIdL5NkoGtfKpr1emFeU6eFGmhNclUlpHOaFs20EXEctVy+cJjlvdyt7EPsfcLw8Bv6T9PTc0zSIpMHSGtVytJzp0GCRZXTyVSRghI46hfCU7gvPbQOi2qfuFwGJf78CN9B4ZdXNCUQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=FSG2BFPQ; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 78dce38ef4c9466c; Tue, 11 Feb 2025 22:25:45 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 22772770175;
-	Tue, 11 Feb 2025 22:25:45 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1739309145;
-	bh=OrkfWzk4rOwXdbaA05EwAtgqA26NxnytAlDoPhIdPEY=;
-	h=From:Subject:Date;
-	b=FSG2BFPQjhriNkTqRtnzq0OrBIgfgx2ep5iuEt2gejMEWnyM3l7hdoidJh4/mVduH
-	 tHgLmva6h7hJsvRaWPH7gfLygILxQPVnhCT6e2eaoc64tgXrbCiLrowIkW13BciI6v
-	 Bpvmon0Finl0+tAos4MAjLvkoM6kbf8IA4rSYGG9qqGZDP9NM4wcrGPUtKWZ/z0bGe
-	 1TKWnHWTtRHK92ZzPWFCmysMQTAARoTVaus92G1QrNhTwfQZrrZHkxuwAE7Jp1TYH2
-	 KS+4vbUhUzLArViUz2yDTQadJc7maDOA0huMny1rj7rwlxvyoH9+l2sQZgXZhjA+Jl
-	 6GtkSLiexCrlQ==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Johan Hovold <johan@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Jon Hunter <jonathanh@nvidia.com>,
- Tony Lindgren <tony.lindgren@linux.intel.com>
-Subject:
- [PATCH v1 08/10] PM: sleep: Make pm_runtime_force_resume() look at
- power.set_active
-Date: Tue, 11 Feb 2025 22:19:13 +0100
-Message-ID: <3817761.MHq7AAxBmi@rjwysocki.net>
-In-Reply-To: <2314745.iZASKD2KPV@rjwysocki.net>
-References: <2314745.iZASKD2KPV@rjwysocki.net>
+	s=arc-20240116; t=1739308804; c=relaxed/simple;
+	bh=b8E8//j8htU8CZiyTHCTTdKOppq45LalcgU07wr/IlA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=P1RQmoZFQMbKy2ZRFinQrxCgDdrCa++Fiqut7xb7QD154dgqy4OkIIF7kWqPVeYDhlFFMSk1hfyAtL3V/7zHRBcPYV8fCBlalVvnM9X3/3LwWv6CPBUPBPbDEwRavIoWQFvNyqTrZne0atEI6d1eCNnpvcbG+maTW4E0/qCw/ls=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HjqeJrpO; arc=none smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739308803; x=1770844803;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=b8E8//j8htU8CZiyTHCTTdKOppq45LalcgU07wr/IlA=;
+  b=HjqeJrpOjgdGul0LJQ85I4HxgprcNHJV6kT6bbqnHnI0gXNnV3HugUOh
+   unMUuJYuzM9nwKesj20L96GgV6IXRTc7O7mSHIpSCMEY8BEyZK4hr0c/Q
+   AY4ReVSsxLnZ65xx3lV/gAaIkpzVVXy9tKoVnfFgaOtzy5PZ8/j5Fv/sJ
+   NY6rO6kl1xxPnPFI6+R2DigRPgCaKWe/M+wu/LdasmnM0+mjXY88nCYmL
+   REoIH1IO44mgIwz+DcAUmuOOJcIE+SVudqYBayc0PvPudlCk3AMw5piR4
+   Qee0RL/Fcu3VOODMa0lz3thEqq0C67/BysZwdVp9aPB2evqubjM8boMoH
+   Q==;
+X-CSE-ConnectionGUID: RjdaQYHsS92fbM2OuIRF/w==
+X-CSE-MsgGUID: CfimkJ38TSyyFdVAqtJgVA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="40089047"
+X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
+   d="scan'208";a="40089047"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 13:20:02 -0800
+X-CSE-ConnectionGUID: mW3shC1+TD+tFRchX5n/TQ==
+X-CSE-MsgGUID: 9CbQZ9KxR8mFObKX38naQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
+   d="scan'208";a="143474481"
+Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.108.48]) ([10.125.108.48])
+  by orviesa002-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 13:20:00 -0800
+Message-ID: <b262cb35-4753-49bb-8db7-7195cc856d1f@intel.com>
+Date: Tue, 11 Feb 2025 13:20:00 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegvddtjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeekpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehjohhhrghnsehkvghrnhgvlhdrohhrghdprhgtphh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=8 Fuz1=8 Fuz2=8
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 14/17] x86/acpi/cstate: Improve Intel Family model
+ checks
+To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
+ Dave Hansen <dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ Kan Liang <kan.liang@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Andy Lutomirski <luto@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Zhang Rui <rui.zhang@intel.com>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ David Laight <david.laight.linux@gmail.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20250211194407.2577252-1-sohil.mehta@intel.com>
+ <20250211194407.2577252-15-sohil.mehta@intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20250211194407.2577252-15-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 2/11/25 11:44, Sohil Mehta wrote:
+> Update the Intel Family checks to consistently use Family 15 instead of
+> Family 0xF. Also, get rid of one of last usages of x86_model by using
+> the new VFM checks.
+> 
+> Update the incorrect comment since the check has changed[1][2] since the
+> initial commit ee1ca48fae7e ("ACPI: Disable ARB_DISABLE on platforms
+> where it is not needed").
+> 
+> [1]: commit 3e2ada5867b7 ("ACPI: fix Compaq Evo N800c (Pentium 4m) boot
+> hang regression") removed the P4 - Family 15.
+> 
+> [2]: commit 03a05ed11529 ("ACPI: Use the ARB_DISABLE for the CPU which
+> model id is less than 0x0f.") got rid of CORE_YONAH - Family 6, model E.
+> 
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
 
-In theory (and also in practice after a change to come),
-pm_runtime_force_resume() can be called on a device with power.set_active
-set, in which case the core has already called pm_runtime_set_active()
-on it, and power.needs_force_resume may be clear.  This happens when the
-core decides to resume a device because new information on it has become
-available during the "noirq" phase of system-wide suspend.
-
-In order to handle that case properly, make pm_runtime_force_resume()
-look at power.set_active in addition to power.needs_force_resume, so it
-does not skip the device when the former is set.  Namely, make it invoke
-the callback for the device then, but without disabling the wake IRQ if
-pm_runtime_force_resume() has not enabled it.  Also clear power.set_active
-in pm_runtime_force_resume() to prevent it from being taken into account
-twice in a row.
-
-Additionally, adjust the pm_runtime_force_resume() kerneldoc comment
-and the code comments inside it.  Moreover, remove a remark regarding
-DPM_FLAG_SMART_SUSPEND from the pm_runtime_force_suspend() kerneldoc
-comment because it is not valid any more after this change.
-
-This change is not expected to alter the behavior in the case when
-power.needs_force_resume is set.
-
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
-
-Unfortunately, I have not found a way to do this without adding
-a new device PM flag and now there are 2 flags specifically for
-pm_runtime_force_suspend/resume() which is a bit sad.
-
-Questions for Ulf:
-
-(1) How is the enabling of wakeirqs handled for devices that are runtime-
-    suspended before system suspend, so pm_runtime_force_suspend() skips
-    them?
-
-(2) What is supposed to happen to wakeirqs during system resume after
-    pm_runtime_force_suspend() has enabled them, but hasn't set
-    power.needs_force_resume at the same time?
-
----
- drivers/base/power/runtime.c |   41 ++++++++++++++++++++++++++---------------
- include/linux/pm.h           |    1 +
- 2 files changed, 27 insertions(+), 15 deletions(-)
-
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1897,10 +1897,6 @@
-  * sure the device is put into low power state and it should only be used during
-  * system-wide PM transitions to sleep states.  It assumes that the analogous
-  * pm_runtime_force_resume() will be used to resume the device.
-- *
-- * Do not use with DPM_FLAG_SMART_SUSPEND as this can lead to an inconsistent
-- * state where this function has called the ->runtime_suspend callback but the
-- * PM core marks the driver as runtime active.
-  */
- int pm_runtime_force_suspend(struct device *dev)
- {
-@@ -1923,6 +1919,7 @@
- 		goto err;
- 
- 	dev_pm_enable_wake_irq_complete(dev);
-+	dev->power.wake_irq_enabled = true;
- 
- 	/*
- 	 * If the device can stay in suspend after the system-wide transition
-@@ -1950,31 +1947,39 @@
-  * pm_runtime_force_resume - Force a device into resume state if needed.
-  * @dev: Device to resume.
-  *
-- * Prior invoking this function we expect the user to have brought the device
-- * into low power state by a call to pm_runtime_force_suspend(). Here we reverse
-- * those actions and bring the device into full power, if it is expected to be
-- * used on system resume.  In the other case, we defer the resume to be managed
-- * via runtime PM.
-+ * The primary role of this function is to reverse the actions carried out by
-+ * pm_runtime_force_suspend() for @dev, so it must always be balanced with a
-+ * matching invocation of the latter.  Accordingly, it is only valid to call
-+ * this function during system-wide resume transitions.
-+ *
-+ * Typically, it is used as a system resume callback of a device driver.
-  *
-- * Typically this function may be invoked from a system resume callback.
-+ * However, if @dev had been runtime-suspended before pm_runtime_force_suspend()
-+ * was called for it and that function did nothing, but power.set_active has
-+ * been set for it by the core, it still needs to be resumed.  That special case
-+ * is also handled by this function.
-  */
- int pm_runtime_force_resume(struct device *dev)
- {
- 	int (*callback)(struct device *);
- 	int ret = 0;
- 
--	if (!dev->power.needs_force_resume)
-+	if (!dev->power.needs_force_resume && !dev->power.set_active)
- 		goto out;
- 
- 	/*
--	 * The value of the parent's children counter is correct already, so
--	 * just update the status of the device.
-+	 * The parent's active children counter an the suppliers' usage counters
-+	 * are correct already, so just update the status (even though it is
-+	 * already RPM_ACTIVE if power.set_active is set).
- 	 */
- 	__update_runtime_status(dev, RPM_ACTIVE);
- 
--	callback = RPM_GET_CALLBACK(dev, runtime_resume);
-+	if (dev->power.wake_irq_enabled) {
-+		dev_pm_disable_wake_irq_check(dev, false);
-+		dev->power.wake_irq_enabled = false;
-+	}
- 
--	dev_pm_disable_wake_irq_check(dev, false);
-+	callback = RPM_GET_CALLBACK(dev, runtime_resume);
- 	ret = callback ? callback(dev) : 0;
- 	if (ret) {
- 		pm_runtime_set_suspended(dev);
-@@ -1982,6 +1987,12 @@
- 	}
- 
- 	pm_runtime_mark_last_busy(dev);
-+	/*
-+	 * Clear power.set_active in case this function runs for the same
-+	 * device again.
-+	 */
-+	dev->power.set_active = false;
-+
- out:
- 	dev->power.needs_force_resume = 0;
- 	pm_runtime_enable(dev);
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -698,6 +698,7 @@
- 	bool			request_pending:1;
- 	bool			deferred_resume:1;
- 	bool			needs_force_resume:1;
-+	bool			wake_irq_enabled:1;
- 	bool			runtime_auto:1;
- 	bool			ignore_children:1;
- 	bool			no_callbacks:1;
-
-
-
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
 
