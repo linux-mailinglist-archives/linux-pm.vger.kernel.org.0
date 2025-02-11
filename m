@@ -1,179 +1,127 @@
-Return-Path: <linux-pm+bounces-21798-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21799-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F401FA3074F
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 10:39:46 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0EB4A307E8
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 11:02:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A66F71647F9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 09:39:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3686D188A5B9
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 10:02:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B6091F1521;
-	Tue, 11 Feb 2025 09:39:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 527111F2B9C;
+	Tue, 11 Feb 2025 10:02:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="lsj6qQ2q";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="O1ytzOyC"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="psUIZpjr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fhigh-a4-smtp.messagingengine.com (fhigh-a4-smtp.messagingengine.com [103.168.172.155])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 820481BD9D2;
-	Tue, 11 Feb 2025 09:39:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.155
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE21B1F238D
+	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 10:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739266780; cv=none; b=Rcbpz1aGHIV0NBZD5mRpGJ0GxfCPJZtFeaHpYku9blTu7DTw4Cp3YWwTkoEON7rGbjNQ1aXofQkJjbpPbnWZ6SidciSDpvtq/JNfOA/+aytw8ua0yCh45OHGCNHxSRIjTicwGlm5DMFZ6bppf1ppzkgq5RZNh4NorsRXsOKe5OQ=
+	t=1739268163; cv=none; b=DVf5+RSURHD+lKMEJXVMH2peMNRrmD9DQz7lEC7MbbjFmgvNRXxPERIGt69ijXuOahqtykLY1nJnPclqYInXrRqLMvPLyi5IyWKV3sY7vUu5WJw1l/ShdXC7wJpv0ouw5S/8lWf4zDLl9Xf7AptSYPUPPKWzeSkfji0lHxRNO9s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739266780; c=relaxed/simple;
-	bh=D7zD+p56S2uJb050elc6uqiirJAnWzqABI0Tvvzm1PA=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=oTesMPf0cWHK+obo3MABEZRKuV6hDRuLS2fBffG9LaRnIwcUYzbjukOyhHgeNCvu4tSEyw8sO2h2c3K0rGS85zVU4CJA5SKXazSf1OS9TAm9b9d3asVZsNqKz5lxlvCody/aq5OVFjI2SI/RKeIzXoLj1oEfr5d6/i7WfShsJaY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=lsj6qQ2q; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=O1ytzOyC; arc=none smtp.client-ip=103.168.172.155
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-10.internal (phl-compute-10.phl.internal [10.202.2.50])
-	by mailfhigh.phl.internal (Postfix) with ESMTP id 9EB3C11401C8;
-	Tue, 11 Feb 2025 04:39:37 -0500 (EST)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-10.internal (MEProxy); Tue, 11 Feb 2025 04:39:37 -0500
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm2; t=1739266777;
-	 x=1739353177; bh=MRQlTKoPQh1fnUMrZpxRpmFtfnl/gO3GS5ESXGTQf9U=; b=
-	lsj6qQ2qXspoZnGD8qrPMhDUL/HUPuBpDp4TCziuY7Y5F87+Lwm3k4R9LRuKFTkj
-	7R+hw7HxwG0/fBtr6Pbf1Ro4Cx/h6vRCwc7RU/yM4Dqwn30CJBwnf8G6hopQa7kV
-	NbLR3Ysi5mqtwM3x8b9ZwJL3aWu8xQ8xBLKmf5f25fSOGEHuvi8Q8UcSYjSy7amI
-	2qoWJ/j1jm8O/WFq/eP614xiNQpav50zcEM4t22xnwylN9YJ8WnUlZ1CkWCk/Gg1
-	Cz8NdkCw7uft+UrbHZCTWsTQOXmQ2tC5alroV/OSuv/OdgguJINN/LhNdVfVuVZa
-	bx6qFKfx/Zyi6ygnzc80gw==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1739266777; x=
-	1739353177; bh=MRQlTKoPQh1fnUMrZpxRpmFtfnl/gO3GS5ESXGTQf9U=; b=O
-	1ytzOyCDn20E6j7konLb1nk6LSPBYbqzOwh9s6Q/7yTh8fkTLsmbq1dKTRMSLTMF
-	bmcFT0CY/Bz0SBtFFLmjYFxb7bPXyCTwEJiX0ogs+o5OPNFYsr9Nrn0DgXhsfxkX
-	m7YK0Df8uG6upe5Dr+6o5usDu4lAyBwc13Y+tmi/Us006zFljxES+gAx3gTuX5uO
-	j8lfVYvjDQlduG+RTXEGxSueejGUUt1/9qHtoU6ETlmT/BnPKv3rr28fW55Ta+9K
-	bR08jsuuaNh8mdNhGBtu1KbJnqkUurD8OzkBKcyHuTfljGfNRdZzPmkBFlFUEQSy
-	fgd+bi871QbpOaNNmBmRg==
-X-ME-Sender: <xms:2RqrZ5ri0pdyHuTglNDXJaIrJ6PjjOH7ZycWO8L_Q9ifnE6wXzOfEw>
-    <xme:2RqrZ7rzTtZ_p2NN4MMxlPmdwbftiJ0gfsU1DTIQcUzY6avFmWuI-c0EM6wAo6Otn
-    NZ_RpOcye_Pb7XFMZY>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegtdeiiecutefuodetggdotefrod
-    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
-    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
-    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
-    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
-    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
-    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
-    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedv
-    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepughmihhtrhihrdhtohhrohhkhh
-    hovhesghhmrghilhdrtghomhdprhgtphhtthhopehlghhirhgufihoohgusehgmhgrihhl
-    rdgtohhmpdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomhdprhgtphhtthhopehprh
-    iivghmhihslhgrfidrkhhithhsiigvlhesihhnthgvlhdrtghomhdprhgtphhtthhopehr
-    rggrghdrjhgruggrvhesihhnthgvlhdrtghomhdprhgtphhtthhopegsrhhoohhnihgvse
-    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehjihgtvdefsehkvghrnhgvlhdrohhrghdp
-    rhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrvg
-    eskhgvrhhnvghlrdhorhhg
-X-ME-Proxy: <xmx:2RqrZ2M6byFl_gSVcMJ1iAp4gInXGYPnbasVHiO1gMSRM7PQGGg9bw>
-    <xmx:2RqrZ046-ByUStylR_CWHsyeELFY0fsOFwqdAlEsI69cndmDLFsapw>
-    <xmx:2RqrZ46rPvrMkzd8y0lewlZLxwsdWGjBQ6VOrHe_RiNpzhP7GUvn3A>
-    <xmx:2RqrZ8g7n6Y20_Pg4nstPsse4Zu24VzSG3TUTcPNjO6VjizmQpCCag>
-    <xmx:2RqrZ-sqGxff7huGPCRZoM_ZWT-reuMfETwhqqkj1M_2GbLBP77xVnoh>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id F0E152220072; Tue, 11 Feb 2025 04:39:36 -0500 (EST)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1739268163; c=relaxed/simple;
+	bh=WDKNPjiPF6VWfA7jc6yUC9uakVSKGaDOa7W6V9I8LtE=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=pZavzPUxbdFDQTAKYjTTz/y+5+Rxwh8AUMF3hNUFOxUODc3rtTKz1iURnZ61r0UheaE+Y/3aMjI8TGAPiiWB0ZI36fIAP6LRw4TTfkTMNzZ0QvyGLfjbhaog+ay0blUks4gerhylk3LQfoOvTKPyi3Wb6hdRMAJnQQUP/CFMSKY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=psUIZpjr; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-21f62cc4088so58057555ad.3
+        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 02:02:40 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739268160; x=1739872960; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=LawanDDHMjAWuwn6kkbSpPIPu7T1Xm3IJQExiBBX4Uw=;
+        b=psUIZpjrkjgUnjkDvLfSw1qSh5P1cTcz9vWQ+XRQQwdnbkJM7Ass3aguA+aZ5xqr97
+         MEl5CMS5KtpWpAMWlvbKOc14ZEL8zNNbc3Wf5zKdmxILOpYVx9eZl4EEl2SDd5k4H3VU
+         Nfa9Ba3JHrWaZfQpNbWki55FBxad7d+GLiH7lj2DxpXAy9QjXNdYugfiZgSaxV9IKX5N
+         WqyV/XkMBNlsOaHfA8sCs90SEjp85OvfPFXRuWvF6d7AbZWquQhGhSBU0sVs7PruDRD4
+         evUBN3Xp24K50IA+P4Kbo8MGAcMLtNNY1xTevJ1NUHhpk+YXKbHJJwLK5bLywTbE0cp2
+         PkVw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739268160; x=1739872960;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=LawanDDHMjAWuwn6kkbSpPIPu7T1Xm3IJQExiBBX4Uw=;
+        b=lLE/LMR9qrAGMQNzCi1S1b8aMN1ZighBTmCW9CfRnnvJVFLzFcV3knjszYLx3nA2Oi
+         nLTF+D7LX0/4w6r1MVXwfQwG0oKLrUDKZM4obprrthVJxard02Wp/0hV+bzNtd6fIDvU
+         A4gvVrAds4Lusmc+rgB0L/EkXkgvjGxJHKmh/CDJiSQmDFFGXz/+SsBgUABYcKMKc3Ha
+         EtTRoSgfxjABbrlw6gMic/NER4nXHa41gP9gwD0SsDtHWS90RCddVpASw4+ZoSaSLpPI
+         yCPOqCopmzPJnHdLwZhL3RYQckMFJkNWlCUmohTgtHNdEHFYm0PH9crN0P3w/bLqTRB0
+         1EcQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWaMnyrVTkjPXUtSvtSRfoc9RykcLprLjKEYxaF/SmQtLVVjlmlNJl1Y5MEwqTGzQpdKQgqBDz0cA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxWx5ukl+yXJTjj3ebCNoZsMIhN46lzLfpcWW3LwSHS9/LBQnzY
+	qULVOtcxUk5+rUBBthXJyU28IbFs/OZGaesstuMzKoW2iCQv3dIGA/OydlWkPEQ=
+X-Gm-Gg: ASbGncuGwJ8+OeUNYeIJIqQ7dM5j6qwxDci9vqKxZPdG+XuLRT9ifsUmmyo3FV8yOvC
+	hqV3/G6+lW2ybsfd2JQNO+aRPZ4xakUjpjhBem29Tm2fIIxwzXbXtnQH38gruMLcybSC3ocjXL/
+	yZWH0vgR/H6eNLN/bTt0G4fUy6huEYouvVdLbXgWGHRGiZTT/jKFPZrOq9QWl/CiGOnFxb03NLd
+	g6APZCLF8PsNjJm1E8l9pivD+Y+jkkO5gtZKe3S0LlYaOCDhz/vCDzG3mVdSZN3dPVPd5JhC5qJ
+	0W/3fey3RrXH1Pk0Zg==
+X-Google-Smtp-Source: AGHT+IGxtNiHpfjO6oCMWUcwWUsQX6gTAMRPhPvi+aF+HBTExi++a87MpePgkbA1/PSWJ0O9TmRTVA==
+X-Received: by 2002:a17:902:e5ca:b0:21f:6885:2b0b with SMTP id d9443c01a7336-21f68852c6bmr167497965ad.26.1739268160056;
+        Tue, 11 Feb 2025 02:02:40 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f3653b02dsm92369735ad.74.2025.02.11.02.02.39
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Feb 2025 02:02:39 -0800 (PST)
+Date: Tue, 11 Feb 2025 15:32:37 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: rjw@rjwysocki.net, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, kernel test robot <lkp@intel.com>,
+	Amit Daniel Kachhap <amit.kachhap@gmail.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>
+Subject: Re: [PATCH] thermal/cpufreq_cooling: Remove structure member
+ documentation
+Message-ID: <20250211100237.r32hu366jbihndbc@vireshk-i7>
+References: <20250211084712.2746705-1-daniel.lezcano@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Tue, 11 Feb 2025 10:39:16 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
-Cc: "kernel test robot" <lkp@intel.com>, "Raag Jadav" <raag.jadav@intel.com>,
- "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
- "Rafael J . Wysocki" <rafael@kernel.org>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Mika Westerberg" <mika.westerberg@linux.intel.com>,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, lgirdwood@gmail.com,
- "Mark Brown" <broonie@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
- "Jonathan Cameron" <jic23@kernel.org>,
- "Przemek Kitszel" <przemyslaw.kitszel@intel.com>,
- oe-kbuild-all@lists.linux.dev,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
- linux-sound@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-iio@vger.kernel.org
-Message-Id: <c1184a91-e216-423d-b956-d4b22116a171@app.fastmail.com>
-In-Reply-To: <Z6sYAxRIeCzw12nY@smile.fi.intel.com>
-References: <20250210064906.2181867-2-raag.jadav@intel.com>
- <202502102201.zLWaJC6V-lkp@intel.com> <Z6oZ9dnYrlp5djiQ@smile.fi.intel.com>
- <7c42e438-22f9-40d9-bb8e-24feb7d58e64@app.fastmail.com>
- <Z6sYAxRIeCzw12nY@smile.fi.intel.com>
-Subject: Re: [PATCH v4 01/20] driver core: Split devres APIs to device/devres.h
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250211084712.2746705-1-daniel.lezcano@linaro.org>
 
-On Tue, Feb 11, 2025, at 10:27, Andy Shevchenko wrote:
-> On Tue, Feb 11, 2025 at 08:36:47AM +0100, Arnd Bergmann wrote:
->> On Mon, Feb 10, 2025, at 16:23, Andy Shevchenko wrote:
->> >
->> > TBH I have no quick idea how to address this. It seems that io.h 
->> > includes device.h
->> > for no reason (but I haven't checked that carefully). OTOH, we need only
->> > IOMEM_IS_ERR() definition which can simply be moved from io.h to err.h 
->> > as the
->> > former includes the latter and the definition depends only on 
->> > compiler_types.h.
->> >
->> > Arnd?
->> 
->> Removing linux/device.h from asm/io.h is probably the right step,
->> it really has no business in there and no other architecture
->> includes it. I don't see an IOMEM_IS_ERR() definition, do you 
->> mean EEH_POSSIBLE_ERROR?
->
-> The definition is in the generic header and patch here relies on
-> that definition to fix the sparse warning. The simplest solution
-> is to add another patch that simply moves the macro from
-> linux/io.h to linux/err.h.
+On 11-02-25, 09:47, Daniel Lezcano wrote:
+> The structure member documentation refers to a member which does no
+> longer exist. Remove it.
+> 
+> Link: https://lore.kernel.org/all/202501220046.h3PMBCti-lkp@intel.com/
+> Reported-by: kernel test robot <lkp@intel.com>
+> Closes: https://lore.kernel.org/oe-kbuild-all/202501220046.h3PMBCti-lkp@intel.com/
+> Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
+> ---
+>  drivers/thermal/cpufreq_cooling.c | 2 --
+>  1 file changed, 2 deletions(-)
+> 
+> diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
+> index 280071be30b1..6b7ab1814c12 100644
+> --- a/drivers/thermal/cpufreq_cooling.c
+> +++ b/drivers/thermal/cpufreq_cooling.c
+> @@ -57,8 +57,6 @@ struct time_in_idle {
+>   * @max_level: maximum cooling level. One less than total number of valid
+>   *	cpufreq frequencies.
+>   * @em: Reference on the Energy Model of the device
+> - * @cdev: thermal_cooling_device pointer to keep track of the
+> - *	registered cooling device.
+>   * @policy: cpufreq policy.
+>   * @cooling_ops: cpufreq callbacks to thermal cooling device ops
+>   * @idle_time: idle time stats
 
-Ah, IOMEM_ERR_PTR(), not IOMEM_IS_ERR().
+Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-I don't mind moving that if it helps you, but don't see what
-the problem is here. Is this missing because of a circular
-#include list with linux/device.h including asm/io.h and vice
-versa? If that is the root cause, then I assume there will be
-additional problems either way until the loop can be broken.
-
->> Most of asm/eeh.h probably shouldn't be included by asm/io.h
->> either, my guess is that we can get away with the
->> eeh_{s,}{b,w,l,q}{_be} helpers, eeh_memcpy_fromio() and
->> eeh_check_failure(), which have no dependency on 'struct
->> device' in the header.
->> 
->> Removing a giant header inclusion from another one likely causes
->> build regressions in drivers that should have included the
->> header (linux/device.h or something included by that) themselves,
->> so ideally there should be some separate build testing of
->> powerpc kernels.
->
-> I believe this might be far out of scope for this series due to potential
-> fallouts here and there. But would be good to have it separately.
-
-It certainly gets towards yak-shaving, but it does look like
-the best solution. It really depends on how much breaks -- if there
-are only a couple of missing #include statements, I can see those
-get merged early as a bugfix or as part of another series. If there
-are a lot of them, it is probably not worth it.
-
-     Arnd
+-- 
+viresh
 
