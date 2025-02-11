@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-21905-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70CFFA317A4
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:26:49 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 96C7FA317A1
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 22:26:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 37C64188BF05
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:26:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id C0BE2188C2AC
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:26:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0EC9F26869F;
-	Tue, 11 Feb 2025 21:25:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D51B026658A;
+	Tue, 11 Feb 2025 21:25:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="lYHSmmnL"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="A1sBXudh"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6EFB26280E;
-	Tue, 11 Feb 2025 21:25:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A9C9D2627EE;
+	Tue, 11 Feb 2025 21:25:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739309157; cv=none; b=NiKOTCSFutzEsMKH4JwcFgjhcTPX6sjea5jvP7q87ehAIeQYfRAA+Jpvo5NczPcgK7F6KmjLjoCOF7ZNgu2BOQzU4sYp1phbrxkwBme+RSeuj+s3a2kFk9XKZbFqRbuhb5UO4KfFL3J5h7GyQVlCVCWWmBx+UNmNHh0X6Z9XjBw=
+	t=1739309156; cv=none; b=JHoHTP2HVdzINxP6PatIVMwyanKHQe+mXxtr/3Ih7pnN2lTHiTetFnvKLeP6ncjaP5r91NwSwHG0QzHObZqvtZ4QsNV66FFvSXRA6LuQi+Z0vMvMbXE7uTI8MQ8pAy4IwmISYUB/hbjRWOBSj5lsVdpe40/LCkp+0Q8DleWVdmo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739309157; c=relaxed/simple;
-	bh=CVXpmJor++qVMVrNa2Vtw7b1Gj23SWNCnYY/5A5S8YU=;
+	s=arc-20240116; t=1739309156; c=relaxed/simple;
+	bh=RWDhH8aBvtwB31yfyrq93XAA2QMV2NPAWaWlvDad8Aw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=iCb93y1RIjMN8/4CBTK5YUFc42LGvco43mwola5zLxeppzv6iOWd2eabS4cEqdc7JYf3w+wQAww0O401QwCNWy7mH49//aOI8//rQEi+1S1RiJXW7O2shtw64lMIdjlCrLH958OVjbf/CAtYG/XRyz64srZSMubvrxUULK1AkII=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=lYHSmmnL; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=WiJijbkBzMN1/X701PBKHnpnU0vQCkaFWMZdsq1/ncia+T2NymDcuMndsGAd/POl/ZftDUA+vS7as7PJ3rF84pfNpHRFclv3H7S+nrrygxlbKhqIyqNIBcMWsJ2N5B8JZGTjCHUH+ttXVLlAkia6brmC51pnXFtaYqAyWE4FQ8s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=A1sBXudh; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 043443d38ece3eef; Tue, 11 Feb 2025 22:25:47 +0100
+ id 90ab42b8ac642b3b; Tue, 11 Feb 2025 22:25:46 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 2F9FE770175;
-	Tue, 11 Feb 2025 22:25:47 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 3A65E770175;
+	Tue, 11 Feb 2025 22:25:46 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1739309147;
-	bh=CVXpmJor++qVMVrNa2Vtw7b1Gj23SWNCnYY/5A5S8YU=;
+	s=dkim; t=1739309146;
+	bh=RWDhH8aBvtwB31yfyrq93XAA2QMV2NPAWaWlvDad8Aw=;
 	h=From:Subject:Date;
-	b=lYHSmmnLa/p1gEwWiGE/rEnPKxHM2jU+pPnMB2xwW/gnrDp3S7pXUF6zzkS2KTfaE
-	 CQvgkcy5kn0ubzhy9X5nGiEsryZXL84SoV+5SSMwqf1gHNnmM/migPdbvCcjVZr7N9
-	 xSTt/uB5uRsdnR1g08vYNPzSvn01+mfxyjyCKp2liEIOaqDqQL3FkA4Jggx9mQimhe
-	 76Ixfa7781xtHiZyHULzr4cLbLBBD1zzP62oXF+xqdRhgNu1zF7DMD+vib7KNWLbQF
-	 Otk1oYvV4HQNb/kFLmElIrUwhuwNh7x4yIHWbAd3zyqE5kkbqroCk7Q3sbdUI+vsB3
-	 cF5eg2RSvQZYQ==
+	b=A1sBXudh+cnMY8vi+n5HqzMXOTfHp4+QmTeQiUprmfQG7OzrY0YPq8Ox01fcwHLgT
+	 89/2QnVyQfHJybxRStV+ssH4Yqy5kc2ceMl3UhG+id0FUfeA3VMY7fMG9ms8XALyB6
+	 P3DNheGK9zlxmHXlyK/IuDcAfYQ0j1DoOsA9eh2BM68WZzAVq/z6MBw4JUMNUZH5hd
+	 5AaKV6kUPyZ85I+I2KvKjhslBpPhzfRZywP23xs744MmITUDfoJ3gZHUyxbcd9O4Cy
+	 JJt73UJQ8/n5QdKfVbFVDeMhgy7ZXm9Ow800M/9uCsDBUpT5f38+Q8KWMGZDI2uxTU
+	 2upvCl6JwmG1g==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -57,10 +57,9 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Johan Hovold <johan@kernel.org>,
  Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
  Jon Hunter <jonathanh@nvidia.com>
-Subject:
- [PATCH v1 06/10] PM: sleep: Adjust check before setting power.must_resume
-Date: Tue, 11 Feb 2025 22:10:39 +0100
-Message-ID: <3548152.QJadu78ljV@rjwysocki.net>
+Subject: [PATCH v1 07/10] PM: sleep: Clear the power.set_active upfront
+Date: Tue, 11 Feb 2025 22:11:42 +0100
+Message-ID: <23846285.6Emhk5qWAg@rjwysocki.net>
 In-Reply-To: <2314745.iZASKD2KPV@rjwysocki.net>
 References: <2314745.iZASKD2KPV@rjwysocki.net>
 Precedence: bulk
@@ -79,69 +78,45 @@ X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Use pm_runtime_need_not_resume() in the check deciding whether or not
-the device's power.must_resume flag needs to be set, so it covers the
-device's active children counter in addition to its runtime PM usage
-counter, rearrange that check and adjust the comment next to it.
+Instead of clearing power.set_active right after it has been used,
+clear it when the other related flags (power.may_skip_resume and
+power.must_resume) are initialized, so it remains set throughout
+system-wide resume transitions and can be checked at any time while
+they are still in progress.
+
+This is done in preparation for subsequent changes and it should not
+alter the kernel behavior.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- drivers/base/power/main.c    |   12 +++++-------
- drivers/base/power/runtime.c |    2 +-
- include/linux/pm_runtime.h   |    2 ++
- 3 files changed, 8 insertions(+), 8 deletions(-)
+ drivers/base/power/main.c |    7 +++----
+ 1 file changed, 3 insertions(+), 4 deletions(-)
 
 --- a/drivers/base/power/main.c
 +++ b/drivers/base/power/main.c
-@@ -1268,14 +1268,12 @@
- 	dev->power.is_noirq_suspended = true;
- 
- 	/*
--	 * Skipping the resume of devices that were in use right before the
--	 * system suspend (as indicated by their PM-runtime usage counters)
--	 * would be suboptimal.  Also resume them if doing that is not allowed
--	 * to be skipped.
-+	 * If it is not allowed to skip the resume of the device or it was in
-+	 * use before the system suspend has started (in which case it needs to
-+	 * be resumed for consistency), set the "must resume" flag for it.
+@@ -659,12 +659,10 @@
+ 	 * status to "active" unless its power.set_active flag is clear, in
+ 	 * which case it is not necessary to update its PM-runtime status.
  	 */
--	if (atomic_read(&dev->power.usage_count) > 1 ||
--	    !(dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME) &&
--	      dev->power.may_skip_resume))
-+	if (!(dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME) &&
-+	      dev->power.may_skip_resume) || !pm_runtime_need_not_resume(dev))
- 		dev->power.must_resume = true;
+-	if (skip_resume) {
++	if (skip_resume)
+ 		pm_runtime_set_suspended(dev);
+-	} else if (dev->power.set_active) {
++	else if (dev->power.set_active)
+ 		pm_runtime_set_active(dev);
+-		dev->power.set_active = false;
+-	}
  
- 	if (dev->power.must_resume) {
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1874,7 +1874,7 @@
- 	pm_request_idle(link->supplier);
- }
+ 	if (dev->pm_domain) {
+ 		info = "noirq power domain ";
+@@ -1662,6 +1660,7 @@
  
--static bool pm_runtime_need_not_resume(struct device *dev)
-+bool pm_runtime_need_not_resume(struct device *dev)
- {
- 	return atomic_read(&dev->power.usage_count) <= 1 &&
- 		(atomic_read(&dev->power.child_count) == 0 ||
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -66,6 +66,7 @@
+ 	dev->power.may_skip_resume = true;
+ 	dev->power.must_resume = !dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME);
++	dev->power.set_active = false;
  
- extern int pm_generic_runtime_suspend(struct device *dev);
- extern int pm_generic_runtime_resume(struct device *dev);
-+extern bool pm_runtime_need_not_resume(struct device *dev);
- extern int pm_runtime_force_suspend(struct device *dev);
- extern int pm_runtime_force_resume(struct device *dev);
- 
-@@ -254,6 +255,7 @@
- 
- static inline int pm_generic_runtime_suspend(struct device *dev) { return 0; }
- static inline int pm_generic_runtime_resume(struct device *dev) { return 0; }
-+static inline bool pm_runtime_need_not_resume(struct device *dev) {return true; }
- static inline int pm_runtime_force_suspend(struct device *dev) { return 0; }
- static inline int pm_runtime_force_resume(struct device *dev) { return 0; }
- 
+ 	dpm_watchdog_set(&wd, dev);
+ 	device_lock(dev);
 
 
 
