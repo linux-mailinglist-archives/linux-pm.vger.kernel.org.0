@@ -1,278 +1,163 @@
-Return-Path: <linux-pm+bounces-21832-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21833-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7C7AFA30C99
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 14:13:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D9BF9A30CC2
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 14:24:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C044A161DA9
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 13:13:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7F01E164AD1
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 13:24:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2E5D21E08B;
-	Tue, 11 Feb 2025 13:13:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8A02622068A;
+	Tue, 11 Feb 2025 13:24:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="SJ/6f0oq"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="nIJPjNon"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2042.outbound.protection.outlook.com [40.107.93.42])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C25F2214811;
-	Tue, 11 Feb 2025 13:13:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.42
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739279611; cv=fail; b=FatYgZOayGihQbkw9PH+uEx7FK08XXN4MUpaHUDjEWqLHjVyYwXsUhhdAgcIu1rQCknkYljzqNBntltOOVNuryp2XuIO4kaslFOghEpQwujlD8bXGYShhwdeTODjBjzTFjrmE+GVI6I4WXa7LlAyx6qlC6Z54irSjiNMvT9sPCQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739279611; c=relaxed/simple;
-	bh=UQuH8xdJD+b2raxFxmdTfJUjVGkDZmz1xeS2XCtt1uY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=SUWa9U9nnTjtg2g46g8HZgdXOZ7Ud0p1mjSGuc2GHKptWGnkPvA4Dr+AkFDuwjQvYVw+JNNXGViR3EH+N54fW71xKtgz5E4yaN0s1O268KbvmnpR/xWVCU7GZGjdgFJ3eBKimUyFFl8xBilt33RCTaMLUsxDEWMfg7xjANVepe0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=SJ/6f0oq; arc=fail smtp.client-ip=40.107.93.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=S9mvEPI+1MrAIfA8ec2D5AZ4Ap1UTqQ8J8iVq6Am7io1fsREQ8i1AMtnBNvHyaIs4b6bH3nqLCHjd8xgnye0+kId1m+u1idEbRp7Dx100TVh/P4Hw8J8JBZD6hE/KqtH2WWNFR1og15CCkEsMSGxlcGBc7mTbxnC7jRS3d1Jw4NZ0KTT3YgLZWjLSaoS6Iq5S7l50Fm/te2WdFpvEWAR0D1Wa4Q6hyqovYG2P6LSZImqDEOYqDb7DLGpzxcGwOGJKsmJvfJ61/j0jiG5r9f5Ta8Z+0FUMfgFUSq1uGZeDFFZlgbxo5FbfH8Z61D1ev/emPbD/yYlVAXmUgs40cMMaQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+27sEL7+2gAHFhrYJAOBgTD0uhiNbIg7pylIfCp85Gs=;
- b=wYKf1xFGtPzREV/WKI8sUFb7nqyJCpWaOBX3EOdQ9fi4B1BXPD0Sqp4uN9BDoxMhO1E7nOPn6M8lP+k2tkJft0H/NYMrLOw/DyOMbLR0gX7y3SITcmumFIuiJEwYV7wfquh0DkWgRClEY5sXIv9VDR0bIRfvRTFe+hQeheWJHN54Fs//xJVkcK/8W4EjAZPCfPoeQ8jg7U1x5GaDFJGYfxAEd7fntg3IjYUJPcIXBX/Om4boyf1UZiZOPad3Zx3Bnza7cBrkTKWSTWmT4OXs4DraC4lU1An+BQkBgt5+2gIo3rXy5D5OGJSS9yK8uQpclxWO2r4VERAqK9BV96MLwQ==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+27sEL7+2gAHFhrYJAOBgTD0uhiNbIg7pylIfCp85Gs=;
- b=SJ/6f0oq3mhLBA+l8zFlBt4494a8FrJZJUnG2wBGqeU5qoshkpnyh7zzIeRyQKkWTSWilqAL8nhM2jlO0c/eCImhj8NFp8TEsvu8M6/RifOJnxvYOLSdcNaA/GA3E9qwpj7FMhMzyZFQOqzqW/roFsSgCosi8Y1SKdr74OYSOqM=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from LV8PR12MB9207.namprd12.prod.outlook.com (2603:10b6:408:187::15)
- by LV8PR12MB9136.namprd12.prod.outlook.com (2603:10b6:408:18e::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.18; Tue, 11 Feb
- 2025 13:13:27 +0000
-Received: from LV8PR12MB9207.namprd12.prod.outlook.com
- ([fe80::3a37:4bf4:a21:87d9]) by LV8PR12MB9207.namprd12.prod.outlook.com
- ([fe80::3a37:4bf4:a21:87d9%6]) with mapi id 15.20.8422.015; Tue, 11 Feb 2025
- 13:13:27 +0000
-Message-ID: <a3d10f58-3d69-40e8-b0ea-53f4ed9ce31a@amd.com>
-Date: Tue, 11 Feb 2025 18:43:21 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/14] cpufreq/amd-pstate: Cache a pointer to policy in
- cpudata
-To: Mario Limonciello <superm1@kernel.org>,
- "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
- Perry Yuan <perry.yuan@amd.com>
-Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250206215659.3350066-1-superm1@kernel.org>
- <20250206215659.3350066-13-superm1@kernel.org>
-Content-Language: en-US
-From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-In-Reply-To: <20250206215659.3350066-13-superm1@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: BMXPR01CA0085.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:b00:54::25) To LV8PR12MB9207.namprd12.prod.outlook.com
- (2603:10b6:408:187::15)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31697215F42
+	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 13:24:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739280270; cv=none; b=uF9tvSX7X0nDmy0NkFW6ZNRmcR+IKN5/d70g9KQowGW6zl6Ecq2dXp6vePqJCUpWOKabnQ/dIP+BgsSYiQ3e3Oqe0HRCodt3M+Ah4+nCNUe5ptALIHc0JxkizYpcSl9lEoeEucgBTmGLmhPegTrpQ/tr4psZlXIjlTR+rW1Ylys=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739280270; c=relaxed/simple;
+	bh=faoFeqrYKEAf9svlTJWzo4t+5/zdVdV4o0bV7POm6C8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=i2o1WpQgD1B1wEcLH0CecZr4HiOgSIwHSa5Lvsdx6BZujOd+nK6ge2dOgKo7Bn8dYv9psFn059SoHgkhdCVQj3SGx/NCI42JbHEe4veSjA2cQKSufepb1OMZFPBPE5Gb4Sn20iMcAu9TOJAb32cCEF8ZZx2+VpPojhbiYq8qagA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=nIJPjNon; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51BDNIdH007898
+	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 13:24:27 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	sQVfGCv09vBoDVQrh4Ze9mUczCoghiYMGRI0q2XkcrI=; b=nIJPjNonXVIHRGvn
+	VYTMpCDZc8Wz0AG0xRHsPUAyBgR8KxmaLnTpHvQy4egNSJQXf3Eegxvatmf3Qe++
+	43SEXFG7/Tifn2Nq2oGkGebHMX8lHb+lUk9kePBs+KxnfgXo8AVlQwpgCmrx2nKX
+	565eQMG12nov8zLuwYbNOTsw/EdKJ/EPNm1O02Gq7+dbm4i+FseXDdlYnSXOBINM
+	pAa8fNMPVjYav3iVG8K6MLgYRGlOGcTa2YEFSbTuDD5y1yeIrH2MEpjzSO7PcnEZ
+	sHQkPHk2uKjOgArQrY8ipN0xA3uijyvx07Bspg9rTUp/rn69QB/An8hwJuvCqm2k
+	IC+GYA==
+Received: from mail-qv1-f72.google.com (mail-qv1-f72.google.com [209.85.219.72])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44qy4d9f7g-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 13:24:27 +0000 (GMT)
+Received: by mail-qv1-f72.google.com with SMTP id 6a1803df08f44-6e422f1ceadso10805626d6.0
+        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 05:24:27 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739280266; x=1739885066;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=sQVfGCv09vBoDVQrh4Ze9mUczCoghiYMGRI0q2XkcrI=;
+        b=YnT0Tq2B7gf2XCV+IqsPm5fnXxHfQREdNGNbAphK+0PFM8Ln7JKOR12VcthtIEmcxF
+         0VKmS4VX977ekLuc9WC92tqnkHo6X55WuZhmh17+RYJjMfD587oERIUFCEnZzC5JWr+X
+         +nbl3m4w4lMEa8M1lF5cyPVxwnrSpk79D7IIoz4qAblZU72zscWQ72P70NfdF5u8gH1k
+         CZE0waas+yUS+IkGimWE6x3gwt7MiaXBW0tMazs22C63ub9Kwp4Z/ubtNgS7FW4uNheX
+         YF3iert5O/ZydMwLmp3GmQli1ZeTekn9/q9Zp4RGuDlcMYYCUQRQAUYdRP97BqasVDqc
+         62FA==
+X-Forwarded-Encrypted: i=1; AJvYcCUqbihwPptN3PAuiM03ozQT1tT/I7tQ+9ulFxsFOB1klhFuI9u5ZCk+KwmF57M3Ph9Gh46hszOLhw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyd2EutxPxcrzFwbgcErNCN7qics1bTQXQR7DBz95N8fLQhVFWu
+	nEuGnMCCPwqmAEtngarPHdA265lg3GbzsE50zCI89GY0uTO/P3pXRs4T2VDqs7WngT6Jc2mm48I
+	nX8WQbqM2H5lKISkFOb7OivPNKwqaYQ2siSktq0POVO/bA/1t3ytq41zskw==
+X-Gm-Gg: ASbGncuglg5FKqTvPRlIWOMRQKcj2N3stgOkzg9r6R0EZs1AjFD38PJnzqyfaWB10zi
+	CDL8ZWvQfNXuOhULJZFJ9LX+965x5xjVf2w/6s7fTDLuBTBRpwPLlf9lYl1+3h19BOxqA4C0g78
+	35eI9n6+gQ4VQCtzozq1q+HMg5XiHUwqGw4Kgfn0q1ODsrsdx81lkFDh/raIR315Ah3xGn0N4lM
+	PJoBnOkIaNYf6MNYOBwSx+FXpBbYBXWqPxJv/GQ1/OIGoF6euHqR3SOXYHgnTpRbsjjifq2+C0v
+	fmvLcpzitmr5m8v5+HP6Vqe8eg0Kz2YIdw+9Uv+/GK0ljG5sDe1I0VJy5mU=
+X-Received: by 2002:a05:620a:19a3:b0:7bf:ff64:3370 with SMTP id af79cd13be357-7c069d8278fmr124539785a.15.1739280266069;
+        Tue, 11 Feb 2025 05:24:26 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGuDMhfu4vsIuZpH9egkjC6KW9vClwfQVhdNexGYBZzWrK+zKQWg/bT3kho4XEZz7VPxtBwww==
+X-Received: by 2002:a05:620a:19a3:b0:7bf:ff64:3370 with SMTP id af79cd13be357-7c069d8278fmr124537185a.15.1739280265736;
+        Tue, 11 Feb 2025 05:24:25 -0800 (PST)
+Received: from [192.168.65.90] (078088045245.garwolin.vectranet.pl. [78.88.45.245])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5de61830117sm6150225a12.6.2025.02.11.05.24.21
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Feb 2025 05:24:24 -0800 (PST)
+Message-ID: <ed47db4c-42d2-4fb2-9b48-733443c62a70@oss.qualcomm.com>
+Date: Tue, 11 Feb 2025 14:24:20 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9207:EE_|LV8PR12MB9136:EE_
-X-MS-Office365-Filtering-Correlation-Id: c3394d15-fe76-4e48-46e8-08dd4a9ddf5d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?bC8rS1l0MjBGb0JLMGNueng0SDMzd1BiRngvQVFaUzlweWJubXFJQkxpaVhq?=
- =?utf-8?B?b00yZkJSK0czaElreXVlQTdwS3d0MTRzS0VxekM3RUVBaEwwR3pvYmUyM29L?=
- =?utf-8?B?cDNodUZXNHpxQ25nYkZlUVhWeGMxaG5CczBNU2JpNFo4RjNvVmwxM1pPd2Fo?=
- =?utf-8?B?djVDaUU3eWRCMG1GUGFYWTE0RHh5S2FoelcrbWpCTkFWMTd3RDhqSVRFaTU4?=
- =?utf-8?B?dkpYVW81ckJlWVFSU1VzbUVDWFM3b0EwSXlwRHIxbDlxUTJWSVhnTEpJcU9o?=
- =?utf-8?B?eGM1MXBjYytrOTR0TVV0R0xzSzRRK0dGMk5hSm1BOUlsTzVVMmx2TVBLbzlh?=
- =?utf-8?B?TXEwTUpVWVNrdWhEUXdDSGJOS3lEQVBWbGU1MEZUK1ppQTlPNG14Ty9OblVL?=
- =?utf-8?B?cGZuN0VENEtuVGFHWUVGU3pNUE4vWUo0MTNsSTFWaWlvcGN4Mk53dTIyTFdZ?=
- =?utf-8?B?ZkZkaTliN0U0UTdUL1pOenR2TjA5dDBKcHdKbUdpTU1OQVAvcnJJb3IyUk0x?=
- =?utf-8?B?SEE0bjl4YjdWWUVoYmJGSCt1N0ExdTRkMXBnelRya295ZjNvd1Rhb0FJQVFo?=
- =?utf-8?B?a0Vpak1BMVBzQWdwQlRrRTFhdUkzako1aE9TMWdnMGNOSU1lM3U3dzBNL2Qw?=
- =?utf-8?B?aFBtT0ltM3BUejVseEt1VlZYcW1DZXo0SGo2MkdYWVZLWDhpeGUwNnpYYWpx?=
- =?utf-8?B?UFhhT3ZGWVJoa0NNeENxZStzVFQwYVYyOGJodm1mOGh5Q2gzMUN1Q1o5blhM?=
- =?utf-8?B?R2hocnhiakZyaFBuTVdabWNVdXl5UHl4U3E0aGVRczZUOFlCeG5ibVlRUFhR?=
- =?utf-8?B?SiswVFpjS3UvdGdTdVlyT3JZK2djdHVwbG04NC9hQlBPQTcyTXdIZkhjbEVm?=
- =?utf-8?B?WE5XbnNBbDFSYXFGeWlRVzBTNncwc2R5c0ZTb0lndUpXVmRCK1EyTDI1T1lG?=
- =?utf-8?B?RlI0ajZyU3QrMDV2QzF2ZVB6WHNkbXR2QUJQbThzb0VLN0F4YUtEajJkeVRV?=
- =?utf-8?B?N24xL0syb0RFS1VyMEdka0Z2NXRtcllxYldxSXh3NGpjTmlLTUlUM1pVR2dL?=
- =?utf-8?B?bGloSUZsZm52VVM2b2pWTkUxdE1sNEtnUHd6azRZWmZNbExtUmkrd3EvckxK?=
- =?utf-8?B?cy91U25uV2VsakpYTmxidnllZ2xqV1ErdmNta1VpdndFV2phMjd2S1c3dW5E?=
- =?utf-8?B?TVJtZGxaaUZyMnd3SjZub09WQ1NhbHNORm5BZTRXcmRRUTlrZ2xweGtNYjQr?=
- =?utf-8?B?Q29vNE5kTFZEcWlZd2tyWmxheDRuRDV4QmZKc0NWakJXdFdFb1VvNGZYNHV0?=
- =?utf-8?B?djFHMkRSL2J2TVBhMkFFSmUyQ1lnZXkyWG5QanA4ZGZuUlJPVER4M3c3aG9r?=
- =?utf-8?B?ZVRBeXEwcFJ5ZHBVd1ZHMFBIcHBPRjRCN2VnS2VHMjhqK3pucitlNTgwaG9j?=
- =?utf-8?B?VmtKaU1XeUxLbXdYK0MzOWplMWhPbG1zckViM2VGZExUTDJGTjVBVDMrazFU?=
- =?utf-8?B?SWNWNlNyQkUwUVgzSGxLbW9aNW01dzd3TTVnZ2ljM3ZUTGx4WElENEU5Zy9i?=
- =?utf-8?B?eFhPSGNLZmM4NVpSL0JPRTFxYi9nbGtNRitsVGZpdUZGdjVIWXJhN2F0dXVn?=
- =?utf-8?B?QXVIdkNpdGF0THJXajhGVm45WVptS3UxNnpIUFFQRU9LYVgwNXo5bENiVEdy?=
- =?utf-8?B?QTUxVENMRDhpSm5PL1ZFNzZ4Q25iOVE0OU53Z3VIQ0ErSXVDOHIwS3NaR3Rn?=
- =?utf-8?B?R1NydVE0RE1HNEdCLzF0YWJGSGh2OWJUcW9BaGh3TEJoa2pmaDNhWGJDYXBN?=
- =?utf-8?B?MGEvbnRseG8vOTEzSTdreWFueUJhenI0elVTL2JwQzRHL0s3bWZQMjd2dE0z?=
- =?utf-8?Q?Q/O17JWlI0FHr?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9207.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Z3gyMjY0a3VCRzhGOUw2WU0wS2E5TGZ1M2treE56dWdsQ3RtbGlmSTlnZ2FC?=
- =?utf-8?B?bm9wRzN3MTN1eXg0UzhIbkowd3JaclQzdHA5NG0rak0wOGVzY0ZnRzN5U1Jm?=
- =?utf-8?B?eU1tRzk3MUxVRWlnVFAzaGFFTFh5bnl4d2VMd3dMNC8yWk4yN0Z4MjJyM3RE?=
- =?utf-8?B?ajdnejZaR052MXl5YzFpa0JTNlJhc3U5RWNvZnJGVWtKRTExRm9Nb3FzYTVo?=
- =?utf-8?B?MmZqOEFYN1dFdVh3bkpTYVZGT1lOd25jeUlSQzdRQmFLOFBmNnZKandTUDgy?=
- =?utf-8?B?akxFTXg5MG5lcjdhSzlaakhIRXhDNHI1S0tyWC9kWXhWYjRrYlk4QXlIMmRI?=
- =?utf-8?B?VWMyRFZ2U1VqTnU2UXlWQmh6QUZpZlF2Y29WeFduR0I1R1JySnFtWGFRKzdX?=
- =?utf-8?B?aXNibGliNG9SRnBIQjd3VEUweXdDVTZOZ29qYXM1YTNGR2M2dkR5UG5UekE4?=
- =?utf-8?B?QlN6YUVLOUZ6L0xlT1l5WjBJdGtJenM5MVlHMmVrY2NLSFlOVm5MRFdHY2tv?=
- =?utf-8?B?MkpuNldONGZHUW9kbnU4eUduYmJJdytVV0IrMERQdENyU0QrQWc1Q3Y0YU11?=
- =?utf-8?B?dTU0R2V6c2VwbzAxL3RZNHJhMU5jZlA5OS9IaTVHb3A3OFBvNkxaZzZRaXRN?=
- =?utf-8?B?N05nUzliQmptMkpOY2YxTVpnRStXa0lEWitLaUkwWjhqRGtiUFBoazMyOFRl?=
- =?utf-8?B?SXpDdHVaNDRTbjJUcG82MDh2S0RTZU5qZDB6V1lxQmEzMnZxMTI5QTc4ZGNR?=
- =?utf-8?B?SmRKQ1lnK0hXZVFsSlFxZHUvc3VGWVQrODl1RXByREQ5b3BNMlJEeGZ2UXZ6?=
- =?utf-8?B?VmRmZU42RDdQaW1zM0NlQVp6amxWOU9tcjV3ZEpMWllxb2dnNG9kM0NYLzFj?=
- =?utf-8?B?UncvQStGamUzV3FQNEl4bXZPb0gxMVk3TlRzU1JpOVRSd1ZCaExrVVlmRktB?=
- =?utf-8?B?aFZSd2FaR0lDTWlSRzhBTzV5VG5jc0xVMEFqNWdCdjhIQnZYbWc0VVpvZFpN?=
- =?utf-8?B?MGNwSFNDbytYdkQ1eStoMEZEcVh2Z0FEYWJnT1RrMUllbXBGZ0Nqc29KdW5q?=
- =?utf-8?B?VmVLTC9RZ0dYd2IrS3JPRDg5VHhoYmt4N0czWDlpY2JqNVBBdm9vYzJMbWJ5?=
- =?utf-8?B?VWFmdXJUT2NpZVdEeVF2NFJJQXRuVUtFbjNlem01WTZ6YXE4MThqMi9PbUw5?=
- =?utf-8?B?UmQrU2RMdXVZTEllZ0hKY3Fxamc0WFlaY0ZQSjBWTUtkbWlZbTh5c1RlM1VK?=
- =?utf-8?B?V0Q0L3kzREp4T0tVWVIyVURoK0JHRTFRRVVZenNVK01BN2tNYzZyRDlqSUhp?=
- =?utf-8?B?cWhRMloxMGZjdHhCdXlEOHpjK1BsSCtYNnVuSzczVXRuZGpuSzBzSWloYi85?=
- =?utf-8?B?aDI1Rzdtb0luQ2ZMRWNoREdOVEIyRG9uOTlwc3doZlJpVnE5Vm81T3RSU1Ro?=
- =?utf-8?B?THFuNlhxdVJwZEhVamtDVmdTUW95dUpLa0FTR2twOUduY29LNDY1dS93U3U0?=
- =?utf-8?B?L0xJUVJXZW1JK3FZN2tWZUZiYjhPbFBGdXRGYTJnbFFSREZLMnp1QUdZVzN3?=
- =?utf-8?B?U0pMblM2L3dMakM3VnlUMEJ5dXhCTEw1VUl1eUtOMXg2aDN2SEg5UktPVjNO?=
- =?utf-8?B?WERaNmFIc1Y1RHNMSmVaNmJjTks0QVhUcS8vQVhhdDdVdnltYmtGbDVJRFZo?=
- =?utf-8?B?cGw3WGRPRWZsVzM5ckZYYnVWYVVSQ1VDZTU2QXBweDRmcjdNZE1xVWgwbmlE?=
- =?utf-8?B?ZWNaa1YxZDJtYTEzWlRKSVp4WjNjZFZSbmRrZE94UDdBVjdCTjNhZTVrNDdF?=
- =?utf-8?B?NmtxczR4NWt0Ulp5TDVKemh3OE92d3RtSzJTWXZUYVdvOXVnT0JWek9hUG5t?=
- =?utf-8?B?aWFrMHNERVdPL3Q1L2RZdklkZ2hDR1EzRTlCb0puYVozZ3laUUZlcnowTGU0?=
- =?utf-8?B?cDRhUlBqSUU1RkR2NDg5VFMyUzhZQ2VITERXQlRnajkyUXpya0RZSzhCOU93?=
- =?utf-8?B?dTViekVCb3pUSEd4NWcrcGtPNW5rc3BGNkt4c052N2NtdFZCdnplRjFBRGhN?=
- =?utf-8?B?YVNVTGVjSDJJVW16Y2lTMXNaSzJpZnNBUkdOWWRSWGxycW1wQU5VWEtkYjdj?=
- =?utf-8?Q?s1lTAUpNJyy6ZTZxVvSBc55Mq?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: c3394d15-fe76-4e48-46e8-08dd4a9ddf5d
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9207.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 11 Feb 2025 13:13:27.7708
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: g7PEEiJbLLeRp1H727AX6e5L8e2M2UEqMH0lHZ+bYgYmaNqggNsPkqyQadKmaBUqZ4cnaX1BUhSKA3AkjVloug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV8PR12MB9136
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH RFC v2 5/5] arm64: dts: qcom: sa8775p-pmics: Add support
+ for MBG TM
+To: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        Daniel Lezcano <daniel.lezcano@linaro.org>,
+        Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+        Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley
+ <conor+dt@kernel.org>,
+        Jonathan Cameron <jic23@kernel.org>,
+        Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
+        Stephen Boyd <sboyd@kernel.org>, Amit Kucheria <amitk@kernel.org>,
+        Thara Gopinath <thara.gopinath@gmail.com>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+Cc: Ajit Pandey <quic_ajipan@quicinc.com>,
+        Imran Shaik <quic_imrashai@quicinc.com>,
+        Taniya Das <quic_tdas@quicinc.com>,
+        Jagadeesh Kona <quic_jkona@quicinc.com>, quic_kamalw@quicinc.com,
+        quic_jprakash@quicinc.com, linux-arm-msm@vger.kernel.org,
+        linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+        linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
+References: <20241212-mbg-v2-support-v2-0-3249a4339b6e@quicinc.com>
+ <20241212-mbg-v2-support-v2-5-3249a4339b6e@quicinc.com>
+Content-Language: en-US
+From: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
+In-Reply-To: <20241212-mbg-v2-support-v2-5-3249a4339b6e@quicinc.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: 8rDkkvZoZfNTLlAR_NbQ8rUJApsmEPgw
+X-Proofpoint-GUID: 8rDkkvZoZfNTLlAR_NbQ8rUJApsmEPgw
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-11_05,2025-02-11_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015
+ priorityscore=1501 mlxlogscore=999 bulkscore=0 phishscore=0 spamscore=0
+ suspectscore=0 adultscore=0 lowpriorityscore=0 mlxscore=0 impostorscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502110088
 
-On 2/7/2025 3:26 AM, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
+On 12.12.2024 5:11 PM, Satya Priya Kakitapalli wrote:
+> Add support for MBG TEMP peripheral for pm8775 sail pmics on SA8775P.
 > 
-> In order to access the policy from a notification block it will
-> need to be stored in cpudata.
-
-This might break the cpufreq_policy ref counting right?, if we cache the pointer 
-and use it independent of the ref counting framework.
-
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> Signed-off-by: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
 > ---
->  drivers/cpufreq/amd-pstate.c | 13 +++++++------
->  drivers/cpufreq/amd-pstate.h |  3 ++-
->  2 files changed, 9 insertions(+), 7 deletions(-)
+>  arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi | 116 ++++++++++++++++++++++++++++
+>  1 file changed, 116 insertions(+)
 > 
-> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index 689de385d06da..5945b6c7f7e56 100644
-> --- a/drivers/cpufreq/amd-pstate.c
-> +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -388,7 +388,7 @@ static int amd_pstate_set_energy_pref_index(struct cpufreq_policy *policy,
->  	else
->  		epp = epp_values[pref_index];
->  
-> -	if (epp > 0 && cpudata->policy == CPUFREQ_POLICY_PERFORMANCE) {
-> +	if (epp > 0 && policy->policy == CPUFREQ_POLICY_PERFORMANCE) {
->  		pr_debug("EPP cannot be set under performance policy\n");
->  		return -EBUSY;
->  	}
-> @@ -689,7 +689,7 @@ static void amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
->  	perf.max_limit_perf = freq_to_perf(perf, cpudata->nominal_freq, policy->max);
->  	perf.min_limit_perf = freq_to_perf(perf, cpudata->nominal_freq, policy->min);
->  
-> -	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
-> +	if (policy->policy == CPUFREQ_POLICY_PERFORMANCE)
->  		perf.min_limit_perf = min(perf.nominal_perf, perf.max_limit_perf);
->  
->  	WRITE_ONCE(cpudata->perf, perf);
-> @@ -1042,6 +1042,7 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
->  		return -ENOMEM;
->  
->  	cpudata->cpu = policy->cpu;
-> +	cpudata->policy = policy;
->  
->  	mutex_init(&cpudata->lock);
->  	guard(mutex)(&cpudata->lock);
-> @@ -1224,9 +1225,8 @@ static ssize_t show_energy_performance_available_preferences(
->  {
->  	int i = 0;
->  	int offset = 0;
-> -	struct amd_cpudata *cpudata = policy->driver_data;
->  
-> -	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
-> +	if (policy->policy == CPUFREQ_POLICY_PERFORMANCE)
->  		return sysfs_emit_at(buf, offset, "%s\n",
->  				energy_perf_strings[EPP_INDEX_PERFORMANCE]);
->  
-> @@ -1543,6 +1543,7 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
->  		return -ENOMEM;
->  
->  	cpudata->cpu = policy->cpu;
-> +	cpudata->policy = policy;
->  
->  	mutex_init(&cpudata->lock);
->  	guard(mutex)(&cpudata->lock);
-> @@ -1632,7 +1633,7 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
->  
->  	amd_pstate_update_min_max_limit(policy);
->  
-> -	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
-> +	if (policy->policy == CPUFREQ_POLICY_PERFORMANCE)
->  		epp = 0;
->  	else
->  		epp = READ_ONCE(cpudata->epp_cached);
-> @@ -1651,7 +1652,7 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
->  	if (!policy->cpuinfo.max_freq)
->  		return -ENODEV;
->  
-> -	cpudata->policy = policy->policy;
-> +	cpudata->policy = policy;
->  
->  	ret = amd_pstate_epp_update_limit(policy);
->  	if (ret)
-> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
-> index 7501d30db9953..16ce631a6c3d5 100644
-> --- a/drivers/cpufreq/amd-pstate.h
-> +++ b/drivers/cpufreq/amd-pstate.h
-> @@ -97,9 +97,10 @@ struct amd_cpudata {
->  
->  	struct mutex	lock;
->  
-> +	struct cpufreq_policy *policy;
+> diff --git a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> index e87f95e9ba9f59e3f067af0d5565b8e3ed4b37fc..eade5784f18629dc9f7ebf0257551bf96bea9a4c 100644
+> --- a/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> +++ b/arch/arm64/boot/dts/qcom/sa8775p-pmics.dtsi
+> @@ -89,6 +89,58 @@ trip1 {
+>  				};
+>  			};
+>  		};
 > +
->  	/* EPP feature related attributes*/
->  	u8	epp_cached;
-> -	u32	policy;
->  	bool	suspended;
->  	u8	epp_default;
->  };
+> +		pm8775-mbg0-thermal {
+> +			polling-delay-passive = <100>;
+> +			thermal-sensors = <&pmm8654au_0_mbg_temp>;
+> +
+> +			trips {
+> +				trip0 {
+> +					temperature = <115000>;
+> +					hysteresis = <5000>;
+> +					type = "passive";
 
+These could possibly be 'critical' if 115C is the TjMAX or near it
+
+Konrad
 
