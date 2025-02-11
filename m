@@ -1,166 +1,142 @@
-Return-Path: <linux-pm+bounces-21850-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21851-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id D754CA312EB
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 18:28:07 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5BCCA313E7
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 19:19:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 36CB51886C62
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 17:28:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id BDAF27A421B
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 18:17:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DAB826215A;
-	Tue, 11 Feb 2025 17:28:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B79ED1E5B62;
+	Tue, 11 Feb 2025 18:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZBrQx2h3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FO7tv1K6"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 39BC3262152;
-	Tue, 11 Feb 2025 17:28:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 887D01E282D;
+	Tue, 11 Feb 2025 18:18:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739294883; cv=none; b=TRKTZXuBtrJigYGsV3rNzrMykcDlapVJq4T/WS7MyCtBqMyTj5VnmHK0YEv5bryp/UKcWcu4heiIYCs0AUI34Zhb99TEy5SU0pr3am0WynF1dk2TbIjNHkisjVf3B3lo3GvEmaESK2C/EQSuy3QGrsG0zBjkEDJsPuGcsoZi0F0=
+	t=1739297909; cv=none; b=bWSBsBvZSENQ+5IZYYSvUVdDYN04S4UTLzQwAFYYmpRl38DKny3ZtE+FNvRGquVf3qXbDbE0E0le3HqE+atDVfQ1I7YI63ASTY5E54NP4wGg4m+DkeTlWnYk7Cq2REf0Mq+4Oa7B0DCXnmfFkWItBmWTKA3f1zfw4Y206zdNLHc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739294883; c=relaxed/simple;
-	bh=NddH0pkxZWe9E2BuTZtR2bE6TlVPCcuHwM6y+KM9BA4=;
+	s=arc-20240116; t=1739297909; c=relaxed/simple;
+	bh=cE4jcsAX2FB7uvZhLWO9AMcWcOaQ1ZV8xgeqqsLhxAo=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=nya2IDlaYa8QYM9oGl6PCu5nOcoMLH3C3v4x4jqhorSwVqSyYYb5RbQz44ELvW860LdLhdA9XXq2TL5Pu8Bkjen2WgdvCrRanzIQXAVI4mzNZ8IHMXOUEBHcXfpbNR+fI29TwGBQ3WDkkrAg+9GL6rDaTwb/pKH0SGHcPXArFuM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZBrQx2h3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1044EC4CEDD;
-	Tue, 11 Feb 2025 17:27:56 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=PeegjYS5KBfUtUnD9+BCY8LNNau5h1iRzefGo42GAToWWEFjC+C+E5KZNkQrzpShy5bEN7ueXmcXos+gI5scdNXh1XxkyOzLzuBjIWSQ2hHiG4Lbc9r+W9pMZRpnPawofIo/g2ZcTpmCp00fv99Xc8cmYbGlYWufEmE+IHXdCi0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FO7tv1K6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D2DA8C4CEDD;
+	Tue, 11 Feb 2025 18:18:25 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739294882;
-	bh=NddH0pkxZWe9E2BuTZtR2bE6TlVPCcuHwM6y+KM9BA4=;
+	s=k20201202; t=1739297909;
+	bh=cE4jcsAX2FB7uvZhLWO9AMcWcOaQ1ZV8xgeqqsLhxAo=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZBrQx2h3jicMJM1SPW6/fLau90JPmb1GNG1ajhMgiNldTP0+DP4vDxK9l/SvqE0+Q
-	 8QO8ese1OhzYvU9Fj5IkmkzL8vy7Lo6ffmv5cfVIBfk8oG0C5ZjIY6L4nUeqAkP9DT
-	 rUgMR9E8BR6B8E9cpv97P118YM9xzqEVj5iVZMXeZWW7J9AcFUbd1EpU/UvxOZR+z9
-	 xvuob0gKx8VLDx0YbpkGNNoehd11HjHSceewp1VA1DTPoVJX5lsWYrRCDyEFvVlNh4
-	 IWWKh7N0PrUzofo75YHCqwMweBJuV5LZ0ABsP2zkwdmi+QBJD7//iT2hsWm3IhXKMu
-	 DRGIHWh8Cjt8Q==
-Date: Tue, 11 Feb 2025 18:27:54 +0100
-From: Danilo Krummrich <dakr@kernel.org>
-To: Yury Norov <yury.norov@gmail.com>
-Cc: Viresh Kumar <viresh.kumar@linaro.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	linux-pm@vger.kernel.org,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	rust-for-linux@vger.kernel.org,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH V8 04/14] rust: Add cpumask helpers
-Message-ID: <Z6uImtVQpVGrCGnj@pollux>
-References: <cover.1738832118.git.viresh.kumar@linaro.org>
- <db0166341ce824c157d0c58c240b3efc6aec6f6e.1738832118.git.viresh.kumar@linaro.org>
- <Z6qTelPSqpFk439l@thinkpad>
- <20250211042908.nyftiw7gtxosfjwc@vireshk-i7>
- <Z6t51xodSV21ER4M@thinkpad>
+	b=FO7tv1K6drxWVq7uoFgvOKH9m4xyJAD00rlHVuiIu/apLLCjiLCU2t0Z2ggEOEPCu
+	 rM2PBdCJsX7wTz/49XKW4//7sk6YXeF8JEwDlbxd5FK0O1tGGvxgY+DVa5IRRGlHnJ
+	 NKzJwKgcw1Hx2lyhPdbclbmVPpWcY7aNWDIJ8BaNlcPKPnXN7lRQ4EETZgevJWCCpG
+	 fABcr+pxuuSY9JyiaRnwivJ5x3MVGihPBLldfdLIzZKvL9hypU5VLNPnAbhIhGX6ZB
+	 KXh0m/92ptmm8D6NwXPnWEVt+p0WxBnF80K3Mad6OUVg3CCsANQJMBsQyhk3ztFSoL
+	 M29vTBxJN7ySA==
+Date: Tue, 11 Feb 2025 18:18:23 +0000
+From: Conor Dooley <conor@kernel.org>
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+Cc: soc@lists.linux.dev, Jisheng Zhang <jszhang@kernel.org>,
+	Chao Wei <chao.wei@sophgo.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@outlook.com>, linux-pm@vger.kernel.org,
+	linux-riscv@lists.infradead.org, devicetree@vger.kernel.org,
+	Haylen Chu <heylenay@outlook.com>,
+	linux-arm-kernel@lists.infradead.org,
+	Sebastian Reichel <sre@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>
+Subject: Re: [PATCH v2 2/7] dt-bindings: soc: sophgo: Move SoCs/boards from
+ riscv into soc, add SG2000
+Message-ID: <20250211-squishy-blip-8ac4cf64d462@spud>
+References: <20250210220951.1248533-1-alexander.sverdlin@gmail.com>
+ <20250210220951.1248533-3-alexander.sverdlin@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: multipart/signed; micalg=pgp-sha256;
+	protocol="application/pgp-signature"; boundary="3/BNf11h93vTDDr6"
+Content-Disposition: inline
+In-Reply-To: <20250210220951.1248533-3-alexander.sverdlin@gmail.com>
+
+
+--3/BNf11h93vTDDr6
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <Z6t51xodSV21ER4M@thinkpad>
+Content-Transfer-Encoding: quoted-printable
 
-Hi Yury,
+On Mon, Feb 10, 2025 at 11:09:42PM +0100, Alexander Sverdlin wrote:
+> Move sophgo.yaml from riscv into soc/sophgo so that it can be shared for
+> all SoCs containing ARM cores as well. This already applies to SG2002.
+>=20
+> Add SG2000 SoC, Milk-V Duo Module 01 and Milk-V Module 01 EVB.
+>=20
+> Signed-off-by: Alexander Sverdlin <alexander.sverdlin@gmail.com>
 
-On Tue, Feb 11, 2025 at 11:24:55AM -0500, Yury Norov wrote:
-> + Jason, Christoph
-> 
-> On Tue, Feb 11, 2025 at 09:59:08AM +0530, Viresh Kumar wrote:
-> > On 10-02-25, 19:02, Yury Norov wrote:
-> > > On Thu, Feb 06, 2025 at 02:58:25PM +0530, Viresh Kumar wrote:
-> > > > diff --git a/MAINTAINERS b/MAINTAINERS
-> > > > index ee6709599df5..bfc1bf2ebd77 100644
-> > > > --- a/MAINTAINERS
-> > > > +++ b/MAINTAINERS
-> > > > @@ -4021,6 +4021,7 @@ F:	lib/cpumask_kunit.c
-> > > >  F:	lib/find_bit.c
-> > > >  F:	lib/find_bit_benchmark.c
-> > > >  F:	lib/test_bitmap.c
-> > > > +F:	rust/helpers/cpumask.c
-> > > 
-> > > Sorry what? I never committed to maintain this thing, and will
-> > > definitely not do it for free.
-> > > 
-> > > NAK.
-> > 
-> > Okay.
-> 
-> No, not Okay.
-> 
-> To begin with, this is the 8th version of the same patch, but you
-> only now bothered to CC someone who is listed in MAINTAINERS. This is
-> not how the community works.
+Acked-by: Conor Dooley <conor.dooley@microchip.com>
 
-I'm answering, since I was involved in the discussion you refer to below, but
-please also let me add a few other thoughts from my side.
+> ---
+>  .../devicetree/bindings/{riscv =3D> soc/sophgo}/sophgo.yaml  | 7 ++++++-
+>  1 file changed, 6 insertions(+), 1 deletion(-)
+>  rename Documentation/devicetree/bindings/{riscv =3D> soc/sophgo}/sophgo.=
+yaml (80%)
+>=20
+> diff --git a/Documentation/devicetree/bindings/riscv/sophgo.yaml b/Docume=
+ntation/devicetree/bindings/soc/sophgo/sophgo.yaml
+> similarity index 80%
+> rename from Documentation/devicetree/bindings/riscv/sophgo.yaml
+> rename to Documentation/devicetree/bindings/soc/sophgo/sophgo.yaml
+> index a14cb10ff3f0..5d73d0ccc547 100644
+> --- a/Documentation/devicetree/bindings/riscv/sophgo.yaml
+> +++ b/Documentation/devicetree/bindings/soc/sophgo/sophgo.yaml
+> @@ -1,7 +1,7 @@
+>  # SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+>  %YAML 1.2
+>  ---
+> -$id: http://devicetree.org/schemas/riscv/sophgo.yaml#
+> +$id: http://devicetree.org/schemas/soc/sophgo/sophgo.yaml#
+>  $schema: http://devicetree.org/meta-schemas/core.yaml#
+> =20
+>  title: Sophgo SoC-based boards
+> @@ -26,6 +26,11 @@ properties:
+>            - enum:
+>                - sophgo,huashan-pi
+>            - const: sophgo,cv1812h
+> +      - items:
+> +          - enum:
+> +              - milkv,duo-module-01-evb
+> +          - const: milkv,duo-module-01
+> +          - const: sophgo,sg2000
+>        - items:
+>            - enum:
+>                - sipeed,licheerv-nano-b
+> --=20
+> 2.48.1
+>=20
 
-First of all, I think you are right here.
+--3/BNf11h93vTDDr6
+Content-Type: application/pgp-signature; name="signature.asc"
 
-AFAICS, the cpumask abstraction was added to this series in v6, and you were
-CC'd in v8, which is *not* OK.
+-----BEGIN PGP SIGNATURE-----
 
-I also agree that this definitely deserves it's own series for you to be
-properly involved.
+iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6uUbwAKCRB4tDGHoIJi
+0iP8AP9Mc/wlam2GgeEuieW+XaQ1w6dG0Bj4kXG2xUCIG5ayXgD/UBsEkKFcu+7I
+ozzxFKHl9x4z4ZZ2vx1qTuKO/mt7JA4=
+=SHXJ
+-----END PGP SIGNATURE-----
 
-> > I will add a separate entry for Rust cpumask stuff.
-> 
-> That would make things even worse. Before you wanted me to maintain
-> rust linkage. Now you want me to get approval from someone else who
-> maintains rust linkage. In case I need to change something, I want to
-> be able to just change.
-
-I think the decision is up to you, whether
-
-1) You want to maintain it on your own.
-2) You want a co-maintainer / reviewer that takes care of the Rust parts.
-3) You want nothing to do with it and have it maintained as a separate
-   component.
-
-In case you prefer option 3), please do *not* see it as "you need to get
-approval from someone else for code changes in your subsystem", because no ones
-wants to impose this on you.
-
-Please see it as just another driver or another component that makes use of the
-API you maintain.
-
-If you are running into API changes that affect the Rust abstraction, that's
-where you can refer to the maintainer of the Rust abstraction to help out. Just
-like with every other driver or component that uses a core API, which isn't
-trivial to adjust.
-
-> 
-> I went deeper into the subject, and found that rust team has similar
-> problems with other maintainers:
-> 
-> https://lore.kernel.org/lkml/20250108122825.136021-3-abdiel.janulgue@gmail.com/
-
-I don't think that this case is similar to the one you linked in. I think you
-were indeed a bit bypassed here, plus you seem to have a real concern with
-maintainership, which I think is fair to be addressed and resolved.
-
-I hope my reply already helps with that.
-
-- Danilo
+--3/BNf11h93vTDDr6--
 
