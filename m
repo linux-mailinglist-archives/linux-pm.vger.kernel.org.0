@@ -1,110 +1,165 @@
-Return-Path: <linux-pm+bounces-21877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21878-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id C256DA3165F
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:05:09 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AC1CA3166F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 21:11:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5B6E5188A834
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 20:05:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0F995188A221
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 20:11:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 154C11E47B3;
-	Tue, 11 Feb 2025 20:05:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7584626156B;
+	Tue, 11 Feb 2025 20:10:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CIz2nBZA"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IC3VwTCF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E254026561A;
-	Tue, 11 Feb 2025 20:05:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4E9D265603;
+	Tue, 11 Feb 2025 20:10:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739304307; cv=none; b=XoHEdX+R625apm64apgYbME2sBcK5ybzrfOmw1xil/c/fe2FmuXwjPVq2d81vLYeuktr+gioUZs3QV6u/7NmrVZuPJvRxBGluVicKJeFwD9kLhSv5PuBlZNiisCZfxB63gZwuSCFpgDCB0rfMZjD5okmhL08P8EmJMAYo5A5BnE=
+	t=1739304657; cv=none; b=c0EMQJsb0jcnmWTpvrHp07B5uP3G6De44DFS/KH5cvoZF1M0PmA1Z19SfmKPsF38wpcaXoWgPWqx14xby6+zoBc+xZnAk3jDi/UKqUlLvPcwysQ/x4V+2JO6LWWVm92b/Uxg48A6ELosOIAk2LSUpwu74JpIHkX4cc2u/EG7Oz8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739304307; c=relaxed/simple;
-	bh=RDRL1qjE4Pn/bojp/LkSNcMc0bPso9G7XSBgA/da9mo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JAMRx5vz7dHWQWH5vvfwdIZPFJi2AZqYrMjRF5ZHLZk0TyRnrfGQFkcY2dNglSDOd+HTtR0u8JAr32yjO3QpsgVN1OkkCO0xq+w7H1u2vdYXdk0TTCXVIku8WSftQZGBeCA7v94hVfCYll9amI+YrNh/QSRZEIDeA3JssBRK0xs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CIz2nBZA; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54430C4CEE8;
-	Tue, 11 Feb 2025 20:05:06 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739304306;
-	bh=RDRL1qjE4Pn/bojp/LkSNcMc0bPso9G7XSBgA/da9mo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=CIz2nBZApbjwkrDrJBIS7LRV9l2f/3k78NCPzoszjpz/4hQ8ZqmwmIuqCKB0qlg2n
-	 +CG15v+CSFHMbXjwDoyce8Y1ULqaIaOFbeTVBxdAtqagQk4BUPlpDK/s2XIrX99EEa
-	 S5nKLq2MFrwbiuPTIOetYU8ofLW5uwvx7PEYva7HsvYfGX+WTeoEdrYS6jTHOEd5DX
-	 D1P22Otfq8Hu3Dubq/C6KmrVrN6Z6FGCTylkFB8iz7sRNVoiWohl2kHwgr6aTE/GBM
-	 gO4BFXlaBlGk4XFFCs0L9vdVyz9T9xOuYdWfiwfoSLCO/mTmuO2Jgjx31yab0QFtFj
-	 7QL6coHuNec+A==
-Received: by mail-oo1-f47.google.com with SMTP id 006d021491bc7-5fc447b03f2so1523168eaf.0;
-        Tue, 11 Feb 2025 12:05:06 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUepn4eenbw6I7N870g39LM62CfrKCXQDgKcckZyD1MXlc3O/J8+TVqcSEZ+9XMtJMvEKbZQcOxIxbcOQI=@vger.kernel.org, AJvYcCUoNDTwQyHQaZOkRhqh0ACFhleIDakjm9hypzLJ0m0js0hDzLrST1eoq0thj4/7BIc3+GoZ0g7dHjc=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2/kDep015I/ZNL1T+L1nY8CS/ER8nq7hSLesEuMt79plfXD/F
-	Z6w6RfhaMi2kXLQKVUQLgTOrqBPFnWtJsjzXvLTy5jSyqo7/c5JvDVBAnqsSUgxSFT4gQ176nO0
-	gF07KqMtFoJj+PHhK5C5FBaSpRXE=
-X-Google-Smtp-Source: AGHT+IFmfRi3LUQnmJl3G2zF30ySF5EP/rkbIPMDbZ3TdVebm5QTqDMXJXo6dKXyeBgGAgR2nL/Lwu/Q9xwryoWzLYs=
-X-Received: by 2002:a05:6870:6125:b0:29d:c870:74 with SMTP id
- 586e51a60fabf-2b8d67bdce7mr595970fac.27.1739304305616; Tue, 11 Feb 2025
- 12:05:05 -0800 (PST)
+	s=arc-20240116; t=1739304657; c=relaxed/simple;
+	bh=E6uMHNRrqvX68qYvnwYOEDWtD7KowOQ+Y/xaRqFhUqk=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ulaA9y7SJvuP00WrBrYDfhlc4fdCfZgCqA9nGmFtnf8Mls1KeQz+b2AXlUU7Jksd0YuoqY4U24uuq1+d4GMgtDVl76oHU9ZoNGDOgal9ClI27xtbDU3/iEFQMKICWjdwNZeB/jqQk8OSMFMR1s+g6n5ZZ/nPEFMP3dod1B9/CMg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IC3VwTCF; arc=none smtp.client-ip=192.198.163.13
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739304656; x=1770840656;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=E6uMHNRrqvX68qYvnwYOEDWtD7KowOQ+Y/xaRqFhUqk=;
+  b=IC3VwTCFpZTwmm8RyNbn6pgh1vA6KrCwlnFUtdQrJxxtfLobqEvGMRwT
+   5YVatV9FNOwZhQq2Pv9eiu3cbX1dbA9fwJkrZJUekVibR0a5kxBZj/IYY
+   bxqu+gUByc6lkKU+ucVZbHHg/e3tpXliINUxIdFEY9A0J6E54Haz3pfyS
+   zjtrfW04F7K9/hFYpkDm2I6M67IzBozIqEKfMJ1E24Ya50aIZ3GY5Slzg
+   Z89PsVpX3MGbhFS6v7agwU0+Ek9IwDO4SD4h563xMBdsRk6RGm1br3Qm3
+   Dj/LGkfvL+wmGqaqoX2ZEvKZ7EGCmKuMcBKHvt14uO18/Y/ufnrUxzbLb
+   w==;
+X-CSE-ConnectionGUID: oa4bHUOBQ5Wr4P5YtC4s3Q==
+X-CSE-MsgGUID: W3mPqZJqQ9aWDcrm3ptBYA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="42787707"
+X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
+   d="scan'208";a="42787707"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 12:10:55 -0800
+X-CSE-ConnectionGUID: j7GB39CpStKmyqktQdhAaQ==
+X-CSE-MsgGUID: tp+rj++cT9y4A7cEUlLEPw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,278,1732608000"; 
+   d="scan'208";a="112831724"
+Received: from msatwood-mobl.amr.corp.intel.com (HELO [10.125.108.48]) ([10.125.108.48])
+  by fmviesa008-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 12:10:53 -0800
+Message-ID: <cd4828de-3a60-41a1-bb5a-9212bbe01e60@intel.com>
+Date: Tue, 11 Feb 2025 12:10:53 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250211084712.2746705-1-daniel.lezcano@linaro.org> <20250211100237.r32hu366jbihndbc@vireshk-i7>
-In-Reply-To: <20250211100237.r32hu366jbihndbc@vireshk-i7>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 11 Feb 2025 21:04:54 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jHjqVTgxsN__JdO_9SvdQ-JMV4F38reDEWtZC_UueQew@mail.gmail.com>
-X-Gm-Features: AWEUYZnqDrOebhvFrXT4iLjMkN0uz7OxXfkFyZc4G7o5C5RdJJZJCO4Lkids2ac
-Message-ID: <CAJZ5v0jHjqVTgxsN__JdO_9SvdQ-JMV4F38reDEWtZC_UueQew@mail.gmail.com>
-Subject: Re: [PATCH] thermal/cpufreq_cooling: Remove structure member documentation
-To: Viresh Kumar <viresh.kumar@linaro.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: rjw@rjwysocki.net, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	kernel test robot <lkp@intel.com>, Amit Daniel Kachhap <amit.kachhap@gmail.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Zhang Rui <rui.zhang@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/17] x86/smpboot: Fix INIT delay optimization for
+ extended Intel Families
+To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
+ Dave Hansen <dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>,
+ Kan Liang <kan.liang@linux.intel.com>, Thomas Gleixner <tglx@linutronix.de>,
+ Borislav Petkov <bp@alien8.de>, "H . Peter Anvin" <hpa@zytor.com>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <lenb@kernel.org>,
+ Andy Lutomirski <luto@kernel.org>, Viresh Kumar <viresh.kumar@linaro.org>,
+ Fenghua Yu <fenghua.yu@intel.com>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Zhang Rui <rui.zhang@intel.com>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ David Laight <david.laight.linux@gmail.com>,
+ linux-perf-users@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-acpi@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-hwmon@vger.kernel.org
+References: <20250211194407.2577252-1-sohil.mehta@intel.com>
+ <20250211194407.2577252-3-sohil.mehta@intel.com>
+From: Dave Hansen <dave.hansen@intel.com>
+Content-Language: en-US
+Autocrypt: addr=dave.hansen@intel.com; keydata=
+ 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
+In-Reply-To: <20250211194407.2577252-3-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Tue, Feb 11, 2025 at 11:02=E2=80=AFAM Viresh Kumar <viresh.kumar@linaro.=
-org> wrote:
->
-> On 11-02-25, 09:47, Daniel Lezcano wrote:
-> > The structure member documentation refers to a member which does no
-> > longer exist. Remove it.
-> >
-> > Link: https://lore.kernel.org/all/202501220046.h3PMBCti-lkp@intel.com/
-> > Reported-by: kernel test robot <lkp@intel.com>
-> > Closes: https://lore.kernel.org/oe-kbuild-all/202501220046.h3PMBCti-lkp=
-@intel.com/
-> > Signed-off-by: Daniel Lezcano <daniel.lezcano@linaro.org>
-> > ---
-> >  drivers/thermal/cpufreq_cooling.c | 2 --
-> >  1 file changed, 2 deletions(-)
-> >
-> > diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufre=
-q_cooling.c
-> > index 280071be30b1..6b7ab1814c12 100644
-> > --- a/drivers/thermal/cpufreq_cooling.c
-> > +++ b/drivers/thermal/cpufreq_cooling.c
-> > @@ -57,8 +57,6 @@ struct time_in_idle {
-> >   * @max_level: maximum cooling level. One less than total number of va=
-lid
-> >   *   cpufreq frequencies.
-> >   * @em: Reference on the Energy Model of the device
-> > - * @cdev: thermal_cooling_device pointer to keep track of the
-> > - *   registered cooling device.
-> >   * @policy: cpufreq policy.
-> >   * @cooling_ops: cpufreq callbacks to thermal cooling device ops
-> >   * @idle_time: idle time stats
->
-> Acked-by: Viresh Kumar <viresh.kumar@linaro.org>
+On 2/11/25 11:43, Sohil Mehta wrote:
+> Currently only Family 6 is considered as modern and avoids the 10 msec
+> INIT delay. The optimization doesn't extend to the upcoming Family 18/19
+> models.
 
-Applied as 6.14-rc material, thanks!
+This doesn't quite parse correctly to me.
+
+Let's say it this way:
+
+	Some old crusty CPUs need an extra delay that slows down
+	booting. See the comment above 'init_udelay' for details. Newer
+	CPUs don't need the delay.
+
+	Right now, for Intel, Family 6 and only Family 6 skips the
+	delay. That leaves out both the Family 15 (Pentium 4s) and brand
+	new Family 18/19 models.
+
+	The omission of Family 15 (Pentium 4s) seems like an oversight
+	and 18/19 do not need the delay.
+
+	Skip the delay on all Intel processors Family 6 and beyond.
+
+Is there anything wrong there?
 
