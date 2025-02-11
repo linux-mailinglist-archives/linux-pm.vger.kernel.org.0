@@ -1,151 +1,149 @@
-Return-Path: <linux-pm+bounces-21804-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21805-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7381A30857
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 11:19:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5269FA3086F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 11:23:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 675663A2C97
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 10:19:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A13BE188A0CB
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 10:23:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 963491F3FD3;
-	Tue, 11 Feb 2025 10:19:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1B4E1F4262;
+	Tue, 11 Feb 2025 10:23:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="RyKq5tU4"
+	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="7jiT3OiS";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="o4dWhCRk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+Received: from fout-a2-smtp.messagingengine.com (fout-a2-smtp.messagingengine.com [103.168.172.145])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 841721F3FD1;
-	Tue, 11 Feb 2025 10:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30A841F37BC;
+	Tue, 11 Feb 2025 10:23:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.145
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739269189; cv=none; b=u9czoN5tC/xva1cdNSiSW5Na+Bxs4bZiJwsHIFvqIAaN8NsH5vmOCIB/XxVV1cDbjHXBiyUPrU7idDjbNYO4qi7oitQhYiEbYvJEgYLc1dGSwI48E6UgFlC68Iy4GTi73OoNP8BGl/vzcgh6yHXz2NbCB0Ch9nWziTtOnO+C0Ps=
+	t=1739269410; cv=none; b=rWSns3msUH0+KzC9o2xNjv2HJJ0xWZ1hgw1xiezNXG97uB8v39nqQ7QpRbz3Yqkfa30zwnO4t7tAGS9JSZehqZuNFSHW+u9kkKLt2zXCBR+m7phlt+3i/KDIdyCSIkvjuCk6bqMakFCyZzqAE12K5EcFgjHV1o8GNlynMSnbEdo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739269189; c=relaxed/simple;
-	bh=uX1dyU9IflgpojBwXeOMw8uHEiq7py2tVx43fLyNoyc=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=MYFl03fnhuf4Tm4LHEWM6h3a9gTt8v6LjJN9ms73T3tuLjEQpTKwjcDqVgB526bjA81/ZAnBbqvvY1UFylgruQtdTl5p7I99GqzxTFWH7mrRUqpKwl+yM5dmhC5DZ8bysDKcWr+Bha8Vvd8WJZURKiAkg7v8942TyjPj2IECZvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=RyKq5tU4; arc=none smtp.client-ip=185.11.138.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
-	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
-	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
-	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
-	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
-	List-Subscribe:List-Post:List-Owner:List-Archive;
-	bh=7hfjt0I5NnrMIwqrD0mfpNKdeBJDKmRJFRQX9VEMhUU=; b=RyKq5tU4gJrvp0I9SDHNYwuL7b
-	NIoPnPxm1Ky1/wh0xCoSJHRif70vJVUsux58hnlYWxL4M1BtGHKz9fs4d8clPl8B+QsISMjXZum9w
-	+MA2E+sjoIHRtpl8wQK2JzQ5PXOOQ2VLzKmETjW9SZSIAzyWuz8nHCdCQVNAyPbloRGNJBQTW2xmV
-	vw4dO1Y8ze/3FGKayzQaJ9+lqHw1Ratvb1PgCng3yEfmjmvWnlj1Os3Lx5eZPcM9NkF1zu97uKC91
-	s9Wd5+REWbaxfvcIWFsjmLp8TdX75W9mG7J/fPWeK2/yq4x4N9BGxrbdVx2hGN7b8toBEaedLZ0tJ
-	1rKNklJg==;
-Received: from i53875bc0.versanet.de ([83.135.91.192] helo=diego.localnet)
-	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
-	(Exim 4.94.2)
-	(envelope-from <heiko@sntech.de>)
-	id 1thnMf-0006As-Pf; Tue, 11 Feb 2025 11:19:37 +0100
-From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
-To: Kever Yang <kever.yang@rock-chips.com>,
- Daniel Lezcano <daniel.lezcano@linaro.org>
-Cc: linux-rockchip@lists.infradead.org,
- Shaohan Yao <shaohan.yao@rock-chips.com>, linux-pm@vger.kernel.org,
- Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
- Zhang Rui <rui.zhang@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- linux-arm-kernel@lists.infradead.org
-Subject:
- Re: [PATCH 2/2] thermal: rockchip: Support the rk3562 SoC in thermal driver
-Date: Tue, 11 Feb 2025 11:19:36 +0100
-Message-ID: <17758610.geO5KgaWL5@diego>
-In-Reply-To: <7f17cc55-a741-4bb8-9513-0580ca6fedd3@linaro.org>
-References:
- <20241224094015.3816301-1-kever.yang@rock-chips.com>
- <20241224094015.3816301-2-kever.yang@rock-chips.com>
- <7f17cc55-a741-4bb8-9513-0580ca6fedd3@linaro.org>
+	s=arc-20240116; t=1739269410; c=relaxed/simple;
+	bh=xGVNrU+Td07Sq/OfoziyU6CAIh+CFau93NGRqIkJUjg=;
+	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
+	 Subject:Content-Type; b=bHeyZxm0yqDBIKnLM/sb52sdI0YgzT8ro3l3bgZSJz+lPXXMGia/3E+Saz6XmqrD2WwIFdVMddET87WA9roqh87Frq9xy+7QKj62K5636L87PhwRl8U6MUyHRQlrBd2Dq9UHpR0I+otxJAP+htHNLBJWHj/po0+4NkUw8nm+rtM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=7jiT3OiS; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=o4dWhCRk; arc=none smtp.client-ip=103.168.172.145
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
+Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
+	by mailfout.phl.internal (Postfix) with ESMTP id 3235613801EA;
+	Tue, 11 Feb 2025 05:23:28 -0500 (EST)
+Received: from phl-imap-11 ([10.202.2.101])
+  by phl-compute-07.internal (MEProxy); Tue, 11 Feb 2025 05:23:28 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
+	:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to; s=fm2; t=1739269408;
+	 x=1739355808; bh=8OyYLNftrq4qsPpVbcCZjPTAkDXA++bvU6mWCFjEjgw=; b=
+	7jiT3OiSpA32reTMzba8ong48JFOgVF1U6a/YhE+4hM+N4lPWP6VdAMdNJG4eqpW
+	jy2ZuhgN8H4sARf6uwBwrUfOBu1EYIKmIgq/E5rSmLNchTlhwv3Qwui5NOMUKE77
+	uuQHRJxqvlbIIUvsSvpIrfDt7VIX32RPC6LAEhr3R0N6+uwY+lggC2MYpfPglDAA
+	x1cY0JNj9pgZT92ohW9w03Q7Oqp53okxso3H3D+dYMDiOAEYcY8CvIE1DggWn+7M
+	LnYgWH19tkgs9IC0BJjs+6geR/ZvlQhiAEIp0j9nKZGPemiNzOhVypH7R5LgQRbE
+	Ruvri524FrQeNymKKkhJGQ==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:in-reply-to:message-id:mime-version
+	:references:reply-to:subject:subject:to:to:x-me-proxy
+	:x-me-sender:x-me-sender:x-sasl-enc; s=fm3; t=1739269408; x=
+	1739355808; bh=8OyYLNftrq4qsPpVbcCZjPTAkDXA++bvU6mWCFjEjgw=; b=o
+	4dWhCRkdj4qkaNqhhPfJvLUVKiW9tPyFpvdyy9b0EGiPkRcll+xQkcbrSPJ7aj7x
+	0WLpuT6sDRveNwFp1OmHd+d68i0kuE+AfPp9SKs8bP3llOZ41o74GPbRHVmZZBPT
+	cqz9T+R44zFDcyumuIhpLjdUu/QvXhb4z/4soGf+vBJX3dF5jGK6FjCS8Osf5WZO
+	YaOr8zQeGgrxrH1seTBbcWm/eZCbqwa80f5meNvG/OJedAKPf6Pqdorl/26V8pxn
+	UrNuCGuKhmxv9c/5Y0LxDu11S+EJaKnNuMTn17Dv4nzD6m24376CM7eDV3K285rR
+	L+CAUxMCaiNPnvKR3XUeA==
+X-ME-Sender: <xms:HyWrZ26wHeJmj1eYHHDJ_3ZWEa_xwAeSt6ZCS6aWQfgb7qDfoAM2Dw>
+    <xme:HyWrZ9sAr9XdFcg7XJplGIdZ9q0Vb3LpTZsQL3ikp9EWV2eYAYPB3s0n2WxsHbqa4
+    FmCG1BmSUquhX0hYkM>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdegtdejhecutefuodetggdotefrod
+    ftvfcurfhrohhfihhlvgemucfhrghsthforghilhdpggftfghnshhusghstghrihgsvgdp
+    uffrtefokffrpgfnqfghnecuuegrihhlohhuthemuceftddtnecusecvtfgvtghiphhivg
+    hnthhsucdlqddutddtmdenucfjughrpefoggffhffvvefkjghfufgtgfesthejredtredt
+    tdenucfhrhhomhepfdetrhhnugcuuegvrhhgmhgrnhhnfdcuoegrrhhnugesrghrnhgusg
+    druggvqeenucggtffrrghtthgvrhhnpefhtdfhvddtfeehudekteeggffghfejgeegteef
+    gffgvedugeduveelvdekhfdvieenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmh
+    epmhgrihhlfhhrohhmpegrrhhnugesrghrnhgusgdruggvpdhnsggprhgtphhtthhopedv
+    tddpmhhouggvpehsmhhtphhouhhtpdhrtghpthhtohepughmihhtrhihrdhtohhrohhkhh
+    hovhesghhmrghilhdrtghomhdprhgtphhtthhopehlghhirhgufihoohgusehgmhgrihhl
+    rdgtohhmpdhrtghpthhtoheplhhkphesihhnthgvlhdrtghomhdprhgtphhtthhopehprh
+    iivghmhihslhgrfidrkhhithhsiigvlhesihhnthgvlhdrtghomhdprhgtphhtthhopehr
+    rggrghdrjhgruggrvhesihhnthgvlhdrtghomhdprhgtphhtthhopegsrhhoohhnihgvse
+    hkvghrnhgvlhdrohhrghdprhgtphhtthhopehjihgtvdefsehkvghrnhgvlhdrohhrghdp
+    rhgtphhtthhopehrrghfrggvlheskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhrvg
+    eskhgvrhhnvghlrdhorhhg
+X-ME-Proxy: <xmx:HyWrZ_5UbZd6U-PsEAdgo-UuxpcBhgDo44UH9H0ZQWE9eV-SlLTvDA>
+    <xmx:HyWrZwWyp6B9-dwn-rssMz-baxnFh-3GaCaPG-BGfm2skTTAb0GcBg>
+    <xmx:HyWrZ59d3gv-TbLJSalbb526wpA9l5YwAcQI5vgVAp71mgRA6mOjlw>
+    <xmx:HyWrZ0mdiyFLSyGCoKVFrxDMPn4pJf2nuCY-ELIgdb46mVwJZNOS7w>
+    <xmx:ICWrZ8EhdH1Y_BZY7xcGwPfx99z1LQ-8fLRW3OD5Qa3L5OxUSU3Xytjw>
+Feedback-ID: i56a14606:Fastmail
+Received: by mailuser.phl.internal (Postfix, from userid 501)
+	id C3E5D2220073; Tue, 11 Feb 2025 05:23:27 -0500 (EST)
+X-Mailer: MessagingEngine.com Webmail Interface
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="utf-8"
+Date: Tue, 11 Feb 2025 11:23:07 +0100
+From: "Arnd Bergmann" <arnd@arndb.de>
+To: "Andy Shevchenko" <andriy.shevchenko@linux.intel.com>
+Cc: "kernel test robot" <lkp@intel.com>, "Raag Jadav" <raag.jadav@intel.com>,
+ "Greg Kroah-Hartman" <gregkh@linuxfoundation.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>,
+ "Linus Walleij" <linus.walleij@linaro.org>,
+ "Mika Westerberg" <mika.westerberg@linux.intel.com>,
+ "Dmitry Torokhov" <dmitry.torokhov@gmail.com>, lgirdwood@gmail.com,
+ "Mark Brown" <broonie@kernel.org>, "Sebastian Reichel" <sre@kernel.org>,
+ "Jonathan Cameron" <jic23@kernel.org>,
+ "Przemek Kitszel" <przemyslaw.kitszel@intel.com>,
+ oe-kbuild-all@lists.linux.dev,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+ linux-sound@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-iio@vger.kernel.org
+Message-Id: <279d9f32-a1c9-41aa-b15a-e1485877b2d5@app.fastmail.com>
+In-Reply-To: <Z6siYlWfvfUvNLpX@smile.fi.intel.com>
+References: <20250210064906.2181867-2-raag.jadav@intel.com>
+ <202502102201.zLWaJC6V-lkp@intel.com> <Z6oZ9dnYrlp5djiQ@smile.fi.intel.com>
+ <7c42e438-22f9-40d9-bb8e-24feb7d58e64@app.fastmail.com>
+ <Z6sYAxRIeCzw12nY@smile.fi.intel.com>
+ <c1184a91-e216-423d-b956-d4b22116a171@app.fastmail.com>
+ <Z6siYlWfvfUvNLpX@smile.fi.intel.com>
+Subject: Re: [PATCH v4 01/20] driver core: Split devres APIs to device/devres.h
+Content-Type: text/plain
+Content-Transfer-Encoding: 7bit
 
-Hey Daniel,
+On Tue, Feb 11, 2025, at 11:11, Andy Shevchenko wrote:
+> On Tue, Feb 11, 2025 at 10:39:16AM +0100, Arnd Bergmann wrote:
+>> On Tue, Feb 11, 2025, at 10:27, Andy Shevchenko wrote:
+>
+>> I don't mind moving that if it helps you, but don't see what
+>> the problem is here. Is this missing because of a circular
+>> #include list with linux/device.h including asm/io.h and vice
+>> versa? If that is the root cause, then I assume there will be
+>> additional problems either way until the loop can be broken.
+>
+> I don't see how. io.h already includes err.h, so whoever includes io.h should
+> have that as previously.
 
-Am Dienstag, 11. Februar 2025, 10:36:09 MEZ schrieb Daniel Lezcano:
-> On 24/12/2024 10:40, Kever Yang wrote:
-> > From: Shaohan Yao <shaohan.yao@rock-chips.com>
-> > 
-> > There are one Temperature Sensor on rk3562, channel 0 is for chip.
-> 
-> A bit stingy in terms of description, no ?
-> 
-> 
-> > Signed-off-by: Shaohan Yao <shaohan.yao@rock-chips.com>
-> > Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
-[...]
-> > +static const struct tsadc_table rk3562_code_table[] = {
-> > +	{0, -40000},
-> > +	{1419, -40000},
-> > +	{1428, -35000},
-> > +	{1436, -30000},
-> > +	{1445, -25000},
-> > +	{1453, -20000},
-> > +	{1462, -15000},
-> > +	{1470, -10000},
-> > +	{1479, -5000},
-> > +	{1487, 0},
-> > +	{1496, 5000},
-> > +	{1504, 10000},
-> > +	{1512, 15000},
-> > +	{1521, 20000},
-> > +	{1529, 25000},
-> > +	{1538, 30000},
-> > +	{1546, 35000},
-> > +	{1555, 40000},
-> > +	{1563, 45000},
-> > +	{1572, 50000},
-> > +	{1580, 55000},
-> > +	{1589, 60000},
-> > +	{1598, 65000},
-> > +	{1606, 70000},
-> > +	{1615, 75000},
-> > +	{1623, 80000},
-> > +	{1632, 85000},
-> > +	{1640, 90000},
-> > +	{1648, 95000},
-> > +	{1657, 100000},
-> > +	{1666, 105000},
-> > +	{1674, 110000},
-> > +	{1682, 115000},
-> > +	{1691, 120000},
-> > +	{1699, 125000},
-> > +	{TSADCV2_DATA_MASK, 125000},
-> > +};
-> 
-> May be it is time to optimize all these tables out of the memory driver?
-> 
-> It is the 9th table introduced.
+I mean I never understood what problem you are trying to solve
+exactly. From the log, it appears that the problem is an include
+loop between linux/device.h, linux/device/devres.h and asm/io.h,
+and anything that breaks the loop should work. Your suggestion of
+stopping asm/io.h from including linux/device.h sounds like
+the most promising here, but this should be possible regardless
+of whether IOMEM_ERR_PTR() gets moved.
 
-just to see if we think differently, what do you have in mind?
-
-For me the adc-to-temperature conversion _is_ part of the hw-block itself,
-so should likely not spill into the devicetree, but you're right, defining
-a big table for each soc also isn't really great.
-
-For the rk3562 in question, the stepping seems to be 8,9,8,9,....
-where for the rk3568 the value stepping seems to be 32,36,32,36,...
-and it looks similar for the other socs too, with the driver is already
-interpolating between values it seems.
-
-So even just halving (or more) all the big tables (dropping every second
-entry for example) should not really loose us real granularity.
-
-Heiko
-
-
+    Arnd
 
