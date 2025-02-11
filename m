@@ -1,126 +1,140 @@
-Return-Path: <linux-pm+bounces-21813-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21814-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5B07BA3091E
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 11:50:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7C1A8A30A9A
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 12:45:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 097571624D1
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 10:50:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B10461885013
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 11:44:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 888F71F4604;
-	Tue, 11 Feb 2025 10:50:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21F121CA11;
+	Tue, 11 Feb 2025 11:37:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WY+6xnxV"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="l3P0zPTl"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5406E1C3308;
-	Tue, 11 Feb 2025 10:50:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F9221F8BBF;
+	Tue, 11 Feb 2025 11:37:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739271051; cv=none; b=D7y8bbVwM/FBzh6F472G0bwI/H4uei2Cyelsv6FHaVD/C+uprgZq76t0wuaH9rMUszeQ4T4D7E5RnmE1Y54qW//+2PqTRyOtqwJ0iUeMMyWcREOcH4cW4bigLBkXotKyRl1VLa0qTJGNU217GUcYfayov4eVnUEckUsNY7QdkcI=
+	t=1739273850; cv=none; b=FdWgDA9L+tArFNbdOYHbUIUI/JYCR34XwGJH8LNnPTr+cpFDPxkbVVqN7+CFmc5D0NJNqDoioqn20pHJiyF+NYEXrWIxDHadhNz3WTmM4tiQGvQAMABuApiWIFQ8+aC06rT5xPw9D7Qnbvf526yYch6BSSzK1sTWpc5T5J5AJvc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739271051; c=relaxed/simple;
-	bh=013p6U9CkyzGbsFMDw5hD4LtqAl6uIDMuNEstJ38EU4=;
+	s=arc-20240116; t=1739273850; c=relaxed/simple;
+	bh=I5AdoWmvDU3PLEQCbDE5u9wLf7B+tx82l9Cux6XsAos=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=UjIh0kCGPAUCsRMwGqDloDMrYXkYTbEbEuhbFD0ShTmjmWyQWBZtuMr4mZL4JXrutEHKxXUXew+++RirBCaP6njYWME//NKFs+h84ZGLEwostPan8DK+GIhmHyzp0P9L+/KTfJYJs7BelY6AOGZlmtp/u6uyDaC/1wC5qkv1QEI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WY+6xnxV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9D78EC4CEE4;
-	Tue, 11 Feb 2025 10:50:46 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739271050;
-	bh=013p6U9CkyzGbsFMDw5hD4LtqAl6uIDMuNEstJ38EU4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=WY+6xnxVmSDxLNxTyv2FsAUgLaXUGS7FvHBvsBWLGeg6ohEEo/EnnCLl6QcwwctMZ
-	 LzuoHFo4xJZTMmWSreF8xvpn8B5Y9JRiDYcvsRyFOqD/JnE9m2Cgvg/UblMxnXaf9h
-	 qZTufFjmLAALumQ45jOmnsv2dig7BUpqT5dZmMNE/2vJMdCYH2x7BvsVS1cvMyTWJd
-	 EVtX+8+fd2g7aZ/1rTN0QqqrKH8zmcGr20Z1byhEcnM4Txr2Xi18QjQUqkLYUrMUwi
-	 p//l+oAdhcnxtNWFQ3JVEZEaUGWnthIUirtpLxYtxr2AXGzFO+sEej+nmE/bllDE4t
-	 soBfwy0okj4OQ==
-Date: Tue, 11 Feb 2025 10:50:44 +0000
-From: Conor Dooley <conor@kernel.org>
-To: Alexander Sverdlin <alexander.sverdlin@gmail.com>
-Cc: soc@lists.linux.dev, Chen Wang <unicorn_wang@outlook.com>,
-	Inochi Amaoto <inochiama@outlook.com>, Lee Jones <lee@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Philipp Zabel <p.zabel@pengutronix.de>,
-	Catalin Marinas <catalin.marinas@arm.com>,
-	Will Deacon <will@kernel.org>, Arnd Bergmann <arnd@arndb.de>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>,
-	Sebastian Reichel <sre@kernel.org>, devicetree@vger.kernel.org,
-	Haylen Chu <heylenay@outlook.com>,
-	linux-arm-kernel@lists.infradead.org,
-	linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org,
-	Jisheng Zhang <jszhang@kernel.org>, Chao Wei <chao.wei@sophgo.com>
-Subject: Re: [PATCH v2 0/7] arm64 support for Milk-V Duo Module 01 EVB
-Message-ID: <20250211-backwash-jester-2fdd6740000e@spud>
-References: <20250210220951.1248533-1-alexander.sverdlin@gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=NCIvWbIle2Y1uKk7KwTSC5aseynXNNefNi1z2W6OH1ff4lw19et1jqD1KS1k2RjFG6jT+VLw51yrnwlRYgfU/i+3/W1KQgu6mbq/5pSgI5A0/kUrs76PlhS2mfqKUJ/i+k9w27CyjjTH5VzMwN2ZxQkPw1bMR179eDDA29Kl2Ik=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=l3P0zPTl; arc=none smtp.client-ip=192.198.163.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739273849; x=1770809849;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=I5AdoWmvDU3PLEQCbDE5u9wLf7B+tx82l9Cux6XsAos=;
+  b=l3P0zPTli0n8CwFc60929ER0eF3mT0lfl7v5dYHZqlS5G2TC3ECeIkDA
+   gsML5n356sdLz4zVf8uB1fQduqnNsRNgsYmdmSoQSCeTBphBXfPq1/mRb
+   JBgKsmiyBlCh8hzLQxXg1oxc9Pk2+5uCs7jZTV3K6vJpZnlkS1n4p/Hbg
+   5Y/BxkuyffCMnbwN2Ug9SQKirOad7Q5HOM8gfNE83Wy/qW0IrJkcmMmU5
+   QNn1tKViOCgLhd0hWtwdc8uJJfFGMLEiWo0ql+bFt2OoIzV1xn+Q7d1JP
+   oIKYqS+OxtbRxQetBE5Iyuq75peY6vLnGd4p9kQyhunor+7259Y3Te5Op
+   w==;
+X-CSE-ConnectionGUID: kizH9LRyRA6FGI8f1xGP7Q==
+X-CSE-MsgGUID: YYCMM1ToSw6BiQ0G8kt9kg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11341"; a="40155613"
+X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
+   d="scan'208";a="40155613"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by fmvoesa108.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 03:37:28 -0800
+X-CSE-ConnectionGUID: TJ+sGaBPSISuK0fXAhAI6w==
+X-CSE-MsgGUID: GJZ279LaR/u2M3O1nsWMMA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,277,1732608000"; 
+   d="scan'208";a="113123900"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 03:37:24 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1thoZt-0000000AUGl-0uDM;
+	Tue, 11 Feb 2025 13:37:21 +0200
+Date: Tue, 11 Feb 2025 13:37:20 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Arnd Bergmann <arnd@arndb.de>
+Cc: kernel test robot <lkp@intel.com>, Raag Jadav <raag.jadav@intel.com>,
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Linus Walleij <linus.walleij@linaro.org>,
+	Mika Westerberg <mika.westerberg@linux.intel.com>,
+	Dmitry Torokhov <dmitry.torokhov@gmail.com>, lgirdwood@gmail.com,
+	Mark Brown <broonie@kernel.org>, Sebastian Reichel <sre@kernel.org>,
+	Jonathan Cameron <jic23@kernel.org>,
+	Przemek Kitszel <przemyslaw.kitszel@intel.com>,
+	oe-kbuild-all@lists.linux.dev,
+	"open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+	linux-kernel@vger.kernel.org, linux-input@vger.kernel.org,
+	linux-sound@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-iio@vger.kernel.org
+Subject: Re: [PATCH v4 01/20] driver core: Split devres APIs to
+ device/devres.h
+Message-ID: <Z6s2cGMM9R6SZ9Le@smile.fi.intel.com>
+References: <20250210064906.2181867-2-raag.jadav@intel.com>
+ <202502102201.zLWaJC6V-lkp@intel.com>
+ <Z6oZ9dnYrlp5djiQ@smile.fi.intel.com>
+ <7c42e438-22f9-40d9-bb8e-24feb7d58e64@app.fastmail.com>
+ <Z6sYAxRIeCzw12nY@smile.fi.intel.com>
+ <c1184a91-e216-423d-b956-d4b22116a171@app.fastmail.com>
+ <Z6siYlWfvfUvNLpX@smile.fi.intel.com>
+ <279d9f32-a1c9-41aa-b15a-e1485877b2d5@app.fastmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="tVnH0HVkr/l99Dz5"
-Content-Disposition: inline
-In-Reply-To: <20250210220951.1248533-1-alexander.sverdlin@gmail.com>
-
-
---tVnH0HVkr/l99Dz5
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
+In-Reply-To: <279d9f32-a1c9-41aa-b15a-e1485877b2d5@app.fastmail.com>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Feb 10, 2025 at 11:09:40PM +0100, Alexander Sverdlin wrote:
-> This series adds very basic support for Milk-V Duo Module 01 EVB [1] in
-> arm64 mode. The SoC (SG2000) is dual-arch, RiscV and ARM64, the latter has
-> been chosen because the upstream toolchain can be utilized.
+On Tue, Feb 11, 2025 at 11:23:07AM +0100, Arnd Bergmann wrote:
+> On Tue, Feb 11, 2025, at 11:11, Andy Shevchenko wrote:
+> > On Tue, Feb 11, 2025 at 10:39:16AM +0100, Arnd Bergmann wrote:
+> >> On Tue, Feb 11, 2025, at 10:27, Andy Shevchenko wrote:
+> >
+> >> I don't mind moving that if it helps you, but don't see what
+> >> the problem is here. Is this missing because of a circular
+> >> #include list with linux/device.h including asm/io.h and vice
+> >> versa? If that is the root cause, then I assume there will be
+> >> additional problems either way until the loop can be broken.
+> >
+> > I don't see how. io.h already includes err.h, so whoever includes io.h should
+> > have that as previously.
+> 
+> I mean I never understood what problem you are trying to solve
+> exactly. From the log, it appears that the problem is an include
+> loop between linux/device.h, linux/device/devres.h and asm/io.h,
+> and anything that breaks the loop should work. Your suggestion of
+> stopping asm/io.h from including linux/device.h sounds like
+> the most promising here, but this should be possible regardless
+> of whether IOMEM_ERR_PTR() gets moved.
 
->  .../{riscv => soc/sophgo}/sophgo.yaml         |  7 +-
->  arch/arm64/Kconfig.platforms                  |  6 ++
->  arch/arm64/boot/dts/Makefile                  |  1 +
->  arch/arm64/boot/dts/sophgo/Makefile           |  2 +
+The problem this series solves at the beginning is that not all the consumers
+of device.h needs it, in many cases the device/devres.h (or subset of
+device/*.h) is enough to include. While solving this, it appears that
+the current code uses ERR_PTR() instead of IOMEM_ERR_PTR() in devm_*io*() APIs
+and kernel test robot found this and complained about. While solving
+this new issue, LKP found another issue that is circular dependency.
+But the original code only wants to have an access to IOMEM_ERR_PTR() which
+is in io.h and can be moved to err.h AFAICS. Does this sound reasonable?
 
-I'd expect this to be maintained alongside the riscv support, how come
-there's no maintainers entry change here?
-
->  .../sophgo/sg2000-milkv-duo-module-01-evb.dts | 31 +++++++
->  .../sophgo/sg2000-milkv-duo-module-01.dtsi    | 85 +++++++++++++++++
->  arch/arm64/boot/dts/sophgo/sg2000.dtsi        | 75 +++++++++++++++
->  arch/arm64/configs/defconfig                  |  5 +
->  arch/riscv/boot/dts/sophgo/cv1800b.dtsi       | 64 ++++++++++---
->  arch/riscv/boot/dts/sophgo/cv1812h.dtsi       | 64 ++++++++++---
->  arch/riscv/boot/dts/sophgo/cv181x.dtsi        |  2 +-
->  arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi    | 57 ++++++++++++
->  arch/riscv/boot/dts/sophgo/cv18xx.dtsi        | 91 +++++--------------
->  arch/riscv/boot/dts/sophgo/sg2002.dtsi        | 64 ++++++++++---
->  14 files changed, 451 insertions(+), 103 deletions(-)
->  rename Documentation/devicetree/bindings/{riscv => soc/sophgo}/sophgo.yaml (80%)
->  create mode 100644 arch/arm64/boot/dts/sophgo/Makefile
->  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01-evb.dts
->  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01.dtsi
->  create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
->  create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi
+-- 
+With Best Regards,
+Andy Shevchenko
 
 
---tVnH0HVkr/l99Dz5
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ6srgQAKCRB4tDGHoIJi
-0puLAQCT0dLjiS8f39e7ltuZPdGjdh8a4aC4NpEw33b3OSuNugD/Z7NyHS2OtCHX
-teoIJE271CYirlmdAMsth4TJLf2e/w4=
-=lK/q
------END PGP SIGNATURE-----
-
---tVnH0HVkr/l99Dz5--
 
