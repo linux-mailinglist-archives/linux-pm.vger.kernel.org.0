@@ -1,113 +1,82 @@
-Return-Path: <linux-pm+bounces-21785-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21786-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70BE8A3054D
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 09:10:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 91638A3055B
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 09:12:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D91BB1886456
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 08:10:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 44BDA167C4C
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 08:12:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D2081EE01A;
-	Tue, 11 Feb 2025 08:10:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75C6A1EE7DF;
+	Tue, 11 Feb 2025 08:12:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="HHFYOwOW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RYRi6IPU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34D051EE7B9
-	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 08:10:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EE351EE017;
+	Tue, 11 Feb 2025 08:12:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739261437; cv=none; b=BS4Fhsj2wW5vLo6XdB7tmMbIVd7UUc4qphVB65WnbTICy4h6XmqTD1pLZIF2ai19arX4Y7nu79P6HXyMGsCFpxLJBobMRqR8GbvGIWUSTxn/XPbblN4tnx8C2RNRGaMJlQg6vNtX8A9pFshblHMMX1mKpPQsw2+7NVIp7W5kux4=
+	t=1739261569; cv=none; b=fqZ13/dZh5UEpK/7b4zzfsx+NFk5qImLGhIU32iexjwCXdoPGnMMRR/+k80s2Jgo7ks26ByXSwO/aosV/8Q1VaaX2bFB40gB79nw2d1yugHHEhQUeQ36RP4Z+UX+1Y0sePd7j0K8SorKcbEHPDZWj18c4NCHvtuiI4llXhudAoY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739261437; c=relaxed/simple;
-	bh=ymJbeUbw4hGpBCPEcJ+PlTo7IzTTXMUzLHzPuWmSnyM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CnYFy6kfeY1jRjwHZ0RYSjRW1jNfh+9BIyMHOoo0Z8ESn9YTXukd29/gONNHZAhamOzYGZo5A4iQ+6bSr8u2UpO2qyhXhEXcU0oR5Md4J5HsYS/rG56HLnRfk+XE7YELjYrnW333YJr7qbT8WL5Gt3cOoxl56ZIdfZf0SkvM15U=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=HHFYOwOW; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43955067383so1408335e9.0
-        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 00:10:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739261434; x=1739866234; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=78daTuQVz0FgeVjUA2ayAuQ5v2be1XKpu60xXrbYshs=;
-        b=HHFYOwOWX8739IgeT2ifq2wHr+ovgtGupJPU78Eoj+f9vteJyW+/C8lIre+rVNs28U
-         JX5xomrXzQG9ejcs3A4Ppd7un/FPt/CfP8QlFa5utrqlEvqRD5rQZlvzshLlMND1fhjd
-         sr2euDjaLw21jm2m5ZwKuQ+5IZybqnIfzzM4CDqd3J9tBDG7x/mDL/pzMXmrikjVLgJ/
-         CXf8upwDetrF5zOfxZN744A7vAF2ima0rrmED6tF+umqWAJW64RsI7PSqJvf7fibib2m
-         jKKqXSxxKy95EpDyP+MVC3a/gpZGytjg6aq9tK+SLEOrLZKJPsbjjz9ggDA8G0MLrEu9
-         lHVw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739261434; x=1739866234;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=78daTuQVz0FgeVjUA2ayAuQ5v2be1XKpu60xXrbYshs=;
-        b=ZnY2O+YQ+V+1C9LFuDKAWIY0CNPe/S1xtai0EJynzUnUVG4CxDP57CioqDZePJ8Bid
-         +p9JtxtOMEDjMBnmbpKrcNqldo7cSpNIQoIl4xu9BR43idDQ1Mnr9UVTIPZtxaUyCHkX
-         2e61l0ZCchTc8xNkOEYCnPj5BtlEio1MjYLciacWHfx19Oo8pg3ipPtWLM85jDbnJ6I7
-         H4oVCQgFNTILwhFh1XlvmE6dDEEfHhIrcdkZUQiwfiIvZV8NIBV4UMeLwacRonk+f+Bo
-         RK1HqslOBl+15qJp2tVvJIRwAcTjKT/SlUPHA0f5DhS6WkR8vYvUKOLwEizsgAa05z9y
-         sBcg==
-X-Gm-Message-State: AOJu0YzXLYsvnDtu0CSJxfxmlQyZkit6uIEM6H6tmXPRbqDquk4iW3Vr
-	GHW6jW48uBP499R0isDXpfX2atrw8vd+Vf35XOWOzsNdv4gHNzf9sHJcl+K3qDA=
-X-Gm-Gg: ASbGncsk0Ayh1jfIuYKvJkLWdSeXnMmEsnAOmJ/GOvWPIC7fc1mckiAwYXnizZhOlOp
-	8Jkx+psyLFwoS6zAOBXIA44YmEIOexDodpzzNnXIDoJAaJglRLw7QYT7ruD10wbXFq5czRRKO5s
-	XaBel/khvvBpzKvZBOv9diQfTD7V6ZsS6tZpehK5Gs8BFFglDpKfWYZM8/RXGxJDKFZ9UuYp5G1
-	IwCPQR/NckKbW3u0x7yNSihN12sYq7RMzptKQpZlydu9VT5VjK9xdKjKmMLKO2pQSoZzQgFF0uP
-	VhxZqEOV2rQLto/F2s6+o/cd99F38TXrBeDm0UM/Gl3lAv9nQAbNzYQ=
-X-Google-Smtp-Source: AGHT+IGLXEpFIAWJT7WvqNnDlD3lK/vfQpTxfAdtyharhsIDVFsFgpEKPN9BMWXc0m9HymMjl+wP1A==
-X-Received: by 2002:a05:600c:4e8b:b0:436:1b08:4c78 with SMTP id 5b1f17b1804b1-4394c8693d0mr27743475e9.31.1739261434474;
-        Tue, 11 Feb 2025 00:10:34 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4390db10b2fsm201248275e9.33.2025.02.11.00.10.32
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 11 Feb 2025 00:10:33 -0800 (PST)
-Message-ID: <eab96d3a-4daa-472d-a7c6-50b28b7afeeb@linaro.org>
-Date: Tue, 11 Feb 2025 09:10:31 +0100
+	s=arc-20240116; t=1739261569; c=relaxed/simple;
+	bh=BnklPy0jBwIcPPG0sfRjtHiMoI+AINPFQwQR4mm4XlI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rSsqnE+r38GvjiP/X0QUwKbGa8rA/8FJC3LZJ4i/ebYuEgoixlvcoWGQzheTidBe8xYKvFZHHw5Q8Dir6HdxHuRRQp5+8ni5d479OzDLjXOab5LMF5YF9hc8wPifb20XmTXI1avI0z12GKZBG2lp5CweQ229TEoNMN8rLNmYWpk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RYRi6IPU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2383EC4CEDD;
+	Tue, 11 Feb 2025 08:12:47 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739261568;
+	bh=BnklPy0jBwIcPPG0sfRjtHiMoI+AINPFQwQR4mm4XlI=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=RYRi6IPUcjP10cTFZ3JnXr6ZE2UChBLEn+nMJE3VvaCYbQmqo4hYQfj/GlHbDcbTo
+	 bDdvAfGvM76dcFahRq4LANPLe7jgrG3KiRZddZ1SWCZ8M9jNqfe9CcVATpb/BBMorq
+	 pIxuZzg9fa2jb3UhLNX4EdCT3G9sE55zQpsV6SyQZq7hVP5fBJa7iaqmYeSJgeEiLb
+	 OqspoFUWG2j6ZFih8kukG5bDISXmlXIw7IdEVnhQcM4LLrFXw63ZbMpcHPYgNlQ45W
+	 01MSNTnfclflNUGViKchq8sl248/zRw4s+qGxRY9KUMxCk9kFeFqvo5UTDVeR6H5Jx
+	 YqQiWrOlZvWdg==
+Date: Tue, 11 Feb 2025 09:12:45 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Ryan.Wanner@microchip.com
+Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, claudiu.beznea@tuxon.dev, sre@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, p.zabel@pengutronix.de, 
+	linux@armlinux.org.uk, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 01/15] dt-bindings: mfd: syscon: add
+ microchip,sama7d65-ddr3phy
+Message-ID: <20250211-logical-ingenious-slug-9b648a@krzk-bin>
+References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
+ <7e2c590467171cb3a942692aef5a679f127e567e.1739221064.git.Ryan.Wanner@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal: core: Remove duplicate struct declaration
-To: xueqin Luo <luoxueqin@kylinos.cn>, rafael@kernel.org,
- rui.zhang@intel.com, lukasz.luba@arm.com
-Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-References: <20250206081436.51785-1-luoxueqin@kylinos.cn>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250206081436.51785-1-luoxueqin@kylinos.cn>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <7e2c590467171cb3a942692aef5a679f127e567e.1739221064.git.Ryan.Wanner@microchip.com>
 
-On 06/02/2025 09:14, xueqin Luo wrote:
-> The struct thermal_zone_device is already declared on line 32, so the
-> duplicate declaration has been removed.
+On Mon, Feb 10, 2025 at 02:13:01PM -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> Fixes: b1ae92dcfa8e ("thermal: core: Make struct thermal_zone_device definition internal")
-> Signed-off-by: xueqin Luo <luoxueqin@kylinos.cn>
+> Add SAMA7D65 DDR3phy compatible to DT bindings documentation
+> 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 > ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Applied, thanks for the fix !
+Acked-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
-   -- D.
+Best regards,
+Krzysztof
 
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
 
