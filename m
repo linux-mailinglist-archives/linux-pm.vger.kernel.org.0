@@ -1,127 +1,345 @@
-Return-Path: <linux-pm+bounces-21800-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21801-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 373DAA307F7
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 11:06:00 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 543C4A30806
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 11:09:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7DC3D7A3327
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 10:05:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 91401166EFC
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 10:09:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 03B9F1F2C5B;
-	Tue, 11 Feb 2025 10:05:49 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 73B631F3D58;
+	Tue, 11 Feb 2025 10:09:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nxx39yYh"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="zJSONbUX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-ua1-f46.google.com (mail-ua1-f46.google.com [209.85.222.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A7161F2BA6;
-	Tue, 11 Feb 2025 10:05:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 98BB01F3BBE
+	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 10:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739268348; cv=none; b=JKruegZFyhyixiQ8UBkOLWCNBxTwlsbUIeQ1Fg52Zz5VRakWIx0zQ6S+bzaRkgdlN5lab062fuU9Fou2Uo5A+J1fX/cyY6wu6MzjwZDfqRfM/1B/1q7rQMErPli/+SyS06VouAHfVwDZRtlHEW/QNNnoefb/lz4piJAfjmY8K+c=
+	t=1739268542; cv=none; b=BsSOkncY1I4/PrAk0j3GCtbP/r8wr2XKaam+cBlIilxll278J8v9wiN53pBYh+joxRNIaV/kVOSFPt5WTiEzkxc0ogLc0x/0kxVCKOMowKbHAUFuU9MeYa3HnSxkQlQd0bvRiRMohohvKGtj6qyPaseLC27ZiIdolxXFjGQfgYk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739268348; c=relaxed/simple;
-	bh=3zkyfWpptUkYiCfOPRk2QRhH3P2OMstKZ+rV6oFSubY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=usVXotuiAAjn1w05D1r+UANLiS2j8KznLy/Ugfa0nc4dNL1ApLy34PskqJJxCBqKIuyNiKzd+Jcz0TmVrvQhAiUP8Ryjrvz8g+7AEn4QlVDT2mWCALyYgMH04UP82nTBw5TbkqZr9JMCq8sr0uLDM4woLbyIWEV/AbFoYiEj0CY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nxx39yYh; arc=none smtp.client-ip=209.85.214.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-21f5a224544so43839325ad.0;
-        Tue, 11 Feb 2025 02:05:47 -0800 (PST)
+	s=arc-20240116; t=1739268542; c=relaxed/simple;
+	bh=K6S6iD5Rl8d3VWop+gMF8fxHP2/hz2ZGqmmyv6NoDeA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=J1bdE9Z9JwfVoa9elnhWRcfyRhVZ9o7AtgRHO3R1XZmgO8gqiRgzrsr7pA4TjSV2cxHPr7WMDni3srFHcxvq9F4xtxLlgx2bkli97n/SHhMW6iZEoWny+gw7Xxl1FJXnStqvVt5mF5Ttnst+eCF1jmos90m5OjxOddjKbmJp0dE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=zJSONbUX; arc=none smtp.client-ip=209.85.222.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ua1-f46.google.com with SMTP id a1e0cc1a2514c-86112ab1ad4so1546306241.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 02:08:59 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739268346; x=1739873146; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=NlJmnKHx1lwCXmiIBkyeorsVWdoLFgtXUGK/oyDO4pM=;
-        b=Nxx39yYhgZOdsO187ddSrqobwdsHDGR+nVhdASST3BHsF6/838DaZL7tKGE0Gtjg5K
-         dsOiRj4G2a5307tZloXwTMRQuExRwpF2JqZU+YBHRae9VaVysz1UKPEe0ph/D7UNQxVV
-         xMPyjD6BptZcToMRHmv4Hn7oD8XfVBaS6v3UJJ9hPAXgxIZGlOXh9N+9kDcs83L69oe5
-         Q1AZDQMiMkgigAe3YWld9aiKPm+q6QpsHV1XYFx/5cJflra36e7nUSiZlxs97Tr6mGw/
-         mb6RIFdB1o+PEf+J8Gs/GtlbS7LEAFgygsNXqKYbu7uyPGWbXCT8AlWmONRmmExzLU89
-         5gAg==
+        d=linaro.org; s=google; t=1739268538; x=1739873338; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=xEn3cm/UNrP7SZZldloJXkuufWri2Kvjnrj9hrLDPQo=;
+        b=zJSONbUXNjUxPwaAhwR11YaCEGxh+rGPY9/wu+eqXAgAg4VB3P9yJZt8BHoYMoc1kx
+         Bd3Aq6MBujKnddL92AvMLkG7ORLp7ofIvB/3kzRpGrlK501NLLGSIH3grh13ZC2fxYQ/
+         yg61PmArNQiNblm1NukY1yy7VLEoUysY2azzDU195wY6H2V1s148ghuz5wrPwJPipz3y
+         cCh5OcvykDstZ8f3xfFHnRCX9cpm5GeChZnRcaUoWh29Mtx8fQpV1L8udDi67GPHGUcA
+         hKYf+RKyuzoqOQDw+VxVMEHJGOpI1+jy8n2lu8qJAk32kfBDESW443ddIMGKffOeG92+
+         WaJw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739268346; x=1739873146;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1739268538; x=1739873338;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NlJmnKHx1lwCXmiIBkyeorsVWdoLFgtXUGK/oyDO4pM=;
-        b=dK6uDp5rkIcxVkAR/KhUL1k+YVHBivlIajPphwEiWrrp2x+7ExERLGYLCRKip1OtU4
-         /fMO16CPjlhughpPtuXjSZZ1iLl4oQ/1S/XRTdwCV8PHW4v28BtTakGuUUjKH4vqV8Br
-         ngzw08ork461Nvb/kX3HpPsi4TvekI+LWkb8uWDO7GyJdgKLg/HkM7JEFt4++URX7Qlc
-         cN2MiznXvRtNWcBzXZcNCrE6x1BFKuT18mvQ02c2Uf9Aa9l1DfNdT7lr8eiMddD73pzF
-         S5tndG8qB9MFP9m4MZ0NCwGCn/cly9TX+aOzh0hUeQKzEdrGB/E5WBT7uT3JeJtpEFO1
-         i0TQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVnc4Jlsdi4SY3IlVWNfAAVcMkN5QitP/5T7I45H2Ea5LMPzUx+b2Ho4lX5mNVd4c2aVo2VNwwRolSg/ig=@vger.kernel.org, AJvYcCXW8yWLYYkw+es+nfL52tRdQ+V2aLfYPqO8uuInUTCZ4Rxin2fApJ25S4xixwVV9AzfeZ/gev0GnH4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyyqnH5CBQSWSSwGI52fbzc3zJs09ZbTnhif4EK+uPEEIaTRKai
-	3xBN89NEghs2JLn6AWoMgzLFXT9lYFcvxDLjApc5dNZl0//AZgOt
-X-Gm-Gg: ASbGncvOSjMy1kQKKpb5LYDWFsJ9oxOeOV41mwzBAvd7l4nAHAPzaLs18M2QbISm+tx
-	RjtPrkoSPe7l7JwLnlF8Ff47abHKU8Qx95MozgI95wZfN2gRT7WQPHLrye12edpNndJfdk7qfST
-	O3S20VtATrG/ZYd3vOJ2u5Aq8LDrcxoQv5h1pAY3BmTHB/PZztFTKmtaRFKBcHQFidi0Kngd7Xb
-	xz44WZafY5Wiaukst7SInfq2IozaVEB/9Y/T4cJyclNsTcuA/iJIBLC9rjxXZn5i0ThInkvR2a7
-	6eqEd50lDsRzK79HNUWYiqQmBV359Ef++9540mgKhJ/uY66N6nxlyG/mIaQ7
-X-Google-Smtp-Source: AGHT+IEYCLyM1if/1HHbXJy/5vtng8QSMrWKzlyhT/lzwguDALJrJrH36PvxKE2cmIwoas5S01rlMg==
-X-Received: by 2002:a17:902:ef4c:b0:216:7c33:8994 with SMTP id d9443c01a7336-21f4e7aff63mr266343325ad.53.1739268345868;
-        Tue, 11 Feb 2025 02:05:45 -0800 (PST)
-Received: from localhost.localdomain (59-124-78-22.hinet-ip.hinet.net. [59.124.78.22])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f365616ecsm92740135ad.100.2025.02.11.02.05.44
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 02:05:45 -0800 (PST)
-From: Yiwei Lin <s921975628@gmail.com>
-To: trenn@suse.com,
-	shuah@kernel.org
-Cc: jwyatt@redhat.com,
-	jkacur@redhat.com,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yiwei Lin <s921975628@gmail.com>
-Subject: [PATCH] cpupower: monitor: Exit with error status if execvp() fail
-Date: Tue, 11 Feb 2025 18:05:30 +0800
-Message-Id: <20250211100530.5918-1-s921975628@gmail.com>
-X-Mailer: git-send-email 2.34.1
+        bh=xEn3cm/UNrP7SZZldloJXkuufWri2Kvjnrj9hrLDPQo=;
+        b=t2b8tws4Ap3P71Gk0hlR0WlS5MJnxHx4DbPYjvzZeyTdMV8Y8a/Tu/mPNcw9Oo1kdH
+         p4l/F3QIf16XKLvjkEJ0L7RIu9i33c2eHl0TnTkko510BJWP1UD+jCOQDfyT9dUT4AxX
+         eYkheK2pPaMUNDtMbdmyGITFmhszF2IL+HY0Re2AnYZqdNX7Nf0IleKR1nxKhp1HWrMA
+         miRYtwld0SKw87LxWUJ924fdQhLX3aurkIHCf8spJMrDRevNebuEFsumwTXMFz6wkF7x
+         kstVtFt14JrcxNbZM3RughaYsH+PR1P/B29ngPYlG7ni3jywB7Xb1AyfUqpkns/3gzpy
+         +BDA==
+X-Forwarded-Encrypted: i=1; AJvYcCWSlaq6h6KCna3AU969HYp3c1WDN+nf6f+/Wxqdn/9uTojQl5E9MYou5XHeCWDqTBtXx5boETZFtQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzGjDuxbhJF5RenBlUupiW5nq789yDB644suzdgfV2dNuCDtMYS
+	tQsY2o5bsIDUftDvyEwCOd8+pgbEzYQX276p9rUwfzbCmU4fcUynISoC2reJflqZlymqJi2+dNC
+	M5xpmgP8U3tf4Ij3hXCeGWlvD++ry2eKIcR6/cA==
+X-Gm-Gg: ASbGncuWYj8ezrjIfhO1ByfOY1spYgyz1EquB2Fd1CV9xwZLGgLnD9yx1FLl1kvBF/l
+	eTemy8NZJ/zu1r0mRm0hqTMEZLIhRY+kLlp6qqblE9/BanQQXwZLE38VwQfYLeHdZ2c6Xyrdj6a
+	BnTsSm3tuHuvh3Eef7QwL/Bcr/69lPvA==
+X-Google-Smtp-Source: AGHT+IHp1zdj8ZibeFlCfAdtduHOD6KnRYnX/ZueNTg9nfqkFNPLIXpI43V2qHdRl3eZSUUEm/vQoAR49cYDijtPvYw=
+X-Received: by 2002:a05:6102:3e0b:b0:4af:ba51:a25f with SMTP id
+ ada2fe7eead31-4ba85f1d603mr11334067137.20.1739268538258; Tue, 11 Feb 2025
+ 02:08:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <CA+G9fYt5QwJ4_F8fJj7jx9_0Le9kOVSeG38ox9qnKqwsrDdvHQ@mail.gmail.com>
+In-Reply-To: <CA+G9fYt5QwJ4_F8fJj7jx9_0Le9kOVSeG38ox9qnKqwsrDdvHQ@mail.gmail.com>
+From: Naresh Kamboju <naresh.kamboju@linaro.org>
+Date: Tue, 11 Feb 2025 15:38:46 +0530
+X-Gm-Features: AWEUYZlxubnV84-s1VVkx9iBxiTYmg01jsC7etcGK75gbLsVTjiAfHyBl1JrU90
+Message-ID: <CA+G9fYtf=NaCuLrs2BtfXRQvxDap214i4bJSC+mEqTWPV7676Q@mail.gmail.com>
+Subject: Re: next-20250210: WARNING: at include/linux/rwsem.h:85 madvise_unlock
+To: open list <linux-kernel@vger.kernel.org>, linux-mm <linux-mm@kvack.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, rcu <rcu@vger.kernel.org>, 
+	LTP List <ltp@lists.linux.it>, Linux Regressions <regressions@lists.linux.dev>, 
+	lkft-triage@lists.linaro.org
+Cc: Andrew Morton <akpm@linux-foundation.org>, "Paul E. McKenney" <paulmck@kernel.org>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Arnd Bergmann <arnd@arndb.de>, Dan Carpenter <dan.carpenter@linaro.org>, 
+	Anders Roxell <anders.roxell@linaro.org>, SeongJae Park <sj@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-In the case that we give a invalid command to idle_monitor for
-monitoring, the execvp() will fail and thus go to the next line.
-As a result, we'll see two differnt monitoring output. For
-example, running `cpupower monitor -i 5 invalidcmd` which `invalidcmd`
-is not executable.
+On Tue, 11 Feb 2025 at 14:53, Naresh Kamboju <naresh.kamboju@linaro.org> wrote:
+>
+> Regressions on arm64 Juno-r2 device while running LTP syscalls tests
+> madvise01 warnings on the Linux next-20250210 tag.
+>
+> First seen on next-20250210
+> Good: next-20250207
+> Bad: next-20250210
+>
+> This regression is reproducible with CONFIG_ARM64_64K_PAGES=y
+>
+> Test regression: LTP madvise01 WARNING include/linux/rwsem.h madvise_unlock
+> Reported-by: Linux Kernel Functional Testing <lkft@linaro.org>
+>
+> ## Test log
+> command: madvise01
+> [ 1190.422933] /usr/local/bin/kirk[359]: starting test madvise01 (madvise01)
+> tst_tmpdir.c:316: TINFO: Using /tmp/LTP_madSbRtkW as tmpdir (tmpfs filesystem)
+> tst_test.c:1860: TINFO: LTP version: 20240930
+> [ 1190.607278] Injecting memory failure for pfn 0x8e13f at process
+> virtual address 0xffff8c8c0000
+> tst_test.c:1864: TINFO:[
+> ** replaying previous printk message **
+> [ 1190.618980] Memory failure: 0x8e13f: recovery action for clean LRU
+> page: Recovered
+> [ 1190.619013] ------------[ cut here ]------------
+> [ 1190.619016] WARNING: CPU: 2 PID: 137820 at include/linux/rwsem.h:85
+> madvise_unlock (include/linux/rwsem.h:85 (discriminator 1)
+> include/linux/rwsem.h:205 (discriminator 1)
+> include/linux/mmap_lock.h:70 (discriminator 1)
+> include/linux/mmap_lock.h:169 (discriminator 1)
+> include/linux/mmap_lock.h:176 (discriminator 1) mm/madvise.c:1599
+> (discriminator 1))
+> Tested kernel: 6.14.0-rc2-next-20[ 1190.646322] Modules linked in: tun
+> overlay btrfs blake2b_generic xor xor_neon raid6_pq zstd_compress
+> panfrost hdlcd tda998x onboard_usb_dev drm_shmem_helper drm_client_lib
+> cec gpu_sched drm_dma_helper drm_kms_helper fuse drm backlight
+> ip_tables x_tables
+> 250210 #1 SMP PREEMPT @1739162484[ 1190.671777] CPU: 2 UID: 0 PID:
+> 137820 Comm: madvise01 Not tainted 6.14.0-rc2-next-20250210 #1
+> [ 1190.683191] Hardware name: ARM Juno development board (r2) (DT)
+> aarch64
+> tst_test.c:1703: TINFO:[ 1192.996920] pstate: a0000005 (NzCv daif -PAN
+> -UAO -TCO -DIT -SSBS BTYPE=--)
+> Timeout per run is 0h 05m 24s
+> [ 1193.006802] pc : madvise_unlock (include/linux/rwsem.h:85
+> (discriminator 1) include/linux/rwsem.h:205 (discriminator 1)
+> include/linux/mmap_lock.h:70 (discriminator 1)
+> include/linux/mmap_lock.h:169 (discriminator 1)
+> include/linux/mmap_lock.h:176 (discriminator 1) mm/madvise.c:1599
+> (discriminator 1))
+> [ 1211.692758] rcu: INFO: rcu_preempt detected stalls on CPUs/tasks:
+> [ 1211.692776] rcu: 1-...0: (0 ticks this GP)
+> idle=f3a4/1/0x4000000000000000 softirq=946757/946757 fqs=2625
+> [ 1211.692794] rcu: 2-...0: (1 GPs behind)
+> idle=2fac/1/0x4000000000000002 softirq=357256/357257 fqs=2625
+> [ 1211.692809] rcu: (detected by 4, t=5252 jiffies, g=196909, q=138 ncpus=6)
+> [ 1211.692821] Sending NMI from CPU 4 to CPUs 1:
+> [ 1221.694021] Sending NMI from CPU 4 to CPUs 2:
+> [ 1231.695220] rcu: rcu_preempt kthread timer wakeup didn't happen for
+> 5001 jiffies! g196909 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
+> [ 1231.695231] rcu: Possible timer handling issue on cpu=4 timer-softirq=26922
+> [ 1231.695238] rcu: rcu_preempt kthread starved for 5002 jiffies!
+> g196909 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=4
+> [ 1231.695251] rcu: Unless rcu_preempt kthread gets sufficient CPU
+> time, OOM is now expected behavior.
+> [ 1231.695257] rcu: RCU grace-period kthread stack dump:
+> [ 1231.695262] task:rcu_preempt     state:I stack:0     pid:18
+> tgid:18    ppid:2      task_flags:0x208040 flags:0x00000008
+> [ 1231.695280] Call trace:
+> [ 1231.695286] __switch_to (arch/arm64/kernel/process.c:704) (T)
+> [ 1231.695306] __schedule (kernel/sched/core.c:5381 kernel/sched/core.c:6765)
+> [ 1231.695318] schedule (kernel/sched/core.c:6843 kernel/sched/core.c:6857)
+> [ 1231.695330] schedule_timeout (include/linux/timer.h:185
+> kernel/time/sleep_timeout.c:100)
+> [ 1231.695347] rcu_gp_fqs_loop (kernel/rcu/tree.c:2024 (discriminator 15))
+> [ 1231.695365] rcu_gp_kthread (kernel/rcu/tree.c:2229 (discriminator 2))
+> [ 1231.695380] kthread (kernel/kthread.c:464)
+> [ 1231.695395] ret_from_fork (arch/arm64/kernel/entry.S:863)
+> [ 1231.695410] rcu: Stack dump where RCU GP kthread last ran:
+> [ 1231.695417] CPU: 4 UID: 0 PID: 0 Comm: swapper/4 Not tainted
+> 6.14.0-rc2-next-20250210 #1
+> [ 1231.695428] Hardware name: ARM Juno development board (r2) (DT)
+> [ 1231.695434] pstate: 40000005 (nZcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [ 1231.695445] pc : cpuidle_enter_state (drivers/cpuidle/cpuidle.c:292)
+> [ 1231.695467] lr : cpuidle_enter_state
+> (arch/arm64/include/asm/irqflags.h:26
+> arch/arm64/include/asm/irqflags.h:48 drivers/cpuidle/cpuidle.c:290)
+> [ 1231.695481] sp : ffff80008378fd90
+> [ 1231.695486] x29: ffff80008378fd90 x28: 0000000000000000 x27: 0000000000000000
+> [ 1231.695503] x26: 0000000000000000 x25: 0000000000000001 x24: 0000011a1e4785a4
+> [ 1231.695519] x23: 0000000000000001 x22: ffff00080314a080 x21: 0000011a1e83fe44
+> [ 1231.695536] x20: 0000000000000001 x19: ffff00097d625778 x18: ffff8000a0c2fc10
+> [ 1231.695552] x17: 000000040044ffff x16: 00500072f5507510 x15: 0000000000000000
+> [ 1231.695568] x14: ffff0008007bc800 x13: ffff8008fad70000 x12: 0000000034d4d91d
+> [ 1231.695585] x11: 0000000000000000 x10: 0000000000001000 x9 : ffff8000815901a4
+> [ 1231.695601] x8 : ffff80008378fc98 x7 : 0000000000000001 x6 : ffff8000829f9000
+> [ 1231.695617] x5 : ffff0008007bc800 x4 : ffff8000829f95e0 x3 : 0000000000000000
+> [ 1231.695633] x2 : 0000000000000000 x1 : 0000000100000001 x0 : 0000000100000001
+> [ 1231.695649] Call trace:
+> [ 1231.695653] cpuidle_enter_state (drivers/cpuidle/cpuidle.c:292) (P)
+> [ 1231.695671] cpuidle_enter (drivers/cpuidle/cpuidle.c:391 (discriminator 2))
+> [ 1231.695692] do_idle (kernel/sched/idle.c:155
+> kernel/sched/idle.c:230 kernel/sched/idle.c:325)
+> [ 1231.695716] cpu_startup_entry (kernel/sched/idle.c:423 (discriminator 1))
+> [ 1231.695732] secondary_start_kernel
+> (arch/arm64/include/asm/atomic_ll_sc.h:95 (discriminator 2)
+> arch/arm64/include/asm/atomic.h:28 (discriminator 2)
+> include/linux/atomic/atomic-arch-fallback.h:546 (discriminator 2)
+> include/linux/atomic/atomic-arch-fallback.h:994 (discriminator 2)
+> include/linux/atomic/atomic-instrumented.h:436 (discriminator 2)
+> include/linux/sched/mm.h:37 (discriminator 2)
+> arch/arm64/kernel/smp.c:214 (discriminator 2))
+> [ 1231.695749] __secondary_switched (arch/arm64/kernel/head.S:421)
+> madvise01.c:68: TINFO: Mounting [ 1231.961851] lr : do_madvise
+> (mm/madvise.c:1748)
+> [ 1242.412862] sp : ffff8000a188fdc0
+> tmp_madvise to /tmp/LTP_madSbRtkW/tmp_madvise fstyp=tmpfs flags=0[
+> 1242.416214] x29: ffff8000a188fdc0 x28: ffff000813417c00 x27:
+> 0000000000000000
+>
+> madvise01.c:113: TPASS: madvise[ 1294.712666] rcu: INFO: rcu_preempt
+> detected stalls on CPUs/tasks:
+> [ 1294.712685] rcu: 2-...0: (1 GPs behind)
+> idle=2fac/1/0x4000000000000002 softirq=357256/357257 fqs=7636
+> [ 1294.712704] rcu: (detected by 4, t=26007 jiffies, g=196909, q=184 ncpus=6)
+> [ 1294.712716] Sending NMI from CPU 4 to CPUs 2:
+> [ 1304.713915] rcu: rcu_preempt kthread timer wakeup didn't happen for
+> 8168 jiffies! g196909 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402
+> [ 1304.713927] rcu: Possible timer handling issue on cpu=3 timer-softirq=35895
+> [ 1304.713933] rcu: rcu_preempt kthread starved for 8169 jiffies!
+> g196909 f0x0 RCU_GP_WAIT_FQS(5) ->state=0x402 ->cpu=3
+> [ 1304.713945] rcu: Unless rcu_preempt kthread gets sufficient CPU
+> time, OOM is now expected behavior.
+> [ 1304.713951] rcu: RCU grace-period kthread stack dump:
+> [ 1304.713955] task:rcu_preempt     state:I stack:0     pid:18
+> tgid:18    ppid:2      task_flags:0x208040 flags:0x00000008
+> [ 1304.713974] Call trace:
+> [ 1304.713979] __switch_to (arch/arm64/kernel/process.c:704) (T)
+> [ 1304.714000] __schedule (kernel/sched/core.c:5381 kernel/sched/core.c:6765)
+> [ 1304.714013] schedule (kernel/sched/core.c:6843 kernel/sched/core.c:6857)
+> [ 1304.714024] schedule_timeout (include/linux/timer.h:185
+> kernel/time/sleep_timeout.c:100)
+> [ 1304.714042] rcu_gp_fqs_loop (kernel/rcu/tree.c:2024 (discriminator 15))
+> [ 1304.714061] rcu_gp_kthread (kernel/rcu/tree.c:2229 (discriminator 2))
+> [ 1304.714076] kthread (kernel/kthread.c:464)
+> [ 1304.714090] ret_from_fork (arch/arm64/kernel/entry.S:863)
+> [ 1304.714105] rcu: Stack dump where RCU GP kthread last ran:
+> [ 1304.714109] Sending NMI from CPU 4 to CPUs 3:
+> [ 1304.714119] NMI backtrace for cpu 3
+> [ 1304.714130] CPU: 3 UID: 0 PID: 205 Comm: systemd-udevd Not tainted
+> 6.14.0-rc2-next-20250210 #1
+> [ 1304.714143] Hardware name: ARM Juno development board (r2) (DT)
+> [ 1304.714148] pstate: 00000005 (nzcv daif -PAN -UAO -TCO -DIT -SSBS BTYPE=--)
+> [ 1304.714158] pc : queued_spin_lock_slowpath
+> (kernel/locking/qspinlock.c:380 (discriminator 5))
+> [ 1304.714176] lr : _raw_spin_lock_bh (kernel/locking/spinlock.c:179)
+> [ 1304.714189] sp : ffff800085e6f310
+> [ 1304.714193] x29: ffff800085e6f310 x28: ffff000808761c00 x27: ffff00080295b500
+> [ 1304.714210] x26: ffff00081e724e00 x25: 0000000000000000 x24: 0000000000008080
+> [ 1304.714224] x23: 0000000000000000 x22: 0000000074000080 x21: 0000000000000078
+> [ 1304.714239] x20: ffff000802bb0a30 x19: ffff000802bb0a30 x18: 0000000000000000
+> [ 1304.714254] x17: 0000000000000000 x16: 0000000000000000 x15: 0000aaaabea75a70
+> [ 1304.714268] x14: 0000000000000000 x13: 2dcd92d500000000 x12: 40982a24d45a0569
+> [ 1304.714283] x11: 3cc1638a3642b30d x10: d5e7818600000000 x9 : ffff80008159decc
+> [ 1304.714298] x8 : ffff800085e6f278 x7 : 0000000000000000 x6 : 0000000000000201
+> [ 1304.714312] x5 : ffff8000829f9000 x4 : ffff8000829f95e0 x3 : 0000000000000001
+> [ 1304.714326] x2 : 0000000000000000 x1 : 0000000000000000 x0 : 0000000000000001
+> [ 1304.714339] Call trace:
+> [ 1304.714343] queued_spin_lock_slowpath
+> (kernel/locking/qspinlock.c:380 (discriminator 5)) (P)
+> [ 1304.714360] _raw_spin_lock_bh (kernel/locking/spinlock.c:179)
+> [ 1304.714374] lock_sock_nested (net/core/sock.c:3649 (discriminator 1))
+> [ 1304.714388] tcp_sock_set_cork (net/ipv4/tcp.c:3547 net/ipv4/tcp.c:3560)
+> [ 1304.714405] xs_tcp_send_request (net/sunrpc/xprtsock.c:1124)
+> [ 1304.714418] xprt_transmit (net/sunrpc/xprt.c:1578 net/sunrpc/xprt.c:1634)
+> [ 1304.714434] call_transmit (net/sunrpc/clnt.c:2283 net/sunrpc/clnt.c:2265)
+> [ 1304.714447] __rpc_execute
+> (include/asm-generic/bitops/generic-non-atomic.h:128
+> net/sunrpc/sched.c:954)
+> [ 1304.714463] rpc_execute (include/linux/sched/mm.h:339
+> (discriminator 1) include/linux/sched/mm.h:399 (discriminator 1)
+> net/sunrpc/sched.c:1026 (discriminator 1))
+> [ 1304.714476] rpc_run_task (net/sunrpc/clnt.c:1250)
+> [ 1304.714488] rpc_call_sync (net/sunrpc/clnt.c:1278 (discriminator 1))
+> [ 1304.714501] nfs3_rpc_wrapper (fs/nfs/nfs3proc.c:36)
+> [ 1304.714516] nfs3_proc_getattr (fs/nfs/nfs3proc.c:123)
+> [ 1304.714528] __nfs_revalidate_inode (fs/nfs/inode.c:1311 (discriminator 2))
+> [ 1304.714546] nfs_access_get_cached (fs/nfs/dir.c:3058 (discriminator
+> 1) fs/nfs/dir.c:3118 (discriminator 1))
+> [ 1304.714561] nfs_do_access (fs/nfs/dir.c:3246)
+> [ 1304.714574] nfs_permission (fs/nfs/dir.c:3360)
+> [ 1304.714588] inode_permission (fs/namei.c:588 fs/namei.c:562)
+> [ 1304.714606] link_path_walk.part.0.constprop.0 (fs/namei.c:1831
+> fs/namei.c:2422)
+> [ 1304.714624] path_lookupat (fs/namei.c:2607 fs/namei.c:2630)
+> [ 1304.714639] filename_lookup (fs/namei.c:2660)
+> [ 1304.714654] kern_path (fs/namei.c:2768)
+> [ 1304.714669] unix_find_other (net/unix/af_unix.c:1153 net/unix/af_unix.c:1182)
+> [ 1304.714681] unix_dgram_sendmsg (net/unix/af_unix.c:2038)
+> [ 1304.714692] ____sys_sendmsg (net/socket.c:718 (discriminator 1)
+> net/socket.c:733 (discriminator 1) net/socket.c:2573 (discriminator
+> 1))
+> [ 1304.714710] ___sys_sendmsg (net/socket.c:2627)
+> [ 1304.714725] __sys_sendmsg (net/socket.c:2659 (discriminator 1))
+> [ 1304.714740] __arm64_sys_sendmsg (net/socket.c:2662)
+> [ 1304.714755] invoke_syscall.constprop.0
+> (arch/arm64/include/asm/syscall.h:61 arch/arm64/kernel/syscall.c:54)
+> [ 1304.714772] do_el0_svc (arch/arm64/kernel/syscall.c:139
+> arch/arm64/kernel/syscall.c:151)
+> [ 1304.714787] el0_svc (arch/arm64/include/asm/irqflags.h:82
+> (discriminator 1) arch/arm64/include/asm/irqflags.h:123 (discriminator
+> 1) arch/arm64/include/asm/irqflags.h:136 (discriminator 1)
+> arch/arm64/kernel/entry-common.c:165 (discriminator 1)
+> arch/arm64/kernel/entry-common.c:178 (discriminator 1)
+> arch/arm64/kernel/entry-common.c:745 (discriminator 1))
+> [ 1304.714806] el0t_64_sync_handler (arch/arm64/kernel/entry-common.c:763)
+> [ 1304.714821] el0t_64_sync (arch/arm64/kernel/entry.S:600)
+> test for MADV_NORMAL PASSED
+>
+> ## Source
+> * kernel version: 6.14.0-rc2-next-20250210
+> * git tree: https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git
+> * git sha: df5d6180169ae06a2eac57e33b077ad6f6252440
+> * git describe: next-20250210
+> * project details:
+> https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250210/
+> * architecture: arm64
+> * device: Juno-r2
+> * toolchain: gcc-13
+> * config : CONFIG_ARM64_64K_PAGES=y (gcc-13-lkftconfig-64k_page_size)
+> * build config:
+> https://storage.tuxsuite.com/public/linaro/lkft/builds/2spp0dMfaQHNeHr0jT9DgXiO1Px/config
+> * build: https://storage.tuxsuite.com/public/linaro/lkft/builds/2spp0dMfaQHNeHr0jT9DgXiO1Px/
 
-Signed-off-by: Yiwei Lin <s921975628@gmail.com>
----
- tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c | 2 ++
- 1 file changed, 2 insertions(+)
+Re posting links due format issue,
 
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-index f746099b5dac..0fc0e229739d 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-+++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-@@ -6,6 +6,7 @@
-  */
- 
- 
-+#include <errno.h>
- #include <stdio.h>
- #include <unistd.h>
- #include <stdlib.h>
-@@ -295,6 +296,7 @@ int fork_it(char **argv)
- 	if (!child_pid) {
- 		/* child */
- 		execvp(argv[0], argv);
-+		exit(errno);
- 	} else {
- 		/* parent */
- 		if (child_pid == -1) {
--- 
-2.34.1
+## Boot log
+* Juno-r2 log: https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250210/testrun/27251102/suite/log-parser-test/test/warning-warning-cpu-pid-at-includelinuxrwsemh-madvise_unlock/log
+* Juno-r2 details:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250210/testrun/27251102/suite/log-parser-test/test/warning-warning-cpu-pid-at-includelinuxrwsemh-madvise_unlock/
+* Juno-r2 history:
+https://qa-reports.linaro.org/lkft/linux-next-master/build/next-20250210/testrun/27251102/suite/log-parser-test/test/warning-warning-cpu-pid-at-includelinuxrwsemh-madvise_unlock/history/
+* Juno-r2 lava log 1:
+https://lkft.validation.linaro.org/scheduler/job/8117395#L43180
+* Juno-r2 lava log 2: https://lkft.validation.linaro.org/scheduler/job/8118169
+* Juno-r2 lava log 3: https://lkft.validation.linaro.org/scheduler/job/8118170
 
+ >
+> --
+> Linaro LKFT
+> https://lkft.linaro.org
 
