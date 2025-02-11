@@ -1,81 +1,81 @@
-Return-Path: <linux-pm+bounces-21827-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21828-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4CB91A30C26
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 13:57:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5D176A30C2A
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 13:57:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91C8D188AF83
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 12:57:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F03F01657F5
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 12:57:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF51021E097;
-	Tue, 11 Feb 2025 12:56:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49E5E2236F2;
+	Tue, 11 Feb 2025 12:56:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="IyAhij7R"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="qx0ux12T"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f47.google.com (mail-wr1-f47.google.com [209.85.221.47])
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E9FF31EF0AB
-	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 12:56:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.47
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3A90921D59F
+	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 12:56:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739278607; cv=none; b=ukMhaSJqd+co0ZNgc9GRO9qgSRsv4tWJklRqf7JDxqhaSTGAlKRnmcEZE6rw7HhZjJD14w0Kk7YwE1u9BB/eWmR/VlHPRctXq4RtRennv3MZzkANjneUxB9ZCT/juXl3g2nqR8YNFblu/p2mRVtP7CHMppqnIWGYIqg5691TgGc=
+	t=1739278610; cv=none; b=CixNzsXley8A9m+b4fQKvdY23h7qVEDZSmfhSY5vEyAM/XrfUr8JytnYylhLAwfSGWGY1XND5cLMqson0D/SK9rFp1HFhGp3kYR6Dsu18yo3YGXC80+kf4ZD336XXb8KEjouSrDRdMaomvh+sv251ROfpEHVtIVna/d24QNij/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739278607; c=relaxed/simple;
-	bh=d+GjSlfsiPtSREFcW4TugBdSP8ZalkWtqO1Bjmm9SpI=;
+	s=arc-20240116; t=1739278610; c=relaxed/simple;
+	bh=ZElkFFNaQVfyA6jlsV48V8/b9aHZJZEVfmq9Tnxd/qE=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=SxNby2xmEieW39LEbT4NQSDGtkJmN9ac+hIzvwCfPAAy5DYFYNT+dspKE2NQfUApLIBvCNI/M/0iIMUK8okh2a4hV4PauqXlxUxFiceWmEXLpAy/aSVIV/xUGCDvxIuZsiul2ebhKle1ZbvsMLRGefQlD8WF/R753Gv7S+Lkw3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=IyAhij7R; arc=none smtp.client-ip=209.85.221.47
+	 In-Reply-To:To:Cc; b=YB83R3nGga0UDLozl3i1cw7UvbGAG3WDUeBc+h1McQ59JuTyABbnwuAbcMdOFPwIVk2Jp2KjDIhnNlgq09eiLUTLZcbyIbr8snp44Jt0tb4Q3k4zDDVAy4wNnorne0ZabRJ/Pig/qFye6pXcDDvrfflWLFv3AIsF6RoXcUMPRFU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=qx0ux12T; arc=none smtp.client-ip=209.85.128.53
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wr1-f47.google.com with SMTP id ffacd0b85a97d-38dc0cd94a6so2611500f8f.0
-        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 04:56:45 -0800 (PST)
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43937cf2131so19078605e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 04:56:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739278604; x=1739883404; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1739278605; x=1739883405; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=UoASWxQXtVgWCHaFayYEr/E5Q8fw3DlK8oqmIqWCzcE=;
-        b=IyAhij7Riz2cQxDQ82sq/X6sK7sreKDJi/3tYF2HMT32L0U/FsCOiB7Zd0LsPADo1Q
-         YMquauMRnccSDzHqqsD/Tp65rNMBnIoQN0dxW4naeLurwK+llzZ1hp4kc6Zps/G4QBAC
-         sXon9FKOZVJ251AG0gjdHNUgLFGeS9JIwxU8bXrRQtWDYQqpbwSToopmpYPshAxPpvlS
-         0yzsOxQbYeibdFiQhOt2yIQ0Jo59kh7FlKMQjKtYgqxrfmXytce8e6k2PldHwzcFb6qT
-         LWHsYGDGaBehgtHP/Zn37EF725zf1Rf+CMtjDYT6bvSWyvNSScpd67St0ts/OU3gQt2B
-         Wh9A==
+        bh=FRtaCX/ZKHIEgnZuN9eTd2vxVIRxRn4dVC3Yg6NlT3k=;
+        b=qx0ux12TudTCV7TObn0KyRRvJCxlNvo0dKuE5uTwuhdiYcKKZ4CUCxv3LGXkNFzR8w
+         sBsjJQo3rL7fdmBoh8N7tJh4Qd/Vjj0vkXhnNrLmoAjX3P6YZ5PloUfTUSMXUNr06olJ
+         eCnTAX9YXDuBHJZmn6nnirCYWMtA0rPLM3FbFo72NvzMz2dxbpTX26T1D0cWMOzr8c+3
+         VKLmGX1pJ/UKeE9sXlNvCAd117AP+NImGmbUUs5ZiOkMJHmGEhetnIqkkbrB5+1zYObm
+         ec4pKrwLlWazYJPAFLTlM8XvEVJPyLMVyDQxmPyLu906Ggzax4HUe7c8+3YcYUUQgZw9
+         429w==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739278604; x=1739883404;
+        d=1e100.net; s=20230601; t=1739278605; x=1739883405;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=UoASWxQXtVgWCHaFayYEr/E5Q8fw3DlK8oqmIqWCzcE=;
-        b=hKrXAIK5Za7eKSOdZtXUktCRDTlcGpLSXLLuRheRXRVxqC1OQh0ud9ZpzpPVculkrY
-         3zkJDz02NDWUVTee04jUID67TN+xmqRgQTiMCMRkEp3HfyKrG5IsIbximleKxKua7IRK
-         nkVV4aV9gClVFdGNPt2ZfvwqvKavUB8DJ7Mouzj9GfXxVEJBhFtHd0/hG5Eg5Pe6h53L
-         QrGNQ/h5WC3rhj50NZZfNglCE9X5h1N439pObrKzIxondPVtBy0tY3IGvcoZIjMA5haG
-         lYgo9k7aYiGXNmdkkG5qlLYhMv8jOeXR2L8u2Rf2zm2LFRrIO/EXseY5PgrmnQQtFZkN
-         rXeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW4erbe0a2gwWeDnbtKpPWffHnwwg9PWXKiQ7Lw2JwJGm+OW3N5S0uOqv64pIzsXt6EEYfrbSiPWQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNXd/woESCZ5aX/BDBKwOVEE5QPFRQYFcxzK+m1dbL3cMhwgf+
-	OvTPyenalyoaBXY99+we7ciBc3X/N4P1IzRA8tJDxgnej4a1WJwsfIIyUmA9RPA=
-X-Gm-Gg: ASbGncuYJ3UEAH4xUHN50jg6HXnyWmq8ZG7ZNgh702vLLRqKQr+Bg8pUuVDrJIk/QkS
-	S5d5di6ediRMi82nwgDZn4NFza86N4NkHwm0Uehf2Y+VqnBLqAOesRlxz61tamxo2xboSVoVR0B
-	O/p7iVA6sjie5dvcgjTBoYmuuCVMqP54Q5+0TsLdnoAKQBKaXAEjLs39ylEKh7aqRJ6qrZ/pva8
-	Q2+JPG84e0gat7AysTDITwxgysT+jSu/Kyp+67He+uAlz2EJUfF4i9nRv5lQ7hSF+WtwljOuOF2
-	sZkmBenX51kHkjRwMwzZbR2oDQbDorYLYgDO
-X-Google-Smtp-Source: AGHT+IE7QsdzhZcPw6zibNK5UvGLFSYMv3UerAe3R8f0T0a8G9H3YZ9WijThZ1hoipc3YOPnigfRkw==
-X-Received: by 2002:a5d:5887:0:b0:38d:e2ab:1969 with SMTP id ffacd0b85a97d-38de2ab1b35mr4273490f8f.14.1739278604210;
-        Tue, 11 Feb 2025 04:56:44 -0800 (PST)
+        bh=FRtaCX/ZKHIEgnZuN9eTd2vxVIRxRn4dVC3Yg6NlT3k=;
+        b=JCkuDzfbH4Eo8cL+VrXr+zZqUTK++LBh8I4E8x+QwGcK7VVVAF7ejes8zEMbD2M4xZ
+         6uH/r80US6nweE3TmmG7Zowo6Jgsc+OYlP9IBXdeTwFXizDPmhlogfkZheQDjfKsGQ1E
+         z0z3TiAGdYeiL2hyiRm/vTp2DF5CKD2HoWZFkkShZ7NuAKm40EKGhp23MUmGcLqz2ABN
+         ZMgGCRTpVjzgbYpU7iX6haG0AbKcfuDzSv2wrotIwaXSNYN/61g9HV2L7e/c12Bw5an1
+         mVVT+UYxN9ST5Z6WVA5MKt88avekxk0mLNV3VVR7KFiktRmSce4lKf8HxNBLKJgAHyLB
+         jT2g==
+X-Forwarded-Encrypted: i=1; AJvYcCX+3jd4QMptPNFHUNnrwOCEOy5I+EwdgaoWMic5ubv2r6lGL39rjgnvrdmySFr5PJrPgnxKrUjoCw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzltsedFhbv0rln21euyWPXr34wIXsrFrvZ+eyIxL+yy1hZZOn6
+	HChUtX6tzraZPXiBfxeUQmEq/QQ4WXXc2m9/jrVObKIZJk7UxTBV1d+1W2JjBPg=
+X-Gm-Gg: ASbGnctHV+MQy9FTIwuLxjfqs030qRLYRhNbkpLPiWvNwUB6eAXBRq7zi0Nn/ZlYU1U
+	hk5m9bOjatBvYAye1MVojYn0rqGwRTbpNyz+f8liNsyLfGAN02G49+P6rhC9y1hNmSrHB4+gLQZ
+	oxaxuzxeoxgllLln+tOzqm/KSBAyHfGfaPddkt7YYJ5QAPcOcOpbyC1nWRiStkQrjri64dCVqv+
+	6Jv9k0FC0zsLUbDjQir0v8uShUUOqmLGztDoHAEWaJ7Z22y+ncxsD1zA09XATrJeklI+7w6xLb5
+	MUC2Eo95oHahvVkMAqh2+DCma5J4fl3SFXu0
+X-Google-Smtp-Source: AGHT+IEPBEgV8VC333Tr+Op0prDfAr6OQ0hPkR2+9gUCR63TMWh6MweTEaEpo21ums3GIMmkl5R69g==
+X-Received: by 2002:a05:600c:348a:b0:436:f3f6:9582 with SMTP id 5b1f17b1804b1-4394c8185d5mr32223915e9.8.1739278605262;
+        Tue, 11 Feb 2025 04:56:45 -0800 (PST)
 Received: from arrakeen.starnux.net ([2a01:e0a:982:cbb0:8261:5fff:fe11:bdda])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dc73c2e00sm12863078f8f.57.2025.02.11.04.56.43
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38dc73c2e00sm12863078f8f.57.2025.02.11.04.56.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 04:56:43 -0800 (PST)
+        Tue, 11 Feb 2025 04:56:44 -0800 (PST)
 From: Neil Armstrong <neil.armstrong@linaro.org>
-Date: Tue, 11 Feb 2025 13:56:38 +0100
-Subject: [PATCH v2 2/3] arm64: dts: qcom: sm8650: add cpu interconnect
- nodes
+Date: Tue, 11 Feb 2025 13:56:39 +0100
+Subject: [PATCH v2 3/3] arm64: dts: qcom: sm8650: add cpu OPP table with
+ DDR, LLCC & L3 bandwidths
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250211-topic-sm8650-ddr-bw-scaling-v2-2-a0c950540e68@linaro.org>
+Message-Id: <20250211-topic-sm8650-ddr-bw-scaling-v2-3-a0c950540e68@linaro.org>
 References: <20250211-topic-sm8650-ddr-bw-scaling-v2-0-a0c950540e68@linaro.org>
 In-Reply-To: <20250211-topic-sm8650-ddr-bw-scaling-v2-0-a0c950540e68@linaro.org>
 To: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -96,157 +96,987 @@ Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  Neil Armstrong <neil.armstrong@linaro.org>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=4643;
+X-Developer-Signature: v=1; a=openpgp-sha256; l=27062;
  i=neil.armstrong@linaro.org; h=from:subject:message-id;
- bh=d+GjSlfsiPtSREFcW4TugBdSP8ZalkWtqO1Bjmm9SpI=;
- b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBnq0kIAYN9Xlykt4Y45YFKgX/+5nZVVCbhCPkiJyUx
- xHVpzMSJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZ6tJCAAKCRB33NvayMhJ0apTD/
- 9HqK1MA5nLUfJRodntaIBfcxfz3Ii0gqCd/9fo49UJ2UHJsU+MT6dnV3zrgIVz1IZO0v/5PCqd7kw0
- swow99cgFATZ3P5IDBi8nyl4nI7yup1NvcvjMNtRChGs0XEEO1eMU8a5mNthDEcbxQfRnNwyoHSLfq
- sZtvbfi8ieKzZ6ltfzI+MoUkuzIFFjS+DZir10gxW50AViONUj/M3JtP2TXufBc9VfvGx7/yFpqPsD
- XTDJRpuvWe3AsiMuEo066EGGJhe8t5+RUbwBAcETgmfyPWm/j5qDw2q0HCiUqJIetG622DGV/Nr2BF
- mFd8ZEb3OoFbCbtMc3di4SNPDeTS+vyp1csdSiSIZOtyfxHVSwcRlHqk7HyVdWr2tN+et32mXVWYD+
- G7sE3xM6wrLJ29PXEpLxK2iZR9lEgEqtCfyazIoXoSDN28YbUAkPAx5aLQuW1NpIjVFcDscID5K8IP
- frSZ3HRN2NGPZM6NdU8dBY9PGaEhzKsl+h0TO11ne+9l3HWTGEai4oRFTRv+ezMhWTaHbeSG8b7zwt
- NYgA4W+kIt+V41T6xYRSXa18Cz5fn33uFKntuimKS2I1uJmfvvLKQ2TH2b1AEvg1xImqpzFqi7Lbuo
- etLf2AUxOTc3XoEV7mN2nnB5jcpnYkwdpQHeMBhio+AGUC3oEW4FliWIV7Bw==
+ bh=ZElkFFNaQVfyA6jlsV48V8/b9aHZJZEVfmq9Tnxd/qE=;
+ b=owEBbQKS/ZANAwAKAXfc29rIyEnRAcsmYgBnq0kJOSnWe7bsNJuxq5CRowrKCu0GSXSGV5/yJnmM
+ f5ZqTTGJAjMEAAEKAB0WIQQ9U8YmyFYF/h30LIt33NvayMhJ0QUCZ6tJCQAKCRB33NvayMhJ0bYvEA
+ DMB5PCrwNlm5ouTaYtl46+5FicraM6qdRQLMJFaQeGNRRQs2wM1YPM8bLe8qB9Qgox26DAD1VKfd6q
+ iIKx+65A9qOCqWtucD5DXDWf+a82dO1ut5ktiPVkJMoazOOhffroC6jFzCa3paeVjIS2x5yFxU1JIR
+ D3bRQofQFYVzxmbqRm7a/HHPGu+0QdUrxg3t+Vg3qmFKKVsMHoWygQTtldffUw3diFdIT3zGr0qDvS
+ pJYuQUIURCK3bYqsukPS3D/3iON/d4Wnzx5lbJKJ/Ny49AOQWirV5rnR0CKS/lGgxap9Rq3Ht0PN2y
+ gis5HyUdb+NEWmEi4FiBkSWaN2qMYgkOqgXsOKUXr2NFUa4p5Ln+ft5uh1ZhCGl5W7ExknQcShxLiC
+ BHehSIafypPmcbB7Xh/aZ+mjAkt24aVDdjbm/aMf8M3heMyRNTPcLlQWoC9v3g0VT/+kGVd5Q1gPoW
+ 7/yVvtTRuyx1EUn69Kmp0jF2le2T9zmFJ44XgTBFVeGVqHhOm0Pnv1RKdAqwF1OzxWq7H4hsfbHXf1
+ E3BgaPSqf2/PBDVsINKHfRo/WWVc+iwQmhmFmbKC4kRhnCt05UYHMRRASsIvSTsXtymv5z0UImFE2C
+ IeHiqBIwPxInLZbq6kQvYswiZsrszQZrpcADT+b1JdUf1r+44u5EQYLZbLIg==
 X-Developer-Key: i=neil.armstrong@linaro.org; a=openpgp;
  fpr=89EC3D058446217450F22848169AB7B1A4CFF8AE
 
-Add the interconnect entry for each cpu, with 3 different paths:
-- CPU to Last Level Cache Controller (LLCC)
-- Last Level Cache Controller (LLCC) to DDR
-- L3 Cache from CPU to DDR interface
+Add the OPP tables for each CPU clusters (cpu0-1, cpu2-3-4, cpu5-6 & cpu7)
+to permit scaling the Last Level Cache Controller (LLCC), DDR and L3 cache
+frequency by aggregating bandwidth requests of all CPU core with referenc
+to the current OPP they are configured in by the LMH/EPSS hardware.
+
+The effect is a proper caches & DDR frequency scaling when CPU cores
+changes frequency.
+
+The OPP tables were built using the downstream memlat ddr, llcc & l3
+tables for each cluster types with the actual EPSS cpufreq LUT tables
+from running HDK and QRD devices.
+
+The cpu2 and cpu5 tables are similar but must be kept separate to
+take in account that they define OPP for shared CPUs of two different
+clusters that can scale separately, thus vote different bandwidths.
 
 Signed-off-by: Neil Armstrong <neil.armstrong@linaro.org>
 ---
- arch/arm64/boot/dts/qcom/sm8650.dtsi | 57 ++++++++++++++++++++++++++++++++++++
- 1 file changed, 57 insertions(+)
+ arch/arm64/boot/dts/qcom/sm8650.dtsi | 876 +++++++++++++++++++++++++++++++++++
+ 1 file changed, 876 insertions(+)
 
 diff --git a/arch/arm64/boot/dts/qcom/sm8650.dtsi b/arch/arm64/boot/dts/qcom/sm8650.dtsi
-index bc09e879c1440873a52daf3fc7a38f451f1f972c..e194a95cdcc0f0f692e62b942331cd9e07a4eae0 100644
+index e194a95cdcc0f0f692e62b942331cd9e07a4eae0..09cc884f0969432c53671e804ec6a3f7643fc0a9 100644
 --- a/arch/arm64/boot/dts/qcom/sm8650.dtsi
 +++ b/arch/arm64/boot/dts/qcom/sm8650.dtsi
-@@ -15,6 +15,7 @@
- #include <dt-bindings/gpio/gpio.h>
- #include <dt-bindings/interconnect/qcom,icc.h>
- #include <dt-bindings/interconnect/qcom,sm8650-rpmh.h>
-+#include <dt-bindings/interconnect/qcom,osm-l3.h>
- #include <dt-bindings/interrupt-controller/arm-gic.h>
- #include <dt-bindings/mailbox/qcom-ipcc.h>
- #include <dt-bindings/phy/phy-qcom-qmp.h>
-@@ -85,6 +86,13 @@ cpu0: cpu@0 {
+@@ -86,6 +86,8 @@ cpu0: cpu@0 {
  
  			qcom,freq-domain = <&cpufreq_hw 0>;
  
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS
-+					 &epss_l3 SLAVE_EPSS_L3_SHARED>;
++			operating-points-v2 = <&cpu0_opp_table>;
 +
- 			#cooling-cells = <2>;
- 
- 			l2_0: l2-cache {
-@@ -118,6 +126,13 @@ cpu1: cpu@100 {
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+ 					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
+ 					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
+@@ -126,6 +128,8 @@ cpu1: cpu@100 {
  
  			qcom,freq-domain = <&cpufreq_hw 0>;
  
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS
-+					 &epss_l3 SLAVE_EPSS_L3_SHARED>;
++			operating-points-v2 = <&cpu0_opp_table>;
 +
- 			#cooling-cells = <2>;
- 		};
- 
-@@ -138,6 +153,13 @@ cpu2: cpu@200 {
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+ 					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
+ 					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
+@@ -153,6 +157,8 @@ cpu2: cpu@200 {
  
  			qcom,freq-domain = <&cpufreq_hw 3>;
  
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS
-+					 &epss_l3 SLAVE_EPSS_L3_SHARED>;
++			operating-points-v2 = <&cpu2_opp_table>;
 +
- 			#cooling-cells = <2>;
- 
- 			l2_200: l2-cache {
-@@ -165,6 +187,13 @@ cpu3: cpu@300 {
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+ 					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
+ 					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
+@@ -187,6 +193,8 @@ cpu3: cpu@300 {
  
  			qcom,freq-domain = <&cpufreq_hw 3>;
  
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS
-+					 &epss_l3 SLAVE_EPSS_L3_SHARED>;
++			operating-points-v2 = <&cpu2_opp_table>;
 +
- 			#cooling-cells = <2>;
- 		};
- 
-@@ -185,6 +214,13 @@ cpu4: cpu@400 {
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+ 					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
+ 					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
+@@ -214,6 +222,8 @@ cpu4: cpu@400 {
  
  			qcom,freq-domain = <&cpufreq_hw 3>;
  
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS
-+					 &epss_l3 SLAVE_EPSS_L3_SHARED>;
++			operating-points-v2 = <&cpu2_opp_table>;
 +
- 			#cooling-cells = <2>;
- 
- 			l2_400: l2-cache {
-@@ -212,6 +248,13 @@ cpu5: cpu@500 {
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+ 					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
+ 					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
+@@ -248,6 +258,8 @@ cpu5: cpu@500 {
  
  			qcom,freq-domain = <&cpufreq_hw 1>;
  
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS
-+					 &epss_l3 SLAVE_EPSS_L3_SHARED>;
++			operating-points-v2 = <&cpu5_opp_table>;
 +
- 			#cooling-cells = <2>;
- 
- 			l2_500: l2-cache {
-@@ -239,6 +282,13 @@ cpu6: cpu@600 {
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+ 					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
+ 					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
+@@ -282,6 +294,8 @@ cpu6: cpu@600 {
  
  			qcom,freq-domain = <&cpufreq_hw 1>;
  
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS
-+					 &epss_l3 SLAVE_EPSS_L3_SHARED>;
++			operating-points-v2 = <&cpu5_opp_table>;
 +
- 			#cooling-cells = <2>;
- 
- 			l2_600: l2-cache {
-@@ -266,6 +316,13 @@ cpu7: cpu@700 {
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+ 					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
+ 					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
+@@ -316,6 +330,8 @@ cpu7: cpu@700 {
  
  			qcom,freq-domain = <&cpufreq_hw 2>;
  
-+			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
-+					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ACTIVE_ONLY>,
-+					<&epss_l3 MASTER_EPSS_L3_APPS
-+					 &epss_l3 SLAVE_EPSS_L3_SHARED>;
++			operating-points-v2 = <&cpu7_opp_table>;
 +
- 			#cooling-cells = <2>;
+ 			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+ 					 &gem_noc SLAVE_LLCC QCOM_ICC_TAG_ACTIVE_ONLY>,
+ 					<&mc_virt MASTER_LLCC QCOM_ICC_TAG_ACTIVE_ONLY
+@@ -483,6 +499,866 @@ memory@a0000000 {
+ 		reg = <0 0xa0000000 0 0>;
+ 	};
  
- 			l2_700: l2-cache {
++	cpu0_opp_table: opp-table-cpu0 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-307200000 {
++			opp-hz = /bits/ 64 <307200000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-364800000 {
++			opp-hz = /bits/ 64 <364800000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-460800000 {
++			opp-hz = /bits/ 64 <460800000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (384000 * 32)>;
++		};
++
++		opp-556800000 {
++			opp-hz = /bits/ 64 <556800000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (499200 * 32)>;
++		};
++
++		opp-672000000 {
++			opp-hz = /bits/ 64 <672000000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (499200 * 32)>;
++		};
++
++		opp-787200000 {
++			opp-hz = /bits/ 64 <787200000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (729600 * 32)>;
++		};
++
++		opp-902400000 {
++			opp-hz = /bits/ 64 <902400000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (844800 * 32)>;
++		};
++
++		opp-1017600000 {
++			opp-hz = /bits/ 64 <1017600000>;
++			opp-peak-kBps = <(466000 * 16) (547000 * 4) (940800 * 32)>;
++		};
++
++		opp-1132800000 {
++			opp-hz = /bits/ 64 <1132800000>;
++			opp-peak-kBps = <(466000 * 16) (547000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1248000000 {
++			opp-hz = /bits/ 64 <1248000000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (1132800 * 32)>;
++		};
++
++		opp-1344000000 {
++			opp-hz = /bits/ 64 <1344000000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1440000000 {
++			opp-hz = /bits/ 64 <1440000000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1459200000 {
++			opp-hz = /bits/ 64 <1459200000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1536000000 {
++			opp-hz = /bits/ 64 <1536000000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (1440000 * 32)>;
++		};
++
++		opp-1574400000 {
++			opp-hz = /bits/ 64 <1574400000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (1440000 * 32)>;
++		};
++
++		opp-1651200000 {
++			opp-hz = /bits/ 64 <1651200000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (1440000 * 32)>;
++		};
++
++		opp-1689600000 {
++			opp-hz = /bits/ 64 <1689600000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (1440000 * 32)>;
++		};
++
++		opp-1747200000 {
++			opp-hz = /bits/ 64 <1747200000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (1440000 * 32)>;
++		};
++
++		opp-1804800000 {
++			opp-hz = /bits/ 64 <1804800000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (1555200 * 32)>;
++		};
++
++		opp-1843200000 {
++			opp-hz = /bits/ 64 <1843200000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (1555200 * 32)>;
++		};
++
++		opp-1920000000 {
++			opp-hz = /bits/ 64 <1920000000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (1651200 * 32)>;
++		};
++
++		opp-1939200000 {
++			opp-hz = /bits/ 64 <1939200000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (1651200 * 32)>;
++		};
++
++		opp-2035200000 {
++			opp-hz = /bits/ 64 <2035200000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2150400000 {
++			opp-hz = /bits/ 64 <2150400000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2265600000 {
++			opp-hz = /bits/ 64 <2265600000>;
++			opp-peak-kBps = <(600000 * 16) (1555000 * 4) (2035200 * 32)>;
++		};
++	};
++
++	cpu2_opp_table: opp-table-cpu2 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-460800000 {
++			opp-hz = /bits/ 64 <460800000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-499200000 {
++			opp-hz = /bits/ 64 <499200000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-576000000 {
++			opp-hz = /bits/ 64 <576000000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-614400000 {
++			opp-hz = /bits/ 64 <614400000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (499200 * 32)>;
++		};
++
++		opp-691200000 {
++			opp-hz = /bits/ 64 <691200000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-729600000 {
++			opp-hz = /bits/ 64 <729600000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-806400000 {
++			opp-hz = /bits/ 64 <806400000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-844800000 {
++			opp-hz = /bits/ 64 <844800000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-902400000 {
++			opp-hz = /bits/ 64 <902400000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-960000000 {
++			opp-hz = /bits/ 64 <960000000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (844800 * 32)>;
++		};
++
++		opp-1036800000 {
++			opp-hz = /bits/ 64 <1036800000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (844800 * 32)>;
++		};
++
++		opp-1075200000 {
++			opp-hz = /bits/ 64 <1075200000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (844800 * 32)>;
++		};
++
++		opp-1152000000 {
++			opp-hz = /bits/ 64 <1152000000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (844800 * 32)>;
++		};
++
++		opp-1190400000 {
++			opp-hz = /bits/ 64 <1190400000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1267200000 {
++			opp-hz = /bits/ 64 <1267200000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1286400000 {
++			opp-hz = /bits/ 64 <1286400000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1382400000 {
++			opp-hz = /bits/ 64 <1382400000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1401600000 {
++			opp-hz = /bits/ 64 <1401600000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1497600000 {
++			opp-hz = /bits/ 64 <1497600000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1612800000 {
++			opp-hz = /bits/ 64 <1612800000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1708800000 {
++			opp-hz = /bits/ 64 <1708800000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1728000000 {
++			opp-hz = /bits/ 64 <1728000000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1824000000 {
++			opp-hz = /bits/ 64 <1824000000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1843200000 {
++			opp-hz = /bits/ 64 <1843200000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1920000000 {
++			opp-hz = /bits/ 64 <1920000000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1440000 * 32)>;
++		};
++
++		opp-1958400000 {
++			opp-hz = /bits/ 64 <1958400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2035200000 {
++			opp-hz = /bits/ 64 <2035200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2073600000 {
++			opp-hz = /bits/ 64 <2073600000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2131200000 {
++			opp-hz = /bits/ 64 <2131200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2188800000 {
++			opp-hz = /bits/ 64 <2188800000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2246400000 {
++			opp-hz = /bits/ 64 <2246400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2304000000 {
++			opp-hz = /bits/ 64 <2304000000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2323200000 {
++			opp-hz = /bits/ 64 <2323200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2380800000 {
++			opp-hz = /bits/ 64 <2380800000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2400000000 {
++			opp-hz = /bits/ 64 <2400000000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2438400000 {
++			opp-hz = /bits/ 64 <2438400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2515200000 {
++			opp-hz = /bits/ 64 <2515200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2572800000 {
++			opp-hz = /bits/ 64 <2572800000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1651200 * 32)>;
++		};
++
++		opp-2630400000 {
++			opp-hz = /bits/ 64 <2630400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1651200 * 32)>;
++		};
++
++		opp-2707200000 {
++			opp-hz = /bits/ 64 <2707200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1651200 * 32)>;
++		};
++
++		opp-2764800000 {
++			opp-hz = /bits/ 64 <2764800000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2841600000 {
++			opp-hz = /bits/ 64 <2841600000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2899200000 {
++			opp-hz = /bits/ 64 <2899200000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2956800000 {
++			opp-hz = /bits/ 64 <2956800000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-3014400000 {
++			opp-hz = /bits/ 64 <3014400000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-3072000000 {
++			opp-hz = /bits/ 64 <3072000000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-3148800000 {
++			opp-hz = /bits/ 64 <3148800000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (2035200 * 32)>;
++		};
++	};
++
++	cpu5_opp_table: opp-table-cpu5 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-460800000 {
++			opp-hz = /bits/ 64 <460800000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-499200000 {
++			opp-hz = /bits/ 64 <499200000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-576000000 {
++			opp-hz = /bits/ 64 <576000000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-614400000 {
++			opp-hz = /bits/ 64 <614400000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (499200 * 32)>;
++		};
++
++		opp-691200000 {
++			opp-hz = /bits/ 64 <691200000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-729600000 {
++			opp-hz = /bits/ 64 <729600000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-806400000 {
++			opp-hz = /bits/ 64 <806400000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-844800000 {
++			opp-hz = /bits/ 64 <844800000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-902400000 {
++			opp-hz = /bits/ 64 <902400000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-960000000 {
++			opp-hz = /bits/ 64 <960000000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (844800 * 32)>;
++		};
++
++		opp-1036800000 {
++			opp-hz = /bits/ 64 <1036800000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (844800 * 32)>;
++		};
++
++		opp-1075200000 {
++			opp-hz = /bits/ 64 <1075200000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (844800 * 32)>;
++		};
++
++		opp-1152000000 {
++			opp-hz = /bits/ 64 <1152000000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (844800 * 32)>;
++		};
++
++		opp-1190400000 {
++			opp-hz = /bits/ 64 <1190400000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1267200000 {
++			opp-hz = /bits/ 64 <1267200000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1286400000 {
++			opp-hz = /bits/ 64 <1286400000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1382400000 {
++			opp-hz = /bits/ 64 <1382400000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1401600000 {
++			opp-hz = /bits/ 64 <1401600000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1497600000 {
++			opp-hz = /bits/ 64 <1497600000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1612800000 {
++			opp-hz = /bits/ 64 <1612800000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1708800000 {
++			opp-hz = /bits/ 64 <1708800000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1728000000 {
++			opp-hz = /bits/ 64 <1728000000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1824000000 {
++			opp-hz = /bits/ 64 <1824000000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1843200000 {
++			opp-hz = /bits/ 64 <1843200000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1920000000 {
++			opp-hz = /bits/ 64 <1920000000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1440000 * 32)>;
++		};
++
++		opp-1958400000 {
++			opp-hz = /bits/ 64 <1958400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2035200000 {
++			opp-hz = /bits/ 64 <2035200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2073600000 {
++			opp-hz = /bits/ 64 <2073600000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2131200000 {
++			opp-hz = /bits/ 64 <2131200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2188800000 {
++			opp-hz = /bits/ 64 <2188800000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2246400000 {
++			opp-hz = /bits/ 64 <2246400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2304000000 {
++			opp-hz = /bits/ 64 <2304000000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2323200000 {
++			opp-hz = /bits/ 64 <2323200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2380800000 {
++			opp-hz = /bits/ 64 <2380800000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2400000000 {
++			opp-hz = /bits/ 64 <2400000000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2438400000 {
++			opp-hz = /bits/ 64 <2438400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2515200000 {
++			opp-hz = /bits/ 64 <2515200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2572800000 {
++			opp-hz = /bits/ 64 <2572800000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1651200 * 32)>;
++		};
++
++		opp-2630400000 {
++			opp-hz = /bits/ 64 <2630400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1651200 * 32)>;
++		};
++
++		opp-2707200000 {
++			opp-hz = /bits/ 64 <2707200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1651200 * 32)>;
++		};
++
++		opp-2764800000 {
++			opp-hz = /bits/ 64 <2764800000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2841600000 {
++			opp-hz = /bits/ 64 <2841600000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2899200000 {
++			opp-hz = /bits/ 64 <2899200000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2956800000 {
++			opp-hz = /bits/ 64 <2956800000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-3014400000 {
++			opp-hz = /bits/ 64 <3014400000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-3072000000 {
++			opp-hz = /bits/ 64 <3072000000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-3148800000 {
++			opp-hz = /bits/ 64 <3148800000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (2035200 * 32)>;
++		};
++	};
++
++	cpu7_opp_table: opp-table-cpu7 {
++		compatible = "operating-points-v2";
++		opp-shared;
++
++		opp-480000000 {
++			opp-hz = /bits/ 64 <480000000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-499200000 {
++			opp-hz = /bits/ 64 <499200000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-576000000 {
++			opp-hz = /bits/ 64 <576000000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (307200 * 32)>;
++		};
++
++		opp-614400000 {
++			opp-hz = /bits/ 64 <614400000>;
++			opp-peak-kBps = <(300000 * 16) (547000 * 4) (499200 * 32)>;
++		};
++
++		opp-672000000 {
++			opp-hz = /bits/ 64 <672000000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-729600000 {
++			opp-hz = /bits/ 64 <729600000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-787200000 {
++			opp-hz = /bits/ 64 <787200000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-844800000 {
++			opp-hz = /bits/ 64 <844800000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-902400000 {
++			opp-hz = /bits/ 64 <902400000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-940800000 {
++			opp-hz = /bits/ 64 <940800000>;
++			opp-peak-kBps = <(466000 * 16) (768000 * 4) (499200 * 32)>;
++		};
++
++		opp-1017600000 {
++			opp-hz = /bits/ 64 <1017600000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (844800 * 32)>;
++		};
++
++		opp-1075200000 {
++			opp-hz = /bits/ 64 <1075200000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (844800 * 32)>;
++		};
++
++		opp-1132800000 {
++			opp-hz = /bits/ 64 <1132800000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (844800 * 32)>;
++		};
++
++		opp-1190400000 {
++			opp-hz = /bits/ 64 <1190400000>;
++			opp-peak-kBps = <(466000 * 16) (1555000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1248000000 {
++			opp-hz = /bits/ 64 <1248000000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1305600000 {
++			opp-hz = /bits/ 64 <1305600000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1363200000 {
++			opp-hz = /bits/ 64 <1363200000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1036800 * 32)>;
++		};
++
++		opp-1420800000 {
++			opp-hz = /bits/ 64 <1420800000>;
++			opp-peak-kBps = <(600000 * 16) (2092000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1478400000 {
++			opp-hz = /bits/ 64 <1478400000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1555200000 {
++			opp-hz = /bits/ 64 <1555200000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1593600000 {
++			opp-hz = /bits/ 64 <1593600000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1670400000 {
++			opp-hz = /bits/ 64 <1670400000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1708800000 {
++			opp-hz = /bits/ 64 <1708800000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1804800000 {
++			opp-hz = /bits/ 64 <1804800000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1824000000 {
++			opp-hz = /bits/ 64 <1824000000>;
++			opp-peak-kBps = <(806000 * 16) (2736000 * 4) (1248000 * 32)>;
++		};
++
++		opp-1939200000 {
++			opp-hz = /bits/ 64 <1939200000>;
++			opp-peak-kBps = <(806000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2035200000 {
++			opp-hz = /bits/ 64 <2035200000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2073600000 {
++			opp-hz = /bits/ 64 <2073600000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2112000000 {
++			opp-hz = /bits/ 64 <2112000000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2169600000 {
++			opp-hz = /bits/ 64 <2169600000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2208000000 {
++			opp-hz = /bits/ 64 <2208000000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2246400000 {
++			opp-hz = /bits/ 64 <2246400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2304000000 {
++			opp-hz = /bits/ 64 <2304000000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2342400000 {
++			opp-hz = /bits/ 64 <2342400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2380800000 {
++			opp-hz = /bits/ 64 <2380800000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2438400000 {
++			opp-hz = /bits/ 64 <2438400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2457600000 {
++			opp-hz = /bits/ 64 <2457600000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2496000000 {
++			opp-hz = /bits/ 64 <2496000000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2553600000 {
++			opp-hz = /bits/ 64 <2553600000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1440000 * 32)>;
++		};
++
++		opp-2630400000 {
++			opp-hz = /bits/ 64 <2630400000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1651200 * 32)>;
++		};
++
++		opp-2688000000 {
++			opp-hz = /bits/ 64 <2688000000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1651200 * 32)>;
++		};
++
++		opp-2745600000 {
++			opp-hz = /bits/ 64 <2745600000>;
++			opp-peak-kBps = <(933000 * 16) (3686000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2803200000 {
++			opp-hz = /bits/ 64 <2803200000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2880000000 {
++			opp-hz = /bits/ 64 <2880000000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2937600000 {
++			opp-hz = /bits/ 64 <2937600000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-2995200000 {
++			opp-hz = /bits/ 64 <2995200000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-3052800000 {
++			opp-hz = /bits/ 64 <3052800000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (1843200 * 32)>;
++		};
++
++		opp-3187200000 {
++			opp-hz = /bits/ 64 <3187200000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (2035200 * 32)>;
++		};
++
++		opp-3302400000 {
++			opp-hz = /bits/ 64 <3302400000>;
++			opp-peak-kBps = <(1066000 * 16) (4224000 * 4) (2035200 * 32)>;
++		};
++	};
++
+ 	pmu-a520 {
+ 		compatible = "arm,cortex-a520-pmu";
+ 		interrupts = <GIC_PPI 7 IRQ_TYPE_LEVEL_LOW>;
 
 -- 
 2.34.1
