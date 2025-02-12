@@ -1,169 +1,162 @@
-Return-Path: <linux-pm+bounces-21940-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A54ECA320DB
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 09:22:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7A856A320B8
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 09:15:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 575CA164AE9
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 08:22:07 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E27271640F7
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 08:15:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 547F3204F62;
-	Wed, 12 Feb 2025 08:22:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D89A4204F77;
+	Wed, 12 Feb 2025 08:15:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="i4xVd5f1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1722C1E9B3B
-	for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 08:22:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A80D1EB9E7
+	for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 08:15:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739348524; cv=none; b=NUKy21Y9r4S8z7JISHia+T8eDlgVn/Tem3HjtmOZZRWU65YdufM2vunX9OEsZz1gKzw0Bl7AwRL9zHCP+LHQ+UhrO7xIC571zM6e6xLZ9vO6uMo45cXBFoBlqdj82JgYqA7w6arZvoct8KxhMxifUv7SI5YwIXB+YBl9g7svUzo=
+	t=1739348137; cv=none; b=AP3B9Sa/KNS7YPSbvfL+Y1NwI856zqARV4vSLOQ7LtCuaJVVTjR/UvM6qRaaYTiayV0Ec84itGSUlpY402J8OAC6cOgKMuuz7FqIQlgmz592B6H+Pt3dQgiuCmtAt8nM1KHvfnLcam111TfuN+0JzM9a9YQ9GijyDy6phgBZxZg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739348524; c=relaxed/simple;
-	bh=FuT1ASiQrvpwE46UW9tiK9Q2X0rqNLK50CHk+F6Fnh8=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ZY9UxRwdw/20mR0Nq/2Po76/MhqQJTW5JYfmhsijKyCJYhtSXcX6MnxbMxn8yszkkreglEdbs6k/0NYfDJGaQFq0iMZtIMO6zDpiedRVGjY3QtI+YkcQP4EpEAP1YHCBIqqFgGlokIHxDOKLRt+194/VZk5uSVr50j8HK7ib5u0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
-Received: from mail.maildlp.com (unknown [172.19.88.105])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YtB4p6fGkz11PbB;
-	Wed, 12 Feb 2025 16:17:30 +0800 (CST)
-Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
-	by mail.maildlp.com (Postfix) with ESMTPS id 13BA6140258;
-	Wed, 12 Feb 2025 16:21:58 +0800 (CST)
-Received: from localhost.localdomain (10.90.30.45) by
- kwepemo100006.china.huawei.com (7.202.195.47) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.11; Wed, 12 Feb 2025 16:21:57 +0800
-From: Jie Zhan <zhanjie9@hisilicon.com>
-To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <yu.c.chen@intel.com>, <linuxarm@huawei.com>,
-	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
-	<zhenglifeng1@huawei.com>, <lihuisong@huawei.com>, <wanghuiqiang@huawei.com>,
-	<fanghao11@huawei.com>, <prime.zeng@hisilicon.com>
-Subject: [PATCH v2] cpufreq: governor: Fix negative 'idle_time' handling in dbs_update()
-Date: Wed, 12 Feb 2025 16:14:38 +0800
-Message-ID: <20250212081438.1294503-1-zhanjie9@hisilicon.com>
-X-Mailer: git-send-email 2.30.0
+	s=arc-20240116; t=1739348137; c=relaxed/simple;
+	bh=pqSWrSKDZu2W3AsjSYgllmcKNDjNEXWE7Ff4oLEDdIg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=H0zxy1SM82iY0EnknFkuLDicT+n9pIFrdNUqnADf9saj/UtoYCd+6efwho8HAmZeqsIiWitatGQggl6dUjF/hmHhDKX15ME+o4SJY6IBPtjlaoRoFi6v1zixgeK9mddyuvnGfNZ9FoEGiKi5/1gFz+enfQQGtwhgnJ1tUlCV1ww=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=i4xVd5f1; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aaedd529ba1so792119466b.1
+        for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 00:15:34 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1739348133; x=1739952933; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=OqxADw0mM/35GjV5ECvP4wRGY3fCb1JBuXcZqTu8EFw=;
+        b=i4xVd5f14CB9wxl+nAc9EGUXVxVSLuYwoNivnE6JYceGuyzJJhV6W80E4pp1eVyWWG
+         bnt//ZhMCzLSUWHE8URMFc29y/CGuSgi21m4hIkrrFp4httbU82kcs9alwJfutWGqv7m
+         HbWrb8rMhF9r6+Ngu6WtSPhQr7xLMsBEe5OaKAFMv2CLkhKzZV56GWb8tRYYptMqBniF
+         B/sPPRJTPBR7aceeiqsscu810IebLyQGyjtrlwDZF1TC/sqyfklom+sd0XVotsthwAzf
+         5P0Ez7IzQycjzZbtJldoAyQ6xzW2fg7W7NjE3/xkoEkJt2W5M/GMUHBgY3xn7IIgL0k2
+         x4kw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739348133; x=1739952933;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=OqxADw0mM/35GjV5ECvP4wRGY3fCb1JBuXcZqTu8EFw=;
+        b=k+nrl131Li1yi5Y0s7EbF0lLEUulfHprunIkCX7lv4dyhh1D+5dzjpoROwTcjCFPg8
+         TU5aHb//tIFGxG22+w04wiHybM3MofTbEwf3paZ1PesXjwWQY6i9/8Af1vN5E0RisfvI
+         RYtRuO4GkI5KtSAZl6PLUqD9Jt2Wn37LFeCAMAwbiVawo4F59PYRUF/cydyuJZHnkGdJ
+         UGBnKi6ZpatTBtL0YgjxQate7Ey8QIdi21aidHRidOTPX1WbXmEiOk7le7jLdXJKnMg8
+         wvZFOiZxJhr04u6p5kCsYnt+b928hJevHwBFwHDIG1X1c//jP1XVPmsWGxN4Rfn4O+c1
+         LXwQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV4w+ORKtma6iUSl4eB1BJlbXiADYdRSrYJaiSTvIpf9D22DijEXqyKMhqT8qeL762YX2sjBlyuJQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8wd/8+JGWlK29ps1kOy582fUJdRqfRF0T4VjzeO3fQhbctoZH
+	5HBQByzrtltkFWSNIb7fzYJ8XqQIx6rpmONw2RYHJOhAuzuet4A7js55nMNOBJQ=
+X-Gm-Gg: ASbGncu5U3P9OIRZSuEEPIT//NoBUyzLZjUCfdmUqaKyKVl31a3BG4MLbz9LFjEvss9
+	5j9i2SlrUQtE9hbzDut8tGqdKVcaygC//DYs4GPJnuOz1cw+c0NV5hl3GdulD+dxTemfdvy98Kv
+	86JjiN8yxI1CyanoVdoukxCi7EyH6bsYOrsXAEegN3BH9+YgYizHKDGgtjwmLEFNa1LVURJqHWZ
+	2C5/fbuXn45X9rqomwPymHfH2I2z2PqMEjxNkj8BfWnVQ0HfU3zbYWu2NmZ7hFZ3Jl2AtYfA3Qz
+	K12kSW8DzELZRiKgg8OCHqKC
+X-Google-Smtp-Source: AGHT+IEbwR6Lyd/Au1yiix8z7N9e//5C4qN6OPaROOH+JFMvGJ7S7t8yx7MVhrpHdvoBh0/u2cudOA==
+X-Received: by 2002:a05:6402:13cc:b0:5dc:caab:9447 with SMTP id 4fb4d7f45d1cf-5deadd9d336mr5364745a12.18.1739348132467;
+        Wed, 12 Feb 2025 00:15:32 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.173])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5de44e4bc17sm9802856a12.70.2025.02.12.00.15.29
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Feb 2025 00:15:31 -0800 (PST)
+Message-ID: <833f642e-a4f5-46ad-8854-0e85598d1be7@tuxon.dev>
+Date: Wed, 12 Feb 2025 10:15:29 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-ClientProxiedBy: dggems705-chm.china.huawei.com (10.3.19.182) To
- kwepemo100006.china.huawei.com (7.202.195.47)
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 11/15] ARM: at91: PM: Add Backup mode for SAMA7D65
+To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+ p.zabel@pengutronix.de
+Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
+ <76a89f1ae5e9c4d337c2a28e4b1d0e5cef63e5fe.1739221064.git.Ryan.Wanner@microchip.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Content-Language: en-US
+In-Reply-To: <76a89f1ae5e9c4d337c2a28e4b1d0e5cef63e5fe.1739221064.git.Ryan.Wanner@microchip.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-We observed an issue that the cpu frequency can't raise up with a 100% cpu
-load when nohz is off and the 'conservative' governor is selected.
+Hi, Ryan,
 
-'idle_time' can be negative if it's obtained from get_cpu_idle_time_jiffy()
-when nohz is off.  This was found and explained in commit 9485e4ca0b48
-("cpufreq: governor: Fix handling of special cases in dbs_update()").
+On 10.02.2025 23:13, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> Add config check that enables Backup mode for SAMA7D65 SoC.
+> 
+> Add SHDWC_SR read to clear the status bits once finished exiting low
+> power modes.
 
-However, commit 7592019634f8 ("cpufreq: governors: Fix long idle detection
-logic in load calculation") introduced a comparison between 'idle_time' and
-'samling_rate' to detect a long idle interval.  While 'idle_time' is
-converted to int before comparison, it's actually promoted to unsigned
-again when compared with an unsigned 'sampling_rate'.  Hence, this leads to
-wrong idle interval detection when it's in fact 100% busy and sets
-policy_dbs->idle_periods to a very large value.  'conservative' adjusts the
-frequency to minimum because of the large 'idle_periods', such that the
-frequency can't raise up.  'Ondemand' doesn't use policy_dbs->idle_periods
-so it fortunately avoids the issue.
+Can you please also explain why? From [1]:
 
-Correct negative 'idle_time' to 0 before any use of it in dbs_update().
+"The text should be written in such detail so that when read weeks, months
+or even years later, it can give the reader the needed details to grasp the
+reasoning for **why** the patch was created."
 
-Fixes: 7592019634f8 ("cpufreq: governors: Fix long idle detection logic in load calculation")
-Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
----
-v2:
-- Avoid type conversion, compare current and previous idle time before
-  obtaining 'idle_time'.
-- Update the explanation in comments.
 
-Discussions:
-v1: https://lore.kernel.org/linux-pm/20250210130659.3533182-1-zhanjie9@hisilicon.com/
----
- drivers/cpufreq/cpufreq_governor.c | 42 ++++++++++++++----------------
- 1 file changed, 19 insertions(+), 23 deletions(-)
+[1] https://www.kernel.org/doc/html/v6.13/process/submitting-patches.html
 
-diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
-index af44ee6a6430..c140e3f8d4f9 100644
---- a/drivers/cpufreq/cpufreq_governor.c
-+++ b/drivers/cpufreq/cpufreq_governor.c
-@@ -145,7 +145,20 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
- 		time_elapsed = update_time - j_cdbs->prev_update_time;
- 		j_cdbs->prev_update_time = update_time;
- 
--		idle_time = cur_idle_time - j_cdbs->prev_cpu_idle;
-+		/*
-+		 * cur_idle_time could be smaller than j_cdbs->prev_cpu_idle if
-+		 * it's obtained from get_cpu_idle_time_jiffy() when NO_HZ is
-+		 * off, where idle_time is calculated by the difference between
-+		 * time elapsed in jiffies and "busy time" obtained from CPU
-+		 * statistics.  If a CPU is 100% busy, the time elapsed and busy
-+		 * time should grow with the same amount in two consecutive
-+		 * samples, but in practice there could be a tiny difference,
-+		 * making the accumulated idle time decrease sometimes.  Hence,
-+		 * in this case, idle_time should be regarded as 0 in order to
-+		 * make the further process correct.
-+		 */
-+		idle_time = cur_idle_time > j_cdbs->prev_cpu_idle ?
-+			    cur_idle_time - j_cdbs->prev_cpu_idle : 0;
- 		j_cdbs->prev_cpu_idle = cur_idle_time;
- 
- 		if (ignore_nice) {
-@@ -162,7 +175,7 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
- 			 * calls, so the previous load value can be used then.
- 			 */
- 			load = j_cdbs->prev_load;
--		} else if (unlikely((int)idle_time > 2 * sampling_rate &&
-+		} else if (unlikely(idle_time > 2 * sampling_rate &&
- 				    j_cdbs->prev_load)) {
- 			/*
- 			 * If the CPU had gone completely idle and a task has
-@@ -189,30 +202,13 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
- 			load = j_cdbs->prev_load;
- 			j_cdbs->prev_load = 0;
- 		} else {
--			if (time_elapsed >= idle_time) {
--				load = 100 * (time_elapsed - idle_time) / time_elapsed;
--			} else {
--				/*
--				 * That can happen if idle_time is returned by
--				 * get_cpu_idle_time_jiffy().  In that case
--				 * idle_time is roughly equal to the difference
--				 * between time_elapsed and "busy time" obtained
--				 * from CPU statistics.  Then, the "busy time"
--				 * can end up being greater than time_elapsed
--				 * (for example, if jiffies_64 and the CPU
--				 * statistics are updated by different CPUs),
--				 * so idle_time may in fact be negative.  That
--				 * means, though, that the CPU was busy all
--				 * the time (on the rough average) during the
--				 * last sampling interval and 100 can be
--				 * returned as the load.
--				 */
--				load = (int)idle_time < 0 ? 100 : 0;
--			}
-+			load = time_elapsed > idle_time ?
-+			       100 * (time_elapsed - idle_time) / time_elapsed :
-+			       0;
- 			j_cdbs->prev_load = load;
- 		}
- 
--		if (unlikely((int)idle_time > 2 * sampling_rate)) {
-+		if (unlikely(idle_time > 2 * sampling_rate)) {
- 			unsigned int periods = idle_time / sampling_rate;
- 
- 			if (periods < idle_periods)
--- 
-2.33.0
+
+> This is only for SAMA7D65 SoCs.
+> 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
+>  arch/arm/mach-at91/pm.c | 6 +++++-
+>  1 file changed, 5 insertions(+), 1 deletion(-)
+> 
+> diff --git a/arch/arm/mach-at91/pm.c b/arch/arm/mach-at91/pm.c
+> index 1eec68e92f8d8..55cab31ce1ecb 100644
+> --- a/arch/arm/mach-at91/pm.c
+> +++ b/arch/arm/mach-at91/pm.c
+> @@ -707,6 +707,9 @@ static int at91_pm_enter(suspend_state_t state)
+>  static void at91_pm_end(void)
+>  {
+>  	at91_pm_config_ws(soc_pm.data.mode, false);
+> +
+> +	if (IS_ENABLED(CONFIG_SOC_SAMA7D65))
+> +		readl(soc_pm.data.shdwc + 0x08);
+
+Can you please add a comment near explaining what 0x08 offset means (search
+for "SHDWC.MR" in this file for an example)?
+
+Is this cleanup needed only for backup mode or for all of them. If only for
+backup you can move it in at91_pm_suspend() after fncpy().
+
+Thank you,
+Claudiu
+
+>  }
+>  
+>  
+> @@ -1065,7 +1068,8 @@ static int __init at91_pm_backup_init(void)
+>  	int ret = -ENODEV, located = 0;
+>  
+>  	if (!IS_ENABLED(CONFIG_SOC_SAMA5D2) &&
+> -	    !IS_ENABLED(CONFIG_SOC_SAMA7G5))
+> +	    !IS_ENABLED(CONFIG_SOC_SAMA7G5) &&
+> +	    !IS_ENABLED(CONFIG_SOC_SAMA7D65))
+>  		return -EPERM;
+>  
+>  	if (!at91_is_pm_mode_active(AT91_PM_BACKUP))
 
 
