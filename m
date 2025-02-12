@@ -1,175 +1,124 @@
-Return-Path: <linux-pm+bounces-21930-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21931-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 38F35A31F6C
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 07:48:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CE1F8A31F9F
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 08:05:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id F2FA07A36BA
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 06:47:36 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0B5E7A2BEB
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 07:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 385641FFC7D;
-	Wed, 12 Feb 2025 06:47:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5F61FF1B7;
+	Wed, 12 Feb 2025 07:04:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MBljoS2m"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LR5eoN8V"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F1BC01FDE29;
-	Wed, 12 Feb 2025 06:47:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661B81E9B04;
+	Wed, 12 Feb 2025 07:04:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739342871; cv=none; b=UcA+YjHiO/Em4eyI5VOImyfvltGo0BW/sLm6CFVv29c2q9u3vHg62FWaIhG/A7CeDPebY9ca4icJolixSj5d5c+n11LTG8NCy8HfsKO+fMoxEDytGEaUckVMj+ObgRtnhWZ3BjeFrwYHrrrO489gRjMnWbpeYoa+njc+EQdvtwM=
+	t=1739343896; cv=none; b=fM7mFyBdj8yHObWamUYFxlJ4aHy82B/NOR+BPfNXwJTDrDrO141yIQnDV/u/EDm41idEaYSQkxvT1+uRR1QpnLCO3Wp9hoyw22s77dGH3gSnV0+K7uLp9s9Vq0V7PfRGrUk3oc45XX5yoDh5nKA7BfnsWu9GD0BKJ+b+PX0QZc8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739342871; c=relaxed/simple;
-	bh=/F92a0PMj0AuZbrbMu9wxJhq5HMJEJQzyLLYQ86jWU8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=hppJaB3f2aDRre5CNUz+XXavgDpwdvQmAeNWxCoveAVuwW9sndd0weayJIBRCT412PhFHMyB7l9+d9OSAHcemY3KxSILJ1FCdBrq91qlH447s+DtI5jduSxcpj54k0IF3jHObbgsUGymg+ctSoFXUscYgUFh9iWlJWFo5PlJdBw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MBljoS2m; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 54739C4CEDF;
-	Wed, 12 Feb 2025 06:47:40 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739342870;
-	bh=/F92a0PMj0AuZbrbMu9wxJhq5HMJEJQzyLLYQ86jWU8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=MBljoS2mFaRBTWOAOOSTIRDgJjPSYKcBUs5MTVj2TFmFs4ZEOJXb6+TA8S/5Zu9+N
-	 Ro5L1SRP2I9C+8/Whz8NksM9HOph6zGftNKXKC+d3qXj2GbaVU+oEerFfyLunnmX1m
-	 L4uSddtwdxEya4/cpEEHvq6qaeFGejYYzrp1mJ14Fv6mzvu4YMi095UmaCHPSg4Rxu
-	 c88emxhMP4UmUf+/lh7gX/82BeJvaMekhyfwgBIef4YUDxP+QN6jfsLyGw2JSHGNgD
-	 77++I8W9BzD82JoVMM8nIVQcGRgT56ZRPJkfMWnnLYi232Y9Ju5TkAF+28zj6Q0TlH
-	 y5klYmXKvExBg==
-Message-ID: <b9aa7771-0b94-4b1c-815b-7c22f779d91e@kernel.org>
-Date: Wed, 12 Feb 2025 07:47:37 +0100
+	s=arc-20240116; t=1739343896; c=relaxed/simple;
+	bh=XZknmyTZpuJ/vYhf9yhvHpuHXU7uvg3lPc+DRXtI5S4=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=uWDnedZaFOCHl30Wn8z5rPG4mbjoooZGwlXDS7PhvF/26IwMx1DQc9k1P0biAdF0fCzxll5V1kcpUPptCWESVHsnaXeqfGcDWUQT75NUgvG4wql4tac8HkOFSxa7wJLVUuT8seLGnSz7eezlEytp6hmHG9mPEvP3nveRX9+BAag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LR5eoN8V; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ab7d58aa674so322785666b.0;
+        Tue, 11 Feb 2025 23:04:54 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739343893; x=1739948693; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XZknmyTZpuJ/vYhf9yhvHpuHXU7uvg3lPc+DRXtI5S4=;
+        b=LR5eoN8VCCD2U2alOwqZWW+nzvNQQqwyS7jcqdcypgSMNGS0CYl7e+qzFM67gD2QW4
+         TEmWG4u8dp8nFgg/bnHWdmof4PDOORgO4ODYuAIrLKjzb5xrq7Y5fEqWXAtHgrP7Qqn8
+         U1aODSPbpp61cqCtQ9mVajxb9UFcxdTGtZ17bk8sJSPpr13O55wodvUsVYqZC9HplVW0
+         aOoGMl/2TFVqMYsvRqz7IxYYqkHGb4psA+vmwLXQRqQToZvUtxeTWcMo3tF6V1ozcbu4
+         RUbu1Q6MBTEPlgVh70DTgX4Zvb6h7TJ2Y6Mq/H+gBGxbQ1EMdCjfuAjhFPKJmN+2pg28
+         Py5g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739343893; x=1739948693;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=XZknmyTZpuJ/vYhf9yhvHpuHXU7uvg3lPc+DRXtI5S4=;
+        b=gUtowyFr7vIEGOukL4BkdD9v8Z95MJjOsad93ohisxuIDV8W6a+0+zgcun6gOwx5XZ
+         235CrB9LXbuT83Igx/hARPq7LbiHlUjCDoObVvWvgt+dpNwEois/5FS7foZGszoI5fpH
+         yPXpkTIgNiL45ePpsMeqSFMTKJc/nnnLGJPerQFMu0G71PpkoyAHiInqh+4Z8XdW+P9Y
+         27WTtUvb8ZLJhWf73NkF5+BR3YQTsB9EMlgMtaDRh34+wiaOLEO4xrS8twG8jQisXEUL
+         rbpfl8rrQhUk5m+4/8upFSyq+OVJ1/5LxSkrBAfaCMboU3NMqJ2+kJ3EaXZtlcJ+i+xo
+         J34A==
+X-Forwarded-Encrypted: i=1; AJvYcCUsSjxyiLNkwQUs9DQiYlkSKY0z22JsvXzNB8tsxos4/BYVzAUQSeomv5MNvZzOL3YttdDIJ+42x6o=@vger.kernel.org, AJvYcCX1doEHSIIJnBNz0vrbsW6Q7EblXUWEkXvBJNcYFe8wSsprf0qEeUy4ZvT34qCZKyoSmyKmfb3r8tI=@vger.kernel.org, AJvYcCXAycuMB+6QdZUSwrflS4oPy2Y9LS7k8EqtiJpat+SeONnT2NjPPlA7Da5OBLaHDh7gjLmoG/XkKLRzCvn2@vger.kernel.org
+X-Gm-Message-State: AOJu0YyWyuafMc8moH/ReB8qouZXUHZug4CoLPdNK4p7/cVsRts4Eh0+
+	SayP85+Z7LGfACAyG8kJpFLeNuTG78cA/sJJODPenqi/dZfVPPby
+X-Gm-Gg: ASbGncsMXwMb1iXRiF2Cx3K4L3xnFnTKvFM+9fJ1oxYRnJQJesnZMfr//F2Nhc5hizN
+	mDxoCn4esle1Z+gFMi9oOaH/q0yF1sh11FUmcRBSgzPwa2PfWGwqoBaswCFWH4aW+zJOLAHbQ1R
+	q5iJ8n7Dm0Vu7Wd56wGRB6/IsKFt2Y+KWV7rGv2QY2rmqiLfLB0BBEfKsKEuvEbv8E8IiLILUwW
+	PeL6ySP4xG3cLS0E33TXqM1Td88+Qqs2GhKL1aHkWFZcHMib4U8Je/qPBHT/gH0wgxCtZXkuSvZ
+	nEOhE/z9T2YlH4AP+reyLGSpSD/oQEN8zj078mkt1GQyrw==
+X-Google-Smtp-Source: AGHT+IFw0knxSS8K/s8LJBCcVpkUFKsw4fDsN4n1F+1zZY89z/X1MaaaItGkcnvBdrGg9qkLRY5BVA==
+X-Received: by 2002:a17:907:7288:b0:ab7:d06d:b4bf with SMTP id a640c23a62f3a-ab7f34af30emr143645666b.39.1739343892477;
+        Tue, 11 Feb 2025 23:04:52 -0800 (PST)
+Received: from abityuts-desk1.ger.corp.intel.com ([134.191.196.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7e8050dd2sm222571166b.136.2025.02.11.23.04.50
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Feb 2025 23:04:51 -0800 (PST)
+Message-ID: <6417e41c8564fccbeb97babb14656988e6b2ac7a.camel@gmail.com>
+Subject: Re: [PATCH v3] intel_idle: introduce 'no_native' module parameter
+From: Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To: David Arcari <darcari@redhat.com>, linux-pm@vger.kernel.org
+Cc: Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>, Prarit
+ Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Wed, 12 Feb 2025 09:04:49 +0200
+In-Reply-To: <20250211132741.99944-1-darcari@redhat.com>
+References: <20250128141139.2033088-1-darcari@redhat.com>
+	 <20250211132741.99944-1-darcari@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2 1/5] dt-bindings: thermal: Add MBG thermal monitor
- support
-To: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, Jonathan Cameron <jic23@kernel.org>,
- Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>,
- Stephen Boyd <sboyd@kernel.org>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- Bjorn Andersson <andersson@kernel.org>,
- Konrad Dybcio <konradybcio@kernel.org>, Ajit Pandey
- <quic_ajipan@quicinc.com>, Imran Shaik <quic_imrashai@quicinc.com>,
- Taniya Das <quic_tdas@quicinc.com>, Jagadeesh Kona <quic_jkona@quicinc.com>,
- quic_kamalw@quicinc.com, quic_jprakash@quicinc.com,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-iio@vger.kernel.org
-References: <20241212-mbg-v2-support-v2-0-3249a4339b6e@quicinc.com>
- <20241212-mbg-v2-support-v2-1-3249a4339b6e@quicinc.com>
- <ojukpywkhu72cimujmijzidf26654g5vkjaj477imcf4suz2o6@cmow62jcqsfz>
- <7a5db383-914c-4c1e-846e-5d68cc6a7765@quicinc.com>
- <fcd718be-fe8a-466f-bd2b-7b75d5f8dd6c@kernel.org>
- <c85903c6-6a89-4382-bfa2-2fed95f0cbc0@kernel.org>
- <aec622a8-bc3f-4ecb-a020-72f1634b7bed@quicinc.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <aec622a8-bc3f-4ecb-a020-72f1634b7bed@quicinc.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
 
-On 12/02/2025 07:24, Satya Priya Kakitapalli wrote:
-> 
-> On 2/11/2025 5:20 PM, Krzysztof Kozlowski wrote:
->> On 11/02/2025 12:46, Krzysztof Kozlowski wrote:
->>> On 11/02/2025 12:15, Satya Priya Kakitapalli wrote:
->>>> On 12/13/2024 2:08 PM, Krzysztof Kozlowski wrote:
->>>>> On Thu, Dec 12, 2024 at 09:41:20PM +0530, Satya Priya Kakitapalli wrote:
->>>>>> +
->>>>>> +required:
->>>>>> +  - compatible
->>>>>> +  - reg
->>>>>> +  - interrupts
->>>>>> +  - io-channels
->>>>>> +  - io-channel-names
->>>>> Binding looks ok, but this wasn't tested due to unneeded dependency.
->>>>> Please decouple from dependency, so automation can properly test it.
->>>>
->>>> The dependency is needed because this mbg peripheral is present on only
->>>> targets which have GEN3 ADC5, for which the bindings support is added in
->>>> the series [1]
->>>>
->>>>
->>>> [1]
->>>> https://lore.kernel.org/linux-arm-msm/c4ca0a4c-e421-4cf6-b073-8e9019400f4c@quicinc.com/
->>> Sure. Then this cannot be merged due to resulting test failure.
->>>
->>> Please don't post new versions before this can be actually tested and
->>> applied.
->> Heh, you responded *after two months*, to an old email so even previous
->> discussion is gone from my inbox.
-> 
-> 
-> Sorry about that, I initially misunderstood it was regarding the b4 deps 
-> I created. I wanted to confirm before posting new version yesterday, 
-> hence clarified about the dependency.
+On Tue, 2025-02-11 at 08:27 -0500, David Arcari wrote:
+> Since commit 18734958e9bf ("intel_idle: Use ACPI _CST for processor model=
+s
+> without C-state tables") the intel_idle driver has had the ability to use
+> the ACPI _CST to populate C-states when the processor model is not
+> recognized. However, even when the processor model is recognized (native
+> mode) there are cases where it is useful to make the driver ignore the pe=
+r
+> cpu idle states in lieu of ACPI C-states (such as specific application
+> performance). Add the 'no_native' module parameter to provide this
+> functionality.
+>=20
+> Cc: Jonathan Corbet <corbet@lwn.net>
+> Cc: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> Cc: Len Brown <lenb@kernel.org>
+> Cc: David Arcari <darcari@redhat.com>
+> Cc: Artem Bityutskiy <dedekind1@gmail.com>
+> Cc: Prarit Bhargava <prarit@redhat.com>
+> Cc: linux-doc@vger.kernel.org
+> Cc: linux-kernel@vger.kernel.org
+> Signed-off-by: David Arcari <darcari@redhat.com>
+> ---
+> v3: more documentation cleanup
+> v2: renamed parameter, cleaned up documentation
 
-
-Please correct me if I understood:
-After two months you responded dependency is needed. Dependency means
-this cannot be merged. You want to confirm if you can post new version.
-
-In that case depends on the dependency. If it is still there, it won't
-be possible to merge it, right? Or maybe it is not there, but it is not
-us who should guess it but you should tell us.
-
-Best regards,
-Krzysztof
+Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
