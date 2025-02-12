@@ -1,180 +1,186 @@
-Return-Path: <linux-pm+bounces-21944-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21945-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 147AEA321D1
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 10:13:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id A56D2A3221E
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 10:28:45 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7CCCA1612DD
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 09:12:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCB681887142
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 09:28:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7181A205ADA;
-	Wed, 12 Feb 2025 09:12:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 805B42063C4;
+	Wed, 12 Feb 2025 09:28:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rYKmR1Hg"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IuL9uzUu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9AE201D63C0
-	for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 09:12:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6279A205E24;
+	Wed, 12 Feb 2025 09:28:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739351575; cv=none; b=S3lqDzLT6XILfoRy1tOdUjJ2zBRT6b9NJbMMhfb8R58lCJfrsB1Fj/1lItZWAffDZ0YXJQyPQLkN51lUOiTi3MfjAD27YYfMIYQ6kKoUw+U27/YoiGvjsTkTd3/ieQbDJ8voIBtaEPdxzbU8WYkUPOv30Q+VONViRMi/UA79yO8=
+	t=1739352519; cv=none; b=rzEhl388prYzY1vlobBnHF973RnC4P1ICx5/+NgfyS/J3rEGhE1brJRRo+v6Y5ubBUAoNOyqghWrPTmNzjbNykfJRifUcLVHdC8+iTYB6mmbRlkV7v20msAqtSViXnpNEKw0HMO5lHcBTltxDrMQYvHrUTSiDKzlBlABDQ0NdjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739351575; c=relaxed/simple;
-	bh=VszNZ+tOcSRZmD+6PTeoB4E5xsU2P0ZBHqIsfJ80K+0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Wwd7RhviwvyIqB8Y2VR2uTI4zYE76kjFgR8dkO4aleU1SotfkyFss27AsEWVfuCe7JGmn9wCl73S9WfRkWOgD+0gyuSdPYX/zZNXety6F/H2e2IgMN1ZhqOTAvYcv3m+ls6nMXGZqccwOxrR+yIMYTo6iSCJBv/FrKnbjA3Jz/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rYKmR1Hg; arc=none smtp.client-ip=209.85.219.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e549be93d5eso6311422276.1
-        for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 01:12:53 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739351572; x=1739956372; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=M4qmugdZ8b2EBLGeykukgskjWNLfUcPNwqpBmF/6qK8=;
-        b=rYKmR1HgE0KHLpkEcnd5wMVaTPVxl4+6hPviv44hQjmho75FHKAzPFoD86mpW6fJZj
-         1fNLjknMQVBH0Wc09hFtZKHelR+cjQ3sYD/gB/t3qDPhUcAivYMgmt4BEUNCNOoHkkLL
-         jHP0oF9gu1FolN2MChw/cjRv8PhmUITPPJJLr0Z7TwoMjEPJDfPE12O/ohGBb6qIwv2v
-         FTM1fX2d+9Pyu0YyW2KKbHJbs4QdPq3VZtpIzmeKL/oH5wS/On96RSZyEhkeU/yK8Oj7
-         dmlf8cqukDSqOUC3QfWXog9G4ruQkrCfFqEwKhuGCGrqM3WPY8wXW7TboDVBbiSxpFa4
-         0m4g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739351572; x=1739956372;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=M4qmugdZ8b2EBLGeykukgskjWNLfUcPNwqpBmF/6qK8=;
-        b=wvxXJsHWcDom75nmj/rZc+zRIW9nhAqNbFxFfRZoRlxR8LDBkyO9Axl2qMcqMCHM1+
-         kO8VGj56J1mGs7CCkBUseUMSHLg6FR+lx6UPZBw6vhEO89qqdajUN/RAEmJhYBF9d/4V
-         KeMmyZSQ4FMI8XyUBTMopz+5EkHPjl/7Oumhi1UYPcbazlNF3UTwEiFww318mAk0vlfD
-         y0JLkQm+ge5kvMju4fFKcgY/uwgypnvtBMZKv2id+IItfCit2y13rrCL1b1HeMDbeFz1
-         LuPatVLhh3iffdJf0GoaHtftLLTey824HYzqPQ5UUffJI027X69GZ+eUsVoVI4qhkj0n
-         Vu3Q==
-X-Gm-Message-State: AOJu0Yz/sb5Es3WP/UoARM8KxVi54KMO/RLUf2TP/BU/e3ZPPfkgBDwP
-	sSY48r9mTpZL7+ia0nyvLgGa1WK9a3maA5dEkjVnBOkmPHwXfBcKg/yzi5KNAFi5k6Rx41Uy7Hd
-	b92nVesfvoq0rzB8HNK9gPza01fXYN08tACJ22g==
-X-Gm-Gg: ASbGncsjUtghjs1eTkd2eOal3h2KMl/F7nEV4tj5VxuR6ZrUh0RjmjvInNgm6S4xak5
-	LVzDMVs8FpCkPvvlCfdpkN6n4f64dF46Un+8acDbD9SuBqJT0hiIdgqbI7uxVpYIlu4EsWAvWfQ
-	==
-X-Google-Smtp-Source: AGHT+IEFTfiiJO/Ldzgu1l/xRfUK7lO8stGZ8r1z/sjXf9F2I5Toe3YEuBIRQ5Xd4j94E+8EWqgMqvplCJDGM8GTOtE=
-X-Received: by 2002:a05:6902:2b03:b0:e5b:21fe:d9bd with SMTP id
- 3f1490d57ef6-e5d9f0cfcb2mr2258915276.10.1739351572470; Wed, 12 Feb 2025
- 01:12:52 -0800 (PST)
+	s=arc-20240116; t=1739352519; c=relaxed/simple;
+	bh=gJpIK2N1oWtH5ADm/MDAKA+A5d3VUR0XUHUg0+3+Iq8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Cm/maOLWhiUrT8Z5G8EESgTAu4bv5fU78zSE95LiURn7AJ2uwnBncBIHoGcXjn1fuujpDDlXREWzR2LDDqgdD3vb7z+AgzmQQPM1sBSF6Qbn5C0q1jiVADBhMm4b6zQFx0vuzKNeZYR1SnYf+ZznYQkMtbQcZ0ZN+qQfd9YfGF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IuL9uzUu; arc=none smtp.client-ip=192.198.163.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739352517; x=1770888517;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=gJpIK2N1oWtH5ADm/MDAKA+A5d3VUR0XUHUg0+3+Iq8=;
+  b=IuL9uzUuUH+8nCg77Sg+hb4u0zPJq0i75WfPFV7+3vTjA36JBLM6E2r7
+   COVfCO8AZAy/nBEW2BdZdQ2cANqf1xd0kyJ4L9SHb3b2fteeTL3z/kBuJ
+   ZDXsAo5JB2z9HTcXKedKREAJoqDZRODkxMGi658kJpuwIRZG0ssrzzMSh
+   NUFOmx0Zo6UJwm7Cm5ct7QEVauOWDYnlM0Kv4D/CI/gm9zvMo4pIR003L
+   zNISUcr3nZ2hFo5I0V4xwsAauVeySgJj8A0uFJkyHU1mCe/beLnxP5S+J
+   EJGYHw+uopBnByxvSQdYboJsh6TiN1/8C2vE/9Wo+1olxLO0EqyoqpETB
+   A==;
+X-CSE-ConnectionGUID: fTfQ6i8fRB+M9w9c4GvkYA==
+X-CSE-MsgGUID: 2zc2OsELS7Cz2/nAqIYjJw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="43925758"
+X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
+   d="scan'208";a="43925758"
+Received: from orviesa009.jf.intel.com ([10.64.159.149])
+  by fmvoesa106.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 01:28:36 -0800
+X-CSE-ConnectionGUID: uoFlp30lSuaGrdQz3fpcsg==
+X-CSE-MsgGUID: XLCudRqwS5uKdTV8jnwDsw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
+   d="scan'208";a="112526808"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by orviesa009.jf.intel.com with ESMTP; 12 Feb 2025 01:28:32 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ti92j-0015R1-2F;
+	Wed, 12 Feb 2025 09:28:29 +0000
+Date: Wed, 12 Feb 2025 17:27:58 +0800
+From: kernel test robot <lkp@intel.com>
+To: Sumit Gupta <sumitg@nvidia.com>, rafael@kernel.org,
+	viresh.kumar@linaro.org, lenb@kernel.org, robert.moore@intel.com,
+	corbet@lwn.net, linux-pm@vger.kernel.org,
+	linux-acpi@vger.kernel.org, linux-doc@vger.kernel.org,
+	acpica-devel@lists.linux.dev, linux-kernel@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-tegra@vger.kernel.org, treding@nvidia.com,
+	jonathanh@nvidia.com, sashal@nvidia.com, vsethi@nvidia.com,
+	ksitaraman@nvidia.com, sanjayc@nvidia.com, bbasu@nvidia.com,
+	sumitg@nvidia.com
+Subject: Re: [Patch 5/5] cpufreq: CPPC: Add cppc_cpufreq_epp instance for
+ Autonomous mode
+Message-ID: <202502121734.xMnvqs6o-lkp@intel.com>
+References: <20250211103737.447704-6-sumitg@nvidia.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2314745.iZASKD2KPV@rjwysocki.net>
-In-Reply-To: <2314745.iZASKD2KPV@rjwysocki.net>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 12 Feb 2025 10:12:16 +0100
-X-Gm-Features: AWEUYZmtpXJLhhN7Bd3XVjN5bt01NgkkmESkkQc2SjhdL8nC_uCDGFZOZpBMS08
-Message-ID: <CAPDyKFroyU3YDSfw_Y6k3giVfajg3NQGwNWeteJWqpW29BojhQ@mail.gmail.com>
-Subject: Re: [PATCH v1 00/10] PM: Make the core and pm_runtime_force_suspend/resume()
- agree more
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250211103737.447704-6-sumitg@nvidia.com>
 
-On Tue, 11 Feb 2025 at 22:25, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> Hi Everyone,
->
-> This series is a result of the discussion on a recently reported issue
-> with device runtime PM status propagation during system resume and
-> the resulting patches:
->
-> https://lore.kernel.org/linux-pm/12619233.O9o76ZdvQC@rjwysocki.net/
-> https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwysocki.net/
->
-> Overall, due to restrictions related to pm_runtime_force_suspend() and
-> pm_runtime_force_resume(), it was necessary to limit the RPM_ACTIVE
-> setting propagation to the parent of the first device in a dependency
-> chain that turned out to have to be resumed during system resume even
-> though it was runtime-suspended before system suspend.
->
-> Those restrictions are that (1) pm_runtime_force_suspend() attempts to
-> suspend devices that have never had runtime PM enabled if their runtime
-> PM status is currently RPM_ACTIVE and (2) pm_runtime_force_resume()
-> will skip device whose runtime PM status is currently RPM_ACTIVE.
->
-> The purpose of this series is to eliminate the above restrictions and
-> get pm_runtime_force_suspend() and pm_runtime_force_resume() to agree
-> more with what the core does.
+Hi Sumit,
 
-For my understanding, would you mind elaborating a bit more around the
-end-goal with this?
+kernel test robot noticed the following build warnings:
 
-Are you trying to make adaptations for
-pm_runtime_force_suspend|resume() and the PM core, such that drivers
-that uses pm_runtime_force_suspend|resume() should be able to cope
-with other drivers for child-devices that make use of
-DPM_FLAG_SMART_SUSPEND?
+[auto build test WARNING on next-20250210]
+[cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge v6.14-rc2 v6.14-rc1 v6.13 linus/master v6.14-rc2]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-If we can make this work, it would enable the propagation of
-RPM_ACTIVE in the PM core for more devices, but still not for all,
-right?
+url:    https://github.com/intel-lab-lkp/linux/commits/Sumit-Gupta/ACPI-CPPC-add-read-perf-ctrls-api-and-rename-few-existing/20250211-184154
+base:   next-20250210
+patch link:    https://lore.kernel.org/r/20250211103737.447704-6-sumitg%40nvidia.com
+patch subject: [Patch 5/5] cpufreq: CPPC: Add cppc_cpufreq_epp instance for Autonomous mode
+config: riscv-randconfig-001-20250212 (https://download.01.org/0day-ci/archive/20250212/202502121734.xMnvqs6o-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 6807164500e9920638e2ab0cdb4bf8321d24f8eb)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250212/202502121734.xMnvqs6o-lkp@intel.com/reproduce)
 
-The point is, the other bigger issue that I pointed out in our earlier
-discussions; all those devices where their drivers/buses don't cope
-with the behaviour of the DPM_FLAG_SMART_SUSPEND flag, will prevent
-the PM core from *unconditionally* propagating the RPM_ACTIVE to
-parents. I guess this is the best we can do then?
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502121734.xMnvqs6o-lkp@intel.com/
 
->
-> First off, it turns out that detecting devices that have never had
-> runtime PM enabled is not really hard - it is sufficient to check
-> their power.last_status data when runtime PM is disabled.  If
-> power.last_status is RPM_INVALID at that point, runtime PM has never
-> been enabled for the given device, so patch [01/10] adds a helper
-> function for checking that.
->
-> Patch [02/10] makes the PM core use the new function to avoid setting
-> power.set_active for devices with no runtime PM support which really
-> is a fixup on top of
->
-> https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwysocki.net/
->
-> Patch [03/10] modifies pm_runtime_force_suspend() to skip devices
-> with no runtime PM support with the help of the new function.
->
-> Next, patch [04/10] uses the observation that the runtime PM status
-> check in pm_runtime_force_resume() is redundant and drops that check.
->
-> Patch [05/10] removes the wakeirq enabling from the pm_runtime_force_resume()
-> error path because it is not really a good idea to enable wakeirqs during
-> system resume.
->
-> Patch [06/10] makes the PM core somewhat more consistent with
-> pm_runtime_force_suspend() and patch [07/10] prepares it for the subsequent
-> changes.
->
-> Patch [08/10] changes pm_runtime_force_resume() to handle the case in
-> which the runtime PM status of the device has been updated by the core to
-> RPM_ACTIVE after pm_runtime_force_suspend() left it in RPM_SUSPENDED.
->
-> Patch [09/10] restores the RPM_ACTIVE setting propagation to parents
-> and suppliers, but it takes exceptions into account (for example, devices
-> with no runtime PM support).
->
-> Finally, patch [10/10] adds a mechanism to discover cases in which runtime PM
-> is disabled for a device permanently even though it has been enabled for that
-> device at one point.
->
-> Please have a look and let me know if you see any problems.
->
-> Thanks!
+All warnings (new ones prefixed by >>):
 
-Kind regards
-Uffe
+>> drivers/cpufreq/cppc_cpufreq.c:780:68: warning: more '%' conversions than data arguments [-Wformat-insufficient-args]
+     780 |         pr_debug("cpu%d, curr epp:%u, new epp:%u, curr mode:%u, new mode:%u\n",
+         |                                                                          ~^
+   include/linux/printk.h:631:30: note: expanded from macro 'pr_debug'
+     631 |         no_printk(KERN_DEBUG pr_fmt(fmt), ##__VA_ARGS__)
+         |                                     ^~~
+   drivers/cpufreq/cppc_cpufreq.c:11:37: note: expanded from macro 'pr_fmt'
+      11 | #define pr_fmt(fmt)     "CPPC Cpufreq:" fmt
+         |                                         ^~~
+   include/linux/printk.h:135:11: note: expanded from macro 'no_printk'
+     135 |                 _printk(fmt, ##__VA_ARGS__);            \
+         |                         ^~~
+>> drivers/cpufreq/cppc_cpufreq.c:799:23: warning: unused variable 'cpu_data' [-Wunused-variable]
+     799 |         struct cppc_cpudata *cpu_data = policy->driver_data;
+         |                              ^~~~~~~~
+   drivers/cpufreq/cppc_cpufreq.c:1018:23: warning: unused variable 'cpu_data' [-Wunused-variable]
+    1018 |         struct cppc_cpudata *cpu_data;
+         |                              ^~~~~~~~
+>> drivers/cpufreq/cppc_cpufreq.c:1019:11: warning: unused variable 'pref' [-Wunused-variable]
+    1019 |         int cpu, pref, ret = 0;
+         |                  ^~~~
+   4 warnings generated.
+
+
+vim +780 drivers/cpufreq/cppc_cpufreq.c
+
+   773	
+   774	static int cppc_cpufreq_epp_update_auto_mode(struct cpufreq_policy *policy, int auto_sel, u32 epp)
+   775	{
+   776		struct cppc_cpudata *cpu_data = policy->driver_data;
+   777		int ret, curr_epp;
+   778	
+   779		curr_epp = cpu_data->perf_ctrls.energy_perf;
+ > 780		pr_debug("cpu%d, curr epp:%u, new epp:%u, curr mode:%u, new mode:%u\n",
+   781			 curr_epp, epp, cpu_data->perf_caps.auto_sel, auto_sel);
+   782	
+   783		/* set Performance preference as default */
+   784		cpu_data->perf_ctrls.energy_perf = epp;
+   785		ret = cppc_set_epp_perf(policy->cpu, &cpu_data->perf_ctrls, auto_sel);
+   786		if (ret < 0) {
+   787			pr_err("failed to set energy perf value (%d)\n", ret);
+   788			cpu_data->perf_ctrls.energy_perf = curr_epp;
+   789			return ret;
+   790		}
+   791		cpu_data->perf_caps.auto_sel = auto_sel;
+   792	
+   793		return ret;
+   794	}
+   795	
+   796	static int cppc_cpufreq_epp_update_perf(struct cpufreq_policy *policy, int auto_sel, u32 epp,
+   797						u32 highest_perf, u32 lowest_perf)
+   798	{
+ > 799		struct cppc_cpudata *cpu_data = policy->driver_data;
+   800		int ret;
+   801	
+   802		ret = cppc_cpufreq_epp_update_perf_ctrls(policy, highest_perf, lowest_perf);
+   803		if (ret)
+   804			return ret;
+   805	
+   806		ret = cppc_cpufreq_epp_update_auto_mode(policy, auto_sel, epp);
+   807		if (ret)
+   808			return ret;
+   809	
+   810		return ret;
+   811	}
+   812	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
