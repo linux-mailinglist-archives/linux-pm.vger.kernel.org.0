@@ -1,197 +1,255 @@
-Return-Path: <linux-pm+bounces-21975-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21976-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86F07A32C97
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 17:57:26 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id ED447A32CF8
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 18:09:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3CA5C1882FB9
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 16:57:30 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 84BA916A454
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 17:07:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07E50256C89;
-	Wed, 12 Feb 2025 16:57:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 869B725A2D3;
+	Wed, 12 Feb 2025 17:05:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="chqsZ11b"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XMZicH/i"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31DDE256C83;
-	Wed, 12 Feb 2025 16:57:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D7E321506D;
+	Wed, 12 Feb 2025 17:05:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739379434; cv=none; b=HYbFN/R38v5PxTSFoRDkzk4m7SpZAyQiS/gjWHWzrkFAkA9o+fYdsG0ZUnPyRqpx3LRpKSRbXl96S4W5X0BRr7YkrFQO3LQ12U5XibU0RymgzQemMh49ZiYodQEn1e3RfgG1P4Up+ZboGwhX/yJii5JXiRK2L+KpSOLmCcekbLI=
+	t=1739379918; cv=none; b=YRvSqZuulsefkG1LECSOPXEZJlasNYNEk3E7m06MsEC/R0DBabJeu4GjmsU2EWeN2nbO+/agxTuD4LtvNWp0aL0UPqP8/LknotIh93QRigEDiy8U7tO10xvcE0jAr6wjH7ZMNM0dLhhvf9az0cBbMBSXHAkwsqmdzISDz8ztjKY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739379434; c=relaxed/simple;
-	bh=fR1t7CeXF+FlrrMDmgJROQWMLPPn+T4BEP4V6XerrzI=;
-	h=Content-Type:Message-ID:Date:MIME-Version:Subject:To:Cc:
-	 References:From:In-Reply-To; b=rCF7i24J8nEvlnxKUgJaBeqIRZ01BvdmRD5If5DVM1m1pCe1FoUxGl2f6Kk6V+E0ooXTQPFZp1JA0RH+S3OC3MJw6bQIkN6hjBgxEx11f1NOqmPbz33H53kKErcV3PN5scrjJCErkQ2EQpdcoTON0n61Fn646icXzG7o/Fpk3Mo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=chqsZ11b; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739379434; x=1770915434;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to;
-  bh=fR1t7CeXF+FlrrMDmgJROQWMLPPn+T4BEP4V6XerrzI=;
-  b=chqsZ11bhTkhdtxwEJNUlkTNluoZc8uoUp/bvrWSd6GquNkOWc/jWphq
-   v4BfupRtNnffaNNTSZk1/CJsb1v3bpMUtECZ/cLExAOelhVkLa1dvO79c
-   xLcHbTuMv1S9xUoRwvVLnmyiRDHf3TBuHBxvx1jbLtRw2yrhqaQQeoXzv
-   nxVui7DPK6Dyj/thM3g3hhq2BCEQmSiKh6VN3s/lL8qkDoBqEoxS4ilcm
-   7MIytNuiUCT5uPdI9cOlRpSz0I5l9Y7aIhTLZlUOHd3Sx9Sjus7A5srFH
-   y/LY0UCOK2PUyb7+dHoty1zm2PdZP3COwWw6FLM9uZHEX+MdagGNx34Nn
-   A==;
-X-CSE-ConnectionGUID: YTcLGtYzRIOKlykPv6nVAw==
-X-CSE-MsgGUID: RI/aYVYQTCGuZpHot3Tqag==
-X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="39972455"
-X-IronPort-AV: E=Sophos;i="6.13,280,1732608000"; 
-   d="scan'208";a="39972455"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 08:57:13 -0800
-X-CSE-ConnectionGUID: Mq53iWY3QyWA26KfNoVz4g==
-X-CSE-MsgGUID: rRQCDfuRSi6MbbZZMdw9OQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,280,1732608000"; 
-   d="scan'208";a="117882904"
-Received: from aschofie-mobl2.amr.corp.intel.com (HELO [10.125.108.131]) ([10.125.108.131])
-  by orviesa004-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 08:57:12 -0800
-Content-Type: multipart/mixed; boundary="------------BhJCh6KKkL052rdWpL6DiAAA"
-Message-ID: <78895061-6f1e-4d3b-9481-95f47f97ab96@intel.com>
-Date: Wed, 12 Feb 2025 08:57:12 -0800
+	s=arc-20240116; t=1739379918; c=relaxed/simple;
+	bh=OOphGY58A73wzPUp/hoO6eFXEV5qdt7mxWHBLh0zvOI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=E1LJqSBO2I+M3C1x/toUtNtgfRqk9mLU8R9dC9IE0gBalP7JQb2aGu1p0p2Zi72bT13PV0cQRX1s38ZY3AJ79PK5IvqvXTlBHkt6hpXF3KfVfOGxm880AG5lBcWgOcoXRRhM1lnGegerwoW55Ywu6mz7s/EQHRuAL51HW9ON4TU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XMZicH/i; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CC77CC4CEE4;
+	Wed, 12 Feb 2025 17:05:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739379916;
+	bh=OOphGY58A73wzPUp/hoO6eFXEV5qdt7mxWHBLh0zvOI=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=XMZicH/iX7O2/d4jTqBFrYkk4JnmlfgFWdlv5P/LkMK9cS8IorLfLQJ1I4/FCjqgn
+	 VRPVUYmLdCsbLq9KtpZcl79koQKrfXwi0du2gCvC685cyLQ26F3Mckr9S4abo3ospP
+	 RVJwBZYJrrkhX0exnp93tCBePqEFWOZz7kD2cFCKCOHjcc/4TJafSnifjiXAQ66ZDI
+	 wVzxzoZFUn0WRo/c3v88VO+Nosca+5SgL4HhJWfIH4+sF29tg5o0nMZdxVdikXKXIA
+	 a2hrJ3Tic14JAmF31ogZBzsQAlQs7e5QvBxQnCpSnKLWZ95q01PRJrIX8Omc7EMEXu
+	 p3nI1sGYzUwXg==
+Received: by mail-ot1-f53.google.com with SMTP id 46e09a7af769-726cdcec232so2054244a34.1;
+        Wed, 12 Feb 2025 09:05:16 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVOf470ZBpy12fWZhOgxElakwO9oU/jWNZVmosqLOrA1wMwcwu4rU7qwf7ORzYppx9hWjRjNTU/m1jmtaI=@vger.kernel.org, AJvYcCXHwxnb82VQWR+xUcZHHV6YDdmorQ+rIVjSSzj0FDfNIlSfzv0QCOqPv2zU4kthH5HVcCJVIiK7vZw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YziN5sZVRCug1+h2duiorxEY+VwweHvq8h/dD0R+l7hY6EbFL2a
+	jvlTvKnX9ECLqhjAPmZigadcvY5WKR+EgEEiLeZtZqkMPo8G6MYYNz/GKloOZ9wuu2R8MoNoyXp
+	7jwH9cLqt1GygJpangLaVsybxA4Q=
+X-Google-Smtp-Source: AGHT+IGUz9+NnKxTsJr3SkJXSq55rUPHvDHM6I+x1V/qceMRyG9F3Q82N7yezlzIGfshDIKUQI/YlJbuVZbzYJ4ny5c=
+X-Received: by 2002:a05:6870:819e:b0:2b7:fa6f:9672 with SMTP id
+ 586e51a60fabf-2b8d69460e0mr2546882fac.38.1739379915938; Wed, 12 Feb 2025
+ 09:05:15 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/17] hwmon: Fix Intel Family-model checks to include
- extended Families
-To: "Zhang, Rui" <rui.zhang@intel.com>, "Mehta, Sohil"
- <sohil.mehta@intel.com>, "Luck, Tony" <tony.luck@intel.com>,
- "x86@kernel.org" <x86@kernel.org>,
- "dave.hansen@linux.intel.com" <dave.hansen@linux.intel.com>
-Cc: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "viresh.kumar@linaro.org" <viresh.kumar@linaro.org>,
- "andrew.cooper3@citrix.com" <andrew.cooper3@citrix.com>,
- "alexander.shishkin@linux.intel.com" <alexander.shishkin@linux.intel.com>,
- "luto@kernel.org" <luto@kernel.org>,
- "david.laight.linux@gmail.com" <david.laight.linux@gmail.com>,
- "linux-hwmon@vger.kernel.org" <linux-hwmon@vger.kernel.org>,
- "linux-perf-users@vger.kernel.org" <linux-perf-users@vger.kernel.org>,
- "Hunter, Adrian" <adrian.hunter@intel.com>,
- "jdelvare@suse.com" <jdelvare@suse.com>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "mingo@redhat.com" <mingo@redhat.com>,
- "irogers@google.com" <irogers@google.com>,
- "tglx@linutronix.de" <tglx@linutronix.de>,
- "linux@roeck-us.net" <linux@roeck-us.net>, "lenb@kernel.org"
- <lenb@kernel.org>, "kan.liang@linux.intel.com" <kan.liang@linux.intel.com>,
- "hpa@zytor.com" <hpa@zytor.com>, "peterz@infradead.org"
- <peterz@infradead.org>, "mark.rutland@arm.com" <mark.rutland@arm.com>,
- "bp@alien8.de" <bp@alien8.de>, "acme@kernel.org" <acme@kernel.org>,
- "rafael@kernel.org" <rafael@kernel.org>, "jolsa@kernel.org"
- <jolsa@kernel.org>, "linux-acpi@vger.kernel.org"
- <linux-acpi@vger.kernel.org>, "namhyung@kernel.org" <namhyung@kernel.org>
-References: <20250211194407.2577252-1-sohil.mehta@intel.com>
- <20250211194407.2577252-8-sohil.mehta@intel.com>
- <23e24c79-96ca-45da-832b-83a9b6456208@intel.com>
- <882357df-7600-4aee-9fb1-4a118872f1af@intel.com>
- <273b9080d42bcd2fb36fc4510416f0e111edee62.camel@intel.com>
-From: Dave Hansen <dave.hansen@intel.com>
-Content-Language: en-US
-Autocrypt: addr=dave.hansen@intel.com; keydata=
- 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
-In-Reply-To: <273b9080d42bcd2fb36fc4510416f0e111edee62.camel@intel.com>
+References: <2314745.iZASKD2KPV@rjwysocki.net> <CAPDyKFroyU3YDSfw_Y6k3giVfajg3NQGwNWeteJWqpW29BojhQ@mail.gmail.com>
+ <CAJZ5v0h44Yxp95pHW+75gk5yWKviLO1_YK_cZNFKaGnid7nx9A@mail.gmail.com>
+ <CAJZ5v0iMZ=6YgKR3ZZuiv7DF4=vfoFRonSoXO_zV65oZH2rOgA@mail.gmail.com> <CAPDyKFq91JnCFhEuitOJPZtq78-Y3CUy4p0bNE1wK+eYCste6g@mail.gmail.com>
+In-Reply-To: <CAPDyKFq91JnCFhEuitOJPZtq78-Y3CUy4p0bNE1wK+eYCste6g@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 12 Feb 2025 18:05:04 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iuLA9N5Vi-JNa8=uTO-kpsKNsRGKegYnCYLEhAn=nW9g@mail.gmail.com>
+X-Gm-Features: AWEUYZk3i_DCfMUdCRB2ktAYzTCS-9IJYh9sUR7y_wCTzS-VE7oqQPFNFa-PCCY
+Message-ID: <CAJZ5v0iuLA9N5Vi-JNa8=uTO-kpsKNsRGKegYnCYLEhAn=nW9g@mail.gmail.com>
+Subject: Re: [PATCH v1 00/10] PM: Make the core and pm_runtime_force_suspend/resume()
+ agree more
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Alan Stern <stern@rowland.harvard.edu>, Johan Hovold <johan@kernel.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-This is a multi-part message in MIME format.
---------------BhJCh6KKkL052rdWpL6DiAAA
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+On Wed, Feb 12, 2025 at 4:15=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> On Wed, 12 Feb 2025 at 12:33, Rafael J. Wysocki <rafael@kernel.org> wrote=
+:
+> >
+> > On Wed, Feb 12, 2025 at 11:59=E2=80=AFAM Rafael J. Wysocki <rafael@kern=
+el.org> wrote:
+> > >
+> > > On Wed, Feb 12, 2025 at 10:12=E2=80=AFAM Ulf Hansson <ulf.hansson@lin=
+aro.org> wrote:
+> > > >
+> > > > On Tue, 11 Feb 2025 at 22:25, Rafael J. Wysocki <rjw@rjwysocki.net>=
+ wrote:
+> > > > >
+> > > > > Hi Everyone,
+> > > > >
+> > > > > This series is a result of the discussion on a recently reported =
+issue
+> > > > > with device runtime PM status propagation during system resume an=
+d
+> > > > > the resulting patches:
+> > > > >
+> > > > > https://lore.kernel.org/linux-pm/12619233.O9o76ZdvQC@rjwysocki.ne=
+t/
+> > > > > https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwysocki.net=
+/
+> > > > >
+> > > > > Overall, due to restrictions related to pm_runtime_force_suspend(=
+) and
+> > > > > pm_runtime_force_resume(), it was necessary to limit the RPM_ACTI=
+VE
+> > > > > setting propagation to the parent of the first device in a depend=
+ency
+> > > > > chain that turned out to have to be resumed during system resume =
+even
+> > > > > though it was runtime-suspended before system suspend.
+> > > > >
+> > > > > Those restrictions are that (1) pm_runtime_force_suspend() attemp=
+ts to
+> > > > > suspend devices that have never had runtime PM enabled if their r=
+untime
+> > > > > PM status is currently RPM_ACTIVE and (2) pm_runtime_force_resume=
+()
+> > > > > will skip device whose runtime PM status is currently RPM_ACTIVE.
+> > > > >
+> > > > > The purpose of this series is to eliminate the above restrictions=
+ and
+> > > > > get pm_runtime_force_suspend() and pm_runtime_force_resume() to a=
+gree
+> > > > > more with what the core does.
+> > > >
+> > > > For my understanding, would you mind elaborating a bit more around =
+the
+> > > > end-goal with this?
+> > >
+> > > The end goal is, of course, full integration of runtime PM with syste=
+m
+> > > sleep for all devices.  Eventually.
+> > >
+> > > And it is necessary to make the core and
+> > > pm_runtime_force_suspend|resume() work together better for this
+> > > purpose.
+> > >
+> > > > Are you trying to make adaptations for
+> > > > pm_runtime_force_suspend|resume() and the PM core, such that driver=
+s
+> > > > that uses pm_runtime_force_suspend|resume() should be able to cope
+> > > > with other drivers for child-devices that make use of
+> > > > DPM_FLAG_SMART_SUSPEND?
+> > >
+> > > Yes.
+> > >
+> > > This is a more general case, though, when a device that was
+> > > runtime-suspended before system suspend and is left in suspend during
+> > > it, needs to be resumed during the system resume that follows.
+> > >
+> > > Currently, DPM_FLAG_SMART_SUSPEND can lead to this sometimes and it
+> > > cannot happen otherwise, but I think that it is a generally valid
+> > > case.
+> > >
+> > > > If we can make this work, it would enable the propagation of
+> > > > RPM_ACTIVE in the PM core for more devices, but still not for all,
+> > > > right?
+> > >
+> > > It is all until there is a known case in which it isn't.  So either
+> > > you know a specific case in which it doesn't work, or I don't see a
+> > > reason for avoiding it.
+> > >
+> > > ATM the only specific case in which it doesn't work is when
+> > > pm_runtime_force_suspend|resume() are used.
+> > >
+> > > > The point is, the other bigger issue that I pointed out in our earl=
+ier
+> > > > discussions; all those devices where their drivers/buses don't cope
+> > > > with the behaviour of the DPM_FLAG_SMART_SUSPEND flag, will prevent
+> > > > the PM core from *unconditionally* propagating the RPM_ACTIVE to
+> > > > parents. I guess this is the best we can do then?
+> > >
+> > > OK, what are they?
+> > >
+> > > You keep saying that they exist without giving any examples.
+> >
+> > To put it more bluntly, I'm not aware of any place other than
+> > pm_runtime_force_suspend|resume() that can be confused by changing the
+> > runtime PM status of a device with runtime PM disabled (either
+> > permanently, or transiently during a system suspend-resume cycle) to
+> > RPM_ACTIVE, so if there are any such places, I would appreciate
+> > letting me know what they are.
+>
+> Well, sorry I thought you were aware. Anyway, I believe you need to do
+> your own investigation as it's simply too time consuming for me to
+> find them all. The problem is that it's not just a simple pattern to
+> search for, so we would need some clever scripting to move forward to
+> find them.
+>
+> To start with, we should look for drivers that enable runtime PM, by
+> calling pm_runtime_enable().
+>
+> Additionally, in their system suspend callback they should typically
+> *not* use pm_runtime_suspended(), pm_runtime_status_suspended() or
+> pm_runtime_active() as that is usually (but no always) indicating that
+> they got it right. Then there are those that don't have system
+> suspend/resume callbacks assigned at all (or uses some other subsystem
+> specific callback for this), but only uses runtime PM.
+>
+> On top of that, drivers that makes use of
+> pm_runtime_force_suspend|resume() should be disregarded, which has
+> reached beyond 300 as this point.
+>
+> Anyway, here is just one example that I found from a quick search.
+> drivers/i2c/busses/i2c-qcom-geni.c
 
-On 2/12/25 05:43, Zhang, Rui wrote:
-> I agree.
-> adjust_tjmax() contains a list of quirks based on PCI-
-> ID/x86_vendor_id/x86_model/x86_stepping. The common problem is that all
-> the quirks are for Fam6 processors but the family id is not checked. So
-> the fix is sufficient. In fact, I think it is better to move the check
-> to the very beginning of adjust_tjmax().
+OK, I see.
 
-Or, heck, just remove the model list. dev_warn_once() if the rdmsr
-fails. Who cares about one more line in dmesg?
+It sets the status to RPM_SUSPENDED in geni_i2c_suspend_noirq(), if
+not suspended already, and assumes it to stay this way across
+geni_i2c_resume_noirq() until someone resumes it via runtime PM.
 
-Why not do the attached patch?
---------------BhJCh6KKkL052rdWpL6DiAAA
-Content-Type: text/x-patch; charset=UTF-8; name="coretemp-1.patch"
-Content-Disposition: attachment; filename="coretemp-1.patch"
-Content-Transfer-Encoding: base64
+Fair enough, but somebody should tell them that they don't need to use
+pm_runtime_disable/enable() in _noirq.
 
-CgotLS0KCiBiL2RyaXZlcnMvaHdtb24vY29yZXRlbXAuYyB8ICAgMTUgKy0tLS0tLS0tLS0t
-LS0tCiAxIGZpbGUgY2hhbmdlZCwgMSBpbnNlcnRpb24oKyksIDE0IGRlbGV0aW9ucygtKQoK
-ZGlmZiAtcHVOIGRyaXZlcnMvaHdtb24vY29yZXRlbXAuY35jb3JldGVtcC0xIGRyaXZlcnMv
-aHdtb24vY29yZXRlbXAuYwotLS0gYS9kcml2ZXJzL2h3bW9uL2NvcmV0ZW1wLmN+Y29yZXRl
-bXAtMQkyMDI1LTAyLTEyIDA4OjUyOjQ4Ljc4MjczMTIyNiAtMDgwMAorKysgYi9kcml2ZXJz
-L2h3bW9uL2NvcmV0ZW1wLmMJMjAyNS0wMi0xMiAwODo1Mzo0My44Njc2MTc1MDUgLTA4MDAK
-QEAgLTI1OCwxOCArMjU4LDYgQEAgc3RhdGljIGludCBhZGp1c3RfdGptYXgoc3RydWN0IGNw
-dWluZm9feAogCXJldHVybiB0am1heDsKIH0KIAotc3RhdGljIGJvb2wgY3B1X2hhc190am1h
-eChzdHJ1Y3QgY3B1aW5mb194ODYgKmMpCi17Ci0JdTggbW9kZWwgPSBjLT54ODZfbW9kZWw7
-Ci0KLQlyZXR1cm4gbW9kZWwgPiAweGUgJiYKLQkgICAgICAgbW9kZWwgIT0gMHgxYyAmJgot
-CSAgICAgICBtb2RlbCAhPSAweDI2ICYmCi0JICAgICAgIG1vZGVsICE9IDB4MjcgJiYKLQkg
-ICAgICAgbW9kZWwgIT0gMHgzNSAmJgotCSAgICAgICBtb2RlbCAhPSAweDM2OwotfQotCiBz
-dGF0aWMgaW50IGdldF90am1heChzdHJ1Y3QgdGVtcF9kYXRhICp0ZGF0YSwgc3RydWN0IGRl
-dmljZSAqZGV2KQogewogCXN0cnVjdCBjcHVpbmZvX3g4NiAqYyA9ICZjcHVfZGF0YSh0ZGF0
-YS0+Y3B1KTsKQEAgLTI4Nyw4ICsyNzUsNyBAQCBzdGF0aWMgaW50IGdldF90am1heChzdHJ1
-Y3QgdGVtcF9kYXRhICp0CiAJICovCiAJZXJyID0gcmRtc3Jfc2FmZV9vbl9jcHUodGRhdGEt
-PmNwdSwgTVNSX0lBMzJfVEVNUEVSQVRVUkVfVEFSR0VULCAmZWF4LCAmZWR4KTsKIAlpZiAo
-ZXJyKSB7Ci0JCWlmIChjcHVfaGFzX3RqbWF4KGMpKQotCQkJZGV2X3dhcm4oZGV2LCAiVW5h
-YmxlIHRvIHJlYWQgVGpNYXggZnJvbSBDUFUgJXVcbiIsIHRkYXRhLT5jcHUpOworCQlkZXZf
-d2Fybl9vbmNlKGRldiwgIlVuYWJsZSB0byByZWFkIFRqTWF4IGZyb20gQ1BVICV1XG4iLCB0
-ZGF0YS0+Y3B1KTsKIAl9IGVsc2UgewogCQl2YWwgPSAoZWF4ID4+IDE2KSAmIDB4ZmY7CiAJ
-CWlmICh2YWwpCl8K
+> >
+> > Note that rpm_active() could start producing confusing results if the
+> > runtime PM status of a device with runtime PM disabled is changed from
+> > RPM_ACTIVE to RPM_SUSPENDED because it will then start to return
+> > -EACCES instead of 1, but changing the status to RPM_ACTIVE will not
+> > confuse it the same way.
+>
+> Trust me, it will cause problems.
+>
+> Drivers may call pm_runtime_get_sync() to turn on the resources for
+> the device after the system has resumed, when runtime PM has been
+> re-enabled for the device by the PM core.
+>
+> Those calls to pm_runtime_get_sync() will then not end up invoking any
+> if ->runtime_resume() callbacks for the device since its state is
+> already RPM_ACTIVE. Hence, the device will remain in a low power state
+> even if the driver believes it has been powered on. In many cases,
+> accessing the device (like reading/writing a register) will often just
+> just hang in these cases, but in worst cases we could end up getting
+> even more difficult bugs to debug.
 
---------------BhJCh6KKkL052rdWpL6DiAAA--
+Sure, that would be a problem.
+
+I think I need to find a different way to address the problem I'm
+seeing, that is to resume devices that were runtime-suspended before
+system suspend along with their superiors.
+
+One way to do it would be to just defer their resume to the point when
+the core has enabled runtime PM for them, which means that it has also
+enabled runtime PM for all of their superiors, and then call
+pm_runtime_resume().
+
+This should work unless one of the superiors has runtime PM disabled
+at that point, of course.
 
