@@ -1,85 +1,117 @@
-Return-Path: <linux-pm+bounces-21921-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21922-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0C509A31D22
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 04:52:42 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 05E45A31D9E
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 05:57:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3AFA3A2BFC
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 03:52:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A185A168435
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 04:57:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4B7181DDA24;
-	Wed, 12 Feb 2025 03:52:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC51E271834;
+	Wed, 12 Feb 2025 04:57:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="EgZ2Y3U5"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="d3Ka9cjg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11on2044.outbound.protection.outlook.com [40.107.220.44])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 58CF5271838;
-	Wed, 12 Feb 2025 03:52:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.220.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 959F55474C;
+	Wed, 12 Feb 2025 04:57:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=192.198.163.15
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739332358; cv=fail; b=LxYBddPPceC3GtwcVU3Fs3+jlt0vXXTjMK13j4iz9wP6pabepPkZ5ilkHUwBJMO4H2PZIXtAOH+i6bUgWrJ9dW2//xEsa0HOZEU3oSuRLjMTv0TpDrKtw0WXNUKY6vdZ9NwydrJnYUwBR51Schqsl3Jg8QbL+QyKlJBrUMRFPP8=
+	t=1739336247; cv=fail; b=SpFeZ+moZQXTeos6F/APu5uB+pXqt0qMuHK5K4d4gGFsyq+EPUhrqHwcriGqfrWEWWjlPR/542TEkxViS61GNGpabyxeNDxD2gGdaewrM5PyXaNTi4ldSrmpSPyaBRG4hza26u6e3HiRj9/YW0j4WEAMttw3wg4mX/i1M7tCWpQ=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739332358; c=relaxed/simple;
-	bh=y8ugVznMrt5Xg+PwxdBUlq/2f5p3ky9p7n6qGsfufFM=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=YKxgG6p6/QyxMEslktwWi3tf0XbNR0jLYCnHuVDkNV/07L5iMWj9W6JuPBzvAORA9vp3H4iqVMb70uxKCtKRg53Xs0K0vXkj1HQNX56F8rUfiE4k+8ORi1j+HS6AlwxAtA5syEoj4mGPssurhI+zdo2JQ+Tj8NinlH6fUlw7pg8=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=EgZ2Y3U5; arc=fail smtp.client-ip=40.107.220.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+	s=arc-20240116; t=1739336247; c=relaxed/simple;
+	bh=AQpPbs3ANiO1zq2hKzoZ8mztP1k1Qwws2zEi1j6lenE=;
+	h=Date:From:To:CC:Subject:Message-ID:Content-Type:
+	 Content-Disposition:MIME-Version; b=sbzwtey7z9MmHLjqCOgDdaIt4zHr2dZazWjEWSZ8TOJLzz6bP1FaTVGKEQuVwhvSYY3kXZdLXznsgOrK8E31Ms/5OqtL+6d0Uvdn+wto6SrsLKf9Eh0I9osvkh43bMueej44YETmmWupIiBYwpAltBYE60Uz4h7eTQ5EUqVIQBo=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=d3Ka9cjg; arc=fail smtp.client-ip=192.198.163.15
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739336246; x=1770872246;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=AQpPbs3ANiO1zq2hKzoZ8mztP1k1Qwws2zEi1j6lenE=;
+  b=d3Ka9cjgEmfzZJuTRcc43Ho+v4SckzprnZJeHYG5DL9/IBkyppBX0vP6
+   LN8VREtcry8WFK+Xo3brdgzvg/NJZk3vu/t7MiEey+bS/Q3y4kYFZWYMp
+   VQd7YsAWtM8A+jrozg7syV7cY/lY+TjWRlUwWy1bKXArKgRvMK5hPE1IM
+   bDvo/1o/O/sxQNhIgIMqKmdEqAATm/uoMpwbG2faKzlNJhBJqNNBBenvn
+   JMKb2y3Xdt/vCaavd1Aw4enWQNv/FiuXN+uPJOVX230+0kjBxoNnRSqhp
+   SCf8fZwP4m1LVTAB2FmuoJIOmtKwAgajJ7tOiN6EcG3jOmK1HEPM+MrRd
+   g==;
+X-CSE-ConnectionGUID: w4AZ1HXsQo+ww9iw8+Zenw==
+X-CSE-MsgGUID: Z0ZTUTNVSm+gcYBWlPFwlA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11342"; a="40122054"
+X-IronPort-AV: E=Sophos;i="6.13,279,1732608000"; 
+   d="scan'208";a="40122054"
+Received: from orviesa008.jf.intel.com ([10.64.159.148])
+  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Feb 2025 20:57:25 -0800
+X-CSE-ConnectionGUID: iVq0sBg+QEqvWFSfYrLTJQ==
+X-CSE-MsgGUID: 6kJ4X5b+S2OKsq0KR4WeKQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="113608302"
+Received: from orsmsx601.amr.corp.intel.com ([10.22.229.14])
+  by orviesa008.jf.intel.com with ESMTP/TLS/AES256-GCM-SHA384; 11 Feb 2025 20:57:24 -0800
+Received: from orsmsx601.amr.corp.intel.com (10.22.229.14) by
+ ORSMSX601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44; Tue, 11 Feb 2025 20:57:24 -0800
+Received: from orsedg603.ED.cps.intel.com (10.7.248.4) by
+ orsmsx601.amr.corp.intel.com (10.22.229.14) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.44 via Frontend Transport; Tue, 11 Feb 2025 20:57:24 -0800
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (104.47.57.177)
+ by edgegateway.intel.com (134.134.137.100) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.1.2507.44; Tue, 11 Feb 2025 20:57:22 -0800
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=MtiZOHUL8HfbA5B5ii/cZpv4TWeA8+JreRq/IYWCMnx17gX7g9oPTNFDml9MWC7ZutK3g55fqBmrjWp/SIJ8lnarXd0yJ5fXnxU+SW6U/BkMkKo+tHsD8VfO7kE2d7mvkZUSDHE9FILoyZ8q2deffNngZv2b6xE595IjW4IzhcsqSX11BUr6xBiJVWWtRLXL99v1AuCN/BJEOxjB/5oXYYE8HPwiuBmjROLOym54luoFBXitK3AnwQo/meR9fn8bKx4WnWWovztX4+bzQarMUWIMYAQRTSJkynwGNyBpdjbtsaozodp0m8bNdiIL+5Ij1CuoI5BhCJT3c1N34JhD5g==
+ b=yKLj7DOMTgx0hPSW8+c0iJIr6MMT2h4jO+I8QvYu6Hug5c2r4+PZXkY48OZE1wuHPqZf1GpYu5tshs+ELjYqhdi2Fatw+j1NmMEx2AzvgBnAjJRrZyH2aNYHQJavOkRLbGbr6OPHaDW8d9noBiOHQZerxJwD7ZIE2t5LHV4Q1Q6U8Fl/lvqApGmwxzf1YgyutgRNxN4P6JHevhLtCmvbglfAQ9gJZpIISIfLPzw4QIsWUlamrdwn7/bIkoNTig5zeeUWZGUQjVDY6D4EWK8bx3OlY34FxpeZ1C/2ksZgLPkZ+JuGeA20J+UnkYodOHXlKWpbXhMnQ8VaAy8x7xHIQQ==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Hfr0aPsGZrXgLU1E63XW4U4MCYLfSbbzUw+vcHiwFl4=;
- b=HbbBcZ7lK+A7SdFewECBTjWOmGm1uJR9F5pNi7Pb568SFwITHAhSfp0GeJpnCqFqkXlUg20rTmk9E6/QCLMiCVqpacsEMiww1upOGJ/rgg0citpczuMK6VDlIZ1C+AKdGOuSZBWLYxnXVyz4SipveZPX/Do4knonGnAPrm82/2TP7yaBnJwyHr0YamVUnoe32L5tCTUSbBv5ON+57sqqPF8Lg/TXAajSlCjAPD5QQtTFs/oowgddX+3+EDZ3h2D5l10P9C+Ysu+3/D54TdA+pIWQxwOf/hixwdDtfpl+fHRnWayzbg5M221HKPRCJHa3gYWs3DRNtdbZctX79AA61Q==
+ bh=9xS19ITpW6p3lFQ69S9JrjzYnurvyZFlE9K3RIGnEBE=;
+ b=nMI92rH0fDDDf8rVdmxegIxVWxm4KvaLE3lDWEZ6/L26BJk+cgwBWW5rEr7jyLGF3/jQIi3zsu/W1xgl4//nfqrb9rDqDINc/HHw20Hro8YA8JrjT47FmbCtzRJvHQVt/jffrw3KwzlDdoczM/8cOyBU5z8ftA7R/rRwPNcKycT66Xmkl5szkWEmCfRgMAOHv2n0zrYnt20M/RJfk5XRjv559uU/fYVW2jQ1/A4JfqIMEqqjljBHzaSJALFj7trjzFHrLv9lOlXMecMfZFhy6/SmvKZXXJLduNhX8vtC0QtN1GAg02G3tE27ZAgyaFZVCsoMSHzhq/0QJTUCEFJEdA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Hfr0aPsGZrXgLU1E63XW4U4MCYLfSbbzUw+vcHiwFl4=;
- b=EgZ2Y3U5qBponlFkq/ALICYXxrx9gRLiI+F9H7rC5sLCaaNTGWJdAbtGvx749I1SCm19d4xne0Z9DSkM2ZF52gexF6Qo7fuvBvXs0CMDiohCVXJXmUjEaxMOzXwgmfcCioo9gwRZTdbyh05oAelY8Z/dpHBc1B7pYuJJrSOFizE=
+ smtp.mailfrom=intel.com; dmarc=pass action=none header.from=intel.com;
+ dkim=pass header.d=intel.com; arc=none
 Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from LV8PR12MB9207.namprd12.prod.outlook.com (2603:10b6:408:187::15)
- by DM6PR12MB4139.namprd12.prod.outlook.com (2603:10b6:5:214::18) with
+ header.d=none;dmarc=none action=none header.from=intel.com;
+Received: from LV3PR11MB8603.namprd11.prod.outlook.com (2603:10b6:408:1b6::9)
+ by CH3PR11MB8702.namprd11.prod.outlook.com (2603:10b6:610:1cb::7) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8422.18; Wed, 12 Feb
- 2025 03:52:33 +0000
-Received: from LV8PR12MB9207.namprd12.prod.outlook.com
- ([fe80::3a37:4bf4:a21:87d9]) by LV8PR12MB9207.namprd12.prod.outlook.com
- ([fe80::3a37:4bf4:a21:87d9%6]) with mapi id 15.20.8422.015; Wed, 12 Feb 2025
- 03:52:33 +0000
-Message-ID: <3bd7acde-a4ea-42d6-8e75-bf17e6a4f143@amd.com>
-Date: Wed, 12 Feb 2025 09:22:27 +0530
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 12/14] cpufreq/amd-pstate: Cache a pointer to policy in
- cpudata
-To: Mario Limonciello <superm1@kernel.org>,
- "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
- Perry Yuan <perry.yuan@amd.com>
-Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250206215659.3350066-1-superm1@kernel.org>
- <20250206215659.3350066-13-superm1@kernel.org>
- <a3d10f58-3d69-40e8-b0ea-53f4ed9ce31a@amd.com>
- <2877ad66-0148-483e-83b3-fab5da5dbe1f@kernel.org>
-Content-Language: en-US
-From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-In-Reply-To: <2877ad66-0148-483e-83b3-fab5da5dbe1f@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: PN2P287CA0014.INDP287.PROD.OUTLOOK.COM
- (2603:1096:c01:21b::8) To LV8PR12MB9207.namprd12.prod.outlook.com
- (2603:10b6:408:187::15)
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.11; Wed, 12 Feb
+ 2025 04:57:21 +0000
+Received: from LV3PR11MB8603.namprd11.prod.outlook.com
+ ([fe80::4622:29cf:32b:7e5c]) by LV3PR11MB8603.namprd11.prod.outlook.com
+ ([fe80::4622:29cf:32b:7e5c%3]) with mapi id 15.20.8422.015; Wed, 12 Feb 2025
+ 04:57:21 +0000
+Date: Wed, 12 Feb 2025 12:57:07 +0800
+From: kernel test robot <oliver.sang@intel.com>
+To: Frederic Weisbecker <frederic@kernel.org>
+CC: <oe-lkp@lists.linux.dev>, <lkp@intel.com>, <linux-kernel@vger.kernel.org>,
+	Dan Carpenter <dan.carpenter@linaro.org>, <kvm@vger.kernel.org>,
+	<linux-crypto@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<dri-devel@lists.freedesktop.org>, <intel-gfx@lists.freedesktop.org>,
+	<linux-arm-msm@vger.kernel.org>, <freedreno@lists.freedesktop.org>,
+	<linux-media@vger.kernel.org>, <netdev@vger.kernel.org>,
+	<intel-wired-lan@lists.osuosl.org>, <chrome-platform@lists.linux.dev>,
+	<linux-spi@vger.kernel.org>, <linux-usb@vger.kernel.org>,
+	<virtualization@lists.linux.dev>, <linux-watchdog@vger.kernel.org>,
+	<linux-erofs@lists.ozlabs.org>, <rcu@vger.kernel.org>,
+	<oliver.sang@intel.com>
+Subject: [linus:master] [treewide]  b04e317b52:
+ INFO:task_blocked_for_more_than#seconds
+Message-ID: <202502121025.55bfa801-lkp@intel.com>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+X-ClientProxiedBy: SG2PR02CA0026.apcprd02.prod.outlook.com
+ (2603:1096:3:18::14) To LV3PR11MB8603.namprd11.prod.outlook.com
+ (2603:10b6:408:1b6::9)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -87,192 +119,178 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: LV8PR12MB9207:EE_|DM6PR12MB4139:EE_
-X-MS-Office365-Filtering-Correlation-Id: 5daebb63-ffce-4565-6962-08dd4b18ae2a
+X-MS-TrafficTypeDiagnostic: LV3PR11MB8603:EE_|CH3PR11MB8702:EE_
+X-MS-Office365-Filtering-Correlation-Id: c46323ac-296c-42bc-785a-08dd4b21bb95
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?WXhtVC9XQ2EySDFVT3dLR0JVY3JTelcvb2JFenpIQjNCOHo2a1l2YmlESXZS?=
- =?utf-8?B?cFJITjlwQjdkNTlrUUVvdkVIdnlxbHJLMlhKMHVRdnJsb3RIQi9sUU5nb0Yx?=
- =?utf-8?B?cVJCbjd0bjJkNkZ6RmQ5NkNjMWVRanFGVTd2VTVsMk5YaW9QaUxtb3RORXpv?=
- =?utf-8?B?TFNVbDk4L1NZTlJPUmg2ZkhadEcxWHNxZi93THhFYXJCTGFnNVd2RTQvYjdt?=
- =?utf-8?B?U3hrT3c0MFpHbXRMODZYSEZaQThtNW5qY2huUFRpOFlxVDIydkFIc0lkV0lx?=
- =?utf-8?B?YkUwM2haQ3RZeHVmQkhyYjdiQWtyQ2Zla1VwYTZ3clVld0tlTGNCQlZEUzdR?=
- =?utf-8?B?T3VGSncwSUcxamdwcTUvWnphSmUweWgyeUVoM29qaVNyY2wySDU2WVhDbGhW?=
- =?utf-8?B?SnE4dEk0OWZFcFB4emhrR2lhOUlGdnVpNW92Qnc1R3lpOVJKazVSTU9FUTZZ?=
- =?utf-8?B?ZS9Fa2JiZVV4cjdSV21OT1dtcFN3RWFEeWhaNkQ3MHE3N0MycWQwV3FMVTVW?=
- =?utf-8?B?T1pBKzdTb2NZWEduYWdieDJBa1dmRWhrZHVpMEZVcmltQ1hhdFZEQ3NZeTJG?=
- =?utf-8?B?Q2dLVjIzbStyU2wxS0NpK09RWUl6ZDN3bFRlaXpYVFJUR3JTK3RMZVdoZDNG?=
- =?utf-8?B?K1lIVzZMdytqNlpoSThWZFVlNGw3SWdLcUVQRTJ6bWwyTExKbURiWGIzY3FQ?=
- =?utf-8?B?aGJqU0hhQkVIWFFvSTQ0S01zWis1a083WStTbi9aYmFFamFUd3U3RTJ2R05D?=
- =?utf-8?B?ZUh5RXlxZ0hVU1hRMDU4VGZWSlZleWxpSFVNM1ZYcVByc3NUK1pzU1lERGIz?=
- =?utf-8?B?UGNXMTlqcGhPK1lUMDEvRG1nUkg5Q1JpQjRCVldDbG5BVzQvN3NDckttaUZp?=
- =?utf-8?B?K20xRmE1V0VhQlNtMkV1dUxZNEtCY1ZKK2p3MkVlcTF1cnVCNlJaNXRCSUEx?=
- =?utf-8?B?a3Y1L1hRQkFqeGRVWmt6VWxKTHF0MWZ4TS91WG01ZFFmc0xyM2g3b1daSXFE?=
- =?utf-8?B?ekRTbTcwaTZVcytHVHVXMlEzY25RSEl4OGZubSs4N3BKWEtlbFJuZmZ2b0Q1?=
- =?utf-8?B?V2FnZXMwRVB3dnJqbThUVFptbi9memhHMlhwQ2cvK2hOL2pha2MxY2treU5F?=
- =?utf-8?B?WkpxYjkvVzBjdGZRZXljcG0vQWw1SHFiMWxiTTBlUExmdi9Bd1BIaTBEVE1a?=
- =?utf-8?B?SUVFQ3R4RlB1OWxQVDdSWHRVcGttbW1KMGZhQUw1VUtiVWRmRW5JRDRrY1hD?=
- =?utf-8?B?c203VDdZaS9rRmlJc1F3UWVFTXEvd2RRNzI1N3JVZDg3bDQxQ082SWttc2Ny?=
- =?utf-8?B?QXNVWUZrdzF0UkdIVWpoZ1VWOE9TOXV4K0Zld3pJNCszZklyOVYzWTIrZ0JO?=
- =?utf-8?B?TitkcDZiVGVjWUh1TUNnY0JpUEthazd0dndlQjdkM3VkYU5uUVJOcG1TNC84?=
- =?utf-8?B?ak4xenBxVHNpbWhCdzdzdzlmRFFpMFJDem1HYXBwa1RNUDRVMGRMNzJqNWVT?=
- =?utf-8?B?R3prZXEwMHMvUHRUV0tscTNFVUttT2d1WlpHQjJxWDloOUhvcnVnRnVwbEZn?=
- =?utf-8?B?L01mbFAxSWpwWHU4anZ3bksvbUpKR041UStNT2o2N2NyZW5jRXAwc0k0NjBS?=
- =?utf-8?B?MllZRzhHcklxQjlCeEhmTTBEa1U3aTNNSFlXajBIMlZqN3dKRGRFZWtNTU9x?=
- =?utf-8?B?M2xmMVVGNXk0MzQrc0hlcFhTbHNmZDNScjdRdjBpWC9wa3ljMmRuOURkOEJJ?=
- =?utf-8?B?T0gxVVNxbUhCNGVTdzFXeFNwVkR0V2FlVmhPWDZsZ2RDSFRPVHVBTWNKRHR1?=
- =?utf-8?B?aXNzUnF0ekFjSlVRMERmdmtIYnlkZWlvNkNUUkt1NnhjNm9DNGdRd25Mb01D?=
- =?utf-8?Q?KGbW/Syenz021?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9207.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|7416014|366016;
+X-Microsoft-Antispam-Message-Info: =?us-ascii?Q?uo0w6I6vEaKTOCsL7J8ifJ45cTTuQ7UqOValydjixMDw3twVrS4OVfepdsDw?=
+ =?us-ascii?Q?PcyRBJ07OcBrIf/LxcwO/99xJKp9q0UG29kWiCFHsxg6fpaJa+Oz4o5aBLl1?=
+ =?us-ascii?Q?3rznIjpUm1kISONqnkSnFlac+Fr2j85zPQiKhlw9az66GnuRfky7G7GJnI0A?=
+ =?us-ascii?Q?E+LmTkYnsVET7KtAFJthQuNXyp846a+QPGAkwYEoTPuneoan5UMt8CmzZ4Bm?=
+ =?us-ascii?Q?PGSdCSfNHSORQ3nELCE5IoWY1O12yKyZOioIebPLhVzYLeQe7ltUV7TxO7NB?=
+ =?us-ascii?Q?1Y31gxPssspJHy1rQPtlnPkxLQ6ipFsvp7smEw4wETmrpj+RsElD3MItteKI?=
+ =?us-ascii?Q?HLq5901/2WweX8xqFcUOrMUydVquWbPktX2zxTv7+STmLBpUAfHGJx9wPm2Y?=
+ =?us-ascii?Q?t3vi6rg0W6AOLMRJEsW3ZyobsLab8zfYT2J+m/DNmL8Wub0xShPZ/Equrk7v?=
+ =?us-ascii?Q?oMxvfvwJmuNkWzg6QgNdlqhczdn6rHlgfRoJmtXiM3+FyEvX+JgAsaBKr3cN?=
+ =?us-ascii?Q?zzQdHHp/h+2L1BrnRCgnKwmRrvv3Zo5hBDHAICua8UY8QQLY6E+TOpBuczJb?=
+ =?us-ascii?Q?uGJSJDdW8lvhXl57ggD2fjDJRRghlTrldMYRDwjvSKc6GTCyXi7X1r3G0cLb?=
+ =?us-ascii?Q?AimKgWsXQnIDu9KRpYiYqytOo5OPnomE9kzKlxTdyhTXenvFRqo1YjqYppOA?=
+ =?us-ascii?Q?ElkWo4Jio+ThalcuafQd95MXdjbsc/HuUYBtT2dD9Fz0pJ3DOQKtmijV5Ovc?=
+ =?us-ascii?Q?o7cALViBOWMmD1k784EuIu94EuhRHfeYoTA567j4Vx0ZpuqP1rzPmbieRXVp?=
+ =?us-ascii?Q?ooTTOvT7sedV/V8LQFCE+sdJeaOrZBlXUo7egVjtCKEGtnCgnoU8avPHbbtx?=
+ =?us-ascii?Q?pAN59K3QId/lVaP4Igc2wD0YcgTHnR5dS8uamFQa0cIJDGmcRk85gbzTOi2d?=
+ =?us-ascii?Q?PDZglBkS+0wrxllbCQz87gtFV5kcAKqTYRGTjYBfqVu7gKSJEHFGob1h5/Sr?=
+ =?us-ascii?Q?dsJSTZH6ZU9w82PCl6c7aRcg5mUiyfX5pl+14LRRrNhM37QF+BlCSn4lzFTc?=
+ =?us-ascii?Q?g89pe1eGkrcAfAXybcl4bs4r1S1h0sInVBFTDSz0vq7qhZoYzx6CcDyCO0YA?=
+ =?us-ascii?Q?fM3yb5SQOLQ2SosVItpZv99z02frAPl8Ya0OItxnfUJRNS1kKNTB9Zqh4++R?=
+ =?us-ascii?Q?AgjA/6/dv52kckc2NEDO0wZRmLf8o7dMXqnSpZ/kVsP/jf+dAnVldB7Z7pNM?=
+ =?us-ascii?Q?iDOl7LsH8MLafJ6UkaVsAhdIVf/Z4fBgEtX8oAXl22JcHEvbmGlVHMSdIUE8?=
+ =?us-ascii?Q?qFrzxZ/Y/XMbQrOwBl1wDiZZYzTRUi506Vh7xI1JhYRwGw=3D=3D?=
+X-Forefront-Antispam-Report: CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV3PR11MB8603.namprd11.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(7416014)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?Z3NURU1tUTNobTFXK3h1TVdoSERPRUZvVnJ0ZkNKbDlHa3d2cFVNWGVlbjIv?=
- =?utf-8?B?Um1vK3hJN2VzeFRGbkRkNHlZTjZxL0lNVldkTEdHT29rYnlTbC9qMXZwaU1z?=
- =?utf-8?B?WC9qRklxcVFqRi9YOFFlNlNJdTFQRWxwMXgwVGx3eW4xS2cwMGp5d2VmS0h4?=
- =?utf-8?B?Sm1TMUdZWDEvZHNCcVVhamRBTXRTZlU0d2VUZHZCbE5IcDIvUjBGOGFWTTZE?=
- =?utf-8?B?eFUwRC9Ca0l0UGtYWk5DdHB3SzdLWURrWHk0Rk04a2RPM0FtWHlrOS9oVnVI?=
- =?utf-8?B?YmQ2azdOMnprRXY0WnhJVlo4T3BPcVMzTVhPTWN0NmlFeS81Vm45VkhyZ05k?=
- =?utf-8?B?cXRCU3N4aThpYzlWL01VcVVGNjNLdjZkWXNFRjJpd2JDUnllemhoaU9pZnlF?=
- =?utf-8?B?T0ZuQUJMSEV1M0dZVHlUUG9mTG9PMTZxL2x1Z0wrRXVkaDNRc1hLQlp6TnA4?=
- =?utf-8?B?Sk1qVGVxL0NkNlpJSnRJK3F4N1NqeHZMQVFyTVBlZkh1cG5vRUlXak92UUo2?=
- =?utf-8?B?R2JrZzRqYmc4T1ZxSW1DeWVkbjJHdnV4WkNiVk0vbEo3R0FuUUtRdEtmMzA3?=
- =?utf-8?B?Ukx2N1M1eDhSV1hybytmeWVyVjhadzdlajBaT1pOUkFRbUJwR00yWlp0MHY4?=
- =?utf-8?B?LzBPOVAxbzJSYlFoWXdaWG5lekl5eDllRWZ0c2w2TVMwQUh1VFc5OUFWRFVw?=
- =?utf-8?B?RkdFWHp2VkpMNHhZd3M2dHJTWnlLQUVOZHgrblRnQ2FaVW1kWmtHWDlWeFRn?=
- =?utf-8?B?OU5Vci9OWm9yOWg5bkI1MlhyaTBsWlc2OGg0emx6MnJ4Tm1JWEJmemI3ZWcz?=
- =?utf-8?B?NWFqS1dZZllZVEZBSWhBcTFwTTR2OVNUc2U4SnQwdzhVYTBMN0o2U0F0V0lH?=
- =?utf-8?B?dnVPODZMRWlSSFB4UHFHdU1MM0VVT01JbHFBZWNvRUIxa3VxQ2lmTHBMMU1m?=
- =?utf-8?B?NG5RdTJwMm9sc2wrNkUvT3NKeklPTklFTFZtOExUbTVrNkhSQU9WWkYweUwv?=
- =?utf-8?B?RWpJa2cvenl0SEdoWmF6WGkyK1JnUTZRN0trSXRVQTFvZ2Znb2g4cFJ2Z0Rl?=
- =?utf-8?B?eE9IUE9ZcDd2Yk4vckFIZHU4Y0tkZ05GeE5mQjRFRFMzYVZCZnN1L2lFT244?=
- =?utf-8?B?R3lKbmlBN2pvTHRCYTZHSDNBYU5qa3VxcDh4OG9maXpaaTIwTnljd1A4M1d6?=
- =?utf-8?B?elJzd01tbnlDOFZUVzdDYW9Pb1l2ZjdrandlR2FpVlhQT3RoNGdwdks2UVVX?=
- =?utf-8?B?T3JhNFp3bjRzSDV1WG1VZG51ZytXQUc1d2JqMHVTOHNVdkx0R3pwYUEydmQr?=
- =?utf-8?B?UHFxS2hMTDRYOGNXVlRjcVRGRDJ6WlZGZ1dxejFqN29VbVpFeU4wNXcya2d6?=
- =?utf-8?B?djh3cExZUEQ0dVBVc0pqZFlXMzhmSStKUlFMeXA5eWF3aWtvZmd2V0REaUk2?=
- =?utf-8?B?dEg1NklsakNtVzBTV1ZSajdxUkZOWGlWVmlhaCtHY045Z29MS0NLK2pDcnJk?=
- =?utf-8?B?NC92aWpJVWd4M2VVYlFyUmRTMFlVZ2pJZnRkSzV6Lzd4ZGFOcUV1clNHQXdL?=
- =?utf-8?B?M0FiQW1Nd1ZjbHRUREFNVC9NcEF2S3hsVDRFd1A3cyt0aFZ6L0owdjRneXhk?=
- =?utf-8?B?cTA1UVBUc2t1eGlZOTZVTU02ZzhEQUNtZnZpUGd0NUprOHo3cWl0UmpXdlVL?=
- =?utf-8?B?SDMxRFJBNldkZk5XcjIyVnBTekVnQkNqMy95b0xkVVY2cGIvbjRmQm5YNmxh?=
- =?utf-8?B?VUtJb002dXZHTDNFQkhVL2NvdU9zMEl6ZzhHSEtrYjQ1cW1kYTZuUjBpaHdx?=
- =?utf-8?B?dEE3V1lOYTc2SWJvVVFaNDk0ZFppd2RTblZ2Vm1aZUxRRmdKTE9sTFVQWmFk?=
- =?utf-8?B?UjZYZU1zZ3MvZ2hoMVROVFlJcnVxOGkwNDlKM2ZnRkdaakdGZmhRUjZUUzc3?=
- =?utf-8?B?UTYvR3ZuREJQUCthbGlteCtMd2ZyUmRFNlpUUVY2Y3BwQ0JpMG9hOGxmbVJQ?=
- =?utf-8?B?SXNWUnpObythL3lBZy9NS0F3Mm9PMTZKVnRPb2JFdG5TWnFEdVdzVHZTRTFS?=
- =?utf-8?B?YlFteXkxeUJvaUxCQVVPZGRzR2xWU3JoUHF0Z0haSmhkYWRaOXJ2c2hXaGNx?=
- =?utf-8?Q?ekAdNLhzuSJ63QGy6bXbV9Im4?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 5daebb63-ffce-4565-6962-08dd4b18ae2a
-X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9207.namprd12.prod.outlook.com
+X-MS-Exchange-AntiSpam-MessageData-0: =?us-ascii?Q?zrKrFoT4L86AWYuH+4n/i+5S8HqBpf07m7dbtjR2bNubIPSfZD0CxtYiWnGI?=
+ =?us-ascii?Q?IZYTXsIYzwHfKJwpQ/bMO/St9qOKjiyDE9yefNmRWqsHbTjZEXSb7taSbCQN?=
+ =?us-ascii?Q?og5mlqxO97K36cVDO/bEb08/Xr9YVMidqiX+q6LQot08/Y1Mdavzk/2wb0Ul?=
+ =?us-ascii?Q?eONBUAEi5CvvN5yxSRg+2yzZHtjSLIGkC7eIXosoCubODr+GXoId2Kl2dYiR?=
+ =?us-ascii?Q?GBqP6AQQgf3v47OvaqLhy2jiB/fGJm05fwHDvyUP4BIyZrHAPYxPvjjDYwbI?=
+ =?us-ascii?Q?Tqf+xQCrfLDR48HYbugCOUO0ByYZCB4KfM2raXDndeWQYocG+5FwBxCM9/gt?=
+ =?us-ascii?Q?RpsElh6ziUsMIJv0tgoL8gAd5ra4a2dG3SuqEowlqLRlw/g9gr33oOn+klaP?=
+ =?us-ascii?Q?Pz1yyu29HJYWzhgA3MlJor8pbLNKsQwrdAQavL12BkJ/f/hbgVAa3GMthBTm?=
+ =?us-ascii?Q?iyxl5hXShF4y4Y/l1JWPXKQ48dUy/HXWZIZ4bBlp/ERV694qTwVLCG/dE0eT?=
+ =?us-ascii?Q?Qq0sar7zOzrqHmqeT44C3wWkOfdv6Yq9LJTbfTjxxbC9k/mVZIaWgeBM1rdL?=
+ =?us-ascii?Q?cSLrAwqvB8KRwrGPhHEt5TfFCgKk546ho1u1w28kOLhnPincavBJIHZdywh/?=
+ =?us-ascii?Q?fmBaJufw9XzebE2AAWIo//oLG27Aa8z+czUrDEN8EoWTULL4OlOSzg+WEESe?=
+ =?us-ascii?Q?33UE7E2S2rU20bt+zPAJ8W3hmplA1W70Ngdy3dusV5l8Y+Mp1GYn6J1csKyp?=
+ =?us-ascii?Q?fyOdiEvOEPYC+how3CWISze2NYRurdV+reYXeB+mERwnrXuKNyh9TDhkfzez?=
+ =?us-ascii?Q?Qjg6etk+wglUQvPh0yeURScQWDkhZuhzKr2K0ayIDWti2iiZ2wMJHXaicpxz?=
+ =?us-ascii?Q?rDDelL1nq1gng185xUrdqLfaB14V17D2jQra/nRyzrtDr9gCbzGyAIYd47SQ?=
+ =?us-ascii?Q?+twN0sbDFcQ1Ygw2aUJ+q16JANTTiBdNHSdWWc8iXoTTVcpUh7YC6YbGca56?=
+ =?us-ascii?Q?GpHfaIwvBJHzCOB8mxalwLmgPRol7bursofdO6I+nxWEozermfdqx430ihHY?=
+ =?us-ascii?Q?FuuE0Ml447SuO50C4yWZCfkoLdbXwKCI2vwKhbKNwNSrwTi7Ia/y62Rf+CW6?=
+ =?us-ascii?Q?qQtXn0NHnt/FN+cPrz/P7JAc3nR9MSDW+ZrWR4QOHHsdqDz1j+uYCm813zli?=
+ =?us-ascii?Q?lCg+RQ1Ll9a02Z1XgPvlOFf4UQHWOA6XDNO1bozzEj7vScdCG1xnc9nVIRAw?=
+ =?us-ascii?Q?95X3RJ+ULbOzzn38nA7ANxAgyZS+6yAEt0bFPYqbTWero443GbTVzA6X8KVb?=
+ =?us-ascii?Q?Y/YUTyptjMOiHkZqBYLznIQZo6yLm8VX8io3tPPNlMXfqcqLTclejBZ3HnRf?=
+ =?us-ascii?Q?2c3VYENz1vPWtZtYl2JLBkZ19E9yOwO5vY5MmJiKFy2yIqomrUOBN04EALgv?=
+ =?us-ascii?Q?Ikn5uuyWY2y/6MzzJ82VDvTbva1LY9HakhtJ1VhPZx0wd3cSVtCiZ6hOQPaN?=
+ =?us-ascii?Q?9vi9+iLOJMKetZUBETrR4dH7fHhmLTGtDqDnHAKWe99i6oFnBl3RQJfMG+KK?=
+ =?us-ascii?Q?odjtyn67cplQrrV4FDt5AfAgflHlHWDET4srGm3FaAT+DakLoxJLdtQTndb5?=
+ =?us-ascii?Q?TA=3D=3D?=
+X-MS-Exchange-CrossTenant-Network-Message-Id: c46323ac-296c-42bc-785a-08dd4b21bb95
+X-MS-Exchange-CrossTenant-AuthSource: LV3PR11MB8603.namprd11.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2025 03:52:33.2922
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 12 Feb 2025 04:57:21.0389
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-Id: 46c98d88-e344-4ed4-8496-4ed7712e255d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Mnc0ofB1CUWqkeK61vv4X7JQqcG794130QwPrLoFp069L+nvWb9Fj3aiRvAZ1IVC2oNyBDg9xq12V/uLMxB9Ug==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: DM6PR12MB4139
+X-MS-Exchange-CrossTenant-UserPrincipalName: LyN3mmZxBrwyJ6R8ZuLzRn9HoAcyKcqw/XreDJlhnnDYmw3Nn/aRxGMumgMEHGQ+sJiYnz2JYqc+wINeTP4EZA==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: CH3PR11MB8702
+X-OriginatorOrg: intel.com
 
-On 2/12/2025 12:47 AM, Mario Limonciello wrote:
-> On 2/11/2025 07:13, Dhananjay Ugwekar wrote:
->> On 2/7/2025 3:26 AM, Mario Limonciello wrote:
->>> From: Mario Limonciello <mario.limonciello@amd.com>
->>>
->>> In order to access the policy from a notification block it will
->>> need to be stored in cpudata.
->>
->> This might break the cpufreq_policy ref counting right?, if we cache the pointer
->> and use it independent of the ref counting framework.
-> 
-> Would it be reasonable to bump the ref count when we take the pointer?
-> 
-> I'm not sure if this will work properly.
 
-One doubt, why cant we get the policy ref normally using the cpufreq_cpu_get(cpudata->cpu) 
-in the notification block ? I'm not aware of that code, if there is any restriction on this.
 
-> 
->>
->>>
->>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->>> ---
->>>   drivers/cpufreq/amd-pstate.c | 13 +++++++------
->>>   drivers/cpufreq/amd-pstate.h |  3 ++-
->>>   2 files changed, 9 insertions(+), 7 deletions(-)
->>>
->>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->>> index 689de385d06da..5945b6c7f7e56 100644
->>> --- a/drivers/cpufreq/amd-pstate.c
->>> +++ b/drivers/cpufreq/amd-pstate.c
->>> @@ -388,7 +388,7 @@ static int amd_pstate_set_energy_pref_index(struct cpufreq_policy *policy,
->>>       else
->>>           epp = epp_values[pref_index];
->>>   -    if (epp > 0 && cpudata->policy == CPUFREQ_POLICY_PERFORMANCE) {
->>> +    if (epp > 0 && policy->policy == CPUFREQ_POLICY_PERFORMANCE) {
->>>           pr_debug("EPP cannot be set under performance policy\n");
->>>           return -EBUSY;
->>>       }
->>> @@ -689,7 +689,7 @@ static void amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
->>>       perf.max_limit_perf = freq_to_perf(perf, cpudata->nominal_freq, policy->max);
->>>       perf.min_limit_perf = freq_to_perf(perf, cpudata->nominal_freq, policy->min);
->>>   -    if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
->>> +    if (policy->policy == CPUFREQ_POLICY_PERFORMANCE)
->>>           perf.min_limit_perf = min(perf.nominal_perf, perf.max_limit_perf);
->>>         WRITE_ONCE(cpudata->perf, perf);
->>> @@ -1042,6 +1042,7 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
->>>           return -ENOMEM;
->>>         cpudata->cpu = policy->cpu;
->>> +    cpudata->policy = policy;
->>>         mutex_init(&cpudata->lock);
->>>       guard(mutex)(&cpudata->lock);
->>> @@ -1224,9 +1225,8 @@ static ssize_t show_energy_performance_available_preferences(
->>>   {
->>>       int i = 0;
->>>       int offset = 0;
->>> -    struct amd_cpudata *cpudata = policy->driver_data;
->>>   -    if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
->>> +    if (policy->policy == CPUFREQ_POLICY_PERFORMANCE)
->>>           return sysfs_emit_at(buf, offset, "%s\n",
->>>                   energy_perf_strings[EPP_INDEX_PERFORMANCE]);
->>>   @@ -1543,6 +1543,7 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
->>>           return -ENOMEM;
->>>         cpudata->cpu = policy->cpu;
->>> +    cpudata->policy = policy;
->>>         mutex_init(&cpudata->lock);
->>>       guard(mutex)(&cpudata->lock);
->>> @@ -1632,7 +1633,7 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
->>>         amd_pstate_update_min_max_limit(policy);
->>>   -    if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
->>> +    if (policy->policy == CPUFREQ_POLICY_PERFORMANCE)
->>>           epp = 0;
->>>       else
->>>           epp = READ_ONCE(cpudata->epp_cached);
->>> @@ -1651,7 +1652,7 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
->>>       if (!policy->cpuinfo.max_freq)
->>>           return -ENODEV;
->>>   -    cpudata->policy = policy->policy;
->>> +    cpudata->policy = policy;
->>>         ret = amd_pstate_epp_update_limit(policy);
->>>       if (ret)
->>> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
->>> index 7501d30db9953..16ce631a6c3d5 100644
->>> --- a/drivers/cpufreq/amd-pstate.h
->>> +++ b/drivers/cpufreq/amd-pstate.h
->>> @@ -97,9 +97,10 @@ struct amd_cpudata {
->>>         struct mutex    lock;
->>>   +    struct cpufreq_policy *policy;
->>> +
->>>       /* EPP feature related attributes*/
->>>       u8    epp_cached;
->>> -    u32    policy;
->>>       bool    suspended;
->>>       u8    epp_default;
->>>   };
->>
-> 
+Hello,
+
+
+we noticed the issue happens with a low rate on this commit, but keeps clean
+on parent when we even run the tests up to 999 times. just FYI.
+
+41f70d8e16349c65 b04e317b522630b46f78ee62ecb
+---------------- ---------------------------
+       fail:runs  %reproduction    fail:runs
+           |             |             |
+           :999          2%          16:999   dmesg.INFO:task_blocked_for_more_than#seconds
+           :999          2%          16:999   dmesg.Kernel_panic-not_syncing:hung_task:blocked_tasks
+
+
+kernel test robot noticed "INFO:task_blocked_for_more_than#seconds" on:
+
+commit: b04e317b522630b46f78ee62ecbdc5734e8d43de ("treewide: Introduce kthread_run_worker[_on_cpu]()")
+https://git.kernel.org/cgit/linux/kernel/git/torvalds/linux.git master
+
+[test failed on linus/master      7ee983c850b40043ac4751836fbd9a2b4d0c5937]
+[test failed on linux-next/master ed58d103e6da15a442ff87567898768dc3a66987]
+
+in testcase: rcuscale
+version: 
+with following parameters:
+
+	runtime: 300s
+	scale_type: rcu
+
+
+
+config: i386-randconfig-052-20250205
+compiler: gcc-12
+test machine: qemu-system-x86_64 -enable-kvm -cpu SandyBridge -smp 2 -m 16G
+
+(please refer to attached dmesg/kmsg for entire log/backtrace)
+
+
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <oliver.sang@intel.com>
+| Closes: https://lore.kernel.org/oe-lkp/202502121025.55bfa801-lkp@intel.com
+
+
+[ 1023.501569][   T32] INFO: task UVCG:82 blocked for more than 491 seconds.
+[ 1023.510932][   T32]       Tainted: G                T  6.13.0-rc2-00014-gb04e317b5226 #1
+[ 1023.528506][   T32] "echo 0 > /proc/sys/kernel/hung_task_timeout_secs" disables this message.
+[ 1023.551252][   T32] task:UVCG            state:D stack:0     pid:82    tgid:82    ppid:2      flags:0x00004000
+[ 1023.582336][   T32] Call Trace:
+[ 1023.599286][ T32] __schedule (kernel/sched/core.c:5372 kernel/sched/core.c:6756) 
+[ 1023.617204][ T32] ? __this_cpu_preempt_check (lib/smp_processor_id.c:67) 
+[ 1023.637326][ T32] schedule (kernel/sched/core.c:6834 kernel/sched/core.c:6848) 
+[ 1023.653175][ T32] schedule_preempt_disabled (kernel/sched/core.c:6906) 
+[ 1023.672095][ T32] kthread (kernel/kthread.c:453) 
+[ 1023.684220][ T32] ? kthread_flush_work (kernel/kthread.c:970) 
+[ 1023.700611][ T32] ? kthread_is_per_cpu (kernel/kthread.c:413) 
+[ 1023.716756][ T32] ret_from_fork (arch/x86/kernel/process.c:153) 
+[ 1023.732758][ T32] ? kthread_is_per_cpu (kernel/kthread.c:413) 
+[ 1023.748605][ T32] ret_from_fork_asm (arch/x86/entry/entry_32.S:737) 
+[ 1023.764004][ T32] entry_INT80_32 (arch/x86/entry/entry_32.S:942) 
+[ 1023.776959][   T32]
+[ 1023.776959][   T32] Showing all locks held in the system:
+[ 1023.803410][   T32] 1 lock held by khungtaskd/32:
+[ 1023.815913][ T32] #0: c3baa3d4 (rcu_read_lock){....}-{1:3}, at: rcu_lock_acquire (include/linux/rcupdate.h:336) 
+[ 1023.842061][   T32] 1 lock held by in:imklog/227:
+[ 1023.849815][ T32] #0: ecd0e884 (&f->f_pos_lock){+.+.}-{4:4}, at: fdget_pos (fs/file.c:1194) 
+[ 1023.877481][   T32] 1 lock held by dmesg/494:
+[ 1023.885260][   T32] 2 locks held by depmod/567:
+[ 1023.903871][   T32]
+[ 1023.907007][   T32] =============================================
+[ 1023.907007][   T32]
+[ 1023.938278][   T32] Kernel panic - not syncing: hung_task: blocked tasks
+[ 1023.951013][   T32] CPU: 0 UID: 0 PID: 32 Comm: khungtaskd Tainted: G                T  6.13.0-rc2-00014-gb04e317b5226 #1 78ab3595737b7bb7ccfbfed5c1dcb65e25af99a7
+[ 1023.973770][   T32] Tainted: [T]=RANDSTRUCT
+[ 1023.979010][   T32] Hardware name: QEMU Standard PC (i440FX + PIIX, 1996), BIOS 1.16.2-debian-1.16.2-1 04/01/2014
+[ 1023.991787][   T32] Call Trace:
+[ 1023.995862][ T32] dump_stack_lvl (lib/dump_stack.c:122) 
+[ 1024.001535][ T32] dump_stack (lib/dump_stack.c:130) 
+[ 1024.006622][ T32] panic (kernel/panic.c:258 kernel/panic.c:375) 
+[ 1024.011360][ T32] check_hung_uninterruptible_tasks (kernel/hung_task.c:239) 
+[ 1024.018678][ T32] watchdog (kernel/hung_task.c:398) 
+[ 1024.023798][ T32] kthread (kernel/kthread.c:466) 
+[ 1024.028697][ T32] ? check_hung_uninterruptible_tasks (kernel/hung_task.c:380) 
+[ 1024.036601][ T32] ? kthread_is_per_cpu (kernel/kthread.c:413) 
+[ 1024.042763][ T32] ret_from_fork (arch/x86/kernel/process.c:153) 
+[ 1024.048431][ T32] ? kthread_is_per_cpu (kernel/kthread.c:413) 
+[ 1024.054588][ T32] ret_from_fork_asm (arch/x86/entry/entry_32.S:737) 
+[ 1024.060422][ T32] entry_INT80_32 (arch/x86/entry/entry_32.S:942) 
+[ 1024.067908][   T32] Kernel Offset: disabled
+
+
+
+The kernel config and materials to reproduce are available at:
+https://download.01.org/0day-ci/archive/20250212/202502121025.55bfa801-lkp@intel.com
+
+
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
 
