@@ -1,165 +1,220 @@
-Return-Path: <linux-pm+bounces-21954-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21955-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B10BEA3247F
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 12:14:19 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBEB2A32497
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 12:15:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 42285188C1B6
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 11:14:03 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1003F3A9276
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 11:14:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 474A920AF89;
-	Wed, 12 Feb 2025 11:12:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F21EB20A5CC;
+	Wed, 12 Feb 2025 11:14:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cQ4IutSq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="sI8z74Gt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 36B5620ADEF
-	for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 11:12:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C75DF209F58;
+	Wed, 12 Feb 2025 11:14:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739358773; cv=none; b=u+hQocj1JxFjUAR0XnJQ4yGcafHaaMupHEbXJyw18Gihb/yjOyrddQUkGTknZTW3ooJieRqZHtjnLCUvjUMz9f19acptDLllZSzsBRaw0lYme6vgHmxLEMsNy5FNr0AVKLm3YJwY+7CirMEe/oNEx8uP3vIxHFzXdqa1U77oHHQ=
+	t=1739358882; cv=none; b=Jyyv+OxB2Tjg+pJu6FhFY6iK24Aw2B9xkTIlkz2Yc2W2oztMl1fp9OqxsbtOp3ZX0fD1/pzLgJXUJG7kwCwk9JqA1r1fBhwpdp32fZzYZ/q4yNnZlblJQOvuRIVCFr39GvF9yNq7NXMtMVJrSi9A6WzgGVhZRlGQgJzUckX9R2Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739358773; c=relaxed/simple;
-	bh=czDBhXds2774fwZNyEeYA03Jzlh2/wYesLkUERE8+UM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p7056ej9HGqzjVAaY7NyJihuYC0yl+phATS+SX8VyHpdq3Gp9+LC2t4YnNwAYtFxcy7Da0gUzwVlNZZYAeLgpuvx4fYZGrlqI8KMlQtB6BMIx3lmaDSuKAj+BH3xwehBMMZik8WOfCtI+Q/AYLTsLCZpc48wxxbQTBWZ5FKV2to=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cQ4IutSq; arc=none smtp.client-ip=209.85.208.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lj1-f180.google.com with SMTP id 38308e7fff4ca-30761be8fcfso67824321fa.0
-        for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 03:12:50 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739358769; x=1739963569; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Zi7NSGVlmdukYXP2xLDE0jItD13dYbVjBU6ou/KCEC8=;
-        b=cQ4IutSqVBqRUrbXKbHaw/NNLr1RNmie25Y/MVG8IodnPJSqJa1cPFbqwN103Z0JrV
-         oQD/xEU3XgRSarfKrcXiX1R6KEago3ox9oIBsnI0DjB9UJsWl5sDcNop4HlLguL/G1hu
-         GxTT24uzp3zZ4xPySTjF/eTz1vun4CLeFjc33jlvNrBwu6cGZBt5hl0Rt8fbjQf+H/rZ
-         eUaZpg1KGuoSAJWBY++4lRaSip9zdagPjDMryJPbVXhf7eYMR4rUviwCv5HHeZUxfMTw
-         0myu+Z8dFmtj8OsLAL07GSg9YY4qwgAAg4x0xyfKZRR1n/bfa4Un0GDIw6/E2zW6vQa0
-         gw6w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739358769; x=1739963569;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Zi7NSGVlmdukYXP2xLDE0jItD13dYbVjBU6ou/KCEC8=;
-        b=jRNNz1icWvlDRb48w4YCSovJxMpExuqbnsBc/veInoHus1mLWe8+cZ9TbVUk0qpP/G
-         +vGes5aKLkIxQL94peITjwybPnMCwEdKrmn2nmJ+3JorVtAcpIkisXL55a5j9pr1EhqP
-         zdEhEAku/WFfR6bOg+vssuwm9O5wpuP1pWpbRJCQ36KG0bwiAI6HnJH1aUeKYhoWdm+w
-         +B2Ktus5XQk7aeWki+xyVoQEX3f2iJJO9xspGSDpD5G5US0CkErslN8Z2OMzrkyAboJf
-         6MXUBxA+xiaZQBGifxNXOzfTxe67Qq5Tj08mYT82thePRk2Ws1oK9itIcX356rJUjaLs
-         loMA==
-X-Forwarded-Encrypted: i=1; AJvYcCXdM/oV+ohdrOLwwPFM4c9mEgHTewkS9i6fAInvXbxfh/NFIynhQvAzHF/Fk2CSYDHkP2ElD0D2vw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyRQyMJoUzh3tNnd021RIyCVF6y0Ntu+Gk1+EotHegLFPraqmLm
-	GIGiwfkKrkE+wSmiOU9u5AjbdaQhdXFWpfqSBMvgW2I9MJ9lkZq19owsl0PFjjw=
-X-Gm-Gg: ASbGncsCOqo0gTbWiJE3QAecSSMx8TPhZ9DZZDgXzKRbTCOP+094P/17Id8gMfRwSA1
-	ayxRjRtl/Afc3wB2JYN894ru7q71Q4qgXfOu9Ltj1GyeazPlcrTK4odpjjVsvg6DYvZxthZE+bF
-	WfElSyPHEkNRyabGaXfLspGgfG8L8enGQA7+fNwIt+id95918HZN1bb6w6Vjr7TLWY8E9y+FAXd
-	H8zeXDarMgaBJm+yzpycsvYAGAmDkokxNL9k7IeJFt7rvGZGNp820pnCH72qzCsiYJ3COKEqdxR
-	RwpwkIZea7r2XtN7qybW8dEmrPbA9QpI/YSBCDaej55dFOMh9zqZZV+N2amnnLoyoieyGk8=
-X-Google-Smtp-Source: AGHT+IGWDa45dg3xRQlPrBCB2RykQBWQjwcAddvmjkqC+H/VzwhKqUGo6U53A3FTwTYDMQ62clov2A==
-X-Received: by 2002:a05:651c:220c:b0:307:e0c3:5293 with SMTP id 38308e7fff4ca-309036ea829mr7444151fa.36.1739358769271;
-        Wed, 12 Feb 2025 03:12:49 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-308fe555e5dsm4932671fa.72.2025.02.12.03.12.47
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Feb 2025 03:12:48 -0800 (PST)
-Date: Wed, 12 Feb 2025 13:12:46 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Amit Kucheria <amitk@kernel.org>, 
-	Thara Gopinath <thara.gopinath@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Ajit Pandey <quic_ajipan@quicinc.com>, 
-	Imran Shaik <quic_imrashai@quicinc.com>, Taniya Das <quic_tdas@quicinc.com>, 
-	Jagadeesh Kona <quic_jkona@quicinc.com>, quic_kamalw@quicinc.com, quic_jprakash@quicinc.com, 
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH RFC v2 1/5] dt-bindings: thermal: Add MBG thermal monitor
- support
-Message-ID: <iuzhsmcfmc5kxpxirqdacxgaqqufs3hdhlvhw2mds2wq3rb6si@pcsvops5yd6h>
-References: <20241212-mbg-v2-support-v2-0-3249a4339b6e@quicinc.com>
- <20241212-mbg-v2-support-v2-1-3249a4339b6e@quicinc.com>
- <ojukpywkhu72cimujmijzidf26654g5vkjaj477imcf4suz2o6@cmow62jcqsfz>
- <7a5db383-914c-4c1e-846e-5d68cc6a7765@quicinc.com>
- <fcd718be-fe8a-466f-bd2b-7b75d5f8dd6c@kernel.org>
- <c85903c6-6a89-4382-bfa2-2fed95f0cbc0@kernel.org>
- <sybrfmrpegq7fcqykgsfhm56wjyx5vp6zafqw2d73tiral64aw@hg4di55fzdle>
- <9a61e73d-29d1-4189-89eb-1299b8934af9@kernel.org>
+	s=arc-20240116; t=1739358882; c=relaxed/simple;
+	bh=ElFOyPp5k6YAWw4PxIEAueha3V2bu2dMbp+yyR1nDGQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=aYfkX0mQ8C+P9Tqaic7yRjaliY5pKwCyN2H2y3O6qJIeZxQvqDUAyeyRoeD23Cq5IRvPSOVE4jDmDtfbFmnOOjw8s1N94Vytvay9ZutJ1oAHSexP81R+pDJV/kYmFvCfe1HLOumtUWeMCHk2oKgLx1MIY7018XMs6RchjOraNA8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=sI8z74Gt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 469A0C4CEE7;
+	Wed, 12 Feb 2025 11:14:41 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739358881;
+	bh=ElFOyPp5k6YAWw4PxIEAueha3V2bu2dMbp+yyR1nDGQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=sI8z74Gt9ttDJJar58Snerx+M8hB3Bsf5fiS7ZsYevmCiMDEAzWw76SE3qojUQ5dd
+	 JQBnp0VUQk4mlewH2aswVYjLHFnApRKiBGK9uiHhDavId6M66GsLl0Ls8f/tZxNgo0
+	 VYQkKP1fRJ9r2l3N2LJY4Gfls3ZA8je/iKFPeOo2+bAM/DHv6QKIxtQkmRvDEzd3Hw
+	 UQd7dkUjBvF6W3vrcqOoHvWTBFwyPTE5B/JWtyC0lCx1sHPe1o0J+2EzoQMAHO5qIS
+	 A2H2wzKTlXTnoKYngDEBQp7pCnJaNtwJQfeEWT8NWYalEHaIJDM4HnEKrXrCeJKQoH
+	 vHUdmNIvvlO6w==
+Received: by mail-oo1-f50.google.com with SMTP id 006d021491bc7-5fc7ff13fb8so1073196eaf.3;
+        Wed, 12 Feb 2025 03:14:41 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWoECSJMSekCZZqeyPxq/bIFiQEWRsrAotQLg2wBpsxXeceZCIKKQXC3IsIA/pAQP78m5Z3/mQncQOamhY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzxi2pZDUKuq1kNh0o+yZea8+TePtLLrKOkklcfdLfaS4uCMIXP
+	dv0evany7aaCssnHFTzsICAxGCFFSIe95tx9oicO5B3otI8fyd5ZTxNquMw2DvHfhPNr3OZX22/
+	x3egGfdfINONyKw27wPN5jBZ+E/s=
+X-Google-Smtp-Source: AGHT+IFMD1m6fioybSqUNwNdum8Rd0YCRKt7+QHVCKPkl2Cd7Y9Y7YGsVOHouQvD1XFPP/iIIiry843NZvUpjkFi+cg=
+X-Received: by 2002:a05:6870:46a9:b0:296:aef8:fe9a with SMTP id
+ 586e51a60fabf-2b8d643d386mr1780134fac.7.1739358880488; Wed, 12 Feb 2025
+ 03:14:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <9a61e73d-29d1-4189-89eb-1299b8934af9@kernel.org>
+References: <2314745.iZASKD2KPV@rjwysocki.net> <2511990.jE0xQCEvom@rjwysocki.net>
+In-Reply-To: <2511990.jE0xQCEvom@rjwysocki.net>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 12 Feb 2025 12:14:29 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jwkwawYHRe893Fj7EuQLGCVzNSgq2YQN08Ycf0bqrhOQ@mail.gmail.com>
+X-Gm-Features: AWEUYZmT7mRoSQtvrHUGOVP1IcZ2kFak6kouIIRiqjLSUhqnWQUlGBxXI-VoOrE
+Message-ID: <CAJZ5v0jwkwawYHRe893Fj7EuQLGCVzNSgq2YQN08Ycf0bqrhOQ@mail.gmail.com>
+Subject: Re: [PATCH v1 10/10] PM: runtime: Discover the lack of runtime PM support
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Jon Hunter <jonathanh@nvidia.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 12, 2025 at 07:06:56AM +0100, Krzysztof Kozlowski wrote:
-> On 12/02/2025 00:57, Dmitry Baryshkov wrote:
-> > On Tue, Feb 11, 2025 at 12:50:12PM +0100, Krzysztof Kozlowski wrote:
-> >> On 11/02/2025 12:46, Krzysztof Kozlowski wrote:
-> >>> On 11/02/2025 12:15, Satya Priya Kakitapalli wrote:
-> >>>>
-> >>>> On 12/13/2024 2:08 PM, Krzysztof Kozlowski wrote:
-> >>>>> On Thu, Dec 12, 2024 at 09:41:20PM +0530, Satya Priya Kakitapalli wrote:
-> >>>>>> +
-> >>>>>> +required:
-> >>>>>> +  - compatible
-> >>>>>> +  - reg
-> >>>>>> +  - interrupts
-> >>>>>> +  - io-channels
-> >>>>>> +  - io-channel-names
-> >>>>> Binding looks ok, but this wasn't tested due to unneeded dependency.
-> >>>>> Please decouple from dependency, so automation can properly test it.
-> >>>>
-> >>>>
-> >>>> The dependency is needed because this mbg peripheral is present on only 
-> >>>> targets which have GEN3 ADC5, for which the bindings support is added in 
-> >>>> the series [1]
-> >>>>
-> >>>>
-> >>>> [1] 
-> >>>> https://lore.kernel.org/linux-arm-msm/c4ca0a4c-e421-4cf6-b073-8e9019400f4c@quicinc.com/
-> >>>
-> >>> Sure. Then this cannot be merged due to resulting test failure.
-> >>>
-> >>> Please don't post new versions before this can be actually tested and
-> >>> applied.
-> >>
-> >> Heh, you responded *after two months*, to an old email so even previous
-> >> discussion is gone from my inbox.
-> > 
-> > Are you responding to your own email?
-> 
-> Look at the timeline of these emails. Satya responded after two months
-> with some comment. I responded now. Then I noticed that it is talk about
-> something two months old, so I responded again. Two responses from me,
-> that's correct.
+On Tue, Feb 11, 2025 at 10:25=E2=80=AFPM Rafael J. Wysocki <rjw@rjwysocki.n=
+et> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Previous changes have updated the PM core to special-case devices that
+> have never had runtime PM enabled in some places, but what if a device
+> had had runtime PM enabled at one point, but then it was permanently
+> disabled?  Arguably, there is not much of a difference between such
+> devices and the devices that have never had runtime PM enabled as far
+> as system-wide suspend and resume is concerned, so they should be
+> handled in the same way.
+>
+> For this reason, add a mechanism for discovering "lost" runtime PM
+> support in devices with the help of the power.last_status field used
+> for saving the last runtime PM status of the device known at the time
+> when runtime PM was disabled for it.
+>
+> That field is set to RPM_INVALID initially and whenever runtime PM is
+> enabled for a device (that is, when its power.disable_depth counter
+> drops down to zero) and it is set to the current runtime PM status of
+> the device when runtime PM is disabled (that is, the power.disable_depth
+> counter becomes nonzero).  Therefore, if power.last_status is equal to
+> RPM_INVALID for a device with runtime PM disabled, it means that
+> runtime PM has never been enabled for that device.
+>
+> The PM core will now change the power.last_status value to RPM_UNKNOWN
+> for devices having runtime PM disabled and power.last_status different
+> from RPM_INVALID during the "prepare" phase of system suspend.  Then,
+> __pm_runtime_disable() called subsequently on the device will set
+> power.last_status to RPM_INVALID unless it changes from RPM_UNKNOWN
+> to some other value in the meantime which requires enabling runtime PM
+> for the device.  When power.last_status becomes RPM_INVALID and runtime
+> PM is still disabled, the device will be handled as a "no runtime PM
+> support" one from that point on until runtime PM is enabled for it
+> again.
 
-I see, Satya's email didn't get to lore.kernel.org, so it wasn't fetched
-by lei.
+So the interim RPM_UNKNOWN value of last_status isn't really
+necessary, it may as well be changed directly to RPM_INVALID in
+device_prepare().
 
-> I recently got way too many such 2-month old clarifications.
-> 
-> That's indeed right of the contributor to respond in their own pace, I
-> am also sometimes slow, but really there should be some limit. It's
-> putting unnecessary burden on reviewers as now I should dig some old
-> discussion.
+Scratch this one and I'll replace it with a different patch.
 
--- 
-With best wishes
-Dmitry
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/base/power/main.c    |    6 ++++++
+>  drivers/base/power/runtime.c |   25 +++++++++++++++++++++++++
+>  include/linux/pm.h           |    1 +
+>  include/linux/pm_runtime.h   |    2 ++
+>  4 files changed, 34 insertions(+)
+>
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1817,6 +1817,12 @@
+>          * it again during the complete phase.
+>          */
+>         pm_runtime_get_noresume(dev);
+> +       /*
+> +        * Devices that have had runtime PM disabled recently may need to=
+ be
+> +        * handled as though they have never supported it, so arrange for
+> +        * detecting that situation.
+> +        */
+> +       pm_runtime_kick_last_status(dev);
+>
+>         if (dev->power.syscore)
+>                 return 0;
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1480,6 +1480,9 @@
+>
+>         if (dev->power.disable_depth > 0) {
+>                 dev->power.disable_depth++;
+> +               if (dev->power.last_status =3D=3D RPM_UNKNOWN)
+> +                       dev->power.last_status =3D RPM_INVALID;
+> +
+>                 goto out;
+>         }
+>
+> @@ -1568,6 +1571,28 @@
+>  EXPORT_SYMBOL_GPL(devm_pm_runtime_enable);
+>
+>  /**
+> + * pm_runtime_kick_last_status - Start runtime PM support verification.
+> + * @dev: Target device.
+> + *
+> + * If runtime PM is currently disabled for @dev, but it has been enabled=
+ at one
+> + * point, change power.last_status for it to RPM_UNKNOWN, and if it is s=
+till
+> + * RPM_UNKNOWN when __pm_runtime_disabled() is called for @dev next time=
+, it
+> + * will be changed to RPM_INVALID indicating no runtime PM support going
+> + * forward until pm_runtime_enable() is called for @dev.
+> + *
+> + * This function is used by the PM core.
+> + */
+> +void pm_runtime_kick_last_status(struct device *dev)
+> +{
+> +       spin_lock_irq(&dev->power.lock);
+> +
+> +       if (dev->power.disable_depth && dev->power.last_status !=3D RPM_I=
+NVALID)
+> +               dev->power.last_status =3D RPM_UNKNOWN;
+> +
+> +       spin_unlock_irq(&dev->power.lock);
+> +}
+> +
+> +/**
+>   * pm_runtime_forbid - Block runtime PM of a device.
+>   * @dev: Device to handle.
+>   *
+> --- a/include/linux/pm.h
+> +++ b/include/linux/pm.h
+> @@ -597,6 +597,7 @@
+>         RPM_RESUMING,
+>         RPM_SUSPENDED,
+>         RPM_SUSPENDING,
+> +       RPM_UNKNOWN,
+>  };
+>
+>  /*
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -80,6 +80,7 @@
+>  extern int pm_runtime_barrier(struct device *dev);
+>  extern void pm_runtime_enable(struct device *dev);
+>  extern void __pm_runtime_disable(struct device *dev, bool check_resume);
+> +extern void pm_runtime_kick_last_status(struct device *dev);
+>  extern void pm_runtime_allow(struct device *dev);
+>  extern void pm_runtime_forbid(struct device *dev);
+>  extern void pm_runtime_no_callbacks(struct device *dev);
+> @@ -288,6 +289,7 @@
+>  static inline int pm_runtime_barrier(struct device *dev) { return 0; }
+>  static inline void pm_runtime_enable(struct device *dev) {}
+>  static inline void __pm_runtime_disable(struct device *dev, bool c) {}
+> +static inline void pm_runtime_kick_last_status(struct device *dev) {}
+>  static inline void pm_runtime_allow(struct device *dev) {}
+>  static inline void pm_runtime_forbid(struct device *dev) {}
+>
+>
+>
+>
+>
 
