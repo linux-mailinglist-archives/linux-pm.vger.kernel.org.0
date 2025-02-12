@@ -1,124 +1,145 @@
-Return-Path: <linux-pm+bounces-21931-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21932-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE1F8A31F9F
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 08:05:03 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4829A32009
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 08:34:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E0B5E7A2BEB
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 07:04:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5E4343A3C9F
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 07:34:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A5F61FF1B7;
-	Wed, 12 Feb 2025 07:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D113A20468E;
+	Wed, 12 Feb 2025 07:34:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LR5eoN8V"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="bWBKFMZn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 661B81E9B04;
-	Wed, 12 Feb 2025 07:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EAB881FF1C8
+	for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 07:34:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739343896; cv=none; b=fM7mFyBdj8yHObWamUYFxlJ4aHy82B/NOR+BPfNXwJTDrDrO141yIQnDV/u/EDm41idEaYSQkxvT1+uRR1QpnLCO3Wp9hoyw22s77dGH3gSnV0+K7uLp9s9Vq0V7PfRGrUk3oc45XX5yoDh5nKA7BfnsWu9GD0BKJ+b+PX0QZc8=
+	t=1739345683; cv=none; b=Xv3s/e/ykSR1v2ygYDUuyDPEDujRj5g+n/waZdz0WWc4GFnhgxitwW+6hPVdlH26+hoUfZQ+N0ltQwcnirSC+qi8iXqTV3OcGwePwp8kT8JMts5Kw+L0boGfvbJ2AoyiRMbzyTxquykXq9uVwd9Tqamh7GckWJqqx3A/ng8H2o8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739343896; c=relaxed/simple;
-	bh=XZknmyTZpuJ/vYhf9yhvHpuHXU7uvg3lPc+DRXtI5S4=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=uWDnedZaFOCHl30Wn8z5rPG4mbjoooZGwlXDS7PhvF/26IwMx1DQc9k1P0biAdF0fCzxll5V1kcpUPptCWESVHsnaXeqfGcDWUQT75NUgvG4wql4tac8HkOFSxa7wJLVUuT8seLGnSz7eezlEytp6hmHG9mPEvP3nveRX9+BAag=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LR5eoN8V; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-ab7d58aa674so322785666b.0;
-        Tue, 11 Feb 2025 23:04:54 -0800 (PST)
+	s=arc-20240116; t=1739345683; c=relaxed/simple;
+	bh=xKZQeC8QlmSbvkB9BK44DQ6sGPlxDTX+bVywm5YMmj0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iGgQij64dzJQ6GLMRodLwxqaHIey44l+vZ9XrrW3LR4xNWVQ0zLEwqad+iq5T+xlPu2Sq/uCV2SqCn51dohslRUpgK7N6PIx4ju0pdndXSzuF0jo5oUBBpZiVVy7Wd7alElsIC2OFERLXtz4CtuufhlXLHXvAAlKALY7q5nVsH4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=bWBKFMZn; arc=none smtp.client-ip=209.85.214.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-21f50895565so74360275ad.2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 23:34:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739343893; x=1739948693; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:reply-to:from:subject:message-id:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=XZknmyTZpuJ/vYhf9yhvHpuHXU7uvg3lPc+DRXtI5S4=;
-        b=LR5eoN8VCCD2U2alOwqZWW+nzvNQQqwyS7jcqdcypgSMNGS0CYl7e+qzFM67gD2QW4
-         TEmWG4u8dp8nFgg/bnHWdmof4PDOORgO4ODYuAIrLKjzb5xrq7Y5fEqWXAtHgrP7Qqn8
-         U1aODSPbpp61cqCtQ9mVajxb9UFcxdTGtZ17bk8sJSPpr13O55wodvUsVYqZC9HplVW0
-         aOoGMl/2TFVqMYsvRqz7IxYYqkHGb4psA+vmwLXQRqQToZvUtxeTWcMo3tF6V1ozcbu4
-         RUbu1Q6MBTEPlgVh70DTgX4Zvb6h7TJ2Y6Mq/H+gBGxbQ1EMdCjfuAjhFPKJmN+2pg28
-         Py5g==
+        d=linaro.org; s=google; t=1739345681; x=1739950481; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=gBZVQXzGj/Nj2dxnCyApeR+oIxTqVjbcwS+DUCxmMZo=;
+        b=bWBKFMZnmiLu5Jb+el07taK6pY24LrKMKt8GmUEH1zlq0+O5Jm954HK2CoZwHJN0YX
+         LuinVGVEwQKzztFmxSCjnnAmjkrp4kCcdg8KeVK75wW5dV4A3RiVh+UFv3U29qbu+v3o
+         7Gb1vXmyuODRDjzGPwpmT2/PyT5h131eJ19ABx3WE/+iF99iE9Nl7D9Pl7PCbSe0y+1n
+         udKH3ZbJCqzcc62GmiVtvVrsEzvM/qPKig09OeCbfPxFxvCEUkowak4Y2idYbYcoYZro
+         u2CDVyZ9b5KyUvnlHnpJtm1ZN/PUkltlxM0aqgxdxHbtfmPVuHdEdu7rw3YH3blPvn2E
+         3xOw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739343893; x=1739948693;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:reply-to:from:subject:message-id
+        d=1e100.net; s=20230601; t=1739345681; x=1739950481;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XZknmyTZpuJ/vYhf9yhvHpuHXU7uvg3lPc+DRXtI5S4=;
-        b=gUtowyFr7vIEGOukL4BkdD9v8Z95MJjOsad93ohisxuIDV8W6a+0+zgcun6gOwx5XZ
-         235CrB9LXbuT83Igx/hARPq7LbiHlUjCDoObVvWvgt+dpNwEois/5FS7foZGszoI5fpH
-         yPXpkTIgNiL45ePpsMeqSFMTKJc/nnnLGJPerQFMu0G71PpkoyAHiInqh+4Z8XdW+P9Y
-         27WTtUvb8ZLJhWf73NkF5+BR3YQTsB9EMlgMtaDRh34+wiaOLEO4xrS8twG8jQisXEUL
-         rbpfl8rrQhUk5m+4/8upFSyq+OVJ1/5LxSkrBAfaCMboU3NMqJ2+kJ3EaXZtlcJ+i+xo
-         J34A==
-X-Forwarded-Encrypted: i=1; AJvYcCUsSjxyiLNkwQUs9DQiYlkSKY0z22JsvXzNB8tsxos4/BYVzAUQSeomv5MNvZzOL3YttdDIJ+42x6o=@vger.kernel.org, AJvYcCX1doEHSIIJnBNz0vrbsW6Q7EblXUWEkXvBJNcYFe8wSsprf0qEeUy4ZvT34qCZKyoSmyKmfb3r8tI=@vger.kernel.org, AJvYcCXAycuMB+6QdZUSwrflS4oPy2Y9LS7k8EqtiJpat+SeONnT2NjPPlA7Da5OBLaHDh7gjLmoG/XkKLRzCvn2@vger.kernel.org
-X-Gm-Message-State: AOJu0YyWyuafMc8moH/ReB8qouZXUHZug4CoLPdNK4p7/cVsRts4Eh0+
-	SayP85+Z7LGfACAyG8kJpFLeNuTG78cA/sJJODPenqi/dZfVPPby
-X-Gm-Gg: ASbGncsMXwMb1iXRiF2Cx3K4L3xnFnTKvFM+9fJ1oxYRnJQJesnZMfr//F2Nhc5hizN
-	mDxoCn4esle1Z+gFMi9oOaH/q0yF1sh11FUmcRBSgzPwa2PfWGwqoBaswCFWH4aW+zJOLAHbQ1R
-	q5iJ8n7Dm0Vu7Wd56wGRB6/IsKFt2Y+KWV7rGv2QY2rmqiLfLB0BBEfKsKEuvEbv8E8IiLILUwW
-	PeL6ySP4xG3cLS0E33TXqM1Td88+Qqs2GhKL1aHkWFZcHMib4U8Je/qPBHT/gH0wgxCtZXkuSvZ
-	nEOhE/z9T2YlH4AP+reyLGSpSD/oQEN8zj078mkt1GQyrw==
-X-Google-Smtp-Source: AGHT+IFw0knxSS8K/s8LJBCcVpkUFKsw4fDsN4n1F+1zZY89z/X1MaaaItGkcnvBdrGg9qkLRY5BVA==
-X-Received: by 2002:a17:907:7288:b0:ab7:d06d:b4bf with SMTP id a640c23a62f3a-ab7f34af30emr143645666b.39.1739343892477;
-        Tue, 11 Feb 2025 23:04:52 -0800 (PST)
-Received: from abityuts-desk1.ger.corp.intel.com ([134.191.196.181])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ab7e8050dd2sm222571166b.136.2025.02.11.23.04.50
+        bh=gBZVQXzGj/Nj2dxnCyApeR+oIxTqVjbcwS+DUCxmMZo=;
+        b=goaxWYyybISK9CMRxgle15q+FlHoqmHdmc/F0b/Xlir/xEXZK11pMG/Has1gC5xvCe
+         lxsb+8pXsHBRC5157fr1q+1Ju+UYmenKLsajrCqN0cDahyftTFLXXrKKA62H2ktQgpW+
+         ZHPQHs3R1m/B20BAu5jGypLRB6mKwNdzfkEenMpKHZyh+8okUgTyoeuseXTDcqWT2fdb
+         7QmS9oDQB0UO9mHKPPNIc5dFUL9PKmPnrbHOybrBfQ1lATAa4l2otP2+75fXSHfzcSYg
+         Pmd2/HvnM9J+KxoOX9zX9yjnZTDUjNv0Y3YB3UBoSTwPSeGxvYQhXySgwfoGjLE15B8d
+         uIhQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWKBamiw/W15TZdGBWDt/CYuloxNxlFkVcUiaiunoyy6vYT2usvtSh4tmCgGe+kKbipm0Ku5PQaAA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwwIy2G7ut9pu/CJa5ljn16OmtOYR+FPR2z2xm5Yi6savAS4D2C
+	KZEhY6g0s8s2ZrJktOIOGj/Qzb7JGU16KmbYyzuqVniBRcoRaKpIfuNUbDz5y30=
+X-Gm-Gg: ASbGncvAMJwLnYzVGh+FOXbxopUHx5Y16DrX7/7fJkGZEVzT0H+oLjUIesAlNn/5ES/
+	ymsZznlC8Ey6ePI+xP7IVSkbqAQhn2OyphW4FkX+XSSt++v3DQzjVk+2yrJvgXXbSgUZFahgWZ2
+	mO3nkiD5FDkdd44krRHtsqBEdNsw2EZzJ045IPzbA15KU740RzuQDQLohZDub1tRUgJpaHfiMeN
+	i3z+SHzvNfjciDKCCrYOb6Y6h1WFuvne5b/SWMoFbY3gmNtDFIwbmGGOo9HpbRn3tPEe19n2WUy
+	L1QYMRdItq6FDg5DkQ==
+X-Google-Smtp-Source: AGHT+IG+5sMijvsVWogU7ykbigna0UHmysXJKLgwHilyqSb7VE5FnliyWRdOolJC+q6GU38VtdsVhw==
+X-Received: by 2002:a17:903:124e:b0:212:996:3536 with SMTP id d9443c01a7336-220bdedcf55mr32555755ad.10.1739345681224;
+        Tue, 11 Feb 2025 23:34:41 -0800 (PST)
+Received: from localhost ([122.172.84.139])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-21f36511846sm107668125ad.37.2025.02.11.23.34.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 23:04:51 -0800 (PST)
-Message-ID: <6417e41c8564fccbeb97babb14656988e6b2ac7a.camel@gmail.com>
-Subject: Re: [PATCH v3] intel_idle: introduce 'no_native' module parameter
-From: Artem Bityutskiy <dedekind1@gmail.com>
-Reply-To: dedekind1@gmail.com
-To: David Arcari <darcari@redhat.com>, linux-pm@vger.kernel.org
-Cc: Jonathan Corbet <corbet@lwn.net>, Len Brown <lenb@kernel.org>, Prarit
- Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-Date: Wed, 12 Feb 2025 09:04:49 +0200
-In-Reply-To: <20250211132741.99944-1-darcari@redhat.com>
-References: <20250128141139.2033088-1-darcari@redhat.com>
-	 <20250211132741.99944-1-darcari@redhat.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
+        Tue, 11 Feb 2025 23:34:40 -0800 (PST)
+Date: Wed, 12 Feb 2025 13:04:38 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	linux-pm@vger.kernel.org,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	rust-for-linux@vger.kernel.org,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH V8 04/14] rust: Add cpumask helpers
+Message-ID: <20250212073438.bjhfgefz7t4dxobi@vireshk-i7>
+References: <cover.1738832118.git.viresh.kumar@linaro.org>
+ <db0166341ce824c157d0c58c240b3efc6aec6f6e.1738832118.git.viresh.kumar@linaro.org>
+ <Z6qTelPSqpFk439l@thinkpad>
+ <20250211042908.nyftiw7gtxosfjwc@vireshk-i7>
+ <Z6t51xodSV21ER4M@thinkpad>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z6t51xodSV21ER4M@thinkpad>
 
-On Tue, 2025-02-11 at 08:27 -0500, David Arcari wrote:
-> Since commit 18734958e9bf ("intel_idle: Use ACPI _CST for processor model=
-s
-> without C-state tables") the intel_idle driver has had the ability to use
-> the ACPI _CST to populate C-states when the processor model is not
-> recognized. However, even when the processor model is recognized (native
-> mode) there are cases where it is useful to make the driver ignore the pe=
-r
-> cpu idle states in lieu of ACPI C-states (such as specific application
-> performance). Add the 'no_native' module parameter to provide this
-> functionality.
->=20
-> Cc: Jonathan Corbet <corbet@lwn.net>
-> Cc: Jacob Pan <jacob.jun.pan@linux.intel.com>
-> Cc: Len Brown <lenb@kernel.org>
-> Cc: David Arcari <darcari@redhat.com>
-> Cc: Artem Bityutskiy <dedekind1@gmail.com>
-> Cc: Prarit Bhargava <prarit@redhat.com>
-> Cc: linux-doc@vger.kernel.org
-> Cc: linux-kernel@vger.kernel.org
-> Signed-off-by: David Arcari <darcari@redhat.com>
-> ---
-> v3: more documentation cleanup
-> v2: renamed parameter, cleaned up documentation
+On 11-02-25, 11:24, Yury Norov wrote:
+> To begin with, this is the 8th version of the same patch, but you
+> only now bothered to CC someone who is listed in MAINTAINERS. This is
+> not how the community works.
 
-Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
-Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+Yes, this was my mistake. I assumed get_maintainers would Cc all
+relevant people, but I overlooked the fact that these are new files,
+so it didn’t include the maintainers. Unfortunately, the same issue
+occurred with the clk bindings. Miguel pointed it out at V7, and I
+corrected it immediately. There was no intention to bypass anyone.
+
+These bindings had been in my tree since earlier versions, but I
+hesitated to post them before V6 because I wasn’t confident in writing
+bindings for a framework I didn’t fully understand. I eventually
+shared them in V6 to unblock my series but inadvertently missed Cc’ing
+few, as mentioned above.
+
+> You also made it a patch bomb that touches multiple critical and very
+> sensitive subsystems. You link them to an experimental and unstable
+> project, and do it in a way that makes it really easy to slip through
+> maintainers' attention.
+> 
+> Not speaking for others, but please for cpumasks create a separate
+> series and start thorough discussion.
+
+Agree, its better to post these separately.
+
+-- 
+viresh
 
