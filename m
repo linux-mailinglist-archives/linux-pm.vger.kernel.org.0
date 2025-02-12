@@ -1,201 +1,153 @@
-Return-Path: <linux-pm+bounces-21952-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21953-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFD45A323F4
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 11:52:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5170BA3241B
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 11:59:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C6B243A80DC
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 10:52:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CC991188A203
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 10:59:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 306BC209F33;
-	Wed, 12 Feb 2025 10:52:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E780209F2A;
+	Wed, 12 Feb 2025 10:59:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="I+i7e48A"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 190D5209F2A;
-	Wed, 12 Feb 2025 10:52:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D8303206F2C;
+	Wed, 12 Feb 2025 10:59:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739357530; cv=none; b=ZGhOQQ0HHjZ5cd1Gn5WjIyqkNs2hgkCKW/XhHFjCuYOkydhXECcOWJtjGPZLZVHEzyfB7+xey+Fcx+ZPHimA9D6Lg6d0jTErb9VhvjKvCZOWGDHiSX8qCWMmkT9K4SQqU2SIcG5rlzkZrT7PSvf/a7oDUSJPCD7133R4tv92mxg=
+	t=1739357953; cv=none; b=jL6jQqoMswfCvYF9IEFQ7r3AuhbXVwHyANMM3Lb+MXqPUgHVW9Ea5Vgw57ulIwvQUocHrDLduO/C8Pd3s1a//3qoQN4Xh32z4Cob6raKaSkpfyyo2GvQGlIzMmgR8Ve5XwqP3QGWVQc6ua28WJ42nGjhAbTPaQiZbRq1ntNXPJc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739357530; c=relaxed/simple;
-	bh=AI5QOFLLH0oxBfsduevknRWSBfbZxBE//7tA0kLY9ic=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=UfRn3maRjQuLxV5WdIJTky/4I4FWNA08krbUTD7bpOdQVA/4VxQ6wC3sDIuI6efciJEtteaxYBID1JfrLOUSh6TosYQwYNHwYmHZ0t5TwQ4TDZA+ccevAietISN2zBFa308OAXzm0XBphrl7DjgLzqgrJmdcqocIP+z4Fv2INbk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.194])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YtFQ03R0Lz11Q1B;
-	Wed, 12 Feb 2025 18:47:36 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id BAF91140258;
-	Wed, 12 Feb 2025 18:52:03 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 12 Feb
- 2025 18:52:02 +0800
-Message-ID: <8d5e0035-d8fe-49ef-bda5-f5881ff96657@huawei.com>
-Date: Wed, 12 Feb 2025 18:52:02 +0800
+	s=arc-20240116; t=1739357953; c=relaxed/simple;
+	bh=6ynvjwiirw9pMPqaFmUszoi8riMDvjaa43Q0OnomhyY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=IQRdRiV6JS/5RZEPsPtEqjjwiDLmur2pQJMOMKAkIA2RCzd+aTB8QRygs65DpY24+GNS/n34sG/4Yf0qGdkCOqj93b8W3llIRvHRkPV5Yz2d7q3ECEZwVpipe6V30ZjqeMsoDEfWX1WGgH1d72lUv4B3+UCqnLERFmfJaEfknnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=I+i7e48A; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4AEC8C4CEDF;
+	Wed, 12 Feb 2025 10:59:13 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739357953;
+	bh=6ynvjwiirw9pMPqaFmUszoi8riMDvjaa43Q0OnomhyY=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=I+i7e48A18OPZ7QAL7RlpiB+2HBjm7fKAEJG2P4o4hm10eY1DB/8aLTIL59Q848cq
+	 wQOhwOR6Vym90bja0VZT9/TeyZxpuXyxG5tM4nXGFqdJqBJ1f1IPN0+4a+J50+cqAD
+	 e1DqC0XHa02wH8JgMvGDGKAz2yEZqm0PQKhOYdlnPf6Jp+/kpnYC4Fqh5ZSvLmNWyu
+	 rDXTniMapqot6GwsVx8hSHql+lihgCNPPVN7OXGTdg1o7/7f1xW3ymsuHWcNsUuMLN
+	 OYpnF2r+UMjQTWwzVO9I2CjPhXITvsgnGwchcw4e3lU0APuyST7sv7wrVrykB1r2V8
+	 sYU15cHoLTTig==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-29fe83208a4so432052fac.0;
+        Wed, 12 Feb 2025 02:59:13 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCV7DOdLTX2hdF/E/6OfJnGczaoFP7UrhGijBeZkf8dZq9lEYG4o63Ynl7nr+bIMv6GFHX2LhMqNIJI=@vger.kernel.org, AJvYcCX2dNVhtsmm94MsI5Z/HyXnOneobiXKtr7yoaka4prlzRjc5rb8ingRwxebrPRv7lRynY5gAvnKTqO+Kac=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyIwR/hnRf2KssHv5/yRkcwfuamQyjpiw/R8w63aqFLGAoTmJB4
+	SjQAIyW++Xo9eGy4laRZVRNqSQckF13xh32b6EG0P50sHW6VsaJAA0BoI93S3rZMmilre6kLk2W
+	ZlTQvMAGDHgZ7HJyizJY+EM0G/Mk=
+X-Google-Smtp-Source: AGHT+IG8QKAMUrvf7UKtROR6aDoc2C+w6x3rW2FjrqQKNmgcv5Enubi24yKLLGjLSma4ad+RujMSCIDPV2yBLz/vRGs=
+X-Received: by 2002:a05:6870:9a21:b0:2b8:a5a9:c615 with SMTP id
+ 586e51a60fabf-2b8b6d5f653mr4471213fac.3.1739357952589; Wed, 12 Feb 2025
+ 02:59:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch 0/5] Support Autonomous Selection mode in cppc_cpufreq
-To: Sumit Gupta <sumitg@nvidia.com>, Viresh Kumar <viresh.kumar@linaro.org>
-CC: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
-	<corbet@lwn.net>, <linux-pm@vger.kernel.org>, <linux-acpi@vger.kernel.org>,
-	<linux-doc@vger.kernel.org>, <acpica-devel@lists.linux.dev>,
-	<linux-kernel@vger.kernel.org>, <linux-tegra@vger.kernel.org>,
-	<treding@nvidia.com>, <jonathanh@nvidia.com>, <sashal@nvidia.com>,
-	<vsethi@nvidia.com>, <ksitaraman@nvidia.com>, <sanjayc@nvidia.com>,
-	<bbasu@nvidia.com>
-References: <20250211103737.447704-1-sumitg@nvidia.com>
- <20250211104428.dibsnxmkiluzixvz@vireshk-i7>
- <b45d0d81-e4f7-474e-a146-0075a6145cc2@huawei.com>
- <868d4c2a-583a-4cbb-a572-d884090a7134@nvidia.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <868d4c2a-583a-4cbb-a572-d884090a7134@nvidia.com>
+References: <2314745.iZASKD2KPV@rjwysocki.net> <CAPDyKFroyU3YDSfw_Y6k3giVfajg3NQGwNWeteJWqpW29BojhQ@mail.gmail.com>
+In-Reply-To: <CAPDyKFroyU3YDSfw_Y6k3giVfajg3NQGwNWeteJWqpW29BojhQ@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 12 Feb 2025 11:59:01 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h44Yxp95pHW+75gk5yWKviLO1_YK_cZNFKaGnid7nx9A@mail.gmail.com>
+X-Gm-Features: AWEUYZnUZ89kR8nnk8jl2vFBp3d8Lo9uDbYIeRM2O4NyovM9vBRPbcJB9RpaZBU
+Message-ID: <CAJZ5v0h44Yxp95pHW+75gk5yWKviLO1_YK_cZNFKaGnid7nx9A@mail.gmail.com>
+Subject: Re: [PATCH v1 00/10] PM: Make the core and pm_runtime_force_suspend/resume()
+ agree more
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Jon Hunter <jonathanh@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Transfer-Encoding: quoted-printable
 
-On 2025/2/11 22:08, Sumit Gupta wrote:
-> 
-> 
->>
->> On 2025/2/11 18:44, Viresh Kumar wrote:
->>> On 11-02-25, 16:07, Sumit Gupta wrote:
->>>> This patchset supports the Autonomous Performance Level Selection mode
->>>> in the cppc_cpufreq driver. The feature is part of the existing CPPC
->>>> specification and already present in Intel and AMD specific pstate
->>>> cpufreq drivers. The patchset adds the support in generic acpi cppc
->>>> cpufreq driver.
->>>
->>> Is there an overlap with:
->>>
->>> https://lore.kernel.org/all/20250206131428.3261578-1-zhenglifeng1@huawei.com/
->>>
->>> ?
->>
->> Ha, it looks like we're doing something very similar.
->>
-> 
-> Hi Viresh,
-> 
-> Thank you for pointing to [1].
-> 
-> There seems to be some common points about updating the 'energy_perf'
-> and 'auto_sel' registers for autonomous mode but the current patchset
-> has more comprehensive changes to support Autonomous mode with the
-> cppc_cpufreq driver.
-> 
-> The patches in [1]:
-> 1) Make the cpc register read/write API’s generic and improves error
->    handling for 'CPC_IN_PCC'.
-> 2) Expose sysfs under 'cppc_cpufreq_attr' to update 'auto_select',
->    'auto_act_window' and 'epp' registers.
-> 
-> The current patch series:
-> 1) Exposes sysfs under 'cppc_attrs' to keep CPC registers together.
-> 2) Updates existing API’s to use new registers and creates new API
->    with similar semantics to get all perf_ctrls.
-> 3) Renames some existing API’s for clarity.
-> 4) Use these existing API’s from acpi_cppc sysfs to update the CPC
->    registers used in Autonomous mode:
->    'auto_select', 'epp', 'min_perf', 'max_perf' registers.
-> 5) Add separate 'cppc_cpufreq_epp' instance of the 'cppc_cpufreq'
->    driver to apply different limit and policy for Autonomous mode.
->    Having it separate will avoid confusion between SW and HW mode.
->    Also, it will be easy to scale and add new features in future
->    without interference. Similar approach is used in Intel and AMD
->    pstate drivers.
-> 
-> Please share inputs about the preferred approach.
-> 
-> Best Regards,
-> Sumit Gupta
-> 
-> [1] https://lore.kernel.org/all/20250206131428.3261578-1-zhenglifeng1@huawei.com/
-> 
-> 
+On Wed, Feb 12, 2025 at 10:12=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.or=
+g> wrote:
+>
+> On Tue, 11 Feb 2025 at 22:25, Rafael J. Wysocki <rjw@rjwysocki.net> wrote=
+:
+> >
+> > Hi Everyone,
+> >
+> > This series is a result of the discussion on a recently reported issue
+> > with device runtime PM status propagation during system resume and
+> > the resulting patches:
+> >
+> > https://lore.kernel.org/linux-pm/12619233.O9o76ZdvQC@rjwysocki.net/
+> > https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwysocki.net/
+> >
+> > Overall, due to restrictions related to pm_runtime_force_suspend() and
+> > pm_runtime_force_resume(), it was necessary to limit the RPM_ACTIVE
+> > setting propagation to the parent of the first device in a dependency
+> > chain that turned out to have to be resumed during system resume even
+> > though it was runtime-suspended before system suspend.
+> >
+> > Those restrictions are that (1) pm_runtime_force_suspend() attempts to
+> > suspend devices that have never had runtime PM enabled if their runtime
+> > PM status is currently RPM_ACTIVE and (2) pm_runtime_force_resume()
+> > will skip device whose runtime PM status is currently RPM_ACTIVE.
+> >
+> > The purpose of this series is to eliminate the above restrictions and
+> > get pm_runtime_force_suspend() and pm_runtime_force_resume() to agree
+> > more with what the core does.
+>
+> For my understanding, would you mind elaborating a bit more around the
+> end-goal with this?
 
-Hi Sumit,
+The end goal is, of course, full integration of runtime PM with system
+sleep for all devices.  Eventually.
 
-Thanks for upstreaming this.
+And it is necessary to make the core and
+pm_runtime_force_suspend|resume() work together better for this
+purpose.
 
-I think the changes to cppc_acpi in this patchset is inappropriate.
+> Are you trying to make adaptations for
+> pm_runtime_force_suspend|resume() and the PM core, such that drivers
+> that uses pm_runtime_force_suspend|resume() should be able to cope
+> with other drivers for child-devices that make use of
+> DPM_FLAG_SMART_SUSPEND?
 
-1) cppc_attrs are common sysfs for any system that supports CPPC. That
-means, these interfaces would appear even if the cpufreq driver has already
-managing it, e.g. amd-pstate and cppc_cpufreq. This would create multiple
-interfaces to modify the same CPPC regs, which may probably introduce
-concurrency and data consistency issues. Instead, exposing the interfaces
-under cppc_cpufreq_attr decouples the write access to CPPC regs.
+Yes.
 
-2) It's inappropriate to call cpufreq_cpu_get() in cppc_acpi. This file
-currently provides interfaces for cpufreq drivers to use. It has no ABI
-dependency on cpufreq at the moment.
+This is a more general case, though, when a device that was
+runtime-suspended before system suspend and is left in suspend during
+it, needs to be resumed during the system resume that follows.
 
-Apart from the changes to cppc_acpi, I think the whole patchset in [1] can
-be independent to this patchset. In other words, adding the
-cppc_cpufreq_epp_driver could be standalone to discuss. I think combining
-the use of ->setpolicy() and setting EPP could be a use case? Could you
-explain more on the motivation of adding a new cppc_cpufreq_epp_driver?
+Currently, DPM_FLAG_SMART_SUSPEND can lead to this sometimes and it
+cannot happen otherwise, but I think that it is a generally valid
+case.
 
-[1] https://lore.kernel.org/all/20250206131428.3261578-1-zhenglifeng1@huawei.com/
+> If we can make this work, it would enable the propagation of
+> RPM_ACTIVE in the PM core for more devices, but still not for all,
+> right?
 
-Regards,
-Lifeng
+It is all until there is a known case in which it isn't.  So either
+you know a specific case in which it doesn't work, or I don't see a
+reason for avoiding it.
 
->>>
->>>> It adds a new 'cppc_cpufreq_epp' instance of the 'cppc_cpufreq' driver
->>>> for supporting the Autonomous Performance Level Selection and Energy
->>>> Performance Preference (EPP).
->>>> Autonomous selection will get enabled during boot if 'cppc_auto_sel'
->>>> boot argument is passed or the 'Autonomous Selection Enable' register
->>>> is already set before kernel boot. When enabled, the hardware is
->>>> allowed to autonomously select the CPU frequency within the min and
->>>> max perf boundaries using the Engergy Performance Preference hints.
->>>> The EPP values range from '0x0'(performance preference) to '0xFF'
->>>> (energy efficiency preference).
->>>>
->>>> It also exposes the acpi_cppc sysfs nodes to update the epp, auto_sel
->>>> and {min|max_perf} registers for changing the hints to hardware for
->>>> Autonomous selection.
->>>>
->>>> In a followup patch, plan to add support to dynamically switch the
->>>> cpufreq driver instance from 'cppc_cpufreq_epp' to 'cppc_cpufreq' and
->>>> vice-versa without reboot.
->>>>
->>>> The patches are divided into below groups:
->>>> - Patch [1-2]: Improvements. Can be applied independently.
->>>> - Patch [3-4]: sysfs store nodes for Auto mode. Depend on Patch [1-2].
->>>> - Patch [5]: Support for 'cppc_cpufreq_epp'. Uses a macro from [3].
->>>>
->>>> Sumit Gupta (5):
->>>>    ACPI: CPPC: add read perf ctrls api and rename few existing
->>>>    ACPI: CPPC: expand macro to create store acpi_cppc sysfs node
->>>>    ACPI: CPPC: support updating epp, auto_sel and {min|max_perf} from
->>>>      sysfs
->>>>    Documentation: ACPI: add autonomous mode ctrls info in cppc_sysfs.txt
->>>>    cpufreq: CPPC: Add cppc_cpufreq_epp instance for Autonomous mode
->>>>
->>>>   Documentation/admin-guide/acpi/cppc_sysfs.rst |  28 ++
->>>>   .../admin-guide/kernel-parameters.txt         |  11 +
->>>>   drivers/acpi/cppc_acpi.c                      | 311 ++++++++++++++++--
->>>>   drivers/cpufreq/cppc_cpufreq.c                | 260 ++++++++++++++-
->>>>   include/acpi/cppc_acpi.h                      |  19 +-
->>>>   5 files changed, 572 insertions(+), 57 deletions(-)
->>>
->>
+ATM the only specific case in which it doesn't work is when
+pm_runtime_force_suspend|resume() are used.
 
+> The point is, the other bigger issue that I pointed out in our earlier
+> discussions; all those devices where their drivers/buses don't cope
+> with the behaviour of the DPM_FLAG_SMART_SUSPEND flag, will prevent
+> the PM core from *unconditionally* propagating the RPM_ACTIVE to
+> parents. I guess this is the best we can do then?
+
+OK, what are they?
+
+You keep saying that they exist without giving any examples.
 
