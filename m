@@ -1,100 +1,89 @@
-Return-Path: <linux-pm+bounces-21916-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21917-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70218A31A09
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 00:58:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D62A2A31A7B
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 01:30:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1DE423A1FE1
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Feb 2025 23:58:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5CBE918872F9
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 00:30:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D0FFC27181B;
-	Tue, 11 Feb 2025 23:58:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B6B42A957;
+	Wed, 12 Feb 2025 00:30:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yLp7Sbyl"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KPn+OvsS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-qk1-f182.google.com (mail-qk1-f182.google.com [209.85.222.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EB1E0271806
-	for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 23:58:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 14AA4566A;
+	Wed, 12 Feb 2025 00:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739318286; cv=none; b=NdKySu48wPnp8DbTVqhWYT3KViV9YdiVer7zWHGz+EmUvkceZLblVO8PxZLyXt3CBMCuri8QyR8829qAchJVWKDIDaXcolU3vvxnlOJMDYFDnKBhiGy2eP5BAUD6KRBYW8Gbc3WPwCN+04ux9lhwPNx4ml71uO/WOdQYYLa1U6k=
+	t=1739320205; cv=none; b=t2E2oJZqpEpiY2iCB6/6KFXf7Ze69+7b3v0tfbGTuSfm21jswBTHGSBCq0mnomrvGmbER/XK8XS/a1aQkZylYOZwpLyXVnWqMLP4HoGvMLiLbE0gGHiQ5js/CRjTs26Nxjlhu7Bp+2fVpO6TSnY9+oOcuzZgte0S/w7fGMqJ/U4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739318286; c=relaxed/simple;
-	bh=RE+aHUIVuDPsDQj42j/fwrw4kpBxa9lJz16JhCXTAlU=;
+	s=arc-20240116; t=1739320205; c=relaxed/simple;
+	bh=5n6CIWZ3CxVNLsrtCbvzjAs6RrZHUz2LGcyMe8T5d/w=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=I9/qAtuWje/GqfX3s2nqHX05cakOiy7jDDmFi9xz/jx6FGoqfDR9AqYqctSU1jbmvIJyk5DKj9GmBa5Tdr5p0W73HvA/5Y0wtsAnnSWsI0FNwDQm+oUe+Ji/yAg3jAXEpvyXvY6Lpwk81DrgHeSpebXWE7AccHqhMA9ttllbEN0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yLp7Sbyl; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5450622b325so3548495e87.1
-        for <linux-pm@vger.kernel.org>; Tue, 11 Feb 2025 15:58:04 -0800 (PST)
+	 Content-Type:Content-Disposition:In-Reply-To; b=XVfjcAFc06Vw20teHxFLfnA/jBdVFqlnw9Zo/NVqKG+6gsUpe+C9oUafGJxoC7Ys/pYlkLdBrEwvO+g062CmzIJEKKx25aY2vGWKqAtlveac1N6KHqZF5PscXXSNGa801Te+mwJWW9NC9drkjKxUxb2PRAVYfsND38UjY3UF2c0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KPn+OvsS; arc=none smtp.client-ip=209.85.222.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qk1-f182.google.com with SMTP id af79cd13be357-7c05dc87ad9so308974185a.3;
+        Tue, 11 Feb 2025 16:30:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739318283; x=1739923083; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1739320203; x=1739925003; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=LX/ULobNxBgRiiE6AfMWm4qglJRxW2bL2STp6gK7uVE=;
-        b=yLp7SbylZpV6KkaSft03RvdgKMMDJvCbp1+9KxKl5etNCsfLKcWaKWp6vqobcyoAx4
-         0s5SuVB24scHYfL5DRsd8opiUm642VHMw0wFiR20aial2/9DZWNwTSMVYAmQLCNki7jL
-         Jpxocb4OXYrDxTr12FjdGB61F5AGXC4BCtCpVw4Ry0VjUOlMondYP+Dt1un41k3mW63W
-         BdWiMgN6qxGRO2QvJOxAPbNEbtw23ny7uR4Gy1APWR3DeqJ7IXiENPu/sqn8YnK7tcbr
-         IqosVIT6PZ8miakhIlc7rCJ6Onerf/9e2h1Ogt9I3m8D1xIQXzW7KTYN+yMabSuDgZpE
-         bbpw==
+        bh=PMXY+b7w1R2zK37gr/dvT3WG1zO8cthqCAH7UbMiDus=;
+        b=KPn+OvsSifDS8CTHukmUfJFBfBh68xxSDhAmxOv7EEa0dcs1wstQo47ntMs5O4AFuF
+         P+GragoyUIhYHaDGHoyBFYNEMDJAScES1tRoHxdVlx5e5v1g47AGJJXa38yGl7abXEzS
+         qOG2IRfgnEwyUkJkfZVMlmzGkJa04dU6f9k+37dfYaS6eM9tYi/oEtFWZg6RUpmyH2BL
+         ysSPDt/8V4/QabxfXp6beiPrwQ+hm141cqPK34Zxm9VWsYwlRYM+v9hDMBkTxF+K84EY
+         tWTSzArXZx1FTBTogeSWX407RL6mxx9kT0xe82qXCWnap52MB6LvwrrN1nJGlGf5epyI
+         2X1A==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739318283; x=1739923083;
+        d=1e100.net; s=20230601; t=1739320203; x=1739925003;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=LX/ULobNxBgRiiE6AfMWm4qglJRxW2bL2STp6gK7uVE=;
-        b=bYCVSj0VFgJJrgN6YGlIuIZ84lUXl8voAv4OKWsIHDbU90y6qAI7sC+RB/2NdjUm7E
-         9273e6DAsHhpR/HKuFbr9CqjBI6b40cZp0ZplJu3Acpmm4kUs13T6W0quMj99u0kmK8O
-         g3l2IbrTx/f3TuABBvLvop+ZY0L5HAVl04pigGRUR+PiTGFupjxiL+Mdv32GHyZ9EY26
-         kY34jph9kQuo3PgGjVxAnvJ5WbwNbFZGV4/ue0TtTWuZG8iZ3N3VUuf9+/SNZTR1BG6J
-         LWEoTt+PoMjyq9AKQ2/5tYzXBgXuCG//dtk+v/FZK9NXuvctLi991Ghsjysydx2A0fKz
-         /njA==
-X-Forwarded-Encrypted: i=1; AJvYcCV48KeBrXp6dCn1wCL/ViW5oiQ14Bz5K7AzdorzFcy76TN9U67YnkmpMbQk1cLkDcfIvWQIkOliOQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx6205FFWGnqVoLmJUU43GH0FHXvRWhtKc+AK6HJi4zCEVeybsJ
-	uY+yIiE4BP/8j0vr1ynui+DWtWgxkPR3itgqcWTGhnxJTgouSwxt77x20LjWX/0=
-X-Gm-Gg: ASbGncs11r6yQKNdisa4zvwcKyulvom8UFp8PzciMA4VKWdwFlQuu0DA82N7BIU3hFW
-	yl9Obpyx7Iw9Ce5YuPYLiQZ24C0bBtiwz/d/PuQIJRf/rd9sLXqDHME5ONM/CZwRAwShHS6X/ks
-	zTk0cgS2i95XsAMMTCuksLtxrTnYBaBf40bXyWoXpsqZGKmPWNoKjhuX8rK69mcHjHqKfWsrNBE
-	zKZDskMENlm3LwpMJ4RcOH75ABdqx6aTETyNa/k57JBrrbDKRWY3NCvMHV3WidTHLB1MoscamP2
-	s2ERZb3vNcSw3Aqfp5zHJi7kNYFN6HOEgFsy7cHzcpgvR63ZARVEyiruYF+R+asFBlU+HOg=
-X-Google-Smtp-Source: AGHT+IEZuHKlP0HFN8WiWm/I8ajOzqgUnqFUKxuS5iwuMpASJK2/hwz0WfYOWgwjCMYH+7xZ6hFXEQ==
-X-Received: by 2002:a05:6512:124c:b0:545:353:4d46 with SMTP id 2adb3069b0e04-545181148dfmr238228e87.25.1739318282977;
-        Tue, 11 Feb 2025 15:58:02 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54512236ba5sm393771e87.110.2025.02.11.15.58.00
+        bh=PMXY+b7w1R2zK37gr/dvT3WG1zO8cthqCAH7UbMiDus=;
+        b=qHLkMDLarPxaviyOdtHvfT4SDXXLD+oCYTOaFp6vIZDzCM34LOL0KXSINSype53eBm
+         Kc0w0k4hG3BbA9zVkfcFHUfQhW17NJv7qzlEpNFSrddTG5QM/upCQHutp2mJIS7vImth
+         TGtVDWzDknsQxtzg0wDNtXEMPXOEi76hXqEMw2goQvtyyGseCz81+JN4WU5RUJNMAsjh
+         8nGNv/pOdnM6O9AYsuL2895MwuHNsYFbj8VKo7cdikuNswAb5tfGP87sScMB++6s1sJj
+         ZWaVdLlFcjGQ7Q1+owmM/GWPQw++Qns566zG+xB52xQHfYbCo0D3BhvNcNKJ29QnDfY7
+         Bnww==
+X-Forwarded-Encrypted: i=1; AJvYcCWdL6oWwg6DvtiN1sh8p55E0as2Id0GUt26gBYO2rfUXjXnhiJ52SlNtgHyRnyrCV7sQbp5diLPH7st@vger.kernel.org, AJvYcCXZAXNb8BtYZ58MqADGGgE52JxkaRU83GvXtohScD8Q4/CAxSvP94yZb+XHuhGVv6u13VGZE7FhJfY=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzxic8hGEXvawKZgycD8ADDR2Ngp6qKGpaqK39/kSJVn+s9H3JF
+	oTkP63dYR2mvGDllqEyRWijHXkaD/CTZWVOphiP4ll6T8DZ8QtN4
+X-Gm-Gg: ASbGncuEaP2hiLtnKSOfnCmWmbxn2QFMkk+pMMmsycNg/Kufj/95ScRACZg/QTZmpRu
+	4av6uteMvzW00b45WlFVGuBbOIvOrVGECvcQPUzMdVcncRzzeCAMZO/C1XD89gWInDo/DP0bpNi
+	QaQPnNJRD0IS5BgPylLo7FE9IjrbQ2PD53/FpVHvciN2Zg31YJ8h9JRD341KpYpIV1s+z5teoTw
+	AhvlvEmh3pI7vVtTM8nK8Pc7Nfbnyx0+P4ZGjNaICK0N2Fmv6US7i5FrljXXkAlGec=
+X-Google-Smtp-Source: AGHT+IEycbQbC8PQDQpHssIWlJbqaUfQDH5H7e9AlKziotBrsNh5hQbOfp7wttz1fsHAHfvTcMGspQ==
+X-Received: by 2002:a05:622a:1b91:b0:471:ae33:b362 with SMTP id d75a77b69052e-471afed77b9mr13923621cf.40.1739320202786;
+        Tue, 11 Feb 2025 16:30:02 -0800 (PST)
+Received: from localhost ([2001:da8:7001:11::cb])
+        by smtp.gmail.com with UTF8SMTPSA id d75a77b69052e-47153bec10esm67114951cf.74.2025.02.11.16.30.01
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Feb 2025 15:58:01 -0800 (PST)
-Date: Wed, 12 Feb 2025 01:57:59 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Satya Priya Kakitapalli <quic_skakitap@quicinc.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Jonathan Cameron <jic23@kernel.org>, Lars-Peter Clausen <lars@metafoo.de>, Lee Jones <lee@kernel.org>, 
-	Stephen Boyd <sboyd@kernel.org>, Amit Kucheria <amitk@kernel.org>, 
-	Thara Gopinath <thara.gopinath@gmail.com>, Bjorn Andersson <andersson@kernel.org>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Ajit Pandey <quic_ajipan@quicinc.com>, 
-	Imran Shaik <quic_imrashai@quicinc.com>, Taniya Das <quic_tdas@quicinc.com>, 
-	Jagadeesh Kona <quic_jkona@quicinc.com>, quic_kamalw@quicinc.com, quic_jprakash@quicinc.com, 
-	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-iio@vger.kernel.org
-Subject: Re: [PATCH RFC v2 1/5] dt-bindings: thermal: Add MBG thermal monitor
- support
-Message-ID: <sybrfmrpegq7fcqykgsfhm56wjyx5vp6zafqw2d73tiral64aw@hg4di55fzdle>
-References: <20241212-mbg-v2-support-v2-0-3249a4339b6e@quicinc.com>
- <20241212-mbg-v2-support-v2-1-3249a4339b6e@quicinc.com>
- <ojukpywkhu72cimujmijzidf26654g5vkjaj477imcf4suz2o6@cmow62jcqsfz>
- <7a5db383-914c-4c1e-846e-5d68cc6a7765@quicinc.com>
- <fcd718be-fe8a-466f-bd2b-7b75d5f8dd6c@kernel.org>
- <c85903c6-6a89-4382-bfa2-2fed95f0cbc0@kernel.org>
+        Tue, 11 Feb 2025 16:30:01 -0800 (PST)
+Date: Wed, 12 Feb 2025 08:29:54 +0800
+From: Inochi Amaoto <inochiama@gmail.com>
+To: Alexander Sverdlin <alexander.sverdlin@gmail.com>, 
+	Inochi Amaoto <inochiama@gmail.com>, Yixun Lan <dlan@gentoo.org>
+Cc: soc@lists.linux.dev, Chen Wang <unicorn_wang@outlook.com>, 
+	Inochi Amaoto <inochiama@outlook.com>, Lee Jones <lee@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, devicetree@vger.kernel.org, Haylen Chu <heylenay@outlook.com>, 
+	linux-arm-kernel@lists.infradead.org, linux-riscv@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH 00/10] arm64 support for Milk-V Duo Module 01 EVB
+Message-ID: <prrsy34bv6xskxu7afgmpdwc7lefdh7l2gtm2ejzcwk74zh6lr@23x3llxy662z>
+References: <20250209220646.1090868-1-alexander.sverdlin@gmail.com>
+ <eoeyutuu4mrpsu7snkk5ll6kmm4344qsgbnncss6gerlcvvea7@usuf5v7w5ffp>
+ <77c0db160bcaa7c2a68c04a0d33a561b2834f764.camel@gmail.com>
+ <ccadcdf720d6b1055165f1404fafca9b1c6c54f7.camel@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -103,44 +92,49 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <c85903c6-6a89-4382-bfa2-2fed95f0cbc0@kernel.org>
+In-Reply-To: <ccadcdf720d6b1055165f1404fafca9b1c6c54f7.camel@gmail.com>
 
-On Tue, Feb 11, 2025 at 12:50:12PM +0100, Krzysztof Kozlowski wrote:
-> On 11/02/2025 12:46, Krzysztof Kozlowski wrote:
-> > On 11/02/2025 12:15, Satya Priya Kakitapalli wrote:
-> >>
-> >> On 12/13/2024 2:08 PM, Krzysztof Kozlowski wrote:
-> >>> On Thu, Dec 12, 2024 at 09:41:20PM +0530, Satya Priya Kakitapalli wrote:
-> >>>> +
-> >>>> +required:
-> >>>> +  - compatible
-> >>>> +  - reg
-> >>>> +  - interrupts
-> >>>> +  - io-channels
-> >>>> +  - io-channel-names
-> >>> Binding looks ok, but this wasn't tested due to unneeded dependency.
-> >>> Please decouple from dependency, so automation can properly test it.
-> >>
-> >>
-> >> The dependency is needed because this mbg peripheral is present on only 
-> >> targets which have GEN3 ADC5, for which the bindings support is added in 
-> >> the series [1]
-> >>
-> >>
-> >> [1] 
-> >> https://lore.kernel.org/linux-arm-msm/c4ca0a4c-e421-4cf6-b073-8e9019400f4c@quicinc.com/
-> > 
-> > Sure. Then this cannot be merged due to resulting test failure.
-> > 
-> > Please don't post new versions before this can be actually tested and
-> > applied.
+On Tue, Feb 11, 2025 at 08:37:01PM +0100, Alexander Sverdlin wrote:
+> Hi Inochi!
 > 
-> Heh, you responded *after two months*, to an old email so even previous
-> discussion is gone from my inbox.
+> On Mon, 2025-02-10 at 21:55 +0100, Alexander Sverdlin wrote:
+> > > > It would probably make sense that the whole series would go into SOC tree,
+> > > > even though technically nothing prevents the reboot/reset driver to come
+> > > > in PM/reset tree. If everything would come together, `reboot` command would
+> > > > work out of the box.
+> > > > 
+> > > > [1] https://milkv.io/docs/duo/getting-started/duo-module-01
+> > > > [2] https://github.com/milkv-duo/duo-buildroot-sdk-v2/releases/
+> > > > [3] https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01/sg2000_trm_en.pdf
+> > > > 
+> > > 
+> > > This reboot implentment across the RTC and 8051 domain, which is
+> > > still a big problem to be upstreamed. This should be designed 
+> > 
+> > Now I've got it. The problem is not in the reboot procedure, but
+> > rather how to model this thing in the DT, because of all these
+> > unrelated functions brought into two HW address spaces...
+> > 
+> > > carefully and needs further discussion. Adding these two syscon
+> > > compatiable may be not a good idea and cause some problem. I invite
+> > > Yixun to this talk and he may give some useful suggestions.
+> > > 
+> > > At last, I prefer this goes to an separate patch series, and
+> > > implement with rtc device.
+> 
+> Thanks for your hints!
+> I've completely missed the RTC driver in progress [1].
+> I will provide a patch registering the reboot handler on top of the driver
+> as soon as it's accepted.
+> 
+> [1] https://patchwork.ozlabs.org/project/rtc-linux/patch/20240428060848.706573-3-qiujingbao.dlmu@gmail.com/
+> 
 
-Are you responding to your own email?
+As far as I know the RTC patch is no longer maintained. Maybe you can
+pick it up?
+The patch states can be found on:
+https://github.com/sophgo/linux/wiki
 
--- 
-With best wishes
-Dmitry
+Regards,
+Inochi
 
