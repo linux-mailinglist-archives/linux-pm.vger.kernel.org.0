@@ -1,231 +1,195 @@
-Return-Path: <linux-pm+bounces-21990-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21992-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B00EA331FA
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 23:05:59 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A038BA332D4
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 23:44:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 293313A5D92
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 22:05:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C50753A4AB0
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 22:44:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 709E0204089;
-	Wed, 12 Feb 2025 22:05:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 51FEE204591;
+	Wed, 12 Feb 2025 22:44:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TJVT8kjj"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="BcbPqvgc"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f46.google.com (mail-ed1-f46.google.com [209.85.208.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4990B204087;
-	Wed, 12 Feb 2025 22:05:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E6B202F7E;
+	Wed, 12 Feb 2025 22:44:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739397924; cv=none; b=QOG7i1pW+76y5EgNwDV/zuMJj/f7zHjiRb84OVw0vGitTO27sIh+WXw6MkyuHBT9JbgKs5YraBVAa/KIe4vlmlsToXN/GCjGzQniQHR7gwTV7FuV11q6C8bYMOjZwwD1yK0gPCAbER4uLnduXaTu9UiJiS95gnlABgzdlqFlUf0=
+	t=1739400248; cv=none; b=AR9zeOnqq7JDxyk7t0i3jflRpstC01iEz6WEV4sVD6JmmzYI3m2cwTlsnKMNJe0rFFL+EJLUzbdp2udAnOk7yh4V6VnPkcdepcNs7Qk869vJ7bddkAAui9h2iMjlpUlfkWezTG3hAqnDYKOXbMaDTa0cG9Uhw9urBEWNvJm4OpY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739397924; c=relaxed/simple;
-	bh=MQI+PKcaHTqtA7qNC5oF+u39hyT4lvLQUfBwteyUk0c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=aMLGgMb5JAfmrWNj722w04ZbAK+YbZbKOO/VQmGBfyv+ygtKOicF9MLXG112T3u8fFfdUO/jFqnuicEZGhHSzoQcGs+Hleageht78oGsYkXhNzrzCdTv98xmxI6rHRLrzoqsMucwiGNLSkg5xsyXFfj70EXtxYWD3R3PEmEguY0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TJVT8kjj; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 04081C4CEDF;
-	Wed, 12 Feb 2025 22:05:22 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739397923;
-	bh=MQI+PKcaHTqtA7qNC5oF+u39hyT4lvLQUfBwteyUk0c=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=TJVT8kjjGRUmJI2QMR+AWjvdphUmVun9lACRjgqqYlTUaB3TeMTlvyUdVCkMoDQhJ
-	 eb82v5bQasBPqg28MeL4NhfYu4IrF8NkGplwoo5B4QA1XGFq4QzWv3q9hygHguJMn0
-	 TPMnPe27DrBkZK52k0pof/aItQWioFkq0eh98Z0HzWPJ+mGQ597d1YNW7rk+RgulGq
-	 R5gJlfRpDGYM4yhW1Dp9LiG8qcWjke/ARLgRN37YuRWwwVUnnWKrkKfLMjYS+CpurT
-	 vb0K9S17HEjE//byKpo4+WRA80zuxOFntZbP6qtRKUDxbTf3ZMq8UHTKC4Gp8VFGwb
-	 Q8ELHsr9ZFtXQ==
-Message-ID: <04f036bf-e863-45c1-87de-7b61f8bc510d@kernel.org>
-Date: Wed, 12 Feb 2025 16:05:22 -0600
+	s=arc-20240116; t=1739400248; c=relaxed/simple;
+	bh=8XeVwHSw3fMh3jLSmwjruyUOp6GzMgE1kFJYTL7bjZw=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=SC13y0bN19TNLettVHjdeZfmxM9H5KW2rC/E70dCA2g4vIWXf/pvjX2xHNYPCNC8UfaqYVyyF7JXtOxNlf01Kc5SEjH2m9mLY8NXGMRV+HU+tK9LrEho2ZWEaTGqhfl0aznWfwsQuFfGcjJxw6q3FtpDaCslPofH/wOTs2Il71Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=BcbPqvgc; arc=none smtp.client-ip=209.85.208.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f46.google.com with SMTP id 4fb4d7f45d1cf-5dc89df7eccso305727a12.3;
+        Wed, 12 Feb 2025 14:44:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739400245; x=1740005045; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=sD1Sd6cAP8Th7UTJsJpR3D3J20e2A9Te/LBbAhEgPjM=;
+        b=BcbPqvgc+VgtXkrS4RN2hVfiHsE2O9p1sFpOtpmB0+AM1aJ94PaXuXk5P8wYK7LPhg
+         e2wbdODL879I7Ut93gkH8ApJH0gcKHIKJyQLJ3EVXT3j8mt/e6wJyDzhgrpL1U+khl+d
+         PIOdzvFNkP3mKTddAV2QG68NgbhqfWGPqYVRQvLycjSyQUV/ukL3RM0M0RQ6JRtpzW91
+         K3bkhuML9m5TUb1ad9vf+nl/nSpr4VfqbTasNO+ePUjlqw7fl+JtVBAbIA+AMsj7NJeB
+         KQgG96YzX6vv+ICJ8aOKZcLPa1QJk0bRPg/kg7CAzNLhirCZjjMO4jGz/hQNlE2VtRsu
+         zDCg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739400245; x=1740005045;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=sD1Sd6cAP8Th7UTJsJpR3D3J20e2A9Te/LBbAhEgPjM=;
+        b=rxMe232NqcWDGbUX2EOu/WXlFrgs09b9sf0dDgwTwzghEgLBtTiiCIfveL/feDhmEY
+         xIfMuPxeLw3xwFajIQtZn04g8Cybqbm/J73EFPve7XJCsmTj6/49t7UtOV+3QQd5W9pK
+         fZU68XSvo/nFHGhsfcWEumh9yR1hLvCYtkQIkPZtoMlsO/44uFTNNHHHUHi2NeXbbF+s
+         CaPYAZS8u/UO9KrumFzjVU1Y3+S0QNPRzcptUK64036JboLha7b0BjsuMEPnSydfZMeh
+         /StKFaedph6XSYMDD+NpugH4IxsObtwhG8ANa2oVQ5VHSQkZtfAtrw9llKVzyYpsWFuW
+         wVyQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUKivaQxjZ4gPV5hU97jzrwXL3pmKihpwQ7pX0Jq3e7RJPXdlvW3MfNSLI8Cc90H7+Z8hYdJSqk/Crh@vger.kernel.org, AJvYcCX4zOgSd2ZKxflegzqDhwy/zmGY6xyjG8ogDznfuabbNLcczTHDmhcp3fhXO4dXr1fnloDR98LZEQU=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGFt16qooJSqctEtUsRZAuvwR7ZWWak/hqPMtPMOnnfTCNOGjp
+	5oP81bppkVLpjY+r4bQ86noZuQmU69FjYcTBAUuntfDgEsl+4XR3vG/8iv1W
+X-Gm-Gg: ASbGncuaICBB0EI99E/I+O99nYZeqhQUx8ZgRoAkzSnb42Ooc/9Ia4oLNKst/tgSr2p
+	Mqzt0G3cHHDuygbNLHCT98oSQ8eOISFmMg9+UqWfBoWmiHCbeu/ofcIH1T0YtFy5LwprNJZfE0Q
+	+XUgXqRejorq6ECE3SZCVuWnKEXpu1LHUzyCv0cwGgfYV2lnZhosRZzNi9HZrMWXvWwgcW0HZrU
+	OG1vvc+TEsrVVQjtWj3b+OgZz75azqfjjy/6701z0/YiYotsQDrr70Ws7TJbqYTYq2Cyomu5/UG
+	OsjnoXRbxWo7+b12SA+lMF2OJqWP
+X-Google-Smtp-Source: AGHT+IGew9eYcM2URi/21CyZAiBNRVDDORJCErtMKBXGaipTpLhYOkMN7qo1rF4n3H1ilggRuIN5EA==
+X-Received: by 2002:a05:6402:2748:b0:5dc:c3c2:225e with SMTP id 4fb4d7f45d1cf-5dec9d3eb64mr723602a12.8.1739400234330;
+        Wed, 12 Feb 2025 14:43:54 -0800 (PST)
+Received: from giga-mm.. ([2a02:1210:861b:6f00:82ee:73ff:feb8:99e3])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece1b4e02sm119914a12.3.2025.02.12.14.43.53
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2025 14:43:53 -0800 (PST)
+From: Alexander Sverdlin <alexander.sverdlin@gmail.com>
+To: soc@lists.linux.dev
+Cc: Alexander Sverdlin <alexander.sverdlin@gmail.com>,
+	Chen Wang <unicorn_wang@outlook.com>,
+	Inochi Amaoto <inochiama@outlook.com>,
+	Lee Jones <lee@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Philipp Zabel <p.zabel@pengutronix.de>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>,
+	Arnd Bergmann <arnd@arndb.de>,
+	Paul Walmsley <paul.walmsley@sifive.com>,
+	Palmer Dabbelt <palmer@dabbelt.com>,
+	Albert Ou <aou@eecs.berkeley.edu>,
+	Sebastian Reichel <sre@kernel.org>,
+	devicetree@vger.kernel.org,
+	Haylen Chu <heylenay@outlook.com>,
+	linux-arm-kernel@lists.infradead.org,
+	linux-riscv@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	Jisheng Zhang <jszhang@kernel.org>,
+	Chao Wei <chao.wei@sophgo.com>
+Subject: [PATCH v3 0/7] arm64 support for Milk-V Duo Module 01 EVB
+Date: Wed, 12 Feb 2025 23:43:32 +0100
+Message-ID: <20250212224347.1767819-1-alexander.sverdlin@gmail.com>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/14] cpufreq/amd-pstate: Overhaul locking
-To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
- "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
- Perry Yuan <perry.yuan@amd.com>
-Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250206215659.3350066-1-superm1@kernel.org>
- <20250206215659.3350066-5-superm1@kernel.org>
- <adccc912-bf93-4320-8011-21c0220c839a@amd.com>
- <bfcafbaf-c407-412b-a5e4-d152e2a565d7@kernel.org>
- <82f27cde-4725-4f4e-b4ae-c23885b31d14@amd.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <82f27cde-4725-4f4e-b4ae-c23885b31d14@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-On 2/11/2025 23:15, Dhananjay Ugwekar wrote:
-> On 2/12/2025 3:24 AM, Mario Limonciello wrote:
->> On 2/10/2025 23:02, Dhananjay Ugwekar wrote:
->>> On 2/7/2025 3:26 AM, Mario Limonciello wrote:
->>>> From: Mario Limonciello <mario.limonciello@amd.com>
->>>>
->>>> amd_pstate_cpu_boost_update() and refresh_frequency_limits() both
->>>> update the policy state and have nothing to do with the amd-pstate
->>>> driver itself.
->>>>
->>>> A global "limits" lock doesn't make sense because each CPU can have
->>>> policies changed independently.  Instead introduce locks into to the
->>>> cpudata structure and lock each CPU independently.
->>>>
->>>> The remaining "global" driver lock is used to ensure that only one
->>>> entity can change driver modes at a given time.
->>>>
->>>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->>>> ---
->>>>    drivers/cpufreq/amd-pstate.c | 27 +++++++++++++++++----------
->>>>    drivers/cpufreq/amd-pstate.h |  2 ++
->>>>    2 files changed, 19 insertions(+), 10 deletions(-)
->>>>
->>>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->>>> index 77bc6418731ee..dd230ed3b9579 100644
->>>> --- a/drivers/cpufreq/amd-pstate.c
->>>> +++ b/drivers/cpufreq/amd-pstate.c
->>>> @@ -196,7 +196,6 @@ static inline int get_mode_idx_from_str(const char *str, size_t size)
->>>>        return -EINVAL;
->>>>    }
->>>>    -static DEFINE_MUTEX(amd_pstate_limits_lock);
->>>>    static DEFINE_MUTEX(amd_pstate_driver_lock);
->>>>      static u8 msr_get_epp(struct amd_cpudata *cpudata)
->>>> @@ -283,6 +282,8 @@ static int msr_set_epp(struct amd_cpudata *cpudata, u8 epp)
->>>>        u64 value, prev;
->>>>        int ret;
->>>>    +    lockdep_assert_held(&cpudata->lock);
->>>
->>> After making the perf_cached variable writes atomic, do we still need a cpudata->lock ?
->>
->> My concern was specifically that userspace could interact with multiple sysfs files that influence the atomic perf variable (and the HW) at the same time.  So you would not have a deterministic behavior if they raced.  But if you take the mutex on all the paths that this could happen it will be a FIFO.
-> 
-> I guess, the lock still wont guarantee the ordering right? It will just ensure that one thread executes
-> that code path for a specific CPU at a time. And do we even care about the ordering ? I'm having a hard
-> time thinking of a scenario where we'll need the lock. Can you or Gautham think of any such scenario?
-> 
+This series adds very basic support for Milk-V Duo Module 01 EVB [1] in
+arm64 mode. The SoC (SG2000) is dual-arch, RiscV and ARM64, the latter has
+been chosen because the upstream toolchain can be utilized.
 
-You're right; I can't really think of one either.  Let me take out the 
-private lock for the per-cpu device and I'll just overhaul the global 
-lock locations.
+Sophgo SG2000 seems to be a continuation of the Cvitek CV18xx series, same
+peripherals with an addition of ARM64 core. Therefore it would be
+beneficial not to copy-paste the peripherals' device-tree, but rather split
+the most suitable riscv DT into ARCH-specific and peripherals parts and
+just include the latter on the arm64 side.
 
->>
->>>
->>> Regards,
->>> Dhananjay
->>>
->>>> +
->>>>        value = prev = READ_ONCE(cpudata->cppc_req_cached);
->>>>        value &= ~AMD_CPPC_EPP_PERF_MASK;
->>>>        value |= FIELD_PREP(AMD_CPPC_EPP_PERF_MASK, epp);
->>>> @@ -315,6 +316,8 @@ static int shmem_set_epp(struct amd_cpudata *cpudata, u8 epp)
->>>>        int ret;
->>>>        struct cppc_perf_ctrls perf_ctrls;
->>>>    +    lockdep_assert_held(&cpudata->lock);
->>>> +
->>>>        if (epp == cpudata->epp_cached)
->>>>            return 0;
->>>>    @@ -335,6 +338,8 @@ static int amd_pstate_set_energy_pref_index(struct cpufreq_policy *policy,
->>>>        struct amd_cpudata *cpudata = policy->driver_data;
->>>>        u8 epp;
->>>>    +    guard(mutex)(&cpudata->lock);
->>>> +
->>>>        if (!pref_index)
->>>>            epp = cpudata->epp_default;
->>>>        else
->>>> @@ -750,7 +755,6 @@ static int amd_pstate_set_boost(struct cpufreq_policy *policy, int state)
->>>>            pr_err("Boost mode is not supported by this processor or SBIOS\n");
->>>>            return -EOPNOTSUPP;
->>>>        }
->>>> -    guard(mutex)(&amd_pstate_driver_lock);
->>>>          ret = amd_pstate_cpu_boost_update(policy, state);
->>>>        refresh_frequency_limits(policy);
->>>> @@ -973,6 +977,9 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
->>>>          cpudata->cpu = policy->cpu;
->>>>    +    mutex_init(&cpudata->lock);
->>>> +    guard(mutex)(&cpudata->lock);
->>>> +
->>>>        ret = amd_pstate_init_perf(cpudata);
->>>>        if (ret)
->>>>            goto free_cpudata1;
->>>> @@ -1179,8 +1186,6 @@ static ssize_t store_energy_performance_preference(
->>>>        if (ret < 0)
->>>>            return -EINVAL;
->>>>    -    guard(mutex)(&amd_pstate_limits_lock);
->>>> -
->>>>        ret = amd_pstate_set_energy_pref_index(policy, ret);
->>>>          return ret ? ret : count;
->>>> @@ -1353,8 +1358,10 @@ int amd_pstate_update_status(const char *buf, size_t size)
->>>>        if (mode_idx < 0 || mode_idx >= AMD_PSTATE_MAX)
->>>>            return -EINVAL;
->>>>    -    if (mode_state_machine[cppc_state][mode_idx])
->>>> +    if (mode_state_machine[cppc_state][mode_idx]) {
->>>> +        guard(mutex)(&amd_pstate_driver_lock);
->>>>            return mode_state_machine[cppc_state][mode_idx](mode_idx);
->>>> +    }
->>>>          return 0;
->>>>    }
->>>> @@ -1375,7 +1382,6 @@ static ssize_t status_store(struct device *a, struct device_attribute *b,
->>>>        char *p = memchr(buf, '\n', count);
->>>>        int ret;
->>>>    -    guard(mutex)(&amd_pstate_driver_lock);
->>>>        ret = amd_pstate_update_status(buf, p ? p - buf : count);
->>>>          return ret < 0 ? ret : count;
->>>> @@ -1472,6 +1478,9 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
->>>>          cpudata->cpu = policy->cpu;
->>>>    +    mutex_init(&cpudata->lock);
->>>> +    guard(mutex)(&cpudata->lock);
->>>> +
->>>>        ret = amd_pstate_init_perf(cpudata);
->>>>        if (ret)
->>>>            goto free_cpudata1;
->>>> @@ -1558,6 +1567,8 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
->>>>        union perf_cached perf;
->>>>        u8 epp;
->>>>    +    guard(mutex)(&cpudata->lock);
->>>> +
->>>>        amd_pstate_update_min_max_limit(policy);
->>>>          if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
->>>> @@ -1646,8 +1657,6 @@ static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
->>>>        if (cpudata->suspended)
->>>>            return 0;
->>>>    -    guard(mutex)(&amd_pstate_limits_lock);
->>>> -
->>>>        if (trace_amd_pstate_epp_perf_enabled()) {
->>>>            trace_amd_pstate_epp_perf(cpudata->cpu, perf.highest_perf,
->>>>                          AMD_CPPC_EPP_BALANCE_POWERSAVE,
->>>> @@ -1684,8 +1693,6 @@ static int amd_pstate_epp_resume(struct cpufreq_policy *policy)
->>>>        struct amd_cpudata *cpudata = policy->driver_data;
->>>>          if (cpudata->suspended) {
->>>> -        guard(mutex)(&amd_pstate_limits_lock);
->>>> -
->>>>            /* enable amd pstate from suspend state*/
->>>>            amd_pstate_epp_reenable(policy);
->>>>    diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
->>>> index a140704b97430..6d776c3e5712a 100644
->>>> --- a/drivers/cpufreq/amd-pstate.h
->>>> +++ b/drivers/cpufreq/amd-pstate.h
->>>> @@ -96,6 +96,8 @@ struct amd_cpudata {
->>>>        bool    boost_supported;
->>>>        bool    hw_prefcore;
->>>>    +    struct mutex    lock;
->>>> +
->>>>        /* EPP feature related attributes*/
->>>>        u8    epp_cached;
->>>>        u32    policy;
->>>
->>
-> 
+This series adds the device-tree for Milk-V Duo Module 01 EVB, which
+in turn contains Milk-V Duo Module 01 (separate .dtsi) on it, which has
+SG2000 SoC inside (separate .dtsi).
+
+This series has been tested with Sophgo-provided U-Boot binary [2]: it
+boots from SD card; pinctrl, serial, GPIO drivers are functional (same
+as for RiscV-based CV18xx SoCs).
+
+Partial SoC documentation is available [3].
+
+This series lacks the support of:
+- USB
+- Audio
+- Ethernet
+- WiFi
+- Bluetooth
+- eMMC
+- Video
+- "reboot" functionality
+
+It would probably make sense that the series will go into ARM SOC tree.
+
+Changelog:
+v3:
+- &cpus node has been moved into cv18xx-cpu.dtsi, &plic and &clint nodes
+were moved into cv18xx-intc.dtsi to reduce code duplication;
+v2:
+- dropped all patches related to the new reboot driver and corresponding DT
+and bindings;
+- grouped DT-related and config-related patches together;
+- added patch moving sophgo.yaml from riscv into soc (to share it with
+ARM); added SG2000 SoC and Milk-V Duo Module 01 EVB into it;
+- other changes are documented in the corresponding patches;
+
+[1] https://milkv.io/docs/duo/getting-started/duo-module-01
+[2] https://github.com/milkv-duo/duo-buildroot-sdk-v2/releases/
+[3] https://github.com/sophgo/sophgo-doc/releases/download/sg2000-trm-v1.01/sg2000_trm_en.pdf
+
+Alexander Sverdlin (7):
+  riscv: dts: sophgo: cv18xx: Move RiscV-specific part into SoCs' .dtsi
+    files
+  dt-bindings: soc: sophgo: Move SoCs/boards from riscv into soc, add
+    SG2000
+  arm64: dts: sophgo: Add initial SG2000 SoC device tree
+  arm64: dts: sophgo: Add Duo Module 01
+  arm64: dts: sophgo: Add Duo Module 01 Evaluation Board
+  arm64: Add SOPHGO SOC family Kconfig support
+  arm64: defconfig: Enable rudimentary Sophgo SG2000 support
+
+ .../{riscv => soc/sophgo}/sophgo.yaml         |  7 +-
+ arch/arm64/Kconfig.platforms                  |  6 ++
+ arch/arm64/boot/dts/Makefile                  |  1 +
+ arch/arm64/boot/dts/sophgo/Makefile           |  2 +
+ .../sophgo/sg2000-milkv-duo-module-01-evb.dts | 31 +++++++
+ .../sophgo/sg2000-milkv-duo-module-01.dtsi    | 85 +++++++++++++++++
+ arch/arm64/boot/dts/sophgo/sg2000.dtsi        | 75 +++++++++++++++
+ arch/arm64/configs/defconfig                  |  4 +
+ arch/riscv/boot/dts/sophgo/cv1800b.dtsi       | 28 +++---
+ arch/riscv/boot/dts/sophgo/cv1812h.dtsi       | 28 +++---
+ arch/riscv/boot/dts/sophgo/cv181x.dtsi        |  2 +-
+ arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi    | 36 ++++++++
+ arch/riscv/boot/dts/sophgo/cv18xx-intc.dtsi   | 23 +++++
+ arch/riscv/boot/dts/sophgo/cv18xx.dtsi        | 91 +++++--------------
+ arch/riscv/boot/dts/sophgo/sg2002.dtsi        | 34 ++++---
+ 15 files changed, 347 insertions(+), 106 deletions(-)
+ rename Documentation/devicetree/bindings/{riscv => soc/sophgo}/sophgo.yaml (80%)
+ create mode 100644 arch/arm64/boot/dts/sophgo/Makefile
+ create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01-evb.dts
+ create mode 100644 arch/arm64/boot/dts/sophgo/sg2000-milkv-duo-module-01.dtsi
+ create mode 100644 arch/arm64/boot/dts/sophgo/sg2000.dtsi
+ create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-cpu.dtsi
+ create mode 100644 arch/riscv/boot/dts/sophgo/cv18xx-intc.dtsi
+
+-- 
+2.48.1
 
 
