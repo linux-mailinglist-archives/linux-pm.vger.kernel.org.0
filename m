@@ -1,193 +1,152 @@
-Return-Path: <linux-pm+bounces-21984-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21985-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC299A330A0
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 21:18:47 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3835DA3311A
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 21:55:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 42C283A63D8
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 20:18:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35273188B281
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 20:55:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4987E20102A;
-	Wed, 12 Feb 2025 20:18:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E0FD4202C3B;
+	Wed, 12 Feb 2025 20:55:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="AJKxF253"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DbrgKPXm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.8])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77F61200B99;
-	Wed, 12 Feb 2025 20:18:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.8
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B88F81FF5EF
+	for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 20:55:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739391523; cv=none; b=onKDSzus5AdPVPnIrMOnUZJSEpHEjwjLRwoHKis4avJ7ve/Yz4UN3i4p7Ensd5FRRIhct10i9eoUbxushMaGwG6aflSuEciEG/iOHCK8ZVQAKHnYwjgKX+qksbnxK/Oc9i92WutP+T6APNmlBxovaWFA7mj7TyPSFwHwYHA4nwc=
+	t=1739393712; cv=none; b=hj9TZ3Q0I5SCK+5+IWXHSHdxf1pDQw51XyVkrE1sPDcgua2XstGkASuA11As4RyhKT0BCi1XyKi5rlLGpR6OfA0fQMojJXG4muj71y43WhRNF8v+MOiIK4dgIwSW9bmUiNiT8vf5ilaHuEq5g0af4UTSftcLuo3Ka6OGDHvbxP8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739391523; c=relaxed/simple;
-	bh=ZicH1sJqAqdWHQ/AtROSQxjl3xv81hd+byp3AVNO4eg=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=kWHi6yaIM77MaHX9O8HCnD81FOrqm1G9HZBQrksVzKZzEF9F4BX803iKj2g9nkcGxTwVZQI572VXVtKSwfN5EKjrrejk14RaWxiF/k+S08m9dljlkDn89/6qxWTxDSFsVwDR2PDWKlH+k+VO7NLt8rrlLmcKPKJpVvKNdrJpvms=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=AJKxF253; arc=none smtp.client-ip=192.198.163.8
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739391521; x=1770927521;
-  h=date:from:to:cc:subject:message-id;
-  bh=ZicH1sJqAqdWHQ/AtROSQxjl3xv81hd+byp3AVNO4eg=;
-  b=AJKxF253Hwho8CS0pXSy5AaTfbO9m/tTBoQMhg4otfxuGl1sH20Aj2l4
-   bBkpYSm+3K8K/1NboBHYvDU96kKFcZ87eo51De2WoAzTiDVxFRqw9QfMz
-   i9LNKKGAI17+xUJpmTB9G8So2MOA7M5Ck6nPbuNnMSy2cWpQSc56xJbc4
-   AMnKL0URcDn9MSt+Wy5YvkGnmhAQAbVoZJ7S+IhB0nmUVgxPVBBBUS3ym
-   094fvIw1sLO/w6KCMZTCu389yd4O8Ndw5eP8FNrJPlwsem4B5tHIvQ/Mm
-   PbIMJoeC4hmLW5atmypQyirB2W3qZWqUR8K25lXODSAGTJiMskipBsdd1
-   g==;
-X-CSE-ConnectionGUID: IbYpru6bTE+T3nT6bvHvhQ==
-X-CSE-MsgGUID: w/vCKDQZSA2aEWC8rNmyJQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="57602702"
-X-IronPort-AV: E=Sophos;i="6.13,280,1732608000"; 
-   d="scan'208";a="57602702"
-Received: from orviesa007.jf.intel.com ([10.64.159.147])
-  by fmvoesa102.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 12 Feb 2025 12:18:41 -0800
-X-CSE-ConnectionGUID: mP1uR7Q3Rgm1XLx94zOwEA==
-X-CSE-MsgGUID: sNpJqGhzSkq4MJxc+Wxa9w==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="113416082"
-Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
-  by orviesa007.jf.intel.com with ESMTP; 12 Feb 2025 12:18:39 -0800
-Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tiJBs-00165s-2Q;
-	Wed, 12 Feb 2025 20:18:36 +0000
-Date: Thu, 13 Feb 2025 04:17:50 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- 7c2191495f2c9ecdcb05b3e951cbc82a2918ee64
-Message-ID: <202502130443.UyzY3Iam-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1739393712; c=relaxed/simple;
+	bh=39gu3mTlYdf0v2Eq066/2+uqNCf3JJqMeORR/jt38mQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=UC5LORwtPTHmQvp2RKG8yl23AZ9+8suFYn0y8ySrplmj649E6O4pyzdt+vygIUxZewhweqY0B2PBgOz26nkOu1/e25WAlXm1rHLbQv2movRxTpv9nFFFr31jxM91M2idRkoKpUUeIBBVCSryXNXp67q0z2+ju4O44MUfmOnPjEk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DbrgKPXm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2A209C4CEDF
+	for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 20:55:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739393712;
+	bh=39gu3mTlYdf0v2Eq066/2+uqNCf3JJqMeORR/jt38mQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DbrgKPXmSMoPEWlkexKNvUmzO8UEitfnIsPBqglDwLiuxGEX8vqnXG9E2mUyWH6LR
+	 a4t3FHSM/Hy8pn/jARf9t9NCJLSbSApeSyMDkleqCmkhafXdN9vKe9zNiRMQ6JC/t9
+	 E8xNuOZuwMd340l7WAf24UBIsIPhoVDXF+fEsF/+UYP3hIhIkcz3TgSD17qhUt7YHS
+	 +ntQmhAXfogdLwzP7OnK9BJczAKMYmB18jjujlFU1oHOQKphmVkMv5G6gyV3nXmTtW
+	 kfDGHTSUdcdC4cT3gTdB2Cmb6Z9B+qcpVjbXvZ+T/grGxF0nuuY7ue5MlUz7Ukh4UY
+	 ftfVP+mQb0big==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2b85d1a9091so116576fac.0
+        for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 12:55:12 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUsvVletUlnfTPQxSueYG7khoXpmRtiEfgNTtoGHU+yMbvWiC7LBb3LPYfeP2sb/S9zzCqS3ie+MA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxnajy6nYLJTkcR++81Cd8J5O4RkdmzbBll/T2CKje+WN9I1mKK
+	923GhKGKTpGbPWPpcAMkweh6IE8uqRRnQuSfK0NP3fahODB7WapkrJiQif9LpDOAksBf1fCjasQ
+	AC/kzoDV/Bxk9FH1SWqVcS77jo04=
+X-Google-Smtp-Source: AGHT+IHAwD1ttfG0K94WAt0e4SFyzmvmei12b3tUpJVQpW2KdKZYMHE1MyIRBpyAa09QT9uoRUo9/N+Db/fvDbHPTzY=
+X-Received: by 2002:a05:6871:230c:b0:2a7:d856:94a with SMTP id
+ 586e51a60fabf-2b8d658f5a6mr2922009fac.22.1739393711449; Wed, 12 Feb 2025
+ 12:55:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <20250211034423.833783-1-xu.yang_2@nxp.com>
+In-Reply-To: <20250211034423.833783-1-xu.yang_2@nxp.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 12 Feb 2025 21:55:00 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0idzf1QKf8UKp4ttepLbipZD6b1RFHX7QqgQCyJZL8dQg@mail.gmail.com>
+X-Gm-Features: AWEUYZmzXzKrtf4Vgah8gs2KBi2oAYO_8oD_R3sVAnvKrRxDR-fQrUwcdBcFTqI
+Message-ID: <CAJZ5v0idzf1QKf8UKp4ttepLbipZD6b1RFHX7QqgQCyJZL8dQg@mail.gmail.com>
+Subject: Re: [PATCH] PM: sleep: core: Set is_prepared to false before checking direct_complete
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
+	gregkh@linuxfoundation.org, dakr@kernel.org, stern@rowland.harvard.edu, 
+	linux-pm@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: 7c2191495f2c9ecdcb05b3e951cbc82a2918ee64  Merge branch 'thermal-core' into fixes
+On Tue, Feb 11, 2025 at 4:43=E2=80=AFAM Xu Yang <xu.yang_2@nxp.com> wrote:
+>
+> Currently, if power.no_callbacks is true for a device, device_prepare()
+> will also set power.direct_complete to true. When device_resume() check
+> power.direct_complete, setting power.is_prepared will be skipped if it
+> can directly complete. This will cause a warning when add new devices
+> during resume() stage.
+>
+> Although power.is_prepared should be cleared in complete() state, commit
+> (f76b168b6f11 PM: Rename dev_pm_info.in_suspend to is_prepared) allow
+> clear it in earlier resume() stage. However, we need set is_prepared to
+> false before checking direct_complete after including direct complete
+> support.
+>
+> Take USB as example:
+> The usb_interface is such a device which setting power.no_callbacks to
+> true. Then if the user call usb_set_interface() during resume() stage,
+> the kernel will print below warning since the system will create and
+> add ep devices.
+>
+> [  186.461414] usb 1-1: reset high-speed USB device number 3 using ci_hdr=
+c
+> [  187.102681]  ep_81: PM: parent 1-1:1.1 should not be sleeping
+> [  187.105010] PM: resume devices took 0.936 seconds
+>
+> Fixes: aae4518b3124 ("PM / sleep: Mechanism to avoid resuming runtime-sus=
+pended devices unnecessarily")
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> ---
+>  drivers/base/power/main.c | 12 ++++++------
+>  1 file changed, 6 insertions(+), 6 deletions(-)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index 40e1d8d8a589..69d0f9ca7051 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -929,6 +929,12 @@ static void device_resume(struct device *dev, pm_mes=
+sage_t state, bool async)
+>         if (dev->power.syscore)
+>                 goto Complete;
+>
+> +       /*
+> +        * This is a fib.  But we'll allow new children to be added below
+> +        * a resumed device, even if the device hasn't been completed yet=
+.
+> +        */
+> +       dev->power.is_prepared =3D false;
 
-elapsed time: 1446m
+Well, not really.
 
-configs tested: 99
-configs skipped: 2
+This is to allow new children to be added from a resume callback, but
+direct_complete devices are still in suspend at this point.  You can't
+make this change for all of them.
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+You can clear power.is_prepared for devices with power.no_pm_callbacks
+set before the dev->power.syscore check, though.
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250212    gcc-13.2.0
-arc                   randconfig-002-20250212    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250212    clang-18
-arm                   randconfig-002-20250212    clang-16
-arm                   randconfig-003-20250212    clang-21
-arm                   randconfig-004-20250212    clang-16
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250212    gcc-14.2.0
-arm64                 randconfig-002-20250212    gcc-14.2.0
-arm64                 randconfig-003-20250212    clang-16
-arm64                 randconfig-004-20250212    gcc-14.2.0
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250212    gcc-14.2.0
-csky                  randconfig-002-20250212    gcc-14.2.0
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250212    clang-21
-hexagon               randconfig-002-20250212    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250212    clang-19
-i386        buildonly-randconfig-002-20250212    gcc-12
-i386        buildonly-randconfig-003-20250212    gcc-12
-i386        buildonly-randconfig-004-20250212    gcc-12
-i386        buildonly-randconfig-005-20250212    gcc-12
-i386        buildonly-randconfig-006-20250212    gcc-12
-i386                                defconfig    clang-19
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250212    gcc-14.2.0
-loongarch             randconfig-002-20250212    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250212    gcc-14.2.0
-nios2                 randconfig-002-20250212    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250212    gcc-14.2.0
-parisc                randconfig-002-20250212    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc               randconfig-001-20250212    gcc-14.2.0
-powerpc               randconfig-002-20250212    clang-16
-powerpc               randconfig-003-20250212    gcc-14.2.0
-powerpc64             randconfig-001-20250212    clang-16
-powerpc64             randconfig-002-20250212    gcc-14.2.0
-powerpc64             randconfig-003-20250212    gcc-14.2.0
-riscv                             allnoconfig    gcc-14.2.0
-riscv                 randconfig-001-20250212    clang-21
-riscv                 randconfig-002-20250212    clang-18
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250212    clang-15
-s390                  randconfig-002-20250212    clang-17
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250212    gcc-14.2.0
-sh                    randconfig-002-20250212    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250212    gcc-14.2.0
-sparc                 randconfig-002-20250212    gcc-14.2.0
-sparc64               randconfig-001-20250212    gcc-14.2.0
-sparc64               randconfig-002-20250212    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250212    clang-16
-um                    randconfig-002-20250212    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250212    gcc-11
-x86_64      buildonly-randconfig-002-20250212    clang-19
-x86_64      buildonly-randconfig-003-20250212    clang-19
-x86_64      buildonly-randconfig-004-20250212    clang-19
-x86_64      buildonly-randconfig-005-20250212    gcc-12
-x86_64      buildonly-randconfig-006-20250212    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250212    gcc-14.2.0
-xtensa                randconfig-002-20250212    gcc-14.2.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> +
+>         if (dev->power.direct_complete) {
+>                 /* Match the pm_runtime_disable() in device_suspend(). */
+>                 pm_runtime_enable(dev);
+> @@ -941,12 +947,6 @@ static void device_resume(struct device *dev, pm_mes=
+sage_t state, bool async)
+>         dpm_watchdog_set(&wd, dev);
+>         device_lock(dev);
+>
+> -       /*
+> -        * This is a fib.  But we'll allow new children to be added below
+> -        * a resumed device, even if the device hasn't been completed yet=
+.
+> -        */
+> -       dev->power.is_prepared =3D false;
+> -
+>         if (!dev->power.is_suspended)
+>                 goto Unlock;
+>
+> --
 
