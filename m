@@ -1,154 +1,128 @@
-Return-Path: <linux-pm+bounces-21967-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21968-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70D01A327DF
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 14:59:50 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0301AA32838
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 15:17:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 48587188C7A4
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 13:58:10 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E41507A0F51
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 14:16:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8D3C20E703;
-	Wed, 12 Feb 2025 13:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vLpxtGk2"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C2F720FA90;
+	Wed, 12 Feb 2025 14:17:03 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E90220E6FF;
-	Wed, 12 Feb 2025 13:57:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from mail.loongson.cn (mail.loongson.cn [114.242.206.163])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 885EB1A5AA;
+	Wed, 12 Feb 2025 14:16:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=114.242.206.163
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739368642; cv=none; b=LVcFnWqQ5CsFQfHy7abTpRLHNk7n8V92sfy5aluxIZ2UJAA10HiueZuabrRTjDeVVhtGgijxs33s8OOf8ec8BM2jgQzHnOT7LS5X20Ba/AZxOQf0R9iEd4FG2vxgWdEEhfxsfHqdSTYMO65KqfKGdSpKr/hJCT6+pGTJ0Ml2UMo=
+	t=1739369823; cv=none; b=YfJCkz/CHmbkYYzPYjPoh8hna8Y016KaPMe0huSaWi2hopfcRiMScaB5jwP4EGiNfqJYuCNMiWL4fzgne2BfppXOWPzMYVCyuJ0HAItqHVAl6CKsGO8Q2MOacBgi66Q3iNTAaNj9zZ8lgqBG9dp1Tx4xXxyntc9syBNVJhtZuZU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739368642; c=relaxed/simple;
-	bh=n3O4c5fvh5M04TdsNyeoIXrYlh7gJcLldyGVj/7plFE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=qeIjKUogWEdYUbvFcvLW21jjPazFlU3j0D4WcDTDrKH2T48bGpmlm5JQ3QU9bJ1h4KGDuxiXmieNyXidKfB3+R6Zr64NoNMMb5E0+CiEgC6+uy56scjtaZot3Q3rZg7K6QGbNECzrUfmK6kHXzFtuK3yCeikoGE7+QR6ThnXwGo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vLpxtGk2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F027BC4CEDF;
-	Wed, 12 Feb 2025 13:57:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739368642;
-	bh=n3O4c5fvh5M04TdsNyeoIXrYlh7gJcLldyGVj/7plFE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=vLpxtGk2Gxq3mGnrMrlS50qicK1BxxmPCcaIxAqk3RMyp48ONjZJVsJRhYwVlxiQN
-	 GSfS7MrnvQKvYS0Lmb/FJa1yWy4tGcMwd2rfqoAHcohQFfHskiZstkLGtbjH/8JhkA
-	 VPdmjYxw6lrlPlyHMjKPuFLsIl1mT5cD35pvOvVyqFY/6iryUT9tNMs+h53NewhaI6
-	 Qm2RIoItD+uQ481UnbfQvT6nEjXpGaTM1vyRsRPPZfQTmcwzpIxLeU2ztKOL/6dEyB
-	 6RZzjaGW7jtr2QxFjjFj6U9GS4A9VR7ooKhrUJzNK9CHKE1jG+Dh6Q3vcJ8Lu2OZu2
-	 0uzLA4+YoFt4w==
-Received: by mail-ot1-f47.google.com with SMTP id 46e09a7af769-71fbb0d035dso3819818a34.2;
-        Wed, 12 Feb 2025 05:57:21 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWyMxWP7FeqOOtgn3nXKbKAW1sDRtTLG2TsQzCpODyDgbBe74n5be0QCYWPrVBMkPVtaCN6X9X5BV+l@vger.kernel.org, AJvYcCXqgeAgkiODvqEPIowdN7akRO3jVO6mOLoCRx8M/0yC6DlQSXs+BfO+K+uJnRbaVY5EpfNdrFbvsLc=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwXk3GPxpzHP0lFrv6U8TnBVZnNKNJ83mm5SJZIcpM3wisURr26
-	AbSLFZtojViPzJTFsEnVmvOpKjzW+8sQ1oxkqmGDeFfmO6BUSTdMlOdUW47KCr5pCEg1dCvdnnk
-	sXqlmuckixOrJW8zdWG6ARb1ENLE=
-X-Google-Smtp-Source: AGHT+IEBybnIF5K9wCf/EnvmIcG8fruNpEyQUW1zRB3WiNZru87p6saoKu+vyT0F6UmXkWqI6c2wiJQkHfUvBe8Ao6Q=
-X-Received: by 2002:a05:6830:6dc3:b0:71e:1ff9:e91b with SMTP id
- 46e09a7af769-726f1dc61c5mr2182723a34.27.1739368641324; Wed, 12 Feb 2025
- 05:57:21 -0800 (PST)
+	s=arc-20240116; t=1739369823; c=relaxed/simple;
+	bh=E7GrwC0pOKXDDZPTfqpnhVvP9PN+YrM0iMkoJ69auwY=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Ogkn/c8AfqqciVCgDe7HEM6kSzWgyelpBUq5ZD50gs18CCQEUtoxGtqjKHYC3ACzmnCE1wWzaFBJRN5yq6nwERiP2MmlyPbsFxTXAxyWlOTxl6E2lM4v/1xixBJf/BBnWyjE/kWGaCSOfVgUV6Q7ZcRruKdxLVAI/9o2hVE4zDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn; spf=pass smtp.mailfrom=loongson.cn; arc=none smtp.client-ip=114.242.206.163
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=loongson.cn
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=loongson.cn
+Received: from loongson.cn (unknown [223.64.68.156])
+	by gateway (Coremail) with SMTP id _____8AxaeFXraxnNi1zAA--.25365S3;
+	Wed, 12 Feb 2025 22:16:55 +0800 (CST)
+Received: from localhost.localdomain (unknown [223.64.68.156])
+	by front1 (Coremail) with SMTP id qMiowMAxHsdTraxnd_ANAA--.3470S2;
+	Wed, 12 Feb 2025 22:16:54 +0800 (CST)
+From: Huacai Chen <chenhuacai@loongson.cn>
+To: Huacai Chen <chenhuacai@kernel.org>,
+	Andrew Morton <akpm@linux-foundation.org>
+Cc: linux-mm@kvack.org,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>,
+	linux-pm@vger.kernel.org,
+	GONG Ruiqi <gongruiqi@huaweicloud.com>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	stable@vger.kernel.org,
+	Yuli Wang <wangyuli@uniontech.com>
+Subject: [PATCH] mm/slab: Initialise random_kmalloc_seed after initcalls
+Date: Wed, 12 Feb 2025 22:16:48 +0800
+Message-ID: <20250212141648.599661-1-chenhuacai@loongson.cn>
+X-Mailer: git-send-email 2.47.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250208162210.3929473-1-superm1@kernel.org> <20250208162210.3929473-5-superm1@kernel.org>
- <CAJZ5v0j4+8nqQRtcAihpVgOHWUPE54nTWienCpFk1U7easVPnA@mail.gmail.com>
- <4e6cc95f-90dd-4f55-bb53-50de7d280d62@kernel.org> <dcbcbee9-7f1b-43ea-90ee-f863f4c6687f@gmx.de>
-In-Reply-To: <dcbcbee9-7f1b-43ea-90ee-f863f4c6687f@gmx.de>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 12 Feb 2025 14:57:10 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jmYda_OiFQTrtca-Z=W=AL5L-5gnsEE6oj_MoubW5fXA@mail.gmail.com>
-X-Gm-Features: AWEUYZlcsdhBGkKJiVsCaizffxhm0HrhtyYkEr3XyR0cwGyyDI7sGGkf-UkxlB4
-Message-ID: <CAJZ5v0jmYda_OiFQTrtca-Z=W=AL5L-5gnsEE6oj_MoubW5fXA@mail.gmail.com>
-Subject: Re: [PATCH 4/4] ACPI: battery: Wake system on AC plug or unplug in
- over s2idle
-To: Armin Wolf <W_Armin@gmx.de>, Mario Limonciello <superm1@kernel.org>
-Cc: Len Brown <lenb@kernel.org>, Pavel Machek <pavel@ucw.cz>, 
-	"open list:ACPI" <linux-acpi@vger.kernel.org>, 
-	"open list:HIBERNATION (aka Software Suspend, aka swsusp)" <linux-pm@vger.kernel.org>, Mario Limonciello <mario.limonciello@amd.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-CM-TRANSID:qMiowMAxHsdTraxnd_ANAA--.3470S2
+X-CM-SenderInfo: hfkh0x5xdftxo6or00hjvr0hdfq/
+X-Coremail-Antispam: 1Uk129KBj93XoW7ZrykCrW5JFy5Cw1DKr43XFc_yoW8AFyUpr
+	Z2gF1jqrykAr4Uur47C3y8urn5ZaykGFW7CwsIkwnrZw1UAw10gFWkXFsF9rn3XFW5JayS
+	vFyvkFn0ya45ZwcCm3ZEXasCq-sJn29KB7ZKAUJUUUUx529EdanIXcx71UUUUU7KY7ZEXa
+	sCq-sGcSsGvfJ3Ic02F40EFcxC0VAKzVAqx4xG6I80ebIjqfuFe4nvWSU5nxnvy29KBjDU
+	0xBIdaVrnRJUUUBjb4IE77IF4wAFF20E14v26r1j6r4UM7CY07I20VC2zVCF04k26cxKx2
+	IYs7xG6rWj6s0DM7CIcVAFz4kK6r1Y6r17M28lY4IEw2IIxxk0rwA2F7IY1VAKz4vEj48v
+	e4kI8wA2z4x0Y4vE2Ix0cI8IcVAFwI0_JFI_Gr1l84ACjcxK6xIIjxv20xvEc7CjxVAFwI
+	0_Gr0_Cr1l84ACjcxK6I8E87Iv67AKxVW0oVCq3wA2z4x0Y4vEx4A2jsIEc7CjxVAFwI0_
+	GcCE3s1ln4kS14v26r126r1DM2AIxVAIcxkEcVAq07x20xvEncxIr21l57IF6xkI12xvs2
+	x26I8E6xACxx1l5I8CrVACY4xI64kE6c02F40Ex7xfMcIj6xIIjxv20xvE14v26r126r1D
+	McIj6I8E87Iv67AKxVWUJVW8JwAm72CE4IkC6x0Yz7v_Jr0_Gr1lF7xvr2IYc2Ij64vIr4
+	1lc7CjxVAaw2AFwI0_JF0_Jw1l42xK82IYc2Ij64vIr41l4I8I3I0E4IkC6x0Yz7v_Jr0_
+	Gr1l4IxYO2xFxVAFwI0_JF0_Jw1lx2IqxVAqx4xG67AKxVWUJVWUGwC20s026x8GjcxK67
+	AKxVWUGVWUWwC2zVAF1VAY17CE14v26r1q6r43MIIYrxkI7VAKI48JMIIF0xvE2Ix0cI8I
+	cVAFwI0_JFI_Gr1lIxAIcVC0I7IYx2IY6xkF7I0E14v26r1j6r4UMIIF0xvE42xK8VAvwI
+	8IcIk0rVWUJVWUCwCI42IY6I8E87Iv67AKxVWUJVW8JwCI42IY6I8E87Iv6xkF7I0E14v2
+	6r1j6r4UYxBIdaVFxhVjvjDU0xZFpf9x07j5o7tUUUUU=
 
-On Wed, Feb 12, 2025 at 2:49=E2=80=AFPM Armin Wolf <W_Armin@gmx.de> wrote:
->
-> Am 09.02.25 um 14:14 schrieb Mario Limonciello:
->
-> >
-> >
-> > On 2/8/25 11:59, Rafael J. Wysocki wrote:
-> >> On Sat, Feb 8, 2025 at 5:22=E2=80=AFPM Mario Limonciello <superm1@kern=
-el.org>
-> >> wrote:
-> >>>
-> >>> From: Mario Limonciello <mario.limonciello@amd.com>
-> >>>
-> >>> On Windows the OS will wake up when plugged or unplugged from AC
-> >>> adapter.
-> >>> Depending upon whether the system was plugged in or unplugged will
-> >>> determine whether the "display turns on".  If there is no user activi=
-ty
-> >>> for some time then it goes back to sleep.
-> >>>
-> >>> In Linux plugging or unplugging an adapter will wake the SoC from HW
-> >>> sleep but then the Linux kernel puts it right back into HW sleep
-> >>> immediately unless there is another interrupt active (such as a PME o=
-r
-> >>> GPIO).
-> >>>
-> >>> To get closer to the Windows behavior, record the state of the batter=
-y
-> >>> when going into suspend and compare it when updating battery status
-> >>> during the s2idle loop. If it's changed, wake the system.
-> >>>
-> >>> This can be restored to previous behavior by disabling the ACPI batte=
-ry
-> >>> device `power/wakeup` sysfs file.
-> >>
-> >> Why is this desirable?
-> >>
-> >> What if the AC is connected to a suspended laptop when the lid is
-> >> still closed?  Is it really a good idea to resume it then?
-> >
-> > Yes; that's the exact situation I wanted this to work.  I have a dock
-> > connected to some monitors, power supply, keyboard, and mouse.  I want
-> > the machine to wake up when it's connected to the dock but still closed=
-.
-> >
-> > That's how Windows works at least.
-> >
-> >>
-> >> Frankly, I'd prefer the existing behavior to be still the default.
-> >
-> > Since this is hooking into the existing wakeups that can happen for
-> > battery I guess that there isn't a good way to configure one but not
-> > the other.
-> >
-> > Would it be better to do something similar in the ACPI power supply
-> > device?
->
-> Hi,
->
-> i believe that handling the wakeup inside the ACPI power supply device wo=
-uld make more sense, because the current patch will also cause the machine =
-to wake up
-> if the battery has finished charging. This behavior would be quite counte=
-rintuitive.
+Hibernation assumes the memory layout after resume be the same as that
+before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this assumption.
+At least on LoongArch and ARM64 we observed failures of resuming from
+hibernation (on LoongArch non-boot CPUs fail to bringup, on ARM64 some
+devices are unusable).
 
-Good point.
+software_resume_initcall(), the function which resume the target kernel
+is a initcall function. So, move the random_kmalloc_seed initialisation
+after all initcalls.
 
-Also, in Linux there is a concept of "system wakeup devices" which
-IIUC is not present in (current) Windows, at least not in this form.
-That is, the user can select devices that are allowed to wake up the
-system from sleep via the /sys/dev/ces/.../power/wakeup attributes
-(all wakeup-capable devices should have them).
+Cc: stable@vger.kernel.org
+Fixes: 3c6152940584290668 ("Randomized slab caches for kmalloc()")
+Reported-by: Yuli Wang <wangyuli@uniontech.com>
+Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
+---
+ init/main.c      | 3 +++
+ mm/slab_common.c | 3 ---
+ 2 files changed, 3 insertions(+), 3 deletions(-)
 
-If this is enabled, device_may_wakeup() returns true and this is the
-case when the given device is expected to wake up the system from
-sleep.
+diff --git a/init/main.c b/init/main.c
+index 2a1757826397..1362957bdbe4 100644
+--- a/init/main.c
++++ b/init/main.c
+@@ -1458,6 +1458,9 @@ static int __ref kernel_init(void *unused)
+ 	/* need to finish all async __init code before freeing the memory */
+ 	async_synchronize_full();
+ 
++#ifdef CONFIG_RANDOM_KMALLOC_CACHES
++	random_kmalloc_seed = get_random_u64();
++#endif
+ 	system_state = SYSTEM_FREEING_INITMEM;
+ 	kprobe_free_init_mem();
+ 	ftrace_free_init_mem();
+diff --git a/mm/slab_common.c b/mm/slab_common.c
+index 4030907b6b7d..23e324aee218 100644
+--- a/mm/slab_common.c
++++ b/mm/slab_common.c
+@@ -971,9 +971,6 @@ void __init create_kmalloc_caches(void)
+ 		for (i = KMALLOC_SHIFT_LOW; i <= KMALLOC_SHIFT_HIGH; i++)
+ 			new_kmalloc_cache(i, type);
+ 	}
+-#ifdef CONFIG_RANDOM_KMALLOC_CACHES
+-	random_kmalloc_seed = get_random_u64();
+-#endif
+ 
+ 	/* Kmalloc array is now usable */
+ 	slab_state = UP;
+-- 
+2.47.1
+
 
