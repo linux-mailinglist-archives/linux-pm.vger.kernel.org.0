@@ -1,145 +1,121 @@
-Return-Path: <linux-pm+bounces-21960-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21961-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46C1AA32602
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 13:41:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E3F74A32628
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 13:47:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B887A168E00
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 12:41:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8B09C3A89FA
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Feb 2025 12:47:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 625C920C497;
-	Wed, 12 Feb 2025 12:41:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 584131F866A;
+	Wed, 12 Feb 2025 12:47:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="IMc9ov/k"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dGGi62R6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.129.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f46.google.com (mail-ej1-f46.google.com [209.85.218.46])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A346320A5E3
-	for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 12:41:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.129.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9837120E00E;
+	Wed, 12 Feb 2025 12:47:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739364079; cv=none; b=GT+U9/Hm/1/kYnUmzrWMrGpLEcjT33rXZV5iRPCwSYnJYR9oAmCG29yRtrfxkybbKnXAPg4VmsTJFmbLLTNm3B3eGbaXLhQadadLwzYq25IMKwqhZDt/psWkVOdj1P6mLqUAnEcYTI9uWNMDGAjrKUMLc3ur82wp0TKWmKdREOg=
+	t=1739364426; cv=none; b=t4Zt0nxR2XvW6URXrh6DnWHGLrYpH5OlrfnjmZIlS6cF5sOMp3cwjenFy0S2U2gZxQ8BgaJo26bWItXuQUGvR6/SiYHPr4OmNKGGEW7b+I+H/rKSIU/cKWoOxbCIy4Hq7wYcIIPHuD8JS0Z26b1mKz6FmoW/TgMdI9c/9Aa0bsg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739364079; c=relaxed/simple;
-	bh=ME5xsF3un+RPwTZSAF0pplXPAeDr4ydnwfVUmHp8McU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lgyXa9ptBEAQk5h5Lt0eJuTlFy3gJfymWYFrMsgzPRDZ4mvotX+Y3w2f8zHtw3vsuelfynV5BRf+UOg6KyrKRsLwTtnCV18y+Frwx0EI2VjQO/VNBvigtNv0U9TKurJ3Uov7RLvfQexjh7fNxWwAW/yHx8O/ptD8q5L5fepYqZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=IMc9ov/k; arc=none smtp.client-ip=170.10.129.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1739364076;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=IcCcfwfQhYUa1+LUaKcJqa7S3yY7KgRC7fJ6fRDLjdI=;
-	b=IMc9ov/kOTB3KB2ZzP/HhuOryZgvCns/3RNzCHQab0SYLIZZxI+Ri09Bv2jul3VS2oI5H/
-	sWwbNteHZEj1nQJkHZA6qUTIrxukBB8C/211Tm45f2RXRT5YbF+tjctaVfmYZ8YKX7mf7b
-	kTZYLORrWxdQoKHMmDJ5q1IdZGbfbQw=
-Received: from mail-qt1-f197.google.com (mail-qt1-f197.google.com
- [209.85.160.197]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-465-5QwYzYosNn2bHvif8dxpsg-1; Wed, 12 Feb 2025 07:41:15 -0500
-X-MC-Unique: 5QwYzYosNn2bHvif8dxpsg-1
-X-Mimecast-MFC-AGG-ID: 5QwYzYosNn2bHvif8dxpsg
-Received: by mail-qt1-f197.google.com with SMTP id d75a77b69052e-47189f95eb0so16075221cf.1
-        for <linux-pm@vger.kernel.org>; Wed, 12 Feb 2025 04:41:15 -0800 (PST)
+	s=arc-20240116; t=1739364426; c=relaxed/simple;
+	bh=tY5gwz0K1pH9LPERb3scr9O6bcGKY6gXL50Bkc8UiRQ=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=Cs4Q7SdWKidilHr7thOlYW3U0zBRsqsj6FBqolU1tW3/3qxuqZIWz68pLrbHi34iuHj/xZQL4loY/y81JVQIGZYnD5znTMDw+kSTiK3NFKuqKjozDSWTOB1uBCIH1lmYrxvgnUyHhgt9I9HvD+UqZXQaa4b4TM9OTfDStzLPvXE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dGGi62R6; arc=none smtp.client-ip=209.85.218.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f46.google.com with SMTP id a640c23a62f3a-ab7e1286126so342366266b.0;
+        Wed, 12 Feb 2025 04:47:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739364423; x=1739969223; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=tY5gwz0K1pH9LPERb3scr9O6bcGKY6gXL50Bkc8UiRQ=;
+        b=dGGi62R6f2iDm2xxUxeY/6JPjFYD+6f3zOk0lF6cO7VUX3bOjqxrPjH/rzmNv9og5E
+         A7FNAyfU96MOdR+u+hQslYDruesPHPmG7XhXnOC1OdMBM8ILthRN614PEP/v9LwUgsfG
+         I6gYOZaB2dQeXFj6zHUj3dD9+7mx3zF7Yt620KgaqZr4Kae1U4oHmpHSDJ9eNnhp2FPj
+         S9j0AMYCJdPgB9odFHkUrHMrwsFZP9Z56GakzkddJXCXzZV+UdLH8RaE5OwsF2zylgnm
+         xH6/lGXovOpFPoy+wKe8FDUotSNk+FA4vufFSMV+OhmVIhAYo6YvkgZYZG7qVjfT3j0X
+         Ha9g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739364075; x=1739968875;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1739364423; x=1739969223;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=IcCcfwfQhYUa1+LUaKcJqa7S3yY7KgRC7fJ6fRDLjdI=;
-        b=QL+54xuF4MWqyl3K2GPeV42RfVWBnj9GBRV8o8onSMiHZLHPIKKAolDR/euM9WRftZ
-         Cecdu/YBhlG8tHpringsmeWQBRAUiGeUAd2RaHmMWOhjUB8fR/oMMhsQNzQJPiy68eDm
-         SzS1Z0PhT/880UOsaHAmrEQ6aarHrUTQAhmRHZAr7nrFVvLB9PLXLYrbFicu340joWTK
-         w/bOHbJomt1CnXrsRphLaDofecuyaocExp8Q11ajULqP0xflYdBqFYKdh3pZFC9n6A/3
-         he8XZJ79YIJ4M0jHu/GV4ZZ5t5MsfLZN6pCJx+9oOapyKRpPlR8ow0oq7qbYoGkhNSVh
-         5wEA==
-X-Forwarded-Encrypted: i=1; AJvYcCW9QB8dnhJhQqECjhTwFXRIYpLyLGACkGZEUIcny9dXuwdkuLbz53IPwP4VU+ZfwbXv+pd9llcGMg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx5nBmd2dyCF5AVtSBLbKfQ5TCmDXzJvlGheQJZis/9VAUXM47O
-	AjIhRXD9xAJ2K3juWY87QRM5jBL9SNW7JKpfpyDWtAntBt0iXG83WhMXpoTpPJbl9DZ5px15tIR
-	yWchdEGeP8x+30bT0RLB6cqGbtx+Z8c5HzW07M5jXFew8JBX70yZxhUE9Qc9TN0Jf
-X-Gm-Gg: ASbGncvDa+7dqzo2wRTMXVJLwh2AIzwh4I2P7c67Dj0J9idAfi0wOE9BeBTVsms6T3k
-	4qc6SHP5QiYOUc8iqd149Juw9+LfvaYDegGXR7Q+3DX54A1kn+MsvZ0N5USl5dFZHKRYUe5zJrk
-	GSsUaHFbJU5RMtin26noHafDq2nnx05QEfgOYPJjwUsZxkwUdF5TQADMlJ4C/67lqZ0mvr0Lhf9
-	EuNV4AdNOAoXkT6m8ca3uHYCoWP5U6j3K/ECX+AxV1xMY45nufjwqdQucQijv9IpMuGe9PlM4GJ
-	Vh3n
-X-Received: by 2002:ac8:7e90:0:b0:46e:2d0b:e1bf with SMTP id d75a77b69052e-471a1285b1dmr107223531cf.11.1739364074939;
-        Wed, 12 Feb 2025 04:41:14 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEc/5GZoYwqTghTlMDfKo+W14Qj3PAyNsgnM8EOKyze88sNfy/x51BtROYbXMZUOJtzdRgkfg==
-X-Received: by 2002:ac8:7e90:0:b0:46e:2d0b:e1bf with SMTP id d75a77b69052e-471a1285b1dmr107223131cf.11.1739364074559;
-        Wed, 12 Feb 2025 04:41:14 -0800 (PST)
-Received: from [10.26.1.94] ([66.187.232.136])
-        by smtp.gmail.com with ESMTPSA id d75a77b69052e-47180b1ca44sm51284181cf.76.2025.02.12.04.41.13
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Feb 2025 04:41:14 -0800 (PST)
-Message-ID: <9416ee48-a68a-465e-85be-89d5a53afcd8@redhat.com>
-Date: Wed, 12 Feb 2025 07:41:12 -0500
+        bh=tY5gwz0K1pH9LPERb3scr9O6bcGKY6gXL50Bkc8UiRQ=;
+        b=Pm0MeMCQeikH9/2DhdyyU3rzHmeNKQTgTezmZhLDDBmuh4GCsWQD28dohwjyFRmD1c
+         HnUYCMhsknXl6CGlEFFtvum/Mr1i5ubvGXGXxrSm5K4LlnaDGC2hocn40bRG44aaTBLt
+         KXfqquzjUcixTuNSifJUi952ROIOC/dRtS1D0Ptaa2IqUqAn9PHGYl/uS676u1DLrZTO
+         8lftKISQ1pDNgaGsxbucIZk6uzLS1g434/Bmwj18LngGMypjWMM1iiEoDMIoT18CaGEu
+         WnbbY9w3b2CYu+EbXg/3CjrV35jl8e0DjOFkcqJmgbxIGzBqG00NRkC9FPOytmxg8XPY
+         5BGw==
+X-Forwarded-Encrypted: i=1; AJvYcCUPHIYb7x+SpuVTQ/wNVXSnXiW/fW2ez82a98Rn+whyPbLPmG8johYxPkjNrV5vsLCo5tEiq+ORM8A=@vger.kernel.org, AJvYcCVdVjx5X28c3fw3rb9BkZTzx0yswTNNRIc2h328bnqGxB5jZ9J2fl9k9Od184J1wcU+JTKefgiZi9w=@vger.kernel.org, AJvYcCWffrIuAPbe0TtLKA+qU/1SslpHJzCOwvA4FX81HZIvzMh1pmhpHKM/ghGP4ITmhEQ41ImEUUqSsYkDPAoj@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxi4T5mGkUco51EoqODYcjVHv8P7Y0OdqLi7OavJR5nmIZT5wFw
+	JXeXWnmhkwzjUZOZqOPq+Chx0bwTkElq2WcfWDndw+LcmJyCwyUZ
+X-Gm-Gg: ASbGncvDh/axSGdXRamdyiQG/THYnDe41le5nCl7oepAOtXAA4xfLWqsUADzyqOZim0
+	FXC4ngFcuS+aULvOWJZ8T3OWMTnJf8iaFtqIYnZWq9sIbK4hoXFOWQiJA3o7wqZmk6C1C4xrGyB
+	csDn5MF8houheDlIBksck+w+qFprYYTX1xWis41ZMAHu8VLIHkA60CbBpB56JXiTOa+Ms2Pc68Q
+	1ZLKHpuhf6V55G3wGahJbr42ZzAYkiA6bwPIqXRqLKzCvgRseMGXUWGFSWH297/joYeHy9GaA+3
+	8G8nbORv3dEUuisv/J4wm4Mdy+ujvMMTjyTUMQzRL9WaaA==
+X-Google-Smtp-Source: AGHT+IEfERvoHB4iH1mmp4qy1uXP3e8Z6S8KEgHPkgkozaQ5CERnYM7uDu5mG84oDMZpogQPQ7Cmag==
+X-Received: by 2002:a17:907:2d12:b0:ab7:a39:db4 with SMTP id a640c23a62f3a-ab7f34ac985mr255168666b.57.1739364422581;
+        Wed, 12 Feb 2025 04:47:02 -0800 (PST)
+Received: from abityuts-desk1.ger.corp.intel.com ([134.191.196.181])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5de6e5880b6sm6685818a12.37.2025.02.12.04.47.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Feb 2025 04:47:02 -0800 (PST)
+Message-ID: <b7ed8d0b07e82a637bfc8a3f4d592f0f15ba9688.camel@gmail.com>
+Subject: Re: [PATCH v3] intel_idle: introduce 'no_native' module parameter
+From: Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To: David Arcari <darcari@redhat.com>, kernel test robot <lkp@intel.com>, 
+	linux-pm@vger.kernel.org
+Cc: oe-kbuild-all@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>, Jacob
+ Pan <jacob.jun.pan@linux.intel.com>, Len Brown <lenb@kernel.org>, Prarit
+ Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Wed, 12 Feb 2025 14:46:58 +0200
+In-Reply-To: <9416ee48-a68a-465e-85be-89d5a53afcd8@redhat.com>
+References: <20250211132741.99944-1-darcari@redhat.com>
+	 <202502121732.P7lZkbhm-lkp@intel.com>
+	 <21e66060c13c6a3cc33592f71cb08975711a6adb.camel@gmail.com>
+	 <9416ee48-a68a-465e-85be-89d5a53afcd8@redhat.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3] intel_idle: introduce 'no_native' module parameter
-To: dedekind1@gmail.com, kernel test robot <lkp@intel.com>,
- linux-pm@vger.kernel.org
-Cc: oe-kbuild-all@lists.linux.dev, Jonathan Corbet <corbet@lwn.net>,
- Jacob Pan <jacob.jun.pan@linux.intel.com>, Len Brown <lenb@kernel.org>,
- Prarit Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250211132741.99944-1-darcari@redhat.com>
- <202502121732.P7lZkbhm-lkp@intel.com>
- <21e66060c13c6a3cc33592f71cb08975711a6adb.camel@gmail.com>
-Content-Language: en-US
-From: David Arcari <darcari@redhat.com>
-In-Reply-To: <21e66060c13c6a3cc33592f71cb08975711a6adb.camel@gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+On Wed, 2025-02-12 at 07:41 -0500, David Arcari wrote:
+> - #ifdef the code that doesn't compile
+> - default no_acpi=3Dtrue in the !CONFIG_ACPI_PROCESSOR_CSTATE case
+>=20
+> I sort of like the second option better, but I worry about the=20
+> documentation.=C2=A0 Specifically:
+>=20
+> "In the case that ACPI is not configured these flags have no impact
+> +on functionality."
+>=20
+> I guess that is still true.
+>=20
+> Perhaps there is a better option.=C2=A0 What do you think?
 
-Hi Artem,
+I've not been involved into kernel that much for long time. In old days
+sprinkling #ifdefs around was an anti-pattern. Most probably nowadays too. =
+So
+the second option sounds better to me.
 
-On 2/12/25 6:32 AM, Artem Bityutskiy wrote:
-> On Wed, 2025-02-12 at 18:09 +0800, kernel test robot wrote:
->>     drivers/idle/intel_idle.c: In function 'intel_idle_init':
->>>> drivers/idle/intel_idle.c:2289:27: error: 'no_acpi' undeclared (first use
->>>> in this function); did you mean 'no_action'?
->>      2289 |         if (no_native && !no_acpi) {
->>           |                           ^~~~~~~
->>           |                           no_action
->>     drivers/idle/intel_idle.c:2289:27: note: each undeclared identifier is
->> reported only once for each function it appears in
-> 
-> David, this must be the !CONFIG_ACPI_PROCESSOR_CSTATE case.
-> 
-> Thanks!
-
-Oh - I see the problem.
-
-After a quick look I see two options:
-
-- #ifdef the code that doesn't compile
-- default no_acpi=true in the !CONFIG_ACPI_PROCESSOR_CSTATE case
-
-I sort of like the second option better, but I worry about the 
-documentation.  Specifically:
-
-"In the case that ACPI is not configured these flags have no impact
-+on functionality."
-
-I guess that is still true.
-
-Perhaps there is a better option.  What do you think?
-
-Thanks,
--DA
-
+Artem.
 
