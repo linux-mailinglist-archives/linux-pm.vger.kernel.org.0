@@ -1,328 +1,146 @@
-Return-Path: <linux-pm+bounces-22034-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22035-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6C09EA34F9B
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 21:42:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DE2E5A3500D
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 22:04:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 14837169EC0
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 20:42:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FDDC3AB7A3
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 21:04:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF3C52661A8;
-	Thu, 13 Feb 2025 20:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 896EF28A2C5;
+	Thu, 13 Feb 2025 21:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dY9EpC9O"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="NbxLY77H"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4586221720;
-	Thu, 13 Feb 2025 20:42:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173C4210F58
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:04:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739479372; cv=none; b=RBEFZEpf2jpXEMmSNHj9tw29KDKINpZdwZFM1wmzcwqJdTPWCkL4UZccE0DRSLpU3TfC6PSixQoZlGVB14oXMS/sHDyNHo+Oe6d9QPx4CLoWWf4g39eNb9a7PIKvHti7tS/6DA2cmbt+rMnPYHaU8wz7vONoMtf3JeIRU7Byzhc=
+	t=1739480648; cv=none; b=YvPlT8OCNQ590uUkuyvnQyW+EVTrErhLadntD88lFnaNNzJlbI/vFAolNrQLs7xTgVrRjLNcYRMh8normHEdBTNoYIA3zwjg1NDVhMM5gGQ6cakstrLL/Idf/VmUQU4Js81NJc48YKH1uxJ/Ea/Sa/mnGKsIa3X9goYt3qVZ8Pw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739479372; c=relaxed/simple;
-	bh=u4Cb1Mm78P3ZVkhMRAoV68PKQ06OET2BeKatkr9yuU4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=BoCWSsvtLi+Py2ABM2kbcl3tYauSg9g11R44QPg6LQ6Qq9JLAdK8Jy3i2JVvujdEMn+k+83cj+w6VMHTwZEV7C0MKFf8SEAZwox8pyVbb2c4eTdGR1yV86Ikmzs6ZgbE1tVb0O0d3Q1N0pYfJ6XDnuBpo5UTPEmsOgzOQh8ZssE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dY9EpC9O; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0F3D6C4CEE5;
-	Thu, 13 Feb 2025 20:42:52 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739479372;
-	bh=u4Cb1Mm78P3ZVkhMRAoV68PKQ06OET2BeKatkr9yuU4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=dY9EpC9OIV0no2NcOAtrxCoFUktccAkFTVsWXrkZuinkw2kyrgKBlqsdogAZrqeCE
-	 FDY5zA5dr18/PzYDeqQeIHxfEIQ1cpAE6D3KtFEWlFwZZj9iQv3n0ui/W48U2b/3Fl
-	 iaFc7sZbxBwPItKaVSpdrdE2VQLm59BDjQTRhEv1HtO99a/lPHSrXzgqMcLSvayikp
-	 qb/FILqzdks1gGe3g6Fya3aFn4kDiPxmiCVle8D7F2ooQy+e8hd+D8StgR7I0FRoo3
-	 2JcMJ+Bcd/0/Y77GQSKcT4fvy5R4EWAx24qJnOEy4amGKySWSY8YkJYTEXY1+msQ78
-	 bohqklTZEv4Nw==
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-724d1724657so1383184a34.0;
-        Thu, 13 Feb 2025 12:42:52 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVtj5LWeG21+F/3nAVf8ZjzUs44EkJ6k7zqQRU28Lwac9XTu6lu/o/WYvGBnEshnvQPUwV+pMU7Tl2YQ/o=@vger.kernel.org, AJvYcCWrzZx1WNRNF1f5LIGIppYWShcLw4akBina8A385OwEScLT7aHzfRRPb8o5zlf4cB+uM7dqdSM2AKw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxzF7+ph+RsbzaSeYxHd3PP4MFX04nzUXwagZW05O5UDjOVMjXI
-	IUXYI39uXBtKo96/mUWHeui/S4pxsH7OZDeh48OQwP9+SaN8gD1fjY6wgrZHCrntIseloKCeJe5
-	qVqt+KIh7VF/jZ22YQWUsS1q8xME=
-X-Google-Smtp-Source: AGHT+IGSpgJ6Bpl2rN6eFYhR1HS3TnJH0PC87GoxWC/7ZiYe+R+1Aotg5EJrmLYWcYUQoNijd0r2mNM1zZfrY9NT9YI=
-X-Received: by 2002:a05:6808:1794:b0:3f3:beb4:49ec with SMTP id
- 5614622812f47-3f3d925f6d7mr2923278b6e.7.1739479371267; Thu, 13 Feb 2025
- 12:42:51 -0800 (PST)
+	s=arc-20240116; t=1739480648; c=relaxed/simple;
+	bh=YRGZnLfEo00umHgePB/lOxUrXp4t6Vz/QLbBg0QP3mc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VXEdM7eYHjzlNgdEsFw98dwCjB7+/2RdMlLj+6+LgbvRZT4lZ90BIyz7d/H9SVbYisukf6g0f9a2EBjNk6Sq06MaU7cAT4JuGxwI1CVt7TAc0dTFo8gobipsADXwy8ICWJ0T3BYSgsA7LGLtYj6q2o1tcRqL6P9O4/eukQHVmWE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=NbxLY77H; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
+Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51DKHNjn001789
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:04:06 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
+	cc:content-transfer-encoding:date:from:message-id:mime-version
+	:subject:to; s=qcppdkim1; bh=8VxP/CgXnqLT7dCVI0cxvlRc3vuTuhQDamA
+	kGTDrmDw=; b=NbxLY77HESK8z2YTw5p41EtFM4+f1MZ/aI0SAtGTnwKV546D9wr
+	i7icOiJES4OIy6pp3GoQaAXzwYxRZ8v2rSDLlnDa1Qgi0TvPYYuQ9K7ncdMvVLXK
+	Hlfz2rltDyC5ARp/0tHLquq5RQVgrzNWFB444MR+gHWEENx+UZIGRfuiTHT4XSGP
+	GMNCDM3LTkHScSDXFjkxgzzMSwWeuxdVCGeRNDBAW+DIsLCxNt3bPx8MtVYzKj8J
+	+YTZgvNDXOw4LNBiENiUbVN9R2fvWPX8IcFE6dPTIT9LcOt5lJMYeZ/wgVJCXHdB
+	pdQhYMLbMgKD3yNlH5zb9Zh2x/q1cvw0DVw==
+Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44semp9mty-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:04:05 +0000 (GMT)
+Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-21fb94c7fc6so28466545ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 13:04:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739480645; x=1740085445;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8VxP/CgXnqLT7dCVI0cxvlRc3vuTuhQDamAkGTDrmDw=;
+        b=UAeSiDYm/x98D8UE7HH9mnXPE3RORT42qBvrsiGdZo1JOyUmPurETmrs0O9zdlZ6l7
+         UYB+3C6uEKGYGsPe79ns05HR78x2Gl5Ne5Ln4+uHbqDI4upB78PHQt9RdakJKBAGIOG0
+         YlWCL5PLSVWaNo26eeTEhfxJV8VNuRw228Gdr6qR6hZ56tKdLv0/YIKMuPpcaNjfab6C
+         CYo/xGMrmAr3B0+6c4ZhtmEXRK8tEiST7rUNmDnzzGP1+KjejTJu7q1C6GGRZFs4bNwj
+         MbBg4BhWV1Uf2YK3GIYO9srKvaUtiEKxtyEmaZScpoiQkKZxI5NFYUQ4CqeSLeQV0vIy
+         gG1w==
+X-Forwarded-Encrypted: i=1; AJvYcCU/v01oeJMbsj+PmSeMCZ0enSpPP6+gw1XqzUYLq1jGN67edsb92S5o//qzR/stLRc0QPB3VJc1OQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxI2g6iremdjPOV2TL3+3biN+yTtXAC4GuzBdQxnpnAr+pS5GbL
+	aa8/+N6VnUSSrlrmsHVnc2xCkJeJSIL2Ikck+lQvAcsnm5JUaMf3A83NXzkjBbS5O7tSunKUcOF
+	Xzg0zszieOUXCR3H96LkREPscva54mTFB4dp2r7gg4Zz20QKOdhiHS4TSPA==
+X-Gm-Gg: ASbGncufJDb1nzr40PYvOtNJZlzDRDn5ZLCdD1Qnu/e5bsrUTgHmeLjarxMkZdnWs3w
+	O323eh//3dQkxLbaVfxl902m9p4t7mgP2Wn0T6Vz+1AmS46Xdpp5gJgr0H2qgaIiaBYc+ns60pm
+	oc9FdBbPipCIAU7BBGGisCXWgudqXqBL2f9m3nWufzgvS+OLTt5FbLA23CO0mYRoH9TUNuSVgei
+	jL8gOldUbfIB8emLLivgEeJ8sPB5PejBijAwjlNpIawBFDYiIx4okPrdc8+uTjF8l6XIodambtj
+	slZZh8q2wdugwRDVv/qYpFAAfX6D/A1mltJ2amdAdRlxl1SUiTgGsfSvt6R2HScdfK7H
+X-Received: by 2002:a17:902:e74d:b0:220:c94b:83a7 with SMTP id d9443c01a7336-220d20e9098mr66059125ad.29.1739480644978;
+        Thu, 13 Feb 2025 13:04:04 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE3PVefDcwgu/C99h90ihg+V7iq72uwEndOIuPiYoQ0b1DMyzjKKFzPMqJTWrNTXGvhYvMn1Q==
+X-Received: by 2002:a17:902:e74d:b0:220:c94b:83a7 with SMTP id d9443c01a7336-220d20e9098mr66058705ad.29.1739480644579;
+        Thu, 13 Feb 2025 13:04:04 -0800 (PST)
+Received: from hu-amelende-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220dacfc769sm14339375ad.201.2025.02.13.13.04.03
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2025 13:04:04 -0800 (PST)
+From: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+To: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+        daniel.lezcano@linaro.org
+Cc: rui.zhang@intel.com, lukasz.luba@arm.com, david.collins@oss.qualcomm.com,
+        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-kernel@vger.kernel.org
+Subject: [PATCH 0/4] thermal: qcom-spmi-temp-alarm: Add support for new TEMP_ALARM subtypes
+Date: Thu, 13 Feb 2025 13:03:59 -0800
+Message-Id: <20250213210403.3396392-1-anjelique.melendez@oss.qualcomm.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2314745.iZASKD2KPV@rjwysocki.net> <CAPDyKFroyU3YDSfw_Y6k3giVfajg3NQGwNWeteJWqpW29BojhQ@mail.gmail.com>
- <CAJZ5v0h44Yxp95pHW+75gk5yWKviLO1_YK_cZNFKaGnid7nx9A@mail.gmail.com>
- <CAJZ5v0iMZ=6YgKR3ZZuiv7DF4=vfoFRonSoXO_zV65oZH2rOgA@mail.gmail.com>
- <CAPDyKFq91JnCFhEuitOJPZtq78-Y3CUy4p0bNE1wK+eYCste6g@mail.gmail.com>
- <CAJZ5v0iuLA9N5Vi-JNa8=uTO-kpsKNsRGKegYnCYLEhAn=nW9g@mail.gmail.com>
- <CAJZ5v0gLDRhWySvoc6eLBTjQ_RdXL4AzOWGZrvUNaj_5ahxJwQ@mail.gmail.com> <CAPDyKFqYzv-5O3k51W4rG=Qm4T3Uu0CcP2taMTYGrGXBj1pYUA@mail.gmail.com>
-In-Reply-To: <CAPDyKFqYzv-5O3k51W4rG=Qm4T3Uu0CcP2taMTYGrGXBj1pYUA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 13 Feb 2025 21:42:39 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gsq5XDW8CW2My60Fn94F8h4XBFFUhKb19LcCwXLWvEfg@mail.gmail.com>
-X-Gm-Features: AWEUYZlCdhi7Bh1riX3LX640whouX3fCqpy06Brya6nod8jT1iSJMqKaIN9LlFE
-Message-ID: <CAJZ5v0gsq5XDW8CW2My60Fn94F8h4XBFFUhKb19LcCwXLWvEfg@mail.gmail.com>
-Subject: Re: [PATCH v1 00/10] PM: Make the core and pm_runtime_force_suspend/resume()
- agree more
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-ORIG-GUID: ZL4v_6a8B19Q1SxW5yYt6HfxiMx-vNrr
+X-Proofpoint-GUID: ZL4v_6a8B19Q1SxW5yYt6HfxiMx-vNrr
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-13_08,2025-02-13_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
+ mlxscore=0 bulkscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
+ impostorscore=0 malwarescore=0 mlxlogscore=999 adultscore=0 phishscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
+ definitions=main-2502130148
 
-On Thu, Feb 13, 2025 at 2:38=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
->
-> On Wed, 12 Feb 2025 at 20:04, Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
-> >
-> > On Wed, Feb 12, 2025 at 6:05=E2=80=AFPM Rafael J. Wysocki <rafael@kerne=
-l.org> wrote:
-> > >
-> > > On Wed, Feb 12, 2025 at 4:15=E2=80=AFPM Ulf Hansson <ulf.hansson@lina=
-ro.org> wrote:
-> > > >
-> > > > On Wed, 12 Feb 2025 at 12:33, Rafael J. Wysocki <rafael@kernel.org>=
- wrote:
-> > > > >
-> > > > > On Wed, Feb 12, 2025 at 11:59=E2=80=AFAM Rafael J. Wysocki <rafae=
-l@kernel.org> wrote:
-> > > > > >
-> > > > > > On Wed, Feb 12, 2025 at 10:12=E2=80=AFAM Ulf Hansson <ulf.hanss=
-on@linaro.org> wrote:
-> > > > > > >
-> > > > > > > On Tue, 11 Feb 2025 at 22:25, Rafael J. Wysocki <rjw@rjwysock=
-i.net> wrote:
-> > > > > > > >
-> > > > > > > > Hi Everyone,
-> > > > > > > >
-> > > > > > > > This series is a result of the discussion on a recently rep=
-orted issue
-> > > > > > > > with device runtime PM status propagation during system res=
-ume and
-> > > > > > > > the resulting patches:
-> > > > > > > >
-> > > > > > > > https://lore.kernel.org/linux-pm/12619233.O9o76ZdvQC@rjwyso=
-cki.net/
-> > > > > > > > https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwysoc=
-ki.net/
-> > > > > > > >
-> > > > > > > > Overall, due to restrictions related to pm_runtime_force_su=
-spend() and
-> > > > > > > > pm_runtime_force_resume(), it was necessary to limit the RP=
-M_ACTIVE
-> > > > > > > > setting propagation to the parent of the first device in a =
-dependency
-> > > > > > > > chain that turned out to have to be resumed during system r=
-esume even
-> > > > > > > > though it was runtime-suspended before system suspend.
-> > > > > > > >
-> > > > > > > > Those restrictions are that (1) pm_runtime_force_suspend() =
-attempts to
-> > > > > > > > suspend devices that have never had runtime PM enabled if t=
-heir runtime
-> > > > > > > > PM status is currently RPM_ACTIVE and (2) pm_runtime_force_=
-resume()
-> > > > > > > > will skip device whose runtime PM status is currently RPM_A=
-CTIVE.
-> > > > > > > >
-> > > > > > > > The purpose of this series is to eliminate the above restri=
-ctions and
-> > > > > > > > get pm_runtime_force_suspend() and pm_runtime_force_resume(=
-) to agree
-> > > > > > > > more with what the core does.
-> > > > > > >
-> > > > > > > For my understanding, would you mind elaborating a bit more a=
-round the
-> > > > > > > end-goal with this?
-> > > > > >
-> > > > > > The end goal is, of course, full integration of runtime PM with=
- system
-> > > > > > sleep for all devices.  Eventually.
-> > > > > >
-> > > > > > And it is necessary to make the core and
-> > > > > > pm_runtime_force_suspend|resume() work together better for this
-> > > > > > purpose.
-> > > > > >
-> > > > > > > Are you trying to make adaptations for
-> > > > > > > pm_runtime_force_suspend|resume() and the PM core, such that =
-drivers
-> > > > > > > that uses pm_runtime_force_suspend|resume() should be able to=
- cope
-> > > > > > > with other drivers for child-devices that make use of
-> > > > > > > DPM_FLAG_SMART_SUSPEND?
-> > > > > >
-> > > > > > Yes.
-> > > > > >
-> > > > > > This is a more general case, though, when a device that was
-> > > > > > runtime-suspended before system suspend and is left in suspend =
-during
-> > > > > > it, needs to be resumed during the system resume that follows.
-> > > > > >
-> > > > > > Currently, DPM_FLAG_SMART_SUSPEND can lead to this sometimes an=
-d it
-> > > > > > cannot happen otherwise, but I think that it is a generally val=
-id
-> > > > > > case.
-> > > > > >
-> > > > > > > If we can make this work, it would enable the propagation of
-> > > > > > > RPM_ACTIVE in the PM core for more devices, but still not for=
- all,
-> > > > > > > right?
-> > > > > >
-> > > > > > It is all until there is a known case in which it isn't.  So ei=
-ther
-> > > > > > you know a specific case in which it doesn't work, or I don't s=
-ee a
-> > > > > > reason for avoiding it.
-> > > > > >
-> > > > > > ATM the only specific case in which it doesn't work is when
-> > > > > > pm_runtime_force_suspend|resume() are used.
-> > > > > >
-> > > > > > > The point is, the other bigger issue that I pointed out in ou=
-r earlier
-> > > > > > > discussions; all those devices where their drivers/buses don'=
-t cope
-> > > > > > > with the behaviour of the DPM_FLAG_SMART_SUSPEND flag, will p=
-revent
-> > > > > > > the PM core from *unconditionally* propagating the RPM_ACTIVE=
- to
-> > > > > > > parents. I guess this is the best we can do then?
-> > > > > >
-> > > > > > OK, what are they?
-> > > > > >
-> > > > > > You keep saying that they exist without giving any examples.
-> > > > >
-> > > > > To put it more bluntly, I'm not aware of any place other than
-> > > > > pm_runtime_force_suspend|resume() that can be confused by changin=
-g the
-> > > > > runtime PM status of a device with runtime PM disabled (either
-> > > > > permanently, or transiently during a system suspend-resume cycle)=
- to
-> > > > > RPM_ACTIVE, so if there are any such places, I would appreciate
-> > > > > letting me know what they are.
-> > > >
-> > > > Well, sorry I thought you were aware. Anyway, I believe you need to=
- do
-> > > > your own investigation as it's simply too time consuming for me to
-> > > > find them all. The problem is that it's not just a simple pattern t=
-o
-> > > > search for, so we would need some clever scripting to move forward =
-to
-> > > > find them.
-> > > >
-> > > > To start with, we should look for drivers that enable runtime PM, b=
-y
-> > > > calling pm_runtime_enable().
-> > > >
-> > > > Additionally, in their system suspend callback they should typicall=
-y
-> > > > *not* use pm_runtime_suspended(), pm_runtime_status_suspended() or
-> > > > pm_runtime_active() as that is usually (but no always) indicating t=
-hat
-> > > > they got it right. Then there are those that don't have system
-> > > > suspend/resume callbacks assigned at all (or uses some other subsys=
-tem
-> > > > specific callback for this), but only uses runtime PM.
-> > > >
-> > > > On top of that, drivers that makes use of
-> > > > pm_runtime_force_suspend|resume() should be disregarded, which has
-> > > > reached beyond 300 as this point.
-> > > >
-> > > > Anyway, here is just one example that I found from a quick search.
-> > > > drivers/i2c/busses/i2c-qcom-geni.c
-> > >
-> > > OK, I see.
-> > >
-> > > It sets the status to RPM_SUSPENDED in geni_i2c_suspend_noirq(), if
-> > > not suspended already, and assumes it to stay this way across
-> > > geni_i2c_resume_noirq() until someone resumes it via runtime PM.
-> > >
-> > > Fair enough, but somebody should tell them that they don't need to us=
-e
-> > > pm_runtime_disable/enable() in _noirq.
+Add support in the qcom-spmi-temp-alarm driver for the new PMIC
+TEMP_ALARM peripheral subtypes: GEN2 rev 2 and LITE. The GEN2 rev 2
+subtype provides greater flexibility in temperature threshold
+specification by using an independent register value to configure
+each of the three thresholds. The LITE subtype utilizes a simplified
+set of control registers to configure two thresholds: warning and
+shutdown. While at it refactor the qcom-spmi-temp-alarm driver to limit
+code reuse and if/else statements when deciphering between TEMP_ALARM 
+peripheral subtypes. 
 
-BTW, I'm wondering how this driver handles the case in which someone
-runs pm_runtime_get*() on its device and doesn't release the reference
-throughout a system suspend-resume cycle, which is a valid thing to do
-albeit unusual.
+Also add support to avoid a potential issue on certain versions of
+the TEMP_ALARM GEN2 subtype when automatic stage 2 partial shutdown
+is disabled.
 
-> > > > >
-> > > > > Note that rpm_active() could start producing confusing results if=
- the
-> > > > > runtime PM status of a device with runtime PM disabled is changed=
- from
-> > > > > RPM_ACTIVE to RPM_SUSPENDED because it will then start to return
-> > > > > -EACCES instead of 1, but changing the status to RPM_ACTIVE will =
-not
-> > > > > confuse it the same way.
-> > > >
-> > > > Trust me, it will cause problems.
-> > > >
-> > > > Drivers may call pm_runtime_get_sync() to turn on the resources for
-> > > > the device after the system has resumed, when runtime PM has been
-> > > > re-enabled for the device by the PM core.
-> > > >
-> > > > Those calls to pm_runtime_get_sync() will then not end up invoking =
-any
-> > > > if ->runtime_resume() callbacks for the device since its state is
-> > > > already RPM_ACTIVE. Hence, the device will remain in a low power st=
-ate
-> > > > even if the driver believes it has been powered on. In many cases,
-> > > > accessing the device (like reading/writing a register) will often j=
-ust
-> > > > just hang in these cases, but in worst cases we could end up gettin=
-g
-> > > > even more difficult bugs to debug.
-> > >
-> > > Sure, that would be a problem.
-> >
-> > We may be making a logical mistake here by assuming that any of these
-> > devices will end up in dependency chains starting at the devices that
-> > I'm concerned about.
-> >
-> > > I think I need to find a different way to address the problem I'm
-> > > seeing, that is to resume devices that were runtime-suspended before
-> > > system suspend along with their superiors.
-> >
-> > Well, maybe not.
-> >
-> > So the "smart suspend" thing can be done only if all of the devices
-> > above the given one in the dependency graph (including the parent,
-> > suppliers etc) either opt in for "smart suspend" or are devices
-> > without PM callbacks and the dependency graphs can be cut at devices
-> > that don't support runtime PM.  This would require another flag in
-> > struct dev_pm_info for the tracking of dependencies, but it should be
-> > entirely doable because all of them are known at the device_prepare()
-> > time.
-> >
-> > That should avoid involving anyone who can be surprised.
->
-> This would be an improvement, while it is questionable for how
-> valuable this would be in the end. As soon as there is a
-> parent/supplier that has PM callbacks, we would need to prevent the
-> propagation.
+This patch series is a continuation of older series from 7/2024
+(https://lore.kernel.org/all/20240729231259.2122976-1-quic_amelende@quicinc.com/)
+but current series has been reworked to address the change in thermal framework to
+update .set_trip_temp() callback function variables
+(https://lore.kernel.org/all/8392906.T7Z3S40VBb@rjwysocki.net/)
 
-One without "smart suspend" that is.  Yes.
 
-For the current users of DPM_FLAG_SMART_SUSPEND this shouldn't
-actually matter because it is the case already AFAICS, so I'm not
-worried about this.
+Anjelique Melendez (3):
+  thermal: qcom-spmi-temp-alarm: Add temp alarm data struct based on HW
+    subtype
+  thermal: qcom-spmi-temp-alarm: add support for GEN2 rev 2 PMIC
+    peripherals
+  thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
 
-> I am also a bit worried about adding more corner cases to
-> the PM core, as it's not entirely easy to understand them, I think.
+David Collins (1):
+  thermal: qcom-spmi-temp-alarm: enable stage 2 shutdown when required
 
-That is always a valid concern, but sometimes there is no other way to
-make progress.
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 515 ++++++++++++++++++--
+ 1 file changed, 464 insertions(+), 51 deletions(-)
 
-> That said, maybe it's the best we can do.
+-- 
+2.34.1
+
 
