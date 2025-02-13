@@ -1,60 +1,79 @@
-Return-Path: <linux-pm+bounces-22013-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22014-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 65CCDA33EF2
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 13:18:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3E58A33F0C
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 13:24:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 00170188E428
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 12:18:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C14E188AD2C
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 12:25:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D3FF0215059;
-	Thu, 13 Feb 2025 12:18:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DEA8221559;
+	Thu, 13 Feb 2025 12:24:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="R2+1Ezj7";
-	dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b="R2+1Ezj7"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kMP1GvgS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail.mleia.com (mleia.com [178.79.152.223])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7CA7915383A;
-	Thu, 13 Feb 2025 12:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=178.79.152.223
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 919EC21D3D2
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 12:24:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739449081; cv=none; b=NhW7JXrU9jaExuDARKBlXSh9lnAEgOm1q2NInEeHtmkFptMNazt7156OWjxQ6p5GLWb5Sa3R7Gwkqa2/C7QLXI9B6Nl0WuBykVztpwA89D2emiLnS85IT2AbNKLv/DjUgGXQ8WwxYvaaD3l/h3tF5FEeq0i1ydc1I0HfLFmtChc=
+	t=1739449494; cv=none; b=FHEmCSP1ONC8lD2rbrAz3Ct4nhZTnw3DJkfVurWDp9srzRdly901PhlY5At+EWSG12f1WFcFWPhEyMxjXVXaPRWW+wnptAv9yYBcDHPnCLDnqRYpz8QMVBF5CYefqg0AJWUW2AlgELoXIml0rC3Bz+mgcZiGEgV8AUgPSnEaLdA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739449081; c=relaxed/simple;
-	bh=Js2J+We0EvBUaLzVdJbyTpliD1eqko9gYiN/kW/jRHE=;
+	s=arc-20240116; t=1739449494; c=relaxed/simple;
+	bh=ZDgifnO2eXQLO+3FjCdjysEvK77aW7cAL9ZpjrzvDXU=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CnP2pm+e0hrr0pXG3wpDEjKQU6Un8QHi/FYuvCpdAnKEhD58jeLYd9gRqOk5NDQKHhneioG9qW5pQpXzpozhWjl/CCyedvJS1PIzx+4pYC2TjydDXtkdAGsAqaZdpnGjf2pxZtiU8mdd7hfO3ATr6HQ7stFYS035sGyVZsZlH5A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com; spf=none smtp.mailfrom=mleia.com; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=R2+1Ezj7; dkim=pass (2048-bit key) header.d=mleia.com header.i=@mleia.com header.b=R2+1Ezj7; arc=none smtp.client-ip=178.79.152.223
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=mleia.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=mleia.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1739448574; bh=Js2J+We0EvBUaLzVdJbyTpliD1eqko9gYiN/kW/jRHE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R2+1Ezj7XnIiH/8+SKrh/QoEozYuaKzC9/SB4PMu89COfc4wa1PmY7Os7YHyHTBfR
-	 7XjsRnxi0+eMp7NCl8Zz+2xtnWKbusOwLUdfXz0CGS4SQqrNFdM607UR2Dac5LGf1q
-	 oLHJLqEyvUe/rujc9Hms16Uz9nhyfrRrudNhL5vEIYGo/NofSWQhouO5CU7VgVZgy/
-	 67k7UZHBalgvUy6wlq6FE7tHGdr8BoqNs8WxfvREQn+s3eV8eth1FpobAzZCGHeSGK
-	 cgpDItUtfoOO+raAMHf6rTzAOzNHpAK4ud26pt3FH1xWi9wxa1P0DwT4dqghu1DKnp
-	 7DIBxFWFE6CGg==
-Received: from mail.mleia.com (localhost [127.0.0.1])
-	by mail.mleia.com (Postfix) with ESMTP id 601253A2376;
-	Thu, 13 Feb 2025 12:09:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=mleia.com; s=mail;
-	t=1739448574; bh=Js2J+We0EvBUaLzVdJbyTpliD1eqko9gYiN/kW/jRHE=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=R2+1Ezj7XnIiH/8+SKrh/QoEozYuaKzC9/SB4PMu89COfc4wa1PmY7Os7YHyHTBfR
-	 7XjsRnxi0+eMp7NCl8Zz+2xtnWKbusOwLUdfXz0CGS4SQqrNFdM607UR2Dac5LGf1q
-	 oLHJLqEyvUe/rujc9Hms16Uz9nhyfrRrudNhL5vEIYGo/NofSWQhouO5CU7VgVZgy/
-	 67k7UZHBalgvUy6wlq6FE7tHGdr8BoqNs8WxfvREQn+s3eV8eth1FpobAzZCGHeSGK
-	 cgpDItUtfoOO+raAMHf6rTzAOzNHpAK4ud26pt3FH1xWi9wxa1P0DwT4dqghu1DKnp
-	 7DIBxFWFE6CGg==
-Message-ID: <9e2b9e70-454d-4573-b1d3-b77fe9dc9a46@mleia.com>
-Date: Thu, 13 Feb 2025 14:09:32 +0200
+	 In-Reply-To:Content-Type; b=PyLZHf6lTadk/5nKjXbakn3RZ+nPB04sRQtPf7s2HsygvTcj3gkmuEEswZFWYyBb/5fDl1Ykkhnzf9h2wRQcWXdvyrB1quyd0ViLIK854BFECaYTrYI3GaN9k1uFyfPinLG0yw6ZP5n0S43eZa5Fyo9aG6qN19FPsHpO/W/mBkM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kMP1GvgS; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5450982c7edso76685e87.0
+        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 04:24:52 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739449491; x=1740054291; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=5GCfGb+lf3aOIwd+RY6NCgd8Twa0/XMsahXFwWYyqjk=;
+        b=kMP1GvgSPYe4qzneEhYLHbfaV3B5c5p/WxWm09rpN8J2zrDONAWsjvvkZ/xY54DNc1
+         KHpgkvLdHTGJy8YavBRrhsqsDAW6i25OK/BCAdbgHZO1YAW8Laq+f30mnrz7pu0sPZS/
+         0CTlwl4QE4ZoK7U9biWPu94EdqcQ4OwmUYLL7ZY1cEqsxUhh1vbVwY6QZING1d9nBIDO
+         5ld5PQc277jGFwMPEHPxSP28qhIxaERB4OJ7ejtS4gLPRREFeWEI7fXezqrR7k3VOmYj
+         +/didzFi3x0+K16Hv/getXcXguskXpeBq6KUtFVOWBofiM1NRJp3z8kN2nAgbZMbGNDh
+         ED1g==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739449491; x=1740054291;
+        h=content-transfer-encoding:in-reply-to:from:references:cc:to
+         :content-language:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=5GCfGb+lf3aOIwd+RY6NCgd8Twa0/XMsahXFwWYyqjk=;
+        b=buyQnxgMdQTHMoHia6v8h1PGwNsZlT7zXI7vBbb1DH8fHjOy+h+L1O1pmzn+FgSp9s
+         4zANhaKSotCxPnmYI8GeaP0Mx9BpIAYNuVvwBKWvBo0LPrkmeLpOO+T13xJXc1ymSgPm
+         9CYaShFNV1bvIfUiZKQfD5ef03hjAgTwdxWqPFL6xP/B9strw0PdBMe3+jjB3WoXbYZs
+         chCTel8Bqi1eDJ9vu4PQ7dy6T0cZP9VPP9PwrlGBJKn1CBB9kvjUJHcijI53Ymhx3/Jg
+         o4sGpEbk3nUZ0t12UNIX63ghNYFCD6alQAZ4moq5UOaBwapPK95gohCf48z41ORI1rYY
+         BHpQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVnsDDZr5mQcenQSQ33gwt4AnZIzscv+2nV59gihXprl79RWJv79cdgmDnkECHOEzPUcRLykbjOOQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxf5VLhgkecgyrvr/3tjrUGZIOlB2HA8QIu37MDY+R19nM4llwD
+	DsGS6oJ8TkuP3X4XqtyLci93n3kypp8asiS1m1kzQrhaGXIm1hpksRZal9EX6DY=
+X-Gm-Gg: ASbGncsiaNbV28v51TbHgKwsezd7gGgVsu+HsyrkZBmKPhOxaZLS1GO8VYqGzdWbMq6
+	Wm8JPwBoZFgYl2yFtiC5B4mKxByAdHozS1XLWevBxsftYGcFX2BYk/v4yR8PYKtgAgrWrzoFpTI
+	D40/vLUSXcxd/2bhWkbcHOgZMKECo/VQ5wekx/ABAF7weyrQngrt+8gkybOSTsOz49KWm2mDcfn
+	TbDAyXt+1Ps6CLgdst00MdQ8Jg9DI8zZawsobgqvdpr64VUUTGbzbcCs2wzG2LnOFr30bOhCAKI
+	GX9Vpkir6GJZnpDRhYQaxjBg8MDC1WVhuTijBpiSo7M5EuUbPMIA8Q1KWpBhpzO1WbRGzw==
+X-Google-Smtp-Source: AGHT+IGGGD1LnQRTjzKIMu7P71jbpTMS7skHZBVLY6dWl3mmG7KfIeCOfXaf1YVcbcnJypSEi1k+cQ==
+X-Received: by 2002:a05:6512:234e:b0:545:576:9e07 with SMTP id 2adb3069b0e04-545180ddc06mr822493e87.2.1739449490594;
+        Thu, 13 Feb 2025 04:24:50 -0800 (PST)
+Received: from [192.168.1.4] (88-112-131-206.elisa-laajakaista.fi. [88.112.131.206])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5451f09ab7dsm162311e87.61.2025.02.13.04.24.49
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Feb 2025 04:24:50 -0800 (PST)
+Message-ID: <85a9eda7-a6f5-401e-90b6-0353182b8deb@linaro.org>
+Date: Thu, 13 Feb 2025 14:24:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -73,20 +92,20 @@ To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
 Cc: Samuel Holland <samuel@sholland.org>, Sebastian Reichel <sre@kernel.org>
 References: <20250213114613.2646933-1-andriy.shevchenko@linux.intel.com>
  <20250213114613.2646933-2-andriy.shevchenko@linux.intel.com>
-From: Vladimir Zapolskiy <vz@mleia.com>
+From: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 In-Reply-To: <20250213114613.2646933-2-andriy.shevchenko@linux.intel.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
-X-CRM114-Version: 20100106-BlameMichelson ( TRE 0.8.0 (BSD) ) MR-49551924 
-X-CRM114-CacheID: sfid-20250213_120934_411596_C50C303C 
-X-CRM114-Status: UNSURE (   4.62  )
-X-CRM114-Notice: Please train this message. 
 
 On 2/13/25 13:45, Andy Shevchenko wrote:
 > Get matching data in one step by switching to use i2c_get_match_data().
 > 
 > Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 > Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+
+Now sending the tag from my different email address for the sake of consistency.
+
+Thank you for the change.
 
 Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
