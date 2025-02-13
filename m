@@ -1,147 +1,138 @@
-Return-Path: <linux-pm+bounces-21994-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21995-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86937A33506
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 02:55:49 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D07FCA3356B
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 03:19:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C4F3167AE4
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 01:55:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8C6797A10E5
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 02:18:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 076B0139CE3;
-	Thu, 13 Feb 2025 01:55:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECD7A1F75AC;
+	Thu, 13 Feb 2025 02:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="djvjLIp9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE8A8635E;
-	Thu, 13 Feb 2025 01:55:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 95CAE1553AA;
+	Thu, 13 Feb 2025 02:19:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739411745; cv=none; b=AeqX8i7HVfvN4DF6/paiU6Vq3f31p941IiKPOJS9Hwv1HSuiKuENYXJEt9fsdcGXIfjFOjqSCZwV1mbp9H1EUeYFpxpSTyMkDl9nEsTH0+CJzkfnj4q8xE8DG6XySRCRy+n/hi3mVM2pjfkHI70hyWUDZxfa5R1aggcM0CyWfJo=
+	t=1739413153; cv=none; b=mdDBNEmZuAnOx0Y8Dt2qFS0emrUZ04eORZHk59SK36H6CEPiqECsf5rE9tOlR7bTAm5cI0JC/oUuimOKVmCwLDhvdRravt4V9ZgqasPQ+zNZk2iYHns7cl+QlnsVStKyPF7bSxGCCzvR6pb44ruoumeQDlMQlh6L+bnHZTOvGIA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739411745; c=relaxed/simple;
-	bh=iTSClWmyDqTMwzKfbdlDXnb2TNVtqMpl6wDetfIo41E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=PN3AbuNo/kL9XZvIjC61B3Eo0FBaG2X9YxlT/GHl2ZXL5e2qmR8eRkUK+9OI5DfTwYHnQwn8/fEU26lULc6lIViuVTGEokphJ8fOk7PK9hHpHZ3bmeC3fPd1g/ynQ1SY7BeJIb50M1DoffSPqlu4pykQsuWSWpdVTo+zSFfr7Y8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.254])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4YtdTf50VqzkXKD;
-	Thu, 13 Feb 2025 09:52:06 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id ED4271800B6;
-	Thu, 13 Feb 2025 09:55:39 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Thu, 13 Feb
- 2025 09:55:39 +0800
-Message-ID: <0097a9a3-fe61-4200-9a54-5a9c81d3219c@huawei.com>
-Date: Thu, 13 Feb 2025 09:55:38 +0800
+	s=arc-20240116; t=1739413153; c=relaxed/simple;
+	bh=xXGK+hkiNAqmGRDzJim5UG5/4YOulKq8CXtmJjqHxbw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oR8hmfYp9zCrLQrjT7TS4rZGDTuT5RsIXXgflgAygCUdAlDWhLX0qs1MBd/sCoHWqTY6GcoQfSVHZBObxrtCntvTe0C6T/k4+QmSM9oLPKn1IMugYU5elL9xuEcmHoianyF6t+U8Pu7hKlUv1F1vjsMusPR5p9vPD7JGof4ouKc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=djvjLIp9; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5de849a0b6cso581597a12.2;
+        Wed, 12 Feb 2025 18:19:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739413150; x=1740017950; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=ThEK+8ls/3g31TOtGvnpp5N+ZnnkdrOcxxsDcqY6f68=;
+        b=djvjLIp9CcBE4urFIO/2gAt9OKCM3Oz0ZjaZe4XvozZeq3j57/HGk0pV7SWk9uwVYm
+         VMtSZhEgXMFMzk7XxpmeZd4h1F03EJCUU8TEuOp8k7eJJxEXyq0UZA9CnU/G/rmu4fl9
+         oW6DskGne+gLSktoaq5NjaomTI/clBq8QfD+WxIZUKfr1gvTPHesNVuj/DDha8OpNEzA
+         CXOf0QTm8SKVBF9QKNsoWqGdvyqftDmwPy15wmkddLrJ94OTWgJPW2SQp4jut2WI95mi
+         WCeb72TbFv43Z2o42cwx4Dhw3Ugs65cjMocHyxfeXFGYxLCfVPdcagQdOtfpJkbdHtXe
+         O3AA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739413150; x=1740017950;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=ThEK+8ls/3g31TOtGvnpp5N+ZnnkdrOcxxsDcqY6f68=;
+        b=aoBzIM8AGWvnm7bnhvfAb0ddALP+6Rayb2dZxcDksixDdJf/3Kb1QISWAh8Zk7F5KA
+         6+wVA1+t8JQyotILd16c2l6OhfM3sx2426utOTXGpIjukQEsxVG97MV6pd5d/v9ZNiAz
+         z6J7p4wwTJJREP89NCx/tXAYOHWWoFskEnI1wQzSSHfZX3XGDU6YE/B30ghFuguZKgu2
+         awi807fWLybW4xILy2p+DOUj21AZMnrwg21a4DtkmmztFXXjsM2ZuPJGttqNy7VlsDjL
+         hE2QTSEmMB5vwSGiItAG8ll0qMLKRDKZLgVpmUKyc/v8jdmFOyxy3RVqO6/1pbFMWHZB
+         827w==
+X-Forwarded-Encrypted: i=1; AJvYcCU/mwd3rqCVC0PMzNUqs1t2K0zm65gvIpFyJLR9GqfKft1GfPZrWhYf12uhUmh+vdrMsxucsF8xj8Q=@vger.kernel.org, AJvYcCUB0A8T3kHL62gw7Chusd+o0DHJ8NyX8ErLaHN0A24G46cezWWyPQxxLEe8TBQJxx245R5pDEGCKVu1RhU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzn6ztzO4yUQ0nYg+QgpUuwLg2yZbB7XChLCagUe1j54G/P0/NL
+	JWPwKkAWp95grfEhgKgYJ/HWcf6DHE2fUCR1hEwd9nf1G1ZFWswTrv0LRkTVxIxJ8enZ/Q2yTSR
+	u9/f7LBKMZzEDh794vlWHHZL6St7nOPcx
+X-Gm-Gg: ASbGncs9ZQZyOxt6jPmMlXqbDoiRxNV7x1L54RqS2Zxi5/cLGWge7Fic8TezCylVknT
+	NJPB5Iwo4gPhA3WihLhGV233dhJ9H+5Gmq1FHpJe3dR9WhK7TpbrEMV9wgyqtjDXn2EDHiSfy4g
+	==
+X-Google-Smtp-Source: AGHT+IGAxr5YqQUvSoz9+MenQqpjAtscKqMAuPz/l84gJauDI4Dsyr3o6SY6QbHaooalN8wF/Wi8bAev8HGm/mDMrA0=
+X-Received: by 2002:a05:6402:3715:b0:5dc:a463:aafd with SMTP id
+ 4fb4d7f45d1cf-5dec9d3235amr1017254a12.4.1739413149552; Wed, 12 Feb 2025
+ 18:19:09 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/8] Support for autonomous selection in cppc_cpufreq
-To: <rafael@kernel.org>, <lenb@kernel.org>, <robert.moore@intel.com>,
-	<viresh.kumar@linaro.org>, <mario.limonciello@amd.com>,
-	<gautham.shenoy@amd.com>, <ray.huang@amd.com>, <pierre.gondois@arm.com>
-CC: <acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>, <yumpusamongus@gmail.com>,
-	<srinivas.pandruvada@linux.intel.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <hepeng68@huawei.com>,
-	<fanghao11@huawei.com>
-References: <20250206131428.3261578-1-zhenglifeng1@huawei.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <20250206131428.3261578-1-zhenglifeng1@huawei.com>
+References: <20241219091109.10050-1-xuewen.yan@unisoc.com> <a43ebb14-be7f-4f8a-8892-cdb63eec4043@arm.com>
+In-Reply-To: <a43ebb14-be7f-4f8a-8892-cdb63eec4043@arm.com>
+From: Xuewen Yan <xuewen.yan94@gmail.com>
+Date: Thu, 13 Feb 2025 10:18:57 +0800
+X-Gm-Features: AWEUYZnhPboBY5GOcVpSt__jsVyo_2OnZr2KiqQVob_S5bCWyffDCJ5Ra3xMLxk
+Message-ID: <CAB8ipk-qYR4LncOi2ue6Rbdc6CqX67_OydcOp14Yj=afYZPe=Q@mail.gmail.com>
+Subject: Re: [PATCH] power: energy_model: Rework the depends on for CONFIG_ENERGY_MODEL
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: Xuewen Yan <xuewen.yan@unisoc.com>, linux-pm@vger.kernel.org, rafael@kernel.org, 
+	len.brown@intel.com, linux-kernel@vger.kernel.org, ke.wang@unisoc.com, 
+	jeson.gao@unisoc.com, di.shen@unisoc.com, pavel@ucw.cz
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Transfer-Encoding: quoted-printable
 
-On 2025/2/6 21:14, Lifeng Zheng wrote:
-> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
-> driver.
-> 
-> The patch series is organized in two parts:
-> 
->  - patch 1-5 refactor out the general CPPC register get and set functions
->    in cppc_acpi.c
-> 
->  - patches 6-8 expose sysfs files for users to control CPPC autonomous
->    selection when supported
-> 
-> Changelog:
-> 
-> v5:
-> 
->  - add more explanation to the commit logs and comments
->  - change REG_OPTIONAL from bin to hex
->  - split patch 2 into 3 smaller patches
->  - remove CPPC_REG_VAL_READ() and CPPC_REG_VAL_WRITE() macros
->  - move the modification part in patch 5 into a separate patch
->  - rename the sysfs file from "energy_perf" to
->    energy_performance_preference_val
-> 
-> v4:
-> 
->  - add REG_OPTIONAL and IS_OPTIONAL_CPC_REG to judge if a cpc register is
->    an optional one
->  - check whether the register is optional before CPC_SUPPORTED check in
->    cppc_get_reg_val() and cppc_set_reg_val()
->  - check the register's type in cppc_set_reg_val()
->  - add macros to generally implement registers getting and setting
->    functions
->  - move some logic codes from cppc_cpufreq.c to cppc_acpi.c
->  - replace cppc_get_auto_sel_caps() by cppc_get_auto_sel()
-> 
-> v3:
-> 
->  - change cppc_get_reg() and cppc_set_reg() name to cppc_get_reg_val() and
->    cppc_set_reg_val()
->  - extract cppc_get_reg_val_in_pcc() and cppc_set_reg_val_in_pcc()
->  - return the result of cpc_read() in cppc_get_reg_val()
->  - add pr_debug() in cppc_get_reg_val_in_pcc() when pcc_ss_id < 0
->  - rename 'cpunum' to 'cpu' in cppc_get_reg_val()
->  - move some macros from drivers/cpufreq/cppc_cpufreq.c to
->    include/acpi/cppc_acpi.h with a CPPC_XXX prefix
-> 
-> v2:
-> 
->  - fix some incorrect placeholder
->  - change kstrtoul to kstrtobool in store_auto_select
-> 
-> Lifeng Zheng (8):
->   ACPI: CPPC: Add IS_OPTIONAL_CPC_REG macro to judge if a cpc_reg is
->     optional
->   ACPI: CPPC: Optimize cppc_get_perf()
->   ACPI: CPPC: Rename cppc_get_perf() to cppc_get_reg_val()
->   ACPI: CPPC: Add cppc_set_reg_val()
->   ACPI: CPPC: Refactor register value get and set ABIs
->   ACPI: CPPC: Modify cppc_get_auto_sel_caps() to cppc_get_auto_sel()
->   ACPI: CPPC: Add three functions related to autonomous selection
->   cpufreq: CPPC: Support for autonomous selection in cppc_cpufreq
-> 
->  .../ABI/testing/sysfs-devices-system-cpu      |  54 ++++
->  drivers/acpi/cppc_acpi.c                      | 303 +++++++++++-------
->  drivers/cpufreq/amd-pstate.c                  |   3 +-
->  drivers/cpufreq/cppc_cpufreq.c                | 109 +++++++
->  include/acpi/cppc_acpi.h                      |  30 +-
->  5 files changed, 372 insertions(+), 127 deletions(-)
-> 
+Hi Rafael,
 
-Gentle ping.
+I noticed that this patch has not been merged yet. Do you have any comments=
+?
 
-Attach discussions of previous versions:
-v1: https://lore.kernel.org/all/20241114084816.1128647-1-zhenglifeng1@huawei.com/
-v2: https://lore.kernel.org/all/20241122062051.3658577-1-zhenglifeng1@huawei.com/
-v3: https://lore.kernel.org/all/20241216091603.1247644-1-zhenglifeng1@huawei.com/
-v4: https://lore.kernel.org/all/20250113122104.3870673-1-zhenglifeng1@huawei.com/
+BR
+
+On Thu, Dec 19, 2024 at 5:17=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
+>
+>
+>
+> On 12/19/24 09:11, Xuewen Yan wrote:
+> > From: Jeson Gao <jeson.gao@unisoc.com>
+> >
+> > Now not only CPUs can use energy efficiency models, but GPUs
+> > can also use. On the other hand, even with only one CPU, we can also
+> > use energy_model to align control in thermal.
+> > So remove the dependence of SMP, and add the DEVFREQ.
+>
+> That's true, there are 1-CPU platforms supported. Also, GPU can have
+> the EM alone.
+>
+> >
+> > Signed-off-by: Jeson Gao <jeson.gao@unisoc.com>
+> > ---
+> >   kernel/power/Kconfig | 3 +--
+> >   1 file changed, 1 insertion(+), 2 deletions(-)
+> >
+> > diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> > index afce8130d8b9..c532aee09e12 100644
+> > --- a/kernel/power/Kconfig
+> > +++ b/kernel/power/Kconfig
+> > @@ -361,8 +361,7 @@ config CPU_PM
+> >
+> >   config ENERGY_MODEL
+> >       bool "Energy Model for devices with DVFS (CPUs, GPUs, etc)"
+> > -     depends on SMP
+> > -     depends on CPU_FREQ
+> > +     depends on CPU_FREQ || PM_DEVFREQ
+> >       help
+> >         Several subsystems (thermal and/or the task scheduler for examp=
+le)
+> >         can leverage information about the energy consumed by devices t=
+o
+>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
