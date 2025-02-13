@@ -1,758 +1,401 @@
-Return-Path: <linux-pm+bounces-22045-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22046-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46607A35092
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 22:40:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 41BFFA350E7
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 23:06:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EC58F16D508
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 21:40:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D655B16E3B4
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 22:05:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF610266B58;
-	Thu, 13 Feb 2025 21:40:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F1342698A5;
+	Thu, 13 Feb 2025 22:04:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hLR/8JWq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="kbtQrp8m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f54.google.com (mail-lf1-f54.google.com [209.85.167.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B5AD1487FA;
-	Thu, 13 Feb 2025 21:39:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7F815269815
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 22:04:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739482801; cv=none; b=JuaO1S8yFVbu+++FfQn9B69ng5DzxOjgjBWQC2FcNZXUUNWrTutkRAP1tGag99v9DlUBuMuwRvFEM+s9n6rt6OjLzOEksJNT4Gn+DLAuSylU2LA9gm5aXg3UzTmDE8va8HvcAf7UHhkm7HUPFYPnhNRy9CInsb4CJ4SE987mn6c=
+	t=1739484299; cv=none; b=GZIsk1xUJ1epOViyEw1KMb7uIbkpFs+aW7B1IXdxKNSWZJV1A3Olm2uTS5jt2GGAWKDhQMHixSgDT/iqcih43C9oDxNcgHA+tOPxoZKFD5BsgSCIl37fLYM7npk7Oys8IHofXC3humrTK11D1sNsKQIFwoq9kEUPot4YhAEKZvE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739482801; c=relaxed/simple;
-	bh=93gKTEWLmulpAr+9qxixjcrh3Te4MbpMOjX9pir1o/0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=CMfZ8UE9tFp4j7UtVRoDo7PbbQtKUM/JvOVLraIASm+Iip4ges74G4zoBUGcn/dwAk1rH7SV6lvk0hcG13drIR45ee7iMx1CtbD9+hNTUnZ2+YG2Eue+iJwkr3gCaBPc2e42ftOo+U4S0ub5O7zSaxW8Mg9Ur/jVGpBUBu6dumo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hLR/8JWq; arc=none smtp.client-ip=192.198.163.19
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739482799; x=1771018799;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=93gKTEWLmulpAr+9qxixjcrh3Te4MbpMOjX9pir1o/0=;
-  b=hLR/8JWqUiEkJa3Bx3XudC2lpSFtEuqclXxfFsDUD8N/8M5HlbF0vMiq
-   XZFHGaNZPsMZo1ZtglB3oD7oMupJWBp6ZqDkmIliE4qm3bkRk8G6yq+B4
-   uZ+bZ5hZ5gcAxzPnT9hTfAXJadTgEmWlZwRTYkQ1l7hFBL8fB1Wxy6HVG
-   TQ24N0sRhf0jr/Je3EwhVTg1UKcJeia8atWG0V1pCnboVIV+TUVyuy2tt
-   p+UzlEbvUwXKacvGf+yf0yPx5ADIGaoo4odIqAqe3xhKNG1Hs7SUuNCSb
-   uFfat138UYaBf3Rj4BhdvjCbechbPcJXh21cyrH2J3NAHFUTjot2+kTKx
-   w==;
-X-CSE-ConnectionGUID: 7I3KZ9iDR+e/hoQFzyzyLw==
-X-CSE-MsgGUID: B0OqmiwdTteHXaJriZtJug==
-X-IronPort-AV: E=McAfee;i="6700,10204,11344"; a="39399797"
-X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="39399797"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 13:39:58 -0800
-X-CSE-ConnectionGUID: ZO2nHOzTTh6rsxsFxZN24g==
-X-CSE-MsgGUID: eBMuV7tiTUmVhNl0c5TwTg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="113229194"
-Received: from xpardee-mobl.amr.corp.intel.com (HELO [10.124.80.173]) ([10.124.80.173])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 13:39:57 -0800
-Message-ID: <cb72bc9c-3f43-4d99-9c50-80d4fc5c3b08@linux.intel.com>
-Date: Thu, 13 Feb 2025 13:39:56 -0800
+	s=arc-20240116; t=1739484299; c=relaxed/simple;
+	bh=8yAMqL0L6BD7uVErtuAjmRBz3/oIM31YGuqXSiMObR8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=JBq9J49AkvLO9M4K4BCGmUeYBYp5Cke8bqmGAUkUCXhqTdMuuQWAFL6vN6vN5ApFEYpSBbwPSmZ0TO/hqu8PFafWXBBO03CGBC1pQxehlB48eNDN33xT5n0vDif5EW5vltEP27JPHS0CSuvDLHFKka8xYsxUseGnDOSJwEaAL/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=kbtQrp8m; arc=none smtp.client-ip=209.85.167.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f54.google.com with SMTP id 2adb3069b0e04-54524740032so421264e87.3
+        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 14:04:56 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739484294; x=1740089094; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=m+QFpNrmD21zq76Z6YLs3X2SVk3vG63A4LruZcgFYZE=;
+        b=kbtQrp8mg4aJkl++T/nIu32leQ33eIXBnAvkCGzl7AU/UFneG3vsy9KF9vb1fp08s7
+         XzYAJfT54sHz2v/ds+sKb8EV+rKVuMHHsghC/xGOlHc9Nq7wCzzQjce+/MsmR1g+3Gzu
+         LEa/XWizWUkVls9hjhuV0fNcseTuKilX5cANwuLUt5+SCKoh1+IIlHMFfAhYXOoiSqUA
+         GtCVzCSAHDPMOYKI37gIFX3+81kpCauZTcgY5xK6EQdYpHYMgpZvzMb/dhnnexpAilrz
+         LnA3VI3pGTxYxVzlKaPyZSUKONaZyS6yngYDNqQZ8V/S3xhMwKsK3M2qOi7T8VfPFKR8
+         t6PA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739484294; x=1740089094;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=m+QFpNrmD21zq76Z6YLs3X2SVk3vG63A4LruZcgFYZE=;
+        b=lnnA2Fn56dDEGDGWO2PoeAwz9QQOOFdPFVRifvgf4xq2xNnLP4axYV148k1tlNhaCf
+         HcZpeiPFZTy3DtJxQbawHH3SzaPHPQHTj6UMl7mwDbbpvWiImFhJ4VrDHP84KtvQaAFn
+         RbBhP7Wex9ZvnJuNTwyXKyxvYlhVk/MHzjixhabynGWn6Xk3m+xwZRw2Qnrvizh5hgtt
+         rPatZXhubKt2ZA0baY5GfIaf8CDgnvYmW5r2xjOk3qfGzJ55CkNF2WqcTNg5O1jxTZST
+         CpayjobqaJqrp3MmpzNVTQ0kwOLs7WkL2N/FfNDmkkPjukyVlK8tSpCLQsHgq1Bl06lU
+         LaAw==
+X-Forwarded-Encrypted: i=1; AJvYcCUBVbXbU7juqSGEvhAGZR9fOL21Fq5b+NffyKp6hK3br7lClveag+diSFbT/OpYAroSO4Eo82v/jA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzoFuxV88pt690+rIAq3GQxYNK+ELBdcx40YcxBkfLVWA3OQNOD
+	HmJBhdRS3HkCMOkSWxgUdWHQqTCpggDQPyJU7iUQgwCX8nq+xHE2SvnyT+0R8Bk=
+X-Gm-Gg: ASbGncuB+1vuOqOCoG+3fIY8aInD8on6EqBO7coM7YKZ9EQjAYLYUIyEmEASPTd9kYq
+	LSv6P8QuzhE2tHFBIm+SGhytcMzy9wUFadisIjcouKMg4oYPE/oWf9KQ0qtqKtAX1ypncg+Fxpx
+	TjAH2M9swF9MLYRecOMsquIynwbythj/H9ztWElclaAkh7QK4DeOAKnn2IgSamtiPSLd+v/ejsr
+	BHPYGLL2YuMHeD3WcJgbosaicjwhorQnGwbh14LWuDTPW132jlo50bjJODbiftISpxSolNYvAJp
+	jiNpoqXrZ/JrnHdseRk6JkZ4v3ptJ/L8B1SDfzXag5xL3iQ//oGDBjdGRq5fwngJLm58o28=
+X-Google-Smtp-Source: AGHT+IFOsJQ/Humlfu8J95P2B+ISmf4D6Tr3+B6BkN50O9jDmOfTI9Er8NpOzVeRmXif1kCWw7g8HA==
+X-Received: by 2002:a05:6512:1318:b0:545:e2e:844a with SMTP id 2adb3069b0e04-5451ddd7917mr1733274e87.38.1739484294366;
+        Thu, 13 Feb 2025 14:04:54 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5451f10cd51sm297424e87.198.2025.02.13.14.04.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 13 Feb 2025 14:04:53 -0800 (PST)
+Date: Fri, 14 Feb 2025 00:04:50 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Cc: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org, 
+	daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	david.collins@oss.qualcomm.com, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] thermal: qcom-spmi-temp-alarm: Add temp alarm data
+ struct based on HW subtype
+Message-ID: <rfpnkedb26mtaalwmklepn7fres6tvz356qbmu3xpgliqdtfyh@2qj2nmgcu25t>
+References: <20250213210403.3396392-1-anjelique.melendez@oss.qualcomm.com>
+ <20250213210403.3396392-3-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] platform/x86/intel/pmc: Add Panther Lake support to
- intel_pmc_core
-To: =?UTF-8?Q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-Cc: rajvi0912@gmail.com, irenic.rajneesh@gmail.com,
- david.e.box@linux.intel.com, Hans de Goede <hdegoede@redhat.com>,
- platform-driver-x86@vger.kernel.org, LKML <linux-kernel@vger.kernel.org>,
- linux-pm@vger.kernel.org
-References: <20250212063213.1232792-1-xi.pardee@linux.intel.com>
- <0393c050-6f3d-aacb-79d7-6202d7658688@linux.intel.com>
-Content-Language: en-US
-From: Xi Pardee <xi.pardee@linux.intel.com>
-In-Reply-To: <0393c050-6f3d-aacb-79d7-6202d7658688@linux.intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250213210403.3396392-3-anjelique.melendez@oss.qualcomm.com>
 
+On Thu, Feb 13, 2025 at 01:04:01PM -0800, Anjelique Melendez wrote:
+> Currently multiple if/else statements are used in functions to decipher
+> between SPMI temp alarm Gen 1, Gen 2 and Gen 2 Rev 1 functionality. Instead
+> refactor the driver so that SPMI temp alarm chips will have reference to a
+> spmi_temp_alarm_data struct which defines data and function callbacks
+> based on the HW subtype.
+> 
+> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+> ---
+>  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 143 +++++++++++++-------
+>  1 file changed, 95 insertions(+), 48 deletions(-)
+> 
+> diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> index b2077ff9fe73..af71d4238340 100644
+> --- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> +++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+> @@ -31,7 +31,6 @@
+>  
+>  #define STATUS_GEN1_STAGE_MASK		GENMASK(1, 0)
+>  #define STATUS_GEN2_STATE_MASK		GENMASK(6, 4)
+> -#define STATUS_GEN2_STATE_SHIFT		4
+>  
+>  #define SHUTDOWN_CTRL1_OVERRIDE_S2	BIT(6)
+>  #define SHUTDOWN_CTRL1_THRESHOLD_MASK	GENMASK(1, 0)
+> @@ -68,10 +67,20 @@ static const long temp_map_gen2_v1[THRESH_COUNT][STAGE_COUNT] = {
+>  /* Temperature in Milli Celsius reported during stage 0 if no ADC is present */
+>  #define DEFAULT_TEMP			37000
+>  
+> +struct qpnp_tm_chip;
+> +
+> +struct spmi_temp_alarm_data {
+> +	const struct thermal_zone_device_ops *ops;
+> +	const long (*temp_map)[THRESH_COUNT][STAGE_COUNT];
+> +	int (*get_temp_stage)(struct qpnp_tm_chip *chip);
+> +	int (*configure_trip_temps)(struct qpnp_tm_chip *chip);
+> +};
+> +
+>  struct qpnp_tm_chip {
+>  	struct regmap			*map;
+>  	struct device			*dev;
+>  	struct thermal_zone_device	*tz_dev;
+> +	const struct spmi_temp_alarm_data *data;
+>  	unsigned int			subtype;
+>  	unsigned int			dig_revision;
+>  	long				temp;
+> @@ -82,14 +91,11 @@ struct qpnp_tm_chip {
+>  	struct mutex			lock;
+>  	bool				initialized;
+>  	bool				require_s2_shutdown;
+> +	long				temp_thresh_map[STAGE_COUNT];
+>  
+>  	struct iio_channel		*adc;
+> -	const long			(*temp_map)[THRESH_COUNT][STAGE_COUNT];
+>  };
+>  
+> -/* This array maps from GEN2 alarm state to GEN1 alarm stage */
+> -static const unsigned int alarm_state_map[8] = {0, 1, 1, 2, 2, 3, 3, 3};
+> -
 
-On 2/13/2025 4:47 AM, Ilpo Järvinen wrote:
-> On Tue, 11 Feb 2025, Xi Pardee wrote:
->
->> Add Panther Lake support to intel_pmc_core driver
->>
->> Signed-off-by: Rajvi Jingar <rajvi.jingar@linux.intel.com>
->> Signed-off-by: Xi Pardee <xi.pardee@linux.intel.com>
->> ---
->>   drivers/platform/x86/intel/pmc/Makefile |   2 +-
->>   drivers/platform/x86/intel/pmc/core.c   |   1 +
->>   drivers/platform/x86/intel/pmc/core.h   |  32 ++
->>   drivers/platform/x86/intel/pmc/ptl.c    | 551 ++++++++++++++++++++++++
->>   4 files changed, 585 insertions(+), 1 deletion(-)
->>   create mode 100644 drivers/platform/x86/intel/pmc/ptl.c
->>
->> diff --git a/drivers/platform/x86/intel/pmc/Makefile b/drivers/platform/x86/intel/pmc/Makefile
->> index 389e5419dadf2..b148b40d09f54 100644
->> --- a/drivers/platform/x86/intel/pmc/Makefile
->> +++ b/drivers/platform/x86/intel/pmc/Makefile
->> @@ -4,7 +4,7 @@
->>   #
->>   
->>   intel_pmc_core-y			:= core.o core_ssram.o spt.o cnp.o \
->> -					   icl.o tgl.o adl.o mtl.o arl.o lnl.o
->> +					   icl.o tgl.o adl.o mtl.o arl.o lnl.o ptl.o
->>   obj-$(CONFIG_INTEL_PMC_CORE)		+= intel_pmc_core.o
->>   intel_pmc_core_pltdrv-y			:= pltdrv.o
->>   obj-$(CONFIG_INTEL_PMC_CORE)		+= intel_pmc_core_pltdrv.o
->> diff --git a/drivers/platform/x86/intel/pmc/core.c b/drivers/platform/x86/intel/pmc/core.c
->> index bd90d38e62e94..9c759bbc78941 100644
->> --- a/drivers/platform/x86/intel/pmc/core.c
->> +++ b/drivers/platform/x86/intel/pmc/core.c
->> @@ -1413,6 +1413,7 @@ static const struct x86_cpu_id intel_pmc_core_ids[] = {
->>   	X86_MATCH_VFM(INTEL_ARROWLAKE_H,	&arl_h_pmc_dev),
->>   	X86_MATCH_VFM(INTEL_ARROWLAKE_U,	&arl_h_pmc_dev),
->>   	X86_MATCH_VFM(INTEL_LUNARLAKE_M,	&lnl_pmc_dev),
->> +	X86_MATCH_VFM(INTEL_PANTHERLAKE_L,	&ptl_pmc_dev),
->>   	{}
->>   };
->>   
->> diff --git a/drivers/platform/x86/intel/pmc/core.h b/drivers/platform/x86/intel/pmc/core.h
->> index 987fde3ffc1ce..d30442ae1d7f0 100644
->> --- a/drivers/platform/x86/intel/pmc/core.h
->> +++ b/drivers/platform/x86/intel/pmc/core.h
->> @@ -285,6 +285,14 @@ enum ppfear_regs {
->>   #define LNL_PPFEAR_NUM_ENTRIES			12
->>   #define LNL_S0IX_BLOCKER_OFFSET			0x2004
->>   
->> +/* Panther Lake Power Management Controller register offsets */
->> +#define PTL_LPM_NUM_MAPS			14
->> +#define PTL_PMC_LTR_SATA2			0x1B90
->> +#define PTL_PMC_LTR_PMC				0x1BA8
->> +#define PTL_PMC_LTR_CUR_ASLT			0x1C28
->> +#define PTL_PMC_LTR_CUR_PLT			0x1C2C
->> +#define PTL_PCD_PMC_MMIO_REG_LEN		0x31A8
->> +
->>   extern const char *pmc_lpm_modes[];
->>   
->>   struct pmc_bit_map {
->> @@ -602,6 +610,29 @@ extern const struct pmc_bit_map arl_pchs_signal_status_map[];
->>   extern const struct pmc_bit_map *arl_pchs_lpm_maps[];
->>   extern const struct pmc_reg_map arl_pchs_reg_map;
->>   
->> +/* PTL */
->> +extern const struct pmc_bit_map ptl_pcdp_pfear_map[];
->> +extern const struct pmc_bit_map *ext_ptl_pcdp_pfear_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_ltr_show_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_clocksource_status_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_power_gating_status_0_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_power_gating_status_1_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_power_gating_status_2_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_d3_status_0_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_d3_status_1_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_d3_status_2_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_d3_status_3_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_vnn_req_status_0_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_vnn_req_status_1_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_vnn_req_status_2_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_vnn_req_status_3_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_vnn_misc_status_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_signal_status_map[];
->> +extern const struct pmc_bit_map ptl_pcdp_rsc_status_map[];
->> +extern const struct pmc_bit_map *ptl_pcdp_lpm_maps[];
->> +extern const struct pmc_bit_map *ptl_pcdp_blk_maps[];
->> +extern const struct pmc_reg_map ptl_pcdp_reg_map;
-> Why are you adding these into here?? They should all be static within
-> ptl.c.
->
-> There are apparently also other unnecessarily declared maps in this
-> file. Anything in the output of this command that has <= 2 is not used
-> by more than one .c file (apparently there's also one extern for a map
-> that doesn't exists at all :-/):
->
-> for i in $(git grep 'extern' core.h | grep _map | sed -e 's|;$||g' -e 's|\[\]||g' | awk '{print $5}' | tr -d '*'); do echo -n "$i "; git grep -l "$i" | wc -l; done | sort -n -k2,2
->
-> Also, some functions seem to have extern keyword, which isn't necessary
-> for function forward declarations.
-Thanks for reviewing. These declaration will be removed. I will also add 
-one patch to remove declarations that are not used
-by more than one .c file and another patch to remove extern keyword for 
-function declaration in next version.
-Xi
->> +
->>   extern void pmc_core_get_tgl_lpm_reqs(struct platform_device *pdev);
->>   extern int pmc_core_ssram_get_lpm_reqs(struct pmc_dev *pmcdev);
->>   int pmc_core_send_ltr_ignore(struct pmc_dev *pmcdev, u32 value, int ignore);
->> @@ -626,6 +657,7 @@ extern struct pmc_dev_info mtl_pmc_dev;
->>   extern struct pmc_dev_info arl_pmc_dev;
->>   extern struct pmc_dev_info arl_h_pmc_dev;
->>   extern struct pmc_dev_info lnl_pmc_dev;
->> +extern struct pmc_dev_info ptl_pmc_dev;
->>   
->>   void cnl_suspend(struct pmc_dev *pmcdev);
->>   int cnl_resume(struct pmc_dev *pmcdev);
->> diff --git a/drivers/platform/x86/intel/pmc/ptl.c b/drivers/platform/x86/intel/pmc/ptl.c
->> new file mode 100644
->> index 0000000000000..c9380ce7de2a7
->> --- /dev/null
->> +++ b/drivers/platform/x86/intel/pmc/ptl.c
->> @@ -0,0 +1,551 @@
->> +// SPDX-License-Identifier: GPL-2.0
->> +/*
->> + * This file contains platform specific structure definitions
->> + * and init function used by Panther Lake PCH.
->> + *
->> + * Copyright (c) 2025, Intel Corporation.
->> + *
->> + */
->> +
->> +#include <linux/pci.h>
->> +
->> +#include "core.h"
->> +
->> +const struct pmc_bit_map ptl_pcdp_pfear_map[] = {
->> +	{"PMC_0",               BIT(0)},
->> +	{"FUSE_OSSE",           BIT(1)},
->> +	{"ESPISPI",             BIT(2)},
->> +	{"XHCI",                BIT(3)},
->> +	{"SPA",                 BIT(4)},
->> +	{"SPB",                 BIT(5)},
->> +	{"MPFPW2",              BIT(6)},
->> +	{"GBE",                 BIT(7)},
->> +
->> +	{"SBR16B20",            BIT(0)},
->> +	{"SBR8B20",             BIT(1)},
->> +	{"SBR16B21",            BIT(2)},
->> +	{"DBG_SBR16B",          BIT(3)},
->> +	{"OSSE_HOTHAM",         BIT(4)},
->> +	{"D2D_DISP_1",          BIT(5)},
->> +	{"LPSS",                BIT(6)},
->> +	{"LPC",                 BIT(7)},
->> +
->> +	{"SMB",                 BIT(0)},
->> +	{"ISH",                 BIT(1)},
->> +	{"SBR16B2",             BIT(2)},
->> +	{"NPK_0",		BIT(3)},
->> +	{"D2D_NOC_1",           BIT(4)},
->> +	{"SBR8B2",              BIT(5)},
->> +	{"FUSE",                BIT(6)},
->> +	{"SBR16B0",             BIT(7)},
->> +
->> +	{"PSF0",		BIT(0)},
->> +	{"XDCI",                BIT(1)},
->> +	{"EXI",                 BIT(2)},
->> +	{"CSE",                 BIT(3)},
->> +	{"KVMCC",		BIT(4)},
->> +	{"PMT",			BIT(5)},
->> +	{"CLINK",		BIT(6)},
->> +	{"PTIO",		BIT(7)},
->> +
->> +	{"USBR0",		BIT(0)},
->> +	{"SUSRAM",		BIT(1)},
->> +	{"SMT1",		BIT(2)},
->> +	{"MPFPW1",              BIT(3)},
->> +	{"SMS2",		BIT(4)},
->> +	{"SMS1",		BIT(5)},
->> +	{"CSMERTC",		BIT(6)},
->> +	{"CSMEPSF",		BIT(7)},
->> +
->> +	{"D2D_NOC_0",           BIT(0)},
->> +	{"ESE",			BIT(1)},
->> +	{"P2SB8B",              BIT(2)},
->> +	{"SBR16B7",             BIT(3)},
->> +	{"SBR16B3",             BIT(4)},
->> +	{"OSSE_SMT1",           BIT(5)},
->> +	{"D2D_DISP",            BIT(6)},
->> +	{"DBG_SBR",             BIT(7)},
->> +
->> +	{"U3FPW1",              BIT(0)},
->> +	{"FIA_X",               BIT(1)},
->> +	{"PSF4",                BIT(2)},
->> +	{"CNVI",                BIT(3)},
->> +	{"UFSX2",               BIT(4)},
->> +	{"ENDBG",               BIT(5)},
->> +	{"DBC",                 BIT(6)},
->> +	{"FIA_PG",              BIT(7)},
->> +
->> +	{"D2D_IPU",             BIT(0)},
->> +	{"NPK1",		BIT(1)},
->> +	{"FIACPCB_X",           BIT(2)},
->> +	{"SBR8B4",              BIT(3)},
->> +	{"DBG_PSF",             BIT(4)},
->> +	{"PSF6",                BIT(5)},
->> +	{"UFSPW1",              BIT(6)},
->> +	{"FIA_U",		BIT(7)},
->> +
->> +	{"PSF8",                BIT(0)},
->> +	{"SBR16B4",             BIT(1)},
->> +	{"SBR16B5",             BIT(2)},
->> +	{"FIACPCB_U",           BIT(3)},
->> +	{"TAM",			BIT(4)},
->> +	{"D2D_NOC_2",           BIT(5)},
->> +	{"TBTLSX",              BIT(6)},
->> +	{"THC0",		BIT(7)},
->> +
->> +	{"THC1",                BIT(0)},
->> +	{"PMC_1",		BIT(1)},
->> +	{"SBR8B1",              BIT(2)},
->> +	{"TCSS",                BIT(3)},
->> +	{"DISP_PGA",            BIT(4)},
->> +	{"SBR16B1",             BIT(5)},
->> +	{"SBRG",		BIT(6)},
->> +	{"PSF5",		BIT(7)},
->> +
->> +	{"P2SB16B",             BIT(0)},
->> +	{"ACE_0",		BIT(1)},
->> +	{"ACE_1",               BIT(2)},
->> +	{"ACE_2",               BIT(3)},
->> +	{"ACE_3",               BIT(4)},
->> +	{"ACE_4",               BIT(5)},
->> +	{"ACE_5",		BIT(6)},
->> +	{"ACE_6",		BIT(7)},
->> +
->> +	{"ACE_7",		BIT(0)},
->> +	{"ACE_8",		BIT(1)},
->> +	{"ACE_9",		BIT(2)},
->> +	{"ACE_10",		BIT(3)},
->> +	{"FIACPCB_PG",		BIT(4)},
->> +	{"SBR16B6",		BIT(5)},
->> +	{"OSSE",		BIT(6)},
->> +	{"SBR8B0",              BIT(7)},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map *ext_ptl_pcdp_pfear_map[] = {
->> +	ptl_pcdp_pfear_map,
->> +	NULL
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_ltr_show_map[] = {
->> +	{"SOUTHPORT_A",		CNP_PMC_LTR_SPA},
->> +	{"SOUTHPORT_B",		CNP_PMC_LTR_SPB},
->> +	{"SATA",		CNP_PMC_LTR_SATA},
->> +	{"GIGABIT_ETHERNET",	CNP_PMC_LTR_GBE},
->> +	{"XHCI",		CNP_PMC_LTR_XHCI},
->> +	{"SOUTHPORT_F",		ADL_PMC_LTR_SPF},
->> +	{"ME",			CNP_PMC_LTR_ME},
->> +	{"SATA1",		CNP_PMC_LTR_EVA},
->> +	{"SOUTHPORT_C",		CNP_PMC_LTR_SPC},
->> +	{"HD_AUDIO",		CNP_PMC_LTR_AZ},
->> +	{"CNV",			CNP_PMC_LTR_CNV},
->> +	{"LPSS",		CNP_PMC_LTR_LPSS},
->> +	{"SOUTHPORT_D",		CNP_PMC_LTR_SPD},
->> +	{"SOUTHPORT_E",		CNP_PMC_LTR_SPE},
->> +	{"SATA2",		PTL_PMC_LTR_SATA2},
->> +	{"ESPI",		CNP_PMC_LTR_ESPI},
->> +	{"SCC",			CNP_PMC_LTR_SCC},
->> +	{"ISH",			CNP_PMC_LTR_ISH},
->> +	{"UFSX2",		CNP_PMC_LTR_UFSX2},
->> +	{"EMMC",		CNP_PMC_LTR_EMMC},
->> +	{"WIGIG",		ICL_PMC_LTR_WIGIG},
->> +	{"THC0",		TGL_PMC_LTR_THC0},
->> +	{"THC1",		TGL_PMC_LTR_THC1},
->> +	{"SOUTHPORT_G",		MTL_PMC_LTR_SPG},
->> +	{"ESE",			MTL_PMC_LTR_ESE},
->> +	{"IOE_PMC",		MTL_PMC_LTR_IOE_PMC},
->> +	{"DMI3",		ARL_PMC_LTR_DMI3},
->> +	{"OSSE",		LNL_PMC_LTR_OSSE},
->> +
->> +	/* Below two cannot be used for LTR_IGNORE */
->> +	{"CURRENT_PLATFORM",	PTL_PMC_LTR_CUR_PLT},
->> +	{"AGGREGATED_SYSTEM",	PTL_PMC_LTR_CUR_ASLT},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_clocksource_status_map[] = {
->> +	{"AON2_OFF_STS",                 BIT(0),	1},
->> +	{"AON3_OFF_STS",                 BIT(1),	0},
->> +	{"AON4_OFF_STS",                 BIT(2),	1},
->> +	{"AON5_OFF_STS",                 BIT(3),	1},
->> +	{"AON1_OFF_STS",                 BIT(4),	0},
->> +	{"XTAL_LVM_OFF_STS",             BIT(5),	0},
->> +	{"MPFPW1_0_PLL_OFF_STS",         BIT(6),	1},
->> +	{"USB3_PLL_OFF_STS",             BIT(8),	1},
->> +	{"AON3_SPL_OFF_STS",             BIT(9),	1},
->> +	{"MPFPW2_0_PLL_OFF_STS",         BIT(12),	1},
->> +	{"XTAL_AGGR_OFF_STS",            BIT(17),	1},
->> +	{"USB2_PLL_OFF_STS",             BIT(18),	0},
->> +	{"SAF_PLL_OFF_STS",		 BIT(19),	1},
->> +	{"SE_TCSS_PLL_OFF_STS",		 BIT(20),	1},
->> +	{"DDI_PLL_OFF_STS",		 BIT(21),	1},
->> +	{"FILTER_PLL_OFF_STS",           BIT(22),	1},
->> +	{"ACE_PLL_OFF_STS",              BIT(24),	0},
->> +	{"FABRIC_PLL_OFF_STS",           BIT(25),	1},
->> +	{"SOC_PLL_OFF_STS",              BIT(26),	1},
->> +	{"REF_PLL_OFF_STS",              BIT(28),	1},
->> +	{"IMG_PLL_OFF_STS",              BIT(29),	1},
->> +	{"RTC_PLL_OFF_STS",              BIT(31),	0},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_power_gating_status_0_map[] = {
->> +	{"PMC_PGD0_PG_STS",              BIT(0),	0},
->> +	{"FUSE_OSSE_PGD0_PG_STS",	 BIT(1),	0},
->> +	{"ESPISPI_PGD0_PG_STS",          BIT(2),	0},
->> +	{"XHCI_PGD0_PG_STS",             BIT(3),	1},
->> +	{"SPA_PGD0_PG_STS",              BIT(4),	1},
->> +	{"SPB_PGD0_PG_STS",              BIT(5),	1},
->> +	{"MPFPW2_PGD0_PG_STS",           BIT(6),	0},
->> +	{"GBE_PGD0_PG_STS",              BIT(7),	1},
->> +	{"SBR16B20_PGD0_PG_STS",         BIT(8),	0},
->> +	{"SBR8B20_PGD0_PG_STS",          BIT(9),	0},
->> +	{"SBR16B21_PGD0_PG_STS",         BIT(10),	0},
->> +	{"DBG_PGD0_PG_STS",		 BIT(11),	0},
->> +	{"OSSE_HOTHAM_PGD0_PG_STS",      BIT(12),	1},
->> +	{"D2D_DISP_PGD1_PG_STS",         BIT(13),	1},
->> +	{"LPSS_PGD0_PG_STS",             BIT(14),	1},
->> +	{"LPC_PGD0_PG_STS",              BIT(15),	0},
->> +	{"SMB_PGD0_PG_STS",              BIT(16),	0},
->> +	{"ISH_PGD0_PG_STS",              BIT(17),	0},
->> +	{"SBR16B2_PGD0_PG_STS",		 BIT(18),	0},
->> +	{"NPK_PGD0_PG_STS",              BIT(19),	0},
->> +	{"D2D_NOC_PGD1_PG_STS",		 BIT(20),	1},
->> +	{"SBR8B2_PGD0_PG_STS",           BIT(21),	0},
->> +	{"FUSE_PGD0_PG_STS",             BIT(22),	0},
->> +	{"SBR16B0_PGD0_PG_STS",		 BIT(23),	0},
->> +	{"PSF0_PGD0_PG_STS",		 BIT(24),	0},
->> +	{"XDCI_PGD0_PG_STS",             BIT(25),	1},
->> +	{"EXI_PGD0_PG_STS",              BIT(26),	0},
->> +	{"CSE_PGD0_PG_STS",              BIT(27),	1},
->> +	{"KVMCC_PGD0_PG_STS",            BIT(28),	1},
->> +	{"PMT_PGD0_PG_STS",              BIT(29),	1},
->> +	{"CLINK_PGD0_PG_STS",            BIT(30),	1},
->> +	{"PTIO_PGD0_PG_STS",             BIT(31),	1},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_power_gating_status_1_map[] = {
->> +	{"USBR0_PGD0_PG_STS",            BIT(0),	1},
->> +	{"SUSRAM_PGD0_PG_STS",           BIT(1),	1},
->> +	{"SMT1_PGD0_PG_STS",             BIT(2),	1},
->> +	{"MPFPW1_PGD0_PG_STS",           BIT(3),	0},
->> +	{"SMS2_PGD0_PG_STS",             BIT(4),	1},
->> +	{"SMS1_PGD0_PG_STS",             BIT(5),	1},
->> +	{"CSMERTC_PGD0_PG_STS",          BIT(6),	0},
->> +	{"CSMEPSF_PGD0_PG_STS",          BIT(7),	0},
->> +	{"D2D_NOC_PGD0_PG_STS",          BIT(8),	0},
->> +	{"ESE_PGD0_PG_STS",		 BIT(9),	1},
->> +	{"P2SB8B_PGD0_PG_STS",           BIT(10),	1},
->> +	{"SBR16B7_PGD0_PG_STS",          BIT(11),	0},
->> +	{"SBR16B3_PGD0_PG_STS",          BIT(12),	0},
->> +	{"OSSE_SMT1_PGD0_PG_STS",        BIT(13),	1},
->> +	{"D2D_DISP_PGD0_PG_STS",         BIT(14),	1},
->> +	{"DBG_SBR_PGD0_PG_STS",          BIT(15),	0},
->> +	{"U3FPW1_PGD0_PG_STS",           BIT(16),	0},
->> +	{"FIA_X_PGD0_PG_STS",            BIT(17),	0},
->> +	{"PSF4_PGD0_PG_STS",             BIT(18),	0},
->> +	{"CNVI_PGD0_PG_STS",             BIT(19),	0},
->> +	{"UFSX2_PGD0_PG_STS",            BIT(20),	1},
->> +	{"ENDBG_PGD0_PG_STS",            BIT(21),	0},
->> +	{"DBC_PGD0_PG_STS",		 BIT(22),	0},
->> +	{"FIA_PG_PGD0_PG_STS",           BIT(23),	0},
->> +	{"D2D_IPU_PGD0_PG_STS",          BIT(24),	1},
->> +	{"NPK_PGD1_PG_STS",              BIT(25),	0},
->> +	{"FIACPCB_X_PGD0_PG_STS",	 BIT(26),	0},
->> +	{"SBR8B4_PGD0_PG_STS",           BIT(27),	0},
->> +	{"DBG_PSF_PGD0_PG_STS",          BIT(28),	0},
->> +	{"PSF6_PGD0_PG_STS",             BIT(29),	0},
->> +	{"UFSPW1_PGD0_PG_STS",           BIT(30),	0},
->> +	{"FIA_U_PGD0_PG_STS",            BIT(31),	0},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_power_gating_status_2_map[] = {
->> +	{"PSF8_PGD0_PG_STS",             BIT(0),	0},
->> +	{"SBR16B4_PGD0_PG_STS",          BIT(1),	0},
->> +	{"SBR16B5_PGD0_PG_STS",          BIT(2),	0},
->> +	{"FIACPCB_U_PGD0_PG_STS",        BIT(3),	0},
->> +	{"TAM_PGD0_PG_STS",              BIT(4),	1},
->> +	{"D2D_NOC_PGD0_PG_STS",          BIT(5),	1},
->> +	{"TBTLSX_PGD0_PG_STS",           BIT(6),	1},
->> +	{"THC0_PGD0_PG_STS",             BIT(7),	1},
->> +	{"THC1_PGD0_PG_STS",             BIT(8),	1},
->> +	{"PMC_PGD1_PG_STS",              BIT(9),	0},
->> +	{"SBR8B1_PGD0_PG_STS",           BIT(10),	0},
->> +	{"TCSS_PGD0_PG_STS",             BIT(11),	0},
->> +	{"DISP_PGA_PGD0_PG_STS",         BIT(12),	0},
->> +	{"SBR16B1_PGD0_PG_STS",          BIT(13),	0},
->> +	{"SBRG_PGD0_PG_STS",		 BIT(14),	0},
->> +	{"PSF5_PGD0_PG_STS",             BIT(15),	0},
->> +	{"P2SB16B_PGD0_PG_STS",          BIT(16),	1},
->> +	{"ACE_PGD0_PG_STS",              BIT(17),	0},
->> +	{"ACE_PGD1_PG_STS",              BIT(18),	0},
->> +	{"ACE_PGD2_PG_STS",              BIT(19),	0},
->> +	{"ACE_PGD3_PG_STS",              BIT(20),	0},
->> +	{"ACE_PGD4_PG_STS",              BIT(21),	0},
->> +	{"ACE_PGD5_PG_STS",              BIT(22),	0},
->> +	{"ACE_PGD6_PG_STS",              BIT(23),	0},
->> +	{"ACE_PGD7_PG_STS",              BIT(24),	0},
->> +	{"ACE_PGD8_PG_STS",              BIT(25),	0},
->> +	{"ACE_PGD9_PG_STS",              BIT(26),	0},
->> +	{"ACE_PGD10_PG_STS",             BIT(27),	0},
->> +	{"FIACPCB_PG_PGD0_PG_STS",       BIT(28),	0},
->> +	{"SBR16B6_PGD0_PG_STS",          BIT(29),	0},
->> +	{"OSSE_PGD0_PG_STS",		 BIT(30),	1},
->> +	{"SBR8B0_PGD0_PG_STS",           BIT(31),	0},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_d3_status_0_map[] = {
->> +	{"LPSS_D3_STS",                  BIT(3),	1},
->> +	{"XDCI_D3_STS",                  BIT(4),	1},
->> +	{"XHCI_D3_STS",                  BIT(5),	1},
->> +	{"OSSE_D3_STS",                  BIT(6),	0},
->> +	{"SPA_D3_STS",                   BIT(12),	0},
->> +	{"SPB_D3_STS",                   BIT(13),	0},
->> +	{"ESPISPI_D3_STS",               BIT(18),	0},
->> +	{"PSTH_D3_STS",                  BIT(21),	0},
->> +	{"OSSE_SMT1_D3_STS",             BIT(30),	0},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_d3_status_1_map[] = {
->> +	{"GBE_D3_STS",                   BIT(19),	0},
->> +	{"ITSS_D3_STS",                  BIT(23),	0},
->> +	{"CNVI_D3_STS",                  BIT(27),	0},
->> +	{"UFSX2_D3_STS",                 BIT(28),	1},
->> +	{"OSSE_HOTHAM_D3_STS",           BIT(29),	0},
->> +	{"ESE_D3_STS",                   BIT(30),	0},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_d3_status_2_map[] = {
->> +	{"CSMERTC_D3_STS",               BIT(1),	0},
->> +	{"SUSRAM_D3_STS",                BIT(2),	0},
->> +	{"CSE_D3_STS",                   BIT(4),	0},
->> +	{"KVMCC_D3_STS",                 BIT(5),	0},
->> +	{"USBR0_D3_STS",                 BIT(6),	0},
->> +	{"ISH_D3_STS",                   BIT(7),	0},
->> +	{"SMT1_D3_STS",                  BIT(8),	0},
->> +	{"SMT2_D3_STS",                  BIT(9),	0},
->> +	{"SMT3_D3_STS",                  BIT(10),	0},
->> +	{"OSSE_SMT2_D3_STS",             BIT(12),	0},
->> +	{"CLINK_D3_STS",                 BIT(14),	0},
->> +	{"PTIO_D3_STS",                  BIT(16),	0},
->> +	{"PMT_D3_STS",                   BIT(17),	0},
->> +	{"SMS1_D3_STS",                  BIT(18),	0},
->> +	{"SMS2_D3_STS",                  BIT(19),	0},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_d3_status_3_map[] = {
->> +	{"THC0_D3_STS",                  BIT(14),	1},
->> +	{"THC1_D3_STS",                  BIT(15),	1},
->> +	{"OSSE_SMT3_D3_STS",             BIT(18),	0},
->> +	{"ACE_D3_STS",                   BIT(23),	0},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_vnn_req_status_0_map[] = {
->> +	{"LPSS_VNN_REQ_STS",             BIT(3),	1},
->> +	{"OSSE_VNN_REQ_STS",             BIT(6),	1},
->> +	{"ESPISPI_VNN_REQ_STS",          BIT(18),	1},
->> +	{"OSSE_SMT1_VNN_REQ_STS",        BIT(30),	1},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_vnn_req_status_1_map[] = {
->> +	{"NPK_VNN_REQ_STS",              BIT(4),	1},
->> +	{"DFXAGG_VNN_REQ_STS",           BIT(8),	0},
->> +	{"EXI_VNN_REQ_STS",              BIT(9),	1},
->> +	{"P2D_VNN_REQ_STS",              BIT(18),	1},
->> +	{"GBE_VNN_REQ_STS",              BIT(19),	1},
->> +	{"SMB_VNN_REQ_STS",              BIT(25),	1},
->> +	{"LPC_VNN_REQ_STS",              BIT(26),	0},
->> +	{"ESE_VNN_REQ_STS",              BIT(30),	1},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_vnn_req_status_2_map[] = {
->> +	{"CSMERTC_VNN_REQ_STS",          BIT(1),	1},
->> +	{"CSE_VNN_REQ_STS",              BIT(4),	1},
->> +	{"ISH_VNN_REQ_STS",              BIT(7),	1},
->> +	{"SMT1_VNN_REQ_STS",             BIT(8),	1},
->> +	{"CLINK_VNN_REQ_STS",            BIT(14),	1},
->> +	{"SMS1_VNN_REQ_STS",             BIT(18),	1},
->> +	{"SMS2_VNN_REQ_STS",             BIT(19),	1},
->> +	{"GPIOCOM4_VNN_REQ_STS",         BIT(20),	1},
->> +	{"GPIOCOM3_VNN_REQ_STS",         BIT(21),	1},
->> +	{"GPIOCOM1_VNN_REQ_STS",         BIT(23),	1},
->> +	{"GPIOCOM0_VNN_REQ_STS",         BIT(24),	1},
->> +	{"DISP_SHIM_VNN_REQ_STS",        BIT(26),	1},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_vnn_req_status_3_map[] = {
->> +	{"DTS0_VNN_REQ_STS",             BIT(7),	0},
->> +	{"GPIOCOM5_VNN_REQ_STS",         BIT(11),	1},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_vnn_misc_status_map[] = {
->> +	{"CPU_C10_REQ_STS",              BIT(0),	0},
->> +	{"TS_OFF_REQ_STS",               BIT(1),	0},
->> +	{"PNDE_MET_REQ_STS",             BIT(2),	1},
->> +	{"PG5_PMA0_REQ_STS",		 BIT(3),	0},
->> +	{"FW_THROTTLE_ALLOWED_REQ_STS",  BIT(4),	0},
->> +	{"VNN_SOC_REQ_STS",              BIT(6),	1},
->> +	{"ISH_VNNAON_REQ_STS",           BIT(7),	0},
->> +	{"D2D_NOC_CFI_QACTIVE_REQ_STS",	 BIT(8),	1},
->> +	{"D2D_NOC_GPSB_QACTIVE_REQ_STS", BIT(9),	1},
->> +	{"D2D_IPU_QACTIVE_REQ_STS",	 BIT(10),	1},
->> +	{"PLT_GREATER_REQ_STS",          BIT(11),	1},
->> +	{"ALL_SBR_IDLE_REQ_STS",         BIT(12),	0},
->> +	{"PMC_IDLE_FB_OCP_REQ_STS",      BIT(13),	0},
->> +	{"PM_SYNC_STATES_REQ_STS",       BIT(14),	0},
->> +	{"EA_REQ_STS",                   BIT(15),	0},
->> +	{"MPHY_CORE_OFF_REQ_STS",        BIT(16),	0},
->> +	{"BRK_EV_EN_REQ_STS",            BIT(17),	0},
->> +	{"AUTO_DEMO_EN_REQ_STS",         BIT(18),	0},
->> +	{"ITSS_CLK_SRC_REQ_STS",         BIT(19),	1},
->> +	{"ARC_IDLE_REQ_STS",             BIT(21),	0},
->> +	{"PG5_PMA1_REQ_STS",		 BIT(22),	0},
->> +	{"FIA_DEEP_PM_REQ_STS",          BIT(23),	0},
->> +	{"XDCI_ATTACHED_REQ_STS",        BIT(24),	1},
->> +	{"ARC_INTERRUPT_WAKE_REQ_STS",   BIT(25),	0},
->> +	{"D2D_DISP_DDI_QACTIVE_REQ_STS", BIT(26),	1},
->> +	{"PRE_WAKE0_REQ_STS",            BIT(27),	1},
->> +	{"PRE_WAKE1_REQ_STS",            BIT(28),	1},
->> +	{"PRE_WAKE2_REQ_STS",		 BIT(29),	1},
->> +	{"D2D_DISP_EDP_QACTIVE_REQ_STS", BIT(31),	1},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_signal_status_map[] = {
->> +	{"LSX_Wake0_STS",		 BIT(0),	0},
->> +	{"LSX_Wake1_STS",		 BIT(1),	0},
->> +	{"LSX_Wake2_STS",		 BIT(2),	0},
->> +	{"LSX_Wake3_STS",		 BIT(3),	0},
->> +	{"LSX_Wake4_STS",		 BIT(4),	0},
->> +	{"LSX_Wake5_STS",		 BIT(5),	0},
->> +	{"LSX_Wake6_STS",		 BIT(6),	0},
->> +	{"LSX_Wake7_STS",		 BIT(7),	0},
->> +	{"LPSS_Wake0_STS",		 BIT(8),	1},
->> +	{"LPSS_Wake1_STS",		 BIT(9),	1},
->> +	{"Int_Timer_SS_Wake0_STS",	 BIT(10),	1},
->> +	{"Int_Timer_SS_Wake1_STS",	 BIT(11),	1},
->> +	{"Int_Timer_SS_Wake2_STS",	 BIT(12),	1},
->> +	{"Int_Timer_SS_Wake3_STS",	 BIT(13),	1},
->> +	{"Int_Timer_SS_Wake4_STS",	 BIT(14),	1},
->> +	{"Int_Timer_SS_Wake5_STS",	 BIT(15),	1},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map ptl_pcdp_rsc_status_map[] = {
->> +	{"Memory",		0,		1},
->> +	{"PSF0",		0,		1},
->> +	{"PSF4",		0,		1},
->> +	{"PSF5",		0,		1},
->> +	{"PSF6",		0,		1},
->> +	{"PSF8",		0,		1},
->> +	{"SAF_CFI_LINK",	0,		1},
->> +	{"SB",			0,		1},
->> +	{}
->> +};
->> +
->> +const struct pmc_bit_map *ptl_pcdp_lpm_maps[] = {
->> +	ptl_pcdp_clocksource_status_map,
->> +	ptl_pcdp_power_gating_status_0_map,
->> +	ptl_pcdp_power_gating_status_1_map,
->> +	ptl_pcdp_power_gating_status_2_map,
->> +	ptl_pcdp_d3_status_0_map,
->> +	ptl_pcdp_d3_status_1_map,
->> +	ptl_pcdp_d3_status_2_map,
->> +	ptl_pcdp_d3_status_3_map,
->> +	ptl_pcdp_vnn_req_status_0_map,
->> +	ptl_pcdp_vnn_req_status_1_map,
->> +	ptl_pcdp_vnn_req_status_2_map,
->> +	ptl_pcdp_vnn_req_status_3_map,
->> +	ptl_pcdp_vnn_misc_status_map,
->> +	ptl_pcdp_signal_status_map,
->> +	NULL
->> +};
->> +
->> +const struct pmc_bit_map *ptl_pcdp_blk_maps[] = {
->> +	ptl_pcdp_power_gating_status_0_map,
->> +	ptl_pcdp_power_gating_status_1_map,
->> +	ptl_pcdp_power_gating_status_2_map,
->> +	ptl_pcdp_rsc_status_map,
->> +	ptl_pcdp_vnn_req_status_0_map,
->> +	ptl_pcdp_vnn_req_status_1_map,
->> +	ptl_pcdp_vnn_req_status_2_map,
->> +	ptl_pcdp_vnn_req_status_3_map,
->> +	ptl_pcdp_d3_status_0_map,
->> +	ptl_pcdp_d3_status_1_map,
->> +	ptl_pcdp_d3_status_2_map,
->> +	ptl_pcdp_d3_status_3_map,
->> +	ptl_pcdp_clocksource_status_map,
->> +	ptl_pcdp_vnn_misc_status_map,
->> +	ptl_pcdp_signal_status_map,
->> +	NULL
->> +};
->> +
->> +const struct pmc_reg_map ptl_pcdp_reg_map = {
->> +	.pfear_sts = ext_ptl_pcdp_pfear_map,
->> +	.slp_s0_offset = CNP_PMC_SLP_S0_RES_COUNTER_OFFSET,
->> +	.slp_s0_res_counter_step = TGL_PMC_SLP_S0_RES_COUNTER_STEP,
->> +	.ltr_show_sts = ptl_pcdp_ltr_show_map,
->> +	.msr_sts = msr_map,
->> +	.ltr_ignore_offset = CNP_PMC_LTR_IGNORE_OFFSET,
->> +	.regmap_length = PTL_PCD_PMC_MMIO_REG_LEN,
->> +	.ppfear0_offset = CNP_PMC_HOST_PPFEAR0A,
->> +	.ppfear_buckets = LNL_PPFEAR_NUM_ENTRIES,
->> +	.pm_cfg_offset = CNP_PMC_PM_CFG_OFFSET,
->> +	.pm_read_disable_bit = CNP_PMC_READ_DISABLE_BIT,
->> +	.lpm_num_maps = PTL_LPM_NUM_MAPS,
->> +	.ltr_ignore_max = LNL_NUM_IP_IGN_ALLOWED,
->> +	.lpm_res_counter_step_x2 = TGL_PMC_LPM_RES_COUNTER_STEP_X2,
->> +	.etr3_offset = ETR3_OFFSET,
->> +	.lpm_sts_latch_en_offset = MTL_LPM_STATUS_LATCH_EN_OFFSET,
->> +	.lpm_priority_offset = MTL_LPM_PRI_OFFSET,
->> +	.lpm_en_offset = MTL_LPM_EN_OFFSET,
->> +	.lpm_residency_offset = MTL_LPM_RESIDENCY_OFFSET,
->> +	.lpm_sts = ptl_pcdp_lpm_maps,
->> +	.lpm_status_offset = MTL_LPM_STATUS_OFFSET,
->> +	.lpm_live_status_offset = MTL_LPM_LIVE_STATUS_OFFSET,
->> +	.s0ix_blocker_maps = ptl_pcdp_blk_maps,
->> +	.s0ix_blocker_offset = LNL_S0IX_BLOCKER_OFFSET,
->> +};
->> +
->> +#define PTL_NPU_PCI_DEV                0xb03e
->> +#define PTL_IPU_PCI_DEV                0xb05d
->> +
->> +/*
->> + * Set power state of select devices that do not have drivers to D3
->> + * so that they do not block Package C entry.
->> + */
->> +static void ptl_d3_fixup(void)
->> +{
->> +	pmc_core_set_device_d3(PTL_IPU_PCI_DEV);
->> +	pmc_core_set_device_d3(PTL_NPU_PCI_DEV);
->> +}
->> +
->> +static int ptl_resume(struct pmc_dev *pmcdev)
->> +{
->> +	ptl_d3_fixup();
->> +	return cnl_resume(pmcdev);
->> +}
->> +
->> +static int ptl_core_init(struct pmc_dev *pmcdev, struct pmc_dev_info *pmc_dev_info)
->> +{
->> +	ptl_d3_fixup();
->> +	return generic_core_init(pmcdev, pmc_dev_info);
->> +}
->> +
->> +struct pmc_dev_info ptl_pmc_dev = {
->> +	.map = &ptl_pcdp_reg_map,
->> +	.suspend = cnl_suspend,
->> +	.resume = ptl_resume,
->> +	.init = ptl_core_init,
->> +};
->>
+Don't move the code / data without a need, it complicates review.
+
+>  static int qpnp_tm_read(struct qpnp_tm_chip *chip, u16 addr, u8 *data)
+>  {
+>  	unsigned int val;
+> @@ -118,34 +124,51 @@ static int qpnp_tm_write(struct qpnp_tm_chip *chip, u16 addr, u8 data)
+>   */
+>  static long qpnp_tm_decode_temp(struct qpnp_tm_chip *chip, unsigned int stage)
+>  {
+> -	if (!chip->temp_map || chip->thresh >= THRESH_COUNT || stage == 0 ||
+> -	    stage > STAGE_COUNT)
+> +	if (stage == 0 || stage > STAGE_COUNT)
+>  		return 0;
+>  
+> -	return (*chip->temp_map)[chip->thresh][stage - 1];
+> +	return chip->temp_thresh_map[stage - 1];
+>  }
+>  
+>  /**
+>   * qpnp_tm_get_temp_stage() - return over-temperature stage
+>   * @chip:		Pointer to the qpnp_tm chip
+>   *
+> - * Return: stage (GEN1) or state (GEN2) on success, or errno on failure.
+> + * Return: stage on success, or errno on failure.
+>   */
+>  static int qpnp_tm_get_temp_stage(struct qpnp_tm_chip *chip)
+>  {
+> +	u8 reg = 0;
+>  	int ret;
+> +
+> +	ret = qpnp_tm_read(chip, QPNP_TM_REG_STATUS, &reg);
+> +	if (ret < 0)
+> +		return ret;
+> +
+> +	return FIELD_GET(STATUS_GEN1_STAGE_MASK, reg);
+> +}
+> +
+> +/* This array maps from GEN2 alarm state to GEN1 alarm stage */
+> +static const unsigned int alarm_state_map[8] = {0, 1, 1, 2, 2, 3, 3, 3};
+> +
+> +/**
+> + * qpnp_tm_get_gen2_temp_stage() - return over-temperature stage
+> + * @chip:		Pointer to the qpnp_tm chip
+> + *
+> + * Return: stage on success, or errno on failure.
+> + */
+> +static int qpnp_tm_gen2_get_temp_stage(struct qpnp_tm_chip *chip)
+> +{
+>  	u8 reg = 0;
+> +	int ret;
+>  
+>  	ret = qpnp_tm_read(chip, QPNP_TM_REG_STATUS, &reg);
+>  	if (ret < 0)
+>  		return ret;
+>  
+> -	if (chip->subtype == QPNP_TM_SUBTYPE_GEN1)
+> -		ret = reg & STATUS_GEN1_STAGE_MASK;
+> -	else
+> -		ret = (reg & STATUS_GEN2_STATE_MASK) >> STATUS_GEN2_STATE_SHIFT;
+> +	ret = FIELD_GET(STATUS_GEN2_STATE_MASK, reg);
+>  
+> -	return ret;
+> +	return alarm_state_map[ret];
+>  }
+>  
+>  /*
+> @@ -154,23 +177,16 @@ static int qpnp_tm_get_temp_stage(struct qpnp_tm_chip *chip)
+>   */
+>  static int qpnp_tm_update_temp_no_adc(struct qpnp_tm_chip *chip)
+>  {
+> -	unsigned int stage, stage_new, stage_old;
+> +	unsigned int stage_new, stage_old;
+>  	int ret;
+>  
+>  	WARN_ON(!mutex_is_locked(&chip->lock));
+>  
+> -	ret = qpnp_tm_get_temp_stage(chip);
+> +	ret = chip->data->get_temp_stage(chip);
+>  	if (ret < 0)
+>  		return ret;
+> -	stage = ret;
+> -
+> -	if (chip->subtype == QPNP_TM_SUBTYPE_GEN1) {
+> -		stage_new = stage;
+> -		stage_old = chip->stage;
+> -	} else {
+> -		stage_new = alarm_state_map[stage];
+> -		stage_old = alarm_state_map[chip->stage];
+> -	}
+> +	stage_new = ret;
+> +	stage_old = chip->stage;
+>  
+>  	if (stage_new > stage_old) {
+>  		/* increasing stage, use lower bound */
+> @@ -182,7 +198,7 @@ static int qpnp_tm_update_temp_no_adc(struct qpnp_tm_chip *chip)
+>  				- TEMP_STAGE_HYSTERESIS;
+>  	}
+>  
+> -	chip->stage = stage;
+> +	chip->stage = stage_new;
+>  
+>  	return 0;
+>  }
+> @@ -222,8 +238,8 @@ static int qpnp_tm_get_temp(struct thermal_zone_device *tz, int *temp)
+>  static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+>  					     int temp)
+>  {
+> -	long stage2_threshold_min = (*chip->temp_map)[THRESH_MIN][1];
+> -	long stage2_threshold_max = (*chip->temp_map)[THRESH_MAX][1];
+> +	long stage2_threshold_min = (*chip->data->temp_map)[THRESH_MIN][1];
+> +	long stage2_threshold_max = (*chip->data->temp_map)[THRESH_MAX][1];
+>  	bool disable_s2_shutdown = false;
+>  	u8 reg;
+>  
+> @@ -258,6 +274,8 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+>  	}
+>  
+>  skip:
+> +	memcpy(chip->temp_thresh_map, chip->data->temp_map[chip->thresh],
+> +		sizeof(chip->temp_thresh_map));
+>  	reg |= chip->thresh;
+>  	if (disable_s2_shutdown && !chip->require_s2_shutdown)
+>  		reg |= SHUTDOWN_CTRL1_OVERRIDE_S2;
+> @@ -295,6 +313,42 @@ static irqreturn_t qpnp_tm_isr(int irq, void *data)
+>  	return IRQ_HANDLED;
+>  }
+>  
+> +static int qpnp_tm_configure_trip_temp(struct qpnp_tm_chip *chip)
+> +{
+> +	int crit_temp, ret;
+> +
+> +	mutex_unlock(&chip->lock);
+> +
+> +	ret = thermal_zone_get_crit_temp(chip->tz_dev, &crit_temp);
+> +	if (ret)
+> +		crit_temp = THERMAL_TEMP_INVALID;
+> +
+> +	mutex_lock(&chip->lock);
+> +
+> +	return qpnp_tm_update_critical_trip_temp(chip, crit_temp);
+> +}
+> +
+> +static const struct spmi_temp_alarm_data spmi_temp_alarm_data = {
+> +	.ops = &qpnp_tm_sensor_ops,
+> +	.temp_map = &temp_map_gen1,
+> +	.configure_trip_temps = qpnp_tm_configure_trip_temp,
+> +	.get_temp_stage = qpnp_tm_get_temp_stage,
+> +};
+> +
+> +static const struct spmi_temp_alarm_data spmi_temp_alarm_gen2_data = {
+> +	.ops = &qpnp_tm_sensor_ops,
+> +	.temp_map = &temp_map_gen1,
+> +	.configure_trip_temps = qpnp_tm_configure_trip_temp,
+> +	.get_temp_stage = qpnp_tm_gen2_get_temp_stage,
+> +};
+> +
+> +static const struct spmi_temp_alarm_data spmi_temp_alarm_gen2_rev1_data = {
+> +	.ops = &qpnp_tm_sensor_ops,
+
+All three data structures use &qpnp_tm_sensor_ops and
+qpnp_tm_configure_trip_temp(). Plese use them directly. In case it is
+necessary for the next patch, please perform this refactoring separately
+with a proper explanation ("In preparation to .... peform foo and bar").
+
+> +	.temp_map = &temp_map_gen2_v1,
+> +	.configure_trip_temps = qpnp_tm_configure_trip_temp,
+> +	.get_temp_stage = qpnp_tm_gen2_get_temp_stage,
+> +};
+> +
+>  /*
+>   * This function initializes the internal temp value based on only the
+>   * current thermal stage and threshold. Setup threshold control and
+> @@ -305,7 +359,6 @@ static int qpnp_tm_init(struct qpnp_tm_chip *chip)
+>  	unsigned int stage;
+>  	int ret;
+>  	u8 reg = 0;
+> -	int crit_temp;
+>  
+>  	mutex_lock(&chip->lock);
+>  
+> @@ -316,26 +369,15 @@ static int qpnp_tm_init(struct qpnp_tm_chip *chip)
+>  	chip->thresh = reg & SHUTDOWN_CTRL1_THRESHOLD_MASK;
+>  	chip->temp = DEFAULT_TEMP;
+>  
+> -	ret = qpnp_tm_get_temp_stage(chip);
+> -	if (ret < 0)
+> +	stage = chip->data->get_temp_stage(chip);
+> +	if (stage < 0)
+>  		goto out;
+> -	chip->stage = ret;
+> -
+> -	stage = chip->subtype == QPNP_TM_SUBTYPE_GEN1
+> -		? chip->stage : alarm_state_map[chip->stage];
+> +	chip->stage = stage;
+>  
+>  	if (stage)
+>  		chip->temp = qpnp_tm_decode_temp(chip, stage);
+>  
+> -	mutex_unlock(&chip->lock);
+> -
+> -	ret = thermal_zone_get_crit_temp(chip->tz_dev, &crit_temp);
+> -	if (ret)
+> -		crit_temp = THERMAL_TEMP_INVALID;
+> -
+> -	mutex_lock(&chip->lock);
+> -
+> -	ret = qpnp_tm_update_critical_trip_temp(chip, crit_temp);
+> +	ret = chip->data->configure_trip_temps(chip);
+>  	if (ret < 0)
+>  		goto out;
+>  
+> @@ -439,10 +481,15 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+>  	}
+>  
+>  	chip->subtype = subtype;
+> -	if (subtype == QPNP_TM_SUBTYPE_GEN2 && dig_major >= 1)
+> -		chip->temp_map = &temp_map_gen2_v1;
+> +
+> +	if (subtype == QPNP_TM_SUBTYPE_GEN1)
+> +		chip->data = &spmi_temp_alarm_data;
+> +	else if (subtype == QPNP_TM_SUBTYPE_GEN2 && dig_major >= 1)
+> +		chip->data = &spmi_temp_alarm_gen2_rev1_data;
+> +	else if (subtype == QPNP_TM_SUBTYPE_GEN2)
+> +		chip->data = &spmi_temp_alarm_gen2_data;
+>  	else
+> -		chip->temp_map = &temp_map_gen1;
+> +		return -ENODEV;
+>  
+>  	/*
+>  	 * Register the sensor before initializing the hardware to be able to
+> @@ -450,7 +497,7 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+>  	 * before the hardware initialization is completed.
+>  	 */
+>  	chip->tz_dev = devm_thermal_of_zone_register(
+> -		&pdev->dev, 0, chip, &qpnp_tm_sensor_ops);
+> +		&pdev->dev, 0, chip, chip->data->ops);
+>  	if (IS_ERR(chip->tz_dev))
+>  		return dev_err_probe(&pdev->dev, PTR_ERR(chip->tz_dev),
+>  				     "failed to register sensor\n");
+> -- 
+> 2.34.1
+> 
+
+-- 
+With best wishes
+Dmitry
 
