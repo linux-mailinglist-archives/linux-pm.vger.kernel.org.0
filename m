@@ -1,155 +1,133 @@
-Return-Path: <linux-pm+bounces-22001-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22002-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F164A339FD
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 09:30:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5754A33A03
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 09:31:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A33533A4900
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 08:30:43 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72BEF18842CC
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 08:31:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D8FB20C008;
-	Thu, 13 Feb 2025 08:30:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517FD20B80F;
+	Thu, 13 Feb 2025 08:31:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="T+QBgBtj"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VGNv0Izj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0C6F1EF08E
-	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 08:30:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEC02054EE
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 08:31:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739435447; cv=none; b=GZoeJ97nrGxyweEh3Qejb+91+xMRPOaQTkNcOIYu+W2YshbE83sJI6xH5m8vhThgZLouLfCJEhkYGUeduyVZZ0nEWs9PWS+9+2P9eeWJrGjAIrKGZtDzIyElMW7YhJKCgH4G9sUgz9UCnU02ZnB2owD/+I2qgWfK2VreyjJU7Ys=
+	t=1739435492; cv=none; b=E9stMIvkjR6uw00FM1OQDS5PMB4DFeKg5lXNr9SgZhxZhEAH0eV3NjSikF0m1OzbfnpKhglcieE/eSKWm/s4TcfCucc98zhuePRYbr3g+66qKIr4ynuIHIeASNojBgfYpm5nKjjmZUZM06FuKlRhoz8mMLMfAig6+ShVCvyMl58=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739435447; c=relaxed/simple;
-	bh=yVyXip6qwmE1k0De5I/LF6Pjyh8674Af4I42FomQeV4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HylavZfu5h5I6bIOmNjASRUB8oXYW6XuxJuEVwozt8SMb2obKIF9BodfIP4naGqyxpLioJZt0IlZirUh/Ct3gHKQhFyZW6AkqmII0Pc+/FhNAY89OPvbvgXgXVUQ7lwmZy1fHbT9B1izFXOxQEXjzBxsTOz/tvyZOQ8Yc9UrPi0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=T+QBgBtj; arc=none smtp.client-ip=209.85.218.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-aaecf50578eso133008166b.2
-        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 00:30:44 -0800 (PST)
+	s=arc-20240116; t=1739435492; c=relaxed/simple;
+	bh=L25nrY27bgTQ9n4g/1cHQoTCJ6y6XVKfBEEs6t5MU20=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MYqqAdfm8zX59bASkUxSmEWClV/bGgp0dRZqQSe1MkXzE/3dPMnbu9FDNRa/8zdb3/1rgzpHslwYkW3EXoH9PxVqSxhbSa1lRyGtpti25LPhMkMw7SvqOy6f61djsFPo5Meq01QpawcM3T/L1vndroo9HESzQ0VGFKPdX5oWD+0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VGNv0Izj; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5450cf3ef63so575939e87.1
+        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 00:31:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1739435443; x=1740040243; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8OTJXiPdRvtiBBp8e+x5n2i2CDc/LvduVGRkWa7Iyto=;
-        b=T+QBgBtjCHvKUV+kA9m1KbX7frJPnYEnFiOv88BJ4Ogq1DTf1Wqwxc5mRee3tvrUzI
-         AftQNJIEgA4UDykK01Y82iOR5t4gJlWMScSi9IKtfijLscekzoB+ZGZaB7SOHw/+Eq3o
-         4c/HIQioSOO++u0eTbjGxUwebhJ7+ghCTPDsO/mirYiuV/KC8KuvOxjWiPYVlhWlPVWH
-         BLWRxxacVOr3h0qvP9dwVe7gQCtbKiYC3O8mn6HOwi55pEbpwWtZlFOIGg+TaPGiRwXZ
-         75oJFKhXkwFTz/YfyDvKoJfk5swu3hqVosJmg1xIEJrvGOD3xyct0QfT9fzJ8h9XFcEh
-         riBA==
+        d=google.com; s=20230601; t=1739435488; x=1740040288; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=qqYuvd73ewFdC9LGI08iIdezVI5Agbij5wls3/+Pd9w=;
+        b=VGNv0IzjdPMpzqkQ6VJwodmsn1hwBsxCu6WnXWa/y6naysLawUWuq+MpBvPg9c/xUB
+         0p6Z+kbSXZQsD0wolnid0tWNWv2g8Kt5aRpT4a+5m+6RgOY6mereFXN8mB+WopCXV+iA
+         pSGwHcxfPhOk0ygyg7fyDSUnrN8kxgw6jiMqC+KknnKiqgRjQQDZX/WrMJvSapmdGDS4
+         RC5lbsG6LV1EGUwNYpxI9PRcJW1vZRylT9dv4TTULUzieLJPAYhJiJuZjIckgj0lCRj5
+         NTRkzcR0Zx4UiYq6Pu8PLDU9g/5EEBn9fCYzdtt+Gm8ZZ3VOVbmkl6l0k/AMxKIfwygx
+         a5Ow==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739435443; x=1740040243;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=8OTJXiPdRvtiBBp8e+x5n2i2CDc/LvduVGRkWa7Iyto=;
-        b=cYpkCcnw2A8iIh3d5h3PcuV+tfPdkbURzlC8GLgxywNNFlEOeKarDrLBmYeBBkgHP+
-         pxpKHKnnKqxQy8aeMvvhmGdcMgZcBUvJrhii0zFrPjZp584npVLl5wwdPY9qA0xc1oFq
-         YQ1nQSIsH8q0lwEw78kl3wgDtfN7NW+YWtpW6CVKwoTiMA2N22UdSW1rcOnSH0aISzO4
-         P9JnEIUOkE0gsD8T/lyJRuJ5y3xF/+MZ3itX6ETimX2W0a0cpoK/JRYAlvgeZGOkt2sG
-         ryVrLjVpf2scB3TR3tw+itUBX6qrKIHv5h5YqVzPvoXdh523/SkI0bETpqR8Q0EHsilr
-         mrOA==
-X-Forwarded-Encrypted: i=1; AJvYcCWnp9dqkNpdYkNZZJSprzg4Dw2DVVthF4spUQK2lZre+W1y+UCzfJ1htiGgiSpdOsb3LC6ctnGMSA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwQqwR+igGR4+iU0arpjbkilXTvyRa0icj747wq7HKRudElliI8
-	etmVd6JgU9Mv5cpCMwndvl3UKvEMbRKor8dlyn2ZS11H3KHXsD+XE4GBIVHLkks=
-X-Gm-Gg: ASbGncshjfiWDMPO2FdIM4OxrLNDoScLm687+YSZWSEquZpr+t6juUUCCCU3yjFTNhY
-	wMNax9+yTFGS/llO68JsHDnxxIGbN0+pZMFL7IDRKpFoF0YXZeRqHEsfFtTBzluBf3/znT2MgKF
-	mylLkqkSExlLq4diOIVlOmfb5G1ClxjNk0avcXf6zVd77UIGJT3jLBHKSY8eXohwiZTDwBpNBLi
-	+5jKQRG0bbywpODzVvKATj7qOT5Z/cfyF3eFJpWD+dD399ijY7Zrkzfr63/vgCs4gdWedE6dCtw
-	rlp2Yjq4oTzEss0o4dE7q/Dx
-X-Google-Smtp-Source: AGHT+IGRpE3mvXYi07r5eKrsPU6jDtGUtF130PrHSlSd+nAQxiAUlBKaWgcX6BHCBayFoA8d6GoHcg==
-X-Received: by 2002:a17:907:724c:b0:ab7:d10b:e1de with SMTP id a640c23a62f3a-ab7f339c868mr555099266b.13.1739435443116;
-        Thu, 13 Feb 2025 00:30:43 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.173])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece288e38sm753543a12.79.2025.02.13.00.30.40
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 13 Feb 2025 00:30:41 -0800 (PST)
-Message-ID: <83a59afc-ce67-4461-bb63-d8b8078a1198@tuxon.dev>
-Date: Thu, 13 Feb 2025 10:30:39 +0200
+        d=1e100.net; s=20230601; t=1739435488; x=1740040288;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=qqYuvd73ewFdC9LGI08iIdezVI5Agbij5wls3/+Pd9w=;
+        b=q0SGRPGIMitM7SMfbsSZTjt6vxrARRq+obor68et5F93pfO7WlVzUk2zMxXqMwG2O1
+         1zedSAQwfzs5h75xWmFUAQ3PRXTfhSWi8FY4xHsYCGlmeKWN8LUoJfcHG/JCmyhWCSWY
+         zpuR1Do/mV6gA+AlFbq+fp2hyd7K7yoMduwHpe3KsBK4Y3iO5IIDItMiuSd2L+ld9WvQ
+         jv/GeX5WYoPn+uyi4GnBM+2w3SaE9rw2uFVWkVti9vR4P6GTyO/h8lKIE9X9AGQsgmJC
+         HAjmtbbE+ii1AIZh9eTow9auABY8yDMBn1NbA+6Ryhl4dAfQ/SODHepfqz22tf+CdCBQ
+         gZ2A==
+X-Forwarded-Encrypted: i=1; AJvYcCX2i9ZbB/FZX0UrJQ0hHSX37CoE4yBRgDlpXnQHsGalRMbAL4fKeGiwzy4HzGLCka83XurQB9IS4w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxpWxMPRSVj2LeWcOcAVsNhRTJTfveYO+QdpLxCGOL0Q7WMojRB
+	72uC0UWojfHcOwU8JE/UsJBj6ikMLZleoLdAQYygACZtBi5YBpwNcmnnjeGBla2dHSHUne5nXU2
+	RA8yg/CakoZAEXKGViDBdCAfbB/DUSKk+quI4
+X-Gm-Gg: ASbGncuHy3Hctbg5sYI42BRCH7rlbHgL8aKNZmvY2kEGeDuQFgkzMuEpyoIvmRCKeLs
+	3WIAJx4xkEaY3rKxiO6tdCRXsEdUcJN754H3mI003tmvQhUrkLteVpun4wdAckv4CAmV0BBs=
+X-Google-Smtp-Source: AGHT+IGpzgKBnlzlI17bAlkc7hVX0gihSIWqb7XNIa4ZHRZHg8qVXL3z0Eph4UoadM3AqA+kzKLC1HMwKydNxeaTIqM=
+X-Received: by 2002:a05:6512:1056:b0:545:8c5:44cb with SMTP id
+ 2adb3069b0e04-5451dd9e2ecmr815118e87.31.1739435488357; Thu, 13 Feb 2025
+ 00:31:28 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 15/15] ARM: dts: microchip: add shutdown controller and
- rtt timer
-To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
- p.zabel@pengutronix.de
-Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
- <709f5268da63c123cc4eee9e47875324df81c454.1739221064.git.Ryan.Wanner@microchip.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <709f5268da63c123cc4eee9e47875324df81c454.1739221064.git.Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <CAMuHMdXN9A-1P_qe=BwKjLaoqxU8iJUQK6h8=s-apR4Y0em_0Q@mail.gmail.com>
+ <CAMuHMdXXWH0Do5zXWJ1Uc6dyEb9o1chGSyeyzgDrX+v1wZ7e_A@mail.gmail.com>
+In-Reply-To: <CAMuHMdXXWH0Do5zXWJ1Uc6dyEb9o1chGSyeyzgDrX+v1wZ7e_A@mail.gmail.com>
+From: Saravana Kannan <saravanak@google.com>
+Date: Thu, 13 Feb 2025 00:30:52 -0800
+X-Gm-Features: AWEUYZlU1z59xVb1UWJjvijh9vxRZwTp3eFMUqBlg8xzQmISt8RNRcB6a9aYInw
+Message-ID: <CAGETcx_wA9RB9QhMPqsLHDFZ4cwOFgE8dBL9ssFkT=J6DEgjGg@mail.gmail.com>
+Subject: Re: s2idle blocked on dev->power.completion
+To: Geert Uytterhoeven <geert@linux-m68k.org>
+Cc: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
+	Linux PM list <linux-pm@vger.kernel.org>, 
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi, Ryan,
+On Mon, Feb 10, 2025 at 2:24=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68=
+k.org> wrote:
+>
+> On Fri, 7 Feb 2025 at 16:08, Geert Uytterhoeven <geert@linux-m68k.org> wr=
+ote:
+> > Instrumenting all dev->power.completion accesses in
+> > drivers/base/power/main.c reveals that resume is blocked in dpm_wait()
+> > in the call to wait_for_completion() for regulator-1p2v, which is
+> > indeed a dependency for the SN65DSI86 DSI-DP bridge.  Comparing
+>
+> [...]
+>
+> > Looking at /sys/devices/virtual/devlink, the non-working case has the
+> > following extra entries:
+>
+> Note that the SN65DSI86 DSI-DP bridge driver uses the auxiliary bus
+> to create four subdevices:
+>   - ti_sn65dsi86.aux.0,
+>   - ti_sn65dsi86.bridge.0,
+>   - ti_sn65dsi86.gpio.0,
+>   - ti_sn65dsi86.pwm.0.
+> None of them have supplier:* symlinks in sysfs, so perhaps that is
+> the root cause of the issue?
 
-On 10.02.2025 23:13, Ryan.Wanner@microchip.com wrote:
-> From: Ryan Wanner <Ryan.Wanner@microchip.com>
-> 
-> Add shutdown controller and rtt timer to support shutdown and wake up.
+Hi Geert,
 
-Also, split it in 2 patches:
+Sorry, I haven't had time to look into this closely. Couple of
+questions/suggestions that might give you some answers.
 
-1/ add rtt timer
-2/ Enable shdwc
+Is this an issue only happening for s2idle or for s2ram too? I'd guess
+both, but if not, that might tell you something?
 
-> 
-> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
-> ---
->  .../boot/dts/microchip/at91-sama7d65_curiosity.dts | 14 ++++++++++++++
->  1 file changed, 14 insertions(+)
-> 
-> diff --git a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-> index 0f86360fb733a..d1d0b06fbfc43 100644
-> --- a/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-> +++ b/arch/arm/boot/dts/microchip/at91-sama7d65_curiosity.dts
-> @@ -77,6 +77,11 @@ pinctrl_uart6_default: uart6-default {
->  	};
->  };
->  
-> +&rtt {
-> +	atmel,rtt-rtc-time-reg = <&gpbr 0x0>;
-> +	status = "disabled";
+The only reason the wait_for_completion() wouldn't work is because the
+supplier is not "completing"? There's some weird direct_complete logic
+that I haven't fully understood. You can look at that to see if some
+of the devices are skipping their resumes and hence the "completes"
+too? Also, runtime PM and some flag can cause some lazy resume or
+avoid suspending already suspended devices behavior. Check that too.
 
-Any reason for keeping this node disabled?
+Hope this helps.
 
-> +};
-> +
->  &sdmmc1 {
->  	bus-width = <4>;
->  	pinctrl-names = "default";
-> @@ -84,6 +89,15 @@ &sdmmc1 {
->  	status = "okay";
->  };
->  
-> +&shdwc {
-> +	debounce-delay-us = <976>;
-> +	status = "okay";
-> +
-> +	input@0 {
-> +		reg = <0>;
-> +	};
-> +};
-> +
->  &slow_xtal {
->  	clock-frequency = <32768>;
->  };
-
+-Saravana
 
