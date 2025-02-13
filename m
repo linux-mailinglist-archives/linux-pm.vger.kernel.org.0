@@ -1,126 +1,152 @@
-Return-Path: <linux-pm+bounces-22003-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22004-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E35AA33BBD
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 10:56:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEBF7A33CB6
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 11:27:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 508EC1674E0
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 09:56:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 586E57A1E07
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 10:26:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2303E20F09C;
-	Thu, 13 Feb 2025 09:56:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jkxiL1bY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 675A72135AD;
+	Thu, 13 Feb 2025 10:27:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f52.google.com (mail-ua1-f52.google.com [209.85.222.52])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B18420DD5C;
-	Thu, 13 Feb 2025 09:56:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4C711212FA8;
+	Thu, 13 Feb 2025 10:27:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739440609; cv=none; b=KcZOHIKd4Tchx087ghLaB8wKxhruWybatTk869fIWVravZkxd66a4dgBgjuz9x88PwgCou3xw4T8SVGQ3W3/oBfeAlb1/P2dwtHbNfmKsfrcuu9tFPpYHRSPyNqzsN3/ZsgmnD8tI3mgFBiMwJt/3yT6LFiWu/J/2kymlkBNBXI=
+	t=1739442428; cv=none; b=QEz6A4DSL/IZX+ExxLi/lY0aB05yS9HbkIMALc5JJ918TfAHT3AAuWHueiXJbucJXePBNYU0yqYmrrDghJlww8+9fgr3TjnzYN9xBqa0TuUzgLVHqfS3AYTT54cE2UJ211lZZ8OgdvALh/tGW+Hg9jO5UYVBwrpDA195WEOeIJ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739440609; c=relaxed/simple;
-	bh=SJ/UzaavzQJpHfjZKxALqoOs5j5o6tpLEqhJ8NthZ1Y=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=kyXjuZ9bEQuL4Xx2LD5HnQ75V3HuZTsBuvURrfgn7w3Lx/kyDb/18Pm+wbZbpw1atezVQQ4QaShXctuyPB4V8PFvkbKlQ12gFTY4+Lvz9iF9/7FySy43gwyZekiPqjWkpO9ia8fxEIfFZQoQdr+9Sy9Eg+YG3uPc89lKFcrQEJ4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jkxiL1bY; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739440608; x=1770976608;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=SJ/UzaavzQJpHfjZKxALqoOs5j5o6tpLEqhJ8NthZ1Y=;
-  b=jkxiL1bYwYQ819+hg3L+jtjy8KhcEohWjTMt8E5lKDP5PPULYS2sv0/U
-   q17SWpZZXWFigT68w4vICYQmVHRpOXHvPpvI1pVSmHsfeWhPeV+RIP15H
-   ANurQPagiARLNr7XqW5MCNpzLV3zp+/20YM8SyIdfp19qsIhgVo8HoF/q
-   xyaAQxoxfkcRlYYXlX+XHGgmR5egkzF+HcJhwJqzE+0Pvo3X5b/GObeHu
-   L0b10D3NdJfqnET8rj0gStF325EojUP9B76afe/sQ4kguMIV1bp/74xiH
-   qoD0gLN/8IbFtGL7XmN8TMPDdHai35YsHDnEDmpKIWlPNC+5HF6b2+dDr
-   A==;
-X-CSE-ConnectionGUID: wGzSMESGRGaI2B1wq2xG6w==
-X-CSE-MsgGUID: ThK1UU/ESmukBBMlqsGWBw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="43901990"
-X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="43901990"
-Received: from orviesa004.jf.intel.com ([10.64.159.144])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 01:56:47 -0800
-X-CSE-ConnectionGUID: B3t23aX9QTOUleu8/qaS0Q==
-X-CSE-MsgGUID: RxlP/DoHTLmLy+VbE93uSw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
-   d="scan'208";a="118103089"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 01:56:45 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tiVxZ-0000000B7w3-2Ov4;
-	Thu, 13 Feb 2025 11:56:41 +0200
-Date: Thu, 13 Feb 2025 11:56:41 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Bence =?iso-8859-1?B?Q3Pza+Fz?= <csokas.bence@prolan.hu>,
-	Wolfram Sang <wsa+renesas@sang-engineering.com>,
-	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org, Samuel Holland <samuel@sholland.org>
-Subject: Re: [PATCH v1 1/2] power: ip5xxx_power: Make use of
- i2c_get_match_data()
-Message-ID: <Z63B2dxEd0g1ppra@smile.fi.intel.com>
-References: <20250212165012.2413079-1-andriy.shevchenko@linux.intel.com>
- <20250212165012.2413079-2-andriy.shevchenko@linux.intel.com>
- <hnfdjznbvqbstcqd7rgrukqqdv7uasexojnujz63qgjnv7pja3@z4lanwhk4i6b>
+	s=arc-20240116; t=1739442428; c=relaxed/simple;
+	bh=nXgtec5yfvXrRWWYRsZ4bDFNattFo59xnRbwG8aLwJo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TLl9GVycJbyyaXXRN6rBWbfUei2/onY4eR6mWyKPuA9c3rRUGGfQqPHn7ajMobMY5ntRdWHPr2/YeWDPsgnGHxzrrFWAjPBuTdCKJjHQI24K4+YDph5p+4reAHTUKmSzXP6vbXPvBkvscVUknoZFp8h481Tw+Q2nHCKDOkt3hCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.52
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f52.google.com with SMTP id a1e0cc1a2514c-86718541914so978000241.1;
+        Thu, 13 Feb 2025 02:27:05 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739442424; x=1740047224;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=a4BQvSjdPvwvlHZOZKVU4dEkUHYrrJIZUOAsZTtgVLc=;
+        b=VGlkPrPViZuvkTt2ZlXb/Tzsqh6Ssqu0CJCG4FFPE3lqUyNrsLTQZJvNh7v4oXtehp
+         krWbjIaqvXzvIPRXWtSdwD2rMJnK27D2IMUUabzt6RHW478CPZHGt8hPx/4F9VTvXtnq
+         MEa0FFYeE8Lr0v3tXk5Jk0v6dZXcn3yivh++2GziJKT6Bk5WIWPkqjEYszoiBGb99RVA
+         wEt/nPQFn/O3B+i8JzjasYGiPHtA4Vcrxzq3Vmu/YN09Td1D8iPm4vitiiaSNNK8uy7x
+         3qAABfFgsAkQ5g5wy3SZMKSs7wWCW/mQyxyuWimSY0S/VKKSnpnt1bgZfFyLDNNFtxTH
+         q+PQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUJHkvNa9xjaHlK9zpOoFBRqO/VXeBXOUIAJs0O63plNZ/H8rEDD+AdvcFU9RTLSsQsjKVRFuK1kw==@vger.kernel.org, AJvYcCVZBzw1rK/eESbQbNU3lVPaqkG/s4tW5RXUBBL4WVyunzmDbZ1j5CkSe8F24+KS/9Vu3joumIcGb+JnMUserI13u7A=@vger.kernel.org
+X-Gm-Message-State: AOJu0YythjcXtHVcI4GBabjXbs98MR8dYwzVKBvWQQ++OQZ1ZRnkYMcY
+	U0zgtf2JL1drhenliIj1ZgrPJ34VkeWNT2uTYM79zrzLXZfr8zO+AyQ89kXIgmE=
+X-Gm-Gg: ASbGncs5g9S1zRhMZGR1mMiu2ELXsXix4UNwTxsuPuGUW2CsbNCoL2sjT/m/0o/Fsn7
+	nAAq3whPf9pyEatulzhgRharArG3xg42pLONXoOQ4XvZU0gbDUcxzfJ1xwLT67RhhRMy8cn/38P
+	f0VekGJcjG4VA9A/OtyhfDlHe2/1Hs5R/j8ih56EYgJ3v7Jtc7TyB194qjQB+3aOuku6GfFuekr
+	ZeQsbN3jRofl3z81Pi3SszTyih46PKezuElpxV/Qie0MNfrNgaL8A2/pwRbxCE/kaoFvCYOXifA
+	jvvXQvPqLGaIg2uu3pOsJAUzNo9ZgT9kbn4YamNkutaBtKeoZnjS7A==
+X-Google-Smtp-Source: AGHT+IHvA3+YrUJiEWttnbxu9B6Mf3qZXcRp1ksm3t4/m4q7GIHs3Z7AjZRdanvLczZ+3ZJuTPd4aQ==
+X-Received: by 2002:a05:6122:4897:b0:516:1e32:f8c7 with SMTP id 71dfb90a1353d-520786743d8mr2036544e0c.0.1739442424378;
+        Thu, 13 Feb 2025 02:27:04 -0800 (PST)
+Received: from mail-vs1-f49.google.com (mail-vs1-f49.google.com. [209.85.217.49])
+        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-868e8547fd6sm144797241.3.2025.02.13.02.27.04
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 13 Feb 2025 02:27:04 -0800 (PST)
+Received: by mail-vs1-f49.google.com with SMTP id ada2fe7eead31-4b9486a15a0so1041117137.0;
+        Thu, 13 Feb 2025 02:27:04 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUkHAG9RnbOU9AGBycB8JFubmnDYyKL/UTi/WOABnvr1cd40W6UtFfrDIHHjK1/EMHeXLDuFF+K/k8K+B0XoudeVQs=@vger.kernel.org, AJvYcCVo1ebY2wFd3rPH499XC0PMt9JBQSAvArcGItWc3sLnG3Xqsd4GVzFC3iCSY/ZR+kjk7b5+Q4xddg==@vger.kernel.org
+X-Received: by 2002:a05:6102:2424:b0:4bb:b7ff:c486 with SMTP id
+ ada2fe7eead31-4bc050376fbmr1353306137.12.1739442424014; Thu, 13 Feb 2025
+ 02:27:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <hnfdjznbvqbstcqd7rgrukqqdv7uasexojnujz63qgjnv7pja3@z4lanwhk4i6b>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+References: <CAMuHMdXN9A-1P_qe=BwKjLaoqxU8iJUQK6h8=s-apR4Y0em_0Q@mail.gmail.com>
+ <CAMuHMdXXWH0Do5zXWJ1Uc6dyEb9o1chGSyeyzgDrX+v1wZ7e_A@mail.gmail.com> <CAGETcx_wA9RB9QhMPqsLHDFZ4cwOFgE8dBL9ssFkT=J6DEgjGg@mail.gmail.com>
+In-Reply-To: <CAGETcx_wA9RB9QhMPqsLHDFZ4cwOFgE8dBL9ssFkT=J6DEgjGg@mail.gmail.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 13 Feb 2025 11:26:52 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUCXJkg3rkngXf7cqa50u-TEAOntV6O=Nvg33Q9diPJPw@mail.gmail.com>
+X-Gm-Features: AWEUYZmKRqIGNWtC5Wby5dZMR568x7wkurDrEaa0GNlacN_xsgZ6oH6hx-u5EoQ
+Message-ID: <CAMuHMdUCXJkg3rkngXf7cqa50u-TEAOntV6O=Nvg33Q9diPJPw@mail.gmail.com>
+Subject: Re: s2idle blocked on dev->power.completion
+To: Saravana Kannan <saravanak@google.com>
+Cc: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
+	Linux PM list <linux-pm@vger.kernel.org>, 
+	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 12, 2025 at 06:07:19PM +0100, Sebastian Reichel wrote:
-> On Wed, Feb 12, 2025 at 06:46:23PM +0200, Andy Shevchenko wrote:
-> > Get matching data in one step by switching to use i2c_get_match_data().
+Hi Saravana,
 
-...
+On Thu, 13 Feb 2025 at 09:31, Saravana Kannan <saravanak@google.com> wrote:
+> On Mon, Feb 10, 2025 at 2:24=E2=80=AFAM Geert Uytterhoeven <geert@linux-m=
+68k.org> wrote:
+> > On Fri, 7 Feb 2025 at 16:08, Geert Uytterhoeven <geert@linux-m68k.org> =
+wrote:
+> > > Instrumenting all dev->power.completion accesses in
+> > > drivers/base/power/main.c reveals that resume is blocked in dpm_wait(=
+)
+> > > in the call to wait_for_completion() for regulator-1p2v, which is
+> > > indeed a dependency for the SN65DSI86 DSI-DP bridge.  Comparing
+> >
+> > [...]
+> >
+> > > Looking at /sys/devices/virtual/devlink, the non-working case has the
+> > > following extra entries:
+> >
+> > Note that the SN65DSI86 DSI-DP bridge driver uses the auxiliary bus
+> > to create four subdevices:
+> >   - ti_sn65dsi86.aux.0,
+> >   - ti_sn65dsi86.bridge.0,
+> >   - ti_sn65dsi86.gpio.0,
+> >   - ti_sn65dsi86.pwm.0.
+> > None of them have supplier:* symlinks in sysfs, so perhaps that is
+> > the root cause of the issue?
+>
+> Sorry, I haven't had time to look into this closely. Couple of
+> questions/suggestions that might give you some answers.
+>
+> Is this an issue only happening for s2idle or for s2ram too? I'd guess
+> both, but if not, that might tell you something?
 
-> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+The two (very similar) boards I could reproduce the issue on do not
+support s2ram yet.
 
-Thank you!
+> The only reason the wait_for_completion() wouldn't work is because the
+> supplier is not "completing"?
 
-...
+Yes, the diff shows ca. 70 additional calls to "complete_all()" in the
+good case.
 
-> >  static int ip5xxx_power_probe(struct i2c_client *client)
-> >  {
-> > -	const struct ip5xxx_regfield_config *fields = &ip51xx_fields;
-> > +	const struct ip5xxx_regfield_config *fields;
-> >  	struct power_supply_config psy_cfg = {};
-> >  	struct device *dev = &client->dev;
+> There's some weird direct_complete logic
+> that I haven't fully understood. You can look at that to see if some
+> of the devices are skipping their resumes and hence the "completes"
+> too? Also, runtime PM and some flag can cause some lazy resume or
+> avoid suspending already suspended devices behavior. Check that too.
 
-> >  	const struct of_device_id *of_id;
+Thanks, will give it a try...
 
-Seems I forgot to drop this (unused) variable.
+Gr{oetje,eeting}s,
 
-> > @@ -843,9 +843,7 @@ static int ip5xxx_power_probe(struct i2c_client *client)
-> >  	if (IS_ERR(ip5xxx->regmap))
-> >  		return PTR_ERR(ip5xxx->regmap);
-> >  
-> > -	of_id = i2c_of_match_device(dev->driver->of_match_table, client);
-> > -	if (of_id)
-> > -		fields = (const struct ip5xxx_regfield_config *)of_id->data;
-> > +	fields = i2c_get_match_data(client) ?: &ip51xx_fields;
+                        Geert
 
--- 
-With Best Regards,
-Andy Shevchenko
+--=20
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k=
+.org
 
-
+In personal conversations with technical people, I call myself a hacker. Bu=
+t
+when I'm talking to journalists I just say "programmer" or something like t=
+hat.
+                                -- Linus Torvalds
 
