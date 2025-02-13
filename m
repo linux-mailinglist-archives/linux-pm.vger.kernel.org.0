@@ -1,219 +1,178 @@
-Return-Path: <linux-pm+bounces-21996-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-21997-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF1C5A33604
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 04:20:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 015FFA33680
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 05:02:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4B610188AF65
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 03:20:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 87D3C3A4A3B
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 04:02:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A078204C27;
-	Thu, 13 Feb 2025 03:20:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="de0A3Qf4"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E601157E88;
+	Thu, 13 Feb 2025 04:02:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B46E2046BA;
-	Thu, 13 Feb 2025 03:20:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3298E1EA84
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 04:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739416835; cv=none; b=hk42vtcuvpuY0rKzuzb70PhslWcwT1PYchUjzTDkOJgP3BTaNRKRJ9/TOO+2VUhnn6rh9Pl8d3hzgMYvTU2AJtKgpj29MigM9qIYT8WUmLMDnahYoCWbI0vdPntQyx3auOF7BsWFrmXt19yt/MkzOpHiprbL6c08OmjE0gA9Wc4=
+	t=1739419364; cv=none; b=pp/XqIZrTAyxFOLbIPei3okO0/7x4D+Sp81IG2ilFgxzXtDkMjR/bCJFsT5sZUX4Vv7/v6YGJCAGfg1YVcZxvmkK1DvEtsdOl2pyl2cY0gLc/o6tAiaj2kBIiXRXCyIcNWe4fvWM2tn3274Dn4Ye13VCRGmeHqsibkf3RBwQP1g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739416835; c=relaxed/simple;
-	bh=ZZtTGc97rYuezRwymIH2Hj30+2Ig+dElar5rFqwGxTY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=twpTK2Jk92cPiD9h2EljKG+lDNOFNK3vCoKBwF+Cv7mwjvOyn4YtbJvALFQN3keOuykqm6aUqNnwq0vGXt81P0NRbsykwmWeZ8LqB7KiF8HKqcKG4lNjTjttAII26LTUxOV7mcJA7Y9pIT/xS8zJ5nM5ipBURYUqcV37TN6jWW0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=de0A3Qf4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 740E5C4CEE8;
-	Thu, 13 Feb 2025 03:20:34 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739416834;
-	bh=ZZtTGc97rYuezRwymIH2Hj30+2Ig+dElar5rFqwGxTY=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=de0A3Qf4Xj1Q3wrFa/BONbIsxubNb1elroOVkQnysNxvvngC1gwLSAwNduq3fxEsO
-	 WJO3khkyOZmAG6oS6S6iBGQziE4y9RxfWaK7cKg0B0Rtno6Lbyvg2Zv1Y8zefVLoKV
-	 Rb+k4i+vdfKUA9nFFDp8yGJfMQMz6Ynjmj8tBUY+aIn0qRDAXAMsPi+7HsLkVP9GQf
-	 wtEiKMqv5JvNoy4wtx6KKXs4pHXagoHrUVLEbz7gth3Tr72Wa+2MfvRJS6rbBCSIY6
-	 0yT7r7RpM8ZpgnR5tXWZzcmuE9ZwFgblME5vUs4v+fdsZCEDppkdVNpjsB8L6O+lIG
-	 Z1Sn7COePJGVg==
-Received: by mail-ej1-f45.google.com with SMTP id a640c23a62f3a-ab7c07e8b9bso78174766b.1;
-        Wed, 12 Feb 2025 19:20:34 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUhdXb6LRS8ARxReDfKHdoZ31JYDvQSqZsbgH9Do+SserfOkrOaayj3iarbc9ouS8eu5+okdk1c@vger.kernel.org, AJvYcCVltihLM+yYDAGIKQnYAbZ4mgCoU4c4tr7kdgCdq5XbW3heAsr5T8JRjARc7Dkh6bGznXCBG56sKw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxfexoZN7Vvth7NseeTq86wC3Ebm5C6l4iegGlZS3dkKsT66tw2
-	ivTHEhJRCIdzguZ4D6lxz9xQLeInc+HN9aKGbpHDtcekdSnDd6wErp4sr4xQ8tlu2lhKXIrpQHS
-	F1OIRAXFPM9bFvtsPa3OVROIM0OE=
-X-Google-Smtp-Source: AGHT+IFmDko2YyfGXLm5N7dpgFRel/cJF8hEyY4/JBVR8gKi9tylitcgLg0rIQPxEOtT+fAIMByFWZ5LtW5BhSRGpSI=
-X-Received: by 2002:a05:6402:4024:b0:5d0:efaf:fb73 with SMTP id
- 4fb4d7f45d1cf-5deaddc10acmr5634218a12.15.1739416832930; Wed, 12 Feb 2025
- 19:20:32 -0800 (PST)
+	s=arc-20240116; t=1739419364; c=relaxed/simple;
+	bh=hyuBtJnR5Yhh6e0xXp+jlK3M4LN6n9pQJpWVGPpzjCo=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=ui3EQiKIfF4v0Tt1hT5v+9LqQo9wmV6dMkDzeCBiea5/T5mesQ9w7v/G7Cu8Rczb338ZPk501Xxws2ahORyuPd+3XuC0GJ/YJisw/RFxLSPbnXjJ6h1zKQbOX1jdxVjDQGYD0wxgY5EWgh+X3g0VoB4at57TJ88F/RkW/M8fs1M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.88.234])
+	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4YthJp36wqz22n3H;
+	Thu, 13 Feb 2025 11:59:38 +0800 (CST)
+Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
+	by mail.maildlp.com (Postfix) with ESMTPS id 08CC5140138;
+	Thu, 13 Feb 2025 12:02:32 +0800 (CST)
+Received: from localhost.localdomain (10.90.30.45) by
+ kwepemo100006.china.huawei.com (7.202.195.47) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.11; Thu, 13 Feb 2025 12:02:31 +0800
+From: Jie Zhan <zhanjie9@hisilicon.com>
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <yu.c.chen@intel.com>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <zhanjie9@hisilicon.com>,
+	<zhenglifeng1@huawei.com>, <lihuisong@huawei.com>, <wanghuiqiang@huawei.com>,
+	<fanghao11@huawei.com>, <prime.zeng@hisilicon.com>
+Subject: [PATCH v3] cpufreq: governor: Fix negative 'idle_time' handling in dbs_update()
+Date: Thu, 13 Feb 2025 11:55:10 +0800
+Message-ID: <20250213035510.2402076-1-zhanjie9@hisilicon.com>
+X-Mailer: git-send-email 2.30.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250212141648.599661-1-chenhuacai@loongson.cn> <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
-In-Reply-To: <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Thu, 13 Feb 2025 11:20:22 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
-X-Gm-Features: AWEUYZkPCPR1x9EMHB3sgDzhdPaQ_MLs8QhmK6dDB4tI1CFXaY4nt5-W7kb1leg
-Message-ID: <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
-Subject: Re: [PATCH] mm/slab: Initialise random_kmalloc_seed after initcalls
-To: "Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>
-Cc: Huacai Chen <chenhuacai@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-mm@kvack.org, "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	linux-pm@vger.kernel.org, GONG Ruiqi <gongruiqi@huaweicloud.com>, 
-	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org, 
-	Yuli Wang <wangyuli@uniontech.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Christoph Lameter <cl@linux.com>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Pekka Enberg <penberg@kernel.org>, 
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemo100006.china.huawei.com (7.202.195.47)
 
-Hi, Harry,
+We observed an issue that the cpu frequency can't raise up with a 100% cpu
+load when NOHZ is off and the 'conservative' governor is selected.
 
-On Wed, Feb 12, 2025 at 11:39=E2=80=AFPM Harry (Hyeonggon) Yoo
-<42.hyeyoo@gmail.com> wrote:
->
-> On Wed, Feb 12, 2025 at 11:17=E2=80=AFPM Huacai Chen <chenhuacai@loongson=
-.cn> wrote:
-> >
-> > Hibernation assumes the memory layout after resume be the same as that
-> > before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this assumption.
->
-> [Let's also Cc SLAB ALLOCATOR folks in MAINTAINERS file]
->
-> Could you please elaborate what do you mean by
-> hibernation assumes 'the memory layout' after resume be the same as that
-> before sleep?
->
-> I don't understand how updating random_kmalloc_seed breaks resuming from
-> hibernation. Changing random_kmalloc_seed affects which kmalloc caches
-> newly allocated objects are from, but it should not affect the objects th=
-at are
-> already allocated (before hibernation).
-When resuming, the booting kernel should switch to the target kernel,
-if the address of switch code (from the booting kernel) is the
-effective data of the target kernel, then the switch code may be
-overwritten.
+'idle_time' can be negative if it's obtained from get_cpu_idle_time_jiffy()
+when NOHZ is off.  This was found and explained in commit 9485e4ca0b48
+("cpufreq: governor: Fix handling of special cases in dbs_update()").
 
-For LoongArch there is an additional problem: the regular kernel
-function uses absolute address to call exception handlers, this means
-the code calls to exception handlers should at the same address for
-booting kernel and target kernel.
+However, commit 7592019634f8 ("cpufreq: governors: Fix long idle detection
+logic in load calculation") introduced a comparison between 'idle_time' and
+'samling_rate' to detect a long idle interval.  While 'idle_time' is
+converted to int before comparison, it's actually promoted to unsigned
+again when compared with an unsigned 'sampling_rate'.  Hence, this leads to
+wrong idle interval detection when it's in fact 100% busy and sets
+policy_dbs->idle_periods to a very large value.  'conservative' adjusts the
+frequency to minimum because of the large 'idle_periods', such that the
+frequency can't raise up.  'Ondemand' doesn't use policy_dbs->idle_periods
+so it fortunately avoids the issue.
 
->
-> > At least on LoongArch and ARM64 we observed failures of resuming from
-> > hibernation (on LoongArch non-boot CPUs fail to bringup, on ARM64 some
-> > devices are unusable).
->
-> Did you have any chance to reproduce it on x86_64?
-I haven't reproduce on x86_64, but I have heard that x86_32 has problems.
+Correct negative 'idle_time' to 0 before any use of it in dbs_update().
 
->
-> > software_resume_initcall(), the function which resume the target kernel
-> > is a initcall function. So, move the random_kmalloc_seed initialisation
-> > after all initcalls.
-> >
-> > Cc: stable@vger.kernel.org
-> > Fixes: 3c6152940584290668 ("Randomized slab caches for kmalloc()")
-> > Reported-by: Yuli Wang <wangyuli@uniontech.com>
-> > Signed-off-by: Huacai Chen <chenhuacai@loongson.cn>
-> > ---
-> >
-> >  init/main.c      | 3 +++
-> >  mm/slab_common.c | 3 ---
-> >  2 files changed, 3 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/init/main.c b/init/main.c
-> > index 2a1757826397..1362957bdbe4 100644
-> > --- a/init/main.c
-> > +++ b/init/main.c
-> > @@ -1458,6 +1458,9 @@ static int __ref kernel_init(void *unused)
-> >         /* need to finish all async __init code before freeing the memo=
-ry */
-> >         async_synchronize_full();
-> >
-> > +#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-> > +       random_kmalloc_seed =3D get_random_u64();
-> > +#endif
->
-> It doesn=E2=80=99t seem appropriate to put slab code in kernel_init.
->
-> Additionally, it introduces a dependency that the code must be executed
-> after all late_initcalls, which sounds like introducing yet another
-> type of initcall.
-What about introducing a function to initialize kmalloc seed in
-slab_common.c, and then call it at kernel_init()? I don't have a
-better solution than this.
+Fixes: 7592019634f8 ("cpufreq: governors: Fix long idle detection logic in load calculation")
+Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+Reviewed-by: Chen Yu <yu.c.chen@intel.com>
+---
+v3:
+- Remove ternary operators.
 
->
-> >         system_state =3D SYSTEM_FREEING_INITMEM;
-> >         kprobe_free_init_mem();
-> >         ftrace_free_init_mem();
-> > diff --git a/mm/slab_common.c b/mm/slab_common.c
-> > index 4030907b6b7d..23e324aee218 100644
-> > --- a/mm/slab_common.c
-> > +++ b/mm/slab_common.c
-> > @@ -971,9 +971,6 @@ void __init create_kmalloc_caches(void)
-> >                 for (i =3D KMALLOC_SHIFT_LOW; i <=3D KMALLOC_SHIFT_HIGH=
-; i++)
-> >                         new_kmalloc_cache(i, type);
-> >         }
-> > -#ifdef CONFIG_RANDOM_KMALLOC_CACHES
-> > -       random_kmalloc_seed =3D get_random_u64();
-> > -#endif
->
-> I have no idea how hibernation and resume work, but let me ask here:
-> Can we simply skip or defer updating random_kmalloc_seed when the system =
-is
-> resuming from hibernation? (probably system_state represents this?)
-Do you mean something like below? It does work (it is my original
-solution), but this patch is simpler.
+v2:
+- Avoid type conversion, compare current and previous idle time before
+  obtaining 'idle_time'.
+- Update the explanation in comments.
 
-diff --git a/include/linux/slab.h b/include/linux/slab.h
-index b35e2db7eb0e..42fb91650b13 100644
---- a/include/linux/slab.h
-+++ b/include/linux/slab.h
-@@ -614,14 +614,20 @@ static __always_inline enum kmalloc_cache_type
-kmalloc_type(gfp_t flags, unsigne
-         * The most common case is KMALLOC_NORMAL, so test for it
-         * with a single branch for all the relevant flags.
-         */
--       if (likely((flags & KMALLOC_NOT_NORMAL_BITS) =3D=3D 0))
-+       if (likely((flags & KMALLOC_NOT_NORMAL_BITS) =3D=3D 0)) {
- #ifdef CONFIG_RANDOM_KMALLOC_CACHES
-+               unsigned long random_seed =3D 0;
+Discussions:
+v2: https://lore.kernel.org/linux-pm/20250212081438.1294503-1-zhanjie9@hisilicon.com/
+v1: https://lore.kernel.org/linux-pm/20250210130659.3533182-1-zhanjie9@hisilicon.com/
+---
+ drivers/cpufreq/cpufreq_governor.c | 45 +++++++++++++++---------------
+ 1 file changed, 23 insertions(+), 22 deletions(-)
+
+diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
+index af44ee6a6430..1a7fcaf39cc9 100644
+--- a/drivers/cpufreq/cpufreq_governor.c
++++ b/drivers/cpufreq/cpufreq_governor.c
+@@ -145,7 +145,23 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
+ 		time_elapsed = update_time - j_cdbs->prev_update_time;
+ 		j_cdbs->prev_update_time = update_time;
+ 
+-		idle_time = cur_idle_time - j_cdbs->prev_cpu_idle;
++		/*
++		 * cur_idle_time could be smaller than j_cdbs->prev_cpu_idle if
++		 * it's obtained from get_cpu_idle_time_jiffy() when NOHZ is
++		 * off, where idle_time is calculated by the difference between
++		 * time elapsed in jiffies and "busy time" obtained from CPU
++		 * statistics.  If a CPU is 100% busy, the time elapsed and busy
++		 * time should grow with the same amount in two consecutive
++		 * samples, but in practice there could be a tiny difference,
++		 * making the accumulated idle time decrease sometimes.  Hence,
++		 * in this case, idle_time should be regarded as 0 in order to
++		 * make the further process correct.
++		 */
++		if (cur_idle_time > j_cdbs->prev_cpu_idle)
++			idle_time = cur_idle_time - j_cdbs->prev_cpu_idle;
++		else
++			idle_time = 0;
 +
-+               if (system_state > SYSTEM_SCHEDULING)
-+                       random_seed =3D random_kmalloc_seed;
+ 		j_cdbs->prev_cpu_idle = cur_idle_time;
+ 
+ 		if (ignore_nice) {
+@@ -162,7 +178,7 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
+ 			 * calls, so the previous load value can be used then.
+ 			 */
+ 			load = j_cdbs->prev_load;
+-		} else if (unlikely((int)idle_time > 2 * sampling_rate &&
++		} else if (unlikely(idle_time > 2 * sampling_rate &&
+ 				    j_cdbs->prev_load)) {
+ 			/*
+ 			 * If the CPU had gone completely idle and a task has
+@@ -189,30 +205,15 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
+ 			load = j_cdbs->prev_load;
+ 			j_cdbs->prev_load = 0;
+ 		} else {
+-			if (time_elapsed >= idle_time) {
++			if (time_elapsed > idle_time)
+ 				load = 100 * (time_elapsed - idle_time) / time_elapsed;
+-			} else {
+-				/*
+-				 * That can happen if idle_time is returned by
+-				 * get_cpu_idle_time_jiffy().  In that case
+-				 * idle_time is roughly equal to the difference
+-				 * between time_elapsed and "busy time" obtained
+-				 * from CPU statistics.  Then, the "busy time"
+-				 * can end up being greater than time_elapsed
+-				 * (for example, if jiffies_64 and the CPU
+-				 * statistics are updated by different CPUs),
+-				 * so idle_time may in fact be negative.  That
+-				 * means, though, that the CPU was busy all
+-				 * the time (on the rough average) during the
+-				 * last sampling interval and 100 can be
+-				 * returned as the load.
+-				 */
+-				load = (int)idle_time < 0 ? 100 : 0;
+-			}
++			else
++				load = 0;
 +
-                /* RANDOM_KMALLOC_CACHES_NR (=3D15) copies + the KMALLOC_NO=
-RMAL */
--               return KMALLOC_RANDOM_START + hash_64(caller ^
-random_kmalloc_seed,
-+               return KMALLOC_RANDOM_START + hash_64(caller ^ random_seed,
+ 			j_cdbs->prev_load = load;
+ 		}
+ 
+-		if (unlikely((int)idle_time > 2 * sampling_rate)) {
++		if (unlikely(idle_time > 2 * sampling_rate)) {
+ 			unsigned int periods = idle_time / sampling_rate;
+ 
+ 			if (periods < idle_periods)
+-- 
+2.33.0
 
-ilog2(RANDOM_KMALLOC_CACHES_NR + 1));
- #else
-                return KMALLOC_NORMAL;
- #endif
-+       }
-
-
-Huacai
-
->
-> >         /* Kmalloc array is now usable */
-> >         slab_state =3D UP;
->
-> --
-> Harry
 
