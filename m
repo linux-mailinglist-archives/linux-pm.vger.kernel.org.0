@@ -1,133 +1,126 @@
-Return-Path: <linux-pm+bounces-22002-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22003-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id E5754A33A03
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 09:31:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9E35AA33BBD
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 10:56:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72BEF18842CC
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 08:31:41 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 508EC1674E0
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 09:56:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 517FD20B80F;
-	Thu, 13 Feb 2025 08:31:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2303E20F09C;
+	Thu, 13 Feb 2025 09:56:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="VGNv0Izj"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jkxiL1bY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AEC02054EE
-	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 08:31:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6B18420DD5C;
+	Thu, 13 Feb 2025 09:56:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739435492; cv=none; b=E9stMIvkjR6uw00FM1OQDS5PMB4DFeKg5lXNr9SgZhxZhEAH0eV3NjSikF0m1OzbfnpKhglcieE/eSKWm/s4TcfCucc98zhuePRYbr3g+66qKIr4ynuIHIeASNojBgfYpm5nKjjmZUZM06FuKlRhoz8mMLMfAig6+ShVCvyMl58=
+	t=1739440609; cv=none; b=KcZOHIKd4Tchx087ghLaB8wKxhruWybatTk869fIWVravZkxd66a4dgBgjuz9x88PwgCou3xw4T8SVGQ3W3/oBfeAlb1/P2dwtHbNfmKsfrcuu9tFPpYHRSPyNqzsN3/ZsgmnD8tI3mgFBiMwJt/3yT6LFiWu/J/2kymlkBNBXI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739435492; c=relaxed/simple;
-	bh=L25nrY27bgTQ9n4g/1cHQoTCJ6y6XVKfBEEs6t5MU20=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MYqqAdfm8zX59bASkUxSmEWClV/bGgp0dRZqQSe1MkXzE/3dPMnbu9FDNRa/8zdb3/1rgzpHslwYkW3EXoH9PxVqSxhbSa1lRyGtpti25LPhMkMw7SvqOy6f61djsFPo5Meq01QpawcM3T/L1vndroo9HESzQ0VGFKPdX5oWD+0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=VGNv0Izj; arc=none smtp.client-ip=209.85.167.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-5450cf3ef63so575939e87.1
-        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 00:31:30 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739435488; x=1740040288; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=qqYuvd73ewFdC9LGI08iIdezVI5Agbij5wls3/+Pd9w=;
-        b=VGNv0IzjdPMpzqkQ6VJwodmsn1hwBsxCu6WnXWa/y6naysLawUWuq+MpBvPg9c/xUB
-         0p6Z+kbSXZQsD0wolnid0tWNWv2g8Kt5aRpT4a+5m+6RgOY6mereFXN8mB+WopCXV+iA
-         pSGwHcxfPhOk0ygyg7fyDSUnrN8kxgw6jiMqC+KknnKiqgRjQQDZX/WrMJvSapmdGDS4
-         RC5lbsG6LV1EGUwNYpxI9PRcJW1vZRylT9dv4TTULUzieLJPAYhJiJuZjIckgj0lCRj5
-         NTRkzcR0Zx4UiYq6Pu8PLDU9g/5EEBn9fCYzdtt+Gm8ZZ3VOVbmkl6l0k/AMxKIfwygx
-         a5Ow==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739435488; x=1740040288;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=qqYuvd73ewFdC9LGI08iIdezVI5Agbij5wls3/+Pd9w=;
-        b=q0SGRPGIMitM7SMfbsSZTjt6vxrARRq+obor68et5F93pfO7WlVzUk2zMxXqMwG2O1
-         1zedSAQwfzs5h75xWmFUAQ3PRXTfhSWi8FY4xHsYCGlmeKWN8LUoJfcHG/JCmyhWCSWY
-         zpuR1Do/mV6gA+AlFbq+fp2hyd7K7yoMduwHpe3KsBK4Y3iO5IIDItMiuSd2L+ld9WvQ
-         jv/GeX5WYoPn+uyi4GnBM+2w3SaE9rw2uFVWkVti9vR4P6GTyO/h8lKIE9X9AGQsgmJC
-         HAjmtbbE+ii1AIZh9eTow9auABY8yDMBn1NbA+6Ryhl4dAfQ/SODHepfqz22tf+CdCBQ
-         gZ2A==
-X-Forwarded-Encrypted: i=1; AJvYcCX2i9ZbB/FZX0UrJQ0hHSX37CoE4yBRgDlpXnQHsGalRMbAL4fKeGiwzy4HzGLCka83XurQB9IS4w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxpWxMPRSVj2LeWcOcAVsNhRTJTfveYO+QdpLxCGOL0Q7WMojRB
-	72uC0UWojfHcOwU8JE/UsJBj6ikMLZleoLdAQYygACZtBi5YBpwNcmnnjeGBla2dHSHUne5nXU2
-	RA8yg/CakoZAEXKGViDBdCAfbB/DUSKk+quI4
-X-Gm-Gg: ASbGncuHy3Hctbg5sYI42BRCH7rlbHgL8aKNZmvY2kEGeDuQFgkzMuEpyoIvmRCKeLs
-	3WIAJx4xkEaY3rKxiO6tdCRXsEdUcJN754H3mI003tmvQhUrkLteVpun4wdAckv4CAmV0BBs=
-X-Google-Smtp-Source: AGHT+IGpzgKBnlzlI17bAlkc7hVX0gihSIWqb7XNIa4ZHRZHg8qVXL3z0Eph4UoadM3AqA+kzKLC1HMwKydNxeaTIqM=
-X-Received: by 2002:a05:6512:1056:b0:545:8c5:44cb with SMTP id
- 2adb3069b0e04-5451dd9e2ecmr815118e87.31.1739435488357; Thu, 13 Feb 2025
- 00:31:28 -0800 (PST)
+	s=arc-20240116; t=1739440609; c=relaxed/simple;
+	bh=SJ/UzaavzQJpHfjZKxALqoOs5j5o6tpLEqhJ8NthZ1Y=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kyXjuZ9bEQuL4Xx2LD5HnQ75V3HuZTsBuvURrfgn7w3Lx/kyDb/18Pm+wbZbpw1atezVQQ4QaShXctuyPB4V8PFvkbKlQ12gFTY4+Lvz9iF9/7FySy43gwyZekiPqjWkpO9ia8fxEIfFZQoQdr+9Sy9Eg+YG3uPc89lKFcrQEJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jkxiL1bY; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739440608; x=1770976608;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=SJ/UzaavzQJpHfjZKxALqoOs5j5o6tpLEqhJ8NthZ1Y=;
+  b=jkxiL1bYwYQ819+hg3L+jtjy8KhcEohWjTMt8E5lKDP5PPULYS2sv0/U
+   q17SWpZZXWFigT68w4vICYQmVHRpOXHvPpvI1pVSmHsfeWhPeV+RIP15H
+   ANurQPagiARLNr7XqW5MCNpzLV3zp+/20YM8SyIdfp19qsIhgVo8HoF/q
+   xyaAQxoxfkcRlYYXlX+XHGgmR5egkzF+HcJhwJqzE+0Pvo3X5b/GObeHu
+   L0b10D3NdJfqnET8rj0gStF325EojUP9B76afe/sQ4kguMIV1bp/74xiH
+   qoD0gLN/8IbFtGL7XmN8TMPDdHai35YsHDnEDmpKIWlPNC+5HF6b2+dDr
+   A==;
+X-CSE-ConnectionGUID: wGzSMESGRGaI2B1wq2xG6w==
+X-CSE-MsgGUID: ThK1UU/ESmukBBMlqsGWBw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11343"; a="43901990"
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="43901990"
+Received: from orviesa004.jf.intel.com ([10.64.159.144])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 01:56:47 -0800
+X-CSE-ConnectionGUID: B3t23aX9QTOUleu8/qaS0Q==
+X-CSE-MsgGUID: RxlP/DoHTLmLy+VbE93uSw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,282,1732608000"; 
+   d="scan'208";a="118103089"
+Received: from smile.fi.intel.com ([10.237.72.58])
+  by orviesa004.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 13 Feb 2025 01:56:45 -0800
+Received: from andy by smile.fi.intel.com with local (Exim 4.98)
+	(envelope-from <andriy.shevchenko@linux.intel.com>)
+	id 1tiVxZ-0000000B7w3-2Ov4;
+	Thu, 13 Feb 2025 11:56:41 +0200
+Date: Thu, 13 Feb 2025 11:56:41 +0200
+From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Bence =?iso-8859-1?B?Q3Pza+Fz?= <csokas.bence@prolan.hu>,
+	Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Samuel Holland <samuel@sholland.org>
+Subject: Re: [PATCH v1 1/2] power: ip5xxx_power: Make use of
+ i2c_get_match_data()
+Message-ID: <Z63B2dxEd0g1ppra@smile.fi.intel.com>
+References: <20250212165012.2413079-1-andriy.shevchenko@linux.intel.com>
+ <20250212165012.2413079-2-andriy.shevchenko@linux.intel.com>
+ <hnfdjznbvqbstcqd7rgrukqqdv7uasexojnujz63qgjnv7pja3@z4lanwhk4i6b>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CAMuHMdXN9A-1P_qe=BwKjLaoqxU8iJUQK6h8=s-apR4Y0em_0Q@mail.gmail.com>
- <CAMuHMdXXWH0Do5zXWJ1Uc6dyEb9o1chGSyeyzgDrX+v1wZ7e_A@mail.gmail.com>
-In-Reply-To: <CAMuHMdXXWH0Do5zXWJ1Uc6dyEb9o1chGSyeyzgDrX+v1wZ7e_A@mail.gmail.com>
-From: Saravana Kannan <saravanak@google.com>
-Date: Thu, 13 Feb 2025 00:30:52 -0800
-X-Gm-Features: AWEUYZlU1z59xVb1UWJjvijh9vxRZwTp3eFMUqBlg8xzQmISt8RNRcB6a9aYInw
-Message-ID: <CAGETcx_wA9RB9QhMPqsLHDFZ4cwOFgE8dBL9ssFkT=J6DEgjGg@mail.gmail.com>
-Subject: Re: s2idle blocked on dev->power.completion
-To: Geert Uytterhoeven <geert@linux-m68k.org>
-Cc: Tomi Valkeinen <tomi.valkeinen+renesas@ideasonboard.com>, 
-	Linux PM list <linux-pm@vger.kernel.org>, 
-	Linux-Renesas <linux-renesas-soc@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <hnfdjznbvqbstcqd7rgrukqqdv7uasexojnujz63qgjnv7pja3@z4lanwhk4i6b>
+Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
 
-On Mon, Feb 10, 2025 at 2:24=E2=80=AFAM Geert Uytterhoeven <geert@linux-m68=
-k.org> wrote:
->
-> On Fri, 7 Feb 2025 at 16:08, Geert Uytterhoeven <geert@linux-m68k.org> wr=
-ote:
-> > Instrumenting all dev->power.completion accesses in
-> > drivers/base/power/main.c reveals that resume is blocked in dpm_wait()
-> > in the call to wait_for_completion() for regulator-1p2v, which is
-> > indeed a dependency for the SN65DSI86 DSI-DP bridge.  Comparing
->
-> [...]
->
-> > Looking at /sys/devices/virtual/devlink, the non-working case has the
-> > following extra entries:
->
-> Note that the SN65DSI86 DSI-DP bridge driver uses the auxiliary bus
-> to create four subdevices:
->   - ti_sn65dsi86.aux.0,
->   - ti_sn65dsi86.bridge.0,
->   - ti_sn65dsi86.gpio.0,
->   - ti_sn65dsi86.pwm.0.
-> None of them have supplier:* symlinks in sysfs, so perhaps that is
-> the root cause of the issue?
+On Wed, Feb 12, 2025 at 06:07:19PM +0100, Sebastian Reichel wrote:
+> On Wed, Feb 12, 2025 at 06:46:23PM +0200, Andy Shevchenko wrote:
+> > Get matching data in one step by switching to use i2c_get_match_data().
 
-Hi Geert,
+...
 
-Sorry, I haven't had time to look into this closely. Couple of
-questions/suggestions that might give you some answers.
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-Is this an issue only happening for s2idle or for s2ram too? I'd guess
-both, but if not, that might tell you something?
+Thank you!
 
-The only reason the wait_for_completion() wouldn't work is because the
-supplier is not "completing"? There's some weird direct_complete logic
-that I haven't fully understood. You can look at that to see if some
-of the devices are skipping their resumes and hence the "completes"
-too? Also, runtime PM and some flag can cause some lazy resume or
-avoid suspending already suspended devices behavior. Check that too.
+...
 
-Hope this helps.
+> >  static int ip5xxx_power_probe(struct i2c_client *client)
+> >  {
+> > -	const struct ip5xxx_regfield_config *fields = &ip51xx_fields;
+> > +	const struct ip5xxx_regfield_config *fields;
+> >  	struct power_supply_config psy_cfg = {};
+> >  	struct device *dev = &client->dev;
 
--Saravana
+> >  	const struct of_device_id *of_id;
+
+Seems I forgot to drop this (unused) variable.
+
+> > @@ -843,9 +843,7 @@ static int ip5xxx_power_probe(struct i2c_client *client)
+> >  	if (IS_ERR(ip5xxx->regmap))
+> >  		return PTR_ERR(ip5xxx->regmap);
+> >  
+> > -	of_id = i2c_of_match_device(dev->driver->of_match_table, client);
+> > -	if (of_id)
+> > -		fields = (const struct ip5xxx_regfield_config *)of_id->data;
+> > +	fields = i2c_get_match_data(client) ?: &ip51xx_fields;
+
+-- 
+With Best Regards,
+Andy Shevchenko
+
+
 
