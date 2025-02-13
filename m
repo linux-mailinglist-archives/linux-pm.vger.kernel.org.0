@@ -1,93 +1,96 @@
-Return-Path: <linux-pm+bounces-22035-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22036-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE2E5A3500D
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 22:04:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA645A35010
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 22:04:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4FDDC3AB7A3
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 21:04:06 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 617A47A4103
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 21:03:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 896EF28A2C5;
-	Thu, 13 Feb 2025 21:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86D60266B7B;
+	Thu, 13 Feb 2025 21:04:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="NbxLY77H"
+	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="G4lIXjpW"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 173C4210F58
-	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:04:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 050B5210F58
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:04:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739480648; cv=none; b=YvPlT8OCNQ590uUkuyvnQyW+EVTrErhLadntD88lFnaNNzJlbI/vFAolNrQLs7xTgVrRjLNcYRMh8normHEdBTNoYIA3zwjg1NDVhMM5gGQ6cakstrLL/Idf/VmUQU4Js81NJc48YKH1uxJ/Ea/Sa/mnGKsIa3X9goYt3qVZ8Pw=
+	t=1739480650; cv=none; b=RWVww12jQTP1WW4JMU8ULhbWVXr4q+IdFW089jlodO0kJbOEsu3qo+2Tf14jg0m7keXxJPbSNcLDTyGZTzXFlbvI5jxyvM6WBGwa2xLYmPS8P8JGiyPOmN9SF6UZSyQtC6i3jFnX6AdpkBe+FMaNwHGg19Ihfm0zeoGBcD3e2q4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739480648; c=relaxed/simple;
-	bh=YRGZnLfEo00umHgePB/lOxUrXp4t6Vz/QLbBg0QP3mc=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=VXEdM7eYHjzlNgdEsFw98dwCjB7+/2RdMlLj+6+LgbvRZT4lZ90BIyz7d/H9SVbYisukf6g0f9a2EBjNk6Sq06MaU7cAT4JuGxwI1CVt7TAc0dTFo8gobipsADXwy8ICWJ0T3BYSgsA7LGLtYj6q2o1tcRqL6P9O4/eukQHVmWE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=NbxLY77H; arc=none smtp.client-ip=205.220.168.131
+	s=arc-20240116; t=1739480650; c=relaxed/simple;
+	bh=Hm34EcCZY7Nya6IWrGgD3q/+JNM1BPaGd40TDCxo+LM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=AB21fOKg50GPx78B9yEDWT5I21f2oT6tfL9EcleX+coMOSq7eQDElSK+uc+/ROeq9VmXaS7XMvhAr7B3qG7HjRR6rk2uAJDOl/+vFVJaXZYrO91CQFB8ACdcgjeWTEnFUp4yeT7tM5AkDlroQFLklGS08asnDwiAPG2YeYhamDs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=G4lIXjpW; arc=none smtp.client-ip=205.220.168.131
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279864.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51DKHNjn001789
-	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:04:06 GMT
+Received: from pps.filterd (m0279866.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51D9gmIW027460
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:04:08 GMT
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:message-id:mime-version
-	:subject:to; s=qcppdkim1; bh=8VxP/CgXnqLT7dCVI0cxvlRc3vuTuhQDamA
-	kGTDrmDw=; b=NbxLY77HESK8z2YTw5p41EtFM4+f1MZ/aI0SAtGTnwKV546D9wr
-	i7icOiJES4OIy6pp3GoQaAXzwYxRZ8v2rSDLlnDa1Qgi0TvPYYuQ9K7ncdMvVLXK
-	Hlfz2rltDyC5ARp/0tHLquq5RQVgrzNWFB444MR+gHWEENx+UZIGRfuiTHT4XSGP
-	GMNCDM3LTkHScSDXFjkxgzzMSwWeuxdVCGeRNDBAW+DIsLCxNt3bPx8MtVYzKj8J
-	+YTZgvNDXOw4LNBiENiUbVN9R2fvWPX8IcFE6dPTIT9LcOt5lJMYeZ/wgVJCXHdB
-	pdQhYMLbMgKD3yNlH5zb9Zh2x/q1cvw0DVw==
-Received: from mail-pl1-f200.google.com (mail-pl1-f200.google.com [209.85.214.200])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44semp9mty-1
+	cc:content-transfer-encoding:date:from:in-reply-to:message-id
+	:mime-version:references:subject:to; s=qcppdkim1; bh=/E2f4sNa5dJ
+	1J/+u/sCAiw4E4qFHfywaLempWlQrqbI=; b=G4lIXjpWbUU5RKfBQ/y4NncLt/G
+	E0J85o1BuM3mk2EWd5+Sk9EXLpYI/SoEudUG7XpMsK6H+AsHJ7LnBG9BSdHG+fHi
+	FMmfXqpjd+1rgNPg4MqFAOo0Cp7hQHiHBS5OaoyjM8r8VrT8YGckhykJeqCdxWTj
+	pKc8NuCFhcKAmnzkyoJSJp/GiuKT+i0G/B/0kbHBYiAWLn+EZwZPgANzOPfvkb7+
+	R+GisppLdtNJ/oiUX7Zna/ruzj7Gjjs4XB+lnhn9CcgQK+pm9KC5ncSy6m0ObgYY
+	l6nCQRDBM91Ib3ugWoadoHXruulywezBt2g3HHl7o58AajwX//ChzDDmffg==
+Received: from mail-pl1-f198.google.com (mail-pl1-f198.google.com [209.85.214.198])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44sebn9qvx-1
 	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:04:05 +0000 (GMT)
-Received: by mail-pl1-f200.google.com with SMTP id d9443c01a7336-21fb94c7fc6so28466545ad.1
-        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 13:04:05 -0800 (PST)
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:04:07 +0000 (GMT)
+Received: by mail-pl1-f198.google.com with SMTP id d9443c01a7336-21f022fc6a3so27857325ad.1
+        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 13:04:07 -0800 (PST)
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739480645; x=1740085445;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=8VxP/CgXnqLT7dCVI0cxvlRc3vuTuhQDamAkGTDrmDw=;
-        b=UAeSiDYm/x98D8UE7HH9mnXPE3RORT42qBvrsiGdZo1JOyUmPurETmrs0O9zdlZ6l7
-         UYB+3C6uEKGYGsPe79ns05HR78x2Gl5Ne5Ln4+uHbqDI4upB78PHQt9RdakJKBAGIOG0
-         YlWCL5PLSVWaNo26eeTEhfxJV8VNuRw228Gdr6qR6hZ56tKdLv0/YIKMuPpcaNjfab6C
-         CYo/xGMrmAr3B0+6c4ZhtmEXRK8tEiST7rUNmDnzzGP1+KjejTJu7q1C6GGRZFs4bNwj
-         MbBg4BhWV1Uf2YK3GIYO9srKvaUtiEKxtyEmaZScpoiQkKZxI5NFYUQ4CqeSLeQV0vIy
-         gG1w==
-X-Forwarded-Encrypted: i=1; AJvYcCU/v01oeJMbsj+PmSeMCZ0enSpPP6+gw1XqzUYLq1jGN67edsb92S5o//qzR/stLRc0QPB3VJc1OQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxI2g6iremdjPOV2TL3+3biN+yTtXAC4GuzBdQxnpnAr+pS5GbL
-	aa8/+N6VnUSSrlrmsHVnc2xCkJeJSIL2Ikck+lQvAcsnm5JUaMf3A83NXzkjBbS5O7tSunKUcOF
-	Xzg0zszieOUXCR3H96LkREPscva54mTFB4dp2r7gg4Zz20QKOdhiHS4TSPA==
-X-Gm-Gg: ASbGncufJDb1nzr40PYvOtNJZlzDRDn5ZLCdD1Qnu/e5bsrUTgHmeLjarxMkZdnWs3w
-	O323eh//3dQkxLbaVfxl902m9p4t7mgP2Wn0T6Vz+1AmS46Xdpp5gJgr0H2qgaIiaBYc+ns60pm
-	oc9FdBbPipCIAU7BBGGisCXWgudqXqBL2f9m3nWufzgvS+OLTt5FbLA23CO0mYRoH9TUNuSVgei
-	jL8gOldUbfIB8emLLivgEeJ8sPB5PejBijAwjlNpIawBFDYiIx4okPrdc8+uTjF8l6XIodambtj
-	slZZh8q2wdugwRDVv/qYpFAAfX6D/A1mltJ2amdAdRlxl1SUiTgGsfSvt6R2HScdfK7H
-X-Received: by 2002:a17:902:e74d:b0:220:c94b:83a7 with SMTP id d9443c01a7336-220d20e9098mr66059125ad.29.1739480644978;
-        Thu, 13 Feb 2025 13:04:04 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE3PVefDcwgu/C99h90ihg+V7iq72uwEndOIuPiYoQ0b1DMyzjKKFzPMqJTWrNTXGvhYvMn1Q==
-X-Received: by 2002:a17:902:e74d:b0:220:c94b:83a7 with SMTP id d9443c01a7336-220d20e9098mr66058705ad.29.1739480644579;
-        Thu, 13 Feb 2025 13:04:04 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739480646; x=1740085446;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=/E2f4sNa5dJ1J/+u/sCAiw4E4qFHfywaLempWlQrqbI=;
+        b=hh5INk4BkTwkSADzCyGbAeDJqPRBhOKDxcs69YRGG0ppNVIW2f8GWI0GhlkXfPLF4x
+         mv4DTcEA/iKJ7jJFYq6KGUNgBWfmB3oM00jurlcL7XHdq6eKXjymSYAlr1SGlHeaJ30k
+         /eTWZfO76PHbYzc/ctJmHeWscGoum3vbqU4w5lDm0LGFwhoWir9DYYVv/icAX4Svqav8
+         NFe5q7nJg29uoASdIcGTk+HZRbedMlKtOgopdRLiABQGP9SNmTmUtZSuhaZkBgDQ+04Q
+         sA+6FITJ3Yadybo5cJzwkv4GZgXlcqAQw8VLAOzUOBLY0wvTG6FvYevAmczRpYo+n3lh
+         CQSQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUAhbbSEXUmv8S9UQdCTMDXuSvjA2zRY/hUgDOnj/TBoTOVsUM1g9vkGd0FrUcfCfhRt0mJYoiDJA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyYj7eC9aJ9uNeI4I/f8pDUmgl9Yw3pVhOtWn/39QBOEXoxoOAQ
+	xw1nf7zU/42x9ncC213wLvr4wV8xsZn+rfDNtZl4Fn5XYW0RQvv49z3AOTOfjPH6D+69vcL3ph2
+	w8tLSrCoFcCqM6umNXxWVQWSQF2+7YrLnwqVvKmI0OcKvSJ34tdZu/+wUmw==
+X-Gm-Gg: ASbGncsIOtccUWt5s5hSyAd9+nsVmVuWQsp0pdKPgQonsd879xgIua+Ekofm2skjf6X
+	6l7RTitQbcNnMoVebTB+dmizpnuztPhhS1dfEobVlNEQ62HogrOHtTcAWgR3alpFj0ZFduvkvCc
+	mzpHWMfvFApe5HepL0jQ9RgT4WAGxHx4ol3bIumoDR5y6U0pTdJ4LF+WrA0IqswoNHW6S2Ww37o
+	tCfepxuOLZU84qDJCXrPWXlIm7nyofOzPEsmV24tweTwjaSNhrLn6vICaNVcy7WmGQHHYUYDTmq
+	J7dygqplclpiaGZt5Q5eW8+dNrZXclR7a9UxYfnmR21meVDWs2IOUkjbs8KjwhqmupUZ
+X-Received: by 2002:a17:902:f689:b0:21f:98fc:8414 with SMTP id d9443c01a7336-220d35e2297mr70289415ad.26.1739480646261;
+        Thu, 13 Feb 2025 13:04:06 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFgZkxefzAh1dnDM8xO5GuAGXCpKBllT6VbOz2bGnH6gN5UaFfTD4wPjuQFCzfXfUFkHcgqag==
+X-Received: by 2002:a17:902:f689:b0:21f:98fc:8414 with SMTP id d9443c01a7336-220d35e2297mr70288985ad.26.1739480645828;
+        Thu, 13 Feb 2025 13:04:05 -0800 (PST)
 Received: from hu-amelende-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220dacfc769sm14339375ad.201.2025.02.13.13.04.03
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220dacfc769sm14339375ad.201.2025.02.13.13.04.04
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 13:04:04 -0800 (PST)
+        Thu, 13 Feb 2025 13:04:05 -0800 (PST)
 From: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
 To: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
         daniel.lezcano@linaro.org
 Cc: rui.zhang@intel.com, lukasz.luba@arm.com, david.collins@oss.qualcomm.com,
         linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
         linux-kernel@vger.kernel.org
-Subject: [PATCH 0/4] thermal: qcom-spmi-temp-alarm: Add support for new TEMP_ALARM subtypes
-Date: Thu, 13 Feb 2025 13:03:59 -0800
-Message-Id: <20250213210403.3396392-1-anjelique.melendez@oss.qualcomm.com>
+Subject: [PATCH 1/4] thermal: qcom-spmi-temp-alarm: enable stage 2 shutdown when required
+Date: Thu, 13 Feb 2025 13:04:00 -0800
+Message-Id: <20250213210403.3396392-2-anjelique.melendez@oss.qualcomm.com>
 X-Mailer: git-send-email 2.34.1
+In-Reply-To: <20250213210403.3396392-1-anjelique.melendez@oss.qualcomm.com>
+References: <20250213210403.3396392-1-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -95,51 +98,118 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: ZL4v_6a8B19Q1SxW5yYt6HfxiMx-vNrr
-X-Proofpoint-GUID: ZL4v_6a8B19Q1SxW5yYt6HfxiMx-vNrr
+X-Proofpoint-GUID: kQjtbATrKKdO-sENlCebOehtOEmoAKef
+X-Proofpoint-ORIG-GUID: kQjtbATrKKdO-sENlCebOehtOEmoAKef
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
  definitions=2025-02-13_08,2025-02-13_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 suspectscore=0
- mlxscore=0 bulkscore=0 priorityscore=1501 spamscore=0 lowpriorityscore=0
- impostorscore=0 malwarescore=0 mlxlogscore=999 adultscore=0 phishscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
- definitions=main-2502130148
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 spamscore=0
+ lowpriorityscore=0 clxscore=1015 mlxlogscore=999 phishscore=0
+ suspectscore=0 malwarescore=0 priorityscore=1501 adultscore=0 mlxscore=0
+ bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2501170000 definitions=main-2502130147
 
-Add support in the qcom-spmi-temp-alarm driver for the new PMIC
-TEMP_ALARM peripheral subtypes: GEN2 rev 2 and LITE. The GEN2 rev 2
-subtype provides greater flexibility in temperature threshold
-specification by using an independent register value to configure
-each of the three thresholds. The LITE subtype utilizes a simplified
-set of control registers to configure two thresholds: warning and
-shutdown. While at it refactor the qcom-spmi-temp-alarm driver to limit
-code reuse and if/else statements when deciphering between TEMP_ALARM 
-peripheral subtypes. 
+From: David Collins <david.collins@oss.qualcomm.com>
 
-Also add support to avoid a potential issue on certain versions of
-the TEMP_ALARM GEN2 subtype when automatic stage 2 partial shutdown
-is disabled.
+Certain TEMP_ALARM GEN2 PMIC peripherals need over-temperature
+stage 2 automatic PMIC partial shutdown to be enabled in order to
+avoid repeated faults in the event of reaching over-temperature
+stage 3.  Modify the stage 2 shutdown control logic to ensure that
+stage 2 shutdown is enabled on all affected PMICs.  Read the
+digital major and minor revision registers to identify these
+PMICs.
 
-This patch series is a continuation of older series from 7/2024
-(https://lore.kernel.org/all/20240729231259.2122976-1-quic_amelende@quicinc.com/)
-but current series has been reworked to address the change in thermal framework to
-update .set_trip_temp() callback function variables
-(https://lore.kernel.org/all/8392906.T7Z3S40VBb@rjwysocki.net/)
+Signed-off-by: David Collins <david.collins@oss.qualcomm.com>
+Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+---
+ drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 32 +++++++++++++++++++--
+ 1 file changed, 30 insertions(+), 2 deletions(-)
 
-
-Anjelique Melendez (3):
-  thermal: qcom-spmi-temp-alarm: Add temp alarm data struct based on HW
-    subtype
-  thermal: qcom-spmi-temp-alarm: add support for GEN2 rev 2 PMIC
-    peripherals
-  thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
-
-David Collins (1):
-  thermal: qcom-spmi-temp-alarm: enable stage 2 shutdown when required
-
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 515 ++++++++++++++++++--
- 1 file changed, 464 insertions(+), 51 deletions(-)
-
+diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+index c2d59cbfaea9..b2077ff9fe73 100644
+--- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
++++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+@@ -1,6 +1,7 @@
+ // SPDX-License-Identifier: GPL-2.0-only
+ /*
+  * Copyright (c) 2011-2015, 2017, 2020, The Linux Foundation. All rights reserved.
++ * Copyright (c) 2024, Qualcomm Innovation Center, Inc. All rights reserved.
+  */
+ 
+ #include <linux/bitops.h>
+@@ -16,6 +17,7 @@
+ 
+ #include "../thermal_hwmon.h"
+ 
++#define QPNP_TM_REG_DIG_MINOR		0x00
+ #define QPNP_TM_REG_DIG_MAJOR		0x01
+ #define QPNP_TM_REG_TYPE		0x04
+ #define QPNP_TM_REG_SUBTYPE		0x05
+@@ -71,6 +73,7 @@ struct qpnp_tm_chip {
+ 	struct device			*dev;
+ 	struct thermal_zone_device	*tz_dev;
+ 	unsigned int			subtype;
++	unsigned int			dig_revision;
+ 	long				temp;
+ 	unsigned int			thresh;
+ 	unsigned int			stage;
+@@ -78,6 +81,7 @@ struct qpnp_tm_chip {
+ 	/* protects .thresh, .stage and chip registers */
+ 	struct mutex			lock;
+ 	bool				initialized;
++	bool				require_s2_shutdown;
+ 
+ 	struct iio_channel		*adc;
+ 	const long			(*temp_map)[THRESH_COUNT][STAGE_COUNT];
+@@ -255,7 +259,7 @@ static int qpnp_tm_update_critical_trip_temp(struct qpnp_tm_chip *chip,
+ 
+ skip:
+ 	reg |= chip->thresh;
+-	if (disable_s2_shutdown)
++	if (disable_s2_shutdown && !chip->require_s2_shutdown)
+ 		reg |= SHUTDOWN_CTRL1_OVERRIDE_S2;
+ 
+ 	return qpnp_tm_write(chip, QPNP_TM_REG_SHUTDOWN_CTRL1, reg);
+@@ -350,7 +354,7 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+ {
+ 	struct qpnp_tm_chip *chip;
+ 	struct device_node *node;
+-	u8 type, subtype, dig_major;
++	u8 type, subtype, dig_major, dig_minor;
+ 	u32 res;
+ 	int ret, irq;
+ 
+@@ -403,6 +407,30 @@ static int qpnp_tm_probe(struct platform_device *pdev)
+ 		return dev_err_probe(&pdev->dev, ret,
+ 				     "could not read dig_major\n");
+ 
++	ret = qpnp_tm_read(chip, QPNP_TM_REG_DIG_MINOR, &dig_minor);
++	if (ret < 0) {
++		dev_err(&pdev->dev, "could not read dig_minor\n");
++		return ret;
++	}
++
++	chip->dig_revision = (dig_major << 8) | dig_minor;
++
++	if (chip->subtype == QPNP_TM_SUBTYPE_GEN2) {
++		/*
++		 * Check if stage 2 automatic partial shutdown must remain
++		 * enabled to avoid potential repeated faults upon reaching
++		 * over-temperature stage 3.
++		 */
++		switch (chip->dig_revision) {
++		case 0x0001:
++		case 0x0002:
++		case 0x0100:
++		case 0x0101:
++			chip->require_s2_shutdown = true;
++			break;
++		}
++	}
++
+ 	if (type != QPNP_TM_TYPE || (subtype != QPNP_TM_SUBTYPE_GEN1
+ 				     && subtype != QPNP_TM_SUBTYPE_GEN2)) {
+ 		dev_err(&pdev->dev, "invalid type 0x%02x or subtype 0x%02x\n",
 -- 
 2.34.1
 
