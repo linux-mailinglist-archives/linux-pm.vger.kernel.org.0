@@ -1,115 +1,116 @@
-Return-Path: <linux-pm+bounces-22021-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22022-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6087DA346C9
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 16:28:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13D87A3489A
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 16:55:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17DB41898DDB
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 15:20:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B4F5A16442D
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 15:52:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 554B214A605;
-	Thu, 13 Feb 2025 15:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DDBD91D6DB4;
+	Thu, 13 Feb 2025 15:51:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="x2QCH6gy"
+	dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b="jSmhxf+u"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.zeus03.de (zeus03.de [194.117.254.33])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 03BFE13D8A4
-	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 15:20:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6660518A6C4
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 15:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=194.117.254.33
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739460041; cv=none; b=HDaeAKRXEzE4la3dGzpAQkPM9JFo5T3pfr7F1exZMRA9AIzlv+QbM95oS3cSlA4TEo/Q0HH/d+XNVB8ahR279RqOGG8xbONLdU0wMnj0gn1Q62wK3fCO1faL+L6mYd2yfFUfjNOL8lOAiAov7Ty0+NNfA4unMKc9yuuq5PEnFwQ=
+	t=1739461903; cv=none; b=Qu3/ncrM+uIQ+UJsH3L8yb69vR/z7YlEQHyFXfDsCzqEwEdb7+xLsobirrzr8Izty07tIlvo4/KJQuZRcLJ7v7+eJZUpb5jCppSAdTGgCK4OU0KT6RgkOqR/jan99Ws18pMMyzuB16qHT9vTl07PN9cBUXhshaAW8JfEJV4mPqo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739460041; c=relaxed/simple;
-	bh=rfpPomdaAuC/C/fVrS0p4u4D+n8uN16/rL49lRiJWnY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Ho1Nt/FV6fbUpp+gvaH3Uxa4ceOFqSCQE0BY2BAjm+8WNE+yARskRI0/pZkUgIgG3K426xGyAjzkCaj7pgvrKzeOrtN87w8ozDucJXKebhPzg2dFqEPEc9z95dpnb58UoHE2tlPSvrjUBs+oVe/VHBYEKPWcOE4IuzBAhRWkk14=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=x2QCH6gy; arc=none smtp.client-ip=209.85.219.175
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e5b4d615267so936167276.1
-        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 07:20:38 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739460038; x=1740064838; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rfpPomdaAuC/C/fVrS0p4u4D+n8uN16/rL49lRiJWnY=;
-        b=x2QCH6gyWVWNjpe2+HEgLP1mqY/X5n2KqG+LvZ9wohdc6WeENRtHM6pDJT0OTSyHOz
-         2Dkt+6p+/3lf1Oyot9hGsxQ1vD1RwJ8mxMRnYtLUdV6kzXK3e2Lku5c3PyAHIKwS/PYF
-         5lmLxMn5zcxxfiPd9dAgIEzXyRRqWeWtGRsZcHVniB1+naFAdYVQqV76DFsdJiZONxWG
-         kmJexM4lKtIvcogsKJFH7sb14vSYu8U714KhWbqGdWdgUhrwV8zRh2WyZ6NZZepP5z0g
-         44L/3fDzxfKA0CWBrzczWv/Sqz/VAelBljA1fOBCXUG+j1E/bMbc8lsjTElsQu7uA9k+
-         X0Dw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739460038; x=1740064838;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=rfpPomdaAuC/C/fVrS0p4u4D+n8uN16/rL49lRiJWnY=;
-        b=MPHIaYdjRp1ZEjafXc/PiwR6y2YDqFMV4OHE5LAQxHmRfLII3F7f5eNhlS87bPWJZB
-         GQfNt+7pCyB58ik+JDIPO5EL+lrnz+ovuOnHq1q+blF5TCSXxO2AfAnDmeU/t3SMKhfn
-         +6xAGZRht3+QQPsHFfbHBcMPJ4exSgjerNODW7pRG7jVjJI/DkEeNbM3nC7yKBiHnO2Q
-         EPlqnkzXDvmg+fXcFQ3n7DUTX8bmGHq8Q7cOuoJXdjbzrapxEFBc8cBzskmNIC2ylDmn
-         jnPaG409lOnkcM3JNtCK/YpZ95riOhpGmI3NyC18dPLSnJihHEXp9mMP6LSG6OZ71b70
-         MdkA==
-X-Forwarded-Encrypted: i=1; AJvYcCV37x5i6EkrCESj65Mu6Ike+LBVP7bz1aAzwdqFoFFriTDFwgknJOClTR/VzqgmuKz727AD/9OokA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx3T7tg4V0A5MCbth9uNoKFzjtRwOfhY5wb1qDLU5laZfeLi9pS
-	9wZ2Hlq9YT4QXvYYJuA8E6SUe2nTYV5SG0SeQjheX94uJyHkCrAvTXeVvbK8GVs0RiFLfSsLIdw
-	ua2wE4w5sjMHGTBLYHfkBZ1H26Mv+ITd6SJJGdA==
-X-Gm-Gg: ASbGncuci9nPt3bW7eZx1ojwfIRQUgdgUDxiFM7HLzEolFAzQQ/GWKIJ2SEQdB2h3ZK
-	Uy/RHJcbpsIMWT1oN/QiVBDGRjsEVUVsmn3K0HW2LSj2MbDBC7gWdlOeMxDj6UrBCNA4YX5zmgg
-	==
-X-Google-Smtp-Source: AGHT+IFl/TG61rvCBbheyo/94kyjI8M7amCo+Z6FRtUrkr7CyRBFmSwZjs8C3zZwm91mmD1mfp5rexOLBEr+jyGCvjE=
-X-Received: by 2002:a05:6902:1206:b0:e57:f8cd:f0a4 with SMTP id
- 3f1490d57ef6-e5d9f1793cemr7130963276.34.1739460037910; Thu, 13 Feb 2025
- 07:20:37 -0800 (PST)
+	s=arc-20240116; t=1739461903; c=relaxed/simple;
+	bh=dWOaHC0+96XuRzyjiuYqb/FLWuMQd9XDcQE2Lru9iWw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=iLEG+0xCYgaw/GShRqOBuNfOCxPSqy8liNiHcCJ4mGIWs9IKfajdiIDOH6qRgRPSpIKACiGi9LMa6GyLu+zhPYpaUi/WH9j4bluNxmG4/fNR8y69KQZ64ZD8X42YRy2upsAk3mIeYMuiGTSRzHylI9zGiMcfxjkdDk/RttD/KeA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com; spf=pass smtp.mailfrom=sang-engineering.com; dkim=pass (2048-bit key) header.d=sang-engineering.com header.i=@sang-engineering.com header.b=jSmhxf+u; arc=none smtp.client-ip=194.117.254.33
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=sang-engineering.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sang-engineering.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	sang-engineering.com; h=date:from:to:cc:subject:message-id
+	:references:mime-version:content-type:in-reply-to; s=k1; bh=dWOa
+	HC0+96XuRzyjiuYqb/FLWuMQd9XDcQE2Lru9iWw=; b=jSmhxf+uPseSkWq6Jc5r
+	rLJu93XhNzTqAnJdj7Kv2slaOPz4N3jLnVTE3ML3DRT8cNQb0jomMc9Jj4vlzMVP
+	4mWbnBdP//4BdKFRbtYMoMvauHVpA60Gf812u39xa+yB62IjxROv6rEman6OX8IE
+	BKpZUUsevSKIx3q8/JGAt/rD+mZyqkbE4F6G4Hc3vj7JbzFX2mn9D/QXkE2fPzA6
+	pfUt0nKEki1nwFFicCQIN1PROKHCiMPoQRAiCuXYyRcHTdcMpploXwacET4Rcyh0
+	JkBILJGdZlXw/mRfQ/WpHN99iYoWr3X1Bx4xBFbceJiSVT4kgrjh7isnuq/0la9L
+	VQ==
+Received: (qmail 1932185 invoked from network); 13 Feb 2025 16:51:38 +0100
+Received: by mail.zeus03.de with ESMTPSA (TLS_AES_256_GCM_SHA384 encrypted, authenticated); 13 Feb 2025 16:51:38 +0100
+X-UD-Smtp-Session: l3s3148p1@ExqICAguFspehh99
+Date: Thu, 13 Feb 2025 16:51:37 +0100
+From: Wolfram Sang <wsa+renesas@sang-engineering.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Bence =?utf-8?B?Q3PDs2vDoXM=?= <csokas.bence@prolan.hu>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+	Sebastian Reichel <sre@kernel.org>
+Subject: Re: [PATCH v2 1/2] power: ip5xxx_power: Make use of
+ i2c_get_match_data()
+Message-ID: <Z64VCeUWIsNbg_g8@shikoro>
+Mail-Followup-To: Wolfram Sang <wsa+renesas@sang-engineering.com>,
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	Bence =?utf-8?B?Q3PDs2vDoXM=?= <csokas.bence@prolan.hu>,
+	linux-i2c@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org, Samuel Holland <samuel@sholland.org>,
+	Sebastian Reichel <sre@kernel.org>
+References: <20250213114613.2646933-1-andriy.shevchenko@linux.intel.com>
+ <20250213114613.2646933-2-andriy.shevchenko@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
- <CAPDyKFq+pWXq75xEtfkeCkmkdZtfp9dAFej4M+6rO6EAUULf=w@mail.gmail.com> <yq14j0y25hd.fsf@ca-mkp.ca.oracle.com>
-In-Reply-To: <yq14j0y25hd.fsf@ca-mkp.ca.oracle.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Thu, 13 Feb 2025 16:20:01 +0100
-X-Gm-Features: AWEUYZklR9qSyrIhPSPo_ng6rtBVVDlndlqorR6YtDIMuUhis6JkRbA7309T0XU
-Message-ID: <CAPDyKFqsiBaSV--a_SvJ1n0733XXjSoONztf0e=jsGTZhKxQJw@mail.gmail.com>
-Subject: Re: [PATCH v7 0/7] Initial support for RK3576 UFS controller
-To: Shawn Lin <shawn.lin@rock-chips.com>, 
-	"Martin K. Petersen" <martin.petersen@oracle.com>
-Cc: "James E . J . Bottomley" <james.bottomley@hansenpartnership.com>, Rob Herring <robh+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Heiko Stuebner <heiko@sntech.de>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
-	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="Jnew7k6MiJ09mEs0"
+Content-Disposition: inline
+In-Reply-To: <20250213114613.2646933-2-andriy.shevchenko@linux.intel.com>
 
-On Wed, 12 Feb 2025 at 22:56, Martin K. Petersen
-<martin.petersen@oracle.com> wrote:
->
->
-> Ulf,
->
-> > If so, may I suggest that I pick patch2, patch3 and patch4 via my
-> > pmdomain tree and share them via an immutable branch, so they can be
-> > pulled into James/Martin's scsi tree?
->
-> Sure, that's fine with me.
 
-Okay, great! I have picked up the patches and pushed them to the below
-immutable branch, which is based upon rc2.
+--Jnew7k6MiJ09mEs0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
 
-git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git rockchip
+On Thu, Feb 13, 2025 at 01:45:04PM +0200, Andy Shevchenko wrote:
+> Get matching data in one step by switching to use i2c_get_match_data().
+>=20
+> Acked-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> Signed-off-by: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
+> Reviewed-by: Vladimir Zapolskiy <vladimir.zapolskiy@linaro.org>
 
-Kind regards
-Uffe
+Applied to for-next, thanks!
+
+
+--Jnew7k6MiJ09mEs0
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEEOZGx6rniZ1Gk92RdFA3kzBSgKbYFAmeuFQkACgkQFA3kzBSg
+KbaVyQ//VZfDXVtbS8X2ax1ClaKPnDT2Aac1yuVmRlBRSw/NqcdwDCKFwQuLyEcg
+rtAIOGtA9SW/DUaToKJrDvDoVTHpv9s1kEyZEO3SjCxHzRJytLqMpp2foQYYSWRK
+tXhHvWPQRGozXWKcSE7CyU4FsKf7GPQOlbuQ1XE6jtzr1zKs/62VQnw4u1uF/T3k
+Zfw2+RKWv3VloHywu53rQJPaDbND/1XAUbjAmGBEw/mi1GHtO0xY5kYPzzWBRy5E
+2UAv1QRJyFYIqhWaOnE8Y0Fs0A3EU2301tb5auLry9gcrVkgImy29sIRB5/jki3g
+Pvp0uaRExHSMAhYhHa72UudqYzE8to+VGhlzFv3h3G7tfOwS/N9HWZ5lLXbpa+FD
+GBEd+zDLUg1m4L/+fTEnsdxCxbCKp31Y9ZDuu/LbpKYoEKEnpfVPrLonRNZutafX
+GW7AmwCOAqN6Nr/0DjkVlY7a3o7SOxuoQU30T1YnJKnauJyv0se4SeIR1SNNXFuJ
+bjxf+D/uCRc79Dt0BRuyC4pg/IsgXHoO0ZGjRyVLBwCMysEo1XSlrFJna7Fynr1r
+X6u8x410wIXn+UYdlrWo6E68WzR1esQEkCAdpsBBNRTYOpLZQy7Yez6WEy3jhvE4
+5mlDef47jxmSdAY4C6abc7+mPqDel+bRAFvdEc6mDyhmeo8bejI=
+=4BJb
+-----END PGP SIGNATURE-----
+
+--Jnew7k6MiJ09mEs0--
 
