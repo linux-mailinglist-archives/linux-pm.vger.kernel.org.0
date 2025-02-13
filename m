@@ -1,451 +1,163 @@
-Return-Path: <linux-pm+bounces-22042-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22043-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7742EA35055
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 22:13:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 245BFA3506E
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 22:20:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 527127A28E3
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 21:12:12 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9054B3AC0D4
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Feb 2025 21:20:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF6F5269898;
-	Thu, 13 Feb 2025 21:12:37 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64BAA26619E;
+	Thu, 13 Feb 2025 21:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b="PQgOjTPS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="RzlcxEud"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85373269822
-	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:12:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3E5DF245B1B
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:20:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739481157; cv=none; b=qGtkIFseYFzm8X0H+tKN/RfkI3apGBl8jCR4y665lFbbCqUGlQtZx9PBiD4jf3MYsUDTJQgBHC3mr+7NVhQ3wxqsnuVcJi/kcIZVd5thoc6fE1MrWYA1TtLhQSyxalxcwPxXpDcnF3q07277KBGAttwmPt570FFL+qBhPS8/7Jg=
+	t=1739481644; cv=none; b=dszxdkAEMcpxOrH/c24SKZ4tWsVyjRyBYabbqdWgwmodzsNIJiSQndtoyhybSMStJeZn/PRIOwh8fMCFvziYcUP8o+aZtfYL3hCHn92jKL8DYztcc0Ue4iL7CIb4T3ac/Q7UViag+XP2AjUxf5lq5pHZOWI7Wa8LFfiC+UE2dd8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739481157; c=relaxed/simple;
-	bh=LaWY661hGGOsz8ab9A8tX3O52beRD/JORrirTIwPdYI=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=gqVzb09T3ARmxR2jHoe1Eet/TsTex7WeW72yGaxEQkiyLF5QO+RpilEUhH5QMaMeG26UyHfGT8ssch8/uSJYlckp3A2ic0dDBN7uv7TgdozozArFblwae344utW/iTIVcAnFGmWfz+M0qZZKea/P5YyCn4JIqOx0+cc5uh6TYOU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com; spf=pass smtp.mailfrom=rivosinc.com; dkim=pass (2048-bit key) header.d=rivosinc-com.20230601.gappssmtp.com header.i=@rivosinc-com.20230601.gappssmtp.com header.b=PQgOjTPS; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rivosinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rivosinc.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-220d28c215eso18487835ad.1
-        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 13:12:35 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=rivosinc-com.20230601.gappssmtp.com; s=20230601; t=1739481155; x=1740085955; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=7dCT5jcbY95du2Tjjq6rItJv9SEP2f87N9w5dx/eCvk=;
-        b=PQgOjTPSZ018B7gXHtYTZ5cRL50oqDk9VjHlUmAM1ERVJShkmoz/p6hKEKzwtRjDNY
-         po6iTqmYTlvXp98UsSVtAkMNSQ/MBAAbYVQycjTeVLKTtnVOtrT5IwJx0pp7bJW8yzRM
-         zycNB69qQDWQLooo6hDzJfOC6QSax+5hV8oD04YhjuRF4dmcKVwW1ZnooFrXvHyLOnEJ
-         TFypj/qjuk49tse64lXBXoEyp5453DjrsmfnDxc6Tij4a0XpLwBOS7iCIdQlF5ru8Ock
-         Ueav0D4Msz4raWAfzewlOF1AGnZL0oQPiS4Es067DrW12AIveFAApfkEPV6L7S5W+Mwa
-         tbcQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739481155; x=1740085955;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=7dCT5jcbY95du2Tjjq6rItJv9SEP2f87N9w5dx/eCvk=;
-        b=sT726taNR/p8fPMILv52mZl3iQoRI3dHWWemCc6R1Q2yktrLkcq9B7M4Lt8J8CpD4S
-         VkyStrB/Da6VpD/aV61kJ5OSSMPXVZz+FYch0FBBWn4oOLV38k3r4769hF8/tlbOSsOx
-         NwijDz7QYia5HsxRU7Bmw909UuVNP4LGefQEw53pNkRLcdQujxemNnZC6WudhBMOOc2V
-         EbjitklT9igpHo560zftsrO9/qwsCxgTGGKwKJDfVrWmXL2Rs/XRMk/shLeU1MFeiG8C
-         Pi1CrnlKSAbgLps5reUsO9jVjI2YpTOim5YUq2sil6Rp8PBlKcFVHHOcZQm5b5+pD3Y1
-         nMKQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXy4xGgm8zVKwvdN1WZ3ffVRg6aNtU8a1XcayHup5NQRHtlPNsGlfRByHxq1piv55pHu6B24+L0FA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyKYsCABATvYYX4Cc99ppVvyToOHebbJI8N8d0+sZHd5Hv6CdaW
-	MNjS8IpR7cxI3qwODG3TaKvZ1FmlnsdfvgLhEXhou2kDP8jnLBgRlswySLHOkXY=
-X-Gm-Gg: ASbGncs66LIWLP4SHtr4IVqXbooFPCGJbK/yZZTDBK8NpLWmXnae6xAQ3Eoxbr/a75f
-	QdipOOF1bCYeNz6xCpVXCdt/B1zNcgxPmwN1nDfAnxvu1NWj7mg8QRKM9SbIJxiXhE/mdzPV70K
-	WiXTpUWvjTpJke9FsSJwPxWS8RJ5OdL3Xszhfu7OQYk4i0EGOiYA40apfVgdqboEEnRWy+nkxQ7
-	857FnSRK8BGNH4OqNuvugfw06mJMJN3GdJLlqLbay9tD36tzGMSeqce47wU/WwLD8Bd8TQ5GQcx
-	UvR8SdUtpFZYuocgsfGa/gsf4h9MXTc=
-X-Google-Smtp-Source: AGHT+IHWMlGwUiWdsiNRbvm7dD8sEMzLzmRqwl/PU5Ys8fbVS90IAlTNhDD0UoMI3fOVabW+kAQ4WQ==
-X-Received: by 2002:a05:6a00:3e04:b0:730:9334:18f3 with SMTP id d2e1a72fcca58-7323c1bcde7mr7654326b3a.19.1739481154657;
-        Thu, 13 Feb 2025 13:12:34 -0800 (PST)
-Received: from charlie.ba.rivosinc.com ([64.71.180.162])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7324257fdd6sm1758072b3a.76.2025.02.13.13.12.32
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 13 Feb 2025 13:12:34 -0800 (PST)
-From: Charlie Jenkins <charlie@rivosinc.com>
-Date: Thu, 13 Feb 2025 13:06:22 -0800
-Subject: [PATCH v3 2/2] tools: Remove redundant quiet setup
+	s=arc-20240116; t=1739481644; c=relaxed/simple;
+	bh=R6yZihHam0h6IlcVsO97cIFK7OeOruhXhxzpvShzhP8=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=fL/ftEtEMrh/OUgTvrtPzMmPkhT/j1U2+tzlzRLpnV/YXp486OiS+3mT+abUwnULxBakJgVAD6RIK53eqPZxJbR/avei92jZ3NhByovyD/KJ/DtVXIxRsD5UxTMJYx+B4q5p9C3po4CGJlCGm0T/u+y/sQ29fwz7m4vSgEGpA9I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=RzlcxEud; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id C1E87C4CED1
+	for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 21:20:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739481643;
+	bh=R6yZihHam0h6IlcVsO97cIFK7OeOruhXhxzpvShzhP8=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=RzlcxEudos6tHo5uHtN1HgAw6EewdK0A9144rXpHZ9+TjlXCkiLgaTBcfDOdSpATo
+	 Gc4/5Is/xGYmPE7r9hAG6sDgepefPTmnm2ofAM00OftOMboLusLJSNOkJu97oriya0
+	 n7PWoGC9mrxxv5HS3DtleFPypPmUByoCQN82MiwYwcAzo1E6p6pYHxPiavqcTpUI+8
+	 e1PhMLdduOPUbKRiAx84Gvh6dziyL/RbuuxdgF+ZLO0gOn2pCDBQlbHJpI8exdmhzZ
+	 MNjCr++g5TEl6eTgeEvZ/HJ+i6lZ3RWW95EbMYRKU6DW23h+nzdnyuWpm/z2AncacO
+	 EJ4WspA1EiXFQ==
+Received: by mail-oa1-f42.google.com with SMTP id 586e51a60fabf-2b8e26063e4so722359fac.3
+        for <linux-pm@vger.kernel.org>; Thu, 13 Feb 2025 13:20:42 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXR5zPJ2BGhdGtqv8a+uxuCwntcwUrGs5N7+O/9awNjTqptnIy1p9NCFADmexe1dvoRY7to634ujQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx03NjGRSnwi2FPD7A10XyB4B0DM0nrQ8L630MBwKGzkyG94EYr
+	iHoD1HJY8Xz3s+z+iss8pqxQfgz/QoUMHzpk7oFLemmjw7WBz5vZs6wvBZbmldjxR+kEIzzf4dI
+	WghAvJkNJaqis+54TTg1KhA4Aj2E=
+X-Google-Smtp-Source: AGHT+IHhtwiyO7pSSPqsWR2kHRk24EchxhEUH5QxXM6/nqWNb/nvAeT4uYZe2n/jCmUVmvNLC3LUXeHdxJuvNMhzhDE=
+X-Received: by 2002:a05:6871:7506:b0:2b7:ecaf:59d4 with SMTP id
+ 586e51a60fabf-2b8d6831231mr5507942fac.38.1739481642049; Thu, 13 Feb 2025
+ 13:20:42 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250213-quiet_tools-v3-2-07de4482a581@rivosinc.com>
-References: <20250213-quiet_tools-v3-0-07de4482a581@rivosinc.com>
-In-Reply-To: <20250213-quiet_tools-v3-0-07de4482a581@rivosinc.com>
-To: Alexei Starovoitov <ast@kernel.org>, 
- Daniel Borkmann <daniel@iogearbox.net>, Andrii Nakryiko <andrii@kernel.org>, 
- Martin KaFai Lau <martin.lau@linux.dev>, 
- Eduard Zingerman <eddyz87@gmail.com>, Song Liu <song@kernel.org>, 
- Yonghong Song <yonghong.song@linux.dev>, 
- John Fastabend <john.fastabend@gmail.com>, KP Singh <kpsingh@kernel.org>, 
- Stanislav Fomichev <sdf@fomichev.me>, Hao Luo <haoluo@google.com>, 
- Jiri Olsa <jolsa@kernel.org>, Peter Zijlstra <peterz@infradead.org>, 
- Ingo Molnar <mingo@redhat.com>, Arnaldo Carvalho de Melo <acme@kernel.org>, 
- Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>, 
- Alexander Shishkin <alexander.shishkin@linux.intel.com>, 
- Ian Rogers <irogers@google.com>, Adrian Hunter <adrian.hunter@intel.com>, 
- Quentin Monnet <qmo@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, Josh Poimboeuf <jpoimboe@kernel.org>, 
- Mykola Lysenko <mykolal@fb.com>, Shuah Khan <shuah@kernel.org>, 
- Jiri Kosina <jikos@kernel.org>, Benjamin Tissoires <bentiss@kernel.org>, 
- Steven Rostedt <rostedt@goodmis.org>
-Cc: bpf@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-perf-users@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kselftest@vger.kernel.org, linux-input@vger.kernel.org, 
- linux-trace-kernel@vger.kernel.org, Charlie Jenkins <charlie@rivosinc.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=10133; i=charlie@rivosinc.com;
- h=from:subject:message-id; bh=LaWY661hGGOsz8ab9A8tX3O52beRD/JORrirTIwPdYI=;
- b=owGbwMvMwCXWx5hUnlvL8Y3xtFoSQ/q6BGu5TUfqNyQ4drwoiJ+XWX7zwBmVfSudWRT0mS+9f
- 6jGzv6oo5SFQYyLQVZMkYXnWgNz6x39sqOiZRNg5rAygQxh4OIUgImsvszwz7bS6cPv4DW/n82q
- c1vDlz51t8ZH3vIlkd7+d8qjXp67tpThf3xtgqCr1zKtYgkrh/mW1rFZmbr1cr4pv1r89977OvU
- rMwA=
-X-Developer-Key: i=charlie@rivosinc.com; a=openpgp;
- fpr=7D834FF11B1D8387E61C776FFB10D1F27D6B1354
+References: <20250211034423.833783-1-xu.yang_2@nxp.com> <CAJZ5v0idzf1QKf8UKp4ttepLbipZD6b1RFHX7QqgQCyJZL8dQg@mail.gmail.com>
+ <20250213105306.vz2xirvffqaycz7z@hippo>
+In-Reply-To: <20250213105306.vz2xirvffqaycz7z@hippo>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 13 Feb 2025 22:20:30 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jEd1hdssAeLXUMqAuqFsc1Pcebm3eEUP0wrx39xG2TwA@mail.gmail.com>
+X-Gm-Features: AWEUYZn7R16V2pRKXfHP1W9UJH86Y8NuXzfIZN6YIUVp_0ne92KdxV50IZQCwYo
+Message-ID: <CAJZ5v0jEd1hdssAeLXUMqAuqFsc1Pcebm3eEUP0wrx39xG2TwA@mail.gmail.com>
+Subject: Re: [PATCH] PM: sleep: core: Set is_prepared to false before checking direct_complete
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, len.brown@intel.com, pavel@kernel.org, 
+	gregkh@linuxfoundation.org, dakr@kernel.org, stern@rowland.harvard.edu, 
+	linux-pm@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Q is exported from Makefile.include so it is not necessary to manually
-set it.
+On Thu, Feb 13, 2025 at 11:56=E2=80=AFAM Xu Yang <xu.yang_2@nxp.com> wrote:
+>
+> On Wed, Feb 12, 2025 at 09:55:00PM +0100, Rafael J. Wysocki wrote:
+> > On Tue, Feb 11, 2025 at 4:43=E2=80=AFAM Xu Yang <xu.yang_2@nxp.com> wro=
+te:
+> > >
+> > > Currently, if power.no_callbacks is true for a device, device_prepare=
+()
+> > > will also set power.direct_complete to true. When device_resume() che=
+ck
+> > > power.direct_complete, setting power.is_prepared will be skipped if i=
+t
+> > > can directly complete. This will cause a warning when add new devices
+> > > during resume() stage.
+> > >
+> > > Although power.is_prepared should be cleared in complete() state, com=
+mit
+> > > (f76b168b6f11 PM: Rename dev_pm_info.in_suspend to is_prepared) allow
+> > > clear it in earlier resume() stage. However, we need set is_prepared =
+to
+> > > false before checking direct_complete after including direct complete
+> > > support.
+> > >
+> > > Take USB as example:
+> > > The usb_interface is such a device which setting power.no_callbacks t=
+o
+> > > true. Then if the user call usb_set_interface() during resume() stage=
+,
+> > > the kernel will print below warning since the system will create and
+> > > add ep devices.
+> > >
+> > > [  186.461414] usb 1-1: reset high-speed USB device number 3 using ci=
+_hdrc
+> > > [  187.102681]  ep_81: PM: parent 1-1:1.1 should not be sleeping
+> > > [  187.105010] PM: resume devices took 0.936 seconds
+> > >
+> > > Fixes: aae4518b3124 ("PM / sleep: Mechanism to avoid resuming runtime=
+-suspended devices unnecessarily")
+> > > Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+> > > ---
+> > >  drivers/base/power/main.c | 12 ++++++------
+> > >  1 file changed, 6 insertions(+), 6 deletions(-)
+> > >
+> > > diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> > > index 40e1d8d8a589..69d0f9ca7051 100644
+> > > --- a/drivers/base/power/main.c
+> > > +++ b/drivers/base/power/main.c
+> > > @@ -929,6 +929,12 @@ static void device_resume(struct device *dev, pm=
+_message_t state, bool async)
+> > >         if (dev->power.syscore)
+> > >                 goto Complete;
+> > >
+> > > +       /*
+> > > +        * This is a fib.  But we'll allow new children to be added b=
+elow
+> > > +        * a resumed device, even if the device hasn't been completed=
+ yet.
+> > > +        */
+> > > +       dev->power.is_prepared =3D false;
+> >
+> > Well, not really.
+> >
+> > This is to allow new children to be added from a resume callback, but
+> > direct_complete devices are still in suspend at this point.  You can't
+> > make this change for all of them.
+> >
+> > You can clear power.is_prepared for devices with power.no_pm_callbacks
+> > set before the dev->power.syscore check, though.
+>
+> Okay. Thanks for your suggestion.
 
-Signed-off-by: Charlie Jenkins <charlie@rivosinc.com>
-Acked-by: Quentin Monnet <qmo@kernel.org>
----
- tools/arch/arm64/tools/Makefile           |  6 ------
- tools/bpf/Makefile                        |  6 ------
- tools/bpf/bpftool/Documentation/Makefile  |  6 ------
- tools/bpf/bpftool/Makefile                |  6 ------
- tools/bpf/resolve_btfids/Makefile         |  2 --
- tools/bpf/runqslower/Makefile             |  5 +----
- tools/lib/bpf/Makefile                    | 13 -------------
- tools/lib/perf/Makefile                   | 13 -------------
- tools/lib/thermal/Makefile                | 13 -------------
- tools/objtool/Makefile                    |  6 ------
- tools/testing/selftests/bpf/Makefile.docs |  6 ------
- tools/testing/selftests/hid/Makefile      |  2 --
- tools/thermal/lib/Makefile                | 13 -------------
- tools/tracing/latency/Makefile            |  6 ------
- tools/tracing/rtla/Makefile               |  6 ------
- tools/verification/rv/Makefile            |  6 ------
- 16 files changed, 1 insertion(+), 114 deletions(-)
+Actually, this is more complicated than I initially thought, sorry about th=
+at.
 
-diff --git a/tools/arch/arm64/tools/Makefile b/tools/arch/arm64/tools/Makefile
-index 7b42feedf647190ad498de0937e8fb557e40f39c..de4f1b66ef0148b7bfd0fd16655ad854c7542240 100644
---- a/tools/arch/arm64/tools/Makefile
-+++ b/tools/arch/arm64/tools/Makefile
-@@ -13,12 +13,6 @@ AWK	?= awk
- MKDIR	?= mkdir
- RM	?= rm
- 
--ifeq ($(V),1)
--Q =
--else
--Q = @
--endif
--
- arm64_tools_dir = $(top_srcdir)/arch/arm64/tools
- arm64_sysreg_tbl = $(arm64_tools_dir)/sysreg
- arm64_gen_sysreg = $(arm64_tools_dir)/gen-sysreg.awk
-diff --git a/tools/bpf/Makefile b/tools/bpf/Makefile
-index 243b79f2b451e52ca196f79dc46befd1b3dab458..062bbd6cd048e9e42f9bc8f9972ec96594f3dbd2 100644
---- a/tools/bpf/Makefile
-+++ b/tools/bpf/Makefile
-@@ -27,12 +27,6 @@ srctree := $(patsubst %/,%,$(dir $(CURDIR)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- FEATURE_USER = .bpf
- FEATURE_TESTS = libbfd disassembler-four-args disassembler-init-styled
- FEATURE_DISPLAY = libbfd
-diff --git a/tools/bpf/bpftool/Documentation/Makefile b/tools/bpf/bpftool/Documentation/Makefile
-index 4315652678b9f2e27e48b7815f3b9ddc70a57165..bf843f328812e10dd65a73f355f74e6825ad95b9 100644
---- a/tools/bpf/bpftool/Documentation/Makefile
-+++ b/tools/bpf/bpftool/Documentation/Makefile
-@@ -5,12 +5,6 @@ INSTALL ?= install
- RM ?= rm -f
- RMDIR ?= rmdir --ignore-fail-on-non-empty
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- prefix ?= /usr/local
- mandir ?= $(prefix)/man
- man8dir = $(mandir)/man8
-diff --git a/tools/bpf/bpftool/Makefile b/tools/bpf/bpftool/Makefile
-index dd9f3ec842017f1dd24054bf3a0986d546811dc4..6ea4823b770cbbe7fd9eb7da79956cc1dae1f204 100644
---- a/tools/bpf/bpftool/Makefile
-+++ b/tools/bpf/bpftool/Makefile
-@@ -7,12 +7,6 @@ srctree := $(patsubst %/,%,$(dir $(srctree)))
- srctree := $(patsubst %/,%,$(dir $(srctree)))
- endif
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- BPF_DIR = $(srctree)/tools/lib/bpf
- 
- ifneq ($(OUTPUT),)
-diff --git a/tools/bpf/resolve_btfids/Makefile b/tools/bpf/resolve_btfids/Makefile
-index 4b8079f294f65b284481e9a2bf6ff52594a4669a..afbddea3a39c64ffb2efc874a3637b6401791c5b 100644
---- a/tools/bpf/resolve_btfids/Makefile
-+++ b/tools/bpf/resolve_btfids/Makefile
-@@ -5,10 +5,8 @@ include ../../scripts/Makefile.arch
- srctree := $(abspath $(CURDIR)/../../../)
- 
- ifeq ($(V),1)
--  Q =
-   msg =
- else
--  Q = @
-   ifeq ($(silent),1)
-     msg =
-   else
-diff --git a/tools/bpf/runqslower/Makefile b/tools/bpf/runqslower/Makefile
-index c4f1f1735af659c2e660a322dbf6912d9a5724bc..e49203ebd48c18607a6136a9e805ccf16ee960d3 100644
---- a/tools/bpf/runqslower/Makefile
-+++ b/tools/bpf/runqslower/Makefile
-@@ -26,10 +26,7 @@ VMLINUX_BTF_PATHS := $(if $(O),$(O)/vmlinux)		\
- VMLINUX_BTF_PATH := $(or $(VMLINUX_BTF),$(firstword			       \
- 					  $(wildcard $(VMLINUX_BTF_PATHS))))
- 
--ifeq ($(V),1)
--Q =
--else
--Q = @
-+ifneq ($(V),1)
- MAKEFLAGS += --no-print-directory
- submake_extras := feature_display=0
- endif
-diff --git a/tools/lib/bpf/Makefile b/tools/lib/bpf/Makefile
-index 857a5f7b413d6dc4cbe7bc4167496674dd08d875..168140f8e6461bd06db40e23d21a3fb8847ccbf4 100644
---- a/tools/lib/bpf/Makefile
-+++ b/tools/lib/bpf/Makefile
-@@ -53,13 +53,6 @@ include $(srctree)/tools/scripts/Makefile.include
- 
- # copy a bit from Linux kbuild
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
- INCLUDES = -I$(or $(OUTPUT),.) \
- 	   -I$(srctree)/tools/include -I$(srctree)/tools/include/uapi \
- 	   -I$(srctree)/tools/arch/$(SRCARCH)/include
-@@ -96,12 +89,6 @@ override CFLAGS += $(CLANG_CROSS_FLAGS)
- # flags specific for shared library
- SHLIB_FLAGS := -DSHARED -fPIC
- 
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- # Disable command line variables (CFLAGS) override from top
- # level Makefile (perf), otherwise build Makefile will get
- # the same command line setup.
-diff --git a/tools/lib/perf/Makefile b/tools/lib/perf/Makefile
-index 3a9b2140aa048ea919c69ed2240bf0ea444dbf21..e9a7ac2c062e2b398c2f22af41907b62815ca07e 100644
---- a/tools/lib/perf/Makefile
-+++ b/tools/lib/perf/Makefile
-@@ -39,19 +39,6 @@ libdir = $(prefix)/$(libdir_relative)
- libdir_SQ = $(subst ','\'',$(libdir))
- libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- TEST_ARGS := $(if $(V),-v)
- 
- # Set compile option CFLAGS
-diff --git a/tools/lib/thermal/Makefile b/tools/lib/thermal/Makefile
-index 8890fd57b110ccc1a837d37624a5dead00f18656..a1f5e388644d31d36f973d3ddce48d036ee0a083 100644
---- a/tools/lib/thermal/Makefile
-+++ b/tools/lib/thermal/Makefile
-@@ -39,19 +39,6 @@ libdir = $(prefix)/$(libdir_relative)
- libdir_SQ = $(subst ','\'',$(libdir))
- libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- # Set compile option CFLAGS
- ifdef EXTRA_CFLAGS
-   CFLAGS := $(EXTRA_CFLAGS)
-diff --git a/tools/objtool/Makefile b/tools/objtool/Makefile
-index f56e2772753414ff8d3462bdebbc8e95e7667fcd..7a65948892e569cbe1d6e5a78db68bb35102cd26 100644
---- a/tools/objtool/Makefile
-+++ b/tools/objtool/Makefile
-@@ -46,12 +46,6 @@ HOST_OVERRIDES := CC="$(HOSTCC)" LD="$(HOSTLD)" AR="$(HOSTAR)"
- AWK = awk
- MKDIR = mkdir
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- BUILD_ORC := n
- 
- ifeq ($(SRCARCH),x86)
-diff --git a/tools/testing/selftests/bpf/Makefile.docs b/tools/testing/selftests/bpf/Makefile.docs
-index eb6a4fea8c794d8354363ac8daa0baac3e3bd060..f7f9e7088bb38c7507282990fb62921ca7a636d2 100644
---- a/tools/testing/selftests/bpf/Makefile.docs
-+++ b/tools/testing/selftests/bpf/Makefile.docs
-@@ -7,12 +7,6 @@ INSTALL ?= install
- RM ?= rm -f
- RMDIR ?= rmdir --ignore-fail-on-non-empty
- 
--ifeq ($(V),1)
--  Q =
--else
--  Q = @
--endif
--
- prefix ?= /usr/local
- mandir ?= $(prefix)/man
- man2dir = $(mandir)/man2
-diff --git a/tools/testing/selftests/hid/Makefile b/tools/testing/selftests/hid/Makefile
-index 0336353bd15f0d56dbed6c8fa02f53c234f949e1..2839d2612ce3a70f4332f8e886586e9cca6f03cb 100644
---- a/tools/testing/selftests/hid/Makefile
-+++ b/tools/testing/selftests/hid/Makefile
-@@ -43,10 +43,8 @@ TEST_GEN_PROGS = hid_bpf hidraw
- # $3 - target (assumed to be file); only file name will be emitted;
- # $4 - optional extra arg, emitted as-is, if provided.
- ifeq ($(V),1)
--Q =
- msg =
- else
--Q = @
- msg = @printf '  %-8s%s %s%s\n' "$(1)" "$(if $(2), [$(2)])" "$(notdir $(3))" "$(if $(4), $(4))";
- MAKEFLAGS += --no-print-directory
- submake_extras := feature_display=0
-diff --git a/tools/thermal/lib/Makefile b/tools/thermal/lib/Makefile
-index f2552f73a64c7eb1be24c27b3a1414617391315b..056d212f25cf51cd8c02260fbe2ef28dda5e4acb 100644
---- a/tools/thermal/lib/Makefile
-+++ b/tools/thermal/lib/Makefile
-@@ -39,19 +39,6 @@ libdir = $(prefix)/$(libdir_relative)
- libdir_SQ = $(subst ','\'',$(libdir))
- libdir_relative_SQ = $(subst ','\'',$(libdir_relative))
- 
--ifeq ("$(origin V)", "command line")
--  VERBOSE = $(V)
--endif
--ifndef VERBOSE
--  VERBOSE = 0
--endif
--
--ifeq ($(VERBOSE),1)
--  Q =
--else
--  Q = @
--endif
--
- # Set compile option CFLAGS
- ifdef EXTRA_CFLAGS
-   CFLAGS := $(EXTRA_CFLAGS)
-diff --git a/tools/tracing/latency/Makefile b/tools/tracing/latency/Makefile
-index 6518b03e05c71b4fa84498f9628adf81a38c9f56..257a56b1899f23837de533353e9c2cebdb6035bd 100644
---- a/tools/tracing/latency/Makefile
-+++ b/tools/tracing/latency/Makefile
-@@ -37,12 +37,6 @@ FEATURE_TESTS	+= libtracefs
- FEATURE_DISPLAY	:= libtraceevent
- FEATURE_DISPLAY	+= libtracefs
- 
--ifeq ($(V),1)
--  Q 		=
--else
--  Q 		= @
--endif
--
- all: $(LATENCY-COLLECTOR)
- 
- include $(srctree)/tools/build/Makefile.include
-diff --git a/tools/tracing/rtla/Makefile b/tools/tracing/rtla/Makefile
-index 8b5101457c70b48e9c720f1ba53293f1307c15a2..0b61208db604ec0754024c3007db6b2fe74a613c 100644
---- a/tools/tracing/rtla/Makefile
-+++ b/tools/tracing/rtla/Makefile
-@@ -37,12 +37,6 @@ FEATURE_DISPLAY	:= libtraceevent
- FEATURE_DISPLAY	+= libtracefs
- FEATURE_DISPLAY	+= libcpupower
- 
--ifeq ($(V),1)
--  Q		=
--else
--  Q		= @
--endif
--
- all: $(RTLA)
- 
- include $(srctree)/tools/build/Makefile.include
-diff --git a/tools/verification/rv/Makefile b/tools/verification/rv/Makefile
-index 411d62b3d8eb93abf85526ad33cafd783df86bc1..5b898360ba4818b12e8a16c27bd88c75d0076fb9 100644
---- a/tools/verification/rv/Makefile
-+++ b/tools/verification/rv/Makefile
-@@ -35,12 +35,6 @@ FEATURE_TESTS	+= libtracefs
- FEATURE_DISPLAY	:= libtraceevent
- FEATURE_DISPLAY	+= libtracefs
- 
--ifeq ($(V),1)
--  Q		=
--else
--  Q		= @
--endif
--
- all: $(RV)
- 
- include $(srctree)/tools/build/Makefile.include
+While it is true that is_prepared may be set early for devices without
+PM callbacks, in principle they still need to wait for their parents
+and suppliers to get ready before this happens because the new
+children may depend on the functionality provided by those devices.
 
--- 
-2.43.0
+However, IIRC in the USB case the new children are added by the parent
+of the device in question during the execution of its resume callback,
+so is_prepared needs to be set before that callback runs which is not
+guaranteed to happen so long as it is done in device_resume().  It
+looks like that would need to be done in device_resume_early(), which
+then would be questionable because of the above.
 
+I need to think about this some more.
 
