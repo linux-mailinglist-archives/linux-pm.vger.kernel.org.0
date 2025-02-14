@@ -1,130 +1,147 @@
-Return-Path: <linux-pm+bounces-22087-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22088-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1182FA35F4F
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 14:36:39 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 85A20A35F75
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 14:51:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D9D617168C
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 13:32:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4A6DB1696A7
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 13:51:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3003264A85;
-	Fri, 14 Feb 2025 13:32:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56E86263C9B;
+	Fri, 14 Feb 2025 13:51:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="ajopEHBO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f51.google.com (mail-vs1-f51.google.com [209.85.217.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9EA2139A8;
-	Fri, 14 Feb 2025 13:31:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C57015199D;
+	Fri, 14 Feb 2025 13:51:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.17
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739539920; cv=none; b=Eo/OfwVKHXtZqJZe4Y+qeHfFfqL0hteWftMqBFMebWxKPFMyhuFSXvxzAgbQn/kywi66zcpU1tyKzXVD8cz6xHOAGDEgT3FLGtmt4gygAwzYXbId+7jPaRTYbCwuvBieCtsz4C25rXlEsdmmsIjq+bGnlrRC3sdbgoKqF323Cwg=
+	t=1739541085; cv=none; b=SRaKNfLQWWm5M2O1T08YbL5QkQI9VaQdviwo7MC2zNi7vGaSqRGIOtUYQONECWIGCfOmLIY88R5/KN6LIMBgOC4GfaZpeW6ZjunzWjWODzrkz+A+bMZFnE6/4l6fmFPZz1lhCHwfjZ95NZwe/JCpvj+xXSbBQgTzDM6mZ/ew5KI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739539920; c=relaxed/simple;
-	bh=G3KO93dVJzkzqyKqAbpRldruJuHi2xQw2ZHHHSW+eZU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q3iOAzYiJdruy5aT4fIitIR0tsYgsJP3m42KeqKEW59EUaFuSSWCFR+8lE6kQh8k55K8+o3yFsUm2+OYOkWsbSz09HXYSfk5X5k3l2cm3a/fqW88z6h0i1oZjH5mzOjwVGOuVqM9us1mBk0Nko5uWQXbbXp6WgB6EQTlDoTFKfE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f51.google.com with SMTP id ada2fe7eead31-4bbf0aab584so582077137.0;
-        Fri, 14 Feb 2025 05:31:58 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739539917; x=1740144717;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=DoB0GQglfkbE99K597Y7qNuzNigGvdYrd4FeOhL83jI=;
-        b=g0XYTCue0/XrgYzxbhCP82xQcg9bpfNXSAr600oUJ7b0McxnzwbAye39MrUjqevGPH
-         ShoC9klZaZ7IX1SyEHiSANzsKD2qXPrwbuQWR7rCyhIFIvo9PN1DGIJk2sgOUhyNDnXp
-         9M4v6yM9su/o12WJqkCGnc9DVorYP4nY3Cd38uuSz3oD+IcEVx0ZKhgwyQK3IpxrgI2K
-         wmg83aAaR231OBCjWmbK8pWpuYKSN76LcoSulDZBtToL3mq3WAx+wy5YPL2X/csvkzu8
-         /u6pScZBbJBMGbrySLxIkhp5oo/+24x6kj5xGhfnRpZqiUHQqm2HGUZLExDdPRY1b2DJ
-         KdRw==
-X-Forwarded-Encrypted: i=1; AJvYcCVL2/5+1XTyYEEZQILpRsN4JEZJeia0InjrAoWV1xTuT+UaeR/gmoJxgii5iQbVeGWb2P2/ZoXusk8ZQCg=@vger.kernel.org, AJvYcCVSsP5/rtAFekYb2RNbkNR6uM4Gu9uqHoAPeuyyZ5BjRLA1vjzIStqoYUQwS832/LQuH5hBtuMDZj0=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy5nhGrfYHbqsV+wxbay/hqXEc5XwZrqIvm6Zd2ipzmU65Oq/Yo
-	+WhHXy2lMRHDVcuCEMWfxaRVAy/eM5mdQLXmXA1ac5AzTJz342TC4ShHmvitWXk=
-X-Gm-Gg: ASbGncuYBYayJCOAIwhNO3IRvwxwqOXg8nkJemdRkS/P8meHHoPEjxmQl62NvBadL0+
-	9aqvLqhR40nbopGwj0x5TVGwrhDTjOcE7SezQ5/zAlgE1bn5aA2tiYKzFd5hZkKbyYwCr8y2XSz
-	7NltZZNqHJVWAjCTvKCutQOOAaztTfK1lPNaUgZBgLF9RVnpyEpISjAW9dWssEwzm7jP0TcpsJb
-	aZDhiedm1sO6G1ua6BFJ5UsyzZJ2Gce/g9K307nMksrpp1dqemV1WNEP6b++8ByFKT5tKj7WLOa
-	TKZCGo+Zgbom6dmUGc7RKMeLHm/x12sbOJMzcREqjMHjIcGglW9XUHLm+A==
-X-Google-Smtp-Source: AGHT+IGj32SQ+ouGIQmvLlny32lSB9yEvzrubGRaTUtw7Mk+5vG8/NAXZkh7NWw/pTiaom6duFVXGQ==
-X-Received: by 2002:a05:6122:d11:b0:518:773b:39f with SMTP id 71dfb90a1353d-52067b85482mr9150204e0c.4.1739539914639;
-        Fri, 14 Feb 2025 05:31:54 -0800 (PST)
-Received: from mail-vk1-f178.google.com (mail-vk1-f178.google.com. [209.85.221.178])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5208ae7718dsm311213e0c.29.2025.02.14.05.31.53
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Feb 2025 05:31:54 -0800 (PST)
-Received: by mail-vk1-f178.google.com with SMTP id 71dfb90a1353d-520349fc3ddso651897e0c.1;
-        Fri, 14 Feb 2025 05:31:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV5Z1toZSZ1Di0sKwvWSaojIuNgzQVagPLMP3W/PgwhlahZBeEc5mmZG/Oo+6ySaL/46SmNE8Nvkt8=@vger.kernel.org, AJvYcCXamJajVVURxkEoqviKQFQIfGm2a8Gph3F516Rh0GSt9Dz3wc5qz8l0pSuM48hHRylDgrxGMu7II4ihyQE=@vger.kernel.org
-X-Received: by 2002:a05:6122:32c6:b0:520:60c2:3fb with SMTP id
- 71dfb90a1353d-520678bd90cmr9295309e0c.0.1739539913724; Fri, 14 Feb 2025
- 05:31:53 -0800 (PST)
+	s=arc-20240116; t=1739541085; c=relaxed/simple;
+	bh=4RYb0V938Hvh8XfpOfW2FPzt2ThKIlaPfePtmuDjHvc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=p9A+In/a43QbGaymK8cF0owrTW46FIdUTr+hQAgk7qP6p+LNhrbpY/VfOtfo79BESovK0ULAT94GzzAZFYta5TvJgnXwCvMu2kgcWkMVxXcqgGbQTTWduMjb1YYH57JxNNu1rcY8ytVDQ+0vF8FMOuMEOaVr5yxhRJXatydfKxw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=ajopEHBO; arc=none smtp.client-ip=198.175.65.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739541084; x=1771077084;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=4RYb0V938Hvh8XfpOfW2FPzt2ThKIlaPfePtmuDjHvc=;
+  b=ajopEHBOv8Zaajqeto9xrTkVQbhzgjZlsjVeyOpgKTEQlx0QOMXtzoSh
+   RXRbhZDNzXN+CiatTBx+aH+NYtWlnlt62ZGwU6/aQGD3eqElWEypPcMVT
+   QcmOeYmPtKpQb6KjXoFnnyom1GzwUtrv8jWvgJKYFdDqE0ZTqWsAXfmcl
+   VxBvpXplg1aD/96/sNnGCDYsZC1ySJVVorCqo2a35uEjtrBZ6n21viChS
+   +Hx74D1PQSdUx+KHslbO5O56ZHPEHiouf4AvXLeN/DzultfRAVPW20H+x
+   1hllQ31pGP4AFHRDex/mSdrUoN6yCe7Ule96mL8QAPp8hd0On77YVYdZm
+   w==;
+X-CSE-ConnectionGUID: yVCtjxg8SvGC80AV8Wz30Q==
+X-CSE-MsgGUID: vPyRbgCrSEGgKjQARKlBhQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="40323767"
+X-IronPort-AV: E=Sophos;i="6.13,286,1732608000"; 
+   d="scan'208";a="40323767"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by orvoesa109.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 05:51:23 -0800
+X-CSE-ConnectionGUID: PSBcuQ5sRpC62aaIV9z4VQ==
+X-CSE-MsgGUID: jEzRNxGUQIiWWnjKYiY9Qw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,286,1732608000"; 
+   d="scan'208";a="113650248"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa008.fm.intel.com with ESMTP; 14 Feb 2025 05:51:19 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tiw69-0019c7-0D;
+	Fri, 14 Feb 2025 13:51:17 +0000
+Date: Fri, 14 Feb 2025 21:50:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>,
+	amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+	daniel.lezcano@linaro.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	rui.zhang@intel.com, lukasz.luba@arm.com,
+	david.collins@oss.qualcomm.com, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] thermal: qcom-spmi-temp-alarm: Add temp alarm data
+ struct based on HW subtype
+Message-ID: <202502142135.ez2QBdYV-lkp@intel.com>
+References: <20250213210403.3396392-3-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250214102130.3000-1-johan+linaro@kernel.org>
- <CAPDyKFr98DraLvOC83rRFa=uKj_hmwS7Lj0L3JqrbqcFuhdWGA@mail.gmail.com>
- <Z688uKdqVDaQhm5V@hovoldconsulting.com> <CAMuHMdXD1yF65ezOmLz2ShP=gnYNNkUfTLfY8RA0m=C+WwtaVw@mail.gmail.com>
- <Z69ExkCLfv_xLLUm@hovoldconsulting.com>
-In-Reply-To: <Z69ExkCLfv_xLLUm@hovoldconsulting.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 14 Feb 2025 14:31:41 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdVZyh4ooooFM_ox0ZU5xChie+ivbFFKdVM5=r8xvY9QaA@mail.gmail.com>
-X-Gm-Features: AWEUYZmNIoURtMZkV8g-fr8c-dVm3ih5jXXS6AhSCrloM8oFmml3XVvnAhB9IPE
-Message-ID: <CAMuHMdVZyh4ooooFM_ox0ZU5xChie+ivbFFKdVM5=r8xvY9QaA@mail.gmail.com>
-Subject: Re: [PATCH] bus: simple-pm-bus: fix forced runtime PM use
-To: Johan Hovold <johan@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold <johan+linaro@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Liu Ying <victor.liu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250213210403.3396392-3-anjelique.melendez@oss.qualcomm.com>
 
-Hi Johan,
+Hi Anjelique,
 
-On Fri, 14 Feb 2025 at 14:27, Johan Hovold <johan@kernel.org> wrote:
-> On Fri, Feb 14, 2025 at 02:16:14PM +0100, Geert Uytterhoeven wrote:
-> > On Fri, 14 Feb 2025 at 13:53, Johan Hovold <johan@kernel.org> wrote:
->
-> > > I didn't add a CC stable tag since this currently works, but I still
-> > > consider it a bug to call these helpers unconditionally when not using
-> > > runtime PM.
-> >
-> > Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> >
-> > > [ And during rc1 these callbacks were suddenly called and triggered a
-> > > NULL-pointer dereference as you know. [1] ]
->
-> > > [1] https://lore.kernel.org/lkml/Z6YcjFBWAVVVANf2@hovoldconsulting.com/
-> >
-> > Thanks, that was the context I needed to raise review priority ;)
-> >
-> > Perhaps Reported-by: and Closes:?
->
-> The glitch was only temporary this time and the immediate issue was
-> addressed by Rafael's partial revert in rc2:
->
->         https://lore.kernel.org/lkml/6137505.lOV4Wx5bFT@rjwysocki.net/
->
-> (and which has these tags).
+kernel test robot noticed the following build errors:
 
-OK.
+[auto build test ERROR on rafael-pm/thermal]
+[also build test ERROR on linus/master v6.14-rc2 next-20250214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-Gr{oetje,eeting}s,
+url:    https://github.com/intel-lab-lkp/linux/commits/Anjelique-Melendez/thermal-qcom-spmi-temp-alarm-enable-stage-2-shutdown-when-required/20250214-050700
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20250213210403.3396392-3-anjelique.melendez%40oss.qualcomm.com
+patch subject: [PATCH 2/4] thermal: qcom-spmi-temp-alarm: Add temp alarm data struct based on HW subtype
+config: i386-buildonly-randconfig-003-20250214 (https://download.01.org/0day-ci/archive/20250214/202502142135.ez2QBdYV-lkp@intel.com/config)
+compiler: clang version 19.1.3 (https://github.com/llvm/llvm-project ab51eccf88f5321e7c60591c5546b254b6afab99)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250214/202502142135.ez2QBdYV-lkp@intel.com/reproduce)
 
-                        Geert
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502142135.ez2QBdYV-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/thermal/qcom/qcom-spmi-temp-alarm.c:148:9: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     148 |         return FIELD_GET(STATUS_GEN1_STAGE_MASK, reg);
+         |                ^
+   drivers/thermal/qcom/qcom-spmi-temp-alarm.c:169:8: error: call to undeclared function 'FIELD_GET'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+     169 |         ret = FIELD_GET(STATUS_GEN2_STATE_MASK, reg);
+         |               ^
+   2 errors generated.
+
+
+vim +/FIELD_GET +148 drivers/thermal/qcom/qcom-spmi-temp-alarm.c
+
+   132	
+   133	/**
+   134	 * qpnp_tm_get_temp_stage() - return over-temperature stage
+   135	 * @chip:		Pointer to the qpnp_tm chip
+   136	 *
+   137	 * Return: stage on success, or errno on failure.
+   138	 */
+   139	static int qpnp_tm_get_temp_stage(struct qpnp_tm_chip *chip)
+   140	{
+   141		u8 reg = 0;
+   142		int ret;
+   143	
+   144		ret = qpnp_tm_read(chip, QPNP_TM_REG_STATUS, &reg);
+   145		if (ret < 0)
+   146			return ret;
+   147	
+ > 148		return FIELD_GET(STATUS_GEN1_STAGE_MASK, reg);
+   149	}
+   150	
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
