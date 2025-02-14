@@ -1,194 +1,213 @@
-Return-Path: <linux-pm+bounces-22081-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22082-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9115CA35DD4
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 13:45:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8FFBA35DE1
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 13:51:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 46C21188B1E0
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 12:45:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31DCA3AE72F
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 12:51:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B0D9F2753E0;
-	Fri, 14 Feb 2025 12:45:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D9E1E89C;
+	Fri, 14 Feb 2025 12:51:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lN0Bw6Pp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="HyupKxZV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
+Received: from mail-ed1-f47.google.com (mail-ed1-f47.google.com [209.85.208.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1D17C2753E7;
-	Fri, 14 Feb 2025 12:45:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 444BA17555
+	for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 12:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739537112; cv=none; b=txxAgOflswoGqMzzloe7IjBRwmZVo7q8lMoqYvOu5n0n5QLz9Aj+dHn739TwdHFTNIUfp5P9G3FO1JEbYpOd/6YcoZhsB3AgGqX04g6LBsgKY9JauEepIjaalLUMJ9duq+826syFn4BBxzlU6CXkyk5eRcjQ6JK63o75kHDbHvs=
+	t=1739537472; cv=none; b=mWAq4VDQirSzWLTdBMG2FQsNelN6NObfWMuyWJlx85oUPYyZ9Tga84q5S4xqNZhY931Ot87nkRojkuHrvXnoz18e3SuaEUGfbp5SzCuTpjHiKYto2bUJT1fZji3dIizZaCl7f1kyeFbLIQorgwC4M6QCOOweTjoaY7AvrcSS6dw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739537112; c=relaxed/simple;
-	bh=R4hy37vGkrYE28S6AwTj2N9aT+HvyWMv8kU/AQ+7b9U=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Lwit6o9l0UkLxBTEZERW4Ggxk4108N8OeJhjWzKRtpWwYfaWH/vuLs4Yvmv/bRBparsSTC+O17cdta2BtMqeP+kvHSHjpr31i6zRrK87o8Hlpi9lBrvhNBOWQc54ULx+NGDsCKKzUDNzp/NHgudfD3hXWAg8k8pFLmREQuGfm5Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lN0Bw6Pp; arc=none smtp.client-ip=209.85.214.178
+	s=arc-20240116; t=1739537472; c=relaxed/simple;
+	bh=JGTc+Sf0Feuosm0Je9PJuzw2tVCZLsSqS+uLvp78470=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=fh5glfA3DgPzK0xDhzijveyJhnfVsvLGrJKWpn8qvm05pp0wnVN0ACVgQIXElE/EvpT09NYrG/Rbzvsdymz38BrW1gX7Z0oC6WEUL3jSSdLKNzEqg+G3quUBWM+qfVes94lOaPO38ckwZraGT5SLYEC0XJXX7y4/8KAJPjXPDFM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=HyupKxZV; arc=none smtp.client-ip=209.85.208.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-220e6028214so25331535ad.0;
-        Fri, 14 Feb 2025 04:45:10 -0800 (PST)
+Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5deb0ea1129so3216317a12.3
+        for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 04:51:09 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739537110; x=1740141910; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=AV91Ol/uGYlZ+kAk8FUPrqnABFWgsBeEvSHw1qGc9Ow=;
-        b=lN0Bw6PpJOW5nsaLExFin9D18N8qMZf7NbkOLHcv1da+fDYghXs+WZpRtayoPoVZxl
-         /mz/fP+gcdObCHxdLNW+jFms7EMgcjVu5teocGek82JBM2lhLZzlAMsBUK8QRJ6KoU/B
-         JJArZ86D+vZgFTcghepJlovi/CixEdv+tCwgPL7MkM6fCw1odL1/3CY/a8AaM3cJMpTb
-         HrpYPWlUKn3eBo1F4bB4/J5C4Fw3gRMDwQ+gWqpaHvogM9G0IDjzJynLN01awi0Oqc8R
-         5XDljqngFAyvbYlgA79g4UhSwO6Hya+CC2OQmOaWtRCr3dMi76cDItbKUGz2AMXOXj9z
-         /YfA==
+        d=gmail.com; s=20230601; t=1739537468; x=1740142268; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=JGTc+Sf0Feuosm0Je9PJuzw2tVCZLsSqS+uLvp78470=;
+        b=HyupKxZV4FTSgwIND0HjY9Ub8Elo+7R7XfOiiqYuMpynJZCM7Ir/0zJevTlbvD1l2F
+         jr9KTsRMhBYzDGzhE00KewhrXMQ9hqxv/0jOcfDLZg12LLR7TdPAtdCoBUr40c6+5cFb
+         vZbL/QVjN4IjWGOFPAaWut+kxCGs9ik2pigx4sucqPl5lIvYh9RnkmBp7f/3vO0PNVDv
+         6VYbsEWP8NwTrkYRNXAm9S3qQFKBypFyovsy3Slgqb0jCFIjYPDeImD2i/7HHxZySooi
+         dMkAV5VdoOnKDdbBFwlwcScMU97TSfR+hqlt+CVYzt/6XvhDC5eHh6groAdLEjut0VRx
+         gl0Q==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739537110; x=1740141910;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1739537468; x=1740142268;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=AV91Ol/uGYlZ+kAk8FUPrqnABFWgsBeEvSHw1qGc9Ow=;
-        b=C6D8QJtJfcAnqJkKVwNgnika5SDB7kAQG0KOYazzpxpseg10I1Z1INIkK/ANGdfcr3
-         RHJ04g5Hq8Gm11jgUNXQVgRsgtN4PVxWEU7REwmdPZ5KdtCVlM/QvIcwnIQtrddBKMZ4
-         5SzmeC9bzt2N7IRqTz7iDWOg2kWqepVctXtJUorINMGDFlonuI9KEbEUk6m042dCqDND
-         4KRVBSnfjkULe5mfRdIiT6CMds2OxWlDHhE83EbqWOqxKB70QkNfNXTCHfcMwZQQk1S2
-         CVNoJnU2kMZkGV72bl24wfyQ1Q5bWEVC+ghGpdxmJ98g/ru0CcHDlSGDP+5QeyLCmg0F
-         d4mg==
-X-Forwarded-Encrypted: i=1; AJvYcCUJNZGtev4QJTxLlfPp0T0U9AsXkONgM0v1BK2gxBVwq2D53ffkIJHi3vUlw1GoQ6/dGQz5lgXa@vger.kernel.org, AJvYcCX0MzLMZD06fi+eOisD9POWOpkjBgFeHDdA8+umgZ0E2vnAZboa9TZUbIFgwx8X80s/LfjyjTl1sg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyMPMAil1m9dkIuqGg09dWwM8HRVIyFz+zhekX63MP1UZjx/JiT
-	0ylc49kLnzNbo2nRVcgASb+3ibZTYUU3IhHBD8k7L1WJdVm1Kien
-X-Gm-Gg: ASbGncueSiHpbNfRE16j3rPZ7SYFChvtG9Chix1oIWAx6FJE4JCsTlLR8y4HsA/EiX/
-	pU1qGr1nRqHHPBQ0pWx9k8Zn7dD+WCHbfiRI9jcNor5jZWD7JPH7F2prJfkuHc3QeP8i19QFPQ1
-	UwQvGicYkSnpSBJY7yyDKYzquOWITZHaCUPFiOg1xEYEIwa3ybHxVt/dexyHAFHN14KuuVQwSWx
-	6iTlNQAtba74lpY9J4FTkrWsdbJPzTXZz5FPvxOsmpmlnHpTDrXjjLzqwWiMIZ7LUFN297UwbWD
-	t9id2gXg66MpbpE+ltCaPh/Lwy6FI/1eIfXCsrc=
-X-Google-Smtp-Source: AGHT+IE2e69StPZgPQBveZ5VZ37UHrxEJkVNnJNFO7ZcVLIcz2YwL+02E7YjNANvrPV/HbkC5GN3wg==
-X-Received: by 2002:a05:6a00:2e84:b0:730:79bf:c893 with SMTP id d2e1a72fcca58-7322c56f984mr16408464b3a.4.1739537110062;
-        Fri, 14 Feb 2025 04:45:10 -0800 (PST)
-Received: from MacBook-Air-5.local ([1.245.180.67])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7324256e8aasm3030618b3a.70.2025.02.14.04.45.04
+        bh=JGTc+Sf0Feuosm0Je9PJuzw2tVCZLsSqS+uLvp78470=;
+        b=CX5MZ6L46PlZFX0N2Q3d2g6UmtmKhKCF2qVrweqQDPAPBDKZ0Kw6n+V0uhMu47OMxB
+         mX9tZwYWEqbG1/quxYVulyeJY20JO+p4fmsVZ66tjdmbcWM2bN8BOe3wJwb/52jPKouz
+         SM056qoE9JJs92CUmefk8xa+p1EPKs24MIum0Yhf+F872jNQvawV5OqOGJV1Kv8JA2xF
+         sGdUO8q5soC5uLkGc2/s220MyHBw5Xe1rAJRUZqPxMqk7VfWvnEtmGfTYgN6zoioSmuC
+         B/q3NjBxFx3UQrsjX0WnOPeQ9co+aNWCPMhe1cyD7u1EejgidYRjlhrpv5VOA/QMLwqP
+         tUhw==
+X-Gm-Message-State: AOJu0Yyk0QUhsjwqdQt8GRQi++7zync0zuPk5detHy/CKK2dAVf8mpF7
+	tncX8bJW8XSWg4uhCgL58RC6xjQ5siHEKl8ngKrNzcnjttozVV45HawDWsts
+X-Gm-Gg: ASbGnculuf4XQkWFQpK6rWgjn6hbFyURPTn3Cb2rzj7ekd26V84pIxiFg6GC9D0jRoH
+	MwtFVkzGVj8De0EoRJg7UKTkLX6w694SZd4YtZKhlODh7P+r3EkXExtVd7iVi4W0Eez3+ii21TR
+	G77Ab+APH8CDaxSs3YzuJurIqtUztbidemkimDSZPJOu7RZv6nR+nwqmcP+FZzfh58qMnTWRIHI
+	bkVKR6vZgJXbu69rTx+8uw01ANpuN8Pk4S0J9kHFZaUxoLamg23LPnlQMS6mIi7Wabxa4ilmRtz
+	Pm2H6Xxmq+kJr4feFApB+/8NAY9Bj91FE3C0Uvha4CwMCQ==
+X-Google-Smtp-Source: AGHT+IH1POJ5Rg3D85FKr+OyMJiv/8EuDicyZmrNA23GytDsxqyu3xxadgpHNeChRIpDwGZFHFcbwg==
+X-Received: by 2002:a17:907:94c5:b0:ab7:c6f4:9529 with SMTP id a640c23a62f3a-ab7f33781f4mr1299803466b.7.1739537468121;
+        Fri, 14 Feb 2025 04:51:08 -0800 (PST)
+Received: from abityuts-desk1.ger.corp.intel.com ([134.191.196.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-aba9cf8a262sm58618166b.22.2025.02.14.04.51.06
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 14 Feb 2025 04:45:09 -0800 (PST)
-Date: Fri, 14 Feb 2025 21:44:59 +0900
-From: "Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>,
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org,
-	GONG Ruiqi <gongruiqi@huaweicloud.com>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org,
-	Yuli Wang <wangyuli@uniontech.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Pekka Enberg <penberg@kernel.org>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Kees Cook <kees@kernel.org>,
-	GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
- Initialise random_kmalloc_seed after initcalls)
-Message-ID: <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
-References: <20250212141648.599661-1-chenhuacai@loongson.cn>
- <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
- <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
- <Z68N4lTIIwudzcLY@MacBook-Air-5.local>
- <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
+        Fri, 14 Feb 2025 04:51:07 -0800 (PST)
+Message-ID: <f6922e38fd83433d60c0f7d9dc9a6effb967cc8a.camel@gmail.com>
+Subject: Re: [PATCH 1/2] intel_idle: Add C1 demotion on/off sysfs knob
+From: Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM Mailing List <linux-pm@vger.kernel.org>
+Date: Fri, 14 Feb 2025 14:51:05 +0200
+In-Reply-To: <CAJZ5v0hnm_Xx-NQfOiOFWNYJoeOr-LbgTcd1u0SxNM=EbyQQTA@mail.gmail.com>
+References: <20250212084232.2349984-1-dedekind1@gmail.com>
+	 <CAJZ5v0hnm_Xx-NQfOiOFWNYJoeOr-LbgTcd1u0SxNM=EbyQQTA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
 
-On Fri, Feb 14, 2025 at 06:02:52PM +0800, Huacai Chen wrote:
-> On Fri, Feb 14, 2025 at 5:33 PM Harry (Hyeonggon) Yoo
-> <42.hyeyoo@gmail.com> wrote:
-> >
-> > On Thu, Feb 13, 2025 at 11:20:22AM +0800, Huacai Chen wrote:
-> > > Hi, Harry,
-> > >
-> > > On Wed, Feb 12, 2025 at 11:39 PM Harry (Hyeonggon) Yoo
-> > > <42.hyeyoo@gmail.com> wrote:
-> > > > On Wed, Feb 12, 2025 at 11:17 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > >
-> > > > > Hibernation assumes the memory layout after resume be the same as that
-> > > > > before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this assumption.
-> > > >
-> > > > Could you please elaborate what do you mean by
-> > > > hibernation assumes 'the memory layout' after resume be the same as that
-> > > > before sleep?
-> > > >
-> > > > I don't understand how updating random_kmalloc_seed breaks resuming from
-> > > > hibernation. Changing random_kmalloc_seed affects which kmalloc caches
-> > > > newly allocated objects are from, but it should not affect the objects that are
-> > > > already allocated (before hibernation).
-> > >
-> > > When resuming, the booting kernel should switch to the target kernel,
-> > > if the address of switch code (from the booting kernel) is the
-> > > effective data of the target kernel, then the switch code may be
-> > > overwritten.
-> >
-> > Hmm... I'm still missing some pieces.
-> > How is the kernel binary overwritten when slab allocations are randomized?
-> >
-> > Also, I'm not sure if it's even safe to assume that the memory layout is the
-> > same across boots. But I'm not an expert on swsusp anyway...
-> >
-> > It'd be really helpful for linux-pm folks to clarify 1) what are the
-> > (architecture-independent) assumptions are for swsusp to work, and
-> > 2) how architectures dealt with other randomization features like kASLR...
->
+Hi Rafael,
 
-[+Cc few more people that worked on slab hardening]
+thanks for reply!
 
-> I'm sorry to confuse you. Binary overwriting is indeed caused by
-> kASLR, so at least on LoongArch we should disable kASLR for
-> hibernation.
+On Wed, 2025-02-12 at 21:11 +0100, Rafael J. Wysocki wrote:
+>=20
+> > +static ssize_t c1_demotion_store(struct device *dev,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct device_attribute *attr,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 const char *buf, size_t count)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 int err;
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 bool enable;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 err =3D kstrtobool(buf, &enable);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 if (err)
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0 return err;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex_lock(&c1_demotion_mutex);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 /* Enable/disable C1 demotion on =
+all CPUs */
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 on_each_cpu(c1_demotion_toggle, &=
+enable, 1);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 mutex_unlock(&c1_demotion_mutex);
+>=20
+> This is not the only place where MSR_PKG_CST_CONFIG_CONTROL gets
+> updated.=C2=A0 The other one is drivers/platform/x86/intel/pmc/cnp.c
+>=20
+> There is no real conflict because the PMC core thing happens during
+> system suspend/resume on client platforms, but this is kind of
+> duplicated code.=C2=A0 Any chance to consolidate this?
 
-Understood.
+Thanks for pointing this out.
 
-> Random kmalloc is another story, on LoongArch it breaks smpboot when
-> resuming, the details are:
-> 1, LoongArch uses kmalloc() family to allocate idle_task's
-> stack/thread_info and other data structures.
-> 2, If random kmalloc is enabled, idle_task's stack in the booting
-> kernel may be other things in the target kernel.
+I'd propose to leave it as is because it is such a small amount of
+duplication and also trivial. Since the two code paths do not interfere
+with each other, I am not sure consolidation is worth it in this case.
 
-Slab hardening features try so hard to prevent such predictability.
-For example, SLAB_FREELIST_RANDOM could also randomize the address
-kmalloc objects are allocated at.
+I was also hoping that this patch would be backported by OS vendors,
+because it makes a very significant difference on recent Intel
+server platforms, so I wanted to keep it simple for easier backporting.
 
-Rather than hacking CONFIG_RANDOM_KMALLOC_CACHES like this, we could
-have a single option to disable slab hardening features that makes
-the address unpredictable.
+But I did not dare to CC stable, because it may not be perceived as fix.
+However, in practice enabling C1 demotion fixes performance issues on
+recent Xeons in some workloads.
 
-It'd be nice to have something like ARCH_SUPPORTS_SLAB_RANDOM which
-some hardening features depend on. And then let some arches conditionally
-not select ARCH_SUPPORTS_SLAB_RANDOM if hibernation's enabled
-(at cost of less hardening)?
+If you really think the MSR read and write code should be consolidated,
+I would propose to do this as a separate patch-set on top, so this one
+stays simple and easier to backport.
 
--- 
-Harry
+To recap:
 
-> 3, When CPU0 executes the switch code, other CPUs are executing
-> idle_task, and their stacks may be corrupted by the switch code.
->
-> So in experiments we can fix hibernation only by moving
-> random_kmalloc_seed initialization after smp_init(). But obviously,
-> moving it after all initcalls is harmless and safer.
-> 
-> 
-> Huacai
-> 
-> > > For LoongArch there is an additional problem: the regular kernel
-> > > function uses absolute address to call exception handlers, this means
-> > > the code calls to exception handlers should at the same address for
-> > > booting kernel and target kernel.
+* I propose not to consolidate it.
+* If you insist, I propose to do it on top of this one.
+
+Please, let me know.
+
+> > +static ssize_t c1_demotion_show(struct device *dev,
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=
+=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 struct device_attribute *attr, char *b=
+uf)
+> > +{
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 unsigned long long msr_val;
+> > +
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 rdmsrl(MSR_PKG_CST_CONFIG_CONTROL=
+, msr_val);
+> > +=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0=C2=A0 return sysfs_emit(buf, "%d\n", !!=
+(msr_val & NHM_C1_AUTO_DEMOTE));
+>=20
+> This reads the register on the current CPU with the assumption that
+> the specific bit value will be the same for all CPUs.=C2=A0 Is this alway=
+s
+> true?
+
+Yes, anything else would be either a BIOS bug or a user toggling the MSR
+bits directly via /dev/msr. I was trying to keep the driver simple and
+avoid detecting different values, because the only think we could do in
+that case is just print a warning.
+
+> =C2=A0 What about systems with more than one package?=C2=A0 Do they alway=
+s
+> initialize this bit to the same value in all packages?
+
+Yes, anything else would be a misconfiguration or bug.
+
+> =C2=A0 I guess so,
+> but then I would add a comment documenting this assumption and the
+> reasons for it.
+
+I'll add, thanks!
+
+> I'm not sure if the attr name is clear enough.=C2=A0 I guess reading the
+> doc is really necessary to get an idea of what this is about, but it
+> might indicate that the demotion is done in hardware, like
+> "hw_c1_demotion".
+
+Well, let's see. I propose two approaches for naming this attribute.
+
+1. Follow the Intel name, documented in the Intel SDM: c1_demotion.
+2. Try to come up with a better and more intuitive name. I would suggest on=
+e of
+these:
+* demotion_to_c1
+* auto_demotion_to_c1
+
+I followed approach #1. I agree that C1 demotion is not an intuitive name,
+because it sounds like C1 is being demoted. But I am used to it, and it is =
+also
+old and documented in the SDM.
+
+However, I can rename it if you direct me this way. In that case, I would
+propose one of the above two. Please, let me know.
+
+Thank you!
 
