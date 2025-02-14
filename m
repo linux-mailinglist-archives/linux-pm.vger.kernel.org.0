@@ -1,57 +1,57 @@
-Return-Path: <linux-pm+bounces-22101-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22102-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1F262A36471
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 18:23:45 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 98445A36476
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 18:24:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CFD543B32AB
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 17:21:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0CB323B3385
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 17:22:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A33DA269CED;
-	Fri, 14 Feb 2025 17:20:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F1E3D269D07;
+	Fri, 14 Feb 2025 17:20:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="ZDIWifHG"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Ryz+EwqX"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C4667269CF4;
-	Fri, 14 Feb 2025 17:20:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BBB02690CD;
+	Fri, 14 Feb 2025 17:20:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739553613; cv=none; b=Lw93edb+6FyQCfbOjukv+cDv/d+Rdb6oZ9yq14LaeIsKEPHH8oIh7ekg4IfJZxi3pIRfScRlWpPSkoxZN0peE76/cm7k9NJ77P5qAPDzRg2N+0hTORlsKpRVfN0INg6FnPzJ+obUDwRCgQThV/iSLrZqvFkKhaJzPgKG3NXmswk=
+	t=1739553618; cv=none; b=cfy60VGO6Bq1TYWA9Vyg14dHa5bwBj3wh/UBTtNrToU3koT0M4xNWP0MCtSz+yI6IqIW24CUIK2X84wPYyMurTlF42fcma+Yo0CZq0i+q+Qa2XZakj0rMa8WJHXyabIyAT/zn6QPjVEus2XhDQlECfJujmny1UcFJkSzvuHu/UE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739553613; c=relaxed/simple;
-	bh=daPg2Fccz1EsxoSOHSS26SMyam1GJAwCnpk0jrud1Jc=;
+	s=arc-20240116; t=1739553618; c=relaxed/simple;
+	bh=vSj0waEcx17dh7fvzqeAr6f2FKcw3vDK6V0f2tcErhs=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=Oev9gycYQJBm2xqDOKY30Sdi3WQEOULwVS8UkhCLhyY1sQfVlERsfWkfbXDjP1pDrYX1XAoqzsidTizUIJzXa8tjpZRqzzoWLoPvpoocWEIYG+fc5CsGZts3zsbBauLKYxchRJo6doaBvBykO+OpZT3+Jlo1SUUNT9CQDAqE5fU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=ZDIWifHG; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:To:Cc; b=md9FJIpHiE7zFrE7NzKqStGjwwfBRil4fZVQjQGPGncGRoVeP1X4n97TvBM+HjYwkrhtZ4aPp4ZiMBZ2PnhLZgo/JXG2Qwd57mVk14qEpvzn1FQMZ8OsKUKwiSN61iRe5pFYJnjik5Yd70/asSF9DmWQhs9VIVWDLTutxWGvZ8o=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Ryz+EwqX; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1739553610;
-	bh=daPg2Fccz1EsxoSOHSS26SMyam1GJAwCnpk0jrud1Jc=;
+	s=mail; t=1739553615;
+	bh=vSj0waEcx17dh7fvzqeAr6f2FKcw3vDK6V0f2tcErhs=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=ZDIWifHGTNohT2atoseUGMlz2wV56E7UPz45PLkn29wGPTh841/hlaVfWyCXPpFgJ
-	 HVwQ/XU+eSG1tUTwse6mW/3Nz5hMBLWU31dEUDjnVA3ljsKiZzO3CGHHg/9GB2V46t
-	 oss2kceiK/DYUuDt6ACSrEKRYjZ25sj+3nsrdRQ7YAu4uat9tMwq5UCoUVi2vNRbz3
-	 /otgmvMRGUR7iegJuheY7HFcQGoCJeOO3Fm6IE+3ewFZSIzNlJ7yjTj3ATHBgstJe7
-	 GxrmN7eS77a4UIjhkZqQg5FxfKvBcR5zKRGTbipeiBG0Ew/4q2OyeujIXsDJooriWs
-	 tV/ojXxwRwrug==
+	b=Ryz+EwqXUQc8bryYPPZtwdHaMkEyfPKmTk+BW6/8Hfl+FzlC2+s/y+yJk9vFI8bH0
+	 KNCowMDpEMe62aG3YNlFW43bFJ7rXGBBO3M0VGXDKjOcTMxNuh54+8XwaaGwQDR1OU
+	 EI/MJS+gZJnvhAijOzLHK4xm5vVeyJ3/XlDoEr5/oIWWJkq+jDZ88eysEtLNweLx0K
+	 jPlzKL8qo0Q7if3Gh4gNA1oqLIigLV2UI67LSU5oDGQu9N79075ufAoNhAZDSWXCKd
+	 HQ8BLJkmGGDk9QbrZBBckXBhT066MzsBiRf5uwhp0PMfwIFMti7x0MFsB/5gye2TP1
+	 ow68EqiFADeog==
 Received: from [192.168.0.47] (unknown [IPv6:2804:14c:1a9:53ee::1003])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 00C1017E0239;
-	Fri, 14 Feb 2025 18:20:05 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id DA84917E0FC1;
+	Fri, 14 Feb 2025 18:20:10 +0100 (CET)
 From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Fri, 14 Feb 2025 14:18:42 -0300
-Subject: [PATCH 11/13] ASoC: mediatek: mt6359-accdet: Handle
- mediatek,eint-use-ext-res as bool
+Date: Fri, 14 Feb 2025 14:18:43 -0300
+Subject: [PATCH 12/13] ASoC: mediatek: mt6359-accdet: Split
+ mediatek,pwm-deb-setting properties
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250214-mt6359-accdet-dts-v1-11-677a151b9b4c@collabora.com>
+Message-Id: <20250214-mt6359-accdet-dts-v1-12-677a151b9b4c@collabora.com>
 References: <20250214-mt6359-accdet-dts-v1-0-677a151b9b4c@collabora.com>
 In-Reply-To: <20250214-mt6359-accdet-dts-v1-0-677a151b9b4c@collabora.com>
 To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -78,67 +78,86 @@ Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
  =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
 X-Mailer: b4 0.14.2
 
-The code currently allows for values between 0 and 4 for the
-eint_use_ext_res property, but it should be handled as a boolean, either
-configuring the internal resistor to be used or not. Update the code
-accordingly.
+Instead of parsing an array of 15 integers from the
+mediatek,pwm-deb-setting property, which makes them harder to identify,
+parse each value individually from its own property.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- sound/soc/codecs/mt6359-accdet.c | 12 +++---------
- sound/soc/codecs/mt6359-accdet.h |  2 +-
- 2 files changed, 4 insertions(+), 10 deletions(-)
+ sound/soc/codecs/mt6359-accdet.c | 44 +++++++++++++++++++++++++++++-----------
+ 1 file changed, 32 insertions(+), 12 deletions(-)
 
 diff --git a/sound/soc/codecs/mt6359-accdet.c b/sound/soc/codecs/mt6359-accdet.c
-index c3d51c0753c815cd92935736300f57fd18e033f7..646cdd4e0b57f2a007fdcfcaecb7534e08ae61c4 100644
+index 646cdd4e0b57f2a007fdcfcaecb7534e08ae61c4..eca8a0eeb1f868a41c808cc0b853e77db3b0bf59 100644
 --- a/sound/soc/codecs/mt6359-accdet.c
 +++ b/sound/soc/codecs/mt6359-accdet.c
-@@ -82,8 +82,7 @@ static unsigned int adjust_eint_analog_setting(struct mt6359_accdet *priv)
- 					   RG_EINT1CONFIGACCDET_MASK_SFT,
- 					   BIT(RG_EINT1CONFIGACCDET_SFT));
- 		}
--		if (priv->data->eint_use_ext_res == 0x3 ||
--		    priv->data->eint_use_ext_res == 0x4) {
-+		if (!priv->data->eint_use_ext_res) {
- 			/*select 500k, use internal resistor */
- 			regmap_update_bits(priv->regmap,
- 					   RG_EINT0HIRENB_ADDR,
-@@ -547,12 +546,7 @@ static int mt6359_accdet_parse_dt(struct mt6359_accdet *priv)
- 	else if (tmp == 2)
- 		priv->caps |= ACCDET_PMIC_BI_EINT;
+@@ -501,9 +501,13 @@ static int mt6359_accdet_parse_dt(struct mt6359_accdet *priv)
+ 	int ret;
+ 	struct device *dev = priv->dev;
+ 	struct device_node *node = NULL;
+-	int pwm_deb[15] = {0};
++	struct pwm_deb_settings *pwm_deb;
+ 	unsigned int tmp = 0;
  
--	ret = of_property_read_u32(node, "mediatek,eint-use-ext-res",
--				   &priv->data->eint_use_ext_res);
--	if (ret) {
--		/* eint use internal resister */
--		priv->data->eint_use_ext_res = 0x0;
--	}
-+	priv->data->eint_use_ext_res = of_property_read_bool(node, "mediatek,eint-use-ext-res");
++	pwm_deb = devm_kzalloc(dev, sizeof(struct pwm_deb_settings), GFP_KERNEL);
++	if (!pwm_deb)
++		return -ENOMEM;
++
+ 	node = of_get_child_by_name(dev->parent->of_node, "accdet");
+ 	if (!node)
+ 		return -EINVAL;
+@@ -518,11 +522,33 @@ static int mt6359_accdet_parse_dt(struct mt6359_accdet *priv)
+ 	if (ret)
+ 		priv->data->mic_mode = 2;
  
- 	ret = of_property_read_u32(node, "mediatek,eint-comp-vth",
- 				   &priv->data->eint_comp_vth);
-@@ -660,7 +654,7 @@ static void config_eint_init_by_mode(struct mt6359_accdet *priv)
- 	if (priv->data->eint_detect_mode == 0x1 ||
- 	    priv->data->eint_detect_mode == 0x2 ||
- 	    priv->data->eint_detect_mode == 0x3) {
--		if (priv->data->eint_use_ext_res == 0x1) {
-+		if (priv->data->eint_use_ext_res) {
- 			if (priv->caps & ACCDET_PMIC_EINT0) {
- 				regmap_update_bits(priv->regmap,
- 						   RG_EINT0CONFIGACCDET_ADDR,
-diff --git a/sound/soc/codecs/mt6359-accdet.h b/sound/soc/codecs/mt6359-accdet.h
-index 148e181fc00048ea349c029b382507542a33202e..1a255a360b2319396e9b7a5a145a9317e575587f 100644
---- a/sound/soc/codecs/mt6359-accdet.h
-+++ b/sound/soc/codecs/mt6359-accdet.h
-@@ -76,7 +76,7 @@ struct dts_data {
- 	struct pwm_deb_settings *pwm_deb;
- 	unsigned int moisture_detect_enable;
- 	unsigned int eint_detect_mode;
--	unsigned int eint_use_ext_res;
-+	bool eint_use_ext_res;
- 	unsigned int eint_comp_vth;
- 	unsigned int moisture_detect_mode;
- 	unsigned int moisture_comp_vth;
+-	ret = of_property_read_u32_array(node, "mediatek,pwm-deb-setting",
+-					 pwm_deb, ARRAY_SIZE(pwm_deb));
+-	/* debounce8(auxadc debounce) is default, needn't get from dts */
+-	if (!ret)
+-		memcpy(priv->data->pwm_deb, pwm_deb, sizeof(pwm_deb));
++	of_property_read_u32(node, "mediatek,pwm-width", &pwm_deb->pwm_width);
++	of_property_read_u32(node, "mediatek,pwm-thresh", &pwm_deb->pwm_thresh);
++	of_property_read_u32(node, "mediatek,pwm-rise-delay",
++			     &pwm_deb->rise_delay);
++	of_property_read_u32(node, "mediatek,pwm-fall-delay",
++			     &pwm_deb->fall_delay);
++	of_property_read_u32(node, "mediatek,debounce0", &pwm_deb->debounce0);
++	of_property_read_u32(node, "mediatek,debounce1", &pwm_deb->debounce1);
++	of_property_read_u32(node, "mediatek,debounce3", &pwm_deb->debounce3);
++	of_property_read_u32(node, "mediatek,debounce-auxadc",
++			     &pwm_deb->debounce4);
++	of_property_read_u32(node, "mediatek,eint-cmpmen-pwm-width",
++			     &pwm_deb->eint_pwm_width);
++	of_property_read_u32(node, "mediatek,eint-cmpmen-pwm-thresh",
++			     &pwm_deb->eint_pwm_thresh);
++	of_property_read_u32(node, "mediatek,eint-debounce0",
++			     &pwm_deb->eint_debounce0);
++	of_property_read_u32(node, "mediatek,eint-debounce1",
++			     &pwm_deb->eint_debounce1);
++	of_property_read_u32(node, "mediatek,eint-debounce2",
++			     &pwm_deb->eint_debounce2);
++	of_property_read_u32(node, "mediatek,eint-debounce3",
++			     &pwm_deb->eint_debounce3);
++	of_property_read_u32(node, "mediatek,eint-inverter-debounce",
++			     &pwm_deb->eint_inverter_debounce);
++
++	priv->data->pwm_deb = pwm_deb;
+ 
+ 	ret = of_property_read_u32(node, "mediatek,eint-level-pol",
+ 				   &priv->data->eint_pol);
+@@ -834,12 +860,6 @@ static int mt6359_accdet_probe(struct platform_device *pdev)
+ 	if (!priv->data)
+ 		return -ENOMEM;
+ 
+-	priv->data->pwm_deb = devm_kzalloc(&pdev->dev,
+-					   sizeof(struct pwm_deb_settings),
+-					   GFP_KERNEL);
+-	if (!priv->data->pwm_deb)
+-		return -ENOMEM;
+-
+ 	priv->regmap = mt6397->regmap;
+ 	if (IS_ERR(priv->regmap)) {
+ 		ret = PTR_ERR(priv->regmap);
 
 -- 
 2.48.1
