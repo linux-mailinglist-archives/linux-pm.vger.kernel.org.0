@@ -1,138 +1,142 @@
-Return-Path: <linux-pm+bounces-22084-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22085-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C8D9BA35EC6
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 14:21:54 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65066A35EB3
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 14:19:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 06196166832
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 13:16:33 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 056AD7A2B5C
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 13:18:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5FFFD264A62;
-	Fri, 14 Feb 2025 13:16:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D1CD264A91;
+	Fri, 14 Feb 2025 13:18:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="VAsTH2DE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vk1-f180.google.com (mail-vk1-f180.google.com [209.85.221.180])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F42E22D786;
-	Fri, 14 Feb 2025 13:16:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.180
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E32C22D786;
+	Fri, 14 Feb 2025 13:18:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739538990; cv=none; b=uSmVrkaUVMQaSWmwYWKMzBwbHxKfob59egWdRpNaa8rhOy9EA+g4AOy7BCqOVJbLaVKevqomYrRMNIHog4zwo3gB/gUP171qk40hgyjFD3LUCCxMF73CegkfuKhQlTHsfo+JGjW2FwmNWp/IihBMgAjUXLb45QyGtnWxbbXQDvc=
+	t=1739539101; cv=none; b=QhEX96UaIGvduf9KpFyoKvGhv6VwP08b/hPnoVGx4EfTesoHTsbNN7EsW9NMhW5N6I1kSOc08u/cbGMyY7khVCYUOjLs6P8BL+9xILp9rIhfcVOj4oFXxAMR6u1vP59z5DszQg6z7YH4kB02MetQd9sRsaMAwEU+tVtO1pEjN0o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739538990; c=relaxed/simple;
-	bh=1hS5Vle+g/q9XvEnA2MvPqrBd/gpu16zPsjPc98juo4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ehJSJ3UdxBDJAo8bFS0W7zPzqAjoh1CsGqYPdr93hNSTqDSxTg1gCvIstClfrIEcbO31WVS8qx4u0WG8y7w+Ehg/9jnBHeh0BjBcQGC2pHrtmQ5wf1C3bdPE5Xz1zSCVQDt5b6bR/ll0mGV9v2NgKFWYc3cRy5v5uPnwHoUoCro=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.221.180
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vk1-f180.google.com with SMTP id 71dfb90a1353d-520847ad493so641866e0c.1;
-        Fri, 14 Feb 2025 05:16:27 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739538987; x=1740143787;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K0BS+w+btNVzSfe+gnqs3oIU7cm6xzL/ZJ4nnMO7/6Q=;
-        b=l1hJf9VBMf2d9I91/M+e2BHbD0Z+IrGeo3zy1d9DPVq6BIIqDlb46jTTRBMYtgXQBv
-         IZWScsUZ7IFHBYFOSbOYBL/EOTGrtDuKsjCVdXkWdYchwkz2f2Wsys/B6SydfkWcg8cX
-         kNtqRgRXn//o50LTgdGb8v4psAVFJICUgZ4T13NsiU/7iig3/ZfZqOoXN4YYgFQg73JG
-         4OLQ/g9PJuUHAKd1wMdeBpU0OZ0w1N1hfImf1X1AgTxHHR6j1w0ZH7wmm7z55/UoRPms
-         pan4lB0eoqYhTmK+tYyDuqGyBQU5/TMRDly1Q5h5ywMufQKza7FhP8yM2SlRAKztsCfI
-         qhRg==
-X-Forwarded-Encrypted: i=1; AJvYcCWVBk4hC6ZzpCC1JAUg2fmIYmN1ZJ84gHva/+QBSwxDjqq/SWNAht3JO43VwJhP4UwnUH0nfTYQeAWvKbI=@vger.kernel.org, AJvYcCWilvAli0hr7bvPXdbniCmMH+MCWueU8Po7GY/Lv5CX3ATguRh7iv8uKfsqBMgHPvmh4pnyY4xCX98=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDCl4hY5X6u1yWOYyxsZi2Uyrne2DAbuL2WVmF42vAryUYrA1E
-	MqEoIpJ5hhzP8ET1bOTLqrJn/BFCtys/QpydU8bLOhE81LGPJg7YD7DK0xQygxA=
-X-Gm-Gg: ASbGncsT1jew4WuSqYpB6mN2fA/z45bD/L4rWauxZItjliwgiY3rOQYjK5gxgDPh3kN
-	eYltuOSdTlbp9htC7i4uZTbkACUkWYdVSugcENBTFM4wukvC/xBD7pXNVVplMkFyRcSRIMphfkt
-	KO2hmDSTr3BU9Qv+FLi71LtHb35BKym/TJhqnvWI9CwUF6+Rex4vMhZdRpiK162U+hJGydmND1r
-	rY2SzARF4T7kJzaHgL/0W3QHQRJe4Pz7MC/nRtYaiIIDqihWcetgrgt05vHzEIOl5eY5IAUxSYB
-	YlZ+pb6UFJfy6gcKkhlC92QoviSFwYSWKy3DeCaULTNYb7Uksvdyhg==
-X-Google-Smtp-Source: AGHT+IHGnw44gehwqh+RkmcYENFLiq+rSRSd2rAQxkwhb2ItUZ+th07v2CP2/RH8c/vEJQZwjj6COA==
-X-Received: by 2002:a05:6122:2510:b0:51f:3eee:89e7 with SMTP id 71dfb90a1353d-52067cd6b2amr9368556e0c.11.1739538986742;
-        Fri, 14 Feb 2025 05:16:26 -0800 (PST)
-Received: from mail-vs1-f54.google.com (mail-vs1-f54.google.com. [209.85.217.54])
-        by smtp.gmail.com with ESMTPSA id 71dfb90a1353d-5207ab4f633sm615456e0c.35.2025.02.14.05.16.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 14 Feb 2025 05:16:26 -0800 (PST)
-Received: by mail-vs1-f54.google.com with SMTP id ada2fe7eead31-4bbe31ef430so1342232137.3;
-        Fri, 14 Feb 2025 05:16:26 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUwuLsQd/IxvMMH6Y+nBpmbg4e1AznQAM+EV8cEfMRrDFBqNDcUlrDraqpvyPAh2xcvG4R19LNtwqU=@vger.kernel.org, AJvYcCWnDtVP4qDBuGP6cz/k0EfO6o+7P9XXsBehgH78s69G+VnoJtqZk2QQ05a5OekU9FqCwgFiQEja50DbGq0=@vger.kernel.org
-X-Received: by 2002:a05:6102:5108:b0:4bb:edc9:f95c with SMTP id
- ada2fe7eead31-4bbf210aa1emr9510669137.15.1739538986275; Fri, 14 Feb 2025
- 05:16:26 -0800 (PST)
+	s=arc-20240116; t=1739539101; c=relaxed/simple;
+	bh=jPuAmynmOel3ZYS+nralVAlab6we2cU4t4qrzTZ2XBs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=XX3lu3uRaDP1eew2904NRZaq/cqxsdRbEAXeUDAzepEX09cmw2KpmIvvtGnsJQwxLxU7OYMLl6hMzuzCpvFazersHDbBW+1sBTiMcyZ5h9yi3Hfks5B//OL3rb60YQA0Zzw1B11n5vfeySQB6qdaxdhB9W1r+y7GD0a+3bIOM1Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=VAsTH2DE; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739539099; x=1771075099;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=jPuAmynmOel3ZYS+nralVAlab6we2cU4t4qrzTZ2XBs=;
+  b=VAsTH2DEydKtvogLLPeK/8IWWWaxjxRewVVaOnX/hrdTXrdczOjWISDU
+   VpNE0zNuLAY6NQnuabp+p6T8fUPIJVJ8USvUuFNmCv5jb5Z/fFM/dQ+d1
+   +Puyipu2xDVnl4xXniejICAcb8KuM+S68BGQT8XU3ZEZRLyjAI8YIsLlw
+   baObUpUM+gEUcjyM7xPzj8viatuQfKA34CAVnuFS+m5Xy9LpCO7RavE12
+   5WB3KXTNHL4eVpBwrT60NV1u9dTmKCaonVUtpqfoN6ZJ1gCD+FyyVk5CX
+   jRLqjaZvfS/yis2f3l6HuSg2DfECkUUYispVOrItWMHEpQGvySe8zL+yr
+   g==;
+X-CSE-ConnectionGUID: J/abtWp3S/GGa4RwREheLg==
+X-CSE-MsgGUID: y6Xu/VUwTN2cxCwf1YNf9w==
+X-IronPort-AV: E=McAfee;i="6700,10204,11345"; a="50914015"
+X-IronPort-AV: E=Sophos;i="6.13,286,1732608000"; 
+   d="scan'208";a="50914015"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 14 Feb 2025 05:18:18 -0800
+X-CSE-ConnectionGUID: FrGF59/FRKi0aL1+JQPXSQ==
+X-CSE-MsgGUID: 1wesBdFHQuu6y47xyf5zKw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="136679212"
+Received: from lkp-server01.sh.intel.com (HELO d63d4d77d921) ([10.239.97.150])
+  by fmviesa002.fm.intel.com with ESMTP; 14 Feb 2025 05:18:15 -0800
+Received: from kbuild by d63d4d77d921 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tiva8-0019Zj-2T;
+	Fri, 14 Feb 2025 13:18:12 +0000
+Date: Fri, 14 Feb 2025 21:18:04 +0800
+From: kernel test robot <lkp@intel.com>
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>,
+	amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
+	daniel.lezcano@linaro.org
+Cc: oe-kbuild-all@lists.linux.dev, rui.zhang@intel.com, lukasz.luba@arm.com,
+	david.collins@oss.qualcomm.com, linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/4] thermal: qcom-spmi-temp-alarm: Add temp alarm data
+ struct based on HW subtype
+Message-ID: <202502142142.SOgv2k2t-lkp@intel.com>
+References: <20250213210403.3396392-3-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250214102130.3000-1-johan+linaro@kernel.org>
- <CAPDyKFr98DraLvOC83rRFa=uKj_hmwS7Lj0L3JqrbqcFuhdWGA@mail.gmail.com> <Z688uKdqVDaQhm5V@hovoldconsulting.com>
-In-Reply-To: <Z688uKdqVDaQhm5V@hovoldconsulting.com>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Fri, 14 Feb 2025 14:16:14 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdXD1yF65ezOmLz2ShP=gnYNNkUfTLfY8RA0m=C+WwtaVw@mail.gmail.com>
-X-Gm-Features: AWEUYZlSIlRmseK5vNNQ4sx2pg6SL5RqLE-jro8jxejgHcUj6Mk9u1FfpeC4bLY
-Message-ID: <CAMuHMdXD1yF65ezOmLz2ShP=gnYNNkUfTLfY8RA0m=C+WwtaVw@mail.gmail.com>
-Subject: Re: [PATCH] bus: simple-pm-bus: fix forced runtime PM use
-To: Johan Hovold <johan@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold <johan+linaro@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, Liu Ying <victor.liu@nxp.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250213210403.3396392-3-anjelique.melendez@oss.qualcomm.com>
 
-Hi Johan,
+Hi Anjelique,
 
-On Fri, 14 Feb 2025 at 13:53, Johan Hovold <johan@kernel.org> wrote:
-> On Fri, Feb 14, 2025 at 01:36:48PM +0100, Ulf Hansson wrote:
-> > On Fri, 14 Feb 2025 at 11:21, Johan Hovold <johan+linaro@kernel.org> wrote:
-> > >
-> > > The simple-pm-bus driver only enables runtime PM for some buses
-> > > ('simple-pm-bus') yet has started calling pm_runtime_force_suspend() and
-> > > pm_runtime_force_resume() during system suspend unconditionally.
-> > >
-> > > This currently works, but that is not obvious and depends on
-> > > implementation details which may change at some point.
-> > >
-> > > Add dedicated system sleep ops and only call pm_runtime_force_suspend()
-> > > and pm_runtime_force_resume() for buses that use runtime PM to avoid any
-> > > future surprises.
+kernel test robot noticed the following build warnings:
 
-Thanks for your patch!
+[auto build test WARNING on rafael-pm/thermal]
+[also build test WARNING on linus/master v6.14-rc2 next-20250214]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-> > > Fixes: c45839309c3d ("drivers: bus: simple-pm-bus: Use clocks")
-> >
-> > This doesn't look like it is needed to me. It isn't broken, right?
->
-> I didn't add a CC stable tag since this currently works, but I still
-> consider it a bug to call these helpers unconditionally when not using
-> runtime PM.
+url:    https://github.com/intel-lab-lkp/linux/commits/Anjelique-Melendez/thermal-qcom-spmi-temp-alarm-enable-stage-2-shutdown-when-required/20250214-050700
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git thermal
+patch link:    https://lore.kernel.org/r/20250213210403.3396392-3-anjelique.melendez%40oss.qualcomm.com
+patch subject: [PATCH 2/4] thermal: qcom-spmi-temp-alarm: Add temp alarm data struct based on HW subtype
+config: loongarch-allmodconfig (https://download.01.org/0day-ci/archive/20250214/202502142142.SOgv2k2t-lkp@intel.com/config)
+compiler: loongarch64-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250214/202502142142.SOgv2k2t-lkp@intel.com/reproduce)
 
-Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502142142.SOgv2k2t-lkp@intel.com/
 
-> [ And during rc1 these callbacks were suddenly called and triggered a
-> NULL-pointer dereference as you know. [1] ]
->
-> Johan
->
-> [1] https://lore.kernel.org/lkml/Z6YcjFBWAVVVANf2@hovoldconsulting.com/
+All warnings (new ones prefixed by >>):
 
-Thanks, that was the context I needed to raise review priority ;)
+>> drivers/thermal/qcom/qcom-spmi-temp-alarm.c:161: warning: expecting prototype for qpnp_tm_get_gen2_temp_stage(). Prototype was for qpnp_tm_gen2_get_temp_stage() instead
 
-Perhaps Reported-by: and Closes:?
 
-Gr{oetje,eeting}s,
+vim +161 drivers/thermal/qcom/qcom-spmi-temp-alarm.c
 
-                        Geert
+   153	
+   154	/**
+   155	 * qpnp_tm_get_gen2_temp_stage() - return over-temperature stage
+   156	 * @chip:		Pointer to the qpnp_tm chip
+   157	 *
+   158	 * Return: stage on success, or errno on failure.
+   159	 */
+   160	static int qpnp_tm_gen2_get_temp_stage(struct qpnp_tm_chip *chip)
+ > 161	{
+   162		u8 reg = 0;
+   163		int ret;
+   164	
+   165		ret = qpnp_tm_read(chip, QPNP_TM_REG_STATUS, &reg);
+   166		if (ret < 0)
+   167			return ret;
+   168	
+   169		ret = FIELD_GET(STATUS_GEN2_STATE_MASK, reg);
+   170	
+   171		return alarm_state_map[ret];
+   172	}
+   173	
 
 -- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
-
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
