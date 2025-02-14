@@ -1,129 +1,99 @@
-Return-Path: <linux-pm+bounces-22066-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22067-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id F315AA3581D
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 08:44:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A77B7A358D6
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 09:27:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FD3B16F248
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 07:44:22 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A21D03A7A4B
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 08:27:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AFE5A215F76;
-	Fri, 14 Feb 2025 07:44:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD59E227BA0;
+	Fri, 14 Feb 2025 08:27:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b="DHRE9W03"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r9pPn/G6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailgw01.mediatek.com (unknown [60.244.123.138])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 808D42153FA;
-	Fri, 14 Feb 2025 07:44:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=60.244.123.138
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AAA53227B96;
+	Fri, 14 Feb 2025 08:27:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739519043; cv=none; b=ImXckasYvY8L2LEur5Y2ZsYhLUd4FWa/KJ1mm7Wn4515Msjs5Z3vH3rjG5QP8FGyTIAcs/liJS7qB1J7jkoH27k8iUluFYbrunBFl4eY0UGy8esie3h9vwj8RiUiq2RdweVdvy9P01WZJ5Hn7uaUdNTxqdl3EmtXL7RJoCrU2Ao=
+	t=1739521653; cv=none; b=fQM6M6xT77J2iN5iIJJhikpnB8F6CLmzvE2RitWXKzhRMHQsHWsCLZ/CmCjNctFeQ3XMSJScOzCkzzhtH0mBKfuTJxeTeFUHtjPPkHqfcR1ysCkZ5w+O2/Du2U8LayrJejLTDT/h/Hoah1H0+/sYfPBIVww465B+6Bm0pgzGj8s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739519043; c=relaxed/simple;
-	bh=TTTXWahj9vnNhXUW3BbTkDdH/JC5WYcR0eoYpe7uoFw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mBCHHE4jLDqKmXzoVR/UMDhLp+ldw7V2bD66myIUe+MqUfBT25PiPQR2fXOI9cPLQVbUj/DUVLsjx0UpEqxzb0lIo4mmdCmf1p6mz8KEa7UgemIx5fY3zwNpfoW0v/Fx7VcS+kxiq7igo0q0O0O7YoNibeThZhUfP7cUdbt+Jes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com; spf=pass smtp.mailfrom=mediatek.com; dkim=pass (1024-bit key) header.d=mediatek.com header.i=@mediatek.com header.b=DHRE9W03; arc=none smtp.client-ip=60.244.123.138
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=mediatek.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mediatek.com
-X-UUID: 71626fc0eaa711efb8f9918b5fc74e19-20250214
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=mediatek.com; s=dk;
-	h=Content-Type:Content-Transfer-Encoding:MIME-Version:References:In-Reply-To:Message-ID:Date:Subject:CC:To:From; bh=Av2lEU68lYQ0S7L92vfD2pewctBQ4t+HkHiry0seZP8=;
-	b=DHRE9W03+4Q6KpGc4CZizp8GR1RKNo5in8W42CZw2D02Mnl6h4tXz1Ks3kL6Oqomz4N1Z/dbbqPj20nOBJeXExBy3XJuvXIIvqBEsj3W1NTCMdRRLVi232U2RaTbcLKImp1qmQqz9N/R8U12F1I8q36g33R1r3hd26LeAW9HbqU=;
-X-CID-P-RULE: Release_Ham
-X-CID-O-INFO: VERSION:1.1.46,REQID:b784bc57-ca9b-4f4e-b915-bb97077f08e4,IP:0,U
-	RL:0,TC:0,Content:0,EDM:0,RT:0,SF:0,FILE:0,BULK:0,RULE:Release_Ham,ACTION:
-	release,TS:0
-X-CID-META: VersionHash:60aa074,CLOUDID:a3bcbe24-96bd-4ac5-8f2e-15aa1ef9defa,B
-	ulkID:nil,BulkQuantity:0,Recheck:0,SF:81|82|102,TC:nil,Content:0|50,EDM:-3
-	,IP:nil,URL:0,File:nil,RT:nil,Bulk:nil,QS:nil,BEC:nil,COL:0,OSI:0,OSA:0,AV
-	:0,LES:1,SPR:NO,DKR:0,DKP:0,BRR:0,BRE:0,ARC:0
-X-CID-BVR: 0,NGT
-X-CID-BAS: 0,NGT,0,_
-X-CID-FACTOR: TF_CID_SPAM_SNR
-X-UUID: 71626fc0eaa711efb8f9918b5fc74e19-20250214
-Received: from mtkmbs10n1.mediatek.inc [(172.21.101.34)] by mailgw01.mediatek.com
-	(envelope-from <chun-jen.tseng@mediatek.com>)
-	(Generic MTA with TLSv1.2 ECDHE-RSA-AES256-GCM-SHA384 256/256)
-	with ESMTP id 252830353; Fri, 14 Feb 2025 15:43:55 +0800
-Received: from mtkmbs13n1.mediatek.inc (172.21.101.193) by
- mtkmbs11n2.mediatek.inc (172.21.101.187) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1258.28; Fri, 14 Feb 2025 15:43:54 +0800
-Received: from mtksitap99.mediatek.inc (10.233.130.16) by
- mtkmbs13n1.mediatek.inc (172.21.101.73) with Microsoft SMTP Server id
- 15.2.1258.28 via Frontend Transport; Fri, 14 Feb 2025 15:43:54 +0800
-From: Mark Tseng <chun-jen.tseng@mediatek.com>
-To: "Rafael J . Wysocki" <rafael@kernel.org>, Viresh Kumar
-	<viresh.kumar@linaro.org>, MyungJoo Ham <myungjoo.ham@samsung.com>, Kyungmin
- Park <kyungmin.park@samsung.com>, Chanwoo Choi <cw00.choi@samsung.com>,
-	Matthias Brugger <matthias.bgg@gmail.com>, AngeloGioacchino Del Regno
-	<angelogioacchino.delregno@collabora.com>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-mediatek@lists.infradead.org>,
-	<Project_Global_Chrome_Upstream_Group@mediatek.com>,
-	<chun-jen.tseng@mediatek.com>
-Subject: [PATCH v3 3/3] cpufreq: mediatek: data safety protect
-Date: Fri, 14 Feb 2025 15:43:34 +0800
-Message-ID: <20250214074353.1169864-4-chun-jen.tseng@mediatek.com>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250214074353.1169864-1-chun-jen.tseng@mediatek.com>
-References: <20250214074353.1169864-1-chun-jen.tseng@mediatek.com>
+	s=arc-20240116; t=1739521653; c=relaxed/simple;
+	bh=umGs2f8JsxE41Yq3/TX60DBVwiLiOcTZOkxMPH65zVU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P4N9EWNy/3oC/VT/vL77SmnVutqHFQAtbdczgErWDy2CE8yQYM3zL9/ohmZGdnYqhDo/0crRVESHtewqVcamf9R8hV1jKmKbFjgPa5mHMsakBTLl83mwsZdVEtmjemP35wfbGq/iNMCr+Y79Yi9raji1noiC2o1jzHI+9yQmtiU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r9pPn/G6; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F9C2C4CEDF;
+	Fri, 14 Feb 2025 08:27:32 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739521653;
+	bh=umGs2f8JsxE41Yq3/TX60DBVwiLiOcTZOkxMPH65zVU=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=r9pPn/G6xAXrX7koevvifKhjd8InbQfDSr4R4fneKtezV5CGNSKnrio1ZhBmBl0rm
+	 7TSZzklUVz/5t95PoK64ywDLnVLCaaJzEGW3PkLtXfILnBs3k7Pl+sY6h4wlluc2ai
+	 tL7OEWByg4+W/k1THY54Yo6sS8ODkCcmZ8hhl/PYmhggJo93c9B2oEZ3p1Md5+TGkr
+	 oJ8Q/Lclwp0rABoNHUcxxj0Jo0x6Z3ODMYSE8wvblVpR5jLykG7L+BRaKeW5OJEP89
+	 vzNK25RWx+z6c4X5AfQrIIlpXGpQCygZMIlzr1F3dKmOe1enDzve0sx59xyNec+QtK
+	 C15godChkxIkg==
+Date: Fri, 14 Feb 2025 09:27:29 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Ryan.Wanner@microchip.com
+Cc: lee@kernel.org, robh@kernel.org, krzk+dt@kernel.org, 
+	conor+dt@kernel.org, claudiu.beznea@tuxon.dev, sre@kernel.org, 
+	nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com, p.zabel@pengutronix.de, 
+	linux@armlinux.org.uk, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+Subject: Re: [PATCH v2 05/15] dt-bindings: reset: atmel,at91sam9260-reset:
+ add microchip,sama7d65-rstc
+Message-ID: <20250214-flashy-myna-of-opportunity-dce05a@krzk-bin>
+References: <cover.1739221064.git.Ryan.Wanner@microchip.com>
+ <b78ea6d7b306bca7012cff604b67b65b89b41093.1739221064.git.Ryan.Wanner@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <b78ea6d7b306bca7012cff604b67b65b89b41093.1739221064.git.Ryan.Wanner@microchip.com>
 
-get policy data in global lock session avoid get wrong data.
+On Mon, Feb 10, 2025 at 02:13:05PM -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> Add SAMA7D65 RSTC compatible to DT bindings documentation. The
+> sama7d65-rstc is compatible with the sama7g5-rstc.
+> 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
+>  .../devicetree/bindings/reset/atmel,at91sam9260-reset.yaml   | 5 +++++
+>  1 file changed, 5 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+> index 98465d26949ee..a1c21c3880f9d 100644
+> --- a/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+> +++ b/Documentation/devicetree/bindings/reset/atmel,at91sam9260-reset.yaml
+> @@ -23,6 +23,11 @@ properties:
+>                - atmel,sama5d3-rstc
+>                - microchip,sam9x60-rstc
+>                - microchip,sama7g5-rstc
+> +
+> +      - items:
+> +          - const: microchip,sama7d65-rstc
+> +          - const: microchip,sama7g5-rstc
+> +
 
-Signed-off-by: Mark Tseng <chun-jen.tseng@mediatek.com>
----
- drivers/cpufreq/mediatek-cpufreq.c | 15 ++++++++++-----
- 1 file changed, 10 insertions(+), 5 deletions(-)
+No need for blank lines around. It's making it unnecessary long.
 
-diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-index 68fcb6fcbe48..37b929e81f70 100644
---- a/drivers/cpufreq/mediatek-cpufreq.c
-+++ b/drivers/cpufreq/mediatek-cpufreq.c
-@@ -201,11 +201,11 @@ static bool is_ccifreq_ready(struct mtk_cpu_dvfs_info *info)
- static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
- 				  unsigned int index)
- {
--	struct cpufreq_frequency_table *freq_table = policy->freq_table;
--	struct clk *cpu_clk = policy->clk;
--	struct clk *armpll = clk_get_parent(cpu_clk);
--	struct mtk_cpu_dvfs_info *info = policy->driver_data;
--	struct device *cpu_dev = info->cpu_dev;
-+	struct cpufreq_frequency_table *freq_table;
-+	struct clk *cpu_clk;
-+	struct clk *armpll;
-+	struct mtk_cpu_dvfs_info *info;
-+	struct device *cpu_dev;
- 	struct dev_pm_opp *opp;
- 	long freq_hz, pre_freq_hz;
- 	int vproc, pre_vproc, inter_vproc, target_vproc, ret;
-@@ -213,6 +213,11 @@ static int mtk_cpufreq_set_target(struct cpufreq_policy *policy,
- 
- 	mutex_lock(&mtk_policy_lock);
- 
-+	freq_table = policy->freq_table;
-+	cpu_clk = policy->clk;
-+	armpll = clk_get_parent(cpu_clk);
-+	info = policy->driver_data;
-+	cpu_dev = info->cpu_dev;
- 	inter_vproc = info->intermediate_voltage;
- 	pre_freq_hz = policy->cur * 1000;
- 
--- 
-2.45.2
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+
+Best regards,
+Krzysztof
 
 
