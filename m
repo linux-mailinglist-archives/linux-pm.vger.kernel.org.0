@@ -1,127 +1,159 @@
-Return-Path: <linux-pm+bounces-22079-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22080-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 31BCCA35C7D
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 12:26:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0648AA35DBD
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 13:37:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E9A0C16F265
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 11:26:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A62D7188E3E8
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 12:37:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4F826263C6A;
-	Fri, 14 Feb 2025 11:26:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3044263F26;
+	Fri, 14 Feb 2025 12:37:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="jTFlee+/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="CHygU2Fw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
+Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8A2EA263C62
-	for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 11:26:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CDBFD25A627
+	for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 12:37:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739532401; cv=none; b=LbEUk3Jeg7A6H6j9BaZIoSGa6ZdEGvgCAzlMIVVMFRIVTWd6/5XirkuVn3oh0Fn8pUU88a97mRBqtkfVMdaspAnuewtFhAI+F0A/RVVEuKC5xOSz6l/N+Avic0Dk74sXbF3k83hrgs1r9ZAzzMkvklVNCr12CvbbRyoAlFWDz+s=
+	t=1739536647; cv=none; b=B+tJ/VbMoA6c3yw6BsihS862i0Rbm5SOCtUMOunZFAZk+j5D8hLNmGmPEyVJWJtg3GrJMYBGDU4Hq1Ogy3CdYCcImapGYtM9txbVjjw6gMB1uk18JGm44LpDcsAKQx7KcIC58/qgQsqFj/dDQhIgBMSlhZKmolYnooSgGOd3Lx4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739532401; c=relaxed/simple;
-	bh=9CFmR3NtOILyiu4Bu+g3fs7HgLLo6IFCFDt9ttxv4TY=;
+	s=arc-20240116; t=1739536647; c=relaxed/simple;
+	bh=JJ+O3NQc7ZRxc/eAygdOLugfRhN3r8KOEi5bbWBrjKk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=CTLMfCGQXPTs+ThWmtv8Cl31kEd4uaCFzPpKlyPDtuEIzU7OnIxLGJO7jXLgWF6sCjNC7E5ji/RZNQokkQvaysIGWxHbIEV/aRBTIXlzRoQoW8KGhJrxDNnSq1vICC46u0FaqJPYEuRp9k2Vp+7aPTkg5vZJJEAs2u2GAQl9oxc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=jTFlee+/; arc=none smtp.client-ip=209.85.219.181
+	 To:Cc:Content-Type; b=kjWJXm8FsF/kFIbKQBmv8PQTfyvv8HWZYIhHGHHd9WGeLi6HoaZSjXvH/CGeQmu3g4ZQ1HmNRb5asxXtYynj8zB5lT8OeM8LiEd78TodwY59/cn1Mcb1UgQe8pJdhxzM9D4l6m5N7CxSfi20rYoiLRVKYLO0j6EbMPl+/Z2Rn+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=CHygU2Fw; arc=none smtp.client-ip=209.85.219.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e5b271efc64so1653451276.0
-        for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 03:26:39 -0800 (PST)
+Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e5b296611d1so2637771276.1
+        for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 04:37:25 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739532398; x=1740137198; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1739536645; x=1740141445; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=NewR8BVnLAvb+QHkWMp14O+AvzFEsqhZDEpEAFt1rM0=;
-        b=jTFlee+/f9TVv2DoWD+zvahsgmXyLxLv+CGARzJoBaY+haN96p8CSKap6H/8kFKmVi
-         8PBn+EGSWWrNqvgwQy/22zKvnGxJ4BN01GzVQC0uf6NR7eSUza4MsoGlgPn6YlwxURyP
-         LJUw+EC5ZwZpDDm7Kmrj2ePnKOFEkpBVHIHl0UlbLnqW6XGmOIB0y6mXhXImJ5tWu0MO
-         RLyqVuPYuZbqSnQ/vUyQz7Q7DD8Ul79CkJV5s0QORh9r0fDudVe5F9SwfGcItCa2uwwb
-         jjBxr3Jre7cNOX1QFLe4uzsOEwQ/+12+4O6wUcJGCl7RbRIPuWIg8DRDAbC0bzQ1TJmN
-         kLjA==
+        bh=PJIeOuHK6HT3LfS+Gyhx912FloyWVeSMjTYMVQ61KWs=;
+        b=CHygU2Fw89aAA7PSbeojSR2Ch6baGXb07HTqKIVrBhnRue9KCs+2zbAnzRV15LsssT
+         sFNHo4IujZgiMvmlSavmMJZN4ftPtGY8cF3wIBIPoAHsy7z0oR6ltc7bltCDbwJYPRyQ
+         zmB8+JjWNBnuKMNKe0iW0Z9fZOmt+AF3ZJ50aqRNyjd3S8yw7mWgjGB7EcwnEG8W4W6M
+         rbWJlYPi++YvPZAn8+HBgHqQ4sKFqeJMNqTmxPsy/7tgHA4N73nRjLaJyMTkr6P3y4mj
+         qZpq3UXy7imUBL60PhdbyoMo7RlpotjmsTpJHjWdl+na6MFtJan3ulP1aAZERZAUhPOW
+         IgaQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739532398; x=1740137198;
+        d=1e100.net; s=20230601; t=1739536645; x=1740141445;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=NewR8BVnLAvb+QHkWMp14O+AvzFEsqhZDEpEAFt1rM0=;
-        b=Y75DEmhjoNd96plU+9pB4yKNGIaUTEIw7sw8+L7BqOCTLhA/e1VN7CCkmxl4/RKgGE
-         GhbCOAWFF98SisuYoue7FxtJweIMFGpRd2TySDw3BmzVilxjmuCU92fb/uk0ElAb6bv7
-         38vxK7U+D8ebBIVp+CJNm8lH5XgO4+q01OFS+qBvvZavVOOG2wsLqQcyeww0Wv8g1Gqk
-         Fql2oZ9YjMb8GxiJ2mU1gHHldwBswCvMVn8UTldQtKyOj/ovAtbWQamVYOLNRsH1qHE2
-         rpZZfexiGeMXO6OcYcjs3G2X/oLtyrRPwQPlf5K6Rgv87Z/d6nVW1S7cMdcAkDUFzyEQ
-         uDtg==
-X-Forwarded-Encrypted: i=1; AJvYcCUm2t20p6ZEXvtP0MuN1F3d6KdVZhYo+gJkikIm6iWU6DSJ+4bjej5WydL4UXVAMhUOHOS20wdCQg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyLXW+NdUCiD6uhn9LsZQyEKVJ/qu33vJ8Iy4QFxY3t4TEaNvt0
-	oBVplm/YSikptgM5cvdw1zvIQabqd4yiGN1Gc8XmFFGWjf23+Rj2DkuSMSRQE97Iqvc872Gdmoj
-	ytX/yBy++jZ8c3zLupNVAVsIWQmGvLJVsAchEGnRTpAaYCgd9
-X-Gm-Gg: ASbGncsVxbB8thrHEHsH97yVPCs0KXxfraw9coCGetDfiCQ20qnJ6OAinssKDymudY/
-	FhZL8nrMSwid9GAjx7E3ujxQY54kVowCkwQZbRMP6IShuk7gU05PP0DAxw5PgL+I5sliGvoZooQ
+        bh=PJIeOuHK6HT3LfS+Gyhx912FloyWVeSMjTYMVQ61KWs=;
+        b=DxL+GQwQyG/Hdi1Xs50btGO/hueLxermr7Ew+JIeKujpjLuULDJ0skk2nRuV11UDyD
+         aPBzWpNxCFQ/Qg3XxKqaeTMuBVpJCq63G+JJahlztmjjW9jljE055g2+5uNZcltOMM5R
+         L4V3q1K6RvDeztbqtuDZwhz8i9G/vzFNRCJwUTPjV6Wcjwr8P/WqxSxqCJJCt15F41dz
+         G80OCw502BUfO9i07gEEh/HE3FCI9cS4nZWVc+UI+/FwyUo+Idw8OgVVJAY0VzupFG7o
+         oeJcWpk9qflSySdqlyesqrNg7QnrOkHVO7BlU5n58HuWR0GHpDo4gfP+NxUK9eXvMRl/
+         0qyg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQncS6VTQ7APgxeWYb5WKLY8dt3He3sp8m8omOvns1clYzNgoWgcfRKO6G//1w60NX10mUk8uVHw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy/4Xhy4WtgR+63s7iaNiL6roUC+Wi26bohrUi1PxdYBeeoTP0y
+	UBzHu1eRHqjj3xzZoljmUarVFFV6o7UN/XAXUDmFpGixDMRcAx2DUrZUn0h1Abni6x8JWo4D/mc
+	CmWu+/Jycfy6M2RcXHi4/ydw02IhFTvO5aIE4zQ==
+X-Gm-Gg: ASbGncvesCn6q20tCoKBWIOO6VvMioqL7pAlzGkdMejx/NpJUZ8ue/BWIrhj31fD9jc
+	ypIK1Y6500f6hTWepwn+rrgDoC+Owr+vydCoXZ+MDYMfAXQfATSJjZvNHfImHRqjXmJjw1NM45A
 	==
-X-Google-Smtp-Source: AGHT+IFDX2eFmViL+5OfSdYQnUicI9/siMdarIoycTUrSgGa7HJlcc6AqAWw01jHHuRRs9G125oUVvKi+mqUSg2uSFo=
-X-Received: by 2002:a05:6902:2b8b:b0:e58:32b4:4868 with SMTP id
- 3f1490d57ef6-e5da8102cedmr6577945276.3.1739532398616; Fri, 14 Feb 2025
- 03:26:38 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IFFUIbAl5XDVgSjeARoAg42VVByccGOmxG3hSULf8SrcrXGHd+9G5Ugv+8hOXmpTF7lxA8JoAU9tHSD43F9q0M=
+X-Received: by 2002:a05:6902:1b08:b0:e58:36ad:a1ba with SMTP id
+ 3f1490d57ef6-e5daac7a614mr6387024276.16.1739536644605; Fri, 14 Feb 2025
+ 04:37:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <05c2ef630694a28b560426d8c426881cc14e8f7c.1738748678.git.geert+renesas@glider.be>
-In-Reply-To: <05c2ef630694a28b560426d8c426881cc14e8f7c.1738748678.git.geert+renesas@glider.be>
+References: <20250214102130.3000-1-johan+linaro@kernel.org>
+In-Reply-To: <20250214102130.3000-1-johan+linaro@kernel.org>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 14 Feb 2025 12:26:02 +0100
-X-Gm-Features: AWEUYZkIpsTyC0FKSztaRjDkRsJdclXeZO3ETJo0ehA80cyTKZy1G6MUW_Wd4yU
-Message-ID: <CAPDyKFouXuTZCqHUBwzg=BU7CbFJLa_Cd7q3Bs1wc-xzruMCfQ@mail.gmail.com>
-Subject: Re: [PATCH v2] pmdomain: renesas: rcar-sysc: Drop fwnode_dev_initialized()
- call
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: linux-renesas-soc@vger.kernel.org, linux-pm@vger.kernel.org, 
-	Saravana Kannan <saravanak@google.com>
+Date: Fri, 14 Feb 2025 13:36:48 +0100
+X-Gm-Features: AWEUYZm-GqVQrKsKGZVAfCbeybEf32Dak5WgakPU21UHnEHfkiCIl9P2xjgmigM
+Message-ID: <CAPDyKFr98DraLvOC83rRFa=uKj_hmwS7Lj0L3JqrbqcFuhdWGA@mail.gmail.com>
+Subject: Re: [PATCH] bus: simple-pm-bus: fix forced runtime PM use
+To: Johan Hovold <johan+linaro@kernel.org>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Geert Uytterhoeven <geert+renesas@glider.be>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Liu Ying <victor.liu@nxp.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Wed, 5 Feb 2025 at 10:45, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
+On Fri, 14 Feb 2025 at 11:21, Johan Hovold <johan+linaro@kernel.org> wrote:
 >
-> As of commit bab2d712eeaf9d60 ("PM: domains: Mark fwnodes when their
-> powerdomain is added/removed") in v5.12, the pmdomain core takes care of
-> marking the fwnode initialized, so there is no need to repeat it.
+> The simple-pm-bus driver only enables runtime PM for some buses
+> ('simple-pm-bus') yet has started calling pm_runtime_force_suspend() and
+> pm_runtime_force_resume() during system suspend unconditionally.
 >
-> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
-> Acked-by: Saravana Kannan <saravanak@google.com>
+> This currently works, but that is not obvious and depends on
+> implementation details which may change at some point.
+>
+> Add dedicated system sleep ops and only call pm_runtime_force_suspend()
+> and pm_runtime_force_resume() for buses that use runtime PM to avoid any
+> future surprises.
+>
+> Fixes: c45839309c3d ("drivers: bus: simple-pm-bus: Use clocks")
 
-Applied for next, thanks!
+This doesn't look like it is needed to me. It isn't broken, right?
+
+> Cc: Liu Ying <victor.liu@nxp.com>
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+
+Seems reasonable to me, but I think we need an ack from Geert here too.
+
+Anyway, feel free to add:
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
 
-
 > ---
-> v2:
->   - Add Acked-by.
-> ---
->  drivers/pmdomain/renesas/rcar-sysc.c | 2 --
->  1 file changed, 2 deletions(-)
+>  drivers/bus/simple-pm-bus.c | 22 +++++++++++++++++++++-
+>  1 file changed, 21 insertions(+), 1 deletion(-)
 >
-> diff --git a/drivers/pmdomain/renesas/rcar-sysc.c b/drivers/pmdomain/renesas/rcar-sysc.c
-> index b99326917330f5f1..dce1a6d37e80127d 100644
-> --- a/drivers/pmdomain/renesas/rcar-sysc.c
-> +++ b/drivers/pmdomain/renesas/rcar-sysc.c
-> @@ -434,8 +434,6 @@ static int __init rcar_sysc_pd_init(void)
->         }
+> diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-bus.c
+> index 5dea31769f9a..d8e029e7e53f 100644
+> --- a/drivers/bus/simple-pm-bus.c
+> +++ b/drivers/bus/simple-pm-bus.c
+> @@ -109,9 +109,29 @@ static int simple_pm_bus_runtime_resume(struct device *dev)
+>         return 0;
+>  }
 >
->         error = of_genpd_add_provider_onecell(np, &domains->onecell_data);
-> -       if (!error)
-> -               fwnode_dev_initialized(of_fwnode_handle(np), true);
+> +static int simple_pm_bus_suspend(struct device *dev)
+> +{
+> +       struct simple_pm_bus *bus = dev_get_drvdata(dev);
+> +
+> +       if (!bus)
+> +               return 0;
+> +
+> +       return pm_runtime_force_suspend(dev);
+> +}
+> +
+> +static int simple_pm_bus_resume(struct device *dev)
+> +{
+> +       struct simple_pm_bus *bus = dev_get_drvdata(dev);
+> +
+> +       if (!bus)
+> +               return 0;
+> +
+> +       return pm_runtime_force_resume(dev);
+> +}
+> +
+>  static const struct dev_pm_ops simple_pm_bus_pm_ops = {
+>         RUNTIME_PM_OPS(simple_pm_bus_runtime_suspend, simple_pm_bus_runtime_resume, NULL)
+> -       NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
+> +       NOIRQ_SYSTEM_SLEEP_PM_OPS(simple_pm_bus_suspend, simple_pm_bus_resume)
+>  };
 >
->  out_put:
->         of_node_put(np);
+>  #define ONLY_BUS       ((void *) 1) /* Match if the device is only a bus. */
 > --
-> 2.43.0
+> 2.45.3
 >
 
