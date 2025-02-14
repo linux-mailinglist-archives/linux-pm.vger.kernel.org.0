@@ -1,109 +1,115 @@
-Return-Path: <linux-pm+bounces-22108-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22109-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 75235A36719
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 21:52:15 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97A74A36728
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 21:59:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B14F171B63
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 20:52:14 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 471D718936DD
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 20:59:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A67B5198E77;
-	Fri, 14 Feb 2025 20:52:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 358E01C8619;
+	Fri, 14 Feb 2025 20:59:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YyG7L3cp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="M/ZCoP5R"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f44.google.com (mail-pj1-f44.google.com [209.85.216.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 796B918EFD4;
-	Fri, 14 Feb 2025 20:52:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C1E7D1A83ED;
+	Fri, 14 Feb 2025 20:59:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739566331; cv=none; b=m7eYlB5e7Tng7SjseQCGT1jCbqvO+z5OeWtcDAa9fHfuItTonlv6H/FCU3HE8mN7CyhapBVEafKdsA5iEZ74imCR829pIowpKEC7rrU3RCR9ymFrefrvi3NfNNGoS4DMRsCfpdyCROtzmbPN0fTyyoLqUFGkcmUJl9Kb/1rp+2Q=
+	t=1739566746; cv=none; b=URlejnfAD1AvO9X02DJOnjyXuW2rbbtnp/o5ri5jK1PMuHFp+L10k1SeCZbXUISJ2faensOwpNPMpnd1435HoHoai0U7Lg6aGzmG5uq3ezkmr/pZ2Nu1sxKbuOwpog5bC6Ab9tHvR7DbcwSXhQbQR+xcbCF/LL8H9/1Zl8v43+0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739566331; c=relaxed/simple;
-	bh=Pasz9gJodBkYKRLU+7hhjVomkiw6r4ovSyTAwl0T65I=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=NLbKLW0YB1Hzu7a5gi/DD2cVL9sSAHqUXLmO96FK6BtkJYFSMg6YJHgAc6wBipzf+dFo7B29FgGpBS1YqhTwSOhGxNBq+NYUNM/lAVBSz6lKKHuEpgXIjzFizcTK7IBVa03d0LdNUrH6lyb6L8JqimyH9Uf0zV3crHd6NL8y3zo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YyG7L3cp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E2CE8C4CEDF;
-	Fri, 14 Feb 2025 20:52:10 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739566330;
-	bh=Pasz9gJodBkYKRLU+7hhjVomkiw6r4ovSyTAwl0T65I=;
-	h=From:Date:Subject:To:Cc:From;
-	b=YyG7L3cp/aiqGkyQJXoGvIit4mumovgS+PEMkcepTdO9bGJtJ2w+7/fSKxQQPPB06
-	 GO8NONQrHkFJORtB7k5HK4Yl9KXd1lnaFQVSNtj50GtADYmWAfUHhTqnlpWaNSOPrK
-	 a1BYFNgvuVFtr27ezbgO7uwlneTSO4ksYqHe+HmguUoJvojTYUJz0qdq83RH6/RtFK
-	 8wagBsa9SORUdtZy5zKVpheIbwH5UYyrOEzIn69FWuufJ7Hwjl0aVaDIOE/X1H8NK+
-	 4FzHC2WiUDupiDbKop9SoRF/vZmqMsoB11I8YWC1XUuSsLufziEVxsg6ALvGWqI4y9
-	 YBYdDFHQWj4KQ==
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5fcb41b6455so649359eaf.1;
-        Fri, 14 Feb 2025 12:52:10 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCU0bvGShb5XXN1l6EjEae8vsmxhmwRSkIakAyAWQfrOir84TxF5xdzQ0iBsCf9vnvvwcEFT6ANLguTo0UM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwslDuN7HSJUPErphrJyToVOf88LrXtwVIQdX368j+gbkVpCdHH
-	6I7FdDRFpH8NUlWp5lhSztV1leV7HV3dx1Txp+Z25Dsa8e41yz2vgJMbiCjXhjDLVKA99y7qE4o
-	R/iJfHCv6Bkg/QdFKpBySedYZAJU=
-X-Google-Smtp-Source: AGHT+IHFLBC7rZlNpsFiPov4BUId7EKQWZc1Pk104NDKABNFsqpLD6hJH/f0cFybVWecKyyA/XTnm1FbYtARoKb55BE=
-X-Received: by 2002:a05:6871:6c08:b0:29e:7603:be65 with SMTP id
- 586e51a60fabf-2bc99a4bbdcmr315498fac.1.1739566330235; Fri, 14 Feb 2025
- 12:52:10 -0800 (PST)
+	s=arc-20240116; t=1739566746; c=relaxed/simple;
+	bh=H2cNc1aX4F0Q4gWS6uIBPMkCD42ZScjGxPQs4UXIEiY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=uk7ijRvAPhbJ90V1gCxTCn5phhb0SDYGgIBA8C+/clI1ZRD+klMuqFeEPjOlIaQnf2IWA5TWUKiztkpAFt/BP+bZ8RE5eQt7zOJY57iBHLWcUa/VXRpYbFezNX5F6KA65gaKvPy6caiKiHuUBL9Q70qloJ7jDACBXHMd9mUGPVg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=M/ZCoP5R; arc=none smtp.client-ip=209.85.216.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f44.google.com with SMTP id 98e67ed59e1d1-2fa8c788c74so525399a91.2;
+        Fri, 14 Feb 2025 12:59:04 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1739566744; x=1740171544; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=H2cNc1aX4F0Q4gWS6uIBPMkCD42ZScjGxPQs4UXIEiY=;
+        b=M/ZCoP5RHSWdv4IhqSy/1BxjBZPVSuP0RDTAR70Zgv4GtYszNIZuOqRINvnYidtZzn
+         m1of+B18uL4qIHHwmDryB/mIW5spwLZxkOuP03gES/ZWs9Yo0ZR7m+UGvd5L22pwlPkX
+         ehZffjFAfoQcnGXlDSdkfz9hhjOLlC/AEsoaLsrzoNhKCAaKWa+jlqUFxh6n4ai+dHt7
+         FOLvSZ/spPCtGaFr+GFtxsnYkHjWyoT79ifym6xROozgNyUjfvOZWG4g0Y4/2aAKS36t
+         vOQuk7KYxplSutFjF6LEoy891Q33T1y/bWiNJj1ByRUFUcHlIXoGpIN4euCGyKXHwazX
+         rmag==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739566744; x=1740171544;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=H2cNc1aX4F0Q4gWS6uIBPMkCD42ZScjGxPQs4UXIEiY=;
+        b=Yh/2pKECEkRoS5kyvDObNANOrODs1Vht0JWq+2UcWqEZHrJZOZ2jaUDedEEkyggx+t
+         69iK/G9LcO3jJM1u7Os1Ma//uWy0HYg+4R22v39kBQjIFJI/iHsAnspZN6n61hmBAj5P
+         RsTIGefqDM/WAfgAFkLUSMFNYX0zw1X2u1moFza84a309fxAM1oLVMlxiOh3tZFl7idw
+         OZbPIkyZC0xJbNoDeLxO5BDfTn5WXfE4DtHZzWf6BVrvIjw7eWSG6RzRJaETVjE/dyoR
+         c2ttIykyKJJghcaDLJaT0CnsszEHvvXK8yrOHsVy9Kq/STbuQxo9pCs8dFbxJI4IV5qb
+         Y2cw==
+X-Forwarded-Encrypted: i=1; AJvYcCUwSWrQ5IvMuskv8Ii5Ro0Sudm8WT+egCr1fooT4Z8N9NzF1AYWi4JmCs63N1aIiq0OfZ5Q1K3i7YsJhgo=@vger.kernel.org, AJvYcCVH4AZ/o8P6wn387o9rePxuqZPDAvQ7CJhR+097HW6zRd9pU7rt83ed0Z3tCxf3eFzc1TdnpSU1G6XkayFoufI=@vger.kernel.org, AJvYcCWUvrcx+HDVlp7wIYGV54TjDpugBQMKNQbAMrJoNxxBK6ipei46Klh0xuN0WpQ6eKmOyYs+BUd/dXo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzZTvOMjVltPHZZG5fSvmSRMg20NpT0LS3pArQXq76r0ug91cwY
+	j6aRvpHuFQ9HMXEiqpLIAdofICOtAkZ7lgE3an2dOV+TkJBBpaNJWxpWHjFdJblUPb4cF2EIrdq
+	0fnhyZolVRqh4UDeMNfvv/8Zw+CE=
+X-Gm-Gg: ASbGnctsoeTF69lNyWjurBDCgpFi60Z0dBI93uuO5/wXZk+K3REehBIcbXXFOPCijmf
+	nJCwyN3ZtnzhnfLyvLfDhKau4LxjlAiW/f6JgrutAzRR8eU48RheKa/oh8oOI6BhACN1hKDtD
+X-Google-Smtp-Source: AGHT+IFVZVbHdCpMFS++gVmeCdw7EseksGV4n9xOJLGAgoTbNNSnOQqLE6P5cle8eM56V0ellIYQ8zK4VM8AKw+YE3Q=
+X-Received: by 2002:a17:90b:3504:b0:2fc:f63:4b6a with SMTP id
+ 98e67ed59e1d1-2fc4078f0a1mr365983a91.0.1739566744109; Fri, 14 Feb 2025
+ 12:59:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 14 Feb 2025 21:51:56 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hZnJHLmwh9K7_auS+JeinAx0DWd1vi-bWr_qDp5ZnyGw@mail.gmail.com>
-X-Gm-Features: AWEUYZlTFjJC74EjVRoWEYGVCsgyXhbThLp3IIXGFw6SlVnbBbwMmJ8upu7hN5s
-Message-ID: <CAJZ5v0hZnJHLmwh9K7_auS+JeinAx0DWd1vi-bWr_qDp5ZnyGw@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fixes for v6.14-rc3
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
+References: <cover.1738832118.git.viresh.kumar@linaro.org> <db0166341ce824c157d0c58c240b3efc6aec6f6e.1738832118.git.viresh.kumar@linaro.org>
+ <Z6qTelPSqpFk439l@thinkpad> <20250211042908.nyftiw7gtxosfjwc@vireshk-i7>
+ <Z6t51xodSV21ER4M@thinkpad> <CANiq72=3MR9F9ur-aQYP4P81RBreAr=UiGg5iaSuFjjd5Q4Y7Q@mail.gmail.com>
+ <Z66oWuLwY4X9Ou9D@thinkpad> <CANiq72=Yy8e=pGA+bUHPZhn+D66TmU3kLSjAXCSQzgseSYnDxQ@mail.gmail.com>
+ <20250214191103.GH3886819@nvidia.com>
+In-Reply-To: <20250214191103.GH3886819@nvidia.com>
+From: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Date: Fri, 14 Feb 2025 21:58:51 +0100
+X-Gm-Features: AWEUYZl63yy9VCOe9ontb_-fLX2oqD0JTPOslbrPOyjFSHRApIrQfDyu9KUaM0k
+Message-ID: <CANiq72=io8McQ+N2-dxF6L4CC_CLJpRyCoqco3U72gfOMzXfSQ@mail.gmail.com>
+Subject: Re: [PATCH V8 04/14] rust: Add cpumask helpers
+To: Jason Gunthorpe <jgg@nvidia.com>
+Cc: Yury Norov <yury.norov@gmail.com>, Viresh Kumar <viresh.kumar@linaro.org>, 
+	"Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, 
+	Alex Gaynor <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, 
+	Gary Guo <gary@garyguo.net>, =?UTF-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>, 
+	Benno Lossin <benno.lossin@proton.me>, Andreas Hindborg <a.hindborg@kernel.org>, 
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>, 
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>, linux-pm@vger.kernel.org, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Stephen Boyd <sboyd@kernel.org>, 
+	Nishanth Menon <nm@ti.com>, rust-for-linux@vger.kernel.org, 
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>, Erik Schilling <erik.schilling@linaro.org>, 
+	=?UTF-8?B?QWxleCBCZW5uw6ll?= <alex.bennee@linaro.org>, 
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>, Christoph Hellwig <hch@lst.de>, 
+	linux-kernel@vger.kernel.org, Uros Bizjak <ubizjak@gmail.com>, 
+	Philipp Stanner <phasta@mailbox.org>, Greg KH <gregkh@linuxfoundation.org>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Linus,
+On Fri, Feb 14, 2025 at 8:11=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com> wr=
+ote:
+>
+> Philipp
+> Greg
 
-Please pull from the tag
+Since they were mentioned by name, we should Cc them out of courtesy.
 
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.14-rc3
-
-with top-most commit a6768c4f92e152265590371975d44c071a5279c7
-
- thermal/cpufreq_cooling: Remove structure member documentation
-
-on top of commit a64dcfb451e254085a7daee5fe51bf22959d52d3
-
- Linux 6.14-rc2
-
-to receive thermal control fixes for 6.14-rc3.
-
-These fix a regression caused by an inadvertent change of the
-THERMAL_GENL_ATTR_CPU_CAPABILITY value in one of the recent thermal
-commits (Zhang Rui) and drop a stale piece of documentation (Daniel
-Lezcano).
-
-Thanks!
-
-
----------------
-
-Daniel Lezcano (1):
-      thermal/cpufreq_cooling: Remove structure member documentation
-
-Zhang Rui (1):
-      thermal/netlink: Prevent userspace segmentation fault by
-adjusting UAPI header
-
----------------
-
- drivers/thermal/cpufreq_cooling.c | 2 --
- include/uapi/linux/thermal.h      | 2 +-
- 2 files changed, 1 insertion(+), 3 deletions(-)
+Cheers,
+Miguel
 
