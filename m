@@ -1,86 +1,86 @@
-Return-Path: <linux-pm+bounces-22076-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22077-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2715A35C18
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 12:02:31 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A9492A35C4D
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 12:16:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4C409188FE02
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 11:02:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 10C9E1890B28
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 11:16:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CD4125C6F5;
-	Fri, 14 Feb 2025 11:02:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF51F22837F;
+	Fri, 14 Feb 2025 11:16:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="NuQYe3/x"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OI2otWP4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f173.google.com (mail-yb1-f173.google.com [209.85.219.173])
+Received: from mail-yb1-f181.google.com (mail-yb1-f181.google.com [209.85.219.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A826125A64D
-	for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 11:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0AA2525A652
+	for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 11:16:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739530946; cv=none; b=kiTNPyawlhpSb0dnlaiXpom6GMiFLVbwfGLsKpwVKGyvQb6sfsOkSvWF+dYwaUE0WgXgk72voB7+hQCAcBwLuddmMh3uygfh926JOvRVVZotJVzx/Uza+YmV7SWDl6Mft0GO0QnaUokPdpOQlDwoCu+Pc1n+YY0PcluqKk9cUGs=
+	t=1739531796; cv=none; b=LDjKpyfr4sy0Fo12D0f7VEoA9RKy5RtisL3dabmBcGAytz8Io99SwUX7zkGPRYy/Y3pGScdnIWHJKsBURW+I5aHXEvkfXh0UzuSXiFp3eMOKk7vZsNU8dMjbsnVnNQpg++ayVrxDhrV4zdlxN04iyYOU/YOEo9hSvBv3V07HgqE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739530946; c=relaxed/simple;
-	bh=0oIRrtnr+c7cwXNcyE/LI0nu17hvVOSCrYcVsn19aTQ=;
+	s=arc-20240116; t=1739531796; c=relaxed/simple;
+	bh=Nv+6Ycy+r/YLOTrYHkPYwU3kd5MfJvihnaHXExKMBQs=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=tZtDhpUSyZUmXOOSrGQHKpgCBRpNWPWfIFCgUswp+Q8dO1RcoVNWCVKfI47xBIl6xpl9Glhf9rjhmjzCd7F1CxP6KL8qiwNKEHNuLyMJiRTJpZZeELX2gNzbO2vzsyRms/Hr72hcRKVw1sPi7+CDwnghqU9VdzvSpiia6CZ+ku8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=NuQYe3/x; arc=none smtp.client-ip=209.85.219.173
+	 To:Cc:Content-Type; b=jMk/yB1+DWPIXIQMEPLO3AIny7TVfaNsYcuYDuC/UKOCwrquZf3AIPOp5pd1ph9n9nAs8TYbohv/PZTjngEiCl3o8yznkBGIc3KTfUER1sJXM3+7fJ/tn4LW/B7oBch1nCWJGPAJ7+/offWaH/ESzcjZ6jVz0xpii2VGx8rQnkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OI2otWP4; arc=none smtp.client-ip=209.85.219.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f173.google.com with SMTP id 3f1490d57ef6-e479e529ebcso1461823276.3
-        for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 03:02:24 -0800 (PST)
+Received: by mail-yb1-f181.google.com with SMTP id 3f1490d57ef6-e46ebe19489so1346378276.2
+        for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 03:16:34 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739530943; x=1740135743; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1739531794; x=1740136594; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=rzLryw/XAyJKRphNFTyQsyFqFFX/jhMAED6ZmtSxJ5A=;
-        b=NuQYe3/xoqaBjlHK/cM9QdVPH2vtuGzVRxzflbD81fGp9QSbUSUI+XdbsVd5ZhJTht
-         G27MLk/ikrps+tYXYkxVOyjPaB7m7CqYdOmJM5kItSLtDG/pPgyuLuOqQsSEt4/10wVB
-         hqseoWL2q1aNdR7VK5aBmwZTtUCQNPyifsUQVXiF3m398IfynDyA4y2drUL86GaBf+pM
-         61/1chSux2vTt9sifz0vAa+j+8tgeatyKAw8fUS9L3LYzeMifBwaMSAIWVI+azbsWey9
-         Z7anlUhAX7dPZc7dpQH03tJwUXflWSktAmyih7gODjgh0tkdgxIGjwEz532rC0+QS6l7
-         6K6w==
+        bh=9jM48aKf/sbl9H/oOIzSS3d/8y4m7nkDsYlbYDKZEDc=;
+        b=OI2otWP44QmJsoWW6RJiWch/jCTDIewr6cfpbcKwj/F7m36rqzqlUgKidAe42S+0S4
+         Z7sl3GyDZudsFFofQHZvvXpLyBBeIxAlhSPSmFD2b9fQ8MrDh8lYn64YjwcrstwGrPph
+         UcOOQIc6sq3RMSX77WwLDimMAqZosz21ge6REELimIcopeiS/RZF2FNLUhbWcGDpUgbu
+         0PACkJqPTYGriSinpNaJtPZooZGLlY1F1SA2cVH4oMNuYPeCktrvhZSCMCgYqCRidG9r
+         WD/sauw0CRoqsGpFsTrR1EpxCRtFdzkud54FGFRQCIJlNQzwkGVPWnAEZz9jH/S/AUCV
+         PVQw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739530943; x=1740135743;
+        d=1e100.net; s=20230601; t=1739531794; x=1740136594;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=rzLryw/XAyJKRphNFTyQsyFqFFX/jhMAED6ZmtSxJ5A=;
-        b=CBD07hE6BcpWA9XjNzA8IcBlITW//ztOkWLk+n5sOoACdgpCUXyZik4t/rial1VMC+
-         mAVQ6J49+0wZCbIQ3YhGEtAbBvDw5Et+BU0GMUVUFLhey3IgRn+dvnR0HJ80smxmc2V5
-         y0wxG50on3e55pe0MbcLctvqb3jd1Tb8R4Cmjce0ipN8EBOtdiVrX7hRftHEXam6mWU8
-         pcJQoGDqexLPECwDhiTQuuI5+f/ykvRsS1shQ3Mmy458fGE2cU6dAdQPxd2xlLVwQBzL
-         sLkRqkcAaLSU6BIQRnwyVykb4ydIxVFhrarTnohUuonQSho/m+o4bjLRBYk0P0XX6unp
-         cQ5Q==
-X-Forwarded-Encrypted: i=1; AJvYcCXsv0MStJCRO8QU/EeN7EM/N8LQfkI5SvfHvC0UAPK1WVyyKSi+bbmlT7nIOD8e5Joy4kRHGFr9Rw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzKeLm/MpJorWscK4wgmIqWgXvgg7CeDKRNApQbYd4kJiJ+jxQ2
-	L18e6kLTrGGjT+tuy8hecXy5Y9JDuvw6jrYW2WIL1iG2jpbznbu7X9L95fO4n7J1G9hblC/d8Sj
-	g5pI3razKb2OfAWYVVqrjUm2KMEcBacoA+OBZhw==
-X-Gm-Gg: ASbGncvtF4vWlurehLzM98kNnXxH6YXb8Y8GM5uTZpcPLWGYC5wvSTzKeQmcZumwyJ/
-	UlpPcBES+siml/51K46OdXC9pAm6nD/4LRIcWkv0LPhYVeStjyy0hIHVF5yCNJyDDTSCTw8yEPA
+        bh=9jM48aKf/sbl9H/oOIzSS3d/8y4m7nkDsYlbYDKZEDc=;
+        b=XFWOWKSUdmZVuUlg7Zl0Nlsp80srBa2rUQFypupOqPdV7V2yMsoYySlofnvRamqem7
+         /rjrQDt8Oqm7vdb1w6y2f4H0OQRSdW9L8mU3CeomtcQ2VuU41l70ruQyxdYoIme5qQKU
+         205sRw7uj58ck4rmcQlaCxIl3Mb0pquysBK48JBjalVbqRuiwNP0xgzWVL1t3GX01Z6c
+         loDO2QPm7f7b2YdkCW7uz+/2MxymRmr+NcfaiPdxZ1D8hovga9C/RsxOoDmfbKDvcVzf
+         SatmMP3xLsJLNcqcju1MEpIkpjl46IBOXkfepzXCjfg8bF+FkGXEnozrFmm1X0tGCNiw
+         ofzA==
+X-Forwarded-Encrypted: i=1; AJvYcCVj7T9T8bpYa84dqr5zv0MYI+qMxFUkVm2GmQ0ZgksTUpJpKLVijAyl3WprlFj4H56KRz5vlm7KgQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwptIl2qrKTJLzQnefE7yT2wSCtQghaAxDPT/LTgkZ2uzeOekdz
+	9/i1EhhltT1mG0V6/RuGY08AkWVBzFtS2wHM3ws/njySFXNq0aHFDhLHkwajhb/46yyifrqa+W/
+	ZNH7w1nJRoUvalA7UsMXAB/dVVQeqEgSKPoDPtg==
+X-Gm-Gg: ASbGnctgUr9P9WuVZJ8YJtntl5gTyu+bn/Uxfw4eAaFygbZl9k9PpqE6nv2T9f11PVQ
+	xDvUjGpVOiidkvO6YusP4sOkb2hnLxEtq5sVEMe9WxEz339DeEHNl4SPEcx350Pm4WIal9hJ4xQ
 	==
-X-Google-Smtp-Source: AGHT+IEKcq28b+1jm6W/qMPjV397BfFJUY6Ro0y3t74MU1oh8ipE5HyvHwkyR5H+34Nm6ywfG6DdYeLN9CCigPMkqzw=
-X-Received: by 2002:a05:6902:11c7:b0:e57:4db7:6d51 with SMTP id
- 3f1490d57ef6-e5d9f170324mr10340809276.32.1739530943472; Fri, 14 Feb 2025
- 03:02:23 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IE6woj8oPDle191tVLCdn9IrSTd52LbGDiCC/HBR/zbujT5GVfsySFK4K0WQQyEViMhqMK63WlGFClc8+pjkbk=
+X-Received: by 2002:a05:6902:841:b0:e5b:323b:a1a4 with SMTP id
+ 3f1490d57ef6-e5d9f180dc6mr10461212276.41.1739531793901; Fri, 14 Feb 2025
+ 03:16:33 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <CGME20250128194830eucas1p134d566631b5622c85d843f5d811c3c00@eucas1p1.samsung.com>
- <20250128194816.2185326-1-m.wilczynski@samsung.com> <20250128194816.2185326-5-m.wilczynski@samsung.com>
-In-Reply-To: <20250128194816.2185326-5-m.wilczynski@samsung.com>
+References: <CGME20250128194832eucas1p15db9ed3575703812ecc0374ffc5b2861@eucas1p1.samsung.com>
+ <20250128194816.2185326-1-m.wilczynski@samsung.com> <20250128194816.2185326-7-m.wilczynski@samsung.com>
+In-Reply-To: <20250128194816.2185326-7-m.wilczynski@samsung.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 14 Feb 2025 12:01:47 +0100
-X-Gm-Features: AWEUYZlteGTa4T3_RQ0f5ZiaQGtHVX2-gpRxvu_zXmJT0uvPZbTFwTKkU3epoaE
-Message-ID: <CAPDyKFp6OTa07Lv+jsMy=Rn7U_NYFb_0MfNUXT3cjN_Gkwqs9g@mail.gmail.com>
-Subject: Re: [PATCH v4 04/18] firmware: thead: Add AON firmware protocol driver
+Date: Fri, 14 Feb 2025 12:15:58 +0100
+X-Gm-Features: AWEUYZmWRXn0bzCrMyNA_HXGOtxuTTirzpyDWms-8p0mq8f1JPxvJIR_18CPMCg
+Message-ID: <CAPDyKFrcs5Hc-X6qExEA992MoQcakCuKRjw7cek3KpYZihsLFw@mail.gmail.com>
+Subject: Re: [PATCH v4 06/18] pmdomain: thead: Add power-domain driver for TH1520
 To: Michal Wilczynski <m.wilczynski@samsung.com>
 Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
 	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org, 
@@ -97,13 +97,19 @@ Content-Type: text/plain; charset="UTF-8"
 On Tue, 28 Jan 2025 at 20:48, Michal Wilczynski
 <m.wilczynski@samsung.com> wrote:
 >
-> The T-Head TH1520 SoC uses an E902 co-processor running Always-On (AON)
-> firmware to manage power, clock, and other system resources [1]. This
-> patch introduces a driver implementing the AON firmware protocol,
-> allowing the Linux kernel to communicate with the firmware via mailbox
-> channels.  Through an RPC-based interface, the kernel can initiate power
-> state transitions, update resource configurations, and perform other
-> AON-related tasks.
+> The T-Head TH1520 SoC contains multiple power islands that can be
+> programmatically turned on and off using the AON (Always-On) protocol
+> and a hardware mailbox [1]. The relevant mailbox driver has already been
+> merged into the mainline kernel in commit 5d4d263e1c6b ("mailbox:
+> Introduce support for T-head TH1520 Mailbox driver");
+>
+> Introduce a power-domain driver for the TH1520 SoC, which is using AON
+> firmware protocol to communicate with E902 core through the hardware
+> mailbox. This way it can send power on/off commands to the E902 core.
+>
+> The interaction with AUDIO power island e.g trying to turn it OFF proved
+> to crash the firmware running on the E902 core. Introduce the workaround
+> to disable interacting with the power island.
 >
 > Link: https://openbeagle.org/beaglev-ahead/beaglev-ahead/-/blob/main/docs/TH1520%20System%20User%20Manual.pdf [1]
 >
@@ -113,96 +119,85 @@ On Tue, 28 Jan 2025 at 20:48, Michal Wilczynski
 [...]
 
 > +
-> +static int th1520_aon_probe(struct platform_device *pdev)
+> +static int th1520_pd_probe(struct platform_device *pdev)
 > +{
-> +       struct device *dev = &pdev->dev;
+> +       struct generic_pm_domain **domains;
+> +       struct genpd_onecell_data *pd_data;
 > +       struct th1520_aon_chan *aon_chan;
-> +       struct mbox_client *cl;
-> +       int ret;
-> +       struct platform_device_info pdevinfo = {
-> +               .name = "th1520-pd",
-> +               .id = PLATFORM_DEVID_AUTO,
-> +               .parent = dev,
-> +       };
+> +       struct device *dev = &pdev->dev;
+> +       int i;
 > +
-> +       aon_chan = devm_kzalloc(dev, sizeof(*aon_chan), GFP_KERNEL);
-> +       if (!aon_chan)
+> +       aon_chan = dev_get_drvdata(dev->parent);
+> +       if (!aon_chan) {
+> +               dev_err(dev, "Failed to get AON channel from parent\n");
+> +               return -EINVAL;
+> +       }
+
+As pointed out on patch4. Rather than receiving the aon_chang from the
+parent device like this, it seems better to receive it from a call to
+a library function provided by the FW library.
+
+> +
+> +       domains = devm_kcalloc(dev, ARRAY_SIZE(th1520_pd_ranges),
+> +                              sizeof(*domains), GFP_KERNEL);
+> +       if (!domains)
 > +               return -ENOMEM;
 > +
-> +       cl = &aon_chan->cl;
-> +       cl->dev = dev;
-> +       cl->tx_block = true;
-> +       cl->tx_tout = MAX_TX_TIMEOUT;
-> +       cl->rx_callback = th1520_aon_rx_callback;
+> +       pd_data = devm_kzalloc(dev, sizeof(*pd_data), GFP_KERNEL);
+> +       if (!pd_data)
+> +               return -ENOMEM;
 > +
-> +       aon_chan->ch = mbox_request_channel_byname(cl, "aon");
-> +       if (IS_ERR(aon_chan->ch))
-> +               return dev_err_probe(dev, PTR_ERR(aon_chan->ch),
-> +                                    "Failed to request aon mbox chan\n");
+> +       for (i = 0; i < ARRAY_SIZE(th1520_pd_ranges); i++) {
+> +               struct th1520_power_domain *pd;
 > +
-> +       mutex_init(&aon_chan->transaction_lock);
-> +       init_completion(&aon_chan->done);
+> +               if (th1520_pd_ranges[i].disabled)
+> +                       continue;
 > +
-> +       platform_set_drvdata(pdev, aon_chan);
+> +               pd = th1520_add_pm_domain(dev, &th1520_pd_ranges[i]);
+> +               if (IS_ERR(pd))
+> +                       return PTR_ERR(pd);
 > +
-> +       aon_chan->pd = platform_device_register_full(&pdevinfo);
-> +       ret = PTR_ERR_OR_ZERO(aon_chan->pd);
-> +       if (ret) {
-> +               dev_err(dev, "Failed to register child device 'th1520-pd': %d\n", ret);
-> +               goto free_mbox_chan;
+> +               pd->aon_chan = aon_chan;
+> +               domains[i] = &pd->genpd;
+> +               dev_dbg(dev, "added power domain %s\n", pd->genpd.name);
 > +       }
 > +
-> +       ret = devm_of_platform_populate(dev);
-> +       if (ret)
-> +               goto unregister_pd;
+> +       pd_data->domains = domains;
+> +       pd_data->num_domains = ARRAY_SIZE(th1520_pd_ranges);
+> +       pd_data->xlate = th1520_pd_xlate;
 > +
-> +       return 0;
+> +       /*
+> +        * Initialize all power domains to off to ensure they start in a
+> +        * low-power state. This allows device drivers to manage power
+> +        * domains by turning them on or off as needed.
+> +        */
+> +       th1520_pd_init_all_off(domains, dev);
 > +
-> +unregister_pd:
-> +       platform_device_unregister(aon_chan->pd);
-> +free_mbox_chan:
-> +       mbox_free_channel(aon_chan->ch);
-> +
-> +       return ret;
-> +}
-
-Rather than implementing this as a driver, I suggest limiting this to
-a set of exported library functions.
-
-In this way, you don't need to register a platform device, but can
-instead let the power-domain provider driver in patch6, to be the one
-that matches on the "thead,th1520-aon" compatible to probe.
-
-> +
-> +static void th1520_aon_remove(struct platform_device *pdev)
-> +{
-> +       struct th1520_aon_chan *aon_chan = platform_get_drvdata(pdev);
-> +
-> +       platform_device_unregister(aon_chan->pd);
-> +       mbox_free_channel(aon_chan->ch);
+> +       return of_genpd_add_provider_onecell(dev->parent->of_node, pd_data);
 > +}
 > +
-> +static const struct of_device_id th1520_aon_match[] = {
-> +       { .compatible = "thead,th1520-aon" },
-> +       { /* Sentinel */ }
-> +};
-> +MODULE_DEVICE_TABLE(of, th1520_aon_match);
-> +
-> +static struct platform_driver th1520_aon_driver = {
+> +static struct platform_driver th1520_pd_driver = {
 > +       .driver = {
-> +               .name = "th1520-aon",
-> +               .of_match_table = th1520_aon_match,
+> +               .name = "th1520-pd",
 > +       },
-> +       .probe = th1520_aon_probe,
-> +       .remove = th1520_aon_remove,
+> +       .probe = th1520_pd_probe,
 > +};
-> +module_platform_driver(th1520_aon_driver);
+> +module_platform_driver(th1520_pd_driver);
+
+There is no ->remove() callback.
+
+Either add one or make this a builtin_platform_driver() with
+"suppress_bind_attrs = true".
+
 > +
 > +MODULE_AUTHOR("Michal Wilczynski <m.wilczynski@samsung.com>");
-> +MODULE_DESCRIPTION("T-HEAD TH1520 Always-On firmware driver");
+> +MODULE_DESCRIPTION("T-HEAD TH1520 SoC power domain controller");
 > +MODULE_LICENSE("GPL");
+> --
+> 2.34.1
+>
 
-[...]
+Besides the minor thing above, this looks good to me!
 
 Kind regards
 Uffe
