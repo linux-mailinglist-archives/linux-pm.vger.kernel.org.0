@@ -1,57 +1,57 @@
-Return-Path: <linux-pm+bounces-22097-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22098-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A9F7EA3645F
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 18:21:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 69250A36465
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 18:22:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 501ED1896954
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 17:21:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F3EB43B2724
+	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 17:21:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4796E269884;
-	Fri, 14 Feb 2025 17:19:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B9272698B4;
+	Fri, 14 Feb 2025 17:19:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Nu/Nyn5a"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="i+JH/wh0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 590A3268693;
-	Fri, 14 Feb 2025 17:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CA1A2698A9;
+	Fri, 14 Feb 2025 17:19:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739553594; cv=none; b=spOg6hPVHEXIBVEo4/RCIO9D4LGm08Nlmcku7ZY4tlB//TlDUPYCUHkCfxYWjkTB1OQD+KOCzVTV2HvG7lglQnLvaUPI9JLxASAIsvzfhdGr2FaI3q4BhsYp8QemqRYRywCsLqM96nWW+IhUOmbVit1/vS3Lx5i32Dr7NSWOmKc=
+	t=1739553599; cv=none; b=aVdkEVQUpgvctufg7odmGZuNIEoWYfI1DZKQkwQVkPTDTuJr5jxQNkTa2OGhyU1rD+wIw3LG3GdHYdBYRmb+xW7jUoPdYkBZMeQpNBWkeFKxziupzcYMhpoPHKmr1goy0RusakgD4K0j0n+rB5Znis4AueAVKErfdjkmJOOw3Po=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739553594; c=relaxed/simple;
-	bh=00LuyQwthdh+8uIpImTyvsn+9nWVCxHN/HdOPIE73Mc=;
+	s=arc-20240116; t=1739553599; c=relaxed/simple;
+	bh=dllF4OZS+fykAk4GG2xX2cZG/gu45NNSuP+Q2RiVATk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=V94DvSfWxIjCX7WBH0hOe4J5vZhjNsw6tqsVRzybq7AxLcB/FbsG9+3HTRono7CLPbAtuVwead/48KKwwH1U1Sbn2Y8CJmcaBvWNjkUyirT6LAxsZcVvhqGBMvR3ULGC/1taHQtSpx45b+HU6hgB8Yi/0LUtZP1brFYTANyX3jg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Nu/Nyn5a; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:To:Cc; b=WQ+XL1cuLsLBWcZGlLOKEyuv1SCxrJZBY1WbEuVtsYPjKnjxOOuoLGm6DIBdxOzRff9hmUuSgFSMQtceigvvGjNZrFdtLxsoa+vnXQJl8jTgCKisO+4nR0gEbHEf2yCouJ8wee6NdZrhn+/zr1fxIefeIuRzFHZIHVLKpr7jddw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=i+JH/wh0; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1739553591;
-	bh=00LuyQwthdh+8uIpImTyvsn+9nWVCxHN/HdOPIE73Mc=;
+	s=mail; t=1739553596;
+	bh=dllF4OZS+fykAk4GG2xX2cZG/gu45NNSuP+Q2RiVATk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Nu/Nyn5abae0kdlvkimaIaT1dlXXVOhx4s5ajeC1Hs4tM/knyuv8wJ1doPmItwuId
-	 1McNTYmOrE/rUCQ6EOcJuBlmRhk62VBC5G/v7KzwcIkBXdkuXOSnMjscKTlUSutlN0
-	 HMQMTbK4YM83FcMgtV5tIcyVs28IrtvsOGPoSyGb8vZ85vRH3vE6kMzPBncq3N7FQ3
-	 7xJfSM+d3GIcgOBNimcw1fEVt892CB+cqxerpNO8OWwkZzfq649PzGkaH59Pj+uotj
-	 lJyKv8j/0jJLlgNR0xNISh1b8lhWWmRPUciXPJMbqyrxIlww37EXXzar4kmWD0V0fw
-	 CBzCzy5Iiwxkw==
+	b=i+JH/wh04YHiTTELCcPDvcxhtx7aSVDAI/6vzARmHr1S9N/g2EGH0i4tqWOhd6D5y
+	 HLwnhk+cyfXsOK2kYWFjreNP1YqwV3D3EKrUtn/JrZK92mGfQDcPxB1CzKAXaZpmrp
+	 N5ekz9gh9m4Tr1GCwFOA9zca6xYen2gRPqFFsq5cM1mGz2Nc9cbvFR4SmjO63Wbz78
+	 iHsVH+oAx6EvMtZJF8cL6MWQoqe2I445Xxao/4eJDs8zRJpIcpwfMspc/oYNwPa5mT
+	 GxeQ3FX1CLzRTWvvEaoei9yzk7rsEjbZEgB2K2HifLLPPoVwCZTqmJ/f7hHuY+u5r1
+	 gQBIn/RH8NwYw==
 Received: from [192.168.0.47] (unknown [IPv6:2804:14c:1a9:53ee::1003])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 4DBAA17E0239;
-	Fri, 14 Feb 2025 18:19:46 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 6AF4517E0FC1;
+	Fri, 14 Feb 2025 18:19:51 +0100 (CET)
 From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Fri, 14 Feb 2025 14:18:38 -0300
-Subject: [PATCH 07/13] ASoC: mediatek: mt6359-accdet: Drop dead code for
- EINT/GPIO IRQ handling
+Date: Fri, 14 Feb 2025 14:18:39 -0300
+Subject: [PATCH 08/13] ASoC: mediatek: mt6359-accdet: Drop dead code for
+ EINT trigger setting
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250214-mt6359-accdet-dts-v1-7-677a151b9b4c@collabora.com>
+Message-Id: <20250214-mt6359-accdet-dts-v1-8-677a151b9b4c@collabora.com>
 References: <20250214-mt6359-accdet-dts-v1-0-677a151b9b4c@collabora.com>
 In-Reply-To: <20250214-mt6359-accdet-dts-v1-0-677a151b9b4c@collabora.com>
 To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -78,69 +78,43 @@ Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
  =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
 X-Mailer: b4 0.14.2
 
-The ACCDET supports two modes for IRQ generation: PMIC EINT or AP GPIO,
-which in principle could be configured through a DT property. However
-this DT property has no user nor is documented in a binding, and the
-driver only implements the PMIC EINT case, so drop the unused code
-intended to handle both cases.
+None of the EINT trigger options are implemented and the DT property is
+not described in the binding. Remove the unused code.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- sound/soc/codecs/mt6359-accdet.c | 20 +++-----------------
- 1 file changed, 3 insertions(+), 17 deletions(-)
+ sound/soc/codecs/mt6359-accdet.c | 11 -----------
+ 1 file changed, 11 deletions(-)
 
 diff --git a/sound/soc/codecs/mt6359-accdet.c b/sound/soc/codecs/mt6359-accdet.c
-index b71957f7a2edb352add23884fd9e231e36b08621..57a70867b4b80fc904ae07ee05d0e554495ed6e7 100644
+index 57a70867b4b80fc904ae07ee05d0e554495ed6e7..e45630a134bb3a27bb52a80f43901c9fe4eac105 100644
 --- a/sound/soc/codecs/mt6359-accdet.c
 +++ b/sound/soc/codecs/mt6359-accdet.c
-@@ -31,9 +31,6 @@
- #define REGISTER_VAL(x)	((x) - 1)
- 
- /* mt6359 accdet capability */
--#define ACCDET_PMIC_EINT_IRQ		BIT(0)
--#define ACCDET_AP_GPIO_EINT		BIT(1)
--
- #define ACCDET_PMIC_EINT0		BIT(2)
+@@ -35,8 +35,6 @@
  #define ACCDET_PMIC_EINT1		BIT(3)
  #define ACCDET_PMIC_BI_EINT		BIT(4)
-@@ -448,8 +445,7 @@ static void mt6359_accdet_jd_work(struct work_struct *work)
- 		mt6359_accdet_recover_jd_setting(priv);
- 	}
  
--	if (priv->caps & ACCDET_PMIC_EINT_IRQ)
--		recover_eint_setting(priv);
-+	recover_eint_setting(priv);
- 	mutex_unlock(&priv->res_lock);
- }
+-#define ACCDET_PMIC_GPIO_TRIG_EINT	BIT(5)
+-#define ACCDET_PMIC_INVERTER_TRIG_EINT	BIT(6)
+ #define ACCDET_PMIC_RSV_EINT		BIT(7)
  
-@@ -583,14 +579,6 @@ static int mt6359_accdet_parse_dt(struct mt6359_accdet *priv)
- 	if (ret)
- 		priv->data->eint_pol = IRQ_TYPE_LEVEL_LOW;
+ #define ACCDET_THREE_KEY		BIT(8)
+@@ -596,15 +594,6 @@ static int mt6359_accdet_parse_dt(struct mt6359_accdet *priv)
+ 	else if (tmp == 2)
+ 		priv->caps |= ACCDET_PMIC_BI_EINT;
  
--	ret = of_property_read_u32(node, "mediatek,eint-use-ap", &tmp);
+-	ret = of_property_read_u32(node, "mediatek,eint-trig-mode",
+-				   &tmp);
 -	if (ret)
 -		tmp = 0;
 -	if (tmp == 0)
--		priv->caps |= ACCDET_PMIC_EINT_IRQ;
+-		priv->caps |= ACCDET_PMIC_GPIO_TRIG_EINT;
 -	else if (tmp == 1)
--		priv->caps |= ACCDET_AP_GPIO_EINT;
+-		priv->caps |= ACCDET_PMIC_INVERTER_TRIG_EINT;
 -
- 	ret = of_property_read_u32(node, "mediatek,eint-detect-mode",
- 				   &priv->data->eint_detect_mode);
+ 	ret = of_property_read_u32(node, "mediatek,eint-use-ext-res",
+ 				   &priv->data->eint_use_ext_res);
  	if (ret) {
-@@ -910,10 +898,8 @@ static void mt6359_accdet_init(struct mt6359_accdet *priv)
- 				   0x3 << RG_ANALOGFDEN_SFT);
- 	}
- 
--	if (priv->caps & ACCDET_PMIC_EINT_IRQ) {
--		config_eint_init_by_mode(priv);
--		config_digital_init_by_mode(priv);
--	}
-+	config_eint_init_by_mode(priv);
-+	config_digital_init_by_mode(priv);
- }
- 
- int mt6359_accdet_enable_jack_detect(struct snd_soc_component *component,
 
 -- 
 2.48.1
