@@ -1,159 +1,212 @@
-Return-Path: <linux-pm+bounces-22146-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22147-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 334E5A36B93
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 04:09:02 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 045FAA36D22
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 10:53:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BB9551702CD
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 03:09:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0A68D7A4860
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 09:52:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E354158525;
-	Sat, 15 Feb 2025 03:08:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC84C1A08AF;
+	Sat, 15 Feb 2025 09:53:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="Ug88F8Yc"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oA0pkx0/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 420961426C;
-	Sat, 15 Feb 2025 03:08:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739588937; cv=pass; b=S95xKWRmy+7ayT/VgXZtXSSgJhJTu3NKY8iEkX8xB2daW6kApszlbNuroC5YWqp3DMxTWyjo8hGwTVLlcg0jvcpEH/3EWid+hw/THdW1WJHK+eRRqij99lcD1yCWymQ695KkJJddUSHrdGYzYDm83tgJiV2hJECI/tzl4t+yEeU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739588937; c=relaxed/simple;
-	bh=TSid2wpEec/JFZ0X5ZNXOZleNNrkpu60/3D5KVKRcXQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=X8GyPcbf2vcZ5HYmH+QFLSq7W9rSzF4pMQ5chPL9K5MhWC2/6sbbU3cZtl/ykmxLYS35l+Vi1UffntpPf6/f46DFZjbByaMDnb7XFIOlq8vy9cLdF3OsL+ZmC1+uTnOjsM1IwxZzz8DTL2c7Wr/YCxRgZp7RyCUK1ffp61VZLyQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=Ug88F8Yc; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1739588911; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=ScNgEi08Rzryh3YAb2G/uBfB+/IyMVix5Tf4N8C3OocWx84bQRoR+rqQ0G/nis8Nu5rsiW8eOlBcrQ2j1MP7F+6Uwne9dM5Bv5MvgWJYfcLOrK8lbpMpI3CsJZK3eiToT2crTBp57yzlsPgJWUvcIEHsSC+KWGjtwMgkERmVmb0=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1739588911; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=0GHUWF87oUo/UusENMIAUFzoIF3dJeB1mxddebspI48=; 
-	b=kn//SUcCOawuARBkxx44NS/oMktPImJzl2g/HeC69XtJNsCokCrzgHjHQtyVhT11X4y59fO+bBK7ZYlwPgvGoSBYF8kF5d9QUEBilzQ4Hy0YIlqvzfvq3F/Sjw91ETKKRfnDEtPxQ0jjKR1bbJ3pcJUspDeEY8v3MWqdtI2J2xY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1739588911;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=0GHUWF87oUo/UusENMIAUFzoIF3dJeB1mxddebspI48=;
-	b=Ug88F8YcLkHOa6do1KcAGr+3xPh4BCwc/H2WB+MVJeHDoMMrCXqf6Lp0nNQYzT9t
-	NNmILtV1wNYwZ8UluL7N2unJmYp39ahg5JKgRxuhK7A/VLyDDVV/1cQN3IqgTc+uljF
-	YsDIo5eFqtsCGAzDfFif0dy3AjRGVqrD9+kAEgVQ=
-Received: by mx.zohomail.com with SMTPS id 173958890899237.694036789018924;
-	Fri, 14 Feb 2025 19:08:28 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id 83CBF180CEF; Sat, 15 Feb 2025 04:08:25 +0100 (CET)
-Date: Sat, 15 Feb 2025 04:08:25 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: aruhier@mailbox.org, linux-arm-msm@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH RESEND] power: supply: qcom_battmgr: abs() on POWER_NOW
- property
-Message-ID: <7wbot7sxm3y5y7in5ashcn5lpx3mi55abnbfrkz2jta7nm6jep@zk6zvocd3tuz>
-References: <20250213-patch-qcomm-bat-uint-power-v1-1-16e7e2a77a02@mailbox.org>
- <yfbgbdugk4xdjpemozdzcuxczx4xd5aphykuksf3lhn22dsgkf@fcfgddu6gpyt>
- <ioiy4ixlvx5gxl3f4pqshwxz35ktrqghju2circpnd3qicgemc@oohazfsfvuag>
- <p5tszocxa7mcazgxsnt3gnv547m523gde2hj2yekiuoimm6rsy@pzofvxngb4ul>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1F42194A75;
+	Sat, 15 Feb 2025 09:53:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739613222; cv=none; b=GLufALCnDOUyKePAczCMBjZmXV0WjGNPgEPatTN1nQg6WMxIhUkBZcvHvlL2asOtf/xhmLX/wMA00aAEULYLs5MRxGtvoeAVMgIjik3dbymcIwDsMhX6dx7MSpzZ1Cm/1mBFEiiaxvpcQuqtvlByVl2SO09dsy3CoMxkrlMpmT8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739613222; c=relaxed/simple;
+	bh=XRON9YpZit+13IZCBmcmH3X3m0W/5w3xJWfXTOVxWqk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=WvgZhQspwPfhTK6jEoid3gtAVsZ/qyraAQ6+Z3ATHA9QD9vmdkN3cZctz9eLnRefB1uJjIXVYZwt7/bRwgAxERZjoFwpaH79RlLqJRZfLL71LACFGix406gdUlQG5Vlu5mTrAGzhz5PCFVHUquzmlXunYu3GTXUnHJjIspSEpZ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oA0pkx0/; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 01BB2C4CEEF;
+	Sat, 15 Feb 2025 09:53:42 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739613222;
+	bh=XRON9YpZit+13IZCBmcmH3X3m0W/5w3xJWfXTOVxWqk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=oA0pkx0/MESTfEIvJadmKD6VCVArPKOcSHHrGsAU7Vm+LvyVk/GWxzfItTXt3Y4PR
+	 G3GLXz0+2L1uxKP2wCfGO52RAuJ8PYKJIrNP61lwQxHONcPt6zQ/+URxu4DcleZNav
+	 SpfM4qWOhYMADuy4jLX/1kTWLAPIoOKcBHBOTpGBSkRzPM88q2TBCi3CI5gQBngoF5
+	 eo8p4hhpRFCWA2dNmWu+NTBSInQrdNWwaND5N5Hv9rUAnxumaKzsyDetNB7wLqsPGO
+	 vf92XVxvTFWexrGXEmbcvCzr3+8Pbt7N0NRoJycH3iToTW5YeX3X+4jC51lgL86AGz
+	 xNHJ8J5NGeevg==
+Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ab7b80326cdso545378966b.3;
+        Sat, 15 Feb 2025 01:53:41 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUp0yFqS4lRHMQiPWCDe4sWUg4oFyG7q7VwNT+uhO/SLNn6gvHmPxP3KQVqO3Ka8iwJFpQSWj6+@vger.kernel.org, AJvYcCWuc6P5N+SUJGHqyJgt4Xf9Zr7cq6c1KjF0t7Sftsut1eoI3uUGTXeRfxcb8C56oMj60Bb6/mIgkQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxZzVvsWCqt4Hr7x2ceY1G8oy66KbFW6BIKUW6s1kj8djldVxej
+	sGD771nDKMjsuEAomEZKcTQ3i0sNwVaPj6BVi5q5Q/5sRbCXYlitni6bsrWOKYqUIoD1lSGsb4t
+	DQZnfUodOvtbF0di8xyhuDbJ+QNs=
+X-Google-Smtp-Source: AGHT+IFQkktP4/XZXdQKDzrldOcGrW+VT8uHPIAcZrza8zIIRSr6WzGkT3I/FT6WmfK75v5Ts1MUFtLaUBNk+lVlKwg=
+X-Received: by 2002:a17:906:3158:b0:ab7:b8eb:f725 with SMTP id
+ a640c23a62f3a-abb70a7a54emr190367866b.7.1739613220431; Sat, 15 Feb 2025
+ 01:53:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <p5tszocxa7mcazgxsnt3gnv547m523gde2hj2yekiuoimm6rsy@pzofvxngb4ul>
-X-ZohoMailClient: External
+References: <20250212141648.599661-1-chenhuacai@loongson.cn>
+ <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
+ <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
+ <Z68N4lTIIwudzcLY@MacBook-Air-5.local> <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
+ <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
+In-Reply-To: <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Sat, 15 Feb 2025 17:53:29 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H4BSWC+K=qQfmHfdXuDqUgGcBLZ7Ftb6VEKs1QYVd6wxg@mail.gmail.com>
+X-Gm-Features: AWEUYZn1B4iVF_hrPKrMzEuFIJf7ie2bWNy-5mfqJDkWYIXZqn6mcTtrKk52_Ko
+Message-ID: <CAAhV-H4BSWC+K=qQfmHfdXuDqUgGcBLZ7Ftb6VEKs1QYVd6wxg@mail.gmail.com>
+Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
+ Initialise random_kmalloc_seed after initcalls)
+To: "Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>
+Cc: Huacai Chen <chenhuacai@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
+	linux-mm@kvack.org, "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
+	linux-pm@vger.kernel.org, GONG Ruiqi <gongruiqi@huaweicloud.com>, 
+	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org, 
+	Yuli Wang <wangyuli@uniontech.com>, Vlastimil Babka <vbabka@suse.cz>, 
+	Christoph Lameter <cl@linux.com>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Pekka Enberg <penberg@kernel.org>, 
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Kees Cook <kees@kernel.org>, 
+	GONG Ruiqi <gongruiqi1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi,
-
-On Fri, Feb 14, 2025 at 05:01:08AM +0200, Dmitry Baryshkov wrote:
-> On Fri, Feb 14, 2025 at 02:36:17AM +0100, aruhier@mailbox.org wrote:
-> > On Fri, Feb 14, 2025 at 12:24:18AM +0200, Dmitry Baryshkov wrote:
-> > > On Thu, Feb 13, 2025 at 05:51:38PM +0100, Anthony Ruhier via B4 Relay wrote:
-> > > > From: Anthony Ruhier <aruhier@mailbox.org>
-> > > >
-> > > > The value for the POWER_NOW property is by default negative when the
-> > > > battery is discharging, positive when charging.
-> > > >
-> > > > However on x1e laptops it breaks several userland tools that give a
-> > > > prediction of the battery run time (such as the acpi command, powertop
-> > > > or the waybar battery module), as these tools do not expect a negative
-> > > > value for /sys/class/power_supply/qcom-battmgr-bat/power_now. They
-> > > > estimate the battery run time by dividing the value of energy_full by
-> > > > power_now. The battery percentage is calculated by dividing energy_full
-> > > > by energy_now, therefore it is not impacted.
-> > > >
-> > > > While having a negative number during discharge makes sense, it is not
-> > > > standard with how other battery drivers expose it. Instead, it seems
-> > > > standard to have a positive value for power_now, and rely on the status
-> > > > file instead to know if the battery is charging or discharging. It is
-> > > > what other x86 laptops do.
+On Fri, Feb 14, 2025 at 8:45=E2=80=AFPM Harry (Hyeonggon) Yoo
+<42.hyeyoo@gmail.com> wrote:
+>
+> On Fri, Feb 14, 2025 at 06:02:52PM +0800, Huacai Chen wrote:
+> > On Fri, Feb 14, 2025 at 5:33=E2=80=AFPM Harry (Hyeonggon) Yoo
+> > <42.hyeyoo@gmail.com> wrote:
 > > >
-> > > Documentation/ABI does not define ABI for the power_now. However for
-> > > current_now it clearly defines that it can be positive or negative.
+> > > On Thu, Feb 13, 2025 at 11:20:22AM +0800, Huacai Chen wrote:
+> > > > Hi, Harry,
+> > > >
+> > > > On Wed, Feb 12, 2025 at 11:39=E2=80=AFPM Harry (Hyeonggon) Yoo
+> > > > <42.hyeyoo@gmail.com> wrote:
+> > > > > On Wed, Feb 12, 2025 at 11:17=E2=80=AFPM Huacai Chen <chenhuacai@=
+loongson.cn> wrote:
+> > > > > >
+> > > > > > Hibernation assumes the memory layout after resume be the same =
+as that
+> > > > > > before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this assu=
+mption.
+> > > > >
+> > > > > Could you please elaborate what do you mean by
+> > > > > hibernation assumes 'the memory layout' after resume be the same =
+as that
+> > > > > before sleep?
+> > > > >
+> > > > > I don't understand how updating random_kmalloc_seed breaks resumi=
+ng from
+> > > > > hibernation. Changing random_kmalloc_seed affects which kmalloc c=
+aches
+> > > > > newly allocated objects are from, but it should not affect the ob=
+jects that are
+> > > > > already allocated (before hibernation).
+> > > >
+> > > > When resuming, the booting kernel should switch to the target kerne=
+l,
+> > > > if the address of switch code (from the booting kernel) is the
+> > > > effective data of the target kernel, then the switch code may be
+> > > > overwritten.
 > > >
-> > > >
-> > > > Without the patch:
-> > > >     $ acpi
-> > > >     Battery 0: Discharging, 98%, discharging at zero rate - will never fully discharge.
-> > > >
-> > > > With the patch:
-> > > >     $ acpi
-> > > >     Battery 0: Discharging, 97%, 10:18:27 remaining
-> > > >
-> > > > ---
-> > > > Signed-off-by: Anthony Ruhier <aruhier@mailbox.org>
-> > > > ---
-> > > >  drivers/power/supply/qcom_battmgr.c | 2 +-
-> > > >  1 file changed, 1 insertion(+), 1 deletion(-)
+> > > Hmm... I'm still missing some pieces.
+> > > How is the kernel binary overwritten when slab allocations are random=
+ized?
 > > >
-> > > --
-> > > With best wishes
-> > > Dmitry
-> > 
-> > I see. But as it breaks existing tools when power_now is negative, should we
-> > change the behavior of these tools or adapt the driver?
-> > 
-> > As it does not seem common that power_now and current_now are negative in
-> > other drivers, tools using these values rely on the status anyway. I'm
-> > wondering if it provides anything to keep this behavior.
+> > > Also, I'm not sure if it's even safe to assume that the memory layout=
+ is the
+> > > same across boots. But I'm not an expert on swsusp anyway...
+> > >
+> > > It'd be really helpful for linux-pm folks to clarify 1) what are the
+> > > (architecture-independent) assumptions are for swsusp to work, and
+> > > 2) how architectures dealt with other randomization features like kAS=
+LR...
+> >
+>
+> [+Cc few more people that worked on slab hardening]
+>
+> > I'm sorry to confuse you. Binary overwriting is indeed caused by
+> > kASLR, so at least on LoongArch we should disable kASLR for
+> > hibernation.
+>
+> Understood.
+>
+> > Random kmalloc is another story, on LoongArch it breaks smpboot when
+> > resuming, the details are:
+> > 1, LoongArch uses kmalloc() family to allocate idle_task's
+> > stack/thread_info and other data structures.
+> > 2, If random kmalloc is enabled, idle_task's stack in the booting
+> > kernel may be other things in the target kernel.
+>
+> Slab hardening features try so hard to prevent such predictability.
+> For example, SLAB_FREELIST_RANDOM could also randomize the address
+> kmalloc objects are allocated at.
+>
+> Rather than hacking CONFIG_RANDOM_KMALLOC_CACHES like this, we could
+> have a single option to disable slab hardening features that makes
+> the address unpredictable.
+>
+> It'd be nice to have something like ARCH_SUPPORTS_SLAB_RANDOM which
+> some hardening features depend on. And then let some arches conditionally
+> not select ARCH_SUPPORTS_SLAB_RANDOM if hibernation's enabled
+> (at cost of less hardening)?
+This is not good, my patch doesn't disable RANDOM for hibernation, it
+just delays the initialization. When the system is running, all
+randomization is still usable.
 
-There are other drivers reporting negative values as documented.
-Most of the embedded ones do this actually and there surely are
-(embedded) userspace programs relying on this by now. But the
-most used driver - generic ACPI battery - does not. That's why
-quite a few userspace tools handle it wrong without anyone
-noticing for quite some time. Fixing it to follow the ABI would
-obviously end up in a bunch of regression reports, so things are
-a bit messy :(
+For SLAB_FREELIST_RANDOM, I found that it doesn't break hibernation
+(at least on LoongArch), the reason is:
+1. When I said "data overwritten" before, it doesn't mean that every
+byte shouldn't be overwritten, only some important parts matter.
+2. On LoongArch, the important parts include: switch code, exception
+handlers, idle_task's stack/thread_info.
+3. switch code and exception handlers are protected by automatically
+disabling kASLR from arch-specific code, idle_task's stack/thread_info
+is protected by delaying random seeds (this patch).
 
-> I think it is a problem of the 'acpi' tool. At least 'upower -d' uses
-> fabs internally since the initial commit in 2008.
+Why SLAB_FREELIST_RANDOM doesn't corrupt idle_task's
+stack/thread_info? Because the scope of randomization of
+SLAB_FREELIST_RANDOM is significantly less than RANDOM_KMALLOC_CACHES.
+When RANDOM_KMALLOC_CACHES enabled, the CPU1's idle task stack from
+the booting kernel may be the CPU2's idle task stack from the target
+kernel, and CPU2's idle task stack from the booting kernel may be the
+CPU1's idle task stack from the target kernel, but idle task's stack
+from the booting kernel won't be other things from the target kernel
+(and won't be overwritten by switching kernel).
 
-It's definitely sensible to fix the userspace tools. We can't change
-the documented ABI for current_now after that many years and while
-documentation for power_now is missing, it would be quite unexpected
-to have it behave differently than current_now. Also userspace
-tooling needs to handle current_now and power_now anyways. And we
-surely can't change the behaviour for all drivers reporting signed
-data. So let's keep qcom_battmgr as is. It follows the documented
-ABI and hopefully helps giving this more exposure (I'm typing this
-on a X1E laptop right now and can see your problem with waybar).
 
-But we should document the power_now property. It somehow fell
-through the cracks :)
+Huacai
 
--- Sebastian
+>
+> --
+> Harry
+>
+> > 3, When CPU0 executes the switch code, other CPUs are executing
+> > idle_task, and their stacks may be corrupted by the switch code.
+> >
+> > So in experiments we can fix hibernation only by moving
+> > random_kmalloc_seed initialization after smp_init(). But obviously,
+> > moving it after all initcalls is harmless and safer.
+> >
+> >
+> > Huacai
+> >
+> > > > For LoongArch there is an additional problem: the regular kernel
+> > > > function uses absolute address to call exception handlers, this mea=
+ns
+> > > > the code calls to exception handlers should at the same address for
+> > > > booting kernel and target kernel.
 
