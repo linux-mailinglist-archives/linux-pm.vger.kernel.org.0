@@ -1,89 +1,104 @@
-Return-Path: <linux-pm+bounces-22120-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22121-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id C34CCA368E8
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 00:09:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BD3E0A36A2B
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 01:54:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6C1D318933AD
-	for <lists+linux-pm@lfdr.de>; Fri, 14 Feb 2025 23:09:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53E27164CD1
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 00:53:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A5AF1DE2B4;
-	Fri, 14 Feb 2025 23:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBB02A1BA;
+	Sat, 15 Feb 2025 00:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ovwI50sY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from rdmp.org (unknown [195.15.247.228])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DBD51A83F2
-	for <linux-pm@vger.kernel.org>; Fri, 14 Feb 2025 23:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.15.247.228
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FD31373;
+	Sat, 15 Feb 2025 00:52:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739574583; cv=none; b=cLeQR+ct6j5aEV+z13qBKKlVb+QvBGzLsPpGX5PcXGWXMDp/uiZNFlr/6LgyXzHPiIgxSDiVQSVMyvNntqzFv75NlHcAIfLPjLQA7G/t9tKodWImZvwCp/TOg13WSL7wbo4IbS3rcptnNns4VY3NrJBEe+FD9eTPOuYbi6wawgE=
+	t=1739580776; cv=none; b=kVVJUGfmp8TqkV/eQ36DXIP7lnYM/hLkwF8kz5CaOymhTjMDznlGV/TqsiI1t2g1iTOSoPLjmTJ4y4o/a7NXKyRfUKvfr4dK2Oaq3l7v/5wOo7yBTuL2xHgxWSfeIsfZrK4vKEkJQNdkOuxLlqc/1fRW+1y8ysrXy6hv472DOS4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739574583; c=relaxed/simple;
-	bh=V8syrvc4bH7J19xYbg1nabs9yF1pXhHBhsaYi5FBntU=;
-	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version; b=Csm90KFn7UeWa3kGmVsVvvQGWo7ldaYOQJtpP6ZwwxYhcR5S44MR4uWAFlXHKx10Ur4uFJ53uq6PNtW3aPU1792RNvP61gr3c5jhGU4DvLHL+x3JtqW1P7nv7uLhurvuYFojLA7kdA2Lo/Xp7gA/rtySBXX5AMY3oPTtNxngpB0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rdmp.org; spf=pass smtp.mailfrom=rdmp.org; arc=none smtp.client-ip=195.15.247.228
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rdmp.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rdmp.org
-Received: from [127.0.0.1] (helo=[IPv6:::1])
-	by rdmp.org with esmtp (Exim 4.96.1)
-	(envelope-from <no-reply@rdmp.org>)
-	id 1tj4oW-0000NY-0A
-	for linux-pm@vger.kernel.org;
-	Fri, 14 Feb 2025 23:09:40 +0000
-Message-ID: <1e2af6bddb8cd51e5076285659a6f5bc92b026f9.camel@rdmp.org>
-Subject: How should userland app be notified when kernel comes out of
- suspend or hibernation?
-From: Dale Mellor <no-reply@rdmp.org>
-Reply-To: mcron-lsfnyl@rdmp.org
-To: linux-pm@vger.kernel.org
-Date: Fri, 14 Feb 2025 23:09:34 +0000
-Organization: DM Bespoke Computer Solutions Ltd
-Content-Type: multipart/signed; micalg="pgp-sha512";
-	protocol="application/pgp-signature"; boundary="=-LbBRMvfSx6CwLGdP2rb7"
-User-Agent: Evolution 3.48.4 
+	s=arc-20240116; t=1739580776; c=relaxed/simple;
+	bh=18gY+6DNEY6pm3vWq+D6ujWxKSDxDmMWkCpBg3C4kX8=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u/kuHhcWxgVl9bdxodX32xyoDNou/W2sEbR6ymbIq2iv/PeGSom4xBrCTj8PUig20GV/21pD9KVjYI3geOsZevTkY+4Tu/T54VJsNdVG4WCLkgjlZAzmbxrnqERLLqoIp92GD92jN4NjCHizO8CVM+UZMoCkyah4I665VU6RvrY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ovwI50sY; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52048C4CED1;
+	Sat, 15 Feb 2025 00:52:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739580776;
+	bh=18gY+6DNEY6pm3vWq+D6ujWxKSDxDmMWkCpBg3C4kX8=;
+	h=From:To:Cc:Subject:Date:From;
+	b=ovwI50sYHPvDuCNdAtmm/diy3+7sjRnAxjQvFxRltR2vSR1aK9SwhufnXSs08c1bY
+	 SvGyE+sbayWKiryq61Pdzt4p5c5wCBYEn/stlbFt322ZnM3tgcReeWlA1ZEvFn9SmB
+	 A5lClx5fgRT7VI5S77KE/eR8f8i1upQ++qC2nnIt2Zr6nX1R1EFU8BvzOOTlIToJyB
+	 DRMSCqPzNRrKp1guhqn/K8TPITflmd/47YYP0019oAR0SbcIBXQliijmNwVA/vWfO4
+	 aBbqzjBo4sIyE012lO1g4eMUuqIxj9DBYnF/yMFn7RAP1XO2hJhoD/Q70ohjS04iOy
+	 ZHu03G5EEzVIQ==
+From: Mario Limonciello <superm1@kernel.org>
+To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>
+Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK),
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v2 00/17] amd-pstate cleanups
+Date: Fri, 14 Feb 2025 18:52:27 -0600
+Message-ID: <20250215005244.1212285-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
+From: Mario Limonciello <mario.limonciello@amd.com>
 
---=-LbBRMvfSx6CwLGdP2rb7
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+This series overhauls locking and drops many unnecessarily cached
+variables.
 
-I am the originator of the GNU mcron app, which waits (using select)
-for set amounts of time before executing some function on behalf of the
-user.  But when the system comes out of sleep the timings are all wrong
-and need to be re-evaluated.  But how does my application know when
-this needs to happen?
+Debugging messages are also dropped in favor of more ftracing.
 
-I'm currently trying to use the ACPI netlink interface, which
-conveniently gives me a socket I can add to the select call and wakes
-me up when some power-changing event occurs.  However, there is not an
-event specifically for notifying the coming out of sleep, and different
-systems will have different hardware which reacts in this situation
-(the netlink interface has a soft specification and requires
-introspection to understand the data it delivers).
+This series is based off superm1/linux.git bleeding-edge branch.
 
-What is the 'official' way to do this?
+Mario Limonciello (17):
+  cpufreq/amd-pstate: Show a warning when a CPU fails to setup
+  cpufreq/amd-pstate: Drop min and max cached frequencies
+  cpufreq/amd-pstate: Move perf values into a union
+  cpufreq/amd-pstate: Overhaul locking
+  cpufreq/amd-pstate: Drop `cppc_cap1_cached`
+  cpufreq/amd-pstate-ut: Use _free macro to free put policy
+  cpufreq/amd-pstate-ut: Allow lowest nonlinear and lowest to be the
+    same
+  cpufreq/amd-pstate-ut: Drop SUCCESS and FAIL enums
+  cpufreq/amd-pstate-ut: Continue on missing policies
+  cpufreq/amd-pstate-ut: Adjust variable scope for
+    amd_pstate_ut_check_freq()
+  cpufreq/amd-pstate: Replace all AMD_CPPC_* macros with masks
+  cpufreq/amd-pstate: Cache CPPC request in shared mem case too
+  cpufreq/amd-pstate: Move all EPP tracing into *_update_perf and
+    *_set_epp functions
+  cpufreq/amd-pstate: Update cppc_req_cached for shared mem EPP writes
+  cpufreq/amd-pstate: Drop debug statements for policy setting
+  cpufreq/amd-pstate: Rework CPPC enabling
+  cpufreq/amd-pstate: Stop caching EPP
 
+ arch/x86/include/asm/msr-index.h   |  20 +-
+ arch/x86/kernel/acpi/cppc.c        |   2 +-
+ drivers/cpufreq/amd-pstate-trace.h |  13 +-
+ drivers/cpufreq/amd-pstate-ut.c    | 204 ++++------
+ drivers/cpufreq/amd-pstate.c       | 589 ++++++++++++++---------------
+ drivers/cpufreq/amd-pstate.h       |  60 +--
+ 6 files changed, 414 insertions(+), 474 deletions(-)
 
---=-LbBRMvfSx6CwLGdP2rb7
-Content-Type: application/pgp-signature; name="signature.asc"
-Content-Description: This is a digitally signed message part
+-- 
+2.43.0
 
------BEGIN PGP SIGNATURE-----
-
-iF0EABEKAB0WIQTiPCHthk/086cRTN/KRx/VAWGKSQUCZ6/NLgAKCRDKRx/VAWGK
-SScMAJ9ownEcXzpqVQ+DoB5Qi6bN6VLeOwCcDzePFw8kh2vUpib7WiOYO3wkvJA=
-=KAeF
------END PGP SIGNATURE-----
-
---=-LbBRMvfSx6CwLGdP2rb7--
 
