@@ -1,45 +1,46 @@
-Return-Path: <linux-pm+bounces-22121-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22122-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BD3E0A36A2B
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 01:54:21 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43BEFA36A20
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 01:53:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 53E27164CD1
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 00:53:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E8928188E9BF
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 00:53:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EDBB02A1BA;
-	Sat, 15 Feb 2025 00:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DA0EA7CF16;
+	Sat, 15 Feb 2025 00:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ovwI50sY"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="A2AuRjPz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2FD31373;
-	Sat, 15 Feb 2025 00:52:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0C9B74BE1;
+	Sat, 15 Feb 2025 00:52:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739580776; cv=none; b=kVVJUGfmp8TqkV/eQ36DXIP7lnYM/hLkwF8kz5CaOymhTjMDznlGV/TqsiI1t2g1iTOSoPLjmTJ4y4o/a7NXKyRfUKvfr4dK2Oaq3l7v/5wOo7yBTuL2xHgxWSfeIsfZrK4vKEkJQNdkOuxLlqc/1fRW+1y8ysrXy6hv472DOS4=
+	t=1739580777; cv=none; b=ZBSGNzuwHy9j0kfqG7/f7cBvK2Om1IUFu5FPQMlXLm0Ed24kNZX+LHbJG3m0gufo+wGspl0/S+u09OAqp7rhuJEv2o0IXgro6P2NGCNciG0eleTkmFeH8L3h/+nT6LAqEdud+fTpbLwa7BDy7Lv6ZEF+t2LCAMsD9lDehcLgb/Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739580776; c=relaxed/simple;
-	bh=18gY+6DNEY6pm3vWq+D6ujWxKSDxDmMWkCpBg3C4kX8=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=u/kuHhcWxgVl9bdxodX32xyoDNou/W2sEbR6ymbIq2iv/PeGSom4xBrCTj8PUig20GV/21pD9KVjYI3geOsZevTkY+4Tu/T54VJsNdVG4WCLkgjlZAzmbxrnqERLLqoIp92GD92jN4NjCHizO8CVM+UZMoCkyah4I665VU6RvrY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ovwI50sY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52048C4CED1;
-	Sat, 15 Feb 2025 00:52:55 +0000 (UTC)
+	s=arc-20240116; t=1739580777; c=relaxed/simple;
+	bh=v1EHsotfTSHicHPDFPC5WimMSrd8dRYscSm3SRD/P2A=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=CgXYWrlwrm07dzoC3RMx9upT2Tb9pWqbMSATJuKGv7GAD7qv+kKdWmumkIjl20H0Mwc4NG5bR5WCQ6eZPx1EkPzgc1+Pxn+pw+uq0c2325jSqtyllsWAVQlJUhqskYVVycp6NYkbzWM0GuVdufDIIrviepVh7meKZv6B/riP6oo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=A2AuRjPz; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 85ED5C4CEE2;
+	Sat, 15 Feb 2025 00:52:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739580776;
-	bh=18gY+6DNEY6pm3vWq+D6ujWxKSDxDmMWkCpBg3C4kX8=;
-	h=From:To:Cc:Subject:Date:From;
-	b=ovwI50sYHPvDuCNdAtmm/diy3+7sjRnAxjQvFxRltR2vSR1aK9SwhufnXSs08c1bY
-	 SvGyE+sbayWKiryq61Pdzt4p5c5wCBYEn/stlbFt322ZnM3tgcReeWlA1ZEvFn9SmB
-	 A5lClx5fgRT7VI5S77KE/eR8f8i1upQ++qC2nnIt2Zr6nX1R1EFU8BvzOOTlIToJyB
-	 DRMSCqPzNRrKp1guhqn/K8TPITflmd/47YYP0019oAR0SbcIBXQliijmNwVA/vWfO4
-	 aBbqzjBo4sIyE012lO1g4eMUuqIxj9DBYnF/yMFn7RAP1XO2hJhoD/Q70ohjS04iOy
-	 ZHu03G5EEzVIQ==
+	s=k20201202; t=1739580777;
+	bh=v1EHsotfTSHicHPDFPC5WimMSrd8dRYscSm3SRD/P2A=;
+	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
+	b=A2AuRjPzySdO/FSjF5gHeuMiBNnZ7Civ7ZN+RGg+iDJ+3rcEYVolXVZGCqZ9pJX6u
+	 Y9ZQYE4+O4gFk4tqDv+1zH3tCcwpU9UxYqhtWzYHrQAmjFdv/Uxo+C4fW6L3oGgc3P
+	 190SvZY35Ee9YIRjDJzZvKSwXNER7bAEUdpgR/gq52IGXN+2Q5ls4gCq50NgOUuSr9
+	 srkBRmr2yRsFj5gnmxMT0X5PFoMjHecIIy0GsFRkq/6S4Xhq5roZYBwqdU6BrJkrBa
+	 VyKBUnQW8N5WJowWTay3rPmBJ1DUkHlYDKBW+Tkb6b6zFnj0YZmMf7dUuOOtRLoZpY
+	 s0JQKj/BuZIwg==
 From: Mario Limonciello <superm1@kernel.org>
 To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
 	Perry Yuan <perry.yuan@amd.com>
@@ -47,10 +48,12 @@ Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
 	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
 	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK),
 	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v2 00/17] amd-pstate cleanups
-Date: Fri, 14 Feb 2025 18:52:27 -0600
-Message-ID: <20250215005244.1212285-1-superm1@kernel.org>
+Subject: [PATCH v2 01/17] cpufreq/amd-pstate: Show a warning when a CPU fails to setup
+Date: Fri, 14 Feb 2025 18:52:28 -0600
+Message-ID: <20250215005244.1212285-2-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250215005244.1212285-1-superm1@kernel.org>
+References: <20250215005244.1212285-1-superm1@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -61,43 +64,36 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-This series overhauls locking and drops many unnecessarily cached
-variables.
+I came across a system that MSR_AMD_CPPC_CAP1 for some CPUs isn't
+populated.  This is an unexpected behavior that is most likely a
+BIOS bug. In the event it happens I'd like users to report bugs
+to properly root cause and get this fixed.
 
-Debugging messages are also dropped in favor of more ftracing.
+Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+---
+ drivers/cpufreq/amd-pstate.c | 2 ++
+ 1 file changed, 2 insertions(+)
 
-This series is based off superm1/linux.git bleeding-edge branch.
-
-Mario Limonciello (17):
-  cpufreq/amd-pstate: Show a warning when a CPU fails to setup
-  cpufreq/amd-pstate: Drop min and max cached frequencies
-  cpufreq/amd-pstate: Move perf values into a union
-  cpufreq/amd-pstate: Overhaul locking
-  cpufreq/amd-pstate: Drop `cppc_cap1_cached`
-  cpufreq/amd-pstate-ut: Use _free macro to free put policy
-  cpufreq/amd-pstate-ut: Allow lowest nonlinear and lowest to be the
-    same
-  cpufreq/amd-pstate-ut: Drop SUCCESS and FAIL enums
-  cpufreq/amd-pstate-ut: Continue on missing policies
-  cpufreq/amd-pstate-ut: Adjust variable scope for
-    amd_pstate_ut_check_freq()
-  cpufreq/amd-pstate: Replace all AMD_CPPC_* macros with masks
-  cpufreq/amd-pstate: Cache CPPC request in shared mem case too
-  cpufreq/amd-pstate: Move all EPP tracing into *_update_perf and
-    *_set_epp functions
-  cpufreq/amd-pstate: Update cppc_req_cached for shared mem EPP writes
-  cpufreq/amd-pstate: Drop debug statements for policy setting
-  cpufreq/amd-pstate: Rework CPPC enabling
-  cpufreq/amd-pstate: Stop caching EPP
-
- arch/x86/include/asm/msr-index.h   |  20 +-
- arch/x86/kernel/acpi/cppc.c        |   2 +-
- drivers/cpufreq/amd-pstate-trace.h |  13 +-
- drivers/cpufreq/amd-pstate-ut.c    | 204 ++++------
- drivers/cpufreq/amd-pstate.c       | 589 ++++++++++++++---------------
- drivers/cpufreq/amd-pstate.h       |  60 +--
- 6 files changed, 414 insertions(+), 474 deletions(-)
-
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index f425fb7ec77d7..573643654e8d6 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -1034,6 +1034,7 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+ free_cpudata2:
+ 	freq_qos_remove_request(&cpudata->req[0]);
+ free_cpudata1:
++	pr_warn("Failed to initialize CPU %d: %d\n", policy->cpu, ret);
+ 	kfree(cpudata);
+ 	return ret;
+ }
+@@ -1527,6 +1528,7 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+ 	return 0;
+ 
+ free_cpudata1:
++	pr_warn("Failed to initialize CPU %d: %d\n", policy->cpu, ret);
+ 	kfree(cpudata);
+ 	return ret;
+ }
 -- 
 2.43.0
 
