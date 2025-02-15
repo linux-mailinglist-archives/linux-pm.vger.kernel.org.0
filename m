@@ -1,232 +1,118 @@
-Return-Path: <linux-pm+bounces-22154-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22155-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1997DA36EAF
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 15:06:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 47D53A36F29
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 16:43:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE58E3B14EC
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 14:05:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 497A43A7ED1
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 15:43:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C6A814B087;
-	Sat, 15 Feb 2025 14:05:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16F601DC9BB;
+	Sat, 15 Feb 2025 15:43:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ejs0pBGL"
+	dkim=pass (2048-bit key) header.d=online.de header.i=captainfineweather@online.de header.b="LkfxGHhu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mout.kundenserver.de (mout.kundenserver.de [217.72.192.74])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDA81D5AD3;
-	Sat, 15 Feb 2025 14:05:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE36D84D02
+	for <linux-pm@vger.kernel.org>; Sat, 15 Feb 2025 15:43:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.72.192.74
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739628349; cv=none; b=pI8MIiybTUd1HVmPWb65p9/dLcQ+FHfrIZdwtSFNTJ3tUbDlFs/Aopi0X2XTmvjPQD+JN0NIvHCDk92iuwQi/UcFEN7dvM1MZ4G5sJZ1r9/aPfwnMY0QUCJNNYQ53BlZHptfCUsHRWpgkteVzyyV2DLXB1FDTYF69XmBNb6enBY=
+	t=1739634214; cv=none; b=SZD+hU/1GG1dmIY5z7TpLbDvaO7etbCXNzZzidxp1m2nzv1T5yi9LUXa+DrhYf2mbMvcw2W2y2JhkxX/CjPPFP9RYSFDUnkH+zekff1zDcQlIO6bb6KZ+jjsOwB7Ej0drIBccjJY7U3jtlOyeKilNGnvinu//HHxNNQXzq+FIi4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739628349; c=relaxed/simple;
-	bh=LdOS54w+GjrAoUKzo/nCkhTuTCo7ZyLyFY98GzsPKMU=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eIIvWd6r4puE4+WE+0TJgWB9L2JyNwMiMW2jrEO+rp5MYrFuMmFTSb3Iii4mDONOVjoG1T1+pa7DtmdCCtB6Wo3FbHLJwUoP1GRJ9+LGl/ycdftNsqC/Pe8dNFIGsJLaEiDJHEV1SzTHtPNP/gWWmgzCfqJxPDYm0MOG4X5aLb4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ejs0pBGL; arc=none smtp.client-ip=209.85.214.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-220d39a5627so44209835ad.1;
-        Sat, 15 Feb 2025 06:05:48 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739628347; x=1740233147; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=J0EBfoneyQ2m5DKQOCwe2zek2SAqeGp/XPESUcXVWkQ=;
-        b=Ejs0pBGLNPwfKQwsQCRhfyV19ooNzlrspcqQqKn8PK968i0RvSwT5Tc3thVbdKIYE1
-         u+ZNF+qJ3V8DIvkhb+UXpzc6ZbyoB8USM+uwgtLpJj+NQkFZ8WeUEI9Iyn10UkniS6nx
-         NRWlOz71Y+Ts6LdTiSijZgttgnu5Ix++4EvIbDm/Q+y/bHyMMhS9HPdFLVCsJmrqGvO4
-         QFK+IebMJtRKUqZyIXL86tPhZEb8ak5bML4Aza20dayiSrHXZ9Ib2VJiuFL4w5XCq6pR
-         UCdWS3+yIWW8O3gJA76ps8iaYgdkQXAQwNM/37TyBE9ID/3lxiE8IfQ64Lxq7+ujlOQ4
-         n+Sg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739628347; x=1740233147;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=J0EBfoneyQ2m5DKQOCwe2zek2SAqeGp/XPESUcXVWkQ=;
-        b=prdo/ttLl9UMCuzwXoJVzk/GkNe9dfBdehPwgvWgsx2+JqKRXM2602739CLFOgS3nB
-         1sfYqfEbActETZJavHdhRy3qcpc1aaT5qn+WgT8LTu2caqZz7lEx+FYNNhUegQ/y58nw
-         0jp1yL7e4lHzcH3jns4JJYyktzZ2b9hK19Zj7FtSYi9cprRlY1lE9H8IdOCNhftTypX7
-         6j3CBk8veBlTbJmfJmnIKRxzWrf4iUT3HXx1IgmWFubiL0ery80/Ob9l5cBES7+TKZCE
-         wn30PkGHBp5xqXSTd/ihKY/QiO5OQ2T553JLsbVCn/Oz/xSnGZX1F+Xlsjgwe8h0yhDF
-         4HRg==
-X-Forwarded-Encrypted: i=1; AJvYcCVh9NUfxBM9neGPd5OHQOF8nvZJuHqPiJjkF85Kx4/QYBdNizSPd1JQGdk63pDQqidMeUkUWsbBLg==@vger.kernel.org, AJvYcCXAj9kZWzV6/Ka1/F4uJa/f4o+dtdQtZB6/psmbAW3KowMjGF77maNZVK2Q3SvyFXGix1ggoLIZ@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxg3kqSu6eFvb7rkaCc3LGuUurBpjGT9zn3+quPX3tisTdHqvWj
-	ahIj2dnLpVOtiazIwiR+p5GYKTdRCSLwmh0WORmLzLqJL1KqneHU
-X-Gm-Gg: ASbGncu6a6yHtBwu/u+PQ8Wi3oTTVpTY9FlYBZ68+LDwcUBRZVfw3MudNbK/YTUzuYz
-	EJPKIusr+ej5YmHL1BjLLW+F3ps5eb8BioVjDW9eyv8N0hQa8kej10nl5k2I9cyUgrjpfDZ6X/n
-	GkopslrF1o/goLhcvtB4Y/waTdvyeBP5yrfsiLa3uAEN3zXWW2THCYYeGpnTy7DMqdgBh/iD4MO
-	6rnRa3Gutb3V1y7imG7bv58dCfdwt1a7wJhDeDXJg45bDLZK/BLd0EER/a6UrlSAfJTMPop8L1L
-	Wqo1VzOjdYM2vwdVlJMp4MzbxPVsj5z3FA==
-X-Google-Smtp-Source: AGHT+IHiwcNhpRT7FDtJmA7aR6hz4/Zu8vY9uHoO6iE0CSHXcKq43K5Cs5Gy5oFq+I3HV/fZTOnkgw==
-X-Received: by 2002:a17:902:e841:b0:21f:860:6d0d with SMTP id d9443c01a7336-22103efb488mr57653765ad.5.1739628347291;
-        Sat, 15 Feb 2025 06:05:47 -0800 (PST)
-Received: from MacBook-Air-5.local ([1.245.180.67])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220ea7a9348sm29804825ad.211.2025.02.15.06.05.40
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sat, 15 Feb 2025 06:05:46 -0800 (PST)
-Date: Sat, 15 Feb 2025 23:05:34 +0900
-From: "Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: Huacai Chen <chenhuacai@loongson.cn>,
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org,
-	GONG Ruiqi <gongruiqi@huaweicloud.com>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org,
-	Yuli Wang <wangyuli@uniontech.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Pekka Enberg <penberg@kernel.org>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Kees Cook <kees@kernel.org>,
-	GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
- Initialise random_kmalloc_seed after initcalls)
-Message-ID: <Z7CfLlEw9vtbFJwI@MacBook-Air-5.local>
-References: <20250212141648.599661-1-chenhuacai@loongson.cn>
- <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
- <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
- <Z68N4lTIIwudzcLY@MacBook-Air-5.local>
- <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
- <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
- <CAAhV-H4BSWC+K=qQfmHfdXuDqUgGcBLZ7Ftb6VEKs1QYVd6wxg@mail.gmail.com>
+	s=arc-20240116; t=1739634214; c=relaxed/simple;
+	bh=T/l6R7c052cpChK/88MI3HKLKlt544tzWGfWRGGvOIo=;
+	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version; b=H5JDQ1gfWu62HXm1Jcxy4+Kv1g/wu8F2jApbAbLcN6WdI5ek9VjCaCgN5h2tXw8gPz9rz4kiANQh6VY2/JB6zzoSO2eEQPyGwMiNx7Ud1JUJWytpnP9+6v0YS78FhK8wb10hU3YOOyeQC/Rh7aSy1IQM8pqMf6UG4uLXVq2YtG8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=online.de; spf=pass smtp.mailfrom=online.de; dkim=pass (2048-bit key) header.d=online.de header.i=captainfineweather@online.de header.b=LkfxGHhu; arc=none smtp.client-ip=217.72.192.74
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=online.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=online.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=online.de;
+	s=s42582890; t=1739634208; x=1740239008;
+	i=captainfineweather@online.de;
+	bh=T/l6R7c052cpChK/88MI3HKLKlt544tzWGfWRGGvOIo=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:Reply-To:To:Date:
+	 Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=LkfxGHhuCI9iVX0lfWGSFECAeCHqJ5UMT+GCUgSY8rPwqlWyd92gfLMOhwQ9NtMJ
+	 5kMzniKxSfHml/Fixge8t+hm0r7qxERvPKIv5C/Db3ygUFsrPsj+PdntFhMd3oWxd
+	 f3es4yRkHb0ifyAS4jvQKHxNmIMLYTEQRiC4NO48wrQhyVsMk9sa5g8vrRwnOHlYD
+	 QEnLcaQE2znUKbFWkkYwDss7ufrSNkLWVOpIiZHhYP9YksHVlrSJu+K7uELcmCLAO
+	 jZ83ZQ5r5WqAubryYgE1O9FKbqBY5YkMp4jJa6dx5z26laVtn1M2AsqlfDbg4/Nqi
+	 yY+vfihEvRF3t/bVqA==
+X-UI-Sender-Class: 6003b46c-3fee-4677-9b8b-2b628d989298
+Received: from Captain.fritz.box ([87.146.17.67]) by mrelayeu.kundenserver.de
+ (mreue106 [212.227.15.183]) with ESMTPSA (Nemesis) id
+ 1MMnnm-1u25zc4C0q-00KNeB for <linux-pm@vger.kernel.org>; Sat, 15 Feb 2025
+ 16:30:29 +0100
+Message-ID: <48eda7b68480db4209eb9c5a2fef4260180c3a49.camel@online.de>
+Subject: Trouble with cpufreq-set
+From: Frank Fricke <captainfineweather@online.de>
+Reply-To: captainfineweather@online.de
+To: linux-pm@vger.kernel.org
+Date: Sat, 15 Feb 2025 16:30:22 +0100
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1+deb11u2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAAhV-H4BSWC+K=qQfmHfdXuDqUgGcBLZ7Ftb6VEKs1QYVd6wxg@mail.gmail.com>
+Content-Transfer-Encoding: 7bit
+X-Provags-ID: V03:K1:5lv7LXuUCKXXCO6L2OsjyuZWt0lODE2MG5VGTXNuJjUc9l6onve
+ L5KyZWyLYbI1gW5HQA9ZNQN5gOn07YN2KBenJ6b5E5QQuJNvm78kO74WL0QNu1i/Ju3XJAt
+ CYemvm6gZfOXfMwhsq3QYnsAUKYYfB0YwgVzd7nyOWe2FDCYn7I4RdFXBgzor6Y9XjDNzLt
+ +jIBJ5wKoKkYJqOFlwNMQ==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:Q1QZapLnytk=;nB1UuEAIISM+eOFxu1wgW/Snawt
+ zXU2Rq8JZbuYyx8nhe+CRvlhEc+7ECyeu/BE/4mInOcW9C7VOnvCY/PEn9wxN2qK1YmGOCB35
+ Kg9uIIZkIWkZxWlhK7ouj3Qd4ZFigniQc7k76FCfigZwMayemDOdsPuNPJfaxd/wxXrLFSeKm
+ 35AGaxAhWVwrvtbFTDebjaKiB4CEfoosyRYjw3cl7MHo8Q63prldX26PBCVSzwKqDV6ku9kbX
+ aL9zDHNCF3SCR++/1nvjDEdVJJJUePwl1WhvSQMqdoMlamax6iQX/ebCgM6IFE307ZVLWV2sb
+ xojL0MtYTOSfM6JI5hr3cBZdoXHUY2SjxRDAyGVFTKjFyG0prOh8uWpMR+A6OBV0uVQLyzYQ5
+ Rj0OFmc2BkfFKhYTyk31SBpFF4KgHEYG8008K3RoInG0aKqp9f4tiJMG3rvqZUiRHjTKSA01A
+ N0sTeS8e/8NDDPtkoJueYE92zMgGlIJeIHbEVNlbqCRyMC0r4quBTBSUl8/SExqGj0KPWI7ee
+ UQDUxQ7yuexRiWXslriViP94c9PeKJF+GxCSbudM3fDiWwicDgq5V86kk1ICYYIisGKROuRgz
+ HlFbDLwMSpj49Dv0AUuxVtoLLvPPBi2GRc4yjE773dqmFzpd2WE/jNLuVRjoiknAdRCcCVpQm
+ Ht1DI33H/IB0gIWGh53PQ1C61bnClRpsNUD85l+MTkNLLDkIcpGABbCw1t85hVHwBk3HJV34e
+ bSLc/GeqjC3viHmGhrRymMzv2BDCjDtcUxDtS1/8UfpKbXyykns2C8jGCbHe2JRLKvU6CJPuT
+ rkLcY/Kv3eQeQS2xQFt12L9haWMl+sQz6qL1xivgQKQo526htpSYSorIt+xzeaIC+qr2e05zV
+ 8wqxIoaDOH9YN09k1mCD5s6yGJjkf8o4mQA9TSdSlhMCki82tb1IIMhbyhcqrju/6bgCgtHkY
+ QIsA8rgy6YXqEfcnYiIC+Cqos/6X9uwukY+f2J3WYN0cAstjRmy4mo1+rPjsbGvBlFqdcXDnF
+ edN6mv6Iq979IQpoajSKB6VCCUxs+UDT95iEWtuIzPmke25++RNIu8MVDhfTlx+LNgpZYIkjn
+ BqekfKioqOW6Tgq7142v/92Lj+D7F3NuQqmalmj6BKMpVL00s/oAzvmHsOpkaaoNMqlcTnDYY
+ Vh2hp87P8PKhHdWnemhpKnFTi1/1LO/YlHc5y0v10HsYb3y04ezAj4lzcUHWjOS/KMYMAW4+0
+ BHzrYHtX/xoHm1zm0P/UQXq3zlT7BdjRRaXEIgy5y9pRZ3TdRCJNHkAr8Y0+bZ57xujNQSJyo
+ 0pRTVbXxDLi2nfs/CycJvmtSoRASVtcaUptebD+8P1HZxXb10W4NgC6gg7RPtRa3FRn
 
-On Sat, Feb 15, 2025 at 05:53:29PM +0800, Huacai Chen wrote:
-> On Fri, Feb 14, 2025 at 8:45 PM Harry (Hyeonggon) Yoo
-> <42.hyeyoo@gmail.com> wrote:
-> >
-> > On Fri, Feb 14, 2025 at 06:02:52PM +0800, Huacai Chen wrote:
-> > > On Fri, Feb 14, 2025 at 5:33 PM Harry (Hyeonggon) Yoo
-> > > <42.hyeyoo@gmail.com> wrote:
-> > > >
-> > > > On Thu, Feb 13, 2025 at 11:20:22AM +0800, Huacai Chen wrote:
-> > > > > Hi, Harry,
-> > > > >
-> > > > > On Wed, Feb 12, 2025 at 11:39 PM Harry (Hyeonggon) Yoo
-> > > > > <42.hyeyoo@gmail.com> wrote:
-> > > > > > On Wed, Feb 12, 2025 at 11:17 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > > > >
-> > > > > > > Hibernation assumes the memory layout after resume be the same as that
-> > > > > > > before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this assumption.
-> > > > > >
-> > > > > > Could you please elaborate what do you mean by
-> > > > > > hibernation assumes 'the memory layout' after resume be the same as that
-> > > > > > before sleep?
-> > > > > >
-> > > > > > I don't understand how updating random_kmalloc_seed breaks resuming from
-> > > > > > hibernation. Changing random_kmalloc_seed affects which kmalloc caches
-> > > > > > newly allocated objects are from, but it should not affect the objects that are
-> > > > > > already allocated (before hibernation).
-> > > > >
-> > > > > When resuming, the booting kernel should switch to the target kernel,
-> > > > > if the address of switch code (from the booting kernel) is the
-> > > > > effective data of the target kernel, then the switch code may be
-> > > > > overwritten.
-> > > >
-> > > > Hmm... I'm still missing some pieces.
-> > > > How is the kernel binary overwritten when slab allocations are randomized?
-> > > >
-> > > > Also, I'm not sure if it's even safe to assume that the memory layout is the
-> > > > same across boots. But I'm not an expert on swsusp anyway...
-> > > >
-> > > > It'd be really helpful for linux-pm folks to clarify 1) what are the
-> > > > (architecture-independent) assumptions are for swsusp to work, and
-> > > > 2) how architectures dealt with other randomization features like kASLR...
-> > >
-> >
-> > [+Cc few more people that worked on slab hardening]
-> >
-> > > I'm sorry to confuse you. Binary overwriting is indeed caused by
-> > > kASLR, so at least on LoongArch we should disable kASLR for
-> > > hibernation.
-> >
-> > Understood.
-> >
-> > > Random kmalloc is another story, on LoongArch it breaks smpboot when
-> > > resuming, the details are:
-> > > 1, LoongArch uses kmalloc() family to allocate idle_task's
-> > > stack/thread_info and other data structures.
-> > > 2, If random kmalloc is enabled, idle_task's stack in the booting
-> > > kernel may be other things in the target kernel.
-> >
-> > Slab hardening features try so hard to prevent such predictability.
-> > For example, SLAB_FREELIST_RANDOM could also randomize the address
-> > kmalloc objects are allocated at.
-> >
-> > Rather than hacking CONFIG_RANDOM_KMALLOC_CACHES like this, we could
-> > have a single option to disable slab hardening features that makes
-> > the address unpredictable.
-> >
-> > It'd be nice to have something like ARCH_SUPPORTS_SLAB_RANDOM which
-> > some hardening features depend on. And then let some arches conditionally
-> > not select ARCH_SUPPORTS_SLAB_RANDOM if hibernation's enabled
-> > (at cost of less hardening)?
->
-> This is not good, my patch doesn't disable RANDOM for hibernation, it
-> just delays the initialization. When the system is running, all
-> randomization is still usable.
 
-I think at least we need a rule (like ARCH_SUPPORTS_SLAB_RANDOM)
-for slab hardening features that prevents breaking hibernation
-in the future. Without rules, introducing new hardening features could
-break hibernation again.
+Good afternoon!
 
-But I'm not yet convinced if it's worth the complexity of hacking slab
-hardening features (for security) just to make hibernation work on
-some arches, which have already disabled kASLR anyway...
+I want to set the "Performance" governor with cpufreq-set for my dual
+core CPU but I am having a hard time figuring out the correct syntax
+for using the -c option (in order to make it work for both CPUs) since
+the man page is not quite specific about that and I'm not very familiar
+with that sort of thing.
 
-> For SLAB_FREELIST_RANDOM, I found that it doesn't break hibernation
-> (at least on LoongArch), the reason is:
-> 1. When I said "data overwritten" before, it doesn't mean that every
-> byte shouldn't be overwritten, only some important parts matter.
-> 2. On LoongArch, the important parts include: switch code, exception
-> handlers, idle_task's stack/thread_info.
-> 3. switch code and exception handlers are protected by automatically
-> disabling kASLR from arch-specific code, idle_task's stack/thread_info
-> is protected by delaying random seeds (this patch).
-> 
-> Why SLAB_FREELIST_RANDOM doesn't corrupt idle_task's
-> stack/thread_info? Because the scope of randomization of
-> SLAB_FREELIST_RANDOM is significantly less than RANDOM_KMALLOC_CACHES.
-> When RANDOM_KMALLOC_CACHES enabled,
+I'm using Debian 11 LTS.
 
-You mean when SLAB_FREELIST_RANDOM enabled?
-Assuming that...
+Would you please be so kind and advise me? Thank you very much.
 
-> the CPU1's idle task stack from
-> the booting kernel may be the CPU2's idle task stack from the target
-> kernel, and CPU2's idle task stack from the booting kernel may be the
-> CPU1's idle task stack from the target kernel
+Have a nice day and All The Best!
 
-What happens if it's not the case?
+Frank Fricke
 
-> but idle task's stack
-> from the booting kernel won't be other things from the target kernel
-> (and won't be overwritten by switching kernel).
 
-What guarantees that it won't be overwritten?
-To me it seems to be a fragile assumption that could be broken.
+Composed with Evolution mailclient on Debian GNU/Linux
 
-Am I missing something?
 
--- 
-Harry
+
+
+
+
 
