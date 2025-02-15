@@ -1,345 +1,253 @@
-Return-Path: <linux-pm+bounces-22150-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22151-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 19808A36E10
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 13:33:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B3B1CA36E67
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 14:09:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 167A63A9C8E
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 12:32:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 006A93B0961
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 13:08:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1CB1A4F09;
-	Sat, 15 Feb 2025 12:32:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DBF31C84A6;
+	Sat, 15 Feb 2025 13:09:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QRr4JdPb"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Wn4ZBtai"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17D61922DE;
-	Sat, 15 Feb 2025 12:32:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E34171C6FE1
+	for <linux-pm@vger.kernel.org>; Sat, 15 Feb 2025 13:08:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739622747; cv=none; b=p8mADPDwszUU4+4ISR8Q5++a/FTBLjYj6PTBgHrEM5SJbAT0U0/I4tffbSY58+jfbb6Oc8mbm+OLSlQ14Z1xhkB2F7FDGpD/R3p3YRt2XKh36M2RwB1T+CkqTGWQEj7yUdoQW8JYBxyM4KoJKvG6ZAMGIt72Ub7H5wiypJMUVt8=
+	t=1739624942; cv=none; b=GzDqArqAZkAMltHHhRL01OvCn2d8alLmb25CL+qA7vCUPqhi7UNDXcwpN9UxfuvAv5/kxOTpXbrib3UcH2m6C45WbiF7HuHX5hhlWNq7MLUTYdvzv59ulOB6S3uIcVvrSpnsYfjUO9ZsYHagylG8+kfFbs4xB9OO4N9MO3coLbg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739622747; c=relaxed/simple;
-	bh=pxL3I6JpZRiZ/DicB595jlWhSGuCzMtUKNs9R2zf78k=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=XT9Igu0MgAH2EOaLoGce7vh40dPs6J7XZ3UrjHRGXJunbtCEx5jZy3kAEX5iEthvE1fNVATU6kAvR+BKixfYWDPW+CTwB+NA1AgNKXw368WRrsTtPJz1NPHgEuTDevp8+YVG59ZFDGr6KetuiRkmMiYOZ7/2n8vVkidoT//8awA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QRr4JdPb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 5478AC4CEE6;
-	Sat, 15 Feb 2025 12:32:27 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739622747;
-	bh=pxL3I6JpZRiZ/DicB595jlWhSGuCzMtUKNs9R2zf78k=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=QRr4JdPbOBm7uPjxegJgT8qmTfu71kXzdqdJv/GUVigIUtAwTaCAQ7JQqxPQ/uB3Z
-	 3Aumnd864/zcvukheZadPeKpTW2dTJgjU7u2OtKwUC8WuEaD64IUg90iIuQt/UX0pc
-	 B8Z26oNPQSQwWRyJiYpNX3rExj1tH8paF6yawdl3H1w1hvhIH2IpDPYiawZ7ReLWlZ
-	 KSznlemYJ/srAfQDoRe2Rduvs6CKHH6pkC8dHZgt2FMFsDifVewmRY3bxo52ANh99F
-	 KlH+E/jH0+ZD7Q4LQGZfsRn9h7QD8Om+fzu0F3arzCkJpsyA6JdbCAfz522KqHuIPx
-	 fNEqmSOLbMZDw==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5fa9778fa2cso1567139eaf.0;
-        Sat, 15 Feb 2025 04:32:27 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWXPFLJCSwhcFw30dsdRsyyaIiYhy962khFAa9R2fX3fVGY+6td2ZEstEOgjJFDrW1/gNsMJlUtLKE=@vger.kernel.org, AJvYcCXiTU4f2XPXtt9gwqulEyOrkzK+CeQ51/NZfMhAU+cy0EKLAA0G911VpwpdQcvJftBecFRoNxQ+1QKq46w=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/RSNPrWx3Gemolng5e1VZ1o5x9BFYIDGMDPQvc1f8P+xMrcHA
-	E69aDmOLXsdyVqOM/XLpkQlp+6V1KsymNeezswG4cCwIwgYJjXoOwubIRUv2DWAjQbXoISTuKF3
-	itfqWX10bL7khc99s+aYQFq8YYu4=
-X-Google-Smtp-Source: AGHT+IGAd2rTamR3KLwnmSkmf+oNHNwrp8eoOfLrNSgoT5cvLyMqY6pP7GSarmem7uRju5IRW1XuzorG5veNC9k+0WE=
-X-Received: by 2002:a05:6870:c14e:b0:29e:76c8:be2e with SMTP id
- 586e51a60fabf-2bc99d5095cmr1379769fac.28.1739622746568; Sat, 15 Feb 2025
- 04:32:26 -0800 (PST)
+	s=arc-20240116; t=1739624942; c=relaxed/simple;
+	bh=s4htX+F1zzRD0lYov4+9prU+b0yfaEjXX+1u/e48NXQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WQaBHCtAM4od0O5/hXASnCYqlAILc564fmK47zDjpSYRSVPSK3wxwOq2j8f094v/43y27mycFUCybRaitA2SZNMfv/VTba/iASqnsDtCMprmESX6Wkle9X2TUXD/D2kZ/85Aypw5q31+vH5hRBG08qon/18swmbRGjhhfsWSmpM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Wn4ZBtai; arc=none smtp.client-ip=209.85.208.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5de38c3d2acso4771455a12.1
+        for <linux-pm@vger.kernel.org>; Sat, 15 Feb 2025 05:08:59 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1739624938; x=1740229738; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=TPr0RA4sTxfMrblR7pYl2liz/ysOC6e1FaOIdebj5hk=;
+        b=Wn4ZBtai/Eh60ePuwzYAWINMvABoAQ60hH8jAxjQoR8qMHg5AiBRj/DAxpIv9UNavu
+         KUJgs3jUlD5Ca0oz0LHBhLtjvaK8EldV0sa0ghsXyOaV3S2MDrJgipBGEqHOiFNSgQ5F
+         PmTzir/nQeWlJh6TDzlZvX6/v5nPAa4Xtiam+V3He284o2szQgdPqFWOa4RDsIH4BCt/
+         09M/DwPcReI+JR0jF+KHlhMfpE67lf/VJWI8vKXYwzYqFA7XfzM4Gx0uO8V1ClJQWicj
+         ogSqfnHidEFrHKhbwG6jk7XGvuq+ggiAqxv4lYefh/WPfFVY3DEyP/2ZNZpB7uFpxtoD
+         nTlQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739624938; x=1740229738;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=TPr0RA4sTxfMrblR7pYl2liz/ysOC6e1FaOIdebj5hk=;
+        b=lumUMHQkFn6KsCwq4Yi6s41RhFuwVdRHJN6RmLRPEgCVYyRtQtx1PCaEICn7fzgE0c
+         mWg/4JxA6inEGm/Ruo0Xr3hOz+oRQTpsJBa9l6mp28SCnVjh50vY1QNDcezUpHrbx393
+         9cthyUt57B9sT3LCH3l6lGyeV1OaJOY/Dfmx4zC193Pyt4vhSU9QbGkfW/2VBTDyDwdK
+         jJqBhoDfbbW5eeEpnyLdMX7xqKy5VDAfPPRNKKqZB9P4zWPrZHt2eeIcSRIQB2k7Yh0I
+         J59tdqcKyNHOOETuTlUlHPtPLrjC3idsz1ujZRW6Sl018kodG+OeYB4A2Eby9xSWQUC1
+         xMjg==
+X-Forwarded-Encrypted: i=1; AJvYcCVlO0dMRtm5/irn4ObwDTdDNaxr2npNndsoUilvQp6gPPn/zREGE8gQJus5n0t7ASF1NuMRlLH4zg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwOloMNVhbbP6hLgYgj9hz8Z+OlWE6AK/q+EkesWuQXUeEdbofW
+	LK0rmjFo7riXsxKIFznix++A8zL1sFqvhuTyjW3ywN7zo07Cbq+2nNU7mINGFxbp8u56myD2WAg
+	w
+X-Gm-Gg: ASbGnctRIF9ZR2O2qFG2sSvnkO8YQXF4bMwkvyR4zomliZkUDp13uNajmQkh6UbOpXl
+	QKLe6iFqublfSwTBDlShSXBcCBsuaEAFFEHLn31SgcKB/OzIraqEM2gISRZYDb4OoI75d2lZomq
+	E0UUdZXmHTTJv5qe4ZwobwbubZUrsE7P+Zz97dVTFahfxtn4m771eiPfZUtYki2B7F+uqKQ6YHD
+	OfZ6xdxtdfEQ8etfjd8bYKxXaQIjm35vB4z7SfvWm9s3uoGIaKQzj2gXoGqCpZU6Oll6gdVIJAQ
+	mzgico0nLERnS+ri2EJs9QA6DfW541BO1I1pqIV6VNAtBw==
+X-Google-Smtp-Source: AGHT+IE2gOOcTHNza2EOhRpbFKVQn95DHRKBHAZlBuKwZYla0cd1eeJ63caSvBI9Z702VIK30UtwcA==
+X-Received: by 2002:a05:6402:42ca:b0:5de:cf0c:cb37 with SMTP id 4fb4d7f45d1cf-5e03608d918mr2811400a12.12.1739624937833;
+        Sat, 15 Feb 2025 05:08:57 -0800 (PST)
+Received: from claudiu-X670E-Pro-RS.. ([82.78.167.173])
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece1d3693sm4444316a12.39.2025.02.15.05.08.55
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Feb 2025 05:08:56 -0800 (PST)
+From: Claudiu <claudiu.beznea@tuxon.dev>
+X-Google-Original-From: Claudiu <claudiu.beznea.uj@bp.renesas.com>
+To: gregkh@linuxfoundation.org,
+	rafael@kernel.org,
+	dakr@kernel.org,
+	jic23@kernel.org,
+	ulf.hansson@linaro.org,
+	daniel.lezcano@linaro.org
+Cc: claudiu.beznea@tuxon.dev,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	geert@linux-m68k.org,
+	Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+Subject: [PATCH] driver core: platform: Use devres group to free driver probe resources
+Date: Sat, 15 Feb 2025 15:08:49 +0200
+Message-ID: <20250215130849.227812-1-claudiu.beznea.uj@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <2314745.iZASKD2KPV@rjwysocki.net> <CAPDyKFroyU3YDSfw_Y6k3giVfajg3NQGwNWeteJWqpW29BojhQ@mail.gmail.com>
- <CAJZ5v0h44Yxp95pHW+75gk5yWKviLO1_YK_cZNFKaGnid7nx9A@mail.gmail.com>
- <CAJZ5v0iMZ=6YgKR3ZZuiv7DF4=vfoFRonSoXO_zV65oZH2rOgA@mail.gmail.com>
- <CAPDyKFq91JnCFhEuitOJPZtq78-Y3CUy4p0bNE1wK+eYCste6g@mail.gmail.com>
- <CAJZ5v0iuLA9N5Vi-JNa8=uTO-kpsKNsRGKegYnCYLEhAn=nW9g@mail.gmail.com>
- <CAPDyKFr1LmYji1Yh=mrx03eeW8ukFr9rE0hk277iam174TjGig@mail.gmail.com>
- <CAJZ5v0hsEg7eFRg2Q2sbn0DkUoBu0F08B+0yVGAicKyQ91NKuA@mail.gmail.com> <CAPDyKFoLM-sW8SfcZa2v-ruFYYxz3ZR7oXw_G+SCwvcZoEPEKA@mail.gmail.com>
-In-Reply-To: <CAPDyKFoLM-sW8SfcZa2v-ruFYYxz3ZR7oXw_G+SCwvcZoEPEKA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Sat, 15 Feb 2025 13:32:14 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hVMm3=G2WshxVc==7W=BTzepKAh2NgpVHwANUV5n9T9w@mail.gmail.com>
-X-Gm-Features: AWEUYZl2I4qRn-r7REC1Xw5ikgbnMAmruwiMVCqLH431nRBmDVuGI3raeJHkHq8
-Message-ID: <CAJZ5v0hVMm3=G2WshxVc==7W=BTzepKAh2NgpVHwANUV5n9T9w@mail.gmail.com>
-Subject: Re: [PATCH v1 00/10] PM: Make the core and pm_runtime_force_suspend/resume()
- agree more
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Fri, Feb 14, 2025 at 10:55=E2=80=AFAM Ulf Hansson <ulf.hansson@linaro.or=
-g> wrote:
->
-> On Thu, 13 Feb 2025 at 21:17, Rafael J. Wysocki <rafael@kernel.org> wrote=
-:
-> >
-> > On Thu, Feb 13, 2025 at 2:11=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro=
-.org> wrote:
-> > >
-> > > On Wed, 12 Feb 2025 at 18:05, Rafael J. Wysocki <rafael@kernel.org> w=
-rote:
-> > > >
-> > > > On Wed, Feb 12, 2025 at 4:15=E2=80=AFPM Ulf Hansson <ulf.hansson@li=
-naro.org> wrote:
-> > > > >
-> > > > > On Wed, 12 Feb 2025 at 12:33, Rafael J. Wysocki <rafael@kernel.or=
-g> wrote:
-> > > > > >
-> > > > > > On Wed, Feb 12, 2025 at 11:59=E2=80=AFAM Rafael J. Wysocki <raf=
-ael@kernel.org> wrote:
-> > > > > > >
-> > > > > > > On Wed, Feb 12, 2025 at 10:12=E2=80=AFAM Ulf Hansson <ulf.han=
-sson@linaro.org> wrote:
-> > > > > > > >
-> > > > > > > > On Tue, 11 Feb 2025 at 22:25, Rafael J. Wysocki <rjw@rjwyso=
-cki.net> wrote:
-> > > > > > > > >
-> > > > > > > > > Hi Everyone,
-> > > > > > > > >
-> > > > > > > > > This series is a result of the discussion on a recently r=
-eported issue
-> > > > > > > > > with device runtime PM status propagation during system r=
-esume and
-> > > > > > > > > the resulting patches:
-> > > > > > > > >
-> > > > > > > > > https://lore.kernel.org/linux-pm/12619233.O9o76ZdvQC@rjwy=
-socki.net/
-> > > > > > > > > https://lore.kernel.org/linux-pm/6137505.lOV4Wx5bFT@rjwys=
-ocki.net/
-> > > > > > > > >
-> > > > > > > > > Overall, due to restrictions related to pm_runtime_force_=
-suspend() and
-> > > > > > > > > pm_runtime_force_resume(), it was necessary to limit the =
-RPM_ACTIVE
-> > > > > > > > > setting propagation to the parent of the first device in =
-a dependency
-> > > > > > > > > chain that turned out to have to be resumed during system=
- resume even
-> > > > > > > > > though it was runtime-suspended before system suspend.
-> > > > > > > > >
-> > > > > > > > > Those restrictions are that (1) pm_runtime_force_suspend(=
-) attempts to
-> > > > > > > > > suspend devices that have never had runtime PM enabled if=
- their runtime
-> > > > > > > > > PM status is currently RPM_ACTIVE and (2) pm_runtime_forc=
-e_resume()
-> > > > > > > > > will skip device whose runtime PM status is currently RPM=
-_ACTIVE.
-> > > > > > > > >
-> > > > > > > > > The purpose of this series is to eliminate the above rest=
-rictions and
-> > > > > > > > > get pm_runtime_force_suspend() and pm_runtime_force_resum=
-e() to agree
-> > > > > > > > > more with what the core does.
-> > > > > > > >
-> > > > > > > > For my understanding, would you mind elaborating a bit more=
- around the
-> > > > > > > > end-goal with this?
-> > > > > > >
-> > > > > > > The end goal is, of course, full integration of runtime PM wi=
-th system
-> > > > > > > sleep for all devices.  Eventually.
-> > > > > > >
-> > > > > > > And it is necessary to make the core and
-> > > > > > > pm_runtime_force_suspend|resume() work together better for th=
-is
-> > > > > > > purpose.
-> > > > > > >
-> > > > > > > > Are you trying to make adaptations for
-> > > > > > > > pm_runtime_force_suspend|resume() and the PM core, such tha=
-t drivers
-> > > > > > > > that uses pm_runtime_force_suspend|resume() should be able =
-to cope
-> > > > > > > > with other drivers for child-devices that make use of
-> > > > > > > > DPM_FLAG_SMART_SUSPEND?
-> > > > > > >
-> > > > > > > Yes.
-> > > > > > >
-> > > > > > > This is a more general case, though, when a device that was
-> > > > > > > runtime-suspended before system suspend and is left in suspen=
-d during
-> > > > > > > it, needs to be resumed during the system resume that follows=
-.
-> > > > > > >
-> > > > > > > Currently, DPM_FLAG_SMART_SUSPEND can lead to this sometimes =
-and it
-> > > > > > > cannot happen otherwise, but I think that it is a generally v=
-alid
-> > > > > > > case.
-> > > > > > >
-> > > > > > > > If we can make this work, it would enable the propagation o=
-f
-> > > > > > > > RPM_ACTIVE in the PM core for more devices, but still not f=
-or all,
-> > > > > > > > right?
-> > > > > > >
-> > > > > > > It is all until there is a known case in which it isn't.  So =
-either
-> > > > > > > you know a specific case in which it doesn't work, or I don't=
- see a
-> > > > > > > reason for avoiding it.
-> > > > > > >
-> > > > > > > ATM the only specific case in which it doesn't work is when
-> > > > > > > pm_runtime_force_suspend|resume() are used.
-> > > > > > >
-> > > > > > > > The point is, the other bigger issue that I pointed out in =
-our earlier
-> > > > > > > > discussions; all those devices where their drivers/buses do=
-n't cope
-> > > > > > > > with the behaviour of the DPM_FLAG_SMART_SUSPEND flag, will=
- prevent
-> > > > > > > > the PM core from *unconditionally* propagating the RPM_ACTI=
-VE to
-> > > > > > > > parents. I guess this is the best we can do then?
-> > > > > > >
-> > > > > > > OK, what are they?
-> > > > > > >
-> > > > > > > You keep saying that they exist without giving any examples.
-> > > > > >
-> > > > > > To put it more bluntly, I'm not aware of any place other than
-> > > > > > pm_runtime_force_suspend|resume() that can be confused by chang=
-ing the
-> > > > > > runtime PM status of a device with runtime PM disabled (either
-> > > > > > permanently, or transiently during a system suspend-resume cycl=
-e) to
-> > > > > > RPM_ACTIVE, so if there are any such places, I would appreciate
-> > > > > > letting me know what they are.
-> > > > >
-> > > > > Well, sorry I thought you were aware. Anyway, I believe you need =
-to do
-> > > > > your own investigation as it's simply too time consuming for me t=
-o
-> > > > > find them all. The problem is that it's not just a simple pattern=
- to
-> > > > > search for, so we would need some clever scripting to move forwar=
-d to
-> > > > > find them.
-> > > > >
-> > > > > To start with, we should look for drivers that enable runtime PM,=
- by
-> > > > > calling pm_runtime_enable().
-> > > > >
-> > > > > Additionally, in their system suspend callback they should typica=
-lly
-> > > > > *not* use pm_runtime_suspended(), pm_runtime_status_suspended() o=
-r
-> > > > > pm_runtime_active() as that is usually (but no always) indicating=
- that
-> > > > > they got it right. Then there are those that don't have system
-> > > > > suspend/resume callbacks assigned at all (or uses some other subs=
-ystem
-> > > > > specific callback for this), but only uses runtime PM.
-> > > > >
-> > > > > On top of that, drivers that makes use of
-> > > > > pm_runtime_force_suspend|resume() should be disregarded, which ha=
-s
-> > > > > reached beyond 300 as this point.
-> > > > >
-> > > > > Anyway, here is just one example that I found from a quick search=
-.
-> > > > > drivers/i2c/busses/i2c-qcom-geni.c
-> > > >
-> > > > OK, I see.
-> > > >
-> > > > It sets the status to RPM_SUSPENDED in geni_i2c_suspend_noirq(), if
-> > > > not suspended already, and assumes it to stay this way across
-> > > > geni_i2c_resume_noirq() until someone resumes it via runtime PM.
-> > > >
-> > > > Fair enough, but somebody should tell them that they don't need to =
-use
-> > > > pm_runtime_disable/enable() in _noirq.
-> > > >
-> > > > > >
-> > > > > > Note that rpm_active() could start producing confusing results =
-if the
-> > > > > > runtime PM status of a device with runtime PM disabled is chang=
-ed from
-> > > > > > RPM_ACTIVE to RPM_SUSPENDED because it will then start to retur=
-n
-> > > > > > -EACCES instead of 1, but changing the status to RPM_ACTIVE wil=
-l not
-> > > > > > confuse it the same way.
-> > > > >
-> > > > > Trust me, it will cause problems.
-> > > > >
-> > > > > Drivers may call pm_runtime_get_sync() to turn on the resources f=
-or
-> > > > > the device after the system has resumed, when runtime PM has been
-> > > > > re-enabled for the device by the PM core.
-> > > > >
-> > > > > Those calls to pm_runtime_get_sync() will then not end up invokin=
-g any
-> > > > > if ->runtime_resume() callbacks for the device since its state is
-> > > > > already RPM_ACTIVE. Hence, the device will remain in a low power =
-state
-> > > > > even if the driver believes it has been powered on. In many cases=
-,
-> > > > > accessing the device (like reading/writing a register) will often=
- just
-> > > > > just hang in these cases, but in worst cases we could end up gett=
-ing
-> > > > > even more difficult bugs to debug.
-> > > >
-> > > > Sure, that would be a problem.
-> > > >
-> > > > I think I need to find a different way to address the problem I'm
-> > > > seeing, that is to resume devices that were runtime-suspended befor=
-e
-> > > > system suspend along with their superiors.
-> > > >
-> > > > One way to do it would be to just defer their resume to the point w=
-hen
-> > > > the core has enabled runtime PM for them, which means that it has a=
-lso
-> > > > enabled runtime PM for all of their superiors, and then call
-> > > > pm_runtime_resume().
-> > > >
-> > > > This should work unless one of the superiors has runtime PM disable=
-d
-> > > > at that point, of course.
-> > >
-> > > Right, so typically users of pm_runtime_force_suspend|resume() from
-> > > the regular ->suspend|resume() callbacks would not work, because they
-> > > disable/enable runtime PM. Although, we could probably fix this quite
-> > > easily by making some adaptations in
-> > > pm_runtime_force_suspend|resume().
-> > >
-> > > I am not sure if this approach would have any other issue though, but
-> > > it seems like it could make sense to explore this approach. In genera=
-l
-> > > drivers should cope with their devices being runtime resumed if
-> > > runtime PM is enabled, right!?
+From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
 
-In theory.
+On the Renesas RZ/G3S (and other Renesas SoCs, e.g., RZ/G2{L, LC, UL}),
+clocks are managed through PM domains. These PM domains, registered on
+behalf of the clock controller driver, are configured with
+GENPD_FLAG_PM_CLK. In most of the Renesas drivers used by RZ SoCs, the
+clocks are enabled/disabled using runtime PM APIs. The power domains may
+also have power_on/power_off support implemented. After the device PM
+domain is powered off any CPU accesses to these domains leads to system
+aborts.
 
-In practice, though, to start with, this can only be done for devices
-whose drivers opt-in (or don't care) and starting with "leaf" devices
-(no children or consumers).
+During probe, devices are attached to the PM domain controlling their
+clocks and power. Similarly, during removal, devices are detached from the
+PM domain.
 
-> > > If this works, it seems like a generic and a good solution to me.
-> >
-> > For PCI ports, though, it would require some tuning of
-> > ->runtime_resume(), so it is not as simple as it would seem to be in
-> > the end.
->
-> Okay. Perhaps it would be worth it to try this out anyway, as it would
-> allow us to keep the PM core as simple as possible?
+The detachment call stack is as follows:
 
-Except that initially it will need the same opt-in from everybody
-involved as the set active propagation, at least initially, so IMV it
-is better to start enforcing the opt-in requirement first and then
-convert stuff to the new approach.
+device_driver_detach() ->
+  device_release_driver_internal() ->
+    __device_release_driver() ->
+      device_remove() ->
+        platform_remove() ->
+	  dev_pm_domain_detach()
+
+During driver unbind, after the device is detached from its PM domain,
+the device_unbind_cleanup() function is called, which subsequently invokes
+devres_release_all(). This function handles devres resource cleanup.
+
+If runtime PM is enabled in driver probe via devm_pm_runtime_enable(), the
+cleanup process triggers the action or reset function for disabling runtime
+PM. This function is pm_runtime_disable_action(), which leads to the
+following call stack of interest when called:
+
+pm_runtime_disable_action() ->
+  pm_runtime_dont_use_autosuspend() ->
+    __pm_runtime_use_autosuspend() ->
+      update_autosuspend() ->
+        rpm_idle()
+
+The rpm_idle() function attempts to resume the device at runtime. However,
+at the point it is called, the device is no longer part of a PM domain
+(which manages clocks and power states). If the driver implements its own
+runtime PM APIs for specific functionalities - such as the rzg2l_adc
+driver - while also relying on the power domain subsystem for power
+management, rpm_idle() will invoke the driver's runtime PM API. However,
+since the device is no longer part of a PM domain at this point, the PM
+domain's runtime PM APIs will not be called. This leads to system aborts on
+Renesas SoCs.
+
+Another identified case is when a subsystem performs various cleanups
+using device_unbind_cleanup(), calling driver-specific APIs in the process.
+A known example is the thermal subsystem, which may call driver-specific
+APIs to disable the thermal device. The relevant call stack in this case
+is:
+
+device_driver_detach() ->
+  device_release_driver_internal() ->
+    device_unbind_cleanup() ->
+      devres_release_all() ->
+        devm_thermal_of_zone_release() ->
+	  thermal_zone_device_disable() ->
+	    thermal_zone_device_set_mode() ->
+	      struct thermal_zone_device_ops::change_mode()
+
+At the moment the driver-specific change_mode() API is called, the device
+is no longer part of its PM domain. Accessing its registers without proper
+power management leads to system aborts.
+
+Open a devres group before calling the driver probe, and close it
+immediately after the driver remove function is called and before
+dev_pm_domain_detach(). This ensures that driver-specific devm actions or
+reset functions are executed immediately after the driver remove function
+completes. Additionally, it prevents driver-specific runtime PM APIs from
+being called when the device is no longer part of its power domain.
+
+Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
+---
+
+Hi,
+
+Although Ulf gave its green light for the approaches on both IIO [1],
+[2] and thermal subsystems [3], Jonathan considered unacceptable the
+approaches in [1], [2] as he considered it may lead to dificult to
+maintain code and code opened to subtle bugs (due to the potential of
+mixing devres and non-devres calls). He pointed out a similar approach
+that was done for the I2C bus [4], [5].
+
+As the discussions in [1], [2] stopped w/o a clear conclusion, this
+patch tries to revive it by proposing a similar approach that was done
+for the I2C bus.
+
+Please let me know you input.
+
+Thank you,
+Claudiu
+
+[1] https://lore.kernel.org/all/20250103140042.1619703-2-claudiu.beznea.uj@bp.renesas.com/
+[2] https://lore.kernel.org/all/20250117114540.289248-2-claudiu.beznea.uj@bp.renesas.com/
+[3] https://lore.kernel.org/all/20250103163805.1775705-3-claudiu.beznea.uj@bp.renesas.com/
+[4] https://elixir.bootlin.com/linux/v6.12.6/source/drivers/i2c/i2c-core-base.c#L579
+[5] https://elixir.bootlin.com/linux/v6.12.6/source/drivers/i2c/i2c-core-base.c#L630
+
+ drivers/base/platform.c         | 10 +++++++++-
+ include/linux/platform_device.h |  3 +++
+ 2 files changed, 12 insertions(+), 1 deletion(-)
+
+diff --git a/drivers/base/platform.c b/drivers/base/platform.c
+index 6f2a33722c52..1b64c4a44263 100644
+--- a/drivers/base/platform.c
++++ b/drivers/base/platform.c
+@@ -1401,9 +1401,15 @@ static int platform_probe(struct device *_dev)
+ 		goto out;
+ 
+ 	if (drv->probe) {
++		dev->devres_group_id = devres_open_group(&dev->dev, NULL, GFP_KERNEL);
++		if (!dev->devres_group_id)
++			return -ENOMEM;
++
+ 		ret = drv->probe(dev);
+-		if (ret)
++		if (ret) {
++			devres_close_group(&dev->dev, dev->devres_group_id);
+ 			dev_pm_domain_detach(_dev, true);
++		}
+ 	}
+ 
+ out:
+@@ -1422,6 +1428,8 @@ static void platform_remove(struct device *_dev)
+ 
+ 	if (drv->remove)
+ 		drv->remove(dev);
++	if (dev->devres_group_id)
++		devres_release_group(&dev->dev, dev->devres_group_id);
+ 	dev_pm_domain_detach(_dev, true);
+ }
+ 
+diff --git a/include/linux/platform_device.h b/include/linux/platform_device.h
+index 074754c23d33..e842ad243bef 100644
+--- a/include/linux/platform_device.h
++++ b/include/linux/platform_device.h
+@@ -40,6 +40,9 @@ struct platform_device {
+ 	/* MFD cell pointer */
+ 	struct mfd_cell *mfd_cell;
+ 
++	/* ID of the probe devres group. */
++	void *devres_group_id;
++
+ 	/* arch specific additions */
+ 	struct pdev_archdata	archdata;
+ };
+-- 
+2.43.0
+
 
