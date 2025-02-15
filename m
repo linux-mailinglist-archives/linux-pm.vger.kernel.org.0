@@ -1,222 +1,232 @@
-Return-Path: <linux-pm+bounces-22153-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22154-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0ABCDA36EA0
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 14:51:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1997DA36EAF
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 15:06:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 468403ADCCE
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 13:51:08 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE58E3B14EC
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 14:05:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5BDDC1AAA0D;
-	Sat, 15 Feb 2025 13:51:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0C6A814B087;
+	Sat, 15 Feb 2025 14:05:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="EsTOF6wc"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Ejs0pBGL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D04B13FD72
-	for <linux-pm@vger.kernel.org>; Sat, 15 Feb 2025 13:51:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5CDA81D5AD3;
+	Sat, 15 Feb 2025 14:05:48 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739627473; cv=none; b=YJmD86nIHSl5ep/Hpx9HGj2ZQcGK//4XKMXUaM1HJxsxrzlsxbj5WKBkinGJuTBVn8Ly8dETZeWYnqPFlI+xkAQsYOKmfWVIZXxPToBGSF1V4JV3xHc/ECpyJlvLYrDBptCJCLz8zhDoFp6/0KelKzs5OEZv1tujANMctDM71PI=
+	t=1739628349; cv=none; b=pI8MIiybTUd1HVmPWb65p9/dLcQ+FHfrIZdwtSFNTJ3tUbDlFs/Aopi0X2XTmvjPQD+JN0NIvHCDk92iuwQi/UcFEN7dvM1MZ4G5sJZ1r9/aPfwnMY0QUCJNNYQ53BlZHptfCUsHRWpgkteVzyyV2DLXB1FDTYF69XmBNb6enBY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739627473; c=relaxed/simple;
-	bh=7QYxIZYVkBPVcBRtZV1bHOD2EOWvDuyh0f+6TKXwhHI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lgV64avPKTxJuPl8mKM+7sB+dkDkop0F8s5MgfCofkEcSJZ8Fk98Ra/h8zXm3QECHadE4mwAdItlQagJbyhC1DRpJD2MfHqwcz5dPpIik52X20he0dXQ6oRnKQy9Iwly0t64sFknUi/X2wqPejb8auxwtSVD9YRJsH84MWPhYIg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=EsTOF6wc; arc=none smtp.client-ip=209.85.208.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5dc89df7eccso5311589a12.3
-        for <linux-pm@vger.kernel.org>; Sat, 15 Feb 2025 05:51:10 -0800 (PST)
+	s=arc-20240116; t=1739628349; c=relaxed/simple;
+	bh=LdOS54w+GjrAoUKzo/nCkhTuTCo7ZyLyFY98GzsPKMU=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=eIIvWd6r4puE4+WE+0TJgWB9L2JyNwMiMW2jrEO+rp5MYrFuMmFTSb3Iii4mDONOVjoG1T1+pa7DtmdCCtB6Wo3FbHLJwUoP1GRJ9+LGl/ycdftNsqC/Pe8dNFIGsJLaEiDJHEV1SzTHtPNP/gWWmgzCfqJxPDYm0MOG4X5aLb4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Ejs0pBGL; arc=none smtp.client-ip=209.85.214.174
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-220d39a5627so44209835ad.1;
+        Sat, 15 Feb 2025 06:05:48 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1739627469; x=1740232269; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=jGe5zFm2hqgl1riWslKYEhwYCtjiJiuO8PGs9H4DGXM=;
-        b=EsTOF6wcqyEIbbjf4/cFsaGtRww4IxDHiYF8o/x0pzLFYsYdDndZ0iPNiIVo98fbFt
-         3RgmKKoKGBS/WeQ5NgjRp3T30PIVhuee68uHjTEcZUMWVUR0VZQwan/ann3KtskweLPU
-         R9m8UaZQrHFjJMExKdXoyk76yKt4hv0ZwWHm5qBkkL8ALryXjowqATomEf/yVSw/JZCt
-         s6p/f6egzCfmRGlFgKwr2T2usJS+vuX/ZgoEzD+9AJB9pB39op1EQ65XDpYR8lOSfF+A
-         HLcHLLvXE+WyX2AR7FMOKBBzhvaiGaMmEp68U/DvS/ZUxmdGICUzIR75ueTmb21iDL9l
-         Z/KA==
+        d=gmail.com; s=20230601; t=1739628347; x=1740233147; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=J0EBfoneyQ2m5DKQOCwe2zek2SAqeGp/XPESUcXVWkQ=;
+        b=Ejs0pBGLNPwfKQwsQCRhfyV19ooNzlrspcqQqKn8PK968i0RvSwT5Tc3thVbdKIYE1
+         u+ZNF+qJ3V8DIvkhb+UXpzc6ZbyoB8USM+uwgtLpJj+NQkFZ8WeUEI9Iyn10UkniS6nx
+         NRWlOz71Y+Ts6LdTiSijZgttgnu5Ix++4EvIbDm/Q+y/bHyMMhS9HPdFLVCsJmrqGvO4
+         QFK+IebMJtRKUqZyIXL86tPhZEb8ak5bML4Aza20dayiSrHXZ9Ib2VJiuFL4w5XCq6pR
+         UCdWS3+yIWW8O3gJA76ps8iaYgdkQXAQwNM/37TyBE9ID/3lxiE8IfQ64Lxq7+ujlOQ4
+         n+Sg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739627469; x=1740232269;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1739628347; x=1740233147;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=jGe5zFm2hqgl1riWslKYEhwYCtjiJiuO8PGs9H4DGXM=;
-        b=tv8OgqFpJcuTDw6JHtHj2nmNEiNlR9m2hym92AiSjgGgipDNIjhJqylIkxRv24mFNM
-         e2diw+jx6lcjR2hPMw2X3JdFEKSG7lWaKczgdhvSoh5a6Ac1b6JaRo1GxoIGnCbJsqGl
-         g3VKqZkb/8Un2HBrYned6J/gxjBhFY8qQxT1Ky+8I5cU3TRmzxMeWMW4lHje0grYwgFN
-         OWH8wQqQdRXm300SPdGlbztooODPvQaXKKbLpIiFMWOqmBY2I72KbuLBIAjYQFUuW/ji
-         E/riH3gY5nKgRiSfOWuUwuC+HliKugvhaxTo0OEbpX9U0/KK4DpVUDuVeoJ0Sr2LYGpJ
-         FDww==
-X-Forwarded-Encrypted: i=1; AJvYcCVRN9IEFqCBMZxII37pQJTVZ0j8nSmFARKFYQ7Ym5FIsET3GDc0A7D0GT6CiVNBA1tp3agkX8mjHg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzkMAGt+pr+yUiF1xV5LCpZqVSuPGeAiSSBuMrZLcMvgR5ekzIX
-	QCJ2s5VLfL8v9CRIfOZYp2f0mfb4cnNWSgVy08Qfa+hpdwx9Mdd5Lkmjtmwsmd4=
-X-Gm-Gg: ASbGncuuQ943C5MSUln7953KCtJlEENoE1A1pNtICUPnl0be7a1ST3bGq/xoYZSGbC+
-	+nSdHNoJs+lY15luDy7j+VQ62TPE2fUJkOEitlIpYOqfXJjnTbSsv35b2z/gFPaaAJnkoisgOCm
-	+9q+7XtsERjm6p78jqTZn5MSiJGYG3sbnFEzTYSdb2d2jJpVwfAAUG0slVwI16ORY3JQJyN1HIU
-	zvrtJzCF5XEn4fRXacQaMSJjyWigMORnZg1YeILXy/6fk4ZmU+ibzEZF/eekiqHZ0pBaj9rd67y
-	U/lp+SaGM2JGlXtEm+04g5J/
-X-Google-Smtp-Source: AGHT+IHAE3K34tunCi2jsOlYrjn2E1aFkpBBzksorxYjrR1g/vjBHfziIANjKfKbdmU98ZykDePgDg==
-X-Received: by 2002:a05:6402:1d52:b0:5dc:88fe:dcd1 with SMTP id 4fb4d7f45d1cf-5e036071a81mr3271834a12.12.1739627469583;
-        Sat, 15 Feb 2025 05:51:09 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.173])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5dece271223sm4598233a12.59.2025.02.15.05.51.06
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sat, 15 Feb 2025 05:51:08 -0800 (PST)
-Message-ID: <4bf01946-90e3-4169-91fa-10d9f90310e9@tuxon.dev>
-Date: Sat, 15 Feb 2025 15:51:06 +0200
+        bh=J0EBfoneyQ2m5DKQOCwe2zek2SAqeGp/XPESUcXVWkQ=;
+        b=prdo/ttLl9UMCuzwXoJVzk/GkNe9dfBdehPwgvWgsx2+JqKRXM2602739CLFOgS3nB
+         1sfYqfEbActETZJavHdhRy3qcpc1aaT5qn+WgT8LTu2caqZz7lEx+FYNNhUegQ/y58nw
+         0jp1yL7e4lHzcH3jns4JJYyktzZ2b9hK19Zj7FtSYi9cprRlY1lE9H8IdOCNhftTypX7
+         6j3CBk8veBlTbJmfJmnIKRxzWrf4iUT3HXx1IgmWFubiL0ery80/Ob9l5cBES7+TKZCE
+         wn30PkGHBp5xqXSTd/ihKY/QiO5OQ2T553JLsbVCn/Oz/xSnGZX1F+Xlsjgwe8h0yhDF
+         4HRg==
+X-Forwarded-Encrypted: i=1; AJvYcCVh9NUfxBM9neGPd5OHQOF8nvZJuHqPiJjkF85Kx4/QYBdNizSPd1JQGdk63pDQqidMeUkUWsbBLg==@vger.kernel.org, AJvYcCXAj9kZWzV6/Ka1/F4uJa/f4o+dtdQtZB6/psmbAW3KowMjGF77maNZVK2Q3SvyFXGix1ggoLIZ@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxg3kqSu6eFvb7rkaCc3LGuUurBpjGT9zn3+quPX3tisTdHqvWj
+	ahIj2dnLpVOtiazIwiR+p5GYKTdRCSLwmh0WORmLzLqJL1KqneHU
+X-Gm-Gg: ASbGncu6a6yHtBwu/u+PQ8Wi3oTTVpTY9FlYBZ68+LDwcUBRZVfw3MudNbK/YTUzuYz
+	EJPKIusr+ej5YmHL1BjLLW+F3ps5eb8BioVjDW9eyv8N0hQa8kej10nl5k2I9cyUgrjpfDZ6X/n
+	GkopslrF1o/goLhcvtB4Y/waTdvyeBP5yrfsiLa3uAEN3zXWW2THCYYeGpnTy7DMqdgBh/iD4MO
+	6rnRa3Gutb3V1y7imG7bv58dCfdwt1a7wJhDeDXJg45bDLZK/BLd0EER/a6UrlSAfJTMPop8L1L
+	Wqo1VzOjdYM2vwdVlJMp4MzbxPVsj5z3FA==
+X-Google-Smtp-Source: AGHT+IHiwcNhpRT7FDtJmA7aR6hz4/Zu8vY9uHoO6iE0CSHXcKq43K5Cs5Gy5oFq+I3HV/fZTOnkgw==
+X-Received: by 2002:a17:902:e841:b0:21f:860:6d0d with SMTP id d9443c01a7336-22103efb488mr57653765ad.5.1739628347291;
+        Sat, 15 Feb 2025 06:05:47 -0800 (PST)
+Received: from MacBook-Air-5.local ([1.245.180.67])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220ea7a9348sm29804825ad.211.2025.02.15.06.05.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 15 Feb 2025 06:05:46 -0800 (PST)
+Date: Sat, 15 Feb 2025 23:05:34 +0900
+From: "Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: Huacai Chen <chenhuacai@loongson.cn>,
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org,
+	GONG Ruiqi <gongruiqi@huaweicloud.com>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org,
+	Yuli Wang <wangyuli@uniontech.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Pekka Enberg <penberg@kernel.org>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Kees Cook <kees@kernel.org>,
+	GONG Ruiqi <gongruiqi1@huawei.com>
+Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
+ Initialise random_kmalloc_seed after initcalls)
+Message-ID: <Z7CfLlEw9vtbFJwI@MacBook-Air-5.local>
+References: <20250212141648.599661-1-chenhuacai@loongson.cn>
+ <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
+ <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
+ <Z68N4lTIIwudzcLY@MacBook-Air-5.local>
+ <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
+ <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
+ <CAAhV-H4BSWC+K=qQfmHfdXuDqUgGcBLZ7Ftb6VEKs1QYVd6wxg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] driver core: platform: Use devres group to free driver
- probe resources
-To: Greg KH <gregkh@linuxfoundation.org>
-Cc: rafael@kernel.org, dakr@kernel.org, jic23@kernel.org,
- ulf.hansson@linaro.org, daniel.lezcano@linaro.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-renesas-soc@vger.kernel.org, geert@linux-m68k.org,
- Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
-References: <20250215130849.227812-1-claudiu.beznea.uj@bp.renesas.com>
- <2025021539-untrained-prompter-a48f@gregkh>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
-Content-Language: en-US
-In-Reply-To: <2025021539-untrained-prompter-a48f@gregkh>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAAhV-H4BSWC+K=qQfmHfdXuDqUgGcBLZ7Ftb6VEKs1QYVd6wxg@mail.gmail.com>
 
-Hi, Greg,
+On Sat, Feb 15, 2025 at 05:53:29PM +0800, Huacai Chen wrote:
+> On Fri, Feb 14, 2025 at 8:45 PM Harry (Hyeonggon) Yoo
+> <42.hyeyoo@gmail.com> wrote:
+> >
+> > On Fri, Feb 14, 2025 at 06:02:52PM +0800, Huacai Chen wrote:
+> > > On Fri, Feb 14, 2025 at 5:33 PM Harry (Hyeonggon) Yoo
+> > > <42.hyeyoo@gmail.com> wrote:
+> > > >
+> > > > On Thu, Feb 13, 2025 at 11:20:22AM +0800, Huacai Chen wrote:
+> > > > > Hi, Harry,
+> > > > >
+> > > > > On Wed, Feb 12, 2025 at 11:39 PM Harry (Hyeonggon) Yoo
+> > > > > <42.hyeyoo@gmail.com> wrote:
+> > > > > > On Wed, Feb 12, 2025 at 11:17 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > > > >
+> > > > > > > Hibernation assumes the memory layout after resume be the same as that
+> > > > > > > before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this assumption.
+> > > > > >
+> > > > > > Could you please elaborate what do you mean by
+> > > > > > hibernation assumes 'the memory layout' after resume be the same as that
+> > > > > > before sleep?
+> > > > > >
+> > > > > > I don't understand how updating random_kmalloc_seed breaks resuming from
+> > > > > > hibernation. Changing random_kmalloc_seed affects which kmalloc caches
+> > > > > > newly allocated objects are from, but it should not affect the objects that are
+> > > > > > already allocated (before hibernation).
+> > > > >
+> > > > > When resuming, the booting kernel should switch to the target kernel,
+> > > > > if the address of switch code (from the booting kernel) is the
+> > > > > effective data of the target kernel, then the switch code may be
+> > > > > overwritten.
+> > > >
+> > > > Hmm... I'm still missing some pieces.
+> > > > How is the kernel binary overwritten when slab allocations are randomized?
+> > > >
+> > > > Also, I'm not sure if it's even safe to assume that the memory layout is the
+> > > > same across boots. But I'm not an expert on swsusp anyway...
+> > > >
+> > > > It'd be really helpful for linux-pm folks to clarify 1) what are the
+> > > > (architecture-independent) assumptions are for swsusp to work, and
+> > > > 2) how architectures dealt with other randomization features like kASLR...
+> > >
+> >
+> > [+Cc few more people that worked on slab hardening]
+> >
+> > > I'm sorry to confuse you. Binary overwriting is indeed caused by
+> > > kASLR, so at least on LoongArch we should disable kASLR for
+> > > hibernation.
+> >
+> > Understood.
+> >
+> > > Random kmalloc is another story, on LoongArch it breaks smpboot when
+> > > resuming, the details are:
+> > > 1, LoongArch uses kmalloc() family to allocate idle_task's
+> > > stack/thread_info and other data structures.
+> > > 2, If random kmalloc is enabled, idle_task's stack in the booting
+> > > kernel may be other things in the target kernel.
+> >
+> > Slab hardening features try so hard to prevent such predictability.
+> > For example, SLAB_FREELIST_RANDOM could also randomize the address
+> > kmalloc objects are allocated at.
+> >
+> > Rather than hacking CONFIG_RANDOM_KMALLOC_CACHES like this, we could
+> > have a single option to disable slab hardening features that makes
+> > the address unpredictable.
+> >
+> > It'd be nice to have something like ARCH_SUPPORTS_SLAB_RANDOM which
+> > some hardening features depend on. And then let some arches conditionally
+> > not select ARCH_SUPPORTS_SLAB_RANDOM if hibernation's enabled
+> > (at cost of less hardening)?
+>
+> This is not good, my patch doesn't disable RANDOM for hibernation, it
+> just delays the initialization. When the system is running, all
+> randomization is still usable.
 
-On 15.02.2025 15:25, Greg KH wrote:
-> On Sat, Feb 15, 2025 at 03:08:49PM +0200, Claudiu wrote:
->> From: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->>
->> On the Renesas RZ/G3S (and other Renesas SoCs, e.g., RZ/G2{L, LC, UL}),
->> clocks are managed through PM domains. These PM domains, registered on
->> behalf of the clock controller driver, are configured with
->> GENPD_FLAG_PM_CLK. In most of the Renesas drivers used by RZ SoCs, the
->> clocks are enabled/disabled using runtime PM APIs. The power domains may
->> also have power_on/power_off support implemented. After the device PM
->> domain is powered off any CPU accesses to these domains leads to system
->> aborts.
->>
->> During probe, devices are attached to the PM domain controlling their
->> clocks and power. Similarly, during removal, devices are detached from the
->> PM domain.
->>
->> The detachment call stack is as follows:
->>
->> device_driver_detach() ->
->>   device_release_driver_internal() ->
->>     __device_release_driver() ->
->>       device_remove() ->
->>         platform_remove() ->
->> 	  dev_pm_domain_detach()
->>
->> During driver unbind, after the device is detached from its PM domain,
->> the device_unbind_cleanup() function is called, which subsequently invokes
->> devres_release_all(). This function handles devres resource cleanup.
->>
->> If runtime PM is enabled in driver probe via devm_pm_runtime_enable(), the
->> cleanup process triggers the action or reset function for disabling runtime
->> PM. This function is pm_runtime_disable_action(), which leads to the
->> following call stack of interest when called:
->>
->> pm_runtime_disable_action() ->
->>   pm_runtime_dont_use_autosuspend() ->
->>     __pm_runtime_use_autosuspend() ->
->>       update_autosuspend() ->
->>         rpm_idle()
->>
->> The rpm_idle() function attempts to resume the device at runtime. However,
->> at the point it is called, the device is no longer part of a PM domain
->> (which manages clocks and power states). If the driver implements its own
->> runtime PM APIs for specific functionalities - such as the rzg2l_adc
->> driver - while also relying on the power domain subsystem for power
->> management, rpm_idle() will invoke the driver's runtime PM API. However,
->> since the device is no longer part of a PM domain at this point, the PM
->> domain's runtime PM APIs will not be called. This leads to system aborts on
->> Renesas SoCs.
->>
->> Another identified case is when a subsystem performs various cleanups
->> using device_unbind_cleanup(), calling driver-specific APIs in the process.
->> A known example is the thermal subsystem, which may call driver-specific
->> APIs to disable the thermal device. The relevant call stack in this case
->> is:
->>
->> device_driver_detach() ->
->>   device_release_driver_internal() ->
->>     device_unbind_cleanup() ->
->>       devres_release_all() ->
->>         devm_thermal_of_zone_release() ->
->> 	  thermal_zone_device_disable() ->
->> 	    thermal_zone_device_set_mode() ->
->> 	      struct thermal_zone_device_ops::change_mode()
->>
->> At the moment the driver-specific change_mode() API is called, the device
->> is no longer part of its PM domain. Accessing its registers without proper
->> power management leads to system aborts.
->>
->> Open a devres group before calling the driver probe, and close it
->> immediately after the driver remove function is called and before
->> dev_pm_domain_detach(). This ensures that driver-specific devm actions or
->> reset functions are executed immediately after the driver remove function
->> completes. Additionally, it prevents driver-specific runtime PM APIs from
->> being called when the device is no longer part of its power domain.
->>
->> Signed-off-by: Claudiu Beznea <claudiu.beznea.uj@bp.renesas.com>
->> ---
->>
->> Hi,
->>
->> Although Ulf gave its green light for the approaches on both IIO [1],
->> [2] and thermal subsystems [3], Jonathan considered unacceptable the
->> approaches in [1], [2] as he considered it may lead to dificult to
->> maintain code and code opened to subtle bugs (due to the potential of
->> mixing devres and non-devres calls). He pointed out a similar approach
->> that was done for the I2C bus [4], [5].
->>
->> As the discussions in [1], [2] stopped w/o a clear conclusion, this
->> patch tries to revive it by proposing a similar approach that was done
->> for the I2C bus.
->>
->> Please let me know you input.
+I think at least we need a rule (like ARCH_SUPPORTS_SLAB_RANDOM)
+for slab hardening features that prevents breaking hibernation
+in the future. Without rules, introducing new hardening features could
+break hibernation again.
+
+But I'm not yet convinced if it's worth the complexity of hacking slab
+hardening features (for security) just to make hibernation work on
+some arches, which have already disabled kASLR anyway...
+
+> For SLAB_FREELIST_RANDOM, I found that it doesn't break hibernation
+> (at least on LoongArch), the reason is:
+> 1. When I said "data overwritten" before, it doesn't mean that every
+> byte shouldn't be overwritten, only some important parts matter.
+> 2. On LoongArch, the important parts include: switch code, exception
+> handlers, idle_task's stack/thread_info.
+> 3. switch code and exception handlers are protected by automatically
+> disabling kASLR from arch-specific code, idle_task's stack/thread_info
+> is protected by delaying random seeds (this patch).
 > 
-> I'm with Jonathan here, the devres stuff is getting crazy here and you
-> have drivers mixing them and side affects happening and lots of
-> confusion.  Your change here is only going to make it even more
-> confusing, and shouldn't actually solve it for other busses (i.e. what
-> about iio devices NOT on the platform bus?)
+> Why SLAB_FREELIST_RANDOM doesn't corrupt idle_task's
+> stack/thread_info? Because the scope of randomization of
+> SLAB_FREELIST_RANDOM is significantly less than RANDOM_KMALLOC_CACHES.
+> When RANDOM_KMALLOC_CACHES enabled,
 
-You're right, other busses will still have this problem.
+You mean when SLAB_FREELIST_RANDOM enabled?
+Assuming that...
 
-> 
-> Why can't your individual driver handle this instead?
+> the CPU1's idle task stack from
+> the booting kernel may be the CPU2's idle task stack from the target
+> kernel, and CPU2's idle task stack from the booting kernel may be the
+> CPU1's idle task stack from the target kernel
 
-Initially I tried it at the driver level by using non-devres PM runtime
-enable API but wasn't considered OK by all parties.
+What happens if it's not the case?
 
-I haven't thought about having devres_open_group()/devres_close_group() in
-the driver itself but it should work.
+> but idle task's stack
+> from the booting kernel won't be other things from the target kernel
+> (and won't be overwritten by switching kernel).
 
-Thank you,
-Claudiu
+What guarantees that it won't be overwritten?
+To me it seems to be a fragile assumption that could be broken.
 
-> 
-> thanks,
-> 
-> greg k-h
+Am I missing something?
 
+-- 
+Harry
 
