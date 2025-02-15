@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-22144-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22145-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C92A9A36A5E
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 01:59:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49ABEA36A63
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 02:00:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 79082169E44
-	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 00:58:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1F9A81896DB9
+	for <lists+linux-pm@lfdr.de>; Sat, 15 Feb 2025 00:59:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B9AD5193436;
-	Sat, 15 Feb 2025 00:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ADC1B1DF963;
+	Sat, 15 Feb 2025 00:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="l9CnHvia"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GhoKX1i7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 933231925AC;
-	Sat, 15 Feb 2025 00:55:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EA1319ABDE;
+	Sat, 15 Feb 2025 00:55:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739580902; cv=none; b=FJaDtX41B8BcTzMcPRs5jJ9PQEOWXVeU/tQPG612Ft9kopXko3IxWeY3QcQwS3J7KuRu4PBVsd7R0SvguoibdKzaO9D0tUyHZe/uRxBNLpSc9EA6bwilebhemCFA7nsQpN4fjfnrY5Zlxru8ZpJSfESopOXxI+SxmtuB46uurnA=
+	t=1739580903; cv=none; b=HS1hvDBlyxpyczwa379VYo4qm5OKMHNQsfRI6sWmDIF977P3HDJXIKGXz2+DCtC1+NB7V/YyzqhbdUMbKIzIl2mh8Ujx0/ZozYgH5po8JIHPzCBmGKa0t2JeEmRUypsaAUA2vlghqsZNP3X+z+0U0fPhfkXvySHMwMAh3fSTvfQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739580902; c=relaxed/simple;
-	bh=xNVlLenkvG2vhuYPE5tLdxeYbge7k4Nuv4kwBtl5rD8=;
+	s=arc-20240116; t=1739580903; c=relaxed/simple;
+	bh=gJBb3JyO4xb+ZhP18SRMcjTy36ZQoLUIZdnq9lF0008=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Y25DIHz8xBETGJHWffZbEXAr8N3p5rHBitQbkI3GPQzneBSeOmO9CTeVD7oGunZARLIppoxHZH+U7SkyuqRvMQ/Vu/VR8st3dajnck0NIa3Zi4bOVygjJmwfu4VKU+URlMelCVhqUMLDS3WoKr378GdFmFmesnFVYDBVQuZvsYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=l9CnHvia; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 70A47C4CEE6;
-	Sat, 15 Feb 2025 00:55:01 +0000 (UTC)
+	 MIME-Version; b=BZQbQpaRthvDsjN3XnVTES+JNak4miwWdoNFbdhWdhrXM+bvo7aWep66RLB3lFuU74Hem7Bc9KTm47wz15lmaxbzez4feck3o0DU7XTVuBqOZOCLbv2ckGRm6Gt2bd2A27sedRYCBN/JZbKm9XlOLMDYrYTNCq8tk6uDBCXt9Ak=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GhoKX1i7; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 57B8AC4CEE9;
+	Sat, 15 Feb 2025 00:55:02 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739580902;
-	bh=xNVlLenkvG2vhuYPE5tLdxeYbge7k4Nuv4kwBtl5rD8=;
+	s=k20201202; t=1739580903;
+	bh=gJBb3JyO4xb+ZhP18SRMcjTy36ZQoLUIZdnq9lF0008=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=l9CnHviagF8D3AVJL73gegi7YXunng4wPOq5gGmz5Y/jWNpgQwJtclG/yBT9NqPAv
-	 OUXW/BUGv8KLqs4Xmv5pK8AfELt2PQAcMaCKBgU5vmoP7xJB1kMpE/RjVwCMv3cN6X
-	 W5lH+Fi8d1VrSPKQRFlgJgHK9EHJhoteAImf92pv4P+Ia/ed2g6bdbkPe7PEcvRw0f
-	 M5sfebFXoCQstgyNHFViwHOW5tfAWPbjRwHZXs7f6Ec8aXVfHN9FfMkO2lUPjbtd6o
-	 gWYodg8iYrjCrWtu0Bbx0eIVnx83cWz/s0TMcWqZiqXj3qTE1Uxo8AMGNd/z1x06bj
-	 ijsqm4eXXMk7w==
+	b=GhoKX1i7AugFrX1chA1NAottTknWKSNboE3e9MCu0TV4jrk+qzbGEzRLr00R3hb60
+	 hM++KpZpvO207VlYIKDnVp+VHwbsu9NZhJD+FOwZVRqQ29Xw50ywSjoqehTvecQp9c
+	 eutnSu+vfHvHnmaQN+pc0bWHuPbe+rrhoG6BoE3V5NlkKaV8fsLK+6eqVH6HrHyf0k
+	 NTr4JfNm5aT0EzYLQ/s7pJ6DypYmkAw+h9CAbR/sb8onvQNJfn3B1wm8vyuByM205u
+	 LqzAOXfjm07S1bbYA734/B/taeGu2BPDzxKuNVgs8rUWIpqFzdQGaJBUT6Sslvlflo
+	 TGaVCCM0hdcMA==
 From: Mario Limonciello <superm1@kernel.org>
 To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
 	Perry Yuan <perry.yuan@amd.com>
@@ -48,9 +48,9 @@ Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
 	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
 	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK),
 	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH 4/5] cpufreq/amd-pstate: Add support for raw EPP writes
-Date: Fri, 14 Feb 2025 18:54:47 -0600
-Message-ID: <20250215005448.1216646-5-superm1@kernel.org>
+Subject: [PATCH 5/5] cpufreq/amd-pstate-ut: Add a unit test for raw EPP
+Date: Fri, 14 Feb 2025 18:54:48 -0600
+Message-ID: <20250215005448.1216646-6-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250215005448.1216646-1-superm1@kernel.org>
 References: <20250215005448.1216646-1-superm1@kernel.org>
@@ -64,118 +64,110 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-The energy performance preference field of the CPPC request MSR
-supports values from 0 to 255, but the strings only offer 4 values.
-
-The other values are useful for tuning the performance of some
-workloads.
-
-Add support for writing the raw energy performance preference value
-to the sysfs file.  If the last value written was an integer then
-an integer will be returned.  If the last value written was a string
-then a string will be returned.
+Ensure that all supported raw EPP values work properly.
 
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- Documentation/admin-guide/pm/amd-pstate.rst | 16 +++++++++++-----
- drivers/cpufreq/amd-pstate.c                | 11 +++++++++--
- drivers/cpufreq/amd-pstate.h                |  1 +
- 3 files changed, 21 insertions(+), 7 deletions(-)
+ drivers/cpufreq/amd-pstate-ut.c | 58 +++++++++++++++++++++++++++++++++
+ 1 file changed, 58 insertions(+)
 
-diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
-index 36950fb6568c0..0e4d2e0aaeff7 100644
---- a/Documentation/admin-guide/pm/amd-pstate.rst
-+++ b/Documentation/admin-guide/pm/amd-pstate.rst
-@@ -280,16 +280,22 @@ A list of all the supported EPP preferences that could be used for
- These profiles represent different hints that are provided
- to the low-level firmware about the user's desired energy vs efficiency
- tradeoff.  ``default`` represents the epp value is set by platform
--firmware. This attribute is read-only.
-+firmware. ``custom`` designates that integer values 0-255 may be written
-+as well.  This attribute is read-only.
+diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
+index 067e9e325102e..b5bf0c37d8037 100644
+--- a/drivers/cpufreq/amd-pstate-ut.c
++++ b/drivers/cpufreq/amd-pstate-ut.c
+@@ -25,6 +25,7 @@
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
++#include <linux/mm.h>
+ #include <linux/fs.h>
+ #include <linux/cleanup.h>
  
- ``energy_performance_preference``
+@@ -32,6 +33,7 @@
  
- The current energy performance preference can be read from this attribute.
- and user can change current preference according to energy or performance needs
--Please get all support profiles list from
--``energy_performance_available_preferences`` attribute, all the profiles are
--integer values defined between 0 to 255 when EPP feature is enabled by platform
--firmware, but if the dynamic EPP feature is enabled, driver will block writes.
-+Coarse named profiles are available in the attribute
-+``energy_performance_available_preferences``.
-+Users can also write individual integer values between 0 to 255.
-+When EPP feature is enabled by platform firmware but if the dynamic EPP feature is
-+enabled, driver will ignore the written value. Lower epp values shift the bias
-+towards improved performance while a higher epp value shifts the bias towards
-+power-savings. The exact impact can change from one platform to the other.
-+If a valid integer was last written, then a number will be returned on future reads.
-+If a valid string was last written then a string will be returned on future reads.
- This attribute is read-write.
+ #include "amd-pstate.h"
  
- ``boost``
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 5d5f602ef1407..0d71eaf7366f2 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -1330,6 +1330,7 @@ ssize_t store_energy_performance_preference(struct cpufreq_policy *policy,
- 	struct amd_cpudata *cpudata = policy->driver_data;
- 	char str_preference[21];
- 	ssize_t ret;
-+	bool raw_epp = FALSE;
- 	u8 epp;
++DEFINE_FREE(free_page, void *, if (_T) free_page((unsigned long)_T))
  
- 	if (cpudata->dynamic_epp) {
-@@ -1346,6 +1347,7 @@ ssize_t store_energy_performance_preference(struct cpufreq_policy *policy,
- 	 * matches an index in the energy_perf_strings array
- 	 */
- 	ret = kstrtou8(str_preference, 0, &epp);
-+	raw_epp = !ret;
- 	if (ret) {
- 		ret = match_string(energy_perf_strings, -1, str_preference);
- 		if (ret < 0 || ret == EPP_INDEX_CUSTOM)
-@@ -1365,7 +1367,9 @@ ssize_t store_energy_performance_preference(struct cpufreq_policy *policy,
- 	if (ret)
- 		return ret;
+ struct amd_pstate_ut_struct {
+ 	const char *name;
+@@ -45,6 +47,7 @@ static int amd_pstate_ut_acpi_cpc_valid(u32 index);
+ static int amd_pstate_ut_check_enabled(u32 index);
+ static int amd_pstate_ut_check_perf(u32 index);
+ static int amd_pstate_ut_check_freq(u32 index);
++static int amd_pstate_ut_epp(u32 index);
+ static int amd_pstate_ut_check_driver(u32 index);
  
--	return ret ? ret : count;
-+	cpudata->raw_epp = raw_epp;
-+
-+	return count;
+ static struct amd_pstate_ut_struct amd_pstate_ut_cases[] = {
+@@ -52,6 +55,7 @@ static struct amd_pstate_ut_struct amd_pstate_ut_cases[] = {
+ 	{"amd_pstate_ut_check_enabled",    amd_pstate_ut_check_enabled    },
+ 	{"amd_pstate_ut_check_perf",       amd_pstate_ut_check_perf       },
+ 	{"amd_pstate_ut_check_freq",       amd_pstate_ut_check_freq       },
++	{"amd_pstate_ut_epp",              amd_pstate_ut_epp              },
+ 	{"amd_pstate_ut_check_driver",	   amd_pstate_ut_check_driver     }
+ };
+ 
+@@ -238,6 +242,60 @@ static int amd_pstate_set_mode(enum amd_pstate_mode mode)
+ 	return amd_pstate_update_status(mode_str, strlen(mode_str));
  }
- EXPORT_SYMBOL_GPL(store_energy_performance_preference);
  
-@@ -1376,6 +1380,9 @@ ssize_t show_energy_performance_preference(struct cpufreq_policy *policy, char *
- 
- 	epp = FIELD_GET(AMD_CPPC_EPP_PERF_MASK, cpudata->cppc_req_cached);
- 
-+	if (cpudata->raw_epp)
-+		return sysfs_emit(buf, "%u\n", epp);
++static int amd_pstate_ut_epp(u32 index)
++{
++	struct cpufreq_policy *policy __free(put_cpufreq_policy) = NULL;
++	void *buf __free(free_page) = NULL;
++	struct amd_cpudata *cpudata;
++	int ret, cpu = 0;
++	u16 epp;
 +
- 	switch (epp) {
- 	case AMD_CPPC_EPP_PERFORMANCE:
- 		preference = EPP_INDEX_PERFORMANCE;
-@@ -1390,7 +1397,7 @@ ssize_t show_energy_performance_preference(struct cpufreq_policy *policy, char *
- 		preference = EPP_INDEX_POWERSAVE;
- 		break;
- 	default:
--		return sysfs_emit(buf, "%u\n", epp);
-+		return -EINVAL;
- 	}
- 
- 	return sysfs_emit(buf, "%s\n", energy_perf_strings[preference]);
-diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
-index f1bbac4faf83d..490fb46f05602 100644
---- a/drivers/cpufreq/amd-pstate.h
-+++ b/drivers/cpufreq/amd-pstate.h
-@@ -106,6 +106,7 @@ struct amd_cpudata {
- 	u8	epp_default_ac;
- 	u8	epp_default_dc;
- 	bool	dynamic_epp;
-+	bool	raw_epp;
- 	struct notifier_block power_nb;
- 
- 	/* platform profile */
++	policy = cpufreq_cpu_get(cpu);
++	if (!policy)
++		return -ENODEV;
++
++	cpudata = policy->driver_data;
++
++	/* disable dynamic EPP before running test */
++	if (cpudata->dynamic_epp) {
++		pr_debug("Dynamic EPP is enabled, disabling it\n");
++		amd_pstate_clear_dynamic_epp(policy);
++	}
++
++	buf = (void *)__get_free_page(GFP_KERNEL);
++	if (!buf)
++		return -ENOMEM;
++
++	ret = amd_pstate_set_mode(AMD_PSTATE_ACTIVE);
++	if (ret)
++		return ret;
++
++	for (epp = 0; epp <= U8_MAX; epp++) {
++		u8 val;
++
++		/* write all EPP values */
++		memset(buf, 0, sizeof(buf));
++		snprintf(buf, PAGE_SIZE, "%d", epp);
++		ret = store_energy_performance_preference(policy, buf, sizeof(buf));
++		if (ret < 0)
++			return ret;
++
++		/* check if the EPP value reads back correctly for raw numbers */
++		memset(buf, 0, sizeof(buf));
++		ret = show_energy_performance_preference(policy, buf);
++		if (ret < 0)
++			return ret;
++		strreplace(buf, '\n', '\0');
++		ret = kstrtou8(buf, 0, &val);
++		if (!ret && epp != val) {
++			pr_err("Raw EPP value mismatch: %d != %d\n", epp, val);
++			return -EINVAL;
++		}
++	}
++
++	return 0;
++}
++
+ static int amd_pstate_ut_check_driver(u32 index)
+ {
+ 	enum amd_pstate_mode mode1, mode2 = AMD_PSTATE_DISABLE;
 -- 
 2.43.0
 
