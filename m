@@ -1,181 +1,119 @@
-Return-Path: <linux-pm+bounces-22169-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22170-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7BEAAA375D9
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Feb 2025 17:39:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id A43CDA3765F
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Feb 2025 18:44:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B817165C85
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Feb 2025 16:39:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CD4ED3B0A02
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Feb 2025 17:44:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB0DD19ADB0;
-	Sun, 16 Feb 2025 16:39:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E9E4619D881;
+	Sun, 16 Feb 2025 17:44:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="esO2Fg5n"
+	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="j/9JlxT4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from mout-p-103.mailbox.org (mout-p-103.mailbox.org [80.241.56.161])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0DD5A3D6F;
-	Sun, 16 Feb 2025 16:39:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B50F042070;
+	Sun, 16 Feb 2025 17:44:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.161
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739723965; cv=none; b=t11ZDaGH4ggbpA0O6xRTveQhuKxajiyJDRfGJT21Ud0rFCQCD6benBm0qS69q09DUnG2z6m0TibaCVF1SHBm73wt7t8+mqNMhcx40qV4SAlJfvhE7iiagO/JfgzW6QJAb6mbJ9h/Va+Ku2C/AKhKdvRV9Gj5VQLJGtOJw91jUpA=
+	t=1739727852; cv=none; b=sQGf98zRT+KxSyPAJfbNswC1CUHmjIcdfP0DZeb1h5LK25rFOx+xrVZwdehLdBLo3g5wqAOqNnkEl2FQMfTQP7uOP0Vm+wAs2/2Ngt5uxf9nb8NLJekmNRQZMfbHsNls5jEhUpTtLubFqhle2hxlNl5tkmzxDtPypembW2sRgw0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739723965; c=relaxed/simple;
-	bh=F7lxG+YyUpyZN5BDO1TWo52GvkiZpf4iGTTc9DJNJZo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=kQNwpk7j2Kx4J+XSKfh4oXX/Z36m9y2HzPJB6Ox6iYh9yk+YPneBS2mcrntnEYKTzTUTL7LpHBLTG2bBV/4HTQVR5YeS+oj+DS9nOpllysESUAIZ/5pW6tpEOG+kamaXHJ2uxDnHl1TgSeSuEgnyF9zK0LaslOWpgRSDvBsZYj4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=esO2Fg5n; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51GEsrNq018208;
-	Sun, 16 Feb 2025 16:39:15 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	jybwYLBxnC29e5G9/7UFhw8l7MCD8xAgH5D9/8Aq3Wc=; b=esO2Fg5nYbgHipOi
-	D36/g3dkeCDxeKMAX51sotQeJW9QXiI8pXWFUhLZKv+WLe3oHb/Ohe0sexN8Ofzd
-	GdIqDJk/NsJvD5Feg/zS27q8SEpF9XrkrUt36thEax0ou3jxSghuIHgifFdg6zgn
-	DE72sU7Uxi6zwEn8g8sbZswQg9awcjwAD63PRdb3VzPVYtWNmTV1/YarJLmHxen+
-	l1iPMb1XguwwRyMoSjc84hJO9aggJioms6LtISAUCFZ4Zc7P9AEUQZKGYdeRQ2HU
-	RInRbvH8PJiRFmDQwtcAaUC0Ox+BzE++XELearLbtozEwKw7fEV2ffs6emBWPVUN
-	c7F21Q==
-Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44tkwnaaee-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 16 Feb 2025 16:39:14 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51GGdE5r019692
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Sun, 16 Feb 2025 16:39:14 GMT
-Received: from [10.216.15.99] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Sun, 16 Feb
- 2025 08:38:54 -0800
-Message-ID: <f40f6b9d-8f31-4ce6-a912-1aa484863d5e@quicinc.com>
-Date: Sun, 16 Feb 2025 22:08:51 +0530
+	s=arc-20240116; t=1739727852; c=relaxed/simple;
+	bh=LTOjVk+4QHTyDDma3KbEPH1FY8x5w5DWJiaF31yDOKw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=jRDHxHJTO+SfRsBXPSeLc3PQGoDcylqsBrwFS38ZzZgJwizlrcVwBzte0vyauskL3bR8Bo8OcYWnr0PvmBMq6QZu1YeooOvh6CpH3GpRWFRjs2zyp/lqWO8IJ5PCg97q9Q7SODKn7gCfEix2MRifuhd7BYAQ9ttg8kdFdVPJ818=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=j/9JlxT4; arc=none smtp.client-ip=80.241.56.161
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
+Received: from smtp2.mailbox.org (smtp2.mailbox.org [IPv6:2001:67c:2050:b231:465::2])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by mout-p-103.mailbox.org (Postfix) with ESMTPS id 4YwtSd0Dcwz9sp5;
+	Sun, 16 Feb 2025 18:44:01 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
+	t=1739727841;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 in-reply-to:in-reply-to:references:references;
+	bh=LTOjVk+4QHTyDDma3KbEPH1FY8x5w5DWJiaF31yDOKw=;
+	b=j/9JlxT4IEo8QlXbMmRMOo+zggf7UGKFoUqsQ0TIh/KrGxM32QNQUWhx2IeiOCej30RQ2e
+	CT4n0x9tf8bX8S8hZs+pW69StYwip1QI9HBA56jmauFh33umaQc4197JFw10j3Vdn6UGG/
+	lg5mh2sg3Qlz5ireoieZQBDcPA7cweJ2E2ZKk/P/RATxgQouOwLYEwHmPifCemGZwGGzVX
+	awMR8T+LvB5IqWS8PH2TOOlVxATsxNBykxIPJlLM2KcVSkZGea7fEbDqGEnjEyCxHZvO69
+	oRZOQ4XZW+qBxFad7NaoZdNpEpllZJPKiIjwDw/RCfTzW4U8p5AgG/qf/vRpJw==
+Date: Sun, 16 Feb 2025 18:43:58 +0100
+From: Anthony Ruhier <aruhier@mailbox.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH RESEND] power: supply: qcom_battmgr: abs() on POWER_NOW
+ property
+Message-ID: <6w6pq2d2nlrun6cz6tq4fjzqri52n3sskrf2frj6wj4jxzzrcg@z3a5bykeixsu>
+References: <20250213-patch-qcomm-bat-uint-power-v1-1-16e7e2a77a02@mailbox.org>
+ <yfbgbdugk4xdjpemozdzcuxczx4xd5aphykuksf3lhn22dsgkf@fcfgddu6gpyt>
+ <ioiy4ixlvx5gxl3f4pqshwxz35ktrqghju2circpnd3qicgemc@oohazfsfvuag>
+ <p5tszocxa7mcazgxsnt3gnv547m523gde2hj2yekiuoimm6rsy@pzofvxngb4ul>
+ <7wbot7sxm3y5y7in5ashcn5lpx3mi55abnbfrkz2jta7nm6jep@zk6zvocd3tuz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V8 2/7] interconnect: core: Add dynamic id allocation
- support
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        "Mike
- Tipton" <quic_mdtipton@quicinc.com>,
-        Jeff Johnson
-	<quic_jjohnson@quicinc.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Sibi
- Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20250205182743.915-1-quic_rlaggysh@quicinc.com>
- <20250205182743.915-3-quic_rlaggysh@quicinc.com>
- <bwiuhfgv4jw7tlwjqffgrxvskxbpf4forz46nn5g3vihz3z5od@w25y7hdprykf>
-Content-Language: en-US
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <bwiuhfgv4jw7tlwjqffgrxvskxbpf4forz46nn5g3vihz3z5od@w25y7hdprykf>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: 3Y1V5aHKQunWBqCnAPPXtUPZVUhoxVbT
-X-Proofpoint-ORIG-GUID: 3Y1V5aHKQunWBqCnAPPXtUPZVUhoxVbT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-16_05,2025-02-13_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 phishscore=0 mlxlogscore=999
- suspectscore=0 malwarescore=0 adultscore=0 spamscore=0 lowpriorityscore=0
- mlxscore=0 priorityscore=1501 clxscore=1015 bulkscore=0 impostorscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2501170000
- definitions=main-2502160151
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <7wbot7sxm3y5y7in5ashcn5lpx3mi55abnbfrkz2jta7nm6jep@zk6zvocd3tuz>
+X-MBO-RS-ID: 093cea7cce9679a1858
+X-MBO-RS-META: a9sgno18t6wer8kquh3rbd78d1597mc4
 
+On Sat, Feb 15, 2025 at 04:08:25AM +0100, Sebastian Reichel wrote:
+>
+> There are other drivers reporting negative values as documented.
+> Most of the embedded ones do this actually and there surely are
+> (embedded) userspace programs relying on this by now. But the
+> most used driver - generic ACPI battery - does not. That's why
+> quite a few userspace tools handle it wrong without anyone
+> noticing for quite some time. Fixing it to follow the ABI would
+> obviously end up in a bunch of regression reports, so things are
+> a bit messy :(
+>
+> > I think it is a problem of the 'acpi' tool. At least 'upower -d' uses
+> > fabs internally since the initial commit in 2008.
+>
+> It's definitely sensible to fix the userspace tools. We can't change
+> the documented ABI for current_now after that many years and while
+> documentation for power_now is missing, it would be quite unexpected
+> to have it behave differently than current_now. Also userspace
+> tooling needs to handle current_now and power_now anyways. And we
+> surely can't change the behaviour for all drivers reporting signed
+> data. So let's keep qcom_battmgr as is. It follows the documented
+> ABI and hopefully helps giving this more exposure (I'm typing this
+> on a X1E laptop right now and can see your problem with waybar).
+>
+> But we should document the power_now property. It somehow fell
+> through the cracks :)
+>
+> -- Sebastian
 
+Hi Sebastian,
+Thanks a lot for the detailed answer, that makes sense for me.
+I was sending this patch more to know which direction to follow (changing the
+driver or the userspace tools), and you answered it perfectly.
 
-On 2/10/2025 4:20 PM, Dmitry Baryshkov wrote:
-> On Wed, Feb 05, 2025 at 06:27:38PM +0000, Raviteja Laggyshetty wrote:
->> The current interconnect framework relies on static IDs for node
->> creation and registration, which limits topologies with multiple
->> instances of the same interconnect provider. To address this, update
->> the interconnect framework APIs icc_node_create() and icc_link_create()
->> APIs to dynamically allocate IDs for interconnect nodes during creation.
->> This change removes the dependency on static IDs, allowing multiple
->> instances of the same hardware, such as EPSS L3.
->>
->> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->> ---
->>  drivers/interconnect/core.c | 13 ++++++++++++-
->>  1 file changed, 12 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
->> index 9d5404a07e8a..40700246f1b6 100644
->> --- a/drivers/interconnect/core.c
->> +++ b/drivers/interconnect/core.c
->> @@ -20,6 +20,8 @@
->>  
->>  #include "internal.h"
->>  
->> +#define ICC_DYN_ID_START 10000
->> +
->>  #define CREATE_TRACE_POINTS
->>  #include "trace.h"
->>  
->> @@ -826,7 +828,12 @@ static struct icc_node *icc_node_create_nolock(int id)
->>  	if (!node)
->>  		return ERR_PTR(-ENOMEM);
->>  
->> -	id = idr_alloc(&icc_idr, node, id, id + 1, GFP_KERNEL);
->> +	/* negative id indicates dynamic id allocation */
->> +	if (id < 0)
-> 
-> Nit: I think it might be better to add an explicit define for that and
-> to decline all other negatdive values. Please leave us some room for
-> future expansion.
-> 
-Do you mean to replace the value of ALLOC_DYN_ID from -1 to some
-positive value like 100000 and to use it as initial ID for the nodes
-requiring the dynamic allocation ? This explicit define can be used as
-check for dynamic allocation and also as argument to idr_alloc min value
-argument. Is my interpretation of the comment correct ?
+I started fixing the different desktop tools I use, starting with Waybar:
+https://github.com/Alexays/Waybar/pull/3942
 
->> +		id = idr_alloc(&icc_idr, node, ICC_DYN_ID_START, 0, GFP_KERNEL);
->> +	else
->> +		id = idr_alloc(&icc_idr, node, id, id + 1, GFP_KERNEL);
->> +
->>  	if (id < 0) {
->>  		WARN(1, "%s: couldn't get idr\n", __func__);
->>  		kfree(node);
->> @@ -962,6 +969,10 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
->>  	node->avg_bw = node->init_avg;
->>  	node->peak_bw = node->init_peak;
->>  
->> +	if (node->id >= ICC_DYN_ID_START)
->> +		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
->> +					    node->name, dev_name(provider->dev));
->> +
->>  	if (node->avg_bw || node->peak_bw) {
->>  		if (provider->pre_aggregate)
->>  			provider->pre_aggregate(node);
->> -- 
->> 2.39.2
->>
-> 
+For powertop, the fix seems straightforward. For acpiclient, due to no activity
+in almost 10 years, we'll see if it goes through.
 
+--
+Thanks,
+Anthony Ruhier
 
