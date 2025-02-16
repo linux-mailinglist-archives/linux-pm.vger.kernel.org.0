@@ -1,254 +1,107 @@
-Return-Path: <linux-pm+bounces-22163-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22165-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCD95A37207
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Feb 2025 06:08:51 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 64E1FA373C1
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Feb 2025 11:17:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3825116DBC8
-	for <lists+linux-pm@lfdr.de>; Sun, 16 Feb 2025 05:08:50 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 26B91188953B
+	for <lists+linux-pm@lfdr.de>; Sun, 16 Feb 2025 10:17:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30E87481CD;
-	Sun, 16 Feb 2025 05:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 674EB15DBB3;
+	Sun, 16 Feb 2025 10:17:02 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="aRQ5cIQQ"
+	dkim=pass (2048-bit key) header.d=online.de header.i=captainfineweather@online.de header.b="hveWaBK2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.kundenserver.de (mout.kundenserver.de [212.227.126.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 05D9C3209;
-	Sun, 16 Feb 2025 05:08:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D875B1487C8
+	for <linux-pm@vger.kernel.org>; Sun, 16 Feb 2025 10:16:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.126.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739682526; cv=none; b=Gmm0GI4flmz0APC1qoixRak5u6HFcrm/2/v2Pk65ygFt4w8Sxae9h8E/VTS/wGvlx/G5uiN2IT5Ur4VpZv7fhGzqND0Yo4J+Isa3xVR35ItFWq8Ey7kg3w5W6tcYW3aW83jyva5d9KZ0ts+KQ6F5xMhdCE32p9uj41xAqDvFscQ=
+	t=1739701022; cv=none; b=ip62C4M6P2JGf/M3iN3LQc8+Trky4VSNzlg27VnMj6O9trllMMXXQDx2/5ymGpEXAP/cZ5SBkw9xm/uxoB82a3MrN7WOw3bXwr+9YiMOoYZ+4bwLlIR04nsSvuqeQ4YP3hybO5S2zd39/MOwWW7Z06N5aHF3BW1f4CfpDc4a50Q=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739682526; c=relaxed/simple;
-	bh=TjMHj92f3aH5T5tcN0AWk+5u5VvS/UjV5tTtkNWW/KU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TniLs/q1SQmV0ycwfZqBQNiMLpN635FHARVEzSa3y/IxRToNAlVYooOcOIMEuHeThXQuKIc/Ozv8t0CXCrnHISnQ9YhIrGNDuoIwk2LoIxlqwSHibGStOXNX/5drgNz46UcGEqlrlHI/7FppUrAu+YihXXZxKdTkql3kMkUpUmE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=aRQ5cIQQ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6A528C4CEED;
-	Sun, 16 Feb 2025 05:08:43 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739682523;
-	bh=TjMHj92f3aH5T5tcN0AWk+5u5VvS/UjV5tTtkNWW/KU=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=aRQ5cIQQbUcCNuPYP8w+LHwJxNAcAx9aARni4FLB8wYgy+W2pPpi0R5rXEa/Wwrs1
-	 xey0wH7u3eVEM+uliFQHM8gKlTKOFJ8beRMPfZvPDqwAjZUJ0vCZqL+Z7kl2t7hxr1
-	 tyY0glmZin0Reir7ibYDR+BOEHTrwBy+5FKrxa/5htyWn7oZimqf5/vkRWLgImYUgw
-	 wSjsBat66nelICFL2ri3gvdehwDaBZAQle4wYiUQDKyLROc0zqkLF5TJ9OU1LStqNi
-	 cK8jWQI+VVWGMr/LtnVQj3o+RmVUuecAky/55POv04DYBS1mbu4Icdlbjj2mt/mlMx
-	 iPsGXFwnBO4IQ==
-Received: by mail-ej1-f51.google.com with SMTP id a640c23a62f3a-ab744d5e567so626425666b.1;
-        Sat, 15 Feb 2025 21:08:43 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVaNNj8ou6YPg2YhZsvC7pwIAufQpb0k9+9im71eSpWxljV18HFwmNKuIirfBZuhR8p4k2qi3v0@vger.kernel.org, AJvYcCXXQGvc4CyMIso/TTVhFp1RycssbOLJ5hB93feo02Kc51hqZwR/tU+ykLSejq5mnQ/Ok+ZruMeTyw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzrqcSgex599tMkw6Bv1wviGMF4aX9ZMOxIxRIlOtL1RNMwygeW
-	0qoSK6f6mrRMV4QWwjgpVeDU9LJrM3zLbYjwOt1cNVjZTHkM96x3q31kvtJTXK97xisRSRR2H4L
-	OPykUznof0gqsYyjTqNfyPdQhF1I=
-X-Google-Smtp-Source: AGHT+IG0uKd25dY1QefQSYqIH7OdcvhKYoVhskTkARo2TPH/qMDXTbbtCOZRrar1d9hRbIVAtnHQspupRqZZZjzgpwc=
-X-Received: by 2002:a17:906:c14c:b0:aba:620a:acf7 with SMTP id
- a640c23a62f3a-abb708aaf52mr569004266b.10.1739682521939; Sat, 15 Feb 2025
- 21:08:41 -0800 (PST)
+	s=arc-20240116; t=1739701022; c=relaxed/simple;
+	bh=lDyrgP1tKRrqkKBwB2pqMCM1jdU2kKO0LrYsVtLjBFE=;
+	h=Message-ID:Subject:From:To:Date:Content-Type:MIME-Version; b=pKFi8AyNIqf4h39zckTh7EOFysxaPajnfA67UqSEmwzjf1MysY2jkG/iEOr0ZnhjgEVI5DAsGXjDwaIS2LlWDcfg+11mznVfwHpMLVkeDy4/iWNiJg6DtX/4B9MlQMb7o9WbVv4djcgL3WXC4vK+3PscRDL7DleTdZ1ae6TJiGM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=online.de; spf=pass smtp.mailfrom=online.de; dkim=pass (2048-bit key) header.d=online.de header.i=captainfineweather@online.de header.b=hveWaBK2; arc=none smtp.client-ip=212.227.126.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=online.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=online.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=online.de;
+	s=s42582890; t=1739701018; x=1740305818;
+	i=captainfineweather@online.de;
+	bh=lDyrgP1tKRrqkKBwB2pqMCM1jdU2kKO0LrYsVtLjBFE=;
+	h=X-UI-Sender-Class:Message-ID:Subject:From:Reply-To:To:Date:
+	 Content-Type:MIME-Version:Content-Transfer-Encoding:cc:
+	 content-transfer-encoding:content-type:date:from:message-id:
+	 mime-version:reply-to:subject:to;
+	b=hveWaBK2JJbUBBM/nLOogYBwqpGHqBv+u7KOBsn8YBpQgtxsG/WejxFbAiVUy7JA
+	 OlgseC0NjNzt1RwXgKpS7OR/u/OZeBwYNPul/M3X0uJv1Vdtu7z0mn9zmNrI/Z4ZY
+	 JGq5IuQCwZ/kOzjQY4lrSW8mTHByqrD7+iwWiWcAe4bM7wN+motNSyfCMcJ7gmZWT
+	 4FtnAe6ILCzifTSKnUcbJMOWt3AEMctQ8fNc7JeAFDdke9h5OTFZXL+/D1rzr2uWw
+	 /CqpUaxtxXa1RCghs9nUJsVQnz+4wksjyzjY+NOUAfh/RJAXkAjftiqT9gszw6kOT
+	 C3DIryvqJ/jxmw0TvQ==
+X-UI-Sender-Class: 6003b46c-3fee-4677-9b8b-2b628d989298
+Received: from Captain.fritz.box ([79.235.164.134]) by
+ mrelayeu.kundenserver.de (mreue009 [212.227.15.167]) with ESMTPSA (Nemesis)
+ id 1MSKq0-1tudg12ObY-00QTz6 for <linux-pm@vger.kernel.org>; Sun, 16 Feb 2025
+ 10:34:41 +0100
+Message-ID: <e6f7d4b028513b1b1d82b859c4747f4f82d91f40.camel@online.de>
+Subject: SOLVED: Trouble with cpufreq-set
+From: Frank Fricke <captainfineweather@online.de>
+Reply-To: captainfineweather@online.de
+To: linux-pm@vger.kernel.org
+Date: Sun, 16 Feb 2025 10:34:33 +0100
+Content-Type: text/plain; charset="UTF-8"
+User-Agent: Evolution 3.38.3-1+deb11u2 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250212141648.599661-1-chenhuacai@loongson.cn>
- <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
- <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
- <Z68N4lTIIwudzcLY@MacBook-Air-5.local> <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
- <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local> <CAAhV-H4BSWC+K=qQfmHfdXuDqUgGcBLZ7Ftb6VEKs1QYVd6wxg@mail.gmail.com>
- <Z7CfLlEw9vtbFJwI@MacBook-Air-5.local>
-In-Reply-To: <Z7CfLlEw9vtbFJwI@MacBook-Air-5.local>
-From: Huacai Chen <chenhuacai@kernel.org>
-Date: Sun, 16 Feb 2025 13:08:30 +0800
-X-Gmail-Original-Message-ID: <CAAhV-H40eTo+tUx8b8=j4_9sfq7i9wo-LSO9pHKmRU7=wDDdbw@mail.gmail.com>
-X-Gm-Features: AWEUYZk9z8Ky-eeelh-PyAQijbE-EnoVcqWYGSYclbdmVVJgV2PTlUciZ2MX3Q4
-Message-ID: <CAAhV-H40eTo+tUx8b8=j4_9sfq7i9wo-LSO9pHKmRU7=wDDdbw@mail.gmail.com>
-Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
- Initialise random_kmalloc_seed after initcalls)
-To: "Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>
-Cc: Huacai Chen <chenhuacai@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, 
-	linux-mm@kvack.org, "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@kernel.org>, 
-	linux-pm@vger.kernel.org, GONG Ruiqi <gongruiqi@huaweicloud.com>, 
-	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org, 
-	Yuli Wang <wangyuli@uniontech.com>, Vlastimil Babka <vbabka@suse.cz>, 
-	Christoph Lameter <cl@linux.com>, David Rientjes <rientjes@google.com>, 
-	Roman Gushchin <roman.gushchin@linux.dev>, Pekka Enberg <penberg@kernel.org>, 
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>, Kees Cook <kees@kernel.org>, 
-	GONG Ruiqi <gongruiqi1@huawei.com>
-Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:R6RdVbmgmYpTGhLFnVBfzbgcdeD7qQ87XwOD3Q0bKhphUqtkzbK
+ nALPC3LET3xCIyTMGTBNdyKHvFPQtsPd/Ugetb6cR1m+pu41o3pIlM/bXzVsRXOVpLDvUih
+ V94kkrrZbriIRTJkCii8u/JNkjaukWmWLIuTZzH+YFMAObFRq/uWhfqP3Xt2Im7HUNHi8Ma
+ t8PUPl+KSWUzcfgSp+xvg==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:RS/nhVj+3T8=;EpzfxmtEfCXox/QusQiC/id7lNk
+ +F12J9Dhr7VwFQ9dStz24MeW/vNQlbkcYLOndz8p5GoSzDGXiyZjy3hEm5gjEaMFxiriKW3co
+ PkL5Im9VPdwdTnJjZPWzz8ZqARazNg4/1aVIb9xjMWM2AqZ+L6l19w1UgkxzfBPDs6yvBBLlr
+ vspQ2lTOq0CC8tGEWy+Ystr/8tib/rCsLq7s+HNM/dmVlB1Vlni16syFmC8FN/H+eVuLUV/aZ
+ Lcu24EfqqqfHiGEwfpKtTU5ASso36WuRxu6lBr/jgxIMrjh5yir8MT/jfnDRESV0Er/tveCwB
+ zjDcDS/Q8jmuYS09QROx/Zl4PKWLL+YYGgcnQIkR2Of9G62OvFg9KKfHa9Dtk4sEV87+DT3hc
+ 6KD6ihrEXB7NSPHNp6hNHdpmE/I+h/AVMYIqwdJJdjg3LiodZiSkYXL3CzvlNkxaiP4DUQ5pI
+ 3D3w4lTYtCRgmM60hVhX+IRVJ7qGp21sV/BAo4a4lJrTit4d3HMDTGeB7ZnFbUppvNnBSKdSO
+ yWqETxy8gfePwjFqTu0CDc+VHuxzqyopkJT5dTFKjZiJBmooCSFlgMUaezthPGvfkYTKT5QKA
+ LQqzxb+zyR1GnzHotMgGFcVS9/po3yoYRn0sFNYR8lDqOeBv6ibJ/wb6u3ySG9LiHP/DgOZsq
+ L6g6VBP5dYpLdJTl5UY2C6G/XxGz0Mjk0ALxyp5faCYuB5bE2tHwylkKz9i6H0x5qoGHWAfK5
+ Y+CvohVPiWsUgELgvfEgyrFV5FJVDY7cal3fpT9Hl53pJouVMmP5sackI2015WFzoM1gXvNOK
+ 2IT21p45GIF4n1JU4mKuFAd8iIhrTSp3cL8RpYnXmZyde71yCBJF7LzuadRZhPQu/nMAKpiEG
+ c/r/U2cl5bjFuPQFUBXGnLcDwv9Qdnole8KAsXFv0VziOtfSCvbutcT199SsD0ybO0X3bupCO
+ a/UdWZ0+Ar9hYN/87/so6APEZ/mOKlpou/d9Q2pfrIgPD+IyLJerbIgSrqx5W6wKIuayFFmJW
+ W1PUtpJI3ZXO2AKuZtnNyNc1mWcaHEbKgN6NN3LsK0SXz0aUC2UfmF0ZrIElSTV4A3eapgx4p
+ 7unxTtbPKSXHfGaiqvR5Txfl4EUhcrC+6gwHd8hACzBUJ/84BsMNrq7inKfbGLp9rBRWFn7uj
+ Gh+gv5WHNlEvrxYC3ADNkLZq8eIl47nQw+E376aS0A6e6o77iDBTYxs1WqBjIvzQEXloDhPEI
+ AWjR11BTE6UcTuZYOqeqXZ4DMvE+tATdALeBVGAGm7spWzYjYeEdd8WHGxOGWws/QXkEncYYQ
+ c2Bsdi0fqT7HSrI76fY80bhf2jZCAKePKds/zHKtaZBRNQqCx6Pr9p9HNwOZWWCkXRK
 
-On Sat, Feb 15, 2025 at 10:05=E2=80=AFPM Harry (Hyeonggon) Yoo
-<42.hyeyoo@gmail.com> wrote:
->
-> On Sat, Feb 15, 2025 at 05:53:29PM +0800, Huacai Chen wrote:
-> > On Fri, Feb 14, 2025 at 8:45=E2=80=AFPM Harry (Hyeonggon) Yoo
-> > <42.hyeyoo@gmail.com> wrote:
-> > >
-> > > On Fri, Feb 14, 2025 at 06:02:52PM +0800, Huacai Chen wrote:
-> > > > On Fri, Feb 14, 2025 at 5:33=E2=80=AFPM Harry (Hyeonggon) Yoo
-> > > > <42.hyeyoo@gmail.com> wrote:
-> > > > >
-> > > > > On Thu, Feb 13, 2025 at 11:20:22AM +0800, Huacai Chen wrote:
-> > > > > > Hi, Harry,
-> > > > > >
-> > > > > > On Wed, Feb 12, 2025 at 11:39=E2=80=AFPM Harry (Hyeonggon) Yoo
-> > > > > > <42.hyeyoo@gmail.com> wrote:
-> > > > > > > On Wed, Feb 12, 2025 at 11:17=E2=80=AFPM Huacai Chen <chenhua=
-cai@loongson.cn> wrote:
-> > > > > > > >
-> > > > > > > > Hibernation assumes the memory layout after resume be the s=
-ame as that
-> > > > > > > > before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this =
-assumption.
-> > > > > > >
-> > > > > > > Could you please elaborate what do you mean by
-> > > > > > > hibernation assumes 'the memory layout' after resume be the s=
-ame as that
-> > > > > > > before sleep?
-> > > > > > >
-> > > > > > > I don't understand how updating random_kmalloc_seed breaks re=
-suming from
-> > > > > > > hibernation. Changing random_kmalloc_seed affects which kmall=
-oc caches
-> > > > > > > newly allocated objects are from, but it should not affect th=
-e objects that are
-> > > > > > > already allocated (before hibernation).
-> > > > > >
-> > > > > > When resuming, the booting kernel should switch to the target k=
-ernel,
-> > > > > > if the address of switch code (from the booting kernel) is the
-> > > > > > effective data of the target kernel, then the switch code may b=
-e
-> > > > > > overwritten.
-> > > > >
-> > > > > Hmm... I'm still missing some pieces.
-> > > > > How is the kernel binary overwritten when slab allocations are ra=
-ndomized?
-> > > > >
-> > > > > Also, I'm not sure if it's even safe to assume that the memory la=
-yout is the
-> > > > > same across boots. But I'm not an expert on swsusp anyway...
-> > > > >
-> > > > > It'd be really helpful for linux-pm folks to clarify 1) what are =
-the
-> > > > > (architecture-independent) assumptions are for swsusp to work, an=
-d
-> > > > > 2) how architectures dealt with other randomization features like=
- kASLR...
-> > > >
-> > >
-> > > [+Cc few more people that worked on slab hardening]
-> > >
-> > > > I'm sorry to confuse you. Binary overwriting is indeed caused by
-> > > > kASLR, so at least on LoongArch we should disable kASLR for
-> > > > hibernation.
-> > >
-> > > Understood.
-> > >
-> > > > Random kmalloc is another story, on LoongArch it breaks smpboot whe=
-n
-> > > > resuming, the details are:
-> > > > 1, LoongArch uses kmalloc() family to allocate idle_task's
-> > > > stack/thread_info and other data structures.
-> > > > 2, If random kmalloc is enabled, idle_task's stack in the booting
-> > > > kernel may be other things in the target kernel.
-> > >
-> > > Slab hardening features try so hard to prevent such predictability.
-> > > For example, SLAB_FREELIST_RANDOM could also randomize the address
-> > > kmalloc objects are allocated at.
-> > >
-> > > Rather than hacking CONFIG_RANDOM_KMALLOC_CACHES like this, we could
-> > > have a single option to disable slab hardening features that makes
-> > > the address unpredictable.
-> > >
-> > > It'd be nice to have something like ARCH_SUPPORTS_SLAB_RANDOM which
-> > > some hardening features depend on. And then let some arches condition=
-ally
-> > > not select ARCH_SUPPORTS_SLAB_RANDOM if hibernation's enabled
-> > > (at cost of less hardening)?
-> >
-> > This is not good, my patch doesn't disable RANDOM for hibernation, it
-> > just delays the initialization. When the system is running, all
-> > randomization is still usable.
->
-> I think at least we need a rule (like ARCH_SUPPORTS_SLAB_RANDOM)
-> for slab hardening features that prevents breaking hibernation
-> in the future. Without rules, introducing new hardening features could
-> break hibernation again.
-I don't think so, even if on LoongArch, hibernation and various RANDOM
-infra can co-exist (need some adjustment). Even if hibernation cannot
-be used together with kASLR, we don't disable it at build time but at
-run time. This means we can choose hibernation or kASLR with a single
-kernel image.
 
->
-> But I'm not yet convinced if it's worth the complexity of hacking slab
-> hardening features (for security) just to make hibernation work on
-> some arches, which have already disabled kASLR anyway...
-I don't think this patch is an ugly hack, it is a proper adjustment.
-Random kmalloc can still work with hibernation, delaying the seed
-initialization only makes that random kmalloc doesn't work (fallback
-to predictable kmalloc) for a very short time during the boot phase.
-And again, kASLR is disable at run time rather than build time.
+Good Morning!
 
->
-> > For SLAB_FREELIST_RANDOM, I found that it doesn't break hibernation
-> > (at least on LoongArch), the reason is:
-> > 1. When I said "data overwritten" before, it doesn't mean that every
-> > byte shouldn't be overwritten, only some important parts matter.
-> > 2. On LoongArch, the important parts include: switch code, exception
-> > handlers, idle_task's stack/thread_info.
-> > 3. switch code and exception handlers are protected by automatically
-> > disabling kASLR from arch-specific code, idle_task's stack/thread_info
-> > is protected by delaying random seeds (this patch).
-> >
-> > Why SLAB_FREELIST_RANDOM doesn't corrupt idle_task's
-> > stack/thread_info? Because the scope of randomization of
-> > SLAB_FREELIST_RANDOM is significantly less than RANDOM_KMALLOC_CACHES.
-> > When RANDOM_KMALLOC_CACHES enabled,
->
-> You mean when SLAB_FREELIST_RANDOM enabled?
-> Assuming that...
-Yes.
+Please regard my request to help me with setting the "Performance"
+governor for ALL CPUs using cpufreq-set. I have found what I was
+looking for by asking the search engine the right question.
 
->
-> > the CPU1's idle task stack from
-> > the booting kernel may be the CPU2's idle task stack from the target
-> > kernel, and CPU2's idle task stack from the booting kernel may be the
-> > CPU1's idle task stack from the target kernel
->
-> What happens if it's not the case?
-SLAB means "objects with the same type", right? So it is probably the
-case. Yes, there is a very very low possibility that not the case,
-but...
+Again, have a nice day and All The Best!
 
-In theory x86_64 also has a low possibility that the idle task's stack
-or other metadata be overwritten, then should we also disable random
-kmalloc for x86_64?
+Frank Fricke
 
-On the other hand, if we really need to handle this theoretic
-possibility about SLAB_FREELIST_RANDOM now, we can simply move
-init_freelist_randomization() after all initcalls, too.
 
-Huacai
+Composed with Evolution mailclient on Debian GNU/Linux
 
->
-> > but idle task's stack
-> > from the booting kernel won't be other things from the target kernel
-> > (and won't be overwritten by switching kernel).
->
-> What guarantees that it won't be overwritten?
-> To me it seems to be a fragile assumption that could be broken.
->
-> Am I missing something?
->
-> --
-> Harry
 
