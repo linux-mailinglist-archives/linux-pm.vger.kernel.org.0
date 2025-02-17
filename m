@@ -1,48 +1,40 @@
-Return-Path: <linux-pm+bounces-22222-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22223-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BCFA5A38A52
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 18:07:40 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id BDFBAA38A5E
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 18:11:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 477F81897952
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 17:05:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AA9A71894BF7
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 17:10:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B25CC227B92;
-	Mon, 17 Feb 2025 17:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CXOJdCKY"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A6AB42288DA;
+	Mon, 17 Feb 2025 17:10:41 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B11C227584;
-	Mon, 17 Feb 2025 17:04:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8B7E321A421;
+	Mon, 17 Feb 2025 17:10:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739811859; cv=none; b=iPPMxVYLOi93ahPMUx42Z+P6qY+p/AvOq6nUUbSUvZzJgvNjSX38B7r7m2+SgCHjWHj6+qK+xciXdKhOURaZr+lTlw0gF6/KGjdFJHt5lpG+b8KVt0p6mCutPUgyE5K29eDsZfqri8u9EQozioRKvwyx37fV1BubepTQAmM60Pc=
+	t=1739812241; cv=none; b=esmCWSnU4syrhf5bpNCFNgTFtZG0fi4v4UMcX5ZauC1nIjepV2iJGUGyxqpi/PD+M9NtlPFR1x48YPaHcrlIFUfZCeUSaBZ32hvo9lYiP7G00F8puOO8thP40BP19hqUfdie2el1TFDftteBf3x5vl8qoFmzM24DsWjgt/WxEgc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739811859; c=relaxed/simple;
-	bh=ZmSc8mMIKJjr06qBSyOu8Bv+q9wbNq8MGVbD05+1lPY=;
+	s=arc-20240116; t=1739812241; c=relaxed/simple;
+	bh=0+01KA7K2Nk/glEH3Wbcih7aJcSpkuWTCeB52iqLzPo=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=lkEcuWnBAb9zg8UWmiS/hxls8DsP2+vowkW/es5HXtqVr6GsUNlqSjsD1gUqyarIy9cq9RAJ1FqWTNZ86eCAztbUSPDawC/j+MyM4OYqrVsPMFTYARsdXfHdE9PnNUqFLxqNROaCrEI76Hz3WA4bbWVH1UJdT1LacRmm+x3ufbA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CXOJdCKY; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1717C4CED1;
-	Mon, 17 Feb 2025 17:04:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739811859;
-	bh=ZmSc8mMIKJjr06qBSyOu8Bv+q9wbNq8MGVbD05+1lPY=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=CXOJdCKYO7gofAlxxZfu5jCtvQLV9FxxyHE/Rm/jOckfdHM3SFqi2gjbkuiXrLu4t
-	 9oYphmjSNeURidd9NOvupQEwIYnEMUzzDBiaAbd919xQuNGFnIziiTNrjWFzv9jip3
-	 cu2N4m7TWYtOvqsBu3ZjF27if1M8/lX47DaAswJa70wsmNimEB+yixKmJ+Iuy3Fc35
-	 aT0NMHstZlonF7kPggT/CU3/UAsV02PYyCzbrgyxXKJYpyJ87WvlXk6qCPBDoVup21
-	 jw8WCSArzrFwV6YzhCeZBJDxEu6GGefEObi64RzmZGsXwbsHq+U/vtGhWWYVp6vBuD
-	 n972U7crVhqjw==
-Message-ID: <92da3765-def8-4164-b667-8caaba01706c@kernel.org>
-Date: Mon, 17 Feb 2025 11:04:17 -0600
+	 In-Reply-To:Content-Type; b=f+h3oBOyNVD+PounkwIdqqRiKBRdidcgrAv1DQjL3/9LbadGGNHGs+TkiYONrNlQi4IaOwQuvMArniczoOoeKg+xTqlxxOovonzecRvOYt5UlbzhhnhRnykBwwjn3Sc0joMrWAWSD64Do5y2Aw97cVX2Qxq8cF6ntdCnrt5sP8k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 820E0152B;
+	Mon, 17 Feb 2025 09:10:57 -0800 (PST)
+Received: from [10.1.27.38] (e122027.cambridge.arm.com [10.1.27.38])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id A530C3F5A1;
+	Mon, 17 Feb 2025 09:10:34 -0800 (PST)
+Message-ID: <321804ef-f852-47cf-afd7-723666ec8f62@arm.com>
+Date: Mon, 17 Feb 2025 17:10:32 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,40 +42,73 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 09/17] cpufreq/amd-pstate-ut: Continue on missing
- policies
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Cc: Perry Yuan <perry.yuan@amd.com>,
- Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
- "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250215005244.1212285-1-superm1@kernel.org>
- <20250215005244.1212285-10-superm1@kernel.org>
- <Z7MfqEB48RqD7tuZ@BLRRASHENOY1.amd.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <Z7MfqEB48RqD7tuZ@BLRRASHENOY1.amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Subject: Re: [PATCH v7 4/7] pmdomain: rockchip: Add smc call to inform
+ firmware
+To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Shawn Lin <shawn.lin@rock-chips.com>, Rob Herring <robh+dt@kernel.org>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>, YiFeng Zhao <zyf@rock-chips.com>,
+ Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+ <1738736156-119203-5-git-send-email-shawn.lin@rock-chips.com>
+ <d543a0a7-8e14-483a-bc2b-783dc3aa33e2@arm.com> <2579724.BzM5BlMlMQ@diego>
+From: Steven Price <steven.price@arm.com>
+Content-Language: en-GB
+In-Reply-To: <2579724.BzM5BlMlMQ@diego>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 2/17/2025 05:38, Gautham R. Shenoy wrote:
-> On Fri, Feb 14, 2025 at 06:52:36PM -0600, Mario Limonciello wrote:
->> From: Mario Limonciello <mario.limonciello@amd.com>
+On 17/02/2025 15:16, Heiko Stübner wrote:
+> Hi Steven,
+> 
+> Am Montag, 17. Februar 2025, 15:47:21 MEZ schrieb Steven Price:
+>> On 05/02/2025 06:15, Shawn Lin wrote:
+>>> Inform firmware to keep the power domain on or off.
+>>>
+>>> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+>>> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+>>> ---
 >>
->> If a CPU is missing a policy then the unit test is skipped for the rest
->> of the CPUs on the system.
->>
->> Instead just skip the rest of that test and continue to test the rest
->> of them.
+>> This patch is causing my Firefly RK3288 to fail to boot, it hangs 
+>> shortly after reaching user space, but the bootup messages include the 
+>> suspicious line "Bad mode in prefetch abort handler detected".
+>> I suspect the firmware on this board doesn't support this new SMC 
+>> correctly. Reverting this patch on top of linux-next gets everything 
+>> working again.
 > 
-> Along with this change, does it make sense to only loop over the
-> online CPUs instead of possible CPUs ?
-> 
-> 
+> Is your board actually running some trusted firmware?
 
-Sure thing.  Will change this patch for v3.
+Not as far as I know.
 
-Thanks!
+> Stock rk3288 never had tf-a / psci [0], I did work on that for a while,
+> but don't think that ever took off.
+> 
+> I'm wondering who the smcc call is calling, but don't know about
+> about smcc stuff.
+
+Good question - it's quite possible things are blowing up just because
+there's nothing there to handle the SMC. My DTB is as upstream:
+
+        cpus {
+                #address-cells = <0x01>;
+                #size-cells = <0x00>;
+                enable-method = "rockchip,rk3066-smp";
+                rockchip,pmu = <0x06>;
+
+I haven't investigated why this code is attempting to call an SMC on
+this board.
+
+Steve
+
+> [0] https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/arch/arm/boot/dts/rockchip/rk3288.dtsi#n63
+> 
+> 
 
