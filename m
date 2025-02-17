@@ -1,195 +1,114 @@
-Return-Path: <linux-pm+bounces-22202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id C64F3A3827B
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 12:57:31 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4E6AA382D3
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 13:20:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 69F421687E3
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 11:57:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA6523AC00D
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 12:20:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C44D21A436;
-	Mon, 17 Feb 2025 11:57:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C38521A451;
+	Mon, 17 Feb 2025 12:20:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cfv+iQDr"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b="djEOSibu"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1E95721A421;
-	Mon, 17 Feb 2025 11:57:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739793440; cv=none; b=QKOd2/1ZQfKD4WFEcIgBMrYhvDzQCJzi8Gh7jdbmZPgfZ39Qk7ckZVO26ylfuqR+arrFOxj/DbgndQnacBfTSMiWFtMbi9fIb3n8YGtgSrI10T0LHBvIiiCt5Xh+MxMwZZaDedlFKscS0Xs7p1YSFzi9oXmlx2biT1aPqK6Sbg4=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739793440; c=relaxed/simple;
-	bh=Y/TN2bh9LSXg3FW05NB+yXIAvd1FTqOs+ZHW/w1bA90=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ldE920u7rUvtBn74wARon0x7osZdJW8ypqENRvJz9n8rJIbzQuBcLZQZiU32bcSOMXJWo5zA9w7HvuH69H4f3ck7NHrkFqYYtwmVT/cLZOU2uZr4psI101hG5lqNN0Pk5ip6j0RWTqsxAgFbUiSZrNasftkh/981yGItzSrHUkA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cfv+iQDr; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9842FC4CEEE;
-	Mon, 17 Feb 2025 11:57:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739793439;
-	bh=Y/TN2bh9LSXg3FW05NB+yXIAvd1FTqOs+ZHW/w1bA90=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=cfv+iQDrdlvQhTaqmTSjjFAW0FI5sUTOl67HXFXxgts+jSAGVIuTfp5jpzwcsBtZ6
-	 GJuA92555UBfHT+pKctv0gc9wkFh4gzmvZfuOkS5fwDHJDqeEcKzVUliWqFC6WW6m+
-	 00aKxI2H65TKhey8O+fp0FK4qH7FvSOD5Am80Wh6yg81CPerUtNIRwpa6foYMyh3Ff
-	 v7EkH2Xx91D0lrJ9i6ZIXFH/gS9tPGpr7Itq9FPswe8EL4262ExHLItgWYKDwfaUQQ
-	 t40pWxGJcGDIgJIEbPIBfyj06/E8Jw/MHG9KLdxFrSe7dLaMJeQBz+Qfv19nbNKJtL
-	 /eKinNhoEyzdw==
-Received: by mail-oi1-f170.google.com with SMTP id 5614622812f47-3f3deb037cfso1750335b6e.3;
-        Mon, 17 Feb 2025 03:57:19 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVgmMmH2jLLpI2ELQ5HJfsTV2OYXw99c/SlPOULVuntUA8ixEbO59OaMFMgGgPwVTGbrUQ3A3LyMo6cHkeQo5wYPcV5@vger.kernel.org, AJvYcCWgYbIFZN0YBOLY3k9tNsFIqG+k7H1R/0CySa3iLw2rCrPim0MFzaD90hzJv4QDaUl+L1qoOY+hmw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjxOUn/UAvFkKu955hHWfA/HeEiBLtBQh8NLe4yBy4WotO6sPP
-	rXwVHv3K6EwkaAmnznsdeiD8hJLywSMKDnB4HR/xi+uk0K0XhRfYgOGyo1A7GqCcRXPfQGmPqY7
-	2IEBSZdXkefF4Jy0NwxVg2j39ayY=
-X-Google-Smtp-Source: AGHT+IGgk9wjF7NwnX8et0jzER6LayQU2MY0yj2pfOSKSlhSiBlMxG4HuFD/YSGpYLbiMFfjiKIXrDujz+RjTFY3bqo=
-X-Received: by 2002:a05:6808:13c2:b0:3f3:e1c3:39d8 with SMTP id
- 5614622812f47-3f3eb088af9mr6680370b6e.7.1739793438923; Mon, 17 Feb 2025
- 03:57:18 -0800 (PST)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 56E73218842;
+	Mon, 17 Feb 2025 12:20:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739794844; cv=pass; b=ew2V2i0a9edksFJQ8OAEVRgshR7LCX5ZYuekihHqxkEiBAO2HNOFm0lzpOTipCJjH+rjr29YuBGMBmBUL2Kd4PFhUQ0ikapu5Jce5ATBWXWja6m2IVmhZulyE5bcGIJMEVvU1Z3D4qBKxcCwSMijOM+gmFWCKMNYrCgzWWFGOxg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739794844; c=relaxed/simple;
+	bh=gAK0z1eMSFkXTRTMPAieGLJr3Bhl0DvjUlpsOZAm4jo=;
+	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
+	 Message-Id:References:To; b=dOHkYHlhk3S72PmGaz3dn7bYuQms900Oz11RDuy4Lbu+ALxO8IoEEa4gcWugv1sJzzphyGMb3B1x2wKOV1Mr7iK6TZDHgwTwWXzHgG1BIMfVL2Hbf1+zuv/ZzQbyDzDpAl2YVwh8A/61P1Q7F2L5taiiGZgFGalZqA0JOg56mu4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=daniel.almeida@collabora.com header.b=djEOSibu; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1739794815; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=GuXIgRTKfl5pnsPmwHwiTzLe4SKUWKrV3qrYKBVJ2X8sRCVcOuVzlCNMdH4r3KbF5TN//FC6nnkG+1czD1/CHFHD9xyTDn+6pCnPsMTJ+W+BZ/wvb3jp6E6rWwW5pxiockASliDqWtccqobD1r2xh0id+AeOEWTyIhVbL0eHHOE=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1739794815; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=gAK0z1eMSFkXTRTMPAieGLJr3Bhl0DvjUlpsOZAm4jo=; 
+	b=ADkVlSunrvisvHSJYruzGBvyLQ0JgTHRlE/8vCx56tYr24gRa3DCSq80RNUK4T0PWGZE3OjJtI2cM1bXTRpYCSKVM5wwg9AizxM//2xDuScLGsnYhcN58eVj6P79DJ6uoz/GZqfCYIDvFUJg13cNtXuhQW//gDCGhD0X96w3AmE=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=daniel.almeida@collabora.com;
+	dmarc=pass header.from=<daniel.almeida@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1739794814;
+	s=zohomail; d=collabora.com; i=daniel.almeida@collabora.com;
+	h=Content-Type:Mime-Version:Subject:Subject:From:From:In-Reply-To:Date:Date:Cc:Cc:Content-Transfer-Encoding:Message-Id:Message-Id:References:To:To:Reply-To;
+	bh=gAK0z1eMSFkXTRTMPAieGLJr3Bhl0DvjUlpsOZAm4jo=;
+	b=djEOSibu6AvPYJWLed81y8oFIIl+78SQKw0jnPrX35Z1OOKFsiIFsRQylmZKUE8M
+	dtr3PomY7yEBu3dJZ0ZufI17rO3ko6MGJ61Z/gh+bEpLMjP3Om/MH2xFrJBqFIEvahF
+	NgyLjsXX4BdU4y11ScItRUafA22XF2vBa9ha8eL8=
+Received: by mx.zohomail.com with SMTPS id 1739794812898824.9432494406607;
+	Mon, 17 Feb 2025 04:20:12 -0800 (PST)
+Content-Type: text/plain;
+	charset=utf-8
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-References: <20250210055828.1875372-1-keyz@google.com>
-In-Reply-To: <20250210055828.1875372-1-keyz@google.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 17 Feb 2025 12:57:07 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hWNYB69ydM4--GNtLBgG3WS4MT+S10w46883kHnFMMEQ@mail.gmail.com>
-X-Gm-Features: AWEUYZlerGW8CaScCPlNU0kV18tmC8lLU10SucLC1QEGtyvEZia5QSOw4UT49-U
-Message-ID: <CAJZ5v0hWNYB69ydM4--GNtLBgG3WS4MT+S10w46883kHnFMMEQ@mail.gmail.com>
-Subject: Re: [PATCH v5 RESEND] cpuidle: psci: Add trace for PSCI domain idle
-To: Keita Morisaki <keyz@google.com>, Ulf Hansson <ulf.hansson@linaro.org>, lpieralisi@kernel.org, 
-	sudeep.holla@arm.com
-Cc: linux-kernel@vger.kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	rostedt@goodmis.org, mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
-	linux-trace-kernel@vger.kernel.org, aarontian@google.com, 
-	yimingtseng@google.com, Dhruva Gole <d-gole@ti.com>, Kevin Hilman <khilman@baylibre.com>
-Content-Type: text/plain; charset="UTF-8"
+Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3826.300.87.4.3\))
+Subject: Re: [PATCH V8 06/14] rust: Add bare minimal bindings for clk
+ framework
+From: Daniel Almeida <daniel.almeida@collabora.com>
+In-Reply-To: <c68081e18d939aefc7f6dac798df6b72e81bba4b.1738832118.git.viresh.kumar@linaro.org>
+Date: Mon, 17 Feb 2025 09:19:51 -0300
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+ Danilo Krummrich <dakr@redhat.com>,
+ Miguel Ojeda <ojeda@kernel.org>,
+ Alex Gaynor <alex.gaynor@gmail.com>,
+ Boqun Feng <boqun.feng@gmail.com>,
+ Gary Guo <gary@garyguo.net>,
+ =?utf-8?Q?Bj=C3=B6rn_Roy_Baron?= <bjorn3_gh@protonmail.com>,
+ Benno Lossin <benno.lossin@proton.me>,
+ Andreas Hindborg <a.hindborg@kernel.org>,
+ Alice Ryhl <aliceryhl@google.com>,
+ Trevor Gross <tmgross@umich.edu>,
+ Michael Turquette <mturquette@baylibre.com>,
+ Stephen Boyd <sboyd@kernel.org>,
+ linux-pm@vger.kernel.org,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Nishanth Menon <nm@ti.com>,
+ rust-for-linux@vger.kernel.org,
+ Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+ Erik Schilling <erik.schilling@linaro.org>,
+ =?utf-8?Q?Alex_Benn=C3=A9e?= <alex.bennee@linaro.org>,
+ Joakim Bech <joakim.bech@linaro.org>,
+ Rob Herring <robh@kernel.org>,
+ linux-kernel@vger.kernel.org,
+ linux-clk@vger.kernel.org
 Content-Transfer-Encoding: quoted-printable
+Message-Id: <EC290802-2C5E-4ACA-A530-E776654C7E94@collabora.com>
+References: <cover.1738832118.git.viresh.kumar@linaro.org>
+ <c68081e18d939aefc7f6dac798df6b72e81bba4b.1738832118.git.viresh.kumar@linaro.org>
+To: Viresh Kumar <viresh.kumar@linaro.org>
+X-Mailer: Apple Mail (2.3826.300.87.4.3)
+X-ZohoMailClient: External
 
-+Ulf
+Hi Viresh
 
-On Mon, Feb 10, 2025 at 6:58=E2=80=AFAM Keita Morisaki <keyz@google.com> wr=
-ote:
->
-> The trace event cpu_idle provides insufficient information for debugging
-> PSCI requests due to lacking access to determined PSCI domain idle
-> states. The cpu_idle usually only shows -1, 0, or 1 regardless how many
-> idle states the power domain has.
->
-> Add new trace events namely psci_domain_idle_enter and
-> psci_domain_idle_exit to trace enter and exit events with a determined
-> idle state.
->
-> These new trace events will help developers debug CPUidle issues on ARM
-> systems using PSCI by providing more detailed information about the
-> requested idle states.
->
-> Signed-off-by: Keita Morisaki <keyz@google.com>
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
-> Tested-by: Kevin Hilman <khilman@baylibre.com>
-> ---
-> v1->v2: Split the ftrace event into two (psci_domain_idle_(enter|exit))
->         and rephrase the commit message accordingly. Rebased onto the lat=
-est.
-> v2->v3: Add "Reviewed-by: Steven Rostedt"
-> v3->v4: Add the Tested-by label
-> v4->v5: Add "Reviewed-by: Dhruva Gole"
->
-> Hopefully this patch gets attention from maintainers of
-> drivers/cpuidle/cpuidle-psci.c too.
+> On 6 Feb 2025, at 06:28, Viresh Kumar <viresh.kumar@linaro.org> wrote:
+>=20
+> This adds very basic bindings for the clk framework, implements only
+> clk_get() and clk_put(). These are the bare minimum bindings required
+> for many users and are simple enough to add in the first attempt.
 
-Lorenzo, Sudeep, Ulf, any comments?
+I am missing clk_prepare_enable/clk_disable_unprepare.
 
->  drivers/cpuidle/cpuidle-psci.c |  3 +++
->  include/trace/events/power.h   | 37 ++++++++++++++++++++++++++++++++++
->  2 files changed, 40 insertions(+)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psc=
-i.c
-> index 2562dc001fc1..dd8d776d6e39 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -25,6 +25,7 @@
->  #include <linux/syscore_ops.h>
->
->  #include <asm/cpuidle.h>
-> +#include <trace/events/power.h>
->
->  #include "cpuidle-psci.h"
->  #include "dt_idle_states.h"
-> @@ -74,7 +75,9 @@ static __cpuidle int __psci_enter_domain_idle_state(str=
-uct cpuidle_device *dev,
->         if (!state)
->                 state =3D states[idx];
->
-> +       trace_psci_domain_idle_enter(dev->cpu, state, s2idle);
->         ret =3D psci_cpu_suspend_enter(state) ? -1 : idx;
-> +       trace_psci_domain_idle_exit(dev->cpu, state, s2idle);
->
->         if (s2idle)
->                 dev_pm_genpd_resume(pd_dev);
-> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-> index d2349b6b531a..9253e83b9bb4 100644
-> --- a/include/trace/events/power.h
-> +++ b/include/trace/events/power.h
-> @@ -62,6 +62,43 @@ TRACE_EVENT(cpu_idle_miss,
->                 (unsigned long)__entry->state, (__entry->below)?"below":"=
-above")
->  );
->
-> +DECLARE_EVENT_CLASS(psci_domain_idle,
-> +
-> +       TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-> +
-> +       TP_ARGS(cpu_id, state, s2idle),
-> +
-> +       TP_STRUCT__entry(
-> +               __field(u32,            cpu_id)
-> +               __field(u32,            state)
-> +               __field(bool,           s2idle)
-> +       ),
-> +
-> +       TP_fast_assign(
-> +               __entry->cpu_id =3D cpu_id;
-> +               __entry->state =3D state;
-> +               __entry->s2idle =3D s2idle;
-> +       ),
-> +
-> +       TP_printk("cpu_id=3D%lu state=3D0x%lx is_s2idle=3D%s",
-> +                 (unsigned long)__entry->cpu_id, (unsigned long)__entry-=
->state,
-> +                 (__entry->s2idle)?"yes":"no")
-> +);
-> +
-> +DEFINE_EVENT(psci_domain_idle, psci_domain_idle_enter,
-> +
-> +       TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-> +
-> +       TP_ARGS(cpu_id, state, s2idle)
-> +);
-> +
-> +DEFINE_EVENT(psci_domain_idle, psci_domain_idle_exit,
-> +
-> +       TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-> +
-> +       TP_ARGS(cpu_id, state, s2idle)
-> +);
-> +
->  TRACE_EVENT(powernv_throttle,
->
->         TP_PROTO(int chip_id, const char *reason, int pmax),
->
-> base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
-> --
-> 2.48.1.362.g079036d154-goog
+Otherwise I see no way of enabling and disabling clks. IMHO I would also
+consider these as =E2=80=9Cbare minimum=E2=80=9D.
+
+=E2=80=94 Daniel=
 
