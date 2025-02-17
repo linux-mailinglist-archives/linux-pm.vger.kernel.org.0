@@ -1,109 +1,163 @@
-Return-Path: <linux-pm+bounces-22254-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22255-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 80E48A38D9E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:45:16 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3CFD6A38DA0
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:45:37 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6F491732F9
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:45:02 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 34FB71893F39
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:45:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2FEEE238D42;
-	Mon, 17 Feb 2025 20:45:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LqMwvxxR"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 846BC239595;
+	Mon, 17 Feb 2025 20:45:22 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f45.google.com (mail-ed1-f45.google.com [209.85.208.45])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FC5F235BF4
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 20:44:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E668323958A
+	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 20:45:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739825100; cv=none; b=X+e6P5JVvaSVZP5jAtJwwdlcs2Do+UzJniEmaLV1KeS7F0158wO/w4RQXMU5Y4XPmY3beSOg2htJ0HhviGGgVXlOy4q37SHqiKt1j6ZfKpl1lUxVm91kC4aKcOgblDZzfCRFJTasQO/oBUrBRiwvhM/o9qbTodS9yUsyvKEsgVo=
+	t=1739825122; cv=none; b=UpgnrP8EptJaiaqnr5xofk9BGDzKV9JPNOAOMNsJ4muCXfuk10dYYmyAVyGyZV3S2yMIDOnKIMWwKBjys44sPFJI/X1m6E22sp6wUxo2pokRDgiJOONtkXHzfynauoNO5iE6exaxq3MMe+vV92mN7cF2xBuberjlESP4lIvcHks=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739825100; c=relaxed/simple;
-	bh=8pLWhykq/xuXsSGo3fdN/MDuXB8gYp2zSrRpJzw54+8=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Content-Type; b=RTnQwoZwI6baCA76jrLa6r6IRgboMqKdSxWG8ryoCe9lHqpflgHAJlQoW5l9lrYDknQmJdvEB59k0LPcEHcCiapFD/3RSNvJy9xei/wQ+v0KJlnTNj92xwSr3+rvxdmOUpQ2D+u31TjqaZd5gfwCApPkOWwS8DfX0cW4/jTxowg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LqMwvxxR; arc=none smtp.client-ip=209.85.208.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ed1-f45.google.com with SMTP id 4fb4d7f45d1cf-5e0505275b7so2741708a12.3
-        for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 12:44:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739825096; x=1740429896; darn=vger.kernel.org;
-        h=to:subject:message-id:date:from:mime-version:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=8pLWhykq/xuXsSGo3fdN/MDuXB8gYp2zSrRpJzw54+8=;
-        b=LqMwvxxRkcENjS72aFBO0SbnqEL/0n1itpL7ht8kVVGunwJQqPWBDiK53s2qool4bo
-         8PZfT8zZPGvjdAPhJh3xChI24kSPCmlj5jeBMKfTvSwuv0yLpeEmMdE5W3X6fNfvXmfE
-         wqGfyjlmYc0/rSRHEsIinwyxnYj8HoDIZ4p0NiaXidnsM0QBa23wThmDCnsUI8yO6n+r
-         4JM6ijdNxDl2S5Z3Geom1AgSSeTQOvmoE/oo2p30Y3UkZSOjS8pY0DudpIrqw3JmVT9R
-         ufr9kL8YutuUwVMFT7q7wDYpjaLOOcn7/wO4fuR8Hh/buX5W4ZW2G35k8t75NjuaMvJ0
-         a5+w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739825096; x=1740429896;
-        h=to:subject:message-id:date:from:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=8pLWhykq/xuXsSGo3fdN/MDuXB8gYp2zSrRpJzw54+8=;
-        b=qD81HMfEesrQwQnzFMg2Afj7OvKrF5OaOTH8JE2kgZriou1GjvdAE8VZVhsiCh2JfR
-         pLKfTmbqfcAzk3esMUHfZFi0RqlUCzJFghnxEbv+4XEOjVy0YMayZn7hIqwj9g6Y20Y+
-         u4tBaKbVaM3yRbceH1WcNcSMbvDjJx8bbPY8VfY+dV4Vr9pf/KSAeFxrnHk2r9qNVlra
-         nXr3e0Yan95MvU75s6cwk8H/JPezCeSEDsno3GfTBAxIC551T48nguPyM4ABqAbPrQAm
-         Ebsa53vdu1C4G5/cDzwB+eRVhhhwM6Aviw1f5De4VuYlKwXsgq5ZNVqsqOQjx+TQl0CI
-         J7aA==
-X-Gm-Message-State: AOJu0YxHKM/u5P6UlvmCcjvhoJgS1cYbq6DISmtMIZNTknKIzG4c8VF9
-	b58czxn0aAVaT9zj7x7e/SeZk63PLNaqvoxIvjiL/z9DFK7+pNjK7h00BfQXGIK3Wd3YOLKhmMd
-	JZAyTVDuOSaWzwABBwLzSgY/AdO2LKAmo
-X-Gm-Gg: ASbGncuxHcRidjL8kgr5ygQeVlAxoCZsQPY8H4s99fYU4A/UiL8yxuIAuvXke0vK19T
-	M4fxq+QuS2U9XQnsIAMrYgd8z3xkGzTHXQLT9MP1d+7wY/pF7sw75HOW9iC/5mL3vCSfcCCJ3
-X-Google-Smtp-Source: AGHT+IF2EEHGFKTYn1KC73CJALtPKogvwbcqnYt3N89uDplEyb0Crdf8Va6MydGVaM5QRbX7fVXKNv9h7x+1WTaXa+8=
-X-Received: by 2002:a17:906:3190:b0:abb:6722:f98c with SMTP id
- a640c23a62f3a-abb70c5c019mr1067603466b.34.1739825096098; Mon, 17 Feb 2025
- 12:44:56 -0800 (PST)
+	s=arc-20240116; t=1739825122; c=relaxed/simple;
+	bh=igOAyOe0a93PQhLLZM99D+X4R+n8FIOx6J9OuZIDARU=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=neGTngWMxuOTl3+leTImhJGM2HLn9YhoFWXPR61nnbHPrS52BrH1RzAueXMoOTavcrrH/yuT3i0R0QJfem0WVSKMcDCf62XXZw2dFBuQEY21a/DvdQKA8BdPbyODGlBatu9UPyzJu8GO19n0eZtPGnbClY9xopx/dYz08uNakkg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tk7zP-0000iy-6L; Mon, 17 Feb 2025 21:45:15 +0100
+Received: from dude05.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::54])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tk7zO-001TGu-0c;
+	Mon, 17 Feb 2025 21:45:14 +0100
+Received: from localhost ([::1] helo=dude05.red.stw.pengutronix.de)
+	by dude05.red.stw.pengutronix.de with esmtp (Exim 4.96)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tk7zO-000cxJ-0Q;
+	Mon, 17 Feb 2025 21:45:14 +0100
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Date: Mon, 17 Feb 2025 21:45:03 +0100
+Subject: [PATCH RFC v2] docs: ABI: replace mcroce@microsoft.com with new
+ Meta address
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: James Dutton <james.dutton@gmail.com>
-Date: Mon, 17 Feb 2025 20:44:19 +0000
-X-Gm-Features: AWEUYZlcIM3HqJwp-yKRSySzLDYeKKErPzw0dSiDVsse2QzQZH3PhqI84AFMSr0
-Message-ID: <CAAMvbhGRBhdz2RnReoGxDRM=bTws6s4qe5kh2nUqQDMRDYBh6Q@mail.gmail.com>
-Subject: USB4 thunderbolt device suspend/resume problems. Unplug during suspend.
-To: Linux PM mailing list <linux-pm@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250217-fix-mcroce-mail-bounce-v2-1-e897f4b15c80@pengutronix.de>
+X-B4-Tracking: v=1; b=H4sIAM6fs2cC/4VNSwrCMBC9Spm1kUyswbgSBA/gVrroZ2wHbFKSt
+ lRK7+7QC7h7/7dCosiU4JqtEGnmxMELMYcM6q70LSluhIPRJkeDTr15UX0dQ02qL/mjqjB5wSd
+ zcVqjdbk+g5SHSJLch1/wfNyhELHjNIb43c9m3K1/uzMqVLmTCNrKaqtvA/l2GmPwvBwbgmLbt
+ h/pRhTBxgAAAA==
+X-Change-ID: 20241219-fix-mcroce-mail-bounce-328900169405
+To: Matteo Croce <teknoraver@meta.com>, Jens Axboe <axboe@kernel.dk>, 
+ Andrew Morton <akpm@linux-foundation.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-block@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ kernel@pengutronix.de, Ahmad Fatoum <a.fatoum@pengutronix.de>
+X-Mailer: b4 0.14.2
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Hi,
+The Microsoft email address is bouncing:
 
-I have a thunderbolt / usb4 10Gbps ethernet adapter.
-While plugged in, it appears to handle suspend and resume OK.
-The problem is the following:
-1) Thunderbolt device plugged in. Device appears in "lscpi".
-2) Suspend Laptop
-3) Unplug the device while it is asleep.
-4) Resume the Laptop
-5) Laptop locks up, no stack trace, nothing output.
+    550 5.4.1 Recipient address rejected: Access denied.
 
-Further diagnosis has found the following:
-I locks up in:
-drivers/base/power/main.c:
-static void device_resume(struct device *dev, pm_message_t state, bool async)
-at the line that says:
-"device_lock(dev);"
-where "dev" is the dev of the 10Gbps ethernet adapter.
+So let's replace it with Matteo's current mail address.
 
-I don't have any other usb4 / thunderbolt devices but I am thinking
-that this might affect all usb4 / thunderbolt devices that appear in
-lspci.
-Essentially, it looks to the OS like a PCIe card is removed during suspend.
+Acked-by: Matteo Croce <teknoraver@meta.com>
+Link: https://lore.kernel.org/all/BYAPR15MB2504E4B02DFFB1E55871955DA1062@BYAPR15MB2504.namprd15.prod.outlook.com/
+Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+---
+I ran into this while submitting a series[1] touching sysfs-kernel-reboot
+and b4/get_maintainers.pl picked off the stale address from the file.
 
-Does anyone have any hints of where in the code to look for a fix for this?
+[1]: https://lore.kernel.org/all/20241219-hw_protection-reboot-v1-6-263a0c1df802@pengutronix.de/
+---
+Changes in v2:
+- Added Matteo's Acked-by 
+- Link to v1: https://lore.kernel.org/r/20241219-fix-mcroce-mail-bounce-v1-1-4912116b6060@pengutronix.de
+---
+ Documentation/ABI/stable/sysfs-block          |  2 +-
+ Documentation/ABI/testing/sysfs-kernel-reboot | 10 +++++-----
+ 2 files changed, 6 insertions(+), 6 deletions(-)
 
-Kind Regards
+diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/stable/sysfs-block
+index 0cceb2badc836b8cbdade543deff71edef0e3da1..ee1bbb4dfd4ea65fc0aa13c03a5205b8d5816ecf 100644
+--- a/Documentation/ABI/stable/sysfs-block
++++ b/Documentation/ABI/stable/sysfs-block
+@@ -77,7 +77,7 @@ Description:
+ 
+ What:		/sys/block/<disk>/diskseq
+ Date:		February 2021
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:
+ 		The /sys/block/<disk>/diskseq files reports the disk
+ 		sequence number, which is a monotonically increasing
+diff --git a/Documentation/ABI/testing/sysfs-kernel-reboot b/Documentation/ABI/testing/sysfs-kernel-reboot
+index 837330fb251134ffdf29cd68f0b2a845b088e5a0..fb2d21acc6627ee340a3c8327261d5727ad63e15 100644
+--- a/Documentation/ABI/testing/sysfs-kernel-reboot
++++ b/Documentation/ABI/testing/sysfs-kernel-reboot
+@@ -1,7 +1,7 @@
+ What:		/sys/kernel/reboot
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	Interface to set the kernel reboot behavior, similarly to
+ 		what can be done via the reboot= cmdline option.
+ 		(see Documentation/admin-guide/kernel-parameters.txt)
+@@ -9,24 +9,24 @@ Description:	Interface to set the kernel reboot behavior, similarly to
+ What:		/sys/kernel/reboot/mode
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	Reboot mode. Valid values are: cold warm hard soft gpio
+ 
+ What:		/sys/kernel/reboot/type
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	Reboot type. Valid values are: bios acpi kbd triple efi pci
+ 
+ What:		/sys/kernel/reboot/cpu
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	CPU number to use to reboot.
+ 
+ What:		/sys/kernel/reboot/force
+ Date:		November 2020
+ KernelVersion:	5.11
+-Contact:	Matteo Croce <mcroce@microsoft.com>
++Contact:	Matteo Croce <teknoraver@meta.com>
+ Description:	Don't wait for any other CPUs on reboot and
+ 		avoid anything that could hang.
 
-James
+---
+base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
+change-id: 20241219-fix-mcroce-mail-bounce-328900169405
+
+Best regards,
+-- 
+Ahmad Fatoum <a.fatoum@pengutronix.de>
+
 
