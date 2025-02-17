@@ -1,215 +1,125 @@
-Return-Path: <linux-pm+bounces-22241-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22242-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EB82A38D3E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:23:37 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CA3B1A38D51
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:31:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D9361188F863
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:23:42 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 6949C3A52CA
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:31:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 60073237A3B;
-	Mon, 17 Feb 2025 20:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9530822B5A3;
+	Mon, 17 Feb 2025 20:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kBcWvdg4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="WFShrN+0"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34F5C236A6A;
-	Mon, 17 Feb 2025 20:23:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6662019048F
+	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 20:31:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739823811; cv=none; b=DUeifcGkIgmA+inEcPdyl/XOrEDXF5A6bWhSI/q6iV5yXS2NeLeBpOwPDNqOljzX8VPILhcVuXNqIecHuNbDqbTJUuoFTiwX408qnvoyIJ5CF2+jgzn6RcvA2hHUXMmRjlIzj2pkuH3/BQh4qG9uK8CtQI/Mhcmir5eUi4GdAqg=
+	t=1739824304; cv=none; b=r0r6XVEv7ckKPiuo3Rkas9H5L/FeCCcjIsSMgUilLuL2L1yCB/wPNu2yo8EIRFLINj7HVwz1CjECejrrch/Rq+IiNz3qIzBwRl+MVR71aBfSGn4cELx0W/zDWzI9dgJORGr5JV/KJRLcHcYOBxn0st9Bjpbw3P2C5GeOZXfuBog=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739823811; c=relaxed/simple;
-	bh=1h9MwvGIS8D5jPJQSFET2oluXayiIP8DbSxALxBuL8U=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LTA/5InpS6dVIZAJlKjyxZPWI2VjmHrAxEUy5vF03DqmDHSr/o417Wq5C3bs9/Mus066VQm9UDkuoYKJOe+nVuKYqAcqZoblQ8AeWoD9yhGAb4NCExT+Uat3rvYvbbYnHZUJG9QGjj2SaqqIBDNwqKCfjP8Ulxq6EhAGhFwX+nM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kBcWvdg4; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 088A5C4CEE2;
-	Mon, 17 Feb 2025 20:23:31 +0000 (UTC)
+	s=arc-20240116; t=1739824304; c=relaxed/simple;
+	bh=0SBIDNow1B7VtcoOuSmSKI0v9GbtKNO5tUN644CCbGQ=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=AxdZUnYqXksOhueJzOQbyg+0mLdiZuV5lU91ErgvBT+vBaApnYwdSCdJ54rThOoHDIo2S+LCpmnfsB8ZbnoxaivU6EESVIUZxQrAiah+tLCUUBipB6lJGzsh/xMscnRJui5zX1Ng11R7ql7XXGftgKRCA+Eew5FvXz94wa8SkLU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=WFShrN+0; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E053CC4CEEB
+	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 20:31:43 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739823811;
-	bh=1h9MwvGIS8D5jPJQSFET2oluXayiIP8DbSxALxBuL8U=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=kBcWvdg4s2XQVXU6tMvldOT8u0YGKV63N6m8lJhV3QDqOEWSeg6D4vtaAN26pNwt6
-	 NytnIxoR0ic8cWTdqsIVUKDrUpCv4zJkoPimIximoeNAiNHnMZDKAyMxqXkczjptjE
-	 jrkWvkspWfdKL+QB/7fq1c1pHkRW5g7g1dFRSy8OlriZQgN7piNjhYXsebazYVF0Dr
-	 rp6zv95H3w0+q7GzYTFmvD02jmOWUC/LMDeh1659dg37mqAx7drvgs0btdoVzoyQru
-	 OtkJ80OyUYwvrmolmhal8/aiODJsjcMYupW75NiS+ST2Yrg5UZXEiTDMeM4dR+xKA7
-	 A82aVLtisto7g==
-Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-724d1724657so3254168a34.0;
-        Mon, 17 Feb 2025 12:23:31 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWHDG1M/WdsHdf5pekjgMbqNQzf7N1rUP64URyYM1ZuBhzuV4XrAcNDTY35wuy8hK7BWvTbbxgfBPE=@vger.kernel.org, AJvYcCXLm9Tgz/0xgt9pUHiy6UGnqDEpIwGrCwGnBy5HQNyQ51eNQt2UUG8T76FWJ0Yjy2tqEjzhNAmtM7Mo/Nak@vger.kernel.org, AJvYcCXlazXg4oYl0sWm5dGfPusLsaAB5IpZUYJZC2Chgjmy6oom6yYBrpA2bmdQY+Uwnsb+iF+YMWoT6Ys=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyk6Ht00FOWNj7/Ko6VnettD5t4d7WEQJZ6LlAnZyqOGK6B453v
-	3bb3Y8hKFv1/UNuvLfC8BLnIOg/F2le+2UH2e+JrgJ2MQYPXNhbniO8sBb8cXZJLrvrx49j/xyw
-	IzlBZofcAjhak+wqSamLo1kmKp9w=
-X-Google-Smtp-Source: AGHT+IGPh9FNrtXp3FggoEQw9aKUrDogGptSwF6VujHcw64guqZFeUK2vTL7g5FzrFK09nm4jP3iMmPGT9ohbNt/nqw=
-X-Received: by 2002:a05:6808:2dcf:b0:3f3:fc36:25b7 with SMTP id
- 5614622812f47-3f3fc362819mr4062729b6e.19.1739823810284; Mon, 17 Feb 2025
- 12:23:30 -0800 (PST)
+	s=k20201202; t=1739824303;
+	bh=0SBIDNow1B7VtcoOuSmSKI0v9GbtKNO5tUN644CCbGQ=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=WFShrN+0eh/doVp1mWsMUsWQ8ZS23LpP6UThzhYNiM22NcLbZ52F5M2TmS3bcUq6y
+	 xS7M4teOx07Ifh1XBsqesgaQmoR7aKB3mteOT7Sa2WC7l7CRS+wvW9x8rlKCN2GJQh
+	 IC6v2FkKEJ7sQAjkeFUh+6+H2CbnwTTaIuck5J01vTdxluxyU0rLyDx9KR0vHey+gk
+	 KIW+3QboxvWLmmgfg3hIVj4nOEZqbul+8k12Ac4vYjvqlK9Sx4x0Lr+02E5wT/yMkH
+	 9RrtzdzaN+HB7NB6zAO+IkJ3oz/PnLPZehy2yiSrf8KT0YsUqN/vrrERyYFAcDcFsG
+	 ixTMPHyWXTcJw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id D9BA9C3279E; Mon, 17 Feb 2025 20:31:43 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
+ boost control
+Date: Mon, 17 Feb 2025 20:31:43 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: miroslav@pavleski.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: 
+Message-ID: <bug-217931-137361-IaWSIdIhpe@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5caa944f-c841-6f74-8e43-a278b2b93b06@suse.com>
- <20220708110325.GA5307@axis.com> <4ca77763-53d0-965a-889e-be2eafadfd2f@intel.com>
- <1937b65c-36c0-5475-c745-d7285d1a6e25@suse.com> <CAJZ5v0j0mgOcfKXRzyx12EX8CYLzowXrM8DGCH9XvQGnRNv0iw@mail.gmail.com>
- <5c37ee19-fe2c-fb22-63a2-638e3dab8f7a@suse.com> <CAJZ5v0ijy4FG84xk_n8gxR_jS0xao246eVbnFj-dXzwz=8S9NQ@mail.gmail.com>
- <Z6lzWfGbpa7jN1QD@google.com> <Z6vNV8dDDPdWUKLS@google.com>
- <CAJZ5v0i83eJWV_kvWxZvja+Js3tKbrwZ8rVVGn7vR=0qLf1mtw@mail.gmail.com> <Z7Kx2RN35QVyg8nP@google.com>
-In-Reply-To: <Z7Kx2RN35QVyg8nP@google.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 17 Feb 2025 21:23:18 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hom5Ex9xCfd_qD7XyFxie1iy2L_T8vDNWF-xBMmq=9aQ@mail.gmail.com>
-X-Gm-Features: AWEUYZlAjLzs6ezGg8wnligAVPSRXEI9eSmLi9kBikLyhpmKJuoOqGOdrVjLyt4
-Message-ID: <CAJZ5v0hom5Ex9xCfd_qD7XyFxie1iy2L_T8vDNWF-xBMmq=9aQ@mail.gmail.com>
-Subject: Re: PM runtime_error handling missing in many drivers?
-To: Ajay Agarwal <ajayagarwal@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Brian Norris <briannorris@google.com>, 
-	Oliver Neukum <oneukum@suse.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	Vincent Whitchurch <vincent.whitchurch@axis.com>, "jic23@kernel.org" <jic23@kernel.org>, 
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, 
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>, 
-	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>, Brian Norris <briannorris@chromium.org>, 
-	Joy Chakraborty <joychakr@google.com>, Vamshi Gajjela <vamshigajjela@google.com>, 
-	Manu Gautam <manugautam@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Mon, Feb 17, 2025 at 4:49=E2=80=AFAM Ajay Agarwal <ajayagarwal@google.co=
-m> wrote:
->
-> On Wed, Feb 12, 2025 at 08:29:34PM +0100, Rafael J. Wysocki wrote:
-> > On Tue, Feb 11, 2025 at 11:21=E2=80=AFPM Brian Norris <briannorris@goog=
-le.com> wrote:
-> > >
-> > > Hi Ajay,
-> > >
-> > > On Mon, Feb 10, 2025 at 09:02:41AM +0530, Ajay Agarwal wrote:
-> > > > On Wed, Jul 27, 2022 at 06:31:48PM +0200, Rafael J. Wysocki wrote:
-> > > > > On Wed, Jul 27, 2022 at 10:08 AM Oliver Neukum <oneukum@suse.com>=
- wrote:
-> > > > > > On 26.07.22 17:41, Rafael J. Wysocki wrote:
-> > > > > > > Well, in general suspending or resuming a device is a collabo=
-rative
-> > > > > > > effort and if one of the pieces falls over, making it work ag=
-ain
-> > > > > > > involves fixing up the failing piece and notifying the others=
- that it
-> > > > > > > is ready again.  However, that part isn't covered and I'm not=
- sure if
-> > > > > > > it can be covered in a sufficiently generic way.
-> > > > > >
-> > > > > > True. But that still cannot solve the question what is to be do=
-ne
-> > > > > > if error handling fails. Hence my proposal:
-> > > > > > - record all failures
-> > > > > > - heed the record only when suspending
-> > > > >
-> > > > > I guess that would boil down to moving the power.runtime_error up=
-date
-> > > > > from rpm_callback() to rpm_suspend()?
-> > > > Resuming this discussion. One of the ways the device drivers are
-> > > > clearing the runtime_error flag is by calling pm_runtime_set_suspen=
-ded
-> > > > [1].
-> >
-> > I personally think that jumping on a 2.5 years old thread is not a
-> > good idea.  It would be better to restate the problem statement and
-> > provide the link to the previous discussion.
-> >
-> > > > To me, it feels weird that a device driver calls pm_runtime_set_sus=
-pended
-> > > > if the runtime_resume() has failed. It should be implied that the d=
-evice
-> > > > is in suspended state if the resume failed.
-> > > >
-> > > > So how really should the runtime_error flag be cleared? Should ther=
-e be
-> > > > a new API exposed to device drivers for this? Or should we plan for=
- it
-> > > > in the framework itself?
-> > >
-> > > While the API naming is unclear, that's exactly what
-> > > pm_runtime_set_suspended() is about. Personally, I find it nice when =
-a
-> > > driver adds the comment "clear runtime_error flag", because otherwise
-> > > it's not really obvious why a driver has to take care of "suspending"
-> > > after a failed resume. But that's not the biggest question here, IMO.
-> > >
-> > > The real reson I pointed you at this thread was because I think it's
-> > > useful to pursue the proposal above: to avoid setting a persistent
-> > > "runtime_error" for resume failures. This seems to just create a pitf=
-all
-> > > for clients, as asked by Vincent and Oliver upthread.
-> > >
-> > > And along this line, there are relatively few drivers that actually
-> > > bother to reset this error flag ever (e.g., commit f2bc2afe34c1
-> > > ("accel/ivpu: Clear runtime_error after pm_runtime_resume_and_get()
-> > > fails")).
-> > >
-> > > So to me, we should simply answer Rafael's question:
-> > >
-> > > (repeated:)
-> > > > > I guess that would boil down to moving the power.runtime_error up=
-date
-> > > > > from rpm_callback() to rpm_suspend()?
-> > >
-> > > Yes, I think so. (Although I'm not sure if this leaves undesirable sp=
-am
-> > > where persistent .runtime_resume() failures occur.)
-> > >
-> > > ...and then write/test/submit such a patch, provided it achieves the
-> > > desired results.
-> > >
-> > > Unless of course one of the thread participants here has some other
-> > > update in the intervening 2.5 years, or if Rafael was simply asking t=
-he
-> > > above rhetorically, and wasn't actually interested in fielding such a
-> > > change.
-> >
-> > The reason why runtime_error is there is to prevent runtime PM
-> > callbacks from being run until something is done about the error,
-> > under the assumption that running them in that case may make the
-> > problem worse.
-> >
-> > I'm not sure if I see a substantial difference between suspend and
-> > resume in that respect: If any of them fails, the state of the device
-> > is kind of unstable.  In particular, if resume fails and the device
-> > doesn't actually resume, something needs to be done about it or it
-> > just becomes unusable.
-> >
-> > Now, the way of clearing the error may not be super-convenient, which
-> > was a bit hard to figure out upfront, so I'm not against making any
-> > changes as long as there are sufficient reasons for making them.
->
-> I am thinking if we can start with a change to not check runtime_error
-> in rpm_resume, and let it go through even if the previous rpm_resume
-> attempt failed. Something like this:
->
-> ```
-> static int rpm_resume(struct device *dev, int rpmflags)
->         trace_rpm_resume(dev, rpmflags);
->
->   repeat:
-> -       if (dev->power.runtime_error) {
-> -               retval =3D -EINVAL;
-> -       } else if (dev->power.disable_depth > 0) {
-> +       if (dev->power.disable_depth > 0) {
->                 if (dev->power.runtime_status =3D=3D RPM_ACTIVE &&
->                     dev->power.last_status =3D=3D RPM_ACTIVE)
->                         retval =3D 1;
-> ```
->
-> I think setting the runtime_error in rpm_callback, i.e. for both resume
-> and suspend is still a good idea for book-keeping purposes, e.g. the
-> user reading the runtime_status of the device from sysfs.
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
-What would be the benefit of this change?
+--- Comment #77 from Miroslav Pavleski (miroslav@pavleski.net) ---
+> I'm confused here on the timing of all of these events, do you mean to say
+> that
+the patch did nothing?  That's what it seems like at least.
+
+All the files in the zip are after applying the patched kernel and rebootin=
+g.=20
+amd_pstate_report-2025-02-17_post_patch2.txt is report created after resumi=
+ng
+from s2idle.
+
+I've just double checked in the source tree used for building the kernel
+package. The patch is applied.=20
+
+In addition, I did some more testing after resuming from sleep. Seems now i=
+t is
+not jumping above the scaling_max_freq when not stressed.=20
+
+I stress tested all 16 cores and then it ramped up towards boost freq. (abo=
+ve
+nominal 3.3), while having scaling_max_freq set to 1.6GHz and boost 0. Howe=
+ver
+when I stopped the cpu hogging, it ramped back down idling between 400MHz a=
+nd
+1400MHz. Subjectively I would say the behavior is now *way better*, the CPU=
+ is
+not drawing a lot of power when not stressed, under light desktop use. The =
+fans
+stay quiet.
+
+Seems like the amd-pstate-epp has complex algorithm that takes the
+scaling_max_freq as a hint, not as hard limit. The upside is that when need=
+ed,
+it adapts to those needs. The downside is that this is not ideal under batt=
+ery
+use, as rogue processes (e.g. browser tabs) might drain battery without the
+user realizing it.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
