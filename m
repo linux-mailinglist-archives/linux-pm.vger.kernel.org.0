@@ -1,104 +1,175 @@
-Return-Path: <linux-pm+bounces-22204-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22205-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD28CA38307
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 13:32:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 58FA7A3840F
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 14:10:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A06A3171386
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 12:31:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A05433B8A68
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 13:04:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5CBCB18FDD5;
-	Mon, 17 Feb 2025 12:31:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CE34C21B1B9;
+	Mon, 17 Feb 2025 13:03:08 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 999DB7F9;
-	Mon, 17 Feb 2025 12:31:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10169193084;
+	Mon, 17 Feb 2025 13:03:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739795515; cv=none; b=MJ+49WQheyc3UPkXqL/3Mra02dF6FXFx4T1isxwAGN5+CZx/JPX+6Iia3PhsgmwZDvw4b805KjVOGDCiYvRZyTwirdmX6L54uttsJRgrRPwm1BHWhTbMAitENkdlLeaPjAI97llOUy7uueTiBQjj3TsVd04zghooRb+IUcsmDAk=
+	t=1739797388; cv=none; b=LdmwTV3tOVjUdweHqXJw9Vn8B+XYgci0ZgTCv4I8+5buKidTzSFSOzkrAaGvtqLQMjg7n5GSR6XHe81F51XaclYlU23wzPIgELW+YdahOO+1qHDoC7FlQMTBWVEcOpoIIKN8BL/XJ7eE4HuUwOIKN2DHHTuDP33U3u5G9xz1inE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739795515; c=relaxed/simple;
-	bh=mLoswGq4ee6hpNyl8OOh6wrbHYc6wwRA6DU8avtw+Tw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=O7yxuRDRQtbItJauivYBZMKv3yOX1PjSGmiCrnvOtPbYJzLp/OBP7kG3HEObcRFpRAX0VQM/oAE8reUdXGNFB56q86fz1iqDePz1CxMOtgaZHLwI3Zgjvf4KzkvfcN0ZeBahvr8I4giXFrAxL6iXW7Orwj9qPWhOkysM0b3lmj8=
+	s=arc-20240116; t=1739797388; c=relaxed/simple;
+	bh=qrmOkaVLkCWivZRjK6eeyFEaTtgFT3AnfYzGBM29WPE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=FjoBHalo7tO3fTSNOEJkNoq/9bKm5Bd6Hg7o5OPCwXyskAj08LQXzDkA8calSgtoXOW1XIKlx35EbSi9qJH/OddeGMcKzlWs1LJH+a9mk87Vsg17o60xQnw9GEzun4JuOsfnyuMBkmkBHSnbdzW/uR38qoVbBuZ/ygDs//lzZvM=
 ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
 Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 16C171692;
-	Mon, 17 Feb 2025 04:32:12 -0800 (PST)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 198303F5A1;
-	Mon, 17 Feb 2025 04:31:49 -0800 (PST)
-Date: Mon, 17 Feb 2025 12:31:47 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Keita Morisaki <keyz@google.com>, Ulf Hansson <ulf.hansson@linaro.org>,
-	lpieralisi@kernel.org, linux-kernel@vger.kernel.org,
-	daniel.lezcano@linaro.org, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org, rostedt@goodmis.org,
-	mhiramat@kernel.org, mathieu.desnoyers@efficios.com,
-	linux-trace-kernel@vger.kernel.org, aarontian@google.com,
-	Sudeep Holla <sudeep.holla@arm.com>, yimingtseng@google.com,
-	Dhruva Gole <d-gole@ti.com>, Kevin Hilman <khilman@baylibre.com>
-Subject: Re: [PATCH v5 RESEND] cpuidle: psci: Add trace for PSCI domain idle
-Message-ID: <Z7MsM5Va5xi-Nuis@bogus>
-References: <20250210055828.1875372-1-keyz@google.com>
- <CAJZ5v0hWNYB69ydM4--GNtLBgG3WS4MT+S10w46883kHnFMMEQ@mail.gmail.com>
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 4BD9413D5;
+	Mon, 17 Feb 2025 05:03:24 -0800 (PST)
+Received: from [10.1.35.42] (e127648.arm.com [10.1.35.42])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id ABE313F6A8;
+	Mon, 17 Feb 2025 05:03:03 -0800 (PST)
+Message-ID: <4ccf81b2-fa1e-479d-91f4-1c518594f877@arm.com>
+Date: Mon, 17 Feb 2025 13:03:01 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0hWNYB69ydM4--GNtLBgG3WS4MT+S10w46883kHnFMMEQ@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFT][PATCH v1 2/5] cpuidle: menu: Use one loop for average and
+ variance computations
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Aboorva Devarajan <aboorvad@linux.ibm.com>
+References: <1916668.tdWV9SEqCh@rjwysocki.net>
+ <3339073.aeNJFYEL58@rjwysocki.net>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <3339073.aeNJFYEL58@rjwysocki.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-On Mon, Feb 17, 2025 at 12:57:07PM +0100, Rafael J. Wysocki wrote:
-> +Ulf
+On 2/6/25 14:24, Rafael J. Wysocki wrote:
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > 
-> On Mon, Feb 10, 2025 at 6:58 AM Keita Morisaki <keyz@google.com> wrote:
-> >
-> > The trace event cpu_idle provides insufficient information for debugging
-> > PSCI requests due to lacking access to determined PSCI domain idle
-> > states. The cpu_idle usually only shows -1, 0, or 1 regardless how many
-> > idle states the power domain has.
-> >
-> > Add new trace events namely psci_domain_idle_enter and
-> > psci_domain_idle_exit to trace enter and exit events with a determined
-> > idle state.
-> >
-> > These new trace events will help developers debug CPUidle issues on ARM
-> > systems using PSCI by providing more detailed information about the
-> > requested idle states.
-> >
-> > Signed-off-by: Keita Morisaki <keyz@google.com>
-> > Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> > Reviewed-by: Dhruva Gole <d-gole@ti.com>
-> > Tested-by: Kevin Hilman <khilman@baylibre.com>
-> > ---
-> > v1->v2: Split the ftrace event into two (psci_domain_idle_(enter|exit))
-> >         and rephrase the commit message accordingly. Rebased onto the latest.
-> > v2->v3: Add "Reviewed-by: Steven Rostedt"
-> > v3->v4: Add the Tested-by label
-> > v4->v5: Add "Reviewed-by: Dhruva Gole"
-> >
-> > Hopefully this patch gets attention from maintainers of
-> > drivers/cpuidle/cpuidle-psci.c too.
->
-> Lorenzo, Sudeep, Ulf, any comments?
->
+> Use the observation that one loop is sufficient to compute the average
+> of an array of values and their variance to eliminate one of the loops
+> from get_typical_interval().
+> 
+> While at it, make get_typical_interval() consistently use u64 as the
+> 64-bit unsigned integer data type and rearrange some white space and the
+> declarations of local variables in it (to make them follow the reverse
+> X-mas tree pattern).
+> 
+> No intentional functional impact.
+> 
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> ---
+>  drivers/cpuidle/governors/menu.c |   61 +++++++++++++++++----------------------
+>  1 file changed, 28 insertions(+), 33 deletions(-)
+> 
+> --- a/drivers/cpuidle/governors/menu.c
+> +++ b/drivers/cpuidle/governors/menu.c
+> @@ -116,49 +116,45 @@
+>   */
+>  static unsigned int get_typical_interval(struct menu_device *data)
+>  {
+> -	int i, divisor;
+> -	unsigned int max, thresh, avg;
+> -	uint64_t sum, variance;
+> -
+> -	thresh = INT_MAX; /* Discard outliers above this value */
+> +	unsigned int max, divisor, thresh = INT_MAX;
+> +	u64 avg, variance, avg_sq;
+> +	int i;
+>  
+>  again:
+> -
+> -	/* First calculate the average of past intervals */
+> +	/* Compute the average and variance of past intervals. */
+>  	max = 0;
+> -	sum = 0;
+> +	avg = 0;
+> +	variance = 0;
+>  	divisor = 0;
+>  	for (i = 0; i < INTERVALS; i++) {
+>  		unsigned int value = data->intervals[i];
+> -		if (value <= thresh) {
+> -			sum += value;
+> -			divisor++;
+> -			if (value > max)
+> -				max = value;
+> -		}
+> +
+> +		/* Discard data points above the threshold. */
+> +		if (value > thresh)
+> +			continue;
+> +
+> +		divisor++;
+> +
+> +		avg += value;
+> +		variance += (u64)value * value;
+> +
+> +		if (value > max)
+> +			max = value;
+>  	}
+>  
+>  	if (!max)
+>  		return UINT_MAX;
+>  
+> -	if (divisor == INTERVALS)
+> -		avg = sum >> INTERVAL_SHIFT;
+> -	else
+> -		avg = div_u64(sum, divisor);
+> -
+> -	/* Then try to determine variance */
+> -	variance = 0;
+> -	for (i = 0; i < INTERVALS; i++) {
+> -		unsigned int value = data->intervals[i];
+> -		if (value <= thresh) {
+> -			int64_t diff = (int64_t)value - avg;
+> -			variance += diff * diff;
+> -		}
+> -	}
+> -	if (divisor == INTERVALS)
+> +	if (divisor == INTERVALS) {
+> +		avg >>= INTERVAL_SHIFT;
+>  		variance >>= INTERVAL_SHIFT;
+> -	else
+> +	} else {
+> +		do_div(avg, divisor);
+>  		do_div(variance, divisor);
+> +	}
+> +
+> +	avg_sq = avg * avg;
+> +	variance -= avg_sq;
+>  
+>  	/*
+>  	 * The typical interval is obtained when standard deviation is
+> @@ -173,10 +169,9 @@
+>  	 * Use this result only if there is no timer to wake us up sooner.
+>  	 */
+>  	if (likely(variance <= U64_MAX/36)) {
+> -		if ((((u64)avg*avg > variance*36) && (divisor * 4 >= INTERVALS * 3))
+> -							|| variance <= 400) {
+> +		if ((avg_sq > variance * 36 && divisor * 4 >= INTERVALS * 3) ||
+> +		    variance <= 400)
+>  			return avg;
+> -		}
+>  	}
+>  
+>  	/*
+> 
 
-Looks good to me. I left it to Ulf, FWIW:
+Reviewed-by: Christian Loehle <christian.loehle@arm.com>
 
-Acked-by: Sudeep Holla <sudeep.holla@arm.com>
-
--- 
-Regards,
-Sudeep
 
