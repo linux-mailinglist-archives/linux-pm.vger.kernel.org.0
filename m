@@ -1,199 +1,288 @@
-Return-Path: <linux-pm+bounces-22200-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22201-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6415BA38215
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 12:42:45 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04E0FA3824B
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 12:53:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 563EB3B5DDC
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 11:40:43 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A9F4D16928E
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 11:53:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 58328218EB0;
-	Mon, 17 Feb 2025 11:39:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE1A5219A99;
+	Mon, 17 Feb 2025 11:52:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="UTJNTqvX"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ga3BjvGm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2047.outbound.protection.outlook.com [40.107.94.47])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DABF21B8E0;
-	Mon, 17 Feb 2025 11:39:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.47
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739792384; cv=fail; b=sN7SYdZ/8LIKHI1WvC5eNbU2fBD3lM8neU32G255lu/1KaCf+Orc50sgpqDeR4t4mAPixx3vWs6wDMxfOxTCSMKY65ZQk1AdM3Dcl4dnjnYpujw/scFPBgYVamY6In9ea3odlaxNYT4GvbxZZuTgXOjvLq5nvsXylKpM1DyRfmw=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739792384; c=relaxed/simple;
-	bh=TPXMd9bmaR45ssx+cwdhLIvfXrbYOj7kTjIbXcC5cxg=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
-	 Content-Disposition:In-Reply-To:MIME-Version; b=orysRFdDT2Nmy+oMMJZ7lAsWIfH09ley7MWPoqXUx1BPCDG954ShUCMant3foQLnaDxGfnLYoqncgIx1TMC9HsrBdCgVzDDw27lpTx5sC0cgnJ1SVdYWRFq2kjkW99vPmg2WZv5rCAGMdtKfbD7y70ZRYfhQppR80aO32NvCySA=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=UTJNTqvX; arc=fail smtp.client-ip=40.107.94.47
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=p87Ol4dyV0jalkeixfiDvkxf8XcZpmc/Z8MVei6URzseF0rvtMmBf4nWKMX0++fY3q4aS5ARAGqfQor9C0a3je3jJxOEPkhwB9xFw1L5lDRBT+QNabCWAL+RAH0QxtRMHJtnwCQinb+okNnNMGtBuH6MJsYe6U2Zl/fPl9hWcyXb5PpEwVXmj3yVTeVBP99SRJLGAo4PAoFcQEpdqKMd77Lkc6WIHcnpjOxa8bX57ShjUgi6irPHt0l/QCMfkJAPbpldEe3FvjZ+hXtlM8FhrpMFbejpL7RWLGI0Yl6e6J63yNZgZ4z6cNpd0UowWxQNdeMgKSoZDKHuDqmmjJF81w==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=YrXFJt30Bx7Xl/3BBJP5k03/XpVfitjhiXoNnQ0sLAM=;
- b=B9I+dlRdGGG8JH63thkXk8smJAN3mvPZ2Kz2s81ExBbz4CcmoCqlOJpCP7zxePNya7C4SeFOOld0FVmLseUyZv6USwz8CFKLFvBifxjHOtVcZ/U9It90nEvRpsaLroQ/6VzVBg4mLzANjZoVpIMcghl/sJf3PejY7LyM8Wa/ugw/oRqzWdU+7lAyWcVitW5vSZUxfCDRUlztafN8D5WmD4yNA35YtPPbmLgEEZgAJ9WcsOnVlrg3sXbBAa9a5JS8qMV8JFw2KZhH+jHiKePefcx6yZ0qZM90tYicSevY/42WnqpdQbF68W2IMr8JEB2HM5mGA3F+AIC2tPWJulNr4A==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
- header.d=amd.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=YrXFJt30Bx7Xl/3BBJP5k03/XpVfitjhiXoNnQ0sLAM=;
- b=UTJNTqvXWhzdGBrMtBBalXClC6nGWAekz/Tud17hK3tjG87fqsJP3BnDkDY5oBeFLOXF7HbQdj4eusxPmzxLLxOFJVOx9xBdHfY/8JVccWm7VF9uFpVmCVZcYyFddH4FMTlnO4RoXkQ5wch9msppLPMs8nTvaGMStbVjZDI2KNU=
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=amd.com;
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
- PH0PR12MB8128.namprd12.prod.outlook.com (2603:10b6:510:294::9) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.20.8445.13; Mon, 17 Feb 2025 11:39:40 +0000
-Received: from DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
- ([fe80::2d0c:4206:cb3c:96b7%3]) with mapi id 15.20.8445.017; Mon, 17 Feb 2025
- 11:39:40 +0000
-Date: Mon, 17 Feb 2025 17:09:32 +0530
-From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-To: Mario Limonciello <superm1@kernel.org>
-Cc: Perry Yuan <perry.yuan@amd.com>,
-	Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
-	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
-	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: Re: [PATCH v2 10/17] cpufreq/amd-pstate-ut: Adjust variable scope
- for amd_pstate_ut_check_freq()
-Message-ID: <Z7Mf9PEVSEAnqV57@BLRRASHENOY1.amd.com>
-References: <20250215005244.1212285-1-superm1@kernel.org>
- <20250215005244.1212285-11-superm1@kernel.org>
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250215005244.1212285-11-superm1@kernel.org>
-X-ClientProxiedBy: PN3PR01CA0154.INDPRD01.PROD.OUTLOOK.COM
- (2603:1096:c01:c8::7) To DS7PR12MB8252.namprd12.prod.outlook.com
- (2603:10b6:8:ee::7)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE558C2EF;
+	Mon, 17 Feb 2025 11:52:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739793179; cv=none; b=qcU8qmf0hsCxs/7t171mATPDjWunUZiCRn2fbErbGeq4bceXPtW8WV00slXLMLyM+SdhC8tkSTxaK1aPpd+ao39D1TwjGFbUv7Yz+YkZns/roWrG5JKiNCjTPs+KXV1iNGJHIo1etqfNwFvffOp5cSd8yr0JueniANUDrq/UxsM=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739793179; c=relaxed/simple;
+	bh=fALyPesKDexFLqrL682vo6Gg3diI4uJ8t5o+EuWB7lg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oKODtkyrd9OLIxsnOjQnyv8xazuNk6lJ0IiGBlBcOVwxglRVC7VOPPTYeNTNuCBWgZFTnjmd+3A1uyElrUJrN6nJFgxVPsD+9VYL3n0tbiOaR9CRz0mnhjaQttJTxDtBHt3kz89JR/rqdqQPilBPFUCVJBLxMPvj80JUAOVTiNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ga3BjvGm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 390C0C4CEED;
+	Mon, 17 Feb 2025 11:52:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739793179;
+	bh=fALyPesKDexFLqrL682vo6Gg3diI4uJ8t5o+EuWB7lg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ga3BjvGmBpNta6i7xzE9CH2etGrzAJ0PbyRInlzWCm+mzOjBoi1eAPelwFhzDdD6v
+	 EIRz1Bs+AM6q+ofQubnxQn7CZZaH4Ad1ld8U/zyoG+pZGi1HZqnseKugrDVqTmNh5T
+	 DlySaHrNWqvJ1WmgsRFLpU4Qyov4ubv8MtGtvOu4dbp8DuLvHzBnuiAPIU475WW2SS
+	 ih06UxrcB9CaCfbyIngebdDu/jcvqVd95ffetDzlewTdK1zilbdISHyDECB7K/8vLo
+	 OsGTMs67/QHl5NKF+WR6STOkiwPqkIhyxtsW4zmYvi2hF5qMO5YFAjrleuKXIJg2F9
+	 GJSUL5KcogFsQ==
+Received: by mail-ot1-f43.google.com with SMTP id 46e09a7af769-726fec215d7so2693533a34.2;
+        Mon, 17 Feb 2025 03:52:59 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUjIcHI7K/v51E/oC1qto2xdiIn7G0uLTbmM+xsI8aZP+tyQVEZI44sDZufd8V4PLhZBT6SMI5Q19w=@vger.kernel.org, AJvYcCVKx2/ksGrc02bvVzxq9Hx+oiijwI19ID5BwONudJV5IYWqsUUKzxB1GUMbEb/5myg9CJWCAWkRkhs=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxsWNMu9VyrE1jO/Iq97c/oTd/s/B1z3cnMEywHANW6VRm5INnO
+	GNYsLr4F1EfkMhbiQJGDnLswWri0DjdaW8dcepYjMN9hEWtQO9abyvufbZCTwJyovH1WdnxvJPv
+	7vwMNx4V/2v0g3p2haUATLaglZxQ=
+X-Google-Smtp-Source: AGHT+IFVVYYbfWFp50Vgm/8/jOG1dKsdvDum4jRfwfMYeu7eMmrCifCE4J9b/zE1tfHWUNE1oMSm7u8tEJSuPg+CO3k=
+X-Received: by 2002:a05:6808:2e99:b0:3f3:c301:c9e3 with SMTP id
+ 5614622812f47-3f3eb0dfdcfmr5815289b6e.12.1739793178328; Mon, 17 Feb 2025
+ 03:52:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|PH0PR12MB8128:EE_
-X-MS-Office365-Filtering-Correlation-Id: 95d48895-9cba-4696-128c-08dd4f47c36d
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|376014|366016;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?FnewIRbCN39TgtlbaqBOrlC1pwq7Jbv3dKbKO9Zt7GGhTaItSZHztIqBa2/+?=
- =?us-ascii?Q?1vmUQCp+I0VpVRbKPkesJervduEL1jUIew3UI9dI716XkjDIgZ5PaHQ0EVXy?=
- =?us-ascii?Q?5mFv50JPhqA/w+vR8TLOI5hU3ZtNwPY2kXFXNoSW9OAAahJRVmQjJGWAz+EM?=
- =?us-ascii?Q?aqrMq6cFXRKclscXU7P/fob4ND5YdaNYInvlhkSQ50uMAxpeB71mo6wQukJT?=
- =?us-ascii?Q?obb9FwBD7DjNWpz359CxJ82OWpzx8cq3621gXJJfZzYUYGjLOl1q8P7k0Bzu?=
- =?us-ascii?Q?fxkzLboWt0mwoT3qOhmvbBshv987fN3yESnpwYQiojn74TdBHq81LABEiwMb?=
- =?us-ascii?Q?HsFFzalw2K9s8zSVaAR6UARDMfpG5sOm3pwkEQla7RbMQsRrayE8ClWonzS8?=
- =?us-ascii?Q?/BydpCAHSDTTGkBjGDmhSKPrHrXVNgv3ppe/16deNn5FKjI/atGAk4HwRaUa?=
- =?us-ascii?Q?7wel9ZF1m5s/z01jsquwFVSUcpWfk3EhGMaG/XGrM6pA9bOBv/1JlmNgnNUV?=
- =?us-ascii?Q?sFyciluopKm5Djbt3pNiUJAvbTkqNhP1+nHjQXTHuccAtjrf29yRRdqTScUk?=
- =?us-ascii?Q?jk8uYg1WYV66qLXDWbuqoEAeIx7guabuKnl6Il+Unv/QUogFwqFllsZJmhHt?=
- =?us-ascii?Q?yiEQXQ+sCmleYxqCpG0wky8INu4hKFWChgLera69i6QZqHngrJ3H54JpZC7N?=
- =?us-ascii?Q?JthXaRupBRkR8f1lNcMwDXi+Y8afWo/xH9R7SkPeuGWRv1dz6GN/EE7z5wgc?=
- =?us-ascii?Q?HKPi4e6nMz4Be6cv7zM57iBHKdzkB2/zYZMcXWnuEzF0fRspbG9Ybw+lMXGx?=
- =?us-ascii?Q?C3D+g640SPaeE/ATEuA2yUrDFOJ+SEBsUUspWO7AFTefccIk4ASY733+NbxR?=
- =?us-ascii?Q?c1Mlk+lQ5M8e/7o9LnlN5G8MVmOeXZdw2x2TMCJk+SZeDoSPPw85lE98CFvf?=
- =?us-ascii?Q?pAViZM62j4guShI8GDyerOTSfV0h4UjuIUHyAnD3Sr1BBklILRyUFhytu1IE?=
- =?us-ascii?Q?iSAKG4LkFsf5SPx6kevCFHeztxVAEpWVdmFnv1ulbADWBXCX/+oDbeHPfnW8?=
- =?us-ascii?Q?5wXxrtRzYhvEcf6y2q/xLtOAob2nsP7ksuk2DHIAq0ZzloDphPp2XXdjFG1V?=
- =?us-ascii?Q?QBpYGImq8Yjkr4i7pmaUJZR+BanW4lfGAae0ES20/S4aHiLq4gWucvtC++oD?=
- =?us-ascii?Q?3zydxXO87iw9Ux7anCknc4l7NPzuMEXUDkhoS66GKNNNhgffhPBjBr8IJ2Hg?=
- =?us-ascii?Q?0kIRCawLC0sBnuMKT6Mep+2GJWmqR4FxPmXmk4nV0a0dzkXTtIQL9MTCxu8S?=
- =?us-ascii?Q?Y2sFlBJ6pCcaG3l82mgxQ02wCFN29fZD8QXaWhvfNImwW1XxvHlS8XylzJfE?=
- =?us-ascii?Q?KPTkET3TO9mRj7G5EqDyqqiOS9lc?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(376014)(366016);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?WaFzzAQMeM+/S5Nb/HJNZk1gNhedAVug5u2b7olpjticSblcXyLse+k41Wzq?=
- =?us-ascii?Q?9D3Sfv8o7KfoMr24t3PQNvq9l+MnIXzgcIKJsBeRpzj2FKmDTYtM8grkXetp?=
- =?us-ascii?Q?ITIsH58uUB1l+i15n034UIY7nYAJutcsEYE59v9esqvuft5w62JE3cBqPMBd?=
- =?us-ascii?Q?eCzyJkJKZLs+I6OJk+1yekDZ+6QjpZxCTAP3mngS6GmAUXA9Rl3ybFXj4KDM?=
- =?us-ascii?Q?JfVoY3whuionFuXV6d7a7fBiSJ7ImTtgMXwVDBhdz3tZNoE5NfjL+0HyvZ6I?=
- =?us-ascii?Q?Ay53ZwAxgGUTJQUC60gbm7RE8BsO+0i6BRutp1+7LA1LkVJEvks06d8+5EtR?=
- =?us-ascii?Q?Es7vd2ksIpOReGVmg4rddn+gV9UHZeC3vjrxinYIXeNcV2fgVN/H1DdI2r/l?=
- =?us-ascii?Q?zSotkhWkpC8zRWbYR0qUWkbWiHcsANdWga0XX3ylyzLiallA4Yi0bmQ+iK6f?=
- =?us-ascii?Q?hdEl0RrujUC2CZwR8KM5X8hjGioNd6Xb/lnnXzNpIk/P+iN3FpYnwc21zauS?=
- =?us-ascii?Q?tpNDbGbB8ukeisBGxYp/IMb1VlH+dAcIO4atIm10QPhQBxzMJoiSFYUGOA4U?=
- =?us-ascii?Q?PDu1J46A7lMd7yXmclFtdAF72ocPh1f3LRhSCT1ChldQ+wJG6ZURZgZNLvTi?=
- =?us-ascii?Q?rAgTfWIPJmUrLatLIqHSI+lw5J03V85v9I8glU1HfypaA2xxJd9PiUkFvhXX?=
- =?us-ascii?Q?Q2BIZu8fLjGiOWJF5y22OB3fXdnuWkDuRujGUrce/9VnjxMlHkABx1wH6wKd?=
- =?us-ascii?Q?LjsB3PR9B8he9sbcoFpnbZEBuiXER20Dj0w+1GwTuG5n6LL6gj8RBxezvKds?=
- =?us-ascii?Q?+ASAf/7iv2O+DJrDBDY5/6k4xoRbEtMS/C2v5AWqsDt0R4dd+0zEh+P+Q9V4?=
- =?us-ascii?Q?2yGwV1G73EvumY21dGCcgJfDnC1rEVKmnarTWEy5QxB0Y5kOCXdwMnp2O0ru?=
- =?us-ascii?Q?OSan4z2twS6Zp9Ekebwzz9yPAJZ9KCfLao6MkaVi2SPvIcxjXPvkXbho3/8e?=
- =?us-ascii?Q?6QZ+iGW6f2aWLYkqWfasblQ+ntriEU/FCCeoD9mCU6DxCfsCb+yDSExPE4f9?=
- =?us-ascii?Q?jSNMd7mTNdmBrlNyBzzbFPo9RnE/a/1dGv7T2LgWKcM85uGzOZCKEV9f0z06?=
- =?us-ascii?Q?a9wLeaH3g4yP/euWD9mJUN364EShCJMyEv4QwGWxVqFriQfVZWq0JwqaqTLX?=
- =?us-ascii?Q?ywJnyGVfi3wMW+139p/hnGxR+T/pm2mowkm+UN6AfSaRKNy1BIJnlHeLg8tl?=
- =?us-ascii?Q?xycW16cXRuNCZSsRT/L09pqVPDs3mTqLcKSczgTJ2Y/LEQi+XpoXsMUjGX64?=
- =?us-ascii?Q?8g1GG6zkPqqE6DlMQRFUCvOYUn8wXki4IX/BboGABUECjRVSP2g+pJOnR83F?=
- =?us-ascii?Q?EWGgZyfB9MK0vXSb/ehQ9qNPKvekTEJrxSl0Uq54G/SaqjbU/SZP93IYOYPa?=
- =?us-ascii?Q?vopOtaMhWUsli+cA3DiHtPB4Tilvzg8DJAQgKlaJDwpopw29a3Kn3OtEEVjw?=
- =?us-ascii?Q?+bN3cLZDr5AS/cG0rENpoJfgLOlcxOv1+DTJlVN3F60n4aG0Xrs2W6i1Rqfb?=
- =?us-ascii?Q?OBHwf4xiUIG2wEPD8SZ4VgsD4gqyW48nO19OFfEQ?=
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 95d48895-9cba-4696-128c-08dd4f47c36d
-X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2025 11:39:39.9733
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: myVRK3l8AUNJpqRxHCZJXb7+mZ128Vpxyn4Eol9BOIL1cwyQxZhRyBRwWDD3Tu0e8bvhzv1cUvYvGwMWJZgraQ==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: PH0PR12MB8128
+References: <20250131162439.3843071-1-beata.michalska@arm.com> <20250131162439.3843071-3-beata.michalska@arm.com>
+In-Reply-To: <20250131162439.3843071-3-beata.michalska@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 17 Feb 2025 12:52:44 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g+yax=pT4m_2MTd9kUwbk5VBp2wkctTYJpFRU3myEjPQ@mail.gmail.com>
+X-Gm-Features: AWEUYZnn9bgmOxkTXEcn87pSetveYQRe_SyW5ltWCODIphxbCVMgI8FLshf-Yx0
+Message-ID: <CAJZ5v0g+yax=pT4m_2MTd9kUwbk5VBp2wkctTYJpFRU3myEjPQ@mail.gmail.com>
+Subject: Re: [PATCH v10 2/4] cpufreq: Introduce an optional cpuinfo_avg_freq
+ sysfs entry
+To: Beata Michalska <beata.michalska@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-pm@vger.kernel.org, ionela.voinescu@arm.com, sudeep.holla@arm.com, 
+	will@kernel.org, catalin.marinas@arm.com, rafael@kernel.org, 
+	viresh.kumar@linaro.org, sumitg@nvidia.com, yang@os.amperecomputing.com, 
+	vanshikonda@os.amperecomputing.com, lihuisong@huawei.com, 
+	zhanjie9@hisilicon.com, ptsm@linux.microsoft.com, 
+	Jonathan Corbet <corbet@lwn.net>, Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>, 
+	Borislav Petkov <bp@alien8.de>, Dave Hansen <dave.hansen@linux.intel.com>, 
+	"H . Peter Anvin" <hpa@zytor.com>, Phil Auld <pauld@redhat.com>, x86@kernel.org, 
+	linux-doc@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 14, 2025 at 06:52:37PM -0600, Mario Limonciello wrote:
-> From: Mario Limonciello <mario.limonciello@amd.com>
-> 
-> The cpudata variable is only needed in the scope of the for loop. Move it
-> there.
+On Fri, Jan 31, 2025 at 5:25=E2=80=AFPM Beata Michalska <beata.michalska@ar=
+m.com> wrote:
+>
+> Currently the CPUFreq core exposes two sysfs attributes that can be used
+> to query current frequency of a given CPU(s): namely cpuinfo_cur_freq
+> and scaling_cur_freq. Both provide slightly different view on the
+> subject and they do come with their own drawbacks.
+>
+> cpuinfo_cur_freq provides higher precision though at a cost of being
+> rather expensive. Moreover, the information retrieved via this attribute
+> is somewhat short lived as frequency can change at any point of time
+> making it difficult to reason from.
+>
+> scaling_cur_freq, on the other hand, tends to be less accurate but then
+> the actual level of precision (and source of information) varies between
+> architectures making it a bit ambiguous.
+>
+> The new attribute, cpuinfo_avg_freq, is intended to provide more stable,
+> distinct interface, exposing an average frequency of a given CPU(s), as
+> reported by the hardware, over a time frame spanning no more than a few
+> milliseconds. As it requires appropriate hardware support, this
+> interface is optional.
+>
+> Note that under the hood, the new attribute relies on the information
+> provided by arch_freq_get_on_cpu, which, up to this point, has been
+> feeding data for scaling_cur_freq attribute, being the source of
+> ambiguity when it comes to interpretation. This has been amended by
+> restoring the intended behavior for scaling_cur_freq, with a new
+> dedicated config option to maintain status quo for those, who may need
+> it.
 
-Makes sense.
+In case anyone is waiting for my input here
 
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Acked-by: Rafael J. Wysocki <rafael@kernel.org>
 
-> 
-> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+for this and the previous patch and please feel free to route them
+both through ARM64.
+
+Thanks!
+
+> CC: Jonathan Corbet <corbet@lwn.net>
+> CC: Thomas Gleixner <tglx@linutronix.de>
+> CC: Ingo Molnar <mingo@redhat.com>
+> CC: Borislav Petkov <bp@alien8.de>
+> CC: Dave Hansen <dave.hansen@linux.intel.com>
+> CC: H. Peter Anvin <hpa@zytor.com>
+> CC: Phil Auld <pauld@redhat.com>
+> CC: x86@kernel.org
+> CC: linux-doc@vger.kernel.org
+>
+> Signed-off-by: Beata Michalska <beata.michalska@arm.com>
+> Reviewed-by: Prasanna Kumar T S M <ptsm@linux.microsoft.com>
+> Reviewed-by: Sumit Gupta <sumitg@nvidia.com>
 > ---
-> v2:
->  * new patch
-> 
->  drivers/cpufreq/amd-pstate-ut.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-> index b888a5877ad93..9db20ac357042 100644
-> --- a/drivers/cpufreq/amd-pstate-ut.c
-> +++ b/drivers/cpufreq/amd-pstate-ut.c
-> @@ -186,10 +186,10 @@ static int amd_pstate_ut_check_perf(u32 index)
->  static int amd_pstate_ut_check_freq(u32 index)
+>  Documentation/admin-guide/pm/cpufreq.rst | 17 +++++++++++++-
+>  drivers/cpufreq/Kconfig.x86              | 12 ++++++++++
+>  drivers/cpufreq/cpufreq.c                | 30 +++++++++++++++++++++++-
+>  3 files changed, 57 insertions(+), 2 deletions(-)
+>
+> diff --git a/Documentation/admin-guide/pm/cpufreq.rst b/Documentation/adm=
+in-guide/pm/cpufreq.rst
+> index a21369eba034..3950583f2b15 100644
+> --- a/Documentation/admin-guide/pm/cpufreq.rst
+> +++ b/Documentation/admin-guide/pm/cpufreq.rst
+> @@ -248,6 +248,20 @@ are the following:
+>         If that frequency cannot be determined, this attribute should not
+>         be present.
+>
+> +``cpuinfo_avg_freq``
+> +        An average frequency (in KHz) of all CPUs belonging to a given p=
+olicy,
+> +        derived from a hardware provided feedback and reported on a time=
+ frame
+> +        spanning at most few milliseconds.
+> +
+> +        This is expected to be based on the frequency the hardware actua=
+lly runs
+> +        at and, as such, might require specialised hardware support (suc=
+h as AMU
+> +        extension on ARM). If one cannot be determined, this attribute s=
+hould
+> +        not be present.
+> +
+> +        Note, that failed attempt to retrieve current frequency for a gi=
+ven
+> +        CPU(s) will result in an appropriate error, i.e: EAGAIN for CPU =
+that
+> +        remains idle (raised on ARM).
+> +
+>  ``cpuinfo_max_freq``
+>         Maximum possible operating frequency the CPUs belonging to this p=
+olicy
+>         can run at (in kHz).
+> @@ -293,7 +307,8 @@ are the following:
+>         Some architectures (e.g. ``x86``) may attempt to provide informat=
+ion
+>         more precisely reflecting the current CPU frequency through this
+>         attribute, but that still may not be the exact current CPU freque=
+ncy as
+> -       seen by the hardware at the moment.
+> +       seen by the hardware at the moment. This behavior though, is only
+> +       available via c:macro:``CPUFREQ_ARCH_CUR_FREQ`` option.
+>
+>  ``scaling_driver``
+>         The scaling driver currently in use.
+> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
+> index 97c2d4f15d76..2c5c228408bf 100644
+> --- a/drivers/cpufreq/Kconfig.x86
+> +++ b/drivers/cpufreq/Kconfig.x86
+> @@ -340,3 +340,15 @@ config X86_SPEEDSTEP_RELAXED_CAP_CHECK
+>           option lets the probing code bypass some of those checks if the
+>           parameter "relaxed_check=3D1" is passed to the module.
+>
+> +config CPUFREQ_ARCH_CUR_FREQ
+> +       default y
+> +       bool "Current frequency derived from HW provided feedback"
+> +       help
+> +         This determines whether the scaling_cur_freq sysfs attribute re=
+turns
+> +         the last requested frequency or a more precise value based on h=
+ardware
+> +         provided feedback (as architected counters).
+> +         Given that a more precise frequency can now be provided via the
+> +         cpuinfo_avg_freq attribute, by enabling this option,
+> +         scaling_cur_freq maintains the provision of a counter based fre=
+quency,
+> +         for compatibility reasons.
+> +
+> diff --git a/drivers/cpufreq/cpufreq.c b/drivers/cpufreq/cpufreq.c
+> index 96b013ea177c..a2f31fbb1774 100644
+> --- a/drivers/cpufreq/cpufreq.c
+> +++ b/drivers/cpufreq/cpufreq.c
+> @@ -734,12 +734,20 @@ __weak int arch_freq_get_on_cpu(int cpu)
+>         return -EOPNOTSUPP;
+>  }
+>
+> +static inline bool cpufreq_avg_freq_supported(struct cpufreq_policy *pol=
+icy)
+> +{
+> +       return arch_freq_get_on_cpu(policy->cpu) !=3D -EOPNOTSUPP;
+> +}
+> +
+>  static ssize_t show_scaling_cur_freq(struct cpufreq_policy *policy, char=
+ *buf)
 >  {
->  	int cpu = 0;
-> -	struct amd_cpudata *cpudata = NULL;
->  
->  	for_each_possible_cpu(cpu) {
->  		struct cpufreq_policy *policy __free(put_cpufreq_policy) = NULL;
-> +		struct amd_cpudata *cpudata;
->  
->  		policy = cpufreq_cpu_get(cpu);
->  		if (!policy)
-> -- 
-> 2.43.0
-> 
-
--- 
-Thanks and Regards
-gautham.
+>         ssize_t ret;
+>         int freq;
+>
+> -       freq =3D arch_freq_get_on_cpu(policy->cpu);
+> +       freq =3D IS_ENABLED(CONFIG_CPUFREQ_ARCH_CUR_FREQ)
+> +               ? arch_freq_get_on_cpu(policy->cpu)
+> +               : 0;
+> +
+>         if (freq > 0)
+>                 ret =3D sysfs_emit(buf, "%u\n", freq);
+>         else if (cpufreq_driver->setpolicy && cpufreq_driver->get)
+> @@ -784,6 +792,19 @@ static ssize_t show_cpuinfo_cur_freq(struct cpufreq_=
+policy *policy,
+>         return sysfs_emit(buf, "<unknown>\n");
+>  }
+>
+> +/*
+> + * show_cpuinfo_avg_freq - average CPU frequency as detected by hardware
+> + */
+> +static ssize_t show_cpuinfo_avg_freq(struct cpufreq_policy *policy,
+> +                                    char *buf)
+> +{
+> +       int avg_freq =3D arch_freq_get_on_cpu(policy->cpu);
+> +
+> +       if (avg_freq > 0)
+> +               return sysfs_emit(buf, "%u\n", avg_freq);
+> +       return avg_freq !=3D 0 ? avg_freq : -EINVAL;
+> +}
+> +
+>  /*
+>   * show_scaling_governor - show the current policy for the specified CPU
+>   */
+> @@ -946,6 +967,7 @@ static ssize_t show_bios_limit(struct cpufreq_policy =
+*policy, char *buf)
+>  }
+>
+>  cpufreq_freq_attr_ro_perm(cpuinfo_cur_freq, 0400);
+> +cpufreq_freq_attr_ro(cpuinfo_avg_freq);
+>  cpufreq_freq_attr_ro(cpuinfo_min_freq);
+>  cpufreq_freq_attr_ro(cpuinfo_max_freq);
+>  cpufreq_freq_attr_ro(cpuinfo_transition_latency);
+> @@ -1073,6 +1095,12 @@ static int cpufreq_add_dev_interface(struct cpufre=
+q_policy *policy)
+>                         return ret;
+>         }
+>
+> +       if (cpufreq_avg_freq_supported(policy)) {
+> +               ret =3D sysfs_create_file(&policy->kobj, &cpuinfo_avg_fre=
+q.attr);
+> +               if (ret)
+> +                       return ret;
+> +       }
+> +
+>         ret =3D sysfs_create_file(&policy->kobj, &scaling_cur_freq.attr);
+>         if (ret)
+>                 return ret;
+> --
+> 2.25.1
+>
+>
 
