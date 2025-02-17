@@ -1,237 +1,218 @@
-Return-Path: <linux-pm+bounces-22178-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22179-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC5F1A37A08
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 04:14:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 875D1A37A31
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 04:50:12 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AC4197A2B8A
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 03:13:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23F8F3ACE23
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 03:49:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B8F14D444;
-	Mon, 17 Feb 2025 03:14:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07FB713FD72;
+	Mon, 17 Feb 2025 03:49:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="oLOsbCF2"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xeyKevpr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from EUR02-VI1-obe.outbound.protection.outlook.com (mail-vi1eur02on2043.outbound.protection.outlook.com [40.107.241.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F3ECF14830A;
-	Mon, 17 Feb 2025 03:14:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.241.43
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739762062; cv=fail; b=FJRDClzskoOz23qfW1wkR2g6tXnvEbYolKqO1n9L/t8yXf/Z+khUEKHtKlhX17zvESOWWNdHsr4Cycfs3568n/NyoAUbRwxTNGKVqDu2JF2BXIdNRAKIEEGWERctjX72OmxMqj7HA1CZtu2S322470YBmzykXo8Fqn1aHuWGIbY=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739762062; c=relaxed/simple;
-	bh=aMo58fLYHm1Owhl7L8TA3D8F03OG9iJHkJYGwheJ6To=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=Cg62cK1OaUSc8uafGwL8RtWWzJpQ72Vlw20j+sY9V78EohXewTG3jfgOVeDtf9uosnSjvQrPwB4hDIrsEhfixndXLBXc8xYIr0C2kwZRRafpD1oQ9i3i19fptsY7gPdgzqY+qdo2Zm3coF+aTX2xL1n+OuShp3Jaf1MSnB4QGjY=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=oLOsbCF2; arc=fail smtp.client-ip=40.107.241.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=nD0/KlhaHaS0cSZVt0t+QaUiMvpDcBHpxV/uMW+fUcVcDbzIn2Gvswv3OT3r6GkprGNWDeaikMVUbKK8UnD5HP8rshENZqUTtth6F59aLueaOLd6GVkjV9GK9TxGZCZzkAl8pll/oASz4FRUUBLQ9OqE0wirQ/1iKpROoyLLX9+PgE+3nihPDf0FEi7S1tI6S07/xccIftGJmEIYd6vqe/wS1mACfQ1KGjuiKx2wls8sWEBOpl+7cwuy0qDjjjw1Al1uKSqJGNu0ocx7ABEV/+A5r7x2Xmo4CqglPSdecnOMuoWPLU6vCJRJ+jLuG5aVXWyxgS4sb/UISwH0scFgJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=+Js2JVHoJNz5Fx27p3xSLUq/uxlACJCCRU2jQ0UOAII=;
- b=t5f2Y2zsQdoCJXpWDRbkjBVQrrc5CFIPOouDe8QvtjUJPrr2zPJLhOqdNIT50X+kzjRjGPnAEk5nwFAIVlMzuG8LNcR7sj9dovlV2m8P9QIxt4pBPwaxIwuiz83Met1kR5bZxDemM2MeScFicyWgmT7M1wY+w7y4Bl8U9+Rf6tYTDoJ5EVTV+KjBuWRzgBkH3z4v57yxoWvOc+dFuRwa72VUV6CvSUYpSsgA/jRLOJj+JoFEAHgSTZLujXhwd+7mstiJi4YiaInfclZVKF1lc+mblAtXzNQ8FmVPeXqjFtEBrrVrAjDtaO9oIfu0Rsdo94QAWIxfKOUnG5PSGUji1g==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=+Js2JVHoJNz5Fx27p3xSLUq/uxlACJCCRU2jQ0UOAII=;
- b=oLOsbCF2uG1EFaliWeTEmVrHo4019OQMNlC1eOhRhy+WBNJn+SxUQKQ6+Eh4G3Y3xRcM2yID9IL7hmVOJetCJ+PfLRYDzgRZ0cViMUXmpnA6e95PMHeAgv1O0h5IzbfpFrcgJSy5cJ/nYQhI9MdLBJ7jkYfKZdK8//OLvpGHFIJRIdsZ9ujaa2ulwbdCY726LtN73Ctx1ldsl0KJZHmMlMVmBt9bVwQ9+wWpyXuhqqfe28+PmQ9/xZtAnWNYxPFxwKmCY+rIShfE6QHZfnzd8LaqsXXFRePkvieg+1UZm5WeG/vWaNCrCjftIdSmLX+0OZhHo0exAHtPy2bKGKgOkQ==
-Authentication-Results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
- by AM0PR04MB7043.eurprd04.prod.outlook.com (2603:10a6:208:19b::20) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.18; Mon, 17 Feb
- 2025 03:14:16 +0000
-Received: from AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::d1ce:ea15:6648:6f90]) by AM7PR04MB7046.eurprd04.prod.outlook.com
- ([fe80::d1ce:ea15:6648:6f90%3]) with mapi id 15.20.8445.017; Mon, 17 Feb 2025
- 03:14:16 +0000
-Message-ID: <f8de9c49-aee2-4ce4-b3cf-ee448f9fc293@nxp.com>
-Date: Mon, 17 Feb 2025 11:15:25 +0800
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] bus: simple-pm-bus: fix forced runtime PM use
-To: Johan Hovold <johan+linaro@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Ulf Hansson <ulf.hansson@linaro.org>,
- Geert Uytterhoeven <geert+renesas@glider.be>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250214102130.3000-1-johan+linaro@kernel.org>
-From: Liu Ying <victor.liu@nxp.com>
-Content-Language: en-US
-In-Reply-To: <20250214102130.3000-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: SGBP274CA0004.SGPP274.PROD.OUTLOOK.COM (2603:1096:4:b0::16)
- To AM7PR04MB7046.eurprd04.prod.outlook.com (2603:10a6:20b:113::22)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D882C2C9
+	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 03:49:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739764196; cv=none; b=AEJG7OMctCRwqNmCD5rb9WFrsC7lW0DD9XmSdFqNFSTqMUgjNEVs2wuzMicyUJXqLkL7Jonm7q8koenXdpb7rweJv5t6SUOvW3oGjCtz5rpLz/y7iBWNHv4k7e/pDicAih1IVUaJDHWjrm2RQNo1dn0tUKo2V4sg/w5/D5l6ou8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739764196; c=relaxed/simple;
+	bh=AEctecPW644bInprG1Q0+EICJctiBz+Em9TO21wIBsM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QLaphU43CTHPJ0gUB3aiP/bipCsptvdvhUkJK4OOT3ytCh35hqts3ls5UlWsZtLg7gWI6cfV8zkIWUT6W0v4AkVbR36o54CmxLFYZik4baW2KU9I+kbbPOJ40Poefn5iKTabZtxhJTJumwG3bUKRkp/+dhkT3ywC4GKkO8VM/lU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xeyKevpr; arc=none smtp.client-ip=209.85.216.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2fc3a14f6fbso2653705a91.3
+        for <linux-pm@vger.kernel.org>; Sun, 16 Feb 2025 19:49:55 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1739764195; x=1740368995; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=q6qV2LKgDU3t0RtwY5zJqsVUWjzCYVJ/54cGupGGOAA=;
+        b=xeyKevprCrOYvYbdurqZtnbhcZINaGfp+vCLLYEJtPSeqEFj7E8iEMcskh9WcoROAy
+         YNw9/d3YHEqoBG5t+DU4BB1e+Se29yYWVloLKZiTBFYURbtyv87qV9UyabfHfzuJxylv
+         H4L5zOZrnHTF3vKjFo3ZVWNMyYKc6GzrcYBZL4tLblYJR1/dKbCoqoHwLdkf8P+qqqj3
+         V5t6amp7YrmuVj5GbqUrN9X5AZttyguELNaGx0lS6h6chEaaf8gnz/Aom+J/WdQGEMwQ
+         FLT9oa5ZE6JAgbwW2nyhtxg3ApRGsfJ4Sj90WomhxwjaIlmVfLW+P60Nq5hl06QzeKBY
+         jl7w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739764195; x=1740368995;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=q6qV2LKgDU3t0RtwY5zJqsVUWjzCYVJ/54cGupGGOAA=;
+        b=ngfuTtt1CPytafGYsWZRIYYD0mDinxtL1I4+EjwL6+umYd+AU8k2eOU+Yzcv9F5wKU
+         PBv8FVdG//LOkRAhQFutjmGvIJCSFsCidiTMSu42r6rJslH5fl9H0CYsn15V2l1cSJLp
+         z/GzbEd7k/LwR6bsjBAIhszUBTRe2zRf7PBZMY3eWCggVotLqCI4KBmsN3slaA9oixbL
+         csGFugasXYo7RcBbQO2fI3XQTjwhKJ1gZYxK2EoXov+yS8mC/ZEmGr1jAFl8YDXIjaVf
+         0gYtt5T6iZQvXvmw206TbG2wozwcWClnTFsIMxALKLv+Ldbm+UI6Fs6wFKaaLGCH7j0Y
+         6G8Q==
+X-Forwarded-Encrypted: i=1; AJvYcCVRagE2r7SpiqU9KllK5dzZO2mTwXSJDa4ZhHH+FACWxz1Unav2OAgJBq3kfMsTbtal16yjDuP61g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwhdRmxfFagnCSuIoFjRSExSQJyvqMWraFV0EzbxNC+ODauKc4Q
+	HNjgzvTyttCTqCO3K73XHbFoABZIgOjVMnyVBAZ8lQNM8hw89o4x1yV+IquDBw==
+X-Gm-Gg: ASbGncu72KA2uF0KSO9qpRPjSFThUOl3G+OKQtHy7o+ydGGeUnT2WKMOmhXfj2S+Yjb
+	EeWlblE8eXvprAO94aIMyUr034cjW4ONpq5pmIXxRJVFYo7grp3YNHlQXbnSU+pyCzGwGg2/tGF
+	JBClfdAagJVwEXkURgcQvOyUaqK/Mrjd1wpYL4ZKxcJ3U440oaZ9FqTWo07WruElC64Fa27Vfn3
+	qqloYXM5A21aKax5jVY1uTm502DZTmZ0GM8s9QoXta0f00+AcjdE6Xk4pFaKjVWVcwI3ldqZEbS
+	adTF+O4i9O/pY0kfa6hxWj+iV+zpFwU5lnOHBoO1OpRvhHhkuZuiP4kZBw==
+X-Google-Smtp-Source: AGHT+IG+mp2u7hYvW8OafGPbN4o2uVFyOs0S++K2BLbGBPWA98vSvCccRtLwR4LjGhALrh85g6TMxQ==
+X-Received: by 2002:a17:90b:35c9:b0:2f6:d266:f462 with SMTP id 98e67ed59e1d1-2fc411540camr12191613a91.35.1739764194422;
+        Sun, 16 Feb 2025 19:49:54 -0800 (PST)
+Received: from google.com (49.156.143.34.bc.googleusercontent.com. [34.143.156.49])
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fc13ac0a5bsm6833135a91.18.2025.02.16.19.49.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sun, 16 Feb 2025 19:49:53 -0800 (PST)
+Date: Mon, 17 Feb 2025 09:19:45 +0530
+From: Ajay Agarwal <ajayagarwal@google.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Brian Norris <briannorris@google.com>, Oliver Neukum <oneukum@suse.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	Vincent Whitchurch <vincent.whitchurch@axis.com>,
+	"jic23@kernel.org" <jic23@kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
+	Brian Norris <briannorris@chromium.org>,
+	Joy Chakraborty <joychakr@google.com>,
+	Vamshi Gajjela <vamshigajjela@google.com>,
+	Manu Gautam <manugautam@google.com>
+Subject: Re: PM runtime_error handling missing in many drivers?
+Message-ID: <Z7Kx2RN35QVyg8nP@google.com>
+References: <5caa944f-c841-6f74-8e43-a278b2b93b06@suse.com>
+ <20220708110325.GA5307@axis.com>
+ <4ca77763-53d0-965a-889e-be2eafadfd2f@intel.com>
+ <1937b65c-36c0-5475-c745-d7285d1a6e25@suse.com>
+ <CAJZ5v0j0mgOcfKXRzyx12EX8CYLzowXrM8DGCH9XvQGnRNv0iw@mail.gmail.com>
+ <5c37ee19-fe2c-fb22-63a2-638e3dab8f7a@suse.com>
+ <CAJZ5v0ijy4FG84xk_n8gxR_jS0xao246eVbnFj-dXzwz=8S9NQ@mail.gmail.com>
+ <Z6lzWfGbpa7jN1QD@google.com>
+ <Z6vNV8dDDPdWUKLS@google.com>
+ <CAJZ5v0i83eJWV_kvWxZvja+Js3tKbrwZ8rVVGn7vR=0qLf1mtw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: AM7PR04MB7046:EE_|AM0PR04MB7043:EE_
-X-MS-Office365-Filtering-Correlation-Id: 9214a644-3908-4a89-9572-08dd4f01294c
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam: BCL:0;ARA:13230040|366016|376014|1800799024|7053199007;
-X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?b21DeVBEYmo2aWExczB0THRtaXA4a0VGQVVhYzdmOHlyaUxUN0VoRldCc1VR?=
- =?utf-8?B?TlBXajZXNCtvL2lWZXQ1Q3hQNE5DWU4xcUNjME44VFZZdmVycDJqRFBFR0ND?=
- =?utf-8?B?OWdMSVRBTkxubmtsL3dmNmRoY3J2ME0wMFBUUHlSQllUUGZIR1g3MDl1MnlZ?=
- =?utf-8?B?OWhNRW1DYWJQeWdqZ2hham1FL2dkR016V0pjaE9NWjAwQlFvalVtRkpFekNO?=
- =?utf-8?B?WHdUeDVvWjNiVkIrS0x3a3ZTTHlnTUFFNXEzUnB5YXJDSlJadEQ2VndNTFE2?=
- =?utf-8?B?VURMWksrTStFRFpCT2lGZHRvYlF6VW10VXg0d0d1WHAxU0xOSTVTVzFXeTZB?=
- =?utf-8?B?OGZhRi9EdWdtTUt6cm8xK0VTaHJsZnhxRmhURzhGcUJKNzg1TklRT3NoQkIv?=
- =?utf-8?B?MVdKSU9BY0l6VkJBVTVEbUJ4T3oraHM1SkViNFltSTRJU3lIbXRWQzhtNWtN?=
- =?utf-8?B?ZU5EanBjNUhYNW1STjE2SXNOQXE0NGRSZmlDWEdURGZMT2xKUDMxb2YvWklP?=
- =?utf-8?B?cWd1L0JSK1VXZTdXS0IwMDZkZmRHbjFvSkdEQzNRNWxMNUpqQVBrcmMvVTRw?=
- =?utf-8?B?OHplZEtxTHlUK21DUjZnS3RwZXo3WEtNd1YybWsvSnZnbGdNMGxFaFUrV0lE?=
- =?utf-8?B?V25TSUxMRVhNekxQWTFrYzU3alBETzNmeVo0VTRMUDNmV0pWWkRkY3RBZkNS?=
- =?utf-8?B?NnJ3SWk3NFpCSzFSbitTYWIyMDRHVFR1Q2ZPY2NXdDJzRWNjd1JJS0M4NGhS?=
- =?utf-8?B?WVArdGNnYUlzaFN1SEhSaHpzYTk4RmZWWjhJUVl6SWpEWmpsODUyWVYxaFBF?=
- =?utf-8?B?dVZ2TlBPb2xXOGNPcTE5eEhhTnlyL0ZiWjNneXFGRGxNa0s1TmlLUUlndExU?=
- =?utf-8?B?cFZzRmJEUmdFM2pVWit5N25FM3ZOQ2xGQVhDckVmTnc2Z1B0VDgzWE1mOUl0?=
- =?utf-8?B?WWo4Q3l6WE9relN3dEFoSkZmeDc2cVp3SXoyZHdNelhMSitLdUhWbmpjN1R2?=
- =?utf-8?B?WlNQS1A4cWR4WXR1aHArM05tVUwwNFUvRlFpdVJaRkJwRUpEam1vZG9rRm5M?=
- =?utf-8?B?ZGc3U2hha003MkFCMVJna1FMUWtCeUZvcCtQQ2YwczcrY01OZVdDK2RGU3NY?=
- =?utf-8?B?S3lUUVZlUzNLcE54WE9CcWtMN01YMzBPWjhSWWtjcTJPK3ZOVk9lUFRYSHVw?=
- =?utf-8?B?UjhWTDFzOTBwQmRXbzltd2xQTzF4UmtqaFNaalBoN1FYYnljSUl2Nks2Nll1?=
- =?utf-8?B?SUlwamZWUXBkN3dPcFZFem15UkhqN0gvYjlPcFFXNWNkOGpiOHI5QlFrRlkw?=
- =?utf-8?B?UHA5U3pjMFV4Wm9ON0xyak82Y3FBTW5EdkxqZnRIZm41M1YyQkZpeUtUKzhX?=
- =?utf-8?B?NlFWS0hNV3BCU25PT3pZbkdsdUJBUVRtUFpwazRrc1pkWXNZd2VINWFYM1Rh?=
- =?utf-8?B?cmdkcUhLRm5ZMXJBNWp4UzdseHJLRUgyVWJNWG1CRW5rWTlqUkpYY0dZZEFT?=
- =?utf-8?B?UHVhRlNyY05YRVVHZnBObUV1UmVqNW1pYk5IUllHZnZZTGh5aGllNWNmTVVy?=
- =?utf-8?B?bm1Ec2xGMVFva3BOc2xoL3FSam5UWUl5VjhhdHdKSWtlSDk0WldOS2lUR3pv?=
- =?utf-8?B?T1crS3g1OFA5d3BYUWllUnBLRWZ5cmk1cXRERkVvQVZBZitrTjhtQXJTWGEv?=
- =?utf-8?B?QUlKY2xsOFA2ajJ6YnlCTU81cjRiRDlNK3lEd3hVU3dTS0RBdWkxKzdTcGFX?=
- =?utf-8?B?bW4wcUNIU1NoZ0dTS3gyZlp6dXFRUUpkQ3ZhQzE0OW51Q1gzMmxMVHBsRXhU?=
- =?utf-8?B?a0hTY2tIcW5UTWJUYkNZTVRCYytTR1hDSmM4bHoxMUVudGhPYTVkQm5ta2Ru?=
- =?utf-8?Q?Ut/j2nmiBUe/r?=
-X-Forefront-Antispam-Report:
-	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AM7PR04MB7046.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(376014)(1800799024)(7053199007);DIR:OUT;SFP:1101;
-X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
-X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?V252aVdTdjd4NE5MYVBzNDVXYUF0Q1p5aldrY1drd3VNRlNnd3pJNlM3Y0Zu?=
- =?utf-8?B?U0hqQmpTUC9Yd1ZzY3dMdmthSi9FWFJ5NXNzMWpWSkhYTldzTFJvZCtuenRw?=
- =?utf-8?B?aEJYTGIvODZ1RFdHclNNb2NJUFlSWVVzZnhFa2pCK25nanY5bTRqR0hic3ZF?=
- =?utf-8?B?bmtldlZrc0NCakVPc05mZ2h3M1VYaVpZUGZKYkZESWpmYWt6djR6UXlFWnp3?=
- =?utf-8?B?MHhrUlN2a21nNXo5S2M4bVpyRUFjaUlWdEZRbGtiZ1FMcitHU1dkdFBCZU5y?=
- =?utf-8?B?cDR2N0J2UzBzOWJzNHAxL0NvRFhUeXlVclVIUzlHN3NUaVI5NU5KaUJuUVo5?=
- =?utf-8?B?N3lqZEx1ejJ1dXJWaHpzSlVlQy9pNEdZdFNpYWJmeTNIRTZySktoRHc0dTdy?=
- =?utf-8?B?SFhxTkJnMllmQ3dnSEcvSUQ1WXlpbGYvSUZMcFRDZ2swajJpdkcvejFoOUhQ?=
- =?utf-8?B?SzZlZnRTSmw0UVdUZ1FVT3N2UjZlbHpNbVBCdFNUTng2dWc3TXV1U3pMSEcz?=
- =?utf-8?B?L2Z2MWRGbW9IUXN6cGxlcGI2UVYwL2p4dmxGaElCY2RWYWtEdkdtRzN5cXZ2?=
- =?utf-8?B?cHBTS0ttVDRvd3YwZG9iMjR2Z0lTeWRZdEJMZ2hKeXhkcWRWSXN5MVBsbzFp?=
- =?utf-8?B?UExpSmFIL1pNQkZLWEhyVkFweVpTUUgzeVlNT21Pb2NocWxRa3RJbEk3K2N2?=
- =?utf-8?B?MkQ2TlJZMjFVOXFnM0VtOEdjWGFRN0hucm90RTJLMllyczRyWnArL0ROMk9L?=
- =?utf-8?B?UExVUzVpUFZHenlQWEJjU2duQ1BnSXRBb3JPakIrd0xReFJRbk53WG9JT2Nk?=
- =?utf-8?B?a2o0YjBwTWlnbEc3TVNES3habWVaTFp1emU1YXJsTTNzWG5QdVU0RmFVK2Zp?=
- =?utf-8?B?Y2hZdkhBTTE5WExSTXpGTTNNeDUyOFhOUUw1MnQxRVdmanJSNXQrYTFOS3M3?=
- =?utf-8?B?aG14M001S2RaWG5TNmN3M2Q2cGJmS0swTGU0WTRMNjRycjhrVHhid0hOOXo4?=
- =?utf-8?B?eklxaDE0Z1ZvRzFRTVRMRDYrcmxKWFRNUmdaMVhGUDRpbUh2TjJGcmJoQjcv?=
- =?utf-8?B?VGNoMUt6bGRuQkpuczhqMHh1V2lidzNnS055anM1TjhNdHk3UFp0dGxEbWlv?=
- =?utf-8?B?K3pyQVZxMVZqY2ExalJHd05NYTduV05qUTVIV0JDMm1QdjNvREl5Q1V3L0NE?=
- =?utf-8?B?c214TmM3dFc4N3RoU2VGM2Q3dUk1OXRpSVo3ZDBSN2tYci8vN0JRUWtSTGFq?=
- =?utf-8?B?cUJGZnp6NjVuOHdTNmZTbnJaNlVlT2VQNGc2ODJ6azNZMHFUbVk1NkVpZ1RC?=
- =?utf-8?B?NTduQzdCN1RWY1VXTnhsdmZkN1FET1BHNHluSDhGUVBneGpReDI3c3JaRkhR?=
- =?utf-8?B?UVZoazlOSHdla3hmTW9hMytGcFk4UTJOaU5CUFF3WWlpSnUxNW1ES2h1bzBi?=
- =?utf-8?B?WERpSUFuT3hvVE4zNUlHbEkrYnVPSEYxT0NUQ2lpTFFWaWoxUHFoVldJZXRj?=
- =?utf-8?B?RUkrS3E0cENsdWdEZG5mM2ZOTFFVNWFEQ2MraVNpSFMzQUs3WW84K09hbzdT?=
- =?utf-8?B?TjVLNzVZSHprdGdSUEVQR1FIcGlvUks2U3l3OGNhRzhpaUg2VmNRSFdNMEJr?=
- =?utf-8?B?cm9CVlB4U1A5cGJCUDd3L01LY0lqeGJDKzFJam01ZVlTMVlyR3FSRmZZU1g2?=
- =?utf-8?B?RWNhSUxoV25KbkRwZWdCakVjY2dBMWV4bXZkVTVnLzBSZ2V5U3Jwalc5RElH?=
- =?utf-8?B?TzJYQ0pBYmVqVmFlcmMzUXYyeFRmaUp3bk80REVQYkxSamJpaUJ3VmFibFhF?=
- =?utf-8?B?L0h6eFh6ZncreE5JNjF1M0VGZUJBTEdpKzZMam9QWFZDS3A4dHdaYWRNVVJD?=
- =?utf-8?B?SGxWRmxoZnFXMzY1K3J6bFJob3JYbGpMM0lEc3pYTkkxNDNsL0hNRTd3MnVW?=
- =?utf-8?B?NHdIaWFBVERXYnlSd3dYaHNBaGdGWnlsbXNFM241WTdIRGg1bCtQWjVXTitP?=
- =?utf-8?B?bk55Ym1YWTNrQlNuZHcyb3hkSDQ3b0NMS0NqQ1h5MFlyMVI0SGl6UGpPRlJV?=
- =?utf-8?B?ZHFQYkxCOHR4UG5nUlpxc0lpemZqU0QxdlBUOEhHbUFFL3p4S0l5eFNZTmgx?=
- =?utf-8?Q?w6nSVQ6U/miEgGeei9Y4FmXim?=
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 9214a644-3908-4a89-9572-08dd4f01294c
-X-MS-Exchange-CrossTenant-AuthSource: AM7PR04MB7046.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2025 03:14:16.4989
- (UTC)
-X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
-X-MS-Exchange-CrossTenant-Id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: qVgNk/1gy8e/yWpHUMRUxrwKM9BUusIkiamFYPu3zMB0ltFyFwcAozBndCqD6dW8lyL8fCVGZHQ/dpMuevmB7Q==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: AM0PR04MB7043
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0i83eJWV_kvWxZvja+Js3tKbrwZ8rVVGn7vR=0qLf1mtw@mail.gmail.com>
 
-On 02/14/2025, Johan Hovold wrote:
-> The simple-pm-bus driver only enables runtime PM for some buses
-> ('simple-pm-bus') yet has started calling pm_runtime_force_suspend() and
-> pm_runtime_force_resume() during system suspend unconditionally.
+On Wed, Feb 12, 2025 at 08:29:34PM +0100, Rafael J. Wysocki wrote:
+> On Tue, Feb 11, 2025 at 11:21 PM Brian Norris <briannorris@google.com> wrote:
+> >
+> > Hi Ajay,
+> >
+> > On Mon, Feb 10, 2025 at 09:02:41AM +0530, Ajay Agarwal wrote:
+> > > On Wed, Jul 27, 2022 at 06:31:48PM +0200, Rafael J. Wysocki wrote:
+> > > > On Wed, Jul 27, 2022 at 10:08 AM Oliver Neukum <oneukum@suse.com> wrote:
+> > > > > On 26.07.22 17:41, Rafael J. Wysocki wrote:
+> > > > > > Well, in general suspending or resuming a device is a collaborative
+> > > > > > effort and if one of the pieces falls over, making it work again
+> > > > > > involves fixing up the failing piece and notifying the others that it
+> > > > > > is ready again.  However, that part isn't covered and I'm not sure if
+> > > > > > it can be covered in a sufficiently generic way.
+> > > > >
+> > > > > True. But that still cannot solve the question what is to be done
+> > > > > if error handling fails. Hence my proposal:
+> > > > > - record all failures
+> > > > > - heed the record only when suspending
+> > > >
+> > > > I guess that would boil down to moving the power.runtime_error update
+> > > > from rpm_callback() to rpm_suspend()?
+> > > Resuming this discussion. One of the ways the device drivers are
+> > > clearing the runtime_error flag is by calling pm_runtime_set_suspended
+> > > [1].
 > 
-> This currently works, but that is not obvious and depends on
-> implementation details which may change at some point.
-
-Fair enough. It's not a good practice to depend on the PM core behaviour.
-
-Acked-by: Liu Ying <victor.liu@nxp.com>
-
+> I personally think that jumping on a 2.5 years old thread is not a
+> good idea.  It would be better to restate the problem statement and
+> provide the link to the previous discussion.
 > 
-> Add dedicated system sleep ops and only call pm_runtime_force_suspend()
-> and pm_runtime_force_resume() for buses that use runtime PM to avoid any
-> future surprises.
+> > > To me, it feels weird that a device driver calls pm_runtime_set_suspended
+> > > if the runtime_resume() has failed. It should be implied that the device
+> > > is in suspended state if the resume failed.
+> > >
+> > > So how really should the runtime_error flag be cleared? Should there be
+> > > a new API exposed to device drivers for this? Or should we plan for it
+> > > in the framework itself?
+> >
+> > While the API naming is unclear, that's exactly what
+> > pm_runtime_set_suspended() is about. Personally, I find it nice when a
+> > driver adds the comment "clear runtime_error flag", because otherwise
+> > it's not really obvious why a driver has to take care of "suspending"
+> > after a failed resume. But that's not the biggest question here, IMO.
+> >
+> > The real reson I pointed you at this thread was because I think it's
+> > useful to pursue the proposal above: to avoid setting a persistent
+> > "runtime_error" for resume failures. This seems to just create a pitfall
+> > for clients, as asked by Vincent and Oliver upthread.
+> >
+> > And along this line, there are relatively few drivers that actually
+> > bother to reset this error flag ever (e.g., commit f2bc2afe34c1
+> > ("accel/ivpu: Clear runtime_error after pm_runtime_resume_and_get()
+> > fails")).
+> >
+> > So to me, we should simply answer Rafael's question:
+> >
+> > (repeated:)
+> > > > I guess that would boil down to moving the power.runtime_error update
+> > > > from rpm_callback() to rpm_suspend()?
+> >
+> > Yes, I think so. (Although I'm not sure if this leaves undesirable spam
+> > where persistent .runtime_resume() failures occur.)
+> >
+> > ...and then write/test/submit such a patch, provided it achieves the
+> > desired results.
+> >
+> > Unless of course one of the thread participants here has some other
+> > update in the intervening 2.5 years, or if Rafael was simply asking the
+> > above rhetorically, and wasn't actually interested in fielding such a
+> > change.
 > 
-> Fixes: c45839309c3d ("drivers: bus: simple-pm-bus: Use clocks")
-> Cc: Liu Ying <victor.liu@nxp.com>
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
->  drivers/bus/simple-pm-bus.c | 22 +++++++++++++++++++++-
->  1 file changed, 21 insertions(+), 1 deletion(-)
+> The reason why runtime_error is there is to prevent runtime PM
+> callbacks from being run until something is done about the error,
+> under the assumption that running them in that case may make the
+> problem worse.
 > 
-> diff --git a/drivers/bus/simple-pm-bus.c b/drivers/bus/simple-pm-bus.c
-> index 5dea31769f9a..d8e029e7e53f 100644
-> --- a/drivers/bus/simple-pm-bus.c
-> +++ b/drivers/bus/simple-pm-bus.c
-> @@ -109,9 +109,29 @@ static int simple_pm_bus_runtime_resume(struct device *dev)
->  	return 0;
->  }
->  
-> +static int simple_pm_bus_suspend(struct device *dev)
-> +{
-> +	struct simple_pm_bus *bus = dev_get_drvdata(dev);
-> +
-> +	if (!bus)
-> +		return 0;
-> +
-> +	return pm_runtime_force_suspend(dev);
-> +}
-> +
-> +static int simple_pm_bus_resume(struct device *dev)
-> +{
-> +	struct simple_pm_bus *bus = dev_get_drvdata(dev);
-> +
-> +	if (!bus)
-> +		return 0;
-> +
-> +	return pm_runtime_force_resume(dev);
-> +}
-> +
->  static const struct dev_pm_ops simple_pm_bus_pm_ops = {
->  	RUNTIME_PM_OPS(simple_pm_bus_runtime_suspend, simple_pm_bus_runtime_resume, NULL)
-> -	NOIRQ_SYSTEM_SLEEP_PM_OPS(pm_runtime_force_suspend, pm_runtime_force_resume)
-> +	NOIRQ_SYSTEM_SLEEP_PM_OPS(simple_pm_bus_suspend, simple_pm_bus_resume)
->  };
->  
->  #define ONLY_BUS	((void *) 1) /* Match if the device is only a bus. */
+> I'm not sure if I see a substantial difference between suspend and
+> resume in that respect: If any of them fails, the state of the device
+> is kind of unstable.  In particular, if resume fails and the device
+> doesn't actually resume, something needs to be done about it or it
+> just becomes unusable.
+> 
+> Now, the way of clearing the error may not be super-convenient, which
+> was a bit hard to figure out upfront, so I'm not against making any
+> changes as long as there are sufficient reasons for making them.
+I am thinking if we can start with a change to not check runtime_error
+in rpm_resume, and let it go through even if the previous rpm_resume
+attempt failed. Something like this:
 
--- 
-Regards,
-Liu Ying
+```
+static int rpm_resume(struct device *dev, int rpmflags)
+        trace_rpm_resume(dev, rpmflags);
+
+  repeat:
+-       if (dev->power.runtime_error) {
+-               retval = -EINVAL;
+-       } else if (dev->power.disable_depth > 0) {
++       if (dev->power.disable_depth > 0) {
+                if (dev->power.runtime_status == RPM_ACTIVE &&
+                    dev->power.last_status == RPM_ACTIVE)
+                        retval = 1;
+```
+
+I think setting the runtime_error in rpm_callback, i.e. for both resume
+and suspend is still a good idea for book-keeping purposes, e.g. the
+user reading the runtime_status of the device from sysfs.
 
