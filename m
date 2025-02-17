@@ -1,218 +1,201 @@
-Return-Path: <linux-pm+bounces-22179-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22180-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 875D1A37A31
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 04:50:12 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BA800A37B11
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 06:53:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23F8F3ACE23
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 03:49:52 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6A9DF7A2951
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 05:52:38 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07FB713FD72;
-	Mon, 17 Feb 2025 03:49:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9009C186615;
+	Mon, 17 Feb 2025 05:53:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="xeyKevpr"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="eH7I8y55"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f42.google.com (mail-pj1-f42.google.com [209.85.216.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-DM6-obe.outbound.protection.outlook.com (mail-dm6nam11on2070.outbound.protection.outlook.com [40.107.223.70])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5D882C2C9
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 03:49:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.42
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739764196; cv=none; b=AEJG7OMctCRwqNmCD5rb9WFrsC7lW0DD9XmSdFqNFSTqMUgjNEVs2wuzMicyUJXqLkL7Jonm7q8koenXdpb7rweJv5t6SUOvW3oGjCtz5rpLz/y7iBWNHv4k7e/pDicAih1IVUaJDHWjrm2RQNo1dn0tUKo2V4sg/w5/D5l6ou8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739764196; c=relaxed/simple;
-	bh=AEctecPW644bInprG1Q0+EICJctiBz+Em9TO21wIBsM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QLaphU43CTHPJ0gUB3aiP/bipCsptvdvhUkJK4OOT3ytCh35hqts3ls5UlWsZtLg7gWI6cfV8zkIWUT6W0v4AkVbR36o54CmxLFYZik4baW2KU9I+kbbPOJ40Poefn5iKTabZtxhJTJumwG3bUKRkp/+dhkT3ywC4GKkO8VM/lU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=xeyKevpr; arc=none smtp.client-ip=209.85.216.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pj1-f42.google.com with SMTP id 98e67ed59e1d1-2fc3a14f6fbso2653705a91.3
-        for <linux-pm@vger.kernel.org>; Sun, 16 Feb 2025 19:49:55 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739764195; x=1740368995; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=q6qV2LKgDU3t0RtwY5zJqsVUWjzCYVJ/54cGupGGOAA=;
-        b=xeyKevprCrOYvYbdurqZtnbhcZINaGfp+vCLLYEJtPSeqEFj7E8iEMcskh9WcoROAy
-         YNw9/d3YHEqoBG5t+DU4BB1e+Se29yYWVloLKZiTBFYURbtyv87qV9UyabfHfzuJxylv
-         H4L5zOZrnHTF3vKjFo3ZVWNMyYKc6GzrcYBZL4tLblYJR1/dKbCoqoHwLdkf8P+qqqj3
-         V5t6amp7YrmuVj5GbqUrN9X5AZttyguELNaGx0lS6h6chEaaf8gnz/Aom+J/WdQGEMwQ
-         FLT9oa5ZE6JAgbwW2nyhtxg3ApRGsfJ4Sj90WomhxwjaIlmVfLW+P60Nq5hl06QzeKBY
-         jl7w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739764195; x=1740368995;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=q6qV2LKgDU3t0RtwY5zJqsVUWjzCYVJ/54cGupGGOAA=;
-        b=ngfuTtt1CPytafGYsWZRIYYD0mDinxtL1I4+EjwL6+umYd+AU8k2eOU+Yzcv9F5wKU
-         PBv8FVdG//LOkRAhQFutjmGvIJCSFsCidiTMSu42r6rJslH5fl9H0CYsn15V2l1cSJLp
-         z/GzbEd7k/LwR6bsjBAIhszUBTRe2zRf7PBZMY3eWCggVotLqCI4KBmsN3slaA9oixbL
-         csGFugasXYo7RcBbQO2fI3XQTjwhKJ1gZYxK2EoXov+yS8mC/ZEmGr1jAFl8YDXIjaVf
-         0gYtt5T6iZQvXvmw206TbG2wozwcWClnTFsIMxALKLv+Ldbm+UI6Fs6wFKaaLGCH7j0Y
-         6G8Q==
-X-Forwarded-Encrypted: i=1; AJvYcCVRagE2r7SpiqU9KllK5dzZO2mTwXSJDa4ZhHH+FACWxz1Unav2OAgJBq3kfMsTbtal16yjDuP61g==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwhdRmxfFagnCSuIoFjRSExSQJyvqMWraFV0EzbxNC+ODauKc4Q
-	HNjgzvTyttCTqCO3K73XHbFoABZIgOjVMnyVBAZ8lQNM8hw89o4x1yV+IquDBw==
-X-Gm-Gg: ASbGncu72KA2uF0KSO9qpRPjSFThUOl3G+OKQtHy7o+ydGGeUnT2WKMOmhXfj2S+Yjb
-	EeWlblE8eXvprAO94aIMyUr034cjW4ONpq5pmIXxRJVFYo7grp3YNHlQXbnSU+pyCzGwGg2/tGF
-	JBClfdAagJVwEXkURgcQvOyUaqK/Mrjd1wpYL4ZKxcJ3U440oaZ9FqTWo07WruElC64Fa27Vfn3
-	qqloYXM5A21aKax5jVY1uTm502DZTmZ0GM8s9QoXta0f00+AcjdE6Xk4pFaKjVWVcwI3ldqZEbS
-	adTF+O4i9O/pY0kfa6hxWj+iV+zpFwU5lnOHBoO1OpRvhHhkuZuiP4kZBw==
-X-Google-Smtp-Source: AGHT+IG+mp2u7hYvW8OafGPbN4o2uVFyOs0S++K2BLbGBPWA98vSvCccRtLwR4LjGhALrh85g6TMxQ==
-X-Received: by 2002:a17:90b:35c9:b0:2f6:d266:f462 with SMTP id 98e67ed59e1d1-2fc411540camr12191613a91.35.1739764194422;
-        Sun, 16 Feb 2025 19:49:54 -0800 (PST)
-Received: from google.com (49.156.143.34.bc.googleusercontent.com. [34.143.156.49])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fc13ac0a5bsm6833135a91.18.2025.02.16.19.49.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 16 Feb 2025 19:49:53 -0800 (PST)
-Date: Mon, 17 Feb 2025 09:19:45 +0530
-From: Ajay Agarwal <ajayagarwal@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Brian Norris <briannorris@google.com>, Oliver Neukum <oneukum@suse.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Vincent Whitchurch <vincent.whitchurch@axis.com>,
-	"jic23@kernel.org" <jic23@kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-	Brian Norris <briannorris@chromium.org>,
-	Joy Chakraborty <joychakr@google.com>,
-	Vamshi Gajjela <vamshigajjela@google.com>,
-	Manu Gautam <manugautam@google.com>
-Subject: Re: PM runtime_error handling missing in many drivers?
-Message-ID: <Z7Kx2RN35QVyg8nP@google.com>
-References: <5caa944f-c841-6f74-8e43-a278b2b93b06@suse.com>
- <20220708110325.GA5307@axis.com>
- <4ca77763-53d0-965a-889e-be2eafadfd2f@intel.com>
- <1937b65c-36c0-5475-c745-d7285d1a6e25@suse.com>
- <CAJZ5v0j0mgOcfKXRzyx12EX8CYLzowXrM8DGCH9XvQGnRNv0iw@mail.gmail.com>
- <5c37ee19-fe2c-fb22-63a2-638e3dab8f7a@suse.com>
- <CAJZ5v0ijy4FG84xk_n8gxR_jS0xao246eVbnFj-dXzwz=8S9NQ@mail.gmail.com>
- <Z6lzWfGbpa7jN1QD@google.com>
- <Z6vNV8dDDPdWUKLS@google.com>
- <CAJZ5v0i83eJWV_kvWxZvja+Js3tKbrwZ8rVVGn7vR=0qLf1mtw@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A0B16433A8;
+	Mon, 17 Feb 2025 05:53:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.223.70
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739771610; cv=fail; b=YjVRiOKbDEKooG87I/7zbmYxPRSP3C+PARrVqeWyAwI1D8zDoRMfLV9hjClAuXHWDF8782VTH+JDKmFv10sQ3ZI3LIooJJCTff1Vz7bhaAKfWe0n0FOUjsAPdTgACMlKmN2RFVCX6uEjifY6Zyzx7fYAIhNLrF4xS4M10FTfqWg=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739771610; c=relaxed/simple;
+	bh=9h+3P7Y0JktJzdp0tA7cD+jw3V8PPjzWI3uQqaYFeNw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:Content-Type:
+	 Content-Disposition:In-Reply-To:MIME-Version; b=pFvAGM/8D8nR2dpWGiHBWnvYzABqkdhjfs38sOerbzygF9jLQ33RlbEdN/9laXv1dHSauhY9UBF3vl6So+H9vnvS8eeBMxdSr2ZLjh7IrieYhkOl8HaYI4DotcdPWULCSKVpj8pAn5BbkdzqUNuQntNYlHpvfpQcW7a5//1EMJs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=eH7I8y55; arc=fail smtp.client-ip=40.107.223.70
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=QxH1CpdnwJopDii+S86dhkU2fmOmLh7IaDOpSJPJAkOr2k1AEr1jUAYYej7mWL39mCNvDEOejnkOIz6ObXvpPPNhUuXKovfh+U+7xD7FsA7UvF6pLIA2YYw55TCP3Z/Qd3B+Dyz6sR7+q0QtVYjDtRYhAcODGCcNFrhX8aaoS6Qd3WdRN0PMH1da5x66rKmGeuhjEPc+8BfMwclfiNffUhdlc9mv4QttLsaE+gLh8pmMOxypkbjBR51zT7/y75N2JR4yvbKzqPdDkICctaKGD805yWB92bOkfJ9O8m7zLf5egVHerJ+6grqSB6byUOIvswddhOj9RBI7epZfnX3Gig==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=vqHjpssfi5rE+GQe4Cnc+pZ1iNxKXyHd8ai/jIxqIXs=;
+ b=xHOYIx4h7563v5UIeIBEWx7Dehlz2gOp0ozng27x2d8QfjbQ+E21BZkETGeBEYh4ggbXdx/nPJXCSORgbjlZ4gBpTGOgICs789X+AfA0jrVCQpYJYffrhY3S0qhYN4ebe+2j9yIRWlksp2h1HEQ8zHL2xXX1oyiLSBBvUH26pNi2/LidluAKcn0ruuqQYge9KeyN/LJ1VgKVARdDJEL6rMoePRmFhs5rvll7s4CVlXWcZ6Gu0hKA2pqFKZUlBt9sKXUGpuTC7u70X8NG26rVHVbBsDqBIh8J3RWHQvqGYRMjzkAz5AkuS5o6P8J6b1piNjCUvDkOYvYYxC/Sn/W4tw==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=vqHjpssfi5rE+GQe4Cnc+pZ1iNxKXyHd8ai/jIxqIXs=;
+ b=eH7I8y557j6lj/7jayZUOfV8mkpg3kYd7mHgZxRKUYoZ5yJvQ4kf7ATdeYUA0S0vh9DTFFRoT3visK4COAvcw5s1wYAPwVnedoPaeZ/CQWQaYnAgShid8aE+h1Y1Tr6s15HMoJuhkrPh/K0FrmmQG0aiyDXzvQQ5ReDC3PhCXHw=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com (2603:10b6:8:ee::7) by
+ IA1PR12MB7613.namprd12.prod.outlook.com (2603:10b6:208:42a::19) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Mon, 17 Feb
+ 2025 05:53:25 +0000
+Received: from DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7]) by DS7PR12MB8252.namprd12.prod.outlook.com
+ ([fe80::2d0c:4206:cb3c:96b7%3]) with mapi id 15.20.8445.017; Mon, 17 Feb 2025
+ 05:53:24 +0000
+Date: Mon, 17 Feb 2025 11:23:17 +0530
+From: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
+To: Mario Limonciello <superm1@kernel.org>
+Cc: Perry Yuan <perry.yuan@amd.com>,
+	Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+	"open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)" <linux-kernel@vger.kernel.org>,
+	"open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: Re: [PATCH v2 01/17] cpufreq/amd-pstate: Show a warning when a CPU
+ fails to setup
+Message-ID: <Z7LOzep0ISEIlYEp@BLRRASHENOY1.amd.com>
+References: <20250215005244.1212285-1-superm1@kernel.org>
+ <20250215005244.1212285-2-superm1@kernel.org>
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250215005244.1212285-2-superm1@kernel.org>
+X-ClientProxiedBy: BM1P287CA0003.INDP287.PROD.OUTLOOK.COM
+ (2603:1096:b00:40::16) To DS7PR12MB8252.namprd12.prod.outlook.com
+ (2603:10b6:8:ee::7)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAJZ5v0i83eJWV_kvWxZvja+Js3tKbrwZ8rVVGn7vR=0qLf1mtw@mail.gmail.com>
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR12MB8252:EE_|IA1PR12MB7613:EE_
+X-MS-Office365-Filtering-Correlation-Id: 7133522f-47fc-4baa-4f2a-08dd4f176481
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|366016|1800799024;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?04/bhWZzsGveq/elUplHGZBCiQ3Lezq8nRjQutvaLL+Z8181Z2UJ7OkiLr00?=
+ =?us-ascii?Q?9UcoHYrw5EvsVVJTLojdA4ckQqf/XFrWq0N9cCm9v2BJxwP2/7wzJopDfbnN?=
+ =?us-ascii?Q?prNpTqTZxhR6vjlsMt1r043ZSwivz/dryvdT8lDvmyrTjRa0AoyU7Obr9iJ2?=
+ =?us-ascii?Q?odGvxRYhbw/BO/Asy483RUYvgumqg0MTY3xkCkh2h4hJIQ0RXUrQcR52iQeH?=
+ =?us-ascii?Q?sR3r3fPZUEoPrGJACZHZUO5+WCcifpGdSXuiUX2xSzZp1UNW5GwjaAG3pOL7?=
+ =?us-ascii?Q?fuVJQ5vfTlP8fmwdmUXWgg3K3opPT+So7k8/6okTMv7kjfifoO435dwcRbAO?=
+ =?us-ascii?Q?Gq1j/F+ebZeTYZ312MWdA47oGjwDThVGJc8ISthPYFj0X2YWq8dyESA5LtXR?=
+ =?us-ascii?Q?zAG+evlV4He9yTsN5wa2TinUNfVePUuJzfZZLYxgIPa7zrxHvW9nsR8VMuif?=
+ =?us-ascii?Q?IvM7G+W4JLG40teRYuJ+MkHub4NuoVU1oyR2XE6TOIB9kvnOaziNslIz8O18?=
+ =?us-ascii?Q?I+AvZvNCi8j9JICI/LuEacPVbZbPZohKr6pJzkM9jJPcMgMFtBq/bIRT3XF9?=
+ =?us-ascii?Q?d4hup6D0qnhDbmeyDGfg25EFJk9uL5bCXLf2otmvu2F9iNYwffQ39O3LpH2O?=
+ =?us-ascii?Q?uRhUE0/yy50v+T89aHAt0yAt+Bxpex25wiFPacyaahXp9ZrSyVU69wHiaGI6?=
+ =?us-ascii?Q?5kDCJG7o4pcjbH90XtxDs8TjPvJ8wphy0a1UUMw1YEz6wVAcPdwZ34x6YmHG?=
+ =?us-ascii?Q?4tbH6hJZI2hLO4lrPCAOlWLw837XgvnHPub4SyPDyzGxDNIvz4IFWC4MJkVq?=
+ =?us-ascii?Q?JYK+Lag+3HRkfhxSHFv4zTuPx2MlYJFGkUxjoE1yRdDmhLbSUWF/40Up/aQu?=
+ =?us-ascii?Q?ZE0QWm3oKiLXGo3+IB2kQkSWnZQflWGAP13zN9+TpVCApCEg78K0fseGDiSs?=
+ =?us-ascii?Q?nzR5Ay54YQbooknUI7pqKpVdsDf3Ck9KvMfnP3fhBXOrUB2NnEPfsZOrdqAj?=
+ =?us-ascii?Q?yNoxddj+/lDiGOnlJdVKvjU/QNdbskVupmxJLOzAMmm+WXS5WfckXS9tTLL8?=
+ =?us-ascii?Q?bfz9z1NW0taM/tcFxL2E19q9R59KfHzdeJ0DHgHXxk05+CCJpYaF2jqjHdJe?=
+ =?us-ascii?Q?HM2S0phl2pqLkzsTF5mG1cN/J6QlbYw6mcPDUsvR7QS03GUkjK91Y8xDMyMY?=
+ =?us-ascii?Q?FtwTPgYHESjpK4E/sV90+Vb36HGzCdglk7a+C6hjztkmuPJt5IGqlCsNmnvb?=
+ =?us-ascii?Q?a0tHXK8hBNoJSmbx1AZnsq60gzjQt/wZj+yFCws1QHYMI/eDvD59rHLQlaum?=
+ =?us-ascii?Q?UQqM27aI87ZPYfmtqR3tFzPyaOO/COAY/kxAOyYdASnDCzPzbJDjNlNkZKvC?=
+ =?us-ascii?Q?2MSbDxi/8o3kjOU8g27EvrzMMP/Q?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:DS7PR12MB8252.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(366016)(1800799024);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?4RLtFUHaEu57nSIUPgJw5kgiNkFl9aRpQbQuQ3g1PACq6mKCoUFEXhaFJpzn?=
+ =?us-ascii?Q?YCeRx+RVsjB/3r4f4kkZ4mtYnWXcJoqoec6CGjV4/nNdWxhXjPHycYZI1Uzl?=
+ =?us-ascii?Q?SukMx9Qo90y5u7qI4v8isYqYM/8seRpeRfHvEQ1MJ7r28oCvQaXlaQ7IVa9n?=
+ =?us-ascii?Q?o7CH4bmSLtrAOQfsFTdJiFJJw5XfNWMFbTl9yN97r+29d0mqmAT5yHOLYPRe?=
+ =?us-ascii?Q?dSlPgZH5gL/FuBTAfuDisFY3+N9OmVb7WmePlIGrRam06GYN7oWxxyaaZnRG?=
+ =?us-ascii?Q?Ow4A77LgYIao72rgzm1/kho79BDLLOdRCo0x4EsmFHERFaN18EbkrZgR/Jp/?=
+ =?us-ascii?Q?ntcdgdWoz4XJtfYxxaT0XYsPL9paGpiWjn5ywv2m5RyDIZbcFEBKB3wKrvSA?=
+ =?us-ascii?Q?3Dn7Z1Khs2lsGAwAlwdEqhwhI76MZPw3oc4pfMK6X55d3IW+gVTAOqJ5NfV1?=
+ =?us-ascii?Q?MVEG9KpvLrudeVGtcfyJORObxEsVra2WL2fqYpuzcl6PVFnLQRutUKV1DGu7?=
+ =?us-ascii?Q?qF3Cgyzsl1+oBcVXKFk+UsdmTU7563z2WJLJj6VmKhf420f7pHglyM1k39ta?=
+ =?us-ascii?Q?sJGez8+j8QZZH/6RlRo0RJWvvmebjrb+6OdsQNQJV7dvU3+MYa5Z9kfkSkL7?=
+ =?us-ascii?Q?LfMRPeDDk9Tg8dMIfC4n2saRtHPs9zcncTONGXZ3NrtO+rPd0EmUQanMO/J4?=
+ =?us-ascii?Q?dobz2vNLpePMjteg/IVo3+BoaunFAkFx8iaUzcrjxTAtYSMhLstfQm/IdvMN?=
+ =?us-ascii?Q?w7u78xBpr6474lgJk77AII2aqV1CCt8GLFEtvfsIF+muueTUQFkt0jlQF5pk?=
+ =?us-ascii?Q?wI/MRfl7NURufFSYsXalgA4WmstMZDNET/kxwrPiPETlFxznCvWem3RpHgOO?=
+ =?us-ascii?Q?Bk/LbS1ujw3Xd0NYV+VdhJZHLXY3yvDpgWoARbw/8UqGwGo1i96iQkUQJymb?=
+ =?us-ascii?Q?cpfZ6yp2NOr+ei53xc08XD9O9O12bB7YYcBwRArwhpfnAkc8MTawgC1QwaVq?=
+ =?us-ascii?Q?Q82dgla9Qcb95PhKvfsOUx2CaoFno6c2fBs0egfQ5xFaorgDFGY7gF33rCS0?=
+ =?us-ascii?Q?6YIjAg80lGUqH1U4CaH+km/wMAgCynxmy37zYIo4RXpG3wcf8Gm97GX7egIa?=
+ =?us-ascii?Q?30SQDwbHFlSbDOzx5z40yPNRXw95lar1Svl0LdDvgB5bAHSUYn8craKgh94U?=
+ =?us-ascii?Q?bkJRa8XNZYDNw8fE0pjwH7OHpZmUOwnnrtscQWBMAMcaNWYt50l9y6I/R/Tv?=
+ =?us-ascii?Q?z7hzkLnVwwCc4TMo+n0FK/Uij3Ds/iX/VPdjwsu6JYxwT7TvaUQwNlI5wR6r?=
+ =?us-ascii?Q?uBiGEXDnlOuCgg+HZEKyJSXEs9eeVJu5faknWazTY15BfTutM3yzV5yG2f+P?=
+ =?us-ascii?Q?9eXdwbFw9qaVZipaWGo6Rg6akWavY618IJkQkxppEsIxGkRxbKo4mceig2EJ?=
+ =?us-ascii?Q?BJnM5DCnHsEBZhFQe138IeMWRdLG0b5XJmbDp+xhTcJOqI9MLMJzHBKYHAo+?=
+ =?us-ascii?Q?QYHNavtmKnFWh+cpEUfYGO4kT2oyYB8kVJOnHjYUYSrYbJiWQdJASWkA8cTf?=
+ =?us-ascii?Q?6H3+JfNb0gkD8Tq3zhkMdOOxraGm7wqLU9vux1ag?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 7133522f-47fc-4baa-4f2a-08dd4f176481
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR12MB8252.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2025 05:53:24.7624
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: ZdXhO9V/QiApEYrznB9+RU9gmRg7ZeoL9aM4NEwMntU3UYiVcwGSPhPqLmC54ES/pd7lajd55JfZw9w8XuJ59w==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR12MB7613
 
-On Wed, Feb 12, 2025 at 08:29:34PM +0100, Rafael J. Wysocki wrote:
-> On Tue, Feb 11, 2025 at 11:21 PM Brian Norris <briannorris@google.com> wrote:
-> >
-> > Hi Ajay,
-> >
-> > On Mon, Feb 10, 2025 at 09:02:41AM +0530, Ajay Agarwal wrote:
-> > > On Wed, Jul 27, 2022 at 06:31:48PM +0200, Rafael J. Wysocki wrote:
-> > > > On Wed, Jul 27, 2022 at 10:08 AM Oliver Neukum <oneukum@suse.com> wrote:
-> > > > > On 26.07.22 17:41, Rafael J. Wysocki wrote:
-> > > > > > Well, in general suspending or resuming a device is a collaborative
-> > > > > > effort and if one of the pieces falls over, making it work again
-> > > > > > involves fixing up the failing piece and notifying the others that it
-> > > > > > is ready again.  However, that part isn't covered and I'm not sure if
-> > > > > > it can be covered in a sufficiently generic way.
-> > > > >
-> > > > > True. But that still cannot solve the question what is to be done
-> > > > > if error handling fails. Hence my proposal:
-> > > > > - record all failures
-> > > > > - heed the record only when suspending
-> > > >
-> > > > I guess that would boil down to moving the power.runtime_error update
-> > > > from rpm_callback() to rpm_suspend()?
-> > > Resuming this discussion. One of the ways the device drivers are
-> > > clearing the runtime_error flag is by calling pm_runtime_set_suspended
-> > > [1].
+On Fri, Feb 14, 2025 at 06:52:28PM -0600, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
 > 
-> I personally think that jumping on a 2.5 years old thread is not a
-> good idea.  It would be better to restate the problem statement and
-> provide the link to the previous discussion.
+> I came across a system that MSR_AMD_CPPC_CAP1 for some CPUs isn't
+> populated.  This is an unexpected behavior that is most likely a
+> BIOS bug. In the event it happens I'd like users to report bugs
+> to properly root cause and get this fixed.
 > 
-> > > To me, it feels weird that a device driver calls pm_runtime_set_suspended
-> > > if the runtime_resume() has failed. It should be implied that the device
-> > > is in suspended state if the resume failed.
-> > >
-> > > So how really should the runtime_error flag be cleared? Should there be
-> > > a new API exposed to device drivers for this? Or should we plan for it
-> > > in the framework itself?
-> >
-> > While the API naming is unclear, that's exactly what
-> > pm_runtime_set_suspended() is about. Personally, I find it nice when a
-> > driver adds the comment "clear runtime_error flag", because otherwise
-> > it's not really obvious why a driver has to take care of "suspending"
-> > after a failed resume. But that's not the biggest question here, IMO.
-> >
-> > The real reson I pointed you at this thread was because I think it's
-> > useful to pursue the proposal above: to avoid setting a persistent
-> > "runtime_error" for resume failures. This seems to just create a pitfall
-> > for clients, as asked by Vincent and Oliver upthread.
-> >
-> > And along this line, there are relatively few drivers that actually
-> > bother to reset this error flag ever (e.g., commit f2bc2afe34c1
-> > ("accel/ivpu: Clear runtime_error after pm_runtime_resume_and_get()
-> > fails")).
-> >
-> > So to me, we should simply answer Rafael's question:
-> >
-> > (repeated:)
-> > > > I guess that would boil down to moving the power.runtime_error update
-> > > > from rpm_callback() to rpm_suspend()?
-> >
-> > Yes, I think so. (Although I'm not sure if this leaves undesirable spam
-> > where persistent .runtime_resume() failures occur.)
-> >
-> > ...and then write/test/submit such a patch, provided it achieves the
-> > desired results.
-> >
-> > Unless of course one of the thread participants here has some other
-> > update in the intervening 2.5 years, or if Rafael was simply asking the
-> > above rhetorically, and wasn't actually interested in fielding such a
-> > change.
-> 
-> The reason why runtime_error is there is to prevent runtime PM
-> callbacks from being run until something is done about the error,
-> under the assumption that running them in that case may make the
-> problem worse.
-> 
-> I'm not sure if I see a substantial difference between suspend and
-> resume in that respect: If any of them fails, the state of the device
-> is kind of unstable.  In particular, if resume fails and the device
-> doesn't actually resume, something needs to be done about it or it
-> just becomes unusable.
-> 
-> Now, the way of clearing the error may not be super-convenient, which
-> was a bit hard to figure out upfront, so I'm not against making any
-> changes as long as there are sufficient reasons for making them.
-I am thinking if we can start with a change to not check runtime_error
-in rpm_resume, and let it go through even if the previous rpm_resume
-attempt failed. Something like this:
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 
-```
-static int rpm_resume(struct device *dev, int rpmflags)
-        trace_rpm_resume(dev, rpmflags);
+Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 
-  repeat:
--       if (dev->power.runtime_error) {
--               retval = -EINVAL;
--       } else if (dev->power.disable_depth > 0) {
-+       if (dev->power.disable_depth > 0) {
-                if (dev->power.runtime_status == RPM_ACTIVE &&
-                    dev->power.last_status == RPM_ACTIVE)
-                        retval = 1;
-```
+-- 
+Thanks and Regards
+gautham.
 
-I think setting the runtime_error in rpm_callback, i.e. for both resume
-and suspend is still a good idea for book-keeping purposes, e.g. the
-user reading the runtime_status of the device from sysfs.
+> ---
+>  drivers/cpufreq/amd-pstate.c | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
+> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+> index f425fb7ec77d7..573643654e8d6 100644
+> --- a/drivers/cpufreq/amd-pstate.c
+> +++ b/drivers/cpufreq/amd-pstate.c
+> @@ -1034,6 +1034,7 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>  free_cpudata2:
+>  	freq_qos_remove_request(&cpudata->req[0]);
+>  free_cpudata1:
+> +	pr_warn("Failed to initialize CPU %d: %d\n", policy->cpu, ret);
+>  	kfree(cpudata);
+>  	return ret;
+>  }
+> @@ -1527,6 +1528,7 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+>  	return 0;
+>  
+>  free_cpudata1:
+> +	pr_warn("Failed to initialize CPU %d: %d\n", policy->cpu, ret);
+>  	kfree(cpudata);
+>  	return ret;
+>  }
+> -- 
+> 2.43.0
+> 
 
