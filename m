@@ -1,302 +1,152 @@
-Return-Path: <linux-pm+bounces-22235-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22239-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 70D13A38D1E
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:20:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E4715A38D35
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:23:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 35664188C75F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:20:14 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2ABDB16FCBB
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:22:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76EF7236A98;
-	Mon, 17 Feb 2025 20:20:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="UgZAcIse"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B9B5237A3B;
+	Mon, 17 Feb 2025 20:22:43 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FB45149C41;
-	Mon, 17 Feb 2025 20:20:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55AD2234970
+	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 20:22:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739823603; cv=none; b=OlH5I9R5T0jVEEViT6CEW+5Jufz31wnctjoMM6WO+bMGTNoWpvPPRRkxQq6dZMrx4HK3s187DT3sRrDtFZFSsSiTdFMjnOOMA6RmgxXnrqUPt5TdIQ6wqv3vZteKQVJjdufzZ3KVGOMY8Rkj85gbPML+GO6r+HLO4eufdw/vvwQ=
+	t=1739823763; cv=none; b=Ped82TsCP0LR71q+/d4ayAun877gCOygvSjghFd4y21LBMmK/FWwiHkzK3Q5FsFrN/4sEiVh2z5k5Ro3j1IFd5vgW+jiXipKfos5NgAWzl8GwGIjBRMI6X/z9fCBJiEcXm+whZcyHVZH/LjvyXDTsacECk0EieTvRc1QM2fWTnM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739823603; c=relaxed/simple;
-	bh=/YPL+Qdj5nQduva774o+9werrMjy/VnTRhIWBdp51IY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=jW15XPLRUIctmAMhgvePBrj/Ra6oPUJSEAwayXmjdy6K61zG2ZsXn4Vh5N+PbuYAruToCjpQdgcCJBb716nn5sC0mWpdMJi66qdapR1dSKhdXP6VIrFMQdatyXzye//gx2ENqKJK6FFT637jITOLP5cNbXnXctTcAxS3mbySf4w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=UgZAcIse; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 2349e9a2f8523f5c; Mon, 17 Feb 2025 21:19:58 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id DD39E9100B0;
-	Mon, 17 Feb 2025 21:19:57 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1739823598;
-	bh=/YPL+Qdj5nQduva774o+9werrMjy/VnTRhIWBdp51IY=;
-	h=From:Subject:Date;
-	b=UgZAcIseRHmcvWA9lqNRWIUhtqmltkrpQElTb7JwiseKC00S1azy4uLecGc22JKbb
-	 T3i8v00K70VF9jCHNFfPE+zftOV9O9ArCJQEsVbz0TBVtugH3ehpF/nrGXZB+WcVv0
-	 L75iqbrb2HIoJZD2ICtjivFnSAxdtpnb1veCpgfvHAhMH4x3iRZXrZeA0q0+3Sof6V
-	 /ojoIPzvpZ6yG/ZmNYMLcjl81W/viR8RJkjdZGQjOe+NYMksH9uBpwMfNA1xv0vf/x
-	 mnyH0KFdAUXQVZi1HRnJs9LjnyyhXrs+xpSZwWMFw+yB0GNNQKZFt3OkCSOoK6gx8C
-	 AiceuAiIL91mg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Bjorn Helgaas <helgaas@kernel.org>,
- Linux PCI <linux-pci@vger.kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- Johan Hovold <johan@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Jon Hunter <jonathanh@nvidia.com>, Linux ACPI <linux-acpi@vger.kernel.org>,
- Mika Westerberg <mika.westerberg@linux.intel.com>,
- Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Subject: [PATCH v1 3/3] PM: sleep: Use DPM_FLAG_SMART_SUSPEND conditionally
-Date: Mon, 17 Feb 2025 21:19:41 +0100
-Message-ID: <2000822.PYKUYFuaPT@rjwysocki.net>
-In-Reply-To: <4966939.GXAFRqVoOG@rjwysocki.net>
-References: <4966939.GXAFRqVoOG@rjwysocki.net>
+	s=arc-20240116; t=1739823763; c=relaxed/simple;
+	bh=jqFfdj6v+j6ZL/5Lhj7VAenchTd63W8FR16/J9yKku4=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Ej4aceN00CbAwt71ieNgwzpVQHRHeR/8EeHc4o6ryIfZ2bLeHMTh7REQf5el1nFpKu6SBfTVrAhpR9jQDWPGMQoHyle2NklHl/3UUH0hAcLWrzlpcFw3OrpeujRpaDadYUY/jjH6VJjoYSnjcSOsu/3+CTwJ4agKDIXOCXM/06U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
+	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
+	(envelope-from <a.fatoum@pengutronix.de>)
+	id 1tk7d6-00057v-9j; Mon, 17 Feb 2025 21:22:12 +0100
+Message-ID: <de781a07-d209-4bbe-8945-efcb4490f604@pengutronix.de>
+Date: Mon, 17 Feb 2025 21:22:06 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehleefgecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeefudduuedtuefgleffudeigeeitdeufeelvdejgefftdethffhhfethfeljefgteenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepuddvpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehhvghlghgrrghssehkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhi
-X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/12] reboot: reboot, not shutdown, on
+ hw_protection_reboot timeout
+To: Matti Vaittinen <mazziesaccount@gmail.com>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Fabio Estevam
+ <festevam@denx.de>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Jonathan Corbet <corbet@lwn.net>, Serge Hallyn <serge@hallyn.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Guenter Roeck <groeck@chromium.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
+ chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+ kernel@pengutronix.de
+References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
+ <20250113-hw_protection-reboot-v2-2-161d3fc734f0@pengutronix.de>
+ <7b6d3226-4422-415a-9146-16c421463ac5@gmail.com>
+Content-Language: en-US
+From: Ahmad Fatoum <a.fatoum@pengutronix.de>
+In-Reply-To: <7b6d3226-4422-415a-9146-16c421463ac5@gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
+X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+Hello Matti,
 
-A recent discussion has revealed that using DPM_FLAG_SMART_SUSPEND
-unconditionally is generally problematic because it may lead to
-situations in which the device's runtime PM information is internally
-inconsistent or does not reflect its real state [1].
+On 22.01.25 12:28, Matti Vaittinen wrote:
+> On 13/01/2025 18:25, Ahmad Fatoum wrote:
+>> hw_protection_shutdown() will kick off an orderly shutdown and if that
+>> takes longer than a configurable amount of time, an emergency shutdown
+>> will occur.
+>>
+>> Recently, hw_protection_reboot() was added for those systems that don't
+>> implement a proper shutdown and are better served by rebooting and
+>> having the boot firmware worry about doing something about the critical
+>> condition.
+>>
+>> On timeout of the orderly reboot of hw_protection_reboot(), the system
+>> would go into shutdown, instead of reboot. This is not a good idea, as
+>> going into shutdown was explicitly not asked for.
+>>
+>> Fix this by always doing an emergency reboot if hw_protection_reboot()
+>> is called and the orderly reboot takes too long.
+>>
+>> Fixes: 79fa723ba84c ("reboot: Introduce thermal_zone_device_critical_reboot()")
+>> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>> ---
+>>   kernel/reboot.c | 70 ++++++++++++++++++++++++++++++++++++++++-----------------
+>>   1 file changed, 49 insertions(+), 21 deletions(-)
+>>
+>> diff --git a/kernel/reboot.c b/kernel/reboot.c
+>> index 847ac5d17a659981c6765699eac323f5e87f48c1..222b63dfd31020d0e2bc1b1402dbfa82adc71990 100644
+>> --- a/kernel/reboot.c
+>> +++ b/kernel/reboot.c
+>> @@ -932,48 +932,76 @@ void orderly_reboot(void)
+>>   }
+>>   EXPORT_SYMBOL_GPL(orderly_reboot);
+>>   +static const char *hw_protection_action_str(enum hw_protection_action action)
+>> +{
+>> +    switch (action) {
+>> +    case HWPROT_ACT_SHUTDOWN:
+>> +        return "shutdown";
+>> +    case HWPROT_ACT_REBOOT:
+>> +        return "reboot";
+>> +    default:
+>> +        return "undefined";
+>> +    }
+>> +}
+>> +
+>> +static enum hw_protection_action hw_failure_emergency_action;
+> 
+> nit: Do we have a (theoretical) possibility that two emergency restarts get scheduled with different actions? Should the action be allocated (maybe not) for each caller, or should there be a check if an operation with conflicting action is already scheduled?
+> 
+> If this was already considered and thought it is not an issue:
+> 
+> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
 
-For this reason, change the handling of DPM_FLAG_SMART_SUSPEND so that
-it is only taken into account if it is consistently set by the drivers
-of all devices having any PM callbacks throughout dependency graphs in
-accordance with the following rules:
+__hw_protection_trigger (née __hw_protection_shutdown) has this at its start:
 
- - The "smart suspend" feature is only enabled for devices whose drivers
-   ask for it (that is, set DPM_FLAG_SMART_SUSPEND) and for devices
-   without PM callbacks unless they have never had runtime PM enabled.
+ static atomic_t allow_proceed = ATOMIC_INIT(1);
 
- - The "smart suspend" feature is not enabled for a device if it has not
-   been enabled for the device's parent unless the parent does not take
-   children into account or it has never had runtime PM enabled.
+ /* Shutdown should be initiated only once. */
+ if (!atomic_dec_and_test(&allow_proceed))
+         return;
 
- - The "smart suspend" feature is not enabled for a device if it has not
-   been enabled for one of the device's suppliers taking runtime PM into
-   account unless that supplier has never had runtime PM enabled.
+It's thus not possible to have a later emergency restart race against the first.
 
-Namely, introduce a new device PM flag called smart_suspend that is only
-set if the above conditions are met and update all DPM_FLAG_SMART_SUSPEND
-users to check power.smart_suspend instead of directly checking the
-latter.
+Thanks for your R-b,
+Ahmad
 
-At the same time, drop the power.set_active flage introduced recently
-in commit 3775fc538f53 ("PM: sleep: core: Synchronize runtime PM status
-of parents and children") because it is now sufficient to check
-power.smart_suspend along with the dev_pm_skip_resume() return value
-to decide whether or not pm_runtime_set_active() needs to be called
-for the device.
-
-Link: https://lore.kernel.org/linux-pm/CAPDyKFroyU3YDSfw_Y6k3giVfajg3NQGwNWeteJWqpW29BojhQ@mail.gmail.com/  [1]
-Fixes: 7585946243d6 ("PM: sleep: core: Restrict power.set_active propagation")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/acpi/device_pm.c  |    6 +---
- drivers/base/power/main.c |   63 +++++++++++++++++++++++++++++++++++-----------
- drivers/mfd/intel-lpss.c  |    2 -
- drivers/pci/pci-driver.c  |    6 +---
- include/linux/pm.h        |    2 -
- 5 files changed, 55 insertions(+), 24 deletions(-)
-
---- a/drivers/acpi/device_pm.c
-+++ b/drivers/acpi/device_pm.c
-@@ -1161,8 +1161,7 @@
-  */
- int acpi_subsys_suspend(struct device *dev)
- {
--	if (!dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) ||
--	    acpi_dev_needs_resume(dev, ACPI_COMPANION(dev)))
-+	if (!dev->power.smart_suspend || acpi_dev_needs_resume(dev, ACPI_COMPANION(dev)))
- 		pm_runtime_resume(dev);
- 
- 	return pm_generic_suspend(dev);
-@@ -1320,8 +1319,7 @@
-  */
- int acpi_subsys_poweroff(struct device *dev)
- {
--	if (!dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) ||
--	    acpi_dev_needs_resume(dev, ACPI_COMPANION(dev)))
-+	if (!dev->power.smart_suspend || acpi_dev_needs_resume(dev, ACPI_COMPANION(dev)))
- 		pm_runtime_resume(dev);
- 
- 	return pm_generic_poweroff(dev);
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -656,15 +656,13 @@
- 	 * so change its status accordingly.
- 	 *
- 	 * Otherwise, the device is going to be resumed, so set its PM-runtime
--	 * status to "active" unless its power.set_active flag is clear, in
-+	 * status to "active" unless its power.smart_suspend flag is clear, in
- 	 * which case it is not necessary to update its PM-runtime status.
- 	 */
--	if (skip_resume) {
-+	if (skip_resume)
- 		pm_runtime_set_suspended(dev);
--	} else if (dev->power.set_active) {
-+	else if (dev->power.smart_suspend)
- 		pm_runtime_set_active(dev);
--		dev->power.set_active = false;
--	}
- 
- 	if (dev->pm_domain) {
- 		info = "noirq power domain ";
-@@ -1282,14 +1280,8 @@
- 	      dev->power.may_skip_resume))
- 		dev->power.must_resume = true;
- 
--	if (dev->power.must_resume) {
--		if (dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND)) {
--			dev->power.set_active = true;
--			if (dev->parent && !dev->parent->power.ignore_children)
--				dev->parent->power.set_active = true;
--		}
-+	if (dev->power.must_resume)
- 		dpm_superior_set_must_resume(dev);
--	}
- 
- Complete:
- 	complete_all(&dev->power.completion);
-@@ -1797,6 +1789,49 @@
- 	return error;
- }
- 
-+static void device_prepare_smart_suspend(struct device *dev)
-+{
-+	struct device_link *link;
-+	int idx;
-+
-+	/*
-+	 * The "smart suspend" feature is enabled for devices whose drivers ask
-+	 * for it and for devices without PM callbacks unless runtime PM is
-+	 * disabled and enabling it is blocked for them.
-+	 *
-+	 * However, if "smart suspend" is not enabled for the device's parent
-+	 * or any of its suppliers that take runtime PM into account, it cannot
-+	 * be enabled for the device either.
-+	 */
-+	dev->power.smart_suspend = (dev->power.no_pm_callbacks ||
-+		dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND)) &&
-+		!pm_runtime_blocked(dev);
-+
-+	if (!dev->power.smart_suspend)
-+		return;
-+
-+	if (dev->parent && !pm_runtime_blocked(dev->parent) &&
-+	    !dev->parent->power.ignore_children && !dev->parent->power.smart_suspend) {
-+		dev->power.smart_suspend = false;
-+		return;
-+	}
-+
-+	idx = device_links_read_lock();
-+
-+	list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node) {
-+		if (!(link->flags | DL_FLAG_PM_RUNTIME))
-+			continue;
-+
-+		if (!pm_runtime_blocked(link->supplier) &&
-+		    !link->supplier->power.smart_suspend) {
-+			dev->power.smart_suspend = false;
-+			break;
-+		}
-+	}
-+
-+	device_links_read_unlock(idx);
-+}
-+
- /**
-  * device_prepare - Prepare a device for system power transition.
-  * @dev: Device to handle.
-@@ -1858,6 +1893,7 @@
- 		pm_runtime_put(dev);
- 		return ret;
- 	}
-+	device_prepare_smart_suspend(dev);
- 	/*
- 	 * A positive return value from ->prepare() means "this device appears
- 	 * to be runtime-suspended and its state is fine, so if it really is
-@@ -2033,6 +2069,5 @@
- 
- bool dev_pm_skip_suspend(struct device *dev)
- {
--	return dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) &&
--		pm_runtime_status_suspended(dev);
-+	return dev->power.smart_suspend && pm_runtime_status_suspended(dev);
- }
---- a/drivers/mfd/intel-lpss.c
-+++ b/drivers/mfd/intel-lpss.c
-@@ -480,7 +480,7 @@
- 
- static int resume_lpss_device(struct device *dev, void *data)
- {
--	if (!dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND))
-+	if (!dev->power.smart_suspend)
- 		pm_runtime_resume(dev);
- 
- 	return 0;
---- a/drivers/pci/pci-driver.c
-+++ b/drivers/pci/pci-driver.c
-@@ -812,8 +812,7 @@
- 	 * suspend callbacks can cope with runtime-suspended devices, it is
- 	 * better to resume the device from runtime suspend here.
- 	 */
--	if (!dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) ||
--	    pci_dev_need_resume(pci_dev)) {
-+	if (!dev->power.smart_suspend || pci_dev_need_resume(pci_dev)) {
- 		pm_runtime_resume(dev);
- 		pci_dev->state_saved = false;
- 	} else {
-@@ -1151,8 +1150,7 @@
- 	}
- 
- 	/* The reason to do that is the same as in pci_pm_suspend(). */
--	if (!dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND) ||
--	    pci_dev_need_resume(pci_dev)) {
-+	if (!dev->power.smart_suspend || pci_dev_need_resume(pci_dev)) {
- 		pm_runtime_resume(dev);
- 		pci_dev->state_saved = false;
- 	} else {
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -680,8 +680,8 @@
- 	bool			syscore:1;
- 	bool			no_pm_callbacks:1;	/* Owned by the PM core */
- 	bool			async_in_progress:1;	/* Owned by the PM core */
-+	bool			smart_suspend:1;	/* Owned by the PM core */
- 	bool			must_resume:1;		/* Owned by the PM core */
--	bool			set_active:1;		/* Owned by the PM core */
- 	bool			may_skip_resume:1;	/* Set by subsystems */
- #else
- 	bool			should_wakeup:1;
+> 
+> 
+> Yours,
+>     -- Matti
+> 
 
 
-
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
