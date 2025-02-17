@@ -1,206 +1,155 @@
-Return-Path: <linux-pm+bounces-22209-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22210-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5152FA38502
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 14:45:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 155BBA38514
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 14:48:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 160C418870CE
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 13:45:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 005DF16561B
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 13:48:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B756321CFFF;
-	Mon, 17 Feb 2025 13:45:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5353529D05;
+	Mon, 17 Feb 2025 13:48:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="N2qgLDaz"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="r2CQAxdN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f174.google.com (mail-yb1-f174.google.com [209.85.219.174])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E47291DD525
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 13:45:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.174
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 29AE0179BC;
+	Mon, 17 Feb 2025 13:48:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739799906; cv=none; b=J8z6m0JCC2kycVG0EZ10/qzicLcE1wDFHqcY4QY2qdTgzkTaFME6nq6ehQvu9nNtkKYNGeXn28kTeFsnPJ9/wISYUP4gtepJ++x/c1y7QmBAgsBCxI1oDyeaalFAFWKrU3+dqjQfLyInTIZAg7w8P27TvdH64ah8jCXpih7yssQ=
+	t=1739800087; cv=none; b=M7ZdOyFLEN4aSYpLYen5s36tVS0+XN+S9Ope9CoUHgp/AvpK5YKUr7JuffAhnXYeebU9FOvXwyf1IxjkYiK8SmNpIm6TK0gtUITbhcadVX5HoO8G88f6C9a3wgZ/rEBF/v+BgaQLAoAyH71ZV1/pc75+cQjc/k4DhN2+nHsYWbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739799906; c=relaxed/simple;
-	bh=mz8Ai43z2T4C3EljPqnyEAPpcR/9p6r3VDn8veM6B78=;
+	s=arc-20240116; t=1739800087; c=relaxed/simple;
+	bh=L8OCN1cUiLRiv9P1I7bfcU+HLKCa8ZIv8qOYNs8TFCQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ZtdGUczHoPlVOas6nC6lGfdzoPt03ti2soAWjGQV+5aosd57iMZbLMj1Q5TManeTqNWNi5YP3XOmFMNdEWG8Zly87WoyDvoGEtNkYXenORrLNzpS61XTZPoj7+ejdQB9ebkQh/xGD6Juy4CaWPoeyaa5DsDM84z1lqAO8empvkM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=N2qgLDaz; arc=none smtp.client-ip=209.85.219.174
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f174.google.com with SMTP id 3f1490d57ef6-e5dc299dee9so2037853276.3
-        for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 05:45:04 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739799904; x=1740404704; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=p+UsSXYo2ga0Tyi4tOLZzBPl69neKftwGKEChrHrVkU=;
-        b=N2qgLDazdpBf5eLpgVGll9FejGrVxcRGfVnDDgGUQ0g+rDwDRQRHb0MdW48/z3Y/Hw
-         QjVbWb5qJ+15yJHcwChM/dDT9rfFbXTuFiXACB4nK05sUWICJG42C42UWxUxWGfTmFsQ
-         Jkbc/+1v02ifHypaBBP3qsQJAn9c95Td4uhs1Hd1pKnQOksfm2GFUPie7CLQXO7fF612
-         tcEJFJWQ9vZYySr5kaqQqv8KeG5de+6W1v0jor0h69MSvOBkbVDX62SZOghpqXOsAIeE
-         Mykmg4iwf8dlmux21IeHEegDm164fD2DqrGmeL74ySrTRohkzpg81mczgklZpWBxuPj2
-         V3Xw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739799904; x=1740404704;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=p+UsSXYo2ga0Tyi4tOLZzBPl69neKftwGKEChrHrVkU=;
-        b=JuwLGStz9gsEJsuOyhe1f7/nXWm42r0nEoGp9GDrgPLGLF1dxIBul3AysyVTL1Dcyt
-         ekeqPeAvv846qmFBz4kQq8+H8unrs62Vf+0PVhdps2nHjs3F31nEpouP710oXrWMRhQ9
-         GF9bHD0gegvnLcw17oF7igm6PUOD0PC+oUQRg5OcMSLG/HaGpBHsGLr62IF7m36oz7No
-         TfLUDReEbIMYbmigQpek7uRyljApk+VO3YY6HY8fL1jE0k5EwT3vt5sI3Q4exQW/NEOz
-         AhbZj6+YqiLZ5ORsc4QTQ156BV7E6XYzcb7wHLyefSFSYNuq3znoLyUok4m0ICmybxcM
-         ZVaQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUqUlTNYc8205h/ehUhiycEY26WklQHMkZpvWSkQFhD0duV43GFyAXeqJy52Ur77le8cUU/HREeUw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyYceppyRXUpaQ2nkwa0xH64PhxyNTbFr52ccEPCbXUngLuIlcr
-	3TRTma+/z/u0whPkw+RT8NLC1KXGRKVoIBqnLgdQdXk8nntisJrWwqCDesyAoUbHDdy4d5DfGue
-	hzkax8K3ii+7GunrXkoAgN4lpj0uPqpYSeR/47w==
-X-Gm-Gg: ASbGncsQLMJnTJzyN62GDOzGWSQPEbyA6sqAnAZGXhA+iYVS5DJLe/mH8FRFFZqbjKV
-	ndN5LjRiniU7ysTw5Wcev6k1QIyl09I4+5cvB7sqwQAnNLhjtTmWcrNQhKfhAPdgiB0qPCxroAw
-	==
-X-Google-Smtp-Source: AGHT+IFwm/mDqHth8/B/J2U9h8dFtorqOZBoT4t+LjnjdnozWXFMI7irJv+LBN7mF0tOQfF16XjitkQjg935Mk3+pG4=
-X-Received: by 2002:a05:6902:27c4:b0:e5d:ce4f:66ba with SMTP id
- 3f1490d57ef6-e5dce4f6a09mr4587750276.46.1739799903844; Mon, 17 Feb 2025
- 05:45:03 -0800 (PST)
+	 To:Cc:Content-Type; b=IDdqr0jAxHs+OjXLU+qysjYj52BTUi7q9+FTTwHAJCJ7/Y+dQRfZbLrr3yXj9dRI3pGqXY62z2RqFEqG3a8qqDj31eihL7UEkAGwBd3NvtxCcaczbpja0m8x2/zzFhwpzl2dyR03zxVvAq6R7xIcDsDHqjzHcb5L/QlV7+pjB1E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=r2CQAxdN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9AEAEC4CEE7;
+	Mon, 17 Feb 2025 13:48:06 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739800086;
+	bh=L8OCN1cUiLRiv9P1I7bfcU+HLKCa8ZIv8qOYNs8TFCQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=r2CQAxdNAA90959zy5dtp01imhYusxAZN1YJtlkU7HEY/26WTYyjHC3wt08inR5XS
+	 k1H7f3FsPhsqebwuMDPz8F3h/Tp4ndjOq5GMyHxiIMSOcyagfFqiVWCsHpaHRsBM9x
+	 2KihCPLfPZNL3bsTCDNeZYcwoNsPicDvBMna5tLSqxB8rdC3IypN+gLMCgKwNG4Ty6
+	 VA/0a/l0JYopS7z4pHGyv4ZSPnP+lWADWqMiPsJd3vtoqlN2dehSLJhAeDmkRB5/hb
+	 VhQG4ML1x/gi/h/tKaEfw2AIL2hQKm4HMS7nJ2gaKWVSbkUm24CqPKKaR+3q6XpxbP
+	 D2XcnCr2P9uZw==
+Received: by mail-ot1-f50.google.com with SMTP id 46e09a7af769-7272cc739f7so30902a34.1;
+        Mon, 17 Feb 2025 05:48:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUXvXe5ghcFK4pnL3Z7J+zNAzw6VbCropJlbZe1qecdYowgRSUFZdEdSr1EUiMyCm7CcmCe7jJXFIM=@vger.kernel.org, AJvYcCVqZJeHc/0RdAwe+A7PiarQOdIr/oNhkCtgFwN/3WiPJOA6zrSiPyuT6jvqC6+KX4UOnWKU5aSFQU02Vys=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxrME5IYa+bjFY2ZjrpZrtcNULpCw5mHo25ryr2nNqPTzQl7ysF
+	ee2Eb7JY1QoHGwJmdH99Ki+5lhFW4ImI5rOpGRSRvbnKGFF+PpdOVFa0N6rMPmTTaOqjv9H9reX
+	UhWdhgh8fuITCncfBSuCV5Hg1a8M=
+X-Google-Smtp-Source: AGHT+IF4QDX+pkNaLhTeKO5r4AlLlH+oGgzolJUPo0/f9q0W438NMECwqDRAmg6kv5e+6w0OLzk2fSvdbKTFcWq5VWY=
+X-Received: by 2002:a05:6808:1817:b0:3f3:adab:2012 with SMTP id
+ 5614622812f47-3f3d91581f9mr10573633b6e.15.1739800085922; Mon, 17 Feb 2025
+ 05:48:05 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250210055828.1875372-1-keyz@google.com>
-In-Reply-To: <20250210055828.1875372-1-keyz@google.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 17 Feb 2025 14:44:28 +0100
-X-Gm-Features: AWEUYZkhcOiOPHPRB32A0szYwISzmq1cUWV_OtOCbi8uCd62e9ysZ4rFpLd2LWo
-Message-ID: <CAPDyKFor_kP1hcNC1YwLBjH=eaLG9qSyvOYvj+FQrNu8Piu2Dg@mail.gmail.com>
-Subject: Re: [PATCH v5 RESEND] cpuidle: psci: Add trace for PSCI domain idle
-To: Keita Morisaki <keyz@google.com>
-Cc: linux-kernel@vger.kernel.org, lpieralisi@kernel.org, sudeep.holla@arm.com, 
-	rafael@kernel.org, daniel.lezcano@linaro.org, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, rostedt@goodmis.org, 
-	mhiramat@kernel.org, mathieu.desnoyers@efficios.com, 
-	linux-trace-kernel@vger.kernel.org, aarontian@google.com, 
-	yimingtseng@google.com, Dhruva Gole <d-gole@ti.com>, Kevin Hilman <khilman@baylibre.com>
+References: <1916668.tdWV9SEqCh@rjwysocki.net> <7770672.EvYhyI6sBW@rjwysocki.net>
+ <20f09309-bd96-4b29-9602-4f969547dc51@arm.com>
+In-Reply-To: <20f09309-bd96-4b29-9602-4f969547dc51@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 17 Feb 2025 14:47:54 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hbthUx6BkCmfpESjz6YTA4rN2iF8TFFRM=4gY500UcSw@mail.gmail.com>
+X-Gm-Features: AWEUYZnA1943DQlhWqO4DxwAbzmHpOgNYwqLjuVpwzLtZo_5iVIDwEf-izmcA38
+Message-ID: <CAJZ5v0hbthUx6BkCmfpESjz6YTA4rN2iF8TFFRM=4gY500UcSw@mail.gmail.com>
+Subject: Re: [RFT][PATCH v1 5/5] cpuidle: menu: Avoid discarding useful information
+To: Christian Loehle <christian.loehle@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Artem Bityutskiy <artem.bityutskiy@linux.intel.com>, 
+	Aboorva Devarajan <aboorvad@linux.ibm.com>
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 10 Feb 2025 at 06:58, Keita Morisaki <keyz@google.com> wrote:
+On Mon, Feb 17, 2025 at 2:39=E2=80=AFPM Christian Loehle
+<christian.loehle@arm.com> wrote:
 >
-> The trace event cpu_idle provides insufficient information for debugging
-> PSCI requests due to lacking access to determined PSCI domain idle
-> states. The cpu_idle usually only shows -1, 0, or 1 regardless how many
-> idle states the power domain has.
+> On 2/6/25 14:29, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > When giving up on making a high-confidence prediction,
+> > get_typical_interval() always returns UINT_MAX which means that the
+> > next idle interval prediction will be based entirely on the time till
+> > the next timer.  However, the information represented by the most
+> > recent intervals may not be completely useless in those cases.
+> >
+> > Namely, the largest recent idle interval is an upper bound on the
+> > recently observed idle duration, so it is reasonable to assume that
+> > the next idle duration is unlikely to exceed it.  Moreover, this is
+> > still true after eliminating the suspected outliers if the sample
+> > set still under consideration is at least as large as 50% of the
+> > maximum sample set size.
+> >
+> > Accordingly, make get_typical_interval() return the current maximum
+> > recent interval value in that case instead of UINT_MAX.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >  drivers/cpuidle/governors/menu.c |   13 ++++++++++++-
+> >  1 file changed, 12 insertions(+), 1 deletion(-)
+> >
+> > --- a/drivers/cpuidle/governors/menu.c
+> > +++ b/drivers/cpuidle/governors/menu.c
+> > @@ -190,8 +190,19 @@
+> >        * This can deal with workloads that have long pauses intersperse=
+d
+> >        * with sporadic activity with a bunch of short pauses.
+> >        */
+> > -     if ((divisor * 4) <=3D INTERVALS * 3)
+> > +     if (divisor * 4 <=3D INTERVALS * 3) {
+> > +             /*
+> > +              * If there are sufficiently many data points still under
+> > +              * consideration after the outliers have been eliminated,
+> > +              * returning without a prediction would be a mistake beca=
+use it
+> > +              * is likely that the next interval will not exceed the c=
+urrent
+> > +              * maximum, so return the latter in that case.
+> > +              */
+> > +             if (divisor >=3D INTERVALS / 2)
+> > +                     return max;
+> > +
+> >               return UINT_MAX;
+> > +     }
+> >
+> >       /* Update the thresholds for the next round. */
+> >       if (avg - min > max - avg)
+> >
 >
-> Add new trace events namely psci_domain_idle_enter and
-> psci_domain_idle_exit to trace enter and exit events with a determined
-> idle state.
->
-> These new trace events will help developers debug CPUidle issues on ARM
-> systems using PSCI by providing more detailed information about the
-> requested idle states.
->
-> Signed-off-by: Keita Morisaki <keyz@google.com>
-> Reviewed-by: Steven Rostedt (Google) <rostedt@goodmis.org>
-> Reviewed-by: Dhruva Gole <d-gole@ti.com>
-> Tested-by: Kevin Hilman <khilman@baylibre.com>
+> You might want to amend the description at the top of menu.c then given t=
+hat
+> this now returns something without any meaning in a statistical significa=
+nce
+> way. Similar to admin-guide doc.
 
-Applied for next, thanks!
+OK, I'll send a documentation update patch on top of this.
 
-Kind regards
-Uffe
+> As reported by the tests, this does improve performance a lot in scenario=
+s of
+> short intervals (where passing the statistical test is hard).
 
-> ---
-> v1->v2: Split the ftrace event into two (psci_domain_idle_(enter|exit))
->         and rephrase the commit message accordingly. Rebased onto the latest.
-> v2->v3: Add "Reviewed-by: Steven Rostedt"
-> v3->v4: Add the Tested-by label
-> v4->v5: Add "Reviewed-by: Dhruva Gole"
+Yes, that pretty much is what the SPECjbb critical-jOPS improvement means.
+
+> Teo exploits the idle state residencies for this (i.e. as long as they fa=
+ll
+> into the same bin, they are equal for our means), this can be viewed as t=
+he
+> menu equivalent to it, without relying on idle states.
 >
-> Hopefully this patch gets attention from maintainers of
-> drivers/cpuidle/cpuidle-psci.c too.
->
->  drivers/cpuidle/cpuidle-psci.c |  3 +++
->  include/trace/events/power.h   | 37 ++++++++++++++++++++++++++++++++++
->  2 files changed, 40 insertions(+)
->
-> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
-> index 2562dc001fc1..dd8d776d6e39 100644
-> --- a/drivers/cpuidle/cpuidle-psci.c
-> +++ b/drivers/cpuidle/cpuidle-psci.c
-> @@ -25,6 +25,7 @@
->  #include <linux/syscore_ops.h>
->
->  #include <asm/cpuidle.h>
-> +#include <trace/events/power.h>
->
->  #include "cpuidle-psci.h"
->  #include "dt_idle_states.h"
-> @@ -74,7 +75,9 @@ static __cpuidle int __psci_enter_domain_idle_state(struct cpuidle_device *dev,
->         if (!state)
->                 state = states[idx];
->
-> +       trace_psci_domain_idle_enter(dev->cpu, state, s2idle);
->         ret = psci_cpu_suspend_enter(state) ? -1 : idx;
-> +       trace_psci_domain_idle_exit(dev->cpu, state, s2idle);
->
->         if (s2idle)
->                 dev_pm_genpd_resume(pd_dev);
-> diff --git a/include/trace/events/power.h b/include/trace/events/power.h
-> index d2349b6b531a..9253e83b9bb4 100644
-> --- a/include/trace/events/power.h
-> +++ b/include/trace/events/power.h
-> @@ -62,6 +62,43 @@ TRACE_EVENT(cpu_idle_miss,
->                 (unsigned long)__entry->state, (__entry->below)?"below":"above")
->  );
->
-> +DECLARE_EVENT_CLASS(psci_domain_idle,
-> +
-> +       TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-> +
-> +       TP_ARGS(cpu_id, state, s2idle),
-> +
-> +       TP_STRUCT__entry(
-> +               __field(u32,            cpu_id)
-> +               __field(u32,            state)
-> +               __field(bool,           s2idle)
-> +       ),
-> +
-> +       TP_fast_assign(
-> +               __entry->cpu_id = cpu_id;
-> +               __entry->state = state;
-> +               __entry->s2idle = s2idle;
-> +       ),
-> +
-> +       TP_printk("cpu_id=%lu state=0x%lx is_s2idle=%s",
-> +                 (unsigned long)__entry->cpu_id, (unsigned long)__entry->state,
-> +                 (__entry->s2idle)?"yes":"no")
-> +);
-> +
-> +DEFINE_EVENT(psci_domain_idle, psci_domain_idle_enter,
-> +
-> +       TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-> +
-> +       TP_ARGS(cpu_id, state, s2idle)
-> +);
-> +
-> +DEFINE_EVENT(psci_domain_idle, psci_domain_idle_exit,
-> +
-> +       TP_PROTO(unsigned int cpu_id, unsigned int state, bool s2idle),
-> +
-> +       TP_ARGS(cpu_id, state, s2idle)
-> +);
-> +
->  TRACE_EVENT(powernv_throttle,
->
->         TP_PROTO(int chip_id, const char *reason, int pmax),
->
-> base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
-> --
-> 2.48.1.362.g079036d154-goog
->
+> Reviewed-by: Christian Loehle <christian.loehle@arm.com>
+
+Thank you!
 
