@@ -1,163 +1,109 @@
-Return-Path: <linux-pm+bounces-22233-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22234-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 566A4A38CFC
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:03:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C2DE2A38D0B
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:11:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 229A11896C07
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:03:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD9B1188D96D
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:11:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7685F23642E;
-	Mon, 17 Feb 2025 20:03:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DC3A22B5A3;
+	Mon, 17 Feb 2025 20:11:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="lbLsLX7M"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TlK/ERDj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CE47522B8BC;
-	Mon, 17 Feb 2025 20:03:10 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1869A13AA5D
+	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 20:11:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739822593; cv=none; b=f37Ah8H6AS3hP7RjetHRcmseGcph76+NQaz6Z8HFlCxaXxBenoRukI9Cvp0lr8PqrnASWDj8mddS36jA/p6hUGUj6YqtREnrBlxhutm2Ih5/DaLecNVK2ol0Auu7DNcR9VekZEXh+8jquHa85RKoc8DbhUYcIxVaPr8rdtWA67E=
+	t=1739823077; cv=none; b=EZ70tcSDU/WON7C1O0c8bRaIlJPXVztd5j2hC14AQ8qTcESfkDYH9/IDwa6yfZIqXABpineDryktMCFdhCLkJ5YmjD5E2aJbB8Yk80Ul8A9t13wtVIOcwQE4Si2D7Q0+OFGIV5nucfIElmTyJV0CRIB+3e9hh/QTppVpKJ2Xta4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739822593; c=relaxed/simple;
-	bh=Czt6dzLaaJYi0aLl1SqokBZut9L0657qGVnXG8CtbZk=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=XEq8QyfvZe/fyU60dmFOTylN5PwmKSsjfjnvUfItMBEs/oSe++RjhpjSUjD+8loGzsdVlrQqidE3taqEZxWRLzSZHJnUdTFP35ic/Q/gBrGXvoIPhcaibsoYj+jzsHBcU91yWaLfy5NlpMHeerw9u9N/W3nk7IsPkkir78IWcsI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=lbLsLX7M; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 09ce3472b20f4a40; Mon, 17 Feb 2025 21:03:02 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 280BB9100B0;
-	Mon, 17 Feb 2025 21:03:02 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1739822582;
-	bh=Czt6dzLaaJYi0aLl1SqokBZut9L0657qGVnXG8CtbZk=;
-	h=From:Subject:Date;
-	b=lbLsLX7MVn+NzaOcOJjkjHD64cWTdjK0qVqzMQmQ/PlRzT+NqmQmiF9ghU9kjsxf0
-	 YzxuK51DdxYF2SPp2NBKHWbK4UjxH+u3CM1f3fhcx4ya5iZAIDum4sAtn+/UEc2C3i
-	 lD4zOAagiPPK7rgOZFeQTXJI3nqufg5xeC5aml1vXJ0bFTpO3IprrrthQHutpw/LBa
-	 c5V/ht0HaUI42V+krFnakW/mU3HQljHsCMdpVuKMJKQggN/OP52GRqAdwYlMRrXf79
-	 Kwgx9OrnYMigNlhymXvTl3fYN6tMrfaDgwG6uzLQapP6c0yFnB1j4PsB09p9+RZbca
-	 YRBUUgmMaic8g==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
- Johan Hovold <johan@kernel.org>
-Subject:
- [PATCH v1] PM: Rearrange documentation related to __pm_runtime_disable()
-Date: Mon, 17 Feb 2025 21:03:01 +0100
-Message-ID: <12617588.O9o76ZdvQC@rjwysocki.net>
+	s=arc-20240116; t=1739823077; c=relaxed/simple;
+	bh=9Ii4P30d9LDAzOkQd4hJ8Te9yTxuu9uVX8GBjDUPrf8=;
+	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=sIN5sW2T7m9q+TlsADMbK3OGjIsXCOLWYxtL4V+pUZJkss6mu7dPk8jgEibpkiXF9B7f14PKdQ05O0C4yzG/aHxwsk6zpy0qQA7L9NzVlktKqlGFd/9h/z1otXDAow3Bnd2fD7v/7N//z6ExWamEG+FMCSURiauscEn+gjP2qTs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TlK/ERDj; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 8B3ACC4CEEA
+	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 20:11:16 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739823076;
+	bh=9Ii4P30d9LDAzOkQd4hJ8Te9yTxuu9uVX8GBjDUPrf8=;
+	h=From:To:Subject:Date:In-Reply-To:References:From;
+	b=TlK/ERDjrJPrpVAAy8thUXbIqnhQFAjCYkBIRx6eLzqmHY46+2yhmOhHs+89hNJs1
+	 0nJ4d9634rwSYTWUnOYDOc3JGOzzWLBi13k0UqFRljD7/K+RKWU3d8f8S9bcfOpiyo
+	 CMQmb6KJi/i1PP66RNwK3SMZRppU6WKLkUm2uIIopMYVHhzQqb4C6zQvQeQun2jgyk
+	 02UUGI8fQNdxfi7zrw2ywfkf/SgIxkQet7T4U7W4o171Be7SVWYoAhmQK9w1ufL4HD
+	 NpPJ7Q8D14aGDFsQOx7pD0xupjjxjWUcihRxKpbZh2KJuX8KxlaoEcZz+jHMZqe7S2
+	 yiGx890ic2Sjw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 83B8BC41614; Mon, 17 Feb 2025 20:11:16 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
+ boost control
+Date: Mon, 17 Feb 2025 20:11:15 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: changed
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: miroslav@pavleski.net
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: attachments.created
+Message-ID: <bug-217931-137361-n6f0vPGkEN@https.bugzilla.kernel.org/>
+In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
+References: <bug-217931-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdehleefudcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeffffffkefgheehffelteeiveeffeevhfelteejvddvieejjeelvdeiheeuveeuffenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehjohhhrghnsehkvghrnhgvlhdrohhrgh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
 
-There are only two callers of __pm_runtime_disable(), one of which is
-device_suspend_late() and the other is pm_runtime_disable() that has
-its own kerneldoc comment and there are no plans to add any more of
-them.  Since they use different values of the __pm_runtime_disable()
-second parameter, the actual code behavior is different in each case,
-but it is all documented in the __pm_runtime_disable() kerneldoc comment
-which is not particularly straightforward.
+--- Comment #75 from Miroslav Pavleski (miroslav@pavleski.net) ---
+Created attachment 307681
+  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307681&action=3Dedit
+s2idle and pstate reports after applying the 'invalidate cppc' patch on 6.1=
+4rc2
 
-For this reason, move the information from the __pm_runtime_disable()
-kerneldoc comment to the pm_runtime_disable() one and into a separate
-comment in device_suspend_late() and remove the __pm_runtime_disable()
-kerneldoc comment altogether.
+Maybe those GPIOs are used on the Asus machine for handling the Hybrid
+graphics. I'm just speculating here.=20
 
-No functional impact.
+The laptop has the onboard 6900HS GPU and also an AMD Radeon RX 6800S.
 
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- drivers/base/power/main.c    |    4 ++++
- drivers/base/power/runtime.c |   14 --------------
- include/linux/pm_runtime.h   |   15 +++++++++++----
- 3 files changed, 15 insertions(+), 18 deletions(-)
+I've applied the patch on 6.14rc2. Attaching
+2025.02.17_s2idle_and_pstate_reports_post-patch.zip:
 
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1404,6 +1404,10 @@
- 	TRACE_DEVICE(dev);
- 	TRACE_SUSPEND(0);
- 
-+	/*
-+	 * Disable runtime PM for the device without checking if there is a
-+	 * pending resume request for it.
-+	 */
- 	__pm_runtime_disable(dev, false);
- 
- 	dpm_wait_for_subordinate(dev, async);
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1460,20 +1460,6 @@
- }
- EXPORT_SYMBOL_GPL(pm_runtime_barrier);
- 
--/**
-- * __pm_runtime_disable - Disable runtime PM of a device.
-- * @dev: Device to handle.
-- * @check_resume: If set, check if there's a resume request for the device.
-- *
-- * Increment power.disable_depth for the device and if it was zero previously,
-- * cancel all pending runtime PM requests for the device and wait for all
-- * operations in progress to complete.  The device can be either active or
-- * suspended after its runtime PM has been disabled.
-- *
-- * If @check_resume is set and there's a resume request pending when
-- * __pm_runtime_disable() is called and power.disable_depth is zero, the
-- * function will wake up the device before disabling its runtime PM.
-- */
- void __pm_runtime_disable(struct device *dev, bool check_resume)
- {
- 	spin_lock_irq(&dev->power.lock);
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -556,11 +556,18 @@
-  * pm_runtime_disable - Disable runtime PM for a device.
-  * @dev: Target device.
-  *
-- * Prevent the runtime PM framework from working with @dev (by incrementing its
-- * "blocking" counter).
-+ * Prevent the runtime PM framework from working with @dev by incrementing its
-+ * "disable" counter.
-  *
-- * For each invocation of this function for @dev there must be a matching
-- * pm_runtime_enable() call in order for runtime PM to be enabled for it.
-+ * If the counter is zero when this function runs and there is a pending runtime
-+ * resume request for @dev, it will be resumed.  If the counter is still zero at
-+ * that point, all of the pending runtime PM requests for @dev will be canceled
-+ * and all runtime PM operations in progress involving it will be waited for to
-+ * complete.
-+ *
-+ * For each invocation of this function for @dev, there must be a matching
-+ * pm_runtime_enable() call, so that runtime PM is eventually enabled for it
-+ * again.
-  */
- static inline void pm_runtime_disable(struct device *dev)
- {
+- s2idle_report-2025-02-17-post_patch.txt -> run after fresh boot to 6.14rc2
+with the patch. Suspend/resume cycle worked normal.
+- rebooted
+- amd_pstate_report-2025-02-17_post_patch.txt -> run after fresh boot
+- s2idle_rs2idle_report-2025-02-17-post_patch2.txt -> succeeded suspend /
+resume cycle
+- amd_pstate_report-2025-02-17_post_patch2.txt -> run after the resume
 
+--=20
+You may reply to this email to add a comment.
 
-
+You are receiving this mail because:
+You are the assignee for the bug.=
 
