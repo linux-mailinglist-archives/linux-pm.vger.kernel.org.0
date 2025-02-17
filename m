@@ -1,115 +1,111 @@
-Return-Path: <linux-pm+bounces-22264-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22265-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44E1FA38E53
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 22:56:09 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D920CA38EB8
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 23:10:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4D4A63B140F
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:55:59 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A8C811736A3
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 22:09:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DD0231A23B5;
-	Mon, 17 Feb 2025 21:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 444B11AA1E0;
+	Mon, 17 Feb 2025 22:07:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="OOrIq/9G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="dzCQqQiV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6418224F0
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 21:56:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1A55019E999;
+	Mon, 17 Feb 2025 22:07:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739829364; cv=none; b=rjNkH4Hn7qkMgRUiSi3kJfrBvH3D502O5ZUO/AYUowvBnbSgI7FwGUyvA8PY91LbWUusu4KzsRBAbYoVAr2om0vhTMhlMOrBzhY4iyFElryTURbDmsL3w4SXDfY/yFesNTpiGcEBw2j+NUjdEZLn273UMPTSRFadF25907BKVNY=
+	t=1739830055; cv=none; b=azDKvdbJxI3XfR4k2mbgjlpPxlTX4iKj0fpHIr2gdgKv/ucLid/YjNboqc7xG0A+il5dvQ927pGtvmncXs4GqUSFCGV8GtMjMTFNR3W9paztJZB+8j+eg8r7cdxLi//Um0LtgJGEx9qnlH9JKovsbzFhSxpxoHvlOmPae4Wyueo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739829364; c=relaxed/simple;
-	bh=xPDkc0Z68TIbJMwSByfMVNN+JQCYuYqV/rxTXXuiVno=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=rt5qV+KB7MMggA8YXMxSWqgH7lBMeKtU1a9ypR+xTK45vrv8c3YLGMQ4I9CMQ9/oP4+UosAhNyJX2j2o1TDT4CrGDkmfdSVY7x9lXrA6l3IJLxFPhjcYTXgfdDpFTUtK32WrEpSb1b/wRTwjS1qUInKThD6aMavdcmFKmLw+PzA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=OOrIq/9G; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 2CDADC4CEEB
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 21:56:04 +0000 (UTC)
+	s=arc-20240116; t=1739830055; c=relaxed/simple;
+	bh=3eet+SfkjGmFMFBdttMU7uwQEMBf27tn1bjASmuISaU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=CntWeQzWfPHIAeJsVv3uo6KW5P7wjz6rUj2gShAlBGErzf0ZooMKxJz0RfMpcjJBIUxQJKBZpSqvKNixK0l5ocTYeZwo4DVynvelaxoYWQJAVpM/JsrxpC7I+Gz/G7jpHw1u8bxrENNc63+IrexT60OM7JrYcE2AxbStMeW1bR0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=dzCQqQiV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DE378C4CED1;
+	Mon, 17 Feb 2025 22:07:33 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739829364;
-	bh=xPDkc0Z68TIbJMwSByfMVNN+JQCYuYqV/rxTXXuiVno=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=OOrIq/9GHTQmGMZMXS6s8KhkygN+n/zlGiRF7Bps5ie4KPPrngktk07wu6yKa8V30
-	 W8MAp3mlsaoHinQSD2SHFLlu71k0ZbpXcJZdJ27+HKATaQeFUl5aUFhigZ4CRN+2m7
-	 PPojVaySpQ6jkPXsew6r9FbDsecmaiIfGbwAz8vR/NppkRcigtlYon+Wm5F5oEy59M
-	 dWWXgPPXYQDIfbvL+ccjRPUoHdMpns6Hw1Z2dTFF8Z5y9YiMad38/rRgC9o4yndBMC
-	 1FOYkFCV0EbEm955FzXtsGapp4sj0CCuqwaSBEAQOqX+DxVmGAEzHNvIDi9OUdsuZw
-	 hKuGWX/PU0bpw==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 26728C41606; Mon, 17 Feb 2025 21:56:04 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
- boost control
-Date: Mon, 17 Feb 2025 21:56:03 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: mario.limonciello@amd.com
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217931-137361-lSObpBz2Qt@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
-References: <bug-217931-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1739830054;
+	bh=3eet+SfkjGmFMFBdttMU7uwQEMBf27tn1bjASmuISaU=;
+	h=From:To:Cc:Subject:Date:From;
+	b=dzCQqQiVJ0fg/SaQQw70Lpc/vUfcp7XHvs6jG87IrhZZ71TB825iTKWuYiphENqxi
+	 M2qNOs9XcsftK0OWlqU3eXgXKhyY5NstGDS9+7xuzIt5E2F8vQRpbHOHmunr8UuUgU
+	 J9sA94jJeoP1188mPNPxm8swEUDvJUQhOffZ2bWZJs2L8TL6RhkqlnmQ5uySSE+9c/
+	 8qKjIKvwSL6RBAlj89fAauYu7taBfJUTKNORCkLBebXpEJHFGqOmzWfF/oyevM9KW9
+	 Bl0kMLJH8GqY3vzkYyK7gbee7N+b04siTc6B4fSQ099Ote9mtTxHWzckT34MXqlQg2
+	 mAQBWCjBXV9xA==
+From: Mario Limonciello <superm1@kernel.org>
+To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>
+Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK),
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v3 00/18] amd-pstate cleanups
+Date: Mon, 17 Feb 2025 16:06:49 -0600
+Message-ID: <20250217220707.1468365-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
+From: Mario Limonciello <mario.limonciello@amd.com>
 
---- Comment #80 from Mario Limonciello (AMD) (mario.limonciello@amd.com) ---
+This series overhauls locking and drops many unnecessarily cached
+variables.
 
-OK great, it looks like the amd-pstate issue is fixed.  I'll include this i=
-n my
-next patch series for amd-pstate.  It's good timing because I'm overhauling=
- a
-lot of this code for 6.15.
+Debugging messages are also dropped in favor of more ftracing.
 
-Unfortunately; your suspend failure is missing the thing I need to tell me =
-some
-important info about the failure mode(the idle mask print).  This is the li=
-ne
-we should have seen printed.=20=20
-https://github.com/torvalds/linux/blob/master/drivers/platform/x86/amd/pmc/=
-pmc.c#L733
+This series is based off superm1/linux.git bleeding-edge branch.
 
-I notice this at the top before your sequence starts though:
+v2->v3:
+ * Mostly pick up tags
+ * Add new patch 1/18 that fixes a KBZ issue (see patch for detail)
+ * Fixup for min_freq issue in dropping cached values patch
+ * Fixup for unit tests to only run on online CPUs
 
-> feb 17 22:06:52 greenstation kernel: NOHZ tick-stop error: local softirq =
-work
-> is pending, handler #08!!!
+Mario Limonciello (18):
+  cpufreq/amd-pstate: Invalidate cppc_req_cached during suspend
+  cpufreq/amd-pstate: Show a warning when a CPU fails to setup
+  cpufreq/amd-pstate: Drop min and max cached frequencies
+  cpufreq/amd-pstate: Move perf values into a union
+  cpufreq/amd-pstate: Overhaul locking
+  cpufreq/amd-pstate: Drop `cppc_cap1_cached`
+  cpufreq/amd-pstate-ut: Use _free macro to free put policy
+  cpufreq/amd-pstate-ut: Allow lowest nonlinear and lowest to be the
+    same
+  cpufreq/amd-pstate-ut: Drop SUCCESS and FAIL enums
+  cpufreq/amd-pstate-ut: Run on all of the correct CPUs
+  cpufreq/amd-pstate-ut: Adjust variable scope for
+    amd_pstate_ut_check_freq()
+  cpufreq/amd-pstate: Replace all AMD_CPPC_* macros with masks
+  cpufreq/amd-pstate: Cache CPPC request in shared mem case too
+  cpufreq/amd-pstate: Move all EPP tracing into *_update_perf and
+    *_set_epp functions
+  cpufreq/amd-pstate: Update cppc_req_cached for shared mem EPP writes
+  cpufreq/amd-pstate: Drop debug statements for policy setting
+  cpufreq/amd-pstate: Rework CPPC enabling
+  cpufreq/amd-pstate: Stop caching EPP
 
-And that has me most concerned that the kernel wasn't really ready for susp=
-end.
- Let's split out your s2idle suspend issue to it's own bug and try to figure
-out the pattern and what debug we'll need.  We can keep this one for the
-amd-pstate issue, and I expect we can land the patch for a later 6.14-rc.
+ arch/x86/include/asm/msr-index.h   |  20 +-
+ arch/x86/kernel/acpi/cppc.c        |   4 +-
+ drivers/cpufreq/amd-pstate-trace.h |  13 +-
+ drivers/cpufreq/amd-pstate-ut.c    | 209 +++++-----
+ drivers/cpufreq/amd-pstate.c       | 592 ++++++++++++++---------------
+ drivers/cpufreq/amd-pstate.h       |  61 +--
+ 6 files changed, 428 insertions(+), 471 deletions(-)
 
---=20
-You may reply to this email to add a comment.
+-- 
+2.43.0
 
-You are receiving this mail because:
-You are the assignee for the bug.=
 
