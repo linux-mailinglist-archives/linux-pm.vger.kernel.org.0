@@ -1,56 +1,57 @@
-Return-Path: <linux-pm+bounces-22275-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22277-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 565FFA38EC6
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 23:11:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id F15A0A38EDE
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 23:13:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9826F188CCD8
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BB9953B55CB
 	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 22:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED0D61DDC11;
-	Mon, 17 Feb 2025 22:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECF841DE3AF;
+	Mon, 17 Feb 2025 22:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CBFHakTq"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Pp46F/ET"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B9FEA1DD539;
-	Mon, 17 Feb 2025 22:07:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2ED01DE3A5;
+	Mon, 17 Feb 2025 22:07:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739830064; cv=none; b=gjUeLhHRKnztK1Yi6ZpKomvkUXeEqWOQM8qTYdgtIuh+M2I3oCtpi1IdK3xOOrW1GRZORN+BVdCcV/2ndtyn983nWKMu51wxFdVBAssZNDNKs6JhBj3IG+qE/xfDBOV3QxFWvyi6qvlHREX9Iq4ChjFXH8a+2Vy4Cxi1JFLeojc=
+	t=1739830065; cv=none; b=SkdULIhhiUG9Frgn7gLk1OZu5DyU1wxbmTQRhuLLQgu78crh9VdltSISzQi36jt2LJn0+vXMBON//C+Ib0UTUZWrM4C+QApusIrFomSsuUDQMglqhxWVyj/vKVu/MwY9h11W8vEi+YLy2/CZ480y81GTo63bzymvINSlCiixp0s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739830064; c=relaxed/simple;
-	bh=KIwG/kEIVb6cTf+T/wqq7Akr9rEXI8YurHlaC3SVGpc=;
+	s=arc-20240116; t=1739830065; c=relaxed/simple;
+	bh=K/7qaKxoxOFS1u+zBhk0UZK39MFTTZOG66iJNpiCHU0=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=R8xyUKFg6/8/+SKCl0l5fLGU3hXN0k6sYYrovTCrJDNUjVuroVGdb/PUM+158EACqpuDzNCnO8ivFBmdNskI4rsbPQsje/KMOlfsyj6WVhLKa80r3cICfjBjUtsVmY7XxQ6ZvzDe2Nm5fxppf2nWeb0M0NKKEM0OHeROaT6q/DE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CBFHakTq; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id F1F09C4CEEA;
-	Mon, 17 Feb 2025 22:07:43 +0000 (UTC)
+	 MIME-Version; b=EMCsW0PIUuSnTlTIbX7RWGJUZDhPTtVgCW7/j4UPX6+7I9lGFBWdGo1vjIFM5ne+p7Me3/MPGLXJK1Yf/YBKfxc/DhVU8QLaQHObNVLC3Lnfk3rz6FkH08Fe10u9mjxrGgQAOmUNvPiJ6pQQubxlT6xWEMjvj54KCsU09HOX5Lc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Pp46F/ET; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DC8F9C4CED1;
+	Mon, 17 Feb 2025 22:07:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739830064;
-	bh=KIwG/kEIVb6cTf+T/wqq7Akr9rEXI8YurHlaC3SVGpc=;
+	s=k20201202; t=1739830065;
+	bh=K/7qaKxoxOFS1u+zBhk0UZK39MFTTZOG66iJNpiCHU0=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=CBFHakTqHj57wKa/bEqkDs3pnfyy7gQqMQGI6CLnD7j7HrEsZh6rv3pO3u2kfiUFJ
-	 1tGPC+kl2hSgMT9qFEQOXErClpfsOJnW8ohu/DbG6YABP1RbvQEhjDCXn0bVoZ4gRb
-	 d/GlULSMNWRpF0PNCDnfK/Abads23HTyJifZHLlXSvk96NR/PAe0MQlyzmLtdzJI/2
-	 H14bPf58whMyxTfCgsQTbU4BvXbccQa0cIR8tvYZXutKuowtIHo3XX8Q3sgtiUGIhi
-	 0h4oe81C7ZyvBrXPZZuT2e8Dm2JD4mRa/1QYGZvTMNnU2wUKw8IwZwpk4w7VvGtBq0
-	 tl5/yfedLngfg==
+	b=Pp46F/ET1wbaStMByMOmShnfcOApdkff1fzXPLH6TsqvG2ejOu8dUN+rczTQT3Amm
+	 UU/3cgDyr9hWQeElmXzWyCTMyiuPKXAW7IwrqM7t31elXC8V+phRwZyD6fdfuGSoou
+	 Zk8cRj0MofMFeObRVCzuuT0eFgrwUBPlRqZtwsny2M3zeY13k4ZGZozRvObyom9FU3
+	 u4DrrcDCOGg+eXiAHZSB1FEdBXnaSoLrW1dMYiWf+MVjo7qwq4SXcIJfeDyO285BRy
+	 RmyvCYzuTcJf3yAkfIkn1wPBXkpkE/pAkl9As9e/digHQoYnA0HAVx7R8AfUlmWMG1
+	 EPHeRH2GMwkgA==
 From: Mario Limonciello <superm1@kernel.org>
 To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
 	Perry Yuan <perry.yuan@amd.com>
 Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
 	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
 	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK),
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v3 11/18] cpufreq/amd-pstate-ut: Adjust variable scope for amd_pstate_ut_check_freq()
-Date: Mon, 17 Feb 2025 16:07:00 -0600
-Message-ID: <20250217220707.1468365-12-superm1@kernel.org>
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
+Subject: [PATCH v3 12/18] cpufreq/amd-pstate: Replace all AMD_CPPC_* macros with masks
+Date: Mon, 17 Feb 2025 16:07:01 -0600
+Message-ID: <20250217220707.1468365-13-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250217220707.1468365-1-superm1@kernel.org>
 References: <20250217220707.1468365-1-superm1@kernel.org>
@@ -64,31 +65,140 @@ Content-Transfer-Encoding: 8bit
 
 From: Mario Limonciello <mario.limonciello@amd.com>
 
-The cpudata variable is only needed in the scope of the for loop. Move it
-there.
+Bitfield masks are easier to follow and less error prone.
 
+Reviewed-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
 Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
- drivers/cpufreq/amd-pstate-ut.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+v3:
+ * Add tag
+ * Add missing includes
+v2:
+ * Add a comment in msr-index.h
+ * Pick up tag
+---
+ arch/x86/include/asm/msr-index.h | 20 +++++++++++---------
+ arch/x86/kernel/acpi/cppc.c      |  4 +++-
+ drivers/cpufreq/amd-pstate-ut.c  |  9 +++++----
+ drivers/cpufreq/amd-pstate.c     | 16 ++++++----------
+ 4 files changed, 25 insertions(+), 24 deletions(-)
 
+diff --git a/arch/x86/include/asm/msr-index.h b/arch/x86/include/asm/msr-index.h
+index c84930610c7e6..cfcc49e5cf925 100644
+--- a/arch/x86/include/asm/msr-index.h
++++ b/arch/x86/include/asm/msr-index.h
+@@ -701,15 +701,17 @@
+ #define MSR_AMD_CPPC_REQ		0xc00102b3
+ #define MSR_AMD_CPPC_STATUS		0xc00102b4
+ 
+-#define AMD_CPPC_LOWEST_PERF(x)		(((x) >> 0) & 0xff)
+-#define AMD_CPPC_LOWNONLIN_PERF(x)	(((x) >> 8) & 0xff)
+-#define AMD_CPPC_NOMINAL_PERF(x)	(((x) >> 16) & 0xff)
+-#define AMD_CPPC_HIGHEST_PERF(x)	(((x) >> 24) & 0xff)
+-
+-#define AMD_CPPC_MAX_PERF(x)		(((x) & 0xff) << 0)
+-#define AMD_CPPC_MIN_PERF(x)		(((x) & 0xff) << 8)
+-#define AMD_CPPC_DES_PERF(x)		(((x) & 0xff) << 16)
+-#define AMD_CPPC_ENERGY_PERF_PREF(x)	(((x) & 0xff) << 24)
++/* Masks for use with MSR_AMD_CPPC_CAP1 */
++#define AMD_CPPC_LOWEST_PERF_MASK	GENMASK(7, 0)
++#define AMD_CPPC_LOWNONLIN_PERF_MASK	GENMASK(15, 8)
++#define AMD_CPPC_NOMINAL_PERF_MASK	GENMASK(23, 16)
++#define AMD_CPPC_HIGHEST_PERF_MASK	GENMASK(31, 24)
++
++/* Masks for use with MSR_AMD_CPPC_REQ */
++#define AMD_CPPC_MAX_PERF_MASK		GENMASK(7, 0)
++#define AMD_CPPC_MIN_PERF_MASK		GENMASK(15, 8)
++#define AMD_CPPC_DES_PERF_MASK		GENMASK(23, 16)
++#define AMD_CPPC_EPP_PERF_MASK		GENMASK(31, 24)
+ 
+ /* AMD Performance Counter Global Status and Control MSRs */
+ #define MSR_AMD64_PERF_CNTR_GLOBAL_STATUS	0xc0000300
+diff --git a/arch/x86/kernel/acpi/cppc.c b/arch/x86/kernel/acpi/cppc.c
+index d745dd586303c..77bfb846490c0 100644
+--- a/arch/x86/kernel/acpi/cppc.c
++++ b/arch/x86/kernel/acpi/cppc.c
+@@ -4,6 +4,8 @@
+  * Copyright (c) 2016, Intel Corporation.
+  */
+ 
++#include <linux/bitfield.h>
++
+ #include <acpi/cppc_acpi.h>
+ #include <asm/msr.h>
+ #include <asm/processor.h>
+@@ -149,7 +151,7 @@ int amd_get_highest_perf(unsigned int cpu, u32 *highest_perf)
+ 		if (ret)
+ 			goto out;
+ 
+-		val = AMD_CPPC_HIGHEST_PERF(val);
++		val = FIELD_GET(AMD_CPPC_HIGHEST_PERF_MASK, val);
+ 	} else {
+ 		ret = cppc_get_highest_perf(cpu, &val);
+ 		if (ret)
 diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-index 3a541780f374f..6b04b5b54b3b5 100644
+index 6b04b5b54b3b5..9a2de25a4b749 100644
 --- a/drivers/cpufreq/amd-pstate-ut.c
 +++ b/drivers/cpufreq/amd-pstate-ut.c
-@@ -186,10 +186,10 @@ static int amd_pstate_ut_check_perf(u32 index)
- static int amd_pstate_ut_check_freq(u32 index)
- {
- 	int cpu = 0;
--	struct amd_cpudata *cpudata = NULL;
+@@ -22,6 +22,7 @@
  
- 	for_each_online_cpu(cpu) {
- 		struct cpufreq_policy *policy __free(put_cpufreq_policy) = NULL;
-+		struct amd_cpudata *cpudata;
+ #define pr_fmt(fmt) KBUILD_MODNAME ": " fmt
  
- 		policy = cpufreq_cpu_get(cpu);
- 		if (!policy)
++#include <linux/bitfield.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
+ #include <linux/moduleparam.h>
+@@ -142,10 +143,10 @@ static int amd_pstate_ut_check_perf(u32 index)
+ 				return ret;
+ 			}
+ 
+-			highest_perf = AMD_CPPC_HIGHEST_PERF(cap1);
+-			nominal_perf = AMD_CPPC_NOMINAL_PERF(cap1);
+-			lowest_nonlinear_perf = AMD_CPPC_LOWNONLIN_PERF(cap1);
+-			lowest_perf = AMD_CPPC_LOWEST_PERF(cap1);
++			highest_perf = FIELD_GET(AMD_CPPC_HIGHEST_PERF_MASK, cap1);
++			nominal_perf = FIELD_GET(AMD_CPPC_NOMINAL_PERF_MASK, cap1);
++			lowest_nonlinear_perf = FIELD_GET(AMD_CPPC_LOWNONLIN_PERF_MASK, cap1);
++			lowest_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
+ 		}
+ 
+ 		cur_perf = READ_ONCE(cpudata->perf);
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index c6934c9730bee..2c8f6e92ec8a8 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -89,11 +89,6 @@ static bool cppc_enabled;
+ static bool amd_pstate_prefcore = true;
+ static struct quirk_entry *quirks;
+ 
+-#define AMD_CPPC_MAX_PERF_MASK		GENMASK(7, 0)
+-#define AMD_CPPC_MIN_PERF_MASK		GENMASK(15, 8)
+-#define AMD_CPPC_DES_PERF_MASK		GENMASK(23, 16)
+-#define AMD_CPPC_EPP_PERF_MASK		GENMASK(31, 24)
+-
+ /*
+  * AMD Energy Preference Performance (EPP)
+  * The EPP is used in the CCLK DPM controller to drive
+@@ -439,12 +434,13 @@ static int msr_init_perf(struct amd_cpudata *cpudata)
+ 
+ 	perf.highest_perf = numerator;
+ 	perf.max_limit_perf = numerator;
+-	perf.min_limit_perf = AMD_CPPC_LOWEST_PERF(cap1);
+-	perf.nominal_perf = AMD_CPPC_NOMINAL_PERF(cap1);
+-	perf.lowest_nonlinear_perf = AMD_CPPC_LOWNONLIN_PERF(cap1);
+-	perf.lowest_perf = AMD_CPPC_LOWEST_PERF(cap1);
++	perf.min_limit_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
++	perf.nominal_perf = FIELD_GET(AMD_CPPC_NOMINAL_PERF_MASK, cap1);
++	perf.lowest_nonlinear_perf = FIELD_GET(AMD_CPPC_LOWNONLIN_PERF_MASK, cap1);
++	perf.lowest_perf = FIELD_GET(AMD_CPPC_LOWEST_PERF_MASK, cap1);
+ 	WRITE_ONCE(cpudata->perf, perf);
+-	WRITE_ONCE(cpudata->prefcore_ranking, AMD_CPPC_HIGHEST_PERF(cap1));
++	WRITE_ONCE(cpudata->prefcore_ranking, FIELD_GET(AMD_CPPC_HIGHEST_PERF_MASK, cap1));
++
+ 	return 0;
+ }
+ 
 -- 
 2.43.0
 
