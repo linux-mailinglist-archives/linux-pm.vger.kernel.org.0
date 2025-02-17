@@ -1,105 +1,98 @@
-Return-Path: <linux-pm+bounces-22262-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22263-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BEB7A38DED
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 22:21:34 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 7B814A38E09
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 22:32:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 539D41890BBA
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:21:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4ABCF188EBEF
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:32:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96D31226545;
-	Mon, 17 Feb 2025 21:21:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ouTeSSqX"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B13CE1A5BBC;
+	Mon, 17 Feb 2025 21:32:13 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E19733F7
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 21:21:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DC631A3BD8;
+	Mon, 17 Feb 2025 21:32:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739827289; cv=none; b=Cuo7AcMmQjkzp5yTkvtCgViG9QG+M1JP9gAqc/GSeHlt7l2TA7Ae8HmZcURULDn2iIB4ktHfAV6FjA3Lz3bgwhRN7AA1bAzPueRI49DhpaosmCNH+WCmbezkuNgtOOxcVB3MRmSXeVs7TcpaXz/rzFyopDFyPpU6YH66pyW+6v4=
+	t=1739827933; cv=none; b=IawZGRfCl6pF/lLEhXZHVyu3NG390qGF+1km7hKGGMQw5HzSph6L1NDy5joZ9vntgIWGTZ7uG/Y/xbhfKQjilryiaEDoqSVlA7rUi53S3G0/8GhdSn/MCSZ/rj3t8kuU9jVftzdylBehZOCuIztvuHZ+hB+HEJaAO5GcXP0PIVs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739827289; c=relaxed/simple;
-	bh=nmfPmRHc2Jb5S61L5iIhoW7YgVubbYxiHfKhdaEcXEY=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=ZGQuvKWiz2sMxkiyXiy/TZFASVl9H/bkGTaWZN+Y5GiDaTvx6HYyiJROhNjOpoMKGUYKCO6J8JbIHUJ6Dj9s6CVM+VWPVoXO5illsgFE2BLqetG30xd75lZF8L09xZfBJT3sFy1atD606OCz0jJoE4cVtHkWTThHmSxLuykWfXA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ouTeSSqX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 3A897C4CEEB
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 21:21:29 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739827289;
-	bh=nmfPmRHc2Jb5S61L5iIhoW7YgVubbYxiHfKhdaEcXEY=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=ouTeSSqXfgkac1lnN5LEZiYLazuVYseqAUnKo5CLw5tiAK/ksjTgtpIVz4NkLJniv
-	 JPeDv1NQT+m7/088H9nTQ4f9AfYFTXxgRwfTGhsXqphX6YqE+4Ka5ELui1WFZy6X/x
-	 65w5IRlVUABQgSV1pOLJuvTgRDmI/6ujbVnbqFu3Ec8OShys37hGvS1QxwL152wJRH
-	 MbmbM3i6VH/8Kj75FPYMFNAjIu/Yv+/cdYIV9HbxhqaU9wNYceNQGzEfljClGO6Lvw
-	 r8eu0QHlESgQaqkf99cG67fsr4d77tb83XQpuZ89gdonypT/5uQe5oZ5Y0A0PvJ9xO
-	 SmcdGcVDHUzlQ==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 298ACC41606; Mon, 17 Feb 2025 21:21:29 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
- boost control
-Date: Mon, 17 Feb 2025 21:21:28 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: miroslav@pavleski.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: attachments.created
-Message-ID: <bug-217931-137361-ayTCYZGmM7@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
-References: <bug-217931-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1739827933; c=relaxed/simple;
+	bh=EDHIzeefqwYVg8Oi79jPCHdArng8mIR7FnuBUpEPGiM=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Leyp47vmzjrQHimCXw1eWhGov9jDz4f/JSazgtYsjIEWbgVnRIP//LZnloOs8YDkq8rJ9pNSYqai3ERuXNOc08Lbz6KnVYjQ+4kj9Uca0UztXtJwXuGqBdJi1gwmowgf42qQfLJ0/b7FmUePwP5UdqJQRwz2daCxhFFEWIP9Ing=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E3BC0C4CED1;
+	Mon, 17 Feb 2025 21:32:08 +0000 (UTC)
+From: Catalin Marinas <catalin.marinas@arm.com>
+To: linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	ionela.voinescu@arm.com,
+	sudeep.holla@arm.com,
+	will@kernel.org,
+	rafael@kernel.org,
+	viresh.kumar@linaro.org,
+	Beata Michalska <beata.michalska@arm.com>
+Cc: sumitg@nvidia.com,
+	yang@os.amperecomputing.com,
+	vanshikonda@os.amperecomputing.com,
+	lihuisong@huawei.com,
+	zhanjie9@hisilicon.com,
+	ptsm@linux.microsoft.com,
+	Jonathan Corbet <corbet@lwn.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>,
+	Phil Auld <pauld@redhat.com>,
+	x86@kernel.org,
+	linux-doc@vger.kernel.org
+Subject: Re: [PATCH v10 0/4] Add support for AArch64 AMUv1-based average freq
+Date: Mon, 17 Feb 2025 21:32:06 +0000
+Message-Id: <173982791748.4020779.2848639862581042284.b4-ty@arm.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250131162439.3843071-1-beata.michalska@arm.com>
+References: <20250131162439.3843071-1-beata.michalska@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
+On Fri, 31 Jan 2025 16:24:35 +0000, Beata Michalska wrote:
+> This series adds support for obtaining an average CPU frequency based on
+> a hardware provided feedback. The average frequency is being exposed via
+> dedicated yet optional cpufreq sysfs attribute - cpuinfo_avg_freq.
+> The architecture specific bits are being provided for AArch64, caching on
+> existing implementation for FIE and AMUv1 support: the frequency scale
+> factor, updated on each sched tick, serving as a base for retrieving
+> the frequency for a given CPU, representing an average frequency
+> reported between the ticks.
+> 
+> [...]
 
---- Comment #79 from Miroslav Pavleski (miroslav@pavleski.net) ---
-Created attachment 307683
-  --> https://bugzilla.kernel.org/attachment.cgi?id=3D307683&action=3Dedit
-s2idle and pstate reports after patchv2
+Applied to arm64 (for-next/amuv1-avg-freq), thanks!
 
-I applied the second patch to mainline 6.14rc2, rebooted.
+[1/4] cpufreq: Allow arch_freq_get_on_cpu to return an error
+      https://git.kernel.org/arm64/c/38e480d4fcac
+[2/4] cpufreq: Introduce an optional cpuinfo_avg_freq sysfs entry
+      https://git.kernel.org/arm64/c/fbb4a4759b54
+[3/4] arm64: Provide an AMU-based version of arch_freq_get_on_cpu
+      https://git.kernel.org/arm64/c/dd871ac1237f
+[4/4] arm64: Update AMU-based freq scale factor on entering idle
+      https://git.kernel.org/arm64/c/96b335620c59
 
-- run amd_pstate.py, results in
-amd_pstate_report-2025-02-17-patchv2_pre_sleep.txt
-- run amd_s2idle.py, system failed to suspend, hard reset, journal in
-patchv2_suspend_freeze_journal.txt
-- rebooted, run amd_pstate.py again =3D>
-amd_pstate_report-2025-02-17-patchv2_pre_sleep_2nd_attempt.txt
-- run amd_s2idle.py , succeeded cycling suspend/resume, report in
-s2idle_report-2025-02-17_patchv2.txt
-- run amd_pstate.py again after resume =3D>
-amd_pstate_report-2025-02-17-patchv2_post_resume_2nd_attempt.txt
+-- 
+Catalin
 
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
 
