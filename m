@@ -1,260 +1,177 @@
-Return-Path: <linux-pm+bounces-22192-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22193-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 64D0BA37EE4
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 10:47:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD369A37F02
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 10:55:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 953D07A35FC
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 09:44:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 989EC16E788
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 09:54:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 544642165E2;
-	Mon, 17 Feb 2025 09:45:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 30ED1216600;
+	Mon, 17 Feb 2025 09:53:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b="Zv5AOoK4"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="z6cLmWKV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-201.mailbox.org (mout-p-201.mailbox.org [80.241.56.171])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2084.outbound.protection.outlook.com [40.107.93.84])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B5F152163BA;
-	Mon, 17 Feb 2025 09:45:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.171
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739785540; cv=none; b=k9mTBmLMaCg6RBkdm9YSdtpMziTUzWwbrCu4nQICtRGk0uIyKPOgl7j9GOq7uPFlnkiReyj1GCAXd8K/1AlnTuvMoc9oy1XsCXrbVnILSWMIctT/fkR+R2vhPYzsUdhifMTlQYnCL2euT34PsKuoZ1iTXVd4iHYZubYkm7UUqK0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739785540; c=relaxed/simple;
-	bh=dfy2ywxbm9ZJJb1F36/6VsBddiXxecHJPPozdX/dwZI=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=mCy4eDYUiEPM4brm28MGVH7KJzpgZj5sf9pdZLqtbmEQuw1W/2J+89ekxCzXU46Y2TjN11S86p5RUYijGgXgnY6HNs95AiCvIj1UOwtphNSe1vHpab6GI21NAOYJW/Wy29kW+d+h7WRaWDLhCCt0YgDtEJjb9BZp3IrURroM+J8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org; spf=pass smtp.mailfrom=mailbox.org; dkim=pass (2048-bit key) header.d=mailbox.org header.i=@mailbox.org header.b=Zv5AOoK4; arc=none smtp.client-ip=80.241.56.171
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=mailbox.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=mailbox.org
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-201.mailbox.org (Postfix) with ESMTPS id 4YxHnz0xy7z9sc4;
-	Mon, 17 Feb 2025 10:45:27 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=mailbox.org; s=mail20150812;
-	t=1739785527; h=from:from:reply-to:reply-to:subject:subject:date:date:
-	 message-id:message-id:to:to:cc:cc:mime-version:mime-version:
-	 content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=dfy2ywxbm9ZJJb1F36/6VsBddiXxecHJPPozdX/dwZI=;
-	b=Zv5AOoK4F+wgFhT65eRzIy1aLRnffHEfrQI0Njsj80Pp/TcjLFOUNPIXpF6ItFWQsF4FDz
-	GiBnRU8B+nr3/xur/sFDrTZ420NHsCW0ypgi1VHrmrJhPbQoPceXV5/fP66sEisdepUw+E
-	w+Za99O287mBh8nbNTrr6N3mJJkBV5aeBwPiCWbcHngkSvIzqUrbwwT4GEjR3aw560yo4D
-	RdyiV8ZjjrMiLUMBtdBPdyZZCygZaX3xWlf4P1fk7q58sz17o5c8G3Jbp5kPeJhTZZmtR0
-	PpnbG8skJxBRtPswxrz3lrcmqnazlqeiws37kHvqTHuRAbn3Xz2YBL8o8RVZqA==
-Message-ID: <55a58a606cbd2afd86f83a89b9843e8c7d88c9f6.camel@mailbox.org>
-Subject: Re: [PATCH V8 04/14] rust: Add cpumask helpers
-From: Philipp Stanner <phasta@mailbox.org>
-Reply-To: phasta@kernel.org
-To: Jason Gunthorpe <jgg@nvidia.com>, Miguel Ojeda
-	 <miguel.ojeda.sandonis@gmail.com>
-Cc: Yury Norov <yury.norov@gmail.com>, Viresh Kumar
- <viresh.kumar@linaro.org>,  "Rafael J. Wysocki" <rafael@kernel.org>, Danilo
- Krummrich <dakr@redhat.com>, Miguel Ojeda <ojeda@kernel.org>, Alex Gaynor
- <alex.gaynor@gmail.com>, Boqun Feng <boqun.feng@gmail.com>, Gary Guo
- <gary@garyguo.net>,  =?ISO-8859-1?Q?Bj=F6rn?= Roy Baron
- <bjorn3_gh@protonmail.com>, Benno Lossin <benno.lossin@proton.me>, Andreas
- Hindborg <a.hindborg@kernel.org>, Alice Ryhl <aliceryhl@google.com>, Trevor
- Gross <tmgross@umich.edu>,  Rasmus Villemoes <linux@rasmusvillemoes.dk>,
- linux-pm@vger.kernel.org, Vincent Guittot <vincent.guittot@linaro.org>, 
- Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
- rust-for-linux@vger.kernel.org, Manos Pitsidianakis
- <manos.pitsidianakis@linaro.org>, Erik Schilling
- <erik.schilling@linaro.org>, Alex =?ISO-8859-1?Q?Benn=E9e?=
- <alex.bennee@linaro.org>, Joakim Bech <joakim.bech@linaro.org>, Rob Herring
- <robh@kernel.org>, Christoph Hellwig <hch@lst.de>,
- linux-kernel@vger.kernel.org,  Uros Bizjak <ubizjak@gmail.com>
-Date: Mon, 17 Feb 2025 10:45:17 +0100
-In-Reply-To: <20250214210637.GK3886819@nvidia.com>
-References: <cover.1738832118.git.viresh.kumar@linaro.org>
-	 <db0166341ce824c157d0c58c240b3efc6aec6f6e.1738832118.git.viresh.kumar@linaro.org>
-	 <Z6qTelPSqpFk439l@thinkpad> <20250211042908.nyftiw7gtxosfjwc@vireshk-i7>
-	 <Z6t51xodSV21ER4M@thinkpad>
-	 <CANiq72=3MR9F9ur-aQYP4P81RBreAr=UiGg5iaSuFjjd5Q4Y7Q@mail.gmail.com>
-	 <Z66oWuLwY4X9Ou9D@thinkpad>
-	 <CANiq72=Yy8e=pGA+bUHPZhn+D66TmU3kLSjAXCSQzgseSYnDxQ@mail.gmail.com>
-	 <20250214191103.GH3886819@nvidia.com>
-	 <CANiq72=tDhUEjdBmVTPv4cFeD8iiKwJAQD3Cb1=Y4KnE-vh2OQ@mail.gmail.com>
-	 <20250214210637.GK3886819@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 703212163B5;
+	Mon, 17 Feb 2025 09:53:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.84
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1739786039; cv=fail; b=cjIbumK7TBH4PXJCo6k1nonzGFT6M3kcOBvSDcl22tjXV+0lAh84mpHCJTzEf8StJXQi5Lzg15+TggM060OVifeUNRfYL+CCA00ly+vIttSpy/7xri2U2dbfsa1eLjEcQCoyr7/Zbr4uA37bv7WFFqD2Hzyr+BkFhLQe8vwBrJc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1739786039; c=relaxed/simple;
+	bh=YcTAihBIjQ6JnXB2nvgiBZnEc63u7hwfSzLJHeElnkw=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=orgAbwtyGvGzc9auSp7Uy6HImMhdVdgqMyd4HVxi0bmPByGZRW6LtTBFf4N+zKsTQ90tQeiSEqa3MgonKM/depifQatqhRYLnNlq/3mMgm1oClpXc+zLjR/Q8hzB6uzSmYMVbGfdVK1ROdqO74JZuV5GNq6kzQ5pFZ9zPvRA7IE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=z6cLmWKV; arc=fail smtp.client-ip=40.107.93.84
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=Brq2t8O0WMLJ+QR/rECDEAMH59X9zvB2cHELPtoepGgKgjLxbUFuNf7/PWtCgQpTTfOaWmx7kTz+c0b0S8HtPhWfDIRgrqlIdE93AZz2vdNDzjv21JmNL8Ad8emiRZsxKA6RTcFSjZ38uIci7I0YlBc1voLnKWjjwwa+FQJjDl7vVe012FjPgiYlaT0vJz+6F3nBcFvjM+5D0mdd32QT8N13vssnXs8y73CFKOzCb1fI47VroYk8+u9WC5RW9PEQEpsbLDjZXI4uiBWlUJ8Isn6SFqhXjG4S7af+cSY+lWFfTmFEkwjteq7w0rSxA4FXGozjm+L+IGnv0YHUXPnp9w==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=0YxsblgvyhPceRn9CV3F5txUITBVLC+2fUBTAYKfjRI=;
+ b=AHWawrIZyV4nCXYamqSb6ngPqPk0GQLLnok0Ao2MFBIHSwGKXqBf18YfrvRO7WFiq32SzKoO1+bxfM/IbrbUfHhyaobObGQtg8Tk9rI6bA30B/2nDbWNVJpHDK6fe0abAkZukUTmkK3xK/586zUG5zKEJATKOikdxNccdHQtmtI3T6RtdzPG+ZpEVQH1QK9lSzQcsOoXqLVyWVU422mZdhHH66Q2hYVjsGz+URl6itUtGUdJZW7n8AN0tOYjqA3EndddmuSjnSDIpBGMgPViQFrsfRdOjwkjTPqPszCB0HGe6NDpXLtCeR2B8Ds7Tzw7LgmDFbwE66v/Voyh8ClQzg==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=0YxsblgvyhPceRn9CV3F5txUITBVLC+2fUBTAYKfjRI=;
+ b=z6cLmWKVtZnxAHNNB7cqCK3l9lJRlu4sEPcx+jsxjQhfI1dVWFac3EOv0iH4zx2yYcV5KGX5G7jVvuO31f11FYyNNzINLx99iMNNvaB+RiGsgnM7L7D51TZFvgKAim1gzn9CRrCM32wCJ+ZmoLqLzC4E/xDBTkUEXjoOibCndj0=
+Received: from PH0PR07CA0082.namprd07.prod.outlook.com (2603:10b6:510:f::27)
+ by SJ2PR12MB9243.namprd12.prod.outlook.com (2603:10b6:a03:578::7) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8445.19; Mon, 17 Feb
+ 2025 09:53:52 +0000
+Received: from CY4PEPF0000EDD1.namprd03.prod.outlook.com
+ (2603:10b6:510:f:cafe::65) by PH0PR07CA0082.outlook.office365.com
+ (2603:10b6:510:f::27) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8445.17 via Frontend Transport; Mon,
+ 17 Feb 2025 09:53:52 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CY4PEPF0000EDD1.mail.protection.outlook.com (10.167.241.197) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8466.11 via Frontend Transport; Mon, 17 Feb 2025 09:53:51 +0000
+Received: from SATLEXMB06.amd.com (10.181.40.147) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 17 Feb
+ 2025 03:53:51 -0600
+Received: from SATLEXMB04.amd.com (10.181.40.145) by SATLEXMB06.amd.com
+ (10.181.40.147) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Mon, 17 Feb
+ 2025 03:53:49 -0600
+Received: from xhdshubhraj40.xilinx.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server id 15.1.2507.39 via Frontend
+ Transport; Mon, 17 Feb 2025 03:53:47 -0600
+From: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+	Michal Simek <michal.simek@amd.com>, <linux-pm@vger.kernel.org>,
+	<devicetree@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>
+CC: <git@amd.com>, Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+Subject: [PATCH] dt-bindings: power: reset: xilinx: Make "interrupts" property optional
+Date: Mon, 17 Feb 2025 15:22:26 +0530
+Message-ID: <20250217095226.12606-1-shubhrajyoti.datta@amd.com>
+X-Mailer: git-send-email 2.17.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-MBO-RS-META: srr8d9hbx4hrod39prc91hgogotwtthr
-X-MBO-RS-ID: c04db6c564b3c4e7acd
+Content-Type: text/plain
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CY4PEPF0000EDD1:EE_|SJ2PR12MB9243:EE_
+X-MS-Office365-Filtering-Correlation-Id: e40f48e0-e215-4a1d-5e04-08dd4f38fc09
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|36860700013|1800799024|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?Ukk2D6JmChjmxVv267/CAnSOS/0yc5rpljo44X9Wa/iMfCSxIy77Guv5YvW9?=
+ =?us-ascii?Q?e120eXxr/0qk3ysWNWFQZXEwQX/S1iALHewRVFkrZQUIY7Zr86qSnkF/Cvfr?=
+ =?us-ascii?Q?JJoLfHzNDM7+q45OGT9Z33+EYiVRw8WXIWvLg9GZO0cHG2a/3+G2PKkuzaCI?=
+ =?us-ascii?Q?oh+BDpck8FElu3xQSYHkdXpVL9pXeXD3rT5qZmcsDs54o1oPfBUzLKBTmM/y?=
+ =?us-ascii?Q?NGhT86m8AOsRtN/ItQiD/ykNAKSKHJLTWFgXK7C6Y4wzPfcayFy78dRUM71h?=
+ =?us-ascii?Q?f+cmfGGn1y7W6UMC7w82cri0ZY8bIiz7QHISPdcB9YAd2j1x/iQtd6ARKHPP?=
+ =?us-ascii?Q?eNNfzVUoHMmBNW4rxjAlRE+wMpccdwztrKQ7twlfMEU+Lzebw48yCrnz/kS+?=
+ =?us-ascii?Q?1t3h36rdIjs2x+ksAECA0zFtgXEKqpk+gu32MyAqnlQbSZSCtKH/17NaKS5v?=
+ =?us-ascii?Q?4VKwmhd3dyLKLDR1+HQSZB2nczLXRB5H0QbmsXYnaUDZZeW9Kd5mdWkSHwYp?=
+ =?us-ascii?Q?fBWtX1ekuoBewRhf5NLoylKFR/5htKBxtEAZH7jM9lR2mX5zEfwRpFNCIZGh?=
+ =?us-ascii?Q?YxJtBsMWZeCUwozb5FR+JjdSzs4O1H9tpprVSor3xDGx4zAmKItNTuQymhGo?=
+ =?us-ascii?Q?3jCBiAEqvTgvbm5fMjmcKLlBGf6hhj/KgwSoDU25rMcgns4wwaR+iqrkA/zP?=
+ =?us-ascii?Q?GcKcdJKibEtPQ8IHsP57/ZvhySRcz6gTgsfxfF0CX+sxTxWKqbtD2vj2zxEQ?=
+ =?us-ascii?Q?yqqi4WFXRhI0WM/rPiHjJG3xqEr0zPgWppPw7Y2IvhrWyZsTmBVrn1ss+TBR?=
+ =?us-ascii?Q?7KKJxjdYtTurcONHJycKdxvrJdu8H9MKvLHf2of8C3THNMyCsrpyeYQB4FWx?=
+ =?us-ascii?Q?XZZqgXZsvEpghRRcOY/tRUbun+PUBy6e+lvGuYZve10qVNyk/QZJLWcblNOj?=
+ =?us-ascii?Q?kd7enDn0l+z9cgqsvEOcJ4pBeyrrne3qHCV+hdSQKczAGcPSd0ZBhAwhMHBo?=
+ =?us-ascii?Q?G+Pbz+GvfsM/2+JRSqqjm32H0Uy5s3GGTGV//vCI7UcSN4YsKz/wQo7xEnWe?=
+ =?us-ascii?Q?Pp5P1naqhn2Bgv436XGopiTwClNgq59l5XWYutM3bCYJRir1FlVuJdC+qEzt?=
+ =?us-ascii?Q?0VjYHmGTWv5VseRQh74OGRCZaDa1+uNnE8oUuY8OPUOUzR2vNKsGoY2W24TC?=
+ =?us-ascii?Q?uXlJb3u0KU1ASONmRlRofgCjgW7ihXmAjAy03EQCixzW/pq1IoiX5kC0gg8U?=
+ =?us-ascii?Q?3XMeGXAtEfAnUjUtnE6ZHvIFDsf8iNZ4Fmi8tC54teDcKkF7vVtbNAe5DiK2?=
+ =?us-ascii?Q?CzdgXLA0SilruOs/MMLWZayca5sp0EEeHw4ESWjtYVVaNsx/9oaFlxrRtUvP?=
+ =?us-ascii?Q?DXC3LCAXbANIxZC5p5o9K+WA70J6kibvAz/reglPSPjlmsAfeTg/N3hw/z+h?=
+ =?us-ascii?Q?nboghxL0cfe2/SgTy7NQdmW0Ma2/ei3QTbAShjvufsC7jHcBSMxpN4FFmHrF?=
+ =?us-ascii?Q?ViwayYn2wOpOj8A=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(36860700013)(1800799024)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 17 Feb 2025 09:53:51.9994
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: e40f48e0-e215-4a1d-5e04-08dd4f38fc09
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CY4PEPF0000EDD1.namprd03.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB9243
 
-On Fri, 2025-02-14 at 17:06 -0400, Jason Gunthorpe wrote:
-> On Fri, Feb 14, 2025 at 09:24:31PM +0100, Miguel Ojeda wrote:
-> > On Fri, Feb 14, 2025 at 8:11=E2=80=AFPM Jason Gunthorpe <jgg@nvidia.com=
->
-> > wrote:
-> > >=20
-> > > Sure, but it was said, by many people, many times, that "Rust is
-> > > allowed to break".
-> >=20
-> > A lot of people have said many things (especially in online fora),
-> > and
-> > many of those things are contradictory, but that does not really
-> > mean
-> > anything.
->=20
-> We don't have a community where there is a clear authority
-> structure. If lots of people are repeating a thing, that thing
-> usually
-> becomes the consensus and common viewpoint regardless of who
-> originated it. The repetition reflects community agreement and buy in
-> of the idea.
->=20
-> At the end of the day, only the policy adopted by the people merging
-> patches really matters.
->=20
-> The assumption being if respected people speak with authority on a
-> policy they have also got buy in from the people responsible to
-> execute it.
->=20
-> I also think you should merge your policy document to the tree, not
-> keep it on a web page. That seems to be a big part of getting
-> community agreed policy adopted.
->=20
-> > Finally, ambiguous terms are used in many cases to refer to
-> > different
-> > parties: "Rust community", "Rust people", "Rust team", "Rust
-> > maintainers"... I have started to ask people to avoid doing that
-> > (at
-> > least in the LKML), please, and be concrete if possible.
->=20
-> Okay, that makes lots of seense. Please don't use "we" as well.. I
-> have no idea who is included in your "we", or what to even call it.
->=20
-> > > And Greg's version:
-> > >=20
-> > > https://lore.kernel.org/all/2025013030-gummy-cosmic-7927@gregkh/
-> >=20
-> > I cannot speak for Greg, sorry.
->=20
-> Yet he does seems to be speaking with authority on this topic. His
-> message was quoted on LWN and likely was read by a large number of
-> maintainers.
->=20
-> Is he not part of your "we"?
->=20
-> > I can read his message in the following ways:
->=20
-> I think it was very clear, sorry, I don't read it your many ways at
-> all.
->=20
-> > =C2=A0 - I can read it as a general ability of subsystems to potentiall=
-y
-> > agree to treat Rust code as something like staging, like block's
-> > plan.
->=20
-> As a side note, I don't see how anyone can enact this plan without
-> the
-> support of Linus to do CONFIG_RUST=3Dn builds and put out a non-working
-> rc1. IMHO it is yet unclear if this is real thing or an unproven idea
-> block has that will run into problems.
->=20
-> > It is very hard to keep hundreds of maintainers on the same page.
->=20
-> It is, but also I think you need to take this challenge to succeed.
-> =C2=A0
-> > > I do not agree with "Didn't you promise Rust wouldn't be extra
-> > > work
-> > > for maintainers?" in your document. Clearly there is a widespread
-> > > belief this kind of promise was made, even if it was never made
-> > > by
-> > > you. "Rust is allowed to break" is understood to be the same as
-> > > saying
-> > > it won't cause extra work.
-> >=20
-> > Sorry, but I have to strongly push back against this paragraph.
-> >=20
-> > Are you really saying that, because people out there may think
-> > something, we cannot claim anymore that we did not promise
-> > something?
->=20
-> Again "we" ?
->=20
-> I'm not concerned about "people out there". Greg said it. Others who
-> I
-> would think are part of your "we" have posted it on LKML.
->=20
-> It is not clear at all. If you said Miguel never claimed it, then I
-> would not complain. You said it correctly above, be concrete. Ideally
-> acknowledge there were different policy ideas in wide circulation,
-> but
-> they did not get adopted.
->=20
-> > Furthermore, I don't agree with your assessment in your last
-> > sentence
-> > at all. Even if it was decided to allow Rust to break globally and
-> > at
-> > all times, it does not mean Rust is not extra work.=20
->=20
-> I appreciate this point is realistically true, but look at how
-> Philipp
-> presented this 'no break' concept to Christoph as a no-work option
-> for
-> him.
+The "interrupts" property in the ZynqMP power/reset binding was previously
+marked as required. However, there are multiple mechanisms for
+handling power/reset events, including:
+-Event management registration,
+-Mailbox (mboxes),
+-Interrupts (interrupts).
 
-Hello,
+When event management support is available (default on Versal SoC), the
+"interrupts" property is not used hence not required.
 
-so to clarify that: I'm (currently) not writing or maintaining any Rust
-abstractions. So I'm not representing official projects, so take the
-statement for what it's worth. I mainly wanted to probe how an
-agreement with Christoph could have been worked out.
+Signed-off-by: Shubhrajyoti Datta <shubhrajyoti.datta@amd.com>
+---
 
-My main point still holds up, though:
-The rules should be written down. In tree, in linux/
+ .../devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml       | 1 -
+ 1 file changed, 1 deletion(-)
 
-As you, Jason, also state, this would enforce a discussion leading to
-more clarity.
-
-
->=20
-> My main point here is that I'm glad things are getting straightened
-> out, some of the conflicting policy ideas shot down, and the demands
-> on maintainers are being articulated more clearly.
->=20
-> > That is good, but to be clear, from my point of view, the approach
-> > mentioned in the document I wrote is what we have always said.
->=20
-> There is another we :)
-
-The current, apparent, distinction between Rust and non-Rust kernel
-engineers might indeed be a symbol for an underlying big question. 10
-years down the road, will there still be "Rust people" who take care
-of=E2=80=A6 the compiler? The abstractions and bindings? Are there "Clang
-people and GCC people" currently, too?
-
-That question goes deeper than one might think, because it's ultimately
-about who maintains what and, as we already discussed, who can break
-what. If, in the mid-future, subsystem maintainers uninvolved with Rust
-couldn't merge changes that break Rust anymore, that *might* de facto
-indeed lead to them having to learn that language. Or everyone would
-need a Rust-proficient co-maintainer who can deal with those breakages;
-or similar solutions.
-
-So that's why I think clarifying it rather sooner than later is
-necessary.
-
-
-P.
-
-
->=20
-> Jason
->=20
+diff --git a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
+index 799831636194..079ad977b907 100644
+--- a/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
++++ b/Documentation/devicetree/bindings/power/reset/xlnx,zynqmp-power.yaml
+@@ -46,7 +46,6 @@ properties:
+ 
+ required:
+   - compatible
+-  - interrupts
+ 
+ additionalProperties: false
+ 
+-- 
+2.17.1
 
 
