@@ -1,156 +1,153 @@
-Return-Path: <linux-pm+bounces-22256-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22257-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E385EA38DA3
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:46:28 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 106D5A38DAA
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 21:51:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E98B13B4C3D
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:46:18 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CE1AB7A2D34
+	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 20:50:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47B96238D35;
-	Mon, 17 Feb 2025 20:46:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CF8CE238D35;
+	Mon, 17 Feb 2025 20:51:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="1HrXNtcE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8335372
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 20:46:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43DC4236A8E;
+	Mon, 17 Feb 2025 20:51:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739825186; cv=none; b=O2iLd4TE1Vo0w56/5ZgfF/j+8awJ/0qiKsQhBp9zQkUuwReYlgPeB8QKAJfFhrKU87ZNnHlnBR3GlcvBsVkNZVahSotOfetEEyd7sYA6lN4+9bDmNKqtWJu3xMZsoxIz4wIwzybLNaIjrpBfHgVg6RPcaqPBR+Je335p7EpwUL0=
+	t=1739825473; cv=none; b=IgslZPTcL5k8FWrpNh+dKRfIAk7TnkLRhbtL7howw55AzX8lGuc+gqwqCCj+MMX652RgWJuRMH/vSbBi6zFFClfaEo/j3Hz/NgJYo+E1ha9seHRs9CzAzRFsK6p3MA0vMmPy7lXD/xkFquHs5KHF8gdFsJv87NcHZCMLur9XbyI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739825186; c=relaxed/simple;
-	bh=AY31hYe7mt5ncRT3ZKQBVxcnA+SWDK+vRoripLMek2E=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ljsZ3tQiGxevXOdU/ubUMHkoyxkhiugXmIb+nl8xJ4BrdvA+SW7DQAdMIfI/g6ueGJADS8+1StFJp3YesSx6lGRPUDqZTidhCjCwGA16aEytmFeoWKGpxsIajZpVWpKx8KnxdRSmQmzlt9NRZSS6/V9enSs2u3on0Kd8xmCyJtA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
-Received: from ptz.office.stw.pengutronix.de ([2a0a:edc0:0:900:1d::77] helo=[127.0.0.1])
-	by metis.whiteo.stw.pengutronix.de with esmtp (Exim 4.92)
-	(envelope-from <a.fatoum@pengutronix.de>)
-	id 1tk80Q-0000th-EW; Mon, 17 Feb 2025 21:46:18 +0100
-Message-ID: <55fb4104-3f89-44fe-bd30-8b477e00e9d9@pengutronix.de>
-Date: Mon, 17 Feb 2025 21:46:17 +0100
+	s=arc-20240116; t=1739825473; c=relaxed/simple;
+	bh=+Tneczc/gt5KlRww9DciWgCPYL3QAZCwMLLyT/8V2j0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=qixh+6E9Yj6yT7Jwm0hdvJ4EiPP3ouz9RPWK4gkVCahr0zwWvcYZ78roZ5Ek9tg3yOMpBu0wCAPuH5y10Il6QbU3/80Ix2r3YZ7Ez/bzNgwl7lxtfBycEJdsbVLcD5XfP22eEU246OED+WKJx3BL/vRczTiZfBDGJ/n4yvpzFfM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=1HrXNtcE; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Type:Content-Transfer-Encoding:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=IXt480Abf0JotZYaVu+nX5d1RPwKRi9f0QFxpN31t9o=; b=1HrXNtcEjiR4bI/hrUHfyTpuhJ
+	JT2f8Hm5aC5Y/0l7nCoyzBbotkZhQ7OROX38ne58/OFkBnRPaSeXptNjbhwlw1D4o6uqn7Ez0QTwI
+	Amcl3Y0SrStBGHHF9206aYqM2BlWfISLru8f6p7nqxKlBKA8TQZZQRA5nsVxe/vruEt3iYDoLECzQ
+	0l+zVtVQX07NQT/ev66Ym2F5SXmnt1oL6J6HiCk0SKPICdWg4x+fxBugyxONOFRFv+L22cYjlVgBl
+	+xOzIRAWIDC/hT9Z8L59yh79gpowPwq7xVF68zLODFHni7MLvIhhQnFqQCEsOhCsvXQGElyMsf4lk
+	+TAGLl9w==;
+Received: from i53875bc0.versanet.de ([83.135.91.192] helo=diego.localnet)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1tk84i-0007CW-1Y; Mon, 17 Feb 2025 21:50:44 +0100
+From: Heiko =?UTF-8?B?U3TDvGJuZXI=?= <heiko@sntech.de>
+To: Shawn Lin <shawn.lin@rock-chips.com>, Rob Herring <robh+dt@kernel.org>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ "Martin K . Petersen" <martin.petersen@oracle.com>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Steven Price <steven.price@arm.com>
+Cc: Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>, YiFeng Zhao <zyf@rock-chips.com>,
+ Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org
+Subject:
+ Re: [PATCH v7 4/7] pmdomain: rockchip: Add smc call to inform firmware
+Date: Mon, 17 Feb 2025 21:50:42 +0100
+Message-ID: <5649637.F8r316W7xa@diego>
+In-Reply-To: <321804ef-f852-47cf-afd7-723666ec8f62@arm.com>
+References:
+ <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+ <2579724.BzM5BlMlMQ@diego> <321804ef-f852-47cf-afd7-723666ec8f62@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH RFC v2] docs: ABI: replace mcroce@microsoft.com with new
- Meta address
-To: Matteo Croce <teknoraver@meta.com>, Jens Axboe <axboe@kernel.dk>,
- Andrew Morton <akpm@linux-foundation.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, linux-block@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, kernel@pengutronix.de
-References: <20250217-fix-mcroce-mail-bounce-v2-1-e897f4b15c80@pengutronix.de>
-Content-Language: en-US
-From: Ahmad Fatoum <a.fatoum@pengutronix.de>
-In-Reply-To: <20250217-fix-mcroce-mail-bounce-v2-1-e897f4b15c80@pengutronix.de>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-SA-Exim-Connect-IP: 2a0a:edc0:0:900:1d::77
-X-SA-Exim-Mail-From: a.fatoum@pengutronix.de
-X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
-X-PTX-Original-Recipient: linux-pm@vger.kernel.org
+Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
 
-I forgot to omit the RFC, sorry. Please let me know if I should resend.
+Am Montag, 17. Februar 2025, 18:10:32 MEZ schrieb Steven Price:
+> On 17/02/2025 15:16, Heiko St=C3=BCbner wrote:
+> > Hi Steven,
+> >=20
+> > Am Montag, 17. Februar 2025, 15:47:21 MEZ schrieb Steven Price:
+> >> On 05/02/2025 06:15, Shawn Lin wrote:
+> >>> Inform firmware to keep the power domain on or off.
+> >>>
+> >>> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+> >>> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+> >>> ---
+> >>
+> >> This patch is causing my Firefly RK3288 to fail to boot, it hangs=20
+> >> shortly after reaching user space, but the bootup messages include the=
+=20
+> >> suspicious line "Bad mode in prefetch abort handler detected".
+> >> I suspect the firmware on this board doesn't support this new SMC=20
+> >> correctly. Reverting this patch on top of linux-next gets everything=20
+> >> working again.
+> >=20
+> > Is your board actually running some trusted firmware?
+>=20
+> Not as far as I know.
+>=20
+> > Stock rk3288 never had tf-a / psci [0], I did work on that for a while,
+> > but don't think that ever took off.
+> >=20
+> > I'm wondering who the smcc call is calling, but don't know about
+> > about smcc stuff.
+>=20
+> Good question - it's quite possible things are blowing up just because
+> there's nothing there to handle the SMC. My DTB is as upstream:
+>=20
+>         cpus {
+>                 #address-cells =3D <0x01>;
+>                 #size-cells =3D <0x00>;
+>                 enable-method =3D "rockchip,rk3066-smp";
+>                 rockchip,pmu =3D <0x06>;
+>=20
+> I haven't investigated why this code is attempting to call an SMC on
+> this board.
 
-On 17.02.25 21:45, Ahmad Fatoum wrote:
-> The Microsoft email address is bouncing:
-> 
->     550 5.4.1 Recipient address rejected: Access denied.
-> 
-> So let's replace it with Matteo's current mail address.
-> 
-> Acked-by: Matteo Croce <teknoraver@meta.com>
-> Link: https://lore.kernel.org/all/BYAPR15MB2504E4B02DFFB1E55871955DA1062@BYAPR15MB2504.namprd15.prod.outlook.com/
-> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
-> ---
-> I ran into this while submitting a series[1] touching sysfs-kernel-reboot
-> and b4/get_maintainers.pl picked off the stale address from the file.
-> 
-> [1]: https://lore.kernel.org/all/20241219-hw_protection-reboot-v1-6-263a0c1df802@pengutronix.de/
-> ---
-> Changes in v2:
-> - Added Matteo's Acked-by 
-> - Link to v1: https://lore.kernel.org/r/20241219-fix-mcroce-mail-bounce-v1-1-4912116b6060@pengutronix.de
-> ---
->  Documentation/ABI/stable/sysfs-block          |  2 +-
->  Documentation/ABI/testing/sysfs-kernel-reboot | 10 +++++-----
->  2 files changed, 6 insertions(+), 6 deletions(-)
-> 
-> diff --git a/Documentation/ABI/stable/sysfs-block b/Documentation/ABI/stable/sysfs-block
-> index 0cceb2badc836b8cbdade543deff71edef0e3da1..ee1bbb4dfd4ea65fc0aa13c03a5205b8d5816ecf 100644
-> --- a/Documentation/ABI/stable/sysfs-block
-> +++ b/Documentation/ABI/stable/sysfs-block
-> @@ -77,7 +77,7 @@ Description:
->  
->  What:		/sys/block/<disk>/diskseq
->  Date:		February 2021
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:
->  		The /sys/block/<disk>/diskseq files reports the disk
->  		sequence number, which is a monotonically increasing
-> diff --git a/Documentation/ABI/testing/sysfs-kernel-reboot b/Documentation/ABI/testing/sysfs-kernel-reboot
-> index 837330fb251134ffdf29cd68f0b2a845b088e5a0..fb2d21acc6627ee340a3c8327261d5727ad63e15 100644
-> --- a/Documentation/ABI/testing/sysfs-kernel-reboot
-> +++ b/Documentation/ABI/testing/sysfs-kernel-reboot
-> @@ -1,7 +1,7 @@
->  What:		/sys/kernel/reboot
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	Interface to set the kernel reboot behavior, similarly to
->  		what can be done via the reboot= cmdline option.
->  		(see Documentation/admin-guide/kernel-parameters.txt)
-> @@ -9,24 +9,24 @@ Description:	Interface to set the kernel reboot behavior, similarly to
->  What:		/sys/kernel/reboot/mode
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	Reboot mode. Valid values are: cold warm hard soft gpio
->  
->  What:		/sys/kernel/reboot/type
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	Reboot type. Valid values are: bios acpi kbd triple efi pci
->  
->  What:		/sys/kernel/reboot/cpu
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	CPU number to use to reboot.
->  
->  What:		/sys/kernel/reboot/force
->  Date:		November 2020
->  KernelVersion:	5.11
-> -Contact:	Matteo Croce <mcroce@microsoft.com>
-> +Contact:	Matteo Croce <teknoraver@meta.com>
->  Description:	Don't wait for any other CPUs on reboot and
->  		avoid anything that could hang.
-> 
-> ---
-> base-commit: 78d4f34e2115b517bcbfe7ec0d018bbbb6f9b0b8
-> change-id: 20241219-fix-mcroce-mail-bounce-328900169405
-> 
-> Best regards,
+I guess the why is easy, something to do with suspend :-) .
+
+I did go testing a bit, booting a rk3288-veyron produces the same issue
+you saw, likely due to the non-existent trusted-firmware.
+
+On the arm64-side, I tried a plethora of socs + tfa-versions,
+
+  rk3328: v2.5 upstream(?)-tf-a
+  rk3399: v2.9 upstream-tf-a
+  px30: v2.4+v2.9 upstream-tf-a
+  rk3568: v2.3 vendor-tf-a
+  rk3588: v2.3 vendor-tf-a
+
+and all ran just fine.
+So it really looks like the smcc call going to some unset location is
+the culprit.
+
+Looking at other users of arm_smcc_smc, most of them seem to be handled
+unguarded, but some older(?) arm32 boards actually check their DTs for an
+optee node before trying their smc-call.
+
+I guess in the pm-domain case, we could just wrap the call with:
+	if(arm_smccc_1_1_get_conduit() !=3D SMCCC_CONDUIT_NONE)
+
+I've checked in my boards now, and all the boards mentioned above seem
+to handle this well with smccc-versions of at least 0x10002 .
+
+Heiko
 
 
--- 
-Pengutronix e.K.                           |                             |
-Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
-31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
-Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
