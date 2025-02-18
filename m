@@ -1,221 +1,193 @@
-Return-Path: <linux-pm+bounces-22299-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22300-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2196AA39ACE
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:29:01 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id EB50FA39B25
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:40:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E44A31886024
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 11:29:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E17783A6543
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 11:40:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5789123C8BF;
-	Tue, 18 Feb 2025 11:28:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50ACB23ED47;
+	Tue, 18 Feb 2025 11:40:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wu1efTmK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3A91DEFEB;
-	Tue, 18 Feb 2025 11:28:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7B423CF07;
+	Tue, 18 Feb 2025 11:40:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739878137; cv=none; b=Y7rmOd/qpGySsKEPozwRh7Jlj90pbZUwRC3ehx8IVFj8635KDOJQomcx9BvuBn7JNQkoXWr2gOhfn22WVElaWYdRitRBc3ytz5RrFAKHYH49k7MJQc21PuTFjJsxP0vv3Bvz8hIxv6cCyr9ufNYN77y8ezeI4j4Uv5fozkI/ZM8=
+	t=1739878850; cv=none; b=qz1Yb/LStIBhqBNK8fUEUeW4Jn2mNyaiol6Czm3mKTpuEOBnxxg78M7wrcRp8k7FSHF2ocm4HxDwM4xK8BK5KGQMis3G6RX+kWNNW9ri2Cbn9JMXjilCzd3vz0REsRkvsMR+NkQwLD51L79VPcRp/Cr0Oy8xqR6BLK1oD0KaZBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739878137; c=relaxed/simple;
-	bh=e3YwgSBfhhjN6vJS7m63dt9OHcAqtI+PxuY9KnmPzqE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jAQ3bRfsb4WtpZ14U6miltv2auHmqZPyb3XyNAGM7OrU7pBAw1pDOVGDB1K6wh3T7Q3FFnSkwgKEQQrugnJTtG2pquiLEo3P2gwn9263ZdgZ9u3NVO5y7eLTgykPRjYx6xE9UFdkWOK2xBftIaeNW0bKnuvhci0T3HQA7jZzYDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 906D313D5;
-	Tue, 18 Feb 2025 03:29:11 -0800 (PST)
-Received: from [10.1.26.35] (e127648.arm.com [10.1.26.35])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE8413F6A8;
-	Tue, 18 Feb 2025 03:28:50 -0800 (PST)
-Message-ID: <09472579-d59a-4be9-996b-1638228895ac@arm.com>
-Date: Tue, 18 Feb 2025 11:28:48 +0000
+	s=arc-20240116; t=1739878850; c=relaxed/simple;
+	bh=Crg0iOsQWNGPSMN8Ph8R1qurjlfWd39GRLdd7Nuj3JY=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=h+RSlXzDJTvu4Qu0q9awc2t2MUp44jdbMgf5+zmDNKN2ArAziCUXYmYQM+2z/jztU2w88M5qhE/sK7aI3KQt/AlP+ykrZJKFnf2w5S0NaikMmBoCefjY6IRBqNTBiM3XylDNNZz+6nTW+cBId2lgtZRSjTg/g9Saz/Rco1ykBXc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wu1efTmK; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1739878848; x=1771414848;
+  h=date:from:to:cc:subject:message-id;
+  bh=Crg0iOsQWNGPSMN8Ph8R1qurjlfWd39GRLdd7Nuj3JY=;
+  b=Wu1efTmKA5Ih2qXTVP+AvXSNW4+hko2n0BnTKuEi4PflH9G9zw+f+YNB
+   zeSshQyC/E9+4DenCIUJkzt5I7EjuqXSeMR3m2n/p8eJ4FGNVh0r0GYGH
+   /OUffSKMuA286/2K+J1c+en47eh3bpQ9iNU2OM89yQjAuep1Owxw+627L
+   wEVIz0sIbofyl+sYEiZ+VAX5vgkpQVxe3DV9fGLH0xP3aNEqbYUJFlcVs
+   3F8ekgRXN9GMzQYIngUwEt2eTbWjhbjYL8EPKHVO2mcna7w1hbl0LBCxt
+   se8AM25ZJCuGkYyaFEqEyrIlmx/wM+OunWr3RI8nWgB9XOT0sygM+6Djo
+   Q==;
+X-CSE-ConnectionGUID: huvnew4jSjmLeEuzdHjViw==
+X-CSE-MsgGUID: lSgXlYZ/RC2CmL18n8SyKg==
+X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="39803500"
+X-IronPort-AV: E=Sophos;i="6.13,295,1732608000"; 
+   d="scan'208";a="39803500"
+Received: from fmviesa008.fm.intel.com ([10.60.135.148])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 03:40:47 -0800
+X-CSE-ConnectionGUID: /3BHby8TRq6kJ7o0ZirYdQ==
+X-CSE-MsgGUID: a9jbh1/nQdmkJlOJRthOJA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,295,1732608000"; 
+   d="scan'208";a="114574532"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa008.fm.intel.com with ESMTP; 18 Feb 2025 03:40:46 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tkLxz-0000T1-2b;
+	Tue, 18 Feb 2025 11:40:43 +0000
+Date: Tue, 18 Feb 2025 19:36:27 +0800
+From: kernel test robot <lkp@intel.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
+ linux-pm@vger.kernel.org
+Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
+ d802451b2edbc6ba8e57ed60523dd3dc86786964
+Message-ID: <202502181921.divkcWA6-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [RFT][PATCH v1] cpuidle: teo: Avoid selecting deepest idle state
- over-eagerly
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
- Linux PM <linux-pm@vger.kernel.org>, dsmythies@telus.net,
- LKML <linux-kernel@vger.kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>,
- Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
- Aboorva Devarajan <aboorvad@linux.ibm.com>
-References: <12630185.O9o76ZdvQC@rjwysocki.net>
- <8d147f4f-f511-4f44-b18e-2011b0fab17c@arm.com>
- <CAJZ5v0jjs=po8y0MzkUo=mUuqkxq3tg-V8r7-=AUJUu6=9ymMw@mail.gmail.com>
-Content-Language: en-US
-From: Christian Loehle <christian.loehle@arm.com>
-In-Reply-To: <CAJZ5v0jjs=po8y0MzkUo=mUuqkxq3tg-V8r7-=AUJUu6=9ymMw@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
 
-On 2/14/25 21:34, Rafael J. Wysocki wrote:
-> On Thu, Feb 13, 2025 at 3:08 PM Christian Loehle
-> <christian.loehle@arm.com> wrote:
->>
->> On 2/4/25 20:58, Rafael J. Wysocki wrote:
->>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>>
->>> It has been observed that the recent teo governor update which concluded
->>> with commit 16c8d7586c19 ("cpuidle: teo: Skip sleep length computation
->>> for low latency constraints") caused the max-jOPS score of the SPECjbb
->>> 2015 benchmark [1] on Intel Granite Rapids to decrease by around 1.4%.
->>> While it may be argued that this is not a significant increase, the
->>> previous score can be restored by tweaking the inequality used by teo
->>> to decide whether or not to preselect the deepest enabled idle state.
->>> That change also causes the critical-jOPS score of SPECjbb to increase
->>> by around 2%.
->>>
->>> Namely, the likelihood of selecting the deepest enabled idle state in
->>> teo on the platform in question has increased after commit 13ed5c4a6d9c
->>> ("cpuidle: teo: Skip getting the sleep length if wakeups are very
->>> frequent") because some timer wakeups were previously counted as non-
->>> timer ones and they were effectively added to the left-hand side of the
->>> inequality deciding whether or not to preselect the deepest idle state.
->>>
->>> Many of them are now (accurately) counted as timer wakeups, so the left-
->>> hand side of that inequality is now effectively smaller in some cases,
->>> especially when timer wakeups often occur in the range below the target
->>> residency of the deepest enabled idle state and idle states with target
->>> residencies below CPUIDLE_FLAG_POLLING are often selected, but the
->>> majority of recent idle intervals are still above that value most of
->>> the time.  As a result, the deepest enabled idle state may be selected
->>> more often than it used to be selected in some cases.
->>>
->>> To counter that effect, add the sum of the hits metric for all of the
->>> idle states below the candidate one (which is the deepest enabled idle
->>> state at that point) to the left-hand side of the inequality mentioned
->>> above.  This will cause it to be more balanced because, in principle,
->>> putting both timer and non-timer wakeups on both sides of it is more
->>> consistent than only taking into account the timer wakeups in the range
->>> above the target residency of the deepest enabled idle state.
->>>
->>> Link: https://www.spec.org/jbb2015/
->>> Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
->>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->>> ---
->>>  drivers/cpuidle/governors/teo.c |    6 +++---
->>>  1 file changed, 3 insertions(+), 3 deletions(-)
->>>
->>> --- a/drivers/cpuidle/governors/teo.c
->>> +++ b/drivers/cpuidle/governors/teo.c
->>> @@ -349,13 +349,13 @@
->>>       }
->>>
->>>       /*
->>> -      * If the sum of the intercepts metric for all of the idle states
->>> -      * shallower than the current candidate one (idx) is greater than the
->>> +      * If the sum of the intercepts and hits metric for all of the idle
->>> +      * states below the current candidate one (idx) is greater than the
->>>        * sum of the intercepts and hits metrics for the candidate state and
->>>        * all of the deeper states, a shallower idle state is likely to be a
->>>        * better choice.
->>>        */
->>> -     if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
->>> +     if (2 * (idx_intercept_sum + idx_hit_sum) > cpu_data->total) {
->>>               int first_suitable_idx = idx;
->>>
->>>               /*
->>>
->>>
->>>
->>
->> I'm curious, are Doug's numbers reproducible?
->> Or could you share the idle state usage numbers? Is that explainable?
->> Seems like a lot and it does worry me that I can't reproduce anything
->> as drastic.
-> 
-> Well, it may not be drastic, but the results below pretty much confirm
-> that this particular change isn't going in the right direction IMV.
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+branch HEAD: d802451b2edbc6ba8e57ed60523dd3dc86786964  Merge branch 'pm-cpuidle' into bleeding-edge
 
-Agreed, I'd still be eager to pick up something like Doug reported with
-my tests too :(
+elapsed time: 1236m
 
-> 
->> I did a bit of x86 as well and got for Raptor Lake (I won't post the
->> non-x86 numbers now, but teo-tweak performs comparable to teo mainline.)
->>
->> Idle 5 min:
->> device   gov     iter    Joules  idles   idle_misses     idle_miss_ratio         belows  aboves
->> teo     0       170.02  12690   646     0.051   371     275
->> teo     1       123.17  8361    517     0.062   281     236
->> teo     2       122.76  7741    347     0.045   262     85
->> teo     3       118.5   8699    668     0.077   307     361
->> teo     4       80.46   8113    443     0.055   264     179
->> teo-tweak       0       115.05  10223   803     0.079   323     480
->> teo-tweak       1       164.41  8523    631     0.074   263     368
->> teo-tweak       2       163.91  8409    711     0.085   256     455
->> teo-tweak       3       137.22  8581    721     0.084   261     460
->> teo-tweak       4       174.95  8703    675     0.078   261     414
-> 
-> So basically the energy usage goes up, idle misses go up, idle misses
-> ratio goes up and the "above" misses go way up.  Not so good as far as
-> I'm concerned.
-> 
->> teo     0       164.34  8443    516     0.061   303     213
->> teo     1       167.85  8767    492     0.056   256     236
->> teo     2       166.25  7835    406     0.052   263     143
->> teo     3       189.77  8865    493     0.056   276     217
->> teo     4       136.97  9185    467     0.051   286     181
-> 
-> The above is menu I think?
+configs tested: 99
+configs skipped: 1
 
-No this is teo again, just wanted to include it because the variance is
-quite large, (not unusual for idle).
-The full table (with menu (mainline))
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-teo 	0 	170.02 	12690 	646 	0.051 	371 	275
-teo 	1 	123.17 	8361 	517 	0.062 	281 	236
-teo 	2 	122.76 	7741 	347 	0.045 	262 	85
-teo 	3 	118.5 	8699 	668 	0.077 	307 	361
-teo 	4 	80.46 	8113 	443 	0.055 	264 	179
-teo-tweak 	0 	115.05 	10223 	803 	0.079 	323 	480
-teo-tweak 	1 	164.41 	8523 	631 	0.074 	263 	368
-teo-tweak 	2 	163.91 	8409 	711 	0.085 	256 	455
-teo-tweak 	3 	137.22 	8581 	721 	0.084 	261 	460
-teo-tweak 	4 	174.95 	8703 	675 	0.078 	261 	414
-teo 	0 	164.34 	8443 	516 	0.061 	303 	213
-teo 	1 	167.85 	8767 	492 	0.056 	256 	236
-teo 	2 	166.25 	7835 	406 	0.052 	263 	143
-teo 	3 	189.77 	8865 	493 	0.056 	276 	217
-teo 	4 	136.97 	9185 	467 	0.051 	286 	181
-menu 	0 	180.13 	8925 	343 	0.038 	303 	40
-menu 	1 	208.49 	8717 	345 	0.040 	312 	33
-menu 	2 	168.38 	8451 	321 	0.038 	274 	47
-menu 	3 	139.48 	7853 	310 	0.039 	289 	21
-menu 	4 	166.61 	7769 	339 	0.044 	322 	17
+tested configs:
+alpha                            allyesconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                   randconfig-001-20250218    gcc-13.2.0
+arc                   randconfig-002-20250218    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                              allyesconfig    gcc-14.2.0
+arm                   randconfig-001-20250218    gcc-14.2.0
+arm                   randconfig-002-20250218    gcc-14.2.0
+arm                   randconfig-003-20250218    gcc-14.2.0
+arm                   randconfig-004-20250218    clang-21
+arm64                            allmodconfig    clang-18
+arm64                 randconfig-001-20250218    clang-21
+arm64                 randconfig-002-20250218    clang-21
+arm64                 randconfig-003-20250218    gcc-14.2.0
+arm64                 randconfig-004-20250218    clang-16
+csky                  randconfig-001-20250218    gcc-14.2.0
+csky                  randconfig-002-20250218    gcc-14.2.0
+hexagon                          allmodconfig    clang-21
+hexagon                          allyesconfig    clang-18
+hexagon               randconfig-001-20250218    clang-17
+hexagon               randconfig-002-20250218    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250218    gcc-12
+i386        buildonly-randconfig-002-20250218    gcc-12
+i386        buildonly-randconfig-003-20250218    gcc-12
+i386        buildonly-randconfig-004-20250218    clang-19
+i386        buildonly-randconfig-005-20250218    clang-19
+i386        buildonly-randconfig-006-20250218    gcc-12
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch             randconfig-001-20250218    gcc-14.2.0
+loongarch             randconfig-002-20250218    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250218    gcc-14.2.0
+nios2                 randconfig-002-20250218    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                randconfig-001-20250218    gcc-14.2.0
+parisc                randconfig-002-20250218    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc               randconfig-001-20250218    gcc-14.2.0
+powerpc               randconfig-002-20250218    gcc-14.2.0
+powerpc               randconfig-003-20250218    clang-21
+powerpc64             randconfig-001-20250218    gcc-14.2.0
+powerpc64             randconfig-002-20250218    clang-16
+powerpc64             randconfig-003-20250218    clang-18
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-21
+riscv                 randconfig-001-20250218    gcc-14.2.0
+riscv                 randconfig-002-20250218    clang-21
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-21
+s390                             allyesconfig    gcc-14.2.0
+s390                  randconfig-001-20250218    clang-21
+s390                  randconfig-002-20250218    clang-15
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                    randconfig-001-20250218    gcc-14.2.0
+sh                    randconfig-002-20250218    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250218    gcc-14.2.0
+sparc                 randconfig-002-20250218    gcc-14.2.0
+sparc64               randconfig-001-20250218    gcc-14.2.0
+sparc64               randconfig-002-20250218    gcc-14.2.0
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                    randconfig-001-20250218    clang-21
+um                    randconfig-002-20250218    gcc-11
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250218    clang-19
+x86_64      buildonly-randconfig-002-20250218    gcc-12
+x86_64      buildonly-randconfig-003-20250218    clang-19
+x86_64      buildonly-randconfig-004-20250218    gcc-12
+x86_64      buildonly-randconfig-005-20250218    clang-19
+x86_64      buildonly-randconfig-006-20250218    clang-19
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                randconfig-001-20250218    gcc-14.2.0
+xtensa                randconfig-002-20250218    gcc-14.2.0
 
-> 
->> At least in the idle case you can see an increase in 'above' idle_misses.
-
-Agreed, idle_misses clearly go up as mentioned.
-
->>
->> Firefox Youtube 4K video playback 2 min:
->> device   gov     iter    Joules  idles   idle_misses     idle_miss_ratio         belows  aboves
->> teo     0       260.09  67404   11189   0.166   1899    9290
->> teo     1       273.71  76649   12155   0.159   2233    9922
->> teo     2       231.45  59559   10344   0.174   1747    8597
->> teo     3       202.61  58223   10641   0.183   1748    8893
->> teo     4       217.56  61411   10744   0.175   1809    8935
->> teo-tweak       0       227.99  61209   11251   0.184   2110    9141
->> teo-tweak       1       222.44  61959   10323   0.167   1474    8849
->> teo-tweak       2       218.1   64380   11080   0.172   1845    9235
->> teo-tweak       3       207.4   60183   11267   0.187   1929    9338
->> teo-tweak       4       217.46  61253   10381   0.169   1620    8761
-> 
-> And it doesn't improve things drastically here, although on average it
-> does reduce energy usage.
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
