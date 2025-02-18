@@ -1,152 +1,121 @@
-Return-Path: <linux-pm+bounces-22284-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22285-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6BB4CA38EE1
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 23:14:08 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1992AA38FD2
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 01:00:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BADE3174757
-	for <lists+linux-pm@lfdr.de>; Mon, 17 Feb 2025 22:12:46 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 21D203ADAF9
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 00:00:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 403001AA1E4;
-	Mon, 17 Feb 2025 22:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cYS0y1Nh"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F12DD175BF;
+	Tue, 18 Feb 2025 00:00:39 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F7591AA1D8
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 22:09:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 194F110F4;
+	Tue, 18 Feb 2025 00:00:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739830178; cv=none; b=XMxVNsr8c7Z75Qz2IvG0JtmYbYkrCEPNkDiMYm7MtNpSKpYqlCiQ4PdEfNbc10kQIu1KdHGsh4PnWvIiE2/fK+gTFzh5EG6MxF2N8iHHpIqLR2IO7kcuQL2FhQl69whEZke5fbQyFP+95Ok+uL/h8MF0GKq351lExkV3q2LD4fY=
+	t=1739836839; cv=none; b=emdeOsbMHZ/A/mLVdF8dRiT/PDrRUlroarrcfX2g4XSAfdsRafImzkK383z0ZT7Gln9enDVJdWPscg9v1mNHR94QyqHmfTApY/o5sZEFasS6QOQDeXWgWEg5Psoe41ZO36t0uicPdHUO3SQhZmPkPADZ/BvZv+Ycbs94sEtsg34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739830178; c=relaxed/simple;
-	bh=HTH5zo/a8cQSIVm6Wy0nm3K7gajw+FeYtSs5JvJyKlA=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=LaCRFey9LG8kNAceLliIMm8cN3MpjNaXVBhveY1QPSy4r8ffbFqmN1nUTKvBrIBNlAXn9P0YBS7pUNG+YbQoG/kXsYpqvTpWk+1bsV1srZlQ5Ixq9WJg/hbKIkVdrneRaxY+FDZJiRI5iIcPyK46XDWNP4BmSlATPfetXbw2Tos=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cYS0y1Nh; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id DACDCC4CEEC
-	for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 22:09:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739830177;
-	bh=HTH5zo/a8cQSIVm6Wy0nm3K7gajw+FeYtSs5JvJyKlA=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=cYS0y1Nh4Dso+M/OD9O34O2DrfdozPUb4rrzYiHC84EjONnGKTAqyMcmrqlK8bnAq
-	 aKEvWsaJhbdSgt1VuImsvhmwWioII8TSJhvJfkTDgRbJpZucPlH1g0Z/JGNf5KKAIB
-	 sRcVk+QYTSoYDb34A64uMLpbJ9lm5vmcDHTNXTmMiG6Jkq267jXsbDW4wmLNN83//c
-	 T40vWvIiCkiqNYt3N2E1iKKRvpZpghLMl6hRve7j/yM5fGxMQ+rCXQEI299vqPQUPJ
-	 fY1DGL16ihuRhJ4OBO+RX3WUClNVOrFG8g890b2mm78ncArCDOsbOFr62eBhQG5Inb
-	 uSKpD6+TbAjKg==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id D52D9C41606; Mon, 17 Feb 2025 22:09:37 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 217931] amd-pstate lacks crucial features: CPU frequency and
- boost control
-Date: Mon, 17 Feb 2025 22:09:37 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: high
-X-Bugzilla-Who: miroslav@pavleski.net
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-217931-137361-a9oSPC0teY@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-217931-137361@https.bugzilla.kernel.org/>
-References: <bug-217931-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=arc-20240116; t=1739836839; c=relaxed/simple;
+	bh=LhYlUt1QrmW2pOKW32VLRb2bw6qEuWNVn1QUgKRosZw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=SQBd1wVfYS8HbRllhSCsmMmR3vrZVh2c+b2XAQeWEwMEdkpGDzd68CGF1O9+WGV7AqCn+2bbYZq07PgcQOoUgR2koGrlrzcruQwkBRHSnIRyULzQt6T0aH5LLrcDc7PK0kQPj5AxMnq+7OefS/ctlkvjpymHV8GBzzzYKKHcOao=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 0ACD41692;
+	Mon, 17 Feb 2025 16:00:55 -0800 (PST)
+Received: from arm.com (usa-sjc-imap-foss1.foss.arm.com [10.121.207.14])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9C34F3F59E;
+	Mon, 17 Feb 2025 16:00:30 -0800 (PST)
+Date: Tue, 18 Feb 2025 01:00:20 +0100
+From: Beata Michalska <beata.michalska@arm.com>
+To: Catalin Marinas <catalin.marinas@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-pm@vger.kernel.org, ionela.voinescu@arm.com,
+	sudeep.holla@arm.com, will@kernel.org, rafael@kernel.org,
+	viresh.kumar@linaro.org, sumitg@nvidia.com,
+	yang@os.amperecomputing.com, vanshikonda@os.amperecomputing.com,
+	lihuisong@huawei.com, zhanjie9@hisilicon.com,
+	ptsm@linux.microsoft.com, Jonathan Corbet <corbet@lwn.net>,
+	Thomas Gleixner <tglx@linutronix.de>,
+	Ingo Molnar <mingo@redhat.com>, Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>,
+	"H . Peter Anvin" <hpa@zytor.com>, Phil Auld <pauld@redhat.com>,
+	x86@kernel.org, linux-doc@vger.kernel.org
+Subject: Re: [PATCH v10 0/4] Add support for AArch64 AMUv1-based average freq
+Message-ID: <Z7PNlFv2995pDARQ@arm.com>
+References: <20250131162439.3843071-1-beata.michalska@arm.com>
+ <173982791748.4020779.2848639862581042284.b4-ty@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <173982791748.4020779.2848639862581042284.b4-ty@arm.com>
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D217931
-
---- Comment #81 from Miroslav Pavleski (miroslav@pavleski.net) ---
-> OK great, it looks like the amd-pstate issue is fixed.  I'll include this=
- in
-> my next patch series for amd-pstate.  It's good timing because I'm
-> overhauling a lot of this code for 6.15.
-
-That is great news! Glad I could be of some use there.
-
-
-> Unfortunately; your suspend failure is missing the thing I need to tell me
-> some important info about the failure mode(the idle mask print).  This is=
- the
-> line we should have seen printed.=20=20
+On Mon, Feb 17, 2025 at 09:32:06PM +0000, Catalin Marinas wrote:
+> On Fri, 31 Jan 2025 16:24:35 +0000, Beata Michalska wrote:
+> > This series adds support for obtaining an average CPU frequency based on
+> > a hardware provided feedback. The average frequency is being exposed via
+> > dedicated yet optional cpufreq sysfs attribute - cpuinfo_avg_freq.
+> > The architecture specific bits are being provided for AArch64, caching on
+> > existing implementation for FIE and AMUv1 support: the frequency scale
+> > factor, updated on each sched tick, serving as a base for retrieving
+> > the frequency for a given CPU, representing an average frequency
+> > reported between the ticks.
+> > 
+> > [...]
 >
-> https://github.com/torvalds/linux/blob/master/drivers/platform/x86/amd/pm=
-c/pmc.c#L733
->=20
-> I notice this at the top before your sequence starts though:
+Thank you for that.
 
->> feb 17 22:06:52 greenstation kernel: NOHZ tick-stop error: local softirq
->> work
->> is pending, handler #08!!!
+There is still a (not so) small issue with patch
+[3/4] arm64: Provide an AMU-based version of arch_freq_get_on_cpu.
+It did not come up while testing, sadly.
+No idea how I could have missed that, nor why I made the mistake
+in the first place.
 
-> And that has me most concerned that the kernel wasn't really ready for
-> suspend.  Let's split out your s2idle suspend issue to it's own bug and t=
-ry
-> to figure out the pattern and what debug we'll need.  We can keep this one
-> for the amd-pstate issue, and I expect we can land the patch for a later
-> 6.14-rc.
+The fix is pretty straightforward:
 
-Well, I see line 733 calls amd_pmc_idlemask_read which includes the strings
-"SMU" and "idlemask" in the output. Unfortunately, idlemask is not found in=
- the
-journal.
-When grepping for "SMU" I got this:
+diff --git a/arch/arm64/kernel/topology.c b/arch/arm64/kernel/topology.c
+index 6f0cab8e746b..4bac26d8e29c 100644
+--- a/arch/arm64/kernel/topology.c
++++ b/arch/arm64/kernel/topology.c
+@@ -268,7 +268,7 @@ int arch_freq_get_on_cpu(int cpu)
+ 
+                        do {
+                                ref_cpu = cpumask_next_wrap(ref_cpu, policy->cpus,
+-                                                           start_cpu, false);
++                                                           start_cpu, true);
 
-=3D=3D=3D
-feb 17 22:03:18 greenstation kernel: amdgpu 0000:03:00.0: amdgpu: SMU drive=
-r if
-version not matched
-feb 17 22:03:18 greenstation kernel: amdgpu 0000:03:00.0: amdgpu: SMU is
-initialized successfully!
-feb 17 22:03:18 greenstation kernel: amdgpu 0000:07:00.0: amdgpu: SMU is
-initialized successfully!
-feb 17 22:07:09 greenstation kernel: amdgpu 0000:07:00.0: amdgpu: SMU is
-resuming...
-feb 17 22:07:09 greenstation kernel: amdgpu 0000:07:00.0: amdgpu: SMU is
-resumed successfully!
-feb 17 22:07:09 greenstation kernel: amdgpu 0000:03:00.0: amdgpu: SMU is
-resuming...
-feb 17 22:07:09 greenstation kernel: amdgpu 0000:03:00.0: amdgpu: SMU drive=
-r if
-version not matched
-feb 17 22:07:09 greenstation kernel: amdgpu 0000:03:00.0: amdgpu: SMU: I'm =
-not
-done with your previous command: SMN_C2PMSG_66:0x00000036
-SMN_C2PMSG_82:0x00000000
-=3D=3D=3D
+Please let me know if you want me to send new version with the fix applied.
 
-Regarding the NOHZ tick-stop error. I've seen on another thread somewhere t=
-hat
-it is probably related to the external USB-C hub I use. I cannot judge if i=
-t is
-interfering with the s2idle suspend process.
+Apologies for the inconvenience.
 
---=20
-You may reply to this email to add a comment.
+---
+BR
+Beata
 
-You are receiving this mail because:
-You are the assignee for the bug.=
+> Applied to arm64 (for-next/amuv1-avg-freq), thanks!
+> 
+> [1/4] cpufreq: Allow arch_freq_get_on_cpu to return an error
+>       https://git.kernel.org/arm64/c/38e480d4fcac
+> [2/4] cpufreq: Introduce an optional cpuinfo_avg_freq sysfs entry
+>       https://git.kernel.org/arm64/c/fbb4a4759b54
+> [3/4] arm64: Provide an AMU-based version of arch_freq_get_on_cpu
+>       https://git.kernel.org/arm64/c/dd871ac1237f
+> [4/4] arm64: Update AMU-based freq scale factor on entering idle
+>       https://git.kernel.org/arm64/c/96b335620c59
+> 
+> -- 
+> Catalin
+> 
 
