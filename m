@@ -1,196 +1,178 @@
-Return-Path: <linux-pm+bounces-22342-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22343-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8072A3A7EA
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:44:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 42AB5A3A829
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:56:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C080172DA3
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 19:43:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CDE3E3A2781
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 19:54:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4CA21EB5C9;
-	Tue, 18 Feb 2025 19:43:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 26C0C1EB5C9;
+	Tue, 18 Feb 2025 19:54:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u/R0YUhg"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DfDsVdID"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39181E833C
-	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 19:43:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01C8D1E51F8
+	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 19:54:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739907828; cv=none; b=ct/DB7pA4yNKKxPVietEcwvTRND8b3xrLqNLcMx/oLX2j5T7XD83GYlAGpA31k/pfjWDgooRUb790StxvvxcxaTB2UcBsQePu894cB23zWcyJYcInx7+6rHpare65+26xD6AW62D0/t9mQ9QOY+dvjJwd+jB5A0x/EJRN6W9PuM=
+	t=1739908496; cv=none; b=LVqQXTZFlUSdfvUsfwovE/FYywVYIaVHWTyaIEHqA1CnV7sKJAnktURch1I1SitL/KyHDdVQmSwNebhSi2FiuorILWWZyFNnm6nYUYsyjnUQENxhwO1uk9S3bulQWZ8fI9Wzdtxyl0RaLrhLFGA5x71XHfa0veRvdoPF2Yz+6tc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739907828; c=relaxed/simple;
-	bh=pMvVG7fqHk6x9Lp+bc7lGWvpOYPn7WYP6O203zRn38I=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XtpGafSxcrHmlBYkftj7IF0ZpbG6zVPG/3HrUh/XrKLveAOoSMEN6jwX7XggeDA3Da5rx9nO016rKYOmds0eGcYF/taM9omMaBRlN6/ktSsnTBL7LpOXWez6/EQuiWqnzMluW6ufDertCrBjzC70QlMzqnRcfW3qBaKStPkphkI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u/R0YUhg; arc=none smtp.client-ip=209.85.128.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43937cf2131so40058075e9.2
-        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 11:43:44 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739907823; x=1740512623; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=t6NET/R65D4fhygY4ZNz4mV2mBN1Fn/fSAZnL4GhO6k=;
-        b=u/R0YUhgtjl6EfbPcb8jg9FhB7sdaLo28saWnHxydKEUBmFosb1V6FvqLF0xdwVoVh
-         Lhhg13FMZIxapnOinJsH4WyuMjpfiOLe3YVLkM7HiW25OIqEweTj+n8ccn0F6Miyjk8P
-         AfgEJrII53/vz4J5HCtjElb5XTFWj4UulpP/UUNdn/DedruDtwunHxOMf02/tQGUU5gV
-         N5J4cH16mSfIU2GpeIjBJdBQeERlsEBAeNS2OZkUpUAB7y2a8Afd/NOQ6oNelPBgOihv
-         m2Z7E0Bg8TM6VdSsBO9Xcso8+2gRDeh3yjLL1w6GX/G0H07RWcj/eDaolDTWtwwV5OTP
-         fmog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739907823; x=1740512623;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=t6NET/R65D4fhygY4ZNz4mV2mBN1Fn/fSAZnL4GhO6k=;
-        b=clu4+hCAmOBXsLGkasyn+vlEPJBYzHtareNHVhJkrLiBBwJlnlGlwwLGqswmyd9bhp
-         HOzN+w0XFBb/eNMTluP7iD9SBIBCCvFXcJ2yHZnSGTaWB8F2F0DMs70Ho/DaROiX95fz
-         KcFsr8RnXFQRYMuh2RYcjr8Yh+J3hL2iK38bDF0deGZCAXw+zj1Z9fnyeHYjbx8pjgxO
-         UoABrEP/J4ElZcVM3vhWPbJxJWHK2akOdBYxWUQHt8NcHEAhV3B2mrtAvdyF5Zrz0/ss
-         LT131XzwX2X79dInghJvfRamzZV5K6cTUuwBxhZNaZs+9iVzggJh+iaEqvxko22F37oD
-         kARQ==
-X-Forwarded-Encrypted: i=1; AJvYcCViPJuMeNLDmGp+TY8RfqZFb/SFOHHqDOIz4BOgsOx6UmFzII7IP0S6k/WLUnZmqAU+aUBsgiIuKw==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx/nm4WY91DnV7ez7So1RMJfXvDyXR5slwFrFd+DxjziDb+vOtO
-	9b8Y1iGDnSLeGIDUxV5qat631rkJfCbEKyAjMc8W441ORyvhPcLrunawX6UweHY=
-X-Gm-Gg: ASbGnctBCmG9qoH4rTzAl1PkjqdYe7ywBRy1Fo5p6kwbtmZMUhcpL542PxbPBQ2LVZs
-	Lo/fUHYiO2KjSVNe1cJVzNStQutY8wlOdBI6CIp+iIpsCSbn1hj8K3p/9nXJ1IB1AWs4G0kYVM4
-	x3U+gJyDFClJPknW1Wypvd3lUTyovvcpQpH1spyKMpeFWFwp9KwiKmTF82hDY9vf1pXj6Kfn40C
-	YZDelXmbcQuQ7JXmlmPcGuxRCALNTB8ZHnNKG+BgR8XZDffj7URUbw6ZBwdbmUfVNGnPPLi10QH
-	qDRDCy/TrmNMJOV7NLMsjNVWWhfmRY13uBFMMHIPVp+20kg9EULQvRk=
-X-Google-Smtp-Source: AGHT+IE0UW/mzN+qXiFnRcnySUoZloCoBhk1jxMNyKm7/6Uvfk8YLL036J9/dJuG/NFnq4RdsX52mw==
-X-Received: by 2002:a05:600c:3b0e:b0:439:987c:2309 with SMTP id 5b1f17b1804b1-439987c256dmr19864515e9.27.1739907823188;
-        Tue, 18 Feb 2025 11:43:43 -0800 (PST)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4395a055910sm190528525e9.9.2025.02.18.11.43.42
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2025 11:43:42 -0800 (PST)
-Message-ID: <e36a5771-d277-41d3-af9c-c5841c4060a2@linaro.org>
-Date: Tue, 18 Feb 2025 20:43:42 +0100
+	s=arc-20240116; t=1739908496; c=relaxed/simple;
+	bh=R1uIKJMZsiPQAfVHz7gqJLehbdFcr9jSQBjyzDikQ3E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=hxCPIwupicpQEWyjiaXygWD5X3C6XRUsOO8NGevXhNtwpmP5OrKQXbeeuEX9NihzKzPmgg+Tz0UHwPFFj1yb62Tor99GQYwaXLzPuHUkZ+uJfH9yYmQrt0s8od+W631R89ZJ9Kv1gB/ktMM/3PZnUgHDwMeVJvkkYlUzFnb4n2M=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DfDsVdID; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 73605C4CEE4
+	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 19:54:55 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1739908495;
+	bh=R1uIKJMZsiPQAfVHz7gqJLehbdFcr9jSQBjyzDikQ3E=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=DfDsVdID6S6/NIuj7k/7g4l2V4Cb2evD6gSXzy4XzQpTUbycceVlWHSUowLS3XRpa
+	 mrhw3NvRTKJQbrorwBLswbEZj92McjckWOw7nq9JWq571FcIqeyGtwL1ptYDEIuYos
+	 /wcXXY2lsFLnKAlNgphJ38LgaTBNb0cvMxWPApUOo1YQkM7Hp6g/i5tpe1aGPuqsU0
+	 U4GLAoXcGlq84RajNLuVOszsTkEB9fuKh3DqCs7GA3zKWV7f2IysHDgZ5aVkkYKOqb
+	 z+IC3GGjrQt0B4x3Nz25R6ChW2kJNmlbrScdg5SFkzCWubWgg/7+lA1bYzsR4OFAd2
+	 uP2APAixXlE/A==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2bc52407b78so2377928fac.0
+        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 11:54:55 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUu2tk+AdT9rEq8eYDAefXdVci8L0TcvFoX9FK0c7MhnQ5RjDPmhy0N+QOCiPb+7YvzRmS+Js8IQg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzbvPvt8YlLp9CPEH3D5tFhHVdS8TTBp7MZ4W25hPVxbFntrJg1
+	SIXXa8pzC9Q4AzNYw8jyNVLBKcEnRWyIGN98ow/bQCImRQ5i+2YCUS0qnZM+O7usK54teIx/lW9
+	MRX6x8gVjpE28EecHQqU1EVVhsO4=
+X-Google-Smtp-Source: AGHT+IGOKPMkAHXxyKnXA5n7IHzSwoLkF6LFXcLLbqUZyOaVjYIgiZ4qGP/2KP4xQMAI+3VJwimmCkmpgf+NCbHC9SU=
+X-Received: by 2002:a05:6870:9a12:b0:29e:4bc4:97ca with SMTP id
+ 586e51a60fabf-2bc99b57ba3mr9627928fac.21.1739908494778; Tue, 18 Feb 2025
+ 11:54:54 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 2/2] thermal: rockchip: Support the rk3562 SoC in thermal
- driver
-To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
- Kever Yang <kever.yang@rock-chips.com>
-Cc: linux-rockchip@lists.infradead.org,
- Shaohan Yao <shaohan.yao@rock-chips.com>, linux-pm@vger.kernel.org,
- Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
- Zhang Rui <rui.zhang@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
- linux-arm-kernel@lists.infradead.org
-References: <20241224094015.3816301-1-kever.yang@rock-chips.com>
- <20241224094015.3816301-2-kever.yang@rock-chips.com>
- <7f17cc55-a741-4bb8-9513-0580ca6fedd3@linaro.org> <17758610.geO5KgaWL5@diego>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <17758610.geO5KgaWL5@diego>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <20250210071253.2991030-1-dedekind1@gmail.com>
+In-Reply-To: <20250210071253.2991030-1-dedekind1@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Tue, 18 Feb 2025 20:54:43 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hKQgqMbMKEMXSZFYo-y3k-7hBXqQftbMcY--H9VZaBtw@mail.gmail.com>
+X-Gm-Features: AWEUYZmZNUhVFt-s4Knc0bV4MY3zJ8H2mS98Btue3QbuEE6sD50eIK6Q1acUrJc
+Message-ID: <CAJZ5v0hKQgqMbMKEMXSZFYo-y3k-7hBXqQftbMcY--H9VZaBtw@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: cleanup BYT/CHT auto demotion disable
+To: Artem Bityutskiy <dedekind1@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM Mailing List <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 11/02/2025 11:19, Heiko Stübner wrote:
-> Hey Daniel,
-> 
-> Am Dienstag, 11. Februar 2025, 10:36:09 MEZ schrieb Daniel Lezcano:
->> On 24/12/2024 10:40, Kever Yang wrote:
->>> From: Shaohan Yao <shaohan.yao@rock-chips.com>
->>>
->>> There are one Temperature Sensor on rk3562, channel 0 is for chip.
->>
->> A bit stingy in terms of description, no ?
->>
->>
->>> Signed-off-by: Shaohan Yao <shaohan.yao@rock-chips.com>
->>> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
-> [...]
->>> +static const struct tsadc_table rk3562_code_table[] = {
->>> +	{0, -40000},
->>> +	{1419, -40000},
->>> +	{1428, -35000},
->>> +	{1436, -30000},
->>> +	{1445, -25000},
->>> +	{1453, -20000},
->>> +	{1462, -15000},
->>> +	{1470, -10000},
->>> +	{1479, -5000},
->>> +	{1487, 0},
->>> +	{1496, 5000},
->>> +	{1504, 10000},
->>> +	{1512, 15000},
->>> +	{1521, 20000},
->>> +	{1529, 25000},
->>> +	{1538, 30000},
->>> +	{1546, 35000},
->>> +	{1555, 40000},
->>> +	{1563, 45000},
->>> +	{1572, 50000},
->>> +	{1580, 55000},
->>> +	{1589, 60000},
->>> +	{1598, 65000},
->>> +	{1606, 70000},
->>> +	{1615, 75000},
->>> +	{1623, 80000},
->>> +	{1632, 85000},
->>> +	{1640, 90000},
->>> +	{1648, 95000},
->>> +	{1657, 100000},
->>> +	{1666, 105000},
->>> +	{1674, 110000},
->>> +	{1682, 115000},
->>> +	{1691, 120000},
->>> +	{1699, 125000},
->>> +	{TSADCV2_DATA_MASK, 125000},
->>> +};
->>
->> May be it is time to optimize all these tables out of the memory driver?
->>
->> It is the 9th table introduced.
-> 
-> just to see if we think differently, what do you have in mind?
-> 
-> For me the adc-to-temperature conversion _is_ part of the hw-block itself,
-> so should likely not spill into the devicetree, but you're right, defining
-> a big table for each soc also isn't really great.
-> 
-> For the rk3562 in question, the stepping seems to be 8,9,8,9,....
-> where for the rk3568 the value stepping seems to be 32,36,32,36,...
-> and it looks similar for the other socs too, with the driver is already
-> interpolating between values it seems.
-> 
-> So even just halving (or more) all the big tables (dropping every second
-> entry for example) should not really loose us real granularity.
+On Mon, Feb 10, 2025 at 8:12=E2=80=AFAM Artem Bityutskiy <dedekind1@gmail.c=
+om> wrote:
+>
+> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+>
+> Bay Trail (BYT) and Cherry Trail (CHT) platforms have a very specific way
+> of disabling auto-demotion via specific MSR bits. Clean up the code so th=
+at
+> BYT/CHT-specifics do not show up in the common 'struct idle_cpu' data
+> structure.
+>
+> Remove the 'byt_auto_demotion_disable_flag' flag from 'struct idle_cpu',
+> because a better coding pattern is to avoid very case-specific fields lik=
+e
+> 'bool byt_auto_demotion_disable_flag' in a common data structure, which i=
+s
+> used for all platforms, not only BYT/CHT. The code is just more readable
+> when common data structures contain only commonly used fields.
+>
+> Instead, match BYT/CHT in the 'intel_idle_init_cstates_icpu()' function,
+> and introduce a small helper to take care of BYT/CHT auto-demotion. This
+> is consistent with how platform-specific things are done for other
+> platforms.
+>
+> No intended functional changes, compile-tested only.
+>
+> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> ---
+>  drivers/idle/intel_idle.c | 21 +++++++++++++--------
+>  1 file changed, 13 insertions(+), 8 deletions(-)
+>
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index 118fe1d37c22..324814dc34fa 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -89,7 +89,6 @@ struct idle_cpu {
+>          * Indicate which enable bits to clear here.
+>          */
+>         unsigned long auto_demotion_disable_flags;
+> -       bool byt_auto_demotion_disable_flag;
+>         bool disable_promotion_to_c1e;
+>         bool use_acpi;
+>  };
+> @@ -1463,13 +1462,11 @@ static const struct idle_cpu idle_cpu_snx __initc=
+onst =3D {
+>  static const struct idle_cpu idle_cpu_byt __initconst =3D {
+>         .state_table =3D byt_cstates,
+>         .disable_promotion_to_c1e =3D true,
+> -       .byt_auto_demotion_disable_flag =3D true,
+>  };
+>
+>  static const struct idle_cpu idle_cpu_cht __initconst =3D {
+>         .state_table =3D cht_cstates,
+>         .disable_promotion_to_c1e =3D true,
+> -       .byt_auto_demotion_disable_flag =3D true,
+>  };
+>
+>  static const struct idle_cpu idle_cpu_ivb __initconst =3D {
+> @@ -2055,6 +2052,15 @@ static void __init spr_idle_state_table_update(voi=
+d)
+>         }
+>  }
+>
+> +/**
+> + * byt_cht_auto_demotion_disable - Disable Bay/Cherry Trail auto-demotio=
+n.
+> + */
+> +static void __init byt_cht_auto_demotion_disable(void)
+> +{
+> +       wrmsrl(MSR_CC6_DEMOTION_POLICY_CONFIG, 0);
+> +       wrmsrl(MSR_MC6_DEMOTION_POLICY_CONFIG, 0);
+> +}
+> +
+>  static bool __init intel_idle_verify_cstate(unsigned int mwait_hint)
+>  {
+>         unsigned int mwait_cstate =3D (MWAIT_HINT2CSTATE(mwait_hint) + 1)=
+ &
+> @@ -2136,6 +2142,10 @@ static void __init intel_idle_init_cstates_icpu(st=
+ruct cpuidle_driver *drv)
+>         case INTEL_ATOM_GRACEMONT:
+>                 adl_idle_state_table_update();
+>                 break;
+> +       case INTEL_ATOM_SILVERMONT:
+> +       case INTEL_ATOM_AIRMONT:
+> +               byt_cht_auto_demotion_disable();
+> +               break;
+>         }
+>
+>         for (cstate =3D 0; cstate < CPUIDLE_STATE_MAX; ++cstate) {
+> @@ -2178,11 +2188,6 @@ static void __init intel_idle_init_cstates_icpu(st=
+ruct cpuidle_driver *drv)
+>
+>                 drv->state_count++;
+>         }
+> -
+> -       if (icpu->byt_auto_demotion_disable_flag) {
+> -               wrmsrl(MSR_CC6_DEMOTION_POLICY_CONFIG, 0);
+> -               wrmsrl(MSR_MC6_DEMOTION_POLICY_CONFIG, 0);
+> -       }
+>  }
+>
+>  /**
+> --
 
-It can be just a formula to be reused in the adc_to_temp, temp_to_adc or 
-precompute the table from the formula:
-
-For instance the following formulas:
-
-rk3588_code_table:
-
-	y = ((x^2 + 23315x - 5949300) * 100) / 2457
-
-rk3568_code_table:
-
-	y = ((x^2 - 2660x + 1547712) * 625) / 2448
-
-etc ...
-
-
--- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Applied as 6.15 material, thanks!
 
