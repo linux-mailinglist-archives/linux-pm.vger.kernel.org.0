@@ -1,185 +1,185 @@
-Return-Path: <linux-pm+bounces-22297-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22298-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2DC4A399E0
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:06:47 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4308BA399F3
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:10:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C05116BD7C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 11:06:46 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B19F7A4131
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 11:09:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC26323A988;
-	Tue, 18 Feb 2025 11:06:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78A62397AA;
+	Tue, 18 Feb 2025 11:10:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xBMY9MNr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n0zjKGCf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C975622E002
-	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 11:06:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E863123CF1F
+	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 11:10:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739876800; cv=none; b=C6VlVHZGmn3C2GWXi9kMrQa0yRk4TvEVCq7bEs3jsicyidlw2CA6l5IxB0+AIDdMFJ9/d/4i29A7w1QIiIwi8w0U2uG4PGp/48OXSL+uprmT44qAP8BL0VwvxIZgeetu3y0EzKq7S55w5joYITYaQAyRvSOoEjf2v8YWguOuoe4=
+	t=1739877005; cv=none; b=HFaHWHS47NF3erbx8+9lxJh6eUaJYwqKLHKwRC0SNvDGOMkwQphmowaGl2Pclxh1BvSRa6ziN+ewGENaooCX4OAaRSY9+vazU7yUxLGzPzLuDts8lvddxDEP9FacAsIQ0xMQ983wkY4oSusEBRGvFdL+0Tvj/3jAdKhgQ5UsGus=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739876800; c=relaxed/simple;
-	bh=nIFcW1zAQNpDpL9+kzL6B5pY+AHLOIpYOl91ulP2I6U=;
+	s=arc-20240116; t=1739877005; c=relaxed/simple;
+	bh=NXHNjkP9fyKMEmNMjHzJ6qYQRe9g0RNuw9w6xp6qFwc=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=EQ833Ql0AcW06MzsNMxkzQCql2rTS2Arf5/gytRJrpRhoz+RFPBWaI8KDIdguSkqES1Y7Frpqida7pzmI9gI5fp4xrNYDu8HpbVY+nXs+dWm9yLECqKSK6c+ABR2GSYnIDB6X1fT7cBFhxvuXQuj4U3J2LSsiEZW4KLuIeaxiow=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xBMY9MNr; arc=none smtp.client-ip=209.85.128.179
+	 To:Cc:Content-Type; b=hHuj6XxV8Oe7jo4ClMykZMjQGtStSgBOAjs/x642qh0x3Qn811KsvNKs+CuumZo+vvbprH+LIJsJEQlYeso5upof56PjyFNOuQgdxm/1F7GdRak6q7umWd4+LVCNqUCu9hJOxMXWa8R3I01OXlBRCM1tG72hMj2cUK7UAq0Yyuc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=n0zjKGCf; arc=none smtp.client-ip=209.85.219.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6fb73240988so12349557b3.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 03:06:37 -0800 (PST)
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e5dc39ede40so3031120276.1
+        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 03:10:03 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739876797; x=1740481597; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=ZxBzcG+1RCPRksrqYQsyAhoS4ssC4QSuiEWJmIW8two=;
-        b=xBMY9MNrSOLEewg/P1qKiONEWuEY9xgOJI/kT9834cbP420ehuod8GqETItTN8z1Cz
-         I2jCNa/E9ND8xKBItEs4mIAkIXvXPR+I+6TsVP2ZmUlIlRoX4PJxrZ46TQgV1UL4TomN
-         ZU+C6DMzOaqAyJC93PVL2n2uSN0uD5zVjRRs6uhcPNX/2jUnaEXa0NbrOlzG96bF+K1F
-         jX9HrC+ySq88z4Oe87CUCrP9dpQ7MxNbLulAI9fT//MrQLTlXIblBQ3aa9WPLRQ9wVip
-         aSWukDurDrcojMSlQN5whtyGZb5EUEHrpEPB7dP8Hz8IPoOL+2eKocDFn+YLWoaMWRb8
-         r5AA==
+        d=linaro.org; s=google; t=1739877003; x=1740481803; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=K3ttRw4WtfoPQJNKd0VXXYu2qHT5cqSTvGY4bcJ3Gyo=;
+        b=n0zjKGCfm4ANVdrKJbV9RSg+1EQiBH9XYQ47w86fWBvbvPFUOf/2x8+SUlsXybi24I
+         xyPZieCloAQXW9gFi9w5pHgNMOmtKyAtdzIOVBgI2DNSTLRkHBW6csUEol2WWMbgMaYG
+         ti5qPrp92TGyDpQscThp84kxHttZy8pda5QNGh1j9meBQWYTpTHjJjlZz4iD9XOJBQJ8
+         rYt6JvmBb711Ig1wI/yI8P2ZNuFUZC3rzyGK2Dh1u0r0VCaNEFlLXXomTtbs5MZCFh/N
+         xMZoJMWmkF9cQCBEE4urLrqLpMcq69rikqCTY8AUzC3XHqtKTauzUMroZqw1u3hgSxrX
+         isPg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739876797; x=1740481597;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=ZxBzcG+1RCPRksrqYQsyAhoS4ssC4QSuiEWJmIW8two=;
-        b=axb9HTcNFJnv6YkxzRNSgvzId0NEx8V2iKwuoPE8XudWWN+s86/2atR31mGd5XByTi
-         pPjey+zorkwOuwo2AUXHsw5Gd8t+dGtEndasLCDsvpxWpP6jQPGTmyoKT/yyx7QxOeWJ
-         P6qTFY70k+WfsPhsAS8fQvPJ4CcsrUi13YU9m3Ky/X0HepebG0X95UDxjGqP36MgTTsb
-         QuGa1bgfPYPWwJZeQxosVOCYVRAPIQgiD+bdkSfefIVuLIaLd8l1up3bCcTUNpr7/trX
-         JVKI2BssCkmMpFYNvr12tbitJ16y641A0x7wbcw6zlJdfXO3jr4krPz/mINgHarAtCYx
-         u7aQ==
-X-Forwarded-Encrypted: i=1; AJvYcCXXiC2W0atPVHGqeV+EpFlefWLM9wOWRX1uqd5YTUO73W0Q7cylbYwDfqWbYNgKNcmtk24USZ/6QA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxFUQwLMF1s5ZOwuM4UnuKrQ/96eYP0D+B3yBlbfh7A038rqQ8W
-	2ZXcOWemjeXPpbpeWOMpRxr/hgEkL3Ez92RCxD5XsgPaw8O5NzKs5WZ3jzdDlE0BtGyah84cNCj
-	o7IKvySvRt/wabpHDaqIySnOxjCHhHOXHH0AZrg==
-X-Gm-Gg: ASbGncs7BK2PDGxH/3aaLIBw6ovn0GxEOgXKpdfJYyWUkrL6sYPkvU1Y5pSL3lRXXLn
-	Vnwf9k2l9NM+DsXEmgjjxqZZmLxcBAScLfcYFbqk9F9dYyi+Zw54pXWSVfwNgNb6EDpVPZYIRLQ
+        d=1e100.net; s=20230601; t=1739877003; x=1740481803;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=K3ttRw4WtfoPQJNKd0VXXYu2qHT5cqSTvGY4bcJ3Gyo=;
+        b=BMT+dNR++hZCUvjyZPnfdINL0OL3Pdmw5qxh0HnQh/2wUjB6FYhyTxyrBxqYyTjnA/
+         XXX8ru/vKH1Z6fcSZHHjW6BoS7r2ezI50gsZBmyseC/vgQAP9ejgbjQhG+iU9ZYtJxXU
+         a0nn4yomM26ag76Zip19BXwmFPtzns0Tl02jFQJgvz/xnRyBLfC8AmwM7zASx1dzPoBh
+         2mWe3W1ldCjtnPT55Unwk4jRml/RUHZZb8QePNDw/Nt2dV7/dlTioKZkSXIhNvWR//Vg
+         9TRfSs4kWDaBOJCixsO0ELpU4iD1WxkuNvD75vAzLciAopeZE9aQgS0t5u+XvCGdsiSl
+         bgPw==
+X-Gm-Message-State: AOJu0YzksC3VuWqkgLal6mBXfnGccUA2ZnthP5eMCb+TK8U1x1MTUQIl
+	FVQv8NFh+jALMSbGCb00aORDgTNi43O3mR5QOI0Q0zujs31VSWv6JdV9WMcCvzs1+PzjPxNnQr1
+	xYNyCHj0pGgr2UL+ya70sR+X0DQfISAqyr7oHoA==
+X-Gm-Gg: ASbGncssc1tO+x2A1SVwMdMYhHZyDw7M4i/8l/ykvB8+5FB5FsuxHiJbnjfY+lo0RWc
+	i88Jm1RyK/vQkVVUTdkKl2G7a1oFY0xosN4qmKllnNi1BFegfetsqiuGrt8c7mFkCHVY8Hqs4ng
 	==
-X-Google-Smtp-Source: AGHT+IHLwVd8/FJ71sPKuZozOz3hvT7H8xMZqgkAwVXdbgbT08OeRrY0+2kxMfjx0SKdM7rJ6iJnri3ipFwnGN4coNk=
-X-Received: by 2002:a05:6902:2506:b0:e3c:7c3f:253a with SMTP id
- 3f1490d57ef6-e5dc91dd54amr9391445276.36.1739876796754; Tue, 18 Feb 2025
- 03:06:36 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHPKubHAH0Pi1Zg45U5aQK5z2M6ravRhS4x0dWo2wjj+DHKeqdoUN3K55NfHWX9cETDd8ABYa9nLLFDw4SD/PU=
+X-Received: by 2002:a05:6902:200e:b0:e57:f841:949f with SMTP id
+ 3f1490d57ef6-e5dc904c46bmr9500103276.19.1739877002844; Tue, 18 Feb 2025
+ 03:10:02 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
- <2579724.BzM5BlMlMQ@diego> <321804ef-f852-47cf-afd7-723666ec8f62@arm.com>
- <5649637.F8r316W7xa@diego> <fa184920-e1f5-4eee-894a-f617e6d8e817@rock-chips.com>
-In-Reply-To: <fa184920-e1f5-4eee-894a-f617e6d8e817@rock-chips.com>
+References: <12617588.O9o76ZdvQC@rjwysocki.net>
+In-Reply-To: <12617588.O9o76ZdvQC@rjwysocki.net>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 18 Feb 2025 12:05:59 +0100
-X-Gm-Features: AWEUYZl62zD8xYisGrHF_NbsDrxarZMOFP8pvEVYVbnRWAYdlQmrw0kY_HrKSt8
-Message-ID: <CAPDyKFqPZcQOqEbyfy8uC-SO8vx1f=Ck-fPSqvXqiS1H-JJsrA@mail.gmail.com>
-Subject: Re: [PATCH v7 4/7] pmdomain: rockchip: Add smc call to inform firmware
-To: Shawn Lin <shawn.lin@rock-chips.com>
-Cc: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>, 
-	Steven Price <steven.price@arm.com>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
-	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org, 
-	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org, 
-	linux-pm@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	"Martin K . Petersen" <martin.petersen@oracle.com>, 
-	"James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>, Rob Herring <robh+dt@kernel.org>
+Date: Tue, 18 Feb 2025 12:09:26 +0100
+X-Gm-Features: AWEUYZnJEpLOxgFTwflcJJSgimkNtFIn9NlT1KBJUKUK1WBE1F1P0_LpZGuyeGw
+Message-ID: <CAPDyKFrEv_DV=zZ57S==pZHQt1oeArYHWNrwthenRbP+VhLoHA@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: Rearrange documentation related to __pm_runtime_disable()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Alan Stern <stern@rowland.harvard.edu>, Johan Hovold <johan@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Tue, 18 Feb 2025 at 01:53, Shawn Lin <shawn.lin@rock-chips.com> wrote:
+On Mon, 17 Feb 2025 at 21:03, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
-> Hi Heiko, Steven
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> =E5=9C=A8 2025/2/18 4:50, Heiko St=C3=BCbner =E5=86=99=E9=81=93:
-> > Am Montag, 17. Februar 2025, 18:10:32 MEZ schrieb Steven Price:
-> >> On 17/02/2025 15:16, Heiko St=C3=BCbner wrote:
-> >>> Hi Steven,
-> >>>
-> >>> Am Montag, 17. Februar 2025, 15:47:21 MEZ schrieb Steven Price:
-> >>>> On 05/02/2025 06:15, Shawn Lin wrote:
-> >>>>> Inform firmware to keep the power domain on or off.
-> >>>>>
-> >>>>> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
-> >>>>> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
-> >>>>> ---
-> >>>>
-> >>>> This patch is causing my Firefly RK3288 to fail to boot, it hangs
-> >>>> shortly after reaching user space, but the bootup messages include t=
-he
-> >>>> suspicious line "Bad mode in prefetch abort handler detected".
-> >>>> I suspect the firmware on this board doesn't support this new SMC
-> >>>> correctly. Reverting this patch on top of linux-next gets everything
-> >>>> working again.
-> >>>
-> >>> Is your board actually running some trusted firmware?
-> >>
-> >> Not as far as I know.
-> >>
-> >>> Stock rk3288 never had tf-a / psci [0], I did work on that for a whil=
-e,
-> >>> but don't think that ever took off.
-> >>>
-> >>> I'm wondering who the smcc call is calling, but don't know about
-> >>> about smcc stuff.
-> >>
-> >> Good question - it's quite possible things are blowing up just because
-> >> there's nothing there to handle the SMC. My DTB is as upstream:
-> >>
-> >>          cpus {
-> >>                  #address-cells =3D <0x01>;
-> >>                  #size-cells =3D <0x00>;
-> >>                  enable-method =3D "rockchip,rk3066-smp";
-> >>                  rockchip,pmu =3D <0x06>;
-> >>
-> >> I haven't investigated why this code is attempting to call an SMC on
-> >> this board.
-> >
-> > I guess the why is easy, something to do with suspend :-) .
-> >
-> > I did go testing a bit, booting a rk3288-veyron produces the same issue
-> > you saw, likely due to the non-existent trusted-firmware.
-> >
-> > On the arm64-side, I tried a plethora of socs + tfa-versions,
-> >
-> >    rk3328: v2.5 upstream(?)-tf-a
-> >    rk3399: v2.9 upstream-tf-a
-> >    px30: v2.4+v2.9 upstream-tf-a
-> >    rk3568: v2.3 vendor-tf-a
-> >    rk3588: v2.3 vendor-tf-a
-> >
-> > and all ran just fine.
-> > So it really looks like the smcc call going to some unset location is
-> > the culprit.
-> >
-> > Looking at other users of arm_smcc_smc, most of them seem to be handled
-> > unguarded, but some older(?) arm32 boards actually check their DTs for =
-an
-> > optee node before trying their smc-call.
-> >
-> > I guess in the pm-domain case, we could just wrap the call with:
-> >       if(arm_smccc_1_1_get_conduit() !=3D SMCCC_CONDUIT_NONE)
-> >
+> There are only two callers of __pm_runtime_disable(), one of which is
+> device_suspend_late() and the other is pm_runtime_disable() that has
+> its own kerneldoc comment and there are no plans to add any more of
+> them.  Since they use different values of the __pm_runtime_disable()
+> second parameter, the actual code behavior is different in each case,
+> but it is all documented in the __pm_runtime_disable() kerneldoc comment
+> which is not particularly straightforward.
 >
-> Thanks for the report and helping find out the cause!
+> For this reason, move the information from the __pm_runtime_disable()
+> kerneldoc comment to the pm_runtime_disable() one and into a separate
+> comment in device_suspend_late() and remove the __pm_runtime_disable()
+> kerneldoc comment altogether.
 >
-> @Ulf, if the solution above seems reasonable to you, I can cook a fix-up
-> patch.
+> No functional impact.
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Seems reasonable to me, thanks!
+Much better!
 
-[...]
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
+
+> ---
+>  drivers/base/power/main.c    |    4 ++++
+>  drivers/base/power/runtime.c |   14 --------------
+>  include/linux/pm_runtime.h   |   15 +++++++++++----
+>  3 files changed, 15 insertions(+), 18 deletions(-)
+>
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1404,6 +1404,10 @@
+>         TRACE_DEVICE(dev);
+>         TRACE_SUSPEND(0);
+>
+> +       /*
+> +        * Disable runtime PM for the device without checking if there is a
+> +        * pending resume request for it.
+> +        */
+>         __pm_runtime_disable(dev, false);
+>
+>         dpm_wait_for_subordinate(dev, async);
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1460,20 +1460,6 @@
+>  }
+>  EXPORT_SYMBOL_GPL(pm_runtime_barrier);
+>
+> -/**
+> - * __pm_runtime_disable - Disable runtime PM of a device.
+> - * @dev: Device to handle.
+> - * @check_resume: If set, check if there's a resume request for the device.
+> - *
+> - * Increment power.disable_depth for the device and if it was zero previously,
+> - * cancel all pending runtime PM requests for the device and wait for all
+> - * operations in progress to complete.  The device can be either active or
+> - * suspended after its runtime PM has been disabled.
+> - *
+> - * If @check_resume is set and there's a resume request pending when
+> - * __pm_runtime_disable() is called and power.disable_depth is zero, the
+> - * function will wake up the device before disabling its runtime PM.
+> - */
+>  void __pm_runtime_disable(struct device *dev, bool check_resume)
+>  {
+>         spin_lock_irq(&dev->power.lock);
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -556,11 +556,18 @@
+>   * pm_runtime_disable - Disable runtime PM for a device.
+>   * @dev: Target device.
+>   *
+> - * Prevent the runtime PM framework from working with @dev (by incrementing its
+> - * "blocking" counter).
+> + * Prevent the runtime PM framework from working with @dev by incrementing its
+> + * "disable" counter.
+>   *
+> - * For each invocation of this function for @dev there must be a matching
+> - * pm_runtime_enable() call in order for runtime PM to be enabled for it.
+> + * If the counter is zero when this function runs and there is a pending runtime
+> + * resume request for @dev, it will be resumed.  If the counter is still zero at
+> + * that point, all of the pending runtime PM requests for @dev will be canceled
+> + * and all runtime PM operations in progress involving it will be waited for to
+> + * complete.
+> + *
+> + * For each invocation of this function for @dev, there must be a matching
+> + * pm_runtime_enable() call, so that runtime PM is eventually enabled for it
+> + * again.
+>   */
+>  static inline void pm_runtime_disable(struct device *dev)
+>  {
+>
+>
+>
 
