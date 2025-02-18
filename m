@@ -1,237 +1,179 @@
-Return-Path: <linux-pm+bounces-22287-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22288-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF9F3A392EF
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 06:46:54 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0E790A3938D
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 07:45:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CB7B016E284
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 05:46:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBC3E16831C
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 06:45:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44F771B6D0A;
-	Tue, 18 Feb 2025 05:45:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44A3A1B422A;
+	Tue, 18 Feb 2025 06:45:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="CZ9x+v4b"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Djvu0DZw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-lf1-f44.google.com (mail-lf1-f44.google.com [209.85.167.44])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C2F1A5B8E
-	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 05:45:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 631981E522;
+	Tue, 18 Feb 2025 06:45:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739857552; cv=none; b=NsEu4Way70em2vuCigjZdWtfeN9wyO415f2Ceib5/NqrjCo1Ngf4yZj87WhjcnmZOpzCkeEud3FgBLOvwp8ydYxmMNP/+9h9xl6sqi+Tuh4M3zy9qpopT6Nrek4ipgxRI0Ant6eUXWMpidSy7oAw9xWJ/zkUnqBBeQ86nxpnJ7I=
+	t=1739861128; cv=none; b=OH6xF3nynBFnboMVRI6t2UIgRLhAH+Dn0Qq6i+iWQa33XIahwOiG4UqgT7Ax32O6u+baSvI8nuYoFG4HLzyhRtdMKNXmkS4KP8Vmdg1I+xHbNXkFxkQt5HVRa0i5VqqQj56GYm8eVDeKXnYEaAMY8/zhcTjzc2dpZOqdAwuLqCU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739857552; c=relaxed/simple;
-	bh=L+HA70TVZSbeMdYskL8kC42n8szwtVtfysFxmDVHkKM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=eTVOPsfQHwiNzshKGE8QOY7BXjXpolOyL8bDUKD0ywPhXMDO3Q5/6O3upyaLEHf1hNcyrKhd8DNqHrH1q9zTaKtZ5GhxZcSe3CbBiKyB7LRRHHRgf8TkpupHKidckFsuUN/AlvDeOYwmr9MX3c2ix50SrcuYY6dc/b4Htn7tYMQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=CZ9x+v4b; arc=none smtp.client-ip=209.85.214.173
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-220e83d65e5so77002175ad.1
-        for <linux-pm@vger.kernel.org>; Mon, 17 Feb 2025 21:45:50 -0800 (PST)
+	s=arc-20240116; t=1739861128; c=relaxed/simple;
+	bh=JeV9NGTiS5LreF1qALXiBXoNIsC31R6+99vMmtp8aGA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ctcoQrRl1Z9JB1xuAhCy8Nxa6g9eFogbQbd0KbL8FMVIs+1f+pkkXU8vlGIvllGQLcuyn5kzXtOBKjJVJ2Y3igVqA6OnOQ/JPdyyVHZn8Hsd2bkVsttS0a1+Ka+fFSLVEve0Ogz6il9GTfKjCBhE0ldQo146qr8pQvHEb31ppa4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Djvu0DZw; arc=none smtp.client-ip=209.85.167.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f44.google.com with SMTP id 2adb3069b0e04-543e4bbcd86so5108828e87.1;
+        Mon, 17 Feb 2025 22:45:26 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=google.com; s=20230601; t=1739857550; x=1740462350; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=P3fYbERtYWIWV5Ldhm0+1AIYnN3OdcFMhdr4MubLhJ4=;
-        b=CZ9x+v4bhPl2367Q/xYnwaa+zEHVu9bRrRQ20rGyPNm0lXvfYhm4RvY9zkjkI0lUKu
-         N3wXvTiJJ5BT+19jK7ArVbH1BAzTgenn8OaVdrG0ofb4TViOpxmzjzojVOEGI/rHYlmX
-         orsBKpUh61KMp470Ex7cbmt4OScB9+J8B6/iYHWcYXu1vVPUJWh6lQMPujlfgBR0d13V
-         /FSv6sPDn4H5BwC9EvCiRNnikpV1QyJBAy0YHp4LKIOl1rWT8KC9Gx8o+U6yH837dDRe
-         98sgVzzbEV3izV758Z2IZnV+1EIo7TPjaxKJEAA5RTaGKO1csnoCXEXQiDleWXZ/k7hr
-         GU1A==
+        d=gmail.com; s=20230601; t=1739861124; x=1740465924; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=SqQUy+TmHlIe2lGS+cxMn2E4zLJa5hzyQ87XCzDVJCw=;
+        b=Djvu0DZw2SVxetINmRH7ELr7tv9S30C6IGu62NM7opgmOq2FyM48HYqqRTIQbRXY3+
+         GNHlZd738gs+cfjBxX9z3An1ldynlbvs0amfI7YHQeuXl6n+u1hfPUO9h7Wj7OWUrClV
+         YkD4EiV/Uk/HQjsf/DJMhcz6LEcVHvaA9qZk2QE3ioDFlYIX1hmhhaOqwkFFXkuv/tMi
+         bui4DHm/j35fAt4T2a5DZs1hmGv9EGgSwYrrFVkErK3zaSsW+qElkatZeeJZwDgxkoVx
+         nId2zlM1g9nJvB6oLjyhbWtRG4N59gulkhkOpUFA5B/lIEGyy6ptD/r92foeGAVcLAPn
+         NinA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739857550; x=1740462350;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
+        d=1e100.net; s=20230601; t=1739861124; x=1740465924;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=P3fYbERtYWIWV5Ldhm0+1AIYnN3OdcFMhdr4MubLhJ4=;
-        b=cflblADAGn3QWzkK1/eZV0P8yLjg8FfT/73RmWbfSD4JP1Vd6tH+0l8B2+5LntOkS+
-         DEd4KY+YA+eqPVXaO+tBa2DDmgvn7oApwT+5f5yoB4lixhdjOFmIsyaE6bwry/ujcZC3
-         YfoQNuB+zYmUz7m0/wXE+I70HTTPbmWcR4TcyArINLQ582MYBMVMIcDcKlnCy0/GSAjf
-         Bn/FHsEWWFy2z53cOBamzwaxTqhKjaNVaTJQ8vakMCOf7HPgZS6sRlOdF//bXNfAIRJ3
-         bK+2CyciixiYqfn9TMCg6oj6sG2Eo6LHJpXnqkCnbNmMG1SoHytIL5f6zZnBdbqEa4wN
-         dadQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUcEeqAnoDxeg/c9etCbJHrAYs+bTCOgpC6sXNoajusryu1FJakI7Ma1qeZw8xc/EFjQ6N8T6PNZA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwCSBUHM6d137Fv2L48LEA+B0G+rhXcQCKks5M78bDB9IFkMdvN
-	G+1Enlt+VcPPqmnWjKK+gp8EOhxROTuQpviTwI7X1rtcyeSsNHuaS05W2UG6oQ==
-X-Gm-Gg: ASbGncvEu0FEeQ8qqoRjHbZwrVdmDC7HRExmQ0mtCD6qAH4ugFYo5w/tUwvBqFpyvKn
-	nJp4LntuIwsECg5jqrfmkdQNZOjRRnD0YOMEbG+Ibea0fopSR3TKGzv4t6/ZJ19Y20lhjKpXQ/G
-	b1B3RtS9pMmwizbkXhv1+N3lgwGoPHK8p+P1iE9zMglUrEOw64B9Q2hKYCSaaWi4kRg36xF/SCd
-	M40MZlisIvhcDHCZMall373Ajs4+wpJbyFyblnqtjeMx4r0ExNr6RF20DSlo1PJPwQgAiR0FQ0W
-	AtCOV5zEUeVrT5PI1XJJcG+mIdPqZfvemiruUIlLCZ0CAyBq/94qhGCOdg==
-X-Google-Smtp-Source: AGHT+IH9mb67E80iE2dKITP866mfonSNY51J7MjFAaydvKRMhKMf5Uoax7tn4nwC3ALthMBo2i5EMw==
-X-Received: by 2002:a05:6a21:b93:b0:1ee:cdd1:2fdd with SMTP id adf61e73a8af0-1eecdd14f01mr48697637.16.1739857549554;
-        Mon, 17 Feb 2025 21:45:49 -0800 (PST)
-Received: from google.com (49.156.143.34.bc.googleusercontent.com. [34.143.156.49])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73242546301sm9261922b3a.33.2025.02.17.21.45.46
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 17 Feb 2025 21:45:49 -0800 (PST)
-Date: Tue, 18 Feb 2025 11:15:40 +0530
-From: Ajay Agarwal <ajayagarwal@google.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Brian Norris <briannorris@google.com>, Oliver Neukum <oneukum@suse.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	Vincent Whitchurch <vincent.whitchurch@axis.com>,
-	"jic23@kernel.org" <jic23@kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>,
-	Brian Norris <briannorris@chromium.org>,
-	Joy Chakraborty <joychakr@google.com>,
-	Vamshi Gajjela <vamshigajjela@google.com>,
-	Manu Gautam <manugautam@google.com>
-Subject: Re: PM runtime_error handling missing in many drivers?
-Message-ID: <Z7QehEhw3uM176tW@google.com>
-References: <1937b65c-36c0-5475-c745-d7285d1a6e25@suse.com>
- <CAJZ5v0j0mgOcfKXRzyx12EX8CYLzowXrM8DGCH9XvQGnRNv0iw@mail.gmail.com>
- <5c37ee19-fe2c-fb22-63a2-638e3dab8f7a@suse.com>
- <CAJZ5v0ijy4FG84xk_n8gxR_jS0xao246eVbnFj-dXzwz=8S9NQ@mail.gmail.com>
- <Z6lzWfGbpa7jN1QD@google.com>
- <Z6vNV8dDDPdWUKLS@google.com>
- <CAJZ5v0i83eJWV_kvWxZvja+Js3tKbrwZ8rVVGn7vR=0qLf1mtw@mail.gmail.com>
- <Z7Kx2RN35QVyg8nP@google.com>
- <CAJZ5v0hom5Ex9xCfd_qD7XyFxie1iy2L_T8vDNWF-xBMmq=9aQ@mail.gmail.com>
- <Z7QcjvKRGKgrI8EC@google.com>
+        bh=SqQUy+TmHlIe2lGS+cxMn2E4zLJa5hzyQ87XCzDVJCw=;
+        b=qfBEZj9GaGI8cjOLaoRFjrtz8zIi/bwSD+KLiCxb23PFOx2IH1Rf+OHMl5+F5j5Ux7
+         6nU8dqungxL+OosDwyJvFcbmRXWtL6Q38zO05LkYDmLyR+CrxGr+93jL4g43UMcCmfny
+         LGyCUuYp3XbGWrdsjQL51VQ+AUyzOD+O0SQvcMORjM8KlBr4EGPnV0jTwgbuvyPYMRA5
+         Ha3KgG2bcqgw17oq4G+R8TuIHvEA2F0KML0jbnPYur+Ni8M5Ov3SAcukyOSVJpr0rbiH
+         0yQob5HgZTHNId3LgSf2fcWCY58jgbGoqOAuvclZsUnlL2ACA5qtbnFNW3n80jSgY6xb
+         jqEg==
+X-Forwarded-Encrypted: i=1; AJvYcCU+QXV4m3ez3dUoC2SeWHCLpxcqJpBwaqV8Tfg2eHopBN4RyL20gkmBUr1ZgxiJjL0p3wkKTlt6c/cTX0fxP8w1q+6xDxHR@vger.kernel.org, AJvYcCUbQMLzklNnds7JFWssCGswGuvXTDtRQ3yDYLph+YzwxEypExpMW77uacXVAK+iKwPjOagHAGNLbFos@vger.kernel.org, AJvYcCVA0GnmYKuZ3nq3KN3YcXUCE1X1hLGpOmSLN+PNGppk9jLUSZAYzMjC+MySSKVxwNoOw0TRiixslHoK@vger.kernel.org, AJvYcCXECuciXsZQMl7zJOm0J41J/OLjlGTuAK7kzwlYuwaQMbx6GzwuDjlQyPpyh1xeecSS8p3xPMSbhGA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz+h2tFO7JdJSd7S6nYkzzX5c8stuVlE2x00//uTzczlX1jvsew
+	Z9IKZ2DiIchZmLUNM3g548wVf7g0hUYitTgSBAMcuEeTjN8YhLwiObP/jA==
+X-Gm-Gg: ASbGncsBJJzN0zzlLXRZdVgUWqorCS8ChPMiDToPon23MUug1jTklblhtf7GlgMvheQ
+	SvYn/OYJrP86BaLpo+yN/5367lXsQPrqzYREbhSGyqRI+gVxXy7qvJ7MV5zqY/xf5IIqywulpZa
+	ObO9mFsyyE+fMNW+kv7cfKBUrUyM0+LQBhP/M/J1wTI4PMp2JUBJ9c2AGD2BOO6KEwV5JM0odMn
+	JlEjMrHV4UuWBD+L6rGDGAaTkjde6VFyeDwB528fpA4UWuigJPa4UA4EiQbNbk4/Hiwu9+PTy99
+	FHBqEv3AOtu1CeQQtfz2qMHkAYS4chFtCCH6NVqI7RZds+55gTdHD21K1N2l4Y/mHGV55Dxb
+X-Google-Smtp-Source: AGHT+IEj3If62LMKd4zu2mxufSyaNBZmRoYKgPnZLeAis7jJXTrJ3g3nqNEZsiWpXSyAKIM7D7Y5BQ==
+X-Received: by 2002:a05:6512:3ba9:b0:545:2cf5:dc6c with SMTP id 2adb3069b0e04-5452fe8ff00mr3726297e87.51.1739861124087;
+        Mon, 17 Feb 2025 22:45:24 -0800 (PST)
+Received: from ?IPV6:2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703? ([2a10:a5c0:800d:dd00:8fdf:935a:2c85:d703])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5452de0b2f7sm1330302e87.97.2025.02.17.22.45.22
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 17 Feb 2025 22:45:23 -0800 (PST)
+Message-ID: <48b3e732-b60d-411c-a519-5e89f87eea7d@gmail.com>
+Date: Tue, 18 Feb 2025 08:45:22 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 02/12] reboot: reboot, not shutdown, on
+ hw_protection_reboot timeout
+To: Ahmad Fatoum <a.fatoum@pengutronix.de>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Fabio Estevam
+ <festevam@denx.de>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+ Jonathan Corbet <corbet@lwn.net>, Serge Hallyn <serge@hallyn.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Benson Leung <bleung@chromium.org>, Tzung-Bi Shih <tzungbi@kernel.org>,
+ Guenter Roeck <groeck@chromium.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-doc@vger.kernel.org, linux-security-module@vger.kernel.org,
+ chrome-platform@lists.linux.dev, devicetree@vger.kernel.org,
+ kernel@pengutronix.de
+References: <20250113-hw_protection-reboot-v2-0-161d3fc734f0@pengutronix.de>
+ <20250113-hw_protection-reboot-v2-2-161d3fc734f0@pengutronix.de>
+ <7b6d3226-4422-415a-9146-16c421463ac5@gmail.com>
+ <de781a07-d209-4bbe-8945-efcb4490f604@pengutronix.de>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <de781a07-d209-4bbe-8945-efcb4490f604@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z7QcjvKRGKgrI8EC@google.com>
 
-On Tue, Feb 18, 2025 at 11:07:19AM +0530, Ajay Agarwal wrote:
-> On Mon, Feb 17, 2025 at 09:23:18PM +0100, Rafael J. Wysocki wrote:
-> > On Mon, Feb 17, 2025 at 4:49 AM Ajay Agarwal <ajayagarwal@google.com> wrote:
-> > >
-> > > On Wed, Feb 12, 2025 at 08:29:34PM +0100, Rafael J. Wysocki wrote:
-> > > > On Tue, Feb 11, 2025 at 11:21 PM Brian Norris <briannorris@google.com> wrote:
-> > > > >
-> > > > > Hi Ajay,
-> > > > >
-> > > > > On Mon, Feb 10, 2025 at 09:02:41AM +0530, Ajay Agarwal wrote:
-> > > > > > On Wed, Jul 27, 2022 at 06:31:48PM +0200, Rafael J. Wysocki wrote:
-> > > > > > > On Wed, Jul 27, 2022 at 10:08 AM Oliver Neukum <oneukum@suse.com> wrote:
-> > > > > > > > On 26.07.22 17:41, Rafael J. Wysocki wrote:
-> > > > > > > > > Well, in general suspending or resuming a device is a collaborative
-> > > > > > > > > effort and if one of the pieces falls over, making it work again
-> > > > > > > > > involves fixing up the failing piece and notifying the others that it
-> > > > > > > > > is ready again.  However, that part isn't covered and I'm not sure if
-> > > > > > > > > it can be covered in a sufficiently generic way.
-> > > > > > > >
-> > > > > > > > True. But that still cannot solve the question what is to be done
-> > > > > > > > if error handling fails. Hence my proposal:
-> > > > > > > > - record all failures
-> > > > > > > > - heed the record only when suspending
-> > > > > > >
-> > > > > > > I guess that would boil down to moving the power.runtime_error update
-> > > > > > > from rpm_callback() to rpm_suspend()?
-> > > > > > Resuming this discussion. One of the ways the device drivers are
-> > > > > > clearing the runtime_error flag is by calling pm_runtime_set_suspended
-> > > > > > [1].
-> > > >
-> > > > I personally think that jumping on a 2.5 years old thread is not a
-> > > > good idea.  It would be better to restate the problem statement and
-> > > > provide the link to the previous discussion.
-> > > >
-> > > > > > To me, it feels weird that a device driver calls pm_runtime_set_suspended
-> > > > > > if the runtime_resume() has failed. It should be implied that the device
-> > > > > > is in suspended state if the resume failed.
-> > > > > >
-> > > > > > So how really should the runtime_error flag be cleared? Should there be
-> > > > > > a new API exposed to device drivers for this? Or should we plan for it
-> > > > > > in the framework itself?
-> > > > >
-> > > > > While the API naming is unclear, that's exactly what
-> > > > > pm_runtime_set_suspended() is about. Personally, I find it nice when a
-> > > > > driver adds the comment "clear runtime_error flag", because otherwise
-> > > > > it's not really obvious why a driver has to take care of "suspending"
-> > > > > after a failed resume. But that's not the biggest question here, IMO.
-> > > > >
-> > > > > The real reson I pointed you at this thread was because I think it's
-> > > > > useful to pursue the proposal above: to avoid setting a persistent
-> > > > > "runtime_error" for resume failures. This seems to just create a pitfall
-> > > > > for clients, as asked by Vincent and Oliver upthread.
-> > > > >
-> > > > > And along this line, there are relatively few drivers that actually
-> > > > > bother to reset this error flag ever (e.g., commit f2bc2afe34c1
-> > > > > ("accel/ivpu: Clear runtime_error after pm_runtime_resume_and_get()
-> > > > > fails")).
-> > > > >
-> > > > > So to me, we should simply answer Rafael's question:
-> > > > >
-> > > > > (repeated:)
-> > > > > > > I guess that would boil down to moving the power.runtime_error update
-> > > > > > > from rpm_callback() to rpm_suspend()?
-> > > > >
-> > > > > Yes, I think so. (Although I'm not sure if this leaves undesirable spam
-> > > > > where persistent .runtime_resume() failures occur.)
-> > > > >
-> > > > > ...and then write/test/submit such a patch, provided it achieves the
-> > > > > desired results.
-> > > > >
-> > > > > Unless of course one of the thread participants here has some other
-> > > > > update in the intervening 2.5 years, or if Rafael was simply asking the
-> > > > > above rhetorically, and wasn't actually interested in fielding such a
-> > > > > change.
-> > > >
-> > > > The reason why runtime_error is there is to prevent runtime PM
-> > > > callbacks from being run until something is done about the error,
-> > > > under the assumption that running them in that case may make the
-> > > > problem worse.
-> > > >
-> > > > I'm not sure if I see a substantial difference between suspend and
-> > > > resume in that respect: If any of them fails, the state of the device
-> > > > is kind of unstable.  In particular, if resume fails and the device
-> > > > doesn't actually resume, something needs to be done about it or it
-> > > > just becomes unusable.
-> > > >
-> > > > Now, the way of clearing the error may not be super-convenient, which
-> > > > was a bit hard to figure out upfront, so I'm not against making any
-> > > > changes as long as there are sufficient reasons for making them.
-> > >
-> > > I am thinking if we can start with a change to not check runtime_error
-> > > in rpm_resume, and let it go through even if the previous rpm_resume
-> > > attempt failed. Something like this:
-> > >
-> > > ```
-> > > static int rpm_resume(struct device *dev, int rpmflags)
-> > >         trace_rpm_resume(dev, rpmflags);
-> > >
-> > >   repeat:
-> > > -       if (dev->power.runtime_error) {
-> > > -               retval = -EINVAL;
-> > > -       } else if (dev->power.disable_depth > 0) {
-> > > +       if (dev->power.disable_depth > 0) {
-> > >                 if (dev->power.runtime_status == RPM_ACTIVE &&
-> > >                     dev->power.last_status == RPM_ACTIVE)
-> > >                         retval = 1;
-> > > ```
-> > >
-> > > I think setting the runtime_error in rpm_callback, i.e. for both resume
-> > > and suspend is still a good idea for book-keeping purposes, e.g. the
-> > > user reading the runtime_status of the device from sysfs.
-> > 
-> > What would be the benefit of this change?
-> The benefit would be that the runtime_resume would be re-attempted even if
-> the previous attempt failed.
-Actually, I wanted to propose the removal of `runtime_error` flag
-completely from the code. But it sounded too disruptive to me. Hence, I
-proposed the milder patch of removal of `runtime_error` check from
-rpm_resume so that the drivers do not have to call
-`pm_runtime_set_suspended` explicitly.
+On 17/02/2025 22:22, Ahmad Fatoum wrote:
+> Hello Matti,
+> 
+> On 22.01.25 12:28, Matti Vaittinen wrote:
+>> On 13/01/2025 18:25, Ahmad Fatoum wrote:
+>>> hw_protection_shutdown() will kick off an orderly shutdown and if that
+>>> takes longer than a configurable amount of time, an emergency shutdown
+>>> will occur.
+>>>
+>>> Recently, hw_protection_reboot() was added for those systems that don't
+>>> implement a proper shutdown and are better served by rebooting and
+>>> having the boot firmware worry about doing something about the critical
+>>> condition.
+>>>
+>>> On timeout of the orderly reboot of hw_protection_reboot(), the system
+>>> would go into shutdown, instead of reboot. This is not a good idea, as
+>>> going into shutdown was explicitly not asked for.
+>>>
+>>> Fix this by always doing an emergency reboot if hw_protection_reboot()
+>>> is called and the orderly reboot takes too long.
+>>>
+>>> Fixes: 79fa723ba84c ("reboot: Introduce thermal_zone_device_critical_reboot()")
+>>> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
+>>> ---
+>>>    kernel/reboot.c | 70 ++++++++++++++++++++++++++++++++++++++++-----------------
+>>>    1 file changed, 49 insertions(+), 21 deletions(-)
+>>>
+>>> diff --git a/kernel/reboot.c b/kernel/reboot.c
+>>> index 847ac5d17a659981c6765699eac323f5e87f48c1..222b63dfd31020d0e2bc1b1402dbfa82adc71990 100644
+>>> --- a/kernel/reboot.c
+>>> +++ b/kernel/reboot.c
+>>> @@ -932,48 +932,76 @@ void orderly_reboot(void)
+>>>    }
+>>>    EXPORT_SYMBOL_GPL(orderly_reboot);
+>>>    +static const char *hw_protection_action_str(enum hw_protection_action action)
+>>> +{
+>>> +    switch (action) {
+>>> +    case HWPROT_ACT_SHUTDOWN:
+>>> +        return "shutdown";
+>>> +    case HWPROT_ACT_REBOOT:
+>>> +        return "reboot";
+>>> +    default:
+>>> +        return "undefined";
+>>> +    }
+>>> +}
+>>> +
+>>> +static enum hw_protection_action hw_failure_emergency_action;
+>>
+>> nit: Do we have a (theoretical) possibility that two emergency restarts get scheduled with different actions? Should the action be allocated (maybe not) for each caller, or should there be a check if an operation with conflicting action is already scheduled?
+>>
+>> If this was already considered and thought it is not an issue:
+>>
+>> Reviewed-by: Matti Vaittinen <mazziesaccount@gmail.com>
+> 
+> __hw_protection_trigger (née __hw_protection_shutdown) has this at its start:
+> 
+>   static atomic_t allow_proceed = ATOMIC_INIT(1);
+> 
+>   /* Shutdown should be initiated only once. */
+>   if (!atomic_dec_and_test(&allow_proceed))
+>           return;
+> 
+> It's thus not possible to have a later emergency restart race against the first.
+> 
 
-Basically, we still do not have a good solution for the situation where
-one of the ancestors fails to resume. We do not know how to make the
-ancestor working again. But I guess a re-attempt is better than not
-doing anything about it?
+Ah, indeed. I missed this. Thanks for the clarification! :)
+
+Yours,
+	-- Matti
 
