@@ -1,140 +1,165 @@
-Return-Path: <linux-pm+bounces-22291-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D8434A39542
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 09:27:09 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2C681A399D7
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:04:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 8FD2B7A1FA5
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 08:26:11 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D96987A3FD7
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 11:03:19 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD0C22B5A1;
-	Tue, 18 Feb 2025 08:25:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 33B1223C8A7;
+	Tue, 18 Feb 2025 11:03:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b="Ve8XZR5D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com [209.85.217.41])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail-m49196.qiye.163.com (mail-m49196.qiye.163.com [45.254.49.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 577F21B6D1C;
-	Tue, 18 Feb 2025 08:25:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.217.41
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9D5CB22DFBD;
+	Tue, 18 Feb 2025 11:03:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.254.49.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739867127; cv=none; b=M6ZBw3MSHha5BL6Bly/3kg0zCOKGDfwFQls0HvWT4UmeYp+9kbQFVVLgdEl35kWgE+mAHJ1F1L/UVZo9ERFCCdKpn6aoF4ZisZkXb8KO0R8xackcHnMkVRBcLB04ATyDTAkRM0iYCAJqubSvoS0zkZiRgSR1Z4lYJI4QsZbi/gs=
+	t=1739876637; cv=none; b=ERpO+YmfWn+gi0lG06jeLUp0nrL5XagK3Q+Uwtuw4WT9bbt7wYz1dXxAeXb6dW7CcqKVwTVZs9WU3q3rqmw2+s+Nl13wnVvVSrtOggyR5DE2WVmbUbucU+qaDLFdtY7YRIbBElqY+NNWRhri8xsJcUip2DmiQ2VhrI6Lie6OaXU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739867127; c=relaxed/simple;
-	bh=eKpFWYk9gLsR1VwUPE2StO3ksoQrbMsGjkHO71WMvoQ=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=AITSth1eOC8NVOdGsnJu3PB1MHROdIx4P8nWktAeiG4W+RBm7N/0iOxFLWHcKNwOcjcqQwZJcsZtJij1ftINF5qph7GrBvc/nFJl5URjm9vhoACmV95NhjpW6OE66YXPWHHXmudqqeARnbe1hjBgNRjSiXoYVSKpDL+GvBB3ltw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.217.41
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4be75b2bbceso171881137.1;
-        Tue, 18 Feb 2025 00:25:26 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739867124; x=1740471924;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=cDPxvkilNbMO9E7etRrlexrHd+7C+mRJTRHcVNpSHmo=;
-        b=sJ0Q3Xox/u95WqxVZRxCuS4BC6PSny10ggGyTCVOhkfbc1X4KmGEsAZLqU1odlYy8m
-         g9ieNPkhmZ/lMBvHp5WXRibVjGeua+9jlaDb0p12tLzS4JKbDLCzzSXT1++E3n1ZwslJ
-         4bu1WTNsUegnJYfKujIBpZ87oDJObloHhfMZgIWi/ELUGqRH+qrI2XNylDGqtxbP0T/g
-         exKSordtriNHswhtuWtUFEe7d366rzCp4nn7e10ME9vLTCcdmOyJDaDGXV6SDyGWJRk4
-         ZpyHBJwv3smiDXIXoGXHWbD84oDu06D+k1OK1BC30ljWU3zvF4ej0NoLNUVJ5eaI+Fkg
-         E59A==
-X-Forwarded-Encrypted: i=1; AJvYcCU5Qt2szS09qiQzieG6iWCsFZ3Rf1vxwJfjPNO97xipEzwiBHB0+vxvU42K3Zo5qUj08g8GfjpcU+ZbyAIPtPlRxTc=@vger.kernel.org, AJvYcCWNXq50Z7rHmWKWz3O/uJ9RB/eXqa3yr7HDpsEqvdaUJ81Bru8z9sCi13dr/L6ZCsrmHtqXti/S64U=@vger.kernel.org, AJvYcCWWDlc8zIYvljfpVrGIQXLeZozEpoZdjpILQfEJnXqWc3w+UoGU2RbUaFcwtcNcwqMyY+IEyagdiOac@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz0mQqu78queFB2jV8npYOS/iDogATdPSzAEF+fAym/oVSFs4G3
-	tqbJM3keGQL41jISBlAOePicQ9V8K9+fkpIYznnmC/EWZKesd+Sf1pV+8nIRzto=
-X-Gm-Gg: ASbGnctu2j6XCsVyPrpfFxEHWhgJqx00BQE65mQUsYgDGotN7EW+Dh3dACEiL08/D4Y
-	QAnDOizn8sz/ESwUyxsEBH4IC+CqGiLTWkma/7HTvoZgZYGLE6eLETamUB5YwaRglYwkiuquROz
-	GOG5xdN6avCcrQUp6TiC7bakw1xyxgUSAhcCwnGJOtpsLxI7X1uBAmpU1ON/38M8cwEFEc3kpRv
-	OAKfioUUbAbsErOC3Wg//RHbc4dDIDvGxEvM0TNP2MSjOnosX7xWvIdcVdYSYwpf1q7MLmf9Ge8
-	I00wswNuhNwqW/XVR4rtv4faJ16CtCZ3aEWNZmTRvIwYAy/7qZkl7g==
-X-Google-Smtp-Source: AGHT+IF24tgc8uwn/sK840AKDhGIqFJnaEdfbamqf+EEzCL5YyNsZiYxvqe9r6cOnKJ85VgyvyCngw==
-X-Received: by 2002:a05:6102:c4f:b0:4b2:485b:e151 with SMTP id ada2fe7eead31-4bd3fc9b9fbmr5691529137.10.1739867124544;
-        Tue, 18 Feb 2025 00:25:24 -0800 (PST)
-Received: from mail-vs1-f41.google.com (mail-vs1-f41.google.com. [209.85.217.41])
-        by smtp.gmail.com with ESMTPSA id a1e0cc1a2514c-868e86bce70sm2242220241.27.2025.02.18.00.25.24
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 18 Feb 2025 00:25:24 -0800 (PST)
-Received: by mail-vs1-f41.google.com with SMTP id ada2fe7eead31-4be4de0c038so709494137.0;
-        Tue, 18 Feb 2025 00:25:24 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUNxXRuEibyVgoBByMJxS0ntcvDNt4Ek/tJWeBSznZ2Z3H+7W1MnR9HEg9oWdhGvX+uraZOqRzFThRA@vger.kernel.org, AJvYcCUjQtUg+P6JAy+7zY7BP3sgshwzD8QwWXJrKzBh9VArqXCXAGTa0M463cqESXz7eI+NBO72e7dfouM=@vger.kernel.org, AJvYcCUkgPkooICdn+ufci68XbVk0ShbfewSWB9cn4Sp5cgsAAcILS4zsxt2aJbMJbygB3sGr+/U6xMfvIwt1To+Yt90ZfU=@vger.kernel.org
-X-Received: by 2002:a05:6102:f8a:b0:4b2:adfb:4f91 with SMTP id
- ada2fe7eead31-4bd3fe2a660mr6642224137.21.1739867124064; Tue, 18 Feb 2025
- 00:25:24 -0800 (PST)
+	s=arc-20240116; t=1739876637; c=relaxed/simple;
+	bh=W8pWFn6GOSIb1+YcmK3AKznRs+ASa3pj01Jc6lAvgoc=;
+	h=Message-ID:Date:MIME-Version:Cc:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=Mc08Es5eVv3g6ZwGY3MxWal11/MZFCBI31Q9NK3ua9ynCnF+bwhHyV0M55UhAOpiQ5t+Mg2lbecEkkvh3wl3XYuHPYXcfIJ8x9w+dcB6Daa76UVklJNDx7jth2fCRB+yGvhAgpERfR0wHvcm/8zHupSBkjsoYBY5P4xQJGpwjZ0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com; spf=pass smtp.mailfrom=rock-chips.com; dkim=pass (1024-bit key) header.d=rock-chips.com header.i=@rock-chips.com header.b=Ve8XZR5D; arc=none smtp.client-ip=45.254.49.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=rock-chips.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rock-chips.com
+Received: from [172.16.12.45] (unknown [58.22.7.114])
+	by smtp.qiye.163.com (Hmail) with ESMTP id b572cdb9;
+	Tue, 18 Feb 2025 08:53:36 +0800 (GMT+08:00)
+Message-ID: <fa184920-e1f5-4eee-894a-f617e6d8e817@rock-chips.com>
+Date: Tue, 18 Feb 2025 08:53:36 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <cover.1728377971.git.geert+renesas@glider.be>
-In-Reply-To: <cover.1728377971.git.geert+renesas@glider.be>
-From: Geert Uytterhoeven <geert@linux-m68k.org>
-Date: Tue, 18 Feb 2025 09:25:12 +0100
-X-Gmail-Original-Message-ID: <CAMuHMdX6CBXuKn8bk9y=YpYyD6tCE8fSbQJBns=1aO6uG1_irQ@mail.gmail.com>
-X-Gm-Features: AWEUYZkUFoq6t5-uqY2bkFLs-5l0x0T4E_EBgtc_8teNEaiiojRb2XaDjcZj1a8
-Message-ID: <CAMuHMdX6CBXuKn8bk9y=YpYyD6tCE8fSbQJBns=1aO6uG1_irQ@mail.gmail.com>
-Subject: Re: [PATCH/RFC 0/2] arm64: dts: renesas: Re-add voltages to OPP tables
-To: Geert Uytterhoeven <geert+renesas@glider.be>
-Cc: Lukasz Luba <lukasz.luba@arm.com>, Magnus Damm <magnus.damm@gmail.com>, 
-	Kuninori Morimoto <kuninori.morimoto.gx@renesas.com>, 
-	Lad Prabhakar <prabhakar.mahadev-lad.rj@bp.renesas.com>, linux-pm@vger.kernel.org, 
-	linux-renesas-soc@vger.kernel.org, devicetree@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Cc: shawn.lin@rock-chips.com,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Alim Akhtar <alim.akhtar@samsung.com>, Avri Altman <avri.altman@wdc.com>,
+ Bart Van Assche <bvanassche@acm.org>, YiFeng Zhao <zyf@rock-chips.com>,
+ Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org,
+ linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org,
+ linux-pm@vger.kernel.org, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, "Rafael J . Wysocki"
+ <rafael@kernel.org>, "Martin K . Petersen" <martin.petersen@oracle.com>,
+ "James E . J . Bottomley" <James.Bottomley@hansenpartnership.com>,
+ Rob Herring <robh+dt@kernel.org>
+Subject: Re: [PATCH v7 4/7] pmdomain: rockchip: Add smc call to inform
+ firmware
+To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Steven Price <steven.price@arm.com>, Ulf Hansson <ulf.hansson@linaro.org>
+References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+ <2579724.BzM5BlMlMQ@diego> <321804ef-f852-47cf-afd7-723666ec8f62@arm.com>
+ <5649637.F8r316W7xa@diego>
+Content-Language: en-GB
+From: Shawn Lin <shawn.lin@rock-chips.com>
+In-Reply-To: <5649637.F8r316W7xa@diego>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
+X-HM-Spam-Status: e1kfGhgUHx5ZQUpXWQgPGg8OCBgUHx5ZQUlOS1dZFg8aDwILHllBWSg2Ly
+	tZV1koWUFDSUNOT01LS0k3V1ktWUFJV1kPCRoVCBIfWUFZQx9LQlYYGU5KHhgeSktLHR9WFRQJFh
+	oXVRMBExYaEhckFA4PWVdZGBILWUFZTkNVSUlVTFVKSk9ZV1kWGg8SFR0UWUFZT0tIVUpLSU9PT0
+	hVSktLVUpCS0tZBg++
+X-HM-Tid: 0a95168bd0e409cckunmb572cdb9
+X-HM-MType: 1
+X-HM-Sender-Digest: e1kMHhlZQR0aFwgeV1kSHx4VD1lBWUc6MDo6TRw*ODITSjZJGRk2DQo*
+	DwgwCUhVSlVKTEhCQ09LS0pDSEtIVTMWGhIXVQgTGgwVVRcSFTsJFBgQVhgTEgsIVRgUFkVZV1kS
+	C1lBWU5DVUlJVUxVSkpPWVdZCAFZQUlDTEM3Bg++
+DKIM-Signature:a=rsa-sha256;
+	b=Ve8XZR5DdhdutJmoUm52Yn9KDM9ybUQ8SwL+Jxe+GSWRuJn8fLb8iXr4M2wgSYMy7Axp7IOF9+N8gGeAgnA4qLVR5JLHsWbJ3xNcMzp3M6/IbTXG6V2K7kHQKClEJYn/UuF5bVp7+/zXpmfuDZ6awLPTlPdTjkhRz6DezIVQroI=; c=relaxed/relaxed; s=default; d=rock-chips.com; v=1;
+	bh=nYvAkn0k92xwOq7XB0RP+2OYSTXGGG+F1f9pneUsAuI=;
+	h=date:mime-version:subject:message-id:from;
 
-On Tue, 8 Oct 2024 at 11:14, Geert Uytterhoeven <geert+renesas@glider.be> wrote:
-> When CONFIG_ENERGY_MODEL=y, an error is printed on RZ/G2E and R-Car E3:
->
->     cpu cpu0: EM: invalid perf. state: -22
->
-> This happens because the Operating Points Parameters tables do not list
-> voltages, as they are all identical.  Previously, it was assumed they
-> were optional, and unused, when none of the CPU nodes is tied to a
-> regulator using the "cpu-supply" property.  This assumption turned out
-> to be incorrect, causing the reported error message.
->
-> This RFC patch series fixes this by adding the missing voltages.
->
-> Note that the Energy Model calculates energy efficiency by dividing the
-> (estimated) CPU power consumption by CPU core clock frequency.  When all
-> voltages have the same value, the former is proportional to clock
-> frequency, and energy efficiency becomes a constant.  Hence all
-> operating points are considered to have the same efficiency, and the
-> Energy Model always picks the one with the highest clock rate (see also
-> [1]).
->
-> Alternatively, the Energy Model could be changed to silently ignore OPP
-> tables with missing frequencies.  IMHO this is not an unusual case.
->
-> Which approach should be taken?
-> Thanks for your comments!
->
-> [1] "PM: EM: Question Potential Issue with EM and OPP Table in cpufreq
->      ondemand Governor"
->     https://lore.kernel.org/all/a2ca883e-122e-43a1-b377-c43956b5b3be@arm.com
->
-> Geert Uytterhoeven (2):
->   arm64: dts: renesas: r8a774c0: Re-add voltages to OPP table
->   arm64: dts: renesas: r8a77990: Re-add voltages to OPP table
->
->  arch/arm64/boot/dts/renesas/r8a774c0.dtsi | 3 +++
->  arch/arm64/boot/dts/renesas/r8a77990.dtsi | 3 +++
->  2 files changed, 6 insertions(+)
+Hi Heiko, Steven
 
-Queuing in renesas-devel for v6.15.
-This can be replaced by an alternative solution later...
+在 2025/2/18 4:50, Heiko Stübner 写道:
+> Am Montag, 17. Februar 2025, 18:10:32 MEZ schrieb Steven Price:
+>> On 17/02/2025 15:16, Heiko Stübner wrote:
+>>> Hi Steven,
+>>>
+>>> Am Montag, 17. Februar 2025, 15:47:21 MEZ schrieb Steven Price:
+>>>> On 05/02/2025 06:15, Shawn Lin wrote:
+>>>>> Inform firmware to keep the power domain on or off.
+>>>>>
+>>>>> Suggested-by: Ulf Hansson <ulf.hansson@linaro.org>
+>>>>> Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+>>>>> ---
+>>>>
+>>>> This patch is causing my Firefly RK3288 to fail to boot, it hangs
+>>>> shortly after reaching user space, but the bootup messages include the
+>>>> suspicious line "Bad mode in prefetch abort handler detected".
+>>>> I suspect the firmware on this board doesn't support this new SMC
+>>>> correctly. Reverting this patch on top of linux-next gets everything
+>>>> working again.
+>>>
+>>> Is your board actually running some trusted firmware?
+>>
+>> Not as far as I know.
+>>
+>>> Stock rk3288 never had tf-a / psci [0], I did work on that for a while,
+>>> but don't think that ever took off.
+>>>
+>>> I'm wondering who the smcc call is calling, but don't know about
+>>> about smcc stuff.
+>>
+>> Good question - it's quite possible things are blowing up just because
+>> there's nothing there to handle the SMC. My DTB is as upstream:
+>>
+>>          cpus {
+>>                  #address-cells = <0x01>;
+>>                  #size-cells = <0x00>;
+>>                  enable-method = "rockchip,rk3066-smp";
+>>                  rockchip,pmu = <0x06>;
+>>
+>> I haven't investigated why this code is attempting to call an SMC on
+>> this board.
+> 
+> I guess the why is easy, something to do with suspend :-) .
+> 
+> I did go testing a bit, booting a rk3288-veyron produces the same issue
+> you saw, likely due to the non-existent trusted-firmware.
+> 
+> On the arm64-side, I tried a plethora of socs + tfa-versions,
+> 
+>    rk3328: v2.5 upstream(?)-tf-a
+>    rk3399: v2.9 upstream-tf-a
+>    px30: v2.4+v2.9 upstream-tf-a
+>    rk3568: v2.3 vendor-tf-a
+>    rk3588: v2.3 vendor-tf-a
+> 
+> and all ran just fine.
+> So it really looks like the smcc call going to some unset location is
+> the culprit.
+> 
+> Looking at other users of arm_smcc_smc, most of them seem to be handled
+> unguarded, but some older(?) arm32 boards actually check their DTs for an
+> optee node before trying their smc-call.
+> 
+> I guess in the pm-domain case, we could just wrap the call with:
+> 	if(arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_NONE)
+> 
 
-Gr{oetje,eeting}s,
+Thanks for the report and helping find out the cause!
 
-                        Geert
+@Ulf, if the solution above seems reasonable to you, I can cook a fix-up
+patch.
 
--- 
-Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+> I've checked in my boards now, and all the boards mentioned above seem
+> to handle this well with smccc-versions of at least 0x10002 .
+> 
+> Heiko
+> 
+> 
+> 
 
-In personal conversations with technical people, I call myself a hacker. But
-when I'm talking to journalists I just say "programmer" or something like that.
-                                -- Linus Torvalds
 
