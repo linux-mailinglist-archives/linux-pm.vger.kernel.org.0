@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-22327-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22328-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7586AA3A6FC
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:11:25 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50D78A3A6FF
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:11:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 894F5164AC1
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 19:10:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8ED9E169034
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 19:10:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2F933272932;
-	Tue, 18 Feb 2025 19:08:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66803274262;
+	Tue, 18 Feb 2025 19:09:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BF2QN15l"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ArCDJ5eQ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F41C3272926;
-	Tue, 18 Feb 2025 19:08:58 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3536E274258;
+	Tue, 18 Feb 2025 19:09:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739905739; cv=none; b=HZT5IlIvp5P5KjnOrEXIQUlJE86U2zwwRNJmPoPzuHq2QoU4dknc5PSJlPEk4/aBPjf9KmF9Ww5DxlatGxM5/Wd+FdccFfUVYdr5Qgh/f7XSGzQyOt+xhMP1hAK25RXyA8Pv9/06702oCgYB3lL7FqPRbCoDv6gZCU9RPhfEYp8=
+	t=1739905741; cv=none; b=rw3hYoXFPhmA8OCI+GaZ5UCuIsrj+ejkTglECln0QNsEh1qd1v/O08PCx0ERhcPF0OCmvOtwIbjJcmUROHM7Fv6xY25i7cTKH7Sg0amQ55whePFGwtAsjZ+nKit6nQun8jTeQBw+P5a3ONck4zBrYaRQH/QVLINd5bnbUc4DMGQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739905739; c=relaxed/simple;
-	bh=uwwTkTGlwUrQLWFB8Pyu0IEyDwGC6eMfN5MTKok5eqM=;
+	s=arc-20240116; t=1739905741; c=relaxed/simple;
+	bh=6sI0GRW/qnQOu2y/XnVKfxVu+sKklHKajvLwOtU484E=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Fjj1Di/20hje+zdP2LWhpwfAGWTtOILZpKJ3bg2lGsOHn1EjVhGkjP6X34uEpA6Xt8mWy4WYJS8ZiIJV57vYbL/445gq6Zv9XTm3wq0Ksh+OXDg/bNaQ1ihONQbZ7c8TRdYJlsPtF/excIeZXCR072ebUSZg823AETu3mKU604Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BF2QN15l; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 837ABC4CEEE;
-	Tue, 18 Feb 2025 19:08:56 +0000 (UTC)
+	 MIME-Version:Content-Type; b=JCEkmGzrYLr2UIbMAPqsz39kEwfPkzRVCMMTRSq6I85Kg3W2EfAyjHdaluRbbaES2Ux+7vPp4VxAP6XL741syXP8F/HBcl1B3gI5R8EFa7tGb3mno+bUGZHbXDmIkQw/smJXaSEjUqPhb0Nq7pXkAql7IQFsyN9OkVG7fzmiEyM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ArCDJ5eQ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id B126EC4CEE4;
+	Tue, 18 Feb 2025 19:08:58 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739905738;
-	bh=uwwTkTGlwUrQLWFB8Pyu0IEyDwGC6eMfN5MTKok5eqM=;
+	s=k20201202; t=1739905740;
+	bh=6sI0GRW/qnQOu2y/XnVKfxVu+sKklHKajvLwOtU484E=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=BF2QN15lofAQwOE2YhxCEQXO1stwlle8Lzn9p5g2/USeH4atSqpsiIJuiwkmO2g3/
-	 cFzVcjPAnug1bKkimmoB5obfwhSbrWrv+SKDUssrCRPCqeS3tqCCc5FYVrt+l7OOQR
-	 GOB3Cg5xADlgjQU0Qfb2ClMc3YIlxDKjnn0y6KE3DX3l6U2xDcUp+S53nL5LhiVrJ3
-	 0WlcukFoBROwQ2qyLL5I97mbXKnIGZJmBjHZFpIKufH4fNnKXRnupj4NUBWzbi9IOt
-	 Y9r7xDTV60xmY7ZrcQy4ce/sVMWlPwmPGZfO6Jvns7UvFYoTGio98pm717rZBhg8sl
-	 Xo31PrYkAFLQg==
+	b=ArCDJ5eQc22nv4zcxRxmpRnL0kttAAZBudyEvitqJBcBzuhXX+L4F5lhZDcolI/zO
+	 k69rzejJ2hcxXEvOnsXS5ty5w8MgRrB3Ez24CnsVt/VMp+znGLG6/tPe+QTCaeAGru
+	 /Ay/HBjnTsIZlDSK/W/5zxRxFq7oKyNL9RbOwnsi4nsKBMoJ+9oMHg1Yfnp55E34fi
+	 3OErkO/AtU4T9EQ/jOVIHMO+QFdg7BxofSwYZ06HshCLCuOc2vcoWkOD5YcBe+inek
+	 B8BtEjfJxR5VyJanGq139MMqDiprT6bB5RmFyKIO1AD377gDLSaZzIwKnQWpT9Wx2N
+	 d5qUasYiYFeVA==
 From: Mario Limonciello <superm1@kernel.org>
 To: Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
@@ -61,11 +61,10 @@ Cc: Mario Limonciello <mario.limonciello@amd.com>,
 	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
 	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
 	linux-pm@vger.kernel.org (open list:AMD PSTATE DRIVER),
-	Perry Yuan <Perry.Yuan@amd.com>,
-	Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Subject: [PATCH v8 04/13] platform/x86: hfi: Introduce AMD Hardware Feedback Interface Driver
-Date: Tue, 18 Feb 2025 13:08:13 -0600
-Message-ID: <20250218190822.1039982-5-superm1@kernel.org>
+	Perry Yuan <Perry.Yuan@amd.com>
+Subject: [PATCH v8 05/13] platform/x86: hfi: parse CPU core ranking data from shared memory
+Date: Tue, 18 Feb 2025 13:08:14 -0600
+Message-ID: <20250218190822.1039982-6-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250218190822.1039982-1-superm1@kernel.org>
 References: <20250218190822.1039982-1-superm1@kernel.org>
@@ -75,290 +74,310 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
 From: Perry Yuan <Perry.Yuan@amd.com>
 
-The AMD Heterogeneous core design and Hardware Feedback Interface (HFI)
-provide behavioral classification and a dynamically updated ranking table
-for the scheduler to use when choosing cores for tasks.
+When `amd_hfi` driver is loaded, it will use PCCT subspace type 4 table
+to retrieve the shared memory address which contains the CPU core ranking
+table. This table includes a header that specifies the number of ranking
+data entries to be parsed and rank each CPU core with the Performance and
+Energy Efficiency capability as implemented by the CPU power management
+firmware.
 
-There are two CPU core types defined: `Classic Core` and `Dense Core`.
-"Classic" cores are the standard performance cores, while "Dense" cores
-are optimized for area and efficiency.
+Once the table has been parsed, each CPU is assigned a ranking score
+within its class. Subsequently, when the scheduler selects cores, it
+chooses from the ranking list based on the assigned scores in each class,
+thereby ensuring the optimal selection of CPU cores according to their
+predefined classifications and priorities.
 
-Heterogeneous compute refers to CPU implementations that are comprised
-of more than one architectural class, each with two capabilities. This
-means each CPU reports two separate capabilities: "perf" and "eff".
-
-Each capability lists all core ranking numbers between 0 and 255, where
-a higher number represents a higher capability.
-
-Heterogeneous systems can also extend to more than two architectural
-classes.
-
-The purpose of the scheduling feedback mechanism is to provide information
-to the operating system scheduler in real time, allowing the scheduler to
-direct threads to the optimal core during task scheduling.
-
-All core ranking data are provided by the PMFW via a shared memory ranking
-table, which the driver reads and uses to update core capabilities to the
-scheduler. When the hardware updates the table, it generates a platform
-interrupt to notify the OS to read the new ranking table.
-
-Link: https://bugzilla.kernel.org/show_bug.cgi?id=206537
-Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-Reviewed-by: Shyam Sundar S K <Shyam-sundar.S-k@amd.com>
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
+Reviewed-by: Ilpo Järvinen <ilpo.jarvinen@linux.intel.com>
+Signed-off-by: Perry Yuan <Perry.Yuan@amd.com>
 Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-v8:
- * s,devm_kzalloc,devm_kcalloc,
- * fold newlines from patch 5 into this patch
- * Drop ->cpu member, push to later patch
+v3:
+ * Reverse xmas tree order in amd_hfi_fill_metadata()
  * s,for_each_present_cpu,for_each_possible_cpu,
-v7:
- * Adjust Kconfig to 80 characters
+v2:
+ * Drop __packed
 ---
- drivers/platform/x86/amd/Kconfig      |   1 +
- drivers/platform/x86/amd/Makefile     |   1 +
- drivers/platform/x86/amd/hfi/Kconfig  |  20 ++++
- drivers/platform/x86/amd/hfi/Makefile |   7 ++
- drivers/platform/x86/amd/hfi/hfi.c    | 162 ++++++++++++++++++++++++++
- 5 files changed, 191 insertions(+)
- create mode 100644 drivers/platform/x86/amd/hfi/Kconfig
- create mode 100644 drivers/platform/x86/amd/hfi/Makefile
- create mode 100644 drivers/platform/x86/amd/hfi/hfi.c
+ drivers/platform/x86/amd/hfi/hfi.c | 194 +++++++++++++++++++++++++++++
+ 1 file changed, 194 insertions(+)
 
-diff --git a/drivers/platform/x86/amd/Kconfig b/drivers/platform/x86/amd/Kconfig
-index c3e086ea64fc6..589d61ebf726b 100644
---- a/drivers/platform/x86/amd/Kconfig
-+++ b/drivers/platform/x86/amd/Kconfig
-@@ -6,6 +6,7 @@
- source "drivers/platform/x86/amd/hsmp/Kconfig"
- source "drivers/platform/x86/amd/pmf/Kconfig"
- source "drivers/platform/x86/amd/pmc/Kconfig"
-+source "drivers/platform/x86/amd/hfi/Kconfig"
- 
- config AMD_3D_VCACHE
- 	tristate "AMD 3D V-Cache Performance Optimizer Driver"
-diff --git a/drivers/platform/x86/amd/Makefile b/drivers/platform/x86/amd/Makefile
-index 56f62fc9c97b4..c50e93c3334cf 100644
---- a/drivers/platform/x86/amd/Makefile
-+++ b/drivers/platform/x86/amd/Makefile
-@@ -10,3 +10,4 @@ obj-$(CONFIG_AMD_PMC)		+= pmc/
- obj-$(CONFIG_AMD_HSMP)		+= hsmp/
- obj-$(CONFIG_AMD_PMF)		+= pmf/
- obj-$(CONFIG_AMD_WBRF)		+= wbrf.o
-+obj-$(CONFIG_AMD_HFI)		+= hfi/
-diff --git a/drivers/platform/x86/amd/hfi/Kconfig b/drivers/platform/x86/amd/hfi/Kconfig
-new file mode 100644
-index 0000000000000..532939eb08a6a
---- /dev/null
-+++ b/drivers/platform/x86/amd/hfi/Kconfig
-@@ -0,0 +1,20 @@
-+# SPDX-License-Identifier: GPL-2.0-only
-+#
-+# AMD Hardware Feedback Interface Driver
-+#
-+
-+config AMD_HFI
-+	bool "AMD Hetero Core Hardware Feedback Driver"
-+	depends on ACPI
-+	depends on CPU_SUP_AMD
-+	help
-+	 Select this option to enable the AMD Heterogeneous Core Hardware
-+	 Feedback Interface. If selected, hardware provides runtime thread
-+	 classification guidance to the operating system on the performance and
-+	 energy efficiency capabilities of each heterogeneous CPU core. These
-+	 capabilities may vary due to the inherent differences in the core types
-+	 and can also change as a result of variations in the operating
-+	 conditions of the system such as power and thermal limits. If selected,
-+	 the kernel relays updates in heterogeneous CPUs' capabilities to
-+	 userspace, allowing for more optimal task scheduling and resource
-+	 allocation, leveraging the diverse set of cores available.
-diff --git a/drivers/platform/x86/amd/hfi/Makefile b/drivers/platform/x86/amd/hfi/Makefile
-new file mode 100644
-index 0000000000000..672c6ac106e95
---- /dev/null
-+++ b/drivers/platform/x86/amd/hfi/Makefile
-@@ -0,0 +1,7 @@
-+# SPDX-License-Identifier: GPL-2.0
-+#
-+# AMD Hardware Feedback Interface Driver
-+#
-+
-+obj-$(CONFIG_AMD_HFI) += amd_hfi.o
-+amd_hfi-objs := hfi.o
 diff --git a/drivers/platform/x86/amd/hfi/hfi.c b/drivers/platform/x86/amd/hfi/hfi.c
-new file mode 100644
-index 0000000000000..426f7e520b76c
---- /dev/null
+index 426f7e520b76c..7ab7ae0ec72ca 100644
+--- a/drivers/platform/x86/amd/hfi/hfi.c
 +++ b/drivers/platform/x86/amd/hfi/hfi.c
-@@ -0,0 +1,162 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+/*
-+ * AMD Hardware Feedback Interface Driver
-+ *
-+ * Copyright (C) 2024 Advanced Micro Devices, Inc. All Rights Reserved.
-+ *
-+ * Authors: Perry Yuan <Perry.Yuan@amd.com>
-+ *          Mario Limonciello <mario.limonciello@amd.com>
-+ */
+@@ -18,22 +18,72 @@
+ #include <linux/io.h>
+ #include <linux/kernel.h>
+ #include <linux/module.h>
++#include <linux/mailbox_client.h>
+ #include <linux/mutex.h>
++#include <linux/percpu-defs.h>
+ #include <linux/platform_device.h>
+ #include <linux/smp.h>
++#include <linux/topology.h>
++#include <linux/workqueue.h>
 +
-+#define pr_fmt(fmt)  "amd-hfi: " fmt
++#include <asm/cpu_device_id.h>
 +
-+#include <linux/acpi.h>
-+#include <linux/cpu.h>
-+#include <linux/cpumask.h>
-+#include <linux/gfp.h>
-+#include <linux/init.h>
-+#include <linux/io.h>
-+#include <linux/kernel.h>
-+#include <linux/module.h>
-+#include <linux/mutex.h>
-+#include <linux/platform_device.h>
-+#include <linux/smp.h>
-+
-+#define AMD_HFI_DRIVER		"amd_hfi"
-+
-+#define AMD_HETERO_CPUID_27	0x80000027
-+
-+static struct platform_device *device;
-+
-+struct amd_hfi_data {
-+	const char	*name;
-+	struct device	*dev;
-+	struct mutex	lock;
-+};
-+
-+struct amd_hfi_classes {
-+	u32	perf;
-+	u32	eff;
-+};
-+
++#include <acpi/pcc.h>
++#include <acpi/cppc_acpi.h>
+ 
+ #define AMD_HFI_DRIVER		"amd_hfi"
++#define AMD_HFI_MAILBOX_COUNT		1
++#define AMD_HETERO_RANKING_TABLE_VER	2
+ 
+ #define AMD_HETERO_CPUID_27	0x80000027
+ 
+ static struct platform_device *device;
+ 
 +/**
-+ * struct amd_hfi_cpuinfo - HFI workload class info per CPU
-+ * @cpu:		cpu index
-+ * @class_index:	workload class ID index
-+ * @nr_class:		max number of workload class supported
-+ * @amd_hfi_classes:	current cpu workload class ranking data
++ * struct amd_shmem_info - Shared memory table for AMD HFI
 + *
-+ * Parameters of a logical processor linked with hardware feedback class
++ * @header:	The PCCT table header including signature, length flags and command.
++ * @version_number:		Version number of the table
++ * @n_logical_processors:	Number of logical processors
++ * @n_capabilities:		Number of ranking dimensions (performance, efficiency, etc)
++ * @table_update_context:	Command being sent over the subspace
++ * @n_bitmaps:			Number of 32-bit bitmaps to enumerate all the APIC IDs
++ *				This is based on the maximum APIC ID enumerated in the system
++ * @reserved:			24 bit spare
++ * @table_data:			Bit Map(s) of enabled logical processors
++ *				Followed by the ranking data for each logical processor
 + */
-+struct amd_hfi_cpuinfo {
-+	int		cpu;
-+	s16		class_index;
-+	u8		nr_class;
-+	struct amd_hfi_classes	*amd_hfi_classes;
++struct amd_shmem_info {
++	struct acpi_pcct_ext_pcc_shared_memory header;
++	u32	version_number		:8,
++		n_logical_processors	:8,
++		n_capabilities		:8,
++		table_update_context	:8;
++	u32	n_bitmaps		:8,
++		reserved		:24;
++	u32	table_data[];
 +};
 +
-+static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) = {.class_index = -1};
+ struct amd_hfi_data {
+ 	const char	*name;
+ 	struct device	*dev;
+ 	struct mutex	lock;
 +
-+static int amd_hfi_alloc_class_data(struct platform_device *pdev)
++	/* PCCT table related*/
++	struct pcc_mbox_chan	*pcc_chan;
++	void __iomem		*pcc_comm_addr;
++	struct acpi_subtable_header	*pcct_entry;
++	struct amd_shmem_info	*shmem;
+ };
+ 
++/**
++ * struct amd_hfi_classes - HFI class capabilities per CPU
++ * @perf:	Performance capability
++ * @eff:	Power efficiency capability
++ *
++ * Capabilities of a logical processor in the ranking table. These capabilities
++ * are unitless and specific to each HFI class.
++ */
+ struct amd_hfi_classes {
+ 	u32	perf;
+ 	u32	eff;
+@@ -42,21 +92,103 @@ struct amd_hfi_classes {
+ /**
+  * struct amd_hfi_cpuinfo - HFI workload class info per CPU
+  * @cpu:		cpu index
++ * @apic_id:		apic id of the current cpu
+  * @class_index:	workload class ID index
+  * @nr_class:		max number of workload class supported
++ * @ipcc_scores:	ipcc scores for each class
+  * @amd_hfi_classes:	current cpu workload class ranking data
+  *
+  * Parameters of a logical processor linked with hardware feedback class
+  */
+ struct amd_hfi_cpuinfo {
+ 	int		cpu;
++	u32		apic_id;
+ 	s16		class_index;
+ 	u8		nr_class;
++	int		*ipcc_scores;
+ 	struct amd_hfi_classes	*amd_hfi_classes;
+ };
+ 
+ static DEFINE_PER_CPU(struct amd_hfi_cpuinfo, amd_hfi_cpuinfo) = {.class_index = -1};
+ 
++static int find_cpu_index_by_apicid(unsigned int target_apicid)
 +{
-+	struct amd_hfi_cpuinfo *hfi_cpuinfo;
-+	struct device *dev = &pdev->dev;
-+	int idx;
-+	int nr_class_id;
++	int cpu_index;
 +
-+	nr_class_id = cpuid_eax(AMD_HETERO_CPUID_27);
-+	if (nr_class_id < 0 || nr_class_id > 255) {
-+		dev_err(dev, "failed to get number of supported classes: %d\n",
-+			nr_class_id);
++	for_each_possible_cpu(cpu_index) {
++		struct cpuinfo_x86 *info = &cpu_data(cpu_index);
++
++		if (info->topo.apicid == target_apicid) {
++			pr_debug("match APIC id %d for CPU index: %d\n",
++				 info->topo.apicid, cpu_index);
++			return cpu_index;
++		}
++	}
++
++	return -ENODEV;
++}
++
++static int amd_hfi_fill_metadata(struct amd_hfi_data *amd_hfi_data)
++{
++	struct acpi_pcct_ext_pcc_slave *pcct_ext =
++		(struct acpi_pcct_ext_pcc_slave *)amd_hfi_data->pcct_entry;
++	void __iomem *pcc_comm_addr;
++
++	pcc_comm_addr = acpi_os_ioremap(amd_hfi_data->pcc_chan->shmem_base_addr,
++					amd_hfi_data->pcc_chan->shmem_size);
++	if (!pcc_comm_addr) {
++		pr_err("failed to ioremap PCC common region mem\n");
++		return -ENOMEM;
++	}
++
++	memcpy_fromio(amd_hfi_data->shmem, pcc_comm_addr, pcct_ext->length);
++	iounmap(pcc_comm_addr);
++
++	if (amd_hfi_data->shmem->header.signature != PCC_SIGNATURE) {
++		pr_err("invalid signature in shared memory\n");
++		return -EINVAL;
++	}
++	if (amd_hfi_data->shmem->version_number != AMD_HETERO_RANKING_TABLE_VER) {
++		pr_err("invalid version %d\n", amd_hfi_data->shmem->version_number);
 +		return -EINVAL;
 +	}
 +
-+	for_each_possible_cpu(idx) {
-+		struct amd_hfi_classes *classes;
++	for (unsigned int i = 0; i < amd_hfi_data->shmem->n_bitmaps; i++) {
++		u32 bitmap = amd_hfi_data->shmem->table_data[i];
 +
-+		classes = devm_kcalloc(dev,
-+				       nr_class_id,
-+				       sizeof(struct amd_hfi_classes),
-+				       GFP_KERNEL);
-+		if (!classes)
-+			return -ENOMEM;
-+		hfi_cpuinfo = per_cpu_ptr(&amd_hfi_cpuinfo, idx);
-+		hfi_cpuinfo->amd_hfi_classes = classes;
-+		hfi_cpuinfo->nr_class = nr_class_id;
++		for (unsigned int j = 0; j < BITS_PER_TYPE(u32); j++) {
++			int apic_id = i * BITS_PER_TYPE(u32) + j;
++			struct amd_hfi_cpuinfo *info;
++			int cpu_index;
++
++			if (!(bitmap & BIT(j)))
++				continue;
++
++			cpu_index = find_cpu_index_by_apicid(apic_id);
++			if (cpu_index < 0) {
++				pr_warn("APIC ID %d not found\n", apic_id);
++				continue;
++			}
++
++			info = per_cpu_ptr(&amd_hfi_cpuinfo, cpu_index);
++			info->apic_id = apic_id;
++
++			/* Fill the ranking data for each logical processor */
++			info = per_cpu_ptr(&amd_hfi_cpuinfo, cpu_index);
++			for (unsigned int k = 0; k < info->nr_class; k++) {
++				u32 *table = amd_hfi_data->shmem->table_data +
++					     amd_hfi_data->shmem->n_bitmaps +
++					     i * info->nr_class;
++
++				info->amd_hfi_classes[k].eff = table[apic_id + 2 * k];
++				info->amd_hfi_classes[k].perf = table[apic_id + 2 * k + 1];
++			}
++		}
 +	}
 +
 +	return 0;
 +}
 +
-+static const struct acpi_device_id amd_hfi_platform_match[] = {
-+	{"AMDI0104", 0},
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(acpi, amd_hfi_platform_match);
-+
-+static int amd_hfi_probe(struct platform_device *pdev)
+ static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+ {
+ 	struct amd_hfi_cpuinfo *hfi_cpuinfo;
+@@ -73,6 +205,7 @@ static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+ 
+ 	for_each_possible_cpu(idx) {
+ 		struct amd_hfi_classes *classes;
++		int *ipcc_scores;
+ 
+ 		classes = devm_kcalloc(dev,
+ 				       nr_class_id,
+@@ -80,14 +213,71 @@ static int amd_hfi_alloc_class_data(struct platform_device *pdev)
+ 				       GFP_KERNEL);
+ 		if (!classes)
+ 			return -ENOMEM;
++		ipcc_scores = devm_kcalloc(dev, nr_class_id, sizeof(int), GFP_KERNEL);
++		if (!ipcc_scores)
++			return -ENOMEM;
+ 		hfi_cpuinfo = per_cpu_ptr(&amd_hfi_cpuinfo, idx);
+ 		hfi_cpuinfo->amd_hfi_classes = classes;
++		hfi_cpuinfo->ipcc_scores = ipcc_scores;
+ 		hfi_cpuinfo->nr_class = nr_class_id;
+ 	}
+ 
+ 	return 0;
+ }
+ 
++static int amd_hfi_metadata_parser(struct platform_device *pdev,
++				   struct amd_hfi_data *amd_hfi_data)
 +{
-+	struct amd_hfi_data *amd_hfi_data;
++	struct acpi_pcct_ext_pcc_slave *pcct_ext;
++	struct acpi_subtable_header *pcct_entry;
++	struct mbox_chan *pcc_mbox_channels;
++	struct acpi_table_header *pcct_tbl;
++	struct pcc_mbox_chan *pcc_chan;
++	acpi_status status;
 +	int ret;
 +
-+	if (!acpi_match_device(amd_hfi_platform_match, &pdev->dev))
-+		return -ENODEV;
-+
-+	amd_hfi_data = devm_kzalloc(&pdev->dev, sizeof(*amd_hfi_data), GFP_KERNEL);
-+	if (!amd_hfi_data)
++	pcc_mbox_channels = devm_kcalloc(&pdev->dev, AMD_HFI_MAILBOX_COUNT,
++					 sizeof(*pcc_mbox_channels), GFP_KERNEL);
++	if (!pcc_mbox_channels)
 +		return -ENOMEM;
 +
-+	amd_hfi_data->dev = &pdev->dev;
-+	ret = devm_mutex_init(&pdev->dev, &amd_hfi_data->lock);
-+	if (ret)
-+		return ret;
-+	platform_set_drvdata(pdev, amd_hfi_data);
++	pcc_chan = devm_kcalloc(&pdev->dev, AMD_HFI_MAILBOX_COUNT,
++				sizeof(*pcc_chan), GFP_KERNEL);
++	if (!pcc_chan)
++		return -ENOMEM;
 +
-+	ret = amd_hfi_alloc_class_data(pdev);
-+	if (ret)
-+		return ret;
-+
-+	return 0;
-+}
-+
-+static struct platform_driver amd_hfi_driver = {
-+	.driver = {
-+		.name = AMD_HFI_DRIVER,
-+		.owner = THIS_MODULE,
-+		.acpi_match_table = ACPI_PTR(amd_hfi_platform_match),
-+	},
-+	.probe = amd_hfi_probe,
-+};
-+
-+static int __init amd_hfi_init(void)
-+{
-+	int ret;
-+
-+	if (acpi_disabled ||
-+	    !cpu_feature_enabled(X86_FEATURE_AMD_HETEROGENEOUS_CORES) ||
-+	    !cpu_feature_enabled(X86_FEATURE_AMD_WORKLOAD_CLASS))
++	status = acpi_get_table(ACPI_SIG_PCCT, 0, &pcct_tbl);
++	if (ACPI_FAILURE(status) || !pcct_tbl)
 +		return -ENODEV;
 +
-+	device = platform_device_register_simple(AMD_HFI_DRIVER, -1, NULL, 0);
-+	if (IS_ERR(device)) {
-+		pr_err("unable to register HFI platform device\n");
-+		return PTR_ERR(device);
-+	}
++	/* get pointer to the first PCC subspace entry */
++	pcct_entry = (struct acpi_subtable_header *) (
++			(unsigned long)pcct_tbl + sizeof(struct acpi_table_pcct));
 +
-+	ret = platform_driver_register(&amd_hfi_driver);
-+	if (ret)
-+		pr_err("failed to register HFI driver\n");
++	pcc_chan->mchan = &pcc_mbox_channels[0];
++
++	amd_hfi_data->pcc_chan = pcc_chan;
++	amd_hfi_data->pcct_entry = pcct_entry;
++	pcct_ext = (struct acpi_pcct_ext_pcc_slave *)pcct_entry;
++
++	if (pcct_ext->length <= 0)
++		return -EINVAL;
++
++	amd_hfi_data->shmem = devm_kzalloc(amd_hfi_data->dev, pcct_ext->length, GFP_KERNEL);
++	if (!amd_hfi_data->shmem)
++		return -ENOMEM;
++
++	pcc_chan->shmem_base_addr = pcct_ext->base_address;
++	pcc_chan->shmem_size = pcct_ext->length;
++
++	/* parse the shared memory info from the pcct table */
++	ret = amd_hfi_fill_metadata(amd_hfi_data);
++
++	acpi_put_table(pcct_tbl);
 +
 +	return ret;
 +}
 +
-+static __exit void amd_hfi_exit(void)
-+{
-+	platform_device_unregister(device);
-+	platform_driver_unregister(&amd_hfi_driver);
-+}
-+module_init(amd_hfi_init);
-+module_exit(amd_hfi_exit);
+ static const struct acpi_device_id amd_hfi_platform_match[] = {
+ 	{"AMDI0104", 0},
+ 	{ }
+@@ -116,6 +306,10 @@ static int amd_hfi_probe(struct platform_device *pdev)
+ 	if (ret)
+ 		return ret;
+ 
++	ret = amd_hfi_metadata_parser(pdev, amd_hfi_data);
++	if (ret)
++		return ret;
 +
-+MODULE_LICENSE("GPL");
-+MODULE_DESCRIPTION("AMD Hardware Feedback Interface Driver");
+ 	return 0;
+ }
+ 
 -- 
 2.43.0
 
