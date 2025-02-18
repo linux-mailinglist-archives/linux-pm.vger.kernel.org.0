@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-22332-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22333-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9A31EA3A709
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:12:15 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 300F2A3A70F
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:12:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8EF7B188CC76
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 19:11:54 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id ADF843A58D7
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 19:11:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5D2F28136E;
-	Tue, 18 Feb 2025 19:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C2D401E8329;
+	Tue, 18 Feb 2025 19:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="MM29XqyV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QsNJs3Bw"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B33281363;
-	Tue, 18 Feb 2025 19:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9489F1E8321;
+	Tue, 18 Feb 2025 19:09:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739905749; cv=none; b=V953DhMIFBSIEYvQixm/zSr1MdrOoTQIaDDfEZLZzUq7idxCH6U+1wpmizExKK+NWNlxtpsdZHDEIkPrrjA9g2sPGK7m/Fe0aORje5qx2W8GcZ0XmbZ1Sayje5VFfwiGaa7UkIULKMVb8UKTZROm3PSgJFrwis5V7Rt4QPtoD/s=
+	t=1739905751; cv=none; b=Axosrbor1ZMW2fX1DcWsO8aik+JEobU4/vWv1EHiB4ys6gaYYdTWvxfwIgk8CXbgtqbREb+1j1srnuk45aMSDjSN5Bl0S58q2G4rZaYEmokDKhZf4NEQHP0+nfiaU8j7HcwwCzzSgxgq+RH8iuDgeNvYNGSRPE3a00hI6MinjMY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739905749; c=relaxed/simple;
-	bh=SI1sRPnXmV2AWytIfSaxpRG24MRaOV6/z0jvYmJu0ng=;
+	s=arc-20240116; t=1739905751; c=relaxed/simple;
+	bh=UUsgChwbUHBlYwwpoY3cvOHOZcSsECzzdaCFSYHUK1I=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=K7+H97ZexRRRvBEXO/7uCD3aJGKPmKrLM71af9X5O759M3i6eHsAFehGjXxMLKkGPEDKVPrkLbMPSvun63f1oFecOZlyGecxRp4orEequv7+u5L6l9auq2c63ozJmFrl0whFoeuPfJe23/ugEOvfPgsRvA3JgtU6KnrpevfNlwk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=MM29XqyV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B2A3C4CEE9;
-	Tue, 18 Feb 2025 19:09:07 +0000 (UTC)
+	 MIME-Version; b=VkmolRxsnFk0zeBacs4ehZ3uR78hl5SbJfxvFUA8TPvUU8eh0Cm7HecuUffvsmpvPKXPfgoapAI7E1rTwohrMbo577x5CRUKuhh6X+0/59oTjHyA4BLGxxvqBiS4hjiqtRvEVaj4TpOyJ4bO4j5W+2O2TWZaaOI1uw72czK5QF8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QsNJs3Bw; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3B123C4CEE4;
+	Tue, 18 Feb 2025 19:09:09 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739905749;
-	bh=SI1sRPnXmV2AWytIfSaxpRG24MRaOV6/z0jvYmJu0ng=;
+	s=k20201202; t=1739905751;
+	bh=UUsgChwbUHBlYwwpoY3cvOHOZcSsECzzdaCFSYHUK1I=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=MM29XqyVyD2JEs3mtEVhbTMSO0zM5lM9J6SlOgol5maq6slhT7+bchdEWluGedzkX
-	 o8CEB7HezddAJtD+RNvSrQ6EtenYXl6McqeZCPWenp009RcuNokXQhRSN649yrx2a0
-	 xvpHhgm+XGVw8yAVUuxreYtvYpKnNqe5+ISq9llyPb2cY4wt3o5u1jmmuXItuVwYJr
-	 KCAEhpLY4pzARzw7m5sYYZfhqvEknGLab4YJWXrvQI2otpTDq9/etcvBSBhaBejxSn
-	 SdvvWNXnRcl2VCIZ1Nl8WbiupjWQRjpz42/Wys/4tO4QAGm9i8fdNL6JGabbRCNia3
-	 czg9R8dPWgEMQ==
+	b=QsNJs3BwNqhWKEEIqpqH3/O1j7OeTY+o60cE+ilm+2og2JbnP8ttaFBckXUBHBPD+
+	 M4/x2A3SYiXQXSxnADZtkKUQVVn6YVZeIrljNMLurKlOJlN0w+HCsqc+kzxm/Bxn1E
+	 MFeDzdlGSlT0PMK8Tljnhb/lee+MGurnu3QCfHEXQGz52631w9JG64H36vo/pRXD0P
+	 Qgk4YM6+1r/LbZipXiYztZAdWUPLg3834nsPUBagCA5UbocnV5A8Db/hGdYxpQ8eDk
+	 9NiThExB3ZF7w+Tu+U0QI4P797XRSW6vHemVGZMriDxC8T5/KNABAtkG/HPa19TJeT
+	 NtvOXaRDRtk5w==
 From: Mario Limonciello <superm1@kernel.org>
 To: Hans de Goede <hdegoede@redhat.com>,
 	=?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
@@ -61,9 +61,9 @@ Cc: Mario Limonciello <mario.limonciello@amd.com>,
 	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
 	linux-doc@vger.kernel.org (open list:DOCUMENTATION),
 	linux-pm@vger.kernel.org (open list:AMD PSTATE DRIVER)
-Subject: [PATCH v8 09/13] x86/process: Clear hardware feedback history for AMD processors
-Date: Tue, 18 Feb 2025 13:08:18 -0600
-Message-ID: <20250218190822.1039982-10-superm1@kernel.org>
+Subject: [PATCH v8 10/13] cpufreq/amd-pstate: Disable preferred cores on designs with workload classification
+Date: Tue, 18 Feb 2025 13:08:19 -0600
+Message-ID: <20250218190822.1039982-11-superm1@kernel.org>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250218190822.1039982-1-superm1@kernel.org>
 References: <20250218190822.1039982-1-superm1@kernel.org>
@@ -75,38 +75,35 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-From: Perry Yuan <perry.yuan@amd.com>
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-Incorporate a mechanism within the context switching code to reset
-the hardware history for AMD processors. Specifically, when a task
-is switched in, the class ID was read and reset the hardware workload
-classification history of CPU firmware and then it start to trigger
-workload classification for the next running thread.
+On designs that have workload classification, it's preferred that
+the amd-hfi driver is used to provide hints to the scheduler of
+which cores to use instead of the amd-pstate driver.
 
-Signed-off-by: Perry Yuan <perry.yuan@amd.com>
-Co-developed-by: Mario Limonciello <mario.limonciello@amd.com>
+Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+Reviewed-by: Perry Yuan <perry.yuan@amd.com>
 Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 ---
-v8:
- * Only for 64 bit
----
- arch/x86/kernel/process_64.c | 4 ++++
- 1 file changed, 4 insertions(+)
+ drivers/cpufreq/amd-pstate.c | 6 ++++++
+ 1 file changed, 6 insertions(+)
 
-diff --git a/arch/x86/kernel/process_64.c b/arch/x86/kernel/process_64.c
-index 226472332a70d..371e0e8f987fa 100644
---- a/arch/x86/kernel/process_64.c
-+++ b/arch/x86/kernel/process_64.c
-@@ -709,6 +709,10 @@ __switch_to(struct task_struct *prev_p, struct task_struct *next_p)
- 	/* Load the Intel cache allocation PQR MSR. */
- 	resctrl_sched_in(next_p);
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 08ae480768120..f425fb7ec77d7 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -806,6 +806,12 @@ static void amd_pstate_init_prefcore(struct amd_cpudata *cpudata)
+ 	/* user disabled or not detected */
+ 	if (!amd_pstate_prefcore)
+ 		return;
++	/* should use amd-hfi instead */
++	if (cpu_feature_enabled(X86_FEATURE_AMD_WORKLOAD_CLASS) &&
++	    IS_ENABLED(CONFIG_AMD_HFI)) {
++		amd_pstate_prefcore = false;
++		return;
++	}
  
-+	/* Reset hw history on AMD CPUs */
-+	if (cpu_feature_enabled(X86_FEATURE_AMD_WORKLOAD_CLASS))
-+		wrmsrl(AMD_WORKLOAD_HRST, 0x1);
-+
- 	return prev_p;
- }
+ 	cpudata->hw_prefcore = true;
  
 -- 
 2.43.0
