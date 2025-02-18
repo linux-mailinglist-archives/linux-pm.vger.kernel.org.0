@@ -1,133 +1,69 @@
-Return-Path: <linux-pm+bounces-22312-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22313-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4F4FEA39D35
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 14:18:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46409A39E25
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 15:01:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 21BDC7A13A7
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 13:17:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 695D33A13D0
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 13:56:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 02C06267388;
-	Tue, 18 Feb 2025 13:18:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="AYpRsrYd"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CA9C2405EC;
+	Tue, 18 Feb 2025 13:57:01 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 02949230D2F;
-	Tue, 18 Feb 2025 13:18:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6D7A236A61
+	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 13:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739884721; cv=none; b=W8Jbe6VbQjNj2ff2pPfdZndF/e/s6g7kcnfYQkYT4N8+skXQ/mjtLy57h8ahMSA9UOfNQlONttTVnJapiBPrSSD845utoFE7FUsfBBqcGbTJqkU6UuJbojeQstdB9wlTdtPvwkjTEzUyPeLdGXqpr7Rr4cBviVXcqiGucDBQcx0=
+	t=1739887021; cv=none; b=eorj7IT4Q+SkxYF1LjIzcVFpcONTKoDqnNI33ehMPVkXXNdKMIl3PeR9REEXyVc/vSrMb57kVWw6M8e6SUyI6U7pzry9ltH+4JJSGRMVpbT/uU3p5Vr/f2R3Qkd32WYeur9S7qlLhW+soTxe9M7H/vBNq/F0wSAvof4vjExGpt0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739884721; c=relaxed/simple;
-	bh=FPWHPpu0oh2a3YB49PZMeRnbaB9j7/2z74Gs213PxMM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=NZ3lEe7ArruhPWzB8UEIIdSPZLmyo+S9CqJ/9945MbPu5Qw+YebHP+WBO0OK7iqEwOcG35HUwzOno9LNCyvLdVLEDqKn+CU1pXwOXmUsD9KdojYI/18bNIhfZNHzsumNGDleOeUWgatMCS9+02noIDAPczMV1k2EChTXG8JGXu4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=AYpRsrYd; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1739884718;
-	bh=FPWHPpu0oh2a3YB49PZMeRnbaB9j7/2z74Gs213PxMM=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AYpRsrYdp8B3SpEganL2jKb8Bs73o8Tn+ptsaTezupvmkOLsCMRb0NJW+Qy6PiEwE
-	 OqyREqyyT7zX7wl/QvPmk2ihB0UqByW6nErSSkS4sRhEp9aiJPPWtxyFfnf+UqLsi8
-	 YC7oePKC9WKeq3bZI7VphNuCq0mYxBFjZlNOqNasFpnnSryDt1KK3o4r0wquxiB+v5
-	 Gg2/Zkuzk6Ii9d4MWQyxwlErJjxsVvzwepBA/tVJaQzpXa9DNe8rIickZG79CkQOPK
-	 Qc5MGaavU0xUguPKekofn8VFtZCjUpwnkeDzvHSD2BiU4ZAbSiWkaON3VDXkN6BE3f
-	 DcjsGH6vLF4Xw==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 1EC9017E0657;
-	Tue, 18 Feb 2025 14:18:37 +0100 (CET)
-Message-ID: <0ec8b0a5-d9b0-4090-a6b0-22537f449176@collabora.com>
-Date: Tue, 18 Feb 2025 14:18:36 +0100
+	s=arc-20240116; t=1739887021; c=relaxed/simple;
+	bh=1S+sSuWNNmrqRztYrpuEloXYZYpDhHH/xVAXcq4Ir0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=VwxwpG82nyffm7/h72iuOKFj2ooYizAkUJrxK234J4d1DNla2MsIHtXph7GLCmGF06NO/hzLOl2e3IXTBYM/5WO3cZb7gYo8wVGs6p8CMewRDP3RCKo9WlMuJRzQrLfcJ4AjQWpTOFK1nShHf1RZgQ5xpsg82aRxYoHPDfqi8p4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id B57D3152B;
+	Tue, 18 Feb 2025 05:57:15 -0800 (PST)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9594C3F6A8;
+	Tue, 18 Feb 2025 05:56:55 -0800 (PST)
+Date: Tue, 18 Feb 2025 13:56:52 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>, linux-pm@vger.kernel.org,
+	Sudeep Holla <sudeep.holla@arm.com>,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	linux-arm-kernel@lists.infradead.org
+Subject: Re: [PATCH] MAINTAINERS: Update section for cpuidle-psci
+Message-ID: <Z7SRpEE0UFHdSEmR@bogus>
+References: <20250217140145.117086-1-ulf.hansson@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 04/13] ASoC: mediatek: mt6359-accdet: Add compatible
- property
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, Sen Chu <sen.chu@mediatek.com>,
- Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
- Lee Jones <lee@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>
-Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org, Andrew Perepech <andrew.perepech@mediatek.com>
-References: <20250214-mt6359-accdet-dts-v1-0-677a151b9b4c@collabora.com>
- <20250214-mt6359-accdet-dts-v1-4-677a151b9b4c@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250214-mt6359-accdet-dts-v1-4-677a151b9b4c@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250217140145.117086-1-ulf.hansson@linaro.org>
 
-Il 14/02/25 18:18, Nícolas F. R. A. Prado ha scritto:
-> Add a compatible property and add it to the module device table for the
-> mt6359-accdet platform driver to allow automatic module loading and
-> probing when the compatible is present in DT.
-> 
-> Co-developed-by: Andrew Perepech <andrew.perepech@mediatek.com>
-> Signed-off-by: Andrew Perepech <andrew.perepech@mediatek.com>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
-> ---
->   sound/soc/codecs/mt6359-accdet.c | 10 ++++++++++
->   1 file changed, 10 insertions(+)
-> 
-> diff --git a/sound/soc/codecs/mt6359-accdet.c b/sound/soc/codecs/mt6359-accdet.c
-> index ed34cc15b80e856356c07fd53af22207124e0d19..6f07db879c6a56ce4843954f51bb9602373e4aa5 100644
-> --- a/sound/soc/codecs/mt6359-accdet.c
-> +++ b/sound/soc/codecs/mt6359-accdet.c
-> @@ -1047,9 +1047,19 @@ static int mt6359_accdet_probe(struct platform_device *pdev)
->   	return ret;
->   }
->   
-> +const struct of_device_id accdet_of_match[] = {
-> +	{
-> +		.compatible = "mediatek,mt6359-accdet",
-> +	}, {
-> +		/* sentinel */
-> +	},
+On Mon, Feb 17, 2025 at 03:01:45PM +0100, Ulf Hansson wrote:
+> Add myself as a co-maintainer for the cpuidle-psci driver and the
+> corresponding git-tree, which I am already using for this.
+>
+> Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+> Cc: Sudeep Holla <sudeep.holla@arm.com>
 
-Compress that stuff please...
+Acked-by: Sudeep Holla <sudeep.holla@arm.com>
 
-	{ .compatible .. },
-	{ /* sentinel */ }
-};
-
-after which:
-
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-
-> +};
-> +MODULE_DEVICE_TABLE(of, accdet_of_match);
-> +
->   static struct platform_driver mt6359_accdet_driver = {
->   	.driver = {
->   		.name = "pmic-codec-accdet",
-> +		.of_match_table = accdet_of_match,
->   	},
->   	.probe = mt6359_accdet_probe,
->   };
-> 
-
-
-
+--
+Regards,
+Sudeep
 
