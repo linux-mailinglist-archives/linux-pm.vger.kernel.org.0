@@ -1,46 +1,46 @@
-Return-Path: <linux-pm+bounces-22351-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22352-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D19EAA3A938
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 21:36:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B0F75A3A98E
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 21:43:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 794957A212F
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:35:48 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 514387A59D7
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:42:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3098420E016;
-	Tue, 18 Feb 2025 20:27:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E630E21B19E;
+	Tue, 18 Feb 2025 20:28:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Kl36hLIe"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Wvx9Vb9+"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 030B920DD59;
-	Tue, 18 Feb 2025 20:27:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BD15521A440;
+	Tue, 18 Feb 2025 20:28:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739910421; cv=none; b=Xo5NcV47Fuqwpkgh31EAQrPN7ceHf7XeKINp8l0Q4dXBjNgMxfcBKmpQdYuVJ+XykdX3QJQ77+bnp36rdyHtQSmTqjzXwHYPHtB8orVKdMm7ile/9ogV3FZDQVZvzACOlyh0cc/ZbWaEYhhaV1Eucs8iyKI4QtuKHLTV3QpdrA0=
+	t=1739910490; cv=none; b=olVguXS8wF+7ErNYkim/ev3ULsgk3N2zuqlLeG+L31l1jmBwYay+GW9NAF9/uaFWoreC1BnroJnr4XMUROd4H+p6cLlbUtdsqgILuJLNHW140GkHyHFtH2a1o4L51vSdc7361RCLcz9NEVCcNt+huP4H1axW46RjFmpHKt+ta2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739910421; c=relaxed/simple;
-	bh=mKMJDW6nakEGmrz4QiQyiO3fhORm4+3vCRoK1DdyepQ=;
+	s=arc-20240116; t=1739910490; c=relaxed/simple;
+	bh=QKrdvXReXi8KQD3WFcEkWnbwGaQsE1tvpjORmQTi0NE=;
 	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=p78Paz2mzc5eeHf+kRT1pYPGpC3ZuHiUjuVDHxlznyKb2BZ+nnPK++Tfj/Qy0vVWQ9txQYYW1no4eb+Ym+EcwcEWcB0NcQZnUoyyQFbjEwIlJW+pXb/6tB7bQkzGaoKk1htR9Gg68oAiW6xBTLtnFFPsCPPMfZqtd42OTKI/8S8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Kl36hLIe; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C7DC4C4CEE8;
-	Tue, 18 Feb 2025 20:26:59 +0000 (UTC)
+	 MIME-Version; b=SVVsVmnOG/vxSw/TC+90nIu45zN6KmKH2h75Zjo/UOOEq4T+gH6jYq2B/MgEg9PW1nDimn6JObsopf7er/brCAJpw7xcorGWtCEViGkqqCQbxMfPDsLXQUT1AzyDs93MlcogrwgNbpXyA//aaMBvD8qIGRN3/oR9Nya4nm8oVR8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Wvx9Vb9+; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2E952C4CEE2;
+	Tue, 18 Feb 2025 20:28:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739910420;
-	bh=mKMJDW6nakEGmrz4QiQyiO3fhORm4+3vCRoK1DdyepQ=;
+	s=k20201202; t=1739910489;
+	bh=QKrdvXReXi8KQD3WFcEkWnbwGaQsE1tvpjORmQTi0NE=;
 	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Kl36hLIeR+Aq/g8ZJBCO7Hk2KFGMHzKgkAxdAbZn30/0ptwgvqd9mZ5pyLljzGUtx
-	 jD8Iy/doq5Mdv3e+EZI3XLxiYS3c60YLVswsJSZBHTOgFQZP9Oxa7BY2iY/d5pKP1Y
-	 nC28FinlfOW5gqv8VK5TiDLAENA2IENhphP5TLjxMX45Z3W/Qe4ca4aJe3G6ZfFsgV
-	 cRrpg9DkIowbPtNKnbzNIwQQOXa7ChC+EXxVPCeDC4OIOm/oSlhoYR3XABXypuyjmO
-	 ihY7DK1wGXTLJ4hUUJk7GIDKoCjRaoCkBRnVckK5r+UkAEECWJpXaIMMdUE3nUP2G2
-	 QkIKRGmdLGCfQ==
+	b=Wvx9Vb9+hYppCkX3T/2bkzuAFohQQHBZfi3smJ3Xcv2wuXQe1PcQF/8FBAeRgUHd3
+	 NLhIwxDYqq2uAD6VHg5g7IFSglQ/cSlylPHXMuYVdNDIDR71qhnZnDcGpyFpBNH9fh
+	 SkCZfVSB1re9Uvap3WQ3yjiGS8oFqGcF8a3+/8Lv56Om7Gs6+BUEoKL5+91OA9GGau
+	 deKy2pJAlriF+t22d2CmQHs6MzgSngJC6sPZOGYYF93sPw7o4LxcpZuFIZEA+6ss1J
+	 JsfyfxMtVmzMLWKTMH2Zqin6XjGh26kFTcdcUElEao9IDyyOc8QWhzv6+rUF2cP4Jz
+	 HA3wA/EbPb+OA==
 From: Sasha Levin <sashal@kernel.org>
 To: linux-kernel@vger.kernel.org,
 	stable@vger.kernel.org
@@ -52,12 +52,12 @@ Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
 	amit.kachhap@gmail.com,
 	rafael@kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH AUTOSEL 6.12 20/31] thermal/cpufreq_cooling: Remove structure member documentation
-Date: Tue, 18 Feb 2025 15:26:06 -0500
-Message-Id: <20250218202619.3592630-20-sashal@kernel.org>
+Subject: [PATCH AUTOSEL 6.6 13/17] thermal/cpufreq_cooling: Remove structure member documentation
+Date: Tue, 18 Feb 2025 15:27:37 -0500
+Message-Id: <20250218202743.3593296-13-sashal@kernel.org>
 X-Mailer: git-send-email 2.39.5
-In-Reply-To: <20250218202619.3592630-1-sashal@kernel.org>
-References: <20250218202619.3592630-1-sashal@kernel.org>
+In-Reply-To: <20250218202743.3593296-1-sashal@kernel.org>
+References: <20250218202743.3593296-1-sashal@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -66,7 +66,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-stable: review
 X-Patchwork-Hint: Ignore
-X-stable-base: Linux 6.12.15
+X-stable-base: Linux 6.6.78
 Content-Transfer-Encoding: 8bit
 
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
@@ -90,7 +90,7 @@ Signed-off-by: Sasha Levin <sashal@kernel.org>
  1 file changed, 2 deletions(-)
 
 diff --git a/drivers/thermal/cpufreq_cooling.c b/drivers/thermal/cpufreq_cooling.c
-index 280071be30b15..6b7ab1814c12d 100644
+index e2cc7bd308620..874b4838d2c92 100644
 --- a/drivers/thermal/cpufreq_cooling.c
 +++ b/drivers/thermal/cpufreq_cooling.c
 @@ -57,8 +57,6 @@ struct time_in_idle {
