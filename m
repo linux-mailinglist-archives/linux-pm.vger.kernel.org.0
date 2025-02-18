@@ -1,193 +1,186 @@
-Return-Path: <linux-pm+bounces-22300-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22301-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id EB50FA39B25
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:40:55 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B5B8A39C5F
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 13:42:06 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E17783A6543
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 11:40:45 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 4FDF67A2980
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:41:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 50ACB23ED47;
-	Tue, 18 Feb 2025 11:40:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Wu1efTmK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E279624635A;
+	Tue, 18 Feb 2025 12:41:58 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3D7B423CF07;
-	Tue, 18 Feb 2025 11:40:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4960D24419A
+	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 12:41:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739878850; cv=none; b=qz1Yb/LStIBhqBNK8fUEUeW4Jn2mNyaiol6Czm3mKTpuEOBnxxg78M7wrcRp8k7FSHF2ocm4HxDwM4xK8BK5KGQMis3G6RX+kWNNW9ri2Cbn9JMXjilCzd3vz0REsRkvsMR+NkQwLD51L79VPcRp/Cr0Oy8xqR6BLK1oD0KaZBs=
+	t=1739882518; cv=none; b=k2pNukXKwub9Cje3S+9r1gUUzn9vkQ0TBv+QATrDdwQx6v3zthcU61cO52yh+61tsAXdaEvZPqMx8ACx8HB/gw+49p2oowsnbWyEoVWlAT0NnJWQ51cHPYeibLrE30YRRSeo/aY40SzewLaKKn2loczMgtT3sLJ9GTjc8s1qq4o=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739878850; c=relaxed/simple;
-	bh=Crg0iOsQWNGPSMN8Ph8R1qurjlfWd39GRLdd7Nuj3JY=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=h+RSlXzDJTvu4Qu0q9awc2t2MUp44jdbMgf5+zmDNKN2ArAziCUXYmYQM+2z/jztU2w88M5qhE/sK7aI3KQt/AlP+ykrZJKFnf2w5S0NaikMmBoCefjY6IRBqNTBiM3XylDNNZz+6nTW+cBId2lgtZRSjTg/g9Saz/Rco1ykBXc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Wu1efTmK; arc=none smtp.client-ip=192.198.163.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739878848; x=1771414848;
-  h=date:from:to:cc:subject:message-id;
-  bh=Crg0iOsQWNGPSMN8Ph8R1qurjlfWd39GRLdd7Nuj3JY=;
-  b=Wu1efTmKA5Ih2qXTVP+AvXSNW4+hko2n0BnTKuEi4PflH9G9zw+f+YNB
-   zeSshQyC/E9+4DenCIUJkzt5I7EjuqXSeMR3m2n/p8eJ4FGNVh0r0GYGH
-   /OUffSKMuA286/2K+J1c+en47eh3bpQ9iNU2OM89yQjAuep1Owxw+627L
-   wEVIz0sIbofyl+sYEiZ+VAX5vgkpQVxe3DV9fGLH0xP3aNEqbYUJFlcVs
-   3F8ekgRXN9GMzQYIngUwEt2eTbWjhbjYL8EPKHVO2mcna7w1hbl0LBCxt
-   se8AM25ZJCuGkYyaFEqEyrIlmx/wM+OunWr3RI8nWgB9XOT0sygM+6Djo
-   Q==;
-X-CSE-ConnectionGUID: huvnew4jSjmLeEuzdHjViw==
-X-CSE-MsgGUID: lSgXlYZ/RC2CmL18n8SyKg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11348"; a="39803500"
-X-IronPort-AV: E=Sophos;i="6.13,295,1732608000"; 
-   d="scan'208";a="39803500"
-Received: from fmviesa008.fm.intel.com ([10.60.135.148])
-  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 18 Feb 2025 03:40:47 -0800
-X-CSE-ConnectionGUID: /3BHby8TRq6kJ7o0ZirYdQ==
-X-CSE-MsgGUID: a9jbh1/nQdmkJlOJRthOJA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,295,1732608000"; 
-   d="scan'208";a="114574532"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa008.fm.intel.com with ESMTP; 18 Feb 2025 03:40:46 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tkLxz-0000T1-2b;
-	Tue, 18 Feb 2025 11:40:43 +0000
-Date: Tue, 18 Feb 2025 19:36:27 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- d802451b2edbc6ba8e57ed60523dd3dc86786964
-Message-ID: <202502181921.divkcWA6-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1739882518; c=relaxed/simple;
+	bh=qP88DMrX7m2ic6MbVfJoVMyzekSVi4U0iJ/ob7sRHng=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=W/RHGB0oRODqsSf971wJYz2IvaI40Eafq7jEFIABNTueMXzWPD9vhI4TQecQ17LLTLEY/0C79XFFvSJkgPk7ikOIT/P//uzSN+1uCiShmKEXKag2lvb7GonatgmudhP4EUVMxVB8asQXNvWunvYLwCiobdkX2aGixdgCSnq2uoo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com; spf=pass smtp.mailfrom=hisilicon.com; arc=none smtp.client-ip=45.249.212.191
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=hisilicon.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=hisilicon.com
+Received: from mail.maildlp.com (unknown [172.19.162.112])
+	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4YxzdJ32TNzMrc8;
+	Tue, 18 Feb 2025 20:40:20 +0800 (CST)
+Received: from kwepemo100006.china.huawei.com (unknown [7.202.195.47])
+	by mail.maildlp.com (Postfix) with ESMTPS id 1684A1400D6;
+	Tue, 18 Feb 2025 20:41:50 +0800 (CST)
+Received: from [10.67.121.58] (10.67.121.58) by kwepemo100006.china.huawei.com
+ (7.202.195.47) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Tue, 18 Feb
+ 2025 20:41:49 +0800
+Message-ID: <3965c9ee-c136-bdf2-8384-ed361fc601c1@hisilicon.com>
+Date: Tue, 18 Feb 2025 20:41:48 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+User-Agent: Mozilla/5.0 (Windows NT 10.0; Win64; x64; rv:102.0) Gecko/20100101
+ Thunderbird/102.3.2
+Subject: Re: [PATCH v3] cpufreq: governor: Fix negative 'idle_time' handling
+ in dbs_update()
+To: <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <yu.c.chen@intel.com>, <linuxarm@huawei.com>,
+	<jonathan.cameron@huawei.com>, <zhenglifeng1@huawei.com>,
+	<lihuisong@huawei.com>, <wanghuiqiang@huawei.com>, <fanghao11@huawei.com>,
+	<prime.zeng@hisilicon.com>
+References: <20250213035510.2402076-1-zhanjie9@hisilicon.com>
+From: Jie Zhan <zhanjie9@hisilicon.com>
+In-Reply-To: <20250213035510.2402076-1-zhanjie9@hisilicon.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: dggems701-chm.china.huawei.com (10.3.19.178) To
+ kwepemo100006.china.huawei.com (7.202.195.47)
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: d802451b2edbc6ba8e57ed60523dd3dc86786964  Merge branch 'pm-cpuidle' into bleeding-edge
+A kindly ping on this patch.
 
-elapsed time: 1236m
+Thanks,
+Jie
 
-configs tested: 99
-configs skipped: 1
-
-The following configs have been built successfully.
-More configs may be tested in the coming days.
-
-tested configs:
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250218    gcc-13.2.0
-arc                   randconfig-002-20250218    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250218    gcc-14.2.0
-arm                   randconfig-002-20250218    gcc-14.2.0
-arm                   randconfig-003-20250218    gcc-14.2.0
-arm                   randconfig-004-20250218    clang-21
-arm64                            allmodconfig    clang-18
-arm64                 randconfig-001-20250218    clang-21
-arm64                 randconfig-002-20250218    clang-21
-arm64                 randconfig-003-20250218    gcc-14.2.0
-arm64                 randconfig-004-20250218    clang-16
-csky                  randconfig-001-20250218    gcc-14.2.0
-csky                  randconfig-002-20250218    gcc-14.2.0
-hexagon                          allmodconfig    clang-21
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250218    clang-17
-hexagon               randconfig-002-20250218    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250218    gcc-12
-i386        buildonly-randconfig-002-20250218    gcc-12
-i386        buildonly-randconfig-003-20250218    gcc-12
-i386        buildonly-randconfig-004-20250218    clang-19
-i386        buildonly-randconfig-005-20250218    clang-19
-i386        buildonly-randconfig-006-20250218    gcc-12
-i386                                defconfig    clang-19
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch             randconfig-001-20250218    gcc-14.2.0
-loongarch             randconfig-002-20250218    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-microblaze                       allmodconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                       allyesconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250218    gcc-14.2.0
-nios2                 randconfig-002-20250218    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250218    gcc-14.2.0
-parisc                randconfig-002-20250218    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc               randconfig-001-20250218    gcc-14.2.0
-powerpc               randconfig-002-20250218    gcc-14.2.0
-powerpc               randconfig-003-20250218    clang-21
-powerpc64             randconfig-001-20250218    gcc-14.2.0
-powerpc64             randconfig-002-20250218    clang-16
-powerpc64             randconfig-003-20250218    clang-18
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-21
-riscv                 randconfig-001-20250218    gcc-14.2.0
-riscv                 randconfig-002-20250218    clang-21
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-21
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250218    clang-21
-s390                  randconfig-002-20250218    clang-15
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250218    gcc-14.2.0
-sh                    randconfig-002-20250218    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250218    gcc-14.2.0
-sparc                 randconfig-002-20250218    gcc-14.2.0
-sparc64               randconfig-001-20250218    gcc-14.2.0
-sparc64               randconfig-002-20250218    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250218    clang-21
-um                    randconfig-002-20250218    gcc-11
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250218    clang-19
-x86_64      buildonly-randconfig-002-20250218    gcc-12
-x86_64      buildonly-randconfig-003-20250218    clang-19
-x86_64      buildonly-randconfig-004-20250218    gcc-12
-x86_64      buildonly-randconfig-005-20250218    clang-19
-x86_64      buildonly-randconfig-006-20250218    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250218    gcc-14.2.0
-xtensa                randconfig-002-20250218    gcc-14.2.0
-
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+On 13/02/2025 11:55, Jie Zhan wrote:
+> We observed an issue that the cpu frequency can't raise up with a 100% cpu
+> load when NOHZ is off and the 'conservative' governor is selected.
+> 
+> 'idle_time' can be negative if it's obtained from get_cpu_idle_time_jiffy()
+> when NOHZ is off.  This was found and explained in commit 9485e4ca0b48
+> ("cpufreq: governor: Fix handling of special cases in dbs_update()").
+> 
+> However, commit 7592019634f8 ("cpufreq: governors: Fix long idle detection
+> logic in load calculation") introduced a comparison between 'idle_time' and
+> 'samling_rate' to detect a long idle interval.  While 'idle_time' is
+> converted to int before comparison, it's actually promoted to unsigned
+> again when compared with an unsigned 'sampling_rate'.  Hence, this leads to
+> wrong idle interval detection when it's in fact 100% busy and sets
+> policy_dbs->idle_periods to a very large value.  'conservative' adjusts the
+> frequency to minimum because of the large 'idle_periods', such that the
+> frequency can't raise up.  'Ondemand' doesn't use policy_dbs->idle_periods
+> so it fortunately avoids the issue.
+> 
+> Correct negative 'idle_time' to 0 before any use of it in dbs_update().
+> 
+> Fixes: 7592019634f8 ("cpufreq: governors: Fix long idle detection logic in load calculation")
+> Signed-off-by: Jie Zhan <zhanjie9@hisilicon.com>
+> Reviewed-by: Chen Yu <yu.c.chen@intel.com>
+> ---
+> v3:
+> - Remove ternary operators.
+> 
+> v2:
+> - Avoid type conversion, compare current and previous idle time before
+>   obtaining 'idle_time'.
+> - Update the explanation in comments.
+> 
+> Discussions:
+> v2: https://lore.kernel.org/linux-pm/20250212081438.1294503-1-zhanjie9@hisilicon.com/
+> v1: https://lore.kernel.org/linux-pm/20250210130659.3533182-1-zhanjie9@hisilicon.com/
+> ---
+>  drivers/cpufreq/cpufreq_governor.c | 45 +++++++++++++++---------------
+>  1 file changed, 23 insertions(+), 22 deletions(-)
+> 
+> diff --git a/drivers/cpufreq/cpufreq_governor.c b/drivers/cpufreq/cpufreq_governor.c
+> index af44ee6a6430..1a7fcaf39cc9 100644
+> --- a/drivers/cpufreq/cpufreq_governor.c
+> +++ b/drivers/cpufreq/cpufreq_governor.c
+> @@ -145,7 +145,23 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
+>  		time_elapsed = update_time - j_cdbs->prev_update_time;
+>  		j_cdbs->prev_update_time = update_time;
+>  
+> -		idle_time = cur_idle_time - j_cdbs->prev_cpu_idle;
+> +		/*
+> +		 * cur_idle_time could be smaller than j_cdbs->prev_cpu_idle if
+> +		 * it's obtained from get_cpu_idle_time_jiffy() when NOHZ is
+> +		 * off, where idle_time is calculated by the difference between
+> +		 * time elapsed in jiffies and "busy time" obtained from CPU
+> +		 * statistics.  If a CPU is 100% busy, the time elapsed and busy
+> +		 * time should grow with the same amount in two consecutive
+> +		 * samples, but in practice there could be a tiny difference,
+> +		 * making the accumulated idle time decrease sometimes.  Hence,
+> +		 * in this case, idle_time should be regarded as 0 in order to
+> +		 * make the further process correct.
+> +		 */
+> +		if (cur_idle_time > j_cdbs->prev_cpu_idle)
+> +			idle_time = cur_idle_time - j_cdbs->prev_cpu_idle;
+> +		else
+> +			idle_time = 0;
+> +
+>  		j_cdbs->prev_cpu_idle = cur_idle_time;
+>  
+>  		if (ignore_nice) {
+> @@ -162,7 +178,7 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
+>  			 * calls, so the previous load value can be used then.
+>  			 */
+>  			load = j_cdbs->prev_load;
+> -		} else if (unlikely((int)idle_time > 2 * sampling_rate &&
+> +		} else if (unlikely(idle_time > 2 * sampling_rate &&
+>  				    j_cdbs->prev_load)) {
+>  			/*
+>  			 * If the CPU had gone completely idle and a task has
+> @@ -189,30 +205,15 @@ unsigned int dbs_update(struct cpufreq_policy *policy)
+>  			load = j_cdbs->prev_load;
+>  			j_cdbs->prev_load = 0;
+>  		} else {
+> -			if (time_elapsed >= idle_time) {
+> +			if (time_elapsed > idle_time)
+>  				load = 100 * (time_elapsed - idle_time) / time_elapsed;
+> -			} else {
+> -				/*
+> -				 * That can happen if idle_time is returned by
+> -				 * get_cpu_idle_time_jiffy().  In that case
+> -				 * idle_time is roughly equal to the difference
+> -				 * between time_elapsed and "busy time" obtained
+> -				 * from CPU statistics.  Then, the "busy time"
+> -				 * can end up being greater than time_elapsed
+> -				 * (for example, if jiffies_64 and the CPU
+> -				 * statistics are updated by different CPUs),
+> -				 * so idle_time may in fact be negative.  That
+> -				 * means, though, that the CPU was busy all
+> -				 * the time (on the rough average) during the
+> -				 * last sampling interval and 100 can be
+> -				 * returned as the load.
+> -				 */
+> -				load = (int)idle_time < 0 ? 100 : 0;
+> -			}
+> +			else
+> +				load = 0;
+> +
+>  			j_cdbs->prev_load = load;
+>  		}
+>  
+> -		if (unlikely((int)idle_time > 2 * sampling_rate)) {
+> +		if (unlikely(idle_time > 2 * sampling_rate)) {
+>  			unsigned int periods = idle_time / sampling_rate;
+>  
+>  			if (periods < idle_periods)
 
