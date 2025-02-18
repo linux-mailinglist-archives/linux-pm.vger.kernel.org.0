@@ -1,82 +1,173 @@
-Return-Path: <linux-pm+bounces-22314-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22315-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EEA01A39E2C
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 15:03:12 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 6ABCAA3A06E
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 15:51:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C8013A9C24
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 13:59:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 025033B55CE
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 14:42:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42669269AE8;
-	Tue, 18 Feb 2025 13:59:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D8626E16D;
+	Tue, 18 Feb 2025 14:40:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="yzS9Jomi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D9D812417F5
-	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 13:59:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E406D26AAB9
+	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 14:40:24 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739887155; cv=none; b=perbzYQnRWaIPIGU3+CnSrmnSAtCYl7fOQAdUuTVybyuSdEFfgyaHmvcbWLgc8qC3xittgwV0gxiVrwUQjHyxPy63rqvSkrS57OOqChCjQR7CKmmrzm1WX9efhzNLM0ZbOFN52/ail+rEXXoiGnBY0LviKPQR2EYb1HeqNuAQz8=
+	t=1739889626; cv=none; b=rlGhkPmWhWzqvl1TMOU/B9bQJEO4A2Ne8OPTBFslTNYTNK6ZIL6DaMdL7vZjjblM7Cefo6jLLuvfoWVzq5kY3FZHO0mKu/F0MF1rsyFFdRKP5ugeQWbElg23Xi+TjlnXqNRUqMCuNpVo4IdwsTgabWAYqln8Vdhb6GLS9Lzq1ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739887155; c=relaxed/simple;
-	bh=2dw3vhFkFr3TaomQkOTF+/iPnMob0f7dv5p6Z04/y6g=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Snzyiko+HGZq44PPARXKn9BifO/3lusi892Vg7LZSWEIquZR0LQymaL1sYDk5BAurB6Kn6L6BBRqWRTVp9s2ouJ9MPZjGiSOUU3cAVbdqo4N8u3X0guNEf6lN+i+Ulzd0/0VlrCQ30cS6Mke58j9mUqv9ZUL9mSZVo2zCHWIifc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E518C152B;
-	Tue, 18 Feb 2025 05:59:30 -0800 (PST)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id C4D8C3F6A8;
-	Tue, 18 Feb 2025 05:59:10 -0800 (PST)
-Date: Tue, 18 Feb 2025 13:59:07 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Sudeep Holla <sudeep.holla@arm.com>,
-	Lorenzo Pieralisi <lpieralisi@kernel.org>, linux-pm@vger.kernel.org,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH] MAINTAINERS: Update section for cpuidle-psci
-Message-ID: <Z7SSKwMtY8j4XWJI@bogus>
-References: <20250217140145.117086-1-ulf.hansson@linaro.org>
- <CAJZ5v0hi=zCuhmVRf2HVRWkR53U7xqxC3oQDs8-JN-cyQ+ZX1w@mail.gmail.com>
- <CAPDyKFq1w7Ez+6GSKDeCpeQ=Xm4c3U9BMu3G8q+v2MXk1TdwKw@mail.gmail.com>
+	s=arc-20240116; t=1739889626; c=relaxed/simple;
+	bh=mr+2Jhhmfhv+3seL9n1mB+VOznYBvn3lX+NZfQylTqg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=GAnKtMGkJXnKJN9dKVwknaV51N8cjakp4FdfpfX0tsP+y01jWbQ5XpItS7BtASYa8RxjXA1DE0JBJOHR0eTamr737arGvSumwn3rffGNYcbeztt8I70+QoiDZNtvajYkR8Rka91KHzxbJC+6DLaflvxmXEQMRVAU7WB/Fp2uESo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=yzS9Jomi; arc=none smtp.client-ip=209.85.219.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e5dbdbdaeedso3399303276.2
+        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 06:40:24 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739889624; x=1740494424; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=2wkeEEWV1t+jTfGMDjVEd0UQWJSursxJ+qu65t0oVks=;
+        b=yzS9JomiL+1VCRq5xGA/LVJBda1hD0LHa+tIsrOwo+8YCI4bbA8FZadK/V/4waPQQH
+         9aFpqNh/ia1C10WgvRzuB5wF2U66/lYcRX0QP2L1I3eQBf6yiuSOHZmFx2d7MpQ/D7zY
+         U4ZFcDr7s9T1qxzTzHpwAigz1L8lTWxIO0rcZsWkoNBRq0D4NxcLBiCyVoniZJywJJ7s
+         xsWKhTGX/urMFShw+xctToQ4jo4bUdGFKRL2aGJPp513TUp5dN5+B1OYXD4C9f+yFbaw
+         RGlT0VlSjnEtn1qTEGgF0XzOGk/xU6ENK+5wByLpc0RPumM9RquuK4enTt/nGOnnii8s
+         FbRg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739889624; x=1740494424;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=2wkeEEWV1t+jTfGMDjVEd0UQWJSursxJ+qu65t0oVks=;
+        b=WdvWU/gqh4RV91E2Fa4poMBAHtEBnwTo0FNooKMHs3ANX91NTSFsOGRks2lPQA710H
+         +Zh2SgIIBAUYnGltKSIFv/8GXSPkHlADBowX4Z8KfvZ/7p3Gls25z7RSZrsZp6vb9Wak
+         4LpsOvLiAZYucgxcXjH4fmNTf7rkJvJxpnt7uwvnuiHjb1C1iIzqxsq2OvAxEKtA/lBN
+         1dcXJOSgTEoVJ8iyYID8xuN/R/T6y8zJZm+bobiPnPlcm0uHSWadWssxrGdy6y5uBtYB
+         kddMI2Z+9tUTEptzFdT3vylyEXlElbNMloar3ize7kDWKYUxkp7gjti/lexAcZdT5dIU
+         Pqcg==
+X-Forwarded-Encrypted: i=1; AJvYcCWxcufH//wP4qgCq6fJO32bv38OOdgHnVf/rA9R5STIBHXLyyMttrZGEPG7vSNs0+cB7QdpFi+WMg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy+DvIWF3+GlkjCNyewWtiQ/MSuB37oDRj6nKqY5oLCJQrGGvwH
+	LHbmQwRHOmIHhXQiKj7TxKlS91NzGwbCCSul+X3/R/s3XOQRFw93QVGu3xr811ReKhLqOv84DLj
+	f9oWoFqCBLO5KFd/TBKFm6qK1OF33zkN1JzS3yQ==
+X-Gm-Gg: ASbGncvzDrcFbw7z8fqgmTVs56ShIj/ozmw99Xyi7G57HJatwYU3Tc3RvN/lg2FJ9x5
+	dLCBzT1oNLw4P67kLwbAVR9AdF2i4a97gztTTbNnKzFj6ZqLq/KiOzc7k9h9CIJIuLz02xrPLzA
+	==
+X-Google-Smtp-Source: AGHT+IGc7tsTon1APxRniRGgusdip7zanYIlI5kyK12K1ApVdClP0yClUsQd8ZYL07bK78dVmjWR+9yq+z6BP2esIog=
+X-Received: by 2002:a05:6902:15c4:b0:e20:25bb:7893 with SMTP id
+ 3f1490d57ef6-e5dc9305520mr9687881276.46.1739889623851; Tue, 18 Feb 2025
+ 06:40:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPDyKFq1w7Ez+6GSKDeCpeQ=Xm4c3U9BMu3G8q+v2MXk1TdwKw@mail.gmail.com>
+References: <4966939.GXAFRqVoOG@rjwysocki.net> <2000822.PYKUYFuaPT@rjwysocki.net>
+ <CAPDyKFoB0fQCabahYpx=A_Ns7vJgWYdK=rxuHk+XHVv35cFvWQ@mail.gmail.com> <CAJZ5v0iHsOw4_UbEWGk_-jPpc3q2K3fUXBs4T3JCooPGV10CHQ@mail.gmail.com>
+In-Reply-To: <CAJZ5v0iHsOw4_UbEWGk_-jPpc3q2K3fUXBs4T3JCooPGV10CHQ@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 18 Feb 2025 15:39:47 +0100
+X-Gm-Features: AWEUYZkUeOWjKpfEpylPzwUgMmhW5JCtP7D9lSJ8wjRrv-WgzsAF82ls-gYur34
+Message-ID: <CAPDyKFqshaVNzHPe0KL3HRTpiuzyKVJ-LuDsaAne5PawFLMJow@mail.gmail.com>
+Subject: Re: [PATCH v1 3/3] PM: sleep: Use DPM_FLAG_SMART_SUSPEND conditionally
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Bjorn Helgaas <helgaas@kernel.org>, Linux PCI <linux-pci@vger.kernel.org>, 
+	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+	Jon Hunter <jonathanh@nvidia.com>, Linux ACPI <linux-acpi@vger.kernel.org>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Saravana Kannan <saravanak@google.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, Feb 18, 2025 at 01:54:44PM +0100, Ulf Hansson wrote:
-> On Tue, 18 Feb 2025 at 13:48, Rafael J. Wysocki <rafael@kernel.org> wrote:
-> >
-> > On Mon, Feb 17, 2025 at 3:01 PM Ulf Hansson <ulf.hansson@linaro.org> wrote:
+[...]
+
 > > >
-> > > Add myself as a co-maintainer for the cpuidle-psci driver and the
-> > > corresponding git-tree, which I am already using for this.
+> > > +static void device_prepare_smart_suspend(struct device *dev)
+> > > +{
+> > > +       struct device_link *link;
+> > > +       int idx;
+> > > +
+> > > +       /*
+> > > +        * The "smart suspend" feature is enabled for devices whose drivers ask
+> > > +        * for it and for devices without PM callbacks unless runtime PM is
+> > > +        * disabled and enabling it is blocked for them.
+> > > +        *
+> > > +        * However, if "smart suspend" is not enabled for the device's parent
+> > > +        * or any of its suppliers that take runtime PM into account, it cannot
+> > > +        * be enabled for the device either.
+> > > +        */
+> > > +       dev->power.smart_suspend = (dev->power.no_pm_callbacks ||
+> > > +               dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND)) &&
+> > > +               !pm_runtime_blocked(dev);
+> > > +
+> > > +       if (!dev->power.smart_suspend)
+> > > +               return;
+> > > +
+> > > +       if (dev->parent && !pm_runtime_blocked(dev->parent) &&
+> > > +           !dev->parent->power.ignore_children && !dev->parent->power.smart_suspend) {
+> > > +               dev->power.smart_suspend = false;
+> > > +               return;
+> > > +       }
+> > > +
+> > > +       idx = device_links_read_lock();
+> > > +
+> > > +       list_for_each_entry_rcu_locked(link, &dev->links.suppliers, c_node) {
+> > > +               if (!(link->flags | DL_FLAG_PM_RUNTIME))
+> > > +                       continue;
+> > > +
+> > > +               if (!pm_runtime_blocked(link->supplier) &&
+> > > +                   !link->supplier->power.smart_suspend) {
 > >
-> > Lorenzo, Sudeep, any objections?
+> > This requires device_prepare() for all suppliers to be run before its
+> > consumer. Is that always the case?
+>
+> Yes, it is by design.
+
+Okay! I was worried that fw_devlink could mess this up.
+
+>
+> > > +                       dev->power.smart_suspend = false;
+> > > +                       break;
+> > > +               }
+> > > +       }
+> > > +
+> > > +       device_links_read_unlock(idx);
 > >
-> > Ulf, do you want me to pick this up?
+> > From an execution overhead point of view, did you check if the above
+> > code had some measurable impact on the latency for dpm_prepare()?
 >
-> I can take it via my pmdomain tree, but thanks anyway! Let's also
-> leave some more time for Sudeep/Lorenzo to comment.
+> It didn't on my systems.
 >
+> For the vast majority of devices the overhead is just checking
+> power.no_pm_callbacks and DPM_FLAG_SMART_SUSPEND.  For some,
+> pm_runtime_blocked() needs to be called which requires grabbing a
+> spinlock and there are only a few with power.smart_suspend set to
+> start with.
+>
+> I'm wondering why you didn't have this concern regarding other changes
+> that involved walking suppliers or consumers, though.
 
-Sorry for the delay, accidentally marked it read and missed it until these
-emails. I have responded on the patch with an Ack now.
+Well, the concern is mostly generic from my side. When introducing
+code that potentially could impact latency during system
+suspend/resume, we should at least check it.
 
---
-Regards,
-Sudeep
+That said, I think the approach makes sense, so no objections from my side!
+
+Feel free to add:
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+
+Kind regards
+Uffe
 
