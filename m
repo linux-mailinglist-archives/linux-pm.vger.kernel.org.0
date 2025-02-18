@@ -1,157 +1,196 @@
-Return-Path: <linux-pm+bounces-22341-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22342-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A1826A3A7CD
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:41:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D8072A3A7EA
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 20:44:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 289A217386B
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 19:41:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7C080172DA3
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 19:43:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931CB1E835B;
-	Tue, 18 Feb 2025 19:40:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E4CA21EB5C9;
+	Tue, 18 Feb 2025 19:43:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ptGHWqc2"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="u/R0YUhg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f53.google.com (mail-wm1-f53.google.com [209.85.128.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D32E1E8354;
-	Tue, 18 Feb 2025 19:40:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F39181E833C
+	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 19:43:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739907654; cv=none; b=Ozvl9L3pgvKxesUupoDftUt90hjU5QDSht/YkIx7actJN5oRemVoB2r/8KJvQ8EKoKSj58FsCngncJwsV8aOXaImgRkNkW8OZc3vAJ+7dIUqqq0ByQjw4nFaZhTSHb2Dh6DW1XzGgtyByrce/AT+Kc2uRvjcwMCzdGJ11IB4ZEc=
+	t=1739907828; cv=none; b=ct/DB7pA4yNKKxPVietEcwvTRND8b3xrLqNLcMx/oLX2j5T7XD83GYlAGpA31k/pfjWDgooRUb790StxvvxcxaTB2UcBsQePu894cB23zWcyJYcInx7+6rHpare65+26xD6AW62D0/t9mQ9QOY+dvjJwd+jB5A0x/EJRN6W9PuM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739907654; c=relaxed/simple;
-	bh=Mix1Sb8TkSGjq4CJS+yWPtVsaPPVogiDkh/gh4RgsI0=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=LWExsJd1TyyJ++0f7IO24+/0aKZTPNkFQh/IrPa5cQZ/U2Kt4YfpSNNcfKBOv5pUdNBcbJU/IF3aXVyGXs+c1QQe2Nz6GVkR6TaKoYQ8uXo5vQkAtIg6WzJsZmC4hOzzWq0PT+A+BQaWb3omkcR0takjDY/hNG+KAob9OwHkZ/o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ptGHWqc2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EDDB8C4AF09;
-	Tue, 18 Feb 2025 19:40:53 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739907654;
-	bh=Mix1Sb8TkSGjq4CJS+yWPtVsaPPVogiDkh/gh4RgsI0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=ptGHWqc2URMoDbr7NhhoKEluhhMu6XUiu8gxa08V4vmJ+gm/PDi34OTyFwS8tC27x
-	 sHWrh16+lfRW9A790ED4z91w2ZDetDQUdWO1w83kM0WhfR1It1EVoawFjGRWj6YHpq
-	 uiPUxf0Lndfvtu87mhSQXZRb5TfE0oWi/F4zmvwsL+Uc2h1e4eGsfB8eHc3FGY73Ks
-	 ITmgOag3CTVjiBz2FU9S6IPp1tBRrz3VGq0eMgWFsKDNd5Jg0C0wOJlaR7zML1bzE3
-	 yGH8Ox5jKhOfKyi2zvspO0aqn9uRVnE/yMfs5MHRYfbXCVoTYHpwMokZ+hPBrAjYn+
-	 HpsNRHl6xLOwA==
-Received: by mail-oo1-f42.google.com with SMTP id 006d021491bc7-5fcf21d7235so425490eaf.0;
-        Tue, 18 Feb 2025 11:40:53 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCW4yuHOKON0EIvKqM41dYgUy0jkbq0bAFr1EIZD7QSriBWXZFSnzV7J+9TWyvXe1h6eU+lSID7c2s2Jge4=@vger.kernel.org, AJvYcCWi2wSGnwhmXMzpMpN3tvV1MrZtaPKbXoRdc9ngr1PlwvFyuubYlRFjqY/RMDS0FbeakKG/A3MF6+I=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxdMA6wEWf7c76/7I0pCu0TjODEV9QMSJqavtMovmFbwBcKXPlJ
-	Yk+sHPZcbqq/fM1py99i/22Rl6MIN3l0o4Kut8QAXAMHjmuLWsynorRj4NEifxN/AFUBAhbih22
-	DnkPJZbjN+Xt68nm/Mp0g0DibAlM=
-X-Google-Smtp-Source: AGHT+IHZhvbcJigbv/ZRYGDQArO++IqeVIYf7zGlOvKfKLhWYIFRBQ4St5ugJ4lQigl1B6S4eAXa/o7YikzxC8o0g8o=
-X-Received: by 2002:a05:6808:384e:b0:3f3:e847:fdc1 with SMTP id
- 5614622812f47-3f3eb12e348mr10285215b6e.39.1739907653255; Tue, 18 Feb 2025
- 11:40:53 -0800 (PST)
+	s=arc-20240116; t=1739907828; c=relaxed/simple;
+	bh=pMvVG7fqHk6x9Lp+bc7lGWvpOYPn7WYP6O203zRn38I=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XtpGafSxcrHmlBYkftj7IF0ZpbG6zVPG/3HrUh/XrKLveAOoSMEN6jwX7XggeDA3Da5rx9nO016rKYOmds0eGcYF/taM9omMaBRlN6/ktSsnTBL7LpOXWez6/EQuiWqnzMluW6ufDertCrBjzC70QlMzqnRcfW3qBaKStPkphkI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=u/R0YUhg; arc=none smtp.client-ip=209.85.128.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f53.google.com with SMTP id 5b1f17b1804b1-43937cf2131so40058075e9.2
+        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 11:43:44 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739907823; x=1740512623; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=t6NET/R65D4fhygY4ZNz4mV2mBN1Fn/fSAZnL4GhO6k=;
+        b=u/R0YUhgtjl6EfbPcb8jg9FhB7sdaLo28saWnHxydKEUBmFosb1V6FvqLF0xdwVoVh
+         Lhhg13FMZIxapnOinJsH4WyuMjpfiOLe3YVLkM7HiW25OIqEweTj+n8ccn0F6Miyjk8P
+         AfgEJrII53/vz4J5HCtjElb5XTFWj4UulpP/UUNdn/DedruDtwunHxOMf02/tQGUU5gV
+         N5J4cH16mSfIU2GpeIjBJdBQeERlsEBAeNS2OZkUpUAB7y2a8Afd/NOQ6oNelPBgOihv
+         m2Z7E0Bg8TM6VdSsBO9Xcso8+2gRDeh3yjLL1w6GX/G0H07RWcj/eDaolDTWtwwV5OTP
+         fmog==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739907823; x=1740512623;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=t6NET/R65D4fhygY4ZNz4mV2mBN1Fn/fSAZnL4GhO6k=;
+        b=clu4+hCAmOBXsLGkasyn+vlEPJBYzHtareNHVhJkrLiBBwJlnlGlwwLGqswmyd9bhp
+         HOzN+w0XFBb/eNMTluP7iD9SBIBCCvFXcJ2yHZnSGTaWB8F2F0DMs70Ho/DaROiX95fz
+         KcFsr8RnXFQRYMuh2RYcjr8Yh+J3hL2iK38bDF0deGZCAXw+zj1Z9fnyeHYjbx8pjgxO
+         UoABrEP/J4ElZcVM3vhWPbJxJWHK2akOdBYxWUQHt8NcHEAhV3B2mrtAvdyF5Zrz0/ss
+         LT131XzwX2X79dInghJvfRamzZV5K6cTUuwBxhZNaZs+9iVzggJh+iaEqvxko22F37oD
+         kARQ==
+X-Forwarded-Encrypted: i=1; AJvYcCViPJuMeNLDmGp+TY8RfqZFb/SFOHHqDOIz4BOgsOx6UmFzII7IP0S6k/WLUnZmqAU+aUBsgiIuKw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx/nm4WY91DnV7ez7So1RMJfXvDyXR5slwFrFd+DxjziDb+vOtO
+	9b8Y1iGDnSLeGIDUxV5qat631rkJfCbEKyAjMc8W441ORyvhPcLrunawX6UweHY=
+X-Gm-Gg: ASbGnctBCmG9qoH4rTzAl1PkjqdYe7ywBRy1Fo5p6kwbtmZMUhcpL542PxbPBQ2LVZs
+	Lo/fUHYiO2KjSVNe1cJVzNStQutY8wlOdBI6CIp+iIpsCSbn1hj8K3p/9nXJ1IB1AWs4G0kYVM4
+	x3U+gJyDFClJPknW1Wypvd3lUTyovvcpQpH1spyKMpeFWFwp9KwiKmTF82hDY9vf1pXj6Kfn40C
+	YZDelXmbcQuQ7JXmlmPcGuxRCALNTB8ZHnNKG+BgR8XZDffj7URUbw6ZBwdbmUfVNGnPPLi10QH
+	qDRDCy/TrmNMJOV7NLMsjNVWWhfmRY13uBFMMHIPVp+20kg9EULQvRk=
+X-Google-Smtp-Source: AGHT+IE0UW/mzN+qXiFnRcnySUoZloCoBhk1jxMNyKm7/6Uvfk8YLL036J9/dJuG/NFnq4RdsX52mw==
+X-Received: by 2002:a05:600c:3b0e:b0:439:987c:2309 with SMTP id 5b1f17b1804b1-439987c256dmr19864515e9.27.1739907823188;
+        Tue, 18 Feb 2025 11:43:43 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-4395a055910sm190528525e9.9.2025.02.18.11.43.42
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 18 Feb 2025 11:43:42 -0800 (PST)
+Message-ID: <e36a5771-d277-41d3-af9c-c5841c4060a2@linaro.org>
+Date: Tue, 18 Feb 2025 20:43:42 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250112152658.20132-1-me@davidreaver.com>
-In-Reply-To: <20250112152658.20132-1-me@davidreaver.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 18 Feb 2025 20:40:41 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gaaOwkiYH8-HuoAd3BXkruvi00MFp=bkwAUe+X76yggQ@mail.gmail.com>
-X-Gm-Features: AWEUYZlDSSaDs0SCD8FvmatlcvljabO7macvIPMnLTqwbeykayQGPiEbD6bq8tg
-Message-ID: <CAJZ5v0gaaOwkiYH8-HuoAd3BXkruvi00MFp=bkwAUe+X76yggQ@mail.gmail.com>
-Subject: Re: [PATCH v2] pm: Replace deprecated kmap_atomic() with kmap_local_page()
-To: me@davidreaver.com
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Ira Weiny <ira.weiny@intel.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] thermal: rockchip: Support the rk3562 SoC in thermal
+ driver
+To: =?UTF-8?Q?Heiko_St=C3=BCbner?= <heiko@sntech.de>,
+ Kever Yang <kever.yang@rock-chips.com>
+Cc: linux-rockchip@lists.infradead.org,
+ Shaohan Yao <shaohan.yao@rock-chips.com>, linux-pm@vger.kernel.org,
+ Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org,
+ Zhang Rui <rui.zhang@intel.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ linux-arm-kernel@lists.infradead.org
+References: <20241224094015.3816301-1-kever.yang@rock-chips.com>
+ <20241224094015.3816301-2-kever.yang@rock-chips.com>
+ <7f17cc55-a741-4bb8-9513-0580ca6fedd3@linaro.org> <17758610.geO5KgaWL5@diego>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <17758610.geO5KgaWL5@diego>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sun, Jan 12, 2025 at 4:27=E2=80=AFPM David Reaver <me@davidreaver.com> w=
-rote:
->
-> kmap_atomic() is deprecated and should be replaced with kmap_local_page()
-> [1][2]. kmap_local_page() is faster in kernels with HIGHMEM enabled, can
-> take page faults, and allows preemption.
->
-> According to [2], this replacement is safe as long as the code between
-> kmap_atomic() and kunmap_atomic() does not implicitly depend on disabling
-> page faults or preemption. In all of the call sites in this patch, the on=
-ly
-> thing happening between mapping and unmapping pages is copy_page() calls,
-> and I don't suspect they depend on disabling page faults or preemption.
->
-> [1] https://lwn.net/Articles/836144/
-> [2] https://docs.kernel.org/mm/highmem.html#temporary-virtual-mappings
->
-> Signed-off-by: David Reaver <me@davidreaver.com>
-> ---
->
-> Apologies, I tried testing a CONFIG_HIGHMEM kernel in QEMU and clearly ma=
-de
-> an error because there is an obvious typo. Any pointers to test setups fo=
-r
-> testing CONFIG_HIGHMEM in a VM would be appreciated! Here is v2 of the
-> patch.
->
-> V1 -> V2: Fix typo kmap_page_local() -> kmap_local_page()
->
->  kernel/power/snapshot.c | 16 ++++++++--------
->  1 file changed, 8 insertions(+), 8 deletions(-)
->
-> diff --git a/kernel/power/snapshot.c b/kernel/power/snapshot.c
-> index c9fb559a6399..87f4dde4a49d 100644
-> --- a/kernel/power/snapshot.c
-> +++ b/kernel/power/snapshot.c
-> @@ -2270,9 +2270,9 @@ int snapshot_read_next(struct snapshot_handle *hand=
-le)
->                          */
->                         void *kaddr;
->
-> -                       kaddr =3D kmap_atomic(page);
-> +                       kaddr =3D kmap_local_page(page);
->                         copy_page(buffer, kaddr);
-> -                       kunmap_atomic(kaddr);
-> +                       kunmap_local(kaddr);
->                         handle->buffer =3D buffer;
->                 } else {
->                         handle->buffer =3D page_address(page);
-> @@ -2561,9 +2561,9 @@ static void copy_last_highmem_page(void)
->         if (last_highmem_page) {
->                 void *dst;
->
-> -               dst =3D kmap_atomic(last_highmem_page);
-> +               dst =3D kmap_local_page(last_highmem_page);
->                 copy_page(dst, buffer);
-> -               kunmap_atomic(dst);
-> +               kunmap_local(dst);
->                 last_highmem_page =3D NULL;
->         }
->  }
-> @@ -2881,13 +2881,13 @@ static inline void swap_two_pages_data(struct pag=
-e *p1, struct page *p2,
->  {
->         void *kaddr1, *kaddr2;
->
-> -       kaddr1 =3D kmap_atomic(p1);
-> -       kaddr2 =3D kmap_atomic(p2);
-> +       kaddr1 =3D kmap_local_page(p1);
-> +       kaddr2 =3D kmap_local_page(p2);
->         copy_page(buf, kaddr1);
->         copy_page(kaddr1, kaddr2);
->         copy_page(kaddr2, buf);
-> -       kunmap_atomic(kaddr2);
-> -       kunmap_atomic(kaddr1);
-> +       kunmap_local(kaddr2);
-> +       kunmap_local(kaddr1);
->  }
->
->  /**
+On 11/02/2025 11:19, Heiko Stübner wrote:
+> Hey Daniel,
+> 
+> Am Dienstag, 11. Februar 2025, 10:36:09 MEZ schrieb Daniel Lezcano:
+>> On 24/12/2024 10:40, Kever Yang wrote:
+>>> From: Shaohan Yao <shaohan.yao@rock-chips.com>
+>>>
+>>> There are one Temperature Sensor on rk3562, channel 0 is for chip.
+>>
+>> A bit stingy in terms of description, no ?
+>>
+>>
+>>> Signed-off-by: Shaohan Yao <shaohan.yao@rock-chips.com>
+>>> Signed-off-by: Kever Yang <kever.yang@rock-chips.com>
+> [...]
+>>> +static const struct tsadc_table rk3562_code_table[] = {
+>>> +	{0, -40000},
+>>> +	{1419, -40000},
+>>> +	{1428, -35000},
+>>> +	{1436, -30000},
+>>> +	{1445, -25000},
+>>> +	{1453, -20000},
+>>> +	{1462, -15000},
+>>> +	{1470, -10000},
+>>> +	{1479, -5000},
+>>> +	{1487, 0},
+>>> +	{1496, 5000},
+>>> +	{1504, 10000},
+>>> +	{1512, 15000},
+>>> +	{1521, 20000},
+>>> +	{1529, 25000},
+>>> +	{1538, 30000},
+>>> +	{1546, 35000},
+>>> +	{1555, 40000},
+>>> +	{1563, 45000},
+>>> +	{1572, 50000},
+>>> +	{1580, 55000},
+>>> +	{1589, 60000},
+>>> +	{1598, 65000},
+>>> +	{1606, 70000},
+>>> +	{1615, 75000},
+>>> +	{1623, 80000},
+>>> +	{1632, 85000},
+>>> +	{1640, 90000},
+>>> +	{1648, 95000},
+>>> +	{1657, 100000},
+>>> +	{1666, 105000},
+>>> +	{1674, 110000},
+>>> +	{1682, 115000},
+>>> +	{1691, 120000},
+>>> +	{1699, 125000},
+>>> +	{TSADCV2_DATA_MASK, 125000},
+>>> +};
+>>
+>> May be it is time to optimize all these tables out of the memory driver?
+>>
+>> It is the 9th table introduced.
+> 
+> just to see if we think differently, what do you have in mind?
+> 
+> For me the adc-to-temperature conversion _is_ part of the hw-block itself,
+> so should likely not spill into the devicetree, but you're right, defining
+> a big table for each soc also isn't really great.
+> 
+> For the rk3562 in question, the stepping seems to be 8,9,8,9,....
+> where for the rk3568 the value stepping seems to be 32,36,32,36,...
+> and it looks similar for the other socs too, with the driver is already
+> interpolating between values it seems.
+> 
+> So even just halving (or more) all the big tables (dropping every second
+> entry for example) should not really loose us real granularity.
 
-Applied as 6.15 material, thanks!
+It can be just a formula to be reused in the adc_to_temp, temp_to_adc or 
+precompute the table from the formula:
+
+For instance the following formulas:
+
+rk3588_code_table:
+
+	y = ((x^2 + 23315x - 5949300) * 100) / 2457
+
+rk3568_code_table:
+
+	y = ((x^2 - 2660x + 1547712) * 625) / 2448
+
+etc ...
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
