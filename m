@@ -1,185 +1,221 @@
-Return-Path: <linux-pm+bounces-22298-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22299-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4308BA399F3
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:10:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2196AA39ACE
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:29:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3B19F7A4131
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 11:09:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id E44A31886024
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 11:29:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C78A62397AA;
-	Tue, 18 Feb 2025 11:10:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="n0zjKGCf"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5789123C8BF;
+	Tue, 18 Feb 2025 11:28:57 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f176.google.com (mail-yb1-f176.google.com [209.85.219.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E863123CF1F
-	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 11:10:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.176
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AF3A91DEFEB;
+	Tue, 18 Feb 2025 11:28:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739877005; cv=none; b=HFaHWHS47NF3erbx8+9lxJh6eUaJYwqKLHKwRC0SNvDGOMkwQphmowaGl2Pclxh1BvSRa6ziN+ewGENaooCX4OAaRSY9+vazU7yUxLGzPzLuDts8lvddxDEP9FacAsIQ0xMQ983wkY4oSusEBRGvFdL+0Tvj/3jAdKhgQ5UsGus=
+	t=1739878137; cv=none; b=Y7rmOd/qpGySsKEPozwRh7Jlj90pbZUwRC3ehx8IVFj8635KDOJQomcx9BvuBn7JNQkoXWr2gOhfn22WVElaWYdRitRBc3ytz5RrFAKHYH49k7MJQc21PuTFjJsxP0vv3Bvz8hIxv6cCyr9ufNYN77y8ezeI4j4Uv5fozkI/ZM8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739877005; c=relaxed/simple;
-	bh=NXHNjkP9fyKMEmNMjHzJ6qYQRe9g0RNuw9w6xp6qFwc=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hHuj6XxV8Oe7jo4ClMykZMjQGtStSgBOAjs/x642qh0x3Qn811KsvNKs+CuumZo+vvbprH+LIJsJEQlYeso5upof56PjyFNOuQgdxm/1F7GdRak6q7umWd4+LVCNqUCu9hJOxMXWa8R3I01OXlBRCM1tG72hMj2cUK7UAq0Yyuc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=n0zjKGCf; arc=none smtp.client-ip=209.85.219.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f176.google.com with SMTP id 3f1490d57ef6-e5dc39ede40so3031120276.1
-        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 03:10:03 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739877003; x=1740481803; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=K3ttRw4WtfoPQJNKd0VXXYu2qHT5cqSTvGY4bcJ3Gyo=;
-        b=n0zjKGCfm4ANVdrKJbV9RSg+1EQiBH9XYQ47w86fWBvbvPFUOf/2x8+SUlsXybi24I
-         xyPZieCloAQXW9gFi9w5pHgNMOmtKyAtdzIOVBgI2DNSTLRkHBW6csUEol2WWMbgMaYG
-         ti5qPrp92TGyDpQscThp84kxHttZy8pda5QNGh1j9meBQWYTpTHjJjlZz4iD9XOJBQJ8
-         rYt6JvmBb711Ig1wI/yI8P2ZNuFUZC3rzyGK2Dh1u0r0VCaNEFlLXXomTtbs5MZCFh/N
-         xMZoJMWmkF9cQCBEE4urLrqLpMcq69rikqCTY8AUzC3XHqtKTauzUMroZqw1u3hgSxrX
-         isPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739877003; x=1740481803;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=K3ttRw4WtfoPQJNKd0VXXYu2qHT5cqSTvGY4bcJ3Gyo=;
-        b=BMT+dNR++hZCUvjyZPnfdINL0OL3Pdmw5qxh0HnQh/2wUjB6FYhyTxyrBxqYyTjnA/
-         XXX8ru/vKH1Z6fcSZHHjW6BoS7r2ezI50gsZBmyseC/vgQAP9ejgbjQhG+iU9ZYtJxXU
-         a0nn4yomM26ag76Zip19BXwmFPtzns0Tl02jFQJgvz/xnRyBLfC8AmwM7zASx1dzPoBh
-         2mWe3W1ldCjtnPT55Unwk4jRml/RUHZZb8QePNDw/Nt2dV7/dlTioKZkSXIhNvWR//Vg
-         9TRfSs4kWDaBOJCixsO0ELpU4iD1WxkuNvD75vAzLciAopeZE9aQgS0t5u+XvCGdsiSl
-         bgPw==
-X-Gm-Message-State: AOJu0YzksC3VuWqkgLal6mBXfnGccUA2ZnthP5eMCb+TK8U1x1MTUQIl
-	FVQv8NFh+jALMSbGCb00aORDgTNi43O3mR5QOI0Q0zujs31VSWv6JdV9WMcCvzs1+PzjPxNnQr1
-	xYNyCHj0pGgr2UL+ya70sR+X0DQfISAqyr7oHoA==
-X-Gm-Gg: ASbGncssc1tO+x2A1SVwMdMYhHZyDw7M4i/8l/ykvB8+5FB5FsuxHiJbnjfY+lo0RWc
-	i88Jm1RyK/vQkVVUTdkKl2G7a1oFY0xosN4qmKllnNi1BFegfetsqiuGrt8c7mFkCHVY8Hqs4ng
-	==
-X-Google-Smtp-Source: AGHT+IHPKubHAH0Pi1Zg45U5aQK5z2M6ravRhS4x0dWo2wjj+DHKeqdoUN3K55NfHWX9cETDd8ABYa9nLLFDw4SD/PU=
-X-Received: by 2002:a05:6902:200e:b0:e57:f841:949f with SMTP id
- 3f1490d57ef6-e5dc904c46bmr9500103276.19.1739877002844; Tue, 18 Feb 2025
- 03:10:02 -0800 (PST)
+	s=arc-20240116; t=1739878137; c=relaxed/simple;
+	bh=e3YwgSBfhhjN6vJS7m63dt9OHcAqtI+PxuY9KnmPzqE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=jAQ3bRfsb4WtpZ14U6miltv2auHmqZPyb3XyNAGM7OrU7pBAw1pDOVGDB1K6wh3T7Q3FFnSkwgKEQQrugnJTtG2pquiLEo3P2gwn9263ZdgZ9u3NVO5y7eLTgykPRjYx6xE9UFdkWOK2xBftIaeNW0bKnuvhci0T3HQA7jZzYDU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 906D313D5;
+	Tue, 18 Feb 2025 03:29:11 -0800 (PST)
+Received: from [10.1.26.35] (e127648.arm.com [10.1.26.35])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id AE8413F6A8;
+	Tue, 18 Feb 2025 03:28:50 -0800 (PST)
+Message-ID: <09472579-d59a-4be9-996b-1638228895ac@arm.com>
+Date: Tue, 18 Feb 2025 11:28:48 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12617588.O9o76ZdvQC@rjwysocki.net>
-In-Reply-To: <12617588.O9o76ZdvQC@rjwysocki.net>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Tue, 18 Feb 2025 12:09:26 +0100
-X-Gm-Features: AWEUYZnJEpLOxgFTwflcJJSgimkNtFIn9NlT1KBJUKUK1WBE1F1P0_LpZGuyeGw
-Message-ID: <CAPDyKFrEv_DV=zZ57S==pZHQt1oeArYHWNrwthenRbP+VhLoHA@mail.gmail.com>
-Subject: Re: [PATCH v1] PM: Rearrange documentation related to __pm_runtime_disable()
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Johan Hovold <johan@kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [RFT][PATCH v1] cpuidle: teo: Avoid selecting deepest idle state
+ over-eagerly
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM <linux-pm@vger.kernel.org>, dsmythies@telus.net,
+ LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+ Aboorva Devarajan <aboorvad@linux.ibm.com>
+References: <12630185.O9o76ZdvQC@rjwysocki.net>
+ <8d147f4f-f511-4f44-b18e-2011b0fab17c@arm.com>
+ <CAJZ5v0jjs=po8y0MzkUo=mUuqkxq3tg-V8r7-=AUJUu6=9ymMw@mail.gmail.com>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <CAJZ5v0jjs=po8y0MzkUo=mUuqkxq3tg-V8r7-=AUJUu6=9ymMw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On Mon, 17 Feb 2025 at 21:03, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> There are only two callers of __pm_runtime_disable(), one of which is
-> device_suspend_late() and the other is pm_runtime_disable() that has
-> its own kerneldoc comment and there are no plans to add any more of
-> them.  Since they use different values of the __pm_runtime_disable()
-> second parameter, the actual code behavior is different in each case,
-> but it is all documented in the __pm_runtime_disable() kerneldoc comment
-> which is not particularly straightforward.
->
-> For this reason, move the information from the __pm_runtime_disable()
-> kerneldoc comment to the pm_runtime_disable() one and into a separate
-> comment in device_suspend_late() and remove the __pm_runtime_disable()
-> kerneldoc comment altogether.
->
-> No functional impact.
->
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On 2/14/25 21:34, Rafael J. Wysocki wrote:
+> On Thu, Feb 13, 2025 at 3:08 PM Christian Loehle
+> <christian.loehle@arm.com> wrote:
+>>
+>> On 2/4/25 20:58, Rafael J. Wysocki wrote:
+>>> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>>
+>>> It has been observed that the recent teo governor update which concluded
+>>> with commit 16c8d7586c19 ("cpuidle: teo: Skip sleep length computation
+>>> for low latency constraints") caused the max-jOPS score of the SPECjbb
+>>> 2015 benchmark [1] on Intel Granite Rapids to decrease by around 1.4%.
+>>> While it may be argued that this is not a significant increase, the
+>>> previous score can be restored by tweaking the inequality used by teo
+>>> to decide whether or not to preselect the deepest enabled idle state.
+>>> That change also causes the critical-jOPS score of SPECjbb to increase
+>>> by around 2%.
+>>>
+>>> Namely, the likelihood of selecting the deepest enabled idle state in
+>>> teo on the platform in question has increased after commit 13ed5c4a6d9c
+>>> ("cpuidle: teo: Skip getting the sleep length if wakeups are very
+>>> frequent") because some timer wakeups were previously counted as non-
+>>> timer ones and they were effectively added to the left-hand side of the
+>>> inequality deciding whether or not to preselect the deepest idle state.
+>>>
+>>> Many of them are now (accurately) counted as timer wakeups, so the left-
+>>> hand side of that inequality is now effectively smaller in some cases,
+>>> especially when timer wakeups often occur in the range below the target
+>>> residency of the deepest enabled idle state and idle states with target
+>>> residencies below CPUIDLE_FLAG_POLLING are often selected, but the
+>>> majority of recent idle intervals are still above that value most of
+>>> the time.  As a result, the deepest enabled idle state may be selected
+>>> more often than it used to be selected in some cases.
+>>>
+>>> To counter that effect, add the sum of the hits metric for all of the
+>>> idle states below the candidate one (which is the deepest enabled idle
+>>> state at that point) to the left-hand side of the inequality mentioned
+>>> above.  This will cause it to be more balanced because, in principle,
+>>> putting both timer and non-timer wakeups on both sides of it is more
+>>> consistent than only taking into account the timer wakeups in the range
+>>> above the target residency of the deepest enabled idle state.
+>>>
+>>> Link: https://www.spec.org/jbb2015/
+>>> Tested-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+>>> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>>> ---
+>>>  drivers/cpuidle/governors/teo.c |    6 +++---
+>>>  1 file changed, 3 insertions(+), 3 deletions(-)
+>>>
+>>> --- a/drivers/cpuidle/governors/teo.c
+>>> +++ b/drivers/cpuidle/governors/teo.c
+>>> @@ -349,13 +349,13 @@
+>>>       }
+>>>
+>>>       /*
+>>> -      * If the sum of the intercepts metric for all of the idle states
+>>> -      * shallower than the current candidate one (idx) is greater than the
+>>> +      * If the sum of the intercepts and hits metric for all of the idle
+>>> +      * states below the current candidate one (idx) is greater than the
+>>>        * sum of the intercepts and hits metrics for the candidate state and
+>>>        * all of the deeper states, a shallower idle state is likely to be a
+>>>        * better choice.
+>>>        */
+>>> -     if (2 * idx_intercept_sum > cpu_data->total - idx_hit_sum) {
+>>> +     if (2 * (idx_intercept_sum + idx_hit_sum) > cpu_data->total) {
+>>>               int first_suitable_idx = idx;
+>>>
+>>>               /*
+>>>
+>>>
+>>>
+>>
+>> I'm curious, are Doug's numbers reproducible?
+>> Or could you share the idle state usage numbers? Is that explainable?
+>> Seems like a lot and it does worry me that I can't reproduce anything
+>> as drastic.
+> 
+> Well, it may not be drastic, but the results below pretty much confirm
+> that this particular change isn't going in the right direction IMV.
 
-Much better!
+Agreed, I'd still be eager to pick up something like Doug reported with
+my tests too :(
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+> 
+>> I did a bit of x86 as well and got for Raptor Lake (I won't post the
+>> non-x86 numbers now, but teo-tweak performs comparable to teo mainline.)
+>>
+>> Idle 5 min:
+>> device   gov     iter    Joules  idles   idle_misses     idle_miss_ratio         belows  aboves
+>> teo     0       170.02  12690   646     0.051   371     275
+>> teo     1       123.17  8361    517     0.062   281     236
+>> teo     2       122.76  7741    347     0.045   262     85
+>> teo     3       118.5   8699    668     0.077   307     361
+>> teo     4       80.46   8113    443     0.055   264     179
+>> teo-tweak       0       115.05  10223   803     0.079   323     480
+>> teo-tweak       1       164.41  8523    631     0.074   263     368
+>> teo-tweak       2       163.91  8409    711     0.085   256     455
+>> teo-tweak       3       137.22  8581    721     0.084   261     460
+>> teo-tweak       4       174.95  8703    675     0.078   261     414
+> 
+> So basically the energy usage goes up, idle misses go up, idle misses
+> ratio goes up and the "above" misses go way up.  Not so good as far as
+> I'm concerned.
+> 
+>> teo     0       164.34  8443    516     0.061   303     213
+>> teo     1       167.85  8767    492     0.056   256     236
+>> teo     2       166.25  7835    406     0.052   263     143
+>> teo     3       189.77  8865    493     0.056   276     217
+>> teo     4       136.97  9185    467     0.051   286     181
+> 
+> The above is menu I think?
 
-Kind regards
-Uffe
+No this is teo again, just wanted to include it because the variance is
+quite large, (not unusual for idle).
+The full table (with menu (mainline))
 
-> ---
->  drivers/base/power/main.c    |    4 ++++
->  drivers/base/power/runtime.c |   14 --------------
->  include/linux/pm_runtime.h   |   15 +++++++++++----
->  3 files changed, 15 insertions(+), 18 deletions(-)
->
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -1404,6 +1404,10 @@
->         TRACE_DEVICE(dev);
->         TRACE_SUSPEND(0);
->
-> +       /*
-> +        * Disable runtime PM for the device without checking if there is a
-> +        * pending resume request for it.
-> +        */
->         __pm_runtime_disable(dev, false);
->
->         dpm_wait_for_subordinate(dev, async);
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1460,20 +1460,6 @@
->  }
->  EXPORT_SYMBOL_GPL(pm_runtime_barrier);
->
-> -/**
-> - * __pm_runtime_disable - Disable runtime PM of a device.
-> - * @dev: Device to handle.
-> - * @check_resume: If set, check if there's a resume request for the device.
-> - *
-> - * Increment power.disable_depth for the device and if it was zero previously,
-> - * cancel all pending runtime PM requests for the device and wait for all
-> - * operations in progress to complete.  The device can be either active or
-> - * suspended after its runtime PM has been disabled.
-> - *
-> - * If @check_resume is set and there's a resume request pending when
-> - * __pm_runtime_disable() is called and power.disable_depth is zero, the
-> - * function will wake up the device before disabling its runtime PM.
-> - */
->  void __pm_runtime_disable(struct device *dev, bool check_resume)
->  {
->         spin_lock_irq(&dev->power.lock);
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -556,11 +556,18 @@
->   * pm_runtime_disable - Disable runtime PM for a device.
->   * @dev: Target device.
->   *
-> - * Prevent the runtime PM framework from working with @dev (by incrementing its
-> - * "blocking" counter).
-> + * Prevent the runtime PM framework from working with @dev by incrementing its
-> + * "disable" counter.
->   *
-> - * For each invocation of this function for @dev there must be a matching
-> - * pm_runtime_enable() call in order for runtime PM to be enabled for it.
-> + * If the counter is zero when this function runs and there is a pending runtime
-> + * resume request for @dev, it will be resumed.  If the counter is still zero at
-> + * that point, all of the pending runtime PM requests for @dev will be canceled
-> + * and all runtime PM operations in progress involving it will be waited for to
-> + * complete.
-> + *
-> + * For each invocation of this function for @dev, there must be a matching
-> + * pm_runtime_enable() call, so that runtime PM is eventually enabled for it
-> + * again.
->   */
->  static inline void pm_runtime_disable(struct device *dev)
->  {
->
->
->
+teo 	0 	170.02 	12690 	646 	0.051 	371 	275
+teo 	1 	123.17 	8361 	517 	0.062 	281 	236
+teo 	2 	122.76 	7741 	347 	0.045 	262 	85
+teo 	3 	118.5 	8699 	668 	0.077 	307 	361
+teo 	4 	80.46 	8113 	443 	0.055 	264 	179
+teo-tweak 	0 	115.05 	10223 	803 	0.079 	323 	480
+teo-tweak 	1 	164.41 	8523 	631 	0.074 	263 	368
+teo-tweak 	2 	163.91 	8409 	711 	0.085 	256 	455
+teo-tweak 	3 	137.22 	8581 	721 	0.084 	261 	460
+teo-tweak 	4 	174.95 	8703 	675 	0.078 	261 	414
+teo 	0 	164.34 	8443 	516 	0.061 	303 	213
+teo 	1 	167.85 	8767 	492 	0.056 	256 	236
+teo 	2 	166.25 	7835 	406 	0.052 	263 	143
+teo 	3 	189.77 	8865 	493 	0.056 	276 	217
+teo 	4 	136.97 	9185 	467 	0.051 	286 	181
+menu 	0 	180.13 	8925 	343 	0.038 	303 	40
+menu 	1 	208.49 	8717 	345 	0.040 	312 	33
+menu 	2 	168.38 	8451 	321 	0.038 	274 	47
+menu 	3 	139.48 	7853 	310 	0.039 	289 	21
+menu 	4 	166.61 	7769 	339 	0.044 	322 	17
+
+> 
+>> At least in the idle case you can see an increase in 'above' idle_misses.
+
+Agreed, idle_misses clearly go up as mentioned.
+
+>>
+>> Firefox Youtube 4K video playback 2 min:
+>> device   gov     iter    Joules  idles   idle_misses     idle_miss_ratio         belows  aboves
+>> teo     0       260.09  67404   11189   0.166   1899    9290
+>> teo     1       273.71  76649   12155   0.159   2233    9922
+>> teo     2       231.45  59559   10344   0.174   1747    8597
+>> teo     3       202.61  58223   10641   0.183   1748    8893
+>> teo     4       217.56  61411   10744   0.175   1809    8935
+>> teo-tweak       0       227.99  61209   11251   0.184   2110    9141
+>> teo-tweak       1       222.44  61959   10323   0.167   1474    8849
+>> teo-tweak       2       218.1   64380   11080   0.172   1845    9235
+>> teo-tweak       3       207.4   60183   11267   0.187   1929    9338
+>> teo-tweak       4       217.46  61253   10381   0.169   1620    8761
+> 
+> And it doesn't improve things drastically here, although on average it
+> does reduce energy usage.
+
 
