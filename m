@@ -1,124 +1,139 @@
-Return-Path: <linux-pm+bounces-22305-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22308-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CC798A39C77
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 13:50:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EF752A39C91
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 13:55:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id AB3BE7A2607
-	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:48:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E9F003A84AC
+	for <lists+linux-pm@lfdr.de>; Tue, 18 Feb 2025 12:55:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E0CA25A35C;
-	Tue, 18 Feb 2025 12:49:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A8E8825A643;
+	Tue, 18 Feb 2025 12:55:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L7gvC9vf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="xjmHC7aY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f169.google.com (mail-yb1-f169.google.com [209.85.219.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 294272594B7
-	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 12:49:51 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F19711DDE9
+	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 12:55:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739882991; cv=none; b=miVXHiawotQ7o2UKj+uivf51rC9XU296gbEOa+F8lDfK1klLEQt6W2EB1Fk1Iu+6HMYt+rZcdfhhxLxENoBlDbDxEDvVCQzNAF7qXu3EL0pJqziwkyqLuojnVHZT5V53wT1Y26SJB9XmKw7er+guh40j1+qjnnvEinD9/h5c8q4=
+	t=1739883322; cv=none; b=LNGPGr1/VZjNhT3IxCXMAuBnNIvhGG551QjwFK1OE1ozrV3soFx+S6mvlsu5fPSLJ9MKSvY3Xbav1Nko81MZKpjO1nviWHEIJ4liJGl9P9V4YwpG4H7P1nhlB8U80Hcp8p2nsv80PROcu8/mw+3YJbFj4zLiq3LFssCRmb8ZoAs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739882991; c=relaxed/simple;
-	bh=idynLg+n570UxVJEbZQbALLGH9flYbfL7QB8Dvg2Dy0=;
+	s=arc-20240116; t=1739883322; c=relaxed/simple;
+	bh=fAkWF5NGE22B9x/eQFJgw5Q4IlMRLRI9uy2c5Qbi6y8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GqBvzwnlZVW6Tk/E9UwRiNDU968ejBmw6GUInx6S3HGiJM/S7+vNEX/E89qu7NHuOGFEUiqCMu57+EgdNzrKFT54RjACCUGMxr0JtN32SflsLQI5QxJpgSq+wCn7GL7x+r1RUnzbSAFhL+MX4pzDM0+7dogy1dLGYLvbCK5KPA8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L7gvC9vf; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07EECC4AF09
-	for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 12:49:51 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739882991;
-	bh=idynLg+n570UxVJEbZQbALLGH9flYbfL7QB8Dvg2Dy0=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=L7gvC9vfHxanFQbTTJckDSdF23pLkWbMSEjvFP48eIxRuGw68hjxx22QkMIB2TNlt
-	 WVDA1He0tDYGAwcdu/YPcl0axXw7v+OGwljDTCdTCSaJ8ksIyrkyuGRH89pqjGny/o
-	 U7ngJBiwqlSVk3UlijEipDbg8ftBypgo/grIHcqRQmu6Vtk2yLGTWXtjrRT2koKOTL
-	 /7ICUvJIWD7UX0pcVA65/8HKXHsQR8c1izYWpKH32jJslHB7g+y6Z2Jko5XfxyZsvQ
-	 pJdgHgZ3aE3bsk1RKky++79ADecsLfW9ghx50Ia9fqLt0Dl/1T8zmuP0Fn7VOAvdkA
-	 tHoMCqy8ahsuA==
-Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5fa2685c5c0so2701070eaf.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 04:49:51 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVfdHk4xVj1LpKDBsB9u0DBSrq9XgIq+svzZAjZDTDTpoA1dEW58euRa4oOqJM9UpkY+2QCuBOAjA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwBQyZTVh3SI6FnJcaJgiYYurvpoiTvncEPYhB9z+GgDajtq63F
-	+f9HW2TD/Yj3Vwt9JZ0aGKcK78b51Ln98uRZIkNUiV6W+SHzYROhlO/5lF8SWv+wcNIbgtGFZh0
-	Ax4ZzQ7Jw/RNOaz89r+foFUekxNg=
-X-Google-Smtp-Source: AGHT+IG+SLdXSLCPwCNvc4DsALlMiNwh9q34pP7mQ9K/SG4mXQKD8pehW7+aYG8ousnGCC7owq7qWMSB1mEK25v+Vok=
-X-Received: by 2002:a05:6808:2024:b0:3f0:403a:3db9 with SMTP id
- 5614622812f47-3f3eb15ab78mr8430544b6e.35.1739882990327; Tue, 18 Feb 2025
- 04:49:50 -0800 (PST)
+	 To:Cc:Content-Type; b=Dl/qosegEbfHul3hffs3ERrhLvAV9LhRDNSM47+WfGUsryW0CZtWjnja1Wy9cZdKxOB4lGNitPV65hgeYqY2baj8QwXBO9lP5WX4o0oB+ulaz4RWaioP8A+A+zPLZ0qA3jZ3HgecQFr6SsGhPeMqasWvdVvMYe71JKpbPoNeq7A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=xjmHC7aY; arc=none smtp.client-ip=209.85.219.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f169.google.com with SMTP id 3f1490d57ef6-e3978c00a5aso4019302276.1
+        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 04:55:20 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1739883320; x=1740488120; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=XKP0fSYcRydlhHwC4VSz6cV+PfN3f0BcpYNYU9tHcGI=;
+        b=xjmHC7aYrf6M8SPb9+IIM9aYlMNPt4+njn1XHSEEM6L9gc+a+6W4XnFeUn07X1A7ku
+         h08pQQaLCOaWHh6frmySvgUDKRLwozmxM1nd7d7baQKmA23UlPjXuqf4OR+RoDDp23EA
+         dOa+vjmSq7t8eB5AGb4+g8oE/QT4PPSKKKcVCn1DfQuY2pGUR0YfJw2YSsilb872QQY3
+         niHxPqL+jkcOYuiD+mr1QctLmVqwQ6ANAz09eHTrg8OCZBaYsXaji73s/1ZLuL/qDYsN
+         8wNTEdLPGvvkP922+Bwaty0bX5ADdJ+c/sllhmN1/slKuecDO/QlkqyWOWq0lnubfqzN
+         aZ/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1739883320; x=1740488120;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=XKP0fSYcRydlhHwC4VSz6cV+PfN3f0BcpYNYU9tHcGI=;
+        b=rlRsds9exJYCj8an+zdtixgih1iLcRZfdNT5+5/djTYCrGikU5rxyX7SF3YNNWBK22
+         2b0aWutOFThwLPteXD1QtMyaeKVePRWG+0XqsFsbx4qG+lsfSot5Inr7wqB1GGaxmn0T
+         w5BLlV17+JsZ6nsU3QxYjVeLoX8JNzGIzWuVRwkrghWgx6ZCoguEKrq0iLIUWvvMbwGN
+         CVBnSERdA9Ptu02d2ezWApsjThZngUpAnviQ8vkz7duTMaBHIxSKpkcnWAHM6jsfoW/1
+         0FEgGcnJDy70LJCmA9Mf1n1IKQxGyWuXYT8m8IXvhpppyixtgfXbYgEW5h1Oc1881o82
+         nZBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUxGy2v1QEnOxHBUjAq5ELCsohbZPSzbVvklU35ap3sRR/eSqnZ4jc6De0921sQ1DswtUhVm+nH3w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyLf+6k0i74BIrYo9uquL8L5JMK0HWD16RBWvyCw27gL2EE8clC
+	pcA0OMponoNS9WhxoQaHAcSk5EOMWy7vQStQpgSbUkl8cHuyvC82eaXHkyi16G1kRZ1NuIXmexO
+	6aiIUtAGsvtwJB2jOriU+ap7MRuZRIVFq34aepg==
+X-Gm-Gg: ASbGnct9q47qpMzzbuP0bWfOyzTfxEUr9MPGH721pvy2cJU0gor50tmLMtfJ08ZPF8I
+	9xTQ6DNlgvCCthOdQfGGVPqt4jxWu6DpaGPVWHGGn1yU/D2M1SjPbMzmnY5PlFS/9eDXLjmul6Q
+	==
+X-Google-Smtp-Source: AGHT+IGqWa+YTDuo/jIeuuse8zv3M2XdO5Dzh8lkFtkue0oKd3y7Sr4YadCsNIUJp3SxZ4H9b90Z6MNHcCka61iZ7fo=
+X-Received: by 2002:a05:6902:3387:b0:e5d:b2c4:7cb7 with SMTP id
+ 3f1490d57ef6-e5dc9047e37mr11320156276.12.1739883319875; Tue, 18 Feb 2025
+ 04:55:19 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250218082021.2766-1-lirongqing@baidu.com>
-In-Reply-To: <20250218082021.2766-1-lirongqing@baidu.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Tue, 18 Feb 2025 13:49:39 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gHUQzjk9vdSrHOU6tCoN0hx291ALW7tVN-JPxW9cVSiw@mail.gmail.com>
-X-Gm-Features: AWEUYZnP7fuWYD5K1U2bn0Uij2nRPMuqaZhvU4CKR28vffnqfgdViyv-y3myEEo
-Message-ID: <CAJZ5v0gHUQzjk9vdSrHOU6tCoN0hx291ALW7tVN-JPxW9cVSiw@mail.gmail.com>
-Subject: Re: [PATCH] PM: EM: use kfree_rcu to simplify the code
-To: lirongqing <lirongqing@baidu.com>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: rafael@kernel.org, pavel@kernel.org, len.brown@intel.com, 
-	linux-pm@vger.kernel.org
+References: <20250217140145.117086-1-ulf.hansson@linaro.org> <CAJZ5v0hi=zCuhmVRf2HVRWkR53U7xqxC3oQDs8-JN-cyQ+ZX1w@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hi=zCuhmVRf2HVRWkR53U7xqxC3oQDs8-JN-cyQ+ZX1w@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 18 Feb 2025 13:54:44 +0100
+X-Gm-Features: AWEUYZkPUdp4exJ6jSmob_1efkRW1I1YA2HXT-xMpcoDiySdNuxCrLPd8wp93yY
+Message-ID: <CAPDyKFq1w7Ez+6GSKDeCpeQ=Xm4c3U9BMu3G8q+v2MXk1TdwKw@mail.gmail.com>
+Subject: Re: [PATCH] MAINTAINERS: Update section for cpuidle-psci
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>, Sudeep Holla <sudeep.holla@arm.com>, 
+	linux-pm@vger.kernel.org, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	linux-arm-kernel@lists.infradead.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-+Lukasz Luba
+On Tue, 18 Feb 2025 at 13:48, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Mon, Feb 17, 2025 at 3:01=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+> >
+> > Add myself as a co-maintainer for the cpuidle-psci driver and the
+> > corresponding git-tree, which I am already using for this.
+>
+> Lorenzo, Sudeep, any objections?
+>
+> Ulf, do you want me to pick this up?
 
-On Tue, Feb 18, 2025 at 9:20=E2=80=AFAM lirongqing <lirongqing@baidu.com> w=
-rote:
->
-> From: Li RongQing <lirongqing@baidu.com>
->
-> The callback function of call_rcu() just calls kfree(), so use
-> kfree_rcu() instead of call_rcu() + callback function.
->
-> Signed-off-by: Li RongQing <lirongqing@baidu.com>
+I can take it via my pmdomain tree, but thanks anyway! Let's also
+leave some more time for Sudeep/Lorenzo to comment.
 
-This looks fine to me.  Lukasz?
+Kind regards
+Uffe
 
-> ---
->  kernel/power/energy_model.c | 10 +---------
->  1 file changed, 1 insertion(+), 9 deletions(-)
 >
-> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
-> index 3874f0e..72655ef 100644
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -161,14 +161,6 @@ static void em_debug_create_pd(struct device *dev) {=
-}
->  static void em_debug_remove_pd(struct device *dev) {}
->  #endif
->
-> -static void em_destroy_table_rcu(struct rcu_head *rp)
-> -{
-> -       struct em_perf_table __rcu *table;
-> -
-> -       table =3D container_of(rp, struct em_perf_table, rcu);
-> -       kfree(table);
-> -}
-> -
->  static void em_release_table_kref(struct kref *kref)
->  {
->         struct em_perf_table __rcu *table;
-> @@ -176,7 +168,7 @@ static void em_release_table_kref(struct kref *kref)
->         /* It was the last owner of this table so we can free */
->         table =3D container_of(kref, struct em_perf_table, kref);
->
-> -       call_rcu(&table->rcu, em_destroy_table_rcu);
-> +       kfree_rcu(table, rcu);
->  }
->
->  /**
-> --
-> 2.9.4
->
+> > Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
+> > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  MAINTAINERS | 2 ++
+> >  1 file changed, 2 insertions(+)
+> >
+> > diff --git a/MAINTAINERS b/MAINTAINERS
+> > index 25c86f47353d..f2be70dec4ee 100644
+> > --- a/MAINTAINERS
+> > +++ b/MAINTAINERS
+> > @@ -6087,9 +6087,11 @@ F:       include/linux/platform_data/cpuidle-exy=
+nos.h
+> >  CPUIDLE DRIVER - ARM PSCI
+> >  M:     Lorenzo Pieralisi <lpieralisi@kernel.org>
+> >  M:     Sudeep Holla <sudeep.holla@arm.com>
+> > +M:     Ulf Hansson <ulf.hansson@linaro.org>
+> >  L:     linux-pm@vger.kernel.org
+> >  L:     linux-arm-kernel@lists.infradead.org (moderated for non-subscri=
+bers)
+> >  S:     Supported
+> > +T:     git git://git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm=
+.git
+> >  F:     drivers/cpuidle/cpuidle-psci.c
+> >
+> >  CPUIDLE DRIVER - ARM PSCI PM DOMAIN
+> > --
+> > 2.43.0
+> >
 
