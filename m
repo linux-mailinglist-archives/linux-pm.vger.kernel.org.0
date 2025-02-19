@@ -1,166 +1,371 @@
-Return-Path: <linux-pm+bounces-22458-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22459-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B8B6A3C61D
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 18:25:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A6B75A3C63C
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 18:29:59 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ED07174BB1
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 17:25:30 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0E9B3A9049
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 17:29:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7A2620E6F9;
-	Wed, 19 Feb 2025 17:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4CFCD2144BE;
+	Wed, 19 Feb 2025 17:29:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uvHPgHJF"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="CoITrMkC"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA302144A1;
-	Wed, 19 Feb 2025 17:25:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2056421423C;
+	Wed, 19 Feb 2025 17:29:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739985927; cv=none; b=EMcF2uYuZAtplYHvFTdQYPGlu7eQ6+c66PAu6wMtHoWSqREiZlBfWr90ZDOrMb9TQhxz+1skYXYmwHtXnHY5vCWnaTmsTcfQ4uBTYr+xGJWqREBWfWvEboaEmGENHEGC/2negdrrNkazqyVXbrRTUwjB5SihfpYa6tb7E9trPC4=
+	t=1739986185; cv=none; b=ufEHRc6ZuYa2rzsnDyurc6iDI7kmqrQJLmsy12c+dKnZrRpJVx4tdqB6j+xOyHWELztq9/eTTuhjr+j71qo6eTwN+t1POvyk3moTXTi3TFIfcJ/i0fbPfYVCP6SHTUw3k7BL8qjB8X1j5/pA4BfnwGK+GVGMZtU4hRzkV8pVH3I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739985927; c=relaxed/simple;
-	bh=ikNfhXqco/zJZ8TCINjDGAPmg4V6noayeVHjFs0Yu/Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c3gZB92EkHkW8Bb90feTB7VKb2qxRhcPgEC8VjdtF+6Ghk0hknan3D9kRWThyZ6Ab0xAT5fK/5muUFFFbeNtD1ReeJGPVJzwkWcTSvXr0JYY9NhgrVR8I7kNToQzvAOdK9pomHnUagbY7dr0bpxVeLGuncmIXYpIVRo2FVW+Ors=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uvHPgHJF; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F275C4CED1;
-	Wed, 19 Feb 2025 17:25:27 +0000 (UTC)
+	s=arc-20240116; t=1739986185; c=relaxed/simple;
+	bh=z83ueweR+RlrtVXKdG4SNso1GhHBkFmUl/Da6H9R1kY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=cfhTniEk/jsYZsl0ivTJltznTanDZctbK63xSqG4C1v+nrBznDxeo3OmVPQ9q12kyq2F5DZ2JADSmUzAk4CjLlT16lrxuZicU4q4zu4PrlD2+PCd5wlvbA4tKnF4bXbiBW5wD2bxapmQFjlmhfjbWs5w3ZYZao+le7lnVUSqdCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=CoITrMkC; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 23819C4CED1;
+	Wed, 19 Feb 2025 17:29:44 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739985927;
-	bh=ikNfhXqco/zJZ8TCINjDGAPmg4V6noayeVHjFs0Yu/Q=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=uvHPgHJFzQvrlD3awYsWUcla0n8dIxRVIbz4RH0VeLV8dwEFCU9Qf/wojt3GC0wlk
-	 ++TcMiJI6krHRmoO7At+xX4ymyQFZoIYFB/LCTncBSKYccb1sAaHTYaw3MLAuD6SzD
-	 6erSEDAVcsb561bKcI/1ineoDDo2KywCWcBD+GwqlbdsnLJ80DHKu0wrzDhXUv5abR
-	 /34aQfH2jaf992/jpuMIZG8S8wmGUal9kkaUWdF3TNGJpfmC7Xuy5II8bcPxgFUvzB
-	 jsgIyFqi5fwE+gwm8VUL1PG5PSWcHJ/0/vxj5HIcTQC6FhWCpOa6CMMu9DGj2aVJuO
-	 FphIi8TJL1nWQ==
-Date: Wed, 19 Feb 2025 09:25:24 -0800
-From: Kees Cook <kees@kernel.org>
-To: "Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>
-Cc: Huacai Chen <chenhuacai@kernel.org>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org,
-	GONG Ruiqi <gongruiqi@huaweicloud.com>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org,
-	Yuli Wang <wangyuli@uniontech.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Pekka Enberg <penberg@kernel.org>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
- Initialise random_kmalloc_seed after initcalls)
-Message-ID: <202502190921.6E26F49@keescook>
-References: <20250212141648.599661-1-chenhuacai@loongson.cn>
- <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
- <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
- <Z68N4lTIIwudzcLY@MacBook-Air-5.local>
- <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
- <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
+	s=k20201202; t=1739986184;
+	bh=z83ueweR+RlrtVXKdG4SNso1GhHBkFmUl/Da6H9R1kY=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=CoITrMkCD6vV2f4sc9dvYR2ngbo5pYU7zcC+2Zx+f3YPayA6Hf4hcAsZ2RN3oskXC
+	 MBl4UzMrOIZQGNVJSOafrl+5mmGZQhCwFix/RP2MgdboedUITge/B7hhY+qyFwuL1C
+	 1cQOweU0aBJAQ7sHKCwD/wNxP31udV4VmdK+r2dDIgM+R+OIe6uOP1lAoV6t6EUg5e
+	 0GZj1aIpDdH0ugQQif9ddKjF6A95ud5KvbcRAzSq6Sd9MZpZsrtvv+x8sHiQLpdJC/
+	 QuBXpK6N/bCUYiG2s3ckIQ1FyIE8HACOMJdH1vEF/NdZ5spoob9evsdaW4hoYiE1v1
+	 5vDlVrluEHBcw==
+Message-ID: <f11f3eae-76cc-4e77-93fb-3ee60003e127@kernel.org>
+Date: Wed, 19 Feb 2025 11:29:43 -0600
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 03/18] cpufreq/amd-pstate: Drop min and max cached
+ frequencies
+To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+ "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>
+Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
+ <linux-kernel@vger.kernel.org>,
+ "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+References: <20250217220707.1468365-1-superm1@kernel.org>
+ <20250217220707.1468365-4-superm1@kernel.org>
+ <87a59577-3b66-49ff-a0b5-0cddaa670a27@amd.com>
+Content-Language: en-US
+From: Mario Limonciello <superm1@kernel.org>
+In-Reply-To: <87a59577-3b66-49ff-a0b5-0cddaa670a27@amd.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Fri, Feb 14, 2025 at 09:44:59PM +0900, Harry (Hyeonggon) Yoo wrote:
-> On Fri, Feb 14, 2025 at 06:02:52PM +0800, Huacai Chen wrote:
-> > On Fri, Feb 14, 2025 at 5:33 PM Harry (Hyeonggon) Yoo
-> > <42.hyeyoo@gmail.com> wrote:
-> > >
-> > > On Thu, Feb 13, 2025 at 11:20:22AM +0800, Huacai Chen wrote:
-> > > > Hi, Harry,
-> > > >
-> > > > On Wed, Feb 12, 2025 at 11:39 PM Harry (Hyeonggon) Yoo
-> > > > <42.hyeyoo@gmail.com> wrote:
-> > > > > On Wed, Feb 12, 2025 at 11:17 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
-> > > > > >
-> > > > > > Hibernation assumes the memory layout after resume be the same as that
-> > > > > > before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this assumption.
-> > > > >
-> > > > > Could you please elaborate what do you mean by
-> > > > > hibernation assumes 'the memory layout' after resume be the same as that
-> > > > > before sleep?
-> > > > >
-> > > > > I don't understand how updating random_kmalloc_seed breaks resuming from
-> > > > > hibernation. Changing random_kmalloc_seed affects which kmalloc caches
-> > > > > newly allocated objects are from, but it should not affect the objects that are
-> > > > > already allocated (before hibernation).
-> > > >
-> > > > When resuming, the booting kernel should switch to the target kernel,
-> > > > if the address of switch code (from the booting kernel) is the
-> > > > effective data of the target kernel, then the switch code may be
-> > > > overwritten.
-> > >
-> > > Hmm... I'm still missing some pieces.
-> > > How is the kernel binary overwritten when slab allocations are randomized?
-> > >
-> > > Also, I'm not sure if it's even safe to assume that the memory layout is the
-> > > same across boots. But I'm not an expert on swsusp anyway...
-> > >
-> > > It'd be really helpful for linux-pm folks to clarify 1) what are the
-> > > (architecture-independent) assumptions are for swsusp to work, and
-> > > 2) how architectures dealt with other randomization features like kASLR...
-> >
+On 2/19/2025 02:00, Dhananjay Ugwekar wrote:
+> On 2/18/2025 3:36 AM, Mario Limonciello wrote:
+>> From: Mario Limonciello <mario.limonciello@amd.com>
+>>
+>> Use the perf_to_freq helpers to calculate this on the fly.
 > 
-> [+Cc few more people that worked on slab hardening]
+> Can we call out the below change (in the -1550,7 +1525,8 code chunk) in
+> the commit message, or split it out to different patch
 > 
-> > I'm sorry to confuse you. Binary overwriting is indeed caused by
-> > kASLR, so at least on LoongArch we should disable kASLR for
-> > hibernation.
+> * Adding the if check in amd_pstate_epp_update_limit()
 > 
-> Understood.
-> 
-> > Random kmalloc is another story, on LoongArch it breaks smpboot when
-> > resuming, the details are:
-> > 1, LoongArch uses kmalloc() family to allocate idle_task's
-> > stack/thread_info and other data structures.
-> > 2, If random kmalloc is enabled, idle_task's stack in the booting
-> > kernel may be other things in the target kernel.
-> 
-> Slab hardening features try so hard to prevent such predictability.
-> For example, SLAB_FREELIST_RANDOM could also randomize the address
-> kmalloc objects are allocated at.
-> 
-> Rather than hacking CONFIG_RANDOM_KMALLOC_CACHES like this, we could
-> have a single option to disable slab hardening features that makes
-> the address unpredictable.
-> 
-> It'd be nice to have something like ARCH_SUPPORTS_SLAB_RANDOM which
-> some hardening features depend on. And then let some arches conditionally
-> not select ARCH_SUPPORTS_SLAB_RANDOM if hibernation's enabled
-> (at cost of less hardening)?
+Yeah will add to commit meesage.
 
-I find this whole thread confusing. :) Hibernation should already do
-whatever it need to to get out of the way of the kernel it is restoring
-to memory. The random locations shouldn't matter at all: they're all
-stored in the image. I am not a hibernation expert, but my understanding
-is that the "resume" kernel moves itself out of the way to restore the
-KASLR-ed hibernation image and puts everything back exactly as it was.
-Randomization should not matter at all: it's just simply "put everything
-back where it was".
+>>
+>> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+>> --
+> We need one more hyphen here I think i.e."---", otherwise the version info is
+> showing up in the commit message
+Ack
+> 
+>> v3:
+>>   * Fix calc error for min_freq
+>> v2:
+>>   * Keep cached limits
+>> ---
+>>   drivers/cpufreq/amd-pstate-ut.c | 14 +++----
+>>   drivers/cpufreq/amd-pstate.c    | 70 +++++++++++----------------------
+>>   drivers/cpufreq/amd-pstate.h    |  9 +----
+>>   3 files changed, 32 insertions(+), 61 deletions(-)
+>>
+>> diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
+>> index 3a0a380c3590c..445278cf40b61 100644
+>> --- a/drivers/cpufreq/amd-pstate-ut.c
+>> +++ b/drivers/cpufreq/amd-pstate-ut.c
+>> @@ -214,14 +214,14 @@ static void amd_pstate_ut_check_freq(u32 index)
+>>   			break;
+>>   		cpudata = policy->driver_data;
+>>   
+>> -		if (!((cpudata->max_freq >= cpudata->nominal_freq) &&
+>> +		if (!((policy->cpuinfo.max_freq >= cpudata->nominal_freq) &&
+>>   			(cpudata->nominal_freq > cpudata->lowest_nonlinear_freq) &&
+>> -			(cpudata->lowest_nonlinear_freq > cpudata->min_freq) &&
+>> -			(cpudata->min_freq > 0))) {
+>> +			(cpudata->lowest_nonlinear_freq > policy->cpuinfo.min_freq) &&
+>> +			(policy->cpuinfo.min_freq > 0))) {
+>>   			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
+>>   			pr_err("%s cpu%d max=%d >= nominal=%d > lowest_nonlinear=%d > min=%d > 0, the formula is incorrect!\n",
+>> -				__func__, cpu, cpudata->max_freq, cpudata->nominal_freq,
+>> -				cpudata->lowest_nonlinear_freq, cpudata->min_freq);
+>> +				__func__, cpu, policy->cpuinfo.max_freq, cpudata->nominal_freq,
+>> +				cpudata->lowest_nonlinear_freq, policy->cpuinfo.min_freq);
+>>   			goto skip_test;
+>>   		}
+>>   
+>> @@ -233,13 +233,13 @@ static void amd_pstate_ut_check_freq(u32 index)
+>>   		}
+>>   
+>>   		if (cpudata->boost_supported) {
+>> -			if ((policy->max == cpudata->max_freq) ||
+>> +			if ((policy->max == policy->cpuinfo.max_freq) ||
+>>   					(policy->max == cpudata->nominal_freq))
+>>   				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_PASS;
+>>   			else {
+>>   				amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
+>>   				pr_err("%s cpu%d policy_max=%d should be equal cpu_max=%d or cpu_nominal=%d !\n",
+>> -					__func__, cpu, policy->max, cpudata->max_freq,
+>> +					__func__, cpu, policy->max, policy->cpuinfo.max_freq,
+>>   					cpudata->nominal_freq);
+>>   				goto skip_test;
+>>   			}
+>> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+>> index 87c605348a3dc..a7c41f915b46e 100644
+>> --- a/drivers/cpufreq/amd-pstate.c
+>> +++ b/drivers/cpufreq/amd-pstate.c
+>> @@ -717,7 +717,7 @@ static int amd_pstate_cpu_boost_update(struct cpufreq_policy *policy, bool on)
+>>   	int ret = 0;
+>>   
+>>   	nominal_freq = READ_ONCE(cpudata->nominal_freq);
+>> -	max_freq = READ_ONCE(cpudata->max_freq);
+>> +	max_freq = perf_to_freq(cpudata, READ_ONCE(cpudata->highest_perf));
+>>   
+>>   	if (on)
+>>   		policy->cpuinfo.max_freq = max_freq;
+>> @@ -901,35 +901,26 @@ static u32 amd_pstate_get_transition_latency(unsigned int cpu)
+>>   static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
+>>   {
+>>   	int ret;
+>> -	u32 min_freq, max_freq;
+>> -	u32 nominal_freq, lowest_nonlinear_freq;
+>> +	u32 min_freq, nominal_freq, lowest_nonlinear_freq;
+>>   	struct cppc_perf_caps cppc_perf;
+>>   
+>>   	ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
+>>   	if (ret)
+>>   		return ret;
+>>   
+>> -	if (quirks && quirks->lowest_freq)
+>> -		min_freq = quirks->lowest_freq;
+>> -	else
+>> -		min_freq = cppc_perf.lowest_freq;
+>> -
+>>   	if (quirks && quirks->nominal_freq)
+>>   		nominal_freq = quirks->nominal_freq;
+>>   	else
+>>   		nominal_freq = cppc_perf.nominal_freq;
+>>   
+>> -	min_freq *= 1000;
+>>   	nominal_freq *= 1000;
+>> -
+>>   	WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
+>> -	WRITE_ONCE(cpudata->min_freq, min_freq);
+>> -
+>> -	max_freq = perf_to_freq(cpudata, cpudata->highest_perf);
+>> -	lowest_nonlinear_freq = perf_to_freq(cpudata, cpudata->lowest_nonlinear_perf);
+>>   
+>> -	WRITE_ONCE(cpudata->lowest_nonlinear_freq, lowest_nonlinear_freq);
+>> -	WRITE_ONCE(cpudata->max_freq, max_freq);
+>> +	if (quirks && quirks->lowest_freq) {
+> 
+> We can avoid the "{" for single line if statement, to keep checkpatch happy
 
-Yes, the tricky part is the "move itself out of the way", but that's
-required for any kernel that support being relocatable (a prerequisite
-for KASLR), and KASLR is just an aggressive form of "the relocatable
-kernel might be anywhere" beyond just different boot loaders putting it
-in a handful of different potential offsets.
+This is one of the reason that I don't like to treat checkpatch as 
+gospil.  I added it specficially to avoid back and forth for the new 
+patch.  In this case I plan to keep it for that reason.
 
--- 
-Kees Cook
+> 
+>> +		min_freq = quirks->lowest_freq;
+>> +	} else
+>> +		min_freq = cppc_perf.lowest_freq;
+>> +	min_freq *= 1000;
+> 
+> I see that this min_freq part of the code is unchanged, just moved few lines below.
+> If the moving is unintended can we avoid it, so that the diff is optimal.
+
+Sure I'll see if I can re-order it a bit to keep it the same.
+
+> 
+>>   
+>>   	/**
+>>   	 * Below values need to be initialized correctly, otherwise driver will fail to load
+>> @@ -937,12 +928,15 @@ static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
+>>   	 * lowest_nonlinear_freq is a value between [min_freq, nominal_freq]
+>>   	 * Check _CPC in ACPI table objects if any values are incorrect
+>>   	 */
+>> -	if (min_freq <= 0 || max_freq <= 0 || nominal_freq <= 0 || min_freq > max_freq) {
+> 
+> Shouldn't we retain these sanity checks for min_freq and max_freq?
+
+Now that we're using the helpers isn't it impossible to end up with 
+negative values?
+
+> 
+> Thanks,
+> Dhananjay
+> 
+>> -		pr_err("min_freq(%d) or max_freq(%d) or nominal_freq(%d) value is incorrect\n",
+>> -			min_freq, max_freq, nominal_freq);
+>> +	if (nominal_freq <= 0) {
+>> +		pr_err("nominal_freq(%d) value is incorrect\n",
+>> +			nominal_freq);
+>>   		return -EINVAL;
+>>   	}
+>>   
+>> +	lowest_nonlinear_freq = perf_to_freq(cpudata, cpudata->lowest_nonlinear_perf);
+>> +	WRITE_ONCE(cpudata->lowest_nonlinear_freq, lowest_nonlinear_freq);
+>> +
+>>   	if (lowest_nonlinear_freq <= min_freq || lowest_nonlinear_freq > nominal_freq) {
+>>   		pr_err("lowest_nonlinear_freq(%d) value is out of range [min_freq(%d), nominal_freq(%d)]\n",
+>>   			lowest_nonlinear_freq, min_freq, nominal_freq);
+>> @@ -954,9 +948,9 @@ static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
+>>   
+>>   static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>>   {
+>> -	int min_freq, max_freq, ret;
+>> -	struct device *dev;
+>>   	struct amd_cpudata *cpudata;
+>> +	struct device *dev;
+>> +	int ret;
+>>   
+>>   	/*
+>>   	 * Resetting PERF_CTL_MSR will put the CPU in P0 frequency,
+>> @@ -987,17 +981,11 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>>   	if (ret)
+>>   		goto free_cpudata1;
+>>   
+>> -	min_freq = READ_ONCE(cpudata->min_freq);
+>> -	max_freq = READ_ONCE(cpudata->max_freq);
+>> -
+>>   	policy->cpuinfo.transition_latency = amd_pstate_get_transition_latency(policy->cpu);
+>>   	policy->transition_delay_us = amd_pstate_get_transition_delay_us(policy->cpu);
+>>   
+>> -	policy->min = min_freq;
+>> -	policy->max = max_freq;
+>> -
+>> -	policy->cpuinfo.min_freq = min_freq;
+>> -	policy->cpuinfo.max_freq = max_freq;
+>> +	policy->cpuinfo.min_freq = policy->min = perf_to_freq(cpudata, cpudata->lowest_perf);
+>> +	policy->cpuinfo.max_freq = policy->max = perf_to_freq(cpudata, cpudata->highest_perf);
+>>   
+>>   	policy->boost_enabled = READ_ONCE(cpudata->boost_supported);
+>>   
+>> @@ -1021,9 +1009,6 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>>   		goto free_cpudata2;
+>>   	}
+>>   
+>> -	cpudata->max_limit_freq = max_freq;
+>> -	cpudata->min_limit_freq = min_freq;
+>> -
+>>   	policy->driver_data = cpudata;
+>>   
+>>   	if (!current_pstate_driver->adjust_perf)
+>> @@ -1081,14 +1066,10 @@ static int amd_pstate_cpu_suspend(struct cpufreq_policy *policy)
+>>   static ssize_t show_amd_pstate_max_freq(struct cpufreq_policy *policy,
+>>   					char *buf)
+>>   {
+>> -	int max_freq;
+>>   	struct amd_cpudata *cpudata = policy->driver_data;
+>>   
+>> -	max_freq = READ_ONCE(cpudata->max_freq);
+>> -	if (max_freq < 0)
+>> -		return max_freq;
+>>   
+>> -	return sysfs_emit(buf, "%u\n", max_freq);
+>> +	return sysfs_emit(buf, "%u\n", perf_to_freq(cpudata, READ_ONCE(cpudata->highest_perf)));
+>>   }
+>>   
+>>   static ssize_t show_amd_pstate_lowest_nonlinear_freq(struct cpufreq_policy *policy,
+>> @@ -1446,10 +1427,10 @@ static bool amd_pstate_acpi_pm_profile_undefined(void)
+>>   
+>>   static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+>>   {
+>> -	int min_freq, max_freq, ret;
+>>   	struct amd_cpudata *cpudata;
+>>   	struct device *dev;
+>>   	u64 value;
+>> +	int ret;
+>>   
+>>   	/*
+>>   	 * Resetting PERF_CTL_MSR will put the CPU in P0 frequency,
+>> @@ -1480,19 +1461,13 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+>>   	if (ret)
+>>   		goto free_cpudata1;
+>>   
+>> -	min_freq = READ_ONCE(cpudata->min_freq);
+>> -	max_freq = READ_ONCE(cpudata->max_freq);
+>> -
+>> -	policy->cpuinfo.min_freq = min_freq;
+>> -	policy->cpuinfo.max_freq = max_freq;
+>> +	policy->cpuinfo.min_freq = policy->min = perf_to_freq(cpudata, cpudata->lowest_perf);
+>> +	policy->cpuinfo.max_freq = policy->max = perf_to_freq(cpudata, cpudata->highest_perf);
+>>   	/* It will be updated by governor */
+>>   	policy->cur = policy->cpuinfo.min_freq;
+>>   
+>>   	policy->driver_data = cpudata;
+>>   
+>> -	policy->min = policy->cpuinfo.min_freq;
+>> -	policy->max = policy->cpuinfo.max_freq;
+>> -
+>>   	policy->boost_enabled = READ_ONCE(cpudata->boost_supported);
+>>   
+>>   	/*
+>> @@ -1550,7 +1525,8 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+>>   	struct amd_cpudata *cpudata = policy->driver_data;
+>>   	u8 epp;
+>>   
+>> -	amd_pstate_update_min_max_limit(policy);
+>> +	if (policy->min != cpudata->min_limit_freq || policy->max != cpudata->max_limit_freq)
+>> +		amd_pstate_update_min_max_limit(policy);
+>>   
+>>   	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
+>>   		epp = 0;
+>> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
+>> index 19d405c6d805e..0149933692458 100644
+>> --- a/drivers/cpufreq/amd-pstate.h
+>> +++ b/drivers/cpufreq/amd-pstate.h
+>> @@ -46,8 +46,6 @@ struct amd_aperf_mperf {
+>>    * @max_limit_perf: Cached value of the performance corresponding to policy->max
+>>    * @min_limit_freq: Cached value of policy->min (in khz)
+>>    * @max_limit_freq: Cached value of policy->max (in khz)
+>> - * @max_freq: the frequency (in khz) that mapped to highest_perf
+>> - * @min_freq: the frequency (in khz) that mapped to lowest_perf
+>>    * @nominal_freq: the frequency (in khz) that mapped to nominal_perf
+>>    * @lowest_nonlinear_freq: the frequency (in khz) that mapped to lowest_nonlinear_perf
+>>    * @cur: Difference of Aperf/Mperf/tsc count between last and current sample
+>> @@ -77,11 +75,8 @@ struct amd_cpudata {
+>>   	u8	prefcore_ranking;
+>>   	u8	min_limit_perf;
+>>   	u8	max_limit_perf;
+>> -	u32     min_limit_freq;
+>> -	u32     max_limit_freq;
+>> -
+>> -	u32	max_freq;
+>> -	u32	min_freq;
+>> +	u32	min_limit_freq;
+>> +	u32	max_limit_freq;
+>>   	u32	nominal_freq;
+>>   	u32	lowest_nonlinear_freq;
+>>   
+> 
+
 
