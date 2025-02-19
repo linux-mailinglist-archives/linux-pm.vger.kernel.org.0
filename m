@@ -1,206 +1,399 @@
-Return-Path: <linux-pm+bounces-22426-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22427-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7135FA3C07C
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 14:50:07 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id B572FA3C150
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 15:08:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FA3317508B
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 13:45:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03FE0166436
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 14:03:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C54F41EF0A5;
-	Wed, 19 Feb 2025 13:44:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 925591F150D;
+	Wed, 19 Feb 2025 14:02:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b="bwaGPcOm"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="hlzKPCzk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from perceval.ideasonboard.com (perceval.ideasonboard.com [213.167.242.64])
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0020C1EDA3B;
-	Wed, 19 Feb 2025 13:44:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=213.167.242.64
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B1C8F1EB5CA
+	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 14:02:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739972659; cv=none; b=IRacQdE0Xn1IHcSFFHE5Hjjgb3SzyYqOjIR5niElh67nFtCFDsekHUTCKuRaQjV645HilH9DznhcuQJFTlycJVYDOXiWnwnYHQbZoBLJtob908DhIwwA1tckgkqS6zqKyKsfPc/o7Cx2CL2Bbr5AURN50sAHUPvxHntjwHOQ5fY=
+	t=1739973775; cv=none; b=fc8G1qs2n5mXkxbQavuppOb5cJAJ42egSou0Zz7957cdQEnjGgIETwLl7gal5oB+3xle6fRD+1LuP4asGX+Q4IpzPUFw3wIJWPr+91uoeV5z9mNLzUu23/MoS4fPFcgG41tFH4f94vGeuN7EjHkP5mZME0n2HfefpM5/sux73lY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739972659; c=relaxed/simple;
-	bh=f9Zc5VG8pt57R7Xvh+xsVJ/ay+lEmys3EP79pZtRUO4=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=VLNfkBiOVshAZjWjcKL7/9vxRWlzI2BGUm2B8SXoAEwSIBwK5fu0OuPr8+H3+CM78dXcZMitpA2Xxg6zeN4ydMEBEa8yO4eLBPYce1WOREPej0rsPA1lrhWG6ar4sJD0N7VnLmw4OsF8awv7dZ3tBKgcbALIz8zg8qllY93DTd0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com; spf=pass smtp.mailfrom=ideasonboard.com; dkim=pass (1024-bit key) header.d=ideasonboard.com header.i=@ideasonboard.com header.b=bwaGPcOm; arc=none smtp.client-ip=213.167.242.64
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=ideasonboard.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ideasonboard.com
-Received: from pendragon.ideasonboard.com (81-175-209-231.bb.dnainternet.fi [81.175.209.231])
-	by perceval.ideasonboard.com (Postfix) with ESMTPSA id 0413D169;
-	Wed, 19 Feb 2025 14:42:52 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=ideasonboard.com;
-	s=mail; t=1739972573;
-	bh=f9Zc5VG8pt57R7Xvh+xsVJ/ay+lEmys3EP79pZtRUO4=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=bwaGPcOm7pnNqi+CQD8qLP4ToxnVHXV10hly/kI1aDNTwG60yEFhQhehRuyOIlQ9F
-	 jBMwh0bfCjSJPotc9w+hrrMebIT0m2aRkPzhI6Ltu8PBo7Kz2IvmLFWV+DEBHT8IGS
-	 zayOXFdn5BasZk2mMIjOQ/MMSFzZxut1XfJGEmjU=
-Date: Wed, 19 Feb 2025 15:44:00 +0200
-From: Laurent Pinchart <laurent.pinchart@ideasonboard.com>
-To: Janne Grunau <j@jannau.net>
-Cc: Sasha Finkelstein <fnkl.kernel@gmail.com>,
-	Krzysztof Kozlowski <krzk@kernel.org>,
-	Sven Peter <sven@svenpeter.dev>,
-	Alyssa Rosenzweig <alyssa@rosenzweig.io>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Hector Martin <marcan@marcan.st>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Mauro Carvalho Chehab <mchehab@kernel.org>,
-	Shawn Guo <shawnguo@kernel.org>,
-	Sascha Hauer <s.hauer@pengutronix.de>,
-	Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, asahi@lists.linux.dev,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-media@vger.kernel.org, imx@lists.linux.dev
-Subject: Re: [PATCH 3/5] media: dt-bindings: Add Apple ISP
-Message-ID: <20250219134400.GC15114@pendragon.ideasonboard.com>
-References: <20250219-isp-v1-0-6d3e89b67c31@gmail.com>
- <20250219-isp-v1-3-6d3e89b67c31@gmail.com>
- <16f6d4a2-2102-48b9-a0ae-b8c6595975b8@kernel.org>
- <CAMT+MTR7dhtt3SOMg0K3UakJQftqnc2S-rV41HdHtA+o9aSPug@mail.gmail.com>
- <20250219105326.GA31383@pendragon.ideasonboard.com>
- <20250219115737.GB26386@robin.jannau.net>
+	s=arc-20240116; t=1739973775; c=relaxed/simple;
+	bh=pjJmdJEKtBD/Fl9pbsFChWSOEHgTEYGl5os+PtBeMXc=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version:Content-Type:
+	 References; b=E4nMnrEWxjlZ4RaukQJq0y/3phobRAaLkgWeX4f4B6znHXT6xA/Oz/21rCzb/nPTz+4UoY0PU+e2kRFmimh3afHG0iq5vWUjtiBgR7NWt8bYcNJCSLxDxeIwmnudebGsw93UL1wxx5eGgef8Uya2r/7aa0mknK9y1yYqQb+Uugo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=hlzKPCzk; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250219140250euoutp02db4904b5ba85bcaa0be7ae7c5cdcc8cb~loO0FmkZF0177101771euoutp02D
+	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 14:02:50 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250219140250euoutp02db4904b5ba85bcaa0be7ae7c5cdcc8cb~loO0FmkZF0177101771euoutp02D
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1739973770;
+	bh=PLvnEvoQpqhUh81ve8c4YHx2FKz3xDw/WrUD55AjbmA=;
+	h=From:To:Cc:Subject:Date:References:From;
+	b=hlzKPCzk/NwcQMfOqsBpyvw2CLVdog7Ad+wBQ5Yd8eJc1iIiLF5IPuBa0OXq5eZXH
+	 XOQdsYfsiAvpguPKaxAPEos1sG9NE1YvGBn0tPeSbsxcqx3RnKs3/rlK7FNkRpHpBE
+	 6KVuWTf8YCpym8VCPCNBaa2Ca4PTIkXeKbVU8Vfo=
+Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20250219140250eucas1p1ef22fa513b22ec35d6cc552e75f32c68~loOzYwrD92958229582eucas1p1i;
+	Wed, 19 Feb 2025 14:02:50 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges3new.samsung.com (EUCPMTA) with SMTP id 35.72.20397.984E5B76; Wed, 19
+	Feb 2025 14:02:50 +0000 (GMT)
+Received: from eusmtrp1.samsung.com (unknown [182.198.249.138]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250219140249eucas1p1291eb86c932373c847a3314ae54789d5~loOy1oRIZ2960029600eucas1p1Z;
+	Wed, 19 Feb 2025 14:02:49 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+	eusmtrp1.samsung.com (KnoxPortal) with ESMTP id
+	20250219140249eusmtrp12262569e6963b9330353eda84cd1d46c~loOy0jiPZ2415024150eusmtrp1K;
+	Wed, 19 Feb 2025 14:02:49 +0000 (GMT)
+X-AuditID: cbfec7f5-e59c770000004fad-b0-67b5e4897f22
+Received: from eusmtip2.samsung.com ( [203.254.199.222]) by
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id E3.42.19654.984E5B76; Wed, 19
+	Feb 2025 14:02:49 +0000 (GMT)
+Received: from AMDC4942.home (unknown [106.210.136.40]) by
+	eusmtip2.samsung.com (KnoxPortal) with ESMTPA id
+	20250219140248eusmtip2ecc4f090c189cf0ad976b7a2df4476ba~loOxY-QOv0084500845eusmtip2h;
+	Wed, 19 Feb 2025 14:02:47 +0000 (GMT)
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+To: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
+	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
+	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
+	m.szyprowski@samsung.com
+Cc: linux-clk@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org,
+	dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org, Michal Wilczynski
+	<m.wilczynski@samsung.com>
+Subject: [PATCH v5 00/21] Enable drm/imagination BXM-4-64 Support for
+ LicheePi 4A
+Date: Wed, 19 Feb 2025 15:02:18 +0100
+Message-Id: <20250219140239.1378758-1-m.wilczynski@samsung.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250219115737.GB26386@robin.jannau.net>
+Content-Transfer-Encoding: 8bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA02SfVRTZRzHz3Pv3b1jneFleOIRTDo7ZQmHF7XsiaDyFHopS+2NTicOLrkM
+	FBhnA0utkBgL5lR8QWO8CYcTgxPSYFtsgQtYjDcpcAJ2ZA6FZEoiIB6lg8S4Wf73eb6/7+/5
+	/n7Pefi4qJH05yenZbDyNEmKmBQQpo4Hv4Wox4zS8HtFOOocqsSQ8W8thX5o6cNQua2Ph5wD
+	Bgw55qZIdG78dwpNtGQTaFBXSqGcjnoSubVOEk1rnDx00VJCotkjNoBMs0oS1dlGKFQ/V46h
+	imkjgaqaLACp8r/nof7uaDTi7CSQ+6IGRyrtCrTY3EShh4N6AhXftlLIMHmch+x1sUhpPUW8
+	voaZGs6lmEm3m2Da8+5STMu9swRj1o5QjMbcC5iG2nySuTLYTDJlXTuZq4ftGNNYlcUo6zow
+	5thCODN1/hLJHDXUAmYgZ4jaIfpEEJnApiTvY+Vhr+4SJJ3u90tflHwxn91OHQIL29XAiw/p
+	F+AN8wTuYRGtA7B7ZrcaCJb4LoCFrQaMO8wCeL9kBjzqUA3ZKa5QDWDBHwME1z4JYGtzhIdJ
+	egN0VZfzPKaVdC4Bc3/NBp4DTt8A0DRWQnpcvvT7sL9rfjmcoJ+Fk0fvL5n4fCH9Gqz6NpBL
+	C4TW1gvLFiHtA7uKxpbD8CU9x1iMe+6EdI0AHrbm87iGN+GP7mySY194026gOF4Ne05qCI5l
+	0GWcwTn+Epo19n/5FXilb570zIDT62C9JYyTN0PHscJlGdLecPgvH24Eb3jCdAbnZCHMU4k4
+	91pYqDnyX2ifzoRxFgaO9IZwLxUH1fpRogA8rX1sL+1je2n/H+EswGuBH5upSJWyio1p7Oeh
+	CkmqIjNNGrpbltoAlv51z0P7XBPQ3ZwObQMYH7QByMfFK4WqLINUJEyQ7D/AymXx8swUVtEG
+	AviE2E9Yac2VimipJIPdy7LprPxRFeN7+R/Cftqz473Niu+KtfUfb8qQ0W+vilh3zpx4NTLx
+	56incrz3N3z0YHgs4Fr6L+9WPH8wKWpLoqYmRh02rYx/o/TAp3dCuklX1LbY7ed1sg+nHF4S
+	sW287ERS4Z6twddS0iLWrnLlra5xQp/oTVuupx7vCK4wOhZZrX7+QqNX8+X1Qa7IvRl6f1NP
+	Z0ywUlWU36i+NfFOdRdDBLax03HW0esNob4vPVmZ/I2AL/e6VCB+5lY8sAWVWksTwvc99+IT
+	0QdP+WVZuj4LyQusvR379Vt1ESvy1TEB2zLLdl6O0xkku9Y49Rt801+eWPizfOPwnV7LVEXl
+	VyVxPu0nx6v8B0Z7dY4PqpnYBTGhSJKsD8LlCsk/5Cp260YEAAA=
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFlrEKsWRmVeSWpSXmKPExsVy+t/xe7qdT7amG2zYJGZx4voiJoutv2ex
+	W6zZe47JYv6Rc6wW9y5tYbK48vU9m8W6pxfYLV7sbWSxuLZiLrtF87H1bBYvZ91js/jYc4/V
+	4vKuOWwWn3uPMFps+9zCZrH2yF12i/Vf5zNZLPy4lcViyY5djBZtnctYLS6ecrW4e+8Ei8XL
+	yz3MFm2z+C3+79nBbvHv2kYWi9nv9rNbbHkzkdXi+Npwi5b9U1gc5Dze32hl93jz8iWLx+GO
+	L+wee78tYPHYOesuu0fPzjOMHptWdbJ53Lm2h81j3slAj/vdx5k8Ni+p92hZe4zJo/+vgcf7
+	fVfZPPq2rGL0uNR8nT1AKErPpii/tCRVISO/uMRWKdrQwkjP0NJCz8jEUs/Q2DzWyshUSd/O
+	JiU1J7MstUjfLkEvY9pF8YL/iRW/Gg+zNzD+9e9i5OSQEDCRaLt+nL2LkYtDSGApo8S2h9fY
+	IRIyEte6X7JA2MISf651sUEUvWKUaFg7mQkkwSZgJPFg+XxWEFtEYDGLxN59lSBFzAJvGSWu
+	z9wI1i0sECixc+MZsCIWAVWJN30/GLsYOTh4BewllrTLQyyQl9h/8CwziM0rIChxcuYTFpAS
+	ZgF1ifXzhEDCzEAlzVtnM09g5J+FpGoWQtUsJFULGJlXMYqklhbnpucWG+kVJ+YWl+al6yXn
+	525iBCaWbcd+btnBuPLVR71DjEwcjIcYJTiYlUR42+q3pAvxpiRWVqUW5ccXleakFh9iNAU6
+	eiKzlGhyPjC15ZXEG5oZmBqamFkamFqaGSuJ87JdOZ8mJJCeWJKanZpakFoE08fEwSnVwOSY
+	0mo/veHmXq9nU6a8+529aMXhnpImhQd+hhtl4j9rbsxT9djuHLf6a2Qrd5p/dj/LhBWG4XVJ
+	014ujWQMC/MyDmFXibpq0dSWyMKtxcEa/GdzVZbdyr/H6/NefT6x90mPTfUqk7qwuNzmC25i
+	gWv7WHW0mr79Ua9brPuh4r79XBnR3W/nJIgIv25kPffnFqPj5ddCE+vEvvf1yTmvfxN88c5r
+	iTJ2O42qPYq59y3Vl7zd8jJRMn1e9//92k9n23196COWMOtj0dnpnuf2cr1UOvdktrD8T5t0
+	/+avhcG3pf5bZvdm3Dl+pOMAx4LbNcxXH1kYP9c7p8zCvfcsz+kVPLOdIr54n8nhWf74vBJL
+	cUaioRZzUXEiACGDP6C1AwAA
+X-CMS-MailID: 20250219140249eucas1p1291eb86c932373c847a3314ae54789d5
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250219140249eucas1p1291eb86c932373c847a3314ae54789d5
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20250219140249eucas1p1291eb86c932373c847a3314ae54789d5
+References: <CGME20250219140249eucas1p1291eb86c932373c847a3314ae54789d5@eucas1p1.samsung.com>
 
-On Wed, Feb 19, 2025 at 12:57:37PM +0100, Janne Grunau wrote:
-> On Wed, Feb 19, 2025 at 12:53:26PM +0200, Laurent Pinchart wrote:
-> > On Wed, Feb 19, 2025 at 10:54:31AM +0100, Sasha Finkelstein wrote:
-> > > On Wed, 19 Feb 2025 at 10:37, Krzysztof Kozlowski <krzk@kernel.org> wrote:
-> > > > > +
-> > > > > +  apple,platform-id:
-> > > > > +    description: Platform id for firmware
-> > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > >
-> > > >
-> > > > No, use firmware-name.
-> > > 
-> > > Not sure how is firmware-name an appropriate field, fw-name is a string
-> > > that references a firmware file, while this field is an id that is sent to the
-> > > coprocessor firmware in order to identify the platform.
-> > > 
-> > > > > +  apple,temporal-filter:
-> > > > > +    description: Whether temporal filter should be enabled in firmware
-> > > > > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > > >
-> > > > And why is this not enabled always? Why this is board specific?
-> > > 
-> > > Not every board has support for this feature.
-> > > 
-> > > > You miss here ports or port. ISP usually gets signal from some camera or
-> > > > other block.
-> > > 
-> > > For complex cameras - yes, but this is closer to a UVC camera connected
-> > > via a bespoke protocol. We do not need to deal with the sensor access,
-> > > all of it is managed by the coprocessor firmware.
-> > > 
-> > > > > +        properties:
-> > > > > +          apple,config-index:
-> > > > > +            description: Firmware config index
-> > > > > +            $ref: /schemas/types.yaml#/definitions/uint32
-> > > >
-> > > >
-> > > > No duplicated indices. You have reg for this, assuming this is index.
-> > > 
-> > > There are duplicated indices, see isp-imx248.dtsi in patch 5 for an example.
-> > > 
-> > > > All these do not look like hardware properties but rather configuration
-> > > > of sensor which should be done runtime by OS, not by DT.
-> > > 
-> > > Those are board-specific and not discoverable via the ISP protocol.
-> > 
-> > But they are settable through the ISP protocol, aren't they ? For
-> > instance, looking at isp-imx248.dtsi, the first four entries are
-> > 
-> > 	/* 1280x720 */
-> > 	preset0 {
-> > 		apple,config-index = <0>;
-> > 		apple,input-size = <1296 736>;
-> > 		apple,output-size = <1280 720>;
-> > 		apple,crop = <8 8 1280 720>;
-> > 	};
-> > 
-> > 	/* 960x720 (4:3) */
-> > 	preset1 {
-> > 		apple,config-index = <0>;
-> > 		apple,input-size = <1296 736>;
-> > 		apple,output-size = <960 720>;
-> > 		apple,crop = <168 8 960 720>;
-> > 	};
-> > 
-> > 	/* 960x540 (16:9) */
-> > 	preset2 {
-> > 		apple,config-index = <0>;
-> > 		apple,input-size = <1296 736>;
-> > 		apple,output-size = <960 540>;
-> > 		apple,crop = <8 8 1280 720>;
-> > 	};
-> > 
-> > 	/* 640x480 (4:3) */
-> > 	preset3 {
-> > 		apple,config-index = <0>;
-> > 		apple,input-size = <1296 736>;
-> > 		apple,output-size = <640 480>;
-> > 		apple,crop = <168 8 960 720>;
-> > 	};
-> > 
-> > But I may be interested in capturing a 640x480 frame with cropping only
-> > and without scaling, with
-> > 
-> > input-size = 1296x736
-> > output-size = 640x480
-> > crop = (328,128)/640x480
-> > 
-> > Or I may want my cropped frame to be located in the upper-left corner:
-> > 
-> > input-size = 1296x736
-> > output-size = 640x480
-> > crop = (8,8)/640x480
-> > 
-> > If I set those parameters through the ISP protocol, won't it work ?
-> 
-> If my memory serves me right the presets wre added as workaround for
-> userspace not handling V4L2_FRMSIZE_TYPE_STEPWISE well (or at all) and
-> the added complexity of handling the qadratic sensor with partially
-> occluded or outside of the usable lens diameter corners.
-> 
-> It is a simplified description of the hardware to make it useable for
-> most software which is expected simple uvc cameras.
+The LicheePi 4A board, featuring the T-HEAD TH1520 SoC, includes an Imagination
+Technologies BXM-4-64 GPU. Initial support for this GPU was provided through a
+downstream driver [1]. Recently, efforts have been made to upstream support for
+the Rogue family GPUs, which the BXM-4-64 is part of [2].
 
-I understand that. Ideally userspace should be fixed, but in the
-meantime, I'm fine with the driver exposing a set of presets. They
-should however not be listed in DT, but computed by the driver based on
-properties that describe the device (such as, for instance, the full
-sensor resolution, or the visible area). Those properties could come
-from DT, or be hardcoded in the driver on a per-compatible basis.
+While the initial upstream driver focused on the AXE-1-16 GPU, newer patches
+have introduced support for the BXS-4-64 GPU [3]. The modern upstream
+drm/imagination driver is expected to support the BXM-4-64 as well [4][5]. As
+this support is being developed, it's crucial to upstream the necessary glue
+code including clock and power-domain drivers so they're ready for integration
+with the drm/imagination driver.
 
-> There are still two common issues in user space software related to this
-> driver:
-> - software expects width == linesize
-> - resolution selection is based frame height, i.e. it prefers 1080x1920
->   over 1920x1080 on devices with quadratic sensor.
+Recent Progress:
 
-I share your pain, having to fix userspace when doing kernel work isn't
-always fun :-)
+Firmware Improvements:
+Since August, the vendor has provided updated firmware
+[6][7] that correctly initiates the firmware for the BXM-4-64.
+
+Mesa Driver Testing:
+The vendor-supplied Mesa driver [8] partially works with Vulkan examples, such
+as rendering a triangle using Sascha Willems' Vulkan samples [9]. Although the
+triangle isn't rendered correctly (only the blue background appears), shader
+job submissions function properly, and IOCTL calls are correctly invoked.  For
+testing, we used the following resources:
+
+Kernel Source: Custom kernel with necessary modifications [10].
+Mesa Driver: Vendor-provided Mesa implementation [11].
+
+Dependencies:
+Testing required a functional Display Processing Unit (DPU) and HDMI driver,
+which are currently not upstreamed. Efforts are underway to upstream the DPU
+DC8200 driver used in StarFive boards [12], which is the same DPU used on the
+LicheePi 4A. Once the DPU and HDMI drivers are upstreamed, GPU support can be
+fully upstream.
+
+Testing Status:
+This series has been tested by performing a probe-only operation, confirming
+that the firmware begins execution. The probe function initiates firmware
+execution and waits for the firmware to flip a specific status bit.
+
+[   12.637880] powervr ffef400000.gpu: [drm] loaded firmware powervr/rogue_36.52.104.182_v1.fw
+[   12.648979] powervr ffef400000.gpu: [drm] FW version v1.0 (build 6645434 OS)
+[   12.678906] [drm] Initialized powervr 1.0.0 for ffef400000.gpu on minor 0
+
+Power Management:
+Full power management capabilities require implementing the T-HEAD SoC AON
+protocol messaging via the hardware mailbox. Support for the mailbox was merged
+in kernel 6.13 [13], and the AON protocol implementation is part of this
+series, since v2. Therefore this series support full power management
+capabilities for the GPU driver.
+
+Thanks everyone for taking the time to review the last revision ! Your
+guidance and the direction was very helpful.
+
+v5:
+
+Reset Changes:
+- Moved the reset de-assertion from the reset driver to the clock driver. The
+  reset is now only de-asserted once the sys and core clocks have been enabled
+- Added and exported the GPU_CLKGEN reset, allowing the clock driver to reset
+  the GPU clock circuit
+
+Clock Changes:
+- Introduced a new macro CCU_GATE_CLK_OPS, which allows providing custom clk_ops.
+  In the case of the 'MEM' clock, it provides empty clk_nops. Later, this clock
+  is provided to the GPU node, thereby avoiding any ABI breakage
+- Used the CCU_GATE_CLK_OPS macro to implement a workaround for de-asserting
+  the clkgen reset only after both core and sys clocks are enabled. This
+  sequence is required to properly initialize the GPU
+
+Power-domain/Firmware Changes:
+- Changed the AON driver to be a set of library functions rather than a
+  standalone driver
+
+Imagination Driver Changes:
+- Moved the recommended 1 microsecond delay after de-asserting GPU reset to the
+  Imagination driver itself
+- Included the mem clock to preserve the ABI, acknowledging that this clock
+  exists but is not configurable from the SoC
+- A few remaining conflicts will be resolved after the dt-binding changes
+  mentioned in the review are merged
+
+v4:
+
+Device Tree Changes:
+- restructured power device tree bindings by abstracting power-domain IDs from
+  firmware IDs, with the mappings now defined in a dedicated header file
+- retained existing clock-names in img,powervr-rogue.yaml to maintain ABI
+  compatibility, despite having only one downstream user
+- enhanced documentation for new Video Output (VO) clock inputs in device tree
+  bindings
+
+Reset Driver Changes:
+- reverted reset-cells configuration to single cell as in v2
+- maintained reset definitions in device tree bindings while deferring
+  implementation of watchdog timer (WDT) reset functionality
+- addressed implementation issues in the DRM/Imagination reset driver
+
+Power Domain Changes:
+- added workaround to disable AUDIO power domain to prevent firmware crashes
+
+v3:
+
+Device Tree Changes:
+ - consolidated device tree representation by merging aon and power-domain nodes
+   while maintaining separate drivers internally
+ - power-domain driver is now instantiated from within the aon driver
+ - updated img,powervr-rogue.yaml to use allOf and oneOf for better schema
+   organization
+
+AP Clock Driver Improvements:
+ - reworked driver to support multiple clock controllers through .compatible
+   and .data instead of using multiple address spaces in dt-binding. This change
+   allows to re-use the driver code for multiple clock controllers
+
+Code Quality and Documentation:
+ - fixed optional module dependencies in Kconfig
+ - added kernel-doc comments for all exported functions
+ - implemented th1520_aon_remove() to properly clean up mailbox channel
+   resources
+ - removed unnecessary of.h header in multiple drivers
+ - refactored reset driver to use zero cells
+
+v2:
+
+Removed AP_SUBSYS clock refactoring commits (1-6):
+ - instead of refactoring, I opted to extend the current driver and its
+   associated device tree node to include support for a second address space.
+
+Expanded patchset scope to fully support power management capabilities:
+ - introduced a new firmware driver to manage power-related operations.
+ - rewrote the power-domain driver to function alongside the firmware driver.
+   These nodes in the device tree lack direct address spaces, despite
+   representing HW blocks. Control is achieved via firmware protocol messages
+   transmitted through a mailbox to the E902 core.
+
+Implemented a reset controller for the TH1520 SoC:
+ - developed a reset controller driver for the TH1520 to manage reset
+   sequences.
+ - updated the drm/imagination driver to act as a reset controller consumer.
+   While this patchset is focused on the LPI4A board, the reset controller is
+   designed to be useful for other boards, such as the BPI-3F, which also require
+   a reset sequence after power-up.
+
+Updated dt-bindings:
+ - added new dt-bindings for power, reset, and firmware nodes.
+ - updated the powervr dt-binding to include reset support and new compatibles.
+ - ran dtbs_check and dt_binding_check to ensure compliance.
+
+Addressed code quality:
+ - resolved all checkpatch issues using --strict, except for the call to
+   devm_clk_hw_register_gate_parent_data().  The current implementation remains
+   preferable in this context, and clang-format aligns with this choice.
+
+References:
+
+[1] Downstream Driver Source:
+    https://gitlab.freedesktop.org/frankbinns/powervr/-/blob/cb1929932095649a24f051b9cfdd2cd2ceab35cb/drivers/gpu/drm/img-rogue/Kconfig
+
+[2] Initial Upstream Driver Series:
+    https://lore.kernel.org/all/cover.1700668843.git.donald.robson@imgtec.com/
+
+[3] BXS-4-64 GPU Support Patches:
+    https://lore.kernel.org/all/20241105-sets-bxs-4-64-patch-v1-v1-0-4ed30e865892@imgtec.com/
+
+[4] Firmware Issue Discussion 1:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/1
+
+[5] Firmware Issue Discussion 2:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/issues/2
+
+[6] Firmware Update Commit 1:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/6ac2247e9a1d1837af495fb6d0fbd6f35547c2d1
+
+[7] Firmware Update Commit 2:
+    https://gitlab.freedesktop.org/imagination/linux-firmware/-/commit/efbebc90f25adb2b2e1499e3cc24ea3f3c3e4f4c
+
+[8] Vendor-Provided Mesa Driver:
+    https://gitlab.freedesktop.org/imagination/mesa/-/tree/dev/devinfo
+
+[9] Sascha Willems' Vulkan Samples:     https://github.com/SaschaWillems/Vulkan
+
+[10] Test Kernel Source:
+    https://github.com/mwilczy/linux/tree/2_December_reference_linux_kernel_imagination
+
+[11] Test Mesa Driver:
+    https://github.com/mwilczy/mesa-reference
+
+[12] DPU DC8200 Driver Upstream Attempt:
+    https://lore.kernel.org/all/20241120061848.196754-1-keith.zhao@starfivetech.com/
+
+[13] Pull request kernel 6.13 for mailbox
+    https://lore.kernel.org/all/CABb+yY33qnivK-PzqpSMgmtbFid4nS8wcNvP7wED9DXrYAyLKg@mail.gmail.com/
+
+Michal Wilczynski (21):
+  dt-bindings: clock: thead: Add TH1520 VO clock controller
+  clk: thead: Add clock support for VO subsystem in T-Head TH1520 SoC
+  dt-bindings: firmware: thead,th1520: Add support for firmware node
+  firmware: thead: Add AON firmware protocol driver
+  dt-bindings: power: Add TH1520 SoC power domains
+  pmdomain: thead: Add power-domain driver for TH1520
+  riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+  clk: thead: Add support for custom ops in CCU_GATE_CLK_OPS macro
+  dt-bindings: clock: thead: Add GPU clkgen reset property
+  clk: thead: Add GPU clock gate control with CLKGEN reset support
+  dt-bindings: reset: Add T-HEAD TH1520 SoC Reset Controller
+  reset: thead: Add TH1520 reset controller driver
+  drm/imagination: Add reset controller support for GPU initialization
+  dt-bindings: gpu: Add 'resets' property for GPU initialization
+  dt-bindings: gpu: Add support for T-HEAD TH1520 GPU
+  drm/imagination: Add support for IMG BXM-4-64 GPU
+  drm/imagination: Enable PowerVR driver for RISC-V
+  riscv: dts: thead: Add device tree VO clock controller
+  riscv: dts: thead: Introduce power domain nodes with aon firmware
+  riscv: dts: thead: Introduce reset controller node
+  riscv: dts: thead: Add GPU node to TH1520 device tree
+
+ .../bindings/clock/thead,th1520-clk-ap.yaml   |  33 +-
+ .../bindings/firmware/thead,th1520-aon.yaml   |  53 ++++
+ .../bindings/gpu/img,powervr-rogue.yaml       |  42 ++-
+ .../bindings/reset/thead,th1520-reset.yaml    |  44 +++
+ MAINTAINERS                                   |   8 +
+ arch/riscv/Kconfig.socs                       |   1 +
+ arch/riscv/boot/dts/thead/th1520.dtsi         |  36 +++
+ drivers/clk/thead/clk-th1520-ap.c             | 298 ++++++++++++++++--
+ drivers/firmware/Kconfig                      |   9 +
+ drivers/firmware/Makefile                     |   1 +
+ drivers/firmware/thead,th1520-aon.c           | 247 +++++++++++++++
+ drivers/gpu/drm/imagination/Kconfig           |   2 +-
+ drivers/gpu/drm/imagination/pvr_device.c      |  21 ++
+ drivers/gpu/drm/imagination/pvr_device.h      |   9 +
+ drivers/gpu/drm/imagination/pvr_drv.c         |   2 +
+ drivers/gpu/drm/imagination/pvr_power.c       |  22 +-
+ drivers/pmdomain/Kconfig                      |   1 +
+ drivers/pmdomain/Makefile                     |   1 +
+ drivers/pmdomain/thead/Kconfig                |  12 +
+ drivers/pmdomain/thead/Makefile               |   2 +
+ drivers/pmdomain/thead/th1520-pm-domains.c    | 209 ++++++++++++
+ drivers/reset/Kconfig                         |  10 +
+ drivers/reset/Makefile                        |   1 +
+ drivers/reset/reset-th1520.c                  | 141 +++++++++
+ .../dt-bindings/clock/thead,th1520-clk-ap.h   |  34 ++
+ .../dt-bindings/power/thead,th1520-power.h    |  19 ++
+ .../dt-bindings/reset/thead,th1520-reset.h    |  16 +
+ .../linux/firmware/thead/thead,th1520-aon.h   | 200 ++++++++++++
+ 28 files changed, 1437 insertions(+), 37 deletions(-)
+ create mode 100644 Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+ create mode 100644 Documentation/devicetree/bindings/reset/thead,th1520-reset.yaml
+ create mode 100644 drivers/firmware/thead,th1520-aon.c
+ create mode 100644 drivers/pmdomain/thead/Kconfig
+ create mode 100644 drivers/pmdomain/thead/Makefile
+ create mode 100644 drivers/pmdomain/thead/th1520-pm-domains.c
+ create mode 100644 drivers/reset/reset-th1520.c
+ create mode 100644 include/dt-bindings/power/thead,th1520-power.h
+ create mode 100644 include/dt-bindings/reset/thead,th1520-reset.h
+ create mode 100644 include/linux/firmware/thead/thead,th1520-aon.h
 
 -- 
-Regards,
+2.34.1
 
-Laurent Pinchart
 
