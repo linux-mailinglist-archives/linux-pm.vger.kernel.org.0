@@ -1,154 +1,152 @@
-Return-Path: <linux-pm+bounces-22413-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22414-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 07BF0A3BD28
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 12:42:01 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EADBA3BD76
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 12:52:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 17353189836A
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 11:42:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0D011893B08
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 11:52:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52DC81DEFF1;
-	Wed, 19 Feb 2025 11:41:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE041DE2CE;
+	Wed, 19 Feb 2025 11:51:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b="OlazLVeq"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p2EgY6RE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C4B1DED70
-	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 11:41:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465BE286291
+	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 11:51:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739965316; cv=none; b=Hz1bYz+W1EfLVm8GToHKiaCJgwibPXeEpGf8UjhrEleXxGeCuBQlm3dI0ert5DvShc83aQlbHcUZY6aCuivdfs6dG0ihZydtNr8ZexD1feXGbAD6Rrrp1u7qUWvz6IhnG/+gEPhv8xplbtyQObSEiu8vTLaB0ldxs2lYoL1zfjg=
+	t=1739965917; cv=none; b=lgXcjhyt0KnJMHV32B567zRiKv6vHEQL1c8Bu1YsLaPa5LdkgzNg8HfoHk3TIOYtW30Mm+D0TlUTTVd9AudreOyVUoUCt/GfeLoely9gLzsnWlWp1wCzC/+iVe5f4jApatcRHtXxPvzPmzUxUjL5FqJ82xViCabqgSuuVcu+WHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739965316; c=relaxed/simple;
-	bh=v4Nxihrrot+B12P9jCeJPg6UUTZPQjPI5KJs93sMlZs=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References; b=UdWop6dhoGWAD1zgVIvsS/YXALq9fbeuM9XC3SnqRhQphUQD7YtHUzBuej3FreAKM4n6BD6PZaPk/DkadDDwqycbHJeVaTmGWGSEf65ZXwvARYozvhGV5JZdPL0/1TBCZQkoH3k+eRC+DVuaE7RE5LQTo1+V5EUaZmb0kMTdAdU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com; spf=pass smtp.mailfrom=sifive.com; dkim=pass (2048-bit key) header.d=sifive.com header.i=@sifive.com header.b=OlazLVeq; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=sifive.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sifive.com
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-220ecbdb4c2so138000695ad.3
-        for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 03:41:54 -0800 (PST)
+	s=arc-20240116; t=1739965917; c=relaxed/simple;
+	bh=KPkXD/7cqbXf7VsD8IoPhTC6NEsbU4JuJNGhIxAsmAI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=c4LTuyUIW7itKJMo8bHRPe9ZsLodVQvDk0zulaVv92bfGSFkVW89kAqczTzCxTBwMpn6RXO41WgaHlW0ZSQMOoVQLjIE53/1aX69h5sku8RSnDpK5a2pDa27ieRAr0KoX/hkdmmyXaIIjOtHp2aopkI9kjnidBhiAIbsvy+TfXg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p2EgY6RE; arc=none smtp.client-ip=209.85.219.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e46ebe19489so4368880276.2
+        for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 03:51:53 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=sifive.com; s=google; t=1739965314; x=1740570114; darn=vger.kernel.org;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=TvtQB/lGlc+Tk5xjdqGmPEVFQSYg82f1Tgy36DWvKQU=;
-        b=OlazLVeq2uIf4M8VpnDXS+6owHeQOXfJXJ5ZST4DBo2bpjcvQkoqKJ+F65RRSXJbeQ
-         icsY7iQr79Rcjh45qhueU1x8fxhV52uwuMrFknjpQm0f/RqDRU2GFieigLcjJgtG5K0j
-         FxYFpC10xJWDzSTbZixtIvwLr8IDeg09D/li2xfL3nL4Dp9+ng029vGyd1DzzP3SxSoO
-         iMPlBH0tq4FTzc43+mXF5H6K3Z0w0zPyF2t6Y2d1jlJXzF3yPSvRNodJ7vMjWKvLn+aK
-         ovG6LtjS9889V9DGulKEbsLzC0GuWTv62Mi9/I9BEL+ILbCVUUAv/gDPDSsWUTxtasdH
-         RzfQ==
+        d=linaro.org; s=google; t=1739965913; x=1740570713; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=R46i4neiPPtDwdv3LQifChV+vLwO3rJdmLscnT0rln8=;
+        b=p2EgY6REI6VmljfmMfna+LiilLPp+5y+G+i4bhcr10rosMCusCiN1WUpMD/Mpfe/I/
+         spaK9FlPlfUaxXT+G+PMSHJ848Iy6kh4/ZMaEAwXfNJyLO+6UXlil46CnHBtdziwpUWh
+         LU7V4fbWYeBUwgDWcHY22c9mCDzfdewxB0/NiwEjJ4P1L5hxG3tA2uTIOmRMrsl0yp4W
+         JzpRtbW28g7Vktmbx9GQyQFpbOfkZJI+0t44xXZK3PBbBrN21dziRDroCsVPXlt34mOJ
+         JO1pbNYZAtpWSTAkoCAiUMZ0u3DSNFgKFezvaCcWKcwt7Q79e4WnE43pOk7XvN9AKIUU
+         itWA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739965314; x=1740570114;
-        h=references:in-reply-to:message-id:date:subject:cc:to:from
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=TvtQB/lGlc+Tk5xjdqGmPEVFQSYg82f1Tgy36DWvKQU=;
-        b=erS0aR5qdF4ft4D2o3Gl7T4cBkwh6qm+iK6x6HbgO02KBe32oqHElO+s0QJrQat0er
-         6/h0JOicqeVhTMZseGPfSKgC8i6K8UjEACviscE3O8NgkanX4mu1yoOjvMbSZWguQ1vu
-         Pt9tyZpNHndLrAFA5Qmc4lApLf6sdtrZEaNwPa/zF8SlW8mlT8kZ46qMhfjgqU3taPRI
-         /krguyKTlqAy+Dn2InqNY/Y1q/JAVsxCZ3rBluy3XWq+iiZS/0J+vT3avXtKalm6L+ij
-         rkb2PzlGI5WAri0WorGuYEUeM0HL+VqcuZyAn+hqKcoFODudZYFjvOs2iIuNDYkE23Ea
-         Yryw==
-X-Forwarded-Encrypted: i=1; AJvYcCV7LzaouyxPuhna0+qeLUyD6UG7WVtHxDyLEqVc/0uKrFz4CQpWP1X8yiAH0gdBpJoch6OGg2HZuQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwclGyTCp7yAYlRgTC8qAIl2OhFvoCu4jbcGw17+ZW43qTmM9iY
-	MtYIenDTDSESVGcLpRba2v5PKDj3zFZmhDE5yICkBvOVNM+YAoWslirsFlUVv7c=
-X-Gm-Gg: ASbGncvaqwMgNjj0XS/pLcDv2x58oubKSRqHML40u6mVzP/g871UQpqsPhdqOgsX7zV
-	kU/XzuIHo2W11VteYR2IdONIzRYjy7B1xjvTYy+PZqWwJ1/2UrjNspGO+qiW/5baWJjIoZq5PXG
-	dtZ4qMwtFRGxR+UVGGefTjbZMwp/lTinuQoAq6u2N1UxQfb+ARPMgL4pEye6U+/m0sXVSg+peVZ
-	OPvyqYyK0YQsGV0T+eyPzslz0ErkLE0ZmdC2Giu0OxvtYOf5aacUY5GhDpVEkuYx5NFT7Xe9BJ4
-	3owfnV2v2hCehpJqVNElujF7Nd/jdboGeockbw==
-X-Google-Smtp-Source: AGHT+IE6NLalTRKF906UogoaqA2vkhz8eL3B86SceRlnQGiSoGs39HTOQJs5eyoh/PazNPL54JFJxQ==
-X-Received: by 2002:a17:902:dac5:b0:21f:507b:9ada with SMTP id d9443c01a7336-2210405cc66mr282536845ad.31.1739965313971;
-        Wed, 19 Feb 2025 03:41:53 -0800 (PST)
-Received: from hsinchu26.internal.sifive.com ([210.176.154.34])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d545d507sm103218545ad.145.2025.02.19.03.41.52
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2025 03:41:53 -0800 (PST)
-From: Nick Hu <nick.hu@sifive.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@ucw.cz>,
-	Paul Walmsley <paul.walmsley@sifive.com>,
-	Palmer Dabbelt <palmer@dabbelt.com>,
-	Albert Ou <aou@eecs.berkeley.edu>
-Cc: Nick Hu <nick.hu@sifive.com>,
-	linux-pm@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v4 1/2] riscv: Add stimecmp save and restore
-Date: Wed, 19 Feb 2025 19:41:34 +0800
-Message-Id: <20250219114135.27764-2-nick.hu@sifive.com>
-X-Mailer: git-send-email 2.17.1
-In-Reply-To: <20250219114135.27764-1-nick.hu@sifive.com>
-References: <20250219114135.27764-1-nick.hu@sifive.com>
+        d=1e100.net; s=20230601; t=1739965913; x=1740570713;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=R46i4neiPPtDwdv3LQifChV+vLwO3rJdmLscnT0rln8=;
+        b=XqMTrlJ+UpDVyRCcXVwi/EQQSUUd6IwRRYLdg9uJ3CVWT94sYTecO5BEBA5DCeMCNi
+         BZHpG2OmVBC5X++IegYwXqodqv1mAbayCEnIzbK7afSWmTzJ3ayWOpZn7CHK9yCeGQ6P
+         MdqRF8o/d4m9OlvKVrO4D73QCQdOTDYqtQhicbPScpKzc9TmS3y5pQaG2qaoawnfSPsF
+         qTrmR/iZ1YxZUOyWVtSzO0Od0ju5zW5ovu1egzGbModbvc8sVImsASMTPZDl9mc8m5ZO
+         drWxT1qQ05wq535jIW+3l8HmEJu3++ff08WI8EdPQ0wY3Dm5ZZcvIdIqd4RX6FOgMinG
+         CU3A==
+X-Forwarded-Encrypted: i=1; AJvYcCWdKZ3Eua2q+gZ1Pfh+4d8FoVVFfeILPaPErG4m6VaIhHFpUFU+b3LQODgrQOlnovN6g3MgeogFIw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyZHEVEO7b9ytVOMPEjjWCcEKkJebOwuzF1mr2Qzvh0cDS2mQBG
+	swAn+kYDFWvYionsOrkxoi8PNtqLqgTRZv6Qkq6SpCPzgb3O6cf7n8eDkySNPvZKe0TeF372VDb
+	IOhr/Q1mjJDmmeRAsPYFDARJ3o5Wbo9Zgnmgixg==
+X-Gm-Gg: ASbGncsusGW+5tGXkc0nXk5oSjiybX8jiUQ1Jtl18WQJFAYCZeOs9EraLvCbPS0nYgJ
+	2UAbV7r0NgwxVwZppXO+GuLOGymIvWgWicc+moArliiU1+cjNlnQvT/5B2xlhw7gM7EK/nIQCzg
+	==
+X-Google-Smtp-Source: AGHT+IF336n6iz9MKaV4OlZuLX65CGYiKzqQpe2IHd1yE/zIFjichwdqnXiqfBQCF3WNembgFV6LWh1J7NEVULKdLeg=
+X-Received: by 2002:a05:6902:161c:b0:e5d:b9a0:a14a with SMTP id
+ 3f1490d57ef6-e5e0a0c07famr2649054276.24.1739965913150; Wed, 19 Feb 2025
+ 03:51:53 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+References: <1739926689-151827-1-git-send-email-shawn.lin@rock-chips.com> <a0b41ce7-4ab8-4baa-adee-8b5717326729@arm.com>
+In-Reply-To: <a0b41ce7-4ab8-4baa-adee-8b5717326729@arm.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 19 Feb 2025 12:51:15 +0100
+X-Gm-Features: AWEUYZkoxtEGbbZwqqZGnxCLVjqAx-yQQXpJMgP8dLv4LTOLDOVvgXG75zeBKTo
+Message-ID: <CAPDyKFr6CLzXjXW3SiiE0y4kf6nDgfLppexFtAZds=jOyqtWHg@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: rockchip: Check if smcc could be handled by TA
+To: Shawn Lin <shawn.lin@rock-chips.com>, Steven Price <steven.price@arm.com>
+Cc: Heiko Stuebner <heiko@sntech.de>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org, 
+	Sudeep Holla <sudeep.holla@arm.com>
+Content-Type: text/plain; charset="UTF-8"
 
-If the HW support the SSTC extension, we should save and restore the
-stimecmp register while cpu non retention suspend.
++ Sudeep
 
-Signed-off-by: Nick Hu <nick.hu@sifive.com>
-Reviewed-by: Anup Patel <anup@brainfault.org>
----
- arch/riscv/include/asm/suspend.h |  4 ++++
- arch/riscv/kernel/suspend.c      | 14 ++++++++++++++
- 2 files changed, 18 insertions(+)
+On Wed, 19 Feb 2025 at 10:34, Steven Price <steven.price@arm.com> wrote:
+>
+> On 19/02/2025 00:58, Shawn Lin wrote:
+> > Non-existent trusted-firmware could lead smcc calls into some
+> > unset location which breaks the system.
+> >
+> > Reported-by: Steven Price <steven.price@arm.com>
+> > Cc: Steven Price <steven.price@arm.com>
+> > Suggested-by: Heiko Stuebner <heiko@sntech.de>
+> > Fixes: 58ebba35ddab ("pmdomain: rockchip: Add smc call to inform firmware")
+> > Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
+>
+> Tested-by: Steven Price <steven.price@arm.com>
+>
+> Although one note below...
+>
+> > ---
+> > Hi Ulf, this's a follow-up patch fixing the issue Steven saw.
+> >
+> >  drivers/pmdomain/rockchip/pm-domains.c | 7 ++++---
+> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
+> > index 49842f1..27a5c68 100644
+> > --- a/drivers/pmdomain/rockchip/pm-domains.c
+> > +++ b/drivers/pmdomain/rockchip/pm-domains.c
+> > @@ -572,9 +572,10 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
+> >       }
+> >
+> >       /* Inform firmware to keep this pd on or off */
+> > -     arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD_CONFIG,
+> > -                     pmu->info->pwr_offset + pd_pwr_offset,
+> > -                     pd->info->pwr_mask, on, 0, 0, 0, &res);
+> > +     if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_NONE)
+> > +             arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD_CONFIG,
+> > +                             pmu->info->pwr_offset + pd_pwr_offset,
+> > +                             pd->info->pwr_mask, on, 0, 0, 0, &res);
+>
+> Note that if the conduit is SMCCC_CONDUIT_HVC then this will still
+> attempt an SMC. I'm not sure if this situation can happen in practice.
+>
+> There is a (horrifyingly complex) macro arm_smccc_1_1_invoke() which
+> will automatically use the correct conduit, and even copes with the
+> SMCCC_CONDUIT_NONE case (by simply failing the call).
+>
+> Steve
 
-diff --git a/arch/riscv/include/asm/suspend.h b/arch/riscv/include/asm/suspend.h
-index 4ffb022b097f..dc5782b5fbad 100644
---- a/arch/riscv/include/asm/suspend.h
-+++ b/arch/riscv/include/asm/suspend.h
-@@ -18,6 +18,10 @@ struct suspend_context {
- 	unsigned long ie;
- #ifdef CONFIG_MMU
- 	unsigned long satp;
-+	unsigned long stimecmp;
-+#if __riscv_xlen < 64
-+	unsigned long stimecmph;
-+#endif
- #endif
- };
- 
-diff --git a/arch/riscv/kernel/suspend.c b/arch/riscv/kernel/suspend.c
-index 9a8a0dc035b2..24b3f57d467f 100644
---- a/arch/riscv/kernel/suspend.c
-+++ b/arch/riscv/kernel/suspend.c
-@@ -30,6 +30,13 @@ void suspend_save_csrs(struct suspend_context *context)
- 	 */
- 
- #ifdef CONFIG_MMU
-+	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SSTC)) {
-+		context->stimecmp = csr_read(CSR_STIMECMP);
-+#if __riscv_xlen < 64
-+		context->stimecmph = csr_read(CSR_STIMECMPH);
-+#endif
-+	}
-+
- 	context->satp = csr_read(CSR_SATP);
- #endif
- }
-@@ -43,6 +50,13 @@ void suspend_restore_csrs(struct suspend_context *context)
- 	csr_write(CSR_IE, context->ie);
- 
- #ifdef CONFIG_MMU
-+	if (riscv_has_extension_unlikely(RISCV_ISA_EXT_SSTC)) {
-+		csr_write(CSR_STIMECMP, context->stimecmp);
-+#if __riscv_xlen < 64
-+		csr_write(CSR_STIMECMPH, context->stimecmph);
-+#endif
-+	}
-+
- 	csr_write(CSR_SATP, context->satp);
- #endif
- }
--- 
-2.17.1
+Thanks for letting us know!
 
+Note that, arm_smccc_1_1_invoke() is also a bit problematic, as it
+doesn't compile with Clang-20 and Thumb2 mode. See commit
+885f5669f2ab.
+
+[...]
+
+As the current approach seems fine too, I decided to pick up the
+$patch as is and by updating the commit message, according to Sudeep's
+comment.
+
+Kind regards
+Uffe
 
