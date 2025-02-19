@@ -1,123 +1,166 @@
-Return-Path: <linux-pm+bounces-22457-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22458-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1FFFCA3C603
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 18:21:12 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8B8B6A3C61D
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 18:25:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F1BF1178266
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 17:21:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6ED07174BB1
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 17:25:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 431551FDA93;
-	Wed, 19 Feb 2025 17:21:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7A2620E6F9;
+	Wed, 19 Feb 2025 17:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ddjY5H2g"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="uvHPgHJF"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AEFE286284;
-	Wed, 19 Feb 2025 17:21:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BDA302144A1;
+	Wed, 19 Feb 2025 17:25:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739985668; cv=none; b=CNF96jRmBMPzxABAltJ06ptpXjKAVKwSnihRu+N8UQtWIXNfW5uxtZ6tOfU++00rX43FewsSopPKT0qnHS88KojO9ePkKPr4TxRwxUvv0nOVZ8I00+UtsIVY1eUG6l+1CyrpLuDwgtw1HsDrVZzuaMj+hxaJIQLbSnDhbsTkUh4=
+	t=1739985927; cv=none; b=EMcF2uYuZAtplYHvFTdQYPGlu7eQ6+c66PAu6wMtHoWSqREiZlBfWr90ZDOrMb9TQhxz+1skYXYmwHtXnHY5vCWnaTmsTcfQ4uBTYr+xGJWqREBWfWvEboaEmGENHEGC/2negdrrNkazqyVXbrRTUwjB5SihfpYa6tb7E9trPC4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739985668; c=relaxed/simple;
-	bh=ov+u5w/5fC+8oMPN7+g0AbEGhh+S1mUoX5U15HsZ72o=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Tn/IGmrLLWIbHs34UqDccWGWiP2ab5WC3Y40zFJhDC/Bgyy0R+Jh2eod/oPJuf4FVRuXlO7oiu1numFKLviVRx9Vw9P7MHFAugac72KjPjS0WygbjzwbhVVhzbSV9ouPaLK/g0xnCyjJVQMYCMagqSKXofNA0p9X5d/z8oxqVS8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ddjY5H2g; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1AEA7C4CED1;
-	Wed, 19 Feb 2025 17:21:07 +0000 (UTC)
+	s=arc-20240116; t=1739985927; c=relaxed/simple;
+	bh=ikNfhXqco/zJZ8TCINjDGAPmg4V6noayeVHjFs0Yu/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c3gZB92EkHkW8Bb90feTB7VKb2qxRhcPgEC8VjdtF+6Ghk0hknan3D9kRWThyZ6Ab0xAT5fK/5muUFFFbeNtD1ReeJGPVJzwkWcTSvXr0JYY9NhgrVR8I7kNToQzvAOdK9pomHnUagbY7dr0bpxVeLGuncmIXYpIVRo2FVW+Ors=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=uvHPgHJF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1F275C4CED1;
+	Wed, 19 Feb 2025 17:25:27 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1739985667;
-	bh=ov+u5w/5fC+8oMPN7+g0AbEGhh+S1mUoX5U15HsZ72o=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ddjY5H2gWfTW5YwRCxyJV9CWSepJjZTICyTk07K9DUtj+yeVFHNvc6fOag0o9SUJ+
-	 I+wuk1RwlU5tiP8cbZp++09mdD30s89q2UjmifyxpMtk6J7/VZ5jOP6PfFFuMGjSzK
-	 dib1HPv1FSWr2c3KeFtrc9RaOgKnK7vqDtyNu8Hqe6sgVfZygvpY9ViAE6jjbSjYS/
-	 bLOwmWsD+xD2KCyuPqicoLbEJsz06yMKT54QvpIxgytMphAwMMZki/BDqk/kCbS/Ug
-	 yeg7pc7SE1yFntGZUToQph+lp+xLc5zUbSkrMw5G51oJqm/krY4VkjmTaKIN8PI6b6
-	 I+V2qN3M/NW1A==
-Message-ID: <740725e2-0580-4a52-baa1-44e722d4ce35@kernel.org>
-Date: Wed, 19 Feb 2025 11:21:05 -0600
+	s=k20201202; t=1739985927;
+	bh=ikNfhXqco/zJZ8TCINjDGAPmg4V6noayeVHjFs0Yu/Q=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=uvHPgHJFzQvrlD3awYsWUcla0n8dIxRVIbz4RH0VeLV8dwEFCU9Qf/wojt3GC0wlk
+	 ++TcMiJI6krHRmoO7At+xX4ymyQFZoIYFB/LCTncBSKYccb1sAaHTYaw3MLAuD6SzD
+	 6erSEDAVcsb561bKcI/1ineoDDo2KywCWcBD+GwqlbdsnLJ80DHKu0wrzDhXUv5abR
+	 /34aQfH2jaf992/jpuMIZG8S8wmGUal9kkaUWdF3TNGJpfmC7Xuy5II8bcPxgFUvzB
+	 jsgIyFqi5fwE+gwm8VUL1PG5PSWcHJ/0/vxj5HIcTQC6FhWCpOa6CMMu9DGj2aVJuO
+	 FphIi8TJL1nWQ==
+Date: Wed, 19 Feb 2025 09:25:24 -0800
+From: Kees Cook <kees@kernel.org>
+To: "Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>
+Cc: Huacai Chen <chenhuacai@kernel.org>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+	"Rafael J . Wysocki" <rafael@kernel.org>,
+	Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org,
+	GONG Ruiqi <gongruiqi@huaweicloud.com>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org,
+	Yuli Wang <wangyuli@uniontech.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Pekka Enberg <penberg@kernel.org>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	GONG Ruiqi <gongruiqi1@huawei.com>
+Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
+ Initialise random_kmalloc_seed after initcalls)
+Message-ID: <202502190921.6E26F49@keescook>
+References: <20250212141648.599661-1-chenhuacai@loongson.cn>
+ <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
+ <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
+ <Z68N4lTIIwudzcLY@MacBook-Air-5.local>
+ <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
+ <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 01/18] cpufreq/amd-pstate: Invalidate cppc_req_cached
- during suspend
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Cc: Perry Yuan <perry.yuan@amd.com>,
- Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
- "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>,
- Miroslav Pavleski <miroslav@pavleski.net>
-References: <20250217220707.1468365-1-superm1@kernel.org>
- <20250217220707.1468365-2-superm1@kernel.org>
- <Z7VrADfrrPB7GtfX@BLRRASHENOY1.amd.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <Z7VrADfrrPB7GtfX@BLRRASHENOY1.amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
 
-On 2/18/2025 23:24, Gautham R. Shenoy wrote:
-> Hello Mario,
+On Fri, Feb 14, 2025 at 09:44:59PM +0900, Harry (Hyeonggon) Yoo wrote:
+> On Fri, Feb 14, 2025 at 06:02:52PM +0800, Huacai Chen wrote:
+> > On Fri, Feb 14, 2025 at 5:33 PM Harry (Hyeonggon) Yoo
+> > <42.hyeyoo@gmail.com> wrote:
+> > >
+> > > On Thu, Feb 13, 2025 at 11:20:22AM +0800, Huacai Chen wrote:
+> > > > Hi, Harry,
+> > > >
+> > > > On Wed, Feb 12, 2025 at 11:39 PM Harry (Hyeonggon) Yoo
+> > > > <42.hyeyoo@gmail.com> wrote:
+> > > > > On Wed, Feb 12, 2025 at 11:17 PM Huacai Chen <chenhuacai@loongson.cn> wrote:
+> > > > > >
+> > > > > > Hibernation assumes the memory layout after resume be the same as that
+> > > > > > before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this assumption.
+> > > > >
+> > > > > Could you please elaborate what do you mean by
+> > > > > hibernation assumes 'the memory layout' after resume be the same as that
+> > > > > before sleep?
+> > > > >
+> > > > > I don't understand how updating random_kmalloc_seed breaks resuming from
+> > > > > hibernation. Changing random_kmalloc_seed affects which kmalloc caches
+> > > > > newly allocated objects are from, but it should not affect the objects that are
+> > > > > already allocated (before hibernation).
+> > > >
+> > > > When resuming, the booting kernel should switch to the target kernel,
+> > > > if the address of switch code (from the booting kernel) is the
+> > > > effective data of the target kernel, then the switch code may be
+> > > > overwritten.
+> > >
+> > > Hmm... I'm still missing some pieces.
+> > > How is the kernel binary overwritten when slab allocations are randomized?
+> > >
+> > > Also, I'm not sure if it's even safe to assume that the memory layout is the
+> > > same across boots. But I'm not an expert on swsusp anyway...
+> > >
+> > > It'd be really helpful for linux-pm folks to clarify 1) what are the
+> > > (architecture-independent) assumptions are for swsusp to work, and
+> > > 2) how architectures dealt with other randomization features like kASLR...
+> >
 > 
+> [+Cc few more people that worked on slab hardening]
 > 
-> On Mon, Feb 17, 2025 at 04:06:50PM -0600, Mario Limonciello wrote:
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> During resume it's possible the firmware didn't restore the CPPC request MSR
->> but the kernel thinks the values line up. This leads to incorrect performance
->> after resume from suspend.
->>
->> To fix the issue invalidate the cached value at suspend. During resume use
->> the saved values programmed as cached limits.
->>
->> Reported-by: Miroslav Pavleski <miroslav@pavleski.net>
->> Closes: https://bugzilla.kernel.org/show_bug.cgi?id=217931
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->>   drivers/cpufreq/amd-pstate.c | 5 ++++-
->>   1 file changed, 4 insertions(+), 1 deletion(-)
->>
->> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->> index f425fb7ec77d7..12fb63169a24c 100644
->> --- a/drivers/cpufreq/amd-pstate.c
->> +++ b/drivers/cpufreq/amd-pstate.c
->> @@ -1611,7 +1611,7 @@ static int amd_pstate_epp_reenable(struct cpufreq_policy *policy)
->>   					  max_perf, policy->boost_enabled);
->>   	}
+> > I'm sorry to confuse you. Binary overwriting is indeed caused by
+> > kASLR, so at least on LoongArch we should disable kASLR for
+> > hibernation.
 > 
-> You can also remove the tracing code from amd_pstate_epp_reenable(), i.e,
+> Understood.
 > 
-> 	if (trace_amd_pstate_epp_perf_enabled()) {
-> 		trace_amd_pstate_epp_perf(cpudata->cpu, cpudata->highest_perf,
-> 					  cpudata->epp_cached,
-> 					  FIELD_GET(AMD_CPPC_MIN_PERF_MASK, cpudata->cppc_req_cached),
-> 					  max_perf, policy->boost_enabled);
-> 	}
+> > Random kmalloc is another story, on LoongArch it breaks smpboot when
+> > resuming, the details are:
+> > 1, LoongArch uses kmalloc() family to allocate idle_task's
+> > stack/thread_info and other data structures.
+> > 2, If random kmalloc is enabled, idle_task's stack in the booting
+> > kernel may be other things in the target kernel.
 > 
-> Since amd_pstate_epp_update_limit() also has the the tracing code.
+> Slab hardening features try so hard to prevent such predictability.
+> For example, SLAB_FREELIST_RANDOM could also randomize the address
+> kmalloc objects are allocated at.
+> 
+> Rather than hacking CONFIG_RANDOM_KMALLOC_CACHES like this, we could
+> have a single option to disable slab hardening features that makes
+> the address unpredictable.
+> 
+> It'd be nice to have something like ARCH_SUPPORTS_SLAB_RANDOM which
+> some hardening features depend on. And then let some arches conditionally
+> not select ARCH_SUPPORTS_SLAB_RANDOM if hibernation's enabled
+> (at cost of less hardening)?
 
-Yeah; the tracing code gets updated later in the series.
-My plan is this commit is a minimal fix, and will go to 6.14, the rest 
-will be in 6.15.
+I find this whole thread confusing. :) Hibernation should already do
+whatever it need to to get out of the way of the kernel it is restoring
+to memory. The random locations shouldn't matter at all: they're all
+stored in the image. I am not a hibernation expert, but my understanding
+is that the "resume" kernel moves itself out of the way to restore the
+KASLR-ed hibernation image and puts everything back exactly as it was.
+Randomization should not matter at all: it's just simply "put everything
+back where it was".
 
-> 
-> The patch looks good to me otherwise.
-> 
-> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
-> 
+Yes, the tricky part is the "move itself out of the way", but that's
+required for any kernel that support being relocatable (a prerequisite
+for KASLR), and KASLR is just an aggressive form of "the relocatable
+kernel might be anywhere" beyond just different boot loaders putting it
+in a handful of different potential offsets.
 
-Thanks!
+-- 
+Kees Cook
 
