@@ -1,75 +1,77 @@
-Return-Path: <linux-pm+bounces-22395-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22394-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id BC601A3B3B7
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A44FA3B3B4
 	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 09:29:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5AEB73A8C75
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 08:28:53 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5351B16642A
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 08:28:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79D6A1CAA95;
-	Wed, 19 Feb 2025 08:28:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0018E1C5D5C;
+	Wed, 19 Feb 2025 08:28:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="KHrLUXpL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UxhzdNoV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED9471C5F01;
-	Wed, 19 Feb 2025 08:28:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 212671C82F4;
+	Wed, 19 Feb 2025 08:28:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739953726; cv=none; b=j5NKKpEbKt1yYJQyaOBoRwzIaYOqlfuItlgLM14LYxBL2gzbzg6IrChlo9HvQTbwnproYsAddA4QzfhMDaTS7JddtTMjz5eq4OTcCv7Er86hNdT+C1DGHMWPC6ZmbiMHv4/aSQN9M9RweU2gjYCXFDAYjFwwPQ/Vvj02a+Mk2wo=
+	t=1739953723; cv=none; b=oVqBmfLYTM5SB645+NHmOb5VThudQT5RIvTMI/bHYgNdcUPbZJ+gEPSt+P93UsbAlnGGnSXswPXVk2xNKt2H91A7YyEgr2tIKzu7J/0Tpj7foSBRbraxThG0V3K5tf31VJoTzssken5VQMNEXFqgtYtZDHaLOMFIYir1F1Y8PgQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739953726; c=relaxed/simple;
-	bh=xMa5dhWIwvX/FI0ly9X9PbJJjGiw4OH8z/bKgRy6zEo=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nch3i7yIyiSp3pydGbBTUhN6BUtGVyX0GYo0l78IL0dLKdnavzhNiYghsjlLHq4l+HsHCT+kCLI66eFjaMlGmofb/UBeUtc3+w5kA/pAPeCDOTKmktnp/HZEQVeHizZqwsTZ2fQDWn4Cb2Ca3t2JUpjxBsEEwfz0MMaoGGofOhY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=KHrLUXpL; arc=none smtp.client-ip=209.85.167.49
+	s=arc-20240116; t=1739953723; c=relaxed/simple;
+	bh=4JzvjrWls8MKSWJG9gzPifIffzcDoP0jfVQK+Hf4xX0=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=BDbNPNJPG0PAJ/YK1/VhoJygh+s5j8YnFvUMwtVmS3u9AB06w1Sat7DzT0mVTzRw0UKX0pcK0DwxESbxftXO9+/BQLFXxu0eWfg6rn/731a6tyGoVr4Ht1Ef8Li+6uw4OTO0sB2Jn+/ORXwn6eXZdtQ5ks4+IG5I8blSheVxJaU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UxhzdNoV; arc=none smtp.client-ip=209.85.208.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-54622940ef7so3109060e87.3;
-        Wed, 19 Feb 2025 00:28:40 -0800 (PST)
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-30737db1aa9so60716101fa.1;
+        Wed, 19 Feb 2025 00:28:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1739953719; x=1740558519; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Mb1tzQ3pAYfxP0ynUpJfaLnvBHvFdLIdM0D9Vvl71Wo=;
-        b=KHrLUXpLssnAxx+T0tO0sg70AOXy87L/qIKkyUGV/JxQDptCiXLdn7w36ewMzhPZF0
-         t6mFJjVzawf282XPhG/jNAkurImDPo0Q6gIZkrdtNdo1RxsYxPsU1eFf5gOou2Tu9QKD
-         C8OM3beQjCvN72BCimjmanSPVo3VA0JjEK9B1eUkLLz+o3skA8KXeyufsp8CmxN5Umbs
-         TqcFuJZyxXaLDLeVCOGGVrmbJk/kUNOOsbJRtDl54Nn4wf3bqw1TeupGcO2tKK/qFYOu
-         TtDGcoYlA0mt4zrgG3jTlgGFyl/Qu1mFl+bU8XouEYYCjDADKe8cXuRvL8arOzExYZB2
-         ZGnA==
+        d=gmail.com; s=20230601; t=1739953720; x=1740558520; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Tzczu/KeE3eNkMX5hnweWTDCNf2r7BW02oA1kIbmbSU=;
+        b=UxhzdNoVHXmfPIu6UErT4Q5TwayQzxge6CC8zhpimaqPiWCz9ARUQkB0vwXASlAQDI
+         65QsXG539CU0zp0RXwrS9r7ki/YhV0fyrzmzYnRhnnaaG4Tz9DFHVX7PTyJLsDIM900Q
+         5qSPkZPsOri1nwIy9Lp4gd7FO0TchjywFkzVXLr8/qIOsQ347dKgW/Fcl7+IIiNXX5L6
+         BHuYLXRz8zwYWg3LzzxzukdEyCNj3hEIEmEMO513BlGTywMGVS0hxLQrNsOe/NDii9jf
+         0JbjYDh81GJnyFLqgHJ1IPS1duDX98egjv5ffx+ach7USrdm4FuQaEPMYxU2e0c3ISU1
+         3ipg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739953719; x=1740558519;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Mb1tzQ3pAYfxP0ynUpJfaLnvBHvFdLIdM0D9Vvl71Wo=;
-        b=UhCjHIVlEQ5zJfYiDeDTI4smJ9ccutWWL5AKxxg338DXW6BM1layuAuWczFOr4zxNX
-         h1MXP9ISFVal1kr1KsxQdyFKizCv5UO7ZVUHdg+xLZC6248DKnm//8yypPM/DyosMPoh
-         t7p57ysB+G34Kswdvj0a0AAtvFbTHQKKcyfkKqj5dSMUj/w0G9evJw9h8np1f781tGb8
-         faU1IC8gH6hs+nE2MzoGTt4/RvgMvHriAVZtkPfTWlGKqyq0S4vnrKCDveDg/TNstZWr
-         PZ9XwmULYOP2FzbLsqr9qxuwuC+VT2H1pB3s8sLW/NWRrjuFkqXrWgPX4B/GsvMqeQB2
-         l9Rw==
-X-Forwarded-Encrypted: i=1; AJvYcCU1tdzd+u+4KQIxdyJ2tlAljypp3RoOyR6ua6KFj0EQFVYdWsJBaa9zT8jD+r5vXtzH5QNjfjA+xQiMB6ip@vger.kernel.org, AJvYcCUHHhL2KOlKA/aFo2sDhfWr01q5cOGFhJS1hJW4fHYLoSLERe1um9oWjuWOfJNaCdeND8w0DvPykPzk@vger.kernel.org
-X-Gm-Message-State: AOJu0YxIAYWZMFS8mh0N14WzgsddY8t6hwPcj4ZxSYudC4kB0siasz/t
-	O/zJIwM6soZbUX0ALZPcqP8/wfRA3DTu91SFgEvpDGlzc8bJmDzB
-X-Gm-Gg: ASbGncu75TIX7nR+bk1aqwGT5cQwy1EGrJofncfdhmU89fFdw7um4St6fY8VdNYLQKg
-	Lupa3CjLqnCtcv639SriPzIpmKPob3M4yJOCPcETRJD36WaKYBsyxtifbQZ1u5SKrPgAsiFSVSe
-	Fw2+HcJZLGCfC9f3LXoj7pxsaiytHk6xlEs22ul15zCG1LHF1E7hZIRLk9myoW73Z0PInywcrwr
-	geQc/bv/pN6J89fBPJtjz1p+eaMuI6wUoYMFEMrX2E+85phWRfzVn5aFjbmu/6wprYol8sYhKjw
-	J1OiVw==
-X-Google-Smtp-Source: AGHT+IHYa54eu2Zvq5c+1QI8//C89stYENtxQOthf3tKrjT2ePHvxkgrhNgcOgvKfLBYiIPBJ6F+vQ==
-X-Received: by 2002:ac2:4c48:0:b0:545:1233:d4f9 with SMTP id 2adb3069b0e04-5462eef2cc5mr1105081e87.30.1739953718631;
-        Wed, 19 Feb 2025 00:28:38 -0800 (PST)
+        d=1e100.net; s=20230601; t=1739953720; x=1740558520;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Tzczu/KeE3eNkMX5hnweWTDCNf2r7BW02oA1kIbmbSU=;
+        b=Ggh/AN85ZTZMVm8+rw6ED7FZ76/xoZQcdqaOfkz34BY9yH1kmeHZ+pNrN3Sc7XgZrI
+         TZhEJf7rHkFB5cfNRDCtJ9pxiqmX99A1onxSBNKSWdePGv5VoYv/8eRG23wxuAYPpvBR
+         db8SmdGbtO8Qgsyn4GwnFrLGPNeS20R3iT4C+tkYe+fn1NL+6CnKJzjI0e/+cJX1rj82
+         SKtPKKHv/lHg5aZViMTjcqLCJwNrHr6Mv1Iee54q0KuF5yIaIppd6W973z5Rs/8Zms5Y
+         vRJQw9lXfEGg8pwcqLcS3y3rSbsaffjFSR1Yt4WbTPnZ0UiHEyvGMJsP9VvMea5UK55v
+         XI7A==
+X-Forwarded-Encrypted: i=1; AJvYcCVTMDpdVkdxkaKkO4SkD1b1YSqqUsqnitCGeL1dbMTmN5RfnmgygB3kKkGveVmrsRds9wI1wbRmZZKg@vger.kernel.org, AJvYcCW7rMtnW116Mazb7WX8i+fIO8yIekfLXltnA2NEkemxlJauephFCdTExcqshIkLuqw6WUCDSyYYHO8mflhG@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz8ip+lfWzFzcnWG59cNeGoH4sgnsDQYF9Rz+FoHfWPrCskRLXN
+	EDYHn8/SMzvO+X1vrcodXl1wekQBHHViY64/BziDj3b2zzkhzasO
+X-Gm-Gg: ASbGncs7jTVOGo4yLCIfwg9AWFb1BZLjNeZCAH3HVo0r/vYfQOq4HSKEMqRLcCzW/+8
+	pwQcwX3JqByhBGmlWOoE1Pe4oNR4fmenbrJMLN3+SZBre6/ccadGDb3euCtXrOGZ4Q6WkrQDPlE
+	GCENzSpDCND6nWOxNUzNuNRiZqIQXFs+bGelO6xNNOseSfWpVIXYjkt0KKpBs97yNdb9IGBfmtS
+	X9fkZepWUU9K5W4hKGRo9nyBknIIgMMgEsaz0IHLvt8p25Je8H9PvS2imL0n/sbX85h0CU8Lz/G
+	Ag3qcA==
+X-Google-Smtp-Source: AGHT+IGye2FAZHsucHh4OJcLXHKm/UEJ2InJFf96ynQ3Aj7FuDucOiJ0+O1GWE1ItBmeYP4TcUTUBQ==
+X-Received: by 2002:a2e:9e87:0:b0:308:db61:34cf with SMTP id 38308e7fff4ca-30a44dcd022mr7798931fa.14.1739953719917;
+        Wed, 19 Feb 2025 00:28:39 -0800 (PST)
 Received: from xeon.. ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30a2699d0f5sm12645911fa.78.2025.02.19.00.28.37
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30a2699d0f5sm12645911fa.78.2025.02.19.00.28.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 19 Feb 2025 00:28:38 -0800 (PST)
+        Wed, 19 Feb 2025 00:28:39 -0800 (PST)
 From: Svyatoslav Ryhel <clamor95@gmail.com>
 To: "Rafael J. Wysocki" <rafael@kernel.org>,
 	Daniel Lezcano <daniel.lezcano@linaro.org>,
@@ -82,10 +84,12 @@ To: "Rafael J. Wysocki" <rafael@kernel.org>,
 Cc: linux-pm@vger.kernel.org,
 	devicetree@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] thermal: thermal-generic-adc: add temp sensor function
-Date: Wed, 19 Feb 2025 10:28:15 +0200
-Message-ID: <20250219082817.56339-1-clamor95@gmail.com>
+Subject: [PATCH v2 1/2] dt-bindings: thermal: generic-adc: Add optional io-channel-cells property
+Date: Wed, 19 Feb 2025 10:28:16 +0200
+Message-ID: <20250219082817.56339-2-clamor95@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250219082817.56339-1-clamor95@gmail.com>
+References: <20250219082817.56339-1-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -94,25 +98,36 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Add IIO sensor cell to thermal-generic-adc, which would benefit
-devices that use adc sensors to detect temperature and need a
-custom conversion table.
+Since device is a thermal sensor it needs '#io-channel-cells' to allow
+exposure of thermal data via IIO means.
 
+Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
 ---
-Changes on switching from v1 to v2:
-- documented #iio-channel-cells property
-- switched to IIO_CHAN_INFO_PROCESSED
----
+ .../devicetree/bindings/thermal/generic-adc-thermal.yaml      | 4 ++++
+ 1 file changed, 4 insertions(+)
 
-Svyatoslav Ryhel (2):
-  dt-bindings: thermal: generic-adc: Add optional io-channel-cells
-    property
-  thermal: thermal-generic-adc: add temperature sensor channel
-
- .../bindings/thermal/generic-adc-thermal.yaml |  4 ++
- drivers/thermal/thermal-generic-adc.c         | 54 ++++++++++++++++++-
- 2 files changed, 57 insertions(+), 1 deletion(-)
-
+diff --git a/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
+index 12e6418dc24d..4bc2cff0593c 100644
+--- a/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
++++ b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
+@@ -30,6 +30,9 @@ properties:
+   io-channel-names:
+     const: sensor-channel
+ 
++  '#io-channel-cells':
++    const: 1
++
+   temperature-lookup-table:
+     description: |
+       Lookup table to map the relation between ADC value and temperature.
+@@ -60,6 +63,7 @@ examples:
+         #thermal-sensor-cells = <0>;
+         io-channels = <&ads1015 1>;
+         io-channel-names = "sensor-channel";
++        #io-channel-cells = <1>;
+         temperature-lookup-table = <
+               (-40000) 2578
+               (-39000) 2577
 -- 
 2.43.0
 
