@@ -1,159 +1,231 @@
-Return-Path: <linux-pm+bounces-22480-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22482-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CD0E1A3C8C2
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 20:32:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7FD54A3C967
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 21:13:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB91717709B
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 19:32:22 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DBC957A4D04
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 20:12:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 214592397A4;
-	Wed, 19 Feb 2025 19:30:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C19D022D7AE;
+	Wed, 19 Feb 2025 20:12:55 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HUMWxafv"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hnmgCWNJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.10])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4574423957F;
-	Wed, 19 Feb 2025 19:30:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.10
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E6F661BD00C;
+	Wed, 19 Feb 2025 20:12:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739993402; cv=none; b=aBlnOK0kVeGgmxcf11riE2VM/e+q3s4O57MHv37iU7AyCHgDwkl1ZoEbBP9XxLLoq4NraAZrmpCKjlzg8Ma62OgR+SLznYtNNditU8Ab/0NS/pHaOFCAtQLLW5/vkB+aEIPVpHlhjVHlEj6EAgKkcaW+ZqLLU2Utybr+iRVPa/w=
+	t=1739995975; cv=none; b=GUJtFbA90tnnbjN2niR58rh6YwvKJ8WPlz2iD6TFB+31Usq1ln6H1sV0oPkvsC02fG4u+k/NI9EyCmAAStqiNf6v8qpqExUPkh6LyuaibhvhXzeoFCJh6YndkzySi/UBwj3bt0h5+9+xR65t9vNUohzQ+Lfp4U+iA4GQ2sFA0fw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739993402; c=relaxed/simple;
-	bh=QLIMnNXCwjgKCC5aNgIRCQTRlUzz0+nUlS5cRZ36n7M=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=eIk0gJ5tdJ8nVVonoLNXyudfTDXfuIrV4SE7RW+yndlB+ZLyai6jc8MMhz66t3yAkR+/ZX4kYQrWNgxV8eM5GlA7arQotlLJrAm9bzN9/agf6+UZXkVdQlL+G92HBygyRstGMCcGck+m3SZxJyDGIbZuD+jTI885uXB+5quUu2A=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HUMWxafv; arc=none smtp.client-ip=192.198.163.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+	s=arc-20240116; t=1739995975; c=relaxed/simple;
+	bh=ND/8Wxv5gQFIoFsWtPtheJF33IR5DdoAJv/lL7RafJE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=bl5cgri923hnGEoZd/bCbeEIT7IAiatjp6t8LN0DvssE6BSYd5I7i7e4lUMABN9JDcOvqKcjmz7/gnz7OJFNwyG0rDzkK6WJ6FAw8Kl7co82PuQRorXaYZ3wKRgS65+7JSd4D2LArpUTTwrKMqg3kxgpAnfIaeNRWcFfmzY0i+U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hnmgCWNJ; arc=none smtp.client-ip=198.175.65.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1739993400; x=1771529400;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=QLIMnNXCwjgKCC5aNgIRCQTRlUzz0+nUlS5cRZ36n7M=;
-  b=HUMWxafvQUZ08vO46pAafrfGQeDYR/2mttDR881RDD001mDxetNnqwRQ
-   ALGn4rt9JeNU/iEfzXzTd8lRmMUKKO75wnXaXMg61LYP4j5sG776pMoc9
-   kz36Oa/M2foT8ZvJ/HlnxHYUFvZhvriZw89vyjv4JPpeKT5vRGqZd975N
-   kZJTeDQeewUr/MqKdV6PdkPq4rCiP6spe9/zmNGQHdreNS+45bUHa6ZHw
-   EIdilgKfH/ULEiner3qtF7aOAOdYsddMUC9bvm88+ixfkX9hkMr5B7RHo
-   i3AGh4XFzTFqBwbVG1j509fSjVFKvqWl57VtkOjclnXcfJzf2Bav7RiBR
-   g==;
-X-CSE-ConnectionGUID: L5CK+tJwRWqrfRFhvJX/pg==
-X-CSE-MsgGUID: Xk95ySiIScy67JUblkBj8Q==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="52183103"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="52183103"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa104.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 11:29:58 -0800
-X-CSE-ConnectionGUID: pCzsR04cRdaYRECqVCeYJw==
-X-CSE-MsgGUID: nDUq0+YwTgG3+goNBDOSbQ==
+  t=1739995975; x=1771531975;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=ND/8Wxv5gQFIoFsWtPtheJF33IR5DdoAJv/lL7RafJE=;
+  b=hnmgCWNJPE8qBDlG33mphgtS+E5GVm5/C6yPiWzgMEgKAyT2jIsoNlFS
+   0LERw3zi69ahOaOpKPniKEWMldaxa+EAZB7wg5TkSf0DVeQiRM2tbtXmY
+   QtYjK4+TKy+GIMQpZswQdo2XNfinzti3CWpb31WiWLeldScfn1FBXTV97
+   gm1z7AIlzgoCyecHWBTKhBkATXpmGU89TxJwLMDxGEnVQYhXl0Ks4DhiS
+   6GOgGA7WZxVAWmjXsEDfMDkP0UwCHL34s6hfcLvKBlZ92SH97Fq6Y8r8Z
+   9M+FcrFrlwc/s1nIM3E4oTctCUkJn7O/l3kDVxjgh/pY1GoD2jMysmnaS
+   Q==;
+X-CSE-ConnectionGUID: Ib2z7kGEQ8yUKJOB7OBH0g==
+X-CSE-MsgGUID: +X3WIQ8NTEafnITY/PyOig==
+X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="50965958"
+X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
+   d="scan'208";a="50965958"
+Received: from fmviesa009.fm.intel.com ([10.60.135.149])
+  by orvoesa103.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 12:12:53 -0800
+X-CSE-ConnectionGUID: BZUk7FQcRcmkW+2oQKS2JA==
+X-CSE-MsgGUID: ivcYCpZ+RN28xNfCPYJ9fg==
 X-ExtLoop1: 1
 X-IronPort-AV: E=Sophos;i="6.13,299,1732608000"; 
-   d="scan'208";a="115344084"
-Received: from sohilmeh.sc.intel.com ([172.25.103.65])
-  by fmviesa010.fm.intel.com with ESMTP; 19 Feb 2025 10:50:35 -0800
-From: Sohil Mehta <sohil.mehta@intel.com>
-To: x86@kernel.org,
-	Dave Hansen <dave.hansen@linux.intel.com>,
-	Tony Luck <tony.luck@intel.com>
-Cc: Peter Zijlstra <peterz@infradead.org>,
-	Ingo Molnar <mingo@redhat.com>,
-	Arnaldo Carvalho de Melo <acme@kernel.org>,
-	Namhyung Kim <namhyung@kernel.org>,
-	Mark Rutland <mark.rutland@arm.com>,
-	Alexander Shishkin <alexander.shishkin@linux.intel.com>,
-	Jiri Olsa <jolsa@kernel.org>,
-	Ian Rogers <irogers@google.com>,
-	Adrian Hunter <adrian.hunter@intel.com>,
-	Kan Liang <kan.liang@linux.intel.com>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Borislav Petkov <bp@alien8.de>,
-	"H . Peter Anvin" <hpa@zytor.com>,
-	"Rafael J . Wysocki" <rafael@kernel.org>,
-	Len Brown <lenb@kernel.org>,
-	Andy Lutomirski <luto@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Jean Delvare <jdelvare@suse.com>,
-	Guenter Roeck <linux@roeck-us.net>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	David Laight <david.laight.linux@gmail.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>,
-	Sohil Mehta <sohil.mehta@intel.com>,
-	linux-perf-users@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	linux-acpi@vger.kernel.org,
-	linux-pm@vger.kernel.org
-Subject: [PATCH v3 15/15] perf/x86/p4: Replace Pentium 4 model checks with VFM ones
-Date: Wed, 19 Feb 2025 18:41:33 +0000
-Message-ID: <20250219184133.816753-16-sohil.mehta@intel.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250219184133.816753-1-sohil.mehta@intel.com>
-References: <20250219184133.816753-1-sohil.mehta@intel.com>
+   d="scan'208";a="115480846"
+Received: from linux.intel.com ([10.54.29.200])
+  by fmviesa009.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 19 Feb 2025 12:10:49 -0800
+Received: from [10.246.136.14] (kliang2-mobl1.ccr.corp.intel.com [10.246.136.14])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	by linux.intel.com (Postfix) with ESMTPS id 341C420B5713;
+	Wed, 19 Feb 2025 12:10:43 -0800 (PST)
+Message-ID: <49c59a81-015f-46a1-88b9-f043ca2710d0@linux.intel.com>
+Date: Wed, 19 Feb 2025 15:10:42 -0500
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 14/15] perf/x86: Simplify Intel PMU initialization
+To: Sohil Mehta <sohil.mehta@intel.com>, x86@kernel.org,
+ Dave Hansen <dave.hansen@linux.intel.com>, Tony Luck <tony.luck@intel.com>
+Cc: Peter Zijlstra <peterz@infradead.org>, Ingo Molnar <mingo@redhat.com>,
+ Arnaldo Carvalho de Melo <acme@kernel.org>,
+ Namhyung Kim <namhyung@kernel.org>, Mark Rutland <mark.rutland@arm.com>,
+ Alexander Shishkin <alexander.shishkin@linux.intel.com>,
+ Jiri Olsa <jolsa@kernel.org>, Ian Rogers <irogers@google.com>,
+ Adrian Hunter <adrian.hunter@intel.com>, Thomas Gleixner
+ <tglx@linutronix.de>, Borislav Petkov <bp@alien8.de>,
+ "H . Peter Anvin" <hpa@zytor.com>, "Rafael J . Wysocki" <rafael@kernel.org>,
+ Len Brown <lenb@kernel.org>, Andy Lutomirski <luto@kernel.org>,
+ Viresh Kumar <viresh.kumar@linaro.org>, Jean Delvare <jdelvare@suse.com>,
+ Guenter Roeck <linux@roeck-us.net>, Zhang Rui <rui.zhang@intel.com>,
+ Andrew Cooper <andrew.cooper3@citrix.com>,
+ David Laight <david.laight.linux@gmail.com>,
+ Dapeng Mi <dapeng1.mi@linux.intel.com>, linux-perf-users@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-acpi@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20250219184133.816753-1-sohil.mehta@intel.com>
+ <20250219184133.816753-15-sohil.mehta@intel.com>
+Content-Language: en-US
+From: "Liang, Kan" <kan.liang@linux.intel.com>
+In-Reply-To: <20250219184133.816753-15-sohil.mehta@intel.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
 
-Introduce names for some old pentium 4 models and replace x86_model
-checks with VFM ones.
 
-Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
----
-v3: No change.
-v2: No change.
----
- arch/x86/events/intel/p4.c          | 7 ++++---
- arch/x86/include/asm/intel-family.h | 1 +
- 2 files changed, 5 insertions(+), 3 deletions(-)
 
-diff --git a/arch/x86/events/intel/p4.c b/arch/x86/events/intel/p4.c
-index 844bc4fc4724..fb726c6fc6e7 100644
---- a/arch/x86/events/intel/p4.c
-+++ b/arch/x86/events/intel/p4.c
-@@ -10,6 +10,7 @@
- #include <linux/perf_event.h>
- 
- #include <asm/perf_event_p4.h>
-+#include <asm/cpu_device_id.h>
- #include <asm/hardirq.h>
- #include <asm/apic.h>
- 
-@@ -732,9 +733,9 @@ static bool p4_event_match_cpu_model(unsigned int event_idx)
- {
- 	/* INSTR_COMPLETED event only exist for model 3, 4, 6 (Prescott) */
- 	if (event_idx == P4_EVENT_INSTR_COMPLETED) {
--		if (boot_cpu_data.x86_model != 3 &&
--			boot_cpu_data.x86_model != 4 &&
--			boot_cpu_data.x86_model != 6)
-+		if (boot_cpu_data.x86_vfm != INTEL_P4_PRESCOTT &&
-+		    boot_cpu_data.x86_vfm != INTEL_P4_PRESCOTT_2M &&
-+		    boot_cpu_data.x86_vfm != INTEL_P4_CEDARMILL)
- 			return false;
- 	}
- 
-diff --git a/arch/x86/include/asm/intel-family.h b/arch/x86/include/asm/intel-family.h
-index 6621d796bb3d..89cb545d521b 100644
---- a/arch/x86/include/asm/intel-family.h
-+++ b/arch/x86/include/asm/intel-family.h
-@@ -193,6 +193,7 @@
- /* Family 15 - NetBurst */
- #define INTEL_P4_WILLAMETTE		IFM(15, 0x01) /* Also Xeon Foster */
- #define INTEL_P4_PRESCOTT		IFM(15, 0x03)
-+#define INTEL_P4_PRESCOTT_2M		IFM(15, 0x04)
- #define INTEL_P4_CEDARMILL		IFM(15, 0x06) /* Also Xeon Dempsey */
- 
- /* Family 19 */
--- 
-2.43.0
+On 2025-02-19 1:41 p.m., Sohil Mehta wrote:
+> Architectural Perfmon was introduced on the Family 6 "Core" processors
+> starting with Yonah. Processors before Yonah need their own customized
+> PMU initialization.
+> 
+> p6_pmu_init() is expected to provide that initialization for early
+> Family 6 processors. But, due to the unrestricted call to p6_pmu_init(),
+> it could get called for any Family 6 processor if the architectural
+> perfmon feature is disabled on that processor.
+> 
+> To simplify, restrict the call to p6_pmu_init() to early Family 6
+> processors that do not have architectural perfmon support. As a result,
+> the "unsupported" console print becomes practically unreachable because
+> all the released P6 processors are covered by the switch cases.
+> 
+> Move the console print to a common location where it can cover all
+> modern processors that do not have architectural perfmon support.
+> 
+> Also, use this opportunity to get rid of the unnecessary switch cases in
+> p6_pmu_init().  Only the Pentium Pro processor needs a quirk, and the
+> rest of the processors do not need any special handling. The gaps in the
+> case numbers are only due to no processor with those model numbers being
+> released.
+> 
+> Converting to a VFM based check gets rid of one last few Intel x86_model
+> comparisons.
+> 
+> Signed-off-by: Sohil Mehta <sohil.mehta@intel.com>
+> ---
+> v3: Restrict calling p6_pmu_init() to only when needed.
+>     Move the console print to a common location.
+> 
+> v2: No change.
+> ---
+>  arch/x86/events/intel/core.c | 16 +++++++++++-----
+>  arch/x86/events/intel/p6.c   | 26 +++-----------------------
+>  2 files changed, 14 insertions(+), 28 deletions(-)
+> 
+> diff --git a/arch/x86/events/intel/core.c b/arch/x86/events/intel/core.c
+> index 7601196d1d18..c645d8c8ab87 100644
+> --- a/arch/x86/events/intel/core.c
+> +++ b/arch/x86/events/intel/core.c
+> @@ -6466,16 +6466,22 @@ __init int intel_pmu_init(void)
+>  	char *name;
+>  	struct x86_hybrid_pmu *pmu;
+>  
+> +	/* Architectural Perfmon was introduced starting with INTEL_CORE_YONAH */
+>  	if (!cpu_has(&boot_cpu_data, X86_FEATURE_ARCH_PERFMON)) {
+>  		switch (boot_cpu_data.x86) {
+> -		case 0x6:
+> -			return p6_pmu_init();
+> -		case 0xb:
+> +		case 6:
+> +			if (boot_cpu_data.x86_vfm < INTEL_CORE_YONAH)
+> +				return p6_pmu_init();
+> +			break;
+
+We may need a return -ENODEV here.
+
+I think it's possible that some weird hypervisor doesn't enumerate the
+ARCH_PERFMON for a modern CPU. Perf should not touch the leaf 10 if the
+ARCH_PERFMON is not supported.
+
+Thanks,
+Kan
+
+> +		case 11:
+>  			return knc_pmu_init();
+> -		case 0xf:
+> +		case 15:
+>  			return p4_pmu_init();
+> +		default:
+> +			pr_cont("unsupported CPU family %d model %d ",
+> +				boot_cpu_data.x86, boot_cpu_data.x86_model);
+> +			return -ENODEV;
+>  		}
+> -		return -ENODEV;
+>  	}
+>  
+>  	/*
+> diff --git a/arch/x86/events/intel/p6.c b/arch/x86/events/intel/p6.c
+> index a6cffb4f4ef5..65b45e9d7016 100644
+> --- a/arch/x86/events/intel/p6.c
+> +++ b/arch/x86/events/intel/p6.c
+> @@ -2,6 +2,8 @@
+>  #include <linux/perf_event.h>
+>  #include <linux/types.h>
+>  
+> +#include <asm/cpu_device_id.h>
+> +
+>  #include "../perf_event.h"
+>  
+>  /*
+> @@ -248,30 +250,8 @@ __init int p6_pmu_init(void)
+>  {
+>  	x86_pmu = p6_pmu;
+>  
+> -	switch (boot_cpu_data.x86_model) {
+> -	case  1: /* Pentium Pro */
+> +	if (boot_cpu_data.x86_vfm == INTEL_PENTIUM_PRO)
+>  		x86_add_quirk(p6_pmu_rdpmc_quirk);
+> -		break;
+> -
+> -	case  3: /* Pentium II - Klamath */
+> -	case  5: /* Pentium II - Deschutes */
+> -	case  6: /* Pentium II - Mendocino */
+> -		break;
+> -
+> -	case  7: /* Pentium III - Katmai */
+> -	case  8: /* Pentium III - Coppermine */
+> -	case 10: /* Pentium III Xeon */
+> -	case 11: /* Pentium III - Tualatin */
+> -		break;
+> -
+> -	case  9: /* Pentium M - Banias */
+> -	case 13: /* Pentium M - Dothan */
+> -		break;
+> -
+> -	default:
+> -		pr_cont("unsupported p6 CPU model %d ", boot_cpu_data.x86_model);
+> -		return -ENODEV;
+> -	}
+>  
+>  	memcpy(hw_cache_event_ids, p6_hw_cache_event_ids,
+>  		sizeof(hw_cache_event_ids));
 
 
