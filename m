@@ -1,151 +1,126 @@
-Return-Path: <linux-pm+bounces-22414-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1EADBA3BD76
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 12:52:13 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 892E9A3BD87
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 12:57:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0D011893B08
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 11:52:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 87E241895ACE
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 11:57:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DEE041DE2CE;
-	Wed, 19 Feb 2025 11:51:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 15C3B1DF73A;
+	Wed, 19 Feb 2025 11:57:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="p2EgY6RE"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gIkp8IRK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
+Received: from mail-yb1-f182.google.com (mail-yb1-f182.google.com [209.85.219.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 465BE286291
-	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 11:51:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46FA81C5F1B
+	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 11:57:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739965917; cv=none; b=lgXcjhyt0KnJMHV32B567zRiKv6vHEQL1c8Bu1YsLaPa5LdkgzNg8HfoHk3TIOYtW30Mm+D0TlUTTVd9AudreOyVUoUCt/GfeLoely9gLzsnWlWp1wCzC/+iVe5f4jApatcRHtXxPvzPmzUxUjL5FqJ82xViCabqgSuuVcu+WHo=
+	t=1739966263; cv=none; b=tYf27xb0UJ/CF+U4OiyJ2jqzqWQ+654s6uu6TUbfZn576b/XHa8Faeo3lv5/yQ0xcMFr9ZG4dPjXWlad7yll+Sm0U2H1Jhqr9TbkQwi/m0aW+YTuHl0JFmDzBA6arGhhPAPPPIEGL9Okip7r55v/NwxWSuzsW4lqRxtawwdlfe0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739965917; c=relaxed/simple;
-	bh=KPkXD/7cqbXf7VsD8IoPhTC6NEsbU4JuJNGhIxAsmAI=;
+	s=arc-20240116; t=1739966263; c=relaxed/simple;
+	bh=mKPuqkaO5/tQYVpdTMpg9OTc7P54WtoXIuwWQ6pX94g=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=c4LTuyUIW7itKJMo8bHRPe9ZsLodVQvDk0zulaVv92bfGSFkVW89kAqczTzCxTBwMpn6RXO41WgaHlW0ZSQMOoVQLjIE53/1aX69h5sku8RSnDpK5a2pDa27ieRAr0KoX/hkdmmyXaIIjOtHp2aopkI9kjnidBhiAIbsvy+TfXg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=p2EgY6RE; arc=none smtp.client-ip=209.85.219.175
+	 To:Cc:Content-Type; b=oQrQMWYkZYvGibQcPNQlI7+8rgfZPiqnfk17AbnsaKQcUtD4N86QDRDn4N6PrcBhFAq8RKBkiG3T9WIkNxQ0lpQuHUVecTlhmZNKzb5GmLC8xUg89YftS6PmyEG8Ahd8RW2vomOB/0c76WxI4FBiOL94VgVxzqsWtOBvAtYjnnE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gIkp8IRK; arc=none smtp.client-ip=209.85.219.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e46ebe19489so4368880276.2
-        for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 03:51:53 -0800 (PST)
+Received: by mail-yb1-f182.google.com with SMTP id 3f1490d57ef6-e455bf1f4d3so4969681276.2
+        for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 03:57:41 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739965913; x=1740570713; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1739966260; x=1740571060; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=R46i4neiPPtDwdv3LQifChV+vLwO3rJdmLscnT0rln8=;
-        b=p2EgY6REI6VmljfmMfna+LiilLPp+5y+G+i4bhcr10rosMCusCiN1WUpMD/Mpfe/I/
-         spaK9FlPlfUaxXT+G+PMSHJ848Iy6kh4/ZMaEAwXfNJyLO+6UXlil46CnHBtdziwpUWh
-         LU7V4fbWYeBUwgDWcHY22c9mCDzfdewxB0/NiwEjJ4P1L5hxG3tA2uTIOmRMrsl0yp4W
-         JzpRtbW28g7Vktmbx9GQyQFpbOfkZJI+0t44xXZK3PBbBrN21dziRDroCsVPXlt34mOJ
-         JO1pbNYZAtpWSTAkoCAiUMZ0u3DSNFgKFezvaCcWKcwt7Q79e4WnE43pOk7XvN9AKIUU
-         itWA==
+        bh=mKPuqkaO5/tQYVpdTMpg9OTc7P54WtoXIuwWQ6pX94g=;
+        b=gIkp8IRKJvgifB+QHtNUPsXi+sJP3TWPAXop0Z8xNea0lMDpyVyYQgGyx9/O35fxad
+         sZBwD0Jj4qyyuFj0X5RFitM6o76ynm/wnBSL0aNKjRahAgrP6Suq44IMyyO+Y/tSwqLv
+         KaavDcj1TQkMWmdZtS6VUX+Byn1pdfwYEIhdS8iQF5wpprFLdHB/Nv6JRd12HaiFzMU4
+         iJpJo0WOOES+8gz3pdSbeQ+na1UvdxnyaLfOkIxo/Vm6y15zlzwQTFUQXGtVP8l7xB80
+         K7+WM2r6WkfdsiOCmXFMeTgieczVAUtlfx0wtZm16zb5PWgAOglN9BU2qKHU/QOZnvrJ
+         c/dw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739965913; x=1740570713;
+        d=1e100.net; s=20230601; t=1739966260; x=1740571060;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=R46i4neiPPtDwdv3LQifChV+vLwO3rJdmLscnT0rln8=;
-        b=XqMTrlJ+UpDVyRCcXVwi/EQQSUUd6IwRRYLdg9uJ3CVWT94sYTecO5BEBA5DCeMCNi
-         BZHpG2OmVBC5X++IegYwXqodqv1mAbayCEnIzbK7afSWmTzJ3ayWOpZn7CHK9yCeGQ6P
-         MdqRF8o/d4m9OlvKVrO4D73QCQdOTDYqtQhicbPScpKzc9TmS3y5pQaG2qaoawnfSPsF
-         qTrmR/iZ1YxZUOyWVtSzO0Od0ju5zW5ovu1egzGbModbvc8sVImsASMTPZDl9mc8m5ZO
-         drWxT1qQ05wq535jIW+3l8HmEJu3++ff08WI8EdPQ0wY3Dm5ZZcvIdIqd4RX6FOgMinG
-         CU3A==
-X-Forwarded-Encrypted: i=1; AJvYcCWdKZ3Eua2q+gZ1Pfh+4d8FoVVFfeILPaPErG4m6VaIhHFpUFU+b3LQODgrQOlnovN6g3MgeogFIw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyZHEVEO7b9ytVOMPEjjWCcEKkJebOwuzF1mr2Qzvh0cDS2mQBG
-	swAn+kYDFWvYionsOrkxoi8PNtqLqgTRZv6Qkq6SpCPzgb3O6cf7n8eDkySNPvZKe0TeF372VDb
-	IOhr/Q1mjJDmmeRAsPYFDARJ3o5Wbo9Zgnmgixg==
-X-Gm-Gg: ASbGncsusGW+5tGXkc0nXk5oSjiybX8jiUQ1Jtl18WQJFAYCZeOs9EraLvCbPS0nYgJ
-	2UAbV7r0NgwxVwZppXO+GuLOGymIvWgWicc+moArliiU1+cjNlnQvT/5B2xlhw7gM7EK/nIQCzg
+        bh=mKPuqkaO5/tQYVpdTMpg9OTc7P54WtoXIuwWQ6pX94g=;
+        b=HxoP98rqs2xivPNYD5ApRb0KC2vH7s7nK6R07S2BBzLieUZiyMGY2V/AUlD4qptIf0
+         eAQDcu0BNG3gqzbOPqfKaFzh6QfCMgBrBQmb2HUlBcVxru7arN59Tap7vFVaDNyYVyct
+         qOYTMS0yy2YjXF/UicF6HMuFqnQIgnpmCsWF3yymGB5BEGGwQAzgFvuOmJdnYyMuLg84
+         toUfUPC8XpD4pgC6SZLJJfIJqWlnk+6giMtJxUm+Q8jxF8UAlFxuXxwKFkpDUtfcKaGT
+         wdkt4QwICRyXSWOD8sx52w28K2ZvkDZMyVgTdFqfhM81GYu6Fse3KVklDL8Tm2ZonHdm
+         bODA==
+X-Forwarded-Encrypted: i=1; AJvYcCUVjYid46kmr77b4dlEhmovTpPPLmCNXf9eNI2CZ9dVE1h51pyJ8YcGsnH9XA2Mq62UYIJuiAy6bQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwQ99AQhyZ4uFRM80mRKD3Ek310t+2xirvci6z7au5dugE9twm
+	gOV9lkcSFweK3VyNarvgARgtSFtXXEHBEO3HLBWmTm8marRH+vU7M8WA2RFYeyOX8PCoJwpEvju
+	k9b9XmHBzd7qHY3eVx5UbmjhUcl8CRoKOnzeOXA==
+X-Gm-Gg: ASbGncv2TJ7BHNw+bZMsk2DCohgZX7wS7j4gBYnnHSVDZIHd925ytlSZt+99ROK1n95
+	NFAvTcW1LToywmnSTtx5yxfzdk7eUvdjTDaamnGzMBvMJXJE1FIlCFcJDuk80ZQG1q7gszuN5XA
 	==
-X-Google-Smtp-Source: AGHT+IF336n6iz9MKaV4OlZuLX65CGYiKzqQpe2IHd1yE/zIFjichwdqnXiqfBQCF3WNembgFV6LWh1J7NEVULKdLeg=
-X-Received: by 2002:a05:6902:161c:b0:e5d:b9a0:a14a with SMTP id
- 3f1490d57ef6-e5e0a0c07famr2649054276.24.1739965913150; Wed, 19 Feb 2025
- 03:51:53 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IHmLjRjhz37Ix+o6XyPakdzY6Uu3F+3kxUa8H2huII1zroZajXD9MVDQwO7EqR3XOK/hrhvfu283vamhduicEA=
+X-Received: by 2002:a05:6902:d49:b0:e5e:1062:bcf7 with SMTP id
+ 3f1490d57ef6-e5e1062c055mr980483276.13.1739966260274; Wed, 19 Feb 2025
+ 03:57:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <1739926689-151827-1-git-send-email-shawn.lin@rock-chips.com> <a0b41ce7-4ab8-4baa-adee-8b5717326729@arm.com>
-In-Reply-To: <a0b41ce7-4ab8-4baa-adee-8b5717326729@arm.com>
+References: <1738736156-119203-1-git-send-email-shawn.lin@rock-chips.com>
+ <CAPDyKFq+pWXq75xEtfkeCkmkdZtfp9dAFej4M+6rO6EAUULf=w@mail.gmail.com>
+ <yq14j0y25hd.fsf@ca-mkp.ca.oracle.com> <CAPDyKFqsiBaSV--a_SvJ1n0733XXjSoONztf0e=jsGTZhKxQJw@mail.gmail.com>
+In-Reply-To: <CAPDyKFqsiBaSV--a_SvJ1n0733XXjSoONztf0e=jsGTZhKxQJw@mail.gmail.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 19 Feb 2025 12:51:15 +0100
-X-Gm-Features: AWEUYZkoxtEGbbZwqqZGnxCLVjqAx-yQQXpJMgP8dLv4LTOLDOVvgXG75zeBKTo
-Message-ID: <CAPDyKFr6CLzXjXW3SiiE0y4kf6nDgfLppexFtAZds=jOyqtWHg@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: rockchip: Check if smcc could be handled by TA
-To: Shawn Lin <shawn.lin@rock-chips.com>, Steven Price <steven.price@arm.com>
-Cc: Heiko Stuebner <heiko@sntech.de>, "Rafael J . Wysocki" <rafael@kernel.org>, 
-	linux-rockchip@lists.infradead.org, linux-pm@vger.kernel.org, 
-	Sudeep Holla <sudeep.holla@arm.com>
+Date: Wed, 19 Feb 2025 12:57:04 +0100
+X-Gm-Features: AWEUYZm5qq0kCFH5BGU-KOAykNEjhYZd727rd8VcRiDAXDF4w-LfbABoCwlPr4U
+Message-ID: <CAPDyKFqMJRXRYymhijyWD-e=ScvEc_qbAmJBi--WsJd+zkQu6A@mail.gmail.com>
+Subject: Re: [PATCH v7 0/7] Initial support for RK3576 UFS controller
+To: "Martin K. Petersen" <martin.petersen@oracle.com>
+Cc: Shawn Lin <shawn.lin@rock-chips.com>, 
+	"James E . J . Bottomley" <james.bottomley@hansenpartnership.com>, Rob Herring <robh+dt@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Heiko Stuebner <heiko@sntech.de>, "Rafael J . Wysocki" <rafael@kernel.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Avri Altman <avri.altman@wdc.com>, Bart Van Assche <bvanassche@acm.org>, 
+	YiFeng Zhao <zyf@rock-chips.com>, Liang Chen <cl@rock-chips.com>, linux-scsi@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-+ Sudeep
-
-On Wed, 19 Feb 2025 at 10:34, Steven Price <steven.price@arm.com> wrote:
+On Thu, 13 Feb 2025 at 16:20, Ulf Hansson <ulf.hansson@linaro.org> wrote:
 >
-> On 19/02/2025 00:58, Shawn Lin wrote:
-> > Non-existent trusted-firmware could lead smcc calls into some
-> > unset location which breaks the system.
+> On Wed, 12 Feb 2025 at 22:56, Martin K. Petersen
+> <martin.petersen@oracle.com> wrote:
 > >
-> > Reported-by: Steven Price <steven.price@arm.com>
-> > Cc: Steven Price <steven.price@arm.com>
-> > Suggested-by: Heiko Stuebner <heiko@sntech.de>
-> > Fixes: 58ebba35ddab ("pmdomain: rockchip: Add smc call to inform firmware")
-> > Signed-off-by: Shawn Lin <shawn.lin@rock-chips.com>
->
-> Tested-by: Steven Price <steven.price@arm.com>
->
-> Although one note below...
->
-> > ---
-> > Hi Ulf, this's a follow-up patch fixing the issue Steven saw.
 > >
-> >  drivers/pmdomain/rockchip/pm-domains.c | 7 ++++---
-> >  1 file changed, 4 insertions(+), 3 deletions(-)
+> > Ulf,
 > >
-> > diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-> > index 49842f1..27a5c68 100644
-> > --- a/drivers/pmdomain/rockchip/pm-domains.c
-> > +++ b/drivers/pmdomain/rockchip/pm-domains.c
-> > @@ -572,9 +572,10 @@ static void rockchip_do_pmu_set_power_domain(struct rockchip_pm_domain *pd,
-> >       }
+> > > If so, may I suggest that I pick patch2, patch3 and patch4 via my
+> > > pmdomain tree and share them via an immutable branch, so they can be
+> > > pulled into James/Martin's scsi tree?
 > >
-> >       /* Inform firmware to keep this pd on or off */
-> > -     arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD_CONFIG,
-> > -                     pmu->info->pwr_offset + pd_pwr_offset,
-> > -                     pd->info->pwr_mask, on, 0, 0, 0, &res);
-> > +     if (arm_smccc_1_1_get_conduit() != SMCCC_CONDUIT_NONE)
-> > +             arm_smccc_smc(ROCKCHIP_SIP_SUSPEND_MODE, ROCKCHIP_SLEEP_PD_CONFIG,
-> > +                             pmu->info->pwr_offset + pd_pwr_offset,
-> > +                             pd->info->pwr_mask, on, 0, 0, 0, &res);
+> > Sure, that's fine with me.
 >
-> Note that if the conduit is SMCCC_CONDUIT_HVC then this will still
-> attempt an SMC. I'm not sure if this situation can happen in practice.
+> Okay, great! I have picked up the patches and pushed them to the below
+> immutable branch, which is based upon rc2.
 >
-> There is a (horrifyingly complex) macro arm_smccc_1_1_invoke() which
-> will automatically use the correct conduit, and even copes with the
-> SMCCC_CONDUIT_NONE case (by simply failing the call).
->
-> Steve
+> git.kernel.org/pub/scm/linux/kernel/git/ulfh/linux-pm.git rockchip
 
-Thanks for letting us know!
+Hi Martin,
 
-Note that, arm_smccc_1_1_invoke() is also a bit problematic, as it
-doesn't compile with Clang-20 and Thumb2 mode. See commit
-885f5669f2ab.
+We got a report about an issue in the branch above a couple of days
+ago. The problem has been fixed and I have just published it to the
+branch above.
 
-[...]
-
-As the current approach seems fine too, I decided to pick up the
-$patch as is and by updating the commit message, according to Sudeep's
-comment.
+If you already pulled-in the branch to your tree, please pull again to
+get the fix too.
 
 Kind regards
 Uffe
