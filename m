@@ -1,77 +1,77 @@
-Return-Path: <linux-pm+bounces-22381-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22382-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E105AA3B100
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 06:42:19 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 440B8A3B103
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 06:45:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9A2683AE483
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 05:42:06 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 23BB63AEFF8
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 05:45:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D827B1B4F14;
-	Wed, 19 Feb 2025 05:42:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D2A071ADC8C;
+	Wed, 19 Feb 2025 05:45:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Gr5icUyw"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="gD0Q+owD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pj1-f52.google.com (mail-pj1-f52.google.com [209.85.216.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 482591B6CF5
-	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 05:42:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5906BA934
+	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 05:45:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739943734; cv=none; b=sgRWAIqzKRxObyYKr6VA14SfCnPphNkZvLFu/BFd4fNx7O6KVIfZH4tNCgi2cssJEKeI5QM80VIbtGAt5whaGdoOpzFNDE5zXLSf5qCdOQ6CsHr9YM0gNXz5AikIiazxR0ReiTicDkhc419X/fDaf24w8QO5PR4l0COA5cM1wP0=
+	t=1739943947; cv=none; b=VSdQgXKJOs+vWgHl8Q/j1bxSbJKZApDACWogrz7Zz3sc6vO3J0FJJSYroJa7aLeVoU35q/wMP11u9H/digonQNqL0eb3UlIgDpJ+hkLN52HpqvmHc67Tz2xfuEDOJ4HJXcAKH0mGd9SmhJkArrI2eUiPz9JI3NxvsvtCPyHQxKw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739943734; c=relaxed/simple;
-	bh=UlxN5nIxHgy+wAG7x32fxZL8LlqDfxRzsgF07t+gqsY=;
+	s=arc-20240116; t=1739943947; c=relaxed/simple;
+	bh=kECMkiczJBY+HWUWDw6LnKgZH8be4eQ73OMVJR01HCI=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KvN+6AgUuthgU0wuguorojEFRCrnwCsbvhMGcxAzon1PsMvUoZq6/JxMho08881QVMGO2bU3z7tPLFkGCoYFiwcYSYYfeXNC/2qvtputLf/2ckTChJ0BkGrD1WluzJdGymXT6nZ3lyyq4G6CjS0oIouefTNU0aDVgAyWkv/TsAM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Gr5icUyw; arc=none smtp.client-ip=209.85.214.181
+	 Content-Type:Content-Disposition:In-Reply-To; b=tcn/vc+JrJz8uESQClwtP61LjOpmlSMJUX6L+wZjK6jQUyPsARO6/ORB7LQiuaAkwDYoQFk4FBDJE1uDc3FMEZZrVFgan5OnmldxDznYsJr9xS/KKICW0WiZtyAIRpZlrSj8ibX7kMY5bNQogdhKhsr1u5JdKhQzwWAC8e+FB4g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=gD0Q+owD; arc=none smtp.client-ip=209.85.216.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-22101839807so84831635ad.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 21:42:13 -0800 (PST)
+Received: by mail-pj1-f52.google.com with SMTP id 98e67ed59e1d1-2fc3fa00323so8114214a91.3
+        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 21:45:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739943732; x=1740548532; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1739943945; x=1740548745; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Sw7t6rEqkTZXH92Wz/4+gNz4tFU3pvCeEiYAUtl7Rbc=;
-        b=Gr5icUywPWVr7KKXKa4D6/TQPndfU1OryjWZ+9n//bbxkdufIMfN1R+Z2GfHvPlBhb
-         0J0GoBEmYOIBpo2HdmSYe7j7S9jV53+fzeSteE178SSLJ8Ovq9E5RYwMsSTwuNB/LiYu
-         oiKrKcTsXagiq7n0A3rjJ9OJ7kOv927mauaDcAxbSmDUZv1zAN+jdAqMAkdyhpzViH/X
-         5kvA0zfpI2whjhwddbr9K51BISm90haF2etHzV9GwUJ4GgWbCxaFum5pHtr7v7mdXSEw
-         uN6yUueVcdkuxwhRsQoJHLefMLpIGUyYGQsWeXlQkWVHw/xfKKyoCrhdDI2ubjfJSaAv
-         AksQ==
+        bh=FRInsltroDfnSviS90CirrNU28rUPlNtIher41yQK9w=;
+        b=gD0Q+owDfBmdECcw2HUswj2FbM11eo6b7lfxFYSU8imc/NHZng0gbdSOxXk2gmjlyq
+         vkEdhniIIWbkaH18vzKcZNlsxSGrA8NDIYPxbSxYzu/AXWDqyLbIOyFIR3oVj/93Ybm1
+         UFD6M7wASwvfeNQXh7Sx2peXXMBrHVtIq0PjinerXMeIx+e4EMIvibv0X1QaoUJYCx12
+         3NhzcA/2XvQSBQaH8JVuG7H/CxsmlcL+xH4jir/konTl4M2IvpxcrIF02p40nMmoUBxM
+         wNbyUjyh2Q88zFzPLvfFLUpnMgfsQsvvlIlqRGmBMzOnRA88NPotVpp9iDnElKfr5umg
+         3EnA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739943732; x=1740548532;
+        d=1e100.net; s=20230601; t=1739943945; x=1740548745;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=Sw7t6rEqkTZXH92Wz/4+gNz4tFU3pvCeEiYAUtl7Rbc=;
-        b=OJ8jkrydTMwHylKsHtHn8qYtvcI8UHI9YpB3vQNwGC+RWTOY978JQWek5k88so9/QQ
-         4HmbbsEuHB6SQo942NYsLG1W1ri0y+skkdXGA39nDE+P1RKjo3wC6B96rCNoSnOZXdz1
-         o3Dij0gih8sQotECWNzk2G36dmObmVBMBId+m2fCpVBQFXeoDGdbwkQFReV9/F0/A2yz
-         1GlpV6L3TiAocqRQnC86YUiEUpeKk7Bh1vQ3az5vf2zvwtUPIlMG4ijwIe6+GwHWbVbm
-         FJc5p+1hSeybrZuom3xcPC0TRhUuvucpWKBtSRif4HgX9iXhYZnVyD1KvEhhgymDDT6x
-         LdCw==
-X-Forwarded-Encrypted: i=1; AJvYcCVtorSkXprO8FZZIIueb4+9p/QfdTGsvR5m5leCiaJ+aFlQXebJU4bla5May9Zp+vo3nTec4mzH3Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyjVslDXVCHVi2wtatwSPXAzoJzV2D3rJjsUl5AyGLu8DPhSZ+n
-	Nlvdf8N9L3PRz62TLZw+8ZFuS5jYqIiMbl+/0f6yfEJ+ggUAW7WUQllvEBfuigs=
-X-Gm-Gg: ASbGncvRwfeDHvvfJCD61GaVDqE7SBK4betRS6wUtEdJzzrLqWbEcDWCZoN8vwea3o1
-	cjoBEze0yKCF6268AT5flIWQUXLTy5ErniDjoKD5qYZO/HS4QFeJaYH0iasBkBXZUko+eKQd4zo
-	WxcKAKp2n/SKZEq3X/HoHKkntNNQREt52pYJWlXZz7s0wC+huuwkhoZUwUx1w2FHr+iCyMxvDng
-	xDnm7oEyFSvDjeHT4l2BPYnKmN+vO0WwDbN+NBqHhPc884Dftmn6Bn0MexWviwEapSSyll6p8Sp
-	jIdFQd1xW1PjA7PjYA==
-X-Google-Smtp-Source: AGHT+IFmJl4t7FAw0hGuv5yC3n7fuRs/TbAcabQxCpBJfvULJjAbDJAYajm1qYLNhiNrv4hZgm/Tjg==
-X-Received: by 2002:a05:6a20:7491:b0:1ee:d3ac:56f7 with SMTP id adf61e73a8af0-1eed4fb2369mr3887537637.33.1739943732560;
-        Tue, 18 Feb 2025 21:42:12 -0800 (PST)
+        bh=FRInsltroDfnSviS90CirrNU28rUPlNtIher41yQK9w=;
+        b=QHrxHVbIVm4HOCuSE3u2XUAVRECW7pGREEx6r3mePnfd8jmSsnS6gUMOJY4lhIqqLL
+         ZhxVg187mQIfTBFyT5yCnEJG0NImytR+AZfTMm9+2R5g4iblpTLxbz3asNPeVEYzAsg0
+         D2VIfOtdgFZ2TTmE0q/ndXwwhdjonMSG59qVGwaPV32XP4lzXnhFpAqXZ6ZzhTffrtX/
+         HRIcgOrCLu/wVe1JoCvA61SjBtPB/7zEB6FUfB4+6hZemB5QpVgJqjWkTQVaVBmjejRK
+         8rFszoDJLaMCFnVOU7ObW1GGrJIV5T+/EemH1znGQNoQEk7RijtU0rgsUpwBqS/Dz/n+
+         PUBA==
+X-Forwarded-Encrypted: i=1; AJvYcCVDVcvczQ7R15I/mDA7j7tbzXz/VUiSL7iOsIC/Xzb7Gj4DK99ocAvoWu2rPS7Hh3klgvnMMd8m4A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyQxqdCO/4Aqxh/fFDjJb/8SHWhLb36rNW+BkwAjU5+qLHk46Vc
+	nJ9VgTlo3RMF99CrA6EtSrhP8qB/QiL75OWGydAqXgem4y1eKnnT//yIoRQxzJc=
+X-Gm-Gg: ASbGncsZaduYDQnP2CWquqgkC4Z8kI6EuxhEwau02buMzLVtQm9l5FAsyFMXqHdDvEF
+	Fa/iioajSS7oayDLchdvHztzM5p0NGw0ALwpxz61qMtYySxMAlaMqty12EfDDfxeXgLN6S6fH/D
+	+DDR6JU4MWxoMd64qis3DwSnONsVtsporGDpkfnNI1IS7HjhUS90hGEicwOtI1bGzdXEcfUsv+0
+	mowoYAAPwPxjZfsyUf18S++iI3KryxDgEo2oowOJOD4fPx4D2yEkQjzDxAQnzouxBpNBR1YVRsU
+	uxOaQfKNOb4haK7fBg==
+X-Google-Smtp-Source: AGHT+IFDzea3Pp7rZ2dMCaYzxs9nrys/cZznA9NmmSQBwBK5duGLQELrvaTllazoUHAnVNqWR3kPyQ==
+X-Received: by 2002:a17:90b:2fc3:b0:2ea:b564:4b31 with SMTP id 98e67ed59e1d1-2fc40f21c49mr24036277a91.19.1739943945616;
+        Tue, 18 Feb 2025 21:45:45 -0800 (PST)
 Received: from localhost ([122.172.84.139])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-73242568adasm11461609b3a.52.2025.02.18.21.42.11
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fbf9757365sm13106540a91.0.2025.02.18.21.45.44
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 21:42:11 -0800 (PST)
-Date: Wed, 19 Feb 2025 11:12:09 +0530
+        Tue, 18 Feb 2025 21:45:45 -0800 (PST)
+Date: Wed, 19 Feb 2025 11:15:43 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
 To: Mark Tseng <chun-jen.tseng@mediatek.com>
 Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
@@ -84,11 +84,11 @@ Cc: "Rafael J . Wysocki" <rafael@kernel.org>,
 	linux-arm-kernel@lists.infradead.org,
 	linux-mediatek@lists.infradead.org,
 	Project_Global_Chrome_Upstream_Group@mediatek.com
-Subject: Re: [PATCH v3 1/3] cpufreq: mediatek: using global lock avoid race
- condition
-Message-ID: <20250219054209.erwfp7sgzchaiuds@vireshk-i7>
+Subject: Re: [PATCH v3 2/3] cpufreq: mediatek: Add CPUFREQ_ASYNC_NOTIFICATION
+ flag
+Message-ID: <20250219054543.4xt4tixsauwoqpst@vireshk-i7>
 References: <20250214074353.1169864-1-chun-jen.tseng@mediatek.com>
- <20250214074353.1169864-2-chun-jen.tseng@mediatek.com>
+ <20250214074353.1169864-3-chun-jen.tseng@mediatek.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -97,22 +97,19 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250214074353.1169864-2-chun-jen.tseng@mediatek.com>
+In-Reply-To: <20250214074353.1169864-3-chun-jen.tseng@mediatek.com>
 
 On 14-02-25, 15:43, Mark Tseng wrote:
-> In mtk_cpufreq_set_target() is re-enter function but the mutex lock
-> decalre in mtk_cpu_dvfs_info structure for each policy. It should
-> change to global variable for critical session avoid race condition
-> with 2 or more policy.
+> Add CPUFREQ_ASYNC_NOTIFICATION flages for cpufreq policy because some of
+> process will get CPU frequency by cpufreq sysfs node. It may get wrong
+> frequency then call cpufreq_out_of_sync() to fixed frequency.
 
-And what exactly is the race condition here ? Can you please explain that ?
-Since the struct mtk_cpu_dvfs_info instance is per-policy, I don't think there
-is any race here.
+That's not why CPUFREQ_ASYNC_NOTIFICATION is used. It is used only for the cases
+where the target()/target_index() callback defers the work to some other entity
+(like a workqueue) and it is not guaranteed that the frequency will be changed
+before these helpers return.
 
-The lock was introduced earlier to avoid a potential race with notifiers, but it
-has nothing to do with calling target simultaneously.
-
-commit c210063b40ac ("cpufreq: mediatek: Add opp notification support")
+I don't think your patch is required.
 
 -- 
 viresh
