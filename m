@@ -1,76 +1,76 @@
-Return-Path: <linux-pm+bounces-22389-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22390-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id AAE7DA3B1F9
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 08:07:18 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C38EAA3B1FA
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 08:08:02 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8D4C81886246
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 07:07:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 626EB7A13CA
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 07:07:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 948C51C07D8;
-	Wed, 19 Feb 2025 07:07:14 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 072C81C07EE;
+	Wed, 19 Feb 2025 07:07:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="LuOTiDTX"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="j04rs2L5"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f172.google.com (mail-pl1-f172.google.com [209.85.214.172])
+Received: from mail-pl1-f178.google.com (mail-pl1-f178.google.com [209.85.214.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1848F1B6D0F
-	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 07:07:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 812BF1C07DD
+	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 07:07:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739948834; cv=none; b=EmbaHI5VRP0ofI74aOFl+sZXwPUV7k4vwTR3SwYv9f6wTUpYQjRhU1mlLy7GzCirZxNoaoH5QwFZY5ZM5dntxlvNyggRNcdgsDNME8Hacs1HIcF1TLdDKxO5+8YJjKOJXoCnC0Z2BBIentnFWjU7LG2DYuDPOi9H9Uco8Bv4a5A=
+	t=1739948875; cv=none; b=giYXn7QvoUb+/9wiK7nucAE+n7rbHPAfyHaHROYz8JmXu2QdrsLM63uOKDIXvQKTWqT2FBxSL09V+9fN57YJBs2qTfjFWVlTNSy8aENVraCq3dLeGEMsrrrAD2Yri5rV5L72ZBMNoUA4tEVw1eWPJkvb3gJ0Ba9iiSi8WIas0qo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739948834; c=relaxed/simple;
-	bh=Zyr4va1D3Ha0NHA7NgDMRD1p6wHO7uykIJRhpBQNyjo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=PBulgQemEYpvoGJp7uCkGtIsqYA1LU9n/tw8Cuoj81xOvvUvTUqB4Ih8mbn7KaEM4AxSKfv7K9p18R3wT7vly4gtnE6FVW2TZa3qAjbSRCILCSBqrKhD2TsBKU5NHNLcdhbpBE6eO1x1EA6LiNw1f+jc92BD4FKtufahUUQPrs0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=LuOTiDTX; arc=none smtp.client-ip=209.85.214.172
+	s=arc-20240116; t=1739948875; c=relaxed/simple;
+	bh=tRuwH6VxRqvMDaFXAUrYgi5POr3+De0fDLCYrpPVI5o=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=JbekybDWFVhqGZODJ5YlTiz5fVVocGp/JptXm0/m5tPdZpYdgOAVmgyKluyBxdxgkxcREd0VB5u6NN4Jq+FZM5/DN/h7mxiOdF4813LsY4rD/LTxyLoS0cgYNimRBLsaPvFt1HFJP6Ii1eweRQzAMNwqJP+mrS3OMJJVGWeWCHM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=j04rs2L5; arc=none smtp.client-ip=209.85.214.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f172.google.com with SMTP id d9443c01a7336-220ecbdb4c2so131813545ad.3
-        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 23:07:12 -0800 (PST)
+Received: by mail-pl1-f178.google.com with SMTP id d9443c01a7336-220bfdfb3f4so128787435ad.2
+        for <linux-pm@vger.kernel.org>; Tue, 18 Feb 2025 23:07:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1739948832; x=1740553632; darn=vger.kernel.org;
+        d=chromium.org; s=google; t=1739948874; x=1740553674; darn=vger.kernel.org;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YfgGZzr21LaPimZ5BCr27eSGdmhY3cZSSOMxVIBi6/Q=;
-        b=LuOTiDTXGvHn/cx8WRAA87qUrPgZGHPKtt1Kp3jOk2G88kJPOgJqFhZEZ+C3Yrbh3w
-         DEA4U8Jef15yuxibJ9dqcgdeVn2BVtP0yFEie902hrNYlgpa7t2wvagu9Wdq0w1mycam
-         82RbDtgUlTTnadK5I8bG5D8dP+2zEJS0hBku0=
+        bh=JySMFlXLgdYY+/iNRAMB6CwpEhlF84xeDqxk+lfquv4=;
+        b=j04rs2L5VjnYxKPG8Wv78XJaLmBflmAfIEhMy2mrfV0e29VC0R9TD3WsqTt0EzzPNv
+         cgsAS8m+KV+e/VVnHu8UTiRXd7VIqw3VrirlQ5TQy2jHmJB1J+3m5zL7NPMg5zF/0J1J
+         Zt15+tLNBSv3BMQKMOzetcLtUMy9a2PmvENoU=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739948832; x=1740553632;
+        d=1e100.net; s=20230601; t=1739948874; x=1740553674;
         h=cc:to:message-id:content-transfer-encoding:mime-version:subject
          :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=YfgGZzr21LaPimZ5BCr27eSGdmhY3cZSSOMxVIBi6/Q=;
-        b=Ybvkoy/P0VnkSNUNgwxN3U7Qnm7DXUHk103pjH7MagesjzenPlDUDfJMAwyHG7Wu/V
-         W7M6XIszu+DTVluuZ7UjH4vQunEkk23ZZrnLKHlqkhYCc+3S1dFRM2RKpjXWfhOSr5mR
-         KD8pipduP2CVLxFjyY000eVukmdMP3bUcBrrdR8iNRkX3Io7BaEiC5zP05Hro+6ORqxk
-         tmyjn5zCUJMcvxNOpCDDdGOrgljbawGkuQd+91SXiAfqOBS7Gvk+KCH0wEBZOJM2bzQz
-         iD3y2vHPCKEdSfZ8J+l61GnZdbftcnX855uDnkbXey0vNdA3lRprcg69/hX99wICOYnD
-         Lo5A==
-X-Forwarded-Encrypted: i=1; AJvYcCVm99y5TL0+YyfSP6zwCLJwBehJ7Cpq9PdX/izZXSPHk94iadM/syKilyOY34qVvxBL4Dq36mIPJQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxHAQFgQBudLvBJzRSuZOaPXwxLOBVOnkm+2IiO/mXEzW0+jMAa
-	YmCTjEimfbkaveXGATeUdz8t94NFZ7D7ZaECE+iar/IUacNcYH3Iarjays3FMQ==
-X-Gm-Gg: ASbGncsSKuQ1dfFOG8lzUpZxxkMAoo7eTbKVOFkszew59rnC2NHRqr0tNBc/0SEd7Rf
-	YlX87rfQKKDiu+NGIhvUctIoLFPnWlV0WNfDmE1lsZikS2FNUcLvLUnxP4q7X7ov/U4JZS1RX3Z
-	v9F9QioFO0u8ezqy0pQvb0EwHeGetO+YOizPlGB9+bK41+W5SFND5Hen5dETgzm7sN8SxQ+iLkb
-	Zneob50dr7ZSAhIe5BWxTWppYAWOqlsAyvZIBBmpF0BG+DtyXQR/+hu8fPe7cEfmhr0/IQWrSHq
-	xPF4XyFB67oG5lUQOGjhzZrh4Qmz5+Usa+o=
-X-Google-Smtp-Source: AGHT+IF0MpWDOqFRBnsjQsSAyFd02JvgmIfI/f1b3BYgfqScUk4w7n/fsE2EGQ3VkCQMhrfpdc9u6w==
-X-Received: by 2002:a05:6a21:32a3:b0:1ee:c75c:bed8 with SMTP id adf61e73a8af0-1eec75cc221mr9646530637.26.1739948832381;
-        Tue, 18 Feb 2025 23:07:12 -0800 (PST)
+        bh=JySMFlXLgdYY+/iNRAMB6CwpEhlF84xeDqxk+lfquv4=;
+        b=iR18EJHML2F7NZshc4DLxBmD877u//AIsWIaZ1ivIwtgs1cUe9w9HsE8ihzuqDl0M7
+         4S9/4icyzwKXkOCYnlhdAT9ixCKmXbSzfXTB2CstdPO9BeYXb721KJ28k2SppuXkDO+5
+         2EVugo8Q1ZjzI9HSMG98MG9QDMMQTb2o61A/Wf4SRTckIKbuNwWxW7SW9Y0Pxepehj23
+         GYssQObRuuP5OAAeMyvROxdLh0LoeZ03iu13iycSA+/RvgC6CgyC5iRtPtQmWLGWG0Na
+         lBmlxdpfPtc2p6fWeZ5yd7eKPLwcgKvWag16ZPzFhhaSEkKiBC5hqUR3PFY2OMJ5peH8
+         PurQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXeUnWbP35wnzTG0MqazqCZmsmVgu2PsixyvNhdGMIJ3EqBZ2HlonSj4r82Cxk8ARGIJZyQmGyYRA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy4zlkWb4xu9rLmHymOQ4yR3E6eBQ12+W0lMlKBqD1bWvpaduwx
+	+xW1ELvQiejxaXiWUUxQEe3RgXJIKjVkJVWqKJqxgiRVNDXm1MuZSmfk6J0peA==
+X-Gm-Gg: ASbGnctBXnHPvfnS6ih3oHdwQTzZ9CDm6b/vGZBx8Raxl3Gtw+fOeM3DioPvXT5yxLC
+	TLSaOffiLrPJv1bhL7Z+/fvK75C+IvxA24XDdJdOc21IutEzCp9pU6/Sly/qUnOmgM+ZZyl7nvS
+	1UIX8Pt6eq/PHC3tjQufW2U0Eplht0ELZ0WTHu/mbs/sFWMXxwFbth82WqKkOGlm2Tb+AFNYX4M
+	SuOoEV10ByXxBkYXIemzZaeFGCUTFm0eptmTo0t9F7e9F+0e7DfGuTD1w/isnumhae5m3SvGnY0
+	Vp2hUjmsKKRy9PgRu8OcGLEaWeJfcoYC34I=
+X-Google-Smtp-Source: AGHT+IFNCLC327Tbgy3w8769F53bRAzhUse9206vwI6TMenlf9TyIK/Yx1MUEoN25QE8Ttyi6D3/xg==
+X-Received: by 2002:a17:902:e746:b0:216:69ca:770b with SMTP id d9443c01a7336-221707775a6mr40769815ad.12.1739948873793;
+        Tue, 18 Feb 2025 23:07:53 -0800 (PST)
 Received: from giver-p620.tpe.corp.google.com ([2401:fa00:1:10:224f:3294:90fd:ad2d])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-adf5ae6af3fsm4461016a12.53.2025.02.18.23.07.10
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d545d051sm97789835ad.108.2025.02.18.23.07.51
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 18 Feb 2025 23:07:11 -0800 (PST)
+        Tue, 18 Feb 2025 23:07:53 -0800 (PST)
 From: Yu-Che Cheng <giver@chromium.org>
-Date: Wed, 19 Feb 2025 15:07:07 +0800
-Subject: [PATCH] thermal: gov_power_allocator: Update total_weight on bind
- and cdev updates
+Date: Wed, 19 Feb 2025 15:07:48 +0800
+Subject: [PATCH] thermal: gov_power_allocator: Fix incorrect calculation in
+ divvy_up_power
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -79,11 +79,11 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250219-fix-power-allocator-weight-v1-1-79b1a99e94eb@chromium.org>
-X-B4-Tracking: v=1; b=H4sIABqDtWcC/x3MSwqAMAwA0atI1ga0WH9XERe1jRoQK2lRQby7x
- eWDYR4IJEwB+uwBoZMD+z2hzDOwq9kXQnbJoAqlC1W2OPONh79I0GybtyZ6wYt4WSNqZ2ztqkk
- 3XQNpcAil+p8P4/t+d6kZRGwAAAA=
-X-Change-ID: 20250218-fix-power-allocator-weight-5dac6d4b5797
+Message-Id: <20250219-fix-power-allocator-calc-v1-1-48b860291919@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAESDtWcC/x2MQQqEMAwAvyI5G4hlFfEr4iHtRg0UK6moIP59y
+ x4HZuaBLKaSYageMDk1a9oKNHUFYeVtEdRvYXDkWnJNj7PeuKdLDDnGFPhIhoFjwJnIf9h3LXm
+ Gku8mxf2vx+l9f0Pr6xpqAAAA
+X-Change-ID: 20250218-fix-power-allocator-calc-f00b4ab650ba
 To: Lukasz Luba <lukasz.luba@arm.com>, 
  "Rafael J. Wysocki" <rafael@kernel.org>, 
  Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>
@@ -92,57 +92,38 @@ Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
  Chen-Yu Tsai <wenst@chromium.org>, Yu-Che Cheng <giver@chromium.org>
 X-Mailer: b4 0.15-dev-42535
 
-params->total_weight is not initialized during bind and not updated when
-the bound cdev changes. The cooling device weight will not be used due
-to the uninitialized total_weight, until we trigger an update via sysfs.
+divvy_up_power should use weighted_req_power instead of req_power to
+calculate the granted_power. Otherwise, the granted_power may be
+unexpected as the denominator total_req_power is weighted sum.
 
-The bound cdev update will be triggered during thermal zone registration,
-where each cooling device will be bound to the thermal zone one by one.
+This is a mistake during the previous refactor.
 
-The power_allocator_bind can be called without additional cdev update
-when manually changing the policy of a thermal zone via sysfs.
+Replace the req_power with weighted_req_power in divvy_up_power
+calculation.
 
-Update total_weight when bind and cdev updates to ensure total_weight is
-correct.
-
-Fixes: a3cd6db4cc2e ("thermal: gov_power_allocator: Support new update callback of weights")
+Fixes: 912e97c67cc3 ("thermal: gov_power_allocator: Move memory allocation out of throttle()")
 Signed-off-by: Yu-Che Cheng <giver@chromium.org>
 ---
- drivers/thermal/gov_power_allocator.c | 9 +++++----
- 1 file changed, 5 insertions(+), 4 deletions(-)
+ drivers/thermal/gov_power_allocator.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
 
 diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 3b644de3292e..600cb0e367c3 100644
+index 3b644de3292e..3b626db55b2b 100644
 --- a/drivers/thermal/gov_power_allocator.c
 +++ b/drivers/thermal/gov_power_allocator.c
-@@ -656,11 +656,10 @@ static void power_allocator_update_tz(struct thermal_zone_device *tz,
- 			if (power_actor_is_valid(instance))
- 				num_actors++;
+@@ -370,7 +370,7 @@ static void divvy_up_power(struct power_actor *power, int num_actors,
  
--		if (num_actors == params->num_actors)
--			return;
-+		if (num_actors != params->num_actors)
-+			allocate_actors_buffer(params, num_actors);
+ 	for (i = 0; i < num_actors; i++) {
+ 		struct power_actor *pa = &power[i];
+-		u64 req_range = (u64)pa->req_power * power_range;
++		u64 req_range = (u64)pa->weighted_req_power * power_range;
  
--		allocate_actors_buffer(params, num_actors);
--		break;
-+		fallthrough;
- 	case THERMAL_INSTANCE_WEIGHT_CHANGED:
- 		params->total_weight = 0;
- 		list_for_each_entry(instance, &td->thermal_instances, trip_node)
-@@ -731,6 +730,8 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 
- 	tz->governor_data = params;
- 
-+	power_allocator_update_tz(tz, THERMAL_INSTANCE_WEIGHT_CHANGED);
-+
- 	return 0;
- 
- free_params:
+ 		pa->granted_power = DIV_ROUND_CLOSEST_ULL(req_range,
+ 							  total_req_power);
 
 ---
 base-commit: 2408a807bfc3f738850ef5ad5e3fd59d66168996
-change-id: 20250218-fix-power-allocator-weight-5dac6d4b5797
+change-id: 20250218-fix-power-allocator-calc-f00b4ab650ba
 
 Best regards,
 -- 
