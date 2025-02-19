@@ -1,104 +1,133 @@
-Return-Path: <linux-pm+bounces-22417-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22418-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50BDEA3BDB8
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 13:03:20 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49F41A3BDAF
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 13:01:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B13B51883F81
-	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 12:01:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2EC1516EBD9
+	for <lists+linux-pm@lfdr.de>; Wed, 19 Feb 2025 12:01:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AC30B1D8DFE;
-	Wed, 19 Feb 2025 12:01:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7DAE41DED4C;
+	Wed, 19 Feb 2025 12:01:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="dsbuVFy6"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="pau3xtXW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-yb1-f180.google.com (mail-yb1-f180.google.com [209.85.219.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26F4D1C3C1D
-	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 12:01:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D93EF1C3C1D
+	for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 12:01:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1739966495; cv=none; b=STqMudWvgL/MJ7UTHUzgoID+pSIqzFdgQ+GaZYxrWNbqnevJ/GOpZ7E1MAYHIB3P61of0tmW0x4xCyAzIB9EZd5RVbHGBlWQxH/UT4CNHpRwhx9jy8M0SJWYmsSeRN6Vif3peSuDa8iKV8TSlHMysHrTFlyb9IYGzsjQYapxFc8=
+	t=1739966502; cv=none; b=TXTz5lN7g6Lw8eLYvaI9K85WnkDMCc7D4YwaKi+/a+aelKVJsUe4AA4yihtihPWPUUQR/HfRe/YYPBimsRhIEfUcIWteVAw3rO9p61hhnBN+fqrCno8Lyj7mPiueS/JLyzyPoWKvWK7AwCSqyzGfzmNgovQSq9UEOCsxr3gU8HU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1739966495; c=relaxed/simple;
-	bh=vYTsDpF0WHouv71tUdRGcb6sg816+d86Mu3TaaGSsBI=;
+	s=arc-20240116; t=1739966502; c=relaxed/simple;
+	bh=wcsXtdgQQL4VCUgznJrOnipwQmYIc9S+M6D4qteZ+tw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bkzl7f2KZGHUm3hmWnWZF1YxbyhOl5yELiiFIJaR/CmEhrfJOHWuFyBSrkM6X+8usMe8wCmzigs8LXXfXCTduz5q1oviQaxkh0IiIoW+63lzQBHnFDrkGOcM3NX595P68D/9NCcT80EOGUBv7wVXSFzEbE7jMG8FWgULzfF0vmg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=dsbuVFy6; arc=none smtp.client-ip=209.85.128.179
+	 To:Cc:Content-Type; b=itLAB+KxMf4tHk2ntXTS18hBMO7p4Pp5UB6hSkIniLS6O9eSUsZpWL0UkezijJdPublpqJ6xC43kSHcRe4mH9I6VMGO0DQ4nzRSQmnIYFbLZGEYnGbn2VXSkyS6GgKxxx4vck2rdckTgZzAFMRYC0aytmi8hw4OyX/bOtCEAc+4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=pau3xtXW; arc=none smtp.client-ip=209.85.219.180
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6fbaf4cf2b5so2587107b3.3
-        for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 04:01:33 -0800 (PST)
+Received: by mail-yb1-f180.google.com with SMTP id 3f1490d57ef6-e5dcea5ab3eso682773276.1
+        for <linux-pm@vger.kernel.org>; Wed, 19 Feb 2025 04:01:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1739966493; x=1740571293; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1739966500; x=1740571300; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=vYTsDpF0WHouv71tUdRGcb6sg816+d86Mu3TaaGSsBI=;
-        b=dsbuVFy6ANEuyhYCaCNh0Copr+ObjkP3BMbv7C/LT9peU1nMO/cML+x5ZYdW29n3cR
-         g6LFhNav60noAsMTceRc277owoZXVgwwD4BuwppvAfWhdeQ73pAB+N3GILdCdlfN8nEh
-         OPQs53aF003Xzc/s4gWaIkvgLtGzL3tQ1uC3uiFcNgiRoo12shUhUGFLmkYGGVbM2EeJ
-         OpV2meWLM9QhzoD6mzNN2aL0j5DsVou0kgXQVGRdncbSS/su7DqAlfEAsT31UzcJtVfR
-         sKEcrGi6OECVrrmi6GOu9Yfaodaf+oxVwnVfpwnLaHyB3QYvq0utwHJlZ8zkkU/6YPDY
-         daDw==
+        bh=5xe0n90tbsq5x/xPm1Llh+2RuD6r7msq/tuY+Ym3TsA=;
+        b=pau3xtXWvcHV/N/aolWv4okCW4Bvv7aos+tfJcokETECbzduPTP/t4s5xok9swS4Hb
+         zrweubnff8o/sP+48kM9pyzsVh4ABc89tSz5h/ZXpHtsxj+53c5P69tEmW1DoWWAnuKg
+         LUDQf/L0deKnN+P0nMcE8tWCxb0pZCoBov5aYmjbNIoAG3Dj7PihtbJKJycnINIM5jGv
+         Oc0389vqXjx7rxrouQq0XrLTiHPu9XJZYF/4vQtlSlur8g7qdbztC5p+Ket4vqmnezqZ
+         VAeuxLsji94Ti5PmvPmbt6EcaVzWdCzPgWgFT6mXyP8B9/GFM2iP//kgSiNTuAEcS1sU
+         gOmA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1739966493; x=1740571293;
+        d=1e100.net; s=20230601; t=1739966500; x=1740571300;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=vYTsDpF0WHouv71tUdRGcb6sg816+d86Mu3TaaGSsBI=;
-        b=SjRnjVnPQ80uCOQW3McyDVCln6+sDD8SPO1dw9S3JwbNbUgnwxvWJBAUEHuUDr2x2M
-         S1nSKcHLGa6i2b87NZ9i656jb24QM3ZSG149IEcHLvvf4HQMEZTCGQhRZQ9/3thSrdpP
-         I4GmqBRhKKTBFOjTakNYFvZyWrBijlRGo7usYHtLs2sK0Jdwp71qofKZYsAtYuuYypKQ
-         lZsZRSD5QVvbRR/nxaMlKEMWFu9tqL/uhwpz2x43PdleLeHNjO7kkMroehzGp6ASLRTB
-         I+Qtqh95Lkbji/XBefQ6pvwYCymH/jo5E24DbJtWnk9oKiZSrFG7cIW2O1mRKyVyQMRY
-         3A3w==
-X-Forwarded-Encrypted: i=1; AJvYcCUmnP8l4GmP4Cb+fb1PCmCDlwF1lV91ZgbZDyReya1EWiVDmfhajC59HRi5Ce5j8POMhaTHhqOLSQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxI7hk/vR7BIrDQwxvASIv+ZkvGS60oBcmOk0zosxrnBa1azAop
-	ZNtc5ikxJI42FZUyiESk4zAnIbEZUIo1xgdyIDP/p0rCL4pDJ7uXR+9RBeUFPvraFwSmb+9KNkw
-	TCObLkNSYneRjQuBvvLX1CWTfgPO3xYJ9bxpjEoQNJpOxiZVHzQA=
-X-Gm-Gg: ASbGnctAIIB6hln+gL2EIylcIm74J01bU2deva+Bv+bQQ5xwgT2WhrSqZtX4W3hgpfF
-	3OjVLOxFYEjF+cC8trvB97lVo1FMMVINVC1IJsaTwSYvrDKfo7fl/MGvMMC6+QoM1M9Yi6h5LOQ
+        bh=5xe0n90tbsq5x/xPm1Llh+2RuD6r7msq/tuY+Ym3TsA=;
+        b=eFSJTEnA1hoo6TziYw3AGggYDtKUFvUQOdUVjZAhZgI/japxx5SsIRpzGBlwZqv1lF
+         GipVEohC9sfHbVl0qeNsWuuzwnn0b+pl9Nu2zMvHLHcQumgHlrBip8UjK1tDGrqMYPsj
+         EdE3Hh6HYhBzK48rv5hfl8hRplZZtr7ajPNNwPje2Z8+EjcswQtLPrUWP4yTWLh+y2ix
+         XHMbBDbSzDwYL3wANl+l0OEYX6T+YCOecFeXJIsfZGIqZXT0AXEtZyxKvo059pmb+JwE
+         9nFjqau+mCGvwzBZq57I6zxTXS5aaj49paotbyfNsH0DrZJ4UizhQ8HJCf+EMf6h+bRP
+         Jyeg==
+X-Forwarded-Encrypted: i=1; AJvYcCXnG+y4uYo0F3n1tpR/6XnS4i0o6qVtpj6vKP9GLFXo4sx2pSRGljv2iz83zFkNNkftN5JAWYGsYQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyE8hzAC/+UOfdx4rPSlPqr5czkucwUUWsVkNoTBGoeIgoMozfi
+	h/AgmPoj3Wf2WJEHpbZ57+iBmNQngl+Yz78J1aWdrA4D34jqmVMxlzeuqMLoT4U8smbfpxzR/m8
+	w/1VTA4+i2AbEQjlg7Red5I1dknVdxzZXIMOMbg==
+X-Gm-Gg: ASbGncssgg5vPEBqmkvXHChwiMp3dQmuWZoLiZkHa+sMu6kCE3x0RlBlAsysOLkEy+7
+	MMUUqElp3wKvMjZ2RfBDUdbtgoyTGTKz7EhGetmuX8uKTU5JUwx2L6YCBs7ZmjIg+XASrBZEiYA
 	==
-X-Google-Smtp-Source: AGHT+IHwtF2lE+o2tf7V8rxyFVuVJraHT+N4by5azk0Xzf2f0imq0Hfnj6hm9T1/3s7AUPcxCy9jdh/GuEmHhudS/Fs=
-X-Received: by 2002:a05:690c:6d10:b0:6fb:a4e6:7d52 with SMTP id
- 00721157ae682-6fba4e682f4mr35370547b3.35.1739966493107; Wed, 19 Feb 2025
- 04:01:33 -0800 (PST)
+X-Google-Smtp-Source: AGHT+IGZ/+8xQ6gwL9boFRNAF7KVM22iCnqEax+j9Sk0drg1U/1wYEwbpzOiKk0ZPA6neRnIXD7xoQxd3GTjDpsqxfA=
+X-Received: by 2002:a05:6902:1027:b0:e5d:f98f:6f33 with SMTP id
+ 3f1490d57ef6-e5e09a34021mr2671796276.10.1739966496117; Wed, 19 Feb 2025
+ 04:01:36 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250217140145.117086-1-ulf.hansson@linaro.org> <Z7SRpEE0UFHdSEmR@bogus>
-In-Reply-To: <Z7SRpEE0UFHdSEmR@bogus>
+References: <20250218-gpcv2-of-property-present-v1-1-3bb1a9789654@pengutronix.de>
+In-Reply-To: <20250218-gpcv2-of-property-present-v1-1-3bb1a9789654@pengutronix.de>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 19 Feb 2025 13:00:56 +0100
-X-Gm-Features: AWEUYZkRptIu8JuTeXLBSwgNPQUIMYEr8XMgdltcJUsEkVs_mX89-B_EamjzG64
-Message-ID: <CAPDyKFrcBZCYjcrxPMuMrk+3yqa-2N4Q-qCPu-qmmQ-a6DfL_A@mail.gmail.com>
-Subject: Re: [PATCH] MAINTAINERS: Update section for cpuidle-psci
-To: Sudeep Holla <sudeep.holla@arm.com>
-Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>, linux-pm@vger.kernel.org, 
-	"Rafael J . Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	linux-arm-kernel@lists.infradead.org
+Date: Wed, 19 Feb 2025 13:01:00 +0100
+X-Gm-Features: AWEUYZkq7YJtxfAEssq6nuztkZ1WzoS_qm-UMarQYj6y8mBUO7XjlBb-t9JXEpQ
+Message-ID: <CAPDyKFrEHXhb42rnpjv0KqaUtRzKhX11w70ZoTM8+u9rYDJyuA@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: imx: gpcv2: use proper helper for property detection
+To: Ahmad Fatoum <a.fatoum@pengutronix.de>
+Cc: Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
+	Pengutronix Kernel Team <kernel@pengutronix.de>, Fabio Estevam <festevam@gmail.com>, linux-pm@vger.kernel.org, 
+	imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 18 Feb 2025 at 14:56, Sudeep Holla <sudeep.holla@arm.com> wrote:
+On Tue, 18 Feb 2025 at 20:18, Ahmad Fatoum <a.fatoum@pengutronix.de> wrote:
 >
-> On Mon, Feb 17, 2025 at 03:01:45PM +0100, Ulf Hansson wrote:
-> > Add myself as a co-maintainer for the cpuidle-psci driver and the
-> > corresponding git-tree, which I am already using for this.
-> >
-> > Cc: Lorenzo Pieralisi <lpieralisi@kernel.org>
-> > Cc: Sudeep Holla <sudeep.holla@arm.com>
+> Starting with commit c141ecc3cecd7 ("of: Warn when of_property_read_bool()
+> is used on non-boolean properties"), probing the gpcv2 device on i.MX8M
+> SoCs leads to warnings when LOCKDEP is enabled.
 >
-> Acked-by: Sudeep Holla <sudeep.holla@arm.com>
+> Fix this by checking property presence with of_property_present as
+> intended.
+>
+> Signed-off-by: Ahmad Fatoum <a.fatoum@pengutronix.de>
 
-Thanks - and queued up for next!
+Applied for next, thanks!
 
 Kind regards
 Uffe
+
+
+> ---
+>  drivers/pmdomain/imx/gpcv2.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/pmdomain/imx/gpcv2.c b/drivers/pmdomain/imx/gpcv2.c
+> index 958d34d4821b1be68d730ad345037b8f0a56c45a..105fcaf13a34c787b2d568bc64e7fee9bfc23393 100644
+> --- a/drivers/pmdomain/imx/gpcv2.c
+> +++ b/drivers/pmdomain/imx/gpcv2.c
+> @@ -1361,7 +1361,7 @@ static int imx_pgc_domain_probe(struct platform_device *pdev)
+>         }
+>
+>         if (IS_ENABLED(CONFIG_LOCKDEP) &&
+> -           of_property_read_bool(domain->dev->of_node, "power-domains"))
+> +           of_property_present(domain->dev->of_node, "power-domains"))
+>                 lockdep_set_subclass(&domain->genpd.mlock, 1);
+>
+>         ret = of_genpd_add_provider_simple(domain->dev->of_node,
+>
+> ---
+> base-commit: 0ad2507d5d93f39619fc42372c347d6006b64319
+> change-id: 20250218-gpcv2-of-property-present-158f8dbfe2dc
+>
+> Best regards,
+> --
+> Ahmad Fatoum <a.fatoum@pengutronix.de>
+>
 
