@@ -1,139 +1,109 @@
-Return-Path: <linux-pm+bounces-22558-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22559-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DFB10A3E100
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 17:40:10 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E7E3A3E11E
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 17:44:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 764BD7A7EA6
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 16:38:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 579CF3B5723
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 16:40:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11790204840;
-	Thu, 20 Feb 2025 16:38:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 40531204879;
+	Thu, 20 Feb 2025 16:40:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="TUqVdRtN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oHew2h1L"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f50.google.com (mail-pj1-f50.google.com [209.85.216.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7AADF1E32BD;
-	Thu, 20 Feb 2025 16:38:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0990313A87C;
+	Thu, 20 Feb 2025 16:40:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740069539; cv=none; b=NOZMms87hIAD7Do5faBYEIeb4SozzR7SnvX3RO03Hu8Brp/KJZyyMpg9jANw0xFl4jxIm/MWwR+vvfvBdwIBZOgmKgg1TFchoQSWmFb4cZn3LEjJ/cp8foEi5aaO52p4lXW27jT/DZNhCxRvAQbBEDFgav9R1SYsJsD/O8jBmzw=
+	t=1740069620; cv=none; b=pkSHXwgs7qtw8XA3mXT7MRukzrPqRpcJEZ2JmOdUHADqZGdCJHzJTOsWrIKZo5PB0fhuHkSm9zcNJLYAw0cMg57DXg7Q7oQ1yz2VIYBtZYsgnViLNzWW7YyfLICe/dFxPHKvLyfasoLvV94vAVh/9fNeCHkkQ2NFJ7gDJKUx1IA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740069539; c=relaxed/simple;
-	bh=enw3vpdlwjuqr/D+m0WXDrtOqoqKbZbyUyAjN8kC5kY=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=mhnFgR//MqB6tnu6e+7IwZfTTEa2xMwovT36HWiAkRIeX4IpAc21YjfF3hvtAPcYTaYwI4cw7Izk1cQth/1GaP3IIdq+Rsc2XWnAGJhAwRfefGhdPxTH26b0qMm4I61hj5jy5K6Cf95g+au8jtuuYkUUZcb9h57Hm28aUh8PCfo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=TUqVdRtN; arc=none smtp.client-ip=209.85.216.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f50.google.com with SMTP id 98e67ed59e1d1-2f9b9c0088fso2150223a91.0;
-        Thu, 20 Feb 2025 08:38:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740069537; x=1740674337; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=YabjOh7WpvJZVKAfwb1a4vLOh26YIuOrbHAk91VmU0g=;
-        b=TUqVdRtN9/yxf5DVkmSHnCtF1A1TkNHMsgze9Xl4F44YFzXuw26kP6n2qVvx4775JY
-         BSvhtzd64QQGFnJdLI/cSQNgjv244HOuTumKmfwLndR/xcqRE71tuMcPLrW1+ZWy7hXY
-         lUKBvD15nVaygEoE8Cyu/EOc1Zm/1E49APP/9eCnMGXzuPj6ONA7tdJiutykRUr2oaU/
-         3qmoGw3Z211W4aGaNuEiP73JDchX9aL7Y3jcuvEhH+BVPq3FHw2/Z3GNlbbByNnPh585
-         dAMlVvuwHSPkOIJkeBUoQGXSzOi+GHqzc12iyNgSi9vqAGTYYPe6+LE/8Ov0v3NEr4gh
-         kpPg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740069537; x=1740674337;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=YabjOh7WpvJZVKAfwb1a4vLOh26YIuOrbHAk91VmU0g=;
-        b=PRoKqgU432PdYIpboU6IocI5NjSGpceKpqRKAKjxfjITVvPO8Yh0vjEjk52JUcnCXN
-         Ma68dwajHXtNtqDdhL824qnvTE2WGvbHwWv4QLmfLRqjbbGFA7GdED8IHejrBrsUBUoK
-         cQYG7wY2W7jPz2Slwn4bY69M0+jBv97da4x4OetdRVIfudoHapCwDRzEo1kbiSDyizOm
-         K3VNOBJeRM7H9vvqKDNgAKqNljU6hlFvs4N9eihb3KOkxdcJBav7npmjolsV+riq0JDB
-         aR3bovHxlNy8oH1boU9seMx81jBbw9Y43jW69YSc5UdhXfmYBkf8blmX90q0ItUWoL1e
-         39zA==
-X-Forwarded-Encrypted: i=1; AJvYcCWw1bFsle1uaKvOl5CsqlNxCM4eGHjIEOVxEbL0eHJ3O34QyvWAqdxB0EWcZEx3oxRRcF99fXK08lOW9ME=@vger.kernel.org, AJvYcCXC3XqEsVsPfvUpH74e+xJQVsONd2HTSL/EGD3cbayc191lInryCPvazerO+2rktbfKjLYDPw+FhxA=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywnqz7QGrIef+95QmUJWNCKwN8/W1Nh8pIaqhUWxxSrX2uZoB7F
-	qUrzsZD2ikmaA79n9f6brOIVJWFsn/UB4UTL546lPNxQM5q+vDgojhCZ6mXh
-X-Gm-Gg: ASbGnct0ZcsHEneMNExBu3KsmQwVxlI1k7RRAZjJoIhOtwJlxB1i7KTjL3mlDpqxGQE
-	KdgzD2+hdxKU6U+7LtI2gfEWDGJjRX7Ezyy18L60lOkgvTA7ucTlkK6FK+ThgHH6doNfsEFDvqM
-	CHfjjUAo4O3VzMUZhjywhq4w0MdNP5CbSf9SzKjxYr+kJZKKoLK/MuVsAeMw+D0TpUY0AyO3mdo
-	Z7rWhPE2ynBOSELmudXT+Tko/kTCTRPdC+xAejbh9S26KNpRXDsxG+cXAIX+LIrsGffozQLP9aK
-	csDnuRD9DbhkLLxIfmDwNKQkylb3RHzep/IMFNbDTYWe4u5hGo8E2GsYFKBD
-X-Google-Smtp-Source: AGHT+IHm7I3jyzH88/nJ/wlPRDt1bCVRKuuvraYNrio2tLf0ppW5sSdHzjaLFWilmSVDf6k5FnBX4Q==
-X-Received: by 2002:a17:90b:3805:b0:2ef:ad48:7175 with SMTP id 98e67ed59e1d1-2fcccb9cbeemr6782140a91.15.1740069536587;
-        Thu, 20 Feb 2025 08:38:56 -0800 (PST)
-Received: from localhost.localdomain (59-124-78-18.hinet-ip.hinet.net. [59.124.78.18])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2fbf98cfd66sm16158267a91.12.2025.02.20.08.38.54
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Feb 2025 08:38:56 -0800 (PST)
-From: Yiwei Lin <s921975628@gmail.com>
-To: trenn@suse.com,
-	shuah@kernel.org
-Cc: jwyatt@redhat.com,
-	jkacur@redhat.com,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	Yiwei Lin <s921975628@gmail.com>
-Subject: [PATCH v3] cpupower: monitor: Exit with error status if execvp() fail
-Date: Fri, 21 Feb 2025 00:38:46 +0800
-Message-Id: <20250220163846.2765-1-s921975628@gmail.com>
-X-Mailer: git-send-email 2.34.1
+	s=arc-20240116; t=1740069620; c=relaxed/simple;
+	bh=yGrW1sKVebqJhUcMcxVBHgSJO25Iq3FjkThrAN2NsKI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=jGqtUtrkfbzS4oGTwhFKYqLEfpBbV9+23duh1imsDRl6YQGeMC3GbctqqHSTv3lXVTetkMnFbk1+wFd3qCCbUr7I4WZ20jbQ8VOBr569v9CLSwAz1s9GSyRGCciA2g3UPRZsYgi0NtSb3GSn8CzBlCzhTMhahTR00RvCOmdJJ2Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oHew2h1L; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A0BC4CEE2;
+	Thu, 20 Feb 2025 16:40:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740069619;
+	bh=yGrW1sKVebqJhUcMcxVBHgSJO25Iq3FjkThrAN2NsKI=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=oHew2h1LIKFuHP5TwtrVGg/jFxVLEXSmPMZl7Xhszm2Xyi1SttuJs9BIgQ7vBaGRR
+	 jZos+8vIqCLhl5cFJYAnfe4S1pVsT4uAnKwJ85f62W1xwYFq78EaGEGy1yyciNZsrJ
+	 ru3CSoK9qE97a+g5ptUBJAagw4h1DZXIaMST12BLJ/TRjM6oKEt/XCj8QbEbb1jvwA
+	 A8qIsu6H+ik/8g1IsZUb5MfVGjvmRn16Zzc5ac/D9SkNsdEql7bfER/G0XjV/fEYPH
+	 8CPHTWoAU7Vse7YZV8Ex5i9AgQqQB1OBSDPIy5xQqusu1t6YtnsKjS8Ri2IT9UxbRT
+	 9tdrXfpsTaoSg==
+From: Lee Jones <lee@kernel.org>
+To: Sebastian Reichel <sre@kernel.org>, 
+ Chanwoo Choi <cw00.choi@samsung.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+ Lee Jones <lee@kernel.org>, Rob Herring <robh@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Dmitry Torokhov <dmitry.torokhov@gmail.com>, Pavel Machek <pavel@ucw.cz>, 
+ Hans de Goede <hdegoede@redhat.com>, 
+ Marek Szyprowski <m.szyprowski@samsung.com>, 
+ Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
+ Purism Kernel Team <kernel@puri.sm>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Dzmitry Sankouski <dsankouski@gmail.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-leds@vger.kernel.org, 
+ Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+In-Reply-To: <20250123-starqltechn_integration_upstream-v17-0-8b06685b6612@gmail.com>
+References: <20250123-starqltechn_integration_upstream-v17-0-8b06685b6612@gmail.com>
+Subject: Re: [PATCH v17 0/7] Add support for Maxim Integrated MAX77705 PMIC
+Message-Id: <174006961563.882548.1668950876404410080.b4-ty@kernel.org>
+Date: Thu, 20 Feb 2025 16:40:15 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
+X-Mailer: b4 0.15-dev-510f9
 
-In the case that we give a invalid command to idle_monitor for
-monitoring, the execvp() will fail and thus go to the next line.
-As a result, we'll see two differnt monitoring output. For
-example, running `cpupower monitor -i 5 invalidcmd` which `invalidcmd`
-is not executable.
+On Thu, 23 Jan 2025 18:04:25 +0300, Dzmitry Sankouski wrote:
+> The Maxim MAX77705 is a Companion Power Management and Type-C
+> interface IC which includes charger, fuelgauge, LED, haptic motor driver and
+> Type-C management IC. It's used in Samsung S series smart phones
+> starting from S9 model.
+> 
+> Add features:
+>   - charger
+>   - fuelgauge
+>   - haptic
+>   - led
+> 
+> [...]
 
----
-V3:
-- Modify output message content
+Applied, thanks!
 
-V2:
-- Check return value from execvp and print message for invalid command
----
+[1/7] dt-bindings: power: supply: add maxim,max77705 charger
+      commit: af280f29f32c885942f67edacfeae7d9b6e897a4
+[2/7] dt-bindings: mfd: add maxim,max77705
+      commit: 2ae4ffff28bf48a7144591eed7081f746b98e130
+[3/7] power: supply: max77705: Add charger driver for Maxim 77705
+      commit: a6a494c8e3ce1fe84aac538b087a4cab868ed83f
+[4/7] mfd: simple-mfd-i2c: Add MAX77705 support
+      commit: 7b591ef98b3fc1ce20c3ccb86715429b72e2e6f0
+[5/7] mfd: Add new driver for MAX77705 PMIC
+      commit: c8d50f029748b73313838b64b829992b66ccb704
+[6/7] input: max77693: add max77705 haptic support
+      commit: eb79f3a5a51a1f484e2570d983dc9d8217e8f912
+[7/7] leds: max77705: Add LEDs support
+      commit: aebb5fc9a0d87916133b911e1ef2cc04a7996335
 
-Signed-off-by: Yiwei Lin <s921975628@gmail.com>
----
- tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c | 6 +++++-
- 1 file changed, 5 insertions(+), 1 deletion(-)
-
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-index f746099b5dac..e123aa578881 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-+++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-@@ -6,6 +6,7 @@
-  */
- 
- 
-+#include <errno.h>
- #include <stdio.h>
- #include <unistd.h>
- #include <stdlib.h>
-@@ -294,7 +295,10 @@ int fork_it(char **argv)
- 
- 	if (!child_pid) {
- 		/* child */
--		execvp(argv[0], argv);
-+		if (execvp(argv[0], argv) == -1) {
-+			printf("Invalid monitor command %s\n", argv[0]);
-+			exit(errno);
-+		}
- 	} else {
- 		/* parent */
- 		if (child_pid == -1) {
--- 
-2.34.1
+--
+Lee Jones [李琼斯]
 
 
