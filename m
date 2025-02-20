@@ -1,121 +1,142 @@
-Return-Path: <linux-pm+bounces-22576-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22577-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 52E2EA3E541
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 20:45:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 53A2EA3E55F
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 20:55:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1398A702CEF
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 19:45:08 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 833A719C301E
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 19:55:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA4171E231E;
-	Thu, 20 Feb 2025 19:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 07ADF2116F4;
+	Thu, 20 Feb 2025 19:55:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YTwJA5k0"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="QSQR28Mt"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1A8B1B423B;
-	Thu, 20 Feb 2025 19:45:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6F961DED7C
+	for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2025 19:55:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740080713; cv=none; b=TxpMlSbR20bhmmpmiujOjVJkuSA6kkOYTVcgPzEPPEhvtj7lqHdu22HLlxvIxA/SBXq8vWmYcW3jAcgLzPX1kBsM3p73/zsVH1DTfXB7HHeHK421hQwZX3W1JUDgU8rbssgTma3iBydBQ5msS400p5FmyunMZPXuhmNje0QYKP4=
+	t=1740081304; cv=none; b=AroxngnPhLlCB31LEgic7hcnW6OI2X165VnrNTzCu//SE9r1TWpiv+XkTgi25h9H8HNE61b9j0KZQn3oOu34bBKvcNeg1pmleG6+rJEueanPO6whgaK/+jKsIROT2bai6Ds4WpEDSM2A9ysUDK8foOaiNwfLH3s4d2pmtcbVRlY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740080713; c=relaxed/simple;
-	bh=5w9ZPfM7baicd38+GAndxIdm7j14N21q7eKUF1uXANM=;
+	s=arc-20240116; t=1740081304; c=relaxed/simple;
+	bh=2rBM/Bm5GUWqaK009IYMUNwH4GYxPxmbh/7PFCOhdjk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Img/2BeG2DQhzdmZwKRQZSJifuoVsQ5lowclPO9Rujh5u45kJ1onfNwGAdRCaTbr5AMBBVX56RyVBta0p1Eo7hT16lmIFg8cvjhsRpLEXeF/t4o2EhTNpVzW749BgVjmp4zDzMNvU36Q3mAGDW7YowgauucsrlZ3bS878GuvFR8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YTwJA5k0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80AF9C4CEE3;
-	Thu, 20 Feb 2025 19:45:13 +0000 (UTC)
+	 To:Cc:Content-Type; b=iXk6FcVPfaKX3muu2QcgpkvKDDeGppTZ0KV7bdGinlLsEipvRi/3LhTnvHaQn7VyigVJUE1HegZxnKw3vpLiN7C2xMAljSYbqco6DOPraEjGj+FCXoP1w9xcVny8LmR8Z9UMAaJkdlSlDBOrwH8P6BtgMfFyDwFQLIEZ8eBDNFk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=QSQR28Mt; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AC042C4CED1
+	for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2025 19:55:04 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740080713;
-	bh=5w9ZPfM7baicd38+GAndxIdm7j14N21q7eKUF1uXANM=;
+	s=k20201202; t=1740081304;
+	bh=2rBM/Bm5GUWqaK009IYMUNwH4GYxPxmbh/7PFCOhdjk=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YTwJA5k0w+cLrj0HNpfOs1JUTvA6SauT6M1ZkqUw2YyMj8F0OpGnwiXyDj+qfEIl0
-	 1DOUf8cvAAYsXKCUgst5gAimkaYaYbpX65uXA8bc/sLmVPzl/cXjgzy/eVXXm9TXSg
-	 2iimhWmiIMe7XNyk2GAMTilu5u7KfWz9vSB+Rv0yhkQgKyMG81jH0uBp4D0dh9yJYP
-	 cAcUW030Ng1dsBFzT4C+hXni5rCEORTVMvwrrj/qNwzirisvWTreoZW1NL60e941Vt
-	 Zr17K8djWkCLm29wUPMVU0Y63PhggQMQwJxzRf8W+pvOyBxT7BF39Krd/zfNs7MeRL
-	 dN73SgYBPYsvw==
-Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2b8e2606a58so612045fac.0;
-        Thu, 20 Feb 2025 11:45:13 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUqwhjjf7EEmL8m7kszVY6x+yDBUVwgLPqBNmQ5LqQOmn5uO/2i8xTLixQKFSq5AnbUOtLApvWTZfsKXBk=@vger.kernel.org, AJvYcCV/VWnv0Mnfl7Lr93mu3tabW/pqpG6viSP5UravfFc3SaqZ9NxTEYcL5GPk0OgIzRBR6tlyMQ6/VMw=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw6Z1WBCH8TDJcIgJLSkQt9nTyxJNmnImo8lQParXlCFm8KIZ+i
-	RW+O9m70h/6nw4jTiwUYivvMBzK4PkN/l/sj1KKYqFMVwSLeHDLP50lr1RXsx/akkJ8w+O1lsDk
-	QN2y0N8Ah0rOiKNb425Zjye7OQw0=
-X-Google-Smtp-Source: AGHT+IHeqxjwEu4AYptwD1++tf45lAZPuUZ54xSnYQv4HKcOnC+YKtRBjCgH7ba7P+4afva5Zse6yfqkJrz40QNGIrg=
-X-Received: by 2002:a05:6870:8e16:b0:2ba:9b62:330d with SMTP id
- 586e51a60fabf-2bd50fb8fcbmr229165fac.38.1740080712814; Thu, 20 Feb 2025
- 11:45:12 -0800 (PST)
+	b=QSQR28Mt2Whd0wb5iCce3T8tbX0VY9FtEleX417LMHSRiQN4UPzjGoVa8qoDRY390
+	 Hhbux94r9rDbd3QfNM3XCs63xegga3iIT6b59mfMingKm4DgPJszTIWzUDQ8MVSKJ/
+	 JACBQ18tbwFiQ2WL9be3frcdhOhwUr8NqTAN7toXiUphTIcEy9x7/yo5YR1rqtw/32
+	 eTLY/FsF8vZ8VDtGM87M3BMvdxy836bjhmv1341zHl+qOdGczsobYH19U8c0Q++Naw
+	 ve1/dqZy44zd/60wlr99+mv+l4XC0Td5YrMxzz87dV7awxr5Krd8ne/oj3M9Rkl052
+	 qPYNRIOor2pkw==
+Received: by mail-oa1-f46.google.com with SMTP id 586e51a60fabf-2a01bcd0143so1002399fac.2
+        for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2025 11:55:04 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVdh0Fr008P45xQaJXUyOQ7kCp0euIqQ1VuDNi6KdYsc7KU15nS3QAtTXLIwoQL8As/+oS/+gmzmA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyvmWc33BQWJvLp9dntFio3OsI8/ZlM1zkR4Bo2F+gR84/xjnjR
+	Aok9IQK+8uwTKVhezIggCuYo2AOiUwZA0cP3fYbTQlSBJ+bp0DWb475QSYfn/9gabatyDMLgsQz
+	eATgVvZ2wQ2zfjdv5xrv+Yn+H8sY=
+X-Google-Smtp-Source: AGHT+IFoCGxeqmUel0IvtdmoEq+077bP/2uS8fPtPtwG/hH51o7y5JuQMqO47gMxAx7NyiZ7O9lNqHv7a3IQwLS0KCA=
+X-Received: by 2002:a05:6871:358d:b0:29e:4d0e:a2b6 with SMTP id
+ 586e51a60fabf-2bd50cf31edmr292129fac.10.1740081303997; Thu, 20 Feb 2025
+ 11:55:03 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250219-fix-power-allocator-calc-v1-1-48b860291919@chromium.org>
-In-Reply-To: <20250219-fix-power-allocator-calc-v1-1-48b860291919@chromium.org>
+References: <20250218082021.2766-1-lirongqing@baidu.com> <CAJZ5v0gHUQzjk9vdSrHOU6tCoN0hx291ALW7tVN-JPxW9cVSiw@mail.gmail.com>
+ <95135302-9a9f-46c0-a786-8a20ac26801d@arm.com>
+In-Reply-To: <95135302-9a9f-46c0-a786-8a20ac26801d@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 20 Feb 2025 20:45:01 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0jSh=aOfP7BKTCSxnPGy-XKJKcHNw8bN5PXPH0LA0tAGg@mail.gmail.com>
-X-Gm-Features: AWEUYZlPuKs8Aa3z6321uqgilvggm5XCrIPDQvEqYIr24lZnfObcveBkaIicNsI
-Message-ID: <CAJZ5v0jSh=aOfP7BKTCSxnPGy-XKJKcHNw8bN5PXPH0LA0tAGg@mail.gmail.com>
-Subject: Re: [PATCH] thermal: gov_power_allocator: Fix incorrect calculation
- in divvy_up_power
-To: Yu-Che Cheng <giver@chromium.org>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	Zhang Rui <rui.zhang@intel.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Chen-Yu Tsai <wenst@chromium.org>
+Date: Thu, 20 Feb 2025 20:54:52 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jB7cFS5ZX1SLa2iV3UhxYDhPscbmX7=LyzqipvSgHH_w@mail.gmail.com>
+X-Gm-Features: AWEUYZnLWsVgRUXSIhq-bXcYRlF7Dy88Tf-eECHAwJpOulBObdFbzqsEI2XP6Gw
+Message-ID: <CAJZ5v0jB7cFS5ZX1SLa2iV3UhxYDhPscbmX7=LyzqipvSgHH_w@mail.gmail.com>
+Subject: Re: [PATCH] PM: EM: use kfree_rcu to simplify the code
+To: Lukasz Luba <lukasz.luba@arm.com>, lirongqing <lirongqing@baidu.com>
+Cc: pavel@kernel.org, len.brown@intel.com, linux-pm@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Wed, Feb 19, 2025 at 8:07=E2=80=AFAM Yu-Che Cheng <giver@chromium.org> w=
+On Wed, Feb 19, 2025 at 3:32=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
 rote:
 >
-> divvy_up_power should use weighted_req_power instead of req_power to
-> calculate the granted_power. Otherwise, the granted_power may be
-> unexpected as the denominator total_req_power is weighted sum.
+>
+>
+> On 2/18/25 12:49, Rafael J. Wysocki wrote:
+> > +Lukasz Luba
+> >
+> > On Tue, Feb 18, 2025 at 9:20=E2=80=AFAM lirongqing <lirongqing@baidu.co=
+m> wrote:
+> >>
+> >> From: Li RongQing <lirongqing@baidu.com>
+> >>
+> >> The callback function of call_rcu() just calls kfree(), so use
+> >> kfree_rcu() instead of call_rcu() + callback function.
+> >>
+> >> Signed-off-by: Li RongQing <lirongqing@baidu.com>
+> >
+> > This looks fine to me.  Lukasz?
+>
+> Thanks Rafael for letting me know.
+>
+> >
+> >> ---
+> >>   kernel/power/energy_model.c | 10 +---------
+> >>   1 file changed, 1 insertion(+), 9 deletions(-)
+> >>
+> >> diff --git a/kernel/power/energy_model.c b/kernel/power/energy_model.c
+> >> index 3874f0e..72655ef 100644
+> >> --- a/kernel/power/energy_model.c
+> >> +++ b/kernel/power/energy_model.c
+> >> @@ -161,14 +161,6 @@ static void em_debug_create_pd(struct device *dev=
+) {}
+> >>   static void em_debug_remove_pd(struct device *dev) {}
+> >>   #endif
+> >>
+> >> -static void em_destroy_table_rcu(struct rcu_head *rp)
+> >> -{
+> >> -       struct em_perf_table __rcu *table;
+> >> -
+> >> -       table =3D container_of(rp, struct em_perf_table, rcu);
+> >> -       kfree(table);
+> >> -}
+> >> -
+> >>   static void em_release_table_kref(struct kref *kref)
+> >>   {
+> >>          struct em_perf_table __rcu *table;
+> >> @@ -176,7 +168,7 @@ static void em_release_table_kref(struct kref *kre=
+f)
+> >>          /* It was the last owner of this table so we can free */
+> >>          table =3D container_of(kref, struct em_perf_table, kref);
+> >>
+> >> -       call_rcu(&table->rcu, em_destroy_table_rcu);
+> >> +       kfree_rcu(table, rcu);
+> >>   }
+> >>
+> >>   /**
+> >> --
+> >> 2.9.4
+> >>
+>
+> That should work the same way, nice cleanup.
+> Thanks Li!
+> LGTM,
+>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
-Yes, this is what's happening, to my eyes.
-
-> This is a mistake during the previous refactor.
->
-> Replace the req_power with weighted_req_power in divvy_up_power
-> calculation.
->
-> Fixes: 912e97c67cc3 ("thermal: gov_power_allocator: Move memory allocatio=
-n out of throttle()")
-> Signed-off-by: Yu-Che Cheng <giver@chromium.org>
-> ---
->  drivers/thermal/gov_power_allocator.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_=
-power_allocator.c
-> index 3b644de3292e..3b626db55b2b 100644
-> --- a/drivers/thermal/gov_power_allocator.c
-> +++ b/drivers/thermal/gov_power_allocator.c
-> @@ -370,7 +370,7 @@ static void divvy_up_power(struct power_actor *power,=
- int num_actors,
->
->         for (i =3D 0; i < num_actors; i++) {
->                 struct power_actor *pa =3D &power[i];
-> -               u64 req_range =3D (u64)pa->req_power * power_range;
-> +               u64 req_range =3D (u64)pa->weighted_req_power * power_ran=
-ge;
->
->                 pa->granted_power =3D DIV_ROUND_CLOSEST_ULL(req_range,
->                                                           total_req_power=
-);
->
-> ---
-
-And the fix looks good to me.
-
-Lukasz, any concerns?
+Applied as 6.15 material, thanks!
 
