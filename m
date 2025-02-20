@@ -1,136 +1,135 @@
-Return-Path: <linux-pm+bounces-22542-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22543-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C831A3DA19
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 13:32:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 79013A3DA6F
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 13:51:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2CB7A7009AE
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 12:28:39 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6113317EC78
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 12:50:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DC2FA1F582D;
-	Thu, 20 Feb 2025 12:28:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 812211F5836;
+	Thu, 20 Feb 2025 12:50:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="b96N/Iy9"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="a4jCKz9g"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6703A1F540C;
-	Thu, 20 Feb 2025 12:28:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A67D6134B0;
+	Thu, 20 Feb 2025 12:50:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740054520; cv=none; b=l3J5emjfQ8XzI7SVg6UxsELG+I8GgsQeEWV/2U8Xb67ymDMEaAEG0f+4qfZXoiMEsvMVRQ2AlWrRe8/+Sv6xHchdsDX4xPwwWGwjajDXZ+RpRQp/D5t5sFUqKYKv4cAOnk/e1T+EYqB3++J3WgTGaGzRtv0RAeoYsRVdx7HS+sA=
+	t=1740055852; cv=none; b=ASK+QlVRB55dU9kdW65TKJ2Ufgw9CfHu190lOJ/543AM0+2bcHudq/+jNUGlPfi41s4eUfZXqqCzNLneRq3Ul8VJfj3Fi5fgfwzzeSfh4pojyXhACfutCrg0oyXatsQN8eYzY+9Ks6q1jVgBVSwZ0pFNXeS4Zq0TnTJCV9GVas8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740054520; c=relaxed/simple;
-	bh=NUNQOQMsRGG7DSg4mxzSVG74HEh1Ws9TkBICyqpDumw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=FX2NlES1vKtXKDb79NsaW8yC2p3YHgmC2LmDPVbNrOaNS620SM7/7T8/saKPSnG4+j2bY5LOrZ9swcinqwsKVO/PB7huYRNbOvDBT5mi9RjunKJ0U9O8IkMClHdxS0yw3ypqcofSMw7uOiXs41jQdiojfh+oWwMv+5JOA4dbha4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=b96N/Iy9; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1740055852; c=relaxed/simple;
+	bh=5CdqDe6a+TgCmrvpY0A7LzJCD1blyf0ZlG7AQjJyN4E=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=XwJ7+IwSEZk+RaDEgJpwHz+5I2wb+dTCmlcIIa8ZWjpSooxE9mfG8/47vAkWA0PSVSEgr+1G4CLn4bXTWjja2D2czcZLSNMCA4EeMGAm7z+G77sUYkppYhEb3mupFMFjl89Ux8DuK6fm1tkrjodFC8+V4TQ7nSDAJYceKmLOZJ4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=a4jCKz9g; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-220e6028214so16768875ad.0;
-        Thu, 20 Feb 2025 04:28:39 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5e050b1491eso3557655a12.0;
+        Thu, 20 Feb 2025 04:50:50 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740054518; x=1740659318; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=XzJzI3MSa7XK9xTdL5743Fq2Xbu9IkkDNG1ETRkFDyE=;
-        b=b96N/Iy9EwHfexTHig7aubLanNbkebvaGWTCSXt/AM6ypfaqItHyMqNn0SY3tE0+Jn
-         Duv2VcoiwEXvDjatAwi5bh0MO/JkFGD2ozGBYcJVuSBbZl8YBvTRUqI0O2XE84wzSke8
-         Ol/Zc9r3Qaa7UJDm3P3aoWZ0ckVy/PmxShQo4h7YIZBqC7kv4nvlY0VywHTSspbHE6cA
-         AMU/bs3bHJYU8JkH9g1GKrvF1f7EdyFP0bdUQBkMc3uLdK7JjQ3VLt/2z1Jm77sqDUMM
-         /AxoIKW+b4eGVM+PNYRrFLyiZsBeCKCEqqYz/BKB8uh3Kcr5WX/ujePVusFU3Absld9D
-         8blA==
+        d=gmail.com; s=20230601; t=1740055849; x=1740660649; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=5CdqDe6a+TgCmrvpY0A7LzJCD1blyf0ZlG7AQjJyN4E=;
+        b=a4jCKz9g4DtMxh2XdqyZo1+IrgkwVuuM/SZk7M29dl2e7Iypu5gN8z6zwmftrZWerY
+         D9StLxWTSkN9pi9c2ZDgBpFI8WVBj5qzyKu9h9/AOFiyU9HFlnUC1mpjEmMjSM9BKhjE
+         BePuqA6DKi0lN74SiVRwyJVqcsPH9y+C46kuu2SNu1d8C0OiGJoFP3eKq1PtlWlqpP4F
+         V46VLUkOZ/DSDyTpLw9kfO1iEsVfVcd0WFXgshLr1JNUqmiYgrBz+wA15ke+8AURrS6N
+         F+CUN9al8JvIsEevuw0TQhUT3dCmK96i06+emmgzUTpNCcWlRGtH910iI0sKK9B73N9w
+         HPDQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740054518; x=1740659318;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+        d=1e100.net; s=20230601; t=1740055849; x=1740660649;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:reply-to:from:subject:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=XzJzI3MSa7XK9xTdL5743Fq2Xbu9IkkDNG1ETRkFDyE=;
-        b=UAjPuNAJsrcQfFObIbQWRi+whKfrD6kyHofST8AVg8yFQRZHoOLfxseaKD6tzosCim
-         7SIINkB5XsH5JPOURU5J+pVgNrmkXGNMycaQnez3BIIYAwoUzUKS8Sgc4vhwft2TTJM5
-         12IxU1QODef2gdYDxvK4+U/LOK04pr8iM08puSxwIVZSWshYwRjjsvVAaUwrz5Y0uEzM
-         BX8Sv++zLJkzDUR9J0lPUQK9UU4w8MzBMwW36HEAUHzws0t88rTtouQBYZGtnnnOHGqA
-         FqJ+gKSKNxGzmhReiVcz2mmJGUeN4p9T6kTifrOheHwrSGfBeECfIdZFfsW5AGiYM7kb
-         ROSQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUYIcA5idEup6XxBqHF2qyiWH8/fJljsKUZuYyo9BjE3X9yeYjx9L/p89IXBiDfXbkYydErfuMMDpVU78A=@vger.kernel.org, AJvYcCWHwInUaQft4idXp/GYOJ4TnvxY/P5hSpaANbsQ+l1B9EWN4JDVsnJRPVP4llCvjIFZcLbMGOvDNnU=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxvSsOolbOIrRonvBOrKWnZ4nq7syoqF2t9m7lFFG1cafqDHuvP
-	6pLz85WqxRn8n+WOdrGsIWqgdy6hNXAce6UhYCp7rKQ2+HJfnwWixslfpKOi
-X-Gm-Gg: ASbGncuZt7kI3wgA3fVIRss/Z1Np7koQphhKZgYAmHYjK5ECPICXNeMLmPmGmltyvrX
-	sAQj0LCkODBtXGOc6JzbiYz+rDhFxyLqY6fHNhFhjXpaM5SHJ2QU88tDp0YDTbNY0wuyTmYqmN8
-	NfOlM8t6pQBPepCMPKyirw91HL9sM8qaa3SqZ33y0m9wh8EmfjCkcYwHbQQ49kUXLvUFsA5obQX
-	YChITBiUwmJwQOdBpYU1lVQ79fo5BT5btLSEVp9f/zh50Wewm2rsHgsk7AbnU/z4R7AtFiWX24G
-	AYc9ibPXGO/TYAtjiWoMs+BQNFnhwOCFxrtxqU1TZIsstyxLs5h/RWg56Q7qOcwV0rX0
-X-Google-Smtp-Source: AGHT+IHQdYQPOf3ZTYz+ch9fvB9kyQd03DdROjbnNGl6h80jK1GVCLd0dSbcE1zb/Rzt8hV8CH1BMQ==
-X-Received: by 2002:a05:6a20:2d23:b0:1ee:e439:1929 with SMTP id adf61e73a8af0-1eee5d68e2amr4724131637.30.1740054518390;
-        Thu, 20 Feb 2025 04:28:38 -0800 (PST)
-Received: from [192.168.0.226] (220-137-0-183.dynamic-ip.hinet.net. [220.137.0.183])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-adcbe0311b6sm10815482a12.56.2025.02.20.04.28.36
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Feb 2025 04:28:38 -0800 (PST)
-Message-ID: <1a3c0e5f-777f-4053-91d0-aeed77f4a3d6@gmail.com>
-Date: Thu, 20 Feb 2025 20:28:38 +0800
+        bh=5CdqDe6a+TgCmrvpY0A7LzJCD1blyf0ZlG7AQjJyN4E=;
+        b=omFuU7uJZEJUOAZkxUtQc/eXQKwa60nQnS4f1nOAd6uA0fj8GyhW+GlEzJO2+I+dkd
+         n8N1OtTs1Jj1EAyu8QYOzviGYBTaupgU69fAXqWxVw3sx5IMQBxH7Pu+XGKr7WHBWF14
+         bBs+qUHWuIpzvK4yvv3Jexv0eGpYvKMg29qVzUuRz1Q9coDMrNNRuKZUNNJ84qyYc4Ei
+         1+YiZsTmHvsgMb7ryV+pCHuyXVbXpjpdaxP75tzxYCn2tz4FuYk1Q2lMj2ybO0CNloUx
+         IWUJ0FqTw+fn3+tO+KCBRRiRnlbR9gYMlWTPfn08R59cBPrZtsJUbJ1JbFlf8k+TjLx2
+         b3QA==
+X-Forwarded-Encrypted: i=1; AJvYcCUzEt3D/ERx0MGQa7pCbY5UT9nRqACsprR5+vbfZIYubqE3C8Q469gzcV+jnAtPoWACKB47evgQMK4yJiyw@vger.kernel.org, AJvYcCX333zdNLfySwDlg6l67jwxBApq4Fe2hGzcwZj6MoktBY8OUqtyIbBslhcyjknkLg6lkPXwe2ib6Jw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzOLxcrODnGYeoa7AY+OTretRfwI1FoTEy4/17sewcCJ54K5/3n
+	AUuhLxa2vEpYUFgoFnHvMj00b6Xrz9I0JQUzhto+WvjjaJ14pJNgyMNIn/zoE7A=
+X-Gm-Gg: ASbGncuXWAeoY38ZQRryfqbtREUhDkUIWtBrubvVtBAYvNpzhCC0zsJp85v4FAhmnrV
+	SUau47r6GIm5sNN59v2Pvl9vpwdXdcqPR9Jb0SKkK+USgzd2qPh7hJ9CEWrtvLiKhRDAQfg6PHG
+	YgVoywIPzBuzIZ0X1C+EcNRNY6jJQ1urvXSwOQVQbw3MmsPrqAIGraGk/ztiyL9gaIOdhjgx1BU
+	3DcVNnAbN1zRWOdB1zDQK4EgRdObnr+dOhU2AOaC1dK/OjPZAhNT9meNoRgkLb/bfxRR9ZUd+1y
+	sbqzNyC3hFAiGJygUTOSrIcKz/TNt5W3mU+VjEFkQhfRaw==
+X-Google-Smtp-Source: AGHT+IHtm/rvi3VIjBkWuIExSB85ST7i+4B0cXT1pvysb3E5JpPYV5QDujzd5YmocYgA3XX2V8kIRQ==
+X-Received: by 2002:a17:907:d109:b0:ab3:3b92:8ca5 with SMTP id a640c23a62f3a-abbeddc5984mr305310166b.12.1740055848569;
+        Thu, 20 Feb 2025 04:50:48 -0800 (PST)
+Received: from abityuts-desk1.ger.corp.intel.com ([134.191.196.181])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abb8eea4d65sm874370366b.161.2025.02.20.04.50.45
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 20 Feb 2025 04:50:47 -0800 (PST)
+Message-ID: <9b67088de0b6a24a67cfe0a1860011d290307c08.camel@gmail.com>
+Subject: Re: [PATCH v4] intel_idle: introduce 'no_native' module parameter
+From: Artem Bityutskiy <dedekind1@gmail.com>
+Reply-To: dedekind1@gmail.com
+To: "Rafael J. Wysocki" <rafael@kernel.org>, David Arcari
+ <darcari@redhat.com>
+Cc: linux-pm@vger.kernel.org, Jonathan Corbet <corbet@lwn.net>, Jacob Pan
+ <jacob.jun.pan@linux.intel.com>, Len Brown <lenb@kernel.org>, Prarit
+ Bhargava <prarit@redhat.com>, linux-doc@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+Date: Thu, 20 Feb 2025 14:50:44 +0200
+In-Reply-To: <CAJZ5v0g27Sutp_Ww7zGe0xB95kxFh-pzjd5-PpjR==h7-s8MLA@mail.gmail.com>
+References: <20250128141139.2033088-1-darcari@redhat.com>
+	 <20250213160741.445351-1-darcari@redhat.com>
+	 <CAJZ5v0g27Sutp_Ww7zGe0xB95kxFh-pzjd5-PpjR==h7-s8MLA@mail.gmail.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.52.4 (3.52.4-2.fc40) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: monitor: Exit with error status if execvp()
- fail
-To: Shuah Khan <skhan@linuxfoundation.org>, trenn@suse.com, shuah@kernel.org
-Cc: jwyatt@redhat.com, jkacur@redhat.com, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250211100530.5918-1-s921975628@gmail.com>
- <88d440c0-6a84-4483-939e-9f69e1d7befe@linuxfoundation.org>
-Content-Language: en-US
-From: Yiwei Lin <s921975628@gmail.com>
-In-Reply-To: <88d440c0-6a84-4483-939e-9f69e1d7befe@linuxfoundation.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
 
+On Tue, 2025-02-18 at 20:57 +0100, Rafael J. Wysocki wrote:
+> On Thu, Feb 13, 2025 at 5:07=E2=80=AFPM David Arcari <darcari@redhat.com>=
+ wrote:
+> >=20
+> > Since commit 18734958e9bf ("intel_idle: Use ACPI _CST for processor mod=
+els
+> > without C-state tables") the intel_idle driver has had the ability to u=
+se
+> > the ACPI _CST to populate C-states when the processor model is not
+> > recognized. However, even when the processor model is recognized (nativ=
+e
+> > mode) there are cases where it is useful to make the driver ignore the =
+per
+> > cpu idle states in lieu of ACPI C-states (such as specific application
+> > performance). Add the 'no_native' module parameter to provide this
+> > functionality.
+> >=20
+> > Cc: Jonathan Corbet <corbet@lwn.net>
+> > Cc: Jacob Pan <jacob.jun.pan@linux.intel.com>
+> > Cc: Len Brown <lenb@kernel.org>
+> > Cc: David Arcari <darcari@redhat.com>
+> > Cc: Artem Bityutskiy <dedekind1@gmail.com>
+> > Cc: Prarit Bhargava <prarit@redhat.com>
+> > Cc: linux-doc@vger.kernel.org
+> > Cc: linux-kernel@vger.kernel.org
+> > Signed-off-by: David Arcari <darcari@redhat.com>
+> > ---
+> > v4: fix !CONFIG_ACPI_PROCESSOR_CSTATE compilation issue
+>=20
+> Artem, have all of your comments been addressed in this version?
 
-On 2/20/2025 4:27 AM, Shuah Khan wrote:
-> On 2/11/25 03:05, Yiwei Lin wrote:
->> In the case that we give a invalid command to idle_monitor for
->> monitoring, the execvp() will fail and thus go to the next line.
->> As a result, we'll see two differnt monitoring output. For
->> example, running `cpupower monitor -i 5 invalidcmd` which `invalidcmd`
->> is not executable.
->>
->> Signed-off-by: Yiwei Lin <s921975628@gmail.com>
->> ---
->>   tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c | 2 ++
->>   1 file changed, 2 insertions(+)
->>
->> diff --git 
->> a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c 
->> b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
->> index f746099b5dac..0fc0e229739d 100644
->> --- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
->> +++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
->> @@ -6,6 +6,7 @@
->>    */
->>     +#include <errno.h>
->>   #include <stdio.h>
->>   #include <unistd.h>
->>   #include <stdlib.h>
->> @@ -295,6 +296,7 @@ int fork_it(char **argv)
->>       if (!child_pid) {
->>           /* child */
->>           execvp(argv[0], argv);
->
-> Good find.
->
-> Add a check for execvp() fail and print a message
-> to say that it is an invalid command and then exit.
->
-Thank you! I'll send another patch according to the comment.
-> thanks,
-> -- Shuah
+Hi, I was away for few days. Yes, this patch looks good to me. Works, and
+useful. Granted your comment is also addressed:
+
+Reviewed-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
 
