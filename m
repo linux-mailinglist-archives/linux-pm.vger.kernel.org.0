@@ -1,58 +1,59 @@
-Return-Path: <linux-pm+bounces-22569-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22570-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id EFA19A3E48E
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 20:03:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2ECDBA3E496
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 20:03:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9040E7A9251
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 19:00:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id EB99E4230FE
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 19:01:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 725B0268C55;
-	Thu, 20 Feb 2025 18:58:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C589268FD6;
+	Thu, 20 Feb 2025 18:58:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="KB/uRddy"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Qz2I8oPm"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5890267704;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D58F9267705;
 	Thu, 20 Feb 2025 18:58:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740077921; cv=none; b=f+QB97CtbqMdn7/pjbJ3clLg7mkbZvA+tR5At+d0Lx/0cpW0+0iBVrfAI7/8FT7/2/+FuasnasYlbwFz2ixYgKtXHdQfAEVmB3kE2x5y+8K/CpPxTcL1NT1+4RMhM0HVhva156FSJMQfaZ7Lm5y9MQqNvqeeKxoLn6O7lXejuG4=
+	t=1740077922; cv=none; b=i1rXPtR8EdJiRjZHd+SC7QJk1c+A2vbJJYB0HqvpJdkRu2acOu7zB0XqemykUiwuFwhw/Xv8U6flwYxDx3EscmbYMg/tfcsdmeAeinn9kQRLZa4UdjjI/AA3jTK1P7log0vWs91VgLTbgZsDcNpLAa6dtFNVeGRG9+jpDx/pmPg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740077921; c=relaxed/simple;
-	bh=Mg2GTkVRD8YT/hNJBelVSdS3Wk0hJ4aYbAmjeZFXLYA=;
+	s=arc-20240116; t=1740077922; c=relaxed/simple;
+	bh=0XXZ6OTodD2Jjb+29sa8Gg36H4Ft62btM1qoSWuiUUk=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=fjD/q+ZAvkrTM5CBLlRQg59C0SRqDeVEmFR9Ck3X/mV1jMxWZC0+RcXtZUVnnFjDg8LPBR9YX4guOR3QSJ3hbVvVrVM62WB2ZU9+u6ohkg4AaJXVp6YbT/56/L0ot6icv93LfYwS0HSsh/Fc9HUaq1pct7QhSF8xPHWFHS7fEew=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=KB/uRddy; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:To:Cc; b=bgOAYM/D4Yj9SKtb+xC8uxMOUHGknOiBSoSXe0wG8zLE/ZOcTCSiSozKfXJhWLRWxnvPvfwxiMawYf8FNLfcCVUVNZDeDl/yTW1oKyI55H2dcbCvpcHt6ni8swDsqk1ZqW/zHJIGsFYjmuCROzoB8wzvmxk8/6ZL5U7TgF5d91s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Qz2I8oPm; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
 	s=mail; t=1740077913;
-	bh=Mg2GTkVRD8YT/hNJBelVSdS3Wk0hJ4aYbAmjeZFXLYA=;
+	bh=0XXZ6OTodD2Jjb+29sa8Gg36H4Ft62btM1qoSWuiUUk=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=KB/uRddyxC4mRYx8uCmiDhvnNOwMYFHYSFWjglXROUgLnIDWM23ll4hS6fLrpNqKt
-	 V2qHjId8kYrD/J1SxbEzSuIBsQ0Sl6FgO2ImnEO7nU16BZS7m/LymBb/qX6nLX7Ln5
-	 xvlPt8vZ2lMVqeZlroA/G6z0Fz+2dmBh11NytBG+IZFb6MLWeTIMvBw4B3KT9j/QLm
-	 qWyQVcYoqRPZ2zZ0y5gsV7S9qxayB/Z7F2N6tgILDD5P9HOHO9Ucavgy3SL1QBH2ev
-	 3qEo2dpIJ+F04P+JaoQBAxtmyYpFEtKkSmrDlgcMGv5W87lL/MwY5C1tAv5rF/AguI
-	 /YZAZVFGkHldA==
+	b=Qz2I8oPmv75lwLjm3EYOLYH9rgmXMoryPpJgPiDTjWXNZOz22wBNk0lZB2MFp3L+T
+	 yUYko1i8xoMc9W11759f8f71615ndGvXPW3iizSHUIgmRzoAX/fvN7d65sfixBxNJe
+	 mdmRxDF7vNT5VXsDWCt0MtPYgumeeHdPf9vE2AbOxhHug2FWuUMkXtbwshVPQkOQyF
+	 Nu/M0rX0eLBf3TdZRrV1QdTo1yEwFYMfb9UbXsliuI+VghAFCfauq8951z0mDpZhkX
+	 P+CCqyAtH9YF3XEp9vxg35apjkPiIJpTsxmU5vxS0jHcGO5v8mZpyOa6/mT+A7pz0e
+	 ylALWMlRrVj4g==
 Received: from jupiter.universe (dyndsl-091-248-085-196.ewe-ip-backbone.de [91.248.85.196])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id C0C7817E1574;
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id C498617E1576;
 	Thu, 20 Feb 2025 19:58:33 +0100 (CET)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 131BC48003E; Thu, 20 Feb 2025 19:58:33 +0100 (CET)
+	id 1458648003F; Thu, 20 Feb 2025 19:58:33 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-Date: Thu, 20 Feb 2025 19:58:10 +0100
-Subject: [PATCH v6 7/8] pmdomain: rockchip: add regulator support
+Date: Thu, 20 Feb 2025 19:58:11 +0100
+Subject: [PATCH v6 8/8] arm64: dts: rockchip: Add GPU power domain
+ regulator dependency for RK3588
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,8 +61,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250220-rk3588-gpu-pwr-domain-regulator-v6-7-a4f9c24e5b81@kernel.org>
+Content-Transfer-Encoding: 8bit
+Message-Id: <20250220-rk3588-gpu-pwr-domain-regulator-v6-8-a4f9c24e5b81@kernel.org>
 References: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
 In-Reply-To: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
 To: Mark Brown <broonie@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
@@ -78,239 +79,527 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>,
  devicetree@vger.kernel.org, 
  Sebastian Reichel <sebastian.reichel@collabora.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=13105; i=sre@kernel.org;
- h=from:subject:message-id; bh=Mg2GTkVRD8YT/hNJBelVSdS3Wk0hJ4aYbAmjeZFXLYA=;
- b=owJ4nAFtApL9kA0DAAoB2O7X88g7+poByyZiAGe3e1hFpSKCOI16SXBqHcAmV1FCWWFiQL1uQ
- hiiGSwXh/MFaIkCMwQAAQoAHRYhBO9mDQdGP4tyanlUE9ju1/PIO/qaBQJnt3tYAAoJENju1/PI
- O/qa3SAP+wcBV23j/bXt1J9SqD+Xc/1mwG85HakJqbQ0SBTsTmnRkfjlNNeCsYI+9J1ABbA2vcj
- ia0OgYp233KZANC7XwIwH/s9IbKTR00oUFGP9w6EtIHHIZHDInNSV94fGqSL2QMDdSnI8XKJj7X
- i1fPeRC5K7Y3Wp0N3CC6MX7ihQUEgviaNjE4bZmXfeenb/59ydjazwdfvCy0Udd5Uoq2JppSX8I
- +yXkc+CHoXfCRIIlEj4U9/sDiGiINmwc2N1LKBrnITbUwHSEc7PhSCOb/b+dUCGkFnLpm12Nv8b
- Y+srM0XqTgSBInhoK4PStRvotKaeS8a2gZvGUnxd8deOY+9hGgwd7A5GJifKeO6FJsR5paqPcee
- nlGuy8SMMAHmiXqOB1WsYveDoR6fgPU9jhT54bGYAMEoVibFM7f+0pSW97GGv2UeM1YOlUsaCmi
- LyUuW/SNa72p1/qeySap8mNA9UWnayC6T8745kxp5oVGNMcsCkFJ7G2iysCMOI4J9kqLxr+iAmr
- gHzFdErL3XUhUj22AWkUKat/bKwSq5g9CHxDrkJQgmjivfRs1U6dgTuGRGKMRsf9R4691nUHkAi
- FfQU3tnfhN2zNtcBEekG605lifXTo9CnP4S1kKlh1dWsLUTN280R8Fce3JZ0wzR4RU7UkRxUgCL
- FKJ3O1xbiZOAkgHOp/wQ1BA==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=18621; i=sre@kernel.org;
+ h=from:subject:message-id; bh=0XXZ6OTodD2Jjb+29sa8Gg36H4Ft62btM1qoSWuiUUk=;
+ b=owJ4nAFtApL9kA0DAAoB2O7X88g7+poByyZiAGe3e1h94nh3wLbXrLsbxc/wXHiJB2kcOrdCt
+ p76tKEh/HHA5okCMwQAAQoAHRYhBO9mDQdGP4tyanlUE9ju1/PIO/qaBQJnt3tYAAoJENju1/PI
+ O/qa+/EQAIqvXCigjgbgMieR1LCJ1Kw0rX1V1uKsUMhlue8MnnzTrq/vgpJKoaON3k2ENoZRiO3
+ pjezBGNZSN/TzgZ6tXgtvP1vEQpzc9eQUr7aCoQzFO4aJYm2+fmHbUWJ/KUEcRJtaipPRJ+NKzG
+ lNwjUc60pT/fgpe1CSRmhdjVheRoLVA+zw+mWHOKSCrQEDRt5dZiMo4QY2yAndMe7fURzrshfoj
+ qf7AOy22GddWvP5J7xcWf3UL7mu8e+hsOzgxrrm/yGEe+Hu93LxJkFqqfWRHIpDF18EFmS73kgG
+ SRRkDqMOHss88O75r+pTCLbTcF0qqIgcEHYhRZaCK56S/8E+7AcyTxRbOAdTwWJoAvn62QMo6Sy
+ /ubJH4NMBNmJKZYqRsiTw3j3Cj26xVwwAiWBlI3OQ/C6+A6AuSTSYOg5fswz8F/xXTa7CR9UBkp
+ X4nGjumgEW3IzlkaREsKoH4F7TnJZhGPN0ODtDpVlJcGyDiI0GC6yxCVfW9OKNF/gThqZqJItSx
+ vNR/rUt7FvmmT2IVxNZVcrZ3MDu308b+os7FVPoeKJkVKUzaQKxWZ8d0Tgb/nsTv0E6NAEzCT+Q
+ qYD/TXaL4lht2nFcQ67jh212nUXKQlvh6QkcNSMyM8N1ZoDY8FrwVaJqJGYu3rkRcwDz2wvzl1X
+ NvicM2y5AGAji7W9W5FUxVA==
 X-Developer-Key: i=sre@kernel.org; a=openpgp;
  fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
 
-Some power domains require extra voltages to be applied. For example
-trying to enable the GPU power domain on RK3588 fails when the SoC
-does not have VDD GPU enabled. The same is expected to happen for
-the NPU, which also has a dedicated supply line.
+Enabling the GPU power domain requires that the GPU regulator is
+enabled. The regulator is enabled at boot time, but gets disabled
+automatically when there are no users.
 
-We get the regulator using devm_of_regulator_get(), so a missing
-dependency in the devicetree is handled gracefully by printing a warning
-and creating a dummy regulator. This is necessary, since existing DTs do
-not have the regulator described. They might still work if the regulator
-is marked as always-on. It is also working if the regulator is enabled
-at boot time and the GPU driver is probed before the kernel disables
-unused regulators.
+This means the system might run into a failure state hanging the
+whole system for the following use cases:
 
-The regulator itself is not acquired at driver probe time, since that
-creates an unsolvable circular dependency. The power domain driver must
-be probed early, since SoC peripherals need it. Regulators on the other
-hand depend on SoC peripherals like SPI, I2C or GPIO. MediaTek does not
-run into this, since they have two power domain drivers.
+ * if the GPU driver is being probed late (e.g. build as a
+   module and firmware is not in initramfs), the regulator
+   might already have been disabled. In that case the power
+   domain is enabled before the regulator.
+ * unbinding the GPU driver will disable the PM domain and
+   the regulator. When the driver is bound again, the PM
+   domain will be enabled before the regulator and error
+   appears.
+
+Avoid this by adding an explicit regulator dependency to the
+power domain.
 
 Tested-by: Heiko Stuebner <heiko@sntech.de>
-Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Reported-by: Adrián Martínez Larumbe <adrian.larumbe@collabora.com>
+Tested-by: Adrian Larumbe <adrian.larumbe@collabora.com> # On Rock 5B
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/pmdomain/rockchip/pm-domains.c | 113 +++++++++++++++++++++++----------
- 1 file changed, 79 insertions(+), 34 deletions(-)
+ arch/arm64/boot/dts/rockchip/rk3588-armsom-lm7.dtsi           | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-armsom-sige7.dts          | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-base.dtsi                 | 2 +-
+ arch/arm64/boot/dts/rockchip/rk3588-coolpi-cm5.dtsi           | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-edgeble-neu6a-common.dtsi | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts              | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-fet3588-c.dtsi            | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-firefly-core-3588j.dtsi   | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-friendlyelec-cm3588.dtsi  | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-h96-max-v58.dts           | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts                | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi            | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-ok3588-c.dts              | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-orangepi-5.dtsi           | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-quartzpro64.dts           | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts            | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts               | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi                | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-toybrick-x0.dts           | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi           | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-coolpi-4b.dts            | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-evb1-v10.dts             | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts        | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts      | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-khadas-edge2.dts         | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-nanopi-r6.dtsi           | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-odroid-m2.dts            | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-orangepi-5.dtsi          | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts              | 4 ++++
+ arch/arm64/boot/dts/rockchip/rk3588s-rock-5c.dts              | 4 ++++
+ 30 files changed, 117 insertions(+), 1 deletion(-)
 
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index ac3f6e2080d1c3aa3d0b6fa60949c22a7d256bde..9f6640063fda623ad985283c8c637581247764f0 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -18,6 +18,7 @@
- #include <linux/of_clk.h>
- #include <linux/clk.h>
- #include <linux/regmap.h>
-+#include <linux/regulator/consumer.h>
- #include <linux/mfd/syscon.h>
- #include <soc/rockchip/pm_domains.h>
- #include <dt-bindings/power/px30-power.h>
-@@ -44,6 +45,7 @@ struct rockchip_domain_info {
- 	int idle_mask;
- 	int ack_mask;
- 	bool active_wakeup;
-+	bool need_regulator;
- 	int pwr_w_mask;
- 	int req_w_mask;
- 	int clk_ungate_mask;
-@@ -92,6 +94,8 @@ struct rockchip_pm_domain {
- 	u32 *qos_save_regs[MAX_QOS_REGS_NUM];
- 	int num_clks;
- 	struct clk_bulk_data *clks;
-+	struct device_node *node;
-+	struct regulator *supply;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-armsom-lm7.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-armsom-lm7.dtsi
+index a3138d2d384c628ae2b518441145d12e73d19ee1..e44125e9a8fb6def6a87472884bdf990d49b1d5f 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-armsom-lm7.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-armsom-lm7.dtsi
+@@ -114,6 +114,10 @@ regulator-state-mem {
+ 	};
  };
  
- struct rockchip_pmu {
-@@ -129,7 +133,7 @@ struct rockchip_pmu {
- 	.active_wakeup = wakeup,			\
- }
- 
--#define DOMAIN_M_O_R(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, wakeup)	\
-+#define DOMAIN_M_O_R(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, wakeup, regulator)	\
- {							\
- 	.name = _name,					\
- 	.pwr_offset = p_offset,				\
-@@ -145,6 +149,7 @@ struct rockchip_pmu {
- 	.idle_mask = (idle),				\
- 	.ack_mask = (ack),				\
- 	.active_wakeup = wakeup,			\
-+	.need_regulator = regulator,			\
- }
- 
- #define DOMAIN_M_O_R_G(_name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, ack, g_mask, wakeup)	\
-@@ -303,8 +308,8 @@ void rockchip_pmu_unblock(void)
- }
- EXPORT_SYMBOL_GPL(rockchip_pmu_unblock);
- 
--#define DOMAIN_RK3588(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, wakeup)	\
--	DOMAIN_M_O_R(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, idle, wakeup)
-+#define DOMAIN_RK3588(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, wakeup, regulator)	\
-+	DOMAIN_M_O_R(name, p_offset, pwr, status, m_offset, m_status, r_status, r_offset, req, idle, idle, wakeup, regulator)
- 
- static bool rockchip_pmu_domain_is_idle(struct rockchip_pm_domain *pd)
- {
-@@ -622,18 +627,57 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
- 	return ret;
- }
- 
-+static int rockchip_pd_regulator_disable(struct rockchip_pm_domain *pd)
-+{
-+	return IS_ERR_OR_NULL(pd->supply) ? 0 : regulator_disable(pd->supply);
-+}
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
 +
-+static int rockchip_pd_regulator_enable(struct rockchip_pm_domain *pd)
-+{
-+	struct rockchip_pmu *pmu = pd->pmu;
-+
-+	if (!pd->info->need_regulator)
-+		return 0;
-+
-+	if (IS_ERR_OR_NULL(pd->supply)) {
-+		pd->supply = devm_of_regulator_get(pmu->dev, pd->node, "domain");
-+
-+		if (IS_ERR(pd->supply))
-+			return PTR_ERR(pd->supply);
-+	}
-+
-+	return regulator_enable(pd->supply);
-+}
-+
- static int rockchip_pd_power_on(struct generic_pm_domain *domain)
- {
- 	struct rockchip_pm_domain *pd = to_rockchip_pd(domain);
-+	int ret;
-+
-+	ret = rockchip_pd_regulator_enable(pd);
-+	if (ret) {
-+		dev_err(pd->pmu->dev, "Failed to enable supply: %d\n", ret);
-+		return ret;
-+	}
- 
--	return rockchip_pd_power(pd, true);
-+	ret = rockchip_pd_power(pd, true);
-+	if (ret)
-+		rockchip_pd_regulator_disable(pd);
-+
-+	return ret;
- }
- 
- static int rockchip_pd_power_off(struct generic_pm_domain *domain)
- {
- 	struct rockchip_pm_domain *pd = to_rockchip_pd(domain);
-+	int ret;
- 
--	return rockchip_pd_power(pd, false);
-+	ret = rockchip_pd_power(pd, false);
-+	if (ret)
-+		return ret;
-+
-+	rockchip_pd_regulator_disable(pd);
-+	return ret;
- }
- 
- static int rockchip_pd_attach_dev(struct generic_pm_domain *genpd,
-@@ -714,6 +758,7 @@ static int rockchip_pm_add_one_domain(struct rockchip_pmu *pmu,
- 
- 	pd->info = pd_info;
- 	pd->pmu = pmu;
-+	pd->node = node;
- 
- 	pd->num_clks = of_clk_get_parent_count(node);
- 	if (pd->num_clks > 0) {
-@@ -1177,35 +1222,35 @@ static const struct rockchip_domain_info rk3576_pm_domains[] = {
+ &saradc {
+ 	vref-supply = <&avcc_1v8_s0>;
+ 	status = "okay";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-armsom-sige7.dts b/arch/arm64/boot/dts/rockchip/rk3588-armsom-sige7.dts
+index b89888fe5d464cae642f34f97da70e9ae111188a..6a0fffaa26ee8d422d87ba528e707236bf99a042 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-armsom-sige7.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-armsom-sige7.dts
+@@ -318,6 +318,10 @@ &pcie3x4 {
+ 	status = "okay";
  };
  
- static const struct rockchip_domain_info rk3588_pm_domains[] = {
--	[RK3588_PD_GPU]		= DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       0x0, 0,       BIT(1),  0x0, BIT(0),  BIT(0),  false),
--	[RK3588_PD_NPU]		= DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0x0, 0,       0,       0x0, 0,       0,       false),
--	[RK3588_PD_VCODEC]	= DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0x0, 0,       0,       0x0, 0,       0,       false),
--	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false),
--	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false),
--	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false),
--	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false),
--	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false),
--	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false),
--	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false),
--	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       0x0, BIT(18), BIT(9),  0x0, BIT(8),  BIT(8),  false),
--	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       0x0, BIT(19), BIT(10), 0x0, 0,       0,       false),
--	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       0x0, BIT(20), BIT(11), 0x0, BIT(9),  BIT(9),  false),
--	[RK3588_PD_VI]		= DOMAIN_RK3588("vi",      0x0, BIT(13), 0,       0x0, BIT(21), BIT(12), 0x0, BIT(10), BIT(10), false),
--	[RK3588_PD_FEC]		= DOMAIN_RK3588("fec",     0x0, BIT(14), 0,       0x0, BIT(22), BIT(13), 0x0, 0,       0,       false),
--	[RK3588_PD_ISP1]	= DOMAIN_RK3588("isp1",    0x0, BIT(15), 0,       0x0, BIT(23), BIT(14), 0x0, BIT(11), BIT(11), false),
--	[RK3588_PD_RGA31]	= DOMAIN_RK3588("rga31",   0x4, BIT(0),  0,       0x0, BIT(24), BIT(15), 0x0, BIT(12), BIT(12), false),
--	[RK3588_PD_VOP]		= DOMAIN_RK3588("vop",     0x4, BIT(1),  0,       0x0, BIT(25), BIT(16), 0x0, BIT(13) | BIT(14), BIT(13) | BIT(14), false),
--	[RK3588_PD_VO0]		= DOMAIN_RK3588("vo0",     0x4, BIT(2),  0,       0x0, BIT(26), BIT(17), 0x0, BIT(15), BIT(15), false),
--	[RK3588_PD_VO1]		= DOMAIN_RK3588("vo1",     0x4, BIT(3),  0,       0x0, BIT(27), BIT(18), 0x4, BIT(0),  BIT(16), false),
--	[RK3588_PD_AUDIO]	= DOMAIN_RK3588("audio",   0x4, BIT(4),  0,       0x0, BIT(28), BIT(19), 0x4, BIT(1),  BIT(17), false),
--	[RK3588_PD_PHP]		= DOMAIN_RK3588("php",     0x4, BIT(5),  0,       0x0, BIT(29), BIT(20), 0x4, BIT(5),  BIT(21), false),
--	[RK3588_PD_GMAC]	= DOMAIN_RK3588("gmac",    0x4, BIT(6),  0,       0x0, BIT(30), BIT(21), 0x0, 0,       0,       false),
--	[RK3588_PD_PCIE]	= DOMAIN_RK3588("pcie",    0x4, BIT(7),  0,       0x0, BIT(31), BIT(22), 0x0, 0,       0,       true),
--	[RK3588_PD_NVM]		= DOMAIN_RK3588("nvm",     0x4, BIT(8),  BIT(24), 0x4, 0,       0,       0x4, BIT(2),  BIT(18), false),
--	[RK3588_PD_NVM0]	= DOMAIN_RK3588("nvm0",    0x4, BIT(9),  0,       0x4, BIT(1),  BIT(23), 0x0, 0,       0,       false),
--	[RK3588_PD_SDIO]	= DOMAIN_RK3588("sdio",    0x4, BIT(10), 0,       0x4, BIT(2),  BIT(24), 0x4, BIT(3),  BIT(19), false),
--	[RK3588_PD_USB]		= DOMAIN_RK3588("usb",     0x4, BIT(11), 0,       0x4, BIT(3),  BIT(25), 0x4, BIT(4),  BIT(20), true),
--	[RK3588_PD_SDMMC]	= DOMAIN_RK3588("sdmmc",   0x4, BIT(13), 0,       0x4, BIT(5),  BIT(26), 0x0, 0,       0,       false),
-+	[RK3588_PD_GPU]		= DOMAIN_RK3588("gpu",     0x0, BIT(0),  0,       0x0, 0,       BIT(1),  0x0, BIT(0),  BIT(0),  false, true),
-+	[RK3588_PD_NPU]		= DOMAIN_RK3588("npu",     0x0, BIT(1),  BIT(1),  0x0, 0,       0,       0x0, 0,       0,       false, true),
-+	[RK3588_PD_VCODEC]	= DOMAIN_RK3588("vcodec",  0x0, BIT(2),  BIT(2),  0x0, 0,       0,       0x0, 0,       0,       false, false),
-+	[RK3588_PD_NPUTOP]	= DOMAIN_RK3588("nputop",  0x0, BIT(3),  0,       0x0, BIT(11), BIT(2),  0x0, BIT(1),  BIT(1),  false, false),
-+	[RK3588_PD_NPU1]	= DOMAIN_RK3588("npu1",    0x0, BIT(4),  0,       0x0, BIT(12), BIT(3),  0x0, BIT(2),  BIT(2),  false, false),
-+	[RK3588_PD_NPU2]	= DOMAIN_RK3588("npu2",    0x0, BIT(5),  0,       0x0, BIT(13), BIT(4),  0x0, BIT(3),  BIT(3),  false, false),
-+	[RK3588_PD_VENC0]	= DOMAIN_RK3588("venc0",   0x0, BIT(6),  0,       0x0, BIT(14), BIT(5),  0x0, BIT(4),  BIT(4),  false, false),
-+	[RK3588_PD_VENC1]	= DOMAIN_RK3588("venc1",   0x0, BIT(7),  0,       0x0, BIT(15), BIT(6),  0x0, BIT(5),  BIT(5),  false, false),
-+	[RK3588_PD_RKVDEC0]	= DOMAIN_RK3588("rkvdec0", 0x0, BIT(8),  0,       0x0, BIT(16), BIT(7),  0x0, BIT(6),  BIT(6),  false, false),
-+	[RK3588_PD_RKVDEC1]	= DOMAIN_RK3588("rkvdec1", 0x0, BIT(9),  0,       0x0, BIT(17), BIT(8),  0x0, BIT(7),  BIT(7),  false, false),
-+	[RK3588_PD_VDPU]	= DOMAIN_RK3588("vdpu",    0x0, BIT(10), 0,       0x0, BIT(18), BIT(9),  0x0, BIT(8),  BIT(8),  false, false),
-+	[RK3588_PD_RGA30]	= DOMAIN_RK3588("rga30",   0x0, BIT(11), 0,       0x0, BIT(19), BIT(10), 0x0, 0,       0,       false, false),
-+	[RK3588_PD_AV1]		= DOMAIN_RK3588("av1",     0x0, BIT(12), 0,       0x0, BIT(20), BIT(11), 0x0, BIT(9),  BIT(9),  false, false),
-+	[RK3588_PD_VI]		= DOMAIN_RK3588("vi",      0x0, BIT(13), 0,       0x0, BIT(21), BIT(12), 0x0, BIT(10), BIT(10), false, false),
-+	[RK3588_PD_FEC]		= DOMAIN_RK3588("fec",     0x0, BIT(14), 0,       0x0, BIT(22), BIT(13), 0x0, 0,       0,       false, false),
-+	[RK3588_PD_ISP1]	= DOMAIN_RK3588("isp1",    0x0, BIT(15), 0,       0x0, BIT(23), BIT(14), 0x0, BIT(11), BIT(11), false, false),
-+	[RK3588_PD_RGA31]	= DOMAIN_RK3588("rga31",   0x4, BIT(0),  0,       0x0, BIT(24), BIT(15), 0x0, BIT(12), BIT(12), false, false),
-+	[RK3588_PD_VOP]		= DOMAIN_RK3588("vop",     0x4, BIT(1),  0,       0x0, BIT(25), BIT(16), 0x0, BIT(13) | BIT(14), BIT(13) | BIT(14), false, false),
-+	[RK3588_PD_VO0]		= DOMAIN_RK3588("vo0",     0x4, BIT(2),  0,       0x0, BIT(26), BIT(17), 0x0, BIT(15), BIT(15), false, false),
-+	[RK3588_PD_VO1]		= DOMAIN_RK3588("vo1",     0x4, BIT(3),  0,       0x0, BIT(27), BIT(18), 0x4, BIT(0),  BIT(16), false, false),
-+	[RK3588_PD_AUDIO]	= DOMAIN_RK3588("audio",   0x4, BIT(4),  0,       0x0, BIT(28), BIT(19), 0x4, BIT(1),  BIT(17), false, false),
-+	[RK3588_PD_PHP]		= DOMAIN_RK3588("php",     0x4, BIT(5),  0,       0x0, BIT(29), BIT(20), 0x4, BIT(5),  BIT(21), false, false),
-+	[RK3588_PD_GMAC]	= DOMAIN_RK3588("gmac",    0x4, BIT(6),  0,       0x0, BIT(30), BIT(21), 0x0, 0,       0,       false, false),
-+	[RK3588_PD_PCIE]	= DOMAIN_RK3588("pcie",    0x4, BIT(7),  0,       0x0, BIT(31), BIT(22), 0x0, 0,       0,       true, false),
-+	[RK3588_PD_NVM]		= DOMAIN_RK3588("nvm",     0x4, BIT(8),  BIT(24), 0x4, 0,       0,       0x4, BIT(2),  BIT(18), false, false),
-+	[RK3588_PD_NVM0]	= DOMAIN_RK3588("nvm0",    0x4, BIT(9),  0,       0x4, BIT(1),  BIT(23), 0x0, 0,       0,       false, false),
-+	[RK3588_PD_SDIO]	= DOMAIN_RK3588("sdio",    0x4, BIT(10), 0,       0x4, BIT(2),  BIT(24), 0x4, BIT(3),  BIT(19), false, false),
-+	[RK3588_PD_USB]		= DOMAIN_RK3588("usb",     0x4, BIT(11), 0,       0x4, BIT(3),  BIT(25), 0x4, BIT(4),  BIT(20), true, false),
-+	[RK3588_PD_SDMMC]	= DOMAIN_RK3588("sdmmc",   0x4, BIT(13), 0,       0x4, BIT(5),  BIT(26), 0x0, 0,       0,       false, false),
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	hym8563 {
+ 		hym8563_int: hym8563-int {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
+index f937922cb8ef0d0761992f87e31561c948f54556..64b2e219d2e00ef67c1228d488158e9afb2e1263 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-base.dtsi
+@@ -859,7 +859,7 @@ power-domain@RK3588_PD_NPU2 {
+ 				};
+ 			};
+ 			/* These power domains are grouped by VD_GPU */
+-			power-domain@RK3588_PD_GPU {
++			pd_gpu: power-domain@RK3588_PD_GPU {
+ 				reg = <RK3588_PD_GPU>;
+ 				clocks = <&cru CLK_GPU>,
+ 					 <&cru CLK_GPU_COREGROUP>,
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-coolpi-cm5.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-coolpi-cm5.dtsi
+index 71ed680621b880dd2a001d5fa4f46d389f7ac5cd..cc37f082adea0f848e8e84b0bb780b1cf673355d 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-coolpi-cm5.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-coolpi-cm5.dtsi
+@@ -277,6 +277,10 @@ &pcie2x1l2 {
+ 	status = "okay";
  };
  
- static const struct rockchip_pmu_info px30_pmu = {
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	hym8563 {
+ 		hym8563_int: hym8563-int {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-edgeble-neu6a-common.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-edgeble-neu6a-common.dtsi
+index 5e72d0eff0e0f0a2bba718bc67dc2dc8f9ac183f..8a783dc64c0ef3d7c19358ae0d6e020eedfd2130 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-edgeble-neu6a-common.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-edgeble-neu6a-common.dtsi
+@@ -126,6 +126,10 @@ regulator-state-mem {
+ 	};
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	leds {
+ 		led_user_en: led_user_en {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+index 3fd0665cde2ca15cd309919ff751b00e0f53a400..8c9ad21b0b3c280d22da23d0d462d311eb554804 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-evb1-v10.dts
+@@ -519,6 +519,10 @@ &pcie3x4 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	audio {
+ 		hp_detect: headphone-detect {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-fet3588-c.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-fet3588-c.dtsi
+index 3900513173892330d5bedf23dd20165f88ae6fcb..4331cdc70f973dc23fb494ac4dba2a569745e4a8 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-fet3588-c.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-fet3588-c.dtsi
+@@ -205,6 +205,10 @@ regulator-state-mem {
+ 	};
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	leds {
+ 		led_rgb_b: led-rgb-b {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-firefly-core-3588j.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-firefly-core-3588j.dtsi
+index 42c523b553c98b1a1952240e424db2fdc2976469..80e16ea4154c0ef06f2785005ca129f12fcbdfc9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-firefly-core-3588j.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-firefly-core-3588j.dtsi
+@@ -108,6 +108,10 @@ regulator-state-mem {
+ 	};
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &sdhci {
+ 	bus-width = <8>;
+ 	no-sdio;
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-friendlyelec-cm3588.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-friendlyelec-cm3588.dtsi
+index e3a9598b99fca8873fb4d511f82b9e2af612b8f3..1af0a30866f619ae6f1db549f9158679135689ac 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-friendlyelec-cm3588.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-friendlyelec-cm3588.dtsi
+@@ -256,6 +256,10 @@ &pcie2x1l2 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	gpio-leds {
+ 		led_sys_pin: led-sys-pin {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-h96-max-v58.dts b/arch/arm64/boot/dts/rockchip/rk3588-h96-max-v58.dts
+index a0e685b55d21ac6bea9060a0593cfba3a11d38cf..73d8ce4fde2b8144b2e9cf4854e759141c20f119 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-h96-max-v58.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-h96-max-v58.dts
+@@ -334,6 +334,10 @@ wifi: wifi@0,0 {
+ 	};
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	hym8563 {
+ 		hym8563_int: hym8563-int {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts b/arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts
+index 20b566d4168f038052a05e66e42db9a030792421..9a43e4fdc4f549a65d2767523beb9c880db6bf36 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-jaguar.dts
+@@ -451,6 +451,10 @@ &pcie3x4 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	emmc {
+ 		emmc_reset: emmc-reset {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi
+index 0d9b5020acc099f84f89ef47a43d7a6cbb867719..bbe500cc924b4c4c1ddd833c32c39cf6c20b60e3 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-nanopc-t6.dtsi
+@@ -565,6 +565,10 @@ &pcie3x4 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	gpio-leds {
+ 		sys_led_pin: sys-led-pin {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-ok3588-c.dts b/arch/arm64/boot/dts/rockchip/rk3588-ok3588-c.dts
+index 1c0851b45eb8eef5e2626dfde8e6c145392754a9..fbe1d5c06d903340ee9faa6a34cc6f7289957a09 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-ok3588-c.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-ok3588-c.dts
+@@ -312,6 +312,10 @@ &pcie3x4 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	pcie2 {
+ 		pcie2_0_rst: pcie2-0-rst {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-orangepi-5.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-orangepi-5.dtsi
+index a98e804a09495c65454c5262c8c8ceebf06d0569..261655c7ccbfe7a89aa07d4df2d4483352687265 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-orangepi-5.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-orangepi-5.dtsi
+@@ -348,6 +348,10 @@ &pcie3x4 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &saradc {
+ 	vref-supply = <&vcc_1v8_s0>;
+ 	status = "okay";
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-quartzpro64.dts b/arch/arm64/boot/dts/rockchip/rk3588-quartzpro64.dts
+index 088cfade6f6f14b6383ab844fa174c69fa711fc0..b46abdc27c71deb58a3409a9e45b3b0e36315da3 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-quartzpro64.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-quartzpro64.dts
+@@ -347,6 +347,10 @@ rgmii_phy: ethernet-phy@1 {
+ 	};
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	hym8563 {
+ 		hym8563_int: hym8563-int {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts
+index 6d68f70284e450bb9f58e201ab53f46227345213..eaa2e527a918d46f638a061837f5808b859741f9 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5-itx.dts
+@@ -564,6 +564,10 @@ &pcie3x4 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	hym8563 {
+ 		rtc_int: rtc-int {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+index 5acec6b97a46a870e5437f15b1078b2bdf0143b8..b4f31b7d1c77f1459409a7ff6f0a929434a5f518 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-rock-5b.dts
+@@ -409,6 +409,10 @@ &pcie3x4 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	hym8563 {
+ 		hym8563_int: hym8563-int {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi
+index e8fa449517c27c3be48324e91c033865416b2b2a..e079bf652071649fe3911f3d79e77b9de23bd9d2 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-tiger.dtsi
+@@ -336,6 +336,10 @@ &pcie3x4 {
+ 	reset-gpios = <&gpio3 RK_PB6 GPIO_ACTIVE_HIGH>;
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	emmc {
+ 		emmc_reset: emmc-reset {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-toybrick-x0.dts b/arch/arm64/boot/dts/rockchip/rk3588-toybrick-x0.dts
+index 3cbee5b974700d1e687973566aea229ddc92174a..5a428e00ab938ee500561472d55d743f531d3039 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-toybrick-x0.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588-toybrick-x0.dts
+@@ -289,6 +289,10 @@ rgmii_phy: ethernet-phy@1 {
+ 	};
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	rtl8211f {
+ 		rtl8211f_rst: rtl8211f-rst {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi b/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
+index 6bc46734cc1407833f1133dc640ef57f214d94db..711ac4f2c7cb66d97dc76320f9c87deefcc85dd2 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588-turing-rk1.dtsi
+@@ -287,6 +287,10 @@ &pcie3x4 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	fan {
+ 		fan_int: fan-int {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-coolpi-4b.dts b/arch/arm64/boot/dts/rockchip/rk3588s-coolpi-4b.dts
+index f471baca6d3101ce7e850b666589587dc70d8a17..af4a4e52b5031832edbd72ce5c6216e1f94e604f 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-coolpi-4b.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-coolpi-4b.dts
+@@ -361,6 +361,10 @@ &pcie2x1l2 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	hym8563 {
+ 		hym8563_int: hym8563-int {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-evb1-v10.dts b/arch/arm64/boot/dts/rockchip/rk3588s-evb1-v10.dts
+index bc4077575beb6298917ff545ae5eb721bf1c4651..5b3de53630c6302fe678be5e2b85dd6979bbd2a7 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-evb1-v10.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-evb1-v10.dts
+@@ -340,6 +340,10 @@ &pcie2x1l2 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	audio {
+ 		hp_detect: headphone-detect {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts b/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
+index 812bba0aef1a8b48488339162f232bde30077592..8f70c00a46d30170307f0eeb57cb1533d1d17834 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-gameforce-ace.dts
+@@ -675,6 +675,10 @@ &pcie2x1l1 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	audio-amplifier {
+ 		headphone_amplifier_en: headphone-amplifier-en {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts b/arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts
+index 74a4f03e05e35138232f5393b75c6853fa05d7af..80a8dca4d6a3c83cd5c4c495752a1a634f387403 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-indiedroid-nova.dts
+@@ -455,6 +455,10 @@ &pcie2x1l2 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	bluetooth-pins {
+ 		bt_reset: bt-reset {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-khadas-edge2.dts b/arch/arm64/boot/dts/rockchip/rk3588s-khadas-edge2.dts
+index ac48e7fd3923f4222929afb03b608a647d2c2ed8..88a5e822ed17d4eae555b420f9eb3b75fa5b017e 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-khadas-edge2.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-khadas-edge2.dts
+@@ -233,6 +233,10 @@ hym8563: rtc@51 {
+ 	};
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	vdd_sd {
+ 		vdd_sd_en: vdd-sd-en {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-nanopi-r6.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s-nanopi-r6.dtsi
+index cd47969fadba051a22fdb8118a232c1c124c00b2..fbf062ec3bf17ac6966318be55243e6f2b87a9aa 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-nanopi-r6.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-nanopi-r6.dtsi
+@@ -359,6 +359,10 @@ &pcie2x1l2 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	gpio-key {
+ 		key1_pin: key1-pin {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-odroid-m2.dts b/arch/arm64/boot/dts/rockchip/rk3588s-odroid-m2.dts
+index 1463bd36b1b2e37dfa0da953b3837b33e4e9bf7e..a72063c55140105d5098f1cd7ebf79ad4e90e47c 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-odroid-m2.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-odroid-m2.dts
+@@ -433,6 +433,10 @@ &pcie2x1l2 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	lcd {
+ 		lcd_pwren: lcd-pwren {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-orangepi-5.dtsi b/arch/arm64/boot/dts/rockchip/rk3588s-orangepi-5.dtsi
+index 9e16960b87055a120b6208e75c7ec4189c0e0b4a..be0234d2257d469002e67f51d72c7ac075da4a7d 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-orangepi-5.dtsi
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-orangepi-5.dtsi
+@@ -365,6 +365,10 @@ rgmii_phy1: ethernet-phy@1 {
+ 	};
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	hym8563 {
+ 		hym8563_int: hym8563-int {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
+index 676cc4fec269ef8955630680791231deb8a775cb..f894742b1ebef15e943e7f0894f7ae95ac03e40b 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5a.dts
+@@ -359,6 +359,10 @@ &pcie2x1l2 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	leds {
+ 		io_led: io-led {
+diff --git a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5c.dts b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5c.dts
+index ef8ce10d8f50ba73f1c9b856355e559c6b76b75d..dd7317bab6135c266f5e767f5efc0fa7ae936183 100644
+--- a/arch/arm64/boot/dts/rockchip/rk3588s-rock-5c.dts
++++ b/arch/arm64/boot/dts/rockchip/rk3588s-rock-5c.dts
+@@ -455,6 +455,10 @@ &pcie2x1l2 {
+ 	status = "okay";
+ };
+ 
++&pd_gpu {
++	domain-supply = <&vdd_gpu_s0>;
++};
++
+ &pinctrl {
+ 	leds {
+ 		led_pins: led-pins {
 
 -- 
 2.47.2
