@@ -1,59 +1,58 @@
-Return-Path: <linux-pm+bounces-22568-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22571-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A946A3E490
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 20:03:34 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4F1F8A3E488
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 20:03:10 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E0E3917BB57
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 19:01:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DCAE41885575
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 19:02:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC5B6267F4E;
-	Thu, 20 Feb 2025 18:58:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BC9C92698A8;
+	Thu, 20 Feb 2025 18:58:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="IVp9EtEK"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="FalHM5N7"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E71BA267715;
-	Thu, 20 Feb 2025 18:58:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EEB142690EC;
+	Thu, 20 Feb 2025 18:58:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740077920; cv=none; b=AZPtcx6AD2ImFM8yBjGay3ScnqyZawPmvwBj3XGcV2YP01RyAALZKWmAvQ1Mmp0mxlm16oT6F8JWjMBYITbYKUTHNBeRzDpp+l0FfKVUbJ+vm54B5wXF3MkBV9SP4by0qXE6ZfZgNSC3Gtnx08UyHiCIKEAov1iW0zUnAPUfeb0=
+	t=1740077925; cv=none; b=m+rxUlwtE2g2HjigdvGSfsIYqwBcCpFTlDg0fc92v3xSiogs6wTAnjL45ifisDmzezv+fHnYPpOhm2oIzW7bHq5qZVeoCTiA7269JrWgYHycCYspcEK3QAkBFjntKWEyEjdwIDkPvevncG3b7qaxMNZKs4KgcEf22/EedwsPikM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740077920; c=relaxed/simple;
-	bh=7o+OpRxIZPgyQla3O1ppJeGi5Iy50Gs9yFdJjgvgUAs=;
+	s=arc-20240116; t=1740077925; c=relaxed/simple;
+	bh=gNnZPfQXVKbdkjA8KmghaCar55X1o4WqguMKY2lNPdA=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UVOzRgJ9jY7ptREdVzkf0ABYWwRFzo14a04aHkDuU8ga5x0rr66U87P6xf6FVX5+23fanENfcCIccyNfh2H6vml7oi8niR19rWDd9gqVKkcBpB90yYNomISz7z83O8qWwjiQ96SJ1X+ErG3fglKmmb/CMCvfyngxZnOjomSq57M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=IVp9EtEK; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:To:Cc; b=BsnQPHbmkP7l+tBhbnPmzzlCGX1XN+e/ATuAMHYsDQJrGBPXmq6q2QAlWwGnF8y8QBCDPcMC06yoHjnbiGixGZYTJMDqfE/DSlAqhMaZZ2+Owvka9J97kInZIfcqrC41Y4Q0Kj6ffUMPsU8ODcmgQ8lmQl8Gztf+1GcwHT9SDKg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=FalHM5N7; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1740077914;
-	bh=7o+OpRxIZPgyQla3O1ppJeGi5Iy50Gs9yFdJjgvgUAs=;
+	s=mail; t=1740077913;
+	bh=gNnZPfQXVKbdkjA8KmghaCar55X1o4WqguMKY2lNPdA=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=IVp9EtEK1EDQrXxaycMMOyjcbpc0kzZZ0nRjIu+Ws1l3EEloNNPlCMyptzdC0UIWN
-	 NJI/GHuw9E6dJFdTT4hgYBNisc8yTRAYvsbLBci+y8jSlqm/caEA9TX8GbEGY/CzcU
-	 OXuRQxpTA8ft7U30tLCDW4XUZhPK/8FNaLkDWmsaiSnnXnMj/BumJJ38Bqcb/69ggB
-	 0FFQjGZNvCxN153tPUVbcxwMlvr6SafMmUpIZD1tnZBBQtwKH0YVF9vpjm1zz/YWe1
-	 +sIfDh6poI049lGCy8jW4hP9+j7ISuWbq0eBjW231dkAQLKxXHxyM5J+ijgwM09ELy
-	 Xh6p3WUKP6tBg==
+	b=FalHM5N7yj1ph+ic2Rt+KPGx9VMJcPPptj8SV/2nbRdMjq2qq4hxeCK123RBU5cAQ
+	 N8yD2i+MQkIYKg+Z2CG2vWyOvybzmaMrzntH4V6ai5zPBRSAA3Chgqr9uM4t+5acWX
+	 nMlK2wuElp5ThP0pzWPgnXfxeQsmZMwuxl/Az5VI/TXOU708MdZZkiLrP2kTVYFAGB
+	 MWWR6PusEozyuaO7kSHnq/vdG5sPr+ZAB4WUG1wkVL5kduQuAofOiUGhBo2ZERvghf
+	 RyywJrkbswOwpua08JMoAaBj8+EEq1/+kobdfQI9E5b7fYAJE3CSlXy7+EbCzaKqOt
+	 8rg9iHPaP6dgg==
 Received: from jupiter.universe (dyndsl-091-248-085-196.ewe-ip-backbone.de [91.248.85.196])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
 	(No client certificate requested)
 	(Authenticated sender: sre)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id C0C9417E1575;
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id BB17017E1573;
 	Thu, 20 Feb 2025 19:58:33 +0100 (CET)
 Received: by jupiter.universe (Postfix, from userid 1000)
-	id 0FFA948003C; Thu, 20 Feb 2025 19:58:33 +0100 (CET)
+	id 11E0D48003D; Thu, 20 Feb 2025 19:58:33 +0100 (CET)
 From: Sebastian Reichel <sebastian.reichel@collabora.com>
-Date: Thu, 20 Feb 2025 19:58:08 +0100
-Subject: [PATCH v6 5/8] pmdomain: rockchip: fix rockchip_pd_power error
- handling
+Date: Thu, 20 Feb 2025 19:58:09 +0100
+Subject: [PATCH v6 6/8] dt-bindings: power: rockchip: add regulator support
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -62,7 +61,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
-Message-Id: <20250220-rk3588-gpu-pwr-domain-regulator-v6-5-a4f9c24e5b81@kernel.org>
+Message-Id: <20250220-rk3588-gpu-pwr-domain-regulator-v6-6-a4f9c24e5b81@kernel.org>
 References: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
 In-Reply-To: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
 To: Mark Brown <broonie@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>, 
@@ -79,89 +78,55 @@ Cc: Liam Girdwood <lgirdwood@gmail.com>,
  devicetree@vger.kernel.org, 
  Sebastian Reichel <sebastian.reichel@collabora.com>
 X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=2291; i=sre@kernel.org;
- h=from:subject:message-id; bh=7NJATNPXUxCHC9s2+sZNOuBbjuSPKWLeZvtfpT8pW1U=;
- b=owJ4nAFtApL9kA0DAAoB2O7X88g7+poByyZiAGe3e1hL4X+nbgMp1JEPrMdG3lhEIY/+KdiFv
- wG1olm2UyDAvYkCMwQAAQoAHRYhBO9mDQdGP4tyanlUE9ju1/PIO/qaBQJnt3tYAAoJENju1/PI
- O/qaPoIP/0vjHTdhyezJwSEonLFUCkVFZgCpLgjI8o90JxV3bW2KdmwrYoKyTQpvvZfynFvor3a
- 2ImPkFp0do6BIzTwZAIMmrrJTDRfAHwP5xCeA5Gc50l364C529mm16ejKsHI8S49zvjeLK9WITP
- vtvWeTCNIGG4YOqhYot+WYPXUAAZjBr+viSuFCLYlX7AVoPihACO+CsaBj4MPpdXoAjwlQfoMtz
- nIAczI/0f2HcLG1+/hHG53bjjf2DdAxuZ752q+viB+G6ZCYN2NR5T5ZsqAcNbwHtrz49hu//cjP
- 3jsYpIFialmO+5OAgF6ITGmiIcY3+JntAz35ZSKcr5yTVRVLHy+yXOvBc1YPluEicgv52onY3H0
- PIQhEZy/PClqFlx4MOgvfKQ1mam2rzrCz+wKJhMMy0xG/xzjHvqx3uzXhzbYrZZ4w/qNtYBsiZD
- Nqww0GOtlV8AORBzmZCpv9YgGbPMZ+Z2tQAlHiG/8zg93ErLLzcdn+bXHHO3BnfwSpzLjCXkw1W
- dmwCCpUkJ9nXET2sjGZjRWUVM+ENNI9wsI2dVbI4Ixgcj6QdEhz28dCwMDZexZC8quY9ysuiLFa
- Gm0bStUfGK7Gi+x6J9hZyUZLp+LMwwrsWLiUJU+gY4hNwN57hnsKh9MnHPX5zYICecPbMu6Z9ud
- ervUTdkkKIoCeMbERLRQq5g==
+X-Developer-Signature: v=1; a=openpgp-sha256; l=1565; i=sre@kernel.org;
+ h=from:subject:message-id; bh=gNnZPfQXVKbdkjA8KmghaCar55X1o4WqguMKY2lNPdA=;
+ b=owJ4nAFtApL9kA0DAAoB2O7X88g7+poByyZiAGe3e1jhrocIPKlDYN5gJd0DLM1HYnT+lpJjI
+ B6f+HIyiXGbl4kCMwQAAQoAHRYhBO9mDQdGP4tyanlUE9ju1/PIO/qaBQJnt3tYAAoJENju1/PI
+ O/qahK0QAJ+gRjWLsQBmQ8CDRKD/2gFPon5Mi78UX6H0qkbavrw5m5e9T4UGw4JYnke3jZrZk9w
+ V1cv5zigz6nZ1Inc+dTMzNEGTW5MXr2su0Mf70vi2Hjc+Xju+ON3KK8F9iVBC1cpsMV/Qke9AMs
+ OyUbg7/yjiXjs3TbpHIFQVK7k6nXt7bfvCZLKvQV0ujjLyVcdQlzGeA1kg3TrQXPXFrrPlAnnu2
+ SH7u/8jtSIWczcWxf69MUDV/KwQIm7LmrCRnc1NLFEVJApYA//hPKaBumo2jxb7+7ipKAXv0FNr
+ G6/VgzopETqgbKXNGsxALJ17X9el6Cvd0rzsuqRy1PrDzICQymdu0eWge73OLeoSy6xAu1Oc7b6
+ 3ZnwI7fy4hJuC+m8j3ObpE7qR4jn/HE16W0LqRjOZUrjmKyT+ZQ9BJkHOoRdzDEFJhnDa2EHZ+k
+ ALw0b43wZr6pnL3w2SG2McoH7Hu+uoRRKT59qNIPmgjTuOgBfJhznNfJrw6a53vEzu8LuJxOPIK
+ BWB3BqlGFMrYVh0e8tAZTxt9D4ej664MSPAjx84m+8B5qPE/PmGOzqE1qrVSMKrCrFd/QPo0J+h
+ /wQAA56O3GPVOS0rCUClfpSmqf0zvTvHwKChKn1U4Xa6r7ogUdW43E1+b7cGFCCQ3CEN/xQH/gu
+ Jo9/kvrHL6rxaFLGBlaQ3bg==
 X-Developer-Key: i=sre@kernel.org; a=openpgp;
  fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
 
-From: Peter Geis <pgwipeout@gmail.com>
+Add optional support for a voltage supply required to enable a
+power domain. The binding follows the way it is handled by the
+Mediatek binding to keep things consistent.
 
-The calls rockchip_pd_power makes to rockchip_pmu_set_idle_request lack
-any return error handling, causing device drivers to incorrectly believe
-the hardware idle requests succeed when they may have failed. This leads
-to software possibly accessing hardware that is powered off and the
-subsequent SError panic that follows.
+This will initially be used by the RK3588 GPU power domain, which
+fails to be enabled when the GPU regulator is not enabled. It is
+not limited to that platform, since older generations have similar
+requirements. They worked around this by marking the regulators
+as always-on instead of describing the dependency.
 
-Add error checking and return errors to the calling function to prevent
-such crashes.
-
-gst-launch-1.0 videotestsrc num-buffers=2000 ! v4l2jpegenc ! fakesink
-Setting pipeline to PAUSED ...er-x64
-Pipeline is PREROLLING ...
-Redistribute latency...
-rockchip-pm-domain ff100000.syscon:power-controller: failed to get ack on domain 'hevc', val=0x98260
-SError Interrupt on CPU2, code 0x00000000bf000002 -- SError
-
-Signed-off-by: Peter Geis <pgwipeout@gmail.com>
-Link: https://lore.kernel.org/r/20241214215802.23989-1-pgwipeout@gmail.com
+Reviewed-by: Heiko Stuebner <heiko@sntech.de>
+Tested-by: Heiko Stuebner <heiko@sntech.de>
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
 ---
- drivers/pmdomain/rockchip/pm-domains.c | 17 ++++++++++-------
- 1 file changed, 10 insertions(+), 7 deletions(-)
+ Documentation/devicetree/bindings/power/rockchip,power-controller.yaml | 3 +++
+ 1 file changed, 3 insertions(+)
 
-diff --git a/drivers/pmdomain/rockchip/pm-domains.c b/drivers/pmdomain/rockchip/pm-domains.c
-index f4e555dac20a32978d71092dbe66cdd1226b8ac1..ac3f6e2080d1c3aa3d0b6fa60949c22a7d256bde 100644
---- a/drivers/pmdomain/rockchip/pm-domains.c
-+++ b/drivers/pmdomain/rockchip/pm-domains.c
-@@ -597,26 +597,29 @@ static int rockchip_pd_power(struct rockchip_pm_domain *pd, bool power_on)
- 		rockchip_pmu_save_qos(pd);
+diff --git a/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml b/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
+index 650dc0aae6f518578f57e8ec4335bc8251b736a7..ebab98987e492d64fff9977848fd8942ed96c4b9 100644
+--- a/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
++++ b/Documentation/devicetree/bindings/power/rockchip,power-controller.yaml
+@@ -132,6 +132,9 @@ $defs:
+           A number of phandles to clocks that need to be enabled
+           while power domain switches state.
  
- 		/* if powering down, idle request to NIU first */
--		rockchip_pmu_set_idle_request(pd, true);
-+		ret = rockchip_pmu_set_idle_request(pd, true);
-+		if (ret < 0)
-+			goto out;
- 	}
- 
- 	ret = rockchip_do_pmu_set_power_domain(pd, power_on);
--	if (ret < 0) {
--		clk_bulk_disable(pd->num_clks, pd->clks);
--		return ret;
--	}
-+	if (ret < 0)
-+		goto out;
- 
- 	if (power_on) {
- 		/* if powering up, leave idle mode */
--		rockchip_pmu_set_idle_request(pd, false);
-+		ret = rockchip_pmu_set_idle_request(pd, false);
-+		if (ret < 0)
-+			goto out;
- 
- 		rockchip_pmu_restore_qos(pd);
- 	}
- 
-+out:
- 	rockchip_pmu_ungate_clk(pd, false);
- 	clk_bulk_disable(pd->num_clks, pd->clks);
- 
--	return 0;
-+	return ret;
- }
- 
- static int rockchip_pd_power_on(struct generic_pm_domain *domain)
++      domain-supply:
++        description: domain regulator supply.
++
+       pm_qos:
+         $ref: /schemas/types.yaml#/definitions/phandle-array
+         items:
 
 -- 
 2.47.2
