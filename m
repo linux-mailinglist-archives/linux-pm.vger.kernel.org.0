@@ -1,178 +1,450 @@
-Return-Path: <linux-pm+bounces-22533-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22534-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 516D4A3D4C2
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 10:30:52 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC695A3D6DE
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 11:37:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 15E40188EE47
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 09:30:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5B6B316A83D
+	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 10:37:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 56B1E1F03C0;
-	Thu, 20 Feb 2025 09:30:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A658D1F0E31;
+	Thu, 20 Feb 2025 10:37:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="fWW/2AjN"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="bZhxs/tH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f43.google.com (mail-wm1-f43.google.com [209.85.128.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3AC391E570A
-	for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2025 09:30:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5A67F1F03E5;
+	Thu, 20 Feb 2025 10:37:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740043840; cv=none; b=LC9klCrQt4bhw9VYjO76NBzFw/f+HrD8N7oDsg792Q2NLJUCYk5L7tqY2Z90WwFB3w+Pkma0jc1/+Z5q0PIlSY5yhHx4x6ZYkDZexiNkhX9GZq0aNUtEq/WtTezzfYrThYIxCHfT/7bJZhYIPRyhV/Wk4zrUfREH9XsM4/zsDd4=
+	t=1740047823; cv=none; b=b2kQkOLWKrCfUNcLjqxz6OTj14F2DLHMwgOVBZ+mb5RekslRjir7e+SnyzKpy7xh269Dbs3XCEhgPPZVQuJW6hxPD02ENTalgmcxXiQ50W54iOJnmE1pym+EvLRDWD0K6XztJ37rDmtzm5qO9RductL0qPmje8XnAPvn8pqeiBs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740043840; c=relaxed/simple;
-	bh=mJiT3XmfGosfifXl1yjMZDq+iitE9qUOlBFMxJgjgYM=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h5KMDtIsO50ti2pSeISVgR0F1nLpTzsV2r0LBwkaDo2mkFADFhIpafZIEZtjNF2rmtdujkMGi0KHtbfOneh0HzOFYuD1rLlYb33E12DvL+4SMdH3PoxQu69jXQnxcIR/z3rPyTAYjlWViI2rDw4cgSKXsJw8YVXnXIJqyRZcgKo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=fWW/2AjN; arc=none smtp.client-ip=209.85.128.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wm1-f43.google.com with SMTP id 5b1f17b1804b1-43989226283so4270125e9.1
-        for <linux-pm@vger.kernel.org>; Thu, 20 Feb 2025 01:30:37 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1740043836; x=1740648636; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=X+AyV1ElPPjhQNUEXRx/M9RMpbSIJfQK14iFeHgY7bo=;
-        b=fWW/2AjNilIQwv33XSMtZ0gjPOrBvUd96cH+14EAfl7FycrndoKevrxlePNe3689b3
-         r6i9t0FLlrlbOJoZrWeAXCHx35RDNax06G5TQv1a4tz73lUi9dND+hYlUcn5RN5wr9MA
-         najCDvKnsOwtPhKsTM1OykbVE1ubWRbOkXhIorf6J1upwmAT32QKIewqlM/3ub2470AV
-         9d+1bH7/uCyyLznaN1n5A98T3Ezy77EStDy783uOR6wu9YHllgJ3Uqe702TqtWrn31Yi
-         WL1CL0TndifrRaj2CpuEHRiqvmuEhzP2XARJ9AaFM2GdYE0ZLpI1LPiMNY5FQY0rcC4U
-         5E7g==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740043836; x=1740648636;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=X+AyV1ElPPjhQNUEXRx/M9RMpbSIJfQK14iFeHgY7bo=;
-        b=pXvMI3MhYJf0Hcg4iagl74LRP+Rxvagf7OrfSxqjqF9LdJkOMJbkcKkSt+WZwBmIxp
-         h7c//VbZVXVJDRErTus29GEJRgqpBN/bOo89JqnYM23hWgg1vLWOf9IYu7TgSWIzUyTs
-         MHw+vExYXQPT/7pVM37Sr/4lD7D4DiPvLi+oHNLkl0OiXKz61l5RXrWXKW6z2PNAp4C6
-         WbIUIOH3/dJmbn+URBq/n0yFJhdKwRUgNLHPOOJVbQOKoroHm4ujtG3pGMEsfhJkfrQl
-         UzA0yAbO97AdQbrYj8g/aRrTgMy5GrL51uZin0w4Rxe7pqJm9mDrJ+ILZfkuv3daDZgt
-         0/4A==
-X-Forwarded-Encrypted: i=1; AJvYcCVjmyBfHAb2Q1JoaJGAB57b0FmkrntxUr2xJGUcJdnUCHQXFmOYwkrvT8qhkpUqxKhhar22wS8+6Q==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw0lO4jzdYbSGIn0lQ/NbKs/Oj/uu/fezhlKJpUVZnr8eGBJygr
-	ItJ4t5p1KqBkNMaf0wyp+W0wG4Ot4j6W26F4PGLqtGWoKsY6mfvVihBdIodT4/A=
-X-Gm-Gg: ASbGnct4eZNhlsfQfalnxWMZ5PVdZn2SemOfsroex7RN1eVHZvbbyVx1ereZbfqB4vd
-	LSGlPzf2u7v8WbCZ1Bi7Z0XMucCcxy+q74QLIJJMn5e4aGS9zm8LaTHldk3bn2T9gm7lbTyfhsT
-	gKqbdLT+hxpHFmojsxlnq1Zwf6lHvRWEfOGq5VPa9YXzJ2nUG9Q7APq3X1YPuxqrrLG/PewienD
-	dcBU1Tee+7I7Wc5Y/aF5yWJ73AizohvMtG9Aha0mN+ddwa53e7kf+PO6ny869dA5MqbKuYxN8OV
-	MU54FzD3oaWLNEMIJUdI/baRjUDrhPJmPepSLwVcsqZYX9YC7RLxKZlpPA==
-X-Google-Smtp-Source: AGHT+IGsJlbwWX31Qw4w1zUmu7Bk9UHfJExzc1EbOZsajeDzH9je73pVLI7w+d77pplTZTfvLzXlNg==
-X-Received: by 2002:a05:600c:4fd2:b0:439:9e8b:228e with SMTP id 5b1f17b1804b1-439a4baf3a5mr12968635e9.20.1740043836387;
-        Thu, 20 Feb 2025 01:30:36 -0800 (PST)
-Received: from ?IPV6:2001:a61:136c:cf01:505d:b6ac:9103:aec6? ([2001:a61:136c:cf01:505d:b6ac:9103:aec6])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-38f258eb141sm19702925f8f.41.2025.02.20.01.30.35
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 20 Feb 2025 01:30:36 -0800 (PST)
-Message-ID: <50de9721-2dd8-448b-8c11-50b3923450f6@suse.com>
-Date: Thu, 20 Feb 2025 10:30:34 +0100
+	s=arc-20240116; t=1740047823; c=relaxed/simple;
+	bh=rkZXy35xnfDxkTnp01r6nltwGmhymc4diO7AN7MfGvo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Wa+w2shqbhv7I7up4Asq/wCFL4HCunQxF/jz1kPWBQ1AHZ/qMd7+b3x1mfWwoNQmda9JGgJjRbprwCvz2Iq93F6UbQXkSA6deRbHCX3gTiYSoOm0YQXLm/2s8KDI1G4HAOaRZNqC0r4NhUXspxiw88e52s3z/r1j3ft1/sQfPR4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=bZhxs/tH; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740047821; x=1771583821;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=rkZXy35xnfDxkTnp01r6nltwGmhymc4diO7AN7MfGvo=;
+  b=bZhxs/tHJz0dFefoclzq/wgHgvcH0ZsagXzV2gsZI4hgLyaJAGRJIOzF
+   emhp25tXOIvnOY44dlNY9ZhPq9ft9Qu2zbrUczNT3WYl+q6/ELVWSNgDD
+   Qbn89U0NbUU1hj3gqVoaJnTqSHaP46K0otEhuAW0EXWrlfmVKo4N3+eZn
+   DY55Lx+36m8lChA3xs0a2CRMw0IaRT+oXInUqAzOvI1vBbqfZkkmXkJ49
+   GEEjeLvCYXUyzlSRS41mwEyej2XkQVf/H9dJ9YGFCq8hgiNNAmFJppasb
+   xsh58FqglqP3MAkpu/1T05m6uGpyjnSQOXMgZOqYdjo1sdXfKq6PAqYfU
+   g==;
+X-CSE-ConnectionGUID: BOQPyYN6QRm7h+b9ljzY5Q==
+X-CSE-MsgGUID: Q8ZVk2LMT9Gw8VmuaCzh7g==
+X-IronPort-AV: E=McAfee;i="6700,10204,11350"; a="63294862"
+X-IronPort-AV: E=Sophos;i="6.13,301,1732608000"; 
+   d="scan'208";a="63294862"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 02:37:00 -0800
+X-CSE-ConnectionGUID: eDO3h02PTO6O8h55rXd5cQ==
+X-CSE-MsgGUID: L+UihZLoQhWyW5Y8BMvtYA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,301,1732608000"; 
+   d="scan'208";a="138200311"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 20 Feb 2025 02:36:58 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tl3vF-0004AF-2G;
+	Thu, 20 Feb 2025 10:36:52 +0000
+Date: Thu, 20 Feb 2025 18:35:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Raag Jadav <raag.jadav@intel.com>, rafael@kernel.org,
+	paul@crapouillou.net, andriy.shevchenko@linux.intel.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org, Raag Jadav <raag.jadav@intel.com>
+Subject: Re: [PATCH v1] PM: Discard runtime_xx() handles using pm_ptr()
+Message-ID: <202502201807.2UYZnMAp-lkp@intel.com>
+References: <20250220080318.2660840-1-raag.jadav@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: PM runtime_error handling missing in many drivers?
-To: Brian Norris <briannorris@chromium.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: Ajay Agarwal <ajayagarwal@google.com>, Oliver Neukum <oneukum@suse.com>,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
- Vincent Whitchurch <vincent.whitchurch@axis.com>,
- "jic23@kernel.org" <jic23@kernel.org>,
- "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
- "linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
- "linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-References: <5caa944f-c841-6f74-8e43-a278b2b93b06@suse.com>
- <20220708110325.GA5307@axis.com>
- <4ca77763-53d0-965a-889e-be2eafadfd2f@intel.com>
- <1937b65c-36c0-5475-c745-d7285d1a6e25@suse.com>
- <CAJZ5v0j0mgOcfKXRzyx12EX8CYLzowXrM8DGCH9XvQGnRNv0iw@mail.gmail.com>
- <5c37ee19-fe2c-fb22-63a2-638e3dab8f7a@suse.com>
- <CAJZ5v0ijy4FG84xk_n8gxR_jS0xao246eVbnFj-dXzwz=8S9NQ@mail.gmail.com>
- <Z6lzWfGbpa7jN1QD@google.com> <Z6vNV8dDDPdWUKLS@google.com>
- <CAJZ5v0i83eJWV_kvWxZvja+Js3tKbrwZ8rVVGn7vR=0qLf1mtw@mail.gmail.com>
- <Z7ZYEp4oqPs12vsP@google.com>
-Content-Language: en-US
-From: Oliver Neukum <oneukum@suse.com>
-In-Reply-To: <Z7ZYEp4oqPs12vsP@google.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250220080318.2660840-1-raag.jadav@intel.com>
 
-On 19.02.25 23:15, Brian Norris wrote:
-> On Wed, Feb 12, 2025 at 08:29:34PM +0100, Rafael J. Wysocki wrote:
->> The reason why runtime_error is there is to prevent runtime PM
->> callbacks from being run until something is done about the error,
->> under the assumption that running them in that case may make the
->> problem worse.
-> 
-> What makes you think it will make the problem worse? That seems like a
-> rather large assumption to me. What kind of things do you think go
-> wrong, that it requires the framework to stop any future attempts? Just
-> spam (e.g., logging noise, if -EIO is persistent)? Or something worse?e
+Hi Raag,
 
-suspend() is three operations, potentially
+kernel test robot noticed the following build errors:
 
-a) record device state
-b) arm remote wakeup
-c) transition to a lower power state
+[auto build test ERROR on rafael-pm/linux-next]
+[also build test ERROR on rafael-pm/bleeding-edge linus/master v6.14-rc3 next-20250220]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-I wouldn't trust a device to perform the first two steps
-without error handling either. It is an unnecessary risk.
+url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/PM-Discard-runtime_xx-handles-using-pm_ptr/20250220-160636
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git linux-next
+patch link:    https://lore.kernel.org/r/20250220080318.2660840-1-raag.jadav%40intel.com
+patch subject: [PATCH v1] PM: Discard runtime_xx() handles using pm_ptr()
+config: s390-randconfig-002-20250220 (https://download.01.org/0day-ci/archive/20250220/202502201807.2UYZnMAp-lkp@intel.com/config)
+compiler: s390-linux-gcc (GCC) 14.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250220/202502201807.2UYZnMAp-lkp@intel.com/reproduce)
 
-> And OTOH, there are clearly cases where retrying would be not only
-> acceptable, but expected -- so giving special case to -EAGAIN and
-> -EBUSY, per another branch of this thread, seems wise.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502201807.2UYZnMAp-lkp@intel.com/
 
-Yes
+All errors (new ones prefixed by >>):
 
-> 
-> I'd also note that AFAICT, there is no similar feature in system PM. If
-> suspend() fails, we unwind and report the error ... but still allow
-> future system suspend requests. resume() is even "worse" -- errors are
-> essentially logged and ignored.
+   In file included from include/linux/cpumask.h:11,
+                    from arch/s390/include/asm/processor.h:31,
+                    from include/linux/sched.h:13,
+                    from include/linux/delay.h:13,
+                    from drivers/greybus/interface.c:9:
+>> drivers/greybus/interface.c:764:28: error: 'gb_interface_suspend' undeclared here (not in a function); did you mean 'gb_interface_type'?
+     764 |         SET_RUNTIME_PM_OPS(gb_interface_suspend, gb_interface_resume,
+         |                            ^~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:337:28: note: in expansion of macro 'pm_ptr'
+     337 |         .runtime_suspend = pm_ptr(suspend_fn), \
+         |                            ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/greybus/interface.c:764:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+     764 |         SET_RUNTIME_PM_OPS(gb_interface_suspend, gb_interface_resume,
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/greybus/interface.c:764:50: error: 'gb_interface_resume' undeclared here (not in a function); did you mean 'gb_interface_release'?
+     764 |         SET_RUNTIME_PM_OPS(gb_interface_suspend, gb_interface_resume,
+         |                                                  ^~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:338:27: note: in expansion of macro 'pm_ptr'
+     338 |         .runtime_resume = pm_ptr(resume_fn), \
+         |                           ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/greybus/interface.c:764:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+     764 |         SET_RUNTIME_PM_OPS(gb_interface_suspend, gb_interface_resume,
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/greybus/interface.c:765:28: error: 'gb_interface_runtime_idle' undeclared here (not in a function); did you mean 'gb_interface_read_dme'?
+     765 |                            gb_interface_runtime_idle)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:339:25: note: in expansion of macro 'pm_ptr'
+     339 |         .runtime_idle = pm_ptr(idle_fn),
+         |                         ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/greybus/interface.c:764:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+     764 |         SET_RUNTIME_PM_OPS(gb_interface_suspend, gb_interface_resume,
+         |         ^~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/greybus.h:14,
+                    from drivers/greybus/bundle.c:9:
+>> drivers/greybus/bundle.c:166:28: error: 'gb_bundle_suspend' undeclared here (not in a function); did you mean 'gb_bundle_find'?
+     166 |         SET_RUNTIME_PM_OPS(gb_bundle_suspend, gb_bundle_resume, gb_bundle_idle)
+         |                            ^~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:337:28: note: in expansion of macro 'pm_ptr'
+     337 |         .runtime_suspend = pm_ptr(suspend_fn), \
+         |                            ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/greybus/bundle.c:166:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+     166 |         SET_RUNTIME_PM_OPS(gb_bundle_suspend, gb_bundle_resume, gb_bundle_idle)
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/greybus/bundle.c:166:47: error: 'gb_bundle_resume' undeclared here (not in a function); did you mean 'gb_bundle_release'?
+     166 |         SET_RUNTIME_PM_OPS(gb_bundle_suspend, gb_bundle_resume, gb_bundle_idle)
+         |                                               ^~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:338:27: note: in expansion of macro 'pm_ptr'
+     338 |         .runtime_resume = pm_ptr(resume_fn), \
+         |                           ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/greybus/bundle.c:166:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+     166 |         SET_RUNTIME_PM_OPS(gb_bundle_suspend, gb_bundle_resume, gb_bundle_idle)
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/greybus/bundle.c:166:65: error: 'gb_bundle_idle' undeclared here (not in a function); did you mean 'gb_bundle_add'?
+     166 |         SET_RUNTIME_PM_OPS(gb_bundle_suspend, gb_bundle_resume, gb_bundle_idle)
+         |                                                                 ^~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:339:25: note: in expansion of macro 'pm_ptr'
+     339 |         .runtime_idle = pm_ptr(idle_fn),
+         |                         ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/greybus/bundle.c:166:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+     166 |         SET_RUNTIME_PM_OPS(gb_bundle_suspend, gb_bundle_resume, gb_bundle_idle)
+         |         ^~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/cpumask.h:11,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/mutex.h:17,
+                    from include/linux/kernfs.h:11,
+                    from include/linux/sysfs.h:16,
+                    from include/linux/kobject.h:20,
+                    from include/linux/cdev.h:5,
+                    from include/linux/gnss.h:11,
+                    from drivers/gnss/serial.c:9:
+>> drivers/gnss/serial.c:270:28: error: 'gnss_serial_runtime_suspend' undeclared here (not in a function); did you mean 'pm_generic_runtime_suspend'?
+     270 |         SET_RUNTIME_PM_OPS(gnss_serial_runtime_suspend, gnss_serial_runtime_resume, NULL)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:337:28: note: in expansion of macro 'pm_ptr'
+     337 |         .runtime_suspend = pm_ptr(suspend_fn), \
+         |                            ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/gnss/serial.c:270:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+     270 |         SET_RUNTIME_PM_OPS(gnss_serial_runtime_suspend, gnss_serial_runtime_resume, NULL)
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/gnss/serial.c:270:57: error: 'gnss_serial_runtime_resume' undeclared here (not in a function); did you mean 'pm_generic_runtime_resume'?
+     270 |         SET_RUNTIME_PM_OPS(gnss_serial_runtime_suspend, gnss_serial_runtime_resume, NULL)
+         |                                                         ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:338:27: note: in expansion of macro 'pm_ptr'
+     338 |         .runtime_resume = pm_ptr(resume_fn), \
+         |                           ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/gnss/serial.c:270:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+     270 |         SET_RUNTIME_PM_OPS(gnss_serial_runtime_suspend, gnss_serial_runtime_resume, NULL)
+         |         ^~~~~~~~~~~~~~~~~~
+--
+   In file included from drivers/misc/apds990x.c:11:
+>> drivers/misc/apds990x.c:1266:28: error: 'apds990x_runtime_suspend' undeclared here (not in a function); did you mean 'pm_runtime_suspend'?
+    1266 |         SET_RUNTIME_PM_OPS(apds990x_runtime_suspend,
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:337:28: note: in expansion of macro 'pm_ptr'
+     337 |         .runtime_suspend = pm_ptr(suspend_fn), \
+         |                            ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/misc/apds990x.c:1266:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1266 |         SET_RUNTIME_PM_OPS(apds990x_runtime_suspend,
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/misc/apds990x.c:1267:25: error: 'apds990x_runtime_resume' undeclared here (not in a function); did you mean 'pm_runtime_resume'?
+    1267 |                         apds990x_runtime_resume,
+         |                         ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:338:27: note: in expansion of macro 'pm_ptr'
+     338 |         .runtime_resume = pm_ptr(resume_fn), \
+         |                           ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/misc/apds990x.c:1266:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1266 |         SET_RUNTIME_PM_OPS(apds990x_runtime_suspend,
+         |         ^~~~~~~~~~~~~~~~~~
+--
+   In file included from drivers/misc/bh1770glc.c:11:
+>> drivers/misc/bh1770glc.c:1373:28: error: 'bh1770_runtime_suspend' undeclared here (not in a function); did you mean 'pm_runtime_suspend'?
+    1373 |         SET_RUNTIME_PM_OPS(bh1770_runtime_suspend, bh1770_runtime_resume, NULL)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:337:28: note: in expansion of macro 'pm_ptr'
+     337 |         .runtime_suspend = pm_ptr(suspend_fn), \
+         |                            ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/misc/bh1770glc.c:1373:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1373 |         SET_RUNTIME_PM_OPS(bh1770_runtime_suspend, bh1770_runtime_resume, NULL)
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/misc/bh1770glc.c:1373:52: error: 'bh1770_runtime_resume' undeclared here (not in a function); did you mean 'pm_runtime_resume'?
+    1373 |         SET_RUNTIME_PM_OPS(bh1770_runtime_suspend, bh1770_runtime_resume, NULL)
+         |                                                    ^~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:338:27: note: in expansion of macro 'pm_ptr'
+     338 |         .runtime_resume = pm_ptr(resume_fn), \
+         |                           ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/misc/bh1770glc.c:1373:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1373 |         SET_RUNTIME_PM_OPS(bh1770_runtime_suspend, bh1770_runtime_resume, NULL)
+         |         ^~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/cpumask.h:11,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:63,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/umh.h:4,
+                    from include/linux/kmod.h:9,
+                    from include/linux/module.h:17,
+                    from drivers/iio/accel/bmc150-accel-core.c:7:
+>> drivers/iio/accel/bmc150-accel-core.c:1858:28: error: 'bmc150_accel_runtime_suspend' undeclared here (not in a function); did you mean 'bmc150_accel_update_slope'?
+    1858 |         SET_RUNTIME_PM_OPS(bmc150_accel_runtime_suspend,
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:337:28: note: in expansion of macro 'pm_ptr'
+     337 |         .runtime_suspend = pm_ptr(suspend_fn), \
+         |                            ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/iio/accel/bmc150-accel-core.c:1858:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1858 |         SET_RUNTIME_PM_OPS(bmc150_accel_runtime_suspend,
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/iio/accel/bmc150-accel-core.c:1859:28: error: 'bmc150_accel_runtime_resume' undeclared here (not in a function); did you mean 'bmc150_accel_core_remove'?
+    1859 |                            bmc150_accel_runtime_resume, NULL)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:338:27: note: in expansion of macro 'pm_ptr'
+     338 |         .runtime_resume = pm_ptr(resume_fn), \
+         |                           ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/iio/accel/bmc150-accel-core.c:1858:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1858 |         SET_RUNTIME_PM_OPS(bmc150_accel_runtime_suspend,
+         |         ^~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/cpumask.h:11,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:63,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/umh.h:4,
+                    from include/linux/kmod.h:9,
+                    from include/linux/module.h:17,
+                    from drivers/iio/accel/mma8452.c:21:
+>> drivers/iio/accel/mma8452.c:1823:28: error: 'mma8452_runtime_suspend' undeclared here (not in a function); did you mean 'pm_runtime_suspend'?
+    1823 |         SET_RUNTIME_PM_OPS(mma8452_runtime_suspend,
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:337:28: note: in expansion of macro 'pm_ptr'
+     337 |         .runtime_suspend = pm_ptr(suspend_fn), \
+         |                            ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/iio/accel/mma8452.c:1823:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1823 |         SET_RUNTIME_PM_OPS(mma8452_runtime_suspend,
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/iio/accel/mma8452.c:1824:28: error: 'mma8452_runtime_resume' undeclared here (not in a function); did you mean 'pm_runtime_resume'?
+    1824 |                            mma8452_runtime_resume, NULL)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:338:27: note: in expansion of macro 'pm_ptr'
+     338 |         .runtime_resume = pm_ptr(resume_fn), \
+         |                           ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/iio/accel/mma8452.c:1823:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1823 |         SET_RUNTIME_PM_OPS(mma8452_runtime_suspend,
+         |         ^~~~~~~~~~~~~~~~~~
+--
+   In file included from include/linux/cpumask.h:11,
+                    from include/linux/smp.h:13,
+                    from include/linux/lockdep.h:14,
+                    from include/linux/spinlock.h:63,
+                    from include/linux/mmzone.h:8,
+                    from include/linux/gfp.h:7,
+                    from include/linux/umh.h:4,
+                    from include/linux/kmod.h:9,
+                    from include/linux/module.h:17,
+                    from drivers/iio/magnetometer/bmc150_magn.c:12:
+>> drivers/iio/magnetometer/bmc150_magn.c:1062:28: error: 'bmc150_magn_runtime_suspend' undeclared here (not in a function)
+    1062 |         SET_RUNTIME_PM_OPS(bmc150_magn_runtime_suspend,
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:337:28: note: in expansion of macro 'pm_ptr'
+     337 |         .runtime_suspend = pm_ptr(suspend_fn), \
+         |                            ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/iio/magnetometer/bmc150_magn.c:1062:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1062 |         SET_RUNTIME_PM_OPS(bmc150_magn_runtime_suspend,
+         |         ^~~~~~~~~~~~~~~~~~
+>> drivers/iio/magnetometer/bmc150_magn.c:1063:28: error: 'bmc150_magn_runtime_resume' undeclared here (not in a function); did you mean 'bmc150_magn_trim_regs'?
+    1063 |                            bmc150_magn_runtime_resume, NULL)
+         |                            ^~~~~~~~~~~~~~~~~~~~~~~~~~
+   include/linux/kernel.h:48:44: note: in definition of macro 'PTR_IF'
+      48 | #define PTR_IF(cond, ptr)       ((cond) ? (ptr) : NULL)
+         |                                            ^~~
+   include/linux/pm.h:338:27: note: in expansion of macro 'pm_ptr'
+     338 |         .runtime_resume = pm_ptr(resume_fn), \
+         |                           ^~~~~~
+   include/linux/pm.h:363:9: note: in expansion of macro 'RUNTIME_PM_OPS'
+     363 |         RUNTIME_PM_OPS(suspend_fn, resume_fn, idle_fn)
+         |         ^~~~~~~~~~~~~~
+   drivers/iio/magnetometer/bmc150_magn.c:1062:9: note: in expansion of macro 'SET_RUNTIME_PM_OPS'
+    1062 |         SET_RUNTIME_PM_OPS(bmc150_magn_runtime_suspend,
+         |         ^~~~~~~~~~~~~~~~~~
+..
 
-Suspend requests from runtime PM are different. They happen spontaneously.
-Secondly, failures to suspend in runtime PM are far cheaper.
 
->> I'm not sure if I see a substantial difference between suspend and
->> resume in that respect: If any of them fails, the state of the device
->> is kind of unstable.  In particular, if resume fails and the device
->> doesn't actually resume, something needs to be done about it or it
->> just becomes unusable.
+vim +764 drivers/greybus/interface.c
 
-Again, if you look at it in an abstract manner, this is a mess. Resume()
-is actually two functions
+30a3bf7b30d86b drivers/staging/greybus/interface.c David Lin 2016-07-14  762  
+30a3bf7b30d86b drivers/staging/greybus/interface.c David Lin 2016-07-14  763  static const struct dev_pm_ops gb_interface_pm_ops = {
+30a3bf7b30d86b drivers/staging/greybus/interface.c David Lin 2016-07-14 @764  	SET_RUNTIME_PM_OPS(gb_interface_suspend, gb_interface_resume,
+30a3bf7b30d86b drivers/staging/greybus/interface.c David Lin 2016-07-14 @765  			   gb_interface_runtime_idle)
+30a3bf7b30d86b drivers/staging/greybus/interface.c David Lin 2016-07-14  766  };
+30a3bf7b30d86b drivers/staging/greybus/interface.c David Lin 2016-07-14  767  
 
-a) transition to a power state that allows an operation
-b) restore device settings
-
-It is possible for the second step to fail after the first has worked.
-
-> To me, it's about the state of the device. If suspend failed, the device
-> may still be active and functional -- but not power-efficient. If resume
-> failed, the device may be suspended and non-functional.
-> 
-> But anyway, I don't think I require asymmetry; I'm just more interested
-> in unnecessary non-functionality. (Power inefficiency is less important,
-> as in the worst case, we can at least save our data, reboot, and try
-> again.)
-
-You are calling for asymmetry ;-)
-
-If you fail to resume, you will need to return an error. The functions
-are just not equal in terms of consequences. We don't resume for fun.
-We do, however, suspend just because a timer fires.
-
-	Regards
-		Oliver
-
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
