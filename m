@@ -1,94 +1,99 @@
-Return-Path: <linux-pm+bounces-22610-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22611-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 44782A3EFCB
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 10:16:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BDE30A3F0D1
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 10:47:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2B1A317D55D
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 09:16:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E9641889CA0
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 09:45:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E00CC200136;
-	Fri, 21 Feb 2025 09:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VINOrWZ0"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49E9F205E2F;
+	Fri, 21 Feb 2025 09:41:24 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0E6E1C3F02;
-	Fri, 21 Feb 2025 09:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB74205E28
+	for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 09:41:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740129379; cv=none; b=GlS7C0b48g4GIH4KwzLfaJUa86lA611bTcW28LZ6RX8OV3QoqQXIphdYg6/8vL7kkcnikqYPhtPfgq24zFHRTvjFczMj91CLHM3OOklglMjA68hXUmSquPspvw2n8u/PKC9g8+PSJtueTQaPilKH17zuta9YeFF+iX0mV6ltcpE=
+	t=1740130884; cv=none; b=DpdjDeETxtfShKcbDWLS+kRRbbleADGTbkytydzf9RSnB0qXjC8dv8ej/I9voEmf2yZv7rRkqgywBjqKi9Q9gnN6+5ye1aAVebXqehallMuGARemT1bVBwggDLo23r8sng9ycyEJNBYNkybhCIu2bU/QQkeLUC1TjAuC232jyhA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740129379; c=relaxed/simple;
-	bh=v4duxCBt31nnMKSAT2iTqhqPuTqDH0EcdtbEtxT5aeM=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Om/tYB4wWQg64SVKeUKq4eFt3qtOAbExLDn3IjxfS9UqGGteATaA9tHrKr0Q2yqKmBmwvKPHSCbAW8BbuwpCA4PAKi/NvQKjhsQgFxvh7Kkj4n7mIRTMRd0lKaZVJVfK1wpB/S2L2h3XYs8J5o7GVHVgZErh1W3OfIb8TPqtYFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VINOrWZ0; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7EC04C4CED6;
-	Fri, 21 Feb 2025 09:16:18 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740129379;
-	bh=v4duxCBt31nnMKSAT2iTqhqPuTqDH0EcdtbEtxT5aeM=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=VINOrWZ0MlUK8m4ViqyGszczMyknnwNDy1cX7Of0w9PFryWoN6z7k0/JPV/1ysj75
-	 iFXW2hjpcurfgMZtpyccXSeUa2fjzkvI4wxV0OwSjmr48Vkz8LCixF+LxySC+DdM1s
-	 5LRKP1R8WgRkclg9lf5i1Sjb0pQS2npaJS7ltxBVZame8ZtZkBILQdlvdxjrCLuAYS
-	 rEkcRctogB0dwhmdJ9jDXO+rcOd7qerQCf6FHAsHpMrp2dGwF0i+dlcTybyNDLas49
-	 EURRBLSAPtBNQnQclY5NzJtmxLDFNcFB9UpKuF9a9oCseJajZGe0XPoPruGwH7pU+R
-	 zV2aEAciRde8g==
-Date: Fri, 21 Feb 2025 10:16:16 +0100
-From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Michal Wilczynski <m.wilczynski@samsung.com>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org, 
-	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org, 
-	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com, 
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com, 
-	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com, mripard@kernel.org, 
-	tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch, ulf.hansson@linaro.org, 
-	jszhang@kernel.org, p.zabel@pengutronix.de, m.szyprowski@samsung.com, 
-	linux-clk@vger.kernel.org, devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org, linux-pm@vger.kernel.org
-Subject: Re: [PATCH v5 15/21] dt-bindings: gpu: Add support for T-HEAD TH1520
- GPU
-Message-ID: <20250221-adaptable-tamarin-of-variation-ad6dc6@krzk-bin>
-References: <20250219140239.1378758-1-m.wilczynski@samsung.com>
- <CGME20250219140310eucas1p1297441a3da276569cd86b6b9e4544242@eucas1p1.samsung.com>
- <20250219140239.1378758-16-m.wilczynski@samsung.com>
+	s=arc-20240116; t=1740130884; c=relaxed/simple;
+	bh=ZkkWKXP5VI04+XhhK4BFzZn5nqZ0ICb2qmJ7kldPgGc=;
+	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=S+hXVTXuoEabvS1Ig2gLOfS29HYsF1v3cwQZIvZ4N1npK4YP2p0XU45NU+Dzx4CUEs7pRfE1HD3Cc2E88O3rlgVsn3YcrJ2rBwGSAy7cxo9aG0KVVgc1xrmKsF8udqWwOSerJQNTaLFgviOyeAJMLCfo6So777OwAJ7uXG7xCMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
+Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
+Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3d2b6d933a5so14732115ab.0
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 01:41:22 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740130881; x=1740735681;
+        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=T95fukwRaCyhjkDTbTMQl87Lxi7TRA8tZuBkDLMn1N4=;
+        b=cKZl4nKih2ppHlPf6aE3rzOxbTL1CW/n7AUqXT31n5HUz0KrIPbEpDHMnHhfxhylLN
+         a1Skg60lDG/EbXJLZw9NdB8TmBUgJxZLhJLiEhz3MqMySHrfDwf01wCEHlFVoHXf//Kv
+         CFRnHYbUO+SuNg5gOF1ke6xc1AeCEcexoT7yAaQUiHqWsgA3TOaFBMS85B4WGaOcIdyc
+         UEIIT7itfeCIFUpXlGWwyMC3/ffG/+gspS1ibp0ibmTnrfIqR9enra9y06kPMbcv6F9E
+         qzGwQPETRlP85bw6vY0HeW6LrqiLCagTEbRHQXuUhe73KwX2lnquMWMcCmROPfVjeWGB
+         XlBQ==
+X-Forwarded-Encrypted: i=1; AJvYcCV7BLS4SMdrOhIoyiOKWLOP3hl52ju/4FsRUaoD5/NkeGjuSFXDX3xqFsyPWHf5klQO4A3GZ1nsYw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzWwJbw+kpxRQ2AKuRQy/EaEO18ykF3YtWNRAaXnZC1gxlG9H4d
+	WxW3EEzeRvHBzmCRmkgL2j2orLd6iv0umOoCuwYa9hkbUJy9KuWTGivlTSy2p2M7d3AR58JtwZ/
+	hoh9eG0XxOff1gduXwLjv7+QIS41/YojdhlF7VsdsZ7ul04Uyc8DUlIw=
+X-Google-Smtp-Source: AGHT+IEF5bFtK+eCANJbgUQqmfBu+0vXYeTFRBcR8iV7drnQDTpoOIsrcWPIDwV5HrQ9LgxOXhepfrQaeAw9suS96bC1WqcVv1Jo
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-In-Reply-To: <20250219140239.1378758-16-m.wilczynski@samsung.com>
+X-Received: by 2002:a05:6e02:1908:b0:3d0:21aa:a752 with SMTP id
+ e9e14a558f8ab-3d2cae47e92mr26100285ab.2.1740130881644; Fri, 21 Feb 2025
+ 01:41:21 -0800 (PST)
+Date: Fri, 21 Feb 2025 01:41:21 -0800
+X-Google-Appengine-App-Id: s~syzkaller
+X-Google-Appengine-App-Id-Alias: syzkaller
+Message-ID: <67b84a41.050a0220.14d86d.0358.GAE@google.com>
+Subject: [syzbot] Monthly pm report (Feb 2025)
+From: syzbot <syzbot+liste374d52634bb41a6b682@syzkaller.appspotmail.com>
+To: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Wed, Feb 19, 2025 at 03:02:33PM +0100, Michal Wilczynski wrote:
->    reg:
->      maxItems: 1
-> @@ -60,6 +65,16 @@ allOf:
->          clocks:
->            maxItems: 1
->  
-> +  - if:
-> +      properties:
-> +        compatible:
-> +          contains:
-> +            const: thead,th1520-gpu
-> +    then:
-> +      properties:
-> +        clocks:
-> +          minItems: 3
+Hello pm maintainers/developers,
 
-Missing constraint for clock-names. They *always* go together.
+This is a 31-day syzbot report for the pm subsystem.
+All related reports/information can be found at:
+https://syzkaller.appspot.com/upstream/s/pm
 
-Best regards,
-Krzysztof
+During the period, 1 new issues were detected and 0 were fixed.
+In total, 5 issues are still open and 9 have already been fixed.
 
+Some of the still happening issues:
+
+Ref Crashes Repro Title
+<1> 586     Yes   WARNING in enable_work
+                  https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
+<2> 3       Yes   possible deadlock in lock_system_sleep
+                  https://syzkaller.appspot.com/bug?extid=ace60642828c074eb913
+<3> 2       Yes   possible deadlock in dpm_for_each_dev
+                  https://syzkaller.appspot.com/bug?extid=2a03726f1d4eff48b278
+
+---
+This report is generated by a bot. It may contain errors.
+See https://goo.gl/tpsmEJ for more information about syzbot.
+syzbot engineers can be reached at syzkaller@googlegroups.com.
+
+To disable reminders for individual bugs, reply with the following command:
+#syz set <Ref> no-reminders
+
+To change bug's subsystems, reply with:
+#syz set <Ref> subsystems: new-subsystem
+
+You may send multiple commands in a single email message.
 
