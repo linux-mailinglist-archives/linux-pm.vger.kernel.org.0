@@ -1,40 +1,48 @@
-Return-Path: <linux-pm+bounces-22619-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22620-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 838CFA3F253
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 11:43:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2565FA3F275
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 11:50:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0B5BB3BE85C
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 10:43:00 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03989171442
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 10:50:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C4EA2066F4;
-	Fri, 21 Feb 2025 10:43:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BD06D1F0E27;
+	Fri, 21 Feb 2025 10:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="X7cq87ul"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 721DA205E18;
-	Fri, 21 Feb 2025 10:43:03 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B2E01B21BD;
+	Fri, 21 Feb 2025 10:50:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740134585; cv=none; b=QDN6chTiLkeqy1W2xGIW45zfSOpnBwxm7aZDL03em0E+xk7fhhQkirk012z0Xe1/KmXuNGuMW7H0nN3pgLqQ2HV1fiX+jEydGBqBzCu1WygpaLpCesocqJvnAzLsZrZV0BI6IqsAG/ZrMrzbFXaRWOqVE+TEk1iRwWEeNt4fC4U=
+	t=1740135002; cv=none; b=TM0vDDfrYkF5Ra/IEwBme68rjgOtem1TFxwGd8kOOBohLbkpPciaqxqQcs+eUrj1bEYRJbuq6zrirbk27OkZkza2X+dhT22ui3DVNJb8KFmOtai24Hzw9lAEx//Lol94JTgmXUL6UBGyb3bkEnN/fIy97N6n1TPQ2sp5Tv7ttb0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740134585; c=relaxed/simple;
-	bh=KWrFDt8ZyyvDNI14klHHLJn5BJSmuLX3HftfhtVunO0=;
+	s=arc-20240116; t=1740135002; c=relaxed/simple;
+	bh=UWqI8y1WfbCIpWyFRe7UXNyVBbMnV3Po2lSTiJo0zQ4=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=g5qeDUBS5cInOx6HfLLr2vrNbKGlj3jPpO73O0Bj/eZzVUzSVzQT141kOXg2UnaXKtiLmrEP+jRPVUhhYiM7A5YyLUPBJlD+n5pQRu1ceS2LcPo/nsXUk9CQ7X858Plac5OF6Dt3XD/bdN++iKPTgwUqLd3BItVBW61y1roPtNE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 97305169C;
-	Fri, 21 Feb 2025 02:43:20 -0800 (PST)
-Received: from [10.57.64.214] (unknown [10.57.64.214])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 465213F5A1;
-	Fri, 21 Feb 2025 02:43:01 -0800 (PST)
-Message-ID: <32fe0e71-e8d9-4404-8b48-a8b8e9ec71e7@arm.com>
-Date: Fri, 21 Feb 2025 10:43:00 +0000
+	 In-Reply-To:Content-Type; b=PkborZWsMoY4eSskXXlaGQiZxkBFbzTc14c05YDMv2oS61C/1J9oivwHEcrVHEGGuLp1ATcp6UyX4viZs3rMkkRCP/jG8sdJS9EUytKdrQ6skI5KxmQd+O/vS84jvzjLrLiksmwaXHPpbuxlTqo/vGrO19uRHCIRyYCNxT7JMCc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=X7cq87ul; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3D6D5C4CED6;
+	Fri, 21 Feb 2025 10:49:59 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740135002;
+	bh=UWqI8y1WfbCIpWyFRe7UXNyVBbMnV3Po2lSTiJo0zQ4=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=X7cq87ulo9QWoMoLdkCA5g0kSwRw6xVDdbhVTN8XWJX7+Uyjbja1KaJCd99oPdcrt
+	 CALkJ2xMHK60OXCdrEbn4wGE3qTs7NkKzumU3xJNE/IImftQWXWc5XVREwNQPwYoAR
+	 ipLb8etLfpRVBJmN+Ytu3WdFqdcz1qhV3CSVQuBkeRfcIdZu8eReTO7F4kBx+eESaR
+	 P9g36CKweCrhB4R6P0FX7xZ14zwpd/+6jdJH3Lh4BmlhGS5TJE+BgeMHOKMEH/Iuqg
+	 fHCkbNVKYslm1zmp5YeVRH47mVX8ffVqIC/aR+OZP5t6YSr0mwqRdpZPRpyPAfXiMA
+	 dvdG3x91ga5sA==
+Message-ID: <cbf3170f-b600-4517-a69f-9bd51fc4a93e@kernel.org>
+Date: Fri, 21 Feb 2025 11:49:57 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -42,82 +50,80 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal: gov_power_allocator: Update total_weight on bind
- and cdev updates
-To: "Rafael J. Wysocki" <rafael@kernel.org>, Yu-Che Cheng <giver@chromium.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
- Zhang Rui <rui.zhang@intel.com>,
- "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
-References: <20250219-fix-power-allocator-weight-v1-1-79b1a99e94eb@chromium.org>
- <CAJZ5v0h8MyqEgC8Hf1_s4=kCj2W3Y0TWdVnbhwAiVLqED7WPow@mail.gmail.com>
+Subject: Re: [PATCH v4 1/5] dt-bindings: nvmem: Add compatible for IPQ5018
+To: George Moussalem <george.moussalem@outlook.com>
+Cc: amitk@kernel.org, devicetree@vger.kernel.org,
+ dmitry.baryshkov@linaro.org, krzk+dt@kernel.org,
+ krzysztof.kozlowski@linaro.org, linux-arm-msm@vger.kernel.org,
+ linux-pm@vger.kernel.org, quic_srichara@quicinc.com, robh@kernel.org,
+ thara.gopinath@gmail.com
+References: <4420c389-e53e-4f10-b2f7-7a5429d282ce@kernel.org>
+ <DS7PR19MB8883297DCD342BFA68E4186B9DC72@DS7PR19MB8883.namprd19.prod.outlook.com>
 Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAJZ5v0h8MyqEgC8Hf1_s4=kCj2W3Y0TWdVnbhwAiVLqED7WPow@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <DS7PR19MB8883297DCD342BFA68E4186B9DC72@DS7PR19MB8883.namprd19.prod.outlook.com>
+Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 
+On 21/02/2025 11:08, George Moussalem wrote:
+> I can't speak on behalf of Qualcomm as to whether they've abandoned this chip.
+> However, there are plenty of routers/APs that use this chip and support for it and some IPQ5018 based devices has recently been added to OpenWrt.
+> Hence, I'm picking up where Qualcomm has left off and would like to send as much as possible upstream for mainline support.
 
+That's fine, but should be mentioned in cover letter. Anytime you take
+someone else's patchset, please say shortly why, so maintainers won't
+deal with duplicated submissions for example.
 
-On 2/20/25 19:40, Rafael J. Wysocki wrote:
-> On Wed, Feb 19, 2025 at 8:07 AM Yu-Che Cheng <giver@chromium.org> wrote:
->>
->> params->total_weight is not initialized during bind and not updated when
->> the bound cdev changes. The cooling device weight will not be used due
->> to the uninitialized total_weight, until we trigger an update via sysfs.
->>
->> The bound cdev update will be triggered during thermal zone registration,
->> where each cooling device will be bound to the thermal zone one by one.
->>
->> The power_allocator_bind can be called without additional cdev update
->> when manually changing the policy of a thermal zone via sysfs.
+> 
+> I've included a cover letter here: https://lore.kernel.org/all/DS7PR19MB8883BE38C2B500D03213747A9DC72@DS7PR19MB8883.namprd19.prod.outlook.com/
 
-Thanks Yu-Che for catching this.
+Wasn't in this thread, so that's another issue.
 
->>
->> Update total_weight when bind and cdev updates to ensure total_weight is
->> correct.
->>
->> Fixes: a3cd6db4cc2e ("thermal: gov_power_allocator: Support new update callback of weights")
->> Signed-off-by: Yu-Che Cheng <giver@chromium.org>
->> ---
->>   drivers/thermal/gov_power_allocator.c | 9 +++++----
->>   1 file changed, 5 insertions(+), 4 deletions(-)
->>
->> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
->> index 3b644de3292e..600cb0e367c3 100644
->> --- a/drivers/thermal/gov_power_allocator.c
->> +++ b/drivers/thermal/gov_power_allocator.c
->> @@ -656,11 +656,10 @@ static void power_allocator_update_tz(struct thermal_zone_device *tz,
->>                          if (power_actor_is_valid(instance))
->>                                  num_actors++;
->>
->> -               if (num_actors == params->num_actors)
->> -                       return;
->> +               if (num_actors != params->num_actors)
->> +                       allocate_actors_buffer(params, num_actors);
->>
->> -               allocate_actors_buffer(params, num_actors);
->> -               break;
->> +               fallthrough;
-> 
-> This is basically fine, but I would add a new function, say
-> power_allocator_update_weight(), for updating the weight.
-> 
->>          case THERMAL_INSTANCE_WEIGHT_CHANGED:
-> 
-> And I'd call it from here and from power_allocator_bind() below.
-> 
->>                  params->total_weight = 0;
->>                  list_for_each_entry(instance, &td->thermal_instances, trip_node)
->> @@ -731,6 +730,8 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
->>
->>          tz->governor_data = params;
->>
->> +       power_allocator_update_tz(tz, THERMAL_INSTANCE_WEIGHT_CHANGED);
-> 
-> Because this is kind of confusing (although it will work AFAICS).
-> 
+Anyway, no need to resend just for any of the above.
 
-Thanks Rafael, I agree with suggestions. It would look cleaner.
+Best regards,
+Krzysztof
 
