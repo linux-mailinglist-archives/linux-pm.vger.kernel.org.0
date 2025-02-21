@@ -1,66 +1,68 @@
-Return-Path: <linux-pm+bounces-22706-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22707-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4D88EA4039F
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 00:43:40 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B59BFA403A3
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 00:44:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8F568189F17D
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 23:43:46 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D053167A82
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 23:44:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D6405253F0B;
-	Fri, 21 Feb 2025 23:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516A8253F15;
+	Fri, 21 Feb 2025 23:44:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qUAOYy+/"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2gZlZNJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A61B82500B1;
-	Fri, 21 Feb 2025 23:43:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24553253F06;
+	Fri, 21 Feb 2025 23:44:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740181415; cv=none; b=iGztr5zIKyivVvXvSkNGjWmOx/mxJDcnVIQP1x5nKCrxBjLEZd9OSRvnaRUsIardSA8aBxd4OG4BSbNbEyF6X3+hblGJX6h4aIfhC81/N6cRn22oiP9eYHMlW0VYY9I38ciLOa7mG0T3+8oDHBjKbMoDsiwPnjIrdwwHiNEgxoU=
+	t=1740181455; cv=none; b=cPKCPudgQt01iC0nEtj9K+moQottndGtLwBN5y31DAOdHiwr2Ax2NH7PapaAQ5SExmazKCX0TCilQmmq/TXb99aE7iCMxbChuKA7cDzVa8+Pyc7zVMArYRQzulCqHhh4THAQoA5tSR6NkP+EAJMgl0OgOx7Bzskvvmt33bXviZM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740181415; c=relaxed/simple;
-	bh=GigKIqugzG3RnBUJxgRg750/c4rFtzjUiyDG9IUNwbM=;
+	s=arc-20240116; t=1740181455; c=relaxed/simple;
+	bh=LPuDk+6EvEIOleZ6HMXz7Q2USX7ef9j+avusUpmJAsQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=dIrCkOWsod52eH2gnSPub7oialOcHf4QBudgwI4dCskk/GtRn7eOtyWZgUkzgPkacjOC1gbAO2fQ92LQbs4fICKc48yrYTCCsrGo2M1/MBFXJe1QgLHloQK3xytLu7fISg7IHJzTZy6gQD70HnrgN6faRpzuA5pANxLqgIclH4Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qUAOYy+/; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 2B2AAC4CED6;
-	Fri, 21 Feb 2025 23:43:35 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=OTpGLomSYcXPdJJpQeSrQjvRyOSR0LNp/JYJdIcxsZtIqDrTZtOZcuIM5z6CHBl/ufICOcqD9xQ/VNJyTm4d/uht4qbhVnO6sMedc3bH3BEDoa34j7CUuVUfEr2awnmIRxXuRVxpl4G5QhaphbwaBWNoaGikTfOi+yH3VD2Rnkc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2gZlZNJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7310CC4CED6;
+	Fri, 21 Feb 2025 23:44:14 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740181415;
-	bh=GigKIqugzG3RnBUJxgRg750/c4rFtzjUiyDG9IUNwbM=;
+	s=k20201202; t=1740181454;
+	bh=LPuDk+6EvEIOleZ6HMXz7Q2USX7ef9j+avusUpmJAsQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=qUAOYy+/YJy7QI9SjZaPQFB33Job5VD8SqGBh5+UJAK7Fh1/SYsbAEjVu94E40ZIP
-	 1G2zYt5QKpK09qUmMWzl2nUbiPFq+oz4cKl33uDY6h5UmvRL4JqcZIB2IRTdYMn60f
-	 VMtAUlH+CYQs3lnMjfaI5Hy/zg8G8rP79DfOEnfvzzj4ivsU1FCx7GMyA1nAUObN+7
-	 DXba4FJo3HIbqQQhT3HMvPjLklpHh+qId5Xl32iS1Oxlkb/xyDt/PsvAD9JqRWZ3To
-	 tXKN9NObT19kEXAxLKrKtkw2uzgUzFVMSNyZXniFs3yCNxEVO1XraqooJS/EBhyegr
-	 nsN43cCRgsIVg==
-Date: Fri, 21 Feb 2025 17:43:33 -0600
+	b=G2gZlZNJ4nhnlglQR2Ul7LtTjncW3SSm33huoq+mJ6vI1LF+w3HUJDumaw0NGpT/J
+	 3oi6hEO+LClIxqCIMNUIRHy3fFfvGd1/vDTSey+O4d0QCqMyNrn7GZiPN+piVN9jEa
+	 hE0t6mSe49fbNVKQFbkany8o+WWZGT/FO8dgW+fGYY0z31hk76aKztqqwl+YvjxvyH
+	 4B77FUdncY/A1ir1+kGuY6SpKVq24iRVU4H9GrjksTBqizc+BEeRvZYaSpFPp0+1Zg
+	 7oS49dcHefUDGvpfcDnjGg39MXowMS8ApT/u+FKHDmvYO0fYvOjcbZ5njkM6/qHyIi
+	 JlSmnuuT4f/DQ==
+Date: Fri, 21 Feb 2025 17:44:12 -0600
 From: "Rob Herring (Arm)" <robh@kernel.org>
 To: Andre Przywara <andre.przywara@arm.com>
-Cc: Chen-Yu Tsai <wens@csie.org>, Jernej Skrabec <jernej.skrabec@gmail.com>,
-	Conor Dooley <conor+dt@kernel.org>, linux-sunxi@lists.linux.dev,
-	dri-devel@lists.freedesktop.org, Maxime Ripard <mripard@kernel.org>,
-	Steven Price <steven.price@arm.com>,
-	Samuel Holland <samuel@sholland.org>,
+Cc: linux-sunxi@lists.linux.dev,
 	Boris Brezillon <boris.brezillon@collabora.com>,
 	Thomas Zimmermann <tzimmermann@suse.de>,
-	Simona Vetter <simona@ffwll.ch>,
+	Maxime Ripard <mripard@kernel.org>,
+	Steven Price <steven.price@arm.com>,
 	Ulf Hansson <ulf.hansson@linaro.org>,
-	David Airlie <airlied@gmail.com>, devicetree@vger.kernel.org,
+	Simona Vetter <simona@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
 	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, linux-pm@vger.kernel.org,
-	linux-arm-kernel@lists.infradead.org
-Subject: Re: [PATCH 1/5] dt-bindings: power: Add Allwinner H6/H616 PRCM PPU
-Message-ID: <174018141298.394778.13629046631332003048.robh@kernel.org>
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org,
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
+	Samuel Holland <samuel@sholland.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>
+Subject: Re: [PATCH 3/5] dt-bindings: gpu: mali-bifrost: Add Allwinner H616
+ compatible
+Message-ID: <174018145089.395682.15107324899674215035.robh@kernel.org>
 References: <20250221005802.11001-1-andre.przywara@arm.com>
- <20250221005802.11001-2-andre.przywara@arm.com>
+ <20250221005802.11001-4-andre.przywara@arm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -69,22 +71,21 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250221005802.11001-2-andre.przywara@arm.com>
+In-Reply-To: <20250221005802.11001-4-andre.przywara@arm.com>
 
 
-On Fri, 21 Feb 2025 00:57:58 +0000, Andre Przywara wrote:
-> The Allwinner H6 and some later SoCs contain some bits in the PRCM (Power
-> Reset Clock Management) block that control some power domains.
-> Those power domains include the one for the GPU, the PLLs and some
-> analogue circuits.
+On Fri, 21 Feb 2025 00:58:00 +0000, Andre Przywara wrote:
+> The Allwinner H616 SoC has a Mali-G31 MP2 GPU, which is of the Mali
+> Bifrost family.
+> Add the SoC specific compatible string and pair it with the bifrost
+> fallback compatible.
 > 
 > Signed-off-by: Andre Przywara <andre.przywara@arm.com>
 > ---
->  .../power/allwinner,sun50i-h6-prcm-ppu.yaml   | 42 +++++++++++++++++++
->  1 file changed, 42 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/allwinner,sun50i-h6-prcm-ppu.yaml
+>  Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Applied, thanks!
 
 
