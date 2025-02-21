@@ -1,79 +1,155 @@
-Return-Path: <linux-pm+bounces-22594-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22595-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 803B8A3EA9B
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 03:12:44 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C87FA3EB7D
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 04:45:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BA73D19C363D
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 02:12:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1FC2417B34E
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 03:45:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1999F1D63F8;
-	Fri, 21 Feb 2025 02:12:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2A3851F758F;
+	Fri, 21 Feb 2025 03:44:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ScdMywpS"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="hPs8T5dd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E288B1D63F2;
-	Fri, 21 Feb 2025 02:12:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9B931519A2;
+	Fri, 21 Feb 2025 03:44:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740103947; cv=none; b=rQiDesrrzDxwDwnHUYNLSOE/bxNbyAkFnkjbLLbhK2KVmW8lvtXDNMvOe/im5FsIePok3skqBQ8A5iLVyKdvHWWTmyJN0QZSeE/4dG3AQ7eM8gmhWnScteIJBMwaNFbzi1UOJHHaKHNy58m3v9b/w/+2VCH/OoudYpxj9HDFQ90=
+	t=1740109497; cv=none; b=WAuQ/LzYabLU1jHh/UiRQlvFfX72dzsK65CzOJveOHqh+afltmuvToEiQCzi86jv8WeDNZTVbxkYBRpXoxdZx/ZlVq2QWu+Uq67RnExtORp7WGOOcepBfZZv3pWVbMvfi3vpd3oEOc8cfFsILaFrxB2prplLDDLh310hECwGc5w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740103947; c=relaxed/simple;
-	bh=zWG4BFYzQyItSLuM0QZPIiavJC+sGBG+6J1oP6G41Hs=;
-	h=Subject:From:In-Reply-To:References:Message-Id:Date:To:Cc; b=u4NToeMJ/khG/j+uwL7MgxRw5ZyVTb9oIxI/isM4ls+FTYcvoK6shAbX7G3O8WPlk3gne40Km0zuFUnuCXVXYwTzqxVmHGRz6V2XBAEDb4w9jUuVI47tbYWknprOYw9es3zu6ZGlg3XJMcrGprTvZLIjVW5I68hIejvVDb+AyV8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ScdMywpS; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6917DC4CEE2;
-	Fri, 21 Feb 2025 02:12:26 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740103946;
-	bh=zWG4BFYzQyItSLuM0QZPIiavJC+sGBG+6J1oP6G41Hs=;
-	h=Subject:From:In-Reply-To:References:Date:To:Cc:From;
-	b=ScdMywpSavg1dcTqXXYR14/9w/MTfMaCB3FjqUG6ZYbS2iANjrf7Q+s+B4OdDfACc
-	 rP7Lefw6+i63g1hWmpX2o1ddVCU5/T4k8zCNonMb/mlDy9YJbKoZohBvDCs/DPllvO
-	 adMiR7PL5QW4fwEg26AhdJQHJzAXljwpPTYmWPfgXLpfxQxjWZZbzgn/5Jq9GPJyz4
-	 WnF4vdeSGthAJNam35z4O5BzaYxGsYWUUcqWuULDlwqF8f7cvFyezpNwTEjYu/IVEr
-	 2gh2uIJamQOGPbTN58aPjD5jfQyywiUvLsTNWHQ54rmz+UkXD1XZlsHUtvRU6fHCrw
-	 pxRsmAuim+MUw==
-Received: from [10.30.226.235] (localhost [IPv6:::1])
-	by aws-us-west-2-korg-oddjob-rhel9-1.codeaurora.org (Postfix) with ESMTP id 71B943806641;
-	Fri, 21 Feb 2025 02:12:58 +0000 (UTC)
-Subject: Re: [GIT PULL] power-supply fixes for 6.14
-From: pr-tracker-bot@kernel.org
-In-Reply-To: <73672ehjkrjavtqe3uw3vlpriqclihn3y2k2snrf3qc3ovah7y@jvt2c3vrlnro>
-References: <73672ehjkrjavtqe3uw3vlpriqclihn3y2k2snrf3qc3ovah7y@jvt2c3vrlnro>
-X-PR-Tracked-List-Id: <linux-kernel.vger.kernel.org>
-X-PR-Tracked-Message-Id: <73672ehjkrjavtqe3uw3vlpriqclihn3y2k2snrf3qc3ovah7y@jvt2c3vrlnro>
-X-PR-Tracked-Remote: https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.14-rc
-X-PR-Tracked-Commit-Id: 98380110bd48fbfd6a798ee11fffff893d36062c
-X-PR-Merge-Tree: torvalds/linux.git
-X-PR-Merge-Refname: refs/heads/master
-X-PR-Merge-Commit-Id: 334426094588f8179fe175a09ecc887ff0c75758
-Message-Id: <174010397710.1552538.8374208410048912217.pr-tracker-bot@kernel.org>
-Date: Fri, 21 Feb 2025 02:12:57 +0000
-To: Sebastian Reichel <sre@kernel.org>
-Cc: Linus Torvalds <torvalds@linux-foundation.org>, linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
+	s=arc-20240116; t=1740109497; c=relaxed/simple;
+	bh=KUTLgK2Xp2SvcKFL6jmGIV78nc4eHUxmVQMR4wPZNvU=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=llyzGy9JQ2Rm4dMC6NUPPE7QHP81EuqtruXO3BvmlCV8P6veTHVwobD6KYD81LX1M2OmSjiiP8IyvzmW+5RrEhwlCi3fO+Vs/15PDBpk1EkrPP5W7WPoRoBcdQycafaLLuE4/QRTYErqSJCYJlmTTllALWO5MF8r9PSWC4JShpc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=hPs8T5dd; arc=none smtp.client-ip=192.198.163.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740109495; x=1771645495;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=KUTLgK2Xp2SvcKFL6jmGIV78nc4eHUxmVQMR4wPZNvU=;
+  b=hPs8T5ddbDfwMptq02S98/rPPclo2HRPWX0YzqVBr2+2XWcqP8Keynqh
+   /mpfezmdm3pN0DvA7xx6kla7HnLNvMesNmftHz28pyg6GXySuU2qB6pP2
+   tW46CS2pLybxbGJrotCMjW81FQKEhhBU3tTRicMG2jJkNlaXUuB62cagN
+   nGA5QUpwRxYja8M/sM9WE5DdROBW/kj91K9fTKRBQcvycU8T+RAZCqUet
+   G455uAX7X8XP8FovoOkWBOAVl/Jd9pzTJvYDsY58oUCv9pj0pAYfb+jIY
+   k4F05SFtIXu5i0s5fWrAO6qshOTHsLffC6pqjXVnNFrseYU7NgdsPwDRQ
+   g==;
+X-CSE-ConnectionGUID: lBIAe/YySs2EuxvoCOZQuA==
+X-CSE-MsgGUID: nIUc0WdjT6C7ePhpMafMvQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11351"; a="51536851"
+X-IronPort-AV: E=Sophos;i="6.13,303,1732608000"; 
+   d="scan'208";a="51536851"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by fmvoesa105.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 20 Feb 2025 19:44:54 -0800
+X-CSE-ConnectionGUID: w6YGOm9tR0+73hlzEeyd8g==
+X-CSE-MsgGUID: 5EQxgGyCR0yZTXGM6KdmQg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="115746845"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 20 Feb 2025 19:44:52 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tlJy5-00054f-2Z;
+	Fri, 21 Feb 2025 03:44:49 +0000
+Date: Fri, 21 Feb 2025 11:43:56 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: oe-kbuild-all@lists.linux.dev, linux-acpi@vger.kernel.org,
+	devel@acpica.org, linux-pm@vger.kernel.org,
+	"Rafael J. Wysocki" <rjw@rjwysocki.net>
+Subject: [rafael-pm:bleeding-edge 42/43] include/linux/acpi.h:1133:49:
+ warning: 'struct acpi_s2idle_dev_ops' declared inside parameter list will
+ not be visible outside of this definition or declaration
+Message-ID: <202502211150.aq1wxCVv-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
 
-The pull request you sent on Fri, 21 Feb 2025 02:46:17 +0100:
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   2c6f7196fd5d56b357e1f68d7be5866963aeea6f
+commit: b748ba3ac26ac7c6f5ff7dc55d27583ce6ab4506 [42/43] ACPI: Add missing prototype for non CONFIG_SUSPEND/CONFIG_X86 case
+config: i386-buildonly-randconfig-004-20250221 (https://download.01.org/0day-ci/archive/20250221/202502211150.aq1wxCVv-lkp@intel.com/config)
+compiler: gcc-12 (Debian 12.2.0-14) 12.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250221/202502211150.aq1wxCVv-lkp@intel.com/reproduce)
 
-> https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git tags/for-v6.14-rc
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202502211150.aq1wxCVv-lkp@intel.com/
 
-has been merged into torvalds/linux.git:
-https://git.kernel.org/torvalds/c/334426094588f8179fe175a09ecc887ff0c75758
+All warnings (new ones prefixed by >>):
 
-Thank you!
+   In file included from include/linux/tpm.h:21,
+                    from include/keys/trusted-type.h:12,
+                    from crypto/af_alg.c:26:
+>> include/linux/acpi.h:1133:49: warning: 'struct acpi_s2idle_dev_ops' declared inside parameter list will not be visible outside of this definition or declaration
+    1133 | static inline int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg)
+         |                                                 ^~~~~~~~~~~~~~~~~~~
+   include/linux/acpi.h:1137:52: warning: 'struct acpi_s2idle_dev_ops' declared inside parameter list will not be visible outside of this definition or declaration
+    1137 | static inline void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg)
+         |                                                    ^~~~~~~~~~~~~~~~~~~
+
+
+vim +1133 include/linux/acpi.h
+
+  1105	
+  1106	#ifdef CONFIG_ACPI
+  1107	void acpi_os_set_prepare_sleep(int (*func)(u8 sleep_state,
+  1108				       u32 pm1a_ctrl,  u32 pm1b_ctrl));
+  1109	
+  1110	acpi_status acpi_os_prepare_sleep(u8 sleep_state,
+  1111					  u32 pm1a_control, u32 pm1b_control);
+  1112	
+  1113	void acpi_os_set_prepare_extended_sleep(int (*func)(u8 sleep_state,
+  1114					        u32 val_a,  u32 val_b));
+  1115	
+  1116	acpi_status acpi_os_prepare_extended_sleep(u8 sleep_state,
+  1117						   u32 val_a, u32 val_b);
+  1118	#if defined(CONFIG_SUSPEND) && defined(CONFIG_X86)
+  1119	struct acpi_s2idle_dev_ops {
+  1120		struct list_head list_node;
+  1121		void (*prepare)(void);
+  1122		void (*check)(void);
+  1123		void (*restore)(void);
+  1124	};
+  1125	int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg);
+  1126	void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg);
+  1127	int acpi_get_lps0_constraint(struct acpi_device *adev);
+  1128	#else /* CONFIG_SUSPEND && CONFIG_X86 */
+  1129	static inline int acpi_get_lps0_constraint(struct device *dev)
+  1130	{
+  1131		return ACPI_STATE_UNKNOWN;
+  1132	}
+> 1133	static inline int acpi_register_lps0_dev(struct acpi_s2idle_dev_ops *arg)
+  1134	{
+  1135		return -ENODEV;
+  1136	}
+  1137	static inline void acpi_unregister_lps0_dev(struct acpi_s2idle_dev_ops *arg)
+  1138	{
+  1139	}
+  1140	#endif /* CONFIG_SUSPEND && CONFIG_X86 */
+  1141	void arch_reserve_mem_area(acpi_physical_address addr, size_t size);
+  1142	#else
+  1143	#define acpi_os_set_prepare_sleep(func, pm1a_ctrl, pm1b_ctrl) do { } while (0)
+  1144	#endif
+  1145	
 
 -- 
-Deet-doot-dot, I am a bot.
-https://korg.docs.kernel.org/prtracker.html
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
