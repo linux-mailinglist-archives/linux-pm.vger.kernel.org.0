@@ -1,227 +1,196 @@
-Return-Path: <linux-pm+bounces-22598-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22599-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C47FA3EC76
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 07:03:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C6CF6A3ECC5
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 07:19:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 20C223A99DB
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 06:03:25 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 80E3D19C3E3A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 06:19:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7A521EEA2D;
-	Fri, 21 Feb 2025 06:03:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E62C1FCD04;
+	Fri, 21 Feb 2025 06:18:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="VHMyib5G"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VNtxgC0X"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f49.google.com (mail-pj1-f49.google.com [209.85.216.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0952318C937;
-	Fri, 21 Feb 2025 06:03:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D22311E5B78;
+	Fri, 21 Feb 2025 06:18:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740117811; cv=none; b=qSscIm0a9ffyT4YfLQ8+HwV6TCZT26ley++yk9v5HTYHxcdA8BugxYmQlLGkfoFeBef4sg6/0JcmgE4u5g0UR2s/zqysYZ7tIzi0R5I4cGV1CJ8VfzsLRdcJJja2SC7NUZnuMtn5FGJPY9GN6UL7RsMaA0+sNSR0EApyCA4DlDg=
+	t=1740118737; cv=none; b=uSkn+fUxtqTeDxb4+kTjBg3XiaRLbsaS7znPKTNNmpAG060Oz4VN59YSCqYTbZvL1J9dCvN3zPrl1iF1FCprNYz2/gED8YIZgQo1GbCliSVdUf1MAD6LpK5uPcOEBzT9LI1I/jWlmdcJ/HEaSWASqeFDh3okAuk0bAnBFh/hMyU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740117811; c=relaxed/simple;
-	bh=myYqEq3IjsQ42MkQNilp2nZirfWQcMxslTThPccR8uQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=mvuQ1vf8V3BwgxYH9opnE+CZdIGzjaDjAsCob+gZ6+ZFDGd0EQjoGKYvyf5cmSIBjyorhYULHAvRCvqx/fWcbD/HWTsgjIsZWm2T5KClgOmwlO0keJG/RX8LhHrVXPp5RCde2RqU3WrkvAD1wrOYX1k3fxyxXZM/sZnXQOfK27o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=VHMyib5G; arc=none smtp.client-ip=209.85.216.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f49.google.com with SMTP id 98e67ed59e1d1-2fbf77b2b64so3549278a91.2;
-        Thu, 20 Feb 2025 22:03:29 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740117809; x=1740722609; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=h4e9ra78En4uAJWM6ym6twIIgEm+EPG5nOX3Kb+N+Mg=;
-        b=VHMyib5GPMMDQSZZHbmYoPwl8ISMwZfTR/8p4b3MvUiTwZFhGFRcI0Pz5BJ35u7F8E
-         Mfyeh86W/WIwEIPWzRGZTmi8MGFgqpDSwAki0G/Qi0Z1azNusmFKF5NrmRv9JZD8vpPb
-         QZ53db2vBNd6eGyO5s1ieQUZuE3iNr5UUmI4PvNoX1xVw1ksvbsDe6cmE0gXfyo8m0ox
-         LHeuBIZdxN5wB+gCZziJ0KXrhJw5gNHjn4uMscqH//3nd+sMdc6O3cCZzEJHgfw1f6F7
-         OFvs/qzvhuROdEN6hLcJRgmvI3pJ2lDMbKXWaGd91mZMQYIC8OOYUAepU1xQoeafwHqV
-         w1OQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740117809; x=1740722609;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=h4e9ra78En4uAJWM6ym6twIIgEm+EPG5nOX3Kb+N+Mg=;
-        b=G/nCOt/l+srypIEQAqYngGaHSR0hNuqp9/rm9nBWvmJk+Tr4mK+R2EkJZK80EvrcC+
-         7k4cRvPfYquAqSzAhxGoDyqJUNdacfgi21OOa4esVFDblyWKu+caJKnRYjpWMf199qin
-         4VzEWFopEBSa6kVCpYFljTIKjwtcukooEknA4gu3QSSk7tgXbFecJwK6cnyCYyThOuiy
-         0f507fxGOTAaG7DFjYdewppOLQmBK71Xkut1o3kullSc/fy+mA7Nc48oHpNsGNRu7ZDA
-         3YaZU7RbCjhNPnZ44bE1fpHL6VeIRtGlxGhcHRlCvL+G4dpvRRgvfFnet0Oa5aojZeYP
-         hzzQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWjp8uv7DaHtId8L5IOgdb9HiYDfQ7ewddLLdCtIf6CiPX7snMuzXn30+xE4WklVFhH1AOHzLeKvg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy06WWQ+oNic4Te5Zf1IRMvFiwOJ+lBbVNSayT4+sjZHaRmTCYr
-	uhv/8uNoUdckhZH3XJmEwMGGCS4UDCWGdUGEvggJU/a50BioVbGAjQ+2WjwrIug=
-X-Gm-Gg: ASbGncslaNNErwmOR3vAUague6dfyjPfED8kMWnzezidK1vghTAnJMhMvRMVWM0diAY
-	KkHyy6YFIx+O11vws1C2yC/YgwDlAZpetCqZ/tfR2BukoUfE83Q/Cw4qsARBCTX7wXPjH6ZUvu7
-	lci1nKMK/iiBqzdWdNkmA3dwaA4LZcK9OWmON4EV4y4Mv2EobO1x9ehDzQ5lYVm1vRCAz1BbrwH
-	+xVEQDcnfIyxcQxuVg8VLFmPLYe68oeuy1AGb6MujiBLo8jP3Uitsqi3iww7vKN0RGfxmW6iq99
-	qR2fBPHJmxf3boh+t46EO/GJ
-X-Google-Smtp-Source: AGHT+IFkf58Jvli/2fJFQmQt00LDpB1VtdyHwqcPGV8qa9JslZfV+vKkRVL8LGMdr15gl8o9Gb3dWA==
-X-Received: by 2002:a05:6a00:2302:b0:730:91b8:af1 with SMTP id d2e1a72fcca58-73426d82998mr2966216b3a.18.1740117808976;
-        Thu, 20 Feb 2025 22:03:28 -0800 (PST)
-Received: from nuvole.. ([144.202.86.13])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-734300da098sm299122b3a.129.2025.02.20.22.03.25
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 20 Feb 2025 22:03:28 -0800 (PST)
-From: Pengyu Luo <mitltlatltl@gmail.com>
-To: sebastian.reichel@collabora.com
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	mitltlatltl@gmail.com
-Subject: Re: [PATCH v3 5/6] power: supply: add Huawei Matebook E Go psy driver
-Date: Fri, 21 Feb 2025 14:01:04 +0800
-Message-ID: <20250221060143.201963-1-mitltlatltl@gmail.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <7la3x6f733ju4szqlzmtr277ah7c7lb4d4gcmjgu2rjj5uzpyd@43dmenbpczjs>
-References: <7la3x6f733ju4szqlzmtr277ah7c7lb4d4gcmjgu2rjj5uzpyd@43dmenbpczjs>
+	s=arc-20240116; t=1740118737; c=relaxed/simple;
+	bh=8Tx8j0lvA4+fEQUw3oEHp9MRGre6e3kM75ckUoHtBvM=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=Mn5P8KODLvCsmyXUdcxqBqaO9WtgXHUy3iuQPVvTpsEDHqYLqnA+wcBFlM8zxSBS6TwSP8p0XuDfrTSEHJHUPYnYXKEmZT6GkdrMvO0izg2ffgDfuRHq2eqsAf0isZ8WdwicqexFzAVW/xhnO0dp0Ozsf3xJVazYng5VZoP7npg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VNtxgC0X; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279872.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L5xxQM015703;
+	Fri, 21 Feb 2025 06:18:50 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	8I4xAWQpxfpMRrlRqjIPNzPFALUHLmb31EkOijYpW6M=; b=VNtxgC0Xcwat/Hel
+	II6pZygsOYs+4dL+Gw5OUM+0wJMQF25vPL7o8cxYnJWke32T6oQUL/Nzvp2HlWFU
+	I0s3Pdhlb8UhvDM2YIlsQ7l+vEKC+AK4WghYBxKwtzsicPMCmOgVuGmXlmywhYz8
+	lPrwh1qi0USSZ2+ekpYsVdVvdFfP5geo3DNZTEjIDOJajbjWB500rgWJywoBTC80
+	jCIykSaJdI8Rq/ABSru4o56m1y7ew0t6p6AFl7Ab3mdUGaqxDNNf0MdAPPGmd6Ot
+	0hr8TByMMgvZ2nbSXdFkbeDz5H29Ut1qWFh9meCuJqMOBvWVexKlrisufhd4vg4e
+	ifntgA==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44xku6r1pc-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Feb 2025 06:18:50 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51L6InsI031251
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Feb 2025 06:18:49 GMT
+Received: from [10.216.53.96] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Thu, 20 Feb
+ 2025 22:18:43 -0800
+Message-ID: <17561e13-822b-440a-b62d-3d0eac1861d9@quicinc.com>
+Date: Fri, 21 Feb 2025 11:48:40 +0530
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH V8 2/7] interconnect: core: Add dynamic id allocation
+ support
+To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        Conor Dooley <conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>,
+        Odelu Kukatla <quic_okukatla@quicinc.com>,
+        "Mike
+ Tipton" <quic_mdtipton@quicinc.com>,
+        Jeff Johnson
+	<quic_jjohnson@quicinc.com>,
+        Andrew Halaney <ahalaney@redhat.com>,
+        Sibi
+ Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>
+References: <20250205182743.915-1-quic_rlaggysh@quicinc.com>
+ <20250205182743.915-3-quic_rlaggysh@quicinc.com>
+ <bwiuhfgv4jw7tlwjqffgrxvskxbpf4forz46nn5g3vihz3z5od@w25y7hdprykf>
+ <f40f6b9d-8f31-4ce6-a912-1aa484863d5e@quicinc.com>
+ <6j576swreyqcyu7ryxtyojjmo7clfwb7fibw2aeuvif5vzexpq@du2farsldpti>
+Content-Language: en-US
+From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+In-Reply-To: <6j576swreyqcyu7ryxtyojjmo7clfwb7fibw2aeuvif5vzexpq@du2farsldpti>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: pg88hATFIV5t7CKqbUc97r4tMNKK-jOM
+X-Proofpoint-GUID: pg88hATFIV5t7CKqbUc97r4tMNKK-jOM
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-21_01,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ malwarescore=0 spamscore=0 impostorscore=0 suspectscore=0 clxscore=1015
+ mlxscore=0 bulkscore=0 phishscore=0 mlxlogscore=999 lowpriorityscore=0
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502210046
 
-On Fri, Feb 21, 2025 at 9:33 AM Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
-> On Thu, Feb 20, 2025 at 02:43:20PM +0800, Pengyu Luo wrote:
-> > On Thu, Feb 20, 2025 at 8:24 AM Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
-> > > On Tue, Jan 14, 2025 at 01:51:27AM +0800, Pengyu Luo wrote:
-> > > > On the Huawei Matebook E Go tablet the EC provides access to the adapter
-> > > > and battery status. Add the driver to read power supply status on the
-> > > > tablet.
-> > > >
-> > > > Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
-> > > > ---
-> > > >  .../ABI/testing/sysfs-class-power-gaokun      |  47 ++
-> > > >  drivers/power/supply/Kconfig                  |  10 +
-> > > >  drivers/power/supply/Makefile                 |   1 +
-> > > >  drivers/power/supply/huawei-gaokun-battery.c  | 548 ++++++++++++++++++
-> > > >  4 files changed, 606 insertions(+)
-> > > >  create mode 100644 Documentation/ABI/testing/sysfs-class-power-gaokun
-> > > >  create mode 100644 drivers/power/supply/huawei-gaokun-battery.c
-> > > >
-> > > > diff --git a/Documentation/ABI/testing/sysfs-class-power-gaokun b/Documentation/ABI/testing/sysfs-class-power-gaokun
-> > > > new file mode 100644
-> > > > index 000000000..b1eb9e8d7
-> > > > --- /dev/null
-> > > > +++ b/Documentation/ABI/testing/sysfs-class-power-gaokun
-> > > > @@ -0,0 +1,47 @@
-> > > > +What:                /sys/class/power_supply/gaokun-ec-battery/smart_charge
-> > > > +Date:                January 2025
-> > > > +KernelVersion:       6.12
-> > > > +Contact:     Pengyu Luo <mitltlatltl@gmail.com>
-> > > > +Description:
-> > > > +             This entry allows configuration of smart charging behavior with
-> > > > +             four parameters. The format is: <mode> <delay> <start> <stop>.
-> > > > +
-> > > > +             - mode: Defines the charging mode (1 or 4). Mode 4 enables delay,
-> > > > +                     while mode 1 does not.
-> > > > +             - delay: Specifies the delay in hours (non-negative). This is
-> > > > +                     only used when 'mode' is set to 4.
-> > > > +             - start: The battery percentage at which charging starts (0-100).
-> > > > +             - stop: The battery percentage at which charging stops (1-100).
-> > > > +
-> > > > +              When the laptop is connected to a power adapter, it starts
-> > > > +              charging if the battery level is below the 'start' value. It
-> > > > +              continues charging until the battery reaches the 'stop' level.
-> > > > +              If the battery is already above the 'stop' level, charging is
-> > > > +              paused.
-> > > > +
-> > > > +              When the power adapter is always connected, charging will
-> > > > +              begin if the battery level falls below 'start', and charging
-> > > > +              will stop once the battery reaches 'stop'.
-> > > > +
-> > > > +              If mode is set to 4, the above charging mode will only occur
-> > > > +              after the specified delay in hours. If mode is 1, there is
-> > > > +              no delay.
-> > > > +
-> > > > +             Access: Read, Write
-> > > > +
-> > > > +             Valid values:
-> > > > +                     - mode: integer value (1 or 4)
-> > > > +                     - delay: integer value, delay in hours (non-negative)
-> > > > +                     - start: integer value, battery percentage (0-100)
-> > > > +                     - stop: integer value, battery percentage (1-100)
-> > >
-> > > There are common properties for start and stop charging percentage,
-> > > which should be used:
-> > >
-> > > * POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD
-> > > * POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD
-> > >
-> >
-> > Agree, but at least, we should pass delay, start, end. EC only
-> > providedone interface to set mode and delay, that requires 4
-> > arguments, we can handle it with 3 arguments, as you suggested
-> > below. but if we treat start and end separated, then if we want
-> > to set smart charge, we set start, set end, set delay(read start
-> > read end, then set them again). It is a bit redundant.
->
-> Yes, if these are separate properties you won't get atomic updates.
-> But is that really a problem? Using the standard properties means
-> that you get UI support in the future. I know at least the GNOME
-> people are working on this.
->
 
-On my another x86_64 device with end threshold supported, KDE Plasma
-supports showing this as
 
-> Battery is configured to charge up to aproximately <value>%
+On 2/17/2025 6:32 AM, Dmitry Baryshkov wrote:
+> On Sun, Feb 16, 2025 at 10:08:51PM +0530, Raviteja Laggyshetty wrote:
+>>
+>>
+>> On 2/10/2025 4:20 PM, Dmitry Baryshkov wrote:
+>>> On Wed, Feb 05, 2025 at 06:27:38PM +0000, Raviteja Laggyshetty wrote:
+>>>> The current interconnect framework relies on static IDs for node
+>>>> creation and registration, which limits topologies with multiple
+>>>> instances of the same interconnect provider. To address this, update
+>>>> the interconnect framework APIs icc_node_create() and icc_link_create()
+>>>> APIs to dynamically allocate IDs for interconnect nodes during creation.
+>>>> This change removes the dependency on static IDs, allowing multiple
+>>>> instances of the same hardware, such as EPSS L3.
+>>>>
+>>>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
+>>>> ---
+>>>>  drivers/interconnect/core.c | 13 ++++++++++++-
+>>>>  1 file changed, 12 insertions(+), 1 deletion(-)
+>>>>
+>>>> diff --git a/drivers/interconnect/core.c b/drivers/interconnect/core.c
+>>>> index 9d5404a07e8a..40700246f1b6 100644
+>>>> --- a/drivers/interconnect/core.c
+>>>> +++ b/drivers/interconnect/core.c
+>>>> @@ -20,6 +20,8 @@
+>>>>  
+>>>>  #include "internal.h"
+>>>>  
+>>>> +#define ICC_DYN_ID_START 10000
+>>>> +
+>>>>  #define CREATE_TRACE_POINTS
+>>>>  #include "trace.h"
+>>>>  
+>>>> @@ -826,7 +828,12 @@ static struct icc_node *icc_node_create_nolock(int id)
+>>>>  	if (!node)
+>>>>  		return ERR_PTR(-ENOMEM);
+>>>>  
+>>>> -	id = idr_alloc(&icc_idr, node, id, id + 1, GFP_KERNEL);
+>>>> +	/* negative id indicates dynamic id allocation */
+>>>> +	if (id < 0)
+>>>
+>>> Nit: I think it might be better to add an explicit define for that and
+>>> to decline all other negatdive values. Please leave us some room for
+>>> future expansion.
+>>>
+>> Do you mean to replace the value of ALLOC_DYN_ID from -1 to some
+>> positive value like 100000 and to use it as initial ID for the nodes
+>> requiring the dynamic allocation ? This explicit define can be used as
+>> check for dynamic allocation and also as argument to idr_alloc min value
+>> argument. Is my interpretation of the comment correct ?
+> 
+> No, it is not. I asked to add an explicit define for -1 in the ICC
+> framework and make icc_node_create_nolock() reject all other negative
+> values.
 
-it doesn't support setting things. So, can I keep passing delay, start,
-end when setting, but also setting start and end as battery properties?
+Understood, will make the change as suggested.
+> 
+>>
+>>>> +		id = idr_alloc(&icc_idr, node, ICC_DYN_ID_START, 0, GFP_KERNEL);
+>>>> +	else
+>>>> +		id = idr_alloc(&icc_idr, node, id, id + 1, GFP_KERNEL);
+>>>> +
+>>>>  	if (id < 0) {
+>>>>  		WARN(1, "%s: couldn't get idr\n", __func__);
+>>>>  		kfree(node);
+>>>> @@ -962,6 +969,10 @@ void icc_node_add(struct icc_node *node, struct icc_provider *provider)
+>>>>  	node->avg_bw = node->init_avg;
+>>>>  	node->peak_bw = node->init_peak;
+>>>>  
+>>>> +	if (node->id >= ICC_DYN_ID_START)
+>>>> +		node->name = devm_kasprintf(provider->dev, GFP_KERNEL, "%s@%s",
+>>>> +					    node->name, dev_name(provider->dev));
+>>>> +
+>>>>  	if (node->avg_bw || node->peak_bw) {
+>>>>  		if (provider->pre_aggregate)
+>>>>  			provider->pre_aggregate(node);
+>>>> -- 
+>>>> 2.39.2
+>>>>
+>>>
+>>
+> 
 
-> > > For the charge mode it seems there is no need to expose anything.
-> > > You can have a single property for the charge delay in hours. If
-> > > '0' is written to it there is no delay, so you can use mode 1 and
-> > > otherwise you can use mode 4. There is no need for this multi-value
-> > > mess. The delay thing seems to be quite specific to this EC, so a
-> > > custom property for that is fine.
-> > >
-> >
-> > Agree, mentioned above
->
-> [...]
->
-> > > > +static void gaokun_psy_init(struct gaokun_psy *ecbat)
-> > > > +{
-> > > > +     gaokun_psy_get_bat_present(ecbat);
-> > >
-> > > why?
-> > >
-> >
-> > EC provided a way to check if battery is presented, if there is no
-> > battery, then we don't fetch battery info, but other info
-> > (i.e. adapter) is still available.
->
-> nevermind, I miss-read and wondered why gaokun_psy_bat_present is
-> being called twice.
->
-> > > > +     if (!gaokun_psy_bat_present(ecbat))
-> > > > +             return;
-> > >
-> > > You only call it in your probe function, so the following will
-> > > remain uninitialized if the battery was not present at boot time.
-> >
-> > mentioned above, keep them uninitialized is unharmful.
->
-> Does the battery not support hot-plug?
->
-
-I am not sure, this is a tablet shipped with a qualcomm chip, we can
-take it as an embedded device. I just took normal usage and using
-without battery into account.
-
-Best wishes,
-Pengyu
 
