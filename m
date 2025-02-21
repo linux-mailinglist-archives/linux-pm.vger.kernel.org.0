@@ -1,75 +1,77 @@
-Return-Path: <linux-pm+bounces-22695-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22696-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 06C2BA4017F
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 21:59:15 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A42AA40178
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 21:57:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 307E23ACAA5
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 20:56:49 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 0CF707AA928
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 20:56:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5C5E3253B61;
-	Fri, 21 Feb 2025 20:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CD4F4253F1C;
+	Fri, 21 Feb 2025 20:56:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cHrfXLzL"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Xihv17xM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f170.google.com (mail-pl1-f170.google.com [209.85.214.170])
+Received: from mail-pl1-f174.google.com (mail-pl1-f174.google.com [209.85.214.174])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D50F8228CBA;
-	Fri, 21 Feb 2025 20:56:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.170
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 380CF253B7A;
+	Fri, 21 Feb 2025 20:56:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.174
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740171417; cv=none; b=iykcksh/KWHtv1hQ+ALCuDGYytBO1Pi+rQDTUskBHEyi8onxnX2XAe0iO4mZ0rdg7CDhT5BTLGCUDD/rkSD7t0BjAyx2Qsiji5TRq4PT5lDHneC+YbdgHsjn2uIW92tI+tuLdIKPX759xIvKQfAQDV6xzuGgpmxvUSkSCUkgEtM=
+	t=1740171419; cv=none; b=VQYWnOwV9bK588GabQsDmR9uxa9ppKYZt6B6PEwqgi7LuiXLNBjzHg2H3OwVdi0prrCi0YUKho2sfKy18pSkO14m5G1AcdXlWa7/7SIs+Vbp8+PBeHJFvkbBpwDhjOyu3UWxDFIlyXRBolnH6MhxCDOMiCq9cwcKY9vXmo04rYE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740171417; c=relaxed/simple;
-	bh=/7+cCF97LVI2LZ3uAXEdDIX21F0soxUVOoE6LZY7lpc=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=sAkZXI1+QZUi+O+q0itgAnJJUeADx3DJP8debLsEPZkv+0hBK5dRQpMe2FV9PCllAZMd+EIDLigU1jMUZblz0ic0D10yX/XXIgchNKFeYJFbRM5AbS6D2rZOpnypy4E5y9SEgFXPO5nUW/6cM9LOOh7tl6nMTqi9pPO8X/+HEbU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cHrfXLzL; arc=none smtp.client-ip=209.85.214.170
+	s=arc-20240116; t=1740171419; c=relaxed/simple;
+	bh=QUMElo3V3F9zxTSpJgoR9R9PyCpJqP8Xz/KTGMho6Mc=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=IZwK71xd7+KstCvoO1PdydtknrQg5ee+6GsjPPnrO5KwqqH2+YI1UJemxX4ZppA2uFQanXjmPhz2gn84C0TMIMaeIAH1+omnaOZE3LFuXoGOsAhvEs4qPUKIceDwrpjOBpSpFoglZmHvO/NlTRNDvEFvsdMC15Ti0Gi2CWYZd98=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Xihv17xM; arc=none smtp.client-ip=209.85.214.174
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f170.google.com with SMTP id d9443c01a7336-22114b800f7so50762975ad.2;
-        Fri, 21 Feb 2025 12:56:54 -0800 (PST)
+Received: by mail-pl1-f174.google.com with SMTP id d9443c01a7336-220c8f38febso56397955ad.2;
+        Fri, 21 Feb 2025 12:56:58 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740171414; x=1740776214; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Z8lhhVeH9X9OD7xrq+ml0fQUZEnU/MtBX4pCJFfiH3Y=;
-        b=cHrfXLzLeCiBctYDt7eyGs+c255csl8Byl1cw2l3IXmxM7HP3DoEOJvjJeSLY2VBQ4
-         JoASFiE2x73qBQYw55Ac+P6afwb7okYAr9Fh9bLTEC183YoFxOkJPKs1WN5158UBzbUG
-         G7ORgjIOfPFWo4Ml7bsU5UFoElcjnj62cfiNxx56k0PgUT90DM0EGq8DnYhpU3HK33wK
-         nYWw4iHGInGRiEfZmVNoikP2uqs6lD4FjrJ1bvkgX+NMuood3WBCjMZhj3OC1EVjf0/T
-         3NLVvDTDtyZ7Ba6TJasiP8w4eGou15EkbHava4uRBEuRAiVL2dI77OifcqLosMAactUX
-         8Ppw==
+        d=gmail.com; s=20230601; t=1740171417; x=1740776217; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=paCgM1bNx83qDai14zRwjLnTQ/ATfDA7bHgMh2vXV+4=;
+        b=Xihv17xMkp488SXVTa1vRrK/Ta//RxD3AgKs/FI909yimVirmlYX8tKy5zP+zt02te
+         Eg7cKITnSN7JnVcZpTntoj9/ESCbMu/X0ImIcDvO2wIKrtgFGJ+RLaM8le6/WcUPUyXc
+         JsZMJT8nMXuh/lBCpshSgqOdsWqAp9PICTXgmXqaOHYGtrKrAGhszYN6BY7cPgLS4kA4
+         /woI/E3MGNaEwPp7FFJ6kCIOOme7ED4hnLrvKUVK65RAeRtPmFbTtynxIqlUfovwNpIl
+         2k6JyFmhXIlLNue4f62XWro41P2XhM6pYqTdMVRwAdm7T6Dj7xZOP9xOdGc7FUCnrUU7
+         ECsA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740171414; x=1740776214;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Z8lhhVeH9X9OD7xrq+ml0fQUZEnU/MtBX4pCJFfiH3Y=;
-        b=SwrikKUV8dxhzluzC5b1YDYRfF+aqE7r77dNLuxtzLlG0Ovc1rLk1fvrx1r8PUh0Uk
-         800Q9kWorefOiFHSor/RLjx13iBM+2PKia022WmsZArCR5DAodxIrXOq7S2+07f/oilG
-         l4CKjCdSHRx8f4UhpaDatIq6q2p0hm1YN9H5naW1wHholPSjUAoZ+s6IKPby4P/9o/a2
-         sOJsBO8LlHP6FNoc2PsDLslLXqCVmBdDqOGUeP8nljWOp8cFnY0h1Kw+e6paWSks79uV
-         3n262/0+Q38iL9jSGxC5qhWp/t/mliJ4C4IVaG3n0Bq9OwFvZxos8HRj4vs6sJJXFzsm
-         Z3hg==
-X-Forwarded-Encrypted: i=1; AJvYcCU0J4qr/iIx9eCRHzCbZFvA5e3PveSepdfEVmYYkmc6QftdVn7HRUVq0YUgo50hmLHi0mXSSrXG3MmPSjA=@vger.kernel.org, AJvYcCV1/mM4sH5hoXaekLdCIK3SC6dpQ3jKPTeayX8eSK/a27bmUya+JPDaB4gqF78IG4FYnZ7AEVALvquUhHr/+TU=@vger.kernel.org, AJvYcCVzCsG03cjNS62IQ8FwPrhnbsNdzb1U6lYbkfqgIzpDVwiaSZHo6jjdGJf8Cahez+bpHoXJBNA2e7A=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyEo8fZIzRmtplGa/CIHOj7ZU6hT6sukXIelaM3T8sraVv4Es62
-	4WWSVCUX+p9Lq58co5Orzb28quDVjlwraH+g6R4EVgDt2mnBpvYY
-X-Gm-Gg: ASbGncutOrMm++F71tLs6I9ZK6YF95N1ZNTGIKPNCkzISqKfgh1tGsTIf3jSkhpT7Ml
-	z5L5LHro/VE3h0QNofDRbLmRLguLHwhd71veJ9eNGbMTqNu3KlDasHWbHj9wWsQZ2e4nL/yO7zh
-	2n3jWCCUFcwx/WQK5SvViWj+91+Q97ynJ3ygziyyRu1JK/v52o/9xyesbVZbfpJd1ey2sM2Fcrq
-	63LwjdI/I/wfc4nazlcwbvuv8jHX6i5GzbC09xe8wizXTBB+KRiKwlPiaQmH9bGEDzUUlfo691h
-	En+sgipYEfyDfEi4kY2reQ5FMg==
-X-Google-Smtp-Source: AGHT+IFRImKa4DoPyReOUvSXgQZq1X5x1z6dYzGTDKMLJGX3yWLR8EyKsJPywhTzWA46IVhMKnABsQ==
-X-Received: by 2002:a17:903:32c2:b0:220:d078:eb28 with SMTP id d9443c01a7336-2219fff356dmr58787965ad.48.1740171413934;
-        Fri, 21 Feb 2025 12:56:53 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740171417; x=1740776217;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=paCgM1bNx83qDai14zRwjLnTQ/ATfDA7bHgMh2vXV+4=;
+        b=cs1WLlZoHlVl+fwyBAtUviBJQEzA5EiYdaPMwJwrRFNcDOHz2DDckT8dPQWyCFOZk8
+         WD/gCwxeiii3KXPtctfEelMuncRR5YFMJ5rTe17sl45YHl/L3bNtJIPJgh5IuuQnFKlX
+         FuyJ66b93y30f2cypVijMIDPMzIkuf5ysHChOCxAIuxmgyJebcax6aULARKTRYn0sIgw
+         MY+pydfLiyxR1eeyb4s8XzoCdrbFZ+wHX6RqYCTgsTYQKw26k1ghRIQ2CEsZALz8V4sx
+         6EGEmrdU/5yyo+R9v097bMRPfWanX5VoJerQL5p+z3B5pSSgqXEiEmBLODHDfRvNoC6D
+         A9kQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUb//NCpvS6p5z6ANeXq/gZ6k7pYaMtNsskcjs/BCI6X4aMgZKHQA9GRArRVuMTtCTFHHimwQfHGtSuSbNPe4U=@vger.kernel.org, AJvYcCW/W+9S0D+Tw4BD2ghoOnQCHgXg8FnU9/PnqwLYwUWCGUoKOS14vt8BGZ/1sSkuKLegV0wCBe6WIAGZ+yE=@vger.kernel.org, AJvYcCXISSejOlLfjPHGLAlWRzlr3sPpMyr0ALozmstmuznbv85fK9VBhpR1U0PDiHsL8mVsqT5ILgwIzjg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzxIrMd3O9rvwZLpDBw7Xrc7zJ/BzRzmIXbYBpVMNGgzMAicyUf
+	1LWWQj2Hnv4c7JqaXKsha8GCfy/sNgYwKeh2Cc/0cEQV8kZkhs02
+X-Gm-Gg: ASbGncsNsdf0HEXlmJ/lz37hhCSIcWNspqzEnX7shq/xwyzuqBZ24c9mk7mFQZVBEL/
+	RAYa6Cm6txFiYibrgZXrS4zIktQSSORLT13TSg73Y99nnDwFLOMu8iTfQB2+vL044KYs1CsWG+9
+	4363lqESxLFf/Bk+r67xrw0XJmbBuPhIHc+FTobRO+eKJ9hpiWpOHq+BXtKvycGoql+9Oe9kLzt
+	FKzi3BNx7Ts6kjCV2IHUtQfQT2jLlcxclrNSLyOV3OLloYpbPkfm0NAurP2s9M1S0Wn/lfwUEM9
+	YkU7ONGckdEt6XXvljFsbVITFg==
+X-Google-Smtp-Source: AGHT+IEhwcXAnqVz+vvUfY9p+2PW14yyn57NUFF7bxWfhMxbH3vkbFsnwsXHmLcMkYgcoOGbYy/Sjg==
+X-Received: by 2002:a17:902:f60b:b0:216:725c:a137 with SMTP id d9443c01a7336-2219ffb8b58mr83271265ad.28.1740171417524;
+        Fri, 21 Feb 2025 12:56:57 -0800 (PST)
 Received: from localhost ([216.228.125.130])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d5585220sm139846785ad.215.2025.02.21.12.56.52
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d556dc4bsm141724985ad.188.2025.02.21.12.56.56
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 12:56:53 -0800 (PST)
+        Fri, 21 Feb 2025 12:56:56 -0800 (PST)
 From: Yury Norov <yury.norov@gmail.com>
 To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
@@ -99,10 +101,12 @@ Cc: Yury Norov <yury.norov@gmail.com>,
 	linux-pm@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/2] Bitmap bindings for rust
-Date: Fri, 21 Feb 2025 15:56:36 -0500
-Message-ID: <20250221205649.141305-1-yury.norov@gmail.com>
+Subject: [PATCH 1/2] rust: Add cpumask helpers
+Date: Fri, 21 Feb 2025 15:56:37 -0500
+Message-ID: <20250221205649.141305-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250221205649.141305-1-yury.norov@gmail.com>
+References: <20250221205649.141305-1-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -111,28 +115,99 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-Hi Viresh, Miguel, Danilo and everyone,
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-Please review the bindings and a new maintenance entry together with my
-understanding of our way to collaborate. I tried to summarize the recent
-discussions in patch 2. If you have any thoughts please let me know.
+In order to prepare for adding Rust abstractions for cpumask, add
+the required helpers for inline cpumask functions that cannot be
+called by rust code directly.
 
-Thanks,
-Yury
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Yury Norov [NVIDIA] <yury.norov@gmail.com>
+---
+Yury: a bit more wording in commit description.
 
-Viresh Kumar (1):
-  rust: Add cpumask helpers
+Question: zalloc_cpumask_war() is a convenient wrapper around
+alloc_cpumask_var_node(). Maybe rust can use the latter directly as it's
+a true outlined function? There's more flexibility, if you need it, but
+also a higher risk that the API will change: ~40 users vs 180 for zalloc
+thing. Up to you guys. I can send v2 if needed.
 
-Yury Norov (1):
-  bitmap: add rust bindings entry in MAINTAINERS
-
- MAINTAINERS                     |  5 +++++
  rust/bindings/bindings_helper.h |  1 +
  rust/helpers/cpumask.c          | 40 +++++++++++++++++++++++++++++++++
  rust/helpers/helpers.c          |  1 +
- 4 files changed, 47 insertions(+)
+ 3 files changed, 42 insertions(+)
  create mode 100644 rust/helpers/cpumask.c
 
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index f46cf3bb7069..2396ca1cf8fb 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -10,6 +10,7 @@
+ #include <linux/blk-mq.h>
+ #include <linux/blk_types.h>
+ #include <linux/blkdev.h>
++#include <linux/cpumask.h>
+ #include <linux/cred.h>
+ #include <linux/device/faux.h>
+ #include <linux/errname.h>
+diff --git a/rust/helpers/cpumask.c b/rust/helpers/cpumask.c
+new file mode 100644
+index 000000000000..df4b1a2853a9
+--- /dev/null
++++ b/rust/helpers/cpumask.c
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/cpumask.h>
++
++void rust_helper_cpumask_set_cpu(unsigned int cpu, struct cpumask *dstp)
++{
++	cpumask_set_cpu(cpu, dstp);
++}
++
++void rust_helper_cpumask_clear_cpu(int cpu, struct cpumask *dstp)
++{
++	cpumask_clear_cpu(cpu, dstp);
++}
++
++void rust_helper_cpumask_setall(struct cpumask *dstp)
++{
++	cpumask_setall(dstp);
++}
++
++unsigned int rust_helper_cpumask_weight(struct cpumask *srcp)
++{
++	return cpumask_weight(srcp);
++}
++
++void rust_helper_cpumask_copy(struct cpumask *dstp, const struct cpumask *srcp)
++{
++	cpumask_copy(dstp, srcp);
++}
++
++bool rust_helper_zalloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
++{
++	return zalloc_cpumask_var(mask, flags);
++}
++
++#ifndef CONFIG_CPUMASK_OFFSTACK
++void rust_helper_free_cpumask_var(cpumask_var_t mask)
++{
++	free_cpumask_var(mask);
++}
++#endif
+diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
+index 0640b7e115be..de2341cfd917 100644
+--- a/rust/helpers/helpers.c
++++ b/rust/helpers/helpers.c
+@@ -11,6 +11,7 @@
+ #include "bug.c"
+ #include "build_assert.c"
+ #include "build_bug.c"
++#include "cpumask.c"
+ #include "cred.c"
+ #include "device.c"
+ #include "err.c"
 -- 
 2.43.0
 
