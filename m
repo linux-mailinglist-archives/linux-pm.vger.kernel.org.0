@@ -1,127 +1,136 @@
-Return-Path: <linux-pm+bounces-22683-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22684-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id EC587A3FD04
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 18:12:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E7373A3FD42
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 18:20:29 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CA3813B3326
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 17:05:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id B13D83A4234
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 17:15:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1B77824C66D;
-	Fri, 21 Feb 2025 17:05:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7AE5824E4C4;
+	Fri, 21 Feb 2025 17:15:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Rmi5w32T"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ueXyEGTF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6674124BD11;
-	Fri, 21 Feb 2025 17:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 52B8124E4BC;
+	Fri, 21 Feb 2025 17:15:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740157516; cv=none; b=BCtkPYvWS2MZcQCbGEks15jz6GqBmfCGnwpuSR4VI9PHlG5kVo6tffIeagmfyYFRp2XgbDfYVNwTn8HvLNYHROkTdEZfbVAfU8YfvKy1GOuOjGLGt2stsprTaqyRA2n7Kp7uAit7d5I6FZPwYn0Tzfzg6V/SkwXbv73UM+X1woQ=
+	t=1740158112; cv=none; b=Dk6jwP2TvfsTz64IGNu9+Jjd3v1juXgxCOh/TPXP462SCNfpEGuFlQJhDvj30qvVPs4tmiLmtQ5JsrDpOzxwWn3NX+zSoSFPNTBxba/fvh+Tn4ojqB4z5UlzURgMiIqtQtriW6PuYxCGuvCNy2m2AsqX24TbtwWVU1PKw09JDA4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740157516; c=relaxed/simple;
-	bh=WbW3SAWLQJrmCpMzqPGX5MMUKli4PXDnNDOyEBLp3X0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=bfLYm4+bdaexAvWrUIaqQXIVMBje2LpmTeVHKBxO3Fhsjw2t0F50IDd1PBH0biP0vQVM9TTKf3udUtPTEpAKZliXt5/rf5M0NQauzwSj3qezkQrAinCHjKcfln1HFAU5B8nnxlX9hrNSmfEJfc2xWubueAC0HkuJx9xCtr8teXo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Rmi5w32T; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740157515; x=1771693515;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=WbW3SAWLQJrmCpMzqPGX5MMUKli4PXDnNDOyEBLp3X0=;
-  b=Rmi5w32TT19WlOwhpmqR8vkhu9+CYyFc8BzfG4vdBriCconLKnc/AgdG
-   VgRT4ItwNIzQgOjBGTPf9GdPIIBOayC8MdNc5Xty4dm54VJQ5b03IXgI0
-   08N32gJ8KfG65p4+aSrl97F+LRr9e86hpJt/rtnvEm3KSGf0+qmYPSllj
-   LXFavFkV7Tt1IGScRWeS27GFUn/IMbZN41kAFFjAkrBl0IX7n+m2DNTHD
-   Xfj5Xtq1nCnNw62/CSTDCs1v946atiEpP3b35ZJEyBCOhAOTSVcPWPJn6
-   DKNLf7O6/pCU57Kl1KMHX30LW6eDl/tZsLWxeKI41Bap01VAY8PDPLlba
-   w==;
-X-CSE-ConnectionGUID: QRZs2qsfQyqr4Gb2I15gEg==
-X-CSE-MsgGUID: OKsH8ZkbRb+7Gitf4c382g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11352"; a="40902463"
-X-IronPort-AV: E=Sophos;i="6.13,305,1732608000"; 
-   d="scan'208";a="40902463"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 09:05:14 -0800
-X-CSE-ConnectionGUID: PYJDpfRXRe2YAt1iGJHvGA==
-X-CSE-MsgGUID: Yr500fwjSwuOm2NHrTIwOg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,305,1732608000"; 
-   d="scan'208";a="115374665"
-Received: from inaky-mobl1.amr.corp.intel.com (HELO [10.125.110.189]) ([10.125.110.189])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 21 Feb 2025 09:05:13 -0800
-Message-ID: <43c873e1-737a-4119-abb7-49cc51acd6a0@intel.com>
-Date: Fri, 21 Feb 2025 10:05:09 -0700
+	s=arc-20240116; t=1740158112; c=relaxed/simple;
+	bh=4PQM9t+0YypwAcqSCo3bdqve07Aqqp7/EUz1SJsYKJQ=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=O+KsjowczDjyRlDu9swUiIXUdb7vrU9EWAlmoQiD9AG61rdjREoUxiehysjDqDeXXl+Wdz2fwTw56QvjWS/il4J6fshYzGvKuamJU2rtCsel/qGlvNJVAUecw5hH1L+QbebmOcKGN+KR985PGf7+QAwlUFs4C6GcFaAHQ+jkfPU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ueXyEGTF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 31E1BC4AF0B;
+	Fri, 21 Feb 2025 17:15:12 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740158112;
+	bh=4PQM9t+0YypwAcqSCo3bdqve07Aqqp7/EUz1SJsYKJQ=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=ueXyEGTFXJf6Qe8P+veQ6vHS/eaKbtZf0I3e067X0JqGy7GE5jetfTeQaUZdza1jU
+	 /6fgdJup1dyyf8Ppr/NAcnwttP6kShVkGOQ8jbocfTKC2FHngCgcXplnY1On7ICdkH
+	 mtdPZs9izLh3wYCVsEJ+bf+SHypeepJU8nb3xv3HAbsgs7Yr3iXE6F8SmUnlQeJD75
+	 s+JcsSGC5wGz4WPIs7AVoKu4AAS9i+CeGdbPUaIbUMRRKn4gottLF4wMSSRAlS2Y7f
+	 UFZvPicpJxdS8b6aUVK7qEeYDI6MWLOPwoRiaAmSOAf8SjgaeXQN58RgMtUGdxARFK
+	 Yp1sT2Kfb8hJw==
+Received: by mail-oo1-f48.google.com with SMTP id 006d021491bc7-5fa2a2bdde9so537527eaf.0;
+        Fri, 21 Feb 2025 09:15:12 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWK6il9WWJKFHzJthAVwv3LSbJTDdxacTGi8nzdxT8xCGkkJo+/Gqgo/HrEsKWLu7VEkvT3n/nL3OI=@vger.kernel.org, AJvYcCXOIPnEhCWY2xEis4OJuisnahjeyqMRUTmudwbmalTi+YM8I8ASyzoXjlrfF2ImA9xxDBWxKMH4QA9EJ+U=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw8W/j52a5lrsLKOc1PEOdVMQ4ZrMguVe6KlYE9Vu9yvop3Jq2T
+	nI1SAiC+Wx4PpdNVdhrmNZhMNcMbNqT62R/NxjVzGqpave5VWbjQ0oCuHjof0XecoaiMiMDJxev
+	0zl+y4HMEqJV5KA6fDSIoj8+Jfa4=
+X-Google-Smtp-Source: AGHT+IG3vb+A1RQVBjNrvElN5nnYtOkQLsrAQv8SzBQBKtHK69lUl94qC+NHeiWRzKUbcDRT7MSBFVZq9rHbWacgyVM=
+X-Received: by 2002:a05:6820:2294:b0:5fd:1401:7d32 with SMTP id
+ 006d021491bc7-5fd196d51a7mr2507238eaf.8.1740158111533; Fri, 21 Feb 2025
+ 09:15:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 13/13] ntb: idt: use devm_kmemdup_array()
-To: Raag Jadav <raag.jadav@intel.com>, perex@perex.cz, tiwai@suse.com,
- broonie@kernel.org, lgirdwood@gmail.com, deller@gmx.de,
- andriy.shevchenko@linux.intel.com, sre@kernel.org,
- sakari.ailus@linux.intel.com, mchehab@kernel.org, hverkuil-cisco@xs4all.nl,
- jdmason@kudzu.us, fancer.lancer@gmail.com
-Cc: linux-sound@vger.kernel.org, linux-fbdev@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-media@vger.kernel.org, ntb@lists.linux.dev,
- linux-kernel@vger.kernel.org
-References: <20250221165333.2780888-1-raag.jadav@intel.com>
- <20250221165333.2780888-14-raag.jadav@intel.com>
-Content-Language: en-US
-From: Dave Jiang <dave.jiang@intel.com>
-In-Reply-To: <20250221165333.2780888-14-raag.jadav@intel.com>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
+References: <20250219-fix-power-allocator-calc-v1-1-48b860291919@chromium.org>
+ <CAJZ5v0jSh=aOfP7BKTCSxnPGy-XKJKcHNw8bN5PXPH0LA0tAGg@mail.gmail.com> <9cc02f9e-9326-4fe1-820b-ca725f68de29@arm.com>
+In-Reply-To: <9cc02f9e-9326-4fe1-820b-ca725f68de29@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 21 Feb 2025 18:15:00 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0ikFjYsCfzYX6utX4=sraaBYH==Vdwz7ZPU9gHX=JaGgA@mail.gmail.com>
+X-Gm-Features: AWEUYZkoALubl7OlpmGrglJbQex3eiGNNvzoU73hGQz-POgzrpoEPEbN0f5X-Us
+Message-ID: <CAJZ5v0ikFjYsCfzYX6utX4=sraaBYH==Vdwz7ZPU9gHX=JaGgA@mail.gmail.com>
+Subject: Re: [PATCH] thermal: gov_power_allocator: Fix incorrect calculation
+ in divvy_up_power
+To: Lukasz Luba <lukasz.luba@arm.com>, Yu-Che Cheng <giver@chromium.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Feb 21, 2025 at 11:35=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> =
+wrote:
+>
+>
+>
+> On 2/20/25 19:45, Rafael J. Wysocki wrote:
+> > On Wed, Feb 19, 2025 at 8:07=E2=80=AFAM Yu-Che Cheng <giver@chromium.or=
+g> wrote:
+> >>
+> >> divvy_up_power should use weighted_req_power instead of req_power to
+> >> calculate the granted_power. Otherwise, the granted_power may be
+> >> unexpected as the denominator total_req_power is weighted sum.
+> >
+> > Yes, this is what's happening, to my eyes.
+> >
+> >> This is a mistake during the previous refactor.
+> >>
+> >> Replace the req_power with weighted_req_power in divvy_up_power
+> >> calculation.
+> >>
+> >> Fixes: 912e97c67cc3 ("thermal: gov_power_allocator: Move memory alloca=
+tion out of throttle()")
+> >> Signed-off-by: Yu-Che Cheng <giver@chromium.org>
+> >> ---
+> >>   drivers/thermal/gov_power_allocator.c | 2 +-
+> >>   1 file changed, 1 insertion(+), 1 deletion(-)
+> >>
+> >> diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/g=
+ov_power_allocator.c
+> >> index 3b644de3292e..3b626db55b2b 100644
+> >> --- a/drivers/thermal/gov_power_allocator.c
+> >> +++ b/drivers/thermal/gov_power_allocator.c
+> >> @@ -370,7 +370,7 @@ static void divvy_up_power(struct power_actor *pow=
+er, int num_actors,
+> >>
+> >>          for (i =3D 0; i < num_actors; i++) {
+> >>                  struct power_actor *pa =3D &power[i];
+> >> -               u64 req_range =3D (u64)pa->req_power * power_range;
+> >> +               u64 req_range =3D (u64)pa->weighted_req_power * power_=
+range;
+> >>
+> >>                  pa->granted_power =3D DIV_ROUND_CLOSEST_ULL(req_range=
+,
+> >>                                                            total_req_p=
+ower);
+> >>
+> >> ---
+> >
+> > And the fix looks good to me.
+> >
+> > Lukasz, any concerns?
+>
+> Good catch! It went through since the test didn't set different weights.
+>
+> Thanks for the fix!
+>
+> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
 
-
-On 2/21/25 9:53 AM, Raag Jadav wrote:
-> Convert to use devm_kmemdup_array() which is more robust.
-> 
-> Signed-off-by: Raag Jadav <raag.jadav@intel.com>
-
-I think this patch [1] from earlier today makes this change unnecessary now.
-
-[1]: https://lore.kernel.org/ntb/20250221085748.2298463-1-arnd@kernel.org/
-
-> ---
->  drivers/ntb/hw/idt/ntb_hw_idt.c | 11 +++--------
->  1 file changed, 3 insertions(+), 8 deletions(-)
-> 
-> diff --git a/drivers/ntb/hw/idt/ntb_hw_idt.c b/drivers/ntb/hw/idt/ntb_hw_idt.c
-> index 544d8a4d2af5..dbfc53d0ef0c 100644
-> --- a/drivers/ntb/hw/idt/ntb_hw_idt.c
-> +++ b/drivers/ntb/hw/idt/ntb_hw_idt.c
-> @@ -1103,16 +1103,11 @@ static struct idt_mw_cfg *idt_scan_mws(struct idt_ntb_dev *ndev, int port,
->  		}
->  	}
->  
-> -	/* Allocate memory for memory window descriptors */
-> -	ret_mws = devm_kcalloc(&ndev->ntb.pdev->dev, *mw_cnt, sizeof(*ret_mws),
-> -			       GFP_KERNEL);
-> -	if (!ret_mws)
-> -		return ERR_PTR(-ENOMEM);
-> -
->  	/* Copy the info of detected memory windows */
-> -	memcpy(ret_mws, mws, (*mw_cnt)*sizeof(*ret_mws));
-> +	ret_mws = devm_kmemdup_array(&ndev->ntb.pdev->dev, mws, *mw_cnt,
-> +				     sizeof(mws[0]), GFP_KERNEL);
->  
-> -	return ret_mws;
-> +	return ret_mws ?: ERR_PTR(-ENOMEM);
->  }
->  
->  /*
-
+Applied as 6.14-rc material, thanks!
 
