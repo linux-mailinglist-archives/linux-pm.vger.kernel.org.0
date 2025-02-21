@@ -1,282 +1,200 @@
-Return-Path: <linux-pm+bounces-22624-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22625-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00C65A3F489
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 13:35:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id D1936A3F4CF
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 14:03:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E0BB33BDD34
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 12:35:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFF673BDA80
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 13:03:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E13222063C1;
-	Fri, 21 Feb 2025 12:35:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79ED520C48B;
+	Fri, 21 Feb 2025 13:03:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="WrEGPCgn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBA21205ADF;
-	Fri, 21 Feb 2025 12:35:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CB49F20B7E2;
+	Fri, 21 Feb 2025 13:03:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740141348; cv=none; b=eNsx//pH7FeOmaxu4Ao6FnvrHvHEwPApIzNecogaBrGBNWUbOkVIGlG1/u7QkWCxlYgxcI0vyrlmIlRBUBCRCUZR0+G46N35kRUEOwQzSBskpk6RQ75/ujGjC2TGD2oTYAQQI5Q+ft9DamyO9KyDe+QcWnG71YbwwqWgU+Fy3ok=
+	t=1740143024; cv=none; b=omoVFaoP7funBalHxkl03dh2U7ikp95PfL+GGT0KY4EH8K9X6geGN4XsUhWbIHzJXrWUgq/wvVZ+OT0ygz3CPKsyQqq/g+RjBrZyVGh4Y7r5GF8cYhvE1IQSz4MR6WEFTNZdY1FUZP9kzG8TKWBfeW4/7ZGRhnxHe2cld8UTcEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740141348; c=relaxed/simple;
-	bh=0vUTGAiEKm5/68+bUwnwEG45/Y4eEx9KtAAC3s2DKis=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=JEClI4NjnRtyYyG7/kKhcgCK5fxRpIJuqcmoZ+RvNNSdmk6uk5YgQgqRd8GgUDmS+KzlFA5aHrqX/gpsdfIMcEoEVmLlKB1RNVhl1mZIAM6uuTt8b2xBgBKRWi0O1UwLyVXZY2vVShKMIrQdyib5LTSMpvGs+q3LJP0pg+piAIA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.178.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L8YEPK003822;
-	Fri, 21 Feb 2025 12:35:40 GMT
-Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 44w00kknn9-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 21 Feb 2025 12:35:40 +0000 (GMT)
-Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.43; Fri, 21 Feb 2025 04:35:39 -0800
-Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
- 15.1.2507.43 via Frontend Transport; Fri, 21 Feb 2025 04:35:37 -0800
-From: Lizhi Xu <lizhi.xu@windriver.com>
-To: <rafael@kernel.org>
-CC: <len.brown@intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <pavel@kernel.org>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: [PATCH V2] module: replace the mutex lock acquisition method
-Date: Fri, 21 Feb 2025 20:35:36 +0800
-Message-ID: <20250221123536.2946377-1-lizhi.xu@windriver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAJZ5v0h38FRwpYeTgw0VKqKVT=RDSrLnSt+31E6i=XOAoCor9w@mail.gmail.com>
-References: <CAJZ5v0h38FRwpYeTgw0VKqKVT=RDSrLnSt+31E6i=XOAoCor9w@mail.gmail.com>
+	s=arc-20240116; t=1740143024; c=relaxed/simple;
+	bh=YuTZuPM8fsNmASUzmGSbKLvC77k5AXhZhjx4kfap1ow=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=D1lLbezGBXLrSUz5hsPgWx9iGRsnfOjuiKzvcthL8r615T5fWR68p3wvtGVaWjDhyPHjgAsh0dEH6Pg/PwCKYESV2E2MAXaQ++Jpce+0t6A87C3KR8N2Apqgo65XfYgMaw0Q+Rktnt+nn4d+EBIyCa5dlfgIE+jTmP4KqprIRCU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=WrEGPCgn; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L5WA3b008310;
+	Fri, 21 Feb 2025 13:02:41 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=Jrf2seTrRs2kHXX0JDUsRw
+	6WJbyG652B6YuDCk/1ywM=; b=WrEGPCgnXS+A3yQhrfKsjtSTbv+scw5hW34L4M
+	IBWwj7OE+c+gUs7rXg6n7EnUPJNd060FBWOiXEQ/ZGI/PKIud+90+k8uq4sjm23o
+	ORiIjaqjHGIqZa/griFhcrcJCXLhk08ckHjjfv+BdShRPp1I/6v3p3bX22L2lCSZ
+	Kp1R4z2UI58B+7HSx43+78JfP12irExnw1gPfajpK+qlVFA94r2H63wwGPDBGhBC
+	dqjFEFnjbgPzBJYpn+jn/IpsJihYZCMiSVzsQ0cnzePughdheRFTnKD9u3XspqXH
+	hLgxOajBvXTHzkxxMD5BaYvuywfD16Owq1lDaEjllNwaXG6w==
+Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44vyy3j2mq-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Feb 2025 13:02:41 +0000 (GMT)
+Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
+	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51LD2T6m020137
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Fri, 21 Feb 2025 13:02:29 GMT
+Received: from hu-zijuhu-lv.qualcomm.com (10.49.16.6) by
+ nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Fri, 21 Feb 2025 05:02:28 -0800
+From: Zijun Hu <quic_zijuhu@quicinc.com>
+Subject: [PATCH *-next 00/18] Remove weird and needless 'return' for void
+ APIs
+Date: Fri, 21 Feb 2025 05:02:05 -0800
+Message-ID: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-GUID: 9e5SJcwrXfQzATHap9R1thpku1uYnODP
-X-Proofpoint-ORIG-GUID: 9e5SJcwrXfQzATHap9R1thpku1uYnODP
-X-Authority-Analysis: v=2.4 cv=BvtnwZX5 c=1 sm=1 tr=0 ts=67b8731c cx=c_pps a=K4BcnWQioVPsTJd46EJO2w==:117 a=K4BcnWQioVPsTJd46EJO2w==:17 a=T2h4t0Lz3GQA:10 a=edf1wS77AAAA:8 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8 a=GzR0737Q8psi_uX2n_oA:9 a=DcSpbTIhAlouE1Uv7lRv:22
- a=cQPPKAXgyycSBL8etih5:22 a=FdTzh2GWekK77mhwV6Dw:22
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE55uGcC/x3MQQqAIBBA0avILCNBh4LqKhEROdYsshgtgujuS
+ cu3+P+BSMIUoVMPCF0ceQ8ZtlQwr1NYSLPLBjRYG0SrZbtGoXRK0N66uUFXtegN5OAQ8nz/sx4
+ KHehOMLzvB1Tls1xkAAAA
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+        Will Deacon
+	<will@kernel.org>,
+        Aneesh Kumar K.V <aneesh.kumar@kernel.org>,
+        Andrew Morton
+	<akpm@linux-foundation.org>,
+        Nick Piggin <npiggin@gmail.com>,
+        Peter Zijlstra
+	<peterz@infradead.org>, Arnd Bergmann <arnd@arndb.de>,
+        Thomas Gleixner
+	<tglx@linutronix.de>,
+        Herbert Xu <herbert@gondor.apana.org.au>,
+        "David S.
+ Miller" <davem@davemloft.net>,
+        Greg Kroah-Hartman
+	<gregkh@linuxfoundation.org>,
+        "Rafael J. Wysocki" <rafael@kernel.org>,
+        "Danilo Krummrich" <dakr@kernel.org>,
+        Eric Dumazet <edumazet@google.com>, "Jakub Kicinski" <kuba@kernel.org>,
+        Paolo Abeni <pabeni@redhat.com>, Simon
+ Horman <horms@kernel.org>,
+        Johannes Berg <johannes@sipsolutions.net>,
+        "Jamal
+ Hadi Salim" <jhs@mojatatu.com>,
+        Cong Wang <xiyou.wangcong@gmail.com>, Jiri
+ Pirko <jiri@resnulli.us>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky
+	<leon@kernel.org>,
+        Linus Walleij <linus.walleij@linaro.org>,
+        "Bartosz
+ Golaszewski" <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
+        Thomas Graf
+	<tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
+        Marek Szyprowski
+	<m.szyprowski@samsung.com>,
+        Robin Murphy <robin.murphy@arm.com>,
+        "Miquel
+ Raynal" <miquel.raynal@bootlin.com>,
+        Richard Weinberger <richard@nod.at>,
+        Vignesh Raghavendra <vigneshr@ti.com>
+CC: Zijun Hu <zijun_hu@icloud.com>, <linux-arch@vger.kernel.org>,
+        <linux-mm@kvack.org>, <linux-kernel@vger.kernel.org>,
+        <linux-crypto@vger.kernel.org>, <netdev@vger.kernel.org>,
+        <linux-wireless@vger.kernel.org>, <linux-rdma@vger.kernel.org>,
+        <linux-gpio@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+        <iommu@lists.linux.dev>, <linux-mtd@lists.infradead.org>,
+        Zijun Hu
+	<quic_zijuhu@quicinc.com>
+X-Mailer: b4 0.14.1
+X-ClientProxiedBy: nalasex01c.na.qualcomm.com (10.47.97.35) To
+ nasanex01a.na.qualcomm.com (10.52.223.231)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-ORIG-GUID: NDRu5OKSayRbCwCev8nS9u-wqeqQNEdY
+X-Proofpoint-GUID: NDRu5OKSayRbCwCev8nS9u-wqeqQNEdY
 X-Proofpoint-Virus-Version: vendor=baseguard
  engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-21_03,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 lowpriorityscore=0
- adultscore=0 priorityscore=1501 mlxlogscore=999 bulkscore=0 clxscore=1015
- malwarescore=0 phishscore=0 mlxscore=0 spamscore=0 impostorscore=0
- suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.21.0-2502100000
- definitions=main-2502210092
+ definitions=2025-02-21_04,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0 clxscore=1015
+ phishscore=0 adultscore=0 lowpriorityscore=0 bulkscore=0 impostorscore=0
+ priorityscore=1501 malwarescore=0 spamscore=0 mlxlogscore=999 mlxscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2502210096
 
-syzbot reported a deadlock in lock_system_sleep. [1]
+This patch series is to remove weird and needless 'return' for
+void APIs under include/ with the following pattern:
 
-The write operation to "/sys/module/hibernate/parameters/compressor"
-conflicts with the registration of ieee80211 device, resulting in a deadlock
-in the lock param_lock.
+api_header.h:
 
-Since the conflict cannot be avoided, the way to obtain param_lock is changed
-to trylock to avoid deadlock.
+void api_func_a(...);
 
-[1]
-syz-executor895/5833 is trying to acquire lock:
-ffffffff8e0828c8 (system_transition_mutex){+.+.}-{4:4}, at: lock_system_sleep+0x87/0xa0 kernel/power/main.c:56
+static inline void api_func_b(...)
+{
+	return api_func_a(...);
+}
 
-but task is already holding lock:
-ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: kernel_param_lock kernel/params.c:607 [inline]
-ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: param_attr_store+0xe6/0x300 kernel/params.c:586
+Remove the needless 'return' in api_func_b().
 
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (param_lock){+.+.}-{4:4}:
-       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
-       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
-       ieee80211_rate_control_ops_get net/mac80211/rate.c:220 [inline]
-       rate_control_alloc net/mac80211/rate.c:266 [inline]
-       ieee80211_init_rate_ctrl_alg+0x18d/0x6b0 net/mac80211/rate.c:1015
-       ieee80211_register_hw+0x20cd/0x4060 net/mac80211/main.c:1531
-       mac80211_hwsim_new_radio+0x304e/0x54e0 drivers/net/wireless/virtual/mac80211_hwsim.c:5558
-       init_mac80211_hwsim+0x432/0x8c0 drivers/net/wireless/virtual/mac80211_hwsim.c:6910
-       do_one_initcall+0x128/0x700 init/main.c:1257
-       do_initcall_level init/main.c:1319 [inline]
-       do_initcalls init/main.c:1335 [inline]
-       do_basic_setup init/main.c:1354 [inline]
-       kernel_init_freeable+0x5c7/0x900 init/main.c:1568
-       kernel_init+0x1c/0x2b0 init/main.c:1457
-       ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
-       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-
--> #2 (rtnl_mutex){+.+.}-{4:4}:
-       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
-       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
-       wg_pm_notification drivers/net/wireguard/device.c:80 [inline]
-       wg_pm_notification+0x49/0x180 drivers/net/wireguard/device.c:64
-       notifier_call_chain+0xb7/0x410 kernel/notifier.c:85
-       notifier_call_chain_robust kernel/notifier.c:120 [inline]
-       blocking_notifier_call_chain_robust kernel/notifier.c:345 [inline]
-       blocking_notifier_call_chain_robust+0xc9/0x170 kernel/notifier.c:333
-       pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
-       snapshot_open+0x189/0x2b0 kernel/power/user.c:77
-       misc_open+0x35a/0x420 drivers/char/misc.c:179
-       chrdev_open+0x237/0x6a0 fs/char_dev.c:414
-       do_dentry_open+0x735/0x1c40 fs/open.c:956
-       vfs_open+0x82/0x3f0 fs/open.c:1086
-       do_open fs/namei.c:3830 [inline]
-       path_openat+0x1e88/0x2d80 fs/namei.c:3989
-       do_filp_open+0x20c/0x470 fs/namei.c:4016
-       do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
-       do_sys_open fs/open.c:1443 [inline]
-       __do_sys_openat fs/open.c:1459 [inline]
-       __se_sys_openat fs/open.c:1454 [inline]
-       __x64_sys_openat+0x175/0x210 fs/open.c:1454
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
--> #1 ((pm_chain_head).rwsem){++++}-{4:4}:
-       down_read+0x9a/0x330 kernel/locking/rwsem.c:1524
-       blocking_notifier_call_chain_robust kernel/notifier.c:344 [inline]
-       blocking_notifier_call_chain_robust+0xa9/0x170 kernel/notifier.c:333
-       pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
-       snapshot_open+0x189/0x2b0 kernel/power/user.c:77
-       misc_open+0x35a/0x420 drivers/char/misc.c:179
-       chrdev_open+0x237/0x6a0 fs/char_dev.c:414
-       do_dentry_open+0x735/0x1c40 fs/open.c:956
-       vfs_open+0x82/0x3f0 fs/open.c:1086
-       do_open fs/namei.c:3830 [inline]
-       path_openat+0x1e88/0x2d80 fs/namei.c:3989
-       do_filp_open+0x20c/0x470 fs/namei.c:4016
-       do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
-       do_sys_open fs/open.c:1443 [inline]
-       __do_sys_openat fs/open.c:1459 [inline]
-       __se_sys_openat fs/open.c:1454 [inline]
-       __x64_sys_openat+0x175/0x210 fs/open.c:1454
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
--> #0 (system_transition_mutex){+.+.}-{4:4}:
-       check_prev_add kernel/locking/lockdep.c:3163 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3282 [inline]
-       validate_chain kernel/locking/lockdep.c:3906 [inline]
-       __lock_acquire+0x249e/0x3c40 kernel/locking/lockdep.c:5228
-       lock_acquire.part.0+0x11b/0x380 kernel/locking/lockdep.c:5851
-       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
-       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
-       lock_system_sleep+0x87/0xa0 kernel/power/main.c:56
-       hibernate_compressor_param_set+0x1c/0x210 kernel/power/hibernate.c:1452
-       param_attr_store+0x18f/0x300 kernel/params.c:588
-       module_attr_store+0x55/0x80 kernel/params.c:924
-       sysfs_kf_write+0x117/0x170 fs/sysfs/file.c:139
-       kernfs_fop_write_iter+0x33d/0x500 fs/kernfs/file.c:334
-       new_sync_write fs/read_write.c:586 [inline]
-       vfs_write+0x5ae/0x1150 fs/read_write.c:679
-       ksys_write+0x12b/0x250 fs/read_write.c:731
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-other info that might help us debug this:
-
-Chain exists of:
-  system_transition_mutex --> rtnl_mutex --> param_lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(param_lock);
-                               lock(rtnl_mutex);
-                               lock(param_lock);
-  lock(system_transition_mutex);
-
- *** DEADLOCK ***
-
-Reported-by: syzbot+ace60642828c074eb913@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=ace60642828c074eb913
-Tested-by: syzbot+ace60642828c074eb913@syzkaller.appspotmail.com
-Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
 ---
-V1 -> V2: use -EAGAIN to replace -EPERM.
+Zijun Hu (18):
+      mm/mmu_gather: Remove needless return in void API tlb_remove_page()
+      cpu: Remove needless return in void API suspend_enable_secondary_cpus()
+      crypto: api - Remove needless return in void API crypto_free_tfm()
+      crypto: scomp - Remove needless return in void API crypto_scomp_free_ctx()
+      sysfs: Remove needless return in void API sysfs_enable_ns()
+      skbuff: Remove needless return in void API consume_skb()
+      wifi: mac80211: Remove needless return in void API _ieee80211_hw_set()
+      net: sched: Remove needless return in void API qdisc_watchdog_schedule_ns()
+      ipv4/igmp: Remove needless return in void API ip_mc_dec_group()
+      IB/rdmavt: Remove needless return in void API rvt_mod_retry_timer()
+      ratelimit: Remove needless return in void API ratelimit_default_init()
+      siox: Remove needless return in void API siox_driver_unregister()
+      gpiolib: Remove needless return in two void APIs
+      PM: wakeup: Remove needless return in three void APIs
+      mfd: db8500-prcmu: Remove needless return in three void APIs
+      rhashtable: Remove needless return in three void APIs
+      dma-mapping: Remove needless return in five void APIs
+      mtd: nand: Do not return void function in void function
 
- include/linux/moduleparam.h | 4 ++++
- kernel/params.c             | 9 ++++++++-
- net/mac80211/rate.c         | 4 +++-
- 3 files changed, 15 insertions(+), 2 deletions(-)
+ include/asm-generic/tlb.h           |  2 +-
+ include/crypto/internal/scompress.h |  2 +-
+ include/linux/cpu.h                 |  2 +-
+ include/linux/crypto.h              |  2 +-
+ include/linux/dma-mapping.h         | 12 ++++++------
+ include/linux/gpio.h                |  4 ++--
+ include/linux/igmp.h                |  2 +-
+ include/linux/mfd/dbx500-prcmu.h    |  6 +++---
+ include/linux/mtd/nand.h            | 18 ++++++++++++------
+ include/linux/pm_wakeup.h           |  6 +++---
+ include/linux/ratelimit.h           |  4 ++--
+ include/linux/rhashtable.h          |  6 +++---
+ include/linux/siox.h                |  2 +-
+ include/linux/skbuff.h              |  2 +-
+ include/linux/sysfs.h               |  2 +-
+ include/net/mac80211.h              |  2 +-
+ include/net/pkt_sched.h             |  2 +-
+ include/rdma/rdmavt_qp.h            |  2 +-
+ 18 files changed, 42 insertions(+), 36 deletions(-)
+---
+base-commit: 2014c95afecee3e76ca4a56956a936e23283f05b
+change-id: 20250221-rmv_return-f1dc82d492f0
 
-diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
-index bfb85fd13e1f..cbcbfd8db721 100644
---- a/include/linux/moduleparam.h
-+++ b/include/linux/moduleparam.h
-@@ -306,11 +306,15 @@ struct kparam_array
- 
- #ifdef CONFIG_SYSFS
- extern void kernel_param_lock(struct module *mod);
-+extern int kernel_param_trylock(struct module *mod);
- extern void kernel_param_unlock(struct module *mod);
- #else
- static inline void kernel_param_lock(struct module *mod)
- {
- }
-+static inline int kernel_param_trylock(struct module *mod)
-+{
-+}
- static inline void kernel_param_unlock(struct module *mod)
- {
- }
-diff --git a/kernel/params.c b/kernel/params.c
-index 0074d29c9b80..d19881fbb2ec 100644
---- a/kernel/params.c
-+++ b/kernel/params.c
-@@ -583,7 +583,9 @@ static ssize_t param_attr_store(const struct module_attribute *mattr,
- 	if (!attribute->param->ops->set)
- 		return -EPERM;
- 
--	kernel_param_lock(mk->mod);
-+	if (!kernel_param_trylock(mk->mod))
-+		return -EAGAIN;
-+
- 	if (param_check_unsafe(attribute->param))
- 		err = attribute->param->ops->set(buf, attribute->param);
- 	else
-@@ -607,6 +609,11 @@ void kernel_param_lock(struct module *mod)
- 	mutex_lock(KPARAM_MUTEX(mod));
- }
- 
-+int kernel_param_trylock(struct module *mod)
-+{
-+	return mutex_trylock(KPARAM_MUTEX(mod));
-+}
-+
- void kernel_param_unlock(struct module *mod)
- {
- 	mutex_unlock(KPARAM_MUTEX(mod));
-diff --git a/net/mac80211/rate.c b/net/mac80211/rate.c
-index 0d056db9f81e..aecf7ff51cd9 100644
---- a/net/mac80211/rate.c
-+++ b/net/mac80211/rate.c
-@@ -217,7 +217,9 @@ ieee80211_rate_control_ops_get(const char *name)
- 	const struct rate_control_ops *ops;
- 	const char *alg_name;
- 
--	kernel_param_lock(THIS_MODULE);
-+	if (!kernel_param_trylock(THIS_MODULE))
-+		return NULL;
-+
- 	if (!name)
- 		alg_name = ieee80211_default_rc_algo;
- 	else
+Best regards,
 -- 
-2.43.0
+Zijun Hu <quic_zijuhu@quicinc.com>
 
 
