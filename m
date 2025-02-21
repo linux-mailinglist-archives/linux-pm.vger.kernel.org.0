@@ -1,215 +1,205 @@
-Return-Path: <linux-pm+bounces-22650-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22651-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 580DFA3F64A
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 14:48:29 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0717FA3F69A
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 14:59:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 73DD6188FF12
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 13:48:35 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CFB0E174DDF
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 13:59:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 795961487DD;
-	Fri, 21 Feb 2025 13:48:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6157020D4E4;
+	Fri, 21 Feb 2025 13:59:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="n5Jc+zMl"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="JwEiZFH0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from fllvem-ot03.ext.ti.com (fllvem-ot03.ext.ti.com [198.47.19.245])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f50.google.com (mail-lf1-f50.google.com [209.85.167.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A85D81A270;
-	Fri, 21 Feb 2025 13:48:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.19.245
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6DF4E20B7E0
+	for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 13:59:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740145704; cv=none; b=uj9xXvl5tNOY91jaxljUDF8hYyLDvP9cdrYbLQwIcZzminEIe1sCA98us1BdSo92tLDvjk8VgXzlzGNycc/5kyPylyZ4b4gEyq0SHsInTmB3d0dUyDJXjzkfZULxIvsd2EeRqZ3sLOER5/PyJUUp5ApWNbC2mYf5j6pJF5iPl+U=
+	t=1740146378; cv=none; b=s3rLPPV06F8McHk6/t0dFqVnc50uEvS8FnAwVODRt9glGkuYJf39QQNQQWJ6zgV7usSyJOcVIKLe6/ZnUQMxuz3Rjnet8jBOSLI+Szp1jrqgZi+nRIOih10kSnGh6Utl8wMSOLCi7epZOGq1ECw2n/TDod5yw0tu9gzJ+0CJ/VY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740145704; c=relaxed/simple;
-	bh=B6ACiyqUmdJ3f0CK1Bz6D1FrPp3Fk9b1LVvxEfP6MlM=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:To:CC; b=f5pTJMDLaYIVHHNijflq6VeTGkb683io6ioalyUJJEnjHsQgojz04cT673j8ekwoUxIsd6VsBpaW+qzg9RqM6o4V2iYG0SnGvpl/UumEx53KmeAo7Wky3vgjq2PwKbClY6JLVdPqAPojrbMQkshQ+Waf5j9zGs37aMiYJUbbbxY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=n5Jc+zMl; arc=none smtp.client-ip=198.47.19.245
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0034.itg.ti.com ([10.64.40.246])
-	by fllvem-ot03.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 51LDmJSd310356
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 21 Feb 2025 07:48:19 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1740145699;
-	bh=UnGyoGH3aP4gWm3gHznPmZAXQdBZeSQP1kktMPQL60U=;
-	h=From:Date:Subject:To:CC;
-	b=n5Jc+zMlw3Edf307MwOVBRbHmFZVFhPNMZzFOptpab+g2rb1EUjI0jeDIin5NCRTp
-	 cq+rbYPm5KAz1FXqXE+0FZwOTxzCNqHstbSH2dbq6VKGbfpSy0BuxtI059xxtCbKt8
-	 JNlDD6/ya8t4Ezatg4X40rJiC/mNKs/GuxUBFd1E=
-Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
-	by fllv0034.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 51LDmJgo021262
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 21 Feb 2025 07:48:19 -0600
-Received: from DLEE101.ent.ti.com (157.170.170.31) by DLEE109.ent.ti.com
- (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 21
- Feb 2025 07:48:19 -0600
-Received: from lelvsmtp6.itg.ti.com (10.180.75.249) by DLEE101.ent.ti.com
- (157.170.170.31) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 21 Feb 2025 07:48:19 -0600
-Received: from localhost (kamlesh.dhcp.ti.com [172.24.227.123])
-	by lelvsmtp6.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51LDmI0p025205;
-	Fri, 21 Feb 2025 07:48:19 -0600
-From: Kamlesh Gurudasani <kamlesh@ti.com>
-Date: Fri, 21 Feb 2025 19:18:10 +0530
-Subject: [PATCH RFC] pmdomain: core: add support for writeble power domain
- state
+	s=arc-20240116; t=1740146378; c=relaxed/simple;
+	bh=CbxAJQT3KnJjiwPB/Rc1ytu55iSPfTpU8eUVc7UEzqA=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=UAt3kRh+o/LCeIGBiJ1ZuvelFwcd3avlpb+JmPIF/kAnkBsT+VS7PF3lTHnI4bzWyLG8i0TLlEoNWllOMd2Y/zwY81N66kI6prRZ5ZtipmlNJgv+zSKf2CdY3qhhKU1GBipOwr/kJjmhpsDdgyMYPBmG7yrvNCzEf3j/FWctFVE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=JwEiZFH0; arc=none smtp.client-ip=209.85.167.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f50.google.com with SMTP id 2adb3069b0e04-545316f80beso1963856e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 05:59:36 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740146374; x=1740751174; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=/zYl4L9cR43dlWu0AvSnmoEUXilsvHz4aPwBMTecENo=;
+        b=JwEiZFH0sCyQlkXWPegQw5ZOVXQUJxVe3IlZiS32RMNudvk2ud3S7iLbn05/AEATSY
+         vh2t2cN3ZBVCGWpiTslQtGbuZRyUI5tPniq9Mk50LRhqPiq+03HWoDIBgbrz/+8UgIea
+         YE1Mn8qrRLL2DdcseyP2UxnZ1jNAigHnnAP4narVJWiYJTQkB/qgGiuqAFcUomp5dGsv
+         MUTeKW8k4YQNfSPdZhakH5N6VfslSJu88hkMxivr3WkcT9QVxsGPwjw8qd4aYfFoOgOC
+         rvqt2fs9OcjZKP42AZFxp5j5BnDygAdj7t+GO4Ovh7QqYICGgzdxE92V2OPiLsdlhFr6
+         Y/oA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740146374; x=1740751174;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=/zYl4L9cR43dlWu0AvSnmoEUXilsvHz4aPwBMTecENo=;
+        b=Yt1P6jEGEtGePqL6O5lDPy7CSdNgg7JpgvZ8nQihjMXsCTj6P7zM3kwgxZTNnMZgDm
+         r5oZsHQi46xw3GKZnEGeiYYUbOcFuD2jf2q6o/hjTmDy0UzGZqYvji1sxmllgEQ6mMPs
+         NVXyEpAqU7K3E95TW8NfuJkCEQyk18ektokYG0Vh1ADRkOFCbaSny0E9Cu/t5C3cUCQf
+         vR4b1ksb7xM6BhbVHv3VQXnfru6eAVqxmVsID7ygP/ut+VcJ/smy8qu7SPyVzZv5SPf9
+         5gHfW7ejYRtEA9raKI2zOYCOdsMyMhxzr8JkW/u2aYAv8MJonkFCyalxSTneVlX7xqPi
+         1Jkg==
+X-Forwarded-Encrypted: i=1; AJvYcCX26cbzW0xecsK1D+SzRncGg1IM1AdwGk0d1akjizIZ/mesB7dynUkcKrZVkrz5hmHpObAOGe0gDg==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywx0uvJ8iHxREQvlHaYkO1vKQKaZVukEG/IpsJGxPwVWepso/t9
+	EBoQE+gMP+/af6mQ7gsNlNlwkj86VzfZS30ICaUCG2RyIFgeauX+W4woP/x1tNBSaXiKyi77VPL
+	x
+X-Gm-Gg: ASbGncsSfmuUnz+pZmSyQsdkqYLCse8TYBXim67iW2o2jN2hzoj9TZA56t7pHUuoSpE
+	JDnN9AmdgP4Vr3Up6s+8hMAPrVhFJ9HA3OyNXUFcC7ayxfto8LcSEgMY+e/TTeeH7e0myjduw0J
+	tOg5IsKQ+gs5DvchT7kKZQV+DJmisFolvf067CCLvu8tuTZ8yQW42ahcSH/D299f1LqGzQexAWx
+	vv47T6m4KQ4HPfMZGOIQM3JyGB3yZTlipQeroPCguaf0DLm4C+nVSDykBR4frqSagabQM+vddhT
+	8cK+3Y0HWORRbvCEhQA5mgfz5DtKlnIR6Kpe0jj7TdOI1d1yvo8QqWZ1AIRBzqI+EJXn4tZetlW
+	QQ5qfQg==
+X-Google-Smtp-Source: AGHT+IH1adyJodZuxejqxdNY7+1MgnBwNtjWHQ8rUzYhMFZCIdPs+a2+d5mwFLrhDrfQsO0ptGItPA==
+X-Received: by 2002:a05:6512:ad2:b0:545:191:81db with SMTP id 2adb3069b0e04-54838f5e248mr1022548e87.50.1740146374490;
+        Fri, 21 Feb 2025 05:59:34 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-54531b8ac1dsm1994118e87.75.2025.02.21.05.59.32
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Feb 2025 05:59:33 -0800 (PST)
+Date: Fri, 21 Feb 2025 15:59:30 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: George Moussalem <george.moussalem@outlook.com>
+Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, amitk@kernel.org, thara.gopinath@gmail.com, robh@kernel.org, 
+	krzk+dt@kernel.org, quic_srichara@quicinc.com
+Subject: Re: [PATCH v4 4/5] thermal: qcom: tsens: Add support for IPQ5018
+ tsens
+Message-ID: <zesif5ehsoho3725k4xjqhb3tizj6fj6ufocdlzd3facj5hrrt@r4t5hthvyp2p>
+References: <20250221065219.17036-1-george.moussalem@outlook.com>
+ <DS7PR19MB8883A75912761EB89C9A1B409DC72@DS7PR19MB8883.namprd19.prod.outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250221-pm-debug-v1-1-e5bd815f7ca4@ti.com>
-X-B4-Tracking: v=1; b=H4sIABmEuGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDIyND3YJc3ZTUpNJ0XQMLI5OURGMDC0uDNCWg8oKi1LTMCrBR0UpBbs5
- KsbW1AKg67fhfAAAA
-To: Ulf Hansson <ulf.hansson@linaro.org>
-CC: <vigneshr@ti.com>, <d-gole@ti.com>, <linux-pm@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, Kamlesh Gurudasani <kamlesh@ti.com>
-X-Mailer: b4 0.14.1
-X-Developer-Signature: v=1; a=ed25519-sha256; t=1740145698; l=4252;
- i=kamlesh@ti.com; s=20230614; h=from:subject:message-id;
- bh=B6ACiyqUmdJ3f0CK1Bz6D1FrPp3Fk9b1LVvxEfP6MlM=;
- b=ej04aZpNVUf9YX27lSMlljoXu1ffQiHy+9ygkhsQmRtDcySOs4KmVbyKDNVnSf1VUjoMTcqz+
- KfRntcTpPuBCfn6lRA9D8GcNeIriheGSOhoALr0E0arU2KNRU/6MMfk
-X-Developer-Key: i=kamlesh@ti.com; a=ed25519;
- pk=db9XKPVWDGJVqj2jDqgnPQd6uQf3GZ3oaQa4bq1odGo=
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <DS7PR19MB8883A75912761EB89C9A1B409DC72@DS7PR19MB8883.namprd19.prod.outlook.com>
 
-Add support for writeable power domain states from debugfs.
+On Fri, Feb 21, 2025 at 10:52:18AM +0400, George Moussalem wrote:
+> From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> 
+> IPQ5018 has tsens IP V1.0, 4 sensors and 1 interrupt.
+> The soc does not have a RPM, hence tsens has to be reset and
+> enabled in the driver init. Adding the driver support for same.
+> 
+> Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> Signed-off-by: George Moussalem <george.moussalem@outlook.com>
+> ---
+>  [v4] Added Dmitry's Reviewed-by tag
+>       Fixed modpost warning: added __init to init_common
+> 
+>  drivers/thermal/qcom/tsens-v1.c | 60 +++++++++++++++++++++++++++++++++
+>  drivers/thermal/qcom/tsens.c    |  3 ++
+>  drivers/thermal/qcom/tsens.h    |  2 +-
+>  3 files changed, 64 insertions(+), 1 deletion(-)
+> 
+> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
+> index 1a7874676f68..1f955acbc2cf 100644
+> --- a/drivers/thermal/qcom/tsens-v1.c
+> +++ b/drivers/thermal/qcom/tsens-v1.c
+> @@ -79,6 +79,18 @@ static struct tsens_features tsens_v1_feat = {
+>  	.trip_max_temp	= 120000,
+>  };
+>  
+> +static struct tsens_features tsens_v1_ipq5018_feat = {
+> +	.ver_major	= VER_1_X,
+> +	.crit_int	= 0,
+> +	.combo_int	= 0,
+> +	.adc		= 1,
+> +	.srot_split	= 1,
+> +	.max_sensors	= 11,
+> +	.trip_min_temp	= -40000,
+> +	.trip_max_temp	= 120000,
+> +	.ignore_enable	= 1,
+> +};
+> +
+>  static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
+>  	/* ----- SROT ------ */
+>  	/* VERSION */
+> @@ -150,6 +162,41 @@ static int __init init_8956(struct tsens_priv *priv) {
+>  	return init_common(priv);
+>  }
+>  
+> +static int __init init_ipq5018(struct tsens_priv *priv)
+> +{
+> +	int ret;
+> +	u32 mask;
+> +
+> +	ret = init_common(priv);
+> +	if (ret < 0) {
+> +		dev_err(priv->dev, "Init common failed %d\n", ret);
+> +		return ret;
+> +	}
+> +
+> +	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 1);
+> +	if (ret) {
+> +		dev_err(priv->dev, "Reset failed\n");
+> +		return ret;
+> +	}
+> +
+> +	mask = GENMASK(priv->num_sensors, 0);
+> +	ret = regmap_field_update_bits(priv->rf[SENSOR_EN], mask, mask);
+> +	if (ret) {
+> +		dev_err(priv->dev, "Sensor Enable failed\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = regmap_field_write(priv->rf[TSENS_EN], 1);
+> +	if (ret) {
+> +		dev_err(priv->dev, "Enable failed\n");
+> +		return ret;
+> +	}
+> +
+> +	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 0);
+> +
+> +	return ret;
+> +}
+> +
+>  static const struct tsens_ops ops_generic_v1 = {
+>  	.init		= init_common,
+>  	.calibrate	= calibrate_v1,
+> @@ -194,3 +241,16 @@ struct tsens_plat_data data_8976 = {
+>  	.feat		= &tsens_v1_feat,
+>  	.fields		= tsens_v1_regfields,
+>  };
+> +
+> +const struct tsens_ops ops_ipq5018 = {
+> +	.init		= init_ipq5018,
+> +	.calibrate	= tsens_calibrate_common,
+> +	.get_temp	= get_temp_tsens_valid,
+> +};
+> +
+> +struct tsens_plat_data data_ipq5018 = {
+> +	.num_sensors	= 5,
 
-Defining GENPD_ALLOW_WRITE_DEBUGFS will enable writeable pd_state
-node in debugfs.
+Commit message suggests that this should be '4'.
 
-Signed-off-by: Kamlesh Gurudasani <kamlesh@ti.com>
----
-This has turn out to be really helpful when debugging SCMI protocol
-for power domain management.
+> +	.ops		= &ops_ipq5018,
+> +	.feat		= &tsens_v1_ipq5018_feat,
+> +	.fields		= tsens_v1_regfields,
+> +};
 
-Reference has been taken from clock framework which provides similar
-CLOCK_ALLOW_WRITE_DEBUGFS, which helps to test clocks from debugfs.
----
- drivers/pmdomain/core.c | 77 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
-
-diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-index 9b2f28b34bb5..6aba0c672da0 100644
---- a/drivers/pmdomain/core.c
-+++ b/drivers/pmdomain/core.c
-@@ -1298,6 +1298,60 @@ late_initcall_sync(genpd_power_off_unused);
- 
- #ifdef CONFIG_PM_SLEEP
- 
-+#ifdef GENPD_ALLOW_WRITE_DEBUGFS
-+/*
-+ * This can be dangerous, therefore don't provide any real compile time
-+ * configuration option for this feature.
-+ * People who want to use this will need to modify the source code directly.
-+ */
-+static int genpd_state_set(void *data, u64 val)
-+{
-+
-+	struct generic_pm_domain *genpd = data;
-+	int ret = 0;
-+
-+	ret = genpd_lock_interruptible(genpd);
-+	if (ret)
-+		return -ERESTARTSYS;
-+
-+	if (val == 1) {
-+		genpd->power_on(genpd);
-+		genpd->status = GENPD_STATE_ON;
-+	} else if (val == 0) {
-+		genpd->power_off(genpd);
-+		genpd->status = GENPD_STATE_OFF;
-+	}
-+
-+	genpd_unlock(genpd);
-+	return 0;
-+}
-+
-+#define pd_state_mode	0644
-+
-+static int genpd_state_get(void *data, u64 *val)
-+{
-+
-+	struct generic_pm_domain *genpd = data;
-+	int ret = 0;
-+
-+	ret = genpd_lock_interruptible(genpd);
-+	if (ret)
-+		return -ERESTARTSYS;
-+
-+	if (genpd->status == GENPD_STATE_OFF)
-+		*val = 0;
-+	else
-+		*val = 1;
-+
-+	genpd_unlock(genpd);
-+	return ret;
-+}
-+
-+DEFINE_DEBUGFS_ATTRIBUTE(pd_state_fops, genpd_state_get,
-+			 genpd_state_set, "%llu\n");
-+
-+#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
-+
- /**
-  * genpd_sync_power_off - Synchronously power off a PM domain and its parents.
-  * @genpd: PM domain to power off, if possible.
-@@ -3639,6 +3693,11 @@ static void genpd_debug_add(struct generic_pm_domain *genpd)
- 	if (genpd->set_performance_state)
- 		debugfs_create_file("perf_state", 0444,
- 				    d, genpd, &perf_state_fops);
-+#ifdef GENPD_ALLOW_WRITE_DEBUGFS
-+	debugfs_create_file("pd_state", 0644, d, genpd,
-+			    &pd_state_fops);
-+#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
-+
- }
- 
- static int __init genpd_debug_init(void)
-@@ -3653,6 +3712,24 @@ static int __init genpd_debug_init(void)
- 	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
- 		genpd_debug_add(genpd);
- 
-+#ifdef GENPD_ALLOW_WRITE_DEBUGFS
-+	pr_warn("\n");
-+	pr_warn("********************************************************************\n");
-+	pr_warn("**     NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE           **\n");
-+	pr_warn("**                                                                **\n");
-+	pr_warn("**  WRITEABLE POWER DOMAIN STATE DEBUGFS SUPPORT HAS BEEN ENABLED **\n");
-+	pr_warn("**  IN THIS KERNEL                                                **\n");
-+	pr_warn("** This means that this kernel is built to expose pd operations   **\n");
-+	pr_warn("** such as enabling, disabling, etc.                              **\n");
-+	pr_warn("** to userspace, which may compromise security on your system.    **\n");
-+	pr_warn("**                                                                **\n");
-+	pr_warn("** If you see this message and you are not debugging the          **\n");
-+	pr_warn("** kernel, report this immediately to your vendor!                **\n");
-+	pr_warn("**                                                                **\n");
-+	pr_warn("**     NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE           **\n");
-+	pr_warn("********************************************************************\n");
-+#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
-+
- 	return 0;
- }
- late_initcall(genpd_debug_init);
-
----
-base-commit: d4b0fd87ff0d4338b259dc79b2b3c6f7e70e8afa
-change-id: 20250221-pm-debug-0824da30890f
-
-Best regards,
 -- 
-Kamlesh Gurudasani <kamlesh@ti.com>
-
+With best wishes
+Dmitry
 
