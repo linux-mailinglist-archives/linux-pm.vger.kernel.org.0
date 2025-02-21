@@ -1,125 +1,96 @@
-Return-Path: <linux-pm+bounces-22692-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22693-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0A9EBA40049
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 21:02:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id D684EA40067
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 21:08:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 22CB316995F
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 20:02:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2FD3B4237F3
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 20:08:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B9B5253340;
-	Fri, 21 Feb 2025 20:02:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 185EC20DD63;
+	Fri, 21 Feb 2025 20:08:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="UteSg52R"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tc58lxRe"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from desiato.infradead.org (desiato.infradead.org [90.155.92.199])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7023F1D5173;
-	Fri, 21 Feb 2025 20:02:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.92.199
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E244E1D5173;
+	Fri, 21 Feb 2025 20:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740168131; cv=none; b=VS+AcolZ/TkO3dJfx3zKTFZ9roP4n7LREBC00b+xOFwGSXJsw6ED3gY0ii0if7KPf0yS8gUGm2EjdYn2Tw65gfclm665n7bbR5kARje1GD0LOO0JR3nOZkzrbVb7GE0P4ipXxXmlvDY9cO/uuMaaybIVkJ7u24XdTYJQBUe/3e0=
+	t=1740168492; cv=none; b=VDw/tFEQiANwkGdra//EB/bH/b/ULp6GHFvZ/016JZvlkjjbMtFGuKGU7vToGfol66c7tIFMGEUUOxUPOo6xQuNimayHhtrClp+3iujPL0G4uFcLSZC8p52WoZZCmnPErinhjXERdRCrPbguy6RaeNzSfkoFktW9o6a8hofbtQ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740168131; c=relaxed/simple;
-	bh=cqpH7TG6SAX4ZNWACei1aBxwCR5Ybf1VnjsqFb3f5zs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=lbIbHYxroP0u8MyRKX32VtKC0CmrrPyh+zI/l67SIEG4d3qR7kigXCsJJ+6muaJ4bTWkJl+fiE90kmg89OxeWrLZSuswOaiKCsOADOJvza0xQWlmwtWQ56w2QTjSN676QRVZeWYuxDa1lIS63g9IFQh5CAg0k/rV+zh2L9kz7ZE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=UteSg52R; arc=none smtp.client-ip=90.155.92.199
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=desiato.20200630; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=7gGBaRe4JgYzbdGSQQDl/iu7LJKLfKjaa+/NCZsQ+Ao=; b=UteSg52R0cyjvV7m5TTbonCM1h
-	nNaAO3jaW9OJTFD62ZSqIMkpbxkqDB1DnXGCDq1E9j76theeavHA/RRU5cr9Ld3y9wfjpXqbzl6ny
-	StfdLe4oNTNBs7AUNYsLHfvw/kaINS1IKRZ1sucXhgJkMsTs/iy5t0nieQstbQpmCN/ql5vASIsCB
-	garNWnx82z7wKP48scb0FcUXdE8h/CiJr7AzuSeezFGNc+OEyw6P8aofPitbVwLiEyPVPm69UbSh3
-	xtKeubLPCtDZQLsl/R9x4n93qUl1H2Gyc9cbQjUEI73Ffxu18HzmEy3NN4RJTxgXH80wZWZPvSf6f
-	vY9JATuw==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by desiato.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tlZDO-00000002in9-0hY9;
-	Fri, 21 Feb 2025 20:01:38 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id 48E7130066A; Fri, 21 Feb 2025 21:01:37 +0100 (CET)
-Date: Fri, 21 Feb 2025 21:01:37 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Zijun Hu <quic_zijuhu@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
-	Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>,
-	Zijun Hu <zijun_hu@icloud.com>, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	iommu@lists.linux.dev, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH *-next 01/18] mm/mmu_gather: Remove needless return in
- void API tlb_remove_page()
-Message-ID: <20250221200137.GH7373@noisy.programming.kicks-ass.net>
-References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
- <20250221-rmv_return-v1-1-cc8dff275827@quicinc.com>
+	s=arc-20240116; t=1740168492; c=relaxed/simple;
+	bh=Gm+4xFa7KkdiFVlFBYWqO24vT7+jbVfw8VcidVSE2n4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=tNEOiYydpMapb2HZ9oANf3jKwUpEMzvYpGSAK9g6uKQ1VT+cyhUGZxhiUpQ7FycODks/MbF2jrnf9KlPqwI1BWBCKbGSq/f9BKpWmLNa9eCQm68BQ+8+yFzFy33ny34Zcvm1q60L70xA9Mhfp9oW4jY2TR89sD8n2UYRO+l0hM8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tc58lxRe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 608A6C4CEE7;
+	Fri, 21 Feb 2025 20:08:11 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740168491;
+	bh=Gm+4xFa7KkdiFVlFBYWqO24vT7+jbVfw8VcidVSE2n4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=tc58lxRed8uamUIfbTSBMBHL98ZaBXJzhN1ADvixXSJ9j6o0NXT4WXyiLQy4eQmlz
+	 d7xbJmYWR6aMXN4be8aUZ1LqizSxqGYuEG60HhrR/g+slnImGvRBod1Sca5GK+UD4e
+	 lH6K9G3m6XaROeUnJwTrgtTSzbC760Fr9OGOzzUw3lmun1Y0e6J/iT7tCLC8oYfalz
+	 XquVChLorBqyObMHgOj8tKkTNTUWv/aLT7g1A3QbWLxSB4Cpn7s2lES/2k8qxlOjwU
+	 4IRIuAnP2Z8Fa8gVtmhKJR8dxmUrVC/ZgzWNxlElVATX35sFzPSCI8gw+KdDc87F4L
+	 2xJX4xCV+8mGA==
+Received: by mail-oo1-f52.google.com with SMTP id 006d021491bc7-5fcf21d7235so886336eaf.0;
+        Fri, 21 Feb 2025 12:08:11 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCX5dml9RHqWQBZHxfz8khlXbMb8MI/ejp3fNrhAjTom6mNMhwgGVv4nc0PIpNpLToUXBj2yy5G/QlA=@vger.kernel.org, AJvYcCXVAaAlwLTREkqFDEzlahoC89+pIfevNNC4nbHzZzdAEHrsgMmCnfjlxN8/AhixwLmoe4C6jLzrGFZpDPo=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwE8r+O4QA6w3Lih32NCVsy5DyYQdPk7kQt3nowz5ghY/4rkfm
+	pH2VscADBWyHXhbhiCJbuzxUtR5qohq3HTWLScf7Cw5E9VPaRwr8r8MMbHiKSxuvVIyhtMzKsci
+	Z/Sh0VtNRUKSFX0d0jsLL27k2tsY=
+X-Google-Smtp-Source: AGHT+IEuERQjCgClekDrKOshdDxtp7HRtOnIM+funBYPZRyRmxWui4PTyEGZ8/fnhSnxgFN6UXyB56d99tTLkkrmA68=
+X-Received: by 2002:a05:6820:1b86:b0:5fd:7c4:e9ec with SMTP id
+ 006d021491bc7-5fd1a9af44fmr2594117eaf.6.1740168490633; Fri, 21 Feb 2025
+ 12:08:10 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250221-rmv_return-v1-1-cc8dff275827@quicinc.com>
+References: <CAJZ5v0h38FRwpYeTgw0VKqKVT=RDSrLnSt+31E6i=XOAoCor9w@mail.gmail.com>
+ <20250221123536.2946377-1-lizhi.xu@windriver.com>
+In-Reply-To: <20250221123536.2946377-1-lizhi.xu@windriver.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 21 Feb 2025 21:07:59 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hu=Gi82zS27MwKj-uhEciuD6JN8cZLd+75J3VKY796wg@mail.gmail.com>
+X-Gm-Features: AWEUYZnLLOMc3l8VcpaVAp8trSHpB59NIwlFt5SrgWeznsAsbItqxygllooENFc
+Message-ID: <CAJZ5v0hu=Gi82zS27MwKj-uhEciuD6JN8cZLd+75J3VKY796wg@mail.gmail.com>
+Subject: Re: [PATCH V2] module: replace the mutex lock acquisition method
+To: Lizhi Xu <lizhi.xu@windriver.com>
+Cc: rafael@kernel.org, len.brown@intel.com, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, pavel@kernel.org, syzkaller-bugs@googlegroups.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Fri, Feb 21, 2025 at 05:02:06AM -0800, Zijun Hu wrote:
-> Remove needless 'return' in void API tlb_remove_page() since both the
-> API and tlb_remove_page_size() are void functions.
-> 
-> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
-> ---
->  include/asm-generic/tlb.h | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
-> 
-> diff --git a/include/asm-generic/tlb.h b/include/asm-generic/tlb.h
-> index e402aef79c93..812110813b84 100644
-> --- a/include/asm-generic/tlb.h
-> +++ b/include/asm-generic/tlb.h
-> @@ -501,7 +501,7 @@ static __always_inline bool __tlb_remove_page(struct mmu_gather *tlb,
->   */
->  static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page)
->  {
-> -	return tlb_remove_page_size(tlb, page, PAGE_SIZE);
-> +	tlb_remove_page_size(tlb, page, PAGE_SIZE);
->  }
+On Fri, Feb 21, 2025 at 1:35=E2=80=AFPM Lizhi Xu <lizhi.xu@windriver.com> w=
+rote:
+>
+> syzbot reported a deadlock in lock_system_sleep. [1]
+>
+> The write operation to "/sys/module/hibernate/parameters/compressor"
+> conflicts with the registration of ieee80211 device, resulting in a deadl=
+ock
+> in the lock param_lock.
+>
+> Since the conflict cannot be avoided, the way to obtain param_lock is cha=
+nged
+> to trylock to avoid deadlock.
 
-So I don't mind removing it, but note that that return enforces
-tlb_remove_page_size() has void return type.
+An alternative way to avoid the deadlock would be to replace
+lock_system_sleep() in hibernate_compressor_param_set() with
+mutex_trylock(&system_transition_mutex) (and analogously for the
+unlock operation).  Why have you not done that?
 
-It might not be your preferred coding style, but it is not completely
-pointless.
+It is arguably better to fail a write to the module param with -EBUSY
+than to fail ieee80211_register_hw() IMV.
 
