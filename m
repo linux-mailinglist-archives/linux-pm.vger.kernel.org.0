@@ -1,99 +1,112 @@
-Return-Path: <linux-pm+bounces-22611-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22612-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id BDE30A3F0D1
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 10:47:39 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 14FD1A3F143
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 11:01:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5E9641889CA0
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 09:45:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0024E18992F0
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 10:00:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 49E9F205E2F;
-	Fri, 21 Feb 2025 09:41:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2590F204F90;
+	Fri, 21 Feb 2025 10:00:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EqiL4e0x"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f200.google.com (mail-il1-f200.google.com [209.85.166.200])
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8EB74205E28
-	for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 09:41:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.200
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 624092046A6;
+	Fri, 21 Feb 2025 10:00:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740130884; cv=none; b=DpdjDeETxtfShKcbDWLS+kRRbbleADGTbkytydzf9RSnB0qXjC8dv8ej/I9voEmf2yZv7rRkqgywBjqKi9Q9gnN6+5ye1aAVebXqehallMuGARemT1bVBwggDLo23r8sng9ycyEJNBYNkybhCIu2bU/QQkeLUC1TjAuC232jyhA=
+	t=1740132008; cv=none; b=WAZiHZdGjbYIEOtiDFuJmP5u5TCH4vMU+UbiAP4FrXyIJODafkIGhhSXAs3/pyNwO2B1J7WuOcAwww/VbCAip6bOpfOnk/VxuTYioBCGxzWSy3bchPT+lMIugkxvm43xH/l020YS38C/gDKl1c2ch1RNnlSh/JiC3X2Qt5Ldl7U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740130884; c=relaxed/simple;
-	bh=ZkkWKXP5VI04+XhhK4BFzZn5nqZ0ICb2qmJ7kldPgGc=;
-	h=MIME-Version:Date:Message-ID:Subject:From:To:Content-Type; b=S+hXVTXuoEabvS1Ig2gLOfS29HYsF1v3cwQZIvZ4N1npK4YP2p0XU45NU+Dzx4CUEs7pRfE1HD3Cc2E88O3rlgVsn3YcrJ2rBwGSAy7cxo9aG0KVVgc1xrmKsF8udqWwOSerJQNTaLFgviOyeAJMLCfo6So777OwAJ7uXG7xCMU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com; arc=none smtp.client-ip=209.85.166.200
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=syzkaller.appspotmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=M3KW2WVRGUFZ5GODRSRYTGD7.apphosting.bounces.google.com
-Received: by mail-il1-f200.google.com with SMTP id e9e14a558f8ab-3d2b6d933a5so14732115ab.0
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 01:41:22 -0800 (PST)
+	s=arc-20240116; t=1740132008; c=relaxed/simple;
+	bh=Se+ktXeGp1G/eESkOhJ3QXv058/3RbGnqgzXQHPUT/0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=XBaPI3ytjYDGo/RPsj0F2Ms8MPZ7Be0Q3Wme2XkfsP63Ya8Z7InfZhWoHQoRlP4Aq66VprBiUqMrjVg09xrbLgVt1UZ9StRSX5mMu0/bPDjp7gkcENt4aUqmTOD0EddvYlCwyp/zooRl+lZEWzYL6Dr0DRP9ziWI77kbo1ZRHMU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EqiL4e0x; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-543e47e93a3so2189704e87.2;
+        Fri, 21 Feb 2025 02:00:05 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740132003; x=1740736803; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=iLVwB+GU8xfxQzzItDC5z6HQk73kuURkW63I+L7hNAs=;
+        b=EqiL4e0xNPSarXirmwAXg5TU3LXLNn4E7M4LfmZwd8uwKY3sXR++47o9/Qz/4HOpr6
+         9Rt7ZwNgvUR4tv38pSTBS3IECgm2kHmS52OUWpHkqQtHlPFa4QjnfIqGztfjqM6PoWV5
+         AKaZRthqbg9MZXN5il4UGf55290wq2/uQvivgcjbebCUX/WlQ5unzmiEV1yIGkBvclou
+         aLzlRgwJ7+ZRCCjXKovYWDLpnXMKIab9GuSDNnvE0QshDL0oaZLWC7lcplILY/yIHWqL
+         DRdNa/FnRKc3EFp4QImIaAwWTEURrRDu7BvS1nuF7aLISjUPwHPhd04WVmZkPuZm4Ed5
+         /jcA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740130881; x=1740735681;
-        h=to:from:subject:message-id:date:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=T95fukwRaCyhjkDTbTMQl87Lxi7TRA8tZuBkDLMn1N4=;
-        b=cKZl4nKih2ppHlPf6aE3rzOxbTL1CW/n7AUqXT31n5HUz0KrIPbEpDHMnHhfxhylLN
-         a1Skg60lDG/EbXJLZw9NdB8TmBUgJxZLhJLiEhz3MqMySHrfDwf01wCEHlFVoHXf//Kv
-         CFRnHYbUO+SuNg5gOF1ke6xc1AeCEcexoT7yAaQUiHqWsgA3TOaFBMS85B4WGaOcIdyc
-         UEIIT7itfeCIFUpXlGWwyMC3/ffG/+gspS1ibp0ibmTnrfIqR9enra9y06kPMbcv6F9E
-         qzGwQPETRlP85bw6vY0HeW6LrqiLCagTEbRHQXuUhe73KwX2lnquMWMcCmROPfVjeWGB
-         XlBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCV7BLS4SMdrOhIoyiOKWLOP3hl52ju/4FsRUaoD5/NkeGjuSFXDX3xqFsyPWHf5klQO4A3GZ1nsYw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzWwJbw+kpxRQ2AKuRQy/EaEO18ykF3YtWNRAaXnZC1gxlG9H4d
-	WxW3EEzeRvHBzmCRmkgL2j2orLd6iv0umOoCuwYa9hkbUJy9KuWTGivlTSy2p2M7d3AR58JtwZ/
-	hoh9eG0XxOff1gduXwLjv7+QIS41/YojdhlF7VsdsZ7ul04Uyc8DUlIw=
-X-Google-Smtp-Source: AGHT+IEF5bFtK+eCANJbgUQqmfBu+0vXYeTFRBcR8iV7drnQDTpoOIsrcWPIDwV5HrQ9LgxOXhepfrQaeAw9suS96bC1WqcVv1Jo
+        d=1e100.net; s=20230601; t=1740132003; x=1740736803;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=iLVwB+GU8xfxQzzItDC5z6HQk73kuURkW63I+L7hNAs=;
+        b=OaL2ofhnT2Z3RWndZd+xMH7udS012AJOdBLHb1Zt/X7D6uVYjVbmKnxqPdpiX+16Pl
+         56mgMH6kyIipFt0Ke2K9tYuBvffcQvC7tTQoubOxNwFOeAMYBZTvr7qsW6zK2Wi32xc3
+         C7PAq07ENxg6GMV+OgoCGmgTOT34xoK8IysvcwpPs/Oaa5zx+HCb0GoM6lUsEwXfV+So
+         020x+buhNnrFtQEX+3eGYKjB797XCui7Fe7iSg4/eLqux+VjkDmLiFoaEcDoCb0uR//x
+         RUQE0a1Vb2y9VU6dYZ02En6NZjqs2b8vw9LU0oYBS84eCCdNFu6nkc0BgFVCpuJA4oFe
+         fu3g==
+X-Forwarded-Encrypted: i=1; AJvYcCWZwQTEYjItkQTJLVsxiuPMkTG40kJTNi5dhEvQkaZw0K6knrTlcaTC1lockNAm89+kX6z1sAoQ+nt8ZOsh@vger.kernel.org, AJvYcCXTdrbEsATtnYcJVwCWuFf89Kr1mnAi8PcUH/SJwosutqHWfYZEzm+8RaxnWEiDElrTiEu0YhclQyOp@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywb6WeYUTZYDx4Lt1egs6+TxneykfTzJt+qZkr92BPTJZe+s8Le
+	j5O5c7YxggrX9pJ6SHJB8oBzG0fUChWGU4SpAkbi/tLiBm52HCAs
+X-Gm-Gg: ASbGncuokLW4RehPmztatQ/6Lh95RjLqve8y9j9M8LelRYYONUAXdpHX8IbhqI8qFGF
+	sQ8Yo3LF/99SqZ+4XMNnozJ25YOXHSLUAGgxhU8B7CfXl52SHiagFPX181SrKLLWkcfy/LJh6qO
+	J1Alp97hN3Z7FUCFHVDzor1vcl5biaQh3+/KyM6r11SiPTL+bOCk3rr3pX9qcMXFIA/I/p4vIhe
+	cg5F/ib6yXrIYWKQDtN19SnePkmQ5dmUO6Uf3ubzRnzJi7i9wBbf42Uo4++uDvte4wf+qQEIbiW
+	Y1iY8CEX6YbEWj6b8Q==
+X-Google-Smtp-Source: AGHT+IErZdCZmqT/hVmV9VGsyyRFvsLHJ5ZEyrPE/KSJnPfmO0ICWRGIiXwTWZAc0VGXA+jxodYyMQ==
+X-Received: by 2002:a05:6512:3c99:b0:545:944:aaf4 with SMTP id 2adb3069b0e04-54839129a67mr913108e87.11.1740132003083;
+        Fri, 21 Feb 2025 02:00:03 -0800 (PST)
+Received: from xeon.. ([188.163.112.51])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5461eb04602sm1604805e87.68.2025.02.21.02.00.01
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Feb 2025 02:00:02 -0800 (PST)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v1 0/2] power: supply: Add support for Maxim MAX8971 charger
+Date: Fri, 21 Feb 2025 11:59:41 +0200
+Message-ID: <20250221095943.57297-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-Received: by 2002:a05:6e02:1908:b0:3d0:21aa:a752 with SMTP id
- e9e14a558f8ab-3d2cae47e92mr26100285ab.2.1740130881644; Fri, 21 Feb 2025
- 01:41:21 -0800 (PST)
-Date: Fri, 21 Feb 2025 01:41:21 -0800
-X-Google-Appengine-App-Id: s~syzkaller
-X-Google-Appengine-App-Id-Alias: syzkaller
-Message-ID: <67b84a41.050a0220.14d86d.0358.GAE@google.com>
-Subject: [syzbot] Monthly pm report (Feb 2025)
-From: syzbot <syzbot+liste374d52634bb41a6b682@syzkaller.appspotmail.com>
-To: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
-	syzkaller-bugs@googlegroups.com
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-Hello pm maintainers/developers,
+The MAX8971 is a compact, high-frequency, high-efficiency
+switch-mode charger for a one-cell lithium-ion (Li+) battery.
 
-This is a 31-day syzbot report for the pm subsystem.
-All related reports/information can be found at:
-https://syzkaller.appspot.com/upstream/s/pm
+Svyatoslav Ryhel (2):
+  dt-bindings: power: supply: Document Maxim MAX8971 charger
+  power: supply: Add support for Maxim MAX8971 charger
 
-During the period, 1 new issues were detected and 0 were fixed.
-In total, 5 issues are still open and 9 have already been fixed.
+ .../bindings/power/supply/maxim,max8971.yaml  | 133 ++++
+ drivers/power/supply/Kconfig                  |  14 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/max8971_charger.c        | 685 ++++++++++++++++++
+ 4 files changed, 833 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
+ create mode 100644 drivers/power/supply/max8971_charger.c
 
-Some of the still happening issues:
+-- 
+2.43.0
 
-Ref Crashes Repro Title
-<1> 586     Yes   WARNING in enable_work
-                  https://syzkaller.appspot.com/bug?extid=7053fbd8757fecbbe492
-<2> 3       Yes   possible deadlock in lock_system_sleep
-                  https://syzkaller.appspot.com/bug?extid=ace60642828c074eb913
-<3> 2       Yes   possible deadlock in dpm_for_each_dev
-                  https://syzkaller.appspot.com/bug?extid=2a03726f1d4eff48b278
-
----
-This report is generated by a bot. It may contain errors.
-See https://goo.gl/tpsmEJ for more information about syzbot.
-syzbot engineers can be reached at syzkaller@googlegroups.com.
-
-To disable reminders for individual bugs, reply with the following command:
-#syz set <Ref> no-reminders
-
-To change bug's subsystems, reply with:
-#syz set <Ref> subsystems: new-subsystem
-
-You may send multiple commands in a single email message.
 
