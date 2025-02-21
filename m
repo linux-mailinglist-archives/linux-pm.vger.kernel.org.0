@@ -1,337 +1,292 @@
-Return-Path: <linux-pm+bounces-22621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 78898A3F2B2
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 12:09:49 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7DFC8A3F328
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 12:41:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8DBBF19C1AF1
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 11:09:55 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 57E49172478
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 11:41:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C6FF2080E4;
-	Fri, 21 Feb 2025 11:09:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8C120897C;
+	Fri, 21 Feb 2025 11:41:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="nuAW+rjC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AMefEiHJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DB06207A2E;
-	Fri, 21 Feb 2025 11:09:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0497A208964;
+	Fri, 21 Feb 2025 11:41:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740136184; cv=none; b=Nu8iFF78OKRxCajG4l1nv1U4HyN+s4EBKcFgmXyf0DQ64mPxuWPrbrDAMhgb+UQNRN5X22LI8TaK8A7DFNz7BG7zJeA1PgN5OOZkbhBTK14WWMSnVmRoZG8XYdMv5od+tJZuSZeBXvIsRcexuY+/aj+kR0YHVzKWtrBzO61Uyc8=
+	t=1740138105; cv=none; b=lYz5jrH2argSMf2/aCw0tkmq/2QunL6Qh57WFScPNBf8+Tu82cj2yTLreoljoxqPq6jHxfhG94hp1gFXAwCmwuA1Aoi8vM0CSLSd8AwKV0ZX9C7T0pW/5zh3sPymjy0CgSPWt5Gfx60ZdgYXUP4HYi/M1lwKg+vI+AhV2Ygvj24=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740136184; c=relaxed/simple;
-	bh=h3iqELhA28DBuUskBm3qO3i9yaA0BWW3ouF2OXutVxo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=XLxOPmCXW+W8m6p2hrvbpQw5mQFG4m0cKPo8znNU09+CYOrR/5gFmo9K15ZnzJc0Rq2a2hbxlNKSydjA/Cuppz2G1RGyK6sXnpX8Sw+HO8K5FQDF7ote/YaPQNQ/uwJgkxSg8/9S1raUPF8dgG15OyyWTTtxPmul6JWJCkvRsz0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=nuAW+rjC; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51L5cnNX011722;
-	Fri, 21 Feb 2025 11:09:33 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	hf2PUWm8OQyikV9j6rNMCeXRUVGpnIjAHnXg5g+Qo58=; b=nuAW+rjC1FirxBRM
-	YwVO8y7quHAyvYVB0WYjM7ZxYQ5ODVFk18ReU8eEbJdCIoEx+HW0ycb075SxYHnR
-	Q1edQEv5l1eDpykBWifbBgx4pqSoSmqO1Tcd5eafYqR5d0yWiyAKR82DoHDaW0OE
-	k8TpHLjdCQCEj9xDI8PEzyMgVNoyUp+BsJmgPOmHsdi3vOGvgGXYGrSMmclQRBg/
-	jguSLKo3wObyRuDg8P+LbxVvOvZPlGJEeYBZrkDiazPDjA+OVOrRXCXqQ8eYcdh5
-	xV/UdO9Xk75Ie7t1JS1HyQKS6dT6sf9SMeYzhyWMXYTvdnA93Us8TuUMcVM5AhdW
-	wUZvGQ==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44vyy3spsr-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 11:09:33 +0000 (GMT)
-Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51LB9WZN017409
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 11:09:32 GMT
-Received: from [10.216.53.96] (10.80.80.8) by nasanex01b.na.qualcomm.com
- (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 21 Feb
- 2025 03:09:26 -0800
-Message-ID: <1b9f1bec-5fb6-4afe-bbd5-94d19aa4a4fa@quicinc.com>
-Date: Fri, 21 Feb 2025 16:39:23 +0530
+	s=arc-20240116; t=1740138105; c=relaxed/simple;
+	bh=cxSMk+k7WC7scwDG31gLO45S/n0ITo71CkX/mA3Etnk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=DgmIvCRnqTcsDDzN6g+rk++7XbrRqMxO8hIVOPvteYjgQ75v1CEPrPbgtXrke8RtihkaE2d2eWDwZTzm17cu1cOORhjnTuErrlVeu89qZeQvTI4vbyMKaxw+WbbddD5rSJ8zLqggaT4u6ml96gdfNWbT8dF3xOgqQxG6TcBWOqA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AMefEiHJ; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 80766C4CEDD;
+	Fri, 21 Feb 2025 11:41:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740138104;
+	bh=cxSMk+k7WC7scwDG31gLO45S/n0ITo71CkX/mA3Etnk=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=AMefEiHJ225xdNxa4T/CAlMTctvDTe/ar3WKtq7UUPRVMtyumkMjqqO+/+DkDHvtt
+	 25hFkt0FWhgdVGdQGYNlQ5JNxnzEsNMk9PqDD6IJnTsLVd8pEzV4xBSsP/WfETm/ve
+	 t3w1wrnJlYwM0v97yLeABQfwa6cmsrEK8WGZZ1318DM8YMuRG5FUSDKn8PWXFFdzfo
+	 h9ApIK2WsyJ82WsrnlqXlE7CWimECq9xMqQVqDf5ggfpsVPsZcugnhE00Gv8W+tW0S
+	 eHFkZLvR9JBMP2Np99JXezeAJkMNDLoO+MLXBDUad9WF1sI6e5SEGuDjrAeaniTnt4
+	 dGVciz38GTGAg==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-2bca6017608so1407357fac.0;
+        Fri, 21 Feb 2025 03:41:44 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVXwY2CwZDosZ0CkHhVCvk5oPy54Zgp+GcRB+dYLupQE+A3TO4VfU4Z2d/c+2mxYWGCxsN6edXU/T0=@vger.kernel.org, AJvYcCVk6HThkIZ1CQTfvNFYuV9NeIiDAfGCJMD+uZ9BqapFcV40xsleXdHOgSptdYefitSaf7dspcvbT7zSTr0=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzUaCPyqbL9cSqgsVdx2YpEIRw2z+KBwrewBMonDNu9SnslOHgd
+	y5PW0XWYhHekpdM6LSxMiUQDe2bXruYF+9sskwaCaiabwb1ApFPeqJN6Tyy4cB10GuTqKGZSiXl
+	l8i5lcsZg9NJ/6WPCTmtmfrtabNI=
+X-Google-Smtp-Source: AGHT+IH/9QWqJrGkCC6sqbKoiml+uXxP3M3fP+0kZv8x/7Ry1kcwWGF/u+UuFYcI9mCr/LyoJ/JrHB7UmMLWG7+6UL8=
+X-Received: by 2002:a05:6870:5d92:b0:29e:5c37:a1c3 with SMTP id
+ 586e51a60fabf-2bd50c5627bmr2285695fac.2.1740138103770; Fri, 21 Feb 2025
+ 03:41:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V8 3/7] interconnect: qcom: Add multidev EPSS L3 support
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        "Mike
- Tipton" <quic_mdtipton@quicinc.com>,
-        Jeff Johnson
-	<quic_jjohnson@quicinc.com>,
-        Andrew Halaney <ahalaney@redhat.com>,
-        Sibi
- Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-References: <20250205182743.915-1-quic_rlaggysh@quicinc.com>
- <20250205182743.915-4-quic_rlaggysh@quicinc.com>
- <fclfywuw3p43pcj42gi2w5kutvnto3rcrdng2zl2pzgpvz7dis@cjx2e6v4skfm>
- <4482b900-2ec0-44c1-9b68-3b403a1df7d8@quicinc.com>
- <ii33reyezniliytyom2u6k33nqcdrf5c444s76uwb2rs2hodno@q6exlaj6pqug>
-Content-Language: en-US
-From: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-In-Reply-To: <ii33reyezniliytyom2u6k33nqcdrf5c444s76uwb2rs2hodno@q6exlaj6pqug>
+References: <67b74749.050a0220.14d86d.02b4.GAE@google.com> <20250221101005.2742983-1-lizhi.xu@windriver.com>
+In-Reply-To: <20250221101005.2742983-1-lizhi.xu@windriver.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Fri, 21 Feb 2025 12:41:32 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0h38FRwpYeTgw0VKqKVT=RDSrLnSt+31E6i=XOAoCor9w@mail.gmail.com>
+X-Gm-Features: AWEUYZm05UMkcmKrUI5sQYa56RcaC99vmuDlv9h1m_i86SjN-0-JsefCilwjYz4
+Message-ID: <CAJZ5v0h38FRwpYeTgw0VKqKVT=RDSrLnSt+31E6i=XOAoCor9w@mail.gmail.com>
+Subject: Re: [PATCH] module: replace the mutex lock acquisition method
+To: Lizhi Xu <lizhi.xu@windriver.com>
+Cc: syzbot+ace60642828c074eb913@syzkaller.appspotmail.com, len.brown@intel.com, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, pavel@kernel.org, 
+	rafael@kernel.org, syzkaller-bugs@googlegroups.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01b.na.qualcomm.com (10.46.141.250)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: pKqeWj13H47ZbAjSWLONBOmtpos-BmUD
-X-Proofpoint-GUID: pKqeWj13H47ZbAjSWLONBOmtpos-BmUD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-21_03,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 suspectscore=0
- impostorscore=0 mlxlogscore=999 bulkscore=0 mlxscore=0 spamscore=0
- lowpriorityscore=0 phishscore=0 priorityscore=1501 clxscore=1011
- malwarescore=0 adultscore=0 classifier=spam adjust=0 reason=mlx
- scancount=1 engine=8.19.0-2502100000 definitions=main-2502210084
+Content-Transfer-Encoding: quoted-printable
 
+On Fri, Feb 21, 2025 at 11:10=E2=80=AFAM Lizhi Xu <lizhi.xu@windriver.com> =
+wrote:
+>
+> syzbot reported a deadlock in lock_system_sleep. [1]
+>
+> The write operation to "/sys/module/hibernate/parameters/compressor"
+> conflicts with the registration of ieee80211 device, resulting in a deadl=
+ock
+> in the lock param_lock.
+>
+> Since the conflict cannot be avoided, the way to obtain param_lock is cha=
+nged
+> to trylock to avoid deadlock.
+>
+> [1]
+> syz-executor895/5833 is trying to acquire lock:
+> ffffffff8e0828c8 (system_transition_mutex){+.+.}-{4:4}, at: lock_system_s=
+leep+0x87/0xa0 kernel/power/main.c:56
+>
+> but task is already holding lock:
+> ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: kernel_param_lock kernel/p=
+arams.c:607 [inline]
+> ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: param_attr_store+0xe6/0x30=
+0 kernel/params.c:586
+>
+> which lock already depends on the new lock.
+>
+>
+> the existing dependency chain (in reverse order) is:
+>
+> -> #3 (param_lock){+.+.}-{4:4}:
+>        __mutex_lock_common kernel/locking/mutex.c:585 [inline]
+>        __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
+>        ieee80211_rate_control_ops_get net/mac80211/rate.c:220 [inline]
+>        rate_control_alloc net/mac80211/rate.c:266 [inline]
+>        ieee80211_init_rate_ctrl_alg+0x18d/0x6b0 net/mac80211/rate.c:1015
+>        ieee80211_register_hw+0x20cd/0x4060 net/mac80211/main.c:1531
+>        mac80211_hwsim_new_radio+0x304e/0x54e0 drivers/net/wireless/virtua=
+l/mac80211_hwsim.c:5558
+>        init_mac80211_hwsim+0x432/0x8c0 drivers/net/wireless/virtual/mac80=
+211_hwsim.c:6910
+>        do_one_initcall+0x128/0x700 init/main.c:1257
+>        do_initcall_level init/main.c:1319 [inline]
+>        do_initcalls init/main.c:1335 [inline]
+>        do_basic_setup init/main.c:1354 [inline]
+>        kernel_init_freeable+0x5c7/0x900 init/main.c:1568
+>        kernel_init+0x1c/0x2b0 init/main.c:1457
+>        ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
+>        ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+>
+> -> #2 (rtnl_mutex){+.+.}-{4:4}:
+>        __mutex_lock_common kernel/locking/mutex.c:585 [inline]
+>        __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
+>        wg_pm_notification drivers/net/wireguard/device.c:80 [inline]
+>        wg_pm_notification+0x49/0x180 drivers/net/wireguard/device.c:64
+>        notifier_call_chain+0xb7/0x410 kernel/notifier.c:85
+>        notifier_call_chain_robust kernel/notifier.c:120 [inline]
+>        blocking_notifier_call_chain_robust kernel/notifier.c:345 [inline]
+>        blocking_notifier_call_chain_robust+0xc9/0x170 kernel/notifier.c:3=
+33
+>        pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
+>        snapshot_open+0x189/0x2b0 kernel/power/user.c:77
+>        misc_open+0x35a/0x420 drivers/char/misc.c:179
+>        chrdev_open+0x237/0x6a0 fs/char_dev.c:414
+>        do_dentry_open+0x735/0x1c40 fs/open.c:956
+>        vfs_open+0x82/0x3f0 fs/open.c:1086
+>        do_open fs/namei.c:3830 [inline]
+>        path_openat+0x1e88/0x2d80 fs/namei.c:3989
+>        do_filp_open+0x20c/0x470 fs/namei.c:4016
+>        do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
+>        do_sys_open fs/open.c:1443 [inline]
+>        __do_sys_openat fs/open.c:1459 [inline]
+>        __se_sys_openat fs/open.c:1454 [inline]
+>        __x64_sys_openat+0x175/0x210 fs/open.c:1454
+>        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+>        do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+>        entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>
+> -> #1 ((pm_chain_head).rwsem){++++}-{4:4}:
+>        down_read+0x9a/0x330 kernel/locking/rwsem.c:1524
+>        blocking_notifier_call_chain_robust kernel/notifier.c:344 [inline]
+>        blocking_notifier_call_chain_robust+0xa9/0x170 kernel/notifier.c:3=
+33
+>        pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
+>        snapshot_open+0x189/0x2b0 kernel/power/user.c:77
+>        misc_open+0x35a/0x420 drivers/char/misc.c:179
+>        chrdev_open+0x237/0x6a0 fs/char_dev.c:414
+>        do_dentry_open+0x735/0x1c40 fs/open.c:956
+>        vfs_open+0x82/0x3f0 fs/open.c:1086
+>        do_open fs/namei.c:3830 [inline]
+>        path_openat+0x1e88/0x2d80 fs/namei.c:3989
+>        do_filp_open+0x20c/0x470 fs/namei.c:4016
+>        do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
+>        do_sys_open fs/open.c:1443 [inline]
+>        __do_sys_openat fs/open.c:1459 [inline]
+>        __se_sys_openat fs/open.c:1454 [inline]
+>        __x64_sys_openat+0x175/0x210 fs/open.c:1454
+>        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+>        do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+>        entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>
+> -> #0 (system_transition_mutex){+.+.}-{4:4}:
+>        check_prev_add kernel/locking/lockdep.c:3163 [inline]
+>        check_prevs_add kernel/locking/lockdep.c:3282 [inline]
+>        validate_chain kernel/locking/lockdep.c:3906 [inline]
+>        __lock_acquire+0x249e/0x3c40 kernel/locking/lockdep.c:5228
+>        lock_acquire.part.0+0x11b/0x380 kernel/locking/lockdep.c:5851
+>        __mutex_lock_common kernel/locking/mutex.c:585 [inline]
+>        __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
+>        lock_system_sleep+0x87/0xa0 kernel/power/main.c:56
+>        hibernate_compressor_param_set+0x1c/0x210 kernel/power/hibernate.c=
+:1452
+>        param_attr_store+0x18f/0x300 kernel/params.c:588
+>        module_attr_store+0x55/0x80 kernel/params.c:924
+>        sysfs_kf_write+0x117/0x170 fs/sysfs/file.c:139
+>        kernfs_fop_write_iter+0x33d/0x500 fs/kernfs/file.c:334
+>        new_sync_write fs/read_write.c:586 [inline]
+>        vfs_write+0x5ae/0x1150 fs/read_write.c:679
+>        ksys_write+0x12b/0x250 fs/read_write.c:731
+>        do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+>        do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+>        entry_SYSCALL_64_after_hwframe+0x77/0x7f
+>
+> other info that might help us debug this:
+>
+> Chain exists of:
+>   system_transition_mutex --> rtnl_mutex --> param_lock
+>
+>  Possible unsafe locking scenario:
+>
+>        CPU0                    CPU1
+>        ----                    ----
+>   lock(param_lock);
+>                                lock(rtnl_mutex);
+>                                lock(param_lock);
+>   lock(system_transition_mutex);
+>
+>  *** DEADLOCK ***
+>
+> Reported-by: syzbot+ace60642828c074eb913@syzkaller.appspotmail.com
+> Closes: https://syzkaller.appspot.com/bug?extid=3Dace60642828c074eb913
+> Tested-by: syzbot+ace60642828c074eb913@syzkaller.appspotmail.com
+> Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
+> ---
+>  include/linux/moduleparam.h | 4 ++++
+>  kernel/params.c             | 9 ++++++++-
+>  net/mac80211/rate.c         | 4 +++-
+>  3 files changed, 15 insertions(+), 2 deletions(-)
+>
+> diff --git a/include/linux/moduleparam.h b/include/linux/moduleparam.h
+> index bfb85fd13e1f..cbcbfd8db721 100644
+> --- a/include/linux/moduleparam.h
+> +++ b/include/linux/moduleparam.h
+> @@ -306,11 +306,15 @@ struct kparam_array
+>
+>  #ifdef CONFIG_SYSFS
+>  extern void kernel_param_lock(struct module *mod);
+> +extern int kernel_param_trylock(struct module *mod);
+>  extern void kernel_param_unlock(struct module *mod);
+>  #else
+>  static inline void kernel_param_lock(struct module *mod)
+>  {
+>  }
+> +static inline int kernel_param_trylock(struct module *mod)
+> +{
+> +}
+>  static inline void kernel_param_unlock(struct module *mod)
+>  {
+>  }
+> diff --git a/kernel/params.c b/kernel/params.c
+> index 0074d29c9b80..d19881fbb2ec 100644
+> --- a/kernel/params.c
+> +++ b/kernel/params.c
+> @@ -583,7 +583,9 @@ static ssize_t param_attr_store(const struct module_a=
+ttribute *mattr,
+>         if (!attribute->param->ops->set)
+>                 return -EPERM;
+>
+> -       kernel_param_lock(mk->mod);
+> +       if (!kernel_param_trylock(mk->mod))
+> +               return -EPERM;
 
+-EAGAIN would be better I think?
 
-On 2/17/2025 6:38 AM, Dmitry Baryshkov wrote:
-> On Sun, Feb 16, 2025 at 09:58:41PM +0530, Raviteja Laggyshetty wrote:
->>
->>
->> On 2/10/2025 4:27 PM, Dmitry Baryshkov wrote:
->>> On Wed, Feb 05, 2025 at 06:27:39PM +0000, Raviteja Laggyshetty wrote:
->>>> EPSS on SA8775P has two instances, necessitating the creation of two
->>>> device nodes with different compatibles due to the unique ICC node ID
->>>> and name limitations in the interconnect framework. Add multidevice
->>>> support for the OSM-L3 provider to dynamically obtain unique node IDs
->>>> and register with the framework.
->>>>
->>>> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
->>>> ---
->>>>  drivers/interconnect/qcom/osm-l3.c | 46 +++++++++++++++++-------------
->>>>  1 file changed, 26 insertions(+), 20 deletions(-)
->>>>
->>>> diff --git a/drivers/interconnect/qcom/osm-l3.c b/drivers/interconnect/qcom/osm-l3.c
->>>> index 6a656ed44d49..da2d82700b5a 100644
->>>> --- a/drivers/interconnect/qcom/osm-l3.c
->>>> +++ b/drivers/interconnect/qcom/osm-l3.c
->>>> @@ -1,6 +1,7 @@
->>>>  // SPDX-License-Identifier: GPL-2.0
->>>>  /*
->>>>   * Copyright (c) 2020-2021, The Linux Foundation. All rights reserved.
->>>> + * Copyright (c) 2025 Qualcomm Innovation Center, Inc. All rights reserved.
->>>>   */
->>>>  
->>>>  #include <linux/args.h>
->>>> @@ -33,6 +34,7 @@
->>>>  #define EPSS_REG_PERF_STATE		0x320
->>>>  
->>>>  #define OSM_L3_MAX_LINKS		1
->>>> +#define ALLOC_DYN_ID			-1
->>>
->>> This should be defined by ICC framework.
->>
->> ok, I will move this to framework.
->>>
->>>>  
->>>>  #define to_osm_l3_provider(_provider) \
->>>>  	container_of(_provider, struct qcom_osm_l3_icc_provider, provider)
->>>> @@ -55,46 +57,40 @@ struct qcom_osm_l3_icc_provider {
->>>>   */
->>>>  struct qcom_osm_l3_node {
->>>>  	const char *name;
->>>> -	u16 links[OSM_L3_MAX_LINKS];
->>>> -	u16 id;
->>>> +	struct qcom_osm_l3_node *links[OSM_L3_MAX_LINKS];
->>>> +	int id;
->>>>  	u16 num_links;
->>>>  	u16 buswidth;
->>>>  };
->>>>  
->>>>  struct qcom_osm_l3_desc {
->>>> -	const struct qcom_osm_l3_node * const *nodes;
->>>> +	struct qcom_osm_l3_node * const *nodes;
->>>>  	size_t num_nodes;
->>>>  	unsigned int lut_row_size;
->>>>  	unsigned int reg_freq_lut;
->>>>  	unsigned int reg_perf_state;
->>>>  };
->>>>  
->>>> -enum {
->>>> -	OSM_L3_MASTER_NODE = 10000,
->>>> -	OSM_L3_SLAVE_NODE,
->>>> -};
->>>> -
->>>> -#define DEFINE_QNODE(_name, _id, _buswidth, ...)			\
->>>> -	static const struct qcom_osm_l3_node _name = {			\
->>>> +#define DEFINE_QNODE(_name, _buswidth, ...)			\
->>>> +	static struct qcom_osm_l3_node _name = {			\
-> 
-> No. Global data _must_ remain const.
-
-Ok, will make the global struct const.
-
-> 
->>>>  		.name = #_name,						\
->>>> -		.id = _id,						\
->>>>  		.buswidth = _buswidth,					\
->>>>  		.num_links = COUNT_ARGS(__VA_ARGS__),			\
->>>>  		.links = { __VA_ARGS__ },				\
->>>>  	}
->>>>  
->>>> -DEFINE_QNODE(osm_l3_master, OSM_L3_MASTER_NODE, 16, OSM_L3_SLAVE_NODE);
->>>> -DEFINE_QNODE(osm_l3_slave, OSM_L3_SLAVE_NODE, 16);
->>>> +DEFINE_QNODE(osm_l3_slave, 16);
->>>> +DEFINE_QNODE(osm_l3_master, 16, &osm_l3_slave);
->>>>  
->>>> -static const struct qcom_osm_l3_node * const osm_l3_nodes[] = {
->>>> +static struct qcom_osm_l3_node * const osm_l3_nodes[] = {
->>>>  	[MASTER_OSM_L3_APPS] = &osm_l3_master,
->>>>  	[SLAVE_OSM_L3] = &osm_l3_slave,
->>>>  };
->>>>  
->>>> -DEFINE_QNODE(epss_l3_master, OSM_L3_MASTER_NODE, 32, OSM_L3_SLAVE_NODE);
->>>> -DEFINE_QNODE(epss_l3_slave, OSM_L3_SLAVE_NODE, 32);
->>>> +DEFINE_QNODE(epss_l3_slave, 32);
->>>> +DEFINE_QNODE(epss_l3_master, 32, &epss_l3_slave);
->>>>  
->>>> -static const struct qcom_osm_l3_node * const epss_l3_nodes[] = {
->>>> +static struct qcom_osm_l3_node * const epss_l3_nodes[] = {
->>>>  	[MASTER_EPSS_L3_APPS] = &epss_l3_master,
->>>>  	[SLAVE_EPSS_L3_SHARED] = &epss_l3_slave,
->>>>  };
->>>> @@ -164,7 +160,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->>>>  	const struct qcom_osm_l3_desc *desc;
->>>>  	struct icc_onecell_data *data;
->>>>  	struct icc_provider *provider;
->>>> -	const struct qcom_osm_l3_node * const *qnodes;
->>>> +	struct qcom_osm_l3_node * const *qnodes;
->>>>  	struct icc_node *node;
->>>>  	size_t num_nodes;
->>>>  	struct clk *clk;
->>>> @@ -242,6 +238,10 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->>>>  
->>>>  	icc_provider_init(provider);
->>>>  
->>>> +	/*Initialize IDs to ALLOC_DYN_ID to indicate dynamic id allocation*/
->>>> +	for (i = 0; i < num_nodes; i++)
->>>> +		qnodes[i]->id = ALLOC_DYN_ID;
->>>
->>> This can be initialized statically.
->>
->> There are two instances of EPSS L3 and the target specific compatible
->> data is global which requires resetting the IDs for the second instance
->> probe. If we don't the reset the IDs back to ALLOC_DYN_ID, then ICC
->> framework assumes that ID has been already allocated and doesn't create
->> the new ICC nodes for the second instance.
-> 
-> Well, don't use global data for shared purposes. Consider both your
-> instances probing at the same time. So, please drop the
-> qcom_osm_l3_node.id, pass ALLOC_DYN_ID directly to the
-> icc_node_create(), store returned nodes in a local array and pass node
-> pointers to icc_link_create().
-> 
-
-Will pass ALLOC_DYN_ID as argument to create node instead of
-qcom_osm_l3_node.id and avoid its usage.
-Instead of creating the local array to store the pointers, will make use
-of icc_onecell_data which stores all the nodes present in the provider.
->>
->>>
->>>> +
->>>>  	for (i = 0; i < num_nodes; i++) {
->>>>  		size_t j;
->>>>  
->>>> @@ -250,14 +250,19 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->>>>  			ret = PTR_ERR(node);
->>>>  			goto err;
->>>>  		}
->>>> +		qnodes[i]->id = node->id;
->>>
->>> Should not be necessary.
->> This is required, each qnode corresponds to a ICC node in framework and
->> some nodes get created in icc_node_create() API and some in
->> icc_link_create() API, to have a track of node creation qnode->id is
->> used, hence initializing qnode->id with id allocated during icc node
->> creation and avoid creation of duplicate nodes.
-> 
-> Basically, no. You cannot do that. Create nodes first, create links
-> afterwards.
-
-Sure, Will create nodes first and then create the links.
-> 
->>>
->>>>  
->>>>  		node->name = qnodes[i]->name;
->>>>  		/* Cast away const and add it back in qcom_osm_l3_set() */
->>>>  		node->data = (void *)qnodes[i];
->>>>  		icc_node_add(node, provider);
->>>>  
->>>> -		for (j = 0; j < qnodes[i]->num_links; j++)
->>>> -			icc_link_create(node, qnodes[i]->links[j]);
->>>> +		for (j = 0; j < qnodes[i]->num_links; j++) {
->>>> +			struct qcom_osm_l3_node *link_node = qnodes[i]->links[j];
->>>> +
->>>> +			icc_link_create(node, link_node->id);
->>>
->>> Please add icc_link_nodes() (or something like that), taking two struct
->>> icc_node instances. Then you can use it here, instead of reading back
->>> the ID. Ideally the 'ID' should become an internal detail which is of no
->>> concern for the ICC drivers.
->>>
->>
->> Instead of reading back the link node id from the framework, I will call
->> icc_node_create before calling the icc_link_create() API and assign the
->> allocated id to respective qnode in the following way:
->>
->> struct qcom_osm_l3_node *qn_link_node = qnodes[i]->links[j];
->> struct icc_node *link_node = icc_node_create(qnodes[i]->links[j]->id);
->> qn_link_node->id = link_node->id;
->> icc_link_create(node, link_node->id);
->>
->> This looks cleaner than reading back the id.
-> 
-> As you might have guessed from the the earlier comments, no. Don't write
-> _anything_ to a global data.
-> 
-
-Will not modify or update the global data.
->>
->>
->>>> +			link_node->id = (node->links[node->num_links - 1])->id;
->>>> +		}
->>>>  
->>>>  		data->nodes[i] = node;
->>>>  	}
->>>> @@ -278,6 +283,7 @@ static int qcom_osm_l3_probe(struct platform_device *pdev)
->>>>  static const struct of_device_id osm_l3_of_match[] = {
->>>>  	{ .compatible = "qcom,epss-l3", .data = &epss_l3_l3_vote },
->>>>  	{ .compatible = "qcom,osm-l3", .data = &osm_l3 },
->>>> +	{ .compatible = "qcom,sa8775p-epss-l3", .data = &epss_l3_perf_state },
->>>>  	{ .compatible = "qcom,sc7180-osm-l3", .data = &osm_l3 },
->>>>  	{ .compatible = "qcom,sc7280-epss-l3", .data = &epss_l3_perf_state },
->>>>  	{ .compatible = "qcom,sdm845-osm-l3", .data = &osm_l3 },
->>>> -- 
->>>> 2.39.2
->>>>
->>>
->>
-> 
-
+> +
+>         if (param_check_unsafe(attribute->param))
+>                 err =3D attribute->param->ops->set(buf, attribute->param)=
+;
+>         else
+> @@ -607,6 +609,11 @@ void kernel_param_lock(struct module *mod)
+>         mutex_lock(KPARAM_MUTEX(mod));
+>  }
+>
+> +int kernel_param_trylock(struct module *mod)
+> +{
+> +       return mutex_trylock(KPARAM_MUTEX(mod));
+> +}
+> +
+>  void kernel_param_unlock(struct module *mod)
+>  {
+>         mutex_unlock(KPARAM_MUTEX(mod));
+> diff --git a/net/mac80211/rate.c b/net/mac80211/rate.c
+> index 0d056db9f81e..aecf7ff51cd9 100644
+> --- a/net/mac80211/rate.c
+> +++ b/net/mac80211/rate.c
+> @@ -217,7 +217,9 @@ ieee80211_rate_control_ops_get(const char *name)
+>         const struct rate_control_ops *ops;
+>         const char *alg_name;
+>
+> -       kernel_param_lock(THIS_MODULE);
+> +       if (!kernel_param_trylock(THIS_MODULE))
+> +               return NULL;
+> +
+>         if (!name)
+>                 alg_name =3D ieee80211_default_rc_algo;
+>         else
+> --
 
