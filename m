@@ -1,182 +1,140 @@
-Return-Path: <linux-pm+bounces-22583-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22584-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CE299A3E5C1
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 21:23:01 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 99E9FA3E987
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 02:00:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A40AE17F28C
-	for <lists+linux-pm@lfdr.de>; Thu, 20 Feb 2025 20:23:00 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9DF957A4D36
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 00:59:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B71712116F4;
-	Thu, 20 Feb 2025 20:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="rDrNB/k7"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 41E4B2AE99;
+	Fri, 21 Feb 2025 01:00:18 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8DD231DDC14;
-	Thu, 20 Feb 2025 20:22:56 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8E7752557C;
+	Fri, 21 Feb 2025 01:00:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740082976; cv=none; b=VSAmKlQNafRUytQ2sbD09pEDM5j3uzosUpUlHHBME7aQTyJJ2Sap1civkam2EPGtevd4t4yaRdhnAuraQWVnSOeBgS461FPg1hjxyBXy/CNHXld2qU3bnjvpsAXEr+b0h1viLlbyGuKPaXjMNSNutoSieSoEvVJOWqGtqMC4h5s=
+	t=1740099618; cv=none; b=tABeDojFFZSaVqpcHOnB4W1MQhvEeMK+aQWB1dYXbNIOxjlzXPDhTKZsHlPgvCtn+LKcKq+U7HWM3nxn+hHtX1q2yB2C76Z3kAvJ9Q6PZ8HUs9K+FGT0ir7B/sr3380hpncXPR1DoUVhw4zcWndqLU256SQh2PQ1d5EJSkSOHfU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740082976; c=relaxed/simple;
-	bh=U6lgGAkdJH04BdRUnJnulDKU0SeQEUC1Zm+TPPwbPD8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=U7KNovP7Zs+YiqNp9w4RNH3r1E3L/O4f9+un/TV4HO2XWmZerxVwf7mBH5yuNX/P2ThbAB4IgkjhOaDowCrOTA1r64mGj30gul6blPQN3KqQh+UdEuRxHdX5g3GuwmIUqayKGrMNdb2Q1RgzzbyxiRzBHtYLp0cFgWY3FIy42RM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=rDrNB/k7; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E416EC4CEE6;
-	Thu, 20 Feb 2025 20:22:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740082975;
-	bh=U6lgGAkdJH04BdRUnJnulDKU0SeQEUC1Zm+TPPwbPD8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=rDrNB/k7xDR0W9Aj/TtQNcloxj1e2YesHJPpF7YkVSjKN+IpyXXheMoYISA54oBoG
-	 jIoIlcky4Q+aJlFJJCdl7+BG4SxIbwn0ks1B5uARPaTUSHz8ojpmfaL1D0n6HZOGNZ
-	 H0zq2/l7VkIUu5w2WXBwTyKatV/H3Hk1nHqWCX42VD1IwnG3i07p+jMpngcVNFHtIO
-	 8Vmwz6yo3th0jib3ZS9r4Nj3cDnYWEX3QWKe7F8dGAwok+WPbsgJPvyGANG13ll4aZ
-	 yEKY0JwdPgFszLsyU0HtYgWtaAz4iOmuqEutLO9cPr8I3RUTT0oWfq85rnLO24/qZ8
-	 3jTpTdYJ+yAaQ==
-Received: by mail-oo1-f46.google.com with SMTP id 006d021491bc7-5fc6fe05460so890909eaf.1;
-        Thu, 20 Feb 2025 12:22:55 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUErVzJj+AWpAaBf4cdwEMuUiqev8i+1kG+Xy5/J/edCBzikHqEX4DI+SI12VRCZviQqug7jbGQT4bv9qA=@vger.kernel.org, AJvYcCVFnWN6KB2j4f9QUgyNOLVD5O8CZG4rI5skIBU9VJ8TQo4ustpEx/6fy4tpXZ6mPhohvPcWdX+CYA8=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxEeHCYeCNMKVKkwDmoVpodq1zYpXfDhUVX/t4IuJUtriWiq8H5
-	abfmrhuIRKbO6WPS+WUEAug2JoU0rHWV3qKf7cQlDP9rYUCY3Hx3GiV+7g6MeaFrVpHS3dabkZB
-	Oi2q1ZQuK32ZC49AmMmht0+k9c6A=
-X-Google-Smtp-Source: AGHT+IH6EnL8brABp0Mk08UkkaLVEWekbBYe117zho8S6YxJimcuHVsgFBeidi1T3RqWmnhFWN4yc17qyiyRheV126Q=
-X-Received: by 2002:a05:6820:260d:b0:5fc:92b3:2b03 with SMTP id
- 006d021491bc7-5fd1949807fmr698175eaf.1.1740082975197; Thu, 20 Feb 2025
- 12:22:55 -0800 (PST)
+	s=arc-20240116; t=1740099618; c=relaxed/simple;
+	bh=tu+gpw7OD2GQyTiWhJLzR65PzZKxGrztR1wVsmwPETM=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=H/va9wLfSrlZwsohV8mbjbr5Xa8ybnOwd7Hg9GbGVeeAOfbUNUuf1OAvElTE9KcONf1FOT2xYFdoKRzKqyhFnSdIVul8csQGKE1m5HFPDORwGj2KA8PR1KP0QtShrdGF0DkzAOU+7lbWa79wrD+Iiz8fka9IFDxHkkWCT0JTmRU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 788BE1BA8;
+	Thu, 20 Feb 2025 17:00:31 -0800 (PST)
+Received: from localhost.localdomain (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 15BA43F59E;
+	Thu, 20 Feb 2025 17:00:10 -0800 (PST)
+From: Andre Przywara <andre.przywara@arm.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>,
+	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
+	Maxime Ripard <mripard@kernel.org>,
+	Thomas Zimmermann <tzimmermann@suse.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Chen-Yu Tsai <wens@csie.org>,
+	Jernej Skrabec <jernej.skrabec@gmail.com>,
+	Samuel Holland <samuel@sholland.org>
+Cc: David Airlie <airlied@gmail.com>,
+	Simona Vetter <simona@ffwll.ch>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	Steven Price <steven.price@arm.com>,
+	dri-devel@lists.freedesktop.org,
+	devicetree@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	linux-sunxi@lists.linux.dev,
+	linux-pm@vger.kernel.org
+Subject: [PATCH 0/5] arm64: sunxi: h616: Enable Mali GPU
+Date: Fri, 21 Feb 2025 00:57:57 +0000
+Message-ID: <20250221005802.11001-1-andre.przywara@arm.com>
+X-Mailer: git-send-email 2.46.3
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250219-fix-thermal-of-v1-1-de36e7a590c4@chromium.org> <CAJZ5v0i=Ehi1icm4Tx6cXmdhjq-Qj8Vwv1SwzCyx5oBj-5y9hQ@mail.gmail.com>
-In-Reply-To: <CAJZ5v0i=Ehi1icm4Tx6cXmdhjq-Qj8Vwv1SwzCyx5oBj-5y9hQ@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 20 Feb 2025 21:22:43 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0gJGxWA=7zHYU5h=ueqQcXNt94wOAg7sqrphOUb++mAyw@mail.gmail.com>
-X-Gm-Features: AWEUYZmj4dQ16TOdfKXb0i2SDj6G95jHG8F4Bi6ctfjebp24lSIqhie6AGReCF8
-Message-ID: <CAJZ5v0gJGxWA=7zHYU5h=ueqQcXNt94wOAg7sqrphOUb++mAyw@mail.gmail.com>
-Subject: Re: [PATCH] thermal: of: Fix logic in thermal_of_should_bind
-To: Yu-Che Cheng <giver@chromium.org>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	Chen-Yu Tsai <wenst@chromium.org>
-Content-Type: multipart/mixed; boundary="0000000000009e135c062e98a365"
+Content-Transfer-Encoding: 8bit
 
---0000000000009e135c062e98a365
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+The Allwinner H616/H618/H313/H700 SoCs contain a Mali G32 MP2 GPU. This
+IP is from the Bifrost family and is already supported by the panfrost
+driver, so enabling support for 3D graphics on this SoC is rather
+straight-forward.
+However Allwinner added some bits in the PRCM block, that control the
+power domain for the GPU - on top of its power *supply*.
 
-On Wed, Feb 19, 2025 at 10:40=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.o=
-rg> wrote:
->
-> On Wed, Feb 19, 2025 at 8:06=E2=80=AFAM Yu-Che Cheng <giver@chromium.org>=
- wrote:
-> >
-> > The current thermal_of_should_bind will stop iterating cooling-maps on
-> > the first matched trip point, leading to subsequent cooling devices
-> > binding to the same trip point failing to find the cooling spec.
-> >
-> > The iteration should continue enumerating subsequent cooling-maps if th=
-e
-> > target cooling device is not found.
-> >
-> > Fix the logic to break only when a matched cooling device is found.
->
-> OK, but ->
->
-> > Fixes: 94c6110b0b13 ("thermal/of: Use the .should_bind() thermal zone c=
-allback")
-> > Signed-off-by: Yu-Che Cheng <giver@chromium.org>
-> > ---
-> >  drivers/thermal/thermal_of.c | 3 ++-
-> >  1 file changed, 2 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.=
-c
-> > index 5ab4ce4daaeb..69c530e38574 100644
-> > --- a/drivers/thermal/thermal_of.c
-> > +++ b/drivers/thermal/thermal_of.c
-> > @@ -312,7 +312,8 @@ static bool thermal_of_should_bind(struct thermal_z=
-one_device *tz,
-> >                                 break;
->
-> -> I'd prefer to do a jump from here, that is
->
-> -                                 break;
-> +                                goto put_cm_np;
-> >                 }
-> >
-> > -               break;
->
-> and remove the break statement above altogether.
->
-> > +               if (result)
-> > +                       break;
-> >         }
-> >
->
-> And of course the label needs to be added too:
->
-> +put_cm_np:
-> >         of_node_put(cm_np);
-> >
-> > ---
+This series enables the Mali GPU on those SoCs, by first introducing a
+power domain driver for that SoC (patch 1/5: DT binding, patch 2/5:
+the actual driver). For the Mali GPU to work we literally need to flip a
+single bit (the BSP does this in the bootloader), and this full featured
+power domain driver is admittedly a bit over the top for that purpose.
+However it seems to be the right thing to do architecturally, and while
+at it I added the other power domains (for analogue, PLLs, and the
+management core), even though we won't use them in Linux and they would
+be always on. I have a simpler version of the driver which just covers
+this single bit controlling the GPU, please let me know if you prefer
+that.
+Please also note that this supersedes an RFC patch I sent a year ago,
+which included this power domain in the R-CCU driver:
+https://lore.kernel.org/linux-sunxi/20240225160616.15001-1-andre.przywara@arm.com/T/#u
 
-Or even, to avoid adding a new label, move the loop from
-thermal_of_should_bind() into a new function that will be called by it
-do carry out the cooling-maps lookup, like in the attached patch.
+The rest of the patches enable the Mali GPU on the DT side: patch 3/5
+adds the compatible string to the Mali DT binding, while patch 4/5 adds
+the purely SoC specific DT nodes, for both the power domain and the Mali
+GPU. The final patch 5/5 then enables the GPU on all existing H616-family
+boards.
 
-Can you check if it works for you, please?
+There seems to be an existing problem with powering up the GPU, after it
+has been turned off by the kernel. Chances are this is a problem with the
+proper power-up (or power-down) sequence, where clock gates, reset lines
+and the power domain must be asserted in a specific order.
+A workaround used so far downstream is to keep the power domain enabled,
+by ignoring the power-off request. Observing any assumed "proper" sequence
+is a bit more tricky, since there is no Allwinner specific glue driver
+or anything, so things would need be changed in the generic panfrost
+code, where they have the potential of breaking other Mali users.
+I would be interested in hearing opinions about this.
 
---0000000000009e135c062e98a365
-Content-Type: text/x-patch; charset="US-ASCII"; name="thermal-of-fix.patch"
-Content-Disposition: attachment; filename="thermal-of-fix.patch"
-Content-Transfer-Encoding: base64
-Content-ID: <f_m7dsfrk30>
-X-Attachment-Id: f_m7dsfrk30
+Cheers,
+Andre
 
-LS0tCiBkcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9vZi5jIHwgICA1MCArKysrKysrKysrKysrKysr
-KysrKysrKystLS0tLS0tLS0tLS0tLS0tLS0tCiAxIGZpbGUgY2hhbmdlZCwgMjkgaW5zZXJ0aW9u
-cygrKSwgMjEgZGVsZXRpb25zKC0pCgotLS0gYS9kcml2ZXJzL3RoZXJtYWwvdGhlcm1hbF9vZi5j
-CisrKyBiL2RyaXZlcnMvdGhlcm1hbC90aGVybWFsX29mLmMKQEAgLTI3NCw2ICsyNzQsMzQgQEAK
-IAlyZXR1cm4gdHJ1ZTsKIH0KIAorc3RhdGljIGJvb2wgdGhlcm1hbF9vZl9jbV9sb29rdXAoc3Ry
-dWN0IGRldmljZV9ub2RlICpjbV9ucCwKKwkJCQkgY29uc3Qgc3RydWN0IHRoZXJtYWxfdHJpcCAq
-dHJpcCwKKwkJCQkgc3RydWN0IHRoZXJtYWxfY29vbGluZ19kZXZpY2UgKmNkZXYsCisJCQkJIHN0
-cnVjdCBjb29saW5nX3NwZWMgKmMpCit7CisJZm9yX2VhY2hfY2hpbGRfb2Zfbm9kZV9zY29wZWQo
-Y21fbnAsIGNoaWxkKSB7CisJCXN0cnVjdCBkZXZpY2Vfbm9kZSAqdHJfbnA7CisJCWludCBjb3Vu
-dCwgaTsKKworCQl0cl9ucCA9IG9mX3BhcnNlX3BoYW5kbGUoY2hpbGQsICJ0cmlwIiwgMCk7CisJ
-CWlmICh0cl9ucCAhPSB0cmlwLT5wcml2KQorCQkJY29udGludWU7CisKKwkJLyogVGhlIHRyaXAg
-aGFzIGJlZW4gZm91bmQsIGxvb2sgdXAgdGhlIGNkZXYuICovCisJCWNvdW50ID0gb2ZfY291bnRf
-cGhhbmRsZV93aXRoX2FyZ3MoY2hpbGQsICJjb29saW5nLWRldmljZSIsCisJCQkJCQkgICAiI2Nv
-b2xpbmctY2VsbHMiKTsKKwkJaWYgKGNvdW50IDw9IDApCisJCQlwcl9lcnIoIkFkZCBhIGNvb2xp
-bmdfZGV2aWNlIHByb3BlcnR5IHdpdGggYXQgbGVhc3Qgb25lIGRldmljZVxuIik7CisKKwkJZm9y
-IChpID0gMDsgaSA8IGNvdW50OyBpKyspIHsKKwkJCWlmICh0aGVybWFsX29mX2dldF9jb29saW5n
-X3NwZWMoY2hpbGQsIGksIGNkZXYsIGMpKQorCQkJCXJldHVybiB0cnVlOworCQl9CisJfQorCisJ
-cmV0dXJuIGZhbHNlOworfQorCiBzdGF0aWMgYm9vbCB0aGVybWFsX29mX3Nob3VsZF9iaW5kKHN0
-cnVjdCB0aGVybWFsX3pvbmVfZGV2aWNlICp0eiwKIAkJCQkgICBjb25zdCBzdHJ1Y3QgdGhlcm1h
-bF90cmlwICp0cmlwLAogCQkJCSAgIHN0cnVjdCB0aGVybWFsX2Nvb2xpbmdfZGV2aWNlICpjZGV2
-LApAQCAtMjkzLDI3ICszMjEsNyBAQAogCQlnb3RvIG91dDsKIAogCS8qIExvb2sgdXAgdGhlIHRy
-aXAgYW5kIHRoZSBjZGV2IGluIHRoZSBjb29saW5nIG1hcHMuICovCi0JZm9yX2VhY2hfY2hpbGRf
-b2Zfbm9kZV9zY29wZWQoY21fbnAsIGNoaWxkKSB7Ci0JCXN0cnVjdCBkZXZpY2Vfbm9kZSAqdHJf
-bnA7Ci0JCWludCBjb3VudCwgaTsKLQotCQl0cl9ucCA9IG9mX3BhcnNlX3BoYW5kbGUoY2hpbGQs
-ICJ0cmlwIiwgMCk7Ci0JCWlmICh0cl9ucCAhPSB0cmlwLT5wcml2KQotCQkJY29udGludWU7Ci0K
-LQkJLyogVGhlIHRyaXAgaGFzIGJlZW4gZm91bmQsIGxvb2sgdXAgdGhlIGNkZXYuICovCi0JCWNv
-dW50ID0gb2ZfY291bnRfcGhhbmRsZV93aXRoX2FyZ3MoY2hpbGQsICJjb29saW5nLWRldmljZSIs
-ICIjY29vbGluZy1jZWxscyIpOwotCQlpZiAoY291bnQgPD0gMCkKLQkJCXByX2VycigiQWRkIGEg
-Y29vbGluZ19kZXZpY2UgcHJvcGVydHkgd2l0aCBhdCBsZWFzdCBvbmUgZGV2aWNlXG4iKTsKLQot
-CQlmb3IgKGkgPSAwOyBpIDwgY291bnQ7IGkrKykgewotCQkJcmVzdWx0ID0gdGhlcm1hbF9vZl9n
-ZXRfY29vbGluZ19zcGVjKGNoaWxkLCBpLCBjZGV2LCBjKTsKLQkJCWlmIChyZXN1bHQpCi0JCQkJ
-YnJlYWs7Ci0JCX0KLQotCQlicmVhazsKLQl9CisJcmVzdWx0ID0gdGhlcm1hbF9vZl9jbV9sb29r
-dXAoY21fbnAsIHRyaXAsIGNkZXYsIGMpOwogCiAJb2Zfbm9kZV9wdXQoY21fbnApOwogb3V0Ogo=
---0000000000009e135c062e98a365--
+Andre Przywara (5):
+  dt-bindings: power: Add Allwinner H6/H616 PRCM PPU
+  pmdomain: sunxi: add H6 PRCM PPU driver
+  dt-bindings: gpu: mali-bifrost: Add Allwinner H616 compatible
+  arm64: dts: allwinner: h616: Add Mali GPU node
+  arm64: dts: allwinner: h616: enable Mali GPU for all boards
+
+ .../bindings/gpu/arm,mali-bifrost.yaml        |   1 +
+ .../power/allwinner,sun50i-h6-prcm-ppu.yaml   |  42 ++++
+ .../dts/allwinner/sun50i-h313-tanix-tx1.dts   |   5 +
+ .../sun50i-h616-bigtreetech-cb1.dtsi          |   5 +
+ .../allwinner/sun50i-h616-orangepi-zero.dtsi  |   4 +
+ .../allwinner/sun50i-h616-orangepi-zero2.dts  |   4 +
+ .../dts/allwinner/sun50i-h616-x96-mate.dts    |   5 +
+ .../arm64/boot/dts/allwinner/sun50i-h616.dtsi |  21 ++
+ .../sun50i-h618-longan-module-3h.dtsi         |   5 +
+ .../allwinner/sun50i-h618-orangepi-zero2w.dts |   5 +
+ .../allwinner/sun50i-h618-orangepi-zero3.dts  |   4 +
+ .../sun50i-h618-transpeed-8k618-t.dts         |   5 +
+ .../sun50i-h618-yuzukihd-chameleon.dts        |   5 +
+ .../sun50i-h700-anbernic-rg35xx-2024.dts      |   5 +
+ drivers/pmdomain/sunxi/Kconfig                |  10 +
+ drivers/pmdomain/sunxi/Makefile               |   1 +
+ drivers/pmdomain/sunxi/sun50i-h6-prcm-ppu.c   | 191 ++++++++++++++++++
+ 17 files changed, 318 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/allwinner,sun50i-h6-prcm-ppu.yaml
+ create mode 100644 drivers/pmdomain/sunxi/sun50i-h6-prcm-ppu.c
+
+-- 
+2.46.3
+
 
