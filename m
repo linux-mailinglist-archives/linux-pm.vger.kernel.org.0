@@ -1,840 +1,159 @@
-Return-Path: <linux-pm+bounces-22614-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22615-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A2A7EA3F148
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 11:02:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C488A3F15C
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 11:06:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 19582188610C
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 10:00:51 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CD10317FE38
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 10:06:22 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1FA1C205ADC;
-	Fri, 21 Feb 2025 10:00:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3D342046A5;
+	Fri, 21 Feb 2025 10:06:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ikxd2f6G"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="uMSm8iYz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f48.google.com (mail-lf1-f48.google.com [209.85.167.48])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM11-BN8-obe.outbound.protection.outlook.com (mail-bn8nam11olkn2017.outbound.protection.outlook.com [40.92.20.17])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34282204F96;
-	Fri, 21 Feb 2025 10:00:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.48
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740132011; cv=none; b=UbS/mHTDPQrGToIk7TN/LWRSNaMURSSv+iE3T3rU7a+bq7mtedfaNJua0oM4O3R2vfoMliFcKKGKBbRtbC/kVbTnhA1Enw8OLnhGkJ+25Wq7V+c+thH4nGX4okQ7T2FPGLAscBKJoiErMIAJS51GrI3qZCRaUguUAMp+1FVkLj0=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740132011; c=relaxed/simple;
-	bh=4LfmmMFkKAyJyjKL07XuWCrwkd1cz/V7GxxqLewguD8=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 156331F4299;
+	Fri, 21 Feb 2025 10:06:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.20.17
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740132378; cv=fail; b=A86Goi/b1Qo/rGfaIWF0+hEPt1KBxD6DFPW92AXV/NhM5gx22Vw6uPRXpfeuoOAaKhhNxHXTrA7xO/pDZNO8yyxTcY/Pl+0CZ/arTajLfTTkX5zi9TkGVs5p8dSZiCYxEY3ES+7zC0JNRzqIiGc1T8I/9pmF7v85oNrY9sLXRTc=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740132378; c=relaxed/simple;
+	bh=BeUhUh9uCPxV/P6rPkRwAik973a7bSac7R6Drbpttvw=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=BuTEU0c95k/semYtZl9srOAoW/EQfzF/c506SRyTvAnuZs29nbEMwpYRnVIVus708yaKLO028NQw0GRLAJRjaP9vWxfGxd2Bfx1NJ/dcKziVdjfexL6GJyHFKa1aYkA7Q5En4Q4R03o5CPwsmy1R9VMUvZBapyB5veSOrK6VQWA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ikxd2f6G; arc=none smtp.client-ip=209.85.167.48
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f48.google.com with SMTP id 2adb3069b0e04-546267ed92fso2220330e87.2;
-        Fri, 21 Feb 2025 02:00:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740132006; x=1740736806; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=MCrKegLNT+XW/TrarRnsQBkN9F9sh5gtsYbKxPBgMB8=;
-        b=ikxd2f6GMIM4nIvSFjoK+WEoe7dGinT/DbZQdT31RsCgB2eaDbXU5GaPi2Fm7gMQ5R
-         e96OGCTCwIyAynZfg/AcvDTf5t9fyjaG4ul3lAnX0IEw++yYX/rxr0Y5/MJxUnheGi2s
-         0l0pYsOXqIHxIDEzdeBC9OCtCldigzubnb2ZS4RKmHlZCDoja63DK44O6k5NNs3JCiiy
-         aUkiR3lSap+GnlZIBEqQ3lsft/vRlkAw1NMT9Czb76ThJTV0yZeA7Vzg6i8mOVc0pIFS
-         dRQEoMM5/2GS2Eojo4BNYu4obr3HERBUqpMk6kjwW3D57AwmNBy6CJYLnCJT5JsiNRdZ
-         +vuQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740132006; x=1740736806;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=MCrKegLNT+XW/TrarRnsQBkN9F9sh5gtsYbKxPBgMB8=;
-        b=Xy2OJX+5oznbEufGwUaJ9h6TCy2mZXqUAi1ccbsDn+cIFlkIzEmIqMzVEEEh1VUkPZ
-         mEHVg0pIpKqtQnz+1voXzkJZ/cbaBWQzz74/iM5sKPSO5NfxlC+TBdQeFODmTQemuPvv
-         E2s7E+ehtXIczTal9SNiI35KNK4S2iS2ajhoshEChleEZvGcshvdJJu7RMTPk2YdgLJ4
-         ZAPPw8y6De2HSGm4K8H1tjxIrpoHCCjWffMpYy98iig9UiMhYlYw7o46e75DWoTqM4et
-         Xsta3SVJ9txsP0hLWu0S406HaM9w6sNTpFMUuiR6yv/r5dmmTU8S+gmydddwZxXRuKUx
-         bOCw==
-X-Forwarded-Encrypted: i=1; AJvYcCXLktAZPSwT0Ro1mE1agCAKTE2/2z5zpGjViyMT+22avKAy/58jtfHkFX9/chiuCggJj+lJpeiCyRhOGMQg@vger.kernel.org, AJvYcCXshWARprAB/t1CeWJd4ItZaNcObvuMw4WDtXF8isr/YbqrQSpoF5Kow+ZG310eXwh3EHRNGWztavDR@vger.kernel.org
-X-Gm-Message-State: AOJu0YwO113aBkqShS8Ho9LWyMFPoWRMm/a3cYDGiANpLr7/a+4tjLUa
-	NLHquwQ1A1zLLBobwDFZz5EB2WCrFvMxMVcMFtE0gpXcrMpin3MZ
-X-Gm-Gg: ASbGncva6dka8J/0smrY+CvqhoA7kp5Xv2pYHyjIHH3nCGiBCxOy2rVw4kbbwbGIiAu
-	1T2CRzJw98RUV+fHUkqsjb8eawB3TmLJVP+1OdW/yP3G4tODw9aMiSb9+TE0ntAFklf7OrKHrpi
-	dAm9VMQoUASNwBkhAhvtv9rkFluZsrvL3L8F13YexpHyhxdUupTd2RLMZwH+Q99UvjeWd1xSHC+
-	vKo4cDQysG4kKRyhNermp2mwGuI0lNiowxXnVdyub3ELvihxZI/WbbIZ+IuFjhUun1zwx7j+KuM
-	zaeN2Wz0tXoorHB0UA==
-X-Google-Smtp-Source: AGHT+IEb1qJ6L1r9Zhsis+YUym8nJr9HBbYZotV9M5TyGXhHf4hAjILqWNmyk2DSdWqZ1H7qO7ohlA==
-X-Received: by 2002:a05:6512:3094:b0:545:2e90:8dd7 with SMTP id 2adb3069b0e04-54838f5ce89mr942669e87.45.1740132005979;
-        Fri, 21 Feb 2025 02:00:05 -0800 (PST)
-Received: from xeon.. ([188.163.112.51])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5461eb04602sm1604805e87.68.2025.02.21.02.00.04
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 02:00:05 -0800 (PST)
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-To: Sebastian Reichel <sre@kernel.org>,
-	Rob Herring <robh@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-pm@vger.kernel.org,
+	 Content-Type:MIME-Version; b=YO9wIAzb1HroYsU9zksKg9xLRkShGSECQCFF3md6DxZdVHBaEV14qStEDMExXQlUY6PTWhGlNNfXDu12szsJfZNORGpK4+86ShWSpu16gRerXbbc+CuPGhqsXu7QQp3CAkAk4GCBY4caHlUGASmXpqQ95/NaCdrDmZ8vSbEf3xw=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=uMSm8iYz; arc=fail smtp.client-ip=40.92.20.17
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=VA79a2JpNLCHwHMkOJwuBWAHdk/aL/MxvxzpTaC4suhaanz22uVbRe4VI0NVHgszm7Qce6CYaBAYu1Ll+9VPjVXUwLO21CeZK19DTei7JwIlgfgziSiDLuvWAgV9MlHz4PxI3Wif2Eq9xNm8bxtce0/2BmQJU22mN8KwJxdoAtGtPWNlEXlwl48YdDVnUGPq5MvopSL/7MA3C7IRbVmdhSROvOd6EH0an4C6wVJF2fHcHcFP8bB39IKOR9wbqkpZTtfiWmEaTYInJ3nlSP/PXzWreidMAYQvF6hmYXu9olDQgccX+yC8AmtuI290cWIIfOcFtLbV828KNY08USRDHQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=BeUhUh9uCPxV/P6rPkRwAik973a7bSac7R6Drbpttvw=;
+ b=zJW0JbhyIrmZUKtQJuDAFm7hfvQ03iM5Di7shOZI2JYMedEXuR8kvh54OCV6csyYKXeYUsASs5NqYukk0SJBf7yjvj0hUL5BdKgO7C2NFnrEFwDAa+OWK7djlL/Zbyz0rfvAAPUza+2XLiTn2RFf4ALEAStmlHXKSW8BBtsK1Xj2sGbBQ+g4o/a7W4XOON7yaOaCIvTulAa/YV/y+qUvz9jTwpCJyST6LBj+O8297cdJga80AMbsBxQzT5hrauSRuwIGbPGZdsosepnxdwLC58n1D1r/ayf9H2EVuAeO53pBO73gQ8ZmgNNe+D2xtW8md29nk0uEijcu/Cc6Z1Cz7A==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
+ dkim=none; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
+ s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=BeUhUh9uCPxV/P6rPkRwAik973a7bSac7R6Drbpttvw=;
+ b=uMSm8iYzBhXYmFCc9N99GX1Qw6AJeAsYFdUUYtWEZCfhbXsODGdP5ihPm9Sz/U9sD9c1hBfKNUb49ayZfyyNtMnH5ii1QjjD7sehhnXlbvPtufr0RC9TJ5OtCiDcNHXESbrd+k8ON7VjJv1MC8bcVxvspCXo+TgMO+KtmiUlYhBD7OZz718yOYLgkrXZqz/+0o0z5m5e0K1p62HUt07m9xjqfju/Gv0wSUU5IDJrtKwiDGUSUufPCJeet1pUJFzNTWFJFUUYwZ4iQQGv+zjGvKYsbf8+PTg/YSdOUc7TQyWkOYgp7yEwKQsw/2V/9Gv4KbsiePZ7SXiDC0tnIaJ+KA==
+Received: from DS7PR19MB8883.namprd19.prod.outlook.com (2603:10b6:8:253::16)
+ by DS7PR19MB6278.namprd19.prod.outlook.com (2603:10b6:8:99::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.16; Fri, 21 Feb
+ 2025 10:06:15 +0000
+Received: from DS7PR19MB8883.namprd19.prod.outlook.com
+ ([fe80::e0c2:5b31:534:4305]) by DS7PR19MB8883.namprd19.prod.outlook.com
+ ([fe80::e0c2:5b31:534:4305%6]) with mapi id 15.20.8466.015; Fri, 21 Feb 2025
+ 10:06:15 +0000
+From: George Moussalem <george.moussalem@outlook.com>
+To: george.moussalem@outlook.com
+Cc: amitk@kernel.org,
 	devicetree@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH v1 2/2] power: supply: Add support for Maxim MAX8971 charger
-Date: Fri, 21 Feb 2025 11:59:43 +0200
-Message-ID: <20250221095943.57297-3-clamor95@gmail.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250221095943.57297-1-clamor95@gmail.com>
-References: <20250221095943.57297-1-clamor95@gmail.com>
+	dmitry.baryshkov@linaro.org,
+	krzk+dt@kernel.org,
+	krzysztof.kozlowski@linaro.org,
+	linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	quic_srichara@quicinc.com,
+	robh@kernel.org,
+	thara.gopinath@gmail.com
+Subject: Re: [PATCH v4 1/5] dt-bindings: nvmem: Add compatible for IPQ5018
+Date: Fri, 21 Feb 2025 14:06:08 +0400
+Message-ID:
+ <DS7PR19MB88831660A8C1CB395634B1FE9DC72@DS7PR19MB8883.namprd19.prod.outlook.com>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <DS7PR19MB8883C8E61B02269AAD7D8C1C9DC72@DS7PR19MB8883.namprd19.prod.outlook.com>
+References: <DS7PR19MB8883C8E61B02269AAD7D8C1C9DC72@DS7PR19MB8883.namprd19.prod.outlook.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DX0P273CA0029.AREP273.PROD.OUTLOOK.COM
+ (2603:1086:300:5b::20) To DS7PR19MB8883.namprd19.prod.outlook.com
+ (2603:10b6:8:253::16)
+X-Microsoft-Original-Message-ID:
+ <20250221100608.16329-1-george.moussalem@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+X-MS-Exchange-MessageSentRepresentingType: 1
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: DS7PR19MB8883:EE_|DS7PR19MB6278:EE_
+X-MS-Office365-Filtering-Correlation-Id: b01623a8-be3d-41d9-5a13-08dd525f5fc5
+X-Microsoft-Antispam:
+	BCL:0;ARA:14566002|8060799006|5072599009|19110799003|461199028|7092599003|15080799006|440099028|3412199025|4302099013|10035399004|1602099012|1710799026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?J9Y871shwyu1ue6/2eH0V7sULvqKixqqRz5O0K9M0SKC6hs1MzNYb/GXks+I?=
+ =?us-ascii?Q?/axLBoquuRMwgdXCnSTERnHbRNVzW2lMw2u5byo8Sk6UwKIWdU6BIw2nbWIq?=
+ =?us-ascii?Q?MdnR4ZSbuJ1hd4tOESgGAfyi6yrUWkvVxbnRf+KdJfvgiRSlNy3yMF4Zaheo?=
+ =?us-ascii?Q?EvMoO5xLU5MBaDs4ItOpaUCkh9eU+//FurjfUq5c8OAmHQwB+Y8Eonf+DEvd?=
+ =?us-ascii?Q?WqfM1HsRnI9ENGfoLiFO0uQnrQTPbXIYivNrucCWLA9VQobjivGuc3pcW2Vy?=
+ =?us-ascii?Q?XcjliX3O9P1H8bZZ0q+RRwP4GJySVeXzPaGytijzQLe56Erb2Mapsa+h+uWP?=
+ =?us-ascii?Q?c1AljiaCQ6V14pVEGJ6Jhao3p/HPm36jseprwpKQjWOdPu9JuNYa4ksNzpeM?=
+ =?us-ascii?Q?qW+McGZQ8OsBH52QZBapttqbstlagktd88km9UZZjb3DdDQ94WX0fof8HNgf?=
+ =?us-ascii?Q?CguJMzWxdkgb9yIxVb5b93yjcP13WjiIvhB1pVcA7G726BDIwJfxa5/vU40P?=
+ =?us-ascii?Q?HGbehlVOsB/EZtyvO7HQAN8MZ7DU97nwvjk2F+te92e8atuKN5tNA/EgPV8s?=
+ =?us-ascii?Q?sdH1r4U4tCW62ZyxemwLupmdCuvYyz3gHHAgskuwxw2hrBt2qC88H8fjJESR?=
+ =?us-ascii?Q?ww5bhQNFfaed/UrvUvjCu4WLBefvuLETkF4HdjWfYiN7Us2EQBSRvyYKNrvc?=
+ =?us-ascii?Q?C1oFU03gpgfntO7usShvY6yNHKnpVHI/BfDYmu54/Kd/rbdJtavSlWxG5axY?=
+ =?us-ascii?Q?zl9tMwPMI3j6EdZpwiUxp5Fzp5jGoN5cZHFeb8YVmjHVlWLTVsmDaBnxlL6g?=
+ =?us-ascii?Q?VDwFzMaAlSw6RrOJ9V1upgV3Z9PgCYcADSsFN1awKuBBb70ChQSHDpdGJfUK?=
+ =?us-ascii?Q?A00oaNur07bbWOdOqnya8+vVEWj8NNNiRT97t8yqesKBHmP2C6PI/vHseTR8?=
+ =?us-ascii?Q?XmYjIvT5m2hjr8lU95llNkOoVrJFjgf7V7mx7bDWZ3Q8ysPuzXxPPi/HU8Bp?=
+ =?us-ascii?Q?s8un9KCK7kOQ5zqh9aJ5wK4iUcN8vhIyDrhR3cMK1BHH4fgcMYNnTYG40aUN?=
+ =?us-ascii?Q?7FZwxIrR7A2j1RCNTsW+Rs1FEZMzDKkEboKMTEPPFzK1eNpW29sSvELgyNL7?=
+ =?us-ascii?Q?Yal9j38datKeow2xXV11gv5hTrApbb0HvmJa2tqEz1PtDkH7SizBWWmCp1TP?=
+ =?us-ascii?Q?ffBuS4MfYGlaZcYYIry8y/JbMvnpDCZcaM9ZZCKRky0pS6nJYeqY8G07fRcR?=
+ =?us-ascii?Q?/QsJfvfcn5pqjcTzzSU0Pv550D99giUyilJRfJGw7Q=3D=3D?=
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?us-ascii?Q?74wz42QVaSq4Q9e8kV4b5GScMzVxw2g/B1NHbjgFmCw990aa60lpvOJe0Hct?=
+ =?us-ascii?Q?zxqbJDJ57ggw0Ap8HMHaZ8LegGBLOlmTwytYOYbnY66yvLOVZUZy/Gzjle2E?=
+ =?us-ascii?Q?82vxe3D3FHDgX4acGTIRVuSCXfvUU/tUU2tB7LlAsjhVIlfA9Nn2knht51lA?=
+ =?us-ascii?Q?N9sMdgGr3fIm6dvAC+siMUKn4L+9eNJ8q3b7qcxL/Byo/95Kk0scO+f5Gh3i?=
+ =?us-ascii?Q?Xnd+OoyeLG01NGJn3kawt6oEtf7/F8ZmKtwA8dioOdqEgX/SEgVd6iERTFDZ?=
+ =?us-ascii?Q?1xV0XuTHGrdyEZFqSeVeaV5MSAbQFDRb4RAGc0IydUfryov23YWFEXIkvipo?=
+ =?us-ascii?Q?yJYI12HXoruZMlEcm0P94tPujVKaAWKrgEQh0enS5cZBznasH+6oGx743rH9?=
+ =?us-ascii?Q?qClWV/q+Kc+x72eUCMLLAFRCwEUOipF5t8pdRjLQLk4IGc7wZ2WsS9IMmCIl?=
+ =?us-ascii?Q?2wdfYDNIxefFCpOxgTdVzGvUesfvdlqbm3hEQd5eIqn/YY7nylDqyjR5Orw7?=
+ =?us-ascii?Q?GPkFYEo0qsbpSaQGV4t6uiFVkgoM3Rdokxek6/T7MJY6+DzozLvmtqByEIy5?=
+ =?us-ascii?Q?bPet6pPpbc0u/uQ0E+p+PHil/ZUt04UI8MKc9KnQOz3Q22pQ/V7/oeEajMUT?=
+ =?us-ascii?Q?g7G+XeWZCr1+n/MP4MQCTCRR6+z76fCuty1x7QsOJE0004j6qGI/Cg7wQ8ad?=
+ =?us-ascii?Q?pR9cAyI/QH4HWoWKiQOua0+yAfVb8TWfIXxJa7HYHkmRODQ+h3ZVP16Ig3uc?=
+ =?us-ascii?Q?sApYUmGmoVvxTYXkZClbiJK3oM4aDXNhHmzu+U6SqLRLL6qH6JQVdPjExxXt?=
+ =?us-ascii?Q?/dPw8f6PbqKf9eTMBRadvFdmm3gFQ0CHI7Bfmahir+NJcj8jdHwmtzg1Ncp2?=
+ =?us-ascii?Q?nxwcBAavDOp9HESjYJZtcDvMJu0vxftmybCqO36rNqc5utriyVvJwgscl8H4?=
+ =?us-ascii?Q?JGQ51J5DKkcDPAJvK0meHhb8Ae/Ek8fkAK6DUnjDz4E5nuxEEgJ7+D/OE+i/?=
+ =?us-ascii?Q?+v0DHl4WbCKR2HL7c20D0iv8nK+LpAfd1PeiD1TRXw+B3oRvM86lY561zBpJ?=
+ =?us-ascii?Q?M3BYZripqBeLsMVvrOBNfbC11wQ3qd2/z0lhjd64ZHWHNK+pdHuxOFyfHD8s?=
+ =?us-ascii?Q?NjNMXaKjhA4tn8kx9Go4c26ssl4Jy29tAXW6dWLvtWd8noTiBv+ZTX4iW9Ce?=
+ =?us-ascii?Q?kkPtyHa56Ey+GJOJYQMMaSMudY4tsdtm725rYZ83FVeWq1McGQxLm1DDxeSP?=
+ =?us-ascii?Q?JM3ZekkL07Z2WapqZu2q?=
+X-OriginatorOrg: outlook.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: b01623a8-be3d-41d9-5a13-08dd525f5fc5
+X-MS-Exchange-CrossTenant-AuthSource: DS7PR19MB8883.namprd19.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 21 Feb 2025 10:06:14.8586
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
+X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
+	00000000-0000-0000-0000-000000000000
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR19MB6278
 
-The MAX8971 is a compact, high-frequency, high-efficiency
-switch-mode charger for a one-cell lithium-ion (Li+) battery.
+I can't speak on behalf of Qualcomm as to whether they've abandoned this chip.
+However, there are plenty of routers/APs that use this chip and support for it and some IPQ5018 based devices has recently been added to OpenWrt.
+Hence, I'm picking up where Qualcomm has left off and would like to send as much as possible upstream for mainline support.
 
-Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
----
- drivers/power/supply/Kconfig           |  14 +
- drivers/power/supply/Makefile          |   1 +
- drivers/power/supply/max8971_charger.c | 685 +++++++++++++++++++++++++
- 3 files changed, 700 insertions(+)
- create mode 100644 drivers/power/supply/max8971_charger.c
-
-diff --git a/drivers/power/supply/Kconfig b/drivers/power/supply/Kconfig
-index 9f2eef6787f7..7c86116c2947 100644
---- a/drivers/power/supply/Kconfig
-+++ b/drivers/power/supply/Kconfig
-@@ -595,6 +595,20 @@ config CHARGER_MAX77976
- 	  This driver can also be built as a module. If so, the module will be
- 	  called max77976_charger.
- 
-+config CHARGER_MAX8971
-+	tristate "Maxim MAX8971 battery charger driver"
-+	depends on I2C
-+	select REGMAP_I2C
-+	help
-+	  The MAX8971 is a compact, high-frequency, high-efficiency switch-mode
-+	  charger for a one-cell lithium-ion (Li+) battery. It delivers up to
-+	  1.55A of current to the battery from inputs up to 7.5V and withstands
-+	  transient inputs up to 22V.
-+
-+	  Say Y to enable support for the Maxim MAX8971 battery charger.
-+	  This driver can also be built as a module. If so, the module will be
-+	  called max8971_charger.
-+
- config CHARGER_MAX8997
- 	tristate "Maxim MAX8997/MAX8966 PMIC battery charger driver"
- 	depends on MFD_MAX8997 && REGULATOR_MAX8997
-diff --git a/drivers/power/supply/Makefile b/drivers/power/supply/Makefile
-index 59c4a9f40d28..8fa051ff87ff 100644
---- a/drivers/power/supply/Makefile
-+++ b/drivers/power/supply/Makefile
-@@ -81,6 +81,7 @@ obj-$(CONFIG_CHARGER_DETECTOR_MAX14656)	+= max14656_charger_detector.o
- obj-$(CONFIG_CHARGER_MAX77650)	+= max77650-charger.o
- obj-$(CONFIG_CHARGER_MAX77693)	+= max77693_charger.o
- obj-$(CONFIG_CHARGER_MAX77976)	+= max77976_charger.o
-+obj-$(CONFIG_CHARGER_MAX8971)	+= max8971_charger.o
- obj-$(CONFIG_CHARGER_MAX8997)	+= max8997_charger.o
- obj-$(CONFIG_CHARGER_MAX8998)	+= max8998_charger.o
- obj-$(CONFIG_CHARGER_MP2629)	+= mp2629_charger.o
-diff --git a/drivers/power/supply/max8971_charger.c b/drivers/power/supply/max8971_charger.c
-new file mode 100644
-index 000000000000..946467875989
---- /dev/null
-+++ b/drivers/power/supply/max8971_charger.c
-@@ -0,0 +1,685 @@
-+// SPDX-License-Identifier: GPL-2.0-or-later
-+#include <linux/devm-helpers.h>
-+#include <linux/delay.h>
-+#include <linux/device.h>
-+#include <linux/err.h>
-+#include <linux/extcon.h>
-+#include <linux/i2c.h>
-+#include <linux/mod_devicetable.h>
-+#include <linux/interrupt.h>
-+#include <linux/module.h>
-+#include <linux/pm.h>
-+#include <linux/power_supply.h>
-+#include <linux/regmap.h>
-+#include <linux/types.h>
-+
-+#define MAX8971_REG_CHGINT		0x0f
-+#define   MAX8971_REG_CHG_RST		BIT(0)
-+#define MAX8971_REG_CHGINT_MASK		0x01
-+#define   MAX8971_AICL_MASK		BIT(7)
-+#define MAX8971_REG_CHG_STAT		0x02
-+#define   MAX8971_CHG_MASK		BIT(3)
-+#define MAX8971_REG_DETAILS1		0x03
-+#define MAX8971_REG_DETAILS2		0x04
-+#define MAX8971_REG_CHGCNTL1		0x05
-+#define MAX8971_REG_FCHGCRNT		0x06
-+#define MAX8971_REG_DCCRNT		0x07
-+#define   MAX8971_CHGRSTRT_MASK		BIT(6)
-+#define   MAX8971_CHGRSTRT_SHIFT	6
-+#define MAX8971_REG_TOPOFF		0x08
-+#define MAX8971_REG_TEMPREG		0x09
-+#define MAX8971_REG_PROTCMD		0x0a
-+#define   MAX8971_CHGPROT_LOCKED	0x00
-+#define   MAX8971_CHGPROT_UNLOCKED	0x03
-+
-+#define MAX8971_CHGCC_DCILMT_DEFAULT	500
-+#define MAX8971_FCHGT_DEFAULT		2
-+#define MAX8971_TOPOFFT_DEFAULT		3
-+
-+static const char *max8971_manufacturer	= "Maxim Integrated";
-+static const char *max8971_model	= "MAX8971";
-+
-+enum max8971_charging_state {
-+	MAX8971_CHARGING_DEAD_BATTERY,
-+	MAX8971_CHARGING_PREQUALIFICATION,
-+	MAX8971_CHARGING_FAST_CONST_CURRENT,
-+	MAX8971_CHARGING_FAST_CONST_VOLTAGE,
-+	MAX8971_CHARGING_TOP_OFF,
-+	MAX8971_CHARGING_DONE,
-+	MAX8971_CHARGING_TIMER_FAULT,
-+	MAX8971_CHARGING_SUSPENDED_THERMAL,
-+	MAX8971_CHARGING_OFF,
-+	MAX8971_CHARGING_THERMAL_LOOP,
-+};
-+
-+enum max8971_health_state {
-+	MAX8971_HEALTH_UNKNOWN,
-+	MAX8971_HEALTH_COLD,
-+	MAX8971_HEALTH_COOL,
-+	MAX8971_HEALTH_WARM,
-+	MAX8971_HEALTH_HOT,
-+	MAX8971_HEALTH_OVERHEAT,
-+};
-+
-+/* Fast-Charge current limit, 250..1550 mA, 50 mA steps */
-+#define MAX8971_CHG_CC_STEP			  50000U
-+#define MAX8971_CHG_CC_MIN			 250000U
-+#define MAX8971_CHG_CC_MAX			1550000U
-+
-+/* Input current limit, 250..1500 mA, 25 mA steps */
-+#define MAX8971_DCILMT_STEP			  25000U
-+#define MAX8971_DCILMT_MIN			 250000U
-+#define MAX8971_DCILMT_MAX			1500000U
-+
-+enum max8971_field_idx {
-+	THM_DTLS,		/* DETAILS1 */
-+	BAT_DTLS, CHG_DTLS,	/* DETAILS2 */
-+	CHG_CC, FCHG_T,		/* FCHGCRNT */
-+	DCI_LMT,		/* DCCRNT */
-+	TOPOFF_T, CHG_CV,	/* TOPOFF */
-+	CPROT,			/* PROTCMD */
-+	MAX8971_N_REGMAP_FIELDS
-+};
-+
-+static const struct reg_field max8971_reg_field[MAX8971_N_REGMAP_FIELDS] = {
-+	[THM_DTLS] = REG_FIELD(MAX8971_REG_DETAILS1, 0, 2),
-+	[BAT_DTLS] = REG_FIELD(MAX8971_REG_DETAILS2, 4, 5),
-+	[CHG_DTLS] = REG_FIELD(MAX8971_REG_DETAILS2, 0, 3),
-+	[CHG_CC]   = REG_FIELD(MAX8971_REG_FCHGCRNT, 0, 4),
-+	[FCHG_T]   = REG_FIELD(MAX8971_REG_FCHGCRNT, 5, 7),
-+	[DCI_LMT]  = REG_FIELD(MAX8971_REG_DCCRNT,   0, 5),
-+	[TOPOFF_T] = REG_FIELD(MAX8971_REG_TOPOFF,   5, 7),
-+	[CHG_CV]   = REG_FIELD(MAX8971_REG_TOPOFF,   2, 3),
-+	[CPROT]    = REG_FIELD(MAX8971_REG_PROTCMD,  2, 3),
-+};
-+
-+static const struct regmap_config max8971_regmap_config = {
-+	.reg_bits = 8,
-+	.val_bits = 8,
-+	.max_register = MAX8971_REG_CHGINT,
-+};
-+
-+struct max8971_config {
-+	u32 chgcc;
-+	u32 fchgt;
-+	u32 chgrstrt;
-+	u32 dcilmt;
-+	u32 tofft;
-+	u32 toffs;
-+};
-+
-+struct max8971_data {
-+	struct i2c_client *client;
-+	struct device *dev;
-+	struct power_supply *psy_mains;
-+
-+	struct extcon_dev *edev;
-+	struct notifier_block extcon_nb;
-+	struct delayed_work extcon_work;
-+
-+	struct regmap *regmap;
-+	struct regmap_field *rfield[MAX8971_N_REGMAP_FIELDS];
-+
-+	struct max8971_config config;
-+	enum power_supply_usb_type usb_type;
-+
-+	u32 chgcc_usb;
-+	u32 chgcc_ac;
-+	u32 dcilmt_usb;
-+	u32 dcilmt_ac;
-+
-+	bool present;
-+};
-+
-+static int max8971_get_status(struct max8971_data *priv, int *val)
-+{
-+	u32 regval;
-+	int err;
-+
-+	err = regmap_field_read(priv->rfield[CHG_DTLS], &regval);
-+	if (err)
-+		return err;
-+
-+	switch (regval) {
-+	case MAX8971_CHARGING_DEAD_BATTERY:
-+	case MAX8971_CHARGING_PREQUALIFICATION:
-+	case MAX8971_CHARGING_FAST_CONST_CURRENT:
-+	case MAX8971_CHARGING_FAST_CONST_VOLTAGE:
-+	case MAX8971_CHARGING_TOP_OFF:
-+	case MAX8971_CHARGING_THERMAL_LOOP:
-+		*val = POWER_SUPPLY_STATUS_CHARGING;
-+		break;
-+	case MAX8971_CHARGING_DONE:
-+		*val = POWER_SUPPLY_STATUS_FULL;
-+		break;
-+	case MAX8971_CHARGING_TIMER_FAULT:
-+		*val = POWER_SUPPLY_STATUS_NOT_CHARGING;
-+		break;
-+	case MAX8971_CHARGING_OFF:
-+	case MAX8971_CHARGING_SUSPENDED_THERMAL:
-+		*val = POWER_SUPPLY_STATUS_DISCHARGING;
-+		break;
-+	default:
-+		*val = POWER_SUPPLY_STATUS_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
-+static int max8971_get_charge_type(struct max8971_data *priv, int *val)
-+{
-+	u32 regval;
-+	int err;
-+
-+	err = regmap_field_read(priv->rfield[CHG_DTLS], &regval);
-+	if (err)
-+		return err;
-+
-+	switch (regval) {
-+	case MAX8971_CHARGING_DEAD_BATTERY:
-+	case MAX8971_CHARGING_PREQUALIFICATION:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_TRICKLE;
-+		break;
-+	case MAX8971_CHARGING_FAST_CONST_CURRENT:
-+	case MAX8971_CHARGING_FAST_CONST_VOLTAGE:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_FAST;
-+		break;
-+	case MAX8971_CHARGING_TOP_OFF:
-+	case MAX8971_CHARGING_THERMAL_LOOP:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_STANDARD;
-+		break;
-+	case MAX8971_CHARGING_DONE:
-+	case MAX8971_CHARGING_TIMER_FAULT:
-+	case MAX8971_CHARGING_SUSPENDED_THERMAL:
-+	case MAX8971_CHARGING_OFF:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_NONE;
-+		break;
-+	default:
-+		*val = POWER_SUPPLY_CHARGE_TYPE_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
-+static int max8971_get_health(struct max8971_data *priv, int *val)
-+{
-+	u32 regval;
-+	int err;
-+
-+	err = regmap_field_read(priv->rfield[THM_DTLS], &regval);
-+	if (err)
-+		return err;
-+
-+	switch (regval) {
-+	case MAX8971_HEALTH_COLD:
-+		*val = POWER_SUPPLY_HEALTH_COLD;
-+		break;
-+	case MAX8971_HEALTH_COOL:
-+		*val = POWER_SUPPLY_HEALTH_COOL;
-+		break;
-+	case MAX8971_HEALTH_WARM:
-+		*val = POWER_SUPPLY_HEALTH_GOOD;
-+		break;
-+	case MAX8971_HEALTH_HOT:
-+		*val = POWER_SUPPLY_HEALTH_HOT;
-+		break;
-+	case MAX8971_HEALTH_OVERHEAT:
-+		*val = POWER_SUPPLY_HEALTH_OVERHEAT;
-+		break;
-+	case MAX8971_HEALTH_UNKNOWN:
-+	default:
-+		*val = POWER_SUPPLY_HEALTH_UNKNOWN;
-+	}
-+
-+	return 0;
-+}
-+
-+static int max8971_get_online(struct max8971_data *priv, int *val)
-+{
-+	u32 regval;
-+	int err;
-+
-+	err = regmap_read(priv->regmap, MAX8971_REG_CHG_STAT, &regval);
-+	if (err)
-+		return err;
-+
-+	if (priv->present)
-+		/* CHG_OK bit is 0 when charger is online */
-+		*val = !(regval & MAX8971_CHG_MASK);
-+	else
-+		*val = priv->present;
-+
-+	return 0;
-+}
-+
-+static int max8971_get_integer(struct max8971_data *priv, enum max8971_field_idx fidx,
-+			       u32 clamp_min, u32 clamp_max, u32 mult, int *val)
-+{
-+	u32 regval;
-+	int err;
-+
-+	err = regmap_field_read(priv->rfield[fidx], &regval);
-+	if (err)
-+		return err;
-+
-+	*val = clamp_val(regval * mult, clamp_min, clamp_max);
-+
-+	return 0;
-+}
-+
-+static int max8971_set_integer(struct max8971_data *priv, enum max8971_field_idx fidx,
-+			       u32 clamp_min, u32 clamp_max, u32 div, int val)
-+{
-+	u32 regval;
-+
-+	regval = clamp_val(val, clamp_min, clamp_max) / div;
-+
-+	return regmap_field_write(priv->rfield[fidx], regval);
-+}
-+
-+static int max8971_get_property(struct power_supply *psy, enum power_supply_property psp,
-+				union power_supply_propval *val)
-+{
-+	struct max8971_data *priv = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_STATUS:
-+		ret = max8971_get_status(priv, &val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_TYPE:
-+		ret = max8971_get_charge_type(priv, &val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_USB_TYPE:
-+		val->intval = priv->usb_type;
-+		break;
-+	case POWER_SUPPLY_PROP_HEALTH:
-+		ret = max8971_get_health(priv, &val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_ONLINE:
-+		ret = max8971_get_online(priv, &val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_PRESENT:
-+		val->intval = priv->present;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX:
-+		val->intval = MAX8971_CHG_CC_MAX;
-+		break;
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT:
-+		ret = max8971_get_integer(priv, CHG_CC, MAX8971_CHG_CC_MIN, MAX8971_CHG_CC_MAX,
-+					  MAX8971_CHG_CC_STEP, &val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		ret = max8971_get_integer(priv, DCI_LMT, MAX8971_DCILMT_MIN, MAX8971_DCILMT_MAX,
-+					  MAX8971_DCILMT_STEP, &val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_MODEL_NAME:
-+		val->strval = max8971_model;
-+		break;
-+	case POWER_SUPPLY_PROP_MANUFACTURER:
-+		val->strval = max8971_manufacturer;
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+}
-+
-+static int max8971_set_property(struct power_supply *psy, enum power_supply_property psp,
-+				const union power_supply_propval *val)
-+{
-+	struct max8971_data *priv = power_supply_get_drvdata(psy);
-+	int ret = 0;
-+
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT:
-+		ret = max8971_set_integer(priv, CHG_CC, MAX8971_CHG_CC_MIN, MAX8971_CHG_CC_MAX,
-+					  MAX8971_CHG_CC_STEP, val->intval);
-+		break;
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		ret = max8971_set_integer(priv, DCI_LMT, MAX8971_DCILMT_MIN, MAX8971_DCILMT_MAX,
-+					  MAX8971_DCILMT_STEP, val->intval);
-+		break;
-+	default:
-+		ret = -EINVAL;
-+	}
-+
-+	return ret;
-+};
-+
-+static int max8971_property_is_writeable(struct power_supply *psy,
-+					 enum power_supply_property psp)
-+{
-+	switch (psp) {
-+	case POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT:
-+	case POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT:
-+		return true;
-+	default:
-+		return false;
-+	}
-+}
-+
-+static enum power_supply_property max8971_properties[] = {
-+	POWER_SUPPLY_PROP_STATUS,
-+	POWER_SUPPLY_PROP_CHARGE_TYPE,
-+	POWER_SUPPLY_PROP_USB_TYPE,
-+	POWER_SUPPLY_PROP_HEALTH,
-+	POWER_SUPPLY_PROP_ONLINE,
-+	POWER_SUPPLY_PROP_PRESENT,
-+	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT,
-+	POWER_SUPPLY_PROP_CHARGE_CONTROL_LIMIT_MAX,
-+	POWER_SUPPLY_PROP_INPUT_CURRENT_LIMIT,
-+	POWER_SUPPLY_PROP_MODEL_NAME,
-+	POWER_SUPPLY_PROP_MANUFACTURER,
-+};
-+
-+static const struct power_supply_desc max8971_charger_desc = {
-+	.name = "charger",
-+	.type = POWER_SUPPLY_TYPE_USB,
-+	.usb_types = BIT(POWER_SUPPLY_USB_TYPE_UNKNOWN) |
-+		     BIT(POWER_SUPPLY_USB_TYPE_SDP) |
-+		     BIT(POWER_SUPPLY_USB_TYPE_DCP) |
-+		     BIT(POWER_SUPPLY_USB_TYPE_CDP) |
-+		     BIT(POWER_SUPPLY_USB_TYPE_ACA),
-+	.properties = max8971_properties,
-+	.num_properties = ARRAY_SIZE(max8971_properties),
-+	.get_property = max8971_get_property,
-+	.set_property = max8971_set_property,
-+	.property_is_writeable = max8971_property_is_writeable,
-+};
-+
-+static void max8971_extcon_evt_worker(struct work_struct *work)
-+{
-+	struct max8971_data *priv =
-+		container_of(work, struct max8971_data, extcon_work.work);
-+	struct device *dev = priv->dev;
-+	struct extcon_dev *edev = priv->edev;
-+	u32 chgcc, dcilmt;
-+
-+	if (extcon_get_state(edev, EXTCON_CHG_USB_SDP) > 0) {
-+		dev_dbg(dev, "USB SDP charger is connected\n");
-+		priv->usb_type = POWER_SUPPLY_USB_TYPE_SDP;
-+		chgcc = priv->chgcc_usb;
-+		dcilmt = priv->dcilmt_usb;
-+	} else if (extcon_get_state(edev, EXTCON_USB) > 0) {
-+		dev_dbg(dev, "USB charger is connected\n");
-+		priv->usb_type = POWER_SUPPLY_USB_TYPE_SDP;
-+		chgcc = priv->chgcc_usb;
-+		dcilmt = priv->dcilmt_usb;
-+	} else if (extcon_get_state(edev, EXTCON_DISP_MHL) > 0) {
-+		dev_dbg(dev, "MHL plug is connected\n");
-+		priv->usb_type = POWER_SUPPLY_USB_TYPE_SDP;
-+		chgcc = priv->chgcc_usb;
-+		dcilmt = priv->dcilmt_usb;
-+	} else if (extcon_get_state(edev, EXTCON_CHG_USB_DCP) > 0) {
-+		dev_dbg(dev, "USB DCP charger is connected\n");
-+		priv->usb_type = POWER_SUPPLY_USB_TYPE_DCP;
-+		chgcc = priv->chgcc_ac;
-+		dcilmt = priv->dcilmt_ac;
-+	} else if (extcon_get_state(edev, EXTCON_CHG_USB_FAST) > 0) {
-+		dev_dbg(dev, "USB FAST charger is connected\n");
-+		priv->usb_type = POWER_SUPPLY_USB_TYPE_ACA;
-+		chgcc = priv->chgcc_ac;
-+		dcilmt = priv->dcilmt_ac;
-+	} else if (extcon_get_state(edev, EXTCON_CHG_USB_SLOW) > 0) {
-+		dev_dbg(dev, "USB SLOW charger is connected\n");
-+		priv->usb_type = POWER_SUPPLY_USB_TYPE_ACA;
-+		chgcc = priv->chgcc_ac;
-+		dcilmt = priv->dcilmt_ac;
-+	} else if (extcon_get_state(edev, EXTCON_CHG_USB_CDP) > 0) {
-+		dev_dbg(dev, "USB CDP charger is connected\n");
-+		priv->usb_type = POWER_SUPPLY_USB_TYPE_CDP;
-+		chgcc = priv->chgcc_ac;
-+		dcilmt = priv->dcilmt_ac;
-+	} else {
-+		dev_dbg(dev, "USB state is unknown\n");
-+		priv->usb_type = POWER_SUPPLY_USB_TYPE_UNKNOWN;
-+		return;
-+	}
-+
-+	regmap_field_write(priv->rfield[CPROT], MAX8971_CHGPROT_UNLOCKED);
-+
-+	max8971_set_integer(priv, CHG_CC, MAX8971_CHG_CC_MIN, MAX8971_CHG_CC_MAX,
-+			    MAX8971_CHG_CC_STEP, chgcc);
-+	max8971_set_integer(priv, DCI_LMT, MAX8971_DCILMT_MIN, MAX8971_DCILMT_MAX,
-+			    MAX8971_DCILMT_STEP, dcilmt);
-+
-+	regmap_field_write(priv->rfield[CPROT], MAX8971_CHGPROT_LOCKED);
-+}
-+
-+static int extcon_get_charger_type(struct notifier_block *nb,
-+				   unsigned long state, void *data)
-+{
-+	struct max8971_data *priv =
-+		container_of(nb, struct max8971_data, extcon_nb);
-+	schedule_delayed_work(&priv->extcon_work, 0);
-+	return NOTIFY_OK;
-+}
-+
-+static void max8971_update_config(struct max8971_data *priv)
-+{
-+	struct max8971_config *config = &priv->config;
-+
-+	regmap_field_write(priv->rfield[CPROT], MAX8971_CHGPROT_UNLOCKED);
-+
-+	/* Construct Fast-Charge Current and Timer Control register */
-+	if (config->chgcc != MAX8971_CHGCC_DCILMT_DEFAULT)
-+		max8971_set_integer(priv, CHG_CC, MAX8971_CHG_CC_MIN, MAX8971_CHG_CC_MAX,
-+				    MAX8971_CHG_CC_STEP, config->chgcc);
-+
-+	if (config->fchgt != MAX8971_FCHGT_DEFAULT)
-+		regmap_field_write(priv->rfield[FCHG_T], config->fchgt);
-+
-+	/* Construct Input-Current Limit and Charger Restart Threshold register */
-+	if (config->chgrstrt)
-+		regmap_write_bits(priv->regmap, MAX8971_REG_DCCRNT, MAX8971_CHGRSTRT_MASK,
-+				  config->chgrstrt << MAX8971_CHGRSTRT_SHIFT);
-+
-+	if (config->dcilmt != MAX8971_CHGCC_DCILMT_DEFAULT)
-+		max8971_set_integer(priv, DCI_LMT, MAX8971_DCILMT_MIN, MAX8971_DCILMT_MAX,
-+				    MAX8971_DCILMT_STEP, config->dcilmt);
-+
-+	/* Construct Done Current, Timer, and Battery Regulation Voltage register */
-+	if (config->tofft != MAX8971_TOPOFFT_DEFAULT)
-+		regmap_field_write(priv->rfield[TOPOFF_T], config->tofft);
-+
-+	if (config->toffs)
-+		regmap_field_write(priv->rfield[CHG_CV], config->toffs);
-+
-+	regmap_field_write(priv->rfield[CPROT], MAX8971_CHGPROT_LOCKED);
-+}
-+
-+static irqreturn_t max8971_interrupt(int irq, void *dev_id)
-+{
-+	struct max8971_data *priv = dev_id;
-+	struct device *dev = priv->dev;
-+	int ret, state;
-+
-+	ret = regmap_read(priv->regmap, MAX8971_REG_CHGINT, &state);
-+	if (ret)
-+		dev_err(dev, "interrupt reg read failed %d\n", ret);
-+
-+	ret = regmap_write_bits(priv->regmap, MAX8971_REG_CHGINT_MASK,
-+				MAX8971_AICL_MASK, MAX8971_AICL_MASK);
-+	if (ret)
-+		dev_err(dev, "failed to mask IRQ\n");
-+
-+	/* set presence prop */
-+	priv->present = state & MAX8971_REG_CHG_RST;
-+
-+	/* on every plug chip resets to default */
-+	if (priv->present)
-+		max8971_update_config(priv);
-+
-+	/* update supply status */
-+	power_supply_changed(priv->psy_mains);
-+
-+	return IRQ_HANDLED;
-+}
-+
-+static void max8971_dt_init(struct max8971_data *priv)
-+{
-+	struct device *dev = priv->dev;
-+	struct max8971_config *config = &priv->config;
-+
-+	/* Construct Fast-Charge Current and Timer Control register */
-+	config->chgcc = 500 * 1000;
-+	device_property_read_u32(dev, "maxim,fcharge-current-limit-microamp", &config->chgcc);
-+
-+	config->fchgt = 5;
-+	device_property_read_u32(dev, "maxim,fcharge-timer-hours", &config->fchgt);
-+	config->fchgt -= 3;
-+	if (config->fchgt < 0 || config->fchgt > 7)
-+		config->fchgt = 0;
-+
-+	/* Construct Input-Current Limit and Charger Restart Threshold register */
-+	config->chgrstrt = device_property_read_bool(dev, "maxim,fcharge-rst-threshold-high");
-+
-+	config->dcilmt = 500 * 1000;
-+	device_property_read_u32(dev, "maxim,in-current-limit-microamp", &config->dcilmt);
-+
-+	/* Construct Done Current, Timer, and Battery Regulation Voltage register */
-+	config->tofft = 30;
-+	device_property_read_u32(dev, "maxim,topoff-timer-minutes", &config->tofft);
-+	config->tofft /= 10;
-+	if (config->tofft > 7)
-+		config->tofft = 7;
-+
-+	config->toffs = 50 * 1000;
-+	device_property_read_u32(dev, "maxim,topoff-current-threshold-microamp", &config->toffs);
-+	config->toffs = (config->toffs / 1000 - 50) / 50;
-+
-+	/* Perform initial setup */
-+	max8971_update_config(priv);
-+
-+	/* Get additional variables */
-+	priv->chgcc_usb = 500 * 1000;
-+	device_property_read_u32(dev, "maxim,fcharge-usb-current-limit-microamp", &priv->chgcc_usb);
-+
-+	priv->chgcc_ac = 500 * 1000;
-+	device_property_read_u32(dev, "maxim,fcharge-ac-current-limit-microamp", &priv->chgcc_ac);
-+
-+	priv->dcilmt_usb = 500 * 1000;
-+	device_property_read_u32(dev, "maxim,usb-in-current-limit-microamp", &priv->dcilmt_usb);
-+
-+	priv->dcilmt_ac = 500 * 1000;
-+	device_property_read_u32(dev, "maxim,ac-in-current-limit-microamp", &priv->dcilmt_ac);
-+}
-+
-+static char *max8971_supplied_to[] = {
-+	"battery",
-+};
-+
-+static int max8971_probe(struct i2c_client *client)
-+{
-+	struct device *dev = &client->dev;
-+	struct max8971_data *priv;
-+	struct power_supply_config cfg = { };
-+	int ret, i;
-+
-+	priv = devm_kzalloc(dev, sizeof(*priv), GFP_KERNEL);
-+	if (!priv)
-+		return -ENOMEM;
-+
-+	priv->client = client;
-+	priv->dev = dev;
-+	priv->usb_type = POWER_SUPPLY_USB_TYPE_UNKNOWN;
-+
-+	i2c_set_clientdata(client, priv);
-+
-+	priv->regmap = devm_regmap_init_i2c(client, &max8971_regmap_config);
-+	if (IS_ERR(priv->regmap))
-+		return dev_err_probe(dev, PTR_ERR(priv->regmap), "cannot allocate regmap\n");
-+
-+	for (i = 0; i < MAX8971_N_REGMAP_FIELDS; i++) {
-+		priv->rfield[i] = devm_regmap_field_alloc(dev, priv->regmap, max8971_reg_field[i]);
-+		if (IS_ERR(priv->rfield[i]))
-+			return dev_err_probe(dev, PTR_ERR(priv->rfield[i]),
-+					     "cannot allocate regmap field\n");
-+	}
-+
-+	max8971_dt_init(priv);
-+
-+	cfg.of_node = dev->of_node;
-+	cfg.drv_data = priv;
-+	cfg.supplied_to = max8971_supplied_to;
-+	cfg.num_supplicants = ARRAY_SIZE(max8971_supplied_to);
-+
-+	priv->psy_mains = devm_power_supply_register(dev, &max8971_charger_desc, &cfg);
-+	if (IS_ERR(priv->psy_mains))
-+		return dev_err_probe(dev, PTR_ERR(priv->psy_mains),
-+				     "failed to register mains supply\n");
-+
-+	ret = regmap_write_bits(priv->regmap, MAX8971_REG_CHGINT_MASK, MAX8971_AICL_MASK,
-+				MAX8971_AICL_MASK);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to mask IRQ\n");
-+
-+	ret = devm_request_threaded_irq(dev, client->irq, NULL, &max8971_interrupt,
-+					IRQF_ONESHOT | IRQF_SHARED, client->name, priv);
-+	if (ret)
-+		return dev_err_probe(dev, ret, "failed to register IRQ %d\n", client->irq);
-+
-+	if (device_property_present(dev, "extcon")) {
-+		priv->edev = extcon_get_edev_by_phandle(dev, 0);
-+		if (IS_ERR(priv->edev))
-+			return dev_err_probe(dev, PTR_ERR(priv->edev),
-+					     "failed to register extcon\n");
-+
-+		ret = devm_delayed_work_autocancel(dev, &priv->extcon_work,
-+						   max8971_extcon_evt_worker);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to add extcon evt stop action\n");
-+
-+		priv->extcon_nb.notifier_call = extcon_get_charger_type;
-+
-+		ret = devm_extcon_register_notifier_all(dev, priv->edev, &priv->extcon_nb);
-+		if (ret)
-+			return dev_err_probe(dev, ret, "failed to register notifier\n");
-+
-+		/* Initial configuration work with 1 sec delay */
-+		schedule_delayed_work(&priv->extcon_work, msecs_to_jiffies(1000));
-+	}
-+
-+	return 0;
-+}
-+
-+static int max8971_resume(struct device *dev)
-+{
-+	struct i2c_client *client = to_i2c_client(dev);
-+	struct max8971_data *priv = i2c_get_clientdata(client);
-+
-+	irq_wake_thread(client->irq, priv);
-+
-+	return 0;
-+}
-+
-+static SIMPLE_DEV_PM_OPS(max8971_pm_ops, NULL, max8971_resume);
-+
-+static const struct of_device_id max8971_match_ids[] = {
-+	{ .compatible = "maxim,max8971" },
-+	{ /* sentinel */ }
-+};
-+MODULE_DEVICE_TABLE(of, max8971_match_ids);
-+
-+static const struct i2c_device_id max8971_i2c_id[] = {
-+	{ "max8971" },
-+	{ }
-+};
-+MODULE_DEVICE_TABLE(i2c, max8971_i2c_id);
-+
-+static struct i2c_driver max8971_driver = {
-+	.driver = {
-+		.name = "max8971-charger",
-+		.of_match_table = max8971_match_ids,
-+		.pm = &max8971_pm_ops,
-+	},
-+	.probe = max8971_probe,
-+	.id_table = max8971_i2c_id,
-+};
-+module_i2c_driver(max8971_driver);
-+
-+MODULE_AUTHOR("Svyatoslav Ryhel <clamor95@gmail.com>");
-+MODULE_DESCRIPTION("MAX8971 Charger Driver");
-+MODULE_LICENSE("GPL");
--- 
-2.43.0
-
+I've included a cover letter here: https://lore.kernel.org/all/DS7PR19MB8883BE38C2B500D03213747A9DC72@DS7PR19MB8883.namprd19.prod.outlook.com/
 
