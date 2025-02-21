@@ -1,147 +1,215 @@
-Return-Path: <linux-pm+bounces-22648-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22649-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7E3CEA3F5B3
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 14:21:27 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 04E8CA3F5F9
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 14:30:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C2756862CE1
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 13:17:20 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id CE12D3BDBDC
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 13:29:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B315E20E01B;
-	Fri, 21 Feb 2025 13:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE79420E31D;
+	Fri, 21 Feb 2025 13:28:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="GXpc4jkm"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="PuMLlOuW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
+Received: from sender4-op-o14.zoho.com (sender4-op-o14.zoho.com [136.143.188.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3911320DD46;
-	Fri, 21 Feb 2025 13:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740143822; cv=none; b=kt7kRusM5NSG/u6zbE5vYkLP2rJGAyPSZ9VebUmlKufFAlsX3tVQjBdMaDKUAnjkxrwlQEKdVVGj9r5qZEGiGL+joPIhFOwtDHXRPzxc39coBaJvaQOK47QB1Z7sTM+GJ60xnHz9ncWM2BM6V5SHAwvGC3ZrfqiUGEkWp2ihMrk=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740143822; c=relaxed/simple;
-	bh=7Q/D8RghOyQ/KqhFnFzSNOl6lXSfSgLpiiU60rl6VL4=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=Gj3ElOhC4EFX1RWj8C3hZfCfu9jj7Z0DmWyig3myCVtSYYMmKv7Pl1tHE3sFnysIEJNv4ZPa0SeuP8WxHwT5wHw7qixcKRAwInIgG5b2JNp7qHyd+4yJqg8s154EejeSusyas2GDgNi8KYqlEh/wP7GSbl6A+PUDOZyrJDIdySM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=GXpc4jkm; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279863.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51LCoZSC012227;
-	Fri, 21 Feb 2025 13:15:49 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	hXZATStOuQiUIAFb67THfjHdGBUb7YTvKE8kj2FT690=; b=GXpc4jkmdL/MQPOr
-	pZp6PmeL5Mi6h+yjuc7De9EjOcGwyLk5Pzt+DWsFuvR/4zMHpji7JNti0PzDAsuF
-	iuZbvlN3vWkCNT3dXV3XjsLyd/9+5x7WucaTYx/SwXM5Uzym3sMyZpu2PA0fcbZ/
-	ElH+Q7hSqBEDGfS94WFZxNChfTCTL7xbpz94nJjmDLZximaFc7Kdx+cS+jv4InpO
-	O3MC+FBUWRZZ3ovwFu7u/g+N2IJy4VU44DrfTPhwtfk8/cjY2U/UvWRPue8rGldQ
-	Upx+Cvchd4mqxlWfdssnCq94EEAFk8TQ1ubenUTdIjdE5cgzjvAL1GTrzmDcT1TW
-	Dlg9cw==
-Received: from nasanppmta05.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 44vyy1t4hf-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 13:15:49 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA05.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 51LDFmDi007900
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 21 Feb 2025 13:15:48 GMT
-Received: from [10.133.33.29] (10.80.80.8) by nasanex01a.na.qualcomm.com
- (10.52.223.231) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Fri, 21 Feb
- 2025 05:15:40 -0800
-Message-ID: <7a151447-4961-4cba-b989-9a9e890d7ba3@quicinc.com>
-Date: Fri, 21 Feb 2025 21:15:38 +0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 895E320E01F;
+	Fri, 21 Feb 2025 13:28:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.14
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740144510; cv=pass; b=HGejC6XHjdH01OPTIH8izesMq1Q6gnNhoMi26Nzerr+nWikeHbCBU0xXmeze4fakc73TwcCPMkz+DAEcGC+uq328BczCsVWV84wrcZ4NQ9Qq32drwS67zUre0h2DGOy9q1+ceGCzUVPB4/PDCMbD5aCGeOHeqTeTuCV738BRvn0=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740144510; c=relaxed/simple;
+	bh=vQlYiaR18cP3KvL9U52HaroiXZjM1E7sxNQ7bgVw2wY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=MGcFotnJyhxoZkLo9LJdjz+ErOv0Jug9vyTa21r0OxGXsNH8ZkA6IAZOYXuStlUvBSiJYEcy0ekK+4CwoivIxMPxjyo7pLEzjZdO/EgyPwpz+C6+VgWrRRJhqbIJv9q0qjGZVom4qGLMeCRP85+sEz3F0UFnSiUdXji3/sZjGcY=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=PuMLlOuW; arc=pass smtp.client-ip=136.143.188.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1740144486; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=CEWSyxZxoMOT30Lbo9c/GiuYjoKB6lCUpiX7XU0G/Y8ZiqpYqf3rBOyRZg3p3EUHlznUdn9nMDEklLTGSPhLqIzU8Fw5lc1z/YH4ZKY275MvVMGDDuDJOs4OAL56SOjQw6gy15xh3hALazhelUqafcJiGmIfSvjSzKVmIYXvHXA=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1740144486; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=1NT+BJtGmQPBJxVdJtnETf4Hylev5huwZTuiokcMHso=; 
+	b=S86mae6WsnRg2XGXkrPfCqE7h05p93U6+lmxxLm0OXhnJTkS6Rhukhuh593E5UqWtXkx7hw4QWFuZTTKBP2RnjA0JR6eJ7Vc2a+6OagTK0+GThs8xkkz1FB1urqkF6uZyFCJyGWNITTVXqqU/Wl5MGfsjUMiyYIgTDB9nW9Xbpo=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740144486;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Transfer-Encoding:Content-Type:Message-Id:Reply-To;
+	bh=1NT+BJtGmQPBJxVdJtnETf4Hylev5huwZTuiokcMHso=;
+	b=PuMLlOuWX0TxQ7RVYJKBcIdAjCg5FCDYgvjVenaUwWadc3X2osGRNo0qF+mSfFFc
+	0aRd4Yf/iuxWI2wuedtZqG4B4iO1GCl234AiT4Jo3X7gIjX2PjbTlxyfKlQ0aUGXcTC
+	p0CPmV3tSgS/1YUJxLKWsjScJ0XdjN/ekszEukDw=
+Received: by mx.zohomail.com with SMTPS id 1740144484347820.7261259225404;
+	Fri, 21 Feb 2025 05:28:04 -0800 (PST)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+To: Rob Herring <robh@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>,
+ Sebastian Reichel <sebastian.reichel@collabora.com>, kernel@collabora.com,
+ linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org,
+ linux-kernel@vger.kernel.org
+Subject:
+ Re: [PATCH 4/6] dt-bindings: thermal: rockchip: document otp thermal trim
+Date: Fri, 21 Feb 2025 14:27:58 +0100
+Message-ID: <4631308.LvFx2qVVIh@workhorse>
+In-Reply-To: <20250219231036.GA3137058-robh@kernel.org>
+References:
+ <20250216-rk3576-tsadc-upstream-v1-0-6ec969322a14@collabora.com>
+ <20250216-rk3576-tsadc-upstream-v1-4-6ec969322a14@collabora.com>
+ <20250219231036.GA3137058-robh@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH *-next 00/18] Remove weird and needless 'return' for void
- APIs
-To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-CC: Will Deacon <will@kernel.org>, Aneesh Kumar K.V <aneesh.kumar@kernel.org>,
-        Andrew Morton <akpm@linux-foundation.org>,
-        Nick Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
-        Arnd Bergmann <arnd@arndb.de>, Thomas
- Gleixner <tglx@linutronix.de>,
-        Herbert Xu <herbert@gondor.apana.org.au>,
-        "David S. Miller" <davem@davemloft.net>,
-        "Rafael J. Wysocki"
-	<rafael@kernel.org>,
-        Danilo Krummrich <dakr@kernel.org>,
-        Eric Dumazet
-	<edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-        Paolo Abeni
-	<pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-        Johannes Berg
-	<johannes@sipsolutions.net>,
-        Jamal Hadi Salim <jhs@mojatatu.com>,
-        Cong Wang
-	<xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-        Jason Gunthorpe
-	<jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-        Linus Walleij
-	<linus.walleij@linaro.org>,
-        Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones
-	<lee@kernel.org>,
-        Thomas Graf <tgraf@suug.ch>, Christoph Hellwig
-	<hch@lst.de>,
-        Marek Szyprowski <m.szyprowski@samsung.com>,
-        Robin Murphy
-	<robin.murphy@arm.com>,
-        Miquel Raynal <miquel.raynal@bootlin.com>,
-        Richard
- Weinberger <richard@nod.at>,
-        Vignesh Raghavendra <vigneshr@ti.com>, Zijun Hu
-	<zijun_hu@icloud.com>,
-        <linux-arch@vger.kernel.org>, <linux-mm@kvack.org>,
-        <linux-kernel@vger.kernel.org>, <linux-crypto@vger.kernel.org>,
-        <netdev@vger.kernel.org>, <linux-wireless@vger.kernel.org>,
-        <linux-rdma@vger.kernel.org>, <linux-gpio@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <iommu@lists.linux.dev>,
-        <linux-mtd@lists.infradead.org>
-References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
- <2025022145-ungodly-hanky-499e@gregkh>
-Content-Language: en-US
-From: Zijun Hu <quic_zijuhu@quicinc.com>
-In-Reply-To: <2025022145-ungodly-hanky-499e@gregkh>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: nasanex01a.na.qualcomm.com (10.52.223.231) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-GUID: PjXLPSlfU4X8CAU-woeSzf1fJQlgHVdf
-X-Proofpoint-ORIG-GUID: PjXLPSlfU4X8CAU-woeSzf1fJQlgHVdf
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-21_04,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 clxscore=1015
- adultscore=0 malwarescore=0 mlxscore=0 priorityscore=1501
- lowpriorityscore=0 mlxlogscore=775 suspectscore=0 phishscore=0 spamscore=0
- impostorscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502210097
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="utf-8"
 
-On 2/21/2025 9:12 PM, Greg Kroah-Hartman wrote:
-> These span loads of different subsystems, please just submit them all to
-> the different subsystems directly, not as one big patch series which
-> none of us could take individually.
+On Thursday, 20 February 2025 00:10:36 Central European Standard Time Rob 
+Herring wrote:
+> On Sun, Feb 16, 2025 at 12:34:53AM +0100, Nicolas Frattaroli wrote:
+> > Several Rockchip SoCs, such as the RK3576, can store calibration trim
+> > data for thermal sensors in OTP cells. This capability should be
+> > documented.
 > 
+> Is several most or a minority as this change is enabled for everyone.
 
-sure. will do it as you suggest.
-thank you.
+Downstream has trim_h/trim_l nodes for the following SoCs:
+- RK3502
+- RK3528
+- RK3562
+- RK3566
+- RK3568
+- RK3576
+- RV1126
 
-> thanks,
+If you'd prefer I split the bindings or add a conditional to only enable this 
+on those specific compatibles, let me know. It is worth noting that all of 
+these SoCs are fairly new, so I assume this is the design that Rockchip is 
+using going forward.
+
+Additionally, trim_base/trim_base_frac seem to only be set in downstream DTs 
+for RK3562, RK3566, RK3568 and RV1126, so while I'm at it I'd add those to a 
+separate conditional as well.
+
+> > Such a rockchip thermal sensor may reference cell handles that store
+> > both a chip-wide trim for all the sensors, as well as cell handles
+> > for each individual sensor channel pointing to that specific sensor's
+> > trim value.
+> > 
+> > Additionally, the thermal sensor may optionally reference cells which
+> > store the base in terms of degrees celsius and decicelsius that the trim
+> > is relative to.
+> > 
+> > Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+> > ---
+> > 
+> >  .../bindings/thermal/rockchip-thermal.yaml         | 44
+> >  ++++++++++++++++++++++ 1 file changed, 44 insertions(+)
+> > 
+> > diff --git
+> > a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+> > b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml index
+> > 49ceed68c92ce5a32ed8d4f39bd88fd052de0e80..8d27ddefcc64e29f0faab0598888058
+> > 02c948b41 100644 ---
+> > a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml +++
+> > b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml> 
+> > @@ -40,6 +40,21 @@ properties:
+> >        - const: tsadc
+> >        - const: apb_pclk
+> > 
+> > +  nvmem-cells:
+> > +    items:
+> > +      - description: cell handle of the low byte of the chip fallback
+> > trim value +      - description: cell handle of the high byte of the chip
+> > fallback trim value +      - description: cell handle to where the trim's
+> > base temperature is stored +      - description:
+> > +          cell handle to where the trim's tenths of Celsius base value is
+> > stored +
+> > +  nvmem-cell-names:
+> > +    enum:
+> > +      - trim_l
+> > +      - trim_h
+> > +      - trim_base
+> > +      - trim_base_frac
+> > +
+> > 
+> >    resets:
+> >      minItems: 1
+> >      maxItems: 3
+> > 
+> > @@ -51,6 +66,12 @@ properties:
+> >        - const: tsadc
+> >        - const: tsadc-phy
+> > 
+> > +  "#address-cells":
+> > +    const: 1
+> > +
+> > +  "#size-cells":
+> > +    const: 0
+> > +
+> > 
+> >    "#thermal-sensor-cells":
+> >      const: 1
+> > 
+> > @@ -72,6 +93,29 @@ properties:
+> >      $ref: /schemas/types.yaml#/definitions/uint32
+> >      enum: [0, 1]
+> > 
+> > +patternProperties:
 > 
-> greg k-h
+> > +  "^([a-z]+)@[0-9]+$":
+> If each node is a sensor or channel, then make that the node name.
+
+Will do in V2. Should the node name be something like e.g. `gpu` for the GPU 
+thermal sensor/channel? Maybe suffixed with e.g. `-tsadc` or something, to 
+disambiguate it from other mentions of the GPU, or is disambiguation 
+unnecessary noise because it's evident from it being a child of tsadc anyway, 
+much like cpu and codec aren't suffixed with anything in simple-audio-card's 
+dai-link?
+
+> 
+> > +    type: object
+> > +    properties:
+> > +      reg:
+> > +        maxItems: 1
+> > +        description: sensor ID, a.k.a. channel number
+> > +
+> > +      nvmem-cells:
+> > +        items:
+> > +          - description: handle of cell containing low byte of
+> > calibration data +          - description: handle of cell containing high
+> > byte of calibration data +
+> > +      nvmem-cell-names:
+> > +        items:
+> > +          - const: trim_l
+> > +          - const: trim_h
+> > +
+> > +    required:
+> > +      - reg
+> > +
+> > +    unevaluatedProperties: false
+> > +
+> > 
+> >  required:
+> >    - compatible
+> >    - reg
+
+
+
 
 
