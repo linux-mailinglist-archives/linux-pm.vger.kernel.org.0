@@ -1,62 +1,79 @@
-Return-Path: <linux-pm+bounces-22590-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22591-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9C1EA3E9D8
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 02:22:42 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9D52DA3E9E5
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 02:25:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 489B9179D81
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 01:22:41 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3B2BA3BB131
+	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 01:24:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 441D1288B1;
-	Fri, 21 Feb 2025 01:22:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F85719D087;
+	Fri, 21 Feb 2025 01:24:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="a7TZK1bm"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="D03StydJ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1B84AA94A;
-	Fri, 21 Feb 2025 01:22:35 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740100956; cv=none; b=okQ/hiSlmAtro1/rTz3p7krOJYbFi88Ktu8lQZWi1FVpxwVIfEtgB6dLOuZBQnOo4hgiKRHvv3IoxEs3SHRiPedwqtk+9E/WIMdkWfC7rsyFVWhZoUdYN2wpViqWSsZThMzw0iH3dMFLihLOUXgHjEmAD1WIQbsZK+sjdCqjwMo=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740100956; c=relaxed/simple;
-	bh=K5kHSNUnjTSDcgVrbtlRl82jom5eu/PGvD0+oVoekOM=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9902878F5D;
+	Fri, 21 Feb 2025 01:24:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740101064; cv=pass; b=LDgtuoe5KELNRLU3xcqtu3I6+O8sWe7S1iZlCMePdLiJX4nxjDoI+bgIPkWj7wh6wZsknDBtQVg/c7vvW6OPZ21PNB0dVDjkqr1T/fdrFrwK2RSiVW6B4fTKpbi+59i8BcOm2ZlpoB/zn0pIZBF8e5YYmr6k2l/5t97+Hvrec4U=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740101064; c=relaxed/simple;
+	bh=3Sm7DDI5Q3UUXjF6i7tR75Y3+dqUV1skgvyKaKwQc5M=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=cmKBYODgktfvYz6ThSG0ZQvVwYd0P2HlRGZCZH5CCCg5HxCBkvB66cHTsbM2UZOccIMfvL+ER7vSUUhqxt7U+Ye+LTzuWUm5IhGObces9Q0vm85Ivc4qLHJnzT7W2sCz/cnh6ncwFsXFzgT0LgQV9YZH7I5L55uSpghuOX0RseQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=a7TZK1bm; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 40929C4CED1;
-	Fri, 21 Feb 2025 01:22:35 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740100955;
-	bh=K5kHSNUnjTSDcgVrbtlRl82jom5eu/PGvD0+oVoekOM=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=a7TZK1bma1m0pJkMlj4NeJhhf/+a9vYyeo09ekQQcJEAKmrwXTCI8Gfr9rN1TCjJa
-	 G9cH9J3Sw6K9xKeZCx9PulcJKMQvd5WnDcJBtJvy29yMyQ1cOxrmwa6X1VPIcqHO9c
-	 QmEZiF0WVn1TeV0Pov5BrWBAn9ASqdtVC95JDqEkZxg8EmmI/heAYfJKz8+XdpsVxl
-	 q6Y+MFolzkfN3S/5wqAYTMr9ahN88x8r3r3SGUNtSOX0WImGL1PeSqauTXuMypAL1+
-	 vsXb+Z3odlAmnIDNLaFMhWfHXZiDZOdcjncLNg0RauBd/3ADZQDp8azQYpbmkiWnV5
-	 5CDCkBb7wyjpA==
+	 MIME-Version:Content-Type; b=h6Bi77ezmVrClr345XtaA1t4q8rJmEIZ7BH1HEt0p9KugNceJl/4Wp9l93Bl8EQQTgv9LXG2M+x0Cl14TG5tNa02Qxg57GzdjEAiyUbFgXMIOgDIxkratUrfFOJ02gdRu4Ug8ZNBeHrwmz9ia4EQVpjVrzCA+gIILxJnXZqsvAg=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=D03StydJ; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1740101046; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=XhvEn896bySa73zf2SMJO+WnEZWN1fHFTFN2xqzqaYHRU3Ajab5TbTF2oRi5ftx3N2dtTa1Z/SCGJgy4e7lgq/FE/ZX0R/GOi54FBwl5uIcn3vM8PCpvlsRnjPcWK3Uurs3mNAWDcz0+3icIieMxoE/lpW69in8DjdLcZAGxYfc=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1740101046; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=mI/T5ROJs8elFBTHxKYFGNMmgHI1d3zveSjCBP4h+sc=; 
+	b=BCBzVjbgd844t4bj1IN9w3G7oN9d6a/czM51AXigkPQlwK3NjVNN8kuhB0mNwns8pp/le/5yVoWhfjOsBA3B7sQrKmN2Lc6jU3j1LVsYNLshem7k0kyn4Gs1mm5a9EaQfjKJgYXnISIdEz0ycDzdVhUYHTTkfktrmMsdL9dn/Ig=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740101046;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=From:From:To:To:Cc:Cc:Subject:Subject:Date:Date:Message-ID:In-Reply-To:References:MIME-Version:Content-Type:Content-Transfer-Encoding:Message-Id:Reply-To;
+	bh=mI/T5ROJs8elFBTHxKYFGNMmgHI1d3zveSjCBP4h+sc=;
+	b=D03StydJsNd0cSJtFcp51/4Iqm14tQIeU+qxkoYUOmozFgeKHc5KLpbJ0IN48mnJ
+	MqbSqMgXioY8n9udo9otz/epyVhjIjBPcV6l9pha6fdcHNMWSXEgrC2v4KPXSAQ2nZU
+	SRRD+KMU5BdBZNXgcMmAeC5K9NMf5ZIPAqARtA9o=
+Received: by mx.zohomail.com with SMTPS id 1740101043632123.4475557336358;
+	Thu, 20 Feb 2025 17:24:03 -0800 (PST)
 Received: by venus (Postfix, from userid 1000)
-	id 1FC151835EA; Fri, 21 Feb 2025 02:22:33 +0100 (CET)
-From: Sebastian Reichel <sre@kernel.org>
-To: linux-pm@vger.kernel.org,
-	"Sicelo A. Mhlongo" <absicsz@gmail.com>
+	id CEB621835EA; Fri, 21 Feb 2025 02:23:58 +0100 (CET)
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: linux-sunxi@lists.linux.dev,
+	Chris Morgan <macroalpha82@gmail.com>
 Cc: Sebastian Reichel <sebastian.reichel@collabora.com>,
-	pali@kernel.org,
+	devicetree@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	lee@kernel.org,
+	samuel@sholland.org,
+	jernej.skrabec@gmail.com,
+	wens@csie.org,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
 	sre@kernel.org,
-	linux-kernel@vger.kernel.org,
-	maemo-leste@lists.dyne.org
-Subject: Re: [PATCH] power: supply: bq27xxx_battery: do not update cached flags prematurely
-Date: Fri, 21 Feb 2025 02:21:55 +0100
-Message-ID: <174010090150.20358.11892224771206092730.b4-ty@collabora.com>
+	Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: (subset) [PATCH V2 0/4] Fix RG35XX Battery Charging Issues
+Date: Fri, 21 Feb 2025 02:23:50 +0100
+Message-ID: <174010090154.20358.12342040950217986728.b4-ty@collabora.com>
 X-Mailer: git-send-email 2.47.2
-In-Reply-To: <20241125152945.47937-1-absicsz@gmail.com>
-References: <20241125152945.47937-1-absicsz@gmail.com>
+In-Reply-To: <20250204155835.161973-1-macroalpha82@gmail.com>
+References: <20250204155835.161973-1-macroalpha82@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -64,27 +81,33 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: quoted-printable
+X-ZohoMailClient: External
 
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
 
-
-On Mon, 25 Nov 2024 17:29:30 +0200, Sicelo A. Mhlongo wrote:
-> Commit 243f8ffc883a1 ("power: supply: bq27xxx_battery: Notify also about
-> status changes") intended to notify userspace when the status changes,
-> based on the flags register. However, the cached state is updated too
-> early, before the flags are tested for any changes. Remove the premature
-> update.
-> 
-> 
+On Tue, 04 Feb 2025 09:58:30 -0600, Chris Morgan wrote:
+> From: Chris Morgan <macromorgan@hotmail.com>
+>=20
+> The Anbernic RG35XX devices sometimes fail to charge when the register
+> for the battery temperature sensor is set to the incorrect value either
+> by user error or an incorrectly programmed efuse. Allow users to
+> hard-code if a temperature sensor is not present (which is the case for
+> all Anbernic RGxx series devices) to prevent this issue from causing
+> problems. Additionally, a bug was identified with the handling of PMU
+> faults while this fix was being tested.
+>=20
 > [...]
 
 Applied, thanks!
 
-[1/1] power: supply: bq27xxx_battery: do not update cached flags prematurely
-      commit: 45291874a762dbb12a619dc2efaf84598859007a
+[1/4] dt-bindings: power: supply: axp20x-battery: Add x-powers,no-thermis=
+tor
+      commit: 626006541069d4d595128f03cc3a1b70a482805c
+[3/4] power: supply: axp20x_battery: Update temp sensor for AXP717 from d=
+evice tree
+      commit: bbcfe510ecd47f2db4c8653c7dfa9dc7a55b1583
 
 Best regards,
--- 
+--=20
 Sebastian Reichel <sebastian.reichel@collabora.com>
 
