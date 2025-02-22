@@ -1,99 +1,166 @@
-Return-Path: <linux-pm+bounces-22708-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22709-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02C5AA4047D
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 02:02:48 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AD886A40501
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 02:52:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE6903B2F0D
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 01:02:35 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6388219E3784
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 01:52:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDEB17578;
-	Sat, 22 Feb 2025 01:02:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2E5150980;
+	Sat, 22 Feb 2025 01:51:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ecvcVJv9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99754414;
-	Sat, 22 Feb 2025 01:02:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E153973451
+	for <linux-pm@vger.kernel.org>; Sat, 22 Feb 2025 01:51:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740186162; cv=none; b=Ysh0dTDe6kzS+36JSztI/qEqkQJOLohHH8mGxnUY5io4weYiN9OYrA9DtblvJJPUOphKwFmvgSMvH/hVRVTjNkMtc+cuJy6TELxFQO4kOYO/MX6sFAMXamCageHUyQh835wup2f9aFwcac6UuuBEuFjENvRwmQhRBmfCFxzSnGg=
+	t=1740189101; cv=none; b=urLw8MkAGYVtDkHsbaKXWLyyR3qNkGggUIV11wxcAozfzfauruJFzk76g4gU1Qe4g5IlrH2a/VAvx3J67vHh8eZeHgcbLvHJtQke7AFZJTC/yd5NwaCXxl8PqzR5iZcsbGYkL46HIWx1mU9y9BY3v29vBKtxyp24doycODPEZ9U=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740186162; c=relaxed/simple;
-	bh=NKLRRIgf3DYLDNRMQeCcvYWRQWxccqPowHRvi0rlWZw=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=R3BvcfhyB2nrGf+RU2+iKrrDZ37LFXOGPkbrpBxh7I8wjMFzQm/GV+1rPCqeEo1Xy40EIzpfGTDZWKrG3QCiZ1aIuPvkkP2wSrekjhWiZFYLzjfAWD2JD+ne0baBTWH7yIA0v+ajKzQPtK5rfwEEqwTJWWWAgbCN4wTQZTS14Xo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51LMkGQ9018777;
-	Fri, 21 Feb 2025 17:02:34 -0800
-Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 44w00kcerh-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Fri, 21 Feb 2025 17:02:33 -0800 (PST)
-Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.43; Fri, 21 Feb 2025 17:02:33 -0800
-Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
- 15.1.2507.43 via Frontend Transport; Fri, 21 Feb 2025 17:02:31 -0800
-From: Lizhi Xu <lizhi.xu@windriver.com>
-To: <rafael@kernel.org>
-CC: <len.brown@intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <lizhi.xu@windriver.com>,
-        <pavel@kernel.org>,
-        <syzbot+ace60642828c074eb913@syzkaller.appspotmail.com>,
-        <syzkaller-bugs@googlegroups.com>
-Subject: Re: [PATCH] module: replace the mutex lock acquisition method
-Date: Sat, 22 Feb 2025 09:02:30 +0800
-Message-ID: <20250222010230.9102-1-lizhi.xu@windriver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAJZ5v0hu=Gi82zS27MwKj-uhEciuD6JN8cZLd+75J3VKY796wg@mail.gmail.com>
-References: <CAJZ5v0hu=Gi82zS27MwKj-uhEciuD6JN8cZLd+75J3VKY796wg@mail.gmail.com>
+	s=arc-20240116; t=1740189101; c=relaxed/simple;
+	bh=b/wCdmMliqE07gTjcVqKdmn4h1VhcVtYzWKk7Ib2gis=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ccEVbhW+w9z5N2/bs6l8xJlR2pPeL+Pf9NEZW1gbOTHJnGC6Ccq7DoiBsz+npKwX3CZRmw/IsCCNAPjyRMKL015LvtpylspzzyrpcByaWDgOBSWYMXK8f5zsI+v7hk1VfJ121ceu6vSgmB6bNFmvNULdkJPpjQWkUq341lNeUZw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ecvcVJv9; arc=none smtp.client-ip=209.85.214.181
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
+Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-220d28c215eso43337745ad.1
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 17:51:39 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=chromium.org; s=google; t=1740189099; x=1740793899; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=Bha+1AwEm87+wTDNDH+caF+yfplFmYnHclPIveYfWAQ=;
+        b=ecvcVJv9LVPT0YklwYr6vYCC/8JRmm8gLXgmNdPv2uo/mG71uEU+DbJ0p+Stga4iXB
+         tRmbZYIRuU1vIvplHdnzFeVcHIDN1IslEJfXuYgh58Me2vmHEnx87FO5H5SiYV02OdUV
+         SCg6N6F07ZU2TQspJvdAUZTLwPmTOEWRbqwow=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740189099; x=1740793899;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Bha+1AwEm87+wTDNDH+caF+yfplFmYnHclPIveYfWAQ=;
+        b=g9tjHTr4JnPnsk5zcqfSkoBkJbuhJ2t2stbndfHUs+ZGdgUvG8nX4Z/zZorSYD4ITR
+         Rlrzf2kC/CpfahKemTDa2RqjRaWSFSZuc4rp8HMxyJI8jNOOC/8veWIPhJWToVpmEHC8
+         4eQEKF9l+d6WABgN45PnPhr+7JtgPObMO1cqSwN7gF2DSBYywJgLfGDWcIPu4AbOh++9
+         4nxBa8rY3S3bfaaJvpsPEC8aRqAdObt0fPdm6HgdRUJI2K9CnsKj6O0N4gAzfd0tOfbC
+         kJAv5Cj17LQcq6Z/VL0yAZpPZOh8nb0CE2lc5raTX2DGn+4DeJiwgRLPcySEv2/BLPpP
+         8TGA==
+X-Forwarded-Encrypted: i=1; AJvYcCXKq4p6J7OP7/TNy5gyMM873D7qyR+W7UZxKURsN/PK7e53L6L2wrJ1oBp0QMlvgbAGIb2SN+6g2A==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwF1oIJk/VkBB8tO1X00MEKyH/cjQ5OPC7vCG/kGk3JABohLog4
+	12lCyll3nPpyZMoGqTp6rrGDW6vYD0ICzhNdYi+qfv9pPVi2E4oWU7usukxY5Kku99S3Kz40Cyw
+	=
+X-Gm-Gg: ASbGnctRVRtlq82FFiMqXZ92C2P22+uP/7lNyKeL9+jYRSZofpiNRSnOyXAf9/Kj7LI
+	HGzv065nPiyHAXeeYnbK+itIpvhTqOLkL17/prTnyjMroHwzupslLn+2Whc3aOXlreJSOWAXlJK
+	C+2993Ohq+4TDVSN7Hqnp0ng6ZA6qP1E9/HScnMKgM/lCZQZd0JgTIbE/gT4B0T4SafOcBI34U/
+	aDUIh2XYfBBOig6hnMpginvka7ZHNgQTzjySarsDToKWLQff5wywN7yLBMGFWBNa8YEXDBQucwm
+	sw2vVsnvSBhruJSkjVAZ1EAC61JPWdkCbSffJpAuFaVAUwgmqnGk3RoBzqETplVC
+X-Google-Smtp-Source: AGHT+IFQyCCmTk5w1MoV+somoLERcOrpGo8lL2HFayqWLgHH5Imn3/GOjNna8e6kg5FpReH7HQUnQQ==
+X-Received: by 2002:a17:903:2342:b0:216:6901:d588 with SMTP id d9443c01a7336-2219ff565d8mr81388185ad.15.1740189099244;
+        Fri, 21 Feb 2025 17:51:39 -0800 (PST)
+Received: from localhost ([2a00:79e0:2e14:7:cfe4:a8ae:32fb:3c84])
+        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2213394d6c8sm89030505ad.181.2025.02.21.17.51.37
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Fri, 21 Feb 2025 17:51:38 -0800 (PST)
+Date: Fri, 21 Feb 2025 17:51:36 -0800
+From: Brian Norris <briannorris@chromium.org>
+To: Oliver Neukum <oneukum@suse.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Ajay Agarwal <ajayagarwal@google.com>,
+	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
+	"jic23@kernel.org" <jic23@kernel.org>,
+	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
+	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
+	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
+Subject: Re: PM runtime_error handling missing in many drivers?
+Message-ID: <Z7ktqHxIhp90jLxi@google.com>
+References: <4ca77763-53d0-965a-889e-be2eafadfd2f@intel.com>
+ <1937b65c-36c0-5475-c745-d7285d1a6e25@suse.com>
+ <CAJZ5v0j0mgOcfKXRzyx12EX8CYLzowXrM8DGCH9XvQGnRNv0iw@mail.gmail.com>
+ <5c37ee19-fe2c-fb22-63a2-638e3dab8f7a@suse.com>
+ <CAJZ5v0ijy4FG84xk_n8gxR_jS0xao246eVbnFj-dXzwz=8S9NQ@mail.gmail.com>
+ <Z6lzWfGbpa7jN1QD@google.com>
+ <Z6vNV8dDDPdWUKLS@google.com>
+ <CAJZ5v0i83eJWV_kvWxZvja+Js3tKbrwZ8rVVGn7vR=0qLf1mtw@mail.gmail.com>
+ <Z7ZYEp4oqPs12vsP@google.com>
+ <50de9721-2dd8-448b-8c11-50b3923450f6@suse.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Authority-Analysis: v=2.4 cv=N67TF39B c=1 sm=1 tr=0 ts=67b92229 cx=c_pps a=K4BcnWQioVPsTJd46EJO2w==:117 a=K4BcnWQioVPsTJd46EJO2w==:17 a=T2h4t0Lz3GQA:10 a=VwQbUJbxAAAA:8 a=UbtQlmD_4ytLos8nrPUA:9 a=zZCYzV9kfG8A:10
-X-Proofpoint-ORIG-GUID: xztup1q4mCWFVlMfifwdnYO1XlfN-GTu
-X-Proofpoint-GUID: xztup1q4mCWFVlMfifwdnYO1XlfN-GTu
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-21_09,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
- adultscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=585
- suspectscore=0 clxscore=1015 bulkscore=0 spamscore=0 priorityscore=1501
- mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
- adjust=0 reason=mlx scancount=1 engine=8.21.0-2502100000
- definitions=main-2502220005
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <50de9721-2dd8-448b-8c11-50b3923450f6@suse.com>
 
-On Fri, 21 Feb 2025 21:07:59 +0100, Rafael J. Wysocki" <rafael@kernel.org> wrote:
-> > syzbot reported a deadlock in lock_system_sleep. [1]
-> >
-> > The write operation to "/sys/module/hibernate/parameters/compressor"
-> > conflicts with the registration of ieee80211 device, resulting in a deadlock
-> > in the lock param_lock.
-> >
-> > Since the conflict cannot be avoided, the way to obtain param_lock is changed
-> > to trylock to avoid deadlock.
+Hi Oliver,
+
+On Thu, Feb 20, 2025 at 10:30:34AM +0100, Oliver Neukum wrote:
+> On 19.02.25 23:15, Brian Norris wrote:
+> > On Wed, Feb 12, 2025 at 08:29:34PM +0100, Rafael J. Wysocki wrote:
+> > > The reason why runtime_error is there is to prevent runtime PM
+> > > callbacks from being run until something is done about the error,
+> > > under the assumption that running them in that case may make the
+> > > problem worse.
+> > 
+> > What makes you think it will make the problem worse? That seems like a
+> > rather large assumption to me. What kind of things do you think go
+> > wrong, that it requires the framework to stop any future attempts? Just
+> > spam (e.g., logging noise, if -EIO is persistent)? Or something worse?e
 > 
-> An alternative way to avoid the deadlock would be to replace
-> lock_system_sleep() in hibernate_compressor_param_set() with
-> mutex_trylock(&system_transition_mutex) (and analogously for the
-> unlock operation).  Why have you not done that?
-Yes, you are right, I have confirmed that can work fine.
-I will send V2 patch for using mutex_trylock(&system_transition_mutex).
+> suspend() is three operations, potentially
+> 
+> a) record device state
+> b) arm remote wakeup
+> c) transition to a lower power state
+> 
+> I wouldn't trust a device to perform the first two steps
+> without error handling either. It is an unnecessary risk.
 
-BR,
-Lizhi
+I'm not sure I fully understand what you're saying. I'm not saying
+drivers shouldn't handle errors. I'm just saying I don't see why the
+framework should decide, "fail once and you're out."
+
+Do you think (a) or (b) will fail silently if retried after a failed
+operation? And what's the consequence?
+
+> > But anyway, I don't think I require asymmetry; I'm just more interested
+> > in unnecessary non-functionality. (Power inefficiency is less important,
+> > as in the worst case, we can at least save our data, reboot, and try
+> > again.)
+> 
+> You are calling for asymmetry ;-)
+
+Actually, you were the one who proposed asymmetry :) My concern is
+asymmetric, but the solution doesn't have to be. For example, we could
+remove runtime_error entirely, or else make it some kind of
+ratelimited/backoff state.
+
+Anyway, I appreciate that Rafael has helped improve the situation a bit
+([PATCH v1] PM: runtime: Unify error handling during suspend and
+resume). At least it gives us a tool to achieve what we want: ensure
+that retriable failures produce -EBUSY or -EAGAIN. I'll have to give it
+a whirl.
+
+But I'm still wary that there are corner cases where other errors may
+appear, and yet retrying is indeed the best option. And I'm not
+confident that foisting the burden back onto the driver ("just scatter
+pm_runtime_set_suspended() any time you might have fixed something") is
+a practical approach either.
+
+> If you fail to resume, you will need to return an error. The functions
+> are just not equal in terms of consequences. We don't resume for fun.
+> We do, however, suspend just because a timer fires.
+
+Agreed.
+
+Brian
 
