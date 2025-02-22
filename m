@@ -1,166 +1,189 @@
-Return-Path: <linux-pm+bounces-22709-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22710-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD886A40501
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 02:52:32 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 16209A40547
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 04:21:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6388219E3784
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 01:52:13 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90137707E59
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 03:20:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C2E5150980;
-	Sat, 22 Feb 2025 01:51:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B22A1FFC54;
+	Sat, 22 Feb 2025 03:20:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="ecvcVJv9"
+	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ugl/1YNX"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
+Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E153973451
-	for <linux-pm@vger.kernel.org>; Sat, 22 Feb 2025 01:51:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F3F7E765
+	for <linux-pm@vger.kernel.org>; Sat, 22 Feb 2025 03:20:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740189101; cv=none; b=urLw8MkAGYVtDkHsbaKXWLyyR3qNkGggUIV11wxcAozfzfauruJFzk76g4gU1Qe4g5IlrH2a/VAvx3J67vHh8eZeHgcbLvHJtQke7AFZJTC/yd5NwaCXxl8PqzR5iZcsbGYkL46HIWx1mU9y9BY3v29vBKtxyp24doycODPEZ9U=
+	t=1740194456; cv=none; b=mIqSBtuMK1kI7gU7JQZ8EK7qyaK9Fz4tP+ImtuQ219FPVYPW0XhEd4XCJ88msLH9s9pfwZy6WobG3VxGW6XauKnKthlTiTy1EId4K+JnAgHqQkUPcj+KCBzGcHwcrPswbi9MkR6/TTxI50rRcFQTSDzjOWW3RBmAf6e7UQZ3IPQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740189101; c=relaxed/simple;
-	bh=b/wCdmMliqE07gTjcVqKdmn4h1VhcVtYzWKk7Ib2gis=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ccEVbhW+w9z5N2/bs6l8xJlR2pPeL+Pf9NEZW1gbOTHJnGC6Ccq7DoiBsz+npKwX3CZRmw/IsCCNAPjyRMKL015LvtpylspzzyrpcByaWDgOBSWYMXK8f5zsI+v7hk1VfJ121ceu6vSgmB6bNFmvNULdkJPpjQWkUq341lNeUZw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=ecvcVJv9; arc=none smtp.client-ip=209.85.214.181
+	s=arc-20240116; t=1740194456; c=relaxed/simple;
+	bh=T8gjTPsyxGgKvQIHkS3roTDPyGqo8pES7juNDBDBGuw=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Lx2mPkg+9d1VTSJoT+ftsLtVFryE90QcTVdyrzRVBfJ3G11E5ebJi2+Rzt9ZHnepgkUo94kF3pCL+t99ARumHg6imM37fCWhslLTYDxRC7kzU48bIUhyFYzJDrE9EOXpPajK8mpEuVkys/WwaABjsLBr/IlwQ5nvVbOBov3oGLc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ugl/1YNX; arc=none smtp.client-ip=209.85.214.182
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-220d28c215eso43337745ad.1
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 17:51:39 -0800 (PST)
+Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-220c2a87378so48531545ad.1
+        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 19:20:54 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1740189099; x=1740793899; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=Bha+1AwEm87+wTDNDH+caF+yfplFmYnHclPIveYfWAQ=;
-        b=ecvcVJv9LVPT0YklwYr6vYCC/8JRmm8gLXgmNdPv2uo/mG71uEU+DbJ0p+Stga4iXB
-         tRmbZYIRuU1vIvplHdnzFeVcHIDN1IslEJfXuYgh58Me2vmHEnx87FO5H5SiYV02OdUV
-         SCg6N6F07ZU2TQspJvdAUZTLwPmTOEWRbqwow=
+        d=chromium.org; s=google; t=1740194454; x=1740799254; darn=vger.kernel.org;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=H3y6iz+44k4SeW4sw7BD8Qbz3uarJRE6aXetm/8ariw=;
+        b=Ugl/1YNX/+AkF/TPiXstXe8606+dfLcJYGXZqwJuQWOsSaw6bqV3RObPLFQc0jAk4J
+         vCFCIML9OtowY/PYBTVMhVVNzaR0+Zy4LP4/c90QaDFiK2odnhnUNfMFbUZlwnAD2n4R
+         1IO7ucr9/ND4hVpCZPT5yENi0aj+n5sreEoOk=
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740189099; x=1740793899;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Bha+1AwEm87+wTDNDH+caF+yfplFmYnHclPIveYfWAQ=;
-        b=g9tjHTr4JnPnsk5zcqfSkoBkJbuhJ2t2stbndfHUs+ZGdgUvG8nX4Z/zZorSYD4ITR
-         Rlrzf2kC/CpfahKemTDa2RqjRaWSFSZuc4rp8HMxyJI8jNOOC/8veWIPhJWToVpmEHC8
-         4eQEKF9l+d6WABgN45PnPhr+7JtgPObMO1cqSwN7gF2DSBYywJgLfGDWcIPu4AbOh++9
-         4nxBa8rY3S3bfaaJvpsPEC8aRqAdObt0fPdm6HgdRUJI2K9CnsKj6O0N4gAzfd0tOfbC
-         kJAv5Cj17LQcq6Z/VL0yAZpPZOh8nb0CE2lc5raTX2DGn+4DeJiwgRLPcySEv2/BLPpP
-         8TGA==
-X-Forwarded-Encrypted: i=1; AJvYcCXKq4p6J7OP7/TNy5gyMM873D7qyR+W7UZxKURsN/PK7e53L6L2wrJ1oBp0QMlvgbAGIb2SN+6g2A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwF1oIJk/VkBB8tO1X00MEKyH/cjQ5OPC7vCG/kGk3JABohLog4
-	12lCyll3nPpyZMoGqTp6rrGDW6vYD0ICzhNdYi+qfv9pPVi2E4oWU7usukxY5Kku99S3Kz40Cyw
-	=
-X-Gm-Gg: ASbGnctRVRtlq82FFiMqXZ92C2P22+uP/7lNyKeL9+jYRSZofpiNRSnOyXAf9/Kj7LI
-	HGzv065nPiyHAXeeYnbK+itIpvhTqOLkL17/prTnyjMroHwzupslLn+2Whc3aOXlreJSOWAXlJK
-	C+2993Ohq+4TDVSN7Hqnp0ng6ZA6qP1E9/HScnMKgM/lCZQZd0JgTIbE/gT4B0T4SafOcBI34U/
-	aDUIh2XYfBBOig6hnMpginvka7ZHNgQTzjySarsDToKWLQff5wywN7yLBMGFWBNa8YEXDBQucwm
-	sw2vVsnvSBhruJSkjVAZ1EAC61JPWdkCbSffJpAuFaVAUwgmqnGk3RoBzqETplVC
-X-Google-Smtp-Source: AGHT+IFQyCCmTk5w1MoV+somoLERcOrpGo8lL2HFayqWLgHH5Imn3/GOjNna8e6kg5FpReH7HQUnQQ==
-X-Received: by 2002:a17:903:2342:b0:216:6901:d588 with SMTP id d9443c01a7336-2219ff565d8mr81388185ad.15.1740189099244;
-        Fri, 21 Feb 2025 17:51:39 -0800 (PST)
-Received: from localhost ([2a00:79e0:2e14:7:cfe4:a8ae:32fb:3c84])
-        by smtp.gmail.com with UTF8SMTPSA id d9443c01a7336-2213394d6c8sm89030505ad.181.2025.02.21.17.51.37
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 21 Feb 2025 17:51:38 -0800 (PST)
-Date: Fri, 21 Feb 2025 17:51:36 -0800
-From: Brian Norris <briannorris@chromium.org>
-To: Oliver Neukum <oneukum@suse.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Ajay Agarwal <ajayagarwal@google.com>,
-	"Rafael J. Wysocki" <rafael.j.wysocki@intel.com>,
-	"jic23@kernel.org" <jic23@kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-iio@vger.kernel.org" <linux-iio@vger.kernel.org>
-Subject: Re: PM runtime_error handling missing in many drivers?
-Message-ID: <Z7ktqHxIhp90jLxi@google.com>
-References: <4ca77763-53d0-965a-889e-be2eafadfd2f@intel.com>
- <1937b65c-36c0-5475-c745-d7285d1a6e25@suse.com>
- <CAJZ5v0j0mgOcfKXRzyx12EX8CYLzowXrM8DGCH9XvQGnRNv0iw@mail.gmail.com>
- <5c37ee19-fe2c-fb22-63a2-638e3dab8f7a@suse.com>
- <CAJZ5v0ijy4FG84xk_n8gxR_jS0xao246eVbnFj-dXzwz=8S9NQ@mail.gmail.com>
- <Z6lzWfGbpa7jN1QD@google.com>
- <Z6vNV8dDDPdWUKLS@google.com>
- <CAJZ5v0i83eJWV_kvWxZvja+Js3tKbrwZ8rVVGn7vR=0qLf1mtw@mail.gmail.com>
- <Z7ZYEp4oqPs12vsP@google.com>
- <50de9721-2dd8-448b-8c11-50b3923450f6@suse.com>
+        d=1e100.net; s=20230601; t=1740194454; x=1740799254;
+        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
+         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=H3y6iz+44k4SeW4sw7BD8Qbz3uarJRE6aXetm/8ariw=;
+        b=QT81zCrHESOjJ3kl+BINhYYjD3ulK70H+TckxtuF0J//x3DgOb2lRMyxKwoIUx/rj0
+         dKzWCuJWpg4Yna4s+MM0fju9Y1oApy2ZyenvWavA0Ms+yh+OGTkwo3INfR/y+KqkARSk
+         MEKr0dryoluuIydP7IRUSab5Vt6RiaB4FWfd+U4mbchEC//TsR/lWvhWM/rNa2smhf3W
+         Uq2t2t58dffflY9ZS0NnjYaThLyAqyYtu1a0ilA58axjEYlE3UQRZFbL30tHSeiE12vz
+         0gtrIvopJVI7v8HU72E2kfUEukIy9SFHKuAIV9AA0bBxh9l1fMppR6OVQq9oBW6c0+ZG
+         a2zw==
+X-Forwarded-Encrypted: i=1; AJvYcCUrReGsyVjgYQ3uZYMhACIDUC3lXXA2Yy6juVG2ffHgm71z51BTPpUJT5ysKzwvWTSH77BUiyydSg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzDQUCB6AxWodaazVEJizFcJqvEfpTXDvw/goxUZNqCpRtBqinY
+	+cYQFOkL84EWcTAPy8OhdWpuLCj/ZrpshUmiS/7oZdQP66eljwNCf/1ZfDBcHw==
+X-Gm-Gg: ASbGncv+DtDPwQwmk2Kgs0caPA1lTAN5sB55VFqee2WAanqCfcAfmFzJ2zoxf8rYWki
+	4AsPXCK8bIcNexR7CHRxrOISkFDGKCFjo/PI45qRahcQbBYHXj4RneVG42crwkGDmS39OhrpKnB
+	1a5TfDNMfztwX0jGfxbr0keWZHe8Jb6s3yP46bBxvIUkAHkvNBxq2Jqv0pU66FN/Fer3opI2l/A
+	k/QulOI99KBAcKHjIAvx/MJdRNAhS1RP6nXQPCAyFsKewG9XRCc3ujFbc+qMyR09DQuVcwjR+nl
+	8seUWPlf69tN9BeExjP1J/wqYjI0Mac/awC5Nwn4g0Llmw==
+X-Google-Smtp-Source: AGHT+IFEtqensgVKo94kHd4rZCSCPkU/vwwbllBt8OusMBGYurpSquv8U+hoAavoP2RCD31qoy/6dQ==
+X-Received: by 2002:a17:902:db0a:b0:220:fb23:48dd with SMTP id d9443c01a7336-221a11bc739mr72747905ad.50.1740194453887;
+        Fri, 21 Feb 2025 19:20:53 -0800 (PST)
+Received: from giver-p620.tpe.corp.google.com ([2401:fa00:1:10:c868:d428:c08b:ac8a])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d5349210sm144182635ad.11.2025.02.21.19.20.51
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 21 Feb 2025 19:20:53 -0800 (PST)
+From: Yu-Che Cheng <giver@chromium.org>
+Date: Sat, 22 Feb 2025 11:20:34 +0800
+Subject: [PATCH v2] thermal: gov_power_allocator: Update total_weight on
+ bind and cdev updates
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <50de9721-2dd8-448b-8c11-50b3923450f6@suse.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+Message-Id: <20250222-fix-power-allocator-weight-v2-1-a94de86b685a@chromium.org>
+X-B4-Tracking: v=1; b=H4sIAIFCuWcC/32NQQ6CMBBFr2Jm7RjagFhX3sOwKGWkkwAlUwQN4
+ e5WErcu38/L+ytEEqYI18MKQjNHDkMCfTyA83ZoCblJDDrTRabVBR/8wjEsJGi7Ljg7BcGFuPU
+ TFo115yavi9KUkAKjULL3+L1K7Dkm+71/zeq7/rLmX3ZWqLA0tbLGkMmpvjkvoednfwrSQrVt2
+ wfV918UxwAAAA==
+X-Change-ID: 20250218-fix-power-allocator-weight-5dac6d4b5797
+To: Lukasz Luba <lukasz.luba@arm.com>, 
+ "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>
+Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ Chen-Yu Tsai <wenst@chromium.org>, Yu-Che Cheng <giver@chromium.org>
+X-Mailer: b4 0.15-dev-42535
 
-Hi Oliver,
+params->total_weight is not initialized during bind and not updated when
+the bound cdev changes. The cooling device weight will not be used due
+to the uninitialized total_weight, until we trigger an update via sysfs.
 
-On Thu, Feb 20, 2025 at 10:30:34AM +0100, Oliver Neukum wrote:
-> On 19.02.25 23:15, Brian Norris wrote:
-> > On Wed, Feb 12, 2025 at 08:29:34PM +0100, Rafael J. Wysocki wrote:
-> > > The reason why runtime_error is there is to prevent runtime PM
-> > > callbacks from being run until something is done about the error,
-> > > under the assumption that running them in that case may make the
-> > > problem worse.
-> > 
-> > What makes you think it will make the problem worse? That seems like a
-> > rather large assumption to me. What kind of things do you think go
-> > wrong, that it requires the framework to stop any future attempts? Just
-> > spam (e.g., logging noise, if -EIO is persistent)? Or something worse?e
-> 
-> suspend() is three operations, potentially
-> 
-> a) record device state
-> b) arm remote wakeup
-> c) transition to a lower power state
-> 
-> I wouldn't trust a device to perform the first two steps
-> without error handling either. It is an unnecessary risk.
+The bound cdev update will be triggered during thermal zone registration,
+where each cooling device will be bound to the thermal zone one by one.
 
-I'm not sure I fully understand what you're saying. I'm not saying
-drivers shouldn't handle errors. I'm just saying I don't see why the
-framework should decide, "fail once and you're out."
+The power_allocator_bind can be called without additional cdev update
+when manually changing the policy of a thermal zone via sysfs.
 
-Do you think (a) or (b) will fail silently if retried after a failed
-operation? And what's the consequence?
+Add a new function to handle weight update logic, including updating
+total_weight, and call it when bind, weight changes, and cdev updates to
+ensure total_weight is always correct.
 
-> > But anyway, I don't think I require asymmetry; I'm just more interested
-> > in unnecessary non-functionality. (Power inefficiency is less important,
-> > as in the worst case, we can at least save our data, reboot, and try
-> > again.)
-> 
-> You are calling for asymmetry ;-)
+Fixes: a3cd6db4cc2e ("thermal: gov_power_allocator: Support new update callback of weights")
+Signed-off-by: Yu-Che Cheng <giver@chromium.org>
+---
+Changes in v2:
+- Move the total_weight update to a new function for clarity.
+- Found v1 may cause crash when there are thermal zones without any
+  active or passive trip points.
+  Check trip_max before accessing its trip_desc. 
+- Link to v1: https://lore.kernel.org/r/20250219-fix-power-allocator-weight-v1-1-79b1a99e94eb@chromium.org
+---
+ drivers/thermal/gov_power_allocator.c | 30 ++++++++++++++++++++++--------
+ 1 file changed, 22 insertions(+), 8 deletions(-)
 
-Actually, you were the one who proposed asymmetry :) My concern is
-asymmetric, but the solution doesn't have to be. For example, we could
-remove runtime_error entirely, or else make it some kind of
-ratelimited/backoff state.
+diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
+index 3b644de3292e..126452fb470e 100644
+--- a/drivers/thermal/gov_power_allocator.c
++++ b/drivers/thermal/gov_power_allocator.c
+@@ -641,6 +641,22 @@ static int allocate_actors_buffer(struct power_allocator_params *params,
+ 	return ret;
+ }
+ 
++static void power_allocator_update_weight(struct power_allocator_params *params)
++{
++	const struct thermal_trip_desc *td;
++	struct thermal_instance *instance;
++
++	if (!params->trip_max)
++		return;
++
++	td = trip_to_trip_desc(params->trip_max);
++
++	params->total_weight = 0;
++	list_for_each_entry(instance, &td->thermal_instances, trip_node)
++		if (power_actor_is_valid(instance))
++			params->total_weight += instance->weight;
++}
++
+ static void power_allocator_update_tz(struct thermal_zone_device *tz,
+ 				      enum thermal_notify_event reason)
+ {
+@@ -656,16 +672,12 @@ static void power_allocator_update_tz(struct thermal_zone_device *tz,
+ 			if (power_actor_is_valid(instance))
+ 				num_actors++;
+ 
+-		if (num_actors == params->num_actors)
+-			return;
++		if (num_actors != params->num_actors)
++			allocate_actors_buffer(params, num_actors);
+ 
+-		allocate_actors_buffer(params, num_actors);
+-		break;
++		fallthrough;
+ 	case THERMAL_INSTANCE_WEIGHT_CHANGED:
+-		params->total_weight = 0;
+-		list_for_each_entry(instance, &td->thermal_instances, trip_node)
+-			if (power_actor_is_valid(instance))
+-				params->total_weight += instance->weight;
++		power_allocator_update_weight(params);
+ 		break;
+ 	default:
+ 		break;
+@@ -731,6 +743,8 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
+ 
+ 	tz->governor_data = params;
+ 
++	power_allocator_update_weight(params);
++
+ 	return 0;
+ 
+ free_params:
 
-Anyway, I appreciate that Rafael has helped improve the situation a bit
-([PATCH v1] PM: runtime: Unify error handling during suspend and
-resume). At least it gives us a tool to achieve what we want: ensure
-that retriable failures produce -EBUSY or -EAGAIN. I'll have to give it
-a whirl.
+---
+base-commit: 2408a807bfc3f738850ef5ad5e3fd59d66168996
+change-id: 20250218-fix-power-allocator-weight-5dac6d4b5797
 
-But I'm still wary that there are corner cases where other errors may
-appear, and yet retrying is indeed the best option. And I'm not
-confident that foisting the burden back onto the driver ("just scatter
-pm_runtime_set_suspended() any time you might have fixed something") is
-a practical approach either.
+Best regards,
+-- 
+Yu-Che Cheng <giver@chromium.org>
 
-> If you fail to resume, you will need to return an error. The functions
-> are just not equal in terms of consequences. We don't resume for fun.
-> We do, however, suspend just because a timer fires.
-
-Agreed.
-
-Brian
 
