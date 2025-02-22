@@ -1,189 +1,175 @@
-Return-Path: <linux-pm+bounces-22710-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22711-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 16209A40547
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 04:21:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 678B6A40558
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 04:37:50 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 90137707E59
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 03:20:49 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BEE642555D
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 03:37:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B22A1FFC54;
-	Sat, 22 Feb 2025 03:20:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5B411F9F70;
+	Sat, 22 Feb 2025 03:37:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b="Ugl/1YNX"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="F5YaHt1R"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f182.google.com (mail-pl1-f182.google.com [209.85.214.182])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2063.outbound.protection.outlook.com [40.107.94.63])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A2F3F7E765
-	for <linux-pm@vger.kernel.org>; Sat, 22 Feb 2025 03:20:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.182
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740194456; cv=none; b=mIqSBtuMK1kI7gU7JQZ8EK7qyaK9Fz4tP+ImtuQ219FPVYPW0XhEd4XCJ88msLH9s9pfwZy6WobG3VxGW6XauKnKthlTiTy1EId4K+JnAgHqQkUPcj+KCBzGcHwcrPswbi9MkR6/TTxI50rRcFQTSDzjOWW3RBmAf6e7UQZ3IPQ=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740194456; c=relaxed/simple;
-	bh=T8gjTPsyxGgKvQIHkS3roTDPyGqo8pES7juNDBDBGuw=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=Lx2mPkg+9d1VTSJoT+ftsLtVFryE90QcTVdyrzRVBfJ3G11E5ebJi2+Rzt9ZHnepgkUo94kF3pCL+t99ARumHg6imM37fCWhslLTYDxRC7kzU48bIUhyFYzJDrE9EOXpPajK8mpEuVkys/WwaABjsLBr/IlwQ5nvVbOBov3oGLc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org; spf=pass smtp.mailfrom=chromium.org; dkim=pass (1024-bit key) header.d=chromium.org header.i=@chromium.org header.b=Ugl/1YNX; arc=none smtp.client-ip=209.85.214.182
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=chromium.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=chromium.org
-Received: by mail-pl1-f182.google.com with SMTP id d9443c01a7336-220c2a87378so48531545ad.1
-        for <linux-pm@vger.kernel.org>; Fri, 21 Feb 2025 19:20:54 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=chromium.org; s=google; t=1740194454; x=1740799254; darn=vger.kernel.org;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=H3y6iz+44k4SeW4sw7BD8Qbz3uarJRE6aXetm/8ariw=;
-        b=Ugl/1YNX/+AkF/TPiXstXe8606+dfLcJYGXZqwJuQWOsSaw6bqV3RObPLFQc0jAk4J
-         vCFCIML9OtowY/PYBTVMhVVNzaR0+Zy4LP4/c90QaDFiK2odnhnUNfMFbUZlwnAD2n4R
-         1IO7ucr9/ND4hVpCZPT5yENi0aj+n5sreEoOk=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740194454; x=1740799254;
-        h=cc:to:message-id:content-transfer-encoding:mime-version:subject
-         :date:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=H3y6iz+44k4SeW4sw7BD8Qbz3uarJRE6aXetm/8ariw=;
-        b=QT81zCrHESOjJ3kl+BINhYYjD3ulK70H+TckxtuF0J//x3DgOb2lRMyxKwoIUx/rj0
-         dKzWCuJWpg4Yna4s+MM0fju9Y1oApy2ZyenvWavA0Ms+yh+OGTkwo3INfR/y+KqkARSk
-         MEKr0dryoluuIydP7IRUSab5Vt6RiaB4FWfd+U4mbchEC//TsR/lWvhWM/rNa2smhf3W
-         Uq2t2t58dffflY9ZS0NnjYaThLyAqyYtu1a0ilA58axjEYlE3UQRZFbL30tHSeiE12vz
-         0gtrIvopJVI7v8HU72E2kfUEukIy9SFHKuAIV9AA0bBxh9l1fMppR6OVQq9oBW6c0+ZG
-         a2zw==
-X-Forwarded-Encrypted: i=1; AJvYcCUrReGsyVjgYQ3uZYMhACIDUC3lXXA2Yy6juVG2ffHgm71z51BTPpUJT5ysKzwvWTSH77BUiyydSg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzDQUCB6AxWodaazVEJizFcJqvEfpTXDvw/goxUZNqCpRtBqinY
-	+cYQFOkL84EWcTAPy8OhdWpuLCj/ZrpshUmiS/7oZdQP66eljwNCf/1ZfDBcHw==
-X-Gm-Gg: ASbGncv+DtDPwQwmk2Kgs0caPA1lTAN5sB55VFqee2WAanqCfcAfmFzJ2zoxf8rYWki
-	4AsPXCK8bIcNexR7CHRxrOISkFDGKCFjo/PI45qRahcQbBYHXj4RneVG42crwkGDmS39OhrpKnB
-	1a5TfDNMfztwX0jGfxbr0keWZHe8Jb6s3yP46bBxvIUkAHkvNBxq2Jqv0pU66FN/Fer3opI2l/A
-	k/QulOI99KBAcKHjIAvx/MJdRNAhS1RP6nXQPCAyFsKewG9XRCc3ujFbc+qMyR09DQuVcwjR+nl
-	8seUWPlf69tN9BeExjP1J/wqYjI0Mac/awC5Nwn4g0Llmw==
-X-Google-Smtp-Source: AGHT+IFEtqensgVKo94kHd4rZCSCPkU/vwwbllBt8OusMBGYurpSquv8U+hoAavoP2RCD31qoy/6dQ==
-X-Received: by 2002:a17:902:db0a:b0:220:fb23:48dd with SMTP id d9443c01a7336-221a11bc739mr72747905ad.50.1740194453887;
-        Fri, 21 Feb 2025 19:20:53 -0800 (PST)
-Received: from giver-p620.tpe.corp.google.com ([2401:fa00:1:10:c868:d428:c08b:ac8a])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-220d5349210sm144182635ad.11.2025.02.21.19.20.51
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 21 Feb 2025 19:20:53 -0800 (PST)
-From: Yu-Che Cheng <giver@chromium.org>
-Date: Sat, 22 Feb 2025 11:20:34 +0800
-Subject: [PATCH v2] thermal: gov_power_allocator: Update total_weight on
- bind and cdev updates
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED6E4A05;
+	Sat, 22 Feb 2025 03:37:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.63
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740195466; cv=fail; b=WZbx6GzKunqlLQsYvTx/WMjHUE9NlNV9/KAcvYTAqT6o8bBjoKsc19A/teIeyiaZ3/CSl6ajh6S0Iog2ajfZ8QiE41hdOHUTtGgOeBQDKuhZb20ZKyuwfX9O7m+7B1oEl/1oWWbeNZrxo0/I1ry1S8Gg2O2sFnRSpB+UYZYI/TU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740195466; c=relaxed/simple;
+	bh=WLzlddcUJ/m2BPLR+U+EvqKKuzIrjimzp6Ubn/B14Rs=;
+	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Mdf4Iovd5MuJ/9wcShxwXGUjbOY5FTYHD1OfJYfdc0pOeEUBwZAKMH/MLe1Y93f1MpA5y+8t1Xr65Z+mu1D7X3wXMGxdtch0YgvULt5k/Ppeswgj2OFWRI4khQLvwjSCFm1SJ/YenJidhcqWeWPPZ1Ji13OSwoi3Hv7BlXlg24Y=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=F5YaHt1R; arc=fail smtp.client-ip=40.107.94.63
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=e4RMe7Mk0ehPV8FEgd99keEW686B/hIwZHfNEkTF5MaVd0UaGpkTjKx7nxHUt71nUQ4d6ApVKwM1wxcOXQhX7NyDLQJg93zpM1/PFhkit28ERa6KBjG/2vafL8f5veJxdcOPVK3P3SjqTVR0HpNfVbXoybezYwLNnvu9LPrDddlt0nAjS0dncgveZ/r+9VkwUyKm4F//VPCj+3fnbEKBQ78A4bK4i/xXhaq0xHLACG0w5+HzDTT/ptiPWCXhXDnN6m2K0O7F+I7CgTnz7A8LQ+l3D2UgpoFJMsfPc47RrOM5m1hRIc0TNL9Ht4e7PveJ2rC4LN/xmeQt/7/q4Ddzbg==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=Me55RN6joNUwpVb+2Q55/QbRjbHgBUxjvuwydlLc7aQ=;
+ b=KuXb9EY8i1qFoDN8/75VRI1/mjc5lWZJntMHgTB2tE7/vvKnFmJo7GL16NM+NAVuZL2tnf0hbt4qQlF2iHhaaflCNU+4XmQ5spR+qJbknr2Lo5YXlZeOoXKBbKUCUmDg7Mai9CC/lFOQVKVZvVAtwplU09iRzS+b0O4pRkjfOBYr7c1DzWWTM3bctOymg2KQS2cRMRTaP4zyhCRXSbgiboH1WuAyp9Pop6d2/ai12sA64AJkOcexaBx3G23+zIdu1w9uKuhxW5yhRYVO/8RllxZNxBSr6dcWEpzjDNqZXbOwTCKU7t4V2gfI47XtSZcgNkXYKpWh/Ja6hjU+gOPMSA==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
+ 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
+ (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
+ dkim=none (message not signed); arc=none (0)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=Me55RN6joNUwpVb+2Q55/QbRjbHgBUxjvuwydlLc7aQ=;
+ b=F5YaHt1RpjjOatCzNrPAk5gqgGTtdFDtl5YJmqsSuZPzRdY35ZN9ttznnvRnhAmTNvZ7HhklgLjVfawETx5RiGfR1t5qINqkivC8b1XVplTQdsrgMrT8mbpuQmw3waljLJH9yBB3j7cZgEZFzvkANABgwHez1kFSrVeGhmLbRVg=
+Received: from CH2PR18CA0053.namprd18.prod.outlook.com (2603:10b6:610:55::33)
+ by SJ2PR12MB8943.namprd12.prod.outlook.com (2603:10b6:a03:547::17) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.17; Sat, 22 Feb
+ 2025 03:37:40 +0000
+Received: from CH1PEPF0000AD7F.namprd04.prod.outlook.com
+ (2603:10b6:610:55:cafe::30) by CH2PR18CA0053.outlook.office365.com
+ (2603:10b6:610:55::33) with Microsoft SMTP Server (version=TLS1_3,
+ cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.16 via Frontend Transport; Sat,
+ 22 Feb 2025 03:37:39 +0000
+X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
+ smtp.mailfrom=amd.com; dkim=none (message not signed)
+ header.d=none;dmarc=pass action=none header.from=amd.com;
+Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
+ 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
+ client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
+Received: from SATLEXMB04.amd.com (165.204.84.17) by
+ CH1PEPF0000AD7F.mail.protection.outlook.com (10.167.244.88) with Microsoft
+ SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.20.8466.11 via Frontend Transport; Sat, 22 Feb 2025 03:37:39 +0000
+Received: from shatadru.amd.com (10.180.168.240) by SATLEXMB04.amd.com
+ (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 21 Feb
+ 2025 21:36:16 -0600
+From: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
+To: <gautham.shenoy@amd.com>, <mario.limonciello@amd.com>,
+	<perry.yuan@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
+CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Dhananjay
+ Ugwekar" <dhananjay.ugwekar@amd.com>
+Subject: [PATCH] cpufreq/amd-pstate: Fix the clamping of perf values
+Date: Sat, 22 Feb 2025 03:32:22 +0000
+Message-ID: <20250222033221.554976-1-dhananjay.ugwekar@amd.com>
+X-Mailer: git-send-email 2.34.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250222-fix-power-allocator-weight-v2-1-a94de86b685a@chromium.org>
-X-B4-Tracking: v=1; b=H4sIAIFCuWcC/32NQQ6CMBBFr2Jm7RjagFhX3sOwKGWkkwAlUwQN4
- e5WErcu38/L+ytEEqYI18MKQjNHDkMCfTyA83ZoCblJDDrTRabVBR/8wjEsJGi7Ljg7BcGFuPU
- TFo115yavi9KUkAKjULL3+L1K7Dkm+71/zeq7/rLmX3ZWqLA0tbLGkMmpvjkvoednfwrSQrVt2
- wfV918UxwAAAA==
-X-Change-ID: 20250218-fix-power-allocator-weight-5dac6d4b5797
-To: Lukasz Luba <lukasz.luba@arm.com>, 
- "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>
-Cc: "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, 
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
- Chen-Yu Tsai <wenst@chromium.org>, Yu-Che Cheng <giver@chromium.org>
-X-Mailer: b4 0.15-dev-42535
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
+ (10.181.40.145)
+X-EOPAttributedMessage: 0
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7F:EE_|SJ2PR12MB8943:EE_
+X-MS-Office365-Filtering-Correlation-Id: 46215292-df30-425b-e417-08dd52f241b6
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam:
+	BCL:0;ARA:13230040|376014|1800799024|36860700013|82310400026;
+X-Microsoft-Antispam-Message-Info:
+	=?us-ascii?Q?8JmvdUOHAjxCM0fwoEKC5ZO2Bb1qJbVsicUspnK/RKqy60a63DsnqodR59GT?=
+ =?us-ascii?Q?FAabEqT0FIB3OYDJdG9eW8IZeQZOssiq26E1e9WLl44Ukbpa/gkobcbdtjMw?=
+ =?us-ascii?Q?mc15Z/DjUev+PrdjurPhHXegu9JSJmITDdGIiZWK/0ipoofoV9NLHC3hamQu?=
+ =?us-ascii?Q?x1k0VERVTIOJZHqsekH9FToufqNMbknpZUccIXVw5oIW6RQiD7h8EfwpsiMj?=
+ =?us-ascii?Q?K037StWtUZtMtxqrXLixssxDmen7vkBWzz0gFMZErNeqkrllV1EcUqelM6/Y?=
+ =?us-ascii?Q?1LxouLv6va+GMWlerJe0+rwUuOOZ+8s5wyt8xUOg5uDgWSEaOXQjjtzyKCR6?=
+ =?us-ascii?Q?3reqq7S2i7o7zUKOHb5CL3QiwLrKO/k7abDiBQ8KtiwjntwyRpxzrN2Cdu69?=
+ =?us-ascii?Q?BXPaWYFHtVQj4eIHTGm+xPCo5/S4aDzveJJVs2rRevAi5AEV7ps+lJafjq9K?=
+ =?us-ascii?Q?gNOKpSiZdNBSHQwhs4DiqtdlOQY+O2UhmBo8TadyRI2Z6EmuGIOAUbdFZ6Mt?=
+ =?us-ascii?Q?f/1CJNh1AFRw8/eOZh0ZFlcrSQkpwvaYeSnJoEkQrNKhev04ggM3J6eOSqyc?=
+ =?us-ascii?Q?+oHzA+cw0ZcJR/f0oluyBA7vA+5jxbuXPKZHEUupY0TyVflFb7H/drd+uQo3?=
+ =?us-ascii?Q?9+m7/gW5mCAPm6IFMPFHOJUQKxCzmBSrQQalVzPr/EzzdwOPwlclvhlKRl8v?=
+ =?us-ascii?Q?YKWIydLsdaZ7WtJBCIAS64vUMj2fGzYmFKsgJkxYnwaZfFMyxE1xH8PYsdj+?=
+ =?us-ascii?Q?+0g+QlH9YIxEKNePgcqsMLn9HcBmQQcU8l/GbcEyu2+bCaf9B5DoDsKWp0Z8?=
+ =?us-ascii?Q?xqbGXPy4nR6q5wgnX+igR4FR/4qidM4vqeJXak5i5Q8cXVv/KM5wrBSR3RZL?=
+ =?us-ascii?Q?B346r9nnB+Y+TfAKPvw244EwCtP/K4Z2Px8LwnUtRNYS4k6BFETYtpGgCLZX?=
+ =?us-ascii?Q?Uho1QnHX/mnYXMwjUq3fY3DzIG4Ohd0y/V0SqmaVVxTZ226is7EUT0r/L4VL?=
+ =?us-ascii?Q?ecmc6rqIbxyNsy+r4Z05byZEU/AhchP3bbcOpeWOpp4svOBujawfHRRPVRmp?=
+ =?us-ascii?Q?le5MrAhnihkize2bBWAZAP5Eiyim8C9GpDNx4sSxkznBPNK0MUozvHVHWWIV?=
+ =?us-ascii?Q?xRHMZ40wEK1YZSovnKIrhJ6PpcDvtATeB1yTippeeJIFqZn6jt4ZcCGIys15?=
+ =?us-ascii?Q?wrlDnIdwAiamN+ytWMFhPWAuy2JmsBD9PU+zcki82PEf5dVK151h6pIAziFq?=
+ =?us-ascii?Q?mdyYYtDJlFzPt94QBJP+sIRWddKuJ+ObbIKlcm4IU2Q29VRr29t+2veUA9j7?=
+ =?us-ascii?Q?wTkZweTH3HPwP7O/5gCtRC7b3k2gJQtpWO5QK3Cd5cSQ4HsblNBzUbkDEgS3?=
+ =?us-ascii?Q?u/0DgijBgKCqLQTXFg8QQsNAJK3fGvLY0uXA+gQSLvMSZ2bHutJN4E/sD5ga?=
+ =?us-ascii?Q?WRA7sga7wq/GKzY3T2tt6axejlVAz94FPf4D06onMq/CWIZrft4WG1MgI1Hb?=
+ =?us-ascii?Q?IkrfU4GwA3rZq0k=3D?=
+X-Forefront-Antispam-Report:
+	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2025 03:37:39.3921
+ (UTC)
+X-MS-Exchange-CrossTenant-Network-Message-Id: 46215292-df30-425b-e417-08dd52f241b6
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
+X-MS-Exchange-CrossTenant-AuthSource:
+	CH1PEPF0000AD7F.namprd04.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Anonymous
+X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8943
 
-params->total_weight is not initialized during bind and not updated when
-the bound cdev changes. The cooling device weight will not be used due
-to the uninitialized total_weight, until we trigger an update via sysfs.
+The clamping in freq_to_perf() is broken right now, as we first typecast
+(read wraparound) the overflowing value into a u8 and then clamp it down.
+So, use a u32 to store the >255 value in certain edge cases and then clamp
+it down into a u8.
 
-The bound cdev update will be triggered during thermal zone registration,
-where each cooling device will be bound to the thermal zone one by one.
+Also, use a "explicit typecast + clamp" instead of just a "clamp_t" as the
+latter typecasts first and then clamps between the limits, which defeats
+our purpose.
 
-The power_allocator_bind can be called without additional cdev update
-when manually changing the policy of a thermal zone via sysfs.
-
-Add a new function to handle weight update logic, including updating
-total_weight, and call it when bind, weight changes, and cdev updates to
-ensure total_weight is always correct.
-
-Fixes: a3cd6db4cc2e ("thermal: gov_power_allocator: Support new update callback of weights")
-Signed-off-by: Yu-Che Cheng <giver@chromium.org>
+Fixes: 305621eb6a8b ("cpufreq/amd-pstate: Modularize perf<->freq conversion")
+Signed-off-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
 ---
-Changes in v2:
-- Move the total_weight update to a new function for clarity.
-- Found v1 may cause crash when there are thermal zones without any
-  active or passive trip points.
-  Check trip_max before accessing its trip_desc. 
-- Link to v1: https://lore.kernel.org/r/20250219-fix-power-allocator-weight-v1-1-79b1a99e94eb@chromium.org
----
- drivers/thermal/gov_power_allocator.c | 30 ++++++++++++++++++++++--------
- 1 file changed, 22 insertions(+), 8 deletions(-)
+ drivers/cpufreq/amd-pstate.c | 4 ++--
+ 1 file changed, 2 insertions(+), 2 deletions(-)
 
-diff --git a/drivers/thermal/gov_power_allocator.c b/drivers/thermal/gov_power_allocator.c
-index 3b644de3292e..126452fb470e 100644
---- a/drivers/thermal/gov_power_allocator.c
-+++ b/drivers/thermal/gov_power_allocator.c
-@@ -641,6 +641,22 @@ static int allocate_actors_buffer(struct power_allocator_params *params,
- 	return ret;
+diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
+index 9ab95ec1f828..4705a644db6d 100644
+--- a/drivers/cpufreq/amd-pstate.c
++++ b/drivers/cpufreq/amd-pstate.c
+@@ -144,10 +144,10 @@ static struct quirk_entry quirk_amd_7k62 = {
+ 
+ static inline u8 freq_to_perf(struct amd_cpudata *cpudata, unsigned int freq_val)
+ {
+-	u8 perf_val = DIV_ROUND_UP_ULL((u64)freq_val * cpudata->nominal_perf,
++	u32 perf_val = DIV_ROUND_UP_ULL((u64)freq_val * cpudata->nominal_perf,
+ 					cpudata->nominal_freq);
+ 
+-	return clamp_t(u8, perf_val, cpudata->lowest_perf, cpudata->highest_perf);
++	return (u8)clamp(perf_val, cpudata->lowest_perf, cpudata->highest_perf);
  }
  
-+static void power_allocator_update_weight(struct power_allocator_params *params)
-+{
-+	const struct thermal_trip_desc *td;
-+	struct thermal_instance *instance;
-+
-+	if (!params->trip_max)
-+		return;
-+
-+	td = trip_to_trip_desc(params->trip_max);
-+
-+	params->total_weight = 0;
-+	list_for_each_entry(instance, &td->thermal_instances, trip_node)
-+		if (power_actor_is_valid(instance))
-+			params->total_weight += instance->weight;
-+}
-+
- static void power_allocator_update_tz(struct thermal_zone_device *tz,
- 				      enum thermal_notify_event reason)
- {
-@@ -656,16 +672,12 @@ static void power_allocator_update_tz(struct thermal_zone_device *tz,
- 			if (power_actor_is_valid(instance))
- 				num_actors++;
- 
--		if (num_actors == params->num_actors)
--			return;
-+		if (num_actors != params->num_actors)
-+			allocate_actors_buffer(params, num_actors);
- 
--		allocate_actors_buffer(params, num_actors);
--		break;
-+		fallthrough;
- 	case THERMAL_INSTANCE_WEIGHT_CHANGED:
--		params->total_weight = 0;
--		list_for_each_entry(instance, &td->thermal_instances, trip_node)
--			if (power_actor_is_valid(instance))
--				params->total_weight += instance->weight;
-+		power_allocator_update_weight(params);
- 		break;
- 	default:
- 		break;
-@@ -731,6 +743,8 @@ static int power_allocator_bind(struct thermal_zone_device *tz)
- 
- 	tz->governor_data = params;
- 
-+	power_allocator_update_weight(params);
-+
- 	return 0;
- 
- free_params:
-
----
-base-commit: 2408a807bfc3f738850ef5ad5e3fd59d66168996
-change-id: 20250218-fix-power-allocator-weight-5dac6d4b5797
-
-Best regards,
+ static inline u32 perf_to_freq(struct amd_cpudata *cpudata, u8 perf_val)
 -- 
-Yu-Che Cheng <giver@chromium.org>
+2.34.1
 
 
