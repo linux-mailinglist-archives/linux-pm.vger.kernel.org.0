@@ -1,91 +1,99 @@
-Return-Path: <linux-pm+bounces-22707-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22708-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B59BFA403A3
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 00:44:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 02C5AA4047D
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 02:02:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8D053167A82
-	for <lists+linux-pm@lfdr.de>; Fri, 21 Feb 2025 23:44:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BE6903B2F0D
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 01:02:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 516A8253F15;
-	Fri, 21 Feb 2025 23:44:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="G2gZlZNJ"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5DDEB17578;
+	Sat, 22 Feb 2025 01:02:42 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24553253F06;
-	Fri, 21 Feb 2025 23:44:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B99754414;
+	Sat, 22 Feb 2025 01:02:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740181455; cv=none; b=cPKCPudgQt01iC0nEtj9K+moQottndGtLwBN5y31DAOdHiwr2Ax2NH7PapaAQ5SExmazKCX0TCilQmmq/TXb99aE7iCMxbChuKA7cDzVa8+Pyc7zVMArYRQzulCqHhh4THAQoA5tSR6NkP+EAJMgl0OgOx7Bzskvvmt33bXviZM=
+	t=1740186162; cv=none; b=Ysh0dTDe6kzS+36JSztI/qEqkQJOLohHH8mGxnUY5io4weYiN9OYrA9DtblvJJPUOphKwFmvgSMvH/hVRVTjNkMtc+cuJy6TELxFQO4kOYO/MX6sFAMXamCageHUyQh835wup2f9aFwcac6UuuBEuFjENvRwmQhRBmfCFxzSnGg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740181455; c=relaxed/simple;
-	bh=LPuDk+6EvEIOleZ6HMXz7Q2USX7ef9j+avusUpmJAsQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OTpGLomSYcXPdJJpQeSrQjvRyOSR0LNp/JYJdIcxsZtIqDrTZtOZcuIM5z6CHBl/ufICOcqD9xQ/VNJyTm4d/uht4qbhVnO6sMedc3bH3BEDoa34j7CUuVUfEr2awnmIRxXuRVxpl4G5QhaphbwaBWNoaGikTfOi+yH3VD2Rnkc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=G2gZlZNJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7310CC4CED6;
-	Fri, 21 Feb 2025 23:44:14 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740181454;
-	bh=LPuDk+6EvEIOleZ6HMXz7Q2USX7ef9j+avusUpmJAsQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=G2gZlZNJ4nhnlglQR2Ul7LtTjncW3SSm33huoq+mJ6vI1LF+w3HUJDumaw0NGpT/J
-	 3oi6hEO+LClIxqCIMNUIRHy3fFfvGd1/vDTSey+O4d0QCqMyNrn7GZiPN+piVN9jEa
-	 hE0t6mSe49fbNVKQFbkany8o+WWZGT/FO8dgW+fGYY0z31hk76aKztqqwl+YvjxvyH
-	 4B77FUdncY/A1ir1+kGuY6SpKVq24iRVU4H9GrjksTBqizc+BEeRvZYaSpFPp0+1Zg
-	 7oS49dcHefUDGvpfcDnjGg39MXowMS8ApT/u+FKHDmvYO0fYvOjcbZ5njkM6/qHyIi
-	 JlSmnuuT4f/DQ==
-Date: Fri, 21 Feb 2025 17:44:12 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Andre Przywara <andre.przywara@arm.com>
-Cc: linux-sunxi@lists.linux.dev,
-	Boris Brezillon <boris.brezillon@collabora.com>,
-	Thomas Zimmermann <tzimmermann@suse.de>,
-	Maxime Ripard <mripard@kernel.org>,
-	Steven Price <steven.price@arm.com>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Simona Vetter <simona@ffwll.ch>, Chen-Yu Tsai <wens@csie.org>,
-	Maarten Lankhorst <maarten.lankhorst@linux.intel.com>,
-	Jernej Skrabec <jernej.skrabec@gmail.com>,
-	David Airlie <airlied@gmail.com>, dri-devel@lists.freedesktop.org,
-	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org,
-	linux-pm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>,
-	Samuel Holland <samuel@sholland.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>
-Subject: Re: [PATCH 3/5] dt-bindings: gpu: mali-bifrost: Add Allwinner H616
- compatible
-Message-ID: <174018145089.395682.15107324899674215035.robh@kernel.org>
-References: <20250221005802.11001-1-andre.przywara@arm.com>
- <20250221005802.11001-4-andre.przywara@arm.com>
+	s=arc-20240116; t=1740186162; c=relaxed/simple;
+	bh=NKLRRIgf3DYLDNRMQeCcvYWRQWxccqPowHRvi0rlWZw=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=R3BvcfhyB2nrGf+RU2+iKrrDZ37LFXOGPkbrpBxh7I8wjMFzQm/GV+1rPCqeEo1Xy40EIzpfGTDZWKrG3QCiZ1aIuPvkkP2wSrekjhWiZFYLzjfAWD2JD+ne0baBTWH7yIA0v+ajKzQPtK5rfwEEqwTJWWWAgbCN4wTQZTS14Xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250810.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51LMkGQ9018777;
+	Fri, 21 Feb 2025 17:02:34 -0800
+Received: from ala-exchng02.corp.ad.wrs.com (ala-exchng02.wrs.com [147.11.82.254])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 44w00kcerh-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Fri, 21 Feb 2025 17:02:33 -0800 (PST)
+Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.43; Fri, 21 Feb 2025 17:02:33 -0800
+Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
+ ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
+ 15.1.2507.43 via Frontend Transport; Fri, 21 Feb 2025 17:02:31 -0800
+From: Lizhi Xu <lizhi.xu@windriver.com>
+To: <rafael@kernel.org>
+CC: <len.brown@intel.com>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <lizhi.xu@windriver.com>,
+        <pavel@kernel.org>,
+        <syzbot+ace60642828c074eb913@syzkaller.appspotmail.com>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: Re: [PATCH] module: replace the mutex lock acquisition method
+Date: Sat, 22 Feb 2025 09:02:30 +0800
+Message-ID: <20250222010230.9102-1-lizhi.xu@windriver.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAJZ5v0hu=Gi82zS27MwKj-uhEciuD6JN8cZLd+75J3VKY796wg@mail.gmail.com>
+References: <CAJZ5v0hu=Gi82zS27MwKj-uhEciuD6JN8cZLd+75J3VKY796wg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250221005802.11001-4-andre.przywara@arm.com>
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-Authority-Analysis: v=2.4 cv=N67TF39B c=1 sm=1 tr=0 ts=67b92229 cx=c_pps a=K4BcnWQioVPsTJd46EJO2w==:117 a=K4BcnWQioVPsTJd46EJO2w==:17 a=T2h4t0Lz3GQA:10 a=VwQbUJbxAAAA:8 a=UbtQlmD_4ytLos8nrPUA:9 a=zZCYzV9kfG8A:10
+X-Proofpoint-ORIG-GUID: xztup1q4mCWFVlMfifwdnYO1XlfN-GTu
+X-Proofpoint-GUID: xztup1q4mCWFVlMfifwdnYO1XlfN-GTu
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-21_09,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0 phishscore=0
+ adultscore=0 lowpriorityscore=0 malwarescore=0 mlxlogscore=585
+ suspectscore=0 clxscore=1015 bulkscore=0 spamscore=0 priorityscore=1501
+ mlxscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.21.0-2502100000
+ definitions=main-2502220005
 
-
-On Fri, 21 Feb 2025 00:58:00 +0000, Andre Przywara wrote:
-> The Allwinner H616 SoC has a Mali-G31 MP2 GPU, which is of the Mali
-> Bifrost family.
-> Add the SoC specific compatible string and pair it with the bifrost
-> fallback compatible.
+On Fri, 21 Feb 2025 21:07:59 +0100, Rafael J. Wysocki" <rafael@kernel.org> wrote:
+> > syzbot reported a deadlock in lock_system_sleep. [1]
+> >
+> > The write operation to "/sys/module/hibernate/parameters/compressor"
+> > conflicts with the registration of ieee80211 device, resulting in a deadlock
+> > in the lock param_lock.
+> >
+> > Since the conflict cannot be avoided, the way to obtain param_lock is changed
+> > to trylock to avoid deadlock.
 > 
-> Signed-off-by: Andre Przywara <andre.przywara@arm.com>
-> ---
->  Documentation/devicetree/bindings/gpu/arm,mali-bifrost.yaml | 1 +
->  1 file changed, 1 insertion(+)
-> 
+> An alternative way to avoid the deadlock would be to replace
+> lock_system_sleep() in hibernate_compressor_param_set() with
+> mutex_trylock(&system_transition_mutex) (and analogously for the
+> unlock operation).  Why have you not done that?
+Yes, you are right, I have confirmed that can work fine.
+I will send V2 patch for using mutex_trylock(&system_transition_mutex).
 
-Applied, thanks!
-
+BR,
+Lizhi
 
