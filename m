@@ -1,83 +1,59 @@
-Return-Path: <linux-pm+bounces-22711-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22712-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 678B6A40558
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 04:37:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1B629A40589
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 05:45:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4BEE642555D
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 03:37:49 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9112F707BB6
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 04:45:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5B411F9F70;
-	Sat, 22 Feb 2025 03:37:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="F5YaHt1R"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 330A31DDA24;
+	Sat, 22 Feb 2025 04:45:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2063.outbound.protection.outlook.com [40.107.94.63])
+Received: from mx0a-0064b401.pphosted.com (mx0a-0064b401.pphosted.com [205.220.166.238])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0ED6E4A05;
-	Sat, 22 Feb 2025 03:37:41 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.63
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740195466; cv=fail; b=WZbx6GzKunqlLQsYvTx/WMjHUE9NlNV9/KAcvYTAqT6o8bBjoKsc19A/teIeyiaZ3/CSl6ajh6S0Iog2ajfZ8QiE41hdOHUTtGgOeBQDKuhZb20ZKyuwfX9O7m+7B1oEl/1oWWbeNZrxo0/I1ry1S8Gg2O2sFnRSpB+UYZYI/TU=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740195466; c=relaxed/simple;
-	bh=WLzlddcUJ/m2BPLR+U+EvqKKuzIrjimzp6Ubn/B14Rs=;
-	h=From:To:CC:Subject:Date:Message-ID:MIME-Version:Content-Type; b=Mdf4Iovd5MuJ/9wcShxwXGUjbOY5FTYHD1OfJYfdc0pOeEUBwZAKMH/MLe1Y93f1MpA5y+8t1Xr65Z+mu1D7X3wXMGxdtch0YgvULt5k/Ppeswgj2OFWRI4khQLvwjSCFm1SJ/YenJidhcqWeWPPZ1Ji13OSwoi3Hv7BlXlg24Y=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=F5YaHt1R; arc=fail smtp.client-ip=40.107.94.63
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=e4RMe7Mk0ehPV8FEgd99keEW686B/hIwZHfNEkTF5MaVd0UaGpkTjKx7nxHUt71nUQ4d6ApVKwM1wxcOXQhX7NyDLQJg93zpM1/PFhkit28ERa6KBjG/2vafL8f5veJxdcOPVK3P3SjqTVR0HpNfVbXoybezYwLNnvu9LPrDddlt0nAjS0dncgveZ/r+9VkwUyKm4F//VPCj+3fnbEKBQ78A4bK4i/xXhaq0xHLACG0w5+HzDTT/ptiPWCXhXDnN6m2K0O7F+I7CgTnz7A8LQ+l3D2UgpoFJMsfPc47RrOM5m1hRIc0TNL9Ht4e7PveJ2rC4LN/xmeQt/7/q4Ddzbg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=Me55RN6joNUwpVb+2Q55/QbRjbHgBUxjvuwydlLc7aQ=;
- b=KuXb9EY8i1qFoDN8/75VRI1/mjc5lWZJntMHgTB2tE7/vvKnFmJo7GL16NM+NAVuZL2tnf0hbt4qQlF2iHhaaflCNU+4XmQ5spR+qJbknr2Lo5YXlZeOoXKBbKUCUmDg7Mai9CC/lFOQVKVZvVAtwplU09iRzS+b0O4pRkjfOBYr7c1DzWWTM3bctOymg2KQS2cRMRTaP4zyhCRXSbgiboH1WuAyp9Pop6d2/ai12sA64AJkOcexaBx3G23+zIdu1w9uKuhxW5yhRYVO/8RllxZNxBSr6dcWEpzjDNqZXbOwTCKU7t4V2gfI47XtSZcgNkXYKpWh/Ja6hjU+gOPMSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass (sender ip is
- 165.204.84.17) smtp.rcpttodomain=kernel.org smtp.mailfrom=amd.com; dmarc=pass
- (p=quarantine sp=quarantine pct=100) action=none header.from=amd.com;
- dkim=none (message not signed); arc=none (0)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=Me55RN6joNUwpVb+2Q55/QbRjbHgBUxjvuwydlLc7aQ=;
- b=F5YaHt1RpjjOatCzNrPAk5gqgGTtdFDtl5YJmqsSuZPzRdY35ZN9ttznnvRnhAmTNvZ7HhklgLjVfawETx5RiGfR1t5qINqkivC8b1XVplTQdsrgMrT8mbpuQmw3waljLJH9yBB3j7cZgEZFzvkANABgwHez1kFSrVeGhmLbRVg=
-Received: from CH2PR18CA0053.namprd18.prod.outlook.com (2603:10b6:610:55::33)
- by SJ2PR12MB8943.namprd12.prod.outlook.com (2603:10b6:a03:547::17) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.17; Sat, 22 Feb
- 2025 03:37:40 +0000
-Received: from CH1PEPF0000AD7F.namprd04.prod.outlook.com
- (2603:10b6:610:55:cafe::30) by CH2PR18CA0053.outlook.office365.com
- (2603:10b6:610:55::33) with Microsoft SMTP Server (version=TLS1_3,
- cipher=TLS_AES_256_GCM_SHA384) id 15.20.8466.16 via Frontend Transport; Sat,
- 22 Feb 2025 03:37:39 +0000
-X-MS-Exchange-Authentication-Results: spf=pass (sender IP is 165.204.84.17)
- smtp.mailfrom=amd.com; dkim=none (message not signed)
- header.d=none;dmarc=pass action=none header.from=amd.com;
-Received-SPF: Pass (protection.outlook.com: domain of amd.com designates
- 165.204.84.17 as permitted sender) receiver=protection.outlook.com;
- client-ip=165.204.84.17; helo=SATLEXMB04.amd.com; pr=C
-Received: from SATLEXMB04.amd.com (165.204.84.17) by
- CH1PEPF0000AD7F.mail.protection.outlook.com (10.167.244.88) with Microsoft
- SMTP Server (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.20.8466.11 via Frontend Transport; Sat, 22 Feb 2025 03:37:39 +0000
-Received: from shatadru.amd.com (10.180.168.240) by SATLEXMB04.amd.com
- (10.181.40.145) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id 15.1.2507.39; Fri, 21 Feb
- 2025 21:36:16 -0600
-From: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
-To: <gautham.shenoy@amd.com>, <mario.limonciello@amd.com>,
-	<perry.yuan@amd.com>, <rafael@kernel.org>, <viresh.kumar@linaro.org>
-CC: <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>, "Dhananjay
- Ugwekar" <dhananjay.ugwekar@amd.com>
-Subject: [PATCH] cpufreq/amd-pstate: Fix the clamping of perf values
-Date: Sat, 22 Feb 2025 03:32:22 +0000
-Message-ID: <20250222033221.554976-1-dhananjay.ugwekar@amd.com>
-X-Mailer: git-send-email 2.34.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 760E4165F1A;
+	Sat, 22 Feb 2025 04:45:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.166.238
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740199520; cv=none; b=rYoNUkt1tUM6qfic9UuI7xEi1p/nTq0JcvZKjxMgdGkZvdU5HF4K0VoEn4hn7M9UoZ+tFTZ5pUqyOS5ivumEvu8b+YXPaezY9JbfFpZyEQMuuJxlBDFgzc+EB22Nlhg7jOlo8QdrBJ47ByRoBdN2GruB8ZFpKzkeZMdVulQAsUY=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740199520; c=relaxed/simple;
+	bh=dgqg1KmTIJHro0RNJi156bNVA6tpUgdl4ccMCuE1z4I=;
+	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=EFTuJGfrLVM4HQvYsg/ZrBhpzSI5K+m8mm4NWQ7vaqfJI0INt0q9htUpAn356GjDoN2EGlJmPbyrr5daUElMVBKr0594SSXD+dmMRj53iiqLsKCnvOArFBFGCMvnhPr1SWLSPGMPxWlFqbSsKInGGnPx88O6RZ07hbUkAhUO7O8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.166.238
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
+Received: from pps.filterd (m0250809.ppops.net [127.0.0.1])
+	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51M4jA2b012737;
+	Fri, 21 Feb 2025 20:45:10 -0800
+Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.wrs.com [147.11.82.252])
+	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 44xqcary9b-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
+	Fri, 21 Feb 2025 20:45:10 -0800 (PST)
+Received: from ala-exchng01.corp.ad.wrs.com (147.11.82.252) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.43; Fri, 21 Feb 2025 20:45:09 -0800
+Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
+ ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server id
+ 15.1.2507.43 via Frontend Transport; Fri, 21 Feb 2025 20:45:08 -0800
+From: Lizhi Xu <lizhi.xu@windriver.com>
+To: <rafael@kernel.org>
+CC: <len.brown@intel.com>, <linux-kernel@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <pavel@kernel.org>,
+        <syzkaller-bugs@googlegroups.com>
+Subject: [PATCH V3] module: replace the mutex lock acquisition method
+Date: Sat, 22 Feb 2025 12:45:06 +0800
+Message-ID: <20250222044506.351242-1-lizhi.xu@windriver.com>
+X-Mailer: git-send-email 2.43.0
+In-Reply-To: <CAJZ5v0hu=Gi82zS27MwKj-uhEciuD6JN8cZLd+75J3VKY796wg@mail.gmail.com>
+References: <CAJZ5v0hu=Gi82zS27MwKj-uhEciuD6JN8cZLd+75J3VKY796wg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,90 +62,219 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: SATLEXMB04.amd.com (10.181.40.145) To SATLEXMB04.amd.com
- (10.181.40.145)
-X-EOPAttributedMessage: 0
-X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: CH1PEPF0000AD7F:EE_|SJ2PR12MB8943:EE_
-X-MS-Office365-Filtering-Correlation-Id: 46215292-df30-425b-e417-08dd52f241b6
-X-MS-Exchange-SenderADCheck: 1
-X-MS-Exchange-AntiSpam-Relay: 0
-X-Microsoft-Antispam:
-	BCL:0;ARA:13230040|376014|1800799024|36860700013|82310400026;
-X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?8JmvdUOHAjxCM0fwoEKC5ZO2Bb1qJbVsicUspnK/RKqy60a63DsnqodR59GT?=
- =?us-ascii?Q?FAabEqT0FIB3OYDJdG9eW8IZeQZOssiq26E1e9WLl44Ukbpa/gkobcbdtjMw?=
- =?us-ascii?Q?mc15Z/DjUev+PrdjurPhHXegu9JSJmITDdGIiZWK/0ipoofoV9NLHC3hamQu?=
- =?us-ascii?Q?x1k0VERVTIOJZHqsekH9FToufqNMbknpZUccIXVw5oIW6RQiD7h8EfwpsiMj?=
- =?us-ascii?Q?K037StWtUZtMtxqrXLixssxDmen7vkBWzz0gFMZErNeqkrllV1EcUqelM6/Y?=
- =?us-ascii?Q?1LxouLv6va+GMWlerJe0+rwUuOOZ+8s5wyt8xUOg5uDgWSEaOXQjjtzyKCR6?=
- =?us-ascii?Q?3reqq7S2i7o7zUKOHb5CL3QiwLrKO/k7abDiBQ8KtiwjntwyRpxzrN2Cdu69?=
- =?us-ascii?Q?BXPaWYFHtVQj4eIHTGm+xPCo5/S4aDzveJJVs2rRevAi5AEV7ps+lJafjq9K?=
- =?us-ascii?Q?gNOKpSiZdNBSHQwhs4DiqtdlOQY+O2UhmBo8TadyRI2Z6EmuGIOAUbdFZ6Mt?=
- =?us-ascii?Q?f/1CJNh1AFRw8/eOZh0ZFlcrSQkpwvaYeSnJoEkQrNKhev04ggM3J6eOSqyc?=
- =?us-ascii?Q?+oHzA+cw0ZcJR/f0oluyBA7vA+5jxbuXPKZHEUupY0TyVflFb7H/drd+uQo3?=
- =?us-ascii?Q?9+m7/gW5mCAPm6IFMPFHOJUQKxCzmBSrQQalVzPr/EzzdwOPwlclvhlKRl8v?=
- =?us-ascii?Q?YKWIydLsdaZ7WtJBCIAS64vUMj2fGzYmFKsgJkxYnwaZfFMyxE1xH8PYsdj+?=
- =?us-ascii?Q?+0g+QlH9YIxEKNePgcqsMLn9HcBmQQcU8l/GbcEyu2+bCaf9B5DoDsKWp0Z8?=
- =?us-ascii?Q?xqbGXPy4nR6q5wgnX+igR4FR/4qidM4vqeJXak5i5Q8cXVv/KM5wrBSR3RZL?=
- =?us-ascii?Q?B346r9nnB+Y+TfAKPvw244EwCtP/K4Z2Px8LwnUtRNYS4k6BFETYtpGgCLZX?=
- =?us-ascii?Q?Uho1QnHX/mnYXMwjUq3fY3DzIG4Ohd0y/V0SqmaVVxTZ226is7EUT0r/L4VL?=
- =?us-ascii?Q?ecmc6rqIbxyNsy+r4Z05byZEU/AhchP3bbcOpeWOpp4svOBujawfHRRPVRmp?=
- =?us-ascii?Q?le5MrAhnihkize2bBWAZAP5Eiyim8C9GpDNx4sSxkznBPNK0MUozvHVHWWIV?=
- =?us-ascii?Q?xRHMZ40wEK1YZSovnKIrhJ6PpcDvtATeB1yTippeeJIFqZn6jt4ZcCGIys15?=
- =?us-ascii?Q?wrlDnIdwAiamN+ytWMFhPWAuy2JmsBD9PU+zcki82PEf5dVK151h6pIAziFq?=
- =?us-ascii?Q?mdyYYtDJlFzPt94QBJP+sIRWddKuJ+ObbIKlcm4IU2Q29VRr29t+2veUA9j7?=
- =?us-ascii?Q?wTkZweTH3HPwP7O/5gCtRC7b3k2gJQtpWO5QK3Cd5cSQ4HsblNBzUbkDEgS3?=
- =?us-ascii?Q?u/0DgijBgKCqLQTXFg8QQsNAJK3fGvLY0uXA+gQSLvMSZ2bHutJN4E/sD5ga?=
- =?us-ascii?Q?WRA7sga7wq/GKzY3T2tt6axejlVAz94FPf4D06onMq/CWIZrft4WG1MgI1Hb?=
- =?us-ascii?Q?IkrfU4GwA3rZq0k=3D?=
-X-Forefront-Antispam-Report:
-	CIP:165.204.84.17;CTRY:US;LANG:en;SCL:1;SRV:;IPV:CAL;SFV:NSPM;H:SATLEXMB04.amd.com;PTR:InfoDomainNonexistent;CAT:NONE;SFS:(13230040)(376014)(1800799024)(36860700013)(82310400026);DIR:OUT;SFP:1101;
-X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 22 Feb 2025 03:37:39.3921
- (UTC)
-X-MS-Exchange-CrossTenant-Network-Message-Id: 46215292-df30-425b-e417-08dd52f241b6
-X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
-X-MS-Exchange-CrossTenant-OriginalAttributedTenantConnectingIp: TenantId=3dd8961f-e488-4e60-8e11-a82d994e183d;Ip=[165.204.84.17];Helo=[SATLEXMB04.amd.com]
-X-MS-Exchange-CrossTenant-AuthSource:
-	CH1PEPF0000AD7F.namprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-AuthAs: Anonymous
-X-MS-Exchange-CrossTenant-FromEntityHeader: HybridOnPrem
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ2PR12MB8943
+X-Proofpoint-ORIG-GUID: 7qonuDpIIz1w4UKyP6up0XetmEFOvi4k
+X-Authority-Analysis: v=2.4 cv=Xb9zzJ55 c=1 sm=1 tr=0 ts=67b95656 cx=c_pps a=/ZJR302f846pc/tyiSlYyQ==:117 a=/ZJR302f846pc/tyiSlYyQ==:17 a=T2h4t0Lz3GQA:10 a=edf1wS77AAAA:8 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8 a=GzR0737Q8psi_uX2n_oA:9 a=DcSpbTIhAlouE1Uv7lRv:22
+ a=cQPPKAXgyycSBL8etih5:22 a=FdTzh2GWekK77mhwV6Dw:22
+X-Proofpoint-GUID: 7qonuDpIIz1w4UKyP6up0XetmEFOvi4k
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-22_01,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1015 suspectscore=0
+ adultscore=0 bulkscore=0 malwarescore=0 lowpriorityscore=0 spamscore=0
+ mlxscore=0 phishscore=0 impostorscore=0 priorityscore=1501 mlxlogscore=999
+ classifier=spam authscore=0 authtc=n/a authcc= route=outbound adjust=0
+ reason=mlx scancount=1 engine=8.21.0-2502100000
+ definitions=main-2502220034
 
-The clamping in freq_to_perf() is broken right now, as we first typecast
-(read wraparound) the overflowing value into a u8 and then clamp it down.
-So, use a u32 to store the >255 value in certain edge cases and then clamp
-it down into a u8.
+syzbot reported a deadlock in lock_system_sleep. [1]
 
-Also, use a "explicit typecast + clamp" instead of just a "clamp_t" as the
-latter typecasts first and then clamps between the limits, which defeats
-our purpose.
+The write operation to "/sys/module/hibernate/parameters/compressor"
+conflicts with the registration of ieee80211 device, resulting in a deadlock
+in the lock param_lock.
 
-Fixes: 305621eb6a8b ("cpufreq/amd-pstate: Modularize perf<->freq conversion")
-Signed-off-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
+Replace the method of acquiring the lock system_transition_mutex with trylock,
+it is arguably better to fail a write to the module param with -EBUSY than to
+fail ieee80211_register_hw() IMV.
+
+[1]
+syz-executor895/5833 is trying to acquire lock:
+ffffffff8e0828c8 (system_transition_mutex){+.+.}-{4:4}, at: lock_system_sleep+0x87/0xa0 kernel/power/main.c:56
+
+but task is already holding lock:
+ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: kernel_param_lock kernel/params.c:607 [inline]
+ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: param_attr_store+0xe6/0x300 kernel/params.c:586
+
+which lock already depends on the new lock.
+
+
+the existing dependency chain (in reverse order) is:
+
+-> #3 (param_lock){+.+.}-{4:4}:
+       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
+       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
+       ieee80211_rate_control_ops_get net/mac80211/rate.c:220 [inline]
+       rate_control_alloc net/mac80211/rate.c:266 [inline]
+       ieee80211_init_rate_ctrl_alg+0x18d/0x6b0 net/mac80211/rate.c:1015
+       ieee80211_register_hw+0x20cd/0x4060 net/mac80211/main.c:1531
+       mac80211_hwsim_new_radio+0x304e/0x54e0 drivers/net/wireless/virtual/mac80211_hwsim.c:5558
+       init_mac80211_hwsim+0x432/0x8c0 drivers/net/wireless/virtual/mac80211_hwsim.c:6910
+       do_one_initcall+0x128/0x700 init/main.c:1257
+       do_initcall_level init/main.c:1319 [inline]
+       do_initcalls init/main.c:1335 [inline]
+       do_basic_setup init/main.c:1354 [inline]
+       kernel_init_freeable+0x5c7/0x900 init/main.c:1568
+       kernel_init+0x1c/0x2b0 init/main.c:1457
+       ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
+       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
+
+-> #2 (rtnl_mutex){+.+.}-{4:4}:
+       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
+       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
+       wg_pm_notification drivers/net/wireguard/device.c:80 [inline]
+       wg_pm_notification+0x49/0x180 drivers/net/wireguard/device.c:64
+       notifier_call_chain+0xb7/0x410 kernel/notifier.c:85
+       notifier_call_chain_robust kernel/notifier.c:120 [inline]
+       blocking_notifier_call_chain_robust kernel/notifier.c:345 [inline]
+       blocking_notifier_call_chain_robust+0xc9/0x170 kernel/notifier.c:333
+       pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
+       snapshot_open+0x189/0x2b0 kernel/power/user.c:77
+       misc_open+0x35a/0x420 drivers/char/misc.c:179
+       chrdev_open+0x237/0x6a0 fs/char_dev.c:414
+       do_dentry_open+0x735/0x1c40 fs/open.c:956
+       vfs_open+0x82/0x3f0 fs/open.c:1086
+       do_open fs/namei.c:3830 [inline]
+       path_openat+0x1e88/0x2d80 fs/namei.c:3989
+       do_filp_open+0x20c/0x470 fs/namei.c:4016
+       do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
+       do_sys_open fs/open.c:1443 [inline]
+       __do_sys_openat fs/open.c:1459 [inline]
+       __se_sys_openat fs/open.c:1454 [inline]
+       __x64_sys_openat+0x175/0x210 fs/open.c:1454
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+-> #1 ((pm_chain_head).rwsem){++++}-{4:4}:
+       down_read+0x9a/0x330 kernel/locking/rwsem.c:1524
+       blocking_notifier_call_chain_robust kernel/notifier.c:344 [inline]
+       blocking_notifier_call_chain_robust+0xa9/0x170 kernel/notifier.c:333
+       pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
+       snapshot_open+0x189/0x2b0 kernel/power/user.c:77
+       misc_open+0x35a/0x420 drivers/char/misc.c:179
+       chrdev_open+0x237/0x6a0 fs/char_dev.c:414
+       do_dentry_open+0x735/0x1c40 fs/open.c:956
+       vfs_open+0x82/0x3f0 fs/open.c:1086
+       do_open fs/namei.c:3830 [inline]
+       path_openat+0x1e88/0x2d80 fs/namei.c:3989
+       do_filp_open+0x20c/0x470 fs/namei.c:4016
+       do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
+       do_sys_open fs/open.c:1443 [inline]
+       __do_sys_openat fs/open.c:1459 [inline]
+       __se_sys_openat fs/open.c:1454 [inline]
+       __x64_sys_openat+0x175/0x210 fs/open.c:1454
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+-> #0 (system_transition_mutex){+.+.}-{4:4}:
+       check_prev_add kernel/locking/lockdep.c:3163 [inline]
+       check_prevs_add kernel/locking/lockdep.c:3282 [inline]
+       validate_chain kernel/locking/lockdep.c:3906 [inline]
+       __lock_acquire+0x249e/0x3c40 kernel/locking/lockdep.c:5228
+       lock_acquire.part.0+0x11b/0x380 kernel/locking/lockdep.c:5851
+       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
+       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
+       lock_system_sleep+0x87/0xa0 kernel/power/main.c:56
+       hibernate_compressor_param_set+0x1c/0x210 kernel/power/hibernate.c:1452
+       param_attr_store+0x18f/0x300 kernel/params.c:588
+       module_attr_store+0x55/0x80 kernel/params.c:924
+       sysfs_kf_write+0x117/0x170 fs/sysfs/file.c:139
+       kernfs_fop_write_iter+0x33d/0x500 fs/kernfs/file.c:334
+       new_sync_write fs/read_write.c:586 [inline]
+       vfs_write+0x5ae/0x1150 fs/read_write.c:679
+       ksys_write+0x12b/0x250 fs/read_write.c:731
+       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
+       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
+       entry_SYSCALL_64_after_hwframe+0x77/0x7f
+
+other info that might help us debug this:
+
+Chain exists of:
+  system_transition_mutex --> rtnl_mutex --> param_lock
+
+ Possible unsafe locking scenario:
+
+       CPU0                    CPU1
+       ----                    ----
+  lock(param_lock);
+                               lock(rtnl_mutex);
+                               lock(param_lock);
+  lock(system_transition_mutex);
+
+ *** DEADLOCK ***
+
+Reported-by: syzbot+ace60642828c074eb913@syzkaller.appspotmail.com
+Closes: https://syzkaller.appspot.com/bug?extid=ace60642828c074eb913
+Tested-by: syzbot+ace60642828c074eb913@syzkaller.appspotmail.com
+Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
 ---
- drivers/cpufreq/amd-pstate.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+V1 -> V2: use -EAGAIN to replace -EPERM.
+V2 -> V3: replace lock_system_sleep to trylock and update comments
 
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index 9ab95ec1f828..4705a644db6d 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -144,10 +144,10 @@ static struct quirk_entry quirk_amd_7k62 = {
+ include/linux/suspend.h  |  2 ++
+ kernel/power/hibernate.c |  4 +++-
+ kernel/power/main.c      | 12 ++++++++++++
+ 3 files changed, 17 insertions(+), 1 deletion(-)
+
+diff --git a/include/linux/suspend.h b/include/linux/suspend.h
+index da6ebca3ff77..a9ea3c0b44d7 100644
+--- a/include/linux/suspend.h
++++ b/include/linux/suspend.h
+@@ -468,6 +468,7 @@ extern void pm_wakep_autosleep_enabled(bool set);
+ extern void pm_print_active_wakeup_sources(void);
  
- static inline u8 freq_to_perf(struct amd_cpudata *cpudata, unsigned int freq_val)
- {
--	u8 perf_val = DIV_ROUND_UP_ULL((u64)freq_val * cpudata->nominal_perf,
-+	u32 perf_val = DIV_ROUND_UP_ULL((u64)freq_val * cpudata->nominal_perf,
- 					cpudata->nominal_freq);
+ extern unsigned int lock_system_sleep(void);
++extern unsigned int trylock_system_sleep(void);
+ extern void unlock_system_sleep(unsigned int);
  
--	return clamp_t(u8, perf_val, cpudata->lowest_perf, cpudata->highest_perf);
-+	return (u8)clamp(perf_val, cpudata->lowest_perf, cpudata->highest_perf);
+ #else /* !CONFIG_PM_SLEEP */
+@@ -496,6 +497,7 @@ static inline void pm_wakeup_clear(bool reset) {}
+ static inline void pm_system_irq_wakeup(unsigned int irq_number) {}
+ 
+ static inline unsigned int lock_system_sleep(void) { return 0; }
++static inline unsigned int trylock_system_sleep(void) { return 0; }
+ static inline void unlock_system_sleep(unsigned int flags) {}
+ 
+ #endif /* !CONFIG_PM_SLEEP */
+diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
+index 10a01af63a80..eb2c424a0577 100644
+--- a/kernel/power/hibernate.c
++++ b/kernel/power/hibernate.c
+@@ -1449,7 +1449,9 @@ static int hibernate_compressor_param_set(const char *compressor,
+ 	unsigned int sleep_flags;
+ 	int index, ret;
+ 
+-	sleep_flags = lock_system_sleep();
++	sleep_flags = trylock_system_sleep();
++	if (!sleep_flags)
++		return -EBUSY;
+ 
+ 	index = sysfs_match_string(comp_alg_enabled, compressor);
+ 	if (index >= 0) {
+diff --git a/kernel/power/main.c b/kernel/power/main.c
+index 6254814d4817..6122c652638d 100644
+--- a/kernel/power/main.c
++++ b/kernel/power/main.c
+@@ -58,6 +58,18 @@ unsigned int lock_system_sleep(void)
  }
+ EXPORT_SYMBOL_GPL(lock_system_sleep);
  
- static inline u32 perf_to_freq(struct amd_cpudata *cpudata, u8 perf_val)
++unsigned int trylock_system_sleep(void)
++{
++	unsigned int flags = current->flags;
++	current->flags |= PF_NOFREEZE;
++	if (!mutex_trylock(&system_transition_mutex)) {
++		current->flags &= ~PF_NOFREEZE;
++		return 0;
++	}
++	return flags;
++}
++EXPORT_SYMBOL_GPL(trylock_system_sleep);
++
+ void unlock_system_sleep(unsigned int flags)
+ {
+ 	if (!(flags & PF_NOFREEZE))
 -- 
-2.34.1
+2.43.0
 
 
