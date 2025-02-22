@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-22726-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22727-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6E90DA409E2
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 17:20:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10FABA409EB
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 17:21:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0432D3B82DB
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 16:20:38 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id DE137189E90D
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 16:20:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7928C1FC0FD;
-	Sat, 22 Feb 2025 16:20:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CA6141FF1C2;
+	Sat, 22 Feb 2025 16:20:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="Jj1UxrBN"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="JaDMr1Mz"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BA56A13A265;
-	Sat, 22 Feb 2025 16:20:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B80501FCD03;
+	Sat, 22 Feb 2025 16:20:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740241241; cv=none; b=g152rqPYPdUt2+oZvx4amI6eVScxBHbUykkQjOhMtKR8+tOgpzQyR6YBhLVCfBJc8HPZcTBu0eLaVNZl75ajizU+ckq69OV2rRJtmJk65YQh3q43R7vR+VStYMiKcd7hDrqA49rZWC5ZrLN9NR6GJDcPQHvyp6so+Yc09Kr2Q80=
+	t=1740241243; cv=none; b=khAcE6RJ1g1isljqm9fv/R4KRFy1EHXnFi98HVoirfSb7rFBVh3WPxfXJl6yT2qDEg/0ZffCe8oU5ZkKCiFzU2610Ugsif/0LStECQgOzqMbQgAyMo5VCkRumsbTNv6I/8ocSJLKc5pbWlPponFtVL6nnvCTPMxT5dVC25V1ly0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740241241; c=relaxed/simple;
-	bh=CBpPCiWn2z4z/Jikegt6a6HHwcjSp4acCbqB94ecohs=;
+	s=arc-20240116; t=1740241243; c=relaxed/simple;
+	bh=212vuWDMZNF1i8vBLykZIC7XgELO4WQi1/b9dWVCp/w=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=FBL4ZqP4CVWQl3jKaksHfV/qUzdu/EGMhYsDd8hePCZxih2uc2IZrCrbQCQzYeTa9TjtSauG5jhE2h8tCcuCyYZspsRDPuxkwyLpomqxOLYjTLyXS+HysMHBmWI4rFIJ3MmP6bweQAKIdwu0VU9r/0D16eg0vTQMdt+JQ+euYlc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=Jj1UxrBN; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version; b=jZ+Y/sbyoE66q3vAWHgsq79VrJqDKU5UlhCoTo1Jtd4nqSWKx3fcVJdXV+rmNNEMcx4P9aDRYesI7eE2Lt5l50gIR0etH96Lu2juoXTgrv+Pmj0k9TidjMYpfkvjIeVh30IHQMxWatoHoZOlBsZ0i+pjW4aFiGklp1uWGypzfbo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=JaDMr1Mz; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:cbc0:999f:73ad:33bd])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id DBB142E08C3E;
-	Sat, 22 Feb 2025 18:20:34 +0200 (EET)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id B57742E08C39;
+	Sat, 22 Feb 2025 18:20:36 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1740241236;
-	bh=LKUznuBJTNZaKsBu09bq4CWrMhUVhn38RMi0tzwcObs=; h=From:To:Subject;
-	b=Jj1UxrBNaRREJluOijBcgnm1TeWQy86HCW+6fU4VpUHmDzLU1kZW3e3aw0Vt9SrOM
-	 bMml+Ut2wJUvuVmJT1LRrzZ0qSbnsk01OvQF/Kw7aj+7/U2VsdxbFJgnKg0+LA2l0N
-	 3KGhri7ctlZH/14QJZzLScKuMZ0mWNS2H5Hd4owg=
+	s=default; t=1740241238;
+	bh=QgpDmK/aeZQymj1q5kxd00CT/+YJkKw8DCalRboAXRQ=; h=From:To:Subject;
+	b=JaDMr1MzFsV5QDiFuatrd5k52KsHkyLk1jEKj5h2+9KUkDdYBCK6nJmsmBHyHIuMc
+	 /ll95D5GGxT29c4fc5QByWrIoW1eVAZbhZBbCC5tRL0M9wXs4bnjC2UVIkzxvsYfT8
+	 cV/u0Jse5ZK2vqYXj4JFnFZuVeIb+QZ7WEya/808=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:cbc0:999f:73ad:33bd) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -58,10 +58,10 @@ Cc: linux-doc@vger.kernel.org,
 	Parth Menon <parthasarathymenon@gmail.com>,
 	Eileen <eileen@one-netbook.com>,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v2 07/12] hwmon: (oxp-sensors) Move pwm_enable read to its own
- function
-Date: Sat, 22 Feb 2025 17:18:18 +0100
-Message-ID: <20250222161824.172511-8-lkml@antheas.dev>
+Subject: [PATCH v2 08/12] hwmon: (oxp-sensors) Move pwm value read/write to
+ separate functions
+Date: Sat, 22 Feb 2025 17:18:19 +0100
+Message-ID: <20250222161824.172511-9-lkml@antheas.dev>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250222161824.172511-1-lkml@antheas.dev>
 References: <20250222161824.172511-1-lkml@antheas.dev>
@@ -73,7 +73,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <174024123619.13957.10446542481454210143@linux1587.grserver.gr>
+ <174024123796.14012.17454977986390059471@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
@@ -84,28 +84,36 @@ For the correction to be possible, this means that the pwm_enable
 endpoint will need access to both pwm enable and value (as for
 the 0th value, the fan needs to be set to full power).
 
-Therefore, begin by moving the current pwm_enable read to its own
-function, oxp_pwm_enable.
+Therefore, move the pwm value read/write to separate functions.
 
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- drivers/hwmon/oxp-sensors.c | 50 ++++++++++++++++++++-----------------
- 1 file changed, 27 insertions(+), 23 deletions(-)
+ drivers/hwmon/oxp-sensors.c | 162 +++++++++++++++++++-----------------
+ 1 file changed, 87 insertions(+), 75 deletions(-)
 
 diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-index 9c43ec0fc994..1da1e1655f96 100644
+index 1da1e1655f96..dade2f76124e 100644
 --- a/drivers/hwmon/oxp-sensors.c
 +++ b/drivers/hwmon/oxp-sensors.c
-@@ -762,6 +762,32 @@ static int oxp_pwm_disable(void)
+@@ -802,6 +802,91 @@ static umode_t oxp_ec_hwmon_is_visible(const void *drvdata,
  	}
  }
  
-+static int oxp_pwm_read(long *val)
++/* PWM input read/write functions */
++static int oxp_pwm_input_write(long val)
 +{
++	if (val < 0 || val > 255)
++		return -EINVAL;
 +	switch (board) {
 +	case orange_pi_neo:
-+		return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
-+	case aok_zoe_a1:
++		/* scale to range [1-244] */
++		val = ((val - 1) * 243 / 254) + 1;
++		return write_to_ec(ORANGEPI_SENSOR_PWM_REG, val);
++	case oxp_2:
++	case oxp_x1:
++		/* scale to range [0-184] */
++		val = (val * 184) / 255;
++		return write_to_ec(OXP_SENSOR_PWM_REG, val);
 +	case aya_neo_2:
 +	case aya_neo_air:
 +	case aya_neo_air_1s:
@@ -114,29 +122,91 @@ index 9c43ec0fc994..1da1e1655f96 100644
 +	case aya_neo_flip:
 +	case aya_neo_geek:
 +	case aya_neo_kun:
-+	case oxp_2:
-+	case oxp_fly:
 +	case oxp_mini_amd:
 +	case oxp_mini_amd_a07:
++		/* scale to range [0-100] */
++		val = (val * 100) / 255;
++		return write_to_ec(OXP_SENSOR_PWM_REG, val);
++	case aok_zoe_a1:
++	case oxp_fly:
 +	case oxp_mini_amd_pro:
-+	case oxp_x1:
-+		return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
++		return write_to_ec(OXP_SENSOR_PWM_REG, val);
 +	default:
 +		return -EOPNOTSUPP;
 +	}
 +}
 +
- /* Callbacks for hwmon interface */
- static umode_t oxp_ec_hwmon_is_visible(const void *drvdata,
- 				       enum hwmon_sensor_types type, u32 attr, int channel)
-@@ -859,29 +885,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 			}
- 			return 0;
- 		case hwmon_pwm_enable:
++static int oxp_pwm_input_read(long *val)
++{
++	int ret;
++
++	switch (board) {
++	case orange_pi_neo:
++		ret = read_from_ec(ORANGEPI_SENSOR_PWM_REG, 1, val);
++		if (ret)
++			return ret;
++		/* scale from range [1-244] */
++		*val = ((*val - 1) * 254 / 243) + 1;
++		break;
++	case oxp_2:
++	case oxp_x1:
++		ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
++		if (ret)
++			return ret;
++		/* scale from range [0-184] */
++		*val = (*val * 255) / 184;
++		break;
++	case aya_neo_2:
++	case aya_neo_air:
++	case aya_neo_air_1s:
++	case aya_neo_air_plus_mendo:
++	case aya_neo_air_pro:
++	case aya_neo_flip:
++	case aya_neo_geek:
++	case aya_neo_kun:
++	case oxp_mini_amd:
++	case oxp_mini_amd_a07:
++		ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
++		if (ret)
++			return ret;
++		/* scale from range [0-100] */
++		*val = (*val * 255) / 100;
++		break;
++	case aok_zoe_a1:
++	case oxp_fly:
++	case oxp_mini_amd_pro:
++	default:
++		ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
++		if (ret)
++			return ret;
++		break;
++	}
++	return 0;
++}
++
+ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+ 			     u32 attr, int channel, long *val)
+ {
+@@ -842,48 +927,7 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
+ 	case hwmon_pwm:
+ 		switch (attr) {
+ 		case hwmon_pwm_input:
 -			switch (board) {
 -			case orange_pi_neo:
--				return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, val);
--			case aok_zoe_a1:
+-				ret = read_from_ec(ORANGEPI_SENSOR_PWM_REG, 1, val);
+-				if (ret)
+-					return ret;
+-				/* scale from range [1-244] */
+-				*val = ((*val - 1) * 254 / 243) + 1;
+-				break;
+-			case oxp_2:
+-			case oxp_x1:
+-				ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
+-				if (ret)
+-					return ret;
+-				/* scale from range [0-184] */
+-				*val = (*val * 255) / 184;
+-				break;
 -			case aya_neo_2:
 -			case aya_neo_air:
 -			case aya_neo_air_1s:
@@ -145,18 +215,66 @@ index 9c43ec0fc994..1da1e1655f96 100644
 -			case aya_neo_flip:
 -			case aya_neo_geek:
 -			case aya_neo_kun:
--			case oxp_2:
--			case oxp_fly:
 -			case oxp_mini_amd:
 -			case oxp_mini_amd_a07:
+-				ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
+-				if (ret)
+-					return ret;
+-				/* scale from range [0-100] */
+-				*val = (*val * 255) / 100;
+-				break;
+-			case aok_zoe_a1:
+-			case oxp_fly:
 -			case oxp_mini_amd_pro:
+-			default:
+-				ret = read_from_ec(OXP_SENSOR_PWM_REG, 1, val);
+-				if (ret)
+-					return ret;
+-				break;
+-			}
+-			return 0;
++			return oxp_pwm_input_read(val);
+ 		case hwmon_pwm_enable:
+ 			return oxp_pwm_read(val);
+ 		default:
+@@ -909,39 +953,7 @@ static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
+ 				return oxp_pwm_disable();
+ 			return -EINVAL;
+ 		case hwmon_pwm_input:
+-			if (val < 0 || val > 255)
+-				return -EINVAL;
+-			switch (board) {
+-			case orange_pi_neo:
+-				/* scale to range [1-244] */
+-				val = ((val - 1) * 243 / 254) + 1;
+-				return write_to_ec(ORANGEPI_SENSOR_PWM_REG, val);
+-			case oxp_2:
 -			case oxp_x1:
--				return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
+-				/* scale to range [0-184] */
+-				val = (val * 184) / 255;
+-				return write_to_ec(OXP_SENSOR_PWM_REG, val);
+-			case aya_neo_2:
+-			case aya_neo_air:
+-			case aya_neo_air_1s:
+-			case aya_neo_air_plus_mendo:
+-			case aya_neo_air_pro:
+-			case aya_neo_flip:
+-			case aya_neo_geek:
+-			case aya_neo_kun:
+-			case oxp_mini_amd:
+-			case oxp_mini_amd_a07:
+-				/* scale to range [0-100] */
+-				val = (val * 100) / 255;
+-				return write_to_ec(OXP_SENSOR_PWM_REG, val);
+-			case aok_zoe_a1:
+-			case oxp_fly:
+-			case oxp_mini_amd_pro:
+-				return write_to_ec(OXP_SENSOR_PWM_REG, val);
 -			default:
 -				break;
 -			}
 -			break;
-+			return oxp_pwm_read(val);
++			return oxp_pwm_input_write(val);
  		default:
  			break;
  		}
