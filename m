@@ -1,46 +1,50 @@
-Return-Path: <linux-pm+bounces-22716-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22717-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A6A3FA40745
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 11:08:02 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DC978A4077A
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 11:39:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0645319C789C
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 10:08:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 8B5274247D5
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 10:39:46 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ED185207A35;
-	Sat, 22 Feb 2025 10:07:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D39EA2080E8;
+	Sat, 22 Feb 2025 10:39:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="yYDN+E04"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga01-in.huawei.com (szxga01-in.huawei.com [45.249.212.187])
+Received: from pv50p00im-ztdg10012001.me.com (pv50p00im-ztdg10012001.me.com [17.58.6.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 84D8D205AD2;
-	Sat, 22 Feb 2025 10:07:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.187
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D17E0207E1B
+	for <linux-pm@vger.kernel.org>; Sat, 22 Feb 2025 10:39:39 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740218877; cv=none; b=fK1NlqNtLkIAS/XBYA6aUJwKxTeFLnHeDHkX4ua2ATHnIOQU0fM1EhzAIDM20tAmA5eIesQiIhNByL7QbRA0AlDS9gIAIwY5KQyllC7N46eO25P3nCE1lWz/0fGLzY570zMOqkKBbI2uq8nVJebqkOCngAIgUSELD0zHbvxwaow=
+	t=1740220781; cv=none; b=aT9OqjzqLMfQUnNLNwZFJhtEmumut1VN2os0gXh9XYLH7SUvcCu6KKX7+nHdozw2JVwvq6fVICU5V/dvbZcOwT3TyWswGxElgxY8aJONIxcbWY3pD0nPrSzHwt7GhG/wHozqa6wcSDIbzr5TX+x1VbxG7aLx2sk4vjzBnYfV4cI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740218877; c=relaxed/simple;
-	bh=h4o39zGp6HLTNh3hEvswpajKgUxVor2Rc9U8zJVy15U=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=f5n/8Fs9jGE9TeTJC5/2dD4CA7DVTeM2iJvy80ESQ/hGt/eDByMZQymxkwbtQd5NXhlKr25RD7LBTAlOH5Zq6BI7K31B7hqQVxWEhd/zvyNSagn/GokNjPF5ANWMQmRjSM1XXPNjN6Jm5twK7y3U1UoPCfdlnYFPqOOJTZ0pIhU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.187
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.163.48])
-	by szxga01-in.huawei.com (SkyGuard) with ESMTP id 4Z0My16cJ1zdb8t;
-	Sat, 22 Feb 2025 18:03:05 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 18FD91802D2;
-	Sat, 22 Feb 2025 18:07:46 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Sat, 22 Feb
- 2025 18:07:45 +0800
-Message-ID: <ddbc0336-9083-4054-8930-c22bd8337488@huawei.com>
-Date: Sat, 22 Feb 2025 18:07:44 +0800
+	s=arc-20240116; t=1740220781; c=relaxed/simple;
+	bh=+MM+Sj3Py0FG+77MBxvX9ur6eehoj2ClCYpV/HT4iwI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=k1mg1Ec8Q82HQHFGCBJ72IkFlZC2eOiMsZNFJXIB/MMGYu862+7Dqzs6n/zghuxpOEDNLU+I5ULUTW1XMNv7xtSdrkGvsiJkOybFq0DeqNTCkzFrjXkYTbjLOOv65e7IHlz3IyrU3O/r95YI+XhD3V7GoSTX5GIpIYp/LzEm+JI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=yYDN+E04; arc=none smtp.client-ip=17.58.6.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; bh=mbxficQPTzs09LWwBbFhdunStNbxz1Db5LUu+U2NlSw=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme;
+	b=yYDN+E04f3AdizaUiroUuQGY41SPVVZcRqALdOpH6NFQhX3QCjWpHGcmHdHvZgXyw
+	 lY1ddO0XjuI5jwoyQLYS2xsXRa555rOew3qMgB02ajNFY2naY0JiMg3EzOtw/vDBsm
+	 rNcbU3RkjyAdmQBUnnLpBha3Hg45RvWSCLNO8oK0o5dE+ouOgYdV9O7OaddprvalcC
+	 F7e6FcKQyQxquf6C4CR09WnXr4uHh4OXsP+wDyxaBcn55oVkRsljjd3IOmoDXx5njY
+	 kMIwNWVp9xmRX9kyVkPTFuHEolnlCaw5jRp5Hj9sFk69BnUaESstfS78tB+JnoKuuq
+	 DJolzLt315u8g==
+Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
+	by pv50p00im-ztdg10012001.me.com (Postfix) with ESMTPSA id 00694A0092;
+	Sat, 22 Feb 2025 10:38:11 +0000 (UTC)
+Message-ID: <732f9f29-f794-4491-b942-45ad01b01db5@icloud.com>
+Date: Sat, 22 Feb 2025 18:38:06 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -48,124 +52,102 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/8] Support for autonomous selection in cppc_cpufreq
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-CC: <lenb@kernel.org>, <robert.moore@intel.com>, <viresh.kumar@linaro.org>,
-	<mario.limonciello@amd.com>, <gautham.shenoy@amd.com>, <ray.huang@amd.com>,
-	<pierre.gondois@arm.com>, <acpica-devel@lists.linux.dev>,
-	<linux-acpi@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-	<linux-pm@vger.kernel.org>, <linuxarm@huawei.com>, <yumpusamongus@gmail.com>,
-	<srinivas.pandruvada@linux.intel.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <hepeng68@huawei.com>,
-	<fanghao11@huawei.com>
-References: <20250206131428.3261578-1-zhenglifeng1@huawei.com>
- <0097a9a3-fe61-4200-9a54-5a9c81d3219c@huawei.com>
- <CAJZ5v0hP9a8g8UR2oPyivP1C65=csR245PSHay+nOx3vkoKoaA@mail.gmail.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <CAJZ5v0hP9a8g8UR2oPyivP1C65=csR245PSHay+nOx3vkoKoaA@mail.gmail.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems704-chm.china.huawei.com (10.3.19.181) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Subject: Re: [PATCH *-next 00/18] Remove weird and needless 'return' for void
+ APIs
+To: Arnd Bergmann <arnd@arndb.de>, Zijun Hu <quic_zijuhu@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>,
+ Nicholas Piggin <npiggin@gmail.com>, Peter Zijlstra <peterz@infradead.org>,
+ Thomas Gleixner <tglx@linutronix.de>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ "David S . Miller" <davem@davemloft.net>,
+ "Rafael J . Wysocki" <rafael@kernel.org>, Danilo Krummrich
+ <dakr@kernel.org>, Eric Dumazet <edumazet@google.com>,
+ Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
+ Simon Horman <horms@kernel.org>, Johannes Berg <johannes@sipsolutions.net>,
+ Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
+ Jiri Pirko <jiri@resnulli.us>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Leon Romanovsky <leon@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
+ Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Robin Murphy <robin.murphy@arm.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>
+Cc: Linux-Arch <linux-arch@vger.kernel.org>, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+ Netdev <netdev@vger.kernel.org>, linux-wireless@vger.kernel.org,
+ linux-rdma@vger.kernel.org,
+ "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+ linux-mtd@lists.infradead.org
+References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
+ <5d662c4c-76f7-4e5c-82f3-2aeeaf9e3311@app.fastmail.com>
+Content-Language: en-US
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <5d662c4c-76f7-4e5c-82f3-2aeeaf9e3311@app.fastmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-GUID: 5BaBpFy7OfeZq74ITSrzTheUfV5JFE1_
+X-Proofpoint-ORIG-GUID: 5BaBpFy7OfeZq74ITSrzTheUfV5JFE1_
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-22_04,2025-02-20_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 adultscore=0
+ mlxlogscore=999 suspectscore=0 bulkscore=0 clxscore=1011 phishscore=0
+ malwarescore=0 mlxscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2502220085
 
-On 2025/2/19 3:17, Rafael J. Wysocki wrote:
-> On Thu, Feb 13, 2025 at 2:55 AM zhenglifeng (A) <zhenglifeng1@huawei.com> wrote:
+On 2025/2/21 23:40, Arnd Bergmann wrote:
+>> This patch series is to remove weird and needless 'return' for
+>> void APIs under include/ with the following pattern:
 >>
->> On 2025/2/6 21:14, Lifeng Zheng wrote:
->>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
->>> driver.
->>>
->>> The patch series is organized in two parts:
->>>
->>>  - patch 1-5 refactor out the general CPPC register get and set functions
->>>    in cppc_acpi.c
->>>
->>>  - patches 6-8 expose sysfs files for users to control CPPC autonomous
->>>    selection when supported
->>>
->>> Changelog:
->>>
->>> v5:
->>>
->>>  - add more explanation to the commit logs and comments
->>>  - change REG_OPTIONAL from bin to hex
->>>  - split patch 2 into 3 smaller patches
->>>  - remove CPPC_REG_VAL_READ() and CPPC_REG_VAL_WRITE() macros
->>>  - move the modification part in patch 5 into a separate patch
->>>  - rename the sysfs file from "energy_perf" to
->>>    energy_performance_preference_val
->>>
->>> v4:
->>>
->>>  - add REG_OPTIONAL and IS_OPTIONAL_CPC_REG to judge if a cpc register is
->>>    an optional one
->>>  - check whether the register is optional before CPC_SUPPORTED check in
->>>    cppc_get_reg_val() and cppc_set_reg_val()
->>>  - check the register's type in cppc_set_reg_val()
->>>  - add macros to generally implement registers getting and setting
->>>    functions
->>>  - move some logic codes from cppc_cpufreq.c to cppc_acpi.c
->>>  - replace cppc_get_auto_sel_caps() by cppc_get_auto_sel()
->>>
->>> v3:
->>>
->>>  - change cppc_get_reg() and cppc_set_reg() name to cppc_get_reg_val() and
->>>    cppc_set_reg_val()
->>>  - extract cppc_get_reg_val_in_pcc() and cppc_set_reg_val_in_pcc()
->>>  - return the result of cpc_read() in cppc_get_reg_val()
->>>  - add pr_debug() in cppc_get_reg_val_in_pcc() when pcc_ss_id < 0
->>>  - rename 'cpunum' to 'cpu' in cppc_get_reg_val()
->>>  - move some macros from drivers/cpufreq/cppc_cpufreq.c to
->>>    include/acpi/cppc_acpi.h with a CPPC_XXX prefix
->>>
->>> v2:
->>>
->>>  - fix some incorrect placeholder
->>>  - change kstrtoul to kstrtobool in store_auto_select
->>>
->>> Lifeng Zheng (8):
->>>   ACPI: CPPC: Add IS_OPTIONAL_CPC_REG macro to judge if a cpc_reg is
->>>     optional
->>>   ACPI: CPPC: Optimize cppc_get_perf()
->>>   ACPI: CPPC: Rename cppc_get_perf() to cppc_get_reg_val()
->>>   ACPI: CPPC: Add cppc_set_reg_val()
->>>   ACPI: CPPC: Refactor register value get and set ABIs
->>>   ACPI: CPPC: Modify cppc_get_auto_sel_caps() to cppc_get_auto_sel()
->>>   ACPI: CPPC: Add three functions related to autonomous selection
->>>   cpufreq: CPPC: Support for autonomous selection in cppc_cpufreq
->>>
->>>  .../ABI/testing/sysfs-devices-system-cpu      |  54 ++++
->>>  drivers/acpi/cppc_acpi.c                      | 303 +++++++++++-------
->>>  drivers/cpufreq/amd-pstate.c                  |   3 +-
->>>  drivers/cpufreq/cppc_cpufreq.c                | 109 +++++++
->>>  include/acpi/cppc_acpi.h                      |  30 +-
->>>  5 files changed, 372 insertions(+), 127 deletions(-)
->>>
+>> api_header.h:
 >>
->> Gentle ping.
-> 
-> OK, so I'm wondering how this is related to the patch series at
-> 
-> https://lore.kernel.org/linux-acpi/20250211103737.447704-1-sumitg@nvidia.com/
-
-This series refactors some cppc_acpi ABIs and supports cppc autonomous
-selection with sysfs files in cpufreq policy.  Later, [1] proposed another
-design with different user interfaces.We will discuss and reach a consensus
-with regard to this.
-
-However, as mentioned in [1], patch 1-7 in this series (the cppc_acpi part)
-are not related to user interfaces, so can be reviewed and applied
-separately.  I can also send patch 1-7 as a new thread if preferred.
-
-[1] https://lore.kernel.org/linux-acpi/20250211103737.447704-1-sumitg@nvidia.com/
-
-> 
->> Attach discussions of previous versions:
->> v1: https://lore.kernel.org/all/20241114084816.1128647-1-zhenglifeng1@huawei.com/
->> v2: https://lore.kernel.org/all/20241122062051.3658577-1-zhenglifeng1@huawei.com/
->> v3: https://lore.kernel.org/all/20241216091603.1247644-1-zhenglifeng1@huawei.com/
->> v4: https://lore.kernel.org/all/20250113122104.3870673-1-zhenglifeng1@huawei.com/
+>> void api_func_a(...);
 >>
+>> static inline void api_func_b(...)
+>> {
+>> 	return api_func_a(...);
+>> }
+>>
+>> Remove the needless 'return' in api_func_b().
+>>
+>> Signed-off-by: Zijun Hu <quic_zijuhu@quicinc.com>
+> I have no objection to the changes, but I think you should
+> describe the motivation for them beyond them being 'weird'.
 > 
+
+yes. C spec such as C17 have this description about return
+statement:
+
+6.8.6.4:
+A return statement with an expression shall not appear in a function
+whose return type is void. A return statement without an expression
+shall only appear in a function whose return type is void.
+
+do we need to treat below return statement as bad code style ?
+
+void api_func_a(...);
+void api_func_b(...) {
+...
+	return api_func_a(...); // return void function in void func
+...
+}
+
+> Do these 'return' statements get in the way of some other
+> work you are doing? Is there a compiler warning you want
+> to enable to ensure they don't come back? Is this all of
+> the instances in the kernel or just the ones you found by
+> inspection?
+
+actually, i find this weird return usage by reading code by accident
+in driver core firstly:
+https://git.kernel.org/pub/scm/linux/kernel/git/gregkh/driver-core.git/commit/?h=driver-core-testing&id=a44073c28bc6d4118891d61e31c9fa9dc4333dc0
+
+then i check folder include/ and work out this patch series.
+
+not sure if there are still such instances in current kernel tree.
 
 
