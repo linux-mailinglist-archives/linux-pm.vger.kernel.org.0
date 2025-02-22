@@ -1,120 +1,147 @@
-Return-Path: <linux-pm+bounces-22739-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22740-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 677F2A40B85
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 21:02:59 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4C25DA40C22
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 00:34:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5110A166E81
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 20:02:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0CC17170816
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 23:34:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0DA0220013E;
-	Sat, 22 Feb 2025 20:02:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A07F4198E76;
+	Sat, 22 Feb 2025 23:34:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ethancedwards.com header.i=@ethancedwards.com header.b="Ph4CAjkV"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PJ0JYvrD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout-p-202.mailbox.org (mout-p-202.mailbox.org [80.241.56.172])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f171.google.com (mail-yw1-f171.google.com [209.85.128.171])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F591EEA43;
-	Sat, 22 Feb 2025 20:02:50 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.241.56.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0C9182CCDB;
+	Sat, 22 Feb 2025 23:34:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.171
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740254573; cv=none; b=r7vANk9zHta6figvjL2FcgQeLEht2usfXg8ix/1I3uDVISkwLacdsYIzaxbkkV6EEZTmywgEE47R/HU1fE3mQBJoePai7uj4DTC8l4oTUNUGhMO298erNyvvT70Z+QrIMAT8kdFDVLCSiKLTKlVVlEaQ8F95U0p9oniCA35coMU=
+	t=1740267287; cv=none; b=ZWWIx2jPYvcq2P+7oQ8HzOThG/erNsdzOb7C0gKWabV2coB7d8feDfB5nXv9B4XIBHxlwq3KKosuDya3MzjMDsnq2MUY0sx85d4EEVQjlR4cZGgi3+D1QA5KpnUV1q07nsvzGd4ZuWtzrm0S+h3SXeCH/NF10bEU466sgV5XV50=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740254573; c=relaxed/simple;
-	bh=1ysXJ9tNqbTNnC5MOSLRwjUBTc9Nx5MfsWwXFqejhwo=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:To:Cc; b=JVj91VDU06gXpqcJWfwXbBp3jd1Bosy/Kd0ziURaeD2aOjHtYS+Uu9iP1zFMxkliViLSQCxUyjo9g1I5aXFr+GBBZnGEH17/tjKrMv5jO/fPFlfXkxLFNoof80qnKZ1gfDvWiTZ3F8r8cV/Wdhd6gSGct72eqcDa4jD+DeoXLhc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ethancedwards.com; spf=pass smtp.mailfrom=ethancedwards.com; dkim=pass (2048-bit key) header.d=ethancedwards.com header.i=@ethancedwards.com header.b=Ph4CAjkV; arc=none smtp.client-ip=80.241.56.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ethancedwards.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ethancedwards.com
-Received: from smtp2.mailbox.org (smtp2.mailbox.org [10.196.197.2])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by mout-p-202.mailbox.org (Postfix) with ESMTPS id 4Z0dFz1w3Zz9t1g;
-	Sat, 22 Feb 2025 21:02:47 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ethancedwards.com;
-	s=MBO0001; t=1740254567;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding;
-	bh=Z6djf3boNN959313q2ECyr8yAQbh1eNxQmRkyyOk0VU=;
-	b=Ph4CAjkV2ku4zIUUVJ93F6Rk2zWDvDGXMfwgZSgQxikk3uZ/N1ZeuYD/txQK+F+XihyTqn
-	DJAOkqG7WjFjD3fedGfCn/x45DDMyJ2T2852uMukJ4HITLn+qGzAuo9PP/JZA0WztDdub7
-	0ihldMq4ihrL4SBGqXyWM6PZgRlZWsLjuM3z3Cw3t4ud232skCEH7bOQ0YAxMhnJP3XKWz
-	mVzGqpq9Zmh2cmk8S/A5wU9e46AEpra7peKnc+41sDBUdZP6bNe6LS7/zjlH59EoKivysj
-	xVwStx+UesTGcJIbs2+oCE8W9pXFb8oi8Sjx57mrzHn0pgB25QxmQtnAhtAdvg==
-From: Ethan Carter Edwards <ethan@ethancedwards.com>
-Date: Sat, 22 Feb 2025 15:02:42 -0500
-Subject: [PATCH] thermal/debugfs: replace kzalloc() with kcalloc() in
- thermal_debug_tz_add()
+	s=arc-20240116; t=1740267287; c=relaxed/simple;
+	bh=tU3r286zfMEzp509S4Nwj3oJKm1dT+refdlYwbG487A=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=EUwUNNBwqopGMGpW7m1Ck0xXq1SZ6SCi+kApeoh+49uD0UFqcshtcFgLXIhHY3FZDwbtGu3ExnZcMBMQUDzmK1ZDcLYuAfgf+NpsSJbfVMWi0zFAcpzB9E80ZelLoub1mI+gIcnmd5CGsGpCw8C/DIN+qCm8mgw/LvfuyOOrHTE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PJ0JYvrD; arc=none smtp.client-ip=209.85.128.171
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yw1-f171.google.com with SMTP id 00721157ae682-6fb3a611afdso27781647b3.0;
+        Sat, 22 Feb 2025 15:34:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740267285; x=1740872085; darn=vger.kernel.org;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date:from:to
+         :cc:subject:date:message-id:reply-to;
+        bh=/2b+ymF1Y/6cEr1vN13eZ8XRTQyUDfjNMs7g+mlMvUo=;
+        b=PJ0JYvrDMtayd5cj2X8RdD2q9bDoJnbxlR5f5gYsgYZv80WdqOIvb8MYx3t0C/G8S8
+         6DOMkZz1jcdZ6BGWSi+GvWYS5QnSDLqw9yBusc8XxnC28oXSoupoatwYmMDcfwZuRkvC
+         No2XDBHCgroAP3cy3SLqFVkvl6FE4gzVanDSnTct4YxZ3ixz4IapuTf/DONM7o/xDrJe
+         oEsX/UDjcZRhoilZkbBtgixOQKKUuFyNPNrFcIyVII1PibrPcx4kfW2l1/W80TN/qAHc
+         WEgx3ya8Akg2350xhj8AXvs536ZVvf5kPtg1/ZOYNwYiheisWVmDd/yvhdexcPvC0YJc
+         qgaA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740267285; x=1740872085;
+        h=in-reply-to:content-transfer-encoding:content-disposition
+         :mime-version:references:message-id:subject:cc:to:from:date
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=/2b+ymF1Y/6cEr1vN13eZ8XRTQyUDfjNMs7g+mlMvUo=;
+        b=q4IizJKroa0SSbnkTmcfEv2AohMOAzEj4CiX0hPMMv0q5yNT4hLUpNXOPROzNQdcDW
+         WL7BjVrD3mOV4O0MOhJtCRyA6v9+pPUUa/A/yOh9muoo72MLYDBcATw2kBNpKhW6Vt/A
+         mF2N1JkY9JrCp3eKSIqj7bFyr90PTROrOxKGVJlP5N/fLinEsxOzpOfTAWIYL74ZosVj
+         HqZ4QJKGaZ1YZZIfh75mJ06l3SlXcmzK3MYtXdrV0G+vpeD1B1GzwvKmEANMvLL6lDAE
+         +AeURuZ4zgEkOmiGQJE/QSCzUjwV8fS8/8O96OQWes4FoSDUyJ18h07t9MYbGOiIY9SV
+         Lw7g==
+X-Forwarded-Encrypted: i=1; AJvYcCVIQNTmT6lQHeO2nrzmIA3OA/jIDiB/YPKPH7IAdbJAQ/4fse/uevtFk5kNzwmZN2RqgC+4+mn/jII=@vger.kernel.org, AJvYcCVUuJ4L3mWc/YVXOwnygoE3oPEnklwMH1Xh+PqeA+jo/kVg5kobsgR7giSN+wlY+JhBa2CnmSejfDERFt4=@vger.kernel.org, AJvYcCVnzIJnyNvaHqjyQfiYYT/LohQBZAigApzHkim/ZL2xS4CtCKmp8xk1NimeiBgToTX/5hqWOvb+AFJy9ZjitME=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxBwvnYTjklJsiHLf9mA1aB/lq4Ohz0r3aE2XjB/ny+TaYhgmxK
+	2HbuuKqjDLuh2lF7PVeAiopVn3xyjQttEjWWKSgXDbbSbPTX3IJt
+X-Gm-Gg: ASbGncuVLD6G8JWXa5zX8Uz+B3Sj2gVI/MBBlkJ8Z6rI5dMIvaZk09EgXxRXcpqFHdE
+	XfI/nteTCqCNJLTg2cr17nxY+hR7mMvcCZv1joCo1z/tMeyTmYywkUYUHVbUIqeauuOlGPNBpxv
+	mK+Br1Mp2qcVkKqjLd9RgnAJ/MFZnBEyNpjM71V9Bdv1aCIbSMD0CRkbGoC1H38Nt/4IJf9qglc
+	Y5oExWQjhhzxm66kC2EZEySEU4Yhb0feH6Ad+3tAvnwDgG0eqClhqg7ghAZU+QmUlOVwgIoAVPZ
+	8ALNTFyQPdNxLRtEJkXrWrM0CRGIR/x9/wFEHfty7+r57bc/nJUKdZ/rFrdisA==
+X-Google-Smtp-Source: AGHT+IFX+yydMfA2KvN3qR8wwEAWMY6dCzO7XD1Jpai1WZCyjR83OHW/VfW2eSTH7oe0ieczq9aNOA==
+X-Received: by 2002:a05:690c:6c8e:b0:6fb:9389:3cde with SMTP id 00721157ae682-6fbcc1ffb02mr73850507b3.3.1740267284829;
+        Sat, 22 Feb 2025 15:34:44 -0800 (PST)
+Received: from localhost (c-73-224-175-84.hsd1.fl.comcast.net. [73.224.175.84])
+        by smtp.gmail.com with ESMTPSA id 00721157ae682-6fce175d7c7sm4656927b3.80.2025.02.22.15.34.42
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Feb 2025 15:34:43 -0800 (PST)
+Date: Sat, 22 Feb 2025 18:34:42 -0500
+From: Yury Norov <yury.norov@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+Cc: Viresh Kumar <viresh.kumar@linaro.org>,
+	Danilo Krummrich <dakr@redhat.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
+	John Hubbard <jhubbard@nvidia.com>, linux-pm@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] MAINTAINERS: add rust bindings entry for bitmap API
+Message-ID: <Z7pfBoXDoH5x-MEq@thinkpad>
+References: <20250221205649.141305-1-yury.norov@gmail.com>
+ <20250221205649.141305-3-yury.norov@gmail.com>
+ <CANiq72=ctKoDz+Kf7UFBTD-oF17cTHBcrkNN_5cqxQeK609OVA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250222-thermal_kcalloc-v1-1-9f7a747fbed7@ethancedwards.com>
-X-B4-Tracking: v=1; b=H4sIAGEtumcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
- vPSU3UzU4B8JSMDI1MDIyMj3ZKM1KLcxJz47OTEnJz8ZF0LC8OU5DTTJHPzJAsloK6CotS0zAq
- widGxtbUAOmYgfGEAAAA=
-X-Change-ID: 20250222-thermal_kcalloc-881dcf5b77b8
-To: Markus Elfring <Markus.Elfring@web.de>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
- Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org, 
- Ethan Carter Edwards <ethan@ethancedwards.com>
-X-Developer-Signature: v=1; a=openpgp-sha256; l=1388;
- i=ethan@ethancedwards.com; h=from:subject:message-id;
- bh=1ysXJ9tNqbTNnC5MOSLRwjUBTc9Nx5MfsWwXFqejhwo=;
- b=LS0tLS1CRUdJTiBQR1AgTUVTU0FHRS0tLS0tCgpvd0o0bkp2QXk4ekFKWGJEOXFoNThlVGp6e
- GhQcXlVeHBPL1NUWlpJbS9QMWJkeVV2V1gzRys0cXJ6clBNM1dUCnVqS24rUVRuRnVGWFVuZWNI
- Ny9yS0dWaEVPTmlrQlZUWlBtZm81ejJVSE9Hd3M2L0xrMHdjMWlaUUlZd2NIRUsKd0VTK0JESXk
- vTmJjRWI3UzJYaXU2SlRTeFFZT0UvTW5UdGs0Ujd3My9JL1BjcWF5Qm8vcmF4ais2WVhNYXJ4eA
- p1MDN2K0pQSDRVY3Rpcjh6NTM3emNOMWZ3eTgvUTdrcjNvR0pFd0JwaTB2cQo9azhudAotLS0tL
- UVORCBQR1AgTUVTU0FHRS0tLS0tCg==
-X-Developer-Key: i=ethan@ethancedwards.com; a=openpgp;
- fpr=2E51F61839D1FA947A7300C234C04305D581DBFE
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CANiq72=ctKoDz+Kf7UFBTD-oF17cTHBcrkNN_5cqxQeK609OVA@mail.gmail.com>
 
-We are trying to get rid of all multiplications from allocation
-functions to prevent integer overflows[1]. Here the multiplication is
-obviously safe, but using kcalloc() is more appropriate and improves
-readability. This patch has no effect on runtime behavior.
+On Sat, Feb 22, 2025 at 02:50:50PM +0100, Miguel Ojeda wrote:
+> On Fri, Feb 21, 2025 at 9:57 PM Yury Norov <yury.norov@gmail.com> wrote:
+> >
+> > Bitmap developers do their best to keep the API stable. When API or
+> > user-visible behavior needs to be changed such that it breaks rust,
+> > bitmap and rust developers collaborate as follows:
+> 
+> If I understand correctly, you are proposing to a "temporarily stable
+> API", i.e. to add new APIs while keeping old ones for a bit until the
+> Rust side updates to the new one (including perhaps workarounds in the
+> helpers when needed). Is that correct?
 
-Link: https://github.com/KSPP/linux/issues/162 [1]
-Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments
+Yes. Keeping them under CONFIG_RUST for a while, or moving directly to
+rust helpers would be an option.
 
-Signed-off-by: Ethan Carter Edwards <ethan@ethancedwards.com>
----
- drivers/thermal/thermal_debugfs.c | 2 +-
- 1 file changed, 1 insertion(+), 1 deletion(-)
+> In other words, while the entry is about the helpers file, the policy
+> is about all APIs (since some APIs are called directly), right?
 
-diff --git a/drivers/thermal/thermal_debugfs.c b/drivers/thermal/thermal_debugfs.c
-index c800504c3cfe0ea3b4a51286f348dd5802e1898f..60ee6c366998e26447a0b985112f578ba8757f17 100644
---- a/drivers/thermal/thermal_debugfs.c
-+++ b/drivers/thermal/thermal_debugfs.c
-@@ -876,7 +876,7 @@ void thermal_debug_tz_add(struct thermal_zone_device *tz)
+Yes, it's about all functions used by rust. I can underline it in
+the commit message. 
  
- 	tz_dbg->tz = tz;
- 
--	tz_dbg->trips_crossed = kzalloc(sizeof(int) * tz->num_trips, GFP_KERNEL);
-+	tz_dbg->trips_crossed = kcalloc(tz->num_trips, sizeof(int), GFP_KERNEL);
- 	if (!tz_dbg->trips_crossed) {
- 		thermal_debugfs_remove_id(thermal_dbg);
- 		return;
+> (Up to you, Viresh et al., of course, i.e. I am just trying to follow)
 
----
-base-commit: 5cf80612d3f72c46ad53ef5042b4c609c393122f
-change-id: 20250222-thermal_kcalloc-881dcf5b77b8
+What I want to make clear to my contributors is that lack of proficiency
+in rust will never become a problem for them. If they have an improvement
+that may break something on rust side, there will be someone who will take
+care of it - this way or another.
 
-Best regards,
--- 
-Ethan Carter Edwards <ethan@ethancedwards.com>
+I think rust developers need similar guarantees form rust maintainers:
+there will be a rust engineer who will keep the bindings on rust side in
+a good shape. Viresh, as per my understanding, has committed on that.
 
+Thanks,
+Yury
 
