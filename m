@@ -1,126 +1,196 @@
-Return-Path: <linux-pm+bounces-22719-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22720-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id E0E82A407C4
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 12:01:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id BC845A407DE
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 12:29:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2621A19C71CD
-	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 11:01:08 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9B89617E7B7
+	for <lists+linux-pm@lfdr.de>; Sat, 22 Feb 2025 11:29:16 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5083F209F4E;
-	Sat, 22 Feb 2025 11:00:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E6AA207E0B;
+	Sat, 22 Feb 2025 11:29:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="HhStBCZN"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gggUN6ho"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from pv50p00im-ztdg10021801.me.com (pv50p00im-ztdg10021801.me.com [17.58.6.56])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-pj1-f53.google.com (mail-pj1-f53.google.com [209.85.216.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 77B4C2063E2
-	for <linux-pm@vger.kernel.org>; Sat, 22 Feb 2025 11:00:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.6.56
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6ACF2066C8;
+	Sat, 22 Feb 2025 11:29:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740222055; cv=none; b=gFx+Z68FAE9yv2sfU6gKclmIOtRzQZ9TGSVmKDSxSVBztmL2ZXtfJt3gf8yO13U8Y24BG5kNdHZV9oFRpWHn9lMQM8G8F83VvP/MjRQBaCVR/nR7npZwSeWHlrbr3zln5boDRtQkDFWTAWUUMzTtxwzMID4fgD19X11JX8EnaBg=
+	t=1740223753; cv=none; b=p3D8HM/hG6Tl3ZxsIZMmYZpAaIHMVYbCT7x6GRbfUKs0R0nx4M7zsPTnogxfIH7TkC4BYgA4sXLDPK3lzU3DnHk0D0Kl4NNtZmbGxY74xtYoxmobDoPRcd2wTXo1nhgUduvsPqsRIyDWTLTys5az/b5+1ED4onRscKVTsbdbgkI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740222055; c=relaxed/simple;
-	bh=s5PMq4K2vUmCJ7mWo835mcJtSukLKOG4lecc2nZmroI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=qTjnA98nYQvX3BVm8uaLrFNPv06CcThv6gZjXsemvJSt5Rixsbd/g6zfCduQPa+EdyqYojzqD1InRC1EGhN3+NAVyqyeX9exR85IdmM23HLnQm/w7ykjwMR296q2jz/47NV7qtAe96vJFEPvaIicpvmXlrA/TUZ5r9YZOLj+LJE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=HhStBCZN; arc=none smtp.client-ip=17.58.6.56
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; bh=UhO/oKP5iMw5fHjgaGRWOOpphrslB5BPutH1Bqw2Dkg=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme;
-	b=HhStBCZN3rVcd9EC6oBRvG6abifGqlnPtcBVpdm6i/PmmBuQa0QJPHyLR1FLsYmXk
-	 MvvGwxnVyjgIAQUePoznfvb7VEqM2/2CzwoYBfpUQAlvZbnYih/hmf83Ex5BvNFrdQ
-	 PbfYoJ6GNXR9EuX2Q1IkypReed+wxDFG/c9O7uFQFsKRQdeX9qYk5H4Dvd9QURFidN
-	 MaOu/D4ITgbWB/BaBzseWqBas93vN7EeBu7C7tTfSVogYryn4akeV915HBecUZbsev
-	 T9vaSLH2CkX0yMcrX7poOXKdwAfoNE9h2RgWTSTlng3BI8SOCu2qBQQAo94LS+WVDT
-	 77yqa5YwGC84Q==
-Received: from [192.168.1.26] (pv50p00im-dlb-asmtp-mailmevip.me.com [17.56.9.10])
-	by pv50p00im-ztdg10021801.me.com (Postfix) with ESMTPSA id C1B66201011A;
-	Sat, 22 Feb 2025 11:00:33 +0000 (UTC)
-Message-ID: <8f36be7c-6052-4c5d-85ff-0eed27cf1456@icloud.com>
-Date: Sat, 22 Feb 2025 19:00:28 +0800
+	s=arc-20240116; t=1740223753; c=relaxed/simple;
+	bh=3HcOk7KIE2X2SrurKPz1ZC+4TT9eXp5Ic6dRS70PdAU=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=ql6H67QIg388FgXgxCgejAyoK1xjNwxl7OQz0orxq3EzeCUq0P6QbqHLpiVIe13+D1FiRfJ9R54HlqaX3BXhKUDhx9SaDwL1E7VBa7bQjdGaEMGvfBPvUcIX7qhNMrkAA/ePUu2azpHwbGFajSrLzJtsWI2GjmcF4PMfUyyBdhQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gggUN6ho; arc=none smtp.client-ip=209.85.216.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-pj1-f53.google.com with SMTP id 98e67ed59e1d1-2fcb6c42c47so4775240a91.1;
+        Sat, 22 Feb 2025 03:29:11 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740223751; x=1740828551; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=QECQwJDGEx9XpEmKOp8AR9iu2sg3HSyCp2tf6Nxzees=;
+        b=gggUN6hocVdl6Bpo7sklTOVMEtfYRPEnCtJ8R8J8VX6RdUbnVwCLk9Zm/mPKL7myTc
+         iG/oPyTCwl4PvahO7+TZEgQOHk08IfEHWzOYejGlWZifjKbz2S8CD26E8uPea1l3bJIs
+         oTSf5lAHp9zmeUO+3VxaM/B+jGuoUZ/cY2l9jH5KGDbTRijOD1zXgeLSlJ6fag0iBELQ
+         npfCKCwZL0gu+z9+OFWyZRVnORLVuWqejzpPHFp/YCbNL9LtQ69UnnNJYbvljaIINTyP
+         ScsShpqYR/+o/TpxlPw+X65VcIV6EJ+ka3vYy5UvUJbjXuIEkQTdxtGJYWiH2DDZg26L
+         xDJA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740223751; x=1740828551;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=QECQwJDGEx9XpEmKOp8AR9iu2sg3HSyCp2tf6Nxzees=;
+        b=Pcx/Hdd6O92Uay5vujzDSE9Rc8WPQlZkl6NZJ8qTV4G+ZBa8VEfF3TkNEOawTCAMDu
+         Fr4mNiH1MjXWWsmn31IWRBQs2cJGGfvr+S6kXtLzXvvqZj3iJaU1H+FwQR4lxsGwjkfm
+         +T7QfAj5l1tz1wx+0wCLoKCUySGKPilWACjyuFvZT/GoE9ODr9g7Tsg97Z2G+EdPpBuP
+         donyOHphO9bOTpHXHNCNdSStyqTsrxixHt2Dbf4lxz4qCOnsapq9RUnUBMLcjrhJzbqJ
+         9wup8hRZ8OZJmDBHybE2bWZUEuWfA5bF/4fltuVZIfJdBYn3dJ7/u360gEGh7BbllnHx
+         BKHQ==
+X-Forwarded-Encrypted: i=1; AJvYcCXchjxbdXFUUEoj9w29FyZ4d8JsTu6io4viwOYE3pLcEwoBAL7IdBAmmWar5dy4NmvevL5WvI5eug==@vger.kernel.org
+X-Gm-Message-State: AOJu0Ywqu2a/4Z7yMhFQUap4Uuh0lCLQ9rtn2AWn0sALZnXvfe27ZBWj
+	PMqX2z+9bWEN25OGnsWKU3cxg/gKo0IFtS+gKXjUl/vsIB1hQgw1
+X-Gm-Gg: ASbGncu9RHovIGmBYEith9kBxZ0GrdfztXugur1WQSf2kOprwU6ehSqEwZ7lItncegy
+	NZn/APKE+AH+hRyC5qhUCEwe+tl+UMBI1levUL+rp2WnuSNTcNHyZlb1obiMF5HBNaxcDCvJSFF
+	FvX4EyONB39LBlAWxcciQtJUCZ0J5/Yk+Dnb3guBlo/5NEtysi9NcXlyMsf+S3kzZV1E0yCDgO4
+	rqbsFYo1eo4pCbajW0aPIxx/fvfuPDXLqLl1zKlo6/EBrnbPtfJ6JbkstN0Pn1SpMKChr9awoIz
+	/xa3iX0OQ6LBnCnomGlOkBl7
+X-Google-Smtp-Source: AGHT+IHTV4Fc835gBSr+KiZgTLVuCJR5c6HcR46bp0C4GHKJwo3ghQR31BLbPSzmwrvQLxMk4KDyfA==
+X-Received: by 2002:a05:6a00:2ea9:b0:730:8d25:4c24 with SMTP id d2e1a72fcca58-73426cb1d46mr10451331b3a.10.1740223750960;
+        Sat, 22 Feb 2025 03:29:10 -0800 (PST)
+Received: from nuvole.. ([144.202.86.13])
+        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-addee79a984sm12381005a12.32.2025.02.22.03.29.07
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Sat, 22 Feb 2025 03:29:10 -0800 (PST)
+From: Pengyu Luo <mitltlatltl@gmail.com>
+To: sebastian.reichel@collabora.com
+Cc: linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	mitltlatltl@gmail.com
+Subject: Re: [PATCH v3 5/6] power: supply: add Huawei Matebook E Go psy driver
+Date: Sat, 22 Feb 2025 19:27:24 +0800
+Message-ID: <20250222112724.336033-1-mitltlatltl@gmail.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <m2dy2vhvw7rhexvzkkloelgkcdcq6ci2ot54mdffpvosvagf64@usdxy2cnjeua>
+References: <m2dy2vhvw7rhexvzkkloelgkcdcq6ci2ot54mdffpvosvagf64@usdxy2cnjeua>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH *-next 01/18] mm/mmu_gather: Remove needless return in
- void API tlb_remove_page()
-To: Peter Zijlstra <peterz@infradead.org>, Zijun Hu <quic_zijuhu@quicinc.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Johannes Berg <johannes@sipsolutions.net>,
- Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
- Jiri Pirko <jiri@resnulli.us>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
- Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Robin Murphy <robin.murphy@arm.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, iommu@lists.linux.dev,
- linux-mtd@lists.infradead.org
-References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
- <20250221-rmv_return-v1-1-cc8dff275827@quicinc.com>
- <20250221200137.GH7373@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <20250221200137.GH7373@noisy.programming.kicks-ass.net>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-GUID: xYMDZO87E-9u-9wzotp6QmCV6S-rGtqV
-X-Proofpoint-ORIG-GUID: xYMDZO87E-9u-9wzotp6QmCV6S-rGtqV
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.272,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-22_04,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 clxscore=1015 adultscore=0
- suspectscore=0 spamscore=0 malwarescore=0 phishscore=0 mlxlogscore=885
- mlxscore=0 bulkscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2502220088
+Content-Transfer-Encoding: 8bit
 
-On 2025/2/22 04:01, Peter Zijlstra wrote:
->>   */
->>  static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page)
->>  {
->> -	return tlb_remove_page_size(tlb, page, PAGE_SIZE);
->> +	tlb_remove_page_size(tlb, page, PAGE_SIZE);
->>  }
-> So I don't mind removing it, but note that that return enforces
-> tlb_remove_page_size() has void return type.
+On Sat, Feb 22, 2025 at 6:22 AM Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
+> On Fri, Feb 21, 2025 at 02:01:04PM +0800, Pengyu Luo wrote:
+> > On Fri, Feb 21, 2025 at 9:33 AM Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
+> > > On Thu, Feb 20, 2025 at 02:43:20PM +0800, Pengyu Luo wrote:
+> > > > On Thu, Feb 20, 2025 at 8:24 AM Sebastian Reichel <sebastian.reichel@collabora.com> wrote:
+> > > > > On Tue, Jan 14, 2025 at 01:51:27AM +0800, Pengyu Luo wrote:
+> > > > > > On the Huawei Matebook E Go tablet the EC provides access to the adapter
+> > > > > > and battery status. Add the driver to read power supply status on the
+> > > > > > tablet.
+> > > > > >
+> > > > > > Signed-off-by: Pengyu Luo <mitltlatltl@gmail.com>
+> > > > > > ---
+> > > > > >  .../ABI/testing/sysfs-class-power-gaokun      |  47 ++
+> > > > > >  drivers/power/supply/Kconfig                  |  10 +
+> > > > > >  drivers/power/supply/Makefile                 |   1 +
+> > > > > >  drivers/power/supply/huawei-gaokun-battery.c  | 548 ++++++++++++++++++
+> > > > > >  4 files changed, 606 insertions(+)
+> > > > > >  create mode 100644 Documentation/ABI/testing/sysfs-class-power-gaokun
+> > > > > >  create mode 100644 drivers/power/supply/huawei-gaokun-battery.c
+> > > > > >
+> > > > > > diff --git a/Documentation/ABI/testing/sysfs-class-power-gaokun b/Documentation/ABI/testing/sysfs-class-power-gaokun
+> > > > > > new file mode 100644
+> > > > > > index 000000000..b1eb9e8d7
+> > > > > > --- /dev/null
+> > > > > > +++ b/Documentation/ABI/testing/sysfs-class-power-gaokun
+> > > > > > @@ -0,0 +1,47 @@
+> > > > > > +What:                /sys/class/power_supply/gaokun-ec-battery/smart_charge
+> > > > > > +Date:                January 2025
+> > > > > > +KernelVersion:       6.12
+> > > > > > +Contact:     Pengyu Luo <mitltlatltl@gmail.com>
+> > > > > > +Description:
+> > > > > > +             This entry allows configuration of smart charging behavior with
+> > > > > > +             four parameters. The format is: <mode> <delay> <start> <stop>.
+> > > > > > +
+> > > > > > +             - mode: Defines the charging mode (1 or 4). Mode 4 enables delay,
+> > > > > > +                     while mode 1 does not.
+> > > > > > +             - delay: Specifies the delay in hours (non-negative). This is
+> > > > > > +                     only used when 'mode' is set to 4.
+> > > > > > +             - start: The battery percentage at which charging starts (0-100).
+> > > > > > +             - stop: The battery percentage at which charging stops (1-100).
+> > > > > > +
+> > > > > > +              When the laptop is connected to a power adapter, it starts
+> > > > > > +              charging if the battery level is below the 'start' value. It
+> > > > > > +              continues charging until the battery reaches the 'stop' level.
+> > > > > > +              If the battery is already above the 'stop' level, charging is
+> > > > > > +              paused.
+> > > > > > +
+> > > > > > +              When the power adapter is always connected, charging will
+> > > > > > +              begin if the battery level falls below 'start', and charging
+> > > > > > +              will stop once the battery reaches 'stop'.
+> > > > > > +
+> > > > > > +              If mode is set to 4, the above charging mode will only occur
+> > > > > > +              after the specified delay in hours. If mode is 1, there is
+> > > > > > +              no delay.
+> > > > > > +
+> > > > > > +             Access: Read, Write
+> > > > > > +
+> > > > > > +             Valid values:
+> > > > > > +                     - mode: integer value (1 or 4)
+> > > > > > +                     - delay: integer value, delay in hours (non-negative)
+> > > > > > +                     - start: integer value, battery percentage (0-100)
+> > > > > > +                     - stop: integer value, battery percentage (1-100)
+> > > > >
+> > > > > There are common properties for start and stop charging percentage,
+> > > > > which should be used:
+> > > > >
+> > > > > * POWER_SUPPLY_PROP_CHARGE_CONTROL_START_THRESHOLD
+> > > > > * POWER_SUPPLY_PROP_CHARGE_CONTROL_END_THRESHOLD
+> > > > >
+> > > >
+> > > > Agree, but at least, we should pass delay, start, end. EC only
+> > > > providedone interface to set mode and delay, that requires 4
+> > > > arguments, we can handle it with 3 arguments, as you suggested
+> > > > below. but if we treat start and end separated, then if we want
+> > > > to set smart charge, we set start, set end, set delay(read start
+> > > > read end, then set them again). It is a bit redundant.
+> > >
+> > > Yes, if these are separate properties you won't get atomic updates.
+> > > But is that really a problem? Using the standard properties means
+> > > that you get UI support in the future. I know at least the GNOME
+> > > people are working on this.
+> > >
+> >
+> > On my another x86_64 device with end threshold supported, KDE Plasma
+> > supports showing this as
+> >
+> > > Battery is configured to charge up to aproximately <value>%
+> >
+> > it doesn't support setting things. So, can I keep passing delay, start,
+> > end when setting, but also setting start and end as battery properties?
+>
+> No? Why should we create a custom sysfs ABI (which also breaks the
+> one value per file rule), if we already have a standard ABI?
 >
 
-tlb_remove_page_size() is void function already. (^^)
+I got it, I will follow it. Since V4, I had dropped this driver to
+focus on upstreaming the base EC driver, once the base driver is
+upstreamed, I will send the new version of battery driver.
 
-> It might not be your preferred coding style, but it is not completely
-> pointless.
-
-based on below C spec such as C17 description. i guess language C does
-not like this usage "return void function in void function";
-
-C spec such as C17 have this description about return
-statement:
-6.8.6.4:
-A return statement with an expression shall not appear in a function
-whose return type is void. A return statement without an expression
-shall only appear in a function whose return type is void.
+Best wishes,
+Pengyu
 
