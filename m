@@ -1,244 +1,124 @@
-Return-Path: <linux-pm+bounces-22749-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22750-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A7B25A40EBE
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 12:57:23 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id BEC4FA40F0C
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 13:56:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 199A73B29D2
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 11:57:13 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 6129F7AAFA6
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 12:55:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A72B22066FD;
-	Sun, 23 Feb 2025 11:57:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBE74205AD0;
+	Sun, 23 Feb 2025 12:56:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X/9Ngnfy"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m7Zy3RJq"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f53.google.com (mail-wr1-f53.google.com [209.85.221.53])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0B252063F4;
-	Sun, 23 Feb 2025 11:57:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.53
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B240D1C84CA;
+	Sun, 23 Feb 2025 12:56:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740311828; cv=none; b=QLEZkWF9NMJD4dEbJa6Nis/NWaKrahXZ9Lbb0inCxw7VtktdPxXOmHv2eA3hL+J16LyaPsbtEeTfQlAiWohAMXUHaI3DBqAcgWWtqN3RbClbpCsMiKerS5WwVvgoG4rmtyDNgYnGG+xTVpRDyeDCDK2gepfDdMAWT1Xzdho7/4M=
+	t=1740315382; cv=none; b=le3V3aO3HSi8PO+yPkSaaFRpntit05prCLfzHn9xx2K8rVjGXDzaS35dZAnQVSk4s6pBuYKVRrZ38Qz1qEMaaFQr57rz4aFPqtawN7SCp0Nh9D036ieRkeBfUTtMemcFZb405hf4R7rPfMEPYQjYn8akUFs28g4/EEQ3j5Q9zIo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740311828; c=relaxed/simple;
-	bh=lQCWaTYzbOlez/0mA2hci+myzNPdFuo5HQXOrHOHrds=;
+	s=arc-20240116; t=1740315382; c=relaxed/simple;
+	bh=qS/Vd39854JLBEvTlea6OneA39batnAgvlvcbDkdIdw=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=L7M5Ph9Rguc+FvH2JU8de/4QOdzhmpzb1Pw+I5CXsK61IP8oqHakFuYR1IjnbIfElJMZMG1c2//As4AlOQY3ECDm3/z1dWoQj89XOH0lHlLuy+1SX58SAfp897pH0J2Vd25XrsVl7sI/Ut/NwFxfYqUWALo3Dhfp3ETvYzKgnhI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X/9Ngnfy; arc=none smtp.client-ip=209.85.221.53
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f53.google.com with SMTP id ffacd0b85a97d-38f2f391864so1939170f8f.3;
-        Sun, 23 Feb 2025 03:57:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740311825; x=1740916625; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=L8eYCTx6g/rWtouEkr7hfTZ953yzJSDo4S/RZug6h5Y=;
-        b=X/9NgnfyB9qTalnR16miuaVnOPxfmRK87aqPSBzIjnIR7GpIrsoTdcRJjOdb7OZm6h
-         Q7to2dnOlY95Zo1fGebAHTtkq/NCiUdGcSJuRekKlyEHUlo/yfNH6/y1ANp8/30IBXWb
-         B8t/UFY7rvl5kIrSiPKkFHf//IJdAGG1zCECwSMxLtT92YYwI1bAivoPddb058UqpITz
-         47fC7Rs5JBXB5hIEbGTr7QbuVg7jFeQQdOvfub8bi1wMTbwc3ohgt3YmF4pZOw8ArG2S
-         RYZ/Bx3Ar+XNm09KZmEylvqmBNpnr/EyqimqYedGi0WKnUDdz6PGRi5H/63CQ7VmZlDF
-         kTEw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740311825; x=1740916625;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=L8eYCTx6g/rWtouEkr7hfTZ953yzJSDo4S/RZug6h5Y=;
-        b=wGtkojI7+oBfwy3wnFkOlfXZo4Ci6JlFwvYFtZoPUAbqZc3bad0Nk/8ncWvXlXBvqK
-         YWIXqKnAZabeeR+KCYeMwEhR7SkF3rFUxFnSWysSbTo95GlKzzAOmI+YnhlQCRuHp9wi
-         ABO7FhaWHTnHjor9nPbij41/H4bE1ZeZQ3UrVTjOiP8oLm4RPp+pqseF7LFdRCVH1Ubx
-         PxYshz1sx53NBKjaobOxkX0UXyTTfk5KXY3uLqkvXMsoSmR7rjdw+wgRJb/yUVWi5SrV
-         0XxuHIRKgRYxc0iozeI+/VIT4+CI3WUM8cL6sunSQn6u1n5ooYl4pNZ86P6+tKcrHEaf
-         VNKw==
-X-Forwarded-Encrypted: i=1; AJvYcCUDKw4zDH6TU8JrgBCnvmnMkHirWBi7QLyZnRMbk2WJQ/EWR25XF8kX9fI0mISs5B14EABP6MCxWB1l72to@vger.kernel.org, AJvYcCV3ZZslzNJrxBsoMmiwAv4UdWUhCHUP/IKYr0RhX+gYPN/ak+2JVi19jGaxXZExqapQoAVGiPzcXbg=@vger.kernel.org, AJvYcCXtdE6HtDRJdSWUME+xpOiV0d1wPUZk+qWfJLKvk9kXqIJv+9TuLHQtAo1iax9JVz+BRjzOfhVjRL/r@vger.kernel.org
-X-Gm-Message-State: AOJu0YwOXLdvc+0wF5cJX7Qlm5gDq7ADrSOvswlqPBsAm4zN7ApVLCAY
-	6zrF6PNv2ofNvKsp7hMYgg+ODCd5yiAJOKeSSCqzsofse6Y/aKOFOdB6SRM6pMD9JNVrBTWSvHT
-	ByeXTK4R0vyWAh710DnrsD80Nt94l2g==
-X-Gm-Gg: ASbGncsZVo7D31NCFj1y1qDLpE4Fif6bYVJPm4Ts14PN55G+BKRYCSPMhfsah+6dxwa
-	kj3g2TPxWYpHCYbBD2yJylyvd9/8EQpPcok73oElDo3td3pnMsDejJt/80RZYEaF1RtXkbSvUR9
-	0edwfWhqsz
-X-Google-Smtp-Source: AGHT+IFVv5dy/4Xqxq8iD5kk+CIJUzGwiLe/xbSp9WFqHJXyw+a/z8rOuQxKjpLwOkZRBAAIUrIj6cipgwtdbU3ux5s=
-X-Received: by 2002:a05:6000:1786:b0:38f:3e8d:dd42 with SMTP id
- ffacd0b85a97d-38f6f0d6ccemr8802825f8f.53.1740311824931; Sun, 23 Feb 2025
- 03:57:04 -0800 (PST)
+	 To:Cc:Content-Type; b=CMWx6tuMVaAYcUvJ08dN0DVz4pG7NBtcvrOsLnoAIFIGau3p1YOi31iFacABH9OYTLjdZ3rvC/nUYkUkoYey5frcqtiHvv+eIh0b65FR5RHi/nEP9MevI4lCqQCSJYQYhY1e46eNLmj23vGo6MjcfWAX/tVQImvbszCeqbxt+J0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m7Zy3RJq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8631DC4CEE8;
+	Sun, 23 Feb 2025 12:56:22 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740315382;
+	bh=qS/Vd39854JLBEvTlea6OneA39batnAgvlvcbDkdIdw=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=m7Zy3RJqtTv/pNml1JQJoJCtAjK4Yi2HhFqNlVpFErsVaLnMkLblm7mb7lfloTqai
+	 tBXy62yCNwvjmhXnZSiWjLNFncp0zjcVMzZ8dlXIGTYYNeOntU4fk7b3BVyzVKB2/e
+	 XCra/jXLJZb970xhGJPvIzfiUq3IUfke6lZm1HlZcYE7qeM3gt9ZuhQ4zWiwxFQzq0
+	 hFKxxCj6ftmBKHVSpI1oCt3DKSlc56FZMc8/mmQbwiJfBqaou2vJgtWLcuAwd6fceu
+	 S/8EC+XHsEqeMfm9Yu+unfwYn/ILfC7z6l456V92s8+22oppuCH/jzwEEm5UvMtqyz
+	 7/LkHzAOpPn0g==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2a9ef75a20dso4377269fac.2;
+        Sun, 23 Feb 2025 04:56:22 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWzAtYmFcILp/wbZ15X7sy4JjT0xI6mlCfnhfJbgVx3S2q0rNpCxAjphYwizjFFB2Kv7z2EENYxbNaercc=@vger.kernel.org, AJvYcCXBXkDQq7VEE/UjTTdrD3RvgrXM/hu2/jOBDT9f2/txV/Y/1AfWsU+B5E/8l92HGDWPOmFNMWdcHec=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzkQLnuF90WJDyIJyUXi6BiAHzsqyGxIH/xbhAg60QwsS0dYE77
+	QeO5rbyw9icSTxgwrdTAbReiM75K/tQWwCkoIIe1hSgAYjM8nHVnpw1UmqEWOyZBAJXUJjiWFcv
+	9TzufUyCt9DOP8mFGT17HXudSIPw=
+X-Google-Smtp-Source: AGHT+IHEull1aPm+G6iHppu21oqZTvMHTvcFe8TEhohV+btO3KnfXfnapdYpzmpRbDN8Dt+EhNP1a7whjDz4n6Aqpxg=
+X-Received: by 2002:a05:6808:1925:b0:3f4:be5:16e3 with SMTP id
+ 5614622812f47-3f4246dd328mr8526299b6e.19.1740315381855; Sun, 23 Feb 2025
+ 04:56:21 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250221095943.57297-1-clamor95@gmail.com> <20250221095943.57297-2-clamor95@gmail.com>
- <20250223-daft-amethyst-pogona-e9edcc@krzk-bin>
-In-Reply-To: <20250223-daft-amethyst-pogona-e9edcc@krzk-bin>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Sun, 23 Feb 2025 13:56:53 +0200
-X-Gm-Features: AWEUYZkfvYcch_1aNStlN9muMfJObH5X6HuMk7Wcyr3lcUKdC3EtJi3Rm4g00mc
-Message-ID: <CAPVz0n0-6ea0mzWig-gPx+8fuPgM7iWkZpnpMnp-9+Lq5oCdDw@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+References: <1922654.tdWV9SEqCh@rjwysocki.net> <Z7rPOt0x5hWncjhr@black.fi.intel.com>
+In-Reply-To: <Z7rPOt0x5hWncjhr@black.fi.intel.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Sun, 23 Feb 2025 13:56:07 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jwn0e4HF1SsAG1OXr59tHzh=E2rcGkTdj1FOQdK2Uisw@mail.gmail.com>
+X-Gm-Features: AWEUYZkfvz9T-5QyromuZBvt6QoKeXk1-aKCBqD78UMh8kPys53yuLKtTwmoXdg
+Message-ID: <CAJZ5v0jwn0e4HF1SsAG1OXr59tHzh=E2rcGkTdj1FOQdK2Uisw@mail.gmail.com>
+Subject: Re: [PATCH v1] PM: runtime: Unify error handling during suspend and resume
+To: Raag Jadav <raag.jadav@intel.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Oliver Neukum <oneukum@suse.com>, 
+	Ajay Agarwal <ajayagarwal@google.com>, Brian Norris <briannorris@google.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-=D0=BD=D0=B4, 23 =D0=BB=D1=8E=D1=82. 2025=E2=80=AF=D1=80. =D0=BE 13:43 Krzy=
-sztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+On Sun, Feb 23, 2025 at 8:33=E2=80=AFAM Raag Jadav <raag.jadav@intel.com> w=
+rote:
 >
-> On Fri, Feb 21, 2025 at 11:59:42AM +0200, Svyatoslav Ryhel wrote:
-> > Add bindings for Maxim MAX8971 charger.
+> On Thu, Feb 20, 2025 at 09:18:23PM +0100, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > >
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > There is a confusing difference in error handling between rpm_suspend()
+> > and rpm_resume() related to the special way in which the -EAGAIN and
+> > -EBUSY error values are treated by the former.  Also, converting
+> > -EACCES coming from the callback to an I/O error, which it quite likely
+> > is not, may confuse runtime PM users a bit.
+> >
+> > To address the above, modify rpm_callback() to convert -EACCES coming
+> > from the driver to -EAGAIN and to set power.runtime_error only if the
+> > return value is not -EAGAIN or -EBUSY.
+> >
+> > This will cause the error handling in rpm_resume() and rpm_suspend() to
+> > work consistently, so drop the no longer needed -EAGAIN or -EBUSY
+> > special case from the latter and make it retry autosuspend if
+> > power.runtime_error is unset.
+> >
+> > Link: https://lore.kernel.org/linux-pm/20220620144231.GA23345@axis.com/
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 > > ---
-> >  .../bindings/power/supply/maxim,max8971.yaml  | 133 ++++++++++++++++++
-> >  1 file changed, 133 insertions(+)
-> >  create mode 100644 Documentation/devicetree/bindings/power/supply/maxi=
-m,max8971.yaml
+> >  drivers/base/power/runtime.c |   34 ++++++++++++++++++----------------
+> >  1 file changed, 18 insertions(+), 16 deletions(-)
 > >
-> > diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max89=
-71.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
-> > new file mode 100644
-> > index 000000000000..26b37e6f662f
-> > --- /dev/null
-> > +++ b/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
-> > @@ -0,0 +1,133 @@
-> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > +%YAML 1.2
-> > +---
-> > +$id: http://devicetree.org/schemas/power/supply/maxim,max8971.yaml#
-> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > +
-> > +title: Maxim MAX8971 IC charger
-> > +
-> > +maintainers:
-> > +  - Svyatoslav Ryhel <clamor95@gmail.com>
-> > +
-> > +description:
-> > +  The MAX8971 is a compact, high-frequency, high-efficiency switch-mod=
-e
-> > +  charger for a one-cell lithium-ion (Li+) battery.
-> > +
-> > +properties:
-> > +  compatible:
-> > +    const: maxim,max8971
-> > +
-> > +  reg:
-> > +    maxItems: 1
-> > +
-> > +  interrupts:
-> > +    maxItems: 1
-> > +
-> > +  extcon:
-> > +    description:
-> > +      Special device used to detect type of plug.
-> > +    $ref: /schemas/types.yaml#/definitions/phandle
+> > --- a/drivers/base/power/runtime.c
+> > +++ b/drivers/base/power/runtime.c
+> > @@ -448,8 +448,13 @@
+> >               retval =3D __rpm_callback(cb, dev);
+> >       }
+> >
+> > -     dev->power.runtime_error =3D retval;
+> > -     return retval !=3D -EACCES ? retval : -EIO;
+> > +     if (retval =3D=3D -EACCES)
+> > +             retval =3D -EAGAIN;
 >
-> You rather miss proper connector or ports. Which device pins are
-> describbed here?
->
+> While this is one way to address the problem, are we opening the door
+> to changing error codes when convenient? This might lead to different
+> kind of confusion from user standpoint.
 
-This is an optional phandle to extcon, which can detect plug type. If
-extcon is provided, charger then can change its setup to better
-provide supply to the battery. If no extcon is provided, device itself
-can detect only the fact of charger without details about type.
+Are you saying that if a mistake was made sufficiently long ago, it
+can't be fixed any more because someone may be confused?
 
->
-> > +
-> > +  maxim,fcharge-current-limit-microamp:
-> > +    description:
-> > +      Fast-Charge current limit
-> > +    minimum: 250000
-> > +    default: 500000
-> > +    maximum: 1550000
-> > +
-> > +  maxim,fcharge-timer-hours:
-> > +    description: |
-> > +      Fast-Charge timer in hours. Setting this value 3 and lower or 11=
- and
-> > +      higher will disable Fast-Charge timer.
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    default: 5
-> > +
-> > +  maxim,fcharge-rst-threshold-high:
-> > +    description:
-> > +      Set Fast-Charge reset threshold to -100 mV
-> > +    type: boolean
-> > +
-> > +  maxim,in-current-limit-microamp:
-> > +    description:
-> > +      Input current limit
-> > +    minimum: 100000
-> > +    default: 500000
-> > +    maximum: 1500000
-> > +
-> > +  maxim,topoff-timer-minutes:
-> > +    description:
-> > +      Top-Off timer minutes
-> > +    $ref: /schemas/types.yaml#/definitions/uint32
-> > +    enum: [0, 10, 20, 30, 40, 50, 60, 70]
-> > +    default: 30
-> > +
-> > +  maxim,topoff-current-threshold-microamp:
-> > +    description:
-> > +      Top-Off current threshold
-> > +    enum: [50000, 100000, 150000, 200000]
-> > +    default: 50000
-> > +
-> > +  maxim,fcharge-usb-current-limit-microamp:
-> > +    description:
-> > +      Fast-Charge USB current limit
-> > +    minimum: 100000
-> > +    default: 500000
-> > +    maximum: 1500000
-> > +
-> > +  maxim,fcharge-ac-current-limit-microamp:
-> > +    description:
-> > +      Fast-Charge AC current limit
-> > +    minimum: 100000
-> > +    default: 500000
-> > +    maximum: 1500000
-> > +
-> > +  maxim,usb-in-current-limit-microamp:
-> > +    description:
-> > +      USB Input current limit
-> > +    minimum: 100000
-> > +    default: 500000
-> > +    maximum: 1500000
-> > +
-> > +  maxim,ac-in-current-limit-microamp:
-> > +    description:
-> > +      AC Input current limit
-> > +    minimum: 100000
-> > +    default: 500000
-> > +    maximum: 1500000
->
-> For all or most of these you miss monitored batter.
->
+In that case, I'd like to know who may be confused and why.
 
-This is a charger, it does not monitor battery. There is a fuel gauge
-for that or a battery monitor.
-
-> > +
-> > +required:
-> > +  - compatible
-> > +  - reg
-> > +  - interrupts
-> > +
->
-> Missing allOf with ref to power supply.
->
-> > +additionalProperties: false
->
-> unevaluatedProperties instead, see other bindings.
->
-> Best regards,
-> Krzysztof
->
+Thanks!
 
