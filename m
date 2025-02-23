@@ -1,125 +1,109 @@
-Return-Path: <linux-pm+bounces-22742-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22743-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9E119A40D40
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 08:33:30 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4E352A40D71
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 09:49:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3C3557AC15D
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 07:32:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 236863BE978
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 08:48:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C28AC1FC0F7;
-	Sun, 23 Feb 2025 07:33:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 243DE202C21;
+	Sun, 23 Feb 2025 08:48:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="QXZqvBSd"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="belt4/y7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f170.google.com (mail-yb1-f170.google.com [209.85.219.170])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE60D10A3E;
-	Sun, 23 Feb 2025 07:33:20 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 721DB1F8EEC;
+	Sun, 23 Feb 2025 08:48:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.170
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740296002; cv=none; b=uAVEWwPjFCBIwWGRlxW/aNeGZ/JVYYJ8uauSg6x9U8D3LJqoaCTcanjMVVnwKy04eDk/aCmUF3XF6PcitJPqEKcSYSlZbXxsH3AHyZi7n+zEV1otz9Xafltri/AmkiYGCNeV5MKvVDj0Tr1dGg+3+xfBuXyg/THuivmxtX2uk58=
+	t=1740300524; cv=none; b=p0DuWToslmvx95Yc4GZEEWVLbOuT3Warkj7n2Cu+DZnAL0XvJ37Vnv/R58WwE53NHuzdxmwYbkFvAVOIIDfrTrVuTiy07+nohHaQLDlxPWpd0Pwvok98FwtFkX1QMVf6NKsnPs6EPSoQkdn5u94fPRtkz2fI3I/GsGQZZJVttE8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740296002; c=relaxed/simple;
-	bh=73Wqn9wE5s7jSO3fZC58CnnYARE4WDY+xXaQVFqk0vI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nv7qX1OXJ3q8f7vHBynIFORtx6zdn3quBNGKFk8clfVin7vOk0Qj4TP0KTHzoUpPe+KIQMPL4C9NqpZzIYGF8egn4Y/qkQClANP234fyzr03fhBS5OttFMwBEvXu2b/c1Cb2xn4DufHpdYaPVjIqGGrDgGWSVQpHds263sdfq6o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=QXZqvBSd; arc=none smtp.client-ip=192.198.163.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740296001; x=1771832001;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=73Wqn9wE5s7jSO3fZC58CnnYARE4WDY+xXaQVFqk0vI=;
-  b=QXZqvBSdRr8AP4wHDvIxBdDdlMcgRx3wisHYt/Kv00N3ziCzfRagtCps
-   Jc281eI/CJcCraaabWoZ8QadBO6Pu/aGKCptKLHr3Co48MHkod+qRtlaJ
-   06sdjbFD6jUf84yZYOwnzN5BrfUMNcmZFYvPZb0OKbDyBxO5hzW5hYdc4
-   jEWSK/MBNFied796D7OO942G6ZTOal9EdOQys6v4K/BlK1wydRo+fxBUi
-   lb1aAQW+W+RmIwwxYOucWKnZm0V5TF9GzqUOQimPb/oNfk0jG9QlHNCOD
-   MrSrlUqNYhF0byA1YBih2xNfh+/iEM1xsLlscbxZLLy0H2vcswaz+QNpj
-   w==;
-X-CSE-ConnectionGUID: 2N1yQKtQT06nkyv95CLslQ==
-X-CSE-MsgGUID: oGS84O99RU+GFse4WMRB9g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11353"; a="51708034"
-X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="51708034"
-Received: from orviesa002.jf.intel.com ([10.64.159.142])
-  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 23:33:20 -0800
-X-CSE-ConnectionGUID: VwDMSUE1Q5yqfIXVC9U80w==
-X-CSE-MsgGUID: 03Rn9Od4QwSR7mNggNpMvA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="146612714"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by orviesa002.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 22 Feb 2025 23:33:17 -0800
-Date: Sun, 23 Feb 2025 09:33:14 +0200
-From: Raag Jadav <raag.jadav@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>,
-	LKML <linux-kernel@vger.kernel.org>,
-	Alan Stern <stern@rowland.harvard.edu>,
-	Ulf Hansson <ulf.hansson@linaro.org>,
-	Oliver Neukum <oneukum@suse.com>,
-	Ajay Agarwal <ajayagarwal@google.com>,
-	Brian Norris <briannorris@google.com>
-Subject: Re: [PATCH v1] PM: runtime: Unify error handling during suspend and
- resume
-Message-ID: <Z7rPOt0x5hWncjhr@black.fi.intel.com>
-References: <1922654.tdWV9SEqCh@rjwysocki.net>
+	s=arc-20240116; t=1740300524; c=relaxed/simple;
+	bh=2Uh0N6lbwnpYOuoTtrElbf/WhtpOMy65yWBJHigR/YM=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=dXex8T63rxKzcDhYfipxJdfXdMEbMO/NVlCDzKTFv1xsZSg8IQGTTn5nx+VZufyhCP6uU8jY0iDZbVF576lfRz50h0/zukcxCLuhkIEYnGWIUqKwMPCu0+adfKpiMtGtamT8zF+99zfjvpt9iDmB9xBY1dTg0stFKsDWc5k0dPo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=belt4/y7; arc=none smtp.client-ip=209.85.219.170
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f170.google.com with SMTP id 3f1490d57ef6-e4930eca0d4so2465515276.3;
+        Sun, 23 Feb 2025 00:48:42 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740300521; x=1740905321; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=CRNAVvYYeCRwQ3a1xM+1m/wJzn5pqIvsuHf0zaTzy2U=;
+        b=belt4/y7wmusp5l3dhR4DTtFXnCkYIwKk61V5qAaemidX7kUA9TRCte+IY2oagp1o0
+         s4PbACOrjg6gRguMXxZZGBxNkDrpAEFHJYbf0v+HJzcfcjbXTX5b3D8cZt/w7bES+feh
+         jE7jZKewTZu+IdR4zy94W2ib4jFFr7AWSwKnYw0CnJ6IDpG8p8Lwm9nG6lDD5jDJJKry
+         z+ukIKeh9GNhZ5zlQQ5z6j46CefCcB9goilmFQ2u4rYx4OKZbdneeI8zRT/N5t/BBSsh
+         T25lZSX+fADCLUDyOkqkZ1IVxpHgxM4gnUk2cFPaW2gnNv5+wnlc7QKgAgebLuMvu/U8
+         WMAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740300521; x=1740905321;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=CRNAVvYYeCRwQ3a1xM+1m/wJzn5pqIvsuHf0zaTzy2U=;
+        b=rIYRJLDEsIS8MY/SI0+vryd9oCAbBrLXUm1w8ckkUwWGohgINfrsI3ofjPB4+rGcnp
+         byEIN7Lk76/6zddYCNVSSi7crKyUB3R5m2RlyDlHY0JJAi583B56AMG6v9yZdGnbd9/r
+         l9/3Tk+gUZj4RbJ/BIGkT2K4H96CYC9C2A8stS5GfLJN5xft8A9Xsk0EqpGfMFlUIUIy
+         Jot/E/lTx2yOkcHbrxcWXJElU+XazV16JLyQog2XlyRulm6Su5Rjgp9WKDt6ArfuIXZL
+         t3xfzRBTRHesYxmG2boB284Apm0VWyZeY6XGtstrIqCZpDNx7hA1WIt18Isnu+VKdepD
+         fJUw==
+X-Forwarded-Encrypted: i=1; AJvYcCV4GHATYW9WVFrIzgLQ6Fp3n60oiIuzEo210J3w6dnMjwnvG61aXssQyKLg/zRZmoet0QxaBfR7ig+t@vger.kernel.org, AJvYcCVV97x62r9VbpN3pe9zot2JfsxSpiawhudQYmLXs/ZbsgZCfKeIi4uGoi0v95dmsS4yhXxf/Gtsqx8=@vger.kernel.org, AJvYcCViv7zGnUL8mnHvH7AbAgEN4PdIYrdfFmvmecdir/+wfNl2ZWALkHIkK6YHz5Z6zscJ4bI3cOtFHuhA8Y8=@vger.kernel.org, AJvYcCXrtNmeV99rijaVwzBLJiL7xSBxhsLnv9DswV7nuBnN+6tz0GA2+pVwQw2zhBm4OsW6vhOzJVQBQuvDwn+Z@vger.kernel.org
+X-Gm-Message-State: AOJu0YwDc+EDtCfRHxGuxp1JlUHHplajH+dVchD5FbZaSI3Yys7me6TU
+	I62RkfDEw/wwXSZ0TolmcZIRf1HlHl30/XLaSip71MPk2HsGkABc+GB2plJ1vVGrBFwrchsL+/1
+	rW/6XlUWGtcP8vIU0JOyNKCxymU4=
+X-Gm-Gg: ASbGncvm+Fz39XzYOWyrdo4QiXZlKoQBsAOYlZZg2hwzQ2GSUFRpMVPac5XqfHJF2OZ
+	GoxI2DFRD5k0GpknFashOTDfB+yCUthG3I927dBkRh6DtZQGuz5osFlrGk0QRoi/IfIbGit81Cn
+	kppQ/rh6N+
+X-Google-Smtp-Source: AGHT+IHb12XReeyoJDdKwjTiybo5Sj6fWeU+stjIr25RfUjMsbR/05GXSFVxnSxTw+cp3RjuECFwksFzSO61LWq7Pjs=
+X-Received: by 2002:a05:6902:200b:b0:e5e:1389:cb40 with SMTP id
+ 3f1490d57ef6-e5e245e7139mr6807165276.13.1740300521431; Sun, 23 Feb 2025
+ 00:48:41 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <1922654.tdWV9SEqCh@rjwysocki.net>
+References: <20250219-isp-v1-0-6d3e89b67c31@gmail.com> <20250219-isp-v1-4-6d3e89b67c31@gmail.com>
+ <20250219113422.GA26386@robin.jannau.net>
+In-Reply-To: <20250219113422.GA26386@robin.jannau.net>
+From: Sasha Finkelstein <fnkl.kernel@gmail.com>
+Date: Sun, 23 Feb 2025 09:48:30 +0100
+X-Gm-Features: AWEUYZlT7UA0f04bSLad26HmgfbyXA2dYAU1yBLaWwGCtq5yfIfuPEY4zNm_Co4
+Message-ID: <CAMT+MTR4yPzC-NBLT6uLhveHFDWpwwn=hUzU6=WDc73+UVEMwQ@mail.gmail.com>
+Subject: Re: [PATCH 4/5] media: apple: Add Apple ISP driver
+To: Janne Grunau <j@jannau.net>
+Cc: Sven Peter <sven@svenpeter.dev>, Alyssa Rosenzweig <alyssa@rosenzweig.io>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Hector Martin <marcan@marcan.st>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Mauro Carvalho Chehab <mchehab@kernel.org>, Shawn Guo <shawnguo@kernel.org>, 
+	Sascha Hauer <s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>, 
+	Fabio Estevam <festevam@gmail.com>, asahi@lists.linux.dev, 
+	linux-arm-kernel@lists.infradead.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-media@vger.kernel.org, imx@lists.linux.dev, Eileen Yoon <eyn@gmx.com>, 
+	Asahi Lina <lina@asahilina.net>
+Content-Type: text/plain; charset="UTF-8"
 
-On Thu, Feb 20, 2025 at 09:18:23PM +0100, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> There is a confusing difference in error handling between rpm_suspend()
-> and rpm_resume() related to the special way in which the -EAGAIN and
-> -EBUSY error values are treated by the former.  Also, converting
-> -EACCES coming from the callback to an I/O error, which it quite likely
-> is not, may confuse runtime PM users a bit.
-> 
-> To address the above, modify rpm_callback() to convert -EACCES coming
-> from the driver to -EAGAIN and to set power.runtime_error only if the
-> return value is not -EAGAIN or -EBUSY.
-> 
-> This will cause the error handling in rpm_resume() and rpm_suspend() to
-> work consistently, so drop the no longer needed -EAGAIN or -EBUSY
-> special case from the latter and make it retry autosuspend if
-> power.runtime_error is unset.
-> 
-> Link: https://lore.kernel.org/linux-pm/20220620144231.GA23345@axis.com/
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->  drivers/base/power/runtime.c |   34 ++++++++++++++++++----------------
->  1 file changed, 18 insertions(+), 16 deletions(-)
-> 
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -448,8 +448,13 @@
->  		retval = __rpm_callback(cb, dev);
->  	}
->  
-> -	dev->power.runtime_error = retval;
-> -	return retval != -EACCES ? retval : -EIO;
-> +	if (retval == -EACCES)
-> +		retval = -EAGAIN;
+On Wed, 19 Feb 2025 at 12:34, Janne Grunau <j@jannau.net> wrote:
+> > +     while (maps < end) {
+> > +             maps++;
+> > +             maps = of_translate_dma_region(dev->of_node, maps, &heap_base,
+> > +                                            &heap_size);
+> > +     }
+>
+> The hand-rolled reserved memory parsing looks like it can be replaced
+> with of_iommu_get_resv_region();
 
-While this is one way to address the problem, are we opening the door
-to changing error codes when convenient? This might lead to different
-kind of confusion from user standpoint.
-
-Raag
+I have looked into it, and `of_iommu_get_resv_region` does the wrong
+thing. We fill out `reg`, and it grabs that instead of `iommu-addresses`.
 
