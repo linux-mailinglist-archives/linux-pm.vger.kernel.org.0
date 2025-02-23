@@ -1,195 +1,143 @@
-Return-Path: <linux-pm+bounces-22746-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22747-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7783DA40D94
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 10:14:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id E012CA40DF8
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 11:11:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A8D55188F31D
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 09:14:24 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3A4BA3BA6EB
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 10:11:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DF1A11FF60F;
-	Sun, 23 Feb 2025 09:14:13 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A60A2045A5;
+	Sun, 23 Feb 2025 10:11:47 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AlM3j7eg"
+	dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b="pDAe4ucz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mout.web.de (mout.web.de [212.227.17.11])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B47102F3B;
-	Sun, 23 Feb 2025 09:14:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C51DD1E871;
+	Sun, 23 Feb 2025 10:11:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.17.11
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740302053; cv=none; b=qzEyi11Po+U1eLL0zrCRbLhJhPCfFbLZmJgB5cFIA4kQXlfB4qWso9mqjE1l8pCCEhCjUASyKkjaTf3K8QdEWJJ2j1CkzndhgwFWET20O7FnHqDXjp5xQpZMPsnzlaiG9a0uJcGcOAvozkdNH5Ug8NclsclASzmKyLEcDcUXZl0=
+	t=1740305507; cv=none; b=qY6A7lZIkEPikW1T2SYTQ72n6d9UMdYak8h+fLI1l+oe4JzNNIChvGaatAVn19YhfsDSXIImh3g4Nu6Fr5G5Y4hxAxK1RX14R7G8K1cJ6jI9ukrfJvEuchmezp0Xgk/qDUZpkWjl4YpmK+ocAx+WS/l/nu4dU46ReGE52Gv6y3k=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740302053; c=relaxed/simple;
-	bh=e3MLitCw7D3X/U7auB+ppYOPCSnINJcC2N1dZEbnDSQ=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=DVdapXnuWLIa7ghUo7fbAB3dIPQQ9IsJPS3EG/QNMMd9jwfezRk2SoxnRIpvej1bs1NkacuUxdTh7xlE52/o3jpzFGOLSQ/tDaqe1H+owbSIXaH1g6SJBWAR5zjipTwgyCTTP3TYlTL+sWEofOxYn1XgzksHnBmDd8E1EFaqXns=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AlM3j7eg; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6B358C4CEDD;
-	Sun, 23 Feb 2025 09:14:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740302053;
-	bh=e3MLitCw7D3X/U7auB+ppYOPCSnINJcC2N1dZEbnDSQ=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AlM3j7egETNnva6c3BLp45eauCK15Vg7x7JZbaOrcy3c16hp3uXKHGyo6JylfC3hi
-	 ITKnBtFVSAx5VCJ/Ov03bALU9TTKoaqNJSFR0uPVpY/AoExbYeWcShcyYcu/b65M/H
-	 py4he7kbcmq3iY96KDKI46niJzTR9MH3ujQNCjZ+YrfxmZBCT5oyUGRd5jDGN9can4
-	 47MlSFz14m9uaxFCkRg/xWBBh36tt97vzKa12wMbSVOj8RWTxG3A67PddnxUDG/b2P
-	 THjodkoRJLqpSYXxxtRM2kepZsjBFx7rMS4KiBJtxv4F54EbGYeXWkb4UJRfP7cpX6
-	 H8T+BPZC6Ol7Q==
-Date: Sun, 23 Feb 2025 10:14:01 +0100
-From: Ingo Molnar <mingo@kernel.org>
-To: Qais Yousef <qyousef@layalina.io>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Viresh Kumar <viresh.kumar@linaro.org>,
-	Peter Zijlstra <peterz@infradead.org>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Juri Lelli <juri.lelli@redhat.com>,
-	Steven Rostedt <rostedt@goodmis.org>,
-	Dietmar Eggemann <dietmar.eggemann@arm.com>,
-	Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>,
-	Valentin Schneider <vschneid@redhat.com>,
-	Christian Loehle <christian.loehle@arm.com>,
-	Hongyan Xia <hongyan.xia2@arm.com>,
-	John Stultz <jstultz@google.com>, Anjali K <anjalik@linux.ibm.com>,
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v8] sched: Consolidate cpufreq updates
-Message-ID: <Z7rm2XRqhCM8m9IU@gmail.com>
-References: <20250209235204.110989-1-qyousef@layalina.io>
- <Z7igK4w4PW1T_PCw@gmail.com>
- <20250223000351.xg53osxswsxxohye@airbuntu>
+	s=arc-20240116; t=1740305507; c=relaxed/simple;
+	bh=IiJYWfUzjvzO64rFYkVBgyFB2/WFf5T4phOFcLu6ucg=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=RiWgDDf9JCQA/cbeI0UUi8d7g4uyI9uO8cpCYWeIsNx7aP27U9pG3tMEU4Zh877cIj749v4YC2KAw7sx3XF9OAak437fhLpFTmnYXdqE2z2mw8tqn2A1ZAkFp25hWTLOt4kI+bwlEMpH+JenZYc+NnlJOAGaiEXsjgyXmEctFxk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de; spf=pass smtp.mailfrom=web.de; dkim=pass (2048-bit key) header.d=web.de header.i=markus.elfring@web.de header.b=pDAe4ucz; arc=none smtp.client-ip=212.227.17.11
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=web.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=web.de
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=web.de;
+	s=s29768273; t=1740305497; x=1740910297; i=markus.elfring@web.de;
+	bh=+n81tpsUZjiYF8TyqwTYd0MJyUxrzC5UmrBbfS3jvuk=;
+	h=X-UI-Sender-Class:Message-ID:Date:MIME-Version:Subject:To:Cc:
+	 References:From:In-Reply-To:Content-Type:
+	 Content-Transfer-Encoding:cc:content-transfer-encoding:
+	 content-type:date:from:message-id:mime-version:reply-to:subject:
+	 to;
+	b=pDAe4uczsP/GplF5u56BqD6C71APc1fEGYJhyJEPE0b+2kTqHDoru1cUfHEHD13r
+	 vcTzRtkZZzq2P4nLSDlypQFdJlNlDYhIgD3dj7frFRhQad07p50A8LSxI6LMwAPCB
+	 5Obf1UY3EIuRzhv4PPVsrVClSPo+rC/sBbm4zpOcTsdkFozexB09Fq3Bg/vvWUDXd
+	 NjHyRopkdahaEioZjyNi9pEXJkrtJaR7uQHMUeY9cGwZVpkXViJZ5mPZAaKSi2Efz
+	 KD9m9PrqG6M0LRHgG3KB7E2R07j7L7uVy4Sisl0yuJVqAX8NeGEhByY1VRBOe7rQz
+	 6y/3VBMEYSqcsDvtwg==
+X-UI-Sender-Class: 814a7b36-bfc1-4dae-8640-3722d8ec6cd6
+Received: from [192.168.178.29] ([94.31.70.18]) by smtp.web.de (mrweb106
+ [213.165.67.124]) with ESMTPSA (Nemesis) id 1MBjMM-1tcDLB1kdA-0017BQ; Sun, 23
+ Feb 2025 11:11:37 +0100
+Message-ID: <ebe9e9d5-2058-429e-b733-183c437ba154@web.de>
+Date: Sun, 23 Feb 2025 11:11:35 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250223000351.xg53osxswsxxohye@airbuntu>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4?] thermal/debugfs: replace kzalloc() with kcalloc() in
+ thermal_debug_tz_add()
+To: Ethan Carter Edwards <ethan@ethancedwards.com>, linux-pm@vger.kernel.org,
+ linux-hardening@vger.kernel.org
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Lukasz Luba
+ <lukasz.luba@arm.com>, "Rafael J. Wysocki" <rafael@kernel.org>,
+ Zhang Rui <rui.zhang@intel.com>
+References: <20250222-thermal_kcalloc-v1-1-9f7a747fbed7@ethancedwards.com>
+Content-Language: en-GB
+From: Markus Elfring <Markus.Elfring@web.de>
+In-Reply-To: <20250222-thermal_kcalloc-v1-1-9f7a747fbed7@ethancedwards.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-Provags-ID: V03:K1:Ky02Zy49vEaQHUodvPB1zMlzETqh0IZFLRVNj+LsxYYM+qgqmx9
+ Fi9pnUT6BChB4qVrV/EQcZk/NPM/f8ZULPfMAexBem6Po99MoZSpkjOux4Lj/heJqyMIH70
+ PbhCMMw/R2VeA0cLMZqmeFE9K95PqTu/uJay/WVW5RVlGaUAOmpxSoDgTagnUOgbhJC2npb
+ qLSUqrX9IUKCTtn3tUyyA==
+X-Spam-Flag: NO
+UI-OutboundReport: notjunk:1;M01:P0:66X98Lpb8ZY=;tAWMZY7AGEJNEZudrGY34EyO07c
+ ON30F9mdVqIUBHfIvPnqOfXRcGCCRwU36UNJ3A3bZQxxSNbDs6jN8YbeyOyeQNygp6RrLasum
+ quAkmwYXGX6QaTRJWxo6euC0QvEUiXpV714h/frms+jJASQGuIzd6E/XKSLmefZNyFkWROB9Z
+ 6eZ4W8uRnveh5IIxXV4CuPHLfhH6B36ewl7AW/QEL82n/C+6VDObj+q9YBA5gwvFYnFgqLyJS
+ NsyVPxXvPpaTDBEJFebMZ8i7yG8Hb25fwYbN5XeW6e3Alh11ClF8ORXOF+g6tRCG9g5dVOYeV
+ CgHweCJsPcbXqLXSCReFW7WlRs1GfPiDD8qe3As+x3BwMSpIJfVmOYQ1yffZuRytxvDx5qG8L
+ fp1djDM62JXlHhR4Yrx5JEahJhcEPIIiZ5dKTmH3a/9+G73qVaHPssndD/vrondMLMbVhDcIS
+ alsQ2v7vpuwTAWaPjdM+hqgwQO9EDxTSR/CRPFoa9Wie1CHfcn0y01j/LnlwtPjih4zK4UDgj
+ VGlX9XgQmT20jR1NRti2dEE7udbQlcXVeG65mZlxP0XphpXI7VUmtqWF84kVA5o0a5U6vLfyR
+ IKqabwC8fwZFXqOgdjxgEFgCA3+12G19bj018M6JFgclZZtdtJ04OgJf0mdmWdyA2v/unSEOP
+ 75xthdz2mEzbojY1xM/xTPadhM9d6jzSpRQ5xkV/8HVgR0L80qqntGjfdb3e4x1ygWTYuGI+i
+ qyoBaE/pTxv8/BP0uCfgzKpDJjOyru9yg8sbNgJRY7gC2RbUJglAjbaHPebrhg45XYonhekkF
+ wH2JO8Z/NvQ8hBVZD/J4i/INOcLcljyHd7YSuggP4ZIMontuz0oZo7YucuNO8nQW7ZOSrFPCo
+ sbqJzu3QwIUlhRLxw9Tok9Nk5h7eaJDZfj5RFHrWvVyuGBHsXcKQth7ml/OvuZ5NetgsbTX9I
+ +ylfsvUnPTUqkMEDGjT7pj/OPPT7y5jlLYNH8r17NrjH8b0KSHUr9qQhoCy9pY1+HvhTqDPKs
+ 9JfZthAQUr+YVcVFhjwuGcXIxACvhFEtwmZrld/P/STa+M8b2ja68TWyA0mFcu8PjSRmkL4Nb
+ gOIC/GBv871Inyxu4FKJgqNYzCQsCeqkiFH9Tvw/wnIOpDcVfQgr1MHvft4DhWn2DYsTFc1Q/
+ D8NF5vNs4Oinw8zFF1FapAvkKO2wCyfGNaMfRE4TyAnpkZx64cyFbfDLG+jFJAw+9yzGVvKHD
+ zqyZAjNnd8LWrLcCLVppb7O3YATmd8Uqo3emA7J2DGdXGPcRAErhLebawYfaP1lkIjXHMVqmL
+ 6NvNo4qNO8IjweQZ5XlgJBt1C5Cdo48lvzvgaB51Ggzn/T3Ss31ydc4s/J7btMEqXEur75v76
+ APIpNMH50SN29rMBWsHoxFCKQdVmPnBRHwcA+rBFqQt3duyz7YCNryzhZ7EGh8G+pDpYvzwul
+ h5A9ohgXvcWBL7oDOmjpNhWpYMxE=
+
+=E2=80=A6
+> We are trying to get rid of all multiplications from allocation
+> functions to prevent integer overflows[1]. =E2=80=A6
+
+Is an imperative wording more desirable for such a change description?
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.14-rc3#n94
 
 
-* Qais Yousef <qyousef@layalina.io> wrote:
+=E2=80=A6
+> ---
+>  drivers/thermal/thermal_debugfs.c | 2 +-
+=E2=80=A6
 
-> On 02/21/25 16:47, Ingo Molnar wrote:
-> > 
-> > * Qais Yousef <qyousef@layalina.io> wrote:
-> > 
-> > > ---
-> > >  include/linux/sched/cpufreq.h    |   4 +-
-> > >  kernel/sched/core.c              | 116 +++++++++++++++++++++++++++--
-> > >  kernel/sched/cpufreq_schedutil.c | 122 +++++++++++++++++++------------
-> > >  kernel/sched/deadline.c          |  10 ++-
-> > >  kernel/sched/fair.c              |  84 +++++++++------------
-> > >  kernel/sched/rt.c                |   8 +-
-> > >  kernel/sched/sched.h             |   9 ++-
-> > >  kernel/sched/syscalls.c          |  30 ++++++--
-> > >  8 files changed, 266 insertions(+), 117 deletions(-)
-> > 
-> > The changelog is rather long, and the diffstat is non-trivial.
-> > 
-> > Could you please split this up into multiple patches?
-> 
-> Sure. I did consider that but what stopped me is that I couldn't see 
-> how I could break them into independent patches. A lot of corner 
-> cases needed to be addressed and if I moved them to their own patches 
-> I'd potentially break bisectability of this code. If this is not a 
-> problem then I can see how I can do a better split. If it is a 
-> problem, I'll still try to think it over but it might require a bit 
-> of stretching. But I admit I didn't try to think it over that hard.
+How do you think about to improve your version management?
+https://lore.kernel.org/all/?q=3D%22This+looks+like+a+new+version+of+a+pre=
+viously+submitted+patch%22
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/submitting-patches.rst?h=3Dv6.14-rc3#n780
 
-Yeah, so bisectability should definitely be preserved.
 
-I had a quick look, and these changes look fairly easy to split up to 
-reduce size/complexity of individual patches. The following split looks 
-pretty natural:
+=E2=80=A6
+> +++ b/drivers/thermal/thermal_debugfs.c
+> @@ -876,7 +876,7 @@ void thermal_debug_tz_add(struct thermal_zone_device=
+ *tz)
+>
+>  	tz_dbg->tz =3D tz;
+>
+> -	tz_dbg->trips_crossed =3D kzalloc(sizeof(int) * tz->num_trips, GFP_KER=
+NEL);
+> +	tz_dbg->trips_crossed =3D kcalloc(tz->num_trips, sizeof(int), GFP_KERN=
+EL);
+=E2=80=A6
 
- # ============{ Preparatory changes with no change in functionality: }=========>
+See also:
+https://git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Do=
+cumentation/process/coding-style.rst?h=3Dv6.14-rc3#n941
 
- [PATCH 1/9] Extend check_class_changed() with the 'class_changed' return bool
-             # But don't use it at call sites yet
-
- [PATCH 2/9] Introduce and maintain the sugov_cpu::last_iowait_update metric
-             # But don't use it yet
-
- [PATCH 3/9] Extend sugov_iowait_apply() with a 'flags' parameter
-             # But don't use it yet internally
-
- [PATCH 4/9] Extend sugov_next_freq_shared() with the 'flags' parameter
-             # But don't use it yet internally
-
- [PATCH 5/9] Clean up the enqueue_task_fair() control flow to make it easier to extend
-             # This adds the goto restructuring but doesn't change functionality
-
- [PATCH 6/9] Introduce and maintain the cfs_rq::decayed flag
-             # But don't use it yet
-
- [PATCH 7/8] Extend __setscheduler_uclamp() with the 'update_cpufreq' return bool
-             # But don't use it yet
-
- # ============{ Behavioral changes: }==========>
-
- [PATCH 8/9] Change sugov_iowait_apply() behavior
- [PATCH 9/9] Change sugov_next_freq_shared() bahavior
-
- ... etc.
-
-This is only a quick stab at the most trivial split-ups, it's not a 
-complete list, and I saw other opportunities for split-up too. Please 
-make these changes as finegrained as possible, as it changes behavior 
-and there is a fair chance of behavioral regressions down the road - 
-especially as the patch itself notes that even the new logic isn't 
-perfect yet.
-
-If the behavioral changes can be split into further steps, that would 
-be preferable too.
-
-Also:
-
- - Please make the rq->cfs.decayed logic unconditional on UP too, even 
-   if it's not used. This reduces some of the ugly #ifdeffery AFAICS.
-
- - Please don't add prototypes for internal static functions like 
-   __update_cpufreq_ctx_switch(), define the functions in the right 
-   order instead.
-
- - Also, please read your comments and fix typos:
-
-+                * This logic relied on PELT signal decays happening once every
-+                * 1ms. But due to changes to how updates are done now, we can
-+                * end up with more request coming up leading to iowait boost
-+                * to be prematurely reduced. Make the assumption explicit
-+                * until we improve the iowait boost logic to be better in
-+                * general as it is due for an overhaul.
-
-  s/request
-   /requests
-
-+        * We want to update cpufreq at context switch, but on systems with
-+        * long TICK values, this can happen after a long time while more tasks
-+        * would have been added meanwhile leaving us potentially running at
-+        * inadequate frequency for extended period of time.
-
-  Either 'an inadequate frequency' or 'inadequate frequencies'.
-
-+        * This logic should only apply when new fair task was added to the
-+        * CPU, we'd want to defer to context switch as much as possible, but
-+        * to avoid the potential delays mentioned above, let's check if this
-+        * additional tasks warrants sending an update sooner.
-
-  s/when new fair task
-   /when a new fair task
-
-  s/this additional tasks
-   /this additional task
-
-(I haven't checked the spelling exhaustively, there might be more.)
-
-Thanks,
-
-	Ingo
+Regards,
+Markus
 
