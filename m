@@ -1,257 +1,143 @@
-Return-Path: <linux-pm+bounces-22753-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22754-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9DAA0A40F43
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 15:28:26 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8C177A40F93
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 16:43:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id DBA3C18959E2
-	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 14:28:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id F03571897E64
+	for <lists+linux-pm@lfdr.de>; Sun, 23 Feb 2025 15:42:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B353A206F18;
-	Sun, 23 Feb 2025 14:28:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 25E3220AF8D;
+	Sun, 23 Feb 2025 15:42:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Nu2MPVzf"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="E5szSUvM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.18])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C8F031C860A;
-	Sun, 23 Feb 2025 14:28:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4CC8F1C84B7;
+	Sun, 23 Feb 2025 15:42:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.18
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740320901; cv=none; b=U2RnHxbQloOwZQwuw8SV59Jq4WLwkM0CO+whxwg9jtZMT9quOddjvhQoYj4lPnjJ7um3iu452gXis5qrpDnvzPjhSJs9pvb6O3RV80X/wJMi3h988p9qjda0UjDCv9nHTZ/lhxqrmjWXaLr2UlyZqiBK6PDmkThYx+R4FpjHrmk=
+	t=1740325359; cv=none; b=E1cxURl+xUVgAFnjxVm0FwWfOqXjaqFJAG0syZtsUtsjnvoDbkr/R1XaTgNX34oiZjUYSord4nXj8u60FdFFTG0p1cp3+75RoV+4bleUeTCCrnz1QapEEdxbAsiiJO/L6y4Om33CbkkouGuWxwzDjhdcAUsas4nALhog/2LkEEU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740320901; c=relaxed/simple;
-	bh=ALdr17ylxkoeGmsulIqGgUfzXIoH8d3NSl1FgMfYOaY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=MbGxR8rkx5BbGnd9LkucPeWjCG53Uks556xqzwdjKMIcYR3JWlO2wbOtbJ9qC0P+S20sf86XUQJJ1hHEG1m9v6fFCoggdQHEpZqceoyDa5S5pxHRzfJrdIqlNnfgxeyOYyUD4Msc8tnnOxOJAcR73sjVjYo/UnZ5BNOf7JoGru0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Nu2MPVzf; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-38f286b5281so1738108f8f.1;
-        Sun, 23 Feb 2025 06:28:19 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740320898; x=1740925698; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Qbhke7qI6ser1bUyNhL2A0rIuINLbPSiTTYbMisJjaY=;
-        b=Nu2MPVzf4wLtRe5ZSovMyrKWdss40ZbOYRZqiY4IcJPXh2GKjp+7+fdCaqSmN1quoT
-         AL0bKON5dP/699f2vsA2N7Fo3BLUbTs3Tq3ng4k5WZGyWsq4FQRD0YM51GPfmdC54kPF
-         lFcSvu781C113fImiM1Df79dIvIiQhzoZM+og5PlBaKe4mHM0Tdm5+3tvdqCU+aQpLae
-         6uMK1Q2aii1DLMOHFkxeRf+aV8xs4F+eUnqU8i6h98nBSp8uZ7SR1PkodlGW2e/9usFS
-         cPHQazCb5I4IjMuvktcymZTQnhaLbn3Eg2mWr17ocjf4gmVyMqs8Rz1idsI9+8DUkakT
-         daog==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740320898; x=1740925698;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Qbhke7qI6ser1bUyNhL2A0rIuINLbPSiTTYbMisJjaY=;
-        b=Ge2WZyGr0q2NY644M8kUJkiste8qMHovnS1PRfuvDt/pG7Bt9xaJR/FxXkE7YWQcPo
-         AOWREoOKNkZJrq+KOHRzBH4OL5E3LRmH/vb2t0EK/qz+mK2YuYWrfBCLiWBsd0LPGiTo
-         fStABJ4YEMjz1XnZNXY+sCHeT0Rymo4Xs/DphZbodKUAoMlFmUhSUZm+RMeYhBtapCc2
-         7jKlOQBWNUQzr9yl2kXhISfEMhpvczgGhrIASqvegSBiJ32ZS9TigniVyS165blQR8KI
-         XDUvt7oT5OIS0ojMz1aOwYzDGE58wrF5XBIE8vA1yjCML5VE6pYvrzYdizWA5uR0VNcp
-         erjw==
-X-Forwarded-Encrypted: i=1; AJvYcCUwvBYyQnyF4D0Uu1yC/BGbWeapFncVexpnhZagumBFhv6rLRiTiUPOEdah8fTr9Ft6pdOWoV64i3pc@vger.kernel.org, AJvYcCVMe0ylLJDsW6aQuklip57YSiNzoGz2ltrV9k7Sfsgd6iG1zUU2KNw19OofEfvgorWwd/+Y3EYqxl4=@vger.kernel.org, AJvYcCXcaKY+AZGeellKxDAFrwwvCBO/LBri/QZULmiqjy6WA/zdts5vnuaMLs8itu5sPqsqyh1/LwwQGhQomDZK@vger.kernel.org
-X-Gm-Message-State: AOJu0YxyawfcLNRWBkQdWR4zD4wJQHIabOq0JitjewIW6vSlMIed1L8k
-	xWUCFpKqr4lhgHRvO5ywbH8qM3Jjh9bUOf4WOCLZ6y0DHWwHO45eek+AC1xfqoFRCZrdXTvrTeL
-	mhZEVOdI+DI0RdpkH3GnrecbtfstdOJG6
-X-Gm-Gg: ASbGncvkPwJbM+9hccBs9xSqZYzDlniRujnsE+ImH9STxKy92CJq0M5CDabW5TwXxu/
-	lh1ztFWDxNTh4oF1gY0mrlt5JQ+jrvqJ0XezStzSSeZoCSWH4WmsjbYh/g7iMX6hIwEYevp2lAi
-	HuOkvfElyB
-X-Google-Smtp-Source: AGHT+IFtgGx/eUfVIwS4WW0fnl4k1BN/ejTPbfOEjHuKoxgGUAnP7JVKvCgDsBNPJZY9DOPpSiYVjCl2T46SdT9+8Fk=
-X-Received: by 2002:a5d:5f92:0:b0:38f:3e39:20ae with SMTP id
- ffacd0b85a97d-38f70827d08mr7653725f8f.43.1740320897913; Sun, 23 Feb 2025
- 06:28:17 -0800 (PST)
+	s=arc-20240116; t=1740325359; c=relaxed/simple;
+	bh=8+pwvoCO29+tN6SmiHDXBT+PJZXfOEBCeBttdnD66aQ=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qusKH8HuVgt47TbxVBM993QO/NF3oRGF9XMB32seWhJpU+rakoEb92RiDE/vL25mCPrs3GzToBe+FYHBpqjLojNLKfpza3lu2UNVfUPNHv+EnxpdQyuI9bg894y0d49mVF1x5FjLIu6EMNq2exgs75ziMlPtFunRaGtHLq98k90=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=E5szSUvM; arc=none smtp.client-ip=192.198.163.18
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740325357; x=1771861357;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=8+pwvoCO29+tN6SmiHDXBT+PJZXfOEBCeBttdnD66aQ=;
+  b=E5szSUvMhpVBBwUn1JaaxOrvaHoYfD0p6YBzVlx+MQcmO39785A3LJys
+   fj9KMr9sucZjf/PuRewPUUcwxTggTTt0wVJdtfunckRNLAot1pl3WM5UY
+   1lLJkdcpLW86WQGf2kGx8e6q6SX+AcbTm8vDsv44nIeFsnoWDV9RUhAjf
+   7AYsi4wvXxnFdNZQyTq4gVwtAgyduDxqI8HD8oSTwct/gt14IYnBLx2Rv
+   Huqt7LquwX3n08ltfCzT637/FQsQP3kDNQr4JL7xyawIwcyjqXaBRMLE8
+   elX5dxMdTq8Loj2EyXbgb/p1wToFp7+nu4uCxoHtO9cfO2lNqrqZGDQ3/
+   Q==;
+X-CSE-ConnectionGUID: vDLGwwB1Q4u2dCA4EN3dcQ==
+X-CSE-MsgGUID: LCyubUPpQ86Uk1m3+7vHmw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11354"; a="40322634"
+X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
+   d="scan'208";a="40322634"
+Received: from fmviesa004.fm.intel.com ([10.60.135.144])
+  by fmvoesa112.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2025 07:42:36 -0800
+X-CSE-ConnectionGUID: ie024MwDQfKjNN6NhjokKg==
+X-CSE-MsgGUID: ZEeRozSKRYqk9l320S6kTA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
+   d="scan'208";a="120934044"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa004.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 23 Feb 2025 07:42:34 -0800
+Date: Sun, 23 Feb 2025 17:42:31 +0200
+From: Raag Jadav <raag.jadav@intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Oliver Neukum <oneukum@suse.com>,
+	Ajay Agarwal <ajayagarwal@google.com>,
+	Brian Norris <briannorris@google.com>
+Subject: Re: [PATCH v1] PM: runtime: Unify error handling during suspend and
+ resume
+Message-ID: <Z7tB5wshbGtO6LGg@black.fi.intel.com>
+References: <1922654.tdWV9SEqCh@rjwysocki.net>
+ <Z7rPOt0x5hWncjhr@black.fi.intel.com>
+ <CAJZ5v0jwn0e4HF1SsAG1OXr59tHzh=E2rcGkTdj1FOQdK2Uisw@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250221095943.57297-1-clamor95@gmail.com> <20250221095943.57297-2-clamor95@gmail.com>
- <20250223-daft-amethyst-pogona-e9edcc@krzk-bin> <CAPVz0n0-6ea0mzWig-gPx+8fuPgM7iWkZpnpMnp-9+Lq5oCdDw@mail.gmail.com>
- <2b0500e7-70e2-4bfe-ae72-ebab0f060eeb@kernel.org>
-In-Reply-To: <2b0500e7-70e2-4bfe-ae72-ebab0f060eeb@kernel.org>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Sun, 23 Feb 2025 16:28:06 +0200
-X-Gm-Features: AWEUYZnmmRiuQNcX_aspEi-JkaTPX5awMNjebQlQsFVxIIQjuuB8KRzj0X9pl9A
-Message-ID: <CAPVz0n2CMzU1bqV_jiTw+VgLUSB-CdEwF6uPS7aJzaPN+eGhmg@mail.gmail.com>
-Subject: Re: [PATCH v1 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <CAJZ5v0jwn0e4HF1SsAG1OXr59tHzh=E2rcGkTdj1FOQdK2Uisw@mail.gmail.com>
 
-=D0=BD=D0=B4, 23 =D0=BB=D1=8E=D1=82. 2025=E2=80=AF=D1=80. =D0=BE 16:14 Krzy=
-sztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On 23/02/2025 12:56, Svyatoslav Ryhel wrote:
-> > =D0=BD=D0=B4, 23 =D0=BB=D1=8E=D1=82. 2025=E2=80=AF=D1=80. =D0=BE 13:43 =
-Krzysztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
-> >>
-> >> On Fri, Feb 21, 2025 at 11:59:42AM +0200, Svyatoslav Ryhel wrote:
-> >>> Add bindings for Maxim MAX8971 charger.
-> >>>
-> >>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> >>> ---
-> >>>  .../bindings/power/supply/maxim,max8971.yaml  | 133 ++++++++++++++++=
-++
-> >>>  1 file changed, 133 insertions(+)
-> >>>  create mode 100644 Documentation/devicetree/bindings/power/supply/ma=
-xim,max8971.yaml
-> >>>
-> >>> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max=
-8971.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max8971.ya=
-ml
-> >>> new file mode 100644
-> >>> index 000000000000..26b37e6f662f
-> >>> --- /dev/null
-> >>> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max8971.ya=
-ml
-> >>> @@ -0,0 +1,133 @@
-> >>> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> >>> +%YAML 1.2
-> >>> +---
-> >>> +$id: http://devicetree.org/schemas/power/supply/maxim,max8971.yaml#
-> >>> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> >>> +
-> >>> +title: Maxim MAX8971 IC charger
-> >>> +
-> >>> +maintainers:
-> >>> +  - Svyatoslav Ryhel <clamor95@gmail.com>
-> >>> +
-> >>> +description:
-> >>> +  The MAX8971 is a compact, high-frequency, high-efficiency switch-m=
-ode
-> >>> +  charger for a one-cell lithium-ion (Li+) battery.
-> >>> +
-> >>> +properties:
-> >>> +  compatible:
-> >>> +    const: maxim,max8971
-> >>> +
-> >>> +  reg:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  interrupts:
-> >>> +    maxItems: 1
-> >>> +
-> >>> +  extcon:
-> >>> +    description:
-> >>> +      Special device used to detect type of plug.
-> >>> +    $ref: /schemas/types.yaml#/definitions/phandle
-> >>
-> >> You rather miss proper connector or ports. Which device pins are
-> >> describbed here?
-> >>
+On Sun, Feb 23, 2025 at 01:56:07PM +0100, Rafael J. Wysocki wrote:
+> On Sun, Feb 23, 2025 at 8:33 AM Raag Jadav <raag.jadav@intel.com> wrote:
 > >
-> > This is an optional phandle to extcon, which can detect plug type. If
->
-> I know what is this, you just wrote. extcon property is not allowed anymo=
-re.
->
-
-There is no helper for obtaining extcon via graph endpoint I am aware
-of. Can you provide an example of graph parsing extcon helper?
-
-> > extcon is provided, charger then can change its setup to better
-> > provide supply to the battery. If no extcon is provided, device itself
-> > can detect only the fact of charger without details about type.
->
->
+> > On Thu, Feb 20, 2025 at 09:18:23PM +0100, Rafael J. Wysocki wrote:
+> > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > >
+> > > There is a confusing difference in error handling between rpm_suspend()
+> > > and rpm_resume() related to the special way in which the -EAGAIN and
+> > > -EBUSY error values are treated by the former.  Also, converting
+> > > -EACCES coming from the callback to an I/O error, which it quite likely
+> > > is not, may confuse runtime PM users a bit.
+> > >
+> > > To address the above, modify rpm_callback() to convert -EACCES coming
+> > > from the driver to -EAGAIN and to set power.runtime_error only if the
+> > > return value is not -EAGAIN or -EBUSY.
+> > >
+> > > This will cause the error handling in rpm_resume() and rpm_suspend() to
+> > > work consistently, so drop the no longer needed -EAGAIN or -EBUSY
+> > > special case from the latter and make it retry autosuspend if
+> > > power.runtime_error is unset.
+> > >
+> > > Link: https://lore.kernel.org/linux-pm/20220620144231.GA23345@axis.com/
+> > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > ---
+> > >  drivers/base/power/runtime.c |   34 ++++++++++++++++++----------------
+> > >  1 file changed, 18 insertions(+), 16 deletions(-)
+> > >
+> > > --- a/drivers/base/power/runtime.c
+> > > +++ b/drivers/base/power/runtime.c
+> > > @@ -448,8 +448,13 @@
+> > >               retval = __rpm_callback(cb, dev);
+> > >       }
+> > >
+> > > -     dev->power.runtime_error = retval;
+> > > -     return retval != -EACCES ? retval : -EIO;
+> > > +     if (retval == -EACCES)
+> > > +             retval = -EAGAIN;
 > >
-> >>
-> >>> +
-> >>> +  maxim,fcharge-current-limit-microamp:
-> >>> +    description:
-> >>> +      Fast-Charge current limit
-> >>> +    minimum: 250000
-> >>> +    default: 500000
-> >>> +    maximum: 1550000
-> >>> +
-> >>> +  maxim,fcharge-timer-hours:
-> >>> +    description: |
-> >>> +      Fast-Charge timer in hours. Setting this value 3 and lower or =
-11 and
-> >>> +      higher will disable Fast-Charge timer.
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +    default: 5
-> >>> +
-> >>> +  maxim,fcharge-rst-threshold-high:
-> >>> +    description:
-> >>> +      Set Fast-Charge reset threshold to -100 mV
-> >>> +    type: boolean
-> >>> +
-> >>> +  maxim,in-current-limit-microamp:
-> >>> +    description:
-> >>> +      Input current limit
-> >>> +    minimum: 100000
-> >>> +    default: 500000
-> >>> +    maximum: 1500000
-> >>> +
-> >>> +  maxim,topoff-timer-minutes:
-> >>> +    description:
-> >>> +      Top-Off timer minutes
-> >>> +    $ref: /schemas/types.yaml#/definitions/uint32
-> >>> +    enum: [0, 10, 20, 30, 40, 50, 60, 70]
-> >>> +    default: 30
-> >>> +
-> >>> +  maxim,topoff-current-threshold-microamp:
-> >>> +    description:
-> >>> +      Top-Off current threshold
-> >>> +    enum: [50000, 100000, 150000, 200000]
-> >>> +    default: 50000
-> >>> +
-> >>> +  maxim,fcharge-usb-current-limit-microamp:
-> >>> +    description:
-> >>> +      Fast-Charge USB current limit
-> >>> +    minimum: 100000
-> >>> +    default: 500000
-> >>> +    maximum: 1500000
-> >>> +
-> >>> +  maxim,fcharge-ac-current-limit-microamp:
-> >>> +    description:
-> >>> +      Fast-Charge AC current limit
-> >>> +    minimum: 100000
-> >>> +    default: 500000
-> >>> +    maximum: 1500000
-> >>> +
-> >>> +  maxim,usb-in-current-limit-microamp:
-> >>> +    description:
-> >>> +      USB Input current limit
-> >>> +    minimum: 100000
-> >>> +    default: 500000
-> >>> +    maximum: 1500000
-> >>> +
-> >>> +  maxim,ac-in-current-limit-microamp:
-> >>> +    description:
-> >>> +      AC Input current limit
-> >>> +    minimum: 100000
-> >>> +    default: 500000
-> >>> +    maximum: 1500000
-> >>
-> >> For all or most of these you miss monitored batter.
-> >>
-> >
-> > This is a charger, it does not monitor battery. There is a fuel gauge
-> > for that or a battery monitor.
-> >
-> What does charger charge? Battery or something else?
->
+> > While this is one way to address the problem, are we opening the door
+> > to changing error codes when convenient? This might lead to different
+> > kind of confusion from user standpoint.
+> 
+> Are you saying that if a mistake was made sufficiently long ago, it
+> can't be fixed any more because someone may be confused?
 
-Anything it is linked to. Moreover ref to power supply is not needed
-since properties from there are not relevant to this driver.
-monitored-battery refers to a simple battery cell, which has nothing
-to do with charger and power-supplies is irrelevant since this device
-is on its own a power-supplies for battery/fuel gauge.
+Nothing against the fix but "sufficiently long ago" is why we might
+have users that rely on it. As long as we don't break anything I don't
+see a problem.
 
-> Best regards,
-> Krzysztof
+Messing with error codes is usually received with mixed feelings and
+coming across such a code raises more questions than answers. Perhaps a
+small explanation might do the trick?
+
+Raag
 
