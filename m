@@ -1,126 +1,134 @@
-Return-Path: <linux-pm+bounces-22793-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22794-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8E827A41BCF
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 11:58:51 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id D98CFA41BD8
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 12:00:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6EDF717073A
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 10:58:50 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88E793B3C69
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 10:59:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A0FC4257AFC;
-	Mon, 24 Feb 2025 10:58:46 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dh5xXM6n"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11706257AFA;
+	Mon, 24 Feb 2025 10:59:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0E2C5257AEA;
-	Mon, 24 Feb 2025 10:58:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 293EA146D59;
+	Mon, 24 Feb 2025 10:59:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740394726; cv=none; b=BFSzKSlefWBI2Nw4hHWVm7wfIJEi5rwizWNpd+j3AMfoyKGcfQcouOWk8TNJ36u5d8RKvofM2+HQy5sfh0Qeqd8mkk1kWyxhHbmacf9GMXyt+MwHS8cCR/ERL1bimlOk1MdYaCKjAnfVRixhhxuIgbtDIKJceTTmQOVb6OgbOfA=
+	t=1740394755; cv=none; b=TgYiTdPzGB1EiiXtg22Cb/v63zka2oN3viPuhaFGqIqkQFvzhjoXmyZJizJpImo0tEPqBi2Pb8NdgPhO5lpv2+JMwwkOPzGHTPCRQbzqgvWomc4ISbDLADp8lNQDp1nsCuOGwWwRl/9QoA0UzHqbxYkFAlXGmtXJBkHBwifBgWo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740394726; c=relaxed/simple;
-	bh=Gd0nmKi+y7imohMgl2KoUoI5yg1NN3mViH62L60pt44=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=vGM4ZVKn7vLjPJcyDkRZ+uDrLgs882rHcAgh6zQHQ2NaRbnSS4OhvsL0AFr72J8mgUy0L4qninA3FCRu5BL8yzrwMDjMyQ4eylfE+tITN2hInhpnnF7n+vkBtZKdHI9lAqW+sP4TUW6h049Odfg+kYlGkO39Tm0BlIlji0fIdJU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dh5xXM6n; arc=none smtp.client-ip=198.175.65.14
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740394726; x=1771930726;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=Gd0nmKi+y7imohMgl2KoUoI5yg1NN3mViH62L60pt44=;
-  b=dh5xXM6nT8qfUAcVhq+sXroqyLs4Uh+4YNGMuILvQtqzgtmtId9jaHOk
-   U+xcTKYlkw0wKSSGfE8yaD6RTf1WhOcmRagaYGzB70iYicOUhZXlhD8kZ
-   GO9cMXuFSG0IiKVijeTceQ9E/HPQ6EXMkbRfGEvSTVLEdNBZfwax5Th3C
-   rbzc2JOrxDT13m706VOunieALojpY/S5PK0rW27XBdtNmwx39LgqkY7ZX
-   21fmbGRzrWcclnnXFp39UWBhiRlnVDHDJKyvac7Ikq/jtmtdRoHsD18uC
-   Fa2OHgrPLxfkcE6xnhevszMh7S+JUd474VOtvmoNZ1nu1yjELoOp0ISol
-   A==;
-X-CSE-ConnectionGUID: ypU1WSYVR/+QOJb8bQpuuw==
-X-CSE-MsgGUID: oFgfev9sSJWieOz8jBTJlQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11354"; a="44920721"
-X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="44920721"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 02:58:45 -0800
-X-CSE-ConnectionGUID: JliRsdN2RBCJOvuRyeIrFQ==
-X-CSE-MsgGUID: qp5avr51TuSIlXj+pLby/Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="116932538"
-Received: from smile.fi.intel.com ([10.237.72.58])
-  by orviesa008.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 02:58:39 -0800
-Received: from andy by smile.fi.intel.com with local (Exim 4.98)
-	(envelope-from <andriy.shevchenko@linux.intel.com>)
-	id 1tmWAW-0000000EfnM-0PEP;
-	Mon, 24 Feb 2025 12:58:36 +0200
-Date: Mon, 24 Feb 2025 12:58:35 +0200
-From: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-To: kernel test robot <lkp@intel.com>
-Cc: Raag Jadav <raag.jadav@intel.com>, perex@perex.cz, tiwai@suse.com,
-	broonie@kernel.org, lgirdwood@gmail.com, deller@gmx.de,
-	sre@kernel.org, sakari.ailus@linux.intel.com, mchehab@kernel.org,
-	hverkuil-cisco@xs4all.nl, jdmason@kudzu.us, fancer.lancer@gmail.com,
-	oe-kbuild-all@lists.linux.dev, linux-sound@vger.kernel.org,
-	linux-fbdev@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-media@vger.kernel.org, ntb@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 07/13] fbdev: pxafb: use devm_kmemdup_array()
-Message-ID: <Z7xQ2y-7U5-OhzhB@smile.fi.intel.com>
-References: <20250221165333.2780888-8-raag.jadav@intel.com>
- <202502220449.DvJuMgsL-lkp@intel.com>
+	s=arc-20240116; t=1740394755; c=relaxed/simple;
+	bh=/BJsBBlQ+b6Yp+6OJGBbtUx/kESPkZ9ChX9DC3OVY8U=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Owsfep9k5tAVeUbQa6TfD5FNTtMsY5aXZHH5klPHpJ1VikukDGumo/JhAAMPfRKcR2sxeg19EFbccP1sisFG2VO7ofeahaLx6LN551mP/lY2vFc2y+Ny/fFAQbbfOxOIlKwI6vs3d1jsSRQrjFfXzWJO/s8PmvEVCVNRVnERNGg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id F195A1FCD;
+	Mon, 24 Feb 2025 02:59:28 -0800 (PST)
+Received: from [10.57.65.109] (unknown [10.57.65.109])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 7F8383F673;
+	Mon, 24 Feb 2025 02:59:10 -0800 (PST)
+Message-ID: <c3ea0f88-3ee2-44b4-9970-17c9de59d50b@arm.com>
+Date: Mon, 24 Feb 2025 10:59:11 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <202502220449.DvJuMgsL-lkp@intel.com>
-Organization: Intel Finland Oy - BIC 0357606-4 - Westendinkatu 7, 02160 Espoo
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] thermal: of: Fix logic in thermal_of_should_bind
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ Yu-Che Cheng <giver@chromium.org>, Zhang Rui <rui.zhang@intel.com>,
+ "Rafael J. Wysocki" <rafael.j.wysocki@intel.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, Chen-Yu Tsai <wenst@chromium.org>
+References: <20250219-fix-thermal-of-v1-1-de36e7a590c4@chromium.org>
+ <CAJZ5v0i=Ehi1icm4Tx6cXmdhjq-Qj8Vwv1SwzCyx5oBj-5y9hQ@mail.gmail.com>
+ <CAJZ5v0gJGxWA=7zHYU5h=ueqQcXNt94wOAg7sqrphOUb++mAyw@mail.gmail.com>
+Content-Language: en-US
+From: Lukasz Luba <lukasz.luba@arm.com>
+In-Reply-To: <CAJZ5v0gJGxWA=7zHYU5h=ueqQcXNt94wOAg7sqrphOUb++mAyw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-On Sat, Feb 22, 2025 at 05:41:24AM +0800, kernel test robot wrote:
-> Hi Raag,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on b16e9f8547a328b19af59afc213ce323124d11e9]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/ASoC-Intel-avs-use-devm_kmemdup_array/20250222-010322
-> base:   b16e9f8547a328b19af59afc213ce323124d11e9
-> patch link:    https://lore.kernel.org/r/20250221165333.2780888-8-raag.jadav%40intel.com
-> patch subject: [PATCH v1 07/13] fbdev: pxafb: use devm_kmemdup_array()
-> config: arm-randconfig-004-20250222 (https://download.01.org/0day-ci/archive/20250222/202502220449.DvJuMgsL-lkp@intel.com/config)
-> compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250222/202502220449.DvJuMgsL-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202502220449.DvJuMgsL-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->    drivers/video/fbdev/pxafb.c: In function 'pxafb_probe':
-> >> drivers/video/fbdev/pxafb.c:2236:13: warning: unused variable 'i' [-Wunused-variable]
->     2236 |         int i, irq, ret;
->          |             ^
+Hi Rafael,
 
-Ragg, please, fix this, and issue a v2 with the link to fixed PR:
-https://lore.kernel.org/r/Z7xGpz3Q4Zj6YHx7@black.fi.intel.com.
+On 2/20/25 20:22, Rafael J. Wysocki wrote:
+> On Wed, Feb 19, 2025 at 10:40 PM Rafael J. Wysocki <rafael@kernel.org> wrote:
+>>
+>> On Wed, Feb 19, 2025 at 8:06 AM Yu-Che Cheng <giver@chromium.org> wrote:
+>>>
+>>> The current thermal_of_should_bind will stop iterating cooling-maps on
+>>> the first matched trip point, leading to subsequent cooling devices
+>>> binding to the same trip point failing to find the cooling spec.
+>>>
+>>> The iteration should continue enumerating subsequent cooling-maps if the
+>>> target cooling device is not found.
+>>>
+>>> Fix the logic to break only when a matched cooling device is found.
+>>
+>> OK, but ->
+>>
+>>> Fixes: 94c6110b0b13 ("thermal/of: Use the .should_bind() thermal zone callback")
+>>> Signed-off-by: Yu-Che Cheng <giver@chromium.org>
+>>> ---
+>>>   drivers/thermal/thermal_of.c | 3 ++-
+>>>   1 file changed, 2 insertions(+), 1 deletion(-)
+>>>
+>>> diff --git a/drivers/thermal/thermal_of.c b/drivers/thermal/thermal_of.c
+>>> index 5ab4ce4daaeb..69c530e38574 100644
+>>> --- a/drivers/thermal/thermal_of.c
+>>> +++ b/drivers/thermal/thermal_of.c
+>>> @@ -312,7 +312,8 @@ static bool thermal_of_should_bind(struct thermal_zone_device *tz,
+>>>                                  break;
+>>
+>> -> I'd prefer to do a jump from here, that is
+>>
+>> -                                 break;
+>> +                                goto put_cm_np;
+>>>                  }
+>>>
+>>> -               break;
+>>
+>> and remove the break statement above altogether.
+>>
+>>> +               if (result)
+>>> +                       break;
+>>>          }
+>>>
+>>
+>> And of course the label needs to be added too:
+>>
+>> +put_cm_np:
+>>>          of_node_put(cm_np);
+>>>
+>>> ---
+> 
+> Or even, to avoid adding a new label, move the loop from
+> thermal_of_should_bind() into a new function that will be called by it
+> do carry out the cooling-maps lookup, like in the attached patch.
+> 
+> Can you check if it works for you, please?
 
--- 
-With Best Regards,
-Andy Shevchenko
 
+I have experimented with your proposed patch with my DT setup.
+It looks OK to me and much more clean.
+
+If you have any super-edge-case scenario DT config to try, please let me
+know. I will try to create such on my end...
+
+If you would like to go forward with your patch, feel free to add:
+
+Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Tested-by: Lukasz Luba <lukasz.luba@arm.com>
+
+Regards,
+Lukasz
 
 
