@@ -1,198 +1,156 @@
-Return-Path: <linux-pm+bounces-22804-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22805-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DAB99A41F9F
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 13:52:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E16A8A41FBC
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 13:57:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 04CE47A99C1
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 12:49:21 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 59BAB7AAB09
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 12:56:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CCB623373E;
-	Mon, 24 Feb 2025 12:50:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B592B23373E;
+	Mon, 24 Feb 2025 12:57:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="n4SGZ8yw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga05-in.huawei.com (szxga05-in.huawei.com [45.249.212.191])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 96EA8163;
-	Mon, 24 Feb 2025 12:50:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.191
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BBDD517C61;
+	Mon, 24 Feb 2025 12:56:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740401403; cv=none; b=Va9lmJzjNe0A2zx5q/MIX2ZmWEHzQ0A0qinkEOFXdLVSNMcIrtdh8YhAOSorL+VuPbRgXQS1MeP1CuNMFOF0w17vCvFv8XpKBX7DcoDQjgNLqCzbnJD0tVefqB8ROeUNWFkJRBp+XSfT1m07UrvZhBDq4BGUibzHz0YYMWejn/8=
+	t=1740401820; cv=none; b=KYWJ7AfWhLR0euOaHkAe0BDPN/Gfvv+GpoSOod4Cks70zFR6+DMWFmJNT6JKyrxHS785yQAL/NvYepYNiRj2V+gEb0jF0+RooWjY/prEMQUYX1NfJborJ4JbMXn5w5Ohz5A7IQfnqbxAIXvxoHXLQy+wvMXqijwA5Vi5BlT3k/8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740401403; c=relaxed/simple;
-	bh=ZdBCdF5KOs1JctRObwGVJkOHnGlGXqRbiACo9SOfprU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=g31zbF02UvgCZ6loq4RgN4NXehIFvuNUHXjc+bAsNVkQNrQRG/nWZM6jPcQQw7G6fdZDEAomgl6phlc1YIEHF0OlyPgDrGchIJWagrFMhcfkJ4srjuGFCgPR5u2Wtn9daU3QMiqdqEDRj8u+RJElyQgFa0urNqPS4T59wfbLp0E=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.191
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.88.163])
-	by szxga05-in.huawei.com (SkyGuard) with ESMTP id 4Z1gT108Dcz1ltby;
-	Mon, 24 Feb 2025 20:45:57 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id 1C17E180069;
-	Mon, 24 Feb 2025 20:49:58 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Mon, 24 Feb
- 2025 20:49:57 +0800
-Message-ID: <5162cd2c-e239-4fc6-b2da-2e2fe087cb1b@huawei.com>
-Date: Mon, 24 Feb 2025 20:49:56 +0800
+	s=arc-20240116; t=1740401820; c=relaxed/simple;
+	bh=Gd8Lyf68GbHdn/9os+WED7XTbymWYF2+HIt1zvJdHNg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=l2ObH2KJZE0rNg6hz4ZnRJLF1/9NrwLu1zc6zYPxKWqniAkkgkTOOcJ873c7yU+t5Q8wGQu5Ske36IQJPW1vQaejqAKK56Y9VmlO13gWlLOmWdSf2n3ehga6byQP0Dp8S/kxT8o84lPuvRtP9cXh8XCoHH4/+HBcGge3n+q/A20=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=n4SGZ8yw; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740401818; x=1771937818;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=Gd8Lyf68GbHdn/9os+WED7XTbymWYF2+HIt1zvJdHNg=;
+  b=n4SGZ8yw9KIgYaOOnIibPnkcEKomrUIzG9cPvy/znMsv15I+gDV/jZPN
+   2aa7xCydNIBNBWmG4eZRBkJUY/3AHAeydQQcwU2LNHu65b55usLMvFHPa
+   7KAXzfj3n8IzbYgwLMl8O+88gqwXgLl6gexjHJNWt0rO0zaQSlxKRCyQ9
+   symIEbUAJJRVuN47eZ5PbkGRrrpCN2W0uuaVoMtSeP3G0hBhs771G3b2U
+   /hY1/xkxh6Mbono93xz/3e5CQwIf8xyB1EPngQ0Zb8jmnb+lYl0rXiX8s
+   zJNwJ8tTkHYe5QWv2NsQaIN7bpG5kt/rnUcqmtNkIzFmE+DguhWwgD0iA
+   g==;
+X-CSE-ConnectionGUID: bkP+bytjSZW85U92mXv0Dg==
+X-CSE-MsgGUID: YrQyG5/UReW/7bE62RbyKA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="51791260"
+X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
+   d="scan'208";a="51791260"
+Received: from fmviesa010.fm.intel.com ([10.60.135.150])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 04:56:56 -0800
+X-CSE-ConnectionGUID: rRZOZy3nRfS9dWBwyOsiBg==
+X-CSE-MsgGUID: LuGIPAodQRqgsubJIsZVZQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
+   d="scan'208";a="116558289"
+Received: from black.fi.intel.com ([10.237.72.28])
+  by fmviesa010.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 04:56:54 -0800
+Date: Mon, 24 Feb 2025 14:56:51 +0200
+From: Raag Jadav <raag.jadav@intel.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Linux PM <linux-pm@vger.kernel.org>,
+	LKML <linux-kernel@vger.kernel.org>,
+	Alan Stern <stern@rowland.harvard.edu>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Oliver Neukum <oneukum@suse.com>,
+	Ajay Agarwal <ajayagarwal@google.com>,
+	Brian Norris <briannorris@google.com>
+Subject: Re: [PATCH v1] PM: runtime: Unify error handling during suspend and
+ resume
+Message-ID: <Z7xsk72jQgBkfpwZ@black.fi.intel.com>
+References: <1922654.tdWV9SEqCh@rjwysocki.net>
+ <Z7rPOt0x5hWncjhr@black.fi.intel.com>
+ <CAJZ5v0jwn0e4HF1SsAG1OXr59tHzh=E2rcGkTdj1FOQdK2Uisw@mail.gmail.com>
+ <Z7tB5wshbGtO6LGg@black.fi.intel.com>
+ <CAJZ5v0jmp4PFb6z+K9cGS83CmX=5Ms0F9HSgcpq-VXn=rTdXgg@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 0/8] Support for autonomous selection in cppc_cpufreq
-To: Pierre Gondois <pierre.gondois@arm.com>
-CC: "Rafael J. Wysocki" <rafael@kernel.org>, <lenb@kernel.org>,
-	<robert.moore@intel.com>, <viresh.kumar@linaro.org>,
-	<mario.limonciello@amd.com>, <gautham.shenoy@amd.com>, <ray.huang@amd.com>,
-	<acpica-devel@lists.linux.dev>, <linux-acpi@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linuxarm@huawei.com>, <yumpusamongus@gmail.com>,
-	<srinivas.pandruvada@linux.intel.com>, <jonathan.cameron@huawei.com>,
-	<zhanjie9@hisilicon.com>, <lihuisong@huawei.com>, <hepeng68@huawei.com>,
-	<fanghao11@huawei.com>
-References: <20250206131428.3261578-1-zhenglifeng1@huawei.com>
- <0097a9a3-fe61-4200-9a54-5a9c81d3219c@huawei.com>
- <CAJZ5v0hP9a8g8UR2oPyivP1C65=csR245PSHay+nOx3vkoKoaA@mail.gmail.com>
- <ddbc0336-9083-4054-8930-c22bd8337488@huawei.com>
- <828ab846-fe03-4830-a722-a86e57ba89c7@arm.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <828ab846-fe03-4830-a722-a86e57ba89c7@arm.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
 Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+In-Reply-To: <CAJZ5v0jmp4PFb6z+K9cGS83CmX=5Ms0F9HSgcpq-VXn=rTdXgg@mail.gmail.com>
 
-On 2025/2/24 18:31, Pierre Gondois wrote:
+On Mon, Feb 24, 2025 at 01:39:14PM +0100, Rafael J. Wysocki wrote:
+> On Sun, Feb 23, 2025 at 4:42 PM Raag Jadav <raag.jadav@intel.com> wrote:
+> >
+> > On Sun, Feb 23, 2025 at 01:56:07PM +0100, Rafael J. Wysocki wrote:
+> > > On Sun, Feb 23, 2025 at 8:33 AM Raag Jadav <raag.jadav@intel.com> wrote:
+> > > >
+> > > > On Thu, Feb 20, 2025 at 09:18:23PM +0100, Rafael J. Wysocki wrote:
+> > > > > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > >
+> > > > > There is a confusing difference in error handling between rpm_suspend()
+> > > > > and rpm_resume() related to the special way in which the -EAGAIN and
+> > > > > -EBUSY error values are treated by the former.  Also, converting
+> > > > > -EACCES coming from the callback to an I/O error, which it quite likely
+> > > > > is not, may confuse runtime PM users a bit.
+> > > > >
+> > > > > To address the above, modify rpm_callback() to convert -EACCES coming
+> > > > > from the driver to -EAGAIN and to set power.runtime_error only if the
+> > > > > return value is not -EAGAIN or -EBUSY.
+> > > > >
+> > > > > This will cause the error handling in rpm_resume() and rpm_suspend() to
+> > > > > work consistently, so drop the no longer needed -EAGAIN or -EBUSY
+> > > > > special case from the latter and make it retry autosuspend if
+> > > > > power.runtime_error is unset.
+> > > > >
+> > > > > Link: https://lore.kernel.org/linux-pm/20220620144231.GA23345@axis.com/
+> > > > > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > > > > ---
+> > > > >  drivers/base/power/runtime.c |   34 ++++++++++++++++++----------------
+> > > > >  1 file changed, 18 insertions(+), 16 deletions(-)
+> > > > >
+> > > > > --- a/drivers/base/power/runtime.c
+> > > > > +++ b/drivers/base/power/runtime.c
+> > > > > @@ -448,8 +448,13 @@
+> > > > >               retval = __rpm_callback(cb, dev);
+> > > > >       }
+> > > > >
+> > > > > -     dev->power.runtime_error = retval;
+> > > > > -     return retval != -EACCES ? retval : -EIO;
+> > > > > +     if (retval == -EACCES)
+> > > > > +             retval = -EAGAIN;
+> > > >
+> > > > While this is one way to address the problem, are we opening the door
+> > > > to changing error codes when convenient? This might lead to different
+> > > > kind of confusion from user standpoint.
+> > >
+> > > Are you saying that if a mistake was made sufficiently long ago, it
+> > > can't be fixed any more because someone may be confused?
+> >
+> > Nothing against the fix but "sufficiently long ago" is why we might
+> > have users that rely on it. As long as we don't break anything I don't
+> > see a problem.
+> >
+> > Messing with error codes is usually received with mixed feelings and
+> > coming across such a code raises more questions than answers. Perhaps a
+> > small explanation might do the trick?
 > 
+> Do you mean an explanation why -EACCES needs to be converted to something else?
 > 
-> On 2/22/25 11:07, zhenglifeng (A) wrote:
->> On 2025/2/19 3:17, Rafael J. Wysocki wrote:
->>> On Thu, Feb 13, 2025 at 2:55 AM zhenglifeng (A) <zhenglifeng1@huawei.com> wrote:
->>>>
->>>> On 2025/2/6 21:14, Lifeng Zheng wrote:
->>>>> Add sysfs interfaces for CPPC autonomous selection in the cppc_cpufreq
->>>>> driver.
->>>>>
->>>>> The patch series is organized in two parts:
->>>>>
->>>>>   - patch 1-5 refactor out the general CPPC register get and set functions
->>>>>     in cppc_acpi.c
->>>>>
->>>>>   - patches 6-8 expose sysfs files for users to control CPPC autonomous
->>>>>     selection when supported
->>>>>
->>>>> Changelog:
->>>>>
->>>>> v5:
->>>>>
->>>>>   - add more explanation to the commit logs and comments
->>>>>   - change REG_OPTIONAL from bin to hex
->>>>>   - split patch 2 into 3 smaller patches
->>>>>   - remove CPPC_REG_VAL_READ() and CPPC_REG_VAL_WRITE() macros
->>>>>   - move the modification part in patch 5 into a separate patch
->>>>>   - rename the sysfs file from "energy_perf" to
->>>>>     energy_performance_preference_val
->>>>>
->>>>> v4:
->>>>>
->>>>>   - add REG_OPTIONAL and IS_OPTIONAL_CPC_REG to judge if a cpc register is
->>>>>     an optional one
->>>>>   - check whether the register is optional before CPC_SUPPORTED check in
->>>>>     cppc_get_reg_val() and cppc_set_reg_val()
->>>>>   - check the register's type in cppc_set_reg_val()
->>>>>   - add macros to generally implement registers getting and setting
->>>>>     functions
->>>>>   - move some logic codes from cppc_cpufreq.c to cppc_acpi.c
->>>>>   - replace cppc_get_auto_sel_caps() by cppc_get_auto_sel()
->>>>>
->>>>> v3:
->>>>>
->>>>>   - change cppc_get_reg() and cppc_set_reg() name to cppc_get_reg_val() and
->>>>>     cppc_set_reg_val()
->>>>>   - extract cppc_get_reg_val_in_pcc() and cppc_set_reg_val_in_pcc()
->>>>>   - return the result of cpc_read() in cppc_get_reg_val()
->>>>>   - add pr_debug() in cppc_get_reg_val_in_pcc() when pcc_ss_id < 0
->>>>>   - rename 'cpunum' to 'cpu' in cppc_get_reg_val()
->>>>>   - move some macros from drivers/cpufreq/cppc_cpufreq.c to
->>>>>     include/acpi/cppc_acpi.h with a CPPC_XXX prefix
->>>>>
->>>>> v2:
->>>>>
->>>>>   - fix some incorrect placeholder
->>>>>   - change kstrtoul to kstrtobool in store_auto_select
->>>>>
->>>>> Lifeng Zheng (8):
->>>>>    ACPI: CPPC: Add IS_OPTIONAL_CPC_REG macro to judge if a cpc_reg is
->>>>>      optional
->>>>>    ACPI: CPPC: Optimize cppc_get_perf()
->>>>>    ACPI: CPPC: Rename cppc_get_perf() to cppc_get_reg_val()
->>>>>    ACPI: CPPC: Add cppc_set_reg_val()
->>>>>    ACPI: CPPC: Refactor register value get and set ABIs
->>>>>    ACPI: CPPC: Modify cppc_get_auto_sel_caps() to cppc_get_auto_sel()
->>>>>    ACPI: CPPC: Add three functions related to autonomous selection
->>>>>    cpufreq: CPPC: Support for autonomous selection in cppc_cpufreq
->>>>>
->>>>>   .../ABI/testing/sysfs-devices-system-cpu      |  54 ++++
->>>>>   drivers/acpi/cppc_acpi.c                      | 303 +++++++++++-------
->>>>>   drivers/cpufreq/amd-pstate.c                  |   3 +-
->>>>>   drivers/cpufreq/cppc_cpufreq.c                | 109 +++++++
->>>>>   include/acpi/cppc_acpi.h                      |  30 +-
->>>>>   5 files changed, 372 insertions(+), 127 deletions(-)
->>>>>
->>>>
->>>> Gentle ping.
->>>
->>> OK, so I'm wondering how this is related to the patch series at
->>>
->>> https://lore.kernel.org/linux-acpi/20250211103737.447704-1-sumitg@nvidia.com/
->>
->> This series refactors some cppc_acpi ABIs and supports cppc autonomous
->> selection with sysfs files in cpufreq policy.  Later, [1] proposed another
->> design with different user interfaces.We will discuss and reach a consensus
->> with regard to this.
->>
->> However, as mentioned in [1], patch 1-7 in this series (the cppc_acpi part)
->> are not related to user interfaces, so can be reviewed and applied
->> separately.  I can also send patch 1-7 as a new thread if preferred.
->>
->> [1] https://lore.kernel.org/linux-acpi/20250211103737.447704-1-sumitg@nvidia.com/
-> 
-> I tried the patchset on a platform which doesn't implement CPC and everything worked well.
-> As Lifeng said,
->   PATCH v5 8/8] cpufreq: CPPC: Support for autonomous selection in cppc_cpufreq
-> seems to be still in discussion, but for patches 1-7 FWIW:
-> 
-> Reviewed-by: Pierre Gondois <pierre.gondois@arm.com>
+> That's because -EACCES has a special meaning in runtime PM: it means
+> that runtime PM is disabled for the given device.
 
-Thank you!
+I meant a small comment above for those who may not see it as an obvious
+thing, but whatever you think is best.
 
-Regards,
-Lifeng
-
-> 
-> Regards,
-> Pierre
-> 
->>
->>>
->>>> Attach discussions of previous versions:
->>>> v1: https://lore.kernel.org/all/20241114084816.1128647-1-zhenglifeng1@huawei.com/
->>>> v2: https://lore.kernel.org/all/20241122062051.3658577-1-zhenglifeng1@huawei.com/
->>>> v3: https://lore.kernel.org/all/20241216091603.1247644-1-zhenglifeng1@huawei.com/
->>>> v4: https://lore.kernel.org/all/20250113122104.3870673-1-zhenglifeng1@huawei.com/
->>>>
->>>
->>
->>
-> 
-
+Raag
 
