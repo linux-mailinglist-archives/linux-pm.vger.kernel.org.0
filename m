@@ -1,148 +1,98 @@
-Return-Path: <linux-pm+bounces-22840-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22841-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E28A6A42CDD
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 20:40:42 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9EB86A42D35
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 20:59:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9F9CA177AA3
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 19:40:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B46BF18881D6
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 19:59:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9B28420468D;
-	Mon, 24 Feb 2025 19:40:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 11AAA2063EA;
+	Mon, 24 Feb 2025 19:59:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="EUfODXBF"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="lSBGMgSM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f181.google.com (mail-pl1-f181.google.com [209.85.214.181])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.smtpout.orange.fr (smtp-78.smtpout.orange.fr [80.12.242.78])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 22292156F44;
-	Mon, 24 Feb 2025 19:40:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.181
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C6487136327;
+	Mon, 24 Feb 2025 19:58:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.78
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740426029; cv=none; b=MukWlMgXtJT2gT9gR9XDsaQYJsqF/8iMUOvM6f5v7yPHou0qByR+ofW1DkZfzDGTGMDBt+ydeF4vYBLeGAEX4XAj5HjJzfhTEVr/dyg1FKjnf+brrfoO2Ey17rSBoJjYSccm3+1dGBw+vGoTSrjr+LYirLMAdIjw1xFpm963B/c=
+	t=1740427140; cv=none; b=MMTzTDzkMNkmkpruwhb4L5OZyLFr5KVc4AbfCUbqrVvrF/Vj4lSsXnh+NR2/ZM7IUTsIgERd7CoU1x45vU4Md+qDcLRyMJ77TeVC2IuhKQRIojQBnqhj+4Kx7ZM5zhIVL95OjtRiukw4JnPY6jD2/SKDSr39OvAO4Hdy29p4U8A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740426029; c=relaxed/simple;
-	bh=0G337c2mwOQTgqfGBU7Y7usM5K2vtZxBQJHiZHq0MYs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=QRjPSnGmvnM1pyb7d4QvcFRqXJsNRSwGv/NTXNpWo3FGkNPmnfY4xUpNrQ4UGzV9lgiAVO15d7hPpz3GNJPFvaVWoHSNYKKLHpDRaUKmCzyWIuaJ6b/WS6u/xP05eLYXMCVMceUW3xFp1PI6flswvyaEbXmrKkDNYh3uMWWpgaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=EUfODXBF; arc=none smtp.client-ip=209.85.214.181
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f181.google.com with SMTP id d9443c01a7336-221050f3f00so109178465ad.2;
-        Mon, 24 Feb 2025 11:40:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740426027; x=1741030827; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=blpZojWlw3eBFg2o1Iv9HU3+rowxftfATIEUjR6VDX0=;
-        b=EUfODXBFcCTqiPXJ9vyPYjw1Eccwf40UDFuCcP2QsCSCNh+UpL9cy44fQhJl3Omg8z
-         AR4/eUDNyfXgJ2XKnS8cpIRXvFIgIRvpo7cDJOkjt7KMMrd4EwLJQNZXKsaR0ssXwym3
-         BoIYXIvOrWMKBJOu2tgvgnVs8/RSYf9gVkpXOjQ9AgZqK8oSVDtw+b17tdGXK+FIofRN
-         +ZXz+2ecXm18WBORHoIcJ7KTvLb0LqyIWgVXyz9z+WVJCsbHovWKXiwqHS1pnHXXxY7D
-         kl94zQ59GBj22I+RsFiexg6waR3+dwAA0ahIelr97/PWKLCoIpR4/PT/vT4gRX46brP4
-         2p3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740426027; x=1741030827;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=blpZojWlw3eBFg2o1Iv9HU3+rowxftfATIEUjR6VDX0=;
-        b=gwH5+KZ8sXWhfMIK4FlOziH1hx/sTKf3kLhcmlFXcQg8yLtT1NUG7ESNVHbA9INKme
-         vmyEacLQAM5nS1Fq4inrLzMCRdhxTxcIkWUFmW1kpnU7OsaagQYG/8DfvVJnYsRI22bu
-         ZLmnLSBmnXrp/8L3oLdF2YE5Qoy2vGOLFnNgD4qaQ3oTlELeikqYZOYAANttLef3KgOE
-         Jthr6TAuvZh2f0KutkK4GdfTG7EhK1hhtZkGYJzc7v6Ir4zbJsDkA60TVu1Ce1yD0Eif
-         4LiUAEwuBgsg+yAYOOKR6LpxfpZ1ynwFdHLju0rekP7YGOwaO7+yUdlD+t2EdGb9SpQo
-         jOxw==
-X-Forwarded-Encrypted: i=1; AJvYcCXFtW96HNXJnGYmZezDlnBFK0eFvbB3kn8xKC/sraYeGzS8NDUmhs462aDQbAtUw919rnmYWEDQkhc=@vger.kernel.org, AJvYcCXbPI1doODGK+fwpCJHh6xFJgV1F9c4mk8Y0BZBOllEG9zgMGNx/dSp9OmR02NfW0OnBhYUNQfKI6CBdGxoSVg=@vger.kernel.org, AJvYcCXqR/HUOs1EsB55CJNNgvAHXtIRhCVOoSpm5aP7luXRBYmcvX0jyUu1URJJREJ9H3+Fe4gKkvm5bbCleN4=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwfqZ9rLtCFT2UzAAOLIQ8kPUzYluTajLDlRty3KUBZVHJGQ5tn
-	S2AYuCmZ4k67UZqSZ+1/WjvXX6S+n64PVGelBsfhivNQvUKibnzk
-X-Gm-Gg: ASbGncvQSqzPwwZyZPa/NaNpMAwhSh7I/QBJgkbXRN2K0zdxzxoMpM8DUmWSql8vy+a
-	uQXED1DHaYHaLGtYRGjw3UMgUXXaWNQ/7yJ91cMqJuHZoCtWJbw9PFlsryuRufH5GvWmCazz3uu
-	2IINEAr93brNUYihN9HeeEwJWq+xbAefV9I+7SPBrPk5taqvLuaIl59VizCp8G4y4j175qj9m07
-	tjz39Rt+wPDa81H/RmWsDFnFPY03expTwtQzPbo3i+edMqE/wM3wI39W+suvmxbPapY1d4mJUEW
-	RChsCnXUdbVFrbr1iHhfnON47fkvXvtQmUXyIwSA3L83Xngjew==
-X-Google-Smtp-Source: AGHT+IGYZfzCdstp40Y+7X9Sh1qT/lL1k7FXU2gb12PeZuuLcUxcbij/RYwdDrr6tsXIMsmPIcoXhg==
-X-Received: by 2002:a05:6a20:258e:b0:1ee:d317:48e6 with SMTP id adf61e73a8af0-1f0fbff6cf8mr510414637.7.1740426027235;
-        Mon, 24 Feb 2025 11:40:27 -0800 (PST)
-Received: from localhost (maglev-oncall.nvidia.com. [216.228.125.128])
-        by smtp.gmail.com with ESMTPSA id 41be03b00d2f7-aeda8574dbasm13824a12.42.2025.02.24.11.40.26
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2025 11:40:26 -0800 (PST)
-Date: Mon, 24 Feb 2025 14:40:24 -0500
-From: Yury Norov <yury.norov@gmail.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
-	John Hubbard <jhubbard@nvidia.com>, linux-pm@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] rust: Add cpumask helpers
-Message-ID: <Z7zLKNcvvga08jcw@thinkpad>
-References: <20250221205649.141305-1-yury.norov@gmail.com>
- <20250221205649.141305-2-yury.norov@gmail.com>
- <20250224085613.ksburgsarl35tvnh@vireshk-i7>
+	s=arc-20240116; t=1740427140; c=relaxed/simple;
+	bh=fWCZLO7EKR4DOPrWOUXgbX4igVnp3NTdUsv32c2M+X0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eK4jc0f++aiL4258pJ88mM7W2MnZTfsYIT005Blcww9IN8CR74OeGkjVNQQJGBvyoLRYDO05nwoEyHIlqHPziouu9B22sifE/i5JPjCQFhWqLug+dN1DbPVCf0+OUrQ1PdjnbGnGctTFZi3nHDukkUtPxQVFNgXiuuA3hYPFrwg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=lSBGMgSM; arc=none smtp.client-ip=80.12.242.78
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from fedora.home ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id meSLt3GDwJyOhmeSPtGswC; Mon, 24 Feb 2025 20:49:38 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1740426579;
+	bh=TYkhntDhg6zE2Z9rvZA/FjSywjAnJEg0AG/RXj5Cj1k=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version;
+	b=lSBGMgSMfFY2R+JdkvLMGe2zWfxig9natjAOM4rxrWscn60b5LMO+ZS3u1Xe5Ekev
+	 1CvRH93p4Yd9EpqVtYBGU6Jp4WhutYyiDeJbim0UAq+bamEeDLoIfeGXleFZ9i5eWR
+	 argVhLUHy4C8W7QR24QpctGtYri85t4yoAid5HMWGJ9It5oKL4eOzDXSE7iSEKKEVo
+	 3RU2KCqZBjh1vjdyMbnDyWX3eCo3PM2XQh4RYmdISJilAvW8xQWhRiFrkum9b+anhN
+	 FBOTbRiEt09JWr3T4W3ryk9fr0iGMynSOU3aGeYt3SHKzxLdc7+mjbdpHDvMps5eai
+	 Vw9liiq/fSqGw==
+X-ME-Helo: fedora.home
+X-ME-Auth: Y2hyaXN0b3BoZS5qYWlsbGV0QHdhbmFkb28uZnI=
+X-ME-Date: Mon, 24 Feb 2025 20:49:39 +0100
+X-ME-IP: 90.11.132.44
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org,
+	kernel-janitors@vger.kernel.org,
+	Christophe JAILLET <christophe.jaillet@wanadoo.fr>,
+	linux-pm@vger.kernel.org
+Subject: [PATCH] thermal: intel: Remove a useless operation in int340x_thermal_zone_add()
+Date: Mon, 24 Feb 2025 20:49:28 +0100
+Message-ID: <cceb7f8864c43f046cf1c19c3bbcc38a7a57adc5.1740426540.git.christophe.jaillet@wanadoo.fr>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250224085613.ksburgsarl35tvnh@vireshk-i7>
+Content-Transfer-Encoding: 8bit
 
-On Mon, Feb 24, 2025 at 02:26:13PM +0530, Viresh Kumar wrote:
-> Hi Yury,
-> 
-> On 21-02-25, 15:56, Yury Norov wrote:
-> > Question: zalloc_cpumask_war() is a convenient wrapper around
-> > alloc_cpumask_var_node(). Maybe rust can use the latter directly as it's
-> > a true outlined function? There's more flexibility, if you need it, but
-> > also a higher risk that the API will change: ~40 users vs 180 for zalloc
-> > thing. Up to you guys. I can send v2 if needed.
-> 
-> I looked at the APIs again and here is what I feel:
-> 
-> - I am not sure if the Rust code will have any users of the *_node()
->   APIs in the near future. i.e. There is no need for the Rust code to
->   implement Cpumask::new_node() version for now.
-> 
-> - I have missed implementing the uninitialized version earlier,
->   alloc_cpumask_var(), which I think should be implemented right away.
->   Bindings for alloc_cpumask_var() are required to be added for this
->   though.
-> 
-> - One advantage of using zalloc_cpumask_var() instead of
->   alloc_cpumask_var() is that we don't need to open code it in the
->   Rust code, specifically for the !CONFIG_CPUMASK_OFFSTACK case where
->   we need to call cpumask_clear() separately.
->
-> - The Rust side can have following abstractions for now:
-> 
->   pub fn new() -> Result<Self>;
->   pub fn new_zeroed() -> Result<Self>;
-> 
-> -- 
-> viresh
+'zone_trips' has just been allocated with kzalloc(), so .flags is known to
+be 0. Remove the useless | when assigning THERMAL_TRIP_FLAG_RW_TEMP.
 
-OK, if you need both I'll export both. I'll send it in v2 together
-with clarifications from discussion with Miguel.
+Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+---
+This was added in commit cca52f696952 ("thermal: intel: Set
+THERMAL_TRIP_FLAG_RW_TEMP directly")
+---
+ drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 2 +-
+ 1 file changed, 1 insertion(+), 1 deletion(-)
+
+diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+index 8dca6a6aceca..b43d848e66b8 100644
+--- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
++++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+@@ -143,7 +143,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(struct acpi_device *adev,
+ 	for (i = 0; i < trip_cnt; i++) {
+ 		zone_trips[i].type = THERMAL_TRIP_PASSIVE;
+ 		zone_trips[i].temperature = THERMAL_TEMP_INVALID;
+-		zone_trips[i].flags |= THERMAL_TRIP_FLAG_RW_TEMP;
++		zone_trips[i].flags = THERMAL_TRIP_FLAG_RW_TEMP;
+ 		zone_trips[i].priv = THERMAL_INT_TO_TRIP_PRIV(i);
+ 	}
  
+-- 
+2.48.1
+
 
