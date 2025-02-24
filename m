@@ -1,81 +1,81 @@
-Return-Path: <linux-pm+bounces-22825-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22839-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B17D0A4280E
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 17:38:25 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DD2DBA42A8A
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 19:02:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 862CB3A25C2
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 16:37:36 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DBB31896EBC
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 18:02:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90D80262D05;
-	Mon, 24 Feb 2025 16:37:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 42B21264A85;
+	Mon, 24 Feb 2025 18:02:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b="QVK9OBJj"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 351A7261570;
-	Mon, 24 Feb 2025 16:37:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from gentwo.org (gentwo.org [62.72.0.81])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9DD1C7BAEC;
+	Mon, 24 Feb 2025 18:02:28 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.72.0.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740415061; cv=none; b=njn3dlvk/0oTAOQRARgKBuIM10mjEVgLQFTeq7hIIIgupgJplhqt20wZGWH+HtUL6aRgWGPBhXBkIYsaWAtkF3puwgAOsUVd83kMY2yRDS9xGop1cTE+AtPezIlYoNlCheQLNHAdR7W83hDs96AmJYYmR6KCFaeab1IHYZhsUDM=
+	t=1740420150; cv=none; b=J/jpvXJEUnF8ITfNYljzJqeqeievb+K+2bC73jmAT+ikJz1nFEWQnyeFaU+xzqKPKqnDQSFGIbPzOWe8DpqWl/PKTV0AdkVYd0R3oqhg6lKVyQHXW/Hg6bRBV6wPMswRBOyVK2R8uqIYm4ZKlWss5q3L52aPvWRXDlNaxakL7X0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740415061; c=relaxed/simple;
-	bh=0PtG8eXLtUyqjvaTmcAs9ZW3ZNaNeW/CVYKMDmAlBsI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=WylrdAih4B53hyyQ1IOWHp5cL3g4mIu3oK51jQV5iOD8sc5UyDBCmX2XrCc/NKlfvNc0ZEBIaz/cJ49LxyZR4A2g0FFVhEiq5yVHZPiNt8JT5xSl4x2Bn3qKpkMv5047xDWvBw/f0C9K6l9aWwAA8XMKWz5lz4jWh5GmRsuyliM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9F1FA152B;
-	Mon, 24 Feb 2025 08:37:54 -0800 (PST)
-Received: from [10.57.65.109] (unknown [10.57.65.109])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 4559D3F6A8;
-	Mon, 24 Feb 2025 08:37:36 -0800 (PST)
-Message-ID: <4fe7f680-2189-48b1-b115-abcf1b9084e7@arm.com>
-Date: Mon, 24 Feb 2025 16:37:37 +0000
+	s=arc-20240116; t=1740420150; c=relaxed/simple;
+	bh=ZcSniXRgM+Ddmr47JfUfBW9xvN1HNe9i5drbqA1M/n4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:Message-ID:References:
+	 MIME-Version:Content-Type; b=upXHWVJ3iVykRRB/vu/bS7MiuEckUXjgS4e0ztGbKxYeoiL9accuU1lXuAn2WmRstxEebUtGdyLWm52Fw9gCLZHzEnH7pHEpi4cqGo+LX6R0PFjO0/Rs3hjgwbQCjpaArgOD3Q3yESdUwzYVO4rMX9eNV0IELRcIW6aszFlYJL8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org; spf=pass smtp.mailfrom=gentwo.org; dkim=pass (1024-bit key) header.d=gentwo.org header.i=@gentwo.org header.b=QVK9OBJj; arc=none smtp.client-ip=62.72.0.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=gentwo.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gentwo.org
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=gentwo.org;
+	s=default; t=1740416264;
+	bh=ZcSniXRgM+Ddmr47JfUfBW9xvN1HNe9i5drbqA1M/n4=;
+	h=Date:From:To:cc:Subject:In-Reply-To:References:From;
+	b=QVK9OBJjeDjcboUGIJNsj1/Yd213YN4Cc+1uJUcOc0TH4pwHTurFfHQ+hHR+shN4c
+	 NEtsVESYC4pMVHGrop80zFSssiVTh2QtP520C9PdZM4L/alnUbI8LUFfRCqpXt0Gdj
+	 wGk/29IBVVg2djOspxa+EzOJhlsUNaJrOaYywbt0=
+Received: by gentwo.org (Postfix, from userid 1003)
+	id 41A2940A17; Mon, 24 Feb 2025 08:57:44 -0800 (PST)
+Received: from localhost (localhost [127.0.0.1])
+	by gentwo.org (Postfix) with ESMTP id 4069040195;
+	Mon, 24 Feb 2025 08:57:44 -0800 (PST)
+Date: Mon, 24 Feb 2025 08:57:44 -0800 (PST)
+From: "Christoph Lameter (Ampere)" <cl@gentwo.org>
+To: Ankur Arora <ankur.a.arora@oracle.com>
+cc: linux-pm@vger.kernel.org, kvm@vger.kernel.org, 
+    linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org, 
+    linux-acpi@vger.kernel.org, catalin.marinas@arm.com, will@kernel.org, 
+    x86@kernel.org, pbonzini@redhat.com, vkuznets@redhat.com, 
+    rafael@kernel.org, daniel.lezcano@linaro.org, peterz@infradead.org, 
+    arnd@arndb.de, lenb@kernel.org, mark.rutland@arm.com, harisokn@amazon.com, 
+    mtosatti@redhat.com, sudeep.holla@arm.com, maz@kernel.org, 
+    misono.tomohiro@fujitsu.com, maobibo@loongson.cn, zhenglifeng1@huawei.com, 
+    joao.m.martins@oracle.com, boris.ostrovsky@oracle.com, 
+    konrad.wilk@oracle.com
+Subject: Re: [PATCH v10 08/11] governors/haltpoll: drop kvm_para_available()
+ check
+In-Reply-To: <20250218213337.377987-9-ankur.a.arora@oracle.com>
+Message-ID: <6d035996-8b8f-3d3d-d41e-6573f8a76f31@gentwo.org>
+References: <20250218213337.377987-1-ankur.a.arora@oracle.com> <20250218213337.377987-9-ankur.a.arora@oracle.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal/debugfs: replace kzalloc() with kcalloc() in
- thermal_debug_tz_add()
-To: Ethan Carter Edwards <ethan@ethancedwards.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
- Markus Elfring <Markus.Elfring@web.de>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-hardening@vger.kernel.org
-References: <20250222-thermal_kcalloc-v1-1-9f7a747fbed7@ethancedwards.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <20250222-thermal_kcalloc-v1-1-9f7a747fbed7@ethancedwards.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=US-ASCII
 
+On Tue, 18 Feb 2025, Ankur Arora wrote:
 
+> So, we can safely forgo the kvm_para_available() check. This also
+> allows cpuidle-haltpoll to be tested on baremetal.
 
-On 2/22/25 20:02, Ethan Carter Edwards wrote:
-> We are trying to get rid of all multiplications from allocation
-> functions to prevent integer overflows[1]. Here the multiplication is
-> obviously safe, but using kcalloc() is more appropriate and improves
-> readability. This patch has no effect on runtime behavior.
-> 
-> Link: https://github.com/KSPP/linux/issues/162 [1]
-> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-coded-arithmetic-in-allocator-arguments
-> 
+I would hope that we will have this functionality as the default on
+baremetal after testing in the future.
 
-
-IMO there is no need for such links in the patch header.
-The explanation is enough. Just drop those two links
-and should be good.
-
-Thanks for the patch!
-
-Regards,
-Lukasz
+Reviewed-by; Christoph Lameter (Ampere) <cl@linux.com>
 
