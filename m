@@ -1,121 +1,190 @@
-Return-Path: <linux-pm+bounces-22795-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22796-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AF44EA41D8F
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 12:50:50 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id BCED4A41DB7
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 12:53:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 09D461798D4
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 11:45:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2FCE419C0E4A
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 11:48:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C805D2627E8;
-	Mon, 24 Feb 2025 11:24:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 28B66264F9F;
+	Mon, 24 Feb 2025 11:27:36 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="DIgyjQrb"
+	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="hSbtqKpZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.15])
+Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7B735257AC8;
-	Mon, 24 Feb 2025 11:24:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D318625D534
+	for <linux-pm@vger.kernel.org>; Mon, 24 Feb 2025 11:27:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740396258; cv=none; b=ulCrSc8dF7Db4BnlfAp/5lqgAUwH1eSk3ndN6CxPS8CmhWDopTc8XTdBe9SPKagxIsy03E23DkBOuPobg/s2a2WrLzuwmAzGV1armjFH3uLAeWGxARoMuo6CxjronsIDP4L0ML48b1DaSJjRm8necIPQF4b2I+vUASu2CS6j2Sw=
+	t=1740396456; cv=none; b=Ar/2heJoO1U9GAxgo9FuY3wM8KlecnF7Vm+M81XF+FetyZOVgoUnyVIfiVqk3ZRpZAk84NNVR7TD+nTNgWnXflR8p67NevZFiOkR73+wZLgSOFQmkhV3ZXwURfrZoxwtlKA+X8D65AEEiMSYcsW4WmN1SZOmFMdkgHEFsYROSiA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740396258; c=relaxed/simple;
-	bh=JEcP7qUK6u00OAPytLU3TUQotFYzjM6j/mx4+g5gaUo=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=XBhr6+nH8Ulkfwc86Y4KrwdxN9tHIPvl3BRdbD1i9U7jbC0pOxIsbc92tmQau6ulkI1XywtB/UjLkZ9+FlbPC8kO3GKc8Cy3WW1hWqUpSoNW5vzUQ+GBCk5T/19BqBkqB1tYhYep+gFE4sP6Mh+A+9QVGh0vgiHOpnC4AZLHWQU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=DIgyjQrb; arc=none smtp.client-ip=192.198.163.15
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740396256; x=1771932256;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=JEcP7qUK6u00OAPytLU3TUQotFYzjM6j/mx4+g5gaUo=;
-  b=DIgyjQrbkeRqNWPkeg47gnpy2SynWRatdH9otyUEy6iiCErFWbhtLsd3
-   BrimtGIKJPA1zYpCC/exr6vX8bW2JL/9IcFsZ3e/c9wQLr6flQk7lHRmk
-   4cIUpxQb8ejArKf/XKWp0Bl5FxzMlWRgaAgmum/72Zz+4BrrG7TF1sVnk
-   BTMclSyHO4qLPDY8FfpqD2wE+Wpsl5Iuuxa3+oEtegN4cm9FN5U+mp0cE
-   DHz55Lz368Mmv0PptD3jKz/K+dNhZssID1SEKU1Y6rIlcd1t0JIL+eykR
-   zbtRomloI5oq1/aX264FZHL06VUY//IBmZoLIPvquwSyf2hY2Tv5YV+MS
-   w==;
-X-CSE-ConnectionGUID: aWTxoC83Qc609azyz6kJ/w==
-X-CSE-MsgGUID: zW3fyXE2Sqa4BS8gUdaFjQ==
-X-IronPort-AV: E=McAfee;i="6700,10204,11354"; a="41284554"
-X-IronPort-AV: E=Sophos;i="6.13,309,1732608000"; 
-   d="scan'208";a="41284554"
-Received: from fmviesa003.fm.intel.com ([10.60.135.143])
-  by fmvoesa109.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 03:24:15 -0800
-X-CSE-ConnectionGUID: XyR0He+eS9uuuEihv2486A==
-X-CSE-MsgGUID: u4XpFd1CQeOL5c8P45fx7Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="120159488"
-Received: from black.fi.intel.com ([10.237.72.28])
-  by fmviesa003.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 03:24:11 -0800
-Date: Mon, 24 Feb 2025 13:24:08 +0200
-From: Raag Jadav <raag.jadav@intel.com>
-To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>
-Cc: kernel test robot <lkp@intel.com>, perex@perex.cz, tiwai@suse.com,
-	broonie@kernel.org, lgirdwood@gmail.com, deller@gmx.de,
-	sre@kernel.org, sakari.ailus@linux.intel.com, mchehab@kernel.org,
-	hverkuil-cisco@xs4all.nl, jdmason@kudzu.us, fancer.lancer@gmail.com,
-	oe-kbuild-all@lists.linux.dev, linux-sound@vger.kernel.org,
-	linux-fbdev@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-media@vger.kernel.org, ntb@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v1 07/13] fbdev: pxafb: use devm_kmemdup_array()
-Message-ID: <Z7xW2AIz6vUo6mu-@black.fi.intel.com>
-References: <20250221165333.2780888-8-raag.jadav@intel.com>
- <202502220449.DvJuMgsL-lkp@intel.com>
- <Z7xQ2y-7U5-OhzhB@smile.fi.intel.com>
+	s=arc-20240116; t=1740396456; c=relaxed/simple;
+	bh=92UtT6fHiTt6I/peYlCjRe3NBTfzK6bGmA4JrPDrr8k=;
+	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
+	 Content-Type:MIME-Version; b=UVAgBr5D8KHc4z6T6hblcdG2uIjK81jGfmPGcnrtjHTDxMNsY7kQ9NjENqKhBy9EqHQSZSni1+5swAw48SCBaqt0SqyhxmqCRcCLxEgNzhJfvu9eFraVG1mxTPQcmhs5JcwQrynLLx8Y1nz0eGs41HiTvltXOHpNHewZPxLrZNI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=hSbtqKpZ; arc=none smtp.client-ip=62.96.220.36
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
+Received: from localhost (localhost [127.0.0.1])
+	by mx1.secunet.com (Postfix) with ESMTP id DE55B206BC;
+	Mon, 24 Feb 2025 12:27:24 +0100 (CET)
+X-Virus-Scanned: by secunet
+Received: from mx1.secunet.com ([127.0.0.1])
+ by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
+ with ESMTP id XPRWfl1L0BkV; Mon, 24 Feb 2025 12:27:24 +0100 (CET)
+Received: from cas-essen-01.secunet.de (rl1.secunet.de [10.53.40.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by mx1.secunet.com (Postfix) with ESMTPS id F031E205ED;
+	Mon, 24 Feb 2025 12:27:23 +0100 (CET)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com F031E205ED
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
+	s=202301; t=1740396444;
+	bh=92UtT6fHiTt6I/peYlCjRe3NBTfzK6bGmA4JrPDrr8k=;
+	h=From:To:CC:Subject:Date:References:In-Reply-To:From;
+	b=hSbtqKpZ8cvDzNLBq9PSq6RXbrddKRfQ7uxDdIFO1YrEoAlAWx4TC48uOiXc8fcMG
+	 aaZlU44JmUl93lenmiqGUAUEB+qg7KCpSgDadOpccGiGUXo8DvxsdiIFlOXqt6V0bJ
+	 VhKUvH7mYsg4Krm9oFyPTHHEzHPP3ClkxycBXev+IMquWu0BfUt9IdPR9PZUChASMA
+	 PPDkT9xHvf0hOtKM/UuWCU4LCd0lT8O3jQA5b7tk5p9xSbCE7rkGYg3aIohTMkgUg7
+	 yWI2FQZZpG5TNUh67iSPzegBmeGDciy7i4R/IcIKOkvA1Xd3wdEPWzwhxAnI4kj3vS
+	 A7BwvDQtVMWGg==
+Received: from mbx-essen-02.secunet.de (10.53.40.198) by
+ cas-essen-01.secunet.de (10.53.40.201) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 24 Feb 2025 12:27:23 +0100
+Received: from mbx-essen-02.secunet.de (10.53.40.198) by
+ mbx-essen-02.secunet.de (10.53.40.198) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.39; Mon, 24 Feb 2025 12:27:23 +0100
+Received: from mbx-essen-02.secunet.de ([fe80::fcaf:ee74:71ad:4eff]) by
+ mbx-essen-02.secunet.de ([fe80::fcaf:ee74:71ad:4eff%8]) with mapi id
+ 15.01.2507.039; Mon, 24 Feb 2025 12:27:23 +0100
+From: "Gwara, Mateusz" <mateusz.gwara@secunet.com>
+To: "rafael@kernel.org" <rafael@kernel.org>, "daniel.lezcano@linaro.org"
+	<daniel.lezcano@linaro.org>, "rui.zhang@intel.com" <rui.zhang@intel.com>,
+	"lukasz.luba@arm.com" <lukasz.luba@arm.com>
+CC: "linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "Wassenberg,
+ Dennis" <Dennis.Wassenberg@secunet.com>
+Subject: TCC cooling on Meteorlake
+Thread-Topic: TCC cooling on Meteorlake
+Thread-Index: AduDlx+iplinHwBpQQWp3a/rqpECPwDF4Jbw
+Date: Mon, 24 Feb 2025 11:27:22 +0000
+Message-ID: <163ff391dc6d4f828ecff95e87f5003d@secunet.com>
+References: <f733005155e64d489ae18d7d357bada9@secunet.com>
+In-Reply-To: <f733005155e64d489ae18d7d357bada9@secunet.com>
+Accept-Language: de-DE, en-US
+Content-Language: de-DE
+X-MS-Has-Attach:
+X-MS-TNEF-Correlator:
+Content-Type: text/plain; charset="Windows-1252"
+Content-Transfer-Encoding: quoted-printable
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <Z7xQ2y-7U5-OhzhB@smile.fi.intel.com>
+X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
 
-On Mon, Feb 24, 2025 at 12:58:35PM +0200, Andy Shevchenko wrote:
-> On Sat, Feb 22, 2025 at 05:41:24AM +0800, kernel test robot wrote:
-> > Hi Raag,
-> > 
-> > kernel test robot noticed the following build warnings:
-> > 
-> > [auto build test WARNING on b16e9f8547a328b19af59afc213ce323124d11e9]
-> > 
-> > url:    https://github.com/intel-lab-lkp/linux/commits/Raag-Jadav/ASoC-Intel-avs-use-devm_kmemdup_array/20250222-010322
-> > base:   b16e9f8547a328b19af59afc213ce323124d11e9
-> > patch link:    https://lore.kernel.org/r/20250221165333.2780888-8-raag.jadav%40intel.com
-> > patch subject: [PATCH v1 07/13] fbdev: pxafb: use devm_kmemdup_array()
-> > config: arm-randconfig-004-20250222 (https://download.01.org/0day-ci/archive/20250222/202502220449.DvJuMgsL-lkp@intel.com/config)
-> > compiler: arm-linux-gnueabi-gcc (GCC) 14.2.0
-> > reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250222/202502220449.DvJuMgsL-lkp@intel.com/reproduce)
-> > 
-> > If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> > the same patch/commit), kindly add following tags
-> > | Reported-by: kernel test robot <lkp@intel.com>
-> > | Closes: https://lore.kernel.org/oe-kbuild-all/202502220449.DvJuMgsL-lkp@intel.com/
-> > 
-> > All warnings (new ones prefixed by >>):
-> > 
-> >    drivers/video/fbdev/pxafb.c: In function 'pxafb_probe':
-> > >> drivers/video/fbdev/pxafb.c:2236:13: warning: unused variable 'i' [-Wunused-variable]
-> >     2236 |         int i, irq, ret;
-> >          |             ^
-> 
-> Ragg, please, fix this, and issue a v2 with the link to fixed PR:
-> https://lore.kernel.org/r/Z7xGpz3Q4Zj6YHx7@black.fi.intel.com.
+Hi,
 
-Sure, but perhaps wait a few days for review comments.
+Sorry, my first mail was sent as HTML due to a corporate policy preset.
+So here's my initial mail:
 
-Raag
+
+Hello dear maintainers!
+
+I was comparing the behavior of the Intel TCC cooling driver on a kernel we=
+ develop and also on regular Ubuntu kernel releases(based on Linux kernel u=
+p to 6.13).
+On a Raptorlake CPU you=92ll see the TCC node with e.g.:
+
+/sys/class/thermal/cooling_device8/type
+/sys/class/thermal/cooling_device8/cur_state
+
+Endpoints
+
+This allows reading/setting the offsets as expected.
+
+This was made possible in
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/=
+drivers?h=3Dnext-20250212&id=3Dbe6bfb29c55e48567983e24aba7b6bf9a66a45ab/htt=
+ps://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commit/dri=
+vers/thermal?h=3Dnext-20250212&id=3Dbe6bfb29c55e48567983e24aba7b6bf9a66a45a=
+b/https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/commi=
+t/drivers/thermal/intel?h=3Dnext-20250212&id=3Dbe6bfb29c55e48567983e24aba7b=
+6bf9a66a45ab/https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-nex=
+t.git/commit/drivers/thermal/intel/intel_tcc_cooling.c?h=3Dnext-20250212&id=
+=3Dbe6bfb29c55e48567983e24aba7b6bf9a66a45ab
+
+with a patch that added=20
+> +=A0=A0=A0=A0=A0=A0 X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE,=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0=A0 &temp_tigerlake),
+> +=A0=A0=A0=A0=A0=A0 X86_MATCH_INTEL_FAM6_MODEL(ALDERLAKE_L,=A0=A0=A0=A0=
+=A0=A0=A0=A0 &temp_tigerlake),
+> +=A0=A0=A0=A0=A0=A0 X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE,=A0=A0=A0=A0=A0=
+=A0=A0=A0=A0 &temp_tigerlake),
+> +=A0=A0=A0=A0=A0=A0 X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_P,=A0=A0=A0=A0=
+=A0=A0=A0 &temp_tigerlake),
+> +=A0=A0=A0=A0=A0=A0 X86_MATCH_INTEL_FAM6_MODEL(RAPTORLAKE_S,=A0=A0=A0=A0=
+=A0=A0=A0 &temp_tigerlake),
+
+Among other changes, where intel_tcc_get_offset_mask would get the correct =
+Tjunction offset for each CPU.
+
+I was trying to add a similar entry corresponding to the Meteorlake Model n=
+ames but this did not have the same effect and there was no TCC node presen=
+t like on a Raptorlake device.
+=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=A0=20
+As I see in
+https://git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/tree/dr=
+ivers/thermal/intel/intel_tcc_cooling.c?h=3Dnext-20250219
+the last CPU added here still is the Raptorlake model.
+
+I checked the repositories where Intel maintains their CPU patches but ther=
+e was also no mention of Meteorlake (and later models)regarding TCC support=
+.
+As there have been several ARROW&LUNAR-lake patches handling different issu=
+es regarding clocking the different core variants.
+
+I=92d like to know if there is something I=92m missing(maybe NO TCC support=
+ since Meteorlake?) or if there is TCC support planned?
+I=92d be willing to help test anything regarding this issue.
+
+
+Sorry for the lengthy mail and thank you for you work on the Linux Kernel s=
+o far :)
+
+
+
+Mateusz=20
+
+
+--=20
+Mateusz Gwara
+Senior Software Developer
+Department Network & Client Security
+Division Public Authorities
+secunet Security Networks AG
+
+Tel.: +49 201 54 54-2934
+E-Mail: mailto:mateusz.gwara@secunet.com
+Alt-Moabit 96, 10559 Berlin
+http://www.secunet.com
+______________________________________________________________________
+
+secunet Security Networks AG
+Sitz: Kurf=FCrstenstra=DFe 58, 45138 Essen, Deutschland
+Amtsgericht Essen HRB 13615
+Vorstand: Axel Deininger (Vors.), Torsten Henn, Dr. Kai Martius, Jessica No=
+spers
+Aufsichtsratsvorsitzender: Dr. Ralf Wintergerst
+______________________________________________________________________
+
 
