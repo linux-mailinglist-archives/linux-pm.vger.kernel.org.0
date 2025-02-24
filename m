@@ -1,93 +1,89 @@
-Return-Path: <linux-pm+bounces-22807-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22808-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F711A42088
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 14:27:22 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 87255A421CB
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 14:48:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 66BB717328B
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 13:24:56 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 08BEB3B3E16
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 13:42:48 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1EF924A04F;
-	Mon, 24 Feb 2025 13:24:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CF5223CEF8;
+	Mon, 24 Feb 2025 13:42:54 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b="iS/A260A"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="V2CNkdl/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from casper.infradead.org (casper.infradead.org [90.155.50.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f182.google.com (mail-lj1-f182.google.com [209.85.208.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1F82E24886D;
-	Mon, 24 Feb 2025 13:24:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=90.155.50.34
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32CEF59B71
+	for <linux-pm@vger.kernel.org>; Mon, 24 Feb 2025 13:42:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740403456; cv=none; b=YOCQspX/5qtQcTBaOdKgwGKyZWnkdinTQy5JbcbWoA1S09d2UgM3lD3u/Cc9kNSsO71eHk6ej7hxBw08DWNSR/b+fxVuQX+Ml+ZSKvaE8SBpPfI6gk9hi2HSfVn8dwrw1a0eVetaM7YXQeiGrue8Y3XU+vMV2tV69I5w6WhQ1R4=
+	t=1740404574; cv=none; b=uDsRkmrvyYw6W6SMo3HDWwjGKXGHIcTUGz7Ham0SHsqsIwBTxHED4a2W8KKkqr7iV7P4xPwSWALm5xHEVLnU9s3x6YPpHIqWZDnXktLYAHl/FwwKxnQToy6PzyplLQPtwsJVJy+kTWb+A8f4//wfg46QyXEarXFu7rgI7pnxfgo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740403456; c=relaxed/simple;
-	bh=1k6wjU0I1KWrs2CqF0lxTRBsEKFiGTnFa6NfOjTfvFg=;
+	s=arc-20240116; t=1740404574; c=relaxed/simple;
+	bh=5mhBn5JOZq/Sr6VtMa/3D4upNLR32dDMAVUAlYfycnc=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ix+LZILOXgXIdW3Q9i/vi8bDakVUz7MhKHmxT0FAGiq6hP3s7WSSx1JE4CTQBfZe49kkzm23B1eqg8j3g6gBqoaTxMiOtnygpm09sbPGxEKUgUpOdPnVzu/JB6qRJHqXkcKhgTR1JHG+pawH8brR1Fe3o6/icglL3E2CShwE+pM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org; spf=none smtp.mailfrom=infradead.org; dkim=pass (2048-bit key) header.d=infradead.org header.i=@infradead.org header.b=iS/A260A; arc=none smtp.client-ip=90.155.50.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=infradead.org
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=infradead.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=infradead.org; s=casper.20170209; h=In-Reply-To:Content-Type:MIME-Version:
-	References:Message-ID:Subject:Cc:To:From:Date:Sender:Reply-To:
-	Content-Transfer-Encoding:Content-ID:Content-Description;
-	bh=OwmwOu+Cjzvd/Dyh2oCLg1P9uzBvkTbz8Qibak6RkKs=; b=iS/A260A40VI6SQ9dsr0Pe2Ec0
-	+4I/Bpalp0CX65hp2mHNsbxfdLQ3ZQMp/MO3XTCmulOZ1LdYifv6XmmjBsEkUzc7/Ofye9OegILGU
-	jhMbWZFAabjv9F1E7Tdsq+St//fzgpJbTghlaQ08rLhkZfj4YHNl3RsAgWE0X2VcL1qmU/ZGIqy9s
-	q3djqUzHMEgyRNxqJ4zMlGJrlo+rBDv3+zWiBCnZolwsUOv1flDL0UYKwJjrhfaGLVZBSL82vN7Ui
-	z/ItUQgAbHGrhpvvZGv/LP7zX+kb01JmoNnF7MGJbWqiG9NuEPEKF3SG3il1lVkgYfzh0ukPwqkvp
-	tlhJKBVg==;
-Received: from 77-249-17-252.cable.dynamic.v4.ziggo.nl ([77.249.17.252] helo=noisy.programming.kicks-ass.net)
-	by casper.infradead.org with esmtpsa (Exim 4.98 #2 (Red Hat Linux))
-	id 1tmYR9-00000007Gtp-2twK;
-	Mon, 24 Feb 2025 13:23:55 +0000
-Received: by noisy.programming.kicks-ass.net (Postfix, from userid 1000)
-	id B2A18300164; Mon, 24 Feb 2025 14:23:54 +0100 (CET)
-Date: Mon, 24 Feb 2025 14:23:54 +0100
-From: Peter Zijlstra <peterz@infradead.org>
-To: Zijun Hu <zijun_hu@icloud.com>
-Cc: Zijun Hu <quic_zijuhu@quicinc.com>,
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-	Will Deacon <will@kernel.org>,
-	"Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-	Andrew Morton <akpm@linux-foundation.org>,
-	Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-	Thomas Gleixner <tglx@linutronix.de>,
-	Herbert Xu <herbert@gondor.apana.org.au>,
-	"David S. Miller" <davem@davemloft.net>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Danilo Krummrich <dakr@kernel.org>,
-	Eric Dumazet <edumazet@google.com>,
-	Jakub Kicinski <kuba@kernel.org>, Paolo Abeni <pabeni@redhat.com>,
-	Simon Horman <horms@kernel.org>,
-	Johannes Berg <johannes@sipsolutions.net>,
-	Jamal Hadi Salim <jhs@mojatatu.com>,
-	Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-	Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-	Linus Walleij <linus.walleij@linaro.org>,
-	Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
-	Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
-	Marek Szyprowski <m.szyprowski@samsung.com>,
-	Robin Murphy <robin.murphy@arm.com>,
-	Miquel Raynal <miquel.raynal@bootlin.com>,
-	Richard Weinberger <richard@nod.at>,
-	Vignesh Raghavendra <vigneshr@ti.com>, linux-arch@vger.kernel.org,
-	linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-	linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-	linux-wireless@vger.kernel.org, linux-rdma@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-	iommu@lists.linux.dev, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH *-next 01/18] mm/mmu_gather: Remove needless return in
- void API tlb_remove_page()
-Message-ID: <20250224132354.GC11590@noisy.programming.kicks-ass.net>
-References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
- <20250221-rmv_return-v1-1-cc8dff275827@quicinc.com>
- <20250221200137.GH7373@noisy.programming.kicks-ass.net>
- <8f36be7c-6052-4c5d-85ff-0eed27cf1456@icloud.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=FymLG+fNeq0EU0iZwb9FUBQEhNbosKpulXE4/DBGRaAsxpfviPavcVKJleBR5aJEsrVweNeW/t8imJP+UbFSPEP8gxwFi8eDA3p61k6+zfQ1BqTJUAFSES1nQg3W/Fmq99eqJfSQ9plbjWumhCecSg9YTqj+4NOD1uIKXC/53hI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=V2CNkdl/; arc=none smtp.client-ip=209.85.208.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f182.google.com with SMTP id 38308e7fff4ca-30761be8fcfso39067081fa.0
+        for <linux-pm@vger.kernel.org>; Mon, 24 Feb 2025 05:42:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740404570; x=1741009370; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=t7IyqSXfcAB07mb16t4JzcS21JNbeSpMHrVwyOTk5Cs=;
+        b=V2CNkdl/JDPnhDZQ8jGtzdi8enIFoqaC5Jrlcj3awSqFVzAYaMROtONmV5o+sH+GHw
+         mSIjYw01nDxCeRy/LHf0CJBZBkpMPqqL27DqAmwlxCkkU4NATIc62F+UMnAH3giisNPo
+         1yhs/r/V5qg8hTvFovRBmDNdYqpy496IMP+9wRI2uhXwnVb6UqSetqBQXv77fBvD0VCI
+         g7YPDKggblcOXM+B1Oau0+SqIcuscffqHk5GtCN9SK8+/gW+vWWQngRPXRDGG/fG6aUb
+         l0lN7iuo9AQNqcvwSPzMy0QgP0e1elnS8PJvn4x5NANSNuhnLA0eSP79ixtksgNw30S9
+         vGXQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740404570; x=1741009370;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=t7IyqSXfcAB07mb16t4JzcS21JNbeSpMHrVwyOTk5Cs=;
+        b=X6exzRlbnGW3nxFKVbktcidfZo9wj0kx6sc0LIKBSW+9Uyi7zRoHvA6dZXXcK2T9WR
+         v79ADkAfW4PtyhDbM84sv3xdQXaTQxChJknlWzaXD1VOAfu5hIQkNFV3IVc8pIxgSLGS
+         4wFo+54aITY+SxJD8wFUVP9k1eKB5EJX6aT3uoW7vPU/Ijxzswxxh4gWM2cQ8jPsQ3gX
+         G1a3kvEm35K3bVAKpMM4iDaVNXbnYUExSCkWBELpvFMXW5SLtnW98yM6KlOKH1zVgGBO
+         S1DfgFPu6St4un4w2lncqq6/KtIu8kWshtItBwDn2ZtdYZARhvG/Nq+t1Wcy18pAvhsZ
+         ylWQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWdhAWYf5Qe2ewRPe5RVChR8CwEHDioSKlk+wuNqHCrMNK9t+ug2hdSGDgqySE0uTFj8Ztpj2CUgg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyHSlcdgDp3z3G7Tvo0ofNa1ooxf3tupHZ0+qNWWdNa4UW6A53C
+	jVZYEXlRgD/z9B2UOpwE9+mDxQqV3ufoLkdHTxfjBk5UEGJmTL7KtXsgFJVsCjs=
+X-Gm-Gg: ASbGnctCBEwQlvqDAUmfq51qhTtaTPzcNiYtv/lqZbBdMQLuQvImwSYM1QMMhLgMh84
+	oheebEBS8rYyAP6uDgWTTVk2KSVn4jFU47mA4s72bARVGmdcPtaqOZD9aRSRQhA+3XzhHFvVH7A
+	iYH/b1bO0TC1T7VtYji1QE/NV0SGV2G7U8dJtVB5n1fQ2hdOJattB+NCyRBnhQeKEroYD0SGNuB
+	S+KUEg1Y7W5BpL+KQIvZIslDlbfhHjtqZnne49ZmRC8Z6dVKvdzzyWV1HmXGKLz9VV8f66PfElg
+	g7gmTUoPx9D111KTFGvrEvMe+VQXkUp+Owx7Y1/bhFEJ7ugDIUfpNDcHkS/+J3XTQjlxuyH/NGa
+	u3r7wHw==
+X-Google-Smtp-Source: AGHT+IE48juDZvdR8qHX9mBe7zZT7U1to+JJITpRs1tHbAe0HEtUtfoc3mNnWKiU+vjpJzPigmS6FQ==
+X-Received: by 2002:a2e:9f4f:0:b0:302:1c90:58de with SMTP id 38308e7fff4ca-30a59993eb2mr42883071fa.33.1740404570264;
+        Mon, 24 Feb 2025 05:42:50 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-3091029b75esm36566981fa.103.2025.02.24.05.42.48
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2025 05:42:49 -0800 (PST)
+Date: Mon, 24 Feb 2025 15:42:47 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: George Moussalem <george.moussalem@outlook.com>, 
+	linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	amitk@kernel.org, thara.gopinath@gmail.com, robh@kernel.org, krzk+dt@kernel.org, 
+	quic_srichara@quicinc.com, Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+Subject: Re: [PATCH v6 1/5] dt-bindings: nvmem: Add compatible for IPQ5018
+Message-ID: <zygiknq3pldkcdonekzamn2uprnjyc5dip57i75p7uahftekxr@2lqgo3wa6zhf>
+References: <20250224061224.3342-1-george.moussalem@outlook.com>
+ <DS7PR19MB8883591F0D2E21E62025D2D69DC02@DS7PR19MB8883.namprd19.prod.outlook.com>
+ <2fcb52a3-7ef2-465f-b460-2f7b565a188e@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -96,29 +92,24 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <8f36be7c-6052-4c5d-85ff-0eed27cf1456@icloud.com>
+In-Reply-To: <2fcb52a3-7ef2-465f-b460-2f7b565a188e@kernel.org>
 
-On Sat, Feb 22, 2025 at 07:00:28PM +0800, Zijun Hu wrote:
-> On 2025/2/22 04:01, Peter Zijlstra wrote:
-> >>   */
-> >>  static inline void tlb_remove_page(struct mmu_gather *tlb, struct page *page)
-> >>  {
-> >> -	return tlb_remove_page_size(tlb, page, PAGE_SIZE);
-> >> +	tlb_remove_page_size(tlb, page, PAGE_SIZE);
-> >>  }
-> > So I don't mind removing it, but note that that return enforces
-> > tlb_remove_page_size() has void return type.
-> >
+On Mon, Feb 24, 2025 at 10:19:35AM +0100, Krzysztof Kozlowski wrote:
+> On 24/02/2025 07:12, George Moussalem wrote:
+> > From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> > 
+> > Document the QFPROM block found on IPQ5018
+> > 
+> > Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
+> > Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+> > Signed-off-by: George Moussalem <george.moussalem@outlook.com>
 > 
-> tlb_remove_page_size() is void function already. (^^)
+> You can send the patches to yourself and see whether they are properly
+> threaded.
 
-Yes, but if you were to change that, the above return would complain.
+I don't think outlook world understands the concept of threading.
 
-> > It might not be your preferred coding style, but it is not completely
-> > pointless.
-> 
-> based on below C spec such as C17 description. i guess language C does
-> not like this usage "return void function in void function";
-
-This is GNU extension IIRC. Note kernel uses GNU11, not C11
+-- 
+With best wishes
+Dmitry
 
