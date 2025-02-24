@@ -1,75 +1,77 @@
-Return-Path: <linux-pm+bounces-22850-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22851-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88FB3A4310A
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 00:39:53 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E9042A43114
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 00:41:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83074168C7D
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 23:39:52 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9A1961896C32
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 23:40:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ECE120B814;
-	Mon, 24 Feb 2025 23:39:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2C2A220C49C;
+	Mon, 24 Feb 2025 23:39:48 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fCNxnZCt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="gklq07Bm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+Received: from mail-yb1-f175.google.com (mail-yb1-f175.google.com [209.85.219.175])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F8C20764E;
-	Mon, 24 Feb 2025 23:39:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D46418E377;
+	Mon, 24 Feb 2025 23:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740440386; cv=none; b=PqDDckqCsiPsor72UaMw3vIzsdfSl+wOFD7GlvuOUW1hdTS+VfhBzYAiqE/44BZGBsFqk11qC4UvXJLcb3J2hiivGtKm1UW3L3MfAgv8rVsFA9BdX47wnEdLW0+4WhZBpKxl8Na0VCeZIeTmQkoPnbeNNGcAOyzaCF3gnk9KJZs=
+	t=1740440388; cv=none; b=bMqpzM7AjGJweSetR5gIFBbDJrfUmZfQrv4fH7sPBq0+O1zU5Sp8HNOiEU1W7DlHFurr2nSO8k8Ym+jbnL3aGupIUdHXFpAF/xi7Io/9TCDP6GLlzFAKmKqpTtcM+E7uWxDTGQjn0ESBO76AuSgfjLbP+AJ0gbhbueg0vlEK4oQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740440386; c=relaxed/simple;
-	bh=Mx3M84WwtY3NU5OR0FXjmYAPb68dziDd5bWY/P4BbEE=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P3J9tBQWNRJJavdkVJHe/7kkTD9b970EaEYDMmHEE7u9xVkyuS4pNq4Nmvw5hcQj8L4waffrfKrIm7UfzKEOQy32KCoKq2XE981uepZpkPnzp878wouO6FKzX2JWK/dhgVs/j0vln+aesXic9I/qhZwoDutM1OcP+9bH7lq+TYE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fCNxnZCt; arc=none smtp.client-ip=209.85.219.172
+	s=arc-20240116; t=1740440388; c=relaxed/simple;
+	bh=JVMDXIQEjx/OPBpAvdxhYiWGWReKh3WO9uqZW6UxKQY=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version; b=jkhX/yY9v6AHFn2rqRkZoFPkAJb1Rg17lv/+HQaL7itBMZryC4XqvVUNHwNair41zx5OBT34Bzc+lv2V2pAjFOTVGNL7E9yPYWDAhoiukmrhtRxTqKcPeI5+GfEycmA2OAh8N97Fe1mONrmGPsP7lgHhLfyI/1+2dbLBokEZcOs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=gklq07Bm; arc=none smtp.client-ip=209.85.219.175
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e5dd7b439e3so4230765276.1;
-        Mon, 24 Feb 2025 15:39:43 -0800 (PST)
+Received: by mail-yb1-f175.google.com with SMTP id 3f1490d57ef6-e5dcc411189so4406926276.0;
+        Mon, 24 Feb 2025 15:39:46 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740440383; x=1741045183; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:from:to:cc:subject:date:message-id:reply-to;
-        bh=Em6wyZNwKj45p/oNoxuXgA87kPyVGeauMHk780ar+kU=;
-        b=fCNxnZCtovtjDme0XXFa+yfJJY4l/Akj1tHyikhyIxNS4HRRWIzY8exvMS9YBwwe8J
-         xW3iB2eXvuwUBfO9IU+BgXznmHLuiz8xlT/GP8Hq5AvPq8OD5X4ygKPc4Iuipoi0roww
-         rw/Yqa/e0iVAfvLmk2F1jj3PBKkXKXRoIPwV13B7x02GJc6p2l7S0ry2P5CGBbV8+gL6
-         vMP+AlI5tbbRQwq3Jys2d0n8viqwuPk4w0G1TeFq217Dif7Qr1eqSJrO5wtI4atnFyfe
-         IPrJGAiqBxPxjO7ufHrMfTIEaq+rvCYLYJF3MPvoAx+3slkfA0xUcthXlgBdrUvi4l4o
-         +DTw==
+        d=gmail.com; s=20230601; t=1740440385; x=1741045185; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=K563TY+K7Ju2Y4rHGIcSU7wWrY/3HYZ1BEVYH8alshA=;
+        b=gklq07Bm0b83ge5mO8Uu1j+46A9KKAvOCyTd+BpNaTZplaiChduKvTdOWE5FKVeRvo
+         8hMI/I5211hwyC1pO3n7m+VSU3NYyV562ynHieSUaDLmB1V19tPQmYkcz3BvGe06ai3/
+         jo9zE3LU7TcovVX1SxxGy4fm+2uH4VKrPYYkNmZuq51cvlzhfjMwTJdKyHdLkjwq11Iw
+         DvwNxaPh9hlK7tqvfXPrggNFNDJtQp10QQJi+WZg7pm/82ZrmxynZ0p8uvu07+1yPefJ
+         I43E+dmAqQZc71v/1XZSZAcTDWqtNdKuE5arlXdvpW+iAeIag/pHpNEHBnUqH8t4kGxE
+         pb8g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740440383; x=1741045183;
-        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
-         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=Em6wyZNwKj45p/oNoxuXgA87kPyVGeauMHk780ar+kU=;
-        b=lawplL/zrq4g7rejcnKcuiUAKEQ5tgRffpmdyl/+xNX20lJi/uLRwpjZb4SEQTpSZ/
-         8FgT+9NZHGmCI9+VUbCzRG1ulxZ2es/03ZIaQSZ2Xhw23uSDJiM7hSxCNnIHtEAtSpfc
-         4PXgBO66Uy5sAZfg21m34vFdXzF6dlKiDsFBFEfWs6r49yg7FQvBMu9UCVdzF14oThkX
-         Zko9zhlvOKwVhMRnzHDrX0hk6MGQjm6pJMPX76i7jxYeRh1wAaGlTRx8P/r0l/gA0X7Q
-         2jDTmNpShuqluepG3fpdsRCN2u4Ow8KfaJtYx1aH+z5ez26aqD5keAwmzfv4Q0+sRbiZ
-         zZfg==
-X-Forwarded-Encrypted: i=1; AJvYcCUa9wmnI8RWuQawNh9bdlU7Im7Dt4S/ODx0YyGn/rAwtcrtLo1bWX4JaIQNEQMjJxmSnYirYu4jui+pMH15Jvk=@vger.kernel.org, AJvYcCUfKkPknD//GVe3WA+S/l9VSfdSo2f/kqc0sUQYUNkZSCQx+cEF2Mo2ljtqW92MZD/7jQNNSbTTj5ntYZ4=@vger.kernel.org, AJvYcCVWjZUlPHNW9VCIOuk9ytGy6O8l/aiKN7ZDGY29yXpC6NJydswKX+xF3ejJgTKU9l2LULp4ZRvZgEw=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzjAQgZaow1RUZgQ+nbPwy5M1KeyXert/zJ5OirN7york+mpoZ/
-	YScFWVtPuxU6/6WLupVozh1h7pfNxStnLMJbJEJTAiM+5kL2eZBM
-X-Gm-Gg: ASbGncvpadk5ZDSyUvkxHStY95zV3I9TpQWBSQsBDvDTb4WkXKGy1ep3UJwaVqpmtBs
-	N3qgnFrE+eQi4UyZ/3YUl4XQHL1pWzS4Z731JN/NxQFBcgIbrrOCutMay+Ul1kDSCsdRUNvCxR5
-	2QjGc2cj6GLAP5YNXQoOynIz5aLJdnGW8jrPpfdzMhhKxkSdyp1osrf5gxM7tS7D/Vn+qieAETN
-	Hd7S7sDD7YRYYBmIrHIviSoSRwVna15ihYwYX+ZNso9BCwD1ehJBOHaHKQ3C92ai1P/dRKoI0DV
-	WbSA0/IX0tJNgM+YvZP3Nhgm+6GtDRExh+DXzDJOpRv0nQ+P+/VB2+KDszEcfQ==
-X-Google-Smtp-Source: AGHT+IGJ4kYO+7vEeod1p53CFmuKDYnA9HznKe1Ojaxw+/QIMgxp46DfqTGP8DgzDp0dw2ylUJqDyA==
-X-Received: by 2002:a05:6902:3301:b0:e5d:ba97:b1af with SMTP id 3f1490d57ef6-e5e8b04674cmr10799379276.39.1740440382744;
-        Mon, 24 Feb 2025 15:39:42 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740440385; x=1741045185;
+        h=content-transfer-encoding:mime-version:references:in-reply-to
+         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=K563TY+K7Ju2Y4rHGIcSU7wWrY/3HYZ1BEVYH8alshA=;
+        b=LfASG/utenO7GlFvji5ngkOp+stmjZYunOcUcaLnmi9h5Z4bpfNVpcyYwBRtAIIbgG
+         gRJp6JmE47/Np2Twm+uxi+LaPoeHYzTuodxpjVn84yDlobYoFJBz3AaUu49UhGXi6aRq
+         Nj2Rbd5+6LlqQay2Tzsu80D5v01QXAAAQWOaTmKa6TyeKqfQtHdTHqWBprtiZa66vJy/
+         JOSbYY2vcO7RlTr5Ay2NJrgPrpISFnUHoVcKscNELxFRxNVrRh1Bnr4i4zrPVN5anMeB
+         HrpWJAnJ03ZViVIAr3/FglZeGP28DAz8epC7SVrLvPT9nGueugytF+lQXJk500xDCzpP
+         PxzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCWEKfXqhqYz9LmBNpVW6hbsQot1JApQcMX2pwN2XHToWCYsBgcUcIA2pQ9xeA19nSS7cXDDxr/sTp0lam4=@vger.kernel.org, AJvYcCXkLObjLpgMpaGP+o1qe58BVtuFww2woddkeTJgTJ8te01AJZMXrO42Vzc+NFlfb+x4FKW2K+BZlgTbBu7JkSQ=@vger.kernel.org, AJvYcCXpYl8UxDSSZ51zIlgvUDinyX8tx0gigxkenFw4PzIuQpm7GtoU5rrxVXzFueNRco+y74twVQfuhyw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxKbQnRzvDsdZJOQrJt+1HhGhpLitXJ9/vFRFI/2v1HUFTAr9yg
+	4tE1JhhYvpSeMX57rwHXiMBNZPpERgHDEN303PXKAMCIwBdJ3C1N
+X-Gm-Gg: ASbGncvvNT4PEFhm0+2hGTZGmtKq6Q4pXSB814iUJrFlWxT1XBGKI45bKimTr8YWL0F
+	6k1gi0OhJ2X+FZvQfEls2J5D6xvCguclYx8Jxuv4Iudf+eGHkA4FqGkZYGdxDikUxk+hdlGky/e
+	C6JpVtE34mAaeBHbKfJERnqMudNP6kS+TbEJfAp9kz2SvISabw4PYCc5xO2Ak9oDmPs27vJoyAm
+	KgKbzdo+iy4WkelioGusYq3XpKWQM4FsRdvuGO9Z2LWKe/Dgrw/NtZtoNIldrcpsGvRwLEP/jS9
+	cPet+uavnmh672i2fOxaZ5H4crvyRzNXpXwguKCBzOG7pVXCacUj/D64BGsAcg==
+X-Google-Smtp-Source: AGHT+IFJ4445c9uDMV8u/wEtPl3i6gdzxeZB0ILuVRrOtHlz4PulN9ayYnrSuEev49f3yp3ZBSP18g==
+X-Received: by 2002:a05:6902:2182:b0:e58:14b:6f99 with SMTP id 3f1490d57ef6-e607a4db47cmr890129276.1.1740440385272;
+        Mon, 24 Feb 2025 15:39:45 -0800 (PST)
 Received: from localhost (c-73-224-175-84.hsd1.fl.comcast.net. [73.224.175.84])
-        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e607b3eb08bsm89564276.23.2025.02.24.15.39.40
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e607b4c6e97sm87683276.55.2025.02.24.15.39.43
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Mon, 24 Feb 2025 15:39:41 -0800 (PST)
+        Mon, 24 Feb 2025 15:39:44 -0800 (PST)
 From: Yury Norov <yury.norov@gmail.com>
 To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
 	Viresh Kumar <viresh.kumar@linaro.org>,
@@ -99,10 +101,12 @@ Cc: Yury Norov <yury.norov@gmail.com>,
 	linux-pm@vger.kernel.org,
 	rust-for-linux@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH v2 0/2] Bitmap bindings for rust
-Date: Mon, 24 Feb 2025 18:39:34 -0500
-Message-ID: <20250224233938.3158-1-yury.norov@gmail.com>
+Subject: [PATCH 1/2] rust: Add cpumask helpers
+Date: Mon, 24 Feb 2025 18:39:35 -0500
+Message-ID: <20250224233938.3158-2-yury.norov@gmail.com>
 X-Mailer: git-send-email 2.43.0
+In-Reply-To: <20250224233938.3158-1-yury.norov@gmail.com>
+References: <20250224233938.3158-1-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -111,28 +115,96 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 
-The bindings and a new maintenance entry together with the API changes
-policy.
+From: Viresh Kumar <viresh.kumar@linaro.org>
 
-v1: https://lore.kernel.org/all/20250221205649.141305-1-yury.norov@gmail.com/T/
-v2:
- - export alloc_cpumask_var() @ Viresh;
- - clarify that the maintenance rules apply to all bitmap interfaces,
-   including those not mentioned explicitly in the helpers @ Miguel.
+In order to prepare for adding Rust abstractions for cpumask, add
+the required helpers for inline cpumask functions that cannot be
+called by rust code directly.
 
-Viresh Kumar (1):
-  rust: Add cpumask helpers
-
-Yury Norov [NVIDIA] (1):
-  MAINTAINERS: add rust bindings entry for bitmap API
-
- MAINTAINERS                     |  5 ++++
+Signed-off-by: Viresh Kumar <viresh.kumar@linaro.org>
+Signed-off-by: Yury Norov [NVIDIA] <yury.norov@gmail.com>
+---
  rust/bindings/bindings_helper.h |  1 +
  rust/helpers/cpumask.c          | 45 +++++++++++++++++++++++++++++++++
  rust/helpers/helpers.c          |  1 +
- 4 files changed, 52 insertions(+)
+ 3 files changed, 47 insertions(+)
  create mode 100644 rust/helpers/cpumask.c
 
+diff --git a/rust/bindings/bindings_helper.h b/rust/bindings/bindings_helper.h
+index f46cf3bb7069..2396ca1cf8fb 100644
+--- a/rust/bindings/bindings_helper.h
++++ b/rust/bindings/bindings_helper.h
+@@ -10,6 +10,7 @@
+ #include <linux/blk-mq.h>
+ #include <linux/blk_types.h>
+ #include <linux/blkdev.h>
++#include <linux/cpumask.h>
+ #include <linux/cred.h>
+ #include <linux/device/faux.h>
+ #include <linux/errname.h>
+diff --git a/rust/helpers/cpumask.c b/rust/helpers/cpumask.c
+new file mode 100644
+index 000000000000..2d380a86c34a
+--- /dev/null
++++ b/rust/helpers/cpumask.c
+@@ -0,0 +1,45 @@
++// SPDX-License-Identifier: GPL-2.0
++
++#include <linux/cpumask.h>
++
++void rust_helper_cpumask_set_cpu(unsigned int cpu, struct cpumask *dstp)
++{
++	cpumask_set_cpu(cpu, dstp);
++}
++
++void rust_helper_cpumask_clear_cpu(int cpu, struct cpumask *dstp)
++{
++	cpumask_clear_cpu(cpu, dstp);
++}
++
++void rust_helper_cpumask_setall(struct cpumask *dstp)
++{
++	cpumask_setall(dstp);
++}
++
++unsigned int rust_helper_cpumask_weight(struct cpumask *srcp)
++{
++	return cpumask_weight(srcp);
++}
++
++void rust_helper_cpumask_copy(struct cpumask *dstp, const struct cpumask *srcp)
++{
++	cpumask_copy(dstp, srcp);
++}
++
++bool rust_helper_alloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
++{
++	return alloc_cpumask_var(mask, flags);
++}
++
++bool rust_helper_zalloc_cpumask_var(cpumask_var_t *mask, gfp_t flags)
++{
++	return zalloc_cpumask_var(mask, flags);
++}
++
++#ifndef CONFIG_CPUMASK_OFFSTACK
++void rust_helper_free_cpumask_var(cpumask_var_t mask)
++{
++	free_cpumask_var(mask);
++}
++#endif
+diff --git a/rust/helpers/helpers.c b/rust/helpers/helpers.c
+index 0640b7e115be..de2341cfd917 100644
+--- a/rust/helpers/helpers.c
++++ b/rust/helpers/helpers.c
+@@ -11,6 +11,7 @@
+ #include "bug.c"
+ #include "build_assert.c"
+ #include "build_bug.c"
++#include "cpumask.c"
+ #include "cred.c"
+ #include "device.c"
+ #include "err.c"
 -- 
 2.43.0
 
