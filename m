@@ -1,87 +1,107 @@
-Return-Path: <linux-pm+bounces-22834-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22838-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 96C73A42A01
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 18:38:01 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEE8EA42A79
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 18:57:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 604141896E0B
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 17:35:50 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA57916BD68
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 17:57:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29AAF266188;
-	Mon, 24 Feb 2025 17:34:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9BD5A264FAA;
+	Mon, 24 Feb 2025 17:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vKY/Xj9U"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A12A2264A88;
-	Mon, 24 Feb 2025 17:34:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6E595264A92;
+	Mon, 24 Feb 2025 17:57:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740418496; cv=none; b=g8yK/OYXuudx/x/1AZ3fs1+LgUjeppTMt4nVqtI5idvCtlzGRLsNgdoAIv39SzbRZMk0ebqgR/69HcCR2Le/IiES/QrMdRw+MUpIl3H023P1r/dAwvwWt4jK5PwrofPbb9zhN/KT1Wk8ukUsAZxHZY9MLIAxqQRtkEcGuxJ5H1U=
+	t=1740419821; cv=none; b=MkKp1xt2+8dXq7KuaR7Vhg6uHfxfARoGOFyhzRtSkBXFvgZEo/BjvngtpnulEM7L2RpNQRUUOPNlVkYzXWTUCHpP/3pzXkEcUQW//NKZPqyaB/ByGIoDRgcTllZVHvjr1xIOsatWeOu0DW6eJLFr222mP7QseLh98QKTIDEEnlQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740418496; c=relaxed/simple;
-	bh=b5ZVC40DDyXz6JHdlPQVXaMyUJ8Y1KOTGrt2hfJI5z0=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=MBMnquIN9TGHclC4kcnZzwFaFjeWTFMPjHWEb8CIJc0SEPc3M52S4eE1/pH0gI0E9hasiEE46HvUlAzDEM5ZbU4A1B5+LjWkJM80zOn0x0hls9yJyV53Azr+eTk6ECA4ninWU5sA/fbyWcLX/+E05g4TzLmHDR7PFMLvJD54GP8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9E56F1756;
-	Mon, 24 Feb 2025 09:35:10 -0800 (PST)
-Received: from e129166.arm.com (unknown [10.57.65.109])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPA id 471893F5A1;
-	Mon, 24 Feb 2025 09:34:52 -0800 (PST)
-From: Lukasz Luba <lukasz.luba@arm.com>
-To: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	rafael@kernel.org,
-	daniel.lezcano@linaro.org
-Cc: lukasz.luba@arm.com,
-	rui.zhang@intel.com,
-	srinivas.pandruvada@linux.intel.com
-Subject: [PATCH 4/4] thermal: hisi: Use kcalloc() instead of kzalloc() with multiplication
-Date: Mon, 24 Feb 2025 17:33:06 +0000
-Message-ID: <20250224173432.1946070-5-lukasz.luba@arm.com>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250224173432.1946070-1-lukasz.luba@arm.com>
-References: <20250224173432.1946070-1-lukasz.luba@arm.com>
+	s=arc-20240116; t=1740419821; c=relaxed/simple;
+	bh=98Z6rWquwnb+oqau6pISJGfTMsaiWJKg9oR7AsN7MLQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=VtuHnP978L+TZmYEea0K9nKWylU9nY+b9jsO67TrvYpXoSiHvyWL28wdv53wjOE+notPCNNwc2c8xy1dcr5Xu4cRMC0W+X1dqCfA89+qoF/42heSXaK4w1F5sgeW4PfuBvMz/rW7uYyHDbzj8cSwAWtO9jNcQtJL14rEGSLfBGo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vKY/Xj9U; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id E503AC4CED6;
+	Mon, 24 Feb 2025 17:57:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740419821;
+	bh=98Z6rWquwnb+oqau6pISJGfTMsaiWJKg9oR7AsN7MLQ=;
+	h=From:Subject:Date:To:Cc:Reply-To:From;
+	b=vKY/Xj9UEObtFXb1O4O4gx+CotG9LPPrPo5gAo61O4uqu9J5ffjOaiRUfAVLJB0ka
+	 HpM/XaU+RLmv7AkPiP/i0hNMvycYKB9CYCGq79CZPkdb/C+IAmIti8lReIIn7ZS4xD
+	 n3mkaMjX8b3PgQRj7zFvttEMxsJFTQnBxPQJ5EHd42SE36OrZwD4T/3QPCiUCrsyiE
+	 AlQwg/fAgTguxyAvmu5P+TeelivESdJlhUC+vPvIaiRX+pDMKTE/OObOee/gXRU3QO
+	 +26XZgn+7ih1q/d+rtPPcJzf/tUgcvZZxniPKWRB3FXx+rXpIG8vpqu4o4ninhj/vQ
+	 xBL7EnxU5AwzQ==
+Received: from aws-us-west-2-korg-lkml-1.web.codeaurora.org (localhost.localdomain [127.0.0.1])
+	by smtp.lore.kernel.org (Postfix) with ESMTP id CC103C021BB;
+	Mon, 24 Feb 2025 17:57:00 +0000 (UTC)
+From: Aaron Kling via B4 Relay <devnull+webgeek1234.gmail.com@kernel.org>
+Subject: [PATCH 0/2] (no cover subject)
+Date: Mon, 24 Feb 2025 11:55:32 -0600
+Message-Id: <20250224-build-tegra234-v1-0-39e4e912f968@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAJSyvGcC/6tWKk4tykwtVrJSqFYqSi3LLM7MzwNyDHUUlJIzE
+ vPSU3UzU4B8JSMDI1MDIyMT3aTSzJwU3ZLU9KJEI2MT3WRDC9OklETLtBSTRCWgpoKi1LTMCrC
+ B0bG1tQDeDU1GYAAAAA==
+X-Change-ID: 20250224-build-tegra234-c185bda9fd4a
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Viresh Kumar <viresh.kumar@linaro.org>, Sumit Gupta <sumitg@nvidia.com>, 
+ Lorenzo Pieralisi <lpieralisi@kernel.org>, 
+ =?utf-8?q?Krzysztof_Wilczy=C5=84ski?= <kw@linux.com>, 
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
+ Rob Herring <robh@kernel.org>, Bjorn Helgaas <bhelgaas@google.com>, 
+ Vidya Sagar <vidyas@nvidia.com>
+Cc: linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-pci@vger.kernel.org, Aaron Kling <webgeek1234@gmail.com>
+X-Mailer: b4 0.14.2
+X-Developer-Signature: v=1; a=ed25519-sha256; t=1740419820; l=723;
+ i=webgeek1234@gmail.com; s=20250217; h=from:subject:message-id;
+ bh=98Z6rWquwnb+oqau6pISJGfTMsaiWJKg9oR7AsN7MLQ=;
+ b=iARYKkm2gfxVmnVK8DYl1ygPH+MXiUi2obi+p9pHnMiJJH3kPeSHY4FES+MyFsGKXyVN4z984
+ mxKf7YYuNk0DrCqYGfvBq/7H/VUvvLRujZj1xLNpRYw92WAaZu3INUa
+X-Developer-Key: i=webgeek1234@gmail.com; a=ed25519;
+ pk=TQwd6q26txw7bkK7B8qtI/kcAohZc7bHHGSD7domdrU=
+X-Endpoint-Received: by B4 Relay for webgeek1234@gmail.com/20250217 with
+ auth_id=342
+X-Original-From: Aaron Kling <webgeek1234@gmail.com>
+Reply-To: webgeek1234@gmail.com
 
-According to the latest recommendations, kcalloc() should be used instead
-of kzalloc() with multiplication (which might overflow).
-Switch to this new scheme and use more safe kcalloc().
+When Tegra234 support was added to existing Tegra drivers, many of them
+did not have the matching Kconfig entries updated to allow building for
+the arch. A few of those have already been fixed. This series fixes a
+couple more.
 
-No functional impact changes.
-
-Signed-off-by: Lukasz Luba <lukasz.luba@arm.com>
+Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
 ---
- drivers/thermal/hisi_thermal.c | 4 ++--
- 1 file changed, 2 insertions(+), 2 deletions(-)
+Aaron Kling (2):
+      cpufreq: tegra194: Allow building for Tegra234
+      PCI: tegra194: Allow building for Tegra234
 
-diff --git a/drivers/thermal/hisi_thermal.c b/drivers/thermal/hisi_thermal.c
-index 7e918bd3f1002..4307161533a78 100644
---- a/drivers/thermal/hisi_thermal.c
-+++ b/drivers/thermal/hisi_thermal.c
-@@ -412,8 +412,8 @@ static int hi3660_thermal_probe(struct hisi_thermal_data *data)
- 
- 	data->nr_sensors = 1;
- 
--	data->sensor = devm_kzalloc(dev, sizeof(*data->sensor) *
--				    data->nr_sensors, GFP_KERNEL);
-+	data->sensor = devm_kcalloc(dev, data->nr_sensors,
-+				    sizeof(*data->sensor), GFP_KERNEL);
- 	if (!data->sensor)
- 		return -ENOMEM;
- 
+ drivers/cpufreq/Kconfig.arm        | 2 +-
+ drivers/pci/controller/dwc/Kconfig | 4 ++--
+ 2 files changed, 3 insertions(+), 3 deletions(-)
+---
+base-commit: d082ecbc71e9e0bf49883ee4afd435a77a5101b6
+change-id: 20250224-build-tegra234-c185bda9fd4a
+
+Best regards,
 -- 
-2.48.1
+Aaron Kling <webgeek1234@gmail.com>
+
 
 
