@@ -1,306 +1,139 @@
-Return-Path: <linux-pm+bounces-22849-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22850-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3FE7FA430AE
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 00:23:13 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 88FB3A4310A
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 00:39:53 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1C308189F268
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 23:23:19 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 83074168C7D
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 23:39:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F052320E6E7;
-	Mon, 24 Feb 2025 23:22:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9ECE120B814;
+	Mon, 24 Feb 2025 23:39:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="fCNxnZCt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yb1-f172.google.com (mail-yb1-f172.google.com [209.85.219.172])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D2AB220E31F;
-	Mon, 24 Feb 2025 23:22:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0F8C20764E;
+	Mon, 24 Feb 2025 23:39:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740439322; cv=none; b=cfctbLsi+jrvVwCAGN8VMUzeRBNXDY3yQ/JPIiGxC3ZRjfYl9iTXW/jc1vYTERH7r4TgnohX4kKmkZJx4DSw0w1nYTiNkwp0eo7pzSIE6kwv2LeaIs0+dFBoCzw8yy4ShFft0EC+GhKlw+loPcFbMmkzatKephg9Z8XjZDsQ6KM=
+	t=1740440386; cv=none; b=PqDDckqCsiPsor72UaMw3vIzsdfSl+wOFD7GlvuOUW1hdTS+VfhBzYAiqE/44BZGBsFqk11qC4UvXJLcb3J2hiivGtKm1UW3L3MfAgv8rVsFA9BdX47wnEdLW0+4WhZBpKxl8Na0VCeZIeTmQkoPnbeNNGcAOyzaCF3gnk9KJZs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740439322; c=relaxed/simple;
-	bh=nnV9DZFOn7haUOjP0I2UK6z0S6sV69e9OGIuX6qRp3k=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=UngklJzhCvZFEe51ZdBtktbpMVEgSFwVTkQkvnrszTVyijEcAjtjx6R1o+B9bZp6aVatVsPqVAOMdS5WlC6s/+d61rvF7LvoroVC6dlPkq9MGg5m4cDbrbZjJub1PBjuXrN90QobJoc/zZBVDYcCTBPVrkIICl1/deDiS7lAYFA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 42836C4CEED;
-	Mon, 24 Feb 2025 23:22:02 +0000 (UTC)
-Received: by venus (Postfix, from userid 1000)
-	id 5031F18067F; Tue, 25 Feb 2025 00:21:58 +0100 (CET)
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-Date: Tue, 25 Feb 2025 00:21:40 +0100
-Subject: [PATCH 7/7] power: supply: core: convert to fwnnode
+	s=arc-20240116; t=1740440386; c=relaxed/simple;
+	bh=Mx3M84WwtY3NU5OR0FXjmYAPb68dziDd5bWY/P4BbEE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=P3J9tBQWNRJJavdkVJHe/7kkTD9b970EaEYDMmHEE7u9xVkyuS4pNq4Nmvw5hcQj8L4waffrfKrIm7UfzKEOQy32KCoKq2XE981uepZpkPnzp878wouO6FKzX2JWK/dhgVs/j0vln+aesXic9I/qhZwoDutM1OcP+9bH7lq+TYE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=fCNxnZCt; arc=none smtp.client-ip=209.85.219.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-yb1-f172.google.com with SMTP id 3f1490d57ef6-e5dd7b439e3so4230765276.1;
+        Mon, 24 Feb 2025 15:39:43 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740440383; x=1741045183; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=Em6wyZNwKj45p/oNoxuXgA87kPyVGeauMHk780ar+kU=;
+        b=fCNxnZCtovtjDme0XXFa+yfJJY4l/Akj1tHyikhyIxNS4HRRWIzY8exvMS9YBwwe8J
+         xW3iB2eXvuwUBfO9IU+BgXznmHLuiz8xlT/GP8Hq5AvPq8OD5X4ygKPc4Iuipoi0roww
+         rw/Yqa/e0iVAfvLmk2F1jj3PBKkXKXRoIPwV13B7x02GJc6p2l7S0ry2P5CGBbV8+gL6
+         vMP+AlI5tbbRQwq3Jys2d0n8viqwuPk4w0G1TeFq217Dif7Qr1eqSJrO5wtI4atnFyfe
+         IPrJGAiqBxPxjO7ufHrMfTIEaq+rvCYLYJF3MPvoAx+3slkfA0xUcthXlgBdrUvi4l4o
+         +DTw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740440383; x=1741045183;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=Em6wyZNwKj45p/oNoxuXgA87kPyVGeauMHk780ar+kU=;
+        b=lawplL/zrq4g7rejcnKcuiUAKEQ5tgRffpmdyl/+xNX20lJi/uLRwpjZb4SEQTpSZ/
+         8FgT+9NZHGmCI9+VUbCzRG1ulxZ2es/03ZIaQSZ2Xhw23uSDJiM7hSxCNnIHtEAtSpfc
+         4PXgBO66Uy5sAZfg21m34vFdXzF6dlKiDsFBFEfWs6r49yg7FQvBMu9UCVdzF14oThkX
+         Zko9zhlvOKwVhMRnzHDrX0hk6MGQjm6pJMPX76i7jxYeRh1wAaGlTRx8P/r0l/gA0X7Q
+         2jDTmNpShuqluepG3fpdsRCN2u4Ow8KfaJtYx1aH+z5ez26aqD5keAwmzfv4Q0+sRbiZ
+         zZfg==
+X-Forwarded-Encrypted: i=1; AJvYcCUa9wmnI8RWuQawNh9bdlU7Im7Dt4S/ODx0YyGn/rAwtcrtLo1bWX4JaIQNEQMjJxmSnYirYu4jui+pMH15Jvk=@vger.kernel.org, AJvYcCUfKkPknD//GVe3WA+S/l9VSfdSo2f/kqc0sUQYUNkZSCQx+cEF2Mo2ljtqW92MZD/7jQNNSbTTj5ntYZ4=@vger.kernel.org, AJvYcCVWjZUlPHNW9VCIOuk9ytGy6O8l/aiKN7ZDGY29yXpC6NJydswKX+xF3ejJgTKU9l2LULp4ZRvZgEw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzjAQgZaow1RUZgQ+nbPwy5M1KeyXert/zJ5OirN7york+mpoZ/
+	YScFWVtPuxU6/6WLupVozh1h7pfNxStnLMJbJEJTAiM+5kL2eZBM
+X-Gm-Gg: ASbGncvpadk5ZDSyUvkxHStY95zV3I9TpQWBSQsBDvDTb4WkXKGy1ep3UJwaVqpmtBs
+	N3qgnFrE+eQi4UyZ/3YUl4XQHL1pWzS4Z731JN/NxQFBcgIbrrOCutMay+Ul1kDSCsdRUNvCxR5
+	2QjGc2cj6GLAP5YNXQoOynIz5aLJdnGW8jrPpfdzMhhKxkSdyp1osrf5gxM7tS7D/Vn+qieAETN
+	Hd7S7sDD7YRYYBmIrHIviSoSRwVna15ihYwYX+ZNso9BCwD1ehJBOHaHKQ3C92ai1P/dRKoI0DV
+	WbSA0/IX0tJNgM+YvZP3Nhgm+6GtDRExh+DXzDJOpRv0nQ+P+/VB2+KDszEcfQ==
+X-Google-Smtp-Source: AGHT+IGJ4kYO+7vEeod1p53CFmuKDYnA9HznKe1Ojaxw+/QIMgxp46DfqTGP8DgzDp0dw2ylUJqDyA==
+X-Received: by 2002:a05:6902:3301:b0:e5d:ba97:b1af with SMTP id 3f1490d57ef6-e5e8b04674cmr10799379276.39.1740440382744;
+        Mon, 24 Feb 2025 15:39:42 -0800 (PST)
+Received: from localhost (c-73-224-175-84.hsd1.fl.comcast.net. [73.224.175.84])
+        by smtp.gmail.com with ESMTPSA id 3f1490d57ef6-e607b3eb08bsm89564276.23.2025.02.24.15.39.40
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2025 15:39:41 -0800 (PST)
+From: Yury Norov <yury.norov@gmail.com>
+To: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Viresh Kumar <viresh.kumar@linaro.org>,
+	Danilo Krummrich <dakr@redhat.com>
+Cc: Yury Norov <yury.norov@gmail.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>,
+	Gary Guo <gary@garyguo.net>,
+	=?UTF-8?q?Bj=C3=B6rn=20Roy=20Baron?= <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>,
+	Trevor Gross <tmgross@umich.edu>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Nishanth Menon <nm@ti.com>,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	=?UTF-8?q?Alex=20Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Christoph Hellwig <hch@lst.de>,
+	Jason Gunthorpe <jgg@nvidia.com>,
+	John Hubbard <jhubbard@nvidia.com>,
+	linux-pm@vger.kernel.org,
+	rust-for-linux@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v2 0/2] Bitmap bindings for rust
+Date: Mon, 24 Feb 2025 18:39:34 -0500
+Message-ID: <20250224233938.3158-1-yury.norov@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-Id: <20250225-psy-core-convert-to-fwnode-v1-7-d5e4369936bb@collabora.com>
-References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
-In-Reply-To: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
-To: Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>, 
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
- Linus Walleij <linus.walleij@linaro.org>, 
- Hans de Goede <hdegoede@redhat.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
- Matti Vaittinen <mazziesaccount@gmail.com>, 
- =?utf-8?q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
- Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>, 
- David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
- Marek Szyprowski <m.szyprowski@samsung.com>, 
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
- Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>, 
- Konrad Dybcio <konradybcio@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Orson Zhai <orsonzhai@gmail.com>, 
- Baolin Wang <baolin.wang@linux.alibaba.com>, 
- Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
- Sebastian Reichel <sebastian.reichel@collabora.com>
-X-Mailer: b4 0.14.2
-X-Developer-Signature: v=1; a=openpgp-sha256; l=7861;
- i=sebastian.reichel@collabora.com; h=from:subject:message-id;
- bh=nnV9DZFOn7haUOjP0I2UK6z0S6sV69e9OGIuX6qRp3k=;
- b=owEBbQKS/ZANAwAKAdju1/PIO/qaAcsmYgBnvP8Vyowp/5XDLVpgtqLj5BRsrdZ0KwiEX2JvW
- KFTFVKHaPuJAjMEAAEKAB0WIQTvZg0HRj+Lcmp5VBPY7tfzyDv6mgUCZ7z/FQAKCRDY7tfzyDv6
- mn5ND/98EYA0PlXxgmLRMa9fPfAg5Ed50YVwJL59fCMW5ha/jRoCUuwVNFTgEC+6hmINGNG8ODN
- +MFwKOrvcRzKBa78Yo7FGxTTN3jWcGKtO1Vu0Na4hnD38OoABDEyOjr4ZegySNLFAgSyBXaaofI
- QA87R2YimROI1m+SCrTz4ZF3u1uQAb+vf94cwmeoGDDOqeL5aqeNcvsr9agGVV5o+t0D6RSo2Vj
- SBcTXQ9GmvPFuesK9AyEcQdpJ15UDGEnY5cKBVYe+BVMLe/LHvjkbTZ3Ws2mYdeg3y0Vo2duFnk
- gPukpCmIyscM4Uj0wBOtORCm/NZXW2021se0PmebPGRuEU8FduzAwCFKbALM+k5bw62sQbyIIth
- IvC69gatLauYVn8B4nZ2O9aSKtVtAZ3T5ZFOetqjqccgIp8cNKA/xJh5S9L0Ba4RgaXEFKBEAZ6
- asgfmoLao5zp6TmU6mBkJoyi5h0POAcgNkz1iNjKVmwkKK5cDDdG6/lXqIiLNyX+GDgNjGFuoF/
- F3Gf/Fj/V7ItLWFT3MhFJG5KMp8+z1u1Nn36xCoDAVeZflHaZRsSfnJGT4WAhdvBnfsRSWBlmw9
- +j4ncNHD8sWlVYRFixjCAobqfNe+Zs0Sgr6h24cHQvOGHgxdXj11oL23OkDyt5DoJEB9hmRmqRl
- 6DswGO0R2FlI/3w==
-X-Developer-Key: i=sebastian.reichel@collabora.com; a=openpgp;
- fpr=EF660D07463F8B726A795413D8EED7F3C83BFA9A
+Content-Transfer-Encoding: 8bit
 
-Replace any DT specific code with fwnode in the power-supply
-core.
+The bindings and a new maintenance entry together with the API changes
+policy.
 
-Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
----
- drivers/power/supply/bq2415x_charger.c   |  2 +-
- drivers/power/supply/power_supply_core.c | 65 ++++++++++++++++----------------
- include/linux/power_supply.h             |  2 +-
- 3 files changed, 34 insertions(+), 35 deletions(-)
+v1: https://lore.kernel.org/all/20250221205649.141305-1-yury.norov@gmail.com/T/
+v2:
+ - export alloc_cpumask_var() @ Viresh;
+ - clarify that the maintenance rules apply to all bitmap interfaces,
+   including those not mentioned explicitly in the helpers @ Miguel.
 
-diff --git a/drivers/power/supply/bq2415x_charger.c b/drivers/power/supply/bq2415x_charger.c
-index 9e3b9181ee76a4f473228bba022917677acce256..1ecbca510bba99ee7abcda33a719035adfceeb5f 100644
---- a/drivers/power/supply/bq2415x_charger.c
-+++ b/drivers/power/supply/bq2415x_charger.c
-@@ -1674,7 +1674,7 @@ static int bq2415x_probe(struct i2c_client *client)
- 	/* Query for initial reported_mode and set it */
- 	if (bq->nb.notifier_call) {
- 		if (np) {
--			notify_psy = power_supply_get_by_phandle(np,
-+			notify_psy = power_supply_get_by_phandle(of_fwnode_handle(np),
- 						"ti,usb-charger-detection");
- 			if (IS_ERR(notify_psy))
- 				notify_psy = NULL;
-diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-index 0e5fa16fd8f832414f34fae31086128928fa57cc..a01e6e1815da2ac70ce93d8bd5d06517a0eb1082 100644
---- a/drivers/power/supply/power_supply_core.c
-+++ b/drivers/power/supply/power_supply_core.c
-@@ -18,7 +18,6 @@
- #include <linux/device.h>
- #include <linux/notifier.h>
- #include <linux/err.h>
--#include <linux/of.h>
- #include <linux/power_supply.h>
- #include <linux/property.h>
- #include <linux/thermal.h>
-@@ -196,24 +195,24 @@ static int __power_supply_populate_supplied_from(struct power_supply *epsy,
- 						 void *data)
- {
- 	struct power_supply *psy = data;
--	struct device_node *np;
-+	struct fwnode_handle *np;
- 	int i = 0;
- 
- 	do {
--		np = of_parse_phandle(psy->dev.of_node, "power-supplies", i++);
--		if (!np)
-+		np = fwnode_find_reference(psy->dev.fwnode, "power-supplies", i++);
-+		if (IS_ERR(np))
- 			break;
- 
--		if (np == epsy->dev.of_node) {
-+		if (np == epsy->dev.fwnode) {
- 			dev_dbg(&psy->dev, "%s: Found supply : %s\n",
- 				psy->desc->name, epsy->desc->name);
- 			psy->supplied_from[i-1] = (char *)epsy->desc->name;
- 			psy->num_supplies++;
--			of_node_put(np);
-+			fwnode_handle_put(np);
- 			break;
- 		}
--		of_node_put(np);
--	} while (np);
-+		fwnode_handle_put(np);
-+	} while (!IS_ERR(np));
- 
- 	return 0;
- }
-@@ -232,16 +231,16 @@ static int power_supply_populate_supplied_from(struct power_supply *psy)
- static int  __power_supply_find_supply_from_node(struct power_supply *epsy,
- 						 void *data)
- {
--	struct device_node *np = data;
-+	struct fwnode_handle *fwnode = data;
- 
- 	/* returning non-zero breaks out of power_supply_for_each_psy loop */
--	if (epsy->dev.of_node == np)
-+	if (epsy->dev.fwnode == fwnode)
- 		return 1;
- 
- 	return 0;
- }
- 
--static int power_supply_find_supply_from_node(struct device_node *supply_node)
-+static int power_supply_find_supply_from_fwnode(struct fwnode_handle *supply_node)
- {
- 	int error;
- 
-@@ -249,7 +248,7 @@ static int power_supply_find_supply_from_node(struct device_node *supply_node)
- 	 * power_supply_for_each_psy() either returns its own errors or values
- 	 * returned by __power_supply_find_supply_from_node().
- 	 *
--	 * __power_supply_find_supply_from_node() will return 0 (no match)
-+	 * __power_supply_find_supply_from_fwnode() will return 0 (no match)
- 	 * or 1 (match).
- 	 *
- 	 * We return 0 if power_supply_for_each_psy() returned 1, -EPROBE_DEFER if
-@@ -262,7 +261,7 @@ static int power_supply_find_supply_from_node(struct device_node *supply_node)
- 
- static int power_supply_check_supplies(struct power_supply *psy)
- {
--	struct device_node *np;
-+	struct fwnode_handle *np;
- 	int cnt = 0;
- 
- 	/* If there is already a list honor it */
-@@ -270,24 +269,24 @@ static int power_supply_check_supplies(struct power_supply *psy)
- 		return 0;
- 
- 	/* No device node found, nothing to do */
--	if (!psy->dev.of_node)
-+	if (!psy->dev.fwnode)
- 		return 0;
- 
- 	do {
- 		int ret;
- 
--		np = of_parse_phandle(psy->dev.of_node, "power-supplies", cnt++);
--		if (!np)
-+		np = fwnode_find_reference(psy->dev.fwnode, "power-supplies", cnt++);
-+		if (IS_ERR(np))
- 			break;
- 
--		ret = power_supply_find_supply_from_node(np);
--		of_node_put(np);
-+		ret = power_supply_find_supply_from_fwnode(np);
-+		fwnode_handle_put(np);
- 
- 		if (ret) {
- 			dev_dbg(&psy->dev, "Failed to find supply!\n");
- 			return ret;
- 		}
--	} while (np);
-+	} while (!IS_ERR(np));
- 
- 	/* Missing valid "power-supplies" entries */
- 	if (cnt == 1)
-@@ -511,14 +510,14 @@ void power_supply_put(struct power_supply *psy)
- EXPORT_SYMBOL_GPL(power_supply_put);
- 
- #ifdef CONFIG_OF
--static int power_supply_match_device_node(struct device *dev, const void *data)
-+static int power_supply_match_device_fwnode(struct device *dev, const void *data)
- {
--	return dev->parent && dev->parent->of_node == data;
-+	return dev->parent && dev_fwnode(dev->parent) == data;
- }
- 
- /**
-  * power_supply_get_by_phandle() - Search for a power supply and returns its ref
-- * @np: Pointer to device node holding phandle property
-+ * @fwnode: Pointer to fwnode holding phandle property
-  * @property: Name of property holding a power supply name
-  *
-  * If power supply was found, it increases reference count for the
-@@ -528,21 +527,21 @@ static int power_supply_match_device_node(struct device *dev, const void *data)
-  * Return: On success returns a reference to a power supply with
-  * matching name equals to value under @property, NULL or ERR_PTR otherwise.
-  */
--struct power_supply *power_supply_get_by_phandle(struct device_node *np,
--							const char *property)
-+struct power_supply *power_supply_get_by_phandle(struct fwnode_handle *fwnode,
-+						 const char *property)
- {
--	struct device_node *power_supply_np;
-+	struct fwnode_handle *power_supply_fwnode;
- 	struct power_supply *psy = NULL;
- 	struct device *dev;
- 
--	power_supply_np = of_parse_phandle(np, property, 0);
--	if (!power_supply_np)
--		return ERR_PTR(-ENODEV);
-+	power_supply_fwnode = fwnode_find_reference(fwnode, property, 0);
-+	if (IS_ERR(power_supply_fwnode))
-+		return ERR_CAST(power_supply_fwnode);
- 
--	dev = class_find_device(&power_supply_class, NULL, power_supply_np,
--				power_supply_match_device_node);
-+	dev = class_find_device(&power_supply_class, NULL, power_supply_fwnode,
-+				power_supply_match_device_fwnode);
- 
--	of_node_put(power_supply_np);
-+	fwnode_handle_put(power_supply_fwnode);
- 
- 	if (dev) {
- 		psy = dev_to_psy(dev);
-@@ -574,14 +573,14 @@ struct power_supply *devm_power_supply_get_by_phandle(struct device *dev,
- {
- 	struct power_supply **ptr, *psy;
- 
--	if (!dev->of_node)
-+	if (!dev_fwnode(dev))
- 		return ERR_PTR(-ENODEV);
- 
- 	ptr = devres_alloc(devm_power_supply_put, sizeof(*ptr), GFP_KERNEL);
- 	if (!ptr)
- 		return ERR_PTR(-ENOMEM);
- 
--	psy = power_supply_get_by_phandle(dev->of_node, property);
-+	psy = power_supply_get_by_phandle(dev_fwnode(dev), property);
- 	if (IS_ERR_OR_NULL(psy)) {
- 		devres_free(ptr);
- 	} else {
-diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-index a785742f97721e7e70d0e4c17a1ded7b985acb6d..9afde8c04efc72691c81a373d8dd03477b4efd7e 100644
---- a/include/linux/power_supply.h
-+++ b/include/linux/power_supply.h
-@@ -805,7 +805,7 @@ static inline struct power_supply *power_supply_get_by_name(const char *name)
- { return NULL; }
- #endif
- #ifdef CONFIG_OF
--extern struct power_supply *power_supply_get_by_phandle(struct device_node *np,
-+extern struct power_supply *power_supply_get_by_phandle(struct fwnode_handle *fwnode,
- 							const char *property);
- extern struct power_supply *devm_power_supply_get_by_phandle(
- 				    struct device *dev, const char *property);
+Viresh Kumar (1):
+  rust: Add cpumask helpers
+
+Yury Norov [NVIDIA] (1):
+  MAINTAINERS: add rust bindings entry for bitmap API
+
+ MAINTAINERS                     |  5 ++++
+ rust/bindings/bindings_helper.h |  1 +
+ rust/helpers/cpumask.c          | 45 +++++++++++++++++++++++++++++++++
+ rust/helpers/helpers.c          |  1 +
+ 4 files changed, 52 insertions(+)
+ create mode 100644 rust/helpers/cpumask.c
 
 -- 
-2.47.2
+2.43.0
 
 
