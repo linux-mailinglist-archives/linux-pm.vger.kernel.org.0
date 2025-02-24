@@ -1,250 +1,224 @@
-Return-Path: <linux-pm+bounces-22757-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22758-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6967FA412A2
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 02:32:29 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2AEB7A4148A
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 05:52:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 2DAD57A2F25
-	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 01:31:11 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7E6E73B46A5
+	for <lists+linux-pm@lfdr.de>; Mon, 24 Feb 2025 04:51:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8CB1A2AD14;
-	Mon, 24 Feb 2025 01:32:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EC3961A7253;
+	Mon, 24 Feb 2025 04:52:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="ErYNnP4D"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0064b401.pphosted.com (mx0b-0064b401.pphosted.com [205.220.178.238])
+Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12on2076.outbound.protection.outlook.com [40.107.244.76])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2165D79D0;
-	Mon, 24 Feb 2025 01:32:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.178.238
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740360724; cv=none; b=JR9DvBMxSH3vdOUDwagQTqgZMZvXL0hZMVl1jPkG9NFuFzgJUF6dvZ4kSt7CqalnRaw+HXBUfbU8NndQ8nAB0+sqS6PmV1YEf6O/ZSrE/PHWWepzwPT8IGpTlhnCZNX9evuL0xamxc4cJRw3cEqG7opLr6rpY8GWO/zz2d4L+HY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740360724; c=relaxed/simple;
-	bh=hU/iFiGR6L9o4jYyZ2H8U4ri1JCZwJm07ZLk81zkexQ=;
-	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=YK6vAlBqP5s97NTxRpF4gsp5Gu1RNyhsYIHoCmhiYmpkzxH/Y5EBh5ZTyRf9LVKkzUmwKg6I/8D+GxneVgPzc3NRBUz/L0YLjORo0C8xQotYA2NZZoTq1FDrDpSnANSxfJuIH8P4Gfgg/1aUbqxEuROes4eL0VC3nU0bSWuSpes=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com; spf=pass smtp.mailfrom=windriver.com; arc=none smtp.client-ip=205.220.178.238
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=windriver.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=windriver.com
-Received: from pps.filterd (m0250812.ppops.net [127.0.0.1])
-	by mx0a-0064b401.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51O1PiFF006096;
-	Mon, 24 Feb 2025 01:31:44 GMT
-Received: from ala-exchng01.corp.ad.wrs.com (ala-exchng01.wrs.com [147.11.82.252])
-	by mx0a-0064b401.pphosted.com (PPS) with ESMTPS id 44y5j89n3c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT);
-	Mon, 24 Feb 2025 01:31:43 +0000 (GMT)
-Received: from ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) by
- ala-exchng01.corp.ad.wrs.com (147.11.82.252) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.43; Sun, 23 Feb 2025 17:31:42 -0800
-Received: from pek-lpd-ccm6.wrs.com (147.11.136.210) by
- ALA-EXCHNG02.corp.ad.wrs.com (147.11.82.254) with Microsoft SMTP Server id
- 15.1.2507.43 via Frontend Transport; Sun, 23 Feb 2025 17:31:40 -0800
-From: Lizhi Xu <lizhi.xu@windriver.com>
-To: <rafael@kernel.org>
-CC: <len.brown@intel.com>, <linux-kernel@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <pavel@kernel.org>,
-        <lizhi.xu@windriver.com>, <syzkaller-bugs@googlegroups.com>
-Subject: [PATCH V4] module: replace the mutex lock acquisition method
-Date: Mon, 24 Feb 2025 09:31:39 +0800
-Message-ID: <20250224013139.3994500-1-lizhi.xu@windriver.com>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <CAJZ5v0gad9peEcVYGyV72TBOULnsv20J3DU_7GXQMKXgONCZww@mail.gmail.com>
-References: <CAJZ5v0gad9peEcVYGyV72TBOULnsv20J3DU_7GXQMKXgONCZww@mail.gmail.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 31ACF2F3B;
+	Mon, 24 Feb 2025 04:51:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.244.76
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740372720; cv=fail; b=mEij7JsjfbthbqgMpBE3K0O/TQL+fJQOzQOhUnZcsIlyAq4Ov2Wl0ij2j8sodrYZPCc7P1CMCnqedQFz/GATSfUTrjlbEG16nqzvJ2w7gnKZuoSplWON2H3ehXzYOcNQivJZigX+8ZOg6+x7KC3e2C4Krv8n2eVAyWt/7MC7BPU=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740372720; c=relaxed/simple;
+	bh=FRSJ7neSrtJMRba0WFqKHujj8wtIKYMAXENrscEeREc=;
+	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
+	 Content-Type:MIME-Version; b=rp+0XoaN7VqxAJRUtF7Sk8q9rUQnOMhjqarN7S0kE+Wo+oV1polYs5mESfQNIhI0Al3Ds22bgHDfLkr4uVCTYldYnhvxy61VNebXTTIiHhW4i1ka2WuvILCV4yRGrc/c6pXOOaF2pjt/IKtRK5jzEMuw8Uyxzmi8fMXTF4ILnQ4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=ErYNnP4D; arc=fail smtp.client-ip=40.107.244.76
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=bfylMy3C7sIa6PLHeUNna5sNPJQlBYs4JiRG0eemvppw5HG2KjrqYka5EUgjk7G0/nragY7bRCpTzHWNkkWrqwJawSYsU7J2g0B4y8kJhwBlq7GoclKJIutizQOeYFPygB4FZ24+s7ZOE3IOA9CsmxqXOyXPINaHTfhL6K7T18eok+nbRSYffOx2Sec6M981OQ35XSa1dcTiIvbSNPnscvOtT8ZFDLyV1gLPvryxWMUnoiHqr9VdEftwYs0ZvjY1yOVHWIevaOB+dIe/REdwkBaAqNuiiiATILNH1aqgauJuhFKuVDn5msxX9ttRM8VpN2qDbl1k29oUa5SwLNQsEQ==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=wYEL5mTnb6kVOqKzJGYLNUGWfI3oIyIKwV7mU+KqBLU=;
+ b=Qvj3q6S+kCPxdwKjCTo+UFAE6x5CHUiqs4jTZjQMs+3bpyRMYlA4RXLuml4wVDJnBm6GHR7/9nkwjhVpj/ggRUHif8DxrdVXm1PP+4ALMd7ZAgPnRSTTvzTxOlhOuGEatwR/mRD2vkHw9eFVO4lMITOa+Lzr6u2bgo/+fxXH9U2FfCn3IfWcPaxn5Nbb4qeVUPWnlZCZU2/wsVHpxPXe+CPZ9MjLp0nD/iKOXTPBeTXSb77x3GlOH/EaCnBgoJvxZKkz4Bj3e/lhr1LXO7nmNCGzFb1Kpyp49IUBYpGweWIE/gss2jVC9hSeTouvOzGrYMg2Hbj1a9O2BnFcXGbk0g==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=wYEL5mTnb6kVOqKzJGYLNUGWfI3oIyIKwV7mU+KqBLU=;
+ b=ErYNnP4DCfgSbrhyKpSEC5HUvJ/GeCHanYFBBJcRSShZwWNPdisvsR7BcL+3a0VrDcuQvR5Ek2ZiGNjZ/545/PMKdJVv0aqbyGUBxEutPccBNq6b3GOw7NynoP8zWWMPfdBG6nFne1w4XB+HpwZ0LgJZHDrXRn/Gd4+/fQ0B9/o=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from LV8PR12MB9207.namprd12.prod.outlook.com (2603:10b6:408:187::15)
+ by SJ0PR12MB6805.namprd12.prod.outlook.com (2603:10b6:a03:44f::5) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.16; Mon, 24 Feb
+ 2025 04:51:53 +0000
+Received: from LV8PR12MB9207.namprd12.prod.outlook.com
+ ([fe80::3a37:4bf4:a21:87d9]) by LV8PR12MB9207.namprd12.prod.outlook.com
+ ([fe80::3a37:4bf4:a21:87d9%7]) with mapi id 15.20.8466.015; Mon, 24 Feb 2025
+ 04:51:53 +0000
+Message-ID: <2fed54f7-8e6a-4e33-ac4b-7a2a9c1387e6@amd.com>
+Date: Mon, 24 Feb 2025 10:21:46 +0530
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 03/19] cpufreq/amd-pstate: Drop min and max cached
+ frequencies
+To: Mario Limonciello <superm1@kernel.org>,
+ "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+ Perry Yuan <perry.yuan@amd.com>
+Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
+ <linux-kernel@vger.kernel.org>,
+ "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
+ Mario Limonciello <mario.limonciello@amd.com>
+References: <20250219210302.442954-1-superm1@kernel.org>
+ <20250219210302.442954-4-superm1@kernel.org>
+Content-Language: en-US
+From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
+In-Reply-To: <20250219210302.442954-4-superm1@kernel.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: PN3PEPF00000186.INDPRD01.PROD.OUTLOOK.COM
+ (2603:1096:c04::4c) To LV8PR12MB9207.namprd12.prod.outlook.com
+ (2603:10b6:408:187::15)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-Content-Type: text/plain
-X-Proofpoint-ORIG-GUID: Q3VP6zGX7_9NaR7a49ieimNowjOSrx6f
-X-Proofpoint-GUID: Q3VP6zGX7_9NaR7a49ieimNowjOSrx6f
-X-Authority-Analysis: v=2.4 cv=U+ZoDfru c=1 sm=1 tr=0 ts=67bbcbff cx=c_pps a=/ZJR302f846pc/tyiSlYyQ==:117 a=/ZJR302f846pc/tyiSlYyQ==:17 a=T2h4t0Lz3GQA:10 a=edf1wS77AAAA:8 a=hSkVLCK3AAAA:8 a=t7CeM3EgAAAA:8 a=yXnsfAS9q4kqkkg8_WUA:9 a=DcSpbTIhAlouE1Uv7lRv:22
- a=cQPPKAXgyycSBL8etih5:22 a=FdTzh2GWekK77mhwV6Dw:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-23_11,2025-02-20_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- phishscore=0 adultscore=0 malwarescore=0 lowpriorityscore=0 mlxscore=0
- spamscore=0 impostorscore=0 mlxlogscore=999 clxscore=1015 bulkscore=0
- suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.21.0-2502100000
- definitions=main-2502240009
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: LV8PR12MB9207:EE_|SJ0PR12MB6805:EE_
+X-MS-Office365-Filtering-Correlation-Id: 1208ec8d-3872-4d48-6a1b-08dd548ef4de
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?cXo5SjRNcVpZbHNhUWNNUFVoMVRHVDRmalRyVXJLakdrRlZGMm1sZzFOUVJD?=
+ =?utf-8?B?TzhPeFEwTzhseXRaVnFqSGQ4UTVseXUwTEZydVdJTi9QSnJhOWtHdzhjLzNF?=
+ =?utf-8?B?QWJnUC9qb0pKbUFNTkFYOU9UeHQ3eHBpbzZraS83YmtrVWFvWkZYV1FVVTZZ?=
+ =?utf-8?B?SXRCbVZjU29NYldVdmtGV09Md3k5WHFGaFpuaUgxTVFUdEtlQzRiK21IMmY1?=
+ =?utf-8?B?TFN0eENrbVlyeW45NWxLcG5FRUFoSXlUWlAySHRmTVVhM0RwZS9MdzRId2Ew?=
+ =?utf-8?B?TVFMMXQyY2d1RTlaOFJPRUcyK0M5VGxKMmNVak9vTFcweXplWThRdVVsTTR6?=
+ =?utf-8?B?N1ROOVdYd0lWdCt3NHJzWDh6c2lxWEhUaDgwdm1NT0doOVRKRW40a2FCZy8x?=
+ =?utf-8?B?SzhhU3pmVWIycXBUTmFtSGhoTUdac21BakNHVTFMeXk5eXVJVG9NVHh6MHJV?=
+ =?utf-8?B?YmNMR3d5NFYyRkpDZndsMk03aXVDclZVdnRuRVlyYTB1MU1OdUtGc2VWVVVq?=
+ =?utf-8?B?MkpwWnpOTkVtUkViMjRWeXhGTzV3dDZRdW1FS2JOVEF3ZXNIanQxK0ZCdzM4?=
+ =?utf-8?B?dHZlM3UzazlxQThzSlBMUWpMb0k2c01GMlJLb3hESDVFZ1RLeWk4eGpWTjB5?=
+ =?utf-8?B?N3hOdEhrMkM1YlQ5dlk4cDRFVjB2aURJdmJPUzVVUk4zSjFLcG9vVjJPQlI5?=
+ =?utf-8?B?di9nOUhZeUI0UHJpc2VsbXh0RnhiOER2d3pMNkxGck83ZTg0aXJNY1AvZmt3?=
+ =?utf-8?B?b1FKaFA3NVdrVEMzVCtqQ3pEckpPMWtHRmNnOHdNUkU0Y3pkVEVWRzBPMUxa?=
+ =?utf-8?B?Y3JoNStrNzZlNzhoaWt2VDZUZWdRaC9WSVFiRG85VlhsejJVRUdMcUpudE51?=
+ =?utf-8?B?eHJpMUkvOFJHOTBvaEpZS2E3ZkgraWhwSWlDeWdPSXlHM0JQbWNmakUxaFB5?=
+ =?utf-8?B?c2x5NkV0WUltclVCRndmMUtBQ2ZaWlZPeHE0ekFpcGV2blA2aTRXSk1WSDdZ?=
+ =?utf-8?B?dGZBRy9lUWVwL0RpSlQ3VDFGUTJ5Qzh1bFRNYmlyYWlscVVQTEhJc0RHRE5y?=
+ =?utf-8?B?czZsVjdqdFRXQmFvdXVMMWFKdzZqUlRZVlhUVld1cFIwQi9hU21QOGFKNWpr?=
+ =?utf-8?B?RXNXVEpvVWswR3hDcmU5blNZSjZPbHBNL0U5SUc3czdrc3BkM0RQTzlmN1NV?=
+ =?utf-8?B?YS9FOTNXWUlQaWZyNTFNalpRak5XcVJQNnFzc2hxaWZSdjMxdjhRUXVDWVUx?=
+ =?utf-8?B?SmdJT1VJSm1KMUlWc1ByMnVkUUdXUUYxaGNHOEZBTUd5Q0VYUEF0aXBBSzZr?=
+ =?utf-8?B?OGVwaTNtOEgyUXpxeUtuWnNrTUQyRitaeXR5UmkxazJBRk9wUVh0bDdFeUVt?=
+ =?utf-8?B?ZGs1c0JVOUFzSGJkQS9rVUlBRmVlVkdJV052eng5YU0zRTNKWnBpWXROb0o5?=
+ =?utf-8?B?UHN2NmUzNk5zQ051d1VhN292QjltTDgzVzNUUkhPakhmd1FvU0UzYk5Ccnpk?=
+ =?utf-8?B?WHdjbzRiZVpMaEI3WjdpQk01T0VRS2JyZXNiVlppa2c3ci9UOTBVMDU3S1U4?=
+ =?utf-8?B?NEpJa2hIM1ppN0lob1dhVUxXaFEyQ2laQXJUZFM3aU0wOGFVRFN6SVM1TUpi?=
+ =?utf-8?B?MGYrdTdocUFsTngzN1hwZS8vQlg5ZzFBU3NSdVFqSWZpdktRZXN2MXlEU3Ry?=
+ =?utf-8?B?eWk5cHppN3VsWDV0bkVlWGI0Qk9ucmVTVUtMWWQ4THJqQVJjVStZU2dqb0NF?=
+ =?utf-8?B?eG5zSGhsL2xYRGc3ODZiQ0dROEJidmZMQTJwRHpRdHFZOHZjdWs3aGJtRjha?=
+ =?utf-8?B?N2Z3SlZxMlFLejNlY2pyZy9oV3J4VDBRSXF3bTBDV3NVVE5rZUNMekJDbmFW?=
+ =?utf-8?Q?iiSqIIzuTJ7G4?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9207.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?c2NGSlVDNkRWamNIRFJHQVE1QVpOUW1GaGdBeDkvNFgzT3p4NlJpZ0dMVkdC?=
+ =?utf-8?B?Z3lUdXBLVmVReER0SmFUcmMxZGZES2w2WjFBRm16WHZPWm9iSlBockVCdXcw?=
+ =?utf-8?B?WEVUSVlSZkNtT0grbkJCS1NzQ3B1QjgxajRNMTJtdHlpZWZ1SXNXR3V6MDV0?=
+ =?utf-8?B?a1ZUaU9ETnNFaFFLTmpzZko2czN3cUNGS3BINEROM3JtQ3kwdy91SVNGS0Zi?=
+ =?utf-8?B?dGtaMFFSeGdtSFc2Zm5rZlJlOFdkQ0ZoMmJIMFJHT0dEb2NvbGpDQTlxenYw?=
+ =?utf-8?B?TUttcHV1VUJUa2ZyS3AxWG80RmN6NmYxRXRoUG5LWFFzVm50OVBlVSs1alVL?=
+ =?utf-8?B?YjhyUWRsTXgwWThyK29vWFlmN3k5eEpkNnVhZEdIRUFBUDdGMTkzQVFtNWlH?=
+ =?utf-8?B?T2RQdTdDa2p5VThtSkl5ak95ZWpzUEg1S1NDakt6K3dqZjVtelVPNzZzUGFV?=
+ =?utf-8?B?NUU1TTBBLzdleXFqY1lxUnZmcmJVODZYemgySmZCeHkrMWVRMVBseXBubXJP?=
+ =?utf-8?B?eHRNRFUwOEJGU0hGQUY5Y2JFOURiMGJHNkxwT3R1ZTFuYzJyTmdib2pKaWhW?=
+ =?utf-8?B?VG92TWg2MkJZSGRrQmYwR1VrL3V6cmVRUnN6c1lzZGhVczJVazFFalRhaW81?=
+ =?utf-8?B?TU1KWiszb0MyNG1EWjMrbkp4RStMWDAzeXhlOUIvaExMbklBdUpPUkxhOXZQ?=
+ =?utf-8?B?aHdtTk8yZGJ2YjhUZXZBV3NWS09JVE95WlQrMVlPbWNNWjBwaGZ1dVd0M2RT?=
+ =?utf-8?B?S3FTbm9SaHVib2VKeU94ZnQrWTF3MU1ZK1pnSkhaTTY4T1lobnRXd3BFLzg2?=
+ =?utf-8?B?dFV3NkFNWittWHk3aVloQ1NvTnhYTDdzS3U4OW51TmJyWHZ1K2V3RnNtL3ph?=
+ =?utf-8?B?eWJNazQ3aHdXeU1VdWV4N3RJdDJNcHcyUWwzbkt6MXZ2OVFUQlY4ZTdvTkJL?=
+ =?utf-8?B?ZTNxYTM1ai94enN0MElZck5kL1NYVERPVG12ZWd4UnNFMmpqU0E5NE5UQWNi?=
+ =?utf-8?B?QnRiVGtRbGEycW1XaWllcXpkaTZ6WCtEVkpOMGNWeERjWWNHS3lBZzlJNVhL?=
+ =?utf-8?B?TGdEQ2RLdCtoUC9Mc1pnVHdyem9mMXQ0Q21Ga3BpNkdjcU8veVJRUkJGcEt3?=
+ =?utf-8?B?M2tSOTFvSVp0QjR5cXJqUUY3T0xTYmp4emZQM3BXSytxY05ueDhpMW1sdk5K?=
+ =?utf-8?B?ZFFRQ2tIeFFmYURVOS9YeXpENlFqMnl6RUlBWUU1dlAwY3FuUFFlYk55WWVi?=
+ =?utf-8?B?SFFxWGdOVjFITUJpQ0FFbU9sZDgrT1pwd2phSTFwYjU0U016OXR6dlJUMXVM?=
+ =?utf-8?B?dkNmeVE2UDF2RTRDUHdPcDVRWnNkdFFvaFlLTmJOTzQrci8xTnlkTVhhTVZi?=
+ =?utf-8?B?R2xVNFRqNTgzYWtaU3BVTDE0UGtmREh0ZUpxVWtQeVlEdVZJMjBXUlhIQ0Fw?=
+ =?utf-8?B?Q1MyUzRiY2dGblBvSHR5VmtUZDd4d3JWZm56bjRNVk9HNUhLUk5FVjRzaXpi?=
+ =?utf-8?B?VEJtYUE2aytpMXpKOFZ0Q1NQdnYwczNwZVh3SEpYKzNlbHVkd2dzMlE1Qjdr?=
+ =?utf-8?B?TGFuUU04bXNHZWdyMzArT2VkWXlSYWVoWjBaSE5hZitHeThJbG9VRllhcXRq?=
+ =?utf-8?B?Sk5FTkRsSnNPTFVGajhqVERJc2s5MDhIV1ZHYW1PdDl6MjFOS2Y2NXgyUlBo?=
+ =?utf-8?B?SWtXbVZTU3FnVFllcElCbmpmbTdSRnVna2p3eE5Yd2hHR0JrcEluc3d4S0Zi?=
+ =?utf-8?B?MlVLVy9HdTdyTFo2ZUVuOWw2aHViNkxNMnpKMElhSWg5YjRSM0Erdmg0Y3p0?=
+ =?utf-8?B?WVpXZEFHRlhPQksyWC9MbnExK3g3L0FBNlhoMHVtbVIxbGlTekdaK08wRFlR?=
+ =?utf-8?B?NGJIRXF0QmhmaUpMcG9BdWc2WUc4V3BnckpFZEZDaEs1QXFlQmU2OUZFRGl2?=
+ =?utf-8?B?bGVxWlBhWEpJWDc0OWFNZG42N0czeU1UOXpyVHozc0NiNU5uRFp3ZjNmMnds?=
+ =?utf-8?B?akliMnQ3TTB5WWpQT3ZTcWliMXA1OWxYbWczWENrRGFWSWRLZGZ0eGtPTGxS?=
+ =?utf-8?B?MHcvb0xNUHpER042cHpEblF0Skg4Mi8wSVNFY0NwRExoZ01aWG5kbzFvMDk1?=
+ =?utf-8?Q?dxNZOBFhsU1WgvTwOF2RNPaby?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: 1208ec8d-3872-4d48-6a1b-08dd548ef4de
+X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9207.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 24 Feb 2025 04:51:52.9989
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: G5aW5QtakEMULEcEJ9TPuJ7OnCUkhu0K12Mh8hPyGLMWaKHCSOUIGA45UjHOmMtC1S4J10yDT8eEGypW4esZ8g==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: SJ0PR12MB6805
 
-syzbot reported a deadlock in lock_system_sleep. [1]
+On 2/20/2025 2:32 AM, Mario Limonciello wrote:
+> From: Mario Limonciello <mario.limonciello@amd.com>
+> 
+> Use the perf_to_freq helpers to calculate this on the fly.
+> As the members are no longer cached add an extra check into
+> amd_pstate_update_min_max_limit().
 
-The write operation to "/sys/module/hibernate/parameters/compressor"
-conflicts with the registration of ieee80211 device, resulting in a deadlock
-in the lock param_lock.
+Actually, we are adding the check in "amd_pstate_epp_update_limit" 
+and we are adding it to avoid unnecessary calls to 
+"amd_pstate_update_min_max_limit" if the cached limits are up to date.
 
-Replace the method of acquiring the lock system_transition_mutex with trylock,
-it is arguably better to fail a write to the module param with -EBUSY than to
-fail ieee80211_register_hw() IMV.
+Apart from that the patch looks good to me,
 
-Since this is not a kthread path and it doesn't call set_freezable()
-on itself anywhere, mutex_trylock(&system_transition_mutex) can be called
-from here directly.
+Reviewed-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
 
-[1]
-syz-executor895/5833 is trying to acquire lock:
-ffffffff8e0828c8 (system_transition_mutex){+.+.}-{4:4}, at: lock_system_sleep+0x87/0xa0 kernel/power/main.c:56
+Thanks,
+Dhananjay
 
-but task is already holding lock:
-ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: kernel_param_lock kernel/params.c:607 [inline]
-ffffffff8e07dc68 (param_lock){+.+.}-{4:4}, at: param_attr_store+0xe6/0x300 kernel/params.c:586
-
-which lock already depends on the new lock.
-
-
-the existing dependency chain (in reverse order) is:
-
--> #3 (param_lock){+.+.}-{4:4}:
-       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
-       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
-       ieee80211_rate_control_ops_get net/mac80211/rate.c:220 [inline]
-       rate_control_alloc net/mac80211/rate.c:266 [inline]
-       ieee80211_init_rate_ctrl_alg+0x18d/0x6b0 net/mac80211/rate.c:1015
-       ieee80211_register_hw+0x20cd/0x4060 net/mac80211/main.c:1531
-       mac80211_hwsim_new_radio+0x304e/0x54e0 drivers/net/wireless/virtual/mac80211_hwsim.c:5558
-       init_mac80211_hwsim+0x432/0x8c0 drivers/net/wireless/virtual/mac80211_hwsim.c:6910
-       do_one_initcall+0x128/0x700 init/main.c:1257
-       do_initcall_level init/main.c:1319 [inline]
-       do_initcalls init/main.c:1335 [inline]
-       do_basic_setup init/main.c:1354 [inline]
-       kernel_init_freeable+0x5c7/0x900 init/main.c:1568
-       kernel_init+0x1c/0x2b0 init/main.c:1457
-       ret_from_fork+0x45/0x80 arch/x86/kernel/process.c:148
-       ret_from_fork_asm+0x1a/0x30 arch/x86/entry/entry_64.S:244
-
--> #2 (rtnl_mutex){+.+.}-{4:4}:
-       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
-       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
-       wg_pm_notification drivers/net/wireguard/device.c:80 [inline]
-       wg_pm_notification+0x49/0x180 drivers/net/wireguard/device.c:64
-       notifier_call_chain+0xb7/0x410 kernel/notifier.c:85
-       notifier_call_chain_robust kernel/notifier.c:120 [inline]
-       blocking_notifier_call_chain_robust kernel/notifier.c:345 [inline]
-       blocking_notifier_call_chain_robust+0xc9/0x170 kernel/notifier.c:333
-       pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
-       snapshot_open+0x189/0x2b0 kernel/power/user.c:77
-       misc_open+0x35a/0x420 drivers/char/misc.c:179
-       chrdev_open+0x237/0x6a0 fs/char_dev.c:414
-       do_dentry_open+0x735/0x1c40 fs/open.c:956
-       vfs_open+0x82/0x3f0 fs/open.c:1086
-       do_open fs/namei.c:3830 [inline]
-       path_openat+0x1e88/0x2d80 fs/namei.c:3989
-       do_filp_open+0x20c/0x470 fs/namei.c:4016
-       do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
-       do_sys_open fs/open.c:1443 [inline]
-       __do_sys_openat fs/open.c:1459 [inline]
-       __se_sys_openat fs/open.c:1454 [inline]
-       __x64_sys_openat+0x175/0x210 fs/open.c:1454
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
--> #1 ((pm_chain_head).rwsem){++++}-{4:4}:
-       down_read+0x9a/0x330 kernel/locking/rwsem.c:1524
-       blocking_notifier_call_chain_robust kernel/notifier.c:344 [inline]
-       blocking_notifier_call_chain_robust+0xa9/0x170 kernel/notifier.c:333
-       pm_notifier_call_chain_robust+0x27/0x60 kernel/power/main.c:102
-       snapshot_open+0x189/0x2b0 kernel/power/user.c:77
-       misc_open+0x35a/0x420 drivers/char/misc.c:179
-       chrdev_open+0x237/0x6a0 fs/char_dev.c:414
-       do_dentry_open+0x735/0x1c40 fs/open.c:956
-       vfs_open+0x82/0x3f0 fs/open.c:1086
-       do_open fs/namei.c:3830 [inline]
-       path_openat+0x1e88/0x2d80 fs/namei.c:3989
-       do_filp_open+0x20c/0x470 fs/namei.c:4016
-       do_sys_openat2+0x17a/0x1e0 fs/open.c:1428
-       do_sys_open fs/open.c:1443 [inline]
-       __do_sys_openat fs/open.c:1459 [inline]
-       __se_sys_openat fs/open.c:1454 [inline]
-       __x64_sys_openat+0x175/0x210 fs/open.c:1454
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
--> #0 (system_transition_mutex){+.+.}-{4:4}:
-       check_prev_add kernel/locking/lockdep.c:3163 [inline]
-       check_prevs_add kernel/locking/lockdep.c:3282 [inline]
-       validate_chain kernel/locking/lockdep.c:3906 [inline]
-       __lock_acquire+0x249e/0x3c40 kernel/locking/lockdep.c:5228
-       lock_acquire.part.0+0x11b/0x380 kernel/locking/lockdep.c:5851
-       __mutex_lock_common kernel/locking/mutex.c:585 [inline]
-       __mutex_lock+0x19b/0xb10 kernel/locking/mutex.c:730
-       lock_system_sleep+0x87/0xa0 kernel/power/main.c:56
-       hibernate_compressor_param_set+0x1c/0x210 kernel/power/hibernate.c:1452
-       param_attr_store+0x18f/0x300 kernel/params.c:588
-       module_attr_store+0x55/0x80 kernel/params.c:924
-       sysfs_kf_write+0x117/0x170 fs/sysfs/file.c:139
-       kernfs_fop_write_iter+0x33d/0x500 fs/kernfs/file.c:334
-       new_sync_write fs/read_write.c:586 [inline]
-       vfs_write+0x5ae/0x1150 fs/read_write.c:679
-       ksys_write+0x12b/0x250 fs/read_write.c:731
-       do_syscall_x64 arch/x86/entry/common.c:52 [inline]
-       do_syscall_64+0xcd/0x250 arch/x86/entry/common.c:83
-       entry_SYSCALL_64_after_hwframe+0x77/0x7f
-
-other info that might help us debug this:
-
-Chain exists of:
-  system_transition_mutex --> rtnl_mutex --> param_lock
-
- Possible unsafe locking scenario:
-
-       CPU0                    CPU1
-       ----                    ----
-  lock(param_lock);
-                               lock(rtnl_mutex);
-                               lock(param_lock);
-  lock(system_transition_mutex);
-
- *** DEADLOCK ***
-
-Reported-by: syzbot+ace60642828c074eb913@syzkaller.appspotmail.com
-Closes: https://syzkaller.appspot.com/bug?extid=ace60642828c074eb913
-Signed-off-by: Lizhi Xu <lizhi.xu@windriver.com>
----
-V1 -> V2: use -EAGAIN to replace -EPERM.
-V2 -> V3: replace lock_system_sleep to trylock and update comments
-V3 -> V4: use system_transition_mutex directly
-
- kernel/power/hibernate.c | 6 +++---
- 1 file changed, 3 insertions(+), 3 deletions(-)
-
-diff --git a/kernel/power/hibernate.c b/kernel/power/hibernate.c
-index 10a01af63a80..b129ed1d25a8 100644
---- a/kernel/power/hibernate.c
-+++ b/kernel/power/hibernate.c
-@@ -1446,10 +1446,10 @@ static const char * const comp_alg_enabled[] = {
- static int hibernate_compressor_param_set(const char *compressor,
- 		const struct kernel_param *kp)
- {
--	unsigned int sleep_flags;
- 	int index, ret;
- 
--	sleep_flags = lock_system_sleep();
-+	if (!mutex_trylock(&system_transition_mutex))
-+		return -EBUSY;
- 
- 	index = sysfs_match_string(comp_alg_enabled, compressor);
- 	if (index >= 0) {
-@@ -1461,7 +1461,7 @@ static int hibernate_compressor_param_set(const char *compressor,
- 		ret = index;
- 	}
- 
--	unlock_system_sleep(sleep_flags);
-+	mutex_unlock(&system_transition_mutex);
- 
- 	if (ret)
- 		pr_debug("Cannot set specified compressor %s\n",
--- 
-2.43.0
-
+> 
+> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
+> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
+> ---
+> v4:
+>  * Avoid some unnecessary changes to amd_pstate_init_freq()
+>  * Add tag
+> v3:
+>  * Fix calc error for min_freq
+> v2:
+>  * Keep cached limits
+> ---
+>  drivers/cpufreq/amd-pstate-ut.c | 14 +++++------
+>  drivers/cpufreq/amd-pstate.c    | 43 +++++++++------------------------
+>  drivers/cpufreq/amd-pstate.h    |  9 ++-----
+>  3 files changed, 20 insertions(+), 46 deletions(-)
+> 
+[Snip]> @@ -1550,7 +1528,8 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
+>  	struct amd_cpudata *cpudata = policy->driver_data;
+>  	u8 epp;
+>  
+> -	amd_pstate_update_min_max_limit(policy);
+> +	if (policy->min != cpudata->min_limit_freq || policy->max != cpudata->max_limit_freq)
+> +		amd_pstate_update_min_max_limit(policy);
+>  
+>  	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
+>  		epp = 0;
+[Snip]
 
