@@ -1,133 +1,122 @@
-Return-Path: <linux-pm+bounces-22898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22904-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id B5B21A4442D
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 16:20:53 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7F2C0A44719
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 17:58:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 35180171B5C
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 15:18:23 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7368F7B09B5
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 16:50:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECA0B26D5C2;
-	Tue, 25 Feb 2025 15:18:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27E81A2547;
+	Tue, 25 Feb 2025 16:46:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="AwmSELce"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="AMpBHNJa"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0128026BDAB
-	for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 15:17:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF62319CC34;
+	Tue, 25 Feb 2025 16:46:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740496681; cv=none; b=aOEyEnnlQhx0EHOex6jH6JzeHGq5/dxAvgSItSPrXMFwzdzQQZhyZOxNwYDb8KnASx6TJaN8MnNphvZiQhBf0cBEeC5oU/fMLge5KScCfcqVJueWPpkuq3kCv9/3+m34kFjx6CfRZjC/iPHmxE83IBogcYK1CY2H7/zyA4YEtrA=
+	t=1740501989; cv=none; b=fA9yDbQ4Vkg41faJJArfclh/Oi1lOFdhNKryw2G6CGY3llPxXov7b8XaLN42F5F88+OwdTdGGVErwgJqzi+jImrbolC95EvSXXkfG0DUdfp51nstg+DSZukfStI+6rKNpnYh6fGlBX3kKuAJ6Jjc17OGgc8onGJ9i0qJXtroQF8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740496681; c=relaxed/simple;
-	bh=rALszVeWffksEsP/Rrj6WAtB7agsaUXOmR/msDwji8U=;
-	h=From:In-Reply-To:References:To:Cc:Subject:MIME-Version:
-	 Content-Type:Date:Message-ID; b=aKqXfs13OxAFWtMhnqn55yGsZsFNrk2Lv0pkWtRKsy5pa3y/M/Rojr6jjWYcXNDWCERIvlUq1P856tRJOQNRus0/TQqAmOsJ6kYHkMr6X0yvRS82A+b5Xd6LRDd8jjKiNfAIDrn4qI1m6UtFOFa3KCRGCKlq1nknftRQ0fCLNdo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=AwmSELce; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740496679;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=+QyH+Q7MigOrd7puvdyRTTPCeyR6wog0WvQSvTNgWAg=;
-	b=AwmSELce/se5XCG6C4yYekqzrZR8iqgqdc5M+hHw6o4/TVpFVFgpnelVQ1gfK6pOYZo0Ri
-	JlWeCBqJ2Rd0xw2inIefQyk3uYU+biEeUsMdFzQ4ih85kaMg7mxlQ78cA02Dw1jmyOrxrp
-	tLlAgYAIjV/MOKxLO1Vtt26jQ89ZbPQ=
-Received: from mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com
- (ec2-35-165-154-97.us-west-2.compute.amazonaws.com [35.165.154.97]) by
- relay.mimecast.com with ESMTP with STARTTLS (version=TLSv1.3,
- cipher=TLS_AES_256_GCM_SHA384) id us-mta-184-q8YtqpU0OC6xToOGXJ3YDQ-1; Tue,
- 25 Feb 2025 10:17:53 -0500
-X-MC-Unique: q8YtqpU0OC6xToOGXJ3YDQ-1
-X-Mimecast-MFC-AGG-ID: q8YtqpU0OC6xToOGXJ3YDQ_1740496667
-Received: from mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com [10.30.177.111])
+	s=arc-20240116; t=1740501989; c=relaxed/simple;
+	bh=rUhGtkeEKO5bgIAnZW0g4xICaX1zD95BWrXoltsZvcQ=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cLZe4MjNbqlIKS9MGb3vYeKZ7ESdqw8F9jOIgkMv7TN1axHgiIxsvc906QlbD+WOMOJgHUOQi7qtX9N+KSHtiQnGU26qsISIsJX5DH5zvugSyyJsOuuGAGC+9IeW3cgQM32KvgOdqNQk87lco7Jne+4dnQDO60VgTDt8jxmH53Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=AMpBHNJa; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
+ id 25b314a4524873c0; Tue, 25 Feb 2025 17:46:20 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by mx-prod-mc-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTPS id 1840F1A24789;
-	Tue, 25 Feb 2025 15:16:53 +0000 (UTC)
-Received: from warthog.procyon.org.uk (unknown [10.42.28.9])
-	by mx-prod-int-08.mail-002.prod.us-west-2.aws.redhat.com (Postfix) with ESMTP id A8A29180194B;
-	Tue, 25 Feb 2025 15:16:37 +0000 (UTC)
-Organization: Red Hat UK Ltd. Registered Address: Red Hat UK Ltd, Amberley
-	Place, 107-111 Peascod Street, Windsor, Berkshire, SI4 1TE, United
-	Kingdom.
-	Registered in England and Wales under Company Registration No. 3798903
-From: David Howells <dhowells@redhat.com>
-In-Reply-To: <8f36be7c-6052-4c5d-85ff-0eed27cf1456@icloud.com>
-References: <8f36be7c-6052-4c5d-85ff-0eed27cf1456@icloud.com> <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com> <20250221-rmv_return-v1-1-cc8dff275827@quicinc.com> <20250221200137.GH7373@noisy.programming.kicks-ass.net>
-To: Zijun Hu <zijun_hu@icloud.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
-    Will Deacon <will@kernel.org>,
-    "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
-    Andrew Morton <akpm@linux-foundation.org>,
-    Nick Piggin <npiggin@gmail.com>, Arnd Bergmann <arnd@arndb.de>,
-    Thomas Gleixner <tglx@linutronix.de>,
-    Herbert Xu <herbert@gondor.apana.org.au>,
-    "David S. Miller" <davem@davemloft.net>,
-    "Rafael J. Wysocki" <rafael@kernel.org>,
-    Danilo Krummrich <dakr@kernel.org>,
-    Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
-    Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
-    Johannes Berg <johannes@sipsolutions.net>,
-    Jamal Hadi Salim <jhs@mojatatu.com>,
-    Cong Wang <xiyou.wangcong@gmail.com>, Jiri Pirko <jiri@resnulli.us>,
-    Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
-    Linus Walleij <linus.walleij@linaro.org>,
-    Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
-    Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
-    Marek Szyprowski <m.szyprowski@samsung.com>,
-    Robin Murphy <robin.murphy@arm.com>,
-    Miquel Raynal <miquel.raynal@bootlin.com>,
-    Richard Weinberger <richard@nod.at>,
-    Vignesh Raghavendra <vigneshr@ti.com>, linux-arch@vger.kernel.org,
-    linux-mm@kvack.org, linux-kernel@vger.kernel.org,
-    linux-crypto@vger.kernel.org, netdev@vger.kernel.org,
-    linux-wireless@vger.kernel.org, linux-rdma@vger.kernel.org,
-    linux-gpio@vger.kernel.org, linux-pm@vger.kernel.org,
-    iommu@lists.linux.dev, linux-mtd@lists.infradead.org
-Subject: Re: [PATCH *-next 01/18] mm/mmu_gather: Remove needless return in void API tlb_remove_page()
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 943EC22C28BF;
+	Tue, 25 Feb 2025 17:46:19 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1740501980;
+	bh=rUhGtkeEKO5bgIAnZW0g4xICaX1zD95BWrXoltsZvcQ=;
+	h=From:Subject:Date;
+	b=AMpBHNJaC6riQO5RLvDgwyK/IRNpNgzCCdUYJYTbF8ee79t1G0ZTDm2ixoJa+50PS
+	 Nblp9kB93bYuzFBzXtED611EuWCeYCAXlgfYkC9rsAM7QEyH2Q+eyb0xsS9WvK/+DQ
+	 DgOXj1/H5RQjBrj0Bz6Q6g+20dXpzy78TBFbUIbqwCGWdpZevXZTDHA2MCibhmzFP9
+	 Hzt32Z5QbPvWrMNSfw9gBgBowBs/thQ1XBWT13gtfhFDBhu48oKI1uOR6ZWkYEUUL3
+	 QUA9KLnDa7n2brdDMI4OheoL64lMrxxHAFC652oOr0bfgU8l4CkZufYvAYYO4uTK5U
+	 tSquc+5pl4E0g==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+ Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
+ Johan Hovold <johan@kernel.org>,
+ Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
+ Saravana Kannan <saravanak@google.com>
+Subject:
+ [PATCH v1 0/5] PM: sleep: Improvements of async suspend and resume of devices
+Date: Tue, 25 Feb 2025 17:38:01 +0100
+Message-ID: <13709135.uLZWGnKmhe@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-ID: <2298250.1740496596.1@warthog.procyon.org.uk>
-Content-Transfer-Encoding: quoted-printable
-Date: Tue, 25 Feb 2025 15:16:36 +0000
-Message-ID: <2298251.1740496596@warthog.procyon.org.uk>
-X-Scanned-By: MIMEDefang 3.4.1 on 10.30.177.111
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekvddvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgvrhhnsehrohiflhgrnhgurdhhrghrvhgrrhgurdgvughupdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohepjhhohhg
+X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
-Zijun Hu <zijun_hu@icloud.com> wrote:
+Hi Everyone,
 
-> >>  static inline void tlb_remove_page(struct mmu_gather *tlb, struct pa=
-ge *page)
-> >>  {
-> >> -	return tlb_remove_page_size(tlb, page, PAGE_SIZE);
-> >> +	tlb_remove_page_size(tlb, page, PAGE_SIZE);
-> >>  }
-> > So I don't mind removing it, but note that that return enforces
-> > tlb_remove_page_size() has void return type.
-> >
-> =
+Initially, this was an attempt to address the problems described by
+Saravana related to spawning async work for any async device upfront
+in the resume path:
 
-> tlb_remove_page_size() is void function already. (^^)
+https://lore.kernel.org/linux-pm/20241114220921.2529905-1-saravanak@google.com/
 
-That may be true... for now.  But if that is changed in the future, then y=
-ou
-will get an error indicating something you need to go and look at... so in
-that regard, it's *better* to do this ;-)
+but then I realized that it could be extended to the suspend path and
+used for speeding it up, which it really does.
 
-David
+Overall, the idea is that instead of starting an async work item for every
+async device upfront, which is not very efficient because the majority of
+those devices will not be able to make progress due to dependencies anyway,
+the async handling is only started upfront for the devices that are likely
+to be able to make progress.  That is, devices without parents in the resume
+path and leaf devices (ie. devices without children or consumers) in the
+suspend path (the underlying observation here is that devices without parents
+are likely to have no suppliers too whereas devices without children that
+have consumers are not unheard of).  This allows to reduce the amount of
+processing that needs to be done to start with.
+
+Then, after processing every device ("async" or "sync"), "async" processing
+is started for some devices that have been "unblocked" by it, which are its
+children in the resume path or its parent and its suppliers in the suspend
+path.  This allows asynchronous handling to start as soon as it makes sense
+without delaying the "async" devices unnecessarily.
+
+Fortunately, the additional plumbing needed to implement this is not
+particularly complicated.
+
+The first two patches in the series are preparatory.
+
+Patch [3/5] deals with the resume path for all device resume phases.
+
+Patch [4/5] optimizes the "suspend" phase which has the most visible effect (on
+the systems in my office the speedup is in the 100 ms range which is around 20%
+of the total device resume time).
+
+Patch [5/5] extend this to the "suspend late" and "suspend noirq" phases.
+
+Thanks!
+
+
 
 
