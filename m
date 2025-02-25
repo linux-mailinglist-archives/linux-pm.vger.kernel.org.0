@@ -1,218 +1,208 @@
-Return-Path: <linux-pm+bounces-22878-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22879-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3F6B5A43D53
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 12:20:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 97A67A43DC1
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 12:36:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 961233BA802
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 11:14:25 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 270EF173927
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 11:35:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB99720AF78;
-	Tue, 25 Feb 2025 11:14:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CD143DBB6;
+	Tue, 25 Feb 2025 11:35:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SSPvHeia"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qh0x9/uf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003AF206F38;
-	Tue, 25 Feb 2025 11:14:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 01D612BB13;
+	Tue, 25 Feb 2025 11:35:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740482048; cv=none; b=QpeSvpplcW3TUYkxp+CesIaGtYFWAktO5FQ+zMmZDiK4gCcno/5wSNZxPRWGyfoeaWW+TqeG8IOM1djMGawvNqcodJaD3j6cus2XrnYJaPSx1KGcQtWkkY7HtGkoBmHgwsHJFo/WIiGkBfcfatKFmBF89h4mkElTaouI3oZe4IA=
+	t=1740483327; cv=none; b=Iq8398AJedG5rTnOxdpKjso7kkrJwKffjclnR4PG9ufwnKpt2rlOZDf4QVe1DUlMb7WaQeADdiGV6rh5yXUUYMazdNAp4CLSFKjkWMy4H5glpfHiIy8bU1cwBMiDYxQl52tffTa+AVgCWwUGh0JrxdonQl4Ftr4JNhw5YAubtOI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740482048; c=relaxed/simple;
-	bh=DANjY5TtCCrp11jRRZ29qp0AepL6LXWb2OAgWasVe/c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=HNIQ5Rdjyex16003/01UE2RBdmqoW2ZMosohyyGhm3Ik/lh44RnZS1mgYm+QmwOSQfmq7/r9a9cxitUhnDyBUDZHUHodZ+h7A4rzSYxLWTKNG+cUVvEkRtcEviESafok7lEnRqH10bjIcizYaQyr2myeFCSlsqSoKir/O1JriFs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SSPvHeia; arc=none smtp.client-ip=209.85.167.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5452ca02bdbso5109978e87.1;
-        Tue, 25 Feb 2025 03:14:06 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740482045; x=1741086845; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=Rgo3Wa66A+J6hx1qOkgMYaAB9PtHBgkCHBMzDDLog5w=;
-        b=SSPvHeiaReRunJYFmInDFwnMo8p1XsXRsFmScVE6EptBkjfwZ7+G191lyy33v7uyJ+
-         JSmjLneiYem0+WKRAVYkVYcJUQWdpNX/F08pKLnyTImx3V8LNVdsZ0cKFzRpusGJkZsr
-         E+PKYxGp6khhnJy+UUnmyrp1E4EgHqqu531GncCVdvDiu5MxRw3HE3VdzEDNqczoY7a0
-         dKqhFQD9tkV9sluG9DSVy6Km7Sr/UqH4foUD5GUBLDfLmPoWONFPHUVGLrRURljn9vxl
-         /GTZpeakr9jmtpQzVCpag6bfEMR3h9tsEnOIRxD1QBC4uw5LbWymTK/W2TDhpkWVqjWS
-         8GHQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740482045; x=1741086845;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=Rgo3Wa66A+J6hx1qOkgMYaAB9PtHBgkCHBMzDDLog5w=;
-        b=kHGf4C9ZdvhyW8tPiUjP/VH65lxmWPlaAEg//Z9h/ukOO1ibJ9ZxXVxh+Na9snsgYQ
-         s2G3C6kJT/qZXx+W4oJcLoGnL8BVO+czyaf7zEgJHF/rsOyf4UYbF81IX8PcDW7mT302
-         DFhkG8KYmyT4Szl9PG1gcyFfdMqYWsdyPo/ut6vwn20wwI8/C3PxP3NyPlP0gdUyn5Fp
-         QYSCdTh0nS3KyMHZBCP9hLxkg5htg1W8CYC9lyBO4VSYHIKgvQuuFjcVAsjTVmydSHoh
-         HtAIY+EaPYFUzE25fOlrvMuvPJg+nBfct6xmqB9zH5WUd9LmFOxmyE/HTHycafjjRoLK
-         l/hA==
-X-Forwarded-Encrypted: i=1; AJvYcCUGR/VKNFpN0ypPfUvch8LLEzbZliHUAkJOImhaOYR9zQH01+rHPCFPy6qbkCfB6jX4yLP1/rvtKhR5@vger.kernel.org, AJvYcCUzbbQeYlh9hR0xAMeoHSV+BV4t7/5aQUwI9mEjyqdAw7LlWdiUpYo4muUBLO1BkHEr7Da8wq55eBOrz+k=@vger.kernel.org, AJvYcCVjG0nbL7JGVKywZjYqNaOaeEKbPZVWeyHd/ywTQvNJMRIqdEQ1vMxHW6+qpkADj8IJWr5jtCRbGcQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yxa/vmvgZwIBeb9Rr8McZZjys4Os98o7RuEly8KiSfLvVn+3Plc
-	DCoQqummLVKoo/jSa3cCNxh/bSw8O5n7IA5vSMpe/rf572Orx963
-X-Gm-Gg: ASbGncu2XyXl24LVXVjlvplGikAoulSiFbIQGQxZIZDSlF8/j2aydxApBxYfMosCP9y
-	wuQ7OZTtxMMZTXmsPgWXJ+5QeJPwP0AMOOwP5HZmqwHJ18x50KhIgh2zOxduO6GgCKLqeiRiQR7
-	FznxfZp22d+TPpT/IHfCellwFJY2oWaLrQCxYiwJLYlrNlGLzXmnMn1UJbjnlEESZOeHxIuE48U
-	JRUWCyv8x05vG23VIpZENro4OyQELaHj7Ym63MKbp+NBqSJdEUw1RU06pftuKlsiUS/y82e62sW
-	kQSevOUXLxq44ZW/vHTVkW3+f/hLMt0Bxwf34hw=
-X-Google-Smtp-Source: AGHT+IH87webjBqQp4/vTTkCKu3naPzYWwEogj7hx0iJcKdAdu9PM46iA4Pc1YwDJQyPV713p/gb8g==
-X-Received: by 2002:a05:6512:3e13:b0:545:e19:ba1c with SMTP id 2adb3069b0e04-548510d272cmr1073827e87.19.1740482044737;
-        Tue, 25 Feb 2025 03:14:04 -0800 (PST)
-Received: from [172.16.183.207] ([213.255.186.46])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5487950a4besm86332e87.124.2025.02.25.03.14.03
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Tue, 25 Feb 2025 03:14:04 -0800 (PST)
-Message-ID: <491e20bb-5ab4-40e9-bb35-5e05dc7bd46c@gmail.com>
-Date: Tue, 25 Feb 2025 13:14:03 +0200
+	s=arc-20240116; t=1740483327; c=relaxed/simple;
+	bh=KXFZfcc7XbnsLiwkxI328DODcNjmY7AfOm4ZSVUusbs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=OAAZWoGkXKXwe84iWh2fjzDWpkx3EKAAloxBUkIkv/4qjg4OgrfX3Y4Twkw9F+bDphUEUUlCZeWJT3yKgmrUgSHrGPzeXzWeMxqQEf+lOoZLsexvbrq8FYAeW+J7oWbybZHfA6Y2r1uEKHJYAuULslaGsH3pk7wQfffwkCvgtDY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qh0x9/uf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 6F175C4CEE9;
+	Tue, 25 Feb 2025 11:35:26 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740483326;
+	bh=KXFZfcc7XbnsLiwkxI328DODcNjmY7AfOm4ZSVUusbs=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=qh0x9/uf4R1sR0/Rl8ln53jCjkTU97MmFMxgzZy7UrSI403zrugaLWC1UjXnrlA94
+	 rAZ42ro7SyRS4zmyMR3+bA42+oMhF1bPTddNAw6wPkj3xxtuuN0smK79b8+628veAk
+	 2n2ngsoqvnsco/aD8N4ndLd7pW6IXwct8SQqEwcUacyuL4nh46znKa5VDg8YIcyxIm
+	 DB/XtsGhQFRCdB5iSIpHNuQ6JTr6tmudCXMFmJwUrPWcuKJPEnMtisZC8XLpaX3LTm
+	 Pr0xStRQmAKAtQlgNdcCwAeoRnARbRSK1pxRzbJuhjuB3VKewMB1qeanLMVutqMTUW
+	 S5HRvaqlQscvw==
+Received: by mail-ej1-f53.google.com with SMTP id a640c23a62f3a-ab78e6edb99so770408066b.2;
+        Tue, 25 Feb 2025 03:35:26 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU/jERD0lAtIu4UW/B+mw7Wg2obtmR5d1r1FNBDjoz45JTdKDeP++BlEE7Oq+BpAr1Ttac709f8AQ==@vger.kernel.org, AJvYcCW+J//3IL2gWb7bYYhE57m9WwIy0ESIdAbRIQCgdW3hzSRcxZgSTVYJS7FvkdB8I/3elvoOPmEm@vger.kernel.org
+X-Gm-Message-State: AOJu0YwjAR1fJuoatXs2MqGxrDBQnqwE8Z+ZkMAM9gxBZA32SUwgCHL3
+	a6kH1rLzIkDaJ1esHSZk5+8+VQE3+wLUyBjNd30HUVcCozY6+XkxbaNIiigCJIDAMwbDaXTLiDX
+	hAzbrBG6AiGoKC//yiIY3ZVnwc3M=
+X-Google-Smtp-Source: AGHT+IHpNm5R6d1kXnggyLRBiCFLHj7c8aZbt3rfulQuZsViVrgOnfz9UD3ihQBKZctEaUuFInNweAbCbQHy84PcLNQ=
+X-Received: by 2002:a17:906:110d:b0:abe:cccf:ac88 with SMTP id
+ a640c23a62f3a-abecccfb0a7mr357469566b.54.1740483324943; Tue, 25 Feb 2025
+ 03:35:24 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH 1/7] power: supply: core: get rid of of_node
-To: Sebastian Reichel <sebastian.reichel@collabora.com>,
- Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Linus Walleij <linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
- =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
- Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>,
- David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
- Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>,
- Konrad Dybcio <konradybcio@kernel.org>,
- Matthias Brugger <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
- <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
- linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-usb@vger.kernel.org
-References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
- <20250225-psy-core-convert-to-fwnode-v1-1-d5e4369936bb@collabora.com>
-Content-Language: en-US, en-AU, en-GB, en-BW
-From: Matti Vaittinen <mazziesaccount@gmail.com>
-In-Reply-To: <20250225-psy-core-convert-to-fwnode-v1-1-d5e4369936bb@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <20250212141648.599661-1-chenhuacai@loongson.cn>
+ <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
+ <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
+ <Z68N4lTIIwudzcLY@MacBook-Air-5.local> <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
+ <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local> <202502190921.6E26F49@keescook> <CAJZ5v0hZZdRPwp=OgPw4w8r9X=VbL6Hn6R4ZX6ZujNhBmMV3_A@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hZZdRPwp=OgPw4w8r9X=VbL6Hn6R4ZX6ZujNhBmMV3_A@mail.gmail.com>
+From: Huacai Chen <chenhuacai@kernel.org>
+Date: Tue, 25 Feb 2025 19:35:13 +0800
+X-Gmail-Original-Message-ID: <CAAhV-H5UaEbA0DrAUfROJoiatwrjsge4DNcVTJi=8vtk2Zn+tQ@mail.gmail.com>
+X-Gm-Features: AQ5f1Jp9_oaXVTIfpV_aoA35urmG2ZqS7ChPrwpnZ1qyFh1PmoCPuWDgFLWstUE
+Message-ID: <CAAhV-H5UaEbA0DrAUfROJoiatwrjsge4DNcVTJi=8vtk2Zn+tQ@mail.gmail.com>
+Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
+ Initialise random_kmalloc_seed after initcalls)
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Kees Cook <kees@kernel.org>, "Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>, 
+	Huacai Chen <chenhuacai@loongson.cn>, Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org, 
+	Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org, 
+	GONG Ruiqi <gongruiqi@huaweicloud.com>, Xiu Jianfeng <xiujianfeng@huawei.com>, 
+	stable@vger.kernel.org, Yuli Wang <wangyuli@uniontech.com>, 
+	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>, David Rientjes <rientjes@google.com>, 
+	Roman Gushchin <roman.gushchin@linux.dev>, Pekka Enberg <penberg@kernel.org>, 
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>, GONG Ruiqi <gongruiqi1@huawei.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 25/02/2025 01:21, Sebastian Reichel wrote:
-> This removes .of_node from 'struct power_supply', since there
-> is already a copy in .dev.of_node and there is no need to have
-> two copies.
-> 
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> ---
->   drivers/power/supply/power_supply_core.c | 17 ++++++++---------
->   include/linux/power_supply.h             |  1 -
->   2 files changed, 8 insertions(+), 10 deletions(-)
-> 
-> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
-> index d0bb52a7a0367a8e07787be211691cad14a41a54..11030035da6f121ca76bebf800c06cfd5db57578 100644
-> --- a/drivers/power/supply/power_supply_core.c
-> +++ b/drivers/power/supply/power_supply_core.c
-> @@ -200,11 +200,11 @@ static int __power_supply_populate_supplied_from(struct power_supply *epsy,
->   	int i = 0;
->   
->   	do {
-> -		np = of_parse_phandle(psy->of_node, "power-supplies", i++);
-> +		np = of_parse_phandle(psy->dev.of_node, "power-supplies", i++);
->   		if (!np)
->   			break;
->   
-> -		if (np == epsy->of_node) {
-> +		if (np == epsy->dev.of_node) {
->   			dev_dbg(&psy->dev, "%s: Found supply : %s\n",
->   				psy->desc->name, epsy->desc->name);
->   			psy->supplied_from[i-1] = (char *)epsy->desc->name;
-> @@ -235,7 +235,7 @@ static int  __power_supply_find_supply_from_node(struct power_supply *epsy,
->   	struct device_node *np = data;
->   
->   	/* returning non-zero breaks out of power_supply_for_each_psy loop */
-> -	if (epsy->of_node == np)
-> +	if (epsy->dev.of_node == np)
->   		return 1;
->   
->   	return 0;
-> @@ -270,13 +270,13 @@ static int power_supply_check_supplies(struct power_supply *psy)
->   		return 0;
->   
->   	/* No device node found, nothing to do */
-> -	if (!psy->of_node)
-> +	if (!psy->dev.of_node)
->   		return 0;
->   
->   	do {
->   		int ret;
->   
-> -		np = of_parse_phandle(psy->of_node, "power-supplies", cnt++);
-> +		np = of_parse_phandle(psy->dev.of_node, "power-supplies", cnt++);
->   		if (!np)
->   			break;
->   
-> @@ -606,8 +606,8 @@ int power_supply_get_battery_info(struct power_supply *psy,
->   	const __be32 *list;
->   	u32 min_max[2];
->   
-> -	if (psy->of_node) {
-> -		battery_np = of_parse_phandle(psy->of_node, "monitored-battery", 0);
-> +	if (psy->dev.of_node) {
-> +		battery_np = of_parse_phandle(psy->dev.of_node, "monitored-battery", 0);
->   		if (!battery_np)
->   			return -ENODEV;
+Hi, Harry, Kees, and Rafael,
 
-This reminded me of a change I once did to power_supply - but maybe 
-never got it further than RFC stage. Anyways, do you think it would be 
-possible to decouple the battery info and struct power_suppply (while at 
-it)?
+On Thu, Feb 20, 2025 at 2:09=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+>
+> On Wed, Feb 19, 2025 at 6:25=E2=80=AFPM Kees Cook <kees@kernel.org> wrote=
+:
+> >
+> > On Fri, Feb 14, 2025 at 09:44:59PM +0900, Harry (Hyeonggon) Yoo wrote:
+> > > On Fri, Feb 14, 2025 at 06:02:52PM +0800, Huacai Chen wrote:
+> > > > On Fri, Feb 14, 2025 at 5:33=E2=80=AFPM Harry (Hyeonggon) Yoo
+> > > > <42.hyeyoo@gmail.com> wrote:
+> > > > >
+> > > > > On Thu, Feb 13, 2025 at 11:20:22AM +0800, Huacai Chen wrote:
+> > > > > > Hi, Harry,
+> > > > > >
+> > > > > > On Wed, Feb 12, 2025 at 11:39=E2=80=AFPM Harry (Hyeonggon) Yoo
+> > > > > > <42.hyeyoo@gmail.com> wrote:
+> > > > > > > On Wed, Feb 12, 2025 at 11:17=E2=80=AFPM Huacai Chen <chenhua=
+cai@loongson.cn> wrote:
+> > > > > > > >
+> > > > > > > > Hibernation assumes the memory layout after resume be the s=
+ame as that
+> > > > > > > > before sleep, but CONFIG_RANDOM_KMALLOC_CACHES breaks this =
+assumption.
+> > > > > > >
+> > > > > > > Could you please elaborate what do you mean by
+> > > > > > > hibernation assumes 'the memory layout' after resume be the s=
+ame as that
+> > > > > > > before sleep?
+> > > > > > >
+> > > > > > > I don't understand how updating random_kmalloc_seed breaks re=
+suming from
+> > > > > > > hibernation. Changing random_kmalloc_seed affects which kmall=
+oc caches
+> > > > > > > newly allocated objects are from, but it should not affect th=
+e objects that are
+> > > > > > > already allocated (before hibernation).
+> > > > > >
+> > > > > > When resuming, the booting kernel should switch to the target k=
+ernel,
+> > > > > > if the address of switch code (from the booting kernel) is the
+> > > > > > effective data of the target kernel, then the switch code may b=
+e
+> > > > > > overwritten.
+> > > > >
+> > > > > Hmm... I'm still missing some pieces.
+> > > > > How is the kernel binary overwritten when slab allocations are ra=
+ndomized?
+> > > > >
+> > > > > Also, I'm not sure if it's even safe to assume that the memory la=
+yout is the
+> > > > > same across boots. But I'm not an expert on swsusp anyway...
+> > > > >
+> > > > > It'd be really helpful for linux-pm folks to clarify 1) what are =
+the
+> > > > > (architecture-independent) assumptions are for swsusp to work, an=
+d
+> > > > > 2) how architectures dealt with other randomization features like=
+ kASLR...
+> > > >
+> > >
+> > > [+Cc few more people that worked on slab hardening]
+> > >
+> > > > I'm sorry to confuse you. Binary overwriting is indeed caused by
+> > > > kASLR, so at least on LoongArch we should disable kASLR for
+> > > > hibernation.
+> > >
+> > > Understood.
+> > >
+> > > > Random kmalloc is another story, on LoongArch it breaks smpboot whe=
+n
+> > > > resuming, the details are:
+> > > > 1, LoongArch uses kmalloc() family to allocate idle_task's
+> > > > stack/thread_info and other data structures.
+> > > > 2, If random kmalloc is enabled, idle_task's stack in the booting
+> > > > kernel may be other things in the target kernel.
+> > >
+> > > Slab hardening features try so hard to prevent such predictability.
+> > > For example, SLAB_FREELIST_RANDOM could also randomize the address
+> > > kmalloc objects are allocated at.
+> > >
+> > > Rather than hacking CONFIG_RANDOM_KMALLOC_CACHES like this, we could
+> > > have a single option to disable slab hardening features that makes
+> > > the address unpredictable.
+> > >
+> > > It'd be nice to have something like ARCH_SUPPORTS_SLAB_RANDOM which
+> > > some hardening features depend on. And then let some arches condition=
+ally
+> > > not select ARCH_SUPPORTS_SLAB_RANDOM if hibernation's enabled
+> > > (at cost of less hardening)?
+> >
+> > I find this whole thread confusing. :) Hibernation should already do
+> > whatever it need to to get out of the way of the kernel it is restoring
+> > to memory. The random locations shouldn't matter at all: they're all
+> > stored in the image. I am not a hibernation expert, but my understandin=
+g
+> > is that the "resume" kernel moves itself out of the way to restore the
+> > KASLR-ed hibernation image and puts everything back exactly as it was.
+> > Randomization should not matter at all: it's just simply "put everythin=
+g
+> > back where it was".
+>
+> Exactly.
+>
+> > Yes, the tricky part is the "move itself out of the way", but that's
+> > required for any kernel that support being relocatable (a prerequisite
+> > for KASLR), and KASLR is just an aggressive form of "the relocatable
+> > kernel might be anywhere" beyond just different boot loaders putting it
+> > in a handful of different potential offsets.
+I have investigated deeper, and then found it is an arch-specific
+problem (at least for LoongArch), and the correct solution is here:
+https://lore.kernel.org/loongarch/20250225111812.3065545-1-chenhuacai@loong=
+son.cn/T/#u
 
-I believe that the chargers and especially fuel-gauges which are 
-designed to operate with different batteries (and which get battery 
-details using static battery nodes), would like to get the battery info 
-_before_ registering the power_supply (to avoid sending bogus values 
-while operating on defaults, before the battery info is read and before 
-things are set accordingly).
+But I don't know how to fix arm64.
 
-I know this may be a bit much to ask, but I believe it'd be an improvement.
+Huacai
 
-Other than that, looks good to me.
-
->   
-> @@ -1544,9 +1544,8 @@ __power_supply_register(struct device *parent,
->   	if (cfg) {
->   		dev->groups = cfg->attr_grp;
->   		psy->drv_data = cfg->drv_data;
-> -		psy->of_node =
-> +		dev->of_node =
->   			cfg->fwnode ? to_of_node(cfg->fwnode) : cfg->of_node;
-> -		dev->of_node = psy->of_node;
->   		psy->supplied_to = cfg->supplied_to;
->   		psy->num_supplicants = cfg->num_supplicants;
->   	}
-> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> index 6ed53b292162469d7b357734d5589bff18a201d0..975ccab56597ef579ef0c9dc913dcb0a26b5855a 100644
-> --- a/include/linux/power_supply.h
-> +++ b/include/linux/power_supply.h
-> @@ -316,7 +316,6 @@ struct power_supply {
->   
->   	char **supplied_from;
->   	size_t num_supplies;
-> -	struct device_node *of_node;
->   
->   	/* Driver private data */
->   	void *drv_data;
-> 
-
+>
+> Right.
+>
+> Thanks!
 
