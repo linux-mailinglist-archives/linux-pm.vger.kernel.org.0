@@ -1,104 +1,131 @@
-Return-Path: <linux-pm+bounces-22907-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22908-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A396AA44930
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 18:59:11 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 93E7DA44932
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 18:59:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 328BB881A7D
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 17:52:44 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 30B7D1885A7E
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 17:59:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AEE50198A19;
-	Tue, 25 Feb 2025 17:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EAF4219AD86;
+	Tue, 25 Feb 2025 17:59:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VFzZAOVB"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qWkp5SfV"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C800156F3A;
-	Tue, 25 Feb 2025 17:52:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE2DC156F3A;
+	Tue, 25 Feb 2025 17:59:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740505964; cv=none; b=U5vV1bU1/RuLWM5npAFhQyYm2D+i87AL6dafSrY3cRrU7cZ+QupPUoPx20cwH91/ZB9xxTDEiqR1Fhc5QnzS/9WpNkgHXNoJHumBU699NjmmGL2kkYGOO80h4vz8wYuluRTg80aUovS6EAG/Y+YrVF5iIqOdtoMWoulTPwiHcW8=
+	t=1740506361; cv=none; b=BT0sky72j8uUMuILMvjQYsVz/UCJ6oxHjrxf5VRw6xpZCGWiaWANJwPgIHo29Satn512IrmWUy08ZkSJs4triGK+9TIfY12HlD1k6lFCCVdSiWEcIacIVtxttN5vme0Vh6vgv8TE0FTAodtTrSMK2yNLKfZ/2UxauYetA5rrlpQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740505964; c=relaxed/simple;
-	bh=w0EkbHkGHBYElQYWfADsG+yNVibDYgCQClR6E5omnNM=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=dX4ge9Nv3YjZ5MlHKJPbE0pfy97sk82ZTT9xUFIy16041r8lE38v9q9kXetDa/ZTmwIjVgY5Zkd4VTN9A6k/5oCLcCh2zKE0Zgg/GUTE3N63QWHd7I+D98eZdlViX3vTJSFgsvURxa2pv8Qbl6R8nXod7rf7aC+xQ9bNTGl0Nek=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VFzZAOVB; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 59DBBC4CEE7;
-	Tue, 25 Feb 2025 17:52:44 +0000 (UTC)
+	s=arc-20240116; t=1740506361; c=relaxed/simple;
+	bh=yBULEnieTf/nQ04VsVNsRxbU8OeMLTkbgocf2i5ZY0M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=BCSo91Sn31P2jd5PRUDo4mi6INFyj9XuVxXMkHCUOY/ACv6AQjNAbxvPJhNqQM6yiFfTxpl0p9GA90SgiSPP9aLjrXS712kULwCsAaIxNW2PQckeaGAjUJCq7zuCvNvgiGBACzxYb7FVl2MAVBmO4XjwbVZolRv/DLfAlsP6LhU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qWkp5SfV; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1C258C4CEE2;
+	Tue, 25 Feb 2025 17:59:17 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740505964;
-	bh=w0EkbHkGHBYElQYWfADsG+yNVibDYgCQClR6E5omnNM=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=VFzZAOVB1a78DBjHDtOtuMrJTGr8jVuKit5KqKgfyh/fX73Y6Is0do1MFFrz+Jemp
-	 Lbhlg7xS6yHIZaTOWiszvYatZeN/iv+ogT1Za46h/vkopmjCPLm5TwsWwEC80+Kt07
-	 A2YDXuIPr6QRVYzYIUlUVeZADuuoe/qm/7R47h6ErvqrkGpSsmCqggvlOE/uz7f8zz
-	 peh/7+xGpi7QJ/r4uV9nNEC+HJHbHk6OThzJxJrC/S4+QyoUX2cChMnnIOXLrUZe49
-	 1NjBsFrGwjtJxyM4ounylZapEAZfSXeiQ/IIMS6S+yDeBzA19sVB5M3X7cEVJvyy5p
-	 eYbjFj/YbZxNg==
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5e04064af07so9230833a12.0;
-        Tue, 25 Feb 2025 09:52:44 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCV8eYc5sR/gFaVIk+9oCiwZ3Gs3qQIhSbmZN3cXW3pNlpRxJmRikGhspPyuCSgZjcqsOA4R+hFdmKJD@vger.kernel.org, AJvYcCVVP2runIw3YrhzgGEasoPeD1tnjJ5SpIJxaP3OmoNyMCqQMKe/1BO+UktAYMGKuRc9BYrsMvonFygk6Hg=@vger.kernel.org, AJvYcCVqsuHg5mqRDKfhS+VvfRxozmLs+Ovq4GkW5Az3bWZZAfkMNVLgnW/uV+m+x7AKUrBaJBiT69wcVLQ2+ki8@vger.kernel.org, AJvYcCWX+almcJFNsA4PquVXwmpJUqsPiMvAcLd7VUAKizYuFYioAiAkGBkzs+w67COdun0bAMXbVo/tO8p6@vger.kernel.org, AJvYcCXc1HEujqh8hCzedc+KPpz1BAyCcQdgGyVTxnilKsoJ2DEfhf2nY1UuofG/1Io823t4pJdp9epB4LE=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy++dwbSqQS47iDgUqmAc2EWhfeiDq8jQUpvKYZAJ4oEH1mHKw5
-	TW/tWpulKoHKvXceA6MiwgjdLl2YXnostCDlN2uuNcJuUI9x4ZyXHc2SpeySqImuWORASxNp0i1
-	8jJHPoIE/l+k+6oLOAHOhf+XIdA==
-X-Google-Smtp-Source: AGHT+IF6yxHJA3YSV+Mc7KCSIMedD8jUXEbB4xXTDLc0/UNGPOBcZs5+0oQlFOlVb1ificfP0x+i/oVnnr4HgeYGyas=
-X-Received: by 2002:a05:6402:440b:b0:5de:aa54:dc30 with SMTP id
- 4fb4d7f45d1cf-5e444481387mr4585735a12.5.1740505962886; Tue, 25 Feb 2025
- 09:52:42 -0800 (PST)
+	s=k20201202; t=1740506361;
+	bh=yBULEnieTf/nQ04VsVNsRxbU8OeMLTkbgocf2i5ZY0M=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=qWkp5SfVATCU6JXaCE4TayPuVL+eCHSYSxbJ3H1xQhC0vAS40u98f1WrKObFiVBgh
+	 yqVqMjhZ/YO18OlGgUp0l5NDa/hkbIklidIn82bUP2vJTvJp6yw+73Dh7bHNfqYjHN
+	 +ZQr73CANA2OvIk1XXw4dx2S4aewx69rt6eH3fnc9wALnp3bpQewmBdza28ubI06dG
+	 1dYTu+HfjsJ0i+/DbEsJBcrK1PTDJ/jtaWtpE34VPnAVeQ6EtNFG1BJ+KBYu3uGvnt
+	 MW7NV3+F74bLsP96vaa9QMsK8x6t2brZChzW3h0j/0Us4zQdbR1ruz1320aM+dyxlC
+	 EbdtbJ99OKDAQ==
+Date: Tue, 25 Feb 2025 17:59:15 +0000
+From: Mark Brown <broonie@kernel.org>
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	=?iso-8859-1?Q?Adri=E1n_Mart=EDnez?= Larumbe <adrian.larumbe@collabora.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	Peter Geis <pgwipeout@gmail.com>,
+	Tomeu Vizoso <tomeu@tomeuvizoso.net>,
+	Vignesh Raman <vignesh.raman@collabora.com>,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org
+Subject: Re: [PATCH v6 1/8] regulator: Add (devm_)of_regulator_get()
+Message-ID: <3360051d-1699-46cc-a4c9-0f379fcf8de0@sirena.org.uk>
+References: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
+ <20250220-rk3588-gpu-pwr-domain-regulator-v6-1-a4f9c24e5b81@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241226050205.30241-1-val@packett.cool> <20241226050205.30241-5-val@packett.cool>
- <173920541986.1887800.1972669785800121190.b4-ty@kernel.org>
-In-Reply-To: <173920541986.1887800.1972669785800121190.b4-ty@kernel.org>
-From: Rob Herring <robh@kernel.org>
-Date: Tue, 25 Feb 2025 11:52:31 -0600
-X-Gmail-Original-Message-ID: <CAL_Jsq+PPYeFxr=utwZLemUVCzk5iabtMckOJmNy1-LO39cqeQ@mail.gmail.com>
-X-Gm-Features: AQ5f1Jq1Iz82X3jYxZcNLZTXQB24STg7TFTfP3ZcCT_Tig0_TFrubDNC8pk8KUg
-Message-ID: <CAL_Jsq+PPYeFxr=utwZLemUVCzk5iabtMckOJmNy1-LO39cqeQ@mail.gmail.com>
-Subject: Re: (subset) [PATCH 4/9] mfd: mt6397: Add support for MT6392 pmic
-To: Lee Jones <lee@kernel.org>
-Cc: Val Packett <val@packett.cool>, Fabien Parent <parent.f@gmail.com>, 
-	Dmitry Torokhov <dmitry.torokhov@gmail.com>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, Sen Chu <sen.chu@mediatek.com>, 
-	Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
-	Eddie Huang <eddie.huang@mediatek.com>, 
-	Alexandre Belloni <alexandre.belloni@bootlin.com>, 
-	Javier Carrasco <javier.carrasco.cruz@gmail.com>, Yassine Oudjana <y.oudjana@protonmail.com>, 
-	Chen Zhong <chen.zhong@mediatek.com>, linux-input@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-mediatek@lists.infradead.org, linux-rtc@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-
-On Mon, Feb 10, 2025 at 10:37=E2=80=AFAM Lee Jones <lee@kernel.org> wrote:
->
-> On Thu, 26 Dec 2024 01:58:04 -0300, Val Packett wrote:
-> > Update the MT6397 MFD driver to support the MT6392 PMIC.
-> >
-> >
->
-> Applied, thanks!
->
-> [4/9] mfd: mt6397: Add support for MT6392 pmic
->       commit: 896b1eb4ca771b37ea50feb4d90a78dd4e9cb388
-
-This should be dropped. Missing the sender's S-o-b and the rest of the
-series has issues still.
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="6DahNsJj491Prgx/"
+Content-Disposition: inline
+In-Reply-To: <20250220-rk3588-gpu-pwr-domain-regulator-v6-1-a4f9c24e5b81@kernel.org>
+X-Cookie: I'm not available for comment..
 
 
-Rob
+--6DahNsJj491Prgx/
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+
+On Thu, Feb 20, 2025 at 07:58:04PM +0100, Sebastian Reichel wrote:
+> The Rockchip power-domain controller also plans to make use of
+> per-domain regulators similar to the MediaTek power-domain controller.
+> Since existing DTs are missing the regulator information, the kernel
+> should fallback to the automatically created dummy regulator if
+> necessary. Thus the version without the _optional suffix is needed.
+
+The following changes since commit 0ad2507d5d93f39619fc42372c347d6006b64319:
+
+  Linux 6.14-rc3 (2025-02-16 14:02:44 -0800)
+
+are available in the Git repository at:
+
+  https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-devm-of-get
+
+for you to fetch changes up to 0dffacbbf8d044456d50c893adb9499775c489f4:
+
+  regulator: Add (devm_)of_regulator_get() (2025-02-24 15:26:08 +0000)
+
+----------------------------------------------------------------
+regulator: Add (devm_)of_regulator_get()
+
+This introduces devm_of_regulator_get without the _optional suffix, since
+that is more sensible for the Rockchip usecase.
+
+----------------------------------------------------------------
+Sebastian Reichel (1):
+      regulator: Add (devm_)of_regulator_get()
+
+ drivers/regulator/devres.c         | 17 +++++++++++++++++
+ drivers/regulator/of_regulator.c   | 21 +++++++++++++++++++++
+ include/linux/regulator/consumer.h |  6 ++++++
+ 3 files changed, 44 insertions(+)
+
+--6DahNsJj491Prgx/
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAme+BPIACgkQJNaLcl1U
+h9A55wf/defOMhqJG1AXSmf7/jp/1X3vDIPMsTOOh0tDNUJtT8RdlyJ/1G15zthm
+Ox921lEC1kReTUTejPD2nPrh+9WGu66Fcsm9T61U1q6bAZeAMclhcM6guiw66nXp
+Dx7seGYTztQQY3PdtZmGK7jouFWjKA9f8CPEIENafSPzm6VMuQ50i/+snwRKcsKU
+aM8r9w6ordMdNXq1ZG8lb7Y+gQuwpBBQ2/yELkpoLg/ONyGeR2YikE9Vm5h8jXEE
+LpZh0x1iCwDVWgAJT+bE8g5u8IboaG8D8slK3sUb4f0VN9IiZSDcVOh9yKt4DZR5
+oSNOuTmiEVVNTswy+nw3QdpvMLDTbg==
+=rB2k
+-----END PGP SIGNATURE-----
+
+--6DahNsJj491Prgx/--
 
