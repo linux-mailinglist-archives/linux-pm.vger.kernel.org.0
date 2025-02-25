@@ -1,172 +1,213 @@
-Return-Path: <linux-pm+bounces-22942-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22943-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6295A44EB7
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 22:24:41 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id D6636A44EC5
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 22:26:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 030AF171C4E
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 21:24:15 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 501591894471
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 21:26:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D4BF20C48E;
-	Tue, 25 Feb 2025 21:24:11 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2AD5621148F;
+	Tue, 25 Feb 2025 21:26:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="VZMI05Lf"
+	dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b="siYU52+w"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from smtp.smtpout.orange.fr (smtp-71.smtpout.orange.fr [80.12.242.71])
+	(using TLSv1.2 with cipher AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6A9E81A23BD;
-	Tue, 25 Feb 2025 21:24:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740518651; cv=pass; b=IloHQ9c5uRcJueq/5vMXZ17B2OnjKzwtzEX+2j34MdzEfUH31yEW3Se52xhAiYQhBoEpQO2UNge7a+XSAGDqSa1bOPnPOKUJwHoT5rts7njVnDynMYQgVE7TMrYftTNhF6RT/oXGBhY0yE7rnN7e5Y45cv9Ex2PROY6v5eTwasA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740518651; c=relaxed/simple;
-	bh=yifWYicXzI3Racy3WLNPfPX3gSInoMk9MGp4tHcStF0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=b+0uozk4BFIFb31un9OVrSHzWHWrXR592FFFDK6GWH2Goonklq7NXFimrkEvANjsvOs5hBXoGlzaBJraogH+s1h75rvjHhLzXVitT9TdLlU+lwFBo1ePhEy7jblXHnZv/Ve6JfnSCky7/1SeZEUVdupiFHjXB0rgiz4eUw9jflQ=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=VZMI05Lf; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1740518576; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=VQ2zUjBknzn2fmSl3OndjkBykCq6GH3YuUXD5yu7z5+pqCpQNl+Ruz2gb6ReS+PlvB7W790tIhDa3l/BV+tCifHsB3Dn+li2pohgJn8XbT+Wvbx7HFL7knG09YzGcU8EAF0gTtK+wUfpT13Xa5nPWLjHBLXpKBSHOC0GIJ2XLtY=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1740518576; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=PDVTKSM1rcFjNwRRV/0KaHspAmH3vDFXNZuyf3meR0Y=; 
-	b=KAqxisptIvOtUWOG3/+nOvLQaLBf8bUImwjIguK5eZHbHnM+kgZK9KxTWbfs5dlGJdHYlvssxgGUmaKlbeOzkvdZFn72sEaN9KaSaEwQ3/bwrzYdno7PYDAl2Iw7FZTQvYNOkSS3NgpBZ5P2lgnymWItTMmsE/QLjOwxyqpzte4=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740518576;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=PDVTKSM1rcFjNwRRV/0KaHspAmH3vDFXNZuyf3meR0Y=;
-	b=VZMI05LfLyyWPl0+UeCgDE5+u4fdSF4zFhcfpdraUnoy8v/M835dRL/zZFPtJC3j
-	RLfixi+m2Bzvlxl6W0sDDNBAV8Gg0bhbeLS7vUzTjosyt1C3Ub+da+pZI3WKB8ifLP7
-	O9qzAZPA+h8Q6SweL1iTFwYgc7ut3LVgkZYd/SnA=
-Received: by mx.zohomail.com with SMTPS id 17405185698304.8376916548969575;
-	Tue, 25 Feb 2025 13:22:49 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id 7E04D18040A; Tue, 25 Feb 2025 22:22:42 +0100 (CET)
-Date: Tue, 25 Feb 2025 22:22:42 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Hans de Goede <hdegoede@redhat.com>
-Cc: Mark Brown <broonie@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
-	Matti Vaittinen <mazziesaccount@gmail.com>, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
-	Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>, 
-	David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
-	Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>, 
-	Konrad Dybcio <konradybcio@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Orson Zhai <orsonzhai@gmail.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 7/7] power: supply: core: convert to fwnnode
-Message-ID: <duzge5bpxv4cd7b27pq2daisqtaw6mtt6oxl2u3hcdxcnh5tkw@yasxlx33yxbi>
-References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
- <20250225-psy-core-convert-to-fwnode-v1-7-d5e4369936bb@collabora.com>
- <a98547f0-f125-45dc-8bb6-a154ad78f672@redhat.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 85F4320D513;
+	Tue, 25 Feb 2025 21:26:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=80.12.242.71
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740518769; cv=none; b=K2XBLsaMFGr69Gd50SMpcToi3ovwV74tYkqFZAg6Jxv6k49cndqDdvcuvXlnFpbfzOdDzGWEp+GNNd9N2iHXB0d8msDq6Ll46lE6jp36YgykWKnnprBSaADuoa1HJy08bq/7Xx+d7Y8cKpiG5TOYC6r+sxh7hu70yB0C8WE4fZ8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740518769; c=relaxed/simple;
+	bh=pyuUKKIK/oqDwIAa4v1WeQ0xbo398GEv1psrnk7fMjY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=CSYtzlNPG/uxjKGROYZKov/fs5BZippQgLF/3+StNMqQgXF4DpRPRup1aaWoPmeNPfqb9HR/q9f4Ca7HqBu6skGE+hBoovEY6VahB7ttC7RmbFFYg09DUON/+aYLY+FegjFMuvI8YbuTfNrLG5vXjqW8XSXTXZlMbFR/x4f+jcY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr; spf=pass smtp.mailfrom=wanadoo.fr; dkim=pass (2048-bit key) header.d=wanadoo.fr header.i=@wanadoo.fr header.b=siYU52+w; arc=none smtp.client-ip=80.12.242.71
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=wanadoo.fr
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=wanadoo.fr
+Received: from [192.168.1.37] ([90.11.132.44])
+	by smtp.orange.fr with ESMTPA
+	id n2R0tkeFQ4iG7n2R3t60Fm; Tue, 25 Feb 2025 22:25:57 +0100
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=wanadoo.fr;
+	s=t20230301; t=1740518758;
+	bh=CDOnVbuHRa5TlckniZ+QbcxrKwAHtppPzAjAscxNHSY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From;
+	b=siYU52+wZ9L1fww+iQDN9rtYX6/aPczL9atUE2l26+nq1Ri8dh3TYGdKOZSOl8FUk
+	 XrbU+P2TpuXPZmylEcNVhm7IGsserFCZYBNjOT562ZUYjLqKjMa1SJH893MOHidh6R
+	 OQATR7VDki3fiHZfHEF2JqtwL04PZvB0Oj0pypFUs2f2NaghtKWNKg5zY+oKMy9gx3
+	 hJDV0lXDGXzAw1PjH65vHLOKoP3lFuSvJzAbZkaII3cDH1jfDHrdCDL8+lHftSY/+S
+	 CY90Fz3FaFYxcLZzbR4khlsrjLfgaLUxO0uOmAn+6ltyDhAKQJ99yzzK2ZVeFXSo2U
+	 OrHC+r+ja1CFQ==
+X-ME-Helo: [192.168.1.37]
+X-ME-Auth: bWFyaW9uLmphaWxsZXRAd2FuYWRvby5mcg==
+X-ME-Date: Tue, 25 Feb 2025 22:25:58 +0100
+X-ME-IP: 90.11.132.44
+Message-ID: <44dd2b5b-d91c-4daf-ab75-ed4030180028@wanadoo.fr>
+Date: Tue, 25 Feb 2025 22:25:45 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="hdfg4ybxxtxchsut"
-Content-Disposition: inline
-In-Reply-To: <a98547f0-f125-45dc-8bb6-a154ad78f672@redhat.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.2/240.490.19
-X-ZohoMailClient: External
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 07/16] libceph: convert timeouts to secs_to_jiffies()
+To: Easwar Hariharan <eahariha@linux.microsoft.com>
+Cc: Frank.Li@nxp.com, James.Bottomley@HansenPartnership.com,
+ Julia.Lawall@inria.fr, Shyam-sundar.S-k@amd.com, akpm@linux-foundation.org,
+ axboe@kernel.dk, broonie@kernel.org, cassel@kernel.org, cem@kernel.org,
+ ceph-devel@vger.kernel.org, clm@fb.com, cocci@inria.fr,
+ dick.kennedy@broadcom.com, djwong@kernel.org, dlemoal@kernel.org,
+ dongsheng.yang@easystack.cn, dri-devel@lists.freedesktop.org,
+ dsterba@suse.com, festevam@gmail.com, hch@lst.de, hdegoede@redhat.com,
+ hmh@hmh.eng.br, ibm-acpi-devel@lists.sourceforge.net, idryomov@gmail.com,
+ ilpo.jarvinen@linux.intel.com, imx@lists.linux.dev,
+ james.smart@broadcom.com, jgg@ziepe.ca, josef@toxicpanda.com,
+ kalesh-anakkur.purayil@broadcom.com, kbusch@kernel.org,
+ kernel@pengutronix.de, leon@kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org,
+ linux-btrfs@vger.kernel.org, linux-ide@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org,
+ linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org,
+ linux-scsi@vger.kernel.org, linux-sound@vger.kernel.org,
+ linux-spi@vger.kernel.org, linux-xfs@vger.kernel.org,
+ martin.petersen@oracle.com, nicolas.palix@imag.fr, ogabbay@kernel.org,
+ perex@perex.cz, platform-driver-x86@vger.kernel.org, s.hauer@pengutronix.de,
+ sagi@grimberg.me, selvin.xavier@broadcom.com, shawnguo@kernel.org,
+ sre@kernel.org, tiwai@suse.com, xiubli@redhat.com, yaron.avizrat@intel.com
+References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
+ <20250225-converge-secs-to-jiffies-part-two-v3-7-a43967e36c88@linux.microsoft.com>
+Content-Language: en-US, fr-FR
+From: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+In-Reply-To: <20250225-converge-secs-to-jiffies-part-two-v3-7-a43967e36c88@linux.microsoft.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
+Le 25/02/2025 à 21:17, Easwar Hariharan a écrit :
+> Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
+> secs_to_jiffies().  As the value here is a multiple of 1000, use
+> secs_to_jiffies() instead of msecs_to_jiffies() to avoid the multiplication
+> 
+> This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci with
+> the following Coccinelle rules:
+> 
+> @depends on patch@ expression E; @@
+> 
+> -msecs_to_jiffies(E * 1000)
+> +secs_to_jiffies(E)
+> 
+> @depends on patch@ expression E; @@
+> 
+> -msecs_to_jiffies(E * MSEC_PER_SEC)
+> +secs_to_jiffies(E)
+> 
+> While here, remove the no-longer necessary checks for range since there's
+> no multiplication involved.
 
---hdfg4ybxxtxchsut
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 7/7] power: supply: core: convert to fwnnode
-MIME-Version: 1.0
+No sure it is correct.
 
-Hello Hans,
+Same comment as on patch 06/16, available at [1].
 
-On Tue, Feb 25, 2025 at 02:16:12PM +0100, Hans de Goede wrote:
-> Hi Sebastian,
->=20
-> Thank you for your work on this.
->
-> A few small remarks inline / below.
->=20
-> On 25-Feb-25 12:21 AM, Sebastian Reichel wrote:
->=20
-> <snip>
->=20
-> > diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
-> > index a785742f97721e7e70d0e4c17a1ded7b985acb6d..9afde8c04efc72691c81a37=
-3d8dd03477b4efd7e 100644
-> > --- a/include/linux/power_supply.h
-> > +++ b/include/linux/power_supply.h
-> > @@ -805,7 +805,7 @@ static inline struct power_supply *power_supply_get=
-_by_name(const char *name)
-> >  { return NULL; }
-> >  #endif
-> >  #ifdef CONFIG_OF
-> > -extern struct power_supply *power_supply_get_by_phandle(struct device_=
-node *np,
-> > +extern struct power_supply *power_supply_get_by_phandle(struct fwnode_=
-handle *fwnode,
-> >  							const char *property);
->=20
-> this function now no longer is DT/OF/open-firmware specific, so I think i=
-t should be moved
-> outside of the #ifdef CONFIG_OF block now ?  The same goes for the devm v=
-ariant I think
-> and the implementations of course also should no longer be "#ifdef CONFIG=
-_OF".
+CJ
 
-Good point. I suppose ideally the name should also change to power_supply_g=
-et_by_reference,
-since phandle is a DT/OF term. I will prepare these two changes for v2.
+[1]: 
+https://lore.kernel.org/linux-kernel/e53d7586-b278-4338-95a2-fa768d5d8b5e@wanadoo.fr/
 
-Greetings,
+> 
+> Acked-by: Ilya Dryomov <idryomov@gmail.com>
+> Signed-off-by: Easwar Hariharan <eahariha@linux.microsoft.com>
+> ---
+>   include/linux/ceph/libceph.h | 12 ++++++------
+>   net/ceph/ceph_common.c       | 18 ++++++------------
+>   net/ceph/osd_client.c        |  3 +--
+>   3 files changed, 13 insertions(+), 20 deletions(-)
+> 
+> diff --git a/include/linux/ceph/libceph.h b/include/linux/ceph/libceph.h
+> index 733e7f93db66a7a29a4a8eba97e9ebf2c49da1f9..5f57128ef0c7d018341c15cc59288aa47edec646 100644
+> --- a/include/linux/ceph/libceph.h
+> +++ b/include/linux/ceph/libceph.h
+> @@ -72,15 +72,15 @@ struct ceph_options {
+>   /*
+>    * defaults
+>    */
+> -#define CEPH_MOUNT_TIMEOUT_DEFAULT	msecs_to_jiffies(60 * 1000)
+> -#define CEPH_OSD_KEEPALIVE_DEFAULT	msecs_to_jiffies(5 * 1000)
+> -#define CEPH_OSD_IDLE_TTL_DEFAULT	msecs_to_jiffies(60 * 1000)
+> +#define CEPH_MOUNT_TIMEOUT_DEFAULT	secs_to_jiffies(60)
+> +#define CEPH_OSD_KEEPALIVE_DEFAULT	secs_to_jiffies(5)
+> +#define CEPH_OSD_IDLE_TTL_DEFAULT	secs_to_jiffies(60)
+>   #define CEPH_OSD_REQUEST_TIMEOUT_DEFAULT 0  /* no timeout */
+>   #define CEPH_READ_FROM_REPLICA_DEFAULT	0  /* read from primary */
+>   
+> -#define CEPH_MONC_HUNT_INTERVAL		msecs_to_jiffies(3 * 1000)
+> -#define CEPH_MONC_PING_INTERVAL		msecs_to_jiffies(10 * 1000)
+> -#define CEPH_MONC_PING_TIMEOUT		msecs_to_jiffies(30 * 1000)
+> +#define CEPH_MONC_HUNT_INTERVAL		secs_to_jiffies(3)
+> +#define CEPH_MONC_PING_INTERVAL		secs_to_jiffies(10)
+> +#define CEPH_MONC_PING_TIMEOUT		secs_to_jiffies(30)
+>   #define CEPH_MONC_HUNT_BACKOFF		2
+>   #define CEPH_MONC_HUNT_MAX_MULT		10
+>   
+> diff --git a/net/ceph/ceph_common.c b/net/ceph/ceph_common.c
+> index 4c6441536d55b6323f4b9d93b5d4837cd4ec880c..c2a2c3bcc4e91a628c99bd1cef1211d54389efa2 100644
+> --- a/net/ceph/ceph_common.c
+> +++ b/net/ceph/ceph_common.c
+> @@ -527,29 +527,23 @@ int ceph_parse_param(struct fs_parameter *param, struct ceph_options *opt,
+>   
+>   	case Opt_osdkeepalivetimeout:
+>   		/* 0 isn't well defined right now, reject it */
+> -		if (result.uint_32 < 1 || result.uint_32 > INT_MAX / 1000)
+> +		if (result.uint_32 < 1)
+>   			goto out_of_range;
+> -		opt->osd_keepalive_timeout =
+> -		    msecs_to_jiffies(result.uint_32 * 1000);
+> +		opt->osd_keepalive_timeout = secs_to_jiffies(result.uint_32);
+>   		break;
+>   	case Opt_osd_idle_ttl:
+>   		/* 0 isn't well defined right now, reject it */
+> -		if (result.uint_32 < 1 || result.uint_32 > INT_MAX / 1000)
+> +		if (result.uint_32 < 1)
+>   			goto out_of_range;
+> -		opt->osd_idle_ttl = msecs_to_jiffies(result.uint_32 * 1000);
+> +		opt->osd_idle_ttl = secs_to_jiffies(result.uint_32);
+>   		break;
+>   	case Opt_mount_timeout:
+>   		/* 0 is "wait forever" (i.e. infinite timeout) */
+> -		if (result.uint_32 > INT_MAX / 1000)
+> -			goto out_of_range;
+> -		opt->mount_timeout = msecs_to_jiffies(result.uint_32 * 1000);
+> +		opt->mount_timeout = secs_to_jiffies(result.uint_32);
+>   		break;
+>   	case Opt_osd_request_timeout:
+>   		/* 0 is "wait forever" (i.e. infinite timeout) */
+> -		if (result.uint_32 > INT_MAX / 1000)
+> -			goto out_of_range;
+> -		opt->osd_request_timeout =
+> -		    msecs_to_jiffies(result.uint_32 * 1000);
+> +		opt->osd_request_timeout = secs_to_jiffies(result.uint_32);
+>   		break;
+>   
+>   	case Opt_share:
+> diff --git a/net/ceph/osd_client.c b/net/ceph/osd_client.c
+> index b24afec241382b60d775dd12a6561fa23a7eca45..ba61a48b4388c2eceb5b7a299906e7f90191dd5d 100644
+> --- a/net/ceph/osd_client.c
+> +++ b/net/ceph/osd_client.c
+> @@ -4989,8 +4989,7 @@ int ceph_osdc_notify(struct ceph_osd_client *osdc,
+>   	linger_submit(lreq);
+>   	ret = linger_reg_commit_wait(lreq);
+>   	if (!ret)
+> -		ret = linger_notify_finish_wait(lreq,
+> -				 msecs_to_jiffies(2 * timeout * MSEC_PER_SEC));
+> +		ret = linger_notify_finish_wait(lreq, secs_to_jiffies(2 * timeout));
+>   	else
+>   		dout("lreq %p failed to initiate notify %d\n", lreq, ret);
+>   
+> 
 
--- Sebastian
-
-> >  extern struct power_supply *devm_power_supply_get_by_phandle(
-> >  				    struct device *dev, const char *property);
->=20
-> Regards,
->=20
-> Hans
->=20
->=20
-
---hdfg4ybxxtxchsut
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAme+NJcACgkQ2O7X88g7
-+poO0w/+PtjuypiPttq8FXdCRzUhU78WLqWOJidkFzOKBqamTFhS0xbCsok/IUFQ
-AZSGVeoVEmZoASd8PRsXkGrfTDTq7LU3mcJArxufUITgc3y4xqEBJ82761VW16mJ
-g6koal4Wi4eQ/6BPKPXlXk8fcRiMNKmy2dZbTbivI2q7fmFzVTQLmgMTCi9241XP
-XYiyyHC7cI7/iHtXomgitOXCTF6qXBdXuB7nx/yE+qUofYF8akM/cD+ya5ktzGym
-ZKoizoAVDpu9DyHK6uyJuwBBc6wgmyaH91iIrw8xlfYR+OSHy+HRUyM8NTbROpSr
-nrD0I1ORi3uxjJUeoZ5v/bi70gLMXDEDaxQk7FXrqfBRgw43pHGnMIZsACK+b2Zv
-sFEez70kMZFHJM99oDJ9ZgvBZwrKXc6ZWvYXakX1IW7iNWUoEhXBLnXf2Zrni/Zx
-FMq6lr7s9/QnEtet/17dUKvCp9F3V23kvDbrJRV8C0ujkpW9wfo2VEvfPJNH9Ku+
-vdFDUeYNn7RvwHAsHYlmB/GyCUGdYLDsvyHPMbp4l989RUtNC0OF4t9bAVwJFdUt
-3oN7y6BOqfQa4EcP0fv3Ui9ITiak9BweFCVPm8aHqsKkqnIbzx1N9aaLB+TqS3is
-Xgz0BGWOempPbvaca4fuYrmSOsnC/gNIKFi+LMd5QmMhyO1ybi8=
-=g2xY
------END PGP SIGNATURE-----
-
---hdfg4ybxxtxchsut--
 
