@@ -1,118 +1,150 @@
-Return-Path: <linux-pm+bounces-22859-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22860-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 39B0EA43338
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 03:41:13 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 06418A43388
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 04:19:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 34FA0174EDC
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 02:41:12 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C26C27A95AF
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 03:18:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 71DE11487F8;
-	Tue, 25 Feb 2025 02:41:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 59A0E2505B7;
+	Tue, 25 Feb 2025 03:19:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="py1Hb3E3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f45.google.com (mail-lf1-f45.google.com [209.85.167.45])
+Received: from mail-pl1-f180.google.com (mail-pl1-f180.google.com [209.85.214.180])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E4344433D1;
-	Tue, 25 Feb 2025 02:41:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D726E24C67B
+	for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 03:19:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.180
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740451269; cv=none; b=hTeYC9nIl1EyAKCxurLV+8RGhw8bKGzc0/rF9s3MKCLTZdDCkNrHNTjD9D2adXNYE1PAibvJ23HEwTNKGTP9yPuZGjjrmo9RKJp7J0ciY2WMPO2CJemS7VVZgjDDi496Syefc2uL5mFj2VHigUP+h3pY2ETyyDq3K+0r4+9SRDo=
+	t=1740453550; cv=none; b=qNTrh+H3Ba9vokxyIvZko5pJKUxOXnCjzcY/IfofA33ZBhvWFJ3pP/fBtnoMlYQo2rdKpTLh1VJd4wI3WXwfgVzzr/T7NE//mM6dKlWPUp8NYveiU6BRPjwzP4jsQqCSz+LlXzn9kft9r/IZ7js/S6WoM9q2ZjH9weK3zLGR+cQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740451269; c=relaxed/simple;
-	bh=bUPGmmze+2yYO/R07OBpXdoDaaUY81P4TEL18u2/P7Y=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jfGh7ncNdAqAp4dZZf+CPbxQkuoAYj5ByMtlrZJ9heqNZ5iHBqWnkCrpH9JCKL4tKGxJXrR2YqRuqdDEFNo6sjoVtQHX2THM9gS63p9dN7rG0tbW5sLiT+pufxDDvTtSvFprFaVzTWxX6XcLhSO7TYdnZSKRWJqBbYliGVZGx8g=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.167.45
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=csie.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-lf1-f45.google.com with SMTP id 2adb3069b0e04-545316f80beso4543105e87.1;
-        Mon, 24 Feb 2025 18:41:06 -0800 (PST)
+	s=arc-20240116; t=1740453550; c=relaxed/simple;
+	bh=iGhucKO1xH2G33nc9CPDvje6X4e8o45jdIHriUlAA/Q=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=rU9nRBNpGgkO0Z8jROICv86UldDtBFF4D4XHHpH7Er8gWxM1+nOSA7PVfztFhr/GjtB1RZF0yd3dhCfv9iSgZvSn4Vt0BYSQiRpXBGVGDG5l2cisGOI02UnxPrPoZKCSGwW54DhPxQSMqsl7ePWHdw605M0S/p1WCUrvf32+ykg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=py1Hb3E3; arc=none smtp.client-ip=209.85.214.180
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-pl1-f180.google.com with SMTP id d9443c01a7336-220c8f38febso108185555ad.2
+        for <linux-pm@vger.kernel.org>; Mon, 24 Feb 2025 19:19:08 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740453548; x=1741058348; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=okLfK2M0o/s/bLpxMLsbGPzJcNNKMZqAK2HxekDd8DY=;
+        b=py1Hb3E3rDZS37rGbAQxc6bvRBeJxEIiXYualP2BIlItr5Tyk/sfqsUoQ4rphouYXF
+         nrEvl70h/uXFeGaoDM+Ejgv265G7QLIYmNoRVKLKu9XVKn/LtOBE1y3zSuEh2fc86qlk
+         XwA9IRlIsJHDqzwB5/Mh8Eez2QrxDb/M6SwZeUhHoU6uyCqvkAX/cxdev0ma7b0vZ/xM
+         Sd65SW7BFYEkiVo2q8IwzxAs/+J6DZu5qDTL7qPhHqua70gOEirwaRhjzmdvcMpwslDE
+         xW5U13/cOl9FNcFYOgBH4/IhD1FCLwbKXlmaEqT3FpxKo1Ck72iYbf5d0SKx/YV1R2bq
+         R4Vw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740451262; x=1741056062;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :reply-to:in-reply-to:references:mime-version:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=GDRQSfyrqWB3i9K9f0iWL42UBxbxZ8n8vvLDHbOhuRA=;
-        b=aBXJKGzZFmdCJwyfgBQFFke/nEi9QOQmVWpFmQPl797FqhkXSqKwY0nLt4/oSAVxQv
-         P/Wh6JfPm7+k8yErXJvJaJKD+Cii0OxK3WdU1w/FIxBsDTMAsrZa6D5XoTKMNkkFaOt/
-         5fk7Fpa6U3n/RMYTVaifocc6mDavW+z4kUEe5lPcUFujoYAEkpzrNEX94Etk3d74dRVd
-         ZT0R342aYzP/NuhOK+HH9Rq9vNwpTa3FjmeYIgH0m9snse+YNY5qpWr6JM7woCSAauKE
-         5ST0VXgZw5TFsaUgB5ZlgWsY5X4oqRJPBSE3pbTaB63Qd46Wdw7ef4X7j99/2R+4QZkG
-         ny3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCUDDUtaVW3NumxzEMn7pqJSUez0BjYQQtWHGxpje/4Mm57fd0x9mNYKJZmAkkV1x5/PTxgU0seBvw1HNhE=@vger.kernel.org, AJvYcCWXwORBXNJmlZJOn//B5beCvR5PqBLs8rI85NGl2Ig3qsJT+MQ72tGjTqIZrumGjEUP6ahxonSg2+Y=@vger.kernel.org, AJvYcCXi3ayEcOfG99pXsIJnd8JXzpcdu5khluGUDqXUfh68z5a/yRVpMtNEIKWnfmdC/0Z2jo71UJdYEExd@vger.kernel.org
-X-Gm-Message-State: AOJu0YyysmYD0tSGrwFnpZVnrVHxWHwzpdqwNKrgAyb+X/vsM5SIMMz2
-	hVRA2a/vc7FnQF29xK1yXKxXIlsNDC73tQXyhZvJg04AI7vzzWVaKlhMfjtO
-X-Gm-Gg: ASbGncvT2lKI/TQ8afo3MVkpeTxqqIy0EFVHAaQzpFK5tuu/4+urSY+8XsnCyc7RPs5
-	4X4nDjJVsPzVRpO1whmKfZJgjRfVL8pO1+fgQXV1vD1BsmQ//ZF/2obA+fkoZMT+yi5z0tJyIxI
-	TDxve680du7A9QBdbBnOLCGFE3HWLcyJMPqfyccoyhvEyVqtirdTF3O62PHT0b+mTOz3KgYsrBu
-	Zeqpj41D6DeIpmxfz6FFgH6/uI2JWFAdRm94rj/rXiSTT9Ew+PDX6sTiy/9xEzKdT2il9/8V7na
-	8inm2h39Qm8QzzWnBhdGta5krItAaJK4OBYrD8BTx5p3Tvt4eeGqXQoHV3E=
-X-Google-Smtp-Source: AGHT+IEZe49LqgId3ON5wmec8micMrYJ/QvPiKVtwo4zNx+AQnvppoevZJTySU3BsuxH1cXelRGslA==
-X-Received: by 2002:a05:6512:104e:b0:545:ae6:d73f with SMTP id 2adb3069b0e04-548510ed625mr495420e87.46.1740451261935;
-        Mon, 24 Feb 2025 18:41:01 -0800 (PST)
-Received: from mail-lj1-f174.google.com (mail-lj1-f174.google.com. [209.85.208.174])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-548514bda6fsm59294e87.106.2025.02.24.18.41.00
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 24 Feb 2025 18:41:01 -0800 (PST)
-Received: by mail-lj1-f174.google.com with SMTP id 38308e7fff4ca-30613802a6bso53275491fa.1;
-        Mon, 24 Feb 2025 18:41:00 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWGJbWkaTPB4a+fP5QIaLYsnVGWbhzBvX1JSZ5UOZrIIjLp7xn7lUzKQZILYSRb1LaXyFORZJMjfL+Dkrs=@vger.kernel.org, AJvYcCWH/uNkGq4jrDbOrFfCbst/chgD6yJvE7nRGmH3tSVqgVkIFg/ss/GMVgBGFiG5o7i8LAaOGO4+rKQ=@vger.kernel.org, AJvYcCXVDHrJTrnPJyFVHJfzWXUmOSPHCEdoAZNaF5O4JVKYbMPHM2H6lj5zYlzIT105Cn0EaDOdX6qC8OGF@vger.kernel.org
-X-Received: by 2002:a2e:95ce:0:b0:302:1b18:2bfe with SMTP id
- 38308e7fff4ca-30a80c9a9bdmr5379131fa.25.1740451260110; Mon, 24 Feb 2025
- 18:41:00 -0800 (PST)
+        d=1e100.net; s=20230601; t=1740453548; x=1741058348;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=okLfK2M0o/s/bLpxMLsbGPzJcNNKMZqAK2HxekDd8DY=;
+        b=LL/SacNbjnkAgnQ5v4TacQaxN2VOKZtPt6eQWb60POm670l5qE3i9Yxs6auCmjblgm
+         lZGAT+xVICzY/C8Vdazbr4ZUpJJTpQSDSvL3avUvqV5mkflmor9mysjwjd0CwTIlgCZP
+         Ol6meGpsF+aUiKkgYLE0m/jzrFr9fGMLdYHGRczLYYwdE6C2q9Woc8lTT4HzqbmalAhY
+         AKgsB27Y5mAfeMAWoiF8JZje0NOELKxPnmfVNRv4ItwhVy3a3GvSckoIvE6dkl+qBStd
+         7bIKKr+M0LtuQBjLU6dt/TulMJHwbAKCRH7VM3IGu+Q5TftDNnPJi5czsu7YXDSJqIUi
+         lQMQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUMpFme0ub/QuySaCqJ3qELRNnxAPRmc3JEKSyTJ5uIVR4w5Y7QKwTq4QNnAMrBQUbOU9xzXZWogg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YymCIhwFnB4+Wgnn5KOcyLIaKTUWbKbKG5iuLZzP/YaSkrYMPbz
+	R+UqavIUpuBMxri1T1ynalIC4s645LptB255uQmAxs/R2CowlAuCCXyy2ROZn9k=
+X-Gm-Gg: ASbGncuO5eudTIRS8TyZ9YdFk9JZAZ63W32nT3Jc3aXKnQhMqiMml3XzhNcDsDaQt8K
+	ahtJCvidc3YmD02IpNxSYYc3Wz45SPl2JY9RHqm9F/kf0QX8BYFnmCpeSQ8eH7MeXf3hPaJe3Y2
+	53YDoMfkr8GUJAq7I2FA+ohiryO3yIs2aBIWAka6r0XYf3Vu9tKrX2z1wZuYZ+ib0d3C57JbPDE
+	aSPkOC/lEngPBH7KD1Vzu0VIVqrTQPc6PrwdDHGD8kZODfEgLf89lEF3qxpi9Nk0dA5plCFC365
+	I0gFsPiilf0UMIk9s85ScDYYk74=
+X-Google-Smtp-Source: AGHT+IGwP9mCcyL3DwKg0NjkD2F6ZEckc0c6miRTrYfkXRsNr8k5XeB4zhbt6QtFDhhSVbgmx1KyqA==
+X-Received: by 2002:a17:902:f60a:b0:216:7ee9:2227 with SMTP id d9443c01a7336-221a0015760mr244998305ad.36.1740453548105;
+        Mon, 24 Feb 2025 19:19:08 -0800 (PST)
+Received: from localhost ([122.172.84.15])
+        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2230a0b0df9sm3538785ad.241.2025.02.24.19.19.06
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 24 Feb 2025 19:19:07 -0800 (PST)
+Date: Tue, 25 Feb 2025 08:49:05 +0530
+From: Viresh Kumar <viresh.kumar@linaro.org>
+To: Yury Norov <yury.norov@gmail.com>
+Cc: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
+	Danilo Krummrich <dakr@redhat.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Alex Gaynor <alex.gaynor@gmail.com>,
+	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
+	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
+	Benno Lossin <benno.lossin@proton.me>,
+	Andreas Hindborg <a.hindborg@kernel.org>,
+	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
+	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
+	Vincent Guittot <vincent.guittot@linaro.org>,
+	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
+	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
+	Erik Schilling <erik.schilling@linaro.org>,
+	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
+	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
+	Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
+	John Hubbard <jhubbard@nvidia.com>, linux-pm@vger.kernel.org,
+	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 2/2] MAINTAINERS: add rust bindings entry for bitmap API
+Message-ID: <20250225031905.c63mg6hr4uddncbk@vireshk-i7>
+References: <20250224233938.3158-1-yury.norov@gmail.com>
+ <20250224233938.3158-3-yury.norov@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
- <20250225-psy-core-convert-to-fwnode-v1-4-d5e4369936bb@collabora.com>
-In-Reply-To: <20250225-psy-core-convert-to-fwnode-v1-4-d5e4369936bb@collabora.com>
-Reply-To: wens@csie.org
-From: Chen-Yu Tsai <wens@csie.org>
-Date: Tue, 25 Feb 2025 10:40:48 +0800
-X-Gmail-Original-Message-ID: <CAGb2v64h2znE6KpbWRPWD6ebN=aJpRiOUej82rRefAXoAW1R6Q@mail.gmail.com>
-X-Gm-Features: AWEUYZneU2nxWc2oRTXD4Kr8TpvpktBVkE5hzoKA5lPTcw0D_0oTFLZls5e3gIQ
-Message-ID: <CAGb2v64h2znE6KpbWRPWD6ebN=aJpRiOUej82rRefAXoAW1R6Q@mail.gmail.com>
-Subject: Re: [PATCH 4/7] power: supply: all: switch psy_cfg from of_node to fwnode
-To: Sebastian Reichel <sebastian.reichel@collabora.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Matti Vaittinen <mazziesaccount@gmail.com>, =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>, 
-	Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>, 
-	David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
-	Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Orson Zhai <orsonzhai@gmail.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, 
-	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org, 
-	linux-usb@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250224233938.3158-3-yury.norov@gmail.com>
 
-On Tue, Feb 25, 2025 at 7:22=E2=80=AFAM Sebastian Reichel
-<sebastian.reichel@collabora.com> wrote:
->
-> When registering a power-supply device, either a of_node or the more
-> recent fwnode can be supplied. Since fwnode can also contain an of_node,
-> let's try to get rid of it.
->
-> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+On 24-02-25, 18:39, Yury Norov wrote:
+> From: "Yury Norov [NVIDIA]" <yury.norov@gmail.com>
+> 
+> This entry enumerates bitmap and related APIs listed in BITMAP API entry
+> that rust requires but cannot use directly (i.e. inlined functions and
+> macros).
+> 
+> The "Rust kernel policy" (https://rust-for-linux.com/rust-kernel-policy)
+> document describes the special status of rust support:
+> 
+>   "Exceptionally, for Rust, a subsystem may allow to temporarily
+>    break Rust code."
+> 
+> Accordingly, the following policy applies to all interfaces under the
+> BITMAP API entry that are used in rust codebase, including those not
+> listed explicitly here.
+> 
+> Bitmap developers do their best to keep the API stable. When API or
+> user-visible behavior needs to be changed such that it breaks rust,
+> bitmap and rust developers collaborate as follows:
+>  - bitmap developers don't consider rust bindings as a blocker for the
+>    API change;
+>  - bindings maintainer (me) makes sure that kernel build doesn't break
+>    with CONFIG_RUST=y. This implies fixes in the binding layer, but not
+>    in rust codebase;
+>  - rust developers adopt new version of API in their codebase and remove
+>    unused bindings timely.
+> 
+> CC: Danilo Krummrich <dakr@redhat.com>
+> CC: Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>
+> CC: Viresh Kumar <viresh.kumar@linaro.org>
+> Signed-off-by: Yury Norov [NVIDIA] <yury.norov@gmail.com>
 > ---
+>  MAINTAINERS | 5 +++++
+>  1 file changed, 5 insertions(+)
 
->  drivers/power/supply/axp20x_ac_power.c      | 2 +-
->  drivers/power/supply/axp20x_battery.c       | 2 +-
->  drivers/power/supply/axp20x_usb_power.c     | 2 +-
+Reviewed-by: Viresh Kumar <viresh.kumar@linaro.org>
 
-For AXP stuff,
-
-Acked-by: Chen-Yu Tsai <wens@csie.org>
+-- 
+viresh
 
