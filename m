@@ -1,130 +1,151 @@
-Return-Path: <linux-pm+bounces-22869-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22870-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0DA81A43A4A
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 10:52:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D63FA43C22
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 11:47:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6B1F18884CE
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 09:51:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 373CD1661AB
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 10:47:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 76E5B2627EA;
-	Tue, 25 Feb 2025 09:50:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1CDD026561F;
+	Tue, 25 Feb 2025 10:47:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="SRJt0Gw/"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="XppyBFO1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f179.google.com (mail-pl1-f179.google.com [209.85.214.179])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE681214208
-	for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 09:50:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D911A207640;
+	Tue, 25 Feb 2025 10:47:46 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740477059; cv=none; b=dpi4pg55iXmcFSZpiP2lETyj7jN3VdetbcQbZ4dLs3ZSSUppULY9fe+MJxkUekyHvkVVOIoJzhmXhd7JNTAlBq6VTV5Jhgd7jwLlrGZ+ZoRa0ccRI2ra3hVsIlY+fSg9Tf3Xnf54Zr409Wdo2e5U/zuY8Ev00x8Kw+5PjH1qH2g=
+	t=1740480469; cv=none; b=WBOE8YDZzu/HCIYTh4zlGZWr7jc++AMyVsP5tFWQD3GtbN7DB+mGwIwADJzBzh/Gnq+WAg84IbcSquP7t22CStmT4Ivbbj8CxSVW1hprVbdvSSK4GQTHR7NHhnwpUDcDZCpTpAvGOc3MAGXsYur6hDIeK6uxBOzkbYRAFSxMXsU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740477059; c=relaxed/simple;
-	bh=p6BtO1SPEiYTgGfRVtTmaaauZNwaUPFNQtWx4//eHdw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=c/04IrRlToMDGzeOwAQFsf44L3nkJRtBQNtOTbmw0f60Pt4Br+I7xa424XfwzxLf4uJLLcY6OrQoHn5KGLoIq3M1kB7GsmOODdfOxPYV9NyRjgt7tHjjow75L5CFlUfXcsoahuJuhingloMa+A536PHkmI8B1+uj07NFDsaFbgg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=SRJt0Gw/; arc=none smtp.client-ip=209.85.214.179
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f179.google.com with SMTP id d9443c01a7336-22100006bc8so93899665ad.0
-        for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 01:50:57 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740477057; x=1741081857; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=mHFlVMAkFi70oXxJTi8F3j9ugzg66NFhSakMattK2Gg=;
-        b=SRJt0Gw/CBCRugy4nlXziSvNcuFA9XuJnuCc79uMJ5Kf6kJv49gMzEgroeE1vDtBhk
-         Q4Hf1CU/2BC0Ptn3WgGJ5rBtsLGVgyv9abpkBgy3zxKd/hb9+4BTQqV6roQLG49JR79E
-         6voI2Kv8ISOcsIDbKRGMWk5k3byp2LMoxhtrgvyHOGnxF/cb9bZkkk8Ag50A+Cccyg/j
-         F3xlKyrhll+RhDG0oRdg6Cbng4IchFRogcvrjyC4fPLr5Ovysnp0roDMjb3EtTHprP0a
-         /vkJjHnPybFnSfYoqN2+L1Gjmo3GPRd3Zk6pn4SvMG1oOXEI6tNab1KXDqIdOzlb2ClJ
-         Ut3w==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740477057; x=1741081857;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=mHFlVMAkFi70oXxJTi8F3j9ugzg66NFhSakMattK2Gg=;
-        b=JOxaW2twW1U4ucmfSYL62pxyZrGv57lfDZ6rSW1NkhUdHFpZSsRbINKlu/+1D5SRxW
-         TuPBPI07tDMAVTlpa3C7GdDdE33rUrjW7kExKP0vTm1fx+3FAL7bX5Hq5SR703kwJdPm
-         bQWkHV0zRvuEzUWE3q99k5Db1Cav70i7JueXbnpqhXJ73K8oE0wk38wM+Lw/3LFKfMts
-         nbYJ6EqNRS8SGq4GySJtv4exD5B0VzDX5EF8EYk6FBAXtOnQ7J3Xba/7J6CuAJOaLBEr
-         Q7gmZ2GJmZaqgDYehQgV35iORsQfEuPHihLCp/liV+oqh3LSGKAmycd/ywqoukroiLQq
-         1NBQ==
-X-Forwarded-Encrypted: i=1; AJvYcCW79RdoyfVsN3qlj0IRmna3jyHaCq+e4m1o6IwYm7JUj2d2vO5HRcI3cTwNEChJ17NUDbf3gD2DHA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4/MEUDHftvjANftNEoFFuopab9Oc+y9MokaRaGTQFJiyFQduo
-	6QpLG1wNhsmHgseEojPCS3Z7RQQkf5gqG2IqxFRQHzrQ0lUefHi0P3S0EmW0sXg=
-X-Gm-Gg: ASbGncu2STa/hRS3TZGxxoVvzpE/TUz1g4iyPCo5pRFOiFWmUyPhieZ+Rcm3QlccPic
-	pZtJ+f6LEEls/YbG+Tsm4/RIZwuD5MDwF6WpU3LkaA+E/WcFhZA4gEJwTD8BxQsslp1dVaELCmT
-	LzuXLYE5Wbj6kwfvVg8zStw7sXFJDGPPzk/Ek7ksGEOHqTnu/sb3a5PLXVWoWNm8uNTWgN3JrpU
-	GrWavku/l848wogg9Be7cw3x0/LFiFk9qbLMW6AZAHv2/TTwIuEhhEetKCsHe0fwwEVf5pTOTzH
-	BrjfsYJ+WJv3LdMx5eNmEbpukMM=
-X-Google-Smtp-Source: AGHT+IEh9+WnAiY4cGXADIGyyOzeQbN1kuedINyZawngjXfyPvJCRIP88vK4skeZvmAi6UCA6cE6vg==
-X-Received: by 2002:a05:6a00:929d:b0:730:8d0c:1064 with SMTP id d2e1a72fcca58-7347918cd47mr3591985b3a.18.1740477057199;
-        Tue, 25 Feb 2025 01:50:57 -0800 (PST)
-Received: from localhost ([122.172.84.15])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7347a6b8a82sm1071040b3a.6.2025.02.25.01.50.56
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 01:50:56 -0800 (PST)
-Date: Tue, 25 Feb 2025 15:20:54 +0530
-From: Viresh Kumar <viresh.kumar@linaro.org>
-To: Daniel Almeida <daniel.almeida@collabora.com>
-Cc: Yury Norov <yury.norov@gmail.com>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?utf-8?B?QmrDtnJu?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?utf-8?Q?Benn=C3=A9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
-	John Hubbard <jhubbard@nvidia.com>, linux-pm@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] rust: Add cpumask helpers
-Message-ID: <20250225095054.fp5xdolezdh2yalc@vireshk-i7>
-References: <20250224233938.3158-1-yury.norov@gmail.com>
- <20250224233938.3158-2-yury.norov@gmail.com>
- <9E7A81AA-6460-4F87-942E-2EEA145257F2@collabora.com>
+	s=arc-20240116; t=1740480469; c=relaxed/simple;
+	bh=/KNAMi38Asr2k99fcPjp85/r0zVkoFead7fJ8kaLyls=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=Pl8K9Qrab2fPgwMeewt3PSh+VryjfD7Cq4LWav2UfkNe/bfR7ojMbFSHcGrvx8Tr3yt1mkXsEyfec3D4Gi6rf0GKeErFX9bwq9kR3VZSgQ+tJEEUXyiEQShuGy9rgN810C3V9NVXzyoAxCRGdDoiJ6Ndt1bbTxPmrtbP78cyRS8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=XppyBFO1; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1740480465;
+	bh=/KNAMi38Asr2k99fcPjp85/r0zVkoFead7fJ8kaLyls=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=XppyBFO1zrWOk38LONjnkPJFbnC3SR/T47AtqinrOTthalqcfKkLojzzNkWn1mCTB
+	 WYaN+Ld3k6nhCSodMoQvHhBYYJ8UKNDSkepKJkQp0fsoh1nihxAcsCXv9XIyO+uAB9
+	 mwzdXn5zqNdNnwph2mE6RhpMFRywLpoArNhOp0u1O9D8lGhmaNfsMPkJjDfntGgeM/
+	 WpzAK8WpCs4wT9BsqfFRTGdvmc4TAZ9OfEq0YYDJwB2IBh0mg11VMs+rbUsPt1Yaks
+	 6uQE2XB/pwWdMdZruzbzMhCMTDPA6d5Gs/0/lXfTzDxGGP8UZ0T3TjBMfrdA66nOns
+	 PLGH0y/tgtnag==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id BDF2117E09E7;
+	Tue, 25 Feb 2025 11:47:43 +0100 (CET)
+Message-ID: <1bfe965c-c166-40d6-9cd4-e50fb46fab8f@collabora.com>
+Date: Tue, 25 Feb 2025 11:47:43 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <9E7A81AA-6460-4F87-942E-2EEA145257F2@collabora.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 4/7] power: supply: all: switch psy_cfg from of_node to
+ fwnode
+To: Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+ Matti Vaittinen <mazziesaccount@gmail.com>, =?UTF-8?Q?Pali_Roh=C3=A1r?=
+ <pali@kernel.org>, Paul Cercueil <paul@crapouillou.net>,
+ Samuel Holland <samuel@sholland.org>, David Lechner <david@lechnology.com>,
+ Krzysztof Kozlowski <krzk@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+ Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>, Orson Zhai <orsonzhai@gmail.com>,
+ Baolin Wang <baolin.wang@linux.alibaba.com>,
+ Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
+ <20250225-psy-core-convert-to-fwnode-v1-4-d5e4369936bb@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250225-psy-core-convert-to-fwnode-v1-4-d5e4369936bb@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On 25-02-25, 06:43, Daniel Almeida wrote:
-> I don’t understand what is going on here. You apparently did not provide the
-> Rust code itself.
+Il 25/02/25 00:21, Sebastian Reichel ha scritto:
+> When registering a power-supply device, either a of_node or the more
+> recent fwnode can be supplied. Since fwnode can also contain an of_node,
+> let's try to get rid of it.
 > 
-> Usually, when I see a “in order to prepare for …” I expect the actual patch to
-> follow in the same series.
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com> 
+#MediaTek
+
+> ---
+>   drivers/power/supply/ab8500_charger.c       | 4 ++--
+>   drivers/power/supply/acer_a500_battery.c    | 3 ++-
+>   drivers/power/supply/act8945a_charger.c     | 2 +-
+>   drivers/power/supply/axp20x_ac_power.c      | 2 +-
+>   drivers/power/supply/axp20x_battery.c       | 2 +-
+>   drivers/power/supply/axp20x_usb_power.c     | 2 +-
+>   drivers/power/supply/bd99954-charger.c      | 2 +-
+>   drivers/power/supply/bq2415x_charger.c      | 2 +-
+>   drivers/power/supply/bq24190_charger.c      | 2 +-
+>   drivers/power/supply/bq24735-charger.c      | 2 +-
+>   drivers/power/supply/bq2515x_charger.c      | 2 +-
+>   drivers/power/supply/bq256xx_charger.c      | 2 +-
+>   drivers/power/supply/bq25980_charger.c      | 2 +-
+>   drivers/power/supply/bq27xxx_battery.c      | 2 +-
+>   drivers/power/supply/cpcap-battery.c        | 2 +-
+>   drivers/power/supply/cpcap-charger.c        | 2 +-
+>   drivers/power/supply/ds2760_battery.c       | 3 +--
+>   drivers/power/supply/generic-adc-battery.c  | 2 +-
+>   drivers/power/supply/gpio-charger.c         | 2 +-
+>   drivers/power/supply/ingenic-battery.c      | 2 +-
+>   drivers/power/supply/ip5xxx_power.c         | 2 +-
+>   drivers/power/supply/lego_ev3_battery.c     | 3 ++-
+>   drivers/power/supply/lt3651-charger.c       | 2 +-
+>   drivers/power/supply/ltc4162-l-charger.c    | 2 +-
+>   drivers/power/supply/max17042_battery.c     | 2 +-
+>   drivers/power/supply/max77650-charger.c     | 2 +-
+>   drivers/power/supply/max8903_charger.c      | 2 +-
+>   drivers/power/supply/mm8013.c               | 2 +-
+>   drivers/power/supply/mt6360_charger.c       | 2 +-
+>   drivers/power/supply/mt6370-charger.c       | 2 +-
+>   drivers/power/supply/olpc_battery.c         | 4 ++--
+>   drivers/power/supply/pm8916_bms_vm.c        | 2 +-
+>   drivers/power/supply/pm8916_lbc.c           | 2 +-
+>   drivers/power/supply/qcom_battmgr.c         | 5 +++--
+>   drivers/power/supply/qcom_pmi8998_charger.c | 2 +-
+>   drivers/power/supply/qcom_smbb.c            | 2 +-
+>   drivers/power/supply/rk817_charger.c        | 2 +-
+>   drivers/power/supply/rt5033_battery.c       | 2 +-
+>   drivers/power/supply/rt5033_charger.c       | 3 ++-
+>   drivers/power/supply/rt9455_charger.c       | 2 +-
+>   drivers/power/supply/rt9467-charger.c       | 2 +-
+>   drivers/power/supply/rt9471.c               | 2 +-
+>   drivers/power/supply/sbs-battery.c          | 2 +-
+>   drivers/power/supply/sbs-charger.c          | 2 +-
+>   drivers/power/supply/sbs-manager.c          | 2 +-
+>   drivers/power/supply/sc2731_charger.c       | 2 +-
+>   drivers/power/supply/sc27xx_fuel_gauge.c    | 3 +--
+>   drivers/power/supply/smb347-charger.c       | 2 +-
+>   drivers/power/supply/tps65090-charger.c     | 2 +-
+>   drivers/power/supply/tps65217_charger.c     | 2 +-
+>   drivers/power/supply/ucs1002_power.c        | 2 +-
+>   51 files changed, 58 insertions(+), 56 deletions(-)
 > 
-> Right now - and correct me if I'm wrong - it seems like you’ve essentially added
-> dead code.
-
-Rust abstractions:
-
-https://lore.kernel.org/all/cover.1740475625.git.viresh.kumar@linaro.org/
-
--- 
-viresh
 
