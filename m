@@ -1,151 +1,98 @@
-Return-Path: <linux-pm+bounces-22938-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22939-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 71BB0A44D8D
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 21:35:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id ABC56A44DEF
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 21:44:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B309D18886D2
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 20:34:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05BC3162390
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 20:41:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9829E21325C;
-	Tue, 25 Feb 2025 20:30:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83E9519F41B;
+	Tue, 25 Feb 2025 20:41:16 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b="QDk/Ac62"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F11lASdP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-il1-f178.google.com (mail-il1-f178.google.com [209.85.166.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B94F021148F
-	for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 20:30:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD9F190051;
+	Tue, 25 Feb 2025 20:41:15 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740515443; cv=none; b=NwahE7gpySOOox0rykDYJRShueZWUtUMERj2btPQOoLqESx+f4eJKigBJ94BizR98hLd9V+BWX3XtiMbD40iI6truhiNtU7WutcW989POH8TlU4GH8ZeB8T4J/V84ImZLQe4cAT4L4Wk+Vp0jnoU4fSNFnnvdRN7pMISUkvDFkk=
+	t=1740516076; cv=none; b=lvwYgO5HIatfsJvP2nIqsMNnmSb1e10S/Mef73YX4pq1PpK9UYH08SDSzjcuNuey9M3EVaVMdkbeFYIf4trQNVvATstC/4r85gVHdSKXtwvHTutpdWJsBESM+ddTmCN7TSm+8Mq3yhq1b1wJKgQ4D1nIk+pjzfqDQm8YDK19tO4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740515443; c=relaxed/simple;
-	bh=2mVGB3ONfKEx7GJ+S6y95LCKLGj9XhJhILt75fQVfOw=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=Bra3v/73L7ymHO9qXqaFivGv0Eug6gMIwSkjeX2HGd2p7Qs5I3dEb4GCQX2VFAGgYq+/95Kpg4cgtEIM7wejlZbXkS4TSncun4C1/hFabuJZb9qffhG53eAnQs5+24ihE0BTaqzex6FxI+xckXA5X8pEeuDtE9JKfGFj83htfEE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk; spf=pass smtp.mailfrom=kernel.dk; dkim=pass (2048-bit key) header.d=kernel-dk.20230601.gappssmtp.com header.i=@kernel-dk.20230601.gappssmtp.com header.b=QDk/Ac62; arc=none smtp.client-ip=209.85.166.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=kernel.dk
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=kernel.dk
-Received: by mail-il1-f178.google.com with SMTP id e9e14a558f8ab-3cfc8772469so19427945ab.3
-        for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 12:30:40 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=kernel-dk.20230601.gappssmtp.com; s=20230601; t=1740515440; x=1741120240; darn=vger.kernel.org;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=pLp9Ea62UroP9Hu5zCjkj8kz5zOw20u3Q4aJrEzL0tk=;
-        b=QDk/Ac62IhNXGzKqngYdxZCSXbG5x8xmDSsbPgHkPXGRGhqIjqDGUiGjOIbLEotfcn
-         se3HyG1DX3SZks3sHjaY6okoeRFvBB28UNNWCtKlmSS+QyAwGicvJqcauIZFVZXiYKQU
-         GgzXL1VOQXUMriHNRAZrFoShny2wIC/1+jmbs9w9ym9u1Gc8Z0PCpMhRpodbcGwM+P4G
-         uwqOS3GH+wGHNc+y/i6iy5FR0l3xZ4BM2o5/R3ldtNz9Ln85GoYjxESZTB5rcK8ul0rU
-         mXkT0l3LrxssCkjCIwxLzbEHfq1DkRgLLy3fvpgeykTgkFbAUQqMwfGga9Lhpd3vXWDD
-         W+JQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740515440; x=1741120240;
-        h=content-transfer-encoding:mime-version:date:message-id:subject
-         :references:in-reply-to:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=pLp9Ea62UroP9Hu5zCjkj8kz5zOw20u3Q4aJrEzL0tk=;
-        b=Gtx9FKujzKOgkKQVkZRL1h6euVqyliJlecE1KY2uoqDnH89j8h2hlnjTk+FUsxlXPF
-         NMoPF/JAZ30PsE7rSUK2qsu35c/tDLHNqMCuQvXmizODBZmA8W+a6cbo3o7jka74rbTs
-         jErhoGtBPi3dq196HMJkVUKzEKrYIm1hdq8KybrQBRqc+HVzfqU4pqRgBDB8GZdXqUNf
-         MoxcIWetnbkdfufz1wZGg2MEmz0QnOGVSwGDqN0kxH+QQOBwmTEvtBbfrs1yWUgZOgIx
-         L1usOqja/EHnovHfHc+nCDaiUoHekEJkXz+Nuy0qIGJYncFjf5KGpp/1d6cy1UCyahMS
-         NUlQ==
-X-Forwarded-Encrypted: i=1; AJvYcCURbhhGv8H9G5OIk0AYbTPjbGskt+QlmsvzAvAMkra6tOc+htVxJZ301P8+oup9073+LjU5GGCN6g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yya0pSOL0wkwHu51Kdb79Qc4uMHAJk+Ok0X1e/TXPR7SFGYxTS1
-	xVRQK4uQNYySZC4gGHC8oZGR6tLYMeWgdhCXTjGrwOQtuCwwDnXBZ0lzL4zjnos=
-X-Gm-Gg: ASbGncv94efyLg8Si8b2nu5RUBYHyKbj/l8EasDKnNQvFIBLFPe7XIU+hu4tVTkZaQA
-	+L5IB5Apy76K2tXtWzFt3mwjDLLoL+lNELaMzbAjBOXEgVQTiCG67uy5bNCxYjtJzGBQ1mmTx/Q
-	zplsmSeYufXdy8IPqDvnzy6VWnSc51CGeiV3Hu3KkeWFyga7lEIhVEbJl9f6WYQeq/kSaTm3iGt
-	czC7gF0ElD4BeNdrMmYLusTlXY01edKbSytWlx0eHJ5LlxcA/a/Uj2rNePRDmPxSIhxh6Oc84kB
-	r/V9BjUoFOr9Ef5x
-X-Google-Smtp-Source: AGHT+IEI1HpA9fGHJ1GdkYmfu92FscKbuH3o9L2lVKiqa4D5puwjeIXVc4djLm6mFSVg2XH039gtQg==
-X-Received: by 2002:a05:6e02:b2a:b0:3d1:968a:6d46 with SMTP id e9e14a558f8ab-3d3d1f40415mr9808255ab.6.1740515439644;
-        Tue, 25 Feb 2025 12:30:39 -0800 (PST)
-Received: from [127.0.0.1] ([96.43.243.2])
-        by smtp.gmail.com with ESMTPSA id e9e14a558f8ab-3d361ca3896sm4764255ab.53.2025.02.25.12.30.37
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 25 Feb 2025 12:30:38 -0800 (PST)
-From: Jens Axboe <axboe@kernel.dk>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
- Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>, 
- James Smart <james.smart@broadcom.com>, 
- Dick Kennedy <dick.kennedy@broadcom.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
- David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
- Dongsheng Yang <dongsheng.yang@easystack.cn>, Xiubo Li <xiubli@redhat.com>, 
- Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>, 
- Carlos Maiolino <cem@kernel.org>, "Darrick J. Wong" <djwong@kernel.org>, 
- Sebastian Reichel <sre@kernel.org>, Keith Busch <kbusch@kernel.org>, 
- Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>, 
- Frank Li <Frank.Li@nxp.com>, Mark Brown <broonie@kernel.org>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
- Hans de Goede <hdegoede@redhat.com>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
- Selvin Xavier <selvin.xavier@broadcom.com>, 
- Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: cocci@inria.fr, linux-kernel@vger.kernel.org, 
- linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
- ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
- linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
- linux-spi@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
- ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org, 
- Takashi Iwai <tiwai@suse.de>, Carlos Maiolino <cmaiolino@redhat.com>
-In-Reply-To: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
-References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
-Subject: Re: (subset) [PATCH v3 00/16] Converge on using secs_to_jiffies()
- part two
-Message-Id: <174051543709.2186691.13969880655903967909.b4-ty@kernel.dk>
-Date: Tue, 25 Feb 2025 13:30:37 -0700
+	s=arc-20240116; t=1740516076; c=relaxed/simple;
+	bh=LiVhDem361FjqfGK+J/ahXdQ9J+E267lgyazNH2yhi8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=aa5VSYogXQTzGfAcj5M5ARa9N6mW9iTfLXc5kovToga2HQV8758KUfsSILTnBkgLBiRKm1L/yipHGR/DrZrKmY6VY++5V655Or0rCcUd0X7hd7/3AdejDr/qybe2ZlKFPdll+d7kM1ECfK9HXftEUx/mHx51CqrOrtWSwKMpvzg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F11lASdP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDB4C4CEDD;
+	Tue, 25 Feb 2025 20:41:15 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740516075;
+	bh=LiVhDem361FjqfGK+J/ahXdQ9J+E267lgyazNH2yhi8=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=F11lASdPbzXg7mANBVQlRFzgR/91x+1f1GT6nM7vqP3tiaT1nLvEG+0H/6bay/D3C
+	 2soIDbmbAaMuP3MwJM1iEgNqSl2/9hxJRp3yU7vcobgtmGhUCeVe4BjgU0CCvZvDRX
+	 XbyqqGNx3v6BjI+P/X0lbLNbDuCnIwpNFCNqfA9oo5mRHWeidzibV+RIVZdMW1S5P8
+	 IvglkGpvI0stH2tuWkAz2Cxkyy8C2G3OV8lCC4PHk+FgAoop3MkQvWvQF3u8IlKKub
+	 DTnucELvNjcipckaCJFqPRe6GvqL9PpICzd1ZIm4Ts/D7BfBc0Fg+QCESEd6U47QJB
+	 QEOZySg+TtdWg==
+Date: Tue, 25 Feb 2025 12:41:12 -0800
+From: Kees Cook <kees@kernel.org>
+To: Huacai Chen <chenhuacai@kernel.org>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	"Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>,
+	Huacai Chen <chenhuacai@loongson.cn>,
+	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
+	Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org,
+	GONG Ruiqi <gongruiqi@huaweicloud.com>,
+	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org,
+	Yuli Wang <wangyuli@uniontech.com>,
+	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
+	David Rientjes <rientjes@google.com>,
+	Roman Gushchin <roman.gushchin@linux.dev>,
+	Pekka Enberg <penberg@kernel.org>,
+	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
+	GONG Ruiqi <gongruiqi1@huawei.com>
+Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
+ Initialise random_kmalloc_seed after initcalls)
+Message-ID: <202502251240.49E8674AD@keescook>
+References: <20250212141648.599661-1-chenhuacai@loongson.cn>
+ <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
+ <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
+ <Z68N4lTIIwudzcLY@MacBook-Air-5.local>
+ <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
+ <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
+ <202502190921.6E26F49@keescook>
+ <CAJZ5v0hZZdRPwp=OgPw4w8r9X=VbL6Hn6R4ZX6ZujNhBmMV3_A@mail.gmail.com>
+ <CAAhV-H5UaEbA0DrAUfROJoiatwrjsge4DNcVTJi=8vtk2Zn+tQ@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.14.3-dev-94c79
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <CAAhV-H5UaEbA0DrAUfROJoiatwrjsge4DNcVTJi=8vtk2Zn+tQ@mail.gmail.com>
 
+On Tue, Feb 25, 2025 at 07:35:13PM +0800, Huacai Chen wrote:
+> I have investigated deeper, and then found it is an arch-specific
+> problem (at least for LoongArch), and the correct solution is here:
+> https://lore.kernel.org/loongarch/20250225111812.3065545-1-chenhuacai@loongson.cn/T/#u
 
-On Tue, 25 Feb 2025 20:17:14 +0000, Easwar Hariharan wrote:
-> This is the second series (part 1*) that converts users of msecs_to_jiffies() that
-> either use the multiply pattern of either of:
-> - msecs_to_jiffies(N*1000) or
-> - msecs_to_jiffies(N*MSEC_PER_SEC)
-> 
-> where N is a constant or an expression, to avoid the multiplication.
-> 
-> [...]
+Ah-ha, so it seems like some system start was being incorrectly shared
+between restoration image and hibernated image? Yeah, that's important
+to fix.
 
-Applied, thanks!
+> But I don't know how to fix arm64.
 
-[06/16] rbd: convert timeouts to secs_to_jiffies()
-        commit: c02eea7eeaebd7270cb8ff09049cc7e0fc9bc8da
+Is arm64 broken in this same way?
 
-Best regards,
 -- 
-Jens Axboe
-
-
-
+Kees Cook
 
