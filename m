@@ -1,317 +1,226 @@
-Return-Path: <linux-pm+bounces-22857-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22853-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 61B1EA4331E
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 03:35:56 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B1E2A43275
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 02:29:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4C7BE173C29
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 02:35:55 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id E536A7A86B6
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 01:28:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id BB8E61624D4;
-	Tue, 25 Feb 2025 02:35:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1C8D41CD2C;
+	Tue, 25 Feb 2025 01:29:24 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ujScPUBX"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="MLzBc8NN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 91ADE1624C7;
-	Tue, 25 Feb 2025 02:35:21 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0A7D179A3
+	for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 01:29:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740450921; cv=none; b=s4c5rEFza4C1RYuztaAZiuSdp5ZX7H42WlHJX8HyfmGnQM4TFq5eaMML4Ax+YAdRThdUMipSa7peD+bqDbPti8WK/BTlvRHCzDX1ED30rxjpOYcmNqbTWsUyhB5yWPky+aGE3b0M55u0gS6T/s+H7zkssOGj2CCm2cz0kE/nkig=
+	t=1740446964; cv=none; b=Y4TgmJCsoOPg/4g+mtlzZAqhlF9owkrlzDYUQwFZfhhbnPyAmqDrvLv4Heh3AmU88E7ktjvEBcF+a2ncN4oCMmobEXZtigp+3ghB9UhwFBO3gSKIgzf6nXgkW5XvR9ryoeavAq2buEKQGK72MsJWB9/M2PpjH67jaNfl4IsOwlg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740450921; c=relaxed/simple;
-	bh=yI3U9kFvQuboZ2tG8G24IVcpAGjmPqYpf3KrY/IyXO8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Zd/7phsUH/ROE2ILvD+O+XqWJD+wt3v5HulXOmV4MrfSWZAQQUFDO4KVpmNUBUVN7rynPQbfqbu552rsEe2wkp0kJvrqsEC7kI27Xyrw8ZLds59As/JBJBE+ZkbpMN3dIvtL9RqsF2ujV90aKV3qg9Dw6W6cb0aBcw2Q8mvqC1w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ujScPUBX; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id AB5ACC4CEE6;
-	Tue, 25 Feb 2025 02:35:20 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740450921;
-	bh=yI3U9kFvQuboZ2tG8G24IVcpAGjmPqYpf3KrY/IyXO8=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=ujScPUBXNG0Hja+fR8/f5QdSCju2RnGIvY1VLPb7JA3kxy6FrlIG/bQbyXDVr2FpI
-	 Xa4VDgljHPkmJdPHMyXCGZaQUmmzkT1GGV5jGVDxLpsFd/nNvUoY34TY8AoXKdZ5Af
-	 k2k2crtqkpTwwD3pT4r4aniC8LHQGA4ljJO/8m6414C1KoIRFVSl6S2dMgfhf5R40x
-	 FLod1Kt7TalcUQHYlICD/WJgEXeFYurKYPwYE/qiRBx4qxwB6Sfiai72H1wZW2PM7s
-	 cCmXEj3ZUGaV4cOOz0oalR52PtRDGKxxgPwQz6VJfLsEqBju2hxrUOtB5Ie1zusl9S
-	 yEGEz3znia/cg==
-Message-ID: <9db9da8f-859d-4e23-94ca-e14905c8c6c7@kernel.org>
-Date: Mon, 24 Feb 2025 18:29:05 -0600
+	s=arc-20240116; t=1740446964; c=relaxed/simple;
+	bh=8LM1UGiW2is14hfEDZWL5MQwOyaniv1dQ500a99X/qo=;
+	h=Date:From:To:Cc:Subject:Message-ID; b=gtwXpu6u+Kwzh4AmkVYiak/dqVbY3mFpzSuroORBaKy5KXRiR7L7GW1HGpSFyRDeDmVum/UlFYEIyvtwo8m4iIR+9v8oD5Vri/MSUJToZ1HmFHWFhPeoQ5vcUZkE/g6/SsvS737qlffUC3yjcDZiE0VRoDGxTei/lCFn3i0zSnc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=MLzBc8NN; arc=none smtp.client-ip=192.198.163.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1740446962; x=1771982962;
+  h=date:from:to:cc:subject:message-id;
+  bh=8LM1UGiW2is14hfEDZWL5MQwOyaniv1dQ500a99X/qo=;
+  b=MLzBc8NNraag09WcvzFDCwf2o6gPdQDH6qAXJvGeVt+PFCyHfeoGdYlE
+   2zzlywumnrBb/h81L4VFg4ooW7VC8hIQEG8STIwO2QihE0e32E0MFv6Fb
+   cOLSgNK26SepUKceICSWt+F5v9BSeTTwZBKYjVdlTCLmZ7N4Ltld39uSw
+   rZ1xSRpfM7aYZZWNE5EyedxtOftMctcZDmkxvxCPQDr+3QdXlpy1p6e7y
+   ylWhsZASPyqM58TuKlsGUlhF1cmUYMQD+KY74Bg8AmqUg6VLUxvhd9SiV
+   CZdTMAMbToH2gY/bzB0W9pcCtVha8On1362LkfAaT7ilUbkutrbDYKCgf
+   Q==;
+X-CSE-ConnectionGUID: aO1cDF2RRFi//cpf4B3zqQ==
+X-CSE-MsgGUID: xiOeXIMDQxK+FKbVRKwvSw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11355"; a="66604139"
+X-IronPort-AV: E=Sophos;i="6.13,312,1732608000"; 
+   d="scan'208";a="66604139"
+Received: from fmviesa006.fm.intel.com ([10.60.135.146])
+  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 24 Feb 2025 17:29:21 -0800
+X-CSE-ConnectionGUID: chWzXwcfSMO1zQUmg+tFVg==
+X-CSE-MsgGUID: AGe+TTExQsGZvCWsjmRKGw==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.13,312,1732608000"; 
+   d="scan'208";a="116045630"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by fmviesa006.fm.intel.com with ESMTP; 24 Feb 2025 17:29:20 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tmjl3-0009aB-38;
+	Tue, 25 Feb 2025 01:29:15 +0000
+Date: Tue, 25 Feb 2025 09:29:09 +0800
+From: kernel test robot <lkp@intel.com>
+To: Mario Limonciello <mario.limonciello@amd.com>
+Cc: linux-pm@vger.kernel.org
+Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
+ 3e93edc58a63cf816e6dc853da8e9b0201bd0298
+Message-ID: <202502250903.LO2AQwZ5-lkp@intel.com>
+User-Agent: s-nail v14.9.24
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 04/18] cpufreq/amd-pstate: Move perf values into a
- union
-To: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
- "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
- Perry Yuan <perry.yuan@amd.com>
-Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250217220707.1468365-1-superm1@kernel.org>
- <20250217220707.1468365-5-superm1@kernel.org>
- <ccac287d-5bde-4b0d-a1d6-b1e8b5f4e6cb@amd.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <ccac287d-5bde-4b0d-a1d6-b1e8b5f4e6cb@amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
 
-On 2/19/2025 04:57, Dhananjay Ugwekar wrote:
-> On 2/18/2025 3:36 AM, Mario Limonciello wrote:
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> By storing perf values in a union all the writes and reads can
->> be done atomically, removing the need for some concurrency protections.
->>
->> While making this change, also drop the cached frequency values,
->> using inline helpers to calculate them on demand from perf value.
->>
->> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->> v3:
->>   * Pick up tag
->> v2:
->>   * cache perf variable in unit tests
->>   * Drop unnecessary check from amd_pstate_update_min_max_limit()
->>   * Consistency with READ_ONCE()
->>   * Drop unneeded policy checks
->>   * add kdoc
->> ---
->>   drivers/cpufreq/amd-pstate-ut.c |  18 +--
->>   drivers/cpufreq/amd-pstate.c    | 195 ++++++++++++++++++--------------
->>   drivers/cpufreq/amd-pstate.h    |  49 +++++---
->>   3 files changed, 151 insertions(+), 111 deletions(-)
->>
->> diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
->> index 445278cf40b61..ba3e06f349c6d 100644
->> --- a/drivers/cpufreq/amd-pstate-ut.c
->> +++ b/drivers/cpufreq/amd-pstate-ut.c
->> @@ -129,6 +129,7 @@ static void amd_pstate_ut_check_perf(u32 index)
->>   	struct cppc_perf_caps cppc_perf;
->>   	struct cpufreq_policy *policy = NULL;
->>   	struct amd_cpudata *cpudata = NULL;
->> +	union perf_cached cur_perf;
->>   
->>   	for_each_possible_cpu(cpu) {
->>   		policy = cpufreq_cpu_get(cpu);
->> @@ -162,19 +163,20 @@ static void amd_pstate_ut_check_perf(u32 index)
->>   			lowest_perf = AMD_CPPC_LOWEST_PERF(cap1);
->>   		}
->>   
->> -		if (highest_perf != READ_ONCE(cpudata->highest_perf) && !cpudata->hw_prefcore) {
->> +		cur_perf = READ_ONCE(cpudata->perf);
->> +		if (highest_perf != cur_perf.highest_perf && !cpudata->hw_prefcore) {
->>   			pr_err("%s cpu%d highest=%d %d highest perf doesn't match\n",
->> -				__func__, cpu, highest_perf, cpudata->highest_perf);
->> +				__func__, cpu, highest_perf, cpudata->perf.highest_perf);
-> 						  Can we use cur_perf.highest_perf here ?
+tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
+branch HEAD: 3e93edc58a63cf816e6dc853da8e9b0201bd0298  cpufreq/amd-pstate: Remove the unncecessary driver_lock in amd_pstate_update_limits
 
-Ack.
+elapsed time: 1452m
 
-> 
->>   			goto skip_test;
->>   		}
->> -		if ((nominal_perf != READ_ONCE(cpudata->nominal_perf)) ||
->> -			(lowest_nonlinear_perf != READ_ONCE(cpudata->lowest_nonlinear_perf)) ||
->> -			(lowest_perf != READ_ONCE(cpudata->lowest_perf))) {
->> +		if (nominal_perf != cur_perf.nominal_perf ||
->> +		   (lowest_nonlinear_perf != cur_perf.lowest_nonlinear_perf) ||
->> +		   (lowest_perf != cur_perf.lowest_perf)) {
->>   			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
->>   			pr_err("%s cpu%d nominal=%d %d lowest_nonlinear=%d %d lowest=%d %d, they should be equal!\n",
->> -				__func__, cpu, nominal_perf, cpudata->nominal_perf,
->> -				lowest_nonlinear_perf, cpudata->lowest_nonlinear_perf,
->> -				lowest_perf, cpudata->lowest_perf);
->> +				__func__, cpu, nominal_perf, cpudata->perf.nominal_perf,
->> +				lowest_nonlinear_perf, cpudata->perf.lowest_nonlinear_perf,
->> +				lowest_perf, cpudata->perf.lowest_perf);
-> 			          Can we use cur_perf.(nominal/lowest_nonlinear/lowest)_perf here as well ?			
+configs tested: 133
+configs skipped: 4
 
-Ack.
-			
-> 
->>   			goto skip_test;
->>   		}
->>
-> [Snip]
->> @@ -888,25 +896,24 @@ static u32 amd_pstate_get_transition_latency(unsigned int cpu)
->>   }
->>   
->>   /*
->> - * amd_pstate_init_freq: Initialize the max_freq, min_freq,
->> - *                       nominal_freq and lowest_nonlinear_freq for
->> - *                       the @cpudata object.
->> + * amd_pstate_init_freq: Initialize the nominal_freq and lowest_nonlinear_freq
->> + *			 for the @cpudata object.
->>    *
->> - *  Requires: highest_perf, lowest_perf, nominal_perf and
->> - *            lowest_nonlinear_perf members of @cpudata to be
->> - *            initialized.
->> + * Requires: all perf members of @cpudata to be initialized.
->>    *
->> - *  Returns 0 on success, non-zero value on failure.
->> + * Returns 0 on success, non-zero value on failure.
->>    */
->>   static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
->>   {
->> -	int ret;
->>   	u32 min_freq, nominal_freq, lowest_nonlinear_freq;
->>   	struct cppc_perf_caps cppc_perf;
->> +	union perf_cached perf;
->> +	int ret;
->>   
->>   	ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
->>   	if (ret)
->>   		return ret;
->> +	perf = READ_ONCE(cpudata->perf);
->>   
->>   	if (quirks && quirks->nominal_freq)
->>   		nominal_freq = quirks->nominal_freq;
->> @@ -918,6 +925,7 @@ static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
->>   
->>   	if (quirks && quirks->lowest_freq) {
->>   		min_freq = quirks->lowest_freq;
->> +		perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
-> 
-> I think we forgot to write back this value to the cpudata->perf variable
+The following configs have been built successfully.
+More configs may be tested in the coming days.
 
-Ack, great catch.
+tested configs:
+alpha                             allnoconfig    gcc-14.2.0
+alpha                            allyesconfig    gcc-14.2.0
+alpha                               defconfig    gcc-14.2.0
+arc                              allmodconfig    gcc-13.2.0
+arc                               allnoconfig    gcc-13.2.0
+arc                              allyesconfig    gcc-13.2.0
+arc                                 defconfig    gcc-13.2.0
+arc                   randconfig-001-20250224    gcc-13.2.0
+arc                   randconfig-002-20250224    gcc-13.2.0
+arm                              allmodconfig    gcc-14.2.0
+arm                               allnoconfig    clang-17
+arm                              allyesconfig    gcc-14.2.0
+arm                      footbridge_defconfig    clang-17
+arm                      jornada720_defconfig    clang-21
+arm                   randconfig-001-20250224    gcc-14.2.0
+arm                   randconfig-002-20250224    gcc-14.2.0
+arm                   randconfig-003-20250224    gcc-14.2.0
+arm                   randconfig-004-20250224    gcc-14.2.0
+arm                        shmobile_defconfig    gcc-14.2.0
+arm                         socfpga_defconfig    gcc-14.2.0
+arm                        vexpress_defconfig    gcc-14.2.0
+arm64                            allmodconfig    clang-18
+arm64                             allnoconfig    gcc-14.2.0
+arm64                 randconfig-001-20250224    gcc-14.2.0
+arm64                 randconfig-002-20250224    clang-21
+arm64                 randconfig-003-20250224    gcc-14.2.0
+arm64                 randconfig-004-20250224    gcc-14.2.0
+csky                              allnoconfig    gcc-14.2.0
+csky                                defconfig    gcc-14.2.0
+csky                  randconfig-001-20250224    gcc-14.2.0
+csky                  randconfig-002-20250224    gcc-14.2.0
+hexagon                          allmodconfig    clang-21
+hexagon                           allnoconfig    clang-21
+hexagon                          allyesconfig    clang-18
+hexagon                             defconfig    clang-21
+hexagon               randconfig-001-20250224    clang-21
+hexagon               randconfig-002-20250224    clang-21
+i386                             allmodconfig    gcc-12
+i386                              allnoconfig    gcc-12
+i386                             allyesconfig    gcc-12
+i386        buildonly-randconfig-001-20250224    clang-19
+i386        buildonly-randconfig-002-20250224    gcc-12
+i386        buildonly-randconfig-003-20250224    clang-19
+i386        buildonly-randconfig-004-20250224    gcc-12
+i386        buildonly-randconfig-005-20250224    clang-19
+i386        buildonly-randconfig-006-20250224    clang-19
+i386                                defconfig    clang-19
+loongarch                        allmodconfig    gcc-14.2.0
+loongarch                         allnoconfig    gcc-14.2.0
+loongarch                 loongson3_defconfig    gcc-14.2.0
+loongarch             randconfig-001-20250224    gcc-14.2.0
+loongarch             randconfig-002-20250224    gcc-14.2.0
+m68k                             allmodconfig    gcc-14.2.0
+m68k                              allnoconfig    gcc-14.2.0
+m68k                             allyesconfig    gcc-14.2.0
+microblaze                       allmodconfig    gcc-14.2.0
+microblaze                        allnoconfig    gcc-14.2.0
+microblaze                       allyesconfig    gcc-14.2.0
+mips                              allnoconfig    gcc-14.2.0
+nios2                             allnoconfig    gcc-14.2.0
+nios2                 randconfig-001-20250224    gcc-14.2.0
+nios2                 randconfig-002-20250224    gcc-14.2.0
+openrisc                          allnoconfig    gcc-14.2.0
+openrisc                         allyesconfig    gcc-14.2.0
+openrisc                            defconfig    gcc-14.2.0
+parisc                           allmodconfig    gcc-14.2.0
+parisc                            allnoconfig    gcc-14.2.0
+parisc                           allyesconfig    gcc-14.2.0
+parisc                              defconfig    gcc-14.2.0
+parisc                randconfig-001-20250224    gcc-14.2.0
+parisc                randconfig-002-20250224    gcc-14.2.0
+powerpc                          allmodconfig    gcc-14.2.0
+powerpc                           allnoconfig    gcc-14.2.0
+powerpc                          allyesconfig    clang-16
+powerpc                       holly_defconfig    clang-21
+powerpc                  mpc866_ads_defconfig    clang-21
+powerpc                    mvme5100_defconfig    gcc-14.2.0
+powerpc               randconfig-001-20250224    gcc-14.2.0
+powerpc               randconfig-002-20250224    gcc-14.2.0
+powerpc               randconfig-003-20250224    gcc-14.2.0
+powerpc64             randconfig-001-20250224    gcc-14.2.0
+powerpc64             randconfig-002-20250224    clang-18
+powerpc64             randconfig-003-20250224    gcc-14.2.0
+riscv                            allmodconfig    clang-21
+riscv                             allnoconfig    gcc-14.2.0
+riscv                            allyesconfig    clang-21
+riscv                               defconfig    clang-19
+riscv                 randconfig-001-20250224    gcc-14.2.0
+riscv                 randconfig-002-20250224    clang-18
+s390                             allmodconfig    clang-19
+s390                              allnoconfig    clang-15
+s390                             allyesconfig    gcc-14.2.0
+s390                                defconfig    clang-15
+s390                  randconfig-001-20250224    gcc-14.2.0
+s390                  randconfig-002-20250224    clang-17
+sh                               allmodconfig    gcc-14.2.0
+sh                                allnoconfig    gcc-14.2.0
+sh                               allyesconfig    gcc-14.2.0
+sh                                  defconfig    gcc-14.2.0
+sh                          landisk_defconfig    gcc-14.2.0
+sh                    randconfig-001-20250224    gcc-14.2.0
+sh                    randconfig-002-20250224    gcc-14.2.0
+sh                           se7343_defconfig    gcc-14.2.0
+sparc                            alldefconfig    gcc-14.2.0
+sparc                            allmodconfig    gcc-14.2.0
+sparc                             allnoconfig    gcc-14.2.0
+sparc                 randconfig-001-20250224    gcc-14.2.0
+sparc                 randconfig-002-20250224    gcc-14.2.0
+sparc                       sparc32_defconfig    gcc-14.2.0
+sparc64                             defconfig    gcc-14.2.0
+sparc64               randconfig-001-20250224    gcc-14.2.0
+sparc64               randconfig-002-20250224    gcc-14.2.0
+um                               allmodconfig    clang-21
+um                                allnoconfig    clang-18
+um                               allyesconfig    gcc-12
+um                                  defconfig    clang-21
+um                             i386_defconfig    gcc-12
+um                    randconfig-001-20250224    gcc-12
+um                    randconfig-002-20250224    gcc-12
+um                           x86_64_defconfig    clang-15
+x86_64                            allnoconfig    clang-19
+x86_64                           allyesconfig    clang-19
+x86_64      buildonly-randconfig-001-20250224    gcc-11
+x86_64      buildonly-randconfig-002-20250224    gcc-12
+x86_64      buildonly-randconfig-003-20250224    clang-19
+x86_64      buildonly-randconfig-004-20250224    gcc-12
+x86_64      buildonly-randconfig-005-20250224    clang-19
+x86_64      buildonly-randconfig-006-20250224    clang-19
+x86_64                              defconfig    gcc-11
+xtensa                            allnoconfig    gcc-14.2.0
+xtensa                  audio_kc705_defconfig    gcc-14.2.0
+xtensa                randconfig-001-20250224    gcc-14.2.0
+xtensa                randconfig-002-20250224    gcc-14.2.0
 
-> 
->>   	} else
->>   		min_freq = cppc_perf.lowest_freq;
->>   	min_freq *= 1000;
->> @@ -934,7 +942,7 @@ static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
->>   		return -EINVAL;
->>   	}
->>   
->> -	lowest_nonlinear_freq = perf_to_freq(cpudata, cpudata->lowest_nonlinear_perf);
->> +	lowest_nonlinear_freq = perf_to_freq(perf, nominal_freq, perf.lowest_nonlinear_perf);
->>   	WRITE_ONCE(cpudata->lowest_nonlinear_freq, lowest_nonlinear_freq);
->>   
->>   	if (lowest_nonlinear_freq <= min_freq || lowest_nonlinear_freq > nominal_freq) {
-> [Snip]
->> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
->> index 0149933692458..8421c83c07919 100644
->> --- a/drivers/cpufreq/amd-pstate.h
->> +++ b/drivers/cpufreq/amd-pstate.h
->> @@ -13,6 +13,34 @@
->>   /*********************************************************************
->>    *                        AMD P-state INTERFACE                       *
->>    *********************************************************************/
->> +
->> +/**
->> + * union perf_cached - A union to cache performance-related data.
->> + * @highest_perf: the maximum performance an individual processor may reach,
->> + *		  assuming ideal conditions
->> + *		  For platforms that do not support the preferred core feature, the
->> + *		  highest_pef may be configured with 166 or 255, to avoid max frequency
-> 
-> s/highest_pef/highest_perf/
-> 
-> Also I think this statement is bit confusing, how about,
-> 
-> "For platforms that support the preferred core feature, the highest_perf value maybe
-> configured to any value in the range 166-256 by the firmware (because the preferred
-> core ranking is encoded in the highest_perf value). To maintain consistency across
-> all platforms, we split the highest_perf and preferred core ranking values into
-> cpudata->perf.highest_perf and cpudata->prefcore_ranking."
-
-I like it, thanks.
-
-> 
->> + *		  calculated wrongly. we take the fixed value as the highest_perf.
->> + * @nominal_perf: the maximum sustained performance level of the processor,
->> + *		  assuming ideal operating conditions
->> + * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
->> + *			   savings are achieved
->> + * @lowest_perf: the absolute lowest performance level of the processor
->> + * @min_limit_perf: Cached value of the performance corresponding to policy->min
->> + * @max_limit_perf: Cached value of the performance corresponding to policy->max
->> + */
->> +union perf_cached {
->> +	struct {
->> +		u8	highest_perf;
->> +		u8	nominal_perf;
->> +		u8	lowest_nonlinear_perf;
->> +		u8	lowest_perf;
->> +		u8	min_limit_perf;
->> +		u8	max_limit_perf;
-> 
-> Just a thought, how about adding the "u8 desired_perf" (last requested) and "u8 prefcore_ranking"
-> in this. We can pursue it as a separate patch if you want.
-> 
-> I think there is value in adding desired_perf atleast, so that when we are caching the
-> min, max limits in the perf_cached variable, desired perf level is also atomically
-> updated into the shared cpudata structure.
-
-Can you see if there is any performance advantage to caching these?
-If there is, can you please do a follow up to my v5 series?
-
-It's going to mean another write in amd_pstate_update() potentially.
-
-> 
-> Thanks,
-> Dhananjay
-> 
->> +	};
->> +	u64	val;
->> +};
->> +
->>   /**
->>    * struct  amd_aperf_mperf
->>    * @aperf: actual performance frequency clock count
->> @@ -30,20 +58,9 @@ struct amd_aperf_mperf {
->>    * @cpu: CPU number
->>    * @req: constraint request to apply
->>    * @cppc_req_cached: cached performance request hints
->> - * @highest_perf: the maximum performance an individual processor may reach,
->> - *		  assuming ideal conditions
->> - *		  For platforms that do not support the preferred core feature, the
->> - *		  highest_pef may be configured with 166 or 255, to avoid max frequency
->> - *		  calculated wrongly. we take the fixed value as the highest_perf.
->> - * @nominal_perf: the maximum sustained performance level of the processor,
->> - *		  assuming ideal operating conditions
->> - * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
->> - *			   savings are achieved
->> - * @lowest_perf: the absolute lowest performance level of the processor
->> + * @perf: cached performance-related data
->>    * @prefcore_ranking: the preferred core ranking, the higher value indicates a higher
->>    * 		  priority.
->> - * @min_limit_perf: Cached value of the performance corresponding to policy->min
->> - * @max_limit_perf: Cached value of the performance corresponding to policy->max
->>    * @min_limit_freq: Cached value of policy->min (in khz)
->>    * @max_limit_freq: Cached value of policy->max (in khz)
->>    * @nominal_freq: the frequency (in khz) that mapped to nominal_perf
->> @@ -68,13 +85,9 @@ struct amd_cpudata {
->>   	struct	freq_qos_request req[2];
->>   	u64	cppc_req_cached;
->>   
->> -	u8	highest_perf;
->> -	u8	nominal_perf;
->> -	u8	lowest_nonlinear_perf;
->> -	u8	lowest_perf;
->> +	union perf_cached perf;
->> +
->>   	u8	prefcore_ranking;
->> -	u8	min_limit_perf;
->> -	u8	max_limit_perf;
->>   	u32	min_limit_freq;
->>   	u32	max_limit_freq;
->>   	u32	nominal_freq;
-> 
-
+--
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
