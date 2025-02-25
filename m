@@ -1,187 +1,218 @@
-Return-Path: <linux-pm+bounces-22877-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22878-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 93E29A43C9E
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 12:02:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3F6B5A43D53
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 12:20:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id F18E11886675
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 11:02:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 961233BA802
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 11:14:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9307A267F7B;
-	Tue, 25 Feb 2025 11:00:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DB99720AF78;
+	Tue, 25 Feb 2025 11:14:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="SacVVCr0"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="SSPvHeia"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from DU2PR03CU002.outbound.protection.outlook.com (mail-northeuropeazon11012010.outbound.protection.outlook.com [52.101.66.10])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BC10E267F77;
-	Tue, 25 Feb 2025 11:00:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.66.10
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740481236; cv=fail; b=EDsgist+xFSHmJ78N/wB86dPtlbQEMpQdCntcAFA4Z5RDRQPVXnw0p/uKTwIs4NRh40yJlDAgXA8ciKHamdzWtN/HzCSKff10uCAj+CTHkjYnt7+JkmOlj+VJra8GMsO1HqFKWiaLirBjjUwi9reaOS2ifAeHkRM6LHiaMOm+ks=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740481236; c=relaxed/simple;
-	bh=j3BQJJmYzvfe2OKIsPP0eR8CqOHVmWmmba6QHXldPQ0=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=naSbwd06i6DdPSv3ErCw7311g+ZLZIu+U7CKReRLeGFvKgxY5s2Sf3zcf4Nm7ZntpffxCElquvdxCmFu9+Ve05Nlz3f1qYKucjEVuWhIIYt0ehj0d/gobyR6aIFI7Ip3iAnphiAbPcDtvYD4xoeKwube6h0XJ1OWnw9uO0Q5Vlg=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=SacVVCr0; arc=fail smtp.client-ip=52.101.66.10
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=BNsJLY28AphmBGbH3BPcCkeh9Jw87Wy4HQwDswriQyVJkwVK00dpmdGkvY5RKPIp8eBjS+EmBNlH1GnHWVt6XvBrw6JZvOazAI3vpTbSFN40Uy6vuKCo8aB7nRxt2Y6M3G0ZCj5QNm4zv4aACASzOlb8Nt24YOz+1z08nApVAqvKQZs0DxtyGMlwXWgu4jipqz1CYvQSKfqogCBjAxRi6SDc11Dc7l7umyidUzw/Dfll21EViOjAOLvK+/U5+hiSrqYDu3yhRFBhLpUs+EhrJxxmzWlKPBtvtnbi6n54gRYTxfQ5aEsRE/7U9MPkIKfVr6YbSBu2FXml4wDhhRmcJg==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=j3BQJJmYzvfe2OKIsPP0eR8CqOHVmWmmba6QHXldPQ0=;
- b=DNwDlNHb6a5Z2sdMPi6Dgvi0JioeaVCKGycbFg45MVJobQCpxM3o2MI0j44yXAApfUttMZwBE7WT3B1JpTjt5heuP0Vr3oXSeI4Yob6I8bHL0zdyx2os8S4t40eEv2G46Ovqr2fjQObbBQiNNWXubIQyfDRO5EzRcVuJwIyjZfz+x/pLsEvHH0FjvOEa3RHlH/fkc8vK9MsBbQEvQaWalvBRuwHjOvDosud8AvwdS0zENlJw8h6TK8y/UtiTLdDJHz292c84MjxlWOMKX5iTcDvNtHKK2oCg3yIi6af1+1ASg32cDxtE6H9GpMCWHjK6xE42o1pLPgPbTiLBHm4SdA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=j3BQJJmYzvfe2OKIsPP0eR8CqOHVmWmmba6QHXldPQ0=;
- b=SacVVCr0bUAKck1Vay0TrB//7nOKzBgy9hybfNrYJPlWATotuF6v+tKYf4Bpgv64Y/QWiJCoauE1R1RSLB1Kk2KeYWMZWY8knOgqjl/ZJdTBqDKTCtWS+LTawPwdbETox04+zKdoAQDPCbAPIBIaHK2gVDTGJ7GDrzJuYZUSO+tSHHydtndguw003UWOIoli7ZAusYRCpkhrp7rcsX0KAQnimcoyC8nj5Bwz1b58eEYf2SBEezxevBK9Afzoy70LyuY2+YeKcQeahyezP3fqX6/q1MfHuUrIFFvhi+TeKI6fuCsSabtXwzD2EzdsUY2GOEnyop8H71lqqXD+47lVHA==
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com (2603:10a6:102:1da::15)
- by VE1PR04MB7312.eurprd04.prod.outlook.com (2603:10a6:800:1a5::6) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.15; Tue, 25 Feb
- 2025 11:00:30 +0000
-Received: from PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630]) by PAXPR04MB8459.eurprd04.prod.outlook.com
- ([fe80::165a:30a2:5835:9630%4]) with mapi id 15.20.8466.013; Tue, 25 Feb 2025
- 11:00:30 +0000
-From: Peng Fan <peng.fan@nxp.com>
-To: Alexander Stein <alexander.stein@ew.tq-group.com>, Rob Herring
-	<robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
-	<conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>, Sascha Hauer
-	<s.hauer@pengutronix.de>, Pengutronix Kernel Team <kernel@pengutronix.de>,
-	Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>, Michael
- Turquette <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Ulf
- Hansson <ulf.hansson@linaro.org>
-CC: "devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"imx@lists.linux.dev" <imx@lists.linux.dev>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-kernel@vger.kernel.org"
-	<linux-kernel@vger.kernel.org>, "linux@ew.tq-group.com"
-	<linux@ew.tq-group.com>, "linux-clk@vger.kernel.org"
-	<linux-clk@vger.kernel.org>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>
-Subject: RE: [PATCH v2 3/6] soc: imx: imx93-blk-ctrl: Scan subnodes and bind
- drivers to them
-Thread-Topic: [PATCH v2 3/6] soc: imx: imx93-blk-ctrl: Scan subnodes and bind
- drivers to them
-Thread-Index: AQHbhshzO7y3KbOJQUW16EzpI9lw3LNX2x+Q
-Date: Tue, 25 Feb 2025 11:00:30 +0000
-Message-ID:
- <PAXPR04MB84592DE3846EEBEFBE2302D088C32@PAXPR04MB8459.eurprd04.prod.outlook.com>
-References: <20250224142831.485159-1-alexander.stein@ew.tq-group.com>
- <20250224142831.485159-4-alexander.stein@ew.tq-group.com>
-In-Reply-To: <20250224142831.485159-4-alexander.stein@ew.tq-group.com>
-Accept-Language: en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: PAXPR04MB8459:EE_|VE1PR04MB7312:EE_
-x-ms-office365-filtering-correlation-id: 7bc7c794-0a19-42ac-9d5f-08dd558b9e60
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|7416014|376014|1800799024|366016|38070700018|921020;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?U/KDhcRs6BMmldAEdif96fvRu22ke0DUnVx8tQJ4FW2/J5Amxu8kryBdjmiT?=
- =?us-ascii?Q?kecPXwMCMxURO1tdPoiQZ88q+o5ZsXY455Njc0A+qL4ZoK5ITeOeYk5y78pq?=
- =?us-ascii?Q?MIkWcLA5Oa9Pl7wlOwK1A3NP8aBG9hMrk9XdWJtcOEOQntmKb51Bozgc1Zhi?=
- =?us-ascii?Q?DKhKUGHDG2g32izSfm05siueFDA4TZJEkx5mDZGn8ryc0BqkbjZLHdOFe4AM?=
- =?us-ascii?Q?TUs4vouUshu5euAbwJgFQLY/J3Pvt5oMtw+dHEU+3cv3JHwOcXRxbGgaeqLT?=
- =?us-ascii?Q?sL8g/4sd3zNPmXXA4nsQb0TsYgigAcfgj4hmsB/WL897l2h9h7Dc+dcST2VE?=
- =?us-ascii?Q?EVFqAG6Vm2SQ6CpeoDSaO+4TMgnuuykSDAI6gUmThul1T5midKQquSsq4cDK?=
- =?us-ascii?Q?FOLRkbR7nUYvjgzs41wcpX4WXTAK7q1T7rfKwgjVeeaNCAVPFK7ZxjvwXxfo?=
- =?us-ascii?Q?taYUFG0CXwDKzHpaMpU6Go0NRHxoC7/WTEORDVDykPhRAKZoG85NApAsbKQl?=
- =?us-ascii?Q?9/dPvrggi+wIBEHA8OSdHxMSul5dZQFhyEMBYdUVHhh2eSP1nzsH+AqWxWMU?=
- =?us-ascii?Q?fV7IsT5caGA4ctQAHgWiSZzvWHZJYxfkZr1xAmYSl94ODn7QrMNp7N15+ld6?=
- =?us-ascii?Q?PraK/juUGp8UiwF0ekfmu68e5IxFNSC5GO62HIxr/taBk4Ot4H1wec68eBPA?=
- =?us-ascii?Q?hfm/c0HBepjg+mBJEod3NXAlwk8y74/R5zyoG/6ct/Qfb101agxhpblowsqD?=
- =?us-ascii?Q?gQDOpgQJee4JOtse0JmB9A7CuoCXMn0yh3UFj3m/58Py7rxXIo8fztbpVg5X?=
- =?us-ascii?Q?5r7zXUhiZmX/J+0rom46MOiBwEGmCjpXffaTYovg5YsS38joPttt/aCrUsWz?=
- =?us-ascii?Q?9bCXvSMzdz3OJvdOCV3yby3DwTd/IX9rezvcdt2b0eJrDOz/dQnrWtVOxVWD?=
- =?us-ascii?Q?HHHlE7GlTG8wLzlXhCMaZaxtKwdXQwcahdWOidU0DInRgRMdmC2EiWD20wzK?=
- =?us-ascii?Q?1fl4/RvvvNYtsjJb7BZ1eHtgViMPXY7J3xp0SOBAzHkQSjOL9GqHp5jvcsd9?=
- =?us-ascii?Q?H8z4B2y0supnzb0H+31O6Il+YVFJUhvWGZxO3JALhKQPUuUu23tnziYYuvY8?=
- =?us-ascii?Q?26Xu3z/vZE3nMXwy5TqVvPKw5uypKycJWJYPblbDp+NceZ1VaQCQGcPT7UyX?=
- =?us-ascii?Q?W4hSLrU9/PByjOyF39LqMoiyNrs1sDXC4HlEoHd06dmaV4HDsYcgxTqVFAbI?=
- =?us-ascii?Q?TRcG17FilsGHtjtaf3ig8cNMQhzxwyhIJysfU5QfyF/BO4tWgvYeeaPpga8+?=
- =?us-ascii?Q?r60qDAPXYBszbqa+zeshv8zlGn4Untxsh9bl5+B9deqoDuKyXtSraKIl7LGo?=
- =?us-ascii?Q?z3T2kn1pSRe2SyOZNgfWbRQaqW6fkGdtMU1quts4zQsoA+4lHjXWW8clvVKH?=
- =?us-ascii?Q?y4Dh4VLDXLh5Lgs4sJxeHa9CdFc8H/l+?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:PAXPR04MB8459.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(7416014)(376014)(1800799024)(366016)(38070700018)(921020);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?31tDz/wCO+H0/WEJOY4DVq5Hfx+ZrK7vGwRRMIz1gr+y0tphCAt//8kC7s+L?=
- =?us-ascii?Q?AQfirl+icVv+9DJU7SVpXx7V11dkoVoSZ/c4z7N/bhPpfE9br22TnkylgJUu?=
- =?us-ascii?Q?z/5eFdbAHVQY6RSPyITcZSP89oIcjMyioj302fYwJTwAtHkDV0MIdJXB0cWV?=
- =?us-ascii?Q?XbX1ho450qkzPbyjqaw4+zIhSnYa/nNp8LzmpOHXadysQlGNDrHGcx6EcYDJ?=
- =?us-ascii?Q?qbhtVPewBqTGCL30OlZs4G5P0CrtCjgm1+fEnisKxArInBk7c82mE8Adc9g+?=
- =?us-ascii?Q?AVlQh9HazmY5MjO034EhI3lefkyeUdTmWYfieXiotbUIJLR2vhbFWwHiVsRb?=
- =?us-ascii?Q?D9dfK5j9lv7zUohxTk0Q1aqPkQmYL4SmdlwfIJkocowOQbROhKPRak99U1ST?=
- =?us-ascii?Q?MkKcNUYiVp2gLUA0rq3lu92dkozn0/hk5A1lSRfo7q7DrSXiBF+oW4qBOzhm?=
- =?us-ascii?Q?WUczynrW3N8aaJ3dssTu8mOaGcwNJxuu4+BW9lUuePH72epsNtQnnoqiK+ME?=
- =?us-ascii?Q?vfpkg4wGGA/nMJ1/o6dpiMfH7f2k5IXLgf53rqIgNUINigahT/kJN3uP7FAG?=
- =?us-ascii?Q?ucNteC9eKVvyauRPkqhOKAOxjvxYx/tm4e74rjfkn3BINP/IKPqf2j9nZrdz?=
- =?us-ascii?Q?s8G4hQ0f0RUkt1cm1ISOt4urEje2tWeE1wmbLz7GBrVK70KDNvXlbGS/4Juh?=
- =?us-ascii?Q?6WRJZeB/B+b6JEMpvzFzVuA2F0KRy3ZIhXpCfNoARtD+6M8QbIMRIuyHb72d?=
- =?us-ascii?Q?YxkDaBL20JKbYkvC+xXhTCsH/Ih8B4CB0tlI5eTrMeLzwKKHKVoQIsRgaYmE?=
- =?us-ascii?Q?bZt5G7zhFbIMnNXyhalBOrbmWnt9l3eAkBbmBoeppkD2Cvtq3TuDiOFGKYCf?=
- =?us-ascii?Q?Lf8/O5EL+TnPH3RIy/EZKKwib/xBFIA7gWb9Qe24n6dybsMq1f91MinCzM2x?=
- =?us-ascii?Q?EYWcDINajKQOhfA8v/+Cg7e8aJQFr1ZsiNEqIjL6SEDc8/DNHfeJJ45Hecih?=
- =?us-ascii?Q?yY9sZulpzXsSjP/KAF9nEYTeBHaPYJ9f9RDZ6w3gLOR5/4J8LUq/rP1wVjRD?=
- =?us-ascii?Q?8ZuvAlHRCLEoagxitTwUY6ocB1EdcTA/IYtAwdxcTvbkzeaGrCAqQjF4VGQP?=
- =?us-ascii?Q?7R9LSIEnJXEIDivtwq6huJ7HtncdwXYnstB481nfvxSMIx8CwwHlDENYRq5G?=
- =?us-ascii?Q?c9u6RL+WH7DxE96ZofzCJmyaNECkM99mDF2tTqqWsyzaxfB/C1mYQTtSMq4k?=
- =?us-ascii?Q?NU/VzUanDWCas8TzDzhw2U/I7zL2yeuyHcA9HqTc3s2tlbh1cM43go0vgPrk?=
- =?us-ascii?Q?wxYsLpMETuKm28r8FLmOdI1g1IjlgwYkAQMV1FolfJbCvKczniaUYnilGO4E?=
- =?us-ascii?Q?YHjqrSVZuWEITUK5++LUhA5567zLRL8bBQKs101sctrkl2BRj/QbprR+sMbS?=
- =?us-ascii?Q?sT1GsQXvPqGOklYq1A7b5CMg4xo2Ldbd1GlhoJll0kyERpOfKZDkP2l2APdd?=
- =?us-ascii?Q?ONLxrAdN/z9erOJKqt04PG4gq9AeLLR9ehLtjGTqmnLQJE6QvWEhdz1MjxuS?=
- =?us-ascii?Q?RrQM7Ik8cloKYP6UwPM=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 003AF206F38;
+	Tue, 25 Feb 2025 11:14:06 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740482048; cv=none; b=QpeSvpplcW3TUYkxp+CesIaGtYFWAktO5FQ+zMmZDiK4gCcno/5wSNZxPRWGyfoeaWW+TqeG8IOM1djMGawvNqcodJaD3j6cus2XrnYJaPSx1KGcQtWkkY7HtGkoBmHgwsHJFo/WIiGkBfcfatKFmBF89h4mkElTaouI3oZe4IA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740482048; c=relaxed/simple;
+	bh=DANjY5TtCCrp11jRRZ29qp0AepL6LXWb2OAgWasVe/c=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=HNIQ5Rdjyex16003/01UE2RBdmqoW2ZMosohyyGhm3Ik/lh44RnZS1mgYm+QmwOSQfmq7/r9a9cxitUhnDyBUDZHUHodZ+h7A4rzSYxLWTKNG+cUVvEkRtcEviESafok7lEnRqH10bjIcizYaQyr2myeFCSlsqSoKir/O1JriFs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=SSPvHeia; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-5452ca02bdbso5109978e87.1;
+        Tue, 25 Feb 2025 03:14:06 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740482045; x=1741086845; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=Rgo3Wa66A+J6hx1qOkgMYaAB9PtHBgkCHBMzDDLog5w=;
+        b=SSPvHeiaReRunJYFmInDFwnMo8p1XsXRsFmScVE6EptBkjfwZ7+G191lyy33v7uyJ+
+         JSmjLneiYem0+WKRAVYkVYcJUQWdpNX/F08pKLnyTImx3V8LNVdsZ0cKFzRpusGJkZsr
+         E+PKYxGp6khhnJy+UUnmyrp1E4EgHqqu531GncCVdvDiu5MxRw3HE3VdzEDNqczoY7a0
+         dKqhFQD9tkV9sluG9DSVy6Km7Sr/UqH4foUD5GUBLDfLmPoWONFPHUVGLrRURljn9vxl
+         /GTZpeakr9jmtpQzVCpag6bfEMR3h9tsEnOIRxD1QBC4uw5LbWymTK/W2TDhpkWVqjWS
+         8GHQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740482045; x=1741086845;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=Rgo3Wa66A+J6hx1qOkgMYaAB9PtHBgkCHBMzDDLog5w=;
+        b=kHGf4C9ZdvhyW8tPiUjP/VH65lxmWPlaAEg//Z9h/ukOO1ibJ9ZxXVxh+Na9snsgYQ
+         s2G3C6kJT/qZXx+W4oJcLoGnL8BVO+czyaf7zEgJHF/rsOyf4UYbF81IX8PcDW7mT302
+         DFhkG8KYmyT4Szl9PG1gcyFfdMqYWsdyPo/ut6vwn20wwI8/C3PxP3NyPlP0gdUyn5Fp
+         QYSCdTh0nS3KyMHZBCP9hLxkg5htg1W8CYC9lyBO4VSYHIKgvQuuFjcVAsjTVmydSHoh
+         HtAIY+EaPYFUzE25fOlrvMuvPJg+nBfct6xmqB9zH5WUd9LmFOxmyE/HTHycafjjRoLK
+         l/hA==
+X-Forwarded-Encrypted: i=1; AJvYcCUGR/VKNFpN0ypPfUvch8LLEzbZliHUAkJOImhaOYR9zQH01+rHPCFPy6qbkCfB6jX4yLP1/rvtKhR5@vger.kernel.org, AJvYcCUzbbQeYlh9hR0xAMeoHSV+BV4t7/5aQUwI9mEjyqdAw7LlWdiUpYo4muUBLO1BkHEr7Da8wq55eBOrz+k=@vger.kernel.org, AJvYcCVjG0nbL7JGVKywZjYqNaOaeEKbPZVWeyHd/ywTQvNJMRIqdEQ1vMxHW6+qpkADj8IJWr5jtCRbGcQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yxa/vmvgZwIBeb9Rr8McZZjys4Os98o7RuEly8KiSfLvVn+3Plc
+	DCoQqummLVKoo/jSa3cCNxh/bSw8O5n7IA5vSMpe/rf572Orx963
+X-Gm-Gg: ASbGncu2XyXl24LVXVjlvplGikAoulSiFbIQGQxZIZDSlF8/j2aydxApBxYfMosCP9y
+	wuQ7OZTtxMMZTXmsPgWXJ+5QeJPwP0AMOOwP5HZmqwHJ18x50KhIgh2zOxduO6GgCKLqeiRiQR7
+	FznxfZp22d+TPpT/IHfCellwFJY2oWaLrQCxYiwJLYlrNlGLzXmnMn1UJbjnlEESZOeHxIuE48U
+	JRUWCyv8x05vG23VIpZENro4OyQELaHj7Ym63MKbp+NBqSJdEUw1RU06pftuKlsiUS/y82e62sW
+	kQSevOUXLxq44ZW/vHTVkW3+f/hLMt0Bxwf34hw=
+X-Google-Smtp-Source: AGHT+IH87webjBqQp4/vTTkCKu3naPzYWwEogj7hx0iJcKdAdu9PM46iA4Pc1YwDJQyPV713p/gb8g==
+X-Received: by 2002:a05:6512:3e13:b0:545:e19:ba1c with SMTP id 2adb3069b0e04-548510d272cmr1073827e87.19.1740482044737;
+        Tue, 25 Feb 2025 03:14:04 -0800 (PST)
+Received: from [172.16.183.207] ([213.255.186.46])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5487950a4besm86332e87.124.2025.02.25.03.14.03
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 25 Feb 2025 03:14:04 -0800 (PST)
+Message-ID: <491e20bb-5ab4-40e9-bb35-5e05dc7bd46c@gmail.com>
+Date: Tue, 25 Feb 2025 13:14:03 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: PAXPR04MB8459.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 7bc7c794-0a19-42ac-9d5f-08dd558b9e60
-X-MS-Exchange-CrossTenant-originalarrivaltime: 25 Feb 2025 11:00:30.2106
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: qaeTT3CelbFswoNqTVzGbmnqgwSQK/TaikLtrDtqzO+Tf+wRHJgH4E+/uwBUe6LnJSeJuv6aCJN+Y+dpmgOsKA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VE1PR04MB7312
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 1/7] power: supply: core: get rid of of_node
+To: Sebastian Reichel <sebastian.reichel@collabora.com>,
+ Sebastian Reichel <sre@kernel.org>, Mark Brown <broonie@kernel.org>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Linus Walleij <linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>,
+ =?UTF-8?Q?Pali_Roh=C3=A1r?= <pali@kernel.org>,
+ Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>,
+ David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>,
+ Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>,
+ Konrad Dybcio <konradybcio@kernel.org>,
+ Matthias Brugger <matthias.bgg@gmail.com>,
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+ Orson Zhai <orsonzhai@gmail.com>, Baolin Wang
+ <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>,
+ linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-usb@vger.kernel.org
+References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
+ <20250225-psy-core-convert-to-fwnode-v1-1-d5e4369936bb@collabora.com>
+Content-Language: en-US, en-AU, en-GB, en-BW
+From: Matti Vaittinen <mazziesaccount@gmail.com>
+In-Reply-To: <20250225-psy-core-convert-to-fwnode-v1-1-d5e4369936bb@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-> Subject: [PATCH v2 3/6] soc: imx: imx93-blk-ctrl: Scan subnodes and
-> bind drivers to them
+On 25/02/2025 01:21, Sebastian Reichel wrote:
+> This removes .of_node from 'struct power_supply', since there
+> is already a copy in .dev.of_node and there is no need to have
+> two copies.
+> 
+> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> ---
+>   drivers/power/supply/power_supply_core.c | 17 ++++++++---------
+>   include/linux/power_supply.h             |  1 -
+>   2 files changed, 8 insertions(+), 10 deletions(-)
+> 
+> diff --git a/drivers/power/supply/power_supply_core.c b/drivers/power/supply/power_supply_core.c
+> index d0bb52a7a0367a8e07787be211691cad14a41a54..11030035da6f121ca76bebf800c06cfd5db57578 100644
+> --- a/drivers/power/supply/power_supply_core.c
+> +++ b/drivers/power/supply/power_supply_core.c
+> @@ -200,11 +200,11 @@ static int __power_supply_populate_supplied_from(struct power_supply *epsy,
+>   	int i = 0;
+>   
+>   	do {
+> -		np = of_parse_phandle(psy->of_node, "power-supplies", i++);
+> +		np = of_parse_phandle(psy->dev.of_node, "power-supplies", i++);
+>   		if (!np)
+>   			break;
+>   
+> -		if (np == epsy->of_node) {
+> +		if (np == epsy->dev.of_node) {
+>   			dev_dbg(&psy->dev, "%s: Found supply : %s\n",
+>   				psy->desc->name, epsy->desc->name);
+>   			psy->supplied_from[i-1] = (char *)epsy->desc->name;
+> @@ -235,7 +235,7 @@ static int  __power_supply_find_supply_from_node(struct power_supply *epsy,
+>   	struct device_node *np = data;
+>   
+>   	/* returning non-zero breaks out of power_supply_for_each_psy loop */
+> -	if (epsy->of_node == np)
+> +	if (epsy->dev.of_node == np)
+>   		return 1;
+>   
+>   	return 0;
+> @@ -270,13 +270,13 @@ static int power_supply_check_supplies(struct power_supply *psy)
+>   		return 0;
+>   
+>   	/* No device node found, nothing to do */
+> -	if (!psy->of_node)
+> +	if (!psy->dev.of_node)
+>   		return 0;
+>   
+>   	do {
+>   		int ret;
+>   
+> -		np = of_parse_phandle(psy->of_node, "power-supplies", cnt++);
+> +		np = of_parse_phandle(psy->dev.of_node, "power-supplies", cnt++);
+>   		if (!np)
+>   			break;
+>   
+> @@ -606,8 +606,8 @@ int power_supply_get_battery_info(struct power_supply *psy,
+>   	const __be32 *list;
+>   	u32 min_max[2];
+>   
+> -	if (psy->of_node) {
+> -		battery_np = of_parse_phandle(psy->of_node, "monitored-battery", 0);
+> +	if (psy->dev.of_node) {
+> +		battery_np = of_parse_phandle(psy->dev.of_node, "monitored-battery", 0);
+>   		if (!battery_np)
+>   			return -ENODEV;
 
-Typo: soc->pmdomain
+This reminded me of a change I once did to power_supply - but maybe 
+never got it further than RFC stage. Anyways, do you think it would be 
+possible to decouple the battery info and struct power_suppply (while at 
+it)?
 
->=20
-> This particular block can have DT subnodes describing the LVDS LDB
-> bridge. Instead of misusing simple-bus to scan for those nodes, do the
-> scan within the driver.
->=20
-> Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
+I believe that the chargers and especially fuel-gauges which are 
+designed to operate with different batteries (and which get battery 
+details using static battery nodes), would like to get the battery info 
+_before_ registering the power_supply (to avoid sending bogus values 
+while operating on defaults, before the battery info is read and before 
+things are set accordingly).
 
-Reviewed-by: Peng Fan <peng.fan@nxp.com>
+I know this may be a bit much to ask, but I believe it'd be an improvement.
+
+Other than that, looks good to me.
+
+>   
+> @@ -1544,9 +1544,8 @@ __power_supply_register(struct device *parent,
+>   	if (cfg) {
+>   		dev->groups = cfg->attr_grp;
+>   		psy->drv_data = cfg->drv_data;
+> -		psy->of_node =
+> +		dev->of_node =
+>   			cfg->fwnode ? to_of_node(cfg->fwnode) : cfg->of_node;
+> -		dev->of_node = psy->of_node;
+>   		psy->supplied_to = cfg->supplied_to;
+>   		psy->num_supplicants = cfg->num_supplicants;
+>   	}
+> diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+> index 6ed53b292162469d7b357734d5589bff18a201d0..975ccab56597ef579ef0c9dc913dcb0a26b5855a 100644
+> --- a/include/linux/power_supply.h
+> +++ b/include/linux/power_supply.h
+> @@ -316,7 +316,6 @@ struct power_supply {
+>   
+>   	char **supplied_from;
+>   	size_t num_supplies;
+> -	struct device_node *of_node;
+>   
+>   	/* Driver private data */
+>   	void *drv_data;
+> 
+
 
