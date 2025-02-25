@@ -1,75 +1,89 @@
-Return-Path: <linux-pm+bounces-22939-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22940-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABC56A44DEF
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 21:44:22 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC638A44E64
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 22:09:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 05BC3162390
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 20:41:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C9D477A415C
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 21:08:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83E9519F41B;
-	Tue, 25 Feb 2025 20:41:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2BC520E020;
+	Tue, 25 Feb 2025 21:09:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="F11lASdP"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="BnJV8tek"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f178.google.com (mail-lj1-f178.google.com [209.85.208.178])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AD9F190051;
-	Tue, 25 Feb 2025 20:41:15 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 758021A2392
+	for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 21:09:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740516076; cv=none; b=lvwYgO5HIatfsJvP2nIqsMNnmSb1e10S/Mef73YX4pq1PpK9UYH08SDSzjcuNuey9M3EVaVMdkbeFYIf4trQNVvATstC/4r85gVHdSKXtwvHTutpdWJsBESM+ddTmCN7TSm+8Mq3yhq1b1wJKgQ4D1nIk+pjzfqDQm8YDK19tO4=
+	t=1740517760; cv=none; b=I6owfbnc4izNcxNR/GkzdvFCcE909caj4SgMHQaAvHZn00KYDtchhpwKl48XC5LebuBrlkoXIEeVUuAqvC9pZrtL3/qmQ4Y8O4Fge/xjwPl8j5nAJabKDYv9gIcmgG0TPWXjud3ovz407SNC+sEKFtR9MgW+Ivp6rNu20WwHylE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740516076; c=relaxed/simple;
-	bh=LiVhDem361FjqfGK+J/ahXdQ9J+E267lgyazNH2yhi8=;
+	s=arc-20240116; t=1740517760; c=relaxed/simple;
+	bh=f9nu/gjYpScp2GZzc6dQlyISc0mFy1UpPKMQt+2+SPE=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=aa5VSYogXQTzGfAcj5M5ARa9N6mW9iTfLXc5kovToga2HQV8758KUfsSILTnBkgLBiRKm1L/yipHGR/DrZrKmY6VY++5V655Or0rCcUd0X7hd7/3AdejDr/qybe2ZlKFPdll+d7kM1ECfK9HXftEUx/mHx51CqrOrtWSwKMpvzg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=F11lASdP; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BFDB4C4CEDD;
-	Tue, 25 Feb 2025 20:41:15 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740516075;
-	bh=LiVhDem361FjqfGK+J/ahXdQ9J+E267lgyazNH2yhi8=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=F11lASdPbzXg7mANBVQlRFzgR/91x+1f1GT6nM7vqP3tiaT1nLvEG+0H/6bay/D3C
-	 2soIDbmbAaMuP3MwJM1iEgNqSl2/9hxJRp3yU7vcobgtmGhUCeVe4BjgU0CCvZvDRX
-	 XbyqqGNx3v6BjI+P/X0lbLNbDuCnIwpNFCNqfA9oo5mRHWeidzibV+RIVZdMW1S5P8
-	 IvglkGpvI0stH2tuWkAz2Cxkyy8C2G3OV8lCC4PHk+FgAoop3MkQvWvQF3u8IlKKub
-	 DTnucELvNjcipckaCJFqPRe6GvqL9PpICzd1ZIm4Ts/D7BfBc0Fg+QCESEd6U47QJB
-	 QEOZySg+TtdWg==
-Date: Tue, 25 Feb 2025 12:41:12 -0800
-From: Kees Cook <kees@kernel.org>
-To: Huacai Chen <chenhuacai@kernel.org>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	"Harry (Hyeonggon) Yoo" <42.hyeyoo@gmail.com>,
-	Huacai Chen <chenhuacai@loongson.cn>,
-	Andrew Morton <akpm@linux-foundation.org>, linux-mm@kvack.org,
-	Pavel Machek <pavel@kernel.org>, linux-pm@vger.kernel.org,
-	GONG Ruiqi <gongruiqi@huaweicloud.com>,
-	Xiu Jianfeng <xiujianfeng@huawei.com>, stable@vger.kernel.org,
-	Yuli Wang <wangyuli@uniontech.com>,
-	Vlastimil Babka <vbabka@suse.cz>, Christoph Lameter <cl@linux.com>,
-	David Rientjes <rientjes@google.com>,
-	Roman Gushchin <roman.gushchin@linux.dev>,
-	Pekka Enberg <penberg@kernel.org>,
-	Joonsoo Kim <iamjoonsoo.kim@lge.com>,
-	GONG Ruiqi <gongruiqi1@huawei.com>
-Subject: Re: How does swsusp work with randomization features? (was: mm/slab:
- Initialise random_kmalloc_seed after initcalls)
-Message-ID: <202502251240.49E8674AD@keescook>
-References: <20250212141648.599661-1-chenhuacai@loongson.cn>
- <CAB=+i9QoegJsP2KTQqrUM75=T4-EgGDU6Ow5jmFDJ+p6srFfEw@mail.gmail.com>
- <CAAhV-H7i=WJmdFCCtY5DgE2eN657ddJwJwHGK1jgLKRte+VnEg@mail.gmail.com>
- <Z68N4lTIIwudzcLY@MacBook-Air-5.local>
- <CAAhV-H5sFkdcLbvqYBGV2PM1+MOF5NMxwt+pCF9K6MhUu+R63Q@mail.gmail.com>
- <Z686y7g9OZ0DhT7Q@MacBook-Air-5.local>
- <202502190921.6E26F49@keescook>
- <CAJZ5v0hZZdRPwp=OgPw4w8r9X=VbL6Hn6R4ZX6ZujNhBmMV3_A@mail.gmail.com>
- <CAAhV-H5UaEbA0DrAUfROJoiatwrjsge4DNcVTJi=8vtk2Zn+tQ@mail.gmail.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=aHn83JMMMfsQQ0tBJjfXem7PSUiyuzMYF8X/+85uU/LlVOGBm1UIIFC6X3ZrPV45zjLS0qmjgTnU7F/VYNnfdNwLG6ZWQTJY3rc3uK/Mc/rRJdWd8OvsQak8Q3hRxNA5gRA8n4UTTdAa7sYTXtrNITn/iRfwFObA9Nu3GNdDhv0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=BnJV8tek; arc=none smtp.client-ip=209.85.208.178
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lj1-f178.google.com with SMTP id 38308e7fff4ca-3072f8dc069so62853291fa.3
+        for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 13:09:17 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740517755; x=1741122555; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=M4XoCEWv2ZTyY24QshaT4Wp49xDJ3qBHY1WAxKeHvOQ=;
+        b=BnJV8tek0H2lBSDSA1XJYLnSTGkX5dc7IAY3Bcy7+6xD5yTFyClsz7CB9j2aKrnjs2
+         Pwr2aY4vrxkpZQaMaz8clZQhNxTSNvZpvy4U5eWAd1F6TSgBF5ARLJ3vo2vgrIQA0nyc
+         37TMXeGfvF9gJuYAHcmcWQNCM6lYq4h3eIqFxxa6O4uHgaU4RfqqHQfK9mprkU3QnsVh
+         UoExr8p2tBvij30C89bFkKXq+E9ZyyD0YveWloESi7rb6LMJ7lnxd83iZpeUYTFKt5cA
+         hpdkr0aQvbL0gEKafcJgwd1u1ZksD8FwvOvU+mzSxaiSWuaFjSRgulHcJ8d1vSLC4tOA
+         s6AQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740517755; x=1741122555;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=M4XoCEWv2ZTyY24QshaT4Wp49xDJ3qBHY1WAxKeHvOQ=;
+        b=UIxSJFl4ZfcBSLwO6DNdoqq7Pg8cZyC0QGNFZU4OBxCarBayylLgk74a/0Ezn6Fd9k
+         7rQSmmWUSGrhR69BW2Pd6xIifldMLXcQu0YwgKaJt4NvWI7brNeDKUGpBWqniznr32PW
+         7z30ophSauwQdN8/JQ7tB007rnfgLN26NmPXBEqyRPKGGmkpZgjUMXn8lgWvlRL338T0
+         MWl0aEyajEB9vxqsRROV5Tt3KL1upiMCJDzG+T2nnDddEllC+mPt6RpIhObiYPCc0rMx
+         UZ9/qMHVe7MJZdS9eUylPmG3AxiHUBgHtxkibe5ppQOUc/1LApfZcGlYk5LphSjESIR/
+         DrRg==
+X-Forwarded-Encrypted: i=1; AJvYcCVnglRpAPUrizC5LnOkL9rfAloaJtXu6xgcJv16/7ROwg7tLtFpMnap1F7dchhu2n5t5BMssEYW+g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxAw3m9qwduBcqMsmQbq6r8Gk+0nk5vY4xDHhN/RdcyhBaCwYzI
+	W6igJTqHfmVSAl0IB7QVDGzdyMru8O7skm5+oIOkTzNKCnijuqLb5UXocgCvqFY=
+X-Gm-Gg: ASbGnctIhxpBfM8Q5006etjiQQ6eLd9Q2Vrb6jS5o2F1r/rKIRCB8pspM9dHopn+T4D
+	j7VMFuS7GSS2chWXCXPBBUSVCc3Rg7Va//DeW8J8Eba6Wvu4EZvfXCjJ1E8aX3RGMg6iJVybMUd
+	ElZ+B2nlBGwY0kV/A82nRKj7P0EU2BZeYCFMFe8bokD1c+yt4nX78zuGpcrLLtFcC8wtwqWGFM2
+	tiOFaVprB33yWFRdPA/el4J41ghueF7vQN08Oat24oDxp54XSOzGME3LFrMyDV770GFn/8LK2F7
+	OCd/MKyAVX8XdC6EbFFAM/A+mbUuH+x3dNHY9KrWtS79O6/s+rwdZ1u+XEvnI9Bn+e7QhPDQFUE
+	CDf9Sjw==
+X-Google-Smtp-Source: AGHT+IHZW6d9rnGPSbTopC+zVuHs8+WHbIcOmyVc/br2TV9KZrFgTMvD/wPr004/MWm+y+QcUxD/DA==
+X-Received: by 2002:a2e:9c02:0:b0:308:e9ae:b5b3 with SMTP id 38308e7fff4ca-30b79132d13mr10353661fa.1.1740517755543;
+        Tue, 25 Feb 2025 13:09:15 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30a81ae82d6sm3139931fa.110.2025.02.25.13.09.13
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 25 Feb 2025 13:09:14 -0800 (PST)
+Date: Tue, 25 Feb 2025 23:09:12 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+Cc: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org, 
+	daniel.lezcano@linaro.org, rui.zhang@intel.com, lukasz.luba@arm.com, 
+	david.collins@oss.qualcomm.com, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 2/5] thermal: qcom-spmi-temp-alarm: Add temp alarm
+ data struct based on HW subtype
+Message-ID: <n57hjxg6v7z34qmlvygfwakol45dtj6jgma56w3xqxbj67op3x@5n7yoyydnxm4>
+References: <20250225192429.2328092-1-anjelique.melendez@oss.qualcomm.com>
+ <20250225192429.2328092-3-anjelique.melendez@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -78,21 +92,41 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <CAAhV-H5UaEbA0DrAUfROJoiatwrjsge4DNcVTJi=8vtk2Zn+tQ@mail.gmail.com>
+In-Reply-To: <20250225192429.2328092-3-anjelique.melendez@oss.qualcomm.com>
 
-On Tue, Feb 25, 2025 at 07:35:13PM +0800, Huacai Chen wrote:
-> I have investigated deeper, and then found it is an arch-specific
-> problem (at least for LoongArch), and the correct solution is here:
-> https://lore.kernel.org/loongarch/20250225111812.3065545-1-chenhuacai@loongson.cn/T/#u
+On Tue, Feb 25, 2025 at 11:24:26AM -0800, Anjelique Melendez wrote:
+> Currently multiple if/else statements are used in functions to decipher
+> between SPMI temp alarm Gen 1, Gen 2 and Gen 2 Rev 1 functionality. Instead
+> refactor the driver so that SPMI temp alarm chips will have reference to a
+> spmi_temp_alarm_data struct which defines data and function callbacks
+> based on the HW subtype.
+> 
+> Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
+> ---
+>  drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 103 +++++++++++++-------
+>  1 file changed, 68 insertions(+), 35 deletions(-)
+>  }
+>  
+>  /**
+>   * qpnp_tm_get_temp_stage() - return over-temperature stage
+>   * @chip:		Pointer to the qpnp_tm chip
+>   *
+> - * Return: stage (GEN1) or state (GEN2) on success, or errno on failure.
+> + * Return: stage on success, or errno on failure.
+>   */
+>  static int qpnp_tm_get_temp_stage(struct qpnp_tm_chip *chip)
 
-Ah-ha, so it seems like some system start was being incorrectly shared
-between restoration image and hibernated image? Yeah, that's important
-to fix.
+-> qpnp_tm_gen1_get_temp_stage()
 
-> But I don't know how to fix arm64.
+With that fixed,
 
-Is arm64 broken in this same way?
+
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+
+
+>  {
 
 -- 
-Kees Cook
+With best wishes
+Dmitry
 
