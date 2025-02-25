@@ -1,54 +1,55 @@
-Return-Path: <linux-pm+bounces-22904-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22903-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7F2C0A44719
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 17:58:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 38194A446E0
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 17:51:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7368F7B09B5
-	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 16:50:21 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9C7A61888D11
+	for <lists+linux-pm@lfdr.de>; Tue, 25 Feb 2025 16:51:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E27E81A2547;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A7E4619EED3;
 	Tue, 25 Feb 2025 16:46:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="AMpBHNJa"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="XfYg5Twy"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF62319CC34;
-	Tue, 25 Feb 2025 16:46:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B064619ABD8;
+	Tue, 25 Feb 2025 16:46:26 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740501989; cv=none; b=fA9yDbQ4Vkg41faJJArfclh/Oi1lOFdhNKryw2G6CGY3llPxXov7b8XaLN42F5F88+OwdTdGGVErwgJqzi+jImrbolC95EvSXXkfG0DUdfp51nstg+DSZukfStI+6rKNpnYh6fGlBX3kKuAJ6Jjc17OGgc8onGJ9i0qJXtroQF8=
+	t=1740501989; cv=none; b=tO+gamNLjXOHzWGZjsbptI40DCIrKkeYIzpgsEhHI45TthItBTGkZqQ/5O3+ntc+a0brDFYQImBedXxqcJzv+XFmnEMZ3p6nDx4yVJzvyf9nk5ek8b0ZdWbwFV26DteGV5yZH8VKF3PW+182ocDFbh/6gNoeKIeUBfSgbim01FE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740501989; c=relaxed/simple;
-	bh=rUhGtkeEKO5bgIAnZW0g4xICaX1zD95BWrXoltsZvcQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=cLZe4MjNbqlIKS9MGb3vYeKZ7ESdqw8F9jOIgkMv7TN1axHgiIxsvc906QlbD+WOMOJgHUOQi7qtX9N+KSHtiQnGU26qsISIsJX5DH5zvugSyyJsOuuGAGC+9IeW3cgQM32KvgOdqNQk87lco7Jne+4dnQDO60VgTDt8jxmH53Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=AMpBHNJa; arc=none smtp.client-ip=79.96.170.134
+	bh=x5965uTvLwEkxn6TGr0SnrfvJHVrwkwk9tx8/ZMADy8=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=nNCv7bHqZKNN/9XqrjqYrpmoskEr2wZWWNx918zih0qei4fiyHud56aMCpyE8fgeDSEEgiZuUG631F33Pa6bE0N1w4YGIK6t0Qss9kmqKVLPYzEvBNf8vZQk1/wP2l8ERq478JaE5bO8uSJGSCTT5vbjspOEWKKSvo8TWkBx3Ms=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=XfYg5Twy; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 25b314a4524873c0; Tue, 25 Feb 2025 17:46:20 +0100
+ id 8710ec574f47ab3a; Tue, 25 Feb 2025 17:46:19 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 943EC22C28BF;
-	Tue, 25 Feb 2025 17:46:19 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id A945322C28BF;
+	Tue, 25 Feb 2025 17:46:18 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1740501980;
-	bh=rUhGtkeEKO5bgIAnZW0g4xICaX1zD95BWrXoltsZvcQ=;
+	s=dkim; t=1740501979;
+	bh=x5965uTvLwEkxn6TGr0SnrfvJHVrwkwk9tx8/ZMADy8=;
 	h=From:Subject:Date;
-	b=AMpBHNJaC6riQO5RLvDgwyK/IRNpNgzCCdUYJYTbF8ee79t1G0ZTDm2ixoJa+50PS
-	 Nblp9kB93bYuzFBzXtED611EuWCeYCAXlgfYkC9rsAM7QEyH2Q+eyb0xsS9WvK/+DQ
-	 DgOXj1/H5RQjBrj0Bz6Q6g+20dXpzy78TBFbUIbqwCGWdpZevXZTDHA2MCibhmzFP9
-	 Hzt32Z5QbPvWrMNSfw9gBgBowBs/thQ1XBWT13gtfhFDBhu48oKI1uOR6ZWkYEUUL3
-	 QUA9KLnDa7n2brdDMI4OheoL64lMrxxHAFC652oOr0bfgU8l4CkZufYvAYYO4uTK5U
-	 tSquc+5pl4E0g==
+	b=XfYg5Twy8jTZ1dk/m0qcpD4B9/jPzUcDZt4bm8WwVPhXlBcas4n7pW/RP2i6lnv6s
+	 J86yBP4npYsFbUScElvJzuq+Y0p/Sk7dvrFiQHcfO4cw3zi8pRLbpGR7gPswm/wYoH
+	 TYT/qbLRO+6zXnqy1pKceCQHceQx6YpecnsuMR384o5mASUteF5cvle5fHkKYSB0Oo
+	 1rOq9DKOiVilkQC9b/KLg47TV2ylBuer6G61N/1jaf5cdsXmU/4E1Xl+QVghW70lh7
+	 DMqK/acUNMdchtvMJbuP+o5Onj+tcBK32/tHHlD6uPfPA+n2VVbwwKPeQjBQMCWzlt
+	 naXMIEy4OAbDg==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>,
@@ -57,9 +58,12 @@ Cc: LKML <linux-kernel@vger.kernel.org>,
  Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
  Saravana Kannan <saravanak@google.com>
 Subject:
- [PATCH v1 0/5] PM: sleep: Improvements of async suspend and resume of devices
-Date: Tue, 25 Feb 2025 17:38:01 +0100
-Message-ID: <13709135.uLZWGnKmhe@rjwysocki.net>
+ [PATCH v1 1/5] PM: sleep: Rename power.async_in_progress to
+ power.work_in_progress
+Date: Tue, 25 Feb 2025 17:38:58 +0100
+Message-ID: <3338693.aeNJFYEL58@rjwysocki.net>
+In-Reply-To: <13709135.uLZWGnKmhe@rjwysocki.net>
+References: <13709135.uLZWGnKmhe@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -71,51 +75,84 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekvddvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgvrhhnsehrohiflhgrnhgurdhhrghrvhgrrhgurdgvughupdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohepjhhohhg
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekvddvvdcutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkjghfggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpedvffeuiedtgfdvtddugeeujedtffetteegfeekffdvfedttddtuefhgeefvdejhfenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeejpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepshhtvghrnhesrhhofihlrghnugdrhhgrrhhvrghrugdrvgguuhdprhgtphhtthhopehulhhfrdhhrghnshhsohhnsehlihhnrghrohdrohhrghdprhgtphhtthhopehjohhhrghnsehkvghrnhgvlhdrohhrghdprhgtphh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
 
-Hi Everyone,
+From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Initially, this was an attempt to address the problems described by
-Saravana related to spawning async work for any async device upfront
-in the resume path:
+Rename the async_in_progress field in struct dev_pm_info to
+work_in_progress as after subsequent changes it will mean work in
+general rather than just async work.
 
-https://lore.kernel.org/linux-pm/20241114220921.2529905-1-saravanak@google.com/
+No functional impact.
 
-but then I realized that it could be extended to the suspend path and
-used for speeding it up, which it really does.
+Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+---
+ drivers/base/power/main.c |   12 ++++++------
+ include/linux/pm.h        |    2 +-
+ 2 files changed, 7 insertions(+), 7 deletions(-)
 
-Overall, the idea is that instead of starting an async work item for every
-async device upfront, which is not very efficient because the majority of
-those devices will not be able to make progress due to dependencies anyway,
-the async handling is only started upfront for the devices that are likely
-to be able to make progress.  That is, devices without parents in the resume
-path and leaf devices (ie. devices without children or consumers) in the
-suspend path (the underlying observation here is that devices without parents
-are likely to have no suppliers too whereas devices without children that
-have consumers are not unheard of).  This allows to reduce the amount of
-processing that needs to be done to start with.
-
-Then, after processing every device ("async" or "sync"), "async" processing
-is started for some devices that have been "unblocked" by it, which are its
-children in the resume path or its parent and its suppliers in the suspend
-path.  This allows asynchronous handling to start as soon as it makes sense
-without delaying the "async" devices unnecessarily.
-
-Fortunately, the additional plumbing needed to implement this is not
-particularly complicated.
-
-The first two patches in the series are preparatory.
-
-Patch [3/5] deals with the resume path for all device resume phases.
-
-Patch [4/5] optimizes the "suspend" phase which has the most visible effect (on
-the systems in my office the speedup is in the 100 ms range which is around 20%
-of the total device resume time).
-
-Patch [5/5] extend this to the "suspend late" and "suspend noirq" phases.
-
-Thanks!
+--- a/drivers/base/power/main.c
++++ b/drivers/base/power/main.c
+@@ -602,7 +602,7 @@
+ 	reinit_completion(&dev->power.completion);
+ 
+ 	if (is_async(dev)) {
+-		dev->power.async_in_progress = true;
++		dev->power.work_in_progress = true;
+ 
+ 		get_device(dev);
+ 
+@@ -614,9 +614,9 @@
+ 	/*
+ 	 * Because async_schedule_dev_nocall() above has returned false or it
+ 	 * has not been called at all, func() is not running and it is safe to
+-	 * update the async_in_progress flag without extra synchronization.
++	 * update the work_in_progress flag without extra synchronization.
+ 	 */
+-	dev->power.async_in_progress = false;
++	dev->power.work_in_progress = false;
+ 	return false;
+ }
+ 
+@@ -736,7 +736,7 @@
+ 		dev = to_device(dpm_noirq_list.next);
+ 		list_move_tail(&dev->power.entry, &dpm_late_early_list);
+ 
+-		if (!dev->power.async_in_progress) {
++		if (!dev->power.work_in_progress) {
+ 			get_device(dev);
+ 
+ 			mutex_unlock(&dpm_list_mtx);
+@@ -876,7 +876,7 @@
+ 		dev = to_device(dpm_late_early_list.next);
+ 		list_move_tail(&dev->power.entry, &dpm_suspended_list);
+ 
+-		if (!dev->power.async_in_progress) {
++		if (!dev->power.work_in_progress) {
+ 			get_device(dev);
+ 
+ 			mutex_unlock(&dpm_list_mtx);
+@@ -1042,7 +1042,7 @@
+ 		dev = to_device(dpm_suspended_list.next);
+ 		list_move_tail(&dev->power.entry, &dpm_prepared_list);
+ 
+-		if (!dev->power.async_in_progress) {
++		if (!dev->power.work_in_progress) {
+ 			get_device(dev);
+ 
+ 			mutex_unlock(&dpm_list_mtx);
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -679,7 +679,7 @@
+ 	bool			wakeup_path:1;
+ 	bool			syscore:1;
+ 	bool			no_pm_callbacks:1;	/* Owned by the PM core */
+-	bool			async_in_progress:1;	/* Owned by the PM core */
++	bool			work_in_progress:1;	/* Owned by the PM core */
+ 	bool			smart_suspend:1;	/* Owned by the PM core */
+ 	bool			must_resume:1;		/* Owned by the PM core */
+ 	bool			may_skip_resume:1;	/* Set by subsystems */
 
 
 
