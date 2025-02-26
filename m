@@ -1,231 +1,258 @@
-Return-Path: <linux-pm+bounces-22950-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22951-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4B64A454B0
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 05:49:39 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id C0A0AA456A8
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 08:29:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88C6A3A62E6
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 04:49:28 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3886E188EFDC
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 07:29:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB7B191F84;
-	Wed, 26 Feb 2025 04:49:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B44C26B082;
+	Wed, 26 Feb 2025 07:29:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iegQ+A7N"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="DPnzDNfL"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f47.google.com (mail-ej1-f47.google.com [209.85.218.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FE828EB;
-	Wed, 26 Feb 2025 04:49:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDC8E26AAAF
+	for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 07:29:00 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740545371; cv=none; b=T2fzcI+6C7mnZUY2AQrYa/FsH1UKrcREsfI6O2egHntaibVA6B9p7ZQV0jobiGSYBviawl8AyaNdKlas/69nQk0h23C89t5mn40R3ndKRpI/2XhkifoTcfgNw40jtD3ezKCy3elVVzFh6szL1sP4poYENfZO1vFwRgZhRyhmWEs=
+	t=1740554943; cv=none; b=CuELH+4NIWr0JY9/drteFmRbEwcLr3Lfzi1zsk9TmMIAMjOXv7qnn4AAP4NHHlTJaKz5DzbTrNJnW8FwhkSjzlUY14DvHbwDhVlYIJE//UJtNKpbrthymyAAaLgemGwvG/liG/Djyo6JfYUclYayKa1KDZapi9MctvYzGcw0BNM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740545371; c=relaxed/simple;
-	bh=hmYiMPo7oS0DG52c6LMJIaEcn4lsA2RwU65kc+OxC4w=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=l0sRMHGSA0nC1cW9SkxwbrM5kO95m6YCMUbI8S0u2OBmBuDU7Qy8J+vsYCXU7OKFqvS9ZVzpoBdW9aehfEhEPdQJgVw7F5ZUzxWBhqYWRpL2bEwljipLZ+ejORgI3EsridMomHlTEyXc7XqzmQiJnrz4IZ2Cg++ZexJNKRgIwWM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iegQ+A7N; arc=none smtp.client-ip=148.163.156.1
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
-Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
-	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51Q1krww012248;
-	Wed, 26 Feb 2025 04:49:21 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
-	:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=pp1; bh=ANXq9x
-	MWl++0/nmoFVD3Ih/uAbeST/64803+pDppwJ8=; b=iegQ+A7NG1FXBzIYncBYZX
-	bgknZEZ9Fb/F7SLo94Ws8zq7R8Dn4S27DZlLqrvckE6uwxXtsfjdaT85R9lm25S1
-	ihoyMBl2VgcFMEQzHvlMJUAP/ts4gKqlthL+/0cTJWctjSfdTtb1iYmGUD7a0sDo
-	KxDTCPDyMUFc3pRzLuqeSFwh9DkoUnxNJNwpgu37GrTL+UgqpCqm+2XP2p4DxSHc
-	Tkgc7NVzNB0fIafQDzfpSw0yW6dB1oZ8Vab041XSWTm3dHfU47G5jvcM3Wd+hXJO
-	A6aSKwcr0krBWYqNblGAeS0VtmvXTS7ZIWckbNgnp2EfuTHx8BEeM+00BbNdnZqA
-	==
-Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
-	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 451q5ms5mw-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Feb 2025 04:49:21 +0000 (GMT)
-Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
-	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51Q4h4M2027396;
-	Wed, 26 Feb 2025 04:49:20 GMT
-Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
-	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44ytdkgqav-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Wed, 26 Feb 2025 04:49:20 +0000
-Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
-	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51Q4nJBm27919042
-	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Wed, 26 Feb 2025 04:49:19 GMT
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 51B1B5805E;
-	Wed, 26 Feb 2025 04:49:19 +0000 (GMT)
-Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
-	by IMSVA (Postfix) with ESMTP id 72CC45805A;
-	Wed, 26 Feb 2025 04:49:16 +0000 (GMT)
-Received: from li-c18b6acc-24ee-11b2-a85c-81492619bda1.ibm.com (unknown [9.124.212.187])
-	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
-	Wed, 26 Feb 2025 04:49:16 +0000 (GMT)
-Message-ID: <f949565ef1f256a1641cea3fa1d01d126bcc32e8.camel@linux.ibm.com>
-Subject: Re: [RFT][PATCH v1 0/5] cpuidle: menu: Avoid discarding useful
- information when processing recent idle intervals
-From: Aboorva Devarajan <aboorvad@linux.ibm.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
-        Linux PM
- <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
-        Daniel Lezcano
-	 <daniel.lezcano@linaro.org>,
-        Christian Loehle <christian.loehle@arm.com>,
-        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
-        aboorvad@linux.ibm.com
-Date: Wed, 26 Feb 2025 10:19:14 +0530
-In-Reply-To: <d0c013d5d2a9251d5dc468446f2a08ae8a7a8953.camel@linux.ibm.com>
-References: <1916668.tdWV9SEqCh@rjwysocki.net>
-	 <d0c013d5d2a9251d5dc468446f2a08ae8a7a8953.camel@linux.ibm.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
+	s=arc-20240116; t=1740554943; c=relaxed/simple;
+	bh=6zbN5jOaaksOEj+lbfcyYF58FVbBR2uEiZ1U9Xm0Q7A=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MKtw7E30jVvebcV3AEZTQS9lWypdu075VOwLJLeMjV+8LCnebNupyuaGEegmr6xBE1po0MkQB8BAcsOUgvSOqdEPRvuIpjnH+dHqf6jfFO8cJE2ZScq6L3cf9y8rkroxBoHb1ZROyfw/sGKvZLKc8ldgy/FVnOY+Q+CNtAUpSPs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=DPnzDNfL; arc=none smtp.client-ip=209.85.218.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-ej1-f47.google.com with SMTP id a640c23a62f3a-aaf0f1adef8so445855866b.3
+        for <linux-pm@vger.kernel.org>; Tue, 25 Feb 2025 23:29:00 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1740554939; x=1741159739; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Jy5UzyKzocsSx5cSXomfjfFL//CTemBkcuebkephmC0=;
+        b=DPnzDNfLR7XZTTtbDw+DuW1lx1StRSsipS09fizN5cRrJGW7tcTHqO5NSG7xYdoHX2
+         o6tzx9bfAow0wJAO8wvFqoZHbs4mPyUkYNJ6p4x4X2XVpneFKc09+/l/Yb7I0rXWNvZf
+         59PADbwRVs1Z2Ld7EANg+3GvujiSVL9sTJFNAfRUgh+fg6qGE9wORi/b9D6BsDA1wVBw
+         nERAEUIHLAgGAaFUFnLURjg/tr13IDXYc82dy/A6pzvk+xS3FFlJBWRs/jLhn1DVfYvd
+         oBGL2zkNNM7XMhVb58ZA7Zr8kDt7ripM7lDqQoP5adxc4THLPzMH4Ps/LDy2jBnSEDqQ
+         ZvWg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740554939; x=1741159739;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Jy5UzyKzocsSx5cSXomfjfFL//CTemBkcuebkephmC0=;
+        b=whpbGpH7X7qTJ5MvuS9CAvFDylCYG0gnu28FE62dxFKDb1+hiLWpSAB0LxHmiuemte
+         cIAyb2Hmvfc9g3WMwdkO3fqH21hD4NrfA4x7vjaMCUkWybijjogRkpzsO5Uj8xp6BHNh
+         0HWoOO2kc5m/SKcm7i1ONdlRUYGVpVNJImAp81OgpEJQz7FDCc7kPa2F23dv2lVJdGkk
+         MTXBROfGV+Xydz/YZnQ/t5Z4VLmP5GgaOkAJ0x42bm45W0spUse2nbUqmexHZfY4sdP4
+         1nINl+QA4ZJt2r8XvD48CEKOuiA9VryXa4A52KBH9r3h0Tq/YtfDGeIiBZLKas8c5v2c
+         sFpg==
+X-Forwarded-Encrypted: i=1; AJvYcCVIy/qgvolQeH/allZH4k+ikD9/996R8Nnx7JQWM/ki9rfR4eW2TVjKmX4LgWJEGj92lTqiejbwsA==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyb9nEeiPNSgnmpXB6EmZKMPFiHQF7n3Mw7paeKMsH6H08gdmNG
+	yif/OdaGKlRyLTZKq0pewgts/lJQTcJIi90PytYaU20DK2sNZ4Lme0hxEEUVlhcrtzXllHqKdXw
+	qRiET/IRp2xz/djY9d/+nvLx/AD4gxqfq2/JP/A==
+X-Gm-Gg: ASbGncvbyPkC2dUBDOeDYmz6T6wvINUpsIyMS+CIhblSLxirtzaczVLe5dxVX/DIIA6
+	jsIy7jcR+I0fV2Eu7i8+QGF1luK49o7XdorEHB2EUEtQeqTXddjmWqA7lkM91nRjfB4rkbRSjh2
+	V0+nD6yA==
+X-Google-Smtp-Source: AGHT+IFYP8Tba+z3P6zhrfLVohTtXs/BwRHQBKKRVXu59ZSzqEPbWtjoPmnK2n59Ee5Tugvqu0RIdPnu12lt6iEjWaU=
+X-Received: by 2002:a17:906:18b1:b0:ab6:ed8a:601f with SMTP id
+ a640c23a62f3a-abeeed1123amr202024966b.12.1740554939189; Tue, 25 Feb 2025
+ 23:28:59 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-TM-AS-GCONF: 00
-X-Proofpoint-ORIG-GUID: uj5-40n9YXUe1HMMSpwPJ5oKjlHeZ0PF
-X-Proofpoint-GUID: uj5-40n9YXUe1HMMSpwPJ5oKjlHeZ0PF
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-02-25_08,2025-02-25_03,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
- priorityscore=1501 spamscore=0 clxscore=1015 suspectscore=0 mlxscore=0
- lowpriorityscore=0 malwarescore=0 phishscore=0 bulkscore=0 mlxlogscore=999
- adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2502260033
+References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
+ <20250225-converge-secs-to-jiffies-part-two-v3-6-a43967e36c88@linux.microsoft.com>
+ <e53d7586-b278-4338-95a2-fa768d5d8b5e@wanadoo.fr>
+In-Reply-To: <e53d7586-b278-4338-95a2-fa768d5d8b5e@wanadoo.fr>
+From: Daniel Vacek <neelx@suse.com>
+Date: Wed, 26 Feb 2025 08:28:48 +0100
+X-Gm-Features: AQ5f1JpekOKemtGu2BHsnbGs6fr563e7jHjxxRB5HZ2bESNce9YNZRbPCIKk9Cc
+Message-ID: <CAPjX3Fcr+BoMRgZGbqqgpF+w-sHU+SqGT8QJ3QCp8uvJbnaFsQ@mail.gmail.com>
+Subject: Re: [PATCH v3 06/16] rbd: convert timeouts to secs_to_jiffies()
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: Easwar Hariharan <eahariha@linux.microsoft.com>, Frank.Li@nxp.com, 
+	James.Bottomley@hansenpartnership.com, Julia.Lawall@inria.fr, 
+	Shyam-sundar.S-k@amd.com, akpm@linux-foundation.org, axboe@kernel.dk, 
+	broonie@kernel.org, cassel@kernel.org, cem@kernel.org, 
+	ceph-devel@vger.kernel.org, clm@fb.com, cocci@inria.fr, 
+	dick.kennedy@broadcom.com, djwong@kernel.org, dlemoal@kernel.org, 
+	dongsheng.yang@easystack.cn, dri-devel@lists.freedesktop.org, 
+	dsterba@suse.com, festevam@gmail.com, hch@lst.de, hdegoede@redhat.com, 
+	hmh@hmh.eng.br, ibm-acpi-devel@lists.sourceforge.net, idryomov@gmail.com, 
+	ilpo.jarvinen@linux.intel.com, imx@lists.linux.dev, james.smart@broadcom.com, 
+	jgg@ziepe.ca, josef@toxicpanda.com, kalesh-anakkur.purayil@broadcom.com, 
+	kbusch@kernel.org, kernel@pengutronix.de, leon@kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-block@vger.kernel.org, 
+	linux-btrfs@vger.kernel.org, linux-ide@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-nvme@lists.infradead.org, 
+	linux-pm@vger.kernel.org, linux-rdma@vger.kernel.org, 
+	linux-scsi@vger.kernel.org, linux-sound@vger.kernel.org, 
+	linux-spi@vger.kernel.org, linux-xfs@vger.kernel.org, 
+	martin.petersen@oracle.com, nicolas.palix@imag.fr, ogabbay@kernel.org, 
+	perex@perex.cz, platform-driver-x86@vger.kernel.org, s.hauer@pengutronix.de, 
+	sagi@grimberg.me, selvin.xavier@broadcom.com, shawnguo@kernel.org, 
+	sre@kernel.org, tiwai@suse.com, xiubli@redhat.com, yaron.avizrat@intel.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 2025-02-24 at 11:57 +0530, Aboorva Devarajan wrote:
-> On Thu, 2025-02-06 at 15:21 +0100, Rafael J. Wysocki wrote:
->=20
->=20
->=20
->=20
-> So for the entire series:
->=20
-> Tested-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
->=20
-> I'm also trying a minimal unit fuzz-test with the pre- and post- patched =
-version of the get_typical_interval=C2=A0
-> function to understand this better, will post the results soon.
->=20
->=20
-In addition to the previous tests, I also reviewed and tested how get_typic=
-al_interval
-predicts the idle duration before and after the patch by mimicking the func=
-tion in
-userspace for better unit fuzz testing [1].
+On Tue, 25 Feb 2025 at 22:10, Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> Le 25/02/2025 =C3=A0 21:17, Easwar Hariharan a =C3=A9crit :
+> > Commit b35108a51cf7 ("jiffies: Define secs_to_jiffies()") introduced
+> > secs_to_jiffies().  As the value here is a multiple of 1000, use
+> > secs_to_jiffies() instead of msecs_to_jiffies() to avoid the multiplica=
+tion
+> >
+> > This is converted using scripts/coccinelle/misc/secs_to_jiffies.cocci w=
+ith
+> > the following Coccinelle rules:
+> >
+> > @depends on patch@ expression E; @@
+> >
+> > -msecs_to_jiffies(E * 1000)
+> > +secs_to_jiffies(E)
+> >
+> > @depends on patch@ expression E; @@
+> >
+> > -msecs_to_jiffies(E * MSEC_PER_SEC)
+> > +secs_to_jiffies(E)
+> >
+> > While here, remove the no-longer necessary check for range since there'=
+s
+> > no multiplication involved.
+>
+> I'm not sure this is correct.
+> Now you multiply by HZ and things can still overflow.
 
-With the patch get_typical_interval function now produces more predictable =
-values, whereas
-in the previous implementation it frequently returned UINT_MAX. The behavio=
-r with the patch
-seems to be more reasonable compared to before. =20
+This does not deal with any additional multiplications. If there is an
+overflow, it was already there before to begin with, IMO.
 
-Here are the test results =20
+> Hoping I got casting right:
 
-1. Low Variance:
+Maybe not exactly? See below...
 
-When the history of CPU idle durations (8 intervals) is relatively uniform =
-with low variance,
-the predicted idle duration is unchanged between the patched and unpatched =
-versions: =20
+> #define MSEC_PER_SEC    1000L
+> #define HZ 100
+>
+>
+> #define secs_to_jiffies(_secs) (unsigned long)((_secs) * HZ)
+>
+> static inline unsigned long _msecs_to_jiffies(const unsigned int m)
+> {
+>         return (m + (MSEC_PER_SEC / HZ) - 1) / (MSEC_PER_SEC / HZ);
+> }
+>
+> int main() {
+>
+>         int n =3D INT_MAX - 5;
+>
+>         printf("res  =3D %ld\n", secs_to_jiffies(n));
+>         printf("res  =3D %ld\n", _msecs_to_jiffies(1000 * n));
 
-| Test Case | Intervals                                    | Before | After=
- | Difference |
-|-----------|----------------------------------------------|--------|------=
--|------------|
-| 1         | 100,105,110,115,120,125,130,135              | 117    | 117  =
- | 0          |
-| 2         | 200,205,210,215,220,225,230,235              | 217    | 217  =
- | 0          |
-| 3         | 500,505,510,515,520,525,530,535              | 517    | 517  =
- | 0          |
-| 4         | 1000,1005,1010,1015,1020,1025,1030,1035      | 1017   | 1017 =
- | 0          |
+I think the format should actually be %lu giving the below results:
 
- 2. High Variance
-=20
-For cases with high variance, the nonpatched function returned UINT_MAX,
+res  =3D 18446744073709551016
+res  =3D 429496130
 
-After the patch, the function now returns reasonable values: =20
+Which is still wrong nonetheless. But here, *both* results are wrong
+as the expected output should be 214748364200 which you'll get with
+the correct helper/macro.
 
-| Test Case | Intervals                                  | Before      | Af=
-ter | Difference       |
-|-----------|--------------------------------------------|-------------|---=
-----|------------------|
-| 5         | 99,198,297,396,495,594,693,792             | 4294967295  | 59=
-4   | -4294966701      |
-| 6         | 1000,2000,3000,4000,5000,6000,7000,8000    | 4294967295  | 60=
-00  | -4294961295      |
-| 7         | 40,140,240,340,440,540,640,740             | 4294967295  | 54=
-0   | -4294966755      |
-| 8         | 90,590,1090,1590,2090,2590,3090,3590       | 4294967295  | 25=
-90  | -4294964705      |
-| 9         | 42,142,242,342,442,542,642,742             | 4294967295  | 54=
-2   | -4294966753      |
-| 10        | 70,570,1070,1570,2070,2570,3070,3570       | 4294967295  | 25=
-70  | -4294964725      |
-| 11        | 44,144,244,344,444,544,644,744             | 4294967295  | 54=
-4   | -4294966751      |
+But note another thing, the 1000 * (INT_MAX - 5) already overflows
+even before calling _msecs_to_jiffies(). See?
 
- 3. Low-end Outliers=20
+Now, you'll get that mentioned correct result with:
 
-The patch removes variance from low-end values as well,
-Without the patch, the function only filtered high-end outliers, but now it=
- correctly eliminates both
-high and low ends.
+#define secs_to_jiffies(_secs) ((unsigned long)(_secs) * HZ)
 
-| Test Case | Intervals                                 | Before      | Aft=
-er | Difference  |
-|-----------|-------------------------------------------|-------------|----=
----|-------------|
-| 12        | 1,200,200,250,250,230,220,260             | 4294967295  | 230=
-   | -4294967065 |
-| 13        | 100000,200,200,250,250,230,220,260        | 230         | 230=
-   | 0           |
+Still, why unsigned? What if you wanted to convert -5 seconds to jiffies?
 
+>         return 0;
+> }
+>
+>
+> gives :
+>
+> res  =3D -600
+> res  =3D 429496130
+>
+> with msec, the previous code would catch the overflow, now it overflows
+> silently.
 
- 4. As far as I understand, the function only returns UINT_MAX when all val=
-ues are 0, negative, or the
-computed average itself is UINT_MAX. =20
+What compiler options are you using? I'm not getting any warnings.
 
-| Test Case | Intervals                                   | Before      | A=
-fter       | Difference |
-|-----------|---------------------------------------------|-------------|--=
------------|------------|
-| 14        | 4294967295,4294967295,4294967295,4294967295 | 4294967295  | 4=
-294967295  | 0          |
-| 15        | 0,0,0,0,0,0,0,0                             | 4294967295  | 4=
-294967295  | 0          |
-
-The updated get_typical_interval function avoids unnecessary UINT_MAX retur=
-ns, handles both low and high end
-outliers, and gives more reliable predictions in high-variance cases. It on=
-ly returns UINT_MAX when absolutely
-necessary, and this will help in not selecting deeper idle state unless it =
-is needed. So, I'm good with
-the patch.=20
-
-Refer [2] for more test results.
-
-[1] - https://github.com/AboorvaDevarajan/linux-utils/blob/main/cpuidle/cpu=
-idle-predict-duration/predict_cpuidle_interval.c
-[2] - https://github.com/AboorvaDevarajan/linux-utils/blob/main/cpuidle/cpu=
-idle-predict-duration/out.predict.csv
-
-
-Thanks,
-Aboorva
+> untested, but maybe:
+>         if (result.uint_32 > INT_MAX / HZ)
+>                 goto out_of_range;
+>
+> ?
+>
+> CJ
+>
+>
+> >
+> > Acked-by: Ilya Dryomov <idryomov-Re5JQEeQqe8AvxtiuMwx3w@public.gmane.or=
+g>
+> > Signed-off-by: Easwar Hariharan <eahariha-1pm0nblsJy7Jp67UH1NAhkEOCMrvL=
+tNR@public.gmane.org>
+> > ---
+> >   drivers/block/rbd.c | 8 +++-----
+> >   1 file changed, 3 insertions(+), 5 deletions(-)
+> >
+> > diff --git a/drivers/block/rbd.c b/drivers/block/rbd.c
+> > index faafd7ff43d6ef53110ab3663cc7ac322214cc8c..41207133e21e9203192adf3=
+b92390818e8fa5a58 100644
+> > --- a/drivers/block/rbd.c
+> > +++ b/drivers/block/rbd.c
+> > @@ -108,7 +108,7 @@ static int atomic_dec_return_safe(atomic_t *v)
+> >   #define RBD_OBJ_PREFIX_LEN_MAX      64
+> >
+> >   #define RBD_NOTIFY_TIMEOUT  5       /* seconds */
+> > -#define RBD_RETRY_DELAY              msecs_to_jiffies(1000)
+> > +#define RBD_RETRY_DELAY              secs_to_jiffies(1)
+> >
+> >   /* Feature bits */
+> >
+> > @@ -4162,7 +4162,7 @@ static void rbd_acquire_lock(struct work_struct *=
+work)
+> >               dout("%s rbd_dev %p requeuing lock_dwork\n", __func__,
+> >                    rbd_dev);
+> >               mod_delayed_work(rbd_dev->task_wq, &rbd_dev->lock_dwork,
+> > -                 msecs_to_jiffies(2 * RBD_NOTIFY_TIMEOUT * MSEC_PER_SE=
+C));
+> > +                 secs_to_jiffies(2 * RBD_NOTIFY_TIMEOUT));
+> >       }
+> >   }
+> >
+> > @@ -6283,9 +6283,7 @@ static int rbd_parse_param(struct fs_parameter *p=
+aram,
+> >               break;
+> >       case Opt_lock_timeout:
+> >               /* 0 is "wait forever" (i.e. infinite timeout) */
+> > -             if (result.uint_32 > INT_MAX / 1000)
+> > -                     goto out_of_range;
+> > -             opt->lock_timeout =3D msecs_to_jiffies(result.uint_32 * 1=
+000);
+> > +             opt->lock_timeout =3D secs_to_jiffies(result.uint_32);
+> >               break;
+> >       case Opt_pool_ns:
+> >               kfree(pctx->spec->pool_ns);
+> >
+>
+>
 
