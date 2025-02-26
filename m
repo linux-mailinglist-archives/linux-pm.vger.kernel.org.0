@@ -1,112 +1,113 @@
-Return-Path: <linux-pm+bounces-23018-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23019-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73205A46933
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 19:13:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B055A46997
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 19:25:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id DE3207A9144
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 18:11:16 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3A36A1736BC
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 18:25:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8013B234970;
-	Wed, 26 Feb 2025 18:10:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8ED71238D5B;
+	Wed, 26 Feb 2025 18:18:41 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b="VmATNXiN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VnxcBT5Y"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtpbgsg2.qq.com (smtpbgsg2.qq.com [54.254.200.128])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1EEC7238140;
-	Wed, 26 Feb 2025 18:10:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=54.254.200.128
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 627072356B2;
+	Wed, 26 Feb 2025 18:18:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740593443; cv=none; b=gcpcqNSXKu15tRQB28sZi5RL6N/5u8tkZK2aDueP0AA4mCfDMcDeczH0b1RjlQuxMKwUa5QnCnNOn5fSNpOnLnHPOXLOOugA7n6ePBAVF4kM6JMBGN7fZ0Cp6YsG03DA8XH+LQYl56fD8BzWJKEyqa5eBqtsCI5vi23mjmfnepw=
+	t=1740593921; cv=none; b=X5j2yHLIbn0J7NGK3KhpGx7nJ9RM/ONE6FplTip9u7K6HpjoFid8h8RJRfakRex3e8cG6twmU3pOweZ4WlmMmBUmQX/Th161t+S3OUhheHJfh31M+l8mwSzaSrq3ukfBbfba5eVxR4npd8W1ESywx1cstaIQK5oFZB7Zp/CSNPE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740593443; c=relaxed/simple;
-	bh=g+WVmMBcEHw/mh2I08E4bmd/znjw3ZUG1VmTY9195Z4=;
-	h=From:To:Cc:Subject:Mime-Version:Content-Type:Date:Message-ID:
-	 References:In-Reply-To; b=IH2MCmkyRkg+pKyOVKc4MJ19zM4Geeg2MXbyKb+q3laJWuPGR0sAsnpV+9cprhEFNbc/6uu83ZFdmlOwkEOG+e1ereymXuUAfyqchJVPZrQc1hO/q+KpPzq/P0decDSUH/KCPrWv1D+xueYJzmfxm0xZH16ysfYlKludohq8VDE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com; spf=pass smtp.mailfrom=uniontech.com; dkim=pass (1024-bit key) header.d=uniontech.com header.i=@uniontech.com header.b=VmATNXiN; arc=none smtp.client-ip=54.254.200.128
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=uniontech.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=uniontech.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=uniontech.com;
-	s=onoh2408; t=1740593287;
-	bh=g+WVmMBcEHw/mh2I08E4bmd/znjw3ZUG1VmTY9195Z4=;
-	h=From:To:Subject:Mime-Version:Date:Message-ID;
-	b=VmATNXiNpiNhP4xPczWrA2bbotj26WW5LrxQDpwXoIvpYqnHKHZ96fh40kK53ifu/
-	 hGG4ckmN8bE5DRTvTuskXL+ac6Sdw5D+gpVVGHUi6GiF2qdwcfyacVRcEFM36Ix8vd
-	 d7hZE/27Er6/e4QJ/TwWpit5yfQREw5tE87s7068=
-X-QQ-GoodBg: 1
-X-QQ-SSF: 00400000000000F0
-X-QQ-FEAT: D4aqtcRDiqT6iyfUez+DXx4B7ybItHVbSxkDlA8/kMI=
-X-QQ-BUSINESS-ORIGIN: 2
-X-QQ-Originating-IP: JtCBZ5ymfZPhsUinjHaER1gHqeRkrPE8F3mOU8aVB4k=
-X-QQ-STYLE: 
-X-QQ-mid: v3sz3a-6t1740593277t9517932
-From: "=?utf-8?B?V2VudGFvIEd1YW4=?=" <guanwentao@uniontech.com>
-To: "=?utf-8?B?UmFmYWVsIEouIFd5c29ja2k=?=" <rafael@kernel.org>, "=?utf-8?B?546L5pix5Yqb?=" <wangyuli@uniontech.com>
-Cc: "=?utf-8?B?cmFmYWVs?=" <rafael@kernel.org>, "=?utf-8?B?cGF2ZWw=?=" <pavel@kernel.org>, "=?utf-8?B?dGdseA==?=" <tglx@linutronix.de>, "=?utf-8?B?bWluZ28=?=" <mingo@redhat.com>, "=?utf-8?B?YnA=?=" <bp@alien8.de>, "=?utf-8?B?ZGF2ZS5oYW5zZW4=?=" <dave.hansen@linux.intel.com>, "=?utf-8?B?eDg2?=" <x86@kernel.org>, "=?utf-8?B?aHBh?=" <hpa@zytor.com>, "=?utf-8?B?bGludXgtcG0=?=" <linux-pm@vger.kernel.org>, "=?utf-8?B?bGludXgta2VybmVs?=" <linux-kernel@vger.kernel.org>, "=?utf-8?B?5Y2g5L+K?=" <zhanjun@uniontech.com>, "=?utf-8?B?6IGC6K+a?=" <niecheng1@uniontech.com>, "=?utf-8?B?6ZmI6bqf6L2p?=" <chenlinxuan@uniontech.com>, "=?utf-8?B?SHVhY2FpIENoZW4=?=" <chenhuacai@loongson.cn>
-Subject: Re: [RFC PATCH] x86 / hibernate: Eliminate the redundant smp_ops.play_dead assignment
+	s=arc-20240116; t=1740593921; c=relaxed/simple;
+	bh=I6uZ3dubqopcXOEdZGEs1cSZizLSjhh+Xzs4+YI0Z9w=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=VRpBVEbnnCwWIrECD9FBUCw+TvjTeRacD/Eein8jpFTVU/bcEN6TC4f6of+jMDcYrufmOtAh7wso1anDFS8ZYoNYqTUm5K8XeT6cWLOlQvgW1ouQQMq8qer8LLOjeubB5ZA+GDNJj5gz5mXd7N7ypjMrwMznemUZ5FsXS2wtDys=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VnxcBT5Y; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D858BC4CEEC;
+	Wed, 26 Feb 2025 18:18:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740593920;
+	bh=I6uZ3dubqopcXOEdZGEs1cSZizLSjhh+Xzs4+YI0Z9w=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VnxcBT5YS33uu66ssViE3OsbbOU+0Gwfa83ZtM9wbsnoE25Ejv19v4XNyvl623rcR
+	 8mC5MHmEGFTYaSh0DbrH0A4EQGLndlkKvMaPNjxfpXTExkmHsanJaAFy7kciZhpWH0
+	 3DjQJrZhD+A5aZJLce7NxcbgtTKrGL8Nl0yexYVg5wH61Smd3d7Bhwspp7ILBWj6rf
+	 ZMM44qEWCnZ7VaoYQnAOUmUBD2hEboPd6MUP9wHVmbqRwlBqFXOXkKonMRfGQAJFgF
+	 spdZ4qXxELo8CAGh1p8a6NjR/elqkZcXwbvd0eWfhky6e8MhUxCy4vyWJIxnKwxl+u
+	 /5o3wdft5xbDA==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2a88c7fabdeso112359fac.1;
+        Wed, 26 Feb 2025 10:18:40 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCW3gw2mX7+Vxbd4uBjAIUW3b+afuzzRGWE3I+/vqAEHT+wOIDP8+GolL3WwX8xiy1vzw/8MZQk5Y/ggqM8=@vger.kernel.org, AJvYcCXUDNR93+7zk20c19AgfAqKzmoWmQW2JBLdZ4tFPW9OcaP+ZEcy6QwzdydEHiLeEbt+GcDS+ZnDhTA=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/wvHHLNO45rvuoYWlE9xaRF3bBsKd7OBfYGgfZBXbQh8h5DjP
+	irgkLeZ0K7VR4sMpbEE6UsMMuPfkhc3G6QLpL2BL+FJbSFaHGTvZ3VorpMCskk3PTf6BFVysab/
+	X5TUpGi1DOnMFpADpTde6iIyEoo0=
+X-Google-Smtp-Source: AGHT+IE2kmXQsWSG7myXgUfM51bmNQDYKRwO4hv8qqCQ4cQ+cPJk5SEUokPYyteIO5x0nzk/onRfjaO32NpiFjty/X4=
+X-Received: by 2002:a05:6870:a10d:b0:2b7:ecaf:59d4 with SMTP id
+ 586e51a60fabf-2bd5185ac3dmr15454643fac.38.1740593920019; Wed, 26 Feb 2025
+ 10:18:40 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: base64
-Date: Thu, 27 Feb 2025 02:07:57 +0800
-X-Priority: 3
-Message-ID: <tencent_18C611757FED8D54331785FA@qq.com>
-X-QQ-MIME: TCMime 1.0 by Tencent
-X-Mailer: QQMail 2.x
-X-QQ-Mailer: QQMail 2.x
+MIME-Version: 1.0
 References: <CF154B5C3C8E7E64+20250224074357.673094-1-wangyuli@uniontech.com>
-	<CAJZ5v0iigAB97mGBe6Uvr0v0spjqDKan-0O9XGObt5b4ZBvM7A@mail.gmail.com>
-In-Reply-To: <CAJZ5v0iigAB97mGBe6Uvr0v0spjqDKan-0O9XGObt5b4ZBvM7A@mail.gmail.com>
-X-QQ-ReplyHash: 2641130897
-X-BIZMAIL-ID: 13043415646377140702
-X-QQ-SENDSIZE: 520
-Received: from qq.com (unknown [127.0.0.1])
-	by smtp.qq.com (ESMTP) with SMTP
-	id ; Thu, 27 Feb 2025 02:07:59 +0800 (CST)
-Feedback-ID: v:uniontech.com:qybglogicsvrgz:qybglogicsvrgz8a-1
-X-QQ-XMAILINFO: ND42uzdxTIzr7xhYHUIuHOBk7OylMVzd/MFSzGNRiJb15RMVkvfbjDk8
-	LqcJl/Wi+gyLfBiJXxs9fUX+exPNm3e26gzrSD1OrIJMayaNPts6CBTCgJbjqnRUlxrQfxb
-	x9zAyqC54fdxY8clW6mRURC2cpelmbrM1poArjc/7nI/x70WHsqcfA9RPOmhg/F0KepBkk+
-	JmHxxz+ppqOIqQU4rNPz+1iwhwrw1hDdeQrUmZefiL703Vb83VjpdZvDOhmckcFDb/bs/4f
-	fU4iYKg5q8YkR1j5EAW5ug6h5TJ1F0X0ViqZuD2OrC49t/Q1B5R1OCm3SGkJ/e2jRjR/v1H
-	pKIefUiP4g56hfnGx4m0+e4XPHwoEhqPp/zhXLDBZs2CjHEijZczaQxElTBp98k42C1bDUu
-	4OpeGiOZfRpyzLVTnfmni7M8sVnbh0yTlShEuZIc0bXCj45o07ohzoSlDVUz7wZ/UZJf57J
-	F25NhIqLD3diqREeQjG54msi5roeDDYpJEzHc7JXjAnaHQYluECF/ODWAp2yxx1m10uZwa2
-	Vd3aDJ4+H7WfvHvEsLKQ4xGDdaUIEvubXIqJQTFUXidY6/Xz6Jbgyg5kXCYAqRgx2PlWJCz
-	kGBG4pv6oVb9tNl5aFe7BHLG73mSCPbpc57U9CSBEe7U3P/jchpVI3Ot8+6/aO5pv6F8JyF
-	4fv0RuRYwB73OYw1K7UMnqmI8sWiNh/Lp4T8Qf8S+il37GEYy/au9ZU7VKB6E2MmRoyF9DN
-	v+OK41byxajpqqO0QzVAO8q99C19UD3f4+Wxu6SvTHKiNVIZ36YgLNIoqYVFVPcaB1Lw0tD
-	V+Q5m8tJMcnyLkDh0gKyyEwGZigzDwUpneIbY7oIUDntv36ociFEqtEKedvzh6rWbnMGUq7
-	8AWxZ2gmZy8xzLWwXNqTw3pJasdYF6vKjr/gNCITvAYrlt6BRdpzfCEf8zPUJ1TtvPxvj/y
-	8FLlgyjXfJDbKI0woj6m9aQWH4mVQnkqm62Fv/kYURJPDnbYrGd+XJnmjgfF+L8ZhfokVyk
-	z+dS+mw33OBn/hUPye
-X-QQ-XMRINFO: Mp0Kj//9VHAxr69bL5MkOOs=
-X-QQ-RECHKSPAM: 0
+ <CAJZ5v0iigAB97mGBe6Uvr0v0spjqDKan-0O9XGObt5b4ZBvM7A@mail.gmail.com> <tencent_18C611757FED8D54331785FA@qq.com>
+In-Reply-To: <tencent_18C611757FED8D54331785FA@qq.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 26 Feb 2025 19:18:28 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0jqEPMQ1rLpeH0ZV8DcsJMOXdyoYPwwRkr=2vUBCADjVQ@mail.gmail.com>
+X-Gm-Features: AQ5f1JoGe9ZXilDP7_kh_pdoEO1ILfk23DI97JFXc7XPNsuzaQey6zCxvHz8cvo
+Message-ID: <CAJZ5v0jqEPMQ1rLpeH0ZV8DcsJMOXdyoYPwwRkr=2vUBCADjVQ@mail.gmail.com>
+Subject: Re: [RFC PATCH] x86 / hibernate: Eliminate the redundant
+ smp_ops.play_dead assignment
+To: Wentao Guan <guanwentao@uniontech.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, =?UTF-8?B?546L5pix5Yqb?= <wangyuli@uniontech.com>, 
+	pavel <pavel@kernel.org>, tglx <tglx@linutronix.de>, mingo <mingo@redhat.com>, 
+	bp <bp@alien8.de>, "dave.hansen" <dave.hansen@linux.intel.com>, x86 <x86@kernel.org>, 
+	hpa <hpa@zytor.com>, linux-pm <linux-pm@vger.kernel.org>, 
+	linux-kernel <linux-kernel@vger.kernel.org>, =?UTF-8?B?5Y2g5L+K?= <zhanjun@uniontech.com>, 
+	=?UTF-8?B?6IGC6K+a?= <niecheng1@uniontech.com>, 
+	=?UTF-8?B?6ZmI6bqf6L2p?= <chenlinxuan@uniontech.com>, 
+	Huacai Chen <chenhuacai@loongson.cn>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-SGVsbG8sDQoNClRoYW5rcyBmb3IgeW91ciByZXBseS4NCg0KSW4gbXkgb3BpbmlvbiwgdGhl
-IG9ubHkgbG9naWMgZGlmZmVyZW50IGJlZm9yZSB0aGUgcGF0Y2ggaXMgZGVsZXRlIHNtcF9v
-cHMucGxheV9kZWFkDQpzYXZlIGFuZCByZXN0b3JlLCBhcyB0aGUgY29tbWVudCAidGhlIHJl
-c3VtZWQga2VybmVsIHdpbGwgZGVjaWRlIGl0c2VsZiIgYW5kIHNhbWUgDQpsb2dpYyBhcyB3
-aGljaCBpbiBhcmNoL2FybTY0L2tlcm5lbC9oaWJlcm5hdGUuYywgdGhlIG9rIHBhdGggd2ls
-bCB3b3JrIGFzIGV4cGVjdC4NCg0KV2hlbiBkaXNjdXNzaW5nIHRoZSBlcnJvciBwYXRoIGFu
-ZCByZXQgdmFsdWUgdGhhdCB3ZSBub3QgcmVzdG9yZSBwbGF5X2RlYWQsDQpJIHdpbGwgdHJ5
-IHRvIGFuYWx5emUgdGhlIGRpZmZlcmVuY2UgYmV0d2VlbiBuYXRpdmVfcGxheV9kZWFkIGFu
-ZCByZXN1bWVfcGxheV9kZWFkLA0KYW5kIHNldl9lc19wbGF5X2RlYWQgW3RoZSBhbGwgcG9z
-c2lhYmxlIHRocmVlIHZhbHVlXSwgYW5kIEkgc2VlIHNvbWUgbXdhaXQgYW5kIGhsdA0Kd2F5
-IGRpZmZlcmVuY2UuW21heWJlIGl0IGhhcHBlbnMgYXMgZGlzYWJsZSB0aGUgY3B1IGZhaWxl
-ZCBhbmQgZ29lcyB0byBFbmFibGVfY3B1cw0KcGF0aCBpbiBmdW5jOnJlc3VtZV90YXJnZXRf
-a2VybmVsIGluIGhpYmVybmF0ZS5jPyBdIElzIHRoYXQgaXQgZGVzZ2luIHRvIGRvIGFuZCB3
-ZSBjYW4NCm1vdmUgaXQgdG8gYSBjb21tb24gcGxhY2UgaW4gaGliZXJuYXRlLmMgYW5kIGxl
-ZnQgc29tZSBjb21tZW50cyA/IA0KDQpCUnMNCldlbnRhbyBHdWFu
+On Wed, Feb 26, 2025 at 7:08=E2=80=AFPM Wentao Guan <guanwentao@uniontech.c=
+om> wrote:
+>
+> Hello,
+>
+> Thanks for your reply.
+>
+> In my opinion, the only logic different before the patch is delete smp_op=
+s.play_dead
+> save and restore, as the comment "the resumed kernel will decide itself" =
+and same
+> logic as which in arch/arm64/kernel/hibernate.c, the ok path will work as=
+ expect.
 
+Yes, the OK path will work as expected so long as smp_ops.play_dead is
+switched over to resume_play_dead before calling
+freeze_secondary_cpus().
+
+> When discussing the error path and ret value that we not restore play_dea=
+d,
+> I will try to analyze the difference between native_play_dead and resume_=
+play_dead,
+> and sev_es_play_dead [the all possiable three value], and I see some mwai=
+t and hlt
+> way difference.[maybe it happens as disable the cpu failed and goes to En=
+able_cpus
+> path in func:resume_target_kernel in hibernate.c? ] Is that it desgin to =
+do and we can
+> move it to a common place in hibernate.c and left some comments ?
+
+Why not leave it as is?
 
