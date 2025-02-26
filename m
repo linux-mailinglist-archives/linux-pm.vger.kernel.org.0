@@ -1,156 +1,206 @@
-Return-Path: <linux-pm+bounces-23004-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23005-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C0FCA46358
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 15:45:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 76F73A46368
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 15:46:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5D2E43A6D44
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 14:44:58 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 037BF3B3C98
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 14:46:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F32F2222B8;
-	Wed, 26 Feb 2025 14:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 96F492236EB;
+	Wed, 26 Feb 2025 14:45:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mFrM1f+k"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="L7TO8yXx"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6F9C222173E;
-	Wed, 26 Feb 2025 14:45:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 690F2223339;
+	Wed, 26 Feb 2025 14:45:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740581103; cv=none; b=UyBg8FyU7p4TvWowdQVbTKICtuH0xmKsbDst8xsW3nzAoaQxl3T1y5CPax8gI5OvxAPlT+XmwI1gFPpeNBooVGOxdKBjsofrhujMYTY3lPL18SUQLzoRRp487cLehZPS+pKNo1gUwwsfjPmEhIX9w/zK4GZm4cyq7zbJqVcP7mc=
+	t=1740581151; cv=none; b=QUeGXHd9COGZ3BnT/SNaB91s9wcDpSnp24zceqedgC1YJElCMy05xNXOid+GS7dRt+Dd6FCbTrdv+51IP8lKKVn1Rm/r74nTKfsSOQdnexOJy8RX7bDA2sablF8XRCqsGVgqYe5jaYWh4vF9758r+fDf/q4vyxIytSxDOfdYl2s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740581103; c=relaxed/simple;
-	bh=RTe1hi9sZtyjsIJ/eh+swsfyLFcndx/luRTFTjbvSOE=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=m7rade6vYSHwhkpC9VDY9yYfZhq1K3rWPnrivfHSSbHxNG8Tn5K+wlkYgiJXSOXYS2G4A0HjY+h8TtPt1V/NgAoQ2D3IAZeK1Sqo0ij9FmkJlg1j1/kqwJKrQw/hNIgQX2F0HXNDgRHF1tgy4Y1FPxyk2Y55XXvMaYxr+d5lyZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mFrM1f+k; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E0A74C4CEEA;
-	Wed, 26 Feb 2025 14:45:02 +0000 (UTC)
+	s=arc-20240116; t=1740581151; c=relaxed/simple;
+	bh=2e8y34nF3WAvOI36M9xs1+jJDib5lSf6jroS4lJKWRw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=c1NkqghlF7m7enkt4XhEhKb+gotDb97TLPVUC9SLnMX7oVBTayxQsZLXb3om4UC67vrV/qHg4x49At/T3BLwKZA4tVv7KHsOyaFntOcgb1SWYj5b2BpHtgIOF36j+zfPcvPcaHFM1GfcgqILXbu+5gTpkp136YDQL5GhiZrWP78=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=L7TO8yXx; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 9932AC4AF0B;
+	Wed, 26 Feb 2025 14:45:50 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740581102;
-	bh=RTe1hi9sZtyjsIJ/eh+swsfyLFcndx/luRTFTjbvSOE=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=mFrM1f+k4Ryw9/hca6RmY8s1EczbyQAEbv08b0iv0aQ1LjH91v/7pYBy8Bt4ckOYE
-	 4+6VlXgrn+VpOd1yDuUOOcB3XNLlgz1j5EnxUSC1vMSwTyqbpNcQ06DM5WhcMsc7LO
-	 u4GZFsVbdJTo8DSkH0i5HmlWg6E2WIQSSWvf6aMh1Fs37axyUsbl3d32jUWGc/BSsx
-	 CYmTQdy+SFBEhazDvVLRaPMrp/jAyducZZ6n+6kklm4vf83qw1BdGNjPUEVJXGF8UB
-	 PhbjSAL5UIf9wcvO2DjQ33Mchu+uBvcj2sj2W0RSjJ0wFd8cVuAOs1SGEThbyhiE13
-	 XUsdih/fEjhlQ==
-Received: by mail-oo1-f54.google.com with SMTP id 006d021491bc7-5fe944a4243so537972eaf.0;
-        Wed, 26 Feb 2025 06:45:02 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCXT0LR3/t3n3t48G4Y+NMWm1SZhTVCEcnWZUzEG2SMcQGALF0jRgNBmfspH8uj9Dgq7Cou0Y3aJOFE=@vger.kernel.org, AJvYcCXY2htfPldA7pk+xgg6g2m14sVGUEQElIKnb8oKlMzlB6M1ym6IcEA7EndX0oSBKJH1PVcMl695JnFXd3s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw05kps7jIGTXQrBBCtlmuIqsnDWAcl4KhqdNpKaSvTaxtCHtZ5
-	+/qMxjZpLeRjp6V2zG1h0xmLeUj8jkgCMJQbWmCRkBTpMBboya+gYlsc4ObHRmcSDDESyERY1mU
-	GmUwv+nJwPjQgmw1tMv/ipJ7bVeE=
-X-Google-Smtp-Source: AGHT+IFDwFhho2gHF381k0q51unIEu5nVg0XaN8q8w7FXXIdvxfU5Fs0Ire5SNN90GjJPlA17LgF12CU1gM23vx/Uvw=
-X-Received: by 2002:a05:6808:3a0e:b0:3f3:ffc5:7ba7 with SMTP id
- 5614622812f47-3f540fbf8d8mr4309832b6e.24.1740581102067; Wed, 26 Feb 2025
- 06:45:02 -0800 (PST)
+	s=k20201202; t=1740581150;
+	bh=2e8y34nF3WAvOI36M9xs1+jJDib5lSf6jroS4lJKWRw=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=L7TO8yXxQmiYV0e978xp7cwfIDefmJ7wdXKZEKaEo7couphnmeePegIiWh7rHgAes
+	 yi6PFABiCw0C6OnVizzoqwFj1Y+r4yOaPdqWynd0DSSPzQrZQvRC3yOjjyJuTqLWaS
+	 X4UNy3p+thTfBpcYIf4iwD14hMFT+Ty9KNpydCaHtMpIzgr3TDoE9kUs66v7opDFWg
+	 oplQ8iqVFvQ9CUI6aL7+JfIhPm/vs3pfSN459q0AtlP1xmpXUga85qgQP7CQEBO+2I
+	 7Rr1SDzlaQke0cDyIDA8a4JiXHva92wkVVAL7u9MTHNVoT/utxi17F/MZatXawLLWL
+	 vEAdgOgR53OLw==
+Date: Wed, 26 Feb 2025 08:45:48 -0600
+From: Rob Herring <robh@kernel.org>
+To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Heiko Stuebner <heiko@sntech.de>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>,
+	kernel@collabora.com, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 4/6] dt-bindings: thermal: rockchip: document otp
+ thermal trim
+Message-ID: <20250226144548.GA2299551-robh@kernel.org>
+References: <20250225-rk3576-tsadc-upstream-v2-0-6eb7b00de89c@collabora.com>
+ <20250225-rk3576-tsadc-upstream-v2-4-6eb7b00de89c@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250224010610.187503-1-linux@treblig.org>
-In-Reply-To: <20250224010610.187503-1-linux@treblig.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 26 Feb 2025 15:44:51 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j_dX2a1_cz1SDdSqWHFsGX2mcFx1rE52hVHRnPUFgbmw@mail.gmail.com>
-X-Gm-Features: AQ5f1JoyX5cU0PwLw63HPMohRvlIDUpPpZx6RHNliw-kLiQ9B0-X0rpSleyA9H8
-Message-ID: <CAJZ5v0j_dX2a1_cz1SDdSqWHFsGX2mcFx1rE52hVHRnPUFgbmw@mail.gmail.com>
-Subject: Re: [PATCH] PM: clk: remove unused of_pm_clk_add_clk
-To: linux@treblig.org
-Cc: rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
-	linux-pm@vger.kernel.org, gregkh@linuxfoundation.org, dakr@kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250225-rk3576-tsadc-upstream-v2-4-6eb7b00de89c@collabora.com>
 
-On Mon, Feb 24, 2025 at 2:06=E2=80=AFAM <linux@treblig.org> wrote:
->
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
->
-> The last use of of_pm_clk_add_clk() was removed by 2019's
-> commit fe00f8900ca7 ("irqchip/gic-pm: Update driver to use clk_bulk APIs"=
-)
->
-> Remove it.
->
-> Note that the plural version of_pm_clk_add_clks() is still being
-> used and is left.
->
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+On Tue, Feb 25, 2025 at 01:56:47PM +0100, Nicolas Frattaroli wrote:
+> Several Rockchip SoCs, such as the RK3576, can store calibration trim
+> data for thermal sensors in OTP cells. This capability should be
+> documented.
+> 
+> Such a rockchip thermal sensor may reference cell handles that store
+> both a chip-wide trim for all the sensors, as well as cell handles
+> for each individual sensor channel pointing to that specific sensor's
+> trim value.
+> 
+> Additionally, the thermal sensor may optionally reference cells which
+> store the base in terms of degrees celsius and decicelsius that the trim
+> is relative to.
+> 
+> Each SoC that implements this appears to have a slightly different
+> combination of chip-wide trim, base, base fractional part and
+> per-channel trim, so which ones do which is documented in the bindings.
+> 
+> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
 > ---
->  drivers/base/power/clock_ops.c | 33 ---------------------------------
->  include/linux/pm_clock.h       |  1 -
->  2 files changed, 34 deletions(-)
->
-> diff --git a/drivers/base/power/clock_ops.c b/drivers/base/power/clock_op=
-s.c
-> index e18ba676cdf6..97a53215a274 100644
-> --- a/drivers/base/power/clock_ops.c
-> +++ b/drivers/base/power/clock_ops.c
-> @@ -259,39 +259,6 @@ int pm_clk_add_clk(struct device *dev, struct clk *c=
-lk)
->  }
->  EXPORT_SYMBOL_GPL(pm_clk_add_clk);
->
-> -
-> -/**
-> - * of_pm_clk_add_clk - Start using a device clock for power management.
-> - * @dev: Device whose clock is going to be used for power management.
-> - * @name: Name of clock that is going to be used for power management.
-> - *
-> - * Add the clock described in the 'clocks' device-tree node that matches
-> - * with the 'name' provided, to the list of clocks used for the power
-> - * management of @dev. On success, returns 0. Returns a negative error
-> - * code if the clock is not found or cannot be added.
-> - */
-> -int of_pm_clk_add_clk(struct device *dev, const char *name)
-> -{
-> -       struct clk *clk;
-> -       int ret;
-> -
-> -       if (!dev || !dev->of_node || !name)
-> -               return -EINVAL;
-> -
-> -       clk =3D of_clk_get_by_name(dev->of_node, name);
-> -       if (IS_ERR(clk))
-> -               return PTR_ERR(clk);
-> -
-> -       ret =3D pm_clk_add_clk(dev, clk);
-> -       if (ret) {
-> -               clk_put(clk);
-> -               return ret;
-> -       }
-> -
-> -       return 0;
-> -}
-> -EXPORT_SYMBOL_GPL(of_pm_clk_add_clk);
-> -
->  /**
->   * of_pm_clk_add_clks - Start using device clock(s) for power management=
-.
->   * @dev: Device whose clock(s) is going to be used for power management.
-> diff --git a/include/linux/pm_clock.h b/include/linux/pm_clock.h
-> index 68669ce18720..45c3f3ccbaf8 100644
-> --- a/include/linux/pm_clock.h
-> +++ b/include/linux/pm_clock.h
-> @@ -41,7 +41,6 @@ extern int pm_clk_create(struct device *dev);
->  extern void pm_clk_destroy(struct device *dev);
->  extern int pm_clk_add(struct device *dev, const char *con_id);
->  extern int pm_clk_add_clk(struct device *dev, struct clk *clk);
-> -extern int of_pm_clk_add_clk(struct device *dev, const char *name);
->  extern int of_pm_clk_add_clks(struct device *dev);
->  extern void pm_clk_remove(struct device *dev, const char *con_id);
->  extern void pm_clk_remove_clk(struct device *dev, struct clk *clk);
-> --
+>  .../bindings/thermal/rockchip-thermal.yaml         | 64 ++++++++++++++++++++++
+>  1 file changed, 64 insertions(+)
+> 
+> diff --git a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+> index 49ceed68c92ce5a32ed8d4f39bd88fd052de0e80..eef8d2620b675fe2f871a03aebdaed13278e0884 100644
+> --- a/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+> +++ b/Documentation/devicetree/bindings/thermal/rockchip-thermal.yaml
+> @@ -11,6 +11,23 @@ maintainers:
+>  
+>  $ref: thermal-sensor.yaml#
+>  
+> +definitions:
 
-Applied as 6.15 material, thanks!
+'$defs' is preferred over 'definitions'. However, I don't think you need 
+either.
+
+> +  channel:
+
+Just make this a pattern property:
+
+'@[0-5]$'
+
+Really, node names should be generic and the type of thing they are, not 
+what instance they are. So something like 'sensor' for all the child 
+nodes. IOW, node names is not how you should identify what each sensor 
+is associated with.
+
+> +    type: object
+> +    properties:
+> +      reg:
+> +        maxItems: 1
+> +        description: sensor ID, a.k.a. channel number
+> +      nvmem-cells:
+> +        items:
+> +          - description: handle of cell containing the calibration data
+> +      nvmem-cell-names:
+> +        items:
+> +          - const: trim
+> +    required:
+> +      - reg
+> +    unevaluatedProperties: false
+> +
+>  properties:
+>    compatible:
+>      enum:
+> @@ -51,6 +68,12 @@ properties:
+>        - const: tsadc
+>        - const: tsadc-phy
+>  
+> +  "#address-cells":
+> +    const: 1
+> +
+> +  "#size-cells":
+> +    const: 0
+> +
+>    "#thermal-sensor-cells":
+>      const: 1
+>  
+> @@ -80,6 +103,47 @@ required:
+>    - clock-names
+>    - resets
+>  
+> +allOf:
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: rockchip,rk3568-tsadc
+> +    then:
+> +      properties:
+> +        nvmem-cells:
+> +          items:
+> +            - description: cell handle to where the trim's base temperature is stored
+> +            - description:
+> +                cell handle to where the trim's tenths of Celsius base value is stored
+> +        nvmem-cell-names:
+> +          items:
+> +            - const: trim_base
+> +            - const: trim_base_frac
+
+Define all properties at the top-level and then restrict their presence 
+in the if/then schema.
+
+> +        cpu@0:
+> +          $ref: "#/definitions/channel"
+> +        gpu@1:
+> +          $ref: "#/definitions/channel"
+> +  - if:
+> +      properties:
+> +        compatible:
+> +          contains:
+> +            const: rockchip,rk3576-tsadc
+> +    then:
+> +      properties:
+> +        soc@0:
+> +          $ref: "#/definitions/channel"
+> +        bigcores@1:
+> +          $ref: "#/definitions/channel"
+> +        littlecores@2:
+> +          $ref: "#/definitions/channel"
+> +        ddr@3:
+> +          $ref: "#/definitions/channel"
+> +        npu@4:
+> +          $ref: "#/definitions/channel"
+> +        gpu@5:
+> +          $ref: "#/definitions/channel"
+> +
+>  unevaluatedProperties: false
+>  
+>  examples:
+> 
+> -- 
+> 2.48.1
+> 
 
