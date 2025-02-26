@@ -1,180 +1,134 @@
-Return-Path: <linux-pm+bounces-22985-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22986-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1821CA45BA5
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 11:22:59 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1EE07A45BAA
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 11:24:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id EEE4F7A25D1
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 10:21:58 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id BF6311889C77
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 10:24:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 24E5B226D1E;
-	Wed, 26 Feb 2025 10:22:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 85E4E23815E;
+	Wed, 26 Feb 2025 10:24:32 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Hbh0LX3O"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from szxga04-in.huawei.com (szxga04-in.huawei.com [45.249.212.190])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6594421324D;
-	Wed, 26 Feb 2025 10:22:48 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=45.249.212.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5DFC242AB4;
+	Wed, 26 Feb 2025 10:24:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740565371; cv=none; b=juv3i0kk8vfZWStJ6oWTP0hdiDMvOKWlXyX2qP84Eb+ozIQfvldv70KA7A70QlHk6W85Vns8nQ2VULtm5ipm+EKw4ViYx7tbssElIjFiMC7WHnwAhrj3soL54S7C2GM+/8zi1b728rJrM6WceZK3tOWAR0FaXQKgjhR5D0Nf3Lw=
+	t=1740565472; cv=none; b=nmQMFbfRJet0YZR6jASTlqdLFHhs8XnjIgoFCFDgV5vIopZaWlZ4olHxLZQ+5zfn05d8YpjO9LMnJTEut1XzKGmQxLMyF+YZIjQwsc+ZEzTx8W7Aaeyd1eEO5j8WVOsGC80YfD89PmeToEXNHCAEwa3p36qBsl5WygH45A/xPAk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740565371; c=relaxed/simple;
-	bh=S8bkmRF4hFy5oAR0L+B0tr5ao+COGAqRwbPx36g9o2k=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=i/NhwyofFfeXYb1UjheaNcrhNvkja+LD08+KftXskFSLL1cql9ajO4+ENAzQFTtXGatidacmg3tu9c0JObfBY9HzzbW0/yLkOrP4ZNCg/Z08W5fdJTIXJpLMNGrW0sO0ElXGNS14+vxjpxLSBbLMARx1dsNCL0MW/gWNFKe+Dd4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com; spf=pass smtp.mailfrom=huawei.com; arc=none smtp.client-ip=45.249.212.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=huawei.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=huawei.com
-Received: from mail.maildlp.com (unknown [172.19.162.112])
-	by szxga04-in.huawei.com (SkyGuard) with ESMTP id 4Z2r6B18P3z2CpfZ;
-	Wed, 26 Feb 2025 18:18:42 +0800 (CST)
-Received: from kwepemh100008.china.huawei.com (unknown [7.202.181.93])
-	by mail.maildlp.com (Postfix) with ESMTPS id D33A4140109;
-	Wed, 26 Feb 2025 18:22:45 +0800 (CST)
-Received: from [10.67.121.90] (10.67.121.90) by kwepemh100008.china.huawei.com
- (7.202.181.93) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.11; Wed, 26 Feb
- 2025 18:22:45 +0800
-Message-ID: <73fbf483-7afa-4cd2-84d1-6ace36549c53@huawei.com>
-Date: Wed, 26 Feb 2025 18:22:44 +0800
+	s=arc-20240116; t=1740565472; c=relaxed/simple;
+	bh=W3UsMTl1eRoZNqDh2olgWY2KMFo9sL5/ZGwphflCQTc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=j4laiW0lZU+kcac+rgIN+Ln16ncgcp4E+oakdlvdTY2uusyv+SNVSvQGSd+yd00kjM9G0V18bm5gPiiAzNbO7PYJyKG8eu0Xnz4RFGFRX0dLJQ5B+XmLuZCp8OJ3k6MTZ+6t2fHtRbhK6F83hJb5YKdcLTgyF/Zsf+LtsbTmAlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Hbh0LX3O; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id CCDEEC4CEE2;
+	Wed, 26 Feb 2025 10:24:31 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740565471;
+	bh=W3UsMTl1eRoZNqDh2olgWY2KMFo9sL5/ZGwphflCQTc=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=Hbh0LX3OvqnEzXqoqBSlj+0QUOI0stsyv5l/YUTRzvHxhxhfJ1LfarmaQqLeK/PPX
+	 Nf21o64OI4SCRX28t4aiFSGyusLwvQx840jKEJHB+fZxT694bEi8IzpYvRbxaXycLi
+	 NJ3GqiVldGVUopIPO1mkyyqrhsJjFgQ+CyLV6SIWddcCZBSG/k4Mxfu/jRD/aCQNDJ
+	 my2P9E+PTlzSEztoe9ys00pcRBMNXsSKf7ead1UPUnlNUK72fqq4Q9SKntdaRVz1zJ
+	 o2aU9/8+I42b4h0S76IbryxhfNP5lJ3+ZdjpP216QDAfp7kYpj6TozMkOIBgRYRkqk
+	 jSnPTfQfm2jng==
+Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5fd28093334so2400227eaf.3;
+        Wed, 26 Feb 2025 02:24:31 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVONQwkX/4wF3g0Mga9OUzzolRuQAtvs7VeEsOjBeDFjmVkngNHM8xf5euOYc24l9FeP1CEx62hB2v4+60=@vger.kernel.org, AJvYcCW36SG9BsFbnbP2f282T44+SYIJvTRxKUZNuXtPqx/NVBG5qCZTl6vs0cLB1QsYhqfP2GyXVWpXLxw=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxFZFvaVsHyMa3FDxHJmhsGZJ7mwWzo9V/CW5GIDBydJS1sCIYf
+	fX146636A9WEcrlssYTbzafU4hnzhKLi+VwpuCbpEy59MOJTMo+swHzRAmTOf4DfvF2FFK4vEuX
+	rVaN0c45h/S4387E8ZWSo3Q2ZGqs=
+X-Google-Smtp-Source: AGHT+IGgEx4OXnx9BIFtFtCp5NL6tvorlL2rEvgAw6hgpWmJrhzDYNJls6DAs1pEStloVcNXyD5vvTw3VdxBifERd/0=
+X-Received: by 2002:a05:6871:7b87:b0:29e:559b:d694 with SMTP id
+ 586e51a60fabf-2bd518598bdmr15408803fac.32.1740565471114; Wed, 26 Feb 2025
+ 02:24:31 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [Patch 0/5] Support Autonomous Selection mode in cppc_cpufreq
-To: Sumit Gupta <sumitg@nvidia.com>, "Rafael J. Wysocki" <rafael@kernel.org>
-CC: Viresh Kumar <viresh.kumar@linaro.org>, <lenb@kernel.org>,
-	<robert.moore@intel.com>, <corbet@lwn.net>, <linux-pm@vger.kernel.org>,
-	<linux-acpi@vger.kernel.org>, <linux-doc@vger.kernel.org>,
-	<acpica-devel@lists.linux.dev>, <linux-kernel@vger.kernel.org>,
-	<linux-tegra@vger.kernel.org>, <treding@nvidia.com>, <jonathanh@nvidia.com>,
-	<sashal@nvidia.com>, <vsethi@nvidia.com>, <ksitaraman@nvidia.com>,
-	<sanjayc@nvidia.com>, <bbasu@nvidia.com>
-References: <20250211103737.447704-1-sumitg@nvidia.com>
- <20250211104428.dibsnxmkiluzixvz@vireshk-i7>
- <b45d0d81-e4f7-474e-a146-0075a6145cc2@huawei.com>
- <868d4c2a-583a-4cbb-a572-d884090a7134@nvidia.com>
- <8d5e0035-d8fe-49ef-bda5-f5881ff96657@huawei.com>
- <94bdab73-adc4-4b43-9037-5639f23e3d1e@nvidia.com>
- <CAJZ5v0iAg6HFROHctYQwW=V9XiV8p3XVYgeKUcX4qBgfwQK6Ow@mail.gmail.com>
- <e58a20f8-e8bf-409c-a878-af2bd3c7d243@nvidia.com>
-From: "zhenglifeng (A)" <zhenglifeng1@huawei.com>
-In-Reply-To: <e58a20f8-e8bf-409c-a878-af2bd3c7d243@nvidia.com>
+References: <10cf96aa-1276-4bd4-8966-c890377030c3.ref@yahoo.fr>
+ <10cf96aa-1276-4bd4-8966-c890377030c3@yahoo.fr> <22539099.EfDdHjke4D@debian>
+ <CANDhNCqdpbi=r81NyXVWBbB5POj5nmrc7qo3r2bi1yYqYBgiAg@mail.gmail.com>
+ <CANDhNCqFi1adk_MdejQC1bod5STHPDjaSB9imSGpRtJt3TbW1Q@mail.gmail.com>
+ <c1d1b79c-bb2e-4a69-888d-a3301bcbfeb2@yahoo.fr> <CANDhNCreiCQUKccmW1wBtvVzQrfB=xC0GFRO65SHG-+Wfu1wtA@mail.gmail.com>
+ <b9b58a9e-eb56-4acd-b854-0b5ccb8e6759@yahoo.fr> <87plkoau8w.ffs@tglx>
+ <15f4f44d-6f73-4031-a7dc-d2105672bc81@yahoo.fr> <874j0jhiag.ffs@tglx>
+ <5114de6a-e6ef-4459-9570-6dd2245fabd5@yahoo.fr> <87eczlg6ls.ffs@tglx> <87bjupfy7f.ffs@tglx>
+In-Reply-To: <87bjupfy7f.ffs@tglx>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 26 Feb 2025 11:24:18 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hCqV+=05ojjzvymwC5Z97WccbihCwXT22_my0TRJiWoA@mail.gmail.com>
+X-Gm-Features: AQ5f1JrACA-XbyyVs587zDWqD6pwPNTSLsblqgkJ_LQqoUVOrDE7wdkknfHvWQc
+Message-ID: <CAJZ5v0hCqV+=05ojjzvymwC5Z97WccbihCwXT22_my0TRJiWoA@mail.gmail.com>
+Subject: Re: [PATCH] intel_idle: Handle older CPUs, which stop the TSC in
+ deeper C states, correctly
+To: Thomas Gleixner <tglx@linutronix.de>
+Cc: Fab Stz <fabstz-it@yahoo.fr>, John Stultz <jstultz@google.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Anna-Maria Behnsen <anna-maria@linutronix.de>, 
+	Frederic Weisbecker <frederic@kernel.org>, linux-kernel@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Jacob Pan <jacob.jun.pan@linux.intel.com>, 
+	Len Brown <lenb@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 8bit
-X-ClientProxiedBy: dggems703-chm.china.huawei.com (10.3.19.180) To
- kwepemh100008.china.huawei.com (7.202.181.93)
+Content-Transfer-Encoding: quoted-printable
 
-On 2025/2/21 21:14, Sumit Gupta wrote:
-> 
-> 
-> On 19/02/25 00:53, Rafael J. Wysocki wrote:
->>
->> There seems to be some quite fundamental disagreement on how this
->> should be done, so I'm afraid I cannot do much about it ATM.
->>
->> Please agree on a common approach and come back to me when you are ready.
->>
->> Sending two concurrent patchsets under confusingly similar names again
->> and again isn't particularly helpful.
->>
->> Thanks!
-> 
-> Hi Rafael,
-> 
-> Thank you for looking into this.
-> 
-> Hi Lifeng,
-> 
-> As per the discussion, we can make the driver future extensible and
-> also can optimize the register read/write access.
-> 
-> I gave some thought and below is my proposal.
-> 
-> 1) Pick 'Patch 1-7' from your patch series [1] which optimize API's
->    to read/write a cpc register.
-> 
-> 2) Pick my patches in [2]:
->    - Patch 1-4: Keep all cpc registers together under acpi_cppc sysfs.
->                 Also, update existing API's to read/write regs in batch.
->    - Patch 5: Creates 'cppc_cpufreq_epp_driver' instance for booting
->      all CPU's in Auto mode and set registers with right values.
->      They can be updated after boot from sysfs to change hints to HW.
->      I can use the optimized API's from [1] where required in [2].
-> 
-> Let me know if you are okay with this proposal.
-> I can also send an updated patch series with all the patches combined?
-> 
-> [1] https://lore.kernel.org/all/20250206131428.3261578-1-zhenglifeng1@huawei.com/
-> [2] https://lore.kernel.org/lkml/20250211103737.447704-1-sumitg@nvidia.com/
-> 
-> Regards,
-> Sumit Gupta
-> 
+On Tue, Feb 25, 2025 at 11:37=E2=80=AFPM Thomas Gleixner <tglx@linutronix.d=
+e> wrote:
+>
+> The Intel idle driver is preferred over the ACPI processor idle driver,
+> but fails to implement the work around for Core2 generation CPUs, where
+> the TSC stops in C2 and deeper C-states. This causes stalls and boot
+> delays, when the clocksource watchdog does not catch the unstable TSC
+> before the CPU goes deep idle for the first time.
+>
+> The ACPI driver marks the TSC unstable when it detects that the CPU
+> supports C2 or deeper and the CPU does not have a non-stop TSC.
+>
+> Add the equivivalent work around to the Intel idle driver to cure that.
+>
+> Fixes: 18734958e9bf ("intel_idle: Use ACPI _CST for processor models with=
+out C-state tables")
+> Reported-by: Fab Stz <fabstz-it@yahoo.fr>
+> Signed-off-by: Thomas Gleixner <tglx@linutronix.de>
+> Tested-by: Fab Stz <fabstz-it@yahoo.fr>
+> Cc: stable@vger.kernel.org
+> Closes: https://lore.kernel.org/all/10cf96aa-1276-4bd4-8966-c890377030c3@=
+yahoo.fr
+> ---
+>  drivers/idle/intel_idle.c |    4 ++++
+>  1 file changed, 4 insertions(+)
+>
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -56,6 +56,7 @@
+>  #include <asm/intel-family.h>
+>  #include <asm/mwait.h>
+>  #include <asm/spec-ctrl.h>
+> +#include <asm/tsc.h>
+>  #include <asm/fpu/api.h>
+>
+>  #define INTEL_IDLE_VERSION "0.5.1"
+> @@ -1799,6 +1800,9 @@ static void __init intel_idle_init_cstat
+>                 if (intel_idle_state_needs_timer_stop(state))
+>                         state->flags |=3D CPUIDLE_FLAG_TIMER_STOP;
+>
+> +               if (cx->type > ACPI_STATE_C1 && !boot_cpu_has(X86_FEATURE=
+_NONSTOP_TSC))
+> +                       mark_tsc_unstable("TSC halts in idle");
+> +
+>                 state->enter =3D intel_idle;
+>                 state->enter_s2idle =3D intel_idle_s2idle;
+>         }
 
-Hi Sumit,
-
-Over the past few days, I've been thinking about your proposal and
-scenario.
-
-I think we both agree that PATCH 1-7 in [1] doesn't conflicts with [2], so
-the rest of the discussion focuses on the differences between [2] and the
-PATCH 8 in [1].
-
-We both tried to support autonomous selection mode in cppc_cpufreq but on
-different ways. I think the differences between these two approaches can be
-summarized into three questions:
-
-1. Which sysfs files to expose? I think this is not a problem, we can keep
-all of them.
-
-2. Where to expose these sysfs files? I understand your willing to keep all
-cpc registers together under acpi_cppc sysfs. But in my opinion, it is more
-suitable to expose them under cppc_cpufreq_attr, for these reasons:
-
-  1) It may probably introduce concurrency and data consistency issues, as 
-I mentioned before.
-
-  2) The store functions call cpufreq_cpu_get() to get policy and update
-the driver_data which is a cppc_cpudata. Only the driver_data in 
-cppc_cpufreq's policy is a cppc_cpudata! These operations are inappropriate
-in cppc_acpi. This file currently provides interfaces for cpufreq drivers
-to use. Reverse calls might mess up call relationships, break code
-structures, and cause problems that are hard to pinpoint the root cause!
-
-  3) Difficult to extend. Different cpufreq drivers may have different
-processing logic when reading from and writing to these CPC registers.
-Limiting all sysfs here makes it difficult for each cpufreq driver to
-extend. I think this is why there are only read-only interfaces under
-cppc_attrs before.
-
-Adding a 'ifdef' is not a good way to solve these problems. Defining this
-config does not necessarily mean that the cpufreq driver is cppc_cpufreq.
-
-3. Is it necessary to add a new driver instance? [1] exposed the sysfs
-files to support users dynamically change the auto selection mode of each
-policy. Each policy can be operated seperately. It seems to me that if you
-want to boot all CPUs in auto mode, it should be sufficient to set all
-relevant registers to the correct values at boot time. I can't see why the
-new instance is necessary unless you explain it further. Could you explain
-more about why you add a new instance starting from answer these questions:
-
-For a specific CPU, what is the difference between using the two instances
-when auto_sel is 1? And what is the difference when auto_sel is 0?
-
-If it turns out that the new instance is necessary, I think we can reach a
-common approach by adding this new cpufreq driver instance and place the
-attributes in 'cppc_cpufreq_epp_attr', like amd-pstate did.
-
-What do you think?
-
-Regards,
-Lifeng
+Applied as a fix for 6.14-rc5, thank you!
 
