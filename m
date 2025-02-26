@@ -1,115 +1,111 @@
-Return-Path: <linux-pm+bounces-23023-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23024-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D9F3AA46B5F
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 20:49:21 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6B0AEA46BBB
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 21:03:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D286516B7E1
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 19:49:20 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 87C507A5164
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 20:02:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A179B2566DE;
-	Wed, 26 Feb 2025 19:49:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9823275606;
+	Wed, 26 Feb 2025 19:57:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="fcOE0PsT"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mG+lOpeA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7662221B192;
-	Wed, 26 Feb 2025 19:49:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74BDC275602;
+	Wed, 26 Feb 2025 19:57:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740599357; cv=none; b=aiY0Kb4M5dPgiit2oWqjYD8VhCxpogEtNFNGpP2phaPLWIihZqh4DanG+RHh3jBLXNcmgMtskyg31FSE+am927cPgWmUmruz2DhUal7NaEFErkheFAORHxl2LO/M1fEWWQqAbm9KA4dOI849CZmq15YI2SKC4MkAc5kHhDwrAts=
+	t=1740599833; cv=none; b=EAPzp9nwWjgVwNW93bQe+nKodQdkhBmh9zJqvJfkYvMNbqn/9gJMql4h6/LRejMN9xQgIRvlm3/uhZyBBBkaSqeTSKwpTu2GlZUv8MP6Dtaq4uNzevaBJOmJ8YecPbZjIPDI6fq6bQ2ypKw+ucYizxWyHEdPZwIT8e0390DsPBA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740599357; c=relaxed/simple;
-	bh=iXo8Zg9Hs5XWNAR7WBc8K+qfaewfdE21wZuoP1F6W/4=;
+	s=arc-20240116; t=1740599833; c=relaxed/simple;
+	bh=kIG+ERIckn5eC2R/vDAFUn4qvcjlEI3cz/8tvhHVb88=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=jMZx5LE8ckY9DZsANEFjmZVS+QTkcXw1U/mpxPDYC+LE64gOtsUSfLC1xyy/Mmi1fq8ynki6mRFNvf6FWbngVF3IrHHUz5RClaUyDkVZjyA3u6PiNkhPckGT1HQVqzWIw6t9IEJWzI70aqA7GZ2yQrv043m9zV4rPziUWfrIB2w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=fcOE0PsT; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D4BF5C4CEE9;
-	Wed, 26 Feb 2025 19:49:15 +0000 (UTC)
+	 To:Cc:Content-Type; b=YFUk4mwEbxXUt/VdPt51LFcHFGU9Sti3u8E4eXdojtrcEVO1lUBvXW9mQ+Ft86YXGuT8Pj+Ukn7QidKI/CD6POxYW/kQmAbA+V+32vC8jvuA2TLekLfJ4u4zFvV221PL+yYPWMxvznisw/jyJ4Ga4VjDYnLlmKd9DUe6bbvkmO8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mG+lOpeA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id DFDF4C4CEE8;
+	Wed, 26 Feb 2025 19:57:12 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740599355;
-	bh=iXo8Zg9Hs5XWNAR7WBc8K+qfaewfdE21wZuoP1F6W/4=;
+	s=k20201202; t=1740599832;
+	bh=kIG+ERIckn5eC2R/vDAFUn4qvcjlEI3cz/8tvhHVb88=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=fcOE0PsTnb/Eeyd+RUmyPXo50ettHDcHm4XGjekca9YlB3Xos2Ctlg8fmlo+PkJWj
-	 dsDx4sIqH/Wyo0zAXQaVmFQDHnAUHr9JvuTBN0tl1L31/Mv2tU7uV7WAm2zYSGtUnE
-	 qORGXwhobcb31HQ2i5jyOTCOXdkrGQWgM32uzskqiNSA+4zpeg8rahLvWZmZ+JAUfF
-	 9nhMrgP4t5krJILb0u5D1LUM1tuZQCJpfZFWUkyrsblh459ECVmC6smynnccXAzFFA
-	 4xOoCZYTIvsZlWg5hW/IQENGeykcBSaF7mOjJhSEjk2qZBnPVcHYFluOaycXpBKRDl
-	 /XB3Qk1QhpsaA==
-Received: by mail-oa1-f43.google.com with SMTP id 586e51a60fabf-2a01bcd0143so213378fac.2;
-        Wed, 26 Feb 2025 11:49:15 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUrolhFWJWnjIfZsNLv5ZOX3un0WoRGTGe1RhKP+PoXDNh0i9M0jhD1FVbSlnqUr7DIPC0H3LXt4dZ+aSlWkSw=@vger.kernel.org, AJvYcCX5+D901eguA6rn/2yDvuMc3QofVBpT/7SLxX0JBisQ3e/y+zJBzJR5fIw9+xufpxUoS7cIihuXXCI=@vger.kernel.org, AJvYcCXjX2rk997YSQ9OcXL0BTTIp8NR5Tc3u96Qf8xnl6pCHct4GkhsP6PAZWbUfnhE3l/Ch6jUtG16AqR3TnVu@vger.kernel.org
-X-Gm-Message-State: AOJu0YwKT76zYd/Gw3wn02CkVzFXrQeZ9N1lsuC141Bg+6OELSZT31bq
-	jcFX4uHEYZAt26EW3mTSYnx9ajgSPxXtsBcGpXU2wZo/Jsw5Clbh5CEVOygaMHwC3HNQbpnDgod
-	Dn/wWxEOQbpcQlsfoDFCDJ9ezoXU=
-X-Google-Smtp-Source: AGHT+IG9KOWipKPuW/avokgsq+B5PMz6gRuNbcoVKz5SzBWwDWsvvpNxpEEubrbWAd/G3WgmYULL2iRkf1h3CuLOA8U=
-X-Received: by 2002:a05:6871:582c:b0:29e:4ba5:4ddc with SMTP id
- 586e51a60fabf-2c13070e85fmr2741891fac.24.1740599355161; Wed, 26 Feb 2025
- 11:49:15 -0800 (PST)
+	b=mG+lOpeAqN+8Y8D18XBHrwPD0/RL4i2ipinaiDjYHOcK1f5zO4vagZxtvtYZBf2zf
+	 qwuutyY1uFKX1uWqBprmNMMNktbvGiZ5eYMOJ+0x3JA6yDXqXKuzwa/F0U4mxEAtPe
+	 N9uJ1ALqFI7CIAZ9I6M/GMQTVmTbpVnlano2EbMyghwkdsjlH3P/P0C42tOX53TgYy
+	 RgjeCaI6hPhgG8doqUXBXFxCsEMIjbhP3OhcIU8V6dvZ8jxBFJ3yi2x/iYkmWXOleS
+	 2gT1ndYmSoECw7U3Msyql6GSbjJ7Hdv5vH6poSllt6dv1+ic91l0E4t5RNjsanjStZ
+	 gMFlmAiA9iFcA==
+Received: by mail-oa1-f53.google.com with SMTP id 586e51a60fabf-2bc79a81e6bso92091fac.0;
+        Wed, 26 Feb 2025 11:57:12 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXJXBnXnrHEuGUQ3kYAQRW8kvQfcWQBZO475dLY5hNTqxxVJGtNHW41U/QU+odVSUI5QhTTdQjCpw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwGlCz46Qxsqc4lWH9wf8WX6/twUicu7FFOghD0GvZlnvBPtliu
+	VoYtzZ/qFG4YetcET/UVO3V1eiaB9dfF59mCuA6kug1aru4oms6UPbRWs9DG0wPhp4HrGIupHCt
+	YB/XkpsRMYjS14e+YueGsKWjpv8E=
+X-Google-Smtp-Source: AGHT+IFFqN/GkDn2JKscMKhiV8OGzkookyDLPH2k/d1CKOSDClZwy4YLcKRa4eU7SsOOh+8f0BtPyXXP7wNQZ+R6Uns=
+X-Received: by 2002:a05:6870:d147:b0:2b8:82ef:1d15 with SMTP id
+ 586e51a60fabf-2c10f304ba8mr5135553fac.22.1740599832259; Wed, 26 Feb 2025
+ 11:57:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250222-thermal_kcalloc-v1-1-9f7a747fbed7@ethancedwards.com>
-In-Reply-To: <20250222-thermal_kcalloc-v1-1-9f7a747fbed7@ethancedwards.com>
+References: <20250224173432.1946070-1-lukasz.luba@arm.com>
+In-Reply-To: <20250224173432.1946070-1-lukasz.luba@arm.com>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 26 Feb 2025 20:49:03 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0j5Rqc29NsEBVFakq8b4o1Ng-fhviU5BOfn1jxqEnXokQ@mail.gmail.com>
-X-Gm-Features: AQ5f1JpIycxwb8ZQ_56Qub8exElXQ_8HMpr2P1Nl6dwLu1XkJjsDEjwb14E6avc
-Message-ID: <CAJZ5v0j5Rqc29NsEBVFakq8b4o1Ng-fhviU5BOfn1jxqEnXokQ@mail.gmail.com>
-Subject: Re: [PATCH] thermal/debugfs: replace kzalloc() with kcalloc() in thermal_debug_tz_add()
-To: Ethan Carter Edwards <ethan@ethancedwards.com>
-Cc: Markus Elfring <Markus.Elfring@web.de>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-hardening@vger.kernel.org
+Date: Wed, 26 Feb 2025 20:57:01 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0iaUCXkqkOyBwn2ZwKLFc+ozstf3Rq-n-_eetK6A9vtPA@mail.gmail.com>
+X-Gm-Features: AQ5f1JroDiB95lrODpV0nRKpZJLk5Laj38MOw2KvUcXNz-u6kD_347qtzd7UbWA
+Message-ID: <CAJZ5v0iaUCXkqkOyBwn2ZwKLFc+ozstf3Rq-n-_eetK6A9vtPA@mail.gmail.com>
+Subject: Re: [PATCH 0/4] Thermal: clean-up with kcalloc()
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, rafael@kernel.org, 
+	daniel.lezcano@linaro.org, rui.zhang@intel.com, 
+	srinivas.pandruvada@linux.intel.com
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Sat, Feb 22, 2025 at 9:02=E2=80=AFPM Ethan Carter Edwards
-<ethan@ethancedwards.com> wrote:
+On Mon, Feb 24, 2025 at 6:34=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
 >
-> We are trying to get rid of all multiplications from allocation
-> functions to prevent integer overflows[1]. Here the multiplication is
-> obviously safe, but using kcalloc() is more appropriate and improves
-> readability. This patch has no effect on runtime behavior.
+> Hi all,
 >
-> Link: https://github.com/KSPP/linux/issues/162 [1]
-> Link: https://www.kernel.org/doc/html/next/process/deprecated.html#open-c=
-oded-arithmetic-in-allocator-arguments
+> This is just small clean-up inspired by this patch [1].
+> It aims to keep the thermal framework up-to-date with the
+> recommendations in the community [2]. If there are (or will be)
+> some static checks in this area, we will be OK.
 >
-> Signed-off-by: Ethan Carter Edwards <ethan@ethancedwards.com>
-> ---
->  drivers/thermal/thermal_debugfs.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
+> The patches are on top of latest thermal/linux-next branch
 >
-> diff --git a/drivers/thermal/thermal_debugfs.c b/drivers/thermal/thermal_=
-debugfs.c
-> index c800504c3cfe0ea3b4a51286f348dd5802e1898f..60ee6c366998e26447a0b9851=
-12f578ba8757f17 100644
-> --- a/drivers/thermal/thermal_debugfs.c
-> +++ b/drivers/thermal/thermal_debugfs.c
-> @@ -876,7 +876,7 @@ void thermal_debug_tz_add(struct thermal_zone_device =
-*tz)
+> Regards,
+> Lukasz Luba
 >
->         tz_dbg->tz =3D tz;
+> [1] https://lore.kernel.org/lkml/20250222-thermal_kcalloc-v1-1-9f7a747fbe=
+d7@ethancedwards.com/
+> [2] https://www.kernel.org/doc/html/next/process/deprecated.html#open-cod=
+ed-arithmetic-in-allocator-arguments
 >
-> -       tz_dbg->trips_crossed =3D kzalloc(sizeof(int) * tz->num_trips, GF=
-P_KERNEL);
-> +       tz_dbg->trips_crossed =3D kcalloc(tz->num_trips, sizeof(int), GFP=
-_KERNEL);
->         if (!tz_dbg->trips_crossed) {
->                 thermal_debugfs_remove_id(thermal_dbg);
->                 return;
+> Lukasz Luba (4):
+>   thermal: OF: Use kcalloc() instead of kzalloc() with multiplication
+>   thermal: k3_j72xx_bandgap: Use kcalloc() instead of kzalloc()
+>   thermal: int340x: Use kcalloc() instead of kzalloc() with
+>     multiplication
+>   thermal: hisi: Use kcalloc() instead of kzalloc() with multiplication
 >
-> ---
+>  drivers/thermal/hisi_thermal.c                               | 4 ++--
+>  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 4 ++--
+>  drivers/thermal/k3_j72xx_bandgap.c                           | 4 ++--
+>  drivers/thermal/thermal_of.c                                 | 2 +-
+>  4 files changed, 7 insertions(+), 7 deletions(-)
+>
+> --
 
-Applied as 6.15 material with some edits in the changelog, thanks!
+All applied as 6.15 material, thanks!
 
