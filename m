@@ -1,268 +1,272 @@
-Return-Path: <linux-pm+bounces-23002-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23003-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C9067A461C7
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 15:08:41 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id DB687A462CA
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 15:30:22 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A3CCE3AD44B
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 14:08:29 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BEBDC3A4987
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 14:28:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19D76221717;
-	Wed, 26 Feb 2025 14:08:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9A8A822170B;
+	Wed, 26 Feb 2025 14:28:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="OW7S127S"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="jOoWo6I4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f54.google.com (mail-wm1-f54.google.com [209.85.128.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id F0D8221D3E7
-	for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 14:08:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AC1114D283;
+	Wed, 26 Feb 2025 14:28:58 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740578907; cv=none; b=eBhYGrs/1lupW7rXcv4g48UtPoi7+3EAfEhz1s3004WrZIsywdakbIybrgO0HY86R+hnIil8ieS4NS7+Bu9DBHmrfpMuLiSkTuECmgURrQlkcx/YUAFcVDtHdgZeiBivBkBfe6kNnMHpDOxgPpkPvxZp/vjdv3c9lSjkau+YY1k=
+	t=1740580138; cv=none; b=MYYSIIjgr65CtkyDmc2PUAjsCuMPR/+WrUJPlfk9c/N9UxsnrLDOFDby8UDHtAtboa95w2UC8Iuv47eLJcykc0h8X0SeGNgHC/P2+DgqSQK827uuEfahrlJHicDM/IOw6Q4m881NGPTDxrCgixXiDEfZ0RKnru4Ly4jN5EDB6Hk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740578907; c=relaxed/simple;
-	bh=iNT0VqOrH9vAHA1UAijWCgNgr5GDEqXdheLf0A2HN9w=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=FFmfDoQj/4j/3rNVEUP/XEiVwebj9HXlV+limc6BDZPMokvVLQqQ1GVatcAQo6C054hfsr+UpSFIzsktrBjZ7MVNfyyn3WjdDUijdXfphTqSjCYfhGVzVZ090QTK8mSMIes0xS+A/X9s2voe4S/vCTPPiHQeW0q/xozBXDoNFLs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=OW7S127S; arc=none smtp.client-ip=209.85.128.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f54.google.com with SMTP id 5b1f17b1804b1-4398c8c8b2cso69831335e9.2
-        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 06:08:24 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740578903; x=1741183703; darn=vger.kernel.org;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=WxeFUEnPMpG6A3aZld5E/WFu7bcPUUeu7zfpRBo6A78=;
-        b=OW7S127Sv2ogLD1vBLxNcb+XadepPo7LcPz0iLZlfIBrV84iBNBOmIZyZLGGhte3qU
-         naRHm05Is229BOAVMMoGqAjVUk80VVuXbQGyhFPfqEjueS083LLUNNyBDSN1JbR71h27
-         gr7ihFyJPy+iBMM6FLD/E0TyNjTVEbMRgWKKAoCgVIH6XQAi52o6cGgkyA7HVhUwjCHL
-         JbVfUZfv6B+qna3CFqKYaF9KKEZn6nit3Jq8MEfmxOBCOkH8o2NFIwqzqpQmkeP5AP/8
-         rED34ChY689awQG8i//qF92UK4NR0EMPNEmO+DFlDR1XOgjtUKACe40sM7xq6I4qDBuV
-         5Qwg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740578903; x=1741183703;
-        h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
-         :mime-version:subject:date:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=WxeFUEnPMpG6A3aZld5E/WFu7bcPUUeu7zfpRBo6A78=;
-        b=tMEsZGeApK+n2V8tnBjLcjpL+L1LT0utwt9i0OFy0Vf44+MuxksXsnf69UadRNbtXB
-         DWoqCOf7kE5Ma6llVeGfzbLl5j8fCIrOKgWrAvLEtS00xu4K2LUCdY65gzDmvhy9Er24
-         sADJQgTCwtuE0CRot+FjowVQUbiTWP6gSUA9qCrTEAp5rsgErWp8qBnKIaOjO+P1ciek
-         UfOKY8LPFqlkeJfPi7z5o76g6jDHVvrDzd7p9DiKZo8xoQKpEBgNxWHxOlmXZT2gdSdP
-         6iK/d5dT5QGGGJfgzh6f8q7nhOIculpFZvvn1brWo8mcyITpZJdNwny0dfj2v92i0fmf
-         i8wA==
-X-Forwarded-Encrypted: i=1; AJvYcCXWdBRSCcbPfGwaelF09VaZXpszbrge5hovg0Q+dX2ept0poh93nr32q/mPqonRiH9qcLBpSdgD0A==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZKyepARTviHxFNp2WOtANdabhJAlZORHZU2hGtePWzf1dPm4w
-	J2UXh/3eQbw3YwvUmUAVzXI2ZWzJvRRD4z1IyeQZoi/nZEn33RD2Ryc+fZwB08k=
-X-Gm-Gg: ASbGncs+IZKqpvhgKJFE61HUVLSU73UQ3LOnWp/rVtOH0xejpv/en61MmEBz7oqYqcY
-	/sKikdw7IEFsCH0FCH1Qut0MGM2Cr+fA6DT56++lcqUTDaL7XQD3fMM5zmNAVEBIOf5ISESq/IG
-	YHEn5rkpLg1kGmfhOWY4IkJ7YtQL794NcoXxmBZ8zXJ7tskkuEw0vKKsFdkh6L8reUwbl5B1rvt
-	9hb1F/cnM3WACCQ/xdila5GVKnrkZkGyHQTS5dxphu8tc/TwK7lGUT1spgSdx5IFHYOEzDrXLi/
-	Nv2/L3gPikOybrPp9uV8Yl5Gldua5auVPvUx+JBDXVIKmyF2XLj6nIQA3fixjlRf1fD7GVW1Kly
-	cipsYKpW9qQ==
-X-Google-Smtp-Source: AGHT+IGv/eO4Q+853qoaaBSUt+F6k1tIspvcIuibPPRIZkfwO2bs2v7+pxNtqXYPmvOTuy5Yt55vgA==
-X-Received: by 2002:a05:600c:4753:b0:439:9a40:aa0b with SMTP id 5b1f17b1804b1-43ab0f6e6ccmr69618395e9.25.1740578903152;
-        Wed, 26 Feb 2025 06:08:23 -0800 (PST)
-Received: from puffmais.c.googlers.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abed20b6024sm330157566b.181.2025.02.26.06.08.22
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 06:08:22 -0800 (PST)
-From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Wed, 26 Feb 2025 14:08:21 +0000
-Subject: [PATCH 2/2] power: reset: syscon-reboot: support different reset
- modes
+	s=arc-20240116; t=1740580138; c=relaxed/simple;
+	bh=imG2eoF7EhULeRCWxlkU478DrsG7zuM8IA1zXttiVIg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=cwEJ1wpv8F78vPQHlyx02eZH5lbtDkSAVNoy+pYrdoQclG78v/euEP4WKRkxhsTehRe5sxTR8Ok/3SzIqeUy9A4GmALPxZs1o6XsUySUW5ZRQyrDCMVK9JxCKv2f2mJrBWEyjwRKgC+nfTv8PhprJJjwKo19C031DRB1X7ltA18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=jOoWo6I4; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 91DACC4CED6;
+	Wed, 26 Feb 2025 14:28:50 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740580138;
+	bh=imG2eoF7EhULeRCWxlkU478DrsG7zuM8IA1zXttiVIg=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=jOoWo6I4axjc7/g3HzbBnRFc+bA68ZZR3cVJiGZ4m/qgqjPAatfRVKgjcDg9ZZGQt
+	 PimKjt9TdT6ogmZnuyKrvpZckMidtvJ0PxOJNFPI2CiW1DBM8t6hhYYrlJj3hZrW4+
+	 Y0+M+8c0TVPmzP2HAt5KWoP8LXTK9ytXg9B4f1HeUg+bVlZE4JgD4lUn4RNcYHQm76
+	 qL8irsILkPnFzN4ukaj5mwEQl2ItHgXji0xyV+1/nrltYul0p1dHIc1cu0zIZLD7OI
+	 N2smNVVERmR8m7QXregyeB9z/xbQRf55L5mB+mim13MpOSJHcys2hX/gcPdvmgNcGY
+	 4q11+sAs4NzaQ==
+Date: Wed, 26 Feb 2025 15:28:47 +0100
+From: Lorenzo Pieralisi <lpieralisi@kernel.org>
+To: Elliot Berman <quic_eberman@quicinc.com>
+Cc: Bjorn Andersson <andersson@kernel.org>,
+	Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+	Andy Yan <andy.yan@rock-chips.com>,
+	Mark Rutland <mark.rutland@arm.com>,
+	Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
+	Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, cros-qcom-dts-watchers@chromium.org,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Konrad Dybcio <konradybcio@kernel.org>,
+	Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
+	Melody Olvera <quic_molvera@quicinc.com>,
+	Shivendra Pratap <quic_spratap@quicinc.com>,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org,
+	Florian Fainelli <florian.fainelli@broadcom.com>,
+	Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
+	linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH v8 3/6] firmware: psci: Read and use vendor reset types
+Message-ID: <Z78lH/XErc7G8bL9@lpieralisi>
+References: <20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com>
+ <20241107-arm-psci-system_reset2-vendor-reboots-v8-3-e8715fa65cb5@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 8bit
-Message-Id: <20250226-syscon-reboot-reset-mode-v1-2-91c1b62166ae@linaro.org>
-References: <20250226-syscon-reboot-reset-mode-v1-0-91c1b62166ae@linaro.org>
-In-Reply-To: <20250226-syscon-reboot-reset-mode-v1-0-91c1b62166ae@linaro.org>
-To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
- Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>
-Cc: Peter Griffin <peter.griffin@linaro.org>, 
- Tudor Ambarus <tudor.ambarus@linaro.org>, 
- Will McVicker <willmcvicker@google.com>, kernel-team@android.com, 
- linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
- linux-kernel@vger.kernel.org, 
- =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-X-Mailer: b4 0.14.2
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20241107-arm-psci-system_reset2-vendor-reboots-v8-3-e8715fa65cb5@quicinc.com>
 
-Linux supports a couple different reset modes, but this driver here
-doesn't distinguish between them and issues the same syscon register
-write irrespective of the reset mode requested by the kernel.
+On Thu, Nov 07, 2024 at 03:38:27PM -0800, Elliot Berman wrote:
+> SoC vendors have different types of resets and are controlled through
+> various registers. For instance, Qualcomm chipsets can reboot to a
+> "download mode" that allows a RAM dump to be collected. Another example
+> is they also support writing a cookie that can be read by bootloader
+> during next boot. PSCI offers a mechanism, SYSTEM_RESET2, for these
+> vendor reset types to be implemented without requiring drivers for every
+> register/cookie.
+> 
+> Add support in PSCI to statically map reboot mode commands from
+> userspace to a vendor reset and cookie value using the device tree.
+> 
+> A separate initcall is needed to parse the devicetree, instead of using
+> psci_dt_init because mm isn't sufficiently set up to allocate memory.
+> 
+> Reboot mode framework is close but doesn't quite fit with the
+> design and requirements for PSCI SYSTEM_RESET2. Some of these issues can
+> be solved but doesn't seem reasonable in sum:
+>  1. reboot mode registers against the reboot_notifier_list, which is too
+>     early to call SYSTEM_RESET2. PSCI would need to remember the reset
+>     type from the reboot-mode framework callback and use it
+>     psci_sys_reset.
+>  2. reboot mode assumes only one cookie/parameter is described in the
+>     device tree. SYSTEM_RESET2 uses 2: one for the type and one for
+>     cookie.
+>  3. psci cpuidle driver already registers a driver against the
+>     arm,psci-1.0 compatible. Refactoring would be needed to have both a
+>     cpuidle and reboot-mode driver.
+> 
+> Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
+> Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+> ---
+>  drivers/firmware/psci/psci.c | 104 +++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 104 insertions(+)
+> 
+> diff --git a/drivers/firmware/psci/psci.c b/drivers/firmware/psci/psci.c
+> index 2328ca58bba61fdb677ac20a1a7447882cd0cf22..e60e3f8749c5a6732c51d23a2c1f453361132d9a 100644
+> --- a/drivers/firmware/psci/psci.c
+> +++ b/drivers/firmware/psci/psci.c
+> @@ -79,6 +79,14 @@ struct psci_0_1_function_ids get_psci_0_1_function_ids(void)
+>  static u32 psci_cpu_suspend_feature;
+>  static bool psci_system_reset2_supported;
+>  
+> +struct psci_reset_param {
+> +	const char *mode;
+> +	u32 reset_type;
+> +	u32 cookie;
+> +};
+> +static struct psci_reset_param *psci_reset_params __ro_after_init;
+> +static size_t num_psci_reset_params __ro_after_init;
+> +
+>  static inline bool psci_has_ext_power_state(void)
+>  {
+>  	return psci_cpu_suspend_feature &
+> @@ -305,9 +313,38 @@ static int get_set_conduit_method(const struct device_node *np)
+>  	return 0;
+>  }
+>  
+> +static void psci_vendor_system_reset2(const char *cmd)
+> +{
+> +	unsigned long ret;
+> +	size_t i;
+> +
+> +	for (i = 0; i < num_psci_reset_params; i++) {
+> +		if (!strcmp(psci_reset_params[i].mode, cmd)) {
+> +			ret = invoke_psci_fn(PSCI_FN_NATIVE(1_1, SYSTEM_RESET2),
+> +					     psci_reset_params[i].reset_type,
+> +					     psci_reset_params[i].cookie, 0);
+> +			/*
+> +			 * if vendor reset fails, log it and fall back to
+> +			 * architecture reset types
+> +			 */
+> +			pr_err("failed to perform reset \"%s\": %ld\n", cmd,
+> +			       (long)ret);
+> +			return;
+> +		}
+> +	}
+> +}
+> +
+>  static int psci_sys_reset(struct notifier_block *nb, unsigned long action,
+>  			  void *data)
+>  {
+> +	/*
+> +	 * try to do the vendor system_reset2
+> +	 * If the reset fails or there wasn't a match on the command,
+> +	 * fall back to architectural resets
+> +	 */
+> +	if (data && num_psci_reset_params)
+> +		psci_vendor_system_reset2(data);
 
-Update this driver to support most of Linux' reset modes: cold, hard,
-warm, and soft.
+Mulling over this. If a command (data) was provided and a PSCI vendor
+reset parsed at boot, if the vendor reset fails, isn't it correct to
+just fail reboot instead of falling back to architectural resets ?
 
-The actions to take for these are taken from DT, and are all new
-optional properties. The property names match the existing properties
-supported but should be prefixed with the reset mode.
+What's missing is defining the "contract" between the
+LINUX_REBOOT_CMD_RESTART2 arg parameter and the kernel reboot
+type that is executed.
 
-This change is meant to be backwards compatible with existing DTs, and
-if Linux requests a reset mode that this driver doesn't support, or
-that the DT doesn't specify, the reset is triggered using the fallback
-/ default entry.
+I do wonder whether this is an opportunity to deprecate reboot_mode
+altogether on arm64 (I think that the relationship between REBOOT_WARM
+and REBOOT_SOFT with PSCI arch warm reset is already loose - let alone
+falling back to cold reset if reboot_mode == REBOOT_GPIO - which does
+not make any sense at all simply because REBOOT_GPIO is ill-defined to
+say the least).
 
-As an example why this is useful, other than properly supporting the
-Linux reboot= kernel command line option or sysfs entry, this change
-allows platforms to e.g. default to a more secure cold-reset, but
-also to do a warm-reset in case RAM contents needs to be retained
-across the reset.
+Thoughts ?
 
-Signed-off-by: André Draszik <andre.draszik@linaro.org>
----
- drivers/power/reset/syscon-reboot.c | 88 ++++++++++++++++++++++++++++++++-----
- 1 file changed, 77 insertions(+), 11 deletions(-)
+Thanks,
+Lorenzo
 
-diff --git a/drivers/power/reset/syscon-reboot.c b/drivers/power/reset/syscon-reboot.c
-index d623d77e657e4c233d8ae88bb099bee13c48a9ef..1d3d8a3265ae8005c685b42d3e554bd8bb0047ea 100644
---- a/drivers/power/reset/syscon-reboot.c
-+++ b/drivers/power/reset/syscon-reboot.c
-@@ -14,11 +14,29 @@
- #include <linux/reboot.h>
- #include <linux/regmap.h>
- 
--struct syscon_reboot_context {
--	struct regmap *map;
-+/* REBOOT_GPIO doesn't make sense for syscon-reboot */
-+static const struct {
-+	enum reboot_mode mode;
-+	const char *prefix;
-+} prefix_map[] = {
-+	{ .mode = REBOOT_COLD, .prefix = "cold"  },
-+	{ .mode = REBOOT_WARM, .prefix = "warm"  },
-+	{ .mode = REBOOT_HARD, .prefix = "hard"  },
-+	{ .mode = REBOOT_SOFT, .prefix = "soft"  },
-+};
-+
-+struct reboot_mode_bits {
- 	u32 offset;
- 	u32 value;
- 	u32 mask;
-+	bool valid;
-+};
-+
-+struct syscon_reboot_context {
-+	struct regmap *map;
-+
-+	struct reboot_mode_bits mode_bits[REBOOT_SOFT + 1];
-+	struct reboot_mode_bits catchall;
- 	struct notifier_block restart_handler;
- };
- 
-@@ -28,9 +46,16 @@ static int syscon_restart_handle(struct notifier_block *this,
- 	struct syscon_reboot_context *ctx =
- 			container_of(this, struct syscon_reboot_context,
- 					restart_handler);
-+	const struct reboot_mode_bits *mode_bits;
-+
-+	if (mode < ARRAY_SIZE(ctx->mode_bits) && ctx->mode_bits[mode].valid)
-+		mode_bits = &ctx->mode_bits[mode];
-+	else
-+		mode_bits = &ctx->catchall;
- 
- 	/* Issue the reboot */
--	regmap_update_bits(ctx->map, ctx->offset, ctx->mask, ctx->value);
-+	regmap_update_bits(ctx->map, mode_bits->offset, mode_bits->mask,
-+			   mode_bits->value);
- 
- 	mdelay(1000);
- 
-@@ -45,6 +70,7 @@ static int syscon_reboot_probe(struct platform_device *pdev)
- 	int mask_err, value_err;
- 	int priority;
- 	int err;
-+	char prop[32];
- 
- 	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
- 	if (!ctx)
-@@ -60,12 +86,52 @@ static int syscon_reboot_probe(struct platform_device *pdev)
- 	if (of_property_read_s32(pdev->dev.of_node, "priority", &priority))
- 		priority = 192;
- 
--	if (of_property_read_u32(pdev->dev.of_node, "offset", &ctx->offset))
--		if (of_property_read_u32(pdev->dev.of_node, "reg", &ctx->offset))
-+	BUILD_BUG_ON(ARRAY_SIZE(prefix_map) != ARRAY_SIZE(ctx->mode_bits));
-+	BUILD_BUG_ON(ARRAY_SIZE(ctx->mode_bits) <= REBOOT_COLD);
-+	BUILD_BUG_ON(ARRAY_SIZE(ctx->mode_bits) <= REBOOT_WARM);
-+	BUILD_BUG_ON(ARRAY_SIZE(ctx->mode_bits) <= REBOOT_HARD);
-+	BUILD_BUG_ON(ARRAY_SIZE(ctx->mode_bits) <= REBOOT_SOFT);
-+
-+	for (int i = 0; i < ARRAY_SIZE(prefix_map); ++i) {
-+		const char * const prefix = prefix_map[i].prefix;
-+		struct reboot_mode_bits * const mode_bits =
-+			&ctx->mode_bits[prefix_map[i].mode];
-+
-+		snprintf(prop, sizeof(prop), "%s-offset", prefix);
-+		if (of_property_read_u32(pdev->dev.of_node, "offset",
-+					 &mode_bits->offset))
-+			continue;
-+
-+		snprintf(prop, sizeof(prop), "%s-value", prefix);
-+		if (of_property_read_u32(pdev->dev.of_node, prop,
-+					 &mode_bits->value)) {
-+			/* don't support old binding here */
-+			dev_err(dev, "'%s-value' is mandatory\n", prefix);
-+			continue;
-+		}
-+
-+		snprintf(prop, sizeof(prop), "%s-mask", prefix);
-+		mask_err = of_property_read_u32(pdev->dev.of_node, prop,
-+						&mode_bits->mask);
-+
-+		if (mask_err)
-+			/* support value without mask*/
-+			mode_bits->mask = 0xffffffff;
-+
-+		mode_bits->valid = true;
-+	}
-+
-+	/* catch-all entry */
-+	if (of_property_read_u32(pdev->dev.of_node, "offset",
-+				 &ctx->catchall.offset))
-+		if (of_property_read_u32(pdev->dev.of_node, "reg",
-+					 &ctx->catchall.offset))
- 			return -EINVAL;
- 
--	value_err = of_property_read_u32(pdev->dev.of_node, "value", &ctx->value);
--	mask_err = of_property_read_u32(pdev->dev.of_node, "mask", &ctx->mask);
-+	value_err = of_property_read_u32(pdev->dev.of_node, "value",
-+					 &ctx->catchall.value);
-+	mask_err = of_property_read_u32(pdev->dev.of_node, "mask",
-+					&ctx->catchall.mask);
- 	if (value_err && mask_err) {
- 		dev_err(dev, "unable to read 'value' and 'mask'");
- 		return -EINVAL;
-@@ -73,11 +139,11 @@ static int syscon_reboot_probe(struct platform_device *pdev)
- 
- 	if (value_err) {
- 		/* support old binding */
--		ctx->value = ctx->mask;
--		ctx->mask = 0xFFFFFFFF;
-+		ctx->catchall.value = ctx->catchall.mask;
-+		ctx->catchall.mask = 0xFFFFFFFF;
- 	} else if (mask_err) {
--		/* support value without mask*/
--		ctx->mask = 0xFFFFFFFF;
-+		/* support value without mask */
-+		ctx->catchall.mask = 0xFFFFFFFF;
- 	}
- 
- 	ctx->restart_handler.notifier_call = syscon_restart_handle;
-
--- 
-2.48.1.658.g4767266eb4-goog
-
+> +
+>  	if ((reboot_mode == REBOOT_WARM || reboot_mode == REBOOT_SOFT) &&
+>  	    psci_system_reset2_supported) {
+>  		/*
+> @@ -750,6 +787,73 @@ static const struct of_device_id psci_of_match[] __initconst = {
+>  	{},
+>  };
+>  
+> +#define REBOOT_PREFIX "mode-"
+> +
+> +static int __init psci_init_system_reset2_modes(void)
+> +{
+> +	const size_t len = strlen(REBOOT_PREFIX);
+> +	struct psci_reset_param *param;
+> +	struct device_node *psci_np __free(device_node) = NULL;
+> +	struct device_node *np __free(device_node) = NULL;
+> +	struct property *prop;
+> +	size_t count = 0;
+> +	u32 magic[2];
+> +	int num;
+> +
+> +	if (!psci_system_reset2_supported)
+> +		return 0;
+> +
+> +	psci_np = of_find_matching_node(NULL, psci_of_match);
+> +	if (!psci_np)
+> +		return 0;
+> +
+> +	np = of_find_node_by_name(psci_np, "reset-types");
+> +	if (!np)
+> +		return 0;
+> +
+> +	for_each_property_of_node(np, prop) {
+> +		if (strncmp(prop->name, REBOOT_PREFIX, len))
+> +			continue;
+> +		num = of_property_count_u32_elems(np, prop->name);
+> +		if (num != 1 && num != 2)
+> +			continue;
+> +
+> +		count++;
+> +	}
+> +
+> +	param = psci_reset_params =
+> +		kcalloc(count, sizeof(*psci_reset_params), GFP_KERNEL);
+> +	if (!psci_reset_params)
+> +		return -ENOMEM;
+> +
+> +	for_each_property_of_node(np, prop) {
+> +		if (strncmp(prop->name, REBOOT_PREFIX, len))
+> +			continue;
+> +
+> +		param->mode = kstrdup_const(prop->name + len, GFP_KERNEL);
+> +		if (!param->mode)
+> +			continue;
+> +
+> +		num = of_property_read_variable_u32_array(np, prop->name, magic,
+> +							  1, ARRAY_SIZE(magic));
+> +		if (num < 0) {
+> +			pr_warn("Failed to parse vendor reboot mode %s\n",
+> +				param->mode);
+> +			kfree_const(param->mode);
+> +			continue;
+> +		}
+> +
+> +		/* Force reset type to be in vendor space */
+> +		param->reset_type = PSCI_1_1_RESET_TYPE_VENDOR_START | magic[0];
+> +		param->cookie = num > 1 ? magic[1] : 0;
+> +		param++;
+> +		num_psci_reset_params++;
+> +	}
+> +
+> +	return 0;
+> +}
+> +arch_initcall(psci_init_system_reset2_modes);
+> +
+>  int __init psci_dt_init(void)
+>  {
+>  	struct device_node *np;
+> 
+> -- 
+> 2.34.1
+> 
 
