@@ -1,83 +1,83 @@
-Return-Path: <linux-pm+bounces-23012-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23013-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id A3DB8A46718
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 17:53:50 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id E45EAA46719
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 17:53:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A045A16712A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 16:44:48 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C3BA816D3DE
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 16:44:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id F3834223302;
-	Wed, 26 Feb 2025 16:44:41 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9FAA9223333;
+	Wed, 26 Feb 2025 16:44:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Od1xWWrx"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="PaIyCbZW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+Received: from mail-ed1-f52.google.com (mail-ed1-f52.google.com [209.85.208.52])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EE5C0221F21
-	for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 16:44:39 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A64C6221F39
+	for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 16:44:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.52
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740588281; cv=none; b=E1kOsT02eHq4jP4ldx/CA+vW2CwxoI3/d0EqWiQigooKrCkopeIRs7OF8Y7mVuIPLSSmAk7GMkRpgLOChYBZ63rGKVVF1mtNWjCH7iiAHNAqI+GsB8r5fBCczIY5m/unYoA6/Itjwu7mfduwg40Vm14T44O8OR2kyWLzSvBMNEI=
+	t=1740588282; cv=none; b=cnguBd3R+m4Yb2NSHNfmxXTQ2gOrpA4wAbozOVxsDuj1nDs0q6P6VOBKRtT8h8hLYy9YOp+bGBdPpcVDbL6Gnb6mSJhFjcgSlFJmKEjfyH1/DYjxUUW6QB4Af81omDb/sL5wouCk+PoG8Yf48H4HPfYOeNaSQT7FRArXiiCGQQk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740588281; c=relaxed/simple;
-	bh=YdhxqSQK6u09Yq+wcXxAOkCJ2NySw34/uEOXxH+/B+4=;
+	s=arc-20240116; t=1740588282; c=relaxed/simple;
+	bh=iNT0VqOrH9vAHA1UAijWCgNgr5GDEqXdheLf0A2HN9w=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=iOPQd1r2U8VZ8SEbEyCosj5G+NbKOkFzH99FAjPsablIsbeS0iCoSyOjIUSJ2uh6G5EqtE5kjKWPNvOBOAhFISnH1zzsc3xabNhObcqZDKHFiAzddS/rWAuxW8xryBJQkv8nqC51HF/vusaWMDqnS2jni4jCU+McyKSpAQtuLRQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Od1xWWrx; arc=none smtp.client-ip=209.85.208.54
+	 In-Reply-To:To:Cc; b=tq8kmpvAmad95iKOpRxEFhVfP9jwMiPCAqrVk4Ovigwr6Dsa2++tiJ70kJdERt2acgzA8OXYOezRjA83W20pYC20lHUaGhxOtKuOnPvuzlvNpqg85yh1FlBaW6JErHldCynk6FS1gpfhQcAKYUeukZoPCt9juAo6gmNg29XBkXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=PaIyCbZW; arc=none smtp.client-ip=209.85.208.52
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5ded368fcd9so10268621a12.1
-        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 08:44:39 -0800 (PST)
+Received: by mail-ed1-f52.google.com with SMTP id 4fb4d7f45d1cf-5e095d47a25so12859193a12.0
+        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 08:44:40 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740588278; x=1741193078; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1740588279; x=1741193079; darn=vger.kernel.org;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=l0EZyn2TqObTe2UJw5yeyY3ZtpefcUDz56vkBzRoO/c=;
-        b=Od1xWWrxe62uvOUWcmztsrxGTCS2AX2xm6rf2NtBx0guGzO7HfUHD60kEHhOiHcd5F
-         vtauz3Agr7TRjqqAHWrTGdw+VbZeEG2OE33fwy8qyp4RS9h9JCd4wiZG1ejnzT4JZot6
-         PjNetCHxY1iKJv9/XPZ+28pn8iLytEqytv2D/uDn7lK/bLEesojUAbx/LAg5/n/HWCdS
-         KX+QVpALa/8W9zcO1AhI4s3bBCIE1kmY84h/QlTo28l75TXZDchUj9DkiYK2HIvVAXam
-         kc+CT01SWHvyUn3njfNnKbjZWOguADuvr15QceT4VQQsiFEDW3/cRuzN0MmrhAo9063a
-         ptOg==
+        bh=WxeFUEnPMpG6A3aZld5E/WFu7bcPUUeu7zfpRBo6A78=;
+        b=PaIyCbZWVnIk50RgNRkIDvxNy14XzHoL9WoD8QxlA9x78g13pGAtN46n69B2Ge/95y
+         lJa3WeRkgSMpwZIZGGHgHT/zFAxNSFdv9D3CO9OZujgvlKkC4jJZlV9m5phxP9FCYHIb
+         7/NFxRD1prrEZnRIg0NHbm1+g2NJV8OpsK6vyeVPsvnAQji5OUW02obU79PJEKfzdnlW
+         gzoQUmqGeRiaRuhuE3hHFqQQS6zYD5lsUrivVYdJinzpn5V2+WECKXp20/hl4n9M8EbO
+         egfqlSA8Ffx4t4kSpfs3EW1CfucX/VlcjnvkI1gUe/7+m8wDtv8UgcYJKrnYRLBO9Ktt
+         Dfhw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740588278; x=1741193078;
+        d=1e100.net; s=20230601; t=1740588279; x=1741193079;
         h=cc:to:in-reply-to:references:message-id:content-transfer-encoding
          :mime-version:subject:date:from:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=l0EZyn2TqObTe2UJw5yeyY3ZtpefcUDz56vkBzRoO/c=;
-        b=lFGIUvz3RngIzBe2WQtHjxM2ZgN2SGzTXPDyMGKI0OdNPGoak2wy8pJiQ7PrAMKVSm
-         b9hm2pn/Pj5a4D4S4PDLFDppjcw7vnreBnuDAEMFOULcJmL65tLgnt1tSBfLM5SyZjFH
-         l3GirRh0pfUPb7mt6Xum3J8ZeJaUre+93ZyUAasBTUbSJ2ndeD9B9TyUzX1EYilH6psf
-         XZG1XWaL3a36YRNioY1SkPNix9U4dEZpf9JYXAJzG+tj8DZ6/L6jZGPZcCeIVsRWVDss
-         hB8ONzuxkhYCQseEJayQ2k2EkXkC/NgTPJ3TFpYSztXgJmOQz0YkmcxOhuYqz18Txpuj
-         5UeQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVl16yXJal5ku70O7Oa3pq+0mJ8tZ5UMVTP+bzp46SKGcX6PZpGEKj3DqKYQlOV+75JkqBSu4xjqg==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz+hdwGHVb9HWdjM6Z0uChYSq7HybRp/Y2Cq5rHppUTD+Dxo+4n
-	DLXgBc3FaHkciax5gK3Eliy40L0CiOtQQEHqMYJHiUUPkoJmOdJ7W4Ool31tGQksGf47MEztIMO
-	S3G8=
-X-Gm-Gg: ASbGnctcrJJ/zSy6k2Fxf52/N2qpEHYPNHAGk8bxtOFLoFikkHwT+FV++btPJZwtKEJ
-	8+MuMXujS1Tv8hGRh/RNgTlfG+xj0mMsXEFPgWiJSiakd4m1TJkjxUi9E60WjAn/trw3KQZNATx
-	nc8iwAQ+FXnGTEWQCk5foqX4U7Y1HDY5nQX/D/uVf1jfTs40UYZyKDZ5Of5UGtXGL8CTowLVMYG
-	Er2XviVudt3YEICEPZmZ7XEeDQiIUTWBokeh2FYOPJ4fFmJ46umnLYhjTUCrbbcwguBltnz5xUm
-	PYkJN8ze80qRA2JQk1s8u6nfCLBHCubEzqpGPADpFyzW32fToGPWqNQ7Cw6zvB7f2Dct/cdZS3g
-	kkKb8G4TXbg==
-X-Google-Smtp-Source: AGHT+IH3s7ublc3lcebdSq3s/EcaHrrowWHk7bE8C5LSsDhgwFnc7kY/4pTIWqJdedCRg49Glwrm0A==
-X-Received: by 2002:a05:6402:2683:b0:5e0:9ec6:12d1 with SMTP id 4fb4d7f45d1cf-5e4a0d88d99mr6275127a12.18.1740588278221;
+        bh=WxeFUEnPMpG6A3aZld5E/WFu7bcPUUeu7zfpRBo6A78=;
+        b=eZLAMBwqe6HHQVM+DgD+bFiDPxbffbu+Ud1rE+mkGZVBZpXVmkwJllSBUdKK/b1U3e
+         4PoUg3wYZcAa+eqtU7kc4MPlDN93i1HHeKCvTyEEcs4rarzLKrbzpVE16Cf1cBQnAYDJ
+         c9DDyVu2jSKZraLQmXaeo1MucvRYN1uY2Dl3srHGS5tMXSgtGGXw7EoE2g+I/Vc1oyCZ
+         HIMCqGdL9X6FHgqyOvgkV+0J8p9k2VUczoT8hXvLJn0a5FOgys0nUkHME1+aw1zp1eoi
+         pwW8J96w4fVY3eqvmdwIjbwsNYgy7kyHbCK1LQMMzCP5WGMXCQVke3ze2DFpRPrj4XOL
+         S98A==
+X-Forwarded-Encrypted: i=1; AJvYcCU/9H5fYAQbwyuVlmRetiUw2Qxd6tiEvHHHpnfU7sOZRigIcIB1GKEEOC+Gu/SHQIyCKOifraKqZQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz81lMtjfYobmaUpdTIJUdvFKrklb8DrZdHs/9lxyxVWj2w32YN
+	iNbEOUzSxQcIqLvCL6p/DaxK5siJ6LWmZXJ3ttT+3AH4wvVsvcRbWDgCIol8f3vCJ2b1IOE0j0T
+	3CaA=
+X-Gm-Gg: ASbGnctqzqHNBi/0qt+2y5XrRg4dRXhFX2Z/UDmFcUbUeYXTt2V9EkAj1GIc+7QqyzK
+	2WSds7W4uyd3kC3RxVo3g8uvCQxoa7uM6hFChCPZa7IoTGAin1cYheXwdip9T55inT6f8TXnWlA
+	BLq1TU2XS51cPc8JWVlj2cqCJ2uQv5FS7hVU+3u7xvOQ1jp5zb4ukFERO0M5d8htgvxxFzm2G7W
+	rK660l2ExCXIRtrAkABLUQ7OMSBeI0SZhSIa+sngo4Z9hPWPgurb7ReRaX4hD33G8UFfnxm5TNs
+	5esnVz94jfWasi/y3Xa91U+tsCiKy3qtc1kCyzq6KJyJbMRr2KyWVCwm7u2pcBxEGnibjJKRTmn
+	YgWOoSy0YKw==
+X-Google-Smtp-Source: AGHT+IGv44paoi7SHvV5/BUy3MTrsCsjRS9MSLuRT7rzrBdvmcFLXDj/Fn1PZse8GNxAVzy8dxcAyQ==
+X-Received: by 2002:a05:6402:4409:b0:5e0:815d:4e08 with SMTP id 4fb4d7f45d1cf-5e0b70bbf50mr23117724a12.3.1740588278826;
         Wed, 26 Feb 2025 08:44:38 -0800 (PST)
 Received: from puffmais.c.googlers.com (30.171.91.34.bc.googleusercontent.com. [34.91.171.30])
-        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e462032b00sm3058459a12.68.2025.02.26.08.44.37
+        by smtp.gmail.com with ESMTPSA id 4fb4d7f45d1cf-5e462032b00sm3058459a12.68.2025.02.26.08.44.38
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 08:44:37 -0800 (PST)
+        Wed, 26 Feb 2025 08:44:38 -0800 (PST)
 From: =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
-Date: Wed, 26 Feb 2025 16:44:26 +0000
-Subject: [PATCH v2 1/2] dt-bindings: reset: syscon-reboot: support reset
- modes
+Date: Wed, 26 Feb 2025 16:44:27 +0000
+Subject: [PATCH v2 2/2] power: reset: syscon-reboot: support different
+ reset modes
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -86,7 +86,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250226-syscon-reboot-reset-mode-v2-1-f80886370bb7@linaro.org>
+Message-Id: <20250226-syscon-reboot-reset-mode-v2-2-f80886370bb7@linaro.org>
 References: <20250226-syscon-reboot-reset-mode-v2-0-f80886370bb7@linaro.org>
 In-Reply-To: <20250226-syscon-reboot-reset-mode-v2-0-f80886370bb7@linaro.org>
 To: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
@@ -100,130 +100,168 @@ Cc: Peter Griffin <peter.griffin@linaro.org>,
  =?utf-8?q?Andr=C3=A9_Draszik?= <andre.draszik@linaro.org>
 X-Mailer: b4 0.14.2
 
-Add support for specifying different register/mask/value combinations
-for different types of reset.
+Linux supports a couple different reset modes, but this driver here
+doesn't distinguish between them and issues the same syscon register
+write irrespective of the reset mode requested by the kernel.
 
-In particular, update the binding to allow platforms to specify the
-following reset modes: soft, warm, cold, hard.
+Update this driver to support most of Linux' reset modes: cold, hard,
+warm, and soft.
 
-Linux can perform different types of reset using its reboot= kernel
-command line argument, and some platforms also wish to reset
-differently based on whether or not e.g. contents of RAM should be
-retained across the reboot.
+The actions to take for these are taken from DT, and are all new
+optional properties. The property names match the existing properties
+supported but should be prefixed with the reset mode.
 
-The new properties match the existing properties, just prefixed with
-one of the reset modes mentioned above.
+This change is meant to be backwards compatible with existing DTs, and
+if Linux requests a reset mode that this driver doesn't support, or
+that the DT doesn't specify, the reset is triggered using the fallback
+/ default entry.
+
+As an example why this is useful, other than properly supporting the
+Linux reboot= kernel command line option or sysfs entry, this change
+allows platforms to e.g. default to a more secure cold-reset, but
+also to do a warm-reset in case RAM contents needs to be retained
+across the reset.
 
 Signed-off-by: André Draszik <andre.draszik@linaro.org>
 ---
- .../bindings/power/reset/syscon-reboot.yaml        | 74 ++++++++++++++++++++++
- 1 file changed, 74 insertions(+)
+ drivers/power/reset/syscon-reboot.c | 88 ++++++++++++++++++++++++++++++++-----
+ 1 file changed, 77 insertions(+), 11 deletions(-)
 
-diff --git a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-index 19d3093e6cd2f7e39d94c56636dc202a4427ffc3..1bd821877a16b274ac78a80017d003f1aa9fd471 100644
---- a/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-+++ b/Documentation/devicetree/bindings/power/reset/syscon-reboot.yaml
-@@ -18,6 +18,11 @@ description: |+
-   parental dt-node. So the SYSCON reboot node should be represented as a
-   sub-node of a "syscon", "simple-mfd" node. Though the regmap property
-   pointing to the system controller node is also supported.
-+  This also supports specification of separate sets of register/mask/value
-+  pairs for different types of reset: cold, hard, soft and warm, using
-+  the respective properties with the respective reset type prefix. If prefixed
-+  properties are not specified for a reset type, the non-prefixed properties
-+  will be used for that reset type.
+diff --git a/drivers/power/reset/syscon-reboot.c b/drivers/power/reset/syscon-reboot.c
+index d623d77e657e4c233d8ae88bb099bee13c48a9ef..1d3d8a3265ae8005c685b42d3e554bd8bb0047ea 100644
+--- a/drivers/power/reset/syscon-reboot.c
++++ b/drivers/power/reset/syscon-reboot.c
+@@ -14,11 +14,29 @@
+ #include <linux/reboot.h>
+ #include <linux/regmap.h>
  
- properties:
-   compatible:
-@@ -49,12 +54,41 @@ properties:
-   priority:
-     default: 192
+-struct syscon_reboot_context {
+-	struct regmap *map;
++/* REBOOT_GPIO doesn't make sense for syscon-reboot */
++static const struct {
++	enum reboot_mode mode;
++	const char *prefix;
++} prefix_map[] = {
++	{ .mode = REBOOT_COLD, .prefix = "cold"  },
++	{ .mode = REBOOT_WARM, .prefix = "warm"  },
++	{ .mode = REBOOT_HARD, .prefix = "hard"  },
++	{ .mode = REBOOT_SOFT, .prefix = "soft"  },
++};
++
++struct reboot_mode_bits {
+ 	u32 offset;
+ 	u32 value;
+ 	u32 mask;
++	bool valid;
++};
++
++struct syscon_reboot_context {
++	struct regmap *map;
++
++	struct reboot_mode_bits mode_bits[REBOOT_SOFT + 1];
++	struct reboot_mode_bits catchall;
+ 	struct notifier_block restart_handler;
+ };
  
-+patternProperties:
-+  "^(cold|hard|soft|warm)-(mask|offset|value)$":
-+    $ref: /schemas/types.yaml#/definitions/uint32
-+    description:
-+      Optional alternative offset / mask / value combinations for specific
-+      reboot modes. The mask is optional.
+@@ -28,9 +46,16 @@ static int syscon_restart_handle(struct notifier_block *this,
+ 	struct syscon_reboot_context *ctx =
+ 			container_of(this, struct syscon_reboot_context,
+ 					restart_handler);
++	const struct reboot_mode_bits *mode_bits;
 +
-+  "^(cold|hard|soft|warm)-reg$":
-+    description:
-+      Optional alternative base address and size for the reboot register for
-+      specific reboot modes.
-+
- oneOf:
-   - required:
-       - offset
-   - required:
-       - reg
++	if (mode < ARRAY_SIZE(ctx->mode_bits) && ctx->mode_bits[mode].valid)
++		mode_bits = &ctx->mode_bits[mode];
++	else
++		mode_bits = &ctx->catchall;
  
-+dependencies:
-+  cold-mask: [ cold-value ]
-+  cold-offset: [ cold-value ]
-+  cold-reg: [ cold-value ]
-+
-+  hard-mask: [ hard-value ]
-+  hard-offset: [ hard-value ]
-+  hard-reg: [ hard-value ]
-+
-+  soft-mask: [ soft-value ]
-+  soft-offset: [ soft-value ]
-+  soft-reg: [ soft-value ]
-+
-+  warm-mask: [ warm-value ]
-+  warm-offset: [ warm-value ]
-+  warm-reg: [ warm-value ]
-+
- required:
-   - compatible
+ 	/* Issue the reboot */
+-	regmap_update_bits(ctx->map, ctx->offset, ctx->mask, ctx->value);
++	regmap_update_bits(ctx->map, mode_bits->offset, mode_bits->mask,
++			   mode_bits->value);
  
-@@ -70,6 +104,46 @@ allOf:
-       required:
-         - value
+ 	mdelay(1000);
  
-+  - if:
-+      required:
-+        - cold-value
-+    then:
-+      oneOf:
-+        - required:
-+            - cold-offset
-+        - required:
-+            - cold-reg
+@@ -45,6 +70,7 @@ static int syscon_reboot_probe(struct platform_device *pdev)
+ 	int mask_err, value_err;
+ 	int priority;
+ 	int err;
++	char prop[32];
+ 
+ 	ctx = devm_kzalloc(&pdev->dev, sizeof(*ctx), GFP_KERNEL);
+ 	if (!ctx)
+@@ -60,12 +86,52 @@ static int syscon_reboot_probe(struct platform_device *pdev)
+ 	if (of_property_read_s32(pdev->dev.of_node, "priority", &priority))
+ 		priority = 192;
+ 
+-	if (of_property_read_u32(pdev->dev.of_node, "offset", &ctx->offset))
+-		if (of_property_read_u32(pdev->dev.of_node, "reg", &ctx->offset))
++	BUILD_BUG_ON(ARRAY_SIZE(prefix_map) != ARRAY_SIZE(ctx->mode_bits));
++	BUILD_BUG_ON(ARRAY_SIZE(ctx->mode_bits) <= REBOOT_COLD);
++	BUILD_BUG_ON(ARRAY_SIZE(ctx->mode_bits) <= REBOOT_WARM);
++	BUILD_BUG_ON(ARRAY_SIZE(ctx->mode_bits) <= REBOOT_HARD);
++	BUILD_BUG_ON(ARRAY_SIZE(ctx->mode_bits) <= REBOOT_SOFT);
 +
-+  - if:
-+      required:
-+        - hard-value
-+    then:
-+      oneOf:
-+        - required:
-+            - hard-offset
-+        - required:
-+            - hard-reg
++	for (int i = 0; i < ARRAY_SIZE(prefix_map); ++i) {
++		const char * const prefix = prefix_map[i].prefix;
++		struct reboot_mode_bits * const mode_bits =
++			&ctx->mode_bits[prefix_map[i].mode];
 +
-+  - if:
-+      required:
-+        - soft-value
-+    then:
-+      oneOf:
-+        - required:
-+            - soft-offset
-+        - required:
-+            - soft-reg
++		snprintf(prop, sizeof(prop), "%s-offset", prefix);
++		if (of_property_read_u32(pdev->dev.of_node, "offset",
++					 &mode_bits->offset))
++			continue;
 +
-+  - if:
-+      required:
-+        - warm-value
-+    then:
-+      oneOf:
-+        - required:
-+            - warm-offset
-+        - required:
-+            - warm-reg
++		snprintf(prop, sizeof(prop), "%s-value", prefix);
++		if (of_property_read_u32(pdev->dev.of_node, prop,
++					 &mode_bits->value)) {
++			/* don't support old binding here */
++			dev_err(dev, "'%s-value' is mandatory\n", prefix);
++			continue;
++		}
 +
- examples:
-   - |
-     reboot {
++		snprintf(prop, sizeof(prop), "%s-mask", prefix);
++		mask_err = of_property_read_u32(pdev->dev.of_node, prop,
++						&mode_bits->mask);
++
++		if (mask_err)
++			/* support value without mask*/
++			mode_bits->mask = 0xffffffff;
++
++		mode_bits->valid = true;
++	}
++
++	/* catch-all entry */
++	if (of_property_read_u32(pdev->dev.of_node, "offset",
++				 &ctx->catchall.offset))
++		if (of_property_read_u32(pdev->dev.of_node, "reg",
++					 &ctx->catchall.offset))
+ 			return -EINVAL;
+ 
+-	value_err = of_property_read_u32(pdev->dev.of_node, "value", &ctx->value);
+-	mask_err = of_property_read_u32(pdev->dev.of_node, "mask", &ctx->mask);
++	value_err = of_property_read_u32(pdev->dev.of_node, "value",
++					 &ctx->catchall.value);
++	mask_err = of_property_read_u32(pdev->dev.of_node, "mask",
++					&ctx->catchall.mask);
+ 	if (value_err && mask_err) {
+ 		dev_err(dev, "unable to read 'value' and 'mask'");
+ 		return -EINVAL;
+@@ -73,11 +139,11 @@ static int syscon_reboot_probe(struct platform_device *pdev)
+ 
+ 	if (value_err) {
+ 		/* support old binding */
+-		ctx->value = ctx->mask;
+-		ctx->mask = 0xFFFFFFFF;
++		ctx->catchall.value = ctx->catchall.mask;
++		ctx->catchall.mask = 0xFFFFFFFF;
+ 	} else if (mask_err) {
+-		/* support value without mask*/
+-		ctx->mask = 0xFFFFFFFF;
++		/* support value without mask */
++		ctx->catchall.mask = 0xFFFFFFFF;
+ 	}
+ 
+ 	ctx->restart_handler.notifier_call = syscon_restart_handle;
 
 -- 
 2.48.1.658.g4767266eb4-goog
