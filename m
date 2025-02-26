@@ -1,138 +1,136 @@
-Return-Path: <linux-pm+bounces-23014-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23015-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id BE4ABA46700
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 17:49:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8349CA4677A
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 18:09:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 7338C7A6917
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 16:47:37 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0839C175D72
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 16:56:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 19B9922370F;
-	Wed, 26 Feb 2025 16:48:22 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id ECEE8221DA0;
+	Wed, 26 Feb 2025 16:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gJBntMAW"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="VyWLVNOg"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AF34719005F;
-	Wed, 26 Feb 2025 16:48:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C87F421E082
+	for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 16:56:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740588501; cv=none; b=I+mQysjTGt4b+S7ACdPplboWQPFwdFh1NXs5S0a5TIPd1e5xyNVfhk1/82M2cqw9FyMl32KC1RVMx4JIkFzckWNYE0FIapAPrLdqUwSBcLFjwGDJWB/xEyJhXUIamR34TU+iV9Iye5dgVnYSFinr0Ux7qIrVZIWFNYwxK7mpYw0=
+	t=1740588973; cv=none; b=hEiX65h9f7y7Qq4T40xcOEsdhXTKgmxwqyVNEvujEj+NF01ANndigemDzynJ8YERBL17GJhgViaKO16D1ll+ul27S/od48WOu1Jwjby26Tx55rHHqNrJyViq7G9UHZhwedhx6GMra83r1kN/d/hYKixdU+pFd1T23rC7oN+kCVA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740588501; c=relaxed/simple;
-	bh=FxcvaHDtQk+aPNgLOpA1kKCuwEvZ/n4I9xwMBDMNjMM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=G6cSdDMH+kKrbp5h0yk1/gCnKsMqBxy2ckyOK9U5FReF51pl1TRRtgEi8hceP1PT8BoHYJM7KML1QUFdCbKVqbDxCdUL7k8WtzTp1mFA8hge8eeWLlQoWYdv1YrAFSwsX/mVMe57ZNeR+84hCtsjDVfs1nwI3tfyw2Jf0saa3X0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gJBntMAW; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8F78BC4CED6;
-	Wed, 26 Feb 2025 16:48:07 +0000 (UTC)
+	s=arc-20240116; t=1740588973; c=relaxed/simple;
+	bh=e/e6uDD2H1sZumsUBc8WfzpCmedKf1Cjo2LfktnMCRA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FbhCOW+PyxwzaIWD4c7mcen3WSsabStaQ9dot4/Fhn2W2JTTbUTbqU5/mN64y9I2Sn7A1TthTXMgTxyLaSV5JDcGZSiMEvGMtMW2EPCzLCKyDItaKCmzsc4vePy3H4VPVQuPjlbr1LuvxySMWLoz4ClUNOyWBkzKQszlCEjN2xo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=VyWLVNOg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 607B0C4CEEB
+	for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 16:56:13 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740588501;
-	bh=FxcvaHDtQk+aPNgLOpA1kKCuwEvZ/n4I9xwMBDMNjMM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=gJBntMAWa9qiB6go6MBAYuIpUQmIV8zM3P7hOz/BcMP2byX2P+MCVmwTOF8y59cTA
-	 /dmsi2YnkvFk7WCs/BqmuQVZJqyuuK6B2L34n/nlGh5Fb/IjbLtuJF7xfHrd7ckNHI
-	 3aOmoTcDg9MwCwDV+lRzSbk3kKgtk7sY2T2rRnxcQXeSOKkWWTO2TN5iDQ7y45VEK4
-	 FrA2VRbWMMiI+WJDNW4z9L9r47+ekdDK20fY6zi5lQvVIKVd30Jsj0qJQM2+iV2vYy
-	 04RjgTb6SA4Au/0pUEMYaZh350XZsbrokrKevACKRy5XTZGyf9486J5GRsNNv9vMzQ
-	 71NtfIvQwN7Lw==
-From: Mark Brown <broonie@kernel.org>
-To: Andrew Morton <akpm@linux-foundation.org>, 
- Yaron Avizrat <yaron.avizrat@intel.com>, Oded Gabbay <ogabbay@kernel.org>, 
- Julia Lawall <Julia.Lawall@inria.fr>, Nicolas Palix <nicolas.palix@imag.fr>, 
- James Smart <james.smart@broadcom.com>, 
- Dick Kennedy <dick.kennedy@broadcom.com>, 
- "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>, 
- "Martin K. Petersen" <martin.petersen@oracle.com>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>, 
- David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>, 
- Dongsheng Yang <dongsheng.yang@easystack.cn>, Jens Axboe <axboe@kernel.dk>, 
- Xiubo Li <xiubli@redhat.com>, Damien Le Moal <dlemoal@kernel.org>, 
- Niklas Cassel <cassel@kernel.org>, Carlos Maiolino <cem@kernel.org>, 
- "Darrick J. Wong" <djwong@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
- Keith Busch <kbusch@kernel.org>, Christoph Hellwig <hch@lst.de>, 
- Sagi Grimberg <sagi@grimberg.me>, Frank Li <Frank.Li@nxp.com>, 
- Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>, 
- Pengutronix Kernel Team <kernel@pengutronix.de>, 
- Fabio Estevam <festevam@gmail.com>, 
- Shyam Sundar S K <Shyam-sundar.S-k@amd.com>, 
- Hans de Goede <hdegoede@redhat.com>, 
- =?utf-8?q?Ilpo_J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>, 
- Henrique de Moraes Holschuh <hmh@hmh.eng.br>, 
- Selvin Xavier <selvin.xavier@broadcom.com>, 
- Kalesh AP <kalesh-anakkur.purayil@broadcom.com>, 
- Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>, 
- Easwar Hariharan <eahariha@linux.microsoft.com>
-Cc: cocci@inria.fr, linux-kernel@vger.kernel.org, 
- linux-scsi@vger.kernel.org, dri-devel@lists.freedesktop.org, 
- linux-sound@vger.kernel.org, linux-btrfs@vger.kernel.org, 
- ceph-devel@vger.kernel.org, linux-block@vger.kernel.org, 
- linux-ide@vger.kernel.org, linux-xfs@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-nvme@lists.infradead.org, 
- linux-spi@vger.kernel.org, imx@lists.linux.dev, 
- linux-arm-kernel@lists.infradead.org, platform-driver-x86@vger.kernel.org, 
- ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org, 
- Takashi Iwai <tiwai@suse.de>, Carlos Maiolino <cmaiolino@redhat.com>
-In-Reply-To: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
-References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
-Subject: Re: (subset) [PATCH v3 00/16] Converge on using secs_to_jiffies()
- part two
-Message-Id: <174058848717.58970.18340675342808865020.b4-ty@kernel.org>
-Date: Wed, 26 Feb 2025 16:48:07 +0000
+	s=k20201202; t=1740588973;
+	bh=e/e6uDD2H1sZumsUBc8WfzpCmedKf1Cjo2LfktnMCRA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=VyWLVNOgXqfOFWRVBDYGVyG6AHQcqYYt+vShgQQEJOb98YnI4l363YHrG6+2oaExi
+	 Ly1cg3TSEVcJaGExC4xfDxDqfMlix1ytwNl3y9s3JfbhLH3TpphUvNcEEquVUcGlE2
+	 +rcKFFtfb80KzDo6rJwKOoZexU0dG3JuvCOM423ZMb5iuH7+rnv+h+sy0Sqjel4Esr
+	 vwab6mVIYN/ohltRch9rzVz/qYXmWUehwbSiyK4ilhCTvyt2wGwiHtPgewmXesfDw+
+	 FVGbOdwDEthRq5Uw/g2FuOz8DnzkRAadf1xZcHNtAd8SIsbhrbFDehKF6ti4XGvvU6
+	 iLyuEgtHv29ZA==
+Received: by mail-oa1-f47.google.com with SMTP id 586e51a60fabf-2bca6017608so58814fac.0
+        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 08:56:13 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCXSguxgPSl803HFny7D53nyCUYeA7NKYcnj95qY7tljEM8GJ7N6Svn3dHc919wZLnKLHUoJlsjaqw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyUTSmwp8uwV+ST9QcAx/WTSQvt2tfWQDBbpFbHy5Ea01irSvkv
+	P7Rt3kSyGMya42os2iEH8cSee6vuqwol5QcY+OFqn8FIxTsGVNEoYi3vxz4sUVBmfIDmn3bW9AO
+	3mW0sA93tkp/Ah/ntBZnUJEDQHU8=
+X-Google-Smtp-Source: AGHT+IF8FVsLXXUPxrruZDj/6g3EXfBpP3hVZ7yd8KRhKSwXfZSR7MfVe1OoSJUCVlzqKz497AUQLbP+08IJXDTtt6s=
+X-Received: by 2002:a05:6870:ff8a:b0:29e:569a:f90d with SMTP id
+ 586e51a60fabf-2c13079f269mr2549885fac.32.1740588972588; Wed, 26 Feb 2025
+ 08:56:12 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+References: <20250224070049.3338646-1-xu.yang_2@nxp.com>
+In-Reply-To: <20250224070049.3338646-1-xu.yang_2@nxp.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 26 Feb 2025 17:56:01 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0g1xMRk6B=C9QnFDMFwHgBABkNmr09USBFfHSo1HjyA1Q@mail.gmail.com>
+X-Gm-Features: AQ5f1Jo5mT_bF083RcgF_jcoM9zxH-ADxDFNC7YVSguWdIL3Mwl7v1iWSw68ZPs
+Message-ID: <CAJZ5v0g1xMRk6B=C9QnFDMFwHgBABkNmr09USBFfHSo1HjyA1Q@mail.gmail.com>
+Subject: Re: [PATCH v3] PM: sleep: core: Clear is_prepared if both
+ no_pm_callbacks and direct_complete is set
+To: Xu Yang <xu.yang_2@nxp.com>
+Cc: rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
+	gregkh@linuxfoundation.org, dakr@kernel.org, stern@rowland.harvard.edu, 
+	linux-pm@vger.kernel.org, imx@lists.linux.dev, jun.li@nxp.com
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Tue, 25 Feb 2025 20:17:14 +0000, Easwar Hariharan wrote:
-> This is the second series (part 1*) that converts users of msecs_to_jiffies() that
-> either use the multiply pattern of either of:
-> - msecs_to_jiffies(N*1000) or
-> - msecs_to_jiffies(N*MSEC_PER_SEC)
-> 
-> where N is a constant or an expression, to avoid the multiplication.
-> 
-> [...]
+On Mon, Feb 24, 2025 at 7:59=E2=80=AFAM Xu Yang <xu.yang_2@nxp.com> wrote:
+>
+> Currently, if power.no_callbacks is true for a device, device_prepare()
+> will also set power.direct_complete to true. When device_resume() check
+> power.direct_complete, setting power.is_prepared will be skipped if it
+> can directly complete. This will cause a warning when add new devices
+> during resume() stage.
+>
+> Although power.is_prepared should be cleared in complete() state, commit
+> (f76b168b6f11 PM: Rename dev_pm_info.in_suspend to is_prepared) allow
+> clear it in earlier resume() stage. However, we need also set is_prepared
+> to false if both power.no_callbacks and power.direct_complete are true.
+>
+> Take USB as example:
+> The usb_interface is such a device which setting power.no_callbacks to
+> true. Then if the user call usb_set_interface() during resume() stage,
+> the kernel will print below warning since the system will create and
+> add ep devices.
+>
+> [  186.461414] usb 1-1: reset high-speed USB device number 3 using ci_hdr=
+c
+> [  187.102681]  ep_81: PM: parent 1-1:1.1 should not be sleeping
+> [  187.105010] PM: resume devices took 0.936 seconds
+>
+> Suggested-by: Rafael J. Wysocki <rafael@kernel.org>
+> Signed-off-by: Xu Yang <xu.yang_2@nxp.com>
+>
+> ---
+> v3: combined checking no_pm_callbacks and direct_complete
+> v2: clear is_prepared before check syscore as suggested by Rafael
+> ---
+>  drivers/base/power/main.c | 7 +++++++
+>  1 file changed, 7 insertions(+)
+>
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index dffa2aa1ba7d..b9b1fd43427d 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -930,6 +930,13 @@ static void device_resume(struct device *dev, pm_mes=
+sage_t state, bool async)
+>                 goto Complete;
+>
+>         if (dev->power.direct_complete) {
+> +               /*
+> +                * Allow new children to be added in the resume stage for
+> +                * devices with no PM callbacks and can be completed dire=
+ctly.
+> +                */
+> +               if (dev->power.no_pm_callbacks)
+> +                       dev->power.is_prepared =3D false;
+> +
+>                 /* Match the pm_runtime_disable() in device_suspend(). */
+>                 pm_runtime_enable(dev);
+>                 goto Complete;
+> --
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/spi.git for-next
+Applied as 6.15 material under a new subject and with edits in the changelo=
+g.
 
 Thanks!
-
-[12/16] spi: spi-fsl-lpspi: convert timeouts to secs_to_jiffies()
-        commit: 32fcd1b9c397ccca7fde2fcbcf4fc7e0ec8f34aa
-[13/16] spi: spi-imx: convert timeouts to secs_to_jiffies()
-        commit: 1d2e01d53a8ebfffb49e8cc656f8c85239121b26
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
-
 
