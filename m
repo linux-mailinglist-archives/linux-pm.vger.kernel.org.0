@@ -1,146 +1,145 @@
-Return-Path: <linux-pm+bounces-23009-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23010-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1752FA466B9
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 17:36:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 90FAAA466B8
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 17:35:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 7D15F42747A
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 16:17:54 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D9B01891768
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 16:20:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5C3C21CFEE;
-	Wed, 26 Feb 2025 16:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9582D21D5A1;
+	Wed, 26 Feb 2025 16:20:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="hRZId4xf"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="cjAWEtEI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f177.google.com (mail-pl1-f177.google.com [209.85.214.177])
+Received: from mail-wm1-f46.google.com (mail-wm1-f46.google.com [209.85.128.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 43D53220694;
-	Wed, 26 Feb 2025 16:17:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.177
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B874921D599
+	for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 16:20:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740586658; cv=none; b=XO3E0PnoWYQ52msUZr4sT+fZyeAehpRJyP5S2Qr2lfzSnZ799pmCCkfhNzwAj0YA5FQ0sZEJk/xIp8aZI4TnDtBzHrB/zv8RpPmCPui8XdOeF2QXAZ/BcLdIJ8Cj7P0GZpKNmnM55OAmREGx4Mrd/fWyUFFbQBaZi0LB1+rAA4M=
+	t=1740586832; cv=none; b=aJanrCs9urJQsjG9Zs3fHW5XMhEssqVLmLrEGjX9PgW60Pq6bvvqsgtpIC85PS9BPTWZCJ8p1WoVlbplgaCWst7t06ZoMX+yyzuRClFFPuAoHi+tZ5s+8tShB91WQPmpej202jqXDIgEiij27PYbmh7Eby0+rGsCLNuua31UfRA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740586658; c=relaxed/simple;
-	bh=p+rEInh5x8k2va/qGDSY6xNcd5VCL+2UkWvotiVe6qw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=l8ctONfR1cttyOL6QCF2gXLfPOuBNSkrlzdZjlzAJrPBP3Tqm/G52SnNSLWCkdTbFoY95Bh956kY4xVovnKBE7udAZcA0xb6A4aYT6QZ/bwuRgY5wsrZ3H38q9NwXmP+GfMEM26Woof8O32NxnIiA3M9YlcStr9tBGjg955fa78=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=hRZId4xf; arc=none smtp.client-ip=209.85.214.177
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f177.google.com with SMTP id d9443c01a7336-2210d92292eso59403675ad.1;
-        Wed, 26 Feb 2025 08:17:36 -0800 (PST)
+	s=arc-20240116; t=1740586832; c=relaxed/simple;
+	bh=2nqyqqx0MAd0AgGyAucIaH6EREOxVYygyrAHK6YBIr0=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=GvNJdkshRlNfdobuYQJYuVF47XOnoiUCnVj+zps8E0ywZzrxsyi3kolDeENmrvoy8EGW1yJM0cRCS3vIZ3PuGPDBySzrttuKoY+YKFwmtjSg56fyAIcCSMWyuByBlCzIRRJ9UVAUZnsEhqbDFI+H8orh6E2Xa1vlLXzpHgBTdME=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=cjAWEtEI; arc=none smtp.client-ip=209.85.128.46
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f46.google.com with SMTP id 5b1f17b1804b1-4398e3dfc66so168775e9.0
+        for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 08:20:30 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740586656; x=1741191456; darn=vger.kernel.org;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date:from:to
-         :cc:subject:date:message-id:reply-to;
-        bh=pqqE8TPgTHo5XiZCNnju5LBuzlT14gu1LDeKWI2DZxs=;
-        b=hRZId4xfsql6WdscV+LYmHCUZmUbcOd2xezQ/m4RZ15iY0KYeEySCqPVaIOfi7Sk8z
-         CfIZBx6QvrNR55KN7uchbz6v6tUQ7P00asakiBESHLWBiyfIoXUYepCfeiFOnxFkd4Xk
-         4XH0nSu2nYYXCtbkCawiarnllvl4HBB2W/YFIaLeuWTtyOqIQJkmPv0xt+wYIMlBDO6w
-         ceM7H/R1VsNmzzpni1CV0i20hqyfxdp1BMHiIZfXvmvflBmfVm6MMH6P9lwKJWRNE4Tt
-         MdBED0QasB0LETe+kM2VC5rufwk9E627fnAwmjyBMvNoMeYyZBHGutGuf/wMNuEErErn
-         oxYw==
+        d=linaro.org; s=google; t=1740586829; x=1741191629; darn=vger.kernel.org;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
+         :date:message-id:reply-to;
+        bh=2nqyqqx0MAd0AgGyAucIaH6EREOxVYygyrAHK6YBIr0=;
+        b=cjAWEtEIQJuRE+iO7QUUI0CmBcQ0wqiHs6+i10oD8iO72pb+fWE2t39588F8JZswbN
+         on7rSesWbFZORTfzrbkpr3UfLJJE2GjgB9maoRu2QDFnTVAAxAofdbTLuVXtaiv8rHmT
+         b6I4P2LzCDJGlwlUSgn5wywJBWpXFJ/iQ51BnSVFOa49eGkIhPLDpdpG+f7n1WsUJm0T
+         h6rvst4XE46ao1yzxxsZhGte4VdZfsRMeWiR8iw1to9ybOn2rVAFF75CsyZJ5OsDQt3H
+         AZD7wYO2gJAcy6mVYp++MNXkYwAyUkxcC0sQLR/3s9DX2VQD69cVi9VO7RX/Js1vqsOJ
+         ggfQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740586656; x=1741191456;
-        h=in-reply-to:content-transfer-encoding:content-disposition
-         :mime-version:references:message-id:subject:cc:to:from:date
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=pqqE8TPgTHo5XiZCNnju5LBuzlT14gu1LDeKWI2DZxs=;
-        b=mqToQ3jkzf++urwNLphlfUOh+Zm/vTAfK15terux+R4NiHRZdswJRBN2JSwmf0AoMr
-         7xhJYydN3azgLsrzx3n1e91LPmWSXgLQob8JYbeTZ8Om27G6ceoFjjaJhA2dNOV+61Y9
-         Zsj+y/bgMw87Y7gsqreG5/JIOHCVBA1JZ5pMozjkqUqRCMQy6P+6JkG7nrP8pAON3y6l
-         KJ4nlpEZ3wHq7nJIC9agkcsxTnM4TxyDBjoomt1uK12K9LbfdmLsZeMWg3h9OlM9bwk5
-         3f9cIu4PtyVk7LBxWIvhX6kv0ee52pP7aG14Vlx2gPpFpnX8jX3n65xn6NOks371xx8n
-         ZR9Q==
-X-Forwarded-Encrypted: i=1; AJvYcCViPbhKUHCuyX9W6IECjOU3l+PuCJVMHCl51xaT0xc3ymcTwPvVPrE3PN2YZhdt6tiYEkZEj5HbiqYPgTI=@vger.kernel.org, AJvYcCWrODWSJIJCLJ8itVQh+eoHxEYmmIMZysLyG2C0NE9uj8nBMgtrZIVy12srDLZlKdjeZ3LbudRv8VN4IK3tTw8=@vger.kernel.org, AJvYcCXlLPL3FmIhv7YKhBv7DvzE4Z0oA/m0SzJ7k5nt+Qe9cLO3+40N4X54xI+4IggkxMDxjIHL9j4bdEY=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzwp185e9Y5DO6kNGLgMzbT5L2vfbMkEQEVk6Z2BlN3pSOPN1TN
-	tu0oAQ12akS79M80j/J2chAuHu6IRPsfTEzB9/ZjHzOdda20kMly
-X-Gm-Gg: ASbGncsgm12W9iEdH8wAeJKtLVNexvJv80Snk605qivod0uqF34lNmj5bogmb1eZrzC
-	4ykMFLEIxHUPw9PTNSVWN6w9tv4xhQ4ZPmNNpT20JSiruj+r/KgZxctPzY6EbFgRnahwFnDQx70
-	ir6rjsyyzpys2XKoL53nhU5B4d/582GZ/7OOlyckDSh0hTcTsCAEyXPzEFNREzRf78OJj52KZ7v
-	nu5sbqtjp4XZJdyQ4YKMYAaraWp0bPHOBQ1GDno/oE/WLdOZMMAHyTlk5U+jvfrZLae9N+6TfAL
-	BkfXxRUzWadzZRArUqeB30WR8NSDFxeeGGV8S0Lx/59FlbTQAg==
-X-Google-Smtp-Source: AGHT+IH8h2IxG3eh4Z6IeNx2FDs2WI0YxImOCdZZjE4/c53o1KddiVOiXptTcTDkc9A7LfuRetwA6w==
-X-Received: by 2002:a17:902:c951:b0:215:431f:268f with SMTP id d9443c01a7336-2232008266emr55812535ad.10.1740586656347;
-        Wed, 26 Feb 2025 08:17:36 -0800 (PST)
-Received: from localhost (maglev-oncall.nvidia.com. [216.228.125.128])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-2233254efacsm13220145ad.230.2025.02.26.08.17.34
+        d=1e100.net; s=20230601; t=1740586829; x=1741191629;
+        h=mime-version:user-agent:content-transfer-encoding:references
+         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=2nqyqqx0MAd0AgGyAucIaH6EREOxVYygyrAHK6YBIr0=;
+        b=LoN/gguA/l8HBYjiV6Ho3Rj/blATm/CBL6P229JCIejOXDOZeorC5OT7gV2t444Q5k
+         vCGSCh/jZ1O4+N0aK79vCKl9r9KAy9IxSJQKBDnjWJL9yG6jmckBnVOpNFJISMkLA7yr
+         pcSPdxDNsJUdB0Tt/OHo09tGcyc1ySKv7EOzJY9ejngC9eowOVaf9DsQ1XFMs9TOIzvm
+         d6FYeCnzBf6mHjMDJwjGQU1+D6E0CZxb0cvZiggRnBjPyKd7cWR6qVhKOme1L1IxJJfk
+         gAlI7K9FDSME+P6iiAdvo9O028w8V2tFNWTKEEVof23NhddQmaHxDKUhRDZa1jRRsZri
+         3U3g==
+X-Forwarded-Encrypted: i=1; AJvYcCXy9+ZJL8vTGlY90bQVa0vAlouT+sWV6cMSN4GKHmK2IyVjh+8zYEkHcD2mwqvZwO161zl6Enx8+Q==@vger.kernel.org
+X-Gm-Message-State: AOJu0YyttNOX1FDV0jJMDRp3mSG8jwBhcZMDAAZMcl3mP3kOj1hfeTqS
+	7urBBLzC/JV43ehQ85pj/azRlVONYCgjOf1myhkWpbCHzVPMPgIHum1Ow2pD/YQ=
+X-Gm-Gg: ASbGncsRDJpUKb1prQx9XKrL8EsYDb9pV8NuQhTEBcnE1obNtwXktraJ42PdSrDBxDq
+	Nd5CHC1fUJQ291WG3yN0yGLvad31YER/v/+nBEMpoV28aRsQg22czg7GkNIniT88R4oMWYD8bST
+	zv3GL9R5lavGSCG2gR81iFRum6KRFA+4xOWTIgUNYr65+6LR3XdYXAdHjFytrVykXgXs0exo2sA
+	nTSVaR7wd5YhgJDOdl1CZ6M+mJpQ+1/azqos1y68VeP1Q8GSmufUTZKW6KYuI7omO3gURd5jVIt
+	IWhGWikJdcwAmmFS9sWv0b1mPrEJkg==
+X-Google-Smtp-Source: AGHT+IE0+iJG+B7XOAyijX1v1ZMsbEkcNx8hqjN7umdi3u8zQQME8o/j8N4tXvKdeHCV0Qi8VsGsyA==
+X-Received: by 2002:a05:6000:400f:b0:38d:dc57:855d with SMTP id ffacd0b85a97d-390d4f8d921mr3807666f8f.35.1740586829046;
+        Wed, 26 Feb 2025 08:20:29 -0800 (PST)
+Received: from draszik.lan ([80.111.64.44])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-390dd12c30asm1923141f8f.71.2025.02.26.08.20.28
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 26 Feb 2025 08:17:35 -0800 (PST)
-Date: Wed, 26 Feb 2025 11:17:33 -0500
-From: Yury Norov <yury.norov@gmail.com>
-To: Viresh Kumar <viresh.kumar@linaro.org>
-Cc: Daniel Almeida <daniel.almeida@collabora.com>,
-	Miguel Ojeda <miguel.ojeda.sandonis@gmail.com>,
-	Danilo Krummrich <dakr@redhat.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Alex Gaynor <alex.gaynor@gmail.com>,
-	Boqun Feng <boqun.feng@gmail.com>, Gary Guo <gary@garyguo.net>,
-	=?iso-8859-1?Q?Bj=F6rn?= Roy Baron <bjorn3_gh@protonmail.com>,
-	Benno Lossin <benno.lossin@proton.me>,
-	Andreas Hindborg <a.hindborg@kernel.org>,
-	Alice Ryhl <aliceryhl@google.com>, Trevor Gross <tmgross@umich.edu>,
-	Rasmus Villemoes <linux@rasmusvillemoes.dk>,
-	Vincent Guittot <vincent.guittot@linaro.org>,
-	Stephen Boyd <sboyd@kernel.org>, Nishanth Menon <nm@ti.com>,
-	Manos Pitsidianakis <manos.pitsidianakis@linaro.org>,
-	Erik Schilling <erik.schilling@linaro.org>,
-	Alex =?iso-8859-1?Q?Benn=E9e?= <alex.bennee@linaro.org>,
-	Joakim Bech <joakim.bech@linaro.org>, Rob Herring <robh@kernel.org>,
-	Christoph Hellwig <hch@lst.de>, Jason Gunthorpe <jgg@nvidia.com>,
-	John Hubbard <jhubbard@nvidia.com>, linux-pm@vger.kernel.org,
-	rust-for-linux@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH 1/2] rust: Add cpumask helpers
-Message-ID: <Z78-l1wBYk7nlR5i@thinkpad>
-References: <20250224233938.3158-1-yury.norov@gmail.com>
- <20250224233938.3158-2-yury.norov@gmail.com>
- <9E7A81AA-6460-4F87-942E-2EEA145257F2@collabora.com>
- <20250225095054.fp5xdolezdh2yalc@vireshk-i7>
+        Wed, 26 Feb 2025 08:20:28 -0800 (PST)
+Message-ID: <9c013c053b8677ee6bb2a37bc48e90a25fa16d7e.camel@linaro.org>
+Subject: Re: [PATCH 1/2] dt-bindings: reset: syscon-reboot: support reset
+ modes
+From: =?ISO-8859-1?Q?Andr=E9?= Draszik <andre.draszik@linaro.org>
+To: "Rob Herring (Arm)" <robh@kernel.org>
+Cc: Tudor Ambarus <tudor.ambarus@linaro.org>, devicetree@vger.kernel.org, 
+	linux-pm@vger.kernel.org, Peter Griffin <peter.griffin@linaro.org>, Conor
+ Dooley	 <conor+dt@kernel.org>, Will McVicker <willmcvicker@google.com>, 
+	linux-kernel@vger.kernel.org, kernel-team@android.com, Krzysztof Kozlowski	
+ <krzk+dt@kernel.org>, Sebastian Reichel <sre@kernel.org>
+Date: Wed, 26 Feb 2025 16:20:27 +0000
+In-Reply-To: <ba98106d00038a9b2a2bfb27dd49a5915cb93b81.camel@linaro.org>
+References: <20250226-syscon-reboot-reset-mode-v1-0-91c1b62166ae@linaro.org>
+		 <20250226-syscon-reboot-reset-mode-v1-1-91c1b62166ae@linaro.org>
+		 <174058375994.2463209.9948592153423144239.robh@kernel.org>
+	 <ba98106d00038a9b2a2bfb27dd49a5915cb93b81.camel@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.53.2-1 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <20250225095054.fp5xdolezdh2yalc@vireshk-i7>
 
-On Tue, Feb 25, 2025 at 03:20:54PM +0530, Viresh Kumar wrote:
-> On 25-02-25, 06:43, Daniel Almeida wrote:
-> > I don’t understand what is going on here. You apparently did not provide the
-> > Rust code itself.
-> > 
-> > Usually, when I see a “in order to prepare for …” I expect the actual patch to
-> > follow in the same series.
-> > 
-> > Right now - and correct me if I'm wrong - it seems like you’ve essentially added
-> > dead code.
-> 
-> Rust abstractions:
-> 
-> https://lore.kernel.org/all/cover.1740475625.git.viresh.kumar@linaro.org/
+On Wed, 2025-02-26 at 15:42 +0000, Andr=C3=A9 Draszik wrote:
+> On Wed, 2025-02-26 at 09:29 -0600, Rob Herring (Arm) wrote:
+> >=20
+> > On Wed, 26 Feb 2025 14:08:20 +0000, Andr=C3=A9 Draszik wrote:
+> > > Add support for specifying different register/mask/value combinations
+> > > for different types of reset.
+> > >=20
+> > > In particular, update the binding to allow platforms to specify the
+> > > following reset modes: soft, warm, cold, hard.
+> > >=20
+> > > Linux can perform different types of reset using its reboot=3D kernel
+> > > command line argument, and some platforms also wish to reset
+> > > differently based on whether or not e.g. contents of RAM should be
+> > > retained across the reboot.
+> > >=20
+> > > The new properties match the existing properties, just prefixed with
+> > > one of the reset modes mentioned above.
+> > >=20
+> > > Signed-off-by: Andr=C3=A9 Draszik <andre.draszik@linaro.org>
+> > > ---
+> > > =C2=A0.../bindings/power/reset/syscon-reboot.yaml=C2=A0=C2=A0=C2=A0=
+=C2=A0=C2=A0=C2=A0=C2=A0 | 74 ++++++++++++++++++++++
+> > > =C2=A01 file changed, 74 insertions(+)
+> > >=20
+> >=20
+> > My bot found errors running 'make dt_binding_check' on your patch:
+>=20
+> oops, sorry - the script we usually run didn't cover this binding,
 
-Yes, it's a dead code. 
+BTW, we did that, because it's easy to miss warnings due to
+the amount of bindings and text scrolling past. Ideally make
+would exit with !=3D 0 in case of binding errors.
 
-Cpumasks is a library, and people sometimes submit library code separately
-from their main projects, so it becomes unused for a while. GENMASK_U128()
-is one recent example.
+I can see in commit 3e95dfb315de ("dt-bindings: Don't error
+out on yamllint and dt-doc-validate errors"), warnings are
+never treated as errors.
 
-I'm not happy about it, but I understand why people do so - it's important
-for them to have stable API, and their big project may take longer to get
-upstreamed.
+Is that still relevant, can that commit be revert? Don't we
+want the build to fail loudly on binding errors, so that people
+don't even submit erroneous bindings in the first place?
 
-So, if nobody's strongly opposite, I will move it myself. Alternatively,
-we can ask Viresh to take over the patches and move them together with
-his series.
+Cheers,
+Andre'
 
-Thanks,
-Yury
 
