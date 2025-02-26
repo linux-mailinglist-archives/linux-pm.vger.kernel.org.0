@@ -1,192 +1,231 @@
-Return-Path: <linux-pm+bounces-22949-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-22950-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D6E9A45447
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 05:07:14 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id B4B64A454B0
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 05:49:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 127B27A5934
-	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 04:06:14 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 88C6A3A62E6
+	for <lists+linux-pm@lfdr.de>; Wed, 26 Feb 2025 04:49:28 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6664421519D;
-	Wed, 26 Feb 2025 04:07:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3DB7B191F84;
+	Wed, 26 Feb 2025 04:49:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="Jbqgr+Ia"
+	dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b="iegQ+A7N"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
+Received: from mx0a-001b2d01.pphosted.com (mx0a-001b2d01.pphosted.com [148.163.156.1])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA8574438B
-	for <linux-pm@vger.kernel.org>; Wed, 26 Feb 2025 04:07:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B2FE828EB;
+	Wed, 26 Feb 2025 04:49:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.163.156.1
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740542826; cv=none; b=dMgOAoKJbit2DEnM/98w1EVLhaLxzzJlnudkr/JF6Ah6/iATLrhQXOWIdQVwNtvj6fsNZHbg778Sodok8gw8xfvFjrouQNZt0X7SP8pAz/RXN0/q+YOSP83P6wIfJsigt+48/FIjqvqZgaqgQcYgM3VnCgaivunkfoBRYajHGh8=
+	t=1740545371; cv=none; b=T2fzcI+6C7mnZUY2AQrYa/FsH1UKrcREsfI6O2egHntaibVA6B9p7ZQV0jobiGSYBviawl8AyaNdKlas/69nQk0h23C89t5mn40R3ndKRpI/2XhkifoTcfgNw40jtD3ezKCy3elVVzFh6szL1sP4poYENfZO1vFwRgZhRyhmWEs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740542826; c=relaxed/simple;
-	bh=T8/M+ePT8945TB/DFiRPdLAc2N4+2YCmzn54Ntkqk+w=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=lYve8oiSRJ1pALezU+ZY9+GAxIshio2T7/anbJADPdhLMD/6KGfYcuu/zNjEwR6Nm/xyXP8DWuU8113vIrwvyBsx2+cWKrSB3mr2RzNkPsVCUCMB0qRitWdo6nU330SyOxTMHxyeCDXebYBPa/DupPyvTdNiTUOXyuRfatrcksA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=Jbqgr+Ia; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740542825; x=1772078825;
-  h=date:from:to:cc:subject:message-id;
-  bh=T8/M+ePT8945TB/DFiRPdLAc2N4+2YCmzn54Ntkqk+w=;
-  b=Jbqgr+IaHDjmTSqnKpBy/M/yjabOR9IfSK+aPqfVAjDIpMTZpCbXyVCf
-   2NxMD5gDpsxBLcL1qwB2eHgr+LKiTPxiOREgMFymqMi3pCn7fuRRInjF0
-   9IaPlX3l7qLnzGeM3tpcwpPdCgoRhTzJxlJL6a/Z5kJblujnVSYfxIHla
-   IaYMNIFcf9zjfxUUr9ZgGl2uqcGxZLa2CxjYeg58XSgAqNe0enRZLHXu9
-   P3rJlFzDPER7niKjtVpc9TJxAheP8z8Po9Npt7Z/1WGR0RctWRrF7KBBS
-   KQSiTOAWNbItG0wXstb56iMSdojWWdhVGbc+iOwP3McX72y9Vlnlu3f/G
-   Q==;
-X-CSE-ConnectionGUID: PZ/iVcc+RkambQgDjal4Bg==
-X-CSE-MsgGUID: 14kRu81XTkmplmjKGD3Ukg==
-X-IronPort-AV: E=McAfee;i="6700,10204,11356"; a="41256842"
-X-IronPort-AV: E=Sophos;i="6.13,316,1732608000"; 
-   d="scan'208";a="41256842"
-Received: from orviesa001.jf.intel.com ([10.64.159.141])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 25 Feb 2025 20:07:03 -0800
-X-CSE-ConnectionGUID: 1dQJojaXR5yuBWM+tSa+2w==
-X-CSE-MsgGUID: 6gRW/XWMQfOMilV0UK62qA==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="153761966"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa001.jf.intel.com with ESMTP; 25 Feb 2025 20:07:01 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tn8hH-000B6Z-0W;
-	Wed, 26 Feb 2025 04:06:59 +0000
-Date: Wed, 26 Feb 2025 12:06:04 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org
-Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
- f6c0b760290951688697d9debbb2b8462c423a48
-Message-ID: <202502261258.26U1E4zT-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1740545371; c=relaxed/simple;
+	bh=hmYiMPo7oS0DG52c6LMJIaEcn4lsA2RwU65kc+OxC4w=;
+	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
+	 Content-Type:MIME-Version; b=l0sRMHGSA0nC1cW9SkxwbrM5kO95m6YCMUbI8S0u2OBmBuDU7Qy8J+vsYCXU7OKFqvS9ZVzpoBdW9aehfEhEPdQJgVw7F5ZUzxWBhqYWRpL2bEwljipLZ+ejORgI3EsridMomHlTEyXc7XqzmQiJnrz4IZ2Cg++ZexJNKRgIwWM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com; spf=pass smtp.mailfrom=linux.ibm.com; dkim=pass (2048-bit key) header.d=ibm.com header.i=@ibm.com header.b=iegQ+A7N; arc=none smtp.client-ip=148.163.156.1
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.ibm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linux.ibm.com
+Received: from pps.filterd (m0353729.ppops.net [127.0.0.1])
+	by mx0a-001b2d01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 51Q1krww012248;
+	Wed, 26 Feb 2025 04:49:21 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ibm.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=pp1; bh=ANXq9x
+	MWl++0/nmoFVD3Ih/uAbeST/64803+pDppwJ8=; b=iegQ+A7NG1FXBzIYncBYZX
+	bgknZEZ9Fb/F7SLo94Ws8zq7R8Dn4S27DZlLqrvckE6uwxXtsfjdaT85R9lm25S1
+	ihoyMBl2VgcFMEQzHvlMJUAP/ts4gKqlthL+/0cTJWctjSfdTtb1iYmGUD7a0sDo
+	KxDTCPDyMUFc3pRzLuqeSFwh9DkoUnxNJNwpgu37GrTL+UgqpCqm+2XP2p4DxSHc
+	Tkgc7NVzNB0fIafQDzfpSw0yW6dB1oZ8Vab041XSWTm3dHfU47G5jvcM3Wd+hXJO
+	A6aSKwcr0krBWYqNblGAeS0VtmvXTS7ZIWckbNgnp2EfuTHx8BEeM+00BbNdnZqA
+	==
+Received: from ppma23.wdc07v.mail.ibm.com (5d.69.3da9.ip4.static.sl-reverse.com [169.61.105.93])
+	by mx0a-001b2d01.pphosted.com (PPS) with ESMTPS id 451q5ms5mw-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Feb 2025 04:49:21 +0000 (GMT)
+Received: from pps.filterd (ppma23.wdc07v.mail.ibm.com [127.0.0.1])
+	by ppma23.wdc07v.mail.ibm.com (8.18.1.2/8.18.1.2) with ESMTP id 51Q4h4M2027396;
+	Wed, 26 Feb 2025 04:49:20 GMT
+Received: from smtprelay02.wdc07v.mail.ibm.com ([172.16.1.69])
+	by ppma23.wdc07v.mail.ibm.com (PPS) with ESMTPS id 44ytdkgqav-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Wed, 26 Feb 2025 04:49:20 +0000
+Received: from smtpav02.dal12v.mail.ibm.com (smtpav02.dal12v.mail.ibm.com [10.241.53.101])
+	by smtprelay02.wdc07v.mail.ibm.com (8.14.9/8.14.9/NCO v10.0) with ESMTP id 51Q4nJBm27919042
+	(version=TLSv1/SSLv3 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Wed, 26 Feb 2025 04:49:19 GMT
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 51B1B5805E;
+	Wed, 26 Feb 2025 04:49:19 +0000 (GMT)
+Received: from smtpav02.dal12v.mail.ibm.com (unknown [127.0.0.1])
+	by IMSVA (Postfix) with ESMTP id 72CC45805A;
+	Wed, 26 Feb 2025 04:49:16 +0000 (GMT)
+Received: from li-c18b6acc-24ee-11b2-a85c-81492619bda1.ibm.com (unknown [9.124.212.187])
+	by smtpav02.dal12v.mail.ibm.com (Postfix) with ESMTP;
+	Wed, 26 Feb 2025 04:49:16 +0000 (GMT)
+Message-ID: <f949565ef1f256a1641cea3fa1d01d126bcc32e8.camel@linux.ibm.com>
+Subject: Re: [RFT][PATCH v1 0/5] cpuidle: menu: Avoid discarding useful
+ information when processing recent idle intervals
+From: Aboorva Devarajan <aboorvad@linux.ibm.com>
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+        Linux PM
+ <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>,
+        Daniel Lezcano
+	 <daniel.lezcano@linaro.org>,
+        Christian Loehle <christian.loehle@arm.com>,
+        Artem Bityutskiy <artem.bityutskiy@linux.intel.com>,
+        aboorvad@linux.ibm.com
+Date: Wed, 26 Feb 2025 10:19:14 +0530
+In-Reply-To: <d0c013d5d2a9251d5dc468446f2a08ae8a7a8953.camel@linux.ibm.com>
+References: <1916668.tdWV9SEqCh@rjwysocki.net>
+	 <d0c013d5d2a9251d5dc468446f2a08ae8a7a8953.camel@linux.ibm.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+User-Agent: Evolution 3.54.3 (3.54.3-1.fc41) 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+X-TM-AS-GCONF: 00
+X-Proofpoint-ORIG-GUID: uj5-40n9YXUe1HMMSpwPJ5oKjlHeZ0PF
+X-Proofpoint-GUID: uj5-40n9YXUe1HMMSpwPJ5oKjlHeZ0PF
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1057,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-02-25_08,2025-02-25_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 impostorscore=0
+ priorityscore=1501 spamscore=0 clxscore=1015 suspectscore=0 mlxscore=0
+ lowpriorityscore=0 malwarescore=0 phishscore=0 bulkscore=0 mlxlogscore=999
+ adultscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2502260033
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-branch HEAD: f6c0b760290951688697d9debbb2b8462c423a48  cpufreq/amd-pstate: Fix the clamping of perf values
+On Mon, 2025-02-24 at 11:57 +0530, Aboorva Devarajan wrote:
+> On Thu, 2025-02-06 at 15:21 +0100, Rafael J. Wysocki wrote:
+>=20
+>=20
+>=20
+>=20
+> So for the entire series:
+>=20
+> Tested-by: Aboorva Devarajan <aboorvad@linux.ibm.com>
+>=20
+> I'm also trying a minimal unit fuzz-test with the pre- and post- patched =
+version of the get_typical_interval=C2=A0
+> function to understand this better, will post the results soon.
+>=20
+>=20
+In addition to the previous tests, I also reviewed and tested how get_typic=
+al_interval
+predicts the idle duration before and after the patch by mimicking the func=
+tion in
+userspace for better unit fuzz testing [1].
 
-elapsed time: 1521m
+With the patch get_typical_interval function now produces more predictable =
+values, whereas
+in the previous implementation it frequently returned UINT_MAX. The behavio=
+r with the patch
+seems to be more reasonable compared to before. =20
 
-configs tested: 99
-configs skipped: 2
+Here are the test results =20
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+1. Low Variance:
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                   randconfig-001-20250225    gcc-13.2.0
-arc                   randconfig-002-20250225    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250225    gcc-14.2.0
-arm                   randconfig-002-20250225    gcc-14.2.0
-arm                   randconfig-003-20250225    gcc-14.2.0
-arm                   randconfig-004-20250225    clang-15
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250225    clang-19
-arm64                 randconfig-002-20250225    clang-17
-arm64                 randconfig-003-20250225    clang-15
-arm64                 randconfig-004-20250225    clang-21
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250225    gcc-14.2.0
-csky                  randconfig-002-20250225    gcc-14.2.0
-hexagon                          allmodconfig    clang-21
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250225    clang-21
-hexagon               randconfig-002-20250225    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250225    clang-19
-i386        buildonly-randconfig-002-20250225    gcc-11
-i386        buildonly-randconfig-003-20250225    clang-19
-i386        buildonly-randconfig-004-20250225    clang-19
-i386        buildonly-randconfig-005-20250225    gcc-12
-i386        buildonly-randconfig-006-20250225    clang-19
-i386                                defconfig    clang-19
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250225    gcc-14.2.0
-loongarch             randconfig-002-20250225    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250225    gcc-14.2.0
-nios2                 randconfig-002-20250225    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                randconfig-001-20250225    gcc-14.2.0
-parisc                randconfig-002-20250225    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc                        icon_defconfig    gcc-14.2.0
-powerpc                 mpc832x_rdb_defconfig    gcc-14.2.0
-powerpc               randconfig-001-20250225    gcc-14.2.0
-powerpc               randconfig-002-20250225    clang-19
-powerpc               randconfig-003-20250225    clang-21
-powerpc64             randconfig-001-20250225    gcc-14.2.0
-powerpc64             randconfig-002-20250225    gcc-14.2.0
-powerpc64             randconfig-003-20250225    gcc-14.2.0
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                            allyesconfig    clang-21
-riscv                 randconfig-001-20250225    clang-15
-riscv                 randconfig-002-20250225    clang-21
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-15
-s390                             allyesconfig    gcc-14.2.0
-s390                  randconfig-001-20250225    clang-15
-s390                  randconfig-002-20250225    gcc-14.2.0
-sh                               allmodconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                    randconfig-001-20250225    gcc-14.2.0
-sh                    randconfig-002-20250225    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                 randconfig-001-20250225    gcc-14.2.0
-sparc                 randconfig-002-20250225    gcc-14.2.0
-sparc64               randconfig-001-20250225    gcc-14.2.0
-sparc64               randconfig-002-20250225    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                    randconfig-001-20250225    clang-21
-um                    randconfig-002-20250225    gcc-12
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250225    gcc-12
-x86_64      buildonly-randconfig-002-20250225    clang-19
-x86_64      buildonly-randconfig-003-20250225    clang-19
-x86_64      buildonly-randconfig-004-20250225    gcc-11
-x86_64      buildonly-randconfig-005-20250225    gcc-12
-x86_64      buildonly-randconfig-006-20250225    clang-19
-x86_64                              defconfig    gcc-11
-xtensa                randconfig-001-20250225    gcc-14.2.0
-xtensa                randconfig-002-20250225    gcc-14.2.0
+When the history of CPU idle durations (8 intervals) is relatively uniform =
+with low variance,
+the predicted idle duration is unchanged between the patched and unpatched =
+versions: =20
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+| Test Case | Intervals                                    | Before | After=
+ | Difference |
+|-----------|----------------------------------------------|--------|------=
+-|------------|
+| 1         | 100,105,110,115,120,125,130,135              | 117    | 117  =
+ | 0          |
+| 2         | 200,205,210,215,220,225,230,235              | 217    | 217  =
+ | 0          |
+| 3         | 500,505,510,515,520,525,530,535              | 517    | 517  =
+ | 0          |
+| 4         | 1000,1005,1010,1015,1020,1025,1030,1035      | 1017   | 1017 =
+ | 0          |
+
+ 2. High Variance
+=20
+For cases with high variance, the nonpatched function returned UINT_MAX,
+
+After the patch, the function now returns reasonable values: =20
+
+| Test Case | Intervals                                  | Before      | Af=
+ter | Difference       |
+|-----------|--------------------------------------------|-------------|---=
+----|------------------|
+| 5         | 99,198,297,396,495,594,693,792             | 4294967295  | 59=
+4   | -4294966701      |
+| 6         | 1000,2000,3000,4000,5000,6000,7000,8000    | 4294967295  | 60=
+00  | -4294961295      |
+| 7         | 40,140,240,340,440,540,640,740             | 4294967295  | 54=
+0   | -4294966755      |
+| 8         | 90,590,1090,1590,2090,2590,3090,3590       | 4294967295  | 25=
+90  | -4294964705      |
+| 9         | 42,142,242,342,442,542,642,742             | 4294967295  | 54=
+2   | -4294966753      |
+| 10        | 70,570,1070,1570,2070,2570,3070,3570       | 4294967295  | 25=
+70  | -4294964725      |
+| 11        | 44,144,244,344,444,544,644,744             | 4294967295  | 54=
+4   | -4294966751      |
+
+ 3. Low-end Outliers=20
+
+The patch removes variance from low-end values as well,
+Without the patch, the function only filtered high-end outliers, but now it=
+ correctly eliminates both
+high and low ends.
+
+| Test Case | Intervals                                 | Before      | Aft=
+er | Difference  |
+|-----------|-------------------------------------------|-------------|----=
+---|-------------|
+| 12        | 1,200,200,250,250,230,220,260             | 4294967295  | 230=
+   | -4294967065 |
+| 13        | 100000,200,200,250,250,230,220,260        | 230         | 230=
+   | 0           |
+
+
+ 4. As far as I understand, the function only returns UINT_MAX when all val=
+ues are 0, negative, or the
+computed average itself is UINT_MAX. =20
+
+| Test Case | Intervals                                   | Before      | A=
+fter       | Difference |
+|-----------|---------------------------------------------|-------------|--=
+-----------|------------|
+| 14        | 4294967295,4294967295,4294967295,4294967295 | 4294967295  | 4=
+294967295  | 0          |
+| 15        | 0,0,0,0,0,0,0,0                             | 4294967295  | 4=
+294967295  | 0          |
+
+The updated get_typical_interval function avoids unnecessary UINT_MAX retur=
+ns, handles both low and high end
+outliers, and gives more reliable predictions in high-variance cases. It on=
+ly returns UINT_MAX when absolutely
+necessary, and this will help in not selecting deeper idle state unless it =
+is needed. So, I'm good with
+the patch.=20
+
+Refer [2] for more test results.
+
+[1] - https://github.com/AboorvaDevarajan/linux-utils/blob/main/cpuidle/cpu=
+idle-predict-duration/predict_cpuidle_interval.c
+[2] - https://github.com/AboorvaDevarajan/linux-utils/blob/main/cpuidle/cpu=
+idle-predict-duration/out.predict.csv
+
+
+Thanks,
+Aboorva
 
