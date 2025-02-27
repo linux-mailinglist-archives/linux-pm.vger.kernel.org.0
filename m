@@ -1,228 +1,108 @@
-Return-Path: <linux-pm+bounces-23134-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23135-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id BB792A48986
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 21:09:56 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43885A489B3
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 21:21:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id B6E3916DDEE
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 20:09:55 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 271FE3B2D83
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 20:21:07 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0722F27181D;
-	Thu, 27 Feb 2025 20:09:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B5F8626FDBA;
+	Thu, 27 Feb 2025 20:21:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YnHlJzwu"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="FBHfbYVe"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBE9C26FA7B;
-	Thu, 27 Feb 2025 20:09:09 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8AF3026FA73;
+	Thu, 27 Feb 2025 20:21:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740686949; cv=none; b=f/QMeIiSW5MxqzQXtERIFTpGSE+BJLCvwpW2Vsv6Q3VhAgAi0SQ55O9T9mE1dnXjpzFGs72SCr+umpmRmuDYG6NcuP2wLU7IyXqJxqc9UWVExG5gISbTMU4xg6a+9V/SqLPrj7RYe4g51ixxDt1KeFZKi50MXTDwfhbIoQ1cBfk=
+	t=1740687667; cv=none; b=UtCZQGtVi+xLN/gIErDLb/ufDhmlylG4oCguZOPM4bPRc+Uidp1oj3Uf7wWykeRTqCTZHjmWZIcupYQ3uWYtGQ81eJRng9tuQq3crz4owIeID8QGMfYCbrJu9oX5PgqG/M3pntjZRuT/TlV3S+eynWlFpM68QwLiRGd1/RO0OEk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740686949; c=relaxed/simple;
-	bh=j5VRDcgqEaXuWIDavjd4YEFkmlI9dTVUxhcuv8TxV1Y=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YpQZxBS1F6sdr4r+PxXmfzrmKnjX0C8tlNIGJIoUUsCp+BHyDP6z6Q/04pW8xfGH5kuEZ+8xqRPkTTNJ70GyLZutCqvhNBaJibH1Z4zEQSfTRXtfcYStiBqQCNz3TxMX7IAWkqsWynfYOhr3JKDQmXlgPhA9UBrnfYBAgYi0fQE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YnHlJzwu; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0A482C4CEE4;
-	Thu, 27 Feb 2025 20:09:08 +0000 (UTC)
+	s=arc-20240116; t=1740687667; c=relaxed/simple;
+	bh=zhgA8lTVYegivj3+EBhgdMTn2Pg98qesetiRioNRoMo=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=Yo11p94UiS1s9gl3sfxoL2jINKKWeowEF1Yjsb3Uf229bbvm1gVYESnsbgkP7jpm3CWmaI/TXR8Yf/DY7jgMhq4v11m8kGfyRTW5eYquWQkk9TLXyXOoJVljxaa1N+IU86bfqsdpX058zcToJKMkADYyR+kXpKp9bifkyaWcI4E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=FBHfbYVe; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 07C91C4CEE4;
+	Thu, 27 Feb 2025 20:21:05 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740686949;
-	bh=j5VRDcgqEaXuWIDavjd4YEFkmlI9dTVUxhcuv8TxV1Y=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=YnHlJzwuNAhrmOtUQIOONlXKaDukIwGkh5SrT+AZR/hmITYF8E+hdIpjGMviggUAj
-	 drRRRPU+0AG9uF7+Y4DAsDNah8z1NEGiynbb4H7ZmAMNCtqMAPnrEG0/FOhod04EkA
-	 U4ma/Mnk6WCTXvtBPcsBSlNVHumJohdP7s+1dB7bS3+4Ek6MDDTe+rDOOTWJOBoHw7
-	 88UWXpeCccf5vEyjP4aC80SfJnsy4m7ljKWtpGIkinhTaVHGH1AKbnN9aIZYuM++b4
-	 snIDmnGQv2ZxWJoUBIBmwAuOY6ko8JXBsH0MG2WGHgZeI3Q2ACG+RqLz0uhhZvCWq4
-	 NJ3Oif7ZQ51KA==
-Message-ID: <d1fc8fea-5a2c-4b38-949c-8063cb76fadf@kernel.org>
-Date: Thu, 27 Feb 2025 14:09:08 -0600
+	s=k20201202; t=1740687665;
+	bh=zhgA8lTVYegivj3+EBhgdMTn2Pg98qesetiRioNRoMo=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=FBHfbYVe2+Y9RRSmqefAlel/As32WxZhKbbPD3xR7XlI1ZpP03vvcbXDT47FbLzJK
+	 OOVkoxZn/4XSTDwy8lFv9RSdCOuOGqpGPbl+Jvv7FN02GTbGPBLuasboS7lilMipHX
+	 pnLJOxSPlD86U+3Nk4XilKgRG5w/dyxdcuo1hsWWC9G80wrblb0u4CXIMycaepKUzL
+	 s2plX5hvsMFI+dI5iLC4RwOcJs55yej/FVge1GVkgmmq+heiCIwpCzkGeMDBBw2lCk
+	 I+MOajgKy829ndtFsVDcK1YEiv1H+bz6V//+GhmtArln1+kQWr81qSDssHCqfy//H2
+	 Pjs//4GtZgsCg==
+Received: by mail-oa1-f48.google.com with SMTP id 586e51a60fabf-2c13ec72605so505011fac.0;
+        Thu, 27 Feb 2025 12:21:04 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCUTiJwa7s3a7atAjcf8EAPAhdjbxMD4pQd4amBeSu8rr/zZzeViQwqd9zb69Uy8r+k1BF/UejXh375g5QG7@vger.kernel.org, AJvYcCV+yyGFoF0+3RLE4UgVoSdfqwSbCeuDCgDoAQqPN3384nCdTPxAassEzaCq8mpUJfk53s8qL2oWgY0=@vger.kernel.org, AJvYcCXO1n6WldVSRp3WYk1QBzqYFJjNSRrhyhQ+PnNRzyi5l8rnvLG1qfPEu13zIIXuRcqsXabZo/ivsrfKpBOpxHk=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqvKh1GqutQHzD3PfWnu1tCZ+izY3qroNXyLXYonONOSvH8R1F
+	qfinOT9w+cOQoLpX/VkUyxcXvC+cb7vkp73V4wbjRl/V3rkDiFO20qdXUmRTHmtKI2YksHG9JtN
+	7otFGLDWPvAvVneCi+rJiaSWoeCQ=
+X-Google-Smtp-Source: AGHT+IF96SqJIW4mVo1lyssliOdrmZiV4MWUl27EC9mWKW/Y+yznOetIfl7XasPSTISTnP3CvLcKZOXTKrbfxjeNK5M=
+X-Received: by 2002:a05:6870:9a1c:b0:29e:671b:6003 with SMTP id
+ 586e51a60fabf-2c17874d20amr387145fac.32.1740687664295; Thu, 27 Feb 2025
+ 12:21:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 04/19] cpufreq/amd-pstate: Move perf values into a
- union
-To: kernel test robot <lkp@intel.com>,
- "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
- Perry Yuan <perry.yuan@amd.com>
-Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
- Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
- "(open list:X86 ARCHITECTURE (32-BIT AND 64-BIT))"
- <linux-kernel@vger.kernel.org>, linux-pm@vger.kernel.org,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250226074934.1667721-5-superm1@kernel.org>
- <202502272001.nafS0qXq-lkp@intel.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <202502272001.nafS0qXq-lkp@intel.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+References: <cceb7f8864c43f046cf1c19c3bbcc38a7a57adc5.1740426540.git.christophe.jaillet@wanadoo.fr>
+In-Reply-To: <cceb7f8864c43f046cf1c19c3bbcc38a7a57adc5.1740426540.git.christophe.jaillet@wanadoo.fr>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 27 Feb 2025 21:20:53 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0heBqYxm4GKN+qRD4Av0FBXQ_HvAhxqd7F+1Zeg9_YG8g@mail.gmail.com>
+X-Gm-Features: AQ5f1JqvOKeZYSCbqVhP6TK4aZ30CmAT7tomqX60PmVO52rKxjibULcDTdD4GQI
+Message-ID: <CAJZ5v0heBqYxm4GKN+qRD4Av0FBXQ_HvAhxqd7F+1Zeg9_YG8g@mail.gmail.com>
+Subject: Re: [PATCH] thermal: intel: Remove a useless operation in int340x_thermal_zone_add()
+To: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>, linux-kernel@vger.kernel.org, 
+	kernel-janitors@vger.kernel.org, linux-pm@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 2/27/2025 06:59, kernel test robot wrote:
-> Hi Mario,
-> 
-> kernel test robot noticed the following build warnings:
-> 
-> [auto build test WARNING on amd-pstate/bleeding-edge]
-> [cannot apply to rafael-pm/linux-next rafael-pm/bleeding-edge tip/x86/core amd-pstate/linux-next linus/master v6.14-rc4 next-20250227]
-> [If your patch is applied to the wrong git tree, kindly drop us a note.
-> And when submitting patch, we suggest to use '--base' as documented in
-> https://git-scm.com/docs/git-format-patch#_base_tree_information]
-> 
-> url:    https://github.com/intel-lab-lkp/linux/commits/Mario-Limonciello/cpufreq-amd-pstate-Invalidate-cppc_req_cached-during-suspend/20250226-155545
-> base:   https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-> patch link:    https://lore.kernel.org/r/20250226074934.1667721-5-superm1%40kernel.org
-> patch subject: [PATCH v5 04/19] cpufreq/amd-pstate: Move perf values into a union
-> config: i386-buildonly-randconfig-003-20250227 (https://download.01.org/0day-ci/archive/20250227/202502272001.nafS0qXq-lkp@intel.com/config)
-> compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
-> reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250227/202502272001.nafS0qXq-lkp@intel.com/reproduce)
-> 
-> If you fix the issue in a separate patch/commit (i.e. not just a new version of
-> the same patch/commit), kindly add following tags
-> | Reported-by: kernel test robot <lkp@intel.com>
-> | Closes: https://lore.kernel.org/oe-kbuild-all/202502272001.nafS0qXq-lkp@intel.com/
-> 
-> All warnings (new ones prefixed by >>):
-> 
->     In file included from drivers/cpufreq/amd-pstate.c:51:
->     In file included from drivers/cpufreq/amd-pstate-trace.h:15:
->     In file included from include/linux/trace_events.h:6:
->     In file included from include/linux/ring_buffer.h:5:
->     In file included from include/linux/mm.h:2224:
->     include/linux/vmstat.h:504:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->       504 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->           |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->       505 |                            item];
->           |                            ~~~~
->     include/linux/vmstat.h:511:43: warning: arithmetic between different enumeration types ('enum zone_stat_item' and 'enum numa_stat_item') [-Wenum-enum-conversion]
->       511 |         return vmstat_text[NR_VM_ZONE_STAT_ITEMS +
->           |                            ~~~~~~~~~~~~~~~~~~~~~ ^
->       512 |                            NR_VM_NUMA_EVENT_ITEMS +
->           |                            ~~~~~~~~~~~~~~~~~~~~~~
->>> drivers/cpufreq/amd-pstate.c:914:41: warning: variable 'nominal_freq' is uninitialized when used here [-Wuninitialized]
->       914 |                 perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
->           |                                                       ^~~~~~~~~~~~
->     drivers/cpufreq/amd-pstate.c:902:38: note: initialize the variable 'nominal_freq' to silence this warning
->       902 |         u32 min_freq, max_freq, nominal_freq, lowest_nonlinear_freq;
->           |                                             ^
->           |                                              = 0
->     3 warnings generated.
-> 
-> 
-> vim +/nominal_freq +914 drivers/cpufreq/amd-pstate.c
-> 
->     891	
->     892	/*
->     893	 * amd_pstate_init_freq: Initialize the nominal_freq and lowest_nonlinear_freq
->     894	 *			 for the @cpudata object.
->     895	 *
->     896	 * Requires: all perf members of @cpudata to be initialized.
->     897	 *
->     898	 * Returns 0 on success, non-zero value on failure.
->     899	 */
->     900	static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
->     901	{
->     902		u32 min_freq, max_freq, nominal_freq, lowest_nonlinear_freq;
->     903		struct cppc_perf_caps cppc_perf;
->     904		union perf_cached perf;
->     905		int ret;
->     906	
->     907		ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
->     908		if (ret)
->     909			return ret;
->     910		perf = READ_ONCE(cpudata->perf);
->     911	
->     912		if (quirks && quirks->lowest_freq) {
->     913			min_freq = quirks->lowest_freq;
->   > 914			perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
->     915			WRITE_ONCE(cpudata->perf, perf);
->     916		} else
->     917			min_freq = cppc_perf.lowest_freq;
->     918	
->     919		if (quirks && quirks->nominal_freq)
->     920			nominal_freq = quirks->nominal_freq;
->     921		else
->     922			nominal_freq = cppc_perf.nominal_freq;
->     923	
->     924		min_freq *= 1000;
->     925		nominal_freq *= 1000;
->     926	
->     927		WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
->     928	
->     929		max_freq = perf_to_freq(perf, nominal_freq, perf.highest_perf);
->     930		lowest_nonlinear_freq = perf_to_freq(perf, nominal_freq, perf.lowest_nonlinear_perf);
->     931		WRITE_ONCE(cpudata->lowest_nonlinear_freq, lowest_nonlinear_freq);
->     932	
->     933		/**
->     934		 * Below values need to be initialized correctly, otherwise driver will fail to load
->     935		 * max_freq is calculated according to (nominal_freq * highest_perf)/nominal_perf
->     936		 * lowest_nonlinear_freq is a value between [min_freq, nominal_freq]
->     937		 * Check _CPC in ACPI table objects if any values are incorrect
->     938		 */
->     939		if (min_freq <= 0 || max_freq <= 0 || nominal_freq <= 0 || min_freq > max_freq) {
->     940			pr_err("min_freq(%d) or max_freq(%d) or nominal_freq(%d) value is incorrect\n",
->     941				min_freq, max_freq, nominal_freq);
->     942			return -EINVAL;
->     943		}
->     944	
->     945		if (lowest_nonlinear_freq <= min_freq || lowest_nonlinear_freq > nominal_freq) {
->     946			pr_err("lowest_nonlinear_freq(%d) value is out of range [min_freq(%d), nominal_freq(%d)]\n",
->     947				lowest_nonlinear_freq, min_freq, nominal_freq);
->     948			return -EINVAL;
->     949		}
->     950	
->     951		return 0;
->     952	}
->     953	
-> 
+On Mon, Feb 24, 2025 at 8:50=E2=80=AFPM Christophe JAILLET
+<christophe.jaillet@wanadoo.fr> wrote:
+>
+> 'zone_trips' has just been allocated with kzalloc(), so .flags is known t=
+o
+> be 0. Remove the useless | when assigning THERMAL_TRIP_FLAG_RW_TEMP.
+>
+> Signed-off-by: Christophe JAILLET <christophe.jaillet@wanadoo.fr>
+> ---
+> This was added in commit cca52f696952 ("thermal: intel: Set
+> THERMAL_TRIP_FLAG_RW_TEMP directly")
+> ---
+>  drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c=
+ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> index 8dca6a6aceca..b43d848e66b8 100644
+> --- a/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> +++ b/drivers/thermal/intel/int340x_thermal/int340x_thermal_zone.c
+> @@ -143,7 +143,7 @@ struct int34x_thermal_zone *int340x_thermal_zone_add(=
+struct acpi_device *adev,
+>         for (i =3D 0; i < trip_cnt; i++) {
+>                 zone_trips[i].type =3D THERMAL_TRIP_PASSIVE;
+>                 zone_trips[i].temperature =3D THERMAL_TEMP_INVALID;
+> -               zone_trips[i].flags |=3D THERMAL_TRIP_FLAG_RW_TEMP;
+> +               zone_trips[i].flags =3D THERMAL_TRIP_FLAG_RW_TEMP;
+>                 zone_trips[i].priv =3D THERMAL_INT_TO_TRIP_PRIV(i);
+>         }
+>
+> --
 
-The series is getting close (I think just one more patch needing review).
-
-So if no other feedback for the series needing other fixes I will squash 
-this in to fix this issue when the series is merged.
-
-diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-index bd8bcda4e6eb0..034ee40681b4c 100644
---- a/drivers/cpufreq/amd-pstate.c
-+++ b/drivers/cpufreq/amd-pstate.c
-@@ -915,6 +915,12 @@ static int amd_pstate_init_freq(struct amd_cpudata 
-*cpudata)
-                 return ret;
-         perf = READ_ONCE(cpudata->perf);
-
-+       if (quirks && quirks->nominal_freq)
-+               nominal_freq = quirks->nominal_freq;
-+       else
-+               nominal_freq = cppc_perf.nominal_freq;
-+       nominal_freq *= 1000;
-+
-         if (quirks && quirks->lowest_freq) {
-                 min_freq = quirks->lowest_freq;
-                 perf.lowest_perf = freq_to_perf(perf, nominal_freq, 
-min_freq);
-@@ -922,13 +928,7 @@ static int amd_pstate_init_freq(struct amd_cpudata 
-*cpudata)
-         } else
-                 min_freq = cppc_perf.lowest_freq;
-
--       if (quirks && quirks->nominal_freq)
--               nominal_freq = quirks->nominal_freq;
--       else
--               nominal_freq = cppc_perf.nominal_freq;
--
-         min_freq *= 1000;
--       nominal_freq *= 1000;
-
-         WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
-
+Applied as 6.15 material with edits in the subject and changelog, thanks!
 
