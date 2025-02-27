@@ -1,170 +1,150 @@
-Return-Path: <linux-pm+bounces-23040-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23041-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7DC27A47A99
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 11:44:35 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id C08B5A47AAA
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 11:46:25 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 72ACC1885145
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 10:44:36 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 041E91711B5
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 10:46:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97B5822A1EF;
-	Thu, 27 Feb 2025 10:44:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 779D4221DA7;
+	Thu, 27 Feb 2025 10:45:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="HrWnfuFC"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ibIJ0tGN"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.18])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 64810219304;
-	Thu, 27 Feb 2025 10:44:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.18
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E38E1EB5E8;
+	Thu, 27 Feb 2025 10:45:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740653065; cv=none; b=OUj8ye5L2P4fiCeNPyx8DHnExS++lfCHvnycTEqvsBAvl2vHvfccShGzNM7E+gAnL5GCCPqcQuIIi5srKUVqF4zdDN/CHHD21l+O3i9c+3bmlJrMBhQFmvGIqeZWcmDGKycE9Mljz4unnws194f+PHr5t/jjhjmMK9Db8Ma43K8=
+	t=1740653153; cv=none; b=tk1J0z/bmvqHCzdXYkNlUHPvhKLDVCArN7UGwiuMD8uC5odeY6nYqScxdhP++MTgrrzV2nlHXAQWSdKUSq8INhOtfTQu012Q4+9cZLpUFvwqtC7MWMn1j1cvQ9+/J5/ff0fAhr1Pq/q2tbEuLIJscCNlikNXBlwJPeNBXW0xyZc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740653065; c=relaxed/simple;
-	bh=5ST4DGO4sgEGA8CX2VyyqvnAiLYX3czLao19TJ9TBTU=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=qTrD5fDzlAyQYS20WGR6hnrkLRVf2mwVmz+vGY5N998IX1xsyZlE58NsNi0ZeeyNShKOkfZHnCUfYLe6F5Qd2qs68HzbhGd/hMEM7e50zLGuKSleiQ8zBkR2UXxDZO51eiwgxBRXfbkP829rUZKOA4Musjj8dPD+y5+v2ebar1M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=HrWnfuFC; arc=none smtp.client-ip=198.175.65.18
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740653064; x=1772189064;
-  h=date:from:to:cc:subject:message-id;
-  bh=5ST4DGO4sgEGA8CX2VyyqvnAiLYX3czLao19TJ9TBTU=;
-  b=HrWnfuFCI6IgxcMF2RhR8bANAVse6swxZXMP5271D+0CVCW+STHjwnfQ
-   5VZ1n9QvE/VCuSBFjcw1uRl//v5N/bCPUIH6uQwrEwYrunZA1Nd/UnR6e
-   uRWsSWzyw3irdshJzh6amkJIonIT6Eta5cjbN6wlu2n8CfZVmpEFvZIVA
-   shV9A/3NLAroBj3qfahAh2/OGnqD1mHdpnn/5fqOR2pkwxRxWNJxB/tL1
-   uw90Bfsj6RoN+Mqtt11YI1EqxBhGtT4bt76lVmPYLGQBvEwJTL6hwPRf0
-   vT98w8Znfo4LM2KasT41U/y3+hTYRj/RCucwvHVPImXP+UYGgQRD8+Bim
-   A==;
-X-CSE-ConnectionGUID: VFD68WswSIOC7+Ht7KyZHA==
-X-CSE-MsgGUID: dDZDgAfRTjaU1WHBZ8XuEw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11314"; a="41734062"
-X-IronPort-AV: E=Sophos;i="6.12,310,1728975600"; 
-   d="scan'208";a="41734062"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by orvoesa110.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 27 Feb 2025 02:44:23 -0800
-X-CSE-ConnectionGUID: 4wnfITPETXa+o73NGwuXxQ==
-X-CSE-MsgGUID: hKe4nsXERmGxbcuuKgeT7A==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="117903148"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa008.jf.intel.com with ESMTP; 27 Feb 2025 02:44:20 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tnbNK-000DEU-15;
-	Thu, 27 Feb 2025 10:44:18 +0000
-Date: Thu, 27 Feb 2025 18:43:28 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:fixes] BUILD SUCCESS
- 9e5a50c397fbcfa53516810575d744b555f39900
-Message-ID: <202502271822.bCm3SFLL-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1740653153; c=relaxed/simple;
+	bh=sRc81rsNx8VOK7VP5opBGjZMA86PBpVNKgJXwBSOo24=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=ccpOgeQBnEbhHpk9S0gwVIvcvzuD8z7ww5FQh4htUddgVwaz/3tMZNnlYbnSL5WeumQsa0rgYqMrhS7xqEo5fcmTeEC3VhuujSr2ofQ7pfd9o2PmX/L1uZeqjy9bhH9B2aoylWX0ZkbqbGBRJVO9DIyxfT+F7vfw0vhbxVr8T8A=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ibIJ0tGN; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A0C9C4CEDD;
+	Thu, 27 Feb 2025 10:45:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740653152;
+	bh=sRc81rsNx8VOK7VP5opBGjZMA86PBpVNKgJXwBSOo24=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=ibIJ0tGNCMUjgwabSqp3/JUBa/J327EpdZ6FK+/Ygpb9pmOPvmuY8zFSFaU5wcGYT
+	 dFL1Gg4PooAuVEqg2FbyfDLjjIwWY9JCgB9r1AObMhURA8MOuZpz/ET6weJfysnr0F
+	 FqYqCCi1vfdxo6z8B2J+vWx/rDEWrWPv+ei/aN71Aimv5fyugcLnjJH5lLMNuLUqdO
+	 c0YZSdu6nKpmi8j7mC7AoXNTh3iklM0d1eXzSCeXaGEoaalkMVa+AaToAuCVDwaaFG
+	 v/1VmyblALlu87TiPEgGMuRQ97+DSA/OGL9C50Jx+ql0YE/J/hX4QtFVTHZlHc8mA4
+	 mihgwxlWWLr9A==
+Date: Thu, 27 Feb 2025 11:45:49 +0100
+From: Krzysztof Kozlowski <krzk@kernel.org>
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: supply: Document Maxim
+ MAX8971 charger
+Message-ID: <20250227-cherubic-mantis-from-betelgeuse-86f5ff@krzk-bin>
+References: <20250226093700.44726-1-clamor95@gmail.com>
+ <20250226093700.44726-2-clamor95@gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250226093700.44726-2-clamor95@gmail.com>
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git fixes
-branch HEAD: 9e5a50c397fbcfa53516810575d744b555f39900  Merge branch 'pm-cpuidle-fixes' into fixes
+On Wed, Feb 26, 2025 at 11:36:59AM +0200, Svyatoslav Ryhel wrote:
+> +  maxim,fcharge-current-limit-microamp:
+> +    description:
+> +      Fast-Charge current limit
+> +    minimum: 250000
+> +    default: 500000
+> +    maximum: 1550000
+> +
+> +  maxim,fcharge-timer-hours:
+> +    description:
+> +      Fast-Charge timer in hours. Setting this value 3 and lower or 11 and higher
+> +      will disable Fast-Charge timer.
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    default: 5
 
-elapsed time: 1450m
+You still did not answer why this is board specific. This was rejected
+in the past because of that reason and nothing here changed. Nothing
+will change without detailed explanation, so use other interfaces if you
+need user-space to configure it (see other drivers, e.g. maxim)
 
-configs tested: 76
-configs skipped: 1
+> +
+> +  maxim,fcharge-rst-threshold-high:
+> +    description:
+> +      Set Fast-Charge reset threshold to -100 mV
+> +    type: boolean
+> +
+> +  maxim,in-current-limit-microamp:
+> +    description:
+> +      Input current limit
+> +    minimum: 100000
+> +    default: 500000
+> +    maximum: 1500000
+> +
+> +  maxim,topoff-timer-minutes:
+> +    description:
+> +      Top-Off timer minutes
+> +    $ref: /schemas/types.yaml#/definitions/uint32
+> +    enum: [0, 10, 20, 30, 40, 50, 60, 70]
+> +    default: 30
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Same.
 
-tested configs:
-alpha                           allyesconfig    gcc-14.2.0
-arc                             allmodconfig    gcc-13.2.0
-arc                             allyesconfig    gcc-13.2.0
-arc                  randconfig-001-20250226    gcc-13.2.0
-arc                  randconfig-002-20250226    gcc-13.2.0
-arm                             allmodconfig    gcc-14.2.0
-arm                             allyesconfig    gcc-14.2.0
-arm                  randconfig-001-20250226    gcc-14.2.0
-arm                  randconfig-002-20250226    clang-21
-arm                  randconfig-003-20250226    gcc-14.2.0
-arm                  randconfig-004-20250226    gcc-14.2.0
-arm64                           allmodconfig    clang-18
-arm64                randconfig-001-20250226    gcc-14.2.0
-arm64                randconfig-002-20250226    gcc-14.2.0
-arm64                randconfig-003-20250226    clang-21
-arm64                randconfig-004-20250226    gcc-14.2.0
-csky                 randconfig-001-20250226    gcc-14.2.0
-csky                 randconfig-002-20250226    gcc-14.2.0
-hexagon                         allmodconfig    clang-21
-hexagon                         allyesconfig    clang-18
-hexagon              randconfig-001-20250226    clang-21
-hexagon              randconfig-002-20250226    clang-21
-i386                            allmodconfig    gcc-12
-i386                             allnoconfig    gcc-12
-i386       buildonly-randconfig-001-20250226    gcc-12
-i386       buildonly-randconfig-002-20250226    gcc-12
-i386       buildonly-randconfig-003-20250226    gcc-12
-i386       buildonly-randconfig-004-20250226    clang-19
-i386       buildonly-randconfig-005-20250226    gcc-12
-i386       buildonly-randconfig-006-20250226    gcc-12
-i386                               defconfig    clang-19
-loongarch            randconfig-001-20250226    gcc-14.2.0
-loongarch            randconfig-002-20250226    gcc-14.2.0
-nios2                randconfig-001-20250226    gcc-14.2.0
-nios2                randconfig-002-20250226    gcc-14.2.0
-openrisc                        allyesconfig    gcc-14.2.0
-parisc                          allmodconfig    gcc-14.2.0
-parisc                          allyesconfig    gcc-14.2.0
-parisc               randconfig-001-20250226    gcc-14.2.0
-parisc               randconfig-002-20250226    gcc-14.2.0
-powerpc              randconfig-001-20250226    gcc-14.2.0
-powerpc              randconfig-002-20250226    clang-18
-powerpc              randconfig-003-20250226    clang-21
-powerpc64            randconfig-001-20250226    clang-18
-powerpc64            randconfig-002-20250226    gcc-14.2.0
-powerpc64            randconfig-003-20250226    gcc-14.2.0
-riscv                randconfig-001-20250226    clang-18
-riscv                randconfig-002-20250226    gcc-14.2.0
-s390                            allmodconfig    clang-19
-s390                            allyesconfig    gcc-14.2.0
-s390                 randconfig-001-20250226    gcc-14.2.0
-s390                 randconfig-002-20250226    clang-15
-sh                              allmodconfig    gcc-14.2.0
-sh                              allyesconfig    gcc-14.2.0
-sh                   randconfig-001-20250226    gcc-14.2.0
-sh                   randconfig-002-20250226    gcc-14.2.0
-sparc                           allmodconfig    gcc-14.2.0
-sparc                randconfig-001-20250226    gcc-14.2.0
-sparc                randconfig-002-20250226    gcc-14.2.0
-sparc64              randconfig-001-20250226    gcc-14.2.0
-sparc64              randconfig-002-20250226    gcc-14.2.0
-um                              allmodconfig    clang-21
-um                              allyesconfig    gcc-12
-um                   randconfig-001-20250226    clang-18
-um                   randconfig-002-20250226    gcc-12
-x86_64                           allnoconfig    clang-19
-x86_64                          allyesconfig    clang-19
-x86_64     buildonly-randconfig-001-20250226    clang-19
-x86_64     buildonly-randconfig-002-20250226    clang-19
-x86_64     buildonly-randconfig-003-20250226    gcc-12
-x86_64     buildonly-randconfig-004-20250226    clang-19
-x86_64     buildonly-randconfig-005-20250226    gcc-12
-x86_64     buildonly-randconfig-006-20250226    gcc-12
-x86_64                             defconfig    gcc-11
-xtensa               randconfig-001-20250226    gcc-14.2.0
-xtensa               randconfig-002-20250226    gcc-14.2.0
+> +
+> +  maxim,topoff-current-threshold-microamp:
+> +    description:
+> +      Top-Off current threshold
+> +    enum: [50000, 100000, 150000, 200000]
+> +    default: 50000
+> +
+> +  maxim,fcharge-usb-current-limit-microamp:
+> +    description:
+> +      Fast-Charge USB current limit
+> +    minimum: 100000
+> +    default: 500000
+> +    maximum: 1500000
+> +
+> +  maxim,fcharge-ac-current-limit-microamp:
+> +    description:
+> +      Fast-Charge AC current limit
+> +    minimum: 100000
+> +    default: 500000
+> +    maximum: 1500000
+> +
+> +  maxim,usb-in-current-limit-microamp:
+> +    description:
+> +      USB Input current limit
+> +    minimum: 100000
+> +    default: 500000
+> +    maximum: 1500000
+> +
+> +  maxim,ac-in-current-limit-microamp:
+> +    description:
+> +      AC Input current limit
+> +    minimum: 100000
+> +    default: 500000
+> +    maximum: 1500000
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Half of these properties as well are not suitable and duplicate existing
+sysfs interface.
+
+And for remaining, still no battery.
+
+Best regards,
+Krzysztof
+
 
