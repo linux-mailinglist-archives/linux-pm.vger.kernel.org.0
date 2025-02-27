@@ -1,34 +1,34 @@
-Return-Path: <linux-pm+bounces-23108-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23109-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3A25AA483ED
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 16:59:28 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A91EA483F2
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 16:59:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5A4BE1895CA4
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 15:58:24 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B0F99188819D
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 15:58:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B6CC26FA6F;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9E07C26FD9A;
 	Thu, 27 Feb 2025 15:53:14 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="P3sgPtO5"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="r7yUsj3P"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.154.123])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F13D26E966;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A607F1D5AD8;
 	Thu, 27 Feb 2025 15:53:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.154.123
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740671594; cv=none; b=D4Cbk/+0+a97yhyhOmbOqQpkWCjCUj6OLzjfnbyRUKZFmc5AEN58KyH1/vxCRWDLCEC4fx1amH6nvd487QpUXDaivCDkWbJ2/TTozHnCWIc6i6hu1R/d0s6IcQNhexXA0G/n6oYIfw01FzoO9ecFlV4HUCk0cXqIC+4OeiUzfR8=
+	t=1740671594; cv=none; b=BEO4ZzI4JaysgoRVwR+jKx47tI4lujKU0qPSGF8bCpV0hzBxBWr97fFrBrzi3Typ11ev0HwhlM3QBjqcr7mygtYZOfFmGKiew/GWV5Zwlxt4cnU22OV0dRBa/h8PdUSqoozrB0CRR/FqZ0FUDTO3CfeQx3XBMR6eUZcq2JJkLgg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740671594; c=relaxed/simple;
-	bh=fGIF9yqZoL5+kzzD63s1CFCY6nJfHyqhfQ1cti4gw0c=;
+	bh=YTKmnoBoJKJalyZ9+wnMP6cOqS4GPx8T77stiH9ewgc=;
 	h=From:To:CC:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=Z+p+QOQosar/IWjHVuR+TXqIYHxBqbCQAYqAP7zNd7+8uEnl2Q/xLeI7ubMfM9Aws12WmJDLdOvP/FxxjoZDnfRJDCxAUtJ4Yj82krXruMDqbeqjzCJCp53VkkleevRMzG4NO3FJ+oWwVyTnzjNHtWgTaQ4GxTY1NyyLy2YU15o=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=P3sgPtO5; arc=none smtp.client-ip=68.232.154.123
+	 MIME-Version:Content-Type; b=LfSjiTH7Epkefcc2k4u09qhnPyAqQcWdi1t/fvxQjlXJuJwnArgWBckQmhN+GOdycgqQHJ7ilQ/OcjZHa+m7ZzJzdL74SDs1hYmYlwVNdd1DculPoFrhjQuU500DKM250lTDlIxrp8o3UCBmgJLATyzGNuGYjgS5t29L5PL5yos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=r7yUsj3P; arc=none smtp.client-ip=68.232.154.123
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
@@ -36,18 +36,18 @@ DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   t=1740671592; x=1772207592;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=fGIF9yqZoL5+kzzD63s1CFCY6nJfHyqhfQ1cti4gw0c=;
-  b=P3sgPtO5IDr94EoZ0I7/SmZiz1bjU5m09O9r7RE/I20BGjpev0mfv0ki
-   yGIiejC3OJG1oQ07Mj0ghUDb7fzD6H+ZNYuD+gB6r1O6AWoVnWPZTVp52
-   o5aiXwAplA3vAPQXYdXgWPAkGurat3Y4y9qGxlt9yceYF3E+DifVs4/iY
-   uPgJKabHf0bzuEFTBtupc0oLq2xsfJl+UuDWr64sds8Y8nKI8+fecq/cs
-   zFyd65CZl7sG6araBouZBcsO3o8SEaYAzn80fmNXxtFRWkdqgne6JPLFu
-   ADupn/tOW7r9Cgie6ncc57Ogy43vxdC92CSG/AvfrNfvJj2inyLJQcziK
+  bh=YTKmnoBoJKJalyZ9+wnMP6cOqS4GPx8T77stiH9ewgc=;
+  b=r7yUsj3PzITPC1a+kxmes0ar2HOaSjxifbAPqLYUZwMPkkeuX4O+Ghrl
+   t1mempBTe2ERKSWnExm2qNKmcUr1pt6RLo4+qkx+tqjijXH0Rhooqw3+T
+   r8J6CoA1k2szlK5SZOIPB53R1KA7cTFI0KAa7jwRf3wN9Smfrtv1oxYuU
+   UMuji+WdZWFODUwWFEO4GC+Zls77zqLz9SM5+NH4emUS1xwwwhdwLVzH/
+   hUXKH73muA0sPB9rhb/kiNdht9EUl81ZGlm5m1N5WLgstT8W9wBqE8Yiu
+   eFe3Iz4JC6+kkwbe5ePmOf/bCica41CmSmADyHPXagScMFn+Qq6U8Zuqn
    g==;
 X-CSE-ConnectionGUID: xBkIAngZQVSwQhIMCQbtUA==
-X-CSE-MsgGUID: tQydNibLQ7q4BPYtWVKj1w==
+X-CSE-MsgGUID: L6MQVkjMRV+EIvF8OWYFtQ==
 X-IronPort-AV: E=Sophos;i="6.13,320,1732604400"; 
-   d="scan'208";a="38638183"
+   d="scan'208";a="38638184"
 X-Amp-Result: SKIPPED(no attachment in message)
 Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
   by esa2.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 27 Feb 2025 08:52:59 -0700
@@ -67,9 +67,9 @@ CC: <linux@armlinux.org.uk>, <devicetree@vger.kernel.org>,
 	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
 	<linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>, "Ryan
  Wanner" <Ryan.Wanner@microchip.com>
-Subject: [PATCH v3 18/21] ARM: dts: microchip: sama7d65: Add RTC support for sama7d65
-Date: Thu, 27 Feb 2025 08:52:05 -0700
-Message-ID: <fa1587ffef21a8198317062c15d8eb5c3ca6187c.1740671156.git.Ryan.Wanner@microchip.com>
+Subject: [PATCH v3 19/21] ARM: dts: microchip: sama7d65: Add SFRBU support to sama7d65
+Date: Thu, 27 Feb 2025 08:52:06 -0700
+Message-ID: <dbc51f95f301c106c031fb93f84d0d847e818d91.1740671156.git.Ryan.Wanner@microchip.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <cover.1740671156.git.Ryan.Wanner@microchip.com>
 References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
@@ -84,31 +84,30 @@ Content-Type: text/plain
 
 From: Ryan Wanner <Ryan.Wanner@microchip.com>
 
-Add RTC support for the SAMA7D65 SoC.
+Add SFRBU support to the SAMA7D65 SoC. This is required to change the power
+source for backup mode for the SoC.
 
 Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
 ---
- arch/arm/boot/dts/microchip/sama7d65.dtsi | 7 +++++++
- 1 file changed, 7 insertions(+)
+ arch/arm/boot/dts/microchip/sama7d65.dtsi | 5 +++++
+ 1 file changed, 5 insertions(+)
 
 diff --git a/arch/arm/boot/dts/microchip/sama7d65.dtsi b/arch/arm/boot/dts/microchip/sama7d65.dtsi
-index aadeea132289..e623f9d22f36 100644
+index e623f9d22f36..45037fc95adf 100644
 --- a/arch/arm/boot/dts/microchip/sama7d65.dtsi
 +++ b/arch/arm/boot/dts/microchip/sama7d65.dtsi
-@@ -144,6 +144,13 @@ gpbr: gpbr@e001d700 {
- 			reg = <0xe001d700 0x48>;
+@@ -78,6 +78,11 @@ secumod: secumod@e0004000 {
+ 			#gpio-cells = <2>;
  		};
  
-+		rtc: rtc@e001d800 {
-+			compatible = "microchip,sama7d65-rtc", "microchip,sam9x60-rtc";
-+			reg = <0xe001d800 0x30>;
-+			interrupts = <GIC_SPI 6 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk32k 1>;
++		sfrbu: sfr@e0008000 {
++			compatible ="microchip,sama7d65-sfrbu", "atmel,sama5d2-sfrbu", "syscon";
++			reg = <0xe0008000 0x20>;
 +		};
 +
- 		dma2: dma-controller@e1200000 {
- 			compatible = "microchip,sama7d65-dma", "microchip,sama7g5-dma";
- 			reg = <0xe1200000 0x1000>;
+ 		pioa: pinctrl@e0014000 {
+ 			compatible = "microchip,sama7d65-pinctrl", "microchip,sama7g5-pinctrl";
+ 			reg = <0xe0014000 0x800>;
 -- 
 2.43.0
 
