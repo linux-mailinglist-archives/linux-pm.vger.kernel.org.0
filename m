@@ -1,59 +1,59 @@
-Return-Path: <linux-pm+bounces-23055-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23056-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4B682A47B4F
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 12:09:05 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 72E41A47B6C
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 12:10:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 28CC77A4ECA
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 11:08:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 45941170DC5
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 11:09:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7BA0122B8A9;
-	Thu, 27 Feb 2025 11:05:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BF9D422B8D0;
+	Thu, 27 Feb 2025 11:05:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="PYG8ESjn"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="sNdB60er"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10olkn2068.outbound.protection.outlook.com [40.92.41.68])
+Received: from NAM10-BN7-obe.outbound.protection.outlook.com (mail-bn7nam10olkn2048.outbound.protection.outlook.com [40.92.40.48])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A034A21CFE8;
-	Thu, 27 Feb 2025 11:05:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.41.68
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1080E22B8C5;
+	Thu, 27 Feb 2025 11:05:21 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.40.48
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740654318; cv=fail; b=aKefYPcs9OYo86JlWiKmTxBjO00ZStPImOKYgZBGpzW5Kf0WsywNtKTIo0J1SPYREWntCYuxEFumdUljhAnkVhXJpUKaRT/d4a3yge+BTa5O84JEydpBXAaNk9cOTvnQIHbKDHnWxeC9UZqm8ayVJL6iL4bLz45NnG2/4o4FzIU=
+	t=1740654323; cv=fail; b=L79EnTG+t8h2cop2wlGW2iX7I7n4V38nciFznmC/52lPGWxo9eL6gFIYNZHeN1gX2uo/sc3vHR2JuXUnGaZyglJe0qg2iafyG5prJCRiMqPzyJg38BZ5KDLOIfi61tFqD16aWWbzglv6dMI1vYPwUn7UZuS40CsffXbIqNNUOn0=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740654318; c=relaxed/simple;
-	bh=ApSVB1XH85jFW6RWahY0OhroFUXSSPVsE72zhSo2f34=;
+	s=arc-20240116; t=1740654323; c=relaxed/simple;
+	bh=ynVt71bqa4fpTGX2MdxlvWNHOQtI1SaFD3CEVtr1W90=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=bCfE4cyYRwmKXzFRZYsC4pe1l8QsgGwJ+Dke4BbZpDLIJzd7RiIRBC3+pjF0+2Z5Xd0sd/lljKtbUK16xSqeyrRPZz8A59L+nrqsY21VjB6YNEesu32EkJtCMmiDXsoJAkZj07jlB04BhCi26wlbSJI6qCXc8XHRvEEa0R1+W98=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=PYG8ESjn; arc=fail smtp.client-ip=40.92.41.68
+	 Content-Type:MIME-Version; b=HG4aiOUSJD3usFb/tjr3z1QNV/mVEbViycfRlTBqNxK/uoHNTcgpCI8CAW6YxG/o/5g8PixHpszCtnRPLvmlGplu2lUkA8JVuDuY0zj8sOKjYHV6DyYcmIOhYigEcaH/iGJkgpNVNktCrVOdzQQtih+XnzBoBRjG46qQG+mLKPs=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=sNdB60er; arc=fail smtp.client-ip=40.92.40.48
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=lmzUTbguqt94OzfuvQBA0euABbhtdtYA+W1eaCpWELEppVROQWl3NZVyKM6f3kZsper/W8xjQrlEpNFVwnBnYYyUjfFUQeuPHQsT56FX99lS0C8DGce3Vn7crFMVsCqf/Fy6QakDGmq/UQazqmgre1KS8vpqz6dZjAtoeO2MYkLJ5vJVXcQNzmK/6rYkAiMJVKhvbJlDxcoUf/Z1PokPZvLGGRlziz1iE+wfApKaRq9iT0ShJl9dLZcn7MBdTgMxBmDJDUzXsXD5ET0cj/FoqEtjXQlqsg+p6BlkTpj9JB9ww4Lb7gkJnB6eoRdsmQft7AzRNQ5Sogjq745H5kQ9yA==
+ b=S5e04r5n+e3wIaZ2sn4vN9VVbGhhRQ9g6vUqu4zbN+cJzqGFWjchJ4BMBYC93GhSlc2JyI7J4tILJS+Drc4rUd+B9lBTa9obCMzp+eaHP14yPbKwvitsxX11zK5WtZaXfFFxywOtu6B0fbHS+tmHwkdH+MEszAiKpToOBHNJj/SNneZAIVrAuOX5+/Vda5wGwLXds6Q754sh8T/eHr/zqd3cHH1WbXtbuWZOU1q/YePyUVeriYI3XntdbnGkic3PVjW3X2PY8Qj3kBCLzJeRjxdX3yqpRO3ZX0sTT1YJft5rk+GCv/JOtKQWfTAcMzP0ROLaaryrfNRvH3DPmAHoNA==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=bMIec1KYE5b4XE4aEnEe1QQq6ZFjK3XdogDrQqEGnEg=;
- b=Y2S9yUQ5lIWIPfBA7Rbj12VDhC9SkvPabjaFUJ+qHSz5NAEDd8F1IJEnsa/JBC46zY6fsn1ckptUFIKmJfFFchGy6PmL8JDleIosNnPTjoON67lREeuH1wsZhriNkiRgGKU13v/VtANuAij0VRyqIx6DcpI37XyppOLT1pvtfluxsaUy4KAsGPHGx8ONkm3ZpIvFcsVmDW9WdJFfuobFtd2fmN+C8L2eTCH2koxianbQN5OD31oPUapz7M4Kx3m7irzw8vXYeoL2UrS/hCIDgi2S+WhU+YoJDhUbGUUtxPyrP41ZXW7Z9nFR4/B82jB0bxPkLisRPqJYoPbufBxo6w==
+ bh=oAAUgNFEFDala+W7b7xfFJGdeQWkBlSnoDDVlGE1FfQ=;
+ b=Hyw/hGOlkmRV+/uWPwEyrHWwY4MwIFl9jdeOSNzplP+VTih60bX77yUvdgQ/ro+HsOjpT2j9sdGQ/frgAHFMpGgdL35JJrEsqxxwDHnhtItCj8yqt3E3FwCOJLStEBvJfUo0WeX+6KuI4vRHFiNr/KFS8nw19BHn023uyMmqil7+bCKxvwZMxlbS3J3wjHdhKNdNZRMZBzZuxMz6R3/nHhmQ+4dMXufeLFjpT2Z74KMizZW2/m1ugSsGFQst8lOQgCtDpyGKD1dC8uczn4qtQQvQAd9mGCU1gSQZy4Q8YqoBfFzurdjVv21jddMGmdDtF7sXT6gOdraefh1qjoAzPw==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=bMIec1KYE5b4XE4aEnEe1QQq6ZFjK3XdogDrQqEGnEg=;
- b=PYG8ESjndUPlETAHGRQbtXDmsn7SbKDT8gehbg+gEI1s0TsnwPoVkv89N9ZSViAbllfXwaCe1EGYArQvIT3oYGCNsmXWHChwkXgo5U6NDiCpuOODegM6M+34TqBozRWGWNyKR+I3nJVgUFY264yGUMCj2nptgqrBA8sv5HFP5tOCgwJegIi057HYycUo4rmvjE0w0DA4Lhx9AFQsavs1SwTmJOXXnUhMmNtI0XSx5iFcmMxk7xeTgT9DXYIPw3owIJejGM9IcIMedrA0ENQp/OBNXirDyTLGooziJUK7pq5gQsRAjsY/ld4NRkJy3JShM8JFkrimj0+Hr6kuPN1qAA==
+ bh=oAAUgNFEFDala+W7b7xfFJGdeQWkBlSnoDDVlGE1FfQ=;
+ b=sNdB60erkU+ooYcI3WQVrv4proOB3E/gRPK5bo0B0+KesZiw62lU0qwGl8RdrBUMPcAmlmHtKmkw225xpjRB4HQJr4WNhSaFph0oJdf/qMSs3aXC6aeM6eGVW5Y9UAlXDycqi96M8K2aKOeXa0d7mcAFryuvHsY6N55t7gtB684xRd5Rix9tRCO36A1XJ0q0nyXz7ja/ByprmNa8tEZtmLBO2vFsXP8ZZgrFxsC19LotYMq2oePg53A2FrPxpGDMBwlbzImECpjSEHbI1djZccfP0gi62b64aJzw/d10YJKLQsWbb35YtM+UQuJ/UDJB1m8DBXldNuBJZoJUb2kaZw==
 Received: from DS7PR19MB8883.namprd19.prod.outlook.com (2603:10b6:8:253::16)
  by SN7PR19MB7333.namprd19.prod.outlook.com (2603:10b6:806:348::8) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8466.19; Thu, 27 Feb
- 2025 11:05:12 +0000
+ 2025 11:05:19 +0000
 Received: from DS7PR19MB8883.namprd19.prod.outlook.com
  ([fe80::e0c2:5b31:534:4305]) by DS7PR19MB8883.namprd19.prod.outlook.com
  ([fe80::e0c2:5b31:534:4305%6]) with mapi id 15.20.8466.020; Thu, 27 Feb 2025
- 11:05:12 +0000
+ 11:05:19 +0000
 From: George Moussalem <george.moussalem@outlook.com>
 To: linux-arm-msm@vger.kernel.org,
 	linux-pm@vger.kernel.org,
@@ -67,20 +67,20 @@ To: linux-arm-msm@vger.kernel.org,
 	krzk+dt@kernel.org,
 	quic_srichara@quicinc.com
 Cc: George Moussalem <george.moussalem@outlook.com>
-Subject: [PATCH v8 3/5] thermal: qcom: tsens: add support for tsens v1 without RPM
-Date: Thu, 27 Feb 2025 14:56:41 +0400
+Subject: [PATCH v8 4/5] thermal: qcom: tsens: Add support for IPQ5018 tsens
+Date: Thu, 27 Feb 2025 14:56:42 +0400
 Message-ID:
- <DS7PR19MB888322C58FC555299256E8D99DCD2@DS7PR19MB8883.namprd19.prod.outlook.com>
+ <DS7PR19MB8883FE68B807D651C1AF41C39DCD2@DS7PR19MB8883.namprd19.prod.outlook.com>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250227110423.8418-1-george.moussalem@outlook.com>
 References: <20250227110423.8418-1-george.moussalem@outlook.com>
 Content-Transfer-Encoding: 8bit
 Content-Type: text/plain
-X-ClientProxiedBy: DX0P273CA0056.AREP273.PROD.OUTLOOK.COM
- (2603:1086:300:5a::18) To DS7PR19MB8883.namprd19.prod.outlook.com
+X-ClientProxiedBy: DX1P273CA0006.AREP273.PROD.OUTLOOK.COM
+ (2603:1086:300:21::11) To DS7PR19MB8883.namprd19.prod.outlook.com
  (2603:10b6:8:253::16)
 X-Microsoft-Original-Message-ID:
- <20250227110423.8418-5-george.moussalem@outlook.com>
+ <20250227110423.8418-6-george.moussalem@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -90,59 +90,58 @@ MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: DS7PR19MB8883:EE_|SN7PR19MB7333:EE_
-X-MS-Office365-Filtering-Correlation-Id: 1cbd651e-2fc5-4962-0ff5-08dd571e9b3c
+X-MS-Office365-Filtering-Correlation-Id: 6b904f51-6fac-4305-da92-08dd571e9f3f
 X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|19110799003|8060799006|5072599009|15080799006|461199028|7092599003|3412199025|440099028|41001999003|1710799026;
+	BCL:0;ARA:14566002|19110799003|8060799006|5072599009|15080799006|461199028|7092599003|3412199025|440099028|1710799026;
 X-Microsoft-Antispam-Message-Info:
-	=?us-ascii?Q?haqttWZVBla/g1cPL/YB/MDD8xwFXr+24MW+BGh/O2f2h4swxa2bW2Y0zrsW?=
- =?us-ascii?Q?HbQyGPgwN6BJTLWjfDIVA+wkPU92wFgn5wasHF/btkRzjXGwzaEXfqZBPrt5?=
- =?us-ascii?Q?noGLNqupjWS6gTVrlx4707bQEAc1mo2AtqVXMzJWB5zS6PyY8g0rtDy+V4/e?=
- =?us-ascii?Q?QPbh0vdZQ9+7pY0jMSwSBjw/PDgrvxMn8UUCNed8TLLE+8K75J2Uoi8rj2Xv?=
- =?us-ascii?Q?M2EhMvXR/K/6FT6d/bU3OEGs5zDM3xZ2VTPMsGljmERBOyLxqH1zVw3yrZG8?=
- =?us-ascii?Q?mgBDx2YrWPa0Ln3ysycqr5/s+ZcwIUq1QU8saL+lPxHPPaHXwDLqq6i5twb8?=
- =?us-ascii?Q?FCtPti/LOdbLz+2U7wKpq3rRoTP0PEFhUnBkNOs3vKduGkhVLeG0Z/tmC16A?=
- =?us-ascii?Q?oEbSXWCIMIMPnM3VfsfIoD179LsNHIwaGv1xodvUFslXeEZXWGcnMuOU/rFl?=
- =?us-ascii?Q?pPyFgyZsyvuiR6txH0n7Ohej1MCjmw/azuWU+nkRQpEvlW+0Oy9QADQx+GGO?=
- =?us-ascii?Q?qFHkPtyNSatNztjbBxlphYbLJ8cVw9bzHKBMzZCJIdXK2umKslFHhwcQeWDH?=
- =?us-ascii?Q?cRXjAXvHYwmQCRz4eM/MUL2erpX+rTC7lKKaJ8L+mYQ+voLl21LZ+lP0+cDA?=
- =?us-ascii?Q?Dp07MD6LmrMXY69OuiWJ17Sz775WMp/F4hw2vLXnux6xtuTGuvAUWeddu7UN?=
- =?us-ascii?Q?pvRb89ERjlti5DRhgvEki5jpzT38V9RDdv5qoBXgKjSP+2bPsE6hbJdOstoE?=
- =?us-ascii?Q?unD6fVC90y94s/vAwQ+1qb/jR2Iyv1unWMK7n87SXJ8/SK5objbU3PLbB/7X?=
- =?us-ascii?Q?ML7QeQj1FBnj9Usp5n+SWh3UoCuqAWPVnx0zUsNI33LoVra3DxS/mHH2NPPA?=
- =?us-ascii?Q?YyhjHmPdGLpTfvxGMbJ08p/TX9LMGVMLM2+qaUhKxSFeU7yYFzqzI3GGH0z5?=
- =?us-ascii?Q?3w7ez+zTHaOihKMY2pXNpY4EiAR6cf/6bC91mIyCyyolUz5I7xHiQaAPTyQs?=
- =?us-ascii?Q?+DhDWznDpRalDwO91f6KC83LuN/B4F862KLOggAM/uPDkiqM6UsX2ZerMXfm?=
- =?us-ascii?Q?ESDL7B1f1qN1A9d/apY5PQ01DpphfYhsMW+s6F9Z1u8s8LV5FWftepYf7pig?=
- =?us-ascii?Q?WOcq+VeUo42s?=
+	=?us-ascii?Q?IQfhYl3uDYATkC2NvjzYUhHN2ybDHvyFsWCUogxwio1qUtK1jRrK70S64RRN?=
+ =?us-ascii?Q?v6YQpn97hfTmwnfhdX0CH5hWYAWsm6XE20FNP4vl6DlHvKt+enVMgUV5U6eJ?=
+ =?us-ascii?Q?f+vV2gidEU5CXyO7d0zmLtWNAVKwgrVL41bjRb3gIJXHaYDEiW95l9P+PCdu?=
+ =?us-ascii?Q?fPFHtrfEAoX7bzoxdrUUKnO4zl5jIu7BvImVQJjm7GTne8HrsXTLeZ/xF6Oz?=
+ =?us-ascii?Q?bqlc6m1A9A7bRiqevCjxqOJ3nOcwr/KnzX1ztyFdoQnRmNDR8vBILeQmTJ6H?=
+ =?us-ascii?Q?N0YOEHxaQeNc0+0u4E48XHYBXYsBZwWrLbscVzOGepOOrgCDpD7UFLloeHng?=
+ =?us-ascii?Q?FcBo7xNlZCxvRVYg8VYBLhGbMpe6bMRtYz8tYZplsskC9ZHhB/uDgoMeSpdP?=
+ =?us-ascii?Q?GyBvlcrFIFm2Zai6GGjlymt1j6DcD3IRkBuUG/xAXlyH4ElVJ98K+vmKfQUt?=
+ =?us-ascii?Q?4gStaPyLtmZy8gdKmMsbdtue2K2yqlaFdVMnj5Jzdid12VdBn5hXNDBvEArT?=
+ =?us-ascii?Q?dRFKrhOOKVU7VoZsAYzIupkpU6pf3oi1j9zxkrbr0aEtHOzng8OsuE1HRST8?=
+ =?us-ascii?Q?a+rLtq1Ip+pOI9vV38jRO7Bln9R2j4eiHkszAUTnxEnQ8dnAp9BA6yi+5NYN?=
+ =?us-ascii?Q?dImdXU1Q55pW4V8gvMwP6etz8tvnns+D1rkch2sXResIhnLQ5cVTIciIAmlQ?=
+ =?us-ascii?Q?UqkubbMsFeWCVukrz/WbAG4quaP3FuJE+yy/Yav0WIjyFOxNY9G2ZgtP5wAf?=
+ =?us-ascii?Q?owiSVIRmYb/4j7hvq0TAJMPnfv4GyAMNwfHibxjEo1aSFRMyHl0CovQdgXH5?=
+ =?us-ascii?Q?oPa8dQ2paLvAPUbnGfE73Y5sERixm5mISCamalHB7XlYmJzqdbw8Sdlx2zF4?=
+ =?us-ascii?Q?DoZeoGt/iZK8qh+GG4Yld6mmOZcDYGGLN3Bn6Giel2qwXh1WWfWFL1b7jlZy?=
+ =?us-ascii?Q?QnMK1v7c5gjfJ0P70uNKGKY887SMlOhlEyUx77oQzhFxmMLyNhU6b7ib9ghB?=
+ =?us-ascii?Q?RRXMYu3EEY/GbmrtHyHAUXnm9k2ePdw2X9My3V7SmDkUtefVUVPVidwEn374?=
+ =?us-ascii?Q?eTJzGgkKG4hIp2kqW/8WuB1bX4UHJ2dmcAuzEqswromyn0mCusw=3D?=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?us-ascii?Q?qMfvgqexra4zh4UNowXOoR8gljASgzjHrIkM4++DLmlNjdjiYjKDzl0uxT7+?=
- =?us-ascii?Q?eNWeOBvVWIR4j9uBvkDFht+JS0lNQ5W1A/FWKK0zLqvOCjEhrRSKDlwKabDV?=
- =?us-ascii?Q?EsR7k6Vx1nalDupVLHfSLyj3/jGJTYVoRdQ1GfipJkJeiCyyV/jNt+8/BX7S?=
- =?us-ascii?Q?Wf7y/mSfPs8QjKl5dpd1St8hs1BAbn5V3vozbgNt/FsFogZxBLoxBgmKJfmU?=
- =?us-ascii?Q?ZwfbKHK38p/4MKU++dC06smbkketiSfcUzu5Dj8Dzwtbjq8mfWbaii/m2C4T?=
- =?us-ascii?Q?3ptXkbrO6juKyb812HKw9b9kIl84WSdlWVzaxHbOrkCgk5Tt7fXEndtag3V8?=
- =?us-ascii?Q?ntwL6fuxP9WT8+/B1vUaXLsWDEBdlJYUP70bzrhLAdlwXA6IkmlbbBt3tZ6/?=
- =?us-ascii?Q?pulnv92q+aPrevElXA25YPruNV8we5jne0TInKU1t9gaWDfwnXTlV4KexZku?=
- =?us-ascii?Q?2TTKBNan3ImeA0ayhVxm1R28eqmYL+gsfhPtO4V1KNk3SdfUp+s5x1aMoist?=
- =?us-ascii?Q?jteoXm9riwo63jj1KEuE57KtOvJ6ylTszCBysBM4ZNC+6CxCRxiTCeISudCG?=
- =?us-ascii?Q?fX7WTVPAa4wstIJ4yxF/H/f8lN+fgWwFIMW+2xvM6jG5CA8j/T2s/Thi4dqP?=
- =?us-ascii?Q?nvboLw1ZrCEiTgV7n5H/7qX3kMc+y8BErg8U/f83HNXUL7Zw5HHjZt2eWhuA?=
- =?us-ascii?Q?Hc6qDfE2hY+m6ihE6vvMEkyo2pTQmR2BT/baYq/Up5OTtX5HNwUvafPmc956?=
- =?us-ascii?Q?u6BNURp1qgifiX3mog00l4RjEhM0gpFZDeCqedaZS+N95S1HISHTCInblsUa?=
- =?us-ascii?Q?Jlg+gYNQDV2qxUdUk7nGA0ws/fEsjmB9ZYcXzYC3pgxEJxvtmUw4EjiXegTM?=
- =?us-ascii?Q?viHto20o5DCcP/KyAGz7OAuma8HjoyFlzu/3gRKZ6K27axe5bCspL8fieR7b?=
- =?us-ascii?Q?O13WNU55DijirQ6nRGmcG/ukaVkY+quEIGTWf1OgVVmd22Jg1rAcHtb6OmRz?=
- =?us-ascii?Q?FfIysTsVfoPGd4HmfV6U1UNF7o1I1WMkAYhR3uJLdx5WQJfT4laPiE8CdI0c?=
- =?us-ascii?Q?KkbATht2w5J8h+DE5JaEjs08XILeE5jDgaOMM1YOJyvKWtv6s83BtmhSTPlT?=
- =?us-ascii?Q?ju3+wRHfH5+ZBGLYn07l2DBqtk/oJ2+GTCCe0uecMpV+2Zv/WHnYO9mo1LS4?=
- =?us-ascii?Q?NJ7F1TCEdtKlnDzB9wxsxv35kk2GVU/vi23b+9x0Q8OM8XOBCO10TGM6du85?=
- =?us-ascii?Q?ka/UnzSXmpxPRdmzXouz?=
+	=?us-ascii?Q?ZrXyrkgAG7MOU5JX52XSAp+s3mo8Z/MtFv+CfVbei1kmIdTCACOZTpGVpSwC?=
+ =?us-ascii?Q?UdCJarA7tAf1x/Aq7j9WxexIiJSQDuIKHYfnCZRqvAUMLzlUFnFeGPwf17KJ?=
+ =?us-ascii?Q?oVk68NwN+Jjiy5odPvUEbhn3dN1Qshb03jiSyjZg7l2YiteuBlfKPFPk9KII?=
+ =?us-ascii?Q?Nj0Qw4OVLHrINvG0XAOKhXHmjENsz4+4EcSzQnYJTnX4Gg6j5aFgLWA5fosB?=
+ =?us-ascii?Q?gNwgcaW63wR1eRUc3WvxNJtMLDQ+sYCYRBRNlyFcCtmkLdPK62fEZEzHWfVJ?=
+ =?us-ascii?Q?5Sg9aOXSSN6zyNV0lZML8sFAi9OqwQLCG5tjZkmeMGlCZB5hiCcJkDNTLobs?=
+ =?us-ascii?Q?yb+rZpcYcKldVTt8lIbk3LmzEcYrj+bRhPAopMCOAk58EMP0G77Oj5q0OCvM?=
+ =?us-ascii?Q?0vvByNnhNvc03bn6XsFb1yYeK2Ip2fgxEJk5+0tKVJ0PLSupBSVkSRx/Kq+N?=
+ =?us-ascii?Q?mstpw2Ayx9OuYmprgIJxsCZh9R7mZv2mdO/ep/XZi+S+p6xdGurx8c6GrDjP?=
+ =?us-ascii?Q?uMRSxGypUj0VSTEgtU4RpDhdImZ8MvyNkajzIyJUNS0xktV/IDkExoG6qO54?=
+ =?us-ascii?Q?wLL+4H0GCtHcEDzYG+ZkIvM7/6mWnhNJP8rssGG/yu+q7VVvpB6mHu8xmFcr?=
+ =?us-ascii?Q?46zNgHkXqxXf6M2hu5MqZ9l+m9Rb40qqZZJr++d3hyBCOGcFPV2zawFyby3U?=
+ =?us-ascii?Q?r1bfj8EjqG5yC/detC+vg+W/DTFWUxkPAc186T0XpsgSsbf0eJPs3vNT45nu?=
+ =?us-ascii?Q?Rbwr+zub7qftSMNXrAuucfE0lF83Z45EhUQ7J9E+uf1UeU6jucCEYeRO+/LL?=
+ =?us-ascii?Q?uQo/P0gf9/tly3x93LiO/IOYtJNQt+wDUeOqA1WS3QgXQasb2Gwqlh9XNWML?=
+ =?us-ascii?Q?76Piwwt+BThG2OFXOCtPZ0TNvonBt+tuLUDCFBB9n8HQRZ4a7IlV09ysvSEw?=
+ =?us-ascii?Q?CHtYt0V5zmTIzgWzt/Qq9iiN2GsD6QVt5gJcPb0K+kjwwCZSVHkbq2f7jkMN?=
+ =?us-ascii?Q?+0B0AkLtLRENG75xfsmB5XPiFLocUDWVKiz3AIahRMYC6aWrEbiN2Y3cJYRl?=
+ =?us-ascii?Q?1oH4Ul1SjW9EuLOHOYwroiVGRFgJ2l14KdNmb3j7kacMwzanJsRTt8Xlqj8Z?=
+ =?us-ascii?Q?P24UwFJUs67v8sYtUR8XM7zEO8yMgzre7y3/D9CooOsfeiGk3JGzBNab/+jm?=
+ =?us-ascii?Q?mlZyQ/6qVm8H4Q439jgFlFAViAS6PE0r3uguBzNMQPw2ej2zunQfU8rh5FwB?=
+ =?us-ascii?Q?UW2o9Y7n6M2uOVL+Hcyq?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 1cbd651e-2fc5-4962-0ff5-08dd571e9b3c
+X-MS-Exchange-CrossTenant-Network-Message-Id: 6b904f51-6fac-4305-da92-08dd571e9f3f
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR19MB8883.namprd19.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2025 11:05:12.6233
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 27 Feb 2025 11:05:19.3697
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
@@ -150,167 +149,70 @@ X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
 	00000000-0000-0000-0000-000000000000
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: SN7PR19MB7333
 
-Adding generic support for SoCs with tsens v1.0 IP with no RPM.
-Due to lack of RPM, tsens has to be reset and enabled in the driver
-init.
+From: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 
-Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
+IPQ5018 has tsens IP V1.0, 5 sensors of which 4 are in use and 1
+interrupt. The IP does not have a RPM, hence use init routine for
+tsens v1.0 without RPM which does not early enable.
+
 Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
 Signed-off-by: George Moussalem <george.moussalem@outlook.com>
 ---
- drivers/thermal/qcom/tsens-v1.c | 48 +++++++++++++++++++++++++++++++++
- drivers/thermal/qcom/tsens.c    | 24 ++++++++++-------
- drivers/thermal/qcom/tsens.h    |  1 +
- 3 files changed, 64 insertions(+), 9 deletions(-)
+ drivers/thermal/qcom/tsens-v1.c | 14 ++++++++++++++
+ drivers/thermal/qcom/tsens.c    |  3 +++
+ drivers/thermal/qcom/tsens.h    |  3 +++
+ 3 files changed, 20 insertions(+)
 
 diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
-index 1a7874676f68..877b27274fd2 100644
+index 877b27274fd2..27360e70d62a 100644
 --- a/drivers/thermal/qcom/tsens-v1.c
 +++ b/drivers/thermal/qcom/tsens-v1.c
-@@ -79,6 +79,17 @@ static struct tsens_features tsens_v1_feat = {
- 	.trip_max_temp	= 120000,
+@@ -242,3 +242,17 @@ struct tsens_plat_data data_8976 = {
+ 	.feat		= &tsens_v1_feat,
+ 	.fields		= tsens_v1_regfields,
  };
- 
-+static struct tsens_features tsens_v1_no_rpm_feat = {
-+	.ver_major	= VER_1_X_NO_RPM,
-+	.crit_int	= 0,
-+	.combo_int	= 0,
-+	.adc		= 1,
-+	.srot_split	= 1,
-+	.max_sensors	= 11,
-+	.trip_min_temp	= -40000,
-+	.trip_max_temp	= 120000,
++
++const struct tsens_ops ops_ipq5018 = {
++	.init		= init_tsens_v1_no_rpm,
++	.calibrate	= tsens_calibrate_common,
++	.get_temp	= get_temp_tsens_valid,
 +};
 +
- static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
- 	/* ----- SROT ------ */
- 	/* VERSION */
-@@ -150,6 +161,43 @@ static int __init init_8956(struct tsens_priv *priv) {
- 	return init_common(priv);
- }
- 
-+static int __init init_tsens_v1_no_rpm(struct tsens_priv *priv)
-+{
-+	int i, ret;
-+	u32 mask = 0;
-+
-+	ret = init_common(priv);
-+	if (ret < 0) {
-+		dev_err(priv->dev, "Init common failed %d\n", ret);
-+		return ret;
-+	}
-+
-+	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 1);
-+	if (ret) {
-+		dev_err(priv->dev, "Reset failed\n");
-+		return ret;
-+	}
-+
-+	for (i = 0; i < priv->num_sensors; i++)
-+		mask |= BIT(priv->sensor[i].hw_id);
-+
-+	ret = regmap_field_update_bits(priv->rf[SENSOR_EN], mask, mask);
-+	if (ret) {
-+		dev_err(priv->dev, "Sensor Enable failed\n");
-+		return ret;
-+	}
-+
-+	ret = regmap_field_write(priv->rf[TSENS_EN], 1);
-+	if (ret) {
-+		dev_err(priv->dev, "Enable failed\n");
-+		return ret;
-+	}
-+
-+	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 0);
-+
-+	return ret;
-+}
-+
- static const struct tsens_ops ops_generic_v1 = {
- 	.init		= init_common,
- 	.calibrate	= calibrate_v1,
++const struct tsens_plat_data data_ipq5018 = {
++	.num_sensors	= 5,
++	.ops		= &ops_ipq5018,
++	.hw_ids		= (unsigned int []){0, 1, 2, 3, 4},
++	.feat		= &tsens_v1_no_rpm_feat,
++	.fields		= tsens_v1_regfields,
++};
 diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-index 1f5d4de017d9..f860ea86d130 100644
+index f860ea86d130..00bb4589c405 100644
 --- a/drivers/thermal/qcom/tsens.c
 +++ b/drivers/thermal/qcom/tsens.c
-@@ -447,7 +447,7 @@ static void tsens_set_interrupt(struct tsens_priv *priv, u32 hw_id,
- 	dev_dbg(priv->dev, "[%u] %s: %s -> %s\n", hw_id, __func__,
- 		irq_type ? ((irq_type == 1) ? "UP" : "CRITICAL") : "LOW",
- 		enable ? "en" : "dis");
--	if (tsens_version(priv) > VER_1_X)
-+	if (tsens_version(priv) > VER_1_X_NO_RPM)
- 		tsens_set_interrupt_v2(priv, hw_id, irq_type, enable);
- 	else
- 		tsens_set_interrupt_v1(priv, hw_id, irq_type, enable);
-@@ -499,7 +499,7 @@ static int tsens_read_irq_state(struct tsens_priv *priv, u32 hw_id,
- 	ret = regmap_field_read(priv->rf[LOW_INT_CLEAR_0 + hw_id], &d->low_irq_clear);
- 	if (ret)
- 		return ret;
--	if (tsens_version(priv) > VER_1_X) {
-+	if (tsens_version(priv) > VER_1_X_NO_RPM) {
- 		ret = regmap_field_read(priv->rf[UP_INT_MASK_0 + hw_id], &d->up_irq_mask);
- 		if (ret)
- 			return ret;
-@@ -543,7 +543,7 @@ static int tsens_read_irq_state(struct tsens_priv *priv, u32 hw_id,
+@@ -1108,6 +1108,9 @@ static SIMPLE_DEV_PM_OPS(tsens_pm_ops, tsens_suspend, tsens_resume);
  
- static inline u32 masked_irq(u32 hw_id, u32 mask, enum tsens_ver ver)
- {
--	if (ver > VER_1_X)
-+	if (ver > VER_1_X_NO_RPM)
- 		return mask & (1 << hw_id);
- 
- 	/* v1, v0.1 don't have a irq mask register */
-@@ -733,7 +733,7 @@ static int tsens_set_trips(struct thermal_zone_device *tz, int low, int high)
- static int tsens_enable_irq(struct tsens_priv *priv)
- {
- 	int ret;
--	int val = tsens_version(priv) > VER_1_X ? 7 : 1;
-+	int val = tsens_version(priv) > VER_1_X_NO_RPM ? 7 : 1;
- 
- 	ret = regmap_field_write(priv->rf[INT_EN], val);
- 	if (ret < 0)
-@@ -975,10 +975,16 @@ int __init init_common(struct tsens_priv *priv)
- 	ret = regmap_field_read(priv->rf[TSENS_EN], &enabled);
- 	if (ret)
- 		goto err_put_device;
--	if (!enabled && (tsens_version(priv) != VER_2_X_NO_RPM)) {
--		dev_err(dev, "%s: device not enabled\n", __func__);
--		ret = -ENODEV;
--		goto err_put_device;
-+	if (!enabled) {
-+		switch (tsens_version(priv)) {
-+		case VER_1_X_NO_RPM:
-+		case VER_2_X_NO_RPM:
-+			break;
-+		default:
-+			dev_err(dev, "%s: device not enabled\n", __func__);
-+			ret = -ENODEV;
-+			goto err_put_device;
-+		}
- 	}
- 
- 	priv->rf[SENSOR_EN] = devm_regmap_field_alloc(dev, priv->srot_map,
-@@ -1040,7 +1046,7 @@ int __init init_common(struct tsens_priv *priv)
- 		}
- 	}
- 
--	if (tsens_version(priv) > VER_1_X &&  ver_minor > 2) {
-+	if (tsens_version(priv) > VER_1_X_NO_RPM &&  ver_minor > 2) {
- 		/* Watchdog is present only on v2.3+ */
- 		priv->feat->has_watchdog = 1;
- 		for (i = WDOG_BARK_STATUS; i <= CC_MON_MASK; i++) {
+ static const struct of_device_id tsens_table[] = {
+ 	{
++		.compatible = "qcom,ipq5018-tsens",
++		.data = &data_ipq5018,
++	}, {
+ 		.compatible = "qcom,ipq5332-tsens",
+ 		.data = &data_ipq5332,
+ 	}, {
 diff --git a/drivers/thermal/qcom/tsens.h b/drivers/thermal/qcom/tsens.h
-index 336bc868fd7c..e3cb611426c4 100644
+index e3cb611426c4..2a7afa4c899b 100644
 --- a/drivers/thermal/qcom/tsens.h
 +++ b/drivers/thermal/qcom/tsens.h
-@@ -34,6 +34,7 @@ enum tsens_ver {
- 	VER_0 = 0,
- 	VER_0_1,
- 	VER_1_X,
-+	VER_1_X_NO_RPM,
- 	VER_2_X,
- 	VER_2_X_NO_RPM,
- };
+@@ -652,6 +652,9 @@ extern struct tsens_plat_data data_8226, data_8909, data_8916, data_8939, data_8
+ /* TSENS v1 targets */
+ extern struct tsens_plat_data data_tsens_v1, data_8937, data_8976, data_8956;
+ 
++/* TSENS v1 with no RPM targets */
++extern const struct tsens_plat_data data_ipq5018;
++
+ /* TSENS v2 targets */
+ extern struct tsens_plat_data data_8996, data_ipq8074, data_tsens_v2;
+ extern const struct tsens_plat_data data_ipq5332, data_ipq5424;
 -- 
 2.48.1
 
