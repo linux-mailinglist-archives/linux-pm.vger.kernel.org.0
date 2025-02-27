@@ -1,157 +1,193 @@
-Return-Path: <linux-pm+bounces-23045-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23046-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 88FA0A47AD0
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 11:53:58 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6766CA47AD7
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 11:55:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8253A3AEEC2
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 10:53:47 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6170116D265
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 10:55:53 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D14A322A4C6;
-	Thu, 27 Feb 2025 10:53:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C94222A4D5;
+	Thu, 27 Feb 2025 10:55:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="cZbOvmVS"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="OikCg0M0"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wm1-f44.google.com (mail-wm1-f44.google.com [209.85.128.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 883B522A1ED;
-	Thu, 27 Feb 2025 10:53:53 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A7DA522839A;
+	Thu, 27 Feb 2025 10:55:45 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740653635; cv=none; b=jNxMi8Sk/VBfcyUViYLx6NEeLAxjwbXBQqpNfqEx46x5KrEj1ions8POsZuS0jzMOVMJw1uOAs2Oo9LteQfIv1d4ac56LX6ac9vFW/n2tRWQvXvpjWM3JsxgmcnY5b8n3wxSMDxf5t5ppaOkyBGHUtTtW3AN9VzRttkyKQIhBo4=
+	t=1740653749; cv=none; b=nxafIUsd80v5B856Q9WMMHQHvPslf5hBQH2XUjZ8/JNVfen5WFr8AZ+rIisIc8AcCod9NMxlaC8gY2Sltw/OSaxHmKpg8Ucl1VDmpy1xMp5q5AKbUYVxEYLI8zNOjUFTHXdMRU1IH0zEsIMxQnJdtJ6LuTlUX+7V4YBVPR/Uw0w=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740653635; c=relaxed/simple;
-	bh=sdOfjTsy+77H64MWfHOiCTHS7lU8BvIyjOzKYl/cLGM=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=BUrgHcYRQlO1iQbdsTlXWKCNgxXkZJJEBAcr9gz7+QIw/xQNwqIVuB83l6R+klcZ/Qcg/6jn83UA4HxqneMM3SD12NgOaWnxoTFRqvdwurRUvEhM+EgNwILcrWheULpA0jVc/YhEdjg9U+YpchxrUDM6xWCpHIW/poWYp4keekc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=cZbOvmVS; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id f6aa64a60aa58da8; Thu, 27 Feb 2025 11:53:51 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 03574D50215;
-	Thu, 27 Feb 2025 11:53:51 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1740653631;
-	bh=sdOfjTsy+77H64MWfHOiCTHS7lU8BvIyjOzKYl/cLGM=;
-	h=From:Subject:Date;
-	b=cZbOvmVSqk0Uwf1Ho3FxGja5Kb+stWjnhb1oQeR2KFga544yII+3brJ2x417AdyAz
-	 4o4Ck+25I6ks/fMiC36hfVlqNfK2WAO8jVCCnMA6KLQKpUqNVQ4t5i7oQSOMG9UqFW
-	 YwX/IZZOb9c13jSRsnNV0JNLyFLA0TjznyeO7/nw9opq5a6uvBW8Lgq4LHPEmAKQc6
-	 +bqcl2yOcjFQ+NgkrN0ZN7IguQ78+GAv9PwfFowtdiUWS9i1lfxe/tPAbKuJ6amCGS
-	 h12sPtdsDZ+8UlE5Z4PI3GE31vXQxdT2UgLrnQpmB5BLUz6Irxdl9b+WP28eTg80FB
-	 akDaqxmX4/wrw==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>,
- Johan Hovold <johan@kernel.org>,
- Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>,
- Jon Hunter <jonathanh@nvidia.com>
-Subject: [PATCH v2] PM: sleep: Adjust check before setting power.must_resume
-Date: Thu, 27 Feb 2025 11:53:50 +0100
-Message-ID: <3353728.44csPzL39Z@rjwysocki.net>
+	s=arc-20240116; t=1740653749; c=relaxed/simple;
+	bh=bujcDTjDuNoNm0eQaVr1K6IxX1QIkdithn2Pa9n1gzE=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=FR3tgl02gZEeb/monF2vs/Wg2OuxcfnOqkK7yNN0hEjn/WhziRxIGc2HXHNOIInaEg/bI8bI/QkXYK7+I9QrKFIbBp3aw+A1a9HrGN80nMz27TUNYxd4zrSp7l2QsKMbG22MgVA3PZcSmXjbT9x3lDJ5ezNr2ER08oDEI/pOZgk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=OikCg0M0; arc=none smtp.client-ip=209.85.128.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wm1-f44.google.com with SMTP id 5b1f17b1804b1-43aac0390e8so5086785e9.2;
+        Thu, 27 Feb 2025 02:55:45 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740653744; x=1741258544; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=AKHlnE2Y0JEmifPa1wLht7Bfh/WgS8pXlFyMCfBvkuI=;
+        b=OikCg0M0mYOxL7rkRgVCX+ye0qGYZdYO9GacuZop/EgYmYdCW4NOgnaQ717SAsNSCa
+         RHID9vIC927rIM8ArAKhtw67O4ZefX5bXD4iUYRmlofkf2sGh7eWmo14hals1/qAWJ5r
+         fu/Vr8BrsO1UsYQPYSkd2UhTg9pa1vDZMvyzzC8PgRjBm68DN5xsAdoSJJA/j9pgL6J8
+         PMdpd+bJPNsblTgysELGaFTZyWi3Tvrq7Egq093XBrloLuPqjB+FYFom5EGw/kjqxSZk
+         X13UFcWHZaOb+qy0AOOG/C0TKhhGrZP4GaU0+HVAfmfdRaF7iS0DXdFKtyUnfAqQQXjd
+         1WMA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740653744; x=1741258544;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=AKHlnE2Y0JEmifPa1wLht7Bfh/WgS8pXlFyMCfBvkuI=;
+        b=QFpBZsTidq4RkoPlzhI6V5FSYL/ewtFqLzNsb1iL21Tv0CBFGXERLal6hifHHvePle
+         a23yUuZ83OE6HYmkByZMgSfnuHQ/qFQJ7UI243c5EgqZXG1btkDrZPCFnYgE6DUTLOhm
+         nTpei3I44+I/VjzUmIgZ2d+45PoFqUh+zE2pCz7QsXRaRlS6dD2PSUzVgk6/vECgk7DN
+         5V/Bg0HfGcRSHTwSCje8/Jli2Afj9CbTiNQXrcAMamoWWxN2kkanyrg/tBT9aLG6lJjY
+         MpCKw4ZR1pULxtfknL8mq5DfyhL8y3MfGiCTLMmQOuAq0S9NYkaHI/IHiP9bF8BxOGHy
+         JbBw==
+X-Forwarded-Encrypted: i=1; AJvYcCV/5C/RGQSXppJOV9RhKa9eu718wcd5zG3x2uKs/0udmq7uaLmoJBt5OeUE0YRSl4usHWEi4Qi4hMk=@vger.kernel.org, AJvYcCVnyV3sIPT1fMEQRbv0TdFkfJUu4DaXWonVngh/CFbyjeFOtmSNCltgrZgm/Yrn4Xa7C7dVPnPwg5P1OzQh@vger.kernel.org, AJvYcCWyVoWG66qEPKsW2TFRV+A8SbfbLJnssaoy+i9zE88dg0mcLvfbn47x1M66D2AjFpUz1sE4/aJpRWNn@vger.kernel.org
+X-Gm-Message-State: AOJu0YzMOPCDLfNwr6VSbgRhOQR8eW1HxdftPedJ4AZbGKxvOWKLgG+q
+	QopC/h02klSo4aH7Kr/YyKgNf9tMDvbkNrPlQCwW+cM4KlZ2ilEECBAconUeS9hhz4MlaZvCIe5
+	TNGhw3Yel2ENYqvKfb93iVGvwJvIfP7m4
+X-Gm-Gg: ASbGnctdzQEy+/YfJ/sfWoPk1PRQobdymfF8cZwrkNkcnMyu5RVQRkrM1FUZ1k16AH4
+	JKY2Yk/ckxmI7QnnK8OcpOMpcjdSiAvaPFSL37s/NPUeh6SQ+7VBSVP9yWQt4NPfswSW4m1HeE4
+	uWktt1w3pq
+X-Google-Smtp-Source: AGHT+IHncl9PPc5r6yl0Lv/rKdriH90hESG8/kfSD1bpGd1N2IZOKBThPFywTVAV/1AmDlyV3Kd8xNhZaexKbVPqAbg=
+X-Received: by 2002:a05:600c:3150:b0:439:955d:7adb with SMTP id
+ 5b1f17b1804b1-439ae222a7amr256138625e9.30.1740653743598; Thu, 27 Feb 2025
+ 02:55:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
+References: <20250226093700.44726-1-clamor95@gmail.com> <20250226093700.44726-2-clamor95@gmail.com>
+ <20250227-cherubic-mantis-from-betelgeuse-86f5ff@krzk-bin>
+In-Reply-To: <20250227-cherubic-mantis-from-betelgeuse-86f5ff@krzk-bin>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Thu, 27 Feb 2025 12:55:32 +0200
+X-Gm-Features: AQ5f1JpNBw7exSIzTK2Fu0RwPSOnttGQs3PoxMmfrYBIGnMEtbjoE5q05f9ovHc
+Message-ID: <CAPVz0n0ygR=ygsvG2+z-zST7kmJ_P3nxf29tqdgHpRs_Nw6D5Q@mail.gmail.com>
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdekjedvjecutefuodetggdotefrodftvfcurfhrohhfihhlvgemucfjqffogffrnfdpggftiffpkfenuceurghilhhouhhtmecuudehtdenucesvcftvggtihhpihgvnhhtshculddquddttddmnecujfgurhephffvvefufffkggfgtgesthfuredttddtjeenucfhrhhomhepfdftrghfrggvlhculfdrucghhihsohgtkhhifdcuoehrjhifsehrjhifhihsohgtkhhirdhnvghtqeenucggtffrrghtthgvrhhnpeegfffhudejlefhtdegffekteduhfethffhieettefhkeevgfdvgfefieekiefgheenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepjedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehsthgvrhhnsehrohiflhgrnhgurdhhrghrvhgrrhgurdgvughupdhrtghpthhtohepuhhlfhdrhhgrnhhsshhonheslhhinhgrrhhordhorhhgpdhrtghpthhtohepjhhohhg
-X-DCC--Metrics: v370.home.net.pl 1024; Body=7 Fuz1=7 Fuz2=7
+Content-Transfer-Encoding: quoted-printable
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+=D1=87=D1=82, 27 =D0=BB=D1=8E=D1=82. 2025=E2=80=AF=D1=80. =D0=BE 12:45 Krzy=
+sztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On Wed, Feb 26, 2025 at 11:36:59AM +0200, Svyatoslav Ryhel wrote:
+> > +  maxim,fcharge-current-limit-microamp:
+> > +    description:
+> > +      Fast-Charge current limit
+> > +    minimum: 250000
+> > +    default: 500000
+> > +    maximum: 1550000
+> > +
+> > +  maxim,fcharge-timer-hours:
+> > +    description:
+> > +      Fast-Charge timer in hours. Setting this value 3 and lower or 11=
+ and higher
+> > +      will disable Fast-Charge timer.
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    default: 5
+>
+> You still did not answer why this is board specific. This was rejected
+> in the past because of that reason and nothing here changed. Nothing
+> will change without detailed explanation, so use other interfaces if you
+> need user-space to configure it (see other drivers, e.g. maxim)
+>
+> > +
+> > +  maxim,fcharge-rst-threshold-high:
+> > +    description:
+> > +      Set Fast-Charge reset threshold to -100 mV
+> > +    type: boolean
+> > +
+> > +  maxim,in-current-limit-microamp:
+> > +    description:
+> > +      Input current limit
+> > +    minimum: 100000
+> > +    default: 500000
+> > +    maximum: 1500000
+> > +
+> > +  maxim,topoff-timer-minutes:
+> > +    description:
+> > +      Top-Off timer minutes
+> > +    $ref: /schemas/types.yaml#/definitions/uint32
+> > +    enum: [0, 10, 20, 30, 40, 50, 60, 70]
+> > +    default: 30
+>
+> Same.
+>
+> > +
+> > +  maxim,topoff-current-threshold-microamp:
+> > +    description:
+> > +      Top-Off current threshold
+> > +    enum: [50000, 100000, 150000, 200000]
+> > +    default: 50000
+> > +
+> > +  maxim,fcharge-usb-current-limit-microamp:
+> > +    description:
+> > +      Fast-Charge USB current limit
+> > +    minimum: 100000
+> > +    default: 500000
+> > +    maximum: 1500000
+> > +
+> > +  maxim,fcharge-ac-current-limit-microamp:
+> > +    description:
+> > +      Fast-Charge AC current limit
+> > +    minimum: 100000
+> > +    default: 500000
+> > +    maximum: 1500000
+> > +
+> > +  maxim,usb-in-current-limit-microamp:
+> > +    description:
+> > +      USB Input current limit
+> > +    minimum: 100000
+> > +    default: 500000
+> > +    maximum: 1500000
+> > +
+> > +  maxim,ac-in-current-limit-microamp:
+> > +    description:
+> > +      AC Input current limit
+> > +    minimum: 100000
+> > +    default: 500000
+> > +    maximum: 1500000
+>
+> Half of these properties as well are not suitable and duplicate existing
+> sysfs interface.
+>
 
-The check before setting power.must_resume in device_suspend_noirq()
-does not take power.child_count into account, but it should do that, so
-use pm_runtime_need_not_resume() in it for this purpose and adjust the
-comment next to it accordingly.
+All these properties allow configure the charger to suit the device on
+which it is used. None of them are required but are a nice addition.
+Why you are denying me an ability to fully utilize hardware I have and
+tune it to the device? All those values represent hardware registers
+which can be customized for the device, not for the end user to mess
+with.
 
-Fixes: 107d47b2b95e ("PM: sleep: core: Simplify the SMART_SUSPEND flag handling")
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+> And for remaining, still no battery.
+>
 
-The previous version of this patch is here:
+reference to power-supply IS included, hence the battery option is
+there as well.
 
-https://lore.kernel.org/linux-pm/3548152.QJadu78ljV@rjwysocki.net/
-
-v1 -> v2:
-   * Changelog rewrite.
-   * Added the Fixes: tag.
-   * Refined the comment adjustment.
-
----
- drivers/base/power/main.c    |   13 ++++++-------
- drivers/base/power/runtime.c |    2 +-
- include/linux/pm_runtime.h   |    2 ++
- 3 files changed, 9 insertions(+), 8 deletions(-)
-
---- a/drivers/base/power/main.c
-+++ b/drivers/base/power/main.c
-@@ -1382,14 +1382,13 @@
- 	dev->power.is_noirq_suspended = true;
- 
- 	/*
--	 * Skipping the resume of devices that were in use right before the
--	 * system suspend (as indicated by their PM-runtime usage counters)
--	 * would be suboptimal.  Also resume them if doing that is not allowed
--	 * to be skipped.
-+	 * Devices must be resumed unless they are explicitly allowed to be left
-+	 * in suspend, but even in that case skipping the resume of devices that
-+	 * were in use right before the system suspend (as indicated by their
-+	 * runtime PM usage counters and child counters) would be suboptimal.
- 	 */
--	if (atomic_read(&dev->power.usage_count) > 1 ||
--	    !(dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME) &&
--	      dev->power.may_skip_resume))
-+	if (!(dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME) &&
-+	      dev->power.may_skip_resume) || !pm_runtime_need_not_resume(dev))
- 		dev->power.must_resume = true;
- 
- 	if (dev->power.must_resume)
---- a/drivers/base/power/runtime.c
-+++ b/drivers/base/power/runtime.c
-@@ -1897,7 +1897,7 @@
- 	pm_request_idle(link->supplier);
- }
- 
--static bool pm_runtime_need_not_resume(struct device *dev)
-+bool pm_runtime_need_not_resume(struct device *dev)
- {
- 	return atomic_read(&dev->power.usage_count) <= 1 &&
- 		(atomic_read(&dev->power.child_count) == 0 ||
---- a/include/linux/pm_runtime.h
-+++ b/include/linux/pm_runtime.h
-@@ -66,6 +66,7 @@
- 
- extern int pm_generic_runtime_suspend(struct device *dev);
- extern int pm_generic_runtime_resume(struct device *dev);
-+extern bool pm_runtime_need_not_resume(struct device *dev);
- extern int pm_runtime_force_suspend(struct device *dev);
- extern int pm_runtime_force_resume(struct device *dev);
- 
-@@ -254,6 +255,7 @@
- 
- static inline int pm_generic_runtime_suspend(struct device *dev) { return 0; }
- static inline int pm_generic_runtime_resume(struct device *dev) { return 0; }
-+static inline bool pm_runtime_need_not_resume(struct device *dev) {return true; }
- static inline int pm_runtime_force_suspend(struct device *dev) { return 0; }
- static inline int pm_runtime_force_resume(struct device *dev) { return 0; }
- 
-
-
-
+> Best regards,
+> Krzysztof
+>
 
