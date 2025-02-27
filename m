@@ -1,210 +1,325 @@
-Return-Path: <linux-pm+bounces-23131-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23132-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FA97A4887A
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 20:02:53 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 77849A48959
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 21:01:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9350E7A3861
-	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 19:01:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5B3463B4982
+	for <lists+linux-pm@lfdr.de>; Thu, 27 Feb 2025 20:01:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AE9261EFF88;
-	Thu, 27 Feb 2025 19:02:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 632B226F46E;
+	Thu, 27 Feb 2025 20:01:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="H9qMKKL3"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="m8dwXfDf"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f49.google.com (mail-lf1-f49.google.com [209.85.167.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 748741ABEAC
-	for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2025 19:02:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3EBEE226183
+	for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2025 20:01:52 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740682964; cv=none; b=HFmf8b/oU66vUvdi1eStTaOg9e2Cw6olPqJF94v3nhV+rHYPSTPx9h00ORG0JugNZwKg/3fWrW46zTI8Xczh9zzRTz0SOir77101VSKCpV3qAGQZXLc2RZZ2zgJvK04XPaf96ZFnFSTmCbzFu1X7I6j9/+kDcfQMKuB0+bm6uP0=
+	t=1740686512; cv=none; b=LrnL2qYvt7+BQwar974rJirj5YWVZsx+AQ1xmA1f7eno7BNtxFIH19oZKrNmXcbdIQTH0tngQtTq5f/Bxb0dwRAhlhqLO5NsrHw6Xpzj68rH1bpzujT/xoA+5NeIbyJeCghNJkZQ6PoSWxAmU4D5xm0lqNXql8GS9OzSJ98mvFs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740682964; c=relaxed/simple;
-	bh=BuRTevzALKItQZ428xQb6alv2AlOwzdRzrIVuA9l5lk=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=ZKR3O6TuM9fFORAKhJJiypkeAcAdWu6t9Cr3wPunwXRGolCCGZnlACklpmzzaNJWraSgjX8oX13TmoDCG37VgqXQKpjD0WsJgpphJscmSYRApfGL/Ibpzd/vZtwzaydW4+FpPmxgtwKVZqoQaElBU/7dtUl3u67PcY18Fk9Gzco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=H9qMKKL3; arc=none smtp.client-ip=209.85.167.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f49.google.com with SMTP id 2adb3069b0e04-5494bc4d796so278541e87.3
-        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2025 11:02:42 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740682960; x=1741287760; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=YRlHVq/fhYckH/apG8DI4lghb+1AD7fw2kBANnribBo=;
-        b=H9qMKKL35VarGsBGXNCl+/oELISY6bvK2qXa9tTalQhF0Tv2rnz/8s3Tz8iDP8kbO3
-         CZdFryyEadmpeJachd4w17fuZ+o+f0EuQMp/m51AH4H8mHWoTKdFy9FPJL5f1BmOwWiN
-         X/IEAB8WZBmF7F5ks1JmpPZBrNPZfXCGLr2ZD3DepZ8018esrzu5qI48+C2+V6UnfbBJ
-         +r+zcaUGMYodf2Ij+/+36N3YcCoGKf1d+Vov5ChHVdrhrtN5DeH/7PVzLtd2/uX5ktZw
-         IX5/qIl2EwkXPeXCOSht2WGn0cn6d6+/iOn65NPTELMXqM9gdvTtQKU5lK0h1eaOM0bl
-         //Lw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740682960; x=1741287760;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=YRlHVq/fhYckH/apG8DI4lghb+1AD7fw2kBANnribBo=;
-        b=okUZB8PQP8QEv2I4+20ips07kxqh3352Mc96wh2IhTDjZskVBB8mFGhmmIV4fS8NyH
-         KjbXzXlEH7YU6fGyC45KI3M0PFdi2PnfKk8MWvfMomWEqOzPr8tMRL6A7WeBHYsJtHUW
-         7NC0kwImP+TpohvuxODhDyxIsGr1MRnJ9S23IV5hhHNLyxkEFKOvxQJwU8/DRv9BtyID
-         vSqfhuz4uffjcuvzXCuBdEJzVePMwpeg+5jj31zVa52yQgtApIsU8ueefcQpkeJOYhZO
-         3A0kp8Wg6F4A/lTZYdmmAsUyCJTTAuUZPIRmCIYpz41xlFXdCxD1uQrz4nu4fUPC+q2W
-         eUnw==
-X-Forwarded-Encrypted: i=1; AJvYcCXqbKpWI8lArsaKer4vddf4JTZC+tcro7d4g5cHkdkapY3RGvOCo7deqmodgPtq8/GNGvxNaWUDJg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YyDkrk3Y7nr4DeiWurRqu3Eu1RNwi27iVq2XqqNFKYoy+NhP6/l
-	ZTYU13rKUTp+4PUxn/4gxAhIlzpI8sNiDYVwLYqG3C7w3bqA2wU+b79DBf9KnuY=
-X-Gm-Gg: ASbGnctXe/MVDkvNk6ZzimsoC2aUThtXA2n/f+bsL/rvLkCaeSZjhiehbFvRW31xhky
-	dQaRVZWm4S6AxnDvkb3tKARAtq+oNfgM9Nqkg+9MkcQHpiVavvz1XJoh7ORwAvMHTywU8z+8M3D
-	okkc1KyWVxiQqLRk0v2ct6nMPUYaJ3WWaT/Yo070FyKTFRDX5po08xvBZZYxkk40OsCNmd94SY5
-	xCu8HEuH9Trmyp0wZRuUJVkpsfFfgxG1zOqi52Rp0IYjBOx9aJDpX8GIV5Zvv+lKwuax46jY+eq
-	WOxooKQXYXSqVLhRYXyMOOrVnIpyZN1+Y1BmvfYmSGfvSPCpW+Dv530xY0WJiF4lZCfC5FtODu8
-	KfM50tA==
-X-Google-Smtp-Source: AGHT+IEp+Zq10szXRG2lH2uoKic4S9ViqPTrcBL1J0yzeLJRfwMYDIrB8jNjP79DfJiBuDuA6G4xvg==
-X-Received: by 2002:a05:6512:128e:b0:545:e2e:843a with SMTP id 2adb3069b0e04-5494c37d9d5mr240100e87.38.1740682960314;
-        Thu, 27 Feb 2025 11:02:40 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5494417446fsm236096e87.31.2025.02.27.11.02.38
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Thu, 27 Feb 2025 11:02:38 -0800 (PST)
-Date: Thu, 27 Feb 2025 21:02:37 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: George Moussalem <george.moussalem@outlook.com>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org, amitk@kernel.org, 
-	thara.gopinath@gmail.com, robh@kernel.org, krzk+dt@kernel.org, quic_srichara@quicinc.com
-Subject: Re: [PATCH v8 3/5] thermal: qcom: tsens: add support for tsens v1
- without RPM
-Message-ID: <xv3c2ube7the3gat7ustws4ok6t26c33fyywqi6x3utx52qtzb@owyidrxeprcp>
-References: <20250227110423.8418-1-george.moussalem@outlook.com>
- <DS7PR19MB888322C58FC555299256E8D99DCD2@DS7PR19MB8883.namprd19.prod.outlook.com>
- <eafirt5dg4vmafmu2wph47zrrzyqrz65z5ypqrl7fhr77qckfi@dgqwkkhnz4ge>
- <DS7PR19MB888363A4FF954A6275E81B4B9DCD2@DS7PR19MB8883.namprd19.prod.outlook.com>
+	s=arc-20240116; t=1740686512; c=relaxed/simple;
+	bh=BD/JYlkq7yAGC62e77/mkqjJGjquw+AdOQ/MzlUETrA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=oJmqjggBQQUHDt3Mvemq0wCOLePk0RM/ReROGivyl0Mt0ib+rOPuTr61FqAjRvsUqwtkKX5E8hJvfWJcrBfNUSinyqoVhI+0awwshjTOpSB6QvMux4E7AvXep70bNiMV6Y48wda8nCvDKevHHONCg/PaXA+n6MQNWdA60k8fRoY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=m8dwXfDf; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E54E3C4CEDD
+	for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2025 20:01:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740686511;
+	bh=BD/JYlkq7yAGC62e77/mkqjJGjquw+AdOQ/MzlUETrA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=m8dwXfDf5ipFVM8UQIVpjJUHwQyw0I0DtasrwecgIgzCFnYfBB8gLaYUvPw1PevKf
+	 vdLaRlDPGfmjikd7auQcj+G+CCBBuG33wzCWbfckVxmRL0OdZ3Dt/IJm8M+i3G9//W
+	 XEpd0WfXQtaOcVVGEVzrQkPs8mu7yqY3wGSBkhKAoLxCzaPg8Fr5K6SayixwqfLZPk
+	 O4kplb6IT2RapVyk78PbHw5sp99E8mVAG3+Ueg76gFdPRGhETFX8yIFgpNK39PiJBo
+	 VzFL4KMldCspCPZn+8YEEsBoQOBIgdghqoGtP28ho0hd05JashqRL7svZRrMeJgcjC
+	 CUe7jLDuFJn/Q==
+Received: by mail-oa1-f51.google.com with SMTP id 586e51a60fabf-2c12f9e9449so738117fac.3
+        for <linux-pm@vger.kernel.org>; Thu, 27 Feb 2025 12:01:51 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVradiCQn0WPxO6BccUBS2PWFYxlLnxHE43RQ0m9RLJH79AqqxpD8+3ix0t/8qx+NZUkTIF0Mrm+g==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxhmC/S8D03LCqPHixBjaXFqaahPlKWrLNRm62f7tfr2H2xUjzr
+	qGPg1oHCPTKu07trLD1n39mTKlhvWOzLxsTutM3WZ/V8n8uGzDua7sawr8yK2fDQLW+3KFJ1NaJ
+	KQnh10D9BBBRHY9yqLZyMs8xCLl8=
+X-Google-Smtp-Source: AGHT+IFL1Dd2TdiWkoutWrk1Eu2JTMarqwGhyy/Tkg7LVbPhfB1tAIMLMbRuspyMaCcG2U8A4CUN3Xocc5Je9MwwE2o=
+X-Received: by 2002:a05:6871:5808:b0:2bc:7d6f:fa86 with SMTP id
+ 586e51a60fabf-2c1787a37a4mr347438fac.35.1740686511122; Thu, 27 Feb 2025
+ 12:01:51 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <DS7PR19MB888363A4FF954A6275E81B4B9DCD2@DS7PR19MB8883.namprd19.prod.outlook.com>
+References: <20250220154306.2166129-1-dedekind1@gmail.com> <20250220154306.2166129-2-dedekind1@gmail.com>
+In-Reply-To: <20250220154306.2166129-2-dedekind1@gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 27 Feb 2025 21:01:40 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0gd+Xazbz-ZHqnXS2_geK+f60xZzb4CGbXEWbwiKp81NA@mail.gmail.com>
+X-Gm-Features: AQ5f1JrUIU6XaNyNku4rt-Ut44LqtxmFkm_cHpVgA9-qw_GguBeZRWGyxu1pAl8
+Message-ID: <CAJZ5v0gd+Xazbz-ZHqnXS2_geK+f60xZzb4CGbXEWbwiKp81NA@mail.gmail.com>
+Subject: Re: [RFC PATCH 1/1] x86: msr: add new 'msr_pkg_cst_config_control.h' header
+To: Artem Bityutskiy <dedekind1@gmail.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Linux PM Mailing List <linux-pm@vger.kernel.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Thu, Feb 27, 2025 at 09:25:05PM +0400, George Moussalem wrote:
-> 
-> On 2/27/25 18:59, Dmitry Baryshkov wrote:
-> 
-> > On Thu, Feb 27, 2025 at 02:56:41PM +0400, George Moussalem wrote:
-> >> Adding generic support for SoCs with tsens v1.0 IP with no RPM.
-> >> Due to lack of RPM, tsens has to be reset and enabled in the driver
-> >> init.
-> >>
-> >> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> >> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
-> >> Signed-off-by: George Moussalem <george.moussalem@outlook.com>
-> >> ---
-> >>  drivers/thermal/qcom/tsens-v1.c | 48 +++++++++++++++++++++++++++++++++
-> >>  drivers/thermal/qcom/tsens.c    | 24 ++++++++++-------
-> >>  drivers/thermal/qcom/tsens.h    |  1 +
-> >>  3 files changed, 64 insertions(+), 9 deletions(-)
-> >>
-> >> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
-> >> index 1a7874676f68..877b27274fd2 100644
-> >> --- a/drivers/thermal/qcom/tsens-v1.c
-> >> +++ b/drivers/thermal/qcom/tsens-v1.c
-> >> @@ -79,6 +79,17 @@ static struct tsens_features tsens_v1_feat = {
-> >>  	.trip_max_temp	= 120000,
-> >>  };
-> >>  
-> >> +static struct tsens_features tsens_v1_no_rpm_feat = {
-> >> +	.ver_major	= VER_1_X_NO_RPM,
-> >> +	.crit_int	= 0,
-> >> +	.combo_int	= 0,
-> >> +	.adc		= 1,
-> >> +	.srot_split	= 1,
-> >> +	.max_sensors	= 11,
-> >> +	.trip_min_temp	= -40000,
-> >> +	.trip_max_temp	= 120000,
-> >> +};
-> >> +
-> >>  static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
-> >>  	/* ----- SROT ------ */
-> >>  	/* VERSION */
-> >> @@ -150,6 +161,43 @@ static int __init init_8956(struct tsens_priv *priv) {
-> >>  	return init_common(priv);
-> >>  }
-> >>  
-> >> +static int __init init_tsens_v1_no_rpm(struct tsens_priv *priv)
-> >> +{
-> >> +	int i, ret;
-> >> +	u32 mask = 0;
-> >> +
-> >> +	ret = init_common(priv);
-> >> +	if (ret < 0) {
-> >> +		dev_err(priv->dev, "Init common failed %d\n", ret);
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 1);
-> >> +	if (ret) {
-> >> +		dev_err(priv->dev, "Reset failed\n");
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	for (i = 0; i < priv->num_sensors; i++)
-> >> +		mask |= BIT(priv->sensor[i].hw_id);
-> >> +
-> >> +	ret = regmap_field_update_bits(priv->rf[SENSOR_EN], mask, mask);
-> >> +	if (ret) {
-> >> +		dev_err(priv->dev, "Sensor Enable failed\n");
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	ret = regmap_field_write(priv->rf[TSENS_EN], 1);
-> >> +	if (ret) {
-> >> +		dev_err(priv->dev, "Enable failed\n");
-> >> +		return ret;
-> >> +	}
-> >> +
-> >> +	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 0);
-> >> +
-> >> +	return ret;
-> >> +}
-> >> +
-> >>  static const struct tsens_ops ops_generic_v1 = {
-> >>  	.init		= init_common,
-> >>  	.calibrate	= calibrate_v1,
-> >> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
-> >> index 1f5d4de017d9..f860ea86d130 100644
-> >> --- a/drivers/thermal/qcom/tsens.c
-> >> +++ b/drivers/thermal/qcom/tsens.c
-> >> @@ -447,7 +447,7 @@ static void tsens_set_interrupt(struct tsens_priv *priv, u32 hw_id,
-> >>  	dev_dbg(priv->dev, "[%u] %s: %s -> %s\n", hw_id, __func__,
-> >>  		irq_type ? ((irq_type == 1) ? "UP" : "CRITICAL") : "LOW",
-> >>  		enable ? "en" : "dis");
-> >> -	if (tsens_version(priv) > VER_1_X)
-> >> +	if (tsens_version(priv) > VER_1_X_NO_RPM)
-> > I'd suggest to replace these checks with >= VER_2_X. This saves us from
-> > all the troubles if there is another 1.x 'modification' later on.
-> 
-> makes sense, will change to >= VER_2_X. Thanks for the feedback.
+On Thu, Feb 20, 2025 at 4:43=E2=80=AFPM Artem Bityutskiy <dedekind1@gmail.c=
+om> wrote:
+>
+> From: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+>
+> There are now two users that modify the MSR_PKG_CST_CONFIG_CONTROL regist=
+er:
+> 1. The Intel PMC framework (cnp.c).
+> 2. The intel_idle.c driver.
+>
+> They do not interfere with each other because the former modifies it only
+> during suspend/resume.
+>
+> Introduce common accessor functions for the MSR to make it more clear tha=
+t
+> there is already more than one user. There is no other purpose at this po=
+int.
+> But if more users are introduced, the header file may be replaced with a =
+small
+> MSR_PKG_CST_CONFIG_CONTROL subsystem, possibly implementing locking.
+>
+> Signed-off-by: Artem Bityutskiy <artem.bityutskiy@linux.intel.com>
+> ---
+>  .../include/asm/msr_pkg_cst_config_control.h  | 28 +++++++++++++++++++
+>  drivers/idle/intel_idle.c                     | 17 +++++------
+>  drivers/platform/x86/intel/pmc/cnp.c          | 13 +++++----
+>  3 files changed, 44 insertions(+), 14 deletions(-)
+>  create mode 100644 arch/x86/include/asm/msr_pkg_cst_config_control.h
+>
+> diff --git a/arch/x86/include/asm/msr_pkg_cst_config_control.h b/arch/x86=
+/include/asm/msr_pkg_cst_config_control.h
+> new file mode 100644
+> index 000000000000..0d9dab4c20ef
+> --- /dev/null
+> +++ b/arch/x86/include/asm/msr_pkg_cst_config_control.h
+> @@ -0,0 +1,28 @@
+> +/* SPDX-License-Identifier: GPL-2.0 */
+> +/*
+> + * Accessors from MSR_PKG_CST_CONFIG_CONTROL (0xe2) MSR found on Intel C=
+PUs.
+> + *
+> + * At this point provide only trival read/write functions. But this head=
+er file
+> + * can be turned into a small library if there are more MSR users in the=
+ future.
+> + */
+> +
+> +#ifndef _MSR_PKG_CST_CONFIG_CONTROL_H
+> +#define _MSR_PKG_CST_CONFIG_CONTROL_H
+> +
+> +#include <asm/msr-index.h>
+> +#include <asm/msr.h>
+> +
+> +static inline unsigned long long rdmsrl_pkg_cst_config_control(void)
+> +{
+> +       unsigned long long val;
+> +
+> +       rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, val);
+> +       return val;
+> +}
+> +
+> +static inline void wrmsrl_pkg_cst_config_control(unsigned long long val)
+> +{
+> +       wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, val);
+> +}
 
-THanks! It also makes sense to split this into two patches then: one
-which changes the condition all over the place and the other one which
-adds VER_1_X_NO_RPM.
+I didn't actually mean this.
 
-> 
-> >
-> >>  		tsens_set_interrupt_v2(priv, hw_id, irq_type, enable);
-> >>  	else
-> >>  		tsens_set_interrupt_v1(priv, hw_id, irq_type, enable);
+My comment was based on the observation that both
+disable_c1_auto_demote() and the new code in intel_idle would
+implement a very similar code pattern, that is
 
--- 
-With best wishes
-Dmitry
+(1) read MSR_PKG_CST_CONFIG_CONTROL
+(2) either set or clear NHM_C1_AUTO_DEMOTE (possibly along with some
+additional bits) in the value read from it
+(3) write the updated value to MSR_PKG_CST_CONFIG_CONTROL
+
+and it would be good to have a wrapper for it.  So something like
+
+static inline unsigned long long
+msr_pkg_cst_config_c1_auto_demote(bool set, unsigned long long
+other_bits)
+{
+        unsigned long long val, newval;
+
+        rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, val);
+
+        if (set)
+                newval |=3D NHM_C1_AUTO_DEMOTE | other_bits;
+        else
+                newval &=3D ~(NHM_C1_AUTO_DEMOTE | other_bits);
+
+        wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, newval);
+
+        return val;
+}
+
+> +
+> +#endif /* _MSR_PKG_CST_CONFIG_CONTROL_H */
+> diff --git a/drivers/idle/intel_idle.c b/drivers/idle/intel_idle.c
+> index 8d2095078469..e5415e20e0e3 100644
+> --- a/drivers/idle/intel_idle.c
+> +++ b/drivers/idle/intel_idle.c
+> @@ -59,6 +59,7 @@
+>  #include <asm/mwait.h>
+>  #include <asm/spec-ctrl.h>
+>  #include <asm/fpu/api.h>
+> +#include <asm/msr_pkg_cst_config_control.h>
+>
+>  #define INTEL_IDLE_VERSION "0.5.1"
+>
+> @@ -1975,7 +1976,7 @@ static void __init sklh_idle_state_table_update(voi=
+d)
+>         if ((mwait_substates & (0xF << 28)) =3D=3D 0)
+>                 return;
+>
+> -       rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr);
+> +       msr =3D rdmsrl_pkg_cst_config_control();
+>
+>         /* PC10 is not enabled in PKG C-state limit */
+>         if ((msr & 0xF) !=3D 8)
+> @@ -2006,7 +2007,7 @@ static void __init skx_idle_state_table_update(void=
+)
+>  {
+>         unsigned long long msr;
+>
+> -       rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr);
+> +       msr =3D rdmsrl_pkg_cst_config_control();
+>
+>         /*
+>          * 000b: C0/C1 (no package C-state support)
+> @@ -2059,7 +2060,7 @@ static void __init spr_idle_state_table_update(void=
+)
+>          * C6. However, if PC6 is disabled, we update the numbers to matc=
+h
+>          * core C6.
+>          */
+> -       rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr);
+> +       msr =3D rdmsrl_pkg_cst_config_control();
+>
+>         /* Limit value 2 and above allow for PC6. */
+>         if ((msr & 0x7) < 2) {
+> @@ -2221,9 +2222,9 @@ static void auto_demotion_disable(void)
+>  {
+>         unsigned long long msr_bits;
+>
+> -       rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_bits);
+> +       msr_bits =3D rdmsrl_pkg_cst_config_control();
+>         msr_bits &=3D ~auto_demotion_disable_flags;
+> -       wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_bits);
+> +       wrmsrl_pkg_cst_config_control(msr_bits);
+>  }
+>
+>  static void c1e_promotion_enable(void)
+> @@ -2309,7 +2310,7 @@ static void intel_c1_demotion_toggle(void *info)
+>         unsigned long long msr_val;
+>         bool enable =3D *(bool *)info;
+>
+> -       rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_val);
+> +       msr_val =3D rdmsrl_pkg_cst_config_control();
+>         /*
+>          * Enable/disable C1 undemotion along with C1 demotion, as this i=
+s the
+>          * most sensible configuration in general.
+> @@ -2318,7 +2319,7 @@ static void intel_c1_demotion_toggle(void *info)
+>                 msr_val |=3D NHM_C1_AUTO_DEMOTE | SNB_C1_AUTO_UNDEMOTE;
+>         else
+>                 msr_val &=3D ~(NHM_C1_AUTO_DEMOTE | SNB_C1_AUTO_UNDEMOTE)=
+;
+> -       wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_val);
+> +       wrmsrl_pkg_cst_config_control(msr_val);
+
+And now you can do
+
+static void intel_c1_demotion_toggle(void *info)
+{
+        msr_pkg_cst_config_c1_auto_demote(*(bool *)info, SNB_C1_AUTO_UNDEMO=
+TE);
+}
+
+here and similarly below.
+
+>  }
+>
+>  static ssize_t intel_c1_demotion_store(struct device *dev,
+> @@ -2349,7 +2350,7 @@ static ssize_t intel_c1_demotion_show(struct device=
+ *dev,
+>          * Read the MSR value for a CPU and assume it is the same for all=
+ CPUs. Any other
+>          * configureation would be a BIOS bug.
+>          */
+> -       rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, msr_val);
+> +       msr_val =3D rdmsrl_pkg_cst_config_control();
+>         return sysfs_emit(buf, "%d\n", !!(msr_val & NHM_C1_AUTO_DEMOTE));
+>  }
+>  static DEVICE_ATTR_RW(intel_c1_demotion);
+> diff --git a/drivers/platform/x86/intel/pmc/cnp.c b/drivers/platform/x86/=
+intel/pmc/cnp.c
+> index fc5193fdf8a8..4ef8dfe07664 100644
+> --- a/drivers/platform/x86/intel/pmc/cnp.c
+> +++ b/drivers/platform/x86/intel/pmc/cnp.c
+> @@ -10,6 +10,7 @@
+>
+>  #include <linux/smp.h>
+>  #include <linux/suspend.h>
+> +#include <asm/msr_pkg_cst_config_control.h>
+>  #include "core.h"
+>
+>  /* Cannon Lake: PGD PFET Enable Ack Status Register(s) bitmap */
+> @@ -225,12 +226,12 @@ static DEFINE_PER_CPU(u64, pkg_cst_config);
+>  static void disable_c1_auto_demote(void *unused)
+>  {
+>         int cpunum =3D smp_processor_id();
+> -       u64 val;
+> +       unsigned long long val;
+>
+> -       rdmsrl(MSR_PKG_CST_CONFIG_CONTROL, val);
+> +       val =3D rdmsrl_pkg_cst_config_control();
+>         per_cpu(pkg_cst_config, cpunum) =3D val;
+>         val &=3D ~NHM_C1_AUTO_DEMOTE;
+> -       wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, val);
+> +       wrmsrl_pkg_cst_config_control(val);
+
+That is
+
+per_cpu(pkg_cst_config, cpunum) =3D msr_pkg_cst_config_c1_auto_demote(false=
+, 0);
+
+>         pr_debug("%s: cpu:%d cst %llx\n", __func__, cpunum, val);
+>  }
+> @@ -238,11 +239,11 @@ static void disable_c1_auto_demote(void *unused)
+>  static void restore_c1_auto_demote(void *unused)
+>  {
+>         int cpunum =3D smp_processor_id();
+> +       unsigned long long val =3D per_cpu(pkg_cst_config, cpunum);
+>
+> -       wrmsrl(MSR_PKG_CST_CONFIG_CONTROL, per_cpu(pkg_cst_config, cpunum=
+));
+> +       wrmsrl_pkg_cst_config_control(val);
+
+And I would leave this code as is (in this patch, but generally, as a
+matter of cleanup, adding a local variable var to it would make sense
+IMV).
+
+>
+> -       pr_debug("%s: cpu:%d cst %llx\n", __func__, cpunum,
+> -                per_cpu(pkg_cst_config, cpunum));
+> +       pr_debug("%s: cpu:%d cst %llx\n", __func__, cpunum, val);
+>  }
+>
+>  static void s2idle_cpu_quirk(smp_call_func_t func)
+> --
 
