@@ -1,158 +1,119 @@
-Return-Path: <linux-pm+bounces-23168-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23169-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 271B3A4968D
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 11:11:10 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C41EA496E1
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 11:19:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 93C353B24F3
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 10:10:52 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A7C13B8AE5
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 10:18:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86E5C25DB15;
-	Fri, 28 Feb 2025 10:05:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015BE25DD0F;
+	Fri, 28 Feb 2025 10:17:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="L/W6fTqW";
-	dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b="UhjLYDQY"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="raxQR0X/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mo4-p02-ob.smtp.rzone.de (mo4-p02-ob.smtp.rzone.de [81.169.146.169])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B8E1C25DD1D;
-	Fri, 28 Feb 2025 10:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=81.169.146.169
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740737100; cv=pass; b=C1H3/SXKpLFLczVDi7v7uaJxoYwhKmGsHU7r5wn8YSY/5moTQKdCCqHmgrS+0AIFz9AC5oMmP335mk58ac372VDh3xM7TQSCGwBa1LO/nxF7MKStdVVja1KMEWXvzPHqK+RO19pO/czejR2mQMtssxSPl/zHkaqyQ89AxQaqZYg=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740737100; c=relaxed/simple;
-	bh=jPDALfJ9nOL+lYDnCEeUEdOe2ioz+vzs32Iyd3gnumA=;
-	h=Content-Type:Mime-Version:Subject:From:In-Reply-To:Date:Cc:
-	 Message-Id:References:To; b=me9v9Ylzdihy/RelYSvU4DbANiarV3pS0xxTJxj+k3ZC/48T65nnraOrfACtJgY6y9csKXBw2xs05niF/9ZeZ2zVtevllX7WUaArvlhUVYObRadTveOk232TJfLvhjZ8p417G2LiqmHBJ3YoSZasdGfCCd5Ag9msjiHv1ZU3Lxk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com; spf=pass smtp.mailfrom=goldelico.com; dkim=pass (2048-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=L/W6fTqW; dkim=permerror (0-bit key) header.d=goldelico.com header.i=@goldelico.com header.b=UhjLYDQY; arc=pass smtp.client-ip=81.169.146.169
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=goldelico.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=goldelico.com
-ARC-Seal: i=1; a=rsa-sha256; t=1740736906; cv=none;
-    d=strato.com; s=strato-dkim-0002;
-    b=Ze2OTPM/iC1Yv0OlkS/bh7N/ZWQX3G0rCCoHhJoShWm1PJ08VDmXjs7sJL2fcspPQv
-    x2nYaubH9w7HlqjdQE7xnkbu2H50PjoUSVuiviFxtw/wKS6dDESjAXl/PenxXPOTkNwT
-    XjiVSB5jdXMyI2inOSan+7XunyXKauxWxrld8Gi2J0Oo7FnzJuNw3Qba3jI0/LUCFoIf
-    aY3+G9l9sSU0mSJ3vXUYLbFIzjuSmUj7rF/U+mJa6w7haZ304+pC5UsMGxvEk0XIEChl
-    a4leD1ICrdaKPJTcsriLgD42qPljhbnE1QqUW9SNQmLzOWzUo/KHIaFox9NskFEuXLYg
-    vb3g==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; t=1740736906;
-    s=strato-dkim-0002; d=strato.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=jPDALfJ9nOL+lYDnCEeUEdOe2ioz+vzs32Iyd3gnumA=;
-    b=blEmoaun9dipJ9oJ24XX+DbSv4ZgAdxsn0dqB8Z4787dyHc/SdyymbPRHPIJAdAufV
-    8qZ7LTc2/9Gwxs4/8/onP3mVYcpijrVR8tp44tIu+NkVtsO5ViFoR9D/TR1Lf7O7HbHN
-    OeZaPfZEH2P3sa8dKXaABFYvIgVvIq5yV/1hiWOEQUbVwD9t7B3i456f1ArEYDhX86CT
-    7tRs20VV6/G6Hw8kYyzBTFBmdr7b8IQ0zzykLovHXUwAuqXJkU7H4UXIjCRn7rpOI5aU
-    U1xvkRl6bJk/8m6VoAJcGn4pO3VTyTFi20QyXlc3rCxwLiyzSctKp+uGVhkLLcmC9Y2y
-    RsoQ==
-ARC-Authentication-Results: i=1; strato.com;
-    arc=none;
-    dkim=none
-X-RZG-CLASS-ID: mo02
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; t=1740736906;
-    s=strato-dkim-0002; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=jPDALfJ9nOL+lYDnCEeUEdOe2ioz+vzs32Iyd3gnumA=;
-    b=L/W6fTqWi34g7SgxwBdaXX23+PCB5eKgjGYbR1xlWBAJkngGhjBMUTs7I5C0zE/he6
-    BDAusn+b6yIwfgULgAwKjF316AxGm2YQ1Ja/Q9s2vb6VBi57RUtoUXEtl/kNwIJpU2qG
-    0TeqVhWRgSyF1bhz+YCf/zYF2tSYTo5xzkZsqk4f9bZskY1Pe5UzUzmD75PtScnCxVFS
-    nZDdLIYYASVKhE3vc8B9b20yFptJAH3kxNd7qiRgvGRv5d0P8odYPleM5W3nyaKp8Zb7
-    Su/yoCioyzz5MB8wS6DmZqK+PhaYTFiYhi735/FVJePg4yIygLnJ1oYQ7zarzLIbuI3f
-    I3Lg==
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; t=1740736906;
-    s=strato-dkim-0003; d=goldelico.com;
-    h=To:References:Message-Id:Cc:Date:In-Reply-To:From:Subject:Cc:Date:
-    From:Subject:Sender;
-    bh=jPDALfJ9nOL+lYDnCEeUEdOe2ioz+vzs32Iyd3gnumA=;
-    b=UhjLYDQYzpwbT/Wv6JV7Kg4wUMKhNWsYYW9IIX0kn7Swy3cI/RT71+p8HTYkU7nFW/
-    PyFJTPJ4bHuBapHyxtBw==
-X-RZG-AUTH: ":JGIXVUS7cutRB/49FwqZ7WcJeFKiMhflhwDubTJ9o12DNOsPj0lFzL1yeTkZ"
-Received: from smtpclient.apple
-    by smtp.strato.de (RZmta 51.3.0 DYNA|AUTH)
-    with ESMTPSA id Q56adc11SA1jHF0
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (curve X9_62_prime256v1 with 256 ECDH bits, eq. 3072 bits RSA))
-	(Client did not present a certificate);
-    Fri, 28 Feb 2025 11:01:45 +0100 (CET)
-Content-Type: text/plain;
-	charset=us-ascii
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD0125DCFB
+	for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 10:17:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740737849; cv=none; b=dZ1178SbgYPBOhpNaLa7eBtJVQASb073hxE+omfy2LKD2wcdskC4BjtRwfS8T2lfBZD6WfdDAOcmYhOdhrrssxWS8X3EgKa0ZYvqDgYOYTaxRq7K1ibM8IZSkXlnylPSxUNyGcKuvQjE8xpzfgRifB+AJAqzRpCB3ucUzZAWSv8=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740737849; c=relaxed/simple;
+	bh=b9yW9aKaAj0vv2X4pBwVEAQJxZ6g3pOXCix4VsedwdI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Nhaz5Eb4d+pkBO/H89sE7h9u2QHOQVz8GVWA0/7LXrf3IEbj2LaMmj13sPMIXgSldxaB/g/vnzB15kTe+svJh6Ot5ZOA4H/PdEma+QZVvRBqVEZWPX+TuJFqz4hk/V0yFyBtRlUR3w1egmqybpGkh3AcPHacYt+LnwkUMe1jjqM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=raxQR0X/; arc=none smtp.client-ip=209.85.167.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5484fa1401cso1691669e87.1
+        for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 02:17:27 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740737846; x=1741342646; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=BtF5m7Eo7tw5lbKf+07cY2Tp/XNLgGV8I/BZlAp6LwE=;
+        b=raxQR0X//11z6BewOta7agfUypiDhK4ApQngGZqwK+M/3S2fl4OV8WSIpzq8OPdwtN
+         YMmQnIEa9idk8m+Lg15ITcP+7txroImhd/spu9J3hzPt3njZlZwwSTDZirviFGVvLHq4
+         LgK3UXtjhnpBiFWB9hFhw+Az+OVik7TZWbmJiK2v8nLlICYhec6ODatU4mwlSTiBT7uT
+         HBUPBrWymsDYnxgmvn393qOrpJmFlLV5kpTHlZDCwp84Gge5dB621/Mf77BlTB1ughfd
+         TNY0ZcBQPYTPA/zp+C/AcVMGgL70cvPpL2bmzR8DQzYARGqDIbSjL75siqrpZiEfpR9L
+         nbdA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740737846; x=1741342646;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=BtF5m7Eo7tw5lbKf+07cY2Tp/XNLgGV8I/BZlAp6LwE=;
+        b=RF5/KBfsRw5s+l3ThsodYkbYa/DYZGtZU9dHjvwqfV/YtJoayPHXIoa5v8KI2Jq/Sg
+         lhKqzTV1/Xo8vSlLT4j97dSc5ybb/EEw4kNOQ7S59SNzlUQTKY4xcc9gpEBF/nr9acpR
+         FVC7WImISOr0J+Vi+LQc6e18x8YAPNy2LkJowXR42hcjpcoCHf6o35w6Nnq/zQ5VQzt0
+         K0qUOIoxRJXf8Da3zIfMxq8uk3btzd+JpSQo2ooztpcVcCQoUEFnWP5PsvWpDRtM2mJ1
+         YCyumqUTUHEZTtenOEfX0xYbCvxaxtZpSHAnVMwLH0dLxydZh40d6z2Dm0ri23Luo9Qh
+         /I3w==
+X-Forwarded-Encrypted: i=1; AJvYcCVc88Y9rjQGJjK9Rz7sjn26iSVXj6p2NpxuonNfNHinbeFEdw7EF7gaYPxIXqB5cIL4fxLzz+0wTg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzEdPpT2UV9kegekBJUlIi7VQ1xIbkwLM+kLsuIJEckNBlW37iz
+	KKHaf7YI88a2ClfHnjXD4KW3WI50cOvFPTjAuXPfGh8i1IAIdCkydx8RBXm8z8o=
+X-Gm-Gg: ASbGncubi7MeDsKOuXVOuB4glFgbmdEhxQIBhY6Xh4cnkI8y8CspP9c5yc4CmblSM5m
+	jNfSQt2uaZL9shqEooiL0gQ7zR9NG/GktbWUnpVS7cvhq5+bv2cmwauS1LfiTL1zx5Le78796OJ
+	GILTYKPhsUJdI10gmDoJo42c54wYJLedoVKePXzizAiijA/4Dms6VDti778NCEC0bFXvEP8Ze02
+	8+JJjeDnqZoKfpwJPPI3D2qkFdUt7iqBZbVBBgcPzm81zCx95pyre3zFTeVECtBTw+uz581i7PI
+	5LlMwMw5Zc/DEdVBjUbGTFlVjxV8EXrJk60x1Q61kytAVkjJF+bMjIMUeZNltA68PMn0kvT8Esg
+	8J2Gvkg==
+X-Google-Smtp-Source: AGHT+IGumV9C8K5BUf/QNt3duu1Cz/DHryWxGnIRVWU5r5VemArqgE7BiCYNujMBRO+d3tj1JXx2Sg==
+X-Received: by 2002:ac2:4641:0:b0:549:54f7:e54 with SMTP id 2adb3069b0e04-54954f70ecfmr305434e87.50.1740737846015;
+        Fri, 28 Feb 2025 02:17:26 -0800 (PST)
+Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-549443cc9d3sm440219e87.224.2025.02.28.02.17.23
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 28 Feb 2025 02:17:24 -0800 (PST)
+Date: Fri, 28 Feb 2025 12:17:22 +0200
+From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+To: Johan Hovold <johan+linaro@kernel.org>
+Cc: Amit Kucheria <amitk@kernel.org>, 
+	Thara Gopinath <thara.gopinath@gmail.com>, "Rafael J . Wysocki " <rafael@kernel.org>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Lukasz Luba <lukasz.luba@arm.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Subject: Re: [PATCH] thermal/drivers/qcom-spmi-temp-alarm: drop unused driver
+ data
+Message-ID: <u6h3ekbyhlscbf75wz5zc7pusizky4o34i5h3uluch5xi22oba@x7y4mhohlvgx>
+References: <20250228082936.5694-1-johan+linaro@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
-Mime-Version: 1.0 (Mac OS X Mail 16.0 \(3776.700.51.11.1\))
-Subject: Re: [PATCH] power: supply: bq27xxx: do not report bogus zero values
-From: "H. Nikolaus Schaller" <hns@goldelico.com>
-In-Reply-To: <Z8GHuu8RXkcY8utL@tp440p.steeds.sam>
-Date: Fri, 28 Feb 2025 11:01:35 +0100
-Cc: pali@kernel.org,
- linux-pm@vger.kernel.org,
- maemo-leste@lists.dyne.org,
- phone-devel@vger.kernel.org,
- Discussions about the Letux Kernel <letux-kernel@openphoenux.org>,
- akemnade@kernel.org
-Content-Transfer-Encoding: quoted-printable
-Message-Id: <4D7D3E00-59C6-42F6-AE96-F04970D60E8D@goldelico.com>
-References: <20250207220605.106768-1-absicsz@gmail.com>
- <CB5B8FE7-D619-4D30-BD2D-58B6CEF83D46@goldelico.com>
- <511351B0-A78B-4517-B183-D39A4F807CB6@goldelico.com>
- <Z8FtlaYkbVG1xrsc@tp440p.steeds.sam>
- <C0E0C7EA-7C42-4DE3-9FCA-DAAA7B65B583@goldelico.com>
- <Z8GHuu8RXkcY8utL@tp440p.steeds.sam>
-To: Sicelo <absicsz@gmail.com>,
- Sebastian Reichel <sre@kernel.org>
-X-Mailer: Apple Mail (2.3776.700.51.11.1)
+MIME-Version: 1.0
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250228082936.5694-1-johan+linaro@kernel.org>
 
-Hi,
+On Fri, Feb 28, 2025 at 09:29:36AM +0100, Johan Hovold wrote:
+> The platform device driver data has not been used since commit
+> 7a4ca51b7040 ("thermal/drivers/qcom-spmi: Use devm_iio_channel_get") so
+> drop the unnecessary assignment.
+> 
+> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> ---
+> 
+> I noticed this when doing some rework for pm8008 last year that I have
+> yet to finish.
+> 
+> This can go in meanwhile.
+> 
+> Johan
+> 
+> 
 
-> Am 28.02.2025 um 10:54 schrieb Sicelo <absicsz@gmail.com>:
->=20
-> Hi
->=20
-> On Fri, Feb 28, 2025 at 09:27:29AM +0100, H. Nikolaus Schaller wrote:
->>>=20
->>> Will you submit the fix, or I should?
->>=20
->> I think the patch has not yet been merged anywhere (but I am not =
-sure), so
->> you better can send a v2 of the series.
->=20
-> It is in linux-next [0]. Not sure if that counts?
+Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
 
-
-Ah, I didn't recognize that (and must admit that I did not search =
-through
-linux-next). Sometimes maintainers close a discussion by telling that it
-has been merged.
-
-Maybe Sebastian can replace it or recommends a fixup.
-
-> I guess the only option
-> now is to submit a follow-up fix?
->=20
->> And, I think I have found another potential issue.
->=20
-> Thanks for the review. I will do more thorough testing over the =
-weekend
-> and send the patch.
->=20
->=20
-> [0] =
-https://web.git.kernel.org/pub/scm/linux/kernel/git/next/linux-next.git/co=
-mmit/drivers/power/supply/bq27xxx_battery.c?h=3Dnext-20250228&id=3Df3974ac=
-a381e81c0b1418d8ecc12fa62e1e9d31f
->=20
-> Sincerely
-> Sicelo A. Mhlongo
-
-BR and thanks,
-Nikolaus
-
+-- 
+With best wishes
+Dmitry
 
