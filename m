@@ -1,252 +1,202 @@
-Return-Path: <linux-pm+bounces-23192-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23195-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AC16AA4A25A
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 20:03:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 13930A4A3A7
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 21:12:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id A72AF1658B5
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 19:03:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id F082388239B
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 20:12:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2704F1F4CAA;
-	Fri, 28 Feb 2025 19:03:12 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 44571279343;
+	Fri, 28 Feb 2025 20:07:40 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tShjH7cE"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b="WN9eZH2c"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7E281C54B3;
-	Fri, 28 Feb 2025 19:03:11 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740769392; cv=none; b=Aj/mPk1CI6+mbckbWLm9EQrb/FjcqiEXYMJofVQ0d/ofdWk7CwEe+ObdGKxxXSE7NEzw1eq5kwl4FVYCWfVzied9ZsdO+qdF58Q9Ok76kqAATFHb/HpYtxd+UiSfU1vUq8LcEGzLjVyhuQwCPqQlljic7ydQ3sdb4sl6ThBY9r8=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740769392; c=relaxed/simple;
-	bh=fkRwxASTRhK3CZzhXw1baxiK+9kAKBEvfZLUN9AOx1A=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=WcS///4MUYSuTVC2XbmQe21jUMpWlN7KEdClLScA1DG9pUFsmFN8Z3+t+2qC2q8wJ7YeeLzk9QzfFddshO0NBzFr12H0ZiP4SkP/Mb43mgxuuhX3K2xH9qGPjg5JfQzZ1y15dlwh1K0ECVX9XTPKEpnUvBSWejR94sMWVA3+Ns0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tShjH7cE; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8D352C4CED6;
-	Fri, 28 Feb 2025 19:03:07 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740769391;
-	bh=fkRwxASTRhK3CZzhXw1baxiK+9kAKBEvfZLUN9AOx1A=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=tShjH7cEZHyiforgx0ocxgRzr86xXl8LxTLd6sLN4nfpWq2Nvk7kwuu7XSYtuwmmR
-	 GeBc4FWAIBs0eaFqOaV8sTR2CN+kOWmNf/AysWKF9bpyDfCYZvHf3RJidF2HlGf3wF
-	 Uxi4jVVVQi5fLy1P7P1GhxnLqaa/qeKJIs+dxrgZH36OQRpx/lsVU7q+2K3bgAEW9p
-	 s9fVkyUMncr/8YM9Sp4iLbibXI/KQWuuIvAfUImUX4bMiOtecTG5EUPaBUS7xQsbXS
-	 /gSteDdJkRGdCwfov7gGInz+mEtxVFjgb0vYgo2/viJLpskpqVGhsMKP4s3N99++ag
-	 iWRSGtqrNHeNw==
-Date: Fri, 28 Feb 2025 19:03:05 +0000
-From: Conor Dooley <conor@kernel.org>
-To: John Madieu <john.madieu.xa@bp.renesas.com>
-Cc: geert+renesas@glider.be, magnus.damm@gmail.com, mturquette@baylibre.com,
-	sboyd@kernel.org, rafael@kernel.org, daniel.lezcano@linaro.org,
-	rui.zhang@intel.com, lukasz.luba@arm.com, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, p.zabel@pengutronix.de,
-	catalin.marinas@arm.com, will@kernel.org, john.madieu@gmail.com,
-	linux-renesas-soc@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	biju.das.jz@bp.renesas.com
-Subject: Re: [PATCH v2 3/7] dt-bindings: thermal: r9a09g047-tsu: Document the
- TSU unit
-Message-ID: <20250228-shampoo-uprising-44ae0d3bd68b@spud>
-References: <20250227122453.30480-1-john.madieu.xa@bp.renesas.com>
- <20250227122453.30480-4-john.madieu.xa@bp.renesas.com>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 46490279328;
+	Fri, 28 Feb 2025 20:07:37 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1740773260; cv=pass; b=d+mhLuXZ94QabI91MWB9IJWaGzBDfDsF6oA+ztTsK8v6gwfHOw5YAynjc+ecHIip+rEuZ0cMaYnxyHJvBG8vTD+85uoUp0RMA2TvLwkW6sEnqlxalb5Nimr5tfhBHB0lYkkQR9m+2NfST8UphkVoqHmV5ko20Ark2Kgj/2JPQWY=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1740773260; c=relaxed/simple;
+	bh=OFCDGk68qcTDG5XS23iG3QfommOKANCBxjRQIng3Gmk=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=LMAYSLjL5lQLBTt6FEfOnhsT3oaqzkxGEVuK+hV70t3Fz8Q/fL0H0TFNMGROZV6rglaNhet4hE6+zPbokeKlxbaEd5wB6lj07qceRzSE9nDlEnZNRIGn6BiCXpc3NgJsiQhBXN8JQYi4W7GMhuWrku50ROPNdG6T62tt+WiAoug=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=nicolas.frattaroli@collabora.com header.b=WN9eZH2c; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1740773232; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=aDQ9XSFhTFSuSfJtilNc9D8UJ3U58nCRae8SXzRblM1oHHABehg2W3X86qjADDj1aW9/lKL5C0h3BvnLtY5V91D6NezbsyS2HfCzGT6QCBh8+Prv+Csu581wgGYcPOTWszvUD/i3/y1TcY5Q/VYOgN0sJHIN0QZfJ1R1yJ4XEyw=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1740773232; h=Content-Type:Content-Transfer-Encoding:Cc:Cc:Date:Date:From:From:MIME-Version:Message-ID:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=NZEe0vmA/5VGyYiLh1+RkOnh9kBCTEZSOkm94y03iiA=; 
+	b=klyduJ8+IWp8EAKX5Er02+jH4+k44wjE0Sl3RLy8GNFtd6baFZG+l+e+br6yNFy0Tom4eBXgfyw4ATx5+CeXE+bToQ7daHG1+mJayw+u85tZsRY4QiLGEpSQt8WffXPmFcu1LLw9k/5c4BigF3J5pwaTgsC5anHNq4v6673cA/0=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=nicolas.frattaroli@collabora.com;
+	dmarc=pass header.from=<nicolas.frattaroli@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1740773232;
+	s=zohomail; d=collabora.com; i=nicolas.frattaroli@collabora.com;
+	h=From:From:Subject:Subject:Date:Date:Message-Id:Message-Id:MIME-Version:Content-Type:Content-Transfer-Encoding:To:To:Cc:Cc:Reply-To;
+	bh=NZEe0vmA/5VGyYiLh1+RkOnh9kBCTEZSOkm94y03iiA=;
+	b=WN9eZH2cTFkXs7E0wRuLCofXKJrVxzfhlwXc7uMwn+1vE9gJt1+maLfWjB32D2FH
+	iTU98EDI6iBFkS6pNFF6G8TnMhoAbExuLYqFtT9e91gLsim7vu/uNW/ArI0lV6Xt3M6
+	OcHotsS4luJyNJzKwl+663UAmtsV47ykTcWjIVT4=
+Received: by mx.zohomail.com with SMTPS id 174077323124077.63838150592198;
+	Fri, 28 Feb 2025 12:07:11 -0800 (PST)
+From: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+Subject: [PATCH v3 0/6] RK3576 thermal sensor support, including OTP trim
+ adjustments
+Date: Fri, 28 Feb 2025 21:06:50 +0100
+Message-Id: <20250228-rk3576-tsadc-upstream-v3-0-4bfbb3b699b9@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha256;
-	protocol="application/pgp-signature"; boundary="VeciV8RQYG2Ieked"
-Content-Disposition: inline
-In-Reply-To: <20250227122453.30480-4-john.madieu.xa@bp.renesas.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAFoXwmcC/3WPQQ7CIBBFr9KwdgxMLW1deQ/jgtJRibYoINGY3
+ l2kLoyJyz/Jf//Nk3lyhjxbF0/mKBpv7JhCuSiYPqrxQGD6lBlyrDiKCtyprGoJwatew+3igyM
+ 1QE1ci7bc17JRLHUvjvbmnrnb3ZwdXW8JH+Yj65Qn0HYYTFgXI90DzBPYsHfhaHyw7pG9osiNj
+ 4L8oxAFcJCkW9mWiEqsNtqez6qzTi3TTqZG/CLhv2ciZlJXd5z31LT6lzRN0wtjRJNfOQEAAA=
+ =
+X-Change-ID: 20250215-rk3576-tsadc-upstream-7e0c193f768a
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, Rob Herring <robh@kernel.org>, 
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, Heiko Stuebner <heiko@sntech.de>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, 
+ kernel@collabora.com, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, 
+ Nicolas Frattaroli <nicolas.frattaroli@collabora.com>, 
+ Ye Zhang <ye.zhang@rock-chips.com>
+X-Mailer: b4 0.14.2
 
+This series adds support for the RK3576's thermal sensor.
 
---VeciV8RQYG2Ieked
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
+The sensor has six channels, providing measurements for the package
+temperature, the temperature of the big cores, the temperature of the
+little cores, and the GPU, NPU and DDR controller.
 
-On Thu, Feb 27, 2025 at 01:24:39PM +0100, John Madieu wrote:
-> The Renesas RZ/G3E SoC includes a Thermal Sensor Unit (TSU) block designed
-> to measure the junction temperature. The device provides real-time temper=
-ature
-> measurements for thermal management, utilizing a single dedicated channel
-> (channel 1) for temperature sensing.
->=20
-> Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
-> ---
-> v1 -> v2:
->  * Fix reg property specifier to get rid of yamlint warnings
->  * Fix IRQ name to reflect TSU expectations
->=20
->  .../thermal/renesas,r9a09g047-tsu.yaml        | 123 ++++++++++++++++++
->  1 file changed, 123 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/thermal/renesas,r9a=
-09g047-tsu.yaml
->=20
-> diff --git a/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-=
-tsu.yaml b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.=
-yaml
-> new file mode 100644
-> index 000000000000..e786561ddbe3
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/thermal/renesas,r9a09g047-tsu.yaml
-> @@ -0,0 +1,123 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/thermal/renesas,r9a09g047-tsu.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Renesas RZ/G3E Temperature Sensor Unit (TSU)
-> +
-> +maintainers:
-> +  - John Madieu <john.madieu.xa@bp.renesas.com>
-> +
-> +description:
-> +  The Temperature Sensor Unit (TSU) is an integrated thermal sensor that
-> +  monitors the chip temperature on the Renesas RZ/G3E SoC. The TSU provi=
-des
-> +  real-time temperature measurements for thermal management.
-> +
-> +properties:
-> +  compatible:
-> +    const: renesas,r9a09g047-tsu
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  clocks:
-> +    maxItems: 1
-> +
-> +  resets:
-> +    maxItems: 1
-> +
-> +  power-domains:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    description: |
-> +      Interrupt specifiers for the TSU:
-> +      - S12TSUADI1: Conversion complete interrupt signal (pulse)
-> +      - S12TSUADCMPI1: Comparison result interrupt signal (level)
-> +
-> +  interrupt-names:
-> +    items:
-> +      - const: adi
-> +      - const: adcmpi
-> +
-> +  "#thermal-sensor-cells":
-> +    const: 0
-> +
-> +  renesas,tsu-calibration-sys:
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +    description: |
-> +      Phandle to the system controller (sys) that contains the TSU
-> +      calibration values used for temperature calculations.
-> +
-> +  renesas,tsu-operating-mode:
-> +    $ref: /schemas/types.yaml#/definitions/uint32
-> +    enum: [0, 1]
-> +    description: |
-> +      TSU operating mode:
-> +      0: Mode 0 - Conversion started by software
-> +      1: Mode 1 - Conversion started by ELC trigger
+In addition to adding support for the sensor itself, the series also
+adds support for reading thermal trim values out of the device tree.
+Most of this functionality is not specific to this SoC, but needed to be
+implemented to make the sensors a little more accurate in order to
+investigate whether the TRM swapped GPU and DDR or downstream swapped
+GPU and DDR in terms of channel IDs, as downstream disagrees with what's
+in the TRM, and the difference is so small and hard to pin down with
+testing that the constant offset between the two sensors was a little
+annoying for me to deal with.
 
-Can you make this "software" and "elc" or something please, unless
-people will genuinely find "0" and 1" to be more informative.
-And why doesn't the property have a default?
+I ended up going with the channel assignment the TRM lists, as I see the
+DDR sensor get a larger deviation from baseline temperatures during memory
+stress tests (stress-ng --memrate 8 --memrate-flush) than what the TRM
+claims is the GPU sensor but downstream claims is the DDR sensor. Input
+from Rockchip engineers on whether the TRM is right or wrong welcome.
 
-cheers,
-Conor.
+The trim functionality is only used by RK3576 at the moment. Code to
+handle other SoCs can rely on the shared otp reading and perhaps even
+the IP revision specific function, but may need its own IP revision
+specific functions added as well. Absent trim functionality in other
+SoCs should not interfere with the modified common code paths.
 
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - clocks
-> +  - resets
-> +  - power-domains
-> +  - interrupts
-> +  - interrupt-names
-> +  - "#thermal-sensor-cells"
-> +  - renesas,tsu-operating-mode
-> +  - renesas,tsu-calibration-sys
-> +
-> +additionalProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/clock/renesas,r9a09g047-cpg.h>
-> +    #include <dt-bindings/interrupt-controller/arm-gic.h>
-> +
-> +    tsu: thermal@14002000 {
-> +        compatible =3D "renesas,r9a09g047-tsu";
-> +        reg =3D <0x14002000 0x1000>;
-> +        clocks =3D <&cpg CPG_MOD 0x10a>;
-> +        resets =3D <&cpg 0xf8>;
-> +        power-domains =3D <&cpg>;
-> +        interrupts =3D <GIC_SPI 250 IRQ_TYPE_EDGE_RISING>,
-> +                     <GIC_SPI 251 IRQ_TYPE_LEVEL_HIGH>;
-> +        interrupt-names =3D "adi", "adcmpi";
-> +        #thermal-sensor-cells =3D <0>;
-> +        renesas,tsu-operating-mode =3D <0>;
-> +        renesas,tsu-calibration-sys =3D <&sys>;
-> +    };
-> +
-> +    thermal-zones {
-> +        cpu-thermal {
-> +            polling-delay =3D <1000>;
-> +            polling-delay-passive =3D <250>;
-> +            thermal-sensors =3D <&tsu>;
-> +
-> +            cooling-maps {
-> +                map0 {
-> +                    trip =3D <&target>;
-> +                    cooling-device =3D <&cpu0 0 3>, <&cpu1 0 3>,
-> +                                     <&cpu2 0 3>, <&cpu3 0 3>;
-> +                    contribution =3D <1024>;
-> +                };
-> +            };
-> +
-> +            trips {
-> +                target: trip-point {
-> +                    temperature =3D <95000>;
-> +                    hysteresis =3D <1000>;
-> +                    type =3D "passive";
-> +                };
-> +
-> +                sensor_crit: sensor-crit {
-> +                    temperature =3D <120000>;
-> +                    hysteresis =3D <1000>;
-> +                    type =3D "critical";
-> +                };
-> +            };
-> +        };
-> +    };
-> --=20
-> 2.25.1
->=20
+Patch 1 adds the RK3576 compatible to the bindings.
 
---VeciV8RQYG2Ieked
-Content-Type: application/pgp-signature; name="signature.asc"
+Patch 2 adds the basic thermal nodes required to get temperature
+readings and device throttling to the rk3576.dtsi device tree.
 
------BEGIN PGP SIGNATURE-----
+Patch 3 adds support for this SoC's thermal chip to the driver. It is a
+port of the downstream commit adding support for this.
 
-iHUEABYIAB0WIQRh246EGq/8RLhDjO14tDGHoIJi0gUCZ8IIaQAKCRB4tDGHoIJi
-0h6yAP9mVpIjUx0jaOqOxtaUXN4UN78pR3bAJQoVq1PhhnX9VAD+ILPM3T/hP0Dc
-+ShPfuSw2qswD5Gh7yHGz+0ikOGf9w0=
-=yvBh
------END PGP SIGNATURE-----
+Patch 4 adds some documentation for imminent additional functionality to
+the binding, namely the trim value stuff.
 
---VeciV8RQYG2Ieked--
+Patch 5 adds the requisite OTP cells and tsadc nodes to the SoC's device
+tree, conforming with the bindings modified in Patch 4.
+
+Patch 6 adds support for reading these OTP values in the
+rockchip_thermal driver, and makes use of them. The code is mostly new
+upstream code written by me, using downstream code as reference.
+
+You can grab yourself a spicy linux-next based tree from [1] with this
+changeset if you just want to give it a spin on your own board.
+
+For the record, here's a listing of SoCs that implement the OTP trim
+functionality in some variation, with a legend that is as follows:
+- A = chip-wide trim value
+- B = trim_base value
+- C = trim_base_frac value
+- D = per-channel trim value
+- E = compatible is either in mainline or in this series
+
+The list is as follows:
+- RK3502 (A____)
+- RK3528 (A____)
+- RK3562 (ABC__)
+- RK3566 (_BCDE)
+- RK3568 (_BCDE)
+- RK3576 (___DE) <- the only one we're adding OTP trim for here atm
+- RV1126 (AB___)
+
+[1]: https://gitlab.collabora.com/fratti/linux/-/tree/rk3576-thermal-adc-6
+
+Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+---
+Changes in v3:
+- Changed bindings back to using patternProperties, as per Rob's
+  suggestions
+- Adjusted dts changes to comply with the new schema
+- Link to v2: https://lore.kernel.org/r/20250225-rk3576-tsadc-upstream-v2-0-6eb7b00de89c@collabora.com
+
+Changes in v2:
+- As per Rob's request, the bindings now only feature the new properties
+  depending on the compatible. Since the combination is slightly
+  different for each SoC anyway, this makes future work easier too.
+- The different channels are now explicitly named, instead of giving
+  them patternProperties names. This is once again per-compatible.
+- As per Sebastian's suggestion, unified trim_l and trim_h into just one
+  nvmem cell in the bindings, device tree and driver. I did this after
+  verifying that downstream has no SoC where trim_l and trim_h are ever
+  non-contiguous, including for SoCs upstream does not (yet) support.
+- Rebased on top of next-20250225 and dropped Heiko's OTP patchset as a
+  dependency as it was merged.
+- Added a handy overview of which SoCs use which part of the OTP trim
+  functionality in the cover letter
+- Reintroduced an accidentally removed dev_dbg in the function 
+  rockchip_thermal_set_trips
+- Link to v1: https://lore.kernel.org/r/20250216-rk3576-tsadc-upstream-v1-0-6ec969322a14@collabora.com
+
+---
+Nicolas Frattaroli (5):
+      dt-bindings: rockchip-thermal: Add RK3576 compatible
+      arm64: dts: rockchip: Add thermal nodes to RK3576
+      dt-bindings: thermal: rockchip: document otp thermal trim
+      arm64: dts: rockchip: Add thermal trim OTP and tsadc nodes
+      thermal: rockchip: support reading trim values from OTP
+
+Ye Zhang (1):
+      thermal: rockchip: Support RK3576 SoC in the thermal driver
+
+ .../bindings/thermal/rockchip-thermal.yaml         |  62 +++++
+ arch/arm64/boot/dts/rockchip/rk3576.dtsi           | 221 ++++++++++++++++-
+ drivers/thermal/rockchip_thermal.c                 | 263 +++++++++++++++++++--
+ 3 files changed, 525 insertions(+), 21 deletions(-)
+---
+base-commit: 15c3f6fa407bf6913c282b22ef2bcfa40cb53927
+change-id: 20250215-rk3576-tsadc-upstream-7e0c193f768a
+
+Best regards,
+-- 
+Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
+
 
