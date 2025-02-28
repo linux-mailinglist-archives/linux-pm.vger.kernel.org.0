@@ -1,115 +1,82 @@
-Return-Path: <linux-pm+bounces-23202-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23203-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 50388A4A4D5
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 22:17:23 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 50C23A4A4F0
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 22:22:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 35E303AD6CC
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 21:17:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52A5D16D30D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 21:22:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7B65E1CCB40;
-	Fri, 28 Feb 2025 21:17:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7370C1D6DDA;
+	Fri, 28 Feb 2025 21:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="cqDwF/66"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mjrkcmpq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D1C11CAA82;
-	Fri, 28 Feb 2025 21:17:16 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB761D6DB5;
+	Fri, 28 Feb 2025 21:22:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740777437; cv=none; b=FFp9+nQRCCgGMDcJkOxAcPKUMasyCP1VC1XC9PBBr/BbHuYAtGsstpZGXExaM91vQezj/iRTx0J9VTtyZOwaS5qbPueuLkIf4NY1mc8PxLDOSdDjuBPJd95qBYmW1StVYhMsv225WWY1FSZS9S0DLOmIk6ulIRMqNPOZXLfsI4s=
+	t=1740777739; cv=none; b=ktMPhrLM1Ag3wVoTiMDUqWseo1E2xuftEWyZ2yXzmXDrCR69+2bjzCGQeuJgFwrS2CPUtUksGd+XsS1xxi/TWtFqn8zq1WhwUfFtAT3vwj5+gn1CMLzA3rYFwAjKunEinJtj4iG/75e0DYpjqOgMbUq9CEDUeBdqRvizxvii9G0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740777437; c=relaxed/simple;
-	bh=3JWDbAnPR6V8hpdBs7sUzDU3GCxn9zBstWzrQdBYl+8=;
-	h=MIME-Version:From:Date:Message-ID:Subject:To:Cc:Content-Type; b=NexZET+3rEvZRM60ytDO3n1hTHjyvLeH5YCm+tLbWBCFGLiLx5VPFZPMmP271OGALqLvmAlxii1QZgijOoVJmEqHNxmUhg6SmdSIRXX3s82S8Ij8G8Iajlh7PNUJXIOY3+47Pm0dGnPw7TGz0FQb1syyJ3bNMVzystpgInqJtYU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=cqDwF/66; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id C6751C4CEE2;
-	Fri, 28 Feb 2025 21:17:16 +0000 (UTC)
+	s=arc-20240116; t=1740777739; c=relaxed/simple;
+	bh=70t/oj00452ALapCWhpb/eHsdBwPEI85u4GX6Y1AcQo=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=P8YwYkkf6LBOKQaP9tSvPKJWHMo59AmC6AXpaFvE4rfX09lhFoyeVtCe1behCaIY7Jj5bL4XhUsIRv6assAHzdRf/y4WXliYvFH7WVNwf1SA8wyi6lcM5Z4SmzF4EwGgoSjRY90bejRf49hoNVrZskIze6v/wk5yrxTx0OIEBJY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mjrkcmpq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E7DC8C4CED6;
+	Fri, 28 Feb 2025 21:22:18 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740777436;
-	bh=3JWDbAnPR6V8hpdBs7sUzDU3GCxn9zBstWzrQdBYl+8=;
-	h=From:Date:Subject:To:Cc:From;
-	b=cqDwF/66N4MW2RfwnL5j213/mBR5wp3/EPiQL0cwX7/+KmB+gyjdk3wIwHztIiDp6
-	 OzZp8G1NLUd1lx/bP6TmANPXJ/3sx00hZYh+sKWJLkYrf8gbufNiRJEAHPFIpoDZDo
-	 9WzU9YkkLr7HPKw7hALDrI9Z6dMmnCOABlwB9M4Ui6cxd3NQi3QbURE8gja+cjASBl
-	 p1pBoM6wIy+NspaKWRsKh3y/6ANThk72cbim9pM21nnqb6RgpFKKD6JVPGBt6+aGon
-	 K3iSde3aDmJ7gxl16lncqGSov2QSk7pUD+fb20VGe4A6uFKlzwfFHnBr1KdyIa0OMh
-	 KBEi5rNFtCFUA==
-Received: by mail-oo1-f41.google.com with SMTP id 006d021491bc7-5fea43da18aso676051eaf.1;
-        Fri, 28 Feb 2025 13:17:16 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCUX2f/KaDWGRxfhR4V4gg6HUFgMZ8J2XLtDc8Akqdu0YdePPmi0ETp6WvxfAAZ+uOwOgu4YXMgcoe9/EhI=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yy/q3SNtJV3Saqm+/8WmPrCGXIfI294ujq+zTU0jubaQKlxTVrA
-	ruy+Q/+bPZsnSSZRwb2kvXJYFCA4AqX2o4kukfynaUdj+EBAn4ci/4ZPzT/RiMMCA28Uecl1P/V
-	H/4/5g/5dpr5eysHYu/q1Hfmuk/I=
-X-Google-Smtp-Source: AGHT+IHTPJfpgvJ+sdQYK/AJoOmr8565qG+FIA2T1ntgbt6pLUhGQonYcJP+Yw0f6yVC/xfEdBq8K+sYtnhkImaChXo=
-X-Received: by 2002:a05:6808:1898:b0:3f3:fb4e:f5b6 with SMTP id
- 5614622812f47-3f55851bd5dmr2843536b6e.15.1740777436086; Fri, 28 Feb 2025
- 13:17:16 -0800 (PST)
+	s=k20201202; t=1740777739;
+	bh=70t/oj00452ALapCWhpb/eHsdBwPEI85u4GX6Y1AcQo=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=mjrkcmpqky945mPdhuTZQytsXu8HJGALBLiuuU7MUlu/MV8L16JHuxcsFmT6hMGA7
+	 2ESYG77gQzgGSypqcLdanLuDRxpHiQiIwGLeeLejkG+Huq+okjhoSpMB4i0RQouiFY
+	 8tbyNN7TT90m+bFJDBU7tW3knESkd9jNWche33i8CGebdATFq+JF4bgi/QFT2AKEsH
+	 Ry7WGYYLKsmbYVfyNyBE1A5WX4eVRk3ySeJlBK88kPS42GgQommsI5p/jDnknjyzI8
+	 h73V6NDwB3BrHRmjVhpDoe0Sggj4kxD9++Mtd3Nr/oZKJtzHZT7pDr0xnXY32kSVtj
+	 OEWJLEHzhlx4A==
+Date: Fri, 28 Feb 2025 15:22:17 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Ryan.Wanner@microchip.com
+Cc: linux-pm@vger.kernel.org, conor+dt@kernel.org, linux@armlinux.org.uk,
+	alexandre.belloni@bootlin.com, linux-kernel@vger.kernel.org,
+	linux-arm-kernel@lists.infradead.org, krzk+dt@kernel.org,
+	claudiu.beznea@tuxon.dev, nicolas.ferre@microchip.com,
+	devicetree@vger.kernel.org, linux-rtc@vger.kernel.org,
+	lee@kernel.org, sre@kernel.org, p.zabel@pengutronix.de
+Subject: Re: [PATCH v3 02/21] dt-bindings: mfd: syscon: add
+ microchip,sama7d65-sfrbu
+Message-ID: <174077773610.3738820.3700947387806799800.robh@kernel.org>
+References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
+ <92543fcff4ab35e770b01d4c15d45cc5d55833f4.1740671156.git.Ryan.Wanner@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Fri, 28 Feb 2025 22:17:05 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0h4D=-gGWPaVSFBAYinRpobVeX0owRX70jZ0vaS8V9pLg@mail.gmail.com>
-X-Gm-Features: AQ5f1Jqj7yDVTu2NUJtKTY6iIWACsjuJkBnbTenb3rnN7MVe-lNhr6JPgp6cT-w
-Message-ID: <CAJZ5v0h4D=-gGWPaVSFBAYinRpobVeX0owRX70jZ0vaS8V9pLg@mail.gmail.com>
-Subject: [GIT PULL] Thermal control fixes for v6.14-rc5
-To: Linus Torvalds <torvalds@linux-foundation.org>
-Cc: Linux PM <linux-pm@vger.kernel.org>, 
-	Linux Kernel Mailing List <linux-kernel@vger.kernel.org>, Daniel Lezcano <daniel.lezcano@linaro.org>
-Content-Type: text/plain; charset="UTF-8"
-
-Hi Linus,
-
-Please pull from the tag
-
- git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
- thermal-6.14-rc5
-
-with top-most commit 0cde378a10c1cbfaa8dd2b89672d42f36c2809c3
-
- thermal: gov_power_allocator: Update total_weight on bind and cdev updates
-
-on top of commit 0ad2507d5d93f39619fc42372c347d6006b64319
-
- Linux 6.14-rc3
-
-to receive thermal control fixes for 6.14-rc5.
-
-These fix the processing of DT thermal properties and the Power
-Allocator thermal governor:
-
- - Fix parsing cooling-maps in DT for trip points with more than one
-   cooling device (Rafael Wysocki).
-
- - Fix granted_power computation in the Power Allocator thermal
-   governor and make it update total_weight on configuration changes
-   after the thermal zone has been registered (Yu-Che Cheng).
-
-Thanks!
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <92543fcff4ab35e770b01d4c15d45cc5d55833f4.1740671156.git.Ryan.Wanner@microchip.com>
 
 
----------------
+On Thu, 27 Feb 2025 08:51:49 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
+> 
+> Add SAMA7D65 SFRBU compatible string to DT bindings documentation
+> 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/mfd/syscon.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
+> 
 
-Rafael J. Wysocki (1):
-      thermal/of: Fix cdev lookup in thermal_of_should_bind()
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
-Yu-Che Cheng (2):
-      thermal: gov_power_allocator: Fix incorrect calculation in
-divvy_up_power()
-      thermal: gov_power_allocator: Update total_weight on bind and cdev updates
-
----------------
-
- drivers/thermal/gov_power_allocator.c | 32 +++++++++++++++-------
- drivers/thermal/thermal_of.c          | 50 ++++++++++++++++++++---------------
- 2 files changed, 52 insertions(+), 30 deletions(-)
 
