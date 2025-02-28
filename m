@@ -1,119 +1,226 @@
-Return-Path: <linux-pm+bounces-23169-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23170-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1C41EA496E1
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 11:19:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B7951A4981D
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 12:11:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7A7C13B8AE5
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 10:18:31 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D51A11896DAD
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 11:12:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 015BE25DD0F;
-	Fri, 28 Feb 2025 10:17:30 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DC4261576;
+	Fri, 28 Feb 2025 11:11:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="raxQR0X/"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="C14sm9XU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-lf1-f42.google.com (mail-lf1-f42.google.com [209.85.167.42])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EDD0125DCFB
-	for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 10:17:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.42
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6756F26157C;
+	Fri, 28 Feb 2025 11:11:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740737849; cv=none; b=dZ1178SbgYPBOhpNaLa7eBtJVQASb073hxE+omfy2LKD2wcdskC4BjtRwfS8T2lfBZD6WfdDAOcmYhOdhrrssxWS8X3EgKa0ZYvqDgYOYTaxRq7K1ibM8IZSkXlnylPSxUNyGcKuvQjE8xpzfgRifB+AJAqzRpCB3ucUzZAWSv8=
+	t=1740741105; cv=none; b=EwflBxyZMUdi5cWzvN1Bn0gVK5pQc515QHsCihhLPdx3QeqTXgwmkR8sTHW8/saAOszEz2z1VBYnkMh5nSJAx+VGv1t8bCunIFqdoXiNvPLjOm3nc5gHTfonPUhzsnCXJO5c6EMVKHgyIeBXKGxPfwYlyf2ssNorbGzHrzWCmpE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740737849; c=relaxed/simple;
-	bh=b9yW9aKaAj0vv2X4pBwVEAQJxZ6g3pOXCix4VsedwdI=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Nhaz5Eb4d+pkBO/H89sE7h9u2QHOQVz8GVWA0/7LXrf3IEbj2LaMmj13sPMIXgSldxaB/g/vnzB15kTe+svJh6Ot5ZOA4H/PdEma+QZVvRBqVEZWPX+TuJFqz4hk/V0yFyBtRlUR3w1egmqybpGkh3AcPHacYt+LnwkUMe1jjqM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=raxQR0X/; arc=none smtp.client-ip=209.85.167.42
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-lf1-f42.google.com with SMTP id 2adb3069b0e04-5484fa1401cso1691669e87.1
-        for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 02:17:27 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740737846; x=1741342646; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=BtF5m7Eo7tw5lbKf+07cY2Tp/XNLgGV8I/BZlAp6LwE=;
-        b=raxQR0X//11z6BewOta7agfUypiDhK4ApQngGZqwK+M/3S2fl4OV8WSIpzq8OPdwtN
-         YMmQnIEa9idk8m+Lg15ITcP+7txroImhd/spu9J3hzPt3njZlZwwSTDZirviFGVvLHq4
-         LgK3UXtjhnpBiFWB9hFhw+Az+OVik7TZWbmJiK2v8nLlICYhec6ODatU4mwlSTiBT7uT
-         HBUPBrWymsDYnxgmvn393qOrpJmFlLV5kpTHlZDCwp84Gge5dB621/Mf77BlTB1ughfd
-         TNY0ZcBQPYTPA/zp+C/AcVMGgL70cvPpL2bmzR8DQzYARGqDIbSjL75siqrpZiEfpR9L
-         nbdA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740737846; x=1741342646;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=BtF5m7Eo7tw5lbKf+07cY2Tp/XNLgGV8I/BZlAp6LwE=;
-        b=RF5/KBfsRw5s+l3ThsodYkbYa/DYZGtZU9dHjvwqfV/YtJoayPHXIoa5v8KI2Jq/Sg
-         lhKqzTV1/Xo8vSlLT4j97dSc5ybb/EEw4kNOQ7S59SNzlUQTKY4xcc9gpEBF/nr9acpR
-         FVC7WImISOr0J+Vi+LQc6e18x8YAPNy2LkJowXR42hcjpcoCHf6o35w6Nnq/zQ5VQzt0
-         K0qUOIoxRJXf8Da3zIfMxq8uk3btzd+JpSQo2ooztpcVcCQoUEFnWP5PsvWpDRtM2mJ1
-         YCyumqUTUHEZTtenOEfX0xYbCvxaxtZpSHAnVMwLH0dLxydZh40d6z2Dm0ri23Luo9Qh
-         /I3w==
-X-Forwarded-Encrypted: i=1; AJvYcCVc88Y9rjQGJjK9Rz7sjn26iSVXj6p2NpxuonNfNHinbeFEdw7EF7gaYPxIXqB5cIL4fxLzz+0wTg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEdPpT2UV9kegekBJUlIi7VQ1xIbkwLM+kLsuIJEckNBlW37iz
-	KKHaf7YI88a2ClfHnjXD4KW3WI50cOvFPTjAuXPfGh8i1IAIdCkydx8RBXm8z8o=
-X-Gm-Gg: ASbGncubi7MeDsKOuXVOuB4glFgbmdEhxQIBhY6Xh4cnkI8y8CspP9c5yc4CmblSM5m
-	jNfSQt2uaZL9shqEooiL0gQ7zR9NG/GktbWUnpVS7cvhq5+bv2cmwauS1LfiTL1zx5Le78796OJ
-	GILTYKPhsUJdI10gmDoJo42c54wYJLedoVKePXzizAiijA/4Dms6VDti778NCEC0bFXvEP8Ze02
-	8+JJjeDnqZoKfpwJPPI3D2qkFdUt7iqBZbVBBgcPzm81zCx95pyre3zFTeVECtBTw+uz581i7PI
-	5LlMwMw5Zc/DEdVBjUbGTFlVjxV8EXrJk60x1Q61kytAVkjJF+bMjIMUeZNltA68PMn0kvT8Esg
-	8J2Gvkg==
-X-Google-Smtp-Source: AGHT+IGumV9C8K5BUf/QNt3duu1Cz/DHryWxGnIRVWU5r5VemArqgE7BiCYNujMBRO+d3tj1JXx2Sg==
-X-Received: by 2002:ac2:4641:0:b0:549:54f7:e54 with SMTP id 2adb3069b0e04-54954f70ecfmr305434e87.50.1740737846015;
-        Fri, 28 Feb 2025 02:17:26 -0800 (PST)
-Received: from eriador.lumag.spb.ru (2001-14ba-a0c3-3a00--7a1.rev.dnainternet.fi. [2001:14ba:a0c3:3a00::7a1])
-        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-549443cc9d3sm440219e87.224.2025.02.28.02.17.23
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 02:17:24 -0800 (PST)
-Date: Fri, 28 Feb 2025 12:17:22 +0200
-From: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-To: Johan Hovold <johan+linaro@kernel.org>
-Cc: Amit Kucheria <amitk@kernel.org>, 
-	Thara Gopinath <thara.gopinath@gmail.com>, "Rafael J . Wysocki " <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] thermal/drivers/qcom-spmi-temp-alarm: drop unused driver
- data
-Message-ID: <u6h3ekbyhlscbf75wz5zc7pusizky4o34i5h3uluch5xi22oba@x7y4mhohlvgx>
-References: <20250228082936.5694-1-johan+linaro@kernel.org>
+	s=arc-20240116; t=1740741105; c=relaxed/simple;
+	bh=YuD34HDCBVevDPaLGVJtBZmAYtG5QNk+RZIZJ/O3oMQ=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Xmlhb4U+O08G4JaTUY7o0zrSSckEd22QgIUJkWrdd3EmtUQToCcTQWvBJi+qqyI54wM8uHSbtWynrOfM6xZXLS0/mTJHrkuK2bb4Wfxpecpj+glm8npBYNdDuHJoME7LYf3lNn9nag3NqE/lTHkblYhi7QBUuwxXyL1QIClBgcg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=C14sm9XU; arc=none smtp.client-ip=198.47.23.234
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from fllv0035.itg.ti.com ([10.64.41.0])
+	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 51SBBZ592124114
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Fri, 28 Feb 2025 05:11:35 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1740741095;
+	bh=asqImrv/yYJQ+trytSJVTeaE7rqR1lERUILCexOriWA=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=C14sm9XUww3Zv3doWUTERSq8Co//LZ+fz9KSh8m081ZSWx2NlQVSFPhEBqvId4/tn
+	 HUjEh2Rsh68faQbQrRh8vjIhY8sf3vVfkgTQpuUUFBFFrQ9kvI5Seg9gQQZ1Z+qGLl
+	 pzhDY/GYzGqPvtvxICjp8wX6vdZr4iiqBKN4m8P0=
+Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
+	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 51SBBZdZ048217
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Fri, 28 Feb 2025 05:11:35 -0600
+Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE113.ent.ti.com
+ (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 28
+ Feb 2025 05:11:34 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE115.ent.ti.com
+ (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Fri, 28 Feb 2025 05:11:35 -0600
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51SBBYkZ031582;
+	Fri, 28 Feb 2025 05:11:35 -0600
+Date: Fri, 28 Feb 2025 16:41:34 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Kamlesh Gurudasani <kamlesh@ti.com>
+CC: Ulf Hansson <ulf.hansson@linaro.org>, <vigneshr@ti.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        Kevin Hilman
+	<khilman@baylibre.com>, Peng Fan <peng.fan@oss.nxp.com>,
+        Cristian Marussi
+	<cristian.marussi@arm.com>
+Subject: Re: [PATCH RFC] pmdomain: core: add support for writeble power
+ domain state
+Message-ID: <20250228111134.p56fnrcztufuahic@lcpd911>
+References: <20250221-pm-debug-v1-1-e5bd815f7ca4@ti.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset="us-ascii"
 Content-Disposition: inline
-In-Reply-To: <20250228082936.5694-1-johan+linaro@kernel.org>
+In-Reply-To: <20250221-pm-debug-v1-1-e5bd815f7ca4@ti.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
-On Fri, Feb 28, 2025 at 09:29:36AM +0100, Johan Hovold wrote:
-> The platform device driver data has not been used since commit
-> 7a4ca51b7040 ("thermal/drivers/qcom-spmi: Use devm_iio_channel_get") so
-> drop the unnecessary assignment.
+On Feb 21, 2025 at 19:18:10 +0530, Kamlesh Gurudasani wrote:
+> Add support for writeable power domain states from debugfs.
+
+ACK.
+
++CC'ed a few more folks who maybe interested...
+ 
+> Defining GENPD_ALLOW_WRITE_DEBUGFS will enable writeable pd_state
+> node in debugfs.
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
+> Signed-off-by: Kamlesh Gurudasani <kamlesh@ti.com>
 > ---
-> 
-> I noticed this when doing some rework for pm8008 last year that I have
-> yet to finish.
-> 
-> This can go in meanwhile.
-> 
-> Johan
-> 
-> 
+> This has turn out to be really helpful when debugging SCMI protocol
+> for power domain management.
 
-Reviewed-by: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
+Agreed, I have found this patch very good for turning off/on power
+domains in a "raw" form if you will.
+We have also been using something called k3conf on TI K3
+class of devices like AM62x family where we basically use a user space
+tool to send power on/off/ device status without it going via the kernel
+genPD. This approach that Kamlesh is suggesting helps us leverage the
+kernel stacks (like SCMI) but while also going via the pmdomain core
+driver. This patch helps abstract underneath protocol layers used for power
+domain operations in SOCs...
+
+Here's how it looks for anyone wondering: [1]
+We also talked about this at last year's Embedded Open Source Summit,
+Seattle [2] where we mentioned we'd be upstreaming this patch and the
+audience seemed interested to use it.
+
+> 
+> Reference has been taken from clock framework which provides similar
+> CLOCK_ALLOW_WRITE_DEBUGFS, which helps to test clocks from debugfs.
+> ---
+>  drivers/pmdomain/core.c | 77 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+>  1 file changed, 77 insertions(+)
+> 
+> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> index 9b2f28b34bb5..6aba0c672da0 100644
+> --- a/drivers/pmdomain/core.c
+> +++ b/drivers/pmdomain/core.c
+> @@ -1298,6 +1298,60 @@ late_initcall_sync(genpd_power_off_unused);
+>  
+>  #ifdef CONFIG_PM_SLEEP
+>  
+> +#ifdef GENPD_ALLOW_WRITE_DEBUGFS
+> +/*
+> + * This can be dangerous, therefore don't provide any real compile time
+> + * configuration option for this feature.
+> + * People who want to use this will need to modify the source code directly.
+> + */
+> +static int genpd_state_set(void *data, u64 val)
+> +{
+> +
+> +	struct generic_pm_domain *genpd = data;
+> +	int ret = 0;
+> +
+> +	ret = genpd_lock_interruptible(genpd);
+
+Why has it been kept interruptible? Other places I see are just using
+genpd_lock(pd);
+
+> +	if (ret)
+> +		return -ERESTARTSYS;
+> +
+> +	if (val == 1) {
+> +		genpd->power_on(genpd);
+> +		genpd->status = GENPD_STATE_ON;
+> +	} else if (val == 0) {
+> +		genpd->power_off(genpd);
+> +		genpd->status = GENPD_STATE_OFF;
+> +	}
+> +
+> +	genpd_unlock(genpd);
+> +	return 0;
+> +}
+> +
+> +#define pd_state_mode	0644
+
+Where's this used?
+
+> +
+> +static int genpd_state_get(void *data, u64 *val)
+> +{
+> +
+> +	struct generic_pm_domain *genpd = data;
+> +	int ret = 0;
+> +
+> +	ret = genpd_lock_interruptible(genpd);
+> +	if (ret)
+> +		return -ERESTARTSYS;
+> +
+> +	if (genpd->status == GENPD_STATE_OFF)
+> +		*val = 0;
+> +	else
+> +		*val = 1;
+> +
+> +	genpd_unlock(genpd);
+> +	return ret;
+> +}
+> +
+> +DEFINE_DEBUGFS_ATTRIBUTE(pd_state_fops, genpd_state_get,
+> +			 genpd_state_set, "%llu\n");
+> +
+> +#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
+> +
+>  /**
+>   * genpd_sync_power_off - Synchronously power off a PM domain and its parents.
+>   * @genpd: PM domain to power off, if possible.
+> @@ -3639,6 +3693,11 @@ static void genpd_debug_add(struct generic_pm_domain *genpd)
+>  	if (genpd->set_performance_state)
+>  		debugfs_create_file("perf_state", 0444,
+>  				    d, genpd, &perf_state_fops);
+> +#ifdef GENPD_ALLOW_WRITE_DEBUGFS
+> +	debugfs_create_file("pd_state", 0644, d, genpd,
+
+Ah this is probably where you wanted to use the #define'd pd_state_mode I guess....
+
+> +			    &pd_state_fops);
+> +#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
+> +
+>  }
+>  
+>  static int __init genpd_debug_init(void)
+> @@ -3653,6 +3712,24 @@ static int __init genpd_debug_init(void)
+>  	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+>  		genpd_debug_add(genpd);
+>  
+
+Only minor cleanups pending, otherwise patch looks good to me. Hoping
+more people can also try it out and jump on this thread with their
+thoughts....
+
+Refs:
+[1] https://gist.github.com/DhruvaG2000/f3ec24252d4cf2800c97c2e336d0b5db
+[2]
+https://eoss24.sched.com/event/1aBEs/a-primer-to-clocks-and-power-management-through-arm-scmi-dhruva-gole-kamlesh-gurudasani-texas-instruments
 
 -- 
-With best wishes
-Dmitry
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
