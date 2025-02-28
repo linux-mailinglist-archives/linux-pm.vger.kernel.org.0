@@ -1,110 +1,83 @@
-Return-Path: <linux-pm+bounces-23205-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23206-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD4E9A4A4F6
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 22:23:00 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DE80A4A4FD
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 22:23:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AB53E16C4BB
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 21:22:59 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 397707A4AFF
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 21:22:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 099061DC996;
-	Fri, 28 Feb 2025 21:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7F2511D7E5F;
+	Fri, 28 Feb 2025 21:23:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HZfGsz4a"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="DCerUwiq"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CADEE1D63FD;
-	Fri, 28 Feb 2025 21:22:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F8781CAA74;
+	Fri, 28 Feb 2025 21:23:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740777767; cv=none; b=ROalhsp0za0donSNri+N0FTiIv9OgfTe9XpwH36cWFK45SuN+3Q9enzME0U8WSbnGpd7J61QwyqaIQJ/uv7gnKeHtaQXBn3nBUggX87RWgbkqXkMizUwyEMiiw0w5tDx2NLKOGqTcuHvizRo/a6QzxALU/W/afqJphZQthOgnVQ=
+	t=1740777787; cv=none; b=O8Gapm3pvAsh/95PtB0I32Do7C35C4OjGmT8W4S6xl709tydU6B2FZaGi5hc4QpCz7DIzrn+sLu2VKbz62ZhJ93vf6+Xv2ZXk2UrWzNTBcOsH60gpTL+zd7R3EClSE3Bd+FzaCzh8XhW9ySjeYU77yiJ7UJJkW70AAC8qSYQRbM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740777767; c=relaxed/simple;
-	bh=JBzeKdwhC3moTlOZODJUQj1pAUwMAaCEBCLwB//XK6k=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=UiWvG9xSXlw3R5sADk8ic7VKgmBHDGgVpXX5uxCUcJiJu7Al/vVBqE6PLqsGJ542FsYSZrENvUr0h1WTKdY9IY3Msf6IaQ9MzXTeY9MYEqCZKxmJeFblwpCO8UMLlwu2Z+ESqJErECvhAbAKBxnNQXltE0yvUwvhZQTvsQiuc6M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HZfGsz4a; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E1BE6C4CEE2;
-	Fri, 28 Feb 2025 21:22:43 +0000 (UTC)
+	s=arc-20240116; t=1740777787; c=relaxed/simple;
+	bh=pPhg3oNE6NxT4rC2ot9DW+HPkCoU/NwpAONXXchEa5o=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=CdMWXiMOnw0g29UJeQAB/SvILiby9DkF7eijX4ccckQ94feU6JlF6/4RfR5ozlkT5LpzuROOorJZv4nmNpJeyxohL2VpwtqqN0fu2Xr+X4qtFWnnC+YyZ4uI1Mow/CXxkvoFufvlb+WAKcbAFxA8EIVTfD7KrwVB/PwyH2a3Rdw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=DCerUwiq; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 8C923C4CED6;
+	Fri, 28 Feb 2025 21:23:06 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740777767;
-	bh=JBzeKdwhC3moTlOZODJUQj1pAUwMAaCEBCLwB//XK6k=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
-	b=HZfGsz4a/Wb5K190mpN0hUEjxtlng3IksnID5Wqmy//b3riT8NlHGzftLdTW4732C
-	 A3p/X+JU6g2AfKE+5gkGxi9bch0utFZvBMR3iURHDPgc/gSjeKW/9+7Eh8cHh8jtcs
-	 zCl96QPfdnZKij5aMeAZSyjVYMDu/mcIy0JsRE8/tjDiuo85z4Voyr6Lp/vEFt/g6b
-	 xxagA/4BYOfJrJ0RwB1bzwQRXjrOESSMtjivw9MltIyDdFYGzb/ndaU0IkRR1oWA/e
-	 sCe3zg6XH/ElnzZkSNbxGJiodB6gvt4DwmBWPW0Pk0oHfs0vn1M/T3FDCwcD4p+9UD
-	 Dp8OXQLTITh5A==
-From: Mark Brown <broonie@kernel.org>
-To: perex@perex.cz, tiwai@suse.com, lgirdwood@gmail.com, deller@gmx.de, 
- andriy.shevchenko@linux.intel.com, sre@kernel.org, 
- sakari.ailus@linux.intel.com, mchehab@kernel.org, jdmason@kudzu.us, 
- fancer.lancer@gmail.com, Hans Verkuil <hverkuil@xs4all.nl>, 
- Raag Jadav <raag.jadav@intel.com>
-Cc: linux-sound@vger.kernel.org, linux-fbdev@vger.kernel.org, 
- linux-pm@vger.kernel.org, linux-media@vger.kernel.org, ntb@lists.linux.dev, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20250221165333.2780888-1-raag.jadav@intel.com>
-References: <20250221165333.2780888-1-raag.jadav@intel.com>
-Subject: Re: (subset) [PATCH v1 00/13] Convert to use devm_kmemdup_array()
-Message-Id: <174077776364.602863.4317015681907674937.b4-ty@kernel.org>
-Date: Fri, 28 Feb 2025 21:22:43 +0000
+	s=k20201202; t=1740777786;
+	bh=pPhg3oNE6NxT4rC2ot9DW+HPkCoU/NwpAONXXchEa5o=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=DCerUwiqo50WYbj+/EYFOBQtg3Hw8hKteAoVF2mEuBYCNynj8Zjsu6/2Tc7niJ/Bv
+	 a5wm53RvhGQf3yyteNZcQZ718t9Wc7wQXPyrXEzMG76MZBD2m/fBd5bE6Ofkr6/IBv
+	 Xp2nu9jrU8uJlGrehp8hrQz2XAlo6LiJRWpisXsMgyHXQixP2IRaixz3PbCAmkEu1Z
+	 40jDLCj4QJS0OkvjZ+XDilgbEfzuu+zt7+f2JRbzLg9qqRN5Y7Hv3q3I9evHGhxmDx
+	 Nb4Yc8iMwu9CdEI2Jzsx4FZU45TTzJ1fdem/zKlHCi+UpEwipToaTDi8GJQDEYlBDm
+	 lZyRhI5G+4+8Q==
+Date: Fri, 28 Feb 2025 15:23:04 -0600
+From: "Rob Herring (Arm)" <robh@kernel.org>
+To: Ryan.Wanner@microchip.com
+Cc: lee@kernel.org, krzk+dt@kernel.org, linux-rtc@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	sre@kernel.org, devicetree@vger.kernel.org,
+	nicolas.ferre@microchip.com, linux-pm@vger.kernel.org,
+	claudiu.beznea@tuxon.dev, conor+dt@kernel.org,
+	linux@armlinux.org.uk, p.zabel@pengutronix.de,
+	alexandre.belloni@bootlin.com
+Subject: Re: [PATCH v3 07/21] dt-bindings: at91rm9260-rtt: add
+ microchip,sama7d65-rtt
+Message-ID: <174077778429.3739910.8784445067469354265.robh@kernel.org>
+References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
+ <5b365a63d2124ebf27aebb0ec8395b1946e6c070.1740671156.git.Ryan.Wanner@microchip.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.15-dev-1b0d6
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <5b365a63d2124ebf27aebb0ec8395b1946e6c070.1740671156.git.Ryan.Wanner@microchip.com>
 
-On Fri, 21 Feb 2025 22:23:20 +0530, Raag Jadav wrote:
-> This series is the second wave of patches to add users of newly introduced
-> devm_kmemdup_array() helper. Original series on [1].
+
+On Thu, 27 Feb 2025 08:51:54 -0700, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> This depends on changes available on immutable tag[2]. Feel free to pick
-> your subsystem patches with it, or share your preferred way to route them.
+> Add SAMA7D65 RTT compatible to DT bindings documentation.
 > 
-> [1] https://lore.kernel.org/r/20250212062513.2254767-1-raag.jadav@intel.com
-> [2] https://lore.kernel.org/r/Z7cqCaME4LxTTBn6@black.fi.intel.com
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
+>  Documentation/devicetree/bindings/rtc/atmel,at91sam9260-rtt.yaml | 1 +
+>  1 file changed, 1 insertion(+)
 > 
-> [...]
 
-Applied to
-
-   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
-
-Thanks!
-
-[09/13] regulator: devres: use devm_kmemdup_array()
-        commit: 6ddd1159825c516b8f64fda83177c161434141f5
-[10/13] regulator: cros-ec: use devm_kmemdup_array()
-        commit: c5c4ce6612bb25ce6d6936d8ade96fcba635da54
-
-All being well this means that it will be integrated into the linux-next
-tree (usually sometime in the next 24 hours) and sent to Linus during
-the next merge window (or sooner if it is a bug fix), however if
-problems are discovered then the patch may be dropped or reverted.
-
-You may get further e-mails resulting from automated or manual testing
-and review of the tree, please engage with people reporting problems and
-send followup patches addressing any issues that are reported if needed.
-
-If any updates are required or you are submitting further changes they
-should be sent as incremental updates against current git, existing
-patches will not be replaced.
-
-Please add any relevant lists and maintainers to the CCs when replying
-to this mail.
-
-Thanks,
-Mark
+Acked-by: Rob Herring (Arm) <robh@kernel.org>
 
 
