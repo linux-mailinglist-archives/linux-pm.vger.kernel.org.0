@@ -1,202 +1,106 @@
-Return-Path: <linux-pm+bounces-23176-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23177-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 4E5E3A49A68
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 14:22:25 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B28BA49AEA
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 14:46:55 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 37DEB173F6C
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 13:22:24 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 09F7E7A77E8
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 13:45:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1D0126D5BF;
-	Fri, 28 Feb 2025 13:22:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E46B3F9D5;
+	Fri, 28 Feb 2025 13:46:49 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dJGgvPX1"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b="M0mtWwSS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from gloria.sntech.de (gloria.sntech.de [185.11.138.130])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D981126BDA3;
-	Fri, 28 Feb 2025 13:22:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5C3918F6B;
+	Fri, 28 Feb 2025 13:46:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.11.138.130
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740748935; cv=none; b=FpB5DfDARfkG8svp+ESyGzeQkrUgbyLWxM4sx99uZwaSZ/+B0n9tDoyXcRFTByJ/YIoE/SGGu7Thcshfm0aAPwMUjAOkvgYfEpJ6hcfwwJDkbxE/+4rZn1uFOIq8hmUeHW0w2cAHB4Bo2MNoGpOpr/KbnLo1seC8RSbuOKC28RU=
+	t=1740750409; cv=none; b=or/ZRwMefEV2qbxca1hIbIGpednipVtwXPVG4B431J87PxwiHCOWd605ae98LLfHtcydroa0bFQMr3Z2McBUsi6j184lkL25+Sv757a7XURJkjZeXdM0jJYhR3kbDvikfeUXyhHhRxsDabAdLnpcQ4u8844G5qXbR6baZOxgnTo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740748935; c=relaxed/simple;
-	bh=Kz7tQ7V+0+WAQoonVHNEEJH3MiDZITaZpOzO7CDVJMY=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VKj1gkpAUSUb0H+o1Or+dXGALR71oB6OUTSsDAtkpxtGUElQNfbZW9vX1nJv2C2qiYUo8kAwP3w388EUTkwimZ2b070WOSTcA8SishzD0dHy9AekZUrAE2YYzwmmPpOfvQ125tufJwiI/ZeK02UWey4OxjI4sYU5YuvsE03/2vA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dJGgvPX1; arc=none smtp.client-ip=209.85.221.49
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-390ec7c2d40so743795f8f.1;
-        Fri, 28 Feb 2025 05:22:13 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740748932; x=1741353732; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=aLCskdkyDjKVzUbxWO5nRc2aTnNTpaWoydhtK7t4lAA=;
-        b=dJGgvPX1hkaccIYPc/qRD6g2Rdg8d/IUhokspQrQKp6ZRzs6wEd8fTk+GEgz14zWu1
-         Mt4YXejbw4rETgkKuj7c32F3+wlAwW+emaKo7po9Zydo7WJGI97hwEUEC3SAKgJ1vE2f
-         HmsuCTUQa/twYZw/Dzj0D9FJkHBCUAEcGeHwhDLcZDaLMJ/XkotIcww8AQ2u+USiaCE/
-         DR0bAjE9b0acRAofFAsdKJwAdjQMKwVoyXkAX9iyywAWcGFEq4fHwWqG2KZ/yO8cAzjO
-         t0CqIygYQ5/x/q9GPkd3BwrDahgewJJ+2VTFO1Xb6x/g02fONbiqcAXC0wtwuZAx7WDb
-         ijug==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740748932; x=1741353732;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=aLCskdkyDjKVzUbxWO5nRc2aTnNTpaWoydhtK7t4lAA=;
-        b=FXufwooiPBwNjQWBwrW9SQQl5Ham/gRiMDxB6TwXVUQ6ZA5yO21mksVNUz4MGY24b6
-         oHwpJa02EfJQB2RBembQE0BtYceobm2aNaF7a7oF6CC4Li2vfPMfmb27jZi61DsEgGuh
-         QBBCudJ2piUl4GYm6st/tvx3uSYx0RNM6o5JGwrI2zAiHGbnvVoLHacLDKFse4WP+mFp
-         bEloUmM/PPun1cihz4Vt5lXK2w7iNQkOh9MtIrZfaorZgNYK6kTxJMAFOy/3WgRSqVqZ
-         9StzhajFKR2yrpK4szsE++uGpnkAEdFYVqtERIAZCj43zuhcj1Th9nUy46Kp4g0QAgLB
-         u5/Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW39YshyP/9q0ijekT5BcMS0UZWWiONEG2x3FfNMKdAYIRoMp9Ezqehvlj+/r+Ao/YJXUakP6fK6Mxx@vger.kernel.org, AJvYcCXQgwSOLvsEa0lsJjQjKSwCvBkHz8pZpjl9z2aJ0/c597I1eE5nVRTOlsS1zKcCS7ZPK3QuGnc886a96dKy@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4y1jSdGjM8CfdCnnQvoBMRrByT4O1gwrJEn4VHm1iES+zxG4C
-	ljCHrkzAWXgI3V6cHbBAHz+24rOklxa860HmMQmMnYQO2uumEj3yNJJFKIGKUPxNsm9G323hTri
-	Akwmte5XMpXjaQbNF3ry2yLAZ9Tw=
-X-Gm-Gg: ASbGncusqYr8nIKVfgbp3eqncq5R94oQawdi2Os7OpMZwJFuMvhVz8dSFM4pDICm9XD
-	tbLc/QHB0AD9BG4mUGRxYaMva7P7pYbzqLf+pJqqXKC3+LQd9Ju+YWw3ohain0u7uOEeGPRxsLH
-	lzPGVLXDRA
-X-Google-Smtp-Source: AGHT+IEWGseohuDp7KhNAY0LdcYgEQH/Rbd9LdHbvgH4CFd0eo6h8IeKxvf7p55tqbikbGe86i4k9z8m3nzpWQsmL8w=
-X-Received: by 2002:a05:6000:401f:b0:38d:d664:67d8 with SMTP id
- ffacd0b85a97d-390ec7c6738mr3084072f8f.11.1740748931828; Fri, 28 Feb 2025
- 05:22:11 -0800 (PST)
+	s=arc-20240116; t=1740750409; c=relaxed/simple;
+	bh=ViEBZK3EzIQxuHBMDu4S/+mF+gx5Aa58M+yPv1V91ik=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=sQLOXH2dTaLaopwDM12OX1yOpE/jqYB2yKFfASYn8205eKRTMbvKLy6ONV+zzNtrzQbCaq8N7rE9e2lR2w9O0NrXrUpxOIAzhHolNk1WlQqrYHs/u7QhVeukxuU0e+xsfcmGHjb5oLgZ8dDq9VEGsBgwM4aCNiZ20oTW8DOeU3U=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de; spf=pass smtp.mailfrom=sntech.de; dkim=pass (2048-bit key) header.d=sntech.de header.i=@sntech.de header.b=M0mtWwSS; arc=none smtp.client-ip=185.11.138.130
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=sntech.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=sntech.de
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=sntech.de;
+	s=gloria202408; h=Content-Transfer-Encoding:Content-Type:MIME-Version:
+	References:In-Reply-To:Message-ID:Date:Subject:Cc:To:From:Sender:Reply-To:
+	Content-ID:Content-Description:Resent-Date:Resent-From:Resent-Sender:
+	Resent-To:Resent-Cc:Resent-Message-ID:List-Id:List-Help:List-Unsubscribe:
+	List-Subscribe:List-Post:List-Owner:List-Archive;
+	bh=ZmbzHfuFGxMO/tUQLPQhCYSmxmQclsCq7HjjPDZTRLo=; b=M0mtWwSSXf5AxhHuLJS9gFksqw
+	eAs8epReVMAXpLMykhMSsggIt3/IEvN0OLRRwPmjuJX8+cVhiG3el3nzXZ3chisBzRv0LXOWCHWbS
+	Cmw+rNiMy3/oFYVPst8s5ohyV4n7NbLE08Tv3fBH/rD4qCfkU3sPGi5pW6ZdBrlXcFuNprylOr/aK
+	nMg0YBEv+qLNpJaqV2qBBah5gZq8iVaIk/c/82QrHtBI6P2b4dINkJcAtkAFlaBJedZPQkBxKxkyF
+	DHvgrxcy2eF373uVIHkhrRjkSeTHk7mnkcM810S/anTLny13IEeZMh7oagdJRyGTGOIkEHB2CxzMr
+	ZMXBxjfg==;
+Received: from i53875b47.versanet.de ([83.135.91.71] helo=localhost.localdomain)
+	by gloria.sntech.de with esmtpsa  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.94.2)
+	(envelope-from <heiko@sntech.de>)
+	id 1to0hB-00018u-Dt; Fri, 28 Feb 2025 14:46:29 +0100
+From: Heiko Stuebner <heiko@sntech.de>
+To: Mark Brown <broonie@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Heiko Stuebner <heiko@sntech.de>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Elaine Zhang <zhangqing@rock-chips.com>,
+	=?UTF-8?q?Adri=C3=A1n=20Mart=C3=ADnez=20Larumbe?= <adrian.larumbe@collabora.com>,
+	Boris Brezillon <boris.brezillon@collabora.com>,
+	Peter Geis <pgwipeout@gmail.com>,
+	Tomeu Vizoso <tomeu@tomeuvizoso.net>,
+	Vignesh Raman <vignesh.raman@collabora.com>,
+	linux-kernel@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-rockchip@lists.infradead.org,
+	devicetree@vger.kernel.org
+Subject: Re: (subset) [PATCH v6 0/8] Fix RK3588 power domain problems
+Date: Fri, 28 Feb 2025 14:46:18 +0100
+Message-ID: <174075035003.278101.1580632706000540174.b4-ty@sntech.de>
+X-Mailer: git-send-email 2.47.2
+In-Reply-To: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
+References: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250219082817.56339-1-clamor95@gmail.com> <20250219082817.56339-3-clamor95@gmail.com>
- <99ee61dc-abd5-45d9-8d26-a8f0ae94c8eb@arm.com>
-In-Reply-To: <99ee61dc-abd5-45d9-8d26-a8f0ae94c8eb@arm.com>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Fri, 28 Feb 2025 15:22:00 +0200
-X-Gm-Features: AQ5f1JqiEG1tJRPj2HmNZIqvEspltfMFIDE6rFA4YikSqMAQilmFeeVoGxd-Kho
-Message-ID: <CAPVz0n0uWEY+-evrfpci9-1c3icGyHfTHMbXi=P9Sv=Uh3AUaA@mail.gmail.com>
-Subject: Re: [PATCH v2 2/2] thermal: thermal-generic-adc: add temperature
- sensor channel
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: linux-pm@vger.kernel.org, Conor Dooley <conor+dt@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>, devicetree@vger.kernel.org, 
-	Zhang Rui <rui.zhang@intel.com>, Daniel Lezcano <daniel.lezcano@linaro.org>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Laxman Dewangan <ldewangan@nvidia.com>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
 
-=D0=BF=D1=82, 28 =D0=BB=D1=8E=D1=82. 2025=E2=80=AF=D1=80. =D0=BE 15:11 Luka=
-sz Luba <lukasz.luba@arm.com> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> Hi Svyatoslav,
->
-> On 2/19/25 08:28, Svyatoslav Ryhel wrote:
-> > Add IIO sensor channel along with existing thermal sensor cell. This
-> > would benefit devices that use adc sensors to detect temperature and
-> > need a custom conversion table.
-> >
-> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > ---
-> >   drivers/thermal/thermal-generic-adc.c | 54 ++++++++++++++++++++++++++=
--
-> >   1 file changed, 53 insertions(+), 1 deletion(-)
-> >
-> > diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/th=
-ermal-generic-adc.c
-> > index ee3d0aa31406..a8f3b965b39b 100644
-> > --- a/drivers/thermal/thermal-generic-adc.c
-> > +++ b/drivers/thermal/thermal-generic-adc.c
-> > @@ -7,6 +7,7 @@
-> >    * Author: Laxman Dewangan <ldewangan@nvidia.com>
-> >    */
-> >   #include <linux/iio/consumer.h>
-> > +#include <linux/iio/iio.h>
-> >   #include <linux/kernel.h>
-> >   #include <linux/module.h>
-> >   #include <linux/platform_device.h>
-> > @@ -73,6 +74,57 @@ static const struct thermal_zone_device_ops gadc_the=
-rmal_ops =3D {
-> >       .get_temp =3D gadc_thermal_get_temp,
-> >   };
-> >
-> > +static const struct iio_chan_spec gadc_thermal_iio_channel[] =3D {
-> > +     {
-> > +             .type =3D IIO_TEMP,
-> > +             .info_mask_separate =3D BIT(IIO_CHAN_INFO_PROCESSED),
-> > +     }
-> > +};
-> > +
-> > +static int gadc_thermal_read_raw(struct iio_dev *indio_dev,
-> > +                              struct iio_chan_spec const *chan,
-> > +                              int *temp, int *val2, long mask)
-> > +{
-> > +     struct gadc_thermal_info *gtinfo =3D iio_priv(indio_dev);
-> > +     int ret;
-> > +
-> > +     if (mask !=3D IIO_CHAN_INFO_PROCESSED)
-> > +             return -EINVAL;
-> > +
-> > +     ret =3D gadc_thermal_get_temp(gtinfo->tz_dev, temp);
-> > +     if (ret < 0)
-> > +             return ret;
-> > +
-> > +     *temp /=3D 1000;
-> > +
-> > +     return IIO_VAL_INT;
-> > +}
-> > +
-> > +static const struct iio_info gadc_thermal_iio_info =3D {
-> > +     .read_raw =3D gadc_thermal_read_raw,
-> > +};
-> > +
-> > +static int gadc_iio_register(struct device *dev, struct gadc_thermal_i=
-nfo *gti)
-> > +{
-> > +     struct gadc_thermal_info *gtinfo;
-> > +     struct iio_dev *indio_dev;
-> > +
-> > +     indio_dev =3D devm_iio_device_alloc(dev, sizeof(struct gadc_therm=
-al_info));
-> > +     if (!indio_dev)
-> > +             return -ENOMEM;
-> > +
-> > +     gtinfo =3D iio_priv(indio_dev);
-> > +     memcpy(gtinfo, gti, sizeof(struct gadc_thermal_info));
-> > +
-> > +     indio_dev->name =3D dev_name(dev);
-> > +     indio_dev->info =3D &gadc_thermal_iio_info;
-> > +     indio_dev->modes =3D INDIO_DIRECT_MODE;
-> > +     indio_dev->channels =3D gadc_thermal_iio_channel;
-> > +     indio_dev->num_channels =3D ARRAY_SIZE(gadc_thermal_iio_channel);
-> > +
-> > +     return devm_iio_device_register(dev, indio_dev);
->
-> I don't get the idea why we need iio device, while we already have the
-> hwmon.
->
 
-Idea behind this is to be able to convert adc iio channel into temp
-iio channel without introducing a new sensor which will duplicate
-behavior of existing one (by this I mean conversion table use). Not
-all devices can or have to use hwmon and some may require iio channel
-hooked up.
+On Thu, 20 Feb 2025 19:58:03 +0100, Sebastian Reichel wrote:
+> I got a report, that the Linux kernel crashes on Rock 5B when the panthor
+> driver is loaded late after booting. The crash starts with the following
+> shortened error print:
+> 
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'gpu', val=0
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to get ack on domain 'gpu', val=0xa9fff
+> SError Interrupt on CPU4, code 0x00000000be000411 -- SError
+> 
+> [...]
 
-Real life example. I own a device (LG P985) which has a fuel gauge
-that does not support battery thermal readings. Vendor provided a
-dedicated adc sensor and one of its channels is used as thermal sensor
-with device specific conversion table. Fuel gauge on the other hand
-supports linking in a dedicated temp iio channel to get thermal
-readings.
+Applied, thanks!
 
-> Could you explain this a bit more, the cover letter also misses
-> such justification and details.
->
-> Regards,
-> Lukasz
+[8/8] arm64: dts: rockchip: Add GPU power domain regulator dependency for RK3588
+      commit: f94500eb7328b35f3d0927635b1aba26c85ea4b0
+
+
+Best regards,
+-- 
+Heiko Stuebner <heiko@sntech.de>
 
