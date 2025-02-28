@@ -1,141 +1,244 @@
-Return-Path: <linux-pm+bounces-23189-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23190-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7470FA4A115
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 19:05:18 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 36D9AA4A1C2
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 19:37:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 40D423AD0C4
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 18:05:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 418903B2393
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 18:36:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 61C7D27427C;
-	Fri, 28 Feb 2025 18:04:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 969F427CCCD;
+	Fri, 28 Feb 2025 18:36:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b="drsSSEV1"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="kcFQLij8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from us-smtp-delivery-124.mimecast.com (us-smtp-delivery-124.mimecast.com [170.10.133.124])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f44.google.com (mail-ed1-f44.google.com [209.85.208.44])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C5826F44B
-	for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 18:04:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=170.10.133.124
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A3F6727CCC5;
+	Fri, 28 Feb 2025 18:36:29 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.44
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740765896; cv=none; b=Kz3sDgGHTOV2/lU4xlnge2oQk9yrG6iZ1sz6B4XD7FGHzMErya/umWN8U/XXod25dH2ru7ctIkooB2lfALkju7zoaya28q+w5zqsKAyI0HnIjtjnc0D6ZN7rN0tP7Nuoiw6jq+y1MAmBLSXfiefpdy4q7GZTPcMuNoR8yfiSql4=
+	t=1740767791; cv=none; b=IfGhDYkJiVmwP8P94nCmApzTWHNzjm7H5OPcterKSkVvYT2JeLIU6VaDN1WEkntdT2ss4K5uGuwuqyAEuJv4Y0yvtPxxUFA+9jDEpRSgPEgBPF6JCoU9qSJkRPNnU8shxvdfs8sR+0FIFdkoejU+nKmVBXjusHSMRCxU8V0o2jg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740765896; c=relaxed/simple;
-	bh=scfmeAIOAJYjZm7Jb+84QkPQyC4V8osgVIoJao20Z88=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=kdeC4dz9mQX3y+QMVrlBBQPwtcosHNYVmoWophj1bUFiMjCg5Tb/yOEXze5leL/KvGLbq4hm6ZVcf5Izcv2LGlnWgUo+2r+2oMzwlgRNqNb3ubsTTcr91h6M41NBgZcLDTCKMxqQpd2t2dyt6CfoUQToRS77oIS3mAt5K+kmwa4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com; spf=pass smtp.mailfrom=redhat.com; dkim=pass (1024-bit key) header.d=redhat.com header.i=@redhat.com header.b=drsSSEV1; arc=none smtp.client-ip=170.10.133.124
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=redhat.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=redhat.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=redhat.com;
-	s=mimecast20190719; t=1740765893;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=PAMkimjaX5T169DBm7Y9jGqkQ+vg8U81DkhhnBduopw=;
-	b=drsSSEV1sT9mw7otbLgCY28AShbwzlYWTgBZSZRVl4CidTmSTzXJQWA1Pt+CiIKjR+1Pj8
-	WmqSkRxLpJnEVUcuoUh9lmuVJoxklvcvmf5xrQfMEhOffg/bI8gtFh+tMXVN2uoM+3k1rl
-	HzJfiNjRHo8fu307nNXm8eLh2pZaYUo=
-Received: from mail-qk1-f200.google.com (mail-qk1-f200.google.com
- [209.85.222.200]) by relay.mimecast.com with ESMTP with STARTTLS
- (version=TLSv1.3, cipher=TLS_AES_256_GCM_SHA384) id
- us-mta-108-QV0NJ457Ob2XSTgXHAigfg-1; Fri, 28 Feb 2025 13:04:52 -0500
-X-MC-Unique: QV0NJ457Ob2XSTgXHAigfg-1
-X-Mimecast-MFC-AGG-ID: QV0NJ457Ob2XSTgXHAigfg_1740765891
-Received: by mail-qk1-f200.google.com with SMTP id af79cd13be357-7c0b9242877so579904885a.3
-        for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 10:04:52 -0800 (PST)
+	s=arc-20240116; t=1740767791; c=relaxed/simple;
+	bh=FOo85UWm0LlESU87rNVLWaSKK4QP39SCLtxM0G1y7aY=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=QwyJs7v5PUrM4QVvh/6RhMoYcLDKpD1pdCFrkVpHmaqofzFAGnna7HJSWR+ImuKsbiUepvJ8Y+FreqLeQ5aZs2iIJ8a06h5wf/SYCND8VWS2XpLx6z/BsVfrggSPGt9J6EtABNBSnqCxz6BJroixFKPgS+jzVQx60FQx+/m7Mcw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=kcFQLij8; arc=none smtp.client-ip=209.85.208.44
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f44.google.com with SMTP id 4fb4d7f45d1cf-5ded6c31344so3006511a12.1;
+        Fri, 28 Feb 2025 10:36:29 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1740767788; x=1741372588; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=bcOciFev494FQi+ie3YAuQXZTVFD/MHMZEBQgtl8Sq4=;
+        b=kcFQLij8BHSltIoBPK3w2aYRv42zty8tn8wsDj4Og4z0d9t58dqmgSpdfN3ozZQFcH
+         bd5Pj9LWZoyHE2feg+fZLM8vTczLpLIEiEFL+1J6vbH5kANjHfcIViwxs1qL5t6bSY3g
+         VnxfvyCwt5fRiNNCXQ8E2Q8SwyO4qtxbzCW3nGfBaC/ztA103jb/MgK0HIdW17rfuul0
+         zYmWGZjkAxKTZQaiFBSv96BtKTgsQDkafC9HveVBH6el5mdOXZZp3WQgS6B/yx2hucRr
+         geq33gvEoNv3aXXql/8AhIl9F+Up1xHMfm9+BEolQGeCUcdYOsuCbI5vql8HuW5y/wHl
+         CvwA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740765891; x=1741370691;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=PAMkimjaX5T169DBm7Y9jGqkQ+vg8U81DkhhnBduopw=;
-        b=ckolvxkbB9A/uxwBzjtT0zbHNJmiZF5rCdpIYSVw6/Moite42svcHf0X47G5Byti9r
-         QacmDJcrUWgg00VtzsFQMBjOUxoKxq/5yHwXGQsn48QFuXxztoFLjiTLL6WbvgTJa0GF
-         hfGKoL4cW+9Iq7pyGnvnlh73pfzPdwuWrF9slYPvUNiezXPyU0d5n6y84mqqyDq5XkNo
-         7vhauHoU4VEBD6nVvpCJOB2JrMjpCUagt0g7mzvSSJWLTwH27l6Fy4RysnrVxsOfRXn1
-         qKuOk0AjB2GpWfFZRkIglnyuU8g3p2U/H3h8NEm2LgoJmTGfOwDsAjZyOz1LBXRQ3YW/
-         hiMg==
-X-Forwarded-Encrypted: i=1; AJvYcCU3JjCwDrXNIG7J5zia+YMXxfDTAyJAgBGV27hiR0ZX9H72rDyI3vOWJdToXNxA8p1l50yoGqgQ9A==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yw97bdDlKz9zRFqok/nCaPb5fYak6TDJ6A+93tvFTGvxd9W+iCh
-	vuOgO769yVKky4sBsls2ciEpve2l8Z4Pc9m1AAAsjLlJhaIqI+XD0Wg58cYdMohg1PUK0sn8Ynn
-	Cayb23gXDmFMT9RnFfMGld2j/jdG51Qa8C3t1TKpAekAA0VcZ/CEyu24N
-X-Gm-Gg: ASbGncvHpeyl9DDH6aMkZXUGe/YkDm6vorEbaNoFMGCjKKtqsKy9pY5A/9I8My3kMdu
-	jzJkqzq9GcU823BK0OX4vU4fs/LG/XDtF9e5yTqmn1GAcDG0EsdGHphyKNCi799x+LIT7GBI3hX
-	FSJ0Vhlub2kRmoJgq58qrVFOc4uXAKrackinkL+BZL2QIAW1kgtMBWFtcGgzidn28sve/QActUN
-	DHEcasL9QPWWmhmqGfARcPFVPXLg5Fc2b0m7E6aIj0N1peEdZC6BhwaM7620nQ4Bbje9SNa2vxw
-	IZdkMznSgD7mjIbUVcP5fWY6yjygAgXuvd/ARHfAMXfE3FZj2yT/Xe8pSGkCE/Awv7rLvYrpgHM
-	=
-X-Received: by 2002:a05:620a:394e:b0:7c0:ab10:1132 with SMTP id af79cd13be357-7c39c656e05mr626151785a.38.1740765891362;
-        Fri, 28 Feb 2025 10:04:51 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IFTh85sVtk5oi8HSf7ZrK+kyN9/o2F13SCQKm1m3pZ9EncsS4obYl1hjRjtWWMtTxJIGo4z9g==
-X-Received: by 2002:a05:620a:394e:b0:7c0:ab10:1132 with SMTP id af79cd13be357-7c39c656e05mr626146785a.38.1740765890866;
-        Fri, 28 Feb 2025 10:04:50 -0800 (PST)
-Received: from rhdev.redhat.com (2603-9001-3d00-5353-0000-0000-0000-14c1.inf6.spectrum.com. [2603:9001:3d00:5353::14c1])
-        by smtp.gmail.com with ESMTPSA id af79cd13be357-7c36fee8a08sm274654485a.6.2025.02.28.10.04.49
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Fri, 28 Feb 2025 10:04:50 -0800 (PST)
-From: Jennifer Berringer <jberring@redhat.com>
-To: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
-	Sebastian Reichel <sre@kernel.org>
-Cc: linux-kernel@vger.kernel.org,
-	linux-pm@vger.kernel.org,
-	Jennifer Berringer <jberring@redhat.com>
-Subject: [PATCH v4 2/2] power: reset: nvmem-reboot-mode: support smaller magic
-Date: Fri, 28 Feb 2025 13:03:26 -0500
-Message-ID: <20250228180326.256058-3-jberring@redhat.com>
-X-Mailer: git-send-email 2.47.1
-In-Reply-To: <20250228180326.256058-1-jberring@redhat.com>
-References: <20250228180326.256058-1-jberring@redhat.com>
+        d=1e100.net; s=20230601; t=1740767788; x=1741372588;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=bcOciFev494FQi+ie3YAuQXZTVFD/MHMZEBQgtl8Sq4=;
+        b=gcXfTji0D8fpRRuBfjOOjnOy7kSbkwsj6D+3JOh/GZDGL0g5lgH17N3R1hyqXLl7ci
+         mG31Nova51EC4w0+dZO5H9X6XdBc2cod14aOEwDzOyc9OlfaYHIIEwhoreB3aZLsGlpV
+         /k578AKsH2xXbQxzY6Zex3IMD9SRebfKIMOFFKw0Gc9kmNsuyKpHgQ3unapShlc2K6dQ
+         tdGtYTl6eiDtJrUQmBtmAOxqjJsMoLYJKuB17LgxHJcDNELkZqwUrioQLpOyVSyvJI1O
+         pG7zLCtO5jEafaW4r5IUjsDchKTKNgusYqg4gNne7pcBwzoeVMUQdqSoqW3RVujRCAyz
+         memw==
+X-Forwarded-Encrypted: i=1; AJvYcCUmJ58h6RTDNCeCRkwnW7xcuWe2SY1J/h2hqh5bNNpUOivIEt2+gA0hGqJGF+HZOIpn/u9pfme/7iH4JDc=@vger.kernel.org, AJvYcCW/+ZwdZCcUo7lKkx/zBxGjxmTlG3mSujCM9Wbsy373xXXipdoV4alyNYQKD6I/BKmE8faShza63Q0=@vger.kernel.org, AJvYcCXP2Wu3TNEV40FSzD3TXgOxB2XO/0mdqWts7Q4yqtCVie0yMIkKP0vc8GO3fTP2KyiyEeeMYtoGkJU3unsqdqUbq+I=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyb7LYHQKrvz2Nt2DE982pYgAAzUZ7owOPSfj0I5laen7fyEo9h
+	gyFvAO/zvuaaIupDiVmA0wqn3AYiy6tlS8OtLK1Zd7N8RXnp1pj39/OCpHtvSqW3cG+QfHowycz
+	zzzPRRTCI1IDIVSQ/KdenjIOubcU=
+X-Gm-Gg: ASbGncsjLb3Uh5xkflU2WRrXtnO8DLlHDfgb+9QnQJ3TEDky176u8KhowxE4b0d96uE
+	PbVWIn+qw44DEdeevudBSPqI9PzxeqAMWS0U7BPgu9JfEjmVrxGpWb/aaLXRGhmFPnqvW4+pepM
+	I2qeoOJKI=
+X-Google-Smtp-Source: AGHT+IFE3G2KjHi8I1VMEUvtVVJytNjP0/8SzMhjPmWtNq41A0r54s3RwgOnWAEJT6u1F3AfT20PzYxSV85X9vtUhfM=
+X-Received: by 2002:a05:6402:51c6:b0:5dc:5ada:e0c7 with SMTP id
+ 4fb4d7f45d1cf-5e4d6b4c2edmr8497667a12.26.1740767787540; Fri, 28 Feb 2025
+ 10:36:27 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+References: <20250216195850.5352-1-linux.amoon@gmail.com> <20250216195850.5352-5-linux.amoon@gmail.com>
+ <f44efd1a-1f6e-456d-9395-de2a55ef2279@arm.com>
+In-Reply-To: <f44efd1a-1f6e-456d-9395-de2a55ef2279@arm.com>
+From: Anand Moon <linux.amoon@gmail.com>
+Date: Sat, 1 Mar 2025 00:06:10 +0530
+X-Gm-Features: AQ5f1JrCuLXPNSAWoUTKE1NaVm2ihsuQ5JSDdwiiFIEGBSN_Yr_bdvM8NVPBMWc
+Message-ID: <CANAwSgTpV_kGFEU-ND0N+OEtT6+j4ceq37xAoLyC7iHPWAuLjg@mail.gmail.com>
+Subject: Re: [PATCH v3 4/4] drivers/thermal/exymos: Use guard notation when
+ acquiring mutex
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
+	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>, Alim Akhtar <alim.akhtar@samsung.com>, 
+	Daniel Lezcano <daniel.lezcano@linaro.org>, open list <linux-kernel@vger.kernel.org>, 
+	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, Zhang Rui <rui.zhang@intel.com>, 
+	Krzysztof Kozlowski <krzk@kernel.org>, "Rafael J. Wysocki" <rafael@kernel.org>
+Content-Type: text/plain; charset="UTF-8"
 
-Some devices, such as Qualcomm sa8775p, have an nvmem reboot mode cell
-that is only 1 byte, which resulted in nvmem_reboot_mode_write() failing
-when it attempts to write a 4-byte magic. Checking the nvmem cell size
-and writing only the lower bits of the reboot mode magic is needed for
-these devices.
+Hi Lukasz,
 
-Signed-off-by: Jennifer Berringer <jberring@redhat.com>
----
- drivers/power/reset/nvmem-reboot-mode.c | 9 ++++++++-
- 1 file changed, 8 insertions(+), 1 deletion(-)
+On Fri, 28 Feb 2025 at 22:58, Lukasz Luba <lukasz.luba@arm.com> wrote:
+>
+>
+>
+> On 2/16/25 19:58, Anand Moon wrote:
+> > Using guard notation makes the code more compact and error handling
+> > more robust by ensuring that mutexes are released in all code paths
+> > when control leaves critical section.
+> >
+> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
+> > ---
+> > v3: new patch
+> > ---
+> >   drivers/thermal/samsung/exynos_tmu.c | 21 +++++++--------------
+> >   1 file changed, 7 insertions(+), 14 deletions(-)
+> >
+> > diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
+> > index fe090c1a93ab..a34ba3858d64 100644
+> > --- a/drivers/thermal/samsung/exynos_tmu.c
+> > +++ b/drivers/thermal/samsung/exynos_tmu.c
+> > @@ -256,7 +256,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
+> >       unsigned int status;
+> >       int ret = 0;
+> >
+> > -     mutex_lock(&data->lock);
+> > +     guard(mutex)(&data->lock);
+> >       clk_enable(data->clk);
+> >       clk_enable(data->clk_sec);
+> >
+> > @@ -270,7 +270,6 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
+> >
+> >       clk_disable(data->clk_sec);
+> >       clk_disable(data->clk);
+> > -     mutex_unlock(&data->lock);
+> >
+> >       return ret;
+> >   }
+> > @@ -292,13 +291,12 @@ static int exynos_thermal_zone_configure(struct platform_device *pdev)
+> >               return ret;
+> >       }
+> >
+> > -     mutex_lock(&data->lock);
+> > +     guard(mutex)(&data->lock);
+> >       clk_enable(data->clk);
+> >
+> >       data->tmu_set_crit_temp(data, temp / MCELSIUS);
+> >
+> >       clk_disable(data->clk);
+> > -     mutex_unlock(&data->lock);
+> >
+> >       return 0;
+> >   }
+> > @@ -325,12 +323,11 @@ static void exynos_tmu_control(struct platform_device *pdev, bool on)
+> >   {
+> >       struct exynos_tmu_data *data = platform_get_drvdata(pdev);
+> >
+> > -     mutex_lock(&data->lock);
+> > +     guard(mutex)(&data->lock);
+> >       clk_enable(data->clk);
+> >       data->tmu_control(pdev, on);
+> >       data->enabled = on;
+> >       clk_disable(data->clk);
+> > -     mutex_unlock(&data->lock);
+> >   }
+> >
+> >   static void exynos_tmu_update_bit(struct exynos_tmu_data *data, int reg_off,
+> > @@ -645,7 +642,7 @@ static int exynos_get_temp(struct thermal_zone_device *tz, int *temp)
+> >                */
+> >               return -EAGAIN;
+> >
+> > -     mutex_lock(&data->lock);
+> > +     guard(mutex)(&data->lock);
+> >       clk_enable(data->clk);
+> >
+> >       value = data->tmu_read(data);
+> > @@ -655,7 +652,6 @@ static int exynos_get_temp(struct thermal_zone_device *tz, int *temp)
+> >               *temp = code_to_temp(data, value) * MCELSIUS;
+> >
+> >       clk_disable(data->clk);
+> > -     mutex_unlock(&data->lock);
+> >
+> >       return ret;
+> >   }
+> > @@ -720,11 +716,10 @@ static int exynos_tmu_set_emulation(struct thermal_zone_device *tz, int temp)
+> >       if (temp && temp < MCELSIUS)
+> >               goto out;
+> >
+> > -     mutex_lock(&data->lock);
+> > +     guard(mutex)(&data->lock);
+> >       clk_enable(data->clk);
+> >       data->tmu_set_emulation(data, temp);
+> >       clk_disable(data->clk);
+> > -     mutex_unlock(&data->lock);
+> >       return 0;
+> >   out:
+> >       return ret;
+> > @@ -760,14 +755,13 @@ static irqreturn_t exynos_tmu_threaded_irq(int irq, void *id)
+> >
+> >       thermal_zone_device_update(data->tzd, THERMAL_EVENT_UNSPECIFIED);
+> >
+> > -     mutex_lock(&data->lock);
+> > +     guard(mutex)(&data->lock);
+> >       clk_enable(data->clk);
+> >
+> >       /* TODO: take action based on particular interrupt */
+> >       data->tmu_clear_irqs(data);
+> >
+> >       clk_disable(data->clk);
+> > -     mutex_unlock(&data->lock);
+> >
+> >       return IRQ_HANDLED;
+> >   }
+> > @@ -987,7 +981,7 @@ static int exynos_set_trips(struct thermal_zone_device *tz, int low, int high)
+> >   {
+> >       struct exynos_tmu_data *data = thermal_zone_device_priv(tz);
+> >
+> > -     mutex_lock(&data->lock);
+> > +     guard(mutex)(&data->lock);
+> >       clk_enable(data->clk);
+> >
+> >       if (low > INT_MIN)
+> > @@ -1000,7 +994,6 @@ static int exynos_set_trips(struct thermal_zone_device *tz, int low, int high)
+> >               data->tmu_disable_high(data);
+> >
+> >       clk_disable(data->clk);
+> > -     mutex_unlock(&data->lock);
+> >
+> >       return 0;
+> >   }
 
-diff --git a/drivers/power/reset/nvmem-reboot-mode.c b/drivers/power/reset/nvmem-reboot-mode.c
-index 41530b70cfc4..112e6cf77d1b 100644
---- a/drivers/power/reset/nvmem-reboot-mode.c
-+++ b/drivers/power/reset/nvmem-reboot-mode.c
-@@ -20,11 +20,18 @@ static int nvmem_reboot_mode_write(struct reboot_mode_driver *reboot,
- 				    unsigned int magic)
- {
- 	int ret;
-+	u8 *magic_ptr = (u8 *) &magic;
-+	size_t cell_size;
- 	struct nvmem_reboot_mode *nvmem_rbm;
- 
- 	nvmem_rbm = container_of(reboot, struct nvmem_reboot_mode, reboot);
-+	cell_size = nvmem_cell_size(nvmem_rbm->cell);
- 
--	ret = nvmem_cell_write(nvmem_rbm->cell, &magic, sizeof(magic));
-+	/* Use magic's low-order bytes when writing to a smaller cell. */
-+	if (IS_ENABLED(CONFIG_CPU_BIG_ENDIAN) && cell_size < sizeof(magic))
-+		magic_ptr += sizeof(magic) - cell_size;
-+
-+	ret = nvmem_cell_write(nvmem_rbm->cell, magic_ptr, MIN(cell_size, sizeof(magic)));
- 	if (ret < 0)
- 		dev_err(reboot->dev, "update reboot mode bits failed\n");
- 
--- 
-2.47.1
+Thanks for your review comments.
+>
+> IMO you should be able to even use something like we have
+> core framework:
+>
+> guard(thermal_zone)(tz);
+>
+> Your mutex name is simply 'lock' in the struct exynos_tmu_data
+> so you should be able to leverage this by:
+>
+> guard(exynos_tmu_data)(data);
+>
+> Please try that.
 
+Ok, I will check this
+
+Thanks
+-Anand
 
