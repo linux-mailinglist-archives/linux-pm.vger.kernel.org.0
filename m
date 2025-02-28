@@ -1,110 +1,135 @@
-Return-Path: <linux-pm+bounces-23171-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23172-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 68041A49893
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 12:53:24 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46274A498DD
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 13:13:46 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB1FE7A71A8
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 11:52:23 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 653633BB856
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 12:12:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B7725E46B;
-	Fri, 28 Feb 2025 11:53:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1247B26AAA2;
+	Fri, 28 Feb 2025 12:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=coldcon.co.za header.i=@coldcon.co.za header.b="F27pfRlZ"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MWOoE0Wd"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from outgoing59.jnb.host-h.net (outgoing59.jnb.host-h.net [156.38.154.105])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CFF23E32A
-	for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 11:53:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.38.154.105
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F8626AA9A
+	for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 12:12:19 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740743598; cv=none; b=jDJTOfECLnH95gSZu0eMRNiC9HOuJ3ChGIZaBXei4OEhVRR9dichm7gKv0cDR2rj9OyItL+W1yzUeUYfms+ydeFein/NBRphDrUarDsz0Ql6ViWSXcpMXC14HsX+qYarkNM/SWZ0H+yQuS3QdJdsw196Mvi36iAMdyYBoMM99dk=
+	t=1740744741; cv=none; b=mrFf6VOX+MHvv642SEIyVNCGpZXL+VB53ejQmilVByDD5N6CRjdXiwjSjonMCKwt0aiNfav0itS+5O+9Jr66ut4ysd02F3Rm/qhl2DsmAkBNnFo7QeAnqXPSN6qe8/Wgm5K+OnirE5kujZaGaxmUjcEOiUrvSsiOV/BbwZozwE0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740743598; c=relaxed/simple;
-	bh=LnJAb5OtSiiPPpVmdSEicOxdfy335XXtHun9Lv2d8Bw=;
-	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=e9GS4lR31MjIgkV0Ao/cBT4piacLhzjMRrj3A9zGfyrapyZdx7hm5gUbyzLRGuOyBeEb9VrHEH39CebKQ9a5OHfpexdOnzifl3VeYzAUlQ8gbkLx3UmkX8R+31ieEMgu/w7yNbkcMVnhXCLU5qIJl+8v/L7JKrMsctqyITEH8uQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coldcon.co.za; spf=fail smtp.mailfrom=coldcon.co.za; dkim=pass (2048-bit key) header.d=coldcon.co.za header.i=@coldcon.co.za header.b=F27pfRlZ; arc=none smtp.client-ip=156.38.154.105
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coldcon.co.za
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=coldcon.co.za
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
-	d=coldcon.co.za; s=xneelo; h=Content-Transfer-Encoding:Content-Type:
-	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:sender:cc:bcc:
-	in-reply-to:references; bh=t+qwmUT3iOAm1DfPM+nbVN5TXLHXkSwi3Xte37fm8Y0=; b=F2
-	7pfRlZXZkhHhqcIeHFeH9X1NIVRTj1Ur5wPF5h6zNg21r5IDITHAup9X2Qw4x+wTBYqqJZXYoqr35
-	Ix6vjgmVcnfnGdgdUCmJ/aq55khE64/bWhkwOlOF1drT6VPjUhwiGWIK0nAC0u+I7Sa71vf9JZxf6
-	pMyK3nPy1sX70s0uX5KJpiyOW0cV6X/P+U1OsB+qK830xIziLtnNhJB3Q31o2d4r5qYKKmUGEGhXx
-	EFpjf/WnaAWfFy/2KaaDWRZe2nEiJ28WDzk3JmQJP4bgQpYOeAN+104wn/OGeHl1xoKVzFXl3ccRn
-	lGWMA1HWlaSRWHmM1cfYHR98FaWZ3kMA==;
-Received: from dedi166.jnb2.host-h.net ([41.203.16.166])
-	by antispam8-jnb1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
-	(Exim 4.92)
-	(envelope-from <avaril@coldcon.co.za>)
-	id 1tnyvY-009Dgc-CY
-	for linux-pm@vger.kernel.org; Fri, 28 Feb 2025 13:53:14 +0200
-Received: from [104.192.5.240] (helo=coldcon.co.za)
-	by dedi166.jnb2.host-h.net with esmtpsa (TLS1.2:ECDHE_SECP521R1__RSA_SHA512__AES_256_GCM:256)
-	(Exim 4.98)
-	(envelope-from <avaril@coldcon.co.za>)
-	id 1tnyvV-000000064WS-3314
-	for linux-pm@vger.kernel.org;
-	Fri, 28 Feb 2025 13:53:10 +0200
-Reply-To: funding@investorstrustco.net
-From: Iyke Nikolas <avaril@coldcon.co.za>
-To: linux-pm@vger.kernel.org
-Subject: Re: The Business Loan/financing.
-Date: 28 Feb 2025 11:53:08 +0000
-Message-ID: <20250228112431.7BADFA45012A6B15@coldcon.co.za>
+	s=arc-20240116; t=1740744741; c=relaxed/simple;
+	bh=BABB+Jo1h//suep72I5ItsmFCikAKQIa7J/lBeJE4oI=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=mdLRau6dVHDd5yRyMimHXJMMpaLcrCqEd1RYeCZA5VVqZwoec9et1BJZQVu8aLA8/TYBG9KKIi7tPPbx/GczT08cRpWRiwPdNG8KPJ2lhXHarLzvPWTDEMyN8VHEep4ffiKgdrCCQXsWI5h4M/HchO9zohr2uWbbdZvv5WtBy3Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MWOoE0Wd; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6ef9b8b4f13so16951017b3.2
+        for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 04:12:19 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1740744738; x=1741349538; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=+5pSPichyRWnjhlJDxySBmjSSTwMvFSyoqY5brH4NbM=;
+        b=MWOoE0Wd2RXtwcRi5J0n8V0Tz6p9qajDwFY4kv3BqrsZd7u31vdZWqV8Pbo6n82lFf
+         mAfD1OR8EUcHY2isQGYE4hWxvhcYF4dVhOWgCiz/K/skQ2tYZOw8Ul3VKMe/9b1qB8rr
+         xKk7Fc4v4w5omk+vT/Xok5k6XttJh7FnjPpxLz47tYNiLg/NUvw0k8Mz8+eCgBnnRD/s
+         Psl9/Ey2qGJ/i1orGUknXoRUEtEtaGbXL2wKfYxI6N5CS6I1n7zUKa6zaZ6udvqcygDH
+         hgi7EF7vqVZdIL+87NPThQifn830wWjmCG1kt5UFbg/oi67MjqRM9K4dsulFM/EqBDVu
+         ANyQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740744738; x=1741349538;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=+5pSPichyRWnjhlJDxySBmjSSTwMvFSyoqY5brH4NbM=;
+        b=pYF1mSIn+MNUQCZxyUSJC0xubBHOyaAzhDPdvnxSZKWS1Ja5/pfdyll1AUohODQTyk
+         nuGcYf7iKc1BssbXxhL5GuYZf7CxWiojUKkQvFy0dTmMn4r1miq9xZxssbMiVzcZJ2h5
+         aKB14amEpIL3EezSNOnSGXj9TKL8+vqukq0yn16tD7WhNI/oTdxrMw+p9xLmjwf79V0p
+         BjncdlvBjZE+im5/7I+Ibg04yVKIh4viZ237Fu3zDm/ijUCslDnksblNrNmGIYAm5oC5
+         eEoftRMSdCDr73YuufnpIEYwKbeGKbBgyjq0h9D0lsAmSPcq468Tk++8ZykKDdwFuL5E
+         SqkA==
+X-Forwarded-Encrypted: i=1; AJvYcCU+V6WB04QFx28NpHes1UiHrNa7ArkICBxOXXkJoX+yJWCqwxzQdUaX38zJzteANbaRvkXR6Vw0Xg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwM+Nn7F9JAYSIfN4EBBSsfnRvq6gu0VJfuLDy7vrNb47Q9t5xF
+	2suX7iH9ImOV+G5o2hFb1AkV2WpE5iDQPHHA1RVaXk+elOa/6AvBPc1k8CaOL+qJyR1a0sr3u1A
+	7npcxU/q0/9RetBi/Mt/9obq2cvBsj2lZqxQMyw==
+X-Gm-Gg: ASbGncv1q4zAT4x1lH0Tk4OskHJgPa2l7wUeHxE8pydBAzAQmy6LdMy9OC0XzRQBAeM
+	1NDoizbB5VbSiGrnNFZLFd55dYg7IZoHJSFgCGg1Pr4SDpfrQKU416XBQjHo8P3UFDLyUSPcIAj
+	0xwcGHdplA
+X-Google-Smtp-Source: AGHT+IF5LyA0z6vq8zu3tO1oWVDzeSmN4FFCP4cjtDkkdxPV7Z3Ux5LaBEWOF5SLfhfWthG59puDdlr/Ga0qhFSovFs=
+X-Received: by 2002:a05:690c:3506:b0:6ef:6fef:4cb6 with SMTP id
+ 00721157ae682-6fd49ea038fmr45080957b3.0.1740744738231; Fri, 28 Feb 2025
+ 04:12:18 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain;
-	charset="utf-8"
-Content-Transfer-Encoding: quoted-printable
-X-Authenticated-Sender: avaril@coldcon.co.za
-X-Virus-Scanned: Clear
-X-SpamExperts-Domain: coldcon.co.za
-X-SpamExperts-Username: 
-Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@coldcon.co.za
-X-SpamExperts-Outgoing-Class: unsure
-X-SpamExperts-Outgoing-Evidence: Combined (0.88)
-X-Recommended-Action: accept
-X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+CzanhUpQxxY0jGcn2Rs0cPUtbdvnXkggZ
- 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5w9+NB0706U/e5JSnH+B9KnW4h0KqOTIGbSh7sPxo0b07gN
- zB/4Jkrw1eDLcif59ftsSvV1/NQHUrcsn/Pk4jtugYVALhXkueKT79r7FRLqfRUEuoIDUKvgXwTY
- bAASksh+hJyAsgQN3+fJ25MXybLTEnn3R6339blD0gxjEMpUS7AKkWsSRB50P9i+7DDZoqbBl2zr
- hDc8rYm3k8VWZMvFfvQ0m3pmFgZmwTpeJG35MRTHswbbB/ha+ZWrSAi8SkwqWAikMcSxTAWn8RCv
- ieGEzRrIdLp/AwmQcey+hPKVq9dnf3S1NcNv3U2dp/UbPvviEnzvvDcGs5qmm9XDE2pd30eb89LE
- L2hMaNucijkaP8u7VqvFyzGqvqcVzolfUG+U/86+VeHQfEPfz3YUMMqBqSIGAS5g6SocktP6HR2V
- 1Mnsv/4cfDtSkJz6hRSdrQzTHuxweXeDMpjWlleKrN32mP5wriU8jSHrtsnI5JD0GxR9Ovbqz/k9
- Jlx8RTZkJCspOMQJvQ/Ck3iiU+4DQAj366V+bW1tsfg2xPA2CLYwN3crIUQpaJi+vSc87VANffxa
- 6/OByd93t7BSp9WyM5q4I2qmjKKBlq8TdxpQqSJLRvTJra/Rd6Vtd5fTmhM6nb8XlqtWoZXfDqNX
- VGm4yZ4d/OYnGZUQnca3k4Ez+h60/0M3P8ajsTOgcYvXp2lGYdjouGNWeyDDBMHTHZuluYeB3yVA
- kqJMXGMZ5q3RC4mcsQmogvtkuijgVgXwiIIzxgWjd2x4LjalswpRBG4b+FVJ2w6SeT5iO6UESHEe
- cJJTE9khVSx50aAGz/dpxdFKTmhtALl6tE9e8KCaN2ryngAyISXxK9AXhlIwWCh9wHMxqEy5oqSE
- MZ5ZQYqLIEpgXrLl6H5B8U/ulxTw1Gdtwyp22pb4i4DTkMZeMiNI9JSIyVqEjiLhM0soqLlZEw40
- 8tzmFJqmfDsYdNRg0kZq4IUB
-X-Report-Abuse-To: spam@antispamquarantine.host-h.net
-X-Complaints-To: abuse@antispammaster.host-h.net
+References: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
+ <20250220-rk3588-gpu-pwr-domain-regulator-v6-1-a4f9c24e5b81@kernel.org> <3360051d-1699-46cc-a4c9-0f379fcf8de0@sirena.org.uk>
+In-Reply-To: <3360051d-1699-46cc-a4c9-0f379fcf8de0@sirena.org.uk>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 28 Feb 2025 13:11:42 +0100
+X-Gm-Features: AQ5f1JqGrLsCSl6mU4TpCihGk9__DNvMDKpAdcL6_WxMDANY54b_Qa_DhEb314k
+Message-ID: <CAPDyKFoJ5ZH6LAjFUURkJcudVewxwBM50T4e_GX_COVA5Z2knA@mail.gmail.com>
+Subject: Re: [PATCH v6 1/8] regulator: Add (devm_)of_regulator_get()
+To: Mark Brown <broonie@kernel.org>
+Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, Heiko Stuebner <heiko@sntech.de>, 
+	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Elaine Zhang <zhangqing@rock-chips.com>, 
+	=?UTF-8?Q?Adri=C3=A1n_Mart=C3=ADnez_Larumbe?= <adrian.larumbe@collabora.com>, 
+	Boris Brezillon <boris.brezillon@collabora.com>, Peter Geis <pgwipeout@gmail.com>, 
+	Tomeu Vizoso <tomeu@tomeuvizoso.net>, Vignesh Raman <vignesh.raman@collabora.com>, 
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org, 
+	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hello,
+On Tue, 25 Feb 2025 at 18:59, Mark Brown <broonie@kernel.org> wrote:
+>
+> On Thu, Feb 20, 2025 at 07:58:04PM +0100, Sebastian Reichel wrote:
+> > The Rockchip power-domain controller also plans to make use of
+> > per-domain regulators similar to the MediaTek power-domain controller.
+> > Since existing DTs are missing the regulator information, the kernel
+> > should fallback to the automatically created dummy regulator if
+> > necessary. Thus the version without the _optional suffix is needed.
+>
+> The following changes since commit 0ad2507d5d93f39619fc42372c347d6006b64319:
+>
+>   Linux 6.14-rc3 (2025-02-16 14:02:44 -0800)
+>
+> are available in the Git repository at:
+>
+>   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-devm-of-get
+>
+> for you to fetch changes up to 0dffacbbf8d044456d50c893adb9499775c489f4:
+>
+>   regulator: Add (devm_)of_regulator_get() (2025-02-24 15:26:08 +0000)
+>
+> ----------------------------------------------------------------
+> regulator: Add (devm_)of_regulator_get()
+>
+> This introduces devm_of_regulator_get without the _optional suffix, since
+> that is more sensible for the Rockchip usecase.
+>
+> ----------------------------------------------------------------
+> Sebastian Reichel (1):
+>       regulator: Add (devm_)of_regulator_get()
+>
+>  drivers/regulator/devres.c         | 17 +++++++++++++++++
+>  drivers/regulator/of_regulator.c   | 21 +++++++++++++++++++++
+>  include/linux/regulator/consumer.h |  6 ++++++
+>  3 files changed, 44 insertions(+)
 
-Do you require capital financing or low interest loans to advance=20
-your business projects or growth strategy? We can provide with=20
-the needed investments for your business. 
+Thanks, pulled into the next branch of my pmdomain tree.
 
-Get back to me if interested?
-
-Best regards,
-
-
-Iyke Nikolas
-Managing Partner
-Investors Trust
+Kind regards
+Uffe
 
