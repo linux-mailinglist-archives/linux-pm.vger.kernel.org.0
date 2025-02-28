@@ -1,72 +1,72 @@
-Return-Path: <linux-pm+bounces-23172-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23173-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46274A498DD
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 13:13:46 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 929D5A498FE
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 13:16:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 653633BB856
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 12:12:59 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E3DDD3BD942
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 12:15:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1247B26AAA2;
-	Fri, 28 Feb 2025 12:12:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8BAC26B2AA;
+	Fri, 28 Feb 2025 12:15:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="MWOoE0Wd"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="QuuHrE+m"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-yw1-f181.google.com (mail-yw1-f181.google.com [209.85.128.181])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51F8626AA9A
-	for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 12:12:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 35BD626B087
+	for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 12:15:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.181
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740744741; cv=none; b=mrFf6VOX+MHvv642SEIyVNCGpZXL+VB53ejQmilVByDD5N6CRjdXiwjSjonMCKwt0aiNfav0itS+5O+9Jr66ut4ysd02F3Rm/qhl2DsmAkBNnFo7QeAnqXPSN6qe8/Wgm5K+OnirE5kujZaGaxmUjcEOiUrvSsiOV/BbwZozwE0=
+	t=1740744925; cv=none; b=U+4WHBPNLZ3JqNh77gOKoUra4yCpYtPw9CvQkgpCsasmwl80v1YXsy1SlHXEMTAGx6GnH2Bf4GN68OL8V8CU2YDw5dNyqayvUyL6TewIsJyrTC+hGV4GwezoF9qR6RHHXHtpoH3NI85C6BmtE9dnMnKVqXGbvacrRYBctTC+HRk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740744741; c=relaxed/simple;
-	bh=BABB+Jo1h//suep72I5ItsmFCikAKQIa7J/lBeJE4oI=;
+	s=arc-20240116; t=1740744925; c=relaxed/simple;
+	bh=jUNIrARAbtbTs0tlrP0Tn9FLBSgxnIB4tXATcm2ewZk=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=mdLRau6dVHDd5yRyMimHXJMMpaLcrCqEd1RYeCZA5VVqZwoec9et1BJZQVu8aLA8/TYBG9KKIi7tPPbx/GczT08cRpWRiwPdNG8KPJ2lhXHarLzvPWTDEMyN8VHEep4ffiKgdrCCQXsWI5h4M/HchO9zohr2uWbbdZvv5WtBy3Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=MWOoE0Wd; arc=none smtp.client-ip=209.85.128.176
+	 To:Cc:Content-Type; b=YEknVjzaHZkbyEpvRorP8OH3hphOZ1vwEEAHLGEGshTdvmCKAEKqQbq41J5uT7myCHLw5rHPcpv8gT/t1/N0kPIMsGNKrn5zrhzDHZZm7ikqfn5M3iU0VW09p4VkNT+HMkzDzcml9bxemwOZUaSy3ztP4xawjW1KO1aa4mes7c0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=QuuHrE+m; arc=none smtp.client-ip=209.85.128.181
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6ef9b8b4f13so16951017b3.2
-        for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 04:12:19 -0800 (PST)
+Received: by mail-yw1-f181.google.com with SMTP id 00721157ae682-6ef7c9e9592so16855987b3.1
+        for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 04:15:23 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1740744738; x=1741349538; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1740744923; x=1741349723; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=+5pSPichyRWnjhlJDxySBmjSSTwMvFSyoqY5brH4NbM=;
-        b=MWOoE0Wd2RXtwcRi5J0n8V0Tz6p9qajDwFY4kv3BqrsZd7u31vdZWqV8Pbo6n82lFf
-         mAfD1OR8EUcHY2isQGYE4hWxvhcYF4dVhOWgCiz/K/skQ2tYZOw8Ul3VKMe/9b1qB8rr
-         xKk7Fc4v4w5omk+vT/Xok5k6XttJh7FnjPpxLz47tYNiLg/NUvw0k8Mz8+eCgBnnRD/s
-         Psl9/Ey2qGJ/i1orGUknXoRUEtEtaGbXL2wKfYxI6N5CS6I1n7zUKa6zaZ6udvqcygDH
-         hgi7EF7vqVZdIL+87NPThQifn830wWjmCG1kt5UFbg/oi67MjqRM9K4dsulFM/EqBDVu
-         ANyQ==
+        bh=jUNIrARAbtbTs0tlrP0Tn9FLBSgxnIB4tXATcm2ewZk=;
+        b=QuuHrE+mpQ/NoTWgX7ZAEzezNs+vN6gNvLOcqVVEKYYrdNQeOUjuZuSQCzUDbUIqjp
+         UzSlYXbZDIOLJpD/E1Kx4svNG2JWP5HpevbzWm1fSjVUAgrA4e2U9qJDjwYxpfB8hV1V
+         tcJagQAH30HXsaIKpyw+4jFu2PNDuQ7rfnGHABCx2B+7EYFTA45H/mA3Q9fDnAtDX0E7
+         232ru8SSxbyvw3/Jccu8oMpTT8Q+iQe2dM9jSXthoDyUFqJc+vqlGrN+av38Tnbn8Kfx
+         iBFyZ1zSnVHP5T4LXbci5VDQzRDmlx8bxqebZAWbLyfwAn9+sSqrkJ3q6raUiES6w7Y+
+         Ukzw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740744738; x=1741349538;
+        d=1e100.net; s=20230601; t=1740744923; x=1741349723;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=+5pSPichyRWnjhlJDxySBmjSSTwMvFSyoqY5brH4NbM=;
-        b=pYF1mSIn+MNUQCZxyUSJC0xubBHOyaAzhDPdvnxSZKWS1Ja5/pfdyll1AUohODQTyk
-         nuGcYf7iKc1BssbXxhL5GuYZf7CxWiojUKkQvFy0dTmMn4r1miq9xZxssbMiVzcZJ2h5
-         aKB14amEpIL3EezSNOnSGXj9TKL8+vqukq0yn16tD7WhNI/oTdxrMw+p9xLmjwf79V0p
-         BjncdlvBjZE+im5/7I+Ibg04yVKIh4viZ237Fu3zDm/ijUCslDnksblNrNmGIYAm5oC5
-         eEoftRMSdCDr73YuufnpIEYwKbeGKbBgyjq0h9D0lsAmSPcq468Tk++8ZykKDdwFuL5E
-         SqkA==
-X-Forwarded-Encrypted: i=1; AJvYcCU+V6WB04QFx28NpHes1UiHrNa7ArkICBxOXXkJoX+yJWCqwxzQdUaX38zJzteANbaRvkXR6Vw0Xg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwM+Nn7F9JAYSIfN4EBBSsfnRvq6gu0VJfuLDy7vrNb47Q9t5xF
-	2suX7iH9ImOV+G5o2hFb1AkV2WpE5iDQPHHA1RVaXk+elOa/6AvBPc1k8CaOL+qJyR1a0sr3u1A
-	7npcxU/q0/9RetBi/Mt/9obq2cvBsj2lZqxQMyw==
-X-Gm-Gg: ASbGncv1q4zAT4x1lH0Tk4OskHJgPa2l7wUeHxE8pydBAzAQmy6LdMy9OC0XzRQBAeM
-	1NDoizbB5VbSiGrnNFZLFd55dYg7IZoHJSFgCGg1Pr4SDpfrQKU416XBQjHo8P3UFDLyUSPcIAj
-	0xwcGHdplA
-X-Google-Smtp-Source: AGHT+IF5LyA0z6vq8zu3tO1oWVDzeSmN4FFCP4cjtDkkdxPV7Z3Ux5LaBEWOF5SLfhfWthG59puDdlr/Ga0qhFSovFs=
-X-Received: by 2002:a05:690c:3506:b0:6ef:6fef:4cb6 with SMTP id
- 00721157ae682-6fd49ea038fmr45080957b3.0.1740744738231; Fri, 28 Feb 2025
- 04:12:18 -0800 (PST)
+        bh=jUNIrARAbtbTs0tlrP0Tn9FLBSgxnIB4tXATcm2ewZk=;
+        b=Y4NJkscYRaH/TkzzEaucPwMrFVSBToojQoJ0l30fsqVs+pWF4itwB+sm5+TRx67Uan
+         oVTE9dcyUc6OH6Tr407gxpw6JDgQGSLK1JzWaYOQw7FiRwJO4OYRnyCLz4CgEgQmorY/
+         LXzmsu928atcfxdkBmnCc6vDKsPiJXcl9ku/egyw9iHwYOVmKfaQf40IcLtG8dqccx56
+         lL6Tyf8HeYwT2ivu997YCyp9TOJ3hFO/pcnqwtwQ6mb4Yvr8pvufulwr1YNP5Xe80ysF
+         tngsXI3Nw+CVOQjfFtF6SZBhZ36d9YwjrgGPl24Tm7XxTS/8CLF57q6pTGmA3+cPY7s/
+         vMKA==
+X-Forwarded-Encrypted: i=1; AJvYcCUtNPvYQA5BU+IKLtnBmZtWMu5CZOfwPeM6rh62h5JEh9VztvGkhHVXsgJglMSrxnDMEZchCS1hIw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz2Y2lQDBAJ8j4dmjFAT8NgSOax2eoi0Nh0p30EtfS2fBLuouQ/
+	5CD/bxuwndVQoprQYiu7i0fCVx3L0LoJ7ftbH2JgQ3jQG9DuWLICRvffZTwUxXe+BJoINvEqEY3
+	zEjwCFCk/KQl6EEDYOwWlL2T0x2ss/T8Bq2R1oQ==
+X-Gm-Gg: ASbGnct/tY62gfojhQXBRArAQVdH1fDlNdHM3UN8CMaMpXBzI9eujHapVah1V9NPzvj
+	BSQvCQky3TDRNSXL2EvSd+XhOMe6rQRKW33zYHdnANfVnZd35oHlIWaAXrrVzJ6T1uwx6uuo/eC
+	RfEnc5WZfY
+X-Google-Smtp-Source: AGHT+IHT7obeRQVC5jfTWOVMXwZbo8MvDy1vz1fLAzz3uGYU/jwe30ZeBEtELX2ss/DGYLXh7XY0o+RqytL8ARTZDYA=
+X-Received: by 2002:a05:690c:4a0e:b0:6fb:1c5a:80fc with SMTP id
+ 00721157ae682-6fd4a0c405amr41901307b3.26.1740744923010; Fri, 28 Feb 2025
+ 04:15:23 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -74,16 +74,15 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 References: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
- <20250220-rk3588-gpu-pwr-domain-regulator-v6-1-a4f9c24e5b81@kernel.org> <3360051d-1699-46cc-a4c9-0f379fcf8de0@sirena.org.uk>
-In-Reply-To: <3360051d-1699-46cc-a4c9-0f379fcf8de0@sirena.org.uk>
+In-Reply-To: <20250220-rk3588-gpu-pwr-domain-regulator-v6-0-a4f9c24e5b81@kernel.org>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 28 Feb 2025 13:11:42 +0100
-X-Gm-Features: AQ5f1JqGrLsCSl6mU4TpCihGk9__DNvMDKpAdcL6_WxMDANY54b_Qa_DhEb314k
-Message-ID: <CAPDyKFoJ5ZH6LAjFUURkJcudVewxwBM50T4e_GX_COVA5Z2knA@mail.gmail.com>
-Subject: Re: [PATCH v6 1/8] regulator: Add (devm_)of_regulator_get()
-To: Mark Brown <broonie@kernel.org>
-Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, Heiko Stuebner <heiko@sntech.de>, 
-	Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
+Date: Fri, 28 Feb 2025 13:14:47 +0100
+X-Gm-Features: AQ5f1JrDK1Y4U3HrAxZBGp7DwLtxTGI5xNt7avBzml29SRZW6KdhhTSUIQ_s8IE
+Message-ID: <CAPDyKFpQaX8nUt_OQ-hwB+zYqWVCLKci2BmhrBOYUTcrkOMv9g@mail.gmail.com>
+Subject: Re: [PATCH v6 0/8] Fix RK3588 power domain problems
+To: Sebastian Reichel <sebastian.reichel@collabora.com>
+Cc: Mark Brown <broonie@kernel.org>, Heiko Stuebner <heiko@sntech.de>, Rob Herring <robh@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
 	Liam Girdwood <lgirdwood@gmail.com>, Elaine Zhang <zhangqing@rock-chips.com>, 
 	=?UTF-8?Q?Adri=C3=A1n_Mart=C3=ADnez_Larumbe?= <adrian.larumbe@collabora.com>, 
 	Boris Brezillon <boris.brezillon@collabora.com>, Peter Geis <pgwipeout@gmail.com>, 
@@ -92,44 +91,49 @@ Cc: Sebastian Reichel <sebastian.reichel@collabora.com>, Heiko Stuebner <heiko@s
 	linux-rockchip@lists.infradead.org, devicetree@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 25 Feb 2025 at 18:59, Mark Brown <broonie@kernel.org> wrote:
+On Thu, 20 Feb 2025 at 19:58, Sebastian Reichel
+<sebastian.reichel@collabora.com> wrote:
 >
-> On Thu, Feb 20, 2025 at 07:58:04PM +0100, Sebastian Reichel wrote:
-> > The Rockchip power-domain controller also plans to make use of
-> > per-domain regulators similar to the MediaTek power-domain controller.
-> > Since existing DTs are missing the regulator information, the kernel
-> > should fallback to the automatically created dummy regulator if
-> > necessary. Thus the version without the _optional suffix is needed.
+> Hi,
 >
-> The following changes since commit 0ad2507d5d93f39619fc42372c347d6006b64319:
+> I got a report, that the Linux kernel crashes on Rock 5B when the panthor
+> driver is loaded late after booting. The crash starts with the following
+> shortened error print:
 >
->   Linux 6.14-rc3 (2025-02-16 14:02:44 -0800)
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to set domain 'gpu', val=0
+> rockchip-pm-domain fd8d8000.power-management:power-controller: failed to get ack on domain 'gpu', val=0xa9fff
+> SError Interrupt on CPU4, code 0x00000000be000411 -- SError
 >
-> are available in the Git repository at:
+> This series first does some cleanups in the Rockchip power domain
+> driver and changes the driver, so that it no longer tries to continue
+> when it fails to enable a domain. This gets rid of the SError interrupt
+> and long backtraces. But the kernel still hangs when it fails to enable
+> a power domain. I have not done further analysis to check if that can
+> be avoided.
 >
->   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git tags/regulator-devm-of-get
->
-> for you to fetch changes up to 0dffacbbf8d044456d50c893adb9499775c489f4:
->
->   regulator: Add (devm_)of_regulator_get() (2025-02-24 15:26:08 +0000)
->
-> ----------------------------------------------------------------
-> regulator: Add (devm_)of_regulator_get()
+> Last but not least this provides a fix for the GPU power domain failing
+> to get enabled - after some testing from my side it seems to require the
+> GPU voltage supply to be enabled.
 >
 > This introduces devm_of_regulator_get without the _optional suffix, since
-> that is more sensible for the Rockchip usecase.
+> that is more sensible for the Rockchip usecase. Longer explanation can be
+> seen in patch 6, which adds the handling to the Rockchip driver. My merge
+> suggestion would be that Mark provides an immutable branch to Ulf.
 >
-> ----------------------------------------------------------------
-> Sebastian Reichel (1):
->       regulator: Add (devm_)of_regulator_get()
+> The last patch, which updates the RK3588 board files should cover all RK3588
+> boards that are currently in Heiko's for-next branch. Any board missing the
+> update will behave as before, so it is perfectly fine not to update all DT
+> files at once (in case I missed any).
 >
->  drivers/regulator/devres.c         | 17 +++++++++++++++++
->  drivers/regulator/of_regulator.c   | 21 +++++++++++++++++++++
->  include/linux/regulator/consumer.h |  6 ++++++
->  3 files changed, 44 insertions(+)
+> This is based on Heiko's for-next branch. Also it's probably worth mentioning,
+> that mesa CI is carrying this patchset for quite some time now.
 
-Thanks, pulled into the next branch of my pmdomain tree.
+[...]
 
-Kind regards
+I have pulled patch 1 from Mark's tree and applied patch 2 -> patch 7 for next.
+
+Note that, patch6 (the DT patch) is also available on the immutable dt branch.
+
+Thanks and kind regards
 Uffe
 
