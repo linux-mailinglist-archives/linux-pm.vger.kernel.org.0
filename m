@@ -1,226 +1,110 @@
-Return-Path: <linux-pm+bounces-23170-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23171-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B7951A4981D
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 12:11:57 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 68041A49893
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 12:53:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D51A11896DAD
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 11:12:03 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id CB1FE7A71A8
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 11:52:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E1DC4261576;
-	Fri, 28 Feb 2025 11:11:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 29B7725E46B;
+	Fri, 28 Feb 2025 11:53:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="C14sm9XU"
+	dkim=pass (2048-bit key) header.d=coldcon.co.za header.i=@coldcon.co.za header.b="F27pfRlZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from lelvem-ot01.ext.ti.com (lelvem-ot01.ext.ti.com [198.47.23.234])
+Received: from outgoing59.jnb.host-h.net (outgoing59.jnb.host-h.net [156.38.154.105])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6756F26157C;
-	Fri, 28 Feb 2025 11:11:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.234
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 63CFF23E32A
+	for <linux-pm@vger.kernel.org>; Fri, 28 Feb 2025 11:53:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=156.38.154.105
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740741105; cv=none; b=EwflBxyZMUdi5cWzvN1Bn0gVK5pQc515QHsCihhLPdx3QeqTXgwmkR8sTHW8/saAOszEz2z1VBYnkMh5nSJAx+VGv1t8bCunIFqdoXiNvPLjOm3nc5gHTfonPUhzsnCXJO5c6EMVKHgyIeBXKGxPfwYlyf2ssNorbGzHrzWCmpE=
+	t=1740743598; cv=none; b=jDJTOfECLnH95gSZu0eMRNiC9HOuJ3ChGIZaBXei4OEhVRR9dichm7gKv0cDR2rj9OyItL+W1yzUeUYfms+ydeFein/NBRphDrUarDsz0Ql6ViWSXcpMXC14HsX+qYarkNM/SWZ0H+yQuS3QdJdsw196Mvi36iAMdyYBoMM99dk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740741105; c=relaxed/simple;
-	bh=YuD34HDCBVevDPaLGVJtBZmAYtG5QNk+RZIZJ/O3oMQ=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Xmlhb4U+O08G4JaTUY7o0zrSSckEd22QgIUJkWrdd3EmtUQToCcTQWvBJi+qqyI54wM8uHSbtWynrOfM6xZXLS0/mTJHrkuK2bb4Wfxpecpj+glm8npBYNdDuHJoME7LYf3lNn9nag3NqE/lTHkblYhi7QBUuwxXyL1QIClBgcg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=C14sm9XU; arc=none smtp.client-ip=198.47.23.234
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
-Received: from fllv0035.itg.ti.com ([10.64.41.0])
-	by lelvem-ot01.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 51SBBZ592124114
-	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
-	Fri, 28 Feb 2025 05:11:35 -0600
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
-	s=ti-com-17Q1; t=1740741095;
-	bh=asqImrv/yYJQ+trytSJVTeaE7rqR1lERUILCexOriWA=;
-	h=Date:From:To:CC:Subject:References:In-Reply-To;
-	b=C14sm9XUww3Zv3doWUTERSq8Co//LZ+fz9KSh8m081ZSWx2NlQVSFPhEBqvId4/tn
-	 HUjEh2Rsh68faQbQrRh8vjIhY8sf3vVfkgTQpuUUFBFFrQ9kvI5Seg9gQQZ1Z+qGLl
-	 pzhDY/GYzGqPvtvxICjp8wX6vdZr4iiqBKN4m8P0=
-Received: from DFLE113.ent.ti.com (dfle113.ent.ti.com [10.64.6.34])
-	by fllv0035.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 51SBBZdZ048217
-	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
-	Fri, 28 Feb 2025 05:11:35 -0600
-Received: from DFLE115.ent.ti.com (10.64.6.36) by DFLE113.ent.ti.com
- (10.64.6.34) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Fri, 28
- Feb 2025 05:11:34 -0600
-Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DFLE115.ent.ti.com
- (10.64.6.36) with Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
- Frontend Transport; Fri, 28 Feb 2025 05:11:35 -0600
-Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
-	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 51SBBYkZ031582;
-	Fri, 28 Feb 2025 05:11:35 -0600
-Date: Fri, 28 Feb 2025 16:41:34 +0530
-From: Dhruva Gole <d-gole@ti.com>
-To: Kamlesh Gurudasani <kamlesh@ti.com>
-CC: Ulf Hansson <ulf.hansson@linaro.org>, <vigneshr@ti.com>,
-        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
-        Kevin Hilman
-	<khilman@baylibre.com>, Peng Fan <peng.fan@oss.nxp.com>,
-        Cristian Marussi
-	<cristian.marussi@arm.com>
-Subject: Re: [PATCH RFC] pmdomain: core: add support for writeble power
- domain state
-Message-ID: <20250228111134.p56fnrcztufuahic@lcpd911>
-References: <20250221-pm-debug-v1-1-e5bd815f7ca4@ti.com>
+	s=arc-20240116; t=1740743598; c=relaxed/simple;
+	bh=LnJAb5OtSiiPPpVmdSEicOxdfy335XXtHun9Lv2d8Bw=;
+	h=From:To:Subject:Date:Message-ID:MIME-Version:Content-Type; b=e9GS4lR31MjIgkV0Ao/cBT4piacLhzjMRrj3A9zGfyrapyZdx7hm5gUbyzLRGuOyBeEb9VrHEH39CebKQ9a5OHfpexdOnzifl3VeYzAUlQ8gbkLx3UmkX8R+31ieEMgu/w7yNbkcMVnhXCLU5qIJl+8v/L7JKrMsctqyITEH8uQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coldcon.co.za; spf=fail smtp.mailfrom=coldcon.co.za; dkim=pass (2048-bit key) header.d=coldcon.co.za header.i=@coldcon.co.za header.b=F27pfRlZ; arc=none smtp.client-ip=156.38.154.105
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=coldcon.co.za
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=coldcon.co.za
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed;
+	d=coldcon.co.za; s=xneelo; h=Content-Transfer-Encoding:Content-Type:
+	MIME-Version:Message-ID:Date:Subject:To:From:Reply-To:sender:cc:bcc:
+	in-reply-to:references; bh=t+qwmUT3iOAm1DfPM+nbVN5TXLHXkSwi3Xte37fm8Y0=; b=F2
+	7pfRlZXZkhHhqcIeHFeH9X1NIVRTj1Ur5wPF5h6zNg21r5IDITHAup9X2Qw4x+wTBYqqJZXYoqr35
+	Ix6vjgmVcnfnGdgdUCmJ/aq55khE64/bWhkwOlOF1drT6VPjUhwiGWIK0nAC0u+I7Sa71vf9JZxf6
+	pMyK3nPy1sX70s0uX5KJpiyOW0cV6X/P+U1OsB+qK830xIziLtnNhJB3Q31o2d4r5qYKKmUGEGhXx
+	EFpjf/WnaAWfFy/2KaaDWRZe2nEiJ28WDzk3JmQJP4bgQpYOeAN+104wn/OGeHl1xoKVzFXl3ccRn
+	lGWMA1HWlaSRWHmM1cfYHR98FaWZ3kMA==;
+Received: from dedi166.jnb2.host-h.net ([41.203.16.166])
+	by antispam8-jnb1.host-h.net with esmtpsa (TLSv1.3:TLS_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <avaril@coldcon.co.za>)
+	id 1tnyvY-009Dgc-CY
+	for linux-pm@vger.kernel.org; Fri, 28 Feb 2025 13:53:14 +0200
+Received: from [104.192.5.240] (helo=coldcon.co.za)
+	by dedi166.jnb2.host-h.net with esmtpsa (TLS1.2:ECDHE_SECP521R1__RSA_SHA512__AES_256_GCM:256)
+	(Exim 4.98)
+	(envelope-from <avaril@coldcon.co.za>)
+	id 1tnyvV-000000064WS-3314
+	for linux-pm@vger.kernel.org;
+	Fri, 28 Feb 2025 13:53:10 +0200
+Reply-To: funding@investorstrustco.net
+From: Iyke Nikolas <avaril@coldcon.co.za>
+To: linux-pm@vger.kernel.org
+Subject: Re: The Business Loan/financing.
+Date: 28 Feb 2025 11:53:08 +0000
+Message-ID: <20250228112431.7BADFA45012A6B15@coldcon.co.za>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250221-pm-debug-v1-1-e5bd815f7ca4@ti.com>
-X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
+Content-Type: text/plain;
+	charset="utf-8"
+Content-Transfer-Encoding: quoted-printable
+X-Authenticated-Sender: avaril@coldcon.co.za
+X-Virus-Scanned: Clear
+X-SpamExperts-Domain: coldcon.co.za
+X-SpamExperts-Username: 
+Authentication-Results: host-h.net; auth=pass (login) smtp.auth=@coldcon.co.za
+X-SpamExperts-Outgoing-Class: unsure
+X-SpamExperts-Outgoing-Evidence: Combined (0.88)
+X-Recommended-Action: accept
+X-Filter-ID: Pt3MvcO5N4iKaDQ5O6lkdGlMVN6RH8bjRMzItlySaT+CzanhUpQxxY0jGcn2Rs0cPUtbdvnXkggZ
+ 3YnVId/Y5jcf0yeVQAvfjHznO7+bT5w9+NB0706U/e5JSnH+B9KnW4h0KqOTIGbSh7sPxo0b07gN
+ zB/4Jkrw1eDLcif59ftsSvV1/NQHUrcsn/Pk4jtugYVALhXkueKT79r7FRLqfRUEuoIDUKvgXwTY
+ bAASksh+hJyAsgQN3+fJ25MXybLTEnn3R6339blD0gxjEMpUS7AKkWsSRB50P9i+7DDZoqbBl2zr
+ hDc8rYm3k8VWZMvFfvQ0m3pmFgZmwTpeJG35MRTHswbbB/ha+ZWrSAi8SkwqWAikMcSxTAWn8RCv
+ ieGEzRrIdLp/AwmQcey+hPKVq9dnf3S1NcNv3U2dp/UbPvviEnzvvDcGs5qmm9XDE2pd30eb89LE
+ L2hMaNucijkaP8u7VqvFyzGqvqcVzolfUG+U/86+VeHQfEPfz3YUMMqBqSIGAS5g6SocktP6HR2V
+ 1Mnsv/4cfDtSkJz6hRSdrQzTHuxweXeDMpjWlleKrN32mP5wriU8jSHrtsnI5JD0GxR9Ovbqz/k9
+ Jlx8RTZkJCspOMQJvQ/Ck3iiU+4DQAj366V+bW1tsfg2xPA2CLYwN3crIUQpaJi+vSc87VANffxa
+ 6/OByd93t7BSp9WyM5q4I2qmjKKBlq8TdxpQqSJLRvTJra/Rd6Vtd5fTmhM6nb8XlqtWoZXfDqNX
+ VGm4yZ4d/OYnGZUQnca3k4Ez+h60/0M3P8ajsTOgcYvXp2lGYdjouGNWeyDDBMHTHZuluYeB3yVA
+ kqJMXGMZ5q3RC4mcsQmogvtkuijgVgXwiIIzxgWjd2x4LjalswpRBG4b+FVJ2w6SeT5iO6UESHEe
+ cJJTE9khVSx50aAGz/dpxdFKTmhtALl6tE9e8KCaN2ryngAyISXxK9AXhlIwWCh9wHMxqEy5oqSE
+ MZ5ZQYqLIEpgXrLl6H5B8U/ulxTw1Gdtwyp22pb4i4DTkMZeMiNI9JSIyVqEjiLhM0soqLlZEw40
+ 8tzmFJqmfDsYdNRg0kZq4IUB
+X-Report-Abuse-To: spam@antispamquarantine.host-h.net
+X-Complaints-To: abuse@antispammaster.host-h.net
 
-On Feb 21, 2025 at 19:18:10 +0530, Kamlesh Gurudasani wrote:
-> Add support for writeable power domain states from debugfs.
+Hello,
 
-ACK.
+Do you require capital financing or low interest loans to advance=20
+your business projects or growth strategy? We can provide with=20
+the needed investments for your business. 
 
-+CC'ed a few more folks who maybe interested...
- 
-> Defining GENPD_ALLOW_WRITE_DEBUGFS will enable writeable pd_state
-> node in debugfs.
-> 
-> Signed-off-by: Kamlesh Gurudasani <kamlesh@ti.com>
-> ---
-> This has turn out to be really helpful when debugging SCMI protocol
-> for power domain management.
+Get back to me if interested?
 
-Agreed, I have found this patch very good for turning off/on power
-domains in a "raw" form if you will.
-We have also been using something called k3conf on TI K3
-class of devices like AM62x family where we basically use a user space
-tool to send power on/off/ device status without it going via the kernel
-genPD. This approach that Kamlesh is suggesting helps us leverage the
-kernel stacks (like SCMI) but while also going via the pmdomain core
-driver. This patch helps abstract underneath protocol layers used for power
-domain operations in SOCs...
-
-Here's how it looks for anyone wondering: [1]
-We also talked about this at last year's Embedded Open Source Summit,
-Seattle [2] where we mentioned we'd be upstreaming this patch and the
-audience seemed interested to use it.
-
-> 
-> Reference has been taken from clock framework which provides similar
-> CLOCK_ALLOW_WRITE_DEBUGFS, which helps to test clocks from debugfs.
-> ---
->  drivers/pmdomain/core.c | 77 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
->  1 file changed, 77 insertions(+)
-> 
-> diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
-> index 9b2f28b34bb5..6aba0c672da0 100644
-> --- a/drivers/pmdomain/core.c
-> +++ b/drivers/pmdomain/core.c
-> @@ -1298,6 +1298,60 @@ late_initcall_sync(genpd_power_off_unused);
->  
->  #ifdef CONFIG_PM_SLEEP
->  
-> +#ifdef GENPD_ALLOW_WRITE_DEBUGFS
-> +/*
-> + * This can be dangerous, therefore don't provide any real compile time
-> + * configuration option for this feature.
-> + * People who want to use this will need to modify the source code directly.
-> + */
-> +static int genpd_state_set(void *data, u64 val)
-> +{
-> +
-> +	struct generic_pm_domain *genpd = data;
-> +	int ret = 0;
-> +
-> +	ret = genpd_lock_interruptible(genpd);
-
-Why has it been kept interruptible? Other places I see are just using
-genpd_lock(pd);
-
-> +	if (ret)
-> +		return -ERESTARTSYS;
-> +
-> +	if (val == 1) {
-> +		genpd->power_on(genpd);
-> +		genpd->status = GENPD_STATE_ON;
-> +	} else if (val == 0) {
-> +		genpd->power_off(genpd);
-> +		genpd->status = GENPD_STATE_OFF;
-> +	}
-> +
-> +	genpd_unlock(genpd);
-> +	return 0;
-> +}
-> +
-> +#define pd_state_mode	0644
-
-Where's this used?
-
-> +
-> +static int genpd_state_get(void *data, u64 *val)
-> +{
-> +
-> +	struct generic_pm_domain *genpd = data;
-> +	int ret = 0;
-> +
-> +	ret = genpd_lock_interruptible(genpd);
-> +	if (ret)
-> +		return -ERESTARTSYS;
-> +
-> +	if (genpd->status == GENPD_STATE_OFF)
-> +		*val = 0;
-> +	else
-> +		*val = 1;
-> +
-> +	genpd_unlock(genpd);
-> +	return ret;
-> +}
-> +
-> +DEFINE_DEBUGFS_ATTRIBUTE(pd_state_fops, genpd_state_get,
-> +			 genpd_state_set, "%llu\n");
-> +
-> +#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
-> +
->  /**
->   * genpd_sync_power_off - Synchronously power off a PM domain and its parents.
->   * @genpd: PM domain to power off, if possible.
-> @@ -3639,6 +3693,11 @@ static void genpd_debug_add(struct generic_pm_domain *genpd)
->  	if (genpd->set_performance_state)
->  		debugfs_create_file("perf_state", 0444,
->  				    d, genpd, &perf_state_fops);
-> +#ifdef GENPD_ALLOW_WRITE_DEBUGFS
-> +	debugfs_create_file("pd_state", 0644, d, genpd,
-
-Ah this is probably where you wanted to use the #define'd pd_state_mode I guess....
-
-> +			    &pd_state_fops);
-> +#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
-> +
->  }
->  
->  static int __init genpd_debug_init(void)
-> @@ -3653,6 +3712,24 @@ static int __init genpd_debug_init(void)
->  	list_for_each_entry(genpd, &gpd_list, gpd_list_node)
->  		genpd_debug_add(genpd);
->  
-
-Only minor cleanups pending, otherwise patch looks good to me. Hoping
-more people can also try it out and jump on this thread with their
-thoughts....
-
-Refs:
-[1] https://gist.github.com/DhruvaG2000/f3ec24252d4cf2800c97c2e336d0b5db
-[2]
-https://eoss24.sched.com/event/1aBEs/a-primer-to-clocks-and-power-management-through-arm-scmi-dhruva-gole-kamlesh-gurudasani-texas-instruments
-
--- 
 Best regards,
-Dhruva Gole
-Texas Instruments Incorporated
+
+
+Iyke Nikolas
+Managing Partner
+Investors Trust
 
