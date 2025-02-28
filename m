@@ -1,85 +1,82 @@
-Return-Path: <linux-pm+bounces-23142-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23143-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id A783AA49039
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 05:17:58 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8DEDA490BF
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 06:15:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 330181892CF7
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 04:17:55 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8A3171893433
+	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 05:15:55 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7BF81A840D;
-	Fri, 28 Feb 2025 04:17:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5B75F1A314B;
+	Fri, 28 Feb 2025 05:15:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="ZgECTZpG"
+	dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b="hM8HcyjQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM12-MW2-obe.outbound.protection.outlook.com (mail-mw2nam12olkn2043.outbound.protection.outlook.com [40.92.23.43])
+Received: from NAM11-CO1-obe.outbound.protection.outlook.com (mail-co1nam11olkn2025.outbound.protection.outlook.com [40.92.18.25])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C32E21A4F0A;
-	Fri, 28 Feb 2025 04:17:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.23.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 749F1632;
+	Fri, 28 Feb 2025 05:15:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.92.18.25
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740716222; cv=fail; b=KZCDQt9EuPZztbSK5i+h0LGdcvrhmzUMmt9/BiGxBj7iey7YWeRrnmNywad2iP9O2l7hZqPUv719McKkCbtcxS7Kyju26ErMZ3mpAVJtQWPzOWoHYTpwXzHoolVHEoNqCYVV/qwaSI373wVGZhMRwFln1v0SW+vjBzw6bqAw2ZE=
+	t=1740719742; cv=fail; b=RpFRhOZJcKGs1rD5HUQL1JuF/ckoyZT9ZjP9bAakdBtKK0e93k4IGQQWj0azLOhI86KaikubKRcVqW2OU8wZl+vw/eLIZU8tz/mU/BcfjrQSPhRAIbDbWT67SlbVL8uTZUWO/2YhdPSnpVXG7rUgooZAHugIsMmXA0ayHlyxqhI=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740716222; c=relaxed/simple;
-	bh=ezvY9/6b44+/jx0wNIz1MzCsNmMfuzceoGEOyqpX1ZY=;
-	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=ifrLC4Q4ZAYlqiZCQo2bOZunZj5f91QphUPPCCCH1WofJxswTvCBppkW3ZQPisq0n6UVHF2/AYKNMSFofdcm28FwTuvnR3o7guE8pTxDzWR47VJLtkgcFm12BMP7IHEtptffi7pZ4DNLuCAmhGBwzH9/w0ktjiD6g9tuhPiU8vE=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=ZgECTZpG; arc=fail smtp.client-ip=40.92.23.43
+	s=arc-20240116; t=1740719742; c=relaxed/simple;
+	bh=DToZa9zVz0m2GunOjKOBmphkoitC/ibQTJlg4Le/IeM=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=YUDJODZyeg2dWGQ/Y24QvgSbJKSUMmg7pVhRtpHqVUyTS5K0g5k7cMHvi8Wy1XeEIHO9mcYJFWTinlwLORSUChVwpgnLm7AJxh0i0KewPejevGfC0TS6+h9VG9eW2NNoLS6Rrwk74S1CZVmrJFuAEoOaZg9v2Jv2kvqbFrlE39g=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com; spf=pass smtp.mailfrom=outlook.com; dkim=pass (2048-bit key) header.d=outlook.com header.i=@outlook.com header.b=hM8HcyjQ; arc=fail smtp.client-ip=40.92.18.25
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=outlook.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=outlook.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=jZGFEkwCmamyPf8vrqwA4SHY7nY0RZz17oRZXtnedeaOCi2l/JdM93R1yUSDPmB0mltYsCD930nJ4e4i4jM6zOd9P6kuswl/ILd8sku+mkAO3PanZMN5SxrnU459BZRVjUiQAYjav0baeql3l7FjzLb63h3Zl5BtX5JV3SDLiBmgd6K8/cGLpooMXYfsqJqoxmvxMwr/KLc3M7a2PJ4Ud76tfs8EoaKwQ1u1+nCePaa5CA+2+UXzH00iV+BWBmRtkSsbCQdevcXqDZneIoaWq7XHBR7tW7J1wri80RV53NXXfIS0V1nUk//qHyNBuJTAzRUn2qats8r36yt7lIQfXQ==
+ b=TGE8MegnQmAoEjG3uHkoyylLyHMzJTOlWvaf7JrUa1QqD3ZisYTLiQvFHB6/pR+no7u9wX3V4xjvdNmRivFBxz8NA9V3TzIzni1hF4hXMaXjV9NDeU9GeWPiZp14mX51Eu/Sm1Yc5hbZwHkBtz3wno+dfnQUiYCRc52rQ7hooC1lXSgauqjh1DL1Xrb0HKTZkl94J4RW0flBMLBFK1dofwMhu/Dnoz40ZRuvZawXepavLmFUIV00RlWLHO6dzY+ZhHGEQJfK7luLYeHJB96SqZFPrTS350bNw/xJ1jmYKXUv8bGR4vt8yG4uHMahaEpYuOyr1XVQW8Y2LvT0eWgq8w==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=hnSuhQceKRMFe/jOY9lYFf3xMBTt7R45wikzYsrpJ3c=;
- b=aiwGKlZf491+1s3eVFmtwAqRGArpmCRgZ3gGm37qkqsnwH85mSsxUR79cGtWv4hIrxKSxT2ono8UZtCfgEpJMYKzIsZ02QD96kX/u+8qL/+iuDJYof7oyLZcG/rGgFKhkI2efsCqeHnnLIV/d8Sq2rG2FDK1h/X8kfnKlNDhGX/7OfdPbdlVmEQD5bQDD7TBjVbdebv6y1udv0Tpz5iZbyp3GRICk8fJ7JT7fYjbODJnkPX3/iY5B5tKKP6u0mvWeGscgG1unzNqAi55V/6Ip4B87IyClci8H46p9EIJrzOgMYiiFIRpxARPPn7MtVlY1BGBphBNgjgak1Ve5QwKxQ==
+ bh=k1q8ZPKVFSUZicImLgH5Wb6aLZh2u9GgthMU2Y7tEqc=;
+ b=L1naAfF1+DvG9EYihh5YfFsnhroBjaRf4tiz/ab67lteIIl/dOOxYoPufu8MKhUaR2lKvPBIFrIg3zV/UQvlCgc+nwqMz86ziaxPFnNagIbQ97OlvGP555jZoGKbFEk9rBKXeeHY6aGZEpeAzWH3oG9qUQOtLdW90sbFcLq96e97qOio8p1u+dp/piNDfqqshQuY7YoMD9Yrke5I0dBJ11R/t1rk7GW4O0embCFsZf1m47+erYWX+5Kw4ZfqxiqIwK+VlEUji1ImYMJ2nz2aBS+Rjj3ctzjHmJvXrIdm9PXVcPHAn9DiW6QSjeUpSFPugJUcjNI9+n5Q9AQUnVhf4Q==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=none; dmarc=none;
  dkim=none; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=outlook.com;
  s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=hnSuhQceKRMFe/jOY9lYFf3xMBTt7R45wikzYsrpJ3c=;
- b=ZgECTZpG3FwUBUpTcE9KikoEC8NmAcTrrRzLailCll6Wzq3Ve9/oPnAsPGSm2B5idXH+XjK06bWUMvcHjWuFKWWlC1wxDUt3jqALp5Md3gxEsea5RBnTuzilYn2D2SF4LKwxhbxlwe8Bhdo/BJQAmATWd7NaOeSXv2DFzbw4ssXH6goG1XQ4F/U+X888U/Y2x/HFQtmHck62lu1b0Dv8NZjDzjKG3BgLwOglTwuwWtOqrFf1hM3aL/q7r+5ZXL5dT8+s4TbZrZi9pohYaFQ3WGA0m9Wft6ZXG5ybf5RJNtFC8GDDGjZnVayOjHgpNkrjti0ORQV8iYeYDAWeBTMQcw==
+ bh=k1q8ZPKVFSUZicImLgH5Wb6aLZh2u9GgthMU2Y7tEqc=;
+ b=hM8HcyjQqbePaVAp3Uirf1JygNa689BaoLvVcKsbKKCWybM8YaABTCr0P9+znlg3zKQ5Ozq2ZA7peq8y6nXevVGBa4v8VvELVHBYuGoeJz+gPRgxTp0eCR789V0znABmfjm25h2QLN4sYaVd+Z7KhhHfA2Cfsr8FqF8vVH4ZZRNu+drb9wIMdvqWUL3FuZs5JDLB+JhnTavFCRksJ8aJKp/BWwKYfxKa2Zuc6Zp7ybd4BQGaQ6yxT5vJdBS05UOFlG37/xSbEqIyBSITn99IW53vASrt1MkBB/oaCwiJS49W3IF6d4uikyAW1WQKOWj33O6GMHT1AJILR/tdmBn91A==
 Received: from DS7PR19MB8883.namprd19.prod.outlook.com (2603:10b6:8:253::16)
- by IA1PR19MB6204.namprd19.prod.outlook.com (2603:10b6:208:3ec::18) with
+ by LV3PR19MB8318.namprd19.prod.outlook.com (2603:10b6:408:215::8) with
  Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.18; Fri, 28 Feb
- 2025 04:16:58 +0000
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.21; Fri, 28 Feb
+ 2025 05:15:38 +0000
 Received: from DS7PR19MB8883.namprd19.prod.outlook.com
  ([fe80::e0c2:5b31:534:4305]) by DS7PR19MB8883.namprd19.prod.outlook.com
  ([fe80::e0c2:5b31:534:4305%6]) with mapi id 15.20.8466.020; Fri, 28 Feb 2025
- 04:16:58 +0000
-Message-ID:
- <DS7PR19MB88835E5F6B906B0E9136CCF59DCC2@DS7PR19MB8883.namprd19.prod.outlook.com>
-Date: Fri, 28 Feb 2025 08:16:42 +0400
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v8 3/5] thermal: qcom: tsens: add support for tsens v1
- without RPM
-To: Dmitry Baryshkov <dmitry.baryshkov@linaro.org>
-Cc: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- devicetree@vger.kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org,
- amitk@kernel.org, thara.gopinath@gmail.com, robh@kernel.org,
- krzk+dt@kernel.org, quic_srichara@quicinc.com
-References: <20250227110423.8418-1-george.moussalem@outlook.com>
- <DS7PR19MB888322C58FC555299256E8D99DCD2@DS7PR19MB8883.namprd19.prod.outlook.com>
- <eafirt5dg4vmafmu2wph47zrrzyqrz65z5ypqrl7fhr77qckfi@dgqwkkhnz4ge>
- <DS7PR19MB888363A4FF954A6275E81B4B9DCD2@DS7PR19MB8883.namprd19.prod.outlook.com>
- <xv3c2ube7the3gat7ustws4ok6t26c33fyywqi6x3utx52qtzb@owyidrxeprcp>
-Content-Language: en-US
+ 05:15:38 +0000
 From: George Moussalem <george.moussalem@outlook.com>
-In-Reply-To: <xv3c2ube7the3gat7ustws4ok6t26c33fyywqi6x3utx52qtzb@owyidrxeprcp>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-ClientProxiedBy: DX0P273CA0087.AREP273.PROD.OUTLOOK.COM
- (2603:1086:300:5d::9) To DS7PR19MB8883.namprd19.prod.outlook.com
+To: linux-arm-msm@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	daniel.lezcano@linaro.org,
+	rafael@kernel.org,
+	amitk@kernel.org,
+	thara.gopinath@gmail.com,
+	dmitry.baryshkov@linaro.org,
+	robh@kernel.org,
+	krzk+dt@kernel.org,
+	quic_srichara@quicinc.com
+Subject: [PATCH v9 0/6] Add support for IPQ5018 tsens
+Date: Fri, 28 Feb 2025 09:11:32 +0400
+Message-ID:
+ <DS7PR19MB8883ADA4537830A07495397F9DCC2@DS7PR19MB8883.namprd19.prod.outlook.com>
+X-Mailer: git-send-email 2.48.1
+Content-Transfer-Encoding: 8bit
+Content-Type: text/plain
+X-ClientProxiedBy: DX1P273CA0013.AREP273.PROD.OUTLOOK.COM
+ (2603:1086:300:21::18) To DS7PR19MB8883.namprd19.prod.outlook.com
  (2603:10b6:8:253::16)
 X-Microsoft-Original-Message-ID:
- <638fcb3a-a23e-4bf1-82af-d967a9185158@outlook.com>
+ <20250228051521.138214-1-george.moussalem@outlook.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -88,191 +85,169 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-Exchange-MessageSentRepresentingType: 1
 X-MS-PublicTrafficType: Email
-X-MS-TrafficTypeDiagnostic: DS7PR19MB8883:EE_|IA1PR19MB6204:EE_
-X-MS-Office365-Filtering-Correlation-Id: 8af8c7bf-a5d6-4ff7-428d-08dd57aebdcb
-X-MS-Exchange-SLBlob-MailProps:
-	WaIXnCbdHrPgu9FUvYZ88hunKvKD6srS0NlyBrObPrUIkROkmIViZF+jvwGElyQC/eCD2RPQ7NBok/MdS5+3hcGYEXViFLzxILfUbunt6IxoESQ02OaUGFp1BijAC7pSQsNAYPFh4OBsvRKGoykugI7BdayviXdM1Ssyfw/UiARGH04r63Z5feYWS7LWreTlMZaPv214bUY2UoMBCDLRHo00LZCl9tnl6Yj1BtgAtjI2EWIt/Nw80jhG4Lq2AOfjxSb0+53Olih2kqLDem50egxI18Gwn0T+7LLlNzZYolux5HPIpvmIWJMNAeJgPX4qe2/iXxvpC4GHptzCn243ZgiXagOvQs9SWyWeIW/AhkKN3Khfgu3G078FkGIqzeGVtESIsinhUUSYO/yA3Uv563ei8KN2XAcIczSWxnTcL6RlDgatQdhWjfkKsKLqeSM2s9npy6zdB6Lnh/kJuBrlFL1zhKqagrldGXcYo6oA3d3AViioN+iJoaSZsFPYmyVqVxAvYb7hWRvykabLcST6oW0dIF5/XD/S28g65f8MlDX/PbHyyyFpTGB3FctQD/qwN9RB0hz/k1mWLDRRcC6f24lArB+yhbfYJiX7kiJNpfyVYCHYhSYz0pPmENew+XGk9XgD7rmiGhqcTc283dbH296+GU9Swi/4sw2ZXY8pmeMihK23joTMcgwa2hwO5c4aDXL/6w188MTj1jZVaaHFPi/lyTW+jaLGJipAPVGCsd/NhlNjbttykfkhuOeE8mteYQNmxn4uaYw=
+X-MS-TrafficTypeDiagnostic: DS7PR19MB8883:EE_|LV3PR19MB8318:EE_
+X-MS-Office365-Filtering-Correlation-Id: 11dbc81b-6d2a-4545-cea4-08dd57b6ee1e
 X-Microsoft-Antispam:
-	BCL:0;ARA:14566002|8060799006|19110799003|6090799003|7092599003|5072599009|461199028|15080799006|3412199025|440099028|41001999003;
+	BCL:0;ARA:14566002|461199028|5062599005|7092599003|8060799006|5072599009|19110799003|15080799006|41001999003|1602099012|10035399004|3412199025|4302099013|440099028;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?cFo2YU5BcnlJM2l6b1NWS1J2M0d4SFVDbXYzUy91cDJ2cXhaSVBmaVlwSVJo?=
- =?utf-8?B?QXlwbjZmRWxnK2hrL2wrL0g2RzdVUExDTlJWY09IWG1vRXk2eXRjSkY0Szha?=
- =?utf-8?B?SXhIMVdzUGhVb1Y3NUkwMWNRRlRXclFBclQyU2FQNVF0bGczQzhMcG1NZVpq?=
- =?utf-8?B?Yi91eGxwRmVYb1ZxVnpYanFXQjBhUmJQYW0vL1ZVWUh0WlB6bndvakFLZW4y?=
- =?utf-8?B?enBLQVNGR1J2Y1l5d3NTRis5eStvM3QwV25LV0EvSHFES29vKzdLUEF5SjN2?=
- =?utf-8?B?T0U0bDQ5eU53ZVM5b3R4a1VGV01CM2pWa3dWbTY0V2xBUXhoVm5iWE1uTER3?=
- =?utf-8?B?SmRUcmFNZitqS3kyN002TkRIYTluUTh0d2VGNGxqdTdXT3FWZlk4OUw0RFlJ?=
- =?utf-8?B?V0FsYm4yd0J3Y2IrNkFrZlA0NTRYeThlc2hSVU9RWnViYlAySnZQMExOK1lP?=
- =?utf-8?B?OGVnYjdKdHpta1BheVFYR1R1MG96YmVRUGpndUdsdWx1VXdidjBvSndvcVpr?=
- =?utf-8?B?bHNwYnVLa0RaUTdyUVpiV09HMFFvYnBCR3BLR0JqdzlYYjNoWks3b3I2akhK?=
- =?utf-8?B?cDhhc2JRUTNoTmdCWWo0NVRiNGVMNG9CU2FoMlR4YUszYUN3REM3UEl0TTFJ?=
- =?utf-8?B?RWxoT1JwRWJybkJjWU9rL0Q2dnFNcVd0cGhZcFdOelh1WHNrWWVmUk9YYjlN?=
- =?utf-8?B?VXhCWHpIcDduL0JNdG95YTEvRWdUNjE1cjQxNlhLWmIvTEhMbGd4cEZmT0RI?=
- =?utf-8?B?K0RaR2VDeUo5UnBIN0t3UC9JUEwxcU1NSlBHUFMwbmI5Yjc5TjRPcXBFMW9n?=
- =?utf-8?B?Z3MxOXh1THlrRGk4NVE3b3N0bXZ5a0oxZ0pLOGlKM2RSQjZkTUFSOFFjWHFp?=
- =?utf-8?B?d0g0ayt3YjBuWFdHcUtRSkFpczdUODNLU3RIN29BTTZEQ0xISTkzdnFOeWly?=
- =?utf-8?B?aXJFL3RRMVViSlJlbWw5RjVhZWg1U3hiN0dMUlZWdjNyZmNEaXY1VzIxOWlp?=
- =?utf-8?B?bGQ2d0xBemVQSjE1aStzQ3RiNXNGb1N2T0FwWkFhS0NhbnlEVEtqeEJSaWtQ?=
- =?utf-8?B?MWgvN3JmVitGc3czWFNLemF1Q1hXL3VQcUR2YlFKajVyRTVWeXRRblNDdzFR?=
- =?utf-8?B?L09oSWY5b0lxMFFNY1pHeWtxcUtTbEhaMjc3SGNOblAxcVR0am1JZ1ZhQjlh?=
- =?utf-8?B?cjBqSm1tYzJ0a0FhNHVQOWpmdUFRd3A4VGtTeXJBNWRadUsvRHV1azI4WnpI?=
- =?utf-8?B?NExLeENVQUc4Uml1ZTNYSEdEZklyTXZaeEErSll1UGFMdkhuSHg0OWQ4QUtK?=
- =?utf-8?B?SzJyV2pBdkpKdmkxZWsvRWRSNjJYQko4TEZrUTRpdU5XV2N0RWVxN29paVhh?=
- =?utf-8?B?VmltWGJjTkJ3NURTd3NPUXdKbVBobURvV1J6VGpNS1hBaXRYUkl3MjdIRFk1?=
- =?utf-8?B?cXFTTjZRNHByT0lPbWRZUXhRMU9sc1JMVU1sUWFXMkpPTXEwQmE0TEVVMFpk?=
- =?utf-8?B?Snc0K0ZPOG1nL0lSTm45YmJKcnhoOENhYTFBKzgyZ1VNMnNLUGQxUVhhc1BB?=
- =?utf-8?B?YVU5QT09?=
+	=?us-ascii?Q?1xyQVjWJxh0V5C4/uc/LpuBhcyeULWCPDbT2y+vJeVCfwlNFJadctG2lrLzn?=
+ =?us-ascii?Q?g96NdRO8iCJGXgNKSqny+m4PpHqaiKe6tWpjXYhTaeNJFw9zmfiEqKotbC1j?=
+ =?us-ascii?Q?S3iqQ5nEC6CCU9513rXIds0OrAMWRvzlKlI6q3GoouTfHkRdWpGKlaKtguCV?=
+ =?us-ascii?Q?/jVIO4E5IUQu0valjXJjTXqPR98QcPtaPtXdMslf9eF4SjoFqNEdWllD8iXg?=
+ =?us-ascii?Q?bUI1eqB7yGfY8P32sE1QUuk+Qv5oRNXN4L5A83gltqH3oW/FsgBGU3XUDGYP?=
+ =?us-ascii?Q?VYkiyN70q+vUXrcyRZG9KoUjZ1blrjxDYoUCt85DYjizbH81WOPFMPJf1jje?=
+ =?us-ascii?Q?l6pwnpt0AZ3hFzwqlBBLy2PjnTI6DLvD9Sasv+vBN1+PTmiCpg08HZRN99//?=
+ =?us-ascii?Q?u9QRY8xw29UkT9oB/ughk0ROIrPOUMyaTcavzXYo4x53RVzRZT1978MsaQWN?=
+ =?us-ascii?Q?bSzGJjAt9U+u5QIX0uVZEqaEN9qTMMK4LSTxZ4OqHP3UeO3IoXxBRmhc0PFa?=
+ =?us-ascii?Q?Tt7++7NOloU0cgnoaoO8InIK/Au1iDhCkCFE0J2Khy2s8xT+QO6tYA50q8w9?=
+ =?us-ascii?Q?6gdR+ACFyBvRboOLMvvHy4h7fDgpex3cYnoRET3aOk6guk81XQHhq0U3rRn7?=
+ =?us-ascii?Q?xaa0OuIGwVpci9YKki5Mh7LgKTpo1tftDnV8fyp0eVdsOZtSFGqlac7T4tpO?=
+ =?us-ascii?Q?+rQt/0aGqsaFj6CevP8a5i4oaYrNhAk8x2oTc4w/EcQqfB5G6InCgSws9DPP?=
+ =?us-ascii?Q?y5F3hra7o8hh1HfPjPZYzrNmIJizJeWV5dASznPLEiW3MRkWXLP3eP9IHmzr?=
+ =?us-ascii?Q?9aL8hzXTyxFU9Zj51FLBbyFS4mUgqDmryCnlmUiGAPhEJHBo/ynZhDOU55AH?=
+ =?us-ascii?Q?wMLkk8uS+W58lKR6WyrrkqE1IUMzCIgcexUk+ZjF6lEli8qc/4ftomHg5/oI?=
+ =?us-ascii?Q?0UORM/Wnr45UDN7OiD8ZMWHOhXIggu99F1fEzRPg6b9rQcsuchm62VnULQOC?=
+ =?us-ascii?Q?yvhjjq0TqapBjsM1ZdaSUeWP/9yIWnPg4xP/8vglTU9rRDJ67y2fiZswGP8l?=
+ =?us-ascii?Q?3K+J+TZKj4E2FkiYVJAx4q79O8WUFTOz58GhLe8WqzEK972CgQa665wmfO3E?=
+ =?us-ascii?Q?4XIQT1t5MSqyJt91vtrEcXDBf/5UbXteFXsPC0E/GqOjrhxRlNRk7jAWoqJj?=
+ =?us-ascii?Q?XDxGmd29k+e0mKylmRfQgEg//arah7LsdZIAl5OUMPSmjMudVKiA0OogMil5?=
+ =?us-ascii?Q?Wfh37gEAOFEc/DebCFK1IrQgNJhAKalumcf7Sb7ShbkE78Pw05Kh3hpl05DY?=
+ =?us-ascii?Q?DQJjDMWKSLjF07TZxrIM1NKJ?=
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?MDVralNRMzNyT3JidHBWU3RBVjM2SmNiNzVSSkp6U2dibGREOGtwZ3B5amRM?=
- =?utf-8?B?cDVuVWx3QjVxclU2OTVoVEFNdFVMaG1zdWFIWkdzZmtIQkpiUm9rbkN4TFAx?=
- =?utf-8?B?MEZwNWdGd2sybEwvdWRCUmNSajAxSFhRN2w0d243Mk9IcDZ4ZXY0UExQNjNB?=
- =?utf-8?B?eVF2ekdkQjR6UCt5V3Q2amZHekpCcnJPVE5xM0Fic1VzTk94dXVvSlhTdVhU?=
- =?utf-8?B?ZTF4VVFHRU5GUHpIR2k2d3B3RStQc1J0ck9VcnFoTDcyRklzZ2xONHFRaUVL?=
- =?utf-8?B?dlZjWFRWVGcyeTdNdnRZTU14MkhJeHVhUkxEcXM2dmFlN2QvUUVaSmlCQ1pZ?=
- =?utf-8?B?U0VyUi9DYkhyQWRIdVA4S1YxajNuenZKYlBsOWFCbnJlWFBBOUhna0ZLS3RI?=
- =?utf-8?B?T3FpR28rd1dkSFRpYkNtaSswRmwyNENpSEJCeWpYTVZWMmZXUStvSnFtWkgy?=
- =?utf-8?B?YlVtMGdFTExvSDMySSs5Z0NYWHhuVEFZZ0p3Skp2UHcvazdDS2RwNmRDc3Fx?=
- =?utf-8?B?YktKTjljWUMxd1M3Q25ROFRlQXd3UTJ6U0JKNmhSSWQ2cXJkSWJyRGhscmZp?=
- =?utf-8?B?NlhYVHByMG9JOFdJTU5wZHFWaUFZdys2TXZ2N0tMN2FUV3k5TDVGdU9PK3Nn?=
- =?utf-8?B?VjQ0c1NmdWovbjNYUzBYeXg4WGNTc0YvZWlhUUxTWDMxNS9KQkUzMUFmWnFU?=
- =?utf-8?B?d3dtNkRKS3IwdWpLRXpuNm5PR3hnT3I3dHduWW1CS0RBYjYrMzNEWkUzOWRY?=
- =?utf-8?B?VXFmTWgrV0xRRnp6dUVsbm52NlVjODVJRUhjL0ZETlhSQ04xaFVqc0dIYmRj?=
- =?utf-8?B?K2VxekFmWHppTjJuVGdBTlJ5K3NzSFJwS3pzMWtnN2FYNTQyUmYvZ2duQkJS?=
- =?utf-8?B?c2QzQmlJdVlXK292YUZreU5KbEN1VnQyNlZHdFl3ZzFEanRjTU1XSWxCUUJs?=
- =?utf-8?B?aHk2MFFWbC8wdXFnZFNrOVdCYmhNVGd3RmZpWXRsS2EyYStJNDZUazEzMVFr?=
- =?utf-8?B?Z3VMOEhBNWN3aTlmeDlTc0FLLyszNEI1Z0FNdVdlbFNraHJmcjlLTVV5emRV?=
- =?utf-8?B?VDVPVzJIZGdNSHZIcUc2VnZiUVR1cjZPZXdUN0pYbkVZNjBlUGNoTHdxNE10?=
- =?utf-8?B?dkpiK1pSZkxHY2JYT0xJNmpjV3ZIcWhPOGtCQXJpazgrMVNIUVNjM1ZWNDBC?=
- =?utf-8?B?bmExdzNsZ2Y0YVZ4WkZENXpIc3ZYY290V0N3VG85ZjllTmJsZGRrS01MV3BL?=
- =?utf-8?B?dVV4QXhVRjZ4UnE0bXp1bXNmR2JLUnB6WXhRMDBNcXUzcEtQTk1raXNZakRr?=
- =?utf-8?B?eFhtRG1SRUtrWStQYTFoSlZXM2plQStaZGx2YjJ5ZGc2djFLb05Ya2tRWjdO?=
- =?utf-8?B?SDVrQ2dicTYyN2QzL3ZkZ3pxdlRLeU53eFE3MzE2ZHdVd3NaZWxJR0dxVC9F?=
- =?utf-8?B?cGNEK0hzb2xxdWpBQmxKWkcweW1UN0RhbVduQTBKcGl4aTVzWDc4TVkveVVh?=
- =?utf-8?B?RkMrUnRlZWdVSlcwTUt1N0RiMVkxZHhmdGhyemhSbFVRTTJ5WUo4RkRscTdq?=
- =?utf-8?B?a3N1eXdYdkFNSzhtdmxGSkdlOXpNVFZzOEhsWTVZQXEyY1VHaEZmMWhhUGdO?=
- =?utf-8?B?L2tmNmlURmpzQUE0WGw2Vlp0T28yQ3pLRVJEajVSNzRVc1h6cjBMSCtRSzUz?=
- =?utf-8?Q?oJIEsgS8tlaIM3D24haZ?=
+	=?us-ascii?Q?VqX7gLmB9+m6/GRzQ0Z1YNb9iNg+oc31jL5+btoji8PPa/UQMusp4SwpKVi6?=
+ =?us-ascii?Q?zcApLr/PRAiIjiNx7u7ovhdpmzsPtVmJJy6YvcAUWWy1pY9eaoxfS1MdWsxy?=
+ =?us-ascii?Q?xc+Q8eT8ijMaaY3jfBN+aU3vCkdSRkF7fJrAVr2G8R+QtHY0+RVaFksENqDr?=
+ =?us-ascii?Q?uKjiCCuBV0kPcKdrAJ1Tg7CO496qX3T0UU0biXnVqHkKklhiX8X9/X6D542e?=
+ =?us-ascii?Q?sNAnMuH3EnT9ToqOFlYLEJ2CBpU3kYA2aWPeGInun7vkZIV60Z1rPhIdG07n?=
+ =?us-ascii?Q?BfiUJsLTm7NVqIHEa5NCBViL32Q7eO60ZkQzR4Yuls9JWswX+SK8qK92Z2Po?=
+ =?us-ascii?Q?tAiUc4wTMfvZL63qFpThBODspJpTmPVG23gJxt1EURxZ0khQlPvawGGDX+TI?=
+ =?us-ascii?Q?YBBm3HRYFa/sIyhjJQh1Hi6qeG6lg5W9vOobxCyABiyvmjOwRAt7tIs70EeK?=
+ =?us-ascii?Q?oUUZO1n2yqmwc7XKMZ7gKvDOW5UqZk9N+ogcmmadoWE45KtGMK2EBDkruj1a?=
+ =?us-ascii?Q?+WobQv+HMnBcuQ36Kc8nZVZ/kCTEKZwJluZvf0Fgik4C051bKtOvZeE79gEf?=
+ =?us-ascii?Q?Y9olV7c+Z1rfIOqpqpU2dcAatMuNmKAScA2oShgc2a9fsZLtzlojvbC6FqFD?=
+ =?us-ascii?Q?AS0NJUM8TIp/L0js4rOVzVn+Enxti5VWzEI4YwDTDeEmUXCpxHhhRhhAe/cS?=
+ =?us-ascii?Q?iBKYVXtCKxBcZM80i9yrZT5TlhQsZZAVpzORYkfVcuSj2m9R/ElJBr0kQZdR?=
+ =?us-ascii?Q?OhcpVdLwB35j8yA5ARVjf1osCkk2lkv9PuT05QNGpofWlTp4DCLITz0aI5Ya?=
+ =?us-ascii?Q?QYxVw073lVKM7qBj715PN/RhjWkUlkP7P9nlXns6J8C3Q/iaQ9iLH9z8yhS+?=
+ =?us-ascii?Q?cnA2k26+cCcQlwGv60OpGetPMz92a+ssG4PyDCMF7hu/L3TT4bDjynn2rP6E?=
+ =?us-ascii?Q?6Shn0CD3Fbsv6XtK92m8aORaRaCDoqYD9IwhadUd087GAmJkencC8GZklUXR?=
+ =?us-ascii?Q?E2YapGpqaOPE+XKwy9qWnohvayP2XZgVsxS7Dohh96wLk0UzP+0OFPPV3NiF?=
+ =?us-ascii?Q?XXqroTqH9RY1OA4jte6JwFsZ7S4Qo/r9nF3KK3gaxCWsykRNeVUvUtLZwYZQ?=
+ =?us-ascii?Q?d7KUD/O0KN3JGQenKlGTpLrXVESEnu6melaozUeBd+WtLZzNkG4/x6XpxBUD?=
+ =?us-ascii?Q?ubb3qtHzChcvWRZe2/h9Se2Obi5OI7BxWpPmewvY/eGIhztEEsMSzg/iWv5H?=
+ =?us-ascii?Q?oZTCxFdObEWxPxMsVlUs?=
 X-OriginatorOrg: outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 8af8c7bf-a5d6-4ff7-428d-08dd57aebdcb
+X-MS-Exchange-CrossTenant-Network-Message-Id: 11dbc81b-6d2a-4545-cea4-08dd57b6ee1e
 X-MS-Exchange-CrossTenant-AuthSource: DS7PR19MB8883.namprd19.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2025 04:16:58.5205
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 28 Feb 2025 05:15:35.5290
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 84df9e7f-e9f6-40af-b435-aaaaaaaaaaaa
 X-MS-Exchange-CrossTenant-RMS-PersistedConsumerOrg:
 	00000000-0000-0000-0000-000000000000
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: IA1PR19MB6204
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: LV3PR19MB8318
+
+IPQ5018 has tsens V1.0 IP with 5 sensors, of which 4 are in use,
+and 1 interrupt. There is no RPM present in the soc to do tsens early
+enable. Adding support for the same here.
+
+Last patch series sent by Qualcomm dates back to Sep 22, 2023.
+Since I'm working on OpenWrt support for IPQ5018 based boards (routers)
+and Sricharan Ramabadhran <quic_srichara@quicinc.com> in below email
+confirmed this SoC is still active, I'm continuing the efforts to send
+patches upstream for Linux kernel support.
+https://lore.kernel.org/all/63dc4054-b1e2-4e7a-94e7-643beb26a6f3@quicinc.com/
+
+[v9]
+	*) Updated checks in tsens to more strictly evaluate for v2+ upon enabling
+	   v2 features as suggsted by Dmitry.
+	*) Split patch 3 into two, one to update conditional statements as
+	   mentioned above and the other to implement tsens IP v1 without RPM.
+	*) Added back Dmitry's RB tag on patch 6 which wasn't carried over
+	   from v7 to v8
+	*) Link to v8: https://lore.kernel.org/all/DS7PR19MB88833F7A9C8F4FC484977BA69DCD2@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+[v8]
+	*) Tsens V1 uses v1 interrupts and watchdog is not present (only on v2.3+).
+	   As such, replaced VER_1_X with VER_1_X_NO_RPM in conditons to ensure
+	   v1 interrupts are set and watchdog isn't enabled.
+	*) Tested on Linksys MX2000 and SPNMX56
+	*) Link to v7: https://lore.kernel.org/all/DS7PR19MB88831624F11516945C63400F9DC22@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+[v7]
+	*) Updated cover letter
+	*) Replaced patch 3 with a new one to add support for tsens v1.0 with
+	   no RPM and removed Dmitry's 'Reviewed-by tag
+	*) Refactored patch 4 and split support for IPQ5018 from support for
+	   tsens v1.0 without RPM. As such, also removed Dmitry's RB tag.
+	*) Depends on patch 1 and 2 from patch series to add support for
+	   IQP5332 and IPQ5424 applied on Feb 11 2025:
+	   https://patchwork.kernel.org/project/linux-arm-msm/cover/20250210120436.821684-1-quic_mmanikan@quicinc.com/
+	*) Link to v6: https://lore.kernel.org/all/DS7PR19MB88838833C0A3BFC3C7FC481F9DC02@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+[v6]
+	*) Include (this) cover letter
+	*) Picked up Dmitry's Reviewed-by tag on patch 5
+	*) Link to v5: https://lore.kernel.org/all/DS7PR19MB88832FDED68D3EBB0EE7E99F9DC72@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+[v5]
+	*) Adjusted commit messages to indicate IPQ5018 has 5 sensors of
+	   which 4 are described and in use as per downstream driver and dts.
+	*) Padded addresses of tsens and qfprom nodes with leading zeros.
+	*) Link to v4: https://lore.kernel.org/all/DS7PR19MB8883BE38C2B500D03213747A9DC72@DS7PR19MB8883.namprd19.prod.outlook.com/
+
+[v4]
+	*) Documented ipq5018 in qcom,qfprom bindings
+	*) Constrained ipq5018-tsens to one interrupt with description
+	*) Added Rob's Acked-by tag
+	*) Added Dmitry's Reviewed-by tag
+	*) Fixed modpost warning: added __init to init_common
+	*) Sorted tsens nodes by address
+	*) Sorted thermal-zones nodes by name
+	*) Link to v3: https://lore.kernel.org/all/20230922115116.2748804-1-srichara@win-platform-upstream01.qualcomm.com/
+
+[v3]
+	*) Added the tsens-ipq5018 as  new binding without rpm
+	*) Added Dmitry's Reviewed tag
+	*) Fixed Dmitry's comments for error checks in init_ipq5018
+	*) Ordered the qfprom device node properties
+	*) Link to v2: https://lore.kernel.org/all/20230915121504.806672-1-quic_srichara@quicinc.com/
+
+[v2]
+	*) Sorted the compatible and removed example
+	*) Fixed the name for new tsens_feature
+	*) Used tsend_calibrate_common instead of legacy
+	   and addressed comments from Dmitry.
+	*) Squashed patch 3 & 4
+	*) Fixed node names, order and added qfprom cells
+            for points seprately
+	*) Squashed patch 6 & 7
+	*) Link to v1: https://lore.kernel.org/all/1693250307-8910-1-git-send-email-quic_srichara@quicinc.com/
 
 
+George Moussalem (2):
+  thermal: qcom: tsens: update conditions to strictly evaluate for IP
+    v2+
+  thermal: qcom: tsens: add support for tsens v1 without RPM
 
-On 2/27/25 23:02, Dmitry Baryshkov wrote:
-> On Thu, Feb 27, 2025 at 09:25:05PM +0400, George Moussalem wrote:
->> On 2/27/25 18:59, Dmitry Baryshkov wrote:
->>
->>> On Thu, Feb 27, 2025 at 02:56:41PM +0400, George Moussalem wrote:
->>>> Adding generic support for SoCs with tsens v1.0 IP with no RPM.
->>>> Due to lack of RPM, tsens has to be reset and enabled in the driver
->>>> init.
->>>>
->>>> Co-developed-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->>>> Signed-off-by: Sricharan Ramabadhran <quic_srichara@quicinc.com>
->>>> Signed-off-by: George Moussalem <george.moussalem@outlook.com>
->>>> ---
->>>>  drivers/thermal/qcom/tsens-v1.c | 48 +++++++++++++++++++++++++++++++++
->>>>  drivers/thermal/qcom/tsens.c    | 24 ++++++++++-------
->>>>  drivers/thermal/qcom/tsens.h    |  1 +
->>>>  3 files changed, 64 insertions(+), 9 deletions(-)
->>>>
->>>> diff --git a/drivers/thermal/qcom/tsens-v1.c b/drivers/thermal/qcom/tsens-v1.c
->>>> index 1a7874676f68..877b27274fd2 100644
->>>> --- a/drivers/thermal/qcom/tsens-v1.c
->>>> +++ b/drivers/thermal/qcom/tsens-v1.c
->>>> @@ -79,6 +79,17 @@ static struct tsens_features tsens_v1_feat = {
->>>>  	.trip_max_temp	= 120000,
->>>>  };
->>>>  
->>>> +static struct tsens_features tsens_v1_no_rpm_feat = {
->>>> +	.ver_major	= VER_1_X_NO_RPM,
->>>> +	.crit_int	= 0,
->>>> +	.combo_int	= 0,
->>>> +	.adc		= 1,
->>>> +	.srot_split	= 1,
->>>> +	.max_sensors	= 11,
->>>> +	.trip_min_temp	= -40000,
->>>> +	.trip_max_temp	= 120000,
->>>> +};
->>>> +
->>>>  static const struct reg_field tsens_v1_regfields[MAX_REGFIELDS] = {
->>>>  	/* ----- SROT ------ */
->>>>  	/* VERSION */
->>>> @@ -150,6 +161,43 @@ static int __init init_8956(struct tsens_priv *priv) {
->>>>  	return init_common(priv);
->>>>  }
->>>>  
->>>> +static int __init init_tsens_v1_no_rpm(struct tsens_priv *priv)
->>>> +{
->>>> +	int i, ret;
->>>> +	u32 mask = 0;
->>>> +
->>>> +	ret = init_common(priv);
->>>> +	if (ret < 0) {
->>>> +		dev_err(priv->dev, "Init common failed %d\n", ret);
->>>> +		return ret;
->>>> +	}
->>>> +
->>>> +	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 1);
->>>> +	if (ret) {
->>>> +		dev_err(priv->dev, "Reset failed\n");
->>>> +		return ret;
->>>> +	}
->>>> +
->>>> +	for (i = 0; i < priv->num_sensors; i++)
->>>> +		mask |= BIT(priv->sensor[i].hw_id);
->>>> +
->>>> +	ret = regmap_field_update_bits(priv->rf[SENSOR_EN], mask, mask);
->>>> +	if (ret) {
->>>> +		dev_err(priv->dev, "Sensor Enable failed\n");
->>>> +		return ret;
->>>> +	}
->>>> +
->>>> +	ret = regmap_field_write(priv->rf[TSENS_EN], 1);
->>>> +	if (ret) {
->>>> +		dev_err(priv->dev, "Enable failed\n");
->>>> +		return ret;
->>>> +	}
->>>> +
->>>> +	ret = regmap_field_write(priv->rf[TSENS_SW_RST], 0);
->>>> +
->>>> +	return ret;
->>>> +}
->>>> +
->>>>  static const struct tsens_ops ops_generic_v1 = {
->>>>  	.init		= init_common,
->>>>  	.calibrate	= calibrate_v1,
->>>> diff --git a/drivers/thermal/qcom/tsens.c b/drivers/thermal/qcom/tsens.c
->>>> index 1f5d4de017d9..f860ea86d130 100644
->>>> --- a/drivers/thermal/qcom/tsens.c
->>>> +++ b/drivers/thermal/qcom/tsens.c
->>>> @@ -447,7 +447,7 @@ static void tsens_set_interrupt(struct tsens_priv *priv, u32 hw_id,
->>>>  	dev_dbg(priv->dev, "[%u] %s: %s -> %s\n", hw_id, __func__,
->>>>  		irq_type ? ((irq_type == 1) ? "UP" : "CRITICAL") : "LOW",
->>>>  		enable ? "en" : "dis");
->>>> -	if (tsens_version(priv) > VER_1_X)
->>>> +	if (tsens_version(priv) > VER_1_X_NO_RPM)
->>> I'd suggest to replace these checks with >= VER_2_X. This saves us from
->>> all the troubles if there is another 1.x 'modification' later on.
->> makes sense, will change to >= VER_2_X. Thanks for the feedback.
-> THanks! It also makes sense to split this into two patches then: one
-> which changes the condition all over the place and the other one which
-> adds VER_1_X_NO_RPM.
-Sounds good, will split into two. Will send v9 shortly..
+Sricharan Ramabadhran (4):
+  dt-bindings: nvmem: Add compatible for IPQ5018
+  dt-bindings: thermal: qcom-tsens: Add ipq5018 compatible
+  thermal: qcom: tsens: Add support for IPQ5018 tsens
+  arm64: dts: qcom: ipq5018: Add tsens node
 
-Kind regards,
-George
->>>>  		tsens_set_interrupt_v2(priv, hw_id, irq_type, enable);
->>>>  	else
->>>>  		tsens_set_interrupt_v1(priv, hw_id, irq_type, enable);
+ .../bindings/nvmem/qcom,qfprom.yaml           |   1 +
+ .../bindings/thermal/qcom-tsens.yaml          |   2 +
+ arch/arm64/boot/dts/qcom/ipq5018.dtsi         | 169 ++++++++++++++++++
+ drivers/thermal/qcom/tsens-v1.c               |  62 +++++++
+ drivers/thermal/qcom/tsens.c                  |  27 ++-
+ drivers/thermal/qcom/tsens.h                  |   4 +
+ 6 files changed, 256 insertions(+), 9 deletions(-)
+
+-- 
+2.48.1
+
 
 
