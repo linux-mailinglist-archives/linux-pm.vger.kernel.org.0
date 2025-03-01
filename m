@@ -1,66 +1,65 @@
-Return-Path: <linux-pm+bounces-23212-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23213-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36EC1A4A95C
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Mar 2025 08:02:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9FCFAA4A95E
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Mar 2025 08:03:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4BDCF189B97F
-	for <lists+linux-pm@lfdr.de>; Sat,  1 Mar 2025 07:03:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 91213189B988
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Mar 2025 07:03:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 87D461C3306;
-	Sat,  1 Mar 2025 07:02:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A6F51C3BF1;
+	Sat,  1 Mar 2025 07:03:23 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="Ii6wuuRt"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="hyLyQ0VK"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2089.outbound.protection.outlook.com [40.107.93.89])
+Received: from NAM10-DM6-obe.outbound.protection.outlook.com (mail-dm6nam10on2080.outbound.protection.outlook.com [40.107.93.80])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EF2BF1B6CE0;
-	Sat,  1 Mar 2025 07:02:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.89
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 18AB31C3306;
+	Sat,  1 Mar 2025 07:03:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.93.80
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740812570; cv=fail; b=GCL+PZ/krKvGiN+2SkK9yGDKJ1mQYM54K10C7PEYYf1+sLfTp6Rjm2c4yW8AAf1QuPW9D3W0N7u/unCOBNn6US1c9tyvOiTRiEfmGGlvtW7+/xTmrrh+gqFP7oFHxL17hWstgLyAvIF8N+sxjKzhrvhdJ4SfITgyk1El3NqhNBI=
+	t=1740812602; cv=fail; b=Gb4yIsH7v5IPWnfoGATjT8WyDvYL1ItWXm5M6HF/MbuuoNnaKUNN4elKVpzoGdGmeMCi7wCzsqTPgCNjJDUpzHw2DVAwQN8ukOG7E7XBNrhZzKd8FSwm/VAU2y8oOUgiaFiSahJGL74Q+uCHtpG0uKljGVRo/Cnz0m0hI1Etc7o=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740812570; c=relaxed/simple;
-	bh=XElNhOI9w4G7sqLRz7ssABTkrK0yuQ7/u09SLAIgKYM=;
+	s=arc-20240116; t=1740812602; c=relaxed/simple;
+	bh=wEaPJm3OUziq3yK5muzwWQZ3p9Z/J/3nhlsneqsvOVo=;
 	h=Message-ID:Date:Subject:To:Cc:References:From:In-Reply-To:
-	 Content-Type:MIME-Version; b=iYbohe3XlQrK6tfl98vd9Ucn7oJkPH0dIal+Q/InChFAnwHwZJGs6Y9MdC5eCFMbHobEXbMbe2k37IsE+Q+kyZC4LemaG7kl2QruTlFrwj+viXACmOUwgle6CXJ1fW9P5Vkty3ZaSTL7xUMDMUfJoqew87sDBUb07cVv6NFAW74=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=Ii6wuuRt; arc=fail smtp.client-ip=40.107.93.89
+	 Content-Type:MIME-Version; b=toikR5LwCO6VGsXFqCava0nJfO0Wux/N+opaf2tdQaiTQPjw5p4zKvbQb3OfQafOFJxvf50zTmR5O3VhfHjF/+uzygTsgv7o2xTMzV+MydvSzgARSEsljltzwnNuLkOuPoSsaO+OGPS8mx1ZiUEri98cDZbgjwq3HXa14JAmjnE=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=hyLyQ0VK; arc=fail smtp.client-ip=40.107.93.80
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
 Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
 ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=zPXfA4IQKcB9AfyoTIuR97UnDgJo1jTJbHg0UF5OXYHLGDdVbH5ZPesZm5GOYKT/8r3fFvYSEIiScLxnNUNHTF8PxOXygTdQCjryZTfnLwanKjqSkhHRll1nT6ObHXl9EtuV7vQGCfPnWWVYJpGhGtaJ5k79nG275jWfdkukXvtC1aISHUxFyBDvfAGi0G5OWJ3b47WwWL2IIkXu43EgbA3pS5wYJ2E3LV8cmDvZIbqi0KsfKn8oEXIhYqoBBUL/Vxggh8Znnb3Dxx429P7NfnUz7d08IXnEHXd2G/49pbahsgW39d4+QUflRWdqeWiXqAQTVzO6hO8SPemidCKVOQ==
+ b=rEei+Lskc3LlDU8odI7krMU7Dd09H1COZQkvcb9maXOC/ujQ5ckPVrMDxzdZ4u7VIq5cix3YSXm8k+W8CNSLQeibe2Kqa/nyEYidJWPJ6XhU2jK8OpX58q3g9s6mG9XiWVVAgU+uUyLOxb0+nlHdMl+e9LiwT1Vu3JtjP1yIPobtre8VES9p8ZQ7ovNZGw+B0MbAD/ZFiL2S7wtgSQ2tI0uDO+X2oHKXP0GqzeNhGcQB34q7/Apzn4AtrywcIC96QveootmWREHL5XalOuQyU3Xgvqe/8QALIq/HJKoKTGCiGJZ2tyeVpFBNb7DiU8qAhdgu6MMvPeNxbTOptxspLw==
 ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
  s=arcselector10001;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=mpFc5wxO432bdQ9Wg0RKeM5TNJJKDpyALC7495yqbBw=;
- b=KmsP/CItUye3K6XVFU1ZK35S3zts+k6kixE6nfPYWpaIs/prAddYISF1RXvgytFswiEM5Td0ku0h4XokNn9FAVNqdALYbHcn6aeDnlW/U9Gv08S9bIdLltk8WpzhZAzF/RsOuPvUH3c0r20J1Eah2Uk2Z4U0cfcmfDvIJ2Y4d2iGlLdON6zPNY4Kb0IxYwqX3tgXu9fs0ZKx68rAVwMrQAjf47z8bQUF5O9I733fm3FTFb1q/gFjFWFFZMt6dzGRIvT78/z12i2UULqU9wOBv6PMeFWbmtNc6vjDgdikV/ABQm3ATDO5kIzIWRzjjnn36UEXzSImTRTkOXA2vaUU8g==
+ bh=Ybx1wxdjG2oelSKO5Rnka7+5SwRuRhbxXOp7pMvtri4=;
+ b=g89oEgClQzjL1K6D0F4ZMoe92quc4VnSnXYlhmxmvYECuWTu7KmMUwJYFmmkZ1LitIaklsxnIYKEwsMmyJGgl6xEq9AJMaqDBHiEe49uLwU0ofphtp4U5r0zYxBMivyZ6iwdJ9GBI6BlS3dX04V7jyss1f3rRKHjwBkORrpCzjpSn4AnuwSgfBHWa5gn52humUAspgOaxZXT2Lj/tYmG7tciuFyZKwe/O3BELpkgWaJGh7iwf30HpOh9ZAFEKONPo14Dcd67j+7lcYI6qv6cSQ1pLiB5HKg062w6waL0adlyuiT1a2EeJ98MOQLyPMn0XD5AcWYO9vFdKRKuwwekQA==
 ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
  smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
  header.d=amd.com; arc=none
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
  h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=mpFc5wxO432bdQ9Wg0RKeM5TNJJKDpyALC7495yqbBw=;
- b=Ii6wuuRtWwwCewPRSaf50XqNRhwsPmTwbxajlOFmL/yvWlk6dhzPHmCDoTVGNLMk7+Z9Uoei29M7El2s9CtQMBLZI+HoysKDtl+7QFOCuUBRzdLIgdKofWFkVzCEDSbwL8PXbkN+CJ2Df2tPbW5jnLlfs4lR0TSLLRz6Oz9UCYQ=
+ bh=Ybx1wxdjG2oelSKO5Rnka7+5SwRuRhbxXOp7pMvtri4=;
+ b=hyLyQ0VKmBcn6SUPCUZBHsispXuyhPk9ZHqSJhXEnCGVMw0AzfqeXf91vhjCn7IXeAkGhwSrqCFa1LyA7ZmFbBRCRDumWxqNKgebh3C6R/InV4Y4lH62aHLJr5iw0fz/P7XmqCA5G9Sv0SJuKiWQXrS/xBnMjouPtbjm3HDn+qg=
 Authentication-Results: dkim=none (message not signed)
  header.d=none;dmarc=none action=none header.from=amd.com;
 Received: from LV8PR12MB9207.namprd12.prod.outlook.com (2603:10b6:408:187::15)
  by DS7PR12MB9474.namprd12.prod.outlook.com (2603:10b6:8:252::17) with
  Microsoft SMTP Server (version=TLS1_2,
  cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.25; Sat, 1 Mar
- 2025 07:02:45 +0000
+ 2025 07:03:19 +0000
 Received: from LV8PR12MB9207.namprd12.prod.outlook.com
  ([fe80::3a37:4bf4:a21:87d9]) by LV8PR12MB9207.namprd12.prod.outlook.com
  ([fe80::3a37:4bf4:a21:87d9%7]) with mapi id 15.20.8489.025; Sat, 1 Mar 2025
- 07:02:45 +0000
-Message-ID: <2b2f8e4e-15ee-4fb4-a4cb-3cea40624a6f@amd.com>
-Date: Sat, 1 Mar 2025 12:32:38 +0530
+ 07:03:18 +0000
+Message-ID: <451e4beb-4485-4405-9c69-741a44c9d13c@amd.com>
+Date: Sat, 1 Mar 2025 12:33:13 +0530
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 04/19] cpufreq/amd-pstate: Move perf values into a
- union
+Subject: Re: [PATCH v5 17/19] cpufreq/amd-pstate: Rework CPPC enabling
 To: Mario Limonciello <superm1@kernel.org>,
  "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
  Perry Yuan <perry.yuan@amd.com>
@@ -69,10 +68,10 @@ Cc: "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
  "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
  Mario Limonciello <mario.limonciello@amd.com>
 References: <20250226074934.1667721-1-superm1@kernel.org>
- <20250226074934.1667721-5-superm1@kernel.org>
+ <20250226074934.1667721-18-superm1@kernel.org>
 Content-Language: en-US
 From: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>
-In-Reply-To: <20250226074934.1667721-5-superm1@kernel.org>
+In-Reply-To: <20250226074934.1667721-18-superm1@kernel.org>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
 X-ClientProxiedBy: PN2PR01CA0207.INDPRD01.PROD.OUTLOOK.COM
@@ -86,103 +85,109 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 X-MS-PublicTrafficType: Email
 X-MS-TrafficTypeDiagnostic: LV8PR12MB9207:EE_|DS7PR12MB9474:EE_
-X-MS-Office365-Filtering-Correlation-Id: fce487ce-32fd-482f-38ca-08dd588f1105
+X-MS-Office365-Filtering-Correlation-Id: 51cdaf37-84d9-4953-b485-08dd588f2554
 X-MS-Exchange-SenderADCheck: 1
 X-MS-Exchange-AntiSpam-Relay: 0
 X-Microsoft-Antispam: BCL:0;ARA:13230040|376014|1800799024|366016;
 X-Microsoft-Antispam-Message-Info:
-	=?utf-8?B?SXJlME1zeVNCZ2c4ME1nRnVhN3JLQ2t3NHNicUpSRCtyZGxJUlFaUDZBTUNP?=
- =?utf-8?B?NE9SZnhKNTBKMThjakxmeHpLMjRjSk8vUFFwN3krVGRHeFEwUGcwWkQvczh4?=
- =?utf-8?B?Tlg4cVF0UkEzZ3RrYWcvMCtWckd2ZTYyTWwwZ2xHMmZDclcwME1TS013dU5B?=
- =?utf-8?B?N1Z0QTUrdW1DL3NWTUdaanFZM3h1K3ovVTNERWN4QjZmelRHQWc2c0dQemdx?=
- =?utf-8?B?ekRWelg1SHhCOGh2dUpETE9ML1pVQ2tlb2hWd0IyeGJvQXpYd2ZwaHV0WENa?=
- =?utf-8?B?T21ORTVOYTZUUDhveG9wL0x6d08rMHBPRXZaakZWSnFHOWo3QStsQzJMdlJy?=
- =?utf-8?B?MWNSL3R3Nzl3WjRZaTJRSjE2cnNVaUJKdHUyK1laYmhnRkw5U3pDcDQ2MlI2?=
- =?utf-8?B?T3JOOW5tbStrdWI1RHhOR2thWDFuVGlycWQrd1BrZ3l3bitoN0xFYmE0Uks1?=
- =?utf-8?B?cjdRNHJNeXlWT0wra2N3U3hEWXcyWkFHSXJJNGdLMHZsRGxJN1E3RkZPK1Jm?=
- =?utf-8?B?V0tUMmM3MzhhMDZGNjNMZXNweDJHNG51eXl6WkxBWEJVUFRLcldJR0ducjIw?=
- =?utf-8?B?MHRuOVQraVQxYkFWMGM3TEJFSnVEajJlSTRTYSswUmttMERrQkRHRU95RHNw?=
- =?utf-8?B?WUkwaHJ2bWJsTnRlSi9qbTBveEtIWlEvekJTc0F4dFhMUEVTcFR0dFNtWHdQ?=
- =?utf-8?B?SXQ0enlIRWRXa01BUjRKZ3pZbjZqL1h2RWtla1Z4eUtQRENsOXJJMDZLdm5k?=
- =?utf-8?B?Vkl2VUFlNThzaVRCWXRTckl4SFZhWTcvdVAzT1JNRXRWdElMU1hEa2JIamN5?=
- =?utf-8?B?RTRKUmh5OC9kL2hOaVFkZi9RbVgzUm84QWN4NDFGQjJxSUpwZjRpVmpIOG9x?=
- =?utf-8?B?c0IxWksxZ0ZYeDcxUFRHamY2S0hWTEplNVluNnlMQk43S0dUUnovak05djRs?=
- =?utf-8?B?aWN3YzYvYnZBRjZ0R0lIT3VVUldxZjhBMitBSkhJaUMxNG0veW9HbmxCTjRm?=
- =?utf-8?B?NUVlQ3oxNm9RZ1NEckw2NWtYQ1QrSzcweCt4Ny9Ra3BSQ1hFeHRUNmx0N3BV?=
- =?utf-8?B?ODh6ZDUrZ0tWMUNFT2pzT090T0NieUtGTXBMTWtEdmVwWTYwcTZSOCt1bGpY?=
- =?utf-8?B?cktJeTBpK1ZYa2kvbm9tYXVaamNjNDJmSGJCN242bFE3OGRJRmlRK3MxekdD?=
- =?utf-8?B?eE9SOVlZeDB5OENoOVlyd2lMUU1TcXQwT1NlN0c3OXV6ZjBpdEpqeUFROXh4?=
- =?utf-8?B?N1h6YWlkb2FuR3oxYS9NaUVDczVRdnBFS1dycnFnUGp3Nmx5RGMvMXlJbG9S?=
- =?utf-8?B?elU2OVc2cysrclZEeHg5R004OU0zSmJiU1hIVjdYLzRVU2YzblN1WTZSdVlu?=
- =?utf-8?B?YVk4Rm83czdIeDRXb2hvemFhZ0JJdXdBaFhmaUh4QVVjcDlQSU84empFcVVz?=
- =?utf-8?B?YzU2bldSU2lsR2UySjZjeEJid3JSNXIycFVyVFFkd3UxMDBsaU5QOFZ5bzZz?=
- =?utf-8?B?REwzTnRpN3pacE5YODkxMUxjb3k4Uk9VUEtmaGoxQzdpNE1tQnQ0RjZaODFI?=
- =?utf-8?B?UmZnWStsekV2di95TWxCQTFESlBFdU1oVWlXdVU0cURNZDhGVGZ3WVdkUlFM?=
- =?utf-8?B?VjNLWjkvaThrWnY1V1g4eFYzQXVrbFZDMjR1V2ZJUElDeHlrcytiamorWWcr?=
- =?utf-8?B?VUVPZTVXUGdpcFJ3ZHFITHpQS2hIT0M5VkFQVVVZTlRsUUlkN2RtcWR6dFlK?=
- =?utf-8?B?aVByVkVud05zV2xIMk5JWEFZQ215bDdONFVPQkxocmZ4NjcyeWJydXpZcXRF?=
- =?utf-8?B?RVBBZzQ2SStuYldxclBGL2RmZXA5TzlSM08vVGJ2c1EzMzg1NzV3TExWVDU3?=
- =?utf-8?Q?1cYj6Y8niitAM?=
+	=?utf-8?B?cGQvRTJZNkdmQXNiRUhGQjA5TEIxODlXbjJ4algxRG1iVGpNTVE4YXVCUFNN?=
+ =?utf-8?B?M0VCbS9OT3RwL3ovZDJ2N0cxU2hFM3hWRGZiQTVMRU9xYVpSN0NYTnVNQkE2?=
+ =?utf-8?B?ME5hQ1gvczZHQnhWOWJ1Ym4wSHRxTHlUM3RSMnZPaTI3ZS9tN1FGSkNjU3RR?=
+ =?utf-8?B?OWtZZGFnMDQzZC8rNHoyTDJaR2JBLzRuT3plYmJSZG9BUEpRT2pqUVp1SkVT?=
+ =?utf-8?B?azlOaGpVajUzWHJKSnQ2YlNZR25rMGtwQlNDbHVyUEM0d2NyOE4za2Y2TUZP?=
+ =?utf-8?B?bkpGYnBVRDlWbi9rdFo5Tm5LanB2U2lDMVBkR3dVbXVwNWgwdUticm5SNkhw?=
+ =?utf-8?B?d3VWd2R5SlA2dnY3aDlTTUFrd2FPWGlPYzRPRkhsRTBTRm0vWmlYc1JPVGlr?=
+ =?utf-8?B?bmpIaGdJa3NhbzZjRFA0YjVOTm1mTmNsVzVSaXZ0Q0JIUGJKQXkwaUtlTndD?=
+ =?utf-8?B?b3I3QmlmVUxmaGd5dC9nQXA2MTNVbWRoeUlqc1NRTTk4NlRFL0RhS2pndWFD?=
+ =?utf-8?B?d2ZTS09hdEFSUVNQbGp6ZVg2L0lUdWNZK2NSQ0xYTk1rM09mYjBYRE9hNVVa?=
+ =?utf-8?B?VDRxQ0MvSVh4emtBcmFBSmd5YTRZSno1a1dJYlB3QUJFOGE2bnVwbzVGUldP?=
+ =?utf-8?B?emNyN0pPc2M5eUQ0ZVFCeEQvNjc0OVd1MmZ0T0pLUTRDeGpiZEhGcjFoVkl0?=
+ =?utf-8?B?ZXgxQlZ4Y3pOeXovbTg4R0hGdW1QYWZSSS9WTTBDQVprSjhqcmoxOFNweGFJ?=
+ =?utf-8?B?aDA3Um9jSmJOUElINzZIVllUSms3bS9TeGFMU2NCbEZqRm9DY1dkd0tUSXJa?=
+ =?utf-8?B?NkVnYS9pYkFENnAvR1N1elpqZm1lQTd6a1dXL25YNDJPbEFrL2NQT0pBZ0VR?=
+ =?utf-8?B?ay9Eb2Q0Y0ovUDlCaEF6K2VzUjRTMzB1cTFqYmIrYkt2UmV0emJXeVdMcnVl?=
+ =?utf-8?B?SS9BOEJMQzk0czJQRmZqWFpoVU90RlBhQ0w3UzBTbUpqY3JkZnhKMEdpcWVk?=
+ =?utf-8?B?Umh2b0wxV2d0UDlxMW1MQ0crdHl2VjA3bEFNZzh2dGhRaTczVlZ4UDZHSDVj?=
+ =?utf-8?B?R0NsNE4zNGQzQVFGZU02MG5INktReEo5SHRlbTErYldzdVZHdXI2WDVJYVVD?=
+ =?utf-8?B?dzE0TWY5cmdLSXlXNGpZN3dTVVA1aHpnZjFZZER2bzY5RE9NVlJuMCtUcjV5?=
+ =?utf-8?B?VzZ4cU00Wm5sK1l6L1BPeWE3YXNYQjQ2MTY0MVE5ZHhYTEJrbXBDRWh5UnRa?=
+ =?utf-8?B?V0gxTmUwMXpWOXc3OFVBVGcwNEZFZm9XOXQ1SDV6YnFIVmJqUjkrKy9GMkk5?=
+ =?utf-8?B?QkVRKzRzUDlhRDg2R1l3dGRGSmgwZ3gxNjlaekhkbVdQYWRESnYxSkRoOUQ1?=
+ =?utf-8?B?Tm5oK3crcU4vYVJCT2gxeFMrVGwwZXZKc3JWd1g4ZU9yLzdQQm42Wlo5b0pj?=
+ =?utf-8?B?anRvdHNOaXdTdUEvcnZrWTRaZ1VPa2FsWXBNR05oQUZmQU55VGxIR0lTM1Rx?=
+ =?utf-8?B?eklRK1RTTlFocUZoVWVOMy9BTFVVakc5blFRMnpnb0loN0RNTzA3bkpVQjVY?=
+ =?utf-8?B?cG53NFpaWHFsZmZVeThIaFlNWlZReTV4bUlFNnRQRHAzWUxPVHZzK0JHejNV?=
+ =?utf-8?B?NUZGbkZXVzlUUmI5SjNPOVBSeFg2cWRNV05ReWVTNjUrN1FzM1NCcW1pRFJ6?=
+ =?utf-8?B?VjVGakFXUEdlN2lURGZhcnI5ZVRnRDhvWjMwZ3pKQjU4TTZPdlIwcVc2eXNn?=
+ =?utf-8?B?TnQ5dXZJSjZka1RwQUxRWEgvSUVUOERreU1pQjdhNUdqYzJsanE4a0RMZVNo?=
+ =?utf-8?B?NGpyYlZkVEVqcTc4dEtLMGNwdndtaVMwZkJKRzJucGFaRFc0UkQ0Vm9qV3k2?=
+ =?utf-8?Q?U09gumFbREVvP?=
 X-Forefront-Antispam-Report:
 	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:LV8PR12MB9207.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(1800799024)(366016);DIR:OUT;SFP:1101;
 X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
 X-MS-Exchange-AntiSpam-MessageData-0:
-	=?utf-8?B?aWdPdUV0ek9jSEdCZnRyYmliSU9vWlg4YS9QZ3N4Y3BMT2d4OU9EOUpYeHRu?=
- =?utf-8?B?aENlMWlxQWRDbWNRUXhzUDJOdzJoaENQWXA3Uk1tUE9sNEdnZXZEQ0luN1NB?=
- =?utf-8?B?NU14OHhzRmpBRWI2YkVaWW9sZmxTeHRLU0pVbkxhckJPKzVCZkRWMHpacFNx?=
- =?utf-8?B?dkVFSFNXeDM2cEUraTJ5L01BTHlZcGFxa05HVGY3R0FObmJIQXB6Q0VzY2kw?=
- =?utf-8?B?SmtFWm9RSzduaTJwMnJNclEwS0RWbFNlYUtrcWFCRUhLdDM4ZXVTTm9CMUdt?=
- =?utf-8?B?RklJWm5WWUtOZ1lGMHltVlg3MFh1OVNYUlQrUGs4YWdGb2l2T0NUNGN5dVNU?=
- =?utf-8?B?TUpHNVlOMnFEUEdoeXVvSWJPeDVkSFppMVVieEtCVnNWNHNrWmMrb1pjbkti?=
- =?utf-8?B?SnJKbERhREx5U3pJTmEvQ0VxRFg2NHRVbElmMFdpaDYrT2tQd003U3cxYU1N?=
- =?utf-8?B?WUlYOWFDWmdmNlppVEZtZWszSXZidlpQYUlUTStnUGx1WElEVHZuK0Nxd2NO?=
- =?utf-8?B?K3U4ZS8wV0VHVW9oVG5jL2FRV2Z1ZEd0ZFNMQkswMWw1MHBSTU1nSjBGUHZM?=
- =?utf-8?B?TUwyR0NtSDg5c2ZaT2NZNEZCRXFKYzcrbEx3T1MvN1hxSnFETk9sNjQ2QUZ1?=
- =?utf-8?B?c05ta2tKSjB4SUJua2JOUE5DM3dOR1ppRWFocEk2a1dSWjYxa0IyUnAxT3Vz?=
- =?utf-8?B?UHFzcEptMlBpRFQwamlaVXN2elBUdFQ3TUQ3cTBXSm9KakJVdEQ0dDdIR1Vv?=
- =?utf-8?B?Wkk1ekIzc3M5b0VCN2lUQXMrLzFlZEVkNC9DVGdTeUllYTRmRTQ0MzduMmhv?=
- =?utf-8?B?d1FxVkN1T2pYVWZaMlVvamFJUTBsNHZEOHpOM0IvUVZPellCRVZ2VE80aUVB?=
- =?utf-8?B?MFRsNWVFZ2d6TUpmdDhra2JEa1BYaGltQ0RoVld0bmtsa1V1RFdrUitySWNk?=
- =?utf-8?B?RTlXR2J5SjBzZ0lzdmtEdDc5S3M2aHA5T0RXQWRiUk5DRXhSR3lJQmkyTDJJ?=
- =?utf-8?B?cXplNTR3T01WazBoN01tSTFyMmVjMHpSYmtKV3NTL0hHSlpzYVExRzZGTjZz?=
- =?utf-8?B?VWQ1N1JOV1M1L1pLNlZLTnUxWThNZE04YWprcXRMaE4xOC9YVEhnaDRvTlJ1?=
- =?utf-8?B?b25JM1ByWGh4eEVYWWNUQklDZ1liT1g3WTdENjdtb3pWWHpEQ1ZTUENwODV6?=
- =?utf-8?B?dHpzV3VjRTJlU2k3NC9DeDRhRkZHb0FLcEJCWVk4dnZBZXJuTndzTHJJekRE?=
- =?utf-8?B?MkNqbTdLb1o2alh5T3A3d2RSODZON3k1bVJVNnllejN5YVhlTW1ObFZNaVpZ?=
- =?utf-8?B?SE5wSzhib1VxNkwrZjQ2NjY3aHBMVDBCS0RFWnNvUFpqbmJBRnAyMjRtbXpQ?=
- =?utf-8?B?WWtzRW85ck14WC9ETmExVjdscmZvRk1sVDhkMzhLZWNqMktxRnRoNHcrMGQ0?=
- =?utf-8?B?ckw3STBtbUVzWXVsWFN1b2ZldnJBb0d3dXZ1T05pcnNQRU9ZSG8zc3RLaGhD?=
- =?utf-8?B?eDNHZEp2alUwaDllSmM4NGFlZ3A5cDk1ZC92aDY0TmN0NkVVQWx4TmF0U2N0?=
- =?utf-8?B?LzE4Y3RtcHRCa3ZDL1BJVklUa3I5czZ5cFpNQm56UzFjYUtoR1FXdWw3ZGFE?=
- =?utf-8?B?NGFBY1lPTVpBQk9tU1ZtU2dzMHdkKzVaVW5MVUVQMVQ0KzdBYmcwSVRqOWpv?=
- =?utf-8?B?bFB3QUVBQjdJZUFnQ1BxUm1aY1hPOUtSekFyaVVPR0NYbWdscWhRd1VxVzRF?=
- =?utf-8?B?czhhSWhueGhtWXl0RlRmNG9OK0liUFlPMG9NK1ZGRjFyazB1b0lEUFVwZnlh?=
- =?utf-8?B?M1h3UEhMdkd1NDFDUXNDWnlWSmtkMW8wUEVsdTNuZDR2WGtiVk9sMmY0QWJh?=
- =?utf-8?B?aUZXeDRsT2F3QjREQTRKMTlCanpHWnNsenhhcFV6WjBqZEtzRXJSYktxZGU4?=
- =?utf-8?B?TlhzbFlEYWxnemtyenR0cjdXaURGT0dVcmt1Z3UrYXpxTHhwYjlydDUvSENq?=
- =?utf-8?B?U2oraTdCdXROS2ZJODI0UFVmbEJpQWdyM3FHdklTVldYeWtxMm9YdDFLTXd3?=
- =?utf-8?B?NHk0amlha2sxVitjWHc5UkZ2bXpGSnBlWEZ5VGcyblpMM0Rjei85QlZuSllV?=
- =?utf-8?Q?PwGjEicXJ39uPGJpjedCWBGW5?=
+	=?utf-8?B?bG10aC9JQ2RzMGtHV2Q3OERvMCtZMEhpcjZ3Mk9kclZIczl6eFRLSmNvUEVG?=
+ =?utf-8?B?S3lrZlRwSk9qaDFMbHdidStwTjQveU5VVjRxVE81UWVLejJBOWxpcldHMXR3?=
+ =?utf-8?B?U3VTODY2V0xjSzFZZFlrQ0o1Y1VCL2tFU3ErOHVwWVdmSlZ5RUQ1UGxnZ0Y5?=
+ =?utf-8?B?SjRrMEZaMUNxK2pGUC9lbHZEeG02YnNGdkxkVXFjR0hyL0VwdXdqZGNrdnFO?=
+ =?utf-8?B?OTBuMWRLeHhMd1BTTHBqeGMvNG9nYldaRXd2SjRQN1lTQ2VkK3lmRDE2eG1F?=
+ =?utf-8?B?OGhZeXY0R0lSdDVLK2VjUlpEUDFlU3Q1MGMrUlJqZ0FITmhLSUJkUU5Ydm1j?=
+ =?utf-8?B?MHVrVDVERGxURUpaUkdaRkJiTlR4eHIvR21FUVpJaVMvbXl1eEZlUElyVUY2?=
+ =?utf-8?B?Tnk2VkxVaTFXQ1dvNlNUd2hRdTIxcDl5M0I2aEVBZk5uMFk4bThOYW8vUXkr?=
+ =?utf-8?B?endTd1pHdCtnbzN2bzdEdDNGS2FtanZGcktzZ1J1RUhmNkl3aXVCSHd1Z1Vl?=
+ =?utf-8?B?em1vMnpjM01jaEgvTk9sUDRpd25QMFVjc2l0dkNIbll5dnRZczg4TU1pa2l6?=
+ =?utf-8?B?OStrUEpaMG5TNjFlZlFlTDdlWm1aRjBZbnZyc01hZVU2RklJd3B1bUVhN0xI?=
+ =?utf-8?B?TjRmWDAxYVZteklvSGFLZWpvM0JQeERnKyttSDFCeTMyR05KanFvb09xRSsw?=
+ =?utf-8?B?SGhuZUdZU1lCSTNhL0pJSWpnU0xPaDNBUjluM2pOUm1TakRzaWE1dkxPNjhN?=
+ =?utf-8?B?RVdoUTJUc09nZHN5dFRzOGg0N3NoSklkMW9KbmFPRnlVSGJHc2ZNcVd4NU9N?=
+ =?utf-8?B?clk1YmtmZHByQjF6bzUvNk8wcUE5N2tmN2RGTmMvcXFwMENJSERSK0V2cTA2?=
+ =?utf-8?B?QytNVVdjTll4aTFmK3A4KytpaTdRSlpBVitEUlNSRDhBeDhHK3NFY0RvaEwy?=
+ =?utf-8?B?RkVWRC83VTJ6QnNtdko5a3JqUFVYNWV1QTgvcy9KQXlSQWU2emRJeHdZLzk2?=
+ =?utf-8?B?a3BIQWV3R3B2S05SR3RsajVmaXZmMmdlYW5kMlJBTWNwQy9GNTJPY01GaVlt?=
+ =?utf-8?B?N0R2dEx2RGNldEluUzRMa2JRd1JEaXlnVVBheEcybjVqK2RkTzRNY1gwYXNY?=
+ =?utf-8?B?OFNGaTJZQW5xYTRkNHJUaHdRckFOdzVxUDVSNXF6SFFHcnZyVW44Y2hKSkxL?=
+ =?utf-8?B?Y2VzZ3VEeEVvTVRKNU1zTUJFTXE5YTJZUWlNaUdqVjFZV1B1UDhDWm80YjlM?=
+ =?utf-8?B?RGM0YkVkWGI3dXNKUzF2cmt0ZnF3dDJpN0lJeTI2UDB4bzBFSjg1RTlsUzBk?=
+ =?utf-8?B?bGFJNnhCL3JxUlVXRmdycis5bHYwaC8zQ1hCbjlUU3RSMUlUV0F0OHMwQTZu?=
+ =?utf-8?B?bXlXcXhKK1k1dEo3d3lCa3d4VVdNc2t4dXNZUDdWR3VYRjFncEVWWVBGM2ow?=
+ =?utf-8?B?ZkZQb29Eb3pkODNzbkNSN0NnakNIUGRuV1MyemdrekxUZHhjVExwU0FLcDNJ?=
+ =?utf-8?B?NTFQYTErN1FHdkVweW5qcnlka0xpaFR5Sk9WZDBzaVhCK2txZWJlNUdzRzFn?=
+ =?utf-8?B?RDBEVGFNUzc2R09OZFBUNkkxSVJEU3pPcW1NV2xlMmxCZlIyZjFlYzEwWGJa?=
+ =?utf-8?B?UnJNRjJIeVhVeU1WUTNabkI3dWw1RTFpd0NsMUVLb0VZUWsyNlpoeXZIVVFP?=
+ =?utf-8?B?UWJ3ZmxpRTRSNmswZkxhS3c0ODlFV1lKdlNFbnEyV3haazRFZnQzei9NaWVy?=
+ =?utf-8?B?Z3lFYnRqMkMxOXI1ZzdQcEJ3TjVwcnNKSktZNXJPZldySkNGbE9LNEsySHBE?=
+ =?utf-8?B?ZEhJazZ3aVVLelVIT1hwbWZSMlBNbDd1MWw1b2ZxSkZ4Y3lBYzY3VU5MV2dY?=
+ =?utf-8?B?R0FrRkEwQnk1UXJBWHNxVGdyUmdGd3hkb0RnUUZaQVZoc0xMSlFCM3I2SVg5?=
+ =?utf-8?B?V2luOGJobjdYbi9UZ1MyL1FudWFGSUx2d3pVMm43SmJieURtYjhZZTZ1cWs2?=
+ =?utf-8?B?Ni9ZTWZnQzdOek9rdHpydnBoVjE5WGtXOXI2cmdUR2lEeDlsTDRNWmdsL3Bh?=
+ =?utf-8?B?RkJEL2JJdHdWQUQ3MXl6YUN5WE9OY2JxQWZzUHpITHNXUTYrNHExTVlxT0hL?=
+ =?utf-8?Q?ssEyZS855BhATReItfstq19c7?=
 X-OriginatorOrg: amd.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: fce487ce-32fd-482f-38ca-08dd588f1105
+X-MS-Exchange-CrossTenant-Network-Message-Id: 51cdaf37-84d9-4953-b485-08dd588f2554
 X-MS-Exchange-CrossTenant-AuthSource: LV8PR12MB9207.namprd12.prod.outlook.com
 X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2025 07:02:44.9370
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 01 Mar 2025 07:03:18.9241
  (UTC)
 X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
 X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
 X-MS-Exchange-CrossTenant-MailboxType: HOSTED
-X-MS-Exchange-CrossTenant-UserPrincipalName: Ubannp4CbRQNlOq7/cU7iiCgS0V6CGHnnhCQtusQdB0K37O5ss+g7/tT26fA575iQS8hzMhvGSLhG4BC2VyLKQ==
+X-MS-Exchange-CrossTenant-UserPrincipalName: LusJmALnqM849V0U5ke+/nGHFCWmRrbclx4DPn24Er5y7+SN2gJkDYZHl0xf+pen4qnWTTteWSuPDB4KrWxs9w==
 X-MS-Exchange-Transport-CrossTenantHeadersStamped: DS7PR12MB9474
 
 On 2/26/2025 1:19 PM, Mario Limonciello wrote:
 > From: Mario Limonciello <mario.limonciello@amd.com>
 > 
-> By storing perf values in a union all the writes and reads can
-> be done atomically, removing the need for some concurrency protections.
+> The CPPC enable register is configured as "write once".  That is
+> any future writes don't actually do anything.
 > 
-> While making this change, also drop the cached frequency values,
-> using inline helpers to calculate them on demand from perf value.
+> Because of this, all the cleanup paths that currently exist for
+> CPPC disable are non-effective.
+> 
+> Rework CPPC enable to only enable after all the CAP registers have
+> been read to avoid enabling CPPC on CPUs with invalid _CPC or
+> unpopulated MSRs.
+> 
+> As the register is write once, remove all cleanup paths as well.
 > 
 
 LGTM now,
@@ -192,626 +197,331 @@ Reviewed-by: Dhananjay Ugwekar <dhananjay.ugwekar@amd.com>
 Thanks,
 Dhananjay
 
-> Reviewed-by: Gautham R. Shenoy <gautham.shenoy@amd.com>
 > Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
 > ---
 > v5:
->  * Use suggestion for union docstring
->  * Flush out for quirk case
->  * Use perf variable in unit test
+>  * Drop unnecessary extra code in shmem_cppc_enable()
+>  * Remove redundant tracing in store_energy_performance_preference()
+>  * Add missing call to amd_pstate_cppc_enable() in passive case
+>  * Leave cpudata->suspended alone in amd_pstate_epp_cpu_online()
+>  * Drop spurious whitespace
 > v4:
->  * Rebase on earlier changes
+>  * Remove unnecessary amd_pstate_update_perf() call during online
+>  * Remove unnecessary if (ret) ret.
+>  * Drop amd_pstate_cpu_resume()
+>  * Drop unnecessary derefs
 > v3:
->  * Pick up tag
-> v2:
->  * cache perf variable in unit tests
->  * Drop unnecessary check from amd_pstate_update_min_max_limit()
->  * Consistency with READ_ONCE()
->  * Drop unneeded policy checks
->  * add kdoc
+>  * Fixup for suspend/resume issue
 > ---
->  drivers/cpufreq/amd-pstate-ut.c |  18 +--
->  drivers/cpufreq/amd-pstate.c    | 205 ++++++++++++++++++--------------
->  drivers/cpufreq/amd-pstate.h    |  51 +++++---
->  3 files changed, 158 insertions(+), 116 deletions(-)
+>  drivers/cpufreq/amd-pstate.c | 179 +++++++----------------------------
+>  1 file changed, 35 insertions(+), 144 deletions(-)
 > 
-> diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-> index 445278cf40b61..5f6a92a816e61 100644
-> --- a/drivers/cpufreq/amd-pstate-ut.c
-> +++ b/drivers/cpufreq/amd-pstate-ut.c
-> @@ -129,6 +129,7 @@ static void amd_pstate_ut_check_perf(u32 index)
->  	struct cppc_perf_caps cppc_perf;
->  	struct cpufreq_policy *policy = NULL;
->  	struct amd_cpudata *cpudata = NULL;
-> +	union perf_cached cur_perf;
->  
->  	for_each_possible_cpu(cpu) {
->  		policy = cpufreq_cpu_get(cpu);
-> @@ -162,19 +163,20 @@ static void amd_pstate_ut_check_perf(u32 index)
->  			lowest_perf = AMD_CPPC_LOWEST_PERF(cap1);
->  		}
->  
-> -		if (highest_perf != READ_ONCE(cpudata->highest_perf) && !cpudata->hw_prefcore) {
-> +		cur_perf = READ_ONCE(cpudata->perf);
-> +		if (highest_perf != cur_perf.highest_perf && !cpudata->hw_prefcore) {
->  			pr_err("%s cpu%d highest=%d %d highest perf doesn't match\n",
-> -				__func__, cpu, highest_perf, cpudata->highest_perf);
-> +				__func__, cpu, highest_perf, cur_perf.highest_perf);
->  			goto skip_test;
->  		}
-> -		if ((nominal_perf != READ_ONCE(cpudata->nominal_perf)) ||
-> -			(lowest_nonlinear_perf != READ_ONCE(cpudata->lowest_nonlinear_perf)) ||
-> -			(lowest_perf != READ_ONCE(cpudata->lowest_perf))) {
-> +		if (nominal_perf != cur_perf.nominal_perf ||
-> +		   (lowest_nonlinear_perf != cur_perf.lowest_nonlinear_perf) ||
-> +		   (lowest_perf != cur_perf.lowest_perf)) {
->  			amd_pstate_ut_cases[index].result = AMD_PSTATE_UT_RESULT_FAIL;
->  			pr_err("%s cpu%d nominal=%d %d lowest_nonlinear=%d %d lowest=%d %d, they should be equal!\n",
-> -				__func__, cpu, nominal_perf, cpudata->nominal_perf,
-> -				lowest_nonlinear_perf, cpudata->lowest_nonlinear_perf,
-> -				lowest_perf, cpudata->lowest_perf);
-> +				__func__, cpu, nominal_perf, cur_perf.nominal_perf,
-> +				lowest_nonlinear_perf, cur_perf.lowest_nonlinear_perf,
-> +				lowest_perf, cur_perf.lowest_perf);
->  			goto skip_test;
->  		}
->  
 > diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
-> index fb28b27558882..bd8bcda4e6eb0 100644
+> index f0d9ee62cb30d..89e6d32223c9b 100644
 > --- a/drivers/cpufreq/amd-pstate.c
 > +++ b/drivers/cpufreq/amd-pstate.c
-> @@ -142,18 +142,17 @@ static struct quirk_entry quirk_amd_7k62 = {
->  	.lowest_freq = 550,
->  };
+> @@ -85,7 +85,6 @@ static struct cpufreq_driver *current_pstate_driver;
+>  static struct cpufreq_driver amd_pstate_driver;
+>  static struct cpufreq_driver amd_pstate_epp_driver;
+>  static int cppc_state = AMD_PSTATE_UNDEFINED;
+> -static bool cppc_enabled;
+>  static bool amd_pstate_prefcore = true;
+>  static struct quirk_entry *quirks;
 >  
-> -static inline u8 freq_to_perf(struct amd_cpudata *cpudata, unsigned int freq_val)
-> +static inline u8 freq_to_perf(union perf_cached perf, u32 nominal_freq, unsigned int freq_val)
->  {
-> -	u32 perf_val = DIV_ROUND_UP_ULL((u64)freq_val * cpudata->nominal_perf,
-> -					cpudata->nominal_freq);
-> +	u32 perf_val = DIV_ROUND_UP_ULL((u64)freq_val * perf.nominal_perf, nominal_freq);
->  
-> -	return (u8)clamp(perf_val, cpudata->lowest_perf, cpudata->highest_perf);
-> +	return (u8)clamp(perf_val, perf.lowest_perf, perf.highest_perf);
+> @@ -371,89 +370,21 @@ static int shmem_set_epp(struct cpufreq_policy *policy, u8 epp)
+>  	return ret;
 >  }
 >  
-> -static inline u32 perf_to_freq(struct amd_cpudata *cpudata, u8 perf_val)
-> +static inline u32 perf_to_freq(union perf_cached perf, u32 nominal_freq, u8 perf_val)
+> -static int amd_pstate_set_energy_pref_index(struct cpufreq_policy *policy,
+> -					    int pref_index)
+> +static inline int msr_cppc_enable(struct cpufreq_policy *policy)
 >  {
-> -	return DIV_ROUND_UP_ULL((u64)cpudata->nominal_freq * perf_val,
-> -				cpudata->nominal_perf);
-> +	return DIV_ROUND_UP_ULL((u64)nominal_freq * perf_val,
-> +				perf.nominal_perf);
+> -	struct amd_cpudata *cpudata = policy->driver_data;
+> -	u8 epp;
+> -
+> -	if (!pref_index)
+> -		epp = cpudata->epp_default;
+> -	else
+> -		epp = epp_values[pref_index];
+> -
+> -	if (epp > 0 && cpudata->policy == CPUFREQ_POLICY_PERFORMANCE) {
+> -		pr_debug("EPP cannot be set under performance policy\n");
+> -		return -EBUSY;
+> -	}
+> -
+> -	return amd_pstate_set_epp(policy, epp);
+> -}
+> -
+> -static inline int msr_cppc_enable(bool enable)
+> -{
+> -	int ret, cpu;
+> -	unsigned long logical_proc_id_mask = 0;
+> -
+> -       /*
+> -        * MSR_AMD_CPPC_ENABLE is write-once, once set it cannot be cleared.
+> -        */
+> -	if (!enable)
+> -		return 0;
+> -
+> -	if (enable == cppc_enabled)
+> -		return 0;
+> -
+> -	for_each_present_cpu(cpu) {
+> -		unsigned long logical_id = topology_logical_package_id(cpu);
+> -
+> -		if (test_bit(logical_id, &logical_proc_id_mask))
+> -			continue;
+> -
+> -		set_bit(logical_id, &logical_proc_id_mask);
+> -
+> -		ret = wrmsrl_safe_on_cpu(cpu, MSR_AMD_CPPC_ENABLE,
+> -				enable);
+> -		if (ret)
+> -			return ret;
+> -	}
+> -
+> -	cppc_enabled = enable;
+> -	return 0;
+> +	return wrmsrl_safe_on_cpu(policy->cpu, MSR_AMD_CPPC_ENABLE, 1);
 >  }
 >  
->  static int __init dmi_matched_7k62_bios_bug(const struct dmi_system_id *dmi)
-> @@ -347,7 +346,9 @@ static int amd_pstate_set_energy_pref_index(struct cpufreq_policy *policy,
->  	}
+> -static int shmem_cppc_enable(bool enable)
+> +static int shmem_cppc_enable(struct cpufreq_policy *policy)
+>  {
+> -	int cpu, ret = 0;
+> -	struct cppc_perf_ctrls perf_ctrls;
+> -
+> -	if (enable == cppc_enabled)
+> -		return 0;
+> -
+> -	for_each_present_cpu(cpu) {
+> -		ret = cppc_set_enable(cpu, enable);
+> -		if (ret)
+> -			return ret;
+> -
+> -		/* Enable autonomous mode for EPP */
+> -		if (cppc_state == AMD_PSTATE_ACTIVE) {
+> -			/* Set desired perf as zero to allow EPP firmware control */
+> -			perf_ctrls.desired_perf = 0;
+> -			ret = cppc_set_perf(cpu, &perf_ctrls);
+> -			if (ret)
+> -				return ret;
+> -		}
+> -	}
+> -
+> -	cppc_enabled = enable;
+> -	return ret;
+> +	return cppc_set_enable(policy->cpu, 1);
+>  }
 >  
->  	if (trace_amd_pstate_epp_perf_enabled()) {
-> -		trace_amd_pstate_epp_perf(cpudata->cpu, cpudata->highest_perf,
-> +		union perf_cached perf = READ_ONCE(cpudata->perf);
-> +
-> +		trace_amd_pstate_epp_perf(cpudata->cpu, perf.highest_perf,
->  					  epp,
->  					  FIELD_GET(AMD_CPPC_MIN_PERF_MASK, cpudata->cppc_req_cached),
->  					  FIELD_GET(AMD_CPPC_MAX_PERF_MASK, cpudata->cppc_req_cached),
-> @@ -425,6 +426,7 @@ static inline int amd_pstate_cppc_enable(bool enable)
+>  DEFINE_STATIC_CALL(amd_pstate_cppc_enable, msr_cppc_enable);
+>  
+> -static inline int amd_pstate_cppc_enable(bool enable)
+> +static inline int amd_pstate_cppc_enable(struct cpufreq_policy *policy)
+>  {
+> -	return static_call(amd_pstate_cppc_enable)(enable);
+> +	return static_call(amd_pstate_cppc_enable)(policy);
+>  }
 >  
 >  static int msr_init_perf(struct amd_cpudata *cpudata)
->  {
-> +	union perf_cached perf = READ_ONCE(cpudata->perf);
->  	u64 cap1, numerator;
+> @@ -1069,6 +1000,10 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
+>  							      cpudata->nominal_freq,
+>  							      perf.highest_perf);
 >  
->  	int ret = rdmsrl_safe_on_cpu(cpudata->cpu, MSR_AMD_CPPC_CAP1,
-> @@ -436,19 +438,21 @@ static int msr_init_perf(struct amd_cpudata *cpudata)
->  	if (ret)
->  		return ret;
->  
-> -	WRITE_ONCE(cpudata->highest_perf, numerator);
-> -	WRITE_ONCE(cpudata->max_limit_perf, numerator);
-> -	WRITE_ONCE(cpudata->nominal_perf, AMD_CPPC_NOMINAL_PERF(cap1));
-> -	WRITE_ONCE(cpudata->lowest_nonlinear_perf, AMD_CPPC_LOWNONLIN_PERF(cap1));
-> -	WRITE_ONCE(cpudata->lowest_perf, AMD_CPPC_LOWEST_PERF(cap1));
-> +	perf.highest_perf = numerator;
-> +	perf.max_limit_perf = numerator;
-> +	perf.min_limit_perf = AMD_CPPC_LOWEST_PERF(cap1);
-> +	perf.nominal_perf = AMD_CPPC_NOMINAL_PERF(cap1);
-> +	perf.lowest_nonlinear_perf = AMD_CPPC_LOWNONLIN_PERF(cap1);
-> +	perf.lowest_perf = AMD_CPPC_LOWEST_PERF(cap1);
-> +	WRITE_ONCE(cpudata->perf, perf);
->  	WRITE_ONCE(cpudata->prefcore_ranking, AMD_CPPC_HIGHEST_PERF(cap1));
-> -	WRITE_ONCE(cpudata->min_limit_perf, AMD_CPPC_LOWEST_PERF(cap1));
->  	return 0;
->  }
->  
->  static int shmem_init_perf(struct amd_cpudata *cpudata)
->  {
->  	struct cppc_perf_caps cppc_perf;
-> +	union perf_cached perf = READ_ONCE(cpudata->perf);
->  	u64 numerator;
->  
->  	int ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
-> @@ -459,14 +463,14 @@ static int shmem_init_perf(struct amd_cpudata *cpudata)
->  	if (ret)
->  		return ret;
->  
-> -	WRITE_ONCE(cpudata->highest_perf, numerator);
-> -	WRITE_ONCE(cpudata->max_limit_perf, numerator);
-> -	WRITE_ONCE(cpudata->nominal_perf, cppc_perf.nominal_perf);
-> -	WRITE_ONCE(cpudata->lowest_nonlinear_perf,
-> -		   cppc_perf.lowest_nonlinear_perf);
-> -	WRITE_ONCE(cpudata->lowest_perf, cppc_perf.lowest_perf);
-> +	perf.highest_perf = numerator;
-> +	perf.max_limit_perf = numerator;
-> +	perf.min_limit_perf = cppc_perf.lowest_perf;
-> +	perf.nominal_perf = cppc_perf.nominal_perf;
-> +	perf.lowest_nonlinear_perf = cppc_perf.lowest_nonlinear_perf;
-> +	perf.lowest_perf = cppc_perf.lowest_perf;
-> +	WRITE_ONCE(cpudata->perf, perf);
->  	WRITE_ONCE(cpudata->prefcore_ranking, cppc_perf.highest_perf);
-> -	WRITE_ONCE(cpudata->min_limit_perf, cppc_perf.lowest_perf);
->  
->  	if (cppc_state == AMD_PSTATE_ACTIVE)
->  		return 0;
-> @@ -549,14 +553,14 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u8 min_perf,
->  			      u8 des_perf, u8 max_perf, bool fast_switch, int gov_flags)
->  {
->  	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpudata->cpu);
-> -	u8 nominal_perf = READ_ONCE(cpudata->nominal_perf);
-> +	union perf_cached perf = READ_ONCE(cpudata->perf);
->  
->  	if (!policy)
->  		return;
->  
->  	des_perf = clamp_t(u8, des_perf, min_perf, max_perf);
->  
-> -	policy->cur = perf_to_freq(cpudata, des_perf);
-> +	policy->cur = perf_to_freq(perf, cpudata->nominal_freq, des_perf);
->  
->  	if ((cppc_state == AMD_PSTATE_GUIDED) && (gov_flags & CPUFREQ_GOV_DYNAMIC_SWITCHING)) {
->  		min_perf = des_perf;
-> @@ -565,7 +569,7 @@ static void amd_pstate_update(struct amd_cpudata *cpudata, u8 min_perf,
->  
->  	/* limit the max perf when core performance boost feature is disabled */
->  	if (!cpudata->boost_supported)
-> -		max_perf = min_t(u8, nominal_perf, max_perf);
-> +		max_perf = min_t(u8, perf.nominal_perf, max_perf);
->  
->  	if (trace_amd_pstate_perf_enabled() && amd_pstate_sample(cpudata)) {
->  		trace_amd_pstate_perf(min_perf, des_perf, max_perf, cpudata->freq,
-> @@ -602,39 +606,41 @@ static int amd_pstate_verify(struct cpufreq_policy_data *policy_data)
->  	return 0;
->  }
->  
-> -static int amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
-> +static void amd_pstate_update_min_max_limit(struct cpufreq_policy *policy)
->  {
-> -	u8 max_limit_perf, min_limit_perf;
->  	struct amd_cpudata *cpudata = policy->driver_data;
-> +	union perf_cached perf = READ_ONCE(cpudata->perf);
->  
-> -	max_limit_perf = freq_to_perf(cpudata, policy->max);
-> -	min_limit_perf = freq_to_perf(cpudata, policy->min);
-> +	perf.max_limit_perf = freq_to_perf(perf, cpudata->nominal_freq, policy->max);
-> +	perf.min_limit_perf = freq_to_perf(perf, cpudata->nominal_freq, policy->min);
->  
->  	if (cpudata->policy == CPUFREQ_POLICY_PERFORMANCE)
-> -		min_limit_perf = min(cpudata->nominal_perf, max_limit_perf);
-> +		perf.min_limit_perf = min(perf.nominal_perf, perf.max_limit_perf);
->  
-> -	WRITE_ONCE(cpudata->max_limit_perf, max_limit_perf);
-> -	WRITE_ONCE(cpudata->min_limit_perf, min_limit_perf);
->  	WRITE_ONCE(cpudata->max_limit_freq, policy->max);
->  	WRITE_ONCE(cpudata->min_limit_freq, policy->min);
-> -
-> -	return 0;
-> +	WRITE_ONCE(cpudata->perf, perf);
->  }
->  
->  static int amd_pstate_update_freq(struct cpufreq_policy *policy,
->  				  unsigned int target_freq, bool fast_switch)
->  {
->  	struct cpufreq_freqs freqs;
-> -	struct amd_cpudata *cpudata = policy->driver_data;
-> +	struct amd_cpudata *cpudata;
-> +	union perf_cached perf;
->  	u8 des_perf;
->  
-> +	cpudata = policy->driver_data;
+> +	ret = amd_pstate_cppc_enable(policy);
+> +	if (ret)
+> +		goto free_cpudata1;
 > +
->  	if (policy->min != cpudata->min_limit_freq || policy->max != cpudata->max_limit_freq)
->  		amd_pstate_update_min_max_limit(policy);
->  
-> +	perf = READ_ONCE(cpudata->perf);
-> +
->  	freqs.old = policy->cur;
->  	freqs.new = target_freq;
->  
-> -	des_perf = freq_to_perf(cpudata, target_freq);
-> +	des_perf = freq_to_perf(perf, cpudata->nominal_freq, target_freq);
->  
->  	WARN_ON(fast_switch && !policy->fast_switch_enabled);
->  	/*
-> @@ -645,8 +651,8 @@ static int amd_pstate_update_freq(struct cpufreq_policy *policy,
->  	if (!fast_switch)
->  		cpufreq_freq_transition_begin(policy, &freqs);
->  
-> -	amd_pstate_update(cpudata, cpudata->min_limit_perf, des_perf,
-> -			  cpudata->max_limit_perf, fast_switch,
-> +	amd_pstate_update(cpudata, perf.min_limit_perf, des_perf,
-> +			  perf.max_limit_perf, fast_switch,
->  			  policy->governor->flags);
->  
->  	if (!fast_switch)
-> @@ -675,9 +681,10 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->  				   unsigned long target_perf,
->  				   unsigned long capacity)
->  {
-> -	u8 max_perf, min_perf, des_perf, cap_perf, min_limit_perf;
-> +	u8 max_perf, min_perf, des_perf, cap_perf;
->  	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpu);
->  	struct amd_cpudata *cpudata;
-> +	union perf_cached perf;
->  
->  	if (!policy)
->  		return;
-> @@ -687,8 +694,8 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->  	if (policy->min != cpudata->min_limit_freq || policy->max != cpudata->max_limit_freq)
->  		amd_pstate_update_min_max_limit(policy);
->  
-> -	cap_perf = READ_ONCE(cpudata->highest_perf);
-> -	min_limit_perf = READ_ONCE(cpudata->min_limit_perf);
-> +	perf = READ_ONCE(cpudata->perf);
-> +	cap_perf = perf.highest_perf;
->  
->  	des_perf = cap_perf;
->  	if (target_perf < capacity)
-> @@ -699,10 +706,10 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->  	else
->  		min_perf = cap_perf;
->  
-> -	if (min_perf < min_limit_perf)
-> -		min_perf = min_limit_perf;
-> +	if (min_perf < perf.min_limit_perf)
-> +		min_perf = perf.min_limit_perf;
->  
-> -	max_perf = cpudata->max_limit_perf;
-> +	max_perf = perf.max_limit_perf;
->  	if (max_perf < min_perf)
->  		max_perf = min_perf;
->  
-> @@ -713,11 +720,12 @@ static void amd_pstate_adjust_perf(unsigned int cpu,
->  static int amd_pstate_cpu_boost_update(struct cpufreq_policy *policy, bool on)
->  {
->  	struct amd_cpudata *cpudata = policy->driver_data;
-> +	union perf_cached perf = READ_ONCE(cpudata->perf);
->  	u32 nominal_freq, max_freq;
->  	int ret = 0;
->  
->  	nominal_freq = READ_ONCE(cpudata->nominal_freq);
-> -	max_freq = perf_to_freq(cpudata, READ_ONCE(cpudata->highest_perf));
-> +	max_freq = perf_to_freq(perf, cpudata->nominal_freq, perf.highest_perf);
->  
->  	if (on)
->  		policy->cpuinfo.max_freq = max_freq;
-> @@ -888,30 +896,30 @@ static u32 amd_pstate_get_transition_latency(unsigned int cpu)
->  }
->  
->  /*
-> - * amd_pstate_init_freq: Initialize the max_freq, min_freq,
-> - *                       nominal_freq and lowest_nonlinear_freq for
-> - *                       the @cpudata object.
-> + * amd_pstate_init_freq: Initialize the nominal_freq and lowest_nonlinear_freq
-> + *			 for the @cpudata object.
->   *
-> - *  Requires: highest_perf, lowest_perf, nominal_perf and
-> - *            lowest_nonlinear_perf members of @cpudata to be
-> - *            initialized.
-> + * Requires: all perf members of @cpudata to be initialized.
->   *
-> - *  Returns 0 on success, non-zero value on failure.
-> + * Returns 0 on success, non-zero value on failure.
->   */
->  static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
->  {
-> -	int ret;
-> -	u32 min_freq, max_freq;
-> -	u32 nominal_freq, lowest_nonlinear_freq;
-> +	u32 min_freq, max_freq, nominal_freq, lowest_nonlinear_freq;
->  	struct cppc_perf_caps cppc_perf;
-> +	union perf_cached perf;
-> +	int ret;
->  
->  	ret = cppc_get_perf_caps(cpudata->cpu, &cppc_perf);
->  	if (ret)
->  		return ret;
-> +	perf = READ_ONCE(cpudata->perf);
->  
-> -	if (quirks && quirks->lowest_freq)
-> +	if (quirks && quirks->lowest_freq) {
->  		min_freq = quirks->lowest_freq;
-> -	else
-> +		perf.lowest_perf = freq_to_perf(perf, nominal_freq, min_freq);
-> +		WRITE_ONCE(cpudata->perf, perf);
-> +	} else
->  		min_freq = cppc_perf.lowest_freq;
->  
->  	if (quirks && quirks->nominal_freq)
-> @@ -924,8 +932,8 @@ static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
->  
->  	WRITE_ONCE(cpudata->nominal_freq, nominal_freq);
->  
-> -	max_freq = perf_to_freq(cpudata, cpudata->highest_perf);
-> -	lowest_nonlinear_freq = perf_to_freq(cpudata, cpudata->lowest_nonlinear_perf);
-> +	max_freq = perf_to_freq(perf, nominal_freq, perf.highest_perf);
-> +	lowest_nonlinear_freq = perf_to_freq(perf, nominal_freq, perf.lowest_nonlinear_perf);
->  	WRITE_ONCE(cpudata->lowest_nonlinear_freq, lowest_nonlinear_freq);
->  
->  	/**
-> @@ -952,6 +960,7 @@ static int amd_pstate_init_freq(struct amd_cpudata *cpudata)
->  static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
->  {
->  	struct amd_cpudata *cpudata;
-> +	union perf_cached perf;
->  	struct device *dev;
->  	int ret;
->  
-> @@ -987,8 +996,14 @@ static int amd_pstate_cpu_init(struct cpufreq_policy *policy)
->  	policy->cpuinfo.transition_latency = amd_pstate_get_transition_latency(policy->cpu);
->  	policy->transition_delay_us = amd_pstate_get_transition_delay_us(policy->cpu);
->  
-> -	policy->cpuinfo.min_freq = policy->min = perf_to_freq(cpudata, cpudata->lowest_perf);
-> -	policy->cpuinfo.max_freq = policy->max = perf_to_freq(cpudata, cpudata->highest_perf);
-> +	perf = READ_ONCE(cpudata->perf);
-> +
-> +	policy->cpuinfo.min_freq = policy->min = perf_to_freq(perf,
-> +							      cpudata->nominal_freq,
-> +							      perf.lowest_perf);
-> +	policy->cpuinfo.max_freq = policy->max = perf_to_freq(perf,
-> +							      cpudata->nominal_freq,
-> +							      perf.highest_perf);
->  
 >  	policy->boost_enabled = READ_ONCE(cpudata->boost_supported);
 >  
-> @@ -1069,23 +1084,27 @@ static int amd_pstate_cpu_suspend(struct cpufreq_policy *policy)
->  static ssize_t show_amd_pstate_max_freq(struct cpufreq_policy *policy,
->  					char *buf)
->  {
-> -	struct amd_cpudata *cpudata = policy->driver_data;
-> +	struct amd_cpudata *cpudata;
-> +	union perf_cached perf;
->  
-> +	cpudata = policy->driver_data;
-> +	perf = READ_ONCE(cpudata->perf);
->  
-> -	return sysfs_emit(buf, "%u\n", perf_to_freq(cpudata, READ_ONCE(cpudata->highest_perf)));
-> +	return sysfs_emit(buf, "%u\n",
-> +			  perf_to_freq(perf, cpudata->nominal_freq, perf.highest_perf));
+>  	/* It will be updated by governor */
+> @@ -1116,28 +1051,6 @@ static void amd_pstate_cpu_exit(struct cpufreq_policy *policy)
+>  	kfree(cpudata);
 >  }
 >  
->  static ssize_t show_amd_pstate_lowest_nonlinear_freq(struct cpufreq_policy *policy,
->  						     char *buf)
->  {
-> -	int freq;
-> -	struct amd_cpudata *cpudata = policy->driver_data;
-> +	struct amd_cpudata *cpudata;
-> +	union perf_cached perf;
->  
-> -	freq = READ_ONCE(cpudata->lowest_nonlinear_freq);
-> -	if (freq < 0)
-> -		return freq;
-> +	cpudata = policy->driver_data;
-> +	perf = READ_ONCE(cpudata->perf);
->  
-> -	return sysfs_emit(buf, "%u\n", freq);
-> +	return sysfs_emit(buf, "%u\n",
-> +			  perf_to_freq(perf, cpudata->nominal_freq, perf.lowest_nonlinear_perf));
->  }
+> -static int amd_pstate_cpu_resume(struct cpufreq_policy *policy)
+> -{
+> -	int ret;
+> -
+> -	ret = amd_pstate_cppc_enable(true);
+> -	if (ret)
+> -		pr_err("failed to enable amd-pstate during resume, return %d\n", ret);
+> -
+> -	return ret;
+> -}
+> -
+> -static int amd_pstate_cpu_suspend(struct cpufreq_policy *policy)
+> -{
+> -	int ret;
+> -
+> -	ret = amd_pstate_cppc_enable(false);
+> -	if (ret)
+> -		pr_err("failed to disable amd-pstate during suspend, return %d\n", ret);
+> -
+> -	return ret;
+> -}
+> -
+>  /* Sysfs attributes */
 >  
 >  /*
-> @@ -1095,12 +1114,11 @@ static ssize_t show_amd_pstate_lowest_nonlinear_freq(struct cpufreq_policy *poli
->  static ssize_t show_amd_pstate_highest_perf(struct cpufreq_policy *policy,
->  					    char *buf)
+> @@ -1229,8 +1142,10 @@ static ssize_t show_energy_performance_available_preferences(
+>  static ssize_t store_energy_performance_preference(
+>  		struct cpufreq_policy *policy, const char *buf, size_t count)
 >  {
-> -	u8 perf;
-> -	struct amd_cpudata *cpudata = policy->driver_data;
-> +	struct amd_cpudata *cpudata;
+> +	struct amd_cpudata *cpudata = policy->driver_data;
+>  	char str_preference[21];
+>  	ssize_t ret;
+> +	u8 epp;
 >  
-> -	perf = READ_ONCE(cpudata->highest_perf);
-> +	cpudata = policy->driver_data;
+>  	ret = sscanf(buf, "%20s", str_preference);
+>  	if (ret != 1)
+> @@ -1240,7 +1155,17 @@ static ssize_t store_energy_performance_preference(
+>  	if (ret < 0)
+>  		return -EINVAL;
 >  
-> -	return sysfs_emit(buf, "%u\n", perf);
-> +	return sysfs_emit(buf, "%u\n", cpudata->perf.highest_perf);
+> -	ret = amd_pstate_set_energy_pref_index(policy, ret);
+> +	if (!ret)
+> +		epp = cpudata->epp_default;
+> +	else
+> +		epp = epp_values[ret];
+> +
+> +	if (epp > 0 && policy->policy == CPUFREQ_POLICY_PERFORMANCE) {
+> +		pr_debug("EPP cannot be set under performance policy\n");
+> +		return -EBUSY;
+> +	}
+> +
+> +	ret = amd_pstate_set_epp(policy, epp);
+>  
+>  	return ret ? ret : count;
 >  }
+> @@ -1273,7 +1198,6 @@ static ssize_t show_energy_performance_preference(
 >  
->  static ssize_t show_amd_pstate_prefcore_ranking(struct cpufreq_policy *policy,
-> @@ -1431,6 +1449,7 @@ static bool amd_pstate_acpi_pm_profile_undefined(void)
->  static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+>  static void amd_pstate_driver_cleanup(void)
 >  {
->  	struct amd_cpudata *cpudata;
-> +	union perf_cached perf;
->  	struct device *dev;
->  	u64 value;
->  	int ret;
-> @@ -1464,8 +1483,15 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
->  	if (ret)
->  		goto free_cpudata1;
+> -	amd_pstate_cppc_enable(false);
+>  	cppc_state = AMD_PSTATE_DISABLE;
+>  	current_pstate_driver = NULL;
+>  }
+> @@ -1307,14 +1231,6 @@ static int amd_pstate_register_driver(int mode)
 >  
-> -	policy->cpuinfo.min_freq = policy->min = perf_to_freq(cpudata, cpudata->lowest_perf);
-> -	policy->cpuinfo.max_freq = policy->max = perf_to_freq(cpudata, cpudata->highest_perf);
-> +	perf = READ_ONCE(cpudata->perf);
+>  	cppc_state = mode;
+>  
+> -	ret = amd_pstate_cppc_enable(true);
+> -	if (ret) {
+> -		pr_err("failed to enable cppc during amd-pstate driver registration, return %d\n",
+> -		       ret);
+> -		amd_pstate_driver_cleanup();
+> -		return ret;
+> -	}
+> -
+>  	/* at least one CPU supports CPB */
+>  	current_pstate_driver->boost_enabled = cpu_feature_enabled(X86_FEATURE_CPB);
+>  
+> @@ -1554,11 +1470,15 @@ static int amd_pstate_epp_cpu_init(struct cpufreq_policy *policy)
+>  	policy->cpuinfo.max_freq = policy->max = perf_to_freq(perf,
+>  							      cpudata->nominal_freq,
+>  							      perf.highest_perf);
+> +	policy->driver_data = cpudata;
 > +
-> +	policy->cpuinfo.min_freq = policy->min = perf_to_freq(perf,
-> +							      cpudata->nominal_freq,
-> +							      perf.lowest_perf);
-> +	policy->cpuinfo.max_freq = policy->max = perf_to_freq(perf,
-> +							      cpudata->nominal_freq,
-> +							      perf.highest_perf);
-> +
+> +	ret = amd_pstate_cppc_enable(policy);
+> +	if (ret)
+> +		goto free_cpudata1;
+>  
 >  	/* It will be updated by governor */
 >  	policy->cur = policy->cpuinfo.min_freq;
 >  
-> @@ -1526,6 +1552,7 @@ static void amd_pstate_epp_cpu_exit(struct cpufreq_policy *policy)
->  static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
->  {
->  	struct amd_cpudata *cpudata = policy->driver_data;
-> +	union perf_cached perf;
->  	u8 epp;
+> -	policy->driver_data = cpudata;
 >  
->  	if (policy->min != cpudata->min_limit_freq || policy->max != cpudata->max_limit_freq)
-> @@ -1536,15 +1563,16 @@ static int amd_pstate_epp_update_limit(struct cpufreq_policy *policy)
->  	else
->  		epp = READ_ONCE(cpudata->epp_cached);
+>  	policy->boost_enabled = READ_ONCE(cpudata->boost_supported);
 >  
-> +	perf = READ_ONCE(cpudata->perf);
->  	if (trace_amd_pstate_epp_perf_enabled()) {
-> -		trace_amd_pstate_epp_perf(cpudata->cpu, cpudata->highest_perf, epp,
-> -					  cpudata->min_limit_perf,
-> -					  cpudata->max_limit_perf,
-> +		trace_amd_pstate_epp_perf(cpudata->cpu, perf.highest_perf, epp,
-> +					  perf.min_limit_perf,
-> +					  perf.max_limit_perf,
->  					  policy->boost_enabled);
->  	}
->  
-> -	return amd_pstate_update_perf(cpudata, cpudata->min_limit_perf, 0U,
-> -				      cpudata->max_limit_perf, epp, false);
-> +	return amd_pstate_update_perf(cpudata, perf.min_limit_perf, 0U,
-> +				      perf.max_limit_perf, epp, false);
+> @@ -1650,31 +1570,11 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
+>  	return 0;
 >  }
 >  
->  static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
-> @@ -1576,20 +1604,18 @@ static int amd_pstate_epp_set_policy(struct cpufreq_policy *policy)
->  static int amd_pstate_epp_reenable(struct cpufreq_policy *policy)
->  {
->  	struct amd_cpudata *cpudata = policy->driver_data;
-> -	u8 max_perf;
-> +	union perf_cached perf = READ_ONCE(cpudata->perf);
->  	int ret;
->  
->  	ret = amd_pstate_cppc_enable(true);
->  	if (ret)
->  		pr_err("failed to enable amd pstate during resume, return %d\n", ret);
->  
-> -	max_perf = READ_ONCE(cpudata->highest_perf);
+> -static int amd_pstate_epp_reenable(struct cpufreq_policy *policy)
+> -{
+> -	int ret;
 > -
->  	if (trace_amd_pstate_epp_perf_enabled()) {
-> -		trace_amd_pstate_epp_perf(cpudata->cpu, cpudata->highest_perf,
-> +		trace_amd_pstate_epp_perf(cpudata->cpu, perf.highest_perf,
->  					  cpudata->epp_cached,
->  					  FIELD_GET(AMD_CPPC_MIN_PERF_MASK, cpudata->cppc_req_cached),
-> -					  max_perf, policy->boost_enabled);
-> +					  perf.highest_perf, policy->boost_enabled);
->  	}
+> -	ret = amd_pstate_cppc_enable(true);
+> -	if (ret)
+> -		pr_err("failed to enable amd pstate during resume, return %d\n", ret);
+> -
+> -
+> -	return amd_pstate_epp_update_limit(policy);
+> -}
+> -
+>  static int amd_pstate_epp_cpu_online(struct cpufreq_policy *policy)
+>  {
+> -	struct amd_cpudata *cpudata = policy->driver_data;
+> -	int ret;
+> -
+> -	pr_debug("AMD CPU Core %d going online\n", cpudata->cpu);
+> +	pr_debug("AMD CPU Core %d going online\n", policy->cpu);
 >  
->  	return amd_pstate_epp_update_limit(policy);
-> @@ -1613,22 +1639,21 @@ static int amd_pstate_epp_cpu_online(struct cpufreq_policy *policy)
+> -	ret = amd_pstate_epp_reenable(policy);
+> -	if (ret)
+> -		return ret;
+> -	cpudata->suspended = false;
+> -
+> -	return 0;
+> +	return amd_pstate_cppc_enable(policy);
+>  }
+>  
 >  static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
+> @@ -1692,11 +1592,6 @@ static int amd_pstate_epp_cpu_offline(struct cpufreq_policy *policy)
+>  static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
 >  {
 >  	struct amd_cpudata *cpudata = policy->driver_data;
-> -	u8 min_perf;
-> +	union perf_cached perf = READ_ONCE(cpudata->perf);
->  
->  	if (cpudata->suspended)
->  		return 0;
->  
-> -	min_perf = READ_ONCE(cpudata->lowest_perf);
+> -	int ret;
 > -
->  	guard(mutex)(&amd_pstate_limits_lock);
+> -	/* avoid suspending when EPP is not enabled */
+> -	if (cppc_state != AMD_PSTATE_ACTIVE)
+> -		return 0;
 >  
->  	if (trace_amd_pstate_epp_perf_enabled()) {
-> -		trace_amd_pstate_epp_perf(cpudata->cpu, cpudata->highest_perf,
-> +		trace_amd_pstate_epp_perf(cpudata->cpu, perf.highest_perf,
->  					  AMD_CPPC_EPP_BALANCE_POWERSAVE,
-> -					  min_perf, min_perf, policy->boost_enabled);
-> +					  perf.lowest_perf, perf.lowest_perf,
-> +					  policy->boost_enabled);
->  	}
+>  	/* invalidate to ensure it's rewritten during resume */
+>  	cpudata->cppc_req_cached = 0;
+> @@ -1704,11 +1599,6 @@ static int amd_pstate_epp_suspend(struct cpufreq_policy *policy)
+>  	/* set this flag to avoid setting core offline*/
+>  	cpudata->suspended = true;
 >  
-> -	return amd_pstate_update_perf(cpudata, min_perf, 0, min_perf,
-> +	return amd_pstate_update_perf(cpudata, perf.lowest_perf, 0, perf.lowest_perf,
->  				      AMD_CPPC_EPP_BALANCE_POWERSAVE, false);
+> -	/* disable CPPC in lowlevel firmware */
+> -	ret = amd_pstate_cppc_enable(false);
+> -	if (ret)
+> -		pr_err("failed to suspend, return %d\n", ret);
+> -
+>  	return 0;
 >  }
 >  
-> diff --git a/drivers/cpufreq/amd-pstate.h b/drivers/cpufreq/amd-pstate.h
-> index 0149933692458..83532a0079a81 100644
-> --- a/drivers/cpufreq/amd-pstate.h
-> +++ b/drivers/cpufreq/amd-pstate.h
-> @@ -13,6 +13,36 @@
->  /*********************************************************************
->   *                        AMD P-state INTERFACE                       *
->   *********************************************************************/
-> +
-> +/**
-> + * union perf_cached - A union to cache performance-related data.
-> + * @highest_perf: the maximum performance an individual processor may reach,
-> + *		  assuming ideal conditions
-> + *		  For platforms that support the preferred core feature, the highest_perf value maybe
-> + * 		  configured to any value in the range 166-255 by the firmware (because the preferred
-> + * 		  core ranking is encoded in the highest_perf value). To maintain consistency across
-> + * 		  all platforms, we split the highest_perf and preferred core ranking values into
-> + * 		  cpudata->perf.highest_perf and cpudata->prefcore_ranking.
-> + * @nominal_perf: the maximum sustained performance level of the processor,
-> + *		  assuming ideal operating conditions
-> + * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
-> + *			   savings are achieved
-> + * @lowest_perf: the absolute lowest performance level of the processor
-> + * @min_limit_perf: Cached value of the performance corresponding to policy->min
-> + * @max_limit_perf: Cached value of the performance corresponding to policy->max
-> + */
-> +union perf_cached {
-> +	struct {
-> +		u8	highest_perf;
-> +		u8	nominal_perf;
-> +		u8	lowest_nonlinear_perf;
-> +		u8	lowest_perf;
-> +		u8	min_limit_perf;
-> +		u8	max_limit_perf;
-> +	};
-> +	u64	val;
-> +};
-> +
->  /**
->   * struct  amd_aperf_mperf
->   * @aperf: actual performance frequency clock count
-> @@ -30,20 +60,9 @@ struct amd_aperf_mperf {
->   * @cpu: CPU number
->   * @req: constraint request to apply
->   * @cppc_req_cached: cached performance request hints
-> - * @highest_perf: the maximum performance an individual processor may reach,
-> - *		  assuming ideal conditions
-> - *		  For platforms that do not support the preferred core feature, the
-> - *		  highest_pef may be configured with 166 or 255, to avoid max frequency
-> - *		  calculated wrongly. we take the fixed value as the highest_perf.
-> - * @nominal_perf: the maximum sustained performance level of the processor,
-> - *		  assuming ideal operating conditions
-> - * @lowest_nonlinear_perf: the lowest performance level at which nonlinear power
-> - *			   savings are achieved
-> - * @lowest_perf: the absolute lowest performance level of the processor
-> + * @perf: cached performance-related data
->   * @prefcore_ranking: the preferred core ranking, the higher value indicates a higher
->   * 		  priority.
-> - * @min_limit_perf: Cached value of the performance corresponding to policy->min
-> - * @max_limit_perf: Cached value of the performance corresponding to policy->max
->   * @min_limit_freq: Cached value of policy->min (in khz)
->   * @max_limit_freq: Cached value of policy->max (in khz)
->   * @nominal_freq: the frequency (in khz) that mapped to nominal_perf
-> @@ -68,13 +87,9 @@ struct amd_cpudata {
->  	struct	freq_qos_request req[2];
->  	u64	cppc_req_cached;
+> @@ -1717,8 +1607,12 @@ static int amd_pstate_epp_resume(struct cpufreq_policy *policy)
+>  	struct amd_cpudata *cpudata = policy->driver_data;
 >  
-> -	u8	highest_perf;
-> -	u8	nominal_perf;
-> -	u8	lowest_nonlinear_perf;
-> -	u8	lowest_perf;
-> +	union perf_cached perf;
+>  	if (cpudata->suspended) {
+> +		int ret;
 > +
->  	u8	prefcore_ranking;
-> -	u8	min_limit_perf;
-> -	u8	max_limit_perf;
->  	u32	min_limit_freq;
->  	u32	max_limit_freq;
->  	u32	nominal_freq;
+>  		/* enable amd pstate from suspend state*/
+> -		amd_pstate_epp_reenable(policy);
+> +		ret = amd_pstate_epp_update_limit(policy);
+> +		if (ret)
+> +			return ret;
+>  
+>  		cpudata->suspended = false;
+>  	}
+> @@ -1733,8 +1627,6 @@ static struct cpufreq_driver amd_pstate_driver = {
+>  	.fast_switch    = amd_pstate_fast_switch,
+>  	.init		= amd_pstate_cpu_init,
+>  	.exit		= amd_pstate_cpu_exit,
+> -	.suspend	= amd_pstate_cpu_suspend,
+> -	.resume		= amd_pstate_cpu_resume,
+>  	.set_boost	= amd_pstate_set_boost,
+>  	.update_limits	= amd_pstate_update_limits,
+>  	.name		= "amd-pstate",
+> @@ -1901,7 +1793,6 @@ static int __init amd_pstate_init(void)
+>  
+>  global_attr_free:
+>  	cpufreq_unregister_driver(current_pstate_driver);
+> -	amd_pstate_cppc_enable(false);
+>  	return ret;
+>  }
+>  device_initcall(amd_pstate_init);
 
 
