@@ -1,157 +1,209 @@
-Return-Path: <linux-pm+bounces-23207-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23208-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B777DA4A528
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 22:40:00 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8A7E6A4A844
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Mar 2025 04:25:49 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7E56F189BA5A
-	for <lists+linux-pm@lfdr.de>; Fri, 28 Feb 2025 21:40:07 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DF68E3BBD33
+	for <lists+linux-pm@lfdr.de>; Sat,  1 Mar 2025 03:25:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17C221D9A5D;
-	Fri, 28 Feb 2025 21:39:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4DB081A724C;
+	Sat,  1 Mar 2025 03:25:42 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JjcIIaSS"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="qV1yj3pP"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 41F6C1CD210;
-	Fri, 28 Feb 2025 21:39:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B1D71CD15;
+	Sat,  1 Mar 2025 03:25:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740778797; cv=none; b=mtrmaN6i5+KoZ6S/2dh+y2FE6hU+9AOPkzOijZDPB2uIiC2j20HuFRa7RWz5GqJ3ZuJvr3CUq6pRjV9aiIdRSL0lGUZJf9+Xw462UnPQy2PgSmX0N8xkt1bEJ4/VjtfzLw+V3jFfFRJCMiqzB4fvwT9aLGoelh5DcJ96UM02534=
+	t=1740799542; cv=none; b=ScnnbYWqzmdzoGXE7nkjSnfZJVQ8vmffM9DycY0871rBPwT+RpSLLmAYsnSpB3dXb+UavnZjdzdDCylHML2GZ5rlrKCMph0sA0pP4x+wyZBfKskjUvIf4mHD/NjrCXLNSn/JSXVbiJUuhy1Nc66wfRq3xy8Xjq3dpjzvNxh5Fwo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740778797; c=relaxed/simple;
-	bh=bq94ewhowEqBJ8/6+Vh7xBKXt2PEhsPRRRQL85oTY5k=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=OtFdIRTBS3N9VppsYXgHtvg0Olcm5424Cun+/rqE/Ij9Drq1Hnxz3I9I4g42d70KAtHFx36WM74A39GTyJ8tpYlLcy5DFQLxLJr61WTu0ThBlnQ05oIZXLi5RgJW7nFIZvql8enZbNcdKBv7uWj5/+Pj6TKEWsWeNxT5WJaXpxg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JjcIIaSS; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740778795; x=1772314795;
-  h=date:from:to:cc:subject:message-id;
-  bh=bq94ewhowEqBJ8/6+Vh7xBKXt2PEhsPRRRQL85oTY5k=;
-  b=JjcIIaSSEeScdESs+ZybBAnoFkqwFWbpifGH+OnQXnsnLQLUA3Iq9y+B
-   NdE3WafkRTNCwSGuZ9ooSk7we7bHQk7mjLyqydWmL3/bsfxhxI81RD1RW
-   PDdMujsx4I3NsHO5tc/xsOXU9iOzm5PDfUskfbxIVIKn/BEcxecLlMwFS
-   1htWXmzpL04ZK1c7qV8yHueyyVZQm1SGEt9bEkb7RFrIZU14k/0WDSXJ+
-   Y8s+ikerdTbPkoZHUx/i4rnJYODkZpwQLcICAPVFjxhOPSIywkHn3O7Uy
-   90zb43X1Yube8ML6iQTHWG6amkO0/b+yBoU0Xh+0B93cqVU0tADN91N3r
-   w==;
-X-CSE-ConnectionGUID: nMcmUnTSSt2m6iE25M1QOg==
-X-CSE-MsgGUID: +SKpeV2TQ8+2OJNrNszUkA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11359"; a="67094078"
-X-IronPort-AV: E=Sophos;i="6.13,323,1732608000"; 
-   d="scan'208";a="67094078"
-Received: from fmviesa009.fm.intel.com ([10.60.135.149])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 28 Feb 2025 13:39:54 -0800
-X-CSE-ConnectionGUID: wkWvgOwmQsKNBTJR7ptQEw==
-X-CSE-MsgGUID: ffCs+XM4SiSz3c75/PQjiQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,323,1732608000"; 
-   d="scan'208";a="118125862"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa009.fm.intel.com with ESMTP; 28 Feb 2025 13:39:53 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1to85H-000FXn-1D;
-	Fri, 28 Feb 2025 21:39:51 +0000
-Date: Sat, 01 Mar 2025 05:39:06 +0800
-From: kernel test robot <lkp@intel.com>
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: linux-acpi@vger.kernel.org, devel@acpica.org,
- linux-pm@vger.kernel.org
-Subject: [rafael-pm:bleeding-edge] BUILD SUCCESS
- ee2d520123ada9719414411e94a88ec7cde4dba8
-Message-ID: <202503010559.Wd3ClPDP-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1740799542; c=relaxed/simple;
+	bh=FmQ/Wz4ZtwGsNlXMLA2I4TgbrEPenZCG9Iv0gdXbVDg=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=uI+aXHhdrVCV1cgBOwZr6u4L9UN6Zod/qpIMXK4nk8ZlvQar017VVd6yXsgmOKKCOoehfgOuDok5afU8eG2UI21aPI3rJrx5luLb59VkR3uwcthIPmMDzpp6FNdJg7u/rNKQWbC56rMb3Zjt8ww+wQ1LSP/6itkHM35BcqUibug=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=qV1yj3pP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 25A14C4CED6;
+	Sat,  1 Mar 2025 03:25:28 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740799541;
+	bh=FmQ/Wz4ZtwGsNlXMLA2I4TgbrEPenZCG9Iv0gdXbVDg=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=qV1yj3pP/YiTqZmytVT+45Crbjp118n/HZY9xCXrKEDhw6EhxgHtjfA2o8ZdUF12+
+	 ZbIOz258SUZx59KzguFDK05TvwmCAgWyRV2iOzm2Zx2M5WeHOQOSsUR3rJeRR26G9j
+	 vWwoRxzoBRTKWaFrFAp8HenVq+Z0uSLafSMVdOHiDYHg36sCMgNiQUSFbPaAY0h1o6
+	 6WCCeGb5OyzmoNepcX1bJQmEy4U+82W5hnAVDVz0qYLpN17t3CkijlOR0tHcHNF1k9
+	 ry4cRubRiLiX08yUeLpCZosIvSYsZLp7m+uDTzl3ze6ScOZg9eHc77y5kbk1THz1Kl
+	 Q1XbG+Sek+o7A==
+Date: Sat, 1 Mar 2025 03:25:19 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
+ agross@kernel.org, andersson@kernel.org, dmitry.baryshkov@linaro.org,
+ konradybcio@kernel.org, daniel.lezcano@linaro.org, sboyd@kernel.org,
+ amitk@kernel.org, thara.gopinath@gmail.com, lee@kernel.org,
+ rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com,
+ david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
+ quic_kamalw@quicinc.com, rui.zhang@intel.com, lukasz.luba@arm.com,
+ lars@metafoo.de, devicetree@vger.kernel.org, linux-arm-msm@vger.kernel.org,
+ linux-iio@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-pm@vger.kernel.org, cros-qcom-dts-watchers@chromium.org,
+ quic_skakitap@quicinc.com, neil.armstrong@linaro.org
+Subject: Re: [PATCH V5 4/5] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
+Message-ID: <20250301032519.16e77288@jic23-huawei>
+In-Reply-To: <9e14f58f-e345-4bae-b14e-de25fc28d9a8@oss.qualcomm.com>
+References: <20250131183242.3653595-1-jishnu.prakash@oss.qualcomm.com>
+	<20250131183242.3653595-5-jishnu.prakash@oss.qualcomm.com>
+	<20250201121134.53040aae@jic23-huawei>
+	<9e14f58f-e345-4bae-b14e-de25fc28d9a8@oss.qualcomm.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset=US-ASCII
+Content-Transfer-Encoding: 7bit
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
-branch HEAD: ee2d520123ada9719414411e94a88ec7cde4dba8  Merge branch 'thermal-misc' into bleeding-edge
+On Wed, 26 Feb 2025 14:22:05 +0530
+Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
 
-elapsed time: 1469m
+> Hi Jonathan,
+> 
+> On 2/1/2025 5:41 PM, Jonathan Cameron wrote:
+> > On Sat,  1 Feb 2025 00:02:41 +0530
+> > Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
+> >   
+> >> The ADC architecture on PMIC5 Gen3 is similar to that on PMIC5 Gen2,
+> >> with all SW communication to ADC going through PMK8550 which
+> >> communicates with other PMICs through PBS.
+> >>
+> >> One major difference is that the register interface used here is that
+> >> of an SDAM (Shared Direct Access Memory) peripheral present on PMK8550.
+> >> There may be more than one SDAM used for ADC5 Gen3 and each has eight
+> >> channels, which may be used for either immediate reads (same functionality
+> >> as previous PMIC5 and PMIC5 Gen2 ADC peripherals) or recurring measurements
+> >> (same as ADC_TM functionality).
+> >>
+> >> By convention, we reserve the first channel of the first SDAM for all
+> >> immediate reads and use the remaining channels across all SDAMs for
+> >> ADC_TM monitoring functionality.
+> >>
+> >> Add support for PMIC5 Gen3 ADC driver for immediate read functionality.
+> >> ADC_TM is implemented as an auxiliary thermal driver under this ADC
+> >> driver.
+> >>
+> >> Signed-off-by: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>  
+> > Hi,
+> > 
+> > A few minor things inline.  One general one is keep to under 80 chars
+> > for line wrap unless going over that makes a significant improvement
+> > to readability.
+> > 
+> > Jonathan
+> >   
+> >> ---
+> >> Changes since v4:
+> >> - Moved out common funtions from newly added .h file into a separate .c
+> >>   file to avoid duplicating them. Updated interrupt name as suggested
+> >>   by reviewer. Updated namespace export symbol statement to have a string
+> >>   as second argument to follow framework change.
+> >>  
+> 
+> ...
+> 
+> >> +
+> >> +			if (!conv_req)
+> >> +				return 0;
+> >> +		}
+> >> +
+> >> +		usleep_range(ADC5_GEN3_HS_DELAY_MIN_US, ADC5_GEN3_HS_DELAY_MAX_US);  
+> > fsleep() perhaps as I doubt the extra tolerance that will give will matter
+> > much.  
+> >> +	}
+> >> +
+> >> +	pr_err("Setting HS ready bit timed out, sdam_index:%d, status:%#x\n", sdam_index, status);
+> >> +	return -ETIMEDOUT;
+> >> +}
+> >> +EXPORT_SYMBOL(adc5_gen3_poll_wait_hs);  
+> > 
+> > At some point may be worth namespacing all these exports.
+> > Probably not in this series though!  
+> 
+> In the main driver file (qcom-spmi-adc5-gen3.c), I have already exported some functions to a namespace ("QCOM_SPMI_ADC5_GEN3"),
+> which is imported in the auxiliary driver file (qcom-spmi-adc-tm5-gen3.c).
+> 
+> Do you think I should export these functions to the same or a different namespace? Or should we check this later?
+Later is fine.
 
-configs tested: 63
-configs skipped: 1
+> >> +void adc5_take_mutex_lock(struct device *dev, bool lock)
+> >> +{
+> >> +	struct iio_dev *indio_dev = dev_get_drvdata(dev->parent);
+> >> +	struct adc5_chip *adc = iio_priv(indio_dev);
+> >> +
+> >> +	if (lock)
+> >> +		mutex_lock(&adc->lock);
+> >> +	else
+> >> +		mutex_unlock(&adc->lock);
+> >> +}
+> >> +EXPORT_SYMBOL_NS_GPL(adc5_take_mutex_lock, "QCOM_SPMI_ADC5_GEN3");  
+> > 
+> > This is potentially going to make a mess for sparse.  Might be better to split
+> > it in two so you can had __acquires and __releases markings.
+> > 
+> > If you don't get any warnings with sparse then I guess we are fine.
+> >   
+> 
+> I had tried building with sparse in my local workspace and I did not get any errors in this file. Do you think I can keep this unchanged?
+> Also, would any kernel bots run sparse later on this patch, if it's not already done?
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Problems around this tend to turn up a bit late in build tests as requires
+particular combinations of features.  Here you may not see problems because
+sparse can't see far enough to understand the locking.
 
-tested configs:
-alpha                           allyesconfig    gcc-14.2.0
-arc                  randconfig-001-20250228    gcc-13.2.0
-arc                  randconfig-002-20250228    gcc-13.2.0
-arm                  randconfig-001-20250228    clang-21
-arm                  randconfig-002-20250228    gcc-14.2.0
-arm                  randconfig-003-20250228    gcc-14.2.0
-arm                  randconfig-004-20250228    gcc-14.2.0
-arm64                randconfig-001-20250228    gcc-14.2.0
-arm64                randconfig-002-20250228    clang-21
-arm64                randconfig-003-20250228    clang-16
-arm64                randconfig-004-20250228    gcc-14.2.0
-csky                 randconfig-001-20250228    gcc-14.2.0
-csky                 randconfig-002-20250228    gcc-14.2.0
-hexagon                         allmodconfig    clang-21
-hexagon                         allyesconfig    clang-18
-hexagon              randconfig-001-20250228    clang-19
-hexagon              randconfig-002-20250228    clang-21
-i386       buildonly-randconfig-001-20250228    clang-19
-i386       buildonly-randconfig-002-20250228    clang-19
-i386       buildonly-randconfig-003-20250228    gcc-12
-i386       buildonly-randconfig-004-20250228    clang-19
-i386       buildonly-randconfig-005-20250228    clang-19
-i386       buildonly-randconfig-006-20250228    clang-19
-loongarch            randconfig-001-20250228    gcc-14.2.0
-loongarch            randconfig-002-20250228    gcc-14.2.0
-nios2                randconfig-001-20250228    gcc-14.2.0
-nios2                randconfig-002-20250228    gcc-14.2.0
-parisc               randconfig-001-20250228    gcc-14.2.0
-parisc               randconfig-002-20250228    gcc-14.2.0
-powerpc              randconfig-001-20250228    gcc-14.2.0
-powerpc              randconfig-002-20250228    clang-16
-powerpc              randconfig-003-20250228    clang-18
-powerpc64            randconfig-001-20250228    clang-16
-powerpc64            randconfig-002-20250228    clang-18
-powerpc64            randconfig-003-20250228    gcc-14.2.0
-riscv                randconfig-001-20250228    gcc-14.2.0
-riscv                randconfig-002-20250228    gcc-14.2.0
-s390                            allmodconfig    clang-19
-s390                            allyesconfig    gcc-14.2.0
-s390                 randconfig-001-20250228    gcc-14.2.0
-s390                 randconfig-002-20250228    clang-17
-sh                              allmodconfig    gcc-14.2.0
-sh                              allyesconfig    gcc-14.2.0
-sh                   randconfig-001-20250228    gcc-14.2.0
-sh                   randconfig-002-20250228    gcc-14.2.0
-sparc                           allmodconfig    gcc-14.2.0
-sparc                randconfig-001-20250228    gcc-14.2.0
-sparc                randconfig-002-20250228    gcc-14.2.0
-sparc64              randconfig-001-20250228    gcc-14.2.0
-sparc64              randconfig-002-20250228    gcc-14.2.0
-um                              allmodconfig    clang-21
-um                              allyesconfig    gcc-12
-um                   randconfig-001-20250228    clang-21
-um                   randconfig-002-20250228    clang-21
-x86_64                           allnoconfig    clang-19
-x86_64     buildonly-randconfig-001-20250228    clang-19
-x86_64     buildonly-randconfig-002-20250228    clang-19
-x86_64     buildonly-randconfig-003-20250228    gcc-12
-x86_64     buildonly-randconfig-004-20250228    clang-19
-x86_64     buildonly-randconfig-005-20250228    gcc-12
-x86_64     buildonly-randconfig-006-20250228    gcc-12
-xtensa               randconfig-001-20250228    gcc-14.2.0
-xtensa               randconfig-002-20250228    gcc-14.2.0
+I would still split this into lock / unlock as that matches better
+with common syntax for locks.  We can then add markings
+as necessary later.
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+> >> +/*  
+> > 
+> > Looks like valid kernel doc, so /** and check it builds fine
+> > with the kernel-doc script.
+> >   
+> >> + * struct adc5_channel_prop - ADC channel property.
+> >> + * @channel: channel number, refer to the channel list.
+> >> + * @cal_method: calibration method.
+> >> + * @decimation: sampling rate supported for the channel.
+> >> + * @sid: slave id of PMIC owning the channel.  
+> > 
+> > In common with most of the kernel, if there is another name that
+> > can be used, I'd prefer avoiding that term.
+> > ID probably fine for example or leave it ambiguous as SID
+> >   
+> 
+> Just to be sure, does this look fine?
+> 
+> @sid: ID of PMIC owning the channel.
+Ok.
+> 
+> I'll address all your other comments in the next patch series.
+> 
+When replying with feedback on some items crop out the rest
+of the email just to maintain relevant context.
+Saves time and makes less likely important parts of your reply
+might be missed.
+
+thanks,
+
+Jonathan
+
+> Thanks,
+> Jishnu
 
