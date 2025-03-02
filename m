@@ -1,274 +1,151 @@
-Return-Path: <linux-pm+bounces-23226-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23227-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id CCC41A4B1F0
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Mar 2025 14:45:05 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8AFECA4B32B
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Mar 2025 17:31:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 83F1C188E2C9
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Mar 2025 13:45:12 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id CA86B188FCAC
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Mar 2025 16:31:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 869C31DE8A8;
-	Sun,  2 Mar 2025 13:44:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4BD6918D65E;
+	Sun,  2 Mar 2025 16:31:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="lUP29g1V"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="HXgX21fR"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B4332629C
-	for <linux-pm@vger.kernel.org>; Sun,  2 Mar 2025 13:44:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 948A9208A7;
+	Sun,  2 Mar 2025 16:31:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740923099; cv=none; b=rcogsCL20UpGw4Ktac71E08PbRDVGqeYijozPQXPf0Nk9M2pFFV5aQUmpIkB74FiRRuGOwaOPKvmUKeWz2QNC4+6TYK2RjvE3O4W5xhN+VgEOGSgTr84AOQ9PFG4bShkSRY1ED51f/zDLisX7mRLXmSBo5zzpP939YIVyUJpgco=
+	t=1740933068; cv=none; b=ZBdupR4HkfCriOsOViMcXx2BE/xVM3LtqGLq55btCrFwONS4gEGqV4mUQ/+lS/UkW7GuhOqbKQ/16XJW0rNc+jyAxBIlavafgT3HT7PIWKFQuZkZenoGlvUVZeaaJfZziyrRw89KL5Zo/vCXrzT0b2lQxzqjOMRx1p7D3lTnLVY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740923099; c=relaxed/simple;
-	bh=qtYj4cTvwpT8i9ShkSR7dTmJTTDIFZPuxa6RX1d9paI=;
-	h=Date:From:To:Cc:Subject:Message-ID; b=tD328rb255ODBCqf8b09R7e0KFkDuRUDdV/Cq3BbQMT5Y6Rl9BMGSMXpt4dKhbmybX2ag9WX0ncKW0cHnO3wuUe4oCIp7BWtjA3VIBW88sViaz7sUzVyolQ50OWkAXch5W3rZ+Md7maaeNNT+4dRiasmlfRuGxEC2dVRutqLkwc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=lUP29g1V; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1740923097; x=1772459097;
-  h=date:from:to:cc:subject:message-id;
-  bh=qtYj4cTvwpT8i9ShkSR7dTmJTTDIFZPuxa6RX1d9paI=;
-  b=lUP29g1V9/r5Qf+FsyjCkWP5zALmvq+TkLgqx5R+/i9tsb10DcHQlnwo
-   w4HQCXiRM9ibUjL086yQgxA7mRBefUFKC9GlljSjbh3OWcjZ++7NoWOfA
-   0r4WsO2A3ZGB1byu8dmE0+hvAJe5kXIEKLr2CjNrC2h8IZOkGuzypi7XT
-   1VdNWOkG2E9wEoZr8waS92hZi7oiIPbBRWzRfsXoDqTjqevzqONqFw5XN
-   fsvGuKA2pH8xjkx1ogiyreUxNUG1eHe3Kk3+tJIMR/OAbOd2wKv4FscFq
-   GdnPJYjRMzsukxshD6jY0N9JZLfu8v47O0Z5a58VbaQJT+GR5YrWvmmsY
-   Q==;
-X-CSE-ConnectionGUID: oYj+CxpWR/G9pfxktVRa3A==
-X-CSE-MsgGUID: OBh7UbGKTcmlwQO1UKWv3g==
-X-IronPort-AV: E=McAfee;i="6700,10204,11360"; a="64262070"
-X-IronPort-AV: E=Sophos;i="6.13,327,1732608000"; 
-   d="scan'208";a="64262070"
-Received: from orviesa003.jf.intel.com ([10.64.159.143])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 02 Mar 2025 05:44:56 -0800
-X-CSE-ConnectionGUID: FnaOsKwWQiqedyx26mUULQ==
-X-CSE-MsgGUID: 2Q27M0PJSYWBpf+MCbCJog==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.13,327,1732608000"; 
-   d="scan'208";a="122730268"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by orviesa003.jf.intel.com with ESMTP; 02 Mar 2025 05:44:55 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tojcj-000HLe-12;
-	Sun, 02 Mar 2025 13:44:53 +0000
-Date: Sun, 02 Mar 2025 21:43:56 +0800
-From: kernel test robot <lkp@intel.com>
-To: Mario Limonciello <mario.limonciello@amd.com>
-Cc: linux-pm@vger.kernel.org
-Subject: [amd-pstate:bleeding-edge] BUILD SUCCESS
- 9e64cfbb06a534089ae4fc9174c01cd91323d505
-Message-ID: <202503022149.MhMm0Fa9-lkp@intel.com>
-User-Agent: s-nail v14.9.24
+	s=arc-20240116; t=1740933068; c=relaxed/simple;
+	bh=Te/+ghmA/RZrMtfC1LsnoUqBiFhdUI71MOZB0VoMZmw=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=UcVb6PRfSxZzmzoS8OXjNaMkRDzoWNysUSm+qh+DIceYt5+6IHqk8pa2Zhc2BcA4Ufhtv11crECmrEboS1NOb/6xg8xkE/tCcMk76kMK+aFJIV6MFBGOxhgr5DkabFk6S9XU4yomfPutkoeutK9pUSxz7AItB9xAX3X/a306oUo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=HXgX21fR; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1740933057;
+	bh=Te/+ghmA/RZrMtfC1LsnoUqBiFhdUI71MOZB0VoMZmw=;
+	h=From:Subject:Date:To:Cc:From;
+	b=HXgX21fRjHhEcq3b8BHzM6FFUGjiTu9fBYysFL0Z6qFQVu8vtMQTx/vtSR4ukAQ8C
+	 IK+HT77hYQTAlrY7wOvabnyxM2QKUZSbZtQBeyR3zXbprnRExQxu0yDbwoE+w0xArf
+	 +vkEbxYDTEIWk/LtPbW1RamznK1t9wsjSmcjg6+FP6vGiLTIq+gwJO6KqZ+4vR2uz2
+	 lrycjkHQldzeSIJTmOTuSQBIF/3TlWr2RkB6DsaHExCh+FDH3/A8quZbmPi8DF848h
+	 fiDK6ir/eHRfFWy8kVaUI6dFI4ijrm7jWDCY7+21l6V0nMCl/fNHUnK+Yu7+0K+dWH
+	 pR7ad5GiRbLmg==
+Received: from [192.168.0.47] (unknown [IPv6:2804:14c:1a9:53ee::1002])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id A2B4B17E07F8;
+	Sun,  2 Mar 2025 17:30:52 +0100 (CET)
+From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
+Subject: [PATCH v2 00/20] Get mt6359-accdet ready for usage in Devicetree
+Date: Sun, 02 Mar 2025 13:30:39 -0300
+Message-Id: <20250302-mt6359-accdet-dts-v2-0-5bd633ee0d47@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
+MIME-Version: 1.0
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-B4-Tracking: v=1; b=H4sIAK+HxGcC/32NSwrDIBRFtxLeuK+oMb+Ouo+Sgb6YRkhiUZGW4
+ N5rs4AOz4F77gHBeGsC3KoDvEk2WLcXEJcKaFH706CdCoNgomGCS9xiWzcDKqLJRJxiQMY074d
+ ednNNUHYvb2b7PpuPsfBiQ3T+c14k/rP/aokjw7brFG+4HrSkO7l1Vdp5dSW3wZhz/gIMsO1lt
+ gAAAA==
+X-Change-ID: 20250214-mt6359-accdet-dts-00b189847f3c
+To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+ Conor Dooley <conor+dt@kernel.org>, 
+ Matthias Brugger <matthias.bgg@gmail.com>, 
+ AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
+ Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, 
+ Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>, 
+ Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
+ Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
+Cc: kernel@collabora.com, linux-sound@vger.kernel.org, 
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
+ linux-pm@vger.kernel.org, 
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>, 
+ Andrew Perepech <andrew.perepech@mediatek.com>
+X-Mailer: b4 0.14.2
 
-tree/branch: https://git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git bleeding-edge
-branch HEAD: 9e64cfbb06a534089ae4fc9174c01cd91323d505  cpufreq/amd-pstate: Drop actions in amd_pstate_epp_cpu_offline()
+This series prepares the MT6359 ACCDET for actual usage in the
+Devicetree. Patches 1 and 2 add the required DT bindings, patches 3 and
+4 get the mt6359-accdet driver probing, patches 5-18 clean up code
+related to DT property parsing, patch 19 adds the node in the
+Devicetree and patch 20 enables the kconfig for the driver.
 
-elapsed time: 1442m
+Together with the series "Allow retrieving accessory detection reference
+on MT8188" [1], and one extra patch on top enabling it on the
+genio-700-evk DT, this series was tested on the Genio 700 EVK to get
+audio jack detection working on it.
 
-configs tested: 181
-configs skipped: 3
+[1] https://lore.kernel.org/all/20250214-mt8188-accdet-v1-0-6bbd5483855b@collabora.com
 
-The following configs have been built successfully.
-More configs may be tested in the coming days.
+Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+---
+Changes in v2:
+- Removed all DT-binding properties except for EINT polarity one
+  (mediatek,eint-level-pol / mediatek,hp-eint-high)
+  - Added patches 12-18 to make those settings internal to driver
+- Renamed mediatek,eint-level-pol to mediatek,hp-eint-high and made it
+  bool
+- Added patch 20 to enable the MT6359 ACCDET Kconfig in the defconfig
+- Removed unused btn_type variable as part of "Drop dead code for button
+  detection" patch.
+- Link to v1: https://lore.kernel.org/r/20250214-mt6359-accdet-dts-v1-0-677a151b9b4c@collabora.com
 
-tested configs:
-alpha                             allnoconfig    gcc-14.2.0
-alpha                            allyesconfig    gcc-14.2.0
-alpha                               defconfig    gcc-14.2.0
-arc                              allmodconfig    gcc-13.2.0
-arc                               allnoconfig    gcc-13.2.0
-arc                              allyesconfig    gcc-13.2.0
-arc                                 defconfig    gcc-13.2.0
-arc                 nsimosci_hs_smp_defconfig    gcc-13.2.0
-arc                   randconfig-001-20250301    gcc-13.2.0
-arc                   randconfig-001-20250302    gcc-13.2.0
-arc                   randconfig-002-20250301    gcc-13.2.0
-arc                   randconfig-002-20250302    gcc-13.2.0
-arm                              allmodconfig    gcc-14.2.0
-arm                               allnoconfig    clang-17
-arm                              allyesconfig    gcc-14.2.0
-arm                   randconfig-001-20250301    gcc-14.2.0
-arm                   randconfig-001-20250302    gcc-14.2.0
-arm                   randconfig-002-20250301    gcc-14.2.0
-arm                   randconfig-002-20250302    clang-21
-arm                   randconfig-003-20250301    clang-21
-arm                   randconfig-003-20250302    gcc-14.2.0
-arm                   randconfig-004-20250301    clang-21
-arm                   randconfig-004-20250302    clang-21
-arm                        vexpress_defconfig    gcc-14.2.0
-arm64                            allmodconfig    clang-18
-arm64                             allnoconfig    gcc-14.2.0
-arm64                 randconfig-001-20250301    gcc-14.2.0
-arm64                 randconfig-001-20250302    clang-18
-arm64                 randconfig-002-20250301    clang-21
-arm64                 randconfig-002-20250302    gcc-14.2.0
-arm64                 randconfig-003-20250301    clang-15
-arm64                 randconfig-003-20250302    gcc-14.2.0
-arm64                 randconfig-004-20250301    clang-17
-arm64                 randconfig-004-20250302    clang-16
-csky                              allnoconfig    gcc-14.2.0
-csky                  randconfig-001-20250301    gcc-14.2.0
-csky                  randconfig-001-20250302    gcc-14.2.0
-csky                  randconfig-002-20250301    gcc-14.2.0
-csky                  randconfig-002-20250302    gcc-14.2.0
-hexagon                          allmodconfig    clang-21
-hexagon                           allnoconfig    clang-21
-hexagon                          allyesconfig    clang-18
-hexagon               randconfig-001-20250301    clang-21
-hexagon               randconfig-001-20250302    clang-21
-hexagon               randconfig-002-20250301    clang-21
-hexagon               randconfig-002-20250302    clang-21
-i386                             allmodconfig    gcc-12
-i386                              allnoconfig    gcc-12
-i386                             allyesconfig    gcc-12
-i386        buildonly-randconfig-001-20250301    clang-19
-i386        buildonly-randconfig-001-20250302    gcc-12
-i386        buildonly-randconfig-002-20250301    clang-19
-i386        buildonly-randconfig-002-20250302    clang-19
-i386        buildonly-randconfig-003-20250301    clang-19
-i386        buildonly-randconfig-003-20250302    gcc-12
-i386        buildonly-randconfig-004-20250301    clang-19
-i386        buildonly-randconfig-004-20250302    gcc-12
-i386        buildonly-randconfig-005-20250301    gcc-12
-i386        buildonly-randconfig-005-20250302    gcc-12
-i386        buildonly-randconfig-006-20250301    clang-19
-i386        buildonly-randconfig-006-20250302    gcc-12
-i386                                defconfig    clang-19
-loongarch                        alldefconfig    gcc-14.2.0
-loongarch                        allmodconfig    gcc-14.2.0
-loongarch                         allnoconfig    gcc-14.2.0
-loongarch             randconfig-001-20250301    gcc-14.2.0
-loongarch             randconfig-001-20250302    gcc-14.2.0
-loongarch             randconfig-002-20250301    gcc-14.2.0
-loongarch             randconfig-002-20250302    gcc-14.2.0
-m68k                             allmodconfig    gcc-14.2.0
-m68k                              allnoconfig    gcc-14.2.0
-m68k                             allyesconfig    gcc-14.2.0
-m68k                        m5407c3_defconfig    gcc-14.2.0
-microblaze                        allnoconfig    gcc-14.2.0
-microblaze                      mmu_defconfig    gcc-14.2.0
-mips                              allnoconfig    gcc-14.2.0
-mips                          ath25_defconfig    clang-16
-mips                         bigsur_defconfig    gcc-14.2.0
-mips                   sb1250_swarm_defconfig    gcc-14.2.0
-nios2                             allnoconfig    gcc-14.2.0
-nios2                 randconfig-001-20250301    gcc-14.2.0
-nios2                 randconfig-001-20250302    gcc-14.2.0
-nios2                 randconfig-002-20250301    gcc-14.2.0
-nios2                 randconfig-002-20250302    gcc-14.2.0
-openrisc                          allnoconfig    gcc-14.2.0
-openrisc                         allyesconfig    gcc-14.2.0
-openrisc                            defconfig    gcc-14.2.0
-parisc                           allmodconfig    gcc-14.2.0
-parisc                            allnoconfig    gcc-14.2.0
-parisc                           allyesconfig    gcc-14.2.0
-parisc                              defconfig    gcc-14.2.0
-parisc                randconfig-001-20250301    gcc-14.2.0
-parisc                randconfig-001-20250302    gcc-14.2.0
-parisc                randconfig-002-20250301    gcc-14.2.0
-parisc                randconfig-002-20250302    gcc-14.2.0
-powerpc                          allmodconfig    gcc-14.2.0
-powerpc                           allnoconfig    gcc-14.2.0
-powerpc                          allyesconfig    clang-16
-powerpc                       ebony_defconfig    clang-18
-powerpc                      ep88xc_defconfig    gcc-14.2.0
-powerpc                    gamecube_defconfig    clang-16
-powerpc               randconfig-001-20250301    clang-17
-powerpc               randconfig-001-20250302    gcc-14.2.0
-powerpc               randconfig-002-20250301    clang-19
-powerpc               randconfig-002-20250302    gcc-14.2.0
-powerpc               randconfig-003-20250301    clang-21
-powerpc               randconfig-003-20250302    clang-16
-powerpc                     tqm8540_defconfig    gcc-14.2.0
-powerpc64             randconfig-001-20250301    gcc-14.2.0
-powerpc64             randconfig-001-20250302    gcc-14.2.0
-powerpc64             randconfig-002-20250301    clang-21
-powerpc64             randconfig-003-20250301    gcc-14.2.0
-powerpc64             randconfig-003-20250302    gcc-14.2.0
-riscv                            allmodconfig    clang-21
-riscv                             allnoconfig    gcc-14.2.0
-riscv                               defconfig    clang-19
-riscv                 randconfig-001-20250301    gcc-14.2.0
-riscv                 randconfig-001-20250302    clang-21
-riscv                 randconfig-002-20250301    gcc-14.2.0
-riscv                 randconfig-002-20250302    clang-16
-s390                             allmodconfig    clang-19
-s390                              allnoconfig    clang-15
-s390                             allyesconfig    gcc-14.2.0
-s390                                defconfig    clang-15
-s390                  randconfig-001-20250301    clang-15
-s390                  randconfig-001-20250302    clang-17
-s390                  randconfig-002-20250301    gcc-14.2.0
-s390                  randconfig-002-20250302    clang-19
-sh                               allmodconfig    gcc-14.2.0
-sh                                allnoconfig    gcc-14.2.0
-sh                               allyesconfig    gcc-14.2.0
-sh                                  defconfig    gcc-14.2.0
-sh                     magicpanelr2_defconfig    gcc-14.2.0
-sh                    randconfig-001-20250301    gcc-14.2.0
-sh                    randconfig-001-20250302    gcc-14.2.0
-sh                    randconfig-002-20250301    gcc-14.2.0
-sh                    randconfig-002-20250302    gcc-14.2.0
-sh                             sh03_defconfig    gcc-14.2.0
-sh                        sh7757lcr_defconfig    gcc-14.2.0
-sparc                            allmodconfig    gcc-14.2.0
-sparc                             allnoconfig    gcc-14.2.0
-sparc                 randconfig-001-20250301    gcc-14.2.0
-sparc                 randconfig-001-20250302    gcc-14.2.0
-sparc                 randconfig-002-20250301    gcc-14.2.0
-sparc                 randconfig-002-20250302    gcc-14.2.0
-sparc                       sparc32_defconfig    gcc-14.2.0
-sparc64                             defconfig    gcc-14.2.0
-sparc64               randconfig-001-20250301    gcc-14.2.0
-sparc64               randconfig-001-20250302    gcc-14.2.0
-sparc64               randconfig-002-20250301    gcc-14.2.0
-sparc64               randconfig-002-20250302    gcc-14.2.0
-um                               allmodconfig    clang-21
-um                                allnoconfig    clang-18
-um                               allyesconfig    gcc-12
-um                                  defconfig    clang-21
-um                             i386_defconfig    gcc-12
-um                    randconfig-001-20250301    gcc-12
-um                    randconfig-001-20250302    gcc-12
-um                    randconfig-002-20250301    gcc-12
-um                    randconfig-002-20250302    clang-16
-um                           x86_64_defconfig    clang-15
-x86_64                            allnoconfig    clang-19
-x86_64                           allyesconfig    clang-19
-x86_64      buildonly-randconfig-001-20250301    clang-19
-x86_64      buildonly-randconfig-001-20250302    clang-19
-x86_64      buildonly-randconfig-002-20250301    clang-19
-x86_64      buildonly-randconfig-002-20250302    clang-19
-x86_64      buildonly-randconfig-003-20250301    gcc-11
-x86_64      buildonly-randconfig-003-20250302    gcc-12
-x86_64      buildonly-randconfig-004-20250301    gcc-12
-x86_64      buildonly-randconfig-004-20250302    gcc-12
-x86_64      buildonly-randconfig-005-20250301    gcc-12
-x86_64      buildonly-randconfig-005-20250302    gcc-12
-x86_64      buildonly-randconfig-006-20250301    clang-19
-x86_64      buildonly-randconfig-006-20250302    gcc-12
-x86_64                              defconfig    gcc-11
-xtensa                            allnoconfig    gcc-14.2.0
-xtensa                randconfig-001-20250301    gcc-14.2.0
-xtensa                randconfig-001-20250302    gcc-14.2.0
-xtensa                randconfig-002-20250301    gcc-14.2.0
-xtensa                randconfig-002-20250302    gcc-14.2.0
+---
+Andrew Perepech (2):
+      mfd: mt6397-core: Add mfd_cell for mt6359-accdet
+      ASoC: mediatek: mt6359-accdet: Implement HP_EINT polarity configuration
 
---
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+Nícolas F. R. A. Prado (18):
+      ASoC: dt-bindings: Add document for mt6359-accdet
+      dt-bindings: mfd: mediatek: mt6397: Add accdet subnode
+      ASoC: mediatek: mt6359-accdet: Add compatible property
+      ASoC: mediatek: mt6359-accdet: Handle hp-eint-high property
+      ASoC: mediatek: mt6359-accdet: Drop dead code for EINT/GPIO IRQ handling
+      ASoC: mediatek: mt6359-accdet: Drop dead code for EINT trigger setting
+      ASoC: mediatek: mt6359-accdet: Drop dead code for button detection
+      ASoC: mediatek: mt6359-accdet: Drop dead code for plugout-debounce
+      ASoC: mediatek: mt6359-accdet: Drop unused moisture variables
+      ASoC: mediatek: mt6359-accdet: Always use internal resistor
+      ASoC: mediatek: mt6359-accdet: Make PWM debounce settings internal
+      ASoC: mediatek: mt6359-accdet: Always use eint detect mode 4
+      ASoC: mediatek: mt6359-accdet: Always set micbias1 to 2.8V
+      ASoC: mediatek: mt6359-accdet: Always configure hardware as mic-mode 2
+      ASoC: mediatek: mt6359-accdet: Always set comp-vth to 1.6V
+      ASoC: mediatek: mt6359-accdet: Always use EINT0 IRQ
+      arm64: dts: mt6359: Add accessory detect node
+      arm64: defconfig: Enable MT6359 ACCDET
+
+ .../devicetree/bindings/mfd/mediatek,mt6397.yaml   |   7 +
+ .../bindings/sound/mediatek,mt6359-accdet.yaml     |  42 ++
+ arch/arm64/boot/dts/mediatek/mt6359.dtsi           |   4 +
+ arch/arm64/configs/defconfig                       |   1 +
+ drivers/mfd/mt6397-core.c                          |  12 +
+ sound/soc/codecs/mt6359-accdet.c                   | 599 +++++----------------
+ sound/soc/codecs/mt6359-accdet.h                   |  55 +-
+ 7 files changed, 196 insertions(+), 524 deletions(-)
+---
+base-commit: c0eb65494e59d9834af7cbad983629e9017b25a1
+change-id: 20250214-mt6359-accdet-dts-00b189847f3c
+
+Best regards,
+-- 
+Nícolas F. R. A. Prado <nfraprado@collabora.com>
+
 
