@@ -1,56 +1,57 @@
-Return-Path: <linux-pm+bounces-23229-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23228-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26B20A4B330
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Mar 2025 17:31:30 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 036BDA4B32D
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Mar 2025 17:31:23 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id BA7693B103C
-	for <lists+linux-pm@lfdr.de>; Sun,  2 Mar 2025 16:31:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 32C8F188FCC3
+	for <lists+linux-pm@lfdr.de>; Sun,  2 Mar 2025 16:31:29 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 931041EB18B;
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70CFA1EA7FD;
 	Sun,  2 Mar 2025 16:31:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="lCGwz7D8"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="du1Q7rbN"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 916BE18C937;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9171B1EA7EB;
 	Sun,  2 Mar 2025 16:31:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740933072; cv=none; b=idVw/6WLBvCTB/C2BzfFQBKk/dBC/F4qksG1MXz4Bav546TaOKT/8HOZAWgABWbpwjDNkMjQ6lCVEdBpYNS2kEcrh80N5L/gklAQaRe6IgiA/Hdeu8Z1S7pQN1qfJQpeTkkvG3DHnlTUkhrHVn54z7fKMxPdhP1SXFkg8UNqYIA=
+	t=1740933072; cv=none; b=IPxeKZh+AD6t1kayR6zq4wgroEGOjkDS3n44NBiaMFRGjS3cqsLC7Y1fQux58/fJ23gVBuz2WTEmZunbHCWGnwVPV5dPsC1HFLvVzmeTPpF43lEZXW2Pb2FJmE7CF2639o9fkq6tLq3aGupZEnMjUoHvWZmADzsJ6VXkymbGrjE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
 	s=arc-20240116; t=1740933072; c=relaxed/simple;
-	bh=osRZAE8iggAuTuQfgUs1urVrp8xOcij0fdpUhTd0IR4=;
+	bh=EjrwtqxQ5bYCEJ01b8/loccYAmWqyhZVlY3k8ihmFqI=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=uqRVl2gB3xtpyZUbtWP5Sc5ZQz1kpf+6QtwASQ9MesTFRc8D4q5Ip6bb0sBefNcjS+SqIRzSqdPKyD0Z0rs+WEydcnkC/W9HG2NtRUPhPt+Kr+GsUaoNWSggq/CkFxrsZgnutZUuCQWz4sE6YvnjPGz7LC3rKYGrkBqbnZbb2kw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=lCGwz7D8; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:To:Cc; b=kh6BjdsJFVrgoFvEjV3+AVaWHiMT1R+4SB0Ce77E/mRYDShJklymp4iobMn7CWvhdrhpxzSNCPLTsDZ60m/gzGkDgLri63ZYlGsSzeWtY2PchwX9XOVMcc8w3MrqVe+NjduCBcNhhsFpZUxP+f9n6X6W5C/ywfiI+8Dbnuj3B/E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=du1Q7rbN; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1740933063;
-	bh=osRZAE8iggAuTuQfgUs1urVrp8xOcij0fdpUhTd0IR4=;
+	s=mail; t=1740933068;
+	bh=EjrwtqxQ5bYCEJ01b8/loccYAmWqyhZVlY3k8ihmFqI=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=lCGwz7D8/3lHPubSEXZHciP30N4PidM0JcMYbudUAKFRmc2NlQxG84xTM7RkxSOmb
-	 iYDx5CNz64b0QBL1k+PZZAKaG+r/nA0hEDPs0+pJfX8QdEqLOsldABbB7jzqJLyo0a
-	 gxqjJrSqy8LwG+F06NP+5R/ihhCVyXZP1LTJxGLFocO1XoEam7ZNEYPWY35ovcj75s
-	 /UQ/MrtHGGt27rdZnfvYBrKulk6xkvHnmOA27lzvY2Rn8XO1E6u/Wm0ZC12b7ZT1a8
-	 IN/r/GwSJ5C2QKvYmBhysDzOp/Hh6e1SV4XNm8PJmE093M9i0597vFlJflZtA26vN2
-	 Eaugt7i1rvNOg==
+	b=du1Q7rbNYTc6tTQpqCSSnYAdhHJIBt9I0oMzyuzH7b/0qpW4AHgHRY1bAFj7i6yC0
+	 qrBqUHd5vl0B+AFN5CAvKiWjapJYSdYRSbMxqGbTOh7MKMDBQscjihtlbE7ubaC3pX
+	 bd4mj66mOGsPY0JIslyxLU644MAvLWFtPWrjFdQY+6T/y6hZgpXAr+zstdwAgvd7/t
+	 JHyKmAfamM38iDkSV+3iCQH8SBGkWI2B4oPo4/ypAlE2r/9DvqnRecZVkQlw0Er6+W
+	 89jtmymsBbAZjMO6A+xDWmOBpwkrMXhh/7kDpGHK2+9g9sGVfI/oob4hsHEdrGZk/g
+	 hFkGImDvkJXSQ==
 Received: from [192.168.0.47] (unknown [IPv6:2804:14c:1a9:53ee::1002])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 770AA17E0880;
-	Sun,  2 Mar 2025 17:30:58 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id E033317E09FB;
+	Sun,  2 Mar 2025 17:31:03 +0100 (CET)
 From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Sun, 02 Mar 2025 13:30:40 -0300
-Subject: [PATCH v2 01/20] ASoC: dt-bindings: Add document for mt6359-accdet
+Date: Sun, 02 Mar 2025 13:30:41 -0300
+Subject: [PATCH v2 02/20] dt-bindings: mfd: mediatek: mt6397: Add accdet
+ subnode
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,7 +60,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250302-mt6359-accdet-dts-v2-1-5bd633ee0d47@collabora.com>
+Message-Id: <20250302-mt6359-accdet-dts-v2-2-5bd633ee0d47@collabora.com>
 References: <20250302-mt6359-accdet-dts-v2-0-5bd633ee0d47@collabora.com>
 In-Reply-To: <20250302-mt6359-accdet-dts-v2-0-5bd633ee0d47@collabora.com>
 To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -78,61 +79,31 @@ Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
  =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
 X-Mailer: b4 0.14.2
 
-Add dt-binding for the MT6359 ACCDET hardware block.
+Describe the accdet as a possible subnode of the MT6359 PMIC.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- .../bindings/sound/mediatek,mt6359-accdet.yaml     | 42 ++++++++++++++++++++++
- 1 file changed, 42 insertions(+)
+ Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml | 7 +++++++
+ 1 file changed, 7 insertions(+)
 
-diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt6359-accdet.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt6359-accdet.yaml
-new file mode 100644
-index 0000000000000000000000000000000000000000..d08a79301409374714c76135b061e20e8e8acfaf
---- /dev/null
-+++ b/Documentation/devicetree/bindings/sound/mediatek,mt6359-accdet.yaml
-@@ -0,0 +1,42 @@
-+# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-+%YAML 1.2
-+---
-+$id: http://devicetree.org/schemas/sound/mediatek,mt6359-accdet.yaml#
-+$schema: http://devicetree.org/meta-schemas/core.yaml#
-+
-+title: MT6359 Accessory Detection
-+
-+maintainers:
-+  - Nícolas F. R. A. Prado <nfraprado@collabora.com>
-+
-+description: |
-+  The MT6359 Accessory Detection block is part of the MT6359 PMIC and allows
-+  detecting audio jack insertion and removal, as well as identifying the type of
-+  events connected to the jack.
-+
-+properties:
-+  compatible:
-+    const: mediatek,mt6359-accdet
-+
-+  mediatek,hp-eint-high:
-+    type: boolean
+diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+index 6a89b479d10fad3c8b61cab5a3af1453baca4d1a..1a8c5748a28da6ad8aa091f8c0a74bc1dc709644 100644
+--- a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
++++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+@@ -224,6 +224,13 @@ properties:
+     description:
+       Pin controller
+ 
++  accdet:
++    type: object
++    $ref: /schemas/sound/mediatek,mt6359-accdet.yaml
++    unevaluatedProperties: false
 +    description:
-+      By default, the HP_EINT pin is assumed to be pulled high and connected to
-+      a normally open 3.5mm jack. Plug insertion is detected when the pin is
-+      brought low in that case. Add this property if the behavior should be
-+      inverted, for example if a normally closed 3.5mm jack is used, or if the
-+      line is pulled low on open.
++      Accessory Detection
 +
-+required:
-+  - compatible
-+
-+additionalProperties: false
-+
-+examples:
-+  - |
-+    #include <dt-bindings/interrupt-controller/irq.h>
-+
-+    accdet: accdet {
-+        compatible = "mediatek,mt6359-accdet";
-+        mediatek,hp-eint-high;
-+    };
+ required:
+   - compatible
+   - regulators
 
 -- 
 2.48.1
