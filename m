@@ -1,181 +1,195 @@
-Return-Path: <linux-pm+bounces-23256-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23257-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 94610A4B902
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 09:21:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id AF806A4B932
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 09:26:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AA75616819D
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 08:21:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 892D418878CA
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 08:25:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EB1B51E51F2;
-	Mon,  3 Mar 2025 08:21:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 751B71EF393;
+	Mon,  3 Mar 2025 08:23:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="dh7g72hN"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nVDm6mrH"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3623723F36D;
-	Mon,  3 Mar 2025 08:20:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449631EF370;
+	Mon,  3 Mar 2025 08:23:43 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740990060; cv=none; b=I9+2zd9aWqWWD7kHZAKGJ5WUtdEQd9FDEMLDODb4cvThEkWkhCDznT2yFO26h4SAUDok13y2pYq60zhwVJiQiSD8mUpRfydk0wr6XzJYfzJfj3LUoGZrrJwbzvkNFonKrZoGKjgxcRRcAbrhesfqwzYEyN8RV/P9w5YfTKzUT+g=
+	t=1740990224; cv=none; b=YeNpwptjQ6U6jfGrrQ4F8XoyNBWy3PsMWutDR1se33zfZVIgbrkhMRjxQjE2s0yC8eBNKg4kI8lgGWvU1Svgm6PGXyLvo2EbQLqdk3Y/9oLtT2fWC42+zzkdkUvVGtsNmUMaB8oILDEk34m2hehRcrn+otTCC4vApBeTspbKlZ0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740990060; c=relaxed/simple;
-	bh=VakzlJs/xcdEOWQWX9R14jQUbZP3sQXWRSAbUYNbi1w=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GChzxpNPi+SsUvpa+ANucR6mswDSMFILA3c5DMzCaQxEl6hW0lw/JxH6EBsxAGLWXyUFDsuN504Jrmc1bKhnwLMPzPgNpyR7ptFUdQti9OKq9VexgHucxB12Bq8DcUYEn8ot75lZih4h+58hRQsuns7lLjFP0ECa0kGaXV/Ty84=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=dh7g72hN; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43bbd711eedso6950605e9.3;
-        Mon, 03 Mar 2025 00:20:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1740990057; x=1741594857; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=Xzxza1cfhmoiOmmh2gLoCOLOpzXx+3CsGqXrYLmlnQk=;
-        b=dh7g72hNaGSaoZiy8xoaqPxOAzwtbPZGqEZ3wrqD6pATQ7SdvpgF0D1Kx2qOoSPiWY
-         Q2Vlos+21ea/oOXAe9YapqAUa/eCm6ygc1347ABe/zOkZdx6Hei5pKlzOoUlevawd8nu
-         dKMzv4yX549fS4+VgyKyiIEVHp5d1w7rZbNAYuHxpRvmxlBfPc153/jvh6KmqRVbwF+l
-         aIfUSKBuuN7WZp1hXIhLPBdMSaB5qBp/Co4HfizLTTR+DVhlimzLFD3zPjZyg9/gNPCC
-         ZQg1bw96rvdmm/CXF8eoqv1bkmyiiv0wgTNMaE3oX75TH/n9c+p5QBhKXx4kjg/yEbux
-         RySA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740990057; x=1741594857;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=Xzxza1cfhmoiOmmh2gLoCOLOpzXx+3CsGqXrYLmlnQk=;
-        b=JSjUuLW7ajoE89SAf1TZO8dskZrg/SCtcCNwtjSulZ4y/XJpLtAfdqtITAjkK+dEh8
-         w67HgiUp5T/NI4EMktlkz9a/JqNZc6Ryu1m0EizSdbNq7/gbPDeguvYFksowVaN+T3tE
-         aHceo7T8mMun5QhqOuGyxfOJh6JTCAJz9T87cpDvmUTEGHz2RWyKsw9mlcE/LSFitOnX
-         y6g7+rhutmOgZt882i4ZOzwWGqgvym4aY13xj40Zup+z8U2G+LxjwFaQN9H0JSohzj/h
-         +f0ehjh2Sjwi8FCbuPKvRp3M2XoosJtX1qZagE378CIILTX4yYIp16kCGSSufY38H759
-         W9tg==
-X-Forwarded-Encrypted: i=1; AJvYcCU0zMvmQH5xs1J9AV2j0iRue+e9S7W0Yf778LJOp8BMdNu9DPGTrVWscoWPE9RonCQPHZh1v/4Gfio=@vger.kernel.org, AJvYcCUk2LQ/LLsg+Srv74Zg3l4iW14AXLBmcaPqK4hEid2zrfh8ZyIcAmJoHZ9yWUYVxb4PillafCsFykFURI9d@vger.kernel.org, AJvYcCXc6y9two1bQgg2g4cTk7JuHKiyKml/xRgGiTFbnER1c3r491+VJVBC/APuhWZXrpfj9rHz6NB8OZZq@vger.kernel.org
-X-Gm-Message-State: AOJu0YzyQApoTcmredQP/M1jYCPstZxrGSdCNLbN1Qmx6DeMTUHZm/DJ
-	Z4vB6qY5XzNz2NFbSJdtTFDWjquVpSA0778F+KG9eJG72SG0rfsF8bPx+OvhIqLZZliGv7CSlcB
-	LIgqny8BbfcSmlV+LGRYZUl0VJ9E=
-X-Gm-Gg: ASbGncu6sovMAIjomJ3cIBFujlTh8ogYE+c2fcvyP6nriJVBtz1t65ZzOHf/QwWxI5N
-	GYF02wySGKG2zct3HFSIAp3Jd8HriW8EzeyXXsMZBjufP9+YGIQaedORMKM9xga3or/JrqF2oll
-	v60BAga/Ad0tj/Yl32zBkfs8vD4Jc=
-X-Google-Smtp-Source: AGHT+IEXhvSfvEIABzQmrugb/ZqRCzgrY8w3fvkcZFLDmGDRuTp7MZs43FMgZU1HNivmm4un/jEJjjncDDet5tyVoXM=
-X-Received: by 2002:a5d:6da2:0:b0:38f:4acd:975c with SMTP id
- ffacd0b85a97d-390ec9bcf2cmr8084690f8f.27.1740990057403; Mon, 03 Mar 2025
- 00:20:57 -0800 (PST)
+	s=arc-20240116; t=1740990224; c=relaxed/simple;
+	bh=JBYtPPedySIRtCIdRicfOKbQHdjbOfdWis8gttwCsKI=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=B6FvrZqC+W6V46yPb7Ff2eN6i0EMkbFPh34rTayNVUaJgabFpd/9qkyZsX5igcK8kk7b5IP01g/jrDjs/5peB0zUHk8qGYjbKeAAdZgbNKy79DCn6UcbgKQEMW8H4wXjlxSm3ptd4fV21BO1C2a1EY/2vKaJegxgi4BaEieV08Y=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVDm6mrH; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC04C4CED6;
+	Mon,  3 Mar 2025 08:23:40 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1740990223;
+	bh=JBYtPPedySIRtCIdRicfOKbQHdjbOfdWis8gttwCsKI=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=nVDm6mrH12QLK3/qUGEVPT3+GKwhphezMCb3UYIFD2ammHyvoXLfegpFXS35yl7wP
+	 iXAtbjJ81a3G3cAnJPMh2gX7ThMNXotuiezB1R2iwBozQKUtI/az9KcGpGrKa0hbfX
+	 sxIFGSWyqRiLFmiKd/sTiAynk6ZlSoW0DEPRoCOz6hRNJiNqnkJO8N8YaYaj9VEbrL
+	 I+RMLenU3E2DKzLx13fWN3rbKamCKZf30X6qYN21gC7d4+1b1HheP+KW4go/pQ8uTh
+	 pzlUSNBjBBx3Y1gdu86czAZdr9zQiESi4E2sLVt5KZcR86KqZIs6zji4qpoCidL2Gn
+	 GrbFt881OjQNQ==
+Message-ID: <a091f085-a7f0-4aaa-997d-cd478764c18a@kernel.org>
+Date: Mon, 3 Mar 2025 09:23:38 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250226093700.44726-1-clamor95@gmail.com> <20250226093700.44726-2-clamor95@gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v2 1/2] dt-bindings: power: supply: Document Maxim MAX8971
+ charger
+To: Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
+ Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
+ <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org
+References: <20250226093700.44726-1-clamor95@gmail.com>
+ <20250226093700.44726-2-clamor95@gmail.com>
  <20250227-cherubic-mantis-from-betelgeuse-86f5ff@krzk-bin>
- <CAPVz0n0ygR=ygsvG2+z-zST7kmJ_P3nxf29tqdgHpRs_Nw6D5Q@mail.gmail.com>
- <fbd307ae-1dfa-497b-a597-d15b6baa30f4@kernel.org> <CAPVz0n2no1EJnf4GKSJWfYA_8h8x6BRk_ducufie90YPZR-k3g@mail.gmail.com>
- <0b2a76e6-ad64-4c98-b6ab-e1f41cb54684@kernel.org>
-In-Reply-To: <0b2a76e6-ad64-4c98-b6ab-e1f41cb54684@kernel.org>
-From: Svyatoslav Ryhel <clamor95@gmail.com>
-Date: Mon, 3 Mar 2025 10:20:46 +0200
-X-Gm-Features: AQ5f1JqGXOM8lR2BOmU1oL5ljAlnewK15hrd2z6vwtD7i3C8KZdGU-4Xk-9ZZN0
-Message-ID: <CAPVz0n2+=m93MXNV-0Lvu5OQzquNSyV2EBRQPDEnpSw-AZFo+g@mail.gmail.com>
-Subject: Re: [PATCH v2 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>, 
-	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+ <CAPVz0n2kfxTJUkqrtLia6xBJ8t+fwjujjsc9k=mOk-P06bJH7A@mail.gmail.com>
+ <f83b2a95-e8f6-4e16-bd7f-f7dc96264c04@kernel.org>
+ <CAPVz0n0KVE8baFyGSgM+0rNfY8+Y2LFZbAhHHzPWTV358gc+Bw@mail.gmail.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
+Content-Language: en-US
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <CAPVz0n0KVE8baFyGSgM+0rNfY8+Y2LFZbAhHHzPWTV358gc+Bw@mail.gmail.com>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-=D0=BF=D0=BD, 3 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 10:18 Krzys=
-ztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
->
-> On 03/03/2025 09:11, Svyatoslav Ryhel wrote:
-> > =D0=BF=D0=BD, 3 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 09:54 K=
-rzysztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
-> >>
-> >> On 27/02/2025 11:55, Svyatoslav Ryhel wrote:
-> >>>>> +
-> >>
-> >> Please kindly trim the replies from unnecessary context. It makes it
-> >> much easier to find new content.
-> >>
-> >>>>> +  maxim,usb-in-current-limit-microamp:
-> >>>>> +    description:
-> >>>>> +      USB Input current limit
-> >>>>> +    minimum: 100000
-> >>>>> +    default: 500000
-> >>>>> +    maximum: 1500000
-> >>>>> +
-> >>>>> +  maxim,ac-in-current-limit-microamp:
-> >>>>> +    description:
-> >>>>> +      AC Input current limit
-> >>>>> +    minimum: 100000
-> >>>>> +    default: 500000
-> >>>>> +    maximum: 1500000
-> >>>>
-> >>>> Half of these properties as well are not suitable and duplicate exis=
-ting
-> >>>> sysfs interface.
-> >>>>
-> >>>
-> >>> All these properties allow configure the charger to suit the device o=
-n
-> >>> which it is used. None of them are required but are a nice addition.
-> >>> Why you are denying me an ability to fully utilize hardware I have an=
-d
-> >>> tune it to the device? All those values represent hardware registers
-> >>> which can be customized for the device, not for the end user to mess
-> >>> with.
-> >>
-> >> Because you put user-space choice or OS policy into the DT and DT is n=
-ot
-> >> for that.
-> >>
-> >
-> > Those are NOT user-space choice or OS policy those are vendor
-> > configuration for a specific device and are NOT and NEVER were exposed
->
-> Then look at existing devices. We had these discussions in the past and
-> these are usually exposed to user-space.
->
+On 03/03/2025 09:13, Svyatoslav Ryhel wrote:
+> пн, 3 бер. 2025 р. о 09:52 Krzysztof Kozlowski <krzk@kernel.org> пише:
+>>
+>> On 27/02/2025 12:03, Svyatoslav Ryhel wrote:
+>>> чт, 27 лют. 2025 р. о 12:45 Krzysztof Kozlowski <krzk@kernel.org> пише:
+>>>>
+>>>> On Wed, Feb 26, 2025 at 11:36:59AM +0200, Svyatoslav Ryhel wrote:
+>>>>> +  maxim,fcharge-current-limit-microamp:
+>>>>> +    description:
+>>>>> +      Fast-Charge current limit
+>>>>> +    minimum: 250000
+>>>>> +    default: 500000
+>>>>> +    maximum: 1550000
+>>>>> +
+>>>>> +  maxim,fcharge-timer-hours:
+>>>>> +    description:
+>>>>> +      Fast-Charge timer in hours. Setting this value 3 and lower or 11 and higher
+>>>>> +      will disable Fast-Charge timer.
+>>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
+>>>>> +    default: 5
+>>>>
+>>>> You still did not answer why this is board specific. This was rejected
+>>>> in the past because of that reason and nothing here changed. Nothing
 
-Provide an example, where there is same or similar configuration.
+Where are the arguments to existing/previous decisions?
 
-> > to user configurations EVER. User messing with those may lead to
-> > device breaking.
-> >
-> >>>
-> >>>> And for remaining, still no battery.
-> >>>>
-> >>>
-> >>> reference to power-supply IS included, hence the battery option is
-> >>> there as well.
-> >>
-> >> I don't see it being used at all and you explicitly duplicated
-> >> properties which means that reference is redundant and should be dropp=
-ed
-> >> with such binding. So how did you solve my request to add reference
-> >> which then you make redundant? Add reference and use it.
-> >>
-> >
-> > Which properties I have duplicated?
->
-> All the current limits.
->
+>>>> will change without detailed explanation, so use other interfaces if you
 
-Those are blank works, show me an example of such duplication.
+Again, where is detailed explanation why time is determined per board,
+unlike previously agreed that it is not?
 
-> >
-> >> Best regards,
-> >> Krzysztof
->
->
-> Best regards,
-> Krzysztof
+>>>> need user-space to configure it (see other drivers, e.g. maxim)
+
+
+
+
+>>>>
+>>>
+>>> Btw, I have used this awesome example you have provided. Take a look
+>>
+>> Where did I provide this example?
+>>
+> 
+> Its presence in the docs is an example on its no? You have explicitly
+> told to check other maxim devices, I did so, they all have similar set
+> of convifurations.
+
+Choose rather later or latest, not 12 YO, binding as an example.
+
+> 
+>>>
+>>> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.git/tree/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml?h=v6.14-rc4
+>>
+>> I opened it and I do not see anything about time. Please point to
+>> specific line.
+>>
+>> But regardless, how did I propose to use 12 year old binding? Where did
+>> I suggest that one?
+>>
+>>>
+>>> Oh, I wonder why it uses so much values which duplicate battery? I
+>>> know, it lacks battery, I assume that is why?
+>>
+>> No. You added to DT something which is not a hardware property, but
+>> user-space choice or policy.
+>>
+> 
+> It is NOT a user-space choice or policy!
+Previous discussions on the lists - since you mention 12 year old
+binding, so also discussions 12 years ago - determined that they are
+closer to them than board configuration.
+
+I already said - this was rejected in the past - so now I am repeating
+myself.
+
+You did not bring any arguments just keep repeating "no", so I suggest
+reading previous discussions and coming with arguments against them.
+
+Best regards,
+Krzysztof
 
