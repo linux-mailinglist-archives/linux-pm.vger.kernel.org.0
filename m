@@ -1,79 +1,72 @@
-Return-Path: <linux-pm+bounces-23266-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23267-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B1C78A4B994
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 09:40:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1C22CA4B9A0
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 09:42:16 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 411983A893E
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 08:40:26 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 337EF16A195
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 08:42:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A5E381EEA59;
-	Mon,  3 Mar 2025 08:40:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A8241EF0B1;
+	Mon,  3 Mar 2025 08:42:12 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="d/m7hkht"
+	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="D8WBJnEo"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ed1-f51.google.com (mail-ed1-f51.google.com [209.85.208.51])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ECFE018C937
-	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 08:40:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32BD018C937
+	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 08:42:10 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740991233; cv=none; b=GIAMBKDNpAguCv0XrknsRWmoiZzX564yIpXmSID7oib8lud1rFIkW25ub2TIz4u039JMwZT8L95AInP6uxoRbmWj2pxhx/TvjQDykAnEAKkr+KNAwFu/kCwOfhsNKCnZfqImKt78Q3wkiKCnEzwjWZ6z2v+9gqwQdmYUaLMGJHA=
+	t=1740991331; cv=none; b=TVjzr++3ndMXyoTyVEN+Lx58s0l3es4fF5Ex1SfAveWWpOp85qi2Amk5SkKdoXyKeGdCfPx5BVp9XXmphvLwFMts/JSTUTgLfK+oZoYETq8AZqsDyphkUr0mVNIXEK3qBAKtSFe8rHcLeLYGO+x/F9oztFB3Ig4d2S0+VH4TrqQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740991233; c=relaxed/simple;
-	bh=TPu0b3Yb8x9XdyZxR9D2BnVeAYiPf0X8CkpwpVfMdK8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J2KH3ZfHBgxl+XS5bOgAeRjyLaHfDADbxIHVDqp/rQ0tcr2Q0+8pkWTtixzCLxobp+7joiWlb6JFGpedMDT7yoyZ7GM+Z7vnFhJNr4EgM3AvRbQp/FFN9IX8lzZszCPgxr1acujV+gAbFy84KGx0nxFtEHrisIhnsYxgBHCgpV4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=d/m7hkht; arc=none smtp.client-ip=209.85.208.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
-Received: by mail-ed1-f51.google.com with SMTP id 4fb4d7f45d1cf-5e55ec94962so676716a12.3
-        for <linux-pm@vger.kernel.org>; Mon, 03 Mar 2025 00:40:31 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=tuxon.dev; s=google; t=1740991230; x=1741596030; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=7t59WyUTPd0L7Mi3cChysUXnRM6v1fDvAcY991WF1bQ=;
-        b=d/m7hkhtYbS9FQ02J6OUue9K8XWSrfTQsCQNsJrxXMnxjx014Y6lhj8GGfZ+cVKWF3
-         6G4lCTOCKCMQgqPi/gOTKfc8c/oZ7g0WdDCdhU8DqXoVmXPUE3yhEVR23oi1Wr5O7Jrc
-         X9YbsxPxkJfmky+wXsnCQ+CMnnS3T6nk3yzLcbJptPvxUXKrBEuYGZPOWj93D+lFsS6t
-         xEeK6ZBm9K9+6z2IKe8baqMJdv8wxUH0fPpsFrwd4QMydaNxCYB8OaTo/fzYc6/pA5ZD
-         D/pQq9D8ezHncVdTX3enW14hctaVjQRdh7w9o0s/hTyKPAOt8BNPnh/YajxIzKBS5fdE
-         N58A==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1740991230; x=1741596030;
-        h=content-transfer-encoding:in-reply-to:content-language:from
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=7t59WyUTPd0L7Mi3cChysUXnRM6v1fDvAcY991WF1bQ=;
-        b=hKCRjJ158jQlGuubXfENLM9y5gGCps3Kj2ojkWhkpyTLhpz+wmRbXB4GWtF2yZS7g2
-         8p9ID97G7b0OGfHJLiuxChGJKmSgWXaLJ31Z9AhVvjY/Xp50kTkVMBtMUypdKXo9XLB+
-         Ch/NH7rCMORgMYOMmWYId/BSIv/PIMsMw+Vi+UH0YhpXAhOah9PjFWoRCmy6TP4QpxLy
-         yeGLG7vZO/cvS4U8mWBl3QPPjkyNaa1wmpPkvYp4+uvhcbBYnuLden1HxP6gBvhD/5va
-         Cc1cxtvETMjuR5hzv/pQV1zDOn59VAh1i+nw0iYf/BW3zKtT4h7BHut3dZ9hQ6VPkaII
-         SymQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVsSkJeWr7JWTGVmNk2z8pkdQuCwK6T1+Bbjy2e1ls4F9S1rCI2WyPmpF1usHLP2mo8cDzhvPmurg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtiHPavd5UHzBorNxPXX6FZAKiK25OEQBA4/P3VWW0FWVAK2vr
-	NQDItVEbncisQEAXGfnl+uAIDHVN295BAWbXkF3p732EdBqXhr+j59KQeHqMhSA=
-X-Gm-Gg: ASbGnctmEb8GZhrXFYf9+GXO5KzwTT5POfEwfu4ySMgpCe22oNiQVaO8dHvH77cYRLN
-	wdJcWfbRx5nvY8u10UxsFNxD1xemnwqL/oDXBbBjJpyGf7yxWrXu3OYf4LFb/H8+DtTP411wxMl
-	e86vj9SDuyasp3lyaKnA1nOVLmlalvl1kxCDGB6FVZ9xXITiZs3CeCbxSfn6eZDOwVwLbLOwxE7
-	3GjvKwhjt3rAAz12FfjUQ3IryzVhKnM1QxLVUuFZC9nEx1SBfm/QUwPrqU3LOqaqdgAtVyW183U
-	dVetKChaMvXWwDxoI4kg4v2I/D4QXCb6lSjx53CEVJi28SLtv1j84A==
-X-Google-Smtp-Source: AGHT+IFbnHrYeaaWFN8nqN3k607A73JWI/jQQa94/Cd3rmC/xFunczpany1uHLkd1AybmzRvqJrINA==
-X-Received: by 2002:a17:907:7f0f:b0:ac0:b05:f0c0 with SMTP id a640c23a62f3a-ac00b05f592mr254231866b.1.1740991230131;
-        Mon, 03 Mar 2025 00:40:30 -0800 (PST)
-Received: from [192.168.50.4] ([82.78.167.138])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c0b98e1sm764527166b.9.2025.03.03.00.40.26
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Mar 2025 00:40:29 -0800 (PST)
-Message-ID: <2a18e305-090c-41fe-9b27-97ebe93fd4e4@tuxon.dev>
-Date: Mon, 3 Mar 2025 10:40:25 +0200
+	s=arc-20240116; t=1740991331; c=relaxed/simple;
+	bh=MQrsAWCl1yUhJaSQrG8surmZQvur7LDh4KoHjIdkEKc=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
+	 Content-Type:References; b=MVNU14GD4jVTUy9hmiYecgkURZRP9WYtBSb5NY5EswHgd8wTmozfIFGOMKMXrrOtUAmH5528192HqIaTrz1uWzCs36s+xQjOHBrY5WPK147ifmk1dMVnbanXGxKXA7G2gPm7FsLTv4J2wVTWmbaQH90XrFpWPjdUbW9Lb2QeOdk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=D8WBJnEo; arc=none smtp.client-ip=210.118.77.12
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
+Received: from eucas1p1.samsung.com (unknown [182.198.249.206])
+	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250303084208euoutp020094e1caab492591ae363ed8c5f661b6~pPmOz8yFw1539715397euoutp02Q
+	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 08:42:08 +0000 (GMT)
+DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250303084208euoutp020094e1caab492591ae363ed8c5f661b6~pPmOz8yFw1539715397euoutp02Q
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
+	s=mail20170921; t=1740991328;
+	bh=AHzYo2Ru4n9BfduEfPoM21VtgML3aRIm0P2jGenVxNY=;
+	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
+	b=D8WBJnEoW0Mx2Wegv6NF7hQPi2B++lufV+EkivYweUaE7WogMyjecETFlGKxLgjy/
+	 u8t67JjCiWQXGgpkQbHX+l87SnG+p/N0UNFer/olvaYnhadlbo3TieVb0RYK7EDbDH
+	 PTPeBqB2bvPS69Ga00BK/cniNSFKYHRtlzUADQ18=
+Received: from eusmges1new.samsung.com (unknown [203.254.199.242]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
+	20250303084208eucas1p16a28fcf739d34b3864789af971ae7de5~pPmOOios61873218732eucas1p1G;
+	Mon,  3 Mar 2025 08:42:08 +0000 (GMT)
+Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
+	eusmges1new.samsung.com (EUCPMTA) with SMTP id EE.D7.20821.06B65C76; Mon,  3
+	Mar 2025 08:42:08 +0000 (GMT)
+Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
+	eucas1p1.samsung.com (KnoxPortal) with ESMTPA id
+	20250303084207eucas1p1f947b4d89277675981f8fb8a42fb2a13~pPmNbQoZl0772407724eucas1p1x;
+	Mon,  3 Mar 2025 08:42:07 +0000 (GMT)
+Received: from eusmgms2.samsung.com (unknown [182.198.249.180]) by
+	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
+	20250303084207eusmtrp207ce82c07d64ce0f17a062330b575469~pPmNZ9iak0677306773eusmtrp2f;
+	Mon,  3 Mar 2025 08:42:07 +0000 (GMT)
+X-AuditID: cbfec7f2-b09c370000005155-1d-67c56b60b96f
+Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
+	eusmgms2.samsung.com (EUCPMTA) with SMTP id C0.99.19654.F5B65C76; Mon,  3
+	Mar 2025 08:42:07 +0000 (GMT)
+Received: from [192.168.1.44] (unknown [106.210.136.40]) by
+	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
+	20250303084205eusmtip1c24745e8c9084816642c784905e3a325~pPmL4zWWQ1255112551eusmtip1H;
+	Mon,  3 Mar 2025 08:42:05 +0000 (GMT)
+Message-ID: <7296ddb3-2096-4414-bfa4-28fc5bb8ec86@samsung.com>
+Date: Mon, 3 Mar 2025 09:42:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -81,39 +74,135 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/21] Enable Power Modes Support for SAMA7D65 SoC
-To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
- krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
- nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
- p.zabel@pengutronix.de
-Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
-References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
-From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
+Subject: Re: [PATCH v5 09/21] dt-bindings: clock: thead: Add GPU clkgen
+ reset property
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
+	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
+	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
+	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
+	m.szyprowski@samsung.com, linux-clk@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
+	linux-pm@vger.kernel.org
 Content-Language: en-US
-In-Reply-To: <cover.1740671156.git.Ryan.Wanner@microchip.com>
-Content-Type: text/plain; charset=UTF-8
+From: Michal Wilczynski <m.wilczynski@samsung.com>
+In-Reply-To: <20250221-imaginary-ebony-macaque-aace8d@krzk-bin>
 Content-Transfer-Encoding: 7bit
+X-Brightmail-Tracker: H4sIAAAAAAAAA01Sa0xTZxj2Oz09pzTADlXCN7bArLiNbdwMJt/Cwlg25tkM4eIWN5MhDZyU
+	BgqshQ0dTA3lIlaZ6HAWGBcJl2onMMCWcXGAtCADB3KRcE0gUhEJ0G6KK4z24Ma/533e533e
+	9/ny8TiCTsKVJ0lIZmQJonghwcebup8NeEXF3RH7/pZNIMNoOYYan6tIdKO1H0MlXf1cNDXY
+	gKH75mUC/TJ/j0QLrWdwNFJdTKKM7psEMqqmCDQwUEuiFeUUFw01FxFo7XwXQE1rCgJpuiZJ
+	VLbSiKMKbTNAWWcruejP3mA0OWXAkXFIyUFZqpfQZouWRBsjdTgqfNJOoobHF7lIrzmKFO2X
+	8SA3enksk6QfG4043ZljIunWv0pxWqeaJGmlrg/Q9eqzBD0x0kLQP/eE09Pn9Bj9a8UpWqHp
+	xug8iy+93DZM0Bca1IAezBglwwTH+O/FMPGSbxiZT2AUPzaj6CGWpKFSn5rywWkwYJ8L7HiQ
+	8ofFg5V4LuDzBFQ1gKqqGowtTABujBpJtlgD8HlLKfliRJF3G7CNKgBL2lQEWywBmL1o4lpV
+	DlQgnB7O5VgxTnnA2wYLxvJOsOfqHG7FzpQ7nB7/yea6m/oC/rF5xcbvoTzhqOVvrtWUQ7Vw
+	YcHlWpsph3KB43MlNiOCOgBnqkpsvB31PizOytrWuMNbS0Uc6zCkhvnQ8mSew979EexbXsRZ
+	vBs+0jds53kVbupYU0glwpnG1W19GtQp9ds4AE70r2/F5G0t8IQ3m31Y+gM4d8sagLeFHeHY
+	khN7giPMb7rCYWkHmJMlYNWvwx+V5/9b2l/dhP0AhKodr6LaEVK1I4zq/72lAFcDFyZFLhUz
+	cr8E5ltvuUgqT0kQe0cnSuvB1j+/u6Ff1YLiRyveHQDjgQ4AeRzhHoevI7rEAocY0YmTjCzx
+	uCwlnpF3gFd4uNDFobw9UyygxKJkJo5hkhjZiy7Gs3M9jYW+Eb6+UJhwxByXmZqrGf9cmi7J
+	jLa/fm2iz+/3gPlL5Fc+ofqwtkhFZJB8OVKtjZ0o3HVyKDnCLYRainANivtQ8cA/JGpvufBS
+	qGdYwDvpbzeU9dX1jN2QasckGftnUrVE4amnc5ULdS1No4U1Ff4Hy1Zfrq01tcmffem1y+/T
+	Q9ejZ2dzvB46l+md72zMFNfnjTxQm9wO5QdXEnvDLOBaY9+i5pPa3u/TsNQ35zyKDLPxeTpj
+	9nfhr/1z5L6hX+2oPx4cyBxIchpWVt8ruHtu37vOB/nHzJ+ZsTPBR+WExGPIzr1m7YLvvrqP
+	T4RI07xieg/rOg1jvWb7+XSvglbx+n4hLo8V+b3FkclF/wIWiPr2VgQAAA==
+X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKKsWRmVeSWpSXmKPExsVy+t/xu7rx2UfTDZ584rE4cX0Rk8XW37PY
+	LdbsPcdkMf/IOVaLe5e2MFlc+fqezWLd0wvsFi/2NrJYXFsxl92i+dh6NouXs+6xWZw/v4Hd
+	4mPPPVaLy7vmsFl87j3CaLHtcwubxdojd9ktFn7cymKxZMcuRou2zmWsFhdPuVrcvXeCxeLl
+	5R5mi7ZZ/Bb/9+xgt/h3bSOLxex3+9kttryZyGpxfG24Rcv+KSwOch7vb7Sye7x5+ZLF43DH
+	F3aPvd8WsHjsnHWX3aNn5xlGj02rOtk87lzbw+Yx72Sgx/3u40wem5fUe7SsPcbk0f/XwOP9
+	vqtsHn1bVjF6XGq+zh4gFKVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9n
+	k5Kak1mWWqRvl6CX0TznOVPBWoGKH18mMTYwnufpYuTkkBAwkWjpP8DYxcjFISSwlFFi0vcJ
+	bBAJGYlr3S9ZIGxhiT/Xutggil4zSizdtZMVJMErYCdx/2oXM4jNIqAiceDEXyaIuKDEyZlP
+	wJpFBeQl7t+awQ5iCwtESNyecw/MFhHQlLj+9zsryFBmgT2sEoc3f4ba8J9R4vyly2BnMAuI
+	S9x6Mh9sKpuAkcSD5fPBNnMK2EvMbWsDsjmAatQl1s8TgiiXl9j+dg7zBEahWUjumIVk0iyE
+	jllIOhYwsqxiFEktLc5Nzy020itOzC0uzUvXS87P3cQITF/bjv3csoNx5auPeocYmTgYDzFK
+	cDArifAWBh1JF+JNSaysSi3Kjy8qzUktPsRoCgyLicxSosn5wASaVxJvaGZgamhiZmlgamlm
+	rCTOy3blfJqQQHpiSWp2ampBahFMHxMHp1QDkxJL8Kt30xWUrnPsnfFuR2RNcYGAzH5Nk6st
+	H01vsorZVDW66O4XD9pt+03qb7fHOV+GnZsu1iXbpC7ReZxjfT2J/ZabWeFO5nOvowoPylr+
+	3OYXauFyb96BFSI/23/G8zz7t3LeuVa5ySsPO5S+rVjSayaz1so4bsWs3oBnx9NYliUuOXuG
+	90XngjTBU9W+a+pnxt/y01VfcMlQ8tz6XX9nflkm+Wkpl43fqWNz723dXXVl7WQHwXdHNjex
+	fbpl1K+6fMKfmRFH2O23yVoLT092nWXmcyj2VvqJpbVx/ktSNtwr/V//Vzj985P9mosa3ONF
+	uzbu7Vha3N/kbl8oMvX+KXaJmk9PuyeKuNVfOavEUpyRaKjFXFScCADr3ZuJ6AMAAA==
+X-CMS-MailID: 20250303084207eucas1p1f947b4d89277675981f8fb8a42fb2a13
+X-Msg-Generator: CA
+Content-Type: text/plain; charset="utf-8"
+X-RootMTR: 20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639
+X-EPHeader: CA
+CMS-TYPE: 201P
+X-CMS-RootMailID: 20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639
+References: <20250219140239.1378758-1-m.wilczynski@samsung.com>
+	<CGME20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639@eucas1p2.samsung.com>
+	<20250219140239.1378758-10-m.wilczynski@samsung.com>
+	<20250221-imaginary-ebony-macaque-aace8d@krzk-bin>
 
 
 
-On 27.02.2025 17:51, Ryan.Wanner@microchip.com wrote:
-> Ryan Wanner (20):
->   ARM: at91: Add PM support to sama7d65
->   ARM: at91: pm: add DT compatible support for sama7d65
->   ARM: at91: PM: Add Backup mode for SAMA7D65
->   ARM: at91: pm: Enable ULP0/ULP1 for SAMA7D65
+On 2/21/25 10:11, Krzysztof Kozlowski wrote:
+> On Wed, Feb 19, 2025 at 03:02:27PM +0100, Michal Wilczynski wrote:
+>> Add a mandatory reset property for the TH1520 VO clock controller that
+>> handles the GPU clocks. This reset line controls the GPU CLKGEN reset,
+>> which is required for proper GPU clock operation.
+>>
+>> The reset property is only required for the "thead,th1520-clk-vo"
+>> compatible, as it specifically handles the GPU-related clocks.
+>>
+>> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+>> ---
+>>  .../bindings/clock/thead,th1520-clk-ap.yaml      | 16 ++++++++++++++++
+>>  1 file changed, 16 insertions(+)
+>>
+>> diff --git a/Documentation/devicetree/bindings/clock/thead,th1520-clk-ap.yaml b/Documentation/devicetree/bindings/clock/thead,th1520-clk-ap.yaml
+>> index 9d058c00ab3d..6ea8202718d0 100644
+>> --- a/Documentation/devicetree/bindings/clock/thead,th1520-clk-ap.yaml
+>> +++ b/Documentation/devicetree/bindings/clock/thead,th1520-clk-ap.yaml
+>> @@ -40,6 +40,12 @@ properties:
+>>              (integer PLL) typically running at 792 MHz (FOUTPOSTDIV), with
+>>              a maximum FOUTVCO of 2376 MHz.
+>>  
+>> +  resets:
+>> +    maxItems: 1
+>> +    description:
+>> +      Required for "thead,th1520-clk-vo". This reset line controls the
+> 
+> You just added the compatible in other patch, so are you saying you
+> added knowingly incomplete code?
+> 
+> No, this must be squashed.
+> 
+>> +      GPU CLKGEN reset which is required for proper GPU clock operation.
+>> +
+>>    "#clock-cells":
+>>      const: 1
+>>      description:
+>> @@ -51,6 +57,16 @@ required:
+>>    - clocks
+>>    - "#clock-cells"
+>>  
+>> +allOf:
+>> +  - if:
+>> +      properties:
+>> +        compatible:
+>> +          contains:
+>> +            const: thead,th1520-clk-vo
+>> +    then:
+>> +      required:
+>> +        - resets
+> 
+> else:
+> ? What's there? Also reset or no?
 
-Applied to at91-soc with some adjustments, please check!
+If the else: case the reset is not required, as it's only required in
+the th1520clk-vo, so there is no need for else:.
 
->   ARM: dts: microchip: sama7d65: Add Reset Controller to sama7d65 SoC
->   ARM: dts: microchip: sama7d65: Add Shutdown controller support
->   ARM: dts: microchip: sama7d65: Add RTC support for sama7d65
->   ARM: dts: microchip: sama7d65: Add SFRBU support to sama7d65
->   ARM: dts: microchip: sama7d65: Enable shutdown controller
-
-Applied to at91-dt with some adjustments, please check!
-
-Thank you!
+> 
+> Best regards,
+> Krzysztof
+> 
+> 
 
