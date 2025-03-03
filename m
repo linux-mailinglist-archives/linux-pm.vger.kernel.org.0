@@ -1,132 +1,211 @@
-Return-Path: <linux-pm+bounces-23293-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23294-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0F296A4BE8B
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:30:40 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B685A4BF12
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:42:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2493A188545E
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:30:47 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 76DE53A5751
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:36:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B86F1F875B;
-	Mon,  3 Mar 2025 11:30:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 99F3C1FECCA;
+	Mon,  3 Mar 2025 11:36:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="M9LNaQQM"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Xg1//Uj7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mr85p00im-hyfv06021401.me.com (mr85p00im-hyfv06021401.me.com [17.58.23.190])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E57D1F8691
-	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 11:30:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.190
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B49241FECBE
+	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 11:36:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741001435; cv=none; b=MlSyve2erj4PfUgftZ5jKFNbVWItiqp57aey053ZvohVghks7HZqLXten0iJhZXFusE9to8vwekjFJXKMoE/jK74lPqyNBeaYmPR7zAMyAHgYid8sbQnBEVW2gey+g/DFamkHOaHqAYLKooYKR28oGBkvTyzRQV2xL+wV0AR+o4=
+	t=1741001792; cv=none; b=bkgjZyk9WeomZRLpwBtZDxnukF4yLZi+PZ0QN/bWkC5e0NWIpiucvbE6S0C8cwO1H4B6iuZZ6qYx4DLZLrAoEHbekOS0MMvBnOrbz40AJD2yU4tVtO1i0lhgPnQTRdf1HFc3IHYnyurJPjwsm2HYf9IXNeS0kpeoO2AgbFH7U34=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741001435; c=relaxed/simple;
-	bh=X0LU3aYn4lUmJVogH7zjqoCFEavVUNcoV5t1PZiDF6c=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=YRlBYnEOp9BpHZlxSLftsnzJOf5yx4zpNOF/qiXN/bWzlWOHAlAFD0pxyhdZCpSWYp6MwRPxGl21dxl37TdIUSTf1P0deMT4xv4KXOIBzu36Zn5doWFpXm2Qgm5UTMJvoAmxwst4Jw2Ak1iQbo+ax4/UvEjtQdGLqKy9wzORLrI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=M9LNaQQM; arc=none smtp.client-ip=17.58.23.190
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
-	s=1a1hai; bh=OZOLugLSboUaxk503olOimdjHThkYZSt/rnUocHx7qo=;
-	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme;
-	b=M9LNaQQMBVnDvn7O9dkyxfqENe+n3CTiJTPQ2UQFIHq6HOYn5yqN3iDQ3RVhMcn23
-	 RYbgEyO7lbqW+H+rJi6eLqXyW0ofbGlb2TozfcwQt+N3LDxfRINewpBQO64R70O6JP
-	 Fj4pbqb3B74JtNoj/kfZRb0TgXmhRDVBpuDr2nHUHUnQnsoslms9i4lxHUEqE597f0
-	 dsKBFbP0qhEmAOCAG72w3Jw4tGGCdcmaS+BdhFHar4cmpTgkAp9kjNy3bhZerCy1fm
-	 yb4VLYz3eRYNRP0qJgIXtuCQgNCwAPfOp2U/Lehb0PDMMPAW6dfU3J1HAJf8t1L7ga
-	 V8U2HDDNFoYsA==
-Received: from [192.168.1.26] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
-	by mr85p00im-hyfv06021401.me.com (Postfix) with ESMTPSA id D31F830384C0;
-	Mon,  3 Mar 2025 11:30:17 +0000 (UTC)
-Message-ID: <ca719ca0-ee14-4022-bf61-5794d7ec8d3a@icloud.com>
-Date: Mon, 3 Mar 2025 19:30:13 +0800
+	s=arc-20240116; t=1741001792; c=relaxed/simple;
+	bh=XaHolFBWoRAOTJGYNJcQzbTPSNUzRjVdWfk1b9YZ3Uc=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=MJ0i/3q+Vf5G/3/aMLxCFQI4Q6Nyi9lU9X315ZUpUHDzrEnGz3Rjug5NHWKuf+FAy7jOXmO6rcfoyC1L0kg7VkquhKJS9Y4LvJ2JSn5NnQFri747bxXQ64z/J4QPjcukxO8Qvpgl3inLoBXAzOSmfPE/mcAZ6Z9RfP7w19tlFFw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Xg1//Uj7; arc=none smtp.client-ip=209.85.128.169
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6fb2a0e4125so27520727b3.1
+        for <linux-pm@vger.kernel.org>; Mon, 03 Mar 2025 03:36:30 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741001789; x=1741606589; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=UBUkHt3avEz8ZOzjIAytFNHnXfMupzHA8HDEzBBxn/4=;
+        b=Xg1//Uj7niWr7J30SfeUTn0faxZBXOcJH35+NQ4ZSM6z04EfayImx9T7OMSzXfYw7v
+         DaC8ZVl8OIUgs7dbXjCZocb1ppGapdFKgVaxnaljsaHE0OYePG959HtrUkh8sgvFcO7O
+         C3tfin8XRPibVUgisjdeYl7R3S19mi+nK8Ns9T4dVqgFKvJDSE6VdgW1Z/r+IzAzIj/Y
+         LVbaR6oEixJoJtKID+rr9YmFlO/EauWvWHWLQlkV4AqPUnUQCMGQ+5bSLsWwPBIZcxym
+         gN1DZTYm+x11k+qJWsaHyydxC/HSUYeHwb75STuP/IEYqYep8CBUTSSGckXs3TYKauVW
+         /jLQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741001789; x=1741606589;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UBUkHt3avEz8ZOzjIAytFNHnXfMupzHA8HDEzBBxn/4=;
+        b=Iw55r8yeR1J5/SatHFl6Ixoui+A0G/loc1+0u91/m+cyqztMgWPXMKmPYRXn6U5+lV
+         9nqeKW5bm25NxoNvIe+hNVRlu46dg3+ss5/twzsY9EdmCfMcWXeJdMMKoFRhL5gUHkFW
+         o1jGBJlFDzZFnLCB+0RsemI5FSxLgopHwTRnb6w6JoOW5RR80qZXQtPU1xUehLi0gVPl
+         KLY4oHNBbAwHfDa6mrGyqH2rXqV3KKSco6tvfFuVeQpHZplEC/hqcGn94Ur+eIJujZFF
+         FZPF0HQ96PA2/xC2Q1JVb6jLfhUFndIxMCfOTjkVcdgAP0U9ZyOU2a2mZfwLM0YBCF8n
+         MlPQ==
+X-Gm-Message-State: AOJu0YyBLwLKKm9XkdhSf0f76JWYb8+Eq68NvUd8BvzNYhDnPs/qdd9P
+	RPu1mZdQxhhfsNR5sCNx+zVq/s0sbPh6l7aVm81FDpl74UZH3zgEJ5PKJq8JlAAAeEKr2Thv+Uu
+	ukBU94bcgQGMoPUrfxV/Cv2hlQsosSPtFqYYPDQ==
+X-Gm-Gg: ASbGncvztJEl1CBWscRa06VejqoKLVbBQb34N1jvq31h+My6LetB/tB+mKmvyvG7C5l
+	hzDqyw3flT6VOfGyo0AWfIoiMB2oTRdwsZulicN4D/mhMHozZJNTafAvaO6wytOFWyRgqC0wgU6
+	zeMfOxN/3ANZ3Mb3MV1QCV6/Cg/Gk=
+X-Google-Smtp-Source: AGHT+IGbmdK13gwcTIYs/RwA8drBpUi9FLIvtkuILBcCZ+xDfdj9K62od7OaWkHcxdZCUCSfkQyJevgrhbgYFW/YreU=
+X-Received: by 2002:a05:690c:688e:b0:6ef:7036:3b57 with SMTP id
+ 00721157ae682-6fd4a141ce2mr148855737b3.28.1741001789654; Mon, 03 Mar 2025
+ 03:36:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH *-next 00/18] Remove weird and needless 'return' for void
- APIs
-To: Peter Zijlstra <peterz@infradead.org>
-Cc: Zijun Hu <quic_zijuhu@quicinc.com>,
- Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
- Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
- Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
- Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
- Herbert Xu <herbert@gondor.apana.org.au>,
- "David S. Miller" <davem@davemloft.net>,
- "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
- Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
- Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
- Johannes Berg <johannes@sipsolutions.net>,
- Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
- Jiri Pirko <jiri@resnulli.us>, Jason Gunthorpe <jgg@ziepe.ca>,
- Leon Romanovsky <leon@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
- Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
- Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
- Marek Szyprowski <m.szyprowski@samsung.com>,
- Robin Murphy <robin.murphy@arm.com>,
- Miquel Raynal <miquel.raynal@bootlin.com>,
- Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
- linux-arch@vger.kernel.org, linux-mm@kvack.org,
- linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
- netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
- linux-rdma@vger.kernel.org, linux-gpio@vger.kernel.org,
- linux-pm@vger.kernel.org, iommu@lists.linux.dev,
- linux-mtd@lists.infradead.org
-References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
- <46d17d84-5298-4460-96b0-9c62672167a0@icloud.com>
- <20250227130347.GA5880@noisy.programming.kicks-ass.net>
-Content-Language: en-US
-From: Zijun Hu <zijun_hu@icloud.com>
-In-Reply-To: <20250227130347.GA5880@noisy.programming.kicks-ass.net>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: VRiK2BwrsvBlqf3istvRC36nkjOjRITT
-X-Proofpoint-GUID: VRiK2BwrsvBlqf3istvRC36nkjOjRITT
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-03_07,2025-03-03_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 suspectscore=0
- mlxscore=0 adultscore=0 clxscore=1015 mlxlogscore=855 phishscore=0
- malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
- engine=8.19.0-2308100000 definitions=main-2503030088
+References: <12612706.O9o76ZdvQC@rjwysocki.net> <2978873.e9J7NaK4W3@rjwysocki.net>
+In-Reply-To: <2978873.e9J7NaK4W3@rjwysocki.net>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Mon, 3 Mar 2025 12:35:53 +0100
+X-Gm-Features: AQ5f1JrNehs-WHA4X5zdeXjF_NISUdLgzpPPWrjP6G-GK3iY6EpyJABxLIHp-1U
+Message-ID: <CAPDyKFpCcQGKoKB3ZNj+=aiftEduiUVKcWLfYZqGY3=MCCMcQw@mail.gmail.com>
+Subject: Re: [PATCH v2 4/4] PM: sleep: Avoid unnecessary checks in device_prepare_smart_suspend()
+To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Alan Stern <stern@rowland.harvard.edu>, Bjorn Helgaas <helgaas@kernel.org>, 
+	Linux PCI <linux-pci@vger.kernel.org>, Johan Hovold <johan@kernel.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>, 
+	Linux ACPI <linux-acpi@vger.kernel.org>, 
+	Mika Westerberg <mika.westerberg@linux.intel.com>, 
+	Andy Shevchenko <andriy.shevchenko@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
 
-On 2025/2/27 21:03, Peter Zijlstra wrote:
->> C) perhaps, most ordinary developers don't known the function mentioned
->>    by B), and also feel strange for the usage
-> It is quite common to do kernel wide updates using scripts / cocinelle.
-> 
-> If you have a specialization that wraps a function to fill out a default
-> value, then you want the return types to keep matching.
-> 
-> Ex.
-> 
-> return_type foo(type1 a1, type2 a2);
-> 
-> return_type my_foo(type1 a1)
-> {
-> 	return foo(a1, value);
-> }
-> 
-> is a normal thing to do. The whole STD C cannot return void bollocks
-> breaks that when return_type := void, so in that regards I would call
-> this a STD C defect.
+On Tue, 18 Feb 2025 at 21:20, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+>
+> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+>
+> Add an optimization (on top of previous changes) to avoid calling
+> pm_runtime_blocked(), which involves acquiring the device's PM spinlock,
+> for devices with no PM callbacks and runtime PM "blocked".
+>
+> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-The usage is a GCC extension.
-but the usage is prone to be used within *inappropriate* context, take
-this patch series for an example:
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
-1)  both foo() and my_foo() are in the same module
-2)  or it seems return type void is the best type for foo(). so no good
-reason to track its type.
+Kind regards
+Uffe
 
-
+> ---
+>  drivers/base/power/main.c    |   16 +++++++++-------
+>  drivers/base/power/runtime.c |    9 +++++++--
+>  include/linux/pm_runtime.h   |    4 ++--
+>  3 files changed, 18 insertions(+), 11 deletions(-)
+>
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -1796,16 +1796,14 @@
+>
+>         /*
+>          * The "smart suspend" feature is enabled for devices whose drivers ask
+> -        * for it and for devices without PM callbacks unless runtime PM is
+> -        * disabled and enabling it is blocked for them.
+> +        * for it and for devices without PM callbacks.
+>          *
+>          * However, if "smart suspend" is not enabled for the device's parent
+>          * or any of its suppliers that take runtime PM into account, it cannot
+>          * be enabled for the device either.
+>          */
+> -       dev->power.smart_suspend = (dev->power.no_pm_callbacks ||
+> -               dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND)) &&
+> -               !pm_runtime_blocked(dev);
+> +       dev->power.smart_suspend = dev->power.no_pm_callbacks ||
+> +               dev_pm_test_driver_flags(dev, DPM_FLAG_SMART_SUSPEND);
+>
+>         if (!dev_pm_smart_suspend(dev))
+>                 return;
+> @@ -1843,6 +1841,7 @@
+>  static int device_prepare(struct device *dev, pm_message_t state)
+>  {
+>         int (*callback)(struct device *) = NULL;
+> +       bool no_runtime_pm;
+>         int ret = 0;
+>
+>         /*
+> @@ -1858,7 +1857,7 @@
+>          * suspend-resume cycle is complete, so prepare to trigger a warning on
+>          * subsequent attempts to enable it.
+>          */
+> -       pm_runtime_block_if_disabled(dev);
+> +       no_runtime_pm = pm_runtime_block_if_disabled(dev);
+>
+>         if (dev->power.syscore)
+>                 return 0;
+> @@ -1893,7 +1892,10 @@
+>                 pm_runtime_put(dev);
+>                 return ret;
+>         }
+> -       device_prepare_smart_suspend(dev);
+> +       /* Do not enable "smart suspend" for devices without runtime PM. */
+> +       if (!no_runtime_pm)
+> +               device_prepare_smart_suspend(dev);
+> +
+>         /*
+>          * A positive return value from ->prepare() means "this device appears
+>          * to be runtime-suspended and its state is fine, so if it really is
+> --- a/drivers/base/power/runtime.c
+> +++ b/drivers/base/power/runtime.c
+> @@ -1460,14 +1460,19 @@
+>  }
+>  EXPORT_SYMBOL_GPL(pm_runtime_barrier);
+>
+> -void pm_runtime_block_if_disabled(struct device *dev)
+> +bool pm_runtime_block_if_disabled(struct device *dev)
+>  {
+> +       bool ret;
+> +
+>         spin_lock_irq(&dev->power.lock);
+>
+> -       if (dev->power.disable_depth && dev->power.last_status == RPM_INVALID)
+> +       ret = dev->power.disable_depth && dev->power.last_status == RPM_INVALID;
+> +       if (ret)
+>                 dev->power.last_status = RPM_BLOCKED;
+>
+>         spin_unlock_irq(&dev->power.lock);
+> +
+> +       return ret;
+>  }
+>
+>  void pm_runtime_unblock(struct device *dev)
+> --- a/include/linux/pm_runtime.h
+> +++ b/include/linux/pm_runtime.h
+> @@ -77,7 +77,7 @@
+>  extern int pm_schedule_suspend(struct device *dev, unsigned int delay);
+>  extern int __pm_runtime_set_status(struct device *dev, unsigned int status);
+>  extern int pm_runtime_barrier(struct device *dev);
+> -extern void pm_runtime_block_if_disabled(struct device *dev);
+> +extern bool pm_runtime_block_if_disabled(struct device *dev);
+>  extern void pm_runtime_unblock(struct device *dev);
+>  extern void pm_runtime_enable(struct device *dev);
+>  extern void __pm_runtime_disable(struct device *dev, bool check_resume);
+> @@ -274,7 +274,7 @@
+>  static inline int __pm_runtime_set_status(struct device *dev,
+>                                             unsigned int status) { return 0; }
+>  static inline int pm_runtime_barrier(struct device *dev) { return 0; }
+> -static inline void pm_runtime_block_if_disabled(struct device *dev) {}
+> +static inline bool pm_runtime_block_if_disabled(struct device *dev) { return true; }
+>  static inline void pm_runtime_unblock(struct device *dev) {}
+>  static inline void pm_runtime_enable(struct device *dev) {}
+>  static inline void __pm_runtime_disable(struct device *dev, bool c) {}
+>
+>
+>
 
