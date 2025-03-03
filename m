@@ -1,180 +1,252 @@
-Return-Path: <linux-pm+bounces-23336-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23337-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id C64C0A4CDE1
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 23:08:32 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id A70ECA4CDE5
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 23:10:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3CDE93A75F6
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 22:08:21 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1FA973AC113
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 22:10:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 48F12214814;
-	Mon,  3 Mar 2025 22:08:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A3B911F1301;
+	Mon,  3 Mar 2025 22:10:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b="aKNIsYn9"
+	dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b="EqBLE+pz"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-oa1-f54.google.com (mail-oa1-f54.google.com [209.85.160.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from NAM10-MW2-obe.outbound.protection.outlook.com (mail-mw2nam10on2043.outbound.protection.outlook.com [40.107.94.43])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 67B181F12FD
-	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 22:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.160.54
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741039707; cv=none; b=JCUZcO8R7B1irJ87KpGemEn5pA9tKXX/xT4pNLVaNqvVIa+DbskuW6yzZkWHMwzRmHuo7ejbsuobuV0Iys0IMnpe2e7BgUV5DLfuxEM9jFW8AJD2+E5QFqtpyKXQHtot/bss6XJTjMRKd6I1efosqlgfCwfVpDzHwvp9ThqLy4Q=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741039707; c=relaxed/simple;
-	bh=b4iMWATKJPmqEf3YNKW6l41GKN4rNmQLHLGWfk6g7rU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=QfFrernHyXv6/mekYdYU1wKGbDqEl4UIkqCb1vbUQ1F/FZwGcKwtKnjRsjGrlljSma2tCtFEWvD/b/7jcQiV4q8TbebnlM4sW70Puc43PvhJ8Ue/oB98GbsB+sn11qgIMX2NxBdTmf6lKLOmvlm9lWYFVVBHyvNSiz6gsaNB37Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com; spf=fail smtp.mailfrom=broadcom.com; dkim=pass (1024-bit key) header.d=broadcom.com header.i=@broadcom.com header.b=aKNIsYn9; arc=none smtp.client-ip=209.85.160.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=broadcom.com
-Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=broadcom.com
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2bcf9d9b60aso1167158fac.3
-        for <linux-pm@vger.kernel.org>; Mon, 03 Mar 2025 14:08:25 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=broadcom.com; s=google; t=1741039704; x=1741644504; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:from:to:cc:subject:date:message-id:reply-to;
-        bh=m1LlYx3lX3cmCu9HC5TAQ4F7fddxzpssEl8kFZBezXM=;
-        b=aKNIsYn9DSnRgsXxLy0JV7f/biCgDlESBa/LaRd6u0yj5EQdvbdV9Wua7NbQvwMcuT
-         DWw78g44GF9x6C3yeZuOZ9PZ7oJy/L3NsXpvosPMyTL/fjg+7tAzDKbuJjhdtPxyh3Mf
-         OepAtmo+AAPp/kUz8m3euCDQ+efaply9/OFMQ=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741039704; x=1741644504;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=m1LlYx3lX3cmCu9HC5TAQ4F7fddxzpssEl8kFZBezXM=;
-        b=CcURow9QCL5JTNjgExoV9N7SQAkc90NXrRd5jlBfuVvegXXuUmuIoDCcoIGRV/tBIs
-         xczXrNYdHspRKYHcYn5PAGZMetqd8Pcwjq3lKGCAZB59sPGyKXjlmU8ccNb4AuP7EE9r
-         nh+pbS00wjX7YUuq+XiNmooo30F+QuHRTKukIG5uOT893WWhHm5KBcKx1EJXUM4tdrz6
-         k/9A38YA3fNhEEFRyvIoOvdpsM2hpeAZhBTi+LXdCAAQkF0GVjQL1Qo0QjDncsZOxbut
-         28JcmVAvutFEZGPtKo1qVZI1MGoYD9470/H/dsmZ8hfW5aU/aVWRxxBoANxa+y3eDpgm
-         43vQ==
-X-Forwarded-Encrypted: i=1; AJvYcCUTm7Rb4RCy9s2mGCYWicyPmTXPO4KKRa1jlolTSZlt6uf0qGkxvJZ5r6mhjqfHyCA6Tp9wLBFnuA==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwbwBg/8DggP0Dgb84pA9Mlar/782JPs/0pR+U9NWhTBPfI29vT
-	aq2iP/+0ud8oGZRn1tVlilStmyMpeUfbMbd8P/33lUS8UpWtCDqCxjaXVyZeOg==
-X-Gm-Gg: ASbGncuDYYVNLMTHYwAA38H8wDy6Nf22rO/CMd/MZVxdohL36+twHQ05hhMWENx+UUc
-	wsO6losCZpToBoMG/ubXyrxkB/onS2gtmuYNBaHmI9PHYaxk5akCbcREcuUIQtcvvEPBSsn+KEV
-	EtV2M0aGxT0w/qNsgIOpBQwA8pqFAqljbw1uBXHiOvbNl7w/B+eLDVTPdGWzWN3UBIzZMTvfxs7
-	P/PjTivea1+QzVY597n1BPqgANf0J6iEAQf82I7BuEOCLQpJnSbwGBnBD7pk2nt1vbbUdOxy6cJ
-	AtG5EyjxAZPQyvLzCIvzM1fzGHDKfBCoicgPm4GaeVSVQshXKV1seU9hEGi6Vz6c1H8AyTzonFF
-	EcJRGAEca
-X-Google-Smtp-Source: AGHT+IHEVCPRn+btmLTPyi7+Zllya/+YMJ9hICXwbK1mVgTBAEQzyvJDdOEMxmoti3Sm0FE6b1BkfA==
-X-Received: by 2002:a05:6870:5b97:b0:2c1:4eaf:5b6e with SMTP id 586e51a60fabf-2c1787befb5mr10220992fac.35.1741039704273;
-        Mon, 03 Mar 2025 14:08:24 -0800 (PST)
-Received: from [10.67.48.245] ([192.19.223.252])
-        by smtp.gmail.com with ESMTPSA id 586e51a60fabf-2c15c12e133sm2004144fac.19.2025.03.03.14.08.18
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Mar 2025 14:08:23 -0800 (PST)
-Message-ID: <cbc21738-2212-4124-9763-bb20fd927ba9@broadcom.com>
-Date: Mon, 3 Mar 2025 14:08:16 -0800
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE8561EE00D
+	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 22:10:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.94.43
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741039844; cv=fail; b=FDSmoFdb7IN/pDlWhIVNznqXRUDvIA5YKwx7wkT/LqVKNckfsPdz0kIMZxK65lJcXHZHqJV85r0MHZ4+yMIV/eu2x7N1kEuQoXFbj57uTvubBUs9wnaVkxoryepdBk0xgwU468u5ZgfKWVYAh0MDOv0bEl3SuTBRZsHw2p1iAMQ=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741039844; c=relaxed/simple;
+	bh=GsbIg+sbCT49boDfqnZDgKCrEQWswoesoNd+itjpTBY=;
+	h=Message-ID:Date:To:Cc:From:Subject:Content-Type:MIME-Version; b=pXgr4xFIFep8BBSFkVij6wBT3C/6qei5TcBBppRuNTX28oMtEgv7KqVBmibdR5EmR8ohp0DglhqlQcEM4DSK8GgCau9QwdEcvx8hAmqevWzOiHP3MDTYHLdB0nHcWJz7UlK6hEONOsoBTuYxWewxc6L7ad1GJ8YySJ1oAfCKXws=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com; spf=fail smtp.mailfrom=amd.com; dkim=pass (1024-bit key) header.d=amd.com header.i=@amd.com header.b=EqBLE+pz; arc=fail smtp.client-ip=40.107.94.43
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=amd.com
+Authentication-Results: smtp.subspace.kernel.org; spf=fail smtp.mailfrom=amd.com
+ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
+ b=fOsvqtT8yu79HPgV5u1S/+tx0FxMxa45SP1CVL0VAy/GtGUpAgIfX3psTQIsQMNUw711VrSQE4Z/WoBJI0MInoJPlm/Qd0PDhP8AgiPo5Xkbvenn15+hdxmmtD6Iuq0mAdZxA6xOIrq20zjzhV2mgHHyrwbItU6fh2HjZ12EY76c9vpZjWz9/onGsjk7JcaaZ1Fw59nGaP5s3c4TIhG/xMflhuGLTG/xKN5Sat7YhTJ2T5nzkoAo1apOomDkPqIKCAhbPKIzLiF92smNsYO6HC0oPzeeFXtohvqu8xsPQCOAYfpVwgrfe7QidF8kji5YA1TLo1IVPdlLQqy4rg0fww==
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
+ s=arcselector10001;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
+ bh=PDuM8iy0pbfzUEeMS7QbpnqHW54JrwYLJbRtrnLxA0c=;
+ b=LoNCaJ1joXTvOCUFb/j2Y1VQ0O2xLdztoK3wpCORBsolFuuEHLPaJdlfJkgHHx9LvDbC9FQSxy2cRlvcAHPVWKyoateHkceYYPVVMGsjoEKZnsts9nf4Ztn2T8vi4pC9oz5O1jdE16telV1lrZ3qcG36a52ao5nbJaCIQoDILH7vj73J6fU9fK7wb63PcIJ85Bgw+wRsxdU0bUVEANfqWtciwpRqZuxVWzXe3M7NZD2Q6c6csHeRVd9YndC6ifaXKwde82vXBPgABIdIKcGhLWNy1Z9/cYEGo/Lema45nPNm9UsR+0lFvd3VKNVRE7NE1FQwL7MgUACxDv+aetPOmQ==
+ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
+ smtp.mailfrom=amd.com; dmarc=pass action=none header.from=amd.com; dkim=pass
+ header.d=amd.com; arc=none
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=amd.com; s=selector1;
+ h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
+ bh=PDuM8iy0pbfzUEeMS7QbpnqHW54JrwYLJbRtrnLxA0c=;
+ b=EqBLE+pzo41plZ9pXXro4y3VuNDl1NK3ZMfoupJ16kAFkQ5Q7ybuLE4ibhsL27IIsdcFCNIJBOxXfWEbKMdmJSakYrCXAljPfB8nbJM9Ik8vUxGlYhjObQXIqaVC9BIbNlE9rsYrpS55eELNRgEcENZIYj/BLJh3m9nH/lCGuGM=
+Authentication-Results: dkim=none (message not signed)
+ header.d=none;dmarc=none action=none header.from=amd.com;
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com (2603:10b6:208:3cb::10)
+ by MW6PR12MB8705.namprd12.prod.outlook.com (2603:10b6:303:24c::18) with
+ Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8489.22; Mon, 3 Mar
+ 2025 22:10:40 +0000
+Received: from MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca]) by MN0PR12MB6101.namprd12.prod.outlook.com
+ ([fe80::37ee:a763:6d04:81ca%4]) with mapi id 15.20.8489.025; Mon, 3 Mar 2025
+ 22:10:40 +0000
+Message-ID: <9b23785c-9aa9-44d2-9bca-0f4fbc9bbc70@amd.com>
+Date: Mon, 3 Mar 2025 16:10:38 -0600
+User-Agent: Mozilla Thunderbird
+Content-Language: en-US
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: Linux PM <linux-pm@vger.kernel.org>
+From: Mario Limonciello <mario.limonciello@amd.com>
+Subject: [GIT PULL] amd-pstate content for 6.15 (3/3/25)
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: SN4PR0501CA0067.namprd05.prod.outlook.com
+ (2603:10b6:803:41::44) To MN0PR12MB6101.namprd12.prod.outlook.com
+ (2603:10b6:208:3cb::10)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v9 2/5] firmware: psci: Read and use vendor reset types
-To: Elliot Berman <quic_eberman@quicinc.com>,
- Bjorn Andersson <andersson@kernel.org>, Sebastian Reichel <sre@kernel.org>,
- Rob Herring <robh@kernel.org>, Conor Dooley <conor+dt@kernel.org>,
- Vinod Koul <vkoul@kernel.org>, Andy Yan <andy.yan@rock-chips.com>,
- Lorenzo Pieralisi <lpieralisi@kernel.org>,
- Mark Rutland <mark.rutland@arm.com>,
- Bartosz Golaszewski <bartosz.golaszewski@linaro.org>,
- Arnd Bergmann <arnd@arndb.de>, Olof Johansson <olof@lixom.net>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- cros-qcom-dts-watchers@chromium.org, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Konrad Dybcio <konradybcio@kernel.org>
-Cc: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
- Satya Durga Srinivasu Prabhala <quic_satyap@quicinc.com>,
- Melody Olvera <quic_molvera@quicinc.com>,
- Shivendra Pratap <quic_spratap@quicinc.com>, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
- Stephen Boyd <swboyd@chromium.org>, linux-pm@vger.kernel.org,
- linux-arm-msm@vger.kernel.org, Elliot Berman <elliotb317@gmail.com>,
- Elliot Berman <elliot.berman@oss.qualcomm.com>
-References: <20250303-arm-psci-system_reset2-vendor-reboots-v9-0-b2cf4a20feda@oss.qualcomm.com>
- <20250303-arm-psci-system_reset2-vendor-reboots-v9-2-b2cf4a20feda@oss.qualcomm.com>
-Content-Language: en-US
-From: Florian Fainelli <florian.fainelli@broadcom.com>
-Autocrypt: addr=florian.fainelli@broadcom.com; keydata=
- xsBNBFPAG8ABCAC3EO02urEwipgbUNJ1r6oI2Vr/+uE389lSEShN2PmL3MVnzhViSAtrYxeT
- M0Txqn1tOWoIc4QUl6Ggqf5KP6FoRkCrgMMTnUAINsINYXK+3OLe7HjP10h2jDRX4Ajs4Ghs
- JrZOBru6rH0YrgAhr6O5gG7NE1jhly+EsOa2MpwOiXO4DE/YKZGuVe6Bh87WqmILs9KvnNrQ
- PcycQnYKTVpqE95d4M824M5cuRB6D1GrYovCsjA9uxo22kPdOoQRAu5gBBn3AdtALFyQj9DQ
- KQuc39/i/Kt6XLZ/RsBc6qLs+p+JnEuPJngTSfWvzGjpx0nkwCMi4yBb+xk7Hki4kEslABEB
- AAHNMEZsb3JpYW4gRmFpbmVsbGkgPGZsb3JpYW4uZmFpbmVsbGlAYnJvYWRjb20uY29tPsLB
- IQQQAQgAywUCZWl41AUJI+Jo+hcKAAG/SMv+fS3xUQWa0NryPuoRGjsA3SAUAAAAAAAWAAFr
- ZXktdXNhZ2UtbWFza0BwZ3AuY29tjDAUgAAAAAAgAAdwcmVmZXJyZWQtZW1haWwtZW5jb2Rp
- bmdAcGdwLmNvbXBncG1pbWUICwkIBwMCAQoFF4AAAAAZGGxkYXA6Ly9rZXlzLmJyb2FkY29t
- Lm5ldAUbAwAAAAMWAgEFHgEAAAAEFQgJChYhBNXZKpfnkVze1+R8aIExtcQpvGagAAoJEIEx
- tcQpvGagWPEH/2l0DNr9QkTwJUxOoP9wgHfmVhqc0ZlDsBFv91I3BbhGKI5UATbipKNqG13Z
- TsBrJHcrnCqnTRS+8n9/myOF0ng2A4YT0EJnayzHugXm+hrkO5O9UEPJ8a+0553VqyoFhHqA
- zjxj8fUu1px5cbb4R9G4UAySqyeLLeqnYLCKb4+GklGSBGsLMYvLmIDNYlkhMdnnzsSUAS61
- WJYW6jjnzMwuKJ0ZHv7xZvSHyhIsFRiYiEs44kiYjbUUMcXor/uLEuTIazGrE3MahuGdjpT2
- IOjoMiTsbMc0yfhHp6G/2E769oDXMVxCCbMVpA+LUtVIQEA+8Zr6mX0Yk4nDS7OiBlvOwE0E
- U8AbwQEIAKxr71oqe+0+MYCc7WafWEcpQHFUwvYLcdBoOnmJPxDwDRpvU5LhqSPvk/yJdh9k
- 4xUDQu3rm1qIW2I9Puk5n/Jz/lZsqGw8T13DKyu8eMcvaA/irm9lX9El27DPHy/0qsxmxVmU
- pu9y9S+BmaMb2CM9IuyxMWEl9ruWFS2jAWh/R8CrdnL6+zLk60R7XGzmSJqF09vYNlJ6Bdbs
- MWDXkYWWP5Ub1ZJGNJQ4qT7g8IN0qXxzLQsmz6tbgLMEHYBGx80bBF8AkdThd6SLhreCN7Uh
- IR/5NXGqotAZao2xlDpJLuOMQtoH9WVNuuxQQZHVd8if+yp6yRJ5DAmIUt5CCPcAEQEAAcLB
- gQQYAQIBKwUCU8AbwgUbDAAAAMBdIAQZAQgABgUCU8AbwQAKCRCTYAaomC8PVQ0VCACWk3n+
- obFABEp5Rg6Qvspi9kWXcwCcfZV41OIYWhXMoc57ssjCand5noZi8bKg0bxw4qsg+9cNgZ3P
- N/DFWcNKcAT3Z2/4fTnJqdJS//YcEhlr8uGs+ZWFcqAPbteFCM4dGDRruo69IrHfyyQGx16s
- CcFlrN8vD066RKevFepb/ml7eYEdN5SRALyEdQMKeCSf3mectdoECEqdF/MWpfWIYQ1hEfdm
- C2Kztm+h3Nkt9ZQLqc3wsPJZmbD9T0c9Rphfypgw/SfTf2/CHoYVkKqwUIzI59itl5Lze+R5
- wDByhWHx2Ud2R7SudmT9XK1e0x7W7a5z11Q6vrzuED5nQvkhAAoJEIExtcQpvGagugcIAJd5
- EYe6KM6Y6RvI6TvHp+QgbU5dxvjqSiSvam0Ms3QrLidCtantcGT2Wz/2PlbZqkoJxMQc40rb
- fXa4xQSvJYj0GWpadrDJUvUu3LEsunDCxdWrmbmwGRKqZraV2oG7YEddmDqOe0Xm/NxeSobc
- MIlnaE6V0U8f5zNHB7Y46yJjjYT/Ds1TJo3pvwevDWPvv6rdBeV07D9s43frUS6xYd1uFxHC
- 7dZYWJjZmyUf5evr1W1gCgwLXG0PEi9n3qmz1lelQ8lSocmvxBKtMbX/OKhAfuP/iIwnTsww
- 95A2SaPiQZA51NywV8OFgsN0ITl2PlZ4Tp9hHERDe6nQCsNI/Us=
-In-Reply-To: <20250303-arm-psci-system_reset2-vendor-reboots-v9-2-b2cf4a20feda@oss.qualcomm.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+X-MS-PublicTrafficType: Email
+X-MS-TrafficTypeDiagnostic: MN0PR12MB6101:EE_|MW6PR12MB8705:EE_
+X-MS-Office365-Filtering-Correlation-Id: e9c182ae-d6af-4ffe-c7c7-08dd5aa03be3
+X-MS-Exchange-SenderADCheck: 1
+X-MS-Exchange-AntiSpam-Relay: 0
+X-Microsoft-Antispam: BCL:0;ARA:13230040|1800799024|366016|376014;
+X-Microsoft-Antispam-Message-Info:
+	=?utf-8?B?SlpTUGVLeFNDZjFMUVpqNFc1ZTEvNTZTU2QvZmZ1eUlYZDdxZEtFMGE3TzV0?=
+ =?utf-8?B?MlI0V3kvandLNDYwY0hBOG1BM1VWZEZEUkg3RFJBWDVNMWZtbmZ0aVprSXNV?=
+ =?utf-8?B?RmppdXM3bnZiVmxlVEFaR2xHR1NxSm1WSWxjelZteHhOVGdVM3JFWWgyTmZD?=
+ =?utf-8?B?ditPQXNVL2RTcFlJdmRySml2SFNNREwvSWNwVU9wYThiWStsYVpQdGJkY0M5?=
+ =?utf-8?B?U2VZOUdKODFCSXhJSi9zR2NlMGloNzRDN2lWVXU5VW00VTVHQXNSTXBuZlhR?=
+ =?utf-8?B?TnYyME5UbVpvSVBXVkhQdEZncDBMSm1yRE5HbG5RWlIvL29XM3JDdVcvdXR5?=
+ =?utf-8?B?NFQwSXhnOFBKcEI2S21Xbm9SUzhUdWlDd0NVTGNiMW1EU0ZtWmoyQnVkanNi?=
+ =?utf-8?B?OXJtZ0RVRVB2RjRWSmtCVDMyTHJhTksvNEtubTU3azZDNVJQZ0hzV1F3UVBD?=
+ =?utf-8?B?Sk13T2xYakhoUitIZVZCVXREazlTSWVOOVdDaXU3ejhVek5QQ0JaV1VjdDVM?=
+ =?utf-8?B?NXdacVE0NUhaeVB5SHYzMG43K2VmYUFRZHQyeGRkZ3JSUjluWExTT3hwUEd0?=
+ =?utf-8?B?QkQzdFlNUTlEV0hENm9jZnBPQko4bEhBcmZoaGpQeldIazdQbWRJT1pUbnRW?=
+ =?utf-8?B?VXlEdEZReW9ZNHBxZHRpRHIwYU5MOEZ4YllNRzVwN2tkcEZudlRlZUtwMHhT?=
+ =?utf-8?B?YkJUaFlOUFlxektjdmRXcnZZY2hMNHJWa25rUjJCQVRpaFFWTVowS3BzdHNs?=
+ =?utf-8?B?Vkw2Ryt4TWpiRzExNTJiUlpFMUxVMXFQVDByS3c3YXdKdTJFblJwaGFJaVZS?=
+ =?utf-8?B?RjBjTkFJVS9qMVdRaTdQM1pPNFJMcFl2WnBUay9KeGx0L0d6TEEwK3RtOG44?=
+ =?utf-8?B?K1JmalVtN0pFdndBYzNWQk9oYmJqVE02ZWF4MU94MkR3Y0lJOWdiZ2ZsVXNr?=
+ =?utf-8?B?OTdPUThLNnM5dGJUU3lzMmRUU05USi8vV1ZMS0o3dW50T0tJVnNrc0pyWngy?=
+ =?utf-8?B?S1VGYm9rR09YOWtscktocnlKV3B5cHBWcEJPaTkvYTU4U3NLR2wwaHlSQ3hX?=
+ =?utf-8?B?TGYwLzY4REl4My8rSVhaZnZ0VkRjQmlRVmF1MzdGbmkwbHI5UGQ2aEc1Mi9P?=
+ =?utf-8?B?SFJ2VUNRdG5HeFhwamtBOU91cTAvQmM2S1BzVjY2enhKcU12OWJEV1VGUmdr?=
+ =?utf-8?B?bzJRQ0h5MXlYbHI2cTlMbWZTdmJ0TmU1eGZtMDlydEppem56NEpmZ1IvUjlL?=
+ =?utf-8?B?RWxVOGFCbVBKc2RGRkpEVkxyK0oycFYwWkpJa1ZoUURNYXZsUWRnckZOTFVu?=
+ =?utf-8?B?TUdhMnh5TStrRkQ4SGZoemZJWXFDSnZoRWtCVEdraHZLamVSL0NMc01PWXBR?=
+ =?utf-8?B?VnJZQ3lmYmJLS3Z6UW41MlpjaXlOZldmeXo4cVV4b0JqVGtBbnk4SzBpRXZy?=
+ =?utf-8?B?LzgvemZzZkc2Uk9WNUhyZnBRYUE5STMyc24vK20rNkhlWFVTU3U0Q3dWcUhN?=
+ =?utf-8?B?cnN3djdTZnVVQll4L2I2ck1hL3NOcnh2SlhWendZU2s4amtzTVJCVU5VbkRy?=
+ =?utf-8?B?aTFQREhSeGZuSzhOdnZlTnY5Mm1VaVNoOHVWbGx0QTF6WGNWb1lWOGhDcWhF?=
+ =?utf-8?B?WmNtbk9iMGxxNFJyVDR5Z0FtV05nc0d3aG1ZeWd4SlJyczdpYU9HVGFyU1lz?=
+ =?utf-8?B?bTFLNVhJQ0I1Nld5M091TitQY0tYWWdzMmdMNTZmbkNMYm1HdXVVRjNzZkQy?=
+ =?utf-8?B?alpSeHB2SXlwd2k0eEJtTUJ0bWhQV2lYQ3V6amZDc1ZKY1FPUGdyWEVhOWxn?=
+ =?utf-8?B?Y2RkZGc5cndRclJUNnVqUT09?=
+X-Forefront-Antispam-Report:
+	CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:MN0PR12MB6101.namprd12.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014);DIR:OUT;SFP:1101;
+X-MS-Exchange-AntiSpam-MessageData-ChunkCount: 1
+X-MS-Exchange-AntiSpam-MessageData-0:
+	=?utf-8?B?T1hCQy84ZUZZbFAxRlUzeVJsU2V2QnJjQ0VVK0NzZEp5eTA5aXpNUW0wb290?=
+ =?utf-8?B?NGxNbDdJL1NqMWN4M0pGbEc5UHJ4eWlERkU3SkVvaVoyUllEMWxLdzJYUi9H?=
+ =?utf-8?B?Z2V6VFJ0L3JaL3JvNDVUYnVZQnFFMVlJTmxKRlB5bnJmaHUyaC9jcC9rQzJ3?=
+ =?utf-8?B?dWl6Q1cxbnBMbThIRCtvcnBSNUppZ1NZay81V1dsYXlkL3FVcW1ZUG5MYVJE?=
+ =?utf-8?B?eEVYUmhjSUd4VWRYbTgwN1dOZmZIZXNRUndQbjFWY09uRDVmRmJ0OEJrREdX?=
+ =?utf-8?B?ZzdCQVRSQnV6Rk5VL3IzcWoyZlROK1dxNWJmY0pQYXdGUWg4eWJUU1VCOGVn?=
+ =?utf-8?B?b0tkRGdENytQeDg2eGFPYkc0VXdRbXg2ZWoyZkJiWmdEUm1LUFJtQ1k1WHp6?=
+ =?utf-8?B?MkVqbGVXRmxNSmk4aytWZlhRZm5jVURmeUJXRzIvajhDbG1MQ2FYM0czaFQ2?=
+ =?utf-8?B?b2M4djFNOU4wMis0NlZqRExCZTRVbEhZVlowaTF6NHZlQ3FjWEhveC9FZmIx?=
+ =?utf-8?B?YmNjVElMWkRMQTk1aHpZR1VjNFJjL3BMOFVEdXhvVW5VMFNwNzVXZzNXTDhG?=
+ =?utf-8?B?dGxocnhkVkdNelZMU2Vwc2pHVUY0c1hlSno0aENzOW9RTkMrdGdtem8ramds?=
+ =?utf-8?B?dTIzd2FBWFFtOU9CRUdoT2l1SXdzYmtYWUtaeGtEdFhOTnQxSXpaT01WUTdL?=
+ =?utf-8?B?UUVGc05rUmJIME1abjUyeTVJbm5mZ0g4ZDg4WXAxcm10RUlTRU5VNXVPQXkz?=
+ =?utf-8?B?VERBbFFBQVNLam8yQVFTeXpNWktTMjlVMDQrNEwwSm5TbFN3Mm5pV0l0SWNr?=
+ =?utf-8?B?andTNVcrVE42Z29LRmVkZ0p2WlBZSlkzSFdHeWxabXJwTjJ4L0s0ZmUxanV1?=
+ =?utf-8?B?aTF4aWNINjdWamtOQ295UitVUFVQZldacmdZeUR6cVlZdnI1ZjlxQ3VBRlBR?=
+ =?utf-8?B?Ty9GVmFZLzZJb2w1MkFvZUZDczJZa1ppWnVxSnJ5clNYNGd6YiticWswTTdv?=
+ =?utf-8?B?UWhCQlJvYTZYMnY5cWxqSjhmQTlLa0E0ckYyUWZHREduTjhuSFdDNkVZOVIy?=
+ =?utf-8?B?TkdPNEJuakkvcm1ySFd1NUwrZ1RaNnUwUUlaQTY0N3phYXVKY1NRZUVrTDdi?=
+ =?utf-8?B?b1VDdkQ1T3VxNGtKZDIwTHl6R1JrMHcvdUdWWmF3RHUvQjh6dmMwV2dyNzFX?=
+ =?utf-8?B?RGlUbEhCb05IS2hOTEJvcjBSRGFuak1mS05zRGlvMUJOQlU4UzhibUE5N0Ev?=
+ =?utf-8?B?WWFXOXBGbUlkbURlN2JXeXB5WUUvOHNYR2VxaVY2clNtdmh1cDRMSHpRR0dz?=
+ =?utf-8?B?aE53TG1BNE1JdDVvWUE4Y0FaUWZaUm82U3llZnNqRW1oKzU0VmRuVEdZdUk4?=
+ =?utf-8?B?RENmTXh3bHE5ZThGeDg5QzJtTzEwQ21kMFcyK2tHeUttQnlveVNwNjhjakdl?=
+ =?utf-8?B?eWI5T1UyVFNOdVdUN2paVmRqYy96UkdlZmxnaDg3Z2hnTTRCUzdLQ0VRYUYv?=
+ =?utf-8?B?ZkNyQ1VucUQ5U3hEczFzQXdZQXZ5OUtiL05DVGFMZFlELzZhRzZmRUdWYmxE?=
+ =?utf-8?B?WFpqdUkzNG4wbVBxVHN2QzF5WnVRc3FRVjlrZ3hLandXQm1YVGkxSDZURi9C?=
+ =?utf-8?B?bG9leWllU2FUcElHK0E0TXAwZmxHMWI0cGJyZzFpRFRtZW0vSnpaSi9WQlZq?=
+ =?utf-8?B?VTR4emNqTzVRT0o0QlJkOEU4U05tU3gvRDBpR0hRb3hDMDlwN0E5UU9jUVd1?=
+ =?utf-8?B?aDhWaDBtczczbTdRUjBySXYxd3RxRGVGckNqSTQrSE5SdEgxbXpZZ2kwVXB0?=
+ =?utf-8?B?aUpJQ2tIUS9oU2FIMXVhalVPdnJnR1RsZERaL3c5QnpXVjZMMjlsc1B4ZC83?=
+ =?utf-8?B?eDN6ZmJJZENkQ1NUcU1VZUlONXVzTWc5ODlwUEJIK3hCZ0pYWVAzMUx1RDYx?=
+ =?utf-8?B?ams0cmlERkVuVE5EbGZpWmlTOW0rY0lLV1RPWlF2YVY1dTlQOUJmTmhpdVIw?=
+ =?utf-8?B?Q1pZM0VxbXVqWDRtR3g5Mlk1U3B0OGhtakZLM0dlZ2hlTWFOR0t3U1BHSGZk?=
+ =?utf-8?B?MGRUN1pwSkF5Yzd1TmthR3JFUnFEZy9XQW50NytNanRvb29LRmVZZ2FOUkdi?=
+ =?utf-8?Q?NTwiBGojctP6TzRurP94m/Qac?=
+X-OriginatorOrg: amd.com
+X-MS-Exchange-CrossTenant-Network-Message-Id: e9c182ae-d6af-4ffe-c7c7-08dd5aa03be3
+X-MS-Exchange-CrossTenant-AuthSource: MN0PR12MB6101.namprd12.prod.outlook.com
+X-MS-Exchange-CrossTenant-AuthAs: Internal
+X-MS-Exchange-CrossTenant-OriginalArrivalTime: 03 Mar 2025 22:10:40.3785
+ (UTC)
+X-MS-Exchange-CrossTenant-FromEntityHeader: Hosted
+X-MS-Exchange-CrossTenant-Id: 3dd8961f-e488-4e60-8e11-a82d994e183d
+X-MS-Exchange-CrossTenant-MailboxType: HOSTED
+X-MS-Exchange-CrossTenant-UserPrincipalName: Cq06F7knBYlUge+EB62RyjXctmnO+BWNVb36eTM2aNMVncvO7TBEbdvLLLs5dRIoeaY9ow7pcBWGZV0RghMfyw==
+X-MS-Exchange-Transport-CrossTenantHeadersStamped: MW6PR12MB8705
 
-On 3/3/25 13:08, Elliot Berman wrote:
-> From: Elliot Berman <elliot.berman@oss.qualcomm.com>
-> 
-> SoC vendors have different types of resets and are controlled through
-> various registers. For instance, Qualcomm chipsets can reboot to a
-> "download mode" that allows a RAM dump to be collected. Another example
-> is they also support writing a cookie that can be read by bootloader
-> during next boot. PSCI offers a mechanism, SYSTEM_RESET2, for these
-> vendor reset types to be implemented without requiring drivers for every
-> register/cookie.
-> 
-> Add support in PSCI to statically map reboot mode commands from
-> userspace to a vendor reset and cookie value using the device tree.
-> 
-> A separate initcall is needed to parse the devicetree, instead of using
-> psci_dt_init because mm isn't sufficiently set up to allocate memory.
-> 
-> Reboot mode framework is close but doesn't quite fit with the
-> design and requirements for PSCI SYSTEM_RESET2. Some of these issues can
-> be solved but doesn't seem reasonable in sum:
->   1. reboot mode registers against the reboot_notifier_list, which is too
->      early to call SYSTEM_RESET2. PSCI would need to remember the reset
->      type from the reboot-mode framework callback and use it
->      psci_sys_reset.
->   2. reboot mode assumes only one cookie/parameter is described in the
->      device tree. SYSTEM_RESET2 uses 2: one for the type and one for
->      cookie.
->   3. psci cpuidle driver already registers a driver against the
->      arm,psci-1.0 compatible. Refactoring would be needed to have both a
->      cpuidle and reboot-mode driver.
-> 
-> Signed-off-by: Elliot Berman <elliot.berman@oss.qualcomm.com>
+The following changes since commit d082ecbc71e9e0bf49883ee4afd435a77a5101b6:
 
-Reviewed-by: Florian Fainelli <florian.fainelli@broadcom.com>
-Tested-by: Florian Fainelli <florian.fainelli@broadcom.com>
--- 
-Florian
+   Linux 6.14-rc4 (2025-02-23 12:32:57 -0800)
+
+are available in the Git repository at:
+
+  
+ssh://git@gitolite.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git 
+amd-pstate-v6.15-2025-03-03
+  
+  
+  
+                                                                 for you 
+to fetch changes up to 9e64cfbb06a534089ae4fc9174c01cd91323d505:
+
+   cpufreq/amd-pstate: Drop actions in amd_pstate_epp_cpu_offline() 
+(2025-03-01 06:45:50 -0600)
+
+----------------------------------------------------------------
+amd-pstate content for 6.15 (3/3/25)
+
+A lot of code optimization to avoid cases where call paths will end up 
+calling
+the same writes multiple times and needlessly caching variables.  To 
+accomplish
+this some of the writes are now made into an atomically written "perf" 
+variable.
+Locking has been overhauled to ensure it only applies to the necessary 
+functions.
+Tracing has been adjusted to ensure trace events only are used right before
+writing out to the hardware.
+  
+  
+  
+  
+----------------------------------------------------------------
+Dhananjay Ugwekar (10):
+       cpufreq/amd-pstate: Modify the min_perf calculation in 
+adjust_perf callback
+       cpufreq/amd-pstate: Remove the redundant des_perf clamping in 
+adjust_perf
+       cpufreq/amd-pstate: Pass min/max_limit_perf as min/max_perf to 
+amd_pstate_update
+       cpufreq/amd-pstate: Convert all perf values to u8
+       cpufreq/amd-pstate: Modularize perf<->freq conversion
+       cpufreq/amd-pstate: Remove the unnecessary cpufreq_update_policy call
+       cpufreq/amd-pstate: Add missing NULL ptr check in amd_pstate_update
+       cpufreq/amd-pstate: Use scope based cleanup for cpufreq_policy refs
+       cpufreq/amd-pstate: Remove the unncecessary driver_lock in 
+amd_pstate_update_limits
+       cpufreq/amd-pstate: Fix the clamping of perf values
+
+Mario Limonciello (19):
+       cpufreq/amd-pstate: Invalidate cppc_req_cached during suspend
+       cpufreq/amd-pstate: Show a warning when a CPU fails to setup
+       cpufreq/amd-pstate: Drop min and max cached frequencies
+       cpufreq/amd-pstate: Move perf values into a union
+       cpufreq/amd-pstate: Overhaul locking
+       cpufreq/amd-pstate: Drop `cppc_cap1_cached`
+       cpufreq/amd-pstate-ut: Use _free macro to free put policy
+       cpufreq/amd-pstate-ut: Allow lowest nonlinear and lowest to be 
+the same
+       cpufreq/amd-pstate-ut: Drop SUCCESS and FAIL enums
+       cpufreq/amd-pstate-ut: Run on all of the correct CPUs
+       cpufreq/amd-pstate-ut: Adjust variable scope
+       cpufreq/amd-pstate: Replace all AMD_CPPC_* macros with masks
+       cpufreq/amd-pstate: Cache CPPC request in shared mem case too
+       cpufreq/amd-pstate: Move all EPP tracing into *_update_perf and 
+*_set_epp functions
+       cpufreq/amd-pstate: Update cppc_req_cached for shared mem EPP writes
+       cpufreq/amd-pstate: Drop debug statements for policy setting
+       cpufreq/amd-pstate: Rework CPPC enabling
+       cpufreq/amd-pstate: Stop caching EPP
+       cpufreq/amd-pstate: Drop actions in amd_pstate_epp_cpu_offline()
+
+  arch/x86/include/asm/msr-index.h   |  20 ++++----
+  arch/x86/kernel/acpi/cppc.c        |   4 +-
+  drivers/cpufreq/amd-pstate-trace.h |  57 +++++++++++----------
+  drivers/cpufreq/amd-pstate-ut.c    | 211 
+++++++++++++++++++++++++++++++++-------------------------------------------
+  drivers/cpufreq/amd-pstate.c       | 666 
++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++--------------------------------------------------------------------------------------------------------------------------------------
+  drivers/cpufreq/amd-pstate.h       |  65 +++++++++++++-----------
+  include/linux/cpufreq.h            |   3 ++
+  7 files changed, 461 insertions(+), 565 deletions(-)
 
