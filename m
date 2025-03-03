@@ -1,134 +1,95 @@
-Return-Path: <linux-pm+bounces-23413-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23422-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 36FB9A4E530
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 17:12:15 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 171C2A4E586
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 17:21:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id EF2E219C6F58
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:01:07 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 3A177189E6CD
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:11:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1322227E1CA;
-	Tue,  4 Mar 2025 15:42:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 38F5C27BF99;
+	Tue,  4 Mar 2025 15:50:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="fQDbMs8G"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lyqxOXPF"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from beeline2.cc.itu.edu.tr (beeline2.cc.itu.edu.tr [160.75.25.116])
+Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 65CB628151C
-	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 15:42:36 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.116
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AC6E8265CA0
+	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 15:50:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=160.75.25.115
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741102957; cv=pass; b=migzBnUFd71eq3qXsMcfHyLKsVHJNM6Pccdivw5Z6xK0B0bhQj3dhVr3su8y3OJoCNid/gZ5gxr/Xr5ih/muPt4zWPTB207l5mHeMQdlAx5uns8M8h/h+emjMnbgsPbPv92lDARVHLTRqDLV2RC/5eK8iR+iZ+ZPRP7l5ivA1Vc=
+	t=1741103444; cv=pass; b=rGqPSBWLGkiA+wxF69UDv/lcq35UQP2fREm+LHQ5XRg3MvtS5OcutsDhD3Npm2jTonM/dkEG2qA5za3zUgzcfY0Axn1VUmPmu3rcwTTUKbkOZsABzGpH5WR5tPj+7wggdCeZFvfWMbR7penw0kOenctSDeVo4HUlTjiXAZu6W0A=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741102957; c=relaxed/simple;
-	bh=Oul6vhkXR4va+z/+WhoZ0xRll3TSdgvTz5RPoDjs9Do=;
+	s=arc-20240116; t=1741103444; c=relaxed/simple;
+	bh=lpis/SLy0ij+CNsW36P4QCLyGtfJ/WP7YKd97ynHmys=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UHATmKGr/v4tgTVQUFDsfuevds+cLgLwOqAEQTDqSmFY1Wkcoqd5LTFg/XhuQB79vBiiTmO7ahfYUSDyCbwN5RwlP1Dd2nE1RP2ZvNXfdItqXiZveEaPpVQtYHs9/+Q9KfV6liMmmD9/ulCJtiS68r3WbZ0AU04QuOxINguzX5g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fQDbMs8G; arc=none smtp.client-ip=205.220.180.131; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; arc=pass smtp.client-ip=160.75.25.116
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
+	 In-Reply-To:Content-Type; b=QxzyEBZpLY8wK+/YgOpNH0wkmq8MbjSrZh+zVTO/M/A4Cxq9G4N1ecP0aLtg3mUarNtC8ID8R3AvR6oFhWTaL8GY8ZU7Z6GoN4YiQSJSBCXOJpz6Jv4IWrzTYNX2LRtKVTmgNtmImnVU59T0dqm5DqV+0Jn3ZJrcb1uXZQS1kPk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyqxOXPF; arc=none smtp.client-ip=10.30.226.201; arc=pass smtp.client-ip=160.75.25.115
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline2.cc.itu.edu.tr (Postfix) with ESMTPS id DC09A40CFBA1
-	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 18:42:34 +0300 (+03)
+	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id 30CA240D9740
+	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 18:50:41 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6fzS2CjhzG0tR
-	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 18:41:08 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6g9951k5zG1ZB
+	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 18:49:33 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id 36C2142746; Tue,  4 Mar 2025 18:40:42 +0300 (+03)
+	id 1E17E42726; Tue,  4 Mar 2025 18:49:20 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fQDbMs8G
-X-Envelope-From: <linux-kernel+bounces-541861-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyqxOXPF
+X-Envelope-From: <linux-kernel+bounces-541880-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fQDbMs8G
-Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id 88B3C41CB7
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 16:57:10 +0300 (+03)
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 3C3C02DCE3
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 16:57:10 +0300 (+03)
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyqxOXPF
+Received: from fgw1.itu.edu.tr (fgw1.itu.edu.tr [160.75.25.103])
+	by le2 (Postfix) with ESMTP id 968C441E12
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 17:07:48 +0300 (+03)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by fgw1.itu.edu.tr (Postfix) with SMTP id CF84E305F789
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 17:07:47 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5E8661689E7
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 13:57:09 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 9B60C7A192A
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 14:06:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5E17C2135A5;
-	Mon,  3 Mar 2025 13:56:57 +0000 (UTC)
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4823213E67;
+	Mon,  3 Mar 2025 14:07:16 +0000 (UTC)
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AE55A212FB3
-	for <linux-kernel@vger.kernel.org>; Mon,  3 Mar 2025 13:56:52 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C2022212B0A;
+	Mon,  3 Mar 2025 14:07:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741010214; cv=none; b=rjUtt5D61v7K7jD5pYLLJ7yGuUSOECtbqS5G2r5c58NhjDz4Cm3lELyG2nVfzrs9+pip+J/f2ntgkVzNJ5qKhhGVcGRDSluRT+Pi3GFo+imRXWjZDny0NlwcZb27B8q7cNjq69U6qLVUZD5zQSe+l7Ah8V3CXaJCJSpgP2dcPjI=
+	t=1741010833; cv=none; b=W5RfAskR4c/NWRZXTbpajebB8fj/kqRMX0LPtY5cq9uxrQiVy/IKp1HaLxWBv0mRcYhvQ5woKtFOO+1Fuj4lHtpY//ekSNn+NWtWqENck5bEpC0ImqJcf39WCTEWDl1qNWAfhg4lBaa1WtuloyFKt9c4tS6Nq8pGGsfXoM4PAmI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741010214; c=relaxed/simple;
-	bh=Oul6vhkXR4va+z/+WhoZ0xRll3TSdgvTz5RPoDjs9Do=;
+	s=arc-20240116; t=1741010833; c=relaxed/simple;
+	bh=lpis/SLy0ij+CNsW36P4QCLyGtfJ/WP7YKd97ynHmys=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=h6UwhjttP03X/m0cbOEZB9e47i645Vf8McJxKoQPS1Alx4bU7UXefz1vwvNPJp7leip9g9LpSo/ZokNWmk0yxv9aCcX8Fbdffe0XhIbl3ZSkLqGmsqboaZTcyi3CSMvzUEfXFSWrR0Ww5bHsqUx7xh2pZIzQ6mrGjUgeblqZdwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=fQDbMs8G; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279871.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523B6x9K030846
-	for <linux-kernel@vger.kernel.org>; Mon, 3 Mar 2025 13:56:51 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	UHuL7NNx8i87z9rx+SL91u+ZQbG95A3iELLmhhDeB5A=; b=fQDbMs8Gkr0StbCH
-	j1Vag3AkItreSFPe4uNsUjhVeTQNecsBYKieSpUdfKaVQd0PtZlw/1Jr4lUh5IGo
-	OXNvHUGqFOHmD1xQ21JYyWhHwf3MFf0YkT7003hJp1kLqYQilF8sT+lbOQeQTVlo
-	1naZwUkfKUwvySmxwzRfhQWLMF4TqfdRfpmVSaKvEtIuG1EP7EccxRmWr7FYoHDB
-	KZH/PXXKzrMYykw3oFScaSuVWxjmerdjZyqArdsB1ajSpWNHp+mNJVDtLCiKOAi6
-	weFw8aXgWhGh64SNsR3uq+/EUC1FbpfokcZoTWo+sSz8BjuMgZIsDmTp7k5WIQuj
-	TrZadw==
-Received: from mail-pl1-f199.google.com (mail-pl1-f199.google.com [209.85.214.199])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453t88w4df-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 13:56:51 +0000 (GMT)
-Received: by mail-pl1-f199.google.com with SMTP id d9443c01a7336-22331df540aso135183825ad.1
-        for <linux-kernel@vger.kernel.org>; Mon, 03 Mar 2025 05:56:51 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741010210; x=1741615010;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=UHuL7NNx8i87z9rx+SL91u+ZQbG95A3iELLmhhDeB5A=;
-        b=hFsjZHfPL9X440nsUqTSVXoiz5p2MzlCPlaCgGLqAugh40MJ7DAzXU63Hno0CUEo+s
-         bJpasj4KvHvFcEFYWHU4iZYEhpM1oPSjvYqwuXgpSK48pvSc7uSBhlA36zbWKrCaUw75
-         FiywaXwMVDF1s7+AyVxAy77c5thv0VYjQJJ7HaHfASzHd5QolrOzKoJD865ENcool3DO
-         lzGGoJGAd8SBZJDcr4QoqcI0PUXmhOMmfKADq6EBF1yxQbAafBRxcIIQU8M166AHD9mE
-         Joeg+m3eypqdIoFxIRtJquQGU8KPklalG+QuGUJ1yz/oDipDKw6Gs8S/QowC+tcDyWtz
-         qtAg==
-X-Forwarded-Encrypted: i=1; AJvYcCXtN+qgcmVGfwFb0lIr9uLD1Ad23XRGDUnoCZBVreWzIgOw0ZBiStl71HegG2H7KqQHxOp4keNSFHF2BXE=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxWszmVgKE+VhARvVAmcR25upto0k4CWJxoVZhJsDAPUj/4ilDg
-	MTH9KZzokShlXjeGnGVLI3Crd6ipjKW8fqwcY4T6Jv2Q6AP2FmP8q4uimrQrY9dZQOHxJ8BIlt8
-	iubHco72r8ad/cjdJcQo06RLAQIBxP0W4gljxfCyCucF3j7Mej+FhPJgZqbGXFF4=
-X-Gm-Gg: ASbGncsXsGUNcSVF+6DFKJ147+OZXzv0HDJnxme92avRGw89TblxxrmirfpHsyCo7ZI
-	ATIiJM0FJQ74mlD9nD6/BVHdem0e2GfXHcKBY1N8IkU9FrP2QABnEsXzeTJQazW+sjH/23yP5E+
-	yRHQrA6IkqHcD+ZE/+A8whHVYlPG+95vcet2HSebj7NUbbICAUX08XtCa7zaAGBlBYL5lu5foOJ
-	53oRdxdqS5/miE99Xj2wXqFeNZdIMv02GbybljESaMZH/I8whop/BVdlmwnNZgsNwkhl9gHEWyB
-	BDqVbl0xMrJ8xlB2craxhIxL2D08GJOgHoKxhNKWAw==
-X-Received: by 2002:a05:6a00:1895:b0:736:3be3:3d76 with SMTP id d2e1a72fcca58-7363be33e3emr9864320b3a.17.1741010208484;
-        Mon, 03 Mar 2025 05:56:48 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IEUiUadUO0TJSNEbJpg+ohvZHRFRRVAl7dtA6ZreELy4A3DZdvPJ97GRjZfVWJgUCtgDVhYkw==
-X-Received: by 2002:a05:6a00:1895:b0:736:3be3:3d76 with SMTP id d2e1a72fcca58-7363be33e3emr9864180b3a.17.1741010206632;
-        Mon, 03 Mar 2025 05:56:46 -0800 (PST)
-Received: from [10.218.7.34] ([202.46.22.19])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7363d010101sm4064636b3a.115.2025.03.03.05.56.39
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Mon, 03 Mar 2025 05:56:46 -0800 (PST)
-Message-ID: <449712bb-961e-4ccf-bf74-50dd55315abc@oss.qualcomm.com>
-Date: Mon, 3 Mar 2025 19:26:37 +0530
+	 In-Reply-To:Content-Type; b=X8H5C1QK4ZnC76a/vdQeWMSg9MOrd3nzaFZXjrfFgLssOrWdks4SCA5qodA5mhNWvx6cf5rb/x2Rta34zm2/ZpdihWFqZmreiwwLOQ10K1M7S8+H0bLf/5hEegeEycUFuXL3nvrVyPolG9fMWUqQmZkuJcOMEgeA4NjxDd5CKQQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lyqxOXPF; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id AEF78C4CEE6;
+	Mon,  3 Mar 2025 14:07:03 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741010833;
+	bh=lpis/SLy0ij+CNsW36P4QCLyGtfJ/WP7YKd97ynHmys=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=lyqxOXPFsF9x17qZNcmlg/aMg5WJcN3dEmFdqOUp5TKVY2X9vYws8CtZpeYV15+xI
+	 yb6xay/8CPcpToj+RmlgZ7fStV71XpSEtKtxmGFNz1pHa6QaL0zwgiAG86jJ98ZjnL
+	 LivAuVHNTYJpNEd6zv/A4I5FTFMD/FYWfIc3LUipTFR3lDjRhdeZfu+NigDKfa981O
+	 HVSdH3bcPmFY8rKBgN3p+FKcfvJ+Apx+VA4r3z9kl2IDcGLFMjLH2gJn1wsY85T1sf
+	 pH58Mald0DF0MaX0hznMWrCg72fFrNTZ4+vemz+ODOBB5V97qeQhkoJBWQ7VcTgFPC
+	 XpAAtoqRP6hxQ==
+Message-ID: <16e6d822-97c1-4dcf-b538-04b6d8881d32@kernel.org>
+Date: Mon, 3 Mar 2025 15:07:00 +0100
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -137,100 +98,113 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH V5 4/5] iio: adc: Add support for QCOM PMIC5 Gen3 ADC
-To: Jonathan Cameron <jic23@kernel.org>
-Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org,
-        agross@kernel.org, andersson@kernel.org, dmitry.baryshkov@linaro.org,
-        konradybcio@kernel.org, daniel.lezcano@linaro.org, sboyd@kernel.org,
-        amitk@kernel.org, thara.gopinath@gmail.com, lee@kernel.org,
-        rafael@kernel.org, subbaraman.narayanamurthy@oss.qualcomm.com,
-        david.collins@oss.qualcomm.com, anjelique.melendez@oss.qualcomm.com,
-        quic_kamalw@quicinc.com, rui.zhang@intel.com, lukasz.luba@arm.com,
-        lars@metafoo.de, devicetree@vger.kernel.org,
-        linux-arm-msm@vger.kernel.org, linux-iio@vger.kernel.org,
-        linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-        cros-qcom-dts-watchers@chromium.org, quic_skakitap@quicinc.com,
-        neil.armstrong@linaro.org
-References: <20250131183242.3653595-1-jishnu.prakash@oss.qualcomm.com>
- <20250131183242.3653595-5-jishnu.prakash@oss.qualcomm.com>
- <20250201121134.53040aae@jic23-huawei>
- <9e14f58f-e345-4bae-b14e-de25fc28d9a8@oss.qualcomm.com>
- <20250301032519.16e77288@jic23-huawei>
+Subject: Re: [PATCH v5 09/21] dt-bindings: clock: thead: Add GPU clkgen reset
+ property
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
+ wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
+ palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
+ matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
+ mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
+ ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
+ m.szyprowski@samsung.com, linux-clk@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
+ linux-pm@vger.kernel.org
+References: <20250219140239.1378758-1-m.wilczynski@samsung.com>
+ <CGME20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639@eucas1p2.samsung.com>
+ <20250219140239.1378758-10-m.wilczynski@samsung.com>
+ <20250221-imaginary-ebony-macaque-aace8d@krzk-bin>
+ <7296ddb3-2096-4414-bfa4-28fc5bb8ec86@samsung.com>
+ <df625379-b472-45d9-87a4-8bf52a87ea1e@kernel.org>
+ <4deba4d6-b82d-4e57-bd27-f4e1523b38ea@samsung.com>
+From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
-From: Jishnu Prakash <jishnu.prakash@oss.qualcomm.com>
-In-Reply-To: <20250301032519.16e77288@jic23-huawei>
+Autocrypt: addr=krzk@kernel.org; keydata=
+ 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 fv0=
+In-Reply-To: <4deba4d6-b82d-4e57-bd27-f4e1523b38ea@samsung.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 7bit
-X-Proofpoint-ORIG-GUID: NX1dR6-oc6tpjPo9egELKQAiOGfJge2p
-X-Proofpoint-GUID: NX1dR6-oc6tpjPo9egELKQAiOGfJge2p
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-03_07,2025-03-03_01,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 bulkscore=0 suspectscore=0
- impostorscore=0 spamscore=0 phishscore=0 lowpriorityscore=0 malwarescore=0
- priorityscore=1501 mlxlogscore=793 mlxscore=0 clxscore=1015 adultscore=0
- classifier=spam adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
- definitions=main-2503030106
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6fzS2CjhzG0tR
+X-ITU-Libra-ESVA-ID: 4Z6g9951k5zG1ZB
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741707685.011@hDXvZ0YVQCdMnpGM8md6mQ
+X-ITU-Libra-ESVA-Watermark: 1741708197.40623@DnLcloRqI0RUXQFmi5gM6w
 X-ITU-MailScanner-SpamCheck: not spam
 
-Hi Jonathan,
-
-On 3/1/2025 8:55 AM, Jonathan Cameron wrote:
-> On Wed, 26 Feb 2025 14:22:05 +0530
-> Jishnu Prakash <jishnu.prakash@oss.qualcomm.com> wrote:
+On 03/03/2025 10:55, Michal Wilczynski wrote:
 > 
-...
->>>> +void adc5_take_mutex_lock(struct device *dev, bool lock)
->>>> +{
->>>> +	struct iio_dev *indio_dev = dev_get_drvdata(dev->parent);
->>>> +	struct adc5_chip *adc = iio_priv(indio_dev);
->>>> +
->>>> +	if (lock)
->>>> +		mutex_lock(&adc->lock);
->>>> +	else
->>>> +		mutex_unlock(&adc->lock);
->>>> +}
->>>> +EXPORT_SYMBOL_NS_GPL(adc5_take_mutex_lock, "QCOM_SPMI_ADC5_GEN3");  
+> 
+> On 3/3/25 09:52, Krzysztof Kozlowski wrote:
+>> On 03/03/2025 09:42, Michal Wilczynski wrote:
+>>>>> +allOf:
+>>>>> +  - if:
+>>>>> +      properties:
+>>>>> +        compatible:
+>>>>> +          contains:
+>>>>> +            const: thead,th1520-clk-vo
+>>>>> +    then:
+>>>>> +      required:
+>>>>> +        - resets
+>>>>
+>>>> else:
+>>>> ? What's there? Also reset or no?
 >>>
->>> This is potentially going to make a mess for sparse.  Might be better to split
->>> it in two so you can had __acquires and __releases markings.
->>>
->>> If you don't get any warnings with sparse then I guess we are fine.
->>>   
->>
->> I had tried building with sparse in my local workspace and I did not get any errors in this file. Do you think I can keep this unchanged?
->> Also, would any kernel bots run sparse later on this patch, if it's not already done?
+>>> If the else: case the reset is not required, as it's only required in
+>>> the th1520clk-vo, so there is no need for else:.
+>> That's not the question. I know it is not required, I can read code.
+>> What is in the hardware?
 > 
-> Problems around this tend to turn up a bit late in build tests as requires
-> particular combinations of features.  Here you may not see problems because
-> sparse can't see far enough to understand the locking.
-> 
-> I would still split this into lock / unlock as that matches better
-> with common syntax for locks.  We can then add markings
-> as necessary later.
-> 
+> I noticed the register SW_GMAC1_GRST_N in section 5.4.2.2.66 of the
+> manual (GMAC1_SWRST [2]), which indicates a GMAC1 CLKGEN soft reset.
+> Although this could theoretically reset part of the AP clock, it is not
+> actually used by the AP clock driver or needed for initialization.
 
-OK, I can split this into separate lock and unlock functions.
-And for markings, you mean I should add these:
+Thanks, this answers here.
 
-    __acquires(&adc->lock)
-    __releases(&adc->lock)
-
-under the lock and unlock functions respectively?
-
-Thanks,
-Jishnu
-
->>>> +/*  
->>>
->>> Looks like valid kernel doc, so /** and check it builds fine
->>> with the kernel-doc script.
->>>   
-
+Best regards,
+Krzysztof
 
 
