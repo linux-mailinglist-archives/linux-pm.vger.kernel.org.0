@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-23283-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23284-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id D4C77A4BD9B
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:11:33 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4EBA7A4BD94
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:11:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9EAA417115B
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:09:19 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 50B97188DCCA
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:09:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A952B1F63CD;
-	Mon,  3 Mar 2025 11:07:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 723E31F7069;
+	Mon,  3 Mar 2025 11:07:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="iiNjCRxd"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UqrBbBBo"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E7A1C1F584F;
-	Mon,  3 Mar 2025 11:07:27 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEE831F585B;
+	Mon,  3 Mar 2025 11:07:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741000049; cv=none; b=qDtUC3r4gRlzBCp8DRGZbA+jiN0HVM6LXXZWjOfUD2pgQAwTAgelyD770B/VPn0AVcOAGPXdr1h192aZSEkFrRvEOYCkEfODZ8B5RbnbJKXXmMIJg5qZ0k6nqWxqWRPJjKOQRb87AduMUKKXsGiniyMuVCP/PlHA0+uQy4l37ig=
+	t=1741000052; cv=none; b=F0IQu5WlihaPTZueXpEx4KuE68pUMH2H/a1HFXuXistoXqF8vZvOzCHqVFp54M8aRlwLcnKGCeEnt29ps91xBpj6fKL0lKQkCnpICaZrRvNghqlFXLk2TEuRMfpYooKx6krh6sgkIxGhqRHJ5+Rv7jL7QFZ73dbxluq7TpyNUUM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741000049; c=relaxed/simple;
-	bh=jb48D3BzBib7BYPClrRzu86QT3T/90FWCUr2WKd5IA8=;
+	s=arc-20240116; t=1741000052; c=relaxed/simple;
+	bh=vFfigEl9JtFE8tbSRW6zvkOLxEZfMTm7xZiNuaYSepk=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=d0wK7sBxjN3KBTTh/ebwfKxX0g/DGjuXs0PxcNN025SQicLoa79EKAxXsXbp4tzLOcRaH3x3ZUKlWwT72PC0b/5pGjMVt8wEL6+u4DnZb+o8h44kU9abid22ai48Yy1gTZLBCjyDhzf9ggckzRw5cnJmsFJUrCD8e+u8yvJ+uj0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=iiNjCRxd; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:Content-Type; b=Me8miSOpNwTcIT+OmZmFjIsi/0UNn9FeB9RT+bR1+EAUccWnAzKy8Z+BRU8adY8FqHdDCueVkyO0RT3oWGRhFSfm+NdC0zRFHcEMWC4Wl7QqIoOP7hM9z1YSELpVtLjmNXlLlBIbqrlZoBpsgsdXqGwsWkPx7o8p59aLbBO3+QM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=UqrBbBBo; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1741000046;
-	bh=jb48D3BzBib7BYPClrRzu86QT3T/90FWCUr2WKd5IA8=;
+	s=mail; t=1741000049;
+	bh=vFfigEl9JtFE8tbSRW6zvkOLxEZfMTm7xZiNuaYSepk=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=iiNjCRxd4KEx2kt3SU9co2OMsJUbKjvZdxf1iAWuTP0eclA0fI0t4n3hb3ikRUhDL
-	 9Qs8Xnj3UcMM2hj3wxEQrS2RLdAr8SwwVhG7El11tYD9p+mYQytowhICs7KrtKiUMe
-	 Q3X2BcC1Kay8DFpD6lCa1wMDIEb3ZJ5uI4zdEqHZtQ6y68u0HYUbBvyMA+/Op0B4Bi
-	 NJK41tAcxvycpaiRim9UXyC/GNpdxWHeF32iqSL4pbwryUjuDNAf6QDK/FgA94Ty1T
-	 3gWSiuvHY2oqj5737l4RGGkjGABnMf2fPO6ZwnZevCyMRQatHu87mwTZlxEA2lPlRW
-	 iIeMqDi5+lqkg==
+	b=UqrBbBBoRzhmFeT7N9CYWxuGC7e0mvHYcx4+KjVzEwmoaZYsp8OVRZoFxcIaUBOPD
+	 OrQZTJuPbzuXayGOVKSoLxCSPKYP0zpC12bTZtL4Zz8vsCP1Bm0pUfNnxDqfWudaX3
+	 7K40ONJS8mBsPTvRp2QAaHZv+TImuv6sq6FkO6/MexVeQ2S/COe8+OS5LlpRhgBATy
+	 ibOfWr33zSuMvXPg4WYcMcF2mQWAkXiex4wczG3beVqw+MNXO5PTjItmHNhVzTwJRs
+	 3lElGWMTpCvIpOxFWmmwV3BQuLthKSxqVxwPc0gZHekTAYP2D3gLmogRtr8Cb1Ct/2
+	 T29tloQ5HAcQg==
 Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
 	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id AE67317E0881;
-	Mon,  3 Mar 2025 12:07:24 +0100 (CET)
-Message-ID: <bea223a0-505e-473b-ac00-fc311f12a9a6@collabora.com>
-Date: Mon, 3 Mar 2025 12:07:24 +0100
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id DC24717E068F;
+	Mon,  3 Mar 2025 12:07:27 +0100 (CET)
+Message-ID: <40c421e1-efc4-492a-9e48-077a95509a18@collabora.com>
+Date: Mon, 3 Mar 2025 12:07:27 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,8 +57,8 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 07/20] ASoC: mediatek: mt6359-accdet: Drop dead code
- for EINT/GPIO IRQ handling
+Subject: Re: [PATCH v2 08/20] ASoC: mediatek: mt6359-accdet: Drop dead code
+ for EINT trigger setting
 To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
  Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -73,19 +73,16 @@ Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
  linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
  linux-pm@vger.kernel.org
 References: <20250302-mt6359-accdet-dts-v2-0-5bd633ee0d47@collabora.com>
- <20250302-mt6359-accdet-dts-v2-7-5bd633ee0d47@collabora.com>
+ <20250302-mt6359-accdet-dts-v2-8-5bd633ee0d47@collabora.com>
 From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Content-Language: en-US
-In-Reply-To: <20250302-mt6359-accdet-dts-v2-7-5bd633ee0d47@collabora.com>
+In-Reply-To: <20250302-mt6359-accdet-dts-v2-8-5bd633ee0d47@collabora.com>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
 Il 02/03/25 17:30, Nícolas F. R. A. Prado ha scritto:
-> The ACCDET supports two modes for IRQ generation: PMIC EINT or AP GPIO,
-> which in principle could be configured through a DT property. However
-> this DT property has no user nor is documented in a binding, and the
-> driver only implements the PMIC EINT case, so drop the unused code
-> intended to handle both cases.
+> None of the EINT trigger options are implemented and the DT property is
+> not described in the binding. Remove the unused code.
 > 
 > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
