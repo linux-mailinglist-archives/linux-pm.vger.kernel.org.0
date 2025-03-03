@@ -1,155 +1,122 @@
-Return-Path: <linux-pm+bounces-23303-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23304-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id BEF7FA4BFDD
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 13:08:51 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4A3C1A4C033
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 13:22:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id AD6181888330
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:08:58 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6244917005A
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:22:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 018F420E313;
-	Mon,  3 Mar 2025 12:08:46 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 93F6C210182;
+	Mon,  3 Mar 2025 12:22:09 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="JOgzba7r"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="Hu07RUWZ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f53.google.com (mail-lf1-f53.google.com [209.85.167.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CAC031FFC5D;
-	Mon,  3 Mar 2025 12:08:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C5ECA20F091;
+	Mon,  3 Mar 2025 12:22:07 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741003725; cv=none; b=i88IRjupga3xLFUMQZrrN6bL3P8maxJ73hwC5dP8uVQzr4rfcZkdLvg//wHprkBWicg02SSSivbftAK1tZMC1bp+Wd4F5CqsBCosKD21T/GS2vZPnhv9jndOlPUUNc0LPQ51w4gRZyk8oMNzM3kRsWZ4S7FRFDGsUNPkEhciwwg=
+	t=1741004529; cv=none; b=R1utBVoEgd+oVV21icNrP6j8HhX1Hvi8rH6k2pG+rIrUe8tkTXgIz+W87ELfbNIZPHGceaOhZRuq1cNOLKYwyOYw8okoI0TyPvNb7GesC4nhQSVgFuFhN4LdjyQcMIDw9ved2ddJulvaIlIz5mFTK+Pyhv8LINttuRUvYFT6m+Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741003725; c=relaxed/simple;
-	bh=LGkSTeMJSL/cH0aAMd2yE3RYQtg8Y3v4p03/JAj8MYo=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=TtQqAUozqEZcyDm0hLoeRkht4ipFtGUFOHchKwXVNReYgTuWdkYXkpcNbYGyT0mAsxfCY59FyiSrVCMdEyEWaeEEFnftTS5u85hY1ufRV28NTO3MyzWppCC8Uii+slOwW/CvOW6TmWkpyo32GkLXeT3+womADNsjthLb+SJfRjw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=JOgzba7r; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4C457C4CEE6;
-	Mon,  3 Mar 2025 12:08:45 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741003725;
-	bh=LGkSTeMJSL/cH0aAMd2yE3RYQtg8Y3v4p03/JAj8MYo=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=JOgzba7rumPUUt+3gteK8x9ZNSeO4vmIPUtBm/4n5NiPfAEtAv3KsduFjHVnRBvYP
-	 nOKDVlscMErtbUIi+bBI0VzMzpkAQHIPXoOECKx8/WIUGqxZYjHwUaXGqwyRABKmtM
-	 eAS3WHS5zm87hWMSDLJy8pBIbTsRIxCyZc4mNW/9375L8GqRPDA7O6X632u3avW3WR
-	 mKY8t5FIvStnQXapBFA2toErN72CMdMS0VLnkzij/l/n6irK+NXPlezBgLOXVgxuZt
-	 Uz0ZrSE9IHPnwUOuCiXFzgPgYABFL8qXwEG1xoNx3xytUjlp6eRzhIMVSUufLiP0Wz
-	 /4VIdlGyXpwzA==
-Received: by mail-oi1-f174.google.com with SMTP id 5614622812f47-3f66bf7602eso261605b6e.3;
-        Mon, 03 Mar 2025 04:08:45 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWQ1/NjUNCSenugMWx7zURmhseK6c1pnsQUTNwlAm7REI0/qRhz6Fyciz5IrDn0irjWkLfeq0dobDE=@vger.kernel.org, AJvYcCWSGvc2TSWxYA01ocw0xcXIvWbuwU++B7/7L2S+Cti9ZBiQhhLZidQZo+uqJzbDYxOgI/4Ymf5t/RnD6/s=@vger.kernel.org
-X-Gm-Message-State: AOJu0Ywnf84Yp9MBfH1VShA0ttlt+MHSwH5VmWAsgyi6U6ugoVjljUPI
-	A1vixVv52XlILr/GDnjutGayFnkW0meusftwDj5OTsyJn8EiNj1GvJK1sR1PyadjUKBY1fHtfSJ
-	LnQGien/BhjmoY/uMk1KCPymaqdQ=
-X-Google-Smtp-Source: AGHT+IHUr2H06n1lRN0NwMlgKxCbIFdOobcyUUosrvn5yqSQUt8nL0vKq4fIngd8cXxKK3Bb4uOrL2lghJ9judeG3LM=
-X-Received: by 2002:a05:6808:1dd9:b0:3f6:6cbc:9326 with SMTP id
- 5614622812f47-3f66cbc9559mr1342832b6e.29.1741003724512; Mon, 03 Mar 2025
- 04:08:44 -0800 (PST)
+	s=arc-20240116; t=1741004529; c=relaxed/simple;
+	bh=5XGSBkroT3NyH15c6J98n/wt9cwzqENYoyXtkNF++dU=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eeONe0NcGjeMb8208NLNidfYMxke8IreKMQnbVxl3MFmtP8shMeMeOg6mRmFZlKjvPy2BlrPdU6ZV7ahdbOgtNHQbbjNBIByT+fDIPxTA1mAcmFJZBIu76nfDmAjG4TRWbGjEj9HTAX840iLIXZXwkVQ/vftEKYlv1KZfF4TGzA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=Hu07RUWZ; arc=none smtp.client-ip=209.85.167.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f53.google.com with SMTP id 2adb3069b0e04-5493b5bc6e8so5087178e87.2;
+        Mon, 03 Mar 2025 04:22:07 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741004526; x=1741609326; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=mZmg489r6L6pRhlkbZ4niT48F2MsWO7ApxopBhoezJw=;
+        b=Hu07RUWZtAqkdAQSl4keRFYy0vjkj9XPifAsfXKIY/Kp5SdGXeS+uk7RldvKyOgJIf
+         CpPg6xGCL2o5V2hJcjRDP93eyxmJ6LYMUkDXt25220Jip6rcjIWW/tRsMsP+RY2c0sop
+         a8k0/AxgITPPKh8WODv0e4pB6L3ndCN3T3fTIps/G+oHLfqEzo588CA6dlJWoFZ/j9NU
+         56MRXRlGjEtgEQFvJf3YlP3wd5vWS4FvosI7OZ3u/Gwh+emAlo3HIQyS2YVv9b5yFuUh
+         Yj96iGFk24XJK7ymdLievxpZ7kazmJ3PPTWOlYvoJQc3VgFipKRv7C+zKvEwiPFoWjUo
+         RFUg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741004526; x=1741609326;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=mZmg489r6L6pRhlkbZ4niT48F2MsWO7ApxopBhoezJw=;
+        b=L3SZWyBEoePzMRtbz+xV980HD2ortnO73DakmWrGxgs6One6zHm5+C4tDrt0pPVp41
+         4U4MBN2Fd1JFJ8ZddnMjnJczLwWJbkrS4RmZL9FZM7C+ejpGMhM7whW5E8EXRjocZpx0
+         PkhVRXaVoZRjHLgtRVjIwHHIZxxBhW8ZeK0D8EBbpfZaI4NlhARIocDzjYuPCY5vLWLf
+         f0YslVPRxi1PKhABJZ2FNnMXeeW6NRkINBv8S6DUMutEV0Xb8KT9kfiFBrje1c0bVsBR
+         9IGDUh4P5AcSJ1hfDQOCayguD8xvwCkQWTl7zTVItbnx6YzwcmGRau0PDMk8NixOT6F3
+         xsgA==
+X-Forwarded-Encrypted: i=1; AJvYcCU0S8LVAtVIL2mOeOEIRJjpVHG4YynR/rJly0/UOfEtAlE2ckttde5neEVbkCr3xdb2v9NAmCB0KLN5HSmB@vger.kernel.org, AJvYcCVvDlwr44JLJgiwRp9Lx0weIjOl5/dBG7nF3qpFog1RNjbd/XOSxQDbBQbHuX7JzxrX7VIQ6/f651T8@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8Abtysd/qgsBvp2JDOhRaO9oR0i3cijmK9LLGVx6oEcXgi+rK
+	Lv0N2ZkGzh6daUlZebUROgD5Q7/lcwP2lkKzAs9Qgl5SWkW7ei9j
+X-Gm-Gg: ASbGncsxo+030cKcDLKUTbNUsv6l4FgOfY0QYJ2ksmNhEoqaFTvsAtl4QJc/Z1a0rHj
+	9HI3mbyK8Mz4XfLfHUfx1+TCA1qo1dK7zm8OjavFbXhBOm40byY9ks0dZEpFawWDMcINhQmS0UV
+	TOg370L5eNEHLCFxk5g3JOit5CBEZlGC/0CrHUYQ4hJDyZRTlT0MJujMgCYgOs38U94j8XMvRo/
+	T4mTYNT9mHHoRmGUe06WEGHOZozr1J3TYQXLGcXA/iIMpQad16YbZv3mZzxSswBSiiKHnI/G/iB
+	MAzC5bssiAE6mbgyfQgKOikX6rSqCfTysVc=
+X-Google-Smtp-Source: AGHT+IGTBGYosGRDbEuVZA2KP4Ij2fiTOu2dMftCCG5C+UQWTRH5Drf67iHW/KYjICrPNIIWKVuJhg==
+X-Received: by 2002:a05:6512:398e:b0:545:d70:1d1c with SMTP id 2adb3069b0e04-5494c129ce8mr5205004e87.11.1741004525723;
+        Mon, 03 Mar 2025 04:22:05 -0800 (PST)
+Received: from xeon.. ([188.163.112.51])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30b868766desm13486611fa.100.2025.03.03.04.22.04
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Mar 2025 04:22:05 -0800 (PST)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Laxman Dewangan <ldewangan@nvidia.com>
+Cc: linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] thermal: thermal-generic-adc: add temp sensor function
+Date: Mon,  3 Mar 2025 14:21:49 +0200
+Message-ID: <20250303122151.91557-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <13709135.uLZWGnKmhe@rjwysocki.net> <CAPDyKFoWeZNqODb5VdXfTEhxRJ0azSQPWhM3WCJ+iUeJ3rYQHw@mail.gmail.com>
-In-Reply-To: <CAPDyKFoWeZNqODb5VdXfTEhxRJ0azSQPWhM3WCJ+iUeJ3rYQHw@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 3 Mar 2025 13:08:32 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0htK3V2uPvqczirL9WW2Pgip00VP6xd8pqbOKvCUPhSbQ@mail.gmail.com>
-X-Gm-Features: AQ5f1JoHfqGi4iiLMoX4pE-Ttl2wrDwMHPv6jml-d3qFwq9ON_ye9RzblquNiDo
-Message-ID: <CAJZ5v0htK3V2uPvqczirL9WW2Pgip00VP6xd8pqbOKvCUPhSbQ@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] PM: sleep: Improvements of async suspend and
- resume of devices
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
-	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
-	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, 
-	Saravana Kannan <saravanak@google.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Mon, Mar 3, 2025 at 1:07=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org>=
- wrote:
->
-> On Tue, 25 Feb 2025 at 17:46, Rafael J. Wysocki <rjw@rjwysocki.net> wrote=
-:
-> >
-> > Hi Everyone,
-> >
-> > Initially, this was an attempt to address the problems described by
-> > Saravana related to spawning async work for any async device upfront
-> > in the resume path:
-> >
-> > https://lore.kernel.org/linux-pm/20241114220921.2529905-1-saravanak@goo=
-gle.com/
-> >
-> > but then I realized that it could be extended to the suspend path and
-> > used for speeding it up, which it really does.
-> >
-> > Overall, the idea is that instead of starting an async work item for ev=
-ery
-> > async device upfront, which is not very efficient because the majority =
-of
-> > those devices will not be able to make progress due to dependencies any=
-way,
-> > the async handling is only started upfront for the devices that are lik=
-ely
-> > to be able to make progress.  That is, devices without parents in the r=
-esume
-> > path and leaf devices (ie. devices without children or consumers) in th=
-e
-> > suspend path (the underlying observation here is that devices without p=
-arents
-> > are likely to have no suppliers too whereas devices without children th=
-at
-> > have consumers are not unheard of).  This allows to reduce the amount o=
-f
-> > processing that needs to be done to start with.
-> >
-> > Then, after processing every device ("async" or "sync"), "async" proces=
-sing
-> > is started for some devices that have been "unblocked" by it, which are=
- its
-> > children in the resume path or its parent and its suppliers in the susp=
-end
-> > path.  This allows asynchronous handling to start as soon as it makes s=
-ense
-> > without delaying the "async" devices unnecessarily.
-> >
-> > Fortunately, the additional plumbing needed to implement this is not
-> > particularly complicated.
->
-> Thanks for the detailed description! Overall, the approach makes
-> perfect sense to me too!
->
-> I am certainly interested to hear Saravana's thoughts around this too.
->
-> >
-> > The first two patches in the series are preparatory.
->
-> For these two, feel free to add:
->
-> Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
->
-> >
-> > Patch [3/5] deals with the resume path for all device resume phases.
-> >
-> > Patch [4/5] optimizes the "suspend" phase which has the most visible ef=
-fect (on
-> > the systems in my office the speedup is in the 100 ms range which is ar=
-ound 20%
-> > of the total device resume time).
-> >
-> > Patch [5/5] extend this to the "suspend late" and "suspend noirq" phase=
-s.
->
-> I will try to have a closer look at patch 3->5 later in the week.
+Add IIO sensor cell to thermal-generic-adc, which would benefit
+devices that use adc sensors to detect temperature and need a
+custom conversion table.
 
-Thank you and thanks for all of the other reviews!
+---
+Changes on switching from v2 to v3:
+- rephrased commit headers
+
+Changes on switching from v1 to v2:
+- documented #iio-channel-cells property
+- switched to IIO_CHAN_INFO_PROCESSED
+---
+
+Svyatoslav Ryhel (2):
+  dt-bindings: thermal: generic-adc: Add optional io-channel-cells
+    property
+  thermal: thermal-generic-adc: add temperature sensor channel
+
+ .../bindings/thermal/generic-adc-thermal.yaml |  4 ++
+ drivers/thermal/thermal-generic-adc.c         | 54 ++++++++++++++++++-
+ 2 files changed, 57 insertions(+), 1 deletion(-)
+
+-- 
+2.43.0
+
 
