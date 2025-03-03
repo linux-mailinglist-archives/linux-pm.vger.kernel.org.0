@@ -1,295 +1,228 @@
-Return-Path: <linux-pm+bounces-23329-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23331-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id CFCF2A4CA71
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 18:55:23 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 10B88A4CD37
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 22:09:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D79CB17AD8B
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 17:48:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 784713AC57A
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 21:09:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86F53215047;
-	Mon,  3 Mar 2025 17:48:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D63D423717F;
+	Mon,  3 Mar 2025 21:09:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="fR8mhTEJ"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="D9NKe91/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 89A1C210F6A;
-	Mon,  3 Mar 2025 17:48:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1BE2E22F3AB;
+	Mon,  3 Mar 2025 21:09:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741024099; cv=none; b=LmDh5fZmj9FHJMqxVbaTHOtfyT8Kd2GmQ/ZS/g2i+MLtdokzB+G5YLWEMdQAV8XPiwoiHXL9g/FdRy8OJ5WhTKzDiOBD3RBwvFMh+oRfaSCqeOrcdrXgGXDQZCoiZWayWCoRl+MX2aIoMzCjhN36bcHi/O2QduixrBbEj0/kvrk=
+	t=1741036178; cv=none; b=mqXHQ+Hpkpp0zNnkcMcMipfdIAlJKns9KFpYQ4jMxMs7RvrtggA8BAjuwSCbHiVxE6e8urHMef1NQz4HwrtMPWso5ZTVoJG0vNJW/EiSFJZ3mc2UHDmtHx5bUwgEylp/KtRnrrY8X50/HtSe+PonfX76BHYr6IlzksvHovZQzPw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741024099; c=relaxed/simple;
-	bh=iDMN4rrBceUEYXqlkKTP4RY49CeemCXZbPGm+CzxaSU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=NaksiK/J6ArPQlLJB2XStAt2ok+FaxGWMwaV8fqPgX29yBqVj2MZfdzqAniiTW5LLZvJHtf983R0DXdwDpsxHXP3q4xV3joX72xevAGmaKrB5NjQ4WHbYeT2luuyMQHmnmyFm6am1YHxa+m9UhDkTahEtV3FHnZfElDECeKmlpk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=fR8mhTEJ; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f177.google.com (mail-lj1-f177.google.com [209.85.208.177])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 484E02E0952E;
-	Mon,  3 Mar 2025 19:48:03 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1741024084;
-	bh=29fX2dP5gBQuuI6ufZPXDnCycOG07kD+08hvoj337p4=;
-	h=Received:From:Subject:To;
-	b=fR8mhTEJ6cBhcdQeftnjbNiSpG07xQHt3xIapaRQECpvYjSYUdzYaji6ufkuWnI+h
-	 +KoI1D1vUcFzghM7xEMHtJHRAUs+eJFgFRCnWvmoX4DdIRWJRE6j11p/Zj1jrLwWaS
-	 +rs1vE1MTMgu+0mNZMqGHhIG7h3MvGgWdjbd3uWc=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.177) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f177.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f177.google.com with SMTP id
- 38308e7fff4ca-30bc9cbeac1so1480741fa.1;
-        Mon, 03 Mar 2025 09:48:03 -0800 (PST)
-X-Forwarded-Encrypted: i=1;
- AJvYcCVT89V0eMzLC0NR94JU9AdgNagAFosIQxz3qO0V7EeFrv0ljcJZMgJzCiq115Gs4qIhM17V+omDEOU=@vger.kernel.org,
- AJvYcCWVYsDBK08u5jSPSIZZ+fPgI2nLaHF1DycEowMstOnfWPQA6D1MUH2KhS9Y/r+nUjB5tLnR4lKZZ9oZM/MUxsXMMpACLg==@vger.kernel.org,
- AJvYcCWvdkljjQL95mQ1Mpr1QikB1ruTAsGIie6boc9JBVoJRx84k9NALYPrvyQnoRz+UMY6fd4tWb/yVgo=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyteMHbfGC3a//fz+QlnmY7Eglx0I9DTgYkS4RpBy+MDrzthaIb
-	+vrOAuKiRKJAOr5jkei3zibxjW+3fBspKRp03zP+6qprbDGbuuJICDHaQL6GseUeHa2hTcjMhc/
-	rb9BuT9dN13tj3t+twAMLGYoqCNM=
-X-Google-Smtp-Source: 
- AGHT+IEZEd9zw1ttDmxZ7tcaRJ6KjJ2VuZRiCWUComhsmMB2kRXdYkwpwtfBc5qySPSoZvYKZvK9dueQ1j0YUkUQkKY=
-X-Received: by 2002:a2e:a9a8:0:b0:30b:c980:c5a7 with SMTP id
- 38308e7fff4ca-30bc980c98emr3691621fa.5.1741024082394; Mon, 03 Mar 2025
- 09:48:02 -0800 (PST)
+	s=arc-20240116; t=1741036178; c=relaxed/simple;
+	bh=VVV+C1MhWMZtWrSSt+g1IrvMbUXiEztZY3qDVStiZKE=;
+	h=From:Subject:Date:Message-ID:MIME-Version:Content-Type:To:CC; b=m5FyvH/VxZNCWOS8XQ7xtkmbQuw+7jx+pxosvLElwyQ85pTwYNZSBWrtFI+ssu2uNgUCEvpfhHwIGatdBqprqZO8dq13NRD42SR+xwc3RWN59HcI66Qa6VglAKcm7xtroDCvAt9hbdNr5HhYWYKbze8ZXwv7Xw6C4t1YOJzjxeE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=D9NKe91/; arc=none smtp.client-ip=205.220.180.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 523AbM8V003941;
+	Mon, 3 Mar 2025 21:09:16 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:message-id
+	:mime-version:subject:to; s=qcppdkim1; bh=bl9bPRcUABcsynBLoqWarU
+	eiwfgNhyam7E3ICj35E54=; b=D9NKe91/Nn/0oJY8SGosNGoOprTnwaPM0uTpVO
+	t5KL6iTYrgk2gFBawE2Uarv91DfIBmgmNLmk2WERSbLO88htMbb+4z7KYnkYlNDR
+	z8oRDaFJgG9lBMC1YNiUUyohrrGk63Z1b9CFWsjIyDU14ZE6KC6fPJY3oWv9ExWq
+	VzHZ2sycfua9kROZLuNOPIWaA9j5gaaRcGbBI16pwQsNcEl8s34V38N8ZTgabksb
+	xcKqo6t8n+pC1dsLKs4bhdJtpcAskDroB8gJK6vNIBexPh6ZKkF5q5KZpdpFN55G
+	5GE4L2MJkSzwBl091XB++1V7cRVc7G3pZGliGPGMeqagk7Cw==
+Received: from nasanppmta03.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 453t7hx38u-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 03 Mar 2025 21:09:16 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA03.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 523L9Fwh025482
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Mon, 3 Mar 2025 21:09:15 GMT
+Received: from hu-eberman-lv.qualcomm.com (10.49.16.6) by
+ nasanex01b.na.qualcomm.com (10.46.141.250) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
+ 15.2.1544.9; Mon, 3 Mar 2025 13:09:14 -0800
+From: Elliot Berman <quic_eberman@quicinc.com>
+Subject: [PATCH v9 0/5] Implement vendor resets for PSCI SYSTEM_RESET2
+Date: Mon, 3 Mar 2025 13:08:29 -0800
+Message-ID: <20250303-arm-psci-system_reset2-vendor-reboots-v9-0-b2cf4a20feda@oss.qualcomm.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250222161824.172511-1-lkml@antheas.dev>
- <20250222161824.172511-12-lkml@antheas.dev>
- <3781a4b0-e9e0-42cb-9393-570b3c8a6305@roeck-us.net>
-In-Reply-To: <3781a4b0-e9e0-42cb-9393-570b3c8a6305@roeck-us.net>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Mon, 3 Mar 2025 18:47:51 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwE8h86y6PDu+0zuhx-9XU2sA_K7RicH_G_aSOKU15M5vg@mail.gmail.com>
-X-Gm-Features: AQ5f1JojJsMNbYUm1sGa4LSU4e_So2GINpqdhHw_rI5pCjq56XSG2fnym_6Ppw4
-Message-ID: 
- <CAGwozwE8h86y6PDu+0zuhx-9XU2sA_K7RicH_G_aSOKU15M5vg@mail.gmail.com>
-Subject: Re: [PATCH v2 11/12] platform/x86: oxpec: Move hwmon/oxp-sensors to
- platform/x86
-To: Guenter Roeck <linux@roeck-us.net>
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
-	linux-pm@vger.kernel.org, platform-driver-x86@vger.kernel.org,
-	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
- Derek J Clark <derekjohn.clark@gmail.com>,
-	Kevin Greenberg <kdgreenberg234@protonmail.com>,
- Joshua Tam <csinaction@pm.me>,
-	Parth Menon <parthasarathymenon@gmail.com>, Eileen <eileen@one-netbook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: 
- <174102408408.24288.13177874548149470812@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIAE0axmcC/5XSy27CMBAF0F9BWdfVjN/pqv9RVZU9dooXEGqnU
+ RHi3+vQByCyCMvx4tyZKx+aEnOKpXlaHZocx1RSv61D+7BqaO2275GlUOeGAxcIqJnLG7YrlFj
+ ZlyFu3nIsceBsjNvQZ5aj7/uhMCLhglSawEBTrV2OXfo65by81nmdytDn/Sl2xOn1N4HLhQkjM
+ mCg0RtD0KKE54/PRGlLj9RvpsgfT8A9XqAQtBCKu4CzHqK5az9BUiNHJSK/8qYORv53twSJi+/
+ m056udaCU09J2t644uwrVUldUF3UIsmsJnJe3rjy7GnGpK6vb2q5u64x00d666tJd3K+a+rW6V
+ dBpBTTj6n+3/ly71NXVrZ6P1npwfKYHc+Hyxa6prpMkwUP0pGZce3YRFvdgqxutQdU5rcira/d
+ 4PH4DcpMRb+QDAAA=
+X-Change-ID: 20231016-arm-psci-system_reset2-vendor-reboots-cc3ad456c070
+To: Bjorn Andersson <andersson@kernel.org>,
+        Sebastian Reichel
+	<sre@kernel.org>, Rob Herring <robh@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>, Vinod Koul <vkoul@kernel.org>,
+        Andy Yan
+	<andy.yan@rock-chips.com>,
+        Lorenzo Pieralisi <lpieralisi@kernel.org>,
+        "Mark
+ Rutland" <mark.rutland@arm.com>,
+        Bartosz Golaszewski
+	<bartosz.golaszewski@linaro.org>,
+        Arnd Bergmann <arnd@arndb.de>, "Olof
+ Johansson" <olof@lixom.net>,
+        Catalin Marinas <catalin.marinas@arm.com>,
+        "Will
+ Deacon" <will@kernel.org>,
+        <cros-qcom-dts-watchers@chromium.org>,
+        "Krzysztof
+ Kozlowski" <krzk+dt@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>,
+        Konrad Dybcio <konradybcio@kernel.org>
+CC: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+        "Satya Durga
+ Srinivasu Prabhala" <quic_satyap@quicinc.com>,
+        Melody Olvera
+	<quic_molvera@quicinc.com>,
+        Shivendra Pratap <quic_spratap@quicinc.com>,
+        <devicetree@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <linux-arm-kernel@lists.infradead.org>,
+        Florian Fainelli
+	<florian.fainelli@broadcom.com>,
+        Stephen Boyd <swboyd@chromium.org>, <linux-pm@vger.kernel.org>,
+        <linux-arm-msm@vger.kernel.org>, Elliot Berman
+	<elliotb317@gmail.com>,
+        Elliot Berman <quic_eberman@quicinc.com>,
+        "Elliot
+ Berman" <elliot.berman@oss.qualcomm.com>,
+        Konrad Dybcio
+	<konrad.dybcio@oss.qualcomm.com>
+X-Mailer: b4 0.14.2
+X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: DeTx5hTeANAUY6axUEYreTWdozumd778
+X-Proofpoint-ORIG-GUID: DeTx5hTeANAUY6axUEYreTWdozumd778
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-03_10,2025-03-03_04,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
+ bulkscore=0 impostorscore=0 phishscore=0 spamscore=0 malwarescore=0
+ adultscore=0 suspectscore=0 mlxlogscore=775 clxscore=1011 mlxscore=0
+ lowpriorityscore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2502100000 definitions=main-2503030163
 
-On Mon, 3 Mar 2025 at 15:07, Guenter Roeck <linux@roeck-us.net> wrote:
->
-> On 2/22/25 08:18, Antheas Kapenekakis wrote:
-> > Once upon a time, the platform EC of handheld devices only
-> > controlled the fan. This is no longer the case, with the
-> > EC of OneXPlayer gaining additional functionality.
-> >
-> > As it will be beneficial from a complexity perspective
-> > to retain this driver as a single unit, move it out
-> > of hwmon, and into platform/x86.
-> >
-> > While at it, add myself to the maintainer's file.
-> >
-> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
->
-> Acked-by: Guenter Roeck <linux@roeck-us.net>
->
-> This should really have been the first patch of the series.
->
-> Guenter
+The PSCI SYSTEM_RESET2 call allows vendor firmware to define additional
+reset types which could be mapped to the reboot argument.
 
-You are right, I will try to for the V3. Hopefully its not too hairy
-to rebase the patches.
+Setting up reboot on Qualcomm devices can be inconsistent from chipset
+to chipset. Generally, there is a PMIC register that gets written to
+decide the reboot type. There is also sometimes a cookie that can be
+written to indicate that the bootloader should behave differently than a
+regular boot. These knobs evolve over product generations and require
+more drivers. Qualcomm firmwares are beginning to expose vendor
+SYSTEM_RESET2 types to simplify driver requirements from Linux.
 
-I will still keep the device additions first so they are possible to
-cherry pick to lts kernels.
+Add support in PSCI to statically wire reboot mode commands from
+userspace to a vendor reset and cookie value using the device tree. The
+DT bindings are similar to reboot mode framework except that 2
+integers are accepted (the type and cookie). Also, reboot mode framework
+is intended to program the cookies, but not actually reboot the host.
+PSCI SYSTEM_RESET2 does both. I've not added support for reading ACPI
+tables since I don't have any device which provides them + firmware that
+supports vendor SYSTEM_RESET2 types.
 
-> > ---
-> >   Documentation/hwmon/index.rst                         |  2 +-
-> >   Documentation/hwmon/{oxp-sensors.rst =3D> oxpec.rst}    |  0
-> >   MAINTAINERS                                           |  7 ++++---
-> >   drivers/hwmon/Kconfig                                 | 11 ----------=
--
-> >   drivers/hwmon/Makefile                                |  1 -
-> >   drivers/platform/x86/Kconfig                          | 11 ++++++++++=
-+
-> >   drivers/platform/x86/Makefile                         |  3 +++
-> >   drivers/{hwmon/oxp-sensors.c =3D> platform/x86/oxpec.c} | 10 ++++----=
---
-> >   8 files changed, 23 insertions(+), 22 deletions(-)
-> >   rename Documentation/hwmon/{oxp-sensors.rst =3D> oxpec.rst} (100%)
-> >   rename drivers/{hwmon/oxp-sensors.c =3D> platform/x86/oxpec.c} (98%)
-> >
-> > diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.=
-rst
-> > index 874f8fd26325..dd7a54d5f281 100644
-> > --- a/Documentation/hwmon/index.rst
-> > +++ b/Documentation/hwmon/index.rst
-> > @@ -186,7 +186,7 @@ Hardware Monitoring Kernel Drivers
-> >      nzxt-kraken3
-> >      nzxt-smart2
-> >      occ
-> > -   oxp-sensors
-> > +   oxpec
-> >      pc87360
-> >      pc87427
-> >      pcf8591
-> > diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/=
-oxpec.rst
-> > similarity index 100%
-> > rename from Documentation/hwmon/oxp-sensors.rst
-> > rename to Documentation/hwmon/oxpec.rst
-> > diff --git a/MAINTAINERS b/MAINTAINERS
-> > index a5e49d57c589..35db92380f99 100644
-> > --- a/MAINTAINERS
-> > +++ b/MAINTAINERS
-> > @@ -17629,12 +17629,13 @@ S:  Maintained
-> >   F:  drivers/mtd/nand/onenand/
-> >   F:  include/linux/mtd/onenand*.h
-> >
-> > -ONEXPLAYER FAN DRIVER
-> > +ONEXPLAYER PLATFORM EC DRIVER
-> > +M:   Antheas Kapenekakis <lkml@antheas.dev>
-> >   M:  Derek John Clark <derekjohn.clark@gmail.com>
-> >   M:  Joaqu=C3=ADn Ignacio Aramend=C3=ADa <samsagax@gmail.com>
-> > -L:   linux-hwmon@vger.kernel.org
-> > +L:   platform-driver-x86@vger.kernel.org
-> >   S:  Maintained
-> > -F:   drivers/hwmon/oxp-sensors.c
-> > +F:   drivers/platform/x86/oxpec.c
-> >
-> >   ONIE TLV NVMEM LAYOUT DRIVER
-> >   M:  Miquel Raynal <miquel.raynal@bootlin.com>
-> > diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
-> > index 4cbaba15d86e..09f7aed96d15 100644
-> > --- a/drivers/hwmon/Kconfig
-> > +++ b/drivers/hwmon/Kconfig
-> > @@ -1774,17 +1774,6 @@ config SENSORS_NZXT_SMART2
-> >
-> >   source "drivers/hwmon/occ/Kconfig"
-> >
-> > -config SENSORS_OXP
-> > -     tristate "OneXPlayer EC fan control"
-> > -     depends on ACPI_EC
-> > -     depends on X86
-> > -     help
-> > -             If you say yes here you get support for fan readings and =
-control over
-> > -             OneXPlayer handheld devices. Only OneXPlayer mini AMD han=
-dheld variant
-> > -             boards are supported.
-> > -
-> > -             Can also be built as a module. In that case it will be ca=
-lled oxp-sensors.
-> > -
-> >   config SENSORS_PCF8591
-> >       tristate "Philips PCF8591 ADC/DAC"
-> >       depends on I2C
-> > diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
-> > index b7ef0f0562d3..0edb08824b17 100644
-> > --- a/drivers/hwmon/Makefile
-> > +++ b/drivers/hwmon/Makefile
-> > @@ -181,7 +181,6 @@ obj-$(CONFIG_SENSORS_NTC_THERMISTOR)      +=3D ntc_=
-thermistor.o
-> >   obj-$(CONFIG_SENSORS_NZXT_KRAKEN2) +=3D nzxt-kraken2.o
-> >   obj-$(CONFIG_SENSORS_NZXT_KRAKEN3) +=3D nzxt-kraken3.o
-> >   obj-$(CONFIG_SENSORS_NZXT_SMART2) +=3D nzxt-smart2.o
-> > -obj-$(CONFIG_SENSORS_OXP) +=3D oxp-sensors.o
-> >   obj-$(CONFIG_SENSORS_PC87360)       +=3D pc87360.o
-> >   obj-$(CONFIG_SENSORS_PC87427)       +=3D pc87427.o
-> >   obj-$(CONFIG_SENSORS_PCF8591)       +=3D pcf8591.o
-> > diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfi=
-g
-> > index 0258dd879d64..4531b20c6b30 100644
-> > --- a/drivers/platform/x86/Kconfig
-> > +++ b/drivers/platform/x86/Kconfig
-> > @@ -1186,6 +1186,17 @@ config SEL3350_PLATFORM
-> >         To compile this driver as a module, choose M here: the module
-> >         will be called sel3350-platform.
-> >
-> > +config OXP_EC
-> > +     tristate "OneXPlayer EC platform control"
-> > +     depends on ACPI_EC
-> > +     depends on X86
-> > +     help
-> > +             Enables support for the platform EC of OneXPlayer and AOK=
-ZOE
-> > +             handheld devices. This includes fan speed, fan controls, =
-and
-> > +             disabling the default TDP behavior of the device. Due to =
-legacy
-> > +             reasons, this driver also provides hwmon functionality to=
- Ayaneo
-> > +             devices and the OrangePi Neo.
-> > +
-> >   endif # X86_PLATFORM_DEVICES
-> >
-> >   config P2SB
-> > diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makef=
-ile
-> > index e1b142947067..f64a191c1162 100644
-> > --- a/drivers/platform/x86/Makefile
-> > +++ b/drivers/platform/x86/Makefile
-> > @@ -153,3 +153,6 @@ obj-$(CONFIG_WINMATE_FM07_KEYS)           +=3D winm=
-ate-fm07-keys.o
-> >
-> >   # SEL
-> >   obj-$(CONFIG_SEL3350_PLATFORM)              +=3D sel3350-platform.o
-> > +
-> > +# OneXPlayer
-> > +obj-$(CONFIG_OXP_EC)         +=3D oxpec.o
-> > \ No newline at end of file
-> > diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/platform/x86/oxpec.c
-> > similarity index 98%
-> > rename from drivers/hwmon/oxp-sensors.c
-> > rename to drivers/platform/x86/oxpec.c
-> > index b5ba863a762a..51845aae8a44 100644
-> > --- a/drivers/hwmon/oxp-sensors.c
-> > +++ b/drivers/platform/x86/oxpec.c
-> > @@ -1,11 +1,8 @@
-> >   // SPDX-License-Identifier: GPL-2.0+
-> >   /*
-> > - * Platform driver for OneXPlayer, AOKZOE, AYANEO, and OrangePi Handhe=
-lds
-> > - * that expose fan reading and control via hwmon sysfs.
-> > - *
-> > - * Old OXP boards have the same DMI strings and they are told apart by
-> > - * the boot cpu vendor (Intel/AMD). Of these older models only AMD is
-> > - * supported.
-> > + * Platform driver for OneXPlayer and AOKZOE devices. For the time bei=
-ng,
-> > + * it also exposes fan controls for AYANEO, and OrangePi Handhelds via
-> > + * hwmon sysfs.
-> >    *
-> >    * Fan control is provided via pwm interface in the range [0-255].
-> >    * Old AMD boards use [0-100] as range in the EC, the written value i=
-s
-> > @@ -16,6 +13,7 @@
-> >    *
-> >    * Copyright (C) 2022 Joaqu=C3=ADn I. Aramend=C3=ADa <samsagax@gmail.=
-com>
-> >    * Copyright (C) 2024 Derek J. Clark <derekjohn.clark@gmail.com>
-> > + * Copyright (C) 2025 Antheas Kapenekakis <lkml@antheas.dev>
-> >    */
-> >
-> >   #include <linux/acpi.h>
->
+Previous discussions around SYSTEM_RESET2:
+- https://lore.kernel.org/lkml/20230724223057.1208122-2-quic_eberman@quicinc.com/T/
+- https://lore.kernel.org/all/4a679542-b48d-7e11-f33a-63535a5c68cb@quicinc.com/
+
+Signed-off-by: Elliot Berman <quic_eberman@quicinc.com>
+
+Changes in v9:
+- Don't fallback to architecturally defined resets from Lorenzo.
+- Link to v8: https://lore.kernel.org/r/20241107-arm-psci-system_reset2-vendor-reboots-v8-0-e8715fa65cb5@quicinc.com
+
+Changes in v8:
+- Code style nits from Stephen
+- Add rb3gen2
+- Link to v7: https://lore.kernel.org/r/20241028-arm-psci-system_reset2-vendor-reboots-v7-0-a4c40b0ebc54@quicinc.com
+
+Changes in v7:
+- Code style nits from Stephen
+- Dropped unnecessary hunk from the sa8775p-ride patch
+- Link to v6: https://lore.kernel.org/r/20241018-arm-psci-system_reset2-vendor-reboots-v6-0-50cbe88b0a24@quicinc.com
+
+Changes in v6:
+- Rebase to v6.11 and fix trivial conflicts in qcm6490-idp
+- Add sa8775p-ride support (same as qcm6490-idp)
+- Link to v5: https://lore.kernel.org/r/20240617-arm-psci-system_reset2-vendor-reboots-v5-0-086950f650c8@quicinc.com
+
+Changes in v5:
+- Drop the nested "items" in prep for future dtschema tools
+- Link to v4: https://lore.kernel.org/r/20240611-arm-psci-system_reset2-vendor-reboots-v4-0-98f55aa74ae8@quicinc.com
+
+Changes in v4:
+- Change mode- properties from uint32-matrix to uint32-array
+- Restructure the reset-types node so only the restriction is in the
+  if/then schemas and not the entire definition
+- Link to v3: https://lore.kernel.org/r/20240515-arm-psci-system_reset2-vendor-reboots-v3-0-16dd4f9c0ab4@quicinc.com
+
+Changes in v3:
+- Limit outer number of items to 1 for mode-* properties
+- Move the reboot-mode for psci under a subnode "reset-types"
+- Fix the DT node in qcm6490-idp so it doesn't overwrite the one from
+  sc7820.dtsi
+- Link to v2: https://lore.kernel.org/r/20240414-arm-psci-system_reset2-vendor-reboots-v2-0-da9a055a648f@quicinc.com
+
+Changes in v2:
+- Fixes to schema as suggested by Rob and Krzysztof
+- Add qcm6490 idp as first Qualcomm device to support
+- Link to v1: https://lore.kernel.org/r/20231117-arm-psci-system_reset2-vendor-reboots-v1-0-03c4612153e2@quicinc.com
+
+Changes in v1:
+- Reference reboot-mode bindings as suggeted by Rob.
+- Link to RFC: https://lore.kernel.org/r/20231030-arm-psci-system_reset2-vendor-reboots-v1-0-dcdd63352ad1@quicinc.com
+
+---
+Elliot Berman (5):
+      dt-bindings: arm: Document reboot mode magic
+      firmware: psci: Read and use vendor reset types
+      arm64: dts: qcom: qcm6490-idp: Add PSCI SYSTEM_RESET2 types
+      arm64: dts: qcom: qcs6490-rb3gen2: Add PSCI SYSTEM_RESET2 types
+      arm64: dts: qcom: sa8775p-ride: Add PSCI SYSTEM_RESET2 types
+
+ Documentation/devicetree/bindings/arm/psci.yaml |  43 ++++++++++
+ arch/arm64/boot/dts/qcom/qcm6490-idp.dts        |   7 ++
+ arch/arm64/boot/dts/qcom/qcs6490-rb3gen2.dts    |   7 ++
+ arch/arm64/boot/dts/qcom/sa8775p-ride.dtsi      |   7 ++
+ arch/arm64/boot/dts/qcom/sa8775p.dtsi           |   2 +-
+ arch/arm64/boot/dts/qcom/sc7280.dtsi            |   2 +-
+ drivers/firmware/psci/psci.c                    | 105 ++++++++++++++++++++++++
+ 7 files changed, 171 insertions(+), 2 deletions(-)
+---
+base-commit: ffd294d346d185b70e28b1a28abe367bbfe53c04
+change-id: 20231016-arm-psci-system_reset2-vendor-reboots-cc3ad456c070
+
+Best regards,
+-- 
+Elliot Berman <elliot.berman@oss.qualcomm.com>
+
 
