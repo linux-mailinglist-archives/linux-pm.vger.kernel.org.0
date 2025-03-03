@@ -1,48 +1,79 @@
-Return-Path: <linux-pm+bounces-23258-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23259-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id D3484A4B948
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 09:28:56 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id AC360A4B93A
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 09:27:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 758393B1EAA
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 08:26:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4019218873ED
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 08:27:11 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1322A1F0992;
-	Mon,  3 Mar 2025 08:24:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 12ADA1EF0B2;
+	Mon,  3 Mar 2025 08:26:57 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AitvrlnU"
+	dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b="Lhp5eRfD"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com [209.85.218.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9A31EF389;
-	Mon,  3 Mar 2025 08:24:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 25F5D19D092
+	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 08:26:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740990299; cv=none; b=BZ3grjqNfFuijCbUUrUNVmLR71XdoJgJ7LX29el8m42jINd4RKoC+xgoUtzH5fj/PL+S3qW+4NElSeAJR1Ki1f8ehgGSvIWi/AMKAUC0p6KEQKM8yC3mAtyeCxUPvhYN0Krn1/b3LB8guXM0dwjIhHuoFM5fD/gC15JTMaxzDao=
+	t=1740990417; cv=none; b=rjCHeqG/ts9PKJ70YOwRXZfc9MyMRYijDNCDy93UUq3pA4eOwQw/g4fC4GF8o/oucTyuMhq6CuYizcZQnPO96KTg34CCVtVb21k4fyFA5bACW6bo8Gean33t6nvD/8xhRKMfthvEBw6JTFY9YG9oa2lpojZ7z27tMHI3/br7hCM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740990299; c=relaxed/simple;
-	bh=oDZLgjN7IToV0/+diks17qyXPqajN4Spi1ShjEZES1I=;
+	s=arc-20240116; t=1740990417; c=relaxed/simple;
+	bh=lJXPyymC+Bn7eNg7QGwNenIBMEiR5kuGsl3f2E+vwL0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=TlnCBB6azUxa2bn/CV5qZ9KBoiJyo2K+G0+mxEvzXbBw20Pe5VUwMHYfKFxgk3+wuR2FQYLzbp74h6wdYVTeXx69OA/W+r5PsClXMDMgqIrTowS73pQ3SnJSupfVtav33jaH2LYH106LE5jVT5mqEdCDgMnBOnG8fkQRcXzEZqc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AitvrlnU; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B907C4CED6;
-	Mon,  3 Mar 2025 08:24:55 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740990298;
-	bh=oDZLgjN7IToV0/+diks17qyXPqajN4Spi1ShjEZES1I=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=AitvrlnUrB65mhIOmclW3UtpdRhY3icPAx40PgkXb+pt5NFpLNgtfAPYolPIjqAmJ
-	 vEcZEN0K9XQ3bzeTsS5zPfIU7CPCMHy7bgRt7COHqJEE38y5feBV4CYiK+G0qJaqy3
-	 fYbCQYJOyBJzagc06mkC+Q69tD3sWkHlFiMWCgFmyXSMOKXUyOnNbcqyPMbBpZVfGu
-	 STgnDuKjXMC0/CM7rYuxPygpqfPx1N6DOpC6xeQipPfBrbSc850vg4XSfUx9MGpojM
-	 WlmySuMTY3CipB+mFWMHyQ2SGtx8h7VgZ77oN2CsDzbYnw7hD7rXqPR86M6BvNWMQg
-	 0/PJt8WqDUaSg==
-Message-ID: <f15fe8bf-1114-416c-8a3a-a0addcb0d5a7@kernel.org>
-Date: Mon, 3 Mar 2025 09:24:53 +0100
+	 In-Reply-To:Content-Type; b=rQ5L69tbDCTbIW3bk5e2FXd4HXO/I9DJSdD1Pj+sdjhw6qgcyEk63mjrcwR1B5zJa7MEdksLAXu6nOMxG8zqXsAzIUW6GIPpJIgOiJbBNbDMmG7KdXchXX247iyYMyVOefgm+tcQH+KFbRtvolUOCb7QbYYWaXmCfo+L0iBc3yQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev; spf=pass smtp.mailfrom=tuxon.dev; dkim=pass (2048-bit key) header.d=tuxon.dev header.i=@tuxon.dev header.b=Lhp5eRfD; arc=none smtp.client-ip=209.85.218.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=tuxon.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=tuxon.dev
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-abf3cf3d142so311042666b.2
+        for <linux-pm@vger.kernel.org>; Mon, 03 Mar 2025 00:26:53 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=tuxon.dev; s=google; t=1740990412; x=1741595212; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=BD0ged1tbWk7V8+0mBgsPRbGV+NS/Ji1P1tciZQV6bE=;
+        b=Lhp5eRfDH8wGcAYGfwM89OO+e8ZKEvJ8G30YTmuWKwp3UwHrBWUElxio4311xTFaJZ
+         dfibFmO7LQnho+Rwu8SoiCWi3y0BcDd8CQwttwW4XbP1kRxVEeFw7VkauJymrzUupTY2
+         ayMGbkBrgQL/puxu8MZne/R5KP6Dj3CuMceUAXWke2RtcXJMDl64/OBDylZpKTZNK1kG
+         IXaKee8r5vtGMxUEICWpLi6VGe6FaJbuSVnCDrjpxKlzJqx1skg27aC0NvK1Rwplz8jl
+         OkPgh4AkdndEYYAwrB0H4j2k2TFAS63K0KqhSygfYsVH5yAG8bMDPDMo2r1aoZRtWDji
+         2+Hg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1740990412; x=1741595212;
+        h=content-transfer-encoding:in-reply-to:content-language:from
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=BD0ged1tbWk7V8+0mBgsPRbGV+NS/Ji1P1tciZQV6bE=;
+        b=Jj2BNBC1Sj8u18WhgqRVDJmW0PHfrCJ5mps6AKpOX2Ca5XdTdz1tmOE4taSVIwKax4
+         nxF/j+Pc8v2WRAJuknBAOlxqg8VyNKwmcj5PG/lxvSimLzoEMxJFKXXIoH0e8WPhpGq4
+         fabjTUxJLe5UmZpnXeisiQqRFa6tjFxX4wXbqATpolTDHX94N7+W/IbfMN4lpO7PzgdI
+         CQsq2fxeRDxxJ2IRxCYvzm1rkMw8XuXTMh9vGI/OxYFRPyZuXUA1RBw0AJVF89SDLTBy
+         ajbP8gJ8SL9ewL2l8eGF687hVs9ucd34+i/OAGz7uTjE1zh5F89hYfO/CBmuHbA+UGRb
+         Dq6g==
+X-Forwarded-Encrypted: i=1; AJvYcCXoOMKY7TWFKd+GwztLwUgh5uyXkFKSE0CeZ4S3URq75NODKppt0j2A4HKoJnAR3WxAE5sodP3OkQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzc7K8OfFzRl5YPRYjuhmunxZQb+WPGkYNgzPQU5mVjMgJ44DSm
+	FQ0/ZCmT73BgVwDBqHJgRmuhNKBFFjhrTEugehLgfXsLb/CUYWq3uspXH4f5G4w=
+X-Gm-Gg: ASbGncuCLxoYntWM5E95fisYNP5dGLfJcmH5kDhHhBgEI/s6TGTheSMH/tj19Zh0K40
+	GItjONwR3SKvdGhQJh6H9RLEJzQVZKv8vQvanFgClADmMH1qNZbZU2t8HL8O+77tswadrt3UHL0
+	l77+3LYK/vvaWZlHVCY3CVTIrZ6Ni02N7pcJM4NjXdYnBOPtvKrA4sZZHDxMC7w3e0bwf9M+vZp
+	g1VkjxFO8mynvIJ1yZL0z3N7rKuSkl6nmtdm+yFx3LykLj3+3cqfPXEzlQuwVCFTGGRJvB1fR5E
+	WkPk0zLT/JM8A9rZ1L+TVpdf9WF6bhhBEPXiPGLLHziSevWpjwWijA==
+X-Google-Smtp-Source: AGHT+IFB0ef71YNR9dJGXCO7UqAzxgYbd67xW8P9JXXgL21idOk1dW4h3KG6K2wPSXyAzJ2F6c4cew==
+X-Received: by 2002:a05:6402:2692:b0:5d0:bf5e:eb8 with SMTP id 4fb4d7f45d1cf-5e4d6b4baabmr28693051a12.23.1740990412164;
+        Mon, 03 Mar 2025 00:26:52 -0800 (PST)
+Received: from [192.168.50.4] ([82.78.167.138])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-abf0c6ee491sm776723966b.103.2025.03.03.00.26.50
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Mon, 03 Mar 2025 00:26:51 -0800 (PST)
+Message-ID: <f03946a8-24bc-4a1a-8d06-d5652a4db34f@tuxon.dev>
+Date: Mon, 3 Mar 2025 10:26:49 +0200
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -50,127 +81,49 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 1/2] dt-bindings: power: supply: Document Maxim MAX8971
- charger
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
- Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley
- <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250226093700.44726-1-clamor95@gmail.com>
- <20250226093700.44726-2-clamor95@gmail.com>
- <20250227-cherubic-mantis-from-betelgeuse-86f5ff@krzk-bin>
- <CAPVz0n0ygR=ygsvG2+z-zST7kmJ_P3nxf29tqdgHpRs_Nw6D5Q@mail.gmail.com>
- <fbd307ae-1dfa-497b-a597-d15b6baa30f4@kernel.org>
- <CAPVz0n2no1EJnf4GKSJWfYA_8h8x6BRk_ducufie90YPZR-k3g@mail.gmail.com>
- <0b2a76e6-ad64-4c98-b6ab-e1f41cb54684@kernel.org>
- <CAPVz0n2+=m93MXNV-0Lvu5OQzquNSyV2EBRQPDEnpSw-AZFo+g@mail.gmail.com>
-From: Krzysztof Kozlowski <krzk@kernel.org>
+Subject: Re: [PATCH v3 08/21] ARM: at91: Add PM support to sama7d65
+To: Ryan.Wanner@microchip.com, lee@kernel.org, robh@kernel.org,
+ krzk+dt@kernel.org, conor+dt@kernel.org, sre@kernel.org,
+ nicolas.ferre@microchip.com, alexandre.belloni@bootlin.com,
+ p.zabel@pengutronix.de
+Cc: linux@armlinux.org.uk, devicetree@vger.kernel.org,
+ linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-rtc@vger.kernel.org
+References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
+ <f4634d70f1e7002db059f2cc892fbbbfe1a95dac.1740671156.git.Ryan.Wanner@microchip.com>
+From: Claudiu Beznea <claudiu.beznea@tuxon.dev>
 Content-Language: en-US
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <CAPVz0n2+=m93MXNV-0Lvu5OQzquNSyV2EBRQPDEnpSw-AZFo+g@mail.gmail.com>
+In-Reply-To: <f4634d70f1e7002db059f2cc892fbbbfe1a95dac.1740671156.git.Ryan.Wanner@microchip.com>
 Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+Content-Transfer-Encoding: 7bit
 
-On 03/03/2025 09:20, Svyatoslav Ryhel wrote:
-> пн, 3 бер. 2025 р. о 10:18 Krzysztof Kozlowski <krzk@kernel.org> пише:
->>
->> On 03/03/2025 09:11, Svyatoslav Ryhel wrote:
->>> пн, 3 бер. 2025 р. о 09:54 Krzysztof Kozlowski <krzk@kernel.org> пише:
->>>>
->>>> On 27/02/2025 11:55, Svyatoslav Ryhel wrote:
->>>>>>> +
->>>>
->>>> Please kindly trim the replies from unnecessary context. It makes it
->>>> much easier to find new content.
->>>>
->>>>>>> +  maxim,usb-in-current-limit-microamp:
->>>>>>> +    description:
->>>>>>> +      USB Input current limit
->>>>>>> +    minimum: 100000
->>>>>>> +    default: 500000
->>>>>>> +    maximum: 1500000
->>>>>>> +
->>>>>>> +  maxim,ac-in-current-limit-microamp:
->>>>>>> +    description:
->>>>>>> +      AC Input current limit
->>>>>>> +    minimum: 100000
->>>>>>> +    default: 500000
->>>>>>> +    maximum: 1500000
->>>>>>
->>>>>> Half of these properties as well are not suitable and duplicate existing
->>>>>> sysfs interface.
->>>>>>
->>>>>
->>>>> All these properties allow configure the charger to suit the device on
->>>>> which it is used. None of them are required but are a nice addition.
->>>>> Why you are denying me an ability to fully utilize hardware I have and
->>>>> tune it to the device? All those values represent hardware registers
->>>>> which can be customized for the device, not for the end user to mess
->>>>> with.
->>>>
->>>> Because you put user-space choice or OS policy into the DT and DT is not
->>>> for that.
->>>>
->>>
->>> Those are NOT user-space choice or OS policy those are vendor
->>> configuration for a specific device and are NOT and NEVER were exposed
->>
->> Then look at existing devices. We had these discussions in the past and
->> these are usually exposed to user-space.
->>
+Hi, Ryan,
+
+On 27.02.2025 17:51, Ryan.Wanner@microchip.com wrote:
+> From: Ryan Wanner <Ryan.Wanner@microchip.com>
 > 
-> Provide an example, where there is same or similar configuration.
+> Add PM support to SAMA7D65 SoC.
+> 
+> Signed-off-by: Ryan Wanner <Ryan.Wanner@microchip.com>
+> ---
+>  arch/arm/mach-at91/Kconfig | 1 +
+>  1 file changed, 1 insertion(+)
+> 
+> diff --git a/arch/arm/mach-at91/Kconfig b/arch/arm/mach-at91/Kconfig
+> index 04bd91c72521..f3ff1220c0fb 100644
+> --- a/arch/arm/mach-at91/Kconfig
+> +++ b/arch/arm/mach-at91/Kconfig
+> @@ -65,6 +65,7 @@ config SOC_SAMA7D65
+>  	select HAVE_AT91_SAM9X60_PLL
+>  	select HAVE_AT91_USB_CLK
+>  	select HAVE_AT91_UTMI
+> +	select PM_OPP
 
-If you tried even a bit, you would easily find them by grep for
-timer/hours/minutes.
+This is for OPP not PM support. For this series this should not be needed.
 
-You do not even try but put this work on maintainer.
 
-Do the homework and try a bit harder instead of pushing this on me.
+>  	select SOC_SAMA7
+>  	help
+>  	  Select this if you are using one of Microchip's SAMA7D65 family SoC.
 
-Best regards,
-Krzysztof
 
