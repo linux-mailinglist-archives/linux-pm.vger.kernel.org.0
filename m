@@ -1,97 +1,97 @@
-Return-Path: <linux-pm+bounces-23430-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23434-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2FBC6A4E8F6
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 18:33:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 127EFA4E89D
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 18:27:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 023A08E0864
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:38:10 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D41C117F99A
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 17:21:37 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2979C2836A8;
-	Tue,  4 Mar 2025 16:16:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3A741284B52;
+	Tue,  4 Mar 2025 16:58:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="nVDm6mrH"
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AitvrlnU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from beeline3.cc.itu.edu.tr (beeline3.cc.itu.edu.tr [160.75.25.117])
+Received: from beeline1.cc.itu.edu.tr (beeline1.cc.itu.edu.tr [160.75.25.115])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8B21427E1BE
-	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 16:16:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.117
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A06402C375D
+	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 16:58:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=160.75.25.115
 ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741104996; cv=fail; b=JwZ7cp0uXcvWb9tXM4IyNlisyfk7EXAaCVizdy2p6ulYwfgdXR8WC4kGqL39FOLVyikKiqbD86f4rljmFIviThN6dTJ6vbuTmhkGUZYoMvsJFw6oPg9YfO79MBRO/AysYN7UQsQTApTHIGV1n5b9Eg/20ipiOcW92URAuo4YHLk=
+	t=1741107532; cv=fail; b=O+A/z+N8+fyhKU20NUlJC6U7Y+yX9Y6aPhkQZUnzKm9e56xECvwInU0so3bEjFKfWpqEJut76WvUyXtMWT6pSjLtEz0RGTa3zTZy40ufgtrWltjadRFqeHKaF1ugJzdZIyYwCbdNjxzgCYsvne/gzUQopyXpkVK5xNIbD4TU6TM=
 ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741104996; c=relaxed/simple;
-	bh=fJSn3lSDTlK+8ZW+kH3QUnzoBFI39rQvsG9xd03tdGo=;
+	s=arc-20240116; t=1741107532; c=relaxed/simple;
+	bh=G5qcuBCS0t7KSTQoJ2aJYVoxj21L6faprTVirclxquY=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=UuYvvaHC6GeP5rJRFTohQ/OVyoYQe+E02XT/OQFa2Zr0fLRv4cVfu4h2Nd6qHdjj2HB4OLaZVUXVX08lgHEUYhIxLVSB1MH40I71sMzEvJGQF6YRFoUuKMYWCQUQ3MEJrOwzXj7Zn55PbvggitvgM1gwQkcTzPgTIQYXkLMUwfI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVDm6mrH reason="signature verification failed"; arc=none smtp.client-ip=10.30.226.201; arc=fail smtp.client-ip=160.75.25.117
+	 In-Reply-To:Content-Type; b=m27qBsCWeJ0aA8USi/GWcs3cwaFdkoSY2Ye7y5f0QJPGqy0/O1WT2be9hWnzAwdI65OPBdffEnpTOsm8cV6TNibgYGIAD/HKXf1/Ldlw7g9jNlGM4YELpqyVOf/PkGpgFkbtFcoGhgl2VO0M6gJryMvibm2BJIgNi6GQv/pvsr4=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr; dkim=fail (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AitvrlnU reason="signature verification failed"; arc=none smtp.client-ip=10.30.226.201; arc=fail smtp.client-ip=160.75.25.115
 Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=quarantine dis=none) header.from=kernel.org
 Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=cc.itu.edu.tr
 Received: from lesvatest1.cc.itu.edu.tr (lesvatest1.cc.itu.edu.tr [10.146.128.1])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange ECDHE (P-256) server-signature RSA-PSS (2048 bits))
 	(No client certificate requested)
-	by beeline3.cc.itu.edu.tr (Postfix) with ESMTPS id C01E540CEC9A
-	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 19:16:32 +0300 (+03)
+	by beeline1.cc.itu.edu.tr (Postfix) with ESMTPS id EFD8540D977D
+	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 19:58:48 +0300 (+03)
 X-Envelope-From: <root@cc.itu.edu.tr>
 Authentication-Results: lesvatest1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20201202 header.b=nVDm6mrH
+	dkim=fail reason="signature verification failed" (2048-bit key, unprotected) header.d=kernel.org header.i=@kernel.org header.a=rsa-sha256 header.s=k20201202 header.b=AitvrlnU
 Received: from lesva1.cc.itu.edu.tr (unknown [160.75.70.79])
-	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6ghN4nWSzG2hl
-	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 19:13:08 +0300 (+03)
+	by lesvatest1.cc.itu.edu.tr (Postfix) with ESMTP id 4Z6gqs03hbzG31N
+	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 19:19:37 +0300 (+03)
 Received: by le1 (Postfix, from userid 0)
-	id C7A4142737; Tue,  4 Mar 2025 19:12:56 +0300 (+03)
+	id 7EAE641898; Tue,  4 Mar 2025 19:19:32 +0300 (+03)
 Authentication-Results: lesva1.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVDm6mrH
-X-Envelope-From: <linux-kernel+bounces-541147-bozkiru=itu.edu.tr@vger.kernel.org>
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AitvrlnU
+X-Envelope-From: <linux-kernel+bounces-541150-bozkiru=itu.edu.tr@vger.kernel.org>
 Authentication-Results: lesva2.cc.itu.edu.tr;
-	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVDm6mrH
+	dkim=fail reason="signature verification failed" (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AitvrlnU
 Received: from fgw2.itu.edu.tr (fgw2.itu.edu.tr [160.75.25.104])
-	by le2 (Postfix) with ESMTP id BCEA942CD8
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:27:58 +0300 (+03)
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by fgw2.itu.edu.tr (Postfix) with SMTP id 52AC12DCEF
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:27:58 +0300 (+03)
+	by le2 (Postfix) with ESMTP id C7EB342CCB
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:27:31 +0300 (+03)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by fgw2.itu.edu.tr (Postfix) with SMTP id 83C8F2DCDE
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 11:27:31 +0300 (+03)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D8BB53B381A
-	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:25:42 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D8F9A160F63
+	for <bozkiru@itu.edu.tr>; Mon,  3 Mar 2025 08:26:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9024A1EFFA3;
-	Mon,  3 Mar 2025 08:23:47 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D4D41F0E32;
+	Mon,  3 Mar 2025 08:25:02 +0000 (UTC)
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449631EF370;
-	Mon,  3 Mar 2025 08:23:43 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DA9A31EF389;
+	Mon,  3 Mar 2025 08:24:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740990224; cv=none; b=YeNpwptjQ6U6jfGrrQ4F8XoyNBWy3PsMWutDR1se33zfZVIgbrkhMRjxQjE2s0yC8eBNKg4kI8lgGWvU1Svgm6PGXyLvo2EbQLqdk3Y/9oLtT2fWC42+zzkdkUvVGtsNmUMaB8oILDEk34m2hehRcrn+otTCC4vApBeTspbKlZ0=
+	t=1740990299; cv=none; b=BZ3grjqNfFuijCbUUrUNVmLR71XdoJgJ7LX29el8m42jINd4RKoC+xgoUtzH5fj/PL+S3qW+4NElSeAJR1Ki1f8ehgGSvIWi/AMKAUC0p6KEQKM8yC3mAtyeCxUPvhYN0Krn1/b3LB8guXM0dwjIhHuoFM5fD/gC15JTMaxzDao=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740990224; c=relaxed/simple;
-	bh=JBYtPPedySIRtCIdRicfOKbQHdjbOfdWis8gttwCsKI=;
+	s=arc-20240116; t=1740990299; c=relaxed/simple;
+	bh=oDZLgjN7IToV0/+diks17qyXPqajN4Spi1ShjEZES1I=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=B6FvrZqC+W6V46yPb7Ff2eN6i0EMkbFPh34rTayNVUaJgabFpd/9qkyZsX5igcK8kk7b5IP01g/jrDjs/5peB0zUHk8qGYjbKeAAdZgbNKy79DCn6UcbgKQEMW8H4wXjlxSm3ptd4fV21BO1C2a1EY/2vKaJegxgi4BaEieV08Y=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=nVDm6mrH; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BCC04C4CED6;
-	Mon,  3 Mar 2025 08:23:40 +0000 (UTC)
+	 In-Reply-To:Content-Type; b=TlnCBB6azUxa2bn/CV5qZ9KBoiJyo2K+G0+mxEvzXbBw20Pe5VUwMHYfKFxgk3+wuR2FQYLzbp74h6wdYVTeXx69OA/W+r5PsClXMDMgqIrTowS73pQ3SnJSupfVtav33jaH2LYH106LE5jVT5mqEdCDgMnBOnG8fkQRcXzEZqc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AitvrlnU; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4B907C4CED6;
+	Mon,  3 Mar 2025 08:24:55 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1740990223;
-	bh=JBYtPPedySIRtCIdRicfOKbQHdjbOfdWis8gttwCsKI=;
+	s=k20201202; t=1740990298;
+	bh=oDZLgjN7IToV0/+diks17qyXPqajN4Spi1ShjEZES1I=;
 	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=nVDm6mrH12QLK3/qUGEVPT3+GKwhphezMCb3UYIFD2ammHyvoXLfegpFXS35yl7wP
-	 iXAtbjJ81a3G3cAnJPMh2gX7ThMNXotuiezB1R2iwBozQKUtI/az9KcGpGrKa0hbfX
-	 sxIFGSWyqRiLFmiKd/sTiAynk6ZlSoW0DEPRoCOz6hRNJiNqnkJO8N8YaYaj9VEbrL
-	 I+RMLenU3E2DKzLx13fWN3rbKamCKZf30X6qYN21gC7d4+1b1HheP+KW4go/pQ8uTh
-	 pzlUSNBjBBx3Y1gdu86czAZdr9zQiESi4E2sLVt5KZcR86KqZIs6zji4qpoCidL2Gn
-	 GrbFt881OjQNQ==
-Message-ID: <a091f085-a7f0-4aaa-997d-cd478764c18a@kernel.org>
-Date: Mon, 3 Mar 2025 09:23:38 +0100
+	b=AitvrlnUrB65mhIOmclW3UtpdRhY3icPAx40PgkXb+pt5NFpLNgtfAPYolPIjqAmJ
+	 vEcZEN0K9XQ3bzeTsS5zPfIU7CPCMHy7bgRt7COHqJEE38y5feBV4CYiK+G0qJaqy3
+	 fYbCQYJOyBJzagc06mkC+Q69tD3sWkHlFiMWCgFmyXSMOKXUyOnNbcqyPMbBpZVfGu
+	 STgnDuKjXMC0/CM7rYuxPygpqfPx1N6DOpC6xeQipPfBrbSc850vg4XSfUx9MGpojM
+	 WlmySuMTY3CipB+mFWMHyQ2SGtx8h7VgZ77oN2CsDzbYnw7hD7rXqPR86M6BvNWMQg
+	 0/PJt8WqDUaSg==
+Message-ID: <f15fe8bf-1114-416c-8a3a-a0addcb0d5a7@kernel.org>
+Date: Mon, 3 Mar 2025 09:24:53 +0100
 Precedence: bulk
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
@@ -110,9 +110,11 @@ Cc: Sebastian Reichel <sre@kernel.org>, Rob Herring <robh@kernel.org>,
 References: <20250226093700.44726-1-clamor95@gmail.com>
  <20250226093700.44726-2-clamor95@gmail.com>
  <20250227-cherubic-mantis-from-betelgeuse-86f5ff@krzk-bin>
- <CAPVz0n2kfxTJUkqrtLia6xBJ8t+fwjujjsc9k=mOk-P06bJH7A@mail.gmail.com>
- <f83b2a95-e8f6-4e16-bd7f-f7dc96264c04@kernel.org>
- <CAPVz0n0KVE8baFyGSgM+0rNfY8+Y2LFZbAhHHzPWTV358gc+Bw@mail.gmail.com>
+ <CAPVz0n0ygR=ygsvG2+z-zST7kmJ_P3nxf29tqdgHpRs_Nw6D5Q@mail.gmail.com>
+ <fbd307ae-1dfa-497b-a597-d15b6baa30f4@kernel.org>
+ <CAPVz0n2no1EJnf4GKSJWfYA_8h8x6BRk_ducufie90YPZR-k3g@mail.gmail.com>
+ <0b2a76e6-ad64-4c98-b6ab-e1f41cb54684@kernel.org>
+ <CAPVz0n2+=m93MXNV-0Lvu5OQzquNSyV2EBRQPDEnpSw-AZFo+g@mail.gmail.com>
 From: Krzysztof Kozlowski <krzk@kernel.org>
 Content-Language: en-US
 Autocrypt: addr=krzk@kernel.org; keydata=
@@ -158,103 +160,50 @@ Autocrypt: addr=krzk@kernel.org; keydata=
  uZwJCLykjad45hsWcOGk3OcaAGQS6NDlfhM6O9aYNwGL6tGt/6BkRikNOs7VDEa4/HlbaSJo
  7FgndGw1kWmkeL6oQh7wBvYll2buKod4qYntmNKEicoHGU+x91Gcan8mCoqhJkbqrL7+nXG2
  5Q/GS5M9RFWS+nYyJh+c3OcfKqVcZQNANItt7+ULzdNJuhvTRRdC3g9hmCEuNSr+CLMdnRBY fv0=
-In-Reply-To: <CAPVz0n0KVE8baFyGSgM+0rNfY8+Y2LFZbAhHHzPWTV358gc+Bw@mail.gmail.com>
+In-Reply-To: <CAPVz0n2+=m93MXNV-0Lvu5OQzquNSyV2EBRQPDEnpSw-AZFo+g@mail.gmail.com>
 Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: quoted-printable
 X-ITU-Libra-ESVA-Information: Please contact Istanbul Teknik Universitesi for more information
-X-ITU-Libra-ESVA-ID: 4Z6ghN4nWSzG2hl
+X-ITU-Libra-ESVA-ID: 4Z6gqs03hbzG31N
 X-ITU-Libra-ESVA: No virus found
 X-ITU-Libra-ESVA-From: root@cc.itu.edu.tr
-X-ITU-Libra-ESVA-Watermark: 1741709675.97099@WMFC7BjvpXJzhbAGgajO0Q
+X-ITU-Libra-ESVA-Watermark: 1741712204.83023@HLlAPPbmyQcyoEkd1k3cgg
 X-ITU-MailScanner-SpamCheck: not spam
 
-On 03/03/2025 09:13, Svyatoslav Ryhel wrote:
-> =D0=BF=D0=BD, 3 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 09:52 K=
+On 03/03/2025 09:20, Svyatoslav Ryhel wrote:
+> =D0=BF=D0=BD, 3 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 10:18 K=
 rzysztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
 >>
->> On 27/02/2025 12:03, Svyatoslav Ryhel wrote:
->>> =D1=87=D1=82, 27 =D0=BB=D1=8E=D1=82. 2025=E2=80=AF=D1=80. =D0=BE 12:4=
-5 Krzysztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>> On 03/03/2025 09:11, Svyatoslav Ryhel wrote:
+>>> =D0=BF=D0=BD, 3 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 09:54=
+ Krzysztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
 >>>>
->>>> On Wed, Feb 26, 2025 at 11:36:59AM +0200, Svyatoslav Ryhel wrote:
->>>>> +  maxim,fcharge-current-limit-microamp:
->>>>> +    description:
->>>>> +      Fast-Charge current limit
->>>>> +    minimum: 250000
->>>>> +    default: 500000
->>>>> +    maximum: 1550000
->>>>> +
->>>>> +  maxim,fcharge-timer-hours:
->>>>> +    description:
->>>>> +      Fast-Charge timer in hours. Setting this value 3 and lower o=
-r 11 and higher
->>>>> +      will disable Fast-Charge timer.
->>>>> +    $ref: /schemas/types.yaml#/definitions/uint32
->>>>> +    default: 5
+>>>> On 27/02/2025 11:55, Svyatoslav Ryhel wrote:
+>>>>>>> +
 >>>>
->>>> You still did not answer why this is board specific. This was reject=
-ed
->>>> in the past because of that reason and nothing here changed. Nothing
-
-Where are the arguments to existing/previous decisions?
-
->>>> will change without detailed explanation, so use other interfaces if=
- you
-
-Again, where is detailed explanation why time is determined per board,
-unlike previously agreed that it is not?
-
->>>> need user-space to configure it (see other drivers, e.g. maxim)
-
-
-
-
+>>>> Please kindly trim the replies from unnecessary context. It makes it
+>>>> much easier to find new content.
 >>>>
->>>
->>> Btw, I have used this awesome example you have provided. Take a look
->>
->> Where did I provide this example?
->>
->=20
-> Its presence in the docs is an example on its no? You have explicitly
-> told to check other maxim devices, I did so, they all have similar set
-> of convifurations.
-
-Choose rather later or latest, not 12 YO, binding as an example.
-
->=20
->>>
->>> https://web.git.kernel.org/pub/scm/linux/kernel/git/torvalds/linux.gi=
-t/tree/Documentation/devicetree/bindings/power/supply/maxim,max77693.yaml=
-?h=3Dv6.14-rc4
->>
->> I opened it and I do not see anything about time. Please point to
->> specific line.
->>
->> But regardless, how did I propose to use 12 year old binding? Where di=
-d
->> I suggest that one?
->>
->>>
->>> Oh, I wonder why it uses so much values which duplicate battery? I
->>> know, it lacks battery, I assume that is why?
->>
->> No. You added to DT something which is not a hardware property, but
->> user-space choice or policy.
->>
->=20
-> It is NOT a user-space choice or policy!
-Previous discussions on the lists - since you mention 12 year old
-binding, so also discussions 12 years ago - determined that they are
-closer to them than board configuration.
-
-I already said - this was rejected in the past - so now I am repeating
-myself.
-
-You did not bring any arguments just keep repeating "no", so I suggest
-reading previous discussions and coming with arguments against them.
-
-Best regards,
-Krzysztof
-
+>>>>>>> +  maxim,usb-in-current-limit-microamp:
+>>>>>>> +    description:
+>>>>>>> +      USB Input current limit
+>>>>>>> +    minimum: 100000
+>>>>>>> +    default: 500000
+>>>>>>> +    maximum: 1500000
+>>>>>>> +
+>>>>>>> +  maxim,ac-in-current-limit-microamp:
+>>>>>>> +    description:
+>>>>>>> +      AC Input current limit
+>>>>>>> +    minimum: 100000
+>>>>>>> +    default: 500000
+>>>>>>> +    maximum: 1500000
+>>>>>>
+>>>>>> Half of these properties as well are not suitable and duplicate ex=
+isting
+>>>>>> sysfs interface.
+>>>>>>
+>>>>>
+>>>>> All these properties allow configure the charger to suit the device=
+ on
+>>>>> which it is used. None of them are required but are a nice addition=
 
