@@ -1,55 +1,50 @@
-Return-Path: <linux-pm+bounces-23292-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23293-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0D328A4BE25
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:22:16 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 0F296A4BE8B
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:30:40 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D3D21188C7F7
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:19:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2493A188545E
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:30:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3707F1EBFE4;
-	Mon,  3 Mar 2025 11:15:29 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B86F1F875B;
+	Mon,  3 Mar 2025 11:30:35 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Zp/H58vJ"
+	dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b="M9LNaQQM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mr85p00im-hyfv06021401.me.com (mr85p00im-hyfv06021401.me.com [17.58.23.190])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 55FE01F1908;
-	Mon,  3 Mar 2025 11:15:27 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7E57D1F8691
+	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 11:30:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=17.58.23.190
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741000529; cv=none; b=lhDWnUCy44M8IFrJtIjOpddzZ8Qp1Mr2XWEWtYbgiedrn2Uc4sE62j+dGQdqB5Lo1PwX/6hk8prW19Tl0z9O7LOuREfdKxgu7Q/YWxrHEb/2GDPEWvejhQl3QrmmqnVKYUqhDCbXzJxOt+FIvhJ3P/1L1/sqSOEeEGEYEAHprOQ=
+	t=1741001435; cv=none; b=MlSyve2erj4PfUgftZ5jKFNbVWItiqp57aey053ZvohVghks7HZqLXten0iJhZXFusE9to8vwekjFJXKMoE/jK74lPqyNBeaYmPR7zAMyAHgYid8sbQnBEVW2gey+g/DFamkHOaHqAYLKooYKR28oGBkvTyzRQV2xL+wV0AR+o4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741000529; c=relaxed/simple;
-	bh=zHGCADU56T7A224lF133oGjwzLj/Y9hZrXbv8NOAx1U=;
+	s=arc-20240116; t=1741001435; c=relaxed/simple;
+	bh=X0LU3aYn4lUmJVogH7zjqoCFEavVUNcoV5t1PZiDF6c=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ld1jtjYLe40kn+MHF3WbqqH4babcSM6eJKeVz2oq4ARciauCIY25HYusrewEydcQiBeeMpsskmdAaMqD5WD+vBMYLHnUlPy2WkB7aIAUnOnsTJRwERxbLtRMBz9qwFQ/QK+PfJl1qO3NgVECNWlweQ9/oMD5IKl3sbsIQO4YZRA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Zp/H58vJ; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1741000525;
-	bh=zHGCADU56T7A224lF133oGjwzLj/Y9hZrXbv8NOAx1U=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=Zp/H58vJ9rjRaEthdrCDdcQWdjaAb1mvE/B2PKHjamT9xW01devW47qz6T+qEtx6b
-	 M3E0H2siHWMutWk60bE3BnHGzRW5Eim8AOm7eBhMdBAln/VMk4Dd1OHZ/2MlPGZ+Qc
-	 lSfZ4gtN4+f6C/GCTf69DojqEueBPedXBGKiourDxcDKScxW3TnCK7US7PZ/wfq8jA
-	 0rGL0bUZkC19Jr6yWljZK6j9C5NpLmhWh1quFmZ3vosaz6I4szPUqLbOl2kFgnYtId
-	 SH4Q2ocYXq72C6WtD8FKYVuKSV7P1TeZ8/O75g86GPmSEBk4QVOEsvHyRyWdOEjMov
-	 NFjeojr1ZOgBQ==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits))
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 7517517E086B;
-	Mon,  3 Mar 2025 12:15:24 +0100 (CET)
-Message-ID: <ea3cfb5c-bcba-4530-8bd4-6738acfaad90@collabora.com>
-Date: Mon, 3 Mar 2025 12:15:24 +0100
+	 In-Reply-To:Content-Type; b=YRlBYnEOp9BpHZlxSLftsnzJOf5yx4zpNOF/qiXN/bWzlWOHAlAFD0pxyhdZCpSWYp6MwRPxGl21dxl37TdIUSTf1P0deMT4xv4KXOIBzu36Zn5doWFpXm2Qgm5UTMJvoAmxwst4Jw2Ak1iQbo+ax4/UvEjtQdGLqKy9wzORLrI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com; spf=pass smtp.mailfrom=icloud.com; dkim=pass (2048-bit key) header.d=icloud.com header.i=@icloud.com header.b=M9LNaQQM; arc=none smtp.client-ip=17.58.23.190
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=icloud.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=icloud.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=icloud.com;
+	s=1a1hai; bh=OZOLugLSboUaxk503olOimdjHThkYZSt/rnUocHx7qo=;
+	h=Message-ID:Date:MIME-Version:Subject:To:From:Content-Type:x-icloud-hme;
+	b=M9LNaQQMBVnDvn7O9dkyxfqENe+n3CTiJTPQ2UQFIHq6HOYn5yqN3iDQ3RVhMcn23
+	 RYbgEyO7lbqW+H+rJi6eLqXyW0ofbGlb2TozfcwQt+N3LDxfRINewpBQO64R70O6JP
+	 Fj4pbqb3B74JtNoj/kfZRb0TgXmhRDVBpuDr2nHUHUnQnsoslms9i4lxHUEqE597f0
+	 dsKBFbP0qhEmAOCAG72w3Jw4tGGCdcmaS+BdhFHar4cmpTgkAp9kjNy3bhZerCy1fm
+	 yb4VLYz3eRYNRP0qJgIXtuCQgNCwAPfOp2U/Lehb0PDMMPAW6dfU3J1HAJf8t1L7ga
+	 V8U2HDDNFoYsA==
+Received: from [192.168.1.26] (mr38p00im-dlb-asmtp-mailmevip.me.com [17.57.152.18])
+	by mr85p00im-hyfv06021401.me.com (Postfix) with ESMTPSA id D31F830384C0;
+	Mon,  3 Mar 2025 11:30:17 +0000 (UTC)
+Message-ID: <ca719ca0-ee14-4022-bf61-5794d7ec8d3a@icloud.com>
+Date: Mon, 3 Mar 2025 19:30:13 +0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -57,41 +52,81 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 06/20] ASoC: mediatek: mt6359-accdet: Implement HP_EINT
- polarity configuration
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, Sen Chu <sen.chu@mediatek.com>,
- Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
- Lee Jones <lee@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>
-Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org, Andrew Perepech <andrew.perepech@mediatek.com>
-References: <20250302-mt6359-accdet-dts-v2-0-5bd633ee0d47@collabora.com>
- <20250302-mt6359-accdet-dts-v2-6-5bd633ee0d47@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Subject: Re: [PATCH *-next 00/18] Remove weird and needless 'return' for void
+ APIs
+To: Peter Zijlstra <peterz@infradead.org>
+Cc: Zijun Hu <quic_zijuhu@quicinc.com>,
+ Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+ Will Deacon <will@kernel.org>, "Aneesh Kumar K.V" <aneesh.kumar@kernel.org>,
+ Andrew Morton <akpm@linux-foundation.org>, Nick Piggin <npiggin@gmail.com>,
+ Arnd Bergmann <arnd@arndb.de>, Thomas Gleixner <tglx@linutronix.de>,
+ Herbert Xu <herbert@gondor.apana.org.au>,
+ "David S. Miller" <davem@davemloft.net>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Danilo Krummrich <dakr@kernel.org>,
+ Eric Dumazet <edumazet@google.com>, Jakub Kicinski <kuba@kernel.org>,
+ Paolo Abeni <pabeni@redhat.com>, Simon Horman <horms@kernel.org>,
+ Johannes Berg <johannes@sipsolutions.net>,
+ Jamal Hadi Salim <jhs@mojatatu.com>, Cong Wang <xiyou.wangcong@gmail.com>,
+ Jiri Pirko <jiri@resnulli.us>, Jason Gunthorpe <jgg@ziepe.ca>,
+ Leon Romanovsky <leon@kernel.org>, Linus Walleij <linus.walleij@linaro.org>,
+ Bartosz Golaszewski <brgl@bgdev.pl>, Lee Jones <lee@kernel.org>,
+ Thomas Graf <tgraf@suug.ch>, Christoph Hellwig <hch@lst.de>,
+ Marek Szyprowski <m.szyprowski@samsung.com>,
+ Robin Murphy <robin.murphy@arm.com>,
+ Miquel Raynal <miquel.raynal@bootlin.com>,
+ Richard Weinberger <richard@nod.at>, Vignesh Raghavendra <vigneshr@ti.com>,
+ linux-arch@vger.kernel.org, linux-mm@kvack.org,
+ linux-kernel@vger.kernel.org, linux-crypto@vger.kernel.org,
+ netdev@vger.kernel.org, linux-wireless@vger.kernel.org,
+ linux-rdma@vger.kernel.org, linux-gpio@vger.kernel.org,
+ linux-pm@vger.kernel.org, iommu@lists.linux.dev,
+ linux-mtd@lists.infradead.org
+References: <20250221-rmv_return-v1-0-cc8dff275827@quicinc.com>
+ <46d17d84-5298-4460-96b0-9c62672167a0@icloud.com>
+ <20250227130347.GA5880@noisy.programming.kicks-ass.net>
 Content-Language: en-US
-In-Reply-To: <20250302-mt6359-accdet-dts-v2-6-5bd633ee0d47@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+From: Zijun Hu <zijun_hu@icloud.com>
+In-Reply-To: <20250227130347.GA5880@noisy.programming.kicks-ass.net>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 7bit
+X-Proofpoint-ORIG-GUID: VRiK2BwrsvBlqf3istvRC36nkjOjRITT
+X-Proofpoint-GUID: VRiK2BwrsvBlqf3istvRC36nkjOjRITT
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-03_07,2025-03-03_01,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 spamscore=0 bulkscore=0 suspectscore=0
+ mlxscore=0 adultscore=0 clxscore=1015 mlxlogscore=855 phishscore=0
+ malwarescore=0 classifier=spam adjust=0 reason=mlx scancount=1
+ engine=8.19.0-2308100000 definitions=main-2503030088
 
-Il 02/03/25 17:30, Nícolas F. R. A. Prado ha scritto:
-> From: Andrew Perepech <andrew.perepech@mediatek.com>
+On 2025/2/27 21:03, Peter Zijlstra wrote:
+>> C) perhaps, most ordinary developers don't known the function mentioned
+>>    by B), and also feel strange for the usage
+> It is quite common to do kernel wide updates using scripts / cocinelle.
 > 
-> The driver currently reads the HP_EINT polarity from the Devicetree but
-> never actually configures the hardware accordingly.
+> If you have a specialization that wraps a function to fill out a default
+> value, then you want the return types to keep matching.
 > 
-> Implement the polarity configuration in hardware.
+> Ex.
 > 
-> Signed-off-by: Andrew Perepech <andrew.perepech@mediatek.com>
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> return_type foo(type1 a1, type2 a2);
+> 
+> return_type my_foo(type1 a1)
+> {
+> 	return foo(a1, value);
+> }
+> 
+> is a normal thing to do. The whole STD C cannot return void bollocks
+> breaks that when return_type := void, so in that regards I would call
+> this a STD C defect.
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+The usage is a GCC extension.
+but the usage is prone to be used within *inappropriate* context, take
+this patch series for an example:
+
+1)  both foo() and my_foo() are in the same module
+2)  or it seems return type void is the best type for foo(). so no good
+reason to track its type.
 
 
 
