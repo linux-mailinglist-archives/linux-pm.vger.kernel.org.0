@@ -1,177 +1,125 @@
-Return-Path: <linux-pm+bounces-23297-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23299-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6FC62A4BF57
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:51:57 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3DB10A4BF85
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:56:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D2AE4188C74D
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:51:09 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9DF6D1629D5
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:56:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0AD2D20DD62;
-	Mon,  3 Mar 2025 11:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A2CE20CCD9;
+	Mon,  3 Mar 2025 11:56:38 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="F8hsg1Ui"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="lcg4DFRr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+Received: from mail-lf1-f51.google.com (mail-lf1-f51.google.com [209.85.167.51])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3C10020C014
-	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 11:50:29 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A816E2036F9;
+	Mon,  3 Mar 2025 11:56:36 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741002631; cv=none; b=FaTQt0L+S5T/SHYD07fx/l0N8KoSQXOBinmSsx4HfMDuqLVp8hK4rPdO+8EoG/JCltlafm3LnVD5bL2RnokTpPE+sG4D+HUB2SngTnsiWaJTIP6z7LgCuwq2W25EzJTZyWL+jk86mEj1xk4H4EqW/SeQcELAFOs0+6o4v19x8HI=
+	t=1741002998; cv=none; b=Jlf0E/tqqvNgPubPtF9ezZAcv1YrBA+O12peRxqI8F6sY82Y7m9Z98pysFYbvDijHsX/ugs3/puE9935/0CPDHJ5ArzFR87/Cf2Y1egehiFhrHm3CfjwHxlEGbFRYWYr9NSqnQh2P5vycZomlIEGKx1RuK86VyQMrT+5mD0BlEQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741002631; c=relaxed/simple;
-	bh=iYUckyVAVeI7XDNNji2uBn6ccd7npEcaiKeFcolCkl4=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Bjw5sgM6sImKqElb7pSecr6nU0in6Z+oCLfthirdKZHIEuEXW+4ZXnKdZCD6fRlNvH1cAvU+/llC4JK44feJLLhSiM1yGf4GLEmV8Ralx5ZIDv3IFNKChVIqI4YdKao8enXzKVRECbLobvdzFyBM9+wLyBvIcLMVMg0SWyNem2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=F8hsg1Ui; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6f74b78df93so38129417b3.0
-        for <linux-pm@vger.kernel.org>; Mon, 03 Mar 2025 03:50:29 -0800 (PST)
+	s=arc-20240116; t=1741002998; c=relaxed/simple;
+	bh=EPUaYsz9RGP9Mfmct+MjKUCihkIdRVMvNEvFaiL85yo=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=f0HlTWKMVtUBRlrWv28Xzp/579gLapERIfrriRSVGLfm5Co5SvlHosARFwGEWVqljs0J33dLmJer7/RosUkOxwytNgPM+o4jioOqur3ZJDCuNmdg8aVsnnLRPOmCta68uJBlqlQqlby9E4k6jDb8owD9FgtzdpF97Yt0/4CUR0E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=lcg4DFRr; arc=none smtp.client-ip=209.85.167.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lf1-f51.google.com with SMTP id 2adb3069b0e04-549490e290dso3171845e87.2;
+        Mon, 03 Mar 2025 03:56:36 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741002629; x=1741607429; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=uk4RC6gYyKlg81cJh6W+VhPYO5gDI/YlGZXXv16k7MQ=;
-        b=F8hsg1UiwKECfQsGtOKKbFDKGEqu6ZIXQDa1QTruaoye6q78NWZQHYBzvcQ4B2iuWI
-         1o8gez1SEP7H37/UixC4ZDON6HsTim+Aj6WvUFxmrlymX5Xs3+XB35XCtlI/X2Y5kTlc
-         wj8bAMqDg9mXtAdq/e0QRkB1szc12HpCUDsHTxrOS1jMWptro81bmUyTJcHV1HFxkJCL
-         gM/ouAshpbk3r/zDp6J2WVawtLvsmZGj6VPQBaVCyJsLH9ihO9XY5qGjB4Y5hyF5iCcj
-         FVclzS6mR9jXufNj1uasHP+WQI3T/Zqn/THUJgqYDBRo7iuuN2p4bKV0ELXPCc8AzVHR
-         iPPQ==
+        d=gmail.com; s=20230601; t=1741002995; x=1741607795; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=pbRgFCwk7Kav0J9k0Ma2PmL6NESow8QOcvEaprV4e+A=;
+        b=lcg4DFRrO9oMmV3cojgDgjz6K0Ro/QqeT7mFFmN9844jh8559rdSyrXg7ggN1lFg/R
+         QT1vl0vTo1xp904pMm0lfH7G1vNcV31vlg1dJwOWQopEJLm913D429lpGtmtDaCL7wha
+         mYpuWWdeEQ8lNH/7Lf8Fj3yILPkXb9+gCUPS0cw2FevzZK7zzGCVQOQw/keNedtppKE4
+         e5j2MQUviKKc/FtHKzVs2D1psk741uPIB3upCy7jUed4wqJn3ktPNhLlSr1ipVBuno9Q
+         jZnaViV9LmL0Udw0Vs6xEMDnIi/ol6shnzZKg/GuOZBQRmOb5Z6EnxZAKrohPWniN2PM
+         J/pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741002629; x=1741607429;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+        d=1e100.net; s=20230601; t=1741002995; x=1741607795;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=uk4RC6gYyKlg81cJh6W+VhPYO5gDI/YlGZXXv16k7MQ=;
-        b=OZi996xiLluraqY5e41P+uCZxWRAnxU72jFxICcUgbI1Y0TjkXIFnwtJ8c3TYtsJYx
-         2qP+FevrJd1LbQiK2yShnItpAIMvFohTBn7hBgfHo/64k301XId1UERpHNea2J7WwKnE
-         qN1yvro+9rp1/EfrB8X1VuSAG3/5qZjeDCp98c8FGr+EEuxNRskcffIbLQh+hjvUCarn
-         6YdDyfT+1AcmyglR1Re9aE7AxwczLbUGsF3JL5PnA+9VFZ/AJ4gtyD1w6ZW0z0BEtpeO
-         xIrCYcl9EVYjX3r/4yDy6hXX7VhSYLlR8a/GhNnvq4nFE6+26UhLy5tHPWuRIYlTaIZg
-         cozA==
-X-Gm-Message-State: AOJu0YwICXaU7YItlBYLwfXUwvwIbCJxv0c5BeRrH+G6oHPjaxG2zk5W
-	bdR5icF5Czc7mxFZouyjYw6dXCxHsXZHfWvErEfTLDFbkQ9EVLYsoF8N3JJ1QlKBLStr4HXXak3
-	EFJx7WI63SjgoyBwKj14qV83NnxH5LuUUqHtMLw==
-X-Gm-Gg: ASbGnctmXg+eOSaPjnjXwQsWREkMsinYjQWNFMPormBcS9L9SQ6tJxYHQgEbgJJDpLn
-	125sKYioq864YaoHp/Hnh/BDNEtUvHm95DtKbwbNJ00njviKxLZFu/f0xeFNUEdPttG07V0D9Ui
-	j6Ku+CTm0Age3MA44R0x1FTCslB/s=
-X-Google-Smtp-Source: AGHT+IHbEZTHl8hhFga4vQY/ULqM1THSQSqqYAdq51p7CVUXvrld+wWN+muocGAUEDlP0o1E2tcH3vx/K7c1uLHnFyY=
-X-Received: by 2002:a05:690c:4b8c:b0:6fd:47b7:9730 with SMTP id
- 00721157ae682-6fd49fb60a6mr161831797b3.12.1741002628443; Mon, 03 Mar 2025
- 03:50:28 -0800 (PST)
+        bh=pbRgFCwk7Kav0J9k0Ma2PmL6NESow8QOcvEaprV4e+A=;
+        b=rZNucrkHrIfckI8qS/23puFiSYzczPnSUxGNCbFIp85twxio2WM6vfACwFnn1JSdSx
+         0lB36Adwh1fuJ7z2BciqLJfhia6FFvIvPa5m/e67I1Sf7VYCQwVzyHYQV1qkbCZW7/Va
+         yiY3saVl6N2d8SCkp/XnZYICHyi9GbFwqAdFTukobx5PmlEpWOMX9fb7mLPHHM6uZcS4
+         V9rSf4A7zCOaoq1XpAGUi1txo6gq2t92ZjYmSfNcIAjPnEl6BQlQNEo+Gt2dINDz6n60
+         Tg1nIhn3lnMUAWYPXTzt/cbOe1tyDt37Vj6bDFMrJu9wu5jmaDhOKR3Pw3lLnpcuIVsc
+         MzMg==
+X-Forwarded-Encrypted: i=1; AJvYcCUQOUcw4DQusQzxcm8c0fAGnEmVzXfWmiAEHGjqkJc+86RqsNQWrkTeqFv6yuvIdSwF4MzYLsHJUzwA5dCk@vger.kernel.org, AJvYcCX3mE21VW+BU7Y/aq7DDQHMerWFPhZGQaLriPYKmvsM5GWDbTBXR+2/68zE5+wL/uoa078g7fnf4ewM@vger.kernel.org
+X-Gm-Message-State: AOJu0YwHK7eFGE8TQbsD7L6MndDMf8Uu6ihmLf3byH1yOAuQbSPGyB9U
+	3ItRc+LXY9kzK0En/7b/AEHthj6yAIk74AK5otfD0H1E7zIqhyHx
+X-Gm-Gg: ASbGnctdxXIdExv9S1ByfJ5fDhTt9aOXceC8i6bydq66zzD9KZtOcsIoVFZ8Y26V5wL
+	b8Wx0ktqsaRhjm/3pl6/JTdLklmE7cOQis+vof0l3RGq6g5Uk4XLwPmsRJDl67kydIOigGu/Lu5
+	iKXXb+M0+sJR4ulxaFjZieslGzyfLcCZtqnlKL2GGBgxBP7yTw+78Lo9M3cCOeloZ3sYHRnEMmy
+	M9+DuEYuxn70r6XG9BrKF1QzBqyQR6jI8ziiVRxUSCLYOU8qBRXAfbLlmCA+PB+0g61oKnSYraB
+	3htX8a25wGyHwitsLprUhSeoDP/WtNcCDBk=
+X-Google-Smtp-Source: AGHT+IE14Kz+bAZcHvS8EnHx9OLxfEmTwZXbj/JyckNJPTgTfvtpnACPfWH43rqQOq/qJWRTLLkWPg==
+X-Received: by 2002:a05:6512:3d19:b0:545:ea9:1a19 with SMTP id 2adb3069b0e04-5494c10c72bmr5706279e87.5.1741002994430;
+        Mon, 03 Mar 2025 03:56:34 -0800 (PST)
+Received: from xeon.. ([188.163.112.51])
+        by smtp.gmail.com with ESMTPSA id 2adb3069b0e04-5495f630cb5sm511817e87.212.2025.03.03.03.56.33
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 03 Mar 2025 03:56:33 -0800 (PST)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: Sebastian Reichel <sre@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v3 0/2] power: supply: Add support for Maxim MAX8971 charger
+Date: Mon,  3 Mar 2025 13:55:00 +0200
+Message-ID: <20250303115502.89457-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <3353728.44csPzL39Z@rjwysocki.net>
-In-Reply-To: <3353728.44csPzL39Z@rjwysocki.net>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 3 Mar 2025 12:49:52 +0100
-X-Gm-Features: AQ5f1JrH4q1zOIaTrqYzbdkfjiU66g40RtbSmo7LK-gb4j9oNzq1abNpZhBdAkc
-Message-ID: <CAPDyKFoQvKFmwpzPtHGzPKzPv7KLo_7-2oYb2=BXEZAm4xpVbQ@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: sleep: Adjust check before setting power.must_resume
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Johan Hovold <johan@kernel.org>, 
-	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>
-Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 8bit
 
-On Thu, 27 Feb 2025 at 11:53, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
->
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
->
-> The check before setting power.must_resume in device_suspend_noirq()
-> does not take power.child_count into account, but it should do that, so
-> use pm_runtime_need_not_resume() in it for this purpose and adjust the
-> comment next to it accordingly.
->
-> Fixes: 107d47b2b95e ("PM: sleep: core: Simplify the SMART_SUSPEND flag handling")
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+The MAX8971 is a compact, high-frequency, high-efficiency
+switch-mode charger for a one-cell lithium-ion (Li+) battery.
 
-Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
+---
+Changes on switching from v2 to v3:
+- fast_charge_timer, top_off_threshold_current and top_off_timer converted to
+  device attributes. Other vendor properties removed.
+- removed max8971_config
+- removed unneded functions and definitions along vendor props removal
+- added __maybe_unused for resume function
 
-Kind regards
-Uffe
+Changes on switching from v1 to v2:
+- swap phandle with graph for extcon
+- added power-supply ref
+---
 
-> ---
->
-> The previous version of this patch is here:
->
-> https://lore.kernel.org/linux-pm/3548152.QJadu78ljV@rjwysocki.net/
->
-> v1 -> v2:
->    * Changelog rewrite.
->    * Added the Fixes: tag.
->    * Refined the comment adjustment.
->
-> ---
->  drivers/base/power/main.c    |   13 ++++++-------
->  drivers/base/power/runtime.c |    2 +-
->  include/linux/pm_runtime.h   |    2 ++
->  3 files changed, 9 insertions(+), 8 deletions(-)
->
-> --- a/drivers/base/power/main.c
-> +++ b/drivers/base/power/main.c
-> @@ -1382,14 +1382,13 @@
->         dev->power.is_noirq_suspended = true;
->
->         /*
-> -        * Skipping the resume of devices that were in use right before the
-> -        * system suspend (as indicated by their PM-runtime usage counters)
-> -        * would be suboptimal.  Also resume them if doing that is not allowed
-> -        * to be skipped.
-> +        * Devices must be resumed unless they are explicitly allowed to be left
-> +        * in suspend, but even in that case skipping the resume of devices that
-> +        * were in use right before the system suspend (as indicated by their
-> +        * runtime PM usage counters and child counters) would be suboptimal.
->          */
-> -       if (atomic_read(&dev->power.usage_count) > 1 ||
-> -           !(dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME) &&
-> -             dev->power.may_skip_resume))
-> +       if (!(dev_pm_test_driver_flags(dev, DPM_FLAG_MAY_SKIP_RESUME) &&
-> +             dev->power.may_skip_resume) || !pm_runtime_need_not_resume(dev))
->                 dev->power.must_resume = true;
->
->         if (dev->power.must_resume)
-> --- a/drivers/base/power/runtime.c
-> +++ b/drivers/base/power/runtime.c
-> @@ -1897,7 +1897,7 @@
->         pm_request_idle(link->supplier);
->  }
->
-> -static bool pm_runtime_need_not_resume(struct device *dev)
-> +bool pm_runtime_need_not_resume(struct device *dev)
->  {
->         return atomic_read(&dev->power.usage_count) <= 1 &&
->                 (atomic_read(&dev->power.child_count) == 0 ||
-> --- a/include/linux/pm_runtime.h
-> +++ b/include/linux/pm_runtime.h
-> @@ -66,6 +66,7 @@
->
->  extern int pm_generic_runtime_suspend(struct device *dev);
->  extern int pm_generic_runtime_resume(struct device *dev);
-> +extern bool pm_runtime_need_not_resume(struct device *dev);
->  extern int pm_runtime_force_suspend(struct device *dev);
->  extern int pm_runtime_force_resume(struct device *dev);
->
-> @@ -254,6 +255,7 @@
->
->  static inline int pm_generic_runtime_suspend(struct device *dev) { return 0; }
->  static inline int pm_generic_runtime_resume(struct device *dev) { return 0; }
-> +static inline bool pm_runtime_need_not_resume(struct device *dev) {return true; }
->  static inline int pm_runtime_force_suspend(struct device *dev) { return 0; }
->  static inline int pm_runtime_force_resume(struct device *dev) { return 0; }
->
->
->
->
+Svyatoslav Ryhel (2):
+  dt-bindings: power: supply: Document Maxim MAX8971 charger
+  power: supply: Add support for Maxim MAX8971 charger
+
+ .../bindings/power/supply/maxim,max8971.yaml  |  68 ++
+ drivers/power/supply/Kconfig                  |  14 +
+ drivers/power/supply/Makefile                 |   1 +
+ drivers/power/supply/max8971_charger.c        | 758 ++++++++++++++++++
+ 4 files changed, 841 insertions(+)
+ create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
+ create mode 100644 drivers/power/supply/max8971_charger.c
+
+-- 
+2.43.0
+
 
