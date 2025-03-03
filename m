@@ -1,100 +1,140 @@
-Return-Path: <linux-pm+bounces-23314-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23315-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 15FA8A4C356
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 15:26:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C8566A4C3BA
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 15:46:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A8E9188A6D0
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 14:26:22 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B2FF170E2A
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 14:45:59 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0A501212B14;
-	Mon,  3 Mar 2025 14:26:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B06E21F473A;
+	Mon,  3 Mar 2025 14:45:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="AXmZDD4Z"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="pR0IFrRI"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D117E78F39;
-	Mon,  3 Mar 2025 14:26:09 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A08F142E6F;
+	Mon,  3 Mar 2025 14:45:56 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741011969; cv=none; b=BLNX4FQCctH5GaTQgddfa3ShoFwIG36OBQbCKjhBGCi4jVuV8DboR/nit/xdHP+FCX8PIxfqwE/mdvRZFEiitYO4KXY5mv+O19BDVrhyBPvDhi3/iQKWWTHAWT7pvxhqySGCs1VktafROfomylisgoLTkoNsSQp+XJ/5FLwbb6g=
+	t=1741013158; cv=none; b=GXEBwbAsqXsgf0HeejCcIpMkc3djSEFTPt5uSDbbBHty0vwczuwgkktqybn73/eiyfxY00b/XmZF/wpN2SAiSD8zWAUjrxoz9jCINU39BDMRS/ahDXgsV19+3Obpi6Njrs8O8SpVamJAEjGlxRPPYLZRUegA2SSwCRJzpD2Wvi0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741011969; c=relaxed/simple;
-	bh=0g9fQWh0Jv15zl9OPaLLQofjM1L8RSDKnVZdipTRZCE=;
+	s=arc-20240116; t=1741013158; c=relaxed/simple;
+	bh=oQYo31W0WahUUgGafPAeoZtr6PUwTcxwzU94GR9sNHk=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=cBYCyeHsnq5bmLXZDnP8TG3gHco3HuHOoA+liuYL00lvn2ISjzQjiqzd+4ZIJW8TBS0B32SuXQ/Q2WNN3CAWT7pWcs1OpR6LCUiaUAprlAWGkPYvaIw4oNOi1C/MJxYS3pzwkQsIfKgyQk+J1CYvLzL8kcYQ6Q7/FAj239YBpYA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=AXmZDD4Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 1A38DC4CED6;
-	Mon,  3 Mar 2025 14:26:09 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741011969;
-	bh=0g9fQWh0Jv15zl9OPaLLQofjM1L8RSDKnVZdipTRZCE=;
+	 Content-Type:Content-Disposition:In-Reply-To; b=RHFbhiEQaaUWaqhPq1MqFiMdYZe7DWZKdk1v3xoLgjrg2iMsNdQwBdGBLe+xORWOrMQsvov/oERZjsSZ1zH/evDfxfmoMVEbu/YT60GpjwMmF52QAy6rj97xR9+NnRJkk8tjAtGebHEXBcIqT2YQGOzYcdSnMHO5MkOQyu0MEoc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=pR0IFrRI; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1741013154;
+	bh=oQYo31W0WahUUgGafPAeoZtr6PUwTcxwzU94GR9sNHk=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=AXmZDD4Z9JhXaUrSlitgAjv2ProElafpbv8DEBeM8BFxzkXJaqr7hxgnvWCNxKnXg
-	 FpnnEOFIsP87R/dqG0i/j4TOH95iuIhzu3WHBJk239wRqEbMNg2y9dxsV67+PaIbvo
-	 01L4IIQpyjRChsYJbNunusnwgpusho9cFVWb77cLG4HN015/DME/JiNlr8wNWxKMU6
-	 eVsiPkCMqat8MCAj9PO8x+sKvOtRCVFnfbtwLwHKCb4UDRnoVv5+OD1cj8r3zxSjnI
-	 HE87mpYyQ3HaC2xmnZt2ZgCuAe/BijhRSQL8W6R4I2MnmVGrcJBP01yg+yEiJUM2Ca
-	 iRG1yvmq7s1qw==
-Date: Mon, 3 Mar 2025 08:26:07 -0600
-From: "Rob Herring (Arm)" <robh@kernel.org>
-To: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-Cc: Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
+	b=pR0IFrRInKm/4EW6eI5mCbpu6AcfVVOO9d1GKUgU8zBG7hrdEKWti0g2z9qKTo7gY
+	 TIySusZ81Wlxzu0ugr8hSJHkluVicHzHktayYvlfQ4JY4C69Xs5d49ZVZ6VP4GF+xF
+	 6x/X1Q1rWFk4lojtvsxX04cw/WDmhoz8DRzu77hkZqIwfXOvX53TDdtA/kVJdWvDSg
+	 tmJPG7aZWAePfIVwt4zSMqPpShGVez3MrIzhk6GdTU3a3lDV8epkhGjXQKMo5WxJ7m
+	 9lKkFUxXIl8HQz2256mS7B6P4G9A2R/UfRp3swUIQHxuY4jUNWGJwtron53UPxB3uN
+	 nbZzneyQzINPw==
+Received: from notapiano (unknown [IPv6:2804:14c:1a9:53ee::1001])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 909A317E0E8D;
+	Mon,  3 Mar 2025 15:45:49 +0100 (CET)
+Date: Mon, 3 Mar 2025 11:45:47 -0300
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Lukasz Luba <lukasz.luba@arm.com>,
-	Sebastian Reichel <sebastian.reichel@collabora.com>,
-	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
-	linux-rockchip@lists.infradead.org,
 	Conor Dooley <conor+dt@kernel.org>,
-	Heiko Stuebner <heiko@sntech.de>, linux-kernel@vger.kernel.org,
-	devicetree@vger.kernel.org, kernel@collabora.com
-Subject: Re: [PATCH v3 4/6] dt-bindings: thermal: rockchip: document otp
- thermal trim
-Message-ID: <174101196712.1786336.17880487519994518563.robh@kernel.org>
-References: <20250228-rk3576-tsadc-upstream-v3-0-4bfbb3b699b9@collabora.com>
- <20250228-rk3576-tsadc-upstream-v3-4-4bfbb3b699b9@collabora.com>
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, kernel@collabora.com,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v2 01/20] ASoC: dt-bindings: Add document for
+ mt6359-accdet
+Message-ID: <0120fe30-43c4-4fec-8b5e-fdb6b382fc2a@notapiano>
+References: <20250302-mt6359-accdet-dts-v2-0-5bd633ee0d47@collabora.com>
+ <20250302-mt6359-accdet-dts-v2-1-5bd633ee0d47@collabora.com>
+ <628a81c5-b9f1-4be9-84ec-90022a3526da@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
+Content-Type: text/plain; charset=iso-8859-1
 Content-Disposition: inline
-In-Reply-To: <20250228-rk3576-tsadc-upstream-v3-4-4bfbb3b699b9@collabora.com>
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <628a81c5-b9f1-4be9-84ec-90022a3526da@collabora.com>
 
+On Mon, Mar 03, 2025 at 12:14:51PM +0100, AngeloGioacchino Del Regno wrote:
+> Il 02/03/25 17:30, Nícolas F. R. A. Prado ha scritto:
+> > Add dt-binding for the MT6359 ACCDET hardware block.
+> > 
+> > Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > ---
+> >   .../bindings/sound/mediatek,mt6359-accdet.yaml     | 42 ++++++++++++++++++++++
+> >   1 file changed, 42 insertions(+)
+> > 
+> > diff --git a/Documentation/devicetree/bindings/sound/mediatek,mt6359-accdet.yaml b/Documentation/devicetree/bindings/sound/mediatek,mt6359-accdet.yaml
+> > new file mode 100644
+> > index 0000000000000000000000000000000000000000..d08a79301409374714c76135b061e20e8e8acfaf
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/sound/mediatek,mt6359-accdet.yaml
+> > @@ -0,0 +1,42 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/sound/mediatek,mt6359-accdet.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: MT6359 Accessory Detection
+> > +
+> > +maintainers:
+> > +  - Nícolas F. R. A. Prado <nfraprado@collabora.com>
+> > +
+> > +description: |
+> > +  The MT6359 Accessory Detection block is part of the MT6359 PMIC and allows
+> > +  detecting audio jack insertion and removal, as well as identifying the type of
+> > +  events connected to the jack.
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: mediatek,mt6359-accdet
+> > +
+> > +  mediatek,hp-eint-high:
+> > +    type: boolean
+> > +    description:
+> > +      By default, the HP_EINT pin is assumed to be pulled high and connected to
+> 
+> Just to be clearer about this pin being an internal one and not externally sourced,
+> so, *not* a SoC GPIO, but somehing that is completely provided and handled by the
+> accdet IP...
+> 
+> "By default, the accdet IP's internal HP_EINT pin is assumed to be pulled ..."
 
-On Fri, 28 Feb 2025 21:06:54 +0100, Nicolas Frattaroli wrote:
-> Several Rockchip SoCs, such as the RK3576, can store calibration trim
-> data for thermal sensors in OTP cells. This capability should be
-> documented.
-> 
-> Such a rockchip thermal sensor may reference cell handles that store
-> both a chip-wide trim for all the sensors, as well as cell handles
-> for each individual sensor channel pointing to that specific sensor's
-> trim value.
-> 
-> Additionally, the thermal sensor may optionally reference cells which
-> store the base in terms of degrees celsius and decicelsius that the trim
-> is relative to.
-> 
-> Each SoC that implements this appears to have a slightly different
-> combination of chip-wide trim, base, base fractional part and
-> per-channel trim, so which ones do which is documented in the bindings.
-> 
-> Signed-off-by: Nicolas Frattaroli <nicolas.frattaroli@collabora.com>
-> ---
->  .../bindings/thermal/rockchip-thermal.yaml         | 61 ++++++++++++++++++++++
->  1 file changed, 61 insertions(+)
-> 
+The HP_EINT is an external, not internal, pin of the MT6359 PMIC. It is an input
+pin of the MT6359 IC that gets wired to the tip (left channel) of a 3.5mm audio
+jack to allow for detecting when a plug is connected.
 
-Reviewed-by: Rob Herring (Arm) <robh@kernel.org>
+Since this dt-binding is about an IP in the MT6359 PMIC, I think when saying
+"HP_EINT pin" it is already clear that the pin is on the MT6359 IC, but if you
+think it's necessary I could make it "MT6359's HP_EINT pin".
 
+Thanks,
+Nícolas
 
