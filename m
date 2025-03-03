@@ -1,177 +1,300 @@
-Return-Path: <linux-pm+bounces-23270-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23271-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 97D02A4BB53
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 10:56:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4D915A4BB74
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 10:58:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 779947A4AA2
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 09:55:03 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 0003B1889049
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 09:58:27 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 722031F2382;
-	Mon,  3 Mar 2025 09:55:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D8691F1317;
+	Mon,  3 Mar 2025 09:58:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b="iOuR5pQS"
+	dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b="L8hCthpU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mailout2.w1.samsung.com (mailout2.w1.samsung.com [210.118.77.12])
+Received: from lelvem-ot02.ext.ti.com (lelvem-ot02.ext.ti.com [198.47.23.235])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 60AB21F1317
-	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 09:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.118.77.12
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3F6A91D79A3;
+	Mon,  3 Mar 2025 09:58:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.47.23.235
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1740995726; cv=none; b=TBqoNOc/v7J4tfj7mcAmtIsmAsP9IRNrA0ahuQhq3SMRftueNBn1p0YOdZZy/uYjoradSoOb108GT8HjNV2jQZOrwE0lTYscGEv97kEop5BL3562wpWNoeImVEIDhiwwEQRjP9/cb5047Yft+ht8Mhle8m1f29ggZKth9cKCZxI=
+	t=1740995897; cv=none; b=Hp3IcXHovlfp6Srl2wER/POicwrP5ezhiPT9S5iz6/wFeZIpYr42KJhAmNP8iCEQKzveEmfd8Rl/ku6llCGKaWVPbrMCEOVwyKJ03AA/1FmKtJ3mROosHvCnufpbNr7d12YvDEYqKw19rVrF4+oi0O6/Thnp7VHUUMh2/Ca57Zs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1740995726; c=relaxed/simple;
-	bh=6dFKW+lioLDu60dHVNyKGbg+VYbzqtMUAtM10HSxmKE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:From:In-Reply-To:
-	 Content-Type:References; b=mFhGcmHfoOMfqM+eTOU6EuPzTDKrliDUNVJLItPnRsTXyYJOsUi9l6Oi7PTSHVgeCPgNUln26uCbDUCyr4RESSck23wTaM/0vM4VecTzksQ1t+4oYv7tUVNMa93ZjuCAnb3QhXRTAgJoCUs9d0I4K/F7geP+pRB+NOWAQjeXHnk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com; spf=pass smtp.mailfrom=samsung.com; dkim=pass (1024-bit key) header.d=samsung.com header.i=@samsung.com header.b=iOuR5pQS; arc=none smtp.client-ip=210.118.77.12
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=samsung.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=samsung.com
-Received: from eucas1p2.samsung.com (unknown [182.198.249.207])
-	by mailout2.w1.samsung.com (KnoxPortal) with ESMTP id 20250303095522euoutp02f96cedbbcc151e00333cf79021a2dc95~pQmK16ZAW0170001700euoutp02B
-	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 09:55:22 +0000 (GMT)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mailout2.w1.samsung.com 20250303095522euoutp02f96cedbbcc151e00333cf79021a2dc95~pQmK16ZAW0170001700euoutp02B
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=samsung.com;
-	s=mail20170921; t=1740995722;
-	bh=jkAx3oP1ERyW9hpWianokfe1kkMolVE+K5Ndsqy3gk0=;
-	h=Date:Subject:To:Cc:From:In-Reply-To:References:From;
-	b=iOuR5pQS7+qqFtOPV46S4Hy6dQuMPQhYuid5Ci7LELDTRFVkVQug3gKvcpxU135Mo
-	 1APKhmYi1jvFdS8DZZ/67aOStH8U6ztnCndaJuOAHa4dQZFCKwOmoY85IYUA/NvaMC
-	 bd9i0Z0/cgaARw/1oYfXFSJWfWfZ6M2GHxn1D95E=
-Received: from eusmges3new.samsung.com (unknown [203.254.199.245]) by
-	eucas1p1.samsung.com (KnoxPortal) with ESMTP id
-	20250303095521eucas1p18b3e85146d3b4e58d374ee65443f510c~pQmKDy2hP1876818768eucas1p1H;
-	Mon,  3 Mar 2025 09:55:21 +0000 (GMT)
-Received: from eucas1p2.samsung.com ( [182.198.249.207]) by
-	eusmges3new.samsung.com (EUCPMTA) with SMTP id A3.CF.20397.98C75C76; Mon,  3
-	Mar 2025 09:55:21 +0000 (GMT)
-Received: from eusmtrp2.samsung.com (unknown [182.198.249.139]) by
-	eucas1p2.samsung.com (KnoxPortal) with ESMTPA id
-	20250303095521eucas1p24b0494320e01283259315a138346d672~pQmJhIYUQ1753017530eucas1p2w;
-	Mon,  3 Mar 2025 09:55:21 +0000 (GMT)
-Received: from eusmgms1.samsung.com (unknown [182.198.249.179]) by
-	eusmtrp2.samsung.com (KnoxPortal) with ESMTP id
-	20250303095521eusmtrp2a5ece5c802ffd421b11eeb5d30ebd786~pQmJgJtYD1593015930eusmtrp2I;
-	Mon,  3 Mar 2025 09:55:21 +0000 (GMT)
-X-AuditID: cbfec7f5-e59c770000004fad-c5-67c57c899582
-Received: from eusmtip1.samsung.com ( [203.254.199.221]) by
-	eusmgms1.samsung.com (EUCPMTA) with SMTP id A8.7F.19920.98C75C76; Mon,  3
-	Mar 2025 09:55:21 +0000 (GMT)
-Received: from [192.168.1.44] (unknown [106.210.136.40]) by
-	eusmtip1.samsung.com (KnoxPortal) with ESMTPA id
-	20250303095519eusmtip10a4185fb739894007312f6777ae0b061~pQmIDKL-s0171201712eusmtip1D;
-	Mon,  3 Mar 2025 09:55:19 +0000 (GMT)
-Message-ID: <4deba4d6-b82d-4e57-bd27-f4e1523b38ea@samsung.com>
-Date: Mon, 3 Mar 2025 10:55:19 +0100
+	s=arc-20240116; t=1740995897; c=relaxed/simple;
+	bh=jsCzTFVQjhyi34lEMooZFC2t/E5oWZlU/nOh9xu/6Hk=;
+	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LXISjFBLVxFdSXSmuo2elTxxeICiAOLfOD8QQ+7jckqr9FKrm0HMXH8z79Us6gDUM7epih/uHxgU+Oyg/Mjd/2H9uKkbBbBRo2w6BpJJbVfachpxMikc8IEY96JfMx39fn0Xp5eU2Zu5ynfQm1RvyILCgUBRCMz9FkFmwveWFZg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com; spf=pass smtp.mailfrom=ti.com; dkim=pass (1024-bit key) header.d=ti.com header.i=@ti.com header.b=L8hCthpU; arc=none smtp.client-ip=198.47.23.235
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=ti.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ti.com
+Received: from lelv0265.itg.ti.com ([10.180.67.224])
+	by lelvem-ot02.ext.ti.com (8.15.2/8.15.2) with ESMTPS id 5239wBmQ3297422
+	(version=TLSv1.2 cipher=DHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Mon, 3 Mar 2025 03:58:11 -0600
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ti.com;
+	s=ti-com-17Q1; t=1740995891;
+	bh=FeggH+PeB9tjcVLtMliId21gkOc5JjsNarxCUZO3rdE=;
+	h=Date:From:To:CC:Subject:References:In-Reply-To;
+	b=L8hCthpUxu1WCYVdXRZCrM6wIuSqUaWtgXiyNuTVpqPCeGIYgc+Ki+pql2Cw1Yek1
+	 mS2qw/PX4RaoHu4YN0vR0Ldu5gIz2Du8VNaDqPRPv0ACR5smAXby2tPCsxPfUDrLbA
+	 BqcvI1mzMrFdKpi5avz+DS8RD2crszeCgBXNBUw4=
+Received: from DLEE109.ent.ti.com (dlee109.ent.ti.com [157.170.170.41])
+	by lelv0265.itg.ti.com (8.15.2/8.15.2) with ESMTPS id 5239wBv0029201
+	(version=TLSv1.2 cipher=AES256-GCM-SHA384 bits=256 verify=FAIL);
+	Mon, 3 Mar 2025 03:58:11 -0600
+Received: from DLEE107.ent.ti.com (157.170.170.37) by DLEE109.ent.ti.com
+ (157.170.170.41) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23; Mon, 3
+ Mar 2025 03:58:11 -0600
+Received: from lelvsmtp5.itg.ti.com (10.180.75.250) by DLEE107.ent.ti.com
+ (157.170.170.37) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_128_CBC_SHA256_P256) id 15.1.2507.23 via
+ Frontend Transport; Mon, 3 Mar 2025 03:58:11 -0600
+Received: from localhost (lcpd911.dhcp.ti.com [172.24.227.226])
+	by lelvsmtp5.itg.ti.com (8.15.2/8.15.2) with ESMTP id 5239wA2k035790;
+	Mon, 3 Mar 2025 03:58:10 -0600
+Date: Mon, 3 Mar 2025 15:28:09 +0530
+From: Dhruva Gole <d-gole@ti.com>
+To: Ulf Hansson <ulf.hansson@linaro.org>
+CC: Kamlesh Gurudasani <kamlesh@ti.com>, <vigneshr@ti.com>,
+        <linux-pm@vger.kernel.org>, <linux-kernel@vger.kernel.org>,
+        <khilman@baylibre.com>
+Subject: Re: [PATCH RFC] pmdomain: core: add support for writeble power
+ domain state
+Message-ID: <20250303095809.x2mmd52znicl7roy@lcpd911>
+References: <20250221-pm-debug-v1-1-e5bd815f7ca4@ti.com>
+ <CAPDyKFr+P9oi-ofXOkfoBHSCLaCAREW_efjJ6TctTeo_AVCzDA@mail.gmail.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v5 09/21] dt-bindings: clock: thead: Add GPU clkgen
- reset property
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: mturquette@baylibre.com, sboyd@kernel.org, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, guoren@kernel.org,
-	wefu@redhat.com, jassisinghbrar@gmail.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, frank.binns@imgtec.com,
-	matt.coster@imgtec.com, maarten.lankhorst@linux.intel.com,
-	mripard@kernel.org, tzimmermann@suse.de, airlied@gmail.com, simona@ffwll.ch,
-	ulf.hansson@linaro.org, jszhang@kernel.org, p.zabel@pengutronix.de,
-	m.szyprowski@samsung.com, linux-clk@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org, dri-devel@lists.freedesktop.org,
-	linux-pm@vger.kernel.org
-Content-Language: en-US
-From: Michal Wilczynski <m.wilczynski@samsung.com>
-In-Reply-To: <df625379-b472-45d9-87a4-8bf52a87ea1e@kernel.org>
-Content-Transfer-Encoding: 7bit
-X-Brightmail-Tracker: H4sIAAAAAAAAA02Se0xTVxzHc+69vffSCFyqC2dgZOsIi4sCKrKTsZnBILlbjI+5OLcxt0Zv
-	ihsUbGE4ZzIYyKxWZA5BO4TizEQUYawUigUmsNYK8lRKeBSz1QYqyKuCG6+1XN347/P7/h7f
-	3+/k0LioifSjD8mSOblMEi8mhYTO+Hf7RuWxP6Sh47c2otuWSxiqmlNT6HpdG4aKmtsEyNql
-	xdC9J+MkuvGwg0LDdekE6im5SKEMYzmJRtRWErW3V1BoUmUVoO7aAhJNn24GSDedSaKy5kEK
-	FU9WEehyTS1AWcpfBKjzTgwatN4m0Ei3CkdZam+0ZKih0GLPrwT66XEDhbSjPwiQqexDlNmQ
-	S7y9jh3vPU6xoyMjBNt0wkmxdTMagtWrBylWpW8FbGWpkmQHegwkW2jezQ6dMmHsb5e/ZTPL
-	jBh7ZiGUHa+/T7LZ2lLAdmVYqF2ij4VvHuTiD33FyUO2fS6M+9HyO5l0njoydyedTAMVgpPA
-	g4ZMGGydzXOxkBYxJQA6G3MBHzgBtOWMknwwDaA120A8b+m351F84gqAmefsGB+MAWgqMAJ3
-	lSezDRqvGnE3E0wgrHfMULzuA80XbMuTXmAC4FDf+WV9NbMP3l3KX9bXMOuhZWF2eSmcMQhg
-	Xi6/Lc74wj5bEeZmktkMH1wpWtY9XGaVZ0wYXxMAq8cKcHczZDqF8OS9689OjYYdT/tInldD
-	h0lL8bwWLun5oZBJhA+qpnCej0G9yvSMI+BA2z+uXtplsB6W14bwciS0VbsPoF3sBXvHfPgV
-	vOBZXT7Oy57wRJaIrw6C51Sn/zNtK9FhOUCsXvEq6hVHqlcco/7fVwOIUuDLpSgSpJxii4xL
-	DVZIEhQpMmnwgcSESuD65y2Lpic1oMQxGdwIMBo0Akjj4jWeh99vloo8D0q+PsrJEz+Tp8Rz
-	ikbgTxNiX89LDcelIkYqSea+5LgkTv48i9EefmkYvraw0JY7ry9XGu3K+Zc3KIOkZSETX+ze
-	OewRTcTZHeaKIFwYle7YsXi3r+7G94GzHRHGv0IiU9Nl/rGf5Gzfs+Vp/l5zhKg7ZuujiMG6
-	AIet18/of9PLkISNbR/3i+xUWcM+iMqeeGnDq4oU7d6jh4vN9c5rpaF77Kcy9s8syg6E3Wrw
-	xi500Nc+zRLtiC23pD6O0UX/+XpAt05T9lHez5p5b5vw4bubO4db1r2zqvq7qy9i4RrDe4Fn
-	fWUgdml4zrkT739lf/SmNxxF/lt9ar2akiam9EcGxNmOFt+09igf+9D8o/urrN+ET7U2dV0c
-	DZ/u17+F7Vu4OVcVkF+cPLhLKyYUcZJNr+FyheRfLoBNOFYEAAA=
-X-Brightmail-Tracker: H4sIAAAAAAAAA+NgFrrKKsWRmVeSWpSXmKPExsVy+t/xu7qdNUfTDS6dYLc4cX0Rk8XW37PY
-	LdbsPcdkMf/IOVaLe5e2MFlc+fqezWLd0wvsFi/2NrJYXFsxl92i+dh6NouXs+6xWZw/v4Hd
-	4mPPPVaLy7vmsFl87j3CaLHtcwubxdojd9ktFn7cymKxZMcuRou2zmWsFhdPuVrcvXeCxeLl
-	5R5mi7ZZ/Bb/9+xgt/h3bSOLxex3+9kttryZyGpxfG24Rcv+KSwOch7vb7Sye7x5+ZLF43DH
-	F3aPvd8WsHjsnHWX3aNn5xlGj02rOtk87lzbw+Yx72Sgx/3u40wem5fUe7SsPcbk0f/XwOP9
-	vqtsHn1bVjF6XGq+zh4gFKVnU5RfWpKqkJFfXGKrFG1oYaRnaGmhZ2RiqWdobB5rZWSqpG9n
-	k5Kak1mWWqRvl6CXMfn6AbaCGewVv081sjUwbmDtYuTkkBAwkbj9bBp7FyMXh5DAUkaJy1sW
-	QCVkJK51v2SBsIUl/lzrYoMoes0oceVpJxtIglfATuLYymPMIDaLgIrEvlff2CHighInZz4B
-	axYVkJe4f2sGWFxYIELi9px7YLaIgKbE9b/fWUGGMgvsYZU4vPkz1IYXTBITJrwB28AsIC5x
-	68l8JhCbTcBI4sHy+WDncQJt3tR/HCjOAVSjLrF+nhBEubzE9rdzmCcwCs1CcscsJJNmIXTM
-	QtKxgJFlFaNIamlxbnpusaFecWJucWleul5yfu4mRmD62nbs5+YdjPNefdQ7xMjEwXiIUYKD
-	WUmEtzDoSLoQb0piZVVqUX58UWlOavEhRlNgWExklhJNzgcm0LySeEMzA1NDEzNLA1NLM2Ml
-	cV63y+fThATSE0tSs1NTC1KLYPqYODilGpjWZbgu4amz51zbvclj01cdjUnB7xdYVmeqrsja
-	lHJliV3H+hP8nxQuRrvencq9k2vizncTfDeoHDXxEroaIDXvaVrAp50rXHLqeb1YD5dXV65r
-	OnP2V0SUxt1/7U2vJDZNPiWQeWI2v6KlFPOXpx+c/rTf3Cmafr15/9VDZ1t3Pc5kT2itOHtv
-	gi/PQ9aDUk9vnv2anRFst4T7z5o7Sp8fr+TScqlPaLc6/t9e6P7aFRd4jHcy/wxgWhj587da
-	MPPRuJc274uC26W89PNKEmaLttVONk4XNL0ntLT1Q6jM/EDbr4GLe9Ojj889anB45bzO3cdm
-	M561sA2U4Ei78O/s/RbH6QqT/ry5Ujf/L6O0EktxRqKhFnNRcSIACJJKEugDAAA=
-X-CMS-MailID: 20250303095521eucas1p24b0494320e01283259315a138346d672
-X-Msg-Generator: CA
-Content-Type: text/plain; charset="utf-8"
-X-RootMTR: 20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639
-X-EPHeader: CA
-CMS-TYPE: 201P
-X-CMS-RootMailID: 20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639
-References: <20250219140239.1378758-1-m.wilczynski@samsung.com>
-	<CGME20250219140301eucas1p249b17ca44832eb8caad2e9ad0e4f8639@eucas1p2.samsung.com>
-	<20250219140239.1378758-10-m.wilczynski@samsung.com>
-	<20250221-imaginary-ebony-macaque-aace8d@krzk-bin>
-	<7296ddb3-2096-4414-bfa4-28fc5bb8ec86@samsung.com>
-	<df625379-b472-45d9-87a4-8bf52a87ea1e@kernel.org>
+Content-Type: text/plain; charset="us-ascii"
+Content-Disposition: inline
+In-Reply-To: <CAPDyKFr+P9oi-ofXOkfoBHSCLaCAREW_efjJ6TctTeo_AVCzDA@mail.gmail.com>
+X-C2ProcessedOrg: 333ef613-75bf-4e12-a4b1-8e3623f5dcea
 
+Ulf,
 
+On Feb 28, 2025 at 13:39:44 +0100, Ulf Hansson wrote:
+> On Fri, 21 Feb 2025 at 14:48, Kamlesh Gurudasani <kamlesh@ti.com> wrote:
+> >
+> > Add support for writeable power domain states from debugfs.
+> >
+> > Defining GENPD_ALLOW_WRITE_DEBUGFS will enable writeable pd_state
+> > node in debugfs.
+> >
+> > Signed-off-by: Kamlesh Gurudasani <kamlesh@ti.com>
+> > ---
+> > This has turn out to be really helpful when debugging SCMI protocol
+> > for power domain management.
+> >
+> > Reference has been taken from clock framework which provides similar
+> > CLOCK_ALLOW_WRITE_DEBUGFS, which helps to test clocks from debugfs.
+> > ---
+> >  drivers/pmdomain/core.c | 77 +++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++++
+> >  1 file changed, 77 insertions(+)
+> >
+> > diff --git a/drivers/pmdomain/core.c b/drivers/pmdomain/core.c
+> > index 9b2f28b34bb5..6aba0c672da0 100644
+> > --- a/drivers/pmdomain/core.c
+> > +++ b/drivers/pmdomain/core.c
+> > @@ -1298,6 +1298,60 @@ late_initcall_sync(genpd_power_off_unused);
+> >
+> >  #ifdef CONFIG_PM_SLEEP
+> >
+> > +#ifdef GENPD_ALLOW_WRITE_DEBUGFS
+> > +/*
+> > + * This can be dangerous, therefore don't provide any real compile time
+> > + * configuration option for this feature.
+> > + * People who want to use this will need to modify the source code directly.
+> > + */
+> > +static int genpd_state_set(void *data, u64 val)
+> > +{
+> > +
+> > +       struct generic_pm_domain *genpd = data;
+> > +       int ret = 0;
+> > +
+> > +       ret = genpd_lock_interruptible(genpd);
+> > +       if (ret)
+> > +               return -ERESTARTSYS;
+> > +
+> > +       if (val == 1) {
+> > +               genpd->power_on(genpd);
+> > +               genpd->status = GENPD_STATE_ON;
+> > +       } else if (val == 0) {
+> > +               genpd->power_off(genpd);
+> > +               genpd->status = GENPD_STATE_OFF;
+> > +       }
+> > +
+> > +       genpd_unlock(genpd);
+> > +       return 0;
+> 
+> This makes the behaviour in genpd inconsistent and I am worried about
+> that, even if it's for debugging/development.
+> 
+> For example, what if there is a device hooked up to the genpd which
+> requires its PM domain to stay on? And what about child domains?
 
-On 3/3/25 09:52, Krzysztof Kozlowski wrote:
-> On 03/03/2025 09:42, Michal Wilczynski wrote:
->>>> +allOf:
->>>> +  - if:
->>>> +      properties:
->>>> +        compatible:
->>>> +          contains:
->>>> +            const: thead,th1520-clk-vo
->>>> +    then:
->>>> +      required:
->>>> +        - resets
->>>
->>> else:
->>> ? What's there? Also reset or no?
->>
->> If the else: case the reset is not required, as it's only required in
->> the th1520clk-vo, so there is no need for else:.
-> That's not the question. I know it is not required, I can read code.
-> What is in the hardware?
+Thanks for taking a look.
 
-I noticed the register SW_GMAC1_GRST_N in section 5.4.2.2.66 of the
-manual (GMAC1_SWRST [2]), which indicates a GMAC1 CLKGEN soft reset.
-Although this could theoretically reset part of the AP clock, it is not
-actually used by the AP clock driver or needed for initialization.
+Agreed that there maybe some paths in genpd that this patch maybe
+ignoring and thus could break something fundamental while debugging.
+
+Perhaps we can split this patch up and remove the state_set part till we
+figure out the right way of doing it without breaking genPD
+
+BUT, as I said in my previous response I feel that if one is enabling
+DEBUG config then anyway they are literally aware of the risk that they
+are taking, by exposing raw PD on/off operations from user space.
+Perhaps we can continue our debate on the reply I gave earlier on this
+thread...
 
 > 
-> Best regards,
-> Krzysztof
+> > +}
+> > +
+> > +#define pd_state_mode  0644
+> > +
+> > +static int genpd_state_get(void *data, u64 *val)
+> > +{
+> > +
+> > +       struct generic_pm_domain *genpd = data;
+> > +       int ret = 0;
+> > +
+> > +       ret = genpd_lock_interruptible(genpd);
+> > +       if (ret)
+> > +               return -ERESTARTSYS;
+> > +
+> > +       if (genpd->status == GENPD_STATE_OFF)
+> > +               *val = 0;
+> > +       else
+> > +               *val = 1;
+> > +
+> > +       genpd_unlock(genpd);
+> > +       return ret;
+> > +}
+> > +
+> > +DEFINE_DEBUGFS_ATTRIBUTE(pd_state_fops, genpd_state_get,
+> > +                        genpd_state_set, "%llu\n");
+> > +
+> > +#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
+> > +
+> >  /**
+> >   * genpd_sync_power_off - Synchronously power off a PM domain and its parents.
+> >   * @genpd: PM domain to power off, if possible.
+> > @@ -3639,6 +3693,11 @@ static void genpd_debug_add(struct generic_pm_domain *genpd)
+> >         if (genpd->set_performance_state)
+> >                 debugfs_create_file("perf_state", 0444,
+> >                                     d, genpd, &perf_state_fops);
+> > +#ifdef GENPD_ALLOW_WRITE_DEBUGFS
+> > +       debugfs_create_file("pd_state", 0644, d, genpd,
+> > +                           &pd_state_fops);
+> > +#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
+> > +
+> >  }
+> >
+> >  static int __init genpd_debug_init(void)
+> > @@ -3653,6 +3712,24 @@ static int __init genpd_debug_init(void)
+> >         list_for_each_entry(genpd, &gpd_list, gpd_list_node)
+> >                 genpd_debug_add(genpd);
+> >
+> > +#ifdef GENPD_ALLOW_WRITE_DEBUGFS
+> > +       pr_warn("\n");
+> > +       pr_warn("********************************************************************\n");
+> > +       pr_warn("**     NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE           **\n");
+> > +       pr_warn("**                                                                **\n");
+> > +       pr_warn("**  WRITEABLE POWER DOMAIN STATE DEBUGFS SUPPORT HAS BEEN ENABLED **\n");
+> > +       pr_warn("**  IN THIS KERNEL                                                **\n");
+> > +       pr_warn("** This means that this kernel is built to expose pd operations   **\n");
+> > +       pr_warn("** such as enabling, disabling, etc.                              **\n");
+> > +       pr_warn("** to userspace, which may compromise security on your system.    **\n");
+> > +       pr_warn("**                                                                **\n");
+> > +       pr_warn("** If you see this message and you are not debugging the          **\n");
+> > +       pr_warn("** kernel, report this immediately to your vendor!                **\n");
+> > +       pr_warn("**                                                                **\n");
+> > +       pr_warn("**     NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE NOTICE           **\n");
+> > +       pr_warn("********************************************************************\n");
+> > +#endif /* GENPD_ALLOW_WRITE_DEBUGFS */
+> > +
+> >         return 0;
+> >  }
+> >  late_initcall(genpd_debug_init);
+> >
+> > ---
+> > base-commit: d4b0fd87ff0d4338b259dc79b2b3c6f7e70e8afa
+> > change-id: 20250221-pm-debug-0824da30890f
+> >
+> > Best regards,
+> > --
+> > Kamlesh Gurudasani <kamlesh@ti.com>
+> >
 > 
+> When working with genpd and SCMI PM domains, a more robust way to
+> debug things would be to implement a slim skeleton driver for a
+> consumer device. In principle it just needs some basic runtime PM
+> support and the corresponding device hooked up to the SCMI PM domain
+> in DT. In this way, we can use the existing sysfs interface for
+
+But this will just be a per-device limited solution right? It still
+won't allow us a generic way of dealing with all possible scmi IDs  without
+having to rebuild the system... Or maybe I am misunderstanding/ missing
+something...
+
+> runtime PM, to control and debug the behaviour of the genpd/SCMI PM
+> domain.
+
+If I were to come from a user's perspective, then they will want to be able
+to get a full view of the system's power status at a glance. Today, I am
+not aware of a way how we can do that from genpd. This makes debugging
+what is _actually_ ON/OFF in the system a bit tricky..
+
+Users may not even care much for example about the kernel drivers for
+certain controllers but still want to ensure that those controller's registers are
+accessible to them to use via something like devmem2.
+Another application for the get_status part of this patch is for
+studying the overall power draw of the system by judging which all IDs
+are on/off at a glance.
+
+Hence, if you feel that for now the state_get part of this patch makes
+sense it will still help users query the status of all the pd id's in
+the system.
+
+Thinking of it... What if we modify the existing status_show() itself
+with another column that shows current status similar to runtime status?
+status_show today only does a print based off of genpd->status ... and
+never really goes and queries the firmware again if by any chance some
+other event or activity in the system may have turned ON the device.
+
+For eg. if we have another remote processor request a resource
+but genPD was unaware of this request so it just assumes that resource is still
+off-0... That's just wrong IMO.
+
+What I am proposing is can we have a get_state callback in genPD which
+would be = something like power_ops->state_get in scmi pmdomains
+today.
+This will help the core pmdomains get an up-to-date view of the system
+in the debugFS. Whether genPD decides to update it's internal
+genpd->status based on the query is another issue.
+But from what it looks like, we definitely have a requirement here to
+make sure pm_genpd_summary shows a true-to life status of the power
+domains. Not just rely on linux runtime pm or assume that linux is the
+only real software who knows and does it all.
+
+> 
+> I have a bunch of local code/drivers for this already. Even for
+> testing the SCMI perf domain with OPPs. I can share them with you, if
+> you are interested?
+
+Yes, please do share. We would love to see your ideas on this so we can
+come up with a better solutions together.
+
+-- 
+Best regards,
+Dhruva Gole
+Texas Instruments Incorporated
 
