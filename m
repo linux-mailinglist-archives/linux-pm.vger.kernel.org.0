@@ -1,185 +1,140 @@
-Return-Path: <linux-pm+bounces-23295-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23296-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 89F5EA4BF15
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:43:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id AB57CA4BF5E
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 12:53:09 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C86993A595A
-	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:37:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C60933B3623
+	for <lists+linux-pm@lfdr.de>; Mon,  3 Mar 2025 11:49:24 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0187C1FF1D5;
-	Mon,  3 Mar 2025 11:37:18 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E463620967C;
+	Mon,  3 Mar 2025 11:48:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="GK5kaHtU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="wN/8O2WM"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f179.google.com (mail-yw1-f179.google.com [209.85.128.179])
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F16B1FF1D0
-	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 11:37:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.179
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 32D7E1F4297
+	for <linux-pm@vger.kernel.org>; Mon,  3 Mar 2025 11:48:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741001837; cv=none; b=HS+nyInijMz9AuXc/JOEYBwrxmoBhEqjIx4PnQepsTdbA3gdP/fBhYHgGWPG/GNJUCVCMcFMnRoKL+4EpvzHUezrzCxPI/726JZJnDQt+eALiV5/T8pAhdrUAxoq+RIuJZsx6xFU9wVHo67g+Z+HDmlLrha3nQT75XEVWZ4vBUc=
+	t=1741002493; cv=none; b=GV5JOqILMYFXEiEtKDivh5n6FOUfFX2VZkjOcONc4yGcVapW3IVW7RN63pKjy4CXZn6YeWQtascSfB6MlpsIBpPu5E08AmLsb7jzb+Cwljg5VTrbGSLqaNtuIxnSwAtCWms6El0J3hs5SocHX3hAzQgzyDioU5WPt2dXXTwR0PI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741001837; c=relaxed/simple;
-	bh=gSmqjl48I2bftmg98TgvWKfCxzYiI8y99YYV12eiWM4=;
+	s=arc-20240116; t=1741002493; c=relaxed/simple;
+	bh=b+lx7Mhr5F+6MDHZhmiQwGCwKX8l5EMHGINdzkXhal8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=GSsoLjvVWdhcfeTlErDMMDnGQaMBilxD8v94Gigi0q8tKRmADqXv4BHlvVukWoC58Ww0kBsPUgkzXWJ3LgkUVhZeBppzKuYbrwuBcnTMIdsdQOA5ZsAn6tgaf+pT/JEfd83u7wdCN+BIqwP46PEXpOgr+Y5fgCE3HS33BlP+RB8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=GK5kaHtU; arc=none smtp.client-ip=209.85.128.179
+	 To:Cc:Content-Type; b=P2q04Kjvqf1caecrVa0hG6pJN+1W1KK2L299XWj3FJ0jDgiaPG8z/u7CMyl2TbYsCFUjN9+b8bgZ/4XJQHNUKfZKNvrtlJFZm4Zh++OZaJA0fpZr/RLg6lydH5J4tGnPxJ6tGazu5PXh4h8eGvKOT4YgrSc8MY/Tc/elD8Atoto=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=wN/8O2WM; arc=none smtp.client-ip=209.85.128.176
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f179.google.com with SMTP id 00721157ae682-6f74b78df93so38028687b3.0
-        for <linux-pm@vger.kernel.org>; Mon, 03 Mar 2025 03:37:16 -0800 (PST)
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6fbaa0582a6so36501837b3.1
+        for <linux-pm@vger.kernel.org>; Mon, 03 Mar 2025 03:48:11 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741001835; x=1741606635; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1741002491; x=1741607291; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VZdcPlKGwSUQ1/c/x0IEBqiGcJoStRQT2SaVJ9Y6HOg=;
-        b=GK5kaHtUi355ItY4ZtFQZHjzfQM9dQ/O8+wFfAlJtSJtfA+6d504PRieJb7idYbzIw
-         WaKxOnqCHKib9Xo1vw3S5hQ8KFtiTaNi9ydDkMvAoTJjaTFJWvM6YeooujfMT0hu0TxE
-         RFsxE8bXf9Xbiy1S5qMDCpjRUlyruwjM6iK3ZdpWuW5hp8eUjVw738BJErki1eWHztbw
-         BzOvM+sxwJZeLQyyJB4ZArWpAsxcJWaUYeafzJ5RBXFZDAW5qjrdlzVNtJLgzbTNJPdJ
-         dJkretoVTEUgbUjvdDKMwhmZziScCtnsmMO+1K//AmCMRCnN1SdKbEQSjoQVwtAlV7Ie
-         xBrQ==
+        bh=3d27QuSpy+kpWSA5wCmX6ePb2qWRbp1n87DWygzb7ZQ=;
+        b=wN/8O2WMt4I5yir/lgd3E7SUqlJ9+m/EGjVskD6DwNQ/INU+WFSV1LuUTum9JOZ4rI
+         GzTa8nOlST/rmUPMLQUKoAwVOWjQpkNU+S6Que+nLCk5kHlHRZCXc7gU6Rw8/O5xZdiP
+         6dzXQFj6OqNOWXCjPrsd5P6piOfniZmWzpkdLwWQssZXrtXjlzlporGPgVW1Kpsz/wnH
+         s+2tw5kdfkkjvm+ySXdP86K0lBYey7Hgxs30Vbr8ewQM1LJv3n27QzK4f6rLr95Nj+Gp
+         bTc2vk3wH3hxLZHkMItJKCuflAaHmjg0md6c8fsqsUA+xr+86zeaP08D2bEviwrXeNZx
+         B1fg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741001835; x=1741606635;
+        d=1e100.net; s=20230601; t=1741002491; x=1741607291;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=VZdcPlKGwSUQ1/c/x0IEBqiGcJoStRQT2SaVJ9Y6HOg=;
-        b=iMtnDbqf1fe3ZqXg7gOniwX9/IJag4WiowioaMo/Aq5AN5ioiSdAo2kZ+ybDO0C6zi
-         CvrcRUCZQiQ28wcm5xvneRGLnMyrt+S8JtKn/GTSPAGfqg5M4u+9ob1fWOCnKk225UcZ
-         ETYgkifohczzM7WwUrh29NRtbjGzg7bLUzXpusj34rOTQGQRV85NBhX1HHSj96FJ4v/e
-         CiokMwkmcmPZsMZu1OLWkNpv1xVtMFv6AdB7kQvK7v9MDBaUJiOJn9VPrsf2Bdw9uEdp
-         Urj2S+IqsYCW/CGKakkL9Nr9Kgv9s8Godsaer5YbW621uAvPXZZhRR6gkm4ZRSMDr+Py
-         pF7A==
-X-Gm-Message-State: AOJu0YwC+TnUROPKK4FXVCZ5U2vnZGTvdeeNTsO7EFI53lyO3EDs/voI
-	pwy1BS9w9bt5OumPveyT0RxmSATne0iWxQxObL2VLhiCb5Y8cbkI4rakSloL8jFXGwO7LVj7mx/
-	Q6ZDvQflvr8UWQjQoyQQyxbs7Lv/WD+1V2BRnFA==
-X-Gm-Gg: ASbGncvl6I1lXc7kSSTr4fw9t9uYIGcpGWY8SkUIepiXENIFGGfN0epr6OzQcXroL1b
-	7MG717ltMnE3jjMtiV0ZlidCyZod2xRAsxTT3LaE4LLDi7kIURnTKKEUs7XYV8s5Ot5F0S9g1IB
-	ifjtpYBbKvYEq8A7E+Agtt7UIbLUU=
-X-Google-Smtp-Source: AGHT+IHrccx3eeYx7Ph57lcw3jkpDa9UoiqwNC12MOXPb6LaFAIEcFkZzSIkizPiqpdEw1ZhtDOIw4oKutTggiYjUA4=
-X-Received: by 2002:a05:690c:3001:b0:6fd:44a5:5b68 with SMTP id
- 00721157ae682-6fd4a100420mr180752197b3.35.1741001835219; Mon, 03 Mar 2025
- 03:37:15 -0800 (PST)
+        bh=3d27QuSpy+kpWSA5wCmX6ePb2qWRbp1n87DWygzb7ZQ=;
+        b=qXX8DW0tcQ1iQg2sBWfPiyYJMhoB3Be7srotpDDnWYjxTsOLy8t1tbj7K9tvqjQD7d
+         xGHASeFTRGhcS1tBH3rJ74gYjL+V3yhoAGBAYBCNCoj3aE5fD95gs/9hEFt4PNQP/aaP
+         2ATixSthhsJ8eOwELs3PJd1SrLVKPzqGxdckq0Xs/E3UbljRDK2yo9dar7IjAQQSNA8C
+         WbLUAghaE1RYw563myhG4v/lNJEPFPyFUDiJL3VQ96/OSlxKKWXY/zfbahHIaO24tp8e
+         TJgoPZephiBmV1EfnRPW15fYCsaYo1kL8HgBqT9ak9gsCOJPpkEdHRKxDigTaMaFfkaT
+         USew==
+X-Gm-Message-State: AOJu0Yz/+2emYfvR2p74tCQ2FrumomiWbhR4BHYc9/gSrucWDVFzZnrZ
+	3gDz5P267mp0sITMcVan0CL7wdVkP1pJNARNW81W9oa2sVun4LKIRZrIaIE1hIBcMRV4/FwyCOY
+	CBORZ3BUeqM/GcQHIFO2DofenEHtLjxg243dfwbu+oH/Ubgbi
+X-Gm-Gg: ASbGnctwQzryTI4oOsj4bSWUQnLIZQUFzrUsE0hOMvGhrm9mxDcluUGPZPVKQEPKvVP
+	fEgbi0Px1PX8G/pbryHva8UrI3c6yuJpNM1ZiyKfv0PZaDIONlLZPvuFY1BkoBZXYBsntagCHqq
+	It1dz67Lgo6FcBVoO8uh0DMZbMfWE=
+X-Google-Smtp-Source: AGHT+IHY4RKTZsPxwlz0x+EffBNFnn1gwEl6xaAlLeZ/6mf2UqQ19PPfFUHpUPqZ9jx4BIUjRwHBk146p8gg5ejQdyY=
+X-Received: by 2002:a05:690c:45c8:b0:6fc:ed3e:ec3a with SMTP id
+ 00721157ae682-6fd39496a58mr245848667b3.5.1741002491087; Mon, 03 Mar 2025
+ 03:48:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <12620037.O9o76ZdvQC@rjwysocki.net>
-In-Reply-To: <12620037.O9o76ZdvQC@rjwysocki.net>
+References: <2309120.iZASKD2KPV@rjwysocki.net>
+In-Reply-To: <2309120.iZASKD2KPV@rjwysocki.net>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Mon, 3 Mar 2025 12:36:39 +0100
-X-Gm-Features: AQ5f1JoM9bXFkjeEORxBmtsj4iFuLmWabqtiwT-NoP3RpdVWmI2bcHKAnUHgW7Q
-Message-ID: <CAPDyKFqdD760Tn5nHghXK1DgSQ6K=hv7D32m9w0-jgi+nA7-gw@mail.gmail.com>
-Subject: Re: [PATCH v2] PM: runtime: Unify error handling during suspend and resume
+Date: Mon, 3 Mar 2025 12:47:35 +0100
+X-Gm-Features: AQ5f1JqlJPhh4XtTkm3850xwbDEaX3GA_R4NEixheKuA3ybh1Xra9hR1TqZF5cM
+Message-ID: <CAPDyKFoSr3EmAcJzw36You7BLfq-TY7KkvdtrZ_O4Wq2a=6AYw@mail.gmail.com>
+Subject: Re: [PATCH v2] PM: runtime: Drop status check from pm_runtime_force_resume()
 To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 Cc: Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Oliver Neukum <oneukum@suse.com>, 
-	Ajay Agarwal <ajayagarwal@google.com>, Brian Norris <briannorris@google.com>, 
-	Raag Jadav <raag.jadav@intel.com>
+	Alan Stern <stern@rowland.harvard.edu>, Johan Hovold <johan@kernel.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Jon Hunter <jonathanh@nvidia.com>
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 25 Feb 2025 at 18:06, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
+On Thu, 27 Feb 2025 at 11:56, Rafael J. Wysocki <rjw@rjwysocki.net> wrote:
 >
 > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 >
-> There is a confusing difference in error handling between rpm_suspend()
-> and rpm_resume() related to the special way in which -EAGAIN and -EBUSY
-> error values are treated by the former.  Also, converting -EACCES coming
-> from the callback to I/O error, which it quite likely is not, may
-> confuse runtime PM users.
+> Since pm_runtime_force_resume() requires pm_runtime_force_suspend() to
+> be called before it on the same device, the runtime PM status of the
+> device is RPM_SUSPENDED when it is called unless the device's runtime
+> PM status is changed somewhere else in the meantime.
 >
-> To address the above, modify rpm_callback() to convert -EACCES coming
-> from the driver to -EAGAIN and to set power.runtime_error only if the
-> return value is not -EAGAIN or -EBUSY.
+> However, even if that happens, the power.needs_force_resume
+> check is still required to pass and that flag is only set by
+> pm_runtime_force_suspend() once and it is cleared at the end of
+> pm_runtime_force_resume(), so it cannot be taken into account
+> twice in a row.
 >
-> This will cause the error handling in rpm_resume() and rpm_suspend() to
-> work consistently, so drop the no longer needed -EAGAIN or -EBUSY
-> special case from the latter and make it retry autosuspend if
-> power.runtime_error is unset.
+> According to the above, the pm_runtime_status_suspended(dev) check in
+> pm_runtime_force_resume() is redundant, so drop it.
 >
 > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Seems reasonable to me!
+Seems reasonable to me! Please add:
 
 Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
 Kind regards
 Uffe
 
-
 > ---
 >
-> v1 -> v2: Add comment explaining the -EACCES error code conversion (Raag)
+> The previous version of this patch is here:
+>
+> https://lore.kernel.org/linux-pm/6038511.MhkbZ0Pkbq@rjwysocki.net/
+>
+> v1 -> v2: Minor changelog edits.
 >
 > ---
->  drivers/base/power/runtime.c |   40 ++++++++++++++++++++++++----------------
->  1 file changed, 24 insertions(+), 16 deletions(-)
+>  drivers/base/power/runtime.c |    2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
 > --- a/drivers/base/power/runtime.c
 > +++ b/drivers/base/power/runtime.c
-> @@ -448,8 +448,19 @@
->                 retval = __rpm_callback(cb, dev);
->         }
+> @@ -1982,7 +1982,7 @@
+>         int (*callback)(struct device *);
+>         int ret = 0;
 >
-> -       dev->power.runtime_error = retval;
-> -       return retval != -EACCES ? retval : -EIO;
-> +       /*
-> +        * Since -EACCES means that runtime PM is disabled for the given device,
-> +        * it should not be returned by runtime PM callbacks.  If it is returned
-> +        * nevertheless, assume it to be a transient error and convert it to
-> +        * -EAGAIN.
-> +        */
-> +       if (retval == -EACCES)
-> +               retval = -EAGAIN;
-> +
-> +       if (retval != -EAGAIN && retval != -EBUSY)
-> +               dev->power.runtime_error = retval;
-> +
-> +       return retval;
->  }
+> -       if (!pm_runtime_status_suspended(dev) || !dev->power.needs_force_resume)
+> +       if (!dev->power.needs_force_resume)
+>                 goto out;
 >
->  /**
-> @@ -725,21 +736,18 @@
->         dev->power.deferred_resume = false;
->         wake_up_all(&dev->power.wait_queue);
->
-> -       if (retval == -EAGAIN || retval == -EBUSY) {
-> -               dev->power.runtime_error = 0;
-> +       /*
-> +        * On transient errors, if the callback routine failed an autosuspend,
-> +        * and if the last_busy time has been updated so that there is a new
-> +        * autosuspend expiration time, automatically reschedule another
-> +        * autosuspend.
-> +        */
-> +       if (!dev->power.runtime_error && (rpmflags & RPM_AUTO) &&
-> +           pm_runtime_autosuspend_expiration(dev) != 0)
-> +               goto repeat;
-> +
-> +       pm_runtime_cancel_pending(dev);
->
-> -               /*
-> -                * If the callback routine failed an autosuspend, and
-> -                * if the last_busy time has been updated so that there
-> -                * is a new autosuspend expiration time, automatically
-> -                * reschedule another autosuspend.
-> -                */
-> -               if ((rpmflags & RPM_AUTO) &&
-> -                   pm_runtime_autosuspend_expiration(dev) != 0)
-> -                       goto repeat;
-> -       } else {
-> -               pm_runtime_cancel_pending(dev);
-> -       }
->         goto out;
->  }
->
+>         /*
 >
 >
 >
