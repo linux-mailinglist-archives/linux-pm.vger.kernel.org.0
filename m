@@ -1,106 +1,96 @@
-Return-Path: <linux-pm+bounces-23401-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23403-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 73906A4E3B8
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:38:47 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9587EA4E514
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 17:10:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D0D681895BF4
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 15:30:17 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 47A38887D86
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 15:35:15 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2CF4724C060;
-	Tue,  4 Mar 2025 15:18:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C75BE281351;
+	Tue,  4 Mar 2025 15:23:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Z92SAcY4"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lhFUfnHg"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6D4DB294EF7;
-	Tue,  4 Mar 2025 15:18:00 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A082724C082;
+	Tue,  4 Mar 2025 15:23:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741101482; cv=none; b=scRo+KJnMJUSOKsWx0jfsYp4JwVPL0F8in0tKR9ZFpodoxCu6B9cST0ZWZ4GbXg0y0B4roCBfknV3gFHfmkPeqnazomnRnTYxdPUiY6UHTFGoF6i3ShGuSExDaQyoS6zJWucs1m04KoK2nIdBycJYb2sWJtFnQDCH5oepl333DQ=
+	t=1741101814; cv=none; b=Y42g20Vqj30Zf0d5NhglD3zUmrZFFzNr+5KSm9j3KY9J2G5YcUvhCBZpu79BD9HwEppB+byfL2kmSfeQCKgsJF6dNH5B3CxjG66dwVdJWFKqN1+9QSpH18XNLWt/d+kKp11ei5fz7ojigmVhRWr9OwBe41NUDNHHsaNoc5GAdEY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741101482; c=relaxed/simple;
-	bh=SY9RMAoowz8kStVuJuN4tunjUBmeihKNe9Rk0kme8RY=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=bttOz9JbK9WgyB1VJ8A6pr+vz6Fs0tn0NuwIrMptREUVhPX1HUf/Z33aD/yG7dm2+e9nDhJ9p7xLk/baN1kHW61lLSEV4kPxEVqHLJ+YRQjFazbXH3sqDjLCJWBEIb9m23r80b8HHeUsKFJun0SiMyFgWAmqEkiAFcIG/A/g98w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Z92SAcY4; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1741101478;
-	bh=SY9RMAoowz8kStVuJuN4tunjUBmeihKNe9Rk0kme8RY=;
-	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Z92SAcY4bic4+jlPkfFqmNjnKibjpBU0DigE/n68ef/7y9WT+bCz6sx9EDbPCkOJU
-	 fv8QYjViZjbkVMhhkNTwAlvmoSZcId47Jupzoqc1Ue0vipUGxLsM4XONcAwg9nzI1k
-	 o1ALC0v3scMS+1EIxeZH7r5p1+bzZ03z+0eJqF26VkgCtI0zVRCRf04jU2mER7l6p+
-	 d4Vqtn0L+cKOBRTW0SMPLQbJYG2ElfhVSrF+d7sngpFaj9owqUACff5xP09WuPEJ1Y
-	 SF40cvUZSujhFrYJbJX1iKeT9d7aCc5y4iYbJwv+rexx4EivLPhifwtyi6Gvu3dsqw
-	 ozOOGYTM/E2BQ==
-Received: from [192.168.0.47] (unknown [IPv6:2804:14c:1a9:53ee::1001])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id D0A0D17E0630;
-	Tue,  4 Mar 2025 16:17:53 +0100 (CET)
-From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Tue, 04 Mar 2025 12:16:01 -0300
-Subject: [PATCH v3 20/20] arm64: defconfig: Enable MT6359 ACCDET
+	s=arc-20240116; t=1741101814; c=relaxed/simple;
+	bh=n+ykfua8ybreYUwCduFeiirpEQHr6IwqrBaEPGWv59s=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=FVribXTHYpnTTToMsdEheKMv0FsSbXwOWchD6IjAIxumUxMCO6CfPtFDRGNI1+Xm+9typdF+7PeVec6zmvLjTDbra7Eukz/VooS3EoVqgL2hkyL/pf2mRAuSxP1L3P7vOg17pGxoBK2xkkkJzlvcdbdMNAUZcOuVX9sL5skphOI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lhFUfnHg; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 7A566C4CEE5;
+	Tue,  4 Mar 2025 15:23:33 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741101814;
+	bh=n+ykfua8ybreYUwCduFeiirpEQHr6IwqrBaEPGWv59s=;
+	h=From:To:Cc:Subject:Date:From;
+	b=lhFUfnHgqGC1PIyucoNmsb6Aa7h/Z/sqKnEF7D3iOXKu2XzDfonK0U/hwEVSNTijE
+	 PLDMS0gyik3jNh+5rMqi0CCGUv+M27JSA8HVbkV0FoLoiF8sj/0dYW8FdSfj+jq+qh
+	 xSGmbvPKKJ6kkpkIrECDN/XIgxNcEXCC7gFGbvoYtWC9Yd47k1vh/vMNPewyisfzSg
+	 6ppy/4MEhfdifCnyPC+WqCIkdHSnSh8AJwiCmMhCdQvwxnBQSveNF/073oBe2kznbk
+	 5ix3vDg6YuFPGsgybKvdb6t4Bv/Utja6g8DFQmu6laNfsbAqJpW52Zee7pKIq9HbCQ
+	 rH2O37m58FSig==
+From: Mario Limonciello <superm1@kernel.org>
+To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
+	Perry Yuan <perry.yuan@amd.com>
+Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
+	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
+	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK),
+	Mario Limonciello <mario.limonciello@amd.com>
+Subject: [PATCH v2 0/5] amd-pstate Dynamic EPP and raw EPP
+Date: Tue,  4 Mar 2025 09:23:22 -0600
+Message-ID: <20250304152327.1561017-1-superm1@kernel.org>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-mt6359-accdet-dts-v3-20-5b0eafc29f5b@collabora.com>
-References: <20250304-mt6359-accdet-dts-v3-0-5b0eafc29f5b@collabora.com>
-In-Reply-To: <20250304-mt6359-accdet-dts-v3-0-5b0eafc29f5b@collabora.com>
-To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
- Conor Dooley <conor+dt@kernel.org>, 
- Matthias Brugger <matthias.bgg@gmail.com>, 
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, 
- Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>, 
- Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>, 
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>, 
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>
-Cc: kernel@collabora.com, linux-sound@vger.kernel.org, 
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
- linux-pm@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-X-Mailer: b4 0.14.2
 
-Enable support for the ACCDET block in the MT6359 PMIC, which provides
-jack detection capabilities to MediaTek platforms.
+From: Mario Limonciello <mario.limonciello@amd.com>
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
----
- arch/arm64/configs/defconfig | 1 +
- 1 file changed, 1 insertion(+)
+Dynamic EPP allows the kernel to register amd-pstate as part of
+a platform profile. It will change EPP modes matching the user's
+preference to the platform profile sysfs files as well as power
+adapter state.
 
-diff --git a/arch/arm64/configs/defconfig b/arch/arm64/configs/defconfig
-index 3a3706db29822036d25a7228f8936e2ad613b208..d4a6eeec8ba0db110dd831e146716a0e50cc294f 100644
---- a/arch/arm64/configs/defconfig
-+++ b/arch/arm64/configs/defconfig
-@@ -1066,6 +1066,7 @@ CONFIG_SND_SOC_WM8978=m
- CONFIG_SND_SOC_WSA881X=m
- CONFIG_SND_SOC_WSA883X=m
- CONFIG_SND_SOC_WSA884X=m
-+CONFIG_SND_SOC_MT6359_ACCDET=m
- CONFIG_SND_SOC_NAU8822=m
- CONFIG_SND_SOC_LPASS_WSA_MACRO=m
- CONFIG_SND_SOC_LPASS_VA_MACRO=m
+Raw EPP allows userspace to write integers to
+energy_performance_preference.
+
+This series is based off superm1/linux.git bleeding-edge branch
+
+v1->v2:
+ * Rebase
+ * Change some defaults
+
+Mario Limonciello (5):
+  cpufreq/amd-pstate: Add dynamic energy performance preference
+  cpufreq/amd-pstate: add kernel command line to override dynamic epp
+  cpufreq/amd-pstate: Add support for platform profile class
+  cpufreq/amd-pstate: Add support for raw EPP writes
+  cpufreq/amd-pstate-ut: Add a unit test for raw EPP
+
+ .../admin-guide/kernel-parameters.txt         |   7 +
+ Documentation/admin-guide/pm/amd-pstate.rst   |  41 ++-
+ drivers/cpufreq/Kconfig.x86                   |  13 +
+ drivers/cpufreq/amd-pstate-ut.c               |  58 ++++
+ drivers/cpufreq/amd-pstate.c                  | 279 ++++++++++++++++--
+ drivers/cpufreq/amd-pstate.h                  |  16 +-
+ 6 files changed, 390 insertions(+), 24 deletions(-)
 
 -- 
-2.48.1
+2.43.0
 
 
