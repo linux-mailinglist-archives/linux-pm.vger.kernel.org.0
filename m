@@ -1,174 +1,91 @@
-Return-Path: <linux-pm+bounces-23408-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23412-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id C81D1A4E3EF
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:44:04 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBBCBA4E4F3
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 17:07:05 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DFC393BF741
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 15:36:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id D01C719C79C4
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:00:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B676B284B41;
-	Tue,  4 Mar 2025 15:23:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9574280CF6;
+	Tue,  4 Mar 2025 15:41:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="kEQZSg7D"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="V11NaW9z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E512284B3A;
-	Tue,  4 Mar 2025 15:23:38 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE674286294;
+	Tue,  4 Mar 2025 15:41:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741101818; cv=none; b=RPzNQBslPx2Uk3o63JLA8wS+dPDtgprWQQj5JK4KeubqKMzaudWNHiFRcf9SzekOTalk64e6sy4F5tsR1nGu48B91YZwYK7YJQ/NQefEVKS96Oe1HD70q54c3clBUpCWmxoF511kmxuixkM9oz6PEbhGokDcXP2O6blTJFoqmrg=
+	t=1741102893; cv=none; b=Y66rxyDMGaF9aUbuyYzPh49Sua+1Hztb3+1iyVNMjawqD8D9SJ9EFIcZlp1HH9m5Qwwhri5mjUeVO/8PMKuDZH3HZxOtnuzmXxOLMz+gotFOChoaSQZkpdBLl7FyxnPqE250JeFNjIO9pCL9Z6/L/Oy40VdfNSoP1DERff76dwQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741101818; c=relaxed/simple;
-	bh=Ovxkur7Th1bj1n91ym6geZ1kTrWIxYLfjpr2pVhZrw4=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=Lly4dqldcTXatuolpx9duNmoSvu6z/7hYVZWrLWOjNr7uK0xSyqoFQE88LAZbbkBzilUluac3eQcFhaPNRMNIcQuXZRI+wXqAgZH97/Uw2uZ8ap2IcVnx9dMjz8gyaVtZKD4ruwuPJGkUrv7u6ECVQBuR75PgCAEm8a+CC/3A/Q=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=kEQZSg7D; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id CA44AC4CEEF;
-	Tue,  4 Mar 2025 15:23:37 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741101818;
-	bh=Ovxkur7Th1bj1n91ym6geZ1kTrWIxYLfjpr2pVhZrw4=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=kEQZSg7DTXo2d31QQQ6pkAwUhAw5E/jJ7NsjHva76xYZ9IWvym/w8bWs+kKcOxi0z
-	 iTNP/twrfServawBsR/o0xDynDEJ7G/Z9YjFuZCZgFC3SQ4QNL4oRRQ3eu+6NaENET
-	 fjb17bACotIGURQ1PrdSZqrfn/fREQOMkRTobhjTpY1xTItsHUixX+mRkrUOC4yzu3
-	 tRng3lp2H5JJpb1HSIZ0w+OCf77pdoRCdt6osug9fYCAIJcdvQZRzvz7D9q3prRl2Y
-	 EG0U2i2Ejf4Aiy8oHvw3C11eXz6JQ83f9az3rja8hhIEtbNm+BuRJgFTjQRlSv+cbt
-	 SCs62lQs6kBVA==
-From: Mario Limonciello <superm1@kernel.org>
-To: "Gautham R . Shenoy" <gautham.shenoy@amd.com>,
-	Perry Yuan <perry.yuan@amd.com>
-Cc: Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
-	linux-kernel@vger.kernel.org (open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)),
-	linux-pm@vger.kernel.org (open list:CPU FREQUENCY SCALING FRAMEWORK),
-	Mario Limonciello <mario.limonciello@amd.com>
-Subject: [PATCH v2 5/5] cpufreq/amd-pstate-ut: Add a unit test for raw EPP
-Date: Tue,  4 Mar 2025 09:23:27 -0600
-Message-ID: <20250304152327.1561017-6-superm1@kernel.org>
-X-Mailer: git-send-email 2.43.0
-In-Reply-To: <20250304152327.1561017-1-superm1@kernel.org>
-References: <20250304152327.1561017-1-superm1@kernel.org>
+	s=arc-20240116; t=1741102893; c=relaxed/simple;
+	bh=mvBrY6YFvpRg5GjXOhGlre9ckKrCJg9/70l8HVzjw/w=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=iMpo5K/ckG9xNluRlBzduSAFbHuai13T48eYQBfWnBPwmNsnf4pggNIDgMQMpuyt3Z0f808uOHk30JsRuPkSP1DDdw7NGaU54puJXTKXxRDShtMwgrfwrcX2J6yAjrOynnZ5iPKqeSpR/HZ/O8H3MsAoMe6CoFByQPGL2Ahfd9w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=V11NaW9z; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1741102889;
+	bh=mvBrY6YFvpRg5GjXOhGlre9ckKrCJg9/70l8HVzjw/w=;
+	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
+	b=V11NaW9zfoFsYpy57yvhtH/jd6XnQ6HuD2gTqWIGoy3d7dZeymCxcnGTWVD/QoCRg
+	 a5q8Gzn8tMjaTPeAua9SFilwR9UoLGPObKAQeMURsrPZdaN/sVvK58PVlyHS7ABiQU
+	 kbQOqIrn4CxpB73Hv0btZ58rhadhw9jkvSziHEDMZ884paz59U9988ObhjcKI8uozx
+	 SZPTPUHtEaL5P/vvKfPK8nI04c7lZJCmm4Wm6Whis0bVZfvgz8gspSnTCNoIJrXZA9
+	 RDh1phsRPMPg3W6DImkTlO+/5ppOw5kEdP3mJbHz+3N80U2PX3i1EyaLeSFY+yZF2Y
+	 P9hnwl8/3zmYg==
+Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
+	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
+	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: kholk11)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id A7A5A17E087E;
+	Tue,  4 Mar 2025 16:41:28 +0100 (CET)
+Message-ID: <f9fad64b-963f-4059-9b80-7d1c877525a8@collabora.com>
+Date: Tue, 4 Mar 2025 16:41:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 02/20] dt-bindings: mfd: mediatek: mt6397: Add accdet
+ subnode
+To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
+ Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
+ <matthias.bgg@gmail.com>, Sen Chu <sen.chu@mediatek.com>,
+ Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
+ Lee Jones <lee@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
+ Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>,
+ Will Deacon <will@kernel.org>
+Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
+ devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+ linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
+ linux-pm@vger.kernel.org
+References: <20250304-mt6359-accdet-dts-v3-0-5b0eafc29f5b@collabora.com>
+ <20250304-mt6359-accdet-dts-v3-2-5b0eafc29f5b@collabora.com>
+From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+Content-Language: en-US
+In-Reply-To: <20250304-mt6359-accdet-dts-v3-2-5b0eafc29f5b@collabora.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-From: Mario Limonciello <mario.limonciello@amd.com>
+Il 04/03/25 16:15, Nícolas F. R. A. Prado ha scritto:
+> Describe the accdet as a possible subnode of the MT6359 PMIC.
+> 
+> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 
-Ensure that all supported raw EPP values work properly.
+Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 
-Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
----
- drivers/cpufreq/amd-pstate-ut.c | 58 +++++++++++++++++++++++++++++++++
- 1 file changed, 58 insertions(+)
-
-diff --git a/drivers/cpufreq/amd-pstate-ut.c b/drivers/cpufreq/amd-pstate-ut.c
-index e671bc7d15508..d0c5c0aa3cc94 100644
---- a/drivers/cpufreq/amd-pstate-ut.c
-+++ b/drivers/cpufreq/amd-pstate-ut.c
-@@ -26,6 +26,7 @@
- #include <linux/kernel.h>
- #include <linux/module.h>
- #include <linux/moduleparam.h>
-+#include <linux/mm.h>
- #include <linux/fs.h>
- #include <linux/cleanup.h>
- 
-@@ -33,6 +34,7 @@
- 
- #include "amd-pstate.h"
- 
-+DEFINE_FREE(free_page, void *, if (_T) free_page((unsigned long)_T))
- 
- struct amd_pstate_ut_struct {
- 	const char *name;
-@@ -46,6 +48,7 @@ static int amd_pstate_ut_acpi_cpc_valid(u32 index);
- static int amd_pstate_ut_check_enabled(u32 index);
- static int amd_pstate_ut_check_perf(u32 index);
- static int amd_pstate_ut_check_freq(u32 index);
-+static int amd_pstate_ut_epp(u32 index);
- static int amd_pstate_ut_check_driver(u32 index);
- 
- static struct amd_pstate_ut_struct amd_pstate_ut_cases[] = {
-@@ -53,6 +56,7 @@ static struct amd_pstate_ut_struct amd_pstate_ut_cases[] = {
- 	{"amd_pstate_ut_check_enabled",    amd_pstate_ut_check_enabled    },
- 	{"amd_pstate_ut_check_perf",       amd_pstate_ut_check_perf       },
- 	{"amd_pstate_ut_check_freq",       amd_pstate_ut_check_freq       },
-+	{"amd_pstate_ut_epp",              amd_pstate_ut_epp              },
- 	{"amd_pstate_ut_check_driver",	   amd_pstate_ut_check_driver     }
- };
- 
-@@ -239,6 +243,60 @@ static int amd_pstate_set_mode(enum amd_pstate_mode mode)
- 	return amd_pstate_update_status(mode_str, strlen(mode_str));
- }
- 
-+static int amd_pstate_ut_epp(u32 index)
-+{
-+	struct cpufreq_policy *policy __free(put_cpufreq_policy) = NULL;
-+	void *buf __free(free_page) = NULL;
-+	struct amd_cpudata *cpudata;
-+	int ret, cpu = 0;
-+	u16 epp;
-+
-+	policy = cpufreq_cpu_get(cpu);
-+	if (!policy)
-+		return -ENODEV;
-+
-+	cpudata = policy->driver_data;
-+
-+	/* disable dynamic EPP before running test */
-+	if (cpudata->dynamic_epp) {
-+		pr_debug("Dynamic EPP is enabled, disabling it\n");
-+		amd_pstate_clear_dynamic_epp(policy);
-+	}
-+
-+	buf = (void *)__get_free_page(GFP_KERNEL);
-+	if (!buf)
-+		return -ENOMEM;
-+
-+	ret = amd_pstate_set_mode(AMD_PSTATE_ACTIVE);
-+	if (ret)
-+		return ret;
-+
-+	for (epp = 0; epp <= U8_MAX; epp++) {
-+		u8 val;
-+
-+		/* write all EPP values */
-+		memset(buf, 0, sizeof(*buf));
-+		snprintf(buf, PAGE_SIZE, "%d", epp);
-+		ret = store_energy_performance_preference(policy, buf, sizeof(*buf));
-+		if (ret < 0)
-+			return ret;
-+
-+		/* check if the EPP value reads back correctly for raw numbers */
-+		memset(buf, 0, sizeof(*buf));
-+		ret = show_energy_performance_preference(policy, buf);
-+		if (ret < 0)
-+			return ret;
-+		strreplace(buf, '\n', '\0');
-+		ret = kstrtou8(buf, 0, &val);
-+		if (!ret && epp != val) {
-+			pr_err("Raw EPP value mismatch: %d != %d\n", epp, val);
-+			return -EINVAL;
-+		}
-+	}
-+
-+	return 0;
-+}
-+
- static int amd_pstate_ut_check_driver(u32 index)
- {
- 	enum amd_pstate_mode mode1, mode2 = AMD_PSTATE_DISABLE;
--- 
-2.43.0
 
 
