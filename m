@@ -1,91 +1,174 @@
-Return-Path: <linux-pm+bounces-23412-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23415-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id EBBCBA4E4F3
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 17:07:05 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA0E5A4E650
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 17:40:42 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D01C719C79C4
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:00:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 8E88C8C3FF0
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:09:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A9574280CF6;
-	Tue,  4 Mar 2025 15:41:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 52BC825FA0D;
+	Tue,  4 Mar 2025 15:49:46 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="V11NaW9z"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="ZAJmH9ma";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="PJ+RHd0k"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BE674286294;
-	Tue,  4 Mar 2025 15:41:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E38D825F789;
+	Tue,  4 Mar 2025 15:49:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741102893; cv=none; b=Y66rxyDMGaF9aUbuyYzPh49Sua+1Hztb3+1iyVNMjawqD8D9SJ9EFIcZlp1HH9m5Qwwhri5mjUeVO/8PMKuDZH3HZxOtnuzmXxOLMz+gotFOChoaSQZkpdBLl7FyxnPqE250JeFNjIO9pCL9Z6/L/Oy40VdfNSoP1DERff76dwQ=
+	t=1741103386; cv=none; b=WmgiRd1gGdR8l0/9Xg6lS8DL/RcYEaSZv1eknxIJRShG87f2Lxa+q2G35XbZrvWYlQ/a1vZpYxRZWiEirC/EhTqwETwnGU3Om6A7NSCxoxZhkM5ZS26mKNfx75d5ewfdZMsIyyx6qOE0qj0c8VhcQ5UYr9ZRVcokb+E0SRwXFdE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741102893; c=relaxed/simple;
-	bh=mvBrY6YFvpRg5GjXOhGlre9ckKrCJg9/70l8HVzjw/w=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=iMpo5K/ckG9xNluRlBzduSAFbHuai13T48eYQBfWnBPwmNsnf4pggNIDgMQMpuyt3Z0f808uOHk30JsRuPkSP1DDdw7NGaU54puJXTKXxRDShtMwgrfwrcX2J6yAjrOynnZ5iPKqeSpR/HZ/O8H3MsAoMe6CoFByQPGL2Ahfd9w=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=V11NaW9z; arc=none smtp.client-ip=148.251.105.195
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1741102889;
-	bh=mvBrY6YFvpRg5GjXOhGlre9ckKrCJg9/70l8HVzjw/w=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=V11NaW9zfoFsYpy57yvhtH/jd6XnQ6HuD2gTqWIGoy3d7dZeymCxcnGTWVD/QoCRg
-	 a5q8Gzn8tMjaTPeAua9SFilwR9UoLGPObKAQeMURsrPZdaN/sVvK58PVlyHS7ABiQU
-	 kbQOqIrn4CxpB73Hv0btZ58rhadhw9jkvSziHEDMZ884paz59U9988ObhjcKI8uozx
-	 SZPTPUHtEaL5P/vvKfPK8nI04c7lZJCmm4Wm6Whis0bVZfvgz8gspSnTCNoIJrXZA9
-	 RDh1phsRPMPg3W6DImkTlO+/5ppOw5kEdP3mJbHz+3N80U2PX3i1EyaLeSFY+yZF2Y
-	 P9hnwl8/3zmYg==
-Received: from [192.168.1.100] (2-237-20-237.ip236.fastwebnet.it [2.237.20.237])
-	(using TLSv1.3 with cipher TLS_AES_128_GCM_SHA256 (128/128 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	(Authenticated sender: kholk11)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id A7A5A17E087E;
-	Tue,  4 Mar 2025 16:41:28 +0100 (CET)
-Message-ID: <f9fad64b-963f-4059-9b80-7d1c877525a8@collabora.com>
-Date: Tue, 4 Mar 2025 16:41:28 +0100
+	s=arc-20240116; t=1741103386; c=relaxed/simple;
+	bh=IZVtyHAG93XJVToieMuxGIEaIhkUm3s79JumsH2atio=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=rvt34SeYeEPW5z3lKcrSNBIHfsAvdM+qQnNkQyYx+dDkgTrN++r5+BcVbTd+6eeq/cvpiOXGLWFybBL1XhzMag3HNkxpUy6fV1Pd14i++9j47oW44d+uGx3ki5e7wMQPlFCwJVAAb5jKivHgoK5f7mx1+rKsLNkTcmhqVX/61W4=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=ZAJmH9ma; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=PJ+RHd0k reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
+  t=1741103382; x=1772639382;
+  h=from:to:cc:subject:date:message-id:mime-version:
+   content-transfer-encoding;
+  bh=V/cWI6jCuZn3fcy5zPp0Q323xNqJa1S74loek1ZBh4w=;
+  b=ZAJmH9mar+mV2VqPDLb8zSS5DXU0LfY0oUxjSg3EhVIjKtQhNdKv1VX8
+   F2J82wkTZRukDdbZnqvYb1637rrMYa+vwlLkomBNrkAsvjOt5bgBYNewX
+   PGbD6Lv62aHEuTg0cN9tGywBgUz8fNTxDB8daHnL7gnxtGjj/Q9zS5Oxc
+   zr94REA82Z937NNfkTPjAu+ehWDqEUguy9EhSF//Y6v6q2rrNFt02o2el
+   aLAsa1ES80vk3hrVCfVo3ZJD8V+6BapfO7X2F3k3164YU5RoxnmFUTFCv
+   BRMwExgYdEJhDdITZXorYfK/ca/bvLAY3usfT33RZQvwYWvxLuj0zFTVD
+   Q==;
+X-CSE-ConnectionGUID: 5RRrExnVSsyHBiZxymnz2g==
+X-CSE-MsgGUID: W9sN2wF4TCe9QgLpWzcDKQ==
+X-IronPort-AV: E=Sophos;i="6.14,220,1736809200"; 
+   d="scan'208";a="42272726"
+X-URL-LookUp-ScanningError: 1
+Received: from vmailcow01.tq-net.de ([10.150.86.48])
+  by mx1.tq-group.com with ESMTP; 04 Mar 2025 16:49:39 +0100
+X-CheckPoint: {67C72113-5-2417938-F0170C2B}
+X-MAIL-CPID: 1B5DD4582515C3582BD7AD615B33C118_2
+X-Control-Analysis: str=0001.0A006369.67C72116.0066,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B3DFC16156A;
+	Tue,  4 Mar 2025 16:49:32 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
+	s=dkim; t=1741103374;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=V/cWI6jCuZn3fcy5zPp0Q323xNqJa1S74loek1ZBh4w=;
+	b=PJ+RHd0k47M0p3Gvk5Gol0p05nmuw6+Wfy0Nb1JicPvJJ/gO0toelssg9xise111CADyl7
+	k9XiBKVmJUl8TFfjhQS90zCTMEdVC43H++eqnMUJEnca8KIzLieiJzO2rqdWaTnWM0gZhn
+	kIgCkD+cTdqOV5VUqNELxJd7KpUBhbIRymV2BaR1mwwBQFOjP06NQAtuYUFoomLYTYw9f2
+	gPkwMdefX3QnbzpT7hTcQgVa5AvH4DsRkW3nzpFF3bR9UMaxrUl5GZpRfF+CKDSGYfk4XK
+	qx2B3/aCSatZ0vafCGj8FNiGbpf14hMuks/v5cnwwooOrtYAMoJu1UDbXkvhyw==
+From: Alexander Stein <alexander.stein@ew.tq-group.com>
+To: Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Shawn Guo <shawnguo@kernel.org>,
+	Sascha Hauer <s.hauer@pengutronix.de>,
+	Pengutronix Kernel Team <kernel@pengutronix.de>,
+	Fabio Estevam <festevam@gmail.com>,
+	Abel Vesa <abelvesa@kernel.org>,
+	Peng Fan <peng.fan@nxp.com>,
+	Michael Turquette <mturquette@baylibre.com>,
+	Stephen Boyd <sboyd@kernel.org>,
+	Ulf Hansson <ulf.hansson@linaro.org>
+Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
+	devicetree@vger.kernel.org,
+	imx@lists.linux.dev,
+	linux-arm-kernel@lists.infradead.org,
+	linux-kernel@vger.kernel.org,
+	linux@ew.tq-group.com,
+	linux-clk@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Subject: [PATCH v3 0/6] TQMa93xx on MBa93xxLA/CA LVDS support
+Date: Tue,  4 Mar 2025 16:49:19 +0100
+Message-ID: <20250304154929.1785200-1-alexander.stein@ew.tq-group.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/20] dt-bindings: mfd: mediatek: mt6397: Add accdet
- subnode
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>, Sen Chu <sen.chu@mediatek.com>,
- Sean Wang <sean.wang@mediatek.com>, Macpaul Lin <macpaul.lin@mediatek.com>,
- Lee Jones <lee@kernel.org>, Jaroslav Kysela <perex@perex.cz>,
- Takashi Iwai <tiwai@suse.com>, Catalin Marinas <catalin.marinas@arm.com>,
- Will Deacon <will@kernel.org>
-Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org
-References: <20250304-mt6359-accdet-dts-v3-0-5b0eafc29f5b@collabora.com>
- <20250304-mt6359-accdet-dts-v3-2-5b0eafc29f5b@collabora.com>
-From: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
-Content-Language: en-US
-In-Reply-To: <20250304-mt6359-accdet-dts-v3-2-5b0eafc29f5b@collabora.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
+X-Last-TLS-Session-Version: TLSv1.3
 
-Il 04/03/25 16:15, Nícolas F. R. A. Prado ha scritto:
-> Describe the accdet as a possible subnode of the MT6359 PMIC.
-> 
-> Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
+Hi,
 
-Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
+this is v3 for the LVDS support on TQMa93xx module series.
 
+It consists of three parts:
+1. New PLL configuration for 477.4 MHz
+2. LVDS support for imx93
+3. LVDS platform support for tqma9352-mba93xxla & tqma9352-mba93xxca
+
+Patch 1 adds a video PLL configuration for 477.4MHz
+Patch 2 is the imx93 equivalent of commit 1cb0c87d27dc ("dt-bindings:
+  soc: imx8mp-media-blk-ctrl: Add LDB subnode into schema and example")
+Patch 3 is the imx93 equivalent of commit 9cb6d1b39a8f ("soc: imx:
+  imx8m-blk-ctrl: Scan subnodes and bind drivers to them")
+Patch 4 is the imx93 equivalent of commit 94e6197dadc9 ("arm64: dts:
+  imx8mp: Add LCDIF2 & LDB nodes")
+Patch 5 adds LVDS DT overlay for tqma9352-mba93xxla platform
+Patch 6 adds LVDS DT overlay for tqma9352-mba93xxca platform
+
+Changes in v3:
+* Collected Peng's R-b
+* Fixed subject prefix in patch 3/6
+* Fix 'ranges' property both in bindings example and .dtsi
+
+Changes in v2:
+* Rebased to next-20250221
+* Reordered patches
+* Added 'ranges' to bindings
+* Use subnode constraint styles as suggested by Rob Herring
+* Use IMX93_CLK_SYS_PLL_PFD0 as parent for IMX93_CLK_MEDIA_AXI
+* Use 333MHz for IMX93_CLK_MEDIA_AXI
+* Do not set board compatible in orverlays
+* Add MBa93xxCA platform as well
+
+I skipped the support for dynamic PLL configuration for now. This is a
+separate task, see [2].
+
+Best regards,
+Alexander
+
+v2:
+* https://lore.kernel.org/all/20250224142831.485159-1-alexander.stein@ew.tq-group.com/
+v1:
+* https://lore.kernel.org/all/20231020130019.665853-1-alexander.stein@ew.tq-group.com/
+
+Alexander Stein (6):
+  clk: imx: clk-fracn-gppll: Add 477.4MHz config for video pll
+  dt-bindings: soc: imx93-media-blk-ctrl: Add LDB subnode into schema
+    and example
+  pmdomain: imx93-blk-ctrl: Scan subnodes and bind drivers to them
+  arm64: dts: imx93: Add LCDIF & LDB nodes
+  arm64: dts: tqma9352-mba93xxla: Add LVDS overlay
+  arm64: dts: tqma9352-mba93xxca: Add LVDS overlay
+
+ .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     | 51 ++++++++++++
+ arch/arm64/boot/dts/freescale/Makefile        |  5 ++
+ ...3-tqma9352-mba93xxca-lvds-tm070jvhg33.dtso | 40 ++++++++++
+ .../freescale/imx93-tqma9352-mba93xxca.dts    | 27 +++++++
+ ...3-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso | 40 ++++++++++
+ .../freescale/imx93-tqma9352-mba93xxla.dts    | 27 +++++++
+ arch/arm64/boot/dts/freescale/imx93.dtsi      | 77 +++++++++++++++++++
+ drivers/clk/imx/clk-fracn-gppll.c             |  1 +
+ drivers/pmdomain/imx/imx93-blk-ctrl.c         |  7 ++
+ 9 files changed, 275 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxca-lvds-tm070jvhg33.dtso
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso
+
+-- 
+2.43.0
 
 
