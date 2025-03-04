@@ -1,414 +1,236 @@
-Return-Path: <linux-pm+bounces-23454-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23455-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AD063A4F12D
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 00:06:22 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0AF03A4F17B
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 00:29:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CBCAA172E4D
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 23:06:21 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A13D16598D
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 23:29:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E608C27CB0A;
-	Tue,  4 Mar 2025 23:05:17 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE7A2278154;
+	Tue,  4 Mar 2025 23:29:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b="UqWqfCRa"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOrmORN2"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1AA6B27C84F
-	for <linux-pm@vger.kernel.org>; Tue,  4 Mar 2025 23:05:14 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40BD1F4CB0;
+	Tue,  4 Mar 2025 23:29:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741129517; cv=none; b=dI4bR8Rr5qc7SG88eT3VQVs3ATC5njhD4/vY1zAUN4uy+lbbjyFN/jSFfbMlZubQcuRlE4A0rMHJgfys0eiXXOlU8d8en/XaBzUABe/yA9nvTw4lZIklr0ewqESTk/hoCpC3aPoqnh9IXqZejBn93uF0pYsUTIN6AXhFGhf3GLw=
+	t=1741130965; cv=none; b=mBd8YPqeLkMYnB8Z3+iWQRpCPubAHGmlM54+VvJMq/sSPus6MQDTeCK5ghB5y6oXUNDeUHqfJHJvVUXAuFrvdTvlSHIG5AgpgnBVG3WMEdB29TrEDLWxPa9amTXFiLymvpxtqzoLCOPL8kCNQ3a1fF0gmazmmrYYusK8CPV2IpU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741129517; c=relaxed/simple;
-	bh=H7KSE1RYrshvUFGJnP3ejIrBqUM1jbXJhYU6mYIyRu8=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=dJx2UaEX0FMpBu+YlHEIBkpDczOykMptY6N8m3IDpPNhwyVjlq8B7K1HzMzQmzdVv3Gk78d5axT98H2Ndxiv1U6d9Llm8BROedJrtBNIB+irkGAiEwrZJr3uKmYQrceHqtP7RSGVWQSAeho69dsSzBOrBmdBoomfXRn0HDllCBE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com; spf=pass smtp.mailfrom=oss.qualcomm.com; dkim=pass (2048-bit key) header.d=qualcomm.com header.i=@qualcomm.com header.b=UqWqfCRa; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oss.qualcomm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oss.qualcomm.com
-Received: from pps.filterd (m0279869.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 524Bk9wl013632
-	for <linux-pm@vger.kernel.org>; Tue, 4 Mar 2025 23:05:14 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=qualcomm.com; h=
-	cc:content-transfer-encoding:date:from:in-reply-to:message-id
-	:mime-version:references:subject:to; s=qcppdkim1; bh=uSqnCviNEbU
-	NoXfwtDyicmV9Arq/nNUqt1uGmYnbL+A=; b=UqWqfCRalyxPB1/8oAWBfWMVH/e
-	sFISc56goDzhVGb1OcoXOzPEh55JqyvcDaGUprW4ASumxmvo2G71Ut/JvdIDb7vj
-	7RFKTCHGLa8aaHNrFdGyfnuSWQNYS0Yra3dpsbsnbayKMkWoWdNEWRd6AWhZwtzy
-	G9csNuqwpedMKY00Y5ghB7FAl17Eho1f7FWNRI7e8B7oOdsTIgfsI4G1XoL628wT
-	Xm1yZiIYP0e4N0RdlZ+J5yOaBrNnwVN6vRLrm5z2x8nKwY0/2ELTbfGIGJ71la4Q
-	vCW60tdl+xw4eU5RXE8pRAFAeVfjl89Udes0+/Yosvq6K64+A/dbE9MAb7g==
-Received: from mail-pj1-f72.google.com (mail-pj1-f72.google.com [209.85.216.72])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 455p6vbcxt-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES128-GCM-SHA256 bits=128 verify=NOT)
-	for <linux-pm@vger.kernel.org>; Tue, 04 Mar 2025 23:05:13 +0000 (GMT)
-Received: by mail-pj1-f72.google.com with SMTP id 98e67ed59e1d1-2ff4b130bb2so152186a91.0
-        for <linux-pm@vger.kernel.org>; Tue, 04 Mar 2025 15:05:13 -0800 (PST)
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741129512; x=1741734312;
-        h=content-transfer-encoding:mime-version:references:in-reply-to
-         :message-id:date:subject:cc:to:from:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=uSqnCviNEbUNoXfwtDyicmV9Arq/nNUqt1uGmYnbL+A=;
-        b=xOHg9BXbzVkhmUJ+hSPS9rLVKbSuji9U0iHuE7Ct9CmPCqpqkAKgIlGms/LRa4J1r1
-         frOPnHxNFrvcwdW+JGHb43Szhxis26vRt3uiFHb9hHDh0QvuDFytn4J/aaJsph3UrE+U
-         81a2NIjNJSbqoFkBezk0VlSY8FfEQkKniE/aJM7h5ZEFI2TSZAdQyH+EDIX+GUzb6CCB
-         DFEzhPu7EWHg8zMkEgfwYHXQlivtPgk1+/G7d9Ornp8vYwXNaG6onj6bcRBUGDwengp7
-         iKeObcxBobHcXpvS/6MUWNKScEFLpoooxMl7uPZBzIxVLM2bozuGrpBFwidRyBZtETtR
-         BE0g==
-X-Forwarded-Encrypted: i=1; AJvYcCVl/Kq0Z0kgdKm8AY6gKO+pQcV4j1n9uyhG4lvRdWbbYldRZi6UiYkDCwU5qB9afr22lAkxLXY4GA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx2wWDUAqbaT8zFo25cXzU1paoFKqK73YVLZa0xvIIpqwoOYAXf
-	Y17XsvO1OwNFDdQNRdiGTF4z7sazH+gUIp0NCGqkihiHzlHX5lYLHMH0SsU7SKQqGueVbjhP7+s
-	t+PyCvZm+484kh/vmbkixt7Uda+nU4cuSRTcafyfwN8e+LnamFVASif+AuQ==
-X-Gm-Gg: ASbGncukLApanQnIWaQE9C1d3CV+z36vlpvcBUQhGVBd1KMcJOtyTjUxJfiuB5dFI9b
-	tqOOn8+NaaMuKmfVl1uftkV44UZ0/BWc7Sbo6bey6/gTFdnOmqFb7EEUtRmxJ2Lqf87aWA2Erwk
-	iN5eOOjHc5uZIvL6jfGCMexFs3dmwUWLdaNlBQL0at3dl8R7ho0s4g2gXFCWsKxQ6/rcZXIPQ+9
-	fuD+7LxTOUHZsgc8/cbd+hpjT0mwG10EuxvCd7cZdR5Hx7lW2AEhv7IBgM5VZSz8tJ39gwAuKHR
-	A/5dvjxsVZnuBGzExJpyjEKWFgVQap0OtuweolXr9rt33f9MkIsgMoe+rMsKczo378SvvH/uX57
-	5me4=
-X-Received: by 2002:a05:6a20:1582:b0:1f3:1d13:969f with SMTP id adf61e73a8af0-1f3494632fcmr1698643637.9.1741129512186;
-        Tue, 04 Mar 2025 15:05:12 -0800 (PST)
-X-Google-Smtp-Source: AGHT+IE29dGVni57iqiYJXK50rIEzOLiq1im/AohVYkzzeKXwALS2G3RbdVYMf54EhRPh3LwABQATQ==
-X-Received: by 2002:a05:6a20:1582:b0:1f3:1d13:969f with SMTP id adf61e73a8af0-1f3494632fcmr1698579637.9.1741129511702;
-        Tue, 04 Mar 2025 15:05:11 -0800 (PST)
-Received: from hu-amelende-lv.qualcomm.com (Global_NAT1.qualcomm.com. [129.46.96.20])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-7349fe6cfd9sm11492793b3a.76.2025.03.04.15.05.10
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 04 Mar 2025 15:05:10 -0800 (PST)
-From: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
-To: amitk@kernel.org, thara.gopinath@gmail.com, rafael@kernel.org,
-        daniel.lezcano@linaro.org
-Cc: rui.zhang@intel.com, lukasz.luba@arm.com, david.collins@oss.qualcomm.com,
-        linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
-        linux-kernel@vger.kernel.org, dmitry.baryshkov@linaro.org
-Subject: [PATCH v3 5/5] thermal: qcom-spmi-temp-alarm: add support for LITE PMIC peripherals
-Date: Tue,  4 Mar 2025 15:05:02 -0800
-Message-Id: <20250304230502.1470523-6-anjelique.melendez@oss.qualcomm.com>
-X-Mailer: git-send-email 2.34.1
-In-Reply-To: <20250304230502.1470523-1-anjelique.melendez@oss.qualcomm.com>
-References: <20250304230502.1470523-1-anjelique.melendez@oss.qualcomm.com>
+	s=arc-20240116; t=1741130965; c=relaxed/simple;
+	bh=wRG2/3guVplG1fzSZhJr0O1MeFWo6h3depSrnEEaUuU=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=gi785SLykDpnbi7ak3wEWSPa/hVtEU6zWHIuisXRyZUu3V0BUhJr62KMltA+Q2GkRMfHgrt9mWq8JI8oLVWZvK/qgfhGpMYcXjK7uY7q8OVJ6+zAW/1g9ha9io2TiM4f7KbS+8VTIzwb7va1YzTJmog230eMhOc1HjfH0crzclI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOrmORN2; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96B2C4CEE5;
+	Tue,  4 Mar 2025 23:29:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741130965;
+	bh=wRG2/3guVplG1fzSZhJr0O1MeFWo6h3depSrnEEaUuU=;
+	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
+	b=EOrmORN2cXFTtf4xgHiVYacgPtdIj2PQA1cmWGAFXVYhMfjY7YuzjdVqAsAsZSADp
+	 UGqFfkNr+DFxISDtg+Q+k5Az2dOBTpoIGL3GjJXWEiV5KG8JgfM3SSKtccM51wQnXU
+	 G6TKC4yEQm21V8tk+mdY+99FWnkCGpQJaobQwK+08f9F2CPkAOUfmzex5leU+eejHe
+	 0QvA8ePd8Pl1REBqPOBtS0l+ZT62q6Fymi6acNTTr98B8OaqYB+YVKCYNNtTBD6ktP
+	 P2RskC78fqw78Qi+JWLmtEmuZrlc/Eha9leWs4hTj3sUl72Js/mfYFzixTWs+tJLUL
+	 Oyy5tLEa7kINw==
+Date: Tue, 4 Mar 2025 23:29:13 +0000
+From: Jonathan Cameron <jic23@kernel.org>
+To: Chris Morgan <macroalpha82@gmail.com>
+Cc: Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
+ linux-iio@vger.kernel.org, andre.przywara@arm.com, lee@kernel.org,
+ sre@kernel.org, lars@metafoo.de, Chris Morgan <macromorgan@hotmail.com>
+Subject: Re: [PATCH 0/2] Fix Regression with AXP20X for 6.13-rc1
+Message-ID: <20250304232913.020056fa@jic23-huawei>
+In-Reply-To: <67c743e3.050a0220.327e31.55b3@mx.google.com>
+References: <20241210224859.58917-1-macroalpha82@gmail.com>
+	<20241211215826.06162190@jic23-huawei>
+	<67606b09.050a0220.3905d.5bc7@mx.google.com>
+	<CAGb2v64vn-h02Bn2AKftphpNNcx9h9K3pKvdjuANsDhwiqbsrQ@mail.gmail.com>
+	<67c743e3.050a0220.327e31.55b3@mx.google.com>
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Proofpoint-ORIG-GUID: WDvcd3wtHlho8p_yobwactSYdkzujtsD
-X-Authority-Analysis: v=2.4 cv=bPnsIO+Z c=1 sm=1 tr=0 ts=67c78729 cx=c_pps a=RP+M6JBNLl+fLTcSJhASfg==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=Vs1iUdzkB0EA:10 a=EUspDBNiAAAA:8 a=47G9NL9pyX4x7Wg37RYA:9 a=iS9zxrgQBfv6-_F4QbHw:22
-X-Proofpoint-GUID: WDvcd3wtHlho8p_yobwactSYdkzujtsD
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-04_09,2025-03-04_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 malwarescore=0 suspectscore=0
- impostorscore=0 lowpriorityscore=0 priorityscore=1501 adultscore=0
- spamscore=0 mlxscore=0 clxscore=1015 bulkscore=0 mlxlogscore=999
- phishscore=0 classifier=spam authscore=0 adjust=0 reason=mlx scancount=1
- engine=8.19.0-2502100000 definitions=main-2503040184
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
 
-Add support for TEMP_ALARM LITE PMIC peripherals. This subtype
-utilizes a pair of registers to configure a warning interrupt
-threshold temperature and an automatic hardware shutdown
-threshold temperature.
+On Tue, 4 Mar 2025 12:18:10 -0600
+Chris Morgan <macroalpha82@gmail.com> wrote:
 
-Signed-off-by: David Collins <david.collins@oss.qualcomm.com>
-Signed-off-by: Anjelique Melendez <anjelique.melendez@oss.qualcomm.com>
----
- drivers/thermal/qcom/qcom-spmi-temp-alarm.c | 204 +++++++++++++++++++-
- 1 file changed, 203 insertions(+), 1 deletion(-)
+> On Tue, Dec 17, 2024 at 02:04:37AM +0800, Chen-Yu Tsai wrote:
+> > On Tue, Dec 17, 2024 at 2:01=E2=80=AFAM Chris Morgan <macroalpha82@gmai=
+l.com> wrote: =20
+> > >
+> > > On Wed, Dec 11, 2024 at 09:58:26PM +0000, Jonathan Cameron wrote: =20
+> > > > On Tue, 10 Dec 2024 16:48:57 -0600
+> > > > Chris Morgan <macroalpha82@gmail.com> wrote:
+> > > > =20
+> > > > > From: Chris Morgan <macromorgan@hotmail.com>
+> > > > >
+> > > > > After performing a git bisect, I identified a commit that broke t=
+he
+> > > > > battery and charger driver for my AXP717 PMIC. This was caused by
+> > > > > commit e37ec3218870 ("mfd: axp20x: Allow multiple regulators").
+> > > > >
+> > > > > After digging into it, it appears when mfd_add_devices was called=
+ with
+> > > > > a platform ID of PLATFORM_DEVID_NONE, the devm_iio_channel_get() =
+call
+> > > > > made by the various AXP20X power drivers would not be able to gen=
+erate
+> > > > > a dev_name(dev) for some reason, and the iio_channel_get() call u=
+sed in
+> > > > > the devm_ helper would fall back to making a iio_channel_get_sys()
+> > > > > call. After the platform ID was updated, now iio_channel_get() is=
+ no
+> > > > > longer falling back to iio_channel_get_sys(). At least this is my
+> > > > > limited understanding of what happened. =20
+> > > >
+> > > > The dev_name(dev) not getting a name doesn't sound quite right to m=
+e.
+> > > >
+> > > > Time to look at the ancient creaking ghost that is the iio_map hand=
+ling.
+> > > >
+> > > > struct iio_channel *iio_channel_get(struct device *dev,
+> > > >                                   const char *channel_name)
+> > > > {
+> > > >       const char *name =3D dev ? dev_name(dev) : NULL;
+> > > >       struct iio_channel *channel;
+> > > >
+> > > >       if (dev) {
+> > > >               channel =3D fwnode_iio_channel_get_by_name(dev_fwnode=
+(dev),
+> > > >                                                        channel_name=
+);
+> > > >               if (!IS_ERR(channel) || PTR_ERR(channel) !=3D -ENODEV)
+> > > >                       return channel;
+> > > >       }
+> > > >
+> > > >       return iio_channel_get_sys(name, channel_name);
+> > > > }
+> > > > EXPORT_SYMBOL_GPL(iio_channel_get);
+> > > >
+> > > > We didn't invent the relevant phandle stuff in DT via the patch you=
+ point at
+> > > > so all that matters is what gets passed to that iio_channel_get_sys=
+()
+> > > >
+> > > > So key here is that dev should be set, so we are passing dev_name(d=
+ev) into
+> > > > iio_channel_get_sys()
+> > > > I'm guessing that changed...
+> > > >
+> > > > Ah.  The iio_maps in
+> > > > https://elixir.bootlin.com/linux/v6.12.4/source/drivers/iio/adc/axp=
+20x_adc.c#L158
+> > > > are our problem. Those hardcode the consumer_dev name. The fix just=
+ changed
+> > > > those names. Back when this infrastructure was written we were in t=
+he world of
+> > > > board files, so everything was hard coded in them - or in an MFD li=
+ke this
+> > > > it was treated as a singleton device.
+> > > >
+> > > > So as to how to fix it... Assuming the new device names are the sam=
+e for all
+> > > > the mfd parts that make up each pmic, then you should be able to fi=
+gure out the
+> > > >  extra the number and build the channel maps to allow you to find t=
+he numbered
+> > > > devices. =20
+> > >
+> > > Is there a way to figure out the device number at runtime? The issue =
+is
+> > > each time the device attempts to probe and fails, the device number
+> > > increments, making it a "hitting a moving target" problem. =20
+> >=20
+> > The ADC device is a mfd cell or child device of the PMIC mfd device.
+> > So you should be able to use dev->parent to get it directly? We do
+> > that at least for the regulator driver. =20
+>=20
+> Sorry to dig up such an old thread. I'm taking a look at this one again
+> and can confirm passing pdev->dev.parent to devm_iio_channel_get() is
+> insufficient to get the driver to find the correct ADC channel. Would
+> there be another/better way to do this other than the
+> devm_iio_channel_get_sys() as proposed? Or should we be walking the
+> parent somehow looking for the named ADC channel on each child device
+> (which would also require a new symbol most likely)?
 
-diff --git a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-index efd2b6534127..2547a69dbd07 100644
---- a/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-+++ b/drivers/thermal/qcom/qcom-spmi-temp-alarm.c
-@@ -23,6 +23,7 @@
- #define QPNP_TM_REG_TYPE		0x04
- #define QPNP_TM_REG_SUBTYPE		0x05
- #define QPNP_TM_REG_STATUS		0x08
-+#define QPNP_TM_REG_IRQ_STATUS		0x10
- #define QPNP_TM_REG_SHUTDOWN_CTRL1	0x40
- #define QPNP_TM_REG_ALARM_CTRL		0x46
- 
-@@ -30,14 +31,20 @@
- #define QPNP_TM_REG_TEMP_DAC_STG1	0x47
- #define QPNP_TM_REG_TEMP_DAC_STG2	0x48
- #define QPNP_TM_REG_TEMP_DAC_STG3	0x49
-+#define QPNP_TM_REG_LITE_TEMP_CFG1	0x50
-+#define QPNP_TM_REG_LITE_TEMP_CFG2	0x51
- 
- #define QPNP_TM_TYPE			0x09
- #define QPNP_TM_SUBTYPE_GEN1		0x08
- #define QPNP_TM_SUBTYPE_GEN2		0x09
-+#define QPNP_TM_SUBTYPE_LITE		0xC0
- 
- #define STATUS_GEN1_STAGE_MASK		GENMASK(1, 0)
- #define STATUS_GEN2_STATE_MASK		GENMASK(6, 4)
- 
-+/* IRQ status only needed for TEMP_ALARM_LITE */
-+#define IRQ_STATUS_MASK			BIT(0)
-+
- #define SHUTDOWN_CTRL1_OVERRIDE_S2	BIT(6)
- #define SHUTDOWN_CTRL1_THRESHOLD_MASK	GENMASK(1, 0)
- 
-@@ -45,6 +52,8 @@
- 
- #define ALARM_CTRL_FORCE_ENABLE		BIT(7)
- 
-+#define LITE_TEMP_CFG_THRESHOLD_MASK	GENMASK(3, 2)
-+
- #define THRESH_COUNT			4
- #define STAGE_COUNT			3
- 
-@@ -89,6 +98,19 @@ static const long temp_dac_max[STAGE_COUNT] = {
- 	119375, 159375, 159375
- };
- 
-+/*
-+ * TEMP_ALARM_LITE has two stages: warning and shutdown with independently
-+ * configured threshold temperatures.
-+ */
-+
-+static const long temp_lite_warning_map[THRESH_COUNT] = {
-+	115000, 125000, 135000, 145000
-+};
-+
-+static const long temp_lite_shutdown_map[THRESH_COUNT] = {
-+	135000, 145000, 160000, 175000
-+};
-+
- /* Temperature in Milli Celsius reported during stage 0 if no ADC is present */
- #define DEFAULT_TEMP			37000
- 
-@@ -198,6 +220,24 @@ static int qpnp_tm_gen2_get_temp_stage(struct qpnp_tm_chip *chip)
- 	return alarm_state_map[ret];
- }
- 
-+/**
-+ * qpnp_tm_lite_get_temp_stage() - return over-temperature stage
-+ * @chip:		Pointer to the qpnp_tm chip
-+ *
-+ * Return: alarm interrupt state on success, or errno on failure.
-+ */
-+static int qpnp_tm_lite_get_temp_stage(struct qpnp_tm_chip *chip)
-+{
-+	u8 reg = 0;
-+	int ret;
-+
-+	ret = qpnp_tm_read(chip, QPNP_TM_REG_IRQ_STATUS, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	return reg & IRQ_STATUS_MASK;
-+}
-+
- /*
-  * This function updates the internal temp value based on the
-  * current thermal stage and threshold as well as the previous stage
-@@ -377,6 +417,96 @@ static const struct thermal_zone_device_ops qpnp_tm_gen2_rev2_sensor_ops = {
- 	.set_trip_temp = qpnp_tm_gen2_rev2_set_trip_temp,
- };
- 
-+static int qpnp_tm_lite_set_temp_thresh(struct qpnp_tm_chip *chip, int trip, int temp)
-+{
-+	int ret, temp_cfg, i;
-+	const long *temp_map;
-+	u16 addr;
-+	u8 reg, thresh;
-+
-+	if (trip < 0 || trip >= STAGE_COUNT) {
-+		dev_err(chip->dev, "invalid TEMP_LITE trip = %d\n", trip);
-+		return -EINVAL;
-+	}
-+
-+	switch (trip) {
-+	case 0:
-+		temp_map = temp_lite_warning_map;
-+		addr = QPNP_TM_REG_LITE_TEMP_CFG1;
-+		break;
-+	case 1:
-+		/*
-+		 * The second trip point is purely in software to facilitate
-+		 * a controlled shutdown after the warning threshold is crossed
-+		 * but before the automatic hardware shutdown threshold is
-+		 * crossed.
-+		 */
-+		return 0;
-+	case 2:
-+		temp_map = temp_lite_shutdown_map;
-+		addr = QPNP_TM_REG_LITE_TEMP_CFG2;
-+		break;
-+	default:
-+		return 0;
-+	}
-+
-+	if (temp < temp_map[THRESH_MIN] || temp > temp_map[THRESH_MAX]) {
-+		dev_err(chip->dev, "invalid TEMP_LITE temp = %d\n", temp);
-+		return -EINVAL;
-+	}
-+
-+	thresh = 0;
-+	temp_cfg = temp_map[thresh];
-+	for (i = THRESH_MAX; i >= THRESH_MIN; i--) {
-+		if (temp >= temp_map[i]) {
-+			thresh = i;
-+			temp_cfg = temp_map[i];
-+			break;
-+		}
-+	}
-+
-+	if (temp_cfg == chip->temp_thresh_map[trip])
-+		return 0;
-+
-+	ret = qpnp_tm_read(chip, addr, &reg);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "LITE_TEMP_CFG read failed, ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	reg &= ~LITE_TEMP_CFG_THRESHOLD_MASK;
-+	reg |= FIELD_PREP(LITE_TEMP_CFG_THRESHOLD_MASK, thresh);
-+
-+	ret = qpnp_tm_write(chip, addr, reg);
-+	if (ret < 0) {
-+		dev_err(chip->dev, "LITE_TEMP_CFG write failed, ret=%d\n", ret);
-+		return ret;
-+	}
-+
-+	chip->temp_thresh_map[trip] = temp_cfg;
-+
-+	return 0;
-+}
-+
-+static int qpnp_tm_lite_set_trip_temp(struct thermal_zone_device *tz,
-+				      const struct thermal_trip *trip, int temp)
-+{
-+	unsigned int trip_index = THERMAL_TRIP_PRIV_TO_INT(trip->priv);
-+	struct qpnp_tm_chip *chip = thermal_zone_device_priv(tz);
-+	int ret;
-+
-+	mutex_lock(&chip->lock);
-+	ret = qpnp_tm_lite_set_temp_thresh(chip, trip_index, temp);
-+	mutex_unlock(&chip->lock);
-+
-+	return ret;
-+}
-+
-+static const struct thermal_zone_device_ops qpnp_tm_lite_sensor_ops = {
-+	.get_temp = qpnp_tm_get_temp,
-+	.set_trip_temp = qpnp_tm_lite_set_trip_temp,
-+};
-+
- static irqreturn_t qpnp_tm_isr(int irq, void *data)
- {
- 	struct qpnp_tm_chip *chip = data;
-@@ -453,6 +583,68 @@ static int qpnp_tm_gen2_rev2_setup(struct qpnp_tm_chip *chip)
- 	return 0;
- }
- 
-+/* Configure TEMP_LITE registers based on DT thermal_zone trips */
-+static int qpnp_tm_lite_configure_trip_temps_cb(struct thermal_trip *trip, void *data)
-+{
-+	struct qpnp_tm_chip *chip = data;
-+	int ret;
-+
-+	trip->priv = THERMAL_INT_TO_TRIP_PRIV(chip->ntrips);
-+	ret = qpnp_tm_lite_set_temp_thresh(chip, chip->ntrips, trip->temperature);
-+	chip->ntrips++;
-+
-+	return ret;
-+}
-+
-+static int qpnp_tm_lite_configure_trip_temps(struct qpnp_tm_chip *chip)
-+{
-+	int ret;
-+
-+	ret = thermal_zone_for_each_trip(chip->tz_dev, qpnp_tm_lite_configure_trip_temps_cb, chip);
-+	if (ret < 0)
-+		return ret;
-+
-+	/* Verify that trips are strictly increasing. */
-+	if (chip->temp_thresh_map[2] <= chip->temp_thresh_map[0]) {
-+		dev_err(chip->dev, "Threshold 2=%ld <= threshold 0=%ld\n",
-+			chip->temp_thresh_map[2], chip->temp_thresh_map[0]);
-+		return -EINVAL;
-+	}
-+
-+	return 0;
-+}
-+
-+/* Read the hardware default TEMP_LITE stage threshold temperatures */
-+static int qpnp_tm_lite_setup(struct qpnp_tm_chip *chip)
-+{
-+	int ret, thresh;
-+	u8 reg = 0;
-+
-+	/*
-+	 * Store the warning trip temp in temp_thresh_map[0] and the shutdown trip
-+	 * temp in temp_thresh_map[2].  The second trip point is purely in software
-+	 * to facilitate a controlled shutdown after the warning threshold is
-+	 * crossed but before the automatic hardware shutdown threshold is
-+	 * crossed.  Thus, there is no register to read for the second trip
-+	 * point.
-+	 */
-+	ret = qpnp_tm_read(chip, QPNP_TM_REG_LITE_TEMP_CFG1, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	thresh = FIELD_GET(LITE_TEMP_CFG_THRESHOLD_MASK, reg);
-+	chip->temp_thresh_map[0] = temp_lite_warning_map[thresh];
-+
-+	ret = qpnp_tm_read(chip, QPNP_TM_REG_LITE_TEMP_CFG2, &reg);
-+	if (ret < 0)
-+		return ret;
-+
-+	thresh = FIELD_GET(LITE_TEMP_CFG_THRESHOLD_MASK, reg);
-+	chip->temp_thresh_map[2] = temp_lite_shutdown_map[thresh];
-+
-+	return 0;
-+}
-+
- static const struct spmi_temp_alarm_data spmi_temp_alarm_data = {
- 	.ops = &qpnp_tm_sensor_ops,
- 	.temp_map = &temp_map_gen1,
-@@ -481,6 +673,13 @@ static const struct spmi_temp_alarm_data spmi_temp_alarm_gen2_rev2_data = {
- 	.get_temp_stage = qpnp_tm_gen2_get_temp_stage,
- };
- 
-+static const struct spmi_temp_alarm_data spmi_temp_alarm_lite_data = {
-+	.ops = &qpnp_tm_lite_sensor_ops,
-+	.setup = qpnp_tm_lite_setup,
-+	.configure_trip_temps = qpnp_tm_lite_configure_trip_temps,
-+	.get_temp_stage = qpnp_tm_lite_get_temp_stage,
-+};
-+
- /*
-  * This function initializes the internal temp value based on only the
-  * current thermal stage and threshold. Setup threshold control and
-@@ -605,7 +804,8 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 	}
- 
- 	if (type != QPNP_TM_TYPE || (subtype != QPNP_TM_SUBTYPE_GEN1
--				     && subtype != QPNP_TM_SUBTYPE_GEN2)) {
-+				     && subtype != QPNP_TM_SUBTYPE_GEN2
-+				     && subtype != QPNP_TM_SUBTYPE_LITE)) {
- 		dev_err(&pdev->dev, "invalid type 0x%02x or subtype 0x%02x\n",
- 			type, subtype);
- 		return -ENODEV;
-@@ -621,6 +821,8 @@ static int qpnp_tm_probe(struct platform_device *pdev)
- 		chip->data = &spmi_temp_alarm_gen2_rev1_data;
- 	else if (subtype == QPNP_TM_SUBTYPE_GEN2)
- 		chip->data = &spmi_temp_alarm_gen2_data;
-+	else if (subtype == QPNP_TM_SUBTYPE_LITE)
-+		chip->data = &spmi_temp_alarm_lite_data;
- 	else
- 		return -ENODEV;
- 
--- 
-2.34.1
+Hi Chris
+
+=46rom what I recall the point was to get the number from pdev->dev.parent
+rather than simply passing it to the devm_iio_channel_get() call.
+
+That should allow building of channel maps that provide the correct
+device name to allow the provider to be found.
+
+Jonathan
+
+>=20
+> Thank you,
+> Chris
+>=20
+> >=20
+> > ChenYu
+> >  =20
+> > > Thank you,
+> > > Chris
+> > > =20
+> > > >
+> > > > That's a lot lighter change than moving over to DT based phandles f=
+or all this.
+> > > > (which is the modern way to handle it).
+> > > >
+> > > > As a cheeky check, just edit those maps to whatever IDs you have an=
+d see
+> > > > if it works.  Probably not an upstreamable solution but will confir=
+m we have
+> > > > it correct.
+> > > >
+> > > > Your patch works because we allow for some fuzzy matching (I can't =
+remember
+> > > > why) that doesn't use the consumer device name.
+> > > > That works as long as there is only one instance.  I'm guessing all=
+ this
+> > > > mess came about because someone has a board with two of these devic=
+es. On such
+> > > > a board we need the precise matching including the device name.
+> > > >
+> > > > Jonathan
+> > > > =20
+> > > > >
+> > > > > To fix this, I added a new devm_ helper of devm_iio_channel_get_s=
+ys()
+> > > > > that directly calls iio_channel_get_sys(), and I updated all the
+> > > > > affected drivers with the new routine. I then no longer experienc=
+ed
+> > > > > any issues with the drivers on my devices.
+> > > > >
+> > > > > Chris Morgan (2):
+> > > > >   iio: core: Add devm_ API for iio_channel_get_sys
+> > > > >   power: supply: axp20x: Use devm_iio_channel_get_sys() for iio c=
+hans
+> > > > >
+> > > > >  drivers/iio/inkern.c                    | 18 ++++++++++++++++++
+> > > > >  drivers/power/supply/axp20x_ac_power.c  |  4 ++--
+> > > > >  drivers/power/supply/axp20x_battery.c   | 16 ++++++++--------
+> > > > >  drivers/power/supply/axp20x_usb_power.c |  6 +++---
+> > > > >  include/linux/iio/consumer.h            | 20 ++++++++++++++++++++
+> > > > >  5 files changed, 51 insertions(+), 13 deletions(-)
+> > > > > =20
+> > > > =20
+>=20
 
 
