@@ -1,236 +1,157 @@
-Return-Path: <linux-pm+bounces-23455-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23456-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0AF03A4F17B
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 00:29:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id E10C3A4F1DF
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 00:58:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2A13D16598D
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 23:29:30 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1BE9E188D000
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 23:58:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE7A2278154;
-	Tue,  4 Mar 2025 23:29:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E65C72780F3;
+	Tue,  4 Mar 2025 23:58:19 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="EOrmORN2"
+	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="IVVExXtr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C40BD1F4CB0;
-	Tue,  4 Mar 2025 23:29:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4F366277021;
+	Tue,  4 Mar 2025 23:58:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741130965; cv=none; b=mBd8YPqeLkMYnB8Z3+iWQRpCPubAHGmlM54+VvJMq/sSPus6MQDTeCK5ghB5y6oXUNDeUHqfJHJvVUXAuFrvdTvlSHIG5AgpgnBVG3WMEdB29TrEDLWxPa9amTXFiLymvpxtqzoLCOPL8kCNQ3a1fF0gmazmmrYYusK8CPV2IpU=
+	t=1741132699; cv=none; b=Vs5DqumiemkVyQkjZw0IqrKwW73lp+vQSnmGmkr1rfv5db0vcc3LPM5R/Zj3oDNEz+Mf8NgxYtrvPeE73CcjGQbKtV72uLjKzL+lw/Fpe/rtgftS26kdnQj97UR+fES21KJLvPivc5Xnb6H7wO7aDND1K8sJZxrIuwcN49M5K+8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741130965; c=relaxed/simple;
-	bh=wRG2/3guVplG1fzSZhJr0O1MeFWo6h3depSrnEEaUuU=;
-	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=gi785SLykDpnbi7ak3wEWSPa/hVtEU6zWHIuisXRyZUu3V0BUhJr62KMltA+Q2GkRMfHgrt9mWq8JI8oLVWZvK/qgfhGpMYcXjK7uY7q8OVJ6+zAW/1g9ha9io2TiM4f7KbS+8VTIzwb7va1YzTJmog230eMhOc1HjfH0crzclI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=EOrmORN2; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id E96B2C4CEE5;
-	Tue,  4 Mar 2025 23:29:21 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741130965;
-	bh=wRG2/3guVplG1fzSZhJr0O1MeFWo6h3depSrnEEaUuU=;
-	h=Date:From:To:Cc:Subject:In-Reply-To:References:From;
-	b=EOrmORN2cXFTtf4xgHiVYacgPtdIj2PQA1cmWGAFXVYhMfjY7YuzjdVqAsAsZSADp
-	 UGqFfkNr+DFxISDtg+Q+k5Az2dOBTpoIGL3GjJXWEiV5KG8JgfM3SSKtccM51wQnXU
-	 G6TKC4yEQm21V8tk+mdY+99FWnkCGpQJaobQwK+08f9F2CPkAOUfmzex5leU+eejHe
-	 0QvA8ePd8Pl1REBqPOBtS0l+ZT62q6Fymi6acNTTr98B8OaqYB+YVKCYNNtTBD6ktP
-	 P2RskC78fqw78Qi+JWLmtEmuZrlc/Eha9leWs4hTj3sUl72Js/mfYFzixTWs+tJLUL
-	 Oyy5tLEa7kINw==
-Date: Tue, 4 Mar 2025 23:29:13 +0000
-From: Jonathan Cameron <jic23@kernel.org>
-To: Chris Morgan <macroalpha82@gmail.com>
-Cc: Chen-Yu Tsai <wens@csie.org>, linux-pm@vger.kernel.org,
- linux-iio@vger.kernel.org, andre.przywara@arm.com, lee@kernel.org,
- sre@kernel.org, lars@metafoo.de, Chris Morgan <macromorgan@hotmail.com>
-Subject: Re: [PATCH 0/2] Fix Regression with AXP20X for 6.13-rc1
-Message-ID: <20250304232913.020056fa@jic23-huawei>
-In-Reply-To: <67c743e3.050a0220.327e31.55b3@mx.google.com>
-References: <20241210224859.58917-1-macroalpha82@gmail.com>
-	<20241211215826.06162190@jic23-huawei>
-	<67606b09.050a0220.3905d.5bc7@mx.google.com>
-	<CAGb2v64vn-h02Bn2AKftphpNNcx9h9K3pKvdjuANsDhwiqbsrQ@mail.gmail.com>
-	<67c743e3.050a0220.327e31.55b3@mx.google.com>
-X-Mailer: Claws Mail 4.3.0 (GTK 3.24.48; x86_64-pc-linux-gnu)
+	s=arc-20240116; t=1741132699; c=relaxed/simple;
+	bh=NElNSuBMxgzeC8rTu/edZDnWeRf0KAL4VeHwtLzomRA=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=fXRoJRaSKBzDZEmwi5zpEBkOdpWk8z1Br25NP//DTQ8ZDM/N21Wqe6E8zhIh29Sjhvh/uS09u24Em7cXkHVI4A06JQg/YO8RnxtpfdCRC0ld2EaA/j8wOhV4rqwBtG5W3LIq8S3wu1XSq8V97Qp8QNdnyIK9u9nPljMj6JdIiiI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=IVVExXtr; arc=none smtp.client-ip=205.220.168.131
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
+Received: from pps.filterd (m0279865.ppops.net [127.0.0.1])
+	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 524NAHVM031827;
+	Tue, 4 Mar 2025 23:58:12 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
+	cc:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
+	So9hw38GyjjRtkgUGbm08Srs6SjHk0risyVY6nRFrG4=; b=IVVExXtr/tBBAmvp
+	lDTvpGBXXCTjDvDuhOxRyDypyoSboJzQs28hh6elrPToK8xuiB0c3+bo3ddRD6VB
+	PLkRcD6t0klmjT8+OB2DmDuOggMnervrp2KLlXaHYcYZUoHkojbi5LcIo5Vydjpa
+	ptCTtFvfxtaUg0VC54vPjNYnP9HRrsSil9AH/h7X4iw4p9n1ELtD0l82ndX3Ne6a
+	2hYgyCXDHSdC9qSw8fZS44Vt7q/FMosM15Y6wBkPdbnOBb7UM9tFgGVbvMORp74T
+	muM2eal7Upkcu/zHJcrcinn2zmtcuotZk0Rg0Acdhyf2gPzo6iUz/fevdaJsA8Jz
+	eUQa5A==
+Received: from nasanppmta02.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
+	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 455p6t3hv6-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 04 Mar 2025 23:58:12 +0000 (GMT)
+Received: from nasanex01b.na.qualcomm.com (nasanex01b.na.qualcomm.com [10.46.141.250])
+	by NASANPPMTA02.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 524NwBB7016230
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
+	Tue, 4 Mar 2025 23:58:11 GMT
+Received: from [10.71.108.112] (10.80.80.8) by nasanex01b.na.qualcomm.com
+ (10.46.141.250) with Microsoft SMTP Server (version=TLS1_2,
+ cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.2.1544.9; Tue, 4 Mar 2025
+ 15:58:11 -0800
+Message-ID: <454b1755-241d-4b68-b62f-4150e78d393a@quicinc.com>
+Date: Tue, 4 Mar 2025 15:58:10 -0800
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH 2/2] arm64: dts: qcom: sm8750: Add BWMONs
+To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>,
+        Stephan Gerhold
+	<stephan.gerhold@linaro.org>
+CC: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>,
+        Georgi Djakov
+	<djakov@kernel.org>, Rob Herring <robh@kernel.org>,
+        Conor Dooley
+	<conor+dt@kernel.org>,
+        Bjorn Andersson <andersson@kernel.org>,
+        Konrad Dybcio
+	<konradybcio@kernel.org>,
+        Krzysztof Kozlowski <krzk+dt@kernel.org>,
+        "Satya
+ Durga Srinivasu Prabhala" <quic_satyap@quicinc.com>,
+        Trilok Soni
+	<quic_tsoni@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
+        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
+        <linux-kernel@vger.kernel.org>,
+        Shivnandan Kumar <quic_kshivnan@quicinc.com>
+References: <20250113-sm8750_bwmon_master-v1-0-f082da3a3308@quicinc.com>
+ <20250113-sm8750_bwmon_master-v1-2-f082da3a3308@quicinc.com>
+ <Z4k8T31cw_CxHFLC@linaro.org>
+ <a02922b6-7b48-4305-8cf3-8019cbe9a069@oss.qualcomm.com>
+Content-Language: en-US
+From: Melody Olvera <quic_molvera@quicinc.com>
+In-Reply-To: <a02922b6-7b48-4305-8cf3-8019cbe9a069@oss.qualcomm.com>
+Content-Type: text/plain; charset="UTF-8"; format=flowed
+Content-Transfer-Encoding: 7bit
+X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
+ nasanex01b.na.qualcomm.com (10.46.141.250)
+X-QCInternal: smtphost
+X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
+X-Proofpoint-GUID: KXX36bico5VNvAaKhC7ESsAttKumilkB
+X-Authority-Analysis: v=2.4 cv=KfMosRYD c=1 sm=1 tr=0 ts=67c79394 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=tmWJlMiWa1-9U-Hj8hsA:9 a=QEXdDO2ut3YA:10
+ a=flcwpJxnCEoFzraN3UnM:22 a=TjNXssC_j7lpFel5tvFf:22
+X-Proofpoint-ORIG-GUID: KXX36bico5VNvAaKhC7ESsAttKumilkB
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-04_09,2025-03-04_02,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 mlxscore=0 lowpriorityscore=0
+ spamscore=0 suspectscore=0 phishscore=0 malwarescore=0 clxscore=1011
+ priorityscore=1501 impostorscore=0 mlxlogscore=999 adultscore=0
+ bulkscore=0 classifier=spam authscore=0 authtc=n/a authcc= route=outbound
+ adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
+ definitions=main-2503040191
 
-On Tue, 4 Mar 2025 12:18:10 -0600
-Chris Morgan <macroalpha82@gmail.com> wrote:
 
-> On Tue, Dec 17, 2024 at 02:04:37AM +0800, Chen-Yu Tsai wrote:
-> > On Tue, Dec 17, 2024 at 2:01=E2=80=AFAM Chris Morgan <macroalpha82@gmai=
-l.com> wrote: =20
-> > >
-> > > On Wed, Dec 11, 2024 at 09:58:26PM +0000, Jonathan Cameron wrote: =20
-> > > > On Tue, 10 Dec 2024 16:48:57 -0600
-> > > > Chris Morgan <macroalpha82@gmail.com> wrote:
-> > > > =20
-> > > > > From: Chris Morgan <macromorgan@hotmail.com>
-> > > > >
-> > > > > After performing a git bisect, I identified a commit that broke t=
-he
-> > > > > battery and charger driver for my AXP717 PMIC. This was caused by
-> > > > > commit e37ec3218870 ("mfd: axp20x: Allow multiple regulators").
-> > > > >
-> > > > > After digging into it, it appears when mfd_add_devices was called=
- with
-> > > > > a platform ID of PLATFORM_DEVID_NONE, the devm_iio_channel_get() =
-call
-> > > > > made by the various AXP20X power drivers would not be able to gen=
-erate
-> > > > > a dev_name(dev) for some reason, and the iio_channel_get() call u=
-sed in
-> > > > > the devm_ helper would fall back to making a iio_channel_get_sys()
-> > > > > call. After the platform ID was updated, now iio_channel_get() is=
- no
-> > > > > longer falling back to iio_channel_get_sys(). At least this is my
-> > > > > limited understanding of what happened. =20
-> > > >
-> > > > The dev_name(dev) not getting a name doesn't sound quite right to m=
-e.
-> > > >
-> > > > Time to look at the ancient creaking ghost that is the iio_map hand=
-ling.
-> > > >
-> > > > struct iio_channel *iio_channel_get(struct device *dev,
-> > > >                                   const char *channel_name)
-> > > > {
-> > > >       const char *name =3D dev ? dev_name(dev) : NULL;
-> > > >       struct iio_channel *channel;
-> > > >
-> > > >       if (dev) {
-> > > >               channel =3D fwnode_iio_channel_get_by_name(dev_fwnode=
-(dev),
-> > > >                                                        channel_name=
-);
-> > > >               if (!IS_ERR(channel) || PTR_ERR(channel) !=3D -ENODEV)
-> > > >                       return channel;
-> > > >       }
-> > > >
-> > > >       return iio_channel_get_sys(name, channel_name);
-> > > > }
-> > > > EXPORT_SYMBOL_GPL(iio_channel_get);
-> > > >
-> > > > We didn't invent the relevant phandle stuff in DT via the patch you=
- point at
-> > > > so all that matters is what gets passed to that iio_channel_get_sys=
-()
-> > > >
-> > > > So key here is that dev should be set, so we are passing dev_name(d=
-ev) into
-> > > > iio_channel_get_sys()
-> > > > I'm guessing that changed...
-> > > >
-> > > > Ah.  The iio_maps in
-> > > > https://elixir.bootlin.com/linux/v6.12.4/source/drivers/iio/adc/axp=
-20x_adc.c#L158
-> > > > are our problem. Those hardcode the consumer_dev name. The fix just=
- changed
-> > > > those names. Back when this infrastructure was written we were in t=
-he world of
-> > > > board files, so everything was hard coded in them - or in an MFD li=
-ke this
-> > > > it was treated as a singleton device.
-> > > >
-> > > > So as to how to fix it... Assuming the new device names are the sam=
-e for all
-> > > > the mfd parts that make up each pmic, then you should be able to fi=
-gure out the
-> > > >  extra the number and build the channel maps to allow you to find t=
-he numbered
-> > > > devices. =20
-> > >
-> > > Is there a way to figure out the device number at runtime? The issue =
-is
-> > > each time the device attempts to probe and fails, the device number
-> > > increments, making it a "hitting a moving target" problem. =20
-> >=20
-> > The ADC device is a mfd cell or child device of the PMIC mfd device.
-> > So you should be able to use dev->parent to get it directly? We do
-> > that at least for the regulator driver. =20
->=20
-> Sorry to dig up such an old thread. I'm taking a look at this one again
-> and can confirm passing pdev->dev.parent to devm_iio_channel_get() is
-> insufficient to get the driver to find the correct ADC channel. Would
-> there be another/better way to do this other than the
-> devm_iio_channel_get_sys() as proposed? Or should we be walking the
-> parent somehow looking for the named ADC channel on each child device
-> (which would also require a new symbol most likely)?
 
-Hi Chris
+On 2/7/2025 5:48 PM, Konrad Dybcio wrote:
+> On 16.01.2025 6:05 PM, Stephan Gerhold wrote:
+>> On Mon, Jan 13, 2025 at 01:08:18PM -0800, Melody Olvera wrote:
+>>> From: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+>>>
+>>> Add the CPU BWMONs for SM8750 SoCs.
+>>>
+>>> Signed-off-by: Shivnandan Kumar <quic_kshivnan@quicinc.com>
+>>> Signed-off-by: Melody Olvera <quic_molvera@quicinc.com>
+>>> ---
+>>>   arch/arm64/boot/dts/qcom/sm8750.dtsi | 74 ++++++++++++++++++++++++++++++++++++
+>>>   1 file changed, 74 insertions(+)
+>>>
+>>> diff --git a/arch/arm64/boot/dts/qcom/sm8750.dtsi b/arch/arm64/boot/dts/qcom/sm8750.dtsi
+>>> index 3bbd7d18598ee0a3a0d5130c03a3166e1fc14d82..09fe3149da1926b74a98280fe209ae7f423db864 100644
+>>> --- a/arch/arm64/boot/dts/qcom/sm8750.dtsi
+>>> +++ b/arch/arm64/boot/dts/qcom/sm8750.dtsi
+>>> @@ -2802,6 +2802,80 @@ rpmhpd_opp_super_turbo_no_cpr: opp-480 {
+>>>   			};
+>>>   		};
+>>>   
+>>> +		/* cluster0 */
+>>> +		pmu@240b3400 {
+>>> +			compatible = "qcom,sm8750-cpu-bwmon", "qcom,sdm845-bwmon";
+>>> +			reg = <0x0 0x240b3400 0x0 0x600>;
+>>> +
+>>> +			interrupts = <GIC_SPI 581 IRQ_TYPE_LEVEL_HIGH>;
+>>> +
+>>> +			interconnects = <&gem_noc MASTER_APPSS_PROC QCOM_ICC_TAG_ACTIVE_ONLY
+>>> +					 &mc_virt SLAVE_EBI1 QCOM_ICC_TAG_ALWAYS>;
+>> The start of the interconnect path is QCOM_ICC_TAG_ACTIVE_ONLY, but the
+>> destination is QCOM_ICC_TAG_ALWAYS? This is strange. Interconnect used
+>> by the CPU should be QCOM_ICC_TAG_ACTIVE_ONLY.
+> I'm not sure if this is a question, but I second, both should be ACTIVE_ONLY
 
-=46rom what I recall the point was to get the number from pdev->dev.parent
-rather than simply passing it to the devm_iio_channel_get() call.
+Apologies for not getting back to this for a while, but I spoke w some 
+folks and y'all are right. Will correct.
 
-That should allow building of channel maps that provide the correct
-device name to allow the provider to be found.
-
-Jonathan
-
->=20
-> Thank you,
-> Chris
->=20
-> >=20
-> > ChenYu
-> >  =20
-> > > Thank you,
-> > > Chris
-> > > =20
-> > > >
-> > > > That's a lot lighter change than moving over to DT based phandles f=
-or all this.
-> > > > (which is the modern way to handle it).
-> > > >
-> > > > As a cheeky check, just edit those maps to whatever IDs you have an=
-d see
-> > > > if it works.  Probably not an upstreamable solution but will confir=
-m we have
-> > > > it correct.
-> > > >
-> > > > Your patch works because we allow for some fuzzy matching (I can't =
-remember
-> > > > why) that doesn't use the consumer device name.
-> > > > That works as long as there is only one instance.  I'm guessing all=
- this
-> > > > mess came about because someone has a board with two of these devic=
-es. On such
-> > > > a board we need the precise matching including the device name.
-> > > >
-> > > > Jonathan
-> > > > =20
-> > > > >
-> > > > > To fix this, I added a new devm_ helper of devm_iio_channel_get_s=
-ys()
-> > > > > that directly calls iio_channel_get_sys(), and I updated all the
-> > > > > affected drivers with the new routine. I then no longer experienc=
-ed
-> > > > > any issues with the drivers on my devices.
-> > > > >
-> > > > > Chris Morgan (2):
-> > > > >   iio: core: Add devm_ API for iio_channel_get_sys
-> > > > >   power: supply: axp20x: Use devm_iio_channel_get_sys() for iio c=
-hans
-> > > > >
-> > > > >  drivers/iio/inkern.c                    | 18 ++++++++++++++++++
-> > > > >  drivers/power/supply/axp20x_ac_power.c  |  4 ++--
-> > > > >  drivers/power/supply/axp20x_battery.c   | 16 ++++++++--------
-> > > > >  drivers/power/supply/axp20x_usb_power.c |  6 +++---
-> > > > >  include/linux/iio/consumer.h            | 20 ++++++++++++++++++++
-> > > > >  5 files changed, 51 insertions(+), 13 deletions(-)
-> > > > > =20
-> > > > =20
->=20
-
+Thanks,
+Melody
 
