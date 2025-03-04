@@ -1,73 +1,73 @@
-Return-Path: <linux-pm+bounces-23419-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23420-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9C0F7A4E519
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 17:10:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id DF9D7A4E561
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 17:18:00 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 03ECF7A3A40
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:09:34 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id C04ED424A03
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:10:50 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9DE482C1556;
-	Tue,  4 Mar 2025 15:50:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A2B9F2C2CA0;
+	Tue,  4 Mar 2025 15:50:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="pdzEjLFq";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="d0ZpTXW+"
+	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="TVNFWT5G";
+	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="BnY/7fFu"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DE7C02C1551;
-	Tue,  4 Mar 2025 15:50:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id ED813277815;
+	Tue,  4 Mar 2025 15:50:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741103405; cv=none; b=jAgckpCZh6n1/scqJJyJvtloaj3XTGf1DtKGY+Tt+mQHJSgjY1Ewwe4fHM/B94iblqBztQCLvIa2vIzRxOc5OfrRdkcI/Ygm3JU52xhRHkkbSGflTNikdaeKDuSvcMJQrfAlzkMw7J4sDgnAXj84ZPRmXXeVr+T8gCu+OHIXYTQ=
+	t=1741103411; cv=none; b=fBPbDoBqMpBIK9o5gUNXq/c0ISitwVrjDFDPfspOdXrvv0yqlq4oE1DVVC9wY+Zv0si9bvXTuN8hUta8xX1b7ug2vgSpqrEOGdiRSimhurqJOnA5bVMOfr2dc4M68ipaQLjzneK3kYbLXao48rcOC35+4KCDPX9/vVoiwDfhHGY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741103405; c=relaxed/simple;
-	bh=mo2wO7MPP0MNUW9jvEInGL4vAwScrsCq6W3n24mnDYY=;
+	s=arc-20240116; t=1741103411; c=relaxed/simple;
+	bh=kLsiO+6XRjWuZSBNb3eoyDVYeIB0/HVPi1Xdv+Vpl7s=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=m+DlZkQ1ZienbIZ5If6GcjBKWo3Ikz5vXuHZ03ITbyBYpzTWIGYjKRyub4L7LObjGpc2/IIndBh270mvlmcwelHS4lmq2hk5aAeIQwiVDtAcFcKCLwUlZAsLREeqHZfmK12Vdu//bMj05VTwWZoSu2FbNd7H3l6E3pVsTmZQlPE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=pdzEjLFq; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=d0ZpTXW+ reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
+	 MIME-Version; b=eNCOmE8l22PctPGDj5Keudg2iRljRXRtdmW21/L1MSk4jN/xRYCgyTyyorxt9QcqoWJh/Ji0ydy3zJbkA1otOZFMM2ve97fSCr70UJigN/px1dlXKMuPCf/cOtsNQCxUIypn/abG8mRTH8xL8cXSCFG0drJMNJc66auxoK7Z4jM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=TVNFWT5G; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=BnY/7fFu reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
   d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1741103403; x=1772639403;
+  t=1741103409; x=1772639409;
   h=from:to:cc:subject:date:message-id:in-reply-to:
    references:mime-version:content-transfer-encoding;
-  bh=8VoAaV45utjStyReGTSKahDfsHoCThtjhDMr40/ZGtg=;
-  b=pdzEjLFqnOT/gzQyrKHq7YyzTlwe+2lh9QoWTeExTYMR4IHvmI6MIB8I
-   ugssbLpCGZXmbmXF7dPO1ssXAXorwNV8ej7qy4FRdTB/axnH9XdyRprRn
-   ASOVwbdaxHYVyP7sP/0K9QnUdK2LTUvRAhn1Z++e4AP1bQBKME4QII1wH
-   oRf8hKfWNhYPnZQGmkmZroxo6eaQDWm2QmEVn0Nayl6DcJu45Q7ltUeTq
-   1ZHs/ZgwZSeMFRJ5dAQJ1wGaLuh/2dbp3bG6X3hnRGxfLmT+vQFZ02osN
-   Fh2Y1sRmKYE0G9KKzO98bAE477kBnIaqOwUkEFRFsiMMbuiLiOXIdXTaV
+  bh=JyqufnNntJt7vbpN4qCJdGub3m2IYSpcdFWV0lv7HeY=;
+  b=TVNFWT5GICWbI0fHfPAJF8LqiqxBiEXrDX4Yh+5lyFMEWW8uIqc6toIl
+   1GhzEz35sWoP76LUqBnh4eGj92aeqWsf6oY/oQX8kYOGYLjEfwxMFQa59
+   HjJXvO0E8mVfgeNFO40Rc3I6jz6iIvyP1X2/fCXCIPkpl3YSJIn7Pdyzs
+   GWALtaGW1l0VFkcEYyz3Y/EeGRbq4IVHfwNTdySO/NJAysxrN7uwQING7
+   YzjxuD5OdZ7n7BrA5lyyt2K3ckBjTYXxxOC+oJbn+LzJbAt1rJDaIhpbS
+   11t9n6WezQ61uHauVNH7QoiyG1JU1asLKEDDXZ4FlJqy6eg3XpBV3dnlV
    w==;
-X-CSE-ConnectionGUID: LfRjySMJQHuFg6AXqcHyxg==
-X-CSE-MsgGUID: gPukJPRnS7SFRHjQMPPMPQ==
+X-CSE-ConnectionGUID: RnRBH7uAQ5qZK7AQFBu60g==
+X-CSE-MsgGUID: BjGsonlfSu+2xRBkhC/lLg==
 X-IronPort-AV: E=Sophos;i="6.14,220,1736809200"; 
-   d="scan'208";a="42272746"
+   d="scan'208";a="42272749"
 Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 04 Mar 2025 16:50:02 +0100
-X-CheckPoint: {67C7212A-0-2417938-F0170C2B}
-X-MAIL-CPID: CC92DBED37CA786F3092364A9E7C0752_2
-X-Control-Analysis: str=0001.0A006367.67C7212D.0028,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id B14E016180C;
-	Tue,  4 Mar 2025 16:49:56 +0100 (CET)
+  by mx1.tq-group.com with ESMTP; 04 Mar 2025 16:50:08 +0100
+X-CheckPoint: {67C72130-E-B1D34AC3-DEA5B19F}
+X-MAIL-CPID: 7B5B58FE919B8CF66131755B05686F47_4
+X-Control-Analysis: str=0001.0A006366.67C72132.00E1,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
+Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id D76CC16324C;
+	Tue,  4 Mar 2025 16:50:02 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1741103397;
+	s=dkim; t=1741103403;
 	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
 	 to:to:cc:cc:mime-version:mime-version:
 	 content-transfer-encoding:content-transfer-encoding:
 	 in-reply-to:in-reply-to:references:references;
-	bh=8VoAaV45utjStyReGTSKahDfsHoCThtjhDMr40/ZGtg=;
-	b=d0ZpTXW+XW9H0wxY7wcgCEQ6dljQ3Hv6H59YAmhYbAlONxHn98m9h4qO39IiCd0/nSlRhL
-	EOxEmadDTzRmdGCszjiduenMDxtl6rz7SUqda64s0ghINesnyORHLr8UWplBOnzScNN0A1
-	3QQGhM9tfTdAlj6XCWCVFKndIgrW48VuyS/ixmZC5LnzQ0Y9XZJswb33jID4xVNx4nO+zG
-	q3k6hSX+EeGPxTa7nQ6E/awEDjpGMRJIJwrGLC2Qz2Omdsigsh2zUjxXFRTYG0/rTiB5Bz
-	t7iGzADX/ov3ns8Q55S3DckdYzKo+z/T33rmmXaSegWfDCPdLZVfFYsAGxhGWg==
+	bh=JyqufnNntJt7vbpN4qCJdGub3m2IYSpcdFWV0lv7HeY=;
+	b=BnY/7fFuSytrQIWdFQTKARB3cM5OblyxNFwwbEbnhlbdmOdbudFNAdRIIVd4vbYYY7NSuo
+	p+rhijLBeYRP6pBQ4namw9g34Pb+Ufzlgy5lfjrJtmGJ3wkASAGUjw5kpXRpVj0ybB1DgZ
+	icVWp5m1OkipWdECwUHiwo07Rvx6g0jWcAmCkCvKREnZ1TRy6IWT65vB7eIPtu/uxATEgB
+	Qmwm0YejFPIsH69KIpKzmPRXEPgRhpa76IKwZDXMcwbtgIsNXRt4cUo3UYFFMU+jkRPSKs
+	E8dWNkPObMQNK9CnG8ztAlC8NZPQ7DLKlnKetCyQ3AYxO+iG5wiiDZFSOaaRjA==
 From: Alexander Stein <alexander.stein@ew.tq-group.com>
 To: Rob Herring <robh@kernel.org>,
 	Krzysztof Kozlowski <krzk+dt@kernel.org>,
@@ -89,9 +89,9 @@ Cc: Alexander Stein <alexander.stein@ew.tq-group.com>,
 	linux@ew.tq-group.com,
 	linux-clk@vger.kernel.org,
 	linux-pm@vger.kernel.org
-Subject: [PATCH v3 4/6] arm64: dts: imx93: Add LCDIF & LDB nodes
-Date: Tue,  4 Mar 2025 16:49:23 +0100
-Message-ID: <20250304154929.1785200-5-alexander.stein@ew.tq-group.com>
+Subject: [PATCH v3 5/6] arm64: dts: tqma9352-mba93xxla: Add LVDS overlay
+Date: Tue,  4 Mar 2025 16:49:24 +0100
+Message-ID: <20250304154929.1785200-6-alexander.stein@ew.tq-group.com>
 X-Mailer: git-send-email 2.43.0
 In-Reply-To: <20250304154929.1785200-1-alexander.stein@ew.tq-group.com>
 References: <20250304154929.1785200-1-alexander.stein@ew.tq-group.com>
@@ -104,111 +104,121 @@ MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
 X-Last-TLS-Session-Version: TLSv1.3
 
-LCDIF port 1 is directly attached to the LVDS Display Bridge (LDB).
-Both need the same clock source (VIDEO_PLL1).
+This adds the overlay for the Tianma TM070JVHG33 LVDS display.
 
 Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
 ---
- arch/arm64/boot/dts/freescale/imx93.dtsi | 77 ++++++++++++++++++++++++
- 1 file changed, 77 insertions(+)
+ arch/arm64/boot/dts/freescale/Makefile        |  3 ++
+ ...3-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso | 40 +++++++++++++++++++
+ .../freescale/imx93-tqma9352-mba93xxla.dts    | 27 +++++++++++++
+ 3 files changed, 70 insertions(+)
+ create mode 100644 arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso
 
-diff --git a/arch/arm64/boot/dts/freescale/imx93.dtsi b/arch/arm64/boot/dts/freescale/imx93.dtsi
-index 56766fdb0b1e5..69a639a8c833f 100644
---- a/arch/arm64/boot/dts/freescale/imx93.dtsi
-+++ b/arch/arm64/boot/dts/freescale/imx93.dtsi
-@@ -1273,6 +1273,9 @@ s4muap: mailbox@47520000 {
- 		media_blk_ctrl: system-controller@4ac10000 {
- 			compatible = "fsl,imx93-media-blk-ctrl", "syscon";
- 			reg = <0x4ac10000 0x10000>;
-+			#address-cells = <1>;
-+			#size-cells = <1>;
-+			ranges = <0x0 0x4ac10000 0x10000>;
- 			power-domains = <&mediamix>;
- 			clocks = <&clk IMX93_CLK_MEDIA_APB>,
- 				 <&clk IMX93_CLK_MEDIA_AXI>,
-@@ -1286,8 +1289,82 @@ media_blk_ctrl: system-controller@4ac10000 {
- 				 <&clk IMX93_CLK_MIPI_DSI_GATE>;
- 			clock-names = "apb", "axi", "nic", "disp", "cam",
- 				      "pxp", "lcdif", "isi", "csi", "dsi";
-+			assigned-clocks = <&clk IMX93_CLK_MEDIA_AXI>,
-+					  <&clk IMX93_CLK_MEDIA_APB>,
-+					  <&clk IMX93_CLK_VIDEO_PLL>,
-+					  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
-+			assigned-clock-parents = <&clk IMX93_CLK_SYS_PLL_PFD0>,
-+						 <&clk IMX93_CLK_SYS_PLL_PFD1_DIV2>,
-+						 <&clk IMX93_CLK_24M>,
-+						 <&clk IMX93_CLK_VIDEO_PLL>;
-+			assigned-clock-rates = <333333333>, <133333333>, <0>, <200000000>;
- 			#power-domain-cells = <1>;
- 			status = "disabled";
+diff --git a/arch/arm64/boot/dts/freescale/Makefile b/arch/arm64/boot/dts/freescale/Makefile
+index be6ef4c56fbf4..ac4f14c69cdd8 100644
+--- a/arch/arm64/boot/dts/freescale/Makefile
++++ b/arch/arm64/boot/dts/freescale/Makefile
+@@ -300,6 +300,9 @@ dtb-$(CONFIG_ARCH_MXC) += imx93-tqma9352-mba93xxla.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx93-var-som-symphony.dtb
+ dtb-$(CONFIG_ARCH_MXC) += imx95-19x19-evk.dtb
+ 
++imx93-tqma9352-mba93xxla-lvds-tm070jvhg33-dtbs += imx93-tqma9352-mba93xxla.dtb imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtbo
++dtb-$(CONFIG_ARCH_MXC) += imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtb
 +
-+			lvds_bridge: bridge@20 {
-+				compatible = "fsl,imx93-ldb";
-+				reg = <0x20 0x4>, <0x24 0x4>;
-+				reg-names = "ldb", "lvds";
-+				clocks = <&clk IMX93_CLK_LVDS_GATE>;
-+				clock-names = "ldb";
-+				assigned-clocks = <&clk IMX93_CLK_MEDIA_LDB>;
-+				assigned-clock-parents = <&clk IMX93_CLK_VIDEO_PLL>;
-+				status = "disabled";
+ imx8mm-kontron-dl-dtbs			:= imx8mm-kontron-bl.dtb imx8mm-kontron-dl.dtbo
+ 
+ dtb-$(CONFIG_ARCH_MXC) += imx8mm-kontron-dl.dtb
+diff --git a/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso
+new file mode 100644
+index 0000000000000..c723a19f03d63
+--- /dev/null
++++ b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla-lvds-tm070jvhg33.dtso
+@@ -0,0 +1,40 @@
++// SPDX-License-Identifier: (GPL-2.0-or-later OR MIT)
++/*
++ * Copyright (c) 2023 TQ-Systems GmbH <linux@ew.tq-group.com>,
++ * D-82229 Seefeld, Germany.
++ * Author: Alexander Stein
++ */
 +
-+				ports {
-+					#address-cells = <1>;
-+					#size-cells = <0>;
++#include <dt-bindings/clock/imx93-clock.h>
++#include <dt-bindings/gpio/gpio.h>
 +
-+					port@0 {
-+						reg = <0>;
++/dts-v1/;
++/plugin/;
 +
-+						ldb_from_lcdif: endpoint {
-+							remote-endpoint = <&lcdif_to_ldb>;
-+						};
-+					};
++&backlight_lvds {
++	status = "okay";
++};
 +
-+					port@1 {
-+						reg = <1>;
++&display {
++	compatible = "tianma,tm070jvhg33";
++	status = "okay";
++};
 +
-+						ldb_lvds: endpoint {
-+						};
-+					};
-+				};
++&lcdif {
++	assigned-clocks = <&clk IMX93_CLK_VIDEO_PLL>,
++			  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
++	assigned-clock-rates = <477400000>;
++	status = "okay";
++};
++
++&lvds_bridge {
++	status = "okay";
++};
++
++&media_blk_ctrl {
++	status = "okay";
++};
++
++&tpm5 {
++	status = "okay";
++};
+diff --git a/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla.dts b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla.dts
+index 9e88c42c3d170..4618f836345fc 100644
+--- a/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla.dts
++++ b/arch/arm64/boot/dts/freescale/imx93-tqma9352-mba93xxla.dts
+@@ -48,6 +48,23 @@ clk_dp: clk-dp {
+ 		clock-frequency = <26000000>;
+ 	};
+ 
++	display: display {
++		/*
++		 * Display is not fixed, so compatible has to be added from
++		 * DT overlay
++		 */
++		power-supply = <&reg_3v3>;
++		enable-gpios = <&expander2 1 GPIO_ACTIVE_HIGH>;
++		backlight = <&backlight_lvds>;
++		status = "disabled";
++
++		port {
++			panel_in_lvds0: endpoint {
++				remote-endpoint = <&ldb_lvds>;
 +			};
 +		};
++	};
 +
-+		lcdif: display-controller@4ae30000 {
-+			compatible = "fsl,imx93-lcdif";
-+			reg = <0x4ae30000 0x23c>;
-+			interrupts = <GIC_SPI 176 IRQ_TYPE_LEVEL_HIGH>;
-+			clocks = <&clk IMX93_CLK_MEDIA_DISP_PIX>,
-+				 <&clk IMX93_CLK_LCDIF_GATE>,
-+				 <&clk IMX93_CLK_MEDIA_AXI>;
-+			clock-names = "pix", "axi", "disp_axi";
-+			assigned-clocks = <&clk IMX93_CLK_VIDEO_PLL>,
-+					  <&clk IMX93_CLK_MEDIA_DISP_PIX>;
-+			assigned-clock-parents = <&clk IMX93_CLK_24M>,
-+						 <&clk IMX93_CLK_VIDEO_PLL>;
-+			power-domains = <&media_blk_ctrl IMX93_MEDIABLK_PD_LCDIF>;
-+			status = "disabled";
-+
-+			port {
-+				#address-cells = <1>;
-+				#size-cells = <0>;
-+
-+				lcdif_to_dsi: endpoint@0 {
-+					reg = <0>;
-+				};
-+
-+				lcdif_to_ldb: endpoint@1 {
-+					reg = <1>;
-+					remote-endpoint = <&ldb_from_lcdif>;
-+				};
-+
-+				lcdif_to_dpi: endpoint@2 {
-+					reg = <2>;
-+				};
-+			};
- 		};
+ 	gpio-keys {
+ 		compatible = "gpio-keys";
+ 		autorepeat;
+@@ -509,6 +526,16 @@ &lpuart8 {
+ 	status = "okay";
+ };
  
- 		usbotg1: usb@4c100000 {
++&lvds_bridge {
++	ports {
++		port@1 {
++			ldb_lvds: endpoint {
++				remote-endpoint = <&panel_in_lvds0>;
++			};
++		};
++	};
++};
++
+ &pcf85063 {
+ 	/* RTC_EVENT# from SoM is connected on mainboard */
+ 	pinctrl-names = "default";
 -- 
 2.43.0
 
