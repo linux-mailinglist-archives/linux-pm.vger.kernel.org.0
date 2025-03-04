@@ -1,159 +1,161 @@
-Return-Path: <linux-pm+bounces-23370-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23372-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id B4816A4E196
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 15:47:50 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id CB30DA4E1A6
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 15:49:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 1D70C3A8C29
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 14:33:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4649117D5F3
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 14:41:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B3E232627F5;
-	Tue,  4 Mar 2025 14:31:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5336E25DD0E;
+	Tue,  4 Mar 2025 14:39:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="ULFskclw"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="ff+UHP0a"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f49.google.com (mail-wr1-f49.google.com [209.85.221.49])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DDA7F26157F;
-	Tue,  4 Mar 2025 14:31:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741098719; cv=pass; b=PAwJ5mYA9xNN/GQkPy0wYgaTK8+LTaVAvnpSODSlFv/YbLY8W8DzackewrwwfNx8PC/GirbGk0OWpFqWQBssNMonsg94kZUEK/746WiNlq/rxInsnuvwMzScBNd4tlqsnlA6cdgwalI/6Cw8VPOrFeWStqfBSZEQEPykt4DXivQ=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741098719; c=relaxed/simple;
-	bh=C5fdCffFI+4OEo9H68+Ik5QYXGMpqzIZq8TCvbL02Zw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=MlKBrTEz3u8zGV9YHCB1JcyHQRQgSQNQIQT5BIShW3CS5adydZGQMOlVcPM5O0FHk5cXsQmJMtfGy5TDSllmogbDcmbNp1M7ImXCTNVJtSMnhe7QwlRDcmFHeI8v6cFaxLeV2yA2H/XqCQU76P5OoY69u146J987MSXZfMWgS1g=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=ULFskclw; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1741098703; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=mAce3bRInugDhWPhCQM6C2uCziq19ilL7/e+dDW2/FGcV1jAnkWk4bEkVhEqALuAwIKUQaz283m1L6+GjNg7wGKM/uLr6E+GmAow3mmPtDa0ZgSRfN9ymqKS30YZ8AGCmJr2RuWWgd8wjvsHdhmBFyY0T91/QvIe3g8dYbJP4AQ=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1741098703; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=tTAodclUAdCBU382l20ItnjkDcvqqEPMOb0qAu5ypcA=; 
-	b=Ihw5XlebV4G1xS/82TskIdALZ4f96MvsX6Qv1UmpB9tv/KyoKguhA+XkF/1QMufniyDdE93wgk/eIuvDnjR6D1YtiiCnJ42kddUTNNAhMHmMaLA94SRyyGqz/S2hLW6XmBsdXKQqLxDW9PmgC5xtmKV/QlfvUFVP7YaqrubOHcE=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741098703;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=tTAodclUAdCBU382l20ItnjkDcvqqEPMOb0qAu5ypcA=;
-	b=ULFskclwdgD84orDTDoYs2GbQMrFcN9IYWZlXv6GhiNxCMwrTweCDIby6f9Pw5PJ
-	Sc7NsYDgv8wk0GOQRn40+TOKILmhGITxhPaBgTLDybhMyj2+NFPkeXOVi1rUcGnUNB0
-	sF1qb5Z03fHMYAxI+Ugu1YrvPgvCd/7yX4yiFB0U=
-Received: by mx.zohomail.com with SMTPS id 1741098701479811.0457773113028;
-	Tue, 4 Mar 2025 06:31:41 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id EB4EE180C9F; Tue, 04 Mar 2025 15:31:37 +0100 (CET)
-Date: Tue, 4 Mar 2025 15:31:37 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Ulf Hansson <ulf.hansson@linaro.org>, Heiko Stuebner <heiko@sntech.de>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
-	linux-rockchip@lists.infradead.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH] pmdomain: rockchip: add regulator dependency
-Message-ID: <2g5p6ucwp55zuisupqx6dglikmbm5rqy3yl34mqobs3giucfqe@um6uhmglxhex>
-References: <20250304142803.689201-1-arnd@kernel.org>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7EDEA25E836;
+	Tue,  4 Mar 2025 14:39:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.49
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741099155; cv=none; b=icOabWna6DWdzI/g8ae8dKMCn/9aTgZav+6caHwMoX2VOGKps6GrtXIaihm0sp6hbqp0N2hZIQpAVegdla3gjVizyxQU+gGzEhwtHd/o5pTSMt16/OBmcgzNEFKBADo+6u/sAPZ2FhOEDdMP9GDaIU4edaqX9RYHlUltz4nVqOk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741099155; c=relaxed/simple;
+	bh=uzDyhg36aKQtXD63rS8FtBbFftRpnHV4ry+5FYiWjAs=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=YXlSzlMI9VDLL/9G+PgoNO7x8gRnxHSEONkTbIRAnUGzPXRqDvsiVarhmd72eo9VB+Ludn4qx4YjkSx46ed4OMbxVsZO5zq32gj70qMliQZsnpMyMTAcvKF7sq1fGt4DUundCEYnr+CqlmfDgugG6RfcpfAzPiiO6vDv17SgJTI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=ff+UHP0a; arc=none smtp.client-ip=209.85.221.49
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f49.google.com with SMTP id ffacd0b85a97d-390e3b3d3f4so2949035f8f.2;
+        Tue, 04 Mar 2025 06:39:13 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741099152; x=1741703952; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=Npvu48cu8TTRTz8ZFkqiXyWbVjLDOCxYiH4u8pc5l24=;
+        b=ff+UHP0aNPhZZWY4t6VUamPhLbSRqf9WEY/N4oKj59QRoHG+vuAEEk4mrUIhX0KESB
+         2O0QiN/t0D7AkMZkPkviEobz/42RoXpjcLCBm2eAYZ3U8gkOE9v83SzrCYoS+kYDYsdg
+         ytUegaVotYPEGRR1nEfXzfgkXOAD78EuAOw7DaBKirHOb4ItXrjmQ/d5vh3ClahMoCo2
+         o31AhFX2Xx2H1RzeLf4rLizjj5TsPHZzxZq6Ki26cxPHZUGs+i+P/WueLt/HjIY1ZrRE
+         mqh/73GfwaEhveo1fr9Pf4W+0oSbacqgY336Y7We6aZQGkacTf2tzGrlfxiMh38In4mg
+         b1/w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741099152; x=1741703952;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=Npvu48cu8TTRTz8ZFkqiXyWbVjLDOCxYiH4u8pc5l24=;
+        b=nvfpxBZfWFgyfoZ5aG729mYTB7G+LmswjfixEb6CFXvztuS1xVjIlocgsQnk/GyDL/
+         JYsKc8HCg3Tvx803lh0j/1F5LRACtXZdwKB53ZooOQAfvOpEzmn3wCM8PJZuxExfecdl
+         9MALbFBkp1h5QCHU45U9uVzFAEEUWAAZEoEPiZ3+wX0oO2O1fqF68eZBOPyiSa3q9iEP
+         vs8LU5RcKa33rgA2GvBZpfEQsUetNHdAiuOCGu8ESOcmgtC/EpRbwRY/4c8wxGXnGU/T
+         gC45UBDjZ9Dq+hRQv5VH9oVAUa4DliHpUGxE5FHNmOhQwb6BqLdQuwlCyY6rsdNCSbRV
+         ljfQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVm4aW28j/2IjIQksnVFZUcSSW7ToOezlxSb1a/odhyFBWgQvJF268g2MkFRemEgxoCb2xDgxQQaQsr@vger.kernel.org, AJvYcCVrK3oE0q2Pc0NIjmQmh1TP8poBlFORIJSEGzfRMJteuCKb0QDzSVrymxk6GYZcN4hY/O86a0VDuHFMgVLa@vger.kernel.org, AJvYcCWDqXydxcnV/NaUS3bHQW/nhYylZsud6iiaen60oeD0fuaLHN75H8Zt9mojscFyphHsCq2LORvi1Lg=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzgEEc4zDfFk8Q8H7e609ZQ/Ve3v78s1AygcgSa44XRpw6bjYDX
+	vSzsqAKGQSeFbVLYG6wkJTo5sxK3cSoPPNGnRjmFDFvSNBybfvDPgcrhw0SUWtBppTa9Tm+3Zkw
+	yet/r3wJVos25+yMWLzWPlbpfdpvo2w==
+X-Gm-Gg: ASbGncvFlYw1sx2jRhe48DQ1jxX954Zz+jRUoGGx7hSSpx81INxdSVShWsPgd1xSPPb
+	+zGy38xkUvKOiMcTjvf6+0yimeUVNwxqnx7wPIXcfE4s2l26FJzJT6pa9jt4it0uy3RG5O4GFNu
+	5hXixocHp2UN2rpgwEZivPSuN01Go=
+X-Google-Smtp-Source: AGHT+IG0UxYU+N5iqHGOMOY8APYCMkNgkojpgu6RARUbeEpAB7tfoOd9OOtUsw2ENkYoGjdUzmZx1Iq+/lOy+wqxbcs=
+X-Received: by 2002:a05:6000:18a7:b0:391:136c:1346 with SMTP id
+ ffacd0b85a97d-391136c141amr4097678f8f.19.1741099151431; Tue, 04 Mar 2025
+ 06:39:11 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="6ftr5rqzgjozmvlj"
-Content-Disposition: inline
-In-Reply-To: <20250304142803.689201-1-arnd@kernel.org>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.2/241.78.79
-X-ZohoMailClient: External
-
-
---6ftr5rqzgjozmvlj
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
+References: <20250303115502.89457-1-clamor95@gmail.com> <20250303115502.89457-2-clamor95@gmail.com>
+ <20250304135806.GA2503334-robh@kernel.org>
+In-Reply-To: <20250304135806.GA2503334-robh@kernel.org>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Tue, 4 Mar 2025 16:38:58 +0200
+X-Gm-Features: AQ5f1JpqrYtkOrzf2CVWZdo1DH3FPGrm0F4fbufI2O5K2mZdFEO6-VEvpN_YR5Y
+Message-ID: <CAPVz0n3WZOUb41AzNPqMLx8wtPiBJ1jfww7h5xyJaZgu+=RdkA@mail.gmail.com>
+Subject: Re: [PATCH v3 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
+To: Rob Herring <robh@kernel.org>
+Cc: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
+	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH] pmdomain: rockchip: add regulator dependency
-MIME-Version: 1.0
 
-Hi,
+=D0=B2=D1=82, 4 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 15:58 Rob H=
+erring <robh@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On Mon, Mar 03, 2025 at 01:55:01PM +0200, Svyatoslav Ryhel wrote:
+> > Add bindings for Maxim MAX8971 charger.
+> >
+> > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
+> > ---
+> >  .../bindings/power/supply/maxim,max8971.yaml  | 68 +++++++++++++++++++
+> >  1 file changed, 68 insertions(+)
+> >  create mode 100644 Documentation/devicetree/bindings/power/supply/maxi=
+m,max8971.yaml
+> >
+> > diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max89=
+71.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
+> > new file mode 100644
+> > index 000000000000..2244cc3d45a6
+> > --- /dev/null
+> > +++ b/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
+> > @@ -0,0 +1,68 @@
+> > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
+> > +%YAML 1.2
+> > +---
+> > +$id: http://devicetree.org/schemas/power/supply/maxim,max8971.yaml#
+> > +$schema: http://devicetree.org/meta-schemas/core.yaml#
+> > +
+> > +title: Maxim MAX8971 IC charger
+> > +
+> > +maintainers:
+> > +  - Svyatoslav Ryhel <clamor95@gmail.com>
+> > +
+> > +description:
+> > +  The MAX8971 is a compact, high-frequency, high-efficiency switch-mod=
+e charger
+> > +  for a one-cell lithium-ion (Li+) battery.
+> > +
+> > +allOf:
+> > +  - $ref: power-supply.yaml#
+> > +
+> > +properties:
+> > +  compatible:
+> > +    const: maxim,max8971
+> > +
+> > +  reg:
+> > +    maxItems: 1
+> > +
+> > +  interrupts:
+> > +    maxItems: 1
+> > +
+> > +  monitored-battery: true
+> > +
+> > +  port:
+> > +    description:
+> > +      An optional port node to link the extcon device to detect type o=
+f plug.
+> > +    $ref: /schemas/graph.yaml#/properties/port
+>
+> extcon as a binding is pretty much deprecated in favor of connector
+> bindings.
+>
+> The OF graph is an overkill here too. You should just need a phandle to
+> the connector node.
+>
 
-On Tue, Mar 04, 2025 at 03:27:59PM +0100, Arnd Bergmann wrote:
-> From: Arnd Bergmann <arnd@arndb.de>
->=20
-> When CONFIG_REGULATOR is disabled, this pmdomain driver fails to build:
->=20
-> drivers/pmdomain/rockchip/pm-domains.c:653:30: error: implicit declaratio=
-n of function 'devm_of_regulator_get'; did you mean 'devm_regulator_get'? [=
--Wimplicit-function-declaration]
->   653 |                 pd->supply =3D devm_of_regulator_get(pmu->dev, pd=
-->node, "domain");
->       |                              ^~~~~~~~~~~~~~~~~~~~~
->       |                              devm_regulator_get
-> drivers/pmdomain/rockchip/pm-domains.c:653:28: error: assignment to 'stru=
-ct regulator *' from 'int' makes pointer from integer without a cast [-Wint=
--conversion]
->   653 |                 pd->supply =3D devm_of_regulator_get(pmu->dev, pd=
-->node, "domain");
->       |                            ^
->=20
-> Add a Kconfig dependency.
->=20
-> Fixes: db6df2e3fc16 ("pmdomain: rockchip: add regulator support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
-> ---
+Actually, I am fine with using connector phandle if this will lead to
+acceptance of schema.
+I will add this in v4 once time comes. Thanks.
 
-Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-
--- Sebastian
-
->  drivers/pmdomain/rockchip/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
->=20
-> diff --git a/drivers/pmdomain/rockchip/Kconfig b/drivers/pmdomain/rockchi=
-p/Kconfig
-> index 7e4f9b628f0b..218d43186e5b 100644
-> --- a/drivers/pmdomain/rockchip/Kconfig
-> +++ b/drivers/pmdomain/rockchip/Kconfig
-> @@ -5,6 +5,7 @@ config ROCKCHIP_PM_DOMAINS
->  	bool "Rockchip generic power domain"
->  	depends on PM
->  	depends on HAVE_ARM_SMCCC_DISCOVERY
-> +	depends on REGULATOR
->  	select PM_GENERIC_DOMAINS
->  	help
->  	  Say y here to enable power domain support.
-> --=20
-> 2.39.5
->=20
-
---6ftr5rqzgjozmvlj
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmfHDsEACgkQ2O7X88g7
-+pp00g//aFcPbqAlUT+9ssFVmS1DZnzPVKvIpP2qpRgf3ZLhdIUUE/9ljAKaBhsB
-ibrwuSsht4nUebBiL/Ge9191zcdE/kG+oBIaOeUpRfUI1fVI5V501LzHoJAX9QJM
-nezzvh8SUWeoerVK2faqPrap0HJ/u/vkhoOpiUBoSBOOaD438GhSPbgAGV7SBH5L
-8dtv0H9PbRg0bjMWaSrUptVZKH1aOgew/ik30jvwDzXRJYGx/86Zzh4h8ryCh4LO
-lfwPZ72cq5QbpagWvO2rCznJrntpdWITqzCJ0Tg+OEjRhhcpDfSpI16krVIfFK37
-lFDhuK9/4VnA8PRmt92pDU2AfNMpUa8O1narQGFGsFTvG8ad9/h5xwxLVq9DMB5F
-r5D8Ild2hkvI1mkm1zj5Ur0aSN9p8kX91gbN5+cblCFw3GQPSRVBCe9iYQMWKOYI
-fJm46Nw4D6pbfMGAl4N4gxBwZsCUbFzVU60cqnUSDyVYVET+5sennBGpX9k/AKfk
-DBoG2efxxd0x34sq6orYAjL0+E0FLw+T/bfgcVwF6XOv6jJfYPPB7YVWREGR7EzQ
-t2ybqCXnUQIpyHe/cYSjJzcgYmfn4I5VlWhjsK5Zw4F6hSPAaDPiskS8PMqTDBGx
-GwR5n9e77eX49YHCd6frUZTZycygRe8J+vB77/bkFd1LcUNlcZI=
-=86c8
------END PGP SIGNATURE-----
-
---6ftr5rqzgjozmvlj--
+> Rob
 
