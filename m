@@ -1,57 +1,57 @@
-Return-Path: <linux-pm+bounces-23397-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23398-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id E08EDA4E41B
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:48:37 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 00D65A4E395
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 16:36:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 102A83BA61B
-	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 15:28:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 5F546179E5A
+	for <lists+linux-pm@lfdr.de>; Tue,  4 Mar 2025 15:29:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0D3BE20A5CC;
-	Tue,  4 Mar 2025 15:17:40 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5EA6E281514;
+	Tue,  4 Mar 2025 15:17:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Inzks9Mh"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UeHlQjkZ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 26008293B6B;
-	Tue,  4 Mar 2025 15:17:38 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9080828150D;
+	Tue,  4 Mar 2025 15:17:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741101459; cv=none; b=E0JPD3oFEpBvee96jQ4FrKrzDzGg8UHYxSc4XP5T7y13aKWSNgJpL+PbW7QqEt0FtxP68H6/k2Xzo2eJ8IV0RyV0o+0AeL73eXQWjRBo6fozmgsJm2zNWjxfSYGsrXTIDFwUSO1NYOjaKR2cQPsi3KjQgIDVpEZlVSGeRv5Yu2U=
+	t=1741101465; cv=none; b=LpYtEzQtks67JZUkXak2gq1n3gqv54Xk1IDqEZxyQmsRpCNDjAAh7tfDp3HH+4ZeDLmt8QhE+6ry82W/Psi6FaQ0bEz0pivh582Pyzby0syCqN2U03YkO3+oneAK3aF+C7f84w3mtp9t8Fee+qRhZL+NJP+ZsONW5SLFO6TPTp4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741101459; c=relaxed/simple;
-	bh=rBci4f69I/d/dQvGhQC94bd2AW9ZiKT0dsBk2rxvf9k=;
+	s=arc-20240116; t=1741101465; c=relaxed/simple;
+	bh=UtaKHqK3+fgfZE111SW1PU59SBdv6NpsckijEheGGYc=;
 	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
-	 In-Reply-To:To:Cc; b=puvAgynAK8lKNrWG243wpwcFX6DudkAL1jo1B/+c20lTv/IF1/Dr9XRSL0DWp7gq0ek2Z4ermCawSyXyNs8sKq/CJHzWuokTArUt9CDGxVw6yQoQD369v2Gb+SSaI01niPA5Dx2AiH01hmmzXZz5tQ/1Ig59Ff3Ly9/fp3Xd0Zc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Inzks9Mh; arc=none smtp.client-ip=148.251.105.195
+	 In-Reply-To:To:Cc; b=FX6FTDYoGRQV93QMsGXURYnPekOdOQMJfw+LsBlmv+hqmAU60stX1c8C5Z6t9ydNIRRbRd2VxCwPiFZxZKDkMmo0iy5cLS5VdxA1ymCskf7fFzEmEqSQDK5hBwyEJqZx+JRYod45zNZ3x7XrrATxC5BpV+FD/nMl5A1zax3e9ag=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=UeHlQjkZ; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1741101456;
-	bh=rBci4f69I/d/dQvGhQC94bd2AW9ZiKT0dsBk2rxvf9k=;
+	s=mail; t=1741101462;
+	bh=UtaKHqK3+fgfZE111SW1PU59SBdv6NpsckijEheGGYc=;
 	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
-	b=Inzks9Mhv1iMCQ3p9MrvMcYWBdpfIaJdhf8iMX+Gf+yyhHcHW1VKGh+91ONxkiLtS
-	 lHAQfgqxt9ZHjidpXd28ba/gKIp/0sx4Zgu7+mdyj2KErN7cWmnOa68se6kufbiuH7
-	 3IA5yA1wJeLr/HJ6PMwoIl2RiemhNCysXuQHd/GI9Pi4clynPxnzwdnWRf+jhtwTF2
-	 hBCQd+4xtUi0EHThhEh5hV310T4lD/5YBDEivhg6DzguksJExCb3vdkhqU9yLKqRCQ
-	 YrJKluc5nck6jKrkklOxl0nfshmbelcwsbU9CtE2IzLVcSgUZfYlystfOp7v3059Fo
-	 ieY1vA8yNzohg==
+	b=UeHlQjkZTWgNWLE9SWAPTKyqfr+Qznx10aC1ZwIIQXuB657d1aDgXvlM1F/E3jZY1
+	 8D0NRAidlavcizEchbZq6l31ASfWvceuQ8pYZcENHEmkvVroHxXEJXvP6q4SED1QQ1
+	 VmQLiER0F4ANvUnQG64VziWd/NS+ZMHxsj0l6GtNXh/5fcr5pVXg3ccLG+/wDHa+q9
+	 uAqx6JjKlTp7Lp8RhskTGHzP0XxUm6Lxvf2SRaCjjaeVvKEOJZLy3qpWHpPRdVw6Xi
+	 yVEOlzhxRV52nOsS1jfbayMLqMgQAqreUZCetkXkrD1QCgzhlS/3+kO2Xc+LmWtk3k
+	 jnbTvwKVuVqBw==
 Received: from [192.168.0.47] (unknown [IPv6:2804:14c:1a9:53ee::1001])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id 81A3717E0630;
-	Tue,  4 Mar 2025 16:17:31 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 2790117E07F8;
+	Tue,  4 Mar 2025 16:17:36 +0100 (CET)
 From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Date: Tue, 04 Mar 2025 12:15:57 -0300
-Subject: [PATCH v3 16/20] ASoC: mediatek: mt6359-accdet: Always configure
- hardware as mic-mode 2
+Date: Tue, 04 Mar 2025 12:15:58 -0300
+Subject: [PATCH v3 17/20] ASoC: mediatek: mt6359-accdet: Always set
+ comp-vth to 1.6V
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -60,7 +60,7 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-Message-Id: <20250304-mt6359-accdet-dts-v3-16-5b0eafc29f5b@collabora.com>
+Message-Id: <20250304-mt6359-accdet-dts-v3-17-5b0eafc29f5b@collabora.com>
 References: <20250304-mt6359-accdet-dts-v3-0-5b0eafc29f5b@collabora.com>
 In-Reply-To: <20250304-mt6359-accdet-dts-v3-0-5b0eafc29f5b@collabora.com>
 To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
@@ -79,107 +79,66 @@ Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
  =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
 X-Mailer: b4 0.14.2
 
-The driver currently reads a mediatek,mic-mode property from DT to
-determine certain register configurations. Since there are no current
-users of the property, the property doesn't directly reflect the
-hardware  and the default value (2) is known to work on
-multiple boards, remove the code handling this property and instead
-always configure the hardware according to the known to work default.
-This property can be properly introduced in the binding in the future
-if it really turns out that different boards need different
-configurations.
+The driver currently reads a mediatek,eint-comp-vth property from DT to
+determine the voltage threshold of the EINT comparator. Since there are
+no current users of the property and setting it to 1.6V is known to work
+across multiple boards, remove the code handling this property and
+instead always configure it to 1.6V. The property can be properly
+introduced in the binding in the future if it really turns out that
+different boards need different configurations.
 
 Reviewed-by: AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
- sound/soc/codecs/mt6359-accdet.c | 43 ++++++----------------------------------
- sound/soc/codecs/mt6359-accdet.h |  5 -----
- 2 files changed, 6 insertions(+), 42 deletions(-)
+ sound/soc/codecs/mt6359-accdet.c | 8 ++------
+ sound/soc/codecs/mt6359-accdet.h | 1 -
+ 2 files changed, 2 insertions(+), 7 deletions(-)
 
 diff --git a/sound/soc/codecs/mt6359-accdet.c b/sound/soc/codecs/mt6359-accdet.c
-index a31e084560c7643b14fb71871699e3167075d9d9..12697b02faff1be39317116cd7d8ffa359f2cd4e 100644
+index 12697b02faff1be39317116cd7d8ffa359f2cd4e..3f6a97e8de8d174e59e512d53135fadc5765b5c1 100644
 --- a/sound/soc/codecs/mt6359-accdet.c
 +++ b/sound/soc/codecs/mt6359-accdet.c
-@@ -494,11 +494,6 @@ static int mt6359_accdet_parse_dt(struct mt6359_accdet *priv)
- 	if (!node)
- 		return -EINVAL;
+@@ -61,6 +61,7 @@
+ #define ACCDET_EINT_INVERTER_DEBOUNCE_256MS 0xe
+ #define ACCDET_EINT_CMPMEN_PWM_WIDTH_400MS 4
+ #define ACCDET_EINT_CMPMEN_PWM_THRESH_2MS 1
++#define ACCDET_EINT_COMP_VTH_1600MV 2
  
--	ret = of_property_read_u32(node, "mediatek,mic-mode",
--				   &priv->data->mic_mode);
+ static struct platform_driver mt6359_accdet_driver;
+ static const struct snd_soc_component_driver mt6359_accdet_soc_driver;
+@@ -506,11 +507,6 @@ static int mt6359_accdet_parse_dt(struct mt6359_accdet *priv)
+ 	else if (tmp == 2)
+ 		priv->caps |= ACCDET_PMIC_BI_EINT;
+ 
+-	ret = of_property_read_u32(node, "mediatek,eint-comp-vth",
+-				   &priv->data->eint_comp_vth);
 -	if (ret)
--		priv->data->mic_mode = 2;
+-		priv->data->eint_comp_vth = 0x0;
 -
- 	priv->data->hp_eint_high = of_property_read_bool(node, "mediatek,hp-eint-high");
+ 	of_node_put(node);
+ 	dev_warn(priv->dev, "accdet caps=%x\n", priv->caps);
  
- 	ret = of_property_read_u32(node, "mediatek,eint-num", &tmp);
-@@ -658,38 +653,12 @@ static void mt6359_accdet_init(struct mt6359_accdet *priv)
- 			     RG_AUDMICBIAS1LOWPEN_MASK_SFT);
- 	/* mic mode setting */
- 	regmap_read(priv->regmap, RG_AUDACCDETMICBIAS0PULLLOW_ADDR, &reg);
--	if (priv->data->mic_mode == HEADSET_MODE_1) {
--		/* ACC mode*/
--		regmap_write(priv->regmap, RG_AUDACCDETMICBIAS0PULLLOW_ADDR,
--			     reg | RG_ACCDET_MODE_ANA11_MODE1);
--		/* enable analog fast discharge */
--		regmap_update_bits(priv->regmap, RG_ANALOGFDEN_ADDR,
--				   RG_ANALOGFDEN_MASK_SFT,
--				   BIT(RG_ANALOGFDEN_SFT));
--		regmap_update_bits(priv->regmap, RG_ACCDETSPARE_ADDR,
--				   0x3 << 11, 0x3 << 11);
--	} else if (priv->data->mic_mode == HEADSET_MODE_2) {
--		/* DCC mode Low cost mode without internal bias */
--		regmap_write(priv->regmap, RG_AUDACCDETMICBIAS0PULLLOW_ADDR,
--			     reg | RG_ACCDET_MODE_ANA11_MODE2);
--		/* enable analog fast discharge */
--		regmap_update_bits(priv->regmap, RG_ANALOGFDEN_ADDR,
--				   0x3 << RG_ANALOGFDEN_SFT,
--				   0x3 << RG_ANALOGFDEN_SFT);
--	} else if (priv->data->mic_mode == HEADSET_MODE_6) {
--		/* DCC mode Low cost mode with internal bias,
--		 * bit8 = 1 to use internal bias
--		 */
--		regmap_write(priv->regmap, RG_AUDACCDETMICBIAS0PULLLOW_ADDR,
--			     reg | RG_ACCDET_MODE_ANA11_MODE6);
--		regmap_update_bits(priv->regmap, RG_AUDPWDBMICBIAS1_ADDR,
--				   RG_AUDMICBIAS1DCSW1PEN_MASK_SFT,
--				   BIT(RG_AUDMICBIAS1DCSW1PEN_SFT));
--		/* enable analog fast discharge */
--		regmap_update_bits(priv->regmap, RG_ANALOGFDEN_ADDR,
--				   0x3 << RG_ANALOGFDEN_SFT,
--				   0x3 << RG_ANALOGFDEN_SFT);
--	}
-+	/* DCC mode Low cost mode without internal bias */
-+	regmap_write(priv->regmap, RG_AUDACCDETMICBIAS0PULLLOW_ADDR,
-+		     reg | RG_ACCDET_MODE_ANA11_MODE2);
-+	/* enable analog fast discharge */
-+	regmap_update_bits(priv->regmap, RG_ANALOGFDEN_ADDR,
-+			   0x3 << RG_ANALOGFDEN_SFT, 0x3 << RG_ANALOGFDEN_SFT);
+@@ -594,7 +590,7 @@ static void config_eint_init_by_mode(struct mt6359_accdet *priv)
+ 			   0x3 << RG_ACCDETSPARE_SFT,
+ 			   0x3 << RG_ACCDETSPARE_SFT);
+ 	regmap_write(priv->regmap, RG_EINTCOMPVTH_ADDR,
+-		     val | priv->data->eint_comp_vth << RG_EINTCOMPVTH_SFT);
++		     val | ACCDET_EINT_COMP_VTH_1600MV << RG_EINTCOMPVTH_SFT);
+ }
  
- 	config_eint_init_by_mode(priv);
- 	config_digital_init_by_mode(priv);
+ static void mt6359_accdet_init(struct mt6359_accdet *priv)
 diff --git a/sound/soc/codecs/mt6359-accdet.h b/sound/soc/codecs/mt6359-accdet.h
-index 46dcd4759230a5190434b9b7c785e8b9ed12fd3d..579373807c414130b2a7384db4978e01cf1d046c 100644
+index 579373807c414130b2a7384db4978e01cf1d046c..288b8fbf7c5efaee6520a2c0a5845e156f3b805d 100644
 --- a/sound/soc/codecs/mt6359-accdet.h
 +++ b/sound/soc/codecs/mt6359-accdet.h
-@@ -12,10 +12,6 @@
- 
- #define ACCDET_DEVNAME "accdet"
- 
--#define HEADSET_MODE_1		(1)
--#define HEADSET_MODE_2		(2)
--#define HEADSET_MODE_6		(6)
--
- #define MT6359_ACCDET_NUM_BUTTONS 4
- #define MT6359_ACCDET_JACK_MASK (SND_JACK_HEADPHONE | \
- 				SND_JACK_HEADSET | \
-@@ -51,7 +47,6 @@ enum {
- };
+@@ -48,7 +48,6 @@ enum {
  
  struct dts_data {
--	unsigned int mic_mode;
  	bool hp_eint_high;
- 	unsigned int eint_comp_vth;
+-	unsigned int eint_comp_vth;
  };
+ 
+ struct mt6359_accdet {
 
 -- 
 2.48.1
