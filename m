@@ -1,112 +1,141 @@
-Return-Path: <linux-pm+bounces-23495-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23496-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43CB7A50689
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 18:39:28 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 581F8A506B8
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 18:47:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 888AC188BA68
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 17:39:35 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 28D8E3A6C93
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 17:47:13 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F7EA250BE2;
-	Wed,  5 Mar 2025 17:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D56ED1A317A;
+	Wed,  5 Mar 2025 17:47:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="B9Ndt8Jr"
+	dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b="j8KN+BTp";
+	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="NuN8zo+t"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
+Received: from fhigh-a6-smtp.messagingengine.com (fhigh-a6-smtp.messagingengine.com [103.168.172.157])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBA719F121;
-	Wed,  5 Mar 2025 17:39:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A4BDB198A0D;
+	Wed,  5 Mar 2025 17:47:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.157
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741196360; cv=none; b=eJPfrlTpM2+yzigLMGbCImxHaaW4lsGl1mjZpxkFWf1p5aTwWbjwW7JOf+aE0NTOHya0C55V0Cy6JM+wBN7qezrRzqmWjv55a2szJ0CFIGAWn7fojkf88b5jsqNuxOEuuP0tAxDLNQvdv2M9oc96/RCq9O3zfYfkoES4VXzimV4=
+	t=1741196842; cv=none; b=pMpWlU7gYauviyS4lGtyJN3dCVEv3ov1Kw/hWjlCsn9D9b0PciUfj/4hzvsxTn++r12gDqJpryy5Oo6R4hq7Iv+ON4geYeN3O1uqCst+ns5K4LNs/NHs4FMxkQ4MhA9eWZOq7oU8KkHAS4Yv+7ty8gzPzSYAusnjRaAiDC3eXNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741196360; c=relaxed/simple;
-	bh=x06wZ4JzzQdXv+skj8Mdw6FwOmNgc2Hi3vw3FdY5VlQ=;
-	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
-	 In-Reply-To:Content-Type; b=cUjYeYz6Kdgu/cnb9vXnUoRKgmwapztWJZnhqUYBX8HOJBrP9jkz8YQc15ioQIFlI2dI9Oi1flohb5TjBlmxR6rCBl6Y/y1PWWOGfQKpxHj26zVSWhcyEL7LkRCoRLC8vedV/ATjQsuZfdqPT5gRHDsJ251R4tJ9BTlwqnOXOL0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=B9Ndt8Jr; arc=none smtp.client-ip=68.232.153.233
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
-  t=1741196359; x=1772732359;
-  h=message-id:date:mime-version:subject:to:cc:references:
-   from:in-reply-to:content-transfer-encoding;
-  bh=x06wZ4JzzQdXv+skj8Mdw6FwOmNgc2Hi3vw3FdY5VlQ=;
-  b=B9Ndt8Jrt9F/t8dghQ6FZpkCMmqN/FiEBeF0FdVjFXeHwEbEz8ydJ3fq
-   FnZxphr38Ahrg+4Y9zqmbQh/9U0ap0SKylnOCIjCe55jMFRlMko+BOr1v
-   HJAp+UqAxZk0O4q76GoLk9OENWkdMNN6OtTmd1im63XKSR9RcGk6Jctxa
-   YwlVQ0ChitFOGAlA/0CEJ1PbPSRC+LltMmSzzG7CbLeHBkHXZLjG0lK7L
-   asfklyrlgj9MV9a7rRlXdZxvpeG0wb3HIJcNaGbftxEc/j//RESrTqfE0
-   Cfz6W4Ud7dElYaVkMaZaIz/o9z/PA8ma2Gq0dTl/ylDXR/bpXGqD1YYgR
-   g==;
-X-CSE-ConnectionGUID: aDhkZa15Rdq5O/AlBZMFPg==
-X-CSE-MsgGUID: Xn9qTDuOTZypoTdWoRNdMg==
-X-IronPort-AV: E=Sophos;i="6.14,223,1736838000"; 
-   d="scan'208";a="269856430"
-X-Amp-Result: SKIPPED(no attachment in message)
-Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
-  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Mar 2025 10:39:16 -0700
-Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
- chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.35; Wed, 5 Mar 2025 10:39:07 -0700
-Received: from [10.10.179.162] (10.10.85.11) by chn-vm-ex01.mchp-main.com
- (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
- Transport; Wed, 5 Mar 2025 10:39:07 -0700
-Message-ID: <ebb161f2-632b-4d10-8c5c-4187a06a06c8@microchip.com>
-Date: Wed, 5 Mar 2025 10:39:06 -0700
+	s=arc-20240116; t=1741196842; c=relaxed/simple;
+	bh=f1+UTpKlC4PMUklAk1R1vw95QbZFxwtMDnEjaAJmvr4=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=it1ufEZN3oIxACPSJx5NvSJcukwBpFBc7KcsimCAgSDuNQlpqvI7qsTptxjPxOtpyS71F729RwL9DnvQfT9MuB1w8g1EffvPPiOS2lHi1yta7eZRxhlRzFa/itiyd5/pb/IwjONKTtPQBC4iqG014PWnhI/qLkR9ueMZIiEVvsk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se; spf=pass smtp.mailfrom=ragnatech.se; dkim=pass (2048-bit key) header.d=ragnatech.se header.i=@ragnatech.se header.b=j8KN+BTp; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=NuN8zo+t; arc=none smtp.client-ip=103.168.172.157
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ragnatech.se
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ragnatech.se
+Received: from phl-compute-01.internal (phl-compute-01.phl.internal [10.202.2.41])
+	by mailfhigh.phl.internal (Postfix) with ESMTP id 99B39114015F;
+	Wed,  5 Mar 2025 12:47:19 -0500 (EST)
+Received: from phl-mailfrontend-02 ([10.202.2.163])
+  by phl-compute-01.internal (MEProxy); Wed, 05 Mar 2025 12:47:19 -0500
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ragnatech.se; h=
+	cc:cc:content-transfer-encoding:content-type:content-type:date
+	:date:from:from:in-reply-to:message-id:mime-version:reply-to
+	:subject:subject:to:to; s=fm3; t=1741196839; x=1741283239; bh=aO
+	QgaZQNUVttMX55uk46kNymM0NpV6zoAj52SI7QW/M=; b=j8KN+BTpfSwSYyovUp
+	0fuQOyvTtxywr7n/gmPR0vroEPo/SV4+FrceqG4Awidulm8mK+5yx2BjKkuu7uXd
+	BtrRmsW5DMXuLJtEG0dOO3gCOy6w1y9UhqPVwx8cvtp8dgp7xbYH5/m1EZcdVYuz
+	fvMpbyfyLGOvvaT/NoLoBnwopD3zGFzN4YUw+ZtCftQpf+aeS01dU9Fe4wkLVEs3
+	ag6P0izI4iJjbVMxp+gunqGaqvTTUl/j48HTyGnQXLVVX/EA2unIj0R+hQy9GgIz
+	ZSVde4wxW4GSk9nDzmT2ChYiYvsmQ6ANdtTfB/fL4v/Z+YDdQMuSs5ghTfZlIvHA
+	1kJg==
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
+	messagingengine.com; h=cc:cc:content-transfer-encoding
+	:content-type:content-type:date:date:feedback-id:feedback-id
+	:from:from:in-reply-to:message-id:mime-version:reply-to:subject
+	:subject:to:to:x-me-proxy:x-me-sender:x-me-sender:x-sasl-enc; s=
+	fm1; t=1741196839; x=1741283239; bh=aOQgaZQNUVttMX55uk46kNymM0Np
+	V6zoAj52SI7QW/M=; b=NuN8zo+tI64uyV35Jzck7bTrh07CmC/lS2bJwSfKgG1m
+	1Iw5AFoPleSGZG0frrGU96RAfY7ifxvbIY5y8dIkwbnoPO7J80ab9MTF9SAJgY9G
+	jBNDaFUj8JvLNri01CqKHFN1XvIXR0Ke6pez9ss/cTGDgip7QFzmeVXPY8X7GEAh
+	HRsrEigYmPEtNyQI+31U7DGZuuG0IKbu18LNY1EFfyCOsWkGL/lJhoHJctClt1X+
+	dR3Vh6YMsQcSD5Lrz3Ccf1MJy5ao2/sOiXsnTQtgHga6eDOC+XfQQ9CwC4/+5rRB
+	E55xzLdkyElSZCCBF696LjPxS+GQyhnLSHhOxg8Byw==
+X-ME-Sender: <xms:J47IZ6fFkv4vIU_kxYqAVQDsX1pANmUgYHPC0yoPKVrld8Aew1MgLQ>
+    <xme:J47IZ0NO_JFv5tWPeSuREJrHoExLtiN4iTxKWzaVie8OGsVcHZxXSB9e1_wzS8v4a
+    IJJhCeA4jtef5KSYcs>
+X-ME-Received: <xmr:J47IZ7jc4Q3Dq5sgSq1sdZlabcjMhYBKvWOJJIFHCxMiwr9CNwskumrH0lhzd31BnbE_dedXf2rXnx99DWWhrUI49w>
+X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdehgeejucetufdoteggodetrf
+    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
+    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
+    gvnhhtshculddquddttddmnecujfgurhephffvvefufffkofggtgfgsehtkeertdertdej
+    necuhfhrohhmpefpihhklhgrshcuufpnuggvrhhluhhnugcuoehnihhklhgrshdrshhoug
+    gvrhhluhhnugdorhgvnhgvshgrshesrhgrghhnrghtvggthhdrshgvqeenucggtffrrght
+    thgvrhhnpeehudelteetkefgffefudefuedvjeeivdekhfevieefgeffheeltddvvefhfe
+    etgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpehn
+    ihhklhgrshdrshhouggvrhhluhhnugesrhgrghhnrghtvggthhdrshgvpdhnsggprhgtph
+    htthhopeekpdhmohguvgepshhmthhpohhuthdprhgtphhtthhopehrrghfrggvlheskhgv
+    rhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghlrdhlvgiitggrnhhosehlihhnrg
+    hrohdrohhrghdprhgtphhtthhopehruhhirdiihhgrnhhgsehinhhtvghlrdgtohhmpdhr
+    tghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehgvg
+    gvrhhtsehlihhnuhigqdhmieekkhdrohhrghdprhgtphhtthhopehlihhnuhigqdhrvghn
+    vghsrghsqdhsohgtsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinh
+    hugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepnhhikhhlrghs
+    rdhsohguvghrlhhunhguodhrvghnvghsrghssehrrghgnhgrthgvtghhrdhsvg
+X-ME-Proxy: <xmx:J47IZ3-2-yNLxRcb1AtEzQ5wM342iJ3Rv7iAgYCOSxUAC7-K22huIw>
+    <xmx:J47IZ2uSehMHGsreXFdavhZvwIt6DMJ96PTeGSliLAC5xeJlxPqCrg>
+    <xmx:J47IZ-EVR7CvIEYQwOyijfpf9VToxfrvjnTlAS1y_9av3yA-7iAeiw>
+    <xmx:J47IZ1MI9qcwCGF-kTgMAwHqbag86WDC8YSwN5-Rgr1zWPfxCiyjjA>
+    <xmx:J47IZ0BjIYXrqzDSD_k8IZSufmtcM_1Y9EeFNV_K4RYB_S4Nd_O2cVYx>
+Feedback-ID: i80c9496c:Fastmail
+Received: by mail.messagingengine.com (Postfix) with ESMTPA; Wed,
+ 5 Mar 2025 12:47:18 -0500 (EST)
+From: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Geert Uytterhoeven <geert@linux-m68k.org>,
+	linux-renesas-soc@vger.kernel.org,
+	linux-pm@vger.kernel.org
+Cc: =?UTF-8?q?Niklas=20S=C3=B6derlund?= <niklas.soderlund+renesas@ragnatech.se>
+Subject: [PATCH v4 0/2] thermal: rcar_gen3: Improve reading calibration fuses
+Date: Wed,  5 Mar 2025 18:46:29 +0100
+Message-ID: <20250305174631.4119374-1-niklas.soderlund+renesas@ragnatech.se>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 00/21] Enable Power Modes Support for SAMA7D65 SoC
-To: Claudiu Beznea <claudiu.beznea@tuxon.dev>, <lee@kernel.org>,
-	<robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
-	<sre@kernel.org>, <nicolas.ferre@microchip.com>,
-	<alexandre.belloni@bootlin.com>, <p.zabel@pengutronix.de>
-CC: <linux@armlinux.org.uk>, <devicetree@vger.kernel.org>,
-	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>
-References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
- <2a18e305-090c-41fe-9b27-97ebe93fd4e4@tuxon.dev>
-From: Ryan Wanner <ryan.wanner@microchip.com>
-Content-Language: en-US
-In-Reply-To: <2a18e305-090c-41fe-9b27-97ebe93fd4e4@tuxon.dev>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-On 3/3/25 01:40, Claudiu Beznea wrote:
-> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
-> 
-> On 27.02.2025 17:51, Ryan.Wanner@microchip.com wrote:
->> Ryan Wanner (20):
->>   ARM: at91: Add PM support to sama7d65
->>   ARM: at91: pm: add DT compatible support for sama7d65
->>   ARM: at91: PM: Add Backup mode for SAMA7D65
->>   ARM: at91: pm: Enable ULP0/ULP1 for SAMA7D65
-> 
-> Applied to at91-soc with some adjustments, please check!
-Checked! This is correct.
-> 
->>   ARM: dts: microchip: sama7d65: Add Reset Controller to sama7d65 SoC
->>   ARM: dts: microchip: sama7d65: Add Shutdown controller support
->>   ARM: dts: microchip: sama7d65: Add RTC support for sama7d65
->>   ARM: dts: microchip: sama7d65: Add SFRBU support to sama7d65
->>   ARM: dts: microchip: sama7d65: Enable shutdown controller
-> 
-> Applied to at91-dt with some adjustments, please check!
-Same here
+Hello,
 
-Thank you!
-> 
-> Thank you!
+This small series aims to remove the code duplication that was added
+when adding support for Gen4 devices. The logic to read the calibration
+fuses are identical for Gen3 and Gen4, but the registers are at
+different offsets.
+
+Patch 1/2 is a small drive-by patch which fixes a style issue of the
+constants found when working on the fuses code. While patch 2/2 is the
+real work removing the code duplication.
+
+It is tested on both Gen3 and Gen4 boards, but as not all boards have
+the fused calibration values and the driver fallback to hard coded 
+values only Gen4 have really been tested as I don't have access to a 
+Gen3 board with fused calibration values.
+
+See individual patches for changelog.
+
+Niklas Söderlund (2):
+  thermal: rcar_gen3: Use lowercase hex constants
+  thermal: rcar_gen3: Reuse logic to read fuses on Gen3 and Gen4
+
+ drivers/thermal/renesas/rcar_gen3_thermal.c | 105 +++++++++-----------
+ 1 file changed, 48 insertions(+), 57 deletions(-)
+
+-- 
+2.48.1
 
 
