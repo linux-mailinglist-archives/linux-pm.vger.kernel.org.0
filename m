@@ -1,125 +1,112 @@
-Return-Path: <linux-pm+bounces-23494-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23495-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5960CA5043A
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 17:11:22 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 43CB7A50689
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 18:39:28 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 40DC2175074
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 16:10:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 888AC188BA68
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 17:39:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 922FA250BF2;
-	Wed,  5 Mar 2025 16:10:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6F7EA250BE2;
+	Wed,  5 Mar 2025 17:39:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="ZivWpuY3"
+	dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b="B9Ndt8Jr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from esa.microchip.iphmx.com (esa.microchip.iphmx.com [68.232.153.233])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6461A24A07A;
-	Wed,  5 Mar 2025 16:10:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id BEBA719F121;
+	Wed,  5 Mar 2025 17:39:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=68.232.153.233
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741191034; cv=none; b=aKngFtcsjFAAs5d5vhHEUpzzF5VFY44G8DomPg2QtnXhGp4oPh34rWRhXXzVNHCZ/iAf+4fVaFaM3Wi/jlKaoj2dMKmyQGRZJSOZgabsU36iGzJUnVX0Qn510fBmC/kqVA4M4qB+/zsoj7nWlK8+vE+V4NH2+63iEi4xzgojf50=
+	t=1741196360; cv=none; b=eJPfrlTpM2+yzigLMGbCImxHaaW4lsGl1mjZpxkFWf1p5aTwWbjwW7JOf+aE0NTOHya0C55V0Cy6JM+wBN7qezrRzqmWjv55a2szJ0CFIGAWn7fojkf88b5jsqNuxOEuuP0tAxDLNQvdv2M9oc96/RCq9O3zfYfkoES4VXzimV4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741191034; c=relaxed/simple;
-	bh=NuzZ1W9S6mA+Pg9tyI3RTRMxgpOiMuBenFty3J3Rgy0=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=HGRIMQMsqfzCV/1Ose137SC5chhcwm3DUyAzQAkPnziFsNMaRU6SkilHs7/Fxgnf6aUJdOyxQh+GOHc73ptnQZSnBjnRnEZ8znO2LYeEISNvga0Vh4z08XFlZqLDAENhdaP3Xj73b7liQJn2+qMsKTKBxKNIWoaMGA902oonx4c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=ZivWpuY3; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id BD3ADC4CED1;
-	Wed,  5 Mar 2025 16:10:33 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741191033;
-	bh=NuzZ1W9S6mA+Pg9tyI3RTRMxgpOiMuBenFty3J3Rgy0=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=ZivWpuY3laRUWhZhuByMXRUc0TlOvrWH6dbQtLBoUUzxX3y1vXxgcu5EcPnk28XS3
-	 T/VeBVjXXeSERqjnC9t9XjOFinEqgQDbwSO1m+6x3ft+ZomOY87LxUHneFm/LcPpst
-	 luumKC2HBXDUKd5MMbWjMj0lBAspP3PMl7N7/YVOT1wDTWihzajfExwmKwJAX+LVNR
-	 OdX24Tvo+BKFl0/u7jAcqrmEtArZMiuZd3l1jc1ewagg9kMwYv2AQz7N1ta6b1t9y4
-	 Nuqv8y4iGKh0bbt+QzcFRG+3NJLVhgmjAP7UxP7MKovwFph+jzVdQNGCqKkEsz0gOd
-	 0nwZVkRU0p5pw==
-Date: Wed, 5 Mar 2025 10:10:32 -0600
-From: Rob Herring <robh@kernel.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, Laxman Dewangan <ldewangan@nvidia.com>,
-	Conor Dooley <conor+dt@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	linux-kernel@vger.kernel.org,
-	"Rafael J. Wysocki" <rafael@kernel.org>
-Subject: Re: [PATCH v3 1/2] dt-bindings: thermal: generic-adc: Add optional
- io-channel-cells property
-Message-ID: <20250305161032.GA2068051-robh@kernel.org>
-References: <20250303122151.91557-1-clamor95@gmail.com>
- <20250303122151.91557-2-clamor95@gmail.com>
- <08f305fa-0dbe-4ed9-bec5-cf8b5bbecfdb@arm.com>
- <CAPVz0n0G+0_f3MONV0Y-tYAb1KOwkUNiY2Pms8CZ6ZGtxRmFFA@mail.gmail.com>
+	s=arc-20240116; t=1741196360; c=relaxed/simple;
+	bh=x06wZ4JzzQdXv+skj8Mdw6FwOmNgc2Hi3vw3FdY5VlQ=;
+	h=Message-ID:Date:MIME-Version:Subject:To:CC:References:From:
+	 In-Reply-To:Content-Type; b=cUjYeYz6Kdgu/cnb9vXnUoRKgmwapztWJZnhqUYBX8HOJBrP9jkz8YQc15ioQIFlI2dI9Oi1flohb5TjBlmxR6rCBl6Y/y1PWWOGfQKpxHj26zVSWhcyEL7LkRCoRLC8vedV/ATjQsuZfdqPT5gRHDsJ251R4tJ9BTlwqnOXOL0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com; spf=pass smtp.mailfrom=microchip.com; dkim=pass (2048-bit key) header.d=microchip.com header.i=@microchip.com header.b=B9Ndt8Jr; arc=none smtp.client-ip=68.232.153.233
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=microchip.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=microchip.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=microchip.com; i=@microchip.com; q=dns/txt; s=mchp;
+  t=1741196359; x=1772732359;
+  h=message-id:date:mime-version:subject:to:cc:references:
+   from:in-reply-to:content-transfer-encoding;
+  bh=x06wZ4JzzQdXv+skj8Mdw6FwOmNgc2Hi3vw3FdY5VlQ=;
+  b=B9Ndt8Jrt9F/t8dghQ6FZpkCMmqN/FiEBeF0FdVjFXeHwEbEz8ydJ3fq
+   FnZxphr38Ahrg+4Y9zqmbQh/9U0ap0SKylnOCIjCe55jMFRlMko+BOr1v
+   HJAp+UqAxZk0O4q76GoLk9OENWkdMNN6OtTmd1im63XKSR9RcGk6Jctxa
+   YwlVQ0ChitFOGAlA/0CEJ1PbPSRC+LltMmSzzG7CbLeHBkHXZLjG0lK7L
+   asfklyrlgj9MV9a7rRlXdZxvpeG0wb3HIJcNaGbftxEc/j//RESrTqfE0
+   Cfz6W4Ud7dElYaVkMaZaIz/o9z/PA8ma2Gq0dTl/ylDXR/bpXGqD1YYgR
+   g==;
+X-CSE-ConnectionGUID: aDhkZa15Rdq5O/AlBZMFPg==
+X-CSE-MsgGUID: Xn9qTDuOTZypoTdWoRNdMg==
+X-IronPort-AV: E=Sophos;i="6.14,223,1736838000"; 
+   d="scan'208";a="269856430"
+X-Amp-Result: SKIPPED(no attachment in message)
+Received: from unknown (HELO email.microchip.com) ([170.129.1.10])
+  by esa5.microchip.iphmx.com with ESMTP/TLS/ECDHE-RSA-AES128-GCM-SHA256; 05 Mar 2025 10:39:16 -0700
+Received: from chn-vm-ex01.mchp-main.com (10.10.85.143) by
+ chn-vm-ex04.mchp-main.com (10.10.85.152) with Microsoft SMTP Server
+ (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
+ 15.1.2507.35; Wed, 5 Mar 2025 10:39:07 -0700
+Received: from [10.10.179.162] (10.10.85.11) by chn-vm-ex01.mchp-main.com
+ (10.10.85.143) with Microsoft SMTP Server id 15.1.2507.35 via Frontend
+ Transport; Wed, 5 Mar 2025 10:39:07 -0700
+Message-ID: <ebb161f2-632b-4d10-8c5c-4187a06a06c8@microchip.com>
+Date: Wed, 5 Mar 2025 10:39:06 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=utf-8
-Content-Disposition: inline
-Content-Transfer-Encoding: 8bit
-In-Reply-To: <CAPVz0n0G+0_f3MONV0Y-tYAb1KOwkUNiY2Pms8CZ6ZGtxRmFFA@mail.gmail.com>
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v3 00/21] Enable Power Modes Support for SAMA7D65 SoC
+To: Claudiu Beznea <claudiu.beznea@tuxon.dev>, <lee@kernel.org>,
+	<robh@kernel.org>, <krzk+dt@kernel.org>, <conor+dt@kernel.org>,
+	<sre@kernel.org>, <nicolas.ferre@microchip.com>,
+	<alexandre.belloni@bootlin.com>, <p.zabel@pengutronix.de>
+CC: <linux@armlinux.org.uk>, <devicetree@vger.kernel.org>,
+	<linux-kernel@vger.kernel.org>, <linux-pm@vger.kernel.org>,
+	<linux-arm-kernel@lists.infradead.org>, <linux-rtc@vger.kernel.org>
+References: <cover.1740671156.git.Ryan.Wanner@microchip.com>
+ <2a18e305-090c-41fe-9b27-97ebe93fd4e4@tuxon.dev>
+From: Ryan Wanner <ryan.wanner@microchip.com>
+Content-Language: en-US
+In-Reply-To: <2a18e305-090c-41fe-9b27-97ebe93fd4e4@tuxon.dev>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 05, 2025 at 12:03:20PM +0200, Svyatoslav Ryhel wrote:
-> ср, 5 бер. 2025 р. о 12:00 Lukasz Luba <lukasz.luba@arm.com> пише:
-> >
-> >
-> >
-> > On 3/3/25 12:21, Svyatoslav Ryhel wrote:
-> > > This implements a mechanism to derive temperature values from an existing ADC IIO
-> > > channel, effectively creating a temperature IIO channel. This approach avoids adding
-> > > a new sensor and its associated conversion table, while providing IIO-based temperature
-> > > data for devices that may not utilize hwmon.
-> > >
-> > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > > ---
-> > >   .../devicetree/bindings/thermal/generic-adc-thermal.yaml      | 4 ++++
-> > >   1 file changed, 4 insertions(+)
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
-> > > index 12e6418dc24d..4bc2cff0593c 100644
-> > > --- a/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
-> > > +++ b/Documentation/devicetree/bindings/thermal/generic-adc-thermal.yaml
-> > > @@ -30,6 +30,9 @@ properties:
-> > >     io-channel-names:
-> > >       const: sensor-channel
-> > >
-> > > +  '#io-channel-cells':
-> > > +    const: 1
-> > > +
-> > >     temperature-lookup-table:
-> > >       description: |
-> > >         Lookup table to map the relation between ADC value and temperature.
-> > > @@ -60,6 +63,7 @@ examples:
-> > >           #thermal-sensor-cells = <0>;
-> > >           io-channels = <&ads1015 1>;
-> > >           io-channel-names = "sensor-channel";
-> > > +        #io-channel-cells = <1>;
-> > >           temperature-lookup-table = <
-> > >                 (-40000) 2578
-> > >                 (-39000) 2577
-> >
-> > Do we really need this change in the DT?
-> > Won't the code in the thermal driver that registers a new iio device
-> > would just be enough?
-> >
-> > I agree with Rob that it looks odd.
+On 3/3/25 01:40, Claudiu Beznea wrote:
+> EXTERNAL EMAIL: Do not click links or open attachments unless you know the content is safe
 > 
-> Building tree will complain on missing cells property if you try to
-> bind it. It is not in required category anyway.
+> On 27.02.2025 17:51, Ryan.Wanner@microchip.com wrote:
+>> Ryan Wanner (20):
+>>   ARM: at91: Add PM support to sama7d65
+>>   ARM: at91: pm: add DT compatible support for sama7d65
+>>   ARM: at91: PM: Add Backup mode for SAMA7D65
+>>   ARM: at91: pm: Enable ULP0/ULP1 for SAMA7D65
+> 
+> Applied to at91-soc with some adjustments, please check!
+Checked! This is correct.
+> 
+>>   ARM: dts: microchip: sama7d65: Add Reset Controller to sama7d65 SoC
+>>   ARM: dts: microchip: sama7d65: Add Shutdown controller support
+>>   ARM: dts: microchip: sama7d65: Add RTC support for sama7d65
+>>   ARM: dts: microchip: sama7d65: Add SFRBU support to sama7d65
+>>   ARM: dts: microchip: sama7d65: Enable shutdown controller
+> 
+> Applied to at91-dt with some adjustments, please check!
+Same here
 
-Sorry, I don't follow nor see why you need the property if there are no 
-DT consumers.
+Thank you!
+> 
+> Thank you!
 
-Rob
 
