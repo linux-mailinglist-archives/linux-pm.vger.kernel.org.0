@@ -1,56 +1,57 @@
-Return-Path: <linux-pm+bounces-23499-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23500-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9157EA50A96
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 20:00:59 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 49C7CA50A9B
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 20:01:15 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 064B9188D664
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 19:00:41 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2D817188E4AC
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 19:00:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 65C96253F0D;
-	Wed,  5 Mar 2025 18:59:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id DBDC7255E30;
+	Wed,  5 Mar 2025 18:59:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="MHW65aF5"
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="Abo9Xoco"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 1C5B7253B7C;
-	Wed,  5 Mar 2025 18:59:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C906E255250;
+	Wed,  5 Mar 2025 18:59:27 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741201164; cv=none; b=rccEhOOTk2w46D7HcLoeZ92AP9OqzjKEdmJw5zQ7XLjn31OH6OBVlAENFIR2YpQx9JNtDz8BuJgfly4xbgqeUxk03GLATyv+mK0OmguZSlNcvSvAw9TcJBj1Ro2a3xJWUnRy1JYifXr2dQh9PXRWZMKdZWnp3wEp/AaUX3fU3sI=
+	t=1741201169; cv=none; b=WK2AwAgDmxOipgpXC7qAkbKK+bWO7im+qclC1dQe/0DFvI7M4VhsG5yNwNy0kADaTdwYfUweLdoEHeZYXENCASwlQcY7+n/4MTFF8MIGKyAV20UazNhR+sI7M6ZkwfcIuR2fsVh5n82pkTnpfOJvSS8NMVAgQ+fg6f/4kgLk4Zg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741201164; c=relaxed/simple;
-	bh=u/GQhP1xEopgzVBLmurB5SYuCMPtvKHmpfxo57+s2TE=;
-	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=Zz+wVgQBa8aLbh7Ai5SI9o0Tqn96l+xqr/5x8aiRFkh1o3PdAuwM+H5TU+RUaljR/RJZcEGpSSOnq9oL4DpxK7fDicWWAQCJ4FkjW9ZaytEdEs3T1mitG8ccTlfZIkynzRhMALMfXr8FogL4tSix7+sYWFyxlffpplMXxtPqtyk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=MHW65aF5; arc=none smtp.client-ip=148.251.105.195
+	s=arc-20240116; t=1741201169; c=relaxed/simple;
+	bh=acUZEVmdOu80f/7L3NgXf/R3B0sCOGH3PeEgX6a2U2w=;
+	h=From:Date:Subject:MIME-Version:Content-Type:Message-Id:References:
+	 In-Reply-To:To:Cc; b=mGr5UJ0t1otYhlwpv4SiryTlfFyNp5zn94brxwZdoV+6ttk6vKwmfituq7uOUGSYgoxTjdfDB2lD+dE+uvKlZ9mTJg5aF0sOw02O+0NzG5X9qlUe/jdjQszrLz3Y/lattXeouYpkq08KvMCw/vLaOl7jctdTCTqRzsGSqwkaY/s=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=Abo9Xoco; arc=none smtp.client-ip=148.251.105.195
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
-	s=mail; t=1741201160;
-	bh=u/GQhP1xEopgzVBLmurB5SYuCMPtvKHmpfxo57+s2TE=;
-	h=From:Subject:Date:To:Cc:From;
-	b=MHW65aF5zt1j/P/JBQGhK4Ht+n1SPqCp9rnl7HVPK/MxufyDMnTGiFq+KJU5To5iu
-	 qjqaWvq5FMB2H4Gf2zY1a1Dj9sbP6up5u5ABBQap/J6xIVvaqHp6a5fm1e6dUlRAW4
-	 XD8uj8A1tPbMEZ9m2HwoRLr3Zga6yX6KmCt96gjg+Gbk5t9yVcxBEq170XEyFJWYDM
-	 qMlqFYxdiINU+ie2Dq6WE1/DzYrAimdTNsALBJFAJ9yXZG3HLif69TPKsAVpP+TtRg
-	 yNEMX5JoFuu4mB+FDfZwjN1Ssfs34DmXKRdaRdL67cCeeeuUIo9rncuCiYScq/P2wF
-	 2ExQ+Tk/zupXQ==
+	s=mail; t=1741201166;
+	bh=acUZEVmdOu80f/7L3NgXf/R3B0sCOGH3PeEgX6a2U2w=;
+	h=From:Date:Subject:References:In-Reply-To:To:Cc:From;
+	b=Abo9Xoco5BZ6WU42i2n8OHs+MacWHLzr5cWpH/Vj8lV7FobM5DrotgY3UG/QBPmhL
+	 pinANvay6rnmht2LOK3N+1p+D1/XHDbTUIJX8x/UVNWB6xZ2epK7GLkhBDn/4pKE1v
+	 yxTOWcCwjsUWKvnGJkRv6q2HiUtIY2gnVEfkkP7zhP4iFBVPKYoLhflODNnghG2CbZ
+	 nRqBW5z2eQvI3owf1W/sW9C9rQwM1QA1yrdZipgiC4t9cwUcUPLbSePr15liY7s59+
+	 bUnz/L6hIntMre5JBbD2oF5HOE1Dm5iyoq6nZdZ0SsSTCsTQLZD7DSzraHEfpFzg+E
+	 D0tXnQe8ECUrw==
 Received: from [192.168.0.47] (unknown [IPv6:2804:14c:1a9:53ee::1004])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
 	(No client certificate requested)
 	(Authenticated sender: nfraprado)
-	by bali.collaboradmins.com (Postfix) with ESMTPSA id DFC6717E0599;
-	Wed,  5 Mar 2025 19:59:14 +0100 (CET)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id 9AE5617E05E7;
+	Wed,  5 Mar 2025 19:59:20 +0100 (CET)
 From: =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
-Subject: [PATCH v4 00/19] Get mt6359-accdet ready for usage in Devicetree
-Date: Wed, 05 Mar 2025 15:58:15 -0300
-Message-Id: <20250305-mt6359-accdet-dts-v4-0-e5ffa5ee9991@collabora.com>
+Date: Wed, 05 Mar 2025 15:58:16 -0300
+Subject: [PATCH v4 01/19] dt-bindings: mfd: mediatek: mt6397: Add accdet
+ subnode
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -59,11 +60,9 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 8bit
-X-B4-Tracking: v=1; b=H4sIAMeeyGcC/33OSwrCMBCA4auUrI3k2TSuvIe4yGNqA62RpBSl9
- O6m3ShSXP4D883MKEMKkNGpmlGCKeQQ7yXEoUKuM/cb4OBLI0aYJIwKPIw1lxob5zyM2I8ZE2J
- poxuhWu5Q2XskaMNzMy/X0l3IY0yv7cRE1+k/baKY4FopQyW12gp3drHvjY3JHF0c0CpO7KNww
- vYUVhRpfc05APFC7Sn8W9n9hW8KAdM6pltpf5VlWd73WOlzQgEAAA==
-X-Change-ID: 20250214-mt6359-accdet-dts-00b189847f3c
+Message-Id: <20250305-mt6359-accdet-dts-v4-1-e5ffa5ee9991@collabora.com>
+References: <20250305-mt6359-accdet-dts-v4-0-e5ffa5ee9991@collabora.com>
+In-Reply-To: <20250305-mt6359-accdet-dts-v4-0-e5ffa5ee9991@collabora.com>
 To: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>, 
  Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
  Conor Dooley <conor+dt@kernel.org>, 
@@ -77,87 +76,92 @@ Cc: kernel@collabora.com, linux-sound@vger.kernel.org,
  devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
  linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org, 
  linux-pm@vger.kernel.org, 
- =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>, 
- Andrew Perepech <andrew.perepech@mediatek.com>
+ =?utf-8?q?N=C3=ADcolas_F=2E_R=2E_A=2E_Prado?= <nfraprado@collabora.com>
 X-Mailer: b4 0.14.2
 
-This series prepares the MT6359 ACCDET for actual usage in the
-Devicetree. Patch 1 adds the required DT bindings, patches 2 and 3 get
-the mt6359-accdet driver probing, patches 4-17 clean up code related to
-DT property parsing, patch 18 adds the node in the Devicetree and patch
-19 enables the kconfig for the driver.
-
-Together with the series "Allow retrieving accessory detection reference
-on MT8188" [1], and one extra patch on top enabling it on the
-genio-700-evk DT, this series was tested on the Genio 700 EVK to get
-audio jack detection working on it.
-
-[1] https://lore.kernel.org/all/20250214-mt8188-accdet-v1-0-6bbd5483855b@collabora.com
+Describe the accessory detection (accdet) module as a possible subnode
+of the MT6359 PMIC.
 
 Signed-off-by: Nícolas F. R. A. Prado <nfraprado@collabora.com>
 ---
-Changes in v4:
-- Moved DT-binding for accdet from standalone file
-  (sound/mediatek,mt6359-accdet.yaml) to parent mfd's file
-  (mfd/mediatek,mt6397.yaml), squashing patches 1 and 2.
-- Link to v3: https://lore.kernel.org/r/20250304-mt6359-accdet-dts-v3-0-5b0eafc29f5b@collabora.com
+ .../devicetree/bindings/mfd/mediatek,mt6397.yaml   | 51 ++++++++++++++++++++++
+ 1 file changed, 51 insertions(+)
 
-Changes in v3:
-- Removed unneeded '|' in mt6359-accdet's dt-binding description
-- Removed unneeded unevaluatedProperties for accdet node in mt6397's
-  dt-binding
-- Clarified HP_EINT pin is on the MT6359 PMIC in mediatek,hp-eint-high's
-  description in the mt6359-accdet dt-binding
-- Link to v2: https://lore.kernel.org/r/20250302-mt6359-accdet-dts-v2-0-5bd633ee0d47@collabora.com
+diff --git a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+index 6a89b479d10fad3c8b61cab5a3af1453baca4d1a..51012b8bbfaef3df7bdb619a4f8d828d6f9cc15a 100644
+--- a/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
++++ b/Documentation/devicetree/bindings/mfd/mediatek,mt6397.yaml
+@@ -24,6 +24,7 @@ description: |
+   - LED
+   - Keys
+   - Power controller
++  - Accessory Detection
+ 
+   It is interfaced to host controller using SPI interface by a proprietary hardware
+   called PMIC wrapper or pwrap. MT6397/MT6323 PMIC is a child device of pwrap.
+@@ -224,6 +225,30 @@ properties:
+     description:
+       Pin controller
+ 
++  accdet:
++    type: object
++    additionalProperties: false
++    description:
++      The Accessory Detection module found on the PMIC allows detecting audio
++      jack insertion and removal, as well as identifying the type of events
++      connected to the jack.
++
++    properties:
++      compatible:
++        const: mediatek,mt6359-accdet
++
++      mediatek,hp-eint-high:
++        type: boolean
++        description:
++          By default, MT6359's HP_EINT pin is assumed to be pulled high and
++          connected to a normally open 3.5mm jack. Plug insertion is detected
++          when the pin is brought low in that case. Add this property if the
++          behavior should be inverted, for example if a normally closed 3.5mm
++          jack is used, or if the line is pulled low on open.
++
++    required:
++      - compatible
++
+ required:
+   - compatible
+   - regulators
+@@ -598,3 +623,29 @@ examples:
+             compatible = "mediatek,mt6397-rtc";
+         };
+     };
++  - |
++    #include <dt-bindings/input/input.h>
++    #include <dt-bindings/interrupt-controller/arm-gic.h>
++
++    pmic {
++        compatible = "mediatek,mt6359";
++        interrupt-controller;
++        #interrupt-cells = <2>;
++
++        accdet {
++            compatible = "mediatek,mt6359-accdet";
++            mediatek,hp-eint-high;
++        };
++
++        regulators {
++            compatible = "mediatek,mt6359-regulator";
++
++            buck_vs1 {
++                    regulator-name = "vs1";
++                    regulator-min-microvolt = <800000>;
++                    regulator-max-microvolt = <2200000>;
++                    regulator-enable-ramp-delay = <0>;
++                    regulator-always-on;
++            };
++        };
++    };
 
-Changes in v2:
-- Removed all DT-binding properties except for EINT polarity one
-  (mediatek,eint-level-pol / mediatek,hp-eint-high)
-  - Added patches 12-18 to make those settings internal to driver
-- Renamed mediatek,eint-level-pol to mediatek,hp-eint-high and made it
-  bool
-- Added patch 20 to enable the MT6359 ACCDET Kconfig in the defconfig
-- Removed unused btn_type variable as part of "Drop dead code for button
-  detection" patch.
-- Link to v1: https://lore.kernel.org/r/20250214-mt6359-accdet-dts-v1-0-677a151b9b4c@collabora.com
-
----
-Andrew Perepech (2):
-      mfd: mt6397-core: Add mfd_cell for mt6359-accdet
-      ASoC: mediatek: mt6359-accdet: Implement HP_EINT polarity configuration
-
-Nícolas F. R. A. Prado (17):
-      dt-bindings: mfd: mediatek: mt6397: Add accdet subnode
-      ASoC: mediatek: mt6359-accdet: Add compatible property
-      ASoC: mediatek: mt6359-accdet: Handle hp-eint-high property
-      ASoC: mediatek: mt6359-accdet: Drop dead code for EINT/GPIO IRQ handling
-      ASoC: mediatek: mt6359-accdet: Drop dead code for EINT trigger setting
-      ASoC: mediatek: mt6359-accdet: Drop dead code for button detection
-      ASoC: mediatek: mt6359-accdet: Drop dead code for plugout-debounce
-      ASoC: mediatek: mt6359-accdet: Drop unused moisture variables
-      ASoC: mediatek: mt6359-accdet: Always use internal resistor
-      ASoC: mediatek: mt6359-accdet: Make PWM debounce settings internal
-      ASoC: mediatek: mt6359-accdet: Always use eint detect mode 4
-      ASoC: mediatek: mt6359-accdet: Always set micbias1 to 2.8V
-      ASoC: mediatek: mt6359-accdet: Always configure hardware as mic-mode 2
-      ASoC: mediatek: mt6359-accdet: Always set comp-vth to 1.6V
-      ASoC: mediatek: mt6359-accdet: Always use EINT0 IRQ
-      arm64: dts: mt6359: Add accessory detect node
-      arm64: defconfig: Enable MT6359 ACCDET
-
- .../devicetree/bindings/mfd/mediatek,mt6397.yaml   |  51 ++
- arch/arm64/boot/dts/mediatek/mt6359.dtsi           |   4 +
- arch/arm64/configs/defconfig                       |   1 +
- drivers/mfd/mt6397-core.c                          |  12 +
- sound/soc/codecs/mt6359-accdet.c                   | 599 +++++----------------
- sound/soc/codecs/mt6359-accdet.h                   |  55 +-
- 6 files changed, 198 insertions(+), 524 deletions(-)
----
-base-commit: 20d5c66e1810e6e8805ec0d01373afb2dba9f51a
-change-id: 20250214-mt6359-accdet-dts-00b189847f3c
-
-Best regards,
 -- 
-Nícolas F. R. A. Prado <nfraprado@collabora.com>
+2.48.1
 
 
