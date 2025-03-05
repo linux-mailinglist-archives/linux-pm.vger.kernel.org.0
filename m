@@ -1,270 +1,156 @@
-Return-Path: <linux-pm+bounces-23472-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23473-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B14DA4F96F
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 10:02:36 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 40155A4FA73
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 10:43:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id B084E7A243B
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 09:01:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 643061891868
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 09:43:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E8437200100;
-	Wed,  5 Mar 2025 09:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4C8C92054E1;
+	Wed,  5 Mar 2025 09:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b="FGEdSHsJ";
-	dkim=fail reason="key not found in DNS" (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b="qzcWgjDG"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lusB/yBV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.tq-group.com (mx1.tq-group.com [93.104.207.81])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42F801FC7D1;
-	Wed,  5 Mar 2025 09:02:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=93.104.207.81
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5AFA21FBCB4
+	for <linux-pm@vger.kernel.org>; Wed,  5 Mar 2025 09:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741165348; cv=none; b=t5ULx4n6ZcTSlo0zH5myketOKdmO64TMObgGSonG+LepUGXRNJBxDD6SJcytoJrhvO7D02ayCasNYvZBb5p1BTI5hVdA17kbHTE/UOgstzX/TnSzyynPlro7ngoD6da95P/Mwbp54gpjfP3KyRRNNiGYWVKD25c3CL6pLszjmz8=
+	t=1741167790; cv=none; b=daBw9W1gL6E1aIA8axvJT3H6MGsTlMW6TR9SXdn9+/ENzBGoZUujOSuBRJoWKb8IV5E38/ZivWzcC/N0u/UT9Iopdfgnx6702m+8o3WhPFED0xxhxUqyX/Dv8YZl9eBYhDAlzYyz6cUlIMK8dwmzkMX+hdNCbJGG9lpdePMSx8Y=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741165348; c=relaxed/simple;
-	bh=7BZUuY0NVXBKg5hilWvkKI6gUrRsdS6N+7BHvgE6STY=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=LOQhZYf9zer4jky7LpeJtklNWuuK7NBDBp/F3Zs7YqpPZsZs2Kc8HyaCg2NOd3DPJT0j4AaVLq6p4/QYS1QLaHY7RxsTEVVk3xCQMdHrlTR2IXQkStlZ4PgAHYImnyHoC7AUEOPcGVXhc4MKwUHHyYOEruPUPhpw/r6UL5akVuE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com; spf=pass smtp.mailfrom=ew.tq-group.com; dkim=pass (2048-bit key) header.d=tq-group.com header.i=@tq-group.com header.b=FGEdSHsJ; dkim=fail (0-bit key) header.d=ew.tq-group.com header.i=@ew.tq-group.com header.b=qzcWgjDG reason="key not found in DNS"; arc=none smtp.client-ip=93.104.207.81
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=ew.tq-group.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=ew.tq-group.com
+	s=arc-20240116; t=1741167790; c=relaxed/simple;
+	bh=PVtm/IxvydhmBRd5q6LUI3L5TnOE7L+pdnpkmkDJ9po=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=ScMtB9RM+iFUOgkgdM9nqT0jiW4VENegLiIcsDJ+6adlvV8B2t6QTZvIXo2Ay67V6zZGM5nbVU7+Ed5CUi1dRq5PFWsHsl0cevaOoyfe2Ne7A5bHoyk82UAfkgGPyUiA0Fj2NwgtC9NjYkVVfhGUghfMdfSt5ikoqrurru8eEuQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lusB/yBV; arc=none smtp.client-ip=209.85.221.51
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-390f69e71c8so424653f8f.0
+        for <linux-pm@vger.kernel.org>; Wed, 05 Mar 2025 01:43:08 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-  d=tq-group.com; i=@tq-group.com; q=dns/txt; s=key1;
-  t=1741165346; x=1772701346;
-  h=from:to:cc:subject:date:message-id:in-reply-to:
-   references:mime-version:content-transfer-encoding;
-  bh=vqA7WR0bg0u4G+HAomrK/aLC9+18x4n+S7IKkNThfiM=;
-  b=FGEdSHsJUzdScXTdYhZDaxdAawHc2qDZosoNyGgeUVrIIunht89aqQqJ
-   HbUFHh48AM65l+XSXqsGhMG9kuBuNclOfyJOb6cJVCMoEll6EDKETj/OH
-   jbdIelhBCxMNFMdTse2GCSiSzcYRvC/ukcGFFmT1KzbJ6SScr756bTxD2
-   4X2TT9k8TUoH3/Vf7vAgXx/kMNl3nO1ma7HamU/roKjhhF4f1fOGyc5nE
-   th+OlHdXuqXo5zwZGT4noy59M1frVRKYYf5yCSt4SJuqEP+v66pLAvPVr
-   +39vEol0TS7h4+Txq3T3sL3fkuax/hlRo99rFeytb+WN0uJz7CaxMlNDK
-   g==;
-X-CSE-ConnectionGUID: IH657TY3Tl23yR3Vv1dR/A==
-X-CSE-MsgGUID: cgkFUMvxRU6w9KHMn9F1ow==
-X-IronPort-AV: E=Sophos;i="6.14,222,1736809200"; 
-   d="scan'208";a="42301885"
-Received: from vmailcow01.tq-net.de ([10.150.86.48])
-  by mx1.tq-group.com with ESMTP; 05 Mar 2025 10:02:22 +0100
-X-CheckPoint: {67C8131E-23-7141A0B0-E6EDEC14}
-X-MAIL-CPID: 0BDC1C9894ABA85FF037DCAB1A11A9B5_3
-X-Control-Analysis: str=0001.0A00636C.67C8131F.010A,ss=1,re=0.000,recu=0.000,reip=0.000,cl=1,cld=1,fgs=0
-Received: from [127.0.0.1] (localhost [127.0.0.1]) by localhost (Mailerdaemon) with ESMTPSA id A72F3170EA5;
-	Wed,  5 Mar 2025 10:02:16 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=ew.tq-group.com;
-	s=dkim; t=1741165338;
-	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
-	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
-	 content-transfer-encoding:content-transfer-encoding:
-	 in-reply-to:in-reply-to:references:references;
-	bh=vqA7WR0bg0u4G+HAomrK/aLC9+18x4n+S7IKkNThfiM=;
-	b=qzcWgjDGS6jWPY+RITIk8yBviKpMKL0y16KSXMlshqTDttq6zKFd8uRh0rjbusm21alLLO
-	0zncE1o54zqa2PkjSbvWyACMubP8NqizUU7F39NtdEyf8B7h5zWhZ3ivT6X25sqtCFjSSc
-	Bq3JpoZAEKG0N2u2vqMbhZJRAtcHkfgPLIvm7R5McponzskDZSRi22nXnOhJg1CUW3KHx/
-	aVeSFRyy4/ATHnHp/9XUjp3UP5VCYqp6++6rG5zw1KmH82cgRaFpKEHzJKR3F3q1GHoDJc
-	hgimR61srqwk7i5wU9S6wvO15O4FIatNLRGINZRrOvbwgrcOGQlB24ojz6hXxA==
-From: Alexander Stein <alexander.stein@ew.tq-group.com>
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Shawn Guo <shawnguo@kernel.org>,
- Sascha Hauer <s.hauer@pengutronix.de>,
- Pengutronix Kernel Team <kernel@pengutronix.de>,
- Fabio Estevam <festevam@gmail.com>, Abel Vesa <abelvesa@kernel.org>,
- Peng Fan <peng.fan@nxp.com>, Michael Turquette <mturquette@baylibre.com>,
- Stephen Boyd <sboyd@kernel.org>, Ulf Hansson <ulf.hansson@linaro.org>,
- devicetree@vger.kernel.org, imx@lists.linux.dev,
- linux-arm-kernel@lists.infradead.org, linux-kernel@vger.kernel.org,
- linux@ew.tq-group.com, linux-clk@vger.kernel.org, linux-pm@vger.kernel.org
-Subject:
- Re: [PATCH v3 2/6] dt-bindings: soc: imx93-media-blk-ctrl: Add LDB subnode
- into schema and example
-Date: Wed, 05 Mar 2025 10:02:16 +0100
-Message-ID: <4414669.ejJDZkT8p0@steina-w>
-Organization: TQ-Systems GmbH
-In-Reply-To: <20250305-dandelion-axolotl-of-excitement-05fa70@krzk-bin>
-References:
- <20250304154929.1785200-1-alexander.stein@ew.tq-group.com>
- <20250304154929.1785200-3-alexander.stein@ew.tq-group.com>
- <20250305-dandelion-axolotl-of-excitement-05fa70@krzk-bin>
+        d=linaro.org; s=google; t=1741167786; x=1741772586; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=hcLEo9C7d754YdOjFOtxhhTyuVlShOS4Gvepo6yn57I=;
+        b=lusB/yBVYF3ivkT8YeQlZU3vnd3VFVJxIha5OGu2Q1vVGgaKGZpEVIADsbix+eAdGL
+         prg1+4rEmKaxZ3L7aLl8GNEjtdUBgwS9PFW/843nNuZjc1Ncoou/Tv22SB6hE1QiYTYT
+         lzZY+3O49bVVXkg34TbXSdP2Nxr9BJtbcNQgy+D5IoQEoDGv48/Si71XN+EwOP+YoxkF
+         bQuFxchUCgF8uL9WwDy2LKfS+JKQaa79FO9b2gmpxpUrNG1Q8kr4TJh6uxjaMVpqcYem
+         yEUuyi6MDY5lt+6bktNLPIeLqJT2g4tCnD7IUibRotAaEhWtGXfaj9fTWtecVCvoIZ/t
+         t5jg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741167786; x=1741772586;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=hcLEo9C7d754YdOjFOtxhhTyuVlShOS4Gvepo6yn57I=;
+        b=FC5Sk2+5POQhZjrtmsnLXPsjb8Qh8agKIp9RCSmtjUIkU8bWgGl5DD7UyUgAAqo7KL
+         N+Svo3/CsScRLhDPxQc5/Ujhxayqiv9FEeP2LiqEqBIRM/l3GSoqlOCO6Pk1GFIBGPv2
+         MFzgOAvG5Re5aF76QwoLj8oMklDcdfc1QmWA7DfzJVfITSHkS828VgKEsRvti6LrnEar
+         EA07ZrSRgDnmNQSRT8YWUhzWa4LbbsqQU1rNp/gU5F9/IV7jtvPic7G+XHZXth9lw85h
+         nBwoPqBluQYLviWgK2/jaxDh8Fh8Mna1MCWQJRq73/FDs7Y0VLm3tovgtRNUJriJtjnP
+         ovsA==
+X-Forwarded-Encrypted: i=1; AJvYcCXt5F0wAahlsyQI0wNmV+bt1rcefpTHe+hn+KoA2MAoR89n/jZQr4oP/r3wVVNZr1NNz3wKyO61xg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzTvLrAqmYIeVZp3qIMmFf/gfgYCVdU/HqzHDnV2Rgt/CgF0Dqy
+	YoBmoateAEg6MUZHZRu/9FK8/oR9OdJaKNFEUNgzpVoXyQrJsu0QU/KZrl0Y1pg=
+X-Gm-Gg: ASbGncu5eyVTR1yEKaKfJQQliCamL5QZijaeyConep5Fg8Fr6J2Mb6WJkTGhFoV/s8Q
+	Hh7MRYJWS1lSgiNO+bzcDeJgt0CK5ExbZKUSBqTaFVWJqmLf+N/FhPLfJmhKqFSgZ9E8D5xxrW3
+	FisVhzki4UGTLk3w7BHioxlLJUjSsPcFX4YB3WNFpv5X4C5sKUOvPX47nmggEV79ZxdE2ZFPoaP
+	tu47j7jN1Xtug2mCC3JAv900zzTgs0MKmBi8C58W4bBiYSXP91T14KzAY5jHm733WuLqULAJv9X
+	QTwTYGqZYXwZp/qSta1y4BTitrxCNxGBSM6WPtwYD1oiSJMNcBGcJfL3uhBi3yEWa6aTyF1m+Bq
+	velJaO/qq
+X-Google-Smtp-Source: AGHT+IEA9x9eIpHEguaymJmRv4i84fzwh2x+uUOGi7ki/p8NE6SyUnBAby+69obVpJEOIv6/ArtGig==
+X-Received: by 2002:a5d:64e8:0:b0:38d:df15:2770 with SMTP id ffacd0b85a97d-391154af01cmr5719740f8f.0.1741167786548;
+        Wed, 05 Mar 2025 01:43:06 -0800 (PST)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43bd435c6f4sm11811915e9.34.2025.03.05.01.43.05
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 05 Mar 2025 01:43:06 -0800 (PST)
+Message-ID: <c1e8abec-680c-451d-b5df-f687291aa413@linaro.org>
+Date: Wed, 5 Mar 2025 10:43:05 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: quoted-printable
-Content-Type: text/plain; charset="iso-8859-1"
-X-Last-TLS-Session-Version: TLSv1.3
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] clocksource/drivers/timer-ti-dm: add module build support
+To: Guillaume La Roque <glaroque@baylibre.com>,
+ Thomas Gleixner <tglx@linutronix.de>
+Cc: Nishanth Menon <nm@ti.com>, Andrew Davis <afd@ti.com>,
+ mkorpershoek@baylibre.com, linux-kernel@vger.kernel.org,
+ Linux PM mailing list <linux-pm@vger.kernel.org>
+References: <20250220-timer-dm-v1-1-64b6dab5f4a5@baylibre.com>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250220-timer-dm-v1-1-64b6dab5f4a5@baylibre.com>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi,
+On 20/02/2025 15:31, Guillaume La Roque wrote:
+> Add missing MODULE_LICENSE variable and convert bool to tristate in
+> Kconfig to be able to build driver in module.
+> 
+> By default this driver was set at y when ARCH_K3=y.
+> 
+> Signed-off-by: Guillaume La Roque <glaroque@baylibre.com>
+> ---
+> Enable possibility to build in module timer-ti-dm driver needed in
+> Android context and Android Generic Kernel Image support.
+> 
+> I know any other clicksource driver support module build but i do test on AM62X and
+> AM62P EVM board and i able to use this driver and test it with PWM.
+> 
+> By default this driver will be always enable in bultin when ARCH_K3=y so
+> no impact for other TI SoC.
+> ---
 
-Am Mittwoch, 5. M=E4rz 2025, 08:13:04 CET schrieb Krzysztof Kozlowski:
-> On Tue, Mar 04, 2025 at 04:49:21PM +0100, Alexander Stein wrote:
-> > Document the LDB bridge subnode and add the subnode into the example.
-> > For the subnode to work, the block control must scan its subnodes and
->=20
-> Don't describe drivers, but describe the hardware.
+Thomas, Guillaume
 
-Thanks, I'll rephrase to describe the hardware better regarding LVDS.
+there are several requests to convert the built-in timers code into 
+modules since Android is converted to a GKI.
 
->=20
-> > bind drivers to them, do not misuse either simple-bus or simple-mfd
-> > here.
->=20
-> I don't understand that simple-bus or simple-mfd statement. There are no
-> such compatibles here.
+I have some concerns about this kind of changes:
 
-Same as above, the wording stems from 1cb0c87d27dcc ("dt-bindings: soc:
-imx8mp-media-blk-ctrl: Add LDB subnode into schema and example").
-I'll drop it to avoid confusion.
+  * the core code may not be prepared for that, so loading / unloading 
+the modules with active timers may result into some issues
 
->=20
-> >=20
-> > Signed-off-by: Alexander Stein <alexander.stein@ew.tq-group.com>
-> > ---
-> >  .../soc/imx/fsl,imx93-media-blk-ctrl.yaml     | 51 +++++++++++++++++++
-> >  1 file changed, 51 insertions(+)
-> >=20
-> > diff --git a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-=
-blk-ctrl.yaml b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-b=
-lk-ctrl.yaml
-> > index b3554e7f9e76d..cd785111928bf 100644
-> > --- a/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctr=
-l.yaml
-> > +++ b/Documentation/devicetree/bindings/soc/imx/fsl,imx93-media-blk-ctr=
-l.yaml
-> > @@ -24,6 +24,14 @@ properties:
-> >    reg:
-> >      maxItems: 1
-> > =20
-> > +  ranges: true
-> > +
-> > +  '#address-cells':
-> > +    const: 1
-> > +
-> > +  '#size-cells':
-> > +    const: 1
-> > +
-> >    '#power-domain-cells':
-> >      const: 1
-> > =20
-> > @@ -46,9 +54,20 @@ properties:
-> >        - const: csi
-> >        - const: dsi
-> > =20
-> > +  bridge@20:
->=20
-> @20 looks wrong. Use 'ranges;' and try again your DTS...
->=20
-> Binding is supposed to be complete. We have several examples when people
-> added children one-by-one, everytime with different reasoning about
-> child addressing.
->=20
-> So please confirm: this is complete and no other children will ever be
-> added here... or you are 100% sure that all future children will be
-> unit-addressable (will have unit address and appropriate properties).
+  * it may end up with some interactions with cpuidle at boot time and 
+the broadcast timer
 
-This block control is a collection of registers for different purposes:
-* MIPI-DSI
-* MIPI-CSI
-* Parallel camera
-* LVDS
-* CAMERA_MUX
+  * the timekeeping may do jump in the past [if and] when switching the 
+clocksource
 
-At lease for parallel camera, another subnode is expected ([1]).
+  * the GKI approach is to have an update for the 'mainline' kernel and 
+let the different SoC vendors deal with their drivers. I'm afraid this 
+will prevent driver fixes to be carry on upstream because they will stay 
+in the OoT kernels
 
-[1] https://lore.kernel.org/all/20240819024001.850065-1-victor.liu@nxp.com/
+For all these reasons, I don't think we can take the module change as is 
+without figuring out the three first technical reasons (the last one is 
+from an upstream maintainer POV)
 
-> BTW, I don't quite get why this is both syscon and has translation for
-> child addresses. Does it mean your child does not use the same MMIO as
-> parent, thus leading to unsynchronized reg access?
+Thoughts?
 
-I'm not sure what the best practices are. This LDB has two registers
-inside this block. So it seems reasonable to me to indicate this using
-a reg property. On the other hand, access is solely done by accessing
-via syscon, so unsynchronized reg access is not an issue.
+Thanks
 
-What I am getting from your comments this node should not have 'reg'
-property, as it uses syscon anyway.
-
-> > +    type: object
-> > +    additionalProperties: true
-> > +    properties:
-> > +      compatible:
-> > +        contains:
-> > +          const: fsl,imx93-ldb
-> > +
-> >  required:
-> >    - compatible
-> >    - reg
-> > +  - ranges
-> > +  - '#address-cells'
-> > +  - '#size-cells'
-> >    - power-domains
-> >    - clocks
-> >    - clock-names
-> > @@ -77,4 +96,36 @@ examples:
-> >                 clock-names =3D "apb", "axi", "nic", "disp", "cam",
-> >                               "pxp", "lcdif", "isi", "csi", "dsi";
-> >        #power-domain-cells =3D <1>;
-> > +      #address-cells =3D <1>;
-> > +      #size-cells =3D <1>;
-> > +      ranges =3D <0x0 0x4ac10000 0x10000>;
-> > +
-> > +      bridge@20 {
-> > +          compatible =3D "fsl,imx93-ldb";
-> > +          reg =3D <0x20 0x4>, <0x24 0x4>;
-> > +          reg-names =3D "ldb", "lvds";
-> > +          clocks =3D <&clk IMX93_CLK_LVDS_GATE>;
-> > +          clock-names =3D "ldb";
-> > +
-> > +          ports {
-> > +              #address-cells =3D <1>;
-> > +              #size-cells =3D <0>;
-> > +
-> > +              port@0 {
-> > +                  reg =3D <0>;
-> > +
-> > +                  ldb_from_lcdif2: endpoint {
-> > +                      remote-endpoint =3D <&lcdif2_to_ldb>;
-> > +                  };
-> > +              };
-> > +
-> > +              port@1 {
-> > +                  reg =3D <1>;
-> > +
-> > +                  ldb_lvds: endpoint {
-> > +                      remote-endpoint =3D <&ldb_to_panel>;
-> > +                  };
-> > +              };
-> > +          };
->=20
-> Messed indentation.
-
-This is already from the original binding. I'll fix in a separate commit.
-
-Best regards,
-Alexander
-
->=20
-> > +        };
->=20
-> Best regards,
-> Krzysztof
->=20
->=20
+   -- Daniel
 
 
-=2D-=20
-TQ-Systems GmbH | M=FChlstra=DFe 2, Gut Delling | 82229 Seefeld, Germany
-Amtsgericht M=FCnchen, HRB 105018
-Gesch=E4ftsf=FChrer: Detlef Schneider, R=FCdiger Stahl, Stefan Schneider
-http://www.tq-group.com/
 
 
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
