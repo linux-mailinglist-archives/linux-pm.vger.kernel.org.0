@@ -1,52 +1,53 @@
-Return-Path: <linux-pm+bounces-23459-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23461-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id DF55AA4F687
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 06:30:33 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E03DBA4F68C
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 06:30:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 78CA47A4886
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 05:29:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1DC0F16E875
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 05:30:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 203361A4F09;
-	Wed,  5 Mar 2025 05:30:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6E12B1DDA0C;
+	Wed,  5 Mar 2025 05:30:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="aVLJOYd+"
+	dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b="i5am8EVA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mout.gmx.net (mout.gmx.net [212.227.15.15])
+Received: from mout.gmx.net (mout.gmx.net [212.227.15.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D0E213DDAA;
-	Wed,  5 Mar 2025 05:30:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.15
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 449071C878E;
+	Wed,  5 Mar 2025 05:30:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=212.227.15.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741152626; cv=none; b=iM7AY/v9qXIt4WEtOagjPxWIFfNLdNaR/+aGdqUNONDp4LQxLbtUv+RNglo9kLxbCUc5j4NPf94yfJKg2KIvNwdXGtMR0+/PFUZFpVyCBG83nnyuJl3V39OfPJ8izsEedIUeZUsXwCcWbiRnFVjN8+qzbp1DwiHCV0mAsTSsl/8=
+	t=1741152628; cv=none; b=IWKkxfLPYpj0Fug7uRrNUFAUVS+yQXkTmMlfhPpzVQFTRlzD/NCm377VVr5wPd+sW98ILnhLoagfQUFKzYQkBgGy32JT601LKnQHWDe8J33TVNS6Z568sOnVbLYmsukW8Vufi3LPZrmFc/PH/AO5uwk/P4EFhO9R15k2+9EwMJo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741152626; c=relaxed/simple;
-	bh=9/O6eC/4zNAuaXLevTITJSjS0IzNi+cg48P7488KcUA=;
-	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=rFZzLlgUkj14Cd/1p9b9G2c611PkaKSc4SSsAf2iH6ELnfqruzMF6aUQ9hHtgh4wObByj5xNjQ90YipmBgDKGIdwSRlqcQZpnWGvsxOg0r1RaZ94XraOtSJpHa5d3w+iGHgeSvfJAwQKqbphPXoGAoE0/SMOxxduVYiIJrk9KZ8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=aVLJOYd+; arc=none smtp.client-ip=212.227.15.15
+	s=arc-20240116; t=1741152628; c=relaxed/simple;
+	bh=Lcm7BEg7Tas04TY7QecAPfuKado1G7il/9aZYqJZ29A=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=hu1oRk/++FDOmp1Br13kUyEfYENcaRiXaryynoKycEmWKruHSTINZUHQRSAfQqPR8tVG13T64KhXtNEBADY1h8FYdkAQ5XFklUgxTZ3Rfm8FLl+iJ6EEcVEqn1K81VZgvuSojPn8RWsPp3MA8r7lQM1K7DdNTgrUWEA4Nqghsq0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de; spf=pass smtp.mailfrom=gmx.de; dkim=pass (2048-bit key) header.d=gmx.de header.i=w_armin@gmx.de header.b=i5am8EVA; arc=none smtp.client-ip=212.227.15.19
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=gmx.de
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmx.de
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=gmx.de;
-	s=s31663417; t=1741152617; x=1741757417; i=w_armin@gmx.de;
-	bh=uG1a4CRHX27/o/TyVcRaubBbKW4uTRuiaKb+dj05CP0=;
-	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:
-	 MIME-Version:Content-Transfer-Encoding:cc:
+	s=s31663417; t=1741152619; x=1741757419; i=w_armin@gmx.de;
+	bh=ntDKQTzh/orsND8IzvQjep/XVQ0n4zvMoy76hxbPS08=;
+	h=X-UI-Sender-Class:From:To:Cc:Subject:Date:Message-Id:In-Reply-To:
+	 References:MIME-Version:Content-Transfer-Encoding:cc:
 	 content-transfer-encoding:content-type:date:from:message-id:
 	 mime-version:reply-to:subject:to;
-	b=aVLJOYd+YV3tPdbPUMadzpbNmp0x63Fe3NvosIOZyz+l8h9M2A8nwISx/XoJdSuK
-	 BivIGyLQpm2ocVENnDp08zdwlxqe3mJk/tlHGIZJb+SqfF2AGiRdd/quM0g+sBC51
-	 8TBbbDsDZCEQUHzqiE+n75sOZhPKKya7ibq21hoMCAymKCBOzCeUxMJQ5qPPcJmj/
-	 kipqq1JtNsP/uZRUX3u6J2m+M1Pb+/cKUuozgI/OFE4fQP9eIEc/i/pZqc6t0oquC
-	 Fp8zIrnCnnOxhndvcLlwsiUIngNNLhUgvyFJz2M5NQ5vc6E6ZxrlLqc/R1wwABiTm
-	 xNiEWTThAEThr4A46g==
+	b=i5am8EVA/kq76SIqFtxXZbQDyiN22uW05D+kmHaVUpd9jRqIMb4d/8IJzf2AfwjP
+	 JJmbrRTs50iOKrYF/hpkH+2xyTAzBzgfLMS9Q4kuuoZO1FEu02D8G+MaBcEc1BQos
+	 OLA/TSfcTG0IOVNYIiXoZCP9AzE4GZIfa7dNCimuFUh8xujB+yur38vvB02ETSMtN
+	 RLYlEUB2ZNpyaA/wIInlh0LsolEChXvQ9w2pfiH6cJQJA4cErebG5oeUjxOQ/EeIg
+	 r4qadfkk5/AcS++BtloUEw3F25yyGjqlG4Ok2EAzpnxNhGWRmLOjRmB9mvD7VEHlQ
+	 ryIj466u4Udk0ekF7A==
 X-UI-Sender-Class: 724b4f7f-cbec-4199-ad4e-598c01a50d3a
 Received: from mx-amd-b650.fritz.box ([87.177.78.219]) by mail.gmx.net
  (mrgmx005 [212.227.17.190]) with ESMTPSA (Nemesis) id
- 1Mg6e4-1tLLSp0MU2-00aS52; Wed, 05 Mar 2025 06:30:17 +0100
+ 1M9Wys-1tt1G30zLA-003siv; Wed, 05 Mar 2025 06:30:19 +0100
 From: Armin Wolf <W_Armin@gmx.de>
 To: hdegoede@redhat.com,
 	ilpo.jarvinen@linux.intel.com,
@@ -54,10 +55,12 @@ To: hdegoede@redhat.com,
 Cc: platform-driver-x86@vger.kernel.org,
 	linux-pm@vger.kernel.org,
 	linux-kernel@vger.kernel.org
-Subject: [PATCH 0/3] platform/x86: dell-ddv: Rework battery temperature handling
-Date: Wed,  5 Mar 2025 06:30:06 +0100
-Message-Id: <20250305053009.378609-1-W_Armin@gmx.de>
+Subject: [PATCH 1/3] platform/x86: dell-ddv: Fix temperature calculation
+Date: Wed,  5 Mar 2025 06:30:07 +0100
+Message-Id: <20250305053009.378609-2-W_Armin@gmx.de>
 X-Mailer: git-send-email 2.39.5
+In-Reply-To: <20250305053009.378609-1-W_Armin@gmx.de>
+References: <20250305053009.378609-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -65,58 +68,68 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: quoted-printable
-X-Provags-ID: V03:K1:WfLybaArPwXi41VeJAoFUxdH6578atxcp48rWoCYh17E/ALZeGA
- 0ONWqfw5qLjDQAC6DaOjq9YANWzom/poXKrrNbFhBLrSJba4XWuUJpgsSkn87VhK/c9JKCb
- Kc9cNffZHkl1iz7qyaQG6YaV0OqsW4D4S11fdywvoB99euyZdpSGNDOFKmCNzA6vWjGtYE4
- EKjfalVg9hSo7fDLWNdaw==
+X-Provags-ID: V03:K1:XcxrfxHs1Oy+ILI2Dcmc+DBRf9eCC+UysHwLJi+zq5z1+fDCG+5
+ IB4rTu/vFdT3uighBcs9MWalFtscjrtVyiuv0dIQLySKIkTvJHhY5G6Rvf9/49Md5DDxYBo
+ TWHcRUR5i+LvKi05TksHipQy1oaRNyFTyHdk/ujQiEa7zjQ1cEANzCCu/eAFH7gGT+oj9MW
+ JcOmIbmzbLxHQYg8sT3lg==
 X-Spam-Flag: NO
-UI-OutboundReport: notjunk:1;M01:P0:f2myFpWQbkk=;+tToephdm4xP8+Ov+R/lRwa4twh
- Na5rkXoWI5FgNCwpT75Ur4hv6lLPYVnNaX9+4cO0OR1t7eDgGhp8Wu9eH8x4QbkrElI8Qvj91
- xokwyRF5lnkzROEMX0RBRVewCnyG58gWF/Ijw13rgdXDlt+y4NZE6zjDt2KOCLXahzZ/otm8T
- tq9maSqTQgM9Wy6ixA67zXebUY0YNxaNQYEXC1cNbGfy1NBjNZdlo5oP6vWPNcy5n5atk7xXY
- DaFASc1jYqD/h71Hc4Q07JxBoAw3OMWMtmECwBYuJ59MBd7CSN8iBXH59aq+b5PCYObMA9GnN
- AnpAg7UAFef5zIc9xsvDxleypVsS7QfFxmekfMAEqw1CNB1aCZeXPqaUBiNwZ0kEE9Qv5PE8k
- 0dsM7Rkqd285h22W+3USm3uCUqfiD63phbupBN0Hm55P3KRPXP8TziPwaanmKgOqunvlPnWWx
- od33OwEn1yZqPJiTOKXYH3i+G+YaFjQB8DdaRgr9Kiv5B3NrlPjZQzyZonzjemTqR1Qape0pa
- JQgehhTyj9wW+U34ICnXXZRr0aDYT0OBB2TkW+q9mGibanT0f4wnyow1hBfKYYRhXIsTXQg6Y
- 4Pc0yo3VPgbHx3+M2YdGHyfvk8U1/UZU782iCxojYti3jq3nU9Re7P1943xgFiF8m3FWUiq1l
- Azl7ny50VUr8Yt2gGvzMZp5iqyd3Ux+lKtDdsj/aoWnxr4AqRfY+psGOlxXpAPixpb8cnBRpa
- vKpHcW1HNq5B8JWqAU0hF6/MF/ZrP2p+lglEvP8zSSTZtyV1BuQkIC+tUmQRj8I0+4bPYW83S
- n37YBFm4uEGnQt67mAEu8wbrjGK129QQi03C1AW48ry+JOPuj3y4VQIyBIjk+8CQpeF0owlz8
- 5f3XT3rZK2aVPO+2WX0N1VBKnkDAEj/zxxsX7gbYtgLwjaB7cBOz2CxzlEb7AC4wTLlGte6zW
- 45RN86ibLBZ4AAYApHNqiokIrpGqtHwDtgsPttqjqoITwAs3+LgVvltvo4nTzf9hYMA9xyfTP
- z3jIbay1K2JoL985fbcLcOxTdEcvp+CYWcWd3D4S43muDSDKvz9vmoS84KaBB0r+vQgjSA1zJ
- QGYfGwTWOZv5otkSGqXWH6M5unBgLiQOnw3ETAwAklGniSsg6/n5oM/0t9wVLf240VLFQkwRq
- Ky1qw0CS0sQnNLM9RJxSfjRzbPrnzIlLHfSB/XAIYPg/4MiQTJf9nfdadiUeAwDDjNNusMN3S
- zgckynf2D0s/32bZ4hR8wT44CLH3WQe8bzjujhRkiay2T/HUnpD2VHyHpxaSZZZbpH7vGFfI9
- plKGV62eUBuhJ95w0feMU9wvu6jKnl+WiiftZaJjgPaJcPazcHmMFhkJH7lHqnxHSvLgFHvBr
- jzzT+cGAEawS6dijkXR1AEeMeGBR5hzILfGOViG6Rk0c8BOg3XwEoua61C
+UI-OutboundReport: notjunk:1;M01:P0:RcT3kDLisPg=;mKyW6oz0L1ph9Hk7I61bOJOfvEX
+ tM9sbZdUowsMpaekWrlm4TzXOX/G0GtiwmRG9zJpy7YPYm7GPopaC0257SU2AnfzANsGfdIcV
+ VfMqlWY/lt1IHknwBB7BbSS3czufTOqaSwbRAk9A5xqwY6iNRNRQXNC4SfHB9tRY0QnoIssJJ
+ 9H9Gr7pRvWbAeiifMsQ5rl7Ybv45iUuVMi0xW21irKQ2DvfWe6y7hgW3PUAASzZYjDiUNOzlI
+ EFDU9tL9RmCsTHZyr23zpYmPD8kmInyYE4z/lnC8iUeXSJbuMrJYMCWl+t+OlMQbxdqA5qTUQ
+ dk2C3j46gD42vID7IR3zajGEwDp2gJeXIqva+Y/dValLzJxV6P8S/HZD03Nuwep0Pi4UepmNj
+ FvkKWhWuq9HWGGau/rbeaYz5+/IyGCWUZObdhZKX7HLX6pKNnUsLzrfqPgIyuhtJRBNNSYp6M
+ eggViuhWxEndz3dA2DFoblD0fWrvrRjOZU6LsyrMN8C+Wn3JFJ0cZMZbZ/LucFiZDHH3yjHjl
+ +UlHR4V1b75IYWmY+McNxWtH1/7e/0CJHSJQCaQirFxMqvyhhvF7fscHMzyKgIzck0K/mg2cU
+ MZdTWix0ulGE2L5ThSOqwT52y20ltj3dSibJL35PP7lacKcvhUBMgtlwWLZy8N5MQlD6nCicx
+ 7tGrG2U8qqgKKusBVCugXM26/ST9XckjQRBm5RZWxv8WxLXtgWf/hZc4IvrqpiFZBiIYxePA9
+ 4lxAE1l18zSMWttX2+hjiHeCWW+6y7IRNqLmwRzBNLNu6stQAs/kSVMBW1YexGLFr36TI8TUd
+ HIPxw3dCmhin0OkuKa8p4H+sVkv6CKCECjrB/g/J++VYiB//okCXeZMwiM9So5jAHqaMfGn10
+ dpUsLBd2iSTE9Ndo46zARwSqsvJWgQW0kLs7/KIYi6nNYOw/hPEt9coBPp4/ceuD8tcMo3U5I
+ uv5r3rDhamI+clEa1tJYpsjH+eUlGwY4PTAyPjs6y/lMnsSvy/NsuSzeFHU+qxbdf5RiSVoEF
+ BlYHtw8g9SAPJgUgb3TZ7f9QyG1BCQbRS4diBAq7di8+Czh9cXtKBtX/tELLdtqcxqNvM7UC8
+ /rsrzVhvyyQ9mdZowq5ezWC9tJ/oSZNgM4lfFK3tnhetlqyYuWuwGen+nNsYGUJFG1t92tETN
+ iAug8Zfvegca8WimtWdSNsP0oLaJuTtvxWLy25JKiYDgoBlGDK7hPkgheUOwJMNPDV6KrW5Ow
+ y/i1XBM200+ZytXPYHoFi6RQc0F1KEJiKDuHHHJe+Pb408rxMRiR6h8CuatT9G+7DCVlJwol/
+ gm4dWJlUY24hpz+AT0wfJdS9sB1aW3fP6ZenW7rODbnHrfGDrtXZPPVflnL8cqO4q1+lwLidx
+ 5c6PcC//LqQ5XWvEaNLhvnscOLUwlGWCvlr5wLP6YTlf43uNupfOzzgH80
 
-This patch series reworks the handling of the battery temperature
-inside the dell-wmi-ddv driver.
+On the Dell Inspiron 3505 the battery temperature is always
+0.1 degrees larger than the temperature show inside the OEM
+application.
 
-The first patch fixes an issue inside the calculation formula for
-the temperature value that resulted in strange temperature values
-like 29.1 degrees celcius.
+Emulate this behaviour to avoid showing strange looking values
+like 29.1 degrees.
 
-The second patch then simplifies the battery hook handling by using
-devm_battery_hook_register().
+Fixes: 0331b1b0ba653 ("platform/x86: dell-ddv: Fix temperature scaling")
+Signed-off-by: Armin Wolf <W_Armin@gmx.de>
+=2D--
+ drivers/platform/x86/dell/dell-wmi-ddv.c | 6 ++++--
+ 1 file changed, 4 insertions(+), 2 deletions(-)
 
-The third patch finally makes use of the new power supply extension
-mechanism to expose the battery temperature to userspace. The
-power supply extension mechanism also takes care that the temperature
-shows up inside the hwmon interface of the associated battery.
+diff --git a/drivers/platform/x86/dell/dell-wmi-ddv.c b/drivers/platform/x=
+86/dell/dell-wmi-ddv.c
+index e75cd6e1efe6..ab5f7d3ab824 100644
+=2D-- a/drivers/platform/x86/dell/dell-wmi-ddv.c
++++ b/drivers/platform/x86/dell/dell-wmi-ddv.c
+@@ -665,8 +665,10 @@ static ssize_t temp_show(struct device *dev, struct d=
+evice_attribute *attr, char
+ 	if (ret < 0)
+ 		return ret;
 
-All patches where tested on a Dell Inspiron 3505 and appear to work.
+-	/* Use 2731 instead of 2731.5 to avoid unnecessary rounding */
+-	return sysfs_emit(buf, "%d\n", value - 2731);
++	/* Use 2732 instead of 2731.5 to avoid unnecessary rounding and to emula=
+te
++	 * the behaviour of the OEM application which seems to round down the re=
+sult.
++	 */
++	return sysfs_emit(buf, "%d\n", value - 2732);
+ }
 
-Armin Wolf (3):
-  platform/x86: dell-ddv: Fix temperature calculation
-  platform/x86: dell-ddv: Use devm_battery_hook_register
-  platform/x86: dell-ddv: Use the power supply extension mechanism
-
- drivers/platform/x86/dell/dell-wmi-ddv.c | 84 +++++++++++++-----------
- 1 file changed, 46 insertions(+), 38 deletions(-)
-
+ static ssize_t eppid_show(struct device *dev, struct device_attribute *at=
+tr, char *buf)
 =2D-
 2.39.5
 
