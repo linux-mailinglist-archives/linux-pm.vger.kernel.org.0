@@ -1,277 +1,148 @@
-Return-Path: <linux-pm+bounces-23523-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23525-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99B7BA50D26
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 22:13:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 96C7AA50EDD
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 23:42:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D93C53A98A7
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 21:13:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 5529118920EB
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 22:41:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0509D2571C3;
-	Wed,  5 Mar 2025 21:13:36 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 05B2F266B49;
+	Wed,  5 Mar 2025 22:40:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="IrFYWVyt"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="hffPW94a"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D5DE5255E3D;
-	Wed,  5 Mar 2025 21:13:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741209215; cv=none; b=lGOa+DxreJ54xITNdp8G0Qejd+Ty3Xbc4g+ZI+HCzSlP+CtYbThkIT9aUUP+m71ee9t7dAcIgACDiGURG+Ie67NA0gL5Jqi4gD9DvoTsxfPUxcYDQEvv2SE6aPrOJUZKW1fMKhAMAt1ihjTtwl4wO0xe95fFz0p8fDF4UmhhUXY=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741209215; c=relaxed/simple;
-	bh=EKzMzYGhYX0Hi8eGqtN07uUXqx+QMcHmor6Nk1VPsK8=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=HO7bnJsUEFQqWFkIc2p9VLZnljA0E13GBX3D+j9oHtc/a7zE+Q1NuHiiH4sYs8s+xMV6WqjTpED0AwDuMWcM+UWR+GALVfWq1FVqNh50CQfrQ8XtXsQgJW71uXgLBOj+r2AHW0xTdSpDBVFF4XgrgtyigFPMvPRz0RQ1eINSKwA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=IrFYWVyt; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 6560a7925c72dba2; Wed, 5 Mar 2025 22:13:23 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 2EEA99A0CE1;
-	Wed,  5 Mar 2025 22:13:23 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1741209203;
-	bh=EKzMzYGhYX0Hi8eGqtN07uUXqx+QMcHmor6Nk1VPsK8=;
-	h=From:Subject:Date;
-	b=IrFYWVytKMJcExik1x9DQjoJdo0CqJLRuyz7f3RE7RwFWW4W7+RlAT1dFpVh1tmDN
-	 fVXLMkiTVBtd4/ibLScuQYfMtgpk/7Fvis7kryZ7J3ue2+Dc6cZAnNEYFRFdf5QyEM
-	 CfxNo5hJq0Jv6njfohJdgKZIyIujFdh9NpoHRuXBNip1hjnxEtIWwMAigrW89eSV9e
-	 t17eUwCr1nqwZVFqxociDdV3XQQlyEddnZBoQdcGo6HhftBjkdx1rZgHTa8orxz8H3
-	 QmHGa1Gk/2qRQx5LKgUM9b/3eyYql0zMF+z6fV4qa2eCesjY6R6PJRyzkgw5VrjWaw
-	 91Ydt7s7hqSLw==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>
-Cc: Lukasz Luba <lukasz.luba@arm.com>, LKML <linux-kernel@vger.kernel.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v1 3/3] PM: EM: Address RCU-related sparse warnings
-Date: Wed, 05 Mar 2025 22:13:15 +0100
-Message-ID: <13728396.uLZWGnKmhe@rjwysocki.net>
-In-Reply-To: <5880743.DvuYhMxLoT@rjwysocki.net>
-References: <5880743.DvuYhMxLoT@rjwysocki.net>
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EC967204088;
+	Wed,  5 Mar 2025 22:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741214416; cv=pass; b=KkVpDPFPHJaFTayv6Km7Un0VGIWcSdsQUIurGE1F2tw+ilfCe4K2TQoanC5ocW5Y8TzgFBMsFBa4q+pOxX4gjxOEnHvdtA+faLhdEUSbkRoNEX9GJMcLrs21bQ9luvA43b4MMoyey0QDsTQwBkpy3o/1XyT3KcGqSi914wR2K5g=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741214416; c=relaxed/simple;
+	bh=eKXxIE4WwPVC4+e8OqKFdghtOdRPil/d/nIxoVtTfKs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=Z6/nNVfJQGIl2yDexwqh7+c3F2fTPVq2dBDinT619iGTS2GgNI8qrkrsKR1Gfz50WyIhjnhNvcXDFQ0SWhl1tjgcMDd41G+LJk7NN7iFxms29/r14bKrA3YszQ4GkeKQpnrNQAkyAbnsuT5GqGb20sRM9LisG85LeJPwNgS54zM=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=hffPW94a; arc=pass smtp.client-ip=136.143.188.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1741214403; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=OqV/zZ1hYCyFILfo6R8GYZchY1D+2XKZFB1Eo7gUyB5diFAUW6nJkiR3vxZMHkZV8D/+YBfbloLzBvi+xSHW4rZUxbArA3NXvObPhejRrSkAuoJrSoS7sAE55LxqhXRRQFe3BguHJJ3EVRzbyQ/5DLulKk+nH02wuBDjdM/o5zI=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1741214403; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=BBsY6vbyK602yG3/GWZnTVSAcS3PfZMJ2KkShbDU/K8=; 
+	b=VxpWmFc5oHogCJOVVsWtelR9F2MhOVc0VK3BYZaLd4Uh4XUcnBcH1zaOe4tN1EhNAi8TedqF/yVMMG0a/k6HAB2zdhH9q4sbmE9esdryPCmfYJZZCQzWhpRaGZlzzpU6hymFOrqXPzc/LPfM6FA9/yftlFyc3RQBew1RnVqrQ78=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741214403;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=BBsY6vbyK602yG3/GWZnTVSAcS3PfZMJ2KkShbDU/K8=;
+	b=hffPW94a9o4UlYuUq9I1kr9CSwIQ680OeIJfOJmlaXq9e8Gc4jfdXdrhsIDBro7q
+	ImBV+QPnZWwl/o2++FfojNLdRgAc444cMq4/1YWKy6b9xSG79/ASG//MRUnwa1tPYA3
+	cdp3HGEY0tq7Z3R5dafVtMb7yiPbF5I1FHjYcPvc=
+Received: by mx.zohomail.com with SMTPS id 1741214401365197.1635456630188;
+	Wed, 5 Mar 2025 14:40:01 -0800 (PST)
+Received: by venus (Postfix, from userid 1000)
+	id 78D47183465; Wed, 05 Mar 2025 23:39:57 +0100 (CET)
+Date: Wed, 5 Mar 2025 23:39:57 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Armin Wolf <W_Armin@gmx.de>
+Cc: hdegoede@redhat.com, ilpo.jarvinen@linux.intel.com, 
+	platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 0/3] platform/x86: dell-ddv: Rework battery temperature
+ handling
+Message-ID: <s4xexzrsozgs7knt7yha5mdjykgctrxklpnnfsm3qj7me5hf4e@tucwr2wvdpri>
+References: <20250305053009.378609-1-W_Armin@gmx.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdehkeekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohephedprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtohepughivghtmhgrrhdrvghgghgvmhgrnhhnsegrrhhmrdgtohhmpdhrtghpthhtoheprhhitggrrhguohdrnhgvrhhiqdgtrghluggvrhhonheslhh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
-
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-
-The usage of __rcu in the Energy Model code is quite inconsistent
-which causes the following sparse warnings to trigger:
-
-kernel/power/energy_model.c:169:15: warning: incorrect type in assignment (different address spaces)
-kernel/power/energy_model.c:169:15:    expected struct em_perf_table [noderef] __rcu *table
-kernel/power/energy_model.c:169:15:    got struct em_perf_table *
-kernel/power/energy_model.c:171:9: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:171:9:    expected struct callback_head *head
-kernel/power/energy_model.c:171:9:    got struct callback_head [noderef] __rcu *
-kernel/power/energy_model.c:171:9: warning: cast removes address space '__rcu' of expression
-kernel/power/energy_model.c:182:19: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:182:19:    expected struct kref *kref
-kernel/power/energy_model.c:182:19:    got struct kref [noderef] __rcu *
-kernel/power/energy_model.c:200:15: warning: incorrect type in assignment (different address spaces)
-kernel/power/energy_model.c:200:15:    expected struct em_perf_table [noderef] __rcu *table
-kernel/power/energy_model.c:200:15:    got void *[assigned] _res
-kernel/power/energy_model.c:204:20: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:204:20:    expected struct kref *kref
-kernel/power/energy_model.c:204:20:    got struct kref [noderef] __rcu *
-kernel/power/energy_model.c:320:19: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:320:19:    expected struct kref *kref
-kernel/power/energy_model.c:320:19:    got struct kref [noderef] __rcu *
-kernel/power/energy_model.c:325:45: warning: incorrect type in argument 2 (different address spaces)
-kernel/power/energy_model.c:325:45:    expected struct em_perf_state *table
-kernel/power/energy_model.c:325:45:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:425:45: warning: incorrect type in argument 3 (different address spaces)
-kernel/power/energy_model.c:425:45:    expected struct em_perf_state *table
-kernel/power/energy_model.c:425:45:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:442:15: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:442:15:    expected void const *objp
-kernel/power/energy_model.c:442:15:    got struct em_perf_table [noderef] __rcu *[assigned] em_table
-kernel/power/energy_model.c:626:55: warning: incorrect type in argument 2 (different address spaces)
-kernel/power/energy_model.c:626:55:    expected struct em_perf_state *table
-kernel/power/energy_model.c:626:55:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:681:16: warning: incorrect type in assignment (different address spaces)
-kernel/power/energy_model.c:681:16:    expected struct em_perf_state *new_ps
-kernel/power/energy_model.c:681:16:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:699:37: warning: incorrect type in argument 2 (different address spaces)
-kernel/power/energy_model.c:699:37:    expected struct em_perf_state *table
-kernel/power/energy_model.c:699:37:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:733:38: warning: incorrect type in argument 3 (different address spaces)
-kernel/power/energy_model.c:733:38:    expected struct em_perf_state *table
-kernel/power/energy_model.c:733:38:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:855:53: warning: dereference of noderef expression
-kernel/power/energy_model.c:864:32: warning: dereference of noderef expression
-
-This is because the __rcu annotation for sparse is only applicable to
-pointers that need rcu_dereference() or equivalent for protection, which
-basically means pointers assigned with rcu_assign_pointer().
-
-Make all of the above sparse warnings go away by cleaning up the usage
-of __rcu and using rcu_dereference_protected() where applicable.
-
-Reported-by: kernel test robot <lkp@intel.com>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
- kernel/power/energy_model.c |   39 ++++++++++++++++++++-------------------
- 1 file changed, 20 insertions(+), 19 deletions(-)
-
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -163,12 +163,8 @@
- 
- static void em_release_table_kref(struct kref *kref)
- {
--	struct em_perf_table __rcu *table;
--
- 	/* It was the last owner of this table so we can free */
--	table = container_of(kref, struct em_perf_table, kref);
--
--	kfree_rcu(table, rcu);
-+	kfree_rcu(container_of(kref, struct em_perf_table, kref), rcu);
- }
- 
- /**
-@@ -177,7 +173,7 @@
-  *
-  * No return values.
-  */
--static void em_table_free(struct em_perf_table __rcu *table)
-+static void em_table_free(struct em_perf_table *table)
- {
- 	kref_put(&table->kref, em_release_table_kref);
- }
-@@ -190,9 +186,9 @@
-  * has a user.
-  * Returns allocated table or NULL.
-  */
--static struct em_perf_table __rcu *em_table_alloc(struct em_perf_domain *pd)
-+static struct em_perf_table *em_table_alloc(struct em_perf_domain *pd)
- {
--	struct em_perf_table __rcu *table;
-+	struct em_perf_table *table;
- 	int table_size;
- 
- 	table_size = sizeof(struct em_perf_state) * pd->nr_perf_states;
-@@ -300,9 +296,9 @@
-  * Return 0 on success or an error code on failure.
-  */
- static int em_dev_update_perf_domain(struct device *dev,
--				     struct em_perf_table __rcu *new_table)
-+				     struct em_perf_table *new_table)
- {
--	struct em_perf_table __rcu *old_table;
-+	struct em_perf_table *old_table;
- 	struct em_perf_domain *pd;
- 
- 	if (!dev)
-@@ -319,7 +315,8 @@
- 
- 	kref_get(&new_table->kref);
- 
--	old_table = pd->em_table;
-+	old_table = rcu_dereference_protected(pd->em_table,
-+					      lockdep_is_held(&em_pd_mutex));
- 	rcu_assign_pointer(pd->em_table, new_table);
- 
- 	em_cpufreq_update_efficiencies(dev, new_table->state);
-@@ -391,7 +388,7 @@
- 			const cpumask_t *cpus,
- 			unsigned long flags)
- {
--	struct em_perf_table __rcu *em_table;
-+	struct em_perf_table *em_table;
- 	struct em_perf_domain *pd;
- 	struct device *cpu_dev;
- 	int cpu, ret, num_cpus;
-@@ -551,6 +548,7 @@
- 				const struct em_data_callback *cb,
- 				const cpumask_t *cpus, bool microwatts)
- {
-+	struct em_perf_table *em_table;
- 	unsigned long cap, prev_cap = 0;
- 	unsigned long flags = 0;
- 	int cpu, ret;
-@@ -623,7 +621,9 @@
- 	dev->em_pd->min_perf_state = 0;
- 	dev->em_pd->max_perf_state = nr_states - 1;
- 
--	em_cpufreq_update_efficiencies(dev, dev->em_pd->em_table->state);
-+	em_table = rcu_dereference_protected(dev->em_pd->em_table,
-+					     lockdep_is_held(&em_pd_mutex));
-+	em_cpufreq_update_efficiencies(dev, em_table->state);
- 
- 	em_debug_create_pd(dev);
- 	dev_info(dev, "EM: created perf domain\n");
-@@ -660,7 +660,8 @@
- 	mutex_lock(&em_pd_mutex);
- 	em_debug_remove_pd(dev);
- 
--	em_table_free(dev->em_pd->em_table);
-+	em_table_free(rcu_dereference_protected(dev->em_pd->em_table,
-+						lockdep_is_held(&em_pd_mutex)));
- 
- 	kfree(dev->em_pd);
- 	dev->em_pd = NULL;
-@@ -668,9 +669,9 @@
- }
- EXPORT_SYMBOL_GPL(em_dev_unregister_perf_domain);
- 
--static struct em_perf_table __rcu *em_table_dup(struct em_perf_domain *pd)
-+static struct em_perf_table *em_table_dup(struct em_perf_domain *pd)
- {
--	struct em_perf_table __rcu *em_table;
-+	struct em_perf_table *em_table;
- 	struct em_perf_state *ps, *new_ps;
- 	int ps_size;
- 
-@@ -692,7 +693,7 @@
- }
- 
- static int em_recalc_and_update(struct device *dev, struct em_perf_domain *pd,
--				struct em_perf_table __rcu *em_table)
-+				struct em_perf_table *em_table)
- {
- 	int ret;
- 
-@@ -722,7 +723,7 @@
- static void em_adjust_new_capacity(struct device *dev,
- 				   struct em_perf_domain *pd)
- {
--	struct em_perf_table __rcu *em_table;
-+	struct em_perf_table *em_table;
- 
- 	em_table = em_table_dup(pd);
- 	if (!em_table) {
-@@ -831,7 +832,7 @@
-  */
- int em_dev_update_chip_binning(struct device *dev)
- {
--	struct em_perf_table __rcu *em_table;
-+	struct em_perf_table *em_table;
- 	struct em_perf_domain *pd;
- 	int i, ret;
- 
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="rhj322g6xfycfnlo"
+Content-Disposition: inline
+In-Reply-To: <20250305053009.378609-1-W_Armin@gmx.de>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.4.2/238.671.54
+X-ZohoMailClient: External
 
 
+--rhj322g6xfycfnlo
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 0/3] platform/x86: dell-ddv: Rework battery temperature
+ handling
+MIME-Version: 1.0
 
+Hi,
+
+On Wed, Mar 05, 2025 at 06:30:06AM +0100, Armin Wolf wrote:
+> This patch series reworks the handling of the battery temperature
+> inside the dell-wmi-ddv driver.
+>=20
+> The first patch fixes an issue inside the calculation formula for
+> the temperature value that resulted in strange temperature values
+> like 29.1 degrees celcius.
+>=20
+> The second patch then simplifies the battery hook handling by using
+> devm_battery_hook_register().
+>=20
+> The third patch finally makes use of the new power supply extension
+> mechanism to expose the battery temperature to userspace. The
+> power supply extension mechanism also takes care that the temperature
+> shows up inside the hwmon interface of the associated battery.
+>=20
+> All patches where tested on a Dell Inspiron 3505 and appear to work.
+
+LGTM.
+
+Reviewed-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+
+-- Sebastian
+
+> Armin Wolf (3):
+>   platform/x86: dell-ddv: Fix temperature calculation
+>   platform/x86: dell-ddv: Use devm_battery_hook_register
+>   platform/x86: dell-ddv: Use the power supply extension mechanism
+>=20
+>  drivers/platform/x86/dell/dell-wmi-ddv.c | 84 +++++++++++++-----------
+>  1 file changed, 46 insertions(+), 38 deletions(-)
+>=20
+> --
+> 2.39.5
+>=20
+>=20
+
+--rhj322g6xfycfnlo
+Content-Type: application/pgp-signature; name="signature.asc"
+
+-----BEGIN PGP SIGNATURE-----
+
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmfI0p8ACgkQ2O7X88g7
++ppbtxAAqUC1M1FObaMzK3Cv/flLvomFaEpbaYZH2x45Wc52PADtW2KmmR/Cr5r9
+mWgc6VeJjcStGiZ6pNOWe6Y2AAfM39DK6ocrlVi1e7E+ItZmr2n+CzZ02NtlmWiP
+9puWXFrEa+E9WP7uvsr1GNFt/eAC57lqkL8RdIFLMcejH5AioQkiwDGeBojspTJg
+3SQJmuM64fLKmrptwh4nibml9sIwTR3l9PiFc9xfFX3Vunbqa78a2VAgmGZigGM3
+rkHcAvrfUHmJ2j43KeI3ihxfCQ8ytpbCmrLU3mWXndcdSbwRWNIXF/rVeClo7FLk
+Qt9FbxvhLAtmEvLbtKDn+To0IRaV9z0tFczhUIx43KKd7RhJ77pax6pwH7Brnx94
+IZ1bdSm7F+iOzMLLVBiAPasykm+cYz6ZEy1OJAl4o4NATUgNbMi1SeltLF8tYH2p
+cxlXDaziHozlV1MzzD1eI1ip6Qg3/Xhe67WpLii72SWM2+L31+NtyVmIF+ZufWv9
+E9jvTFKAOX5KQTr+TXZYXj0U3uE5c6f33WnCW8gkXTvcvJ/ZX7/h5lfIwDKs76kO
+WpwiRrKx+vPPp+JWCc2Ppr1GXXF1Pq3jbDiQJKH/wr1H2rdHhEEq+STm6kJ4+2Ap
+Jzif5QIrBXTwnZnOMt+j+Cbymb5FfVN1MmBTMo7Q3AQcG7uNoBw=
+=UA8u
+-----END PGP SIGNATURE-----
+
+--rhj322g6xfycfnlo--
 
