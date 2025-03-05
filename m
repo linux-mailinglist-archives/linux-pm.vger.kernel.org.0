@@ -1,135 +1,137 @@
-Return-Path: <linux-pm+bounces-23489-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23490-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id B62F5A502FC
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 16:00:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 71E6EA5030D
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 16:03:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2729D189E1D5
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 14:54:34 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9D0E118842F8
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 14:57:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83CC824EF66;
-	Wed,  5 Mar 2025 14:54:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 10B9924A052;
+	Wed,  5 Mar 2025 14:57:45 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WYWrzSbi"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="BpW3yggm"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C4024EF60
-	for <linux-pm@vger.kernel.org>; Wed,  5 Mar 2025 14:54:05 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DC127241CA0;
+	Wed,  5 Mar 2025 14:57:44 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741186447; cv=none; b=QgLk0i3pwDbdts0dVj8UIQefKNwKCyp5Xtvp94WFi592KwRinG0Pv1Zjro8ztHLNpkPV94MhvU6k98DxoZ4kggD4uDCOT/3pSvi65F5DjcCSycE1M9Be5P7uybI6347xzN5Z8EHiPqBFTEvPOGdO+k0JygB1mioNZyqgt1F84Hc=
+	t=1741186665; cv=none; b=GxZ+nDvkNL1LT3fu4nvX34fx9n47vPWYxpmlApki4UK9Lx6VOTaPyyHTrmBa2mz3iCIh5erDPV2TDYgR/1JTisDbRxVNcbJuuiknQT0hi/dpo1voaX0Y/xxc8vyKSGBnmzz9CJzwVCMV9OHpyoWZkeueUQVisacCPC/8p9Z5bfM=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741186447; c=relaxed/simple;
-	bh=WwcEMSxxHLOGH9XJtwTKimEYpC2lcD67Srx1N2R9Nj8=;
+	s=arc-20240116; t=1741186665; c=relaxed/simple;
+	bh=1Gl63dkDn6YzbWhpJHr86mBXDaJRRA0A/VL5dyST0Ro=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=VY11lFV9AqfGOQXWdvzZkalgHubG9cbQJLxX86AzrT6MlN/K7cCe1CdXYCNKPJD0b0CpmxltjbTszlRw2cq8LX3rJzjOf7SwjShYQOJ/RL+z4FjMRwUW3GUtWi7BMSrlzJjRC9zHYFcoj642msZHuAleeq1Z0snm/LpmatqiU70=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WYWrzSbi; arc=none smtp.client-ip=209.85.128.178
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6f4434b5305so61454077b3.3
-        for <linux-pm@vger.kernel.org>; Wed, 05 Mar 2025 06:54:05 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741186445; x=1741791245; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=VeNLwaFo16zfbUMvLDVk5OOLd3X39XkqYnX5zvlPNF0=;
-        b=WYWrzSbiP/d/yY1ksRcSJUCn4y1DK7lmTatxizCLzUldPJ7vvnQ01CzaKgrxKxFX8h
-         MbI719Agtv6mPco3dXZ8ACO04azQY4Aj0a7SZuZep8w7Bqqc9EHJEPyPl9ZJ3e6JZe3Z
-         1tTH2dGEYwmlXfQTkexaosnP0NQvgEUpSu9eupcE0cTxfbd9Li9bIkROisDlMIFdRlJY
-         Ieyyp0hTpwhP6Q6hrRkOn9/T+tSY8Ma1EeQ3BmJlu6SWXDzK2jPIGfk2dKTKY7UU1yh/
-         vsv05aTb+JzTZWUyn1gKlJ3MQkpDd1FxMIZFca2HRst8Ns8/38dXgaqA0VQMKLDBfDZs
-         jZhA==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741186445; x=1741791245;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=VeNLwaFo16zfbUMvLDVk5OOLd3X39XkqYnX5zvlPNF0=;
-        b=Ihk5FKkaLEB6ET5rQ82PbfodJKR9OsTwojY0rPebPaigBE8K8/qt4KJOB4X3jboUJ1
-         aemMe0CAeu7aHoAToFDGhhc6WoRkliTNvcl83zeTnlNKSbUUDHsf31sGNum54BHkqmp8
-         GojEgDd31kh8ahIH4PNllAMeII1QjIw/Yswrm62p+Pq87N9pjQTzrNrNVcq3kLMSvH2/
-         BlfAMucia0mXaATQ2xfJfUmOwHu0E4+6G/S1nUlTIgPtemvLkKItB7g+j/1/CY0lD0H+
-         ZiU/QMzDVZtngueG6J3dVG33byeAXxTVhuVkuGAGEg18KdAexs32p7JrRkAxQYPMmqJc
-         Nx3Q==
-X-Forwarded-Encrypted: i=1; AJvYcCW/pSvOtTomj9ailBSIu8iSXauxSG0B5s51LmVBKRWttoBLR6hAiQQ52UxTPReyd6GIy50pNU2+/w==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwNQGWYizopEUCoeQ7drohX44t5OjJIAwg/o30+K4j7b7DMNikz
-	f2CTgDRmRmFkZOknSowo2dOo8EBO3LzO+pKKL1tswdTSUQzUyXDn++XLGbe3Khd9lG4GoOgSNzN
-	pNg+r0Qm+c6tokJrUs3pa2lCrvYhY4NnSlF/bkg==
-X-Gm-Gg: ASbGncvbm5srPUnGb+N+z3faQv1nuwYf2FPOv6EyBUf/u8oKfP1p5GAOZCpqpybYKeY
-	VOTNtgkV+DiWbX7Cu1OgVAI0NvZqFAZdGxfk0axB12NTVg+eW2/y3shtqFyl8aQtCk3Jci5DDv+
-	4j7cA1J1UIyAV2SObWUmlf8jo0n7s=
-X-Google-Smtp-Source: AGHT+IHaRzLfs4e0s/mjCkKbOX/Qq8AuRys4/xKKYjDcoyyp0XIFqNuIteg7ybYGY5j3p+l87FS/VuOkxSFDK6iD0FQ=
-X-Received: by 2002:a05:690c:3749:b0:6fb:b78a:c0e5 with SMTP id
- 00721157ae682-6fda310bbf6mr42777697b3.28.1741186444835; Wed, 05 Mar 2025
- 06:54:04 -0800 (PST)
+	 To:Cc:Content-Type; b=XZuc2ptwcLfLnSK/eYaeyv53OmfIatdletRjU0uC+92R1fiX3rUSluMj/6Zq10XNTxMDh+t2YcAC4yFTtHROOFstjx8VJAEdOfcZP8LrI7hTWGu9z7qc5DLeoxp16jGqT1FXTfCrfRQVOgNvo8Jdofkkpsfq6UYxtBkv4uIkbqg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=BpW3yggm; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 4A709C4CEEA;
+	Wed,  5 Mar 2025 14:57:44 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741186664;
+	bh=1Gl63dkDn6YzbWhpJHr86mBXDaJRRA0A/VL5dyST0Ro=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=BpW3yggmd7ODf5pzH0d5SReTzmSwrcsqOPrOUG8ua8kCKHH1C7zt+Vna2GsFPM89z
+	 Y4hS+ilKjgM4Ma328JcmNeHtmY0+yBkci2CTwTDexDbFKZrI22MkYLrelsL+FnzmLs
+	 k7hFixlnHi8pAS+JnonJXvpPt8gfiEpPXuL1H2cuz/qAxLjL3m/VQN+H4IPJk9dQ9a
+	 ++7qHUF9si/CRgKal/Lg+OXYnvT75HoY/fepSLoEM6sNl3AXGdWr3AXMFjNO/D2/6S
+	 75Mi7PKqeVTNiRsl7l/UBsjMTZkUzm0M0it/anIFAi4k+KBBtHv7AiefmSFyMaR2ww
+	 SnkOrYTYJ9N5g==
+Received: by mail-oo1-f45.google.com with SMTP id 006d021491bc7-6001060115bso1602392eaf.3;
+        Wed, 05 Mar 2025 06:57:44 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWPrq8kIA4rKSSmVDaOKySR+jP4qQKXgMSukyvFGST/Qj0tZvmArY2Gdcrh+N3Jcd+SYbTDO4b09mA=@vger.kernel.org, AJvYcCX68M2BHrcNWBo8X7RBqBlgOkYyeDRCBAqxRVA37t1s92veOhK/YqVd7k1BsvBulDwbjcg1q9kdu6ivXEY=@vger.kernel.org
+X-Gm-Message-State: AOJu0YzE5S9HoQ2TpzutlQA0a5iW34uQ1m1cvtMoY38929Px7u3b85Ep
+	k8Rz40dwRh+bx/11FqalxKCc5k9k7ne+QBBSTgKaSwIg/aiNAI/ZVWlU0au2nHHgtHrpKXfjUOH
+	+EZhvGVgHf4lNEsNB2TwcndtgbEM=
+X-Google-Smtp-Source: AGHT+IFrp15y/CCHFHM8ClNOdliUQk6Gp8kcuTU19LoJl8SFC7OzoexHyamhW/uvTFwPp3lLv4Y4oc8fNnMXq6XFVjs=
+X-Received: by 2002:a05:6820:a01:b0:5fa:6805:645b with SMTP id
+ 006d021491bc7-600336499dbmr1682833eaf.6.1741186663541; Wed, 05 Mar 2025
+ 06:57:43 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250303-fix-t7-pwrc-v1-1-b563612bcd86@amlogic.com>
-In-Reply-To: <20250303-fix-t7-pwrc-v1-1-b563612bcd86@amlogic.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 5 Mar 2025 15:53:29 +0100
-X-Gm-Features: AQ5f1JpdUfHmjKXFkOL_14EaaLzX4OU9jP-SAbgoA1LHg0Ze3bkxnPXr7Krf_aI
-Message-ID: <CAPDyKFoTBt4g=M1rHrZEPLO1y61csy3_cHfJDANPbvV+bH+YXw@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: amlogic: fix T7 ISP secpower
-To: xianwei.zhao@amlogic.com
-Cc: Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
-	Jerome Brunet <jbrunet@baylibre.com>, 
-	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
-	linux-kernel@vger.kernel.org
+References: <20241219091109.10050-1-xuewen.yan@unisoc.com> <a43ebb14-be7f-4f8a-8892-cdb63eec4043@arm.com>
+ <CAB8ipk-qYR4LncOi2ue6Rbdc6CqX67_OydcOp14Yj=afYZPe=Q@mail.gmail.com> <7bc89310-c0db-4940-8cd7-86566ecb5c65@arm.com>
+In-Reply-To: <7bc89310-c0db-4940-8cd7-86566ecb5c65@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Wed, 5 Mar 2025 15:57:32 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0j3+TFB22FKcGMdy6bfvczAcp+egWv5WjY9dWmHKh8fpA@mail.gmail.com>
+X-Gm-Features: AQ5f1JoSo8eNhPNHqvOq89t9K7B1E5EMRUYkiyzEstbu4yChAy-xnfDK2hhxN58
+Message-ID: <CAJZ5v0j3+TFB22FKcGMdy6bfvczAcp+egWv5WjY9dWmHKh8fpA@mail.gmail.com>
+Subject: Re: [PATCH] power: energy_model: Rework the depends on for CONFIG_ENERGY_MODEL
+To: Lukasz Luba <lukasz.luba@arm.com>, Xuewen Yan <xuewen.yan94@gmail.com>
+Cc: Xuewen Yan <xuewen.yan@unisoc.com>, linux-pm@vger.kernel.org, len.brown@intel.com, 
+	linux-kernel@vger.kernel.org, ke.wang@unisoc.com, jeson.gao@unisoc.com, 
+	di.shen@unisoc.com, pavel@ucw.cz
 Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Mon, 3 Mar 2025 at 10:06, Xianwei Zhao via B4 Relay
-<devnull+xianwei.zhao.amlogic.com@kernel.org> wrote:
->
-> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
->
-> ISP and MIPI_ISP, these two have a parent-child relationship,
-> ISP depends on MIPI_ISP.
->
-> Fixes: ca75e4b214c6 ("pmdomain: amlogic: Add support for T7 power domains controller")
-> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
+Hi,
 
-Applied for fixes and by adding a stable tag, thanks!
+On Wed, Mar 5, 2025 at 10:51=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
+>
+> Hi Rafael,
+>
+> On 2/13/25 02:18, Xuewen Yan wrote:
+> > Hi Rafael,
+> >
+> > I noticed that this patch has not been merged yet. Do you have any comm=
+ents?
+> >
+> > BR
+> >
+> > On Thu, Dec 19, 2024 at 5:17=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.co=
+m> wrote:
+> >>
+> >>
+> >>
+> >> On 12/19/24 09:11, Xuewen Yan wrote:
+> >>> From: Jeson Gao <jeson.gao@unisoc.com>
+> >>>
+> >>> Now not only CPUs can use energy efficiency models, but GPUs
+> >>> can also use. On the other hand, even with only one CPU, we can also
+> >>> use energy_model to align control in thermal.
+> >>> So remove the dependence of SMP, and add the DEVFREQ.
+> >>
+> >> That's true, there are 1-CPU platforms supported. Also, GPU can have
+> >> the EM alone.
+> >>
+> >>>
+> >>> Signed-off-by: Jeson Gao <jeson.gao@unisoc.com>
+> >>> ---
+> >>>    kernel/power/Kconfig | 3 +--
+> >>>    1 file changed, 1 insertion(+), 2 deletions(-)
+> >>>
+> >>> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
+> >>> index afce8130d8b9..c532aee09e12 100644
+> >>> --- a/kernel/power/Kconfig
+> >>> +++ b/kernel/power/Kconfig
+> >>> @@ -361,8 +361,7 @@ config CPU_PM
+> >>>
+> >>>    config ENERGY_MODEL
+> >>>        bool "Energy Model for devices with DVFS (CPUs, GPUs, etc)"
+> >>> -     depends on SMP
+> >>> -     depends on CPU_FREQ
+> >>> +     depends on CPU_FREQ || PM_DEVFREQ
+> >>>        help
+> >>>          Several subsystems (thermal and/or the task scheduler for ex=
+ample)
+> >>>          can leverage information about the energy consumed by device=
+s to
+> >>
+> >> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+>
+> Gentle ping. You probably have missed that change for the v6.15 queue
 
-Kind regards
-Uffe
+Indeed, I have missed this one.
 
-
-> ---
->  drivers/pmdomain/amlogic/meson-secure-pwrc.c | 2 +-
->  1 file changed, 1 insertion(+), 1 deletion(-)
->
-> diff --git a/drivers/pmdomain/amlogic/meson-secure-pwrc.c b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-> index 42ce41a2fe3a..ff76ea36835e 100644
-> --- a/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-> +++ b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
-> @@ -221,7 +221,7 @@ static const struct meson_secure_pwrc_domain_desc t7_pwrc_domains[] = {
->         SEC_PD(T7_VI_CLK2,      0),
->         /* ETH is for ethernet online wakeup, and should be always on */
->         SEC_PD(T7_ETH,          GENPD_FLAG_ALWAYS_ON),
-> -       SEC_PD(T7_ISP,          0),
-> +       TOP_PD(T7_ISP,          0, PWRC_T7_MIPI_ISP_ID),
->         SEC_PD(T7_MIPI_ISP,     0),
->         TOP_PD(T7_GDC,          0, PWRC_T7_NIC3_ID),
->         TOP_PD(T7_DEWARP,       0, PWRC_T7_NIC3_ID),
->
-> ---
-> base-commit: 73e4ffb27bb8a093d557bb2dac1a271474cca99c
-> change-id: 20250303-fix-t7-pwrc-f33650b190ef
->
-> Best regards,
-> --
-> Xianwei Zhao <xianwei.zhao@amlogic.com>
->
->
+Now applied as 6.15 material, thanks!
 
