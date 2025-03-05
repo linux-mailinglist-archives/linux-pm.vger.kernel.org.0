@@ -1,111 +1,113 @@
-Return-Path: <linux-pm+bounces-23474-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23475-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8FF0DA4FA9C
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 10:51:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4DB2BA4FA9F
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 10:51:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AB2C03A7A83
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 09:50:57 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B2C201892FA4
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 09:51:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6162E204F7C;
-	Wed,  5 Mar 2025 09:51:00 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 70D67205AB7;
+	Wed,  5 Mar 2025 09:51:20 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 75E962AF19;
-	Wed,  5 Mar 2025 09:50:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B4A9F1FDA89
+	for <linux-pm@vger.kernel.org>; Wed,  5 Mar 2025 09:51:18 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741168260; cv=none; b=o6L1QqZDDmT20hxTbpHDdwNkfSb2ZA1FmSNQ6ctjl/pEa6FwqsP9n8dxd+Kdtw4wVsYJMSTaMtrRSRoPTS0IPv+sSqUkIbQrcc7yA8RUAsWaVUWiA5mcBHkmoP5Rfy4FUFK7Ji2ky9CmMCU6xT9rtH8/7D4oZG/gJcr6NQQt4i8=
+	t=1741168280; cv=none; b=G5tHJ4vxVKEeUUkkG2VMnHZBBNTLbINFRWhiADYUQ8AFe90SE6U9ldrTZdgFQzAxhkafkaDQEHI8+xEIWNzUQubP94agPvCmOQk+ar7Yw5X1xd78ElRA/4Iwk7WSHHnlUNqPpVckiCpEdc4bXk1V4tKJJkMNDRdeJwTBRKGIJNU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741168260; c=relaxed/simple;
-	bh=im8uaNIgauqwSKJ+QLQ9McFB8wSVj2MzOCQuUY4Y3gU=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=cHeqtbzrxruI5exmr5hZiF6/Eb0MnBBlmEm/DVDqzBZiPu8YpMT1w53OTfHkJfpzy1cevhGwC9gR+uTl8dkwBMq3QYtyF5Fwg8XgFyBM9YzhQmUZ+LWewfBkkrx1Ge4SUjzJkIEmqFThvti3Jhq2M5JMTYE/VGP2guJxoW/15xw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 332A5FEC;
-	Wed,  5 Mar 2025 01:51:11 -0800 (PST)
-Received: from [10.57.64.200] (unknown [10.57.64.200])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id E87E63F673;
-	Wed,  5 Mar 2025 01:50:55 -0800 (PST)
-Message-ID: <7bc89310-c0db-4940-8cd7-86566ecb5c65@arm.com>
-Date: Wed, 5 Mar 2025 09:50:53 +0000
+	s=arc-20240116; t=1741168280; c=relaxed/simple;
+	bh=rvj0a+vHA+NZlGBw9NSx/eWYj1OESCfRgSHcNayQehw=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=IeTiNFoJB4sTKnElT9ALoOpPKPKNc1UvUY5hOOmyx14PzAINBe92A+vIiMtHjOuk9uXvfTWGdmxmbEgduqV03cnCzQ3j2QAz7hDmuKuIOWDj8C9Mt0XE4oR48zUiC88u/+rRjJu9mNzJv7uECi/7TrhwBaYTZ8MkqhnWfX2okgc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1tplP3-0005JY-Sw; Wed, 05 Mar 2025 10:51:01 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1tplP2-0047c0-2t;
+	Wed, 05 Mar 2025 10:51:00 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1tplP2-00EP5R-2W;
+	Wed, 05 Mar 2025 10:51:00 +0100
+Date: Wed, 5 Mar 2025 10:51:00 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>
+Subject: Re: [PATCH v3 2/7] power: reset: Introduce PSCR Recording Framework
+ for Non-Volatile Storage
+Message-ID: <Z8gehLMlc1qiA2HE@pengutronix.de>
+References: <20250304132433.210355-1-o.rempel@pengutronix.de>
+ <20250304132433.210355-3-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] power: energy_model: Rework the depends on for
- CONFIG_ENERGY_MODEL
-To: rafael@kernel.org
-Cc: Xuewen Yan <xuewen.yan94@gmail.com>, Xuewen Yan <xuewen.yan@unisoc.com>,
- linux-pm@vger.kernel.org, len.brown@intel.com, linux-kernel@vger.kernel.org,
- ke.wang@unisoc.com, jeson.gao@unisoc.com, di.shen@unisoc.com, pavel@ucw.cz
-References: <20241219091109.10050-1-xuewen.yan@unisoc.com>
- <a43ebb14-be7f-4f8a-8892-cdb63eec4043@arm.com>
- <CAB8ipk-qYR4LncOi2ue6Rbdc6CqX67_OydcOp14Yj=afYZPe=Q@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAB8ipk-qYR4LncOi2ue6Rbdc6CqX67_OydcOp14Yj=afYZPe=Q@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250304132433.210355-3-o.rempel@pengutronix.de>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-Hi Rafael,
+On Tue, Mar 04, 2025 at 02:24:28PM +0100, Oleksij Rempel wrote:
+> +/**
+> + * set_power_state_change_reason - Record reason for next reboot/shutdown
+> + * @reason: The enumerated reason code to record
+> + *
+> + * Other drivers (e.g. regulator, thermal) call this whenever they detect
+> + * a condition that may lead to or cause a reboot.
+> + */
+> +void set_power_state_change_reason(enum pscr_reason reason);
 
-On 2/13/25 02:18, Xuewen Yan wrote:
-> Hi Rafael,
-> 
-> I noticed that this patch has not been merged yet. Do you have any comments?
-> 
-> BR
-> 
-> On Thu, Dec 19, 2024 at 5:17 PM Lukasz Luba <lukasz.luba@arm.com> wrote:
->>
->>
->>
->> On 12/19/24 09:11, Xuewen Yan wrote:
->>> From: Jeson Gao <jeson.gao@unisoc.com>
->>>
->>> Now not only CPUs can use energy efficiency models, but GPUs
->>> can also use. On the other hand, even with only one CPU, we can also
->>> use energy_model to align control in thermal.
->>> So remove the dependence of SMP, and add the DEVFREQ.
->>
->> That's true, there are 1-CPU platforms supported. Also, GPU can have
->> the EM alone.
->>
->>>
->>> Signed-off-by: Jeson Gao <jeson.gao@unisoc.com>
->>> ---
->>>    kernel/power/Kconfig | 3 +--
->>>    1 file changed, 1 insertion(+), 2 deletions(-)
->>>
->>> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
->>> index afce8130d8b9..c532aee09e12 100644
->>> --- a/kernel/power/Kconfig
->>> +++ b/kernel/power/Kconfig
->>> @@ -361,8 +361,7 @@ config CPU_PM
->>>
->>>    config ENERGY_MODEL
->>>        bool "Energy Model for devices with DVFS (CPUs, GPUs, etc)"
->>> -     depends on SMP
->>> -     depends on CPU_FREQ
->>> +     depends on CPU_FREQ || PM_DEVFREQ
->>>        help
->>>          Several subsystems (thermal and/or the task scheduler for example)
->>>          can leverage information about the energy consumed by devices to
->>
->> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+this declaration should be removed, otherwise it fails on disabled
+CONFIG_PSCRR.
+...
 
-Gentle ping. You probably have missed that change for the v6.15 queue
+> +#if IS_ENABLED(CONFIG_PSCRR)
+> +
+> +void set_power_state_change_reason(enum pscr_reason pscr);
+> +
+> +#else
+> +
+> +static inline void set_power_state_change_reason(enum pscr_reason pscr)
+> +{
+> +}
+> +#endif
+ 
 
-Regards,
-Lukasz
+-- 
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
