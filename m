@@ -1,134 +1,135 @@
-Return-Path: <linux-pm+bounces-23488-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23489-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7B5D2A502EF
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 15:59:09 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B62F5A502FC
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 16:00:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CA18178269
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 14:54:11 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2729D189E1D5
+	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 14:54:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E03AE2475C8;
-	Wed,  5 Mar 2025 14:54:02 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83CC824EF66;
+	Wed,  5 Mar 2025 14:54:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y/FodS+J"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="WYWrzSbi"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f169.google.com (mail-yw1-f169.google.com [209.85.128.169])
+Received: from mail-yw1-f178.google.com (mail-yw1-f178.google.com [209.85.128.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42EBB230BC6
-	for <linux-pm@vger.kernel.org>; Wed,  5 Mar 2025 14:54:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.169
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D6C4024EF60
+	for <linux-pm@vger.kernel.org>; Wed,  5 Mar 2025 14:54:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741186442; cv=none; b=lSNMmLygBHPP1m0WeS9u8uYETR0BhDun5qvpcuohfE4PtQ+ve3z5Kfsh8Juga/SaGgG+s39gRt2KUN28sn5os5Rn3nTWXHFTzzxE3IVMyCJvavY8RBYh8PUMjo6Ahndvtvjd64nRldkLKUtc0XGi7yYfMJJuFmvlcB6ZwufOc/Y=
+	t=1741186447; cv=none; b=QgLk0i3pwDbdts0dVj8UIQefKNwKCyp5Xtvp94WFi592KwRinG0Pv1Zjro8ztHLNpkPV94MhvU6k98DxoZ4kggD4uDCOT/3pSvi65F5DjcCSycE1M9Be5P7uybI6347xzN5Z8EHiPqBFTEvPOGdO+k0JygB1mioNZyqgt1F84Hc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741186442; c=relaxed/simple;
-	bh=jTkplcEsWFR/ytitWc/gZ9Jgm54mf9GXdauo+Q8kRBM=;
+	s=arc-20240116; t=1741186447; c=relaxed/simple;
+	bh=WwcEMSxxHLOGH9XJtwTKimEYpC2lcD67Srx1N2R9Nj8=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JpTj9K4tQykRzXdf2INJavu6N+O2p/AVfyqywYKwtiNo8vWkRwe3Z3LBMOsUXzVk1QB5cGSK11VGJuRMDW0TaM+EYHXL609meFM+Lhu9ChsOZQlxFCZzegS53Z9gRBmR3XHHB5fJaiU1kS9vv03hc2TeLgXq1rySUjXg1y9pwVA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y/FodS+J; arc=none smtp.client-ip=209.85.128.169
+	 To:Cc:Content-Type; b=VY11lFV9AqfGOQXWdvzZkalgHubG9cbQJLxX86AzrT6MlN/K7cCe1CdXYCNKPJD0b0CpmxltjbTszlRw2cq8LX3rJzjOf7SwjShYQOJ/RL+z4FjMRwUW3GUtWi7BMSrlzJjRC9zHYFcoj642msZHuAleeq1Z0snm/LpmatqiU70=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=WYWrzSbi; arc=none smtp.client-ip=209.85.128.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f169.google.com with SMTP id 00721157ae682-6f77b9e0a34so55318897b3.2
-        for <linux-pm@vger.kernel.org>; Wed, 05 Mar 2025 06:54:00 -0800 (PST)
+Received: by mail-yw1-f178.google.com with SMTP id 00721157ae682-6f4434b5305so61454077b3.3
+        for <linux-pm@vger.kernel.org>; Wed, 05 Mar 2025 06:54:05 -0800 (PST)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741186440; x=1741791240; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1741186445; x=1741791245; darn=vger.kernel.org;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=/8e1NK0iHuTNXsrRQMu1Rap5op5xIoO/iE7QbD4E6K4=;
-        b=Y/FodS+J30C868V4Ywnu/qvS5RyRM7GvU7UH3gxg4aosQS+35Zz9gGhTj2bA6QY/hN
-         hJbLf3cd8k/mKfoFIxt1cCy2kSG4X5l2s+0SZaCJERv4LDnn2hvsQZ1LpYF/LKMOzaPw
-         ztnyU8DtXbnanSy5Q/7eI9f8ysQ0Qmp+8SRkie3HJZRaANHFXkN6hn048lfRNcRKYU0a
-         rQQbmtW54mUdVjEL0UbXrLYZ/9r90/g8PWZ5J8thB/to1Rzq8yxvYbSVQzIXlkT5Gnk6
-         bkWz+lP3PwtZ559klAsS1zpTSqTDk8fLgODAUh3uCXYBqWpZSUFWgKuK2aruAZr4Pteg
-         jgog==
+        bh=VeNLwaFo16zfbUMvLDVk5OOLd3X39XkqYnX5zvlPNF0=;
+        b=WYWrzSbiP/d/yY1ksRcSJUCn4y1DK7lmTatxizCLzUldPJ7vvnQ01CzaKgrxKxFX8h
+         MbI719Agtv6mPco3dXZ8ACO04azQY4Aj0a7SZuZep8w7Bqqc9EHJEPyPl9ZJ3e6JZe3Z
+         1tTH2dGEYwmlXfQTkexaosnP0NQvgEUpSu9eupcE0cTxfbd9Li9bIkROisDlMIFdRlJY
+         Ieyyp0hTpwhP6Q6hrRkOn9/T+tSY8Ma1EeQ3BmJlu6SWXDzK2jPIGfk2dKTKY7UU1yh/
+         vsv05aTb+JzTZWUyn1gKlJ3MQkpDd1FxMIZFca2HRst8Ns8/38dXgaqA0VQMKLDBfDZs
+         jZhA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741186440; x=1741791240;
+        d=1e100.net; s=20230601; t=1741186445; x=1741791245;
         h=cc:to:subject:message-id:date:from:in-reply-to:references
          :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
          :reply-to;
-        bh=/8e1NK0iHuTNXsrRQMu1Rap5op5xIoO/iE7QbD4E6K4=;
-        b=xI8lqlkUxXal9WulSeAyoB25d041rlA2swd7BawDpvaMIF8DrR3qiqwZtnhFmUF4bB
-         iw8a5ZfVZad4fdGsRjyDPsC0hNwTj2c/49+uhFk+GOf94ZbGEFscABRZ6LUB1OtCNj8+
-         DVGjtyuPzN2ziAGwvoyqobYurPtxeBybkX1vz63cT5lJwhZMOqZpAz3recbZvdKbdlT/
-         Lnk3vSSlh+ZxvEaIXfp+mrGzXd+ZuyuFQeOCLX/Xctx+o+Ner/Kxj+qwTYofUP/c5jHC
-         jPet+N8TufIqGrSSeYh41dP6EimvZ68FzJm7F4vI4HkqXoxVIjHuQgcW6EYYx7XefEom
-         MvNQ==
-X-Forwarded-Encrypted: i=1; AJvYcCWMo5+k9G2y0e05Uduje8ZaHVpnmSNOGYk+Toy+6Lhoil+bv8uW2Wuzowdii33zS0x04O4lJKTkrA==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yzw2NZXdh2C+XK4FPTrZx1hxvfAs9+epoN8gefesWUQ0eXqjReg
-	VeE6xANHZKtKN9lC1V/4agnO9p4whTKF2dgfQLDlbLGIY1oFchHprn4eEdF/oV9rEiBLMX6YKoc
-	re0ndmIvMwr3ByldHd/UheRT44ErB8UvZzFhrqQ==
-X-Gm-Gg: ASbGnctqo5fgAVje8SGpPMMhTxYOTMOoYunFMBOosXAvbSPb3L9jQAD3PKY6cdFfI6l
-	1NjqlY0PCdVczjeDGEVwnqi5LGn8rjj8l7LsSJypkkC5otB/rHCGx5HB/iJkWwr4RX5zdPkMfMb
-	cCT16FeCstWvGL2l7FskwCM6CIcCU=
-X-Google-Smtp-Source: AGHT+IHVMDgrxpiMAMts0+d6pAHMmbs+DKlyOlsJcQRgBdUnM1Arh/L/Y1HIIcETYwiUqxFlkWz35mNO77MdJGM7YEc=
-X-Received: by 2002:a05:690c:750d:b0:6f9:e609:6a4b with SMTP id
- 00721157ae682-6fda30be95dmr42050127b3.23.1741186440140; Wed, 05 Mar 2025
- 06:54:00 -0800 (PST)
+        bh=VeNLwaFo16zfbUMvLDVk5OOLd3X39XkqYnX5zvlPNF0=;
+        b=Ihk5FKkaLEB6ET5rQ82PbfodJKR9OsTwojY0rPebPaigBE8K8/qt4KJOB4X3jboUJ1
+         aemMe0CAeu7aHoAToFDGhhc6WoRkliTNvcl83zeTnlNKSbUUDHsf31sGNum54BHkqmp8
+         GojEgDd31kh8ahIH4PNllAMeII1QjIw/Yswrm62p+Pq87N9pjQTzrNrNVcq3kLMSvH2/
+         BlfAMucia0mXaATQ2xfJfUmOwHu0E4+6G/S1nUlTIgPtemvLkKItB7g+j/1/CY0lD0H+
+         ZiU/QMzDVZtngueG6J3dVG33byeAXxTVhuVkuGAGEg18KdAexs32p7JrRkAxQYPMmqJc
+         Nx3Q==
+X-Forwarded-Encrypted: i=1; AJvYcCW/pSvOtTomj9ailBSIu8iSXauxSG0B5s51LmVBKRWttoBLR6hAiQQ52UxTPReyd6GIy50pNU2+/w==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwNQGWYizopEUCoeQ7drohX44t5OjJIAwg/o30+K4j7b7DMNikz
+	f2CTgDRmRmFkZOknSowo2dOo8EBO3LzO+pKKL1tswdTSUQzUyXDn++XLGbe3Khd9lG4GoOgSNzN
+	pNg+r0Qm+c6tokJrUs3pa2lCrvYhY4NnSlF/bkg==
+X-Gm-Gg: ASbGncvbm5srPUnGb+N+z3faQv1nuwYf2FPOv6EyBUf/u8oKfP1p5GAOZCpqpybYKeY
+	VOTNtgkV+DiWbX7Cu1OgVAI0NvZqFAZdGxfk0axB12NTVg+eW2/y3shtqFyl8aQtCk3Jci5DDv+
+	4j7cA1J1UIyAV2SObWUmlf8jo0n7s=
+X-Google-Smtp-Source: AGHT+IHaRzLfs4e0s/mjCkKbOX/Qq8AuRys4/xKKYjDcoyyp0XIFqNuIteg7ybYGY5j3p+l87FS/VuOkxSFDK6iD0FQ=
+X-Received: by 2002:a05:690c:3749:b0:6fb:b78a:c0e5 with SMTP id
+ 00721157ae682-6fda310bbf6mr42777697b3.28.1741186444835; Wed, 05 Mar 2025
+ 06:54:04 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250304142803.689201-1-arnd@kernel.org>
-In-Reply-To: <20250304142803.689201-1-arnd@kernel.org>
+References: <20250303-fix-t7-pwrc-v1-1-b563612bcd86@amlogic.com>
+In-Reply-To: <20250303-fix-t7-pwrc-v1-1-b563612bcd86@amlogic.com>
 From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Wed, 5 Mar 2025 15:53:24 +0100
-X-Gm-Features: AQ5f1Jop9maVmyVlQa4pDNjDZNA9U2rexGCX4_vVPocLK9GIMh5i3XadhUynJ5Y
-Message-ID: <CAPDyKFo79xyTOKxN7A52J2Et50++fifdosUpyb2mm3NMc+EC1Q@mail.gmail.com>
-Subject: Re: [PATCH] pmdomain: rockchip: add regulator dependency
-To: Arnd Bergmann <arnd@kernel.org>
-Cc: Heiko Stuebner <heiko@sntech.de>, Sebastian Reichel <sebastian.reichel@collabora.com>, 
-	Arnd Bergmann <arnd@arndb.de>, linux-pm@vger.kernel.org, 
-	linux-arm-kernel@lists.infradead.org, linux-rockchip@lists.infradead.org, 
+Date: Wed, 5 Mar 2025 15:53:29 +0100
+X-Gm-Features: AQ5f1JpdUfHmjKXFkOL_14EaaLzX4OU9jP-SAbgoA1LHg0Ze3bkxnPXr7Krf_aI
+Message-ID: <CAPDyKFoTBt4g=M1rHrZEPLO1y61csy3_cHfJDANPbvV+bH+YXw@mail.gmail.com>
+Subject: Re: [PATCH] pmdomain: amlogic: fix T7 ISP secpower
+To: xianwei.zhao@amlogic.com
+Cc: Neil Armstrong <neil.armstrong@linaro.org>, Kevin Hilman <khilman@baylibre.com>, 
+	Jerome Brunet <jbrunet@baylibre.com>, 
+	Martin Blumenstingl <martin.blumenstingl@googlemail.com>, linux-pm@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, linux-amlogic@lists.infradead.org, 
 	linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 4 Mar 2025 at 15:28, Arnd Bergmann <arnd@kernel.org> wrote:
+On Mon, 3 Mar 2025 at 10:06, Xianwei Zhao via B4 Relay
+<devnull+xianwei.zhao.amlogic.com@kernel.org> wrote:
 >
-> From: Arnd Bergmann <arnd@arndb.de>
+> From: Xianwei Zhao <xianwei.zhao@amlogic.com>
 >
-> When CONFIG_REGULATOR is disabled, this pmdomain driver fails to build:
+> ISP and MIPI_ISP, these two have a parent-child relationship,
+> ISP depends on MIPI_ISP.
 >
-> drivers/pmdomain/rockchip/pm-domains.c:653:30: error: implicit declaration of function 'devm_of_regulator_get'; did you mean 'devm_regulator_get'? [-Wimplicit-function-declaration]
->   653 |                 pd->supply = devm_of_regulator_get(pmu->dev, pd->node, "domain");
->       |                              ^~~~~~~~~~~~~~~~~~~~~
->       |                              devm_regulator_get
-> drivers/pmdomain/rockchip/pm-domains.c:653:28: error: assignment to 'struct regulator *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
->   653 |                 pd->supply = devm_of_regulator_get(pmu->dev, pd->node, "domain");
->       |                            ^
->
-> Add a Kconfig dependency.
->
-> Fixes: db6df2e3fc16 ("pmdomain: rockchip: add regulator support")
-> Signed-off-by: Arnd Bergmann <arnd@arndb.de>
+> Fixes: ca75e4b214c6 ("pmdomain: amlogic: Add support for T7 power domains controller")
+> Signed-off-by: Xianwei Zhao <xianwei.zhao@amlogic.com>
 
-Applied for next, thanks!
+Applied for fixes and by adding a stable tag, thanks!
 
 Kind regards
 Uffe
 
 
 > ---
->  drivers/pmdomain/rockchip/Kconfig | 1 +
->  1 file changed, 1 insertion(+)
+>  drivers/pmdomain/amlogic/meson-secure-pwrc.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/pmdomain/rockchip/Kconfig b/drivers/pmdomain/rockchip/Kconfig
-> index 7e4f9b628f0b..218d43186e5b 100644
-> --- a/drivers/pmdomain/rockchip/Kconfig
-> +++ b/drivers/pmdomain/rockchip/Kconfig
-> @@ -5,6 +5,7 @@ config ROCKCHIP_PM_DOMAINS
->         bool "Rockchip generic power domain"
->         depends on PM
->         depends on HAVE_ARM_SMCCC_DISCOVERY
-> +       depends on REGULATOR
->         select PM_GENERIC_DOMAINS
->         help
->           Say y here to enable power domain support.
+> diff --git a/drivers/pmdomain/amlogic/meson-secure-pwrc.c b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
+> index 42ce41a2fe3a..ff76ea36835e 100644
+> --- a/drivers/pmdomain/amlogic/meson-secure-pwrc.c
+> +++ b/drivers/pmdomain/amlogic/meson-secure-pwrc.c
+> @@ -221,7 +221,7 @@ static const struct meson_secure_pwrc_domain_desc t7_pwrc_domains[] = {
+>         SEC_PD(T7_VI_CLK2,      0),
+>         /* ETH is for ethernet online wakeup, and should be always on */
+>         SEC_PD(T7_ETH,          GENPD_FLAG_ALWAYS_ON),
+> -       SEC_PD(T7_ISP,          0),
+> +       TOP_PD(T7_ISP,          0, PWRC_T7_MIPI_ISP_ID),
+>         SEC_PD(T7_MIPI_ISP,     0),
+>         TOP_PD(T7_GDC,          0, PWRC_T7_NIC3_ID),
+>         TOP_PD(T7_DEWARP,       0, PWRC_T7_NIC3_ID),
+>
+> ---
+> base-commit: 73e4ffb27bb8a093d557bb2dac1a271474cca99c
+> change-id: 20250303-fix-t7-pwrc-f33650b190ef
+>
+> Best regards,
 > --
-> 2.39.5
+> Xianwei Zhao <xianwei.zhao@amlogic.com>
+>
 >
 
