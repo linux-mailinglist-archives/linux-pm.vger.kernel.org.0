@@ -1,179 +1,146 @@
-Return-Path: <linux-pm+bounces-23564-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23565-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1D566A54BD5
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 14:17:33 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 63995A54BE6
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 14:19:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D2178174FDC
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 13:17:20 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD04D1664CA
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 13:18:54 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D57F82101AF;
-	Thu,  6 Mar 2025 13:16:21 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA08720E00B;
+	Thu,  6 Mar 2025 13:18:31 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kMBoDsU1"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GFRVQW4Z"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D0E9C210180;
-	Thu,  6 Mar 2025 13:16:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CB120CCEF;
+	Thu,  6 Mar 2025 13:18:30 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741266981; cv=none; b=ka29uVyeYZNiZ/H/n4DXVC3+ZAuIanSFegnaEr5XgYwfyypSgTl5Y3L3fE4V6WdPWWf07FnRZhgJcsfPO+a8Cst13d5l5zJ/6m23T0VPGhQonVzBLu4+cX89lLNUV9iBUuTUHMPgqdRkdZEgEV6kmJ/Ucyd9LbLIwgnKXcnuIss=
+	t=1741267111; cv=none; b=hyiKaY3yJLGocDWwN0ORV++vhNuiy8F0J5pWqt0M4qR+7acPxPbH8NUSf2xD71AoADF88CaN0mjc7lMHSprN2BzCI1KFiiPVJg2RGi8b7NZXPp+zsNvkJa59vhIR34J9jw7ftTzHjOwm89XK1rk9/TUzwfBBAexf3mtJnZacKJw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741266981; c=relaxed/simple;
-	bh=8ZZqQrq8U/ip7fmy3k0FKs7lmTjCF1yWU9LYT4w/A+Q=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Szp1nrxrvGQ3q9uk0m4ei7S9a/1NR9WP9pvYUPovZpkfOUXTt8ipRGcHUEKcAkpMHtZxXDRiSnlQO+hCG7s33/1iaYDfKbHBmglim0k9DpGXtMZx5hEyg02HZgefboj91C9MBURCey30kwVQ1lMa/pG9EQiN6MxG03KCdK4+JJg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kMBoDsU1; arc=none smtp.client-ip=198.175.65.21
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741266980; x=1772802980;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=8ZZqQrq8U/ip7fmy3k0FKs7lmTjCF1yWU9LYT4w/A+Q=;
-  b=kMBoDsU11rT28NFE2AIevDHJ3nwmNxCqvez5F87Bxmu1Wbky5U7UubjX
-   kQEuWRrQoIwzgymHCGJNQnFi7us86CXekCDZLlR3bPp3OrSoZ0WMOM2o0
-   wiZwbfGESI5X7d52Gs4OlDy4X7Z2Ja3upN2zsebbPH7PR6M5dztGx6jYC
-   s6XgTlmpLCntdjfpKi0ufe82/02O1x2F8CbuI1DSIkZxGqEiXC+pVXfPW
-   FslY9idi1I373RMvqIYjf0bLjaEjLV54kt4jSUDjyUNPaeaacyMnW13RA
-   WF1UxMyx/cMB7SLO28IG53wyhxPChvzD04i4EQS111rMVw/b945SDpMJ+
-   A==;
-X-CSE-ConnectionGUID: 3p+kjUw3SuKtcafHdrLwlg==
-X-CSE-MsgGUID: A1GIaoafQOK8wq5AqmJUgw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42188740"
-X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
-   d="scan'208";a="42188740"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 05:16:19 -0800
-X-CSE-ConnectionGUID: +P/ybUpGQnKelY8wY6WiBg==
-X-CSE-MsgGUID: BHWOhwHVSMGSXeKOi8Dp8Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
-   d="scan'208";a="119519929"
-Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
-  by fmviesa010.fm.intel.com with ESMTP; 06 Mar 2025 05:16:15 -0800
-Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
-	(envelope-from <lkp@intel.com>)
-	id 1tqB5A-000N5y-0f;
-	Thu, 06 Mar 2025 13:16:12 +0000
-Date: Thu, 6 Mar 2025 21:15:30 +0800
-From: kernel test robot <lkp@intel.com>
-To: Michal Wilczynski <m.wilczynski@samsung.com>, robh@kernel.org,
-	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com,
-	guoren@kernel.org, wefu@redhat.com, paul.walmsley@sifive.com,
-	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
-	jszhang@kernel.org, ulf.hansson@linaro.org,
-	m.szyprowski@samsung.com
-Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
-	linux-riscv@lists.infradead.org,
-	Michal Wilczynski <m.wilczynski@samsung.com>
-Subject: Re: [PATCH v1 2/5] firmware: thead: Add AON firmware protocol driver
-Message-ID: <202503062029.bHmgxF2Q-lkp@intel.com>
-References: <20250303145901.446791-3-m.wilczynski@samsung.com>
+	s=arc-20240116; t=1741267111; c=relaxed/simple;
+	bh=NRAmMlaST99PuE29h0Bw96V9IXafkYUp84trtPBfjh4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=cBiHuen/6EvuFaoLLW0aqyaOMmj1CIpajKM8cYmWRwVgcTMsOJOjlizU7pvbMNdPykHvuIncqUgEUSgrkFZyfNLEsz4NTFM5/HyCZrZIJDMvnwaIMj1GbcRP/rvUmMq88/8oa4PYqpb19OI9ZpqLQNlL9/QqV0TO0r+ZpjbTZtU=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GFRVQW4Z; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0247EC4CEE0;
+	Thu,  6 Mar 2025 13:18:30 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741267110;
+	bh=NRAmMlaST99PuE29h0Bw96V9IXafkYUp84trtPBfjh4=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=GFRVQW4ZW3PGSi4JPFIqGI0MwARrwxBZFx63xCwoJ5OhEPrg5lMCAjp4AlkKWAU2E
+	 LeBI7HccZQq3P374H1TonJbQtqg4xIFMwKetdk1U3IdAD26hVaMeLaHqFmABgotnyn
+	 VWOf7EcbHQAgHdjdFpKOHabt0wexqS+W+0M6hrbyBscywpsSrGsoAXQy9V68yVSf0v
+	 ztymC0Gftqbjo2Qc8je0B7Z6k76MkIM65GokkmHaNjkwkH5+Hph045nm288ZHWSgTq
+	 PPSHApjXVN5fyHU3nTghyde6aFzeOyKO4QrWyyzNILmUH8kKGARPPj/8A7gx1auFmA
+	 lcX59UDw/lGBA==
+Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-60018b29f51so431971eaf.1;
+        Thu, 06 Mar 2025 05:18:29 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCVk3jGREOcKBZtEok+zETEcgercbGB1WvowR/lV8vi5P0JcesnCrxmyfTKUiZ8RslH4zr7AD+McF48=@vger.kernel.org, AJvYcCX+ecBZR+vymSm0XISpW4dcGIGneIE+Xr5VCV8UmEzBVvnRWZVSE0E2YG099Z4XBGjxi2pK1jrNlanMvCk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9fVk4TQITl830KIAwS1wutPwcw8HwWihhrFwaT9c5V/zZcSkN
+	uOaVbab/MIwt9Ri/oujvfsfSeZ5hDp2RTkhqHbAO9dEEBDN2V//Xns/xGJbwB8tnKTDnxS2CUjW
+	NlZAnIhxU4aZJKtLkoyfxxX1ZRCs=
+X-Google-Smtp-Source: AGHT+IH3oEcVmbsFOsBmKMsof78yBUJz6WhIFBnZDb8x6rX363SbDrl3Pb/36Y6XTPMbr5wNRn70whh4hwc+eirkwHE=
+X-Received: by 2002:a4a:ee07:0:b0:5f3:4c09:55e7 with SMTP id
+ 006d021491bc7-6003eba4c53mr1847338eaf.3.1741267109305; Thu, 06 Mar 2025
+ 05:18:29 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250303145901.446791-3-m.wilczynski@samsung.com>
+References: <20250306113549.796524-1-ulf.hansson@linaro.org> <20250306113549.796524-3-ulf.hansson@linaro.org>
+In-Reply-To: <20250306113549.796524-3-ulf.hansson@linaro.org>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 6 Mar 2025 14:18:17 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hF_am9DsuwEUmmgpUp=1ZuAG8fdjYfQ5XxFmS_Y1pMog@mail.gmail.com>
+X-Gm-Features: AQ5f1JqAwyTNs4ZBM0f52Gc4g0dPgvb0TMPdtOuexc8yStCGdnp_mg1UZuJLuuw
+Message-ID: <CAJZ5v0hF_am9DsuwEUmmgpUp=1ZuAG8fdjYfQ5XxFmS_Y1pMog@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM: s2idle: Avoid holding the s2idle_lock when
+ calling pm_wakeup_pending()
+To: Ulf Hansson <ulf.hansson@linaro.org>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-Hi Michal,
+On Thu, Mar 6, 2025 at 12:36=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
+> wrote:
+>
+> There's no reason to hold the s2idle_lock longer than necessary. Let's
+> instead acquire it when really needed in s2idle_enter().
+>
+> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> ---
+>  kernel/power/suspend.c | 5 ++---
+>  1 file changed, 2 insertions(+), 3 deletions(-)
+>
+> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> index e7aca4e40561..ca09f26cbf4e 100644
+> --- a/kernel/power/suspend.c
+> +++ b/kernel/power/suspend.c
+> @@ -91,10 +91,10 @@ static void s2idle_enter(void)
+>  {
+>         trace_suspend_resume(TPS("machine_suspend"), PM_SUSPEND_TO_IDLE, =
+true);
+>
+> -       raw_spin_lock_irq(&s2idle_lock);
 
-kernel test robot noticed the following build errors:
+This is to prevent missing a wakeup event when pm_system_wakeup() runs
+at this point on a different CPU.
 
-[auto build test ERROR on robh/for-next]
-[also build test ERROR on linus/master v6.14-rc5 next-20250306]
-[If your patch is applied to the wrong git tree, kindly drop us a note.
-And when submitting patch, we suggest to use '--base' as documented in
-https://git-scm.com/docs/git-format-patch#_base_tree_information]
+If you move the locking, it may run as a whole between the
+pm_wakeup_pending() check below and the s2idle_state update, so the
+wakeup event will be missed.
 
-url:    https://github.com/intel-lab-lkp/linux/commits/Michal-Wilczynski/dt-bindings-firmware-thead-th1520-Add-support-for-firmware-node/20250303-230224
-base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
-patch link:    https://lore.kernel.org/r/20250303145901.446791-3-m.wilczynski%40samsung.com
-patch subject: [PATCH v1 2/5] firmware: thead: Add AON firmware protocol driver
-config: sh-allyesconfig (https://download.01.org/0day-ci/archive/20250306/202503062029.bHmgxF2Q-lkp@intel.com/config)
-compiler: sh4-linux-gcc (GCC) 14.2.0
-reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503062029.bHmgxF2Q-lkp@intel.com/reproduce)
+With the locking in place, the pm_abort_suspend update in
+pm_system_wakeup() may still happen at any time, but the code under
+the lock in s2idle_wake() after it can only run before the lock is
+acquired above or after it is released.
 
-If you fix the issue in a separate patch/commit (i.e. not just a new version of
-the same patch/commit), kindly add following tags
-| Reported-by: kernel test robot <lkp@intel.com>
-| Closes: https://lore.kernel.org/oe-kbuild-all/202503062029.bHmgxF2Q-lkp@intel.com/
+If s2idle_wake() in pm_system_wakeup() runs before the
+raw_spin_lock_irq() above, the pm_wakeup_pending() check below will
+notice the pm_abort_suspend set and return true, so the suspend will
+be aborted (and the pm_abort_suspend update in pm_system_wakeup()
+cannot be reordered entirely after the s2idle_wake() call because of
+the locking there).
 
-All errors (new ones prefixed by >>):
+Now, if s2idle_wake() in pm_system_wakeup() runs after the
+raw_spin_unlock_irq() below, it will notice the s2idle_state change
+and it will update it to S2IDLE_STATE_WAKE, so the suspend will be
+aborted.
 
-   drivers/firmware/thead,th1520-aon.c: In function 'th1520_aon_init':
->> drivers/firmware/thead,th1520-aon.c:206:20: error: implicit declaration of function 'kzalloc' [-Wimplicit-function-declaration]
-     206 |         aon_chan = kzalloc(sizeof(*aon_chan), GFP_KERNEL);
-         |                    ^~~~~~~
->> drivers/firmware/thead,th1520-aon.c:206:18: error: assignment to 'struct th1520_aon_chan *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
-     206 |         aon_chan = kzalloc(sizeof(*aon_chan), GFP_KERNEL);
-         |                  ^
->> drivers/firmware/thead,th1520-aon.c:219:17: error: implicit declaration of function 'kfree'; did you mean 'kvfree'? [-Wimplicit-function-declaration]
-     219 |                 kfree(aon_chan);
-         |                 ^~~~~
-         |                 kvfree
+I guess it would have helped if there had been a comment describing this ..=
+.
 
-
-vim +206 drivers/firmware/thead,th1520-aon.c
-
-   185	
-   186	/**
-   187	 * th1520_aon_init() - Initialize TH1520 AON firmware protocol interface
-   188	 * @dev: Device pointer for the AON subsystem
-   189	 *
-   190	 * This function initializes the TH1520 AON firmware protocol interface by:
-   191	 * - Allocating and initializing the AON channel structure
-   192	 * - Setting up the mailbox client
-   193	 * - Requesting the AON mailbox channel
-   194	 * - Initializing synchronization primitives
-   195	 *
-   196	 * Return:
-   197	 * * Valid pointer to th1520_aon_chan structure on success
-   198	 * * ERR_PTR(-ENOMEM) if memory allocation fails
-   199	 * * ERR_PTR() with other negative error codes from mailbox operations
-   200	 */
-   201	struct th1520_aon_chan *th1520_aon_init(struct device *dev)
-   202	{
-   203		struct th1520_aon_chan *aon_chan;
-   204		struct mbox_client *cl;
-   205	
- > 206		aon_chan = kzalloc(sizeof(*aon_chan), GFP_KERNEL);
-   207		if (!aon_chan)
-   208			return ERR_PTR(-ENOMEM);
-   209	
-   210		cl = &aon_chan->cl;
-   211		cl->dev = dev;
-   212		cl->tx_block = true;
-   213		cl->tx_tout = MAX_TX_TIMEOUT;
-   214		cl->rx_callback = th1520_aon_rx_callback;
-   215	
-   216		aon_chan->ch = mbox_request_channel_byname(cl, "aon");
-   217		if (IS_ERR(aon_chan->ch)) {
-   218			dev_err(dev, "Failed to request aon mbox chan\n");
- > 219			kfree(aon_chan);
-   220			return ERR_CAST(aon_chan->ch);
-   221		}
-   222	
-   223		mutex_init(&aon_chan->transaction_lock);
-   224		init_completion(&aon_chan->done);
-   225	
-   226		return aon_chan;
-   227	}
-   228	EXPORT_SYMBOL_GPL(th1520_aon_init);
-   229	
-
--- 
-0-DAY CI Kernel Test Service
-https://github.com/intel/lkp-tests/wiki
+>         if (pm_wakeup_pending())
+>                 goto out;
+>
+> +       raw_spin_lock_irq(&s2idle_lock);
+>         s2idle_state =3D S2IDLE_STATE_ENTER;
+>         raw_spin_unlock_irq(&s2idle_lock);
+>
+> @@ -111,11 +111,10 @@ static void s2idle_enter(void)
+>         wake_up_all_idle_cpus();
+>
+>         raw_spin_lock_irq(&s2idle_lock);
+> -
+> - out:
+>         s2idle_state =3D S2IDLE_STATE_NONE;
+>         raw_spin_unlock_irq(&s2idle_lock);
+>
+> + out:
+>         trace_suspend_resume(TPS("machine_suspend"), PM_SUSPEND_TO_IDLE, =
+false);
+>  }
+>
+> --
 
