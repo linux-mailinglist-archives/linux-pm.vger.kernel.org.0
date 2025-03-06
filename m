@@ -1,89 +1,77 @@
-Return-Path: <linux-pm+bounces-23574-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23575-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 649CEA552D3
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 18:21:05 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 382D3A556D1
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 20:34:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 9CE7B175B0A
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 17:21:04 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 900481892C95
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 19:35:04 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6EF25D1F9;
-	Thu,  6 Mar 2025 17:20:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9C35F26B2AE;
+	Thu,  6 Mar 2025 19:34:52 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="jawEpkgl"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="dWV9wZLt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.13])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.19])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 62B5525C713;
-	Thu,  6 Mar 2025 17:20:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.13
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A1E351A0BC9;
+	Thu,  6 Mar 2025 19:34:50 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741281645; cv=none; b=dwWcIeFPD7pOvQ3fWX9BTZod9BBttQnxzKC/sakhyKcXe9Yut1+b8hImTPy3N8/FVCw5VRIJc8a4resDlvXqu81bQ0ZGk200JPGIDSRl9JSB6RB5A9pku2eUIKNhBS3Va7FdMofIeWNnhgleQ79AvOJ+yoB8IL+t5+NK9KJjjig=
+	t=1741289692; cv=none; b=lHO2YA6AZ2fuPqQsA7Lmmsh7h/6NwhbaunvMS3NE960TH2aE7SraV+liZ0bMBiq6AranHXYL52R81vN0NEqrMZDc+5tO5k8J4rh1DD1IHq+pfyy9lNkbcwdp+fVBGu2Z3K63M4QECnq65TJNZC07/KvpORK+YqqOCNwNpUk+D5g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741281645; c=relaxed/simple;
-	bh=9GUHUm17IEQGFD6aYmbJ0438ocdu4QCOxvX9Y6riGNw=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Y0uRIEW75vhUEVyk1h2MPT9hZkJenffEnRi+I82Jy2siYfisGHPMHFYq5eWz6y+YfdYEe6j505elSssL8t61lN4bKgruzmCQjTCWk0kuZh5wxHCPO/4YHE5ZecWbYaPQUBtzjnYMUn5xotIXeFJV7A57k7Cq5MP44MHhQTivVZ0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=jawEpkgl; arc=none smtp.client-ip=192.198.163.13
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+	s=arc-20240116; t=1741289692; c=relaxed/simple;
+	bh=rGTjAwzPN3h7icAYCnpUh+MwWG/3h6W2BXTv9Gg40XY=;
+	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
+	 Content-Disposition; b=aBgA4k2k2Y1toKB17UZ9joieKtzmfb1+YBTuhCK5bTvzTcHe0i7/jYRngTMZZtscw3HwIqoKklC3s7BhaS7vDPapzYe+BqwBLFOT+3MtFacDAtaWVDf/ZyfBeJdQ8NBII31Eb5OPiaa0d4OHjn2Jq8Ikw8fq9DuBTjiZIAP4XTo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=dWV9wZLt; arc=none smtp.client-ip=198.175.65.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
   d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741281643; x=1772817643;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=9GUHUm17IEQGFD6aYmbJ0438ocdu4QCOxvX9Y6riGNw=;
-  b=jawEpkgl/u2AVTWr/G/Ey8ashubYmJbL7BeZc9JI/D1Qy2+Q45+r6J5n
-   vxQ8coyA2SZXyKDDVaAznjho6vnctlrzl+8xCq/G2LeeF7jhQYVvwZeFa
-   FzAcOmaMwq3sID1Va1KDaXj0GL5d1r1XH1+cOVpSwK7GRVEdjWfVxbKV9
-   yLVxEkuutC7Yn/3wiZDgQzIc/EcGO+Ot2SWiYXGKGSYxm781MRQ45Q9zi
-   8IGv9ddAKXrzP6TSqBNnI9fTpOzWugUk8v6W+Q4+xt/xXcF9GZG/aFw+M
-   S9ouzsYdj9gv9QV+3iPUIsUM4jOtN4ZT1EY+8socSvuXqwwu55YFB/Anm
+  t=1741289691; x=1772825691;
+  h=date:from:to:cc:subject:message-id:mime-version;
+  bh=rGTjAwzPN3h7icAYCnpUh+MwWG/3h6W2BXTv9Gg40XY=;
+  b=dWV9wZLt20rHOBszRTeW6998tyBowZEUhQ+3kAV93smT0RhPh9o1CYUX
+   aMc2S04rATBoCVhY5eGk4rH9HLSgSvcjxc7pXyMaPqBS6zx3rmsLqZumb
+   spiDcQa/D7Gtkmtnzq5w10e7FWU+wVOQUxMugNA7tAlNw/79pMZ2soSqu
+   FwAW+8F6zLUs+nl7TCW0bPpHdqcxipzNVJvYrvddS+JCNN732ca4LAI+5
+   4cb9fY60uMcHBZWzPuyoOIXu9VmW/phZRDCynq1K3gdnu2/VHUFIdU3cn
+   BqXrA0lylzyosblWcchZlI4gPlZI+HyVrsiQHBhCdvlXzD1w4XgvUR7Sq
    Q==;
-X-CSE-ConnectionGUID: AIbOlETDRNu6Kr+OY4sABQ==
-X-CSE-MsgGUID: A55RFoOfTRuXJHN4LTYNDw==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="45113709"
-X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
-   d="scan'208";a="45113709"
-Received: from fmviesa010.fm.intel.com ([10.60.135.150])
-  by fmvoesa107.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 09:20:41 -0800
-X-CSE-ConnectionGUID: q6yKqGi/RTO2LwlRfA2WsQ==
-X-CSE-MsgGUID: fQND1tF+R4268TMVX/TiMw==
+X-CSE-ConnectionGUID: hfy9yfWaQdGjbnoOxjt5IA==
+X-CSE-MsgGUID: 3eI1rcXYQSSRM6UkgNsVew==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="42179371"
+X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
+   d="scan'208";a="42179371"
+Received: from orviesa007.jf.intel.com ([10.64.159.147])
+  by orvoesa111.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 11:34:51 -0800
+X-CSE-ConnectionGUID: dk5nOdDySbKxeQQCm6MIFw==
+X-CSE-MsgGUID: Kt6sRJWCTUiQ1VAM6ZUdqw==
 X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
-   d="scan'208";a="119589068"
-Received: from sho10-mobl1.amr.corp.intel.com (HELO desk) ([10.125.145.178])
-  by fmviesa010-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 09:20:41 -0800
-Date: Thu, 6 Mar 2025 09:20:34 -0800
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Dave Hansen <dave.hansen@intel.com>
-Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
-	daniel.sneddon@linux.intel.com, tony.luck@intel.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	Brice Goglin <brice.goglin@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <Perry.Yuan@amd.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: Re: [PATCH v6 4/5] x86/bugs: Declutter vulnerable CPU list
-Message-ID: <20250306172034.qf767eqcrw5m22ln@desk>
-References: <20250305-add-cpu-type-v6-0-4741735bcd75@linux.intel.com>
- <20250305-add-cpu-type-v6-4-4741735bcd75@linux.intel.com>
- <542cfd1b-65f8-4fa9-811e-d70850d0cf9a@intel.com>
- <20250306165757.sh6azitvazhq5lxj@desk>
- <39d1597a-d165-4f79-a2fc-d37fc2822909@intel.com>
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="119629615"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa007.jf.intel.com with ESMTP; 06 Mar 2025 11:34:49 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tqGzV-000NWW-2K;
+	Thu, 06 Mar 2025 19:34:45 +0000
+Date: Fri, 7 Mar 2025 03:34:13 +0800
+From: kernel test robot <lkp@intel.com>
+To: Jeson Gao <jeson.gao@unisoc.com>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-acpi@vger.kernel.org, devel@acpica.org,
+	linux-pm@vger.kernel.org, "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+	Lukasz Luba <lukasz.luba@arm.com>
+Subject: [rafael-pm:bleeding-edge 103/108] drivers/powercap/dtpm_cpu.c:83:15:
+ error: call to undeclared function 'sched_cpu_util'; ISO C99 and later do
+ not support implicit function declarations
+Message-ID: <202503070326.9hEUez42-lkp@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,18 +80,59 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <39d1597a-d165-4f79-a2fc-d37fc2822909@intel.com>
 
-On Thu, Mar 06, 2025 at 09:03:52AM -0800, Dave Hansen wrote:
-> On 3/6/25 08:57, Pawan Gupta wrote:
-> > As one of the goal of the patch is to shorten the macro names and follow
-> > the VULNWL_<> pattern, would it make sense to rename VULNWL_INTEL to:
-> > 
-> > #define VULNWL_VFM(vfm, whitelist)		\
-> > 	X86_MATCH_VFM(vfm, whitelist)
-> 
-> I don't think saving 6 characters justifies the extra level of
-> abstraction personally.
+Hi Jeson,
 
-Ok, I will stick with X86_MATCH_VFM().
+First bad commit (maybe != root cause):
+
+tree:   https://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git bleeding-edge
+head:   96791086aa226b85fe090573b9e3668ac53d5364
+commit: 9144584c375e73a4fef6bde3ce399ad43e011b37 [103/108] PM: EM: Rework the depends on for CONFIG_ENERGY_MODEL
+config: um-allmodconfig (https://download.01.org/0day-ci/archive/20250307/202503070326.9hEUez42-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project 14170b16028c087ca154878f5ed93d3089a965c6)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250307/202503070326.9hEUez42-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503070326.9hEUez42-lkp@intel.com/
+
+All errors (new ones prefixed by >>):
+
+>> drivers/powercap/dtpm_cpu.c:83:15: error: call to undeclared function 'sched_cpu_util'; ISO C99 and later do not support implicit function declarations [-Wimplicit-function-declaration]
+      83 |                 sum_util += sched_cpu_util(cpu);
+         |                             ^
+   1 error generated.
+
+
+vim +/sched_cpu_util +83 drivers/powercap/dtpm_cpu.c
+
+0e8f68d7f04856 Daniel Lezcano   2020-12-08  70  
+eb82bace893169 Daniel Lezcano   2021-03-12  71  static u64 scale_pd_power_uw(struct cpumask *pd_mask, u64 power)
+eb82bace893169 Daniel Lezcano   2021-03-12  72  {
+bb4479994945e9 Dietmar Eggemann 2022-06-21  73  	unsigned long max, sum_util = 0;
+eb82bace893169 Daniel Lezcano   2021-03-12  74  	int cpu;
+eb82bace893169 Daniel Lezcano   2021-03-12  75  
+eb82bace893169 Daniel Lezcano   2021-03-12  76  	/*
+eb82bace893169 Daniel Lezcano   2021-03-12  77  	 * The capacity is the same for all CPUs belonging to
+bb4479994945e9 Dietmar Eggemann 2022-06-21  78  	 * the same perf domain.
+eb82bace893169 Daniel Lezcano   2021-03-12  79  	 */
+bb4479994945e9 Dietmar Eggemann 2022-06-21  80  	max = arch_scale_cpu_capacity(cpumask_first(pd_mask));
+eb82bace893169 Daniel Lezcano   2021-03-12  81  
+bb4479994945e9 Dietmar Eggemann 2022-06-21  82  	for_each_cpu_and(cpu, pd_mask, cpu_online_mask)
+bb4479994945e9 Dietmar Eggemann 2022-06-21 @83  		sum_util += sched_cpu_util(cpu);
+bb4479994945e9 Dietmar Eggemann 2022-06-21  84  
+bb4479994945e9 Dietmar Eggemann 2022-06-21  85  	return (power * ((sum_util << 10) / max)) >> 10;
+eb82bace893169 Daniel Lezcano   2021-03-12  86  }
+eb82bace893169 Daniel Lezcano   2021-03-12  87  
+
+:::::: The code at line 83 was first introduced by commit
+:::::: bb4479994945e9170534389a7762eb56149320ac sched, drivers: Remove max param from effective_cpu_util()/sched_cpu_util()
+
+:::::: TO: Dietmar Eggemann <dietmar.eggemann@arm.com>
+:::::: CC: Peter Zijlstra <peterz@infradead.org>
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
