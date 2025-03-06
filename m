@@ -1,148 +1,158 @@
-Return-Path: <linux-pm+bounces-23576-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23577-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 53145A556E9
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 20:38:38 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1ED9CA55753
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 21:14:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 85663169E5A
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 19:38:37 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 7654E188E9BA
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 20:14:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17E0E26B2AE;
-	Thu,  6 Mar 2025 19:38:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5182D27602E;
+	Thu,  6 Mar 2025 20:14:20 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="Dl/CvLJc"
+	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="MUT1kLk1"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-io1-f47.google.com (mail-io1-f47.google.com [209.85.166.47])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5291DDA8;
-	Thu,  6 Mar 2025 19:38:32 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 30BEC1311AC
+	for <linux-pm@vger.kernel.org>; Thu,  6 Mar 2025 20:14:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741289913; cv=none; b=NX8ILdyCmUskGyru3T9RfxjWyxCTFyLhThIf+v4mM9if5Z0vjy+H1gBSL0ALgs4S0esAAUunuSBI6ICmb2pV+JeBxOec8OOv1P6tdP+B/fsX/9oDqbg6J38t63BsFFn9e31KzXWWcLQqd/gEiXo532QjWBNGiLnSCUS6NbiNLR8=
+	t=1741292060; cv=none; b=C6PpxL0lCeCgkeBHVSKUo/WeYg+p+lvOYmpfiPovoTPX2o6T3cEEwljZ9TPn/KL4r5jIWFLQc/C+kZw0cUDgNI/EzABEawm7v9Uq9ve8DzD2Z72WgbXxhu0bOddFvq7oxZnLWsRK2V0g2+WiA7jT8o050w8my4O9xzipGD/Uao0=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741289913; c=relaxed/simple;
-	bh=CLkizdwL2PaxijEb/elPuRAA2i2qQxIVszjmlvOsl8o=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=ffmDiELLtJ1dTQM0VW4MbI/8X7RncfgmY+ZpH3xjOYxYEYSZktNVf6LXDGQGe4ljZN/0p8RhlxuSDb0IvxlkjiDYTr32IyA5/B7qvHDLIMAWWsVhLFonQFep0IA6q8SVaeQT80j0YTHasFvJgZ9LcymG51SLOX0YtnWh72+3CJQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=Dl/CvLJc; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 3E5F8C4CEE4;
-	Thu,  6 Mar 2025 19:38:32 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741289912;
-	bh=CLkizdwL2PaxijEb/elPuRAA2i2qQxIVszjmlvOsl8o=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=Dl/CvLJcCi7v/BW+oxmiPU88yLPDXQV4kXCGbLxAnO5u2WK/oQcQNCXD5CogMvOws
-	 9B7UtkCyB8qDScj0my5w2B5/7i4GoOnzV3edusNRI51ExZ9XQFfuPtQKr28/p2sozc
-	 aERr619V6vC45NJEm/z3FSCN+2AvFXkReG6embswvsCIpsk3nE3qQg32HXgz/LvZMJ
-	 gZ3T1xc6Bi8vZyxawdVp88tRTqH2KOsVtFf8u0ZO5tJ4gcYfp/3MD+8ARC1Qrv7aHC
-	 YnIrHriQ1WbI4pRREOQQVRafiiUvBmiKwiFm8/F0qTptrdrFEBNvC2qU1ALBn9Yltd
-	 6th1iHdyk9JmA==
-Received: by mail-oo1-f49.google.com with SMTP id 006d021491bc7-6001060115bso512318eaf.3;
-        Thu, 06 Mar 2025 11:38:32 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVLLUw3ZxgJxC5R2psPt8TQxuwpHKQNv/VqRXjDn5NEEMIn66hh1xtrELAuavwGRGzZFWLoZ2wKfQM=@vger.kernel.org, AJvYcCXJNCg9z5KfeLRYZQqaAdv6+HZSlLrclHi/a6eZ6nd5MchnL3Punmas7pgZVACHaKSXXrXFB+iW3u28AmU=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyjywean+E1gnAjtz3G3yMQBuQ/+QcYVXelGblE5Ttxeu9jULuX
-	wWKfLm15u3mvi7kyNrdoYC0e8TnPkuqx6VwGFpxDm/NqH+WEpCNwbErFuqV5M3uVFSfuuw8l/37
-	CT+tbPL3wjeSYeWwzX+172yO7dR8=
-X-Google-Smtp-Source: AGHT+IFVJh7lbhZA9B1w8khGnBS8dollYchSr5l3VYxVvpUTw11EPsEEWMnV52SHqpY7jGbHpGATgr1grisJWk8GAbQ=
-X-Received: by 2002:a05:6820:209:b0:600:2ad1:5f3f with SMTP id
- 006d021491bc7-6004a78c51cmr374542eaf.2.1741289911576; Thu, 06 Mar 2025
- 11:38:31 -0800 (PST)
+	s=arc-20240116; t=1741292060; c=relaxed/simple;
+	bh=wwcWwBE0sSEMdHwr9p5wKUS42qWGgJSQb57mFeHC3Z8=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=pMBDmPh4yAHrzGFFmlYNLXmo/tqrqf3/MV8QL/aN4haHZu48CzG56jGWlyz1M6q8wbICD4ArFgrMFnWa7Mh/V+5P9mX9m5zlnSoxn97d4tDBZgbLNFq5VXuGGfJZV1dRb6LlCgex3LqhZpc/tGbsbyLWc62PtIrK/fIeYOBON9Q=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=MUT1kLk1; arc=none smtp.client-ip=209.85.166.47
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
+Received: by mail-io1-f47.google.com with SMTP id ca18e2360f4ac-85aec8c95c4so88813739f.1
+        for <linux-pm@vger.kernel.org>; Thu, 06 Mar 2025 12:14:16 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linuxfoundation.org; s=google; t=1741292056; x=1741896856; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=pvfJLfP5WzUnxJcgKycoKuG00dpEdv8cBX8Elv0AIqQ=;
+        b=MUT1kLk1ddX+ST2bLJtvgqj35/p/7PHNm02HfX7mntsW2zK5jyRDg5Zh9KOC0tM9qk
+         6jgqkcapYMp2hJO7pgNl6uQ1vm8eQibuF3XYm8S30hCWP+yftQ3B2v1m5Qb6FqOixFcR
+         U7PBpH1L5BmRdrHdS65shtJpUyldfefG6olj0=
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741292056; x=1741896856;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=pvfJLfP5WzUnxJcgKycoKuG00dpEdv8cBX8Elv0AIqQ=;
+        b=Kvk3ohFbQXtFEVI6RaifEX1heHsTFPY+ZBfXS4KoU968NRDd64PN0z2jmLgCNdTvfG
+         bv7M0VcmSrck9nCbevQvN6Pet/UKzbzutlt7TPI8hdMGqsRlsEeOQp6o+1lCi7+H5hmI
+         DeNRyA9EivbAAgVNsGblS3ZgHjjNrWKgxnCL14TylyFK6/5+gV0DvXjBJOZArVkb8k+K
+         +xHcRc9JX3lpBygOWb0cYO2HGGnNMx1leTnrUtr2NNjQiDU0nqgyJ98QjgeI97zKmoSH
+         JixSXKbcqadJeSBv4eou9eJ1Xkvmp06Nytb5RB0/xVRl/LbMlCm2brttTJLf0foM6OpO
+         S3UA==
+X-Gm-Message-State: AOJu0YzK7ftge+yFc89t4QnxZCr3rxFZx8j8Chbf4dVbb/oLHBBb7Iwb
+	lf0lEb5cengLs3vjdE9Oksf1SWb9i5d9dzbLGb/j5Vh8fESLGxlj1tbzv6816vAs6tHBS/wn5xD
+	d
+X-Gm-Gg: ASbGncu1LXk+SRBKqxHscyN4t0C73Z20dhFNXvWNqtMu6JPVhQhrV0ws4Ad9J78/0ii
+	4Z+LX9D/5CbXwSmbsS45SG0R2GTKB2UijKp5TKmQA3Xrr/pOuLN8VlApJMo9N1QyL8t0Q5+fjrP
+	9kt5S9F5aG7kKdJrI0CJ60lBk+Hdedy2V2fJ95anuCrNYJbZOC/Xvj8ZrDKYP1kysG0r74rtqGz
+	cPHdyq+CJ+lemhZ7TzNXqIojzT4GZl7iJJUv17gqyfSP4ip4QGze6O2VJJ8ha3hj3n2cyZEolfk
+	MzsISEcoHRF5PLjaLCLbQ+4f03IVJ/PwSojGQPxReNO9cH9iWoSzOkI=
+X-Google-Smtp-Source: AGHT+IEh+Lc6Aj2NXWnZQ8k7UCCl1O9RCdKPZ3pcgarCSG6z7uw+xKz0EMQv/zVrIWy6yk5R824M4g==
+X-Received: by 2002:a05:6602:6a8e:b0:855:9e01:9aca with SMTP id ca18e2360f4ac-85b1d059d36mr122062039f.13.1741292056146;
+        Thu, 06 Mar 2025 12:14:16 -0800 (PST)
+Received: from [192.168.1.14] ([38.175.170.29])
+        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f209e15b12sm523935173.52.2025.03.06.12.14.15
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Mar 2025 12:14:15 -0800 (PST)
+Message-ID: <fb15134a-e822-4757-8cd8-ec6a60b23848@linuxfoundation.org>
+Date: Thu, 6 Mar 2025 13:14:15 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20241219091109.10050-1-xuewen.yan@unisoc.com> <a43ebb14-be7f-4f8a-8892-cdb63eec4043@arm.com>
- <CAB8ipk-qYR4LncOi2ue6Rbdc6CqX67_OydcOp14Yj=afYZPe=Q@mail.gmail.com>
- <7bc89310-c0db-4940-8cd7-86566ecb5c65@arm.com> <CAJZ5v0j3+TFB22FKcGMdy6bfvczAcp+egWv5WjY9dWmHKh8fpA@mail.gmail.com>
-In-Reply-To: <CAJZ5v0j3+TFB22FKcGMdy6bfvczAcp+egWv5WjY9dWmHKh8fpA@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 6 Mar 2025 20:38:20 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0i1v7AEycKDB_U4mQYP-JUQoqC1Nw3Dm16UGA8Hab_fWw@mail.gmail.com>
-X-Gm-Features: AQ5f1JpPSnt76r5uMJlaUcLw0txveon_4t5IrqZsuWQ8TVLiv5MIQxa2-szJ-iU
-Message-ID: <CAJZ5v0i1v7AEycKDB_U4mQYP-JUQoqC1Nw3Dm16UGA8Hab_fWw@mail.gmail.com>
-Subject: Re: [PATCH] power: energy_model: Rework the depends on for CONFIG_ENERGY_MODEL
-To: Lukasz Luba <lukasz.luba@arm.com>, Xuewen Yan <xuewen.yan94@gmail.com>
-Cc: Xuewen Yan <xuewen.yan@unisoc.com>, linux-pm@vger.kernel.org, len.brown@intel.com, 
-	linux-kernel@vger.kernel.org, ke.wang@unisoc.com, jeson.gao@unisoc.com, 
-	di.shen@unisoc.com, pavel@ucw.cz
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH] cpupower: Make versioning scheme more obvious and fix
+ version link
+To: Thomas Renninger <trenn@suse.de>
+Cc: linux-pm@vger.kernel.org, Shuah Khan <skhan@linuxfoundation.org>
+References: <3513228.LZWGnKmheA@laptop.fritzbox>
+Content-Language: en-US
+From: Shuah Khan <skhan@linuxfoundation.org>
+In-Reply-To: <3513228.LZWGnKmheA@laptop.fritzbox>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 7bit
 
-On Wed, Mar 5, 2025 at 3:57=E2=80=AFPM Rafael J. Wysocki <rafael@kernel.org=
-> wrote:
->
-> Hi,
->
-> On Wed, Mar 5, 2025 at 10:51=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com>=
- wrote:
-> >
-> > Hi Rafael,
-> >
-> > On 2/13/25 02:18, Xuewen Yan wrote:
-> > > Hi Rafael,
-> > >
-> > > I noticed that this patch has not been merged yet. Do you have any co=
-mments?
-> > >
-> > > BR
-> > >
-> > > On Thu, Dec 19, 2024 at 5:17=E2=80=AFPM Lukasz Luba <lukasz.luba@arm.=
-com> wrote:
-> > >>
-> > >>
-> > >>
-> > >> On 12/19/24 09:11, Xuewen Yan wrote:
-> > >>> From: Jeson Gao <jeson.gao@unisoc.com>
-> > >>>
-> > >>> Now not only CPUs can use energy efficiency models, but GPUs
-> > >>> can also use. On the other hand, even with only one CPU, we can als=
-o
-> > >>> use energy_model to align control in thermal.
-> > >>> So remove the dependence of SMP, and add the DEVFREQ.
-> > >>
-> > >> That's true, there are 1-CPU platforms supported. Also, GPU can have
-> > >> the EM alone.
-> > >>
-> > >>>
-> > >>> Signed-off-by: Jeson Gao <jeson.gao@unisoc.com>
-> > >>> ---
-> > >>>    kernel/power/Kconfig | 3 +--
-> > >>>    1 file changed, 1 insertion(+), 2 deletions(-)
-> > >>>
-> > >>> diff --git a/kernel/power/Kconfig b/kernel/power/Kconfig
-> > >>> index afce8130d8b9..c532aee09e12 100644
-> > >>> --- a/kernel/power/Kconfig
-> > >>> +++ b/kernel/power/Kconfig
-> > >>> @@ -361,8 +361,7 @@ config CPU_PM
-> > >>>
-> > >>>    config ENERGY_MODEL
-> > >>>        bool "Energy Model for devices with DVFS (CPUs, GPUs, etc)"
-> > >>> -     depends on SMP
-> > >>> -     depends on CPU_FREQ
-> > >>> +     depends on CPU_FREQ || PM_DEVFREQ
-> > >>>        help
-> > >>>          Several subsystems (thermal and/or the task scheduler for =
-example)
-> > >>>          can leverage information about the energy consumed by devi=
-ces to
-> > >>
-> > >> Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
-> >
-> > Gentle ping. You probably have missed that change for the v6.15 queue
->
-> Indeed, I have missed this one.
->
-> Now applied as 6.15 material, thanks!
+On 3/6/25 08:27, Thomas Renninger wrote:
+> Hi Shuah,
+> 
+> I can darkly remember this was discussed already, but it seems
+> it's still broken.
+> 
+> Currently there is:
+> LIB_MAJ=                       0.0.1
+> LIB_MIN=                       1
+> 
+> Resulting in:
+> libcpupower.so.0.0.1
+> libcpupower.so -> libcpupower.so.0.0.1
+> libcpupower.so.1 -> libcpupower.so.0.0.1
+> 
+> The naming of the variables is confusing (MIN should be MAJ) and the result is wrong.
+> 
+> You get the desired result by:
+> -LIB_MAJ=                       0.0.1
+> +LIB_MAJ=                       1.0.1
+> LIB_MIN=                       1
+> libcpupower.so.1.0.1
+> libcpupower.so -> libcpupower.so.1.0.1
+> libcpupower.so.1 -> libcpupower.so.1.0.1
+> 
+> Correct, but still confusing.
+> Here my suggestion to fix this with a reasonable (re-)naming:
 
-And dropped because of
+I thought we fixed this one. Guess not. Can you send me a patch
+to fix this?
 
-https://lore.kernel.org/linux-pm/202503070326.9hEUez42-lkp@intel.com/
+> 
+> -----------------
+> diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
+> index 51a95239fe06..a7d7d335c1ee 100644
+> --- a/tools/power/cpupower/Makefile
+> +++ b/tools/power/cpupower/Makefile
+> @@ -52,8 +52,11 @@ DESTDIR ?=
+>   # and _should_ modify the PACKAGE_BUGREPORT definition
+>   
+>   VERSION:=			$(shell ./utils/version-gen.sh)
+> -LIB_MAJ=			0.0.1
+> -LIB_MIN=			1
+> +LIB_FIX=			1
+> +LIB_MIN=			0
+> +LIB_MAJ=			1
+> +LIB_VER=			$(LIB_MAJ).$(LIB_MIN).$(LIB_FIX)
+> +
+>   
+>   PACKAGE =			cpupower
+>   PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
+> @@ -203,9 +206,9 @@ $(OUTPUT)lib/%.o: $(LIB_SRC) $(LIB_HEADERS)
+>   $(OUTPUT)libcpupower.so.$(LIB_MAJ): $(LIB_OBJS)
+>   	$(ECHO) "  LD      " $@
+>   	$(QUIET) $(CC) -shared $(CFLAGS) $(LDFLAGS) -o $@ \
+> -		-Wl,-soname,libcpupower.so.$(LIB_MIN) $(LIB_OBJS)
+> +		-Wl,-soname,libcpupower.so.$(LIB_VER) $(LIB_OBJS)
+>   	@ln -sf $(@F) $(OUTPUT)libcpupower.so
+> -	@ln -sf $(@F) $(OUTPUT)libcpupower.so.$(LIB_MIN)
+> +	@ln -sf $(@F) $(OUTPUT)libcpupower.so.$(LIB_VER)
+>   
+>   libcpupower: $(OUTPUT)libcpupower.so.$(LIB_MAJ)
+>   
 
-Thanks!
+thanks,
+-- Shuah
 
