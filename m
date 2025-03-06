@@ -1,146 +1,113 @@
-Return-Path: <linux-pm+bounces-23565-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23566-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 63995A54BE6
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 14:19:30 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 49884A54D71
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 15:19:21 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id AD04D1664CA
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 13:18:54 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 820DA16A9BE
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 14:19:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AA08720E00B;
-	Thu,  6 Mar 2025 13:18:31 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="GFRVQW4Z"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D023B157A48;
+	Thu,  6 Mar 2025 14:19:15 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80CB120CCEF;
-	Thu,  6 Mar 2025 13:18:30 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 34BC28F5E;
+	Thu,  6 Mar 2025 14:19:13 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741267111; cv=none; b=hyiKaY3yJLGocDWwN0ORV++vhNuiy8F0J5pWqt0M4qR+7acPxPbH8NUSf2xD71AoADF88CaN0mjc7lMHSprN2BzCI1KFiiPVJg2RGi8b7NZXPp+zsNvkJa59vhIR34J9jw7ftTzHjOwm89XK1rk9/TUzwfBBAexf3mtJnZacKJw=
+	t=1741270755; cv=none; b=n3yj/3RAlLWvkAaduM6Znn2HkedZelBBee7yQHMT5+Fa7cZ5S6dEIt+bvSXIvOU/PpZgPc5uy1eYJSJN35HvYvFU1+Gs542wQbKlyMSpc4lUHGNRFG26dX6zYalkHi4jIIqbn2GAuBlPcrn7AJrlV1l87zJbQojfHJejMOeTLxc=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741267111; c=relaxed/simple;
-	bh=NRAmMlaST99PuE29h0Bw96V9IXafkYUp84trtPBfjh4=;
+	s=arc-20240116; t=1741270755; c=relaxed/simple;
+	bh=Q1j8gHpbri1CxFrvKlgL6l/RLbYkeNcBavgftpIbKpo=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=cBiHuen/6EvuFaoLLW0aqyaOMmj1CIpajKM8cYmWRwVgcTMsOJOjlizU7pvbMNdPykHvuIncqUgEUSgrkFZyfNLEsz4NTFM5/HyCZrZIJDMvnwaIMj1GbcRP/rvUmMq88/8oa4PYqpb19OI9ZpqLQNlL9/QqV0TO0r+ZpjbTZtU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=GFRVQW4Z; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0247EC4CEE0;
-	Thu,  6 Mar 2025 13:18:30 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741267110;
-	bh=NRAmMlaST99PuE29h0Bw96V9IXafkYUp84trtPBfjh4=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=GFRVQW4ZW3PGSi4JPFIqGI0MwARrwxBZFx63xCwoJ5OhEPrg5lMCAjp4AlkKWAU2E
-	 LeBI7HccZQq3P374H1TonJbQtqg4xIFMwKetdk1U3IdAD26hVaMeLaHqFmABgotnyn
-	 VWOf7EcbHQAgHdjdFpKOHabt0wexqS+W+0M6hrbyBscywpsSrGsoAXQy9V68yVSf0v
-	 ztymC0Gftqbjo2Qc8je0B7Z6k76MkIM65GokkmHaNjkwkH5+Hph045nm288ZHWSgTq
-	 PPSHApjXVN5fyHU3nTghyde6aFzeOyKO4QrWyyzNILmUH8kKGARPPj/8A7gx1auFmA
-	 lcX59UDw/lGBA==
-Received: by mail-oo1-f53.google.com with SMTP id 006d021491bc7-60018b29f51so431971eaf.1;
-        Thu, 06 Mar 2025 05:18:29 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCVk3jGREOcKBZtEok+zETEcgercbGB1WvowR/lV8vi5P0JcesnCrxmyfTKUiZ8RslH4zr7AD+McF48=@vger.kernel.org, AJvYcCX+ecBZR+vymSm0XISpW4dcGIGneIE+Xr5VCV8UmEzBVvnRWZVSE0E2YG099Z4XBGjxi2pK1jrNlanMvCk=@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz9fVk4TQITl830KIAwS1wutPwcw8HwWihhrFwaT9c5V/zZcSkN
-	uOaVbab/MIwt9Ri/oujvfsfSeZ5hDp2RTkhqHbAO9dEEBDN2V//Xns/xGJbwB8tnKTDnxS2CUjW
-	NlZAnIhxU4aZJKtLkoyfxxX1ZRCs=
-X-Google-Smtp-Source: AGHT+IH3oEcVmbsFOsBmKMsof78yBUJz6WhIFBnZDb8x6rX363SbDrl3Pb/36Y6XTPMbr5wNRn70whh4hwc+eirkwHE=
-X-Received: by 2002:a4a:ee07:0:b0:5f3:4c09:55e7 with SMTP id
- 006d021491bc7-6003eba4c53mr1847338eaf.3.1741267109305; Thu, 06 Mar 2025
- 05:18:29 -0800 (PST)
+	 To:Cc:Content-Type; b=Chr0tDjkezYOt8+vGqi3Ow+Sfg9aXe9aY5MSbSMy+Nvmh25kkSTmA7/9snyfoP1nZsCHfKIPKmWXcoZMOUdpnNTLq6mZxCV+lcaHozbx3U2LLlhucQRuolX0m4fUM9whN+oYDmZh7M2kcBjUaQzlQyU4dNj8+6s2KGJ8dmPXaMQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-abf518748cbso131696766b.2;
+        Thu, 06 Mar 2025 06:19:13 -0800 (PST)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741270749; x=1741875549;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=/nVfiSll248rUsfwTdZE7ebVgcWytnodaotzGSUKaQ4=;
+        b=ClCZ+PBsxy7Rqlx39kJ/zSsVeRarWNo37tfZCOlwSb8q9msh8/B2TH2UM9rE/qF1wO
+         C7ipWiAqkUa/LcG+hZMJtXqH6eWJg4OP0tqFZWRObwv6LM3ivdg7DCCQgJXFjN+a0fiP
+         QSL5Wje7TS+af6JNQN2bpxwAYdzQtadrb7PVppfSZbJ0TVKFu5HwWIw+fW2nFPKMKG3b
+         zqBA/l1ismH1Ub1TdkcflnIwnMIz5z8CUayzE6EnvhLJCguJ/HYsnynvLFkl36Qm0Jm7
+         brHobEBl2q7WgdhzXcMLEzOIoVBMU3mkpH+M3V85L6JgUFQStYGfy1o2IR0utboCXMZo
+         cdNA==
+X-Forwarded-Encrypted: i=1; AJvYcCUCxvidpILSqd+oqi3k7oAmH1WKSINiK0NS/9A9yhZ5fMw9AQjWxaDfPSHKyy9CInAwqdEktkIQdE8=@vger.kernel.org, AJvYcCVgA9p8+jaNxITD+3ORC22RAuXOMAb95fIXi5P250nTtu2aSDGywTnKLwyUCF/qD7a3C2GJBOMQ1/Rj@vger.kernel.org, AJvYcCVuhGNksJEPcRSYS1RLmt7zuiPuJvlgwGY+Lfa4hFRE9G3UIwq7ClJI1hnzhG+9lCb193cYT4PD1c+SXArJYX15X1M=@vger.kernel.org, AJvYcCWN6CaZ1y5qBteXMfb+1j+CfNKw+B19eYL26WgyYwmGNskwFsxpLat5Yh3Drz45IgsYV2S8a+p1c6j4b9Mr@vger.kernel.org, AJvYcCX3z75FDRao5tgoDGk+e11kYLxn0U/aWvjryPCcU6QbUrfU+fybj+lFs5dJpPfh6jR+hJOF2Xarfx9Z@vger.kernel.org
+X-Gm-Message-State: AOJu0Yx8r/lfztxhruQymMT7h6aTk7bYK9BogLcRXf+mWpbuJSStkHpX
+	ActfCyFTgGF7/iJw0JV4gFgG3JZSDjEzcXVmzgZALhwGFwuC/coGHo/ExbUX7Ho=
+X-Gm-Gg: ASbGnctMW0ywuAzdkIq7bX/JAuvB6yhI7cQXBClmcfczANW8wG87ZWTGHaCMIP+eAf8
+	FbUnQt1cgNGtZxAPYhy80pMvGq1ozT+c0MDgoXJH6PpwAzxzyOnlz1AjMSC0KtdI4OiguSkAWiw
+	vGwWbQ4+iasUsNrVgRT31+1/2lAPmux9Lq29JJaD3isu448sjf/HBkv/JG97Zr8l8MUriC1VKIz
+	yzOF3Ss9AsQpFXmWXsm8lS4BSvKi0IctuKxqeE1ylq8C2ue4tbXsq4OW91jZdLf7z9lH5I8SFKM
+	JzeBdIIetLC0kL6pfpEcuA9v/QFH5Bgls/sL3Mo1nENgkYgT6adIBTanawqyKJn3CavBf+0+7nW
+	6kyab+Uc=
+X-Google-Smtp-Source: AGHT+IHc53ajEExPLTmKtS4CSNRVGzQJulovXInObWfYQzjzXRe3tdupsM3v1I1o8ziklEj11TVPpA==
+X-Received: by 2002:a17:907:940d:b0:ac1:e7a2:f5e8 with SMTP id a640c23a62f3a-ac20da87bb6mr831742666b.35.1741270749148;
+        Thu, 06 Mar 2025 06:19:09 -0800 (PST)
+Received: from mail-ej1-f41.google.com (mail-ej1-f41.google.com. [209.85.218.41])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2397366b0sm103690766b.95.2025.03.06.06.19.06
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Thu, 06 Mar 2025 06:19:06 -0800 (PST)
+Received: by mail-ej1-f41.google.com with SMTP id a640c23a62f3a-abf538f7be0so137019566b.3;
+        Thu, 06 Mar 2025 06:19:06 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCU3oScEQtf/dRxo5zlJDup1sCGlySalLmywSCvVjwee2z/6yg5+EinUZR7LzWA95YmX4wAMBr3cCgsC@vger.kernel.org, AJvYcCWCw4ffZBLzFZUePHVWj9YbSDauw9NW8Wh2YlWSoY9XBnHkQQDUjBYlou8fQR8cmFkrV+Xkqh6fAm2q@vger.kernel.org, AJvYcCWPBw01Ne78wM5e/A2V292n9S7q1LqtEWuNzIecysJGIia7H4ot1r+pXo9+g0+TOA+hxFDULPLmlwtlvYq3GQpZcT0=@vger.kernel.org, AJvYcCWZ0JA1nyA8sQc3KnRJfnxzAtb4ZK72W9T2atuaHtYqjZ+mXx48OYfA7fTo+ijqJEJFKP6kMYM9av0=@vger.kernel.org, AJvYcCXLDYTknwEqBKxNJZNyB4dXK6xAKuI7ZI+o6oEt3uwnwub7s5KdBWJedw8DKIlWGQOkOQtbJtHNe33m8qd0@vger.kernel.org
+X-Received: by 2002:a17:907:c27:b0:abc:c34:4130 with SMTP id
+ a640c23a62f3a-ac20d8bf8c7mr709557766b.18.1741270746647; Thu, 06 Mar 2025
+ 06:19:06 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250306113549.796524-1-ulf.hansson@linaro.org> <20250306113549.796524-3-ulf.hansson@linaro.org>
-In-Reply-To: <20250306113549.796524-3-ulf.hansson@linaro.org>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 6 Mar 2025 14:18:17 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hF_am9DsuwEUmmgpUp=1ZuAG8fdjYfQ5XxFmS_Y1pMog@mail.gmail.com>
-X-Gm-Features: AQ5f1JqAwyTNs4ZBM0f52Gc4g0dPgvb0TMPdtOuexc8yStCGdnp_mg1UZuJLuuw
-Message-ID: <CAJZ5v0hF_am9DsuwEUmmgpUp=1ZuAG8fdjYfQ5XxFmS_Y1pMog@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PM: s2idle: Avoid holding the s2idle_lock when
- calling pm_wakeup_pending()
-To: Ulf Hansson <ulf.hansson@linaro.org>
-Cc: "Rafael J . Wysocki" <rafael@kernel.org>, linux-pm@vger.kernel.org, 
-	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, linux-kernel@vger.kernel.org
+References: <20250227122453.30480-1-john.madieu.xa@bp.renesas.com> <20250227122453.30480-3-john.madieu.xa@bp.renesas.com>
+In-Reply-To: <20250227122453.30480-3-john.madieu.xa@bp.renesas.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Thu, 6 Mar 2025 15:18:51 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdUoXSerYfb2L_tLmC2-5w9mhoZHc20LSYQgCHxB+bJOtw@mail.gmail.com>
+X-Gm-Features: AQ5f1JpSCkfow0oWUCpHHLfYKAm9cW04YyVX-MUYgns8UbS1cnyHUBvgSNPUv8M
+Message-ID: <CAMuHMdUoXSerYfb2L_tLmC2-5w9mhoZHc20LSYQgCHxB+bJOtw@mail.gmail.com>
+Subject: Re: [PATCH v2 2/7] clk: renesas: r9a09g047: Add clock and reset
+ signals for the TSU IP
+To: John Madieu <john.madieu.xa@bp.renesas.com>
+Cc: magnus.damm@gmail.com, mturquette@baylibre.com, sboyd@kernel.org, 
+	rafael@kernel.org, daniel.lezcano@linaro.org, rui.zhang@intel.com, 
+	lukasz.luba@arm.com, robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	p.zabel@pengutronix.de, catalin.marinas@arm.com, will@kernel.org, 
+	john.madieu@gmail.com, linux-renesas-soc@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-clk@vger.kernel.org, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-arm-kernel@lists.infradead.org, biju.das.jz@bp.renesas.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 6, 2025 at 12:36=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.org=
-> wrote:
+On Thu, 27 Feb 2025 at 13:25, John Madieu <john.madieu.xa@bp.renesas.com> wrote:
+> Add required clocks and resets signals for the TSU IP available on the
+> Renesas RZ/G3E SoC
 >
-> There's no reason to hold the s2idle_lock longer than necessary. Let's
-> instead acquire it when really needed in s2idle_enter().
->
-> Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> ---
->  kernel/power/suspend.c | 5 ++---
->  1 file changed, 2 insertions(+), 3 deletions(-)
->
-> diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> index e7aca4e40561..ca09f26cbf4e 100644
-> --- a/kernel/power/suspend.c
-> +++ b/kernel/power/suspend.c
-> @@ -91,10 +91,10 @@ static void s2idle_enter(void)
->  {
->         trace_suspend_resume(TPS("machine_suspend"), PM_SUSPEND_TO_IDLE, =
-true);
->
-> -       raw_spin_lock_irq(&s2idle_lock);
+> Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
 
-This is to prevent missing a wakeup event when pm_system_wakeup() runs
-at this point on a different CPU.
+Reviewed-by: Geert Uytterhoeven <geert+renesas@glider.be>
+i.e. will queue in renesas-clk for v6.15.
 
-If you move the locking, it may run as a whole between the
-pm_wakeup_pending() check below and the s2idle_state update, so the
-wakeup event will be missed.
+Gr{oetje,eeting}s,
 
-With the locking in place, the pm_abort_suspend update in
-pm_system_wakeup() may still happen at any time, but the code under
-the lock in s2idle_wake() after it can only run before the lock is
-acquired above or after it is released.
+                        Geert
 
-If s2idle_wake() in pm_system_wakeup() runs before the
-raw_spin_lock_irq() above, the pm_wakeup_pending() check below will
-notice the pm_abort_suspend set and return true, so the suspend will
-be aborted (and the pm_abort_suspend update in pm_system_wakeup()
-cannot be reordered entirely after the s2idle_wake() call because of
-the locking there).
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
 
-Now, if s2idle_wake() in pm_system_wakeup() runs after the
-raw_spin_unlock_irq() below, it will notice the s2idle_state change
-and it will update it to S2IDLE_STATE_WAKE, so the suspend will be
-aborted.
-
-I guess it would have helped if there had been a comment describing this ..=
-.
-
->         if (pm_wakeup_pending())
->                 goto out;
->
-> +       raw_spin_lock_irq(&s2idle_lock);
->         s2idle_state =3D S2IDLE_STATE_ENTER;
->         raw_spin_unlock_irq(&s2idle_lock);
->
-> @@ -111,11 +111,10 @@ static void s2idle_enter(void)
->         wake_up_all_idle_cpus();
->
->         raw_spin_lock_irq(&s2idle_lock);
-> -
-> - out:
->         s2idle_state =3D S2IDLE_STATE_NONE;
->         raw_spin_unlock_irq(&s2idle_lock);
->
-> + out:
->         trace_suspend_resume(TPS("machine_suspend"), PM_SUSPEND_TO_IDLE, =
-false);
->  }
->
-> --
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
