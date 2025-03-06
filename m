@@ -1,154 +1,137 @@
-Return-Path: <linux-pm+bounces-23544-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23545-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 99F08A5462B
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 10:22:55 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1A1F9A54692
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 10:39:58 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A8FCC3AE6B1
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 09:22:43 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 4C9B83B1F05
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 09:39:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3F09019CCFC;
-	Thu,  6 Mar 2025 09:22:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B6C620AF7D;
+	Thu,  6 Mar 2025 09:39:19 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9843D3D68;
-	Thu,  6 Mar 2025 09:22:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D4ECA20ADEE
+	for <linux-pm@vger.kernel.org>; Thu,  6 Mar 2025 09:39:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741252970; cv=none; b=cOH5jtZCPDmnUwjy3I+jHSa6BxdiEJjIDXZ8Bn2EqeXsirPggIw0Y6Vu5LNzrKaGjVGuP3JtnanfltXpzfziTb2qXKZ7ULTkg8yfNqH7QGqW6Wt5aFUg2SYo83zIjNhdy5ByFQi3WFtNLUCO4pPTx7D52No+o0SpC9fawRUqjIw=
+	t=1741253958; cv=none; b=HQyUqtZUX+FsfbNW3yJJJZtHYn0F2+Sdw7JP17NVg9TOrsBFB++yBLDcU2C/SPLqQroNiAplqX8IPa+zECLo9fppp9QTG4uH2g9om7b69gyRKc6NdRn3zSXlS9tg77yL+fajtUXSFkPdwctCm9l3QlNxVFBq/WrTn9I73blvgjQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741252970; c=relaxed/simple;
-	bh=IdoNQjVtAHqJey1aYxsMjH24LlhppEYBJRnQo0p6aUA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=fi8yYazca7UrrHeZpcY1xBbIKW5PdgwyqH+cgqY+oum0jxVIHl8gFiLf+h1BCrtncp1qc1UH+usJpDNmMrbV2SejgIUA1CnGqYop6ozD+y6XGGHtD32BiF4BHJHKFV+l8wMlHQF3HcwbM6eh6ZgIa0JOewV9jLbhan9feWQ5CAs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id AF1E4FEC;
-	Thu,  6 Mar 2025 01:22:59 -0800 (PST)
-Received: from [10.57.83.26] (unknown [10.57.83.26])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 8E1DF3F673;
-	Thu,  6 Mar 2025 01:22:45 -0800 (PST)
-Message-ID: <9a9bdf37-1462-4aca-b513-268b4f2b235c@arm.com>
-Date: Thu, 6 Mar 2025 09:22:43 +0000
+	s=arc-20240116; t=1741253958; c=relaxed/simple;
+	bh=TOMzH4mCVQ5cMSmBfKjpT4vMonxqABqLpb75gZRP8D4=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=WdbOBCy+23uFY4AKyJoAy9IjLl3o5S7oHrs3oz/Gt8Q8iWB3cim8A+iB2xLoBvZntqWwJI9ktaQO6D49BR42auE9+sC6Ya2yDhBmZ/oVjNOsI8vMqc9bbv+h5MPmDb4k87RhKgD4fzM22E8+rsZJOFxRqkIw5gewy+enmzwjoX8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1tq7h0-0002Pw-Ix; Thu, 06 Mar 2025 10:39:02 +0100
+Received: from dude04.red.stw.pengutronix.de ([2a0a:edc0:0:1101:1d::ac])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1tq7gz-004I9Y-1r;
+	Thu, 06 Mar 2025 10:39:01 +0100
+Received: from ore by dude04.red.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1tq7gz-009EBa-1e;
+	Thu, 06 Mar 2025 10:39:01 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: Oleksij Rempel <o.rempel@pengutronix.de>,
+	kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	=?UTF-8?q?S=C3=B8ren=20Andersen?= <san@skov.dk>
+Subject: [PATCH v4 0/7] Introduction of PSCR Framework and Related Components
+Date: Thu,  6 Mar 2025 10:38:52 +0100
+Message-Id: <20250306093900.2199442-1-o.rempel@pengutronix.de>
+X-Mailer: git-send-email 2.39.5
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v1 1/3] PM: EM: Consify two parameters of
- em_dev_register_perf_domain()
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
- Linux PM <linux-pm@vger.kernel.org>
-References: <5880743.DvuYhMxLoT@rjwysocki.net>
- <4648962.LvFx2qVVIh@rjwysocki.net>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <4648962.LvFx2qVVIh@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
+changes v4:
+- fix compile with CONFIG_PSCRR=n
 
+changes v3
+- rework to remove devicetree dependencies
+- extend NVMEM to search devices and cells by names.
 
-On 3/5/25 21:08, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> Notice that em_dev_register_perf_domain() and the functions called by it
-> do not update objects pointed to by its cb and cpus parameters, so the
-> const modifier can be added to them.
-> 
-> This allows the return value of cpumask_of() or a pointer to a
-> struct em_data_callback declared as const to be passed to
-> em_dev_register_perf_domain() directly without explicit type
-> casting which is rather handy.
-> 
-> No intentional functional impact.
-> 
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
->   include/linux/energy_model.h |    8 ++++----
->   kernel/power/energy_model.c  |   11 ++++++-----
->   2 files changed, 10 insertions(+), 9 deletions(-)
-> 
-> --- a/include/linux/energy_model.h
-> +++ b/include/linux/energy_model.h
-> @@ -169,8 +169,8 @@
->   int em_dev_update_perf_domain(struct device *dev,
->   			      struct em_perf_table __rcu *new_table);
->   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
-> -				struct em_data_callback *cb, cpumask_t *span,
-> -				bool microwatts);
-> +				const struct em_data_callback *cb,
-> +				const cpumask_t *cpus, bool microwatts);
->   void em_dev_unregister_perf_domain(struct device *dev);
->   struct em_perf_table __rcu *em_table_alloc(struct em_perf_domain *pd);
->   void em_table_free(struct em_perf_table __rcu *table);
-> @@ -346,8 +346,8 @@
->   
->   static inline
->   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
-> -				struct em_data_callback *cb, cpumask_t *span,
-> -				bool microwatts)
-> +				const struct em_data_callback *cb,
-> +				const cpumask_t *cpus, bool microwatts)
->   {
->   	return -EINVAL;
->   }
-> --- a/kernel/power/energy_model.c
-> +++ b/kernel/power/energy_model.c
-> @@ -231,7 +231,7 @@
->   }
->   
->   static int em_compute_costs(struct device *dev, struct em_perf_state *table,
-> -			    struct em_data_callback *cb, int nr_states,
-> +			    const struct em_data_callback *cb, int nr_states,
->   			    unsigned long flags)
->   {
->   	unsigned long prev_cost = ULONG_MAX;
-> @@ -333,7 +333,7 @@
->   
->   static int em_create_perf_table(struct device *dev, struct em_perf_domain *pd,
->   				struct em_perf_state *table,
-> -				struct em_data_callback *cb,
-> +				const struct em_data_callback *cb,
->   				unsigned long flags)
->   {
->   	unsigned long power, freq, prev_freq = 0;
-> @@ -388,7 +388,8 @@
->   }
->   
->   static int em_create_pd(struct device *dev, int nr_states,
-> -			struct em_data_callback *cb, cpumask_t *cpus,
-> +			const struct em_data_callback *cb,
-> +			const cpumask_t *cpus,
->   			unsigned long flags)
->   {
->   	struct em_perf_table __rcu *em_table;
-> @@ -548,8 +549,8 @@
->    * Return 0 on success
->    */
->   int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
-> -				struct em_data_callback *cb, cpumask_t *cpus,
-> -				bool microwatts)
-> +				const struct em_data_callback *cb,
-> +				const cpumask_t *cpus, bool microwatts)
->   {
->   	unsigned long cap, prev_cap = 0;
->   	unsigned long flags = 0;
-> 
-> 
-> 
+changes v2:
+- rename the framework from PSCR to PSCRR (last R is for Recorder)
+- extend power on reason header and use it to show detected reason on
+  system start and in sysfs.
+- remove "unknow" reason
+- rebase on top of v6.8-rc1
+- yaml fixes
+- zero reason state on boot
 
-LGTM,
+Hello all,
 
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+This patch series introduces the Power State Change Reasons Recording
+(PSCRR) framework and its related components into the kernel. The PSCR
+framework is designed for systems where traditional methods of storing
+power state change reasons, like PMICs or watchdogs, are inadequate. It
+provides a structured way to store reasons for system shutdowns and
+reboots, such as under-voltage or software-triggered events, in
+non-volatile hardware storage.
+
+These changes are critical for systems requiring detailed postmortem
+analysis and where immediate power-down scenarios limit traditional
+storage options. The framework also assists bootloaders and early-stage
+system components in making informed recovery decisions.
+
+Oleksij Rempel (7):
+  power: Extend power_on_reason.h for upcoming PSCRR framework
+  power: reset: Introduce PSCR Recording Framework for Non-Volatile
+    Storage
+  nvmem: provide consumer access to cell size metrics
+  nvmem: add support for device and sysfs-based cell lookups
+  power: reset: add PSCR NVMEM Driver for Recording Power State Change
+    Reasons
+  regulator: set Power State Change Reason before
+    hw_protection_shutdown()
+  thermal: core: Record PSCR before hw_protection_shutdown()
+
+ drivers/nvmem/core.c                  | 116 ++++++++
+ drivers/power/reset/Kconfig           |  30 ++
+ drivers/power/reset/Makefile          |   2 +
+ drivers/power/reset/pscrr-nvmem.c     | 254 ++++++++++++++++
+ drivers/power/reset/pscrr.c           | 408 ++++++++++++++++++++++++++
+ drivers/regulator/core.c              |   6 +
+ drivers/thermal/thermal_core.c        |   3 +
+ include/linux/nvmem-consumer.h        |  21 ++
+ include/linux/power/power_on_reason.h |   3 +
+ include/linux/pscrr.h                 |  89 ++++++
+ 10 files changed, 932 insertions(+)
+ create mode 100644 drivers/power/reset/pscrr-nvmem.c
+ create mode 100644 drivers/power/reset/pscrr.c
+ create mode 100644 include/linux/pscrr.h
+
+--
+2.39.5
+
 
