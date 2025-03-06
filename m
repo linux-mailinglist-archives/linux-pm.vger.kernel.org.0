@@ -1,120 +1,139 @@
-Return-Path: <linux-pm+bounces-23555-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23556-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id F0717A54754
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 11:07:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FD23A547F5
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 11:38:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 5BEF07AA26D
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 10:03:52 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E408A16BAB0
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 10:38:23 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 35C591FF1B1;
-	Thu,  6 Mar 2025 10:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90817204F85;
+	Thu,  6 Mar 2025 10:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlqhKDkb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 79A54202971;
-	Thu,  6 Mar 2025 10:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68605204F75;
+	Thu,  6 Mar 2025 10:37:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741255448; cv=none; b=orv5vsHQwislctzef21SwHxY8m3mAg/ETNGqpCfjLNSwVGaXt594gSrMMJe6CLgH6gaC0lRPDNV6bGANvhbcuKfO5vkHwSt1sIOW90BHox+WcSv4m2Kbt7ESfQ/fGE+GTKzyQutPThJAI/hOnV+rf5Z0O5Rs/ExJZtsLaZa8V8g=
+	t=1741257479; cv=none; b=hF8EpsvzkmdHboNFF5QwbnjoXUuW1k0ybetRDoO4EiVVuFwaxZw/uaLUNla3e+VootKzprGQGqPWpneEgcxXGceyFZ3XtZvsANLeNrznWNkdM0K0G3w0nzCHeMZpo/KPCSKh3tbbIW3n10+cwuLdp/4zmtFdeXhhZv6UcBCMGOY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741255448; c=relaxed/simple;
-	bh=Oy3sdejRyxIC9YUWZWkva5gjh/7c3mBVfg/OHYuRFjI=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Ny0R3jTFbadQ+GVinrgFWfBV05n2iFENyUFY1h+6lyvY5WRvn1ohEiReNPjSvBQv3R2vxRT0RTGtlJvDvcgs4Jb1pz3gXQmcfHrfUKPnAx5pknSnCYQeoFlbY4o1k1v/J4lXhX9v9BBU2nbWqEetNOQ/R03hrLrJqwJQHlZl6ug=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id BAF44FEC;
-	Thu,  6 Mar 2025 02:04:18 -0800 (PST)
-Received: from [10.57.83.26] (unknown [10.57.83.26])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 79E4A3F66E;
-	Thu,  6 Mar 2025 02:04:03 -0800 (PST)
-Message-ID: <67659d9d-f228-42ac-b096-01020bf66b7f@arm.com>
-Date: Thu, 6 Mar 2025 10:04:01 +0000
+	s=arc-20240116; t=1741257479; c=relaxed/simple;
+	bh=YNg+XgZ1AZ6kclyonPJqBkYdvbYBqR4ivmV7p6WuUlA=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=iCEUGDFYpgBTHemw45p23cJUBt3rCTAtIQlr1eJMU3HUDNCAQddS8q4TGJA90tguOknEzGUNlFvIV/R+jP8KzipuMVnVXWtt8Z+eaCpmpQYqabKbH0aKn1OO+NadlRL/beSNuXO8vKLX1nCj+WtcxkFmG6rZkYpglME0uaAi4pk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlqhKDkb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D94BFC4CEED;
+	Thu,  6 Mar 2025 10:37:58 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
+	s=k20201202; t=1741257478;
+	bh=YNg+XgZ1AZ6kclyonPJqBkYdvbYBqR4ivmV7p6WuUlA=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=YlqhKDkb7hvLHzOkt9B+0yyFkJi5QXGdSZOtv7A76rs16rcPAk/UCBLkzUxVEcL14
+	 //gp0MwZRSS5liC75reC4ytfwXss59R2UwbT5BftrMLZKpoXNcH6k195Tc63Ztnuq3
+	 y99Voq8B/U3hFw3iUwy8MzahPS5lCyNy9Zaypu0mLvm7rRgGbesHdTHKa7P01ALn2e
+	 /IYXatGyKSg/mHU1C8CdJsUSIKE2+oVfTqfn5MrtUm9QRM7kqW895Y8DqwNV9VNVxr
+	 Vy8C07s3rhWPHdzsynP8fUberGlizGjnLYAfczxCGdJ594CFJ27gbGzpocHnNFTwqO
+	 6oRLMc8AOJyDQ==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2bcca6aae0bso333422fac.1;
+        Thu, 06 Mar 2025 02:37:58 -0800 (PST)
+X-Forwarded-Encrypted: i=1; AJvYcCWDv5F1Usw8EPcKi0CTSY1K6HKSK/MC1WcmZ8dYTA/LmgOOn/n71TMkVgLbB9R9zY0WokA2yHKBKW8=@vger.kernel.org, AJvYcCWmS8rRWgMKRg0hUfAWqpfumI80CjfT7MYtR63IMDtASr9zj3vFABs0IEzHnQVwSrgHrpABargEDaMZ2wQ=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyNnZsqjETlqXX+T1skrf27Raxt1MMoswzB5Wn39oHWUbNdkgM+
+	9Ux4i6c/7otnh2/DCaakDwPK7Rz5CsS3nE9WGvGLWG2WhEf4sf71RT/PJPZK27HnhXolsrxo4fS
+	BAFN7pZC+Q6IsNHMNefHxdh+DvcY=
+X-Google-Smtp-Source: AGHT+IH3MUzd3IYGjGngSPT3jt28qznhOZYfbjOgCKDZoTXI1A16WoPmO0MWUmbYmN8AFuZ5cx0hgDeNPJplg4UOXto=
+X-Received: by 2002:a05:6871:588:b0:29e:5522:8ee4 with SMTP id
+ 586e51a60fabf-2c21cd1f13emr3716612fac.25.1741257478205; Thu, 06 Mar 2025
+ 02:37:58 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 2/2] thermal: thermal-generic-adc: add temperature
- sensor channel
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: linux-pm@vger.kernel.org, devicetree@vger.kernel.org,
- Jonathan Cameron <jic23@kernel.org>, Laxman Dewangan <ldewangan@nvidia.com>,
- Conor Dooley <conor+dt@kernel.org>, Krzysztof Kozlowski
- <krzk+dt@kernel.org>, Rob Herring <robh@kernel.org>,
- Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>,
- linux-kernel@vger.kernel.org, "Rafael J. Wysocki" <rafael@kernel.org>
-References: <20250303122151.91557-1-clamor95@gmail.com>
- <20250303122151.91557-3-clamor95@gmail.com>
- <3bc7c5a5-8fe7-4c4b-a80e-23522922debb@arm.com>
- <CAPVz0n0yvw4kyYKSve9sSZEvcZrCYZ6RqCjFSO5OCqtvRZSfJg@mail.gmail.com>
- <f56596fe-92e8-481b-b15b-29b531eaec32@arm.com>
- <CAPVz0n2ywjm+nLQ+ZAYbR1P6yCr8FQgOMeDT07s_YHZ7xA_6uA@mail.gmail.com>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <CAPVz0n2ywjm+nLQ+ZAYbR1P6yCr8FQgOMeDT07s_YHZ7xA_6uA@mail.gmail.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+References: <5880743.DvuYhMxLoT@rjwysocki.net> <1929404.tdWV9SEqCh@rjwysocki.net>
+ <92699eb4-8495-4ccd-a9dc-120b14271f9d@arm.com>
+In-Reply-To: <92699eb4-8495-4ccd-a9dc-120b14271f9d@arm.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Thu, 6 Mar 2025 11:37:46 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0id8ZF+8Q9vaBZfXXhwyiZzbX0NWz0t+4iYTWLo7-X5KA@mail.gmail.com>
+X-Gm-Features: AQ5f1JpCJatDg4H_4G0HO3_y4n_KtbONzf6jVYjuP1cxb-3t01EiCBuwp0JKDMY
+Message-ID: <CAJZ5v0id8ZF+8Q9vaBZfXXhwyiZzbX0NWz0t+4iYTWLo7-X5KA@mail.gmail.com>
+Subject: Re: [PATCH v1 2/3] PM: EM: Make three functions static
+To: Lukasz Luba <lukasz.luba@arm.com>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>, 
+	Linux PM <linux-pm@vger.kernel.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
+On Thu, Mar 6, 2025 at 11:01=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> w=
+rote:
+>
+> Hi Rafael,
+>
+> On 3/5/25 21:11, Rafael J. Wysocki wrote:
+> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> >
+> > Three functions in the Energy Model code, em_dev_update_perf_domain(),
+> > em_table_alloc() and em_table_free(), have no users outside that code a=
+nd
+> > so make them static, remove their headers from the Energy Model header
+> > file and remove a piece of documentation associated with them.
+> >
+> > This also helps to clean up RCU handling in the Energy Model code that
+> > will be done subsequently.
+> >
+> > No intentional functional impact.
+> >
+> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+> > ---
+> >
+> > This essentially follow the rules that all functions without users in t=
+he
+> > files where they are defined should be static (with all due respect to =
+any
+> > out-of-the-tree users of them).
+> >
+> > This change can be reversed when any new users of these functions appea=
+r,
+> > but it will have to take changes made by the subsequent patch into acco=
+unt.
+> >
+>
+> I see your point and it's valid.
+>
+> Although, please give me a few days and I will send some patches which
+> add a client for this API. It will be a modification of the EM for
+> CPUs while the GPU is producing heat to the SoC. Then IPA and EAS
+> will get the updated total power values (doe to this this leakage power)
+> in the EM.
 
+OK, so I'll need to change the headers in the next patch and I'll drop this=
+ one.
 
-On 3/6/25 09:49, Svyatoslav Ryhel wrote:
-> ср, 5 бер. 2025 р. о 16:37 Lukasz Luba <lukasz.luba@arm.com> пише:
->>
->>
->>
->> On 3/5/25 10:06, Svyatoslav Ryhel wrote:
->>> ср, 5 бер. 2025 р. о 11:52 Lukasz Luba <lukasz.luba@arm.com> пише:
->>>>
->>>>
->>>>
->>>> On 3/3/25 12:21, Svyatoslav Ryhel wrote:
->>>>> To avoid duplicating sensor functionality and conversion tables, this design
->>>>> allows converting an ADC IIO channel's output directly into a temperature IIO
->>>>> channel. This is particularly useful for devices where hwmon isn't suitable
->>>>> or where temperature data must be accessible through IIO.
->>>>>
->>>>> One such device is, for example, the MAX17040 fuel gauge.
->>>>>
->>>>> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
->>>>> ---
->>>>>     drivers/thermal/thermal-generic-adc.c | 54 ++++++++++++++++++++++++++-
->>>>>     1 file changed, 53 insertions(+), 1 deletion(-)
->>>>>
->>>>> diff --git a/drivers/thermal/thermal-generic-adc.c b/drivers/thermal/thermal-generic-adc.c
->>> ...
->>>>>
->>>>> +static const struct iio_chan_spec gadc_thermal_iio_channel[] = {
->>>>> +     {
->>>>> +             .type = IIO_TEMP,
->>>>> +             .info_mask_separate = BIT(IIO_CHAN_INFO_PROCESSED),
->>>>
->>>> I would add the IIO_CHAN_INFO_SCALE and say it's in milli-degrees.
->>>>
->>>
->>> I have hit this issue already with als sensor. This should definitely
->>> be a IIO_CHAN_INFO_PROCESSED since there is no raw temp data we have,
->>> it gets processed into temp data via conversion table. I will add
->>> Jonathan Cameron to list if you don't mind, he might give some good
->>> advice.
->>
->> I'm not talking about 'PROCESSED' vs 'RAW'...
->> I'm asking if you can add the 'SCALE' case to handle and report
->> that this device will report 'processed' temp value in milli-degrees
->> of Celsius.
->>
-> 
-> It seems that SCALE is not applied to PROCESSED channel. I can use RAW
-> which would work as intended and I will add a note in commit
-> description why I used RAW. Would that be acceptable?
-> 
+> As of now, I had some code downstream for research, that I share with
+> partners in the Android world [1].
+> I believe the user-space sysfs (like in that top patch) which allows
+> such EM modification would not be accepted?
 
-In that case, yes that would be the preferred solution.
+Well, if there's a good enough reason for its existence, then it can
+be added I think.  It all depends on how this is expected to be used.
+
+> Such approach might also help the Middle-ware in the OS to influence the
+> kernel decisions, mainly on phones, where the app just occupies the
+> screen and Middle-ware knows about it.
+
+You need to be cautious about changing the EM too often though as that
+would only lead to thrashing and nothing beneficial.
+
+> [1]
+> https://gitlab.arm.com/linux-arm/linux-power/-/commits/dynamic_energy_mod=
+el/android14-v6.1/v6.1.75/?ref_type=3Dheads
 
