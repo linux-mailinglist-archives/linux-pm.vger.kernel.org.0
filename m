@@ -1,167 +1,135 @@
-Return-Path: <linux-pm+bounces-23580-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23581-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 13623A5577E
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 21:34:08 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id A4EE1A557C0
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 21:50:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 31C683B591C
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 20:33:56 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DDD8E176E8E
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 20:50:33 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 875862702C7;
-	Thu,  6 Mar 2025 20:34:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 27D7A2063EB;
+	Thu,  6 Mar 2025 20:50:22 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="XBwR+uC7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IYLduU9d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-io1-f54.google.com (mail-io1-f54.google.com [209.85.166.54])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.19])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A186249E5
-	for <linux-pm@vger.kernel.org>; Thu,  6 Mar 2025 20:33:58 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.166.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 73E6D205502;
+	Thu,  6 Mar 2025 20:50:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.19
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741293241; cv=none; b=E6bBP7tB6WsCkApzuqbIsVt6YfluCH7KeVtxVzwh9INH5wcP8gAM6OdyNPDPnn/avnCs8+d3+qusXxKmn7GVq9aZqqX6+/IaSl1x6fKE8CDVDOX6YKl4qsxh3+qQuFdXVVKDNlFxFn9PN606zHwjEjmuKjdRr2WleHPXsJfe+IE=
+	t=1741294222; cv=none; b=TpL9wPv8e+2lTuYa6qbfNoItTFj0nH+gmG9tmuagC57DGdlt9WJ1g1My6w7H+OROx1fcMImKjn9fqBiJok6L6+bDFk2u5uIc4XWh/YO5UrtHzypw/HqUlY/xxKqlXUEo6J/HuFCjmK3kkQvvOxAg2teZEzkK4nDRNlWqrBnlv0g=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741293241; c=relaxed/simple;
-	bh=SIZ0tBXr7dUaXQTtqSJRA7y83aQRtS5SAAGiC//XLHY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=deBOpP7aEiUqST3QPmdPpz9iDAEs8kpQ3mqc9E29vKc9xWxFpVJsmRgWuOhnpHZSScju/j/dxvMzrk9vsJ2/uO1/xHGOm6uCljQPo61jxNlQ+tg1XlhWeo1aXgYfQTVn9s8LejprctISYdQthRmjltBmdspg3t4SzLm6xki5oyg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org; spf=pass smtp.mailfrom=linuxfoundation.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=XBwR+uC7; arc=none smtp.client-ip=209.85.166.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linuxfoundation.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linuxfoundation.org
-Received: by mail-io1-f54.google.com with SMTP id ca18e2360f4ac-855184b6473so77888539f.2
-        for <linux-pm@vger.kernel.org>; Thu, 06 Mar 2025 12:33:58 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linuxfoundation.org; s=google; t=1741293237; x=1741898037; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=WIhhdziM3iU4t3IzVbBCpNdmTjl/KV+FrSoZ0CpQigM=;
-        b=XBwR+uC7DnUuJgQ7ErTZQU9j/84AHydPK+ka135A2N8wgC9jNdkIcS9QZRQIoYdt6y
-         Y3K/6Utsh2lnVAPwP/m9nUrTapVluHWCZiMbrNkqZ5/EBRipjxbwFF+UefS7GjmQ2u0w
-         h1p0fyioSesokouMJ0HURPR00Zz6xbV45mBYg=
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741293237; x=1741898037;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=WIhhdziM3iU4t3IzVbBCpNdmTjl/KV+FrSoZ0CpQigM=;
-        b=osDCjWZrVulxv2r5DHmp4Kx7JV/ZTO2tZwQxBwR4LD8294EaqBvsMcljWgjDkzhJSI
-         5oiSEuc2hq0tX9Lq09onA7yT+6V4i5e+EkzPCukL0wZiPrJ4xNAzyl3o8lyXilL3Dg8Q
-         xDAjqKtwFBKdAP+58s8FROU8/bhX/M75t4UCHPAzmI4adkDu8vfbFMR7g+5eD0s26Wda
-         jSRq7AwrxWNesOaUEevtwv+NQuX1/pNl/YvxVecq1xiDoQ3DmIlpJVloz9amTTPZei0j
-         ff4UT7ew21xq+O089JgXpLJA7LoQV+tYcGmH4Ds/sWhY56PU6TzYStVTxUyhjU2RgO3q
-         E1tw==
-X-Gm-Message-State: AOJu0YwtxKz9DW8wZvJtxKOfJveQRiU28GGNOdlCtrfMgsI+nvs4JHSu
-	Bt30mlYlgb+bxtzcJ8HWrZVuA+iSw9eK6HJJObarFl5SQf/aBCjZFL3fO4NhAmI=
-X-Gm-Gg: ASbGnctC1hWbthX+PDAnbUdVEoRuhzm+LF8XgYKjU3Eo0rxoGGb5N04dClT/LS7z/AY
-	o5CmhluhGbrJA5ujCVxNWPlMEV/kiMCVsgrBEJlRWvfpC6GrrOrHYCoEB6Hx/yPBYhIIhBgJM9G
-	rTSCDYublhVaaGi1Aip3Gq27fcoaUD3tRImv3rubL1uk2m9/Syna8L8vrLKstnB1cLg6VPxe1HS
-	ia88BsYqse1oNYJOuNDdsjj1ukew67oxtlypjmhpxC3U+XvxvAa0O3wM1gOJUTxf5syQ6VT0/oV
-	/NZn+X21Et2Wv/xu05LPan7AJ2D3JNLh69gLvHn6L0RnYHiJoHkqfUk=
-X-Google-Smtp-Source: AGHT+IFn1RRbyMg/82EdQHWJDM6fySYuvESRAD5YIJzAaWoT1EYQ7doQLWKl0VFK0CXtlAmzhAUxTg==
-X-Received: by 2002:a05:6602:720a:b0:85a:fd37:1c65 with SMTP id ca18e2360f4ac-85b1cf985c4mr146678439f.5.1741293237713;
-        Thu, 06 Mar 2025 12:33:57 -0800 (PST)
-Received: from [192.168.1.14] ([38.175.170.29])
-        by smtp.gmail.com with ESMTPSA id 8926c6da1cb9f-4f209df50e4sm529476173.8.2025.03.06.12.33.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Thu, 06 Mar 2025 12:33:57 -0800 (PST)
-Message-ID: <cf81280a-fd37-436c-aefa-fba5a4df87f6@linuxfoundation.org>
-Date: Thu, 6 Mar 2025 13:33:56 -0700
+	s=arc-20240116; t=1741294222; c=relaxed/simple;
+	bh=cvf/ipSb+K3a68VNt2N4RXjMJlyp30yAxRniCB2UBM8=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=KADt2pWJIln/dT8qqRXEjv4EGdl/Yopd80QKJDvaeqvOS37bsglCiI8SMROGo8rSOQRiXExm5RVdx017siflOtwAF+GPbolna/cj1e/SY4W2loWfkj8QOOtkwc1rOEBHOxsg04guYNd3lbM0OA73nu0W6N1IpO0PfZbG6LoKGas=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IYLduU9d; arc=none smtp.client-ip=192.198.163.19
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741294221; x=1772830221;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:content-transfer-encoding:in-reply-to;
+  bh=cvf/ipSb+K3a68VNt2N4RXjMJlyp30yAxRniCB2UBM8=;
+  b=IYLduU9dQn2RXRnZfTZHeIilSD0zvpt3Lw8CEWmXDR8nnBw3p3qHTJVn
+   Uclgy1gXhEORB03Tjn9sC5TqkCekrnyNZyXeJX3lUiiNhHJpWE/hqQkUu
+   3lFniyvPhKqyeSfg+e0+aSeXatD9oNPD4x2JRtOXsnnbTx+b9nG/ResCP
+   n8sQw9tJ8rDRw17gqJcPwKmhzBFWW/ycsxGCbC92eo/+SGxL9LzOWgITU
+   caOQ95ukKogQ7UOQ2Pghfj1GoGENkAX+rC2CXrVKey5WAoI3501fytPyJ
+   YswMxPJBZ2kP7w8Nu5ioyQnyuUAtdz6FkMNs4A2WZMIX/maA3HyiI7GnV
+   A==;
+X-CSE-ConnectionGUID: fg45Lxw4QvicRNx6RWFggQ==
+X-CSE-MsgGUID: udITrILpS76cgepxiJHRVQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="41502045"
+X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
+   d="scan'208";a="41502045"
+Received: from orviesa010.jf.intel.com ([10.64.159.150])
+  by fmvoesa113.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 12:50:20 -0800
+X-CSE-ConnectionGUID: ZCMNw3ZDQFC0f7jhlngx6A==
+X-CSE-MsgGUID: qh4lq5bpSq+Xez7Ou7jcRQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
+   d="scan'208";a="119052143"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa010.jf.intel.com with ESMTP; 06 Mar 2025 12:50:09 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tqIAQ-000NbS-31;
+	Thu, 06 Mar 2025 20:50:06 +0000
+Date: Fri, 7 Mar 2025 04:49:17 +0800
+From: kernel test robot <lkp@intel.com>
+To: =?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>, Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>
+Cc: oe-kbuild-all@lists.linux.dev, kernel@collabora.com,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org,
+	=?iso-8859-1?Q?N=EDcolas_F=2E_R=2E_A=2E?= Prado <nfraprado@collabora.com>,
+	Andrew Perepech <andrew.perepech@mediatek.com>
+Subject: Re: [PATCH v3 04/20] ASoC: mediatek: mt6359-accdet: Add compatible
+ property
+Message-ID: <202503070421.25fbw6zg-lkp@intel.com>
+References: <20250304-mt6359-accdet-dts-v3-4-5b0eafc29f5b@collabora.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] cpupower: Implement CPU physical core querying
-To: "John B. Wyatt IV" <jwyatt@redhat.com>, Thomas Renninger <trenn@suse.com>
-Cc: linux-pm@vger.kernel.org, Shuah Khan <shuah@kernel.org>,
- "Rafael J. Wysocki" <rafael@kernel.org>, linux-kernel@vger.kernel.org,
- John Kacur <jkacur@redhat.com>, "John B. Wyatt IV"
- <sageofredondo@gmail.com>, Shuah Khan <skhan@linuxfoundation.org>
-References: <20250305210901.24177-1-jwyatt@redhat.com>
-Content-Language: en-US
-From: Shuah Khan <skhan@linuxfoundation.org>
-In-Reply-To: <20250305210901.24177-1-jwyatt@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <20250304-mt6359-accdet-dts-v3-4-5b0eafc29f5b@collabora.com>
 
-On 3/5/25 14:08, John B. Wyatt IV wrote:
-> This patch is also an issue report. get_cpu_topology will always save
-> into cpupower_topology a cores size of 0. The code to handle this looks
-> like it was commented out, and what is commented out is missing a curly
-> bracket.
-> 
-> https://elixir.bootlin.com/linux/v6.13.5/source/tools/power/cpupower/lib/cpupower.c#L206-L212
-> 
-> Inspiration was taken from psutil to implement this by querying
-> core_cpu_list. Instead of using a hashmap, I used a sorted array, and
-> counted the number of valid unique strings. The counting of this takes
-> place before the qsort for .pkg as the following code says it is
-> dependent on the order of that sort.
-> 
-> The previous code claimed Intel CPUs are not numbered correctly. I was
-> not able to reproduce that issue and removed that comment and the code.
-> 
-> This commit was tested with the libcpupower SWIG Python bindings and
-> performed correctly on 4 different setups. The most notable is the
-> Framework Intel laptop; a hybrid system of 4 P cores (8 threads) and 8 E
-> cores (8 threads).
-> 
-> The 4 setups: A 4 core virt-manager VM running Fedora 41 4c/4t (specs not
-> listed) was tested as a sanity test for VMs. A Lenovo Ryzen 7 Pro 7840HS
-> 8c/16t. A Supermico Intel(R) Xeon(R) Gold 6330 CPU w/ 56c/112t with 2 CPU
-> sockets. A Framework 12th Gen Intel(R) Core(TM) i5-1240P with hybrid
-> cores.
-> 
-> CPU(s):                   16
->    On-line CPU(s) list:    0-15
-> Vendor ID:                AuthenticAMD
->    Model name:             AMD Ryzen 7 PRO 7840HS w/ Radeon 780M Graphics
->      CPU family:           25
->      Model:                116
->      Thread(s) per core:   2
->      Core(s) per socket:   8
->      Socket(s):            1
->      Stepping:             1
-> 
-> CPU(s):                   112
->    On-line CPU(s) list:    0-111
-> Vendor ID:                GenuineIntel
->    BIOS Vendor ID:         Intel(R) Corporation
->    Model name:             Intel(R) Xeon(R) Gold 6330 CPU @ 2.00GHz
->      BIOS Model name:      Intel(R) Xeon(R) Gold 6330 CPU @ 2.00GHz  CPU @ 2.0GHz
->      BIOS CPU family:      179
->      CPU family:           6
->      Model:                106
->      Thread(s) per core:   2
->      Core(s) per socket:   28
->      Socket(s):            2
->      Stepping:             6
-> 
-> CPU(s):                   16
->    On-line CPU(s) list:    0-15
-> Vendor ID:                GenuineIntel
->    Model name:             12th Gen Intel(R) Core(TM) i5-1240P
->      CPU family:           6
->      Model:                154
->      Thread(s) per core:   2
->      Core(s) per socket:   12
->      Socket(s):            1
->      Stepping:             3
-> 
-> Signed-off-by: "John B. Wyatt IV" <jwyatt@redhat.com>
-> Signed-off-by: "John B. Wyatt IV" <sageofredondo@gmail.com>
-> ---
+Hi Nícolas,
 
-Thanks. Applied and will include in my PR for 6.15-rc1 to Rafael
+kernel test robot noticed the following build warnings:
 
-https://web.git.kernel.org/pub/scm/linux/kernel/git/shuah/linux.git/log/?h=cpupower
+[auto build test WARNING on 20d5c66e1810e6e8805ec0d01373afb2dba9f51a]
 
-thanks,
--- Shuah
+url:    https://github.com/intel-lab-lkp/linux/commits/N-colas-F-R-A-Prado/ASoC-dt-bindings-Add-document-for-mt6359-accdet/20250304-233834
+base:   20d5c66e1810e6e8805ec0d01373afb2dba9f51a
+patch link:    https://lore.kernel.org/r/20250304-mt6359-accdet-dts-v3-4-5b0eafc29f5b%40collabora.com
+patch subject: [PATCH v3 04/20] ASoC: mediatek: mt6359-accdet: Add compatible property
+config: s390-randconfig-r133-20250306 (https://download.01.org/0day-ci/archive/20250307/202503070421.25fbw6zg-lkp@intel.com/config)
+compiler: clang version 15.0.7 (https://github.com/llvm/llvm-project 8dfdcc7b7bf66834a761bd8de445840ef68e4d1a)
+reproduce: (https://download.01.org/0day-ci/archive/20250307/202503070421.25fbw6zg-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503070421.25fbw6zg-lkp@intel.com/
+
+sparse warnings: (new ones prefixed by >>)
+>> sound/soc/codecs/mt6359-accdet.c:1050:27: sparse: sparse: symbol 'accdet_of_match' was not declared. Should it be static?
+
+vim +/accdet_of_match +1050 sound/soc/codecs/mt6359-accdet.c
+
+  1049	
+> 1050	const struct of_device_id accdet_of_match[] = {
+  1051		{ .compatible = "mediatek,mt6359-accdet", },
+  1052		{ /* sentinel */ },
+  1053	};
+  1054	MODULE_DEVICE_TABLE(of, accdet_of_match);
+  1055	
+
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
