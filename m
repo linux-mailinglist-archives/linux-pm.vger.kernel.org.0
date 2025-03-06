@@ -1,158 +1,179 @@
-Return-Path: <linux-pm+bounces-23528-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23529-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 58552A50F31
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 23:54:26 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CE945A53EE4
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 01:08:20 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 2A70A188C5F0
-	for <lists+linux-pm@lfdr.de>; Wed,  5 Mar 2025 22:54:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 2DBB83A8D98
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 00:08:08 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id AB6B1262D0C;
-	Wed,  5 Mar 2025 22:53:45 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 16AA610E4;
+	Thu,  6 Mar 2025 00:08:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b="Y6bipTka"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="YSGyQeHY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.16])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 83E452459CC;
-	Wed,  5 Mar 2025 22:53:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 61673366;
+	Thu,  6 Mar 2025 00:08:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.16
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741215225; cv=none; b=GuhuqcPJzF1TZJQWELAWaafIgpyetfy0/pYyq24bg3Taqgg6fbQzqG02bk0YU3YY7N4O4KR+2kR2YRcBfGyKam2XKUN3wQZyZTtc1hLlbL+u2xvTT7xH/pV3UjmNulQAUdVQdJQZwgXes877y5KzM57lWBb31C68w8Lb8ymO2s0=
+	t=1741219693; cv=none; b=rIvDt/lS6ZMPydIr8Zm1AoIdAoZ69tXnnrpDvkB10cThjJdgBR4D67CfuySauvKKBftJPorPYv7952kO/dziQ0JalF3UwV31DFRSkUBIfuPzB/BA4wU/AdXqArnFmwyFirUWykSzmkfxoSqwFf+7LZNtLEy5CxAQ4HnFEanaOZY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741215225; c=relaxed/simple;
-	bh=ZmBQXKeDJ/oli6LAZSEpY/fC5UuY/yv/eZLzhYt8/AQ=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=V3Q4qCOUjGZOXA7R3wSFOcxl8fwDaja13I5PZkh7K2vwFLe3NXc2HWNyl+9qCCtXM2I1r5pT/z2tjsjFS/O8PkzIGs4bxKEqP2FXsm4cQFpMt8Kug0iQhOCIUsjSHqixyv8eP4Z98dCW8tx/b45ExmlPqBKkWXCFb2TlZbxHt2M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (1024-bit key) header.d=linuxfoundation.org header.i=@linuxfoundation.org header.b=Y6bipTka; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B54BDC4CED1;
-	Wed,  5 Mar 2025 22:53:44 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=linuxfoundation.org;
-	s=korg; t=1741215225;
-	bh=ZmBQXKeDJ/oli6LAZSEpY/fC5UuY/yv/eZLzhYt8/AQ=;
-	h=From:To:Cc:Subject:Date:In-Reply-To:References:From;
-	b=Y6bipTkauDpyLBt8oZNkpqRzTntk+68MupJC6thsCCM5RomqBg9cyVLvmQpFQbvVw
-	 QLWg9ExEyYeWs5tf/FIYJkKJeOejYtomEO0FHWV8J2ww+ntxQ6LZs1EahurniEXKqk
-	 FDA1ZUidm8iTa1TyOei/oCg0KZYLTppkcJwvkGos=
-From: Shuah Khan <skhan@linuxfoundation.org>
-To: shuah@kernel.org,
-	trenn@suse.com,
-	jwyatt@redhat.com,
-	jkacur@redhat.com
-Cc: Shuah Khan <skhan@linuxfoundation.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH 2/2] pm: cpupower: remove hard-coded topology depth values
-Date: Wed,  5 Mar 2025 15:53:40 -0700
-Message-ID: <20250305225342.19447-3-skhan@linuxfoundation.org>
-X-Mailer: git-send-email 2.45.2
-In-Reply-To: <20250305225342.19447-1-skhan@linuxfoundation.org>
-References: <20250305225342.19447-1-skhan@linuxfoundation.org>
+	s=arc-20240116; t=1741219693; c=relaxed/simple;
+	bh=XmkEAc+/w2Dkxu/1TNTvMeosZ3tOVAg+QYljZPhFBjc=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=TQ/lUSzBaDqS6PDVexIHBbZn0L8bwCM4rcAVK4F+eGGB72iVRlcxMCOFvbbG8g0bsAAoh1QwiL7PShDebQFiNLVR6fPKTKYUHaxSPSRXdPnxGgTp6/3j681+InDL1NJ1RJlHnHGiIE9AL6MxCDVjPLvizrooKWQ7MiZXe5F3GlI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=YSGyQeHY; arc=none smtp.client-ip=198.175.65.16
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741219692; x=1772755692;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XmkEAc+/w2Dkxu/1TNTvMeosZ3tOVAg+QYljZPhFBjc=;
+  b=YSGyQeHYdoUNPvRIFBRAPZnPaKMd+rxh08PCBS9imL31ht5nHuvGY9G/
+   xQWCjcn1gfy22MP+O+aJT02DVRQ+0So59oaT24hJF/RZe7T1i9yJj3OT6
+   X8ebJDZG7gZB0g23EFkWdsm0tZf/tKa4DfUO0y/9NJQyeqBXmiSnG2hVJ
+   AovSNX8K3bKXkAek4oSu17uBv/LXuMsrb+dk1NqT29QvACMLGR5nFBcsn
+   rztdqK5aGNthh8s62QbAJA+cRhVTjksgQ1+B31+DryTl9fSJvINsBO3J1
+   wHo3Hqfh+sChcHt6oKzQPNMRUQrW6uEc8X6+GsJKGVdbZ1upzcXp/vWkd
+   g==;
+X-CSE-ConnectionGUID: 8VsXSkovQ86/RTBQMBd0nQ==
+X-CSE-MsgGUID: U7vsS2ckS2G9VH5+ixXtyQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11363"; a="42341118"
+X-IronPort-AV: E=Sophos;i="6.14,224,1736841600"; 
+   d="scan'208";a="42341118"
+Received: from orviesa002.jf.intel.com ([10.64.159.142])
+  by orvoesa108.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 05 Mar 2025 16:05:55 -0800
+X-CSE-ConnectionGUID: QY7iUrB3R0C/1HrbrZxxLg==
+X-CSE-MsgGUID: 3ucTVqz5SF+bWZZ35HJ1vQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,224,1736841600"; 
+   d="scan'208";a="149619719"
+Received: from lkp-server02.sh.intel.com (HELO 76cde6cc1f07) ([10.239.97.151])
+  by orviesa002.jf.intel.com with ESMTP; 05 Mar 2025 16:05:47 -0800
+Received: from kbuild by 76cde6cc1f07 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tpyju-000MLA-0L;
+	Thu, 06 Mar 2025 00:05:27 +0000
+Date: Thu, 6 Mar 2025 08:04:23 +0800
+From: kernel test robot <lkp@intel.com>
+To: Michal Wilczynski <m.wilczynski@samsung.com>, robh@kernel.org,
+	krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com,
+	guoren@kernel.org, wefu@redhat.com, paul.walmsley@sifive.com,
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr,
+	jszhang@kernel.org, ulf.hansson@linaro.org,
+	m.szyprowski@samsung.com
+Cc: oe-kbuild-all@lists.linux.dev, linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
+	linux-riscv@lists.infradead.org,
+	Michal Wilczynski <m.wilczynski@samsung.com>
+Subject: Re: [PATCH v1 2/5] firmware: thead: Add AON firmware protocol driver
+Message-ID: <202503060707.a8CwuQbH-lkp@intel.com>
+References: <20250303145901.446791-3-m.wilczynski@samsung.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250303145901.446791-3-m.wilczynski@samsung.com>
 
-Remove hard-coded topology depth values and replace them with
-defines to improve code readability and maintainability in
-cpupower-monitor code.
+Hi Michal,
 
-Signed-off-by: Shuah Khan <skhan@linuxfoundation.org>
----
- .../utils/idle_monitor/cpupower-monitor.c     | 40 ++++++++++++++-----
- 1 file changed, 29 insertions(+), 11 deletions(-)
+kernel test robot noticed the following build warnings:
 
-diff --git a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-index 0380d2e70016..ad493157f826 100644
---- a/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-+++ b/tools/power/cpupower/utils/idle_monitor/cpupower-monitor.c
-@@ -92,7 +92,11 @@ int fill_string_with_spaces(char *s, int n)
- 	return 0;
- }
- 
--#define MAX_COL_WIDTH 6
-+#define MAX_COL_WIDTH		6
-+#define TOPOLOGY_DEPTH_PKG	3
-+#define TOPOLOGY_DEPTH_CORE	2
-+#define TOPOLOGY_DEPTH_CPU	1
-+
- void print_header(int topology_depth)
- {
- 	int unsigned mon;
-@@ -114,12 +118,19 @@ void print_header(int topology_depth)
- 	}
- 	printf("\n");
- 
--	if (topology_depth > 2)
-+	switch (topology_depth) {
-+	case TOPOLOGY_DEPTH_PKG:
- 		printf(" PKG|");
--	if (topology_depth > 1)
-+		break;
-+	case TOPOLOGY_DEPTH_CORE:
- 		printf("CORE|");
--	if (topology_depth > 0)
-+		break;
-+	case	TOPOLOGY_DEPTH_CPU:
- 		printf(" CPU|");
-+		break;
-+	default:
-+		return;
-+	}
- 
- 	for (mon = 0; mon < avail_monitors; mon++) {
- 		if (mon != 0)
-@@ -153,12 +164,19 @@ void print_results(int topology_depth, int cpu)
- 	    cpu_top.core_info[cpu].pkg == -1)
- 		return;
- 
--	if (topology_depth > 2)
-+	switch (topology_depth) {
-+	case TOPOLOGY_DEPTH_PKG:
- 		printf("%4d|", cpu_top.core_info[cpu].pkg);
--	if (topology_depth > 1)
-+		break;
-+	case TOPOLOGY_DEPTH_CORE:
- 		printf("%4d|", cpu_top.core_info[cpu].core);
--	if (topology_depth > 0)
-+		break;
-+	case TOPOLOGY_DEPTH_CPU:
- 		printf("%4d|", cpu_top.core_info[cpu].cpu);
-+		break;
-+	default:
-+		return;
-+	}
- 
- 	for (mon = 0; mon < avail_monitors; mon++) {
- 		if (mon != 0)
-@@ -454,15 +472,15 @@ int cmd_monitor(int argc, char **argv)
- 	/* ToDo: Topology parsing needs fixing first to do
- 	   this more generically */
- 	if (cpu_top.pkgs > 1)
--		print_header(3);
-+		print_header(TOPOLOGY_DEPTH_PKG);
- 	else
--		print_header(1);
-+		print_header(TOPOLOGY_DEPTH_CPU);
- 
- 	for (cpu = 0; cpu < cpu_count; cpu++) {
- 		if (cpu_top.pkgs > 1)
--			print_results(3, cpu);
-+			print_results(TOPOLOGY_DEPTH_PKG, cpu);
- 		else
--			print_results(1, cpu);
-+			print_results(TOPOLOGY_DEPTH_CPU, cpu);
- 	}
- 
- 	for (num = 0; num < avail_monitors; num++) {
+[auto build test WARNING on robh/for-next]
+[also build test WARNING on linus/master v6.14-rc5 next-20250305]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Michal-Wilczynski/dt-bindings-firmware-thead-th1520-Add-support-for-firmware-node/20250303-230224
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/robh/linux.git for-next
+patch link:    https://lore.kernel.org/r/20250303145901.446791-3-m.wilczynski%40samsung.com
+patch subject: [PATCH v1 2/5] firmware: thead: Add AON firmware protocol driver
+config: arc-allmodconfig (https://download.01.org/0day-ci/archive/20250306/202503060707.a8CwuQbH-lkp@intel.com/config)
+compiler: arceb-elf-gcc (GCC) 13.2.0
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250306/202503060707.a8CwuQbH-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503060707.a8CwuQbH-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   drivers/firmware/thead,th1520-aon.c: In function 'th1520_aon_init':
+   drivers/firmware/thead,th1520-aon.c:206:20: error: implicit declaration of function 'kzalloc' [-Werror=implicit-function-declaration]
+     206 |         aon_chan = kzalloc(sizeof(*aon_chan), GFP_KERNEL);
+         |                    ^~~~~~~
+>> drivers/firmware/thead,th1520-aon.c:206:18: warning: assignment to 'struct th1520_aon_chan *' from 'int' makes pointer from integer without a cast [-Wint-conversion]
+     206 |         aon_chan = kzalloc(sizeof(*aon_chan), GFP_KERNEL);
+         |                  ^
+   drivers/firmware/thead,th1520-aon.c:219:17: error: implicit declaration of function 'kfree' [-Werror=implicit-function-declaration]
+     219 |                 kfree(aon_chan);
+         |                 ^~~~~
+   cc1: some warnings being treated as errors
+
+
+vim +206 drivers/firmware/thead,th1520-aon.c
+
+   185	
+   186	/**
+   187	 * th1520_aon_init() - Initialize TH1520 AON firmware protocol interface
+   188	 * @dev: Device pointer for the AON subsystem
+   189	 *
+   190	 * This function initializes the TH1520 AON firmware protocol interface by:
+   191	 * - Allocating and initializing the AON channel structure
+   192	 * - Setting up the mailbox client
+   193	 * - Requesting the AON mailbox channel
+   194	 * - Initializing synchronization primitives
+   195	 *
+   196	 * Return:
+   197	 * * Valid pointer to th1520_aon_chan structure on success
+   198	 * * ERR_PTR(-ENOMEM) if memory allocation fails
+   199	 * * ERR_PTR() with other negative error codes from mailbox operations
+   200	 */
+   201	struct th1520_aon_chan *th1520_aon_init(struct device *dev)
+   202	{
+   203		struct th1520_aon_chan *aon_chan;
+   204		struct mbox_client *cl;
+   205	
+ > 206		aon_chan = kzalloc(sizeof(*aon_chan), GFP_KERNEL);
+   207		if (!aon_chan)
+   208			return ERR_PTR(-ENOMEM);
+   209	
+   210		cl = &aon_chan->cl;
+   211		cl->dev = dev;
+   212		cl->tx_block = true;
+   213		cl->tx_tout = MAX_TX_TIMEOUT;
+   214		cl->rx_callback = th1520_aon_rx_callback;
+   215	
+   216		aon_chan->ch = mbox_request_channel_byname(cl, "aon");
+   217		if (IS_ERR(aon_chan->ch)) {
+   218			dev_err(dev, "Failed to request aon mbox chan\n");
+   219			kfree(aon_chan);
+   220			return ERR_CAST(aon_chan->ch);
+   221		}
+   222	
+   223		mutex_init(&aon_chan->transaction_lock);
+   224		init_completion(&aon_chan->done);
+   225	
+   226		return aon_chan;
+   227	}
+   228	EXPORT_SYMBOL_GPL(th1520_aon_init);
+   229	
+
 -- 
-2.45.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
