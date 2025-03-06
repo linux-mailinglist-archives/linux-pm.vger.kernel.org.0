@@ -1,139 +1,145 @@
-Return-Path: <linux-pm+bounces-23556-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23557-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 0FD23A547F5
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 11:38:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8F4FDA54870
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 11:53:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E408A16BAB0
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 10:38:23 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id BA33716C22B
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 10:53:56 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 90817204F85;
-	Thu,  6 Mar 2025 10:37:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 510A0204699;
+	Thu,  6 Mar 2025 10:53:53 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YlqhKDkb"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uFDE1ciW"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f175.google.com (mail-yw1-f175.google.com [209.85.128.175])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 68605204F75;
-	Thu,  6 Mar 2025 10:37:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8D69C202C56
+	for <linux-pm@vger.kernel.org>; Thu,  6 Mar 2025 10:53:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.175
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741257479; cv=none; b=hF8EpsvzkmdHboNFF5QwbnjoXUuW1k0ybetRDoO4EiVVuFwaxZw/uaLUNla3e+VootKzprGQGqPWpneEgcxXGceyFZ3XtZvsANLeNrznWNkdM0K0G3w0nzCHeMZpo/KPCSKh3tbbIW3n10+cwuLdp/4zmtFdeXhhZv6UcBCMGOY=
+	t=1741258433; cv=none; b=WClV9Hq8egXW8kP04jhkRdoVWsgwceGLYPrLVI25MJrgp6a8ZpsQBvQs9VNxWtBqWwDQSnPXjLHzk/k+JruUSF7X7bG6gHnBdHzR5TaVHqlRKJVrjAHiPD5W/cdw0RpygIqYG2kijLJhXk1TnvBMB4396MpuS8JNJJEDWX3b52c=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741257479; c=relaxed/simple;
-	bh=YNg+XgZ1AZ6kclyonPJqBkYdvbYBqR4ivmV7p6WuUlA=;
+	s=arc-20240116; t=1741258433; c=relaxed/simple;
+	bh=BjCm5PBqyHKmjMucOFRQC1jdtY0RK6Pqe0onnAO5mwg=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=iCEUGDFYpgBTHemw45p23cJUBt3rCTAtIQlr1eJMU3HUDNCAQddS8q4TGJA90tguOknEzGUNlFvIV/R+jP8KzipuMVnVXWtt8Z+eaCpmpQYqabKbH0aKn1OO+NadlRL/beSNuXO8vKLX1nCj+WtcxkFmG6rZkYpglME0uaAi4pk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YlqhKDkb; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D94BFC4CEED;
-	Thu,  6 Mar 2025 10:37:58 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741257478;
-	bh=YNg+XgZ1AZ6kclyonPJqBkYdvbYBqR4ivmV7p6WuUlA=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=YlqhKDkb7hvLHzOkt9B+0yyFkJi5QXGdSZOtv7A76rs16rcPAk/UCBLkzUxVEcL14
-	 //gp0MwZRSS5liC75reC4ytfwXss59R2UwbT5BftrMLZKpoXNcH6k195Tc63Ztnuq3
-	 y99Voq8B/U3hFw3iUwy8MzahPS5lCyNy9Zaypu0mLvm7rRgGbesHdTHKa7P01ALn2e
-	 /IYXatGyKSg/mHU1C8CdJsUSIKE2+oVfTqfn5MrtUm9QRM7kqW895Y8DqwNV9VNVxr
-	 Vy8C07s3rhWPHdzsynP8fUberGlizGjnLYAfczxCGdJ594CFJ27gbGzpocHnNFTwqO
-	 6oRLMc8AOJyDQ==
-Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2bcca6aae0bso333422fac.1;
-        Thu, 06 Mar 2025 02:37:58 -0800 (PST)
-X-Forwarded-Encrypted: i=1; AJvYcCWDv5F1Usw8EPcKi0CTSY1K6HKSK/MC1WcmZ8dYTA/LmgOOn/n71TMkVgLbB9R9zY0WokA2yHKBKW8=@vger.kernel.org, AJvYcCWmS8rRWgMKRg0hUfAWqpfumI80CjfT7MYtR63IMDtASr9zj3vFABs0IEzHnQVwSrgHrpABargEDaMZ2wQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YyNnZsqjETlqXX+T1skrf27Raxt1MMoswzB5Wn39oHWUbNdkgM+
-	9Ux4i6c/7otnh2/DCaakDwPK7Rz5CsS3nE9WGvGLWG2WhEf4sf71RT/PJPZK27HnhXolsrxo4fS
-	BAFN7pZC+Q6IsNHMNefHxdh+DvcY=
-X-Google-Smtp-Source: AGHT+IH3MUzd3IYGjGngSPT3jt28qznhOZYfbjOgCKDZoTXI1A16WoPmO0MWUmbYmN8AFuZ5cx0hgDeNPJplg4UOXto=
-X-Received: by 2002:a05:6871:588:b0:29e:5522:8ee4 with SMTP id
- 586e51a60fabf-2c21cd1f13emr3716612fac.25.1741257478205; Thu, 06 Mar 2025
- 02:37:58 -0800 (PST)
+	 To:Cc:Content-Type; b=slhAOhaR4VMBc28doELNWzxnLZm7fhvzw4v3Y1KlbPGy6O03gEJ7qUNNCanlW3S0VrxPQQgg7GLR4z2i+5yfSYq8atc602I1SM4TAMTT7I9gOEt1GC4PcwrdqvPt8EjDDEfT3piDuHcHSNhj62GB+osLUSEP9GncGoK9tCeax+E=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uFDE1ciW; arc=none smtp.client-ip=209.85.128.175
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f175.google.com with SMTP id 00721157ae682-6f74b78df93so5251027b3.0
+        for <linux-pm@vger.kernel.org>; Thu, 06 Mar 2025 02:53:51 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741258430; x=1741863230; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=l3kxF9s0s10HtMJFdaStPVy028iaechePMj70+RdBiw=;
+        b=uFDE1ciWDJlFtboEWAIvsZI2uxRdZ+8LVVpUhrImVRQ7V2BKQMMYBHLTIT7UZVxzEO
+         KuZt8MnZgND/hCY2TpAM6zEo90IxWF+b30tTmwjqTguqQ4LTolRXF/r49X7xkgzrbmQn
+         XMRUrs1HSbhRllXxdzHlrSWCVCGsv/KOKvMJhqUl6AEZVZ79IH31oxdKZut71+H3M/C2
+         pbHMrlA281UwnWHp7KuU/swZvj0O7m0wLA3Mzz+iQziBdHc7a5wdhehFRn0g+Kwqs3Mp
+         CJOAkkvb/g/tf0vFrx4sKQZ/pZOUaChpHVGESuah/8zGljTUZCWy52E45lB4OciL2bJU
+         Pi9w==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741258430; x=1741863230;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=l3kxF9s0s10HtMJFdaStPVy028iaechePMj70+RdBiw=;
+        b=TlBEh78r3T3Y6JGpzQkLD6CtPjNi2QsCUzsC+GjCeKV6x4nhvoSnFLJ0XnDGLQ3bns
+         XFOsjDsFg38L1dn7Sbm75Xhat+nCjt8PCMGBdRQDWRst1xuso7hcXvPmgsjkuq1wP56g
+         70T14RHT+ZX6VQjoydoS/6XXZ8qpedT1Dyn6fPpWhpSl/S3neGhXHhUpdrCaavJNceJ5
+         YhpunpkVY4wvrxhhe5av9/cIwx7mRG6LxTVT+dfp177exhLR+qFN7TGHu6ZysyHeIVbA
+         XEselNcHxpwkehYuhCF5LbfNDoLPE3pVobyoKnI+ImkcBeTueVdhlGxSr++834r0hVfb
+         uUzw==
+X-Forwarded-Encrypted: i=1; AJvYcCVZnBZ/HPZ1HeQJCrohNoh5Ni6qUJe5w4ExYyTWwzEWJShkdSaWE1RGjsSVquYHkLaT8drIi59kPw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxvlVglgzQVrY/ScZIpKuReyjImQKHHFUApoEzo58vy571uHzYV
+	wYuuKxWCrbAAQ+1QvBI47mffiYu1S8CH6qaTuYyilk2ygH1odDgKwcg9Z3o9/pb2a9Ckr+IGSaP
+	2ojSjfZqcYECJisx/WqI8B7DpzPGm6YyCi5JoVQ==
+X-Gm-Gg: ASbGncvgUK0oWAAf+pQzGc1MjtzjYs0ioyl4YbM439FsXDV32t211exlA+PaVXeC3ah
+	8OkRRQqm5LGrBdgBeDJhc/SItQH2BMsv2DmHSpAPD/aJd/lTREOAPVDiGKsyXa8Hacrz1nDGQ61
+	VwsML80ko8lwuYq6Am8CMEtD2xDLc=
+X-Google-Smtp-Source: AGHT+IHveALh7pfAJxb1zQDrWysmjfRsRboRORBFdyusSPBVnlo9Xnd8mhzTm+ZPYxFyYXm4hgY3Nu9iytramRNs4y8=
+X-Received: by 2002:a05:690c:64c1:b0:6fd:44a5:5b68 with SMTP id
+ 00721157ae682-6fda306fffbmr91783397b3.35.1741258430563; Thu, 06 Mar 2025
+ 02:53:50 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <5880743.DvuYhMxLoT@rjwysocki.net> <1929404.tdWV9SEqCh@rjwysocki.net>
- <92699eb4-8495-4ccd-a9dc-120b14271f9d@arm.com>
-In-Reply-To: <92699eb4-8495-4ccd-a9dc-120b14271f9d@arm.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Thu, 6 Mar 2025 11:37:46 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0id8ZF+8Q9vaBZfXXhwyiZzbX0NWz0t+4iYTWLo7-X5KA@mail.gmail.com>
-X-Gm-Features: AQ5f1JpCJatDg4H_4G0HO3_y4n_KtbONzf6jVYjuP1cxb-3t01EiCBuwp0JKDMY
-Message-ID: <CAJZ5v0id8ZF+8Q9vaBZfXXhwyiZzbX0NWz0t+4iYTWLo7-X5KA@mail.gmail.com>
-Subject: Re: [PATCH v1 2/3] PM: EM: Make three functions static
-To: Lukasz Luba <lukasz.luba@arm.com>
-Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, LKML <linux-kernel@vger.kernel.org>, 
-	Linux PM <linux-pm@vger.kernel.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
+References: <20250306061805.2318154-1-ping.bai@nxp.com>
+In-Reply-To: <20250306061805.2318154-1-ping.bai@nxp.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Thu, 6 Mar 2025 11:53:14 +0100
+X-Gm-Features: AQ5f1JoVI52ootMQgeP7Rja3_fKhyfkFzcUyyz4qn2NojBs4a97d8HfR3zSlUrg
+Message-ID: <CAPDyKForY4VNZtqietDPt2FQM3p4OsaoE_oJb0PPLUAh98WsHQ@mail.gmail.com>
+Subject: Re: [PATCH v3] cpuidle: psci: Init cpuidle only for present CPUs
+To: Jacky Bai <ping.bai@nxp.com>
+Cc: lpieralisi@kernel.org, sudeep.holla@arm.com, rafael@kernel.org, 
+	daniel.lezcano@linaro.org, james.morse@arm.com, d-gole@ti.com, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, imx@lists.linux.dev, khilman@baylibre.com, 
+	quic_tingweiz@quicinc.com, quic_yuanjiey@quicinc.com
 Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
 
-On Thu, Mar 6, 2025 at 11:01=E2=80=AFAM Lukasz Luba <lukasz.luba@arm.com> w=
-rote:
+On Thu, 6 Mar 2025 at 07:17, Jacky Bai <ping.bai@nxp.com> wrote:
 >
-> Hi Rafael,
+> for_each_possible_cpu() is currently used to initialize cpuidle
+> in the PSCI cpuidle driver.
 >
-> On 3/5/25 21:11, Rafael J. Wysocki wrote:
-> > From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> >
-> > Three functions in the Energy Model code, em_dev_update_perf_domain(),
-> > em_table_alloc() and em_table_free(), have no users outside that code a=
-nd
-> > so make them static, remove their headers from the Energy Model header
-> > file and remove a piece of documentation associated with them.
-> >
-> > This also helps to clean up RCU handling in the Energy Model code that
-> > will be done subsequently.
-> >
-> > No intentional functional impact.
-> >
-> > Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> > ---
-> >
-> > This essentially follow the rules that all functions without users in t=
-he
-> > files where they are defined should be static (with all due respect to =
-any
-> > out-of-the-tree users of them).
-> >
-> > This change can be reversed when any new users of these functions appea=
-r,
-> > but it will have to take changes made by the subsequent patch into acco=
-unt.
-> >
+> However, in cpu_dev_register_generic(), for_each_present_cpu()
+> is used to register CPU devices which means the CPU devices are
+> only registered for present CPUs and not all possible CPUs.
 >
-> I see your point and it's valid.
+> With nosmp or maxcpus=0, only the boot CPU is present, leading
+> to the failure:
 >
-> Although, please give me a few days and I will send some patches which
-> add a client for this API. It will be a modification of the EM for
-> CPUs while the GPU is producing heat to the SoC. Then IPA and EAS
-> will get the updated total power values (doe to this this leakage power)
-> in the EM.
+>   |  Failed to register cpuidle device for cpu1
+>
+> Change for_each_possible_cpu() to for_each_present_cpu() in the
+> PSCI cpuidle driver to ensure it only registers cpuidle devices
+> for CPUs that are actually present.
+>
+> Fixes: b0c69e1214bc ("drivers: base: Use present CPUs in GENERIC_CPU_DEVICES")
+> Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Tested-by: Yuanjie Yang <quic_yuanjiey@quicinc.com>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 
-OK, so I'll need to change the headers in the next patch and I'll drop this=
- one.
+Is this problem specific to cpuidle-psci?
 
-> As of now, I had some code downstream for research, that I share with
-> partners in the Android world [1].
-> I believe the user-space sysfs (like in that top patch) which allows
-> such EM modification would not be accepted?
+Others are using for_each_possible_cpu() when registering their cpuidle drivers.
 
-Well, if there's a good enough reason for its existence, then it can
-be added I think.  It all depends on how this is expected to be used.
+Kind regards
+Uffe
 
-> Such approach might also help the Middle-ware in the OS to influence the
-> kernel decisions, mainly on phones, where the app just occupies the
-> screen and Middle-ware knows about it.
-
-You need to be cautious about changing the EM too often though as that
-would only lead to thrashing and nothing beneficial.
-
-> [1]
-> https://gitlab.arm.com/linux-arm/linux-power/-/commits/dynamic_energy_mod=
-el/android14-v6.1/v6.1.75/?ref_type=3Dheads
+> ---
+>  - v2 changes:
+>   - Improve the changelog as suggested by Sudeep
+> ---
+>  drivers/cpuidle/cpuidle-psci.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> index 2562dc001fc1..00117e9b33e8 100644
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -410,7 +410,7 @@ static int psci_cpuidle_probe(struct platform_device *pdev)
+>         struct cpuidle_driver *drv;
+>         struct cpuidle_device *dev;
+>
+> -       for_each_possible_cpu(cpu) {
+> +       for_each_present_cpu(cpu) {
+>                 ret = psci_idle_init_cpu(&pdev->dev, cpu);
+>                 if (ret)
+>                         goto out_fail;
+> --
+> 2.34.1
+>
 
