@@ -1,322 +1,147 @@
-Return-Path: <linux-pm+bounces-23571-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23572-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6B9C5A551E0
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 17:53:26 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id F3E2DA55225
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 18:02:14 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id AD2233B5F5A
-	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 16:49:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4FCF718976CF
+	for <lists+linux-pm@lfdr.de>; Thu,  6 Mar 2025 17:01:20 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7316125B677;
-	Thu,  6 Mar 2025 16:49:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 64825269AEA;
+	Thu,  6 Mar 2025 16:58:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="m4pRAUPk"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="kE2TqQgr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4E65025B671;
-	Thu,  6 Mar 2025 16:49:22 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7FD8825C6F7;
+	Thu,  6 Mar 2025 16:58:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741279766; cv=none; b=ljnLx/d64MzK5gqgdwWt6XpWId7G3ss6dED8/aaKJ5XnRDcSKdTJdB3VDD85X9A0D7/ydiP5ym+L4matLTNF1WXx1nmHYVtjLGCG9Oq9rrqs7nTvpggDc25c4TLPVM36/tigwhlKR1OSlWl/lecTFJqfWuPkU9QOQhubSDBk5L0=
+	t=1741280287; cv=none; b=I+Kag+Q5AquBXKOa8H3BS+OSDX0JY5MXXNCIdPd2ncjiBUIWw5TuC+r294zWU+v/nCHcV5vFhDIQ09W7+Vh4SWAJ8JpljTPOU+fujrav6SkjeCHWWX84RJsiEHjaG7XefSq0RwswFTqyGx687x/gmF7Hm807OXMdzAUeJ2UDekk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741279766; c=relaxed/simple;
-	bh=+wkndGRtSmkZkJvjBN2WDtpkolwfhZgzVBcYIcmaWXY=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=KQZJs4AmRNzCGyMuZPWdVRUXaSMDYYx401uK5m5+bFWxNUvHLj5PYyFcnzQu7XVCd19mgdP6sOjjCc4ChyF2EbI0tFc2J3Cfof6r+5iNB7bO8qggYDoA18sJAYGNH1pTVMtJHZ219ACaeaWZ0nM/0NOR0omuh6dHUxBFeie5NZQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=m4pRAUPk; arc=none smtp.client-ip=79.96.170.134
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
-Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
- by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.2.1)
- id 27ddc17bb2263b0b; Thu, 6 Mar 2025 17:49:21 +0100
-Received: from kreacher.localnet (unknown [195.136.19.94])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
-	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 671A29A0DA7;
-	Thu,  6 Mar 2025 17:49:20 +0100 (CET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1741279760;
-	bh=+wkndGRtSmkZkJvjBN2WDtpkolwfhZgzVBcYIcmaWXY=;
-	h=From:Subject:Date;
-	b=m4pRAUPkku/K5kY1KfVF3H4RMXVmYImnZKu/D2KPGi2dW2uYZYslgoxPwvSSKH84O
-	 y872bT1qJb003YbP9tPaizkiJC1Cjt9faVTJspYrHgBkmHBu1g1OmcxGR1p0NqBNfl
-	 6uYMYxZ7o1c0Vyz3e43kEV9boX6SvcwrcUx3TZe/DKBbCu5DskWHpRuL9gfbztYolD
-	 XkNkI6eKRsVJ9CEHXmaIkJgUfgoLO7iY1fr+rRQmZHf5NzlEnOn4kF46t1+RkQXFG9
-	 C2GAdCL0yd/QQ4nzfUB4aaqHl5fxTGUDV678rWCBkjyt9FoqmDERlv/LkcQH9u948O
-	 6BGBpsD90MSSg==
-From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-To: Linux PM <linux-pm@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>
-Cc: LKML <linux-kernel@vger.kernel.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-Subject: [PATCH v2] PM: EM: Address RCU-related sparse warnings
-Date: Thu, 06 Mar 2025 17:49:20 +0100
-Message-ID: <5885405.DvuYhMxLoT@rjwysocki.net>
+	s=arc-20240116; t=1741280287; c=relaxed/simple;
+	bh=iye/SSIddxiY8mSsOHtwpzr/U8xVr9GpyZGHUWgmDAI=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=FtihvCXmOBEjtGU+I6nt/1MlmmRTqWFDLK1z/Kvotv/eTsNq0NDqUBwwe1cdDfqN/v1XiFy/bFO9fBqpNGtlTlxr1H/mKVvsRcrF3GXrDEedktgr2mEBSe4bBClrnSvaAKGnqJUAttQVf1ARG6MSBZHt2k3ocp/BlJ98Avo8vQc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=kE2TqQgr; arc=none smtp.client-ip=192.198.163.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741280286; x=1772816286;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=iye/SSIddxiY8mSsOHtwpzr/U8xVr9GpyZGHUWgmDAI=;
+  b=kE2TqQgrHPMiIww8/j3eNQzcLvf7NDgTa44zOtNvLsbzBBOba/DieSvZ
+   UVDDzzwNf7Mw4XLplT2ZKrlCWT4Qx+lRGCf+6nfYxpseJXQQZSy9Xf8l/
+   kWPEfHzt0eMEhxu2dWzWcFEEaheEos0p2yjDZPRX8D4vhPz8OgPNYiBQT
+   vJDjqlwTpvtN7u8stsaGwzQBsFLJUFYFgItrk2Z6f5v5haulJutViaNus
+   Bnd906QGRJBYzoZrbrMmybpPTjqZW1nTHBExWG9dDyAkzn1SqxEuY2KqG
+   LkB45bjlHr4L+20VpIMaKzSof0EgwdpyRYMf0/jifVvSIMnhlaO440OTF
+   Q==;
+X-CSE-ConnectionGUID: nTvGVPz4SD69csXyOtI9IQ==
+X-CSE-MsgGUID: MB6sbF/yQTmzltyHa2ihtw==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="52942743"
+X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
+   d="scan'208";a="52942743"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by fmvoesa103.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 08:58:05 -0800
+X-CSE-ConnectionGUID: uAIDf/VsTtO0dQ/Xd2EERA==
+X-CSE-MsgGUID: bCZGL2y2SnGL9qhLf1QKUg==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,226,1736841600"; 
+   d="scan'208";a="142307035"
+Received: from sho10-mobl1.amr.corp.intel.com (HELO desk) ([10.125.145.178])
+  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 08:58:04 -0800
+Date: Thu, 6 Mar 2025 08:57:57 -0800
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Dave Hansen <dave.hansen@intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	Brice Goglin <brice.goglin@gmail.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <Perry.Yuan@amd.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: Re: [PATCH v6 4/5] x86/bugs: Declutter vulnerable CPU list
+Message-ID: <20250306165757.sh6azitvazhq5lxj@desk>
+References: <20250305-add-cpu-type-v6-0-4741735bcd75@linux.intel.com>
+ <20250305-add-cpu-type-v6-4-4741735bcd75@linux.intel.com>
+ <542cfd1b-65f8-4fa9-811e-d70850d0cf9a@intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 7Bit
-Content-Type: text/plain; charset="UTF-8"
-X-CLIENT-IP: 195.136.19.94
-X-CLIENT-HOSTNAME: 195.136.19.94
-X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgddutdekvdekucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeehpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopeguihgvthhmrghrrdgvghhgvghmrghnnhesrghrmhdrtghomhdprhgtphhtthhopehrihgtrghrugh
-X-DCC--Metrics: v370.home.net.pl 1024; Body=5 Fuz1=5 Fuz2=5
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <542cfd1b-65f8-4fa9-811e-d70850d0cf9a@intel.com>
 
-From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
+On Thu, Mar 06, 2025 at 07:18:55AM -0800, Dave Hansen wrote:
+> On 3/5/25 23:13, Pawan Gupta wrote:
+> ...
+> >  #define VULNWL_INTEL(vfm, whitelist)		\
+> > -	X86_MATCH_VFM(vfm, whitelist)
+> > +	X86_MATCH_VFM(INTEL_##vfm, whitelist)
+> 
+> I think the new VFM code may have thrown you off here. Doing HASWELL_X
+> is not as nice as INTEL_HASWELL_X because, while you can grep for it, it
+> won't work when you're looking for full identifiers like with ctags or
+> cscope.
+> 
+> Also, this is just putting the "INTEL" in the macro instead of the VFM.
+> I'm not sure there's much value in doing:
+> 
+> 	VULNWL_INTEL(ALDERLAKE_L, ...)	
+> 
+> over:
+> 
+> 	X86_MATCH_VFM(INTEL_ALDERLAKE_L, ...)
 
-The usage of __rcu in the Energy Model code is quite inconsistent
-which causes the following sparse warnings to trigger:
+Ahh, right. I will fix that. Thanks for pointing this out.
 
-kernel/power/energy_model.c:169:15: warning: incorrect type in assignment (different address spaces)
-kernel/power/energy_model.c:169:15:    expected struct em_perf_table [noderef] __rcu *table
-kernel/power/energy_model.c:169:15:    got struct em_perf_table *
-kernel/power/energy_model.c:171:9: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:171:9:    expected struct callback_head *head
-kernel/power/energy_model.c:171:9:    got struct callback_head [noderef] __rcu *
-kernel/power/energy_model.c:171:9: warning: cast removes address space '__rcu' of expression
-kernel/power/energy_model.c:182:19: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:182:19:    expected struct kref *kref
-kernel/power/energy_model.c:182:19:    got struct kref [noderef] __rcu *
-kernel/power/energy_model.c:200:15: warning: incorrect type in assignment (different address spaces)
-kernel/power/energy_model.c:200:15:    expected struct em_perf_table [noderef] __rcu *table
-kernel/power/energy_model.c:200:15:    got void *[assigned] _res
-kernel/power/energy_model.c:204:20: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:204:20:    expected struct kref *kref
-kernel/power/energy_model.c:204:20:    got struct kref [noderef] __rcu *
-kernel/power/energy_model.c:320:19: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:320:19:    expected struct kref *kref
-kernel/power/energy_model.c:320:19:    got struct kref [noderef] __rcu *
-kernel/power/energy_model.c:325:45: warning: incorrect type in argument 2 (different address spaces)
-kernel/power/energy_model.c:325:45:    expected struct em_perf_state *table
-kernel/power/energy_model.c:325:45:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:425:45: warning: incorrect type in argument 3 (different address spaces)
-kernel/power/energy_model.c:425:45:    expected struct em_perf_state *table
-kernel/power/energy_model.c:425:45:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:442:15: warning: incorrect type in argument 1 (different address spaces)
-kernel/power/energy_model.c:442:15:    expected void const *objp
-kernel/power/energy_model.c:442:15:    got struct em_perf_table [noderef] __rcu *[assigned] em_table
-kernel/power/energy_model.c:626:55: warning: incorrect type in argument 2 (different address spaces)
-kernel/power/energy_model.c:626:55:    expected struct em_perf_state *table
-kernel/power/energy_model.c:626:55:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:681:16: warning: incorrect type in assignment (different address spaces)
-kernel/power/energy_model.c:681:16:    expected struct em_perf_state *new_ps
-kernel/power/energy_model.c:681:16:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:699:37: warning: incorrect type in argument 2 (different address spaces)
-kernel/power/energy_model.c:699:37:    expected struct em_perf_state *table
-kernel/power/energy_model.c:699:37:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:733:38: warning: incorrect type in argument 3 (different address spaces)
-kernel/power/energy_model.c:733:38:    expected struct em_perf_state *table
-kernel/power/energy_model.c:733:38:    got struct em_perf_state [noderef] __rcu *
-kernel/power/energy_model.c:855:53: warning: dereference of noderef expression
-kernel/power/energy_model.c:864:32: warning: dereference of noderef expression
+As one of the goal of the patch is to shorten the macro names and follow
+the VULNWL_<> pattern, would it make sense to rename VULNWL_INTEL to:
 
-This is because the __rcu annotation for sparse is only applicable to
-pointers that need rcu_dereference() or equivalent for protection, which
-basically means pointers assigned with rcu_assign_pointer().
+#define VULNWL_VFM(vfm, whitelist)		\
+	X86_MATCH_VFM(vfm, whitelist)
 
-Make all of the above sparse warnings go away by cleaning up the usage
-of __rcu and using rcu_dereference_protected() where applicable.
+Then the table would look like:
 
-Cc: All applicable <stable@vger.kernel.org>
-Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
----
+	VULNWL_VFM(INTEL_TIGERLAKE,	NO_MMIO),
 
-This replaces
+Simlarly for cpu_vuln_blacklist the macros become:
 
-https://lore.kernel.org/linux-pm/1929404.tdWV9SEqCh@rjwysocki.net/
+#define VULNBL_VFM(vfm, issues)			\
+	VULNBL_VFM_STEPS(vfm, X86_STEP_MAX, issues)
 
-and
+#define VULNBL_VFM_STEPS(vfm, max_stepping, issues)		   \
+	X86_MATCH_VFM_STEPS(vfm, X86_STEP_MIN, max_stepping, issues)
 
-https://lore.kernel.org/linux-pm/13728396.uLZWGnKmhe@rjwysocki.net/
+#define VULNBL_VFM_TYPE(vfm, cpu_type, issues)			\
+	X86_MATCH_VFM_CPU_TYPE(vfm,				\
+			       INTEL_CPU_TYPE_##cpu_type,	\
+			       issues)
 
----
- include/linux/energy_model.h |   12 ++++++------
- kernel/power/energy_model.c  |   39 ++++++++++++++++++++-------------------
- 2 files changed, 26 insertions(+), 25 deletions(-)
+And the table would look like:
 
---- a/include/linux/energy_model.h
-+++ b/include/linux/energy_model.h
-@@ -167,13 +167,13 @@
- struct em_perf_domain *em_cpu_get(int cpu);
- struct em_perf_domain *em_pd_get(struct device *dev);
- int em_dev_update_perf_domain(struct device *dev,
--			      struct em_perf_table __rcu *new_table);
-+			      struct em_perf_table *new_table);
- int em_dev_register_perf_domain(struct device *dev, unsigned int nr_states,
- 				const struct em_data_callback *cb,
- 				const cpumask_t *cpus, bool microwatts);
- void em_dev_unregister_perf_domain(struct device *dev);
--struct em_perf_table __rcu *em_table_alloc(struct em_perf_domain *pd);
--void em_table_free(struct em_perf_table __rcu *table);
-+struct em_perf_table *em_table_alloc(struct em_perf_domain *pd);
-+void em_table_free(struct em_perf_table *table);
- int em_dev_compute_costs(struct device *dev, struct em_perf_state *table,
- 			 int nr_states);
- int em_dev_update_chip_binning(struct device *dev);
-@@ -373,14 +373,14 @@
- 	return 0;
- }
- static inline
--struct em_perf_table __rcu *em_table_alloc(struct em_perf_domain *pd)
-+struct em_perf_table *em_table_alloc(struct em_perf_domain *pd)
- {
- 	return NULL;
- }
--static inline void em_table_free(struct em_perf_table __rcu *table) {}
-+static inline void em_table_free(struct em_perf_table *table) {}
- static inline
- int em_dev_update_perf_domain(struct device *dev,
--			      struct em_perf_table __rcu *new_table)
-+			      struct em_perf_table *new_table)
- {
- 	return -EINVAL;
- }
---- a/kernel/power/energy_model.c
-+++ b/kernel/power/energy_model.c
-@@ -163,12 +163,8 @@
- 
- static void em_release_table_kref(struct kref *kref)
- {
--	struct em_perf_table __rcu *table;
--
- 	/* It was the last owner of this table so we can free */
--	table = container_of(kref, struct em_perf_table, kref);
--
--	kfree_rcu(table, rcu);
-+	kfree_rcu(container_of(kref, struct em_perf_table, kref), rcu);
- }
- 
- /**
-@@ -177,7 +173,7 @@
-  *
-  * No return values.
-  */
--void em_table_free(struct em_perf_table __rcu *table)
-+void em_table_free(struct em_perf_table *table)
- {
- 	kref_put(&table->kref, em_release_table_kref);
- }
-@@ -190,9 +186,9 @@
-  * has a user.
-  * Returns allocated table or NULL.
-  */
--struct em_perf_table __rcu *em_table_alloc(struct em_perf_domain *pd)
-+struct em_perf_table *em_table_alloc(struct em_perf_domain *pd)
- {
--	struct em_perf_table __rcu *table;
-+	struct em_perf_table *table;
- 	int table_size;
- 
- 	table_size = sizeof(struct em_perf_state) * pd->nr_perf_states;
-@@ -300,9 +296,9 @@
-  * Return 0 on success or an error code on failure.
-  */
- int em_dev_update_perf_domain(struct device *dev,
--			      struct em_perf_table __rcu *new_table)
-+			      struct em_perf_table *new_table)
- {
--	struct em_perf_table __rcu *old_table;
-+	struct em_perf_table *old_table;
- 	struct em_perf_domain *pd;
- 
- 	if (!dev)
-@@ -319,7 +315,8 @@
- 
- 	kref_get(&new_table->kref);
- 
--	old_table = pd->em_table;
-+	old_table = rcu_dereference_protected(pd->em_table,
-+					      lockdep_is_held(&em_pd_mutex));
- 	rcu_assign_pointer(pd->em_table, new_table);
- 
- 	em_cpufreq_update_efficiencies(dev, new_table->state);
-@@ -392,7 +389,7 @@
- 			const cpumask_t *cpus,
- 			unsigned long flags)
- {
--	struct em_perf_table __rcu *em_table;
-+	struct em_perf_table *em_table;
- 	struct em_perf_domain *pd;
- 	struct device *cpu_dev;
- 	int cpu, ret, num_cpus;
-@@ -552,6 +549,7 @@
- 				const struct em_data_callback *cb,
- 				const cpumask_t *cpus, bool microwatts)
- {
-+	struct em_perf_table *em_table;
- 	unsigned long cap, prev_cap = 0;
- 	unsigned long flags = 0;
- 	int cpu, ret;
-@@ -624,7 +622,9 @@
- 	dev->em_pd->min_perf_state = 0;
- 	dev->em_pd->max_perf_state = nr_states - 1;
- 
--	em_cpufreq_update_efficiencies(dev, dev->em_pd->em_table->state);
-+	em_table = rcu_dereference_protected(dev->em_pd->em_table,
-+					     lockdep_is_held(&em_pd_mutex));
-+	em_cpufreq_update_efficiencies(dev, em_table->state);
- 
- 	em_debug_create_pd(dev);
- 	dev_info(dev, "EM: created perf domain\n");
-@@ -661,7 +661,8 @@
- 	mutex_lock(&em_pd_mutex);
- 	em_debug_remove_pd(dev);
- 
--	em_table_free(dev->em_pd->em_table);
-+	em_table_free(rcu_dereference_protected(dev->em_pd->em_table,
-+						lockdep_is_held(&em_pd_mutex)));
- 
- 	kfree(dev->em_pd);
- 	dev->em_pd = NULL;
-@@ -669,9 +670,9 @@
- }
- EXPORT_SYMBOL_GPL(em_dev_unregister_perf_domain);
- 
--static struct em_perf_table __rcu *em_table_dup(struct em_perf_domain *pd)
-+static struct em_perf_table *em_table_dup(struct em_perf_domain *pd)
- {
--	struct em_perf_table __rcu *em_table;
-+	struct em_perf_table *em_table;
- 	struct em_perf_state *ps, *new_ps;
- 	int ps_size;
- 
-@@ -693,7 +694,7 @@
- }
- 
- static int em_recalc_and_update(struct device *dev, struct em_perf_domain *pd,
--				struct em_perf_table __rcu *em_table)
-+				struct em_perf_table *em_table)
- {
- 	int ret;
- 
-@@ -723,7 +724,7 @@
- static void em_adjust_new_capacity(struct device *dev,
- 				   struct em_perf_domain *pd)
- {
--	struct em_perf_table __rcu *em_table;
-+	struct em_perf_table *em_table;
- 
- 	em_table = em_table_dup(pd);
- 	if (!em_table) {
-@@ -814,7 +815,7 @@
-  */
- int em_dev_update_chip_binning(struct device *dev)
- {
--	struct em_perf_table __rcu *em_table;
-+	struct em_perf_table *em_table;
- 	struct em_perf_domain *pd;
- 	int i, ret;
- 
-
-
-
+	VULNBL_VFM(INTEL_COMETLAKE,			MMIO | MMIO_SBDS | RETBLEED | GDS),
+	VULNBL_VFM_STEPS(INTEL_COMETLAKE_L,	0x0,	MMIO | RETBLEED),
+	...
+	VULNBL_VFM_TYPE(INTEL_ALDERLAKE,	ATOM,	RFDS),
 
