@@ -1,109 +1,152 @@
-Return-Path: <linux-pm+bounces-23620-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23621-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5FDB9A56595
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 11:39:25 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 1718FA565A5
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 11:42:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id E64671895ABA
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 10:39:31 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F0243ADF1E
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 10:42:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A954B20E713;
-	Fri,  7 Mar 2025 10:39:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B49F20E302;
+	Fri,  7 Mar 2025 10:42:25 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="TpGJq7Z/"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AbrUSoQk"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.16])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C134B1A239E;
-	Fri,  7 Mar 2025 10:39:16 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.16
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4991A239E
+	for <linux-pm@vger.kernel.org>; Fri,  7 Mar 2025 10:42:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741343960; cv=none; b=dXEWUyHds4dURgFCd2tXlEVT/AGsOQAf30Eo9B7NFhkcjkfYj5RB1iZQj45TRHAaAbNsAWBgUOOW/l45+RvbO/3RnQm23/V36EczPUyrrV7wOYvAG/QvJuFPbz1cLLC2UelHNOjIMyyfrJY5BFLT9BbdIn1uLPB2zdQUAHVydVQ=
+	t=1741344145; cv=none; b=ZELGOhup3W5wC/YK2Lf4j3Z4OaVRGUGdjY5Yi3Deoq7oqX57QH0JgFOXxnvbJQcdx4anmSCyZndc52mAjUT/15RGGJ+e+hrHAtLwQMpikb2xsy1lIeTiw3XAPp9dm68hV7eX/7N80Tg05opq/o52xyfhLqob6FgVl6KpCxYP28I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741343960; c=relaxed/simple;
-	bh=99wAVcYRjJq/6/DqsC5mahdq+/vz2vQmHA/zE8ELOBM=;
-	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
-	 MIME-Version:Content-Type; b=HngLIDc2S3HJNHZNV8detsDpV0rwy+kjPI7tKmcLuqlcKN6ADdINeXbd76b7X75EIsWM/M9zL1JAqM6v2WKA2DsZ/clH2xHk9x4Kik2iHUMZ5V6GFki04JxSWSeV+gHOL3/a/ZQMFImUhE37Aqyi0CFJQ5RnqNWs4FX+95ye3NA=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=TpGJq7Z/; arc=none smtp.client-ip=192.198.163.16
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741343959; x=1772879959;
-  h=from:to:cc:in-reply-to:references:subject:message-id:
-   date:mime-version:content-transfer-encoding;
-  bh=99wAVcYRjJq/6/DqsC5mahdq+/vz2vQmHA/zE8ELOBM=;
-  b=TpGJq7Z/EC0AHVMXbLjn/8rit5vDP3j8ALpHH30l364DEb4nmFWD73Bg
-   mY0cf2Z4ZfiKJ+S/oI5j/MOcJYgAla2A3f5GaPXmMYAc5VezWBmW8xdEN
-   STFRlcyqsgquwQHw8QTQggH11XQybBKOrki6T0qLmhEXCqFHeIcd1sJdW
-   Hfb6p7BJe/sJUSwlQ92kOji7EeASzmP+k+n3v7EU6X6PbN7qQT/2fg01T
-   JUl7IpgsaPgSysWYgObNFeHDrptGxI6nuHPhEcmSVlxF8HfnyuH8er8Cr
-   CRtj+uoCNG1yHTZky4kSM9xpNCDTVsxEo7pvZ6EFDrn38/ocSxRZDbcwi
-   Q==;
-X-CSE-ConnectionGUID: vLca3PQTS2mMGxy3GaPTVA==
-X-CSE-MsgGUID: 32Z+F4pcQuuVhaTYsNLH4w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="29968927"
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="29968927"
-Received: from fmviesa002.fm.intel.com ([10.60.135.142])
-  by fmvoesa110.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 02:39:16 -0800
-X-CSE-ConnectionGUID: /IWgKA95TnOML6Ea/6JBrg==
-X-CSE-MsgGUID: cWCzXnrgSpi4Y+wll4CEfQ==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,228,1736841600"; 
-   d="scan'208";a="142520112"
-Received: from ijarvine-mobl1.ger.corp.intel.com (HELO localhost) ([10.245.245.120])
-  by fmviesa002-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 02:39:14 -0800
-From: =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>
-To: hdegoede@redhat.com, sre@kernel.org, Armin Wolf <W_Armin@gmx.de>
-Cc: platform-driver-x86@vger.kernel.org, linux-pm@vger.kernel.org, 
- linux-kernel@vger.kernel.org
-In-Reply-To: <20250305053009.378609-1-W_Armin@gmx.de>
-References: <20250305053009.378609-1-W_Armin@gmx.de>
-Subject: Re: [PATCH 0/3] platform/x86: dell-ddv: Rework battery temperature
- handling
-Message-Id: <174134395033.2047.10351866706866482165.b4-ty@linux.intel.com>
-Date: Fri, 07 Mar 2025 12:39:10 +0200
+	s=arc-20240116; t=1741344145; c=relaxed/simple;
+	bh=lsavoPaGmfl7xBe3eGeyegwuQTehNQkXPIt3HPhhJAw=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=nYU0Ra4BYBR/ozRgAi8ReUrpwndu/1cUqK/TYZfIAMVWY2aUb9EQcQPmHIQxPDypQm5ZSsuAPr5nyvZMnNKTUFt1UFyucW21WMAASY71difSrf24nKaZNMrWSAJZBlHVVrfIeQxHDK23KABBEAVZQPEQ9YQ8ULTvzAja/INWDz8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AbrUSoQk; arc=none smtp.client-ip=209.85.128.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6fd6f7f8df9so14454077b3.1
+        for <linux-pm@vger.kernel.org>; Fri, 07 Mar 2025 02:42:23 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741344142; x=1741948942; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=rT9XBL4gaIH5wTfFP7ZDqQbyPhjMUoycaEEEpfHomFE=;
+        b=AbrUSoQk6nhlWFqO4asokVbEHik6sxhxTXBMehcD48PPi+kiZ+QoMj89UqyX7uGJqn
+         rox/zaobznu8VGNUgQi8tX6lzq87JapVbrrWnYIpiUeq3DeNNmRy4rPbXtKk1stnx7/D
+         lhol3BWGiEoTAW8u+58noZaHj3mP5ogjQ6/orsrCyR44hr28qd+7ay6ZffuRBMGpkteN
+         TMrMU10f2+/CfUMCMQagngKpeN3BUixY3A6QIVGxvPOGNp4Ue6wJRJmZ9loaf8zPxQUo
+         jTI2Cy0+qzSTynAPbIDpXqrQt9A2XV9xF8LbItcFpCbjdlj0skD37bgLAhgUNK3ZyGKQ
+         fFAQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741344142; x=1741948942;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=rT9XBL4gaIH5wTfFP7ZDqQbyPhjMUoycaEEEpfHomFE=;
+        b=e6BIkY6j67YAreyqStwuHbHuHQaJIyBF2IVEMwFY5PPd1fubXF7jFRvgRgXqrlc2FR
+         PcEv6DTaiHTDQK90E3CeBlTn2pHJiwdR5j4AK/IYFVQN06ETGJXbsIlZtdkRwgrEzKSJ
+         5fwH1kwRYxrvQegIa17Jj3EXdedM7Wrz+JqDSp7Ufo0CF5zpBvmpa+gkQgiowQIb3JzQ
+         LAf+gSj3JMacMMc08ArsfVIz67EkzpB+LdVX46AqlkaAFFdatqMnv2LESSjBGr8eHz7y
+         zS6Duni1lfNzeeyIYE+Lpd+YWUM3p3QnUel4VuJP2pETWabrikga/AFU6CN3F/hkKJu/
+         OG2w==
+X-Gm-Message-State: AOJu0YxX5XhSlDnm6/xVsnxisiAXL7HICg4go//noa+lSH/LGPRoCeKe
+	SjFppVorpqzdGHeOxF8J51ATFV/SJlq7u/6BAAuJnDPNGVhkBTyT0jyvGeyvrBYnqkUK85M2OuK
+	QI/71npxIFbMFX3cNlQWgY65GaCAxDKGwNvolz19Ifn+y4XdV
+X-Gm-Gg: ASbGncvHyjIh7cM2Ii2MA4XlNLc6ZSRfmxBGJGGBJXH/9ZsrSG+3RVKgZJHFNYr0wxb
+	oSxIdg1wmc5ImF9nSVFDiyeqK0fG7bOjz1eBf3P86uJ2PYzTB7+ksBdoQqkgpb0N0GV+Dls3GY0
+	U0GFvXLYK0meD3+USpYkgSLl3SYQ==
+X-Google-Smtp-Source: AGHT+IHXG/0/hShmRUvQAKC9AHfln9CojQ/qyZWB4omLmQIq0J2ete1izlY+85xW6NmBXSV/D95xXORrnvizdPCA3uM=
+X-Received: by 2002:a05:690c:b15:b0:6f7:9f95:d916 with SMTP id
+ 00721157ae682-6febea564cfmr43081107b3.16.1741344142511; Fri, 07 Mar 2025
+ 02:42:22 -0800 (PST)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-X-Mailer: b4 0.13.0
+References: <20250306113549.796524-1-ulf.hansson@linaro.org>
+ <20250306113549.796524-3-ulf.hansson@linaro.org> <CAJZ5v0hF_am9DsuwEUmmgpUp=1ZuAG8fdjYfQ5XxFmS_Y1pMog@mail.gmail.com>
+In-Reply-To: <CAJZ5v0hF_am9DsuwEUmmgpUp=1ZuAG8fdjYfQ5XxFmS_Y1pMog@mail.gmail.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Fri, 7 Mar 2025 11:41:46 +0100
+X-Gm-Features: AQ5f1JqZoOcwKfjkiNxmTrOdstASOHx5S-JbLRg16VovAosUluf6_t-OvA7HKso
+Message-ID: <CAPDyKFphQS4x68f-rHHkhG8w7b6UJcE32v0u-XApicn1pPARXw@mail.gmail.com>
+Subject: Re: [PATCH 2/2] PM: s2idle: Avoid holding the s2idle_lock when
+ calling pm_wakeup_pending()
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>, 
+	Pavel Machek <pavel@kernel.org>, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, 05 Mar 2025 06:30:06 +0100, Armin Wolf wrote:
+On Thu, 6 Mar 2025 at 14:18, Rafael J. Wysocki <rafael@kernel.org> wrote:
+>
+> On Thu, Mar 6, 2025 at 12:36=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
+rg> wrote:
+> >
+> > There's no reason to hold the s2idle_lock longer than necessary. Let's
+> > instead acquire it when really needed in s2idle_enter().
+> >
+> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
+> > ---
+> >  kernel/power/suspend.c | 5 ++---
+> >  1 file changed, 2 insertions(+), 3 deletions(-)
+> >
+> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
+> > index e7aca4e40561..ca09f26cbf4e 100644
+> > --- a/kernel/power/suspend.c
+> > +++ b/kernel/power/suspend.c
+> > @@ -91,10 +91,10 @@ static void s2idle_enter(void)
+> >  {
+> >         trace_suspend_resume(TPS("machine_suspend"), PM_SUSPEND_TO_IDLE=
+, true);
+> >
+> > -       raw_spin_lock_irq(&s2idle_lock);
+>
+> This is to prevent missing a wakeup event when pm_system_wakeup() runs
+> at this point on a different CPU.
+>
+> If you move the locking, it may run as a whole between the
+> pm_wakeup_pending() check below and the s2idle_state update, so the
+> wakeup event will be missed.
 
-> This patch series reworks the handling of the battery temperature
-> inside the dell-wmi-ddv driver.
-> 
-> The first patch fixes an issue inside the calculation formula for
-> the temperature value that resulted in strange temperature values
-> like 29.1 degrees celcius.
-> 
-> [...]
+Of course, you are right! Thanks for clarifying!
 
+>
+> With the locking in place, the pm_abort_suspend update in
+> pm_system_wakeup() may still happen at any time, but the code under
+> the lock in s2idle_wake() after it can only run before the lock is
+> acquired above or after it is released.
+>
+> If s2idle_wake() in pm_system_wakeup() runs before the
+> raw_spin_lock_irq() above, the pm_wakeup_pending() check below will
+> notice the pm_abort_suspend set and return true, so the suspend will
+> be aborted (and the pm_abort_suspend update in pm_system_wakeup()
+> cannot be reordered entirely after the s2idle_wake() call because of
+> the locking there).
+>
+> Now, if s2idle_wake() in pm_system_wakeup() runs after the
+> raw_spin_unlock_irq() below, it will notice the s2idle_state change
+> and it will update it to S2IDLE_STATE_WAKE, so the suspend will be
+> aborted.
+>
+> I guess it would have helped if there had been a comment describing this =
+...
 
-Thank you for your contribution, it has been applied to my local
-review-ilpo-next branch. Note it will show up in the public
-platform-drivers-x86/review-ilpo-next branch only once I've pushed my
-local branch there, which might take a while.
+Yes, I can send a patch adding a small comment about it, if you think
+it makes sense?
 
-The list of commits applied:
-[1/3] platform/x86: dell-ddv: Fix temperature calculation
-      commit: 7a248294a3145bc65eb0d8980a0a8edbb1b92db4
-[2/3] platform/x86: dell-ddv: Use devm_battery_hook_register
-      commit: 8dc3f0161e35d6ceb12de4a70cbed593e5b0583f
-[3/3] platform/x86: dell-ddv: Use the power supply extension mechanism
-      commit: 99923a0df7852311fa3d01eaddb430c958780143
+[...]
 
---
- i.
-
+Kind regards
+Uffe
 
