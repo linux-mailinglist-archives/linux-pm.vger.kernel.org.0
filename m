@@ -1,204 +1,109 @@
-Return-Path: <linux-pm+bounces-23612-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23613-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F2819A5642A
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 10:43:44 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id EBCB6A5645D
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 10:50:56 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id DEB983A45FC
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 09:43:32 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E13DE3AC50A
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 09:50:44 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 242EA201278;
-	Fri,  7 Mar 2025 09:43:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="sMqxK4FG";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7TQ640bc";
-	dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b="sMqxK4FG";
-	dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b="7TQ640bc"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2D95020D500;
+	Fri,  7 Mar 2025 09:50:38 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp-out1.suse.de (smtp-out1.suse.de [195.135.223.130])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 451E0191461
-	for <linux-pm@vger.kernel.org>; Fri,  7 Mar 2025 09:43:37 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=195.135.223.130
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A34041E1DEE;
+	Fri,  7 Mar 2025 09:50:33 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741340620; cv=none; b=gX6BjO5f1CeU/BBzvI3BRtvvd8elK3z/RZf3CIrYujL2aFxwuhqfmtv7C4EEq5uxPdqhjEpTeZ+1PimgtoH5gRsjys4PATHBWvJdC2orrYIPMQvBnCMJEOKoER8m5fh1zxjwDXLmGAeaajHOxi+tVON76SMCX/Uc+07cE6omnds=
+	t=1741341038; cv=none; b=EpZurrutJJvZv9dzilhZaR61squ1JcHs5WJ7/UipW7tIuShdRWvHksx8uxv5PR3V7gzUaYeDz7KsfyZiAh3qlxrRTmrndUxiUtuqEClVlhHjgzFzw9WPwmgHtfqHCz5xYqV540TP5a5hCB4HiZidWN4NmwKlwfDcn96TMMtGLP4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741340620; c=relaxed/simple;
-	bh=WTNdg9md+B8WQQM1mDlfviw9rLBu4szLsoFm5YhODfw=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=WZL9rWSEzYMX7mE/rJlvmwHCVrPpOsck+YXmriG2fHIcf9SO6iw/JeuFpGlj5j/7qajKqgTiUx027hynwjT1aLy6SDpEiOlm0i0cghJcxtS1INgODumQdSDGDRQoZwZT6kIALXg1pmyYhL3XFmxTkSuz+lBxbzb+DQAVwyOmD44=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de; spf=pass smtp.mailfrom=suse.de; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=sMqxK4FG; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7TQ640bc; dkim=pass (1024-bit key) header.d=suse.de header.i=@suse.de header.b=sMqxK4FG; dkim=permerror (0-bit key) header.d=suse.de header.i=@suse.de header.b=7TQ640bc; arc=none smtp.client-ip=195.135.223.130
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=suse.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.de
-Received: from imap1.dmz-prg2.suse.org (imap1.dmz-prg2.suse.org [IPv6:2a07:de40:b281:104:10:150:64:97])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by smtp-out1.suse.de (Postfix) with ESMTPS id 17FF2211A1;
-	Fri,  7 Mar 2025 09:43:36 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1741340616; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=0bEZCu0AcVK+oUMJVTm2Tzz7V0q5lgSYgSO2krkG9TM=;
-	b=sMqxK4FGvBv/GCR9Cu8mkKZOb5LUGAhn/uBUfCm6DB40baDKW+a0DXq+qvmBCjNvJC07R3
-	I3RRpq9O92V0Jf00dkfJ1uT1C7TmweIuIui+nbHSSx7uwDvAuiv4OQIxAQctAK38f3HicZ
-	+AR9601AUOYFtMUgE8cL8CI7dtme1PQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1741340616;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=0bEZCu0AcVK+oUMJVTm2Tzz7V0q5lgSYgSO2krkG9TM=;
-	b=7TQ640bc8rVYGpFk5mgGZWZf9vmvvMRCBqPGmDz/p3AaN9SIT4/Pcc3M8z8gr10e/5U6Fa
-	vut+m/B1AgJhO/CA==
-Authentication-Results: smtp-out1.suse.de;
-	dkim=pass header.d=suse.de header.s=susede2_rsa header.b=sMqxK4FG;
-	dkim=pass header.d=suse.de header.s=susede2_ed25519 header.b=7TQ640bc
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=suse.de; s=susede2_rsa;
-	t=1741340616; h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=0bEZCu0AcVK+oUMJVTm2Tzz7V0q5lgSYgSO2krkG9TM=;
-	b=sMqxK4FGvBv/GCR9Cu8mkKZOb5LUGAhn/uBUfCm6DB40baDKW+a0DXq+qvmBCjNvJC07R3
-	I3RRpq9O92V0Jf00dkfJ1uT1C7TmweIuIui+nbHSSx7uwDvAuiv4OQIxAQctAK38f3HicZ
-	+AR9601AUOYFtMUgE8cL8CI7dtme1PQ=
-DKIM-Signature: v=1; a=ed25519-sha256; c=relaxed/relaxed; d=suse.de;
-	s=susede2_ed25519; t=1741340616;
-	h=from:from:reply-to:date:date:message-id:message-id:to:to:cc:cc:
-	 mime-version:mime-version:  content-transfer-encoding:content-transfer-encoding;
-	bh=0bEZCu0AcVK+oUMJVTm2Tzz7V0q5lgSYgSO2krkG9TM=;
-	b=7TQ640bc8rVYGpFk5mgGZWZf9vmvvMRCBqPGmDz/p3AaN9SIT4/Pcc3M8z8gr10e/5U6Fa
-	vut+m/B1AgJhO/CA==
-Received: from imap1.dmz-prg2.suse.org (localhost [127.0.0.1])
-	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
-	 key-exchange X25519 server-signature RSA-PSS (4096 bits) server-digest SHA256)
-	(No client certificate requested)
-	by imap1.dmz-prg2.suse.org (Postfix) with ESMTPS id EA60C13A22;
-	Fri,  7 Mar 2025 09:43:35 +0000 (UTC)
-Received: from dovecot-director2.suse.de ([2a07:de40:b281:106:10:150:64:167])
-	by imap1.dmz-prg2.suse.org with ESMTPSA
-	id U7lNN8e/ymfGSwAAD6G6ig
-	(envelope-from <trenn@suse.de>); Fri, 07 Mar 2025 09:43:35 +0000
-From: Thomas Renninger <trenn@suse.de>
-To: Shuah Khan <skhan@linuxfoundation.org>
-Cc: linux-pm@vger.kernel.org,
-	Thomas Renninger <trenn@suse.de>
-Subject: [PATCH] cpupower: Make lib versioning scheme more obvious and fix version link
-Date: Fri,  7 Mar 2025 10:43:34 +0100
-Message-ID: <20250307094334.39587-1-trenn@suse.de>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1741341038; c=relaxed/simple;
+	bh=d3agI50q2xWFJ5p1wa9JH4JwPRcj3aWovddGpnxeI40=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kJMhhqM5ESgjXK//p5s4bJDy0+rNcGlHnKEhhGcbxCbp3i0/pKwuLmdcgoUNfjXPu2U9jaD2z9IMPtp6hfRQ/PT5pL6Xflp+u3IRgUPQTtyBsPnQnGihZg4FqNyc8dvR3h1UBlhNlHcBcp9XRA8sYV3Ei0E5HmsyqBFYYfygyII=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 9A661150C;
+	Fri,  7 Mar 2025 01:50:45 -0800 (PST)
+Received: from bogus (e133711.arm.com [10.1.196.55])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id BCEF93F66E;
+	Fri,  7 Mar 2025 01:50:29 -0800 (PST)
+Date: Fri, 7 Mar 2025 09:50:26 +0000
+From: Sudeep Holla <sudeep.holla@arm.com>
+To: Jacky Bai <ping.bai@nxp.com>
+Cc: <rafael@kernel.org>, <daniel.lezcano@linaro.org>,
+	<lpieralisi@kernel.org>, <ulf.hansson@linaro.org>,
+	Sudeep Holla <sudeep.holla@arm.com>, <james.morse@arm.com>,
+	<d-gole@ti.com>, <anup@brainfault.org>, <paul.walmsley@sifive.com>,
+	<palmer@dabbelt.com>, <aou@eecs.berkeley.edu>,
+	<linux-pm@vger.kernel.org>, <linux-arm-kernel@lists.infradead.org>,
+	<linux-kernel@vger.kernel.org>, <linux-riscv@lists.infradead.org>,
+	<imx@lists.linux.dev>, <khilman@baylibre.com>,
+	<quic_tingweiz@quicinc.com>, <quic_yuanjiey@quicinc.com>
+Subject: Re: [PATCH v4] cpuidle: Init cpuidle only for present CPUs
+Message-ID: <Z8rBYuDiIyo8y6HT@bogus>
+References: <20250307080303.2660506-1-ping.bai@nxp.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
-X-Rspamd-Queue-Id: 17FF2211A1
-X-Spam-Score: -3.01
-X-Rspamd-Action: no action
-X-Spamd-Result: default: False [-3.01 / 50.00];
-	BAYES_HAM(-3.00)[99.99%];
-	NEURAL_HAM_LONG(-1.00)[-1.000];
-	MID_CONTAINS_FROM(1.00)[];
-	R_MISSING_CHARSET(0.50)[];
-	R_DKIM_ALLOW(-0.20)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	NEURAL_HAM_SHORT(-0.20)[-1.000];
-	MIME_GOOD(-0.10)[text/plain];
-	MX_GOOD(-0.01)[];
-	RCVD_VIA_SMTP_AUTH(0.00)[];
-	ARC_NA(0.00)[];
-	RCVD_COUNT_TWO(0.00)[2];
-	MIME_TRACE(0.00)[0:+];
-	RBL_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	SPAMHAUS_XBL(0.00)[2a07:de40:b281:104:10:150:64:97:from];
-	TO_DN_SOME(0.00)[];
-	RECEIVED_SPAMHAUS_BLOCKED_OPENRESOLVER(0.00)[2a07:de40:b281:106:10:150:64:167:received];
-	FUZZY_BLOCKED(0.00)[rspamd.com];
-	FROM_HAS_DN(0.00)[];
-	TO_MATCH_ENVRCPT_ALL(0.00)[];
-	DBL_BLOCKED_OPENRESOLVER(0.00)[suse.de:dkim,suse.de:mid,suse.de:email,imap1.dmz-prg2.suse.org:rdns,imap1.dmz-prg2.suse.org:helo];
-	RCVD_TLS_ALL(0.00)[];
-	FROM_EQ_ENVFROM(0.00)[];
-	RCPT_COUNT_THREE(0.00)[3];
-	DKIM_SIGNED(0.00)[suse.de:s=susede2_rsa,suse.de:s=susede2_ed25519];
-	DKIM_TRACE(0.00)[suse.de:+]
-X-Rspamd-Server: rspamd1.dmz-prg2.suse.org
-X-Spam-Flag: NO
-X-Spam-Level: 
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250307080303.2660506-1-ping.bai@nxp.com>
 
-library versioning was broken:
-libcpupower.so.0.0.1
-libcpupower.so -> libcpupower.so.0.0.1
-libcpupower.so.1 -> libcpupower.so.0.0.1
+On Fri, Mar 07, 2025 at 04:03:03PM +0800, Jacky Bai wrote:
+> for_each_possible_cpu() is currently used to initialize cpuidle
+> in below cpuidle drivers:
+>   drivers/cpuidle/cpuidle-arm.c
+>   drivers/cpuidle/cpuidle-big_little.c
+>   drivers/cpuidle/cpuidle-psci.c
+>   drivers/cpuidle/cpuidle-riscv-sbi.c
+> 
+> However, in cpu_dev_register_generic(), for_each_present_cpu()
+> is used to register CPU devices which means the CPU devices are
+> only registered for present CPUs and not all possible CPUs.
+> 
+> With nosmp or maxcpus=0, only the boot CPU is present, lead
+> to the failure:
+> 
+>   |  Failed to register cpuidle device for cpu1
+> 
+> Then rollback to cancel all CPUs' cpuidle registration.
+> 
+> Change for_each_possible_cpu() to for_each_present_cpu() in the
+> above cpuidle drivers to ensure it only registers cpuidle devices
+> for CPUs that are actually present.
+> 
+> Fixes: b0c69e1214bc ("drivers: base: Use present CPUs in GENERIC_CPU_DEVICES")
+> Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Tested-by: Yuanjie Yang <quic_yuanjiey@quicinc.com>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
+> ---
+>  - v4 changes:
+>   - add changes for other cpuidle driver that has the similar issue
+>     as cpuidle-pcsi driver.
+> 
+>  - v3 changes:
+>   - improve the changelog as suggested by Sudeep
+> ---
+>  drivers/cpuidle/cpuidle-arm.c        | 8 ++++----
+>  drivers/cpuidle/cpuidle-big_little.c | 2 +-
+>  drivers/cpuidle/cpuidle-psci.c       | 4 ++--
+>  drivers/cpuidle/cpuidle-riscv-sbi.c  | 4 ++--
 
-and is fixed by this patch to:
-libcpupower.so.1.0.1
-libcpupower.so -> libcpupower.so.1.0.1
-libcpupower.so.1 -> libcpupower.so.1.0.1
 
-Signed-off-by: Thomas Renninger <trenn@suse.de>
----
- tools/power/cpupower/Makefile | 19 +++++++++++--------
- 1 file changed, 11 insertions(+), 8 deletions(-)
+Why have you spared drivers/cpuidle/cpuidle-qcom-spm.c ? IIUC the issue
+exists there as well.
 
-diff --git a/tools/power/cpupower/Makefile b/tools/power/cpupower/Makefile
-index 51a95239fe06..835123add0ed 100644
---- a/tools/power/cpupower/Makefile
-+++ b/tools/power/cpupower/Makefile
-@@ -52,8 +52,11 @@ DESTDIR ?=
- # and _should_ modify the PACKAGE_BUGREPORT definition
- 
- VERSION:=			$(shell ./utils/version-gen.sh)
--LIB_MAJ=			0.0.1
--LIB_MIN=			1
-+LIB_FIX=			1
-+LIB_MIN=			0
-+LIB_MAJ=			1
-+LIB_VER=			$(LIB_MAJ).$(LIB_MIN).$(LIB_FIX)
-+
- 
- PACKAGE =			cpupower
- PACKAGE_BUGREPORT =		linux-pm@vger.kernel.org
-@@ -200,14 +203,14 @@ $(OUTPUT)lib/%.o: $(LIB_SRC) $(LIB_HEADERS)
- 	$(ECHO) "  CC      " $@
- 	$(QUIET) $(CC) $(CFLAGS) -fPIC -o $@ -c lib/$*.c
- 
--$(OUTPUT)libcpupower.so.$(LIB_MAJ): $(LIB_OBJS)
-+$(OUTPUT)libcpupower.so.$(LIB_VER): $(LIB_OBJS)
- 	$(ECHO) "  LD      " $@
- 	$(QUIET) $(CC) -shared $(CFLAGS) $(LDFLAGS) -o $@ \
--		-Wl,-soname,libcpupower.so.$(LIB_MIN) $(LIB_OBJS)
-+		-Wl,-soname,libcpupower.so.$(LIB_MAJ) $(LIB_OBJS)
- 	@ln -sf $(@F) $(OUTPUT)libcpupower.so
--	@ln -sf $(@F) $(OUTPUT)libcpupower.so.$(LIB_MIN)
-+	@ln -sf $(@F) $(OUTPUT)libcpupower.so.$(LIB_MAJ)
- 
--libcpupower: $(OUTPUT)libcpupower.so.$(LIB_MAJ)
-+libcpupower: $(OUTPUT)libcpupower.so.$(LIB_VER)
- 
- # Let all .o files depend on its .c file and all headers
- # Might be worth to put this into utils/Makefile at some point of time
-@@ -217,7 +220,7 @@ $(OUTPUT)%.o: %.c
- 	$(ECHO) "  CC      " $@
- 	$(QUIET) $(CC) $(CFLAGS) -I./lib -I ./utils -o $@ -c $*.c
- 
--$(OUTPUT)cpupower: $(UTIL_OBJS) $(OUTPUT)libcpupower.so.$(LIB_MAJ)
-+$(OUTPUT)cpupower: $(UTIL_OBJS) $(OUTPUT)libcpupower.so.$(LIB_VER)
- 	$(ECHO) "  CC      " $@
- ifeq ($(strip $(STATIC)),true)
- 	$(QUIET) $(CC) $(CFLAGS) $(LDFLAGS) $(UTIL_OBJS) -lrt -lpci -L$(OUTPUT) -o $@
-@@ -262,7 +265,7 @@ update-po: $(OUTPUT)po/$(PACKAGE).pot
- 	done;
- endif
- 
--compile-bench: $(OUTPUT)libcpupower.so.$(LIB_MAJ)
-+compile-bench: $(OUTPUT)libcpupower.so.$(LIB_VER)
- 	@V=$(V) confdir=$(confdir) $(MAKE) -C bench O=$(OUTPUT)
- 
- # we compile into subdirectories. if the target directory is not the
 -- 
-2.48.1
-
+Regards,
+Sudeep
 
