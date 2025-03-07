@@ -1,136 +1,139 @@
-Return-Path: <linux-pm+bounces-23630-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23631-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 02FADA56866
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 14:03:10 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 12587A568C5
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 14:23:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 481A71889ED4
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 13:03:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4CCEB16B88E
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 13:23:00 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E41112940B;
-	Fri,  7 Mar 2025 13:02:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C1BDD218EBD;
+	Fri,  7 Mar 2025 13:22:53 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b="UH30BZtw"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9D16E219EAD;
-	Fri,  7 Mar 2025 13:02:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from bali.collaboradmins.com (bali.collaboradmins.com [148.251.105.195])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88C0D39ACC;
+	Fri,  7 Mar 2025 13:22:51 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=148.251.105.195
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741352577; cv=none; b=DYfkS3as1/eKP7f98ZyB67eoHL9X5vU5OF5CcBjclXOKUsDHaLEgiHJFAFN454cyZFtMl1QlmsYgt9vyCudOgd3nScvNyDu/lzjIHNXdHRbpua8XLxzSKWMOpJsh9SbEZhW0jpdrvGaHD01jes5VMMNUdxk8QAKuRzx8Mx7AS90=
+	t=1741353773; cv=none; b=sEtHYYwRR2g2g13XiNv9y6DKfn5U4ILSMscQD6hRTa07obzSUz+VnKh+l5g3/5l72fvNEX5cl2H70MoYBysix4BGq1jnzn8otkoJoeo6Fm93emdaMRLZe1yyLEvc8jxGVeKKI6FlRhFpsqgw1HR1mBHsvOqS/OGMCadpNZlqtLE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741352577; c=relaxed/simple;
-	bh=WEqfAtflcOZXdqVx77syZFjRqAPFCh/u0vjErVeCWYE=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=uPwilvuq9EMfZsUXbuMtQTdetoBwywMdZb7kz2/Vbmhzhq/craVbE/rxDssbv0L+UO7c5FNEoa4o/9GaIVBz4YgSDCiAA5yKYffozjfAvTaJmR1I60sVqFrElZ414JDAyVh5jo0H+y2CHNBvBWTE2z4w272RvKAqZ10Qt4chkAc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 1B6491477;
-	Fri,  7 Mar 2025 05:03:06 -0800 (PST)
-Received: from [10.57.84.65] (unknown [10.57.84.65])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 9E3483F66E;
-	Fri,  7 Mar 2025 05:02:52 -0800 (PST)
-Message-ID: <4a538376-bf74-4c51-bfa8-a86f67790662@arm.com>
-Date: Fri, 7 Mar 2025 13:02:50 +0000
+	s=arc-20240116; t=1741353773; c=relaxed/simple;
+	bh=nMdElkX27SYzjIYLE2Nq3THJhnIkeKxIRL8VmbGk6kM=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=abWB9QQ9JjZbBWYLlQlNBXq7d1hQak6UZuYtZ1Wbaa+M/uNvPYx3V5PtXPJoiBRo8m+J6s1llQmzDRz55YLV3L2BOw4gv3kx3LDaoNr0pgBbev4OhAGF66mni8ACf5k1Cp4d4wqGyDkICY41UT15FOUBc0SRsNCqu5otwMYUPpw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (2048-bit key) header.d=collabora.com header.i=@collabora.com header.b=UH30BZtw; arc=none smtp.client-ip=148.251.105.195
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=collabora.com;
+	s=mail; t=1741353763;
+	bh=nMdElkX27SYzjIYLE2Nq3THJhnIkeKxIRL8VmbGk6kM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=UH30BZtwjumsTG+ymcK82JDw2TOztk6pPaFGRIpxdfLL1yrF5Rmrv9L+JIpB89d94
+	 ka7coYAc8FoQpIRTFFbPiKgBC//VrsODHU+kGTJxpx9+Ng0X/71/Ny2kMGDpjBVY+0
+	 ODUgWtfT8q1pjxowPX9FiTO3UPu+04ep7laZhiObugs3aPEkCrZr2FrZI6FDCHxv3g
+	 BXWuwjjbT9K0PdGHnHZh131bbuZcUHc1yWlKt0ZMbXggm/q6uOk8W3E54qS4BZJvd6
+	 mkdlKAI6qFkfL7sDjOm41FPFfpS7Qp7vgQzpDzA3oRd6sKGVbxDXyy2Ac0NupiiBG3
+	 9Q96c+BviI4RQ==
+Received: from notapiano (unknown [IPv6:2804:14c:1a9:53ee::1001])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (prime256v1) server-signature RSA-PSS (4096 bits) server-digest SHA256)
+	(No client certificate requested)
+	(Authenticated sender: nfraprado)
+	by bali.collaboradmins.com (Postfix) with ESMTPSA id A168917E05C1;
+	Fri,  7 Mar 2025 14:22:38 +0100 (CET)
+Date: Fri, 7 Mar 2025 10:22:36 -0300
+From: =?utf-8?B?TsOtY29sYXMgRi4gUi4gQS4=?= Prado <nfraprado@collabora.com>
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Matthias Brugger <matthias.bgg@gmail.com>,
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
+	Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
+	Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
+	Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+	Catalin Marinas <catalin.marinas@arm.com>,
+	Will Deacon <will@kernel.org>, kernel@collabora.com,
+	linux-sound@vger.kernel.org, devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org, linux-arm-kernel@lists.infradead.org,
+	linux-mediatek@lists.infradead.org, linux-pm@vger.kernel.org
+Subject: Re: [PATCH v4 01/19] dt-bindings: mfd: mediatek: mt6397: Add accdet
+ subnode
+Message-ID: <cb2820d8-84e8-49ca-b497-1ea815679a3d@notapiano>
+References: <20250305-mt6359-accdet-dts-v4-0-e5ffa5ee9991@collabora.com>
+ <20250305-mt6359-accdet-dts-v4-1-e5ffa5ee9991@collabora.com>
+ <20250306-certain-jasmine-mastiff-fd67ba@krzk-bin>
+ <2fa6037d-b5e9-45b2-a5d5-dbc92fb3434b@notapiano>
+ <0663e03e-e331-4a06-be95-ce8d9059ed6b@kernel.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2] PM: EM: Address RCU-related sparse warnings
-To: "Rafael J. Wysocki" <rjw@rjwysocki.net>
-Cc: LKML <linux-kernel@vger.kernel.org>, Linux PM <linux-pm@vger.kernel.org>,
- Dietmar Eggemann <dietmar.eggemann@arm.com>,
- Ricardo Neri <ricardo.neri-calderon@linux.intel.com>
-References: <5885405.DvuYhMxLoT@rjwysocki.net>
-Content-Language: en-US
-From: Lukasz Luba <lukasz.luba@arm.com>
-In-Reply-To: <5885405.DvuYhMxLoT@rjwysocki.net>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Type: text/plain; charset=iso-8859-1
+Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
+In-Reply-To: <0663e03e-e331-4a06-be95-ce8d9059ed6b@kernel.org>
 
+On Fri, Mar 07, 2025 at 08:11:26AM +0100, Krzysztof Kozlowski wrote:
+> On 06/03/2025 13:19, Nícolas F. R. A. Prado wrote:
+> >>>    It is interfaced to host controller using SPI interface by a proprietary hardware
+> >>>    called PMIC wrapper or pwrap. MT6397/MT6323 PMIC is a child device of pwrap.
+> >>> @@ -224,6 +225,30 @@ properties:
+> >>>      description:
+> >>>        Pin controller
+> >>>  
+> >>> +  accdet:
+> >>> +    type: object
+> >>> +    additionalProperties: false
+> >>> +    description:
+> >>> +      The Accessory Detection module found on the PMIC allows detecting audio
+> >>> +      jack insertion and removal, as well as identifying the type of events
+> >>> +      connected to the jack.
+> >>> +
+> >>> +    properties:
+> >>> +      compatible:
+> >>> +        const: mediatek,mt6359-accdet
+> >>
+> >> You just removed the other file, no folding happened here. Drop the
+> >> accdet node and fold this into parent.
+> > 
+> > Sorry, I'm still not sure what you mean by folding here then. Right now the
+> > accdet is a subnode of the PMIC. If you want me to remove the accdet node, where
+> 
+> Yes
+> 
+> > would its compatible and property go?
+> 
+> compatible: nowhere, because it is close to redundancy.
+> 
+> property: to the parent pmic node.
+> 
+>     pmic {
+>         compatible = "mediatek,mt6359";
+>         interrupt-controller;
+>         #interrupt-cells = <2>;
+> 
+>         mediatek,hp-eint-high;
+>     };
 
+I'm not sure that's right. The ACCDET submodule does have some resources, IRQs,
+that it registers in its mfd cell, see patch 2 of this series [1]. It also has
+its own driver (sound/soc/codecs/mt6359-accdet.c) that probes based on this
+compatible and handles those interrupts. Why would it not get its own node like
+the other MFD cells?
 
-On 3/6/25 16:49, Rafael J. Wysocki wrote:
-> From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> 
-> The usage of __rcu in the Energy Model code is quite inconsistent
-> which causes the following sparse warnings to trigger:
-> 
-> kernel/power/energy_model.c:169:15: warning: incorrect type in assignment (different address spaces)
-> kernel/power/energy_model.c:169:15:    expected struct em_perf_table [noderef] __rcu *table
-> kernel/power/energy_model.c:169:15:    got struct em_perf_table *
-> kernel/power/energy_model.c:171:9: warning: incorrect type in argument 1 (different address spaces)
-> kernel/power/energy_model.c:171:9:    expected struct callback_head *head
-> kernel/power/energy_model.c:171:9:    got struct callback_head [noderef] __rcu *
-> kernel/power/energy_model.c:171:9: warning: cast removes address space '__rcu' of expression
-> kernel/power/energy_model.c:182:19: warning: incorrect type in argument 1 (different address spaces)
-> kernel/power/energy_model.c:182:19:    expected struct kref *kref
-> kernel/power/energy_model.c:182:19:    got struct kref [noderef] __rcu *
-> kernel/power/energy_model.c:200:15: warning: incorrect type in assignment (different address spaces)
-> kernel/power/energy_model.c:200:15:    expected struct em_perf_table [noderef] __rcu *table
-> kernel/power/energy_model.c:200:15:    got void *[assigned] _res
-> kernel/power/energy_model.c:204:20: warning: incorrect type in argument 1 (different address spaces)
-> kernel/power/energy_model.c:204:20:    expected struct kref *kref
-> kernel/power/energy_model.c:204:20:    got struct kref [noderef] __rcu *
-> kernel/power/energy_model.c:320:19: warning: incorrect type in argument 1 (different address spaces)
-> kernel/power/energy_model.c:320:19:    expected struct kref *kref
-> kernel/power/energy_model.c:320:19:    got struct kref [noderef] __rcu *
-> kernel/power/energy_model.c:325:45: warning: incorrect type in argument 2 (different address spaces)
-> kernel/power/energy_model.c:325:45:    expected struct em_perf_state *table
-> kernel/power/energy_model.c:325:45:    got struct em_perf_state [noderef] __rcu *
-> kernel/power/energy_model.c:425:45: warning: incorrect type in argument 3 (different address spaces)
-> kernel/power/energy_model.c:425:45:    expected struct em_perf_state *table
-> kernel/power/energy_model.c:425:45:    got struct em_perf_state [noderef] __rcu *
-> kernel/power/energy_model.c:442:15: warning: incorrect type in argument 1 (different address spaces)
-> kernel/power/energy_model.c:442:15:    expected void const *objp
-> kernel/power/energy_model.c:442:15:    got struct em_perf_table [noderef] __rcu *[assigned] em_table
-> kernel/power/energy_model.c:626:55: warning: incorrect type in argument 2 (different address spaces)
-> kernel/power/energy_model.c:626:55:    expected struct em_perf_state *table
-> kernel/power/energy_model.c:626:55:    got struct em_perf_state [noderef] __rcu *
-> kernel/power/energy_model.c:681:16: warning: incorrect type in assignment (different address spaces)
-> kernel/power/energy_model.c:681:16:    expected struct em_perf_state *new_ps
-> kernel/power/energy_model.c:681:16:    got struct em_perf_state [noderef] __rcu *
-> kernel/power/energy_model.c:699:37: warning: incorrect type in argument 2 (different address spaces)
-> kernel/power/energy_model.c:699:37:    expected struct em_perf_state *table
-> kernel/power/energy_model.c:699:37:    got struct em_perf_state [noderef] __rcu *
-> kernel/power/energy_model.c:733:38: warning: incorrect type in argument 3 (different address spaces)
-> kernel/power/energy_model.c:733:38:    expected struct em_perf_state *table
-> kernel/power/energy_model.c:733:38:    got struct em_perf_state [noderef] __rcu *
-> kernel/power/energy_model.c:855:53: warning: dereference of noderef expression
-> kernel/power/energy_model.c:864:32: warning: dereference of noderef expression
-> 
-> This is because the __rcu annotation for sparse is only applicable to
-> pointers that need rcu_dereference() or equivalent for protection, which
-> basically means pointers assigned with rcu_assign_pointer().
-> 
-> Make all of the above sparse warnings go away by cleaning up the usage
-> of __rcu and using rcu_dereference_protected() where applicable.
-> 
-> Cc: All applicable <stable@vger.kernel.org>
-> Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
-> ---
-> 
-> This replaces
-> 
-> https://lore.kernel.org/linux-pm/1929404.tdWV9SEqCh@rjwysocki.net/
-> 
-> and
-> 
-> https://lore.kernel.org/linux-pm/13728396.uLZWGnKmhe@rjwysocki.net/
-> 
-> ---
->   include/linux/energy_model.h |   12 ++++++------
->   kernel/power/energy_model.c  |   39 ++++++++++++++++++++-------------------
->   2 files changed, 26 insertions(+), 25 deletions(-)
-> 
+[1] https://lore.kernel.org/all/20250305-mt6359-accdet-dts-v4-2-e5ffa5ee9991@collabora.com
 
-LGTM,
-
-Reviewed-by: Lukasz Luba <lukasz.luba@arm.com>
+Thanks,
+Nícolas
 
