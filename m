@@ -1,207 +1,155 @@
-Return-Path: <linux-pm+bounces-23582-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23583-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2E76FA55D83
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 03:17:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5ABF2A55D85
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 03:18:13 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6136D18956B7
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 02:18:03 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B06F162C7E
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 02:18:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8AEAA142E67;
-	Fri,  7 Mar 2025 02:17:51 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4A52152196;
+	Fri,  7 Mar 2025 02:18:04 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="IxUZ/ttj"
+	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="GEwSFkE6"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
+Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id A935B168B1;
-	Fri,  7 Mar 2025 02:17:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5E0168B1;
+	Fri,  7 Mar 2025 02:18:02 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741313871; cv=none; b=qBXHL0sIIcZEflUhWTKJzXTo+YWUuKwzNLWBMB9gETKsbBSx6hR2yybvn7+eub0EUy8H2gqmigyLMNeyG6Y3qEW6GIBiAaZv6zNvnaUGwGOvyySMefqspruWKMkWsgMYOEFUz7NX+3etwHtG2RUIFV7ldH0KgCjke/0Tfeg11gY=
+	t=1741313884; cv=none; b=A6NauFDcc/qRNhA12riSZ0o9i8uRftQWLdpD+9n6B9okp+qWWKt4gui9rcso8z585zh9JhR9Ve6XWvPo3zrMqC3AVJhffFMwJextnrassETFrFcuoHeTdluk1SZD6yl3Y5wkA4HEtlZ56M4E8cLLHOQx0xdWmxhwuin8Q1UEPmA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741313871; c=relaxed/simple;
-	bh=kOu4rvG78Qt/Vnqc24VAFu7oWPCqfeyYuF+ofgHto8c=;
-	h=Date:From:To:Cc:Subject:Message-ID:MIME-Version:Content-Type:
-	 Content-Disposition; b=Lc2O7HYW9EpAn+QnFMt2ytVVgcNQRWCIwV2x3DyFUWcVrG1eul/7d+/AiTtnZYFBnSkrDwyx6sZGT86aYkMmxK2l6zIonNImmCpkjXV1oO7Z0F5W4jP4VnZ6maeEn5UWlK6U1EvO5M/ozn9Jcizj3/H2bXz6QsxkMudejiFtmCk=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=IxUZ/ttj; arc=none smtp.client-ip=198.175.65.9
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741313869; x=1772849869;
-  h=date:from:to:cc:subject:message-id:mime-version;
-  bh=kOu4rvG78Qt/Vnqc24VAFu7oWPCqfeyYuF+ofgHto8c=;
-  b=IxUZ/ttjmwS4DlUPIkOVMcSd8sa4HdMqjnQVAnxXNcJG3C4MiUWqleOp
-   LB+iBFXktVAGf1f3dttY5smFFsaV5gK2O4r35XW2sOhijNuMJOeH9HiHT
-   UQBcbFkHNnFl3AZ+JAp7dsrVCqJxR/Z9cPHgV+nMwBNYJ8vw4Ie2jYqYR
-   8pog3mdzVdMrVsvhDbpy9Fy7l85n5ElvMVAPZb+2xy5PPyVeXA8OuB8gj
-   gX+1DKtbxR2GYF1boTDoMeDX8vNTKTaf+QcHNGGl9DUFDkd+n8P26bFzr
-   mV8/1UmB3Mvz7JX2hirADASU/OrolAyRvkFDubtJf1y0I4t7r/g8DCnag
-   w==;
-X-CSE-ConnectionGUID: kpB2Lp44SR2p2hPR9Q8ypA==
-X-CSE-MsgGUID: Z3NQd9i5Szuw8hFmpx8sQA==
-X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="64795131"
-X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
-   d="scan'208";a="64795131"
-Received: from fmviesa005.fm.intel.com ([10.60.135.145])
-  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 18:17:49 -0800
-X-CSE-ConnectionGUID: R/6qAsNtRkyMJO75vIANDA==
-X-CSE-MsgGUID: W7SV5KTnQuC5uJzU6swTMw==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
-   d="scan'208";a="123788075"
-Received: from ylan1-mobl.amr.corp.intel.com (HELO desk) ([10.125.145.179])
-  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 18:17:48 -0800
-Date: Thu, 6 Mar 2025 18:17:47 -0800
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	Brice Goglin <brice.goglin@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <Perry.Yuan@amd.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [PATCH v7 0/4] Utilize cpu-type for CPU matching
-Message-ID: <20250306-add-cpu-type-v7-0-f903fb022fd4@linux.intel.com>
-X-B4-Tracking: v=1; b=H4sIAC5WymcC/6XQPU/DMBAG4L8Sea6rO3/kkk4gFkYGNsSQ2Bdqq
- SRRkkatqvx3TJAoSsMC4/n0Pq91F9FzF7gXu+QiOh5DH5o6DrRJhNsX9RvL4OMsFCgDKZIsvJe
- uPcrh3LI03rIhrhwiiRhpO67CaeZexNP988OjeI3P+9APTXeeS0acl+veiBJkmWV5njlApvTuE
- OrjaRvqgQ9b17zP3Kh+EGpJqEhUuaLSc6YLD+uEvhIZ2gWhI6G0wVRpq8DSDbFJ/hyd2821Pde
- wIEwkEEyWq5KK0lbrhP0mUCEuCPv5i4IBobKg6ZcbpP8ivm4Qd7C8QRqjhgyStqXzZG/bp2n6A
- KFf0056AgAA
-X-Mailer: b4 0.14.1
+	s=arc-20240116; t=1741313884; c=relaxed/simple;
+	bh=o5x7cLEjm8MZX6Jghu2IW59J2Iu3i6+TNqseTqAL1A0=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nvuvJmNnxL4c7jplfuJHU9IeKhPyE4x73ChnIVBtyNhd18lIQ/1Zh+hmF3CP/ptUJw/77Ht1L79lgeJ7aRk3cE0tRVpoY970KCFPZLY61tWLJ6o16f+7Ft7xm4jutmQIQ7wYV20cyeKdgzB7vWWqgQ9Bgo5z79r2MHMp5agqwSo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=GEwSFkE6; arc=none smtp.client-ip=46.235.229.95
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
+	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
+	:Subject; bh=o7mlQ1962EQiMMcntIkUeCtxj49EfYHI00jQrO3UUx4=; b=GEwSFkE6tfS2VRZq
+	wJgFMV9Clr0R9JkmZotTSOkbxSTxSmw2Wp1aqiiMRp6iqD3fVnhvMHnVRkMyMt6WIYpO/Tov9Vt/H
+	l3UJGcQiLehWHr4V+0Q4WlKX08tUcwV/TDv+Qr7OdBhth8zJLuZcCoEGqooPAIFGhE3sSNMr8lBWr
+	Ul8yUqEzm/eNg7/iB2VPuwa7MpgdymvPomWUwQOvK0Z17dApm1ncwqBcGuueWffjwJCMm+yA5t1YY
+	NH3Eyg+qsoMEtzB6xLYvUxI9GUgkNu8gYUZKtmKC3qg5PUFx+eiZyhF4XjDvhCQzjfJ3Q2BJmS0Q6
+	Mfzqqeo9udR7pu7Gcg==;
+Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
+	by mx.treblig.org with esmtp (Exim 4.96)
+	(envelope-from <linux@treblig.org>)
+	id 1tqNHa-003I6m-2T;
+	Fri, 07 Mar 2025 02:17:50 +0000
+From: linux@treblig.org
+To: rafael@kernel.org,
+	len.brown@intel.com,
+	pavel@kernel.org
+Cc: gregkh@linuxfoundation.org,
+	dakr@kernel.org,
+	linux-pm@vger.kernel.org,
+	linux-kernel@vger.kernel.org,
+	"Dr. David Alan Gilbert" <linux@treblig.org>
+Subject: [PATCH] drivers: base: power: Remove unused pm_generic_ wrappers
+Date: Fri,  7 Mar 2025 02:17:50 +0000
+Message-ID: <20250307021750.457600-1-linux@treblig.org>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+Content-Transfer-Encoding: 8bit
 
-v7:
-- Moved the CPU table cleanup patch out of the series, it does not relate
-  to cpu-type detection. Will send it separately.
+From: "Dr. David Alan Gilbert" <linux@treblig.org>
 
-v6:
-- Use the recently added macro VULNBL_INTEL_STEPS() in the affected CPU
-  list cleanup patch.
-- Rebased to tip/x86/cpu.
+pm_generic_thaw_early() has been unused since 2016's
+commit 294f47ffd55c ("PM / Domains: Remove redundant system PM callbacks")
 
-This series is now the remaining last 5 patches from the original
-series. Below are previously merged patches:
+pm_generic_freeze_late() has been unused since 2019's
+commit 3cd7957e85e6 ("ACPI: PM: Simplify and fix PM domain hibernation
+callbacks")
 
-- upstream:
-  45239ba39a52 ("x86/cpu: Add CPU type to struct cpuinfo_topology")
+Remove them.
 
-- tip:
-  x86/cpu: Prepend 0x to the hex values in cpu_debug_show()
-  cpufreq: intel_pstate: Avoid SMP calls to get cpu-type
-  perf/x86/intel: Use cache cpu-type for hybrid PMU selection
-  x86/cpu: Remove get_this_hybrid_cpu_*()
-
-v5: https://lore.kernel.org/r/20241211-add-cpu-type-v5-0-2ae010f50370@linux.intel.com
-- Replace usages of get_this_hybrid_cpu_native_id() with its cached value
-  in CPU topology structure.
-- s/x86_match_cpu_type/x86_match_vendor_cpu_type and add vendor checks
-  in the function.
-- Some cleanups in intel_pstate.c.
-- Collected tags.
-- Rebased to v6.13-rc1.
-
-v4: https://lore.kernel.org/r/20240930-add-cpu-type-v4-0-104892b7ab5f@linux.intel.com
-- Series doesn't apply to upstream cleanly anymore, rebased to v6.12-rc1,
-  resolved the merge conflict in files:
-	arch/x86/include/asm/cpu_device_id.h
-	arch/x86/kernel/cpu/common.c
-- Remove redundant "hw_" in intel_hw_native_model_id().
-
-v3: https://lore.kernel.org/r/20240815-add-cpu-type-v3-0-234162352057@linux.intel.com
-- Add a patch to prepend "0x" to hex values in cpu_debug_show() (Borislav).
-- Add support to to also get Intel Native Model ID (Dapeng).
-- Keep similar models together in the affected processor list (Josh).
-- Add a comparison of .init.data in commit message for cpu_vuln_blacklist
-  before and after decluttering patch for affected processor list (Josh).
-- Drop the debugfs file reference in the commit message (Borislav).
-- s/cpu_type/hw_cpu_type/ (Borislav).
-- Add a union for hw_cpu_type for easy retrieval of intel_core_type and
-  intel_native_model_id.
-- Updated commit messages, collected tags.
-- Rebased to v6.11-rc3.
-
-Note, I will be off work till Tuesday, will reply to any comments then.
-
-v2: https://lore.kernel.org/r/20240627-add-cpu-type-v2-0-f927bde83ad0@linux.intel.com
-- Move CPU-type to the end of the CPU topology structure (Andrew).
-- Use c->cpuid_level instead of cpuid_eax(0) (Andrew).
-- Move CPU-type enum out of ifdef CONFIG_NUMA (kernel test robot).
-- Rename cpu_type to hw_cpu_type (Borislav).
-- Explain replacing get_this_hybrid_cpu_type() with topology_hw_cpu_type()
-  in the commit message (Dave).
-- Fix the alignment in cpu_vuln_whitelist (Andrew).
-- Add the obj compare note in the commit message (Dave/Tony).
-- s/X86_CPU_TYPE_INTEL_ATOM/ATOM/ in cpu_vuln_whitelist (Dave).
-
-v1: https://lore.kernel.org/r/20240617-add-cpu-type-v1-0-b88998c01e76@linux.intel.com
-
-Hi,
-
-This series adds support for CPU-type (CPUID.1A.EAX[31-24] on Intel) to
-differentiate between hybrid variants P+E, P-only, E-only that share the
-same Family/Model/Stepping. One of the use case for CPU-type is the
-affected CPU table for CPU vulnerabilities, which can now use the CPU-type
-to filter the unaffected variants.
-
-* Patch 1 fixes a minor formatting issue in cpu_debug_show().
-
-* Patch 2 adds hardware cpu-type to CPU topology structure and introduces
-  topology_hw_cpu_type().
-
-* Patch 3-5 replaces usages of get_this_hybrid_cpu_type() with
-  topology_hw_cpu_type().
-
-* Patch 6-8 Updates CPU-matching infrastructure to use CPU-type.
-
-* Patch 9 cleans up the affected CPU list.
-
-* Patch 10 uses the CPU-type to exclude P-only parts from the RFDS affected
-  list.
-
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
 ---
-Pawan Gupta (4):
-      x86/cpu: Name CPU matching macro more generically (and shorten)
-      x86/cpu: Add cpu_type to struct x86_cpu_id
-      x86/cpu: Update x86_match_cpu() to also use cpu-type
-      x86/rfds: Exclude P-only parts from the RFDS affected list
+ drivers/base/power/generic_ops.c | 24 ------------------------
+ include/linux/pm.h               |  4 ----
+ 2 files changed, 28 deletions(-)
 
- .../admin-guide/hw-vuln/reg-file-data-sampling.rst |   8 --
- arch/x86/include/asm/cpu_device_id.h               | 115 ++++++++-------------
- arch/x86/kernel/cpu/common.c                       |   7 +-
- arch/x86/kernel/cpu/match.c                        |  30 ++++++
- include/linux/mod_devicetable.h                    |   2 +
- 5 files changed, 80 insertions(+), 82 deletions(-)
----
-base-commit: 4f2a0b765c9731d2fa94e209ee9ae0e96b280f17
-change-id: 20240617-add-cpu-type-4d5e47efc117
-
-Best regards,
+diff --git a/drivers/base/power/generic_ops.c b/drivers/base/power/generic_ops.c
+index 4fa525668cb7..6502720bb564 100644
+--- a/drivers/base/power/generic_ops.c
++++ b/drivers/base/power/generic_ops.c
+@@ -114,18 +114,6 @@ int pm_generic_freeze_noirq(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_freeze_noirq);
+ 
+-/**
+- * pm_generic_freeze_late - Generic freeze_late callback for subsystems.
+- * @dev: Device to freeze.
+- */
+-int pm_generic_freeze_late(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->freeze_late ? pm->freeze_late(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_freeze_late);
+-
+ /**
+  * pm_generic_freeze - Generic freeze callback for subsystems.
+  * @dev: Device to freeze.
+@@ -186,18 +174,6 @@ int pm_generic_thaw_noirq(struct device *dev)
+ }
+ EXPORT_SYMBOL_GPL(pm_generic_thaw_noirq);
+ 
+-/**
+- * pm_generic_thaw_early - Generic thaw_early callback for subsystems.
+- * @dev: Device to thaw.
+- */
+-int pm_generic_thaw_early(struct device *dev)
+-{
+-	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
+-
+-	return pm && pm->thaw_early ? pm->thaw_early(dev) : 0;
+-}
+-EXPORT_SYMBOL_GPL(pm_generic_thaw_early);
+-
+ /**
+  * pm_generic_thaw - Generic thaw callback for subsystems.
+  * @dev: Device to thaw.
+diff --git a/include/linux/pm.h b/include/linux/pm.h
+index 78855d794342..7bf22ed4a1d5 100644
+--- a/include/linux/pm.h
++++ b/include/linux/pm.h
+@@ -838,10 +838,8 @@ extern int pm_generic_resume_early(struct device *dev);
+ extern int pm_generic_resume_noirq(struct device *dev);
+ extern int pm_generic_resume(struct device *dev);
+ extern int pm_generic_freeze_noirq(struct device *dev);
+-extern int pm_generic_freeze_late(struct device *dev);
+ extern int pm_generic_freeze(struct device *dev);
+ extern int pm_generic_thaw_noirq(struct device *dev);
+-extern int pm_generic_thaw_early(struct device *dev);
+ extern int pm_generic_thaw(struct device *dev);
+ extern int pm_generic_restore_noirq(struct device *dev);
+ extern int pm_generic_restore_early(struct device *dev);
+@@ -883,10 +881,8 @@ static inline void dpm_for_each_dev(void *data, void (*fn)(struct device *, void
+ #define pm_generic_resume_noirq		NULL
+ #define pm_generic_resume		NULL
+ #define pm_generic_freeze_noirq		NULL
+-#define pm_generic_freeze_late		NULL
+ #define pm_generic_freeze		NULL
+ #define pm_generic_thaw_noirq		NULL
+-#define pm_generic_thaw_early		NULL
+ #define pm_generic_thaw			NULL
+ #define pm_generic_restore_noirq	NULL
+ #define pm_generic_restore_early	NULL
 -- 
-Pawan
-
+2.48.1
 
 
