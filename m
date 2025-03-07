@@ -1,206 +1,134 @@
-Return-Path: <linux-pm+bounces-23603-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23604-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 140DBA55F00
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 04:54:12 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5219A56023
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 06:38:32 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 0AD3D3B1947
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 03:54:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 1ECB31893808
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 05:38:40 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1905187872;
-	Fri,  7 Mar 2025 03:54:06 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B709313C9A3;
+	Fri,  7 Mar 2025 05:38:28 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="VGbqUCeT"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="cSyqezQ3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0b-0031df01.pphosted.com (mx0b-0031df01.pphosted.com [205.220.180.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lj1-f176.google.com (mail-lj1-f176.google.com [209.85.208.176])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C49B256B81;
-	Fri,  7 Mar 2025 03:54:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.180.131
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91DE7FD
+	for <linux-pm@vger.kernel.org>; Fri,  7 Mar 2025 05:38:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.176
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741319646; cv=none; b=MXS7KpmM4hxBNMhKaMxl9VSWx6LAn621MkLwmgEvskU8gRPAI+mo1StXWkah2SI2F7fAa+YOpFV6hzXMfznPIJjb8JgfV7ZaV34xxKFt0tAMNivxAopLf6ifCf6LB0U/ALZ1I3nIny0TA58bdrj6/9Zm3OHaMCGR/41kZjf5K0c=
+	t=1741325908; cv=none; b=Ci5Ihyd9y8IW3JYB6CJSMm4NEf2rzuF2KFHLXOtqbLKybuHcmW+8H8YucMLuobrxkbykedKPk/p3Hpp7+ykH5spd5XyqSzyfGyTq7JAZ+ZhbjybXcT+qSILvWZiSCi4z+45SQxyzDwZapDw5GiBVBNdk6+xC48MGKhZwtxMGqdk=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741319646; c=relaxed/simple;
-	bh=jU6h0zm8DtYW4fawJfkNv1nL8z9bH50zN6BIvm+O+Eg=;
-	h=Date:From:To:CC:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=tlAWnM0S20yACZi3qEfYwgOMo6BFRt3c5wrZ6zmz9IFg7Fxm49PS1oXoVM2Ou19gUcoencxL+RKD+jDXb64e070FjVibWr7m2zN8+worQmd+LJeafiiKpKn68uqK+BwfdqJAX5PwAzAHioTqbmO3l/7aQEcOSg5ugN3FMc6w6/0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=VGbqUCeT; arc=none smtp.client-ip=205.220.180.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279873.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 5272YDAD031539;
-	Fri, 7 Mar 2025 03:54:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-type:date:from:in-reply-to:message-id:mime-version
-	:references:subject:to; s=qcppdkim1; bh=8PTq9eG+BT4Hz28wAGMLFEUm
-	W2P+JqYxKWRoyQ32r90=; b=VGbqUCeTwVU5aidABZzir//oRGgOuGoL5m+riG1e
-	Lw/UKo8XxQqUNo3nfiXu2YDzYaGbVNXRoTgWWSjeS3vM4U8yiT3735C9NgSouSc4
-	S2C7LUFJ6Q7/0WJosTV/54IHlfaoT8u7beWJ1bQCGbix8uN6CmdrxPHE/x8sOd6a
-	D85QmmW7z1ycdJn6OgMPUgFgSv/CrCce0W6cGOLDuneziN7g4TFnxS6czdC0ymZ1
-	cg12wHh4VH/3cYA8eofQQ94G6aaGzeL1WJVb7+xspTFS3oHy3fm9crB3TmnH5Lqp
-	5sCDRBU9AuK2gaAEZbywRw7XaLDF/vDABIYwBAbiit0SWA==
-Received: from nalasppmta04.qualcomm.com (Global_NAT1.qualcomm.com [129.46.96.20])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 4574cebn5c-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 07 Mar 2025 03:54:00 +0000 (GMT)
-Received: from nalasex01a.na.qualcomm.com (nalasex01a.na.qualcomm.com [10.47.209.196])
-	by NALASPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 5273rx04019701
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Fri, 7 Mar 2025 03:53:59 GMT
-Received: from hu-mdtipton-lv.qualcomm.com (10.49.16.6) by
- nalasex01a.na.qualcomm.com (10.47.209.196) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Thu, 6 Mar 2025 19:53:58 -0800
-Date: Thu, 6 Mar 2025 19:53:57 -0800
-From: Mike Tipton <quic_mdtipton@quicinc.com>
-To: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-CC: Georgi Djakov <djakov@kernel.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski <krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        Bjorn Andersson <andersson@kernel.org>,
-        Konrad Dybcio
-	<konradybcio@kernel.org>,
-        Odelu Kukatla <quic_okukatla@quicinc.com>,
-        "Jeff
- Johnson" <jeff.johnson@oss.qualcomm.com>,
-        Jagadeesh Kona
-	<quic_jkona@quicinc.com>,
-        Sibi Sankar <quic_sibis@quicinc.com>, <linux-arm-msm@vger.kernel.org>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>
-Subject: Re: [PATCH V9 4/7] interconnect: qcom: icc-rpmh: Add dynamic icc
- node id support
-Message-ID: <20250307035357.GA7435@hu-mdtipton-lv.qualcomm.com>
-References: <20250227155213.404-1-quic_rlaggysh@quicinc.com>
- <20250227155213.404-5-quic_rlaggysh@quicinc.com>
+	s=arc-20240116; t=1741325908; c=relaxed/simple;
+	bh=IW4vIFZWOjZ59KI5KErWGC5iRY88eTLYJwt2dHLfqgk=;
+	h=From:To:Cc:Subject:Date:Message-Id:MIME-Version; b=eBS/r02Ir/k3XKD+qEHLLYS+393JUCgqID6XwprDREhEuIS5fRUYgc9qm3YrnIufesPsjkPfF4GVXRPGRyxfCU578CkZK8GFoYfe3fMfEikRlCdQA9jUSFH9P1LagVE2274uFT6iHV144K4bgrvv3dhtfBeSNCPEJDRa3wYG5yw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=cSyqezQ3; arc=none smtp.client-ip=209.85.208.176
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-lj1-f176.google.com with SMTP id 38308e7fff4ca-30613802a04so15373361fa.2
+        for <linux-pm@vger.kernel.org>; Thu, 06 Mar 2025 21:38:26 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741325904; x=1741930704; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=UrNW8kSm2go2+vpcDO5w+9NJP60EUvhz4lr501KWPjw=;
+        b=cSyqezQ3dIPGbnXhBunaVuYk+g6OAVIml5tPraSXPy+e0KEJVBg9OSLDdaaJjmc4MD
+         +eLysNNqWtKbjL4QICYwP3oyMo37mgkS2bsKVjLztWLrLOypO/1nbWcJo9tlEylTzxn/
+         iuL0cznuWutYl/enQMU92RYS128qIkolpvbOq55QsDJ5PM9clqUN7HTWX+01hMp/d2KM
+         0ST8HnRHGY1GWjWGLyQFJx0areW97Gu/kq6sY+iQBDrEDhPqqUqwFhz45gTHl5PTyRYX
+         V5tp11cSY1C18HX3cHkC1IQAQ5PiTzGDKMZtIpElT8OO9qDV1ce2bWk0TiFKaoR6/FvJ
+         4W3A==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741325904; x=1741930704;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=UrNW8kSm2go2+vpcDO5w+9NJP60EUvhz4lr501KWPjw=;
+        b=V5gnF4SFhCqY7/yibz+WrFrLrtW0V1h005+D0QMCZTL8lk52B7iBGqQazoEWz/gCRT
+         BpGzjxoV03/ytuSuA63Q/CdEynSPEXoWsnPB9FBDgg4RL/C4SfT1imSRYWCftCNn2gdB
+         kqRWUSSaixK+AnFDiirEiRD8VHhbwUljyre6HugN0arozrjVP37KGNtfNN6J7jyBhArR
+         g3FRWpDjb6Qb5H7hrSE4Kky8OnTNANKxMOtGkBz41H3YP6onoW35SWOGXPpLazNKeFK2
+         Rf0SErjNmUgWr4hgK8r9DxH5AYqk4HHq4eXAp/f8NXXhYSp/aAY5hMz8eyVWuik99WXC
+         9ltw==
+X-Gm-Message-State: AOJu0YwVz8N3BN1YHpiIXsxAhfWhvWdrFAxGklw9Se72zhS0v6HlDUsi
+	Ibtx1NN+KfzHZFrEiITfKi6KM4EfS0WfrJEWbS+p69yDo2SqSujs3UmgUym4
+X-Gm-Gg: ASbGncvV8dWeXyba5cC54fPd8JVGuWRpFY0jRGp36LmNWc8shGJau8ENwK45MChXtu7
+	F38/ddVK0EcCzkXPllfdYK1Vvm7x8nKSIZRColAoYyH3k+USQCqIbTDEVuG1mCJJ8O5/YG/pVAf
+	zQuJQsN7Kxfp0FGmuF3mglXN7IB+0N8OvFVMw16J+ra8+f/mRbtIpL+3GGs5n+dw2sv+bViHvlo
+	fi5Uz6jgqJr/jek8bnCSxdgJeuOY8+EQtA7ykuPBH22bUfc/SCqoY5wK6T4D1D2wVBxApSZS5As
+	hW27mdEMEHQluu9tYxpG9ZuKxehV++7MUUb4HoECClE65dyZ9iayVa1anJNsxWUikKQ=
+X-Google-Smtp-Source: AGHT+IEp7SoG/F7KyDIyYNCIh3EbQ88+sR7Ca9biQFRmiQKnEigynrMoZ4zlZE7rilhZczzDNdjbyA==
+X-Received: by 2002:a2e:a590:0:b0:30b:c328:3c9a with SMTP id 38308e7fff4ca-30bf462cb07mr4984351fa.29.1741325904140;
+        Thu, 06 Mar 2025 21:38:24 -0800 (PST)
+Received: from localhost.localdomain ([188.243.23.53])
+        by smtp.gmail.com with ESMTPSA id 38308e7fff4ca-30be98d07e5sm4595701fa.22.2025.03.06.21.38.20
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Thu, 06 Mar 2025 21:38:21 -0800 (PST)
+From: Alexander Shiyan <eagle.alexander923@gmail.com>
+To: linux-pm@vger.kernel.org
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Nicolas Ferre <nicolas.ferre@microchip.com>,
+	Alexandre Belloni <alexandre.belloni@bootlin.com>,
+	Claudiu Beznea <claudiu.beznea@tuxon.dev>,
+	Alexander Shiyan <eagle.alexander923@gmail.com>
+Subject: [PATCH] power: reset: at91-reset: Optimize at91_reset()
+Date: Fri,  7 Mar 2025 08:38:09 +0300
+Message-Id: <20250307053809.20245-1-eagle.alexander923@gmail.com>
+X-Mailer: git-send-email 2.39.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="us-ascii"
-Content-Disposition: inline
-In-Reply-To: <20250227155213.404-5-quic_rlaggysh@quicinc.com>
-User-Agent: Mutt/1.9.4 (2018-02-28)
-X-ClientProxiedBy: nalasex01b.na.qualcomm.com (10.47.209.197) To
- nalasex01a.na.qualcomm.com (10.47.209.196)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Proofpoint-ORIG-GUID: fxJzpiDc5i1jLunUUOZToGbmJ_rl3TMh
-X-Proofpoint-GUID: fxJzpiDc5i1jLunUUOZToGbmJ_rl3TMh
-X-Authority-Analysis: v=2.4 cv=bNLsIO+Z c=1 sm=1 tr=0 ts=67ca6dd8 cx=c_pps a=ouPCqIW2jiPt+lZRy3xVPw==:117 a=ouPCqIW2jiPt+lZRy3xVPw==:17 a=3H110R4YSZwA:10 a=kj9zAlcOel0A:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=zP48Rn2UD53C5hFnKzAA:9 a=CjuIK1q_8ugA:10
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-07_01,2025-03-06_04,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 clxscore=1011 mlxlogscore=999
- suspectscore=0 spamscore=0 mlxscore=0 phishscore=0 malwarescore=0
- lowpriorityscore=0 impostorscore=0 bulkscore=0 adultscore=0
- priorityscore=1501 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502100000
- definitions=main-2503070023
+Content-Transfer-Encoding: 8bit
 
-On Thu, Feb 27, 2025 at 03:52:10PM +0000, Raviteja Laggyshetty wrote:
-> To facilitate dynamic node ID support, the driver now uses
-> node pointers for links instead of static node IDs.
-> Additionally, the default node ID is set to -1 to prompt
-> the ICC framework for dynamic node ID allocation.
-> 
-> Signed-off-by: Raviteja Laggyshetty <quic_rlaggysh@quicinc.com>
-> ---
->  drivers/interconnect/qcom/icc-rpmh.c | 16 ++++++++++++++--
->  drivers/interconnect/qcom/icc-rpmh.h |  3 ++-
->  2 files changed, 16 insertions(+), 3 deletions(-)
-> 
-> diff --git a/drivers/interconnect/qcom/icc-rpmh.c b/drivers/interconnect/qcom/icc-rpmh.c
-> index f2d63745be54..2e654917f535 100644
-> --- a/drivers/interconnect/qcom/icc-rpmh.c
-> +++ b/drivers/interconnect/qcom/icc-rpmh.c
-> @@ -285,13 +285,25 @@ int qcom_icc_rpmh_probe(struct platform_device *pdev)
->  			ret = PTR_ERR(node);
->  			goto err_remove_nodes;
->  		}
-> +		qn->id = node->id;
->  
->  		node->name = qn->name;
->  		node->data = qn;
->  		icc_node_add(node, provider);
->  
-> -		for (j = 0; j < qn->num_links; j++)
-> -			icc_link_create(node, qn->links[j]);
-> +		for (j = 0; j < qn->num_links; j++) {
-> +			struct qcom_icc_node *qn_link_node = qn->link_nodes[j];
-> +			struct icc_node *link_node;
-> +
-> +			if (qn_link_node) {
-> +				link_node = icc_node_create(qn_link_node->id);
-> +				qn_link_node->id = link_node->id;
-> +				icc_link_create(node, qn_link_node->id);
-> +			} else {
-> +				/* backward compatibility for target using static IDs */
-> +				icc_link_create(node, qn->links[j]);
-> +			}
-> +		}
->  
->  		data->nodes[i] = node;
->  	}
-> diff --git a/drivers/interconnect/qcom/icc-rpmh.h b/drivers/interconnect/qcom/icc-rpmh.h
-> index 82344c734091..cf4aa69c707c 100644
-> --- a/drivers/interconnect/qcom/icc-rpmh.h
-> +++ b/drivers/interconnect/qcom/icc-rpmh.h
-> @@ -95,7 +95,8 @@ struct qcom_icc_qosbox {
->  struct qcom_icc_node {
->  	const char *name;
->  	u16 links[MAX_LINKS];
-> -	u16 id;
-> +	struct qcom_icc_node *link_nodes[MAX_LINKS];
+This patch adds a small optimization to the low-level at91_reset()
+function, which includes:
+- Removes the extra branch, since the following store operations
+  already have proper condition checks.
+- Removes the definition of the clobber register r4, since it is
+  no longer used in the code.
 
-This is very inefficient. MAX_LINKS = 128, which means we're adding an
-additional 1KB *per-node*. The vast majority of nodes don't come
-anywhere close to this number of links, so this is almost entirely
-unused and wasted space.
+Fixes: fcd0532fac2a ("power: reset: at91-reset: make at91sam9g45_restart() generic")
+Signed-off-by: Alexander Shiyan <eagle.alexander923@gmail.com>
+---
+ drivers/power/reset/at91-reset.c | 5 ++---
+ 1 file changed, 2 insertions(+), 3 deletions(-)
 
-As an example: sa8775p has 193 nodes, so we're adding 193K to the driver
-from this alone. The current driver size is 84K, and the size after this
-change is 283K.
+diff --git a/drivers/power/reset/at91-reset.c b/drivers/power/reset/at91-reset.c
+index 036b18a1f90f..511f5a8f8961 100644
+--- a/drivers/power/reset/at91-reset.c
++++ b/drivers/power/reset/at91-reset.c
+@@ -129,12 +129,11 @@ static int at91_reset(struct notifier_block *this, unsigned long mode,
+ 		"	str	%4, [%0, %6]\n\t"
+ 		/* Disable SDRAM1 accesses */
+ 		"1:	tst	%1, #0\n\t"
+-		"	beq	2f\n\t"
+ 		"	strne	%3, [%1, #" __stringify(AT91_DDRSDRC_RTR) "]\n\t"
+ 		/* Power down SDRAM1 */
+ 		"	strne	%4, [%1, %6]\n\t"
+ 		/* Reset CPU */
+-		"2:	str	%5, [%2, #" __stringify(AT91_RSTC_CR) "]\n\t"
++		"	str	%5, [%2, #" __stringify(AT91_RSTC_CR) "]\n\t"
+ 
+ 		"	b	.\n\t"
+ 		:
+@@ -145,7 +144,7 @@ static int at91_reset(struct notifier_block *this, unsigned long mode,
+ 		  "r" cpu_to_le32(AT91_DDRSDRC_LPCB_POWER_DOWN),
+ 		  "r" (reset->data->reset_args),
+ 		  "r" (reset->ramc_lpr)
+-		: "r4");
++	);
+ 
+ 	return NOTIFY_DONE;
+ }
+-- 
+2.39.1
 
-Instead of embedding this array with a hardcoded size, we could point to
-an array that's sized for the number of links required by the node:
-
-    - struct qcom_icc_node *link_nodes[MAX_LINKS];
-    + struct qcom_icc_node **link_nodes;
-
-Then when initializing the arrays, we could:
-
-    - .link_nodes = { &qns_a1noc_snoc },
-    + .link_nodes = (struct qcom_icc_node *[]) { &qns_a1noc_snoc },
-
-And for handling compatiblity with older drivers, we'd check for
-link_nodes != NULL instead of checking the array indices.
-
-Doing it this way would reduce the new sa8775p size from 283K to 88K.
-
-A similar argument could be made for qcom_icc_node::links, since that's
-also hardcoded to MAX_LINKS. But it's not quite as bad since it's an
-array of u16 rather than an array of pointers. Still, if we implemented
-similar changes for qcom_icc_node::links, then we'd save almost 256B
-per-node, which for sa8775p would reduce the size by roughly another
-50K. If we're ultimately planning on switching all the old drivers over
-to link_nodes, then we could just wait and get rid of links entirely.
-Regardless, optimizing links doesn't have to happen in this series, but
-I don't want to further bloat the size from the addition of link_nodes.
-
-> +	int id;
->  	u16 num_links;
->  	u16 channels;
->  	u16 buswidth;
-> -- 
-> 2.43.0
-> 
-> 
 
