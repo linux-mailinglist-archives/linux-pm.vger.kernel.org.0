@@ -1,152 +1,120 @@
-Return-Path: <linux-pm+bounces-23621-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23622-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 1718FA565A5
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 11:42:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0A90EA56673
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 12:19:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3F0243ADF1E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 10:42:17 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 737E7189670F
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 11:19:42 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 3B49F20E302;
-	Fri,  7 Mar 2025 10:42:25 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 17B6A217671;
+	Fri,  7 Mar 2025 11:19:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="AbrUSoQk"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="eCFsKVKA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-yw1-f176.google.com (mail-yw1-f176.google.com [209.85.128.176])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from relay4-d.mail.gandi.net (relay4-d.mail.gandi.net [217.70.183.196])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8E4991A239E
-	for <linux-pm@vger.kernel.org>; Fri,  7 Mar 2025 10:42:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.176
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 427D014293;
+	Fri,  7 Mar 2025 11:19:25 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.196
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741344145; cv=none; b=ZELGOhup3W5wC/YK2Lf4j3Z4OaVRGUGdjY5Yi3Deoq7oqX57QH0JgFOXxnvbJQcdx4anmSCyZndc52mAjUT/15RGGJ+e+hrHAtLwQMpikb2xsy1lIeTiw3XAPp9dm68hV7eX/7N80Tg05opq/o52xyfhLqob6FgVl6KpCxYP28I=
+	t=1741346369; cv=none; b=js0DHxCH57HOyc9+DiqFh4+CD6WDlIaKBL4WrJ4fYb+FgmrqpGnCeHIFRLEaADIBXRgjWpzIsDaS0Y0J8taL6EBTXiuqipcSENV7k1PcMvVRZ0WfL2WB6LPmGN3nRNTWqWHgAw1Y5DNu3QhlsG+CA8LP7p/IgT5RtfBCwC34MCs=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741344145; c=relaxed/simple;
-	bh=lsavoPaGmfl7xBe3eGeyegwuQTehNQkXPIt3HPhhJAw=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=nYU0Ra4BYBR/ozRgAi8ReUrpwndu/1cUqK/TYZfIAMVWY2aUb9EQcQPmHIQxPDypQm5ZSsuAPr5nyvZMnNKTUFt1UFyucW21WMAASY71difSrf24nKaZNMrWSAJZBlHVVrfIeQxHDK23KABBEAVZQPEQ9YQ8ULTvzAja/INWDz8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=AbrUSoQk; arc=none smtp.client-ip=209.85.128.176
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-yw1-f176.google.com with SMTP id 00721157ae682-6fd6f7f8df9so14454077b3.1
-        for <linux-pm@vger.kernel.org>; Fri, 07 Mar 2025 02:42:23 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741344142; x=1741948942; darn=vger.kernel.org;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=rT9XBL4gaIH5wTfFP7ZDqQbyPhjMUoycaEEEpfHomFE=;
-        b=AbrUSoQk6nhlWFqO4asokVbEHik6sxhxTXBMehcD48PPi+kiZ+QoMj89UqyX7uGJqn
-         rox/zaobznu8VGNUgQi8tX6lzq87JapVbrrWnYIpiUeq3DeNNmRy4rPbXtKk1stnx7/D
-         lhol3BWGiEoTAW8u+58noZaHj3mP5ogjQ6/orsrCyR44hr28qd+7ay6ZffuRBMGpkteN
-         TMrMU10f2+/CfUMCMQagngKpeN3BUixY3A6QIVGxvPOGNp4Ue6wJRJmZ9loaf8zPxQUo
-         jTI2Cy0+qzSTynAPbIDpXqrQt9A2XV9xF8LbItcFpCbjdlj0skD37bgLAhgUNK3ZyGKQ
-         fFAQ==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741344142; x=1741948942;
-        h=content-transfer-encoding:cc:to:subject:message-id:date:from
-         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
-         :subject:date:message-id:reply-to;
-        bh=rT9XBL4gaIH5wTfFP7ZDqQbyPhjMUoycaEEEpfHomFE=;
-        b=e6BIkY6j67YAreyqStwuHbHuHQaJIyBF2IVEMwFY5PPd1fubXF7jFRvgRgXqrlc2FR
-         PcEv6DTaiHTDQK90E3CeBlTn2pHJiwdR5j4AK/IYFVQN06ETGJXbsIlZtdkRwgrEzKSJ
-         5fwH1kwRYxrvQegIa17Jj3EXdedM7Wrz+JqDSp7Ufo0CF5zpBvmpa+gkQgiowQIb3JzQ
-         LAf+gSj3JMacMMc08ArsfVIz67EkzpB+LdVX46AqlkaAFFdatqMnv2LESSjBGr8eHz7y
-         zS6Duni1lfNzeeyIYE+Lpd+YWUM3p3QnUel4VuJP2pETWabrikga/AFU6CN3F/hkKJu/
-         OG2w==
-X-Gm-Message-State: AOJu0YxX5XhSlDnm6/xVsnxisiAXL7HICg4go//noa+lSH/LGPRoCeKe
-	SjFppVorpqzdGHeOxF8J51ATFV/SJlq7u/6BAAuJnDPNGVhkBTyT0jyvGeyvrBYnqkUK85M2OuK
-	QI/71npxIFbMFX3cNlQWgY65GaCAxDKGwNvolz19Ifn+y4XdV
-X-Gm-Gg: ASbGncvHyjIh7cM2Ii2MA4XlNLc6ZSRfmxBGJGGBJXH/9ZsrSG+3RVKgZJHFNYr0wxb
-	oSxIdg1wmc5ImF9nSVFDiyeqK0fG7bOjz1eBf3P86uJ2PYzTB7+ksBdoQqkgpb0N0GV+Dls3GY0
-	U0GFvXLYK0meD3+USpYkgSLl3SYQ==
-X-Google-Smtp-Source: AGHT+IHXG/0/hShmRUvQAKC9AHfln9CojQ/qyZWB4omLmQIq0J2ete1izlY+85xW6NmBXSV/D95xXORrnvizdPCA3uM=
-X-Received: by 2002:a05:690c:b15:b0:6f7:9f95:d916 with SMTP id
- 00721157ae682-6febea564cfmr43081107b3.16.1741344142511; Fri, 07 Mar 2025
- 02:42:22 -0800 (PST)
+	s=arc-20240116; t=1741346369; c=relaxed/simple;
+	bh=LTgzbJRao0kxWFSBOmMo40nrp0G+Nn8FLwMclm5nFiQ=;
+	h=From:Subject:Date:Message-Id:MIME-Version:Content-Type:To:Cc; b=iS4K9EWEZLBVEq1KGeR4yxUb8t2bhJYgiRh8V69c55rHrc8SuwgdNzH4kDb1WKP94mLHErflCmUf+eR7jiJydUQJyC7opBv1d2u9KhrAZoO59i96VKkw6O/ET7Bg6g5+A3UyKqMqLg8WKmuXBrg1z2xd6Lg+stjiZxb7TCyd1Fw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=eCFsKVKA; arc=none smtp.client-ip=217.70.183.196
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 98BBF443A6;
+	Fri,  7 Mar 2025 11:19:21 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1741346364;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding;
+	bh=Yl6f/SodGGeAxz+5H/l72NErMjz9ym9/w2AhCrQGKKY=;
+	b=eCFsKVKARYrnL/zAS2YX34+Rl56pcOrOvoAXI9lYg7dMcmLKh4yqOq133wU9e1qMoZO8Tu
+	WhTKuiggcabdIRA7tJU77YD6PPNL0f6iqSce2nCSe0NYWV4DkGxhHnua9W/bzAqkcQYZom
+	RrGbfY4wA/kiAIRJMQQZF1qjWT0ufhnkTL3t0iKlOiMQ0m8/d7G73M9Pn5QcvCtB5eG7ei
+	pEpMIC26i7VQAGN4CLowA+VmaYwPuwX1VUFLpVa3HeU3Qj0aju9JXzEXWFiL49DzD9SkS2
+	D9VV0ryc4l9vK69HvKhvA1XcX/OI5ynMNgFQHeRnTMA0egR3Ylufwa5E17eBXQ==
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+Subject: [PATCH 0/2] vsprintf: remove redundant %pCn format specifier
+Date: Fri, 07 Mar 2025 12:19:06 +0100
+Message-Id: <20250307-vsprintf-pcn-v1-0-df0b2ccf610f@bootlin.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250306113549.796524-1-ulf.hansson@linaro.org>
- <20250306113549.796524-3-ulf.hansson@linaro.org> <CAJZ5v0hF_am9DsuwEUmmgpUp=1ZuAG8fdjYfQ5XxFmS_Y1pMog@mail.gmail.com>
-In-Reply-To: <CAJZ5v0hF_am9DsuwEUmmgpUp=1ZuAG8fdjYfQ5XxFmS_Y1pMog@mail.gmail.com>
-From: Ulf Hansson <ulf.hansson@linaro.org>
-Date: Fri, 7 Mar 2025 11:41:46 +0100
-X-Gm-Features: AQ5f1JqZoOcwKfjkiNxmTrOdstASOHx5S-JbLRg16VovAosUluf6_t-OvA7HKso
-Message-ID: <CAPDyKFphQS4x68f-rHHkhG8w7b6UJcE32v0u-XApicn1pPARXw@mail.gmail.com>
-Subject: Re: [PATCH 2/2] PM: s2idle: Avoid holding the s2idle_lock when
- calling pm_wakeup_pending()
-To: "Rafael J. Wysocki" <rafael@kernel.org>
-Cc: linux-pm@vger.kernel.org, Len Brown <len.brown@intel.com>, 
-	Pavel Machek <pavel@kernel.org>, linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-B4-Tracking: v=1; b=H4sIACrWymcC/x2MQQqAIBAAvyJ7TjAtir4SHUzX2ovJGhJIf086D
+ XOYqZCRCTMsogJjoUxXbNJ3Atxp44GSfHPQSo/KqEmWnJjiHWRyUc52MGh25RugJYkx0PPv1u1
+ 9P0rCgtteAAAA
+X-Change-ID: 20250307-vsprintf-pcn-8a43e3b0d43e
+To: "Rafael J. Wysocki" <rafael@kernel.org>, 
+ Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
+ Lukasz Luba <lukasz.luba@arm.com>, 
+ Florian Fainelli <florian.fainelli@broadcom.com>, 
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>, 
+ Broadcom internal kernel review list <bcm-kernel-feedback-list@broadcom.com>, 
+ Petr Mladek <pmladek@suse.com>, Steven Rostedt <rostedt@goodmis.org>, 
+ Andy Shevchenko <andriy.shevchenko@linux.intel.com>, 
+ Rasmus Villemoes <linux@rasmusvillemoes.dk>, 
+ Sergey Senozhatsky <senozhatsky@chromium.org>, 
+ Jonathan Corbet <corbet@lwn.net>, Andrew Morton <akpm@linux-foundation.org>
+Cc: Thomas Petazzoni <thomas.petazzoni@bootlin.com>, 
+ Michael Turquette <mturquette@baylibre.com>, 
+ Stephen Boyd <sboyd@kernel.org>, 
+ Geert Uytterhoeven <geert+renesas@glider.be>, Liu Ying <victor.liu@nxp.com>, 
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org, 
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org, 
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, 
+ Luca Ceresoli <luca.ceresoli@bootlin.com>
+X-Mailer: b4 0.14.2
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduuddthedvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhufffkfggtgfgvfevofesthejredtredtjeenucfhrhhomhepnfhutggrucevvghrvghsohhlihcuoehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmqeenucggtffrrghtthgvrhhnpefgieetkeekgfdtudevueffueffveekheeiudfhfedvhfeukeeuhffhtddtvdekfeenucffohhmrghinhepkhgvrhhnvghlrdhorhhgnecukfhppedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvnecuvehluhhsthgvrhfuihiivgeptdenucfrrghrrghmpehinhgvthepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgdphhgvlhhopegludelvddrudeikedrudejkedruddukegnpdhmrghilhhfrhhomheplhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomhdpnhgspghrtghpthhtohepvdejpdhrtghpthhtoheprghnughrihihrdhshhgvvhgthhgvnhhkoheslhhinhhugidrihhnthgvlhdrtghomhdprhgtphhtthhopehssghrrghnuggvnhessghrohgruggtohhmrdgtohhmpdhrtghpthhto
+ heplhhinhhugidqtghlkhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopegtohhrsggvtheslhifnhdrnhgvthdprhgtphhtthhopehlihhnuhigqdgrrhhmqdhkvghrnhgvlheslhhishhtshdrihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehflhhorhhirghnrdhfrghinhgvlhhlihessghrohgruggtohhmrdgtohhmpdhrtghpthhtohepshgvnhhoiihhrghtshhkhiestghhrhhomhhiuhhmrdhorhhgpdhrtghpthhtohepphhmlhgruggvkhesshhushgvrdgtohhm
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-On Thu, 6 Mar 2025 at 14:18, Rafael J. Wysocki <rafael@kernel.org> wrote:
->
-> On Thu, Mar 6, 2025 at 12:36=E2=80=AFPM Ulf Hansson <ulf.hansson@linaro.o=
-rg> wrote:
-> >
-> > There's no reason to hold the s2idle_lock longer than necessary. Let's
-> > instead acquire it when really needed in s2idle_enter().
-> >
-> > Signed-off-by: Ulf Hansson <ulf.hansson@linaro.org>
-> > ---
-> >  kernel/power/suspend.c | 5 ++---
-> >  1 file changed, 2 insertions(+), 3 deletions(-)
-> >
-> > diff --git a/kernel/power/suspend.c b/kernel/power/suspend.c
-> > index e7aca4e40561..ca09f26cbf4e 100644
-> > --- a/kernel/power/suspend.c
-> > +++ b/kernel/power/suspend.c
-> > @@ -91,10 +91,10 @@ static void s2idle_enter(void)
-> >  {
-> >         trace_suspend_resume(TPS("machine_suspend"), PM_SUSPEND_TO_IDLE=
-, true);
-> >
-> > -       raw_spin_lock_irq(&s2idle_lock);
->
-> This is to prevent missing a wakeup event when pm_system_wakeup() runs
-> at this point on a different CPU.
->
-> If you move the locking, it may run as a whole between the
-> pm_wakeup_pending() check below and the s2idle_state update, so the
-> wakeup event will be missed.
+There are two printk format specifiers for clocks: %pC and %pCn, and they
+print exactly the same string. The reason for having two is not totally
+clear (see discussion in patch 2), but there seem to be no advantage in
+having two instead of one.
 
-Of course, you are right! Thanks for clarifying!
+Definitely having two without properly documenting they do the same creates
+misunderstandings [0].
 
->
-> With the locking in place, the pm_abort_suspend update in
-> pm_system_wakeup() may still happen at any time, but the code under
-> the lock in s2idle_wake() after it can only run before the lock is
-> acquired above or after it is released.
->
-> If s2idle_wake() in pm_system_wakeup() runs before the
-> raw_spin_lock_irq() above, the pm_wakeup_pending() check below will
-> notice the pm_abort_suspend set and return true, so the suspend will
-> be aborted (and the pm_abort_suspend update in pm_system_wakeup()
-> cannot be reordered entirely after the s2idle_wake() call because of
-> the locking there).
->
-> Now, if s2idle_wake() in pm_system_wakeup() runs after the
-> raw_spin_unlock_irq() below, it will notice the s2idle_state change
-> and it will update it to S2IDLE_STATE_WAKE, so the suspend will be
-> aborted.
->
-> I guess it would have helped if there had been a comment describing this =
-...
+Since %pCn is used in a single place, replace it with %pC and remove %pCn
+to simplify such format specifiers implementation and avoid
+misunderstandings.
 
-Yes, I can send a patch adding a small comment about it, if you think
-it makes sense?
+[0] https://lore.kernel.org/dri-devel/71c44221-b18b-4928-8faf-00893ec4a109@nxp.com/
 
-[...]
+Signed-off-by: Luca Ceresoli <luca.ceresoli@bootlin.com>
+---
+Luca Ceresoli (2):
+      thermal: bcm2835: use %pC instead of %pCn
+      vsprintf: remove redundant and unused %pCn format specifier
 
-Kind regards
-Uffe
+ Documentation/core-api/printk-formats.rst  |  3 +--
+ drivers/thermal/broadcom/bcm2835_thermal.c |  2 +-
+ lib/vsprintf.c                             | 10 ++--------
+ 3 files changed, 4 insertions(+), 11 deletions(-)
+---
+base-commit: 7eb172143d5508b4da468ed59ee857c6e5e01da6
+change-id: 20250307-vsprintf-pcn-8a43e3b0d43e
+
+Best regards,
+-- 
+Luca Ceresoli <luca.ceresoli@bootlin.com>
+
 
