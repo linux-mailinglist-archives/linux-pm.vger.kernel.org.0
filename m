@@ -1,55 +1,55 @@
-Return-Path: <linux-pm+bounces-23652-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23653-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 3519BA57252
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 20:43:53 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0FAE7A57254
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 20:44:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 276451898E6E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 19:43:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3B9BB16DEC0
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 19:44:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 049052571DE;
-	Fri,  7 Mar 2025 19:42:55 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0E2E2257AD1;
+	Fri,  7 Mar 2025 19:42:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="N1RWcxwA"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="ELAXfuXQ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AFFAB256C63;
-	Fri,  7 Mar 2025 19:42:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B0027256C64;
+	Fri,  7 Mar 2025 19:42:51 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741376574; cv=none; b=Mf81nRq8kzcrRRSvzq1qbdXt0/4jikBsyF7bTz0eJ8bjGQQyCSTPld0kf5mc/jJNTLQr6AL7x/AXBmn11h5lI1LuAl8NlYa1saw1gYpr16KHgVyUYiKCJOIL8r082tkuUDHx5vKr5VlCompERnx1OZzyAsJRqaBqiG7FbwWbbMQ=
+	t=1741376577; cv=none; b=lmcWQ+ewlaSxxmjhZ8rKcjXGd2gGZDyvrhoEmPlpo4W4TsWKO4BPf8nFzUboLOf5KMxCA6y/7kJC51JMJPppv9jJGfbTDm3xLBNvpeHUnf61sMUcUthE2Bovaegg/i+SRuix5hvlmUBpfonAKvd6251PVci1gBO4QR2uvccNkpw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741376574; c=relaxed/simple;
-	bh=1y59WxewAlScMgxwdnWQ5QLkGAO48EMO5UaovuoTGnI=;
+	s=arc-20240116; t=1741376577; c=relaxed/simple;
+	bh=25uNFJVAZnPmoWvltcPZLOgQK9aoLiwhfXgiuw3qxHM=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=qYnvvS6KT+6g7bcSfqsgZGMc8ArqJ/fs6H4OtFLO0G17Y2PTyPpX2QEXk3koLXPBOf/1JB/IUNLH99aGGPqg/1G83OJqonO2lYiEd+U3D2Vw36io8iiEelZbV5N9KGN8DdkYIa3zXYbY4z5d35l+P2MK8hpeYYzSt5NExZ1418M=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=N1RWcxwA; arc=none smtp.client-ip=79.96.170.134
+	 MIME-Version:Content-Type; b=HUTfjyhpeR5om72LIYEVdE/B78ZqIgklfsB6dH5LCuPRBLymOK5XFNF2scn62DmgkyUAxG1hitYXhcY/fHCXGlGhLgWzE9t5oQSn25sQdKZg+lPerGG1v/qV9EHDH57Nz/R/LTSnXv00LNAVjUR9/R89udKP330uDxtt2/L5rXs=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=ELAXfuXQ; arc=none smtp.client-ip=79.96.170.134
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
 Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
  by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.3.1)
- id b9301e00359c0706; Fri, 7 Mar 2025 20:42:45 +0100
+ id 018cce7891fe7508; Fri, 7 Mar 2025 20:42:44 +0100
 Received: from kreacher.localnet (unknown [195.136.19.94])
 	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
 	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
 	(No client certificate requested)
-	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 8824C9A0BFB;
-	Fri,  7 Mar 2025 20:42:44 +0100 (CET)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 6AE0C9A0BFB;
+	Fri,  7 Mar 2025 20:42:43 +0100 (CET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
-	s=dkim; t=1741376565;
-	bh=1y59WxewAlScMgxwdnWQ5QLkGAO48EMO5UaovuoTGnI=;
+	s=dkim; t=1741376563;
+	bh=25uNFJVAZnPmoWvltcPZLOgQK9aoLiwhfXgiuw3qxHM=;
 	h=From:Subject:Date;
-	b=N1RWcxwAi+uD3EAvZmNKq86mE4KaJaYeIh3z6QpLZSt8nP9Vuxgr42l4k9PY6ieT4
-	 BR+UibhephL7j7Xz4tFZsUmbA+9yfxkba9jLv37evbCr0mRZp8GeNHnjYVVrG5GADm
-	 s9Xsb6Yhm2rZ7G6wQRCrATBMgqeHPTVgfaMg1XjGylTfAFXoyZJec2pFbQWfZFgtaR
-	 uCZAqnTZJkAOjqIzJZKLbcILRqCVzF0fYMRWzuptMaTKhGGArHRD2FnNO27TZVVw9P
-	 lWRzFWox2L2lfNGpueRmPrhkmCdsYCMwNqpWQJEHLfI2A+ODFh5ILPEDaCzoftmCYq
-	 oWS0Io7FAjSHg==
+	b=ELAXfuXQgEVAXvvswdzovxljFBYapZLrai339vgE5is+r9PSZ/m3cf0JS13IQTYUN
+	 32eIXsA2Q6Hac+8ZGuUgMeRCvviHQjhxQN95/dNZIKshTGb5OE3B5Nckrjldjn/J7Z
+	 R0fHeLxs485LG6lRTVrWLC3xQ861Ma+gGSNGXoPucWWmyDTYYsNgE2g0gwE9wbj38T
+	 xzR+reMU/UCEqGwRp9WgbritoN/xmPDAOjTrilzPzf01exML6LYFAWuqMvnuySmydb
+	 GA00K/18+ncJJh5wlOu0cNyqyxhXdXwjvtt3fujqCJuYWCmxXfpW83Qt0FqcdNPLwz
+	 VJ7V4SlJwACiw==
 From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
 To: Linux PM <linux-pm@vger.kernel.org>
 Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
@@ -63,10 +63,10 @@ Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
  Christian Loehle <christian.loehle@arm.com>,
  Viresh Kumar <viresh.kumar@linaro.org>
 Subject:
- [RFC][PATCH v0.3 1/6] cpufreq/sched: schedutil: Add helper for governor
- checks
-Date: Fri, 07 Mar 2025 20:15:42 +0100
-Message-ID: <1840739.VLH7GnMWUR@rjwysocki.net>
+ [RFC][PATCH v0.3 2/6] cpufreq/sched: Move cpufreq-specific EAS checks to
+ cpufreq
+Date: Fri, 07 Mar 2025 20:16:03 +0100
+Message-ID: <2038066.usQuhbGJ8B@rjwysocki.net>
 In-Reply-To: <22640172.EfDdHjke4D@rjwysocki.net>
 References: <22640172.EfDdHjke4D@rjwysocki.net>
 Precedence: bulk
@@ -80,107 +80,115 @@ Content-Type: text/plain; charset="UTF-8"
 X-CLIENT-IP: 195.136.19.94
 X-CLIENT-HOSTNAME: 195.136.19.94
 X-VADE-SPAMSTATE: clean
-X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudduheegucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepuddvpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdh
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudduheefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgjfhgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepvdffueeitdfgvddtudegueejtdffteetgeefkeffvdeftddttdeuhfegfedvjefhnecukfhppeduleehrddufeeirdduledrleegnecuvehluhhsthgvrhfuihiivgepudenucfrrghrrghmpehinhgvthepudelhedrudefiedrudelrdelgedphhgvlhhopehkrhgvrggthhgvrhdrlhhotggrlhhnvghtpdhmrghilhhfrhhomheprhhjfiesrhhjfiihshhotghkihdrnhgvthdpnhgspghrtghpthhtohepuddvpdhrtghpthhtoheplhhinhhugidqphhmsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhinhhugidqkhgvrhhnvghlsehvghgvrhdrkhgvrhhnvghlrdhorhhgpdhrtghpthhtoheplhhukhgrshiirdhluhgsrgesrghrmhdrtghomhdprhgtphhtthhopehpvghtvghriiesihhnfhhrrgguvggrugdrohhrghdprhgtphhtthhopehsrhhinhhivhgrshdrphgrnhgurhhuvhgruggrsehlihhnuhigrdh
 X-DCC--Metrics: v370.home.net.pl 1024; Body=12 Fuz1=12 Fuz2=12
 
 From: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 
-Add a helper for checking if schedutil is the current governor for
-a given cpufreq policy and use it in sched_is_eas_possible() to avoid
-accessing cpufreq policy internals directly from there.
-
-No intentional functional impact.
+Doing cpufreq-specific EAS checks that require accessing policy
+internals directly from sched_is_eas_possible() is a bit unfortunate,
+so introduce cpufreq_ready_for_eas() in cpufreq, move those checks
+into that new function and make sched_is_eas_possible() call it.
 
 Signed-off-by: Rafael J. Wysocki <rafael.j.wysocki@intel.com>
 ---
- include/linux/cpufreq.h          |    9 +++++++++
- kernel/sched/cpufreq_schedutil.c |    9 +++++++--
- kernel/sched/sched.h             |    2 --
- kernel/sched/topology.c          |    6 +++---
- 4 files changed, 19 insertions(+), 7 deletions(-)
+ drivers/cpufreq/cpufreq.c |   30 ++++++++++++++++++++++++++++++
+ include/linux/cpufreq.h   |    2 ++
+ kernel/sched/topology.c   |   25 +++++--------------------
+ 3 files changed, 37 insertions(+), 20 deletions(-)
 
+--- a/drivers/cpufreq/cpufreq.c
++++ b/drivers/cpufreq/cpufreq.c
+@@ -3052,6 +3052,36 @@
+ 
+ 	return 0;
+ }
++
++bool cpufreq_ready_for_eas(const struct cpumask *cpu_mask)
++{
++	int i;
++
++	/* Do not attempt EAS if schedutil is not being used. */
++	for_each_cpu(i, cpu_mask) {
++		struct cpufreq_policy *policy;
++		bool policy_is_ready;
++
++		policy = cpufreq_cpu_get(i);
++		if (!policy) {
++			pr_debug("rd %*pbl: cpufreq policy not set for CPU: %d",
++				 cpumask_pr_args(cpu_mask), i);
++
++			return false;
++		}
++		policy_is_ready = sugov_is_cpufreq_governor(policy);
++		cpufreq_cpu_put(policy);
++		if (!policy_is_ready) {
++			pr_debug("rd %*pbl: schedutil is mandatory for EAS\n",
++				 cpumask_pr_args(cpu_mask));
++
++			return false;
++		}
++	}
++
++	return true;
++}
++
+ module_param(off, int, 0444);
+ module_param_string(default_governor, default_governor, CPUFREQ_NAME_LEN, 0444);
+ core_initcall(cpufreq_core_init);
 --- a/include/linux/cpufreq.h
 +++ b/include/linux/cpufreq.h
-@@ -641,6 +641,15 @@
- struct cpufreq_governor *cpufreq_default_governor(void);
- struct cpufreq_governor *cpufreq_fallback_governor(void);
+@@ -1215,6 +1215,8 @@
+ 		struct cpufreq_frequency_table *table,
+ 		unsigned int transition_latency);
  
-+#ifdef CONFIG_CPU_FREQ_GOV_SCHEDUTIL
-+bool sugov_is_cpufreq_governor(struct cpufreq_policy *policy);
-+#else
-+static inline bool sugov_is_cpufreq_governor(struct cpufreq_policy *policy)
-+{
-+	return false;
-+}
-+#endif
++bool cpufreq_ready_for_eas(const struct cpumask *cpu_mask);
 +
- static inline void cpufreq_policy_apply_limits(struct cpufreq_policy *policy)
+ static inline void cpufreq_register_em_with_opp(struct cpufreq_policy *policy)
  {
- 	if (policy->max < policy->cur)
---- a/kernel/sched/cpufreq_schedutil.c
-+++ b/kernel/sched/cpufreq_schedutil.c
-@@ -604,7 +604,7 @@
- 
- /********************** cpufreq governor interface *********************/
- 
--struct cpufreq_governor schedutil_gov;
-+static struct cpufreq_governor schedutil_gov;
- 
- static struct sugov_policy *sugov_policy_alloc(struct cpufreq_policy *policy)
- {
-@@ -874,7 +874,7 @@
- 	sg_policy->limits_changed = true;
- }
- 
--struct cpufreq_governor schedutil_gov = {
-+static struct cpufreq_governor schedutil_gov = {
- 	.name			= "schedutil",
- 	.owner			= THIS_MODULE,
- 	.flags			= CPUFREQ_GOV_DYNAMIC_SWITCHING,
-@@ -892,4 +892,9 @@
- }
- #endif
- 
-+bool sugov_is_cpufreq_governor(struct cpufreq_policy *policy)
-+{
-+	return policy->governor == &schedutil_gov;
-+}
-+
- cpufreq_governor_init(schedutil_gov);
---- a/kernel/sched/sched.h
-+++ b/kernel/sched/sched.h
-@@ -3552,8 +3552,6 @@
- 	return static_branch_unlikely(&sched_energy_present);
- }
- 
--extern struct cpufreq_governor schedutil_gov;
--
- #else /* ! (CONFIG_ENERGY_MODEL && CONFIG_CPU_FREQ_GOV_SCHEDUTIL) */
- 
- #define perf_domain_span(pd) NULL
+ 	dev_pm_opp_of_register_em(get_cpu_device(policy->cpu),
 --- a/kernel/sched/topology.c
 +++ b/kernel/sched/topology.c
-@@ -216,7 +216,7 @@
+@@ -215,8 +215,6 @@
+ static bool sched_is_eas_possible(const struct cpumask *cpu_mask)
  {
  	bool any_asym_capacity = false;
- 	struct cpufreq_policy *policy;
--	struct cpufreq_governor *gov;
-+	bool policy_is_ready;
+-	struct cpufreq_policy *policy;
+-	bool policy_is_ready;
  	int i;
  
  	/* EAS is enabled for asymmetric CPU capacity topologies. */
-@@ -261,9 +261,9 @@
- 			}
- 			return false;
+@@ -251,25 +249,12 @@
+ 		return false;
+ 	}
+ 
+-	/* Do not attempt EAS if schedutil is not being used. */
+-	for_each_cpu(i, cpu_mask) {
+-		policy = cpufreq_cpu_get(i);
+-		if (!policy) {
+-			if (sched_debug()) {
+-				pr_info("rd %*pbl: Checking EAS, cpufreq policy not set for CPU: %d",
+-					cpumask_pr_args(cpu_mask), i);
+-			}
+-			return false;
+-		}
+-		policy_is_ready = sugov_is_cpufreq_governor(policy);
+-		cpufreq_cpu_put(policy);
+-		if (!policy_is_ready) {
+-			if (sched_debug()) {
+-				pr_info("rd %*pbl: Checking EAS, schedutil is mandatory\n",
+-					cpumask_pr_args(cpu_mask));
+-			}
+-			return false;
++	if (!cpufreq_ready_for_eas(cpu_mask)) {
++		if (sched_debug()) {
++			pr_info("rd %*pbl: Checking EAS: cpufreq is not ready",
++				cpumask_pr_args(cpu_mask));
  		}
--		gov = policy->governor;
-+		policy_is_ready = sugov_is_cpufreq_governor(policy);
- 		cpufreq_cpu_put(policy);
--		if (gov != &schedutil_gov) {
-+		if (!policy_is_ready) {
- 			if (sched_debug()) {
- 				pr_info("rd %*pbl: Checking EAS, schedutil is mandatory\n",
- 					cpumask_pr_args(cpu_mask));
++		return false;
+ 	}
+ 
+ 	return true;
 
 
 
