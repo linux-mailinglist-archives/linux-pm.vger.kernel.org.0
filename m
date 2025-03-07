@@ -1,236 +1,121 @@
-Return-Path: <linux-pm+bounces-23643-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23644-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8B540A56E66
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 17:55:31 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3D5B6A56EA0
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 18:04:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 86BA07A1ECD
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 16:54:29 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 220241892B75
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 17:04:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5D79023A58F;
-	Fri,  7 Mar 2025 16:55:24 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4865C23ED6F;
+	Fri,  7 Mar 2025 17:04:05 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XWNkQ+qK"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Sq7UrRkB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f53.google.com (mail-ed1-f53.google.com [209.85.208.53])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 344EC21859D;
-	Fri,  7 Mar 2025 16:55:24 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 79CD254673
+	for <linux-pm@vger.kernel.org>; Fri,  7 Mar 2025 17:04:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.53
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741366524; cv=none; b=XVIKmFgjAS12Cbx4b5V+epx+FkJBiZwL9ODm922UUgVRtM3SmE3llr5AYcI1J7CqzIS3zVQLAxM9oZdnODtMYt/dhp1H8mGb+3eNvlg0SttYRxTzHfEuTOc+8jqfteICmNZPBTOTE/hd+dnNOQ59ChuBlEZ1XWgWt3gnCgjs9jY=
+	t=1741367045; cv=none; b=O0ZxLgDtO6zKDUPChHclu5ci6ChJqyGERPG4oMejMMUmIpSHSTszUABpKET67Kowp15ULoCrIH+8eS8o+cMSUgdT4l64Pbbh1po+trcT5TP3H49O9iXVUV59e5NMKwIDxPyxa2la2bv6bvdgSM0RIWICTT22zqyQvhwFZgOnCRw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741366524; c=relaxed/simple;
-	bh=prwkqekrCMpSZcoR8i0PEp3Wo+pTRG6L2v9vSdds6fw=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=Vn98hsGh7bnS1a2667BoHM3irgZQiprq7XLkvLN2fcGpSASWmQmqz1EsJq7E6bfkfeTbkxHmI8KyYyqfPx5fTKLDh1Xe7hdq5B+oSQEyifQTqAGpnsyWynEjULeGBOg2Twkizu84QHy/IWkdsaombeJ0ix80B9mxc/bLUbGk5U0=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XWNkQ+qK; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 52AEEC4CED1;
-	Fri,  7 Mar 2025 16:55:23 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741366524;
-	bh=prwkqekrCMpSZcoR8i0PEp3Wo+pTRG6L2v9vSdds6fw=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=XWNkQ+qKmE5wBpLYFiBY5zUbwjjDltlTZG1Keiqt+Ty7OURixd547OqBeX9BY3m7Q
-	 A++vvHt7Pj7uHP58bhfU142/g3ZYyywqApgZcC34Y+0M+S3NoCoFXi4enqTYEi4dU2
-	 eqEUmr79uaPqkzXJPsc2mxtrNpo8VDD3euT8U44EwxaCEruMjYhCYHj0bJFxEzRVWs
-	 R7XwZ0FnNlPIwTZQjjgF/Q5E0AwaQtU/cnPSdcogHfNUrSGyAqSYTeORt/rmdx6iBe
-	 UF3xl0a+2tHbUvnKT2XmApNLjE35a6zN+28EKrDGPsHvaop075VoZy/cOvCjj07x4S
-	 ZST4Q9TvXKidA==
-Message-ID: <969ca809-c630-46e3-9bc2-6cf340bc66e3@kernel.org>
-Date: Fri, 7 Mar 2025 10:55:21 -0600
+	s=arc-20240116; t=1741367045; c=relaxed/simple;
+	bh=xIk78eM7xp6OoVG9TVOMJfTHgwK83vjOapawq/HRb+A=;
+	h=From:To:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=LAXXXj9WqB9BybZ73itzTjnaNYSPNTeWJxQZOcOW0MDONz+6srloY8ls2qqPborAJ76j1YCVNW0AdEFGxjX67kd0+v0f7musEUM6mivu9i9Imv2h5RuvqnvRpXCdCN+4f6P3xK+Wb64vM41GDqMvxWmniQe8U+XTdhBuAPuados=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Sq7UrRkB; arc=none smtp.client-ip=209.85.208.53
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-ed1-f53.google.com with SMTP id 4fb4d7f45d1cf-5e5deb6482cso2697235a12.1
+        for <linux-pm@vger.kernel.org>; Fri, 07 Mar 2025 09:04:03 -0800 (PST)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741367042; x=1741971842; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=SHN+uSouj0jmGUbo4WMlUEXMpe1K7sqb2jQWSJPop/Y=;
+        b=Sq7UrRkBK8A3MN5G9Ta/4IdCflsq+KLlXzWgrkWC+lnFRPOm1hIR3FRjXVZcxlHIjg
+         bcRxZu1CszYB8QwT7RuVppHIHo+7h2Wlp9cBkgIzfW0oEw9bcELFRF7gviP8GOuyFhyy
+         01Es4ZwDxThiRLttRoaoJ2AK5iPC8186nCBGlUc7+7XUzOZTwWfSTuw+XKeOf5Us98Al
+         /kopQUrVc/X1kNlmsbxpECb7oyaw4BYgkrJO9quwswlFE7N+wH+ntbmalaSXe+QTy7KE
+         4XYy/FZi6ewC7x6kEArd8bHHs3ocAGCFXQGHexZYViIiiEHOPXg4lkrpQhcBVKaohZuT
+         k/lw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741367042; x=1741971842;
+        h=content-transfer-encoding:mime-version:date:message-id:subject
+         :references:in-reply-to:to:from:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=SHN+uSouj0jmGUbo4WMlUEXMpe1K7sqb2jQWSJPop/Y=;
+        b=XbyGh2Gz1NHMzKkyoDp8AmWlaIwE13T8chSmGKyYiZd6zCb3qgYf7XbL0QCUaU7T0i
+         svl4s6xEK1nKkd+A/844BXTCcxyjJoiNbPLkTFxmHaiEiNlsUApTDYhgnjVbwVMwhyNn
+         +f6Q8cFVS89fXT1q14wdDuqMGAAZuWf3qmZRcYBUF2fjZ46hKwCRk8f+IE1pPhfXEha9
+         W+bOgOtR8gRqD5MB/q/gK9Q3sxfNxSXA2WJ5w4TTmnRl9Yyl6jldsvh2YJrPdauSBGXl
+         Fyf4n3bye2QW21qwrsdlt91mo7t+F7sC8IhTUn8kuLDaedXkFTIz2oXnVEzSH0+8uKss
+         uKMg==
+X-Forwarded-Encrypted: i=1; AJvYcCXnL1yVryiU2To7zidX0MBea2K30nAzV8KVmGSOvPpRnUfgC3xW4TdVBvWqsgJ+12s+4dWJS1MXEg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwaUYSSFJnU3im9p9tXr4yu8I/RUxcwjbXlNhhSgQK+qlXFvoPT
+	NUbiu/5r9tZofFt1VZFNmxPTI9w+emruuw3oUPTqxGcJ95Sd5lEfegGwCN1B37M=
+X-Gm-Gg: ASbGnctERPd6eTc9jyviNRUOTE7EFuAyCBaCv5sVAA5NaqFK9PdurhCUnVS2tp0jawB
+	EBBneMBNqWCxVqgyyHmxf6d/FXxsYl6d8aSa8XocZfjCr0Eal+M7leLrDS7iRzL9z6nsXTAgy4f
+	ic/4CFDtsbmshbNq/tYVgoKaCh9r8Ys+IzqWGeW+TWUBB/pgdBvTcxySlom7BNmOMb6yYFXSJXj
+	lMAEAwNoyJastXmV8NsMR0QYH+QaK0GdPGdxztxGudX9avSWRk4o7A/5mj/Wn2iHsV/hMZgVx0T
+	37oCOfbNBbvGoDpYdHJaw1UqbjZuFFLnTOkm5n6cOmRZ+Vfr1O3ZYXmGdQaDQhM=
+X-Google-Smtp-Source: AGHT+IEQmy+3snTFo6XUAi3Z68EdUMwf32SGMsvWTVT6oBhepCzGFS3Q+CYPLOO5ESXOew0JzcFftg==
+X-Received: by 2002:a17:907:6b88:b0:ac2:9a4:700b with SMTP id a640c23a62f3a-ac26cac6df1mr27808766b.16.1741367041604;
+        Fri, 07 Mar 2025 09:04:01 -0800 (PST)
+Received: from [192.168.68.113] ([5.133.47.210])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2394825adsm308028366b.56.2025.03.07.09.04.00
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Fri, 07 Mar 2025 09:04:00 -0800 (PST)
+From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+To: linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org, 
+ devicetree@vger.kernel.org, daniel.lezcano@linaro.org, rafael@kernel.org, 
+ amitk@kernel.org, thara.gopinath@gmail.com, dmitry.baryshkov@linaro.org, 
+ robh@kernel.org, krzk+dt@kernel.org, quic_srichara@quicinc.com, 
+ George Moussalem <george.moussalem@outlook.com>
+In-Reply-To: <DS7PR19MB88836DC6965515E12D70BB2C9DCC2@DS7PR19MB8883.namprd19.prod.outlook.com>
+References: <20250228051521.138214-1-george.moussalem@outlook.com>
+ <DS7PR19MB88836DC6965515E12D70BB2C9DCC2@DS7PR19MB8883.namprd19.prod.outlook.com>
+Subject: Re: (subset) [PATCH v9 0/6] Add support for IPQ5018 tsens
+Message-Id: <174136704062.10922.6561617829094107048.b4-ty@linaro.org>
+Date: Fri, 07 Mar 2025 17:04:00 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v2 3/5] cpufreq/amd-pstate: Add support for platform
- profile class
-To: "Gautham R. Shenoy" <gautham.shenoy@amd.com>
-Cc: Perry Yuan <perry.yuan@amd.com>,
- Dhananjay Ugwekar <Dhananjay.Ugwekar@amd.com>,
- "open list:X86 ARCHITECTURE (32-BIT AND 64-BIT)"
- <linux-kernel@vger.kernel.org>,
- "open list:CPU FREQUENCY SCALING FRAMEWORK" <linux-pm@vger.kernel.org>,
- Mario Limonciello <mario.limonciello@amd.com>
-References: <20250304152327.1561017-1-superm1@kernel.org>
- <20250304152327.1561017-4-superm1@kernel.org>
- <Z8sdREywSKVb4xx7@BLRRASHENOY1.amd.com>
-Content-Language: en-US
-From: Mario Limonciello <superm1@kernel.org>
-In-Reply-To: <Z8sdREywSKVb4xx7@BLRRASHENOY1.amd.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Type: text/plain; charset="utf-8"
 Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.12.2
 
-On 3/7/2025 10:22, Gautham R. Shenoy wrote:
-> On Tue, Mar 04, 2025 at 09:23:25AM -0600, Mario Limonciello wrote:
->> From: Mario Limonciello <mario.limonciello@amd.com>
->>
->> The platform profile core allows multiple drivers and devices to
->> register platform profile support.
->>
->> When the legacy platform profile interface is used all drivers will
->> adjust the platform profile as well.
->>
->> Add support for registering every CPU with the platform profile handler
->> when dynamic EPP is enabled.
->>
->> The end result will be that changing the platform profile will modify
->> EPP accordingly.
->>
->> Signed-off-by: Mario Limonciello <mario.limonciello@amd.com>
->> ---
->>   Documentation/admin-guide/pm/amd-pstate.rst |   4 +-
->>   drivers/cpufreq/Kconfig.x86                 |   1 +
->>   drivers/cpufreq/amd-pstate.c                | 142 +++++++++++++++++---
->>   drivers/cpufreq/amd-pstate.h                |  10 ++
->>   4 files changed, 140 insertions(+), 17 deletions(-)
->>
->> diff --git a/Documentation/admin-guide/pm/amd-pstate.rst b/Documentation/admin-guide/pm/amd-pstate.rst
->> index 8424e7119dd7e..36950fb6568c0 100644
->> --- a/Documentation/admin-guide/pm/amd-pstate.rst
->> +++ b/Documentation/admin-guide/pm/amd-pstate.rst
->> @@ -321,7 +321,9 @@ Whether this behavior is enabled by default with the kernel config option
->>   at runtime by the sysfs file ``/sys/devices/system/cpu/cpufreq/policyX/dynamic_epp``.
->>   
->>   When set to enabled, the driver will select a different energy performance
->> -profile when the machine is running on battery or AC power.
->> +profile when the machine is running on battery or AC power. The driver will
->> +also register with the platform profile handler to receive notifications of
->> +user desired power state and react to those.
->>   When set to disabled, the driver will not change the energy performance profile
->>   based on the power source and will not react to user desired power state.
->>   
->> diff --git a/drivers/cpufreq/Kconfig.x86 b/drivers/cpufreq/Kconfig.x86
->> index c5ef92634ddf4..905eab998b836 100644
->> --- a/drivers/cpufreq/Kconfig.x86
->> +++ b/drivers/cpufreq/Kconfig.x86
->> @@ -40,6 +40,7 @@ config X86_AMD_PSTATE
->>   	select ACPI_PROCESSOR
->>   	select ACPI_CPPC_LIB if X86_64
->>   	select CPU_FREQ_GOV_SCHEDUTIL if SMP
->> +	select ACPI_PLATFORM_PROFILE
->>   	help
->>   	  This driver adds a CPUFreq driver which utilizes a fine grain
->>   	  processor performance frequency control range instead of legacy
->> diff --git a/drivers/cpufreq/amd-pstate.c b/drivers/cpufreq/amd-pstate.c
->> index 9911808fe0bcf..28c02edf6e40b 100644
->> --- a/drivers/cpufreq/amd-pstate.c
->> +++ b/drivers/cpufreq/amd-pstate.c
->> @@ -105,6 +105,7 @@ static struct quirk_entry *quirks;
->>    *	2		balance_performance
->>    *	3		balance_power
->>    *	4		power
->> + *	5		custom (for raw EPP values)
->>    */
->>   enum energy_perf_value_index {
->>   	EPP_INDEX_DEFAULT = 0,
->> @@ -112,6 +113,7 @@ enum energy_perf_value_index {
->>   	EPP_INDEX_BALANCE_PERFORMANCE,
->>   	EPP_INDEX_BALANCE_POWERSAVE,
->>   	EPP_INDEX_POWERSAVE,
->> +	EPP_INDEX_CUSTOM,
->>   };
->>   
->>   static const char * const energy_perf_strings[] = {
->> @@ -120,6 +122,7 @@ static const char * const energy_perf_strings[] = {
->>   	[EPP_INDEX_BALANCE_PERFORMANCE] = "balance_performance",
->>   	[EPP_INDEX_BALANCE_POWERSAVE] = "balance_power",
->>   	[EPP_INDEX_POWERSAVE] = "power",
->> +	[EPP_INDEX_CUSTOM] = "custom",
->>   	NULL
->>   };
->>   
->> @@ -1073,6 +1076,10 @@ static int amd_pstate_power_supply_notifier(struct notifier_block *nb,
->>   	if (event != PSY_EVENT_PROP_CHANGED)
->>   		return NOTIFY_OK;
->>   
->> +	/* dynamic actions are only applied while platform profile is in balanced */
->> +	if (cpudata->current_profile != PLATFORM_PROFILE_BALANCED)
->> +		return 0;
->> +
->>   	epp = amd_pstate_get_balanced_epp(policy);
->>   
->>   	ret = amd_pstate_set_epp(policy, epp);
->> @@ -1081,14 +1088,84 @@ static int amd_pstate_power_supply_notifier(struct notifier_block *nb,
->>   
->>   	return NOTIFY_OK;
->>   }
->> -static void amd_pstate_clear_dynamic_epp(struct cpufreq_policy *policy)
->> +
->> +static int amd_pstate_profile_probe(void *drvdata, unsigned long *choices)
->> +{
->> +	set_bit(PLATFORM_PROFILE_LOW_POWER, choices);
->> +	set_bit(PLATFORM_PROFILE_BALANCED, choices);
->> +	set_bit(PLATFORM_PROFILE_PERFORMANCE, choices);
->> +
->> +	return 0;
->> +}
->> +
->> +static int amd_pstate_profile_get(struct device *dev,
->> +				  enum platform_profile_option *profile)
->> +{
->> +	struct amd_cpudata *cpudata = dev_get_drvdata(dev);
->> +
->> +	*profile = cpudata->current_profile;
->> +
->> +	return 0;
->> +}
->> +
->> +static int amd_pstate_profile_set(struct device *dev,
->> +				  enum platform_profile_option profile)
->> +{
->> +	struct amd_cpudata *cpudata = dev_get_drvdata(dev);
->> +	struct cpufreq_policy *policy __free(put_cpufreq_policy) = cpufreq_cpu_get(cpudata->cpu);
->> +	int ret;
->> +
->> +	switch (profile) {
->> +	case PLATFORM_PROFILE_LOW_POWER:
->> +		if (cpudata->policy != CPUFREQ_POLICY_POWERSAVE)
->> +			cpudata->policy = CPUFREQ_POLICY_POWERSAVE;
+
+On Fri, 28 Feb 2025 09:11:33 +0400, George Moussalem wrote:
+> IPQ5018 has tsens V1.0 IP with 5 sensors, of which 4 are in use,
+> and 1 interrupt. There is no RPM present in the soc to do tsens early
+> enable. Adding support for the same here.
 > 
-> So prior to the patch, cpudata->policy is supposed to mirror
-> policy->policy.  With this patch, this assumption is no longer
-> true. So it is possible for the user to again override the choice of
-> EPP set via platform profile by changing the cpufreq governor ?
+> Last patch series sent by Qualcomm dates back to Sep 22, 2023.
+> Since I'm working on OpenWrt support for IPQ5018 based boards (routers)
+> and Sricharan Ramabadhran <quic_srichara@quicinc.com> in below email
+> confirmed this SoC is still active, I'm continuing the efforts to send
+> patches upstream for Linux kernel support.
+> https://lore.kernel.org/all/63dc4054-b1e2-4e7a-94e7-643beb26a6f3@quicinc.com/
 > 
-> Is this the expected behaviour?
-> 
-> The bigger concern is, if the governor was previously "performance"
-> and then the platform profile requested "low power", "cat
-> /sys/devices/system/cpu/cpuX/cpufreq/scaling_governor" would still
-> show "performance", which is inconsistent with the behaviour.
-> 
-> 
+> [...]
 
-This ties back to the previous patches for dynamic EPP.  My expectation 
-was that when dynamic EPP is enabled that users can't manually set the 
-EPP anymore (it will return -EBUSY) and likewise turning on dynamic EPP
-should keep the governor as powersave.
+Applied, thanks!
 
-I'll double check all those are properly enforced; but that's at least 
-the intent.
+[1/6] dt-bindings: nvmem: Add compatible for IPQ5018
+      commit: eb7eeabf64d2b2ea3ae562e85f09fb2593a6da2f
 
-IMO this "should" all work because turning on Dynamic EPP sysfs file 
-forces the driver to go through a state transition that it will tear 
-everything down and back up.  The policy will come back up in 
-"powersave" even if it was previously in "performance" when the dynamic 
-EPP sysfs file was turned on.
+Best regards,
+-- 
+Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
 
-Longer term; I also envision the scheduler influencing EPP values when 
-dynamic_epp is turned on.  The "platform profile" would be an "input" to 
-that decision making process (maybe giving a weighting?), not the only 
-lever.
-
-I haven't given any serious look at how to do this with the scheduler, I 
-wanted to lay the foundation first being dynamic EPP and raw EPP.
-
-So even if dynamic_epp isn't interesting "right now" for server because 
-the focus is around behavior for AC/DC, don't write it off just yet.
 
