@@ -1,171 +1,140 @@
-Return-Path: <linux-pm+bounces-23646-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23647-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6DF0FA56F6D
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 18:44:28 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 3492FA57247
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 20:42:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C7F4D7A3EC1
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 17:42:20 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9FDFA189A08A
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 19:43:01 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 0B1F22405EC;
-	Fri,  7 Mar 2025 17:42:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 86CE9253330;
+	Fri,  7 Mar 2025 19:42:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="B7NE4oXp"
+	dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b="nUstl2fO"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f43.google.com (mail-ej1-f43.google.com [209.85.218.43])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from cloudserver094114.home.pl (cloudserver094114.home.pl [79.96.170.134])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 016E621A44C
-	for <linux-pm@vger.kernel.org>; Fri,  7 Mar 2025 17:42:07 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.43
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BB7424FC1F;
+	Fri,  7 Mar 2025 19:42:47 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=79.96.170.134
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741369329; cv=none; b=pcm1skTduLgi1ZaN9X3/ur2/GQmd3s78KOa0TA9u91oy1fskBAPWTGKJvvUM2IrV9q6y/mGbgWRzC2OmPgl3PfM/w9ONOsZgaMGWK1dfbcKcZmo31nD1rvTnlQOEhV9F6/44gkg6LxZwZgPhjWLacjMXH/2S9hBx2YFoiY8axbw=
+	t=1741376570; cv=none; b=Y51Y8S4hHEGRDWqnCIsnieduoPg1kuioa2+Gs9enQCqkKAg0p8OIna4cci6J8NTmHveyi9hgvnlKtvQArMXdbCM9A+UF21npTXSOIKGiQxnLrDglh+bKbg4uXBVYWH3OabRC/JZipufdayWDL6RSRRJgBIMaibH47Hl5rKXczxY=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741369329; c=relaxed/simple;
-	bh=KQS1zGojMtlyo5Lhl62aadLOweiXB7BrdSEtxARRf9A=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=jW2y1DhVN52FxC3QuQI5tGuj+JkMGjoCK/saKyx1QkIO18xv/ydHIq3xhhyEbTjnMsghbkGEIyh8w2RMfnuF89dMI+C4j3enrwitR+ul1KygW1kKLgP5z03WPiUjGwMylBIyiuncukP6s22A/8z/hYtzAo9m5P2REP7XRbkZdGg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=B7NE4oXp; arc=none smtp.client-ip=209.85.218.43
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-ej1-f43.google.com with SMTP id a640c23a62f3a-ab78e6edb99so328670666b.2
-        for <linux-pm@vger.kernel.org>; Fri, 07 Mar 2025 09:42:07 -0800 (PST)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741369326; x=1741974126; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=87LLRJ6QEN8pKjPcs70n3/W5zmSE0p6Cob9Wz2RQEBw=;
-        b=B7NE4oXpj/yoUiPs8+YVU3eJC1OWK6bnx3B86Ir77M//PbPqFjZzrmt8x2qXdG7BM2
-         fk/BLrKx8iczf5n+P0h8YrvzaPdL5ALMOUBCux6wdPZJGunBrS6c2a/ZeQRGWqh3yQx7
-         nCkvDHx/tGJ0fD+MQsmPaMXP4mh/D90JorgBdtRgVnN0zz3TtzVZ5BRN8yzd2JCVcdpb
-         PoKPSsPigrf6IjbCKyueT5UKmd7053NXuNw98/tzTVwzm3YBtw5HKJIXFtgeZusKXbnl
-         ls2lm0akhpGQhz/vEN2e8OFYSFBaP7vGsEhLGOPF6GStT2N2I3Qu03oyO2JJfLSlavGO
-         0dvg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741369326; x=1741974126;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=87LLRJ6QEN8pKjPcs70n3/W5zmSE0p6Cob9Wz2RQEBw=;
-        b=Jhqh9bvpDfuwnODnO3r+6zdOf+8TvJcAdAfg6yza840uJ8CHs0qAjrmyCA1x1npcj3
-         nwHlWFO4/T3BYpQlk0ScxklYdWeRd2PGLfMQmTwFcG4MwGuJxg4I1617ZvzJI9uRnlop
-         BeKjzY1rfuwbARYojtGRSKnq1BuLdR5BgJ9QOtXUl9oiiPxCH3LF8SeoLkKEo1Dsn+AO
-         bWMG6ReRq5G3MWkJ3jdJSkWVlKgLKvm1EUuukrnzbcExvW9Pnaq5iwzYix8geKN4dixy
-         pdEPVNScuoHYdAXD0yzIgYLNjti2HmR13NNQPDjSUSUZrliem7DQZdA0k9JkDKhoHlXI
-         Kb8A==
-X-Forwarded-Encrypted: i=1; AJvYcCVy5ucTMjQ6dfhn4iEKILpdZ6OwWalWv2daumavOhjPMsZwzMvITDW77us/8S39NRthDhpiLNw8/g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yx4+ZOd+2HUp0nfim7jv2lsQ1rYI6f5fHooxcEPdc5irNTrJ1YM
-	nLi6c1LI3wDTjd3pfk8kwEA9qXqKWIetjnh/7lcqzX6qs1pakdX6iOGzz9FiZUw=
-X-Gm-Gg: ASbGncus3twuHl8vw7AKXBPjs5NHM6aR59rFE9tFW92fWdv/su2A07PkQJY3HLWOMn0
-	A3M1mWgKEm13+f4GBCm6zvMTM2WZL4pRuOFyvMasW8sor62MgGu7ZU8WVSC642geldimFvpfK39
-	hiQAlsq2RjA3Dsodd97bk/zX4uzwsH2zilehBYkkRgxQ66kefCpNCbJhLt4YgMmSnWOZdt0xhnj
-	Pbhn0OeYrZ8d8L98NuYNoN62lUZ0QRtQtUC2VniX5+OyG1IFIj0g7Obwo4l0tuRWPjwYtACSCLD
-	T2Xen7ZBPgtP06HL434ItPWu9K92Perhw2tGzh05Zj5ytFf/Nw5tEPy6HGVfqVo=
-X-Google-Smtp-Source: AGHT+IGf62tDN8mXFcenEaMR6BHaYRH620Q4sbEACg4krU437G/4p/+4UlaCgrWyCIlJS29OT9t8kA==
-X-Received: by 2002:a17:906:d552:b0:ac1:ea29:4e63 with SMTP id a640c23a62f3a-ac252a866b6mr423637566b.26.1741369326129;
-        Fri, 07 Mar 2025 09:42:06 -0800 (PST)
-Received: from [192.168.68.113] ([5.133.47.210])
-        by smtp.googlemail.com with ESMTPSA id a640c23a62f3a-ac23973a733sm304374366b.112.2025.03.07.09.42.05
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Fri, 07 Mar 2025 09:42:05 -0800 (PST)
-Message-ID: <1167c489-92cb-440e-a2c0-4f47190de5ac@linaro.org>
-Date: Fri, 7 Mar 2025 17:42:05 +0000
+	s=arc-20240116; t=1741376570; c=relaxed/simple;
+	bh=bntwyWnrMdWDSe4vnVdSyZBMiRO/ZRUZNY4KsjH/rsE=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=gS4XwikVhhpH6CqUOniwndyfBEFsq81mUgiwERUNUVn8UA+7jAJb5gun7bVTHzGFhSPtGIU86uS7cCmQSfwQZ0sfNt9nxtH5DmOiCvmP5xIQfTxCQNlZpoJKoPWFTLH5qJqRJjlrKFORC5siMCbFoOmj4yqfvvFpbwd7hhkgVNY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net; spf=pass smtp.mailfrom=rjwysocki.net; dkim=pass (2048-bit key) header.d=rjwysocki.net header.i=@rjwysocki.net header.b=nUstl2fO; arc=none smtp.client-ip=79.96.170.134
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=rjwysocki.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=rjwysocki.net
+Received: from localhost (127.0.0.1) (HELO v370.home.net.pl)
+ by /usr/run/smtp (/usr/run/postfix/private/idea_relay_lmtp) via UNIX with SMTP (IdeaSmtpServer 6.3.1)
+ id bd548913f5f0793d; Fri, 7 Mar 2025 20:42:45 +0100
+Received: from kreacher.localnet (unknown [195.136.19.94])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange X25519 server-signature RSA-PSS (2048 bits) server-digest SHA256)
+	(No client certificate requested)
+	by cloudserver094114.home.pl (Postfix) with ESMTPSA id 581269A0BFB;
+	Fri,  7 Mar 2025 20:42:45 +0100 (CET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=rjwysocki.net;
+	s=dkim; t=1741376565;
+	bh=bntwyWnrMdWDSe4vnVdSyZBMiRO/ZRUZNY4KsjH/rsE=;
+	h=From:Subject:Date;
+	b=nUstl2fOjsDJTZ3H1jC9w8CqcwhArq6Q7ElmCXlnurofh79vYmjWSCpuXf+Cl3eyE
+	 HtsbNujM4Vd4zy47Oagr9/5f89lDF98oOtOqubO0vrBxtbv6uoB+wTfYGDimO950rk
+	 84FrT2zAVPl8IaYSdMAH6vNKhUAH28SFl5xk1KajlmFMVCvyAtxtsRaqx7sKEG6ud3
+	 lTq4TH941JmYHRFo4DLaYd52gPYAgDRHT9F3uGi02YTuC1eqMMI+ifKq2y8mJo9als
+	 /vI5MRI3V7dnxVvQqt+KOHbGztaLt1N2wdB99wbSwRxmg2nX+vtG8qOPyyeITqRqZG
+	 5r+O52ybKq21A==
+From: "Rafael J. Wysocki" <rjw@rjwysocki.net>
+To: Linux PM <linux-pm@vger.kernel.org>
+Cc: LKML <linux-kernel@vger.kernel.org>, Lukasz Luba <lukasz.luba@arm.com>,
+ Peter Zijlstra <peterz@infradead.org>,
+ Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+ Dietmar Eggemann <dietmar.eggemann@arm.com>,
+ Morten Rasmussen <morten.rasmussen@arm.com>,
+ Vincent Guittot <vincent.guittot@linaro.org>,
+ Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+ Pierre Gondois <pierre.gondois@arm.com>,
+ Christian Loehle <christian.loehle@arm.com>
+Subject:
+ [RFC][PATCH v0.3 0/6] cpufreq: intel_pstate: Enable EAS on hybrid platforms
+ without SMT - alternative
+Date: Fri, 07 Mar 2025 20:12:11 +0100
+Message-ID: <22640172.EfDdHjke4D@rjwysocki.net>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 1/2] nvmem: core: add nvmem_cell_size()
-To: Jennifer Berringer <jberring@redhat.com>,
- Sebastian Reichel <sre@kernel.org>
-Cc: linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org
-References: <20250228180326.256058-1-jberring@redhat.com>
- <20250228180326.256058-2-jberring@redhat.com>
-Content-Language: en-US
-From: Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-In-Reply-To: <20250228180326.256058-2-jberring@redhat.com>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 7Bit
+Content-Type: text/plain; charset="UTF-8"
+X-CLIENT-IP: 195.136.19.94
+X-CLIENT-HOSTNAME: 195.136.19.94
+X-VADE-SPAMSTATE: clean
+X-VADE-SPAMCAUSE: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudduheefucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecujffqoffgrffnpdggtffipffknecuuegrihhlohhuthemucduhedtnecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpefhvfevufffkfgggfgtsehtufertddttdejnecuhfhrohhmpedftfgrfhgrvghlucflrdcuhgihshhotghkihdfuceorhhjfiesrhhjfiihshhotghkihdrnhgvtheqnecuggftrfgrthhtvghrnhepgeffhfdujeelhfdtgeffkeetudfhtefhhfeiteethfekvefgvdfgfeeikeeigfehnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenucfkphepudelhedrudefiedrudelrdelgeenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpeduleehrddufeeirdduledrleegpdhhvghlohepkhhrvggrtghhvghrrdhlohgtrghlnhgvthdpmhgrihhlfhhrohhmpehrjhifsehrjhifhihsohgtkhhirdhnvghtpdhnsggprhgtphhtthhopeduuddprhgtphhtthhopehlihhnuhigqdhpmhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehlihhnuhigqdhkvghrnhgvlhesvhhgvghrrdhkvghrnhgvlhdrohhrghdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepphgvthgvrhiisehinhhfrhgruggvrggurdhorhhgpdhrtghpthhtohepshhrihhnihhvrghsrdh
+X-DCC--Metrics: v370.home.net.pl 1024; Body=11 Fuz1=11 Fuz2=11
 
-Hi Jennifer,
+Hi Everyone,
 
-On 28/02/2025 18:03, Jennifer Berringer wrote:
-> This function allows nvmem consumers to know the size of an nvmem cell
-> before calling nvmem_cell_write() or nvmem_cell_read(), which is helpful
-> for drivers that may need to handle devices with different cell sizes.
-> 
-> Signed-off-by: Jennifer Berringer <jberring@redhat.com>
-> ---
->   drivers/nvmem/core.c           | 18 ++++++++++++++++++
->   include/linux/nvmem-consumer.h |  6 ++++++
->   2 files changed, 24 insertions(+)
-> 
-> diff --git a/drivers/nvmem/core.c b/drivers/nvmem/core.c
-> index d6494dfc20a7..4d0cbd20da48 100644
-> --- a/drivers/nvmem/core.c
-> +++ b/drivers/nvmem/core.c
-> @@ -1624,6 +1624,24 @@ void nvmem_cell_put(struct nvmem_cell *cell)
->   }
->   EXPORT_SYMBOL_GPL(nvmem_cell_put);
->   
-> +/**
-> + * nvmem_cell_size() - Get nvmem cell size in bytes.
-> + *
-> + * @cell: nvmem cell.
-> + *
-> + * Return: size of the nvmem cell.
-> + */
-> +size_t nvmem_cell_size(struct nvmem_cell *cell)
-> +{
-> +	struct nvmem_cell_entry *entry = cell->entry;
-> +
-> +	if (!entry)
-> +		return 0;
-> +
-> +	return entry->bytes;
-> +}
-> +EXPORT_SYMBOL_GPL(nvmem_cell_size);
-> +
+This is a new take on the "EAS for intel_pstate" work:
 
-There is a similar patch on the list, could you take a look and see if 
-that is usable in power reset driver.
+https://lore.kernel.org/linux-pm/5861970.DvuYhMxLoT@rjwysocki.net/
 
-https://lore.kernel.org/lkml/20250306093900.2199442-3-o.rempel@pengutronix.de/T/#m97bbb1870d7140661894a4e806a695e563588524
+with refreshed preparatory patches and a revised energy model design.
+
+The following paragraph from the original cover letter still applies:
+
+"The underlying observation is that on the platforms targeted by these changes,
+Lunar Lake at the time of this writing, the "small" CPUs (E-cores), when run at
+the same performance level, are always more energy-efficient than the "big" or
+"performance" CPUs (P-cores).  This means that, regardless of the scale-
+invariant utilization of a task, as long as there is enough spare capacity on
+E-cores, the relative cost of running it there is always lower."
+
+However, this time perf domains are registered per CPU and in addition to the
+primary cost component, which is related to the CPU type, there is a small
+component proportional to performance whose role is to help balance the load
+between CPUs of the same type.
+
+This is done to avoid migrating tasks too much between CPUs of the same type,
+especially between E-cores, which has been observed in tests of the previous
+iteration of this work.
+
+The expected effect is still that the CPUs of the "low-cost" type will be
+preferred so long as there is enough spare capacity on any of them.
+
+The first two patches in the series rearrange cpufreq checks related to EAS so
+that sched_is_eas_possible() doesn't have to access cpufreq internals directly
+and patch [3/6] changes those checks to also allow EAS to be used with cpufreq
+drivers that implement internal governors (like intel_pstate).
+
+Patches [4-5/6] deal with the Energy Model code.  Patch [4/6] simply rearranges
+it so as to allow the next patch to be simpler and patch [5/6] adds a function
+that's used in the last patch.
+
+Patch [6/6] is the actual intel_pstate modification which now is significantly
+simpler than before because it doesn't need to track the type of each CPU
+directly in order to put into the right perf domain.
+
+Please refer to the individual patch changelogs for details.
+
+For easier access, the series is available on the experimental/intel_pstate/eas-take2
+branch in linux-pm.git:
+
+git://git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git \
+experimental/intel_pstate/eas-take2
+
+or
+
+https://web.git.kernel.org/pub/scm/linux/kernel/git/rafael/linux-pm.git/log/?h=experimental/intel_pstate/eas-take2
+
+Thanks!
 
 
 
---srini
->   static void nvmem_shift_read_buffer_in_place(struct nvmem_cell_entry *cell, void *buf)
->   {
->   	u8 *p, *b;
-> diff --git a/include/linux/nvmem-consumer.h b/include/linux/nvmem-consumer.h
-> index 34c0e58dfa26..a2020527d2d3 100644
-> --- a/include/linux/nvmem-consumer.h
-> +++ b/include/linux/nvmem-consumer.h
-> @@ -54,6 +54,7 @@ struct nvmem_cell *nvmem_cell_get(struct device *dev, const char *id);
->   struct nvmem_cell *devm_nvmem_cell_get(struct device *dev, const char *id);
->   void nvmem_cell_put(struct nvmem_cell *cell);
->   void devm_nvmem_cell_put(struct device *dev, struct nvmem_cell *cell);
-> +size_t nvmem_cell_size(struct nvmem_cell *cell);
->   void *nvmem_cell_read(struct nvmem_cell *cell, size_t *len);
->   int nvmem_cell_write(struct nvmem_cell *cell, void *buf, size_t len);
->   int nvmem_cell_read_u8(struct device *dev, const char *cell_id, u8 *val);
-> @@ -117,6 +118,11 @@ static inline void nvmem_cell_put(struct nvmem_cell *cell)
->   {
->   }
->   
-> +static inline size_t nvmem_cell_size(struct nvmem_cell *cell)
-> +{
-> +	return 0;
-> +}
-> +
->   static inline void *nvmem_cell_read(struct nvmem_cell *cell, size_t *len)
->   {
->   	return ERR_PTR(-EOPNOTSUPP);
 
