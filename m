@@ -1,155 +1,306 @@
-Return-Path: <linux-pm+bounces-23583-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23584-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 5ABF2A55D85
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 03:18:13 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5B45BA55D87
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 03:18:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6B06F162C7E
-	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 02:18:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5361F3B4024
+	for <lists+linux-pm@lfdr.de>; Fri,  7 Mar 2025 02:18:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D4A52152196;
-	Fri,  7 Mar 2025 02:18:04 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C5BCE18785D;
+	Fri,  7 Mar 2025 02:18:07 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b="GEwSFkE6"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="PPPv8p1q"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx.treblig.org (mx.treblig.org [46.235.229.95])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.9])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D5E0168B1;
-	Fri,  7 Mar 2025 02:18:02 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=46.235.229.95
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id EBD5F16F282;
+	Fri,  7 Mar 2025 02:18:05 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.9
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741313884; cv=none; b=A6NauFDcc/qRNhA12riSZ0o9i8uRftQWLdpD+9n6B9okp+qWWKt4gui9rcso8z585zh9JhR9Ve6XWvPo3zrMqC3AVJhffFMwJextnrassETFrFcuoHeTdluk1SZD6yl3Y5wkA4HEtlZ56M4E8cLLHOQx0xdWmxhwuin8Q1UEPmA=
+	t=1741313887; cv=none; b=uzthXxcq/glVvMU8vr66YKLNwPzrc4aUUG+WYkyJc2fFycVrZZrYejJJx9U5KPFTqvx8suUOfk3uWC6UXDAtSy0Zb6lsEdUfTdRv0gkWX3WdWZATXIwZ0kUTCUqs7mEI09OhKOLjYw7+etwhyMSxe/VpejOtObS0CV76+OfmPyw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741313884; c=relaxed/simple;
-	bh=o5x7cLEjm8MZX6Jghu2IW59J2Iu3i6+TNqseTqAL1A0=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=nvuvJmNnxL4c7jplfuJHU9IeKhPyE4x73ChnIVBtyNhd18lIQ/1Zh+hmF3CP/ptUJw/77Ht1L79lgeJ7aRk3cE0tRVpoY970KCFPZLY61tWLJ6o16f+7Ft7xm4jutmQIQ7wYV20cyeKdgzB7vWWqgQ9Bgo5z79r2MHMp5agqwSo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org; spf=pass smtp.mailfrom=treblig.org; dkim=pass (2048-bit key) header.d=treblig.org header.i=@treblig.org header.b=GEwSFkE6; arc=none smtp.client-ip=46.235.229.95
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=treblig.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=treblig.org
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; d=treblig.org
-	; s=bytemarkmx; h=MIME-Version:Message-ID:Date:Subject:From:Content-Type:From
-	:Subject; bh=o7mlQ1962EQiMMcntIkUeCtxj49EfYHI00jQrO3UUx4=; b=GEwSFkE6tfS2VRZq
-	wJgFMV9Clr0R9JkmZotTSOkbxSTxSmw2Wp1aqiiMRp6iqD3fVnhvMHnVRkMyMt6WIYpO/Tov9Vt/H
-	l3UJGcQiLehWHr4V+0Q4WlKX08tUcwV/TDv+Qr7OdBhth8zJLuZcCoEGqooPAIFGhE3sSNMr8lBWr
-	Ul8yUqEzm/eNg7/iB2VPuwa7MpgdymvPomWUwQOvK0Z17dApm1ncwqBcGuueWffjwJCMm+yA5t1YY
-	NH3Eyg+qsoMEtzB6xLYvUxI9GUgkNu8gYUZKtmKC3qg5PUFx+eiZyhF4XjDvhCQzjfJ3Q2BJmS0Q6
-	Mfzqqeo9udR7pu7Gcg==;
-Received: from localhost ([127.0.0.1] helo=dalek.home.treblig.org)
-	by mx.treblig.org with esmtp (Exim 4.96)
-	(envelope-from <linux@treblig.org>)
-	id 1tqNHa-003I6m-2T;
-	Fri, 07 Mar 2025 02:17:50 +0000
-From: linux@treblig.org
-To: rafael@kernel.org,
-	len.brown@intel.com,
-	pavel@kernel.org
-Cc: gregkh@linuxfoundation.org,
-	dakr@kernel.org,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org,
-	"Dr. David Alan Gilbert" <linux@treblig.org>
-Subject: [PATCH] drivers: base: power: Remove unused pm_generic_ wrappers
-Date: Fri,  7 Mar 2025 02:17:50 +0000
-Message-ID: <20250307021750.457600-1-linux@treblig.org>
-X-Mailer: git-send-email 2.48.1
+	s=arc-20240116; t=1741313887; c=relaxed/simple;
+	bh=BfCpvXPQPn7mcskR6IEtxlwl46LOxQ6OOV0rkXcU5do=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=qtMl7ERqIPquD4elN1RihSoHQPmVUj1MnnWnjprA9tATvob+Er7QwCVTCEjUhrd1AROsFQiWBsuYF4UHrwOx/Cvs2RVqHf96yFNa8DyyDwWhegllWEx2a8Bd1hCeE0oixrX+iWxMlid6lj/r0SX5fpSMBhn5uYhxY9ItM97mJEo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=PPPv8p1q; arc=none smtp.client-ip=198.175.65.9
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741313886; x=1772849886;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=BfCpvXPQPn7mcskR6IEtxlwl46LOxQ6OOV0rkXcU5do=;
+  b=PPPv8p1qpsfvSDALPiSfNUwPFv8qeVQdG467LsJDZujJrU2xd+iRtH44
+   6MQhq8nnhpE5PxWIR2Y5EyMRL0Rr2wxrYgUQ7ZsyLgfpL6IyiBKnkuCAt
+   Etno48SPyr4UDOPWfA9WZe9ZDG1BhBe9SU/N3Him/jiRFRSHL5RxPqq7X
+   TLbdROx8ogtAbl47EZsNuDL3s2CQ0ZtGzjwbzN74sWbJuSLdm4LTJAgyT
+   V8qNvRV1IHnmy+mfDYXovONwGjl7KmBy0cpKtsSFxPG3aPdvK7COxFRB3
+   lYuzEBxmMFP+IMSv12zxCGR7QLVjxlJrMO7U3oGSIIpjVDETkoy8YyV1Z
+   Q==;
+X-CSE-ConnectionGUID: 6zoVGKbUQg2a+tcglYa0QA==
+X-CSE-MsgGUID: fxmkNvb/QTON0n5tCZlwXQ==
+X-IronPort-AV: E=McAfee;i="6700,10204,11365"; a="64795162"
+X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
+   d="scan'208";a="64795162"
+Received: from fmviesa005.fm.intel.com ([10.60.135.145])
+  by orvoesa101.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 18:18:05 -0800
+X-CSE-ConnectionGUID: 46O0E755TPWwfXSb3QfPEw==
+X-CSE-MsgGUID: j0jIViBXQpuO4IYrptvJoQ==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,227,1736841600"; 
+   d="scan'208";a="123788103"
+Received: from ylan1-mobl.amr.corp.intel.com (HELO desk) ([10.125.145.179])
+  by fmviesa005-auth.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 06 Mar 2025 18:18:04 -0800
+Date: Thu, 6 Mar 2025 18:18:03 -0800
+From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Borislav Petkov <bp@alien8.de>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
+Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	Brice Goglin <brice.goglin@gmail.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <Perry.Yuan@amd.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: [PATCH v7 1/4] x86/cpu: Name CPU matching macro more generically
+ (and shorten)
+Message-ID: <20250306-add-cpu-type-v7-1-f903fb022fd4@linux.intel.com>
+X-Mailer: b4 0.14.1
+References: <20250306-add-cpu-type-v7-0-f903fb022fd4@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250306-add-cpu-type-v7-0-f903fb022fd4@linux.intel.com>
 
-From: "Dr. David Alan Gilbert" <linux@treblig.org>
+To add cpu-type to the existing CPU matching infrastructure, the base macro
+X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE need to append _CPU_TYPE. This
+makes an already long name longer, and somewhat incomprehensible.
 
-pm_generic_thaw_early() has been unused since 2016's
-commit 294f47ffd55c ("PM / Domains: Remove redundant system PM callbacks")
+To avoid this, rename the base macro to X86_MATCH_CPU. The macro name
+doesn't need to explicitly tell everything that it matches. The arguments
+to the macro already hints that.
 
-pm_generic_freeze_late() has been unused since 2019's
-commit 3cd7957e85e6 ("ACPI: PM: Simplify and fix PM domain hibernation
-callbacks")
+For consistency, use this base macro to define X86_MATCH_VFM and friends.
 
-Remove them.
-
-Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
+Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
 ---
- drivers/base/power/generic_ops.c | 24 ------------------------
- include/linux/pm.h               |  4 ----
- 2 files changed, 28 deletions(-)
+ arch/x86/include/asm/cpu_device_id.h | 101 ++++++++++-------------------------
+ 1 file changed, 29 insertions(+), 72 deletions(-)
 
-diff --git a/drivers/base/power/generic_ops.c b/drivers/base/power/generic_ops.c
-index 4fa525668cb7..6502720bb564 100644
---- a/drivers/base/power/generic_ops.c
-+++ b/drivers/base/power/generic_ops.c
-@@ -114,18 +114,6 @@ int pm_generic_freeze_noirq(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(pm_generic_freeze_noirq);
+diff --git a/arch/x86/include/asm/cpu_device_id.h b/arch/x86/include/asm/cpu_device_id.h
+index ba32e0f44cba..bb5acba69bd1 100644
+--- a/arch/x86/include/asm/cpu_device_id.h
++++ b/arch/x86/include/asm/cpu_device_id.h
+@@ -57,7 +57,7 @@
+ #define X86_CPU_ID_FLAG_ENTRY_VALID	BIT(0)
  
--/**
-- * pm_generic_freeze_late - Generic freeze_late callback for subsystems.
-- * @dev: Device to freeze.
-- */
--int pm_generic_freeze_late(struct device *dev)
--{
--	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
--
--	return pm && pm->freeze_late ? pm->freeze_late(dev) : 0;
--}
--EXPORT_SYMBOL_GPL(pm_generic_freeze_late);
--
  /**
-  * pm_generic_freeze - Generic freeze callback for subsystems.
-  * @dev: Device to freeze.
-@@ -186,18 +174,6 @@ int pm_generic_thaw_noirq(struct device *dev)
- }
- EXPORT_SYMBOL_GPL(pm_generic_thaw_noirq);
+- * X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE - Base macro for CPU matching
++ * X86_MATCH_CPU -  Base macro for CPU matching
+  * @_vendor:	The vendor name, e.g. INTEL, AMD, HYGON, ..., ANY
+  *		The name is expanded to X86_VENDOR_@_vendor
+  * @_family:	The family number or X86_FAMILY_ANY
+@@ -74,19 +74,7 @@
+  * into another macro at the usage site for good reasons, then please
+  * start this local macro with X86_MATCH to allow easy grepping.
+  */
+-#define X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE(_vendor, _family, _model, \
+-						    _steppings, _feature, _data) { \
+-	.vendor		= X86_VENDOR_##_vendor,				\
+-	.family		= _family,					\
+-	.model		= _model,					\
+-	.steppings	= _steppings,					\
+-	.feature	= _feature,					\
+-	.flags		= X86_CPU_ID_FLAG_ENTRY_VALID,			\
+-	.driver_data	= (unsigned long) _data				\
+-}
+-
+-#define X86_MATCH_VENDORID_FAM_MODEL_STEPPINGS_FEATURE(_vendor, _family, _model, \
+-						    _steppings, _feature, _data) { \
++#define X86_MATCH_CPU(_vendor, _family, _model, _steppings, _feature, _data) { \
+ 	.vendor		= _vendor,					\
+ 	.family		= _family,					\
+ 	.model		= _model,					\
+@@ -106,13 +94,10 @@
+  * @_data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * The steppings arguments of X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE() is
+- * set to wildcards.
+  */
+-#define X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family, model, feature, data) \
+-	X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE(vendor, family, model, \
+-						X86_STEPPING_ANY, feature, data)
++#define X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family, model, feature, data)	\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, family, model, X86_STEPPING_ANY,		\
++		      feature, data)
  
--/**
-- * pm_generic_thaw_early - Generic thaw_early callback for subsystems.
-- * @dev: Device to thaw.
-- */
--int pm_generic_thaw_early(struct device *dev)
--{
--	const struct dev_pm_ops *pm = dev->driver ? dev->driver->pm : NULL;
--
--	return pm && pm->thaw_early ? pm->thaw_early(dev) : 0;
--}
--EXPORT_SYMBOL_GPL(pm_generic_thaw_early);
--
  /**
-  * pm_generic_thaw - Generic thaw callback for subsystems.
-  * @dev: Device to thaw.
-diff --git a/include/linux/pm.h b/include/linux/pm.h
-index 78855d794342..7bf22ed4a1d5 100644
---- a/include/linux/pm.h
-+++ b/include/linux/pm.h
-@@ -838,10 +838,8 @@ extern int pm_generic_resume_early(struct device *dev);
- extern int pm_generic_resume_noirq(struct device *dev);
- extern int pm_generic_resume(struct device *dev);
- extern int pm_generic_freeze_noirq(struct device *dev);
--extern int pm_generic_freeze_late(struct device *dev);
- extern int pm_generic_freeze(struct device *dev);
- extern int pm_generic_thaw_noirq(struct device *dev);
--extern int pm_generic_thaw_early(struct device *dev);
- extern int pm_generic_thaw(struct device *dev);
- extern int pm_generic_restore_noirq(struct device *dev);
- extern int pm_generic_restore_early(struct device *dev);
-@@ -883,10 +881,8 @@ static inline void dpm_for_each_dev(void *data, void (*fn)(struct device *, void
- #define pm_generic_resume_noirq		NULL
- #define pm_generic_resume		NULL
- #define pm_generic_freeze_noirq		NULL
--#define pm_generic_freeze_late		NULL
- #define pm_generic_freeze		NULL
- #define pm_generic_thaw_noirq		NULL
--#define pm_generic_thaw_early		NULL
- #define pm_generic_thaw			NULL
- #define pm_generic_restore_noirq	NULL
- #define pm_generic_restore_early	NULL
+  * X86_MATCH_VENDOR_FAM_FEATURE - Macro for matching vendor, family and CPU feature
+@@ -123,13 +108,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments of X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set to wildcards.
+  */
+-#define X86_MATCH_VENDOR_FAM_FEATURE(vendor, family, feature, data)	\
+-	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family,		\
+-					   X86_MODEL_ANY, feature, data)
++#define X86_MATCH_VENDOR_FAM_FEATURE(vendor, family, feature, data)		\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, family, X86_MODEL_ANY,		\
++		      X86_STEPPING_ANY, feature, data)
+ 
+ /**
+  * X86_MATCH_VENDOR_FEATURE - Macro for matching vendor and CPU feature
+@@ -139,12 +121,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments of X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set to wildcards.
+  */
+-#define X86_MATCH_VENDOR_FEATURE(vendor, feature, data)			\
+-	X86_MATCH_VENDOR_FAM_FEATURE(vendor, X86_FAMILY_ANY, feature, data)
++#define X86_MATCH_VENDOR_FEATURE(vendor, feature, data)				\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, X86_FAMILY_ANY, X86_MODEL_ANY,	\
++		      X86_STEPPING_ANY, feature, data)
+ 
+ /**
+  * X86_MATCH_FEATURE - Macro for matching a CPU feature
+@@ -152,12 +132,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments of X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set to wildcards.
+  */
+-#define X86_MATCH_FEATURE(feature, data)				\
+-	X86_MATCH_VENDOR_FEATURE(ANY, feature, data)
++#define X86_MATCH_FEATURE(feature, data)					\
++	X86_MATCH_CPU(X86_VENDOR_ANY, X86_FAMILY_ANY, X86_MODEL_ANY,		\
++		      X86_STEPPING_ANY, feature, data)
+ 
+ /**
+  * X86_MATCH_VENDOR_FAM_MODEL - Match vendor, family and model
+@@ -168,13 +146,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments of X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set to wildcards.
+  */
+-#define X86_MATCH_VENDOR_FAM_MODEL(vendor, family, model, data)		\
+-	X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family, model,	\
+-					   X86_FEATURE_ANY, data)
++#define X86_MATCH_VENDOR_FAM_MODEL(vendor, family, model, data)			\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, family, model, X86_STEPPING_ANY,	\
++		      X86_FEATURE_ANY, data)
+ 
+ /**
+  * X86_MATCH_VENDOR_FAM - Match vendor and family
+@@ -184,12 +159,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is casted to unsigned long internally.
+- *
+- * All other missing arguments to X86_MATCH_VENDOR_FAM_MODEL_FEATURE() are
+- * set of wildcards.
+  */
+-#define X86_MATCH_VENDOR_FAM(vendor, family, data)			\
+-	X86_MATCH_VENDOR_FAM_MODEL(vendor, family, X86_MODEL_ANY, data)
++#define X86_MATCH_VENDOR_FAM(vendor, family, data)				\
++	X86_MATCH_CPU(X86_VENDOR_##vendor, family, X86_MODEL_ANY,		\
++		      X86_STEPPING_ANY, X86_FEATURE_ANY, data)
+ 
+ /**
+  * X86_MATCH_VFM - Match encoded vendor/family/model
+@@ -197,15 +170,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is cast to unsigned long internally.
+- *
+- * Stepping and feature are set to wildcards
+  */
+-#define X86_MATCH_VFM(vfm, data)			\
+-	X86_MATCH_VENDORID_FAM_MODEL_STEPPINGS_FEATURE(	\
+-		VFM_VENDOR(vfm),			\
+-		VFM_FAMILY(vfm),			\
+-		VFM_MODEL(vfm),				\
+-		X86_STEPPING_ANY, X86_FEATURE_ANY, data)
++#define X86_MATCH_VFM(vfm, data)						\
++	X86_MATCH_CPU(VFM_VENDOR(vfm), VFM_FAMILY(vfm),	VFM_MODEL(vfm),		\
++		      X86_STEPPING_ANY, X86_FEATURE_ANY, data)
+ 
+ #define __X86_STEPPINGS(mins, maxs)    GENMASK(maxs, mins)
+ /**
+@@ -215,16 +183,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is cast to unsigned long internally.
+- *
+- * feature is set to wildcard
+  */
+-#define X86_MATCH_VFM_STEPS(vfm, min_step, max_step, data)	\
+-	X86_MATCH_VENDORID_FAM_MODEL_STEPPINGS_FEATURE(		\
+-		VFM_VENDOR(vfm),				\
+-		VFM_FAMILY(vfm),				\
+-		VFM_MODEL(vfm),					\
+-		__X86_STEPPINGS(min_step, max_step),		\
+-		X86_FEATURE_ANY, data)
++#define X86_MATCH_VFM_STEPS(vfm, min_step, max_step, data)			\
++	X86_MATCH_CPU(VFM_VENDOR(vfm), VFM_FAMILY(vfm), VFM_MODEL(vfm),		\
++		      __X86_STEPPINGS(min_step, max_step), X86_FEATURE_ANY, data)
+ 
+ /**
+  * X86_MATCH_VFM_FEATURE - Match encoded vendor/family/model/feature
+@@ -233,15 +195,10 @@
+  * @data:	Driver specific data or NULL. The internal storage
+  *		format is unsigned long. The supplied value, pointer
+  *		etc. is cast to unsigned long internally.
+- *
+- * Steppings is set to wildcard
+  */
+-#define X86_MATCH_VFM_FEATURE(vfm, feature, data)	\
+-	X86_MATCH_VENDORID_FAM_MODEL_STEPPINGS_FEATURE(	\
+-		VFM_VENDOR(vfm),			\
+-		VFM_FAMILY(vfm),			\
+-		VFM_MODEL(vfm),				\
+-		X86_STEPPING_ANY, feature, data)
++#define X86_MATCH_VFM_FEATURE(vfm, feature, data)				\
++	X86_MATCH_CPU(VFM_VENDOR(vfm), VFM_FAMILY(vfm), VFM_MODEL(vfm),		\
++		      X86_STEPPING_ANY, feature, data)
+ 
+ extern const struct x86_cpu_id *x86_match_cpu(const struct x86_cpu_id *match);
+ extern bool x86_match_min_microcode_rev(const struct x86_cpu_id *table);
+
 -- 
-2.48.1
+2.34.1
+
 
 
