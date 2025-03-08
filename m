@@ -1,194 +1,230 @@
-Return-Path: <linux-pm+bounces-23675-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23676-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86201A57BFC
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Mar 2025 17:34:50 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id C3991A57C38
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Mar 2025 18:07:33 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id D81E31890B39
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Mar 2025 16:34:57 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9D1963AA332
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Mar 2025 17:07:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 97A591E833B;
-	Sat,  8 Mar 2025 16:34:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C6CB1D8DFB;
+	Sat,  8 Mar 2025 17:07:29 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="B9RMkmJ7"
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="oHLx5Ipn"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from sender4-pp-f112.zoho.com (sender4-pp-f112.zoho.com [136.143.188.112])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.21])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8FA551E51EF;
-	Sat,  8 Mar 2025 16:34:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.188.112
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741451682; cv=pass; b=dqfD+GBFDYlMXqqFAxzVxU0G4R4jxlBFoBtHdfMYEV0lCaqyaw19HiXrhE+gKljWmjtGZ5/CSxwpuZV7BU6YamMlgTHVtLJPa6BrMDWnyGDRResSee/65VrKZT7yfQFCDCX+hyVOQNwRDMyjOK6NHABBAxprW7hKjtCUSHB0304=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741451682; c=relaxed/simple;
-	bh=QZ40omMnQEjE+JXg1B5+8JRvEySfzqrCI4ckFb6QspY=;
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 93FF4158DAC;
+	Sat,  8 Mar 2025 17:07:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.21
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741453649; cv=none; b=bMRy450VIzRORa83vmQNRDvTS85pRMBxeEDr/rP4lzQ1nmOToR6XmLi3UowGh6gLmJqk0vWnkCeW5DPQL0qm7JqfEtVq/ckVFGVaDKCwyopGyCNeMHyidOOegs9x8mDplU3lIKVjLTEw2uZxf+cFv5YtQAE6tcjp71F7ivjlafk=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741453649; c=relaxed/simple;
+	bh=XEORLPQvUAU4keZvxERc+zQuOffs6Mxlu2m+3zLqodM=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=Pl0s1vlbDVpvVCCKty/4VFYzK1ZNbqavQwdrprFvlfPjEJyRWXlA0259tbTBEhUem+yQqmgAcVlyzCyNb7miCXMcAki/ruUSz+7Fqf0O7m0GaWrvYF6kgatSjRRDXd6+yNwia6DGMuY8mpdNMXBrEdDzdKgHyFN3N4BidNRjiqk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=B9RMkmJ7; arc=pass smtp.client-ip=136.143.188.112
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
-ARC-Seal: i=1; a=rsa-sha256; t=1741451594; cv=none; 
-	d=zohomail.com; s=zohoarc; 
-	b=Rfzi5+rYi4NcDFW05tntKY/htN29k8Hhwkq5yCyzXl5hrOKBCg/XgsDmSpyKfu9Srq+wo+bN0gjoitXTlY5IOYD08zUlFQhYwxR1j4a5L7rZ+8JU49AlzN+gQJc0MK4yQ1SQ4v2YHQ/Pbgy7+or9dgapw+FAiX5va2oPRScNUIc=
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
-	t=1741451594; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
-	bh=OW81xSgzV1fBuGgf9rWiWPp51pHmz1hWzao7UrnpPhs=; 
-	b=VgTA9ihYfrb9bvBLqmCiAnN9wd5/JXrmK6SetNF2/xpaHSLJXYzuOkTE6STMRg5LifowrmaaI09sESC2ZjRRPNXM68L5qd2NfTAjColl8Rdvy1Yjvez22TxZvOYYdcpdXeEBUxbX7yuk5BYHsywAUVXgfB/eZr1Ff9/K6Q382hY=
-ARC-Authentication-Results: i=1; mx.zohomail.com;
-	dkim=pass  header.i=collabora.com;
-	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
-	dmarc=pass header.from=<sebastian.reichel@collabora.com>
-DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741451594;
-	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
-	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
-	bh=OW81xSgzV1fBuGgf9rWiWPp51pHmz1hWzao7UrnpPhs=;
-	b=B9RMkmJ7l1WoU4e9j6CQ7iW3B3AULNdi/tMLiEVgcLTsMTPWWOREUmD+v3VNOxyH
-	bJyKm7tHAg1wOCSmPwia7ldtb9qZGlk3z42c/Lv8it2o7HxMoYAdcJgN2Sj2AeRKkaM
-	hLh5PKuKKVS3NSXFsBqmaj99zN5d9AGUeZs9cyJ4=
-Received: by mx.zohomail.com with SMTPS id 174145159345355.16251987069427;
-	Sat, 8 Mar 2025 08:33:13 -0800 (PST)
-Received: by venus (Postfix, from userid 1000)
-	id DA823180B9B; Sat, 08 Mar 2025 17:33:05 +0100 (CET)
-Date: Sat, 8 Mar 2025 17:33:05 +0100
-From: Sebastian Reichel <sebastian.reichel@collabora.com>
-To: Konrad Dybcio <konrad.dybcio@oss.qualcomm.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
-	Mark Brown <broonie@kernel.org>, Linus Walleij <linus.walleij@linaro.org>, 
-	Hans de Goede <hdegoede@redhat.com>, Liam Girdwood <lgirdwood@gmail.com>, 
-	Chen-Yu Tsai <wens@csie.org>, Matti Vaittinen <mazziesaccount@gmail.com>, 
-	Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, Paul Cercueil <paul@crapouillou.net>, 
-	Samuel Holland <samuel@sholland.org>, David Lechner <david@lechnology.com>, 
-	Krzysztof Kozlowski <krzk@kernel.org>, Marek Szyprowski <m.szyprowski@samsung.com>, 
-	Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, Purism Kernel Team <kernel@puri.sm>, 
-	Bartosz Golaszewski <brgl@bgdev.pl>, Konrad Dybcio <konradybcio@kernel.org>, 
-	Matthias Brugger <matthias.bgg@gmail.com>, 
-	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Orson Zhai <orsonzhai@gmail.com>, 
-	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
-Subject: Re: [PATCH 3/7] usb: common: usb-conn-gpio: switch psy_cfg from
- of_node to fwnode
-Message-ID: <eqfqv2tkfretqzvt74o5dvj5yixkfc3h3my4bhskvhtsrbmtwp@poryvs4oipnp>
-References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
- <20250225-psy-core-convert-to-fwnode-v1-3-d5e4369936bb@collabora.com>
- <2025022542-recital-ebony-d9b5@gregkh>
- <lhtljyn52wkhotaf2cn6fcj2vqx3dzipv2663kzwtw2tjjlxye@5l3xytkyvocy>
- <2025030845-pectin-facility-a474@gregkh>
- <0401fdf9-7665-40d6-9ec7-7222b2eda866@oss.qualcomm.com>
+	 Content-Type:Content-Disposition:In-Reply-To; b=TwGYJOPTx3FeGziN13/0G4m37asfIL/o0LIj757dcTNOn8Q+Afban6dxT6qWef1m32O3/03jbY5mc4ZP7NaRKVwsilR9lwhUnctNz9RdBSvSmDugjEYDZF5fihiEEyY/w8QG+Y/B7f7BtQVwu7plipSGQfYtm+0W0q8JFo27Ukk=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=oHLx5Ipn; arc=none smtp.client-ip=198.175.65.21
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741453648; x=1772989648;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=XEORLPQvUAU4keZvxERc+zQuOffs6Mxlu2m+3zLqodM=;
+  b=oHLx5Ipnubj5lRRZ6F9xWJ5vjl8L295goDuompxje1+IhqXet8IHCsIk
+   PouSUgBP2NJfcuzZ5DCYv6RhroGgwDerTiR7crLAp2MC1GqGUMOfyw4HZ
+   Xb1GtG1UhM6rizPqOJh4qsJBaHI8wXXQpGv7RndDRHIVcCGijwOsBY0DW
+   bn1MdDHUQJP2n4MJ5k4xv0eMOpNe23H2ZR8gcNuas/vQpjH6T/Rq4ss7X
+   TiJ55+TRNsO/DCwb2Esi0zTl2Bqv58o1ni5/lVvLD3i+92vs+9pGE+9vL
+   tzyRtQ793RaIeZUgtQoiqr26ei6moocqpsO1uQsIZbK0I7ZuT6qTpE+XU
+   w==;
+X-CSE-ConnectionGUID: gSFUFcl0RXihnNqWw7XIkg==
+X-CSE-MsgGUID: KYVp8W+kRWKZaeo9l6hd0A==
+X-IronPort-AV: E=McAfee;i="6700,10204,11367"; a="42403066"
+X-IronPort-AV: E=Sophos;i="6.14,232,1736841600"; 
+   d="scan'208";a="42403066"
+Received: from fmviesa002.fm.intel.com ([10.60.135.142])
+  by orvoesa113.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 08 Mar 2025 09:07:27 -0800
+X-CSE-ConnectionGUID: Zz8zced5Tj2Is/vg/g/nJg==
+X-CSE-MsgGUID: NosHEJTbQB+TMr2B1FVgrA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,232,1736841600"; 
+   d="scan'208";a="142818194"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by fmviesa002.fm.intel.com with ESMTP; 08 Mar 2025 09:07:23 -0800
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1tqxdx-00027Y-1R;
+	Sat, 08 Mar 2025 17:07:21 +0000
+Date: Sun, 9 Mar 2025 01:06:39 +0800
+From: kernel test robot <lkp@intel.com>
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+	Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	Oleksij Rempel <o.rempel@pengutronix.de>, kernel@pengutronix.de,
+	linux-kernel@vger.kernel.org, Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	=?iso-8859-1?Q?S=F8ren?= Andersen <san@skov.dk>
+Subject: Re: [PATCH v4 4/7] nvmem: add support for device and sysfs-based
+ cell lookups
+Message-ID: <202503090029.GNYIypVB-lkp@intel.com>
+References: <20250306093900.2199442-5-o.rempel@pengutronix.de>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="r2mmt44pwozkdwuy"
+Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <0401fdf9-7665-40d6-9ec7-7222b2eda866@oss.qualcomm.com>
-X-Zoho-Virus-Status: 1
-X-Zoho-AV-Stamp: zmail-av-1.4.2/241.192.19
-X-ZohoMailClient: External
+In-Reply-To: <20250306093900.2199442-5-o.rempel@pengutronix.de>
+
+Hi Oleksij,
+
+kernel test robot noticed the following build warnings:
+
+[auto build test WARNING on sre-power-supply/for-next]
+[also build test WARNING on broonie-regulator/for-next rafael-pm/thermal linus/master v6.14-rc5 next-20250307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
+
+url:    https://github.com/intel-lab-lkp/linux/commits/Oleksij-Rempel/power-Extend-power_on_reason-h-for-upcoming-PSCRR-framework/20250306-174233
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/sre/linux-power-supply.git for-next
+patch link:    https://lore.kernel.org/r/20250306093900.2199442-5-o.rempel%40pengutronix.de
+patch subject: [PATCH v4 4/7] nvmem: add support for device and sysfs-based cell lookups
+config: hexagon-randconfig-002-20250308 (https://download.01.org/0day-ci/archive/20250309/202503090029.GNYIypVB-lkp@intel.com/config)
+compiler: clang version 21.0.0git (https://github.com/llvm/llvm-project e15545cad8297ec7555f26e5ae74a9f0511203e7)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250309/202503090029.GNYIypVB-lkp@intel.com/reproduce)
+
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503090029.GNYIypVB-lkp@intel.com/
+
+All warnings (new ones prefixed by >>):
+
+   In file included from drivers/rtc/rtc-pm8xxx.c:10:
+>> include/linux/nvmem-consumer.h:115:20: warning: no previous prototype for function 'nvmem_cell_get_by_sysfs_name' [-Wmissing-prototypes]
+     115 | struct nvmem_cell *nvmem_cell_get_by_sysfs_name(struct nvmem_device *nvmem,
+         |                    ^
+   include/linux/nvmem-consumer.h:115:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     115 | struct nvmem_cell *nvmem_cell_get_by_sysfs_name(struct nvmem_device *nvmem,
+         | ^
+         | static 
+>> include/linux/nvmem-consumer.h:197:22: warning: no previous prototype for function 'nvmem_device_get_by_name' [-Wmissing-prototypes]
+     197 | struct nvmem_device *nvmem_device_get_by_name(const char *name)
+         |                      ^
+   include/linux/nvmem-consumer.h:197:1: note: declare 'static' if the function is not intended to be used outside of this translation unit
+     197 | struct nvmem_device *nvmem_device_get_by_name(const char *name)
+         | ^
+         | static 
+   2 warnings generated.
 
 
---r2mmt44pwozkdwuy
-Content-Type: text/plain; protected-headers=v1; charset=us-ascii
-Content-Disposition: inline
-Content-Transfer-Encoding: quoted-printable
-Subject: Re: [PATCH 3/7] usb: common: usb-conn-gpio: switch psy_cfg from
- of_node to fwnode
-MIME-Version: 1.0
+vim +/nvmem_cell_get_by_sysfs_name +115 include/linux/nvmem-consumer.h
 
-Hi,
+   114	
+ > 115	struct nvmem_cell *nvmem_cell_get_by_sysfs_name(struct nvmem_device *nvmem,
+   116							const char *cell_name)
+   117	{
+   118		return ERR_PTR(-EOPNOTSUPP);
+   119	}
+   120	
+   121	static inline void devm_nvmem_cell_put(struct device *dev,
+   122					       struct nvmem_cell *cell)
+   123	{
+   124	
+   125	}
+   126	static inline void nvmem_cell_put(struct nvmem_cell *cell)
+   127	{
+   128	}
+   129	
+   130	static inline void *nvmem_cell_read(struct nvmem_cell *cell, size_t *len)
+   131	{
+   132		return ERR_PTR(-EOPNOTSUPP);
+   133	}
+   134	
+   135	static inline int nvmem_cell_write(struct nvmem_cell *cell,
+   136					   void *buf, size_t len)
+   137	{
+   138		return -EOPNOTSUPP;
+   139	}
+   140	
+   141	static inline int nvmem_cell_get_size(struct nvmem_cell *cell, size_t *bytes,
+   142					      size_t *bits)
+   143	{
+   144		return -EOPNOTSUPP;
+   145	}
+   146	
+   147	static inline int nvmem_cell_read_u8(struct device *dev,
+   148					     const char *cell_id, u8 *val)
+   149	{
+   150		return -EOPNOTSUPP;
+   151	}
+   152	
+   153	static inline int nvmem_cell_read_u16(struct device *dev,
+   154					      const char *cell_id, u16 *val)
+   155	{
+   156		return -EOPNOTSUPP;
+   157	}
+   158	
+   159	static inline int nvmem_cell_read_u32(struct device *dev,
+   160					      const char *cell_id, u32 *val)
+   161	{
+   162		return -EOPNOTSUPP;
+   163	}
+   164	
+   165	static inline int nvmem_cell_read_u64(struct device *dev,
+   166					      const char *cell_id, u64 *val)
+   167	{
+   168		return -EOPNOTSUPP;
+   169	}
+   170	
+   171	static inline int nvmem_cell_read_variable_le_u32(struct device *dev,
+   172							 const char *cell_id,
+   173							 u32 *val)
+   174	{
+   175		return -EOPNOTSUPP;
+   176	}
+   177	
+   178	static inline int nvmem_cell_read_variable_le_u64(struct device *dev,
+   179							  const char *cell_id,
+   180							  u64 *val)
+   181	{
+   182		return -EOPNOTSUPP;
+   183	}
+   184	
+   185	static inline struct nvmem_device *nvmem_device_get(struct device *dev,
+   186							    const char *name)
+   187	{
+   188		return ERR_PTR(-EOPNOTSUPP);
+   189	}
+   190	
+   191	static inline struct nvmem_device *devm_nvmem_device_get(struct device *dev,
+   192								 const char *name)
+   193	{
+   194		return ERR_PTR(-EOPNOTSUPP);
+   195	}
+   196	
+ > 197	struct nvmem_device *nvmem_device_get_by_name(const char *name)
+   198	{
+   199		return ERR_PTR(-EOPNOTSUPP);
+   200	}
+   201	
 
-On Sat, Mar 08, 2025 at 10:34:45AM +0100, Konrad Dybcio wrote:
-> On 8.03.2025 6:57 AM, Greg Kroah-Hartman wrote:
-> > On Sat, Mar 08, 2025 at 02:10:29AM +0100, Sebastian Reichel wrote:
-> >> On Tue, Feb 25, 2025 at 04:32:50AM +0100, Greg Kroah-Hartman wrote:
-> >>> On Tue, Feb 25, 2025 at 12:21:36AM +0100, Sebastian Reichel wrote:
-> >>>> In order to remove .of_node from the power_supply_config struct,
-> >>>> use .fwnode instead.
-> >>>>
-> >>>> Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
-> >>>> ---
-> >>>>  drivers/usb/common/usb-conn-gpio.c | 2 +-
-> >>>>  1 file changed, 1 insertion(+), 1 deletion(-)
-> >>>>
-> >>>> diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common=
-/usb-conn-gpio.c
-> >>>> index aa710b50791b0282be0a6a26cffdd981b794acaa..1e36be2a28fd5ca5e149=
-5b7923e4d3e25d7cedef 100644
-> >>>> --- a/drivers/usb/common/usb-conn-gpio.c
-> >>>> +++ b/drivers/usb/common/usb-conn-gpio.c
-> >>>> @@ -158,7 +158,7 @@ static int usb_conn_psy_register(struct usb_conn=
-_info *info)
-> >>>>  	struct device *dev =3D info->dev;
-> >>>>  	struct power_supply_desc *desc =3D &info->desc;
-> >>>>  	struct power_supply_config cfg =3D {
-> >>>> -		.of_node =3D dev->of_node,
-> >>>> +		.fwnode =3D dev_fwnode(dev),
-> >>>>  	};
-> >>>> =20
-> >>>>  	desc->name =3D "usb-charger";
-> >>>>
-> >>>> --=20
-> >>>> 2.47.2
-> >>>
-> >>> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
-> >>
-> >> Please just merge this patch through the USB tree.
-> >>
-> >> There are no dependencies and I will send a new version for the
-> >> later patches, but they won't make it to 6.15 as I want enough
-> >> time in linux-next for them. This patch is rather simple and
-> >> getting it merged now means we avoid immutable branches or
-> >> merging through the wrong tree in the 6.16 cycle.
-> >=20
-> > Attempting to merge a single patch out of a series is hard with our
-> > current tools, you know that.
-
-Sorry, I did not know your tooling has issues with that. AFAIK most
-maintainers are using b4 nowadays, which makes it really easy. Might
-be I am biased because I mostly work on ARM stuff where series often
-have patches for the driver and the device tree and thus merging
-partial patch series is basically the norm.
-
-> > Please resend just the single patch if you want that applied.
->=20
-> b4 shazam <msgid> -P 3
->=20
-> to apply the third patch (such as this one) in a thread
-> unless you use some other set of tools..
-
-Exactly.
-
-But I can send this patch separately of course.
-
-Greetings,
-
--- Sebastian
-
---r2mmt44pwozkdwuy
-Content-Type: application/pgp-signature; name="signature.asc"
-
------BEGIN PGP SIGNATURE-----
-
-iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmfMcTYACgkQ2O7X88g7
-+prJhg/+P1CLDpcgJzoT2YDB0oM6oosAappPICXcYCwnk+WuTqXqqoOLm99fCqOe
-gmMU3O21cf81ZGOgxQShW468/2rqdEuv3rr8LXuHJeNgROu2XpI2abuus1Gijwep
-1B/xU3aG0IbYKTXnnLrf3h8KEykCdXhxqh+34dYfsOTHFAKcKKDc6yVXcVeEmX9b
-jq1iZ8qyP1+UX6ISMDpQ/2dqoZYoJtG5JEt4iGOqqcS6gNEjVJ4rrY/Qy2lOaj1Q
-ncj9WP7C/Vd/DC0rRD08Fo8UCi5AOJb8zr7mKo6A+1zsf9pIb4eoEp6+JCa0YeOd
-gAhGkx3DAQTxAPoNlpv8NmhyaNM7e0QgOf15BfkMEkAuSbhaqte+0PDKWeLIOU8x
-76uvrykbBefBKgmxzzMnMK4IGIJwMRGSD1Zd1J6b7bwKEFq4SewPQUqR00f7OUmF
-PPVpxhHy+i8nLKJUgYqGDvdBv7fTM4y0daQM5xdjOtkYosB5ACjAApdGnx+e1uT2
-bhelcjLlwl2x5MHsGbLUZaxka/UB8n+BE3FUVE4BlArGpecUgbkcYkiOuKh9lC0a
-BFRZxB99mGLvNwEO+qRie8IA4JUfyzXne9OradEp1LZdufuOuNT3NXYgoeJbiWfm
-Dpnmw2XruBy5CMn7Nl1ke/ESwvBOWoJ7FUme591xZ6w7LvBXmd0=
-=LBxd
------END PGP SIGNATURE-----
-
---r2mmt44pwozkdwuy--
+-- 
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
