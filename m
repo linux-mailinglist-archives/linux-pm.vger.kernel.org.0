@@ -1,168 +1,167 @@
-Return-Path: <linux-pm+bounces-23666-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23667-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 272F8A5770C
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Mar 2025 02:02:36 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id AA387A5771D
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Mar 2025 02:12:03 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 927A11895AB9
-	for <lists+linux-pm@lfdr.de>; Sat,  8 Mar 2025 01:02:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D6985177067
+	for <lists+linux-pm@lfdr.de>; Sat,  8 Mar 2025 01:12:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7604D8C11;
-	Sat,  8 Mar 2025 01:02:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 22D55E545;
+	Sat,  8 Mar 2025 01:11:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="nlBOUIiB"
+	dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b="GPi87H9/"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.7])
+Received: from sender3-pp-f112.zoho.com (sender3-pp-f112.zoho.com [136.143.184.112])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 845873C38;
-	Sat,  8 Mar 2025 01:02:26 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.7
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741395748; cv=none; b=kAINEI0b1oQ1YWDtgiQX7X+qmU3Q8g5cB7sP3EjVtAL+d7vHSI6SlHB1ETMWJsYHu8w7Trfa2E82LiSYx2Abkq9Grk2oCc+Pj64x2h4NvNm/fnso2XHEyoQUW5wM8l4+ZyLtIszi3UFW2I270g2Aou21txgYOqf31J5tkdZLcUA=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741395748; c=relaxed/simple;
-	bh=1Z06EGd0YPfG9SHGEVxJJILprBZqLC9ZMU3X+BG2jvA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version:Content-Type; b=npNkw9RrE01V0W7y2+N09K2PCIhZmNFgQug7gsuH7Hp18HGzlmLqobh6xgtTQ/o6gmWi083+vL9Ec5lCVEut2dtAdrqKsgXVUEi6Mbndhra4yifO6rXIYuDq2GGWMY7Wp5UEiHcuOiR1c2nbiTdwM855sa/Mmn0djWo1fyD4iDU=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=nlBOUIiB; arc=none smtp.client-ip=192.198.163.7
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741395746; x=1772931746;
-  h=from:to:cc:subject:date:message-id:mime-version:
-   content-transfer-encoding;
-  bh=1Z06EGd0YPfG9SHGEVxJJILprBZqLC9ZMU3X+BG2jvA=;
-  b=nlBOUIiBSMf2LRF1jZTSJHlvQmSWSV/t2x5FjlcjbT6r/OdFuLscS3NM
-   tipejXFfezT6WJmXfkQ4LXi3UGr6wq8UZdpeVOaH9w9uMJbOjrRSxW4Tz
-   2vWRqG4lhiimgMRYNXqCMSPNiCyV9vWTVSBBScHo2CL35n2lb8UMjE2Qo
-   BFuT0dwGNCVJPFuueLJqmcxO6S50G7xhc8Pg5CAYTPFeLXMPkl7gNWrgS
-   MxtCx1JOsfrAZGodYm+51vByoXaf1QFJfNrP9lsEOba90emq3QFNBoN03
-   y/choAKwAwRDEeQZlecVIc7uj/i6wruG0DupEArAHzJWm5VZ25YZLbyDB
-   A==;
-X-CSE-ConnectionGUID: 0HiiVhETTbyk9wpD3F8ZGA==
-X-CSE-MsgGUID: mRBQncZ7T8m2aAiiim/t4w==
-X-IronPort-AV: E=McAfee;i="6700,10204,11366"; a="67825786"
-X-IronPort-AV: E=Sophos;i="6.14,230,1736841600"; 
-   d="scan'208";a="67825786"
-Received: from orviesa008.jf.intel.com ([10.64.159.148])
-  by fmvoesa101.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 17:02:25 -0800
-X-CSE-ConnectionGUID: cbvbsfTyTha0ngMUDpRDAw==
-X-CSE-MsgGUID: JfpX22owRoqpsLOjbfxt5Q==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.12,224,1728975600"; 
-   d="scan'208";a="120378502"
-Received: from lucas-s2600cw.jf.intel.com ([10.165.21.196])
-  by orviesa008-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 07 Mar 2025 17:02:25 -0800
-From: Lucas De Marchi <lucas.demarchi@intel.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Daniel Lezcano <daniel.lezcano@linaro.org>,
-	Zhang Rui <rui.zhang@intel.com>,
-	Lukasz Luba <lukasz.luba@arm.com>
-Cc: Lucas De Marchi <lucas.demarchi@intel.com>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] thermal: core: Delay exposing sysfs interface
-Date: Fri,  7 Mar 2025 17:02:01 -0800
-Message-ID: <20250307-thermal-sysfs-race-v1-1-8a3d4d4ac9c4@intel.com>
-X-Mailer: git-send-email 2.48.1
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2B4B78C11;
+	Sat,  8 Mar 2025 01:11:55 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=pass smtp.client-ip=136.143.184.112
+ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741396318; cv=pass; b=dM0QvOfdjFSKJEk7v5PcRqDMgxarAar9JjuCM36UyLd0HjgNrVj2vW2967UaYAbX2LGb63G/uzPt1RKO3v9U6yOQWKKQRYi97WGiRGxKRw0OpfzBgbnxHNibQol+T8w4fzOpsLmnVujtNbw2ySwEZR0kVFWixi2BJliyYOq0dv4=
+ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741396318; c=relaxed/simple;
+	bh=g3QO1+u7+N6WS+vZDPJ6a1vZMim7a9hD+7eVd6nCdhs=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V7dcOwLRPj80P7u9DOkA+Mc1VBT4ofrho+ToM8Ff7GL3t8RkgXsiCxBsZzEpcoVuVO8CCJOY28q+Q9yVVmvqEEf7Gtz5EAwECSVJNZCXA8yup2frD+4XhXtskkd5FT3dxEXGk0iugiMV9k2k3aLm57W7L1PRUTsDf5BS3Pjy1kk=
+ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com; spf=pass smtp.mailfrom=collabora.com; dkim=pass (1024-bit key) header.d=collabora.com header.i=sebastian.reichel@collabora.com header.b=GPi87H9/; arc=pass smtp.client-ip=136.143.184.112
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=collabora.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=collabora.com
+ARC-Seal: i=1; a=rsa-sha256; t=1741396240; cv=none; 
+	d=zohomail.com; s=zohoarc; 
+	b=NHiUIsSwtrAS7FpZwuBHjAQYl3xY7osYfibXkRQa3WDe+xhUKDBOwk1AiooobvwT0VFfV2ZZuCMZUgJ10cwCIjVFlg5W2qNGhiuG0G3z+4hgUu3OFNKAcs/mxxX8BCHWbOIPsi/OPhuciLqbafcu5XvBj7zlO+27eYZ+c57bSUY=
+ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=zohomail.com; s=zohoarc; 
+	t=1741396240; h=Content-Type:Cc:Cc:Date:Date:From:From:In-Reply-To:MIME-Version:Message-ID:References:Subject:Subject:To:To:Message-Id:Reply-To; 
+	bh=TxVriJCD+oQZz0bB/SrRuqiAAYqHbV9mP+Qfc4zG5B8=; 
+	b=fGVzQELY3NWn85h0OAxLa57fGz7By3P1tWQsItHyMZuNlTq8Vj4YPpTECBbUKO0bvc2vG0XZc5wFVwQ2COq3WCWuuvnLHAq6dYeEIFyUCJj7zpGZUqCHy/ZYZQHTQTFytfm02x3CCfsBer4O0K3A8oSIb57f8L1pO/fI5PMDkQQ=
+ARC-Authentication-Results: i=1; mx.zohomail.com;
+	dkim=pass  header.i=collabora.com;
+	spf=pass  smtp.mailfrom=sebastian.reichel@collabora.com;
+	dmarc=pass header.from=<sebastian.reichel@collabora.com>
+DKIM-Signature: v=1; a=rsa-sha256; q=dns/txt; c=relaxed/relaxed; t=1741396240;
+	s=zohomail; d=collabora.com; i=sebastian.reichel@collabora.com;
+	h=Date:Date:From:From:To:To:Cc:Cc:Subject:Subject:Message-ID:References:MIME-Version:Content-Type:In-Reply-To:Message-Id:Reply-To;
+	bh=TxVriJCD+oQZz0bB/SrRuqiAAYqHbV9mP+Qfc4zG5B8=;
+	b=GPi87H9/Q3UIOdrTklOEvvWRsHendF8E1IBWCsUZ6RxmldtP6ixu47GiUzperiih
+	Sd63XkEEoirs0sfrdQu0aDDbFDUug3Oq7t1daUsFLBKNhzlBF4wdtQicHbfK5FRINy7
+	gzjuJX4YBIVnosripXpbP8XrduNYihpAh2nGp0M4=
+Received: by mx.zohomail.com with SMTPS id 1741396236768534.07744059458;
+	Fri, 7 Mar 2025 17:10:36 -0800 (PST)
+Received: by venus (Postfix, from userid 1000)
+	id F3B93180B97; Sat, 08 Mar 2025 02:10:29 +0100 (CET)
+Date: Sat, 8 Mar 2025 02:10:29 +0100
+From: Sebastian Reichel <sebastian.reichel@collabora.com>
+To: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
+Cc: Mark Brown <broonie@kernel.org>, 
+	Linus Walleij <linus.walleij@linaro.org>, Hans de Goede <hdegoede@redhat.com>, 
+	Liam Girdwood <lgirdwood@gmail.com>, Chen-Yu Tsai <wens@csie.org>, 
+	Matti Vaittinen <mazziesaccount@gmail.com>, Pali =?utf-8?B?Um9ow6Fy?= <pali@kernel.org>, 
+	Paul Cercueil <paul@crapouillou.net>, Samuel Holland <samuel@sholland.org>, 
+	David Lechner <david@lechnology.com>, Krzysztof Kozlowski <krzk@kernel.org>, 
+	Marek Szyprowski <m.szyprowski@samsung.com>, Sebastian Krzyszkowiak <sebastian.krzyszkowiak@puri.sm>, 
+	Purism Kernel Team <kernel@puri.sm>, Bartosz Golaszewski <brgl@bgdev.pl>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Matthias Brugger <matthias.bgg@gmail.com>, 
+	AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>, Orson Zhai <orsonzhai@gmail.com>, 
+	Baolin Wang <baolin.wang@linux.alibaba.com>, Chunyan Zhang <zhang.lyra@gmail.com>, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org
+Subject: Re: [PATCH 3/7] usb: common: usb-conn-gpio: switch psy_cfg from
+ of_node to fwnode
+Message-ID: <lhtljyn52wkhotaf2cn6fcj2vqx3dzipv2663kzwtw2tjjlxye@5l3xytkyvocy>
+References: <20250225-psy-core-convert-to-fwnode-v1-0-d5e4369936bb@collabora.com>
+ <20250225-psy-core-convert-to-fwnode-v1-3-d5e4369936bb@collabora.com>
+ <2025022542-recital-ebony-d9b5@gregkh>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-X-Change-ID: 20250307-thermal-sysfs-race-808f6f8376f4
-X-Mailer: b4 0.15-dev-c25d1
-Content-Transfer-Encoding: 8bit
+Content-Type: multipart/signed; micalg=pgp-sha512;
+	protocol="application/pgp-signature"; boundary="yupacfqv4bidfc3e"
+Content-Disposition: inline
+In-Reply-To: <2025022542-recital-ebony-d9b5@gregkh>
+X-Zoho-Virus-Status: 1
+X-Zoho-AV-Stamp: zmail-av-1.4.2/241.192.19
+X-ZohoMailClient: External
 
-There's a race between initializing the governor and userspace accessing
-the sysfs interface. From time to time the Intel graphics CI shows this
-signature:
 
-	<1>[] #PF: error_code(0x0000) - not-present page
-	<6>[] PGD 0 P4D 0
-	<4>[] Oops: Oops: 0000 [#1] PREEMPT SMP NOPTI
-	<4>[] CPU: 3 UID: 0 PID: 562 Comm: thermald Not tainted 6.14.0-rc4-CI_DRM_16208-g7e37396f86d8+ #1
-	<4>[] Hardware name: Intel Corporation Twin Lake Client Platform/AlderLake-N LP5 RVP, BIOS TWLNFWI1.R00.5222.A01.2405290634 05/29/2024
-	<4>[] RIP: 0010:policy_show+0x1a/0x40
+--yupacfqv4bidfc3e
+Content-Type: text/plain; protected-headers=v1; charset=us-ascii
+Content-Disposition: inline
+Content-Transfer-Encoding: quoted-printable
+Subject: Re: [PATCH 3/7] usb: common: usb-conn-gpio: switch psy_cfg from
+ of_node to fwnode
+MIME-Version: 1.0
 
-thermald tries to read the policy file between the sysfs files being
-created and the governor set by thermal_set_governor(), which causes the
-NULL pointer dereference.
+Hello Greg,
 
-Similarly to the hwmon interface, delay exposing the sysfs files to when
-the governor is already set.
+On Tue, Feb 25, 2025 at 04:32:50AM +0100, Greg Kroah-Hartman wrote:
+> On Tue, Feb 25, 2025 at 12:21:36AM +0100, Sebastian Reichel wrote:
+> > In order to remove .of_node from the power_supply_config struct,
+> > use .fwnode instead.
+> >=20
+> > Signed-off-by: Sebastian Reichel <sebastian.reichel@collabora.com>
+> > ---
+> >  drivers/usb/common/usb-conn-gpio.c | 2 +-
+> >  1 file changed, 1 insertion(+), 1 deletion(-)
+> >=20
+> > diff --git a/drivers/usb/common/usb-conn-gpio.c b/drivers/usb/common/us=
+b-conn-gpio.c
+> > index aa710b50791b0282be0a6a26cffdd981b794acaa..1e36be2a28fd5ca5e1495b7=
+923e4d3e25d7cedef 100644
+> > --- a/drivers/usb/common/usb-conn-gpio.c
+> > +++ b/drivers/usb/common/usb-conn-gpio.c
+> > @@ -158,7 +158,7 @@ static int usb_conn_psy_register(struct usb_conn_in=
+fo *info)
+> >  	struct device *dev =3D info->dev;
+> >  	struct power_supply_desc *desc =3D &info->desc;
+> >  	struct power_supply_config cfg =3D {
+> > -		.of_node =3D dev->of_node,
+> > +		.fwnode =3D dev_fwnode(dev),
+> >  	};
+> > =20
+> >  	desc->name =3D "usb-charger";
+> >=20
+> > --=20
+> > 2.47.2
+>=20
+> Acked-by: Greg Kroah-Hartman <gregkh@linuxfoundation.org>
 
-Closes: https://gitlab.freedesktop.org/drm/i915/kernel/-/issues/13655
-Signed-off-by: Lucas De Marchi <lucas.demarchi@intel.com>
----
-The race window is not that big. I could reproduce it and confirm
-the fix by doing this:
+Please just merge this patch through the USB tree.
 
-1) Add a udelay() in thermal_zone_device_register_with_trips
-2) A busy loop cat'ing the file
+There are no dependencies and I will send a new version for the
+later patches, but they won't make it to 6.15 as I want enough
+time in linux-next for them. This patch is rather simple and
+getting it merged now means we avoid immutable branches or
+merging through the wrong tree in the 6.16 cycle.
 
-	$ while [ 1 ]; do
-		cat /sys/devices/virtual/thermal/thermal_zone0/policy > /dev/null 2>&1
-	  done
-3) rebind processor_thermal_device_pci
----
- drivers/thermal/thermal_core.c | 20 ++++++++++----------
- 1 file changed, 10 insertions(+), 10 deletions(-)
+Thanks,
 
-diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-index 2328ac0d8561b..f96ca27109288 100644
---- a/drivers/thermal/thermal_core.c
-+++ b/drivers/thermal/thermal_core.c
-@@ -1589,26 +1589,26 @@ thermal_zone_device_register_with_trips(const char *type,
- 
- 	tz->state = TZ_STATE_FLAG_INIT;
- 
-+	result = dev_set_name(&tz->device, "thermal_zone%d", tz->id);
-+	if (result)
-+		goto remove_id;
-+
-+	thermal_zone_device_init(tz);
-+
-+	result = thermal_zone_init_governor(tz);
-+	if (result)
-+		goto remove_id;
-+
- 	/* sys I/F */
- 	/* Add nodes that are always present via .groups */
- 	result = thermal_zone_create_device_groups(tz);
- 	if (result)
- 		goto remove_id;
- 
--	result = dev_set_name(&tz->device, "thermal_zone%d", tz->id);
--	if (result) {
--		thermal_zone_destroy_device_groups(tz);
--		goto remove_id;
--	}
--	thermal_zone_device_init(tz);
- 	result = device_register(&tz->device);
- 	if (result)
- 		goto release_device;
- 
--	result = thermal_zone_init_governor(tz);
--	if (result)
--		goto unregister;
--
- 	if (!tz->tzp || !tz->tzp->no_hwmon) {
- 		result = thermal_add_hwmon_sysfs(tz);
- 		if (result)
+-- Sebastian
 
----
-base-commit: 8aed61b8334e00f4fe5de9f2df1cd183dc328a9d
-change-id: 20250307-thermal-sysfs-race-808f6f8376f4
+--yupacfqv4bidfc3e
+Content-Type: application/pgp-signature; name="signature.asc"
 
-Best regards,
--- 
-Lucas De Marchi <lucas.demarchi@intel.com>
+-----BEGIN PGP SIGNATURE-----
 
+iQIzBAABCgAdFiEE72YNB0Y/i3JqeVQT2O7X88g7+poFAmfLmPoACgkQ2O7X88g7
++pqfag//SCn4fHQMNy9MpqB4utfCVxbzElABwBVLAdgNSVN9TjCX8ngn6IdRm5Ku
+1iBerLyl4SkpOnsipY/CYntijc/ML9O115qtoUDEeX+YfgFJ3y/wSj7izzpstqTB
+9Zu9U1grb4W2qmM9aXRnAC7IOFc8MXtqDrEzdM7/0tyb9KKkRWmO37ae8bBMviv8
+DOb/bHr065MXZPPBfDSq73vjrH+3XMPFnKSICKrppNFg+uF/v3TcWGEo+fUPJk6n
+TKqD3H14+26IMvkd+79fNSww0dR5Z9iwBGgBQGvCNTcVIxK2iwGa6pWodbrSI444
+HpAt64qj8n4lWTX5FnrVsTs2bZwphh5cbkHkxzXz/GILZC+KD7+Fi897fgMy+a0C
+v3T61x8aARFvoWzRem+FAOpN+FSYUiXgYi/nUT/8XOamxcUBxwG94WWObGB5Hyqh
+u1QYsBaOGEQVU2WWkPqBoZNgAu91J3qZRjAMP8X/ba6hUO3sPBsWGHDCJhkVDW/p
+1hlMDJ/pkadywYP+wLfRUBwUL9KfuyUfYyvFBPnnyYcrhXmu1mcoJTC3Y7/08wnY
+fK8P8IGFQJ6D98CExE0Nu5B3Xan6MFZ143q7wtGPsdzrK4w4XbD05uy1iOzX0FWh
+Vd1YlbA3CCzXiqnQadwnzF88CR242y9jFu4v+0FYwfMLbxakWxw=
+=AWn0
+-----END PGP SIGNATURE-----
+
+--yupacfqv4bidfc3e--
 
