@@ -1,70 +1,60 @@
-Return-Path: <linux-pm+bounces-23700-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23701-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 9B7A7A583C1
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 12:22:16 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9F028A583EC
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 13:13:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D81D516DEF7
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 11:22:15 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 786993AE75E
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 12:13:36 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id D810F1D90A5;
-	Sun,  9 Mar 2025 11:21:44 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="t41+FfHK"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 354771C7B62;
+	Sun,  9 Mar 2025 12:13:44 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2631A1C5D75;
-	Sun,  9 Mar 2025 11:21:43 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+Received: from relmlie6.idc.renesas.com (relmlor2.renesas.com [210.160.252.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id CC9472B9A4;
+	Sun,  9 Mar 2025 12:13:40 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=210.160.252.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741519304; cv=none; b=j3heK7boucluonaNVTvYTixBOK7NwUAnTahu7XDn9/A7tji5o2kq7IMMqXpsoPhbN7P9A6QsOD01CFcNRvwG9gvnJUrLyGZHYpvsgL7sr3dWz5CvS+ph1dcBMh2ZN9Hud56J9qPJj1+EF9IRehfgfENUIBH6lFwY4opqI11KvQM=
+	t=1741522424; cv=none; b=hXv0rCgO31Jy/warrl+4rGpDM+EBWClPFaDUQGA6fdnfAvrmIkAA5U3IfqsQVmAJ+lMvQQrs5CPsLu72Eqs2svPZJZ5qLH0H/uR7A79zio/G6+lSoICHdOqYgJWLlvaNU5nZJYeODSmj2g61OcJbSQCApq4EwZFDnnNwj0DDGeU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741519304; c=relaxed/simple;
-	bh=x7VIXFPiry34Dw0Y881bOgoIOqomKL15jPA8Ryo+3Qw=;
-	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version; b=G5fiOIHTsaII25HG3u9EYUrIS+TRntFHkRl1md/7mtM/n1Lf45Fs25ActtqTx8Uq6+SRd8BQa8TSvwxck/8DRWj4BBThUKN3w9CHGi5/Ah5nBh9Fpw+2ncV7RBcp3LoGYD2lxq4W/kPikt8iP2BCO1ZHwg6o5A2qcX8njxZJQVo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=t41+FfHK; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:8d8a:5967:d692:ea4e])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id C7C842E02CAB;
-	Sun,  9 Mar 2025 13:21:39 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1741519301;
-	bh=OHipsFnWjp6uZ0j1y6/VAA7Vw2CV/N99b9nKlTIABCg=; h=From:To:Subject;
-	b=t41+FfHK4CExvvV/wNuF+hXofTbo2EmJ8aHuWsTlqVaP+fMlU9FFcpF7hhDnlb6K2
-	 6a7uGN2kzMhe6YEs9bxcj2lgW99UH6dh5uQenN+MRqRdtwauJrL3EfZnAhdD/Pkq8k
-	 2YOKXRLMGjpTlPsiHG6lmz/QdXe+fvXMZQLuevXs=
-Authentication-Results: linux1587.grserver.gr;
-	spf=pass (sender IP is 2a05:f6c2:511b:0:8d8a:5967:d692:ea4e) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-From: Antheas Kapenekakis <lkml@antheas.dev>
-To: platform-driver-x86@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org,
+	s=arc-20240116; t=1741522424; c=relaxed/simple;
+	bh=4DvY72QASYhj2s94IScZ3Src59yyJG6l+LyXmGolDKc=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=Nj7IdHdbmW4MDbrbyxabTn4PumO2dy2iGPF5AxNBe+DzMKty2yYGTZV7A8v4LJ8KxIZKnuaAvM8KzxwIzAy4fHfpMf/Te8ZUBLSoz99NZWA676GwDw5CQ1pjp1VePog1Z+hDxTKVvfPRH5SfUotRUA7xXw8QsOmdFjMK4RKD0bg=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; arc=none smtp.client-ip=210.160.252.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
+X-CSE-ConnectionGUID: 77slmj2eSVSKH9WzPWISrw==
+X-CSE-MsgGUID: /J4vV1yiRyuPkCfltFFj2A==
+Received: from unknown (HELO relmlir6.idc.renesas.com) ([10.200.68.152])
+  by relmlie6.idc.renesas.com with ESMTP; 09 Mar 2025 21:13:33 +0900
+Received: from ubuntu.adwin.renesas.com (unknown [10.226.92.42])
+	by relmlir6.idc.renesas.com (Postfix) with ESMTP id 78B63422041D;
+	Sun,  9 Mar 2025 21:13:27 +0900 (JST)
+From: John Madieu <john.madieu.xa@bp.renesas.com>
+To: geert+renesas@glider.be,
+	niklas.soderlund+renesas@ragnatech.se,
+	conor+dt@kernel.org,
+	krzk+dt@kernel.org,
+	robh@kernel.org,
+	rafael@kernel.org,
+	daniel.lezcano@linaro.org
+Cc: magnus.damm@gmail.com,
+	claudiu.beznea.uj@bp.renesas.com,
+	devicetree@vger.kernel.org,
+	john.madieu@gmail.com,
+	rui.zhang@intel.com,
+	linux-kernel@vger.kernel.org,
+	linux-renesas-soc@vger.kernel.org,
+	biju.das.jz@bp.renesas.com,
 	linux-pm@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>,
-	Jean Delvare <jdelvare@suse.com>,
-	Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
-	Derek J Clark <derekjohn.clark@gmail.com>,
-	Kevin Greenberg <kdgreenberg234@protonmail.com>,
-	Joshua Tam <csinaction@pm.me>,
-	Parth Menon <parthasarathymenon@gmail.com>,
-	Eileen <eileen@one-netbook.com>,
-	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v3 12/12] platform/x86: oxpec: Adhere to sysfs-class-hwmon and
- enable pwm on 2
-Date: Sun,  9 Mar 2025 12:21:13 +0100
-Message-ID: <20250309112114.1177361-13-lkml@antheas.dev>
-X-Mailer: git-send-email 2.48.1
-In-Reply-To: <20250309112114.1177361-1-lkml@antheas.dev>
-References: <20250309112114.1177361-1-lkml@antheas.dev>
+	John Madieu <john.madieu.xa@bp.renesas.com>
+Subject: [RFC PATCH 0/3] thermal: Add CPU hotplug cooling driver
+Date: Sun,  9 Mar 2025 13:13:20 +0100
+Message-ID: <20250309121324.29633-1-john.madieu.xa@bp.renesas.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -72,99 +62,142 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Transfer-Encoding: 8bit
-X-PPP-Message-ID: 
- <174151930112.29430.13365461935020013033@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
 
-Currently, the driver does not adhere to the sysfs-class-hwmon
-specification: 0 is used for auto fan control and 1 is used for manual
-control. However, it is expected that 0 sets the fan to full speed,
-1 sets the fan to manual, and then 2 is used for automatic control.
+MIME-Version: 1.0
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Therefore, change the sysfs API to reflect this and enable pwm on 2.
+This patch series introduces a new thermal cooling driver that implements CPU
+hotplug-based thermal management. The driver dynamically takes CPUs offline
+during thermal excursions to reduce power consumption and prevent overheating,
+while maintaining system stability by keeping at least one CPU online. 
 
-As we are breaking the ABI for this driver, rename oxpec to oxp_ec,
-reflecting the naming convention used by other drivers, to allow for
-a smooth migration in current userspace programs.
+1- Problem Statement
 
-Closes: https://lore.kernel.org/linux-hwmon/20241027174836.8588-1-derekjohn.clark@gmail.com/
-Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
----
- drivers/platform/x86/oxpec.c | 37 ++++++++++++++++++++++++++++++++----
- 1 file changed, 33 insertions(+), 4 deletions(-)
+Modern SoCs require robust thermal management to prevent overheating under heavy
+workloads. Existing cooling mechanisms like frequency scaling may not always
+provide sufficient thermal relief, especially in multi-core systems where
+per-core thermal contributions can be significant. 
 
-diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
-index a06a7c54aa08..0b13baf190fe 100644
---- a/drivers/platform/x86/oxpec.c
-+++ b/drivers/platform/x86/oxpec.c
-@@ -938,7 +938,27 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- 		case hwmon_pwm_input:
- 			return oxp_pwm_input_read(val);
- 		case hwmon_pwm_enable:
--			return oxp_pwm_read(val);
-+			ret = oxp_pwm_read(val);
-+			if (ret)
-+				return ret;
-+
-+			/* Check for auto and return 2 */
-+			if (!*val) {
-+				*val = 2;
-+				return 0;
-+			}
-+
-+			/* Return 0 if at full fan speed, 1 otherwise */
-+			ret = oxp_pwm_fan_speed(val);
-+			if (ret)
-+				return ret;
-+
-+			if (*val == 255)
-+				*val = 0;
-+			else
-+				*val = 1;
-+
-+			return 0;
- 		default:
- 			break;
- 		}
-@@ -952,15 +972,24 @@ static int oxp_platform_read(struct device *dev, enum hwmon_sensor_types type,
- static int oxp_platform_write(struct device *dev, enum hwmon_sensor_types type,
- 			      u32 attr, int channel, long val)
- {
-+	int ret;
-+
- 	switch (type) {
- 	case hwmon_pwm:
- 		switch (attr) {
- 		case hwmon_pwm_enable:
- 			if (val == 1)
- 				return oxp_pwm_enable();
--			else if (val == 0)
-+			else if (val == 2)
- 				return oxp_pwm_disable();
--			return -EINVAL;
-+			else if (val != 0)
-+				return -EINVAL;
-+
-+			/* Enable PWM and set to max speed */
-+			ret = oxp_pwm_enable();
-+			if (ret)
-+				return ret;
-+			return oxp_pwm_input_write(255);
- 		case hwmon_pwm_input:
- 			return oxp_pwm_input_write(val);
- 		default:
-@@ -1025,7 +1054,7 @@ static int oxp_platform_probe(struct platform_device *pdev)
- 	struct device *dev = &pdev->dev;
- 	struct device *hwdev;
- 
--	hwdev = devm_hwmon_device_register_with_info(dev, "oxpec", NULL,
-+	hwdev = devm_hwmon_device_register_with_info(dev, "oxp_ec", NULL,
- 						     &oxp_ec_chip_info, NULL);
- 
- 	if (charge_behaviour_supported())
+2- Solution Overview 
+
+The driver:
+
+ - Integrates with the Linux thermal framework as a cooling device  
+ - Registers per-CPU cooling devices that respond to thermal trip points  
+ - Uses CPU hotplug operations to reduce thermal load  
+ - Maintains system stability by preserving the boot CPU from being put offline,
+ regardless the CPUs that are specified in cooling device list. 
+ - Implements proper state tracking and cleanup
+
+Key Features:   
+
+ - Dynamic CPU online/offline management based on thermal thresholds  
+ - Device tree-based configuration via thermal zones and trip points  
+ - Hysteresis support through thermal governor interactions  
+ - Safe handling of CPU state transitions during module load/unload  
+ - Compatibility with existing thermal management frameworks
+
+Testing    
+
+ - Verified on Renesas RZ/G3E platforms with multi-core CPU configurations  
+ - Validated thermal response using artificial load generation (emul_temp)  
+ - Confirmed proper interaction with other cooling devices
+ - Verified support for 'plug' type trace events
+ - Tested with step_wise governor
+
+As the 'hot' type is already used for user space notification, I've choosen
+'plug' for this new type. suggestions on this are welcome. Here is an example
+of 'thermal-zone' that integrate 'plug' type:
+
+```
+thermal-zones {
+	cpu-thermal {
+		polling-delay = <1000>;
+		polling-delay-passive = <250>;
+		thermal-sensors = <&tsu>;
+
+		cooling-maps {
+			map0 {
+				trip = <&target>;
+				cooling-device = <&cpu0 0 3>, <&cpu3 0 3>;
+				contribution = <1024>;
+			};
+
+			map1 {
+				trip = <&trip_emergency>;
+				cooling-device = <&cpu1 0 1>, <&cpu2 0 1>;
+				contribution = <1024>;
+			};
+
+		};
+
+		trips {
+			target: trip-point {
+				temperature = <95000>;
+				hysteresis = <1000>;
+				type = "passive";
+			};
+
+			trip_emergency: emergency {
+				temperature = <110000>;
+				hysteresis = <1000>;
+				type = "plug";
+			};
+
+			sensor_crit: sensor-crit {
+				temperature = <120000>;
+				hysteresis = <1000>;
+				type = "critical";
+			};
+		};
+	};
+};
+```
+
+Dependencies    
+
+ - Requires standard thermal framework components (CONFIG_THERMAL)  
+ - Depends on CPU hotplug support (CONFIG_HOTPLUG_CPU)  
+ - Assumes device tree contains appropriate thermal zone definitions
+
+This series also depends upon [1], more precisely on patch 6/7, 
+arm64: dts: renesas: r9a09g047: Add TSU node.
+
+
+3) Notes for Reviewers    
+
+ - Focus areas: Thermal framework integration, CPU state management, and error handling  
+ - Feedback on device tree binding requirements is particularly welcome  
+ - Suggestions for interaction improvements with other governors are appreciated
+
+I look forward to your feedback and guidance on this contribution.
+
+[1] https://patchwork.kernel.org/project/linux-clk/cover/20250227122453.30480-1-john.madieu.xa@bp.renesas.com/
+
+Regards,
+John
+
+
+John Madieu (3):
+  thermal/cpuplog_cooling: Add CPU hotplug cooling driver
+  tmon: Add support for THERMAL_TRIP_PLUG type
+  arm64: dts: renesas: r9a09g047: Add thermal hotplug trip point
+
+ arch/arm64/boot/dts/renesas/r9a09g047.dtsi |  13 +
+ drivers/thermal/Kconfig                    |  12 +
+ drivers/thermal/Makefile                   |   1 +
+ drivers/thermal/cpuplug_cooling.c          | 363 +++++++++++++++++++++
+ drivers/thermal/thermal_of.c               |   1 +
+ drivers/thermal/thermal_trace.h            |   2 +
+ drivers/thermal/thermal_trip.c             |   1 +
+ include/uapi/linux/thermal.h               |   1 +
+ tools/thermal/tmon/tmon.h                  |   1 +
+ tools/thermal/tmon/tui.c                   |   3 +-
+ 10 files changed, 397 insertions(+), 1 deletion(-)
+ create mode 100644 drivers/thermal/cpuplug_cooling.c
+
 -- 
-2.48.1
+2.25.1
 
 
