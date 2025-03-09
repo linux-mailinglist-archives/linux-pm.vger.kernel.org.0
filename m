@@ -1,192 +1,199 @@
-Return-Path: <linux-pm+bounces-23720-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23721-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id 258E7A587F6
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 20:50:54 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 6EC40A588E1
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 23:38:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8CA98188D8EF
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 19:51:01 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id B9D9D188C3F8
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 22:38:31 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1DA9B21858F;
-	Sun,  9 Mar 2025 19:50:50 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8929719F47E;
+	Sun,  9 Mar 2025 22:38:18 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="vL4uHPJ9"
+	dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b="TKais6FE"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-lf1-f41.google.com (mail-lf1-f41.google.com [209.85.167.41])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E5082217F48;
-	Sun,  9 Mar 2025 19:50:49 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9BEA219B5B8
+	for <linux-pm@vger.kernel.org>; Sun,  9 Mar 2025 22:38:16 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.167.41
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741549850; cv=none; b=O8dCXTg7rIJQDgk6nwgw0SfoOQSNbTjfU8Jl0zf6jAwoqFO0go+YY6juTlwGIebB7Ory2bFA41HrRMVTla93Si+jjUH2LVtr1BbxiCZwrw96vqLgv+UP5G9CtoecJ+/Mnbu21ZHUPN6m8OlelVe7sJg5EJ5Iv9Ssfmj5mCA70SE=
+	t=1741559898; cv=none; b=AbyUquXRxCUc8T771NWDKnT3T6PTF6QyyQV0ru2UDAAGB4l3QCDQC7UPtMiCT/45cfPX4ffxWeerW310mZv6gr3uO89tBxiijQuQfjrCTPX1C0KSp9MRimXKklvksf4O2wn5GBgFb3s8dFMA+PC3tdqnoY+kr6RlzIummax8RHo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741549850; c=relaxed/simple;
-	bh=8ySbkKhFRXNuJHrR+dQojieyUf+Le6VlZ6dqAVE1rBA=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=J9UuMLxCMGcaW20YuUdHXqyYJc6O6SBN4gahnoTBbZ5QsBvqRDPNIRv+j6G5gVFprqWhQZCl8FzRSSXV+udNjstJwMabzmzAnsBTg5uNsZrEoy6mbZSWZccj7x7rX8eQSYntiK+BauCREJuUZmzbuwA2aApVrUin4sW9ekHJsnI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=vL4uHPJ9; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D01DDC4CEED;
-	Sun,  9 Mar 2025 19:50:41 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741549849;
-	bh=8ySbkKhFRXNuJHrR+dQojieyUf+Le6VlZ6dqAVE1rBA=;
-	h=Date:Subject:To:Cc:References:From:In-Reply-To:From;
-	b=vL4uHPJ9xNFvMEfLN4Ec7wuCyQBk4CvGg96VRLiQVjTdErydTSp7ri+PuMR/AqNvE
-	 Kmgts1dW8zJBzTEUubXkXyzukwbGalmCnd/ojq/0vSQE12plU3rrF54+8cge6/zdoz
-	 Bbnjlswtzje1uBkOeg6DHIWLXh07ojZf0+S86fVRH1SplUiVWdh0Rq58oevPcccqC1
-	 tu0B8TVkzt2MJsS4wJjDkZPYnQfIRa1yNK1V7pmaD2/CCmWCK3bbQAdvYACbUdlPqT
-	 Z80aksp2iPxS9LGFWTaCTU8qI5zHnwm9m6z3Fr2E2A8w72C8vFdVyOpUDGr50KAjPO
-	 TaRGpHsWSquBQ==
-Message-ID: <668ada6a-3e53-474d-be81-d69d75277c26@kernel.org>
-Date: Sun, 9 Mar 2025 20:50:39 +0100
+	s=arc-20240116; t=1741559898; c=relaxed/simple;
+	bh=Azwp04EkMKNvzb3dS2Zw+wVW2FbS+3fUfVDM4kOtpRU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=l5x5K+Vxbq4kJerhuJOn1p0RiEvllfbZd7afkSR2NC61lKOega2JDN1IU7/RjpDSfftg0WvlAZhHGBeatFa2dZejFyZfAi8+xh0DAwE3loq0AQAQ3yExSYUQXoTIUDtuJGuMhsGxbzQGO88YCv57jqSdFVaoDqZHHofWOENlcrw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com; spf=pass smtp.mailfrom=google.com; dkim=pass (2048-bit key) header.d=google.com header.i=@google.com header.b=TKais6FE; arc=none smtp.client-ip=209.85.167.41
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=google.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=google.com
+Received: by mail-lf1-f41.google.com with SMTP id 2adb3069b0e04-5495078cd59so4202038e87.1
+        for <linux-pm@vger.kernel.org>; Sun, 09 Mar 2025 15:38:16 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=google.com; s=20230601; t=1741559895; x=1742164695; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4UtH1v3jP2/r9ixGeLfDdN9kgltpwwM+LthypTjKFcI=;
+        b=TKais6FECWiQTHVvAaKleu7iPsmVAN4JzQXYfo0eHGe0tqTzfptglYEaheZX8Q4P/B
+         dRMYOyTvzRdahKeWSw7yjFu75pNQc1/2bA6MAH0MXAwXImDq+Djvki8uho8fDB8NQO2Y
+         1WZx/nZIxj34F7S/SqUFrHgG8MTnvXKyBjAghAlc7N/YrBRiaDxBIWGAgNS4vu4qX2bs
+         5cxDD2ZLxH7pJ5NpehEdZ/0Pq95QPRyv7r/I1yISqfl4JKAbJ4I4ekh5ktiBtMnu1PAq
+         fAndWnAdTZS8RBeE20IMI1kC8exwpYkDXu9VtpwGfnQiYLdkLto9Iy/F+1gP7iAx8EYz
+         k7Mg==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741559895; x=1742164695;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4UtH1v3jP2/r9ixGeLfDdN9kgltpwwM+LthypTjKFcI=;
+        b=gd2lHK7IuPIGsxRWyHegwqJeSo0GzTi3ZpqFwGnPTKFvZvAQwZudm7jUYDP5Wtanqq
+         vhGn7qdwiF3jJ4KZL+QbuT0MROLlP4btDff91vk6W/r4MY+i3O2UBfA8CjehxzsfiTX5
+         1fnE6D+ycEdXoGHbf1OLZwNL1UkOpXEm7vpFunXGfMcsG87exir98hF9z2qnTVm09I5I
+         7CclQZTNd6DVcA0yd89E/Z2jl+dRXzkwlUA0NK4kM4KwUBgOoi0sSK8Rqqul+efWK9U7
+         pNcUBExIL6oe8R3H1FoEtHVxuvLeQuv1mL6YzCphbzOUucPQX8XyWN/uFoCHhDvq8FEN
+         EOzQ==
+X-Forwarded-Encrypted: i=1; AJvYcCURhCeBh4keGFkDlh15FuS9UrJIc0Ku2Y6kxjTR9dxHfnvc/M3e5+9CZG4qLTp6uYyu9uNesJvuiw==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzdo5mPfH+XBO/u297/mHBUAEh+bxLhXqK3B0Kcdn5+EXfT72Su
+	roTiBzoqDj93jQO1SIKxGfaEeleKPbvClnwGbO3H5BG/rBAZPoHlwVKNu3+T9LLQQlWhbmK0e8e
+	OMa2LLptT2A1ksYSHPlZ8/thitSFNuZf1yWEEjZAp4ts/VFAIvw==
+X-Gm-Gg: ASbGnctZfnZxQepx7l5oop7JvAbAm41hhdI2lzcAj7MdRNhm/fQyeh7PRsTr3L/Bu1S
+	gKoUrxqDv34ON6tpRNY3wtG8xjllKXiIUCsTZeDhOrUS1p92TiDKWJbyHNJee18kK2B2tiUw6Vs
+	AbTKdQ1v7D7zWzfjl6wIPByZx4zQ==
+X-Google-Smtp-Source: AGHT+IHpxX83JssEWivX8xC464YY7AHXc0n7H0jHpozJf0zDm0l+WYGt+H2+vYKELMb3Mtk0JmhwRT5o9Gnn86uFkyc=
+X-Received: by 2002:a05:6512:2393:b0:546:27f0:21a7 with SMTP id
+ 2adb3069b0e04-54990ec1fbdmr3936793e87.49.1741559894418; Sun, 09 Mar 2025
+ 15:38:14 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 01/19] dt-bindings: mfd: mediatek: mt6397: Add accdet
- subnode
-To: =?UTF-8?B?TsOtY29sYXMgRi4gUi4gQS4gUHJhZG8=?= <nfraprado@collabora.com>
-Cc: Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
- Rob Herring <robh@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>,
- Conor Dooley <conor+dt@kernel.org>, Matthias Brugger
- <matthias.bgg@gmail.com>,
- AngeloGioacchino Del Regno <angelogioacchino.delregno@collabora.com>,
- Sen Chu <sen.chu@mediatek.com>, Sean Wang <sean.wang@mediatek.com>,
- Macpaul Lin <macpaul.lin@mediatek.com>, Lee Jones <lee@kernel.org>,
- Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
- Catalin Marinas <catalin.marinas@arm.com>, Will Deacon <will@kernel.org>,
- kernel@collabora.com, linux-sound@vger.kernel.org,
- devicetree@vger.kernel.org, linux-kernel@vger.kernel.org,
- linux-arm-kernel@lists.infradead.org, linux-mediatek@lists.infradead.org,
- linux-pm@vger.kernel.org
-References: <20250305-mt6359-accdet-dts-v4-0-e5ffa5ee9991@collabora.com>
- <20250305-mt6359-accdet-dts-v4-1-e5ffa5ee9991@collabora.com>
- <20250306-certain-jasmine-mastiff-fd67ba@krzk-bin>
- <2fa6037d-b5e9-45b2-a5d5-dbc92fb3434b@notapiano>
- <0663e03e-e331-4a06-be95-ce8d9059ed6b@kernel.org>
- <cb2820d8-84e8-49ca-b497-1ea815679a3d@notapiano>
-Content-Language: en-US
-From: Krzysztof Kozlowski <krzk@kernel.org>
-Autocrypt: addr=krzk@kernel.org; keydata=
- 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 fv0=
-In-Reply-To: <cb2820d8-84e8-49ca-b497-1ea815679a3d@notapiano>
-Content-Type: text/plain; charset=UTF-8
-Content-Transfer-Encoding: 8bit
+References: <13709135.uLZWGnKmhe@rjwysocki.net> <CAGETcx-ow3T_R_Lj1s3sjp6nQz6Wv7T3dQdP3HJHd+E8nkh6rw@mail.gmail.com>
+ <CAJZ5v0g3qOvESqvqiCnwVz2BYGHzrG8=nRQ8j36Qd_LC0io_Tw@mail.gmail.com>
+In-Reply-To: <CAJZ5v0g3qOvESqvqiCnwVz2BYGHzrG8=nRQ8j36Qd_LC0io_Tw@mail.gmail.com>
+From: Saravana Kannan <saravanak@google.com>
+Date: Sun, 9 Mar 2025 15:37:37 -0700
+X-Gm-Features: AQ5f1JpBBebQuZIt8MOSEa4OvjlL6IxzqdZ-iKIGd_qwe4qPaEwtQEJKyBFOkGQ
+Message-ID: <CAGETcx82sLvG19eUN1ATrL5RzEKJjOeWP+kdYJdQX9O=ck7q2Q@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] PM: sleep: Improvements of async suspend and
+ resume of devices
+To: "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>, Linux PM <linux-pm@vger.kernel.org>, 
+	LKML <linux-kernel@vger.kernel.org>, Alan Stern <stern@rowland.harvard.edu>, 
+	Ulf Hansson <ulf.hansson@linaro.org>, Johan Hovold <johan@kernel.org>, 
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On 07/03/2025 14:22, Nícolas F. R. A. Prado wrote:
-> On Fri, Mar 07, 2025 at 08:11:26AM +0100, Krzysztof Kozlowski wrote:
->> On 06/03/2025 13:19, Nícolas F. R. A. Prado wrote:
->>>>>    It is interfaced to host controller using SPI interface by a proprietary hardware
->>>>>    called PMIC wrapper or pwrap. MT6397/MT6323 PMIC is a child device of pwrap.
->>>>> @@ -224,6 +225,30 @@ properties:
->>>>>      description:
->>>>>        Pin controller
->>>>>  
->>>>> +  accdet:
->>>>> +    type: object
->>>>> +    additionalProperties: false
->>>>> +    description:
->>>>> +      The Accessory Detection module found on the PMIC allows detecting audio
->>>>> +      jack insertion and removal, as well as identifying the type of events
->>>>> +      connected to the jack.
->>>>> +
->>>>> +    properties:
->>>>> +      compatible:
->>>>> +        const: mediatek,mt6359-accdet
->>>>
->>>> You just removed the other file, no folding happened here. Drop the
->>>> accdet node and fold this into parent.
->>>
->>> Sorry, I'm still not sure what you mean by folding here then. Right now the
->>> accdet is a subnode of the PMIC. If you want me to remove the accdet node, where
->>
->> Yes
->>
->>> would its compatible and property go?
->>
->> compatible: nowhere, because it is close to redundancy.
->>
->> property: to the parent pmic node.
->>
->>     pmic {
->>         compatible = "mediatek,mt6359";
->>         interrupt-controller;
->>         #interrupt-cells = <2>;
->>
->>         mediatek,hp-eint-high;
->>     };
-> 
-> I'm not sure that's right. The ACCDET submodule does have some resources, IRQs,
-> that it registers in its mfd cell, see patch 2 of this series [1]. It also has
+On Thu, Feb 27, 2025 at 8:23=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.or=
+g> wrote:
+>
+> On Thu, Feb 27, 2025 at 4:45=E2=80=AFPM Saravana Kannan <saravanak@google=
+.com> wrote:
+> >
+> > On Tue, Feb 25, 2025 at 8:46=E2=80=AFAM Rafael J. Wysocki <rjw@rjwysock=
+i.net> wrote:
+> > >
+> > > Hi Everyone,
+> > >
+> > > Initially, this was an attempt to address the problems described by
+> > > Saravana related to spawning async work for any async device upfront
+> > > in the resume path:
+> > >
+> > > https://lore.kernel.org/linux-pm/20241114220921.2529905-1-saravanak@g=
+oogle.com/
+> > >
+> > > but then I realized that it could be extended to the suspend path and
+> > > used for speeding it up, which it really does.
+> >
+> > Btw, maybe I didn't  word it correctly, but my patch series was meant
+> > to speed up the non-async case too.
+>
+> If "the non-async case" means the case with "async" suspend/resume
+> disabled entirely, I don't think that the ordering in which devices
+> are processed can be changed just because there are no known
+> dependencies.
+>
+> > I was going to get around sending a v2 of my series, but was caught up
+> > with some other work. But I'm okay if you want to finish up my effort
+> > -- less work for me and I can focus on the other aspects of suspend :)
+> >
+> > Maybe add a Suggested-by: to the patches?
+>
+> Yeah, I can do that.
+>
+> > I definitely want to review the series, but very busy this week with
+> > some other work. I'll get to this next week for sure.
+>
+> That should be fine.
 
-Binding is supposed to be complete, so why suddenly we have here some
-resources which you did not add?
+Hi Rafael,
 
-Post complete binding, so you will get proper review.
+I looked at the full series and it has at least one bug and a few gaps
+that I address in mine. And those are what make my patches have a
+higher diff. Can we just continue with my series instead? That'll be
+easier to explain and more forward for me than reviewing your patch
+and making sure it covers everything I already tried to deal with.
 
-> its own driver (sound/soc/codecs/mt6359-accdet.c) that probes based on this
+You partially reviewed my patches, if you can give me more details on
+my patch 1 and what else you want me to do for the rest of them, I'd
+be happy to do that.
 
-Drivers do not define bindings.
+Thanks,
+Saravana
 
-> compatible and handles those interrupts. Why would it not get its own node like
-
-Sorry, cannot go. You cannot document binding post factum and claim "I
-have a driver which uses that compatible".
-
-This would be a nice way to bypass review.
-
-> the other MFD cells?
-
-I explained why. I gave you the exact reason.
-
-Best regards,
-Krzysztof
+>
+> > > Overall, the idea is that instead of starting an async work item for =
+every
+> > > async device upfront, which is not very efficient because the majorit=
+y of
+> > > those devices will not be able to make progress due to dependencies a=
+nyway,
+> > > the async handling is only started upfront for the devices that are l=
+ikely
+> > > to be able to make progress.  That is, devices without parents in the=
+ resume
+> > > path and leaf devices (ie. devices without children or consumers) in =
+the
+> > > suspend path (the underlying observation here is that devices without=
+ parents
+> > > are likely to have no suppliers too whereas devices without children =
+that
+> > > have consumers are not unheard of).  This allows to reduce the amount=
+ of
+> > > processing that needs to be done to start with.
+> > >
+> > > Then, after processing every device ("async" or "sync"), "async" proc=
+essing
+> > > is started for some devices that have been "unblocked" by it, which a=
+re its
+> > > children in the resume path or its parent and its suppliers in the su=
+spend
+> > > path.  This allows asynchronous handling to start as soon as it makes=
+ sense
+> > > without delaying the "async" devices unnecessarily.
+> > >
+> > > Fortunately, the additional plumbing needed to implement this is not
+> > > particularly complicated.
+> > >
+> > > The first two patches in the series are preparatory.
+> > >
+> > > Patch [3/5] deals with the resume path for all device resume phases.
+> > >
+> > > Patch [4/5] optimizes the "suspend" phase which has the most visible =
+effect (on
+> > > the systems in my office the speedup is in the 100 ms range which is =
+around 20%
+> > > of the total device resume time).
+> > >
+> > > Patch [5/5] extend this to the "suspend late" and "suspend noirq" pha=
+ses.
+> > >
+> > > Thanks!
 
