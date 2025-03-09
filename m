@@ -1,238 +1,120 @@
-Return-Path: <linux-pm+bounces-23707-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23708-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id CEA31A5860D
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 18:09:18 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 21B21A5863F
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 18:32:19 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BE1F3AA26D
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 17:09:06 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 8E6BD188BEFE
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 17:32:21 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700A31E51FC;
-	Sun,  9 Mar 2025 17:09:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7070F1E51FD;
+	Sun,  9 Mar 2025 17:30:08 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=0x65c.net header.i=@0x65c.net header.b="XQgmpJlS"
+	dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b="CKAGUGdU"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from m204-227.eu.mailgun.net (m204-227.eu.mailgun.net [161.38.204.227])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mail.alien8.de (mail.alien8.de [65.109.113.108])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F56876025
-	for <linux-pm@vger.kernel.org>; Sun,  9 Mar 2025 17:09:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.38.204.227
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 044031E98F8;
+	Sun,  9 Mar 2025 17:30:03 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=65.109.113.108
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741540155; cv=none; b=hmRFXjhfn5WxdT47T4VsSwJSWvyX7k0Nsq91sw5nGF5oWP6RhqwE7fnhGWJFMRZYmDhrvJe846YK4r1Q+EG1v74ZYCxX/a8kgmiE74PYGEFMfeb7cTU09w6oYoMVznClZ34xM2x8tGN3Okl3sVxNBjzjwzZdfBudSrAYDz29eU4=
+	t=1741541408; cv=none; b=lj6Cv9pXYLp63U3lOdN5DtxEFm9KL4SfrMc8LuzxvI0YXoGNI4jmuOpEQ+b8cej9gVIa73DtVC71ypVkOjnAQr1PrhEFlwO2x8OwztM51nMfbC4ZZM+xkI9jUjfJY6PmM0axwi7w+4zUKGfG1BreG2k7G+FeZBZhPq8XFtDd1ps=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741540155; c=relaxed/simple;
-	bh=BqG+B/cyzs7Wx6/2PVQwxhVeusUOkQlZOVAiT2SolqY=;
-	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
-	 MIME-Version; b=OEAszNzFGsysAnwqTIJptEj0nfvEH6dQSmntS42edR4zhZU/m40hD5doi2Y1GqtLJRWfft4D+PKeMENo27y2pHvEj7ez0eIi2GrMdV4i8EgQZg4qpC7SBMMv5LKcczEke9SZKkGBYSqc8Mnw/EjF6UptuQPUoZRJEj9Kpdck3uM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x65c.net; spf=pass smtp.mailfrom=0x65c.net; dkim=pass (2048-bit key) header.d=0x65c.net header.i=@0x65c.net header.b=XQgmpJlS; arc=none smtp.client-ip=161.38.204.227
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x65c.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0x65c.net
-DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=0x65c.net; q=dns/txt; s=email; t=1741540151; x=1741547351;
- h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To: Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
- bh=A5sAFblZ0FdCEVljgC2paXltLJuU0zrqJVe0BZmcX2k=;
- b=XQgmpJlSRm5ZWXU4TwRAp1jmGl9c2pjsCL1ojEedng3JTS8qrlTdTbt4mXYasNRcDNoUuzZpivDkUCyJu0MRXj3PDDjZlHBcdLKA++5NXl1gKDTjaw1jSdm7Fdsd0sr2yCO4/2DKuaQ4eezGRj+9+e18HVn2zYoW2ZOHnNI/hMc3NxFW1XJyzDdVE86V1/inEmN5LydLNEayYlLfVzEhi+K3EUJCzgCdcgper3LGoEhZpoxqXqozsb7cFPQ4Slvh1BHVH7kbUYFQU1oTL5ltswQ651IEsM4VXzQgha7XI91U6wA5NUwcxlv/SD1RZ0dH7BO5IxPvzwgdQdotkzFIvg==
-X-Mailgun-Sending-Ip: 161.38.204.227
-X-Mailgun-Sending-Ip-Pool-Name: 
-X-Mailgun-Sending-Ip-Pool: 
-X-Mailgun-Sid: WyJhMTIzMiIsImxpbnV4LXBtQHZnZXIua2VybmVsLm9yZyIsIjU0ZWY0Il0=
-Received: from debian.lan.ratti.io (pub082136115252.dh-hfc.datazug.ch [82.136.115.252])
- by 4a592af099de with SMTP id 67cdcb3789016550ee98514d (version=TLS1.3,
- cipher=TLS_AES_128_GCM_SHA256); Sun, 09 Mar 2025 17:09:11 GMT
-Sender: don@0x65c.net
-From: Donald <don@0x65c.net>
-To: Dave Young <dyoung@redhat.com>
-Cc: Donald <don@0x65c.net>,
-	Roberto Ricci <io@r-ricci.it>,
-	ebiederm@xmission.com,
-	rafael@kernel.org,
-	pavel@ucw.cz,
-	ytcoode@gmail.com,
-	kexec@lists.infradead.org,
-	linux-pm@vger.kernel.org,
-	akpm@linux-foundation.org,
-	regressions@lists.linux.dev,
-	linux-kernel@vger.kernel.org
-Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from hibernation
-Date: Sun,  9 Mar 2025 18:09:09 +0100
-Message-Id: <20250309170909.6954-1-don@0x65c.net>
-X-Mailer: git-send-email 2.39.5
-In-Reply-To: <CALu+AoSSKh=5ELgQyzDrGEDm5fm2XKteH1ZC70mm89pNSSPMHw@mail.gmail.com>
-References: 
+	s=arc-20240116; t=1741541408; c=relaxed/simple;
+	bh=NBHMxEzCCfSdjqrL75N+ctfjfe/b2U+RJPdkNTWuPkg=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=kOpbGrRzACMn9uy2QsJQujLYQbCbhNC8OlXO5hG5oNAcbzupm8stMH3IXGwOnbSCisZDg/nhgNrM9+v1dBVkH99q12oC/ZS1eZVqBCbCbuWxn3HCUisikfykkeC9wZ4kUz09LY8ySrJ0Snhs40V35Od7xhsgCoLEn+AnpPOJY+8=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de; spf=pass smtp.mailfrom=alien8.de; dkim=pass (4096-bit key) header.d=alien8.de header.i=@alien8.de header.b=CKAGUGdU; arc=none smtp.client-ip=65.109.113.108
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=alien8.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=alien8.de
+Received: from localhost (localhost.localdomain [127.0.0.1])
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTP id 8119840E0214;
+	Sun,  9 Mar 2025 17:29:55 +0000 (UTC)
+X-Virus-Scanned: Debian amavisd-new at mail.alien8.de
+Authentication-Results: mail.alien8.de (amavisd-new); dkim=pass (4096-bit key)
+	header.d=alien8.de
+Received: from mail.alien8.de ([127.0.0.1])
+	by localhost (mail.alien8.de [127.0.0.1]) (amavisd-new, port 10026)
+	with ESMTP id jY-gbk4qE0X4; Sun,  9 Mar 2025 17:29:51 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=alien8.de; s=alien8;
+	t=1741541391; bh=V2ZqBwyXro5zqn3KAotpK1GPzA6yL7YjkTWyX1JdXnM=;
+	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
+	b=CKAGUGdUJ+yjbjqKhtqS2QhBMyARyh2oQFoonRepdter6J1EKAINqUzg+0gb8h+jI
+	 ZN+sn9Y1gi0HbIe4BrPnbfNNJgUS0mRrhIfXLn7gOrtNiDsCCCvWgZ4HhgzVjQ7ea/
+	 gFV9TRgGJ9EQ8D54lnbke3VnR1+gWzqRWAg0YWq+EPYWcB1nVo95Me62lIEDFeoUx7
+	 YQ+g0Z27nZ/JYi+NGaiFioY6Fyr6fHO7pJ2BCh+UYcgBOd+MexDthmHGr442rMzQqP
+	 DZyZtz/Z10KhFwJTuBOKWX4x53rRlkvFsAJgFTOTc/s6eI77UssqRIrIN8F56rg1SS
+	 6NQK1p2UVR1Ng9KKU/2+UONAmY1/ranhDNPc8rX4rFOhuJhbfwDdKs0uIE5IYPAVwD
+	 3QuBLPwfptOJKpR1X/voYw74HEm4Y7vOz5KI2GbHfgD0y+pX3fBtIL4zeyRCHEndDs
+	 V/Ianieh3lKzve6aXpf4zrzfhFYbrSRJeo6xRR58//D03EVyjAQeOvw+yWh7f0lC9Q
+	 dKJGihBdI7+SprjjFNeE0KhM8uR5dyKslgCcHoZ4w0SDApYzhKdwDUhC2QLgXNuVlM
+	 U0QvvFKGfN4Xaa0l68dfVrL+cHGtH/pmhGrNy52I5F46UZcdE9sAH1fJFZe3LzRR+h
+	 BTjoj5hbQgq9jvnCys+fbmVA=
+Received: from zn.tnic (pd95303ce.dip0.t-ipconnect.de [217.83.3.206])
+	(using TLSv1.3 with cipher TLS_AES_256_GCM_SHA384 (256/256 bits)
+	 key-exchange ECDHE (P-256) server-signature ECDSA (P-256) server-digest SHA256)
+	(No client certificate requested)
+	by mail.alien8.de (SuperMail on ZX Spectrum 128k) with ESMTPSA id 0194040E0202;
+	Sun,  9 Mar 2025 17:29:30 +0000 (UTC)
+Date: Sun, 9 Mar 2025 18:29:20 +0100
+From: Borislav Petkov <bp@alien8.de>
+To: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
+Cc: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
+	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org,
+	daniel.sneddon@linux.intel.com, tony.luck@intel.com,
+	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
+	linux-perf-users@vger.kernel.org,
+	Josh Poimboeuf <jpoimboe@kernel.org>,
+	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
+	"Liang, Kan" <kan.liang@linux.intel.com>,
+	Andrew Cooper <andrew.cooper3@citrix.com>,
+	Brice Goglin <brice.goglin@gmail.com>,
+	Mario Limonciello <mario.limonciello@amd.com>,
+	Perry Yuan <Perry.Yuan@amd.com>,
+	Dapeng Mi <dapeng1.mi@linux.intel.com>
+Subject: Re: [PATCH v7 1/4] x86/cpu: Name CPU matching macro more generically
+ (and shorten)
+Message-ID: <20250309172920.GBZ83P8ClXskqjmira@fat_crate.local>
+References: <20250306-add-cpu-type-v7-0-f903fb022fd4@linux.intel.com>
+ <20250306-add-cpu-type-v7-1-f903fb022fd4@linux.intel.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <20250306-add-cpu-type-v7-1-f903fb022fd4@linux.intel.com>
 
-On Mon, 27 Jan 2025 10:42:03 +0800 Dave Young <dyoung@redhat.com> wrote:
+On Thu, Mar 06, 2025 at 06:18:03PM -0800, Pawan Gupta wrote:
+> @@ -106,13 +94,10 @@
+>   * @_data:	Driver specific data or NULL. The internal storage
+>   *		format is unsigned long. The supplied value, pointer
+>   *		etc. is casted to unsigned long internally.
+> - *
+> - * The steppings arguments of X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE() is
+> - * set to wildcards.
+>   */
+> -#define X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family, model, feature, data) \
+> -	X86_MATCH_VENDOR_FAM_MODEL_STEPPINGS_FEATURE(vendor, family, model, \
+> -						X86_STEPPING_ANY, feature, data)
+> +#define X86_MATCH_VENDOR_FAM_MODEL_FEATURE(vendor, family, model, feature, data)	\
+> +	X86_MATCH_CPU(X86_VENDOR_##vendor, family, model, X86_STEPPING_ANY,		\
+> +		      feature, data)
+>  
 
-Hello,
+That one is unused. Zap it.
 
-> On Mon, 27 Jan 2025 at 10:39, Dave Young <dyoung@redhat.com> wrote:
-> >
-> > Hi
-> > On 01/13/25 at 10:28pm, Roberto Ricci wrote:
-> > > After rebooting the system via kexec, hibernating and rebooting the machine, this oops occurs:
-> > >
-> > [snip]
-> > >
-> > > I will send the kernel config and dmesg in replies to this email.
-> > >
-> >
-> > I tried your config (removed some config driver related which is not useful), but it can not boot on my kvm guest.
-> > Firstly I saw a panic in ftrace path,  then I rebuilt the kernel without ftrace, it panicked again but in kvm related code path.
-> > Both are not related to kexec at all so I suspect your bug is not kexec specific.
-> >
-> > Ftrace panic:
-> > ----
-> >     0.215515] software IO TLB: area num 4.
-> > [    0.298815] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
-> > Poking KASLR using RDRAND RDTSC...
-> > [    0.299813] ftrace: allocating 40381 entries in 158 pages
-> > [    0.300603] Oops: general protection fault, probably for non-canonical address 0xdffffc0000008a30: 0000 [#1] PREEMPT SMP KASAN NOPTI
-> > [    0.301877] KASAN: probably user-memory-access in range [0x0000000000045180-0x0000000000045187]
-> > [    0.302734] CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.13.0_ricci+ #913
-> > [    0.303401] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-2.fc40 04/01/2014
-> > [    0.304187] RIP: 0010:__text_poke+0x370/0x840
-> > [    0.304591] Code: c6 48 8b 04 24 48 8d 78 08 e8 cc fb ff ff 48 c7 c0 80 51 04 00 48 8b 0d 96 32 d9 02 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 <0f> b6 04 10 84 c0 74 06 0f 8e cc 03 00 00 65 0f b6 1d aa 3c ed 6e
-> > [    0.306646] RSP: 0000:ffffffff94007d88 EFLAGS: 00010006
-> > [    0.307139] RAX: 0000000000008a30 RBX: ffffffff93f0e070 RCX: ffff8881000744c0
-> > [    0.307839] RDX: dffffc0000000000 RSI: 8000000072001063 RDI: ffff88810006d0d8
-> > [    0.308634] RBP: ffffffff91001b24 R08: 0000000000000001 R09: fffffbfff2800f91
-> > [    0.309359] R10: 0000000000000003 R11: 0000000000000100 R12: 0000000000000005
-> > [    0.309994] R13: 0000000000000b24 R14: 0000000000000b29 R15: 8000000000000063
-> > [    0.310631] FS:  0000000000000000(0000) GS:ffff88815b400000(0000) knlGS:0000000000000000
-> > [    0.311351] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [    0.311867] CR2: ffff88817ffff000 CR3: 0000000075070001 CR4: 00000000000200b0
-> > [    0.312510] Call Trace:
-> > [    0.312731]  <TASK>
-> > [    0.312922]  ? __die_body.cold+0x19/0x2b
-> > [    0.313280]  ? die_addr+0x46/0x70
-> > [    0.313582]  ? exc_general_protection+0x150/0x240
-> > [    0.314010]  ? asm_exc_general_protection+0x26/0x30
-> > [    0.314454]  ? trace_initcall_start_cb+0x4/0x90
-> > [    0.314868]  ? __text_poke+0x370/0x840
-> > [    0.315211]  ? __text_poke+0x2ab/0x840
-> > [    0.315552]  ? __pfx_text_poke_memcpy+0x10/0x10
-> > [    0.315965]  ? __pfx___text_poke+0x10/0x10
-> > [    0.316345]  ? mutex_lock+0x87/0xe0
-> > [    0.316662]  ? __pfx_mutex_lock+0x10/0x10
-> > [    0.317096]  ? ftrace_now+0xc0/0xd0
-> > [    0.317431]  ? __pfx_ftrace_now+0x10/0x10
-> > [    0.317813]  ? trace_initcall_start_cb+0x4/0x90
-> > [    0.318245]  ftrace_modify_code_direct+0x58/0x70
-> > [    0.318696]  ftrace_process_locs+0x514/0xb70
-> > [    0.319105]  ftrace_init+0x80/0x150
-> > [    0.319458]  start_kernel+0x181/0x3c0
-> > [    0.319802]  x86_64_start_reservations+0x24/0x30
-> > [    0.320219]  x86_64_start_kernel+0x84/0x90
-> > [    0.320584]  common_startup_64+0x13e/0x141
-> > [    0.320952]  </TASK>
-> > [    0.321149] Modules linked in:
-> > [    0.321423] ---[ end trace 0000000000000000 ]---
-> > [    0.321832] RIP: 0010:__text_poke+0x370/0x840
-> > [    0.322227] Code: c6 48 8b 04 24 48 8d 78 08 e8 cc fb ff ff 48 c7 c0 80 51 04 00 48 8b 0d 96 32 d9 02 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 <0f> b6 04 10 84 c0 74 06 0f 8e cc 03 00 00 65 0f b6 1d aa 3c ed 6e
-> > [    0.323906] RSP: 0000:ffffffff94007d88 EFLAGS: 00010006
-> > [    0.324383] RAX: 0000000000008a30 RBX: ffffffff93f0e070 RCX: ffff8881000744c0
-> > [    0.325025] RDX: dffffc0000000000 RSI: 8000000072001063 RDI: ffff88810006d0d8
-> > [    0.325681] RBP: ffffffff91001b24 R08: 0000000000000001 R09: fffffbfff2800f91
-> > [    0.326332] R10: 0000000000000003 R11: 0000000000000100 R12: 0000000000000005
-> > [    0.326986] R13: 0000000000000b24 R14: 0000000000000b29 R15: 8000000000000063
-> > [    0.327658] FS:  0000000000000000(0000) GS:ffff88815b400000(0000) knlGS:0000000000000000
-> > [    0.328411] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [    0.328931] CR2: ffff88817ffff000 CR3: 0000000075070001 CR4: 00000000000200b0
-> > [    0.329595] Kernel panic - not syncing: Attempted to kill the idle task!
-> > [    0.330278] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
-> >
-> > kvm panic:
-> > -------
-> > [    0.222231] rcu: srcu_init: Setting srcu_struct sizes based on contention.
-> > [    0.222824] kfence: initialized - using 2097152 bytes for 255 objects at 0x(____ptrval____)-0x(____ptrval____)
-> > [    0.223470] Oops: general protection fault, probably for non-canonical address 0xdffffc0000005356: 0000 [#1] PREEMPT SMP KASAN NOPTI
-> > [    0.224200] KASAN: probably user-memory-access in range [0x0000000000029ab0-0x0000000000029ab7]
-> > [    0.224747] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.13.0_ricci+ #917
-> > [    0.225223] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-2.fc40 04/01/2014
-> > [    0.225779] RIP: 0010:__sysvec_kvm_asyncpf_interrupt+0x64/0x110
-> > [    0.226169] Code: 7c e4 4a 48 c7 c7 40 35 27 b7 e8 67 c2 cd 01 48 c7 c0 b0 9a 02 00 48 ba 00 00 00 00 00 fc ff df 48 89 c1 83 e0 07 48 c1 e9 03 <0f> b6 14 11 38 c2 7f 08 84 d2 0f 85 80 00 00 00 65 0f b6 1d 54 61
-> > [    0.227327] RSP: 0000:ffff888157009fe0 EFLAGS: 00010006
-> > [    0.227657] RAX: 0000000000000000 RBX: ffffffffb7a07e68 RCX: 0000000000005356
-> > [    0.228088] RDX: dffffc0000000000 RSI: ffffffffb7273540 RDI: ffffffffb740be40
-> > [    0.228523] RBP: 0000000000000000 R08: 0000000000000001 R09: ffffed102ae07c08
-> > [    0.228960] R10: ffff88815703e047 R11: ffff888157009ff8 R12: 0000000000000000
-> > [    0.229390] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > [    0.229848] FS:  0000000000000000(0000) GS:ffff888157000000(0000) knlGS:0000000000000000
-> > [    0.230375] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [    0.231089] CR2: ffff88815d201000 CR3: 000000015ba66001 CR4: 00000000000200b0
-> > [    0.231567] Call Trace:
-> > [    0.231727]  <IRQ>
-> > [    0.231859]  ? __die_body.cold+0x19/0x26
-> > [    0.232125]  ? die_addr+0x41/0x70
-> > [    0.232354]  ? exc_general_protection+0x150/0x240
-> > [    0.232663]  ? asm_exc_general_protection+0x26/0x30
-> > [    0.232988]  ? __sysvec_kvm_asyncpf_interrupt+0x64/0x110
-> > [    0.233341]  sysvec_kvm_asyncpf_interrupt+0x9b/0xe0
-> > [    0.233668]  </IRQ>
-> > [    0.233805]  <TASK>
-> > [    0.233942]  asm_sysvec_kvm_asyncpf_interrupt+0x1a/0x20
-> > [    0.234295] RIP: 0010:__x86_return_thunk+0x0/0x10
-> > [    0.234606] Code: 01 00 00 00 cc e8 01 00 00 00 cc 48 81 c4 80 00 00 00 65 48 c7 05 3c 54 14 49 ff ff ff ff c3 cc 66 2e 0f 1f 84 00 00 00 00 00 <c3> 90 90 90 90 cc cc cc cc cc cc cc cc cc cc cc e9 eb ff ff ff 0f
-> > [    0.235828] RSP: 0000:ffffffffb7a07f18 EFLAGS: 00000296
-> > [    0.236168] RAX: 0000000000000096 RBX: 0000000000000000 RCX: 1ffff1102ae07af0
-> > [    0.236677] RDX: dffffc0000000000 RSI: 0000000000000004 RDI: 000000000000000f
-> > [    0.237148] RBP: 00000000000000b0 R08: 0000000000000001 R09: 0000000000000000
-> > [    0.237610] R10: ffff8881571c1e40 R11: 0000000000000007 R12: 0000000000000000
-> > [    0.238071] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000094770
-> > [    0.238547]  start_kernel+0x263/0x3a0
-> > [    0.238787]  x86_64_start_reservations+0x24/0x30
-> > [    0.239088]  x86_64_start_kernel+0x84/0x90
-> > [    0.239355]  common_startup_64+0x13e/0x141
-> > [    0.239637]  </TASK>
-> > [    0.239786] Modules linked in:
-> > [    0.239987] ---[ end trace 0000000000000000 ]---
-> > [    0.240287] RIP: 0010:__sysvec_kvm_asyncpf_interrupt+0x64/0x110
-> > [    0.240676] Code: 7c e4 4a 48 c7 c7 40 35 27 b7 e8 67 c2 cd 01 48 c7 c0 b0 9a 02 00 48 ba 00 00 00 00 00 fc ff df 48 89 c1 83 e0 07 48 c1 e9 03 <0f> b6 14 11 38 c2 7f 08 84 d2 0f 85 80 00 00 00 65 0f b6 1d 54 61
-> > [    0.241896] RSP: 0000:ffff888157009fe0 EFLAGS: 00010006
-> > [    0.242242] RAX: 0000000000000000 RBX: ffffffffb7a07e68 RCX: 0000000000005356
-> > [    0.242708] RDX: dffffc0000000000 RSI: ffffffffb7273540 RDI: ffffffffb740be40
-> > [    0.243194] RBP: 0000000000000000 R08: 0000000000000001 R09: ffffed102ae07c08
-> > [    0.243659] R10: ffff88815703e047 R11: ffff888157009ff8 R12: 0000000000000000
-> > [    0.244122] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
-> > [    0.244595] FS:  0000000000000000(0000) GS:ffff888157000000(0000) knlGS:0000000000000000
-> > [    0.245121] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
-> > [    0.245502] CR2: ffff88815d201000 CR3: 000000015ba66001 CR4: 00000000000200b0
-> > [    0.245968] Kernel panic - not syncing: Fatal exception in interrupt
-> > [    0.246411] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
-> >
-> >
-> > You can find the kernel config here (with the ftrace enabled):
-> > https://people.redhat.com/~ruyang/snakeyear/panic-ftrace.config
-> 
-> BTW, if I disable KASAN then kernel can boot, anyway kexec +
-> hibernation works fine with a few tests, no panics.
-> 
-> >
-> > Thanks
-> > Dave
-> >
+-- 
+Regards/Gruss,
+    Boris.
 
-Even though my system doesn't generate the same trace, I have the same issue:
-when I reboot with kexec into 6.12.y or 6.13.y, suspend stops working properly.
-If I pass to the kernel command line oops=panic panic=-1 at resume the system
-reboots (unfortunately without generating any trace :/)
-The last line found in the kernel message:
-
-    kernel: PM: suspend entry (deep)
-
-I tried with s2idle but I hit the same issue.
-Suspend works just fine going through a cold reboot.
-Please note I'm using a real machine Lenovo Thinkpad X220.
-
-Thanks
-Donald
+https://people.kernel.org/tglx/notes-about-netiquette
 
