@@ -1,262 +1,160 @@
-Return-Path: <linux-pm+bounces-23687-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23688-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 489ADA5832F
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 11:39:41 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 349B7A58391
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 12:21:36 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 637A516BE99
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 10:39:40 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 63BAA16D545
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 11:21:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 213181BAEDC;
-	Sun,  9 Mar 2025 10:39:39 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7EFF1C5D75;
+	Sun,  9 Mar 2025 11:21:30 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="cCxtFmtZ"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="PrlYaP84"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from TYVP286CU001.outbound.protection.outlook.com (mail-japaneastazon11011050.outbound.protection.outlook.com [52.101.125.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FDFF1A4AAA;
-	Sun,  9 Mar 2025 10:39:34 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.125.50
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741516779; cv=fail; b=HQoHHSbU1DwCpiLamH9kiDbiLQPAJ9OUruvTecaYCANYxliDSkKItEdeqGiTTVO8OkuA74R1/3xlvPgZ4feCZuDIXGgc/mOgiZWrgIHfvjCVwiUiJtAXrPcer8WJIGBPx6u2vupDbTOY5erU414gt41i/0i2FDUahZtlskms3BA=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741516779; c=relaxed/simple;
-	bh=BVAlbAB8pbjkuBdW0pr32ZRsimaNX0OZ/gNijSfN/aU=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=Re2oUzBnRdAv74lTMbQ62QmNMaQ3RZgOLEMbuY+Jf0YcqUBSdHfvBeKazA8a0lE8hnuz59lhaED8nZbp6aX2kWtdOLBqKvYGlIK5eDxMR4D/jgSlF0rt2tFmoQrKuwiq6puRqXbjqsE3V4XSXqftXcc9Wrg8fazkuWhD8GpiGwI=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=cCxtFmtZ; arc=fail smtp.client-ip=52.101.125.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=dUTQXtg5QhDZwBgy3wUIALWrpwtiXyV01Gxi4chJxOyT3Bnyva2gVE7bdEKPyJdewuXJHNsDif60DrFiC8qaC+q6GO5jCaaDa3sSfcsnE2Y8FcLZ8ktqlkIh0lkGZq3dyQwUw+Of1vh4aBbE5ILA1KZPeCWfs45ECtZwXp2dOMzVsJ2TEIl7Zqs/Wfv29d3m+nruSEUumxxYjeZ6KjPnfuFzBg65gLT7hLJoibZbHpOalJ78enNOSxKgGvsICk7eEiLpTrdf4KZW8ViTDk6zIdm0AnPltCRQwGmREIGVRetQ8IpBY0dPFg+idJbWEq5r+cu8GQPGQ1lH6WelVG9/BQ==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=1JyivJo74RnuIsmmr/W7IVelnKGRJrY0/qpSPlO8Df4=;
- b=nRfz5Pb1Mnz3CZn6KQK+y/0MEJdajZBhtBGBWQt/m4Ttb0YB2IlXggkyH5MVLU2jbDCHLV6vl7KuuF0qR/R5diAuxaMTjqLbYLNnFujg78h6LzYD8N1dzTQQXUT4mYhedRyaodD4P7mlPWoS1GMpw8MHBAxDZSoW0yrDNclEE649o4vfqJ1JPmzlL9As0H+fK6n2MztltKFoTXkcIu04kPNxAiqTZzqxNSvsXnpZ+boK0llwIwgKBQrW4q2o1VydUwKZNNiztB+dahKvGpNDY1LLt0b6j8eoWsHAchL6c6mJ4iJPLRq+YcOX5HNbr6xafC6dxKmHqowKqag8Mn0JSA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=1JyivJo74RnuIsmmr/W7IVelnKGRJrY0/qpSPlO8Df4=;
- b=cCxtFmtZUJMLxakabaebKO6jlkgnIHjjBLA2U8kXWW3TtYZUyhg2KNtG9qnotG86/7QYpYJOOg0y+aS/l1mHlc0GxmbZTRRdCevO+FDffEzaItttk9lq8b9PlY8yy+bXbRBaVEou7VOoxzVAHVuga9QJKweVmOcf0EMjh9XP0Ug=
-Received: from OSBPR01MB2775.jpnprd01.prod.outlook.com (2603:1096:604:13::17)
- by TY4PR01MB13028.jpnprd01.prod.outlook.com (2603:1096:405:1de::5) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.26; Sun, 9 Mar
- 2025 10:39:31 +0000
-Received: from OSBPR01MB2775.jpnprd01.prod.outlook.com
- ([fe80::54f7:9a51:ae47:185b]) by OSBPR01MB2775.jpnprd01.prod.outlook.com
- ([fe80::54f7:9a51:ae47:185b%4]) with mapi id 15.20.8489.025; Sun, 9 Mar 2025
- 10:39:27 +0000
-From: John Madieu <john.madieu.xa@bp.renesas.com>
-To: Conor Dooley <conor@kernel.org>
-CC: "robh@kernel.org" <robh@kernel.org>, "geert+renesas@glider.be"
-	<geert+renesas@glider.be>, "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
-	"mturquette@baylibre.com" <mturquette@baylibre.com>, "sboyd@kernel.org"
-	<sboyd@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"rui.zhang@intel.com" <rui.zhang@intel.com>, "lukasz.luba@arm.com"
-	<lukasz.luba@arm.com>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "p.zabel@pengutronix.de"
-	<p.zabel@pengutronix.de>, "catalin.marinas@arm.com"
-	<catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>,
-	"john.madieu@gmail.com" <john.madieu@gmail.com>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Biju Das <biju.das.jz@bp.renesas.com>
-Subject: RE: [PATCH v2 3/7] dt-bindings: thermal: r9a09g047-tsu: Document the
- TSU unit
-Thread-Topic: [PATCH v2 3/7] dt-bindings: thermal: r9a09g047-tsu: Document the
- TSU unit
-Thread-Index:
- AQHbiRKwzjBFhg3PXkG3oKF6ljEYA7NdFKWAgAc7OeCAA4ptgIAAAsFwgAAF0QCAAsfM0A==
-Date: Sun, 9 Mar 2025 10:39:27 +0000
-Message-ID:
- <OSBPR01MB2775D121B55A0C543F251BAEFFD72@OSBPR01MB2775.jpnprd01.prod.outlook.com>
-References: <20250227122453.30480-1-john.madieu.xa@bp.renesas.com>
- <20250227122453.30480-4-john.madieu.xa@bp.renesas.com>
- <20250228-shampoo-uprising-44ae0d3bd68b@spud>
- <OSBPR01MB2775DFC184F78E9FB50F28FFFFD52@OSBPR01MB2775.jpnprd01.prod.outlook.com>
- <20250307-everyone-ragweed-e05a10a9646b@spud>
- <OSBPR01MB277531D7C872C9EB0B287069FFD52@OSBPR01MB2775.jpnprd01.prod.outlook.com>
- <20250307-barbell-pretzel-368d6a4d1336@spud>
-In-Reply-To: <20250307-barbell-pretzel-368d6a4d1336@spud>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSBPR01MB2775:EE_|TY4PR01MB13028:EE_
-x-ms-office365-filtering-correlation-id: 57c2622c-a673-41ea-d612-08dd5ef6aaaf
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|376014|7416014|366016|1800799024|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?blnWLpT+ZUcHleyekuWH+zZH2yvfwwJvzVeQia+0M4VavbaznshcxQf8Z7km?=
- =?us-ascii?Q?3pLv6QLSLRIiD5Sq7L+X49XQWg6dMj6F3r85xmXGj8Prgf50C3U8yelzSab4?=
- =?us-ascii?Q?zDFXlmhzOcYw1FUkY+i1G9bSpeTEeoL+VrNFV5LswZGztqbwE90eouOKZWyt?=
- =?us-ascii?Q?T7d6nplttFezhe/BK63GkFr/ZRo7siWEZc2PQLz51iQsYe4m6tJIimuOOVew?=
- =?us-ascii?Q?+B3v8hoQazIG5Chza2D+NXCwEVjEDIfC2pSErGG7XdSqkNWbanCauDxbwP/u?=
- =?us-ascii?Q?x53Qkl76Ragzot7gHqQNuAPqqS1yY+R/tZxKB40df+hUw1BrnJMLNXHiKySB?=
- =?us-ascii?Q?1GrODqcsZIJwv7h0grciSygu8FhDKshMT8djwFs0szPkmPugYGLYkWU50F6y?=
- =?us-ascii?Q?TH0rIPM1AQEFVKRWWyQe8TMnFfotku2MJgWK6e1nKlpi5JGK6zI/UMGlwV2r?=
- =?us-ascii?Q?XaNsLbKtHzmwFlG6HLSq3rflOgZelRUjk4B98Xs1ejbD3V/obzTI7vdrr94u?=
- =?us-ascii?Q?2hT/W+2I9jAg4FuMf8lkIQ1/yBF8apjPPqmv1E1QPdKTT7TKsPUF37kfK6rS?=
- =?us-ascii?Q?dBTGHzxNd6Ug+KflSq06WViZMa/+2MNkktvK6sFvwQ287gcTg8fPNJylMiYx?=
- =?us-ascii?Q?1WJ6XY4jJsDVWgzUxuo1rzqMs4g74Secc7BmI13pL3xOOaue6h4Sbp7IIopX?=
- =?us-ascii?Q?vovgHAaOv8PW3kNa7s5PBDWuqwy2yX6dht60mc072UX1yykEsXHtDk30Z91/?=
- =?us-ascii?Q?fCta26IEyVJ85fwO+EvPGXli7Ig2S8ENpafGCukFXKuwufuDQs1d8+8+o/i+?=
- =?us-ascii?Q?ythaUs2QKe6/O1bSB0XQbvjNO8tKcpJ0F+OqIzf5hZ62DPj3jHC/tH5EXr+8?=
- =?us-ascii?Q?RdrnO25dYFlLlWv4LI5/nMiq54hU+MupmEDPJfC5ztKOGgXU5z7LAm7YUij6?=
- =?us-ascii?Q?AbEF2M/4HUnfM0+xc1sfFwe5el9w3bCJs2XuJQXmZlXZhCiCnb7pHyyRvwyl?=
- =?us-ascii?Q?PmWJsPxDzyb8MezSOK64MJXTr7lzYZEo3KxwOnO1F04XqWdAkqGhv7oLoUPz?=
- =?us-ascii?Q?FRBjmLWUA49dkuLPQ/qTCuZhhSefY/okbIxXDGDIuueVZOPbwFB3l90rZFzd?=
- =?us-ascii?Q?kPC24PIFM5C5+Hd/zg5Fk1FcC6BgGoN7rMnAwtQcfD2CGqlUr+Qi85E22dMa?=
- =?us-ascii?Q?tIIHo4gtYGqydYqPvzVZdTgdlTAftkew49AYmC2UBbMFLm/mPzQXDATtSq4K?=
- =?us-ascii?Q?uP7F2YhPAO9LObGo7MfKGIOk1DjwvFHU6l6WpR8e+xhoN10hXpLvtKXx9SPK?=
- =?us-ascii?Q?sdO5P+5+gKX89l/6h7YWcSmO0hGZk+8Qq1btw76sv5vC4shpZX+ZPtcARy15?=
- =?us-ascii?Q?RZO/V46GVaNd7JFnwUBuGvl+qt4vrrwTS2w/ovnA0RqbwIAREBMhDqUhOLQk?=
- =?us-ascii?Q?powljQK8gLM3VnGmPnHEwidgfCc+0hrK?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB2775.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(376014)(7416014)(366016)(1800799024)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?HDFB43IZ6lFLorZAKx9/7pDMU7WSlbSMLidjAi6KhOYrGfxrLPzJdZPpEmI6?=
- =?us-ascii?Q?Bxh9vS+G6IFIdEZTJfuc66go40SovF/RbBs+eCHjTh4/3yC0Y1aBTvRFGx2c?=
- =?us-ascii?Q?skAr5+sdeBalYAJlp8XbQVXj8UXs+AjhcbOlsc7/ERo72dA1cua1ti8HRT4c?=
- =?us-ascii?Q?w0fKe3UheL8wYaJ2WLZZJxyPH2b+o4s2BdROLvlU27NqVkQKBzpYl0YHgSah?=
- =?us-ascii?Q?BCYpM4uRxnhtTLAzL1RHZBcqGQyGEBM+TstKYfz0nO+wy9r6mRbaz8cwKMgP?=
- =?us-ascii?Q?JWhS6c43E3Mdt92zXjc4iAp4ZajA5IBeBkDG4acTFWhmPMVTqE8V84eLJ3oe?=
- =?us-ascii?Q?hvDNBpU1ByDacHyQJLEPu2lAzK/pJpikNTDLVfuR6TV4R+ucUolsQykClMpE?=
- =?us-ascii?Q?iYUD32JQCTebT5zse2C15HUgTzmL++rVQMDFS3nWGKaxgtxkd2SbvqkSX83j?=
- =?us-ascii?Q?TERWvlBcyrpcpzY7nsZEZ9/+t/r0xoaZ1ZlktqVsSAsQO+UDtTdocclQKexd?=
- =?us-ascii?Q?oEZBnC4qaCOwGkydy+y8juI95LY4Rl9/uO0chT+soBAa65w8WY8D8zH0gsLL?=
- =?us-ascii?Q?kA4Gu5PVJxNeHqD+4qX+SZTggg3wPDE5jXCNmqDEsZSh/JV1AlOvaVlmevft?=
- =?us-ascii?Q?DDqVg8ytDgW26KhNG90kwDFXgcdhfANI9QReu7eUybmJETaOsAhbv4GX2kdf?=
- =?us-ascii?Q?LR250wHCoVEHlL/whMDJmfvpU3GDB+mb2RPFehMzeTXPTV+ob3cTdfPUgL9m?=
- =?us-ascii?Q?E5FI6JfbNfAtJWXsTnGc/e5aRpEILeMLzjIYdHHJZ7E8cRJNgJmGQBNV8Pzb?=
- =?us-ascii?Q?4HXOMHybEmJ5bI7nRlDIL26jH77YnzALiXzRBv4YkwoCKZAykFLPpcwvInAF?=
- =?us-ascii?Q?rVRX0mlAQle3Qng4iC64hiaePcZzUCwiHVwlQBprasIaRLa+Vb4EvOt4mbK/?=
- =?us-ascii?Q?LIJ9dD5zaca5LlSsBIlnLOS6FwHqn1l+WnjkCN1jmpQqzz9HiO39tlrhVmK7?=
- =?us-ascii?Q?6E7SA5UX3ENGy0ODU96btu4971pbOFWG95btvX3nkN9lTKi7WzLzIhO50TfL?=
- =?us-ascii?Q?8b9vjqravsNhg/d1xkYR7X0YEaJuHIcyAdJe53ejNeTvHZEM6QVraUUGP7qW?=
- =?us-ascii?Q?KHYrGSh3Fa+mGei2JHZPCmNfJF3tWI2QBJV36RsK2VjBTnXaZDQYS937dgDB?=
- =?us-ascii?Q?R4x13Sf+VqepWSZZhfvNsxaEEL/rCVbe8Mzf715U0K6Tf1GjetatqhYw8UlX?=
- =?us-ascii?Q?/JI+3+sjBxep3/9yZCY0X3O+dwMubfcTJpUIoKZln/485H4pVYN+ftaW0Gq6?=
- =?us-ascii?Q?AzbDyXsI6Cb5zT7apC6w7ehK7HTKZtZ+jm+tuoMRlI9FoptYzImu5Yf1U7qT?=
- =?us-ascii?Q?cy2o2rDFVOYxFFIAi1HRpFzumV2Umj9Zs0ChEeUSyh3xJjdsFb9S2QAh1xcc?=
- =?us-ascii?Q?Wh1OLxQNRPoZ1NcRWDhS0wxdo3w6JGQaCh7PlrTdMvps+i4R6thytllBX8tr?=
- =?us-ascii?Q?F2XOwMj1YgBXHY/XHwTEPsWsOxCh7gxV9DnUXuckoo8yfmJ2qSbVPjMB53+E?=
- =?us-ascii?Q?ewNfD2sxsOu/uA2WqhyK9d4OBtFaUIAuOoZzoiqMl4xDeWohxTTZor8EBCJN?=
- =?us-ascii?Q?bg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9CED74C08;
+	Sun,  9 Mar 2025 11:21:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741519290; cv=none; b=K6LGR90FXSj2xeBvG310VuF9K7m/+mmd2Ar+F2H0T2kFqNz5p2hE+a3DtxbnrQ/Og+Pr4NkmwXLeAeDaEaq3gr6KRW4ea4TvYcIZPjEv8ujI+VK4lbLRq8mVZCPpXorPkPCC0Y7O2wFR2kXeMGEVYzz/d6jCLP7VxV5GAOoYKk4=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741519290; c=relaxed/simple;
+	bh=D3tYI8iTJ7QZIlhKuN2+ClrGTuzJa2U2KPsn5/wV2js=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=eBFE+hAd9J8H+9KM6Ugvl1OH/+QcVVPXra4uBvscu3zOl3gX/9apqBu8eYHYwawXBI+i5rnGdPg/w+4oLB7J9Yc7vTcViZ4lUn1n+TOyiUfG5d7bAdAld29JfVRHfzzV5uDanAG+2hEEjX/rFJBBFvGkiFFk+pqi1yH04esK/ko=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=PrlYaP84; arc=none smtp.client-ip=185.138.42.100
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
+Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:8d8a:5967:d692:ea4e])
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id 917972E037CC;
+	Sun,  9 Mar 2025 13:21:16 +0200 (EET)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
+	s=default; t=1741519278;
+	bh=w3CdKrkESq2tKARZR2k9fTv2YfnbpHvzaojVRo6xY4o=; h=From:To:Subject;
+	b=PrlYaP849T8sA/19KRFS4qOb2ocBEyujLhtlFvgAECkj6400RHpoxQjM72ukJzDDC
+	 FiiHqZ/SkXghZgVmAqOuJZICRlEh1T/+c2dn9e1e2rxjDLf1EWr+YbuVwHjNrFKk7W
+	 hbXi/r3JQR02UnmsGXfoQiZgbIiW8pm7Ir8DD8hM=
+Authentication-Results: linux1587.grserver.gr;
+	spf=pass (sender IP is 2a05:f6c2:511b:0:8d8a:5967:d692:ea4e) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
+Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
+From: Antheas Kapenekakis <lkml@antheas.dev>
+To: platform-driver-x86@vger.kernel.org
+Cc: linux-hwmon@vger.kernel.org,
+	linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org,
+	Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>,
+	Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+	Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+	Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>,
+	Eileen <eileen@one-netbook.com>,
+	Antheas Kapenekakis <lkml@antheas.dev>
+Subject: [PATCH v3 00/12] hwmon: (oxpsensors) Add devices, features,
+ fix ABI and move to platform/x86
+Date: Sun,  9 Mar 2025 12:21:01 +0100
+Message-ID: <20250309112114.1177361-1-lkml@antheas.dev>
+X-Mailer: git-send-email 2.48.1
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB2775.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 57c2622c-a673-41ea-d612-08dd5ef6aaaf
-X-MS-Exchange-CrossTenant-originalarrivaltime: 09 Mar 2025 10:39:27.4534
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: iNjqmzXZKeONb1wdSJbc/4dS17xf8O8bR9CAnzMNDghYrI643XGhetEWILhOynTjfl2Jmn6zE1iIYA62CfqnMkEWJBWwdrZCpX+iqDT7mL8=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TY4PR01MB13028
+Content-Transfer-Encoding: 8bit
+X-PPP-Message-ID: 
+ <174151927785.28547.2924708597399637820@linux1587.grserver.gr>
+X-PPP-Vhost: antheas.dev
+X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
+X-Virus-Status: Clean
 
-Hi Conor,
+This four part series updates the oxpsensors module to bring it in line
+with its Windows OneXPlayer counterpart. First, it adds support for all
+2024, 2025 OneXPlayer handhelds and their special variants. Then, it moves
+the module to platform/x86 to allow for including more EC features.
 
-> -----Original Message-----
-> From: Conor Dooley <conor@kernel.org>
-> Sent: Friday, March 7, 2025 5:04 PM
-> To: John Madieu <john.madieu.xa@bp.renesas.com>
-> Subject: Re: [PATCH v2 3/7] dt-bindings: thermal: r9a09g047-tsu: Document
-> the TSU unit
->=20
-> On Fri, Mar 07, 2025 at 03:55:27PM +0000, John Madieu wrote:
-> > Hi Conor,
-> >
-> > > > > > Signed-off-by: John Madieu <john.madieu.xa@bp.renesas.com>
-> > > > > > ---
-> > > > > > v1 -> v2:
-> > > > > >  * Fix reg property specifier to get rid of yamlint warnings
-> > > > > >  * Fix IRQ name to reflect TSU expectations
-> > > > > >
-> > > > > > +    enum: [0, 1]
-> > > > > > +    description: |
-> > > > > > +      TSU operating mode:
-> > > > > > +      0: Mode 0 - Conversion started by software
-> > > > > > +      1: Mode 1 - Conversion started by ELC trigger
-> > > > >
-> > > > > Can you make this "software" and "elc" or something please,
-> > > > > unless people will genuinely find "0" and 1" to be more
-> informative.
-> > > > > And why doesn't the property have a default?
-> > > >
-> > > > Sorry for miss-specifying.
-> > > > ELC is an external event trigger. May be should I specify it like
-> that ?
-> > >
-> > > If "elc trigger" is meaningful to people using hte device (IOW, it
-> > > matches datasheet wording) then that's fine I think.
-> >
-> > "elc trigger" matches datasheet wording.
-> >
-> > >
-> > > > To make sure I got your point, do you mean specifying a default
-> > > > value in bindings ?
-> > >
-> > > The property doesn't actually need to be required, it could easily
-> > > have a default (say software) and only be set in the case of using
-> > > the elc trigger - which brings you to Rob's comment that it can just
-> > > be a boolean, setting the property if elc and leaving it out of
-> software.
-> >
-> > Got the point now. I can make it default to software trigger, and add
-> > optional Boolean property to ELC trigger. Let's say "renesas,elc-
-> trigger;"
->=20
-> Yah, that works.
->=20
-> >
-> > >
-> > > Rob's other comment was
-> > >
-> > > | Who/what decides the mode? If a user is going to want to change
-> > > | this, then it should be a runtime control, not a DT property.
-> >
-> > Changes are not possible at runtime. Some customers may want software,
-> > while other may want the external trigger, and this is immutable
-> > configuration.
->=20
-> What makes it immutable? Set by some wiring on the board? I couldn't find
-> the user in your driver patches to better understand how you were using
-> it.
+Then, it adds the new charge limiting and bypass features that were first
+introduced in the X1 and retrofit to older OneXFly variants and for
+controlling the turbo led found in the X1 models. For Bypass, it adds a new
+charge_behaviour variant called inhibit-charge-s0.
 
-I haven't prototyped ELC trigger yet. Since the hardware manual
-describes about ELC trigger, I have documented it in bindings. If you
-think, it is not needed at this stage, then I can drop it now and
-revisit later.
+Finally, it performs a minor refactor by moving around switch statements
+into their own functions, in order to allow for fixing the pwm1_enable ABI
+in the final patch. Currently, pwm1_enable sets the fan to auto with the
+value 0 and allows manual control with the value 1. This patch makes it
+so 0 sets the fan to full speed, 1 sets the fan to manual control, and
+2 sets the fan to auto. This requires both setting enable and the fan
+speed when the enable sysfs is written to as 0, hence the refactor.
 
-Regards,
-John
+As this is a minor ABI break and there is userspace software relying
+on this previous behavior, the last patch also changes the /name of the
+hwmon endpoint to "oxp_ec" from "oxpec" (mirroring WMI module conventions)
+such that userspace software that relied on the previous behavior can be
+retrofit to the new kernel while enabling correct functionality on old
+and new kernels. Failing that, software that is not updated will just
+stop controlling the fans, ensuring no malignant behavior.
+
+Changes since V2:
+    - Add ack by Guenter, move platform move patch to be third (not first
+      to allow for device support backport to lts kernels)
+    - Rework patch text, especially in the refactor patches as per Derek
+    - Change bypass to use charge_behaviour instead of charge_type, as that
+      ABI supports capability detection and is more appropriate
+    - Move battery attach to probe instead of init
+    - Fix bug where reading tt_led would instead use the turbo register
+
+Changes since V1:
+    - Add X1 Pro, F1 Pro variants
+    - Fix minor typo in initial patches
+    - Convert oxp-sensors into a platform driver, as it is no longer
+      considered a hwmon driver.
+    - Add sysfs documentation and myself to the MAINTAINERS file
+    - Update documentation to state that this is the OneXPlayer/AOKZOE
+      platform driver, and that support for Ayaneo/OPI is provided until
+      they gain their own platform driver.
+
+Antheas Kapenekakis (12):
+  hwmon: (oxp-sensors) Distinguish the X1 variants
+  hwmon: (oxp-sensors) Add all OneXFly variants
+  platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
+  ABI: testing: add tt_toggle and tt_led entries
+  power: supply: add inhibit-charge-s0 to charge_behaviour
+  platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
+  platform/x86: oxpec: Rename ec group to tt_toggle
+  platform/x86: oxpec: Add turbo led support to X1 devices
+  platform/x86: oxpec: Move pwm_enable read to its own function
+  platform/x86: oxpec: Move pwm value read/write to separate functions
+  platform/x86: oxpec: Move fan speed read to separate function
+  platform/x86: oxpec: Adhere to sysfs-class-hwmon and enable pwm on 2
+
+ Documentation/ABI/testing/sysfs-class-power   |  11 +-
+ Documentation/ABI/testing/sysfs-platform-oxp  |  29 +
+ Documentation/hwmon/index.rst                 |   2 +-
+ Documentation/hwmon/oxp-sensors.rst           |  89 ---
+ Documentation/hwmon/oxpec.rst                 |  67 ++
+ MAINTAINERS                                   |   7 +-
+ drivers/hwmon/Kconfig                         |  11 -
+ drivers/hwmon/Makefile                        |   1 -
+ drivers/platform/x86/Kconfig                  |  11 +
+ drivers/platform/x86/Makefile                 |   3 +
+ .../oxp-sensors.c => platform/x86/oxpec.c}    | 675 ++++++++++++++----
+ drivers/power/supply/power_supply_sysfs.c     |   1 +
+ drivers/power/supply/test_power.c             |   1 +
+ include/linux/power_supply.h                  |   1 +
+ 14 files changed, 664 insertions(+), 245 deletions(-)
+ create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
+ delete mode 100644 Documentation/hwmon/oxp-sensors.rst
+ create mode 100644 Documentation/hwmon/oxpec.rst
+ rename drivers/{hwmon/oxp-sensors.c => platform/x86/oxpec.c} (51%)
+
+-- 
+2.48.1
+
 
