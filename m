@@ -1,45 +1,45 @@
-Return-Path: <linux-pm+bounces-23691-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23693-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2AA69A5839E
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 12:21:48 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B60F6A583A4
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 12:21:52 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D592D7A27B9
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 11:20:45 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id D034116DED9
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 11:21:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C26911C861A;
-	Sun,  9 Mar 2025 11:21:31 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A11651CC8B0;
+	Sun,  9 Mar 2025 11:21:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="aIPfWTaa"
+	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="uZ+LkaHA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0F22E1A840D;
-	Sun,  9 Mar 2025 11:21:28 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E98C51A9B29;
+	Sun,  9 Mar 2025 11:21:32 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741519291; cv=none; b=L70VcqL8GPVilZW1aXJ3cjsY3TYCM0SIM7rE12T8Bxli9C8h7gkr6p2EMl6fpHz0Gz5LmeuWF0W/UKSIQTowhoBkQ/FHh4LA+KjBp75lI5/C/+S8WbMZ1yU6v0fk1oF1zLGbYu7jEnPUmBdf3CPrADhvwP0bnmtVFF4sNatA+50=
+	t=1741519294; cv=none; b=cbkiHsd7zsGms5O4pn5ai/WnFigAJLd0beIIoqGJqhUk+B/penjE6dLdu2b5JGroZjpVdBIV0umlkeSsqW8gU+XD/Oy2i3zsbUwx20v/YSZEQXMVzckzJSYkFMh4BlwyWppJxznLe3WIXS/cvnEtkZVw62ceyDlnY8Jbbw4OXBo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741519291; c=relaxed/simple;
-	bh=hwbg85IHRmzac4MOiU1b/r7yBMLHOMIeHyC8YX0maYM=;
+	s=arc-20240116; t=1741519294; c=relaxed/simple;
+	bh=olnngvSWzuTw7+jwCrrVTLpt5jpDlljE7E7BTT8hoJU=;
 	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
-	 MIME-Version:Content-Type; b=rPJbBzQKb6uBg/XY8f2mnLCnmd2d7jwW2y1H+AH6FWIJ+lh+qSBEtOBRQPypjOlvthVflJ5l/u3r+ikJdE97DwfWzJ1kPQJydt9VycFzlRcsPXZ5OZLcDtIuFP3KJFckEXU+q4E9DytKI9/+XoiWAGBj0hqIVcXbbHmSRsNHQy4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=aIPfWTaa; arc=none smtp.client-ip=185.138.42.100
+	 MIME-Version; b=adCYl0xPGLCdrICb2kemY/tqKOzSrPBVleFMwlqM3V/LDCQymPSI6hvABAH6QsZ2rV/wWqLTHlCQfILclkiNtnGNjCtXHnEZwWKrikd7ppPmRUzB14aYI7QgRpY3PLUPVRKtL3Dabj2m2vFS7EKH7FO4E7UIkKEZgbrdhQcquXw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=uZ+LkaHA; arc=none smtp.client-ip=185.138.42.100
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
 Received: from localhost.localdomain (unknown [IPv6:2a05:f6c2:511b:0:8d8a:5967:d692:ea4e])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id 1D4C82E05696;
-	Sun,  9 Mar 2025 13:21:25 +0200 (EET)
+	by linux1587.grserver.gr (Postfix) with ESMTPSA id D07DD2E0735E;
+	Sun,  9 Mar 2025 13:21:26 +0200 (EET)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1741519286;
-	bh=EbAW66MOShp+FMmH6+3P02El1Ie30xboAe3WC3/AJMs=; h=From:To:Subject;
-	b=aIPfWTaaI9j9+VH4LI9SytI3dhe7ae9XHW2mPNom8G+1FtOiBnU/bgZvaAomOlJyq
-	 fDRQq8gONGUDOFw9vsSgj6b8NdO0bKQ1STqEbOny1CrzuGrZhlOcBP3MRcRbFJdgAi
-	 dfm8Q/HihadmQ06WKwtskwcnBZ06V3pxTwORwZps=
+	s=default; t=1741519288;
+	bh=sNuKsdasOWIkDosj3z6QbzM+DrhvrIIui0OTrZw4L6c=; h=From:To:Subject;
+	b=uZ+LkaHAcnDWH7cWMkzga8oWBhzJ9aQIzowhUW+/ZJgJ9X8jIsEMONZK2JOYt4WZf
+	 4fgZzEk/OCPQWE7vnJKQ64gvb8hLmFVKaA0QHOL31TSkFQMGZo9yq7sLsSLqjr8Spn
+	 pgqZViF3UM2mespYaaF2hS7uq/jArckyM2aCm92I=
 Authentication-Results: linux1587.grserver.gr;
 	spf=pass (sender IP is 2a05:f6c2:511b:0:8d8a:5967:d692:ea4e) smtp.mailfrom=lkml@antheas.dev smtp.helo=localhost.localdomain
 Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
@@ -58,9 +58,10 @@ Cc: linux-hwmon@vger.kernel.org,
 	Parth Menon <parthasarathymenon@gmail.com>,
 	Eileen <eileen@one-netbook.com>,
 	Antheas Kapenekakis <lkml@antheas.dev>
-Subject: [PATCH v3 04/12] ABI: testing: add tt_toggle and tt_led entries
-Date: Sun,  9 Mar 2025 12:21:05 +0100
-Message-ID: <20250309112114.1177361-5-lkml@antheas.dev>
+Subject: [PATCH v3 05/12] power: supply: add inhibit-charge-s0 to
+ charge_behaviour
+Date: Sun,  9 Mar 2025 12:21:06 +0100
+Message-ID: <20250309112114.1177361-6-lkml@antheas.dev>
 X-Mailer: git-send-email 2.48.1
 In-Reply-To: <20250309112114.1177361-1-lkml@antheas.dev>
 References: <20250309112114.1177361-1-lkml@antheas.dev>
@@ -70,163 +71,88 @@ List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=UTF-8
 Content-Transfer-Encoding: 8bit
 X-PPP-Message-ID: 
- <174151928638.28801.5989227754740765426@linux1587.grserver.gr>
+ <174151928809.28899.2267117621414514029@linux1587.grserver.gr>
 X-PPP-Vhost: antheas.dev
 X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
 X-Virus-Status: Clean
 
-When tt_toggle was introduced, it was not added to the platform sysfs.
-Add it, then add documentation for tt_led. Remove the documentation
-from the hwmon entry, then update its readme to be current.
+OneXPlayer devices have a charge bypass feature
+that allows the user to select between it being
+active always or only when the device is on.
+
+Therefore, add attribute inhibit-charge-s0 to
+charge_behaviour to allow the user to select
+that bypass should only be on when the device is
+in the s0 state.
 
 Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 ---
- Documentation/ABI/testing/sysfs-platform-oxp | 29 +++++++++
- Documentation/hwmon/oxpec.rst                | 62 +++++++-------------
- 2 files changed, 49 insertions(+), 42 deletions(-)
- create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
+ Documentation/ABI/testing/sysfs-class-power | 11 ++++++-----
+ drivers/power/supply/power_supply_sysfs.c   |  1 +
+ drivers/power/supply/test_power.c           |  1 +
+ include/linux/power_supply.h                |  1 +
+ 4 files changed, 9 insertions(+), 5 deletions(-)
 
-diff --git a/Documentation/ABI/testing/sysfs-platform-oxp b/Documentation/ABI/testing/sysfs-platform-oxp
-new file mode 100644
-index 000000000000..8727d5ecaab5
---- /dev/null
-+++ b/Documentation/ABI/testing/sysfs-platform-oxp
-@@ -0,0 +1,29 @@
-+What:		/sys/devices/platform/<platform>/tt_toggle
-+Date:		Jun 2023
-+KernelVersion:	6.5
-+Contact:	"Antheas Kapenekakis" <lkml@antheas.dev>
-+Description:
-+		Takeover TDP controls from the device. OneXPlayer devices have a
-+        turbo button that can be used to switch between two TDP modes
-+        (usually 15W and 25W). By setting this attribute to 1, this
-+        functionality is disabled, handing TDP control over to (Windows)
-+        userspace software and the Turbo button turns into a keyboard
-+        shortcut over the AT keyboard of the device. In addition,
-+        using this setting is a prerequisite for PWM control for most
-+        devices (otherwise it NOOPs).
-+
-+        This attribute was originally introduced in 6.5, without a
-+        corresponding documentation entry.
-+
-+What:		/sys/devices/platform/<platform>/tt_led
-+Date:		Feb 2025
-+KernelVersion:	6.15
-+Contact:	"Antheas Kapenekakis" <lkml@antheas.dev>
-+Description:
-+		Some OneXPlayer devices (e.g., X1 series) feature a little LED
-+        nested in the Turbo button. This LED is illuminated when the
-+        device is in the higher TDP mode (e.g., 25W). Once tt_toggle
-+        is engaged, this LED is left dangling to its last state. This
-+        attribute allows userspace to control the LED state manually
-+        (either with 1 or 0). Only a subset of devices contain this LED.
-+
-diff --git a/Documentation/hwmon/oxpec.rst b/Documentation/hwmon/oxpec.rst
-index 581c4dafbfa1..0a0a7c5d0263 100644
---- a/Documentation/hwmon/oxpec.rst
-+++ b/Documentation/hwmon/oxpec.rst
-@@ -1,35 +1,41 @@
- .. SPDX-License-Identifier: GPL-2.0-or-later
+diff --git a/Documentation/ABI/testing/sysfs-class-power b/Documentation/ABI/testing/sysfs-class-power
+index 2a5c1a09a28f..b5daf757a559 100644
+--- a/Documentation/ABI/testing/sysfs-class-power
++++ b/Documentation/ABI/testing/sysfs-class-power
+@@ -508,11 +508,12 @@ Description:
+ 		Access: Read, Write
  
--Kernel driver oxp-sensors
-+Kernel driver oxpec
- =========================
+ 		Valid values:
+-			================ ====================================
+-			auto:            Charge normally, respect thresholds
+-			inhibit-charge:  Do not charge while AC is attached
+-			force-discharge: Force discharge while AC is attached
+-			================ ====================================
++			================== =====================================
++			auto:              Charge normally, respect thresholds
++			inhibit-charge:    Do not charge while AC is attached
++			inhibit-charge-s0: same as inhibit-charge but only in s0
++			force-discharge:   Force discharge while AC is attached
++			================== =====================================
  
- Authors:
-     - Derek John Clark <derekjohn.clark@gmail.com>
-     - Joaquín Ignacio Aramendía <samsagax@gmail.com>
-+    - Antheas Kapenekakis <lkml@antheas.dev>
+ What:		/sys/class/power_supply/<supply_name>/technology
+ Date:		May 2007
+diff --git a/drivers/power/supply/power_supply_sysfs.c b/drivers/power/supply/power_supply_sysfs.c
+index edb058c19c9c..1a98fc26ce96 100644
+--- a/drivers/power/supply/power_supply_sysfs.c
++++ b/drivers/power/supply/power_supply_sysfs.c
+@@ -140,6 +140,7 @@ static const char * const POWER_SUPPLY_SCOPE_TEXT[] = {
+ static const char * const POWER_SUPPLY_CHARGE_BEHAVIOUR_TEXT[] = {
+ 	[POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO]		= "auto",
+ 	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE]	= "inhibit-charge",
++	[POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_S0]	= "inhibit-charge-s0",
+ 	[POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE]	= "force-discharge",
+ };
  
- Description:
- ------------
+diff --git a/drivers/power/supply/test_power.c b/drivers/power/supply/test_power.c
+index 2a975a110f48..4bc5ab84a9d6 100644
+--- a/drivers/power/supply/test_power.c
++++ b/drivers/power/supply/test_power.c
+@@ -214,6 +214,7 @@ static const struct power_supply_desc test_power_desc[] = {
+ 		.property_is_writeable = test_power_battery_property_is_writeable,
+ 		.charge_behaviours = BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO)
+ 				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE)
++				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_S0)
+ 				   | BIT(POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE),
+ 	},
+ 	[TEST_USB] = {
+diff --git a/include/linux/power_supply.h b/include/linux/power_supply.h
+index 6ed53b292162..b1ca5e148759 100644
+--- a/include/linux/power_supply.h
++++ b/include/linux/power_supply.h
+@@ -212,6 +212,7 @@ enum power_supply_usb_type {
+ enum power_supply_charge_behaviour {
+ 	POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO = 0,
+ 	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE,
++	POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_S0,
+ 	POWER_SUPPLY_CHARGE_BEHAVIOUR_FORCE_DISCHARGE,
+ };
  
--Handheld devices from OneNetbook, AOKZOE, AYANEO, And OrangePi provide fan
--readings and fan control through their embedded controllers.
-+Handheld devices from OneXPlayer and AOKZOE provide fan readings and fan
-+control through their embedded controllers, which can be accessed via this
-+module. If the device has the platform `tt_toggle` attribute (see
-+Documentation/ABI/testing/sysfs-platform-oxp), controlling these attributes
-+without having it engaged is undefined behavior.
- 
--Currently supports OneXPlayer devices, AOKZOE, AYANEO, and OrangePi
--handheld devices. AYANEO devices preceding the AIR and OneXPlayer devices
--preceding the Mini A07 are not supportable as the EC model is different
--and do not have manual control capabilities.
--
--Some OneXPlayer and AOKZOE models have a toggle for changing the behaviour
--of the "Turbo/Silent" button of the device. It will change the key event
--that it triggers with a flip of the `tt_toggle` attribute. See below for
--boards that support this function.
-+In addition, for legacy reasons, this driver provides hwmon functionality
-+to Ayaneo devices, and the OrangePi Neo (AOKZOE is a sister company of
-+OneXPlayer and uses the same EC).
- 
- Supported devices
- -----------------
- 
- Currently the driver supports the following handhelds:
--
-  - AOKZOE A1
-  - AOKZOE A1 PRO
-+ - OneXPlayer 2/2 Pro
-+ - OneXPlayer AMD
-+ - OneXPlayer mini AMD
-+ - OneXPlayer mini AMD PRO
-+ - OneXPlayer OneXFly variants
-+ - OneXPlayer X1 variants
-+
-+In addition, until a driver is upstreamed for the following, the driver
-+also supports controlling them:
-  - AYANEO 2
-  - AYANEO 2S
-  - AYANEO AIR
-@@ -41,29 +47,8 @@ Currently the driver supports the following handhelds:
-  - AYANEO Geek
-  - AYANEO Geek 1S
-  - AYANEO KUN
-- - OneXPlayer 2
-- - OneXPlayer 2 Pro
-- - OneXPlayer AMD
-- - OneXPlayer mini AMD
-- - OneXPlayer mini AMD PRO
-- - OneXPlayer OneXFly
-- - OneXPlayer X1 A
-- - OneXPlayer X1 i
-- - OneXPlayer X1 mini
-  - OrangePi NEO-01
- 
--"Turbo/Silent" button behaviour toggle is only supported on:
-- - AOK ZOE A1
-- - AOK ZOE A1 PRO
-- - OneXPlayer 2
-- - OneXPlayer 2 Pro
-- - OneXPlayer mini AMD (only with updated alpha BIOS)
-- - OneXPlayer mini AMD PRO
-- - OneXPlayer OneXFly
-- - OneXPlayer X1 A
-- - OneXPlayer X1 i
-- - OneXPlayer X1 mini
--
- Sysfs entries
- -------------
- 
-@@ -79,11 +64,4 @@ pwm1_enable
- pwm1
-   Read Write. Read this attribute to see current duty cycle in the range [0-255].
-   When pwm1_enable is set to "1" (manual) write any value in the range [0-255]
--  to set fan speed.
--
--tt_toggle
--  Read Write. Read this attribute to check the status of the turbo/silent
--  button behaviour function. Write "1" to activate the switch and "0" to
--  deactivate it. The specific keycodes and behaviour is specific to the device
--  both with this function on and off. This attribute is attached to the platform
--  driver and not to the hwmon driver (/sys/devices/platform/oxp-platform/tt_toggle)
-+  to set fan speed.
-\ No newline at end of file
 -- 
 2.48.1
 
