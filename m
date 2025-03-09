@@ -1,82 +1,82 @@
-Return-Path: <linux-pm+bounces-23705-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23706-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8BE69A58560
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 16:25:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2B3DEA58565
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 16:25:11 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 82EEE164A1F
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 15:25:06 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41DDE16499E
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 15:25:10 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69CEB1C760D;
-	Sun,  9 Mar 2025 15:24:44 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 474161DE2D4;
+	Sun,  9 Mar 2025 15:25:01 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="GTqBxfi2"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PjbLzxF3"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f173.google.com (mail-pl1-f173.google.com [209.85.214.173])
+Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 992B4137E;
-	Sun,  9 Mar 2025 15:24:42 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.173
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48EE646426;
+	Sun,  9 Mar 2025 15:24:59 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741533884; cv=none; b=Ng6iY7KnVhhjApg8/FzqEM+AqXtmlmGm5K4Pkt3yKw1OemidXBDnjv8FIQes4mTt4iEBuJUjsbB+8JBWw0JDPVaAKgAzo3gCRZigTgOIoJSx4JPpdpjD24ooToxJSL7GBMcuE0LssuwfuGEpfAdivy4XPp9A9A+j39o8OYzQlwk=
+	t=1741533901; cv=none; b=JTSsX4wUsCOQ12COhMWu0cQBh/Orqy/POfaix647fmCehgu03VKP+4lMaYd0XOmX6dQPMBrgN6f4Wwjs7qYuouvYKbx7aA9dzVjoA+Wt6cUsQfJTDBTjXJTI8cpjD1ORN89u0lKqfDZ+Lpv/kqvSm5CSKKuwbd1QRzkuAlYrgn4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741533884; c=relaxed/simple;
-	bh=7LeKLyvUfwlPviWS3E5S+NwgUWxPL+hK93byC9r0tIU=;
+	s=arc-20240116; t=1741533901; c=relaxed/simple;
+	bh=PSFXUHUfKDV0VsXHDLScH1d0tKwFMoxRxuZhJj9brJ0=;
 	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=VmaD5EJBtJcH3RbObScsQqovWB6gij30hwVZOIMD2Blswt6FIR6riNh09Gt6ZRikosc42QbREzwnyqhpz1JNdeXD325jfR2S+9sDfLpX5kpj1gG8A8n6aipKjur/5/0UXtEGeZ/fbbXFSZajjn8tAbCwC3x/3WqHLPkJmSDkvoM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=GTqBxfi2; arc=none smtp.client-ip=209.85.214.173
+	 In-Reply-To:Content-Type; b=ieBpCItmC5H1LBOaER2L/uOuz7O37VS3RmGFn00j3AMExY++U6q5Jq6mX9BQLzwlK8NZFIKDC5LjpZbSGtN0IXIyQ+LYoag52xfgNIKDJ1tn0hn2BNF4BVwH/p1vdpAgmv6rSNA7P3XyfA7civY4MrKADywvELM+kspy/BcRHhM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PjbLzxF3; arc=none smtp.client-ip=209.85.216.54
 Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pl1-f173.google.com with SMTP id d9443c01a7336-2239c066347so57049305ad.2;
-        Sun, 09 Mar 2025 08:24:42 -0700 (PDT)
+Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2feb91a25bdso5183909a91.1;
+        Sun, 09 Mar 2025 08:24:59 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741533882; x=1742138682; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741533898; x=1742138698; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=UAqUzuVnMRkASlHYk3uZY2bDfkxuMKv1oIKXPWP42v0=;
-        b=GTqBxfi2NiuyH7z96B6ESr1j4ArXnBPHD2FUjQU/adEUqGIWl0XeQf6fkhisN7rdOs
-         jSYtpXOpL7vete2bYoUxgP5AHg+djUol0KqbVKw2eUrWCiH6N/h5Bl9GT/q/jCZGTjdk
-         uvB81Ie0CB4V0YxYmyaGKrPSHoAP0Empi10pqQOq/COAqB5aBaiuHiuzW1rh92m0uiKa
-         rD2XrU9SDC7sBkpGofTtpeX+oJkIaqNq7WnL3TwHR1uK84cGTGI5GYMcSsKdcvfbsUPo
-         lqqo4AijeZh/gX/pgqISuCQeOVQDOizi4lPoBje4Oow8nQwRkq3HUD4ZN55xS7HzpQTg
-         IuWw==
+        bh=oE5dlvn/PoFAmzZkkwv7d6PSwwGsaZPhhmrL0ebICmo=;
+        b=PjbLzxF3ApXIc9H7AdnUqm7/c/SbTlRflU9TubEvNhkVZk2SBTVjE5rLF1qTz2Q8tZ
+         LZr1ajmYxokZtkhb6FgAZOVV60LJhagSnEeE87xOEgaP/LIjZZiDwZpDiImq3W9DOaoz
+         ig57QEzy1x8XTdQd2eGV236J3LrizWa9aOupG/K0eHvaG1wXeQ4NExEkMPTbyvEYJowx
+         G2jaQjUferCCUdK1YuRfvq0AQKJX0qM6L5nuIZG//BD3mswyTGVxjHmQWSL5WM9Kw0nF
+         H4w1UYqW0DXpNVKdMkpwEQiDu8+wWYBFbSnSfJ8EI8mtL0PJWJMdmETTkvEEpMI9xHXJ
+         SsFg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741533882; x=1742138682;
+        d=1e100.net; s=20230601; t=1741533898; x=1742138698;
         h=content-transfer-encoding:in-reply-to:autocrypt:from
          :content-language:references:cc:to:subject:user-agent:mime-version
          :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UAqUzuVnMRkASlHYk3uZY2bDfkxuMKv1oIKXPWP42v0=;
-        b=aJ65cStTDPUgmpEY3pGIKzBmjwrAFskJCJ9rPXFaoGOa0PKQnwTi938/BNESQFGxwP
-         GPgzVcEse8hmYzlkvHDbPhb6QtqAucxfeoFZyVefFrqoefDoi9FeUAG1W7Q3jyspd3gy
-         OQ/hCiqqRBvTjzjw9fyN+tN58uWVqYlzG7XojrGK29iOVdtMopv681V/q1NByRmLOhBY
-         aqdGq8HP9n+QVrjoInpuAP3FSQbNcXVT2UHjMHfwpbWo6D44hcmBxvDwhTJF5ofhlphx
-         S3WvNX1vgSTDbBJ7fkE7lh8OvCiQ6gD+YMO+kwcmZR2yfNp4PtRlFGJphVk9LOakyYJq
-         9KjA==
-X-Forwarded-Encrypted: i=1; AJvYcCV4XZgX/e3VWpCOCNB0lxm9KafhJA+G36Ar4Xqlp96TgjgZ/sYclR1Qgfll9Qk6XcqG1bgE+oFd9cdvyIVSdXsGJr5FAA==@vger.kernel.org, AJvYcCVUnFiRhm7/ZYiN7SYVBhPL46bGNZ/4FtVAENLXY08KabrQcK7Vjc7Ym+tIRYsPoFa8loPUb0chFcA=@vger.kernel.org, AJvYcCWxlAlaaSW3UkuRNp68boRVz35BWInJMI8SCX7XW9qmJZHQQBJ9TdFZG5gMmvue6jI42yyDPhfOyTQ=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxRq+fZqHaAb/Tjkuf1vm6y9Pq21wc+Z3HwyMTfktViQdxVMmsf
-	ZmNRO1BfGX0iWh2u4VXrJovJxLUEwPbHSMpYG4ZXO4AZM6Y0s78e
-X-Gm-Gg: ASbGncsVB+ur98m/RtM/Tnik7lHhuvY6abRsFXmysRzCLnTsy5zHO8FvN5PojwAgOna
-	1KljrOfaTbW2DJS+IgWvRw/kpX7oOjeYHQhD60+NkoIl/oCSu34Ll/qEYvpuHXo9cjz3HfFvIhL
-	vplNUZfDir2VnmQZm3p+L6GvoWId1annnI2Z1sb4Dx/fhP91VbYu99GseTrSLQRqyqjSTQTqe3p
-	DoYTPopN2Slz8BAi1FhhllgbX74updqzOMmT6ka5TI4ZRHhpzJ8m+EI/GkT2t+1SgtrlhywLuul
-	NcA3m5mofjQTQTUdpKTSktxxnPA6H6VGat/PWRhPVvI/KPYX1vVcHVHm2gBqimif0y5NdMn20nB
-	OmFjripKb/feHOWgkNg==
-X-Google-Smtp-Source: AGHT+IE6c4jfviidZDtlOhIpFP4Rxlczr0JvsZ9CPjg6TaobIbxFd0CKlNt4Wgwt1af2ulLHd4QpJg==
-X-Received: by 2002:a17:902:e5d2:b0:224:160d:3f5b with SMTP id d9443c01a7336-22428c1169cmr177102065ad.49.1741533881875;
-        Sun, 09 Mar 2025 08:24:41 -0700 (PDT)
+        bh=oE5dlvn/PoFAmzZkkwv7d6PSwwGsaZPhhmrL0ebICmo=;
+        b=tec9/Ka+Z8wlNk7o9UvdCAj2aGjVBlb2seosx2xcqoLc1kNH7EgogWLQZdNjE4S8na
+         7TFvDjlm51C4fnRvkHj39mIqe5MuRxp6J7IvEBeyCvuoWgAlpeVctqXg3WU0A8WdV3Bo
+         U4zVrHdOl+L3IP7zq3Xl3McHumLrU27lf94rkL94JVZ8+/TmM164RMzuuCGhD4i3Uz64
+         oQ644spEsdKOmUWZiAjAWViXTu6SEsgqqXSJDnU+ag6Jh55zrP8gqvB7uSH+o60qu7Jb
+         M+Y+TzIBZuMzPo6RYi0mYAQT4YZSiKdXIYJKlV1jIVkl+RpDxHXodsSs8RTd4ArDs1HF
+         HU+g==
+X-Forwarded-Encrypted: i=1; AJvYcCV7TayuM2KYFfha7FlHxwNA4Lsqk8uP/X7RjoExjZcU5/4z0xHkorOdfvIjFgmvO3MZ9mqgPEoHpuc=@vger.kernel.org, AJvYcCW4rT3XAHo9ptXbbmReZ0vF2YFIHzY8jCg7sBoGnk04K+JoVx4oHRFmlg8I51Am/g94/TJ1w80SVxs=@vger.kernel.org, AJvYcCX7wx+SgR1Ax5erZIGva73K0yqXcN8sPOC8zQjsism0guoADpSoa6oQpAWrFsi48Hgg0mr0yjb1RYvi3MFwzziLr/33rQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxExknHuKkHchoiz7wHVq/Ir1cxLOt1UuYnyAPBlGALDUm0KpN1
+	brenjB2MqgTIyYS93kskuDkSdyckbde628fsTGM3QuLW8mLDdV1k
+X-Gm-Gg: ASbGncuaaYfdjbT0YFaJxKPrCA3YFJYa9wTE05Ih/pYPcH08m8inIqR9f+vzvkZtB/N
+	rfthjRFsXc1AtRp1EBPaHRMcj7SWwCdC9AvgE0Y/wnc+lbM4Tk761Wt149hRigIo/RL1b7yP3GJ
+	uL4edtmXIiegAPSv/UkxMTJPujnC26e09PhQ7rTZa52BpYobbf3KTiMsnjRaELBzBKXVc9xJS04
+	+vWIUYiSv0EBN+E8Umzad7KS7ak27dxzhlxY7sZDd5F7G13MCa66Wyc99vXCj8NaC8eiziEnq2c
+	yDKTuWhKQtokXOv2jZFAevFrSM7ji4Haqg6Jbkk6IVBTHnTUomPLEKM0oeHHaVex0AaW7cyOsTk
+	qnpa/izsw3Oyighfgs83Fd9AkR4l5
+X-Google-Smtp-Source: AGHT+IGJ6fL03acBX7QB9IKawki20pcEFlM7EqCNYYvfl210N08+64JLV1DFRu5PmPzu9ZKwhOIEWw==
+X-Received: by 2002:a17:90b:2883:b0:2ff:6788:cc67 with SMTP id 98e67ed59e1d1-2ff7cf31b55mr13178351a91.34.1741533898557;
+        Sun, 09 Mar 2025 08:24:58 -0700 (PDT)
 Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id d9443c01a7336-22410a908f9sm61501455ad.166.2025.03.09.08.24.40
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ff693534f8sm6218041a91.17.2025.03.09.08.24.56
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Mar 2025 08:24:41 -0700 (PDT)
+        Sun, 09 Mar 2025 08:24:58 -0700 (PDT)
 Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <f0b4a493-4169-4f94-a14e-522a0f8b0074@roeck-us.net>
-Date: Sun, 9 Mar 2025 08:24:39 -0700
+Message-ID: <72528e65-5feb-40d6-9ea6-12ba45cef8d2@roeck-us.net>
+Date: Sun, 9 Mar 2025 08:24:56 -0700
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -84,7 +84,7 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 01/12] hwmon: (oxp-sensors) Distinguish the X1 variants
+Subject: Re: [PATCH v3 02/12] hwmon: (oxp-sensors) Add all OneXFly variants
 To: Antheas Kapenekakis <lkml@antheas.dev>,
  platform-driver-x86@vger.kernel.org
 Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
@@ -96,7 +96,7 @@ Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
  Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
  Eileen <eileen@one-netbook.com>
 References: <20250309112114.1177361-1-lkml@antheas.dev>
- <20250309112114.1177361-2-lkml@antheas.dev>
+ <20250309112114.1177361-3-lkml@antheas.dev>
 Content-Language: en-US
 From: Guenter Roeck <linux@roeck-us.net>
 Autocrypt: addr=linux@roeck-us.net; keydata=
@@ -142,27 +142,30 @@ Autocrypt: addr=linux@roeck-us.net; keydata=
  WkRwrSuCn7UG+qVWZeKEsFKFOkynOs3pVbcbq1pxbhk3TRWCGRU5JolI4ohy/7JV1TVbjiDI
  HP/aVnm6NC8of26P40Pg8EdAhajZnHHjA7FrJXsy3cyIGqvg9os4rNkUWmrCfLLsZDHD8FnU
  mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250309112114.1177361-2-lkml@antheas.dev>
+In-Reply-To: <20250309112114.1177361-3-lkml@antheas.dev>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 7bit
 
 On 3/9/25 04:21, Antheas Kapenekakis wrote:
-> Currently, the oxp-sensors driver fuzzy matches the X1 variants. Luckily,
-> X1 and X1 mini share most hardware features so this works. However, they
-> are completely different product lines, and there is an expectation that
-> OneXPlayer will release more devices in the X1 line that may have
-> differences.
+> Currently, the driver only has the F1 OneXFly variant, which was based
+> on the 7000 AMD platform. Add its special editions: F1 EVA-01, F1 OLED.
+> F1 OLED might have been a dev unit, but it is supported by OneXConsole
+> with the same features so add it. Then add the F1L variant which is
+> based on the 8000 AMD platform and the F1Pro and its special edition
+> EVA-02.
 > 
-> Therefore, distinguish the 3 devices that currently exist in the market.
-> These are the OneXPlayer X1 AMD and Intel variants, and the X1 mini which
-> only has an AMD variant. As far as registers go, all three support the
-> current driver functionality.
+> One might ask why not just fuzzy match. Well, EVA-02 is a variant of
+> F1Pro which is a Strix Point handheld, but does not have F1Pro in its
+> name. This makes it risky to fuzzy match, as special variants in the
+> future from different platforms might not have the same feature set
+> or registers.
+> 
+> By happenstance, all current devices use the same registers. For the
+> charge limitting feature on this series, only F1Pro/X1 (AMD) were
+> released with it, but OneXPlayer is providing bios updates for F1, F1L,
+> X1 Mini units that use the same register, so treat all of them the same.
 > 
 > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-
-It doesn't make sense to handle those two patches in the hwmon subsystem
-because the others depend on it. I'll assume that all patches
-will be applied through a platform tree.
 
 Acked-by: Guenter Roeck <linux@roeck-us.net>
 
