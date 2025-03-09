@@ -1,172 +1,238 @@
-Return-Path: <linux-pm+bounces-23706-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23707-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 2B3DEA58565
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 16:25:11 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id CEA31A5860D
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 18:09:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 41DDE16499E
-	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 15:25:10 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 9BE1F3AA26D
+	for <lists+linux-pm@lfdr.de>; Sun,  9 Mar 2025 17:09:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 474161DE2D4;
-	Sun,  9 Mar 2025 15:25:01 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 700A31E51FC;
+	Sun,  9 Mar 2025 17:09:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="PjbLzxF3"
+	dkim=pass (2048-bit key) header.d=0x65c.net header.i=@0x65c.net header.b="XQgmpJlS"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pj1-f54.google.com (mail-pj1-f54.google.com [209.85.216.54])
+Received: from m204-227.eu.mailgun.net (m204-227.eu.mailgun.net [161.38.204.227])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 48EE646426;
-	Sun,  9 Mar 2025 15:24:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2F56876025
+	for <linux-pm@vger.kernel.org>; Sun,  9 Mar 2025 17:09:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=161.38.204.227
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741533901; cv=none; b=JTSsX4wUsCOQ12COhMWu0cQBh/Orqy/POfaix647fmCehgu03VKP+4lMaYd0XOmX6dQPMBrgN6f4Wwjs7qYuouvYKbx7aA9dzVjoA+Wt6cUsQfJTDBTjXJTI8cpjD1ORN89u0lKqfDZ+Lpv/kqvSm5CSKKuwbd1QRzkuAlYrgn4=
+	t=1741540155; cv=none; b=hmRFXjhfn5WxdT47T4VsSwJSWvyX7k0Nsq91sw5nGF5oWP6RhqwE7fnhGWJFMRZYmDhrvJe846YK4r1Q+EG1v74ZYCxX/a8kgmiE74PYGEFMfeb7cTU09w6oYoMVznClZ34xM2x8tGN3Okl3sVxNBjzjwzZdfBudSrAYDz29eU4=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741533901; c=relaxed/simple;
-	bh=PSFXUHUfKDV0VsXHDLScH1d0tKwFMoxRxuZhJj9brJ0=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ieBpCItmC5H1LBOaER2L/uOuz7O37VS3RmGFn00j3AMExY++U6q5Jq6mX9BQLzwlK8NZFIKDC5LjpZbSGtN0IXIyQ+LYoag52xfgNIKDJ1tn0hn2BNF4BVwH/p1vdpAgmv6rSNA7P3XyfA7civY4MrKADywvELM+kspy/BcRHhM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=PjbLzxF3; arc=none smtp.client-ip=209.85.216.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=roeck-us.net
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-pj1-f54.google.com with SMTP id 98e67ed59e1d1-2feb91a25bdso5183909a91.1;
-        Sun, 09 Mar 2025 08:24:59 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741533898; x=1742138698; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:from:to:cc:subject:date:message-id:reply-to;
-        bh=oE5dlvn/PoFAmzZkkwv7d6PSwwGsaZPhhmrL0ebICmo=;
-        b=PjbLzxF3ApXIc9H7AdnUqm7/c/SbTlRflU9TubEvNhkVZk2SBTVjE5rLF1qTz2Q8tZ
-         LZr1ajmYxokZtkhb6FgAZOVV60LJhagSnEeE87xOEgaP/LIjZZiDwZpDiImq3W9DOaoz
-         ig57QEzy1x8XTdQd2eGV236J3LrizWa9aOupG/K0eHvaG1wXeQ4NExEkMPTbyvEYJowx
-         G2jaQjUferCCUdK1YuRfvq0AQKJX0qM6L5nuIZG//BD3mswyTGVxjHmQWSL5WM9Kw0nF
-         H4w1UYqW0DXpNVKdMkpwEQiDu8+wWYBFbSnSfJ8EI8mtL0PJWJMdmETTkvEEpMI9xHXJ
-         SsFg==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741533898; x=1742138698;
-        h=content-transfer-encoding:in-reply-to:autocrypt:from
-         :content-language:references:cc:to:subject:user-agent:mime-version
-         :date:message-id:sender:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=oE5dlvn/PoFAmzZkkwv7d6PSwwGsaZPhhmrL0ebICmo=;
-        b=tec9/Ka+Z8wlNk7o9UvdCAj2aGjVBlb2seosx2xcqoLc1kNH7EgogWLQZdNjE4S8na
-         7TFvDjlm51C4fnRvkHj39mIqe5MuRxp6J7IvEBeyCvuoWgAlpeVctqXg3WU0A8WdV3Bo
-         U4zVrHdOl+L3IP7zq3Xl3McHumLrU27lf94rkL94JVZ8+/TmM164RMzuuCGhD4i3Uz64
-         oQ644spEsdKOmUWZiAjAWViXTu6SEsgqqXSJDnU+ag6Jh55zrP8gqvB7uSH+o60qu7Jb
-         M+Y+TzIBZuMzPo6RYi0mYAQT4YZSiKdXIYJKlV1jIVkl+RpDxHXodsSs8RTd4ArDs1HF
-         HU+g==
-X-Forwarded-Encrypted: i=1; AJvYcCV7TayuM2KYFfha7FlHxwNA4Lsqk8uP/X7RjoExjZcU5/4z0xHkorOdfvIjFgmvO3MZ9mqgPEoHpuc=@vger.kernel.org, AJvYcCW4rT3XAHo9ptXbbmReZ0vF2YFIHzY8jCg7sBoGnk04K+JoVx4oHRFmlg8I51Am/g94/TJ1w80SVxs=@vger.kernel.org, AJvYcCX7wx+SgR1Ax5erZIGva73K0yqXcN8sPOC8zQjsism0guoADpSoa6oQpAWrFsi48Hgg0mr0yjb1RYvi3MFwzziLr/33rQ==@vger.kernel.org
-X-Gm-Message-State: AOJu0YxExknHuKkHchoiz7wHVq/Ir1cxLOt1UuYnyAPBlGALDUm0KpN1
-	brenjB2MqgTIyYS93kskuDkSdyckbde628fsTGM3QuLW8mLDdV1k
-X-Gm-Gg: ASbGncuaaYfdjbT0YFaJxKPrCA3YFJYa9wTE05Ih/pYPcH08m8inIqR9f+vzvkZtB/N
-	rfthjRFsXc1AtRp1EBPaHRMcj7SWwCdC9AvgE0Y/wnc+lbM4Tk761Wt149hRigIo/RL1b7yP3GJ
-	uL4edtmXIiegAPSv/UkxMTJPujnC26e09PhQ7rTZa52BpYobbf3KTiMsnjRaELBzBKXVc9xJS04
-	+vWIUYiSv0EBN+E8Umzad7KS7ak27dxzhlxY7sZDd5F7G13MCa66Wyc99vXCj8NaC8eiziEnq2c
-	yDKTuWhKQtokXOv2jZFAevFrSM7ji4Haqg6Jbkk6IVBTHnTUomPLEKM0oeHHaVex0AaW7cyOsTk
-	qnpa/izsw3Oyighfgs83Fd9AkR4l5
-X-Google-Smtp-Source: AGHT+IGJ6fL03acBX7QB9IKawki20pcEFlM7EqCNYYvfl210N08+64JLV1DFRu5PmPzu9ZKwhOIEWw==
-X-Received: by 2002:a17:90b:2883:b0:2ff:6788:cc67 with SMTP id 98e67ed59e1d1-2ff7cf31b55mr13178351a91.34.1741533898557;
-        Sun, 09 Mar 2025 08:24:58 -0700 (PDT)
-Received: from ?IPV6:2600:1700:e321:62f0:da43:aeff:fecc:bfd5? ([2600:1700:e321:62f0:da43:aeff:fecc:bfd5])
-        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ff693534f8sm6218041a91.17.2025.03.09.08.24.56
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Sun, 09 Mar 2025 08:24:58 -0700 (PDT)
-Sender: Guenter Roeck <groeck7@gmail.com>
-Message-ID: <72528e65-5feb-40d6-9ea6-12ba45cef8d2@roeck-us.net>
-Date: Sun, 9 Mar 2025 08:24:56 -0700
+	s=arc-20240116; t=1741540155; c=relaxed/simple;
+	bh=BqG+B/cyzs7Wx6/2PVQwxhVeusUOkQlZOVAiT2SolqY=;
+	h=From:To:Cc:Subject:Date:Message-Id:In-Reply-To:References:
+	 MIME-Version; b=OEAszNzFGsysAnwqTIJptEj0nfvEH6dQSmntS42edR4zhZU/m40hD5doi2Y1GqtLJRWfft4D+PKeMENo27y2pHvEj7ez0eIi2GrMdV4i8EgQZg4qpC7SBMMv5LKcczEke9SZKkGBYSqc8Mnw/EjF6UptuQPUoZRJEj9Kpdck3uM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x65c.net; spf=pass smtp.mailfrom=0x65c.net; dkim=pass (2048-bit key) header.d=0x65c.net header.i=@0x65c.net header.b=XQgmpJlS; arc=none smtp.client-ip=161.38.204.227
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=0x65c.net
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=0x65c.net
+DKIM-Signature: a=rsa-sha256; v=1; c=relaxed/relaxed; d=0x65c.net; q=dns/txt; s=email; t=1741540151; x=1741547351;
+ h=Content-Transfer-Encoding: MIME-Version: References: In-Reply-To: Message-Id: Date: Subject: Subject: Cc: To: To: From: From: Sender: Sender;
+ bh=A5sAFblZ0FdCEVljgC2paXltLJuU0zrqJVe0BZmcX2k=;
+ b=XQgmpJlSRm5ZWXU4TwRAp1jmGl9c2pjsCL1ojEedng3JTS8qrlTdTbt4mXYasNRcDNoUuzZpivDkUCyJu0MRXj3PDDjZlHBcdLKA++5NXl1gKDTjaw1jSdm7Fdsd0sr2yCO4/2DKuaQ4eezGRj+9+e18HVn2zYoW2ZOHnNI/hMc3NxFW1XJyzDdVE86V1/inEmN5LydLNEayYlLfVzEhi+K3EUJCzgCdcgper3LGoEhZpoxqXqozsb7cFPQ4Slvh1BHVH7kbUYFQU1oTL5ltswQ651IEsM4VXzQgha7XI91U6wA5NUwcxlv/SD1RZ0dH7BO5IxPvzwgdQdotkzFIvg==
+X-Mailgun-Sending-Ip: 161.38.204.227
+X-Mailgun-Sending-Ip-Pool-Name: 
+X-Mailgun-Sending-Ip-Pool: 
+X-Mailgun-Sid: WyJhMTIzMiIsImxpbnV4LXBtQHZnZXIua2VybmVsLm9yZyIsIjU0ZWY0Il0=
+Received: from debian.lan.ratti.io (pub082136115252.dh-hfc.datazug.ch [82.136.115.252])
+ by 4a592af099de with SMTP id 67cdcb3789016550ee98514d (version=TLS1.3,
+ cipher=TLS_AES_128_GCM_SHA256); Sun, 09 Mar 2025 17:09:11 GMT
+Sender: don@0x65c.net
+From: Donald <don@0x65c.net>
+To: Dave Young <dyoung@redhat.com>
+Cc: Donald <don@0x65c.net>,
+	Roberto Ricci <io@r-ricci.it>,
+	ebiederm@xmission.com,
+	rafael@kernel.org,
+	pavel@ucw.cz,
+	ytcoode@gmail.com,
+	kexec@lists.infradead.org,
+	linux-pm@vger.kernel.org,
+	akpm@linux-foundation.org,
+	regressions@lists.linux.dev,
+	linux-kernel@vger.kernel.org
+Subject: Re: [REGRESSION] Kernel booted via kexec fails to resume from hibernation
+Date: Sun,  9 Mar 2025 18:09:09 +0100
+Message-Id: <20250309170909.6954-1-don@0x65c.net>
+X-Mailer: git-send-email 2.39.5
+In-Reply-To: <CALu+AoSSKh=5ELgQyzDrGEDm5fm2XKteH1ZC70mm89pNSSPMHw@mail.gmail.com>
+References: 
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v3 02/12] hwmon: (oxp-sensors) Add all OneXFly variants
-To: Antheas Kapenekakis <lkml@antheas.dev>,
- platform-driver-x86@vger.kernel.org
-Cc: linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
- linux-pm@vger.kernel.org, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
- Joaquin Ignacio Aramendia <samsagax@gmail.com>,
- Derek J Clark <derekjohn.clark@gmail.com>,
- Kevin Greenberg <kdgreenberg234@protonmail.com>,
- Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
- Eileen <eileen@one-netbook.com>
-References: <20250309112114.1177361-1-lkml@antheas.dev>
- <20250309112114.1177361-3-lkml@antheas.dev>
-Content-Language: en-US
-From: Guenter Roeck <linux@roeck-us.net>
-Autocrypt: addr=linux@roeck-us.net; keydata=
- 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
- mDW4+i+XlNFUPUYMrIKi9joBhu18ssf5i5Q=
-In-Reply-To: <20250309112114.1177361-3-lkml@antheas.dev>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On 3/9/25 04:21, Antheas Kapenekakis wrote:
-> Currently, the driver only has the F1 OneXFly variant, which was based
-> on the 7000 AMD platform. Add its special editions: F1 EVA-01, F1 OLED.
-> F1 OLED might have been a dev unit, but it is supported by OneXConsole
-> with the same features so add it. Then add the F1L variant which is
-> based on the 8000 AMD platform and the F1Pro and its special edition
-> EVA-02.
-> 
-> One might ask why not just fuzzy match. Well, EVA-02 is a variant of
-> F1Pro which is a Strix Point handheld, but does not have F1Pro in its
-> name. This makes it risky to fuzzy match, as special variants in the
-> future from different platforms might not have the same feature set
-> or registers.
-> 
-> By happenstance, all current devices use the same registers. For the
-> charge limitting feature on this series, only F1Pro/X1 (AMD) were
-> released with it, but OneXPlayer is providing bios updates for F1, F1L,
-> X1 Mini units that use the same register, so treat all of them the same.
-> 
-> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+On Mon, 27 Jan 2025 10:42:03 +0800 Dave Young <dyoung@redhat.com> wrote:
 
-Acked-by: Guenter Roeck <linux@roeck-us.net>
+Hello,
 
+> On Mon, 27 Jan 2025 at 10:39, Dave Young <dyoung@redhat.com> wrote:
+> >
+> > Hi
+> > On 01/13/25 at 10:28pm, Roberto Ricci wrote:
+> > > After rebooting the system via kexec, hibernating and rebooting the machine, this oops occurs:
+> > >
+> > [snip]
+> > >
+> > > I will send the kernel config and dmesg in replies to this email.
+> > >
+> >
+> > I tried your config (removed some config driver related which is not useful), but it can not boot on my kvm guest.
+> > Firstly I saw a panic in ftrace path,  then I rebuilt the kernel without ftrace, it panicked again but in kvm related code path.
+> > Both are not related to kexec at all so I suspect your bug is not kexec specific.
+> >
+> > Ftrace panic:
+> > ----
+> >     0.215515] software IO TLB: area num 4.
+> > [    0.298815] SLUB: HWalign=64, Order=0-3, MinObjects=0, CPUs=4, Nodes=1
+> > Poking KASLR using RDRAND RDTSC...
+> > [    0.299813] ftrace: allocating 40381 entries in 158 pages
+> > [    0.300603] Oops: general protection fault, probably for non-canonical address 0xdffffc0000008a30: 0000 [#1] PREEMPT SMP KASAN NOPTI
+> > [    0.301877] KASAN: probably user-memory-access in range [0x0000000000045180-0x0000000000045187]
+> > [    0.302734] CPU: 0 UID: 0 PID: 0 Comm: swapper Not tainted 6.13.0_ricci+ #913
+> > [    0.303401] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-2.fc40 04/01/2014
+> > [    0.304187] RIP: 0010:__text_poke+0x370/0x840
+> > [    0.304591] Code: c6 48 8b 04 24 48 8d 78 08 e8 cc fb ff ff 48 c7 c0 80 51 04 00 48 8b 0d 96 32 d9 02 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 <0f> b6 04 10 84 c0 74 06 0f 8e cc 03 00 00 65 0f b6 1d aa 3c ed 6e
+> > [    0.306646] RSP: 0000:ffffffff94007d88 EFLAGS: 00010006
+> > [    0.307139] RAX: 0000000000008a30 RBX: ffffffff93f0e070 RCX: ffff8881000744c0
+> > [    0.307839] RDX: dffffc0000000000 RSI: 8000000072001063 RDI: ffff88810006d0d8
+> > [    0.308634] RBP: ffffffff91001b24 R08: 0000000000000001 R09: fffffbfff2800f91
+> > [    0.309359] R10: 0000000000000003 R11: 0000000000000100 R12: 0000000000000005
+> > [    0.309994] R13: 0000000000000b24 R14: 0000000000000b29 R15: 8000000000000063
+> > [    0.310631] FS:  0000000000000000(0000) GS:ffff88815b400000(0000) knlGS:0000000000000000
+> > [    0.311351] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [    0.311867] CR2: ffff88817ffff000 CR3: 0000000075070001 CR4: 00000000000200b0
+> > [    0.312510] Call Trace:
+> > [    0.312731]  <TASK>
+> > [    0.312922]  ? __die_body.cold+0x19/0x2b
+> > [    0.313280]  ? die_addr+0x46/0x70
+> > [    0.313582]  ? exc_general_protection+0x150/0x240
+> > [    0.314010]  ? asm_exc_general_protection+0x26/0x30
+> > [    0.314454]  ? trace_initcall_start_cb+0x4/0x90
+> > [    0.314868]  ? __text_poke+0x370/0x840
+> > [    0.315211]  ? __text_poke+0x2ab/0x840
+> > [    0.315552]  ? __pfx_text_poke_memcpy+0x10/0x10
+> > [    0.315965]  ? __pfx___text_poke+0x10/0x10
+> > [    0.316345]  ? mutex_lock+0x87/0xe0
+> > [    0.316662]  ? __pfx_mutex_lock+0x10/0x10
+> > [    0.317096]  ? ftrace_now+0xc0/0xd0
+> > [    0.317431]  ? __pfx_ftrace_now+0x10/0x10
+> > [    0.317813]  ? trace_initcall_start_cb+0x4/0x90
+> > [    0.318245]  ftrace_modify_code_direct+0x58/0x70
+> > [    0.318696]  ftrace_process_locs+0x514/0xb70
+> > [    0.319105]  ftrace_init+0x80/0x150
+> > [    0.319458]  start_kernel+0x181/0x3c0
+> > [    0.319802]  x86_64_start_reservations+0x24/0x30
+> > [    0.320219]  x86_64_start_kernel+0x84/0x90
+> > [    0.320584]  common_startup_64+0x13e/0x141
+> > [    0.320952]  </TASK>
+> > [    0.321149] Modules linked in:
+> > [    0.321423] ---[ end trace 0000000000000000 ]---
+> > [    0.321832] RIP: 0010:__text_poke+0x370/0x840
+> > [    0.322227] Code: c6 48 8b 04 24 48 8d 78 08 e8 cc fb ff ff 48 c7 c0 80 51 04 00 48 8b 0d 96 32 d9 02 48 ba 00 00 00 00 00 fc ff df 48 c1 e8 03 <0f> b6 04 10 84 c0 74 06 0f 8e cc 03 00 00 65 0f b6 1d aa 3c ed 6e
+> > [    0.323906] RSP: 0000:ffffffff94007d88 EFLAGS: 00010006
+> > [    0.324383] RAX: 0000000000008a30 RBX: ffffffff93f0e070 RCX: ffff8881000744c0
+> > [    0.325025] RDX: dffffc0000000000 RSI: 8000000072001063 RDI: ffff88810006d0d8
+> > [    0.325681] RBP: ffffffff91001b24 R08: 0000000000000001 R09: fffffbfff2800f91
+> > [    0.326332] R10: 0000000000000003 R11: 0000000000000100 R12: 0000000000000005
+> > [    0.326986] R13: 0000000000000b24 R14: 0000000000000b29 R15: 8000000000000063
+> > [    0.327658] FS:  0000000000000000(0000) GS:ffff88815b400000(0000) knlGS:0000000000000000
+> > [    0.328411] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [    0.328931] CR2: ffff88817ffff000 CR3: 0000000075070001 CR4: 00000000000200b0
+> > [    0.329595] Kernel panic - not syncing: Attempted to kill the idle task!
+> > [    0.330278] ---[ end Kernel panic - not syncing: Attempted to kill the idle task! ]---
+> >
+> > kvm panic:
+> > -------
+> > [    0.222231] rcu: srcu_init: Setting srcu_struct sizes based on contention.
+> > [    0.222824] kfence: initialized - using 2097152 bytes for 255 objects at 0x(____ptrval____)-0x(____ptrval____)
+> > [    0.223470] Oops: general protection fault, probably for non-canonical address 0xdffffc0000005356: 0000 [#1] PREEMPT SMP KASAN NOPTI
+> > [    0.224200] KASAN: probably user-memory-access in range [0x0000000000029ab0-0x0000000000029ab7]
+> > [    0.224747] CPU: 0 UID: 0 PID: 0 Comm: swapper/0 Not tainted 6.13.0_ricci+ #917
+> > [    0.225223] Hardware name: QEMU Standard PC (Q35 + ICH9, 2009), BIOS 1.16.3-2.fc40 04/01/2014
+> > [    0.225779] RIP: 0010:__sysvec_kvm_asyncpf_interrupt+0x64/0x110
+> > [    0.226169] Code: 7c e4 4a 48 c7 c7 40 35 27 b7 e8 67 c2 cd 01 48 c7 c0 b0 9a 02 00 48 ba 00 00 00 00 00 fc ff df 48 89 c1 83 e0 07 48 c1 e9 03 <0f> b6 14 11 38 c2 7f 08 84 d2 0f 85 80 00 00 00 65 0f b6 1d 54 61
+> > [    0.227327] RSP: 0000:ffff888157009fe0 EFLAGS: 00010006
+> > [    0.227657] RAX: 0000000000000000 RBX: ffffffffb7a07e68 RCX: 0000000000005356
+> > [    0.228088] RDX: dffffc0000000000 RSI: ffffffffb7273540 RDI: ffffffffb740be40
+> > [    0.228523] RBP: 0000000000000000 R08: 0000000000000001 R09: ffffed102ae07c08
+> > [    0.228960] R10: ffff88815703e047 R11: ffff888157009ff8 R12: 0000000000000000
+> > [    0.229390] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > [    0.229848] FS:  0000000000000000(0000) GS:ffff888157000000(0000) knlGS:0000000000000000
+> > [    0.230375] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [    0.231089] CR2: ffff88815d201000 CR3: 000000015ba66001 CR4: 00000000000200b0
+> > [    0.231567] Call Trace:
+> > [    0.231727]  <IRQ>
+> > [    0.231859]  ? __die_body.cold+0x19/0x26
+> > [    0.232125]  ? die_addr+0x41/0x70
+> > [    0.232354]  ? exc_general_protection+0x150/0x240
+> > [    0.232663]  ? asm_exc_general_protection+0x26/0x30
+> > [    0.232988]  ? __sysvec_kvm_asyncpf_interrupt+0x64/0x110
+> > [    0.233341]  sysvec_kvm_asyncpf_interrupt+0x9b/0xe0
+> > [    0.233668]  </IRQ>
+> > [    0.233805]  <TASK>
+> > [    0.233942]  asm_sysvec_kvm_asyncpf_interrupt+0x1a/0x20
+> > [    0.234295] RIP: 0010:__x86_return_thunk+0x0/0x10
+> > [    0.234606] Code: 01 00 00 00 cc e8 01 00 00 00 cc 48 81 c4 80 00 00 00 65 48 c7 05 3c 54 14 49 ff ff ff ff c3 cc 66 2e 0f 1f 84 00 00 00 00 00 <c3> 90 90 90 90 cc cc cc cc cc cc cc cc cc cc cc e9 eb ff ff ff 0f
+> > [    0.235828] RSP: 0000:ffffffffb7a07f18 EFLAGS: 00000296
+> > [    0.236168] RAX: 0000000000000096 RBX: 0000000000000000 RCX: 1ffff1102ae07af0
+> > [    0.236677] RDX: dffffc0000000000 RSI: 0000000000000004 RDI: 000000000000000f
+> > [    0.237148] RBP: 00000000000000b0 R08: 0000000000000001 R09: 0000000000000000
+> > [    0.237610] R10: ffff8881571c1e40 R11: 0000000000000007 R12: 0000000000000000
+> > [    0.238071] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000094770
+> > [    0.238547]  start_kernel+0x263/0x3a0
+> > [    0.238787]  x86_64_start_reservations+0x24/0x30
+> > [    0.239088]  x86_64_start_kernel+0x84/0x90
+> > [    0.239355]  common_startup_64+0x13e/0x141
+> > [    0.239637]  </TASK>
+> > [    0.239786] Modules linked in:
+> > [    0.239987] ---[ end trace 0000000000000000 ]---
+> > [    0.240287] RIP: 0010:__sysvec_kvm_asyncpf_interrupt+0x64/0x110
+> > [    0.240676] Code: 7c e4 4a 48 c7 c7 40 35 27 b7 e8 67 c2 cd 01 48 c7 c0 b0 9a 02 00 48 ba 00 00 00 00 00 fc ff df 48 89 c1 83 e0 07 48 c1 e9 03 <0f> b6 14 11 38 c2 7f 08 84 d2 0f 85 80 00 00 00 65 0f b6 1d 54 61
+> > [    0.241896] RSP: 0000:ffff888157009fe0 EFLAGS: 00010006
+> > [    0.242242] RAX: 0000000000000000 RBX: ffffffffb7a07e68 RCX: 0000000000005356
+> > [    0.242708] RDX: dffffc0000000000 RSI: ffffffffb7273540 RDI: ffffffffb740be40
+> > [    0.243194] RBP: 0000000000000000 R08: 0000000000000001 R09: ffffed102ae07c08
+> > [    0.243659] R10: ffff88815703e047 R11: ffff888157009ff8 R12: 0000000000000000
+> > [    0.244122] R13: 0000000000000000 R14: 0000000000000000 R15: 0000000000000000
+> > [    0.244595] FS:  0000000000000000(0000) GS:ffff888157000000(0000) knlGS:0000000000000000
+> > [    0.245121] CS:  0010 DS: 0000 ES: 0000 CR0: 0000000080050033
+> > [    0.245502] CR2: ffff88815d201000 CR3: 000000015ba66001 CR4: 00000000000200b0
+> > [    0.245968] Kernel panic - not syncing: Fatal exception in interrupt
+> > [    0.246411] ---[ end Kernel panic - not syncing: Fatal exception in interrupt ]---
+> >
+> >
+> > You can find the kernel config here (with the ftrace enabled):
+> > https://people.redhat.com/~ruyang/snakeyear/panic-ftrace.config
+> 
+> BTW, if I disable KASAN then kernel can boot, anyway kexec +
+> hibernation works fine with a few tests, no panics.
+> 
+> >
+> > Thanks
+> > Dave
+> >
+
+Even though my system doesn't generate the same trace, I have the same issue:
+when I reboot with kexec into 6.12.y or 6.13.y, suspend stops working properly.
+If I pass to the kernel command line oops=panic panic=-1 at resume the system
+reboots (unfortunately without generating any trace :/)
+The last line found in the kernel message:
+
+    kernel: PM: suspend entry (deep)
+
+I tried with s2idle but I hit the same issue.
+Suspend works just fine going through a cold reboot.
+Please note I'm using a real machine Lenovo Thinkpad X220.
+
+Thanks
+Donald
 
