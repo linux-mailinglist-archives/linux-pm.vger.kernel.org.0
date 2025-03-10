@@ -1,194 +1,189 @@
-Return-Path: <linux-pm+bounces-23785-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23786-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 7CF3CA5A63C
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 22:30:32 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2209BA5AAB3
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 00:04:18 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D735E3AC9EB
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 21:30:01 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 52D9F17252A
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 23:04:17 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 798881DF269;
-	Mon, 10 Mar 2025 21:29:20 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4E7111F09B0;
+	Mon, 10 Mar 2025 23:04:13 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TirXhkdp"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QgR/lZP9"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-qv1-f48.google.com (mail-qv1-f48.google.com [209.85.219.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 51C9F1CB9F0;
-	Mon, 10 Mar 2025 21:29:19 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9344D1DE3D2;
+	Mon, 10 Mar 2025 23:04:11 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741642160; cv=none; b=ClFHzAALH1chtXFcVbJClRTIjQP36wTxninmAlJe+fYPfNmbUlGUYA6gHt6pz53VC1m2foVnBs+axXBu/4V7mk7HkCvv505Ii2KK6qUrEDsBq4RZ7AvOclnvh+MVRrb4a27hK3bK/VpwFl7DaSBnm/JqrvH19gkGy0pgdGv0OcU=
+	t=1741647853; cv=none; b=NjT7FiGfGZ4XHEw+yKwDbQWp0VBT05Ou2jPrxRxKLEfAIcwFABtAunJlYo5halvhbPPju3wk1AEeZ3UJ2o1NO/ep40VotxwHgjFGSJwOKAx+7mBjm4e2YRO6r8ZyXZsF0f08OkP/zLDNgEIOcdt/f0P+hVm9bfEwMt7LjfMbM38=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741642160; c=relaxed/simple;
-	bh=OoeUDymeISbaQ0PaNahEAnVeRknU+25o4QGwfMko6ug=;
+	s=arc-20240116; t=1741647853; c=relaxed/simple;
+	bh=+haLqFNayGcvZzFqgy9IPhgSVDV6DEg6QSbumjsPCTU=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hYipoFbUzhjXIJzbzEVNluYCIuVxelCM8gPEeqiQtaezgZ0qZLr9Q1kfSAxiMIKjOqfTS8XZCS/V/HIw0CbWHXkYYJ1yTVeNlSDlR4wJg2YlmP1KpCWPvX0J/TO/S4xSdB9D1nmKex+MTExgpgiBbjlx19pjVlekIwer9emITrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TirXhkdp; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B8F7AC4CEE5;
-	Mon, 10 Mar 2025 21:29:19 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741642159;
-	bh=OoeUDymeISbaQ0PaNahEAnVeRknU+25o4QGwfMko6ug=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=TirXhkdpxads6GYAJqkreCa36p6CdNrG+YmakqXFgUMIuDMiq3woNRA66HxaM76Al
-	 YVJq27q2eV5KAehd8WFiqvSaxR+Fs8bthaSXcn5tzE1lC5iDZBsAC4nQajdOyiLPi+
-	 NlyrH1/zDmNpUvIniZLkonfkeCKMWTDW2BeeyzqYGAbYi7bcDbsptdlPgC1jtogwog
-	 C4MrvA+KBfCqD9bo9AnXW8vYwN/2YJh+C8JgnXpXibzEISpCTuq4sID2wjAxKfuR6I
-	 KLN1q1GFh2gtDrdZGviG24Qbpat/OQh2kzLurYvJk+xPYvS3HMWFEa/n6DBgT9SBRj
-	 mfG7Le196I4ZA==
-Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2c12b7af278so2803046fac.0;
-        Mon, 10 Mar 2025 14:29:19 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVuzpo6lKSlBhRHdevTk/nyToLb/+5BM5DODkJ46EROKq+0YFBRTEp3TRGEZqZg+2Pa3Jl6vtFntg4=@vger.kernel.org, AJvYcCXRSk4Z6flUKukqy4kpvu3jdoZQEZ3IAK9hbzMwWsAQ5mZoyAjUMf2WpOkj5EbGBiRURSqukpSIsj/LqVI=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxZP2ICeirKNbWQmCfCYBwENzDrN/G50+niDFFVarokVw2Gv2E/
-	gQ4go7l9b9tPATeprYYwfmEGOZ9QM13/eF4e8cIB84qj7UGmUM4OoN2nBMhO+y6cDVFeKiML19p
-	X+6iG6dKnSW8hAqT9Nx2BPRayqf8=
-X-Google-Smtp-Source: AGHT+IFcs1F3WeWS/rw/rH8zZRmJCxnvb5NTIKWhxHbpZf3MggTanH3PRtzPyFZHmXDyAM20lNRz7MiCww56hnLw9vk=
-X-Received: by 2002:a05:6870:b521:b0:2b8:92f0:ba5d with SMTP id
- 586e51a60fabf-2c2e959794bmr658930fac.8.1741642159022; Mon, 10 Mar 2025
- 14:29:19 -0700 (PDT)
+	 To:Cc:Content-Type; b=qB8SvnDJL+WNweh0CWrcKx1tMld0rg05sHULYdnoqzU0EmIuiXqfW2PiTxh+T6gIAMXxX+hYpL4B6H6FOoVQ9eLeyB8AqZY4/6y9CDhtjhtcuEliHr+a16nKtb1H92tCIMLIkpCDrUgdyv1DeyThyI0ifbl8gdOjDJ23XfkMusM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QgR/lZP9; arc=none smtp.client-ip=209.85.219.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f48.google.com with SMTP id 6a1803df08f44-6e8f94c2698so21447236d6.0;
+        Mon, 10 Mar 2025 16:04:11 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741647850; x=1742252650; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=R2jbyGvMajC80IEN9GNO5bY/eJxmLOGWz+jQElsYBjw=;
+        b=QgR/lZP9BKUp2N2pF9g2hPcswfeZfrxOV62ZKT5S4+PIlqYvcZ0gvPiUTDNv7ywNai
+         2PIlqBUcIc/Vj5oZ8PbN4+18MYQXnC0FjDqhKVy4AjBFzMSewpn3BRH0X3tG1PjnFOHq
+         rnyEvN9LsPMn+flt31/bz8VzLQbFJAoXeeT98Q3UimeAvle9VnTaVFfnfHug9wBs1nAh
+         PdkXDGu9Mx4a3GbZcydft2yR6ae7nWZELPBzHYcGwqbEH41+lNiNEq8e4YJqy7s4yUNj
+         C21Z8eL2K2Q3zTnmUV1b6XbBnbCZPOOxH2yCR9HtiMntvHEbaoyqB/qJ2f/pfBLE60vL
+         sxig==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741647850; x=1742252650;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=R2jbyGvMajC80IEN9GNO5bY/eJxmLOGWz+jQElsYBjw=;
+        b=mIsCyAH4qYu5+jTnto1FrY4wKB6YQJkfEMgr/FcbEra6godJdrYKt5EuncM3PvqoBt
+         duEjikrIzG9BExOcXsQ0QesM5Z+GSmbQoK4FeELJgqdFCqXkdXRLrXOPhQRs69joRn1V
+         gSXWhvxqOmtuYF3zjB9UFg2xawMl9M3Bj5WlGtZofe6Qu8zHcAnnRt+ZscE4uWKMn0rQ
+         M0tONyRsQ6Up24SH3JixB+B4gQBfzXG1yRTHJDfgzR2vfWvsEqE3NOvbS6vv+XiLGogo
+         0U8aShE4vnlKmYNHqpR5OKsTUS7J0VZnZqQs1eOlv28AMD6adh5WLWjVdbhi/aEn+6Hq
+         02aA==
+X-Forwarded-Encrypted: i=1; AJvYcCVAKBMLZR3Xs3GGwYA5cjYeDOYFlECEBx8cFppjjTu2gOg8C0mBA7x53JsKVFZtu9cEivDiUvtHKMs=@vger.kernel.org, AJvYcCX9XGqA1MiB9nP39XqQ6s4eywfoXCxOUtQX7EVLg1RZ2/Wh3D00q0DMIJ8QGYDm4TKOat0ArdkdAnJj7P4=@vger.kernel.org, AJvYcCXSUKwHmZZ5Ekmh34AGGLCM6OiBBJ+ODNb9sHT1ef3sbULmFXXCk93xCnS/CicE/cpEmFUa/LoOLAk=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yyt0AyvpAComMap06BeQrXMrSKi1HdUu1S8lNLGj0ajCjLY62qd
+	0vbM8B7GC17qTmmYQU1RqlcRS0SugHAcV/LP40aDcE2X+Ur3tKTV552UBy3zso8YuyxsXB7sLRw
+	oSBA7DmgIT4yfY1CKsRJdTmI/h2A=
+X-Gm-Gg: ASbGncuqBgI3m8f9HQizTJimKEViuvw2/mKoP9IF7dpO+StlIo2axdIb3EE2pnJJPrg
+	tjwFwxTy6Bulpw2vaZhzzKVx7dK038VkYW304N8BCNHW+Sb3Py9kQJ9vF/CrgoAD/LnbCPy+Pjt
+	J/aQTLW7wlXaOlM79rYdtAPvPXt4c=
+X-Google-Smtp-Source: AGHT+IHtpjz+mYSdGw1McE5Wegqv5LQI0POhWFiT4oDhVlKIrlpyhBp8VExF9lm4bjwHciYsgSgJtFBa/BFB2cOmsXE=
+X-Received: by 2002:ad4:5d49:0:b0:6e8:f4f6:9311 with SMTP id
+ 6a1803df08f44-6e9006019c7mr225757206d6.1.1741647850474; Mon, 10 Mar 2025
+ 16:04:10 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <13709135.uLZWGnKmhe@rjwysocki.net> <CAGETcx-ow3T_R_Lj1s3sjp6nQz6Wv7T3dQdP3HJHd+E8nkh6rw@mail.gmail.com>
- <CAJZ5v0g3qOvESqvqiCnwVz2BYGHzrG8=nRQ8j36Qd_LC0io_Tw@mail.gmail.com>
- <CAGETcx82sLvG19eUN1ATrL5RzEKJjOeWP+kdYJdQX9O=ck7q2Q@mail.gmail.com>
- <CAJZ5v0guoA-xp-yyr7Fb7ikmE9rjt8xwDPcxU52sd0UP_u=2jA@mail.gmail.com> <CAGETcx9WZWiUd+YCQfoZEGGbewv2nrx2TiQJs55KEWbOUg9TCg@mail.gmail.com>
-In-Reply-To: <CAGETcx9WZWiUd+YCQfoZEGGbewv2nrx2TiQJs55KEWbOUg9TCg@mail.gmail.com>
-From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Mon, 10 Mar 2025 22:29:07 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0haTW3L4Baez9Q1LWrRahijWgr0sd85kYOtr6ajZ3Vkgw@mail.gmail.com>
-X-Gm-Features: AQ5f1JrHMx3CwpnVlHY_ucu_zEOmB_7ca_XctKtlXga0bL7icVffHW0BVQmzMlE
-Message-ID: <CAJZ5v0haTW3L4Baez9Q1LWrRahijWgr0sd85kYOtr6ajZ3Vkgw@mail.gmail.com>
-Subject: Re: [PATCH v1 0/5] PM: sleep: Improvements of async suspend and
- resume of devices
-To: Saravana Kannan <saravanak@google.com>
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
-	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
-	Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>, 
-	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+References: <20250309112114.1177361-1-lkml@antheas.dev> <20250309112114.1177361-3-lkml@antheas.dev>
+In-Reply-To: <20250309112114.1177361-3-lkml@antheas.dev>
+From: Derek John Clark <derekjohn.clark@gmail.com>
+Date: Mon, 10 Mar 2025 16:03:59 -0700
+X-Gm-Features: AQ5f1JoOtNPfri84vLX0kRcK-7tOcgRLs_0XAe901KR-b1oLKTbHvVbJfanC8dA
+Message-ID: <CAFqHKTkvNhbTyDmqCOoMq61NXFTau1Gptbqe7EAqZc6GhQYb=w@mail.gmail.com>
+Subject: Re: [PATCH v3 02/12] hwmon: (oxp-sensors) Add all OneXFly variants
+To: Antheas Kapenekakis <lkml@antheas.dev>
+Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>, Kevin Greenberg <kdgreenberg234@protonmail.com>, 
+	Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>, 
+	Eileen <eileen@one-netbook.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Mon, Mar 10, 2025 at 9:31=E2=80=AFPM Saravana Kannan <saravanak@google.c=
-om> wrote:
+On Sun, Mar 9, 2025 at 4:21=E2=80=AFAM Antheas Kapenekakis <lkml@antheas.de=
+v> wrote:
 >
-> On Mon, Mar 10, 2025 at 9:01=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
-org> wrote:
-> >
-> > On Sun, Mar 9, 2025 at 11:38=E2=80=AFPM Saravana Kannan <saravanak@goog=
-le.com> wrote:
-> > >
-> > > On Thu, Feb 27, 2025 at 8:23=E2=80=AFAM Rafael J. Wysocki <rafael@ker=
-nel.org> wrote:
-> > > >
-> > > > On Thu, Feb 27, 2025 at 4:45=E2=80=AFPM Saravana Kannan <saravanak@=
-google.com> wrote:
-> > > > >
-> > > > > On Tue, Feb 25, 2025 at 8:46=E2=80=AFAM Rafael J. Wysocki <rjw@rj=
-wysocki.net> wrote:
-> > > > > >
-> > > > > > Hi Everyone,
-> > > > > >
-> > > > > > Initially, this was an attempt to address the problems describe=
-d by
-> > > > > > Saravana related to spawning async work for any async device up=
-front
-> > > > > > in the resume path:
-> > > > > >
-> > > > > > https://lore.kernel.org/linux-pm/20241114220921.2529905-1-sarav=
-anak@google.com/
-> > > > > >
-> > > > > > but then I realized that it could be extended to the suspend pa=
-th and
-> > > > > > used for speeding it up, which it really does.
-> > > > >
-> > > > > Btw, maybe I didn't  word it correctly, but my patch series was m=
-eant
-> > > > > to speed up the non-async case too.
-> > > >
-> > > > If "the non-async case" means the case with "async" suspend/resume
-> > > > disabled entirely, I don't think that the ordering in which devices
-> > > > are processed can be changed just because there are no known
-> > > > dependencies.
-> > > >
-> > > > > I was going to get around sending a v2 of my series, but was caug=
-ht up
-> > > > > with some other work. But I'm okay if you want to finish up my ef=
-fort
-> > > > > -- less work for me and I can focus on the other aspects of suspe=
-nd :)
-> > > > >
-> > > > > Maybe add a Suggested-by: to the patches?
-> > > >
-> > > > Yeah, I can do that.
-> > > >
-> > > > > I definitely want to review the series, but very busy this week w=
-ith
-> > > > > some other work. I'll get to this next week for sure.
-> > > >
-> > > > That should be fine.
-> > >
-> > > Hi Rafael,
-> > >
-> > > I looked at the full series and it has at least one bug and a few gap=
-s
-> > > that I address in mine.
-> >
-> > What bug?
-> >
-> > You need to tell me specifically because I'm not aware of any bugs in
-> > this series and unless you tell me what it is and I agree that it is a
-> > bug, I have no reason to believe that there are any.
-> >
-> > As for the gaps, there are obvious differences between this patch
-> > series and your work and it would be kind of nice to explain why they
-> > matter in practice, in your view.
+> Currently, the driver only has the F1 OneXFly variant, which was based
+> on the 7000 AMD platform. Add its special editions: F1 EVA-01, F1 OLED.
+> F1 OLED might have been a dev unit, but it is supported by OneXConsole
+> with the same features so add it. Then add the F1L variant which is
+> based on the 8000 AMD platform and the F1Pro and its special edition
+> EVA-02.
 >
-> Sure, I'll do this.
-
-OK
-
-> But it just felt like an inefficient way to get to close to where my seri=
-es is.
-
-I'm not sure where it is TBH.
-
-> Instead of you just saying you don't like
-> about my series and giving me some feedback on how to fix it.
-
-You got feedback on it:
-
-https://lore.kernel.org/linux-pm/CAJZ5v0grG7eSJ7_c73i9-bXaFhm5rfE2WmxtR6yLB=
--MGkd7sVg@mail.gmail.com/
-
-And no response.
-
-Also here:
-
-https://lore.kernel.org/linux-pm/CAJZ5v0g9A1pZ5FjPAjdLY5ybNmefnBVVMJM7h3czW=
-38p1fTfqQ@mail.gmail.com/
-
-And there was a bunch of feedback from other people (and 0-day) on the
-last patch.
-
-> > > And those are what make my patches have a
-> > > higher diff. Can we just continue with my series instead?
-> >
-> > Of course you are free to send a new version of it, but it is unlikely
-> > to be a sufficient replacement for constructive feedback.
+> One might ask why not just fuzzy match. Well, EVA-02 is a variant of
+> F1Pro which is a Strix Point handheld, but does not have F1Pro in its
+> name. This makes it risky to fuzzy match, as special variants in the
+> future from different platforms might not have the same feature set
+> or registers.
 >
-> Ok, I'll point out the issues I see in this series and hopefully you
-> can point out the issues in my series and we can move forward with
-> mine if you agree with the additional issues my series is working
-> through.
+> By happenstance, all current devices use the same registers. For the
+> charge limitting feature on this series, only F1Pro/X1 (AMD) were
+> released with it, but OneXPlayer is providing bios updates for F1, F1L,
+> X1 Mini units that use the same register, so treat all of them the same.
+>
+Greeting Antheas,
 
-Sure, but please address the feedback so far and send a new version.
+Do we know the BIOS version(s) that support was added? If so, I think
+it makes sense to treat these as separate devices  and check for
+device specific BIOS version in an is_visible for the charge limit
+attr. I expect that calling the registers when support isn't present
+will just be a no-op based on how OXP historically does things, but
+having a present attribute that has no effect will probably generate
+bug reports. It is also not appropriate to check/fix this in userspace
+as some folks might use udev to set it over a program with such
+checks.
+
+Cheers,
+- Derek
+
+> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> ---
+>  drivers/hwmon/oxp-sensors.c | 35 +++++++++++++++++++++++++++++++++++
+>  1 file changed, 35 insertions(+)
+>
+> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
+> index 5a4230ad3757..f7a64fbc8f33 100644
+> --- a/drivers/hwmon/oxp-sensors.c
+> +++ b/drivers/hwmon/oxp-sensors.c
+> @@ -188,6 +188,41 @@ static const struct dmi_system_id dmi_table[] =3D {
+>                 },
+>                 .driver_data =3D (void *)oxp_fly,
+>         },
+> +       {
+> +               .matches =3D {
+> +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1 EV=
+A-01"),
+> +               },
+> +               .driver_data =3D (void *)oxp_fly,
+> +       },
+> +       {
+> +               .matches =3D {
+> +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1 OL=
+ED"),
+> +               },
+> +               .driver_data =3D (void *)oxp_fly,
+> +       },
+> +       {
+> +               .matches =3D {
+> +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1L")=
+,
+> +               },
+> +               .driver_data =3D (void *)oxp_fly,
+> +       },
+> +       {
+> +               .matches =3D {
+> +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1Pro=
+"),
+> +               },
+> +               .driver_data =3D (void *)oxp_fly,
+> +       },
+> +       {
+> +               .matches =3D {
+> +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1 EV=
+A-02"),
+> +               },
+> +               .driver_data =3D (void *)oxp_fly,
+> +       },
+>         {
+>                 .matches =3D {
+>                         DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
+> --
+> 2.48.1
+>
 
