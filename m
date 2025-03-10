@@ -1,131 +1,147 @@
-Return-Path: <linux-pm+bounces-23774-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23775-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 87D8AA59A37
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 16:42:00 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id DA1F4A59A93
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 17:01:54 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 0A0F416B975
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 15:41:59 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 84C2A18880DD
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 16:02:02 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id C3E1522DF82;
-	Mon, 10 Mar 2025 15:41:53 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A908622371A;
+	Mon, 10 Mar 2025 16:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="YVmhpbcV"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="XZEvc9GA"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9F5EB22D7BE
-	for <linux-pm@vger.kernel.org>; Mon, 10 Mar 2025 15:41:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7C829A29;
+	Mon, 10 Mar 2025 16:01:50 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741621313; cv=none; b=X2FCPRy/kmszHgEMZt7nXK/tSCrKimzOtRFn8coOGjKHMbRmLFAKEeaYG+jF1ffH6mN6fWymieqSNpX0J8mL2odoQfjFRm5VL9fpVi7wicyYEnr+5IpyBHDhncH5PCJ98PxDQDe8u5jVhvMuGnU8oztyd4gTc+oxl1tlcJKOeSw=
+	t=1741622510; cv=none; b=XjlMAZDHT2KstNN7Ep/p/OLHn/zJC3vRH/kIbU5Pwk/G+gonJj4JKvkoI7pNcDL1X6V0h/id7Ji1umyqp0XvynLtXBkvbctDFAPfVwS5i5ErzyniiK06TkrXHNzJvhOhP0LzO9Z6jxapn+yHwTYxd55eYH/TC/NQe8Qq3FX0E+E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741621313; c=relaxed/simple;
-	bh=Y3dVrBlDfD1k8PxVjkFCwHC1pMGINA5lACQS4vrT8r0=;
-	h=From:To:Subject:Date:Message-ID:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=cJbGHQrbsAR4g2y7riev2wHhngNOJgjCGheQ/Y+jqVWHeGY1JUJizX3iKA3t8vQT268uf60JSVvMJKEXYiNGlpCRZiteEgVJrQTrvrcqessBGJfASI7ZV4XPPz4+omdoI845maRkzHpECl4CzH2vTHeggKF4ChkkAegY8A1b4/k=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=YVmhpbcV; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPS id 21A8CC4CEEE
-	for <linux-pm@vger.kernel.org>; Mon, 10 Mar 2025 15:41:52 +0000 (UTC)
+	s=arc-20240116; t=1741622510; c=relaxed/simple;
+	bh=mqBXqjlVmhomvFbTex1Fuk/DW/hR4kbX8x9xFHLmTAg=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=SE1lN95E7tEnr7ZYBYGsTzF2cjVVB7kcCWcf6/ZwErRZ2JK9bn+SYgkVVvFpfaKQ2XCYm1uP7CAeOe+MNYr/ggbQEADbmxV24oXuGyuSPfv4AUdU3Cwtoyvb17nnw0U30oRqPGAgDP48p4QjXfAJJRwpEn7UHnMxeHhwHrrJ+18=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=XZEvc9GA; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id E31DAC4CEEE;
+	Mon, 10 Mar 2025 16:01:49 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741621312;
-	bh=Y3dVrBlDfD1k8PxVjkFCwHC1pMGINA5lACQS4vrT8r0=;
-	h=From:To:Subject:Date:In-Reply-To:References:From;
-	b=YVmhpbcV/rMbAi8Yj4fBwHNnvm0VmTTOLwIxfiNMKWcWnq56Fk6cJjXgmVNCroQTD
-	 oehcBPMJm7mis8F0W9nP1+/ehHLwIyzPXEDVzN/+sH18eB5xH5c2Bqv6S7HJlFi19c
-	 c80cEuPSqWo1oiiy0VGWwpugi/BuQpPNYHJIQ6pnGQ7LY3V7F5v8ncq/q0cr9n7sLq
-	 63pwxwSLmPckINxmOHLL3HxrstIXVG0rI7+8SgGwXgEOonB+JX7wJZxSFgxqpbfwmq
-	 RoAcdJIkfLSNsnJTZ9oIk+MORApYcRAS4fS+eJdOKngbO3vMlu9tNrFl/nhrSB6aUk
-	 QHityJtgzuD0g==
-Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
-	id 0AB9FC41613; Mon, 10 Mar 2025 15:41:52 +0000 (UTC)
-From: bugzilla-daemon@kernel.org
-To: linux-pm@vger.kernel.org
-Subject: [Bug 219851] [amd-pstate 6.15] Frequency Scaling Will Not Scale
- Above Lowest Non-Linear Performance on Ryzen 7 5700U
-Date: Mon, 10 Mar 2025 15:41:51 +0000
-X-Bugzilla-Reason: AssignedTo
-X-Bugzilla-Type: changed
-X-Bugzilla-Watch-Reason: None
-X-Bugzilla-Product: Power Management
-X-Bugzilla-Component: cpufreq
-X-Bugzilla-Version: 2.5
-X-Bugzilla-Keywords: 
-X-Bugzilla-Severity: normal
-X-Bugzilla-Who: dnaim@cachyos.org
-X-Bugzilla-Status: NEW
-X-Bugzilla-Resolution: 
-X-Bugzilla-Priority: P3
-X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
-X-Bugzilla-Flags: 
-X-Bugzilla-Changed-Fields: 
-Message-ID: <bug-219851-137361-aCCOJyqbTM@https.bugzilla.kernel.org/>
-In-Reply-To: <bug-219851-137361@https.bugzilla.kernel.org/>
-References: <bug-219851-137361@https.bugzilla.kernel.org/>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-Bugzilla-URL: https://bugzilla.kernel.org/
-Auto-Submitted: auto-generated
+	s=k20201202; t=1741622509;
+	bh=mqBXqjlVmhomvFbTex1Fuk/DW/hR4kbX8x9xFHLmTAg=;
+	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
+	b=XZEvc9GANYPdICMpXDD3qOBgROJyZeYvqYf5tsCihhDqk1stckOl4S2UrtTxF6V1C
+	 JivBaco8lWZmRiz2pECQqJcoOBPwY4ziEx9TpUY77TJjwa//XmXQ7lY+04/C2AGWZ+
+	 HJzA/Txu+2VoBq/IFTOjkm/0BjbAy0bjaSw+wjge5QU6FwgWroRn6nvThBgS6LxA9f
+	 OdAYtH/eClhmTbntargzvdaxna9+KLcLr0v/MYOWsHMTwKvhZfdAX3HR5z7h/gblhv
+	 H1kvKUnswjuYYTKkWNYZybHQGVVKqbCsTgzsR+z1mkxqEJe0lgmuOkyXNI0RLShoPV
+	 +vQR929kn/o8w==
+Received: by mail-oa1-f54.google.com with SMTP id 586e51a60fabf-2bd2218ba4fso1311672fac.1;
+        Mon, 10 Mar 2025 09:01:49 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCWtTzGGhK8jthAWzL/qC967tfA5Q0AAOpuEwoEeaXc/5ll+uLiDflwIo4Km/sHrSaLTEOP/r9BbeA4=@vger.kernel.org, AJvYcCXF72IPEQz0wGUZ7hIP1lz4VsHqmBA98TjfyJKiHnmavzb4z0jRsqXdw55UegKe/nQwhNa9hXWN7qC6/KU=@vger.kernel.org
+X-Gm-Message-State: AOJu0Yzir95xoRQXZ9D6cSFr5W7reiO4Nw81bIPvbG9fZtihdkqKVuN+
+	GZJ3c0ukVCZznKVS8JOUIjFzhjk9gshjSEWPB0/qrSO2bYikqlCFICdUy0bDV4ifCCykFRsrciS
+	6kbv4Qi3+m8HgPG6XzXQgzj49jT4=
+X-Google-Smtp-Source: AGHT+IFwGvUc4Tp7kR6y9fTJze0Y92I2Yu8TbnbXDoZHpz0CWvJxxKW5lztZnATqgBlP4ijhJFYR2vhCdDXTfnjI3Fs=
+X-Received: by 2002:a05:6870:c87:b0:29e:7d35:2319 with SMTP id
+ 586e51a60fabf-2c2e86a10e9mr102664fac.4.1741622509128; Mon, 10 Mar 2025
+ 09:01:49 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <13709135.uLZWGnKmhe@rjwysocki.net> <CAGETcx-ow3T_R_Lj1s3sjp6nQz6Wv7T3dQdP3HJHd+E8nkh6rw@mail.gmail.com>
+ <CAJZ5v0g3qOvESqvqiCnwVz2BYGHzrG8=nRQ8j36Qd_LC0io_Tw@mail.gmail.com> <CAGETcx82sLvG19eUN1ATrL5RzEKJjOeWP+kdYJdQX9O=ck7q2Q@mail.gmail.com>
+In-Reply-To: <CAGETcx82sLvG19eUN1ATrL5RzEKJjOeWP+kdYJdQX9O=ck7q2Q@mail.gmail.com>
+From: "Rafael J. Wysocki" <rafael@kernel.org>
+Date: Mon, 10 Mar 2025 17:01:37 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0guoA-xp-yyr7Fb7ikmE9rjt8xwDPcxU52sd0UP_u=2jA@mail.gmail.com>
+X-Gm-Features: AQ5f1JoUs4xvOWLvABy9PgNqRj_ZLqrO_B7qa6QzolnUbKfXtStzMfX9DtMd0t4
+Message-ID: <CAJZ5v0guoA-xp-yyr7Fb7ikmE9rjt8xwDPcxU52sd0UP_u=2jA@mail.gmail.com>
+Subject: Re: [PATCH v1 0/5] PM: sleep: Improvements of async suspend and
+ resume of devices
+To: Saravana Kannan <saravanak@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, "Rafael J. Wysocki" <rjw@rjwysocki.net>, 
+	Linux PM <linux-pm@vger.kernel.org>, LKML <linux-kernel@vger.kernel.org>, 
+	Alan Stern <stern@rowland.harvard.edu>, Ulf Hansson <ulf.hansson@linaro.org>, 
+	Johan Hovold <johan@kernel.org>, Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-https://bugzilla.kernel.org/show_bug.cgi?id=3D219851
+On Sun, Mar 9, 2025 at 11:38=E2=80=AFPM Saravana Kannan <saravanak@google.c=
+om> wrote:
+>
+> On Thu, Feb 27, 2025 at 8:23=E2=80=AFAM Rafael J. Wysocki <rafael@kernel.=
+org> wrote:
+> >
+> > On Thu, Feb 27, 2025 at 4:45=E2=80=AFPM Saravana Kannan <saravanak@goog=
+le.com> wrote:
+> > >
+> > > On Tue, Feb 25, 2025 at 8:46=E2=80=AFAM Rafael J. Wysocki <rjw@rjwyso=
+cki.net> wrote:
+> > > >
+> > > > Hi Everyone,
+> > > >
+> > > > Initially, this was an attempt to address the problems described by
+> > > > Saravana related to spawning async work for any async device upfron=
+t
+> > > > in the resume path:
+> > > >
+> > > > https://lore.kernel.org/linux-pm/20241114220921.2529905-1-saravanak=
+@google.com/
+> > > >
+> > > > but then I realized that it could be extended to the suspend path a=
+nd
+> > > > used for speeding it up, which it really does.
+> > >
+> > > Btw, maybe I didn't  word it correctly, but my patch series was meant
+> > > to speed up the non-async case too.
+> >
+> > If "the non-async case" means the case with "async" suspend/resume
+> > disabled entirely, I don't think that the ordering in which devices
+> > are processed can be changed just because there are no known
+> > dependencies.
+> >
+> > > I was going to get around sending a v2 of my series, but was caught u=
+p
+> > > with some other work. But I'm okay if you want to finish up my effort
+> > > -- less work for me and I can focus on the other aspects of suspend :=
+)
+> > >
+> > > Maybe add a Suggested-by: to the patches?
+> >
+> > Yeah, I can do that.
+> >
+> > > I definitely want to review the series, but very busy this week with
+> > > some other work. I'll get to this next week for sure.
+> >
+> > That should be fine.
+>
+> Hi Rafael,
+>
+> I looked at the full series and it has at least one bug and a few gaps
+> that I address in mine.
 
---- Comment #3 from Eric Naim (dnaim@cachyos.org) ---
-(In reply to Dhananjay Ugwekar (AMD) from comment #2)
-> Hello Eric,
->=20
-Hi Dhananjay,
+What bug?
 
-Unfortunately the user that first reported this issue hasn't reached out to=
- me
-since, so for now I'll give you information regarding what I already know.
+You need to tell me specifically because I'm not aware of any bugs in
+this series and unless you tell me what it is and I agree that it is a
+bug, I have no reason to believe that there are any.
 
-> 1. Could you please give more details on how to reproduce the issue? which
-> governor, amd-pstate mode (when the issue was observed), workload. Are you
-> able to reproduce the issue on your machine as well?
+As for the gaps, there are obvious differences between this patch
+series and your work and it would be kind of nice to explain why they
+matter in practice, in your view.
 
-No STR was given, from the lack of info I believe it's just a general case,
-e.g. if you run `stress-ng -c $(nproc)`, you *should* see the issue (entire=
-ly
-speculation). This regression only happens with the active driver. Both pas=
-sive
-and guided mode was reported to behave correctly.
+> And those are what make my patches have a
+> higher diff. Can we just continue with my series instead?
 
-I can't reproduce this either because my laptop is a Zen3 laptop. It is lik=
-ely
-that it is limited to Zen2.
-
-> 2. Just to confirm, does the user have
-> https://web.git.kernel.org/pub/scm/linux/kernel/git/superm1/linux.git/com=
-mit/
-> ?h=3Damd-pstate-v6.15-2025-03-03&id=3Df6c0b760290951688697d9debbb2b8462c4=
-23a48,
-> in his tree, it fixed a corner case in the culprit commit that you pointed
-> to.
-
-Yes, you can see the related tree
-https://github.com/CachyOS/linux/tree/6.14/amd-pstate. It's not 1:1 with
-Mario's tree but I diffed both trees and the only difference was commit
-34562659110a42276d63f8b5a9d522d2400b2df2 which is from the "Dynamic ITMT co=
-re
-ranking support" series.
-
->=20
-> Thanks,=20
-> Dhananjay
-
---=20
-You may reply to this email to add a comment.
-
-You are receiving this mail because:
-You are the assignee for the bug.=
+Of course you are free to send a new version of it, but it is unlikely
+to be a sufficient replacement for constructive feedback.
 
