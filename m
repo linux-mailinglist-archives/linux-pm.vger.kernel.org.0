@@ -1,143 +1,135 @@
-Return-Path: <linux-pm+bounces-23734-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23735-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B6F5EA58CC7
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 08:23:07 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id B9727A58D5C
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 08:57:30 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 241C07A4E95
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 07:22:05 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 03DB116AC48
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 07:57:30 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id ABDAF1DB55D;
-	Mon, 10 Mar 2025 07:22:48 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7E8FC22256D;
+	Mon, 10 Mar 2025 07:57:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b="H65XTLmq";
-	dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b="UG9NfcuG"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="UVseLK35"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from flow-a1-smtp.messagingengine.com (flow-a1-smtp.messagingengine.com [103.168.172.136])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ed1-f54.google.com (mail-ed1-f54.google.com [209.85.208.54])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 220331D5AA0;
-	Mon, 10 Mar 2025 07:22:45 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=103.168.172.136
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C165E2222BC;
+	Mon, 10 Mar 2025 07:57:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.208.54
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741591368; cv=none; b=h0I6UDI+fQwq/N4FUoQdb9wwSjQPAD0iEjK8J2F2YkqdUxoHhO/HYGq9MG+4ns9qq0cMupawXdOg+NVEYhtAXgczM0I/+AACjr6RF84UDe/ukLvO4nXFx7nZJ/b8oi5zgPx9XCHPQHBDzquAYcrrJ1xf0ubwvfjTJ2ZJr8Pbdu0=
+	t=1741593437; cv=none; b=qhP/5s9mUoefpY6eGZcIJqy4mjx4kEwEzbPKiXrEqSRLyxvzHmsJkYpjerc/j2NYqX0RcDg6AfdPiUFhMtbB3Zc1xdKb511m/OnNhO5PJUGFwZQFIXpXngIUn5W+P8U6iLSy9vgSOea6CrsmuDR3sNz+NfL34DfUgU7AK824ovg=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741591368; c=relaxed/simple;
-	bh=J3sQCA9DV6phIpiLDA9JI9hyBB3YMuMwciQ5P6V/ybU=;
-	h=MIME-Version:Date:From:To:Cc:Message-Id:In-Reply-To:References:
-	 Subject:Content-Type; b=Efdq+3EKNCFv7SAjcKo2G1B1gnEvsm3BeoTSFJ+eXToMJJsdeBBbimC9FWjJU6cG7A7YvewVXOcweNPJ9vdnKWuuyf7Ci68V4692AHY5NVzEzYNL2Y8ekruRCtZyN3ceJEJew+qeWy7PhsGGGuV+CNyKv6D1CxC7UHvqccXbc+s=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de; spf=pass smtp.mailfrom=arndb.de; dkim=pass (2048-bit key) header.d=arndb.de header.i=@arndb.de header.b=H65XTLmq; dkim=pass (2048-bit key) header.d=messagingengine.com header.i=@messagingengine.com header.b=UG9NfcuG; arc=none smtp.client-ip=103.168.172.136
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arndb.de
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arndb.de
-Received: from phl-compute-07.internal (phl-compute-07.phl.internal [10.202.2.47])
-	by mailflow.phl.internal (Postfix) with ESMTP id EF1C720144D;
-	Mon, 10 Mar 2025 03:22:44 -0400 (EDT)
-Received: from phl-imap-11 ([10.202.2.101])
-  by phl-compute-07.internal (MEProxy); Mon, 10 Mar 2025 03:22:44 -0400
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=arndb.de; h=cc
-	:cc:content-transfer-encoding:content-type:content-type:date
-	:date:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to; s=fm3; t=1741591364;
-	 x=1741598564; bh=J3sQCA9DV6phIpiLDA9JI9hyBB3YMuMwciQ5P6V/ybU=; b=
-	H65XTLmqz5qqZeAmNdbjspDs4350aSTpjHT3M0l79hDMl4pnq2pe5PjFjK98dCwv
-	o4LrfOeYYEDjkMaoDLHe88BSZrhiSJdl5IeWm8j1Y5V1cLKRqLWVUJgDtKi3AqWC
-	KfuRma0iaGw+QcjCNImKXIR0+Eey/QuwGWzHp6NTvtwDaKGZZKlGkiEAkuF92KGr
-	pO9m14kWbgKum5NvRFnxzdcu5loSw067bd2SrtA5NEDdn09Jr1WgKpfMC0kXMiyV
-	gySoW7yibIaEIvsQ1wRt/mQUUrE+75ikoTj3/4sr/IHS3726Hqs5z8Gi4oJhQMa6
-	xX3GPhTPoAZ25WWOWHZm4Q==
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=
-	messagingengine.com; h=cc:cc:content-transfer-encoding
-	:content-type:content-type:date:date:feedback-id:feedback-id
-	:from:from:in-reply-to:in-reply-to:message-id:mime-version
-	:references:reply-to:subject:subject:to:to:x-me-proxy
-	:x-me-sender:x-me-sender:x-sasl-enc; s=fm1; t=1741591364; x=
-	1741598564; bh=J3sQCA9DV6phIpiLDA9JI9hyBB3YMuMwciQ5P6V/ybU=; b=U
-	G9NfcuGL1pSUTtjpSHWgR7DtaRlOQQcEfxFpbFhGPWHrFQ72V5NqMHJoDTKyxndw
-	2azGp917nTShs3jYuUCDjUk/j0yF/Dkyz8td3bEeyPjOVkVvX8PVbU3vbTjZCGWl
-	rlRzl3GTL+Hbwm5fcmWrqIw2i4p43osRuubAsklPeSTD4uODiVOmZjMN5CmBP/qD
-	n3i79b7PFhg3h+UucgxAepa2G3BCmKR7ZSWs0RMmvepSamdm06VCk3q272zrAZ0T
-	hErjLISfVFplQVNus9lPhlIgK5TcLYttPnCIjOHExATCmHsyMn7LipJqEEosu6Ee
-	juTt0ySZvua262WfAFfkw==
-X-ME-Sender: <xms:RJPOZ6mBamNSP9M62JjinqZGhLUwhetd7MpHVJQ8c2akNeIW7jFsfQ>
-    <xme:RJPOZx0nmWLSy_Mz_QN0eTDK8IgqkGq_CCsfYR8or1flR3vYZCUEaMlep8G4KNv5v
-    LGmwhLzeoRM_LV54P0>
-X-ME-Proxy-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudekjeefucetufdoteggodetrf
-    dotffvucfrrhhofhhilhgvmecuhfgrshhtofgrihhlpdggtfgfnhhsuhgsshgtrhhisggv
-    pdfurfetoffkrfgpnffqhgenuceurghilhhouhhtmecufedttdenucesvcftvggtihhpih
-    gvnhhtshculddquddttddmnecujfgurhepofggfffhvfevkfgjfhfutgfgsehtjeertder
-    tddtnecuhfhrohhmpedftehrnhguuceuvghrghhmrghnnhdfuceorghrnhgusegrrhhnug
-    gsrdguvgeqnecuggftrfgrthhtvghrnhepfefhheetffduvdfgieeghfejtedvkeetkeej
-    feekkeelffejteevvdeghffhiefhnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghenuc
-    evlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepmhgrihhlfhhrohhmpegrrhhnuges
-    rghrnhgusgdruggvpdhnsggprhgtphhtthhopedvuddpmhhouggvpehsmhhtphhouhhtpd
-    hrtghpthhtohepthhssghoghgvnhgusegrlhhphhgrrdhfrhgrnhhkvghnrdguvgdprhgt
-    phhtthhopegsrhhglhessghguggvvhdrphhlpdhrtghpthhtoheprghlvgigrghnughrvg
-    drsggvlhhlohhnihessghoohhtlhhinhdrtghomhdprhgtphhtthhopegumhhithhrhidr
-    thhorhhokhhhohhvsehgmhgrihhlrdgtohhmpdhrtghpthhtohepjhhinhhgohhohhgrnh
-    dusehgmhgrihhlrdgtohhmpdhrtghpthhtoheplhhgihhrugifohhougesghhmrghilhdr
-    tghomhdprhgtphhtthhopeguvghllhgvrhesghhmgidruggvpdhrtghpthhtohepsghroh
-    honhhivgeskhgvrhhnvghlrdhorhhgpdhrtghpthhtohepuggrnhhivghltheskhgvrhhn
-    vghlrdhorhhg
-X-ME-Proxy: <xmx:RJPOZ4oNdsCVwdwBC1kejn_hiUWULMuszBBeFu3P1XFG2SOVcQq4Yg>
-    <xmx:RJPOZ-kriW5mwdM3YFKa1QEM4zUdOrhgF9EjCIQihVWPJAXdavqkqw>
-    <xmx:RJPOZ43M6hITEMrBvmPyYXUHsNOjK4DlkC__GIdg4uCgnY9xPGHwlQ>
-    <xmx:RJPOZ1tioloLuOdFS7WnMtHjOWPdjL7vMzeeieApRc97UPovDDeF5Q>
-    <xmx:RJPOZw4mIeXgUDIjrdONTNNcGYk--e8ZCokZRYbNMKAedh8jYizIJJyJ>
-Feedback-ID: i56a14606:Fastmail
-Received: by mailuser.phl.internal (Postfix, from userid 501)
-	id ED50C2220072; Mon, 10 Mar 2025 03:22:43 -0400 (EDT)
-X-Mailer: MessagingEngine.com Webmail Interface
+	s=arc-20240116; t=1741593437; c=relaxed/simple;
+	bh=s6ct/4jBLB3PTMdJAeBIpC2PsFG7V/ZbecHXPZSaCCk=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=ejPrC2pfJk1OLIdWlBllpNHc9biydqCNR86UrFLCcxCLVKUA44wpo2Fk7Rk0LyPvYN5MTn7ASYYJY1CNoeEzo+aoaH/kcR61cVWx4KAdHq/pBGyE7zVtGJJVDQvaJtu7FbYwmCvDfYWyCPyuTHDUnStXzB0FW2DimQTMDy4ESQw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=UVseLK35; arc=none smtp.client-ip=209.85.208.54
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ed1-f54.google.com with SMTP id 4fb4d7f45d1cf-5e4d50ed90aso4849992a12.0;
+        Mon, 10 Mar 2025 00:57:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741593433; x=1742198233; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=U15UAvQANOQFKH4VGvkHqQq/+vDSNjUxIybBwkpUdsQ=;
+        b=UVseLK35bIq3ikyiVtZrC1J8J3Ur/LZQ2ur8SSSS/ncgl9pM5nI/iogkMgKcGOvs54
+         3HMc5LFxf5kLj+L03Qnoxu+1bjkGv6RMADDXPoMATjiueb9DMTdcf7+IsKo75oW3uWQt
+         ticOjiSa5SQcdkguf7M1uhe7VRwQouKHXi6jIaxrCmpihGvUdh2nooYI+8tQU33rfNBT
+         Ri9ULwpsPCt7Q1H9B5T3XaTBPiivZ0jyUHAPSkRc8V6MhyyvPNw7V81oq46yS3Aac4on
+         ZGW2fA6q/6D+VoU8Jl44IrWS9tfs1zJent6W667RAamv2HzHCDQ+Dc8GaC+GxQ8RPRAA
+         wRtQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741593433; x=1742198233;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=U15UAvQANOQFKH4VGvkHqQq/+vDSNjUxIybBwkpUdsQ=;
+        b=BeDsGuKDGjF0BwkXbTF5EOvkiF2twY0G+uKmI32kAT9tKVF/BI0YLU8JQQgV4yiXVr
+         2NfageXvBdBpsj4OtqSutUInJTVmhA+IRWGEh6J7+YtL0GkXk0jA6Z1giGSlwv+yx6M+
+         eq5Z+JfjBCzpPDyz/hU7Rmpm6nPRuERUQKZi/8awwjOygFfNJvVb1wsBlQoQy29tNBpV
+         fPCwEQ4qp9W/enyRuxVBm7FsMY40VJdH0E38X+CEWLUVPT5mbw4fngipj7vtoxGSDIsS
+         VNQ8YpZaEx4LCT66mYruUBuEZIsy7WeFObBRn0K2dEIV0wGZXCRy0nVUvQi2OpPSjLrh
+         k2Xg==
+X-Forwarded-Encrypted: i=1; AJvYcCUufRZiFDBjN5v19FHFT/c3eu31erHgmf0tjArNAntcdLdyYkJhVeQrBG8qCsuRF/hJFE9Zy912LkLL@vger.kernel.org, AJvYcCXt7N+kQIYuikw23jYG2BbkSDJYKafmyqmz2r+TDWuqST7xVvxvIZPaZz3c8/PIC/m0LzsHhImKF0eSsady@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy0ji4EPNl/19lq6DESvGTrYXge41GNMyIPeSjgr4sx9JU7+eAg
+	sDSYfY89h+8es0yqx2E2WFG6BPhAvEm6m45pdbWA7jqmmH7dTdV0
+X-Gm-Gg: ASbGncvkwnVmjRrDYNgMSd6tjmYhy2fFlTq1YP+eNf2M5oyZYkjMrS6ahSU22vCPPqs
+	RLl1L8squdY5zZYIKyvhZ/+HIRHggWmt1bGRHo8d7gB+YFhQyrzK/SbSihGfluoGN0XgzsuQ+YN
+	Ka8ITSkemHdShKmOIakfVLbUwagcdQO6xAeha2/rRI9HB7eFuzSb1tOIr6n+wevkRI2aNh/znWK
+	dgM/KOip3Dg96eJ8w02p6U2OJS8OY7mWhS2kH1Grl2LqMvBLQn/cJiZayeAYNeHC8uAYvwAftVQ
+	6m5sO9hopuc7Z33UhtNVikLOItr3O8TJfc7U
+X-Google-Smtp-Source: AGHT+IG9r7MLHawaP0l5S1yYlDQvdCNBoi4U43j8q/dsWKaBv1/GPbKQ4WdcbpJuzt8L4QJ85H7hWA==
+X-Received: by 2002:a17:907:1c1f:b0:abf:457e:cef1 with SMTP id a640c23a62f3a-ac252fa0a9fmr1508456966b.40.1741593432685;
+        Mon, 10 Mar 2025 00:57:12 -0700 (PDT)
+Received: from xeon.. ([188.163.112.51])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac2895e7e6asm274697566b.54.2025.03.10.00.57.11
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Mon, 10 Mar 2025 00:57:12 -0700 (PDT)
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+To: "Rafael J. Wysocki" <rafael@kernel.org>,
+	Daniel Lezcano <daniel.lezcano@linaro.org>,
+	Zhang Rui <rui.zhang@intel.com>,
+	Lukasz Luba <lukasz.luba@arm.com>,
+	Rob Herring <robh@kernel.org>,
+	Krzysztof Kozlowski <krzk+dt@kernel.org>,
+	Conor Dooley <conor+dt@kernel.org>,
+	Laxman Dewangan <ldewangan@nvidia.com>,
+	Svyatoslav Ryhel <clamor95@gmail.com>
+Cc: linux-pm@vger.kernel.org,
+	devicetree@vger.kernel.org,
+	linux-kernel@vger.kernel.org
+Subject: [PATCH v4 0/2] thermal: thermal-generic-adc: add temp sensor function
+Date: Mon, 10 Mar 2025 09:56:36 +0200
+Message-ID: <20250310075638.6979-1-clamor95@gmail.com>
+X-Mailer: git-send-email 2.43.0
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Date: Mon, 10 Mar 2025 08:22:23 +0100
-From: "Arnd Bergmann" <arnd@arndb.de>
-To: linux <linux@treblig.org>, "Lee Jones" <lee@kernel.org>,
- "Dmitry Torokhov" <dmitry.torokhov@gmail.com>,
- "Sebastian Reichel" <sre@kernel.org>, lgirdwood@gmail.com,
- "Mark Brown" <broonie@kernel.org>,
- "Alexandre Belloni" <alexandre.belloni@bootlin.com>, danielt@kernel.org,
- jingoohan1@gmail.com, "Helge Deller" <deller@gmx.de>,
- "Linus Walleij" <linus.walleij@linaro.org>,
- "Bartosz Golaszewski" <brgl@bgdev.pl>,
- "Thomas Bogendoerfer" <tsbogend@alpha.franken.de>
-Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
- linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
- dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
- "open list:GPIO SUBSYSTEM" <linux-gpio@vger.kernel.org>,
- linux-kernel@vger.kernel.org
-Message-Id: <26cd328d-efb6-4fab-969a-320a3968ea29@app.fastmail.com>
-In-Reply-To: <20250309193612.251929-1-linux@treblig.org>
-References: <20250309193612.251929-1-linux@treblig.org>
-Subject: Re: [PATCH 0/9] Remove pcf50633
-Content-Type: text/plain
-Content-Transfer-Encoding: 7bit
+Content-Transfer-Encoding: 8bit
 
-On Sun, Mar 9, 2025, at 20:36, linux@treblig.org wrote:
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
->
-> The pcf50633 was used as part of the OpenMoko devices but
-> the support for its main chip was recently removed in:
-> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
->
-> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
->
-> Remove it.
->
-> I've split this up based on the subcomponents to make the size
-> of each patch sensible.
->
-> Dave
->
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+To avoid duplicating sensor functionality and conversion tables, this
+design allows converting an ADC IIO channel's output directly into a
+temperature IIO channel. This is particularly useful for devices where
+hwmon isn't suitable or where temperature data must be accessible through
+IIO.
 
-Looks all good to me. Whole series
+One such device is, for example, the MAX17040 fuel gauge.
 
-Acked-by: Arnd Bergmann <arnd@arndb.de>
+The temperature data, while technically a product of conversion and thus
+categorized as IIO_CHAN_INFO_PROCESSED, maintains its unscaled state
+(milli-degree). To account for this, IIO_CHAN_INFO_RAW is used along with
+IIO_CHAN_INFO_SCALE to provide different degrees of accuracy.
+
+---
+Changes on switching from v3 to v4:
+- switch to use of RAW and SCALED channels to provide more accurate data
+
+Changes on switching from v2 to v3:
+- rephrased commit headers
+
+Changes on switching from v1 to v2:
+- documented #iio-channel-cells property
+- switched to IIO_CHAN_INFO_PROCESSED
+---
+
+Svyatoslav Ryhel (2):
+  dt-bindings: thermal: generic-adc: Add optional io-channel-cells
+    property
+  thermal: thermal-generic-adc: add temperature sensor channel
+
+ .../bindings/thermal/generic-adc-thermal.yaml |  4 ++
+ drivers/thermal/thermal-generic-adc.c         | 62 ++++++++++++++++++-
+ 2 files changed, 65 insertions(+), 1 deletion(-)
+
+-- 
+2.43.0
+
 
