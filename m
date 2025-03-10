@@ -1,86 +1,86 @@
-Return-Path: <linux-pm+bounces-23787-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23788-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 093D9A5AAD1
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 00:05:15 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id B45D8A5AC22
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 00:18:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A32F53AEDE2
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 23:05:02 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E6D7B173BC5
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 23:18:03 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 125FC1F8745;
-	Mon, 10 Mar 2025 23:05:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id BCF031F0991;
+	Mon, 10 Mar 2025 23:18:00 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="d9v/N/No"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="URoApfNJ"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from mail-qk1-f178.google.com (mail-qk1-f178.google.com [209.85.222.178])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6AEA01DE3D2;
-	Mon, 10 Mar 2025 23:05:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E08D81DDA09;
+	Mon, 10 Mar 2025 23:17:58 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.178
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741647910; cv=none; b=UT0dqdkgJhW2iywTmpDoNxDSXkBsfzbPGQel618hgDyE5UjZafjXGWneBnKm44CrC2eWPHWrQcKI51IZY/0bWRI+iW7SM+ltiWFIDVo+BDZ6Qme1vxF5I60R2KrKY8KupY2/HAj7aPJCUT23BZkG+vQemKCMnY/DbvIbQX/YTXI=
+	t=1741648680; cv=none; b=r/DE/lHgF+GHGh9RxDBV7mV83Ys9qfC7d0YKbZqUS7bTvdykY+UsZ0QUEKQRGTYQleHEm/NmajFdH+Adl3BG061Frc4LV6NZXXEVFvd4trwW7vCn4lq6/eotjutJm+etlEPN+qbCFSdpu/QVcvpl4+eW3aJzYqIP8otE/iRY0SA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741647910; c=relaxed/simple;
-	bh=nYy0n35w8J/4aF7MVdZQR6X3w5M3vPLdoazR6ifT8yQ=;
+	s=arc-20240116; t=1741648680; c=relaxed/simple;
+	bh=K+opj2WmllIZ3zYF7vRmhQnsO5I42FV4A7ebAvd0gRI=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=Q42WqkjH2kV3GLH/XLTT5lu4wTugPivyVERkj3nOc7G0Ok0d6u3zx+qwTJei23MJr7R57NTL2D5pNOCP/Ap+Xbt+VPIMPsAQiGuutrroV9hUqRN/ajWz1+HNJbv2O/nlLRp21bE4A0pxNXYuna5gKHigUwMu0lkTrPLHPiYnP8c=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=d9v/N/No; arc=none smtp.client-ip=209.85.222.178
+	 To:Cc:Content-Type; b=qy8t3ijkUQDzUI3nEgLjgTquE1zk+/RiNSkmS+MmEccayR9sZm7LSBMravhmV+LTz41fmY5TrqNHojIrVadDwL7JwSXDeJsPg8VlZPB3fl3XSflekPcUJxc7+laKukaRfY14two8lot2ojUCIsF1y9vW9jUkJ8ZEfwJkk/LSOVw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=URoApfNJ; arc=none smtp.client-ip=209.85.222.178
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7c542ffec37so231271185a.2;
-        Mon, 10 Mar 2025 16:05:08 -0700 (PDT)
+Received: by mail-qk1-f178.google.com with SMTP id af79cd13be357-7c556b7bb12so115517885a.0;
+        Mon, 10 Mar 2025 16:17:58 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741647907; x=1742252707; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741648678; x=1742253478; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=eeArYs7E3iNBbYq1flgNf+/C0MnZEZNo3VaP51YRBrw=;
-        b=d9v/N/NoK3J9oiNV0ioQlEB6tvDzdYshdxLfwcDzMD+ewr9tUliu6ExRDgiyHXlBfG
-         F6DQAbwAXdyOxYcm7m2/Gu72pMF05+0jPJS/+r4BN8KkEmoaWdiZV0nzQjEDXaUbqU66
-         GeQ1xdmBAPqDAO33t+kqGEkSDfE4swcPZMpjKKvkbIvSbAufeS5gg3WBuZcm3XdlKnUM
-         l2RWZLGwSJtQgRA2sinYKZ18wvRwMGhuX/moMbj0UsAlE01RSZjSmmTABZyQAgZQGS/1
-         DuwjL3OfG3BnXm+8we8QJIhJSYSfWVRVvUA3VNFhKq/ZoyP/AoFp5x/V5bua2NglHG0b
-         a6hw==
+        bh=+kxAlH0RkdQmQhCbEiZXUV0WoFVDMK0yaoIjbU1xdUc=;
+        b=URoApfNJ58URHP7XWkA+bc02oB/wXM00k0x9AXtWP4F8BliRRb8lZkML5dxUq8hMFO
+         MG416/NeNMbvhE3fBfg2YoYNI8XWoVEEDK7hCL9plcXfQIQYIl7ICxeDOSCqPRmpuCbr
+         EosMMsUrZiy4IlnZC11QVyVQUX1kCcpEfWeoIbFAnzNYkU4wAbcnWQk37aEH0qLbZT1e
+         L3JUxGKBlZB054LQselUy/+XCykdQzwpAAs/ZEPPAlMRlek5FEIcRsZUrulPxqzIsJ2F
+         DPRWmMcIjC9uB5Wv/B4KPhIbLYYXHUgwRW6CGwwvUgkwSLZFb//Ey/EK32vvXTQLz4dn
+         lASQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741647907; x=1742252707;
+        d=1e100.net; s=20230601; t=1741648678; x=1742253478;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=eeArYs7E3iNBbYq1flgNf+/C0MnZEZNo3VaP51YRBrw=;
-        b=DyEcYJD0Tq5cnXuUWfl1nHqtZ8Mlt8/4MyDyhSQyAwqy6mzS6uLLjwhRaPnxPzsBC8
-         cMnccY+MnToNU/THPF3u2UsHpLpBJ8WyiRgJ0FQ71G4tUYPPot7hnGKta2Ol6qR+vBCo
-         DQbMGrOgMI81x6/yCubb6L8lu4KMZ6AW/o8IB4LfRzfFZkJqtvK7i0vzHvMqHJFYgpkp
-         8yUtZg8ekjYOMUYszm5Ngo4LDp4Z2ukdWl4Iey59HcYiEFdIthhG+E2yD/vgzg5Aq6/r
-         dzWHI38dq2AZPe+gZKeTRJUavL0dVQiPgrFfOWp/Q7tOQ59HVIjRdlTgnoZIv87T9knM
-         iw9g==
-X-Forwarded-Encrypted: i=1; AJvYcCVYE2MpnXuugcoW2LArQiWSahFvA9WvV+BbSrbbb85jQOHam1VzT76LqUu2uiwUWKX/NpSmybLbpCBjKrI=@vger.kernel.org, AJvYcCViG5c9L5TLk1rv19vkUeR8RaBQZ9zt5jSEOh2hBgNk97ipYiX7nejaNvQupT5AoXgQwH1Dh+pnx1o=@vger.kernel.org, AJvYcCWtfePyqNdZX3Mb2O0MUwnrOudvArIkwW50eIQFAY6iYfbTRfsqJh0OHrM89AuMddudWexhpAYbAik=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwtHQaiPzZ4EfX1jKQDqOAFJBKujkEbrkv80gRiOm5qi3KRRtep
-	xlfF+mR9Hl/XtX6XUg1yjPB6WWmrw7xHEI2cConJyUQ1tiKy8531CduSo3Gm2gmiGSS/ZzoYft2
-	I0UX9HHou9MC5WOBic/8ZsxVigaM=
-X-Gm-Gg: ASbGncut9RBF6kedk8xSHENbXyLmrOfYCDOgWlaxSAsXXbZq+xzbKK2VSbgqkAmgfY5
-	Zwot7Jp40+0kNEG2xm8Iw49EEbfpRAtqwZy6Yw2CVEaXuuH4l4T8bAppVNiHohm4s7a/JGQ2MuH
-	ZugFifaDvnTYieALWzhdr1tTd1ChM=
-X-Google-Smtp-Source: AGHT+IHseeC4LW9zHhyh6Vus9zlbD1jzAdLLHMjgqo9ijfORYdoCA8rv4OQFat2uD5vm9oN9t8lPlhj5rvNgGpM9Kqk=
-X-Received: by 2002:a05:6214:2b0d:b0:6d8:8a8f:75b0 with SMTP id
- 6a1803df08f44-6ea2dd20283mr20084776d6.14.1741647907160; Mon, 10 Mar 2025
- 16:05:07 -0700 (PDT)
+        bh=+kxAlH0RkdQmQhCbEiZXUV0WoFVDMK0yaoIjbU1xdUc=;
+        b=iRit3/un1fi9EaSBlZHQczLDjtw4MA/CCaZ2vT3gYyU8RnRp/YQc17i4HmZdfNZP14
+         co9/yZprJklPtmRVUISyfPShWv2bAFRGHzG73GosVHUW/3OCZJ65gJgJ3fDaebFcvbMA
+         jlweBP6s7jnZ/22z/6yNiDrj5v+JrqaIz+pZdjBDsEOIsE9r6dxmhMDs1Z8Q9B1mcp5X
+         tsRx6jh5aBzho0cAAIK8rMiuvXwIL6FbMmJfpG1zRyx2ZkX9FF7mK1C/TXTAs66E1TE5
+         pHn75/zYzP/8hhNpdu41n53+RqPVh5DVWzWU+BS7FEJBPSdIP2+3gdXqvfz/CycUcYAZ
+         RfqQ==
+X-Forwarded-Encrypted: i=1; AJvYcCU6R/m6H54UhlXow87WS5j7Mv7yKr8uOd63rJL4UJvXAuRVWsYbKKPJgXKzchG8zyRrSIRHBeJFVIE=@vger.kernel.org, AJvYcCWIXmK69W0lY9dlqcVpkz7T8ctCJTdylrgYawvIC4rZ46VKLYv8q3FacIUbMcJDuA3VhSa5h0QzVb/03jE=@vger.kernel.org, AJvYcCXUh/vapyuvHq3HaddN9uC72Bcw3LU1FYFrjg+MSRyUfKIHDYr6wL7EpzSkmbKJIn1CI9zrgpCYZzc=@vger.kernel.org
+X-Gm-Message-State: AOJu0YyGw+1VFiNOv7MbiT2NPCC6uGtPPaz1xsx5+8Mw6oXoLGJbzJGG
+	80WesowiRjQrGTqRNpJ4pcXvkH+d3a+coQL9M/+9pZfnN2eS/9UoCo2nVSjegXco0CLWLs244RU
+	FKNzxGLkx/92JIcE5l4vM7NLxPOY=
+X-Gm-Gg: ASbGncse/aHSGG7YfqMgBsArsNR8buhysX6MkyDaQQkwXNwtjQhCuOx495mbamB4Bld
+	C6P/AYEmceOQTggaq35XZYz/tbYx5LoEj2s5z9ZHiQ7OQdy1JF0UtxM8oaJ5FlLbrK3Fiy63yTv
+	y5OOOnu+GIppbH8Res7SBZAf9MPVg=
+X-Google-Smtp-Source: AGHT+IEuLhLbfWpqKcUnhtiNjheXrWdUu2+AmcxQdyMsRlw9Zlp908S1cXyNG+szLfKpsDlu3otyPvi6RU20bBHbrmw=
+X-Received: by 2002:a05:6214:da9:b0:6e8:ee44:ce9f with SMTP id
+ 6a1803df08f44-6e900604697mr251358806d6.20.1741648677701; Mon, 10 Mar 2025
+ 16:17:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250309112114.1177361-1-lkml@antheas.dev> <20250309112114.1177361-2-lkml@antheas.dev>
-In-Reply-To: <20250309112114.1177361-2-lkml@antheas.dev>
+References: <20250309112114.1177361-1-lkml@antheas.dev> <20250309112114.1177361-4-lkml@antheas.dev>
+In-Reply-To: <20250309112114.1177361-4-lkml@antheas.dev>
 From: Derek John Clark <derekjohn.clark@gmail.com>
-Date: Mon, 10 Mar 2025 16:04:56 -0700
-X-Gm-Features: AQ5f1Jq9VwFHNEFU7lLeGSmJ13yn7Ad4XC2XKVKvsKkS3lqYQS6EMX9mR_VPSb8
-Message-ID: <CAFqHKT=9mfqEVT5XHbKnspAwJ_mcd1Q4gf7DxHXL33bLaxTBvw@mail.gmail.com>
-Subject: Re: [PATCH v3 01/12] hwmon: (oxp-sensors) Distinguish the X1 variants
+Date: Mon, 10 Mar 2025 16:17:46 -0700
+X-Gm-Features: AQ5f1JroAh30RFRqwBJMBODA64lcEg3QOB0t3UypnJGzrO41y8p_5rDEUkixGNA
+Message-ID: <CAFqHKTn4hrKS0aiG1UNfZG5+mVcWEZw729pKv2YhXJtsFDCJEA@mail.gmail.com>
+Subject: Re: [PATCH v3 03/12] platform/x86: oxpec: Move hwmon/oxp-sensors to platform/x86
 To: Antheas Kapenekakis <lkml@antheas.dev>
 Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
@@ -94,63 +94,202 @@ Content-Transfer-Encoding: quoted-printable
 On Sun, Mar 9, 2025 at 4:21=E2=80=AFAM Antheas Kapenekakis <lkml@antheas.de=
 v> wrote:
 >
-> Currently, the oxp-sensors driver fuzzy matches the X1 variants. Luckily,
-> X1 and X1 mini share most hardware features so this works. However, they
-> are completely different product lines, and there is an expectation that
-> OneXPlayer will release more devices in the X1 line that may have
-> differences.
+> The EC of OneXPlayer devices used to only control the fan.
+> This is no longer the case, with the EC of OneXPlayer gaining
+> additional functionality (turbo button, turbo led, battery controls).
 >
-> Therefore, distinguish the 3 devices that currently exist in the market.
-> These are the OneXPlayer X1 AMD and Intel variants, and the X1 mini which
-> only has an AMD variant. As far as registers go, all three support the
-> current driver functionality.
+> As it will be beneficial from a complexity perspective
+> to retain this driver as a single unit, move it out
+> of hwmon, and into platform/x86.
 >
+> While at it, add myself to the maintainer's file.
+>
+> Acked-by: Guenter Roeck <linux@roeck-us.net>
 > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 > ---
->  drivers/hwmon/oxp-sensors.c | 23 ++++++++++++++++++++++-
->  1 file changed, 22 insertions(+), 1 deletion(-)
+>  Documentation/hwmon/index.rst                         |  2 +-
+>  Documentation/hwmon/{oxp-sensors.rst =3D> oxpec.rst}    |  0
+>  MAINTAINERS                                           |  7 ++++---
+>  drivers/hwmon/Kconfig                                 | 11 -----------
+>  drivers/hwmon/Makefile                                |  1 -
+>  drivers/platform/x86/Kconfig                          | 11 +++++++++++
+>  drivers/platform/x86/Makefile                         |  3 +++
+>  drivers/{hwmon/oxp-sensors.c =3D> platform/x86/oxpec.c} | 10 ++++------
+>  8 files changed, 23 insertions(+), 22 deletions(-)
+>  rename Documentation/hwmon/{oxp-sensors.rst =3D> oxpec.rst} (100%)
+
+IMO this should also be moved, it doesn't really make sense that hwmon
+would continue to carry the docs after the move. Platform/x86 doesn't
+seem to have a home in Documentation, perhaps misc-devices? Armin or
+Ilpo may have some thoughts here.
+
+>  rename drivers/{hwmon/oxp-sensors.c =3D> platform/x86/oxpec.c} (98%)
 >
-> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-> index 83730d931824..5a4230ad3757 100644
+> diff --git a/Documentation/hwmon/index.rst b/Documentation/hwmon/index.rs=
+t
+> index 874f8fd26325..dd7a54d5f281 100644
+> --- a/Documentation/hwmon/index.rst
+> +++ b/Documentation/hwmon/index.rst
+> @@ -186,7 +186,7 @@ Hardware Monitoring Kernel Drivers
+>     nzxt-kraken3
+>     nzxt-smart2
+>     occ
+> -   oxp-sensors
+> +   oxpec
+>     pc87360
+>     pc87427
+>     pcf8591
+> diff --git a/Documentation/hwmon/oxp-sensors.rst b/Documentation/hwmon/ox=
+pec.rst
+> similarity index 100%
+> rename from Documentation/hwmon/oxp-sensors.rst
+> rename to Documentation/hwmon/oxpec.rst
+> diff --git a/MAINTAINERS b/MAINTAINERS
+> index 0248c9eb39d6..a11d346a458b 100644
+> --- a/MAINTAINERS
+> +++ b/MAINTAINERS
+> @@ -17641,12 +17641,13 @@ S:    Maintained
+>  F:     drivers/mtd/nand/onenand/
+>  F:     include/linux/mtd/onenand*.h
+>
+> -ONEXPLAYER FAN DRIVER
+> +ONEXPLAYER PLATFORM EC DRIVER
+> +M:     Antheas Kapenekakis <lkml@antheas.dev>
+>  M:     Derek John Clark <derekjohn.clark@gmail.com>
+>  M:     Joaqu=C3=ADn Ignacio Aramend=C3=ADa <samsagax@gmail.com>
+> -L:     linux-hwmon@vger.kernel.org
+> +L:     platform-driver-x86@vger.kernel.org
+>  S:     Maintained
+> -F:     drivers/hwmon/oxp-sensors.c
+> +F:     drivers/platform/x86/oxpec.c
+>
+>  ONIE TLV NVMEM LAYOUT DRIVER
+>  M:     Miquel Raynal <miquel.raynal@bootlin.com>
+> diff --git a/drivers/hwmon/Kconfig b/drivers/hwmon/Kconfig
+> index 4cbaba15d86e..09f7aed96d15 100644
+> --- a/drivers/hwmon/Kconfig
+> +++ b/drivers/hwmon/Kconfig
+> @@ -1774,17 +1774,6 @@ config SENSORS_NZXT_SMART2
+>
+>  source "drivers/hwmon/occ/Kconfig"
+>
+> -config SENSORS_OXP
+> -       tristate "OneXPlayer EC fan control"
+> -       depends on ACPI_EC
+> -       depends on X86
+> -       help
+> -               If you say yes here you get support for fan readings and =
+control over
+> -               OneXPlayer handheld devices. Only OneXPlayer mini AMD han=
+dheld variant
+> -               boards are supported.
+> -
+> -               Can also be built as a module. In that case it will be ca=
+lled oxp-sensors.
+> -
+>  config SENSORS_PCF8591
+>         tristate "Philips PCF8591 ADC/DAC"
+>         depends on I2C
+> diff --git a/drivers/hwmon/Makefile b/drivers/hwmon/Makefile
+> index b7ef0f0562d3..0edb08824b17 100644
+> --- a/drivers/hwmon/Makefile
+> +++ b/drivers/hwmon/Makefile
+> @@ -181,7 +181,6 @@ obj-$(CONFIG_SENSORS_NTC_THERMISTOR)        +=3D ntc_=
+thermistor.o
+>  obj-$(CONFIG_SENSORS_NZXT_KRAKEN2) +=3D nzxt-kraken2.o
+>  obj-$(CONFIG_SENSORS_NZXT_KRAKEN3) +=3D nzxt-kraken3.o
+>  obj-$(CONFIG_SENSORS_NZXT_SMART2) +=3D nzxt-smart2.o
+> -obj-$(CONFIG_SENSORS_OXP) +=3D oxp-sensors.o
+>  obj-$(CONFIG_SENSORS_PC87360)  +=3D pc87360.o
+>  obj-$(CONFIG_SENSORS_PC87427)  +=3D pc87427.o
+>  obj-$(CONFIG_SENSORS_PCF8591)  +=3D pcf8591.o
+> diff --git a/drivers/platform/x86/Kconfig b/drivers/platform/x86/Kconfig
+> index 0258dd879d64..4531b20c6b30 100644
+> --- a/drivers/platform/x86/Kconfig
+> +++ b/drivers/platform/x86/Kconfig
+> @@ -1186,6 +1186,17 @@ config SEL3350_PLATFORM
+>           To compile this driver as a module, choose M here: the module
+>           will be called sel3350-platform.
+>
+> +config OXP_EC
+> +       tristate "OneXPlayer EC platform control"
+> +       depends on ACPI_EC
+> +       depends on X86
+> +       help
+> +               Enables support for the platform EC of OneXPlayer and AOK=
+ZOE
+> +               handheld devices. This includes fan speed, fan controls, =
+and
+> +               disabling the default TDP behavior of the device. Due to =
+legacy
+> +               reasons, this driver also provides hwmon functionality to=
+ Ayaneo
+> +               devices and the OrangePi Neo.
+> +
+
+I don't think it is necessary to indicate future plans in config
+options or documentation. It should just reflect the current state of
+the kernel at the time of the patch. Whenever I get to submitting
+ayaneo-platform I'll remove the necessary notes from Kconfigs, Docs,
+etc.
+
+>  endif # X86_PLATFORM_DEVICES
+>
+>  config P2SB
+> diff --git a/drivers/platform/x86/Makefile b/drivers/platform/x86/Makefil=
+e
+> index e1b142947067..f64a191c1162 100644
+> --- a/drivers/platform/x86/Makefile
+> +++ b/drivers/platform/x86/Makefile
+> @@ -153,3 +153,6 @@ obj-$(CONFIG_WINMATE_FM07_KEYS)             +=3D winm=
+ate-fm07-keys.o
+>
+>  # SEL
+>  obj-$(CONFIG_SEL3350_PLATFORM)         +=3D sel3350-platform.o
+> +
+> +# OneXPlayer
+> +obj-$(CONFIG_OXP_EC)           +=3D oxpec.o
+> \ No newline at end of file
+> diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/platform/x86/oxpec.c
+> similarity index 98%
+> rename from drivers/hwmon/oxp-sensors.c
+> rename to drivers/platform/x86/oxpec.c
+> index f7a64fbc8f33..dc3a0871809c 100644
 > --- a/drivers/hwmon/oxp-sensors.c
-> +++ b/drivers/hwmon/oxp-sensors.c
-> @@ -205,7 +205,28 @@ static const struct dmi_system_id dmi_table[] =3D {
->         {
->                 .matches =3D {
->                         DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> -                       DMI_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1"),
-> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1 A"=
-),
-> +               },
-> +               .driver_data =3D (void *)oxp_x1,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1 i"=
-),
-> +               },
-> +               .driver_data =3D (void *)oxp_x1,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1 mi=
-ni"),
-> +               },
-> +               .driver_data =3D (void *)oxp_x1,
-> +       },
-> +       {
-> +               .matches =3D {
-> +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER X1Pro=
-"),
->                 },
->                 .driver_data =3D (void *)oxp_x1,
->         },
+> +++ b/drivers/platform/x86/oxpec.c
+> @@ -1,11 +1,8 @@
+>  // SPDX-License-Identifier: GPL-2.0+
+>  /*
+> - * Platform driver for OneXPlayer, AOKZOE, AYANEO, and OrangePi Handheld=
+s
+> - * that expose fan reading and control via hwmon sysfs.
+> - *
+> - * Old OXP boards have the same DMI strings and they are told apart by
+> - * the boot cpu vendor (Intel/AMD). Of these older models only AMD is
+> - * supported.
+> + * Platform driver for OneXPlayer and AOKZOE devices. For the time being=
+,
+> + * it also exposes fan controls for AYANEO, and OrangePi Handhelds via
+> + * hwmon sysfs.
+>   *
+
+Same as above.
+
+Cheers,
+- Derek
+
+>   * Fan control is provided via pwm interface in the range [0-255].
+>   * Old AMD boards use [0-100] as range in the EC, the written value is
+> @@ -16,6 +13,7 @@
+>   *
+>   * Copyright (C) 2022 Joaqu=C3=ADn I. Aramend=C3=ADa <samsagax@gmail.com=
+>
+>   * Copyright (C) 2024 Derek J. Clark <derekjohn.clark@gmail.com>
+> + * Copyright (C) 2025 Antheas Kapenekakis <lkml@antheas.dev>
+>   */
+>
+>  #include <linux/acpi.h>
 > --
 > 2.48.1
 >
-
-Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
 
