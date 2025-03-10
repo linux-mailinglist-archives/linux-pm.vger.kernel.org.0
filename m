@@ -1,89 +1,85 @@
-Return-Path: <linux-pm+bounces-23731-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23732-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id ABD1CA58BBD
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 06:50:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 5DB0CA58BD2
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 06:56:47 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 5FB5E3A8A40
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 05:50:27 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 242273A9009
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 05:56:35 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 23E1B1C57B2;
-	Mon, 10 Mar 2025 05:50:35 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7331E1C726D;
+	Mon, 10 Mar 2025 05:56:43 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="lsYelF8V"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="elnAhOBb"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-pl1-f171.google.com (mail-pl1-f171.google.com [209.85.214.171])
+Received: from mail-pj1-f46.google.com (mail-pj1-f46.google.com [209.85.216.46])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 8CB471B6556
-	for <linux-pm@vger.kernel.org>; Mon, 10 Mar 2025 05:50:33 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.214.171
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DBF181B4153
+	for <linux-pm@vger.kernel.org>; Mon, 10 Mar 2025 05:56:41 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.216.46
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741585835; cv=none; b=SWcA9FcoJvJ3vgSFws3/tbHwazc6Kxx6CLBNbbrTg+FbuRNHvyTF2usz1Qf1D9pTm51LFVG4hDD0sKWiMm9QG2Re6Y1GVj9Ibugu2b370VbTYK0+CCLpbDM/MLKQwD+MulqLq/H4fj3HGRpW5x2UUDzoQV5nEH6BgNxG4efFQOU=
+	t=1741586203; cv=none; b=nIeSKXdmsFM/1NlpLtN2k35YAw1h5HoWTmA3Nb15cGVPttq4wCtNKrnHWHariVoHos07zLyJgdJEpWnXt8Ld0zXN67h+GcvKMQWUZ017BZjMe6TlMLT7ujYlsVqpWRvIkAqZge9Lg9XqTp3ApEp9rKBcr8H1vcApAcqTtFrNJrE=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741585835; c=relaxed/simple;
-	bh=zYnvO7UxXaLKDgnQdtARGxHYoWdcUJWZPhez49Oo7HA=;
+	s=arc-20240116; t=1741586203; c=relaxed/simple;
+	bh=ogc/PLKhLA+4ildeifsiCVubE0nHzzPp5u3yxw5rR0A=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=mzKu1BBbhXrFzuaYfIxz33xR/z1SZXqAdubF39hhdQbunSCGiEL0ox1cwdlvDRS+bdrad0jMqeuPMuiVwfjLqn7ZSqDudnFx/DPTdd/o9XVOgVF2gDRDQL+JhmkzegVTngo3qjCs/EbeqQUb1oszlwRXwydHkiFVJwSeATyOBJo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=lsYelF8V; arc=none smtp.client-ip=209.85.214.171
+	 Content-Type:Content-Disposition:In-Reply-To; b=nFg7eu6fmEhFrPuRHUp7/Wg14huhFA8Qbaw/fNylmtecluCKWOq1Ho0uAoxQuS8b59DDRELLAEYGbaQgrqrW/yMe4gAvl765dMbkkMTWt4OlNlamHbPMKKkc6CTu600j8M38/ExTrUUl6FGVV5P9SUZawgFsOR4yr7cN7e1eY4w=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=elnAhOBb; arc=none smtp.client-ip=209.85.216.46
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-pl1-f171.google.com with SMTP id d9443c01a7336-22409077c06so47935825ad.1
-        for <linux-pm@vger.kernel.org>; Sun, 09 Mar 2025 22:50:33 -0700 (PDT)
+Received: by mail-pj1-f46.google.com with SMTP id 98e67ed59e1d1-2ff799d99dcso6091880a91.1
+        for <linux-pm@vger.kernel.org>; Sun, 09 Mar 2025 22:56:41 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741585833; x=1742190633; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1741586201; x=1742191001; darn=vger.kernel.org;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=UwUL+b7ViJdTbaqWpBCbM43ivsoRmiuqDxKHQGJRDvo=;
-        b=lsYelF8VO/wVUjaV36pPJvzGnzNrVXBmOxjOXcbW9T9adNqy1w7H7YZm3JH6Zi7mPX
-         DEOejG45HV4inYdrOVmVkfG1XS2CAhDL0ufkHN5zObwGIhhZPsf0cfgu8li36aRR9DXW
-         9X8VuONPHJzMzTU2xeKxsM73CmsW2Kn9IZdW/tJxdm6xCdaSCaLcpccQAC5AVkKdu6h3
-         9MbopGVLHCOScwMj+4+RuyycmfV/AU99HOIijxo+gLTOaw3Eiqp5GQp6uZwvuVftIkcN
-         74Rqk6ePDcixAumaaI2OQodmVWXjANuwAnHuLBVIzilLaRrTMvwzsxNDkHDqtBx50HcJ
-         rWzQ==
+        bh=CN+dyAjCjHljtJLuzbqtk/LFsy9u3W/5RR8dhe14yeI=;
+        b=elnAhOBbTIIs9z8uc+B5NwMh4Sp35P5390Q6O3iOJ5eahnfRkh2TL8YyOUsmUZqUX6
+         KaweTvZzZykV4AMKza8zhUDLzZAn8Suhp49TTRqqVfxajlurGWyhNfPZBFqiXHIF+XLl
+         dnGrwNEw8IY6DyL1MgdLsucA0U9KsmMakYHbIps4Q4FsBeKXsMnSCORt5THlclJ0Zc//
+         jGjt4uiiTct9ctIgBbYjZpWwPY2HDKN03hZ+Q/iyaksT3eVid735vx8WNUa3KNUsEJl5
+         nPtCbmI4H1cZYF3XpYTLe7+GPEG2gRpU7Dwoz6X5Id8kU06Q3y+Z4qClqz7C2pkCAwJW
+         4w7g==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741585833; x=1742190633;
+        d=1e100.net; s=20230601; t=1741586201; x=1742191001;
         h=in-reply-to:content-disposition:mime-version:references:message-id
          :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=UwUL+b7ViJdTbaqWpBCbM43ivsoRmiuqDxKHQGJRDvo=;
-        b=Cpsbs0j3Z6oOyP+X5QCO+RPOBUnmGS44b44K7nzcZOTzrse5iY6sZ4invN9wOnDUWq
-         bzPxUyfGrP13nWsH6CdvWT1Ovi/9zTrCXB2EqYNgw+JbiRq2swh7Fjgriy0GshP5iVYN
-         7rQnLpp6H9VWUve24fyxoyNwUZFr+UGykPH1ySQ2WPbfPTpcKtStyLGpIO9RN//cZZ/H
-         gM6RgG5KmC2NSyt4BDuOTJ0tw7ElZNl+gM9WFFZO08AMhufLvjwcSKnY6zao+I9DTuyC
-         +8OOzmbJ121q5t9+K2myrgF7JKGxqyoK/rxPocWpHW0oWn4Xjv2rn2HSDzkcSVp5uxEA
-         VocA==
-X-Forwarded-Encrypted: i=1; AJvYcCV9X/w66t1ep+ynsTGAhHOEfMqh4z4GtHu0HsMMI87yZzKiE4/AYum3shVP+lOKdTctMXsmAWRHfg==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzEjVEHpFP5ILy5N4SlNLIASRUoP1U3LlF6vPDxtwN7W8OZTyDl
-	4d5JlzOaO1gco/Iq3mMsEnvaJqJV/3yMrPfDbVAgq9lf1Ek9BH3YhivVXOR3wys=
-X-Gm-Gg: ASbGncu1Wjecth0VvCpSDKu5F4KzjPaJzs8pKhK2Jfhk+veiRw1OEtSE44mOVAihWOm
-	6N0VNIfUCyL++bm5ZVq0oWy3XNPY28Jf4Am78Uck0RvvRfuYaU+eXGKhlkCRVpgEo5SKITHSJ1/
-	Zz9Wq0Uxg1OPM2FaAJEW2Pnr3dqpGaMayOnX1H5PuCttdOflhUfGxHTtf6t+KxiokFY7/BZgOfa
-	z5XOUQNRPmx/ZaPl4kUYweqU/03Ilt5gR4XliSsLrEVY6rc0P8+qyERdUE6fGA8JV+ZVYC2oA5f
-	OWiG+ecOxRemeaOPLeTZGyfkNj6GZACVYgzYwyJfH4ONEA==
-X-Google-Smtp-Source: AGHT+IHPp3K4l2ZyxYf/rKQ3RqUoT3ZhMn6STVsJw+Ky5U+CU8LfyTho0FXbT7xpiSFmiuzSgnUX3w==
-X-Received: by 2002:a05:6a00:b4e:b0:736:592e:795f with SMTP id d2e1a72fcca58-736aaa1d1d6mr13217009b3a.9.1741585832714;
-        Sun, 09 Mar 2025 22:50:32 -0700 (PDT)
+        bh=CN+dyAjCjHljtJLuzbqtk/LFsy9u3W/5RR8dhe14yeI=;
+        b=ceuFwzJ1kRrcdZADeiVvzPz7qXz9Uyxgy4jjBOCcYxU+m3BNJfxWD6bWKEjhvPjgxQ
+         PSjQMaCftNPQF4mGlRkW/aN+aBns3Y+h2uROG7gG2hhu6sLP9IL0PGMm9S0nlVJ+a/pc
+         pt1Xo2SyyxWA3kO3TahRGj2FWKuTNJox0fstpjvt3Ru48pa2HNgBderx54DU6JSYbcEU
+         Eye8fLr6OKDpM6UaH7+AoNg0ZXlTs3G943Nx/n3mOGmJq8QubY4vpewnBxg0eVZ+Vnss
+         YfKYqW8RwdtbrIgfJAOeP3ELz8M0pgtsgs2VOWzQ6o0ybZX2mFsDSKI5hVsJi1wJzta0
+         qhIA==
+X-Forwarded-Encrypted: i=1; AJvYcCWBYwL/QK2Nt0p/dp49ONkYZxHnqQhUbaFDB/tcKAB/zqr9XyvCFFL9b6WQpr9h36Q17uAN80WUvw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YywEMKzU08lSe2+/pXw/d3FARLnhFU3oKjjQejjYIGwlgp0IUGD
+	4KyDB8uLGfDvD4o419q9ps7sfEWII40ziOl4Nr1VA6YKcnLHQF0VM2yinE+WhtI=
+X-Gm-Gg: ASbGnculps5PK2no3/tfrnhIKrJ7Z+6Ejf88+hEYG+HbjQEN+etPLL7tU3PlJMDglb1
+	Me7m6kK0eFVb3JxlH2eIF34uXCZh0TXZBVztTPqE5ZXXd+FzLrxElGlyzFjIjKW0K+enH6eidLw
+	1Th+LuhWx3i9IGFicFFFXtJGMum0+fnhct+3EdAUPDmk9/SU79i0ADjplFVkOZBOlnOK11WCjT9
+	mV6pedjGqUpCbzVHnAtLyCzrTIeRdrn3ePRaUXrErXD1A33Qe7dgkl5STPZrjv47UeXGzUVY+/G
+	A9K9NKwNj9fJAx6gSZmoje/KpceU0qpdm3qvB2Yh/guw7w==
+X-Google-Smtp-Source: AGHT+IGs18fScHki5qpjheaZbhsERO386I6rYov4XoF2rp1kLIxdhWJTut8A6tr/2Pu8Pb+kVYz/YA==
+X-Received: by 2002:a17:90b:3891:b0:2f4:432d:250d with SMTP id 98e67ed59e1d1-2ff7ce93e54mr18647514a91.21.1741586201179;
+        Sun, 09 Mar 2025 22:56:41 -0700 (PDT)
 Received: from localhost ([122.172.84.15])
-        by smtp.gmail.com with ESMTPSA id d2e1a72fcca58-736ca79944csm2481508b3a.87.2025.03.09.22.50.31
+        by smtp.gmail.com with ESMTPSA id 98e67ed59e1d1-2ff69374306sm7038067a91.22.2025.03.09.22.56.40
         (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Sun, 09 Mar 2025 22:50:32 -0700 (PDT)
-Date: Mon, 10 Mar 2025 11:20:29 +0530
+        Sun, 09 Mar 2025 22:56:40 -0700 (PDT)
+Date: Mon, 10 Mar 2025 11:26:38 +0530
 From: Viresh Kumar <viresh.kumar@linaro.org>
-To: webgeek1234@gmail.com
-Cc: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Thierry Reding <thierry.reding@gmail.com>,
-	Jonathan Hunter <jonathanh@nvidia.com>, linux-pm@vger.kernel.org,
-	linux-tegra@vger.kernel.org, linux-kernel@vger.kernel.org,
-	Aaron Kling <luceoscutum@gmail.com>,
-	Sumit Gupta <sumitg@nvidia.com>,
-	Thierry Reding <treding@nvidia.com>
-Subject: Re: [PATCH v2] cpufreq: tegra186: Share policy per cluster
-Message-ID: <20250310055029.7u4qkmcnfqhtof24@vireshk-i7>
-References: <20250310-cpufreq-t186-share-policy-v2-1-d0b743cd051f@gmail.com>
+To: Zxyan Zhu <zxyan20@163.com>
+Cc: vireshk@kernel.org, nm@ti.com, sboyd@kernel.org,
+	linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
+Subject: Re: [PATCH 1/1] OPP: Support multiple frequency points with
+ opp-hz-<name>
+Message-ID: <20250310055638.tvxz2y2sxm3e6hw3@vireshk-i7>
+References: <20250304125256.3361648-1-zxyan20@163.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -92,22 +88,47 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=us-ascii
 Content-Disposition: inline
-In-Reply-To: <20250310-cpufreq-t186-share-policy-v2-1-d0b743cd051f@gmail.com>
+In-Reply-To: <20250304125256.3361648-1-zxyan20@163.com>
 
-On 10-03-25, 00:28, Aaron Kling via B4 Relay wrote:
-> From: Aaron Kling <luceoscutum@gmail.com>
-> 
-> This functionally brings tegra186 in line with tegra210 and tegra194,
-> sharing a cpufreq policy between all cores in a cluster.
-> 
-> Reviewed-by: Sumit Gupta <sumitg@nvidia.com>
-> Acked-by: Thierry Reding <treding@nvidia.com>
-> Signed-off-by: Aaron Kling <webgeek1234@gmail.com>
+On 04-03-25, 20:52, Zxyan Zhu wrote:
+> Current OPP driver only supports a single frequency value per OPP
+> entry using `opp-hz`. This patch extends the functionality to allow
+> retrieving named frequency points using `opp-hz-<name>`, improving
+> flexibility for different operating modes.
+
+I believe you have a use case for this ? Can you post that too ?
+
+> Signed-off-by: Zxyan Zhu <zxyan20@163.com>
 > ---
->  drivers/cpufreq/tegra186-cpufreq.c | 7 +++++++
->  1 file changed, 7 insertions(+)
+>  drivers/opp/of.c | 28 ++++++++++++++++++++--------
+>  1 file changed, 20 insertions(+), 8 deletions(-)
+> 
+> diff --git a/drivers/opp/of.c b/drivers/opp/of.c
+> index a24f76f5fd01..d20802b0f89c 100644
+> --- a/drivers/opp/of.c
+> +++ b/drivers/opp/of.c
+> @@ -752,18 +752,30 @@ EXPORT_SYMBOL_GPL(dev_pm_opp_of_remove_table);
+>  static int _read_rate(struct dev_pm_opp *new_opp, struct opp_table *opp_table,
+>  		      struct device_node *np)
+>  {
+> -	struct property *prop;
+> +	struct property *prop = NULL;
+>  	int i, count, ret;
+>  	u64 *rates;
+> +	char name[NAME_MAX];
+>  
+> -	prop = of_find_property(np, "opp-hz", NULL);
+> -	if (!prop)
+> -		return -ENODEV;
+> +	/* Search for "opp-hz-<name>" */
+> +	if (opp_table->prop_name) {
 
-Applied. Thanks.
+There is a helper to do this job: _parse_named_prop() that you can
+reuse.
+
+You also need to update:
+Documentation/devicetree/bindings/opp/opp-v2-base.yaml for this new
+property. Entries are already there for other -named properties.
 
 -- 
 viresh
