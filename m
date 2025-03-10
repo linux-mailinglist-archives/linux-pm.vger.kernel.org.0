@@ -1,211 +1,285 @@
-Return-Path: <linux-pm+bounces-23789-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23790-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
-	by mail.lfdr.de (Postfix) with ESMTPS id DE48DA5AC58
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 00:19:57 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 46731A5ACF1
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 00:26:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id 62B10188E367
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 23:20:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5D983AF27A
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 23:25:51 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 2B3DA220699;
-	Mon, 10 Mar 2025 23:19:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A451322154D;
+	Mon, 10 Mar 2025 23:25:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="euyfDJIb"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V52qsO32"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
+Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AA53D1E6DCF;
-	Mon, 10 Mar 2025 23:19:47 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C182206AE;
+	Mon, 10 Mar 2025 23:25:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741648792; cv=none; b=fdPTumySYYVM5ZiLu5vgOAXZDyaJPtQvfiiBdAxedHCw7X0eDK4VekmhJ1FK/5TsLXnFFnf2XD4GaIjP02nkUf85ph4sezVadafDt3vV6HZUnb3VjbRferAF/Yu37dO5aohCEchSMCLKyJSBWOf+6kj+98lKImCl9O782YGJwpU=
+	t=1741649159; cv=none; b=qudKXljOjmMq2okYEp5r+74WztkQYSH9cyuNi+aqELqqBPGQjAZ9i6mYkl+j/zYiRXIheZY/uD1TEo9afOdwWaBbKciy8fyn3pthZGSLRcCL1wvOlUUheTuZidp5uD3KNPUXz3dfmbNcl/5qmVsd0VHsvJRKy6MdqGjqruxtM+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741648792; c=relaxed/simple;
-	bh=asbmRT+5cigpg/nxe78mpWESJk2Milh5ARw77OertXg=;
+	s=arc-20240116; t=1741649159; c=relaxed/simple;
+	bh=xc2FkzdcKvogky7tbs9cVvXJbKb+JT2qIskr1rBe1lA=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=QyKTlQsOt2P2J1n3ymElTrdr66n/uCxWjCZYqrpXV9R64Xau3I3ES2U3LNU8IcTxsm8gznk4uqank1nm2GmGcEfBHB6iD9IFy5BQRov5GLJA/mYACNaToAA/JxSGU2zTzx50t/PRXf0UQqyEcd6/iuYgOPNfPIqwJUqLnt3fEQg=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=euyfDJIb; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f180.google.com (mail-lj1-f180.google.com [209.85.208.180])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id A59292E097B2;
-	Tue, 11 Mar 2025 01:19:37 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1741648778;
-	bh=YvVhEO2lgbaJIm0nUMLfYRD352susORCoomlnrqUuW4=;
-	h=Received:From:Subject:To;
-	b=euyfDJIbo+jJ+5vYwQxIuBBzjBy3MC6EXC78Xz+AZAMX5jFOyR1rM3pZhIzXAwSeq
-	 hkSqIIIx0l6gxG+Q5WeMOqrrgFUPzQnCVuH/3y45X2QpheOfy/fmoF3rWiBz8P7b4L
-	 V4IZqk9oKNoCuQv8H/4DcjXGW6movqRsaxdkl6qc=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.180) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f180.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f180.google.com with SMTP id
- 38308e7fff4ca-30bee278c2aso47161151fa.0;
-        Mon, 10 Mar 2025 16:19:37 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCU2sbJPysMJbb4Mx05zt08g56w7n1y3nl7TM9WBcUkHaJyQTW0PfolZ6F1ywEhQznNO5IYwXG85Eag=@vger.kernel.org,
- AJvYcCW9JQ7zRQD3ES8AQUoUCvBQcosjSp4FpesrqjDJZohTifDG2hW3wfOPIwkvHQMuqyeXtxr2cMe4WQdjdL4=@vger.kernel.org,
- AJvYcCWhNC9ho356nhenue1sXWPVeKFwfMGhDFieFUhWW6bGvuRl3hNZ+5E7YeFt6FGzT/4neeE5id3gy8w=@vger.kernel.org
-X-Gm-Message-State: AOJu0YxqqyJ9fcZ4MbM0caOhvywNrT0Ib83lfEuCLqKlkNpLM9zQ/FKm
-	CtIlHE7mJzzpt7+C60rCZbxZN05ZWs0VPpS9DkpSAGqhFGhxwCT50QonmNLaGtlu4d8PwTlE76X
-	oAqe9I3x8bJEHkkp8CxTya6yTY/g=
-X-Google-Smtp-Source: 
- AGHT+IHMtd1vBx5zxEC8GMje3gClUFycVAfNYa3lLOVvSbQksO/dDyY+XhGW5lUgghS6n9sX2irsTya8QBCNaFdpmiI=
-X-Received: by 2002:a2e:b710:0:b0:30b:f2b4:8868 with SMTP id
- 38308e7fff4ca-30c20e3ee8fmr3975141fa.4.1741648776969; Mon, 10 Mar 2025
- 16:19:36 -0700 (PDT)
+	 To:Cc:Content-Type; b=JfT4WztC/hawscC2R5/zW1LSuG7u9HTRTrBLx4eFfaFmSjWF39BemcC5JZNcg3xV5mQOQNsEsHaz/Y6PS9NA01J9ZR9G9VaCmypol6fbIM/btTouQvtZYWYa7pCoGiCCRIA8D+xjwXijrnwwIWo8oiVk+MGygjzVedGeig+JsAo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V52qsO32; arc=none smtp.client-ip=209.85.219.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6df83fd01cbso21338676d6.2;
+        Mon, 10 Mar 2025 16:25:57 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741649156; x=1742253956; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=6Lr89eEuhBzZoZAHpEMRqTP7qesjfu7BBpvvzXDgz4U=;
+        b=V52qsO32b1zCXGFPbqvdgaZx7DIGem6jeA0+L1OaeI5irRSG5QOu+B9sh79fMG0BWV
+         MLye1k418L4Bimu9DvBpYfL4Mh2HM0ZdN5AQgBH5A1sFgTLevKdGDHjBTXST30I5OLvB
+         0rfFF+8Z0HZaXhZiyM1vmgb5k+zEkkNkfrrR6Qewab6xXEP2ojS0O6OuIw7ggzFQI5ac
+         0YM8jaVj1LhkgoEgoiQlFrHC01oo8UhR3HF2/2YEFTkiqXALTwSs0/ePtt+OJs2fdk73
+         WId1oGDCNtjKhGEBo/arAkvw30DUjcVGEfeJQ11Qe4de4s3TZ0apVx0rpq8e6P70UvIJ
+         3lKw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741649156; x=1742253956;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=6Lr89eEuhBzZoZAHpEMRqTP7qesjfu7BBpvvzXDgz4U=;
+        b=TKJ5E6GPnkLw+/VjsgZWc/WDwKvYgEfGpTicjFX9JJodo1X6ZtFiH+j8COihe7feSA
+         tqrn6Dr+LrviefDja8DSVK11M5pNovLUIuIHsZl5jKKJ3W641lLn8cWuOEgm8JMxOhUE
+         5YWPzUk2djy1PepAR/lGIRhAcxSSyVGrUeijFF9hJxt5stfo8x1X/dL5fxgmPow/wDLS
+         aXWZrdwRor344IKv/YnuY9oeDysULKSkcLZzek0MdvkG8+7Teyw0FMLQfHQ06nhbXfMU
+         +PF0pFzINOZ/vbt76a8ZfeGlK3yGe6I+ZtDbckbF5nh7zVUczz9bdzl/X3Fzk3q7qEeE
+         uQ1A==
+X-Forwarded-Encrypted: i=1; AJvYcCV/FgJAaDtz8IfMslMe5T8oP8v9h/ijqPtMU2JqrBaUql3uCY8bDh7WXthaaAmrWPIz/vEH6wV+xRmpPLI=@vger.kernel.org, AJvYcCVXkfH6vK8RtqP+nUvZ98E9G6Afp9IRhaYNPI6szqE/XL4H6yVj+wxuh9YrryxJN3FdDZ1Kz1MAJQA=@vger.kernel.org, AJvYcCXJcOe2kjKoQy/AOJTpvzPsNVA45yjUmEbpu61gB99ZJS/r4/hNE/aDP6DnQMfkYNNw9PTJGCS7H7E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YztqWfdmFo0VV4q8ycavbMIXZ/EdQvYxaNPkbX6PwQO8pv2OyIG
+	LrDPLKc0PBQCwPxBaVXaWFu5IaNrsSjCfd+pkoMG2GQgrnxeMU772TRq2V4nN038rAFdPEyuzQS
+	Wc+efUHaNcTxK1aa8iGaXm7kjzWE=
+X-Gm-Gg: ASbGnctTLt1O0QN3phoX5moB1IIwBtNj6w66djToannAX41ZYbi1HtYSztPEc7lhK+d
+	fUtuf6Jb1QOzvXaEEKRBsFw/Tli5BWcIqgTNV/NulAImfYrWvO2X9QXJDlFPByDSpjQzKgOOXHZ
+	bSTYX0A4kM4sNIN8cEyx9S0BOc8Fg=
+X-Google-Smtp-Source: AGHT+IH6eDV4ffoQYuA6cB3B7dAYpivHpL97tNADur9UBjrWdWefOGeWzTEPxwOrdixFpaz59E8dKfTgXdWUsIfvGNw=
+X-Received: by 2002:a05:6214:226f:b0:6d8:9d81:2107 with SMTP id
+ 6a1803df08f44-6e90064fb9fmr223330266d6.20.1741649156376; Mon, 10 Mar 2025
+ 16:25:56 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250309112114.1177361-1-lkml@antheas.dev>
- <20250309112114.1177361-3-lkml@antheas.dev>
- <CAFqHKTkvNhbTyDmqCOoMq61NXFTau1Gptbqe7EAqZc6GhQYb=w@mail.gmail.com>
-In-Reply-To: 
- <CAFqHKTkvNhbTyDmqCOoMq61NXFTau1Gptbqe7EAqZc6GhQYb=w@mail.gmail.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Tue, 11 Mar 2025 00:19:25 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwGrju56Ki3zqoh3TYZWHrv9+9EcDKqgktiXD5a+MHk1RA@mail.gmail.com>
-X-Gm-Features: AQ5f1JrvpRVUkYQvL48xwrhwTAVzuqRW7YL9RS2O7ksH8xsu8Zusad5mYjTBVO0
-Message-ID: 
- <CAGwozwGrju56Ki3zqoh3TYZWHrv9+9EcDKqgktiXD5a+MHk1RA@mail.gmail.com>
-Subject: Re: [PATCH v3 02/12] hwmon: (oxp-sensors) Add all OneXFly variants
-To: Derek John Clark <derekjohn.clark@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
- Kevin Greenberg <kdgreenberg234@protonmail.com>,
-	Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
+References: <20250309112114.1177361-1-lkml@antheas.dev> <20250309112114.1177361-5-lkml@antheas.dev>
+In-Reply-To: <20250309112114.1177361-5-lkml@antheas.dev>
+From: Derek John Clark <derekjohn.clark@gmail.com>
+Date: Mon, 10 Mar 2025 16:25:45 -0700
+X-Gm-Features: AQ5f1JpB1mK9aB6HRfuBfiGFj9QIeZ5CfKJEnQUIiiwnudg3HVpq9P0OuPYfS-o
+Message-ID: <CAFqHKTn0pTm_vjq0Vdw1qHeiubSrHJ_QJyM37K+eLTpAy_XQ-w@mail.gmail.com>
+Subject: Re: [PATCH v3 04/12] ABI: testing: add tt_toggle and tt_led entries
+To: Antheas Kapenekakis <lkml@antheas.dev>
+Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
+	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
+	Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>, 
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>, Kevin Greenberg <kdgreenberg234@protonmail.com>, 
+	Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>, 
 	Eileen <eileen@one-netbook.com>
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: 
- <174164877802.21696.1581097158961397919@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
 
-On Tue, 11 Mar 2025 at 00:04, Derek John Clark
-<derekjohn.clark@gmail.com> wrote:
+On Sun, Mar 9, 2025 at 4:21=E2=80=AFAM Antheas Kapenekakis <lkml@antheas.de=
+v> wrote:
 >
-> On Sun, Mar 9, 2025 at 4:21=E2=80=AFAM Antheas Kapenekakis <lkml@antheas.=
-dev> wrote:
-> >
-> > Currently, the driver only has the F1 OneXFly variant, which was based
-> > on the 7000 AMD platform. Add its special editions: F1 EVA-01, F1 OLED.
-> > F1 OLED might have been a dev unit, but it is supported by OneXConsole
-> > with the same features so add it. Then add the F1L variant which is
-> > based on the 8000 AMD platform and the F1Pro and its special edition
-> > EVA-02.
-> >
-> > One might ask why not just fuzzy match. Well, EVA-02 is a variant of
-> > F1Pro which is a Strix Point handheld, but does not have F1Pro in its
-> > name. This makes it risky to fuzzy match, as special variants in the
-> > future from different platforms might not have the same feature set
-> > or registers.
-> >
-> > By happenstance, all current devices use the same registers. For the
-> > charge limitting feature on this series, only F1Pro/X1 (AMD) were
-> > released with it, but OneXPlayer is providing bios updates for F1, F1L,
-> > X1 Mini units that use the same register, so treat all of them the same=
-.
-> >
-> Greeting Antheas,
+> When tt_toggle was introduced, it was not added to the platform sysfs.
+> Add it, then add documentation for tt_led. Remove the documentation
+> from the hwmon entry, then update its readme to be current.
 >
-> Do we know the BIOS version(s) that support was added? If so, I think
-> it makes sense to treat these as separate devices  and check for
-> device specific BIOS version in an is_visible for the charge limit
-> attr. I expect that calling the registers when support isn't present
-> will just be a no-op based on how OXP historically does things, but
-> having a present attribute that has no effect will probably generate
-> bug reports. It is also not appropriate to check/fix this in userspace
-> as some folks might use udev to set it over a program with such
-> checks.
+> Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
+> ---
+>  Documentation/ABI/testing/sysfs-platform-oxp | 29 +++++++++
+>  Documentation/hwmon/oxpec.rst                | 62 +++++++-------------
+>  2 files changed, 49 insertions(+), 42 deletions(-)
+>  create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
 >
-> Cheers,
-> - Derek
+> diff --git a/Documentation/ABI/testing/sysfs-platform-oxp b/Documentation=
+/ABI/testing/sysfs-platform-oxp
+> new file mode 100644
+> index 000000000000..8727d5ecaab5
+> --- /dev/null
+> +++ b/Documentation/ABI/testing/sysfs-platform-oxp
+> @@ -0,0 +1,29 @@
+> +What:          /sys/devices/platform/<platform>/tt_toggle
+> +Date:          Jun 2023
+> +KernelVersion: 6.5
+> +Contact:       "Antheas Kapenekakis" <lkml@antheas.dev>
+> +Description:
+> +               Takeover TDP controls from the device. OneXPlayer devices=
+ have a
+> +        turbo button that can be used to switch between two TDP modes
+> +        (usually 15W and 25W). By setting this attribute to 1, this
+> +        functionality is disabled, handing TDP control over to (Windows)
+> +        userspace software and the Turbo button turns into a keyboard
+> +        shortcut over the AT keyboard of the device.
 
-Unfortunately, I do not know the BIOS versions to check for older
-OneXFly devices.
+> In addition,
+> +        using this setting is a prerequisite for PWM control for most
+> +        devices (otherwise it NOOPs).
+> +
 
-OneXPlayer has informed their users they will need to update their
-BIOS and nobody has asked up to now, so I do not expect that to be
-that much of an issue. The ones that will need to update know that
-their device does not support it currently as they bought it without
-the feature. I think we rolled out the GUI for it 3 weeks ago now.
+Is this accurate? This wasn't the case for the mini pro/A1/A1 pro when
+we added them. If it is accurate, we should check for this in the pwm
+_store functions for affected devices so we can inform the user it
+failed (-EOPNOTSUP or similar).
 
-Eileen will know more about that and might be able to provide some
-BIOS ranges. I do not expect that to be that much of a problem
-though.Yes, it will noop as the register is unused.
+> +        This attribute was originally introduced in 6.5, without a
+> +        corresponding documentation entry.
+> +
 
-> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> > ---
-> >  drivers/hwmon/oxp-sensors.c | 35 +++++++++++++++++++++++++++++++++++
-> >  1 file changed, 35 insertions(+)
-> >
-> > diff --git a/drivers/hwmon/oxp-sensors.c b/drivers/hwmon/oxp-sensors.c
-> > index 5a4230ad3757..f7a64fbc8f33 100644
-> > --- a/drivers/hwmon/oxp-sensors.c
-> > +++ b/drivers/hwmon/oxp-sensors.c
-> > @@ -188,6 +188,41 @@ static const struct dmi_system_id dmi_table[] =3D =
-{
-> >                 },
-> >                 .driver_data =3D (void *)oxp_fly,
-> >         },
-> > +       {
-> > +               .matches =3D {
-> > +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> > +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1 =
-EVA-01"),
-> > +               },
-> > +               .driver_data =3D (void *)oxp_fly,
-> > +       },
-> > +       {
-> > +               .matches =3D {
-> > +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> > +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1 =
-OLED"),
-> > +               },
-> > +               .driver_data =3D (void *)oxp_fly,
-> > +       },
-> > +       {
-> > +               .matches =3D {
-> > +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> > +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1L=
-"),
-> > +               },
-> > +               .driver_data =3D (void *)oxp_fly,
-> > +       },
-> > +       {
-> > +               .matches =3D {
-> > +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> > +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1P=
-ro"),
-> > +               },
-> > +               .driver_data =3D (void *)oxp_fly,
-> > +       },
-> > +       {
-> > +               .matches =3D {
-> > +                       DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> > +                       DMI_EXACT_MATCH(DMI_BOARD_NAME, "ONEXPLAYER F1 =
-EVA-02"),
-> > +               },
-> > +               .driver_data =3D (void *)oxp_fly,
-> > +       },
-> >         {
-> >                 .matches =3D {
-> >                         DMI_MATCH(DMI_BOARD_VENDOR, "ONE-NETBOOK"),
-> > --
-> > 2.48.1
-> >
+This last line doesn't provide anything useful to someone reading the
+ABI docs for implementation. Please drop it.
+
+> +What:          /sys/devices/platform/<platform>/tt_led
+> +Date:          Feb 2025
+> +KernelVersion: 6.15
+> +Contact:       "Antheas Kapenekakis" <lkml@antheas.dev>
+> +Description:
+> +               Some OneXPlayer devices (e.g., X1 series) feature a littl=
+e LED
+> +        nested in the Turbo button. This LED is illuminated when the
+> +        device is in the higher TDP mode (e.g., 25W). Once tt_toggle
+> +        is engaged, this LED is left dangling to its last state. This
+> +        attribute allows userspace to control the LED state manually
+> +        (either with 1 or 0). Only a subset of devices contain this LED.
+> +
+> diff --git a/Documentation/hwmon/oxpec.rst b/Documentation/hwmon/oxpec.rs=
+t
+> index 581c4dafbfa1..0a0a7c5d0263 100644
+> --- a/Documentation/hwmon/oxpec.rst
+> +++ b/Documentation/hwmon/oxpec.rst
+> @@ -1,35 +1,41 @@
+>  .. SPDX-License-Identifier: GPL-2.0-or-later
+>
+> -Kernel driver oxp-sensors
+> +Kernel driver oxpec
+>  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
+=3D
+>
+>  Authors:
+>      - Derek John Clark <derekjohn.clark@gmail.com>
+>      - Joaqu=C3=ADn Ignacio Aramend=C3=ADa <samsagax@gmail.com>
+> +    - Antheas Kapenekakis <lkml@antheas.dev>
+>
+>  Description:
+>  ------------
+>
+> -Handheld devices from OneNetbook, AOKZOE, AYANEO, And OrangePi provide f=
+an
+> -readings and fan control through their embedded controllers.
+> +Handheld devices from OneXPlayer and AOKZOE provide fan readings and fan
+> +control through their embedded controllers, which can be accessed via th=
+is
+> +module. If the device has the platform `tt_toggle` attribute (see
+> +Documentation/ABI/testing/sysfs-platform-oxp), controlling these attribu=
+tes
+> +without having it engaged is undefined behavior.
+>
+> -Currently supports OneXPlayer devices, AOKZOE, AYANEO, and OrangePi
+> -handheld devices. AYANEO devices preceding the AIR and OneXPlayer device=
+s
+> -preceding the Mini A07 are not supportable as the EC model is different
+> -and do not have manual control capabilities.
+> -
+> -Some OneXPlayer and AOKZOE models have a toggle for changing the behavio=
+ur
+> -of the "Turbo/Silent" button of the device. It will change the key event
+> -that it triggers with a flip of the `tt_toggle` attribute. See below for
+> -boards that support this function.
+> +In addition, for legacy reasons, this driver provides hwmon functionalit=
+y
+> +to Ayaneo devices, and the OrangePi Neo (AOKZOE is a sister company of
+> +OneXPlayer and uses the same EC).
+>
+>  Supported devices
+>  -----------------
+>
+>  Currently the driver supports the following handhelds:
+> -
+>   - AOKZOE A1
+>   - AOKZOE A1 PRO
+> + - OneXPlayer 2/2 Pro
+> + - OneXPlayer AMD
+> + - OneXPlayer mini AMD
+> + - OneXPlayer mini AMD PRO
+> + - OneXPlayer OneXFly variants
+> + - OneXPlayer X1 variants
+> +
+> +In addition, until a driver is upstreamed for the following, the driver
+> +also supports controlling them:
+>   - AYANEO 2
+>   - AYANEO 2S
+>   - AYANEO AIR
+> @@ -41,29 +47,8 @@ Currently the driver supports the following handhelds:
+>   - AYANEO Geek
+>   - AYANEO Geek 1S
+>   - AYANEO KUN
+> - - OneXPlayer 2
+> - - OneXPlayer 2 Pro
+> - - OneXPlayer AMD
+> - - OneXPlayer mini AMD
+> - - OneXPlayer mini AMD PRO
+> - - OneXPlayer OneXFly
+> - - OneXPlayer X1 A
+> - - OneXPlayer X1 i
+> - - OneXPlayer X1 mini
+>   - OrangePi NEO-01
+>
+> -"Turbo/Silent" button behaviour toggle is only supported on:
+> - - AOK ZOE A1
+> - - AOK ZOE A1 PRO
+> - - OneXPlayer 2
+> - - OneXPlayer 2 Pro
+> - - OneXPlayer mini AMD (only with updated alpha BIOS)
+> - - OneXPlayer mini AMD PRO
+> - - OneXPlayer OneXFly
+> - - OneXPlayer X1 A
+> - - OneXPlayer X1 i
+> - - OneXPlayer X1 mini
+> -
+
+As in the previous patch, I don't think we need to pre-stage the move
+of those devices until the other driver is ready to be submitted.
+
+Cheers,
+- Derek
+
+>  Sysfs entries
+>  -------------
+>
+> @@ -79,11 +64,4 @@ pwm1_enable
+>  pwm1
+>    Read Write. Read this attribute to see current duty cycle in the range=
+ [0-255].
+>    When pwm1_enable is set to "1" (manual) write any value in the range [=
+0-255]
+> -  to set fan speed.
+> -
+> -tt_toggle
+> -  Read Write. Read this attribute to check the status of the turbo/silen=
+t
+> -  button behaviour function. Write "1" to activate the switch and "0" to
+> -  deactivate it. The specific keycodes and behaviour is specific to the =
+device
+> -  both with this function on and off. This attribute is attached to the =
+platform
+> -  driver and not to the hwmon driver (/sys/devices/platform/oxp-platform=
+/tt_toggle)
+> +  to set fan speed.
+> \ No newline at end of file
+> --
+> 2.48.1
+>
 
