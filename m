@@ -1,86 +1,87 @@
-Return-Path: <linux-pm+bounces-23790-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23791-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
-	by mail.lfdr.de (Postfix) with ESMTPS id 46731A5ACF1
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 00:26:04 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 8CA92A5AD13
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 00:27:04 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id E5D983AF27A
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 23:25:51 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 3C2CD3AEB47
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 23:26:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id A451322154D;
-	Mon, 10 Mar 2025 23:25:59 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7F7422156C;
+	Mon, 10 Mar 2025 23:26:59 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="V52qsO32"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="mM+1f7JQ"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-qv1-f50.google.com (mail-qv1-f50.google.com [209.85.219.50])
+Received: from mail-qk1-f173.google.com (mail-qk1-f173.google.com [209.85.222.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id B6C182206AE;
-	Mon, 10 Mar 2025 23:25:57 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.219.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 2706017332C;
+	Mon, 10 Mar 2025 23:26:57 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741649159; cv=none; b=qudKXljOjmMq2okYEp5r+74WztkQYSH9cyuNi+aqELqqBPGQjAZ9i6mYkl+j/zYiRXIheZY/uD1TEo9afOdwWaBbKciy8fyn3pthZGSLRcCL1wvOlUUheTuZidp5uD3KNPUXz3dfmbNcl/5qmVsd0VHsvJRKy6MdqGjqruxtM+s=
+	t=1741649219; cv=none; b=nk8f5B7D2ccDE3Yqv5F34WKkvVHUmKCNq7bWVtdP2A1nkZTdqVGY3vyCpHJY2c5brQWYG8xZL4y+QEtCjTx331WfkO/kvtG0ML4SA/CCmNf0sOJoGUtt/ODCgTLNA+jOsaRh4wQvtyd1Ft5jwV+Kw3KmYMb17/hoQVMQjglYuaQ=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741649159; c=relaxed/simple;
-	bh=xc2FkzdcKvogky7tbs9cVvXJbKb+JT2qIskr1rBe1lA=;
+	s=arc-20240116; t=1741649219; c=relaxed/simple;
+	bh=ZopybM1AWEgiP/TDp5mpeXfpEyUTTu2hwlr8mptNHGQ=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=JfT4WztC/hawscC2R5/zW1LSuG7u9HTRTrBLx4eFfaFmSjWF39BemcC5JZNcg3xV5mQOQNsEsHaz/Y6PS9NA01J9ZR9G9VaCmypol6fbIM/btTouQvtZYWYa7pCoGiCCRIA8D+xjwXijrnwwIWo8oiVk+MGygjzVedGeig+JsAo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=V52qsO32; arc=none smtp.client-ip=209.85.219.50
+	 To:Cc:Content-Type; b=iN6EJvHGMUSC/QCSbAskp526qA0fnYOVoNjf28OTnXlW4qTd0BNZK99OSy4G0xf18EZ2MEFzsxJmr3eYL0Y9Z7DOy+53aiY7mb1tAm2cc0zE2TFaLmu+WX73j9sauf1pFTRtICXVO60IJJ+2VV+lGm9XxfrXkpsDhhWahNyMZjE=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=mM+1f7JQ; arc=none smtp.client-ip=209.85.222.173
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-qv1-f50.google.com with SMTP id 6a1803df08f44-6df83fd01cbso21338676d6.2;
-        Mon, 10 Mar 2025 16:25:57 -0700 (PDT)
+Received: by mail-qk1-f173.google.com with SMTP id af79cd13be357-7c55500d08cso70762385a.0;
+        Mon, 10 Mar 2025 16:26:57 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741649156; x=1742253956; darn=vger.kernel.org;
+        d=gmail.com; s=20230601; t=1741649217; x=1742254017; darn=vger.kernel.org;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:from:to:cc:subject:date
          :message-id:reply-to;
-        bh=6Lr89eEuhBzZoZAHpEMRqTP7qesjfu7BBpvvzXDgz4U=;
-        b=V52qsO32b1zCXGFPbqvdgaZx7DIGem6jeA0+L1OaeI5irRSG5QOu+B9sh79fMG0BWV
-         MLye1k418L4Bimu9DvBpYfL4Mh2HM0ZdN5AQgBH5A1sFgTLevKdGDHjBTXST30I5OLvB
-         0rfFF+8Z0HZaXhZiyM1vmgb5k+zEkkNkfrrR6Qewab6xXEP2ojS0O6OuIw7ggzFQI5ac
-         0YM8jaVj1LhkgoEgoiQlFrHC01oo8UhR3HF2/2YEFTkiqXALTwSs0/ePtt+OJs2fdk73
-         WId1oGDCNtjKhGEBo/arAkvw30DUjcVGEfeJQ11Qe4de4s3TZ0apVx0rpq8e6P70UvIJ
-         3lKw==
+        bh=2xhHTgDCQ+Wcnf3sbf8HhMLimYlSjo1Sx7XAIe3GwSs=;
+        b=mM+1f7JQ64RVxalLxPHZ0EZhIXScL7e6yDcX6G/wx3bDVAFaV8GBS9+1glvGrzxcLl
+         Ae6NGNwzaH8AC+qKLcoFYiW5EvN1QINl2HPVpJIoUUcn0vnCjXiZGNRirWd24sJfztRF
+         THGCeGfg6AMwCWJmIzgbY1pu9Aw9V56jlZXTjKkd3EO4GRq3EdrsiAVm2ttyQYO4TjWy
+         Fk4ddsXEDeTlwu7tRqD1A+4gUM6rO1NhQtinh0UN7zwISypXF9B31vLynJELcIUfEeKq
+         Yh/k3Ldq5e9OsNSfHw08MmoATaV3YsvId/7q30Um5LUGtNrcaX17OVId5IKcpDyltMlS
+         7Yxg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741649156; x=1742253956;
+        d=1e100.net; s=20230601; t=1741649217; x=1742254017;
         h=content-transfer-encoding:cc:to:subject:message-id:date:from
          :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
          :subject:date:message-id:reply-to;
-        bh=6Lr89eEuhBzZoZAHpEMRqTP7qesjfu7BBpvvzXDgz4U=;
-        b=TKJ5E6GPnkLw+/VjsgZWc/WDwKvYgEfGpTicjFX9JJodo1X6ZtFiH+j8COihe7feSA
-         tqrn6Dr+LrviefDja8DSVK11M5pNovLUIuIHsZl5jKKJ3W641lLn8cWuOEgm8JMxOhUE
-         5YWPzUk2djy1PepAR/lGIRhAcxSSyVGrUeijFF9hJxt5stfo8x1X/dL5fxgmPow/wDLS
-         aXWZrdwRor344IKv/YnuY9oeDysULKSkcLZzek0MdvkG8+7Teyw0FMLQfHQ06nhbXfMU
-         +PF0pFzINOZ/vbt76a8ZfeGlK3yGe6I+ZtDbckbF5nh7zVUczz9bdzl/X3Fzk3q7qEeE
-         uQ1A==
-X-Forwarded-Encrypted: i=1; AJvYcCV/FgJAaDtz8IfMslMe5T8oP8v9h/ijqPtMU2JqrBaUql3uCY8bDh7WXthaaAmrWPIz/vEH6wV+xRmpPLI=@vger.kernel.org, AJvYcCVXkfH6vK8RtqP+nUvZ98E9G6Afp9IRhaYNPI6szqE/XL4H6yVj+wxuh9YrryxJN3FdDZ1Kz1MAJQA=@vger.kernel.org, AJvYcCXJcOe2kjKoQy/AOJTpvzPsNVA45yjUmEbpu61gB99ZJS/r4/hNE/aDP6DnQMfkYNNw9PTJGCS7H7E=@vger.kernel.org
-X-Gm-Message-State: AOJu0YztqWfdmFo0VV4q8ycavbMIXZ/EdQvYxaNPkbX6PwQO8pv2OyIG
-	LrDPLKc0PBQCwPxBaVXaWFu5IaNrsSjCfd+pkoMG2GQgrnxeMU772TRq2V4nN038rAFdPEyuzQS
-	Wc+efUHaNcTxK1aa8iGaXm7kjzWE=
-X-Gm-Gg: ASbGnctTLt1O0QN3phoX5moB1IIwBtNj6w66djToannAX41ZYbi1HtYSztPEc7lhK+d
-	fUtuf6Jb1QOzvXaEEKRBsFw/Tli5BWcIqgTNV/NulAImfYrWvO2X9QXJDlFPByDSpjQzKgOOXHZ
-	bSTYX0A4kM4sNIN8cEyx9S0BOc8Fg=
-X-Google-Smtp-Source: AGHT+IH6eDV4ffoQYuA6cB3B7dAYpivHpL97tNADur9UBjrWdWefOGeWzTEPxwOrdixFpaz59E8dKfTgXdWUsIfvGNw=
-X-Received: by 2002:a05:6214:226f:b0:6d8:9d81:2107 with SMTP id
- 6a1803df08f44-6e90064fb9fmr223330266d6.20.1741649156376; Mon, 10 Mar 2025
- 16:25:56 -0700 (PDT)
+        bh=2xhHTgDCQ+Wcnf3sbf8HhMLimYlSjo1Sx7XAIe3GwSs=;
+        b=T0XrdTouQo8ZDN3cE+QWyFTSbCv/G4i4oIAHj1Sq5MZzyChgNX3/1IOri38tsKmp8n
+         SmzmJg8Mi38SO+oFqByqqw4cN6a/33moinkU5p0tzTWW2mmEgj9UYMvXeCOIf5jNEJf1
+         LCsOHClHWNvsdNaKLF0WtwST1WqXpbgIwuzt96/UlrvekAtAf3msA/gaznRcH0U5lvP4
+         MAW42JqwmHQlEhNyk3lyUP/yzdCt4UHSlk0CWOTHbYdmL5wJZkQ6z1Da0TuQb37hSc7g
+         yy0yfyp/63iPDtsOkGLDNX6XSf+gj2NowtZMc33oLBEJWlqLjtSjaSK1UskWyAS/A0cq
+         SOjQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUtJ+wkaUaXZDgn+K1hqPCLbtOjdTHxxUtlG3IoOJgP7w1GtGIL90MQxCq8PMPrNt4mHzMDj4nt3+XrUco=@vger.kernel.org, AJvYcCX1IDFhqdxJF+Q0Vr87jO2Mk6E40acpJbpdv6B+sdFJitcUPSed2ipKMf3WOxJPFMEAEQ7q+3HPYh4=@vger.kernel.org, AJvYcCX3iG+W0yfT9J9r5aM2LJzhSj0WulvsO8pG2vi+HGKX5FXF725ZJJjqXhgJkMQiN88H9xFNtOwVl6E=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxqhcmaPHRTzO/yHPIJIaUVbfXK5g2Uq/xcSjTvRGCMmGFG49uu
+	OyUuyUIf1y105/hiS8FBz3HY4p9GWcOBYh26xT+LrrRz6BIQDFAa67UDbCddF0ETBryTAXoatBJ
+	LEJWzXZmASC1pt2reaD9FS3ocmEvYe5kjlj8c1Q==
+X-Gm-Gg: ASbGncslH1W6iE4t2WruXp9FCIVu1hEcOD1t56meL/eTk467EqX0bVxAF7c0T27g7/W
+	z05r35oa04u/4xOE5dG2oSn2zdGLdmLbVyWgjOiWiO6O+cXQIlT/8P5R/qDFZONMtzp7IuS+/M5
+	5a8xP398Fo+cCWlqv2mEfqzSY45gY=
+X-Google-Smtp-Source: AGHT+IHSBlfvxRG3rYLiRB48oxfEa2zENomb2DqqEb1e6/VHlzGTUIl5V0cVIhT6beiNFwMs/EPwlUPMCiXXKVAiziI=
+X-Received: by 2002:a05:6214:c43:b0:6e8:ebfa:42f9 with SMTP id
+ 6a1803df08f44-6ea2dd1e704mr27311066d6.16.1741649217039; Mon, 10 Mar 2025
+ 16:26:57 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250309112114.1177361-1-lkml@antheas.dev> <20250309112114.1177361-5-lkml@antheas.dev>
-In-Reply-To: <20250309112114.1177361-5-lkml@antheas.dev>
+References: <20250309112114.1177361-1-lkml@antheas.dev> <20250309112114.1177361-10-lkml@antheas.dev>
+In-Reply-To: <20250309112114.1177361-10-lkml@antheas.dev>
 From: Derek John Clark <derekjohn.clark@gmail.com>
-Date: Mon, 10 Mar 2025 16:25:45 -0700
-X-Gm-Features: AQ5f1JpB1mK9aB6HRfuBfiGFj9QIeZ5CfKJEnQUIiiwnudg3HVpq9P0OuPYfS-o
-Message-ID: <CAFqHKTn0pTm_vjq0Vdw1qHeiubSrHJ_QJyM37K+eLTpAy_XQ-w@mail.gmail.com>
-Subject: Re: [PATCH v3 04/12] ABI: testing: add tt_toggle and tt_led entries
+Date: Mon, 10 Mar 2025 16:26:46 -0700
+X-Gm-Features: AQ5f1JqEW-EvQwrvOwMQ0G4UWU38vfz8WpA7Yb2duThLrKAyexG3x3f33iKqk6E
+Message-ID: <CAFqHKTnbW-iJT0+46trjkrjp6Qk_JUM4sDGf9t6iM9GDRkQnoA@mail.gmail.com>
+Subject: Re: [PATCH v3 09/12] platform/x86: oxpec: Move pwm_enable read to its
+ own function
 To: Antheas Kapenekakis <lkml@antheas.dev>
 Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org, 
 	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org, 
@@ -94,192 +95,96 @@ Content-Transfer-Encoding: quoted-printable
 On Sun, Mar 9, 2025 at 4:21=E2=80=AFAM Antheas Kapenekakis <lkml@antheas.de=
 v> wrote:
 >
-> When tt_toggle was introduced, it was not added to the platform sysfs.
-> Add it, then add documentation for tt_led. Remove the documentation
-> from the hwmon entry, then update its readme to be current.
+> Currently, this driver breaks ABI by using auto as 0 and manual as 1.
+> However, for pwm_enable, 0 is full speed, 1 is manual, and 2 is auto.
+> For the correction to be possible, this means that the pwm_enable
+> endpoint will need access to both pwm enable and value (as for
+> the 0th value, the fan needs to be set to full power).
+>
+> Therefore, begin by moving the current pwm_enable read to its own
+> function, oxp_pwm_enable.
 >
 > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
 > ---
->  Documentation/ABI/testing/sysfs-platform-oxp | 29 +++++++++
->  Documentation/hwmon/oxpec.rst                | 62 +++++++-------------
->  2 files changed, 49 insertions(+), 42 deletions(-)
->  create mode 100644 Documentation/ABI/testing/sysfs-platform-oxp
+>  drivers/platform/x86/oxpec.c | 50 +++++++++++++++++++-----------------
+>  1 file changed, 27 insertions(+), 23 deletions(-)
 >
-> diff --git a/Documentation/ABI/testing/sysfs-platform-oxp b/Documentation=
-/ABI/testing/sysfs-platform-oxp
-> new file mode 100644
-> index 000000000000..8727d5ecaab5
-> --- /dev/null
-> +++ b/Documentation/ABI/testing/sysfs-platform-oxp
-> @@ -0,0 +1,29 @@
-> +What:          /sys/devices/platform/<platform>/tt_toggle
-> +Date:          Jun 2023
-> +KernelVersion: 6.5
-> +Contact:       "Antheas Kapenekakis" <lkml@antheas.dev>
-> +Description:
-> +               Takeover TDP controls from the device. OneXPlayer devices=
- have a
-> +        turbo button that can be used to switch between two TDP modes
-> +        (usually 15W and 25W). By setting this attribute to 1, this
-> +        functionality is disabled, handing TDP control over to (Windows)
-> +        userspace software and the Turbo button turns into a keyboard
-> +        shortcut over the AT keyboard of the device.
-
-> In addition,
-> +        using this setting is a prerequisite for PWM control for most
-> +        devices (otherwise it NOOPs).
+> diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.c
+> index eb7eafebbd37..471444fbd786 100644
+> --- a/drivers/platform/x86/oxpec.c
+> +++ b/drivers/platform/x86/oxpec.c
+> @@ -766,6 +766,32 @@ static int oxp_pwm_disable(void)
+>         }
+>  }
+>
+> +static int oxp_pwm_read(long *val)
+> +{
+> +       switch (board) {
+> +       case orange_pi_neo:
+> +               return read_from_ec(ORANGEPI_SENSOR_PWM_ENABLE_REG, 1, va=
+l);
+> +       case aok_zoe_a1:
+> +       case aya_neo_2:
+> +       case aya_neo_air:
+> +       case aya_neo_air_1s:
+> +       case aya_neo_air_plus_mendo:
+> +       case aya_neo_air_pro:
+> +       case aya_neo_flip:
+> +       case aya_neo_geek:
+> +       case aya_neo_kun:
+> +       case oxp_2:
+> +       case oxp_fly:
+> +       case oxp_mini_amd:
+> +       case oxp_mini_amd_a07:
+> +       case oxp_mini_amd_pro:
+> +       case oxp_x1:
+> +               return read_from_ec(OXP_SENSOR_PWM_ENABLE_REG, 1, val);
+> +       default:
+> +               return -EOPNOTSUPP;
+> +       }
+> +}
 > +
-
-Is this accurate? This wasn't the case for the mini pro/A1/A1 pro when
-we added them. If it is accurate, we should check for this in the pwm
-_store functions for affected devices so we can inform the user it
-failed (-EOPNOTSUP or similar).
-
-> +        This attribute was originally introduced in 6.5, without a
-> +        corresponding documentation entry.
-> +
-
-This last line doesn't provide anything useful to someone reading the
-ABI docs for implementation. Please drop it.
-
-> +What:          /sys/devices/platform/<platform>/tt_led
-> +Date:          Feb 2025
-> +KernelVersion: 6.15
-> +Contact:       "Antheas Kapenekakis" <lkml@antheas.dev>
-> +Description:
-> +               Some OneXPlayer devices (e.g., X1 series) feature a littl=
-e LED
-> +        nested in the Turbo button. This LED is illuminated when the
-> +        device is in the higher TDP mode (e.g., 25W). Once tt_toggle
-> +        is engaged, this LED is left dangling to its last state. This
-> +        attribute allows userspace to control the LED state manually
-> +        (either with 1 or 0). Only a subset of devices contain this LED.
-> +
-> diff --git a/Documentation/hwmon/oxpec.rst b/Documentation/hwmon/oxpec.rs=
-t
-> index 581c4dafbfa1..0a0a7c5d0263 100644
-> --- a/Documentation/hwmon/oxpec.rst
-> +++ b/Documentation/hwmon/oxpec.rst
-> @@ -1,35 +1,41 @@
->  .. SPDX-License-Identifier: GPL-2.0-or-later
->
-> -Kernel driver oxp-sensors
-> +Kernel driver oxpec
->  =3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=3D=
-=3D
->
->  Authors:
->      - Derek John Clark <derekjohn.clark@gmail.com>
->      - Joaqu=C3=ADn Ignacio Aramend=C3=ADa <samsagax@gmail.com>
-> +    - Antheas Kapenekakis <lkml@antheas.dev>
->
->  Description:
->  ------------
->
-> -Handheld devices from OneNetbook, AOKZOE, AYANEO, And OrangePi provide f=
-an
-> -readings and fan control through their embedded controllers.
-> +Handheld devices from OneXPlayer and AOKZOE provide fan readings and fan
-> +control through their embedded controllers, which can be accessed via th=
-is
-> +module. If the device has the platform `tt_toggle` attribute (see
-> +Documentation/ABI/testing/sysfs-platform-oxp), controlling these attribu=
-tes
-> +without having it engaged is undefined behavior.
->
-> -Currently supports OneXPlayer devices, AOKZOE, AYANEO, and OrangePi
-> -handheld devices. AYANEO devices preceding the AIR and OneXPlayer device=
-s
-> -preceding the Mini A07 are not supportable as the EC model is different
-> -and do not have manual control capabilities.
-> -
-> -Some OneXPlayer and AOKZOE models have a toggle for changing the behavio=
-ur
-> -of the "Turbo/Silent" button of the device. It will change the key event
-> -that it triggers with a flip of the `tt_toggle` attribute. See below for
-> -boards that support this function.
-> +In addition, for legacy reasons, this driver provides hwmon functionalit=
-y
-> +to Ayaneo devices, and the OrangePi Neo (AOKZOE is a sister company of
-> +OneXPlayer and uses the same EC).
->
->  Supported devices
->  -----------------
->
->  Currently the driver supports the following handhelds:
-> -
->   - AOKZOE A1
->   - AOKZOE A1 PRO
-> + - OneXPlayer 2/2 Pro
-> + - OneXPlayer AMD
-> + - OneXPlayer mini AMD
-> + - OneXPlayer mini AMD PRO
-> + - OneXPlayer OneXFly variants
-> + - OneXPlayer X1 variants
-> +
-> +In addition, until a driver is upstreamed for the following, the driver
-> +also supports controlling them:
->   - AYANEO 2
->   - AYANEO 2S
->   - AYANEO AIR
-> @@ -41,29 +47,8 @@ Currently the driver supports the following handhelds:
->   - AYANEO Geek
->   - AYANEO Geek 1S
->   - AYANEO KUN
-> - - OneXPlayer 2
-> - - OneXPlayer 2 Pro
-> - - OneXPlayer AMD
-> - - OneXPlayer mini AMD
-> - - OneXPlayer mini AMD PRO
-> - - OneXPlayer OneXFly
-> - - OneXPlayer X1 A
-> - - OneXPlayer X1 i
-> - - OneXPlayer X1 mini
->   - OrangePi NEO-01
->
-> -"Turbo/Silent" button behaviour toggle is only supported on:
-> - - AOK ZOE A1
-> - - AOK ZOE A1 PRO
-> - - OneXPlayer 2
-> - - OneXPlayer 2 Pro
-> - - OneXPlayer mini AMD (only with updated alpha BIOS)
-> - - OneXPlayer mini AMD PRO
-> - - OneXPlayer OneXFly
-> - - OneXPlayer X1 A
-> - - OneXPlayer X1 i
-> - - OneXPlayer X1 mini
-> -
-
-As in the previous patch, I don't think we need to pre-stage the move
-of those devices until the other driver is ready to be submitted.
-
-Cheers,
-- Derek
-
->  Sysfs entries
->  -------------
->
-> @@ -79,11 +64,4 @@ pwm1_enable
->  pwm1
->    Read Write. Read this attribute to see current duty cycle in the range=
- [0-255].
->    When pwm1_enable is set to "1" (manual) write any value in the range [=
-0-255]
-> -  to set fan speed.
-> -
-> -tt_toggle
-> -  Read Write. Read this attribute to check the status of the turbo/silen=
-t
-> -  button behaviour function. Write "1" to activate the switch and "0" to
-> -  deactivate it. The specific keycodes and behaviour is specific to the =
-device
-> -  both with this function on and off. This attribute is attached to the =
-platform
-> -  driver and not to the hwmon driver (/sys/devices/platform/oxp-platform=
-/tt_toggle)
-> +  to set fan speed.
-> \ No newline at end of file
+>  /* Callbacks for hwmon interface */
+>  static umode_t oxp_ec_hwmon_is_visible(const void *drvdata,
+>                                        enum hwmon_sensor_types type, u32 =
+attr, int channel)
+> @@ -863,29 +889,7 @@ static int oxp_platform_read(struct device *dev, enu=
+m hwmon_sensor_types type,
+>                         }
+>                         return 0;
+>                 case hwmon_pwm_enable:
+> -                       switch (board) {
+> -                       case orange_pi_neo:
+> -                               return read_from_ec(ORANGEPI_SENSOR_PWM_E=
+NABLE_REG, 1, val);
+> -                       case aok_zoe_a1:
+> -                       case aya_neo_2:
+> -                       case aya_neo_air:
+> -                       case aya_neo_air_1s:
+> -                       case aya_neo_air_plus_mendo:
+> -                       case aya_neo_air_pro:
+> -                       case aya_neo_flip:
+> -                       case aya_neo_geek:
+> -                       case aya_neo_kun:
+> -                       case oxp_2:
+> -                       case oxp_fly:
+> -                       case oxp_mini_amd:
+> -                       case oxp_mini_amd_a07:
+> -                       case oxp_mini_amd_pro:
+> -                       case oxp_x1:
+> -                               return read_from_ec(OXP_SENSOR_PWM_ENABLE=
+_REG, 1, val);
+> -                       default:
+> -                               break;
+> -                       }
+> -                       break;
+> +                       return oxp_pwm_read(val);
+>                 default:
+>                         break;
+>                 }
 > --
 > 2.48.1
 >
+
+Reviewed-by: Derek J. Clark <derekjohn.clark@gmail.com>
 
