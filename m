@@ -1,220 +1,172 @@
-Return-Path: <linux-pm+bounces-23759-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23760-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 86D81A59212
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 11:57:49 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 65F1AA592B5
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 12:24:38 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id DD37716DDAE
-	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 10:57:46 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 010EC188E398
+	for <lists+linux-pm@lfdr.de>; Mon, 10 Mar 2025 11:24:45 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7961E228375;
-	Mon, 10 Mar 2025 10:56:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 5460B22069E;
+	Mon, 10 Mar 2025 11:24:15 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b="S/Tfn9tg"
+	dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b="DnjZuGux"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from DUZPR83CU001.outbound.protection.outlook.com (mail-northeuropeazon11013044.outbound.protection.outlook.com [52.101.67.44])
+Received: from relay9-d.mail.gandi.net (relay9-d.mail.gandi.net [217.70.183.199])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 6C3CA227EBD;
-	Mon, 10 Mar 2025 10:56:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=52.101.67.44
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741604217; cv=fail; b=sxVt43APtWmBACk2Vkj8MLUb4+SnJdSVuTUzFKI1ztSXHGgjpdRfgNuycqccKkF0lttxvSd3D7BK20TaaAr0aYet8OeepnoEV0eY8K0BCSC1BFgD5LTIotm3jUf9i7TfuPZPaWrboFqJ/UKKIeh3KhU/k/d37n+qB1FwXfQ9X0U=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741604217; c=relaxed/simple;
-	bh=yarb/ifwkK6RUjH7iSGygjm5leUjfw8WhRkhBOV+gx4=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=n81Z5/qEyGl2o3NJhuWq1H7OLcTkqln6S4u6LCMEmubQRgucLmyfHvdI5udiwhFy1b46P5HJwDDwb83JY59cH+O4xA1jpeSsnckqRDr931cuBRkVsHCo06hSBG78xbmfjz4e/V00Q+upth6pPB8SDLMnaJWboj8L2UndoRzJMy0=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com; spf=pass smtp.mailfrom=nxp.com; dkim=pass (2048-bit key) header.d=nxp.com header.i=@nxp.com header.b=S/Tfn9tg; arc=fail smtp.client-ip=52.101.67.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=nxp.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=nxp.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=sla51hORuYDw4G0yZFubGq+kzeq5w8c7HBJRrW22jbHiY0XQzxLnbXJPd2CFn1+oGWLEh29pkj/bevzIGlzGsXOzqhPZzn8xbzuMMhWUEcy9mrnJmYWPCsnOa7hlUaF4covBMiIS5ApfZDKcoAU9/HXxNQ03/alXoobMCoRvGf4dVJvNfn5OnUuq7A30gfvbZNJXd4uphriMjXPXS37wsreIGh8dVZIBTOilqY5J7lDp7VMnXN2z5znDdT9eIhJGLSgkVQm/On0QIJcB3UK/qG6NOd5uHcpmsuADkjjiASqBnPdm7vKxzYlmReTm3u6bm9zc5NRl1Ns2VBPhMhn53A==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=V8QCEbidivs62TNVVeNI8FCktNvGNzYTPMl8RvvfpgQ=;
- b=UrP4+l/yQ7UpSRD9J1bDnv6/QN9n2gGJIRfToRVBw9vnaDpYh8LTurtKXIAfc/P3Ye51pLgS5cjIeMmRyNZL4FSnIGtWbtpv+QHWU/v/OlzIdHFkOBFhNvRpR/MDOZEdiat11WbySldK4lZvHpAwXEpRZDnE0k3YIG6lVerv3sCh7FejO6ECU+Cwfna4jpxGvp9WS5Bu9ZU8013Y2JwZ53Hjsi/AsUHvF7I02tBDmANLxUL+DMkny6xZtOg4v9nQhrOjynf/Nv0zcWhkNFj5dX9tsgpJBmmiw0F6Es/2W5FV580thBZ2YDNhpBc2xnIFNGPKdnCBL3j3NyCMk0iufA==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=nxp.com; dmarc=pass action=none header.from=nxp.com; dkim=pass
- header.d=nxp.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=nxp.com; s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=V8QCEbidivs62TNVVeNI8FCktNvGNzYTPMl8RvvfpgQ=;
- b=S/Tfn9tgYWhLDlH5r8ZQKJ4t4ulaKD9xmoIMWArO+Y63hbpjdZB4G1D5dNUQh7Bf8EVFz3PfpM/UlF/zSk8iiMmgBDzA4jzxRSxtGaxIY3qjlOCLuydFf1XcmL7K29Rj0BbHbeeHH4U25C8zPMqGobdg3XFF2e2aYFCwJT5UWTNu5r+kK2c9/am7TcWjuUm/h6D4E/vRjrOn0ZhxaYcRtnVkVkZqJaqKeR2h4tabwC3GsJ1AQgBD+HddOEk9VwpltLNHp9RvJ1/Pre1sL6mS2IEQTM40KWLZNJYy80tgWC3WVrnEVE9QwTraOPseADzCCmbe5O+RSrmcyM7S7hKLcg==
-Received: from AS8PR04MB8642.eurprd04.prod.outlook.com (2603:10a6:20b:429::24)
- by VI0PR04MB10343.eurprd04.prod.outlook.com (2603:10a6:800:237::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.26; Mon, 10 Mar
- 2025 10:56:51 +0000
-Received: from AS8PR04MB8642.eurprd04.prod.outlook.com
- ([fe80::50d3:c32a:2a83:34bb]) by AS8PR04MB8642.eurprd04.prod.outlook.com
- ([fe80::50d3:c32a:2a83:34bb%7]) with mapi id 15.20.8511.026; Mon, 10 Mar 2025
- 10:56:51 +0000
-From: Jacky Bai <ping.bai@nxp.com>
-To: Sudeep Holla <sudeep.holla@arm.com>
-CC: "rafael@kernel.org" <rafael@kernel.org>, "viresh.kumar@linaro.org"
-	<viresh.kumar@linaro.org>, "ilia.lin@kernel.org" <ilia.lin@kernel.org>,
-	"tiny.windzz@gmail.com" <tiny.windzz@gmail.com>, "wens@csie.org"
-	<wens@csie.org>, "jernej.skrabec@gmail.com" <jernej.skrabec@gmail.com>,
-	"samuel@sholland.org" <samuel@sholland.org>, "matthias.bgg@gmail.com"
-	<matthias.bgg@gmail.com>, "angelogioacchino.delregno@collabora.com"
-	<angelogioacchino.delregno@collabora.com>, "linux-pm@vger.kernel.org"
-	<linux-pm@vger.kernel.org>, "linux-arm-msm@vger.kernel.org"
-	<linux-arm-msm@vger.kernel.org>, "linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, "linux-sunxi@lists.linux.dev"
-	<linux-sunxi@lists.linux.dev>, "linux-mediatek@lists.infradead.org"
-	<linux-mediatek@lists.infradead.org>, "imx@lists.linux.dev"
-	<imx@lists.linux.dev>
-Subject: RE: [PATCH] cpufreq: Init cpufreq only for present CPUs
-Thread-Topic: [PATCH] cpufreq: Init cpufreq only for present CPUs
-Thread-Index: AQHbkYw2ZuQIz/pnWU+zV3EzH4MMb7NsKM4AgAADc8A=
-Date: Mon, 10 Mar 2025 10:56:51 +0000
-Message-ID:
- <AS8PR04MB864253339F818E0FC0D9982287D62@AS8PR04MB8642.eurprd04.prod.outlook.com>
-References: <20250310071640.3140435-1-ping.bai@nxp.com>
- <Z868xB3_3NhMsa7R@bogus>
-In-Reply-To: <Z868xB3_3NhMsa7R@bogus>
-Accept-Language: zh-CN, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=nxp.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: AS8PR04MB8642:EE_|VI0PR04MB10343:EE_
-x-ms-office365-filtering-correlation-id: 26d77d62-1fb4-4065-8ffd-08dd5fc2433b
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|1800799024|366016|376014|7416014|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?hqCEDC+1iNzBjK1OQpfwOL6B2HRed3kV6UmA75B89gU44RBcC04IhU2W9vv9?=
- =?us-ascii?Q?PvEu+FwPmL8YZrGnmfSFOFkgss7n6qvX67Ug4M8EQB2b5QU+Q/nCZVtmF9Pg?=
- =?us-ascii?Q?COZcujnxDyBSqU08d7Y+kMzSSdWg2d/v4g7xUz92G0vMseFkoXMsahhbqDik?=
- =?us-ascii?Q?dXeBu/bIoTBWzkV815CHD0BBbOjwogw4M4Z6N21g/i66yDTD/oiBaa0FB+6C?=
- =?us-ascii?Q?x2nZiJ2LpgvwqEKy9tJlcleG+7VXULZaZrEN3AxDDL/cH5jnJAaXUGKQawB2?=
- =?us-ascii?Q?KV8qWvIZrbLjE7vw6KnHCai44Hct8jvjhlTmfybBfoNNTJwIJdWNrQuCTYhl?=
- =?us-ascii?Q?E2GfTe/Wm8Fna/j0hP03BYH5htLJVCNw9uFAZD0wvzukpLpXyn1Uq0LPUUvj?=
- =?us-ascii?Q?GNq7lmLdJJBi+Dpw7qnLkbKixYRPkDf9hXhU8IL77lPXNisDWfDB/uUk0U23?=
- =?us-ascii?Q?nYh2IHKT3rzMF/ZxgrFMPpl0ZICC/1wMdTKZLhzJ+9GEAvM80NADwoAItcZH?=
- =?us-ascii?Q?9UiBELyC7tBCUOKBAf00/5f2cF7YQ+qRczUrTv/gOqkRxhtZr+Z+hwaVIzy3?=
- =?us-ascii?Q?dgTL/Np34hBtCQC98aaVbQQ87mzft7tVJVGEobkunfm37NZojte0cJXFkvzA?=
- =?us-ascii?Q?spH7n6BkPq1I/uU1dx2SWM5K9bRezstzq5W02b1S1dQSEUYPBZsWWQCg38QG?=
- =?us-ascii?Q?rLTgS02zr86k2sGSfvCFB+EI+rSx5W1XQirbf5THMTluUSZ0is72fO3afriu?=
- =?us-ascii?Q?SvnLaiho+DSIaCE8UejArFveBQcyop+jUuAju6TprUcz74atP/uO/NX1CsTL?=
- =?us-ascii?Q?VL/3+FfEhBL6B/DVcLm69ZmdUewvvw2f41AjG1q3UdfDcZ4trnDH9mGLwhov?=
- =?us-ascii?Q?jr1+qZOPJVb/R+bBXh0VQ2HTsqUTQ0YZbXbjM1od4/6GVOw7cgq+2aKKa0AF?=
- =?us-ascii?Q?ep0XBabLNzi3sdUu3WEo27Dzyf/f8QBw5gOwK+svU38Yr0PlrDvy1MerXNLy?=
- =?us-ascii?Q?PyRePAe10HqDQX7rG3MmtUtAe2E27amnnWeGwtUwIGN0lJScEmAmzKmQfC4W?=
- =?us-ascii?Q?GyAOEdIQHnlrgFprMUqGdtDiy7F3t6nj8DV0z7HfXMWY/4YhWIPRm24YIaXB?=
- =?us-ascii?Q?s9KzisAfQgOM9c/a7fnGZY5nnFAdkJvrLtMJrG0RUvDjVwxcbjSTQTzHxAeL?=
- =?us-ascii?Q?sbOh5crg01NDY/pahvM20j6Uyw8oSK+N4nXcTRGhKw/hLs6CjoiUyWhDh/ku?=
- =?us-ascii?Q?+3Pwuei+sxUQ4cksA23zA97i4PQwYqeSkPfrkryVQBdbvSBfe4u2ySWi/cua?=
- =?us-ascii?Q?acA2cEDkQGUpPonkn7XpeFQRXdtfDvm7EteuSG5/kNh+RitQmkQhbZjVQAzz?=
- =?us-ascii?Q?W0zVNjohrCwBwDV+vhUcLcE9Qm0EGJinsXFDZ0BqMMf3qYJw5yknypwS+HCn?=
- =?us-ascii?Q?noBUz/HIPB618iV2Dn+ZCc/hmnRvA16x?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:AS8PR04MB8642.eurprd04.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(1800799024)(366016)(376014)(7416014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?PKhw45c8R/wIjAI07C84GnRMclAQ1wcEzPuDFZP63eDchybFj6KDfliZ4Ca5?=
- =?us-ascii?Q?GCbhxbGHpPO04L8V9DxyqjpzHdHYQpfVLKXqvGNRqja0YMeOLv0HUJXRREwz?=
- =?us-ascii?Q?8bB1jtXq5zSgU/ApkAdnqryh0cU8ZMPwGXDx5I+5Z4JdrfbiO8vLVL+F8WfU?=
- =?us-ascii?Q?z36g5xWNUddk87c+Z4LgS2xmeJKDJzXSdbTa/iLEl5Hr3EcpLDPTUAYYf+q1?=
- =?us-ascii?Q?b3ZvJqIn9ny7J7LAYVBV7vW5nVWhxgIkyXnw44BUnKdieWoar1Oter87l9+R?=
- =?us-ascii?Q?D9vSQRoKxbTsBwW9YuttgiTA7r5HrjOnDD3yDbyGyL/FilLVSbwnCLehnyKI?=
- =?us-ascii?Q?Fcjw2RMeZJwlNCbvsTYQl7dbM+5EMwfzW7FjKMio/ztPm8iaZyZeqwRmlk9v?=
- =?us-ascii?Q?Riu9qcyeU8ijnGM0q7khb9TrHfckTH2O3ybjYwakvtAbFgPTfgibPtE8uNyf?=
- =?us-ascii?Q?CRqfRXhoLWFAxgcBcoe2E9RrgfHobjc0a5jQ6dF6reToBNjdOPO1FNeC91pj?=
- =?us-ascii?Q?ZsjrhEfZDx6ATEa5lRK17LYFkcAvQbxqjAks92RZ68lnIhE44ZhBQzbjHxnQ?=
- =?us-ascii?Q?kFE/KbhPoBP/xiau8c5uz2SS3HcmkClduVXP+OZsXXgMig21VXx+57jVp667?=
- =?us-ascii?Q?OvLm1/px7s6kjlHMjYHp+PsvjfCzQK8dDC6IK/Bouvs30bcX7diMJ4ORVqby?=
- =?us-ascii?Q?1IpSzukGtnjClBWlv3ED+UWAdMq90cTJRc1wkqDwXO8jJzw7+zYKc3Ws+teO?=
- =?us-ascii?Q?WMg6CUJw4FZEyt2Kot88jCgQdodJpmAYY+awtHWdEtrrVczyiSP2tlauZDSD?=
- =?us-ascii?Q?bOd+u/AkEMIUhxN+KZ7YMzL1W94XkXH0Dy9IUuoyY4duYBJ31bXjmMg6No93?=
- =?us-ascii?Q?P1IkPL00SMzG8UIVa49J1pmj97ZSze4E4iXqNyERQ2WeS4JVs40KJUpTh3pb?=
- =?us-ascii?Q?lfTP4dSSiT9tZt5URECCYFvmajkQacqC9iPoqJ0V1rMqFuOJQ58rlApigTOo?=
- =?us-ascii?Q?VTfv81ivWdmT/WYwv8rfUT6PDX8rHEXxSCVPqcoLZzE13uygSR2zYZP57zTn?=
- =?us-ascii?Q?+uPf8muu60qgcv6TaFixO+HbFejug5uG0RlWid1P+Y5r068jjimzta4Hi2og?=
- =?us-ascii?Q?rc++Jo79hXoE1Ti/m4pE1SRuWGNdeHYB3kOesmHLjz5MQn1cMM0Hpjjmp03X?=
- =?us-ascii?Q?+9tBrGhkJvWYV2llbSVVMmwHlbkmDrw5H3KFxshZ6j8Vq9bxjoWIJeP789HS?=
- =?us-ascii?Q?N+qNJcjDXoWGQk65B7MoNSS2/Ka3rE9H21/laWmfFAFJ4srjLKJW/qSfz1G0?=
- =?us-ascii?Q?ytQzlQNo0pr08xRfVJ8fPq7GRjzW6URQRnvSrhPZXWlT+JK/93slEL0OzBEC?=
- =?us-ascii?Q?RkKWSE2dg+yenze+4qtuz0KGxjE9NBC+x7Rhx5mYNkKFETp4YzH6DuqdOGx0?=
- =?us-ascii?Q?foiVisJc+e9XXMZTzaGLxSPNE/DQ6Jcvtw//leQoCXGV1bBnRPjNrVXe0b7G?=
- =?us-ascii?Q?YYhh22WdaKjiEKEPXW+1tQIjR8qZorKGL8Cv3O9q26xwmvr3f8aZ0ZXnnQ5G?=
- =?us-ascii?Q?P6sbAgq4uz/j85njM+g=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7976C220681;
+	Mon, 10 Mar 2025 11:24:12 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.70.183.199
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741605855; cv=none; b=UBcNgYZ/EkfEL+9c3c9HWwQ22LzvxBNi4tWG5WYyqqG1EaWMauxIeJxFfCEJzYGRrOZrWJClbNxR0yGOlpJjAdPixQoYb1HUvGvnQ9YK60FX659nq5yzd6V/6gRsXhQ5ztui1q3DVnL/tKpIWF3uyX/ni5HsxviEnWFEauATT/M=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741605855; c=relaxed/simple;
+	bh=OeLaqDjCUWAjwPd9YXgc8Nf2jUeZmFsbQrRX1+n7oCI=;
+	h=Date:From:To:Cc:Subject:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=Dkw3M6/TO0fGE7XI0pTOtpu8maB7FJwa9V2+jI6fd9y4Uj7gTTu9DS3uMGdUgEQZpTtdnCIxY3E02QU4VPGcmnwWqYTeWefiQtrZMgPVsq306Bo4JMbLBu9R4Pjt26E+hRCLw8qaD5vp7ojNcB0zet6usN3dtk/JrGS0d6NjeFo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com; spf=pass smtp.mailfrom=bootlin.com; dkim=pass (2048-bit key) header.d=bootlin.com header.i=@bootlin.com header.b=DnjZuGux; arc=none smtp.client-ip=217.70.183.199
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=bootlin.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bootlin.com
+Received: by mail.gandi.net (Postfix) with ESMTPSA id 73C8843281;
+	Mon, 10 Mar 2025 11:24:00 +0000 (UTC)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bootlin.com; s=gm1;
+	t=1741605844;
+	h=from:from:reply-to:subject:subject:date:date:message-id:message-id:
+	 to:to:cc:cc:mime-version:mime-version:content-type:content-type:
+	 content-transfer-encoding:content-transfer-encoding:
+	 in-reply-to:in-reply-to:references:references;
+	bh=VIOxtXonhRWejNWq5rxRyT2kvdpRAuigNbl7XmTldVo=;
+	b=DnjZuGuxEwPfPqwor/sH5Pai+QeBH4BGQz6SCaIyuecx+hsULkaMmRZ24I9+i1YqAFsiEC
+	88/Ot/2+dooGKqzx/g7D+5Lglw5VLxEK0gkrEOPY1+OKpvolevV4NeZcZDJNu3I7TtspQ8
+	J/wFp7NguwsuDNj5GMNyhkDnnsXgy8lO0uCYMPDR82VzmOWKureunDkzhhbvzW6+hBCw4k
+	iuGaf1RSN9GnEjBjNvnLPPKbh9T0Rzwr6Gn5Lr8zwmCI7vGhiGnBakvIVjlclwTOO7Fra1
+	dtqVi4uUqoN/SxwTVUoFsMx8XuEv4pnkXnKuWPhvhqKqvxMIhs3ioV/+sI8Gxg==
+Date: Mon, 10 Mar 2025 12:23:58 +0100
+From: Luca Ceresoli <luca.ceresoli@bootlin.com>
+To: Andy Shevchenko <andriy.shevchenko@linux.intel.com>, Alex Shi
+ <alexs@kernel.org>, Yanteng Si <siyanteng@loongson.cn>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Daniel Lezcano
+ <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, Lukasz Luba
+ <lukasz.luba@arm.com>, Florian Fainelli <florian.fainelli@broadcom.com>,
+ Ray Jui <rjui@broadcom.com>, Scott Branden <sbranden@broadcom.com>,
+ Broadcom internal kernel review list
+ <bcm-kernel-feedback-list@broadcom.com>, Petr Mladek <pmladek@suse.com>,
+ Steven Rostedt <rostedt@goodmis.org>, Rasmus Villemoes
+ <linux@rasmusvillemoes.dk>, Sergey Senozhatsky <senozhatsky@chromium.org>,
+ Jonathan Corbet <corbet@lwn.net>, Andrew Morton
+ <akpm@linux-foundation.org>, Thomas Petazzoni
+ <thomas.petazzoni@bootlin.com>, Michael Turquette
+ <mturquette@baylibre.com>, Stephen Boyd <sboyd@kernel.org>, Geert
+ Uytterhoeven <geert+renesas@glider.be>, Liu Ying <victor.liu@nxp.com>,
+ linux-clk@vger.kernel.org, linux-pm@vger.kernel.org,
+ linux-rpi-kernel@lists.infradead.org, linux-arm-kernel@lists.infradead.org,
+ linux-kernel@vger.kernel.org, linux-doc@vger.kernel.org, Binbin Zhou
+ <zhoubinbin@loongson.cn>
+Subject: Re: [PATCH 2/2] vsprintf: remove redundant and unused %pCn format
+ specifier
+Message-ID: <20250310122358.3c07ed18@booty>
+In-Reply-To: <Z86gCjzuC5UFZBIL@smile.fi.intel.com>
+References: <20250307-vsprintf-pcn-v1-0-df0b2ccf610f@bootlin.com>
+	<20250307-vsprintf-pcn-v1-2-df0b2ccf610f@bootlin.com>
+	<Z8sqJhbqEBla_Ch7@smile.fi.intel.com>
+	<20250308003425.7b89bfb6@booty>
+	<Z86gCjzuC5UFZBIL@smile.fi.intel.com>
+Organization: Bootlin
+X-Mailer: Claws Mail 4.3.0 (GTK 3.24.43; x86_64-redhat-linux-gnu)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: nxp.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: AS8PR04MB8642.eurprd04.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: 26d77d62-1fb4-4065-8ffd-08dd5fc2433b
-X-MS-Exchange-CrossTenant-originalarrivaltime: 10 Mar 2025 10:56:51.2539
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 686ea1d3-bc2b-4c6f-a92c-d99c5c301635
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: hIOfBDqoiM/NBqri35Qq8p+Vw19UFp/kF6hqe+4hP6I3zx9KjYqxLANNpAGlhUBmC/tPUKFFXwzjs4vtalRjGA==
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: VI0PR04MB10343
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: quoted-printable
+X-GND-State: clean
+X-GND-Score: -100
+X-GND-Cause: gggruggvucftvghtrhhoucdtuddrgeefvddrtddtgdduudelvddvucetufdoteggodetrfdotffvucfrrhhofhhilhgvmecuifetpfffkfdpucggtfgfnhhsuhgsshgtrhhisggvnecuuegrihhlohhuthemuceftddunecusecvtfgvtghiphhivghnthhsucdlqddutddtmdenucfjughrpeffhffvvefukfgjfhhoofggtgfgsehtqhertdertdejnecuhfhrohhmpefnuhgtrgcuvegvrhgvshholhhiuceolhhutggrrdgtvghrvghsohhlihessghoohhtlhhinhdrtghomheqnecuggftrfgrthhtvghrnhephfekieegtefhgeelieehhefgtdekffevgfegvdeggeelkeehjeetteethfevudfgnecuffhomhgrihhnpehkvghrnhgvlhdrohhrghdpsghoohhtlhhinhdrtghomhenucfkphepvdgrtddvmeeijedtmedvtddvtdemvggrtddumegsvgegudemleehvgejmeefgeefmeeludefvgenucevlhhushhtvghrufhiiigvpedtnecurfgrrhgrmhepihhnvghtpedvrgdtvdemieejtdemvddtvddtmegvrgdtudemsggvgedumeelhegvjeemfeegfeemledufegvpdhhvghlohepsghoohhthidpmhgrihhlfhhrohhmpehluhgtrgdrtggvrhgvshholhhisegsohhothhlihhnrdgtohhmpdhnsggprhgtphhtthhopedvledprhgtphhtthhopegrnhgurhhihidrshhhvghvtghhvghnkhhosehlihhnuhigrdhinhhtvghlrdgtohhmpdhrtghpthhtoheprhgrfhgrvghlsehkvghrnhgvlhdrohhrghdprhgtphhtthhop
+ egurghnihgvlhdrlhgviigtrghnoheslhhinhgrrhhordhorhhgpdhrtghpthhtoheprhhuihdriihhrghnghesihhnthgvlhdrtghomhdprhgtphhtthhopehluhhkrghsiidrlhhusggrsegrrhhmrdgtohhmpdhrtghpthhtohepfhhlohhrihgrnhdrfhgrihhnvghllhhisegsrhhorggutghomhdrtghomhdprhgtphhtthhopehrjhhuihessghrohgruggtohhmrdgtohhmpdhrtghpthhtohepshgsrhgrnhguvghnsegsrhhorggutghomhdrtghomh
+X-GND-Sasl: luca.ceresoli@bootlin.com
 
-Hi Sudeep,
+Hello,
 
-> Subject: Re: [PATCH] cpufreq: Init cpufreq only for present CPUs
->=20
-> On Mon, Mar 10, 2025 at 03:16:40PM +0800, Jacky Bai wrote:
-> > for_each_possible_cpu() is currently used to initialize cpufreq in
-> > below cpufreq drivers:
-> >   drivers/cpufreq/cpufreq-dt.c
-> >   drivers/cpufreq/mediatek-cpufreq-hw.c
-> >   drivers/cpufreq/mediatek-cpufreq.c
-> >   drivers/cpufreq/qcom-cpufreq-nvmem.c
-> >   drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> >
->=20
-> Again how did you just narrow down to the list above ? Is that just a ran=
-dom
-> pick ? As I suggested with corresponding cpuidle changes, please look int=
-o the
-> details in side the for_each_possible_cpu() loop and then decide if it ap=
-plies
-> or not.
->=20
-> For me, it applied to the below files as well at the least.
->=20
-> drivers/cpufreq/mvebu-cpufreq.c
-> drivers/cpufreq/qcom-cpufreq-hw.c
-> drivers/cpufreq/scmi-cpufreq.c
-> drivers/cpufreq/scpi-cpufreq.c
-> drivers/cpufreq/virtual-cpufreq.c
->=20
++To: Alex Shi, Yanteng Si (Chinese docs maintainers)
++Cc: Binbin Zhou (contributor to English version of printk-formats.rst)
 
-I checked these drivers before, these drivers has logic to check
-if the cpu device is available, then skip the not present cpu.
-From my understanding, using 'for_each_possible_cpu' will not
-cause the cpufreq driver failed to register for nosmp case, so I skipped.
-For those I just changed in the patch, the cpufreq will be failed to regist=
-er totally.
-I can changes all of them together as you suggested if no other guys object=
-.
+On Mon, 10 Mar 2025 10:17:14 +0200
+Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote:
 
-Thank you for your comments. :)
-
-BR
-Jacky Bai
-> Please check everything thoroughly as I just looked at these briefly.
+> On Sat, Mar 08, 2025 at 12:34:25AM +0100, Luca Ceresoli wrote:
+> > On Fri, 7 Mar 2025 19:17:26 +0200
+> > Andy Shevchenko <andriy.shevchenko@linux.intel.com> wrote: =20
+> > > On Fri, Mar 07, 2025 at 12:19:08PM +0100, Luca Ceresoli wrote: =20
+> > > > %pC and %pCn print the same string, and commit 900cca294425 ("lib/v=
+sprintf:
+> > > > add %pC{,n,r} format specifiers for clocks") introducing them does =
+not
+> > > > clarify any intended difference. It can be assumed %pC is a default=
+ for
+> > > > %pCn as some other specifiers do, but not all are consistent with t=
+his
+> > > > policy. Moreover there is now no other suffix other than 'n', which=
+ makes a
+> > > > default not really useful.
+> > > >=20
+> > > > All users in the kernel were using %pC except for one which has been
+> > > > converted. So now remove %pCn and all the unnecessary extra code and
+> > > > documentation.   =20
+> > >=20
+> > > You seem forgot to update translation(s) of the documentation. =20
+> >=20
+> > I'm afraid I don't speak Chinese. :-) =20
 >=20
-> --
-> Regards,
-> Sudeep
+> At bare minimum we can drop the same line in the list.
+> Also in such a case we may ask a Chinese speaking person to review / corr=
+ect /
+> suggest the changes. I would not leave a leftover as it will be forgotten=
+ so
+> easily and documentation becomes not in sync.
+
+Alex Shi, Yanteng Si: what is the process to update the Chinese
+documentation after changes to the English one, considering I don't
+speak Chinese?
+
+The documentation [0] seems to imply it will be done by you after the
+English documentation update, is it the case?
+
+Otherwise, for this simple change, I can add a patch that looks like a
+somewhat correct one for Chinese:
+
+@@ -523,9 +523,8 @@ clk=E7=BB=93=E6=9E=84=E4=BD=93
+ ::
+=20
+ 	%pC	pll1
+-	%pCn	pll1
+=20
+-=E7=94=A8=E4=BA=8E=E6=89=93=E5=8D=B0clk=E7=BB=93=E6=9E=84=E3=80=82%pC =E5=
+=92=8C %pCn =E6=89=93=E5=8D=B0=E6=97=B6=E9=92=9F=E7=9A=84=E5=90=8D=E7=A7=B0=
+=EF=BC=88=E9=80=9A=E7=94=A8=E6=97=B6=E9=92=9F=E6=A1=86=E6=9E=B6=EF=BC=89=E6=
+=88=96=E5=94=AF=E4=B8=80=E7=9A=8432=E4=BD=8D
++=E7=94=A8=E4=BA=8E=E6=89=93=E5=8D=B0clk=E7=BB=93=E6=9E=84=E3=80=82%pC =E6=
+=89=93=E5=8D=B0=E6=97=B6=E9=92=9F=E7=9A=84=E5=90=8D=E7=A7=B0=EF=BC=88=E9=80=
+=9A=E7=94=A8=E6=97=B6=E9=92=9F=E6=A1=86=E6=9E=B6=EF=BC=89=E6=88=96=E5=94=AF=
+=E4=B8=80=E7=9A=8432=E4=BD=8D
+ ID=EF=BC=88=E4=BC=A0=E7=BB=9F=E6=97=B6=E9=92=9F=E6=A1=86=E6=9E=B6=EF=BC=89=
+=E3=80=82
+=20
+ =E9=80=9A=E8=BF=87=E5=BC=95=E7=94=A8=E4=BC=A0=E9=80=92=E3=80=82
+
+Can you confirm the above is a correct change?
+
+Luca
+
+[0] https://docs.kernel.org/translations/index.html
+
+--=20
+Luca Ceresoli, Bootlin
+Embedded Linux and Kernel engineering
+https://bootlin.com
 
