@@ -1,138 +1,138 @@
-Return-Path: <linux-pm+bounces-23841-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23842-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
-	by mail.lfdr.de (Postfix) with ESMTPS id A5E53A5C0B4
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 13:22:44 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id E5C07A5C18F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 13:43:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 029367A2B3E
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 12:21:40 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 9F70A1896BAB
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 12:40:52 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 364372566EB;
-	Tue, 11 Mar 2025 12:20:03 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 175FA257429;
+	Tue, 11 Mar 2025 12:40:17 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b="nxKwh2EK"
+	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="X0hm4EI7"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx1.secunet.com (mx1.secunet.com [62.96.220.36])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id D9C39221F17
-	for <linux-pm@vger.kernel.org>; Tue, 11 Mar 2025 12:19:59 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=62.96.220.36
-ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741695603; cv=none; b=Fp/cTxT8bpZtwtCn3Sx8tat1qEHbPoE3Js4kLjum/lA+Cv8Rb16X+9KyFGcAB7M4sm29NxjTRuR/T9usCu3qP6H9ZB3WybssbJeFBebHrnsq5J3kk6rGVX9d2c1nk+bwcseCfptBSLvYFGp4swmSMpJBSSWkw51S8SWrGqtp2KE=
-ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741695603; c=relaxed/simple;
-	bh=2AeoFCNG9KzBBVZSD4nzcr2Yo7ZZ7n58IJVLdYd35g4=;
-	h=From:To:CC:Subject:Date:Message-ID:Content-Type:MIME-Version; b=WGUh7VTvJeEyL0hD34qIrHbB8q8C3C7XpB53vA6TjiEQGBFTWBqn7/x9Zk4kIpYHvDLdXSTmN+VXwiujB416EcaWDT3rhhehltC+M4Kv2PaBtM3t1pfxf6sEKBYEo6DfLeJWPtZdQdPJGlI2vnBuJroJvqg4+PdS8o8PEKFccck=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com; spf=pass smtp.mailfrom=secunet.com; dkim=pass (2048-bit key) header.d=secunet.com header.i=@secunet.com header.b=nxKwh2EK; arc=none smtp.client-ip=62.96.220.36
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=secunet.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=secunet.com
-Received: from localhost (localhost [127.0.0.1])
-	by mx1.secunet.com (Postfix) with ESMTP id 6699220520;
-	Tue, 11 Mar 2025 13:19:52 +0100 (CET)
-X-Virus-Scanned: by secunet
-Received: from mx1.secunet.com ([127.0.0.1])
- by localhost (mx1.secunet.com [127.0.0.1]) (amavisd-new, port 10024)
- with ESMTP id EsWxI1XO0gHr; Tue, 11 Mar 2025 13:19:51 +0100 (CET)
-Received: from cas-essen-02.secunet.de (rl2.secunet.de [10.53.40.202])
+Received: from mail-wm1-f42.google.com (mail-wm1-f42.google.com [209.85.128.42])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by mx1.secunet.com (Postfix) with ESMTPS id CF33F20518;
-	Tue, 11 Mar 2025 13:19:51 +0100 (CET)
-DKIM-Filter: OpenDKIM Filter v2.11.0 mx1.secunet.com CF33F20518
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=secunet.com;
-	s=202301; t=1741695591;
-	bh=2AeoFCNG9KzBBVZSD4nzcr2Yo7ZZ7n58IJVLdYd35g4=;
-	h=From:To:CC:Subject:Date:Reply-To:From;
-	b=nxKwh2EK9gWGNLqctsydDDRUqGb/zLJsvYeqO9SuGRluGDizm2QLZvt/D9ZMl10rb
-	 flsLZ3nkFLCHy/sU4HX+2qVhQEDWPY1RAAnpLkFwJa6MVxy17RANaYZ9A0UXGgeauc
-	 jT3y4xzvsJBGfG+F5UAIOT3J42NVmb0XIwK31Z19OJ9r6VcC8XeN9Mk+04koiCJ9PN
-	 7og0UUf3RmT7z51AIcfW04QvdFcwfyl7JJHJWi+7D9UvOiDOe7cL2U+5LHUY4Urx+I
-	 4lQ9ytdupnH9KncH3i4rRZ412tOpyXb4cNjhpxKw/yzi+wBlvJ3cpiIj46QerzYLXJ
-	 Cf23XbHwql2Jw==
-Received: from mbx-essen-01.secunet.de (10.53.40.197) by
- cas-essen-02.secunet.de (10.53.40.202) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 11 Mar 2025 13:19:51 +0100
-Received: from mbx-essen-02.secunet.de (10.53.40.198) by
- mbx-essen-01.secunet.de (10.53.40.197) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_128_GCM_SHA256) id
- 15.1.2507.39; Tue, 11 Mar 2025 13:19:51 +0100
-Received: from mbx-essen-02.secunet.de ([fe80::fcaf:ee74:71ad:4eff]) by
- mbx-essen-02.secunet.de ([fe80::fcaf:ee74:71ad:4eff%8]) with mapi id
- 15.01.2507.039; Tue, 11 Mar 2025 13:19:51 +0100
-From: "Gwara, Mateusz" <mateusz.gwara@secunet.com>
-To: "Gwara, Mateusz" <mateusz.gwara@secunet.com>
-CC: "Wassenberg, Dennis" <Dennis.Wassenberg@secunet.com>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>, "lukasz.luba@arm.com"
-	<lukasz.luba@arm.com>, "rafael@kernel.org" <rafael@kernel.org>,
-	"rui.zhang@intel.com" <rui.zhang@intel.com>
-Subject: Re: TCC cooling on Meteorlake
-Thread-Topic: Re: TCC cooling on Meteorlake
-Thread-Index: AduSf3zXUhT47FfIT9KWQYQvuThKWQ==
-Date: Tue, 11 Mar 2025 12:19:51 +0000
-Message-ID: <af33f856b8414a5e93f11c8c65b46881@secunet.com>
-Reply-To: "163ff391dc6d4f828ecff95e87f5003d@secunet.com"
-	<163ff391dc6d4f828ecff95e87f5003d@secunet.com>
-Accept-Language: de-DE, en-US
-Content-Language: de-DE
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-Content-Type: text/plain; charset="iso-8859-1"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 072FD2571BC
+	for <linux-pm@vger.kernel.org>; Tue, 11 Mar 2025 12:40:14 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741696817; cv=none; b=XoUkfJzmdUbtVY2p/xpVRylrj8kxwy6IChIugjacvBU/k/psLbK9LJyt0sJJ9B7VuXEQd1jifwfN6gBbWNFusuoO9zW5t2S96Rv8iEQ5TeAHUqhoEcu+SX9czIUDid7sgdFS1AdG5SmM7+Yu8w/J3gNvM8FGwFxgVRZIjYhjaNc=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741696817; c=relaxed/simple;
+	bh=eFLglormP4BRNTD9McBheIkazL8hunpP5eO6YCoRoD0=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=QLHm4oN5Cko3+sZloKJ81MvdRmnJ4+sT1DUiovoVj2WSP4C4fx+5Z6vAHeZ/HUttoOOCPQ1O8FKp4bqLZZl/QXUijHUL6tXwM1zdUYw0iTv/i9p2Vu471JNk+fqN/kBbHiCP+ivpOvjiaBRsacB8jpYm27vncqYKj7F7BX7X9ss=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=X0hm4EI7; arc=none smtp.client-ip=209.85.128.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
+Received: by mail-wm1-f42.google.com with SMTP id 5b1f17b1804b1-43bdf0cbb6bso31589785e9.1
+        for <linux-pm@vger.kernel.org>; Tue, 11 Mar 2025 05:40:14 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=suse.com; s=google; t=1741696813; x=1742301613; darn=vger.kernel.org;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
+        bh=aISzCXBUSpl9Jdl7q1Wak8jR4Cx9Bei2SZjKv/F88EM=;
+        b=X0hm4EI7PM4g/EBVtBGHE2kYgtPVj6vYqP0/VUrsQA1FSRTiojMeYsRNxAf61iPZLX
+         mLSQS+mJ5FeiqKU0MEIuWNC8Yr8NbT9Qi0OZ5GAr67gbh0ocRTobC+qwZdqbn8EwFJ2D
+         x2YAftG3oN68T220lo24HNP9Vc63BBl0jMF4m90ZnlbpOme0N5IX0VShW0MMlhodgCPI
+         QMAOarzY8o06cQOtkh3w4EjWSSFigImIr+NiLxAJj7JwHlyuNbfongbuVSKXk/LUwMe4
+         TAq2QnNKDFHOSOVNfLayZU6qLDrmECMsZufinD4gpE4hrKO0CSAauyRJNhzTW1ZDNJDG
+         fspw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741696813; x=1742301613;
+        h=in-reply-to:content-disposition:mime-version:references:message-id
+         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=aISzCXBUSpl9Jdl7q1Wak8jR4Cx9Bei2SZjKv/F88EM=;
+        b=qAILF6qdaOrx/0sENuuKEi6kEkVHkqedpk43CTLpDPFmKMUVwM0Q6Wl+1lvWdLFBTS
+         L7gyn9Bi9gnRy7t1nle6/UW4U9C8T24HYQNsVD+OofHd0ftKt42qkqlFAyJOoxstZEmg
+         s4t6PuqCEeQcLHAdEr7IFV6Z9pPN5PGw/6qmPrH/w0YnrprFcwdjN5zR3uokxvicRkLi
+         rN2HLViZ4okVnJ3Nu3Bm5PQ/2VlAsunMslEjUevqAg12OHPdsjitAaezaPLpIxgUofcg
+         CiSmWMXxIZ0p7ytVeUhTVkrxyfv23HIMxXNHkDwVVy0GqqL/PHF5qZ+q2OwuNKmReXAl
+         vbEQ==
+X-Forwarded-Encrypted: i=1; AJvYcCUqRMctj3cOel9ln6+w0iJmpMiBfWcZ3eBVVWAsOgEmiK+xPDfXc3noYSuBJBUosiaEHSyWI7tCVg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjZkY4pSeRs8gdoalXZUpHgtEP0p3o+FXKbuGnQWJWNVwRlkN2
+	ebG5NrPLgSNYKo1QCuEAmM5EyIEnmbaY1ZrNTl+LHWRHN7AxgA4H1ybAEjerkbQ=
+X-Gm-Gg: ASbGnctgyY8brhmLAebxNAv926S327DlsxbJtI9WbcQrnLMj/jJj9KCbwx7e+MmfzSZ
+	10mCPFZuq0nL0Os9llYZAj4O9BEKjYDB4PyLT2lVQIYTlfY6m9wAFRdXBmZYTX5iLN8gEbyWx4e
+	7YuE5B8h3SEcoxKTT7LV/T5OBDqh+vruHVS+vTRNmsmNmm8Jiv8y+UEkZXy5nMywQ71fTDsS5+e
+	jJcq7nnre+ZmFBR8JGA7QzJ4fdPJL6/LTpClAiFEKZllxCNR6aaoSWvOKTNwrh8FqJYXdPpjI2+
+	7UxSgxPWzuBH7H3FbOayFraVjtUKQGrIWKNSbUl4hJuMN3c=
+X-Google-Smtp-Source: AGHT+IH+hqLaIb0ak3/PDp2FI+P/Br6EuYDT0bw+M1n8JTY5wRGCazId9C1SCJxp8KfNPqmCL4R8NQ==
+X-Received: by 2002:a05:6000:186b:b0:391:231b:8e0d with SMTP id ffacd0b85a97d-39132dc5632mr17143565f8f.39.1741696813238;
+        Tue, 11 Mar 2025 05:40:13 -0700 (PDT)
+Received: from pathway.suse.cz ([176.114.240.130])
+        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912c1031e3sm17759906f8f.82.2025.03.11.05.40.12
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Tue, 11 Mar 2025 05:40:12 -0700 (PDT)
+Date: Tue, 11 Mar 2025 13:40:10 +0100
+From: Petr Mladek <pmladek@suse.com>
+To: Marcos Paulo de Souza <mpdesouza@suse.com>
+Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>,
+	Eric Biederman <ebiederm@xmission.com>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Len Brown <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>,
+	Steven Rostedt <rostedt@goodmis.org>,
+	John Ogness <john.ogness@linutronix.de>,
+	Sergey Senozhatsky <senozhatsky@chromium.org>,
+	Todd E Brandt <todd.e.brandt@linux.intel.com>,
+	Jiri Slaby <jirislaby@kernel.org>, linux-kernel@vger.kernel.org,
+	kexec@lists.infradead.org, linux-pm@vger.kernel.org,
+	linux-serial@vger.kernel.org
+Subject: Re: [PATCH 0/5] printk: renaming some suspend/resume functions and
+ one fix for unblanking
+Message-ID: <Z9AvKmM4Li57-E2E@pathway.suse.cz>
+References: <20250226-printk-renaming-v1-0-0b878577f2e6@suse.com>
+ <Z9AShs1dEO0jrgjL@pathway.suse.cz>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-EXCLAIMER-MD-CONFIG: 2c86f778-e09b-4440-8b15-867914633a10
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <Z9AShs1dEO0jrgjL@pathway.suse.cz>
 
-Hi,
+On Tue 2025-03-11 11:38:00, Petr Mladek wrote:
+> On Wed 2025-02-26 16:59:00, Marcos Paulo de Souza wrote:
+> > Hello, I've being working on some patches that help to clarify the suspend/resume
+> > of printk machinery. The last patch on this patchset address one issue regarding
+> > suspended consoles and blanking.
+> > 
+> > This is a part one patchset that I would like to see merged before I send more patches
+> > that will rework the suspend flag (a global suspend flag istead of per console) and
+> > the removal of CON_ENABLED flag later on (I've created a function that will forcibly)
+> > register the console instead of using this flag.
+> > 
+> > Please review!
+> > 
+> > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
+> 
+> Looks good to me. I could fix the typos when pushing.
+> 
+> Well, there is one more thing. It seems that the simple graphic logger
+> was merged for 6.14-rc1. And the console_stop()/console_start() API
+> is used also in drivers/gpu/drm/clients/drm_log.c.
+> 
+> It is actually the code which motivated this rename, as already
+> pointed out by John, see
+> https://lore.kernel.org/lkml/ZyoNZfLT6tlVAWjO@pathway.suse.cz/
+> 
+> Well, I am going to update these two locations when pushing this
+> as well. Let's just get this change done.
 
-I wanted to make sure that there is no confusion because there seems to be =
-two sets of drivers handling TCC.
-As the workings of drivers/thermal/intel/int340x_thermal/int3403_thermal.c =
-are visible in
-/sys/bus/pci/devices/0000:00:04.0/tcc_offset_degree_celsius
-and defined in drivers/thermal/intel/int340x_thermal/processor_thermal_devi=
-ce.c
-do have a wrong offset, which does not take into account that Meteor Lake C=
-PUs have a TJunction of 110=B0C instead of 100=B0C.
+And I did as mentioned above.
 
-That's why I was wondering why the new definitions in
-drivers/thermal/intel/intel_tcc_cooling.c
-does not contain any Meteor Lake (or Arrow&Lunar Lake ) definitions.
-Where the results should be visible in /sys/class/thermal as mentioned in t=
-he initial post.
+JFYI, the patcheset has been committed into printk/linux.git,
+branch for-6.15-console-suspend-api-cleanup.
 
-Regards
-
-MG
-
---=20
-Mateusz Gwara
-Senior Software Developer
-Department Network & Client Security
-Division Public Authorities
-secunet Security Networks AG
-
-Tel.: +49 201 54 54-2934
-E-Mail: mateusz.gwara@secunet.com
-Alt-Moabit 96, 10559 Berlin
-www.secunet.com
-______________________________________________________________________
-
-secunet Security Networks AG
-Sitz: Kurf=FCrstenstra=DFe 58, 45138 Essen, Deutschland
-Amtsgericht Essen HRB 13615
-Vorstand: Axel Deininger (Vors.), Torsten Henn, Dr. Kai Martius, Jessica No=
-spers
-Aufsichtsratsvorsitzender: Dr. Ralf Wintergerst
-______________________________________________________________________
-
+Best Regards,
+Petr
 
