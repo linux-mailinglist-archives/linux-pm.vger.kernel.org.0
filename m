@@ -1,138 +1,130 @@
-Return-Path: <linux-pm+bounces-23843-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23844-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 00F78A5C1D2
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 14:03:14 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id 8EB7FA5C34F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 15:10:31 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id B93A6188CFD4
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 13:03:22 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 49E0E1892C4C
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 14:10:39 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 89AA41E493;
-	Tue, 11 Mar 2025 13:03:10 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 7C01E25B67F;
+	Tue, 11 Mar 2025 14:10:26 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="JoThZfxt"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from b-painless.mh.aa.net.uk (b-painless.mh.aa.net.uk [81.187.30.52])
+Received: from mgamail.intel.com (mgamail.intel.com [198.175.65.14])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id DB0F88836;
-	Tue, 11 Mar 2025 13:03:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=81.187.30.52
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3273722D4FE;
+	Tue, 11 Mar 2025 14:10:23 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=198.175.65.14
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741698190; cv=none; b=BwfUCQCIoUobet8qC6DKXwTpL0Zz8FDzvVNwYlwaB9ZWqu2T8OpyS1AAxFztIktRjkp6vAKihvntlClCANR44QFuxzwNvBLp4wlriVXZH6gGcm+odE8dU+UtvWFH4T46VF5eMM7jly6dn6P+uIXPySIfq0F+UY5nrwPtNIq+6pk=
+	t=1741702226; cv=none; b=d0UAJoOeL09rxak+4NxRRWARC8J+DX8D9aI2h/WhLj7SS23LVOyz7SCu+nLTnPHA5NBO6iqm9V79Fm73DDuk3P4K7jtVlvPJqd1olId0D7TsT1R0ADsHRi0DXv3MJhyTRdDq39VvAotNSm5mHNObVEjA5Zomp3xe9jQP6zngi84=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741698190; c=relaxed/simple;
-	bh=O9TwnmR4AKXxhgiL3DZPmOcqYMRKkKpfdbXTiuRl3HA=;
-	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RbuwQ7q4s2blPoP8K6lI2c4gkIkklODK+Loz37bQEGRX4lGQHEywSoJ7ujmeoSrxv/VNkqy84SAsFgKBgD9/KUjj9vli6VwAJZzRRD+J0NumU22xIo4/A6b7vtZyL222+7937MYuIgmJdMHogjimxNC04i4Sowj6BRhFd5CasE8=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pileofstuff.org; spf=pass smtp.mailfrom=pileofstuff.org; arc=none smtp.client-ip=81.187.30.52
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pileofstuff.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pileofstuff.org
-Received: from 0.9.9.0.0.0.0.0.0.0.0.0.0.0.0.0.0.5.8.0.9.1.8.0.0.b.8.0.1.0.0.2.ip6.arpa ([2001:8b0:819:850::990] helo=andrews-2024-laptop.lan)
-	by painless-b.tch.aa.net.uk with esmtp (Exim 4.96)
-	(envelope-from <kernel.org@pileofstuff.org>)
-	id 1trzGC-0066tT-1n;
-	Tue, 11 Mar 2025 13:03:04 +0000
-From: Andrew Sayers <kernel.org@pileofstuff.org>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-	Pavel Machek <pavel@kernel.org>,
-	Len Brown <len.brown@intel.com>,
-	Todd E Brandt <todd.e.brandt@linux.intel.com>
-Cc: Andrew Sayers <kernel.org@pileofstuff.org>,
-	linux-pm@vger.kernel.org,
-	linux-kernel@vger.kernel.org
-Subject: [PATCH] PM: Use two lines for "Restarting..." / "done" messages
-Date: Tue, 11 Mar 2025 13:00:37 +0000
-Message-ID: <20250311130204.216345-1-kernel.org@pileofstuff.org>
-X-Mailer: git-send-email 2.47.2
+	s=arc-20240116; t=1741702226; c=relaxed/simple;
+	bh=6DCHttFxpQlt5JlaplZgiIIP2FjcwsLNjEAL1Va9+u4=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=LNmcoIXEc+k2ekDpAkjeWtVlrSNBMGbLEpnA0U6fMQzd2Qu5RVTVQrrnSBcywM85ahzPV3vBWRdoYHwTKF0ljtTyPphMLLpU7eyjgphWdJ17OwkdZ6DeDo1q3E3LE0S15JJ0k29w7fi8b2I7/1wE7VImqFkiz9FNUR97C64wQLQ=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com; spf=pass smtp.mailfrom=intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=JoThZfxt; arc=none smtp.client-ip=198.175.65.14
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=intel.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=intel.com
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
+  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
+  t=1741702224; x=1773238224;
+  h=date:from:to:cc:subject:message-id:references:
+   mime-version:in-reply-to;
+  bh=6DCHttFxpQlt5JlaplZgiIIP2FjcwsLNjEAL1Va9+u4=;
+  b=JoThZfxtWpBAhqz35ynvdytlBWUKooygdqA1ehBNKiETJA+kgNPGWIeO
+   ALgbTMzxebN3BTl69J4/6+3neK/vHj7zeGBmmlkgCr9E10oJSN2uhIA2K
+   SVgGkPzVwCAzhip4Ked4lXJSDKPS50PKNqpfk347WXw6BzDe0oqw9705i
+   fO2yCukYgtwF/2iMM9hFEB9qlCmijD4IBox0iUtWHDegWXmD9yKmp0b0s
+   HeV06IEFT/qHP+6GvCNdrwx8DxziNukDOiAcxF2ORRPB8qIMEzsQMl9nE
+   4o9c+W6JfNwVi6gAOYgoA4j1PlP7UEPH4PscLKERtAqHm7nYKOxFuNf/B
+   Q==;
+X-CSE-ConnectionGUID: f9SNI9vLSNWZFUfLp49hyQ==
+X-CSE-MsgGUID: HkPR4dGQSpSrfRWpx/EYwA==
+X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="46523319"
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="46523319"
+Received: from orviesa001.jf.intel.com ([10.64.159.141])
+  by orvoesa106.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 07:10:03 -0700
+X-CSE-ConnectionGUID: lwwV97C/Q1Ck5Ar/zlHaNQ==
+X-CSE-MsgGUID: ERKY/U9aQg6zkJ8ybsZURA==
+X-ExtLoop1: 1
+X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
+   d="scan'208";a="157534140"
+Received: from lkp-server02.sh.intel.com (HELO a4747d147074) ([10.239.97.151])
+  by orviesa001.jf.intel.com with ESMTP; 11 Mar 2025 07:10:00 -0700
+Received: from kbuild by a4747d147074 with local (Exim 4.96)
+	(envelope-from <lkp@intel.com>)
+	id 1ts0Iv-0006hg-0j;
+	Tue, 11 Mar 2025 14:09:57 +0000
+Date: Tue, 11 Mar 2025 22:09:18 +0800
+From: kernel test robot <lkp@intel.com>
+To: Antheas Kapenekakis <lkml@antheas.dev>,
+	platform-driver-x86@vger.kernel.org
+Cc: llvm@lists.linux.dev, oe-kbuild-all@lists.linux.dev,
+	linux-hwmon@vger.kernel.org, linux-doc@vger.kernel.org,
+	linux-pm@vger.kernel.org, Guenter Roeck <linux@roeck-us.net>,
+	Jean Delvare <jdelvare@suse.com>, Jonathan Corbet <corbet@lwn.net>,
+	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
+	Derek J Clark <derekjohn.clark@gmail.com>,
+	Kevin Greenberg <kdgreenberg234@protonmail.com>,
+	Joshua Tam <csinaction@pm.me>,
+	Parth Menon <parthasarathymenon@gmail.com>,
+	Eileen <eileen@one-netbook.com>,
+	Antheas Kapenekakis <lkml@antheas.dev>
+Subject: Re: [PATCH v3 06/12] platform/x86: oxpec: Add charge threshold and
+ behaviour to OneXPlayer
+Message-ID: <202503112130.dl6b3XVs-lkp@intel.com>
+References: <20250309112114.1177361-7-lkml@antheas.dev>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=us-ascii
+Content-Disposition: inline
+In-Reply-To: <20250309112114.1177361-7-lkml@antheas.dev>
 
-Other messages are occasionally printed between these two, for example:
+Hi Antheas,
 
-    [203104.106534] Restarting tasks ...
-    [203104.106559] mei_hdcp 0000:00:16.0-b638ab7e-94e2-4ea2-a552-d1c54b627f04: bound 0000:00:02.0 (ops i915_hdcp_ops [i915])
-    [203104.112354] done.
+kernel test robot noticed the following build errors:
 
-This seems to be a timing issue, seen in two of the eleven
-hibernation exits in my current `dmesg` output.
+[auto build test ERROR on groeck-staging/hwmon-next]
+[also build test ERROR on sre-power-supply/for-next amd-pstate/linux-next amd-pstate/bleeding-edge rafael-pm/linux-next rafael-pm/bleeding-edge linus/master v6.14-rc6 next-20250307]
+[If your patch is applied to the wrong git tree, kindly drop us a note.
+And when submitting patch, we suggest to use '--base' as documented in
+https://git-scm.com/docs/git-format-patch#_base_tree_information]
 
-When printed on its own, the "done" message has the default log level.
-This makes the output of `dmesg --level=warn` quite misleading.
+url:    https://github.com/intel-lab-lkp/linux/commits/Antheas-Kapenekakis/hwmon-oxp-sensors-Distinguish-the-X1-variants/20250309-192300
+base:   https://git.kernel.org/pub/scm/linux/kernel/git/groeck/linux-staging.git hwmon-next
+patch link:    https://lore.kernel.org/r/20250309112114.1177361-7-lkml%40antheas.dev
+patch subject: [PATCH v3 06/12] platform/x86: oxpec: Add charge threshold and behaviour to OneXPlayer
+config: x86_64-randconfig-074-20250311 (https://download.01.org/0day-ci/archive/20250311/202503112130.dl6b3XVs-lkp@intel.com/config)
+compiler: clang version 19.1.7 (https://github.com/llvm/llvm-project cd708029e0b2869e80abe31ddb175f7c35361f90)
+reproduce (this is a W=1 build): (https://download.01.org/0day-ci/archive/20250311/202503112130.dl6b3XVs-lkp@intel.com/reproduce)
 
-Add enough context for the "done" messages to make sense on their own,
-and use the same log level for all messages.
+If you fix the issue in a separate patch/commit (i.e. not just a new version of
+the same patch/commit), kindly add following tags
+| Reported-by: kernel test robot <lkp@intel.com>
+| Closes: https://lore.kernel.org/oe-kbuild-all/202503112130.dl6b3XVs-lkp@intel.com/
 
-Signed-off-by: Andrew Sayers <kernel.org@pileofstuff.org>
----
+All errors (new ones prefixed by >>):
 
-I haven't been able to trigger "Restarting kernel threads" at all,
-so can only prove the above occurs for "Restarting tasks".
-But inspecting the code suggests it's possible, and it
-seems more elegant for both pairs to look the same.
+>> ld.lld: error: undefined symbol: battery_hook_register
+   >>> referenced by oxpec.c:927 (drivers/platform/x86/oxpec.c:927)
+   >>>               vmlinux.o:(oxp_platform_probe)
+--
+>> ld.lld: error: undefined symbol: battery_hook_unregister
+   >>> referenced by oxpec.c:935 (drivers/platform/x86/oxpec.c:935)
+   >>>               vmlinux.o:(oxp_platform_remove)
 
- kernel/power/process.c             | 8 ++++----
- tools/power/pm-graph/sleepgraph.py | 3 ++-
- 2 files changed, 6 insertions(+), 5 deletions(-)
-
-diff --git a/kernel/power/process.c b/kernel/power/process.c
-index 66ac067d9ae6..4c674282df03 100644
---- a/kernel/power/process.c
-+++ b/kernel/power/process.c
-@@ -189,7 +189,7 @@ void thaw_processes(void)
- 
- 	oom_killer_enable();
- 
--	pr_info("Restarting tasks ... ");
-+	pr_info("Restarting tasks ...\n");
- 
- 	__usermodehelper_set_disable_depth(UMH_FREEZING);
- 	thaw_workqueues();
-@@ -208,7 +208,7 @@ void thaw_processes(void)
- 	usermodehelper_enable();
- 
- 	schedule();
--	pr_cont("done.\n");
-+	pr_info("Done restarting tasks.\n");
- 	trace_suspend_resume(TPS("thaw_processes"), 0, false);
- }
- 
-@@ -217,7 +217,7 @@ void thaw_kernel_threads(void)
- 	struct task_struct *g, *p;
- 
- 	pm_nosig_freezing = false;
--	pr_info("Restarting kernel threads ... ");
-+	pr_info("Restarting kernel threads ...\n");
- 
- 	thaw_workqueues();
- 
-@@ -229,5 +229,5 @@ void thaw_kernel_threads(void)
- 	read_unlock(&tasklist_lock);
- 
- 	schedule();
--	pr_cont("done.\n");
-+	pr_info("Done restarting kernel threads.\n");
- }
-diff --git a/tools/power/pm-graph/sleepgraph.py b/tools/power/pm-graph/sleepgraph.py
-index 918eae58b0b4..b608c7b44b5d 100755
---- a/tools/power/pm-graph/sleepgraph.py
-+++ b/tools/power/pm-graph/sleepgraph.py
-@@ -4017,7 +4017,8 @@ def parseKernelLog(data):
- 							'PM: early restore of devices complete after.*'],
- 		'resume_complete': ['PM: resume of devices complete after.*',
- 							'PM: restore of devices complete after.*'],
--		    'post_resume': [r'.*Restarting tasks \.\.\..*'],
-+		    'post_resume': [r'.*Restarting tasks \.\.\..*',
-+							'Done restarting tasks.*'],
- 	}
- 
- 	# action table (expected events that occur and show up in dmesg)
 -- 
-2.47.2
-
+0-DAY CI Kernel Test Service
+https://github.com/intel/lkp-tests/wiki
 
