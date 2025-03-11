@@ -1,448 +1,147 @@
-Return-Path: <linux-pm+bounces-23802-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23803-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8483BA5B0CC
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 01:03:12 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id DDA4CA5B5C0
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 02:21:24 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id D34587A5521
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 00:02:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 7F2493ACD0F
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 01:21:12 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8D788A50;
-	Tue, 11 Mar 2025 00:03:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B47311EA7F1;
+	Tue, 11 Mar 2025 01:20:06 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b="VTbJGq36"
+	dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b="NJKW6AJB"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from linux1587.grserver.gr (linux1587.grserver.gr [185.138.42.100])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from mx0b-00069f02.pphosted.com (mx0b-00069f02.pphosted.com [205.220.177.32])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0B10F5258;
-	Tue, 11 Mar 2025 00:03:01 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.138.42.100
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 0BC6D1E9B34;
+	Tue, 11 Mar 2025 01:20:04 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.177.32
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741651385; cv=none; b=k7OpFqEJsX5Qw3O8O9c/Dl8z6XTNL4waHu6Zx/WQkCfPxHSdAEY229Wtc2DNOWnEPDojdfTeC9cKDQdPFyTqhxCn06TE+Ji0xllTyzdOsFGP7LkrsxrPCvI3DtejrllzfHusBmbiq2OYuaS5V+rImg5JeUxZULat2ShnqCM72Os=
+	t=1741656006; cv=none; b=uIoZpFFESu45NAlolrWM82rdM8Bwdw8svZzO26d0Yy1JO28s0yiIT5/M+fCpaiA3nQBS2Mj+8Js1iOvr9d52j62pu2TFtC/cy0ZVWYvn8FYaevpNX+xdcy8ZlfCbChlJP42jLdGcH5vAj29UJP8DG/xT0FbCSx8J0Hvf9yYV+KU=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741651385; c=relaxed/simple;
-	bh=o2rndGmSANWJIWmJ2fiEuwePrpEoDHrLyrWTJCHG844=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=D5vPKpdKwq/o4APIHiht5Vb7+JLIuuixZxrbF4CoIssMBE0JSObicb4Cbc9cOC6jlaDuZxyjJ02YwvfpGxyoFOBz92it0y97zkIWr6jizuqDRlmsnNWeCfno0Dtacf6FzfL+ps3dm+yk0Zu55hzWJfXYTfwap/KFpY8d6kEMDrw=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev; spf=pass smtp.mailfrom=antheas.dev; dkim=pass (1024-bit key) header.d=antheas.dev header.i=@antheas.dev header.b=VTbJGq36; arc=none smtp.client-ip=185.138.42.100
-Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=antheas.dev
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=antheas.dev
-Received: from mail-lj1-f175.google.com (mail-lj1-f175.google.com [209.85.208.175])
-	by linux1587.grserver.gr (Postfix) with ESMTPSA id B7E8B2E09CA5;
-	Tue, 11 Mar 2025 02:02:54 +0200 (EET)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=antheas.dev;
-	s=default; t=1741651379;
-	bh=mqNigfRlIpWYMl0pBgNTyx7LVnR/pZgC6OV/ptsL+Pg=;
-	h=Received:From:Subject:To;
-	b=VTbJGq36gABKsI8wtNbQe4sUMinyRBYFNAE2PqRc5J1Q2yrDQYfvUSyUePFpkHlkd
-	 2G1r3GRU8+NWScfuV++x/gQ7DotTus9kxEpUGButgCjU/v7GSNbd+CWbYLL/fwGpV3
-	 y6WTVxbMtiHoLyznm/lbXC/ccDZxAjK7bYj69F3I=
-Authentication-Results: linux1587.grserver.gr;
-        spf=pass (sender IP is 209.85.208.175) smtp.mailfrom=lkml@antheas.dev smtp.helo=mail-lj1-f175.google.com
-Received-SPF: pass (linux1587.grserver.gr: connection is authenticated)
-Received: by mail-lj1-f175.google.com with SMTP id
- 38308e7fff4ca-30bf8f5dde5so30944381fa.2;
-        Mon, 10 Mar 2025 17:02:54 -0700 (PDT)
-X-Forwarded-Encrypted: i=1;
- AJvYcCVs7huxU134iypQ6d+CkSsuWnEwy20QpnVjshVdyZVHUUUoNSbMteYcptYzdjZRUTWmFHY27AwiWcw=@vger.kernel.org,
- AJvYcCWPDdWseToZCwzcz3QJLn3YIjWm8FWPGMSKah0KW6e1eNCipNOOtdd12gpN2gTkbnwg7tckKE2XA0LNc3g=@vger.kernel.org,
- AJvYcCWrA93BkZvvbGP6ZJYZ4RAZ8j4K2RuJnjQ8Z/gSks+/S3NM984Cr1wGmDWBBp9rMEuaQebiMCpO0VM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzGXeO0kZ4BF6mEMFGEztxebyyRFT7yfuJ36/DnNVUWbss5gz63
-	VbnUkWGjFf/rQVe0QDYP4ze7jHAhcHEhzNwZCBJNCZfXj4wXh9bj9Jv8IzeBQT74btEebo15etd
-	DuO97NjAib4vQf+qfgiSttFO/ihE=
-X-Google-Smtp-Source: 
- AGHT+IEpLukf4KQwouiE/rO5D3PifDw4LGfLW/ikGed/O7+tCnH62GPHtjOSUnA/6LJqiLbhPb1BAYD3WwJjpf355XA=
-X-Received: by 2002:a2e:2c0e:0:b0:30b:b956:53c2 with SMTP id
- 38308e7fff4ca-30bf4513574mr46821321fa.11.1741651374006; Mon, 10 Mar 2025
- 17:02:54 -0700 (PDT)
+	s=arc-20240116; t=1741656006; c=relaxed/simple;
+	bh=3tCGZ+iADYu5Oa8CKzY2Rkhztp4FvrXT9DxF88nUGVI=;
+	h=From:To:Cc:Subject:Date:Message-ID:In-Reply-To:References:
+	 MIME-Version:Content-Type; b=SByQKerexuWXPTg6BJbkVo7FWojNuXUSVdCtvXYH6nOpqmTVjlPg/7jMv9fQQoY1Jc/mLSm4w5fhjz/Th1lJAr2Paabp3H9Yg2yXyuVw4Pyg+x3I0sbNqnBgryJIYEXpVZcO+HMlZR2UdCoVgwbmXraFNl0VDIyqP3BDMJ0l7PI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com; spf=pass smtp.mailfrom=oracle.com; dkim=pass (2048-bit key) header.d=oracle.com header.i=@oracle.com header.b=NJKW6AJB; arc=none smtp.client-ip=205.220.177.32
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=reject dis=none) header.from=oracle.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=oracle.com
+Received: from pps.filterd (m0246630.ppops.net [127.0.0.1])
+	by mx0b-00069f02.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52ALftdS014742;
+	Tue, 11 Mar 2025 01:19:46 GMT
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=oracle.com; h=cc
+	:content-transfer-encoding:content-type:date:from:in-reply-to
+	:message-id:mime-version:references:subject:to; s=
+	corp-2023-11-20; bh=vga/g3evdtXKKUPmygpssFnr7zgCG3URniCGU1ZM1xE=; b=
+	NJKW6AJBCUgSa6sEAdBIf4DaXLPeUgHAKf41rBKDFGo5SjRdlrRbpN54Ty58ItXM
+	oGD7nb3Q0uwkkdmnp0ycEArwam9sgXQD4YMaPgqr389Bd8TyLohkh6ZIKN4rNlT+
+	Bpympy+L/hcrIhDn/kD55cVKOSw8ejQJO36KmiNlf5XfUeQJp6m8Q24vYP8Mf0v1
+	oKp3AZovYIdtDEz3r1hCsceNjBHmSOkEWBsfM1GQaIvGVRKwNq/8RKyo4biJAYa9
+	89xwFFS5UP2nMoHsh70+Pxwh1HmLupNHk+onNTJ3wMWxaPvJ89/dKt8k67AV9RhX
+	i4SZZq8dgRCgXyDYLj3clg==
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.appoci.oracle.com [130.35.103.27])
+	by mx0b-00069f02.pphosted.com (PPS) with ESMTPS id 458cacbvd8-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 11 Mar 2025 01:19:45 +0000 (GMT)
+Received: from pps.filterd (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (8.18.1.2/8.18.1.2) with ESMTP id 52B00t38015068;
+	Tue, 11 Mar 2025 01:19:44 GMT
+Received: from pps.reinject (localhost [127.0.0.1])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTPS id 458cbencn2-1
+	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=OK);
+	Tue, 11 Mar 2025 01:19:44 +0000
+Received: from iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com [127.0.0.1])
+	by pps.reinject (8.17.1.5/8.17.1.5) with ESMTP id 52B1JfrC014960;
+	Tue, 11 Mar 2025 01:19:44 GMT
+Received: from ca-mkp2.ca.oracle.com.com (mpeterse-ol9.allregionaliads.osdevelopmeniad.oraclevcn.com [100.100.251.135])
+	by iadpaimrmta03.imrmtpd1.prodappiadaev1.oraclevcn.com (PPS) with ESMTP id 458cbencm8-4;
+	Tue, 11 Mar 2025 01:19:44 +0000
+From: "Martin K. Petersen" <martin.petersen@oracle.com>
+To: Andrew Morton <akpm@linux-foundation.org>,
+        Yaron Avizrat <yaron.avizrat@intel.com>,
+        Oded Gabbay <ogabbay@kernel.org>, Julia Lawall <Julia.Lawall@inria.fr>,
+        Nicolas Palix <nicolas.palix@imag.fr>,
+        James Smart <james.smart@broadcom.com>,
+        Dick Kennedy <dick.kennedy@broadcom.com>,
+        "James E.J. Bottomley" <James.Bottomley@HansenPartnership.com>,
+        Jaroslav Kysela <perex@perex.cz>, Takashi Iwai <tiwai@suse.com>,
+        Chris Mason <clm@fb.com>, Josef Bacik <josef@toxicpanda.com>,
+        David Sterba <dsterba@suse.com>, Ilya Dryomov <idryomov@gmail.com>,
+        Dongsheng Yang <dongsheng.yang@easystack.cn>,
+        Jens Axboe <axboe@kernel.dk>, Xiubo Li <xiubli@redhat.com>,
+        Damien Le Moal <dlemoal@kernel.org>, Niklas Cassel <cassel@kernel.org>,
+        Carlos Maiolino <cem@kernel.org>,
+        "Darrick J. Wong" <djwong@kernel.org>,
+        Sebastian Reichel <sre@kernel.org>, Keith Busch <kbusch@kernel.org>,
+        Christoph Hellwig <hch@lst.de>, Sagi Grimberg <sagi@grimberg.me>,
+        Frank Li <Frank.Li@nxp.com>, Mark Brown <broonie@kernel.org>,
+        Shawn Guo <shawnguo@kernel.org>, Sascha Hauer <s.hauer@pengutronix.de>,
+        Pengutronix Kernel Team <kernel@pengutronix.de>,
+        Fabio Estevam <festevam@gmail.com>,
+        Shyam Sundar S K <Shyam-sundar.S-k@amd.com>,
+        Hans de Goede <hdegoede@redhat.com>,
+        =?UTF-8?q?Ilpo=20J=C3=A4rvinen?= <ilpo.jarvinen@linux.intel.com>,
+        Henrique de Moraes Holschuh <hmh@hmh.eng.br>,
+        Selvin Xavier <selvin.xavier@broadcom.com>,
+        Kalesh AP <kalesh-anakkur.purayil@broadcom.com>,
+        Jason Gunthorpe <jgg@ziepe.ca>, Leon Romanovsky <leon@kernel.org>,
+        Easwar Hariharan <eahariha@linux.microsoft.com>
+Cc: "Martin K . Petersen" <martin.petersen@oracle.com>, cocci@inria.fr,
+        linux-kernel@vger.kernel.org, linux-scsi@vger.kernel.org,
+        dri-devel@lists.freedesktop.org, linux-sound@vger.kernel.org,
+        linux-btrfs@vger.kernel.org, ceph-devel@vger.kernel.org,
+        linux-block@vger.kernel.org, linux-ide@vger.kernel.org,
+        linux-xfs@vger.kernel.org, linux-pm@vger.kernel.org,
+        linux-nvme@lists.infradead.org, linux-spi@vger.kernel.org,
+        imx@lists.linux.dev, linux-arm-kernel@lists.infradead.org,
+        platform-driver-x86@vger.kernel.org,
+        ibm-acpi-devel@lists.sourceforge.net, linux-rdma@vger.kernel.org,
+        Takashi Iwai <tiwai@suse.de>, Carlos Maiolino <cmaiolino@redhat.com>
+Subject: Re: (subset) [PATCH v3 00/16] Converge on using secs_to_jiffies() part two
+Date: Mon, 10 Mar 2025 21:19:03 -0400
+Message-ID: <174165504986.528513.3575505677065987375.b4-ty@oracle.com>
+X-Mailer: git-send-email 2.48.1
+In-Reply-To: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
+References: <20250225-converge-secs-to-jiffies-part-two-v3-0-a43967e36c88@linux.microsoft.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250309112114.1177361-1-lkml@antheas.dev>
- <20250309112114.1177361-7-lkml@antheas.dev>
- <CAFqHKT=M0ZqeV25zqfmg1dnfLPfJ2+8+rq12pfXoZkZx-J2e_g@mail.gmail.com>
-In-Reply-To: 
- <CAFqHKT=M0ZqeV25zqfmg1dnfLPfJ2+8+rq12pfXoZkZx-J2e_g@mail.gmail.com>
-From: Antheas Kapenekakis <lkml@antheas.dev>
-Date: Tue, 11 Mar 2025 01:02:42 +0100
-X-Gmail-Original-Message-ID: 
- <CAGwozwFUG4FoZvtSp-Vz5816K8WvNP5YgGB1H29M388q1GD_yw@mail.gmail.com>
-X-Gm-Features: AQ5f1JoucYDU_jPjyUjhMUL93ucl3plxSOALUT88tsi8Rlh0xrH5zz5Apk1EcY8
-Message-ID: 
- <CAGwozwFUG4FoZvtSp-Vz5816K8WvNP5YgGB1H29M388q1GD_yw@mail.gmail.com>
-Subject: Re: [PATCH v3 06/12] platform/x86: oxpec: Add charge threshold and
- behaviour to OneXPlayer
-To: Derek John Clark <derekjohn.clark@gmail.com>
-Cc: platform-driver-x86@vger.kernel.org, linux-hwmon@vger.kernel.org,
-	linux-doc@vger.kernel.org, linux-pm@vger.kernel.org,
-	Guenter Roeck <linux@roeck-us.net>, Jean Delvare <jdelvare@suse.com>,
- Jonathan Corbet <corbet@lwn.net>,
-	Joaquin Ignacio Aramendia <samsagax@gmail.com>,
- Kevin Greenberg <kdgreenberg234@protonmail.com>,
-	Joshua Tam <csinaction@pm.me>, Parth Menon <parthasarathymenon@gmail.com>,
-	Eileen <eileen@one-netbook.com>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-X-PPP-Message-ID: 
- <174165137544.28025.622617932087270383@linux1587.grserver.gr>
-X-PPP-Vhost: antheas.dev
-X-Virus-Scanned: clamav-milter 0.103.11 at linux1587.grserver.gr
-X-Virus-Status: Clean
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 8bit
+X-Proofpoint-Virus-Version: vendor=baseguard
+ engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
+ definitions=2025-03-11_01,2025-03-07_03,2024-11-22_01
+X-Proofpoint-Spam-Details: rule=notspam policy=default score=0 phishscore=0 adultscore=0 spamscore=0
+ mlxlogscore=845 malwarescore=0 suspectscore=0 mlxscore=0 bulkscore=0
+ classifier=spam adjust=0 reason=mlx scancount=1 engine=8.12.0-2502100000
+ definitions=main-2503110007
+X-Proofpoint-ORIG-GUID: GqduH_rgdwDpz_bqxVpv837hh_WMHoUq
+X-Proofpoint-GUID: GqduH_rgdwDpz_bqxVpv837hh_WMHoUq
 
-On Tue, 11 Mar 2025 at 00:51, Derek John Clark
-<derekjohn.clark@gmail.com> wrote:
->
-> On Sun, Mar 9, 2025 at 4:21=E2=80=AFAM Antheas Kapenekakis <lkml@antheas.=
-dev> wrote:
-> >
-> > With the X1 (AMD), OneXPlayer added a charge limit and charge bypass to
-> > their devices. Charge limit allows for choosing an arbitrary battery
-> > charge setpoint in percentages. Charge bypass allows to instruct the
-> > device to stop charging either when it is in s0 or always.
-> >
-> > This feature was then extended for the F1Pro as well. OneXPlayer also
-> > released BIOS updates for the X1 Mini, X1 (Intel), and F1 devices that
-> > add support for this feature. Therefore, enable it for all F1 and
-> > X1 devices.
-> >
->
-> As noted in your previous patch, I think checking for BIOS support is
-> a wise move here.
->
-> > Add both of these under the standard sysfs battery endpoints for them,
-> > by looking for the battery. OneXPlayer devices have a single battery.
-> >
-> > Signed-off-by: Antheas Kapenekakis <lkml@antheas.dev>
-> > ---
-> >  drivers/platform/x86/oxpec.c | 217 +++++++++++++++++++++++++++++++++++
-> >  1 file changed, 217 insertions(+)
-> >
-> > diff --git a/drivers/platform/x86/oxpec.c b/drivers/platform/x86/oxpec.=
-c
-> > index dc3a0871809c..dd6d333ebcfa 100644
-> > --- a/drivers/platform/x86/oxpec.c
-> > +++ b/drivers/platform/x86/oxpec.c
-> > @@ -24,6 +24,7 @@
-> >  #include <linux/module.h>
-> >  #include <linux/platform_device.h>
-> >  #include <linux/processor.h>
-> > +#include <acpi/battery.h>
-> >
-> >  /* Handle ACPI lock mechanism */
-> >  static u32 oxp_mutex;
-> > @@ -87,6 +88,24 @@ static enum oxp_board board;
-> >
-> >  #define OXP_TURBO_RETURN_VAL           0x00 /* Common return val */
-> >
-> > +/* Battery bypass settings */
-> > +#define EC_CHARGE_CONTROL_BEHAVIOURS_X1        (BIT(POWER_SUPPLY_CHARG=
-E_BEHAVIOUR_AUTO)             | \
-> > +                                        BIT(POWER_SUPPLY_CHARGE_BEHAVI=
-OUR_INHIBIT_CHARGE)    | \
-> > +                                        BIT(POWER_SUPPLY_CHARGE_BEHAVI=
-OUR_INHIBIT_CHARGE_S0))
-> > +
-> > +#define OXP_X1_CHARGE_LIMIT_REG      0xA3 /* X1 charge limit (%) */
-> > +#define OXP_X1_CHARGE_BYPASS_REG     0xA4 /* X1 bypass charging */
-> > +
-> > +#define OXP_X1_CHARGE_BYPASS_MASK_S0 0x01
-> > +/*
-> > + * Cannot control S3, S5 individually.
-> > + * X1 Mask is 0x0A, OneXFly F1Pro is just 0x02
-> > + * but the extra bit on the X1 does nothing.
-> > + */
-> > +#define OXP_X1_CHARGE_BYPASS_MASK_S3S5 0x02
-> > +#define OXP_X1_CHARGE_BYPASS_MASK_ALWAYS (OXP_X1_CHARGE_BYPASS_MASK_S0=
- | \
-> > +       OXP_X1_CHARGE_BYPASS_MASK_S3S5)
-> > +
-> >  static const struct dmi_system_id dmi_table[] =3D {
-> >         {
-> >                 .matches =3D {
-> > @@ -434,6 +453,194 @@ static ssize_t tt_toggle_show(struct device *dev,
-> >
-> >  static DEVICE_ATTR_RW(tt_toggle);
-> >
-> > +/* Callbacks for turbo toggle attribute */
->
-> This comment is not correct for the section. I think it was a copy/paste?
->
-> > +static bool charge_behaviour_supported(void)
->
-> Attribute groups support .is_visible. This blocks invocation from
-> userspace, vice doing it in probe() manually.
+On Tue, 25 Feb 2025 20:17:14 +0000, Easwar Hariharan wrote:
 
-Unsure what this means. Instead of using is_visible, I block the
-battery attachment, which is preferable ATM as all devices that
-support battery features support all of them. If new devices have
-additional features not covered by this, we will have to move towards
-using is_visible.
+> This is the second series (part 1*) that converts users of msecs_to_jiffies() that
+> either use the multiply pattern of either of:
+> - msecs_to_jiffies(N*1000) or
+> - msecs_to_jiffies(N*MSEC_PER_SEC)
+> 
+> where N is a constant or an expression, to avoid the multiplication.
+> 
+> [...]
 
-> > +{
-> > +       switch (board) {
-> > +       case oxp_x1:
-> > +       case oxp_fly:
-> > +               return 1;
-> > +       default:
-> > +               break;
-> > +       }
-> > +       return 0;
-> > +}
-> > +
-> > +static ssize_t charge_behaviour_store(struct device *dev,
-> > +                              struct device_attribute *attr, const cha=
-r *buf,
-> > +                              size_t count)
-> > +{
-> > +       int ret;
-> > +       u8 reg;
-> > +       long val, s0, always;
-> > +       unsigned int available;
-> > +
->
-> Convention is to order variables in reverse xmas tree, with the
-> longest line first and shortest line last.
+Applied to 6.15/scsi-queue, thanks!
 
-Sure
+[02/16] scsi: lpfc: convert timeouts to secs_to_jiffies()
+        https://git.kernel.org/mkp/scsi/c/a131f20804d6
 
-> > +       switch (board) {
-> > +       case oxp_x1:
-> > +       case oxp_fly:
-> > +               s0 =3D OXP_X1_CHARGE_BYPASS_MASK_S0;
-> > +               always =3D OXP_X1_CHARGE_BYPASS_MASK_ALWAYS;
-> > +               reg =3D OXP_X1_CHARGE_BYPASS_REG;
-> > +               available =3D EC_CHARGE_CONTROL_BEHAVIOURS_X1;
-> > +               break;
-> > +       default:
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       ret =3D power_supply_charge_behaviour_parse(available, buf);
-> > +       if (ret < 0)
->
-> Does ret ever return > 0? I think you can just if (ret)
-
-This is how it is used in other platform drivers. I might be able to
-indulge you on the others though.
-
-> > +               return ret;
-> > +
-> > +       switch (ret) {
-> > +       case POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO:
-> > +               val =3D 0;
-> > +               break;
-> > +       case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_S0:
-> > +               val =3D s0;
-> > +               break;
-> > +       case POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE:
-> > +               val =3D always;
-> > +               break;
-> > +       default:
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       ret =3D write_to_ec(reg, val);
-> > +       if (ret < 0)
->
-> if (ret)
->
-> > +               return ret;
-> > +
-> > +       return count;
-> > +}
-> > +
-> > +static ssize_t charge_behaviour_show(struct device *dev,
-> > +                             struct device_attribute *attr, char *buf)
-> > +{
-> > +       int ret;
-> > +       u8 reg;
-> > +       long val, s0, always, sel;
-> > +       unsigned int available;
-> > +
->
-> Reverse xmas tree here too.
->
-> > +       switch (board) {
-> > +       case oxp_x1:
-> > +       case oxp_fly:
-> > +               s0 =3D OXP_X1_CHARGE_BYPASS_MASK_S0;
-> > +               always =3D OXP_X1_CHARGE_BYPASS_MASK_ALWAYS;
-> > +               reg =3D OXP_X1_CHARGE_BYPASS_REG;
-> > +               available =3D EC_CHARGE_CONTROL_BEHAVIOURS_X1;
-> > +               break;
-> > +       default:
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       ret =3D read_from_ec(reg, 1, &val);
-> > +       if (ret < 0)
->
-> if (ret)
->
-> > +               return ret;
-> > +
-> > +       if ((val & always) =3D=3D always)
-> > +               sel =3D POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE;
-> > +       else if ((val & s0) =3D=3D s0)
-> > +               sel =3D POWER_SUPPLY_CHARGE_BEHAVIOUR_INHIBIT_CHARGE_S0=
-;
-> > +       else
-> > +               sel =3D POWER_SUPPLY_CHARGE_BEHAVIOUR_AUTO;
-> > +
-> > +       return power_supply_charge_behaviour_show(dev, available, sel, =
-buf);
-> > +}
-> > +
-> > +static DEVICE_ATTR_RW(charge_behaviour);
-> > +
-> > +static ssize_t charge_control_end_threshold_store(struct device *dev,
-> > +                              struct device_attribute *attr, const cha=
-r *buf,
-> > +                              size_t count)
-> > +{
-> > +       u64 val, reg;
-> > +       int ret;
-> > +
-> > +       ret =3D kstrtou64(buf, 10, &val);
-> > +       if (ret < 0)
->
-> if (ret)
->
-> > +               return ret;
-> > +       if (val > 100)
-> > +               return -EINVAL;
-> > +
-> > +       switch (board) {
-> > +       case oxp_x1:
-> > +       case oxp_fly:
-> > +               reg =3D OXP_X1_CHARGE_LIMIT_REG;
-> > +               break;
-> > +       default:
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       ret =3D write_to_ec(reg, val);
-> > +       if (ret < 0)
-> > +               return ret;
-> > +
-> > +       return count;
-> > +}
-> > +
-> > +static ssize_t charge_control_end_threshold_show(struct device *dev,
-> > +                             struct device_attribute *attr, char *buf)
-> > +{
-> > +       int ret;
-> > +       u8 reg;
-> > +       long val;
-> > +
->
-> Reverse xmas tree here too.
->
-> > +       switch (board) {
-> > +       case oxp_x1:
-> > +       case oxp_fly:
-> > +               reg =3D OXP_X1_CHARGE_LIMIT_REG;
-> > +               break;
-> > +       default:
-> > +               return -EINVAL;
-> > +       }
-> > +
-> > +       ret =3D read_from_ec(reg, 1, &val);
-> > +       if (ret < 0)
->
-> if (ret)
->
-> Cheers,
-> - Derek
->
-> > +               return ret;
-> > +
-> > +       return sysfs_emit(buf, "%ld\n", val);
-> > +}
-> > +
-> > +static DEVICE_ATTR_RW(charge_control_end_threshold);
-> > +
-> > +static int oxp_battery_add(struct power_supply *battery, struct acpi_b=
-attery_hook *hook)
-> > +{
-> > +       /* OneXPlayer devices only have one battery. */
-> > +       if (strcmp(battery->desc->name, "BAT0") !=3D 0 &&
-> > +           strcmp(battery->desc->name, "BAT1") !=3D 0 &&
-> > +           strcmp(battery->desc->name, "BATC") !=3D 0 &&
-> > +           strcmp(battery->desc->name, "BATT") !=3D 0)
-> > +               return -ENODEV;
-> > +
-> > +       if (device_create_file(&battery->dev,
-> > +           &dev_attr_charge_control_end_threshold))
-> > +               return -ENODEV;
-> > +
-> > +       if (device_create_file(&battery->dev,
-> > +           &dev_attr_charge_behaviour)) {
-> > +               device_remove_file(&battery->dev,
-> > +                               &dev_attr_charge_control_end_threshold)=
-;
-> > +               return -ENODEV;
-> > +       }
-> > +
-> > +       return 0;
-> > +}
-> > +
-> > +static int oxp_battery_remove(struct power_supply *battery, struct acp=
-i_battery_hook *hook)
-> > +{
-> > +       device_remove_file(&battery->dev,
-> > +                          &dev_attr_charge_control_end_threshold);
-> > +       device_remove_file(&battery->dev,
-> > +                          &dev_attr_charge_behaviour);
-> > +       return 0;
-> > +}
-> > +
-> > +static struct acpi_battery_hook battery_hook =3D {
-> > +       .add_battery =3D oxp_battery_add,
-> > +       .remove_battery =3D oxp_battery_remove,
-> > +       .name =3D "OneXPlayer Battery",
-> > +};
-> > +
-> >  /* PWM enable/disable functions */
-> >  static int oxp_pwm_enable(void)
-> >  {
-> > @@ -716,15 +923,25 @@ static int oxp_platform_probe(struct platform_dev=
-ice *pdev)
-> >         hwdev =3D devm_hwmon_device_register_with_info(dev, "oxpec", NU=
-LL,
-> >                                                      &oxp_ec_chip_info,=
- NULL);
-> >
-> > +       if (charge_behaviour_supported())
-> > +               battery_hook_register(&battery_hook);
-> > +
-> >         return PTR_ERR_OR_ZERO(hwdev);
-> >  }
-> >
-> > +static void oxp_platform_remove(struct platform_device *device)
-> > +{
-> > +       if (charge_behaviour_supported())
-> > +               battery_hook_unregister(&battery_hook);
-> > +}
-> > +
-> >  static struct platform_driver oxp_platform_driver =3D {
-> >         .driver =3D {
-> >                 .name =3D "oxp-platform",
-> >                 .dev_groups =3D oxp_ec_groups,
-> >         },
-> >         .probe =3D oxp_platform_probe,
-> > +       .remove =3D oxp_platform_remove,
-> >  };
-> >
-> >  static struct platform_device *oxp_platform_device;
-> > --
-> > 2.48.1
-> >
+-- 
+Martin K. Petersen	Oracle Linux Engineering
 
