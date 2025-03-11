@@ -1,150 +1,242 @@
-Return-Path: <linux-pm+bounces-23846-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23847-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 8F1FAA5C41C
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 15:42:35 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id B5391A5C429
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 15:44:26 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C8F557A143E
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 14:41:32 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 99586189B73E
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 14:43:43 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 1716D25D8E1;
-	Tue, 11 Mar 2025 14:41:26 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B119225C6F6;
+	Tue, 11 Mar 2025 14:43:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b="ebsx0eSt"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="uZ29h8RY"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wr1-f51.google.com (mail-wr1-f51.google.com [209.85.221.51])
+Received: from mail-yw1-f173.google.com (mail-yw1-f173.google.com [209.85.128.173])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E0D5C25D20B
-	for <linux-pm@vger.kernel.org>; Tue, 11 Mar 2025 14:41:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.51
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 9A63425C6F4
+	for <linux-pm@vger.kernel.org>; Tue, 11 Mar 2025 14:43:08 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.173
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741704086; cv=none; b=Kh+hsnA01JeW91hTHl+0JZVclEvOKVW+1JzsQZT50Q1MqlXjaLNdNQj27HR2apNXwEnwieDNnA3iVTRkoW13oxnO3C1WmWDvfrQQq/U4OMPB0h3TGeyAwea51FcX0CR5hzZz8UsaKAy3bTumD2mQpHbVQUialQaOE54dSSDilXA=
+	t=1741704190; cv=none; b=p+eA+u7g7aAN6JTo6/+3IqFvPAlzVTIy+tBil4x9lZU9I+I5I8BPvWdfYzBZ9XZV294s9BIoZg0GR8Zp7jE2h62l93HxqdhZCiJxZHuv01O7cXqPdrT15HfFgBtDcNuuo0pIW8k5hSkvPTwhUmaVaMlxOtBvqNDYu0+kimrKUAI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741704086; c=relaxed/simple;
-	bh=e17YIKewOJw7kg96MYs2+UoD1X4UIFS2MZO7LIlijb0=;
-	h=Message-ID:Subject:From:To:Cc:Date:In-Reply-To:References:
-	 Content-Type:MIME-Version; b=QwfzV3Crx3H+pPxwJnagBHnJI2o/w1iXA3HHo2RDd49TWPIAgfuYf0aM/d48G2tjLRxaQ9N93LvwAARt7lBdX3NGuTfJQ3JTIcHvoy6Kip3dAFQ1SW061qI9D9F+GLyo/zFadmuORDD0wv3Q5V/DG/9gmPV1skqFsv/GzUV2ijE=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com; spf=pass smtp.mailfrom=suse.com; dkim=pass (2048-bit key) header.d=suse.com header.i=@suse.com header.b=ebsx0eSt; arc=none smtp.client-ip=209.85.221.51
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=quarantine dis=none) header.from=suse.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=suse.com
-Received: by mail-wr1-f51.google.com with SMTP id ffacd0b85a97d-39104c1cbbdso2757540f8f.3
-        for <linux-pm@vger.kernel.org>; Tue, 11 Mar 2025 07:41:23 -0700 (PDT)
+	s=arc-20240116; t=1741704190; c=relaxed/simple;
+	bh=VkUyoAyyCmW63H5OQPvbiafh/ZxBkE7JGT7ZH6ENAKk=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=LMll/XcKSym6Mc2QHDw6WmXJFs9nAGwLi6hYEcHla22bNF0QXdagLpYINJlW2K2c9ER+0yUxzOiMA/9EMeTt8PARrH7HfsYNI7BnFzSP7eL2Opd5zi4+dJV1KbpzIt9VBqXIqW/20OhFs03J6Lh6C/D68H25N+rMDKAGbZtFQJM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=uZ29h8RY; arc=none smtp.client-ip=209.85.128.173
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f173.google.com with SMTP id 00721157ae682-6feb0742878so51970737b3.2
+        for <linux-pm@vger.kernel.org>; Tue, 11 Mar 2025 07:43:08 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=suse.com; s=google; t=1741704082; x=1742308882; darn=vger.kernel.org;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:from:to:cc:subject
-         :date:message-id:reply-to;
-        bh=e17YIKewOJw7kg96MYs2+UoD1X4UIFS2MZO7LIlijb0=;
-        b=ebsx0eStJiZ5pRpBn1LGcNEhc9/ufzisag743zx7HByV9d6QSHMUqiwjqKgjpXT7oL
-         2vU8+xXY9ImNkzAqhc+EvhfqYqXs/uWL2Taa6GmFvD3NYqbxPKKX1EoOzb1udEsEZeIV
-         YJMzBGzfn2T/V8bTe6+UFGBu37NvTG5FEH+jse8qcaaAHoyMpnUgjuYM2e4fIXJ49Tif
-         Ri8NcB5Eh5UfFSrSmJvTQbmlPNGjjZKPN9/+jzoXRz+g6N4StRy0oD6tgbLofE5XvswW
-         GqO8Q6qMMwJur3txS14MNAJbQbBRMFnv8s11YyW0GvnX0T4BWus+07cA2MnUkpj/u27U
-         sK6w==
+        d=linaro.org; s=google; t=1741704187; x=1742308987; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=8eN7PsSljamLFmL3eAZGuj/XK8vFI8v0YSA3pxuzua8=;
+        b=uZ29h8RYQH1WGelKC+7tTn+5F+tlCEi7O93CLE0VsxHTo8RRSNJKY4A5FKJpLikNEH
+         4FKkd4MpoZKEL2GAHc+vZoYG4w3NAs2OvwlvD5iTBPu6KKXxH34MjPI14moUPSU0J2WP
+         gjbsLurLtbiZNHqcxNJ1/vMccINBSlTSBPvNc3pxBK3u45/ZF3dxJzYGwWa6C9gz3UBs
+         bU3rF4/jfzkJD7fwmhPflRcuuHFjylg1EUhjQJA/UoqlDJKXYX4Yv4XqwWxxl/Qnfov6
+         Q9WfMDr905YoZJLb+vGiag4sEPGIX0WAror3eTlrHJ9FejO5DvAI4TGdXUYVRt0q1TGn
+         B4pg==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741704082; x=1742308882;
-        h=mime-version:user-agent:content-transfer-encoding:references
-         :in-reply-to:date:cc:to:from:subject:message-id:x-gm-message-state
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=e17YIKewOJw7kg96MYs2+UoD1X4UIFS2MZO7LIlijb0=;
-        b=ZTZgsUvrSFbP+3j8I1kZ7t2Am+uDjeUxkn5qjUQ7kTcKjue7IO76svdkAjBVO6I123
-         2cFVEEhYoBSFoLcRlSOhVOxd//tZfLNNifZ7ajs3O72cAqR/HTD9k29AjINTOVcI2Gro
-         QB6FV4luyPGy7baYX3/xD4T693r6CMRV6yzYlraQm0wS4sfHaPFXdTz/8Lqy+igVRPMh
-         Xj8ArbyeSPi8EjfkEkFRJ5RsfTXp+B7myMRFzdM9PnHsI5zIC4axtwCSuw8rTO/qzMmL
-         y8m63DROz+HRyVYs1Qsd7rBJuEYqOUNCY16tJE7bUdYwBdNS69k/+zxT36YzNaMInWrm
-         GwoQ==
-X-Forwarded-Encrypted: i=1; AJvYcCVNEjCM9+scVLgmaqtBO87sxUIk9M3SlNONdoJe/0Ff+2dPeYv40CVqjnSDtttZ+kE9umdAJ4fJng==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yydk9M8l/GxT+FsoPS19rpIjOdv7JDmvccCgfReBkP3WGaSeu7J
-	qznYNCjwfAlBQfuZk/St9vkAeuNSfcrwHD0JWSMrWeCmHGI4PuR2kvtKDYN0ebU=
-X-Gm-Gg: ASbGnctL2ClbhvadPj7MV3Hld4tXI6LfIbga5GKMBGgfMHKM/dnTlRY+dUFmZrruL/j
-	T0UwSHL623CIUjsOyEt61oc4YPIYSBxBpl+Ot3GYCwepk09OrIbH+YUMeBVItHJfKZ1g/wcDJVd
-	6+HrS5v1YROAH8yWCYcXqDOgb03JcXuXV+7FuISz5T4RGgb6yWx3MCIj9ukjEnaWIfeceJZCm/u
-	Q0GWt3MahIxfYiVZIhblR/EiHdAZE0D9OsBdXBCbvaUXBUmtvp7IeWTtMKDe96TYvxVwr0SSoBL
-	WorQL4qQmLf89m8Wb+eBmNmS4nV0jSMuu9TKPd5/TsBx1Iu11ncfMEOE6PS+Fry4el47aIvKDq4
-	=
-X-Google-Smtp-Source: AGHT+IHedVj4RUj6sW41ewt21ZWFTQVrQn0/iCeA7D/35qQUSXCzs/EtRBqy+mOCc1u29u+Bx4/luQ==
-X-Received: by 2002:a5d:584b:0:b0:391:4873:7940 with SMTP id ffacd0b85a97d-3926c78f6b5mr4736641f8f.54.1741704082203;
-        Tue, 11 Mar 2025 07:41:22 -0700 (PDT)
-Received: from [192.168.3.33] (110.39.160.45.gramnet.com.br. [45.160.39.110])
-        by smtp.gmail.com with ESMTPSA id ffacd0b85a97d-3912c0195casm18675615f8f.53.2025.03.11.07.41.17
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Tue, 11 Mar 2025 07:41:21 -0700 (PDT)
-Message-ID: <9a8b7634b123e82c3eaf278a5944feafd91279cc.camel@suse.com>
-Subject: Re: [PATCH 0/5] printk: renaming some suspend/resume functions and
- one fix for unblanking
-From: Marcos Paulo de Souza <mpdesouza@suse.com>
-To: Petr Mladek <pmladek@suse.com>
-Cc: Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Eric Biederman	
- <ebiederm@xmission.com>, "Rafael J. Wysocki" <rafael@kernel.org>, Len Brown
-	 <len.brown@intel.com>, Pavel Machek <pavel@ucw.cz>, Steven Rostedt	
- <rostedt@goodmis.org>, John Ogness <john.ogness@linutronix.de>, Sergey
- Senozhatsky <senozhatsky@chromium.org>, Todd E Brandt
- <todd.e.brandt@linux.intel.com>, Jiri Slaby	 <jirislaby@kernel.org>,
- linux-kernel@vger.kernel.org, kexec@lists.infradead.org, 
-	linux-pm@vger.kernel.org, linux-serial@vger.kernel.org
-Date: Tue, 11 Mar 2025 11:41:14 -0300
-In-Reply-To: <Z9AvKmM4Li57-E2E@pathway.suse.cz>
-References: <20250226-printk-renaming-v1-0-0b878577f2e6@suse.com>
-	 <Z9AShs1dEO0jrgjL@pathway.suse.cz> <Z9AvKmM4Li57-E2E@pathway.suse.cz>
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
-User-Agent: Evolution 3.54.3 (by Flathub.org) 
+        d=1e100.net; s=20230601; t=1741704187; x=1742308987;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=8eN7PsSljamLFmL3eAZGuj/XK8vFI8v0YSA3pxuzua8=;
+        b=MPnswLcUDGbc08Mcc6KoSeMfUaA+EtAakb2aeVB7NhR+tyZUtLlrU9uazu2rgencx7
+         EYgUbiH7lgI+HuTShZqy6w+EQSocZLCYlCDHSm3hLgbQl9ByXFSTBIV8NfndG2/AyH9M
+         Cu2nuqgSqbBtMPL8n46C1OT7iGtCZFfiyEctt85RZdGHG3Y9RZkvfbMbMzZtpHBrQb9G
+         MuH0gUNN1xkYnGRXfg52Iat9krRYkHPl40NaRbdyWLdCgPFqjpI9Sg7XO4cJh3NL5Iwb
+         ix6pmzNCwZgHexNdiP/y0mOLMh3surjndSzfNqxr5+j8wxSQBbkXz4UMfRe9TW6urcjY
+         f5Ag==
+X-Forwarded-Encrypted: i=1; AJvYcCVaHpWBuqA4F+gWJ90cnNxASUd2QDbz5y1KWVgw1t3Uffb0s5eRU383TyRmdm+5wNtwZeXPl0AAPA==@vger.kernel.org
+X-Gm-Message-State: AOJu0YzwcyfRLvuZTkOg7z5M1TMC05hC1xf3UfktyDYeMdobctdH8+yH
+	OKD6uSpL13nPFHcdctz9b45FJ18Dq0BeIjmLceXc51kNyw/UoLAhkjKogXE5EvzOk3BrVewkpqx
+	6CDvuk4mx10u+iI81wiKlYigs1fK6wfiSQ9zbuw==
+X-Gm-Gg: ASbGncuEPlPtCgUD/AQ5aP1GE+ANKWkcWokuePwhyFJZFhruV9oYZFvAsn7hIlDAgCH
+	rRj95Ea7iH3SFtNxRkThKBtLp4NdpsSx7wTL1AlNQdMjwYSV+6TlOiC1s/PRQbYpHUnnfBpH37n
+	JftEtqvZONO6/Z3M1cEICoIwZ5qnw=
+X-Google-Smtp-Source: AGHT+IG/Nkb2MMo911BY6LZyKSsboklHqls3Mfm0CSui2XrmwBdOBouV0yL+jXkPDlFtJivejjAsU40tXjhf+7Ul5/s=
+X-Received: by 2002:a05:690c:3706:b0:6fb:a696:b23b with SMTP id
+ 00721157ae682-6febf3c519dmr225655647b3.33.1741704187487; Tue, 11 Mar 2025
+ 07:43:07 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
+References: <20250307145547.2784821-1-ping.bai@nxp.com>
+In-Reply-To: <20250307145547.2784821-1-ping.bai@nxp.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 11 Mar 2025 15:42:31 +0100
+X-Gm-Features: AQ5f1JpuVnMxrQT-gRgqkxyP6H2nzFhKukp5aY_RBibf6JhIgaCor4IM8qvGE-0
+Message-ID: <CAPDyKFqsE4nArB+Qn5gH5P7vVePpZ6Z7ruas2-EGYsctGV-=4w@mail.gmail.com>
+Subject: Re: [PATCH v5] cpuidle: Init cpuidle only for present CPUs
+To: rafael@kernel.org, Jacky Bai <ping.bai@nxp.com>
+Cc: daniel.lezcano@linaro.org, lpieralisi@kernel.org, sudeep.holla@arm.com, 
+	james.morse@arm.com, d-gole@ti.com, anup@brainfault.org, 
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+	linux-pm@vger.kernel.org, linux-arm-kernel@lists.infradead.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org, 
+	imx@lists.linux.dev, khilman@baylibre.com, quic_tingweiz@quicinc.com, 
+	quic_yuanjiey@quicinc.com
+Content-Type: text/plain; charset="UTF-8"
 
-On Tue, 2025-03-11 at 13:40 +0100, Petr Mladek wrote:
-> On Tue 2025-03-11 11:38:00, Petr Mladek wrote:
-> > On Wed 2025-02-26 16:59:00, Marcos Paulo de Souza wrote:
-> > > Hello, I've being working on some patches that help to clarify
-> > > the suspend/resume
-> > > of printk machinery. The last patch on this patchset address one
-> > > issue regarding
-> > > suspended consoles and blanking.
-> > >=20
-> > > This is a part one patchset that I would like to see merged
-> > > before I send more patches
-> > > that will rework the suspend flag (a global suspend flag istead
-> > > of per console) and
-> > > the removal of CON_ENABLED flag later on (I've created a function
-> > > that will forcibly)
-> > > register the console instead of using this flag.
-> > >=20
-> > > Please review!
-> > >=20
-> > > Signed-off-by: Marcos Paulo de Souza <mpdesouza@suse.com>
-> >=20
-> > Looks good to me. I could fix the typos when pushing.
-> >=20
-> > Well, there is one more thing. It seems that the simple graphic
-> > logger
-> > was merged for 6.14-rc1. And the console_stop()/console_start() API
-> > is used also in drivers/gpu/drm/clients/drm_log.c.
-> >=20
-> > It is actually the code which motivated this rename, as already
-> > pointed out by John, see
-> > https://lore.kernel.org/lkml/ZyoNZfLT6tlVAWjO@pathway.suse.cz/
-> >=20
-> > Well, I am going to update these two locations when pushing this
-> > as well. Let's just get this change done.
->=20
-> And I did as mentioned above.
->=20
-> JFYI, the patcheset has been committed into printk/linux.git,
-> branch for-6.15-console-suspend-api-cleanup.
+On Fri, 7 Mar 2025 at 15:54, Jacky Bai <ping.bai@nxp.com> wrote:
+>
+> for_each_possible_cpu() is currently used to initialize cpuidle
+> in below cpuidle drivers:
+>   drivers/cpuidle/cpuidle-arm.c
+>   drivers/cpuidle/cpuidle-big_little.c
+>   drivers/cpuidle/cpuidle-psci.c
+>   drivers/cpuidle/cpuidle-qcom-spm.c
+>   drivers/cpuidle/cpuidle-riscv-sbi.c
+>
+> However, in cpu_dev_register_generic(), for_each_present_cpu()
+> is used to register CPU devices which means the CPU devices are
+> only registered for present CPUs and not all possible CPUs.
+>
+> With nosmp or maxcpus=0, only the boot CPU is present, lead
+> to the failure:
+>
+>   |  Failed to register cpuidle device for cpu1
+>
+> Then rollback to cancel all CPUs' cpuidle registration.
+>
+> Change for_each_possible_cpu() to for_each_present_cpu() in the
+> above cpuidle drivers to ensure it only registers cpuidle devices
+> for CPUs that are actually present.
+>
+> Fixes: b0c69e1214bc ("drivers: base: Use present CPUs in GENERIC_CPU_DEVICES")
+> Reviewed-by: Dhruva Gole <d-gole@ti.com>
+> Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
+> Tested-by: Yuanjie Yang <quic_yuanjiey@quicinc.com>
+> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
 
-Thanks to all reviewers and to you Petr for taking the patches and
-adjusting the typos!
+Reviewed-by: Ulf Hansson <ulf.hansson@linaro.org>
 
->=20
-> Best Regards,
-> Petr
+Rafael, I assume you will pick these up? Or let me know if you want me
+to take them via my pmdomain tree.
 
+Kind regards
+Uffe
+
+> ---
+>  - v5 changes:
+>    - add changes for cpuidle-qcom-spm
+>
+>  - v4 changes:
+>   - add changes for other cpuidle driver that has the similar issue
+>     as cpuidle-pcsi driver.
+>
+>  - v3 changes:
+>   - improve the changelog as suggested by Sudeep
+> ---
+>  drivers/cpuidle/cpuidle-arm.c        | 8 ++++----
+>  drivers/cpuidle/cpuidle-big_little.c | 2 +-
+>  drivers/cpuidle/cpuidle-psci.c       | 4 ++--
+>  drivers/cpuidle/cpuidle-qcom-spm.c   | 2 +-
+>  drivers/cpuidle/cpuidle-riscv-sbi.c  | 4 ++--
+>  5 files changed, 10 insertions(+), 10 deletions(-)
+>
+> diff --git a/drivers/cpuidle/cpuidle-arm.c b/drivers/cpuidle/cpuidle-arm.c
+> index caba6f4bb1b7..e044fefdb816 100644
+> --- a/drivers/cpuidle/cpuidle-arm.c
+> +++ b/drivers/cpuidle/cpuidle-arm.c
+> @@ -137,9 +137,9 @@ static int __init arm_idle_init_cpu(int cpu)
+>  /*
+>   * arm_idle_init - Initializes arm cpuidle driver
+>   *
+> - * Initializes arm cpuidle driver for all CPUs, if any CPU fails
+> - * to register cpuidle driver then rollback to cancel all CPUs
+> - * registration.
+> + * Initializes arm cpuidle driver for all present CPUs, if any
+> + * CPU fails to register cpuidle driver then rollback to cancel
+> + * all CPUs registration.
+>   */
+>  static int __init arm_idle_init(void)
+>  {
+> @@ -147,7 +147,7 @@ static int __init arm_idle_init(void)
+>         struct cpuidle_driver *drv;
+>         struct cpuidle_device *dev;
+>
+> -       for_each_possible_cpu(cpu) {
+> +       for_each_present_cpu(cpu) {
+>                 ret = arm_idle_init_cpu(cpu);
+>                 if (ret)
+>                         goto out_fail;
+> diff --git a/drivers/cpuidle/cpuidle-big_little.c b/drivers/cpuidle/cpuidle-big_little.c
+> index 74972deda0ea..4abba42fcc31 100644
+> --- a/drivers/cpuidle/cpuidle-big_little.c
+> +++ b/drivers/cpuidle/cpuidle-big_little.c
+> @@ -148,7 +148,7 @@ static int __init bl_idle_driver_init(struct cpuidle_driver *drv, int part_id)
+>         if (!cpumask)
+>                 return -ENOMEM;
+>
+> -       for_each_possible_cpu(cpu)
+> +       for_each_present_cpu(cpu)
+>                 if (smp_cpuid_part(cpu) == part_id)
+>                         cpumask_set_cpu(cpu, cpumask);
+>
+> diff --git a/drivers/cpuidle/cpuidle-psci.c b/drivers/cpuidle/cpuidle-psci.c
+> index dd8d776d6e39..b46a83f5ffe4 100644
+> --- a/drivers/cpuidle/cpuidle-psci.c
+> +++ b/drivers/cpuidle/cpuidle-psci.c
+> @@ -403,7 +403,7 @@ static int psci_idle_init_cpu(struct device *dev, int cpu)
+>  /*
+>   * psci_idle_probe - Initializes PSCI cpuidle driver
+>   *
+> - * Initializes PSCI cpuidle driver for all CPUs, if any CPU fails
+> + * Initializes PSCI cpuidle driver for all present CPUs, if any CPU fails
+>   * to register cpuidle driver then rollback to cancel all CPUs
+>   * registration.
+>   */
+> @@ -413,7 +413,7 @@ static int psci_cpuidle_probe(struct platform_device *pdev)
+>         struct cpuidle_driver *drv;
+>         struct cpuidle_device *dev;
+>
+> -       for_each_possible_cpu(cpu) {
+> +       for_each_present_cpu(cpu) {
+>                 ret = psci_idle_init_cpu(&pdev->dev, cpu);
+>                 if (ret)
+>                         goto out_fail;
+> diff --git a/drivers/cpuidle/cpuidle-qcom-spm.c b/drivers/cpuidle/cpuidle-qcom-spm.c
+> index 3ab240e0e122..5f386761b156 100644
+> --- a/drivers/cpuidle/cpuidle-qcom-spm.c
+> +++ b/drivers/cpuidle/cpuidle-qcom-spm.c
+> @@ -135,7 +135,7 @@ static int spm_cpuidle_drv_probe(struct platform_device *pdev)
+>         if (ret)
+>                 return dev_err_probe(&pdev->dev, ret, "set warm boot addr failed");
+>
+> -       for_each_possible_cpu(cpu) {
+> +       for_each_present_cpu(cpu) {
+>                 ret = spm_cpuidle_register(&pdev->dev, cpu);
+>                 if (ret && ret != -ENODEV) {
+>                         dev_err(&pdev->dev,
+> diff --git a/drivers/cpuidle/cpuidle-riscv-sbi.c b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> index 0c92a628bbd4..0fe1ece9fbdc 100644
+> --- a/drivers/cpuidle/cpuidle-riscv-sbi.c
+> +++ b/drivers/cpuidle/cpuidle-riscv-sbi.c
+> @@ -529,8 +529,8 @@ static int sbi_cpuidle_probe(struct platform_device *pdev)
+>                         return ret;
+>         }
+>
+> -       /* Initialize CPU idle driver for each CPU */
+> -       for_each_possible_cpu(cpu) {
+> +       /* Initialize CPU idle driver for each present CPU */
+> +       for_each_present_cpu(cpu) {
+>                 ret = sbi_cpuidle_init_cpu(&pdev->dev, cpu);
+>                 if (ret) {
+>                         pr_debug("HART%ld: idle driver init failed\n",
+> --
+> 2.34.1
+>
 
