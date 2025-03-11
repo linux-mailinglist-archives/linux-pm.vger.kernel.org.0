@@ -1,234 +1,315 @@
-Return-Path: <linux-pm+bounces-23835-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23836-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id E6191A5BEDF
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 12:25:20 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4B729A5BEE2
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 12:25:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 13C1E7A1A3E
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 11:24:18 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6DD51888879
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 11:25:41 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6D0A6253F05;
-	Tue, 11 Mar 2025 11:25:12 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b="DeyHM3sl"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 582E9253F3A;
+	Tue, 11 Mar 2025 11:25:25 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from OS0P286CU010.outbound.protection.outlook.com (mail-japanwestazon11011034.outbound.protection.outlook.com [40.107.74.34])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ua1-f42.google.com (mail-ua1-f42.google.com [209.85.222.42])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E91FE1EBA09;
-	Tue, 11 Mar 2025 11:25:08 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=fail smtp.client-ip=40.107.74.34
-ARC-Seal:i=2; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741692312; cv=fail; b=Zqfr4hM3QFj/M8MLU3ePr2j2OXsQ951/oGqx7deqi8CpPwPhTkSyUb05X5SCViWMhO1GUHzUPF8C3wvgT6R/AmibL6ZPRteCa9XoIuUoC43RJqS31Myht9xswTJhaY8H1FgGUaLJgrhPpyUA2zV1yjt8v5/oGjGz0M3GQb/80+A=
-ARC-Message-Signature:i=2; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741692312; c=relaxed/simple;
-	bh=xn9KogLyXi36H1TH1PWHWT0Kk7pbY4lqtJ1CGcBFxGE=;
-	h=From:To:CC:Subject:Date:Message-ID:References:In-Reply-To:
-	 Content-Type:MIME-Version; b=iFv7bLRk1/PCt9yI/HfAlEPPV6Rc5qsL/1zrIFVJ2SUkBXwWl10rl1yOw0fZAJDBcZTEfn+GlPxuT4NawyGF4KvUk/Kx0Cnk+kQ+/yEHK5XdXv1KzXWTvi/PAlR+1o1keFaCwVDVrXsEb6iegBAsIAusK07zjx9RlVJfhAWBspk=
-ARC-Authentication-Results:i=2; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com; spf=pass smtp.mailfrom=bp.renesas.com; dkim=pass (1024-bit key) header.d=bp.renesas.com header.i=@bp.renesas.com header.b=DeyHM3sl; arc=fail smtp.client-ip=40.107.74.34
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=bp.renesas.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=bp.renesas.com
-ARC-Seal: i=1; a=rsa-sha256; s=arcselector10001; d=microsoft.com; cv=none;
- b=HUpleuBZyWExn57F8Mu/pBjP+NHnGw1+Ae1dLwc/r8xJY6bKFCRUuvSOnaXmjlj02B4TB2SjnMTzSGHYtYkZS6jY+r6a6eZM9rafiLmqXoaWLXzxBT6AVyCtVJmppFn/V0rzh658lu4lK2lzCB1S0G/o5/8PjBnxYeX8aJlrotzg1JA2Vs56d5mZhxzpn90mc1DJk3gk1TsXuEnBWabDm8KdbidGUcyKa3UXE0CzS6E5N5VuXADVZGb4d9+uxnmJcBe9DkP/bi2/QS7BMSGhCjGUO0EFGsWdcpAqCBYqGm4Ul+n9Hh5vVmI5IOBy1OSfO1lENx5wmqEbHX39hzURzw==
-ARC-Message-Signature: i=1; a=rsa-sha256; c=relaxed/relaxed; d=microsoft.com;
- s=arcselector10001;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-AntiSpam-MessageData-ChunkCount:X-MS-Exchange-AntiSpam-MessageData-0:X-MS-Exchange-AntiSpam-MessageData-1;
- bh=xn9KogLyXi36H1TH1PWHWT0Kk7pbY4lqtJ1CGcBFxGE=;
- b=gEas2adDCVR639HpNpmT6L+RUpK24kx3sbu3NIF+9auBMgfCfXbIy6hTwX/O5uIzhUr1kvaI/SA6/MXoCDQqXxMgcRyjhvMxH1QEyf9wEZQN/GxGSAiY1LmuZl8RyHvQUG4esSVNZzzZa6t0rZdPQcBw8DEjyIVoZWcp4sdTJOruXRVO7PbuvhC4VebZs9QYK+bCLbTm6wZkLQCt9zG0vdRqiPC6hkKqdfRUuELbjve8qsJhRv0NieZ7tKGvPCEkWvtcCSSC4sWKGMDyjmuFoXlYWQUBtvI/WfsOF5cEBm0DWzf7TCdGSVctkLI22b73ADaf79YbNhsGgYNlKAJabw==
-ARC-Authentication-Results: i=1; mx.microsoft.com 1; spf=pass
- smtp.mailfrom=bp.renesas.com; dmarc=pass action=none
- header.from=bp.renesas.com; dkim=pass header.d=bp.renesas.com; arc=none
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=bp.renesas.com;
- s=selector1;
- h=From:Date:Subject:Message-ID:Content-Type:MIME-Version:X-MS-Exchange-SenderADCheck;
- bh=xn9KogLyXi36H1TH1PWHWT0Kk7pbY4lqtJ1CGcBFxGE=;
- b=DeyHM3slB/04Je/855HvZGT81qXcfE/QqOiiLTqcS16A+6WTpizx2C7mnEe3KGsMrnC+XizqJ9S6f49qwfHD4GjPcAT3yGWTA2glVBQKYmpihNN0/MUvbCldb+mecJ/m+d41/5ObBKKCBSyR8uspelVvb/v1CkNzYNxknMaT9xU=
-Received: from OSBPR01MB2775.jpnprd01.prod.outlook.com (2603:1096:604:13::17)
- by TYRPR01MB15836.jpnprd01.prod.outlook.com (2603:1096:405:2d5::9) with
- Microsoft SMTP Server (version=TLS1_2,
- cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id 15.20.8511.26; Tue, 11 Mar
- 2025 11:25:05 +0000
-Received: from OSBPR01MB2775.jpnprd01.prod.outlook.com
- ([fe80::54f7:9a51:ae47:185b]) by OSBPR01MB2775.jpnprd01.prod.outlook.com
- ([fe80::54f7:9a51:ae47:185b%4]) with mapi id 15.20.8511.025; Tue, 11 Mar 2025
- 11:25:00 +0000
-From: John Madieu <john.madieu.xa@bp.renesas.com>
-To: Conor Dooley <conor@kernel.org>
-CC: "robh@kernel.org" <robh@kernel.org>, "geert+renesas@glider.be"
-	<geert+renesas@glider.be>, "magnus.damm@gmail.com" <magnus.damm@gmail.com>,
-	"mturquette@baylibre.com" <mturquette@baylibre.com>, "sboyd@kernel.org"
-	<sboyd@kernel.org>, "rafael@kernel.org" <rafael@kernel.org>,
-	"daniel.lezcano@linaro.org" <daniel.lezcano@linaro.org>,
-	"rui.zhang@intel.com" <rui.zhang@intel.com>, "lukasz.luba@arm.com"
-	<lukasz.luba@arm.com>, "krzk+dt@kernel.org" <krzk+dt@kernel.org>,
-	"conor+dt@kernel.org" <conor+dt@kernel.org>, "p.zabel@pengutronix.de"
-	<p.zabel@pengutronix.de>, "catalin.marinas@arm.com"
-	<catalin.marinas@arm.com>, "will@kernel.org" <will@kernel.org>,
-	"john.madieu@gmail.com" <john.madieu@gmail.com>,
-	"linux-renesas-soc@vger.kernel.org" <linux-renesas-soc@vger.kernel.org>,
-	"linux-kernel@vger.kernel.org" <linux-kernel@vger.kernel.org>,
-	"linux-clk@vger.kernel.org" <linux-clk@vger.kernel.org>,
-	"linux-pm@vger.kernel.org" <linux-pm@vger.kernel.org>,
-	"devicetree@vger.kernel.org" <devicetree@vger.kernel.org>,
-	"linux-arm-kernel@lists.infradead.org"
-	<linux-arm-kernel@lists.infradead.org>, Biju Das <biju.das.jz@bp.renesas.com>
-Subject: RE: [PATCH v2 3/7] dt-bindings: thermal: r9a09g047-tsu: Document the
- TSU unit
-Thread-Topic: [PATCH v2 3/7] dt-bindings: thermal: r9a09g047-tsu: Document the
- TSU unit
-Thread-Index:
- AQHbiRKwzjBFhg3PXkG3oKF6ljEYA7NdFKWAgAc7OeCAA4ptgIAAAsFwgAAF0QCAAsfM0IAB8mQAgAE6AmA=
-Date: Tue, 11 Mar 2025 11:24:59 +0000
-Message-ID:
- <OSBPR01MB2775B3826A9FE602AC08172BFFD12@OSBPR01MB2775.jpnprd01.prod.outlook.com>
-References: <20250227122453.30480-1-john.madieu.xa@bp.renesas.com>
- <20250227122453.30480-4-john.madieu.xa@bp.renesas.com>
- <20250228-shampoo-uprising-44ae0d3bd68b@spud>
- <OSBPR01MB2775DFC184F78E9FB50F28FFFFD52@OSBPR01MB2775.jpnprd01.prod.outlook.com>
- <20250307-everyone-ragweed-e05a10a9646b@spud>
- <OSBPR01MB277531D7C872C9EB0B287069FFD52@OSBPR01MB2775.jpnprd01.prod.outlook.com>
- <20250307-barbell-pretzel-368d6a4d1336@spud>
- <OSBPR01MB2775D121B55A0C543F251BAEFFD72@OSBPR01MB2775.jpnprd01.prod.outlook.com>
- <20250310-blurry-scam-bee8233878bc@spud>
-In-Reply-To: <20250310-blurry-scam-bee8233878bc@spud>
-Accept-Language: en-GB, en-US
-Content-Language: en-US
-X-MS-Has-Attach:
-X-MS-TNEF-Correlator:
-authentication-results: dkim=none (message not signed)
- header.d=none;dmarc=none action=none header.from=bp.renesas.com;
-x-ms-publictraffictype: Email
-x-ms-traffictypediagnostic: OSBPR01MB2775:EE_|TYRPR01MB15836:EE_
-x-ms-office365-filtering-correlation-id: cbd93496-8fc9-467c-04a9-08dd608f5c3d
-x-ms-exchange-senderadcheck: 1
-x-ms-exchange-antispam-relay: 0
-x-microsoft-antispam:
- BCL:0;ARA:13230040|366016|1800799024|7416014|376014|38070700018;
-x-microsoft-antispam-message-info:
- =?us-ascii?Q?ZB0Hh5pYfK8LszmHBLBgjnglT2889138GSZ4C+NRSBmOudKXlzjk4d2TSzWd?=
- =?us-ascii?Q?hf0eQ030VjVV924hHz222t1x409ciICCq9WkpjRcHQ7w4aX9oqrlVCR7MF37?=
- =?us-ascii?Q?QsT1dsevXigA6PhLL85BdvT+ofxloe29SpKyK7h6DmrzI7aSybU8SzeDTC/w?=
- =?us-ascii?Q?zdWLhKYirSCods+SsSJ6H0G2HYB+jug08H1FOsFz2Its7/bSb4Y8Gq5TSkE8?=
- =?us-ascii?Q?J+Flv4a1m6iK4WuG2vXz4DTS282oHk4qb0Dz8TmubQQiE0sxjxAVNV56o6aC?=
- =?us-ascii?Q?WBRPwuU3wc8ZOqNw/gpIE2KbPiTzLQMb0ODzT79drqzTodV/4zPNd+vMghW+?=
- =?us-ascii?Q?7fa6ziMMg77CPY34Irmg8G+8vO3+LROS8z7grDRpa1RtfSTyyf8rToPT2QMl?=
- =?us-ascii?Q?O6g6VZ3rRXjgxeyq7J/J2taJXflgFPhvMrMwczs1ifKrmw6kx17xutbNeQVe?=
- =?us-ascii?Q?j0Nd/xnHmbRo/q935Kaq+4LG/yGSeHA7T8Yk/bBPMVTfhvCi+HIPVjQL6mcv?=
- =?us-ascii?Q?MI0jpQbrND5C7BtIH1Iax0cZ6u13FGEjtfFbU7+sVb3JPG8+Ck5JVUjTZkN9?=
- =?us-ascii?Q?ZSanuX96I7yAcI/hVusDgmGkOaP9U+0otwO+Y4zP6H131wcBjAq0GIFw5zK3?=
- =?us-ascii?Q?cUSfUKfFrx5fE5RUgO/2onnTBSfEMewgsq+riQJKqR41BHnxgA5HzymFlqCT?=
- =?us-ascii?Q?vP40uUhkl6i5WRJOrh5aTtvHFFNPh7Dstos/Up3lbDfpb6LDoRvKvYyOO26M?=
- =?us-ascii?Q?NWdaERjB598ax4sfbG6KRmlMbxxvsubK0JOhhPQRgvqPWt9M3N1GFQcCE7VB?=
- =?us-ascii?Q?pIDlHUsdnHlkeDyuqxUDj0jtCyExwnRCBcpnCnvbNW1YSpA/3aWbZUvequFx?=
- =?us-ascii?Q?BgUD6HoZEKZOB6NyjIgwblng7qvvaI/+FgDauLJ0e+DW9INCYLdoOMIbligp?=
- =?us-ascii?Q?/dxiG1+HviOp0b6X+nM2kA3mQpmdgAP42qflPApsSDlepZe8hJG4wf6VZank?=
- =?us-ascii?Q?ukCLDf6ZuxRwUNCCetjMxD8TiqGCtaCkmGeoj9iqyjPBwvNRuS+QO5zgb6tM?=
- =?us-ascii?Q?/LQ6LmqoDnVzbf0WKUu27nqwjEdYqKB/w3JQUpWUbEuT5WebUnusQZWg8wuu?=
- =?us-ascii?Q?8LBN3LMWt7lPm7pB890GUy0HYXzMy4xFv7Qa0kG/duxZRvjJt9vRfMAoOIaL?=
- =?us-ascii?Q?X+sk0iQRtx5PTVR/yrQ6UkoRXFg6V8bHPAzEUAfDU5FZpL0x+JzZb2AX4wpO?=
- =?us-ascii?Q?+JjLtj3aRTXOxyTEj0cQ2l5DWO+F/auJEcNrMkhMQe+9t75DYUJUNU2qCLip?=
- =?us-ascii?Q?1nNft0MdxYW22Cl7tSAQUnRdDfTKqc2C9+MpQVf0p4MA6en5aQ8/tOugGtXw?=
- =?us-ascii?Q?W50PDv4Ov/Simg0cU/B/YmkR/t2h/UOF4ttrtTmGnIFJdk76Y2FlertxZUEx?=
- =?us-ascii?Q?wkh+VomggCs6Nu9QK/XKDxDssQjAquaO?=
-x-forefront-antispam-report:
- CIP:255.255.255.255;CTRY:;LANG:en;SCL:1;SRV:;IPV:NLI;SFV:NSPM;H:OSBPR01MB2775.jpnprd01.prod.outlook.com;PTR:;CAT:NONE;SFS:(13230040)(366016)(1800799024)(7416014)(376014)(38070700018);DIR:OUT;SFP:1101;
-x-ms-exchange-antispam-messagedata-chunkcount: 1
-x-ms-exchange-antispam-messagedata-0:
- =?us-ascii?Q?RHlOevyDrrYYcTWiOE1LuquANFeEA1TRTwmi5qrvbqyEIQP5HGuLvqRLyx/Q?=
- =?us-ascii?Q?3UuO0O6Kl0S5rtd7XUfO0Vl/KPm4chsgkJnDHlJW+GKH72ptshiBUSZ6QHP4?=
- =?us-ascii?Q?L1w4p54HDEA58+RyryAuAeFexKhAITXLfK3itZRLl5F1aASdxopXairLU1D2?=
- =?us-ascii?Q?3+7VmJo13VzJzVq9Mh9GPTYD5Q84xvNdwu8Bx26B4XYzy5iVucwQqJLSjqm/?=
- =?us-ascii?Q?FTcxtzLp8oKlg/Em9VwEMcEq+GUDfA/hWrPlapTDPVmNqFDZzCVooQFV+Onx?=
- =?us-ascii?Q?Hh3gKxMsbqUJH743fRoY3yd69vFuxZ3SrrVi7xT7YSR/ivwwg9SNe73UdAVj?=
- =?us-ascii?Q?qX6mClvv1V178v0CuRVdodkgHKwCC6xyMwPdSVnjnhxmPgpBQa4soYWIdguk?=
- =?us-ascii?Q?t5TH3Vco2Kj6d+o3I/1DFzGbE91Kaol3LmL9Y2qeHryRD4meW4rP1EXR7sb2?=
- =?us-ascii?Q?7rSQnWV+DW5g/TGe641GyD6Czb1JnZgTqN6CD9/3eG3qaKterK3MGSEjmSfJ?=
- =?us-ascii?Q?4vY0SjtG6R3ATIWeswRpClNdgxyMoJCLfKeI/hv6AlI0SYq5nLvoAiU5TBPP?=
- =?us-ascii?Q?QSB6yyWqffRf+T4KRFwyW3793YV2q5mUnGU/6RU8il0rMxijuJb6+ETxsmQw?=
- =?us-ascii?Q?Y1L7NwQMKEjMqjlGkYwLEWue+1DpCQZ2AwopX5KzpaK60B1K50LYZeA0DOM0?=
- =?us-ascii?Q?AAekQVSmL0lf7dviB3B+/st51Z8kyCVXiiPc++qhrW4JKbiCHD+w9PFqbnBW?=
- =?us-ascii?Q?h82LGlHu7K0QQnBTi18zg2BtYU2Uwcruktnb+g2CCVxXW+53GeRTcf7NgFse?=
- =?us-ascii?Q?DmoEzx+6ZsUF2vqltQF65SBwCT2eqMc3HOn2Ps5Lso1GDIviWhMJo+vbGUww?=
- =?us-ascii?Q?gtrn8UyM5b1W+OoscIgCWNaLCqwrDvQqJNyrlEfkbIupLHhsEhUlK4qBO49P?=
- =?us-ascii?Q?obMHzSzLruqyO4LLzi6VKNe1FWiyYsrIQIxCDZoX1XfEZGTaYVUefeNDsYHb?=
- =?us-ascii?Q?tT5Y4kzdrs+1lmVn9solIN6VHETznCop4gXN2jEE+h6zn0mhabRKgerRI5Is?=
- =?us-ascii?Q?9Tg+KgK+dQIfXnv5xIsRs7Wn0ocyG8t2Jf4Y6oTp039n5q2rqOTDAs1u/Y+k?=
- =?us-ascii?Q?EtkKk/Dvl0RHzYYyYi/dlayfJNLPKCx1CBEYn8QzuStmQgtWr7PnjKoLKopk?=
- =?us-ascii?Q?dEfB4vmgHYgrFHQqk9J50pnwk172ar2GH4iPIotThw4yt8AwX+tSDJeSNp/g?=
- =?us-ascii?Q?7RakqZ/2VOMCCeE4zHRFb4nCQhrPbHOE68fEvGB1YeT/30nGgpUzGolDTGAI?=
- =?us-ascii?Q?//DmL3y8ST4E1o1BOqovLDMSEFQFRns13uCK/959O1vC7TSrx/HmVFWZl3ko?=
- =?us-ascii?Q?x+e7J77L04+CdnwNzCmiJEJ2b3kGAtiRO3etR8OfJ2IqHgQ8vOilpa5aLrAJ?=
- =?us-ascii?Q?BbAdR9R1rWDwAhW7yXLeK2hiAocBEsB/bMO4Wj+NxggEm4dv718ECRjqUeUG?=
- =?us-ascii?Q?pWbfrNkqA5quEzSJy8RBVcAQQ3QwckUKQNxeM6UqXdL7AlibZ/J0geE15roV?=
- =?us-ascii?Q?WDBUF4ip0LJDKqB4d3BfvMNYczARiRK+Te3b55MXgOKO5xH9qqEaIPlUNVr/?=
- =?us-ascii?Q?Xg=3D=3D?=
-Content-Type: text/plain; charset="us-ascii"
-Content-Transfer-Encoding: quoted-printable
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id E804B1EBA09;
+	Tue, 11 Mar 2025 11:25:22 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.222.42
+ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
+	t=1741692325; cv=none; b=vDVqxh99ijoKA4cv7JiE4ES90I+TvlfYfPbaZcgIh9mwLJHBj0nQxMu+kyHEgrYOpiypcB6tr44bxle7jqcaDbzUgdf3YDhkvr47+l+PNuDk3OGBubt2K7h/oVviyM22zbpvYsZHocDaY7nNeMKPmxe2ZJ2y8fLQvOl+LPbQDsA=
+ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
+	s=arc-20240116; t=1741692325; c=relaxed/simple;
+	bh=mZMgvScT/F5/AVaa3dXW55dwFTsewaMaJFehCC1Ci0E=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=gHQS5/Q/0amFPPaFGaMD0IXbN9L64FvFkT++F+YJ6kxCT88Z1vuKXIrbiB3nPupYICACmF+v3aZ+R0nBL5xLSBxB1v7rH65VuFL+INQzPhYjbWUo2XZy4OHJZdfQrZCATcxHQDPGnoACRX+Gdh7GlR56ifd/sf5uZ40Mx0gnd/k=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org; spf=pass smtp.mailfrom=gmail.com; arc=none smtp.client-ip=209.85.222.42
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=linux-m68k.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ua1-f42.google.com with SMTP id a1e0cc1a2514c-86b9b1def28so4848018241.3;
+        Tue, 11 Mar 2025 04:25:22 -0700 (PDT)
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741692320; x=1742297120;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=JMRhXnvTN8Y1W6ZynZ2LEcKu5slyzFWT8bKSIuRbaWU=;
+        b=V48xbEq6CSq626qhinG62iPkWruYJx44yIt3i+GFeeAulP9I+hs/f2C4O1vIsP2o0l
+         OJ/00cgmxPpOZvXO273KazbQn41rJ16o0Mb59VnBQCmKastiGWN+m0eAncS9w+RJPjM6
+         FuYB4NA1tPzZy9x1YCk1v6q3/wPwXX33o/X5GWbOnt8LBhiA6JmvFt/QJVKVus/ONlb1
+         LhA/KSbRwdb4pSEN8Hi+4HZL58YJ8fBLwFDsMcCQnilRyNQLZtMxQh4Cc2iA4r7hWm3B
+         gv8HinTqxasWBq+q+Cf5MyYC+jE+h36bYqX402cgzPbInnzTYBJlV8G+UKz7wg1SOWJw
+         YBGQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVpj+Jh1wcnouaDCHwO0vNf697m63mbo8D4NlmtEV1GntTxCjWtfgat5J32X2BqKS2w8uwbdHwlff+6ScM=@vger.kernel.org, AJvYcCX4VLU19eF+CTvR5t71Klev6oy+3YcxYIhcL99SmZwbib6k3Eg+IFgUqjCGIDUrRLQwA++kuLZGz78=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxbYy8Njx4QS78iuZDKSZKq4eMhZvbJRL+xcf4yRo5utXJ+BwQ5
+	LUq2nA43vWKMj2ohLOJEGr6nept/AcIe8M8DxWDhyIy4Qi5q9p6SHcty3imS
+X-Gm-Gg: ASbGnctVph5WYfIDHwm0wbIq9E8rjbsqxvK1flZumwhkr7hG7edM8F1m68sQfqtxjo9
+	LOUgcxzSZQFofHbBvmwsiXmynhhh0d2xbpkUSbAnqqBOQ68LnXE5ucS1I+pNnUVIF4zIZjJjI3/
+	hgR+10Lxn4YMKjX6gfcRmTGXJyJlZrgahy+AeTkoDWrD6SAJIydJg9XBsOepmMG6RayFd8Up9MB
+	3GBjX+g1uE58hkyPXVwBc+akcAfvbXDfc/OAq+/RC/ZbXpMFLjyPU7lUzhO8nu4n1lc570ZAG24
+	Jwax9XnUUToY4JQwcSzFDGVoCxI17X6kygpOsLZ8RtHoakBRcEzzDsrupko6EUrorvBVOKmQMAb
+	i+Ls1gVJr9Gc=
+X-Google-Smtp-Source: AGHT+IFyebfh7zTsa2UgaJzfXd0Ed37rl9GDCCEM63vakNWcbCtsh+gtmp2d65CLJ6URC4Dabxx0Iw==
+X-Received: by 2002:a05:6102:1614:b0:4bb:c8e5:aa6d with SMTP id ada2fe7eead31-4c34d31bbecmr2154533137.17.1741692320178;
+        Tue, 11 Mar 2025 04:25:20 -0700 (PDT)
+Received: from mail-vk1-f176.google.com (mail-vk1-f176.google.com. [209.85.221.176])
+        by smtp.gmail.com with ESMTPSA id ada2fe7eead31-4c2fbcde6a7sm2289625137.28.2025.03.11.04.25.19
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Tue, 11 Mar 2025 04:25:19 -0700 (PDT)
+Received: by mail-vk1-f176.google.com with SMTP id 71dfb90a1353d-523ffbe0dbcso2531832e0c.0;
+        Tue, 11 Mar 2025 04:25:19 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCUkBwBbhFQWcRuL3BvzfYXYcpNxmAnka9zOOv2VH5OHtunG05EoKCvAHEJSHbaKLa25Trh9B4HHyTz0k3g=@vger.kernel.org, AJvYcCXQL3ovL2CfLxQ4QQN70xT9mrzC1B47aJuSnOJHQuDieizb2G553kzIFotkM9I8JhVosHlVDfx0IHg=@vger.kernel.org
+X-Received: by 2002:a05:6102:4186:b0:4c3:881:1a8e with SMTP id
+ ada2fe7eead31-4c34d340313mr2181452137.24.1741692319423; Tue, 11 Mar 2025
+ 04:25:19 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-X-OriginatorOrg: bp.renesas.com
-X-MS-Exchange-CrossTenant-AuthAs: Internal
-X-MS-Exchange-CrossTenant-AuthSource: OSBPR01MB2775.jpnprd01.prod.outlook.com
-X-MS-Exchange-CrossTenant-Network-Message-Id: cbd93496-8fc9-467c-04a9-08dd608f5c3d
-X-MS-Exchange-CrossTenant-originalarrivaltime: 11 Mar 2025 11:25:00.0508
- (UTC)
-X-MS-Exchange-CrossTenant-fromentityheader: Hosted
-X-MS-Exchange-CrossTenant-id: 53d82571-da19-47e4-9cb4-625a166a4a2a
-X-MS-Exchange-CrossTenant-mailboxtype: HOSTED
-X-MS-Exchange-CrossTenant-userprincipalname: 6/7dPqVZLy8d2CUfVPEhOMX3UhAJJjBJoiAFqtrGl/DnwNtogx9ydYTBqjxPD4zfr4SV1VDa9Q/8dyyWT0t+qmx5NVeqABKbBX4d1cOkjlA=
-X-MS-Exchange-Transport-CrossTenantHeadersStamped: TYRPR01MB15836
+References: <20241114220921.2529905-1-saravanak@google.com> <20241114220921.2529905-5-saravanak@google.com>
+In-Reply-To: <20241114220921.2529905-5-saravanak@google.com>
+From: Geert Uytterhoeven <geert@linux-m68k.org>
+Date: Tue, 11 Mar 2025 12:25:07 +0100
+X-Gmail-Original-Message-ID: <CAMuHMdWq9s3xn2eDebAfBj6ieLqwHhVhr0UuyQCtiBXz1eFnsw@mail.gmail.com>
+X-Gm-Features: AQ5f1Jo_QHQBYpAcxoS5Og2V2ORgfCZXfzx6vZG5SXk5i7_bBnXQ7K6tDcZPt7M
+Message-ID: <CAMuHMdWq9s3xn2eDebAfBj6ieLqwHhVhr0UuyQCtiBXz1eFnsw@mail.gmail.com>
+Subject: Re: [PATCH v1 4/5] PM: sleep: Do breadth first suspend/resume for
+ async suspend/resume
+To: Saravana Kannan <saravanak@google.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, Pavel Machek <pavel@ucw.cz>, Len Brown <len.brown@intel.com>, 
+	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Ingo Molnar <mingo@redhat.com>, 
+	Peter Zijlstra <peterz@infradead.org>, Juri Lelli <juri.lelli@redhat.com>, 
+	Vincent Guittot <vincent.guittot@linaro.org>, Dietmar Eggemann <dietmar.eggemann@arm.com>, 
+	Steven Rostedt <rostedt@goodmis.org>, Ben Segall <bsegall@google.com>, Mel Gorman <mgorman@suse.de>, 
+	Valentin Schneider <vschneid@redhat.com>, Marek Vasut <marex@denx.de>, Bird@google.com, 
+	Tim <Tim.Bird@sony.com>, kernel-team@android.com, linux-pm@vger.kernel.org, 
+	linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Conor,
+Hi Saravana,
 
-> -----Original Message-----
-> From: Conor Dooley <conor@kernel.org>
-> Sent: Monday, March 10, 2025 5:15 PM
-> To: John Madieu <john.madieu.xa@bp.renesas.com>
-> Subject: Re: [PATCH v2 3/7] dt-bindings: thermal: r9a09g047-tsu: Document
-> the TSU unit
->=20
-> On Sun, Mar 09, 2025 at 10:39:27AM +0000, John Madieu wrote:
-> > Hi Conor,
-> > > > Changes are not possible at runtime. Some customers may want
-> > > > software, while other may want the external trigger, and this is
-> > > > immutable configuration.
-> > >
-> > > What makes it immutable? Set by some wiring on the board? I couldn't
-> > > find the user in your driver patches to better understand how you
-> > > were using it.
-> >
-> > I haven't prototyped ELC trigger yet. Since the hardware manual
-> > describes about ELC trigger, I have documented it in bindings. If you
-> > think, it is not needed at this stage, then I can drop it now and
-> > revisit later.
->=20
-> Ideally a binding is complete, even if the driver isn't. To me "immutable=
-"
-> would mean something like "the trigger type is determined by hardware or
-> firmware configuration", but if it is determined by register writes (e.g.
-> wired up for elc trigger, but you can opt for software trigger in the
-> driver) then it should be a userspace control.
+On Thu, 14 Nov 2024 at 23:09, Saravana Kannan <saravanak@google.com> wrote:
+> The dpm_list used for suspend/resume ensures that all superior devices
+> (parents and suppliers) precede subordinate devices (children and
+> consumers).
+>
+> Current async resume logic:
+> -------------------------------
+> * For each resume phase (except the "complete" phase, which is always
+>   serialized), the resume logic first queues all async devices in the
+>   dpm_list. It then loops through the dpm_list again to resume the sync
+>   devices one by one.
+>
+> * Async devices wait for all their superior devices to resume before
+>   starting their own resume operation.
+>
+> * This process results in multiple sleep and wake-up cycles before an
+>   async device actually resumes. This sleeping also causes kworker
+>   threads to stall with work for a period. Consequently, the workqueue
+>   framework spins up more kworker threads to handle the other async
+>   devices.
+>
+> * The end result is excessive thread creation, wake-ups, sleeps, and
+>   context switches for every async device. This overhead makes a full
+>   async resume (with all devices marked as async-capable) much slower
+>   than a synchronous resume.
+>
+> Current async suspend logic:
+> --------------------------------
+> * The async suspend logic differs from the async resume logic. The
+>   suspend logic loops through the dpm_list. When it finds an async
+>   device, it queues the work and moves on. However, if it encounters a
+>   sync device, it waits until the sync device (and all its subordinate
+>   devices) have suspended before proceeding to the next device.
+>   Therefore, an async suspend device can be left waiting on an
+>   unrelated device before even being queued.
+>
+> * Once queued, an async device experiences the same inefficiencies as
+>   in the resume logic (thread creation, wake-ups, sleeps, and context
+>   switches).
+>
+> On a Pixel 6, averaging over 100 suspend/resume cycles, the data is as
+> follows:
+>
+> +---------------------------+-----------+------------+----------+
+> | Phase                     | Full sync | Full async | % change |
+> +---------------------------+-----------+------------+----------+
+> | Total dpm_suspend*() time |    107 ms |      72 ms |     -33% |
+> +---------------------------+-----------+------------+----------+
+> | Total dpm_resume*() time  |     75 ms |      90 ms |     +20% |
+> +---------------------------+-----------+------------+----------+
+> | Sum                       |    182 ms |     162 ms |     -11% |
+> +---------------------------+-----------+------------+----------+
+>
+> This shows that full async suspend/resume is not a viable option. It
+> makes the user-visible resume phase slower and only improves the
+> overall time by 11%.
+>
+> To fix all this, this patches introduces a new async suspend/resume
+> logic.
+>
+> New suspend/resume logic:
+> -------------------------
+> * For each suspend/resume phase (except "complete" and "prepare,"
+>   which are always serialized), the logic first queues only the async
+>   devices that don't have to wait for any subordinates (for suspend)
+>   or superiors (for resume). It then loops through the dpm_list again
+>   to suspend/resume the sync devices one by one.
+>
+> * When a device (sync or async) successfully suspends/resumes, it
+>   examines its superiors/subordinates and queues only the async
+>   devices that don't need to wait for any subordinates/superiors.
+>
+> With this new logic:
+>
+> * Queued async devices don't have to wait for completion and are
+>   always ready to perform their suspend/resume operation.
+>
+> * The queue of async devices remains short.
+>
+> * kworkers never sleep for extended periods, and the workqueue
+>   framework doesn't spin up many new threads to handle a backlog of
+>   async devices.
+>
+> * The result is approximately NCPU kworker threads running in parallel
+>   without sleeping until all async devices finish.
+>
+> On a Pixel 6, averaging over 100 suspend/resume cycles, the new logic
+> yields improved results:
+> +---------------------------+-----------+------------+------------------+
+> | Phase                     | Old full sync | New full async | % change |
+> +---------------------------+-----------+------------+------------------+
+> | Total dpm_suspend*() time |        107 ms |          60 ms |     -44% |
+> +---------------------------+-----------+------------+------------------+
+> | Total dpm_resume*() time  |         75 ms |          74 ms |      -1% |
+> +---------------------------+-----------+------------+------------------+
+> | Sum                       |        182 ms |         134 ms |     -26% |
+> +---------------------------+-----------+------------+------------------+
+>
+> Signed-off-by: Saravana Kannan <saravanak@google.com>
 
-It is complete, and I confirm, this can be changed by register writes.
-Apart from defining default to 0, should I implement userspace change
-support now ?
+Thanks for your patch!
 
-Or should I keep it as it is, just setting default to 0 (thus making
-the property optional), and add support for userspace change when I add
-ELC support.
+On Renesas Gray Hawk Single (R-Car V4M) during s2idle:
 
-My other question is, in case I must add userspace change support now, woul=
-d
-sysfs be Ok ? If yes, is there any path recommendations ?
+PM: suspend entry (s2idle)
+Filesystems sync: 0.055 seconds
+Freezing user space processes
+Freezing user space processes completed (elapsed 0.004 seconds)
+OOM killer disabled.
+Freezing remaining freezable tasks
+Freezing remaining freezable tasks completed (elapsed 0.003 seconds)
+
+================================
+WARNING: inconsistent lock state
+6.14.0-rc5-rcar3-05904-g1ec95427acf9 #261 Tainted: G        W
+--------------------------------
+inconsistent {IN-HARDIRQ-W} -> {HARDIRQ-ON-W} usage.
+s2idle/764 [HC0[0]:SC0[0]:HE1:SE1] takes:
+ffffff844392c190 (&dev->power.lock){?.-.}-{3:3}, at: dpm_async_fn+0x24/0xa8
+{IN-HARDIRQ-W} state was registered at:
+  lock_acquire+0x26c/0x2c4
+  _raw_spin_lock_irqsave+0x54/0x70
+  pm_suspend_timer_fn+0x20/0x78
+  __hrtimer_run_queues+0x204/0x330
+  hrtimer_interrupt+0xa8/0x1b0
+  arch_timer_handler_virt+0x28/0x3c
+  handle_percpu_devid_irq+0x64/0x110
+  handle_irq_desc+0x3c/0x50
+  generic_handle_domain_irq+0x18/0x20
+  gic_handle_irq+0x50/0xbc
+  call_on_irq_stack+0x24/0x34
+  do_interrupt_handler+0x60/0x88
+  el1_interrupt+0x30/0x48
+  el1h_64_irq_handler+0x14/0x1c
+  el1h_64_irq+0x70/0x74
+  cpuidle_enter_state+0x1a4/0x2d0
+  cpuidle_enter+0x34/0x48
+  do_idle+0x21c/0x240
+  cpu_startup_entry+0x30/0x34
+  kernel_init+0x0/0x124
+  console_on_rootfs+0x0/0x64
+  __primary_switched+0x88/0x90
+irq event stamp: 17055
+hardirqs last  enabled at (17055): [<ffffffc080a0782c>]
+_raw_spin_unlock_irqrestore+0x34/0x54
+hardirqs last disabled at (17054): [<ffffffc080a075a4>]
+_raw_spin_lock_irqsave+0x28/0x70
+softirqs last  enabled at (14360): [<ffffffc080096bcc>]
+handle_softirqs+0x1b0/0x3b4
+softirqs last disabled at (14355): [<ffffffc080010168>] __do_softirq+0x10/0x18
+
+other info that might help us debug this:
+ Possible unsafe locking scenario:
+
+       CPU0
+       ----
+  lock(&dev->power.lock);
+  <Interrupt>
+    lock(&dev->power.lock);
+
+ *** DEADLOCK ***
+
+5 locks held by s2idle/764:
+ #0: ffffff84400983f0 (sb_writers#5){.+.+}-{0:0}, at:
+file_start_write.isra.0+0x24/0x30
+ #1: ffffff8446802288 (&of->mutex#2){+.+.}-{4:4}, at:
+kernfs_fop_write_iter+0xf8/0x180
+ #2: ffffff8440d016e8 (kn->active#39){.+.+}-{0:0}, at:
+kernfs_fop_write_iter+0x100/0x180
+ #3: ffffffc0812f4780 (system_transition_mutex){+.+.}-{4:4}, at:
+pm_suspend+0x84/0x248
+ #4: ffffffc084bb7f78 (dpm_list_mtx){+.+.}-{4:4}, at: dpm_suspend+0x84/0x1a8
+
+stack backtrace:
+CPU: 0 UID: 0 PID: 764 Comm: s2idle Tainted: G        W
+6.14.0-rc5-rcar3-05904-g1ec95427acf9 #261
+Tainted: [W]=WARN
+Hardware name: Renesas Gray Hawk Single board based on r8a779h0 (DT)
+Call trace:
+ show_stack+0x14/0x1c (C)
+ dump_stack_lvl+0x78/0xa8
+ dump_stack+0x14/0x1c
+ print_usage_bug+0x1dc/0x1f8
+ mark_lock+0x1c4/0x3a4
+ __lock_acquire+0x560/0x1038
+ lock_acquire+0x26c/0x2c4
+ _raw_spin_lock+0x40/0x54
+ dpm_async_fn+0x24/0xa8
+ dpm_async_queue_suspend_ready_fn+0x40/0x50
+ dpm_async_suspend_loop+0x48/0x50
+ dpm_suspend+0x94/0x1a8
+ dpm_suspend_start+0x68/0x70
+ suspend_devices_and_enter+0xd8/0x59c
+ pm_suspend+0x214/0x248
+ state_store+0xa8/0xe8
+ kobj_attr_store+0x14/0x24
+ sysfs_kf_write+0x4c/0x64
+ kernfs_fop_write_iter+0x138/0x180
+ vfs_write+0x148/0x1b4
+ ksys_write+0x78/0xe0
+ __arm64_sys_write+0x14/0x1c
+ invoke_syscall+0x68/0xf0
+ el0_svc_common.constprop.0+0xb0/0xcc
+ do_el0_svc+0x18/0x20
+ el0_svc+0x38/0x90
+ el0t_64_sync_handler+0x80/0x130
+ el0t_64_sync+0x158/0x15c
 
 
-Regards,
-John
+Gr{oetje,eeting}s,
+
+                        Geert
+
+-- 
+Geert Uytterhoeven -- There's lots of Linux beyond ia32 -- geert@linux-m68k.org
+
+In personal conversations with technical people, I call myself a hacker. But
+when I'm talking to journalists I just say "programmer" or something like that.
+                                -- Linus Torvalds
 
