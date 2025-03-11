@@ -1,157 +1,108 @@
-Return-Path: <linux-pm+bounces-23892-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23893-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 26266A5CF8C
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 20:37:39 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 9B8ECA5D07D
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 21:12:27 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 6574117C040
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 19:37:38 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id D60623A9252
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 20:12:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id EE695263F3C;
-	Tue, 11 Mar 2025 19:37:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 9F600264625;
+	Tue, 11 Mar 2025 20:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="TPHR3Y1e"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="gjZifLhP"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id C17D217591;
-	Tue, 11 Mar 2025 19:37:34 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5FCA1217719;
+	Tue, 11 Mar 2025 20:12:21 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741721854; cv=none; b=E/0rne3FAJz9AbP+b+xw32fvzl7HFaQ7nu79QjcgjqMdPXSxlEhcLx98K270L9MALUIz4JK4dcr5+G0U0hKP4+xOTleUtMLNStkQGvR7aPd36NwIVN771q5F6JCDgwIP0uVACLLEGnqD60v2GINjf4fA5scNfkqjnAegbDt3RxQ=
+	t=1741723941; cv=none; b=D74qqKGSPeV+zc5ZG6v3S2Z7k/5XAIjLPHpwepn1GLPqvVTTJHWa4gZqUnUtWjwNs7RJWyr7jeGlcq4QucG6LCnv4Sn9iMTSVSY4GN6XHwfnYwF8C5w9rDpQyDskluXU2i0yGs3ZJRtGhEAIYdEXnVD2dE85fSaFIGuNtHhzhDo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741721854; c=relaxed/simple;
-	bh=Yc2i634TtfKAU01+EBlX/aQoXrMwveeOrOozCJkjfiY=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=KzYVaNa060oLYsMZ4OxnLfGH6urXx9MfCvGcjpnVjbJBwi+FyBMlpFgO0xiM1ZWznEWcgjCrFAbQit/rCblPcjOWX96FV0Lyj0ptNY/jaV6NMUlJKyV0251mrzBQnJY6OBhAUD9rlo4KMIG0tdfC3INeS7iHl99I8nGmb3viXNI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=TPHR3Y1e; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id EFF55C4CEE9;
-	Tue, 11 Mar 2025 19:37:33 +0000 (UTC)
+	s=arc-20240116; t=1741723941; c=relaxed/simple;
+	bh=3+OnOIdluvq4El08WnHUY5Y/kcwnOu3x4aGLqAkuCrs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Message-Id:Date:
+	 MIME-Version:Content-Type; b=mJi6Ph36P4CRqkih9JaByc5rcMhPy+ZXiNQJTNA1bO0aRcMPj6Pqn/Tm96p5pq0eqj9js6ovGDw+p7HYRoHeOtK7IrtcDn9ic2+UCCXs0omxwKNCd3gIDRMJjPLguQg2wr2nz0amzxq0s9G+7lSCVEaIYpObqB+o/dmZGT0tBAw=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=gjZifLhP; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id D47A7C4CEE9;
+	Tue, 11 Mar 2025 20:12:16 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741721854;
-	bh=Yc2i634TtfKAU01+EBlX/aQoXrMwveeOrOozCJkjfiY=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=TPHR3Y1egQONi48/xm/BuFYagZfsmreotCtMwE7G4o6s2ME2E6/ydVRDZ2yenrczm
-	 9nmPFc9K/O0gecZI8q5+XcS4JPAx9RX89FStrEuxRqCzcCVGb+XEc47UUbBhCe8WOv
-	 toUP8ck5dxlyiuL7f7m5MN4rAJW2NmCPwITO230xYvq5f1zZqHxlxSEA7uJUqd3INK
-	 wLoU2wu+bz4OhG6S4lAoEBkjBl4OYnHqRstfBl7Tv3z0sZiFDkKI7cAU95qtwMnObJ
-	 C+WYDwGowLNGjTi42mjWe2EN4F3EN9tsvKl/KnmtZNrT9X0fxoWHVOJZDsi91Fhwmm
-	 rxFKfTwCv9SgA==
-Date: Tue, 11 Mar 2025 14:37:32 -0500
-From: Rob Herring <robh@kernel.org>
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>,
-	Krzysztof Kozlowski <krzk+dt@kernel.org>,
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org,
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: [PATCH v4 1/2] dt-bindings: power: supply: Document Maxim
- MAX8971 charger
-Message-ID: <20250311193732.GA4183071-robh@kernel.org>
-References: <20250310080237.7400-1-clamor95@gmail.com>
- <20250310080237.7400-2-clamor95@gmail.com>
+	s=k20201202; t=1741723941;
+	bh=3+OnOIdluvq4El08WnHUY5Y/kcwnOu3x4aGLqAkuCrs=;
+	h=From:To:Cc:In-Reply-To:References:Subject:Date:From;
+	b=gjZifLhPPGXcer1ZAWIyK1S2tH/lt04SIftXSYzZKGfP4lXtZMsmn0Eayh4HpB96b
+	 9/WqmOe6ugZVmY0LQ5SSZW9kBXMR2lxu5SNeNjoFIMide30s/REq6ZNBAcdJlrVORp
+	 he21oJCRdGMpi/X6dYz0x6Og1QgILShA9Vtz4Zfqdtms9SIwKr6HEFsbEAuMctd6Sf
+	 BS0G/1eyAkCusG9Gt/HbcO5zM24U61hX4ZUeBvWsFP2u4HRO5jy6CgLN+tuJGbunvQ
+	 dvSLNH9QnttCUnXihzQwUAmxtSH/2kN0drCOaMIev3rf7vlKgSyJqUbc/XYZSod+Vo
+	 HijI7bZDk9tuQ==
+From: Mark Brown <broonie@kernel.org>
+To: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com, 
+ sre@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com, 
+ danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de, 
+ linus.walleij@linaro.org, brgl@bgdev.pl, tsbogend@alpha.franken.de, 
+ linux@treblig.org
+Cc: linux-mips@vger.kernel.org, linux-input@vger.kernel.org, 
+ linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org, 
+ dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org, 
+ linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
+In-Reply-To: <20250309193612.251929-1-linux@treblig.org>
+References: <20250309193612.251929-1-linux@treblig.org>
+Subject: Re: (subset) [PATCH 0/9] Remove pcf50633
+Message-Id: <174172393659.371198.1480937233663952854.b4-ty@kernel.org>
+Date: Tue, 11 Mar 2025 20:12:16 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250310080237.7400-2-clamor95@gmail.com>
+Content-Type: text/plain; charset="utf-8"
+Content-Transfer-Encoding: 7bit
+X-Mailer: b4 0.15-dev-1b0d6
 
-On Mon, Mar 10, 2025 at 10:02:36AM +0200, Svyatoslav Ryhel wrote:
-> Add bindings for Maxim MAX8971 charger.
+On Sun, 09 Mar 2025 19:36:03 +0000, linux@treblig.org wrote:
+> The pcf50633 was used as part of the OpenMoko devices but
+> the support for its main chip was recently removed in:
+> commit 61b7f8920b17 ("ARM: s3c: remove all s3c24xx support")
 > 
-> Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> ---
->  .../bindings/power/supply/maxim,max8971.yaml  | 64 +++++++++++++++++++
->  1 file changed, 64 insertions(+)
->  create mode 100644 Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
+> See https://lore.kernel.org/all/Z8z236h4B5A6Ki3D@gallifrey/
 > 
-> diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
-> new file mode 100644
-> index 000000000000..d7b3e6ff6906
-> --- /dev/null
-> +++ b/Documentation/devicetree/bindings/power/supply/maxim,max8971.yaml
-> @@ -0,0 +1,64 @@
-> +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> +%YAML 1.2
-> +---
-> +$id: http://devicetree.org/schemas/power/supply/maxim,max8971.yaml#
-> +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> +
-> +title: Maxim MAX8971 IC charger
-> +
-> +maintainers:
-> +  - Svyatoslav Ryhel <clamor95@gmail.com>
-> +
-> +description:
-> +  The MAX8971 is a compact, high-frequency, high-efficiency switch-mode charger
-> +  for a one-cell lithium-ion (Li+) battery.
-> +
-> +allOf:
-> +  - $ref: power-supply.yaml#
-> +
-> +properties:
-> +  compatible:
-> +    const: maxim,max8971
-> +
-> +  reg:
-> +    maxItems: 1
-> +
-> +  interrupts:
-> +    maxItems: 1
-> +
-> +  monitored-battery: true
-> +
-> +  maxim,usb-connector:
-
-Just 'connector', so when we have a 3rd case, we don't have a 3rd 
-vendor.
-
-> +    description:
-> +      Phandle to a USB connector according to usb-connector.yaml. The connector
-> +      should be a child of the extcon device.
-
-'extcon' is a Linuxism. Is there an actual requirement here that's not 
-*current* Linux requirements (which could change)? I assume the 
-requirement is to have vbus or some supply?
-
-> +    $ref: /schemas/types.yaml#/definitions/phandle
-> +
-> +required:
-> +  - compatible
-> +  - reg
-> +  - interrupts
-> +
-> +unevaluatedProperties: false
-> +
-> +examples:
-> +  - |
-> +    #include <dt-bindings/gpio/gpio.h>
-> +    #include <dt-bindings/interrupt-controller/irq.h>
-> +
-> +    i2c {
-> +        #address-cells = <1>;
-> +        #size-cells = <0>;
-> +
-> +        charger@35 {
-> +            compatible = "maxim,max8971";
-> +            reg = <0x35>;
-> +
-> +            interrupt-parent = <&gpio>;
-> +            interrupts = <74 IRQ_TYPE_LEVEL_LOW>;
-> +
-> +            monitored-battery = <&battery>;
-> +            maxim,usb-connector = <&usb_con>;
-> +        };
-> +    };
-> +...
-> -- 
-> 2.43.0
+> Remove it.
 > 
+> [...]
+
+Applied to
+
+   https://git.kernel.org/pub/scm/linux/kernel/git/broonie/regulator.git for-next
+
+Thanks!
+
+[6/9] regulator: pcf50633-regulator: Remove
+      commit: 248bc01138b11ff3af38c3b4a39cb8db7aae6eb6
+
+All being well this means that it will be integrated into the linux-next
+tree (usually sometime in the next 24 hours) and sent to Linus during
+the next merge window (or sooner if it is a bug fix), however if
+problems are discovered then the patch may be dropped or reverted.
+
+You may get further e-mails resulting from automated or manual testing
+and review of the tree, please engage with people reporting problems and
+send followup patches addressing any issues that are reported if needed.
+
+If any updates are required or you are submitting further changes they
+should be sent as incremental updates against current git, existing
+patches will not be replaced.
+
+Please add any relevant lists and maintainers to the CCs when replying
+to this mail.
+
+Thanks,
+Mark
+
 
