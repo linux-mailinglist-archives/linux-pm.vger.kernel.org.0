@@ -1,164 +1,213 @@
-Return-Path: <linux-pm+bounces-23854-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23855-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id 6D88FA5C47E
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 16:04:48 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 24F78A5C6D0
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 16:29:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id CA31D173B81
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 15:04:05 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id C90243B15E3
+	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 15:23:14 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 47A9225EFB3;
-	Tue, 11 Mar 2025 15:03:15 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4822425F78B;
+	Tue, 11 Mar 2025 15:22:39 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b="h51z9ruA"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="Y5zCKpAA"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mgamail.intel.com (mgamail.intel.com [192.198.163.17])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-yw1-f182.google.com (mail-yw1-f182.google.com [209.85.128.182])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 7284525E833;
-	Tue, 11 Mar 2025 15:03:13 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=192.198.163.17
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 24A751494BB
+	for <linux-pm@vger.kernel.org>; Tue, 11 Mar 2025 15:22:35 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.182
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741705395; cv=none; b=ccBz6Kn54n81iklLY6djKaM21XydUXJrbNFklyji1QfXQUPaFg1aapjwSK6tNXBLemNA2nMufN/q8MI5mX+XKCztNg90SYCY8OIr0eW/ICsxQKBlQ524TegZgTqs0Jsj7lwHRURhJTHyKO0rrTr5dTHz2hifcDT/ViVU9730PVs=
+	t=1741706559; cv=none; b=RHcmGZMxF6VUcfjoDMqfI3Je4K1BwcdBYnAHVJXEdu5Ao+2Cced/1Gu5rmRLNlm1EQdsfiGyps5dGo4cySOuCeZ0Iz9pcUnPGUJNPk2FV+audUmtwkf/NLDLN1p767dtZNCef6a7O1EnMCgygbHjGhkR+O7i2yl4UzDOnLdkj1E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741705395; c=relaxed/simple;
-	bh=BBNjOQP4CmwaTxuMkTvDmx+aoMhLUR9wQq+c3rEV3ww=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=p0aueHQOg5mbpgN7NYpBa8PXKy1UJpKBw6ZpP1XQwP32gZm3dm9nM9Wkzx8pK+ud/uLw6OqA/yPKLa9EgxrD+/cgI3B4F8yMrreVoEb/O4g4OzGR1tDZxMb00YIV/GBCgJC6P+vDgJhDxpoDvHnHOmGsseIG0Htfv3YzMobG/vQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com; spf=none smtp.mailfrom=linux.intel.com; dkim=pass (2048-bit key) header.d=intel.com header.i=@intel.com header.b=h51z9ruA; arc=none smtp.client-ip=192.198.163.17
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linux.intel.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=linux.intel.com
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple;
-  d=intel.com; i=@intel.com; q=dns/txt; s=Intel;
-  t=1741705393; x=1773241393;
-  h=date:from:to:cc:subject:message-id:references:
-   mime-version:in-reply-to;
-  bh=BBNjOQP4CmwaTxuMkTvDmx+aoMhLUR9wQq+c3rEV3ww=;
-  b=h51z9ruAorpoYZYvh5+0GKQ2N6Lkhwp4PtaHJHaSH3u50ZdG/P4d99Yy
-   siDEu/kM0c/wJEF/6zXlt2x+dgsEmkYxJoC+QfMYCOeY6SSvutT+hEfBT
-   wIYQ2fuOrXcZOkOSek8RckN19w7FRCwzR9pGqiWrm/DEoQXH6iFZC7qJL
-   UFaMvjEej0DHMq+L8NnlpimzfXtEm37mBAFDBNb0SIydTeD2JIU6KUw1J
-   mEGqP5v8M3VH6WR7SVWXXXTVgpqhfX/YxBF9R1uZD2VOu2gt3fR9ZqJnb
-   373jbdoP932YWSMAV1bq/o1JH7Nc22yc1TLfMcUvRgL0LS/QtmlezRQdm
-   w==;
-X-CSE-ConnectionGUID: R2OZ5TyJQvaF2O8tkWKSJw==
-X-CSE-MsgGUID: PAZnEcDvTE6duNpSW3K39A==
-X-IronPort-AV: E=McAfee;i="6700,10204,11370"; a="42624789"
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="42624789"
-Received: from orviesa006.jf.intel.com ([10.64.159.146])
-  by fmvoesa111.fm.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 08:03:10 -0700
-X-CSE-ConnectionGUID: cJ+j8wTwTbq8zuGjrlxa7A==
-X-CSE-MsgGUID: 0imJHXiJRxS95eLQXhg/Zg==
-X-ExtLoop1: 1
-X-IronPort-AV: E=Sophos;i="6.14,239,1736841600"; 
-   d="scan'208";a="120297721"
-Received: from ghakimel-mobl.amr.corp.intel.com (HELO desk) ([10.125.145.184])
-  by orviesa006-auth.jf.intel.com with ESMTP/TLS/ECDHE-RSA-AES256-GCM-SHA384; 11 Mar 2025 08:03:09 -0700
-Date: Tue, 11 Mar 2025 08:03:08 -0700
-From: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
-To: Thomas Gleixner <tglx@linutronix.de>, Ingo Molnar <mingo@redhat.com>,
-	Borislav Petkov <bp@alien8.de>,
-	Dave Hansen <dave.hansen@linux.intel.com>, x86@kernel.org
-Cc: daniel.sneddon@linux.intel.com, tony.luck@intel.com,
-	linux-kernel@vger.kernel.org, linux-pm@vger.kernel.org,
-	linux-perf-users@vger.kernel.org,
-	Josh Poimboeuf <jpoimboe@kernel.org>,
-	Srinivas Pandruvada <srinivas.pandruvada@linux.intel.com>,
-	"Rafael J. Wysocki" <rafael@kernel.org>,
-	Ricardo Neri <ricardo.neri-calderon@linux.intel.com>,
-	"Liang, Kan" <kan.liang@linux.intel.com>,
-	Andrew Cooper <andrew.cooper3@citrix.com>,
-	Brice Goglin <brice.goglin@gmail.com>,
-	Mario Limonciello <mario.limonciello@amd.com>,
-	Perry Yuan <Perry.Yuan@amd.com>,
-	Dapeng Mi <dapeng1.mi@linux.intel.com>
-Subject: [PATCH v8 5/5] x86/rfds: Exclude P-only parts from the RFDS affected
- list
-Message-ID: <20250311-add-cpu-type-v8-5-e8514dcaaff2@linux.intel.com>
-X-Mailer: b4 0.14.1
-References: <20250311-add-cpu-type-v8-0-e8514dcaaff2@linux.intel.com>
+	s=arc-20240116; t=1741706559; c=relaxed/simple;
+	bh=UxtYwYns0MvhCa2m5ObZdAnlsKQGOnGlpHac9oEyev4=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=TY5hEcLULiYYOMa9i3uhxFB7lQKjj9wyc3uz8ECAbVd7DzVwHcPfaHQJAB/CsPmiS9yIZ4TMgx8gi8ddzjpDV3nt+2HRolQqRxtWJge+CDnlOy3QHMrGIBOOIWnu5tvBZSRu4taiTjlgwGEIBgWhiyvL6m7SLAIWBsfIIY7IXlo=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=Y5zCKpAA; arc=none smtp.client-ip=209.85.128.182
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f182.google.com with SMTP id 00721157ae682-6fef1d35589so22144397b3.0
+        for <linux-pm@vger.kernel.org>; Tue, 11 Mar 2025 08:22:35 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=linaro.org; s=google; t=1741706555; x=1742311355; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=HdiaqU+kYXkNBNnpqC5PVQou0G4lEwUYRv6GT9pOGpI=;
+        b=Y5zCKpAAqvWWdwWu3jfhumpmdT2BGNTxA4Pm54r6smnlF0Eyvj6uRToq4TXKY/r6nL
+         sO7XcgyWOp/djAQjvurj2fhezVxcxIKfOts9SzpvpF6KTyUm2A8pIAhPV8qHUTp/4XA/
+         wpF3+pLFVig7ddquS7HSTFK2hKxfm2wIXK7B6N7T3xTLPnbRiQXTiMvgkSbi9wEAGuTz
+         BxOdl1y+89pkyoaGAo6ZdpcKaj8H9f9SStR1Tf6AykwsEq3iJxbGsjoOwdnoVuV2cOAL
+         xt9wU1gg4Gs7AULsLI/dePUBD6xlLWsD8QpGjSu/+nXInCInULD0DeXg7uEBTBECL1np
+         qckw==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741706555; x=1742311355;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HdiaqU+kYXkNBNnpqC5PVQou0G4lEwUYRv6GT9pOGpI=;
+        b=pT/GwRJ5a/Cwr8oX/KZXjkaG2pLomA6CrFff0ImOZsWaXG2GLWI3ccNsNFbobPn+SN
+         t8i0HBMto7LpXlszn40ofbPtuQc6Y8cP/59vpFBZiO6u38tzA+zBkHLGka0Finq+zz+T
+         FnyZdIcFJGAA9TfKHdB3btDXPBBSqrwzf8F2IW/D1IoUVIa+8GVIpB0hvHeagtPdsPIY
+         H7py1vV8Rsy7qzFhcO7B81dtzL99baX00AoTwnxY0X7bJvr8kfjufz/IE3bsI2sgv81+
+         wc7pHFMlscWlwpChzd/hPfYNd4OLhcrkwSRU+HZ/GPRAfyTKbPl4aBO4HzKxGn3leQn2
+         peoQ==
+X-Forwarded-Encrypted: i=1; AJvYcCVTum1a1UcQylaZQ0XxnVBuuER+wQmF6jY0KmDcjZX6jB9bQoWo4no6sOoct8JL7S1Kkee+vFjB9A==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yy2PWfbR/7k0KNgHevahNKRf87ZFYo9boCxfVJ9cxwFUe+sjY7l
+	0k0xmAYBQXyDm8EsE9clY6gRxysS1foob3M1bE7YD/3PRprxcWzsmRc3SNXtMHG/SoPoOQ5in9h
+	dSjCKlYqfXlmbi0mVZwSIqcnwMhuPgN5OSs660A==
+X-Gm-Gg: ASbGncshWymhtJo46B4ABDqANKK44YPLe4JfjpSot68O0OTdRkbSbt/ntVpgLE/b8Sj
+	Cfb0pNtWHbDg9DVPKmS/ogIA1BXMhNgXgkbkdQmLMpJrPos4XCilHyNcOtylqdSPKkXV0R/G7cp
+	CnLD+A2nnbuwlobHYz9Ibf1qtCBe0=
+X-Google-Smtp-Source: AGHT+IGAy6+55/xUbWPLWAhWa/JJEH75eRRXo5nC8iwxe2xNn2XBzu/ByvzI/h9Bw5amhUiPp08ireVcbtB30aKD1pc=
+X-Received: by 2002:a05:690c:688f:b0:6f9:88b7:b6b7 with SMTP id
+ 00721157ae682-6febf3e990dmr252844457b3.37.1741706554935; Tue, 11 Mar 2025
+ 08:22:34 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250311-add-cpu-type-v8-0-e8514dcaaff2@linux.intel.com>
+References: <CGME20250310090220eucas1p1d5cf6a56935e21b5854f77fdc22236b1@eucas1p1.samsung.com>
+ <20250310090211.286549-1-m.wilczynski@samsung.com> <20250310090211.286549-5-m.wilczynski@samsung.com>
+In-Reply-To: <20250310090211.286549-5-m.wilczynski@samsung.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Tue, 11 Mar 2025 16:21:59 +0100
+X-Gm-Features: AQ5f1JoXRXq5ucc-B5U0o3JR0rVlad9-RVtJACjXjl-xVuXRu_bgY0MVKH5Qe8E
+Message-ID: <CAPDyKFpAxkVgscMQpe2MZFCmNyaFq9YqiPQknLDf3CJ9zMdZ6g@mail.gmail.com>
+Subject: Re: [PATCH v7 4/5] pmdomain: thead: Add power-domain driver for TH1520
+To: Michal Wilczynski <m.wilczynski@samsung.com>
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, drew@pdp7.com, 
+	guoren@kernel.org, wefu@redhat.com, paul.walmsley@sifive.com, 
+	palmer@dabbelt.com, aou@eecs.berkeley.edu, alex@ghiti.fr, jszhang@kernel.org, 
+	m.szyprowski@samsung.com, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, 
+	linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-The affected CPU table (cpu_vuln_blacklist) marks Alderlake and Raptorlake
-P-only parts affected by RFDS. This is not true because only E-cores are
-affected by RFDS. With the current family/model matching it is not possible
-to differentiate the unaffected parts, as the affected and unaffected
-hybrid variants have the same model number.
+On Mon, 10 Mar 2025 at 10:02, Michal Wilczynski
+<m.wilczynski@samsung.com> wrote:
+>
+> The T-Head TH1520 SoC contains multiple power islands that can be
+> programmatically turned on and off using the AON (Always-On) protocol
+> and a hardware mailbox [1]. The relevant mailbox driver has already been
+> merged into the mainline kernel in commit 5d4d263e1c6b ("mailbox:
+> Introduce support for T-head TH1520 Mailbox driver");
+>
+> Introduce a power-domain driver for the TH1520 SoC, which is using AON
+> firmware protocol to communicate with E902 core through the hardware
+> mailbox. This way it can send power on/off commands to the E902 core.
+>
+> The interaction with AUDIO power island e.g trying to turn it OFF proved
+> to crash the firmware running on the E902 core. Introduce the workaround
+> to disable interacting with the power island.
+>
+> Link: https://openbeagle.org/beaglev-ahead/beaglev-ahead/-/blob/main/docs/TH1520%20System%20User%20Manual.pdf [1]
+>
+> Signed-off-by: Michal Wilczynski <m.wilczynski@samsung.com>
+> ---
 
-Add a cpu-type match as well for such parts so as to exclude P-only parts
-being marked as affected.
+[...]
 
-Note, family/model and cpu-type enumeration could be inaccurate in
-virtualized environments. In a guest affected status is decided by RFDS_NO
-and RFDS_CLEAR bits exposed by VMMs.
+> +
+> +static int th1520_pd_probe(struct platform_device *pdev)
+> +{
+> +       struct generic_pm_domain **domains;
+> +       struct genpd_onecell_data *pd_data;
+> +       struct th1520_aon_chan *aon_chan;
+> +       struct device *dev = &pdev->dev;
+> +       int i;
+> +
+> +       aon_chan = th1520_aon_init(dev);
+> +       if (IS_ERR(aon_chan))
+> +               return dev_err_probe(dev, PTR_ERR(aon_chan),
+> +                                    "Failed to get AON channel\n");
+> +
+> +       platform_set_drvdata(pdev, aon_chan);
+> +
+> +       domains = devm_kcalloc(dev, ARRAY_SIZE(th1520_pd_ranges),
+> +                              sizeof(*domains), GFP_KERNEL);
+> +       if (!domains)
+> +               return -ENOMEM;
+> +
+> +       pd_data = devm_kzalloc(dev, sizeof(*pd_data), GFP_KERNEL);
+> +       if (!pd_data)
+> +               return -ENOMEM;
+> +
+> +       for (i = 0; i < ARRAY_SIZE(th1520_pd_ranges); i++) {
+> +               struct th1520_power_domain *pd;
+> +
+> +               if (th1520_pd_ranges[i].disabled)
+> +                       continue;
+> +
+> +               pd = th1520_add_pm_domain(dev, &th1520_pd_ranges[i]);
+> +               if (IS_ERR(pd))
+> +                       return PTR_ERR(pd);
+> +
+> +               pd->aon_chan = aon_chan;
+> +               domains[i] = &pd->genpd;
+> +               dev_dbg(dev, "added power domain %s\n", pd->genpd.name);
+> +       }
+> +
+> +       pd_data->domains = domains;
+> +       pd_data->num_domains = ARRAY_SIZE(th1520_pd_ranges);
+> +       pd_data->xlate = th1520_pd_xlate;
+> +
+> +       /*
+> +        * Initialize all power domains to off to ensure they start in a
+> +        * low-power state. This allows device drivers to manage power
+> +        * domains by turning them on or off as needed.
+> +        */
+> +       th1520_pd_init_all_off(domains, dev);
+> +
+> +       return of_genpd_add_provider_onecell(dev->of_node, pd_data);
 
-Acked-by: Dave Hansen <dave.hansen@linux.intel.com>
-Signed-off-by: Pawan Gupta <pawan.kumar.gupta@linux.intel.com>
----
- Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst | 8 --------
- arch/x86/kernel/cpu/common.c                                 | 7 +++++--
- 2 files changed, 5 insertions(+), 10 deletions(-)
+If this fails, we should clean-up properly, not just returning an error code.
 
-diff --git a/Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst b/Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst
-index 0585d02b9a6c..ad15417d39f9 100644
---- a/Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst
-+++ b/Documentation/admin-guide/hw-vuln/reg-file-data-sampling.rst
-@@ -29,14 +29,6 @@ Below is the list of affected Intel processors [#f1]_:
-    RAPTORLAKE_S            06_BFH
-    ===================  ============
- 
--As an exception to this table, Intel Xeon E family parts ALDERLAKE(06_97H) and
--RAPTORLAKE(06_B7H) codenamed Catlow are not affected. They are reported as
--vulnerable in Linux because they share the same family/model with an affected
--part. Unlike their affected counterparts, they do not enumerate RFDS_CLEAR or
--CPUID.HYBRID. This information could be used to distinguish between the
--affected and unaffected parts, but it is deemed not worth adding complexity as
--the reporting is fixed automatically when these parts enumerate RFDS_NO.
--
- Mitigation
- ==========
- Intel released a microcode update that enables software to clear sensitive
-diff --git a/arch/x86/kernel/cpu/common.c b/arch/x86/kernel/cpu/common.c
-index 5f81c553e733..92fe56c40238 100644
---- a/arch/x86/kernel/cpu/common.c
-+++ b/arch/x86/kernel/cpu/common.c
-@@ -1203,6 +1203,9 @@ static const __initconst struct x86_cpu_id cpu_vuln_whitelist[] = {
- #define VULNBL_INTEL_STEPS(vfm, max_stepping, issues)		   \
- 	X86_MATCH_VFM_STEPS(vfm, X86_STEP_MIN, max_stepping, issues)
- 
-+#define VULNBL_INTEL_TYPE(vfm, cpu_type, issues)	\
-+	X86_MATCH_VFM_CPU_TYPE(vfm, INTEL_CPU_TYPE_##cpu_type, issues)
-+
- #define VULNBL_AMD(family, blacklist)		\
- 	VULNBL(AMD, family, X86_MODEL_ANY, blacklist)
- 
-@@ -1251,9 +1254,9 @@ static const struct x86_cpu_id cpu_vuln_blacklist[] __initconst = {
- 	VULNBL_INTEL_STEPS(INTEL_TIGERLAKE,	     X86_STEP_MAX,	GDS),
- 	VULNBL_INTEL_STEPS(INTEL_LAKEFIELD,	     X86_STEP_MAX,	MMIO | MMIO_SBDS | RETBLEED),
- 	VULNBL_INTEL_STEPS(INTEL_ROCKETLAKE,	     X86_STEP_MAX,	MMIO | RETBLEED | GDS),
--	VULNBL_INTEL_STEPS(INTEL_ALDERLAKE,	     X86_STEP_MAX,	RFDS),
-+	VULNBL_INTEL_TYPE(INTEL_ALDERLAKE,		     ATOM,	RFDS),
- 	VULNBL_INTEL_STEPS(INTEL_ALDERLAKE_L,	     X86_STEP_MAX,	RFDS),
--	VULNBL_INTEL_STEPS(INTEL_RAPTORLAKE,	     X86_STEP_MAX,	RFDS),
-+	VULNBL_INTEL_TYPE(INTEL_RAPTORLAKE,		     ATOM,	RFDS),
- 	VULNBL_INTEL_STEPS(INTEL_RAPTORLAKE_P,	     X86_STEP_MAX,	RFDS),
- 	VULNBL_INTEL_STEPS(INTEL_RAPTORLAKE_S,	     X86_STEP_MAX,	RFDS),
- 	VULNBL_INTEL_STEPS(INTEL_ATOM_GRACEMONT,     X86_STEP_MAX,	RFDS),
+> +}
+> +
+> +static void th1520_pd_remove(struct platform_device *pdev)
+> +{
+> +       struct th1520_aon_chan *aon_chan = platform_get_drvdata(pdev);
+> +
+> +       th1520_aon_deinit(aon_chan);
 
--- 
-2.34.1
+The genpd providers need to be cleaned-up here too.
 
+Or, as I said before, if you think doing a proper clean-up is going to
+be a problem (in most cases it is), we can also make this a
+builtin_platform_driver() with "suppress_bind_attrs = true".
 
+> +}
+> +
+> +static const struct of_device_id th1520_pd_match[] = {
+> +       { .compatible = "thead,th1520-aon" },
+> +       { /* Sentinel */ }
+> +};
+> +MODULE_DEVICE_TABLE(of, th1520_pd_match);
+> +
+> +static struct platform_driver th1520_pd_driver = {
+> +       .driver = {
+> +               .name = "th1520-pd",
+> +               .of_match_table = th1520_pd_match,
+> +       },
+> +       .probe = th1520_pd_probe,
+> +       .remove = th1520_pd_remove,
+> +};
+> +module_platform_driver(th1520_pd_driver);
+> +
+> +MODULE_AUTHOR("Michal Wilczynski <m.wilczynski@samsung.com>");
+> +MODULE_DESCRIPTION("T-HEAD TH1520 SoC power domain controller");
+> +MODULE_LICENSE("GPL");
+> --
+> 2.34.1
+>
+
+Kind regards
+Uffe
 
