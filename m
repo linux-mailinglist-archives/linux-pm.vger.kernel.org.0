@@ -1,149 +1,105 @@
-Return-Path: <linux-pm+bounces-23912-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23914-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AE4A2A5DC1C
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 12:59:18 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 0C824A5DC72
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 13:18:07 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E73DC17294C
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 11:59:17 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 4DD641771CF
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 12:18:06 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 83B5D24168E;
-	Wed, 12 Mar 2025 11:59:05 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 415881DE4CD;
+	Wed, 12 Mar 2025 12:18:03 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oJfgyygt"
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="QFmiRQ3d"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
+Received: from mail-ej1-f50.google.com (mail-ej1-f50.google.com [209.85.218.50])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 57ABA23F411;
-	Wed, 12 Mar 2025 11:59:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 94824236426;
+	Wed, 12 Mar 2025 12:18:01 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.50
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741780745; cv=none; b=HK1rcKHsTVblbaztwFv0jjPajaizFOSrT63YxbRONSnEvCGgoUDLf0733OSAT96ykRz2zutenx2nJso9CVlU95FUdMrHkVPq6RIG1rh/hUK4AnJTxW/DMpzBhPaJgOhrV/VpIZtbyw+eG27vZrhLl7kjAJRXEh2jq53cuKOvg/Q=
+	t=1741781883; cv=none; b=DMZENlbiJCqsQTwXF7zwVJLTApqJaStE3q4lTYe/VXbnFnAO8jS7yOyWWC9nXD2wB3Ali8qwM+wFnYTBOQ31gMPYqTj5uCkRn+GnQWVXg6uFTsUDI0AO9XOlJHO72ybO2gUqIcti+EWgH90tTpMxPH5VqoXKmeif6poyzgiIkig=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741780745; c=relaxed/simple;
-	bh=2+E249FoMxeCPtng7rCF3Mn0z7RfCf3h+Vca3R9nky8=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=hc7m2bvGCTEcWpFGjQlIpTot1XPqV8BTlr6o61cvrGClpsnNh6dPjylBlvNMqkQ/IxX1eKw5NETENeaMEi0y0qQc/z2Eosg2myyJo5VOQfNo8cGGmy/RvIwz6ogrp8CpwFjpWEwz6E/eKN9oOIdWm8bMl0+LlLE/wcHxrKBjVf4=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oJfgyygt; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D0154C4CEED;
-	Wed, 12 Mar 2025 11:59:04 +0000 (UTC)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741780744;
-	bh=2+E249FoMxeCPtng7rCF3Mn0z7RfCf3h+Vca3R9nky8=;
-	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=oJfgyygtRo4YfzZIpKTQx5huLeuEx676YcqWcsXT0VH3VkMbeqmdqDNVh6qHIzZSz
-	 HzaLwjW1T9+SYNVSiJbvkwtsF8AA1axicWAGUfoMSNPls//Vb//5Lmh5indWZhEYfQ
-	 INbpin4GnMfb77i3j2GLT84pDjC+f5Uhej7TloEfofddldjmUCwLTGl0F9ElKQKrDK
-	 wnVPor30O9w82lK57+t5VktPDIFPbu+8qFIu4wRgVRs+kfBOeJt2Gr3DH6mfU3Y6ca
-	 g3c1VdTaHuWCUyJQJg4HyYFCf+vjV6CcoesBGxPXMyWiqDGWJNyDDmPglK1ili4CwF
-	 qo2V+Ky+sEBZQ==
-Received: by mail-ed1-f47.google.com with SMTP id 4fb4d7f45d1cf-5dccaaca646so1621742a12.0;
-        Wed, 12 Mar 2025 04:59:04 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCUH0R8fwcF39ADD/iD4+4uJQrvFV5A0aLkO6NAfxYfxxNc9Tb4K/6X7e1aQ5FXMis3EmnL62MjGGTMMgg25@vger.kernel.org, AJvYcCVHeWQdUivgkBQCgFbgbw+6jCUXeBJMyY8NNA0CDKd6KVym3y0Yz0bJxTFBBcMSN6Cj87tvzMs2bMU=@vger.kernel.org, AJvYcCVlgUjXmmFItQnWPjPTgTOGF3E0P5X2w3FnXNxZvwNLR3nKSPJnHfMUdOe/fNG8x7hptZevFzkBDmOV@vger.kernel.org
-X-Gm-Message-State: AOJu0Yz5Ud5VmgMjp46bcfshrG/LGQjBiGtEy4TiBxKoFDfZ2Ml1OkCt
-	kjscM5VFsC/bq3HBI6hPvRFFzWW/fwm4OduV2R7pKP0IaecoKChLENGphAdxlfpfwUqjJfWsAz6
-	mBjXuf+zicaUKikkD9KWz5yHs8w==
-X-Google-Smtp-Source: AGHT+IH5BQD7ITN/g2eBCi7T0dAu5ljpqR2DL4+BQ5AiD3G98QJvLyb/xuTbUHCaciB5iJ/2IYVIIXj4q33YzTwu+gA=
-X-Received: by 2002:a05:6402:280d:b0:5e5:9c04:777 with SMTP id
- 4fb4d7f45d1cf-5e762900175mr9572561a12.6.1741780743338; Wed, 12 Mar 2025
- 04:59:03 -0700 (PDT)
+	s=arc-20240116; t=1741781883; c=relaxed/simple;
+	bh=HAmmIzEk4qiS0Ha9xMIkcmD5tZckjPN1p3IzuIL22lA=;
+	h=From:To:Cc:Subject:Date:Message-ID:MIME-Version; b=RhJ3GCTgG7RvMTHAREu/aCZGHgBnGL7M3CF3g/5NJesuVn1hqwskEcTycSKAqf9XTmTXDtYrTNKKpJWQ0BLoM8et3hrC89jY4PqNHOUVysx/1JojsCKl6HqgC96Pjf/la5HsdUXnkvAkbm3lek0r+MIKtDyFk5nicQeQLyG+NCY=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=QFmiRQ3d; arc=none smtp.client-ip=209.85.218.50
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-ej1-f50.google.com with SMTP id a640c23a62f3a-aaec111762bso1299375166b.2;
+        Wed, 12 Mar 2025 05:18:01 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741781880; x=1742386680; darn=vger.kernel.org;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:from:to:cc:subject:date:message-id:reply-to;
+        bh=HAmmIzEk4qiS0Ha9xMIkcmD5tZckjPN1p3IzuIL22lA=;
+        b=QFmiRQ3dVHsB8wGeEejA1Th33RCNFlAIXVXj4t1maDEpwQ+pr+gusi7urDrYz3Qu9S
+         OszHDXFghS/PVez8HEv+CmjF8RifHYuz4EyZM6fj7vJvjoSNJMNl1R1eh2yI3dFBFn1Y
+         XPbAz9GETHPACnpfHImJ/MHYclpQtz8dw6kRoWDkY6zs/8Q5sICfdK3sMqab5WxS941w
+         4Suoe+WGRpMCPu3MB0CfRWMF3r3PBkxm0XI16LjjuRi+ErPlFZ7Xj5x+7RRY8DNDRuVc
+         mJY3kC1kRDAjeTusvpDu2b63YKRYiuO448J4uO509Hqv9wldR+IqaPvTQQCbZ++AtliY
+         2YuQ==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741781880; x=1742386680;
+        h=content-transfer-encoding:mime-version:message-id:date:subject:cc
+         :to:from:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=HAmmIzEk4qiS0Ha9xMIkcmD5tZckjPN1p3IzuIL22lA=;
+        b=DIoVub7ew9PDiqqgt+c4csZjMP69xL+V4RP1ETssdTMa7bhZfoMG41KyAvhPipc0j6
+         Hf102Y0E4bJnT+WUUxLyOYkYNWT9q1qygdOqBx47DDhfYKQjv/bcog/mFq812lDeQBFC
+         7RRVTxt1IBxxidmSHrq3d3cozBNz8nQexxvVS/IopD/YrQ7uukVL9G2sTvzM9pKr1YvF
+         JutWtQt4B5SSkEi6aTb+nAOuJZNkiXbwiWVJjysejqbuHeC2H15NJMS8g8jqmGynwKxp
+         r28ciJpspZyAvb80fLUmVrIFWKCpSFvNskG0RNcyybgj1qnSfvBUVWRj4njKJZ4pUwkc
+         zigg==
+X-Forwarded-Encrypted: i=1; AJvYcCVdbRZV4qBgEHUx1grVv3shct1cBWpIiQWTZHL7eT/m+BGzTZCwBNTzKIAUJpCCmQp8N9Hfttf01NniBCg=@vger.kernel.org, AJvYcCWEisMReGc72deE4jPD/BSdnNjK8yMshwt7aWqeiZYFmuc3S+siQB/oo7qb62CBnUez6LMMRLXvaQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0Yw/QAlLgM8AxHcZ1VPxaHsfOXLfX9BnWn9eDt6c+Rdhx7NjS80O
+	39nAgYd2a4TfZukWN6mInbJSYcmmH+VWoTNJYvB8aAXEBD2IqlWNU6fCpLub
+X-Gm-Gg: ASbGncssVwQ3Y/PLxte53QuhfDDy+33uv42b5WNcnJX2tpcwMhjwapNrNvACuF9qWZc
+	uw2OkKskDD19s4aqLM1RrqnCCr6loNFcEtTMOCMpLBI1vU7Ml3dtn5uZF37mdcle7gRpWI6jId2
+	8VFBA/e6G2SeAnV6Lh0dDNbzETZLWz6jHjvI+diwMyeXrb+b0HrUxEazXz+teXg6Dl6k3I91PFf
+	4xnwv6qX1dFzOUgw07BOW0kEzKMTitzTfKUwtY8LlAovvEhO8ImIy7IozjPhe6qlFFCkbvaCZpZ
+	Piv5EUR4bfP9XD3VhDaQ68yjQlhAizE2Dhrl+mj3TrC2
+X-Google-Smtp-Source: AGHT+IFfshNjX+VzbI/wy1G1s4a9ftjRnWREdP8/Qsh3tGzC5CDmK0L2EO8vnrxxCffMAZyC2Zk3sg==
+X-Received: by 2002:a17:907:7255:b0:abf:52e1:2615 with SMTP id a640c23a62f3a-ac25274a004mr2594510366b.7.1741781879598;
+        Wed, 12 Mar 2025 05:17:59 -0700 (PDT)
+Received: from tpt440p.. ([69.63.64.50])
+        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac28847a0a8sm623586166b.119.2025.03.12.05.17.57
+        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
+        Wed, 12 Mar 2025 05:17:59 -0700 (PDT)
+From: "Sicelo A. Mhlongo" <absicsz@gmail.com>
+To: Sebastian Reichel <sre@kernel.org>,
+	linux-pm@vger.kernel.org
+Cc: "H . Nikolaus Schaller" <hns@goldelico.com>,
+	pali@kernel.org,
+	maemo-leste@lists.dyne.org,
+	phone-devel@vger.kernel.org,
+	letux-kernel@openphoenux.org,
+	akemnade@kernel.org
+Subject: [PATCH 0/2] power: supply: bq27xxx: do not report incorrect zero values
+Date: Wed, 12 Mar 2025 14:14:07 +0200
+Message-ID: <20250312121712.146109-1-absicsz@gmail.com>
+X-Mailer: git-send-email 2.47.2
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250310080237.7400-1-clamor95@gmail.com> <20250310080237.7400-2-clamor95@gmail.com>
- <20250311193732.GA4183071-robh@kernel.org> <CAPVz0n09ZP1i2tasdTvnt8RvjhALvUYjv9u_EGRtnXPOYQtuqQ@mail.gmail.com>
-In-Reply-To: <CAPVz0n09ZP1i2tasdTvnt8RvjhALvUYjv9u_EGRtnXPOYQtuqQ@mail.gmail.com>
-From: Rob Herring <robh@kernel.org>
-Date: Wed, 12 Mar 2025 06:58:50 -0500
-X-Gmail-Original-Message-ID: <CAL_JsqK53DY7xV8eFBpf+zpN8qPT2bYaR5Z1pyzSgdi1z5yXHg@mail.gmail.com>
-X-Gm-Features: AQ5f1JqxwbCmUdSE4dbkfReQ51RA6N_SE-HhOIL5Mfs-CfN5v7Ilewsjv3M2Q0Q
-Message-ID: <CAL_JsqK53DY7xV8eFBpf+zpN8qPT2bYaR5Z1pyzSgdi1z5yXHg@mail.gmail.com>
-Subject: Re: [PATCH v4 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
-To: Svyatoslav Ryhel <clamor95@gmail.com>
-Cc: Sebastian Reichel <sre@kernel.org>, Krzysztof Kozlowski <krzk+dt@kernel.org>, 
-	Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
-Content-Type: text/plain; charset="UTF-8"
-Content-Transfer-Encoding: quoted-printable
+Content-Transfer-Encoding: 8bit
 
-On Wed, Mar 12, 2025 at 1:03=E2=80=AFAM Svyatoslav Ryhel <clamor95@gmail.co=
-m> wrote:
->
-> =D0=B2=D1=82, 11 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 21:37 Ro=
-b Herring <robh@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
-> >
-> > On Mon, Mar 10, 2025 at 10:02:36AM +0200, Svyatoslav Ryhel wrote:
-> > > Add bindings for Maxim MAX8971 charger.
-> > >
-> > > Signed-off-by: Svyatoslav Ryhel <clamor95@gmail.com>
-> > > ---
-> > >  .../bindings/power/supply/maxim,max8971.yaml  | 64 +++++++++++++++++=
-++
-> > >  1 file changed, 64 insertions(+)
-> > >  create mode 100644 Documentation/devicetree/bindings/power/supply/ma=
-xim,max8971.yaml
-> > >
-> > > diff --git a/Documentation/devicetree/bindings/power/supply/maxim,max=
-8971.yaml b/Documentation/devicetree/bindings/power/supply/maxim,max8971.ya=
-ml
-> > > new file mode 100644
-> > > index 000000000000..d7b3e6ff6906
-> > > --- /dev/null
-> > > +++ b/Documentation/devicetree/bindings/power/supply/maxim,max8971.ya=
-ml
-> > > @@ -0,0 +1,64 @@
-> > > +# SPDX-License-Identifier: (GPL-2.0-only OR BSD-2-Clause)
-> > > +%YAML 1.2
-> > > +---
-> > > +$id: http://devicetree.org/schemas/power/supply/maxim,max8971.yaml#
-> > > +$schema: http://devicetree.org/meta-schemas/core.yaml#
-> > > +
-> > > +title: Maxim MAX8971 IC charger
-> > > +
-> > > +maintainers:
-> > > +  - Svyatoslav Ryhel <clamor95@gmail.com>
-> > > +
-> > > +description:
-> > > +  The MAX8971 is a compact, high-frequency, high-efficiency switch-m=
-ode charger
-> > > +  for a one-cell lithium-ion (Li+) battery.
-> > > +
-> > > +allOf:
-> > > +  - $ref: power-supply.yaml#
-> > > +
-> > > +properties:
-> > > +  compatible:
-> > > +    const: maxim,max8971
-> > > +
-> > > +  reg:
-> > > +    maxItems: 1
-> > > +
-> > > +  interrupts:
-> > > +    maxItems: 1
-> > > +
-> > > +  monitored-battery: true
-> > > +
-> > > +  maxim,usb-connector:
-> >
-> > Just 'connector', so when we have a 3rd case, we don't have a 3rd
-> > vendor.
-> >
->
-> Please, please be explicit and specific, you could not tell me this in
-> v3, you could but you decided to fuck up v4 as well. So wise.
-> Additionally, if you want a generic 'connector' which can be
-> referenced as 'connector: true' then add one, ATM this is classified
-> under your own terms as 'vendor property' and needs a vendor prefix.
+Some bq27xxx variants are unable to automatically determine the state of
+the battery, e.g. capacity, after a reset. Under these conditions, they
+will report incorrect zero values even when the battery is full. This is
+misleading to userspace, and leads to premature shutdowns.
 
-I don't care for your attitude, so I will be reviewing the 20+ other
-bindings a day I have to review and not yours.
+In an effort to fix this, a patch [0] was submitted, which unfortunately
+introduced a regression [1]. This patch series resolves the regression
+and implements the fix correctly.
 
-Rob
+[0] https://lore.kernel.org/linux-pm/20250207220605.106768-1-absicsz@gmail.com/
+[1] https://lore.kernel.org/linux-pm/CB5B8FE7-D619-4D30-BD2D-58B6CEF83D46@goldelico.com/
 
