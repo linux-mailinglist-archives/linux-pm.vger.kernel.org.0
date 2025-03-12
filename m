@@ -1,304 +1,180 @@
-Return-Path: <linux-pm+bounces-23909-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23910-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
-	by mail.lfdr.de (Postfix) with ESMTPS id 18A96A5D9E0
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 10:51:02 +0100 (CET)
+Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [139.178.88.99])
+	by mail.lfdr.de (Postfix) with ESMTPS id 4CF29A5DA0D
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 10:57:44 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by am.mirrors.kernel.org (Postfix) with ESMTPS id BBA901897B6E
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 09:51:09 +0000 (UTC)
+	by sv.mirrors.kernel.org (Postfix) with ESMTPS id A08C43B4A6C
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 09:57:26 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 69E2C23BFA9;
-	Wed, 12 Mar 2025 09:50:57 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 184EB23C8D0;
+	Wed, 12 Mar 2025 09:57:20 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org;
+	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="X45fVYL8"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from foss.arm.com (foss.arm.com [217.140.110.172])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 66EF1236A73;
-	Wed, 12 Mar 2025 09:50:55 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
+Received: from mail-wr1-f48.google.com (mail-wr1-f48.google.com [209.85.221.48])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+	(No client certificate requested)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BB9423C8AE;
+	Wed, 12 Mar 2025 09:57:17 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.221.48
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741773057; cv=none; b=Wg5hM4uWuPro45He14guu/pgVinJckcfeBu56QVYPw6L/MLQRvCbtwuJCwOBA08LJS/JQkWgkdcur7qRxjK+6C8DDz0jcUei+FN8U+KdPowdgfweggKoLyJF1AiezgqFhMccfca59yg7sS4DJ0ZUbSnqGlO5dtZK0XpA6vtKFWE=
+	t=1741773440; cv=none; b=Prm0PWPTCR8/Z4TYn2mM6MTuBAvl6yp1feAaVT8EmLOlV+OjUK4VVBE6W1H8jSlzfH+ooz8qjf0p5ZoEi3eXTcnBMIEKyhoumwHPicEqxPSEnUSFAiJhG76PCikETkjHBYQGTQaQWOi/kqqflUzJqao513ajf29vvU3MRr5lB3E=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741773057; c=relaxed/simple;
-	bh=cPaifqjn+79emxa4flNc0qkuWrozQrP5tn9MQpqTWl8=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=d+WspqazwcgIkYF7MAs0H79MNl4UgowNFWxUWG2JhPkoGYf3AjA6HXQzmn4cuCbQp2qPRxXEWjFNnAuRbi/Ei/AoPpi1N8OgTqZxuXZ1dQGBKfCHoMt6rSe0aY4wh/WfLKqKovzH4F5b0WmFrkGwKG0OHeLsgBRIpqeOMBJABco=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com; spf=none smtp.mailfrom=foss.arm.com; arc=none smtp.client-ip=217.140.110.172
-Authentication-Results: smtp.subspace.kernel.org; dmarc=fail (p=none dis=none) header.from=arm.com
-Authentication-Results: smtp.subspace.kernel.org; spf=none smtp.mailfrom=foss.arm.com
-Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
-	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id 47C97152B;
-	Wed, 12 Mar 2025 02:51:05 -0700 (PDT)
-Received: from bogus (e133711.arm.com [10.1.196.55])
-	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id D4E443F5A1;
-	Wed, 12 Mar 2025 02:50:51 -0700 (PDT)
-Date: Wed, 12 Mar 2025 09:50:49 +0000
-From: Sudeep Holla <sudeep.holla@arm.com>
-To: Jacky Bai <ping.bai@nxp.com>
-Cc: <rafael@kernel.org>, <viresh.kumar@linaro.org>, <ilia.lin@kernel.org>,
-	<tiny.windzz@gmail.com>, <wens@csie.org>,
-	<jernej.skrabec@gmail.com>, <samuel@sholland.org>,
-	<matthias.bgg@gmail.com>, <angelogioacchino.delregno@collabora.com>,
-	<linux-pm@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-	<linux-arm-kernel@lists.infradead.org>,
-	<linux-sunxi@lists.linux.dev>, <linux-mediatek@lists.infradead.org>,
-	<imx@lists.linux.dev>
-Subject: Re: [PATCH v2] cpufreq: Init cpufreq only for present CPUs
-Message-ID: <Z9FY-Uu-7R9eWEQ7@bogus>
-References: <20250312092127.357316-1-ping.bai@nxp.com>
+	s=arc-20240116; t=1741773440; c=relaxed/simple;
+	bh=MRFFW5+5MiGjJoDsl30p/S9DIYlDXxeob2SpJmgOj20=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=F/fPiaVJj7fn2bUE5lPZFHAMxTFVQuJ++sYzHKUdilZETCZ+Jrl6vZ+q6ympEHlzo48Rttvjr1rjLuwimo78xKsm06n+OipHP2EacZFXM0w7JuvYJ+UjT3d+6vuxf71n0V8szokVVNCCp4dzq2s8GSKUBFwmTvcOfL/Tri+xM14=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=X45fVYL8; arc=none smtp.client-ip=209.85.221.48
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
+Received: by mail-wr1-f48.google.com with SMTP id ffacd0b85a97d-388cae9eb9fso3137961f8f.3;
+        Wed, 12 Mar 2025 02:57:17 -0700 (PDT)
+DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=gmail.com; s=20230601; t=1741773436; x=1742378236; darn=vger.kernel.org;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:from:to:cc:subject:date
+         :message-id:reply-to;
+        bh=4Bk0+6TyveDnhFSN4ubd8Ki6PyJoMe7ilhOG2b+TwmQ=;
+        b=X45fVYL8XICL1l6ywaSE1eqgfpdcam5LDM7s68g8pWjQqLO8RuoezvG0YxjBhlokVh
+         zmmi6KKi+/VxkqoyV5WNoaV57zhlJhyZbDKk3k4X/IHh1ud9qqk9KX/c3R3Eklay8+8+
+         jTBcvA78NUYnEAoobiOqvrIHcxfLs5IeA8K1olnHqebwcNv/Ml2ltkWkLDNaaJd1hh6e
+         GETl/xyK4gKbso282Wq+gzpT+qG77M5CkKp6AkCcuSZvomTZz7nVYhSPtuFS93QEAlJf
+         qkpcE9w3G1BCNTQXYcoKR3DpBY9vTMTUkJDzwIZbsmvRTQSDostTGWFCNSfyBb/7ktjL
+         PAnA==
+X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
+        d=1e100.net; s=20230601; t=1741773436; x=1742378236;
+        h=content-transfer-encoding:cc:to:subject:message-id:date:from
+         :in-reply-to:references:mime-version:x-gm-message-state:from:to:cc
+         :subject:date:message-id:reply-to;
+        bh=4Bk0+6TyveDnhFSN4ubd8Ki6PyJoMe7ilhOG2b+TwmQ=;
+        b=BJ6Ha3SdH7i7Cf/oLOimmDhGQdBTyusUNea996JZ7h+VOig80EEW7lk3YiaLgQhCJ/
+         DkNawpxgOn5d2qiYuUEcP3NCjmRt+dc/Qt6aUf8wGd34Y7QfecX8FjQYc385kJIub9I6
+         vGj3d44FHXAlGY0xsJhBBscrzrSgWOrg/KWqrTFDTQcwcDDteEHF2isYx/sbrtAY8A2D
+         Guczj2ZKG4CHy6NK4kSf2QDQ2QsUoHPS6ffJklhsC8GwIVslCbByy9qAMYhLA7QWvr+m
+         UBxU3IgAk68qvDd+PkRv/OqJuqWBcqjTrXqRa47X6nT74WOFdw1H+XVOlt2HiBoRLUx3
+         xJGA==
+X-Forwarded-Encrypted: i=1; AJvYcCUjdIRt9LwRLJVy2B0N2ooDzXua+fopIwKQnMIC3XHYuOpL6yCYmwny5pmq1qKQy5WALhmSKoy+RNGD@vger.kernel.org, AJvYcCWLqQVTxInTLcS/DlBhxF6kpB/fDWHIiuWlnFdE7DypBatQFIekpmSyARMtrC4VS+CilD4ViadMj44=@vger.kernel.org, AJvYcCWtbTHWZrf2xBBfNQ++l/oXSa9lQ/higtrKnvHGD3uYQzCmZ7aO6uI4oyZrFzJYtReFC7kF4rZcHnOmnvnW@vger.kernel.org
+X-Gm-Message-State: AOJu0Yz9JisPx9XBjxnYIxUc0HknTCRa7wS4GVlx/7m0sAUNItpO32oM
+	Dh9mOmnscSlTfTeczpVRHieUi1waY/Uo2M86B0Z3slxNFuFqGCxurV7mf6DxTRgNdQN+xJ3/EFv
+	kZ54z7I5+sKpI43NdAK+pX9mX0Z0=
+X-Gm-Gg: ASbGncs8LypCNKmcj9nUtLGDYHK3ezZdcVi90RBUxASe7W33m3aADLIH+eHFuruin34
+	hXeBmPkaOR6jXa3w2f+dZFgCHHzxfXD06Rl2s/oMcIEuwYK9wcg9c7AwGMPDAulmHRHQIl6g08G
+	xJWcwDJ4p0hrL3XBb9MCRjsaI4IN0=
+X-Google-Smtp-Source: AGHT+IGRG52MpBzZ4/Ng/tlPI9MLq485xsY5jmMJ52FzXP3WMdFQYzendKxMCVxYqZZI46lbWuSnkeYAQUzI9fNbrlk=
+X-Received: by 2002:a05:6000:1a8e:b0:390:d6ab:6c49 with SMTP id
+ ffacd0b85a97d-39132da9221mr16952047f8f.35.1741773436350; Wed, 12 Mar 2025
+ 02:57:16 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <20250312092127.357316-1-ping.bai@nxp.com>
+References: <20250310080237.7400-1-clamor95@gmail.com> <20250310080237.7400-2-clamor95@gmail.com>
+ <20250311193732.GA4183071-robh@kernel.org> <CAPVz0n09ZP1i2tasdTvnt8RvjhALvUYjv9u_EGRtnXPOYQtuqQ@mail.gmail.com>
+ <4d1c3eb1-5c42-490f-83e5-60de05ffad06@kernel.org>
+In-Reply-To: <4d1c3eb1-5c42-490f-83e5-60de05ffad06@kernel.org>
+From: Svyatoslav Ryhel <clamor95@gmail.com>
+Date: Wed, 12 Mar 2025 11:57:05 +0200
+X-Gm-Features: AQ5f1Jqlx7t3_cSR4R8CS335M--auL7SEwcqufZDylqnzlIg_zB0GKJZ2cFtMKg
+Message-ID: <CAPVz0n2rxpk=KrsC2GOkBD=WZQSdVbd0tOYgow4miPz+3owsCA@mail.gmail.com>
+Subject: Re: [PATCH v4 1/2] dt-bindings: power: supply: Document Maxim MAX8971 charger
+To: Krzysztof Kozlowski <krzk@kernel.org>
+Cc: Rob Herring <robh@kernel.org>, Sebastian Reichel <sre@kernel.org>, 
+	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, linux-pm@vger.kernel.org, 
+	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
 
-On Wed, Mar 12, 2025 at 05:21:27PM +0800, Jacky Bai wrote:
-> for_each_possible_cpu() is currently used to initialize cpufreq
-> in below cpufreq drivers:
->   drivers/cpufreq/cpufreq-dt.c
->   drivers/cpufreq/mediatek-cpufreq-hw.c
->   drivers/cpufreq/mediatek-cpufreq.c
->   drivers/cpufreq/qcom-cpufreq-nvmem.c
->   drivers/cpufreq/sun50i-cpufreq-nvmem.c
+=D1=81=D1=80, 12 =D0=B1=D0=B5=D1=80. 2025=E2=80=AF=D1=80. =D0=BE 11:49 Krzy=
+sztof Kozlowski <krzk@kernel.org> =D0=BF=D0=B8=D1=88=D0=B5:
+>
+> On 12/03/2025 07:02, Svyatoslav Ryhel wrote:
+> >>> +
+> >>> +  reg:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  interrupts:
+> >>> +    maxItems: 1
+> >>> +
+> >>> +  monitored-battery: true
+> >>> +
+> >>> +  maxim,usb-connector:
+> >>
+> >> Just 'connector', so when we have a 3rd case, we don't have a 3rd
+> >> vendor.
+> >>
+> >
+> > Please, please be explicit and specific, you could not tell me this in
+>
+> git grep -C 3 connector:
+>
+> > v3, you could but you decided to fuck up v4 as well. So wise.
+>
+> We got a lot to review thus we make reviews concise. I understand that
+> it might lead to insufficient guidance, so more help in removing
+> workload from maintainers is always appreciated.
+>
+> Instead of using vulgar words towards us, please put a bit more effort
+> and look at other recent bindings how they do it.
+>
+> Review is provided in good faith and if it is by any chance incorrect,
+> it is enough to disagree instead of throwing things like above. That's
+> not acceptable.
+>
+> > Additionally, if you want a generic 'connector' which can be
+> > referenced as 'connector: true' then add one, ATM this is classified
+> > under your own terms as 'vendor property' and needs a vendor prefix.
+>
+> richtek,usb-connector is not the good example here. Your previous code he=
+re:
+
+Then what is a good example? This is the only example with binding Rob
+requested,
+
+> https://lore.kernel.org/all/20250225090014.59067-2-clamor95@gmail.com/
+>
+> looks correct - you have there port. So where does charger_input point?
 >
 
-Just drop this list, totally redundant as diffstat must give that anyways.
-You have already made it stale as it doesn't match the diffstat.
+It pointed to the port I have removed because Rob in v3 said it was
+overkill and connector phandle was enough. May you resolve this inside
+and not to contradict one another. Thank you.
 
-With that fixed:
-
-Reviewed-by: Sudeep Holla <sudeep.holla@arm.com>
-
-> However, in cpu_dev_register_generic(), for_each_present_cpu()
-> is used to register CPU devices which means the CPU devices are
-> only registered for present CPUs and not all possible CPUs.
-> 
-> With nosmp or maxcpus=0, only the boot CPU is present, lead
-> to the cpufreq probe failure or defer probe due to no cpu device
-> available for not present CPUs.
-> 
-> Change for_each_possible_cpu() to for_each_present_cpu() in the
-> above cpufreq drivers to ensure it only registers cpufreq for
-> CPUs that are actually present.
-> 
-> Fixes: b0c69e1214bc ("drivers: base: Use present CPUs in GENERIC_CPU_DEVICES")
-> Signed-off-by: Jacky Bai <ping.bai@nxp.com>
-> ---
->  - v2 changes:
->   - Add changes for armada-8k-cpufreq, mvebu-cpfureq, qcome-cpufreq-hw,
->     scmi-cpufreq, scpi-cpufreq, virtual-cpufreq.
-> ---
->  drivers/cpufreq/armada-8k-cpufreq.c    | 2 +-
->  drivers/cpufreq/cpufreq-dt.c           | 2 +-
->  drivers/cpufreq/mediatek-cpufreq-hw.c  | 2 +-
->  drivers/cpufreq/mediatek-cpufreq.c     | 2 +-
->  drivers/cpufreq/mvebu-cpufreq.c        | 2 +-
->  drivers/cpufreq/qcom-cpufreq-hw.c      | 2 +-
->  drivers/cpufreq/qcom-cpufreq-nvmem.c   | 8 ++++----
->  drivers/cpufreq/scmi-cpufreq.c         | 2 +-
->  drivers/cpufreq/scpi-cpufreq.c         | 2 +-
->  drivers/cpufreq/sun50i-cpufreq-nvmem.c | 6 +++---
->  drivers/cpufreq/virtual-cpufreq.c      | 2 +-
->  11 files changed, 16 insertions(+), 16 deletions(-)
-> 
-> diff --git a/drivers/cpufreq/armada-8k-cpufreq.c b/drivers/cpufreq/armada-8k-cpufreq.c
-> index 7a979db81f09..5a3545bd0d8d 100644
-> --- a/drivers/cpufreq/armada-8k-cpufreq.c
-> +++ b/drivers/cpufreq/armada-8k-cpufreq.c
-> @@ -47,7 +47,7 @@ static void __init armada_8k_get_sharing_cpus(struct clk *cur_clk,
->  {
->  	int cpu;
->  
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		struct device *cpu_dev;
->  		struct clk *clk;
->  
-> diff --git a/drivers/cpufreq/cpufreq-dt.c b/drivers/cpufreq/cpufreq-dt.c
-> index 778916f89a51..e80dd982a3e2 100644
-> --- a/drivers/cpufreq/cpufreq-dt.c
-> +++ b/drivers/cpufreq/cpufreq-dt.c
-> @@ -283,7 +283,7 @@ static int dt_cpufreq_probe(struct platform_device *pdev)
->  	int ret, cpu;
->  
->  	/* Request resources early so we can return in case of -EPROBE_DEFER */
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		ret = dt_cpufreq_early_init(&pdev->dev, cpu);
->  		if (ret)
->  			goto err;
-> diff --git a/drivers/cpufreq/mediatek-cpufreq-hw.c b/drivers/cpufreq/mediatek-cpufreq-hw.c
-> index aa209f5527dc..74f1b4c796e4 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq-hw.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq-hw.c
-> @@ -303,7 +303,7 @@ static int mtk_cpufreq_hw_driver_probe(struct platform_device *pdev)
->  	struct regulator *cpu_reg;
->  
->  	/* Make sure that all CPU supplies are available before proceeding. */
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		cpu_dev = get_cpu_device(cpu);
->  		if (!cpu_dev)
->  			return dev_err_probe(&pdev->dev, -EPROBE_DEFER,
-> diff --git a/drivers/cpufreq/mediatek-cpufreq.c b/drivers/cpufreq/mediatek-cpufreq.c
-> index 2656b88db378..f3f02c4b6888 100644
-> --- a/drivers/cpufreq/mediatek-cpufreq.c
-> +++ b/drivers/cpufreq/mediatek-cpufreq.c
-> @@ -631,7 +631,7 @@ static int mtk_cpufreq_probe(struct platform_device *pdev)
->  		return dev_err_probe(&pdev->dev, -ENODEV,
->  				     "failed to get mtk cpufreq platform data\n");
->  
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		info = mtk_cpu_dvfs_info_lookup(cpu);
->  		if (info)
->  			continue;
-> diff --git a/drivers/cpufreq/mvebu-cpufreq.c b/drivers/cpufreq/mvebu-cpufreq.c
-> index 7f3cfe668f30..2aad4c04673c 100644
-> --- a/drivers/cpufreq/mvebu-cpufreq.c
-> +++ b/drivers/cpufreq/mvebu-cpufreq.c
-> @@ -56,7 +56,7 @@ static int __init armada_xp_pmsu_cpufreq_init(void)
->  	 * it), and registers the clock notifier that will take care
->  	 * of doing the PMSU part of a frequency transition.
->  	 */
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		struct device *cpu_dev;
->  		struct clk *clk;
->  		int ret;
-> diff --git a/drivers/cpufreq/qcom-cpufreq-hw.c b/drivers/cpufreq/qcom-cpufreq-hw.c
-> index 4b3b3dbc7d38..8422704a3b10 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-hw.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-hw.c
-> @@ -306,7 +306,7 @@ static void qcom_get_related_cpus(int index, struct cpumask *m)
->  	struct of_phandle_args args;
->  	int cpu, ret;
->  
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		cpu_np = of_cpu_device_node_get(cpu);
->  		if (!cpu_np)
->  			continue;
-> diff --git a/drivers/cpufreq/qcom-cpufreq-nvmem.c b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> index 3a8ed723a23e..54f8117103c8 100644
-> --- a/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/qcom-cpufreq-nvmem.c
-> @@ -489,7 +489,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
->  		nvmem_cell_put(speedbin_nvmem);
->  	}
->  
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		struct dev_pm_opp_config config = {
->  			.supported_hw = NULL,
->  		};
-> @@ -543,7 +543,7 @@ static int qcom_cpufreq_probe(struct platform_device *pdev)
->  	dev_err(cpu_dev, "Failed to register platform device\n");
->  
->  free_opp:
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		dev_pm_domain_detach_list(drv->cpus[cpu].pd_list);
->  		dev_pm_opp_clear_config(drv->cpus[cpu].opp_token);
->  	}
-> @@ -557,7 +557,7 @@ static void qcom_cpufreq_remove(struct platform_device *pdev)
->  
->  	platform_device_unregister(cpufreq_dt_pdev);
->  
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		dev_pm_domain_detach_list(drv->cpus[cpu].pd_list);
->  		dev_pm_opp_clear_config(drv->cpus[cpu].opp_token);
->  	}
-> @@ -568,7 +568,7 @@ static int qcom_cpufreq_suspend(struct device *dev)
->  	struct qcom_cpufreq_drv *drv = dev_get_drvdata(dev);
->  	unsigned int cpu;
->  
-> -	for_each_possible_cpu(cpu)
-> +	for_each_present_cpu(cpu)
->  		qcom_cpufreq_suspend_pd_devs(drv, cpu);
->  
->  	return 0;
-> diff --git a/drivers/cpufreq/scmi-cpufreq.c b/drivers/cpufreq/scmi-cpufreq.c
-> index ff2897789797..c310aeebc8f3 100644
-> --- a/drivers/cpufreq/scmi-cpufreq.c
-> +++ b/drivers/cpufreq/scmi-cpufreq.c
-> @@ -104,7 +104,7 @@ scmi_get_sharing_cpus(struct device *cpu_dev, int domain,
->  	int cpu, tdomain;
->  	struct device *tcpu_dev;
->  
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		if (cpu == cpu_dev->id)
->  			continue;
->  
-> diff --git a/drivers/cpufreq/scpi-cpufreq.c b/drivers/cpufreq/scpi-cpufreq.c
-> index 048dc43a9997..17cda84f00df 100644
-> --- a/drivers/cpufreq/scpi-cpufreq.c
-> +++ b/drivers/cpufreq/scpi-cpufreq.c
-> @@ -65,7 +65,7 @@ scpi_get_sharing_cpus(struct device *cpu_dev, struct cpumask *cpumask)
->  	if (domain < 0)
->  		return domain;
->  
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		if (cpu == cpu_dev->id)
->  			continue;
->  
-> diff --git a/drivers/cpufreq/sun50i-cpufreq-nvmem.c b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> index 17d6a149f580..47d6840b3489 100644
-> --- a/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> +++ b/drivers/cpufreq/sun50i-cpufreq-nvmem.c
-> @@ -262,7 +262,7 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->  	snprintf(name, sizeof(name), "speed%d", speed);
->  	config.prop_name = name;
->  
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		struct device *cpu_dev = get_cpu_device(cpu);
->  
->  		if (!cpu_dev) {
-> @@ -288,7 +288,7 @@ static int sun50i_cpufreq_nvmem_probe(struct platform_device *pdev)
->  	pr_err("Failed to register platform device\n");
->  
->  free_opp:
-> -	for_each_possible_cpu(cpu)
-> +	for_each_present_cpu(cpu)
->  		dev_pm_opp_clear_config(opp_tokens[cpu]);
->  	kfree(opp_tokens);
->  
-> @@ -302,7 +302,7 @@ static void sun50i_cpufreq_nvmem_remove(struct platform_device *pdev)
->  
->  	platform_device_unregister(cpufreq_dt_pdev);
->  
-> -	for_each_possible_cpu(cpu)
-> +	for_each_present_cpu(cpu)
->  		dev_pm_opp_clear_config(opp_tokens[cpu]);
->  
->  	kfree(opp_tokens);
-> diff --git a/drivers/cpufreq/virtual-cpufreq.c b/drivers/cpufreq/virtual-cpufreq.c
-> index 45becb92aa4a..7dd1b0c263c7 100644
-> --- a/drivers/cpufreq/virtual-cpufreq.c
-> +++ b/drivers/cpufreq/virtual-cpufreq.c
-> @@ -138,7 +138,7 @@ static int virt_cpufreq_get_sharing_cpus(struct cpufreq_policy *policy)
->  	cur_perf_domain = readl_relaxed(base + policy->cpu *
->  					PER_CPU_OFFSET + REG_PERF_DOMAIN_OFFSET);
->  
-> -	for_each_possible_cpu(cpu) {
-> +	for_each_present_cpu(cpu) {
->  		cpu_dev = get_cpu_device(cpu);
->  		if (!cpu_dev)
->  			continue;
-> -- 
-> 2.34.1
-> 
-
--- 
-Regards,
-Sudeep
+>
+> >
+> >>> +    description:
+> >>> +      Phandle to a USB connector according to usb-connector.yaml. Th=
+e connector
+> >>> +      should be a child of the extcon device.
+> >>
+> >> 'extcon' is a Linuxism. Is there an actual requirement here that's not
+> >> *current* Linux requirements (which could change)? I assume the
+> >> requirement is to have vbus or some supply?
+> >>
+> >
+> > Pardon me, this schema is part of Linux kernel, no? I have no clue why
+>
+> Bindings are used by other projects as well and they live here because
+> of possibility of review by skilled people and due to size of the
+> community. It does not make them, in general, Linux specific.
+>
+> > you collectively decided to just ignore external connector detection
+> > devices. Ignorance does not affect the fact that such devices exist.
+>
+> We didn't. They are described.
+>
+> >
+> > And no, it does not need vbus not supply, it needs EXTCON
+>
+> There is no such thing as "extcon" from hardware point of view. Point us
+> to any standard or even wikipedia article describing it.
+>
+>
+> Best regards,
+> Krzysztof
 
