@@ -1,120 +1,114 @@
-Return-Path: <linux-pm+bounces-23926-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23927-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [IPv6:2604:1380:40f1:3f00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 20568A5E173
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 17:08:47 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
+	by mail.lfdr.de (Postfix) with ESMTPS id 2DC45A5E20A
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 17:51:48 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sy.mirrors.kernel.org (Postfix) with ESMTPS id 3DF0D7AA6A4
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 16:07:31 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 714DC173963
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 16:51:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4D0371C5D4B;
-	Wed, 12 Mar 2025 16:08:25 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="rsCGXmXL"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id A1D3B24CEFE;
+	Wed, 12 Mar 2025 16:51:36 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f50.google.com (mail-wm1-f50.google.com [209.85.128.50])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
+Received: from metis.whiteo.stw.pengutronix.de (metis.whiteo.stw.pengutronix.de [185.203.201.7])
+	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 71C191B87F3
-	for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 16:08:23 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.50
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 90BA11D5CCC
+	for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 16:51:34 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=185.203.201.7
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741795705; cv=none; b=NzVlwL9eNmDH7HJyoAMCux0GCffQoVnwAFRLec3Tx/XlOnYglAgWQvtVWJWhAISV4vKoN2b911YqDa88GAIUoupuyPIs1HIY3m/tkTYwnZMwi8qroFWfxcKSGqkb5jN+fheoKbTc8EF1pdijm0mH5DcZr1e9RqpS8JSGNjw/ezY=
+	t=1741798296; cv=none; b=ZapmskP/gg4bhSgSCV01kyGZYCPqMD8h5P7h3MA0Dn1++kpVK1YD1DMUEZPgeXr5eN0sqqSsla2T2PUFpku/To4SkHB7Qtth2JcBW63OfDuOrGPVd+0yQlXNchwN0sweSb6h2M1IYps+cJUXtbjqsPs2NZSP+KVjcqSC3Ok3n+s=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741795705; c=relaxed/simple;
-	bh=/l81mkc4n15BgZGzuE4Us34XgHcjyXIkl5hqU1q+Oo8=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=ahOL9Bd4MPBcJSpT9qiNcJC87Ae/OI5qVdgZLUQhwT3GcCjBtfRu1amr4YnSuYcDEF88KC5xxUOY4N6E44u5bFBsZQaKrvQmYqbNgqvcvzTlGXOoiZ0bIYnVRiqNkF4BfAwlhj1Zt5I6rICw8l0+nIXIrDpx+TTBI5tsfk9MzvQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=rsCGXmXL; arc=none smtp.client-ip=209.85.128.50
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f50.google.com with SMTP id 5b1f17b1804b1-43cf0d787eeso36567805e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 09:08:23 -0700 (PDT)
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741795702; x=1742400502; darn=vger.kernel.org;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=5kRABI63t00ZhwHPnXAq2zHuyopqgID5ECRPytCo344=;
-        b=rsCGXmXLzu/bprVNKhb4LZlry8lLTQOjhsTSTEc24P8xM4uyfaTuyO+5+HNnDofwKp
-         PLejQLSQJ/jLXh82TzAm5XNxYBJdGuDrAhwd0408pEiMavOzistsb5j45Ug7UYWATBpT
-         sKhMII+Akt43jRry/Y3LyCFPmNudCrJUpVreLenyPb4n/finvgvjXmCXrCudXWen8Vyx
-         0dLpVIq2yQXxFEQZdQvORlD5VHpLcisJ03vJxYLNuKrsgO4nRnojLpPCiHKhG6w1N4pf
-         fBfDYyJf1rV0tuEM4D4fiU5XFFGlYxSDYGkid448QCYD5FVlRSY3pF2GBsjFiAmXh7hu
-         IKlw==
-X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741795702; x=1742400502;
-        h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=5kRABI63t00ZhwHPnXAq2zHuyopqgID5ECRPytCo344=;
-        b=bsUildpqmxO0RDHIlkJIzD6ZvA0HPLqlv9wLfBa2/dwpIsdUdIegNa/Lwqb4n8EB4A
-         iiMBHxbfiqvLSbTRI8ZLt4kGEzGpzbbEq7hghSPaL3cYtzRWTMdfTGM/t5//+5L3dGdb
-         Hs+azRC1d9eDTFWimWUC6XbPJNqeH8jLrKRaFmfTRna33lRwXrx4ejiNGljdP9XbCm8t
-         DCFXg7/GGpN1NCl6aFiZUWi8+7v43bjDD7jxzG9K7XaJYPia0Dp/fBbkrt+618LksKfF
-         ZPW+b1TAplzT6eNa2n2L/PUbZ86I/1ZPnvj3UuOUo5Jf+txzWiyS9KC2L88w8RITBCNI
-         2OIA==
-X-Forwarded-Encrypted: i=1; AJvYcCUjKE7WE2yVXTjgAxrfGKDIDgfLdF320PsFY7V6m6EXnEnFqpjNLa/vBSF/Fmvwv5bfrLzVxv39Bw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YzmvtphCn9dpNZ451D5gCyiuJHVD8WhKcd00elteV5I2SarlM1G
-	gw/Gbz8kMPk3doe9QkbL0Yc5+71cutX9PB0UvYWO9GZTxYDx42O9NtV4OdqY4ow=
-X-Gm-Gg: ASbGncsmtnl86wFXnXZmWUzbXYExKDrKbQZ6nhd35GrH46rG1AM31OdPv/NpVQwqccy
-	oMRdEFRhOkcjf2tTufQ1weO8G8H04AboR6C/Upd0Beogz98iSSEnFjtSksegzlgf0GajJfg69ev
-	43b4O646ddrhUycQqHUYTKJRb8YKmATZq+E43hMFGfitpP6ohjrk9pExucqNRZr6twtlzCW9Ol8
-	UyCQ1m7y2zmKB3MBVS5ic0X0i2Nr7jLbPtwtXxjQUA6GCC4DqKcXJfbXXF2WKKDNfUDlbRcvoRw
-	cL5MA3V5/o4ep/3ZyFzDH4bFm/wfWqHjahYBMuNRyMhwxLcS042QkeqBwb4GNKT090UEg8jiwWu
-	2hWrDaaGz
-X-Google-Smtp-Source: AGHT+IF+4mY3bB11AO8af31IGQWD2xZOhSkCDSiLj78VIR/ojQV2gPQFAWRE0UoElYony/PXJed0CQ==
-X-Received: by 2002:a05:600c:1c9d:b0:439:643a:c8d5 with SMTP id 5b1f17b1804b1-43c549dcc0amr199565905e9.0.1741795700168;
-        Wed, 12 Mar 2025 09:08:20 -0700 (PDT)
-Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43d0a731265sm25382605e9.4.2025.03.12.09.08.19
-        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Mar 2025 09:08:19 -0700 (PDT)
-Message-ID: <2372dced-c786-4699-9317-2ebcbda1b0cd@linaro.org>
-Date: Wed, 12 Mar 2025 17:08:19 +0100
+	s=arc-20240116; t=1741798296; c=relaxed/simple;
+	bh=ir1E6OfRFFfst/93jxijvA00MYGvJ0qUp7cTZfOcZ3M=;
+	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
+	 Content-Type:Content-Disposition:In-Reply-To; b=V9vGkN8/E2VN3tvHxXQWsDvaIx7dUM8XU2C+z/YoYqGmxf1dtDSHZD/kdX57/MsHV3alFGWbABLK8c1jzh1QIyL+P1G29doTI/eNEp9I1l0fD3veZa7/j0VE3mzEEJUnJk2kzVvt2tMKDMNQEuzJOT9AmWP9gtXLzUHryfr/qVI=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de; spf=pass smtp.mailfrom=pengutronix.de; arc=none smtp.client-ip=185.203.201.7
+Authentication-Results: smtp.subspace.kernel.org; dmarc=none (p=none dis=none) header.from=pengutronix.de
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=pengutronix.de
+Received: from drehscheibe.grey.stw.pengutronix.de ([2a0a:edc0:0:c01:1d::a2])
+	by metis.whiteo.stw.pengutronix.de with esmtps (TLS1.3:ECDHE_RSA_AES_256_GCM_SHA384:256)
+	(Exim 4.92)
+	(envelope-from <ore@pengutronix.de>)
+	id 1tsPIb-00010B-Bz; Wed, 12 Mar 2025 17:51:17 +0100
+Received: from pty.whiteo.stw.pengutronix.de ([2a0a:edc0:2:b01:1d::c5])
+	by drehscheibe.grey.stw.pengutronix.de with esmtps  (TLS1.3) tls TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384
+	(Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1tsPIa-005OKC-0P;
+	Wed, 12 Mar 2025 17:51:16 +0100
+Received: from ore by pty.whiteo.stw.pengutronix.de with local (Exim 4.96)
+	(envelope-from <ore@pengutronix.de>)
+	id 1tsPIa-009a8e-00;
+	Wed, 12 Mar 2025 17:51:16 +0100
+Date: Wed, 12 Mar 2025 17:51:15 +0100
+From: Oleksij Rempel <o.rempel@pengutronix.de>
+To: Daniel Lezcano <daniel.lezcano@linaro.org>
+Cc: Sebastian Reichel <sre@kernel.org>,
+	Srinivas Kandagatla <srinivas.kandagatla@linaro.org>,
+	kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+	Liam Girdwood <lgirdwood@gmail.com>,
+	Mark Brown <broonie@kernel.org>,
+	"Rafael J. Wysocki" <rafael@kernel.org>,
+	Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
+	linux-pm@vger.kernel.org,
+	=?utf-8?B?U8O4cmVu?= Andersen <san@skov.dk>
+Subject: Re: [PATCH v4 7/7] thermal: core: Record PSCR before
+ hw_protection_shutdown()
+Message-ID: <Z9G7g5fr8DkJtcLI@pengutronix.de>
+References: <20250306093900.2199442-1-o.rempel@pengutronix.de>
+ <20250306093900.2199442-8-o.rempel@pengutronix.de>
+ <726c6ffc-a8d4-4328-a849-2d59f3a0a1c9@linaro.org>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH] thermal/drivers/qcom-spmi-temp-alarm: drop unused driver
- data
-To: Johan Hovold <johan+linaro@kernel.org>, Amit Kucheria <amitk@kernel.org>,
- Thara Gopinath <thara.gopinath@gmail.com>,
- "Rafael J . Wysocki" <rafael@kernel.org>
-Cc: Zhang Rui <rui.zhang@intel.com>, Lukasz Luba <lukasz.luba@arm.com>,
- linux-arm-msm@vger.kernel.org, linux-pm@vger.kernel.org,
- linux-kernel@vger.kernel.org
-References: <20250228082936.5694-1-johan+linaro@kernel.org>
-Content-Language: en-US
-From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250228082936.5694-1-johan+linaro@kernel.org>
-Content-Type: text/plain; charset=UTF-8; format=flowed
-Content-Transfer-Encoding: 8bit
+Content-Type: text/plain; charset=utf-8
+Content-Disposition: inline
+In-Reply-To: <726c6ffc-a8d4-4328-a849-2d59f3a0a1c9@linaro.org>
+X-Sent-From: Pengutronix Hildesheim
+X-URL: http://www.pengutronix.de/
+X-Accept-Language: de,en
+X-Accept-Content-Type: text/plain
+X-SA-Exim-Connect-IP: 2a0a:edc0:0:c01:1d::a2
+X-SA-Exim-Mail-From: ore@pengutronix.de
+X-SA-Exim-Scanned: No (on metis.whiteo.stw.pengutronix.de); SAEximRunCond expanded to false
+X-PTX-Original-Recipient: linux-pm@vger.kernel.org
 
-On 28/02/2025 09:29, Johan Hovold wrote:
-> The platform device driver data has not been used since commit
-> 7a4ca51b7040 ("thermal/drivers/qcom-spmi: Use devm_iio_channel_get") so
-> drop the unnecessary assignment.
+Hi Daniel,
+
+On Wed, Mar 12, 2025 at 04:35:51PM +0100, Daniel Lezcano wrote:
+> > @@ -380,6 +381,8 @@ static void thermal_zone_device_halt(struct thermal_zone_device *tz, bool shutdo
+> >   	dev_emerg(&tz->device, "%s: critical temperature reached\n", tz->type);
+> > +	set_power_state_change_reason(PSCR_OVERTEMPERATURE);
+> > +
+> >   	if (shutdown)
+> >   		hw_protection_shutdown(msg, poweroff_delay_ms);
+> >   	else
 > 
-> Signed-off-by: Johan Hovold <johan+linaro@kernel.org>
-> ---
-> 
-> I noticed this when doing some rework for pm8008 last year that I have
-> yet to finish.
+> In the future could you add me as recipient to the series instead of this
+> one ? so I can get more context.
 
-Applied, thanks
+ack.
 
+> Given there are no so much hw_protection_shutdown() users in the kernel, it
+> could be more interesting to change the function to receive a enum
+> pscr_reason and then in the hw_protection_shutdown() call
+> pscrr_reason_to_str().
+ 
+Do you mean, make it work with CONFIG_PSCRR=n?
+
+Beside, the latest version is v5:
+https://lore.kernel.org/all/20250310103732.423542-1-o.rempel@pengutronix.de/
 
 -- 
-<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
-
-Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
-<http://twitter.com/#!/linaroorg> Twitter |
-<http://www.linaro.org/linaro-blog/> Blog
+Pengutronix e.K.                           |                             |
+Steuerwalder Str. 21                       | http://www.pengutronix.de/  |
+31137 Hildesheim, Germany                  | Phone: +49-5121-206917-0    |
+Amtsgericht Hildesheim, HRA 2686           | Fax:   +49-5121-206917-5555 |
 
