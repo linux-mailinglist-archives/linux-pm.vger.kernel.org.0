@@ -1,177 +1,186 @@
-Return-Path: <linux-pm+bounces-23919-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23920-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F1230A5DC98
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 13:28:28 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id 197C3A5DE3D
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 14:40:51 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 03CA63B84CB
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 12:28:15 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 3CFB417073B
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 13:40:49 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B4FDF242917;
-	Wed, 12 Mar 2025 12:28:19 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 4022324503F;
+	Wed, 12 Mar 2025 13:40:44 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="LFTWDbPU"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="fQeLwxt4"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f44.google.com (mail-ej1-f44.google.com [209.85.218.44])
+Received: from mail-yw1-f177.google.com (mail-yw1-f177.google.com [209.85.128.177])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 018D02417C8;
-	Wed, 12 Mar 2025 12:28:17 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.44
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 5B22A23F422
+	for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 13:40:42 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.177
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741782499; cv=none; b=ehHUof4gUHHtkg7PFw3v0v1E6ThV1Wq9exWY+wyhyFuk0lBBJLA8RQDxNQ/33bJsWyd0SF8LBJVG6NoXswfmsg846hO2WNFj/CfYjS98rXw8L8lkDTVNPDzm/le4HhNhk1XEiDdXfPKwBjY2lSxA4WUuKEfBOZJ2/dOb8NbM9No=
+	t=1741786844; cv=none; b=ivwK9+sVXOJllGQuyuGZTKyAKlX3jMzhxB5CPqd7q2F+s2160f7oE918mpa8mcnszri2Uhnu+Ck+chl8V2ui9Eh3l381t5gb72fSTMo9r/iG3icnUmVCdsIOGj1cmHnJXwl6vbYoLhTyW3ptrOFFIE7FG1BcN/6aiO6QXUAwYbo=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741782499; c=relaxed/simple;
-	bh=JONbt992A2++n0cV4SiUFBSFKKZy3qKjS2WQIdDkxrs=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=a880GG4uvaTYH62F+n5WQy+xD5omnjYX9SbaiheMg22zgsTfDOmms0Ba9vRylsba/wa2Fkg2VaUxm7pVtRwv8q05DJ5Fl8Ky3a2wFAD65wC3IZakhy8a+E0W+bMU3CJzTywMUu78JdB7+n2kmQ1eKUd/wPpmQYJV00kQYTL/Kjc=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=LFTWDbPU; arc=none smtp.client-ip=209.85.218.44
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f44.google.com with SMTP id a640c23a62f3a-ac298c8fa50so519677366b.1;
-        Wed, 12 Mar 2025 05:28:17 -0700 (PDT)
+	s=arc-20240116; t=1741786844; c=relaxed/simple;
+	bh=0FOWGVHaDhMSxLZhQBp1F9w7MDPsHSbh2U8xICqQlwU=;
+	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
+	 To:Cc:Content-Type; b=scacpym7ksSADDtud64aWeKJBUtMfbnKTS3Aa1Wa8C9m9RB0UHbPwpiZEF/OEbbEjtKXNvz770e0q17WYhsLCdyxSNe64uam8M/SySlz2Tb471lfkH5BbjPE9fIRN4pjY/MXQLn8vChFVNbtDcxQoyRzsyzK0DUimhg4lZ3wv/I=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=fQeLwxt4; arc=none smtp.client-ip=209.85.128.177
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-yw1-f177.google.com with SMTP id 00721157ae682-6fece18b3c8so39713307b3.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 06:40:42 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741782496; x=1742387296; darn=vger.kernel.org;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:from:to:cc:subject:date:message-id:reply-to;
-        bh=udcJZmwY9vygJ+nqWIO5M9M9ZBnqe+zAARQm+nnDFyU=;
-        b=LFTWDbPUpNV64aR/TK/Wpp8krMqZyoE+1nVQDUSg22k9IzM2cZwNRIMo3kZUe+ImRj
-         N6ZfpzZWOU0ZGsMCm/OjTRBYBQ/ri1t/ZPAlWlk8kTOdsPO7IOsw0gE9Ls7HYzVNtJPZ
-         hHftrwTU2J9LqwCXYhagFZpsXfFNIz448qdch2Ui20gxXUB1AT65qq8t2OkG+XaimsWE
-         xS1ggLV8LkShe5uysLdGSaS8Bg6yZ0V8RI/Y6nGi+4ojqiDVQ7wxmpIv4QpUVgsfFE2s
-         paAUtI/OFgsNdbkVVzv/9oKMpARBPM7bZmHqEAAqj5upd5zR6KNgbBfKVyDOzZE/XTGk
-         bIcg==
+        d=linaro.org; s=google; t=1741786841; x=1742391641; darn=vger.kernel.org;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:from:to:cc:subject:date:message-id:reply-to;
+        bh=hhrcmi0xUiqdLtVh1GRjRH+/GSXbagDIYdSQNFjxy8U=;
+        b=fQeLwxt4RqfG1IlXdtIoPtuWEBpisLtm5hnyvnUcrXThbNA2I/jQKEFVcFaq4USUYK
+         PRWpDtV4wuPJspJQnFW1Vna/Tz4aMSAiKsuqKursS+9tGKjBqw2732eQ9b2fms4qCCJM
+         F8OPVozdWm5SO8Tpnh8zq/Knw+6O7It/payS+jk4W9TNyZo+AwTQaXNYjuarsyHgVtaO
+         rqffr4q3hKrbdeOlvlE9c/z0FdZFsNNDhulLUjJ7M1grlVymfnDFq0Zp71pP5LD5dqHD
+         s0ML2ZwGkmTt6Nd2mSrpVBjxUWSgcz6gQAJjfAryxcrfWvhQWbZuIcQ7VtPIRgtU2ZiZ
+         IDZw==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741782496; x=1742387296;
-        h=in-reply-to:content-disposition:mime-version:references:message-id
-         :subject:cc:to:from:date:x-gm-message-state:from:to:cc:subject:date
-         :message-id:reply-to;
-        bh=udcJZmwY9vygJ+nqWIO5M9M9ZBnqe+zAARQm+nnDFyU=;
-        b=IkTNVqMczmX2lkjP/6XIdgvdtNhWKUvmavGFiMNxoXc8G2OQtV4EeO58hKAZz+T26P
-         /Sn37y0zjvhiavYvNicnkJK2gwamDJXufscq8qwu4wMLYMZ/hU/esignm4UXTeIkfUaU
-         BIbz2Sco9xXvUlq/NyYw2gQ4ldfmRu+l0RGn3zsU5h+GxzzC5WeT+i/fhxdUt51mNoaj
-         ji/ODMpn9PVIS/PHl58gdX98R6yJSZD0GuosUb570sv/s0MPTmiaO1AdYoIWO+vy3kFD
-         dExe7ffMjNqPXwVFxJIPLOdkVG6lptnIkM/ZKudwJwC5tkTgiVoQTBbqxkAi2qFYrzIj
-         tu0A==
-X-Forwarded-Encrypted: i=1; AJvYcCUXF8EoypIgZDZkDIsMjsOWO6QEoZak5HZl/ChwUQ4jLbUPDL58Lx6RXyBB6MY8mWMZTWwQ2MMkv41IFLQ=@vger.kernel.org, AJvYcCVmxcLpuxmNc5aKr4D7T4JvFfpPiwaN7MDHkZZCwvFlBDTmayN19cyj8CM15fmnqUC/8j5W59kl3g==@vger.kernel.org
-X-Gm-Message-State: AOJu0Yyge1HLbjQGUKbuCnI8K855/oWlNBC6sJGVrpczc0gZZlLldSIa
-	27C9sGj/xkmUOVeCoPK1xM9gdjcSWNjDfrcpW+jBBH9mbB/ntseBaxrk06oc
-X-Gm-Gg: ASbGncv/w9fKzjfhC+mukRSJj3X6XL9lsyXDTLmiZYR1yuAj86g8UmELmJwYyaVc9ps
-	F0bcHN+gXtOJDK/8+mjl0N5O+xi+iUuCtbGRGrL3z0TP30kh8Bvg2MoXiEMjgea+2FCED++mSiG
-	/9N7tlwd0bpethA0WtEQktGQJB9sXp5eMwsSiL1ic5G3vkMfZuRr7lB83hvRDuiAlSVqvHlhs7G
-	VcgkskkOOp34Lnp78Fm2oFAWqfJkPzo5yAzP636WLJ82yFBrg5OsLPwt4KCWXBURRSwkkxVuFYN
-	oAvdn6ft4Ci8pl5PS3Jczt3g6YorgpxYbTuzeOrKIBk7IvY+ykgReGE=
-X-Google-Smtp-Source: AGHT+IFIg2lP7GRrUC4dOGs4mpOZWh5vYC4Zr3r96uhXiY5AlyYNsIBslsgU3YLwi+NCHNXhcXFbZg==
-X-Received: by 2002:a17:906:ef0a:b0:abf:6ebf:5500 with SMTP id a640c23a62f3a-ac25260afefmr519645966b.16.1741782495915;
-        Wed, 12 Mar 2025 05:28:15 -0700 (PDT)
-Received: from tp440p.steeds.sam ([69.63.64.50])
-        by smtp.gmail.com with ESMTPSA id a640c23a62f3a-ac254346ce8sm931347666b.177.2025.03.12.05.28.13
-        (version=TLS1_3 cipher=TLS_AES_256_GCM_SHA384 bits=256/256);
-        Wed, 12 Mar 2025 05:28:15 -0700 (PDT)
-Date: Wed, 12 Mar 2025 14:28:10 +0200
-From: Sicelo <absicsz@gmail.com>
-To: "H. Nikolaus Schaller" <hns@goldelico.com>
-Cc: Sebastian Reichel <sre@kernel.org>, pali@kernel.org,
-	linux-pm@vger.kernel.org, maemo-leste@lists.dyne.org,
-	phone-devel@vger.kernel.org,
-	Discussions about the Letux Kernel <letux-kernel@openphoenux.org>,
-	akemnade@kernel.org
-Subject: Re: [PATCH] power: supply: bq27xxx: do not report bogus zero values
-Message-ID: <Z9F92vGJbyUSFgxa@tp440p.steeds.sam>
-References: <20250207220605.106768-1-absicsz@gmail.com>
- <CB5B8FE7-D619-4D30-BD2D-58B6CEF83D46@goldelico.com>
- <511351B0-A78B-4517-B183-D39A4F807CB6@goldelico.com>
- <Z8FtlaYkbVG1xrsc@tp440p.steeds.sam>
- <C0E0C7EA-7C42-4DE3-9FCA-DAAA7B65B583@goldelico.com>
- <Z8GHuu8RXkcY8utL@tp440p.steeds.sam>
- <4D7D3E00-59C6-42F6-AE96-F04970D60E8D@goldelico.com>
+        d=1e100.net; s=20230601; t=1741786841; x=1742391641;
+        h=cc:to:subject:message-id:date:from:in-reply-to:references
+         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
+         :reply-to;
+        bh=hhrcmi0xUiqdLtVh1GRjRH+/GSXbagDIYdSQNFjxy8U=;
+        b=QtvPHOQBuBNA2W6A3K/9Jc8abC8CP7dtwoVEwwYDCNvtltXhIadWY6y9C7bg2O+L+I
+         xJrBbRwAX56/jngktuwH3ipnz+/JFNWzv7ZniXPkGr75qTYz4gXIobDqJae/cIHo8u0Y
+         y1uf9WNq+PhwUEv2zkTHXe/ObKDNsd8EnBP2tBpqGRRnEnqDM3BKSW4j/wHmmJ0JQkgp
+         ziYH2WRbLrBu5cAqx9qLJyXfbfckzahNrs16AlhNNa9XP1VSaZf2C6vvIuQ5oKUIPuwP
+         piNuz94cLheh6OKUoE4QjDOooK89cJb6T/WdN6JKjNmV3YyMHCMOAe8b1ANTsPpFyPW8
+         2uiQ==
+X-Forwarded-Encrypted: i=1; AJvYcCX2bBNHQBv64KtPsHUWWxGquIn39w/EYsmN/mAyfydVGeqJmjbWDqBbhIOE48ewFPrUZ8lNtJ1DFQ==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjliPUl4IKsGnpY9Oiru2iKs/m6asCgRI2FybggLyFxJbsMs0Y
+	IEgx3N/yMC2w7WalmtYmF3JDxiHRN/uInuOQzh/3FRI1F2CwTwHglhJ+w/6f2LuZjMSpoWTOzAR
+	RtpCy8Ya8jx13jNfX04+JMKtR/fAMCAFMGPx3pA==
+X-Gm-Gg: ASbGncsmIqXPq9KxWR7SVqOvFflnheCD4Qsfc4IqOK5Yu87tn+yP1QryMcSydtXDv+F
+	JCOr+D5jd4XQRJA47V4G0j/fQMh2Hqj64L1oJIscODoi+3t3UnqEyrE9wBSJkJ1kEDcTdTcVO2d
+	Hlrygpt4jXJLavu1vJkAVFAyIbOv8=
+X-Google-Smtp-Source: AGHT+IFJ9p7pfUX7m1bGpDLYs3TL7z5/+KD/9z9ZtEP9BAG4rG+GTMpPFeCO8lp57V6p2dDYRRGpZH8e4zc4/N9bcM8=
+X-Received: by 2002:a05:690c:c01:b0:6fe:abff:cb17 with SMTP id
+ 00721157ae682-6febf383ea4mr321056757b3.26.1741786841208; Wed, 12 Mar 2025
+ 06:40:41 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
-In-Reply-To: <4D7D3E00-59C6-42F6-AE96-F04970D60E8D@goldelico.com>
+References: <CGME20250311172030eucas1p12dda42760f751174e774b8d1a3d3f4cd@eucas1p1.samsung.com>
+ <20250311171900.1549916-1-m.wilczynski@samsung.com>
+In-Reply-To: <20250311171900.1549916-1-m.wilczynski@samsung.com>
+From: Ulf Hansson <ulf.hansson@linaro.org>
+Date: Wed, 12 Mar 2025 14:40:05 +0100
+X-Gm-Features: AQ5f1JoLxbwoXOsAUDISdJHHCDW9bcjCEK99ID6-ayNeElpEQf9KOoIgkdPs6Yo
+Message-ID: <CAPDyKFqeaq5xVNA=0CpMWSt_78qXJsY6+mpE1CSmLrVMQazAjg@mail.gmail.com>
+Subject: Re: [PATCH v8 0/5] TH1520 SoC: Add AON firmware & power-domain support
+To: Michal Wilczynski <m.wilczynski@samsung.com>, drew@pdp7.com, guoren@kernel.org, 
+	wefu@redhat.com
+Cc: robh@kernel.org, krzk+dt@kernel.org, conor+dt@kernel.org, 
+	paul.walmsley@sifive.com, palmer@dabbelt.com, aou@eecs.berkeley.edu, 
+	alex@ghiti.fr, jszhang@kernel.org, m.szyprowski@samsung.com, 
+	linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-riscv@lists.infradead.org
+Content-Type: text/plain; charset="UTF-8"
 
-Hi Nikolaus
+On Tue, 11 Mar 2025 at 18:20, Michal Wilczynski
+<m.wilczynski@samsung.com> wrote:
+>
+> This patch series introduces and documents power management (PM) support and
+> the AON firmware driver for the T-Head TH1520 SoC, as used on the LicheePi 4A
+> board. While part of a larger effort to enable the Imagination BXM-4-64 GPU
+> upstream, these patches can merge independently.
+>
+> Bigger series cover letter:
+> https://lore.kernel.org/all/20250219140239.1378758-1-m.wilczynski@samsung.com/
+>
+> This series is versioned to maintain continuity with the bigger patchset it is
+> a subseries of. Please find below a changelog for the AON & power-domain:
 
-On Fri, Feb 28, 2025 at 11:01:35AM +0100, H. Nikolaus Schaller wrote:
-> > 
-> > Thanks for the review. I will do more thorough testing over the weekend
-> > and send the patch.
+I can pick up patch1 -> patch4 via my pmdomain tree, assuming I can
+get an ack from some of the thead-SoC maintainers.
 
-I have made a follow-up patch [0], which produces the following values
-on the N900:
+Patch5 is probably better to be routed through the SoC maintainers
+tree, but let me know if you prefer me to take this one too.
 
-bq27200 in 'normal' state:
-
-   DEVTYPE=power_supply
-   OF_NAME=bq27200
-   OF_FULLNAME=/ocp@68000000/i2c@48072000/bq27200@55
-   OF_COMPATIBLE_0=ti,bq27200
-   OF_COMPATIBLE_N=1
-   POWER_SUPPLY_NAME=bq27200-0
-   POWER_SUPPLY_TYPE=Battery
-   POWER_SUPPLY_STATUS=Discharging
-   POWER_SUPPLY_HEALTH=Calibration required
-   POWER_SUPPLY_PRESENT=1
-   POWER_SUPPLY_TECHNOLOGY=Li-ion
-   POWER_SUPPLY_CYCLE_COUNT=0
-   POWER_SUPPLY_VOLTAGE_MAX_DESIGN=4064000
-   POWER_SUPPLY_VOLTAGE_MIN_DESIGN=3000000
-   POWER_SUPPLY_VOLTAGE_NOW=3536000
-   POWER_SUPPLY_CURRENT_NOW=-432327
-   POWER_SUPPLY_POWER_AVG=1146100
-   POWER_SUPPLY_CHARGE_FULL_DESIGN=2056320
-   POWER_SUPPLY_CHARGE_FULL=2050560
-   POWER_SUPPLY_CHARGE_NOW=366680
-   POWER_SUPPLY_ENERGY_NOW=1207420
-   POWER_SUPPLY_CAPACITY=18
-   POWER_SUPPLY_CAPACITY_LEVEL=Normal
-   POWER_SUPPLY_TEMP=316
-   POWER_SUPPLY_TIME_TO_EMPTY_NOW=4140
-   POWER_SUPPLY_TIME_TO_EMPTY_AVG=3780
-   POWER_SUPPLY_TYPE=Battery
-   POWER_SUPPLY_MANUFACTURER=Texas Instruments
-
-bq27200 in 'broken' state:
-
-   DEVTYPE=power_supply
-   OF_NAME=bq27200
-   OF_FULLNAME=/ocp@68000000/i2c@48072000/bq27200@55
-   OF_COMPATIBLE_0=ti,bq27200
-   OF_COMPATIBLE_N=1
-   POWER_SUPPLY_NAME=bq27200-0
-   POWER_SUPPLY_TYPE=Battery
-   POWER_SUPPLY_STATUS=Discharging
-   POWER_SUPPLY_HEALTH=Calibration required
-   POWER_SUPPLY_PRESENT=1
-   POWER_SUPPLY_TECHNOLOGY=Li-ion
-   POWER_SUPPLY_CYCLE_COUNT=0
-   POWER_SUPPLY_VOLTAGE_MAX_DESIGN=4064000
-   POWER_SUPPLY_VOLTAGE_MIN_DESIGN=3000000
-   POWER_SUPPLY_VOLTAGE_NOW=3633000
-   POWER_SUPPLY_CURRENT_NOW=-397341
-   POWER_SUPPLY_POWER_AVG=1432260
-   POWER_SUPPLY_CHARGE_FULL_DESIGN=2056320
-   POWER_SUPPLY_CHARGE_FULL=2050560
-   POWER_SUPPLY_CAPACITY_LEVEL=Normal
-   POWER_SUPPLY_TEMP=299
-   POWER_SUPPLY_TYPE=Battery
-   POWER_SUPPLY_MANUFACTURER=Texas Instruments
+Kind regards
+Uffe
 
 
-Hope this also works fine on your devices.
-
-Thanks and Regards
-Sicelo
-
-
-
-[0] https://lore.kernel.org/linux-pm/20250312121712.146109-1-absicsz@gmail.com/T/#t
+>
+> v8:
+> - add proper cleanup in the th1520_pd_probe()
+> - add "suppress_bind_attrs = true", since there is no need to unbound the driver
+>   during runtime. This simplifies the code by eliminating the remove function
+>
+> v7:
+> - add '#include <linux/slab.h", due to kernel robot issue
+>
+> v6:
+> - split the firmware & power-domain patches into a separate series
+>
+> v5:
+> - changed the AON driver to be a set of library functions rather than a
+>   standalone driver
+>
+> v4:
+> - added workaround to disable AUDIO power domain to prevent firmware crashes
+>
+> v3:
+>  - consolidated device tree representation by merging aon and power-domain nodes
+>    while maintaining separate drivers internally
+>  - power-domain driver is now instantiated from within the aon driver
+>  - fixed optional module dependencies in Kconfig
+>  - added kernel-doc comments for all exported functions
+>  - implemented th1520_aon_remove() to properly clean up mailbox channel
+>    resources
+>
+> v2:
+>  - introduced a new firmware driver to manage power-related operations.
+>  - rewrote the power-domain driver to function alongside the firmware driver.
+>    These nodes in the device tree lack direct address spaces, despite
+>    representing HW blocks. Control is achieved via firmware protocol messages
+>    transmitted through a mailbox to the E902 core.
+>  - added new dt-bindings for power and firmware nodes.
+>  - ran dtbs_check and dt_binding_check to ensure compliance.
+>
+> Michal Wilczynski (5):
+>   dt-bindings: firmware: thead,th1520: Add support for firmware node
+>   firmware: thead: Add AON firmware protocol driver
+>   dt-bindings: power: Add TH1520 SoC power domains
+>   pmdomain: thead: Add power-domain driver for TH1520
+>   riscv: Enable PM_GENERIC_DOMAINS for T-Head SoCs
+>
+>  .../bindings/firmware/thead,th1520-aon.yaml   |  53 ++++
+>  MAINTAINERS                                   |   5 +
+>  arch/riscv/Kconfig.socs                       |   1 +
+>  drivers/firmware/Kconfig                      |   9 +
+>  drivers/firmware/Makefile                     |   1 +
+>  drivers/firmware/thead,th1520-aon.c           | 248 ++++++++++++++++++
+>  drivers/pmdomain/Kconfig                      |   1 +
+>  drivers/pmdomain/Makefile                     |   1 +
+>  drivers/pmdomain/thead/Kconfig                |  12 +
+>  drivers/pmdomain/thead/Makefile               |   2 +
+>  drivers/pmdomain/thead/th1520-pm-domains.c    | 218 +++++++++++++++
+>  .../dt-bindings/power/thead,th1520-power.h    |  19 ++
+>  .../linux/firmware/thead/thead,th1520-aon.h   | 200 ++++++++++++++
+>  13 files changed, 770 insertions(+)
+>  create mode 100644 Documentation/devicetree/bindings/firmware/thead,th1520-aon.yaml
+>  create mode 100644 drivers/firmware/thead,th1520-aon.c
+>  create mode 100644 drivers/pmdomain/thead/Kconfig
+>  create mode 100644 drivers/pmdomain/thead/Makefile
+>  create mode 100644 drivers/pmdomain/thead/th1520-pm-domains.c
+>  create mode 100644 include/dt-bindings/power/thead,th1520-power.h
+>  create mode 100644 include/linux/firmware/thead/thead,th1520-aon.h
+>
+> --
+> 2.34.1
+>
 
