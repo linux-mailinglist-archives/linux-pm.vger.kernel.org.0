@@ -1,107 +1,173 @@
-Return-Path: <linux-pm+bounces-23898-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23899-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id AEC0CA5D19F
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 22:16:01 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id D847EA5D410
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 02:33:01 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F16ED17CBAD
-	for <lists+linux-pm@lfdr.de>; Tue, 11 Mar 2025 21:16:00 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id A6B7C1897F31
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 01:33:09 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 04919227BA2;
-	Tue, 11 Mar 2025 21:15:54 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id F26641172A;
+	Wed, 12 Mar 2025 01:32:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="lNEGake5"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="tnOcUuic"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id AED7D1805A;
-	Tue, 11 Mar 2025 21:15:52 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id CBC772F24
+	for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 01:32:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741727753; cv=none; b=SClkcTzDCdREfKOMlHnz4Mvf6PKkNvcORf128ftOWRIXomrw73aiX2ojkqrf8HSShw2Bdol3j2A5NH0qTMvxE11792YEqL3lSvXCqB4jngYjnrrtknJ2bQWeAnXqWErWsFMYRnUb7fMV9G9FQnkYnTyHPPz5WkUovdYNnQm62Zc=
+	t=1741743176; cv=none; b=DOro4AThKoEk+KvVr/lDfHmWHZRGnmPhijQB8ljJtFbZaMs12C7+kz7E7zrWjdX0yHp+QQ2VsLnOPBR+kOjjD5qnpPEhFv6UXJxTQLa8hSEexgoq+IQw8seyz6rcidBhxwM+fhCzGubZZhfye1vnoK4e+/5szvyisja5lSaV8H8=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741727753; c=relaxed/simple;
-	bh=xjQgGwXvLDBc6wOl7YbU39yWFahSwmm6ndteUlBc5XA=;
-	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=AfSggiHbtbhb9T33w1YEZyzqklx0sb5Jm4MObWT+Dw4Bz4jzhVFN3bpOKELEKt16gzuVJN31Co8MHi7LlJvyLb+/PgKDZNmq0KH3XSG4mOsCcrje9VOfIWT3yxOCp/0Jm4/+dOQvZTMOHD2X2kZK3wikCSTiFqViY0kBmkOmxEQ=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=lNEGake5; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id 373E7C4CEE9;
-	Tue, 11 Mar 2025 21:15:48 +0000 (UTC)
+	s=arc-20240116; t=1741743176; c=relaxed/simple;
+	bh=GGxfgq0uhUwoYS2j2u7GXWkBpqhveX9fPtwLvhqQaxg=;
+	h=From:To:Subject:Date:Message-ID:Content-Type:MIME-Version; b=M++o+4nAfOWYBz0NmVUMKPFYJEMG3+JML7DfK8wYfmw4vHG9H6vWm2rXP/RX+h7WGs9ZlqExvxN5Q/afR8f6j2oQTEMfm02wpSz90b5ioWgoksBZ5AEQVMFCX7NPFsiC5ulqBXFISufTBMFJgpo80CMPZkrX9xbyeVjK6c9BlLA=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=tnOcUuic; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPS id 5365CC4CEED
+	for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 01:32:56 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741727752;
-	bh=xjQgGwXvLDBc6wOl7YbU39yWFahSwmm6ndteUlBc5XA=;
-	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=lNEGake5cXKvDxoQt58Up95lRwHNDm6HXeKyolv9F+TzSB+diFhdgBsSbmQFhNke+
-	 Usj4htxgn2r0w9+b12VH8efkevZmZtqRbrdyUPX9EoY3w4R+qm1dv3tWOA8VFL3R8K
-	 1AJSSnsh/D7e0VbeumqoVyFuWr74ae/PkQU/YETFfCijnx/U9M2FyK2uaXIKfSGmsx
-	 /iltx9Dk2kLavw+3M7pKv2gMuJ7UXhLen9Z32ZFGuLsTBxoJ3DEFB4Q/AcCA2FNh7B
-	 Izce93wkuItQf0qOWitWN7up+RBZDT2qptzbYH4hiIgs8QC2/MqJWq7UJDQMskl5VJ
-	 UujMfVpEpPJYg==
-Date: Tue, 11 Mar 2025 21:15:45 +0000
-From: Mark Brown <broonie@kernel.org>
-To: "Dr. David Alan Gilbert" <linux@treblig.org>
-Cc: arnd@arndb.de, lee@kernel.org, dmitry.torokhov@gmail.com,
-	sre@kernel.org, lgirdwood@gmail.com, alexandre.belloni@bootlin.com,
-	danielt@kernel.org, jingoohan1@gmail.com, deller@gmx.de,
-	linus.walleij@linaro.org, brgl@bgdev.pl, tsbogend@alpha.franken.de,
-	linux-mips@vger.kernel.org, linux-input@vger.kernel.org,
-	linux-pm@vger.kernel.org, linux-rtc@vger.kernel.org,
-	dri-devel@lists.freedesktop.org, linux-fbdev@vger.kernel.org,
-	linux-gpio@vger.kernel.org, linux-kernel@vger.kernel.org
-Subject: Re: (subset) [PATCH 0/9] Remove pcf50633
-Message-ID: <ad81e242-36d0-4f0b-a5ee-c073d7d92f7f@sirena.org.uk>
-References: <20250309193612.251929-1-linux@treblig.org>
- <174172393659.371198.1480937233663952854.b4-ty@kernel.org>
- <Z9CltdJsg_qaTKzQ@gallifrey>
+	s=k20201202; t=1741743176;
+	bh=GGxfgq0uhUwoYS2j2u7GXWkBpqhveX9fPtwLvhqQaxg=;
+	h=From:To:Subject:Date:From;
+	b=tnOcUuicY1WlF+pJ4TetwGwXNn77fspC9u7zpdoZeXSU89SIK1ugg+KvK9kWv6sLD
+	 L3QnpnyWJYjCIW3VkGK+PN6AAzbmgS08/D2KDQ1/b9Plowpbaw3P70Q7QeiP12fyk3
+	 J8uf3dspS9SA9LxkGmdf/W1Gd4kifynvaPYQGMLkFiuEELdKhYwQcoeobI7bZZP+dF
+	 FQg/nF7vGJbdF5jzjgVVD3bR5p1dGiGHNLCP3ij5OqA8kJjR74eerWk8S6MqiyLLpq
+	 +X8tgRf7Nlzhy5alzetbzSCl3nQOS+qkbje40XPvOFK+Rps46DwXgDAC6sIaX3bjeg
+	 gnopq3K9pUtKw==
+Received: by aws-us-west-2-korg-bugzilla-1.web.codeaurora.org (Postfix, from userid 48)
+	id 43B8BC41614; Wed, 12 Mar 2025 01:32:56 +0000 (UTC)
+From: bugzilla-daemon@kernel.org
+To: linux-pm@vger.kernel.org
+Subject: [Bug 219858] New: AMD Zen 2 broken power management after sleep
+Date: Wed, 12 Mar 2025 01:32:56 +0000
+X-Bugzilla-Reason: AssignedTo
+X-Bugzilla-Type: new
+X-Bugzilla-Watch-Reason: None
+X-Bugzilla-Product: Power Management
+X-Bugzilla-Component: cpufreq
+X-Bugzilla-Version: 2.5
+X-Bugzilla-Keywords: 
+X-Bugzilla-Severity: high
+X-Bugzilla-Who: diogotavc@protonmail.com
+X-Bugzilla-Status: NEW
+X-Bugzilla-Resolution: 
+X-Bugzilla-Priority: P3
+X-Bugzilla-Assigned-To: linux-pm@vger.kernel.org
+X-Bugzilla-Flags: 
+X-Bugzilla-Changed-Fields: bug_id short_desc product version rep_platform
+ op_sys bug_status bug_severity priority component assigned_to reporter
+ cf_regression
+Message-ID: <bug-219858-137361@https.bugzilla.kernel.org/>
+Content-Type: text/plain; charset="UTF-8"
+Content-Transfer-Encoding: quoted-printable
+X-Bugzilla-URL: https://bugzilla.kernel.org/
+Auto-Submitted: auto-generated
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: multipart/signed; micalg=pgp-sha512;
-	protocol="application/pgp-signature"; boundary="+OmabGPn0b5DXlH7"
-Content-Disposition: inline
-In-Reply-To: <Z9CltdJsg_qaTKzQ@gallifrey>
-X-Cookie: Androphobia:
 
+https://bugzilla.kernel.org/show_bug.cgi?id=3D219858
 
---+OmabGPn0b5DXlH7
-Content-Type: text/plain; charset=us-ascii
-Content-Disposition: inline
+            Bug ID: 219858
+           Summary: AMD Zen 2 broken power management after sleep
+           Product: Power Management
+           Version: 2.5
+          Hardware: AMD
+                OS: Linux
+            Status: NEW
+          Severity: high
+          Priority: P3
+         Component: cpufreq
+          Assignee: linux-pm@vger.kernel.org
+          Reporter: diogotavc@protonmail.com
+        Regression: No
 
-On Tue, Mar 11, 2025 at 09:05:57PM +0000, Dr. David Alan Gilbert wrote:
-> * Mark Brown (broonie@kernel.org) wrote:
+I have a ThinkPad E14 Gen 3 (Ryzen 7 5700U, Zen 2) running Fedora 41 with t=
+he
+6.13.5-200.fc41.x86_64 kernel. After sleep (s2idle), the device will no lon=
+ger
+respect hints or sysfs nodes (not sure these are the right terms). At first=
+ I
+thought this could be related to a recent BIOS/firmware upgrade, but it was=
+n't
+a new occurance (tho, I hadn't taken any time to understand and diagnose the
+issue).
 
-> > [6/9] regulator: pcf50633-regulator: Remove
-> >       commit: 248bc01138b11ff3af38c3b4a39cb8db7aae6eb6
+As an example, sometimes I'll set the profile to Power Saver (regardless if
+it's tuned-ppd or power-profiles-daemon), or manually set the value of
+`/sys/devices/system/cpu/cpu*/cpufreq/energy_performance_preference` to `po=
+wer`
+and `/sys/devices/system/cpu/cpu*/cpufreq/boost` to `0`, and it'll boost
+seemingly arbitrarily even if CPU load is low. To keep track of a few stats,
+quickly wrote the following script:
 
-> Thanks!
-> Although....I'd only tested this as part of the series and assumed
-> someone (Lee?) would pick the lot up in one go.
+```bash
+#!/bin/bash
 
-I test things as I apply them, it really shouldn't make a difference
-either way for leaf drivers.  From my PoV this way it cuts down on
-resends.
+# Battery
+batteryPath=3D"/sys/class/power_supply/BAT0"
+batteryStatus=3D$(cat "$batteryPath/status")
+# Fan
+currentLevel=3D$(cat /proc/acpi/ibm/fan | grep "level:" | awk '{print $2}')
+fanSpeed=3D$(sensors | grep 'fan1:' | tail -c 10 | tr -d ' ' | sed 's/RPM//=
+')
+# CPU
+cpuTemp=3D$(sensors | grep 'CPU:' | tail -c 10 | tr -d ' ' | sed 's/=C2=B0C=
+//')
+cpuFreq=3D$(awk -F ': ' '/cpu MHz/ {print int($2)}' /proc/cpuinfo | sort -n=
+r |
+head -n 1)
+# Power consumption
+consumption=3D$(expr $(cat "$batteryPath/power_now") / 100000)
+units=3D$(expr $consumption / 10)
+decimal=3D$(expr $consumption % 10)
+consumption=3D$units.$decimal
 
---+OmabGPn0b5DXlH7
-Content-Type: application/pgp-signature; name="signature.asc"
+echo "Battery:        $consumption W ($batteryStatus)"
+echo "Fan Speed:      $fanSpeed RPM ($currentLevel)"
+echo "Temperature:    $cpuTemp=C2=B0C ($cpuFreq MHz)"
+```
 
------BEGIN PGP SIGNATURE-----
+With this script, I can verify that the max frequency (between all threads)
+before suspending is typically around 1.4GHz for the task at hand and, after
+suspending, is glued to 4.3GHz almost permanently for the same task (near
+idle). I've also taken the time, in multiple different scenarios, to see how
+many threads were hitting those clock speeds, and it always seemed to be 2 =
+to
+4, with every other thread between 2 and 3GHz (although usually the latter,
+keeping in mind the base clock is 1.8GHz). This, as you'd imagine, causes a=
+ ton
+of unnecessary heat and energy consumption (might not manifest itself as mu=
+ch
+for lighter tasks, but can be problematic if the load is higher).
 
-iQEzBAABCgAdFiEEreZoqmdXGLWf4p/qJNaLcl1Uh9AFAmfQqAAACgkQJNaLcl1U
-h9AD1wf+I2aQLWbF5xfLjvKl72h8bg0RLiGAjZM1NfYz/hLS0dWlF3300oSwCY+G
-rV9Wq8rDd7CWCKnPjzhF61Snu+atLhVVUQrUcYAwRVM/Srm7LNGFPiyMflHQe9mJ
-Nko5SMqN9nRn5CNMLIORrD+uO4uT3KXuXYjrHtYrxmz+O57B+Dii5dEwZDxSbTD2
-wnc1lt45lulI4GDYH0yheKpFvKIe44PN8BHZ+c54BA5WAqSf9moP15PdDK9CLIcc
-bfpBXKvYHO7g2FpUGHN9TmXo0L/UmSaoRhvl0cT1sz2POYC52dqXOhSXvVG2/qdA
-6v0mJL74pnETZ6ZNfFyQpsOIXzCaOw==
-=jn9q
------END PGP SIGNATURE-----
+One side note is that sometimes I'd wake the laptop up and have only the fi=
+rst
+core with boost set to `0` and the rest with boost set to `1`
+(`/sys/devices/system/cpu/cpu*/cpufreq/boost`). Not sure it's relevant, but=
+ it
+was something I noticed.
 
---+OmabGPn0b5DXlH7--
+It happens on all scaling drivers (`amd_pstate=3Dactive`, `amd_pstate=3Dpas=
+sive`,
+`amd_pstate=3Dguided`, and `amd_pstate=3Ddisable`) and seems to happen excl=
+usively
+on kernels 6.13 and up (6.11 doesn't display this behaviour at all, and my
+testing with 6.12 isn't yet very conclusive), so it's reproducible. It's not
+exclusive to Fedora, but may be specific to my laptop model and/or my CPU.
+
+--=20
+You may reply to this email to add a comment.
+
+You are receiving this mail because:
+You are the assignee for the bug.=
 
