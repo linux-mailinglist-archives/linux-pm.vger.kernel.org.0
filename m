@@ -1,170 +1,102 @@
-Return-Path: <linux-pm+bounces-23933-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23934-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B2D64A5E4ED
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 21:04:14 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [147.75.80.249])
+	by mail.lfdr.de (Postfix) with ESMTPS id 7E275A5E535
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 21:19:39 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id F0D7516FBA9
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 20:04:13 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 4DA39189C0A3
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 20:19:47 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6A41D1E5B71;
-	Wed, 12 Mar 2025 20:04:08 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id B2EB91E9B3B;
+	Wed, 12 Mar 2025 20:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="mTM0JBry"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="c10uLhiM"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 42BF51DE3AF;
-	Wed, 12 Mar 2025 20:04:07 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 88D131D5147;
+	Wed, 12 Mar 2025 20:19:34 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741809848; cv=none; b=GyYwhLTsJNwHfS+RwAbtmvrjdtka7bVSH3dS7ZyqESEcnTsU7X67Jy1HB5i6oYGNuzzz390wSXI2vV/uaew+1iG6Q92lWM3nHufaHG7LYJsMBnhXMY+qf/++dAsD6IDBJKFDwxKSI0ysRA0UjHw9LaGJid1x5tzWHY5qajwDVyw=
+	t=1741810774; cv=none; b=cBchHP7mBFAP5fhA/2vEInVhsEDhjd6rb2Ygz5KkymrAN/7ODI9I40YnNlxC8b3zG1oq2WZzNHMBQyxSN4dlAP0A4PfSsb53srQBBUZ5iFuNILXlIR0lcQruNCwIMBVvxZgvb/WGY7+yWKVp333l5SUJgl28HYzov7UWjCFgP/I=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741809848; c=relaxed/simple;
-	bh=wNuqf53XUH4jcdwH6C0CQTwH9roS7HOh4G+zIDNCoWY=;
+	s=arc-20240116; t=1741810774; c=relaxed/simple;
+	bh=dP8j15QLVHCFzZENDuU3agpW/8W1hNls4T8B5Yzf/1c=;
 	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=DPdtIPNLg36rOhnwVFFgfjOY4uX6X96cllZyu7MkL51LZ5Mq7GrI1E5Vf+q+6/7pze86RM8M+DHl+L0hd6x5+NlDMp8e+vV1GE1CdtLeuwLJMinB9ONG2njxLFrhqXESehynNs3OyDi91bBPpqFoEmarQwMeek/kE2pgkTihzfs=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=mTM0JBry; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id B0CAAC4AF0B;
-	Wed, 12 Mar 2025 20:04:07 +0000 (UTC)
+	 To:Cc:Content-Type; b=jz4RLG5VKoavPvrEyAaI++d4qugdGvrAR5ORXgOGZahRAuT0qQNBDsPdp7LDFcIkMRRqg1i7VSrbX/ljYyzTpx/an84dz9ZyeIKlLR7GWhhMKnU4KCwQUV22io7zdJOvQiQDGlGryPvbPq9RzifRcewDtFb6Rk6V/HbuNV+E7X0=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=c10uLhiM; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id 0846FC4CEE3;
+	Wed, 12 Mar 2025 20:19:34 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741809847;
-	bh=wNuqf53XUH4jcdwH6C0CQTwH9roS7HOh4G+zIDNCoWY=;
+	s=k20201202; t=1741810774;
+	bh=dP8j15QLVHCFzZENDuU3agpW/8W1hNls4T8B5Yzf/1c=;
 	h=References:In-Reply-To:From:Date:Subject:To:Cc:From;
-	b=mTM0JBryU0uetVVV+cwk7RbNqcopRYfM+l0hJNW5gN/n2FUMH3WrbJUg46BwC4oFQ
-	 QaWGnYf9ruMYt2Txd/ekDGfWCTE+9rJmEim1uMdtmUyAYH30ZoGpvDgnA57AiqLsId
-	 Dqh7H9uj7NjvccuxYS8AiydrQVBZ2bUJUr9qhyHs8rn5AHAdnpoblLYTeMrO7cXqz6
-	 XsWapUqJ3R0Lljjfni/yc9JXWpMPlbD3050DTnYpAmc3I3Hrql+MdMDUHjgBtP2d+z
-	 Pki02SO8oVbFTHidWYjVLh2A1U++ZNVzsodtpn8PLAln4TOxJGhqdO0HoY2QkwV2xk
-	 WkCk1R/vnTnWA==
-Received: by mail-oa1-f41.google.com with SMTP id 586e51a60fabf-2bc66e26179so139737fac.2;
-        Wed, 12 Mar 2025 13:04:07 -0700 (PDT)
-X-Forwarded-Encrypted: i=1; AJvYcCVr4M7Zk0Y92U7vIxgKXsBg2UGIbQm7br4GyZD1aSxsZrC/X0w5PBL3goJiQKw0WyMADZNmD/MUHkwqOGI=@vger.kernel.org, AJvYcCVyFfDVIslNuigb+1aYPjhad+uiUPdCSPxZ28Gu36GjbGc3Ja0Dqx5tG+9owe79WjBW/1gwTAZ+GDM=@vger.kernel.org
-X-Gm-Message-State: AOJu0YwuiMM0WP/el1wXBlQ6rFcbcb8kxRXPyEThOr6LrylLv7UMU0Ik
-	BQOTWUdvfGXF1JMel1GA1tZeAkV6pGXBDJHvAzgPn9oTBqw7zz7phAcr3bs7+CpnMb5YP9BKSUm
-	ran2DxsKMCEp1jZUBwxXFC+cj10I=
-X-Google-Smtp-Source: AGHT+IHnIBq7OWoc386zouTDRs+6+dYYWygUAwuAs+Djbha1sU5onLDD3P3mJ3eI3pD/3QYB5AA8rLJ87LgDqh2xxlM=
-X-Received: by 2002:a05:6870:819d:b0:29e:40f8:ad9b with SMTP id
- 586e51a60fabf-2c261032b54mr13605881fac.14.1741809846947; Wed, 12 Mar 2025
- 13:04:06 -0700 (PDT)
+	b=c10uLhiMpHqHwE7ODWos3IqpFPyBUJ+KfUvijj0PEczyscybTbinIYiRp1LASzmcy
+	 5FL3iLGYUK28us2+DIUbKuds/JsC/iZ/GWCTrdAYh6IRsuHpsmSzJkeSVY8nwMZ3K8
+	 8r+OhG2RpiPwr7Ft37S8CZuSsDl1mRd+ev/V4I+tNa1xtoXIUVGfk7eJxjsCYbY80V
+	 QgxVx0OWrfGbmmQLjPruMDowgGr3/1/w1ADnVYKTFWPkDEMHHJFkR2oYM+skBWaBbO
+	 tPmOTY4ggYretfdttoTkN2MbYXc/Qqr3bWfYLt46HNX0bAcjIv/MOakwcvhzGBm3+W
+	 4klrE8ScBFdyA==
+Received: by mail-oa1-f44.google.com with SMTP id 586e51a60fabf-2b38896c534so154377fac.0;
+        Wed, 12 Mar 2025 13:19:33 -0700 (PDT)
+X-Forwarded-Encrypted: i=1; AJvYcCXVKTxfmqNrWnYXCB7UJ5AmiO6ERSgd15oiAd2aUz2LN72DW4jW4b/xukBcGBorkS3UGIO3P4zUc5HC7No=@vger.kernel.org, AJvYcCXkbVTa5TxP4Den6MTBHN3OJHf2nLkx/TQpS0stRyuDAEx6cW6uIbn2c43qbstmO7HkDly4q1KUH88=@vger.kernel.org
+X-Gm-Message-State: AOJu0YxYBEHcrBaAAL/wrme9lbNac9XgNCyzTNB9okiL72I7M3nEna8F
+	uekyuEUW6KQ+6oFziiRcA75BiHuY95ngaEzAj2vfUMlqg1GEHVRvlsvjyAqKEKi1mMWh65G38ym
+	vUccj4OFHedSaEI0wXotd2koJ3gU=
+X-Google-Smtp-Source: AGHT+IGPtIF9n8Q2zJiH5GLOWyfayshIf1MppX2HsgP9ODt5i6P6R9UmXD/Y4iQWdD9K8NuF29K1ZXcbQwiWtnigJ08=
+X-Received: by 2002:a05:6871:8416:b0:2c2:b18c:9be9 with SMTP id
+ 586e51a60fabf-2c2b18d470amr5236207fac.3.1741810773370; Wed, 12 Mar 2025
+ 13:19:33 -0700 (PDT)
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250307021750.457600-1-linux@treblig.org>
-In-Reply-To: <20250307021750.457600-1-linux@treblig.org>
+References: <9c8ff2b103c3ba7b0d27bdc8248b05e3b1dc9551.1741776430.git.geert+renesas@glider.be>
+In-Reply-To: <9c8ff2b103c3ba7b0d27bdc8248b05e3b1dc9551.1741776430.git.geert+renesas@glider.be>
 From: "Rafael J. Wysocki" <rafael@kernel.org>
-Date: Wed, 12 Mar 2025 21:03:53 +0100
-X-Gmail-Original-Message-ID: <CAJZ5v0hq-0yfinMG5=EHxqk4B=FfRvkaUuE9gjFgL9gfb35C7A@mail.gmail.com>
-X-Gm-Features: AQ5f1JrBuvQ0VlvbrZwfjzKvwWZOQUy1b2v1kE99vMI3SgvUovZSS0sOza7GoPg
-Message-ID: <CAJZ5v0hq-0yfinMG5=EHxqk4B=FfRvkaUuE9gjFgL9gfb35C7A@mail.gmail.com>
-Subject: Re: [PATCH] drivers: base: power: Remove unused pm_generic_ wrappers
-To: linux@treblig.org
-Cc: rafael@kernel.org, len.brown@intel.com, pavel@kernel.org, 
-	gregkh@linuxfoundation.org, dakr@kernel.org, linux-pm@vger.kernel.org, 
-	linux-kernel@vger.kernel.org
+Date: Wed, 12 Mar 2025 21:19:22 +0100
+X-Gmail-Original-Message-ID: <CAJZ5v0hOUHQeWYtJ2Nousa9C6Coi7W6njaXDCa_=vk0Rzo6=pw@mail.gmail.com>
+X-Gm-Features: AQ5f1JoQXdRNfRAL6c45dmkPkHvUFlBg-EBDerL3rMhug15BgJN_QHAryHC73xE
+Message-ID: <CAJZ5v0hOUHQeWYtJ2Nousa9C6Coi7W6njaXDCa_=vk0Rzo6=pw@mail.gmail.com>
+Subject: Re: [PATCH] PM: core: Fix indentation in dpm_wait_for_children()
+To: Geert Uytterhoeven <geert+renesas@glider.be>
+Cc: "Rafael J . Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, 
+	Pavel Machek <pavel@kernel.org>, Greg Kroah-Hartman <gregkh@linuxfoundation.org>, 
+	Danilo Krummrich <dakr@kernel.org>, linux-pm@vger.kernel.org, linux-kernel@vger.kernel.org
 Content-Type: text/plain; charset="UTF-8"
 Content-Transfer-Encoding: quoted-printable
 
-On Fri, Mar 7, 2025 at 3:18=E2=80=AFAM <linux@treblig.org> wrote:
+On Wed, Mar 12, 2025 at 11:47=E2=80=AFAM Geert Uytterhoeven
+<geert+renesas@glider.be> wrote:
 >
-> From: "Dr. David Alan Gilbert" <linux@treblig.org>
+> The body of dpm_wait_for_children() is indented by 7 spaces instead of a
+> single TAB.
 >
-> pm_generic_thaw_early() has been unused since 2016's
-> commit 294f47ffd55c ("PM / Domains: Remove redundant system PM callbacks"=
-)
->
-> pm_generic_freeze_late() has been unused since 2019's
-> commit 3cd7957e85e6 ("ACPI: PM: Simplify and fix PM domain hibernation
-> callbacks")
->
-> Remove them.
->
-> Signed-off-by: Dr. David Alan Gilbert <linux@treblig.org>
+> Signed-off-by: Geert Uytterhoeven <geert+renesas@glider.be>
 > ---
->  drivers/base/power/generic_ops.c | 24 ------------------------
->  include/linux/pm.h               |  4 ----
->  2 files changed, 28 deletions(-)
+>  drivers/base/power/main.c | 2 +-
+>  1 file changed, 1 insertion(+), 1 deletion(-)
 >
-> diff --git a/drivers/base/power/generic_ops.c b/drivers/base/power/generi=
-c_ops.c
-> index 4fa525668cb7..6502720bb564 100644
-> --- a/drivers/base/power/generic_ops.c
-> +++ b/drivers/base/power/generic_ops.c
-> @@ -114,18 +114,6 @@ int pm_generic_freeze_noirq(struct device *dev)
+> diff --git a/drivers/base/power/main.c b/drivers/base/power/main.c
+> index e4103d29a21a6b2f..2fc37658b0b582e2 100644
+> --- a/drivers/base/power/main.c
+> +++ b/drivers/base/power/main.c
+> @@ -249,7 +249,7 @@ static int dpm_wait_fn(struct device *dev, void *asyn=
+c_ptr)
+>
+>  static void dpm_wait_for_children(struct device *dev, bool async)
+>  {
+> -       device_for_each_child(dev, &async, dpm_wait_fn);
+> +       device_for_each_child(dev, &async, dpm_wait_fn);
 >  }
->  EXPORT_SYMBOL_GPL(pm_generic_freeze_noirq);
 >
-> -/**
-> - * pm_generic_freeze_late - Generic freeze_late callback for subsystems.
-> - * @dev: Device to freeze.
-> - */
-> -int pm_generic_freeze_late(struct device *dev)
-> -{
-> -       const struct dev_pm_ops *pm =3D dev->driver ? dev->driver->pm : N=
-ULL;
-> -
-> -       return pm && pm->freeze_late ? pm->freeze_late(dev) : 0;
-> -}
-> -EXPORT_SYMBOL_GPL(pm_generic_freeze_late);
-> -
->  /**
->   * pm_generic_freeze - Generic freeze callback for subsystems.
->   * @dev: Device to freeze.
-> @@ -186,18 +174,6 @@ int pm_generic_thaw_noirq(struct device *dev)
->  }
->  EXPORT_SYMBOL_GPL(pm_generic_thaw_noirq);
->
-> -/**
-> - * pm_generic_thaw_early - Generic thaw_early callback for subsystems.
-> - * @dev: Device to thaw.
-> - */
-> -int pm_generic_thaw_early(struct device *dev)
-> -{
-> -       const struct dev_pm_ops *pm =3D dev->driver ? dev->driver->pm : N=
-ULL;
-> -
-> -       return pm && pm->thaw_early ? pm->thaw_early(dev) : 0;
-> -}
-> -EXPORT_SYMBOL_GPL(pm_generic_thaw_early);
-> -
->  /**
->   * pm_generic_thaw - Generic thaw callback for subsystems.
->   * @dev: Device to thaw.
-> diff --git a/include/linux/pm.h b/include/linux/pm.h
-> index 78855d794342..7bf22ed4a1d5 100644
-> --- a/include/linux/pm.h
-> +++ b/include/linux/pm.h
-> @@ -838,10 +838,8 @@ extern int pm_generic_resume_early(struct device *de=
-v);
->  extern int pm_generic_resume_noirq(struct device *dev);
->  extern int pm_generic_resume(struct device *dev);
->  extern int pm_generic_freeze_noirq(struct device *dev);
-> -extern int pm_generic_freeze_late(struct device *dev);
->  extern int pm_generic_freeze(struct device *dev);
->  extern int pm_generic_thaw_noirq(struct device *dev);
-> -extern int pm_generic_thaw_early(struct device *dev);
->  extern int pm_generic_thaw(struct device *dev);
->  extern int pm_generic_restore_noirq(struct device *dev);
->  extern int pm_generic_restore_early(struct device *dev);
-> @@ -883,10 +881,8 @@ static inline void dpm_for_each_dev(void *data, void=
- (*fn)(struct device *, void
->  #define pm_generic_resume_noirq                NULL
->  #define pm_generic_resume              NULL
->  #define pm_generic_freeze_noirq                NULL
-> -#define pm_generic_freeze_late         NULL
->  #define pm_generic_freeze              NULL
->  #define pm_generic_thaw_noirq          NULL
-> -#define pm_generic_thaw_early          NULL
->  #define pm_generic_thaw                        NULL
->  #define pm_generic_restore_noirq       NULL
->  #define pm_generic_restore_early       NULL
+>  static void dpm_wait_for_suppliers(struct device *dev, bool async)
 > --
 
 Applied as 6.15 material, thanks!
