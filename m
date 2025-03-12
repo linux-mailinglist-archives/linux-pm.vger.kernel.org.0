@@ -1,174 +1,165 @@
-Return-Path: <linux-pm+bounces-23923-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23924-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id 43534A5DF99
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 15:59:56 +0100 (CET)
+Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
+	by mail.lfdr.de (Postfix) with ESMTPS id E1BFCA5E077
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 16:35:57 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 593703B95B9
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 14:59:32 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2262B1729ED
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 15:35:57 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6C11F24CEFE;
-	Wed, 12 Mar 2025 14:59:42 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DDC515539A;
+	Wed, 12 Mar 2025 15:35:56 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b="G3juhabp"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZwjUCvGr"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-ej1-f54.google.com (mail-ej1-f54.google.com [209.85.218.54])
+Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 910912441A6;
-	Wed, 12 Mar 2025 14:59:40 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.218.54
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B5024FC0D
+	for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 15:35:54 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741791582; cv=none; b=mnmjx84cyeQguZ8KU69WromOXwe1Lpzdc7VXMaXrTC+jsJDpqSKkLOzYWFfTv6h7FwSd8G3ETFHEGq7zaK/u5hW6O6I5EsqeWaq6lsREROa2amZdFcblpFoeZbMrHall5QVpNlei1KcIrk3owKZgLmkAX1e++pJCSsYtm0pSJeA=
+	t=1741793756; cv=none; b=ZopxJl+jiGB2+D3myYK4WWPhSLfClZI0/fKgnFeA+J4M6bOY5snePSF2KAxIcdn4/McveJWscDGux3Rn6jk4pUqRwB3ikbW1D2fBiGbGf4ojV2prpmkrHKsyJ3dKZbNweaBL10ZvmP6KsFTjjeVKtu8UAa+xar/b0+XGWSAAL5A=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741791582; c=relaxed/simple;
-	bh=qKHl4440qk1/HT376ckRtihAJqb0O/rQGW0XFo0QqFU=;
-	h=MIME-Version:References:In-Reply-To:From:Date:Message-ID:Subject:
-	 To:Cc:Content-Type; b=fbY4eQTwAIEDPoasOmesWAPBH7kzGsT91jUCSKSkzY+fCKOSc0akuhkJF9kLgGQUobryxH5kEFaurX+si8keOMsvv1eFJC0QZGIoHxA4IoEjsJSJAHRQOThUALDaN7PuisDrznISatoZ30MqxMPkMCdqmejrSWT+HTTS78E/fMI=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com; spf=pass smtp.mailfrom=gmail.com; dkim=pass (2048-bit key) header.d=gmail.com header.i=@gmail.com header.b=G3juhabp; arc=none smtp.client-ip=209.85.218.54
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=gmail.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=gmail.com
-Received: by mail-ej1-f54.google.com with SMTP id a640c23a62f3a-ac25313ea37so1048596366b.1;
-        Wed, 12 Mar 2025 07:59:40 -0700 (PDT)
+	s=arc-20240116; t=1741793756; c=relaxed/simple;
+	bh=/57whBCc1TMWNm6F13Zc2Y/83EGWz3KHC34aJZ6KkRY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=XKzB1Grh1uvxDOUhcaau84nIP8mTT7/8OVX5vHIwopr1JR/KC85ZkLl+B086UptDlvTZ8CJm5ZAox92jyHdxkTLhJk7eyXxCcFmxbzl+GgTrJJfYICTt6emtO4vZmnuKfIs6/HCP6qCJl/tFUwc7gvRBW6j3SKS0La49ArVzbaM=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZwjUCvGr; arc=none smtp.client-ip=209.85.128.45
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
+Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cf0d787eeso36192325e9.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 08:35:54 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=gmail.com; s=20230601; t=1741791579; x=1742396379; darn=vger.kernel.org;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:from:to:cc:subject:date:message-id:reply-to;
-        bh=a3SyTg0NCa9lvne6z+mxZp19Z0gaaai+gw+VCvsnLk4=;
-        b=G3juhabp87I2qIYj9Tm+PJTdQ5NT6A6JoLOXBeSAWjJI2E6Js+sUMR8joswOeuQlQ2
-         dN9GlD2ItSQtDT7qBpAAjU3usDy8PsWzUrnx/FyMBoDTZypxqGcc7Gy1jYBjb/9F+oik
-         ihsDBzzYR/TBc/c+2jKCuLcLfwKZUxW0mhBL8o3ucFwgo0yIWbJpMpL+9SLg6zH43d/d
-         gdIcUwDaJ39GBdtYvX4sKPP0KfV7QdZdDibP86WxtzZNdUqsONVsjS9t0rB2YN3XK32z
-         bI4hqVIqS1MOKO3jzReiCv2kHarFu+qDnlJ74DuC4BJc090HGRW+acLV9Ic4f9TMaPYs
-         LPiQ==
+        d=linaro.org; s=google; t=1741793753; x=1742398553; darn=vger.kernel.org;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :from:to:cc:subject:date:message-id:reply-to;
+        bh=rnL31mkQuGEMzXApku8enoUMG0mMg3FNo50wKx3UviU=;
+        b=ZwjUCvGrJ7J6NlTCV1bIUbmG6bTpDg0fq4cuGI4WrTGkwrhMRwXp9kHgcDyRjiTIKY
+         IwNi5K3KsxDpDOngkFBDcE7gmXZN77fxxvw/qZs947R3I3BY2WZIYqy+OHrUCmSmv8G/
+         2HyPOs7ZHjqASGLET7iuds3GoVwfDIyULDzN27re9WmWdnBEEA0OhpTiEa8ahJGR6Oqh
+         B/q23TZiQX6zRRMpkzVJrAELtTGGcCbwbLTUMUVnF4x3K8Dk0Rs9R+vl7xyrYdGZSh+N
+         KZQW8zQKinZJLMSoMLMpX6iOc7tBnOBwgEKWtH+JpIscejchsL1ePvVg4tHDmsfvLsDa
+         3RVA==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741791579; x=1742396379;
-        h=cc:to:subject:message-id:date:from:in-reply-to:references
-         :mime-version:x-gm-message-state:from:to:cc:subject:date:message-id
-         :reply-to;
-        bh=a3SyTg0NCa9lvne6z+mxZp19Z0gaaai+gw+VCvsnLk4=;
-        b=XDC2llfL/8ZipWn9wwpr7dKnKjdoTxs3s+T07nLCG2WeP2eNuxGOlNqw4IXvjS2aDo
-         F4K63mb69/7Z+4pA5KlNbymv6t01fZdHZQHNdXu22o6mnNOemRj8XHmArOmHjjAoaCY/
-         WInpoOiHQF6kqKocWut0igZNJpFEXFh3tESqsdox34XMhK+NtUlCb78zcke8Ug7cHM99
-         K9npzSxMKtEDU9xZvHuadr2H+RzV3M2KJQG9+oZKMON86SO9d81OhtEu/+1BaMuU6QEU
-         Hz0GQduU4hcX0yfWelGK5t3J9YYqT9U0cXRFc8tsNRjtlt2I+v3ZhDD1PCJ9SmknYtuI
-         3K7A==
-X-Forwarded-Encrypted: i=1; AJvYcCWOe5M/EJ1mneUEHEVeS3hzvgvJ70jb77WNEVjMmTM1lYpmPhmeH9TifQMEWthhqJADUs5xurH70Zfk8DdF6+2R3Z0=@vger.kernel.org, AJvYcCX4GXX67v3dx57YNbEa+ygeZCcL93eZ8WOkGRzh2IUoXPIcHKGqOKruwUm+iRQrQ2SXNbnY0OVMDJk=@vger.kernel.org, AJvYcCXPPzFLQhMHEgtOlNUjA56oCp0qYuc9jArRra8TUSYqD2+Q61U1aWKs1enxBFaT9XqOeP0vB6RHyAKU3SA=@vger.kernel.org
-X-Gm-Message-State: AOJu0YzoVQF9rCKAh3KogQakPrsf5LZ/E/RY+Crg7SWAdOGRJDlnTF9J
-	RwEc/8PaFDx7Djit+MgjUIV70pif432OWaQQDuQFVHrSZnbcaHnnLKEExMk8lbTPw2h74U3ZUwC
-	Haqgrc0jONBZwHzwXDkmKL94Xx5s=
-X-Gm-Gg: ASbGncu73FlRskrNqQk2delyL3+yiyzoGjEWI6e/TIjQXrK/kQl4uKh0T6z65FM+0KZ
-	APyn5zWb05/uMSc85zJEf3sF8GcC9HtImA1BFOnfYK8mMhBmMzr/Kri8iqhvp9wxCWDfBBOB5ly
-	IS6OigPJE7zv45U/ZGEX7Ik7uxpg==
-X-Google-Smtp-Source: AGHT+IFTAmDUJKde03belOS5TpsnGBNkDmHNjKJjx3vvZcaqf4MLygWUc5G7PDzAqFfXGdcNUzcQs/ObOp1WKsP+o/k=
-X-Received: by 2002:a17:907:a0c8:b0:abf:497d:a23d with SMTP id
- a640c23a62f3a-ac252ed8d17mr2752406566b.53.1741791578586; Wed, 12 Mar 2025
- 07:59:38 -0700 (PDT)
+        d=1e100.net; s=20230601; t=1741793753; x=1742398553;
+        h=content-transfer-encoding:in-reply-to:from:content-language
+         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
+        bh=rnL31mkQuGEMzXApku8enoUMG0mMg3FNo50wKx3UviU=;
+        b=nWe2hyo5YXcCslUKqv7hPatYu3h4Ks7OykrhaTwIi06sfeRx9VUvX8cZy79A+i3iuy
+         r4JADQS78AUs4zlCAM1CHwDbyrEs1JrGicUHj8Tcgx8X4+8+IH+XiklNq7Zr8nhhjC9s
+         5A2YiGpBl625hIW4yT0TkOba8As/7D+YZJ0PF9Ufly9NJVQKFkMIbj2RnqbUE+4VQRxq
+         RCh4MUIYugyvdeMpDzqR38b7MnXHTBPUWUuaJnZSxtFXgKJQCeSd8EGp4uaJzE5XXdoi
+         FOj7HLgBbUZs2s8slnh9KCAhz8hNrM3QmSVl+AZC1XYJusKy8F7qBV3sr0hy6hhzr2n0
+         qFwA==
+X-Forwarded-Encrypted: i=1; AJvYcCX91XhMkPHgOs3ESyZuEQ18ExltmAQfqt6tjytxwXxROEFRgmjxHRqnaeKU2OGhMnIbS+bjyAJlsw==@vger.kernel.org
+X-Gm-Message-State: AOJu0YwWmBED5kasiSg52P8cnIl1nQAZvmZUkyk8GKMzN1IKOL7Gj1+E
+	PoQ2MccWACF1zGgspxKp9gUZ8ExXOVuYWUc4fTpDloMJuiWe/Mh3sbLCHDYs7+U=
+X-Gm-Gg: ASbGncvNci0oD7PdJS3KxlrdfdiJ44oPowYEd56r21NLYxD5qbVHrlzeOKi02TuX7cj
+	YLmoT0uxsKjnz1gUow/LD7L4uDCvk//kFhLlDWeSaDo9ClChk0eIxUA8wjXBG4+2LjRhw+0KBAp
+	9wuIBoTf5kgXPpBURI8M1ho15Kbj6gDbnixHK4RtwBzwYtgSmyUwRajupiMsCExx8eJWAkzlKLD
+	KO54LoNWC/SotLqhboxX/ZZV06M9wJclU7yYk1Y8uFqeQyC85BZ4QSN/zejUqQpYV8DprlzjnpK
+	LxbcQ9ONu5TLXnMVoXOgn7yK6jj94ELLbXD7cAtj5a1hA3qWxCJFHgkNC2+m13VV//Q7KI8A70A
+	NM+x3Zt/S
+X-Google-Smtp-Source: AGHT+IEhJyMWRzmyiYAwxtuXbWMP2QdrKwRFqW4RDJ6sKRc80DOvjzEsLA11vX8fG8O17D8k3CHECg==
+X-Received: by 2002:a05:600c:524c:b0:43d:b32:40aa with SMTP id 5b1f17b1804b1-43d0b32419amr22373515e9.3.1741793752820;
+        Wed, 12 Mar 2025 08:35:52 -0700 (PDT)
+Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
+        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43d0a78f1bbsm24227265e9.31.2025.03.12.08.35.51
+        (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
+        Wed, 12 Mar 2025 08:35:52 -0700 (PDT)
+Message-ID: <726c6ffc-a8d4-4328-a849-2d59f3a0a1c9@linaro.org>
+Date: Wed, 12 Mar 2025 16:35:51 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-References: <20250310143450.8276-1-linux.amoon@gmail.com> <20250310143450.8276-5-linux.amoon@gmail.com>
- <25fa661b-98e4-468b-bb4d-4a2c95f32b71@kernel.org>
-In-Reply-To: <25fa661b-98e4-468b-bb4d-4a2c95f32b71@kernel.org>
-From: Anand Moon <linux.amoon@gmail.com>
-Date: Wed, 12 Mar 2025 20:29:19 +0530
-X-Gm-Features: AQ5f1JpuXbrfqSfBZqHZuJa8hQ7PpVO1Aj4Wg9PCbJZj7yO22_n9i_FjkfaFgs4
-Message-ID: <CANAwSgTeZ83oqatrsWQxT+4RYwEtEqma=R4XX_iGrP2N=phz9Q@mail.gmail.com>
-Subject: Re: [PATCH v4 4/4] drivers/thermal/exymos: Use guard notation when
- acquiring mutex
-To: Krzysztof Kozlowski <krzk@kernel.org>
-Cc: Bartlomiej Zolnierkiewicz <bzolnier@gmail.com>, "Rafael J. Wysocki" <rafael@kernel.org>, 
-	Daniel Lezcano <daniel.lezcano@linaro.org>, Zhang Rui <rui.zhang@intel.com>, 
-	Lukasz Luba <lukasz.luba@arm.com>, Alim Akhtar <alim.akhtar@samsung.com>, 
-	"open list:SAMSUNG THERMAL DRIVER" <linux-pm@vger.kernel.org>, 
-	"open list:SAMSUNG THERMAL DRIVER" <linux-samsung-soc@vger.kernel.org>, 
-	"moderated list:ARM/SAMSUNG S3C, S5P AND EXYNOS ARM ARCHITECTURES" <linux-arm-kernel@lists.infradead.org>, 
-	open list <linux-kernel@vger.kernel.org>
-Content-Type: text/plain; charset="UTF-8"
+User-Agent: Mozilla Thunderbird
+Subject: Re: [PATCH v4 7/7] thermal: core: Record PSCR before
+ hw_protection_shutdown()
+To: Oleksij Rempel <o.rempel@pengutronix.de>,
+ Sebastian Reichel <sre@kernel.org>,
+ Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
+Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
+ Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
+ Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
+ =?UTF-8?Q?S=C3=B8ren_Andersen?= <san@skov.dk>
+References: <20250306093900.2199442-1-o.rempel@pengutronix.de>
+ <20250306093900.2199442-8-o.rempel@pengutronix.de>
+Content-Language: en-US
+From: Daniel Lezcano <daniel.lezcano@linaro.org>
+In-Reply-To: <20250306093900.2199442-8-o.rempel@pengutronix.de>
+Content-Type: text/plain; charset=UTF-8; format=flowed
+Content-Transfer-Encoding: 8bit
 
-Hi Krzysztof,
 
-Thanks for your review comments.
+Hi Oleksij,
 
-On Tue, 11 Mar 2025 at 23:00, Krzysztof Kozlowski <krzk@kernel.org> wrote:
->
-> On 10/03/2025 15:34, Anand Moon wrote:
-> > Using guard notation makes the code more compact and error handling
-> > more robust by ensuring that mutexes are released in all code paths
-> > when control leaves critical section.
-> >
->
-> Subject: typo, exynos
-Ok.
->
-> > Signed-off-by: Anand Moon <linux.amoon@gmail.com>
-> > ---
-> > v4: used DEFINE_GUARD macro to guard exynos_tmu_data structure.
-> >     However, incorporating guard(exynos_tmu_data)(data); results
-> >     in a recursive deadlock with the mutex during initialization, as this
-> >     data structure is common to all the code configurations of Exynos TMU
-> > v3: New patch
->
-> If you ever use cleanup or guards, you must build your code with recent
-> clang and W=1. Failure to do so means you ask reviewers manually to spot
-> issues not visible in the context, instead of using tools. It's a NAK
-> for me.
- Ok, I will check this next time before submitting the changes.
->
-> > ---
-> >  drivers/thermal/samsung/exynos_tmu.c | 25 +++++++++++--------------
-> >  1 file changed, 11 insertions(+), 14 deletions(-)
-> >
-> > diff --git a/drivers/thermal/samsung/exynos_tmu.c b/drivers/thermal/samsung/exynos_tmu.c
-> > index a71cde0a4b17e..85f88c5e0f11c 100644
-> > --- a/drivers/thermal/samsung/exynos_tmu.c
-> > +++ b/drivers/thermal/samsung/exynos_tmu.c
-> > @@ -12,6 +12,7 @@
-> >   */
-> >
-> >  #include <linux/clk.h>
-> > +#include <linux/cleanup.h>
-> >  #include <linux/io.h>
-> >  #include <linux/interrupt.h>
-> >  #include <linux/module.h>
-> > @@ -199,6 +200,9 @@ struct exynos_tmu_data {
-> >       void (*tmu_clear_irqs)(struct exynos_tmu_data *data);
-> >  };
-> >
-> > +DEFINE_GUARD(exynos_tmu_data, struct exynos_tmu_data *,
->
-> I do not understand why do you need custom guard.
 
-I thought this should add a global guard to exynos_tmu_data using
-mutex_lock and mutex_unlock.
-I'll drop this if it turns out to be unnecessary.
->
-> > +          mutex_lock(&_T->lock), mutex_unlock(&_T->lock))
-> > +
-> >  /*
-> >   * TMU treats temperature as a mapped temperature code.
-> >   * The temperature is converted differently depending on the calibration type.
-> > @@ -256,7 +260,7 @@ static int exynos_tmu_initialize(struct platform_device *pdev)
-> >       unsigned int status;
-> >       int ret = 0;
-> >
-> > -     mutex_lock(&data->lock);
-> > +     guard(mutex)(&data->lock);
->
-> Which you do not use... Please don't use cleanup.h if you do not know
-> it. It leads to bugs.
->
-Ok, I will drop this include of cleanup.h.
->
-> Best regards,
-> Krzysztof
+On 06/03/2025 10:38, Oleksij Rempel wrote:
+> Enhance the thermal core to record the Power State Change Reason (PSCR)
+> prior to invoking hw_protection_shutdown(). This change integrates the
+> PSCR framework with the thermal subsystem, ensuring that reasons for
+> power state changes, such as overtemperature events, are stored in a
+> dedicated non-volatile memory (NVMEM) cell.
+> 
+> This 'black box' recording is crucial for post-mortem analysis, enabling
+> a deeper understanding of system failures and abrupt shutdowns,
+> especially in scenarios where PMICs or watchdog timers are incapable of
+> logging such events.  The recorded data can be utilized during system
+> recovery routines in the bootloader or early kernel stages of subsequent
+> boots, significantly enhancing system diagnostics, reliability, and
+> debugging capabilities.
+> 
+> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
+> ---
+>   drivers/thermal/thermal_core.c | 3 +++
+>   1 file changed, 3 insertions(+)
+> 
+> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
+> index 2328ac0d8561..af4e9cf22bf6 100644
+> --- a/drivers/thermal/thermal_core.c
+> +++ b/drivers/thermal/thermal_core.c
+> @@ -16,6 +16,7 @@
+>   #include <linux/kdev_t.h>
+>   #include <linux/idr.h>
+>   #include <linux/thermal.h>
+> +#include <linux/pscrr.h>
+>   #include <linux/reboot.h>
+>   #include <linux/string.h>
+>   #include <linux/of.h>
+> @@ -380,6 +381,8 @@ static void thermal_zone_device_halt(struct thermal_zone_device *tz, bool shutdo
+>   
+>   	dev_emerg(&tz->device, "%s: critical temperature reached\n", tz->type);
+>   
+> +	set_power_state_change_reason(PSCR_OVERTEMPERATURE);
+> +
+>   	if (shutdown)
+>   		hw_protection_shutdown(msg, poweroff_delay_ms);
+>   	else
 
-Thanks
--Anand
+In the future could you add me as recipient to the series instead of 
+this one ? so I can get more context.
+
+Given there are no so much hw_protection_shutdown() users in the kernel, 
+it could be more interesting to change the function to receive a enum 
+pscr_reason and then in the hw_protection_shutdown() call 
+pscrr_reason_to_str().
+
+
+
+-- 
+<http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
+
+Follow Linaro:  <http://www.facebook.com/pages/Linaro> Facebook |
+<http://twitter.com/#!/linaroorg> Twitter |
+<http://www.linaro.org/linaro-blog/> Blog
 
