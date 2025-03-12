@@ -1,80 +1,80 @@
-Return-Path: <linux-pm+bounces-23924-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23925-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
 Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [147.75.199.223])
-	by mail.lfdr.de (Postfix) with ESMTPS id E1BFCA5E077
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 16:35:57 +0100 (CET)
+	by mail.lfdr.de (Postfix) with ESMTPS id CD0E2A5E168
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 17:06:34 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 2262B1729ED
-	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 15:35:57 +0000 (UTC)
+	by ny.mirrors.kernel.org (Postfix) with ESMTPS id 1BFCC168E12
+	for <lists+linux-pm@lfdr.de>; Wed, 12 Mar 2025 16:06:34 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id 6DDC515539A;
-	Wed, 12 Mar 2025 15:35:56 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 68CBC19D092;
+	Wed, 12 Mar 2025 16:06:33 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="ZwjUCvGr"
+	dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b="boVJ9VfV"
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mail-wm1-f45.google.com (mail-wm1-f45.google.com [209.85.128.45])
+Received: from mail-wm1-f47.google.com (mail-wm1-f47.google.com [209.85.128.47])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES128-GCM-SHA256 (128/128 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 80B5024FC0D
-	for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 15:35:54 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.45
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 957843D76
+	for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 16:06:31 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=209.85.128.47
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741793756; cv=none; b=ZopxJl+jiGB2+D3myYK4WWPhSLfClZI0/fKgnFeA+J4M6bOY5snePSF2KAxIcdn4/McveJWscDGux3Rn6jk4pUqRwB3ikbW1D2fBiGbGf4ojV2prpmkrHKsyJ3dKZbNweaBL10ZvmP6KsFTjjeVKtu8UAa+xar/b0+XGWSAAL5A=
+	t=1741795593; cv=none; b=opfRfzubCdZdQ2T9MOKVTUAGPRofGUPSPsnqLUzsMfJmH7/uua49ZHSIAdpr5Iu8VqdKHqfczBKNBkOBvjwf2erRn5rBoRZP6I8Q8vu9xW5p2Xa3pXxcj12brtE59hKMDZy9etwJimeMLXN12ArFcS8t+o8K4r/1JsTI91/ZrbI=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741793756; c=relaxed/simple;
-	bh=/57whBCc1TMWNm6F13Zc2Y/83EGWz3KHC34aJZ6KkRY=;
-	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
-	 In-Reply-To:Content-Type; b=XKzB1Grh1uvxDOUhcaau84nIP8mTT7/8OVX5vHIwopr1JR/KC85ZkLl+B086UptDlvTZ8CJm5ZAox92jyHdxkTLhJk7eyXxCcFmxbzl+GgTrJJfYICTt6emtO4vZmnuKfIs6/HCP6qCJl/tFUwc7gvRBW6j3SKS0La49ArVzbaM=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=ZwjUCvGr; arc=none smtp.client-ip=209.85.128.45
+	s=arc-20240116; t=1741795593; c=relaxed/simple;
+	bh=nmo8fdXV2sIpmS5UmT2CDlZRiYH6e9W1wePfJpe9bQE=;
+	h=Message-ID:Date:MIME-Version:Subject:To:References:From:
+	 In-Reply-To:Content-Type; b=EnHnScFaqD6V2OXIwu3NUJeChH6Xlb0ABiiAXjP57JI+HXgQ6H/C8Z7mKneH2UXpwM1m5S2cD4e7zusq4BTSFplGwrdt2pJLwkrTmtHfjaaqnldWRUr43ktGuruVUwOZYmzM/2+OzJYVO99bgrpWvs8Lkv42ezRz0P3lA8iOIos=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org; spf=pass smtp.mailfrom=linaro.org; dkim=pass (2048-bit key) header.d=linaro.org header.i=@linaro.org header.b=boVJ9VfV; arc=none smtp.client-ip=209.85.128.47
 Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=linaro.org
 Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=linaro.org
-Received: by mail-wm1-f45.google.com with SMTP id 5b1f17b1804b1-43cf0d787eeso36192325e9.3
-        for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 08:35:54 -0700 (PDT)
+Received: by mail-wm1-f47.google.com with SMTP id 5b1f17b1804b1-43cebe06e9eso27648285e9.3
+        for <linux-pm@vger.kernel.org>; Wed, 12 Mar 2025 09:06:31 -0700 (PDT)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=linaro.org; s=google; t=1741793753; x=1742398553; darn=vger.kernel.org;
+        d=linaro.org; s=google; t=1741795590; x=1742400390; darn=vger.kernel.org;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
-         :from:to:cc:subject:date:message-id:reply-to;
-        bh=rnL31mkQuGEMzXApku8enoUMG0mMg3FNo50wKx3UviU=;
-        b=ZwjUCvGrJ7J6NlTCV1bIUbmG6bTpDg0fq4cuGI4WrTGkwrhMRwXp9kHgcDyRjiTIKY
-         IwNi5K3KsxDpDOngkFBDcE7gmXZN77fxxvw/qZs947R3I3BY2WZIYqy+OHrUCmSmv8G/
-         2HyPOs7ZHjqASGLET7iuds3GoVwfDIyULDzN27re9WmWdnBEEA0OhpTiEa8ahJGR6Oqh
-         B/q23TZiQX6zRRMpkzVJrAELtTGGcCbwbLTUMUVnF4x3K8Dk0Rs9R+vl7xyrYdGZSh+N
-         KZQW8zQKinZJLMSoMLMpX6iOc7tBnOBwgEKWtH+JpIscejchsL1ePvVg4tHDmsfvLsDa
-         3RVA==
+         :references:to:subject:user-agent:mime-version:date:message-id:from
+         :to:cc:subject:date:message-id:reply-to;
+        bh=9YK3oQqTUtAqfGd/88d2ovA0EBim6Stx5RfHYpnVTCQ=;
+        b=boVJ9VfVpEJZgLL086LpZsrEZhmK9n1+E8TpCP9/sOlagwkHgZgKvm8RrvScTaoBLZ
+         wCmlcZr4xnJTp+ORcQVXZ8cII2DFSkW11KtO6KPrL3x3cPlrF/pJz3+33B+XX+KHIZ9y
+         5tvVw8vLKPvftshVaK/D9Ipw2UBeBIC6FPcji//M1lUP5h3lXGJnz0a5cPHp8mhXrzvD
+         GRFALkOLBNGoYzMSKNlc8kLOXA2xv3Jsw3uLngoxs+qUeS0u+mvQb1toSrUrmnb+OxvF
+         Y4YlzSJXDZ/A5rnHO7Qo789w34CXMP1r+0j7RWK73xlGw1aPcDXBk3mb3Uh6De+tZYAN
+         vIOQ==
 X-Google-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed;
-        d=1e100.net; s=20230601; t=1741793753; x=1742398553;
+        d=1e100.net; s=20230601; t=1741795590; x=1742400390;
         h=content-transfer-encoding:in-reply-to:from:content-language
-         :references:cc:to:subject:user-agent:mime-version:date:message-id
+         :references:to:subject:user-agent:mime-version:date:message-id
          :x-gm-message-state:from:to:cc:subject:date:message-id:reply-to;
-        bh=rnL31mkQuGEMzXApku8enoUMG0mMg3FNo50wKx3UviU=;
-        b=nWe2hyo5YXcCslUKqv7hPatYu3h4Ks7OykrhaTwIi06sfeRx9VUvX8cZy79A+i3iuy
-         r4JADQS78AUs4zlCAM1CHwDbyrEs1JrGicUHj8Tcgx8X4+8+IH+XiklNq7Zr8nhhjC9s
-         5A2YiGpBl625hIW4yT0TkOba8As/7D+YZJ0PF9Ufly9NJVQKFkMIbj2RnqbUE+4VQRxq
-         RCh4MUIYugyvdeMpDzqR38b7MnXHTBPUWUuaJnZSxtFXgKJQCeSd8EGp4uaJzE5XXdoi
-         FOj7HLgBbUZs2s8slnh9KCAhz8hNrM3QmSVl+AZC1XYJusKy8F7qBV3sr0hy6hhzr2n0
-         qFwA==
-X-Forwarded-Encrypted: i=1; AJvYcCX91XhMkPHgOs3ESyZuEQ18ExltmAQfqt6tjytxwXxROEFRgmjxHRqnaeKU2OGhMnIbS+bjyAJlsw==@vger.kernel.org
-X-Gm-Message-State: AOJu0YwWmBED5kasiSg52P8cnIl1nQAZvmZUkyk8GKMzN1IKOL7Gj1+E
-	PoQ2MccWACF1zGgspxKp9gUZ8ExXOVuYWUc4fTpDloMJuiWe/Mh3sbLCHDYs7+U=
-X-Gm-Gg: ASbGncvNci0oD7PdJS3KxlrdfdiJ44oPowYEd56r21NLYxD5qbVHrlzeOKi02TuX7cj
-	YLmoT0uxsKjnz1gUow/LD7L4uDCvk//kFhLlDWeSaDo9ClChk0eIxUA8wjXBG4+2LjRhw+0KBAp
-	9wuIBoTf5kgXPpBURI8M1ho15Kbj6gDbnixHK4RtwBzwYtgSmyUwRajupiMsCExx8eJWAkzlKLD
-	KO54LoNWC/SotLqhboxX/ZZV06M9wJclU7yYk1Y8uFqeQyC85BZ4QSN/zejUqQpYV8DprlzjnpK
-	LxbcQ9ONu5TLXnMVoXOgn7yK6jj94ELLbXD7cAtj5a1hA3qWxCJFHgkNC2+m13VV//Q7KI8A70A
-	NM+x3Zt/S
-X-Google-Smtp-Source: AGHT+IEhJyMWRzmyiYAwxtuXbWMP2QdrKwRFqW4RDJ6sKRc80DOvjzEsLA11vX8fG8O17D8k3CHECg==
-X-Received: by 2002:a05:600c:524c:b0:43d:b32:40aa with SMTP id 5b1f17b1804b1-43d0b32419amr22373515e9.3.1741793752820;
-        Wed, 12 Mar 2025 08:35:52 -0700 (PDT)
+        bh=9YK3oQqTUtAqfGd/88d2ovA0EBim6Stx5RfHYpnVTCQ=;
+        b=uqKXFAgvHNUMDeT2hvfkfdKDS6aGmSZpjnXZ3Nobt8AP8FVVCGyUGhx8bpmTdWdT9l
+         uhMncklUA/L+hulwzIZ15Cwq7Zs124DZIeGoygx0I1DKPq2eph63VEC50dudDTkWP4q2
+         Ehzqgov3LdhqAdQ4gMF/miDIB2mdbWqWw4BsbSL2Le+mp103l5BgPFj6cjzHPtTm8gyR
+         a3HJ55FJc93rgLvb5LoYxY1TKwGZHI+Qhg73aS7sv8dFCUNmXHgQUw87lF1zulC9BsyU
+         S17Skls7W9B7Uh1jtdKRAOmi1p18uQSYLjDBCHFYq9f+NXEeW/4J4WXj6e6wndbNWkq4
+         9NPg==
+X-Forwarded-Encrypted: i=1; AJvYcCWn+PhP/t3pT7QoJcIk6m/nhKQ5qHKSplRfd472f6oB+CSGe36rt5Q9gswKkZmD69vmxxEFNH3utg==@vger.kernel.org
+X-Gm-Message-State: AOJu0YxjIIqei2kPvAmLmDWvZ3WXIWiyM/ytrue9Bhh2khRUNsXkXVrI
+	RnBPy+cRSL4mfpvqRRwxsA84IvZwsWSt+SiDydJcygAGqf8bgbtuEh4hu4rXjzM=
+X-Gm-Gg: ASbGnctRJSWszkqDavs8spCa2P4QJB4u4WQ13g6FPvyjNPx+/W7DXF/pT3LGYxw1E/T
+	btWY5HUlP9C/bgQ2c9BA+ozO5aLzF3fRDHDfp0mbMhRgcB2kVeRtJaLOzLKsIADo0iMfhCqi/8H
+	8KFazQdYazXeD+4bUp5mPJ53d3QBlNQlYfppmpqPdQJXnsYnyT/6H6M3qPLmLZeDE7IvvqZUwj1
+	IC24eTgnBSm27jzYUy1+kEO0w6eAuTfJ6K3w7owrknucghk0mYYT9aZY96qeWOBJ9GKsBfj0ctT
+	viCz2eTBRD7oRjlIQWApkemkqlYsj7Cr0ykhq6jSgfn3OfU2vrrUngaVWi5NJtE6NGRZjYLVEro
+	NvrqKdnx5
+X-Google-Smtp-Source: AGHT+IGMjnZwEAiEt9Jm4Glsz7srOujFsqeA4GASDmYTpBVB3vgRlKNikYsg5C0lOJ+mSPfd3fXt3w==
+X-Received: by 2002:a5d:6d09:0:b0:38f:355b:13e9 with SMTP id ffacd0b85a97d-39132d33c10mr18303880f8f.15.1741795589829;
+        Wed, 12 Mar 2025 09:06:29 -0700 (PDT)
 Received: from [192.168.10.46] (146725694.box.freepro.com. [130.180.211.218])
-        by smtp.googlemail.com with ESMTPSA id 5b1f17b1804b1-43d0a78f1bbsm24227265e9.31.2025.03.12.08.35.51
+        by smtp.googlemail.com with ESMTPSA id ffacd0b85a97d-3912c0193bfsm21775014f8f.55.2025.03.12.09.06.28
         (version=TLS1_3 cipher=TLS_AES_128_GCM_SHA256 bits=128/128);
-        Wed, 12 Mar 2025 08:35:52 -0700 (PDT)
-Message-ID: <726c6ffc-a8d4-4328-a849-2d59f3a0a1c9@linaro.org>
-Date: Wed, 12 Mar 2025 16:35:51 +0100
+        Wed, 12 Mar 2025 09:06:29 -0700 (PDT)
+Message-ID: <9721ca95-7726-4c17-bbb8-3db1212847ce@linaro.org>
+Date: Wed, 12 Mar 2025 17:06:28 +0100
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -82,79 +82,39 @@ List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 User-Agent: Mozilla Thunderbird
-Subject: Re: [PATCH v4 7/7] thermal: core: Record PSCR before
- hw_protection_shutdown()
-To: Oleksij Rempel <o.rempel@pengutronix.de>,
- Sebastian Reichel <sre@kernel.org>,
- Srinivas Kandagatla <srinivas.kandagatla@linaro.org>
-Cc: kernel@pengutronix.de, linux-kernel@vger.kernel.org,
- Liam Girdwood <lgirdwood@gmail.com>, Mark Brown <broonie@kernel.org>,
+Subject: Re: [PATCH v4 0/2] thermal: rcar_gen3: Improve reading calibration
+ fuses
+To: =?UTF-8?Q?Niklas_S=C3=B6derlund?=
+ <niklas.soderlund+renesas@ragnatech.se>,
  "Rafael J. Wysocki" <rafael@kernel.org>, Zhang Rui <rui.zhang@intel.com>,
- Lukasz Luba <lukasz.luba@arm.com>, linux-pm@vger.kernel.org,
- =?UTF-8?Q?S=C3=B8ren_Andersen?= <san@skov.dk>
-References: <20250306093900.2199442-1-o.rempel@pengutronix.de>
- <20250306093900.2199442-8-o.rempel@pengutronix.de>
+ Lukasz Luba <lukasz.luba@arm.com>, Geert Uytterhoeven
+ <geert@linux-m68k.org>, linux-renesas-soc@vger.kernel.org,
+ linux-pm@vger.kernel.org
+References: <20250305174631.4119374-1-niklas.soderlund+renesas@ragnatech.se>
 Content-Language: en-US
 From: Daniel Lezcano <daniel.lezcano@linaro.org>
-In-Reply-To: <20250306093900.2199442-8-o.rempel@pengutronix.de>
+In-Reply-To: <20250305174631.4119374-1-niklas.soderlund+renesas@ragnatech.se>
 Content-Type: text/plain; charset=UTF-8; format=flowed
 Content-Transfer-Encoding: 8bit
 
-
-Hi Oleksij,
-
-
-On 06/03/2025 10:38, Oleksij Rempel wrote:
-> Enhance the thermal core to record the Power State Change Reason (PSCR)
-> prior to invoking hw_protection_shutdown(). This change integrates the
-> PSCR framework with the thermal subsystem, ensuring that reasons for
-> power state changes, such as overtemperature events, are stored in a
-> dedicated non-volatile memory (NVMEM) cell.
+On 05/03/2025 18:46, Niklas Söderlund wrote:
+> Hello,
 > 
-> This 'black box' recording is crucial for post-mortem analysis, enabling
-> a deeper understanding of system failures and abrupt shutdowns,
-> especially in scenarios where PMICs or watchdog timers are incapable of
-> logging such events.  The recorded data can be utilized during system
-> recovery routines in the bootloader or early kernel stages of subsequent
-> boots, significantly enhancing system diagnostics, reliability, and
-> debugging capabilities.
+> This small series aims to remove the code duplication that was added
+> when adding support for Gen4 devices. The logic to read the calibration
+> fuses are identical for Gen3 and Gen4, but the registers are at
+> different offsets.
 > 
-> Signed-off-by: Oleksij Rempel <o.rempel@pengutronix.de>
-> ---
->   drivers/thermal/thermal_core.c | 3 +++
->   1 file changed, 3 insertions(+)
+> Patch 1/2 is a small drive-by patch which fixes a style issue of the
+> constants found when working on the fuses code. While patch 2/2 is the
+> real work removing the code duplication.
 > 
-> diff --git a/drivers/thermal/thermal_core.c b/drivers/thermal/thermal_core.c
-> index 2328ac0d8561..af4e9cf22bf6 100644
-> --- a/drivers/thermal/thermal_core.c
-> +++ b/drivers/thermal/thermal_core.c
-> @@ -16,6 +16,7 @@
->   #include <linux/kdev_t.h>
->   #include <linux/idr.h>
->   #include <linux/thermal.h>
-> +#include <linux/pscrr.h>
->   #include <linux/reboot.h>
->   #include <linux/string.h>
->   #include <linux/of.h>
-> @@ -380,6 +381,8 @@ static void thermal_zone_device_halt(struct thermal_zone_device *tz, bool shutdo
->   
->   	dev_emerg(&tz->device, "%s: critical temperature reached\n", tz->type);
->   
-> +	set_power_state_change_reason(PSCR_OVERTEMPERATURE);
-> +
->   	if (shutdown)
->   		hw_protection_shutdown(msg, poweroff_delay_ms);
->   	else
+> It is tested on both Gen3 and Gen4 boards, but as not all boards have
+> the fused calibration values and the driver fallback to hard coded
+> values only Gen4 have really been tested as I don't have access to a
+> Gen3 board with fused calibration values.
 
-In the future could you add me as recipient to the series instead of 
-this one ? so I can get more context.
-
-Given there are no so much hw_protection_shutdown() users in the kernel, 
-it could be more interesting to change the function to receive a enum 
-pscr_reason and then in the hw_protection_shutdown() call 
-pscrr_reason_to_str().
-
-
+Applied, thanks
 
 -- 
 <http://www.linaro.org/> Linaro.org │ Open source software for ARM SoCs
