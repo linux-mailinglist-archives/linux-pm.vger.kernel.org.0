@@ -1,214 +1,107 @@
-Return-Path: <linux-pm+bounces-23956-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23957-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from ny.mirrors.kernel.org (ny.mirrors.kernel.org [IPv6:2604:1380:45d1:ec00::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id B8B92A5EB74
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 07:04:31 +0100 (CET)
+Received: from sy.mirrors.kernel.org (sy.mirrors.kernel.org [147.75.48.161])
+	by mail.lfdr.de (Postfix) with ESMTPS id B59C8A5EB91
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 07:15:35 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by ny.mirrors.kernel.org (Postfix) with ESMTPS id E464616CF4F
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 06:04:30 +0000 (UTC)
+	by sy.mirrors.kernel.org (Postfix) with ESMTPS id C539C7A9AB0
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 06:14:32 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id E7A541FBE9F;
-	Thu, 13 Mar 2025 06:04:06 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b="lFT7W7Of"
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 43FAF33F3;
+	Thu, 13 Mar 2025 06:15:30 +0000 (UTC)
 X-Original-To: linux-pm@vger.kernel.org
-Received: from mx0a-0031df01.pphosted.com (mx0a-0031df01.pphosted.com [205.220.168.131])
-	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
-	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 3BC2F1FBE92;
-	Thu, 13 Mar 2025 06:04:04 +0000 (UTC)
-Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=205.220.168.131
+Received: from foss.arm.com (foss.arm.com [217.140.110.172])
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id C7ED4147C9B
+	for <linux-pm@vger.kernel.org>; Thu, 13 Mar 2025 06:15:27 +0000 (UTC)
+Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=217.140.110.172
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741845846; cv=none; b=g3Q8V1DUvxHBT6kfHbQIpP/ygrJQDNAw9WNkapI18aV2oImfGzr07K6NB9NyBJV1orl2ZIuzSpltFjj6RVKBWkxtJpX0uu+ohTYdOt5CddA0mgW5a17dI0uC5M8YnhJ4EWZqCwbKXrUyX/rXHG41wD6RKB7OJKMGl1BxnpRUdys=
+	t=1741846530; cv=none; b=RrHskVJN5sUVWwOwLduAGSbqXV3Muc6kbpjWSnrizlY0kX8I4LTy52V/DKzfMTuYH1/Dlzg8L4LjvVo4XtCAwzYXnwZhhWpvWE2Ndn1YTjk8NX6/jycafMT8YBEZrqwCDp/b6+wRONny89CwubpVLoqsiU4xU8SZ6bbphVVITmw=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741845846; c=relaxed/simple;
-	bh=UqnA4Y9ZnkmDLOxHRgyITFmrTx5GTkAFBtGcKpO/xI0=;
-	h=From:Date:Subject:MIME-Version:Content-Type:Message-ID:References:
-	 In-Reply-To:To:CC; b=hcSFy8/fgY6M2aunZDAboFUNPi5gTxeptd/HiBfFHlTJ/qGjxnVmC1vHdN0qrWPXfw5skNDaK8b7xTHy7AnVKOq6qMAVpHmiCREDyf5hkbofrtPwbHCCvYHvCc6zHT3ome9Y+HjYZIRtemU236O3cevCvbMZHjeFDFvoUhK2TLo=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com; spf=pass smtp.mailfrom=quicinc.com; dkim=pass (2048-bit key) header.d=quicinc.com header.i=@quicinc.com header.b=lFT7W7Of; arc=none smtp.client-ip=205.220.168.131
-Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=quicinc.com
-Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=quicinc.com
-Received: from pps.filterd (m0279862.ppops.net [127.0.0.1])
-	by mx0a-0031df01.pphosted.com (8.18.1.2/8.18.1.2) with ESMTP id 52D2KLXD007310;
-	Thu, 13 Mar 2025 06:04:01 GMT
-DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/relaxed; d=quicinc.com; h=
-	cc:content-transfer-encoding:content-type:date:from:in-reply-to
-	:message-id:mime-version:references:subject:to; s=qcppdkim1; bh=
-	uAEYDZT7XNQdv+gxhZhu0lkAO2jOF3EV0Qf8X8IkF+Q=; b=lFT7W7Of7cjOxBiN
-	qiqnqwaFDIz+LQAhIaiM18YUOEL7QYw3AuFHN3/QIjZtqJqVIGQNiFDSH6mV8gNK
-	TuIcLOvEnomI2YOzr6dYJlGB0Ibu0xRQUnMuQ4tkxq4iOxqd3GfZA+x2E6P3rGNH
-	W0YSM8wBzsrVwKKsqeNW04IGtEo1uVGcA5bRBu6fAYLXRXd9e/4OXQPO6vwazUkb
-	jh/8cVcBIy96EJE3QrYG/FP7uVe3IBqSq1sAnLh0eDhwwRXgE3KrkDyTqOwSkpis
-	Ikt6TyzpZel4250x5QHmZU9JLnOHXptyeyiTniW90sHYhsM5Pt+P4CvW2Ng4V/A0
-	rm07Tw==
-Received: from nasanppmta04.qualcomm.com (i-global254.qualcomm.com [199.106.103.254])
-	by mx0a-0031df01.pphosted.com (PPS) with ESMTPS id 45bpg88fx5-1
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Mar 2025 06:04:01 +0000 (GMT)
-Received: from nasanex01a.na.qualcomm.com (nasanex01a.na.qualcomm.com [10.52.223.231])
-	by NASANPPMTA04.qualcomm.com (8.18.1.2/8.18.1.2) with ESMTPS id 52D640sM031484
-	(version=TLSv1.2 cipher=ECDHE-RSA-AES256-GCM-SHA384 bits=256 verify=NOT);
-	Thu, 13 Mar 2025 06:04:00 GMT
-Received: from hu-imrashai-hyd.qualcomm.com (10.80.80.8) by
- nasanex01a.na.qualcomm.com (10.52.223.231) with Microsoft SMTP Server
- (version=TLS1_2, cipher=TLS_ECDHE_RSA_WITH_AES_256_GCM_SHA384) id
- 15.2.1544.9; Wed, 12 Mar 2025 23:03:56 -0700
-From: Imran Shaik <quic_imrashai@quicinc.com>
-Date: Thu, 13 Mar 2025 11:33:40 +0530
-Subject: [PATCH 2/2] arm64: dts: qcom: qcs8300: Add cpufreq scaling node
+	s=arc-20240116; t=1741846530; c=relaxed/simple;
+	bh=J07LJixRFrMEq+h78TsoNZznPJmHPCc7YIVYdUBwtOY=;
+	h=Message-ID:Date:MIME-Version:Subject:To:Cc:References:From:
+	 In-Reply-To:Content-Type; b=G1lN1E+l/JXjnbQSV19WOWQ9h5SV6HXqzon+B3+JSemj81pnLH7c8MjOSmoNYogeGWC3Gucttvegmhw2Tf1O4bG5vrJQKIisGb6KAQ1cnBwoPucYogIITvmLMMciV0OTs01oYqktHifqhElYyweMyhoZMIEa2tdd559xOwe/T1g=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com; spf=pass smtp.mailfrom=arm.com; arc=none smtp.client-ip=217.140.110.172
+Authentication-Results: smtp.subspace.kernel.org; dmarc=pass (p=none dis=none) header.from=arm.com
+Authentication-Results: smtp.subspace.kernel.org; spf=pass smtp.mailfrom=arm.com
+Received: from usa-sjc-imap-foss1.foss.arm.com (unknown [10.121.207.14])
+	by usa-sjc-mx-foss1.foss.arm.com (Postfix) with ESMTP id E7A331516;
+	Wed, 12 Mar 2025 23:15:31 -0700 (PDT)
+Received: from [192.168.188.123] (usa-sjc-mx-foss1.foss.arm.com [172.31.20.19])
+	by usa-sjc-imap-foss1.foss.arm.com (Postfix) with ESMTPSA id 3BB803F673;
+	Wed, 12 Mar 2025 23:15:20 -0700 (PDT)
+Message-ID: <e1ce9edb-db24-46cc-b33f-f0fbce938f9a@arm.com>
+Date: Thu, 13 Mar 2025 06:15:18 +0000
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
 List-Subscribe: <mailto:linux-pm+subscribe@vger.kernel.org>
 List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
-Content-Type: text/plain; charset="utf-8"
-Content-Transfer-Encoding: 7bit
-Message-ID: <20250313-qcs8300-cpufreq-scaling-v1-2-d4cd3bd9c018@quicinc.com>
-References: <20250313-qcs8300-cpufreq-scaling-v1-0-d4cd3bd9c018@quicinc.com>
-In-Reply-To: <20250313-qcs8300-cpufreq-scaling-v1-0-d4cd3bd9c018@quicinc.com>
-To: "Rafael J. Wysocki" <rafael@kernel.org>,
-        Viresh Kumar
-	<viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>,
-        Krzysztof Kozlowski
-	<krzk+dt@kernel.org>,
-        Conor Dooley <conor+dt@kernel.org>,
-        "Manivannan
- Sadhasivam" <manivannan.sadhasivam@linaro.org>,
-        Bjorn Andersson
-	<andersson@kernel.org>,
-        Konrad Dybcio <konradybcio@kernel.org>
-CC: Ajit Pandey <quic_ajipan@quicinc.com>, Taniya Das <quic_tdas@quicinc.com>,
-        Jagadeesh Kona <quic_jkona@quicinc.com>,
-        Satya Priya Kakitapalli
-	<quic_skakitap@quicinc.com>,
-        <linux-pm@vger.kernel.org>, <devicetree@vger.kernel.org>,
-        <linux-kernel@vger.kernel.org>, <linux-arm-msm@vger.kernel.org>,
-        Imran Shaik <quic_imrashai@quicinc.com>
-X-Mailer: b4 0.14.1
-X-ClientProxiedBy: nasanex01b.na.qualcomm.com (10.46.141.250) To
- nasanex01a.na.qualcomm.com (10.52.223.231)
-X-QCInternal: smtphost
-X-Proofpoint-Virus-Version: vendor=nai engine=6200 definitions=5800 signatures=585085
-X-Authority-Analysis: v=2.4 cv=PtWTbxM3 c=1 sm=1 tr=0 ts=67d27551 cx=c_pps a=JYp8KDb2vCoCEuGobkYCKw==:117 a=JYp8KDb2vCoCEuGobkYCKw==:17 a=GEpy-HfZoHoA:10 a=IkcTkHD0fZMA:10 a=Vs1iUdzkB0EA:10 a=COk6AnOGAAAA:8 a=-kjJAZhfdypRAnGlKBgA:9 a=QEXdDO2ut3YA:10
- a=TjNXssC_j7lpFel5tvFf:22
-X-Proofpoint-GUID: l8GukOOoWU1Dfs00tphHw_8e2Q370Wn6
-X-Proofpoint-ORIG-GUID: l8GukOOoWU1Dfs00tphHw_8e2Q370Wn6
-X-Proofpoint-Virus-Version: vendor=baseguard
- engine=ICAP:2.0.293,Aquarius:18.0.1093,Hydra:6.0.680,FMLib:17.12.68.34
- definitions=2025-03-13_03,2025-03-11_02,2024-11-22_01
-X-Proofpoint-Spam-Details: rule=outbound_notspam policy=outbound score=0 priorityscore=1501
- lowpriorityscore=0 mlxscore=0 mlxlogscore=828 impostorscore=0 spamscore=0
- adultscore=0 phishscore=0 bulkscore=0 clxscore=1011 malwarescore=0
- suspectscore=0 classifier=spam authscore=0 authtc=n/a authcc=
- route=outbound adjust=0 reason=mlx scancount=1 engine=8.19.0-2502280000
- definitions=main-2503130045
+User-Agent: Mozilla Thunderbird
+Subject: Re: TEO as default governor ?
+To: Daniel Lezcano <daniel.lezcano@linaro.org>,
+ "Rafael J. Wysocki" <rafael@kernel.org>
+Cc: "Rafael J. Wysocki" <rjw@rjwysocki.net>,
+ Linux PM mailing list <linux-pm@vger.kernel.org>,
+ Ulf Hansson <ulf.hansson@linaro.org>, Doug Smythies <dsmythies@telus.net>
+References: <483602d6-4ac2-4785-b205-912b59fbd6f1@linaro.org>
+ <4a50de85-0deb-4864-b7b5-ee81cec7f167@arm.com>
+ <CAJZ5v0jBFOZ-z29-KwgHN9cL4sEPsW9K5TG6XeT7Y-ADbVPcCw@mail.gmail.com>
+ <9b4a15c4-4e0c-43f6-b2ec-e98bc02f67cc@linaro.org>
+Content-Language: en-US
+From: Christian Loehle <christian.loehle@arm.com>
+In-Reply-To: <9b4a15c4-4e0c-43f6-b2ec-e98bc02f67cc@linaro.org>
+Content-Type: text/plain; charset=UTF-8
+Content-Transfer-Encoding: 8bit
 
-Add cpufreq-hw node to support cpufreq scaling on QCS8300.
+On 3/11/25 18:00, Daniel Lezcano wrote:
+> On 11/03/2025 18:34, Rafael J. Wysocki wrote:
+>> On Tue, Mar 11, 2025 at 5:47 PM Christian Loehle
+>> <christian.loehle@arm.com> wrote:
+>>>
+>>> On 3/11/25 16:31, Daniel Lezcano wrote:
+>>>>
+>>>> Hi,
+>>>>
+>>>> I think we can agree the teo governor is better then the menu governor.
+>>>>
+>>>> Would it make sense to make the teo governor the default governor ?
+>>>>
+>>>>
+>>>
+>>> Rafael's position seems to be quite conservative here.
+>>> Fact is menu is still the default on many systems.
+>>> Even worse, the really bad performance disadvantage when
+>>> using menu in an intercept-heavy workload has been fixed by Rafael :)
+>>> https://lore.kernel.org/lkml/bc7f915b-8d9f-4e05-9939-8b7ecc078f85@arm.com/
+>>>
+>>> FWIW I proposed this a while ago:
+>>> https://lore.kernel.org/lkml/20240905092645.2885200-3-christian.loehle@arm.com/
+>>
+>> It will help if one can make a really convincing case for this change
+>> (that is, show that menu with the most recent fixes included is really
+>> significantly worse on their platform).
+> 
+> For all the platforms I've been testing, the teo governor is always the best one.
+> 
+> Using the menu governor has also an impact on the user experience as it lags on mobile.
+> 
+> After studying the history of the menu governor few years ago, it appeared the menu governor was introduced before the SMP was widely used. The strength of the menu governor was the ability to find repeating intervals but with he multiplication of the cores, the IPIs were introduced which increased the entropy of the busy-idle cycles duration, thus making the duration much more random and altering the menu governor prediction accuracy.
 
-Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
----
- arch/arm64/boot/dts/qcom/qcs8300.dtsi | 26 ++++++++++++++++++++++++++
- 1 file changed, 26 insertions(+)
+Cross-posting Doug's reply here and +CC
+https://lore.kernel.org/lkml/005801db9397$266ddac0$73499040$@telus.net/
 
-diff --git a/arch/arm64/boot/dts/qcom/qcs8300.dtsi b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-index cdd412706b5b..eb6b01683d1d 100644
---- a/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-+++ b/arch/arm64/boot/dts/qcom/qcs8300.dtsi
-@@ -52,6 +52,7 @@ cpu0: cpu@0 {
- 			power-domain-names = "psci";
- 			capacity-dmips-mhz = <1946>;
- 			dynamic-power-coefficient = <472>;
-+			qcom,freq-domain = <&cpufreq_hw 0>;
- 
- 			l2_0: l2-cache {
- 				compatible = "cache";
-@@ -71,6 +72,7 @@ cpu1: cpu@100 {
- 			power-domain-names = "psci";
- 			capacity-dmips-mhz = <1946>;
- 			dynamic-power-coefficient = <472>;
-+			qcom,freq-domain = <&cpufreq_hw 0>;
- 
- 			l2_1: l2-cache {
- 				compatible = "cache";
-@@ -90,6 +92,7 @@ cpu2: cpu@200 {
- 			power-domain-names = "psci";
- 			capacity-dmips-mhz = <1946>;
- 			dynamic-power-coefficient = <507>;
-+			qcom,freq-domain = <&cpufreq_hw 1>;
- 
- 			l2_2: l2-cache {
- 				compatible = "cache";
-@@ -109,6 +112,7 @@ cpu3: cpu@300 {
- 			power-domain-names = "psci";
- 			capacity-dmips-mhz = <1946>;
- 			dynamic-power-coefficient = <507>;
-+			qcom,freq-domain = <&cpufreq_hw 1>;
- 
- 			l2_3: l2-cache {
- 				compatible = "cache";
-@@ -128,6 +132,7 @@ cpu4: cpu@10000 {
- 			power-domain-names = "psci";
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			qcom,freq-domain = <&cpufreq_hw 2>;
- 
- 			l2_4: l2-cache {
- 				compatible = "cache";
-@@ -147,6 +152,7 @@ cpu5: cpu@10100 {
- 			power-domain-names = "psci";
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			qcom,freq-domain = <&cpufreq_hw 2>;
- 
- 			l2_5: l2-cache {
- 				compatible = "cache";
-@@ -166,6 +172,7 @@ cpu6: cpu@10200 {
- 			power-domain-names = "psci";
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			qcom,freq-domain = <&cpufreq_hw 2>;
- 
- 			l2_6: l2-cache {
- 				compatible = "cache";
-@@ -185,6 +192,7 @@ cpu7: cpu@10300 {
- 			power-domain-names = "psci";
- 			capacity-dmips-mhz = <1024>;
- 			dynamic-power-coefficient = <100>;
-+			qcom,freq-domain = <&cpufreq_hw 2>;
- 
- 			l2_7: l2-cache {
- 				compatible = "cache";
-@@ -5235,6 +5243,24 @@ rpmhpd_opp_turbo_l1: opp-9 {
- 			};
- 		};
- 
-+		cpufreq_hw: cpufreq@18591000 {
-+			compatible = "qcom,qcs8300-cpufreq-epss", "qcom,cpufreq-epss";
-+			reg = <0x0 0x18591000 0x0 0x1000>,
-+			      <0x0 0x18594000 0x0 0x1000>,
-+			      <0x0 0x18593000 0x0 0x1000>;
-+			reg-names = "freq-domain0", "freq-domain1", "freq-domain2";
-+
-+			interrupts = <GIC_SPI 31 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 86 IRQ_TYPE_LEVEL_HIGH>,
-+				     <GIC_SPI 32 IRQ_TYPE_LEVEL_HIGH>;
-+			interrupt-names = "dcvsh-irq-0", "dcvsh-irq-1", "dcvsh-irq-2";
-+
-+			clocks = <&rpmhcc RPMH_CXO_CLK>, <&gcc GCC_GPLL0>;
-+			clock-names = "xo", "alternate";
-+
-+			#freq-domain-cells = <1>;
-+		};
-+
- 		remoteproc_gpdsp: remoteproc@20c00000 {
- 			compatible = "qcom,qcs8300-gpdsp-pas", "qcom,sa8775p-gpdsp0-pas";
- 			reg = <0x0 0x20c00000 0x0 0x10000>;
-
--- 
-2.25.1
-
+Daniel if you're testing both and struggle to find a strong advantage
+for teo:
+teo currently has the intercept-mechanism, trying to find a shallower state
+until we are at < 1/2 intercepts as wakeups.
+Rafael's idea was to make this configurable, e.g. allowing only 20%
+intercepts (more aggressive in selecting shallow states) or 80% (less
+aggressive in selecting shallow states).
+This would be a minimal change in code and the rest of teo is unaffected,
+but gives users a choice, something menu won't offer.
 
