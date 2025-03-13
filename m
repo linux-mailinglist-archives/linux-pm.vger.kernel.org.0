@@ -1,60 +1,62 @@
-Return-Path: <linux-pm+bounces-23966-lists+linux-pm=lfdr.de@vger.kernel.org>
+Return-Path: <linux-pm+bounces-23967-lists+linux-pm=lfdr.de@vger.kernel.org>
 X-Original-To: lists+linux-pm@lfdr.de
 Delivered-To: lists+linux-pm@lfdr.de
-Received: from sv.mirrors.kernel.org (sv.mirrors.kernel.org [IPv6:2604:1380:45e3:2400::1])
-	by mail.lfdr.de (Postfix) with ESMTPS id F02E7A5EE70
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 09:50:57 +0100 (CET)
+Received: from am.mirrors.kernel.org (am.mirrors.kernel.org [IPv6:2604:1380:4601:e00::3])
+	by mail.lfdr.de (Postfix) with ESMTPS id 86128A5EE7D
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 09:52:17 +0100 (CET)
 Received: from smtp.subspace.kernel.org (relay.kernel.org [52.25.139.140])
 	(using TLSv1.2 with cipher ECDHE-ECDSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by sv.mirrors.kernel.org (Postfix) with ESMTPS id 65A0D3B8400
-	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 08:50:45 +0000 (UTC)
+	by am.mirrors.kernel.org (Postfix) with ESMTPS id 6101A19C02BB
+	for <lists+linux-pm@lfdr.de>; Thu, 13 Mar 2025 08:52:25 +0000 (UTC)
 Received: from localhost.localdomain (localhost.localdomain [127.0.0.1])
-	by smtp.subspace.kernel.org (Postfix) with ESMTP id B908A262D11;
-	Thu, 13 Mar 2025 08:50:33 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTP id 8C222262D16;
+	Thu, 13 Mar 2025 08:52:11 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org;
-	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="HBuDpJHJ"
+	dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b="oqxhjJwb"
 X-Original-To: linux-pm@vger.kernel.org
 Received: from smtp.kernel.org (aws-us-west-2-korg-mail-1.web.codeaurora.org [10.30.226.201])
 	(using TLSv1.2 with cipher ECDHE-RSA-AES256-GCM-SHA384 (256/256 bits))
 	(No client certificate requested)
-	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 74FFB2620EA;
-	Thu, 13 Mar 2025 08:50:32 +0000 (UTC)
+	by smtp.subspace.kernel.org (Postfix) with ESMTPS id 4D4C5261573;
+	Thu, 13 Mar 2025 08:52:10 +0000 (UTC)
 Authentication-Results: smtp.subspace.kernel.org; arc=none smtp.client-ip=10.30.226.201
 ARC-Seal:i=1; a=rsa-sha256; d=subspace.kernel.org; s=arc-20240116;
-	t=1741855833; cv=none; b=LSs07xNq/nB+Yhwzj972z7XdO+c7yF6yleHU8qvxzcltiRs8UZLfYvvGRhYSV8CbfFpQBkXKVcWRYfPVrYIiBfikhNe8y/enSYjER6uFyP/NsGa39s4oL1aQvsxqO45L2fLNow3KcdBRXZrEV0x3kULf+Yp1koI2QvAg/SU2AKA=
+	t=1741855931; cv=none; b=s2dlduUFhMCjv/8W3YG1psMtYCR0rRr200EvrZIsqEepkVGkWgWVWBTmcfhvpGvOIoCUj5nimikRJ4bnD0wHgZc/fX3YKRv6AbkcuOLo2Bfbn6AfVA89e90wgjMJ2FVeA0yb8T7JLGA4m9s9sCMH6vTBHcZHHwz1aaSlMzFX1XA=
 ARC-Message-Signature:i=1; a=rsa-sha256; d=subspace.kernel.org;
-	s=arc-20240116; t=1741855833; c=relaxed/simple;
-	bh=U27KUPNIj8hMg2Dc6qsyDFvg73E84u4+n2J6eY11nCw=;
+	s=arc-20240116; t=1741855931; c=relaxed/simple;
+	bh=jVDomjMBnInaKjiE+S8O3q0/G9g8FyXhVtfxKw22KpQ=;
 	h=Date:From:To:Cc:Subject:Message-ID:References:MIME-Version:
-	 Content-Type:Content-Disposition:In-Reply-To; b=OEhi0I5dzWRqTxE6mq8mDB/h8hR6OwNrjpbQIk7pFmuuiQcwQkZW2O4hYCTP4+yw9d1Ti5n/hPbL8fBdgwYnNf1KHnNpqr+jljeAb9NAbHlm46TLwgGcboPiyZu7UM+BmKmVaLDsz2SiyqHxfkcKfLTZcpQ0edpMBZcNO7gkGzY=
-ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=HBuDpJHJ; arc=none smtp.client-ip=10.30.226.201
-Received: by smtp.kernel.org (Postfix) with ESMTPSA id D3AAFC4CEE3;
-	Thu, 13 Mar 2025 08:50:31 +0000 (UTC)
+	 Content-Type:Content-Disposition:In-Reply-To; b=u+AlF20x2Fd3+fpLtdrIch3crSe60rcHf3NYDIm1i7G94u6LgJ20W90/aMn1JQbELiExoileK1EPORj75QKZy8HsCBbiLdA4bqGX4bme544eYRXOv3V4mbabVxyCKd/yHMJgiqpHeeAL2lIMV4NuoJUTCAAiXqqF9jaTXw3Wdyc=
+ARC-Authentication-Results:i=1; smtp.subspace.kernel.org; dkim=pass (2048-bit key) header.d=kernel.org header.i=@kernel.org header.b=oqxhjJwb; arc=none smtp.client-ip=10.30.226.201
+Received: by smtp.kernel.org (Postfix) with ESMTPSA id EC439C4CEDD;
+	Thu, 13 Mar 2025 08:52:08 +0000 (UTC)
 DKIM-Signature: v=1; a=rsa-sha256; c=relaxed/simple; d=kernel.org;
-	s=k20201202; t=1741855832;
-	bh=U27KUPNIj8hMg2Dc6qsyDFvg73E84u4+n2J6eY11nCw=;
+	s=k20201202; t=1741855929;
+	bh=jVDomjMBnInaKjiE+S8O3q0/G9g8FyXhVtfxKw22KpQ=;
 	h=Date:From:To:Cc:Subject:References:In-Reply-To:From;
-	b=HBuDpJHJ0B7/I4PCa6jmfPMjwIkk5SQ6/pj1q6F6bijy66a5SLZJMDQAB/l7qQ8xG
-	 72keDsxQ0Qu9Bw5PiY/lK0thp3Rppgv6Am4kHwZRGRUV2gxor4WzrxwdeF6OGgJ7k/
-	 57N5KYWdzx7XdA78gYsQ0iJh+SQYpEeXsHRDzbf+q6z+8Sb8PvQcH2S9oTj/YIiqPH
-	 w+0SswE39SoI4ggwosDPrv/9bVS5a9AOfgf08zCmpzJOU+d554aoG8IdZql2eoC1k1
-	 VWeMuhEYbovx8LS1qblv5fOJbyXaoRum8tOv39SCegy7sx6bSZorKHkdGi5K6pvm9Y
-	 8MbSEspDerzoA==
-Date: Thu, 13 Mar 2025 09:50:29 +0100
+	b=oqxhjJwbxsTE+ZG9tuMPjHFCDI4apXwfJAeCPphLgJb33ABkytCHrPJW3TLgOS/a/
+	 odHpQ0/+cUvgFqE9olNXeoXI1AwoeRVfzn1jt3rRZwgsgYNQpVoo/aVqW6q/FEYG/b
+	 OBGQLoK+yjVRHG5vnmgP9AYXnqym19Ihr6mNjqHv6Th093Ohl9mmFFe//qDizo+N6Y
+	 HiLjVzqXhTFhJu6ISkrd10yUqy7LKxY3pVQodPVA/JvREzyvqpXDdt/N3XFaKigebJ
+	 N/+V4GkGQffH5HrzFN8u01qxBqAyo+9Rgo+qE1YU5C969JAvffgX1+GSibTLlOMTto
+	 W1ldVtIMo8O8w==
+Date: Thu, 13 Mar 2025 09:52:06 +0100
 From: Krzysztof Kozlowski <krzk@kernel.org>
-To: Amit Sunil Dhamne <amitsd@google.com>
-Cc: Rob Herring <robh@kernel.org>, 
+To: Imran Shaik <quic_imrashai@quicinc.com>
+Cc: "Rafael J. Wysocki" <rafael@kernel.org>, 
+	Viresh Kumar <viresh.kumar@linaro.org>, Rob Herring <robh@kernel.org>, 
 	Krzysztof Kozlowski <krzk+dt@kernel.org>, Conor Dooley <conor+dt@kernel.org>, 
-	Greg Kroah-Hartman <gregkh@linuxfoundation.org>, Badhri Jagan Sridharan <badhri@google.com>, 
-	Sebastian Reichel <sre@kernel.org>, Heikki Krogerus <heikki.krogerus@linux.intel.com>, 
-	"Rafael J. Wysocki" <rafael@kernel.org>, Len Brown <len.brown@intel.com>, Pavel Machek <pavel@kernel.org>, 
-	devicetree@vger.kernel.org, linux-kernel@vger.kernel.org, linux-usb@vger.kernel.org, 
-	linux-pm@vger.kernel.org, RD Babiera <rdbabiera@google.com>, Kyle Tso <kyletso@google.com>
-Subject: Re: [PATCH 0/5] Add support for Battery Status & Battery Caps AMS in
- TCPM
-Message-ID: <20250313-determined-wild-seahorse-f7871a@krzk-bin>
-References: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
+	Manivannan Sadhasivam <manivannan.sadhasivam@linaro.org>, Bjorn Andersson <andersson@kernel.org>, 
+	Konrad Dybcio <konradybcio@kernel.org>, Ajit Pandey <quic_ajipan@quicinc.com>, 
+	Taniya Das <quic_tdas@quicinc.com>, Jagadeesh Kona <quic_jkona@quicinc.com>, 
+	Satya Priya Kakitapalli <quic_skakitap@quicinc.com>, linux-pm@vger.kernel.org, devicetree@vger.kernel.org, 
+	linux-kernel@vger.kernel.org, linux-arm-msm@vger.kernel.org
+Subject: Re: [PATCH 1/2] dt-bindings: cpufreq: cpufreq-qcom-hw: Add QCS8300
+ compatible
+Message-ID: <20250313-valiant-fine-giraffe-c6acdd@krzk-bin>
+References: <20250313-qcs8300-cpufreq-scaling-v1-0-d4cd3bd9c018@quicinc.com>
+ <20250313-qcs8300-cpufreq-scaling-v1-1-d4cd3bd9c018@quicinc.com>
 Precedence: bulk
 X-Mailing-List: linux-pm@vger.kernel.org
 List-Id: <linux-pm.vger.kernel.org>
@@ -63,18 +65,17 @@ List-Unsubscribe: <mailto:linux-pm+unsubscribe@vger.kernel.org>
 MIME-Version: 1.0
 Content-Type: text/plain; charset=utf-8
 Content-Disposition: inline
-In-Reply-To: <20250312-batt_ops-v1-0-88e0bb3129fd@google.com>
+In-Reply-To: <20250313-qcs8300-cpufreq-scaling-v1-1-d4cd3bd9c018@quicinc.com>
 
-On Wed, Mar 12, 2025 at 04:42:00PM -0700, Amit Sunil Dhamne wrote:
-> Support for Battery Status & Battery Caps messages in response to
-> Get_Battery_Status & Get_Battery_Cap request is required by USB PD devices
-> powered by battery, as per "USB PD R3.1 V1.8 Spec", "6.13 Message
-> Applicability" section. This patchset adds support for these AMSes
-> to achieve greater compliance with the spec.
+On Thu, Mar 13, 2025 at 11:33:39AM +0530, Imran Shaik wrote:
+> Document compatible for cpufreq hardware on Qualcomm QCS8300 platform.
+> 
+> Signed-off-by: Imran Shaik <quic_imrashai@quicinc.com>
+> ---
+>  Documentation/devicetree/bindings/cpufreq/cpufreq-qcom-hw.yaml | 2 ++
+>  1 file changed, 2 insertions(+)
 
-Which board uses it? I would be happy to see that connection between
-batteries and USB connector on the schematics of some real device. How
-does it look like?
+Reviewed-by: Krzysztof Kozlowski <krzysztof.kozlowski@linaro.org>
 
 Best regards,
 Krzysztof
